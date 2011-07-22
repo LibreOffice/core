@@ -168,16 +168,15 @@ void OHTMLReader::NextToken( int nToken )
             case HTML_TABLE_ON:
                 ++m_nTableCount;
                 {   // es kann auch TD oder TH sein, wenn es vorher kein TABLE gab
-                    const HTMLOptions* pHtmlOptions = GetOptions();
-                    sal_Int16 nArrLen = pHtmlOptions->Count();
-                    for ( sal_Int16 i = 0; i < nArrLen; i++ )
+                    const HTMLOptions& rHtmlOptions = GetOptions();
+                    for (size_t i = 0, n = rHtmlOptions.size(); i < n; ++i)
                     {
-                        const HTMLOption* pOption = (*pHtmlOptions)[i];
-                        switch( pOption->GetToken() )
+                        const HTMLOption& rOption = rHtmlOptions[i];
+                        switch( rOption.GetToken() )
                         {
                             case HTML_O_WIDTH:
                             {   // Prozent: von Dokumentbreite bzw. aeusserer Zelle
-                                m_nColumnWidth = GetWidthPixel( pOption );
+                                m_nColumnWidth = GetWidthPixel( rOption );
                             }
                             break;
                         }
@@ -327,21 +326,20 @@ void OHTMLReader::fetchOptions()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "OHTMLReader::fetchOptions" );
     m_bInTbl = sal_True;
-    const HTMLOptions* options = GetOptions();
-    sal_Int16 nArrLen = options->Count();
-    for ( sal_Int16 i = 0; i < nArrLen; i++ )
+    const HTMLOptions& options = GetOptions();
+    for (size_t i = 0, n = options.size(); i < n; ++i)
     {
-        const HTMLOption* pOption = (*options)[i];
-        switch( pOption->GetToken() )
+        const HTMLOption& rOption = options[i];
+        switch( rOption.GetToken() )
         {
             case HTML_O_SDVAL:
             {
-                m_sValToken = pOption->GetString();
+                m_sValToken = rOption.GetString();
                 m_bSDNum = sal_True;
             }
             break;
             case HTML_O_SDNUM:
-                m_sNumToken = pOption->GetString();
+                m_sNumToken = rOption.GetString();
             break;
         }
     }
@@ -351,16 +349,15 @@ void OHTMLReader::TableDataOn(SvxCellHorJustify& eVal)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "OHTMLReader::TableDataOn" );
     DBG_CHKTHIS(OHTMLReader,NULL);
-    const HTMLOptions* pHtmlOptions = GetOptions();
-    sal_Int16 nArrLen = pHtmlOptions->Count();
-    for ( sal_Int16 i = 0; i < nArrLen; i++ )
+    const HTMLOptions& rHtmlOptions = GetOptions();
+    for (size_t i = 0, n = rHtmlOptions.size(); i < n; ++i)
     {
-        const HTMLOption* pOption = (*pHtmlOptions)[i];
-        switch( pOption->GetToken() )
+        const HTMLOption& rOption = rHtmlOptions[i];
+        switch( rOption.GetToken() )
         {
             case HTML_O_ALIGN:
             {
-                const String& rOptVal = pOption->GetString();
+                const String& rOptVal = rOption.GetString();
                 if (rOptVal.EqualsIgnoreCaseAscii( OOO_STRING_SVTOOLS_HTML_AL_right ))
                     eVal = SVX_HOR_JUSTIFY_RIGHT;
                 else if (rOptVal.EqualsIgnoreCaseAscii( OOO_STRING_SVTOOLS_HTML_AL_center ))
@@ -372,7 +369,7 @@ void OHTMLReader::TableDataOn(SvxCellHorJustify& eVal)
             }
             break;
             case HTML_O_WIDTH:
-                m_nWidth = GetWidthPixel( pOption );
+                m_nWidth = GetWidthPixel( rOption );
             break;
         }
     }
@@ -383,23 +380,22 @@ void OHTMLReader::TableFontOn(FontDescriptor& _rFont,sal_Int32 &_rTextColor)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "OHTMLReader::TableFontOn" );
     DBG_CHKTHIS(OHTMLReader,NULL);
-    const HTMLOptions* pHtmlOptions = GetOptions();
-    sal_Int16 nArrLen = pHtmlOptions->Count();
-    for ( sal_Int16 i = 0; i < nArrLen; i++ )
+    const HTMLOptions& rHtmlOptions = GetOptions();
+    for (size_t i = 0, n = rHtmlOptions.size(); i < n; ++i)
     {
-        const HTMLOption* pOption = (*pHtmlOptions)[i];
-        switch( pOption->GetToken() )
+        const HTMLOption& rOption = rHtmlOptions[i];
+        switch( rOption.GetToken() )
         {
         case HTML_O_COLOR:
             {
                 Color aColor;
-                pOption->GetColor( aColor );
+                rOption.GetColor( aColor );
                 _rTextColor = aColor.GetRGBColor();
             }
             break;
         case HTML_O_FACE :
             {
-                const String& rFace = pOption->GetString();
+                const String& rFace = rOption.GetString();
                 String aFontName;
                 xub_StrLen nPos = 0;
                 while( nPos != STRING_NOTFOUND )
@@ -416,7 +412,7 @@ void OHTMLReader::TableFontOn(FontDescriptor& _rFont,sal_Int32 &_rTextColor)
             break;
         case HTML_O_SIZE :
             {
-                sal_Int16 nSize = (sal_Int16) pOption->GetNumber();
+                sal_Int16 nSize = (sal_Int16) rOption.GetNumber();
                 if ( nSize == 0 )
                     nSize = 1;
                 else if ( nSize < DBAUI_HTML_FONTSIZES )
@@ -429,15 +425,15 @@ void OHTMLReader::TableFontOn(FontDescriptor& _rFont,sal_Int32 &_rTextColor)
     }
 }
 // ---------------------------------------------------------------------------
-sal_Int16 OHTMLReader::GetWidthPixel( const HTMLOption* pOption )
+sal_Int16 OHTMLReader::GetWidthPixel( const HTMLOption& rOption )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "OHTMLReader::GetWidthPixel" );
     DBG_CHKTHIS(OHTMLReader,NULL);
-    const String& rOptVal = pOption->GetString();
+    const String& rOptVal = rOption.GetString();
     if ( rOptVal.Search('%') != STRING_NOTFOUND )
     {   // Prozent
         OSL_ENSURE( m_nColumnWidth, "WIDTH Option: m_nColumnWidth==0 und Width%" );
-        return (sal_Int16)((pOption->GetNumber() * m_nColumnWidth) / 100);
+        return (sal_Int16)((rOption.GetNumber() * m_nColumnWidth) / 100);
     }
     else
     {
@@ -447,7 +443,7 @@ sal_Int16 OHTMLReader::GetWidthPixel( const HTMLOption* pOption )
             return 0;
         }
         else
-            return (sal_Int16)pOption->GetNumber(); // Pixel
+            return (sal_Int16)rOption.GetNumber();  // Pixel
     }
 }
 // ---------------------------------------------------------------------------

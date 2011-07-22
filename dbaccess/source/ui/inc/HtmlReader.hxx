@@ -57,7 +57,7 @@ namespace dbaui
 
         void                TableDataOn(SvxCellHorJustify& eVal);
         void                TableFontOn(::com::sun::star::awt::FontDescriptor& _rFont,sal_Int32 &_rTextColor);
-        sal_Int16           GetWidthPixel( const HTMLOption* pOption );
+        sal_Int16           GetWidthPixel( const HTMLOption& rOption );
         void                setTextEncoding();
         void                fetchOptions();
         virtual ~OHTMLReader();
