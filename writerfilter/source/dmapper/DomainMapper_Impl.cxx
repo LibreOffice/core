@@ -2682,6 +2682,21 @@ void DomainMapper_Impl::CloseFieldCommand()
                             //above-below
                             nFieldPart = text::ReferenceFieldPart::UP_DOWN;
                         }
+                        else if( lcl_FindInCommand( pContext->GetCommand(), 'r', sValue ))
+                        {
+                            //number
+                            nFieldPart = text::ReferenceFieldPart::NUMBER;
+                        }
+                        else if( lcl_FindInCommand( pContext->GetCommand(), 'n', sValue ))
+                        {
+                            //number-no-context
+                            nFieldPart = text::ReferenceFieldPart::NUMBER_NO_CONTEXT;
+                        }
+                        else if( lcl_FindInCommand( pContext->GetCommand(), 'w', sValue ))
+                        {
+                            //number-full-context
+                            nFieldPart = text::ReferenceFieldPart::NUMBER_FULL_CONTEXT;
+                        }
                         xFieldProperties->setPropertyValue(
                                 rPropNameSupplier.GetName( PROP_REFERENCE_FIELD_PART ), uno::makeAny( nFieldPart ));
                     }
@@ -2982,7 +2997,10 @@ void DomainMapper_Impl::AddBookmark( const ::rtl::OUString& rBookmarkName, const
             xCursor->gotoRange( xTextAppend->getEnd(), true );
             uno::Reference< container::XNamed > xBkmNamed( xBookmark, uno::UNO_QUERY_THROW );
             //todo: make sure the name is not used already!
-            xBkmNamed->setName( aBookmarkIter->second.m_sBookmarkName );
+            if ( aBookmarkIter->second.m_sBookmarkName.getLength() > 0 )
+                xBkmNamed->setName( aBookmarkIter->second.m_sBookmarkName );
+            else
+                xBkmNamed->setName( rBookmarkName );
             xTextAppend->insertTextContent( uno::Reference< text::XTextRange >( xCursor, uno::UNO_QUERY_THROW), xBookmark, !xCursor->isCollapsed() );
             m_aBookmarkMap.erase( aBookmarkIter );
         }
