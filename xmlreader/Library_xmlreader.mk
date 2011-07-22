@@ -29,12 +29,6 @@ $(eval $(call gb_Library_Library,xmlreader))
 
 $(eval $(call gb_Library_add_package_headers,xmlreader,xmlreader_inc))
 
-# add any additional include paths for this library here
-$(eval $(call gb_Library_set_include,xmlreader,\
-	$$(INCLUDE) \
-	-I$(OUTDIR)/inc/offuh \
-))
-
 $(eval $(call gb_Library_add_defs,xmlreader,\
 	-DOOO_DLLIMPLEMENTATION_XMLREADER \
 ))
@@ -48,6 +42,11 @@ $(eval $(call gb_Library_add_exception_objects,xmlreader,\
 	xmlreader/source/pad \
 	xmlreader/source/span \
 	xmlreader/source/xmlreader \
+))
+
+$(eval $(call gb_Library_add_api,xmlreader,\
+    offapi \
+    udkapi \
 ))
 
 # vim: set noet sw=4 ts=4:
