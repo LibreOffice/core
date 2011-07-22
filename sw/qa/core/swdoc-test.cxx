@@ -225,11 +225,13 @@ void SwDocTest::randomTest()
 
     for( sal_uInt16 rlm = 0; rlm < SAL_N_ELEMENTS(modes); rlm++)
     {
+#ifdef COMPLEX
         m_pDoc->ClearDoc();
 
         // setup redlining
         m_pDoc->SetRedlineMode(modes[rlm]);
         SW_MOD()->SetRedlineAuthor(rtl::OUString::createFromAscii(authors[0]));
+#endif
 
         for( int i = 0; i < 2000; i++ )
         {
@@ -239,14 +241,15 @@ void SwDocTest::randomTest()
             aCrs.SetMark();
             aCrs.GoNextCell(getRand(30));
 #else // simple:
-            SwPaM aPam(m_pDoc->GetNodes());
-            SwCursor aCrs(*aPam.Start(), NULL, false);
+            SwNodeIndex nNode( m_pDoc->GetNodes().GetEndOfContent(), -1 );
+            SwPaM aCrs( nNode );
 #endif
 
             switch (getRand (i < 50 ? 3 : 6)) {
             // insert ops first
             case 0: {
-                m_pDoc->InsertString(aCrs, getRandString());
+                if (!m_pDoc->InsertString(aCrs, getRandString()))
+                    fprintf (stderr, "failed to insert string !\n");
                 break;
             }
             case 1:
@@ -304,7 +307,8 @@ void SwDocTest::randomTest()
 #endif
         }
 
-/*        fprintf (stderr, "write it !\n");
+#if 0
+        fprintf (stderr, "write it !\n");
 #ifdef COMPLEX
         SfxFilter aFilter(rtl::OUString::createFromAscii("writer8"),
                           rtl::OUString(), 0, 0, rtl::OUString(), 0, rtl::OUString(),
@@ -320,7 +324,9 @@ void SwDocTest::randomTest()
         aDstMed.SetFilter(&aFilter);
         m_xDocShRef->DoSaveAs(aDstMed);
         m_xDocShRef->DoSaveCompleted(&aDstMed);
-        m_xDocShRef->DoInitNew(0);*/
+        m_xDocShRef->DoInitNew(0);
+#endif
+
 #ifndef COMPLEX
         return;
 #endif
