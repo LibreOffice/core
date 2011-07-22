@@ -938,11 +938,17 @@ void OdgGeneratorPrivate::_writeGraphicsStyle()
     if(mxStyle["draw:fill"] && mxStyle["draw:fill"]->getStr() == "gradient")
     {
         TagOpenElement *pDrawGradientElement = new TagOpenElement("draw:gradient");
+        TagOpenElement *pDrawOpacityElement = new TagOpenElement("draw:opacity");
         if (mxStyle["draw:style"])
+        {
             pDrawGradientElement->addAttribute("draw:style", mxStyle["draw:style"]->getStr());
+            pDrawOpacityElement->addAttribute("draw:style", mxStyle["draw:style"]->getStr());
+        }
         WPXString sValue;
-        sValue.sprintf("Gradient_%i", miGradientIndex++);
+        sValue.sprintf("Gradient_%i", miGradientIndex);
         pDrawGradientElement->addAttribute("draw:name", sValue);
+        sValue.sprintf("Transparency_%i", miGradientIndex++);
+        pDrawOpacityElement->addAttribute("draw:name", sValue);
 
         // ODG angle unit is 0.1 degree
         double angle = mxStyle["draw:angle"] ? mxStyle["draw:angle"]->getDouble() : 0.0;
@@ -952,6 +958,7 @@ void OdgGeneratorPrivate::_writeGraphicsStyle()
             angle -= 360;
         sValue.sprintf("%i", (unsigned)(angle*10));
         pDrawGradientElement->addAttribute("draw:angle", sValue);
+        pDrawOpacityElement->addAttribute("draw:angle", sValue);
 
         if (!mxGradient.count())
         {
@@ -961,32 +968,70 @@ void OdgGeneratorPrivate::_writeGraphicsStyle()
                 pDrawGradientElement->addAttribute("draw:end-color", mxStyle["draw:end-color"]->getStr());
 
             if (mxStyle["draw:border"])
+            {
                 pDrawGradientElement->addAttribute("draw:border", mxStyle["draw:border"]->getStr());
+                pDrawOpacityElement->addAttribute("draw:border", mxStyle["draw:border"]->getStr());
+            }
             else
+            {
                 pDrawGradientElement->addAttribute("draw:border", "0%");
+                pDrawOpacityElement->addAttribute("draw:border", "0%");
+            }
 
             if (mxStyle["svg:cx"])
+            {
                 pDrawGradientElement->addAttribute("draw:cx", mxStyle["svg:cx"]->getStr());
+                pDrawOpacityElement->addAttribute("draw:cx", mxStyle["svg:cx"]->getStr());
+            }
             else if (mxStyle["draw:cx"])
+            {
                 pDrawGradientElement->addAttribute("draw:cx", mxStyle["draw:cx"]->getStr());
+                pDrawOpacityElement->addAttribute("draw:cx", mxStyle["draw:cx"]->getStr());
+            }
 
             if (mxStyle["svg:cy"])
+            {
                 pDrawGradientElement->addAttribute("draw:cy", mxStyle["svg:cy"]->getStr());
+                pDrawOpacityElement->addAttribute("draw:cy", mxStyle["svg:cy"]->getStr());
+            }
             else if (mxStyle["draw:cx"])
+            {
                 pDrawGradientElement->addAttribute("draw:cx", mxStyle["svg:cx"]->getStr());
+                pDrawOpacityElement->addAttribute("draw:cx", mxStyle["svg:cx"]->getStr());
+            }
 
             if (mxStyle["draw:start-intensity"])
                 pDrawGradientElement->addAttribute("draw:start-intensity", mxStyle["draw:start-intensity"]->getStr());
             else
                 pDrawGradientElement->addAttribute("draw:start-intensity", "100%");
 
-            if (mxStyle["draw:border"])
+            if (mxStyle["draw:end-intensity"])
                 pDrawGradientElement->addAttribute("draw:end-intensity", mxStyle["draw:end-intensity"]->getStr());
             else
                 pDrawGradientElement->addAttribute("draw:end-intensity", "100%");
 
+            if (mxStyle["libwpg:start-opacity"])
+                pDrawOpacityElement->addAttribute("draw:start", mxStyle["libwpg:start-opacity"]->getStr());
+            else
+                pDrawOpacityElement->addAttribute("draw:start", "100%");
+
+            if (mxStyle["libwpg:end-opacity"])
+                pDrawOpacityElement->addAttribute("draw:end", mxStyle["libwpg:end-opacity"]->getStr());
+            else
+                pDrawOpacityElement->addAttribute("draw:end", "100%");
+
+            // Work around a mess in LibreOffice where both opacities of 100% are interpreted as complete transparency
+            // Nevertheless, when one is different, immediately, they are interpreted correctly
+            if (!(mxStyle["libwpg:start-opacity"] && mxStyle["libwpg:end-opacity"]) || (mxStyle["libwpg:start-opacity"]->getDouble() == 1.0 && mxStyle["libwpg:end-opacity"]->getDouble() == 1.0))
+            {
+                pDrawOpacityElement->addAttribute("draw:start", "0%");
+                pDrawOpacityElement->addAttribute("draw:end", "0%");
+            }
+
             mGraphicsGradientStyles.push_back(pDrawGradientElement);
             mGraphicsGradientStyles.push_back(new TagCloseElement("draw:gradient"));
+            mGraphicsGradientStyles.push_back(pDrawOpacityElement);
+            mGraphicsGradientStyles.push_back(new TagCloseElement("draw:opacity"));
         }
         else if(mxGradient.count() >= 2)
         {
@@ -999,8 +1044,14 @@ void OdgGeneratorPrivate::_writeGraphicsStyle()
                 pDrawGradientElement->addAttribute("draw:cx", mxStyle["svg:cx"]->getStr());
             if (mxStyle["svg:cy"])
                 pDrawGradientElement->addAttribute("draw:cy", mxStyle["svg:cy"]->getStr());
-            pDrawGradientElement->addAttribute("draw:start-intensity", "100%");
-            pDrawGradientElement->addAttribute("draw:end-intensity", "100%");
+            if (mxGradient[1]["svg:stop-opacity"])
+                pDrawGradientElement->addAttribute("draw:start-intensity", mxGradient[1]["svg:stop-opacity"]->getStr());
+            else
+                pDrawGradientElement->addAttribute("draw:start-intensity", "100%");
+            if (mxGradient[0]["svg:stop-opacity"])
+                pDrawGradientElement->addAttribute("draw:end-intensity", mxGradient[0]["svg:stop-opacity"]->getStr());
+            else
+                pDrawGradientElement->addAttribute("draw:end-intensity", "100%");
             pDrawGradientElement->addAttribute("draw:border", "0%");
             mGraphicsGradientStyles.push_back(pDrawGradientElement);
             mGraphicsGradientStyles.push_back(new TagCloseElement("draw:gradient"));
@@ -1029,9 +1080,14 @@ void OdgGeneratorPrivate::_writeGraphicsStyle()
         if (mxStyle["svg:stroke-color"])
             pStyleGraphicsPropertiesElement->addAttribute("svg:stroke-color", mxStyle["svg:stroke-color"]->getStr());
 
-        if (mxStyle["svg:stroke-opacity"] && mxStyle["svg:stroke-opacity"]->getDouble() != 1.0)
+        if (mxStyle["svg:stroke-opacity"])
             pStyleGraphicsPropertiesElement->addAttribute("svg:stroke-opacity", mxStyle["svg:stroke-opacity"]->getStr());
 
+        if (mxStyle["svg:stroke-linejoin"])
+            pStyleGraphicsPropertiesElement->addAttribute("draw:stroke-linejoin", mxStyle["svg:stroke-linejoin"]->getStr());
+
+        if (mxStyle["svg:stroke-linecap"])
+            pStyleGraphicsPropertiesElement->addAttribute("svg:stoke-linecap", mxStyle["svg:stroke-linecap"]->getStr());
 
         if(mxStyle["libwpg:stroke-solid"] && mxStyle["libwpg:stroke-solid"]->getInt())
             pStyleGraphicsPropertiesElement->addAttribute("draw:stroke", "solid");
@@ -1056,7 +1112,7 @@ void OdgGeneratorPrivate::_writeGraphicsStyle()
         pStyleGraphicsPropertiesElement->addAttribute("draw:fill", "solid");
         if (mxStyle["draw:fill-color"])
             pStyleGraphicsPropertiesElement->addAttribute("draw:fill-color", mxStyle["draw:fill-color"]->getStr());
-        if (mxStyle["draw:opacity"] && mxStyle["draw:opacity"]->getDouble() != 1.0)
+        if (mxStyle["draw:opacity"])
             pStyleGraphicsPropertiesElement->addAttribute("draw:opacity", mxStyle["draw:opacity"]->getStr());
     }
 
@@ -1067,6 +1123,8 @@ void OdgGeneratorPrivate::_writeGraphicsStyle()
             pStyleGraphicsPropertiesElement->addAttribute("draw:fill", "gradient");
             sValue.sprintf("Gradient_%i", miGradientIndex-1);
             pStyleGraphicsPropertiesElement->addAttribute("draw:fill-gradient-name", sValue);
+            sValue.sprintf("Transparency_%i", miGradientIndex-1);
+            pStyleGraphicsPropertiesElement->addAttribute("draw:opacity-name", sValue);
         }
         else
         {
