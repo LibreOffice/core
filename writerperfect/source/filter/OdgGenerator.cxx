@@ -1109,8 +1109,22 @@ void OdgGeneratorPrivate::_writeGraphicsStyle()
     if(mxStyle["draw:fill"] && mxStyle["draw:fill"]->getStr() == "none")
         pStyleGraphicsPropertiesElement->addAttribute("draw:fill", "none");
     else
+    {
+        if (mxStyle["draw:shadow"])
+            pStyleGraphicsPropertiesElement->addAttribute("draw:shadow", mxStyle["draw:shadow"]->getStr());
+        else
+            pStyleGraphicsPropertiesElement->addAttribute("draw:shadow", "hidden");
+        if (mxStyle["draw:shadow-offset-x"])
+            pStyleGraphicsPropertiesElement->addAttribute("draw:shadow-offset-x", mxStyle["draw:shadow-offset-x"]->getStr());
+        if (mxStyle["draw:shadow-offset-y"])
+            pStyleGraphicsPropertiesElement->addAttribute("draw:shadow-offset-y", mxStyle["draw:shadow-offset-y"]->getStr());
+        if (mxStyle["draw:shadow-color"])
+            pStyleGraphicsPropertiesElement->addAttribute("draw:shadow-color", mxStyle["draw:shadow-color"]->getStr());
+        if (mxStyle["draw:shadow-opacity"])
+            pStyleGraphicsPropertiesElement->addAttribute("draw:shadow-opacity", mxStyle["draw:shadow-opacity"]->getStr());
       if (mxStyle["svg:fill-rule"])
         pStyleGraphicsPropertiesElement->addAttribute("svg:fill-rule", mxStyle["svg:fill-rule"]->getStr());
+    }
 
     if(mxStyle["draw:fill"] && mxStyle["draw:fill"]->getStr() == "solid")
     {
