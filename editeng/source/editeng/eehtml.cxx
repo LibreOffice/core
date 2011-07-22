@@ -127,13 +127,13 @@ void EditHTMLParser::NextToken( int nToken )
     {
     case HTML_META:
     {
-        const HTMLOptions *_pOptions = GetOptions();
-        sal_uInt16 nArrLen = _pOptions->Count();
+        const HTMLOptions& aOptions = GetOptions();
+        size_t nArrLen = aOptions.size();
         bool bEquiv = false;
-        for ( sal_uInt16 i = 0; i < nArrLen; i++ )
+        for ( size_t i = 0; i < nArrLen; i++ )
         {
-            const HTMLOption *pOption = (*_pOptions)[i];
-            switch( pOption->GetToken() )
+            const HTMLOption& aOption = aOptions[i];
+            switch( aOption.GetToken() )
             {
                 case HTML_O_HTTPEQUIV:
                 {
@@ -144,7 +144,7 @@ void EditHTMLParser::NextToken( int nToken )
                 {
                     if ( bEquiv )
                     {
-                        rtl_TextEncoding eEnc = GetEncodingByMIME( pOption->GetString() );
+                        rtl_TextEncoding eEnc = GetEncodingByMIME( aOption.GetString() );
                         if ( eEnc != RTL_TEXTENCODING_DONTKNOW )
                             SetSrcEncoding( eEnc );
                     }
@@ -711,21 +711,20 @@ void EditHTMLParser::StartPara( bool bReal )
 {
     if ( bReal )
     {
-        const HTMLOptions *_pOptions = GetOptions();
-        sal_uInt16 nArrLen = _pOptions->Count();
+        const HTMLOptions& aOptions = GetOptions();
         SvxAdjust eAdjust = SVX_ADJUST_LEFT;
-        for ( sal_uInt16 i = 0; i < nArrLen; i++ )
+        for ( size_t i = 0, n = aOptions.size(); i < n; ++i )
         {
-            const HTMLOption *pOption = (*_pOptions)[i];
-            switch( pOption->GetToken() )
+            const HTMLOption& aOption = aOptions[i];
+            switch( aOption.GetToken() )
             {
                 case HTML_O_ALIGN:
                 {
-                    if ( pOption->GetString().CompareIgnoreCaseToAscii( OOO_STRING_SVTOOLS_HTML_AL_right ) == COMPARE_EQUAL )
+                    if ( aOption.GetString().CompareIgnoreCaseToAscii( OOO_STRING_SVTOOLS_HTML_AL_right ) == COMPARE_EQUAL )
                         eAdjust = SVX_ADJUST_RIGHT;
-                    else if ( pOption->GetString().CompareIgnoreCaseToAscii( OOO_STRING_SVTOOLS_HTML_AL_middle ) == COMPARE_EQUAL )
+                    else if ( aOption.GetString().CompareIgnoreCaseToAscii( OOO_STRING_SVTOOLS_HTML_AL_middle ) == COMPARE_EQUAL )
                         eAdjust = SVX_ADJUST_CENTER;
-                    else if ( pOption->GetString().CompareIgnoreCaseToAscii( OOO_STRING_SVTOOLS_HTML_AL_center ) == COMPARE_EQUAL )
+                    else if ( aOption.GetString().CompareIgnoreCaseToAscii( OOO_STRING_SVTOOLS_HTML_AL_center ) == COMPARE_EQUAL )
                         eAdjust = SVX_ADJUST_CENTER;
                     else
                         eAdjust = SVX_ADJUST_LEFT;
@@ -771,18 +770,16 @@ void EditHTMLParser::AnchorStart()
     // ignore anchor in anchor
     if ( !pCurAnchor )
     {
-        const HTMLOptions* _pOptions = GetOptions();
-        sal_uInt16 nArrLen = _pOptions->Count();
-
+        const HTMLOptions& aOptions = GetOptions();
         String aRef;
 
-        for ( sal_uInt16 i = 0; i < nArrLen; i++ )
+        for ( size_t i = 0, n = aOptions.size(); i < n; ++i )
         {
-            const HTMLOption* pOption = (*_pOptions)[i];
-            switch( pOption->GetToken() )
+            const HTMLOption& aOption = aOptions[i];
+            switch( aOption.GetToken() )
             {
                 case HTML_O_HREF:
-                    aRef = pOption->GetString();
+                    aRef = aOption.GetString();
                 break;
             }
         }
