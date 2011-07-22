@@ -37,7 +37,11 @@ $(eval $(call gb_Library_set_include,lng,\
 	$$(INCLUDE) \
 	-I$(SRCDIR)/linguistic/inc \
 	-I$(SRCDIR)/linguistic/inc/pch \
-	-I$(OUTDIR)/inc/offuh \
+))
+
+$(eval $(call gb_Library_add_api,lng,\
+    offapi \
+    udkapi \
 ))
 
 $(eval $(call gb_Library_add_defs,lng,\

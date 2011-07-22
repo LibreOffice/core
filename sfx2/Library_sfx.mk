@@ -59,8 +59,7 @@ $(eval $(call gb_Library_add_defs,sfx,\
 ))
 
 ifeq ($(ENABLE_SYSTRAY_GTK),TRUE)
-$(eval $(call gb_Library_set_defs,sfx,\
-    $$(DEFS) \
+$(eval $(call gb_Library_add_defs,sfx,\
     -DENABLE_QUICKSTART_APPLET \
     -DENABLE_SYSTRAY_GTK \
     -DPLUGIN_NAME=libqstart_gtk$(gb_Library_OOOEXT) \

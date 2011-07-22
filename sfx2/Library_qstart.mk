@@ -48,8 +48,7 @@ $(eval $(call gb_Library_add_defs,qstart_gtk,\
 ))
 
 ifeq ($(ENABLE_SYSTRAY_GTK),TRUE)
-$(eval $(call gb_Library_set_defs,qstart_gtk,\
-    $$(DEFS) \
+$(eval $(call gb_Library_add_defs,qstart_gtk,\
     -DENABLE_SYSTRAY_GTK \
 ))
 endif

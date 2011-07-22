@@ -35,7 +35,11 @@ $(eval $(call gb_Library_set_include,xcr,\
 	-I$(SRCDIR)/xmlscript/source/inc \
 	-I$(SRCDIR)/xmlscript/inc/pch \
 	$$(INCLUDE) \
-	-I$(OUTDIR)/inc/offuh \
+))
+
+$(eval $(call gb_Library_add_api,xcr,\
+    offapi \
+    udkapi \
 ))
 
 $(eval $(call gb_Library_add_defs,xcr,\

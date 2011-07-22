@@ -1,7 +1,7 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
+#
 # Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
@@ -14,55 +14,25 @@
 #
 # OpenOffice.org is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	See the
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU Lesser General Public License version 3 for more details
 # (a copy is included in the LICENSE file that accompanied this code).
 #
 # You should have received a copy of the GNU Lesser General Public License
-# version 3 along with OpenOffice.org.	If not, see
+# version 3 along with OpenOffice.org.  If not, see
 # <http://www.openoffice.org/license.html>
 # for a copy of the LGPLv3 License.
 #
 #*************************************************************************
 
-$(eval $(call gb_Executable_Executable,svidl))
+ifeq ($(strip $(SOLARENV)),)
+$(error No environment set!)
+endif
 
-$(eval $(call gb_Executable_set_include,svidl,\
-	$$(INCLUDE) \
-	-I$(OUTDIR)/inc/ \
-	-I$(SRCDIR)/idl/inc/pch \
-	-I$(SRCDIR)/idl/inc \
-))
+gb_PARTIALBUILD := T
+GBUILDDIR := $(SOLARENV)/gbuild
+include $(GBUILDDIR)/gbuild.mk
 
-$(eval $(call gb_Executable_add_api,svidl,\
-    offapi \
-    udkapi \
-))
-
-$(eval $(call gb_Executable_add_defs,svidl,\
-	-DIDL_COMPILER \
-))
-
-$(eval $(call gb_Executable_add_linked_libs,svidl,\
-	tl \
-	sal \
-    $(gb_STDLIBS) \
-))
-
-$(eval $(call gb_Executable_add_exception_objects,svidl,\
-	idl/source/cmptools/char \
-	idl/source/cmptools/hash \
-	idl/source/cmptools/lex \
-	idl/source/objects/basobj \
-	idl/source/objects/bastype \
-	idl/source/objects/module \
-	idl/source/objects/object \
-	idl/source/objects/slot \
-	idl/source/objects/types \
-	idl/source/prj/command \
-	idl/source/prj/database \
-	idl/source/prj/globals \
-	idl/source/prj/svidl \
-))
+$(eval $(call gb_Module_make_global_targets,$(shell ls $(dir $(realpath $(firstword $(MAKEFILE_LIST))))/Module*.mk)))
 
 # vim: set noet sw=4 ts=4:
