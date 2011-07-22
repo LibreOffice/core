@@ -240,7 +240,7 @@ sal_uInt16 aSave_BoxCntntSet[] = {
 SwUndoInsTbl::SwUndoInsTbl( const SwPosition& rPos, sal_uInt16 nCl, sal_uInt16 nRw,
                             sal_uInt16 nAdj, const SwInsertTableOptions& rInsTblOpts,
                             const SwTableAutoFmt* pTAFmt,
-                            const SvUShorts* pColArr,
+                            const std::vector<sal_uInt16> *pColArr,
                             const String & rName)
     : SwUndo( UNDO_INSTABLE ),
     aInsTblOpts( rInsTblOpts ), pDDEFldType( 0 ), pColWidth( 0 ), pRedlData( 0 ), pAutoFmt( 0 ),
@@ -248,8 +248,7 @@ SwUndoInsTbl::SwUndoInsTbl( const SwPosition& rPos, sal_uInt16 nCl, sal_uInt16 n
 {
     if( pColArr )
     {
-        pColWidth = new SvUShorts( 0, 1 );
-        pColWidth->Insert( pColArr, 0 );
+        pColWidth = new std::vector<sal_uInt16>(*pColArr);
     }
     if( pTAFmt )
         pAutoFmt = new SwTableAutoFmt( *pTAFmt );

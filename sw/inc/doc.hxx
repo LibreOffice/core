@@ -110,7 +110,6 @@ class VirtualDevice;
 class SfxPrinter;
 class SvNumberFormatter;
 class SvStringsSort;
-class SvUShorts;
 class SvxMacro;
 class SvxMacroTableDtor;
 class SwAutoCompleteWord;
@@ -1568,7 +1567,7 @@ public:
                                 const SwPosition& rPos, sal_uInt16 nRows,
                                 sal_uInt16 nCols, short eAdjust,
                                 const SwTableAutoFmt* pTAFmt = 0,
-                                const SvUShorts* pColArr = 0,
+                                const std::vector<sal_uInt16> *pColArr = 0,
                                 sal_Bool bCalledFromShell = sal_False,
                                 sal_Bool bNewModel = sal_True );
 

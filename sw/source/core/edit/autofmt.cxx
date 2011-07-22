@@ -29,12 +29,8 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-#define _SVSTDARR_USHORTS
-
 #include <ctype.h>
 #include <hintids.hxx>
-
-#include <svl/svstdarr.hxx>
 
 #include <unotools/charclass.hxx>
 
@@ -660,7 +656,7 @@ sal_Bool SwAutoFormat::DoTable()
 
     xub_StrLen n = nSttPlus;
     const sal_Unicode* pStr = rTmp.GetBuffer() + n;
-    SvUShorts aPosArr( 5, 5 );
+    std::vector<sal_uInt16> aPosArr;
 
     while( *pStr )
     {
@@ -675,7 +671,7 @@ sal_Bool SwAutoFormat::DoTable()
 
         case '+':
         case '|':
-            aPosArr.Insert( static_cast<sal_uInt16>(aInfo.GetCharPos(n)), aPosArr.Count() );
+            aPosArr.push_back( static_cast<sal_uInt16>(aInfo.GetCharPos(n)) );
             break;
 
         default:
@@ -687,10 +683,10 @@ sal_Bool SwAutoFormat::DoTable()
         ++pStr;
     }
 
-    if( 1 < aPosArr.Count() )
+    if( 1 < aPosArr.size() )
     {
         // Ausrichtung vom Textnode besorgen:
-        sal_uInt16 nColCnt = aPosArr.Count() - 1;
+        sal_uInt16 nColCnt = aPosArr.size() - 1;
         SwTwips nSttPos = aPosArr[ 0 ];
         sal_Int16 eHori;
         switch( pAktTxtNd->GetSwAttrSet().GetAdjust().GetAdjust() )
@@ -704,7 +700,7 @@ sal_Bool SwAutoFormat::DoTable()
                 eHori = text::HoriOrientation::NONE;
                 // dann muss als letztes noch die akt. FrameBreite
                 // ins Array
-                aPosArr.Insert( static_cast<sal_uInt16>(pAktTxtFrm->Frm().Width()), aPosArr.Count() );
+                aPosArr.push_back( static_cast<sal_uInt16>(pAktTxtFrm->Frm().Width()) );
             }
             else
                 eHori = text::HoriOrientation::LEFT;
@@ -720,7 +716,7 @@ sal_Bool SwAutoFormat::DoTable()
                            0, &aPosArr );
         aDelPam.GetPoint()->nNode = aIdx;
     }
-    return 1 < aPosArr.Count();
+    return 1 < aPosArr.size();
 }
 
 
