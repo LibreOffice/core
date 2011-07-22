@@ -159,7 +159,7 @@ $(DESCRIPTION) $(PHONYDESC) : $(DESCRIPTION_SRC)
 # may not fit...
 .IF "$(CUSTOM_LICENSE)"==""
 .IF "$(GUI)" == "WNT"
-PACKLICDEPS=$(SOLARBINDIR)/osl/license.txt
+PACKLICDEPS=$(SOLARVER)/$(INPATH)/bin/osl/license.txt
 .ELSE			# "$(GUI)" == "WNT"
 PACKLICDEPS=$(SOLARBINDIR)/osl/LICENSE
 .ENDIF			# "$(GUI)" == "WNT"
