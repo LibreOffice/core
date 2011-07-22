@@ -51,13 +51,13 @@ static HTMLOptionEnum const aScriptLangOptEnums[] =
     { 0,                    0                   }
 };
 
-sal_Bool HTMLParser::ParseScriptOptions( String& rLangString, const String& rBaseURL,
+bool HTMLParser::ParseScriptOptions( String& rLangString, const String& rBaseURL,
                                      HTMLScriptLanguage& rLang,
                                      String& rSrc,
                                      String& rLibrary,
                                      String& rModule )
 {
-    const HTMLOptions *pScriptOptions = GetOptions();
+    const HTMLOptions& aScriptOptions = GetOptions();
 
     rLangString.Erase();
     rLang = HTML_SL_JAVASCRIPT;
@@ -65,16 +65,16 @@ sal_Bool HTMLParser::ParseScriptOptions( String& rLangString, const String& rBas
     rLibrary.Erase();
     rModule.Erase();
 
-    for( sal_uInt16 i = pScriptOptions->Count(); i; )
+    for( size_t i = aScriptOptions.size(); i; )
     {
-        const HTMLOption *pOption = (*pScriptOptions)[ --i ];
-        switch( pOption->GetToken() )
+        const HTMLOption& aOption = aScriptOptions[--i];
+        switch( aOption.GetToken() )
         {
         case HTML_O_LANGUAGE:
             {
-                rLangString = pOption->GetString();
+                rLangString = aOption.GetString();
                 sal_uInt16 nLang;
-                if( pOption->GetEnum( nLang, aScriptLangOptEnums ) )
+                if( aOption.GetEnum( nLang, aScriptLangOptEnums ) )
                     rLang = (HTMLScriptLanguage)nLang;
                 else
                     rLang = HTML_SL_UNKNOWN;
@@ -82,19 +82,19 @@ sal_Bool HTMLParser::ParseScriptOptions( String& rLangString, const String& rBas
             break;
 
         case HTML_O_SRC:
-            rSrc = INetURLObject::GetAbsURL( rBaseURL, pOption->GetString() );
+            rSrc = INetURLObject::GetAbsURL( rBaseURL, aOption.GetString() );
             break;
         case HTML_O_SDLIBRARY:
-            rLibrary = pOption->GetString();
+            rLibrary = aOption.GetString();
             break;
 
         case HTML_O_SDMODULE:
-            rModule = pOption->GetString();
+            rModule = aOption.GetString();
             break;
         }
     }
 
-    return sal_True;
+    return true;
 }
 
 void HTMLParser::RemoveSGMLComment( String &rString, sal_Bool bFull )

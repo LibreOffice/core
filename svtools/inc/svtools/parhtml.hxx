@@ -35,6 +35,7 @@
 #include <svl/svarray.hxx>
 #include <svtools/svparser.hxx>
 
+#include <boost/ptr_container/ptr_vector.hpp>
 
 namespace com { namespace sun { namespace star {
     namespace document {
@@ -130,11 +131,13 @@ public:
     //SvxAdjust GetAdjust() const;                      // <P,TH,TD ALIGN=>
 };
 
-typedef HTMLOption* HTMLOptionPtr;
-SV_DECL_PTRARR(HTMLOptions,HTMLOptionPtr,16,16)
+typedef ::boost::ptr_vector<HTMLOption> HTMLOptions;
 
 class SVT_DLLPUBLIC HTMLParser : public SvParser
 {
+private:
+    mutable HTMLOptions maOptions; // die Optionen des Start-Tags
+
     bool bNewDoc        : 1;        // neues Doc lesen ?
     bool bIsInHeader    : 1;        // scanne Header-Bereich
     bool bIsInBody      : 1;        // scanne Body-Bereich
@@ -152,7 +155,6 @@ class SVT_DLLPUBLIC HTMLParser : public SvParser
 
     sal_uInt32 nPre_LinePos;            // Pos in der Line im PRE-Tag
 
-    HTMLOptions *pOptions;          // die Optionen des Start-Tags
     String aEndToken;
 
 protected:
@@ -223,7 +225,7 @@ public:
     // Ermitteln der Optionen. pNoConvertToken ist das optionale Token
     // einer Option, fuer die CR/LFs nicht aus dem Wert der Option
     // geloescht werden.
-    const HTMLOptions *GetOptions( sal_uInt16 *pNoConvertToken=0 ) const;
+    const HTMLOptions& GetOptions( sal_uInt16 *pNoConvertToken=0 ) const;
 
     // fuers asynchrone lesen aus dem SvStream
     virtual void Continue( int nToken );
@@ -241,7 +243,7 @@ private:
     bool ParseMetaOptionsImpl( const ::com::sun::star::uno::Reference<
                 ::com::sun::star::document::XDocumentProperties>&,
             SvKeyValueIterator*,
-            const HTMLOptions*,
+            const HTMLOptions&,
             rtl_TextEncoding& rEnc );
 
 public:
@@ -259,7 +261,7 @@ public:
                       bool bSwitchToUCS2 = false,
                       rtl_TextEncoding eEnc=RTL_TEXTENCODING_DONTKNOW );
 
-    sal_Bool ParseScriptOptions( String& rLangString, const String&, HTMLScriptLanguage& rLang,
+    bool ParseScriptOptions( String& rLangString, const String&, HTMLScriptLanguage& rLang,
                              String& rSrc, String& rLibrary, String& rModule );
 
     // Einen Kommentar um den Inhalt von <SCRIPT> oder <STYLE> entfernen

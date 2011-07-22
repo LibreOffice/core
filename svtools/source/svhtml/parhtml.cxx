@@ -52,6 +52,7 @@
 #include <svtools/htmltokn.h>
 #include <svtools/htmlkywd.hxx>
 
+#include <memory>
 
 using namespace ::com::sun::star;
 
@@ -107,10 +108,6 @@ static HTMLOptionEnum const aTableRulesOptEnums[] =
     { OOO_STRING_SVTOOLS_HTML_TR_all,       HTML_TR_ALL     },
     { 0,                0               }
 };
-
-
-SV_IMPL_PTRARR(HTMLOptions,HTMLOptionPtr)
-
 
 sal_uInt16 HTMLOption::GetEnum( const HTMLOptionEnum *pOptEnums, sal_uInt16 nDflt ) const
 {
@@ -323,17 +320,12 @@ HTMLParser::HTMLParser( SvStream& rIn, bool bReadNewDoc ) :
     bReadNextChar(false),
     bReadComment(false)
 {
-    pOptions = new HTMLOptions;
-
     //#i76649, default to UTF-8 for HTML unless we know differently
     SetSrcEncoding(RTL_TEXTENCODING_UTF8);
 }
 
 HTMLParser::~HTMLParser()
 {
-    if( pOptions && pOptions->Count() )
-        pOptions->DeleteAndDestroy( 0, pOptions->Count() );
-    delete pOptions;
 }
 
 SvParserState HTMLParser::CallParser()
@@ -1085,8 +1077,8 @@ int HTMLParser::_GetNextToken()
     sSaveToken.Erase();
 
     // Delete options
-    if( pOptions->Count() )
-        pOptions->DeleteAndDestroy( 0, pOptions->Count() );
+    if (!maOptions.empty())
+        maOptions.clear();
 
     if( !IsParserWorking() )        // Don't continue if already an error occured
         return 0;
@@ -1459,12 +1451,12 @@ void HTMLParser::UnescapeToken()
     }
 }
 
-const HTMLOptions *HTMLParser::GetOptions( sal_uInt16 *pNoConvertToken ) const
+const HTMLOptions& HTMLParser::GetOptions( sal_uInt16 *pNoConvertToken ) const
 {
     // If the options for the current token have already been returned,
     // return them once again.
-    if( pOptions->Count() )
-        return pOptions;
+    if (!maOptions.empty())
+        return maOptions;
 
     xub_StrLen nPos = 0;
     while( nPos < aToken.Len() )
@@ -1613,11 +1605,10 @@ const HTMLOptions *HTMLParser::GetOptions( sal_uInt16 *pNoConvertToken ) const
             }
 
             // Token is known and can be saved
-            HTMLOption *pOption =
-                new HTMLOption(
-                    sal::static_int_cast< sal_uInt16 >(nToken), sName, aValue );
+            std::auto_ptr<HTMLOption> pOption(
+                new HTMLOption(sal::static_int_cast<sal_uInt16>(nToken), sName, aValue));
 
-            pOptions->Insert( pOption, pOptions->Count() );
+            maOptions.push_back(pOption);
 
         }
         else
@@ -1625,7 +1616,7 @@ const HTMLOptions *HTMLParser::GetOptions( sal_uInt16 *pNoConvertToken ) const
             nPos++;
     }
 
-    return pOptions;
+    return maOptions;
 }
 
 int HTMLParser::FilterPRE( int nToken )
@@ -2100,32 +2091,32 @@ void HTMLParser::AddMetaUserDefined( ::rtl::OUString const & )
 bool HTMLParser::ParseMetaOptionsImpl(
         const uno::Reference<document::XDocumentProperties> & i_xDocProps,
         SvKeyValueIterator *i_pHTTPHeader,
-        const HTMLOptions *i_pOptions,
+        const HTMLOptions& aOptions,
         rtl_TextEncoding& o_rEnc )
 {
     String aName, aContent;
     sal_uInt16 nAction = HTML_META_NONE;
     bool bHTTPEquiv = false, bChanged = false;
 
-    for ( sal_uInt16 i = i_pOptions->Count(); i; )
+    for ( size_t i = aOptions.size(); i; )
     {
-        const HTMLOption *pOption = (*i_pOptions)[ --i ];
-        switch ( pOption->GetToken() )
+        const HTMLOption& aOption = aOptions[--i];
+        switch ( aOption.GetToken() )
         {
             case HTML_O_NAME:
-                aName = pOption->GetString();
+                aName = aOption.GetString();
                 if ( HTML_META_NONE==nAction )
                 {
-                    pOption->GetEnum( nAction, aHTMLMetaNameTable );
+                    aOption.GetEnum( nAction, aHTMLMetaNameTable );
                 }
                 break;
             case HTML_O_HTTPEQUIV:
-                aName = pOption->GetString();
-                pOption->GetEnum( nAction, aHTMLMetaNameTable );
+                aName = aOption.GetString();
+                aOption.GetEnum( nAction, aHTMLMetaNameTable );
                 bHTTPEquiv = true;
                 break;
             case HTML_O_CONTENT:
-                aContent = pOption->GetString();
+                aContent = aOption.GetString();
                 break;
         }
     }
