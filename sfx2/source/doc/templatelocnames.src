@@ -1,0 +1,281 @@
+/*
+ * Version: MPL 1.1 / GPLv3+ / LGPLv3+
+ *
+ * The contents of this file are subject to the Mozilla Public License Version
+ * 1.1 (the "License"); you may not use this file except in compliance with
+ * the License. You may obtain a copy of the License at
+ * http://www.mozilla.org/MPL/
+ *
+ * Software distributed under the License is distributed on an "AS IS" basis,
+ * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+ * for the specific language governing rights and limitations under the
+ * License.
+ *
+ * The Initial Developer of the Original Code is
+ *       Péter Rabi <prabi@caesar.elte.hu>
+ * Portions created by the Initial Developer are Copyright (C) 2011 the
+ * Initial Developer. All Rights Reserved.
+ *
+ * Contributor(s):
+ *
+ * Alternatively, the contents of this file may be used under the terms of
+ * either the GNU General Public License Version 3 or later (the "GPLv3+"), or
+ * the GNU Lesser General Public License Version 3 or later (the "LGPLv3+"),
+ * in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
+ * instead of those above.
+ */
+
+#include <sfx2/templatelocnames.hrc>
+
+// Do not translate STR_TEMPLATE_NAME*_DEF names!!
+String STR_TEMPLATE_NAME1_DEF
+{
+    Text = "Blue Border" ;
+};
+
+String STR_TEMPLATE_NAME2_DEF
+{
+    Text = "Black and White" ;
+};
+
+String STR_TEMPLATE_NAME3_DEF
+{
+    Text = "Blue and Grey" ;
+};
+
+String STR_TEMPLATE_NAME4_DEF
+{
+    Text = "Blue Lines and Gradients" ;
+};
+
+String STR_TEMPLATE_NAME5_DEF
+{
+    Text = "Blue with Bottom Title" ;
+};
+
+String STR_TEMPLATE_NAME6_DEF
+{
+    Text = "Notebook" ;
+};
+
+String STR_TEMPLATE_NAME7_DEF
+{
+    Text = "Brown" ;
+};
+
+String STR_TEMPLATE_NAME8_DEF
+{
+    Text = "Characters with Glow" ;
+};
+
+String STR_TEMPLATE_NAME9_DEF
+{
+    Text = "Forest" ;
+};
+
+String STR_TEMPLATE_NAME10_DEF
+{
+    Text = "Fresco" ;
+};
+
+String STR_TEMPLATE_NAME11_DEF
+{
+    Text = "Glacier" ;
+};
+
+String STR_TEMPLATE_NAME12_DEF
+{
+    Text = "Green with White Lines" ;
+};
+
+String STR_TEMPLATE_NAME13_DEF
+{
+    Text = "Keyboard" ;
+};
+
+String STR_TEMPLATE_NAME14_DEF
+{
+    Text = "Light Blue Shapes" ;
+};
+
+String STR_TEMPLATE_NAME15_DEF
+{
+    Text = "Numbers on Dark Background" ;
+};
+
+String STR_TEMPLATE_NAME16_DEF
+{
+    Text = "Blue Step Gradients" ;
+};
+
+String STR_TEMPLATE_NAME17_DEF
+{
+    Text = "White Blue and Lightnings" ;
+};
+
+String STR_TEMPLATE_NAME18_DEF
+{
+    Text = "Noise Paper" ;
+};
+
+String STR_TEMPLATE_NAME19_DEF
+{
+    Text = "Red Noise Shapes" ;
+};
+
+String STR_TEMPLATE_NAME20_DEF
+{
+    Text = "Rounded Rectangles" ;
+};
+
+String STR_TEMPLATE_NAME21_DEF
+{
+    Text = "Blue and Red Gradient" ;
+};
+
+String STR_TEMPLATE_NAME22_DEF
+{
+    Text = "Technical Polygon" ;
+};
+
+String STR_TEMPLATE_NAME23_DEF
+{
+    Text = "Tunnel" ;
+};
+
+String STR_TEMPLATE_NAME24_DEF
+{
+    Text = "Water" ;
+};
+
+String STR_TEMPLATE_NAME25_DEF
+{
+    Text = "Wine" ;
+};
+
+/////////////////////////////////////////////////
+
+String STR_TEMPLATE_NAME1
+{
+    Text [ en-US ] = "Blue Border" ;
+};
+
+String STR_TEMPLATE_NAME2
+{
+    Text [ en-US ] = "Black and White" ;
+};
+
+String STR_TEMPLATE_NAME3
+{
+    Text [ en-US ] = "Blue and Grey" ;
+};
+
+String STR_TEMPLATE_NAME4
+{
+    Text [ en-US ] = "Blue Lines and Gradients" ;
+};
+
+String STR_TEMPLATE_NAME5
+{
+    Text [ en-US ] = "Blue with Bottom Title" ;
+};
+
+String STR_TEMPLATE_NAME6
+{
+    Text [ en-US ] = "Notebook" ;
+};
+
+String STR_TEMPLATE_NAME7
+{
+    Text [ en-US ] = "Brown" ;
+};
+
+String STR_TEMPLATE_NAME8
+{
+    Text [ en-US ] = "Characters with Glow" ;
+};
+
+String STR_TEMPLATE_NAME9
+{
+    Text [ en-US ] = "Forest" ;
+};
+
+String STR_TEMPLATE_NAME10
+{
+    Text [ en-US ] = "Fresco" ;
+};
+
+String STR_TEMPLATE_NAME11
+{
+    Text [ en-US ] = "Glacier" ;
+};
+
+String STR_TEMPLATE_NAME12
+{
+    Text [ en-US ] = "Green with White Lines" ;
+};
+
+String STR_TEMPLATE_NAME13
+{
+    Text [ en-US ] = "Keyboard" ;
+};
+
+String STR_TEMPLATE_NAME14
+{
+    Text [ en-US ] = "Light Blue Shapes" ;
+};
+
+String STR_TEMPLATE_NAME15
+{
+    Text [ en-US ] = "Numbers on Dark Background" ;
+};
+
+String STR_TEMPLATE_NAME16
+{
+    Text [ en-US ] = "Blue Step Gradients" ;
+};
+
+String STR_TEMPLATE_NAME17
+{
+    Text [ en-US ] = "White Blue and Lightnings" ;
+};
+
+String STR_TEMPLATE_NAME18
+{
+    Text [ en-US ] = "Noise Paper" ;
+};
+
+String STR_TEMPLATE_NAME19
+{
+    Text [ en-US ] = "Red Noise Shapes" ;
+};
+
+String STR_TEMPLATE_NAME20
+{
+    Text [ en-US ] = "Rounded Rectangles" ;
+};
+
+String STR_TEMPLATE_NAME21
+{
+    Text [ en-US ] = "Blue and Red Gradient" ;
+};
+
+String STR_TEMPLATE_NAME22
+{
+    Text [ en-US ] = "Technical Polygon" ;
+};
+
+String STR_TEMPLATE_NAME23
+{
+    Text [ en-US ] = "Tunnel" ;
+};
+
+String STR_TEMPLATE_NAME24
+{
+    Text [ en-US ] = "Water" ;
+};
+
+String STR_TEMPLATE_NAME25
+{
+    Text [ en-US ] = "Wine" ;
+};

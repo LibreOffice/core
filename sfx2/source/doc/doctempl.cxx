@@ -94,6 +94,7 @@ using namespace ::ucbhelper;
 #include "sfxtypes.hxx"
 #include <sfx2/app.hxx>
 #include "sfx2/sfxresid.hxx"
+#include <sfx2/templatelocnames.hrc>
 #include "doc.hrc"
 #include <sfx2/fcontnr.hxx>
 #include <svtools/templatefoldercache.hxx>
@@ -151,6 +152,8 @@ class DocTempl_EntryData_Impl
 
 private:
     RegionData_Impl*    GetParent() const { return mpParent; }
+    OUString            ConvertResourceString(
+                            int nSourceResIds, int nDestResIds, int nCount, const OUString& rString );
 
 public:
                         DocTempl_EntryData_Impl( RegionData_Impl* pParent,
@@ -1761,9 +1764,24 @@ DocTempl_EntryData_Impl::DocTempl_EntryData_Impl( RegionData_Impl* pParent,
                                 const OUString& rTitle )
 {
     mpParent    = pParent;
-    maTitle     = rTitle;
+    maTitle     = ConvertResourceString(
+                  STR_TEMPLATE_NAME1_DEF, STR_TEMPLATE_NAME1, NUM_TEMPLATE_NAMES, rTitle );
     mbIsOwner   = sal_False;
     mbDidConvert= sal_False;
+}
+
+// -----------------------------------------------------------------------
+OUString DocTempl_EntryData_Impl::ConvertResourceString (
+    int nSourceResIds, int nDestResIds, int nCount, const OUString& rString )
+{
+    for( int i = 0; i < nCount; ++i )
+    {
+        if( rString == ResId::toString( (const ResId)SfxResId( (sal_uInt16)(nSourceResIds + i) ) ) )
+        {
+            return ResId::toString( (const ResId)SfxResId( (sal_uInt16)(nDestResIds + i) ) );
+        }
+    }
+    return rString;
 }
 
 // -----------------------------------------------------------------------
