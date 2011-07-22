@@ -1,5 +1,5 @@
     <node oor:name="calc_HTML_WebQuery" oor:op="replace">
-        <prop oor:name="Flags"><value>IMPORT ALIEN USEOPTIONS</value></prop>
+        <prop oor:name="Flags"><value>IMPORT ALIEN USEOPTIONS PREFERRED</value></prop>
         <prop oor:name="UIComponent"><value>com.sun.star.comp.Calc.FilterOptionsDialog</value></prop>
         <prop oor:name="FilterService"/>
         <prop oor:name="UserData"><value></value></prop>
