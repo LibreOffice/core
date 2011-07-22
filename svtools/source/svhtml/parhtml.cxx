@@ -307,15 +307,22 @@ HTMLTableRules HTMLOption::GetTableRules() const
     return (HTMLTableRules)GetEnum( aTableRulesOptEnums, HTML_TR_NONE );
 }
 
-HTMLParser::HTMLParser( SvStream& rIn, bool bReadNewDoc )
-    : SvParser( rIn )
+HTMLParser::HTMLParser( SvStream& rIn, bool bReadNewDoc ) :
+    SvParser( rIn ),
+    bNewDoc(bReadNewDoc),
+    bIsInHeader(true),
+    bIsInBody(false),
+    bReadListing(false),
+    bReadXMP(false),
+    bReadPRE(false),
+    bReadTextArea(false),
+    bReadScript(false),
+    bReadStyle(false),
+    bEndTokenFound(false),
+    bPre_IgnoreNewPara(false),
+    bReadNextChar(false),
+    bReadComment(false)
 {
-    bNewDoc = bReadNewDoc;
-    bReadListing = bReadXMP = bReadPRE = bReadTextArea =
-        bReadScript = bReadStyle =
-        bEndTokenFound = bIsInBody = bReadNextChar =
-        bReadComment = false;
-    bIsInHeader = true;
     pOptions = new HTMLOptions;
 
     //#i76649, default to UTF-8 for HTML unless we know differently
