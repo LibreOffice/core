@@ -31,7 +31,11 @@ $(eval $(call gb_Library_set_include,nullcanvas,\
 	$$(INCLUDE) \
 	-I$(SRCDIR)/canvas/inc \
 	-I$(SRCDIR)/canvas/inc/pch \
-	-I$(OUTDIR)/inc/offuh \
+))
+
+$(eval $(call gb_Library_add_api,nullcanvas,\
+	offapi \
+	udkapi \
 ))
 
 ifneq ($(strip $(VERBOSE)$(verbose)),)

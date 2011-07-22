@@ -34,9 +34,12 @@ $(eval $(call gb_Library_set_include,directx5canvas,\
 	-I$(SRCDIR)/canvas/inc \
 	-I$(SRCDIR)/canvas/inc/pch \
 	-I$(SRCDIR)/canvas/source/directx \
-	-I$(OUTDIR)/inc/offuh \
 ))
 
+$(eval $(call gb_Library_add_api,directx5canvas,\
+    offapi \
+    udkapi \
+))
 $(eval $(call gb_Library_add_defs,directx5canvas,\
 	-DDIRECTX_VERSION=0x0500 \
 ))

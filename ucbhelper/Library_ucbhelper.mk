@@ -35,11 +35,15 @@ $(eval $(call gb_Library_set_include,ucbhelper,\
 	$$(INCLUDE) \
 	-I$(SRCDIR)/ucbhelper/inc \
 	-I$(SRCDIR)/ucbhelper/inc/pch \
-	-I$(OUTDIR)/inc/offuh \
 ))
 
 $(eval $(call gb_Library_add_defs,ucbhelper,\
 	-DUCBHELPER_DLLIMPLEMENTATION \
+))
+
+$(eval $(call gb_Library_add_api,ucbhelper,\
+    offapi \
+    udkapi \
 ))
 
 $(eval $(call gb_Library_add_linked_libs,ucbhelper,\

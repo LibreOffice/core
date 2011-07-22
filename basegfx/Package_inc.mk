@@ -92,7 +92,6 @@ $(eval $(call gb_Package_add_file,basegfx_inc,inc/basegfx/pixel/bpixel.hxx,baseg
 $(eval $(call gb_Package_add_file,basegfx_inc,inc/basegfx/matrix/b2dhommatrix.hxx,basegfx/matrix/b2dhommatrix.hxx))
 $(eval $(call gb_Package_add_file,basegfx_inc,inc/basegfx/matrix/b3dhommatrix.hxx,basegfx/matrix/b3dhommatrix.hxx))
 $(eval $(call gb_Package_add_file,basegfx_inc,inc/basegfx/matrix/b2dhommatrixtools.hxx,basegfx/matrix/b2dhommatrixtools.hxx))
-$(eval $(call gb_Package_add_file,basegfx_inc,inc/basegfx/point/b3dhompoint.hxx,basegfx/point/b3dhompoint.hxx))
 $(eval $(call gb_Package_add_file,basegfx_inc,inc/basegfx/point/b3ipoint.hxx,basegfx/point/b3ipoint.hxx))
 $(eval $(call gb_Package_add_file,basegfx_inc,inc/basegfx/point/b3dpoint.hxx,basegfx/point/b3dpoint.hxx))
 $(eval $(call gb_Package_add_file,basegfx_inc,inc/basegfx/point/b2dpoint.hxx,basegfx/point/b2dpoint.hxx))

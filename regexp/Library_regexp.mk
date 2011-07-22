@@ -29,9 +29,9 @@ $(eval $(call gb_Library_Library,i18nregexp))
 
 $(eval $(call gb_Library_add_package_headers,i18nregexp,regexp_inc))
 
-$(eval $(call gb_Library_set_include,i18nregexp,\
-	$$(INCLUDE) \
-	-I$(OUTDIR)/inc/offuh \
+$(eval $(call gb_Library_add_api,i18nregexp,\
+    offapi \
+    udkapi \
 ))
 
 $(eval $(call gb_Library_add_defs,i18nregexp,\

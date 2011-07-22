@@ -33,9 +33,12 @@ $(eval $(call gb_Library_set_include,canvasfactory,\
 	$$(INCLUDE) \
 	-I$(SRCDIR)/canvas/inc \
 	-I$(SRCDIR)/canvas/inc/pch \
-	-I$(OUTDIR)/inc/offuh \
 ))
 
+$(eval $(call gb_Library_add_api,canvasfactory,\
+	offapi \
+	udkapi \
+))
 $(eval $(call gb_Library_add_linked_libs,canvasfactory,\
 	cppu \
 	cppuhelper \

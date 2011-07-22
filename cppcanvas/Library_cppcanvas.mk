@@ -36,9 +36,12 @@ $(eval $(call gb_Library_set_include,cppcanvas,\
 	-I$(SRCDIR)/cppcanvas/inc/pch \
 	-I$(SRCDIR)/cppcanvas/source/inc \
 	$$(INCLUDE) \
-	-I$(OUTDIR)/inc/offuh \
 ))
 
+$(eval $(call gb_Library_add_api,cppcanvas,\
+    offapi \
+    udkapi \
+))
 $(eval $(call gb_Library_add_defs,cppcanvas,\
 	-DCPPCANVAS_DLLIMPLEMENTATION \
 ))

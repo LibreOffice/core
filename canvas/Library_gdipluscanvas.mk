@@ -33,7 +33,11 @@ $(eval $(call gb_Library_set_include,gdipluscanvas,\
 	$$(INCLUDE) \
 	-I$(SRCDIR)/canvas/inc \
 	-I$(SRCDIR)/canvas/inc/pch \
-	-I$(OUTDIR)/inc/offuh \
+))
+
+$(eval $(call gb_Library_add_api,gdipluscanvas,\
+    offapi \
+    udkapi \
 ))
 
 $(eval $(call gb_Library_add_defs,gdipluscanvas,\

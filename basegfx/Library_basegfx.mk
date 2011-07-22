@@ -36,11 +36,15 @@ $(eval $(call gb_Library_set_include,basegfx,\
 	-I$(SRCDIR)/basegfx/source/inc \
 	-I$(SRCDIR)/basegfx/inc/pch \
 	$$(INCLUDE) \
-	-I$(OUTDIR)/inc/offuh \
 ))
 
 $(eval $(call gb_Library_add_defs,basegfx,\
 	-DBASEGFX_DLLIMPLEMENTATION \
+))
+
+$(eval $(call gb_Library_add_api,basegfx,\
+    offapi \
+    udkapi \
 ))
 
 $(eval $(call gb_Library_add_linked_libs,basegfx,\
@@ -51,14 +55,15 @@ $(eval $(call gb_Library_add_linked_libs,basegfx,\
 ))
 
 $(eval $(call gb_Library_add_exception_objects,basegfx,\
-	basegfx/source/tools/liangbarsky \
-	basegfx/source/tools/debugplotter \
+	basegfx/source/tools/b2dclipstate \
 	basegfx/source/tools/canvastools \
+	basegfx/source/tools/debugplotter \
 	basegfx/source/tools/gradienttools \
 	basegfx/source/tools/keystoplerp \
-	basegfx/source/tools/unopolypolygon \
+	basegfx/source/tools/liangbarsky \
 	basegfx/source/tools/tools \
-	basegfx/source/tools/b2dclipstate \
+	basegfx/source/tools/unopolypolygon \
+	basegfx/source/tools/unotools \
 	basegfx/source/numeric/ftools \
 	basegfx/source/tuple/b3ituple \
 	basegfx/source/tuple/b3dtuple \
@@ -98,7 +103,6 @@ $(eval $(call gb_Library_add_exception_objects,basegfx,\
 	basegfx/source/matrix/b3dhommatrix \
 	basegfx/source/matrix/b2dhommatrix \
 	basegfx/source/point/b3ipoint \
-	basegfx/source/point/b3dhompoint \
 	basegfx/source/point/b2dpoint \
 	basegfx/source/point/b3dpoint \
 	basegfx/source/point/b2dhompoint \

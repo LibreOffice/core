@@ -36,7 +36,12 @@ $(eval $(call gb_StaticLibrary_set_include,basegfx_s,\
 	-I$(SRCDIR)/basegfx/source/inc \
 	$$(INCLUDE) \
 	-I$(SRCDIR)/basegfx/inc/pch \
-	-I$(OUTDIR)/inc/offuh \
+	-I$(OUTDIR)/inc \
+))
+
+$(eval $(call gb_StaticLibrary_add_api,basegfx_s,\
+    offapi \
+    udkapi \
 ))
 
 # the whole library is a hack
@@ -103,7 +108,6 @@ $(eval $(call gb_StaticLibrary_add_generated_exception_objects,basegfx_s,\
 	CustomTarget/basegfx/source/matrix/b3dhommatrix \
 	CustomTarget/basegfx/source/matrix/b2dhommatrix \
 	CustomTarget/basegfx/source/point/b3ipoint \
-	CustomTarget/basegfx/source/point/b3dhompoint \
 	CustomTarget/basegfx/source/point/b2dpoint \
 	CustomTarget/basegfx/source/point/b3dpoint \
 	CustomTarget/basegfx/source/point/b2dhompoint \

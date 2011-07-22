@@ -38,9 +38,8 @@ $(eval $(call gb_CppunitTest_add_linked_libs,sax_cppunit, \
     $(gb_STDLIBS) \
 ))
 
-$(eval $(call gb_CppunitTest_set_include,sax_cppunit,\
-	$$(INCLUDE) \
-	-I$(OUTDIR)/inc/offuh \
+$(eval $(call gb_CppunitTest_add_api,sax_cppunit,\
+    offapi \
+    udkapi \
 ))
-
 # vim: set noet sw=4 ts=4:

@@ -56,8 +56,7 @@ $(eval $(call gb_Library_set_include,vcl,\
     -I$(WORKDIR)/CustomTarget/vcl/unx/generic/fontmanager \
 ))
 ifeq ($(GUIBASE),unx)
-$(eval $(call gb_Library_set_include,vcl,\
-	$$(INCLUDE) \
+$(eval $(call gb_Library_add_cxxflags,vcl,\
     $$(FONTCONFIG_CFLAGS) \
     $$(FREETYPE_CFLAGS) \
 ))
@@ -200,8 +199,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
 endif
 
 ifeq ($(GUIBASE),android)
-$(eval $(call gb_Library_set_defs,vcl,\
-    $$(DEFS) \
+$(eval $(call gb_Library_add_defs,vcl,\
     -DSAL_DLLPREFIX=\"$(gb_Library_SYSPRE)\" \
     -DSAL_DLLPOSTFIX=\"$(gb_Library_OOOEXT)\" \
     -D_XSALSET_LIBNAME=\"$(call gb_Library_get_runtime_filename,spa)\" \
@@ -473,8 +471,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/components/rasterizer_rsvg \
 ))
 
-$(eval $(call gb_Library_set_defs,vcl,\
-    $$(DEFS) \
+$(eval $(call gb_Library_add_defs,vcl,\
     -DENABLE_LIBRSVG \
 ))
 ifeq ($(SYSTEM_CAIRO),YES)
@@ -490,8 +487,7 @@ $(eval $(call gb_Library_set_cxxflags,vcl,\
 # that point as they occur on the command line, it is pointless to
 # search the cairo library at that point as no references to cairo
 # entries have been read from object files yet.
-$(eval $(call gb_Library_set_ldflags,vcl,\
-    $$(LDFLAGS) \
+$(eval $(call gb_Library_add_ldflags,vcl,\
     $$(CAIRO_LIBS) \
 ))
 
@@ -515,8 +511,7 @@ endif
 endif
 
 ifeq ($(GUIBASE),unx)
-$(eval $(call gb_Library_set_ldflags,vcl,\
-    $$(LDFLAGS) \
+$(eval $(call gb_Library_add_ldflags,vcl,\
 	$$(FONTCONFIG_LIBS) \
     $$(FREETYPE_LIBS) \
 ))
@@ -561,7 +556,7 @@ $(eval $(call gb_Library_add_ldflags,vcl,\
 ))
 endif
 ifeq ($(COM),GCC)
-$(eval $(call gb_Library_set_ldflags,vcl,\
+$(eval $(call gb_Library_add_ldflags,vcl,\
     $$(LDFLAGS) \
 ))
 endif
@@ -585,8 +580,7 @@ $(eval $(call gb_Library_add_linked_libs,vcl,\
 endif
 
 ifeq ($(GUIBASE),cocoatouch)
-$(eval $(call gb_Library_set_ldflags,vcl,\
-    $$(LDFLAGS) \
+$(eval $(call gb_Library_add_ldflags,vcl,\
     -framework UIKit \
     -framework CoreFoundation \
 ))

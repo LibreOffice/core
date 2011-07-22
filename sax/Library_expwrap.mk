@@ -31,8 +31,12 @@ $(eval $(call gb_Library_set_componentfile,expwrap,sax/source/expatwrap/expwrap)
 
 $(eval $(call gb_Library_set_include,expwrap,\
 	$$(INCLUDE) \
-	-I$(OUTDIR)/inc/offuh \
 	-I$(SRCDIR)/sax/inc \
+))
+
+$(eval $(call gb_Library_add_api,expwrap,\
+    offapi \
+    udkapi \
 ))
 
 $(eval $(call gb_Library_add_linked_libs,expwrap,\

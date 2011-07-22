@@ -33,7 +33,6 @@ $(eval $(call gb_Library_set_include,cairocanvas,\
 	$$(INCLUDE) \
 	-I$(SRCDIR)/canvas/inc \
 	-I$(SRCDIR)/canvas/inc/pch \
-	-I$(OUTDIR)/inc/offuh \
 ))
 
 ifneq ($(strip $(VERBOSE)$(verbose)),)

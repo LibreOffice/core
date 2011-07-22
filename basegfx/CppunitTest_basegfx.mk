@@ -53,4 +53,9 @@ $(eval $(call gb_CppunitTest_set_include,basegfx_test,\
 	-I$(OUTDIR)/inc/offuh \
 ))
 
+$(eval $(call gb_CppunitTest_add_api,basegfx_test,\
+    offapi \
+    udkapi \
+))
+
 # vim: set noet sw=4 ts=4:

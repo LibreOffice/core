@@ -1,3 +1,3 @@
-fx	basegfx	:	o3tl sal offapi comphelper cppuhelper cppu CPPUNIT:cppunit NULL
+fx	basegfx	:	o3tl sal offapi udkapi comphelper cppuhelper cppu CPPUNIT:cppunit NULL
 fx	basegfx\prj								nmake		-	all	fx_prj NULL
 

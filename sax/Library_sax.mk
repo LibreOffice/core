@@ -33,8 +33,12 @@ $(eval $(call gb_Library_add_package_headers,sax,\
 
 $(eval $(call gb_Library_set_include,sax,\
 	$$(INCLUDE) \
-	-I$(OUTDIR)/inc/offuh \
 	-I$(SRCDIR)/sax/inc \
+))
+
+$(eval $(call gb_Library_add_api,sax,\
+    offapi \
+    udkapi \
 ))
 
 $(eval $(call gb_Library_add_defs,sax,\
