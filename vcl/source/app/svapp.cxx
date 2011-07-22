@@ -1589,17 +1589,6 @@ sal_uInt16 Application::GetSystemWindowMode()
 
 // -----------------------------------------------------------------------
 
-const String& Application::GetFontPath()
-{
-    ImplSVData* pSVData = ImplGetSVData();
-
-    if( pSVData->maAppData.mpFontPath )
-        return *(pSVData->maAppData.mpFontPath);
-    return ImplGetSVEmptyStr();
-}
-
-// -----------------------------------------------------------------------
-
 UniqueItemId Application::CreateUniqueId()
 {
     ImplSVData* pSVData = ImplGetSVData();
