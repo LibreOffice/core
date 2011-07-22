@@ -258,13 +258,6 @@ void SfxProgress::SetText
 
 // -----------------------------------------------------------------------
 
-const String& SfxProgress::GetStateText_Impl() const
-{
-    return pImp->aStateText;
-}
-
-// -----------------------------------------------------------------------
-
 // Required in App data
 static sal_uIntPtr nLastTime = 0;
 
@@ -667,23 +660,6 @@ void SfxProgress::LeaveLock()
     SfxAppData_Impl *pImp = SFX_APP()->Get_Impl();
     DBG_ASSERT( 0 != pImp->nRescheduleLocks, "SFxProgress::LeaveLock but no locks" );
     pImp->nRescheduleLocks--;
-}
-
-// -----------------------------------------------------------------------
-
-bool SfxProgress::StatusBarManagerGone_Impl
-(
-    SfxStatusBarManager *       // This <SfxStatusBarManager> will be destroyed
-)
-
-/*  [Description]
-
-    Internal method for notifying the SfxProgress that the specified
-    SfxStatusBarManger will be destroyed so that the Progress can let go of it.
-*/
-
-{
-    return sal_True;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

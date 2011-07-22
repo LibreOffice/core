@@ -2079,33 +2079,6 @@ sal_Bool SfxObjectShell::UseInteractionToHandleError(
     return bResult;
 }
 
-sal_Bool SfxObjectShell_Impl::NeedsOfficeUpdateDialog()
-{
-    // if the configuration is not available for any reason, the default behavior is to show the message
-    sal_Bool bResult = sal_True;
-
-    try
-    {
-        uno::Reference< lang::XMultiServiceFactory > xServiceManager( ::comphelper::getProcessServiceFactory(), uno::UNO_SET_THROW );
-        uno::Reference< uno::XInterface > xCommonConfig(
-                        ::comphelper::ConfigurationHelper::openConfig(
-                            xServiceManager,
-                            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/org.openoffice.Office.Common" ) ),
-                            ::comphelper::ConfigurationHelper::E_STANDARD ),
-                        uno::UNO_SET_THROW );
-
-        ::comphelper::ConfigurationHelper::readRelativeKey(
-                        xCommonConfig,
-                        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Load/" ) ),
-                        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ShowOfficeUpdateDialog" ) ) ) >>= bResult;
-    }
-    catch( uno::Exception& )
-    {
-    }
-
-    return bResult;
-}
-
 sal_Int16 SfxObjectShell_Impl::getCurrentMacroExecMode() const
 {
     sal_Int16 nImposedExecMode( MacroExecMode::NEVER_EXECUTE );

@@ -121,33 +121,6 @@ sal_Bool SfxContentHelper::IsDocument( const String& rContent )
 
 // -----------------------------------------------------------------------
 
-sal_Bool SfxContentHelper::Kill( const String& rContent )
-{
-    sal_Bool bRet = sal_True;
-    INetURLObject aDeleteObj( rContent );
-    DBG_ASSERT( aDeleteObj.GetProtocol() != INET_PROT_NOT_VALID, "Invalid URL!" );
-
-    try
-    {
-        ::ucbhelper::Content aCnt( aDeleteObj.GetMainURL( INetURLObject::NO_DECODE ), uno::Reference< ucb::XCommandEnvironment > () );
-        aCnt.executeCommand( OUString(RTL_CONSTASCII_USTRINGPARAM("delete")), uno::makeAny( sal_Bool( sal_True ) ) );
-    }
-    catch( const ucb::CommandAbortedException& )
-    {
-        DBG_WARNING( "CommandAbortedException" );
-        bRet = sal_False;
-    }
-    catch( const uno::Exception& )
-    {
-        DBG_ERRORFILE( "Any other exception" );
-        bRet = sal_False;
-    }
-
-    return bRet;
-}
-
-// -----------------------------------------------------------------------
-
 uno::Sequence < OUString > SfxContentHelper::GetResultSet( const String& rURL )
 {
     StringList_Impl* pList = NULL;

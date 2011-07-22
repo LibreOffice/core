@@ -323,17 +323,6 @@ public:
     ~SfxMedium_Impl();
 };
 
-void SfxMedium::DataAvailable_Impl()
-{
-    pImp->aAvailableLink.ClearPendingCall();
-    pImp->aAvailableLink.Call( NULL );
-}
-
-void SfxMedium::Cancel_Impl()
-{
-    SetError( ERRCODE_IO_GENERAL, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ) );
-}
-
 //------------------------------------------------------------------
 SfxMedium_Impl::SfxMedium_Impl( SfxMedium* pAntiImplP )
  :  SvCompatWeakBase( pAntiImplP ),
@@ -2587,13 +2576,6 @@ const SfxFilter* SfxMedium::GetOrigFilter( sal_Bool bNotCurrent ) const
 
 //----------------------------------------------------------------
 
-void SfxMedium::SetOrigFilter_Impl( const SfxFilter* pOrigFilter )
-{
-    pImp->pOrigFilter = pOrigFilter;
-}
-
-//------------------------------------------------------------------
-
 sal_uInt32 SfxMedium::CreatePasswordToModifyHash( const ::rtl::OUString& aPasswd, sal_Bool bWriter )
 {
     sal_uInt32 nHash = 0;
@@ -2752,10 +2734,6 @@ void SfxMedium::CloseStreams_Impl()
 }
 
 //------------------------------------------------------------------
-
-void SfxMedium::RefreshName_Impl()
-{
-}
 
 void SfxMedium::SetIsRemote_Impl()
 {
@@ -3040,13 +3018,6 @@ const INetURLObject& SfxMedium::GetURLObject() const
 
 //----------------------------------------------------------------
 
-const String& SfxMedium::GetPreRedirectedURL() const
-{
-    return pImp->aPreRedirectionURL;
-}
-
-//----------------------------------------------------------------
-
 void SfxMedium::SetReferer( const String& rRefer )
 {
     pImp->aReferer = rRefer;
@@ -3142,11 +3113,6 @@ SvKeyValueIterator* SfxMedium::GetHeaderAttributes_Impl()
 SvCompatWeakHdl* SfxMedium::GetHdl()
 {
     return pImp->GetHdl();
-}
-
-sal_Bool SfxMedium::IsDownloadDone_Impl()
-{
-    return pImp->bDownloadDone;
 }
 
 ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >  SfxMedium::GetInputStream()

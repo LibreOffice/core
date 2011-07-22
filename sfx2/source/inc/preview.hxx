@@ -48,7 +48,6 @@ public:
                     SfxPreviewBase_Impl( Window* pParent );
                     ~SfxPreviewBase_Impl(  );
     void            SetObjectShell( SfxObjectShell* pObj );
-    void            SetGDIFile( ::boost::shared_ptr<GDIMetaFile> pFile );
     virtual void    Resize();
 };
 
@@ -66,8 +65,6 @@ public:
                     : SfxPreviewBase_Impl( pParent ){};
     static void     ImpPaint(
         const Rectangle& rRect, GDIMetaFile* pFile, Window* pWindow );
-    static SfxFrameWindow*
-                    PreviewFactory( SfxFrame* pFrame, const String& rName );
 };
 
 #endif

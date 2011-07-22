@@ -157,8 +157,6 @@ struct SfxObjectShell_Impl : public ::sfx2::IMacroDocumentAccess
     SfxObjectShell_Impl( SfxObjectShell& _rDocShell );
     virtual ~SfxObjectShell_Impl();
 
-    static sal_Bool NeedsOfficeUpdateDialog();
-
     // IMacroDocumentAccess overridables
     virtual sal_Int16 getCurrentMacroExecMode() const;
     virtual sal_Bool setCurrentMacroExecMode( sal_uInt16 nMacroMode );
