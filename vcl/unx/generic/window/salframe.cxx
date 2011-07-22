@@ -979,7 +979,6 @@ void X11SalFrame::SetIcon( sal_uInt16 nIcon )
 #endif
 
             const int ourLargestIconSize = 48;
-            bool bFoundIconSize = false;
 
             int i;
             for( i=0; i<nSizes; i++)
@@ -996,7 +995,6 @@ void X11SalFrame::SetIcon( sal_uInt16 nIcon )
                     && pIconSize[i].max_width <= 2*ourLargestIconSize )
                 {
                     iconSize = pIconSize[i].max_width;
-                    bFoundIconSize = true;
                 }
                 iconSize = pIconSize[i].max_width;
 
