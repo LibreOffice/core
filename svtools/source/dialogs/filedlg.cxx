@@ -93,16 +93,6 @@ void FileDialog::AddFilter( const UniString& rFilter, const UniString& rMask )
     ((ImpFileDialog*)pImpFileDlg->GetDialog())->AddFilter( rFilter, rMask );
 }
 
-void FileDialog::RemoveFilter( const UniString& rFilter )
-{
-    ((ImpFileDialog*)pImpFileDlg->GetDialog())->RemoveFilter( rFilter );
-}
-
-void FileDialog::RemoveAllFilter()
-{
-    ((ImpFileDialog*)pImpFileDlg->GetDialog())->RemoveAllFilter();
-}
-
 void FileDialog::SetCurFilter( const UniString& rFilter )
 {
     ((ImpFileDialog*)pImpFileDlg->GetDialog())->SetCurFilter( rFilter );
@@ -136,16 +126,6 @@ UniString FileDialog::GetFilterName( sal_uInt16 nPos ) const
 UniString FileDialog::GetFilterType( sal_uInt16 nPos ) const
 {
   return ((ImpFileDialog*)pImpFileDlg->GetDialog())->GetFilterType( nPos );
-}
-
-void FileDialog::SetOkButtonText( const UniString& rText )
-{
-    pImpFileDlg->SetOkButtonText( rText );
-}
-
-void FileDialog::SetCancelButtonText( const UniString& rText )
-{
-    pImpFileDlg->SetCancelButtonText( rText );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

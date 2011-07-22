@@ -53,22 +53,6 @@
 
 using namespace ::osl;
 
-/*************************************************************************
-|*
-|*    FileCopier::FileCopier()
-|*
-*************************************************************************/
-
-FileCopier::FileCopier() :
-
-    nBytesTotal ( 0 ),
-    nBytesCopied( 0 ),
-    nBlockSize  ( 4096 ),
-    pImp        ( new FileCopier_Impl )
-
-{
-}
-
 // -----------------------------------------------------------------------
 
 FileCopier::FileCopier( const DirEntry& rSource, const DirEntry& rTarget ) :

@@ -449,56 +449,6 @@ const basegfx::B3DVector& B3dTransformationSet::GetTranslate()
 
 /*************************************************************************
 |*
-|* Hilfsmatrixberechnungsroutinen
-|*
-\************************************************************************/
-
-void B3dTransformationSet::CalcMatObjectToDevice()
-{
-    // ObjectToDevice berechnen (Orientation * Projection * Object)
-    maObjectToDevice = maObjectTrans;
-    maObjectToDevice *= maOrientation;
-    maObjectToDevice *= GetProjection();
-
-    // auf gueltig setzen
-    mbObjectToDeviceValid = sal_True;
-}
-
-void B3dTransformationSet::CalcMatInvTransObjectToEye()
-{
-    maInvTransObjectToEye = maObjectTrans;
-    maInvTransObjectToEye *= maOrientation;
-    maInvTransObjectToEye.invert();
-    maInvTransObjectToEye.transpose();
-
-    // eventuelle Translationen rausschmeissen, da diese
-    // Matrix nur zur Transformation von Vektoren gedacht ist
-    maInvTransObjectToEye.set(3, 0, 0.0);
-    maInvTransObjectToEye.set(3, 1, 0.0);
-    maInvTransObjectToEye.set(3, 2, 0.0);
-    maInvTransObjectToEye.set(3, 3, 1.0);
-
-    // auf gueltig setzen
-    mbInvTransObjectToEyeValid = sal_True;
-}
-
-void B3dTransformationSet::CalcMatFromWorldToView()
-{
-    maMatFromWorldToView = maOrientation;
-    maMatFromWorldToView *= GetProjection();
-    const basegfx::B3DVector& rScale(GetScale());
-    maMatFromWorldToView.scale(rScale.getX(), rScale.getY(), rScale.getZ());
-    const basegfx::B3DVector& rTranslate(GetTranslate());
-    maMatFromWorldToView.translate(rTranslate.getX(), rTranslate.getY(), rTranslate.getZ());
-    maInvMatFromWorldToView = maMatFromWorldToView;
-    maInvMatFromWorldToView.invert();
-
-    // gueltig setzen
-    mbWorldToViewValid = sal_True;
-}
-
-/*************************************************************************
-|*
 |* Direkter Zugriff auf verschiedene Transformationen
 |*
 \************************************************************************/

@@ -87,8 +87,6 @@ public:
     void                SetDefaultExt( const UniString& rExt ) { aDfltExt = rExt; }
     const UniString&        GetDefaultExt() const { return aDfltExt; }
     void                AddFilter( const UniString& rFilter, const UniString& rType );
-    void                RemoveFilter( const UniString& rFilter );
-    void                RemoveAllFilter();
     void                SetCurFilter( const UniString& rFilter );
     UniString               GetCurFilter() const;
     sal_uInt16              GetFilterCount() const;
@@ -99,9 +97,6 @@ public:
     const Link&         GetFileSelectHdl() const { return aFileHdlLink; }
     void                SetFilterSelectHdl( const Link& rLink ) { aFilterHdlLink = rLink; }
     const Link&         GetFilterSelectHdl() const { return aFilterHdlLink; }
-
-    void                SetOkButtonText( const UniString& rText );
-    void                SetCancelButtonText( const UniString& rText );
 };
 
 #endif  // _FILEDLG_HXX
