@@ -696,20 +696,6 @@ sal_Bool E3dScene::IsBreakObjPossible()
     return sal_True;
 }
 
-basegfx::B3DVector E3dScene::GetShadowPlaneDirection() const
-{
-    double fWink = (double)GetShadowSlant() * F_PI180;
-    basegfx::B3DVector aShadowPlaneDir(0.0, sin(fWink), cos(fWink));
-    aShadowPlaneDir.normalize();
-    return aShadowPlaneDir;
-}
-
-void E3dScene::SetShadowPlaneDirection(const basegfx::B3DVector& rVec)
-{
-    sal_uInt16 nSceneShadowSlant = (sal_uInt16)((atan2(rVec.getY(), rVec.getZ()) / F_PI180) + 0.5);
-    GetProperties().SetObjectItemDirect(Svx3DShadowSlantItem(nSceneShadowSlant));
-}
-
 basegfx::B2DPolyPolygon E3dScene::TakeCreatePoly(const SdrDragStat& /*rDrag*/) const
 {
     return TakeXorPoly();

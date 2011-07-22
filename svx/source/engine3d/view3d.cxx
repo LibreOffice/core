@@ -1303,22 +1303,6 @@ sal_Bool E3dView::BegDragObj(const Point& rPnt, OutputDevice* pOut,
     return SdrView::BegDragObj(rPnt, pOut, pHdl, nMinMov, pForcedMeth);
 }
 
-sal_Bool E3dView::HasMarkedScene()
-{
-    return (GetMarkedScene() != NULL);
-}
-
-E3dScene* E3dView::GetMarkedScene()
-{
-    sal_uIntPtr nCnt = GetMarkedObjectCount();
-
-    for ( sal_uIntPtr i = 0; i < nCnt; i++ )
-        if ( GetMarkedObjectByIndex(i)->ISA(E3dScene) )
-            return (E3dScene*) GetMarkedObjectByIndex(i);
-
-    return NULL;
-}
-
 // Set current 3D drawing object, create the scene for this
 
 E3dScene* E3dView::SetCurrent3DObj(E3dObject* p3DObj)
@@ -1637,114 +1621,6 @@ void E3dView::BreakSingle3DObj(E3dObject* pObj)
             pNewObj->SetChanged();
             pNewObj->BroadcastObjectChange();
         }
-    }
-}
-
-void E3dView::MergeScenes ()
-{
-    sal_uIntPtr nCount = GetMarkedObjectCount();
-
-    if (nCount > 0)
-    {
-        sal_uIntPtr     nObj    = 0;
-        SdrObject *pObj   = GetMarkedObjectByIndex(nObj);
-        E3dScene  *pScene = new E3dPolyScene(Get3DDefaultAttributes());
-        basegfx::B3DRange aBoundVol;
-        Rectangle aAllBoundRect (GetMarkedObjBoundRect ());
-        Point     aCenter (aAllBoundRect.Center());
-
-        while (pObj)
-        {
-            if (pObj->ISA(E3dScene))
-            {
-                // It is a 3D-Scene or 3D-PolyScene
-                SdrObjList* pSubList = ((E3dObject*) pObj)->GetSubList();
-
-                SdrObjListIter aIter(*pSubList, IM_FLAT);
-
-                while (aIter.IsMore())
-                {
-                    // Search for Lathe objects
-                    SdrObject* pSubObj = aIter.Next();
-
-                        E3dObject *pNewObj = 0;
-
-                        switch (pSubObj->GetObjIdentifier())
-                        {
-                            case E3D_CUBEOBJ_ID :
-                                pNewObj = new E3dCubeObj;
-                                *(E3dCubeObj*)pNewObj = *(E3dCubeObj*)pSubObj;
-                                break;
-
-                            case E3D_SPHEREOBJ_ID:
-                                pNewObj = new E3dSphereObj;
-                                *(E3dSphereObj*)pNewObj = *(E3dSphereObj*)pSubObj;
-                                break;
-
-                            case E3D_EXTRUDEOBJ_ID:
-                                pNewObj = new E3dExtrudeObj;
-                                *(E3dExtrudeObj*)pNewObj = *(E3dExtrudeObj*)pSubObj;
-                                break;
-
-                            case E3D_LATHEOBJ_ID:
-                                pNewObj = new E3dLatheObj;
-                                *(E3dLatheObj*)pNewObj = *(E3dLatheObj*)pSubObj;
-                                break;
-
-                            case E3D_COMPOUNDOBJ_ID:
-                                pNewObj = new E3dCompoundObject;
-                                *(E3dCompoundObject*)pNewObj = *(E3dCompoundObject*)pSubObj;
-                                break;
-                        }
-
-                        Rectangle aBoundRect = pSubObj->GetCurrentBoundRect();
-
-                        basegfx::B3DHomMatrix aMatrix;
-                        aMatrix.translate(aBoundRect.Left() - aCenter.getX(), aCenter.getY(), 0.0);
-                        pNewObj->SetTransform(aMatrix * pNewObj->GetTransform());
-
-                        if (pNewObj) aBoundVol.expand(pNewObj->GetBoundVolume());
-                        pScene->Insert3DObj (pNewObj);
-                }
-            }
-
-            nObj++;
-
-            if (nObj < nCount)
-            {
-                pObj = GetMarkedObjectByIndex(nObj);
-            }
-            else
-            {
-                pObj = NULL;
-            }
-        }
-
-        double fW = aAllBoundRect.GetWidth();
-        double fH = aAllBoundRect.GetHeight();
-        Rectangle aRect(0,0, (long) fW, (long) fH);
-
-        InitScene(pScene, fW, fH, aBoundVol.getMaxZ() +  + ((fW + fH) / 4.0));
-        pScene->NbcSetSnapRect(aRect);
-
-        Camera3D &aCamera  = (Camera3D&) pScene->GetCamera ();
-        basegfx::B3DPoint aMinVec(aBoundVol.getMinimum());
-        basegfx::B3DPoint aMaxVec(aBoundVol.getMaximum());
-        double fDeepth(fabs(aMaxVec.getZ() - aMinVec.getZ()));
-
-        aCamera.SetPRP(basegfx::B3DPoint(0.0, 0.0, 1000.0));
-        double fDefaultCamPosZ(GetDefaultCamPosZ());
-        aCamera.SetPosition(basegfx::B3DPoint(0.0, 0.0, fDefaultCamPosZ + fDeepth / 2.0));
-        aCamera.SetFocalLength(GetDefaultCamFocal());
-        pScene->SetCamera (aCamera);
-
-        // Invalid SnapRects of Objects
-        pScene->SetRectsDirty();
-
-        InsertObjectAtView(pScene, *(GetSdrPageViewOfMarkedByIndex(0)));
-
-        // Invalid SnapRects of Objects
-        pScene->SetRectsDirty();
     }
 }
 

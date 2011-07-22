@@ -312,16 +312,13 @@ public :
 
     // set/get parameters for geometry creation
     sal_Bool GetCreateNormals() const { return bCreateNormals; }
-    void SetCreateNormals(sal_Bool bNew);
 
     sal_Bool GetCreateTexture() const { return bCreateTexture; }
-    void SetCreateTexture(sal_Bool bNew);
 
     virtual E3dCompoundObject* Clone() const;
 
     // material of the object
     const Color& GetMaterialAmbientColor() const { return aMaterialAmbientColor; }
-    void SetMaterialAmbientColor(const Color& rColor);
 
     sal_Bool IsAOrdNumRemapCandidate(E3dScene*& prScene) const;
 };

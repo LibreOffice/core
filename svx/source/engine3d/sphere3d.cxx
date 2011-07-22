@@ -120,17 +120,6 @@ SdrObject *E3dSphereObj::DoConvertToPolyObj(sal_Bool /*bBezier*/) const
     return NULL;
 }
 
-void E3dSphereObj::ReSegment(sal_uInt32 nHSegs, sal_uInt32 nVSegs)
-{
-    if((nHSegs != GetHorizontalSegments() || nVSegs != GetVerticalSegments()) && (nHSegs != 0 || nVSegs != 0))
-    {
-        GetProperties().SetObjectItemDirect(Svx3DHorizontalSegmentsItem(nHSegs));
-        GetProperties().SetObjectItemDirect(Svx3DVerticalSegmentsItem(nVSegs));
-
-        ActionChanged();
-    }
-}
-
 E3dSphereObj* E3dSphereObj::Clone() const
 {
     return CloneHelper< E3dSphereObj >();

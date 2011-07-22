@@ -85,7 +85,6 @@ public:
     void SetPosIsCenter(sal_Bool bNew);
     sal_Bool GetPosIsCenter() { return (sal_Bool)bPosIsCenter; }
 
-    void SetSideFlags(sal_uInt16 nNew);
     sal_uInt16 GetSideFlags() { return nSideFlags; }
 
     // TakeObjName...() is for the display in the UI, for example "3 frames selected".

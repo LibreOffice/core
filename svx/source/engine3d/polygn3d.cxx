@@ -63,36 +63,6 @@ E3dPolygonObj::E3dPolygonObj(
     CreateDefaultTexture();
 }
 
-E3dPolygonObj::E3dPolygonObj(
-    E3dDefaultAttributes& rDefault,
-    const basegfx::B3DPolyPolygon& rPolyPoly3D,
-    const basegfx::B3DPolyPolygon& rPolyNormals3D,
-    sal_Bool bLinOnly)
-:   E3dCompoundObject(rDefault),
-    bLineOnly(bLinOnly)
-{
-    // Set geometry and the normal
-    SetPolyPolygon3D(rPolyPoly3D);
-    SetPolyNormals3D(rPolyNormals3D);
-
-    // Create default texture coordinates
-    CreateDefaultTexture();
-}
-
-E3dPolygonObj::E3dPolygonObj(
-    E3dDefaultAttributes& rDefault,
-    const basegfx::B3DPolyPolygon& rPolyPoly3D,
-    const basegfx::B3DPolyPolygon& rPolyNormals3D,
-    const basegfx::B2DPolyPolygon& rPolyTexture2D,
-    sal_Bool bLinOnly)
-:   E3dCompoundObject(rDefault),
-    bLineOnly(bLinOnly)
-{
-    SetPolyPolygon3D(rPolyPoly3D);
-    SetPolyNormals3D(rPolyNormals3D);
-    SetPolyTexture2D(rPolyTexture2D);
-}
-
 E3dPolygonObj::E3dPolygonObj()
 :   E3dCompoundObject(),
     bLineOnly(false) // added missing initialisation

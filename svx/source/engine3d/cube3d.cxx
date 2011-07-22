@@ -119,15 +119,6 @@ void E3dCubeObj::SetPosIsCenter(sal_Bool bNew)
     }
 }
 
-void E3dCubeObj::SetSideFlags(sal_uInt16 nNew)
-{
-    if(nSideFlags != nNew)
-    {
-        nSideFlags = nNew;
-        ActionChanged();
-    }
-}
-
 // Get the name of the object (singular)
 
 void E3dCubeObj::TakeObjNameSingul(XubString& rName) const

@@ -100,7 +100,6 @@ private:
         { return ((const Svx3DCloseBackItem&)GetObjectItemSet().Get(SDRATTR_3DOBJ_CLOSE_BACK)).GetValue(); }
 
     virtual sal_uInt16 GetObjIdentifier() const;
-    void    ReSegment(sal_uInt32 nHSegs, sal_uInt32 nVSegs);
 
     virtual E3dLatheObj* Clone() const;
 

@@ -73,7 +73,6 @@ public:
 
     virtual E3dSphereObj* Clone() const;
 
-    void ReSegment(sal_uInt32 nHorzSegments, sal_uInt32 nVertSegments);
     const basegfx::B3DPoint& Center() const { return aCenter; }
     const basegfx::B3DVector& Size() const { return aSize; }
 

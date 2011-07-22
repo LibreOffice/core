@@ -117,9 +117,6 @@ public:
     // #83403# Service routine used from local Clone() and from SdrCreateView::EndCreateObj(...)
     sal_Bool ImpCloneAll3DObjectsToDestScene(E3dScene* pSrcScene, E3dScene* pDstScene, Point aOffset);
 
-    sal_Bool HasMarkedScene();
-    E3dScene* GetMarkedScene();
-
     sal_Bool IsConvertTo3DObjPossible() const;
     void ConvertMarkedObjTo3D(sal_Bool bExtrude=sal_True, basegfx::B2DPoint aPnt1 = basegfx::B2DPoint(0.0, 0.0), basegfx::B2DPoint aPnt2 = basegfx::B2DPoint(0.0, 1.0));
 
@@ -270,7 +267,6 @@ public:
         return bDoubleSided;
     }
 
-    void MergeScenes();
     SfxItemSet Get3DAttributes(E3dScene* pInScene = NULL, sal_Bool bOnly3DAttr=sal_False) const;
     void Set3DAttributes(const SfxItemSet& rAttr, E3dScene* pInScene = NULL, sal_Bool bOnly3DAttr=sal_False);
 };

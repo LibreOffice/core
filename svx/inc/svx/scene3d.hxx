@@ -233,9 +233,6 @@ public:
     // break up
     virtual sal_Bool IsBreakObjPossible();
 
-    basegfx::B3DVector GetShadowPlaneDirection() const;
-    void SetShadowPlaneDirection(const basegfx::B3DVector& rVec);
-
     // polygon which is built during creation
     virtual basegfx::B2DPolyPolygon TakeCreatePoly(const SdrDragStat& rDrag) const;
 

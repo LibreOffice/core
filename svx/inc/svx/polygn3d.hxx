@@ -58,17 +58,6 @@ public:
         E3dDefaultAttributes& rDefault,
         const basegfx::B3DPolyPolygon& rPolyPoly3D,
         sal_Bool bLinOnly=sal_False);
-    E3dPolygonObj(
-        E3dDefaultAttributes& rDefault,
-        const basegfx::B3DPolyPolygon& rPolyPoly3D,
-        const basegfx::B3DPolyPolygon& rPolyNormals3D,
-        sal_Bool bLinOnly=sal_False);
-    E3dPolygonObj(
-        E3dDefaultAttributes& rDefault,
-        const basegfx::B3DPolyPolygon& rPolyPoly3D,
-        const basegfx::B3DPolyPolygon& rPolyNormals3D,
-        const basegfx::B2DPolyPolygon& rPolyTexture2D,
-        sal_Bool bLinOnly=sal_False);
 
     E3dPolygonObj();
     virtual ~E3dPolygonObj();

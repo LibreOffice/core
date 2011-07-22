@@ -955,34 +955,6 @@ E3dCompoundObject* E3dCompoundObject::Clone() const
     return CloneHelper< E3dCompoundObject >();
 }
 
-void E3dCompoundObject::SetCreateNormals(sal_Bool bNew)
-{
-    if(bCreateNormals != bNew)
-    {
-        bCreateNormals = bNew;
-        ActionChanged();
-    }
-}
-
-void E3dCompoundObject::SetCreateTexture(sal_Bool bNew)
-{
-    if(bCreateTexture != bNew)
-    {
-        bCreateTexture = bNew;
-        ActionChanged();
-    }
-}
-
-// Material of the object
-
-void E3dCompoundObject::SetMaterialAmbientColor(const Color& rColor)
-{
-    if(aMaterialAmbientColor != rColor)
-    {
-        aMaterialAmbientColor = rColor;
-    }
-}
-
 // convert given basegfx::B3DPolyPolygon to screen coor
 
 basegfx::B2DPolyPolygon E3dCompoundObject::TransformToScreenCoor(const basegfx::B3DPolyPolygon& rCandidate)
