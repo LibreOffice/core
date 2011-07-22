@@ -73,7 +73,6 @@ private:
     void                    SkipGroup( int nEndToken );
     bool                    ThrowAwayBlank();
     bool                    HasTextInCurrentPara();
-    void                    ProcessUnknownControl( sal_Bool bOn );
 
     void                    ImpInsertParaBreak();
     void                    ImpInsertText( const String& rText );
