@@ -201,6 +201,7 @@ public:
     sal_uInt16          GetRedlineAuthor();
     const String&       GetRedlineAuthor(sal_uInt16 nPos);
     sal_uInt16          InsertRedlineAuthor(const String& rAuthor);
+    void                SetRedlineAuthor(const String& rAuthor); // for unit tests
 
     void                GetInsertAuthorAttr(sal_uInt16 nAuthor, SfxItemSet &rSet);
     void                GetDeletedAuthorAttr(sal_uInt16 nAuthor, SfxItemSet &rSet);

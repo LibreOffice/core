@@ -427,6 +427,13 @@ sal_uInt16 SwModule::GetRedlineAuthor()
     return InsertRedlineAuthor( sActAuthor );
 }
 
+void SwModule::SetRedlineAuthor(const String &rAuthor)
+{
+    bAuthorInitialised = sal_True;
+    sActAuthor = rAuthor;
+    InsertRedlineAuthor( sActAuthor );
+}
+
 const String& SwModule::GetRedlineAuthor(sal_uInt16 nPos)
 {
     OSL_ENSURE(nPos<pAuthorNames->Count(), "author not found!"); //#i45342# RTF doc with no author table caused reader to crash

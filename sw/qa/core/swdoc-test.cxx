@@ -59,6 +59,8 @@
 #include "docsh.hxx"
 #include "shellres.hxx"
 #include "docufld.hxx"
+#include "swcrsr.hxx"
+#include "swmodule.hxx"
 
 SO2_DECL_REF(SwDocShell)
 SO2_IMPL_REF(SwDocShell)
@@ -170,9 +172,159 @@ void SwDocTest::testFileNameFields()
     m_xDocShRef->DoInitNew(0);
 }
 
+static int
+getRand(int modulus)
+{
+    if (modulus <= 0)
+        return 0;
+    return rand() % modulus;
+}
+
+static rtl::OUString
+getRandString()
+{
+    static rtl::OUString aText( rtl::OUString::createFromAscii("AAAAA BBBB CCC DD E \n"));
+    int s = getRand(aText.getLength());
+    int j = getRand(aText.getLength() - s);
+    rtl::OUString aRet(aText + s, j);
+    if (!getRand(5))
+        aRet += rtl::OUString(sal_Unicode('\n'));
+//    fprintf (stderr, "rand string '%s'\n", OUStringToOString(aRet, RTL_TEXTENCODING_UTF8).getStr());
+    return aRet;
+}
+
+#ifdef COMPLEX
+static SwPosition
+getRandomPosition(SwDoc *pDoc, int nOffset)
+{
+    SwPaM aPam(pDoc->GetNodes());
+    SwCursor aCrs(*aPam.Start(), 0, false);
+    for (int sskip = getRand(nOffset); sskip > 0; sskip--)
+        aCrs.GoNextSentence();
+    aCrs.GoNextCell(getRand(50));
+    return *aCrs.GetPoint();
+}
+#endif
+
 void SwDocTest::randomTest()
 {
     CPPUNIT_ASSERT_MESSAGE("SwDoc::IsRedlineOn()", !m_pDoc->IsRedlineOn());
+    RedlineMode_t modes[] = {
+        nsRedlineMode_t::REDLINE_NONE,
+        nsRedlineMode_t::REDLINE_ON,
+        nsRedlineMode_t::REDLINE_SHOW_MASK,
+        nsRedlineMode_t::REDLINE_ON | nsRedlineMode_t::REDLINE_SHOW_MASK,
+        nsRedlineMode_t::REDLINE_ON | nsRedlineMode_t::REDLINE_IGNORE,
+        nsRedlineMode_t::REDLINE_ON | nsRedlineMode_t::REDLINE_IGNORE | nsRedlineMode_t::REDLINE_SHOW_MASK,
+        nsRedlineMode_t::REDLINE_ON | nsRedlineMode_t::REDLINE_SHOW_INSERT,
+        nsRedlineMode_t::REDLINE_ON | nsRedlineMode_t::REDLINE_SHOW_DELETE
+    };
+    static const char *authors[] = {
+        "Jim", "Bob", "JimBobina", "Helga", "Gertrude", "Spagna", "Hurtleweed"
+    };
+
+    for( sal_uInt16 rlm = 0; rlm < SAL_N_ELEMENTS(modes); rlm++)
+    {
+        m_pDoc->ClearDoc();
+
+        // setup redlining
+        m_pDoc->SetRedlineMode(modes[rlm]);
+        SW_MOD()->SetRedlineAuthor(rtl::OUString::createFromAscii(authors[0]));
+
+        for( int i = 0; i < 2000; i++ )
+        {
+#ifdef COMPLEX
+            SwPaM aPam(m_pDoc->GetNodes());
+            SwCursor aCrs(getRandomPosition(m_pDoc, i/20), 0, false);
+            aCrs.SetMark();
+            aCrs.GoNextCell(getRand(30));
+#else // simple:
+            SwPaM aPam(m_pDoc->GetNodes());
+            SwCursor aCrs(*aPam.Start(), NULL, false);
+#endif
+
+            switch (getRand (i < 50 ? 3 : 6)) {
+            // insert ops first
+            case 0: {
+                m_pDoc->InsertString(aCrs, getRandString());
+                break;
+            }
+            case 1:
+                break;
+            case 2: { // switch author
+                int a = getRand(SAL_N_ELEMENTS(authors));
+                SW_MOD()->SetRedlineAuthor(rtl::OUString::createFromAscii(authors[a]));
+                break;
+            }
+
+#ifdef COMPLEX
+            // movement / deletion ops later
+            case 3: // deletion
+                switch (getRand(6)) {
+                case 0:
+                    m_pDoc->DelFullPara(aCrs);
+                    break;
+                case 1:
+                    m_pDoc->DeleteRange(aCrs);
+                    break;
+                case 2:
+                    m_pDoc->DeleteAndJoin(aCrs, !!getRand(1));
+                    break;
+                case 3:
+                default:
+                    m_pDoc->Overwrite(aCrs, getRandString());
+                    break;
+                }
+                break;
+            case 4: { // movement
+                IDocumentContentOperations::SwMoveFlags nFlags =
+                    (IDocumentContentOperations::SwMoveFlags)
+                        (getRand(1) ? // FIXME: puterb this more ?
+                         IDocumentContentOperations::DOC_MOVEDEFAULT :
+                         IDocumentContentOperations::DOC_MOVEALLFLYS |
+                         IDocumentContentOperations::DOC_CREATEUNDOOBJ |
+                         IDocumentContentOperations::DOC_MOVEREDLINES |
+                         IDocumentContentOperations::DOC_NO_DELFRMS);
+                SwPosition aTo(getRandomPosition(m_pDoc, i/10));
+                m_pDoc->MoveRange(aCrs, aTo, nFlags);
+                break;
+            }
+#endif
+            case 5:
+                break;
+
+            // undo / redo ?
+            default:
+                break;
+            }
+#ifdef COMPLEX
+            SwPosition start(m_pDoc->GetNodes());
+            SwPosition end(m_pDoc->GetNodes().GetEndOfContent());
+            CheckNodesRange(start.nNode, end.nNode, sal_True);
+#endif
+        }
+
+/*        fprintf (stderr, "write it !\n");
+#ifdef COMPLEX
+        SfxFilter aFilter(rtl::OUString::createFromAscii("writer8"),
+                          rtl::OUString(), 0, 0, rtl::OUString(), 0, rtl::OUString(),
+                          rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CXML")),
+                          rtl::OUString() );
+#else
+        SfxFilter aFilter(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Text")),
+                          rtl::OUString(), 0, 0, rtl::OUString(), 0, rtl::OUString(),
+                          rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TEXT")), rtl::OUString() );
+#endif
+        SfxMedium aDstMed(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("file:///tmp/test.txt")),
+                          STREAM_STD_READWRITE, true);
+        aDstMed.SetFilter(&aFilter);
+        m_xDocShRef->DoSaveAs(aDstMed);
+        m_xDocShRef->DoSaveCompleted(&aDstMed);
+        m_xDocShRef->DoInitNew(0);*/
+#ifndef COMPLEX
+        return;
+#endif
+    }
 }
 
 SwDocTest::SwDocTest()
