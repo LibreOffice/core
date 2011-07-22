@@ -74,7 +74,7 @@ EditHTMLParser::EditHTMLParser( SvStream& rIn, const String& rBaseURL, SvKeyValu
     SetSrcEncoding( GetExtendedCompatibilityTextEncoding(  RTL_TEXTENCODING_ISO_8859_1 ) );
 
     // If the file starts with a BOM, switch to UCS2.
-    SetSwitchToUCS2( sal_True );
+    SetSwitchToUCS2( true );
 
     if ( pHTTPHeaderAttrs )
         SetEncodingByHTTPHeader( pHTTPHeaderAttrs );
@@ -129,7 +129,7 @@ void EditHTMLParser::NextToken( int nToken )
     {
         const HTMLOptions *_pOptions = GetOptions();
         sal_uInt16 nArrLen = _pOptions->Count();
-        sal_Bool bEquiv = sal_False;
+        bool bEquiv = false;
         for ( sal_uInt16 i = 0; i < nArrLen; i++ )
         {
             const HTMLOption *pOption = (*_pOptions)[i];
@@ -137,7 +137,7 @@ void EditHTMLParser::NextToken( int nToken )
             {
                 case HTML_O_HTTPEQUIV:
                 {
-                    bEquiv = sal_True;
+                    bEquiv = true;
                 }
                 break;
                 case HTML_O_CONTENT:
@@ -194,7 +194,7 @@ void EditHTMLParser::NextToken( int nToken )
         if (!bInTitle)
         {
             if ( !bInPara )
-                StartPara( sal_False );
+                StartPara( false );
 
             String aText = aToken;
             if ( aText.Len() && ( aText.GetChar( 0 ) == ' ' )
@@ -243,13 +243,13 @@ void EditHTMLParser::NextToken( int nToken )
 
     case HTML_PARABREAK_ON:
         if( bInPara && HasTextInCurrentPara() )
-            EndPara( sal_True );
-        StartPara( sal_True );
+            EndPara( true );
+        StartPara( true );
         break;
 
     case HTML_PARABREAK_OFF:
         if( bInPara )
-            EndPara( sal_True );
+            EndPara( true );
         break;
 
     case HTML_HEAD1_ON:
@@ -278,7 +278,7 @@ void EditHTMLParser::NextToken( int nToken )
     case HTML_XMP_ON:
     case HTML_LISTING_ON:
     {
-        StartPara( sal_True );
+        StartPara( true );
         ImpSetStyleSheet( STYLE_PRE );
     }
     break;
@@ -317,10 +317,10 @@ void EditHTMLParser::NextToken( int nToken )
     case HTML_ORDERLIST_ON:
     case HTML_UNORDERLIST_ON:
     {
-        sal_Bool bHasText = HasTextInCurrentPara();
+        bool bHasText = HasTextInCurrentPara();
         if ( bHasText )
             ImpInsertParaBreak();
-        StartPara( sal_False );
+        StartPara( false );
     }
     break;
 
@@ -336,7 +336,7 @@ void EditHTMLParser::NextToken( int nToken )
     case HTML_DD_OFF:
     case HTML_DT_OFF:
     case HTML_ORDERLIST_OFF:
-    case HTML_UNORDERLIST_OFF:  EndPara( sal_False );
+    case HTML_UNORDERLIST_OFF:  EndPara( false );
                                 break;
 
     case HTML_TABLEROW_ON:
@@ -707,7 +707,7 @@ void EditHTMLParser::SkipGroup( int nEndToken )
     }
 }
 
-void EditHTMLParser::StartPara( sal_Bool bReal )
+void EditHTMLParser::StartPara( bool bReal )
 {
     if ( bReal )
     {
@@ -740,11 +740,11 @@ void EditHTMLParser::StartPara( sal_Bool bReal )
     bInPara = true;
 }
 
-void EditHTMLParser::EndPara( sal_Bool )
+void EditHTMLParser::EndPara( bool )
 {
     if ( bInPara )
     {
-        sal_Bool bHasText = HasTextInCurrentPara();
+        bool bHasText = HasTextInCurrentPara();
         if ( bHasText )
             ImpInsertParaBreak();
     }
@@ -825,7 +825,7 @@ void EditHTMLParser::AnchorEnd()
 void EditHTMLParser::HeadingStart( int nToken )
 {
     bWasInPara = bInPara;
-    StartPara( sal_False );
+    StartPara( false );
 
     if ( bWasInPara && HasTextInCurrentPara() )
         ImpInsertParaBreak();
@@ -838,7 +838,7 @@ void EditHTMLParser::HeadingStart( int nToken )
 
 void EditHTMLParser::HeadingEnd( int )
 {
-    EndPara( sal_False );
+    EndPara( false );
     ImpSetStyleSheet( 0 );
 
     if ( bWasInPara )
