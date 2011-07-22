@@ -52,21 +52,20 @@
 #define STYLE_PRE               101
 
 EditHTMLParser::EditHTMLParser( SvStream& rIn, const String& rBaseURL, SvKeyValueIterator* pHTTPHeaderAttrs )
-    : HTMLParser( rIn, true )
-    , aBaseURL( rBaseURL )
+    : HTMLParser( rIn, true ),
+    aBaseURL( rBaseURL ),
+    pImpEditEngine(NULL),
+    pCurAnchor(NULL),
+    bInPara(false),
+    bWasInPara(false),
+    bFieldsInserted(false),
+    bInTitle(false),
+    nInTable(0),
+    nInCell(0),
+    nDefListLevel(0),
+    nBulletLevel(0),
+    nNumberingLevel(0)
 {
-    pImpEditEngine = 0;
-    pCurAnchor = 0;
-    bInPara = sal_False;
-    bWasInPara = sal_False;
-    nInTable = 0;
-    nInCell = 0;
-    bInTitle = sal_False;
-    nDefListLevel = 0;
-    nBulletLevel = 0;
-    nNumberingLevel = 0;
-    bFieldsInserted = sal_False;
-
     DBG_ASSERT( RTL_TEXTENCODING_DONTKNOW == GetSrcEncoding( ), "EditHTMLParser::EditHTMLParser: Where does the encoding come from?" );
     DBG_ASSERT( !IsSwitchToUCS2(), "EditHTMLParser::::EditHTMLParser: Switch to UCS2?" );
 
@@ -158,11 +157,11 @@ void EditHTMLParser::NextToken( int nToken )
     break;
     case HTML_PLAINTEXT_ON:
     case HTML_PLAINTEXT2_ON:
-        bInPara = sal_True;
+        bInPara = true;
     break;
     case HTML_PLAINTEXT_OFF:
     case HTML_PLAINTEXT2_OFF:
-        bInPara = sal_False;
+        bInPara = false;
     break;
 
     case HTML_LINEBREAK:
@@ -353,10 +352,10 @@ void EditHTMLParser::NextToken( int nToken )
                             break;
 
     case HTML_TITLE_ON:
-        bInTitle = sal_True;
+        bInTitle = true;
         break;
     case HTML_TITLE_OFF:
-        bInTitle = sal_False;
+        bInTitle = false;
         break;
 
     // globals
@@ -740,7 +739,7 @@ void EditHTMLParser::StartPara( sal_Bool bReal )
         aItemSet.Put( SvxAdjustItem( eAdjust, EE_PARA_JUST ) );
         ImpSetAttribs( aItemSet );
     }
-    bInPara = sal_True;
+    bInPara = true;
 }
 
 void EditHTMLParser::EndPara( sal_Bool )
@@ -751,22 +750,22 @@ void EditHTMLParser::EndPara( sal_Bool )
         if ( bHasText )
             ImpInsertParaBreak();
     }
-    bInPara = sal_False;
+    bInPara = false;
 }
 
-sal_Bool EditHTMLParser::ThrowAwayBlank()
+bool EditHTMLParser::ThrowAwayBlank()
 {
     // A blank must be thrown away if the new text begins with a Blank and
     // if the current paragraph is empty or ends with a Blank...
     ContentNode* pNode = aCurSel.Max().GetNode();
     if ( pNode->Len() && ( pNode->GetChar( pNode->Len()-1 ) != ' ' ) )
-        return sal_False;
-    return sal_True;
+        return false;
+    return true;
 }
 
-sal_Bool EditHTMLParser::HasTextInCurrentPara()
+bool EditHTMLParser::HasTextInCurrentPara()
 {
-    return aCurSel.Max().GetNode()->Len() ? sal_True : sal_False;
+    return aCurSel.Max().GetNode()->Len() ? true : false;
 }
 
 void EditHTMLParser::AnchorStart()
@@ -813,9 +812,9 @@ void EditHTMLParser::AnchorEnd()
         // Insert as URL-Field...
         SvxFieldItem aFld( SvxURLField( pCurAnchor->aHRef, pCurAnchor->aText, SVXURLFORMAT_REPR ), EE_FEATURE_FIELD  );
         aCurSel = pImpEditEngine->InsertField( aCurSel, aFld );
-        bFieldsInserted = sal_True;
+        bFieldsInserted = true;
         delete pCurAnchor;
-        pCurAnchor = 0;
+        pCurAnchor = NULL;
 
         if ( pImpEditEngine->aImportHdl.IsSet() )
         {
@@ -846,8 +845,8 @@ void EditHTMLParser::HeadingEnd( int )
 
     if ( bWasInPara )
     {
-        bInPara = sal_True;
-        bWasInPara = sal_False;
+        bInPara = true;
+        bWasInPara = false;
     }
 }
 
