@@ -37,7 +37,11 @@ $(eval $(call gb_Library_set_include,dbui,\
 	-I$(SRCDIR)/dbaccess/source/inc \
 	-I$(SRCDIR)/dbaccess/inc/pch \
 	$$(SOLARINC) \
-	-I$(OUTDIR)/inc/offuh \
+))
+
+$(eval $(call gb_Library_add_api,dbui,\
+    offapi \
+    udkapi \
 ))
 
 ifeq ($(SYSTEM_ODBC_HEADERS),TRUE)

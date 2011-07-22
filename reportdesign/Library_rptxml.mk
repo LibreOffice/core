@@ -37,11 +37,11 @@ $(eval $(call gb_Library_set_include,rptxml,\
     -I$(OUTDIR)/inc \
 ))
 
-))
-
 $(eval $(call gb_Library_add_api,rptxml,\
     offapi \
     udkapi \
+))
+
 $(eval $(call gb_Library_add_linked_libs,rptxml,\
     comphelper \
     cppu \
