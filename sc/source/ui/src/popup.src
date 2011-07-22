@@ -381,7 +381,6 @@ Menu RID_POPUP_EDIT
                     };
                 };
             };
-            Text [ en-US ] = "St~yle";
         };
          //------------------------------
         MenuItem { Separator = TRUE ; };
