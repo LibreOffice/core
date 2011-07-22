@@ -2537,8 +2537,6 @@ void SalDisplay::PrintInfo() const
     {
         fprintf( stderr, "\n" );
         fprintf( stderr, "Environment\n" );
-        fprintf( stderr, "\t$XENVIRONMENT     \t\"%s\"\n",
-                 GetEnv( "XENVIRONMENT" ) );
         fprintf( stderr, "\t$DISPLAY          \t\"%s\"\n",
                  GetEnv( "DISPLAY" ) );
         fprintf( stderr, "\t$SAL_VISUAL       \t\"%s\"\n",
