@@ -144,7 +144,7 @@ void ListLevel::SetValue( Id nId, sal_Int32 nValue )
 sal_Int16 ListLevel::GetParentNumbering( OUString sText, sal_Int16 nLevel,
         OUString& rPrefix, OUString& rSuffix )
 {
-    sal_Int16 nParentNumbering = nLevel;
+    sal_Int16 nParentNumbering = 1;
 
     //now parse the text to find %n from %1 to %nLevel+1
     //everything before the first % and the last %x is prefix and suffix
