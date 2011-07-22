@@ -79,19 +79,20 @@ SHL1TARGET= $(TARGET)$(DLLPOSTFIX)
 SHL1VERSIONMAP=$(SOLARENV)/src/component.map
 
 SHL1STDLIBS= \
-        $(VCLLIB)			\
-        $(SALLIB)			\
-        $(TOOLSLIB)			\
-        $(CPPULIB) 			\
-        $(SVTOOLLIB)		\
-        $(SVLLIB)			\
-        $(SFXLIB)			\
-        $(CPPUHELPERLIB)	\
-        $(COMPHELPERLIB)	\
-        $(TKLIB)			\
-        $(UNOTOOLSLIB)		\
-        $(SVXCORELIB)		\
-        $(SVXLIB)
+        $(COMPHELPERLIB) \
+        $(CPPUHELPERLIB) \
+        $(CPPULIB) \
+        $(SALLIB) \
+        $(SFXLIB) \
+        $(SVLLIB) \
+        $(SVTLIB) \
+        $(SVTOOLLIB) \
+        $(SVXCORELIB) \
+        $(SVXLIB) \
+        $(TKLIB) \
+        $(TOOLSLIB) \
+        $(UNOTOOLSLIB) \
+        $(VCLLIB) \
 
 SHL1LIBS=		$(SLB)$/$(TARGET).lib
 SHL1IMPLIB=		i$(TARGET)
