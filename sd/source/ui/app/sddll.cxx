@@ -128,26 +128,4 @@ void SdDLL::Init()
     SdrObjFactory::InsertMakeUserDataHdl(LINK(&aSdObjectFactory, SdObjectFactory, MakeUserData));
 }
 
-
-
-/*************************************************************************
-|*
-|* Exit
-|*
-\************************************************************************/
-
-void SdDLL::Exit()
-{
-    // called directly befor unloading the DLL
-    // do whatever you want, Sd-DLL is accessible
-
-    // Objekt-Factory austragen
-    SdrObjFactory::RemoveMakeUserDataHdl(LINK(&aSdObjectFactory, SdObjectFactory, MakeUserData));
-
-    // the SdModule must be destroyed
-    SdModule** ppShlPtr = (SdModule**) GetAppData(SHL_DRAW);
-    delete (*ppShlPtr);
-    (*ppShlPtr) = NULL;
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
