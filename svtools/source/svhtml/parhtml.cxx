@@ -128,7 +128,7 @@ sal_uInt16 HTMLOption::GetEnum( const HTMLOptionEnum *pOptEnums, sal_uInt16 nDfl
     return nValue;
 }
 
-sal_Bool HTMLOption::GetEnum( sal_uInt16 &rEnum, const HTMLOptionEnum *pOptEnums ) const
+bool HTMLOption::GetEnum( sal_uInt16 &rEnum, const HTMLOptionEnum *pOptEnums ) const
 {
     while( pOptEnums->pName )
     {
@@ -179,7 +179,7 @@ sal_Int32 HTMLOption::GetSNumber() const
     return aTmp.ToInt32();
 }
 
-void HTMLOption::GetNumbers( SvULongs &rLongs, sal_Bool bSpaceDelim ) const
+void HTMLOption::GetNumbers( SvULongs &rLongs, bool bSpaceDelim ) const
 {
     if( rLongs.Count() )
         rLongs.Remove( 0, rLongs.Count() );
@@ -188,7 +188,7 @@ void HTMLOption::GetNumbers( SvULongs &rLongs, sal_Bool bSpaceDelim ) const
     {
         // This is a very simplified scanner: it only searches all
         // numerals in the string.
-        sal_Bool bInNum = sal_False;
+        bool bInNum = false;
         sal_uLong nNum = 0;
         for( xub_StrLen i=0; i<aValue.Len(); i++ )
         {
@@ -197,12 +197,12 @@ void HTMLOption::GetNumbers( SvULongs &rLongs, sal_Bool bSpaceDelim ) const
             {
                 nNum *= 10;
                 nNum += (c - '0');
-                bInNum = sal_True;
+                bInNum = true;
             }
             else if( bInNum )
             {
                 rLongs.Insert( nNum, rLongs.Count() );
-                bInNum = sal_False;
+                bInNum = false;
                 nNum = 0;
             }
         }
@@ -307,15 +307,15 @@ HTMLTableRules HTMLOption::GetTableRules() const
     return (HTMLTableRules)GetEnum( aTableRulesOptEnums, HTML_TR_NONE );
 }
 
-HTMLParser::HTMLParser( SvStream& rIn, int bReadNewDoc )
+HTMLParser::HTMLParser( SvStream& rIn, bool bReadNewDoc )
     : SvParser( rIn )
 {
     bNewDoc = bReadNewDoc;
     bReadListing = bReadXMP = bReadPRE = bReadTextArea =
         bReadScript = bReadStyle =
         bEndTokenFound = bIsInBody = bReadNextChar =
-        bReadComment = sal_False;
-    bIsInHeader = sal_True;
+        bReadComment = false;
+    bIsInHeader = true;
     pOptions = new HTMLOptions;
 
     //#i76649, default to UTF-8 for HTML unless we know differently
@@ -336,7 +336,7 @@ SvParserState HTMLParser::CallParser()
     SaveState( 0 );
 
     nPre_LinePos = 0;
-    bPre_IgnoreNewPara = sal_False;
+    bPre_IgnoreNewPara = false;
 
     AddRef();
     Continue( 0 );
@@ -375,24 +375,24 @@ int HTMLParser::FilterToken( int nToken )
         break;          // don't pass
 
     case HTML_HEAD_OFF:
-        bIsInBody = sal_True;
+        bIsInBody = true;
     case HTML_HEAD_ON:
         bIsInHeader = HTML_HEAD_ON == nToken;
         break;
 
     case HTML_BODY_ON:
     case HTML_FRAMESET_ON:
-        bIsInHeader = sal_False;
+        bIsInHeader = false;
         bIsInBody = HTML_BODY_ON == nToken;
         break;
 
     case HTML_BODY_OFF:
-        bIsInBody = bReadPRE = bReadListing = bReadXMP = sal_False;
+        bIsInBody = bReadPRE = bReadListing = bReadXMP = false;
         break;
 
     case HTML_HTML_OFF:
         nToken = 0;
-        bReadPRE = bReadListing = bReadXMP = sal_False;
+        bReadPRE = bReadListing = bReadXMP = false;
         break;      // HTML_ON hasn't been passed either !
 
     case HTML_PREFORMTXT_ON:
@@ -443,17 +443,17 @@ int HTMLParser::FilterToken( int nToken )
 int HTMLParser::ScanText( const sal_Unicode cBreak )
 {
     ::rtl::OUStringBuffer sTmpBuffer( MAX_LEN );
-    int bContinue = sal_True;
-    int bEqSignFound = sal_False;
+    int bContinue = true;
+    int bEqSignFound = false;
     sal_Unicode cQuote = 0U;
 
     while( bContinue && IsParserWorking() )
     {
-        int bNextCh = sal_True;
+        int bNextCh = true;
         switch( nNextCh )
         {
         case '&':
-            bEqSignFound = sal_False;
+            bEqSignFound = false;
             if( bReadXMP )
                 sTmpBuffer.append( (sal_Unicode)'&' );
             else
@@ -465,8 +465,8 @@ int HTMLParser::ScanText( const sal_Unicode cBreak )
                 if( '#' == (nNextCh = GetNextChar()) )
                 {
                     nNextCh = GetNextChar();
-                    const sal_Bool bIsHex( 'x' == nNextCh );
-                    const sal_Bool bIsDecOrHex( bIsHex || HTML_ISDIGIT(nNextCh) );
+                    const bool bIsHex( 'x' == nNextCh );
+                    const bool bIsDecOrHex( bIsHex || HTML_ISDIGIT(nNextCh) );
                     if ( bIsDecOrHex )
                     {
                         if ( bIsHex )
@@ -639,7 +639,7 @@ int HTMLParser::ScanText( const sal_Unicode cBreak )
                 else if( IsParserWorking() )
                 {
                     sTmpBuffer.append( (sal_Unicode)'&' );
-                    bNextCh = sal_False;
+                    bNextCh = false;
                     break;
                 }
 
@@ -674,15 +674,15 @@ int HTMLParser::ScanText( const sal_Unicode cBreak )
                         rInput.Seek( nStreamPos-(sal_uInt32)GetCharSize() );
                         nlLinePos = nLinePos-1;
                         ClearTxtConvContext();
-                        bReadNextChar = sal_True;
+                        bReadNextChar = true;
                     }
-                    bNextCh = sal_False;
+                    bNextCh = false;
                 }
             }
             break;
         case '=':
             if( '>'==cBreak && !cQuote )
-                bEqSignFound = sal_True;
+                bEqSignFound = true;
             sTmpBuffer.append( nNextCh );
             break;
 
@@ -707,13 +707,13 @@ int HTMLParser::ScanText( const sal_Unicode cBreak )
                     cQuote = 0U;
             }
             sTmpBuffer.append( nNextCh );
-            bEqSignFound = sal_False;
+            bEqSignFound = false;
             break;
 
         case sal_Unicode(EOF):
             if( rInput.IsEof() )
             {
-                bContinue = sal_False;
+                bContinue = false;
             }
             else
             {
@@ -722,11 +722,11 @@ int HTMLParser::ScanText( const sal_Unicode cBreak )
             break;
 
         case '<':
-            bEqSignFound = sal_False;
+            bEqSignFound = false;
             if( '>'==cBreak )
                 sTmpBuffer.append( nNextCh );
             else
-                bContinue = sal_False;      // break, String zusammen
+                bContinue = false;      // break, String zusammen
             break;
 
         case '\f':
@@ -738,7 +738,7 @@ int HTMLParser::ScanText( const sal_Unicode cBreak )
             else
             {
                 // otherwise it's a separate token.
-                bContinue = sal_False;
+                bContinue = false;
             }
             break;
 
@@ -752,7 +752,7 @@ int HTMLParser::ScanText( const sal_Unicode cBreak )
             }
             else if( bReadListing || bReadXMP || bReadPRE || bReadTextArea )
             {
-                bContinue = sal_False;
+                bContinue = false;
                 break;
             }
             // Reduce sequence of CR/LF/BLANK/TAB to a single blank
@@ -761,7 +761,7 @@ int HTMLParser::ScanText( const sal_Unicode cBreak )
             if( '\t'==nNextCh && bReadPRE && '>'!=cBreak )
             {
                 // In <PRE>: Tabs nach oben durchreichen
-                bContinue = sal_False;
+                bContinue = false;
                 break;
             }
             // no break
@@ -797,15 +797,15 @@ int HTMLParser::ScanText( const sal_Unicode cBreak )
                 } while ( ' ' == nNextCh || '\t' == nNextCh ||
                           '\r' == nNextCh || '\n' == nNextCh ||
                           '\x0b' == nNextCh );
-                bNextCh = sal_False;
+                bNextCh = false;
             }
             break;
 
         default:
-            bEqSignFound = sal_False;
+            bEqSignFound = false;
             if( (nNextCh==cBreak && !cQuote) ||
                 (sal_uLong(aToken.Len()) + MAX_LEN) > sal_uLong(STRING_MAXLEN & ~1 ))
-                bContinue = sal_False;
+                bContinue = false;
             else
             {
                 do {
@@ -830,7 +830,7 @@ int HTMLParser::ScanText( const sal_Unicode cBreak )
                         return HTML_TEXTTOKEN;
                     }
                 } while( HTML_ISALPHA( nNextCh ) || HTML_ISDIGIT( nNextCh ) );
-                bNextCh = sal_False;
+                bNextCh = false;
             }
         }
 
@@ -855,21 +855,21 @@ int HTMLParser::_GetNextRawToken()
     {
         // During the last execution we already found the end token,
         // thus we don't have to search it again.
-        bReadScript = sal_False;
-        bReadStyle = sal_False;
+        bReadScript = false;
+        bReadStyle = false;
         aEndToken.Erase();
-        bEndTokenFound = sal_False;
+        bEndTokenFound = false;
 
         return 0;
     }
 
     // Default return value: HTML_RAWDATA
-    int bContinue = sal_True;
+    int bContinue = true;
     int nToken = HTML_RAWDATA;
     SaveState( 0 );
     while( bContinue && IsParserWorking() )
     {
-        int bNextCh = sal_True;
+        int bNextCh = true;
         switch( nNextCh )
         {
         case '<':
@@ -885,10 +885,10 @@ int HTMLParser::_GetNextRawToken()
                 sal_uLong nLinePos = GetLinePos();
 
                 // Start of an end token?
-                int bOffState = sal_False;
+                int bOffState = false;
                 if( '/' == (nNextCh = GetNextChar()) )
                 {
-                    bOffState = sal_True;
+                    bOffState = true;
                     nNextCh = GetNextChar();
                 }
                 else if( '!' == nNextCh )
@@ -909,7 +909,7 @@ int HTMLParser::_GetNextRawToken()
                              sal::static_int_cast< xub_StrLen >(
                                  sTmpBuffer.getLength()) );
                 aTok.ToUpperAscii();
-                sal_Bool bDone = sal_False;
+                bool bDone = false;
                 if( bReadScript || aEndToken.Len() )
                 {
                     if( !bReadComment )
@@ -917,7 +917,7 @@ int HTMLParser::_GetNextRawToken()
                         if( aTok.CompareToAscii( OOO_STRING_SVTOOLS_HTML_comment, 3 )
                                 == COMPARE_EQUAL )
                         {
-                            bReadComment = sal_True;
+                            bReadComment = true;
                         }
                         else
                         {
@@ -933,7 +933,7 @@ int HTMLParser::_GetNextRawToken()
                         aTok.Copy( aTok.Len()-2 ).EqualsAscii( "--" ) )
                     {
                         // End of comment of style <!----->
-                        bReadComment = sal_False;
+                        bReadComment = false;
                     }
                 }
                 else
@@ -954,15 +954,15 @@ int HTMLParser::_GetNextRawToken()
                     // Done! Return the previously read string (if requested)
                     // and continue.
 
-                    bContinue = sal_False;
+                    bContinue = false;
 
                     // nToken==0 means, _GetNextToken continues to read
                     if( !aToken.Len() && (bReadStyle || bReadScript) )
                     {
                         // Immediately close environment (or context?)
                         // and parse the end token
-                        bReadScript = sal_False;
-                        bReadStyle = sal_False;
+                        bReadScript = false;
+                        bReadStyle = false;
                         aEndToken.Erase();
                         nToken = 0;
                     }
@@ -970,7 +970,7 @@ int HTMLParser::_GetNextRawToken()
                     {
                         // Keep bReadScript/bReadStyle alive
                         // and parse end token during next execution
-                        bEndTokenFound = sal_True;
+                        bEndTokenFound = true;
                     }
 
                     // Move backwards in stream to '<'
@@ -990,7 +990,7 @@ int HTMLParser::_GetNextRawToken()
                     if( bOffState )
                         aToken += (sal_Unicode)'/';
 
-                    bNextCh = sal_False;
+                    bNextCh = false;
                 }
             }
             break;
@@ -998,11 +998,11 @@ int HTMLParser::_GetNextRawToken()
             sTmpBuffer.append( nNextCh );
             if( bReadComment )
             {
-                sal_Bool bTwoMinus = sal_False;
+                bool bTwoMinus = false;
                 nNextCh = GetNextChar();
                 while( '-' == nNextCh && IsParserWorking() )
                 {
-                    bTwoMinus = sal_True;
+                    bTwoMinus = true;
 
                     if( MAX_LEN == sTmpBuffer.getLength() )
                         aToken += String(sTmpBuffer.makeStringAndClear());
@@ -1011,9 +1011,9 @@ int HTMLParser::_GetNextRawToken()
                 }
 
                 if( '>' == nNextCh && IsParserWorking() && bTwoMinus )
-                    bReadComment = sal_False;
+                    bReadComment = false;
 
-                bNextCh = sal_False;
+                bNextCh = false;
             }
             break;
 
@@ -1022,27 +1022,27 @@ int HTMLParser::_GetNextRawToken()
             nNextCh = GetNextChar();
             if( nNextCh=='\n' )
                 nNextCh = GetNextChar();
-            bContinue = sal_False;
+            bContinue = false;
             break;
         case '\n':
             // \n closes the current text token (even if it's empty)
             nNextCh = GetNextChar();
-            bContinue = sal_False;
+            bContinue = false;
             break;
         case sal_Unicode(EOF):
             // eof closes the current text token and behaves like having read
             // an end token
             if( rInput.IsEof() )
             {
-                bContinue = sal_False;
+                bContinue = false;
                 if( aToken.Len() || sTmpBuffer.getLength() )
                 {
-                    bEndTokenFound = sal_True;
+                    bEndTokenFound = true;
                 }
                 else
                 {
-                    bReadScript = sal_False;
-                    bReadStyle = sal_False;
+                    bReadScript = false;
+                    bReadStyle = false;
                     aEndToken.Erase();
                     nToken = 0;
                 }
@@ -1084,7 +1084,7 @@ int HTMLParser::_GetNextToken()
     if( !IsParserWorking() )        // Don't continue if already an error occured
         return 0;
 
-    sal_Bool bReadNextCharSave = bReadNextChar;
+    bool bReadNextCharSave = bReadNextChar;
     if( bReadNextChar )
     {
         DBG_ASSERT( !bEndTokenFound,
@@ -1092,7 +1092,7 @@ int HTMLParser::_GetNextToken()
         nNextCh = GetNextChar();
         if( !IsParserWorking() )        // Don't continue if already an error occured
             return 0;
-        bReadNextChar = sal_False;
+        bReadNextChar = false;
     }
 
     if( bReadScript || bReadStyle || aEndToken.Len() )
@@ -1103,7 +1103,7 @@ int HTMLParser::_GetNextToken()
     }
 
     do {
-        int bNextCh = sal_True;
+        int bNextCh = true;
         switch( nNextCh )
         {
         case '<':
@@ -1112,10 +1112,10 @@ int HTMLParser::_GetNextToken()
                 sal_uLong nLineNr = GetLineNr();
                 sal_uLong nLinePos = GetLinePos();
 
-                int bOffState = sal_False;
+                int bOffState = false;
                 if( '/' == (nNextCh = GetNextChar()) )
                 {
-                    bOffState = sal_True;
+                    bOffState = true;
                     nNextCh = GetNextChar();
                 }
                 if( HTML_ISALPHA( nNextCh ) || '!'==nNextCh )
@@ -1178,7 +1178,7 @@ int HTMLParser::_GetNextToken()
                         sal_uLong nCLinePos = 0;
                         xub_StrLen nCStrLen = 0;
 
-                        sal_Bool bDone = sal_False;
+                        bool bDone = false;
                         // Read until closing -->. If not found restart at first >
                         while( !bDone && !rInput.IsEof() && IsParserWorking() )
                         {
@@ -1241,7 +1241,7 @@ int HTMLParser::_GetNextToken()
                             aToken = '<';
                             nRet = HTML_TEXTTOKEN;
                             nNextCh = GetNextChar();
-                            bNextCh = sal_False;
+                            bNextCh = false;
                             break;
                         }
                     }
@@ -1266,7 +1266,7 @@ int HTMLParser::_GetNextToken()
                             aToken = '<';
                             nRet = HTML_TEXTTOKEN;
                             nNextCh = GetNextChar();
-                            bNextCh = sal_False;
+                            bNextCh = false;
                             break;
                         }
                         if( SVPAR_PENDING == eState )
@@ -1280,7 +1280,7 @@ int HTMLParser::_GetNextToken()
                         sal_uLong nCStreamPos = rInput.Tell();
                         sal_uLong nCLineNr = GetLineNr(), nCLinePos = GetLinePos();
 
-                        sal_Bool bDone = sal_False;
+                        bool bDone = false;
                         // Read until closing %>. If not found restart at first >.
                         while( !bDone && !rInput.IsEof() && IsParserWorking() )
                         {
@@ -1312,7 +1312,7 @@ int HTMLParser::_GetNextToken()
                     {
                         aToken = '<';
                         nRet = HTML_TEXTTOKEN;
-                        bNextCh = sal_False;
+                        bNextCh = false;
                         break;
                     }
                 }
@@ -1323,31 +1323,31 @@ int HTMLParser::_GetNextToken()
                     switch( nRet )
                     {
                     case HTML_TEXTAREA_ON:
-                        bReadTextArea = sal_True;
+                        bReadTextArea = true;
                         break;
                     case HTML_TEXTAREA_OFF:
-                        bReadTextArea = sal_False;
+                        bReadTextArea = false;
                         break;
                     case HTML_SCRIPT_ON:
                         if( !bReadTextArea )
-                            bReadScript = sal_True;
+                            bReadScript = true;
                         break;
                     case HTML_SCRIPT_OFF:
                         if( !bReadTextArea )
                         {
-                            bReadScript = sal_False;
+                            bReadScript = false;
                             // JavaScript might modify the stream,
                             // thus the last character has to be read again.
-                            bReadNextChar = sal_True;
-                            bNextCh = sal_False;
+                            bReadNextChar = true;
+                            bNextCh = false;
                         }
                         break;
 
                     case HTML_STYLE_ON:
-                        bReadStyle = sal_True;
+                        bReadStyle = true;
                         break;
                     case HTML_STYLE_OFF:
-                        bReadStyle = sal_False;
+                        bReadStyle = false;
                         break;
                     }
                 }
@@ -1380,7 +1380,7 @@ int HTMLParser::_GetNextToken()
                 if( ( '\n' != nNextCh || '\r' != c ) &&
                     ( '\r' != nNextCh || '\n' != c ) )
                 {
-                    bNextCh = sal_False;
+                    bNextCh = false;
                     nNextCh = c;
                 }
                 nRet = HTML_NEWPARA;
@@ -1407,7 +1407,7 @@ scan_text:
             if( !bNextCh && eState == SVPAR_PENDING )
             {
                 eState = SVPAR_WORKING;
-                bReadNextChar = sal_True;
+                bReadNextChar = true;
             }
 
             break;
@@ -1418,7 +1418,7 @@ scan_text:
             nNextCh = GetNextChar();
             if( SVPAR_PENDING == eState && nRet && HTML_TEXTTOKEN != nRet )
             {
-                bReadNextChar = sal_True;
+                bReadNextChar = true;
                 eState = SVPAR_WORKING;
             }
         }
@@ -1435,15 +1435,15 @@ void HTMLParser::UnescapeToken()
 {
     xub_StrLen nPos=0;
 
-    sal_Bool bEscape = sal_False;
+    bool bEscape = false;
     while( nPos < aToken.Len() )
     {
-        sal_Bool bOldEscape = bEscape;
-        bEscape = sal_False;
+        bool bOldEscape = bEscape;
+        bEscape = false;
         if( '\\'==aToken.GetChar(nPos) && !bOldEscape )
         {
             aToken.Erase( nPos, 1 );
-            bEscape = sal_True;
+            bEscape = true;
         }
         else
         {
@@ -1486,7 +1486,7 @@ const HTMLOptions *HTMLParser::GetOptions( sal_uInt16 *pNoConvertToken ) const
             nToken = GetHTMLOption( sNameUpperCase ); // Name is ready
             DBG_ASSERTWARNING( nToken!=HTML_O_UNKNOWN,
                         "GetOption: unknown HTML option" );
-            sal_Bool bStripCRLF = (nToken < HTML_OPTION_SCRIPT_START ||
+            bool bStripCRLF = (nToken < HTML_OPTION_SCRIPT_START ||
                                nToken >= HTML_OPTION_SCRIPT_END) &&
                               (!pNoConvertToken || nToken != *pNoConvertToken);
 
@@ -1513,12 +1513,12 @@ const HTMLOptions *HTMLParser::GetOptions( sal_uInt16 *pNoConvertToken ) const
                     {
                         sal_Unicode cEnd = cChar;
                         nPos++; nStt++;
-                        sal_Bool bDone = sal_False;
-                        sal_Bool bEscape = sal_False;
+                        bool bDone = false;
+                        bool bEscape = false;
                         while( nPos < aToken.Len() && !bDone )
                         {
-                            sal_Bool bOldEscape = bEscape;
-                            bEscape = sal_False;
+                            bool bOldEscape = bEscape;
+                            bEscape = false;
                             cChar = aToken.GetChar(nPos);
                             switch( cChar )
                             {
@@ -1537,7 +1537,7 @@ const HTMLOptions *HTMLParser::GetOptions( sal_uInt16 *pNoConvertToken ) const
                                 else
                                 {
                                     ((String &)aToken).Erase( nPos, 1 );
-                                    bEscape = sal_True;
+                                    bEscape = true;
                                 }
                                 break;
                             case '"':
@@ -1557,12 +1557,12 @@ const HTMLOptions *HTMLParser::GetOptions( sal_uInt16 *pNoConvertToken ) const
                     else
                     {
                         // More liberal than the standard: allow all printable characters
-                        sal_Bool bEscape = sal_False;
-                        sal_Bool bDone = sal_False;
+                        bool bEscape = false;
+                        bool bDone = false;
                         while( nPos < aToken.Len() && !bDone )
                         {
-                            sal_Bool bOldEscape = bEscape;
-                            bEscape = sal_False;
+                            bool bOldEscape = bEscape;
+                            bEscape = false;
                             sal_Unicode c = aToken.GetChar(nPos);
                             switch( c )
                             {
@@ -1575,7 +1575,7 @@ const HTMLOptions *HTMLParser::GetOptions( sal_uInt16 *pNoConvertToken ) const
                             case '\t':
                             case '\r':
                             case '\n':
-                                bDone = sal_True;
+                                bDone = true;
                                 break;
 
                             case '\\':
@@ -1586,7 +1586,7 @@ const HTMLOptions *HTMLParser::GetOptions( sal_uInt16 *pNoConvertToken ) const
                                 else
                                 {
                                     ((String &)aToken).Erase( nPos, 1 );
-                                    bEscape = sal_True;
+                                    bEscape = true;
                                 }
                                 break;
 
@@ -1594,7 +1594,7 @@ const HTMLOptions *HTMLParser::GetOptions( sal_uInt16 *pNoConvertToken ) const
                                 if( HTML_ISPRINTABLE( c ) )
                                     nPos++, nLen++;
                                 else
-                                    bDone = sal_True;
+                                    bDone = true;
                                 break;
                             }
                         }
@@ -1799,7 +1799,7 @@ int HTMLParser::FilterPRE( int nToken )
         break;
     }
 
-    bPre_IgnoreNewPara = sal_False;
+    bPre_IgnoreNewPara = false;
 
     return nToken;
 }
@@ -1840,7 +1840,7 @@ int HTMLParser::FilterXMP( int nToken )
         break;
     }
 
-    bPre_IgnoreNewPara = sal_False;
+    bPre_IgnoreNewPara = false;
 
     return nToken;
 }
@@ -1868,13 +1868,13 @@ int HTMLParser::FilterListing( int nToken )
         break;
     }
 
-    bPre_IgnoreNewPara = sal_False;
+    bPre_IgnoreNewPara = false;
 
     return nToken;
 }
 
 bool HTMLParser::IsHTMLFormat( const sal_Char* pHeader,
-                               sal_Bool bSwitchToUCS2,
+                               bool bSwitchToUCS2,
                                rtl_TextEncoding eEnc )
 {
     // If the string matches one of the following regular expressions then
@@ -1886,14 +1886,14 @@ bool HTMLParser::IsHTMLFormat( const sal_Char* pHeader,
     //
     // where the underlined subexpression has to be a HTML token
     ByteString sCmp;
-    sal_Bool bUCS2B = sal_False;
+    bool bUCS2B = false;
     if( bSwitchToUCS2 )
     {
         if( 0xfeU == (sal_uChar)pHeader[0] &&
             0xffU == (sal_uChar)pHeader[1] )
         {
             eEnc = RTL_TEXTENCODING_UCS2;
-            bUCS2B = sal_True;
+            bUCS2B = true;
         }
         else if( 0xffU == (sal_uChar)pHeader[0] &&
                  0xfeU == (sal_uChar)pHeader[1] )
@@ -1911,7 +1911,7 @@ bool HTMLParser::IsHTMLFormat( const sal_Char* pHeader,
        )
     {
         if( 0xfe == (sal_uChar)pHeader[0] )
-            bUCS2B = sal_True;
+            bUCS2B = true;
 
         xub_StrLen nLen;
         for( nLen = 2;
@@ -1944,7 +1944,7 @@ bool HTMLParser::IsHTMLFormat( const sal_Char* pHeader,
     // A HTML document must have a '<' in the first line
     xub_StrLen nStart = sCmp.Search( '<' );
     if( STRING_NOTFOUND  == nStart )
-        return sal_False;
+        return false;
     nStart++;
 
     // followed by arbitrary characters followed by a blank or '>'
@@ -1958,7 +1958,7 @@ bool HTMLParser::IsHTMLFormat( const sal_Char* pHeader,
 
     // If the document ends after < it's no HTML
     if( nPos==nStart )
-        return sal_False;
+        return false;
 
     // the string following '<' has to be a known HTML token.
     // <DIR> is not interpreted as HTML. Otherwise the output of the DOS command "DIR"
@@ -1966,30 +1966,30 @@ bool HTMLParser::IsHTMLFormat( const sal_Char* pHeader,
     String sTest( sCmp.Copy( nStart, nPos-nStart ), RTL_TEXTENCODING_ASCII_US );
     int nTok = GetHTMLToken( sTest );
     if( 0 != nTok && HTML_DIRLIST_ON != nTok )
-        return sal_True;
+        return true;
 
     // "<!" at the very beginning of the file?
     if( nStart == 1 && '!' == sCmp.GetChar( 1 ) )
-        return sal_True;
+        return true;
 
     // <HTML> somewhere in the first 80 characters of the document
     nStart = sCmp.Search( OOO_STRING_SVTOOLS_HTML_html );
     if( nStart!=STRING_NOTFOUND &&
         nStart>0 && '<'==sCmp.GetChar(nStart-1) &&
         nStart+4 < sCmp.Len() && '>'==sCmp.GetChar(nStart+4) )
-        return sal_True;
+        return true;
 
     // Else it's rather not a HTML document
-    return sal_False;
+    return false;
 }
 
-sal_Bool HTMLParser::InternalImgToPrivateURL( String& rURL )
+bool HTMLParser::InternalImgToPrivateURL( String& rURL )
 {
     if( rURL.Len() < 19 || 'i' != rURL.GetChar(0) ||
         rURL.CompareToAscii( OOO_STRING_SVTOOLS_HTML_internal_gopher, 9 ) != COMPARE_EQUAL )
-        return sal_False;
+        return false;
 
-    sal_Bool bFound = sal_False;
+    bool bFound = false;
 
     if( rURL.CompareToAscii( OOO_STRING_SVTOOLS_HTML_internal_gopher,16) == COMPARE_EQUAL )
     {
@@ -2289,7 +2289,7 @@ rtl_TextEncoding HTMLParser::GetEncodingByHttpHeader( SvKeyValueIterator *pHTTPH
     if( pHTTPHeader )
     {
         SvKeyValue aKV;
-        for( sal_Bool bCont = pHTTPHeader->GetFirst( aKV ); bCont;
+        for( bool bCont = pHTTPHeader->GetFirst( aKV ); bCont;
              bCont = pHTTPHeader->GetNext( aKV ) )
         {
             if( aKV.GetKey().EqualsIgnoreCaseAscii( OOO_STRING_SVTOOLS_HTML_META_content_type ) )
@@ -2304,15 +2304,14 @@ rtl_TextEncoding HTMLParser::GetEncodingByHttpHeader( SvKeyValueIterator *pHTTPH
     return eRet;
 }
 
-sal_Bool HTMLParser::SetEncodingByHTTPHeader(
-                                SvKeyValueIterator *pHTTPHeader )
+bool HTMLParser::SetEncodingByHTTPHeader( SvKeyValueIterator *pHTTPHeader )
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     rtl_TextEncoding eEnc = HTMLParser::GetEncodingByHttpHeader( pHTTPHeader );
     if(RTL_TEXTENCODING_DONTKNOW != eEnc)
     {
         SetSrcEncoding( eEnc );
-        bRet = sal_True;
+        bRet = true;
     }
     return bRet;
 }
