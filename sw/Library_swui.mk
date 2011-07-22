@@ -38,11 +38,11 @@ $(eval $(call gb_Library_set_include,swui,\
     $$(INCLUDE) \
 ))
 
-))
-
 $(eval $(call gb_Library_add_api,swui,\
 	udkapi \
 	offapi \
+))
+
 $(eval $(call gb_Library_add_linked_libs,swui,\
     comphelper \
     cppu \

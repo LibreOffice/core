@@ -35,11 +35,11 @@ $(eval $(call gb_Library_set_include,sm,\
         -I$(OUTDIR)/inc \
 ))
 
-))
-
 $(eval $(call gb_Library_add_api,sm,\
     offapi \
     udkapi \
+))
+
 $(eval $(call gb_Library_add_linked_libs,sm,\
         comphelper \
         cppu \
