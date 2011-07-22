@@ -65,7 +65,8 @@ static HTMLOptionEnum const aScollingTable[] =
     { 0,                0               }
 };
 
-void SfxFrameHTMLParser::ParseFrameOptions( SfxFrameDescriptor *pFrame, const HTMLOptions *pOptions, const String& rBaseURL )
+void SfxFrameHTMLParser::ParseFrameOptions(
+    SfxFrameDescriptor *pFrame, const HTMLOptions& rOptions, const String& rBaseURL )
 {
     // Get and set the options
     Size aMargin( pFrame->GetMargin() );
@@ -77,16 +78,15 @@ void SfxFrameHTMLParser::ParseFrameOptions( SfxFrameDescriptor *pFrame, const HT
     // We will not mimic that bug !
     sal_Bool bMarginWidth = sal_False, bMarginHeight = sal_False;
 
-    sal_uInt16 nArrLen = pOptions->Count();
-    for ( sal_uInt16 i=0; i<nArrLen; i++ )
+    for (size_t i = 0, n = rOptions.size(); i < n; ++i)
     {
-        const HTMLOption *pOption = (*pOptions)[i];
-        switch( pOption->GetToken() )
+        const HTMLOption& aOption = rOptions[i];
+        switch( aOption.GetToken() )
         {
         case HTML_O_BORDERCOLOR:
             {
                 Color aColor;
-                pOption->GetColor( aColor );
+                aOption.GetColor( aColor );
                 pFrame->SetWallpaper( Wallpaper( aColor ) );
                 break;
             }
@@ -94,20 +94,20 @@ void SfxFrameHTMLParser::ParseFrameOptions( SfxFrameDescriptor *pFrame, const HT
             pFrame->SetURL(
                 String(
                     INetURLObject::GetAbsURL(
-                        rBaseURL, pOption->GetString())) );
+                        rBaseURL, aOption.GetString())) );
             break;
         case HTML_O_NAME:
-            pFrame->SetName( pOption->GetString() );
+            pFrame->SetName( aOption.GetString() );
             break;
         case HTML_O_MARGINWIDTH:
-            aMargin.Width() = pOption->GetNumber();
+            aMargin.Width() = aOption.GetNumber();
 
             if( !bMarginHeight )
                 aMargin.Height() = 0;
             bMarginWidth = sal_True;
             break;
         case HTML_O_MARGINHEIGHT:
-            aMargin.Height() = pOption->GetNumber();
+            aMargin.Height() = aOption.GetNumber();
 
             if( !bMarginWidth )
                 aMargin.Width() = 0;
@@ -115,12 +115,12 @@ void SfxFrameHTMLParser::ParseFrameOptions( SfxFrameDescriptor *pFrame, const HT
             break;
         case HTML_O_SCROLLING:
             pFrame->SetScrollingMode(
-                (ScrollingMode)pOption->GetEnum( aScollingTable,
+                (ScrollingMode)aOption.GetEnum( aScollingTable,
                                                  ScrollingAuto ) );
             break;
         case HTML_O_FRAMEBORDER:
         {
-            String aStr = pOption->GetString();
+            String aStr = aOption.GetString();
             sal_Bool bBorder = sal_True;
             if ( aStr.EqualsIgnoreCaseAscii("NO") ||
                  aStr.EqualsIgnoreCaseAscii("0") )
@@ -132,19 +132,19 @@ void SfxFrameHTMLParser::ParseFrameOptions( SfxFrameDescriptor *pFrame, const HT
             pFrame->SetResizable( sal_False );
             break;
         default:
-            if ( pOption->GetTokenString().EqualsIgnoreCaseAscii(
+            if ( aOption.GetTokenString().EqualsIgnoreCaseAscii(
                                                         HTML_O_READONLY ) )
             {
-                String aStr = pOption->GetString();
+                String aStr = aOption.GetString();
                 sal_Bool bReadonly = sal_True;
                 if ( aStr.EqualsIgnoreCaseAscii("FALSE") )
                     bReadonly = sal_False;
                 pFrame->SetReadOnly( bReadonly );
             }
-            else if ( pOption->GetTokenString().EqualsIgnoreCaseAscii(
+            else if ( aOption.GetTokenString().EqualsIgnoreCaseAscii(
                                                         HTML_O_EDIT ) )
             {
-                String aStr = pOption->GetString();
+                String aStr = aOption.GetString();
                 sal_Bool bEdit = sal_True;
                 if ( aStr.EqualsIgnoreCaseAscii("FALSE") )
                     bEdit = sal_False;

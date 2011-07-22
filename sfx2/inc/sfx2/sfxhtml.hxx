@@ -65,12 +65,11 @@ public:
     // Read the options of an image map
     // <MAP>: sal_True = Image-Map has a name
     // <AREA>: sal_True = Image-Map has now one Region more
-    static sal_Bool ParseMapOptions(ImageMap * pImageMap,
-                                const HTMLOptions * pOptions );
-    sal_Bool ParseMapOptions(ImageMap * pImageMap)
+    static bool ParseMapOptions(ImageMap* pImageMap, const HTMLOptions& rOptions);
+    bool ParseMapOptions(ImageMap * pImageMap)
     { return ParseMapOptions(pImageMap, GetOptions()); }
-    static sal_Bool ParseAreaOptions(ImageMap * pImageMap, const String& rBaseURL,
-                                 const HTMLOptions * pOptions,
+    static bool ParseAreaOptions(ImageMap * pImageMap, const String& rBaseURL,
+                                 const HTMLOptions& rOptions,
                                  sal_uInt16 nEventMouseOver = 0,
                                  sal_uInt16 nEventMouseOut = 0 );
     inline sal_Bool ParseAreaOptions(ImageMap * pImageMap, const String& rBaseURL,

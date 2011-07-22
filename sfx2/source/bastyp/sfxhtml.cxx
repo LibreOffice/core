@@ -96,21 +96,20 @@ SfxHTMLParser::~SfxHTMLParser()
     delete pDLMedium;
 }
 
-sal_Bool SfxHTMLParser::ParseMapOptions(ImageMap * pImageMap,
-                                    const HTMLOptions * pOptions)
+bool SfxHTMLParser::ParseMapOptions(
+    ImageMap* pImageMap, const HTMLOptions& rOptions)
 {
     DBG_ASSERT( pImageMap, "ParseMapOptions: No Image-Map" );
-    DBG_ASSERT( pOptions, "ParseMapOptions: No Options" );
 
     String aName;
 
-    for( sal_uInt16 i=pOptions->Count(); i; )
+    for (size_t i = rOptions.size(); i; )
     {
-        const HTMLOption *pOption = (*pOptions)[--i];
-        switch( pOption->GetToken() )
+        const HTMLOption& aOption = rOptions[--i];
+        switch( aOption.GetToken() )
         {
         case HTML_O_NAME:
-            aName = pOption->GetString();
+            aName = aOption.GetString();
             break;
         }
     }
@@ -121,13 +120,12 @@ sal_Bool SfxHTMLParser::ParseMapOptions(ImageMap * pImageMap,
     return aName.Len() > 0;
 }
 
-sal_Bool SfxHTMLParser::ParseAreaOptions(ImageMap * pImageMap, const String& rBaseURL,
-                                     const HTMLOptions * pOptions,
+bool SfxHTMLParser::ParseAreaOptions(ImageMap * pImageMap, const String& rBaseURL,
+                                     const HTMLOptions& rOptions,
                                      sal_uInt16 nEventMouseOver,
                                      sal_uInt16 nEventMouseOut )
 {
     DBG_ASSERT( pImageMap, "ParseAreaOptions: no Image-Map" );
-    DBG_ASSERT( pOptions, "ParseAreaOptions: no Options" );
 
     sal_uInt16 nShape = IMAP_OBJ_RECTANGLE;
     SvULongs aCoords;
@@ -135,33 +133,33 @@ sal_Bool SfxHTMLParser::ParseAreaOptions(ImageMap * pImageMap, const String& rBa
     sal_Bool bNoHRef = sal_False;
     SvxMacroTableDtor aMacroTbl;
 
-    for( sal_uInt16 i=pOptions->Count(); i; )
+    for (size_t i = rOptions.size(); i; )
     {
         sal_uInt16 nEvent = 0;
         ScriptType eScrpType = STARBASIC;
-        const HTMLOption *pOption = (*pOptions)[--i];
-        switch( pOption->GetToken() )
+        const HTMLOption& rOption = rOptions[--i];
+        switch( rOption.GetToken() )
         {
         case HTML_O_NAME:
-            aName = pOption->GetString();
+            aName = rOption.GetString();
             break;
         case HTML_O_SHAPE:
-            pOption->GetEnum( nShape, aAreaShapeOptEnums );
+            rOption.GetEnum( nShape, aAreaShapeOptEnums );
             break;
         case HTML_O_COORDS:
-            pOption->GetNumbers( aCoords, sal_True );
+            rOption.GetNumbers( aCoords, sal_True );
             break;
         case HTML_O_HREF:
-            aHRef = INetURLObject::GetAbsURL( rBaseURL, pOption->GetString() );
+            aHRef = INetURLObject::GetAbsURL( rBaseURL, rOption.GetString() );
             break;
         case HTML_O_NOHREF:
             bNoHRef = sal_True;
             break;
         case HTML_O_ALT:
-            aAlt = pOption->GetString();
+            aAlt = rOption.GetString();
             break;
         case HTML_O_TARGET:
-            aTarget = pOption->GetString();
+            aTarget = rOption.GetString();
             break;
 
         case HTML_O_ONMOUSEOVER:
@@ -178,7 +176,7 @@ sal_Bool SfxHTMLParser::ParseAreaOptions(ImageMap * pImageMap, const String& rBa
 IMAPOBJ_SETEVENT:
             if( nEvent )
             {
-                String sTmp( pOption->GetString() );
+                String sTmp( rOption.GetString() );
                 if( sTmp.Len() )
                 {
                     sTmp.ConvertLineEnd();
