@@ -523,7 +523,6 @@ void EditHTMLParser::ImpInsertParaBreak()
         pImpEditEngine->aImportHdl.Call( &aImportInfo );
     }
     aCurSel = pImpEditEngine->ImpInsertParaBreak( aCurSel );
-    nLastAction = ACTION_INSERTPARABRK;
 }
 
 void EditHTMLParser::ImpSetAttribs( const SfxItemSet& rItems, EditSelection* pSel )
@@ -682,7 +681,6 @@ void EditHTMLParser::ImpInsertText( const String& rText )
     }
 
     aCurSel = pImpEditEngine->ImpInsertText( aCurSel, aText );
-    nLastAction = ACTION_INSERTTEXT;
 }
 
 void EditHTMLParser::SkipGroup( int nEndToken )

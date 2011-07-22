@@ -64,8 +64,6 @@ private:
     sal_uInt8                   nBulletLevel;
     sal_uInt8                   nNumberingLevel;
 
-    sal_uInt8                   nLastAction;
-
     void                    StartPara( sal_Bool bReal );
     void                    EndPara( sal_Bool bReal );
     void                    AnchorStart();
