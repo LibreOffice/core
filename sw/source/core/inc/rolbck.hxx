@@ -29,12 +29,9 @@
 #define _ROLBCK_HXX
 
 #include <tools/solar.h>
-#ifndef _SVSTDARR_HXX
-#define _SVSTDARR_USHORTS
-#include <svl/svstdarr.hxx>
-#endif
 #include <svl/itemset.hxx>
 
+#include <vector>
 #include <set>
 
 //Nur die History anziehen, um das docnew.cxx gegen die CLOOK's zu behaupten.
@@ -282,7 +279,7 @@ class SwHistoryBookmark : public SwHistoryHint
 class SwHistorySetAttrSet : public SwHistoryHint
 {
     SfxItemSet m_OldSet;
-    SvUShorts m_ResetArray;
+    std::vector<sal_uInt16> m_ResetArray;
     const sal_uLong m_nNodeIndex;
 
 public:
@@ -297,7 +294,7 @@ class SwHistoryResetAttrSet : public SwHistoryHint
     const sal_uLong m_nNodeIndex;
     const xub_StrLen m_nStart;
     const xub_StrLen m_nEnd;
-    SvUShorts m_Array;
+    std::vector<sal_uInt16> m_Array;
 
 public:
     SwHistoryResetAttrSet( const SfxItemSet& rSet, sal_uLong nNode,
@@ -305,7 +302,7 @@ public:
                         xub_StrLen nEnd = STRING_MAXLEN );
     virtual void SetInDoc( SwDoc* pDoc, bool bTmpSet );
 
-    const SvUShorts& GetArr() const     { return m_Array; }
+    const std::vector<sal_uInt16>& GetArr() const { return m_Array; }
     sal_uLong GetNode() const               { return m_nNodeIndex; }
     xub_StrLen GetCntnt() const         { return m_nStart; }
 

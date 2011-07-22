@@ -729,7 +729,7 @@ SwHistorySetAttrSet::SwHistorySetAttrSet( const SfxItemSet& rSet,
     do {
         if( !rSetArr.count( pOrigItem->Which() ))
         {
-            m_ResetArray.Insert( pOrigItem->Which(), m_ResetArray.Count() );
+            m_ResetArray.push_back( pOrigItem->Which() );
             m_OldSet.ClearItem( pOrigItem->Which() );
         }
         else
@@ -798,7 +798,7 @@ void SwHistorySetAttrSet::SetInDoc( SwDoc* pDoc, bool )
     if ( pNode->IsCntntNode() )
     {
         static_cast<SwCntntNode*>(pNode)->SetAttr( m_OldSet );
-        if ( m_ResetArray.Count() )
+        if ( !m_ResetArray.empty() )
         {
             static_cast<SwCntntNode*>(pNode)->ResetAttr( m_ResetArray );
         }
@@ -808,9 +808,9 @@ void SwHistorySetAttrSet::SetInDoc( SwDoc* pDoc, bool )
         SwFmt& rFmt =
             *static_cast<SwTableNode*>(pNode)->GetTable().GetFrmFmt();
         rFmt.SetFmtAttr( m_OldSet );
-        if ( m_ResetArray.Count() )
+        if ( !m_ResetArray.empty() )
         {
-            rFmt.ResetFmtAttr( *m_ResetArray.GetData() );
+            rFmt.ResetFmtAttr( m_ResetArray.front() );
         }
     }
 }
@@ -857,7 +857,7 @@ SwHistoryResetAttrSet::SwHistoryResetAttrSet( const SfxItemSet& rSet,
         }
         else
         {
-            m_Array.Insert( aIter.GetCurItem()->Which(), m_Array.Count() );
+            m_Array.push_back( aIter.GetCurItem()->Which() );
         }
 
         if( aIter.IsAtEnd() )
@@ -868,7 +868,7 @@ SwHistoryResetAttrSet::SwHistoryResetAttrSet( const SfxItemSet& rSet,
 
     if ( bAutoStyle )
     {
-        m_Array.Insert( RES_TXTATR_AUTOFMT, m_Array.Count() );
+        m_Array.push_back( RES_TXTATR_AUTOFMT );
     }
 }
 
@@ -882,22 +882,22 @@ void SwHistoryResetAttrSet::SetInDoc( SwDoc* pDoc, bool )
 
     if (pCntntNd)
     {
-        const sal_uInt16* pArr = m_Array.GetData();
+        std::vector<sal_uInt16>::iterator it;
         if ( USHRT_MAX == m_nEnd && USHRT_MAX == m_nStart )
         {
             // no area: use ContentNode
-            for ( sal_uInt16 n = m_Array.Count(); n; --n, ++pArr )
+            for ( it = m_Array.begin(); it != m_Array.end(); ++it )
             {
-                pCntntNd->ResetAttr( *pArr );
+                pCntntNd->ResetAttr( *it );
             }
         }
         else
         {
             // area: use TextNode
-            for ( sal_uInt16 n = m_Array.Count(); n; --n, ++pArr )
+            for ( it = m_Array.begin(); it != m_Array.end(); ++it )
             {
                 static_cast<SwTxtNode*>(pCntntNd)->
-                    DeleteAttributes( *pArr, m_nStart, m_nEnd );
+                    DeleteAttributes( *it, m_nStart, m_nEnd );
             }
         }
     }

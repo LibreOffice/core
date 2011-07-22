@@ -31,7 +31,6 @@
 
 
 #define _ZFORLIST_DECLARE_TABLE
-#define _SVSTDARR_USHORTS
 #include <hintids.hxx>
 #include <rtl/logfile.hxx>
 #include <svl/itemiter.hxx>
@@ -213,7 +212,7 @@ sal_Bool lcl_RstAttr( const SwNodePtr& rpNd, void* pArgs )
                          0 );
         const SfxItemSet* pSet = pNode->GetpSwAttrSet();
 
-        SvUShorts aClearWhichIds;
+        std::vector<sal_uInt16> aClearWhichIds;
         // restoring all paragraph list attributes
         {
             SfxItemSet aListAttrSet( pDoc->GetAttrPool(),
@@ -227,7 +226,7 @@ sal_Bool lcl_RstAttr( const SwNodePtr& rpNd, void* pArgs )
                 const SfxPoolItem* pItem = aIter.GetCurItem();
                 while( pItem )
                 {
-                    aClearWhichIds.Insert( pItem->Which(), aClearWhichIds.Count() );
+                    aClearWhichIds.push_back( pItem->Which() );
                     pItem = aIter.NextItem();
                 }
             }
@@ -265,7 +264,7 @@ sal_Bool lcl_RstAttr( const SwNodePtr& rpNd, void* pArgs )
                 if( bSave )
                 {
                     aSet.Put( *pItem );
-                    aClearWhichIds.Insert( aSavIds[n], aClearWhichIds.Count() );
+                    aClearWhichIds.push_back( aSavIds[n] );
                 }
             }
         }

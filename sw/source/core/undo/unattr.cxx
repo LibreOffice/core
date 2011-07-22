@@ -29,7 +29,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-#define _SVSTDARR_USHORTS
 #include <UndoAttribute.hxx>
 
 #include <svl/itemiter.hxx>
@@ -967,8 +966,8 @@ void SwUndoAttr::RemoveIdx( SwDoc& rDoc )
                     nCntnt = pHistoryHint->GetCntnt();
                     if ( STRING_MAXLEN != nCntnt )
                     {
-                        const SvUShorts& rArr = pHistoryHint->GetArr();
-                        for ( sal_uInt16 i = rArr.Count(); i; )
+                        const std::vector<sal_uInt16>& rArr = pHistoryHint->GetArr();
+                        for ( sal_uInt16 i = rArr.size(); i; )
                         {
                             if ( RES_TXTATR_FTN == rArr[ --i ] )
                             {
