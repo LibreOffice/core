@@ -33,8 +33,8 @@
 #if defined _MSC_VER
 #pragma warning(pop)
 #endif
-#include <Winreg.h>
-#include <Shlwapi.h>
+#include <winreg.h>
+#include <shlwapi.h>
 #include <stdio.h>
 
 #define SO_PATH_SIZE        4096
