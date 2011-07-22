@@ -1,4 +1,4 @@
-from uno import getComponentContext
+import uno
 import traceback
 from com.sun.star.frame.FrameSearchFlag import ALL, PARENT
 from com.sun.star.util import URL
@@ -54,7 +54,7 @@ class Desktop(object):
 
     @classmethod
     def connect(self, connectStr):
-        localContext = getComponentContext()
+        localContext = uno.getComponentContext()
         resolver = localContext.ServiceManager.createInstanceWithContext(
 				        "com.sun.star.bridge.UnoUrlResolver", localContext)
         ctx = resolver.resolve( connectStr )

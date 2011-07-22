@@ -2,7 +2,7 @@ from common.Desktop import Desktop
 from common.PropertyNames import PropertyNames
 from common.HelpIds import HelpIds
 from com.sun.star.awt.ScrollBarOrientation import HORIZONTAL, VERTICAL
-from uno import Any
+import uno
 from common.Helper import Helper
 import traceback
 from ui.UnoDialog import UnoDialog
@@ -44,7 +44,7 @@ class ControlScroller(object):
                 PropertyNames.PROPERTY_POSITION_Y,
                 PropertyNames.PROPERTY_STEP,
                 PropertyNames.PROPERTY_WIDTH),
-            (Any("short", "1"),self.iCompHeight, self.iCompPosX,
+            (uno.Any("short", "1"),self.iCompHeight, self.iCompPosX,
                 self.iCompPosY, ControlScroller.iStep, self.iCompWidth))
         self.oImgControl = ControlScroller.CurUnoDialog.xUnoDialog.getControl(
             "imgBackground" + self.sincSuffix)

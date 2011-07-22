@@ -1,5 +1,5 @@
 from text.TextDocument import *
-from uno import Any
+import uno
 from TemplateConsts import *
 from common.FileAccess import FileAccess
 from common.Helper import Helper
@@ -75,7 +75,6 @@ class AgendaTemplate(TextDocument):
     template = None
     agenda = None
     lock = RLock()
-
 
     '''constructor. The document is *not* loaded here.
     only some formal members are set.
@@ -463,8 +462,7 @@ class AgendaTemplate(TextDocument):
                 topics data has *always* an empty topic at the end...
                 '''
 
-                i = 0
-                while i < topicsData.size() - 1:
+                for i in xrange(topicsData.size() - 1):
                     topic = topicsData.get(i)
                     AgendaTemplate.items = searchFillInItems()
                     itemIndex = 0
@@ -543,7 +541,7 @@ class AgendaTemplate(TextDocument):
 
         Helper.setUnoPropertyValue(placeHolder, "PlaceHolder", ph)
         Helper.setUnoPropertyValue(placeHolder, "Hint", hint)
-        Helper.setUnoPropertyValue(placeHolder, "PlaceHolderType", Any("short",TEXT))
+        Helper.setUnoPropertyValue(placeHolder, "PlaceHolderType", uno.Any("short",TEXT))
         return placeHolder
 
     def getNamesWhichStartWith(self, allNames, prefix):
@@ -751,11 +749,12 @@ class Topics(object):
     topicCell = -1
     responsibleCell = -1
     timeCell = -1
+    rowsPerTopic = None
+    topicCells = []
+    topicCellFormats = []
 
     def __init__(self):
         self.topicItems = {}
-        self.topicCells = []
-        self.topicCellFormats = []
         self.firstRowFormat = []
         # This is the topics table. say hallo :-)
         try:
@@ -777,7 +776,7 @@ class Topics(object):
             t = Helper.getUnoPropertyValue(i, "TextTable")
             if t == Topics.table:
                 cell = Helper.getUnoPropertyValue(i, "Cell")
-                iText = cell.String
+                iText = cell.CellName
                 items[iText] = i
 
         '''
@@ -787,9 +786,9 @@ class Topics(object):
         can restore its structure and format.
         '''
         rows = AgendaTemplate.getRowCount(Topics.table)
-        self.rowsPerTopic = (rows - 1) / 3
-        firstCell = "A" + str(1 + self.rowsPerTopic + 1)
-        afterLastCell = "A" + str(1 + (self.rowsPerTopic * 2) + 1)
+        Topics.rowsPerTopic = (rows - 1) / 3
+        firstCell = "A" + str(1 + Topics.rowsPerTopic + 1)
+        afterLastCell = "A" + str(1 + (Topics.rowsPerTopic * 2) + 1)
         # go to the first row of the 2. topic
         cursor = Topics.table.createCursorByCellName(firstCell)
         # analyze the structure of the topic rows.
@@ -800,21 +799,24 @@ class Topics(object):
             # if the cell contains a relevant <...>
             # i add the text element to the hash,
             # so it's text can be updated later.
-            if items[cell.String] is not None:
-                self.topicItems[cell.String.lower().lstrip()] = ae
+            try:
+                if items[cell.CellName] is not None:
+                    self.topicItems[cell.String.lower().lstrip()] = ae
+            except KeyError:
+                pass
 
-            self.topicCells.append(ae)
+            Topics.topicCells.append(ae)
             # and store the format of the cell.
-            self.topicCellFormats.append( TableCellFormatter(Topics.table.getCellByName(cursor.RangeName)))
+            Topics.topicCellFormats.append( TableCellFormatter(Topics.table.getCellByName(cursor.RangeName)))
             # goto next cell.
             cursor.goRight(1, False)
         '''
         now - in which cell is every fillin?
         '''
-        Topics.numCell = self.topicCells.index(self.topicItems[FILLIN_TOPIC_NUMBER])
-        Topics.topicCell = self.topicCells.index(self.topicItems[FILLIN_TOPIC_TOPIC])
-        Topics.responsibleCell = self.topicCells.index(self.topicItems[FILLIN_TOPIC_RESPONSIBLE])
-        Topics.timeCell = self.topicCells.index(self.topicItems[FILLIN_TOPIC_TIME])
+        Topics.numCell = Topics.topicCells.index(self.topicItems[FILLIN_TOPIC_NUMBER])
+        Topics.topicCell = Topics.topicCells.index(self.topicItems[FILLIN_TOPIC_TOPIC])
+        Topics.responsibleCell = Topics.topicCells.index(self.topicItems[FILLIN_TOPIC_RESPONSIBLE])
+        Topics.timeCell = Topics.topicCells.index(self.topicItems[FILLIN_TOPIC_TIME])
         '''now that we know how the topics look like,
         we get the format of the first and last rows.
         '''
@@ -833,7 +835,7 @@ class Topics(object):
         # we missed the A cell - so we have to add it also..
         Topics.lastRowFormat.append(TableCellFormatter (Topics.table.getCellByName(cursor.RangeName)))
         #COMMENTED
-        #AgendaTemplate.removeTableRows(Topics.table, 1 + self.rowsPerTopic, rows - self.rowsPerTopic - 1)
+        #AgendaTemplate.removeTableRows(Topics.table, 1 + Topics.rowsPerTopic, rows - Topics.rowsPerTopic - 1)
 
     '''@param topic the topic number to write
     @param data the data of the topic.
@@ -841,6 +843,7 @@ class Topics(object):
     to the table. 0 or a negative number: no rows added.
     '''
 
+    @classmethod
     def write2(self, topic, data):
         if topic >= len(AgendaTemplate.writtenTopics):
             size = topic - len(AgendaTemplate.writtenTopics)
@@ -848,8 +851,8 @@ class Topics(object):
         AgendaTemplate.writtenTopics.insert(topic, "")
         # make sure threr are enough rows for me...
         rows = AgendaTemplate.getRowCount(Topics.table)
-        reqRows = 1 + (topic + 1) * self.rowsPerTopic
-        firstRow = reqRows - self.rowsPerTopic + 1
+        reqRows = 1 + (topic + 1) * Topics.rowsPerTopic
+        firstRow = reqRows - Topics.rowsPerTopic + 1
         diff = reqRows - rows
         if diff > 0:
             AgendaTemplate.insertTableRows(Topics.table, rows, diff)
@@ -861,12 +864,12 @@ class Topics(object):
         self.setItemText(Topics.timeCell, data[3].Value)
         # now write !
         cursor = Topics.table.createCursorByCellName("A" + str(firstRow))
-        for i in self.topicCells:
+        for i in Topics.topicCells:
             i.write(Topics.table.getCellByName(cursor.RangeName))
             cursor.goRight(1, False)
         # now format !
         cursor.gotoCellByName("A" + str(firstRow), False)
-        self.formatTable(cursor, self.topicCellFormats, False)
+        self.formatTable(cursor, Topics.topicCellFormats, False)
         return diff
 
     '''check if the topic with the given index is written to the table.
@@ -899,7 +902,7 @@ class Topics(object):
             # write only the "what" cell.
         else:
             # calculate the table row.
-            firstRow = 1 + (topic * self.rowsPerTopic) + 1
+            firstRow = 1 + (topic * Topics.rowsPerTopic) + 1
             # go to the first cell of this topic.
             cursor = Topics.table.createCursorByCellName("A" + firstRow)
             te = None
@@ -923,7 +926,7 @@ class Topics(object):
             xc = Topics.table.getCellByName(cursor.RangeName)
             # and write it !
             te.write(xc)
-            (self.topicCellFormats.get(cursorMoves)).format(xc)
+            (Topics.topicCellFormats.get(cursorMoves)).format(xc)
 
     '''writes the given topic.
     if the first topic was involved, reformat the
@@ -988,7 +991,7 @@ class Topics(object):
             topics = 1
 
         tableRows = Topics.table.getRows()
-        targetNumOfRows = topics * self.rowsPerTopic + 1
+        targetNumOfRows = topics * Topics.rowsPerTopic + 1
         if tableRows.getCount() > targetNumOfRows:
             tableRows.removeByIndex(targetNumOfRows, tableRows.getCount() - targetNumOfRows)
 
@@ -1019,9 +1022,10 @@ class Topics(object):
     to the given cell.
     '''
 
+    @classmethod
     def setItemText(self, cell, value):
         if cell >= 0:
-            te = self.topicCells[cell]
+            te = Topics.topicCells[cell]
             if te is not None:
                 te.text = str(value)
             return te

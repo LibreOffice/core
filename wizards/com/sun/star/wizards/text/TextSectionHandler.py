@@ -1,5 +1,5 @@
 import traceback
-from uno import createUnoStruct
+import uno
 from common.Helper import Helper
 
 class TextSectionHandler(object):
@@ -69,7 +69,7 @@ class TextSectionHandler(object):
         try:
             iSectionCount = self.xTextDocument.TextSections.Count
             oSectionLink = \
-                createUnoStruct('com.sun.star.text.SectionFileLink')
+                uno.createUnoStruct('com.sun.star.text.SectionFileLink')
             oSectionLink.FileURL = ""
             for i in xrange(iSectionCount):
                 oTextSection = xAllTextSections.getByIndex(i)
@@ -81,7 +81,7 @@ class TextSectionHandler(object):
 
     def breakLinkOfTextSection(self, oTextSection):
         oSectionLink = \
-            createUnoStruct('com.sun.star.text.SectionFileLink')
+            uno.createUnoStruct('com.sun.star.text.SectionFileLink')
         oSectionLink.FileURL = ""
         Helper.setUnoPropertyValues(
             oTextSection, ("FileLink", "LinkRegion"),(oSectionLink, ""))
@@ -96,7 +96,7 @@ class TextSectionHandler(object):
 
     def linkSectiontoTemplate(self, oTextSection, TemplateName, SectionName):
         oSectionLink = \
-            createUnoStruct('com.sun.star.text.SectionFileLink')
+            uno.createUnoStruct('com.sun.star.text.SectionFileLink')
         oSectionLink.FileURL = TemplateName
         Helper.setUnoPropertyValues(
             oTextSection, ("FileLink", "LinkRegion"),
