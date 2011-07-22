@@ -386,12 +386,6 @@ void SdXMLImExTransform2D::AddRotate(double fNew)
         maList.push_back(new ImpSdXMLExpTransObj2DRotate(fNew));
 }
 
-void SdXMLImExTransform2D::AddScale(const ::basegfx::B2DTuple& rNew)
-{
-    if(1.0 != rNew.getX() || 1.0 != rNew.getY())
-        maList.push_back(new ImpSdXMLExpTransObj2DScale(rNew));
-}
-
 void SdXMLImExTransform2D::AddTranslate(const ::basegfx::B2DTuple& rNew)
 {
     if(!rNew.equalZero())
@@ -402,18 +396,6 @@ void SdXMLImExTransform2D::AddSkewX(double fNew)
 {
     if(fNew != 0.0)
         maList.push_back(new ImpSdXMLExpTransObj2DSkewX(fNew));
-}
-
-void SdXMLImExTransform2D::AddSkewY(double fNew)
-{
-    if(fNew != 0.0)
-        maList.push_back(new ImpSdXMLExpTransObj2DSkewY(fNew));
-}
-
-void SdXMLImExTransform2D::AddMatrix(const ::basegfx::B2DHomMatrix& rNew)
-{
-    if(!rNew.isIdentity())
-        maList.push_back(new ImpSdXMLExpTransObj2DMatrix(rNew));
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -517,13 +499,6 @@ const OUString& SdXMLImExTransform2D::GetExportString(const SvXMLUnitConverter& 
     msString = aNewString;
 
     return msString;
-}
-
-//////////////////////////////////////////////////////////////////////////////
-// for Import: constructor with string, parses it and generates entries
-SdXMLImExTransform2D::SdXMLImExTransform2D(const OUString& rNew, const SvXMLUnitConverter& rConv)
-{
-    SetString(rNew, rConv);
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -835,36 +810,6 @@ void SdXMLImExTransform3D::EmptyList()
 
 //////////////////////////////////////////////////////////////////////////////
 // add members
-
-void SdXMLImExTransform3D::AddRotateX(double fNew)
-{
-    if(fNew != 0.0)
-        maList.push_back(new ImpSdXMLExpTransObj3DRotateX(fNew));
-}
-
-void SdXMLImExTransform3D::AddRotateY(double fNew)
-{
-    if(fNew != 0.0)
-        maList.push_back(new ImpSdXMLExpTransObj3DRotateY(fNew));
-}
-
-void SdXMLImExTransform3D::AddRotateZ(double fNew)
-{
-    if(fNew != 0.0)
-        maList.push_back(new ImpSdXMLExpTransObj3DRotateZ(fNew));
-}
-
-void SdXMLImExTransform3D::AddScale(const ::basegfx::B3DTuple& rNew)
-{
-    if(1.0 != rNew.getX() || 1.0 != rNew.getY() || 1.0 != rNew.getZ())
-        maList.push_back(new ImpSdXMLExpTransObj3DScale(rNew));
-}
-
-void SdXMLImExTransform3D::AddTranslate(const ::basegfx::B3DTuple& rNew)
-{
-    if(!rNew.equalZero())
-        maList.push_back(new ImpSdXMLExpTransObj3DTranslate(rNew));
-}
 
 void SdXMLImExTransform3D::AddMatrix(const ::basegfx::B3DHomMatrix& rNew)
 {

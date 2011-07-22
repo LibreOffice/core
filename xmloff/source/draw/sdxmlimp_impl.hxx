@@ -255,8 +255,6 @@ public:
     // XInitialization
     virtual void SAL_CALL initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments ) throw(::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
 
-    void SetProgress(sal_Int32 nProg);
-
     virtual void SetViewSettings(const com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& aViewProps);
     virtual void SetConfigurationSettings(const com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& aConfigProps);
 
@@ -311,10 +309,6 @@ public:
 
     sal_Bool IsDraw() const { return mbIsDraw; }
     sal_Bool IsImpress() const { return !mbIsDraw; }
-
-    // import pool defaults. Parameter contains pool defaults read
-    // from input data. These data needs to be set at the model.
-    void ImportPoolDefaults(const XMLPropStyleContext* pPool);
 
     // #80365#
     virtual void SetStatistics(

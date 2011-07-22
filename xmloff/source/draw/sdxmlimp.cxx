@@ -491,15 +491,6 @@ SdXMLImport::~SdXMLImport() throw ()
 
 //////////////////////////////////////////////////////////////////////////////
 
-void SdXMLImport::SetProgress(sal_Int32 nProg)
-{
-    // set progress view
-    if(mxStatusIndicator.is())
-        mxStatusIndicator->setValue(nProg);
-}
-
-//////////////////////////////////////////////////////////////////////////////
-
 const SvXMLTokenMap& SdXMLImport::GetDocElemTokenMap()
 {
     if(!mpDocElemTokenMap)
@@ -851,14 +842,6 @@ SvXMLImportContext *SdXMLImport::CreateFontDeclsContext(const OUString& rLocalNa
                                       gsl_getSystemTextEncoding() );
     SetFontDecls( pFSContext );
     return pFSContext;
-}
-
-//////////////////////////////////////////////////////////////////////////////
-// import pool defaults. Parameter contains pool defaults read
-// from input data. These data needs to be set at the model.
-//
-void SdXMLImport::ImportPoolDefaults(const XMLPropStyleContext*)
-{
 }
 
 //////////////////////////////////////////////////////////////////////////////

@@ -70,15 +70,11 @@ class SdXMLImExTransform2D
 
 public:
     SdXMLImExTransform2D() {}
-    SdXMLImExTransform2D(const rtl::OUString& rNew, const SvXMLUnitConverter& rConv);
     ~SdXMLImExTransform2D() { EmptyList(); }
 
     void AddRotate(double fNew);
-    void AddScale(const ::basegfx::B2DTuple& rNew);
     void AddTranslate(const ::basegfx::B2DTuple& rNew);
     void AddSkewX(double fNew);
-    void AddSkewY(double fNew);
-    void AddMatrix(const ::basegfx::B2DHomMatrix& rNew);
 
     bool NeedsAction() const { return !maList.empty(); }
     void GetFullTransform(::basegfx::B2DHomMatrix& rFullTrans);
@@ -100,11 +96,6 @@ public:
     SdXMLImExTransform3D(const rtl::OUString& rNew, const SvXMLUnitConverter& rConv);
     ~SdXMLImExTransform3D() { EmptyList(); }
 
-    void AddRotateX(double fNew);
-    void AddRotateY(double fNew);
-    void AddRotateZ(double fNew);
-    void AddScale(const ::basegfx::B3DTuple& rNew);
-    void AddTranslate(const ::basegfx::B3DTuple& rNew);
     void AddMatrix(const ::basegfx::B3DHomMatrix& rNew);
 
     void AddHomogenMatrix(const com::sun::star::drawing::HomogenMatrix& xHomMat);

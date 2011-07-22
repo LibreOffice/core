@@ -44,11 +44,6 @@ using ::rtl::OUString;
 
 //------------------------------------------------------------------
 
-SdXMLViewSettingsContext::SdXMLViewSettingsContext( SdXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLName, const uno::Reference<xml::sax::XAttributeList>& ) :
-    SvXMLImportContext( rImport, nPrfx, rLName )
-{
-}
-
 SdXMLViewSettingsContext::~SdXMLViewSettingsContext()
 {
 }
