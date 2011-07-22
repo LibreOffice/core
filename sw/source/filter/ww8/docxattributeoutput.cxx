@@ -807,8 +807,10 @@ void DocxAttributeOutput::EndField_Impl( FieldInfos& rInfos )
         // Write the Field latest value
         m_pSerializer->startElementNS( XML_w, XML_r, FSEND );
 
-        // Find another way for hyperlinks
-        RunText( rInfos.pField->GetFieldName() );
+        String sExpand( rInfos.pField->ExpandField( true ) );
+        sExpand.SearchAndReplaceAll( 0x0A, 0x0B );
+        RunText( sExpand );
+
         m_pSerializer->endElementNS( XML_w, XML_r );
     }
 
