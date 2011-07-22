@@ -226,8 +226,6 @@ public:
     const HTMLOptions *GetOptions( sal_uInt16 *pNoConvertToken=0 ) const;
 
     // fuers asynchrone lesen aus dem SvStream
-//  virtual void SaveState( int nToken );
-//  virtual void RestoreState();
     virtual void Continue( int nToken );
 
 
