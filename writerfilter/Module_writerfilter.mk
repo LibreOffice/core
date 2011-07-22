@@ -28,7 +28,6 @@
 $(eval $(call gb_Module_Module,writerfilter))
 
 $(eval $(call gb_Module_add_targets,writerfilter,\
-    Library_rtftok \
     Library_writerfilter \
     Package_inc \
     Package_writerfilter_generated \

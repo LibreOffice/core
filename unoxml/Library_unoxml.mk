@@ -33,11 +33,11 @@ $(eval $(call gb_Library_set_include,unoxml,\
     $$(INCLUDE) \
 ))
 
-))
-
 $(eval $(call gb_Library_add_api,unoxml,\
 	udkapi \
 	offapi \
+))
+
 $(eval $(call gb_Library_add_linked_libs,unoxml,\
     ucbhelper \
     sax \
