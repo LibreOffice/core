@@ -32,7 +32,7 @@
 #include "TemplateScanner.hxx"
 
 #include <sfx2/templatelocnames.hrc>
-#include "sdresid.hxx"
+#include <sfx2/sfxresid.hxx>
 
 #include <comphelper/processfactory.hxx>
 #include <comphelper/documentconstants.hxx>
@@ -504,9 +504,9 @@ const TemplateEntry* TemplateScanner::GetLastAddedEntry (void) const
 {
     for( int i = 0; i < nCount; ++i )
     {
-        if( rString == ResId::toString( (const ResId)SdResId( (sal_uInt16)(nSourceResIds + i) ) ) )
+        if( rString == ResId::toString( (const ResId)SfxResId( (sal_uInt16)(nSourceResIds + i) ) ) )
         {
-            return ResId::toString( (const ResId)SdResId( (sal_uInt16)(nDestResIds + i) ) );
+            return ResId::toString( (const ResId)SfxResId( (sal_uInt16)(nDestResIds + i) ) );
         }
     }
     return rString;

@@ -93,7 +93,6 @@ $(eval $(call gb_SrsTarget_add_files,sd/res,\
     sd/source/ui/slidesorter/view/SlsResource.src \
     sd/source/ui/table/TableDesignPane.src \
     sd/source/ui/view/DocumentRenderer.src \
-    sfx2/source/doc/templatelocnames.src \
 ))
 
 $(eval $(call gb_SrsTarget_add_templates,sd/res,\
