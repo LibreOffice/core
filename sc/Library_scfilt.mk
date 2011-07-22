@@ -36,11 +36,11 @@ $(eval $(call gb_Library_set_include,scfilt,\
         -I$(OUTDIR)/inc \
 ))
 
-))
-
 $(eval $(call gb_Library_add_api,scfilt,\
     offapi \
     udkapi \
+))
+
 $(eval $(call gb_Library_add_linked_libs,scfilt,\
         basegfx \
         comphelper \
