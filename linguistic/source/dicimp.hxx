@@ -211,7 +211,6 @@ class DicEntry :
                                      ::rtl::OUString &rReplacement);
 
 public:
-    DicEntry();
     DicEntry(const ::rtl::OUString &rDicFileWord, sal_Bool bIsNegativ);
     DicEntry(const ::rtl::OUString &rDicWord, sal_Bool bIsNegativ,
              const ::rtl::OUString &rRplcText);

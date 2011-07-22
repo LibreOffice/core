@@ -71,7 +71,6 @@
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
 #include "workwin.hxx"
-#include "intro.hxx"
 #include <sfx2/fcontnr.hxx>
 #include "sfxlocal.hrc"
 #include <sfx2/sfx.hrc>

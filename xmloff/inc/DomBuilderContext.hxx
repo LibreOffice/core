@@ -86,9 +86,6 @@ public:
     /** access the DOM tree */
     com::sun::star::uno::Reference<com::sun::star::xml::dom::XDocument> getTree();
 
-    /** access this context's DOM sub-tree */
-    com::sun::star::uno::Reference<com::sun::star::xml::dom::XNode> getNode();
-
 
     //
     // implement SvXMLImportContext methods:

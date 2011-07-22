@@ -68,7 +68,6 @@
 #include <sfx2/dispatch.hxx>
 #include <sfx2/docfac.hxx>
 #include <sfx2/evntconf.hxx>
-#include "intro.hxx"
 #include <sfx2/mnumgr.hxx>
 #include <sfx2/msgpool.hxx>
 #include <sfx2/progress.hxx>

@@ -171,7 +171,6 @@ class DomExport: public DomVisitor
     void addNamespace( const OUString& sPrefix, const OUString& sURI );
     OUString qualifiedName( const OUString& sPrefix, const OUString& sURI,
                             const OUString& sLocalName );
-    OUString qualifiedName( const Reference<XNode>&  );
     OUString qualifiedName( const Reference<XElement>&  );
     OUString qualifiedName( const Reference<XAttr>&  );
     void addAttribute( const Reference<XAttr>& );
@@ -239,12 +238,6 @@ OUString DomExport::qualifiedName( const OUString& sPrefix,
     }
     sBuffer.append( sLocalName );
     return sBuffer.makeStringAndClear();
-}
-
-OUString DomExport::qualifiedName( const Reference<XNode>& xNode )
-{
-    return qualifiedName( xNode->getPrefix(), xNode->getNamespaceURI(),
-                          xNode->getNodeName() );
 }
 
 OUString DomExport::qualifiedName( const Reference<XElement>& xElement )

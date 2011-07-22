@@ -54,7 +54,6 @@
 #include "sfx2/sfxresid.hxx"
 #include <sfx2/fcontnr.hxx>
 #include <sfx2/viewsh.hxx>
-#include "intro.hxx"
 #include <sfx2/msgpool.hxx>
 #include <sfx2/mnumgr.hxx>
 #include <sfx2/appuno.hxx>

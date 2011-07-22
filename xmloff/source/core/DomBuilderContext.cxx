@@ -108,12 +108,6 @@ Reference<XDocument> DomBuilderContext::getTree()
     return mxNode->getOwnerDocument();
 }
 
-Reference<XNode> DomBuilderContext::getNode()
-{
-    return mxNode;
-}
-
-
 SvXMLImportContext* DomBuilderContext::CreateChildContext(
     sal_uInt16 nPrefix,
     const OUString& rLocalName,

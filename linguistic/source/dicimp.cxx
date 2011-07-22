@@ -1077,11 +1077,6 @@ void SAL_CALL DictionaryNeo::storeToURL(
 }
 
 
-DicEntry::DicEntry()
-{
-    bIsNegativ = sal_False;
-}
-
 DicEntry::DicEntry(const OUString &rDicFileWord,
                    sal_Bool bIsNegativWord)
 {
