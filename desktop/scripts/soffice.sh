@@ -39,8 +39,6 @@ export SAL_ENABLE_FILE_LOCKING
 # working on your system.
 # SAL_NOOPENGL=true; export SAL_NOOPENGL
 
-unset XENVIRONMENT
-
 # uncomment line below to disable anti aliasing of fonts
 # SAL_ANTIALIAS_DISABLE=true; export SAL_ANTIALIAS_DISABLE
 
