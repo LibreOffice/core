@@ -42,7 +42,6 @@ $(eval $(call gb_Library_set_include,sw,\
     -I$(WORKDIR)/SdiTarget/sw/sdi \
     -I$(WORKDIR)/Misc/sw/ \
     $$(INCLUDE) \
-    $(if $(filter YES,$(SYSTEM_LIBXML)),$(LIBXML_CFLAGS)) \
     -I$(OUTDIR)/inc \
 ))
 
@@ -83,11 +82,13 @@ $(eval $(call gb_Library_add_linked_libs,sw,\
     vbahelper \
     vcl \
     xo \
-    xml2 \
     $(gb_STDLIBS) \
 ))
 
-$(call gb_Library_use_external,sw,icuuc)
+$(eval $(call gb_Library_use_externals,sw,\
+	icuuc \
+	libxml2 \
+))
 
 $(eval $(call gb_Library_add_exception_objects,sw,\
     sw/source/core/SwNumberTree/SwNodeNum \

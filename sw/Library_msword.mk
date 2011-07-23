@@ -38,7 +38,6 @@ $(eval $(call gb_Library_set_include,msword,\
     -I$(WORKDIR)/inc/sw/sdi \
     -I$(WORKDIR)/Misc/sw/ \
     $$(INCLUDE) \
-	$(if $(filter YES,$(SYSTEM_LIBXML)),$(LIBXML_CFLAGS)) \
     -I$(OUTDIR)/inc/sw \
 ))
 
@@ -75,7 +74,10 @@ $(eval $(call gb_Library_add_linked_libs,msword,\
     $(gb_STDLIBS) \
 ))
 
-$(call gb_Library_use_external,msword,icuuc)
+$(eval $(call gb_Library_use_externals,msword,\
+	icuuc \
+	libxml2 \
+))
 
 $(eval $(call gb_Library_add_exception_objects,msword,\
     sw/source/filter/rtf/rtffld \
