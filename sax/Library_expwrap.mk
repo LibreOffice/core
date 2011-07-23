@@ -46,7 +46,7 @@ $(eval $(call gb_Library_add_linked_libs,expwrap,\
     $(gb_STDLIBS) \
 ))
 
-$(call gb_Library_use_external,expwrap,expat_utf16)
+$(eval $(call gb_Library_use_external,expwrap,expat_utf16))
 
 $(eval $(call gb_Library_add_exception_objects,expwrap,\
 	sax/source/expatwrap/attrlistimpl \

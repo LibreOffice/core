@@ -62,10 +62,10 @@ $(eval $(call gb_Library_add_linked_libs,vclplug_gen,\
     $(gb_STDLIBS) \
 ))
 
-$(call gb_Library_use_externals,vclplug_gen,\
+$(eval $(call gb_Library_use_externals,vclplug_gen,\
 	icule \
 	icuuc \
-)
+))
 
 ifeq ($(SYSTEM_CAIRO),YES)
 $(eval $(call gb_Library_set_ldflags,vclplug_gen,\

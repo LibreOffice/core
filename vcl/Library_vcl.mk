@@ -90,10 +90,10 @@ $(eval $(call gb_Library_add_linked_libs,vcl,\
     $(gb_STDLIBS) \
 ))
 
-$(call gb_Library_use_externals,vcl,\
+$(eval $(call gb_Library_use_externals,vcl,\
 	icule \
 	icuuc \
-)
+))
 
 ifeq ($(GUIBASE),aqua)
 $(eval $(call gb_Library_add_cxxflags,vcl,\
@@ -461,7 +461,7 @@ $(eval $(call gb_Library_add_linked_libs,vcl,\
 ))
 endif
 
-$(call gb_Library_use_external,vcl,graphite)
+$(eval $(call gb_Library_use_external,vcl,graphite))
 endif
 
 ## handle Cairo

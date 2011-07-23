@@ -74,10 +74,10 @@ $(eval $(call gb_Library_add_linked_libs,svt,\
     $(gb_STDLIBS) \
 ))
 
-$(call gb_Library_use_externals,svt,\
+$(eval $(call gb_Library_use_externals,svt,\
 	icuuc \
     jpeg \
-)
+))
 
 $(eval $(call gb_Library_add_exception_objects,svt,\
     svtools/source/brwbox/brwbox1 \

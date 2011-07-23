@@ -78,10 +78,10 @@ $(eval $(call gb_Library_add_linked_libs,vclplug_kde4,\
     ICE \
 ))
 
-$(call gb_Library_use_externals,vclplug_kde4,\
+$(eval $(call gb_Library_use_externals,vclplug_kde4,\
 	icule \
 	icuuc \
-)
+))
 
 $(eval $(call gb_Library_add_exception_objects,vclplug_kde4,\
     vcl/unx/kde4/KDEData \

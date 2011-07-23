@@ -68,10 +68,10 @@ $(eval $(call gb_Library_add_linked_libs,vclplug_svp,\
     $(gb_STDLIBS) \
 ))
 
-$(call gb_Library_use_externals,vclplug_svp,\
+$(eval $(call gb_Library_use_externals,vclplug_svp,\
 	icule \
 	icuuc \
-)
+))
 
 $(eval $(call gb_Library_add_exception_objects,vclplug_svp,\
     vcl/unx/headless/svpbmp \

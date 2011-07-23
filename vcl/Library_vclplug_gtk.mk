@@ -91,10 +91,10 @@ $(eval $(call gb_Library_add_linked_libs,vclplug_gtk,\
     $(gb_STDLIBS) \
 ))
 
-$(call gb_Library_use_externals,vclplug_gtk,\
+$(eval $(call gb_Library_use_externals,vclplug_gtk,\
 	icule \
 	icuuc \
-)
+))
 
 $(eval $(call gb_Library_add_exception_objects,vclplug_gtk,\
     vcl/unx/gtk/a11y/atkaction \

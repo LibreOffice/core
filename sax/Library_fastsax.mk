@@ -47,13 +47,9 @@ $(eval $(call gb_Library_add_linked_libs,fastsax,\
     $(gb_STDLIBS) \
 ))
 
-ifeq ($(SYSTEM_ZLIB),YES)
-$(eval $(call gb_Library_add_defs,fastsax,\
-	-DSYSTEM_ZLIB \
-))
-endif
+$(eval $(call gb_Library_use_external,fastsax,zlib))
 
-$(call gb_Library_use_external,fastsax,expat_utf8)
+$(eval $(call gb_Library_use_external,fastsax,expat_utf8))
 
 # re-uses xml2utf object from sax.uno lib (see below)
 $(eval $(call gb_Library_add_exception_objects,fastsax,\

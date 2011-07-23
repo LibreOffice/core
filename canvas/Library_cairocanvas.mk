@@ -78,7 +78,7 @@ $(eval $(call gb_Library_add_exception_objects,cairocanvas,\
 	canvas/source/cairo/cairo_textlayout \
 ))
 
-$(call gb_Library_use_external,cairocanvas,cairo)
+$(eval $(call gb_Library_use_external,cairocanvas,cairo))
 
 ifeq ($(OS),WNT)
 
