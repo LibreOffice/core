@@ -40,8 +40,6 @@ $(eval $(call gb_Library_set_include,ooxml,\
 	-I$(WORKDIR)/CustomTarget/writerfilter/source \
 	-I$(WORKDIR)/CustomTarget/writerfilter/source/ooxml \
 	-I$(WORKDIR)/CustomTarget/writerfilter/source/doctok \
-    -I$(WORKDIR)/writerfilter/inc \
-    -I$(WORKDIR)/writerfilter/inc/ooxml \
     -I$(OUTDIR)/inc \
 ))
 

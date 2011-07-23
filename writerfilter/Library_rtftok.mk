@@ -33,9 +33,11 @@ $(eval $(call gb_Library_set_include,rtftok,\
 	-I$(realpath $(SRCDIR)/writerfilter/inc) \
 	-I$(WORKDIR)/CustomTarget/writerfilter/source \
 	-I$(OUTDIR)/inc \
-	-I$(OUTDIR)/inc/offapi \
-	-I$(OUTDIR)/inc/offuh \
-	-I$(OUTDIR)/inc/udkapi \
+))
+
+$(eval $(call gb_Library_add_api,rtftok,\
+	offapi \
+	udkapi \
 ))
 
 include $(realpath $(SRCDIR)/writerfilter/debug_setup.mk)
