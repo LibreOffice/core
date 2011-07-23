@@ -1894,26 +1894,6 @@ SvxHyperlinkTabPageBase::FileExists(INetURLObject const&)
 SvxIMapDlg::GetTargetList() const
 SvxIconChoiceCtrlEntry::LockPos(unsigned char)
 SvxIconChoiceCtrlEntry::SetMoved(unsigned char)
-SvxIconChoiceCtrl_Impl::GetEntryPredecessor(SvxIconChoiceCtrlEntry*, SvxIconChoiceCtrlEntry**)
-SvxIconChoiceCtrl_Impl::GetGridCount(Size const&, unsigned char, unsigned char) const
-SvxIconChoiceCtrl_Impl::GetItem(SvxIconChoiceCtrlEntry*, Point const&)
-SvxIconChoiceCtrl_Impl::GetItemColumn(unsigned short, long&) const
-SvxIconChoiceCtrl_Impl::GetPopupMenuPosPixel() const
-SvxIconChoiceCtrl_Impl::GetTextMode(SvxIconChoiceCtrlEntry const*) const
-SvxIconChoiceCtrl_Impl::GoLeftRight(SvxIconChoiceCtrlEntry*, unsigned char)
-SvxIconChoiceCtrl_Impl::GoUpDown(SvxIconChoiceCtrlEntry*, unsigned char)
-SvxIconChoiceCtrl_Impl::HideFocus()
-SvxIconChoiceCtrl_Impl::HideShowDDIcon(SvxIconChoiceCtrlEntry*, Point const&)
-SvxIconChoiceCtrl_Impl::InvalidateBoundingRect(SvxIconChoiceCtrlEntry*)
-SvxIconChoiceCtrl_Impl::LockEntryPos(SvxIconChoiceCtrlEntry*, unsigned char)
-SvxIconChoiceCtrl_Impl::PrepareCommandEvent(CommandEvent const&)
-SvxIconChoiceCtrl_Impl::RecalcAllBoundingRects()
-SvxIconChoiceCtrl_Impl::SaveSelection(List**)
-SvxIconChoiceCtrl_Impl::SetEntryFlags(SvxIconChoiceCtrlEntry*, unsigned short)
-SvxIconChoiceCtrl_Impl::SetEntryListPos(SvxIconChoiceCtrlEntry*, unsigned long)
-SvxIconChoiceCtrl_Impl::ShowEntryFocusRect(SvxIconChoiceCtrlEntry const*)
-SvxIconChoiceCtrl_Impl::Tracking(TrackingEvent const&)
-SvxIconChoiceCtrl_Impl::UpdateBoundingRects()
 SvxIconSelectorDialog::AutoScaleBitmap(BitmapEx&, long)
 SvxImportMSVBasic::Import(String const&, String const&, unsigned char, unsigned char)
 SvxInsertStatusBarControl::GetDefItemWidth(StatusBar const&)
