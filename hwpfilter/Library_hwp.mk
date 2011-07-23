@@ -47,7 +47,7 @@ $(eval $(call gb_Library_add_linked_libs,hwp,\
     $(gb_STDLIBS) \
 ))
 
-$(call gb_Library_use_external,hwp,zlib)
+$(eval $(call gb_Library_use_external,hwp,zlib))
 
 ifeq ($(OS),WNT)
 

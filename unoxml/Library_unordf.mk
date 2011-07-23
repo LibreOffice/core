@@ -45,10 +45,10 @@ $(eval $(call gb_Library_add_linked_libs,unordf,\
     $(gb_STDLIBS) \
 ))
 
-$(call gb_Library_use_externals,unordf,\
+$(eval $(call gb_Library_use_externals,unordf,\
 	librdf \
 	libxslt \
-)
+))
 
 $(eval $(call gb_Library_add_exception_objects,unordf,\
     unoxml/source/rdf/CBlankNode \
