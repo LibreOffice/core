@@ -877,11 +877,11 @@ endif
 endef
 
 # this forwards to functions that must be defined in RepositoryExternal.mk.
-# $(call gb_LinkTarget_use_external,library,external)
+# $(eval $(call gb_LinkTarget_use_external,library,external))
 define gb_LinkTarget_use_external
-$(eval $(if $(value gb_LinkTarget__use_$(2)),\
+$(if $(value gb_LinkTarget__use_$(2)),\
   $(call gb_LinkTarget__use_$(2),$(1)),\
-  $(error gb_LinkTarget_use_external: unknown external: $(2))))
+  $(error gb_LinkTarget_use_external: unknown external: $(2)))
 endef
 
 # $(call gb_LinkTarget_use_externals,library,externals)
