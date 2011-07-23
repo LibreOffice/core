@@ -179,7 +179,7 @@ private:
     void                SetWidths();
     void                Adjust();
 
-    sal_uInt16              GetWidthPixel( const HTMLOption* );
+    sal_uInt16              GetWidthPixel( const HTMLOption& );
     sal_Bool                IsAtBeginningOfText( ImportInfo* );
 
     void                TableOn( ImportInfo* );

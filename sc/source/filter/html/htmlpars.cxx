@@ -850,28 +850,27 @@ void ScHTMLLayoutParser::TableDataOn( ImportInfo* pInfo )
     }
     bInCell = sal_True;
     sal_Bool bHorJustifyCenterTH = (pInfo->nToken == HTML_TABLEHEADER_ON);
-    const HTMLOptions* pOptions = ((HTMLParser*)pInfo->pParser)->GetOptions();
-    sal_uInt16 nArrLen = pOptions->Count();
-    for ( sal_uInt16 i = 0; i < nArrLen; i++ )
+    const HTMLOptions& rOptions = static_cast<HTMLParser*>(pInfo->pParser)->GetOptions();
+    for (size_t i = 0, n = rOptions.size(); i < n; ++i)
     {
-        const HTMLOption* pOption = (*pOptions)[i];
-        switch( pOption->GetToken() )
+        const HTMLOption& rOption = rOptions[i];
+        switch( rOption.GetToken() )
         {
             case HTML_O_COLSPAN:
             {
-                pActEntry->nColOverlap = ( SCCOL ) pOption->GetString().ToInt32();
+                pActEntry->nColOverlap = ( SCCOL ) rOption.GetString().ToInt32();
             }
             break;
             case HTML_O_ROWSPAN:
             {
-                pActEntry->nRowOverlap = ( SCROW ) pOption->GetString().ToInt32();
+                pActEntry->nRowOverlap = ( SCROW ) rOption.GetString().ToInt32();
             }
             break;
             case HTML_O_ALIGN:
             {
                 bHorJustifyCenterTH = false;
                 SvxCellHorJustify eVal;
-                const String& rOptVal = pOption->GetString();
+                const String& rOptVal = rOption.GetString();
                 if ( rOptVal.CompareIgnoreCaseToAscii( OOO_STRING_SVTOOLS_HTML_AL_right ) == COMPARE_EQUAL )
                     eVal = SVX_HOR_JUSTIFY_RIGHT;
                 else if ( rOptVal.CompareIgnoreCaseToAscii( OOO_STRING_SVTOOLS_HTML_AL_center ) == COMPARE_EQUAL )
@@ -887,7 +886,7 @@ void ScHTMLLayoutParser::TableDataOn( ImportInfo* pInfo )
             case HTML_O_VALIGN:
             {
                 SvxCellVerJustify eVal;
-                const String& rOptVal = pOption->GetString();
+                const String& rOptVal = rOption.GetString();
                 if ( rOptVal.CompareIgnoreCaseToAscii( OOO_STRING_SVTOOLS_HTML_VA_top ) == COMPARE_EQUAL )
                     eVal = SVX_VER_JUSTIFY_TOP;
                 else if ( rOptVal.CompareIgnoreCaseToAscii( OOO_STRING_SVTOOLS_HTML_VA_middle ) == COMPARE_EQUAL )
@@ -901,25 +900,25 @@ void ScHTMLLayoutParser::TableDataOn( ImportInfo* pInfo )
             break;
             case HTML_O_WIDTH:
             {
-                pActEntry->nWidth = GetWidthPixel( pOption );
+                pActEntry->nWidth = GetWidthPixel( rOption );
             }
             break;
             case HTML_O_BGCOLOR:
             {
                 Color aColor;
-                pOption->GetColor( aColor );
+                rOption.GetColor( aColor );
                 pActEntry->aItemSet.Put(
                     SvxBrushItem( aColor, ATTR_BACKGROUND ) );
             }
             break;
             case HTML_O_SDVAL:
             {
-                pActEntry->pValStr = new String( pOption->GetString() );
+                pActEntry->pValStr = new String( rOption.GetString() );
             }
             break;
             case HTML_O_SDNUM:
             {
-                pActEntry->pNumStr = new String( pOption->GetString() );
+                pActEntry->pNumStr = new String( rOption.GetString() );
             }
             break;
         }
@@ -977,23 +976,22 @@ void ScHTMLLayoutParser::TableOn( ImportInfo* pInfo )
         nLastWidth = nTableWidth;
         if ( pInfo->nToken == HTML_TABLE_ON )
         {   // es kann auch TD oder TH sein, wenn es vorher kein TABLE gab
-            const HTMLOptions* pOptions = ((HTMLParser*)pInfo->pParser)->GetOptions();
-            sal_uInt16 nArrLen = pOptions->Count();
-            for ( sal_uInt16 i = 0; i < nArrLen; i++ )
+            const HTMLOptions& rOptions = static_cast<HTMLParser*>(pInfo->pParser)->GetOptions();
+            for (size_t i = 0, n = rOptions.size(); i < n; ++i)
             {
-                const HTMLOption* pOption = (*pOptions)[i];
-                switch( pOption->GetToken() )
+                const HTMLOption& rOption = rOptions[i];
+                switch( rOption.GetToken() )
                 {
                     case HTML_O_WIDTH:
                     {   // Prozent: von Dokumentbreite bzw. aeusserer Zelle
-                        nTableWidth = GetWidthPixel( pOption );
+                        nTableWidth = GetWidthPixel( rOption );
                     }
                     break;
                     case HTML_O_BORDER:
                         // Border is: ((pOption->GetString().Len() == 0) || (pOption->GetNumber() != 0));
                     break;
                     case HTML_O_ID:
-                        aTabName.Assign( pOption->GetString() );
+                        aTabName.Assign( rOption.GetString() );
                     break;
                 }
             }
@@ -1037,23 +1035,22 @@ void ScHTMLLayoutParser::TableOn( ImportInfo* pInfo )
         nTableWidth = 0;
         if ( pInfo->nToken == HTML_TABLE_ON )
         {   // es kann auch TD oder TH sein, wenn es vorher kein TABLE gab
-            const HTMLOptions* pOptions = ((HTMLParser*)pInfo->pParser)->GetOptions();
-            sal_uInt16 nArrLen = pOptions->Count();
-            for ( sal_uInt16 i = 0; i < nArrLen; i++ )
+            const HTMLOptions& rOptions = static_cast<HTMLParser*>(pInfo->pParser)->GetOptions();
+            for (size_t i = 0, n = rOptions.size(); i < n; ++i)
             {
-                const HTMLOption* pOption = (*pOptions)[i];
-                switch( pOption->GetToken() )
+                const HTMLOption& rOption = rOptions[i];
+                switch( rOption.GetToken() )
                 {
                     case HTML_O_WIDTH:
                     {   // Prozent: von Dokumentbreite bzw. aeusserer Zelle
-                        nTableWidth = GetWidthPixel( pOption );
+                        nTableWidth = GetWidthPixel( rOption );
                     }
                     break;
                     case HTML_O_BORDER:
                         //BorderOn is: ((pOption->GetString().Len() == 0) || (pOption->GetNumber() != 0));
                     break;
                     case HTML_O_ID:
-                        aTabName.Assign( pOption->GetString() );
+                        aTabName.Assign( rOption.GetString() );
                     break;
                 }
             }
@@ -1235,16 +1232,15 @@ void ScHTMLLayoutParser::Image( ImportInfo* pInfo )
 {
     ScHTMLImage* pImage = new ScHTMLImage;
     pActEntry->maImageList.push_back( pImage );
-    const HTMLOptions* pOptions = ((HTMLParser*)pInfo->pParser)->GetOptions();
-    sal_uInt16 nArrLen = pOptions->Count();
-    for ( sal_uInt16 i = 0; i < nArrLen; i++ )
+    const HTMLOptions& rOptions = static_cast<HTMLParser*>(pInfo->pParser)->GetOptions();
+    for (size_t i = 0, n = rOptions.size(); i < n; ++i)
     {
-        const HTMLOption* pOption = (*pOptions)[i];
-        switch( pOption->GetToken() )
+        const HTMLOption& rOption = rOptions[i];
+        switch( rOption.GetToken() )
         {
             case HTML_O_SRC:
             {
-                pImage->aURL = INetURLObject::GetAbsURL( aBaseURL, pOption->GetString() );
+                pImage->aURL = INetURLObject::GetAbsURL( aBaseURL, rOption.GetString() );
             }
             break;
             case HTML_O_ALT:
@@ -1253,28 +1249,28 @@ void ScHTMLLayoutParser::Image( ImportInfo* pInfo )
                 {   // ALT text only if not any image loaded
                     if ( pActEntry->aAltText.Len() )
                         pActEntry->aAltText.AppendAscii( "; " );
-                    pActEntry->aAltText += pOption->GetString();
+                    pActEntry->aAltText += rOption.GetString();
                 }
             }
             break;
             case HTML_O_WIDTH:
             {
-                pImage->aSize.Width() = (long)pOption->GetNumber();
+                pImage->aSize.Width() = (long)rOption.GetNumber();
             }
             break;
             case HTML_O_HEIGHT:
             {
-                pImage->aSize.Height() = (long)pOption->GetNumber();
+                pImage->aSize.Height() = (long)rOption.GetNumber();
             }
             break;
             case HTML_O_HSPACE:
             {
-                pImage->aSpace.X() = (long)pOption->GetNumber();
+                pImage->aSpace.X() = (long)rOption.GetNumber();
             }
             break;
             case HTML_O_VSPACE:
             {
-                pImage->aSpace.Y() = (long)pOption->GetNumber();
+                pImage->aSpace.Y() = (long)rOption.GetNumber();
             }
             break;
         }
@@ -1328,16 +1324,15 @@ void ScHTMLLayoutParser::Image( ImportInfo* pInfo )
 
 void ScHTMLLayoutParser::ColOn( ImportInfo* pInfo )
 {
-    const HTMLOptions* pOptions = ((HTMLParser*)pInfo->pParser)->GetOptions();
-    sal_uInt16 nArrLen = pOptions->Count();
-    for ( sal_uInt16 i = 0; i < nArrLen; i++ )
+    const HTMLOptions& rOptions = static_cast<HTMLParser*>(pInfo->pParser)->GetOptions();
+    for (size_t i = 0, n = rOptions.size(); i < n; ++i)
     {
-        const HTMLOption* pOption = (*pOptions)[i];
-        switch( pOption->GetToken() )
+        const HTMLOption& rOption = rOptions[i];
+        switch( rOption.GetToken() )
         {
             case HTML_O_WIDTH:
             {
-                sal_uInt16 nVal = GetWidthPixel( pOption );
+                sal_uInt16 nVal = GetWidthPixel( rOption );
                 MakeCol( pLocalColOffset, nColOffset, nVal, 0, 0 );
                 nColOffset = nColOffset + nVal;
             }
@@ -1347,13 +1342,13 @@ void ScHTMLLayoutParser::ColOn( ImportInfo* pInfo )
 }
 
 
-sal_uInt16 ScHTMLLayoutParser::GetWidthPixel( const HTMLOption* pOption )
+sal_uInt16 ScHTMLLayoutParser::GetWidthPixel( const HTMLOption& rOption )
 {
-    const String& rOptVal = pOption->GetString();
+    const String& rOptVal = rOption.GetString();
     if ( rOptVal.Search('%') != STRING_NOTFOUND )
     {   // Prozent
         sal_uInt16 nW = (nTableWidth ? nTableWidth : (sal_uInt16) aPageSize.Width());
-        return (sal_uInt16)((pOption->GetNumber() * nW) / 100);
+        return (sal_uInt16)((rOption.GetNumber() * nW) / 100);
     }
     else
     {
@@ -1363,23 +1358,22 @@ sal_uInt16 ScHTMLLayoutParser::GetWidthPixel( const HTMLOption* pOption )
             return 0;
         }
         else
-            return (sal_uInt16)pOption->GetNumber();    // Pixel
+            return (sal_uInt16)rOption.GetNumber();    // Pixel
     }
 }
 
 
 void ScHTMLLayoutParser::AnchorOn( ImportInfo* pInfo )
 {
-    const HTMLOptions* pOptions = ((HTMLParser*)pInfo->pParser)->GetOptions();
-    sal_uInt16 nArrLen = pOptions->Count();
-    for ( sal_uInt16 i = 0; i < nArrLen; i++ )
+    const HTMLOptions& rOptions = static_cast<HTMLParser*>(pInfo->pParser)->GetOptions();
+    for (size_t i = 0, n = rOptions.size(); i < n; ++i)
     {
-        const HTMLOption* pOption = (*pOptions)[i];
-        switch( pOption->GetToken() )
+        const HTMLOption& rOption = rOptions[i];
+        switch( rOption.GetToken() )
         {
             case HTML_O_NAME:
             {
-                pActEntry->pName = new String( pOption->GetString() );
+                pActEntry->pName = new String( rOption.GetString() );
             }
             break;
         }
@@ -1400,16 +1394,15 @@ void ScHTMLLayoutParser::FontOn( ImportInfo* pInfo )
 {
     if ( IsAtBeginningOfText( pInfo ) )
     {   // nur am Anfang des Textes, gilt dann fuer gesamte Zelle
-        const HTMLOptions* pOptions = ((HTMLParser*)pInfo->pParser)->GetOptions();
-        sal_uInt16 nArrLen = pOptions->Count();
-        for ( sal_uInt16 i = 0; i < nArrLen; i++ )
+        const HTMLOptions& rOptions = static_cast<HTMLParser*>(pInfo->pParser)->GetOptions();
+        for (size_t i = 0, n = rOptions.size(); i < n; ++i)
         {
-            const HTMLOption* pOption = (*pOptions)[i];
-            switch( pOption->GetToken() )
+            const HTMLOption& rOption = rOptions[i];
+            switch( rOption.GetToken() )
             {
                 case HTML_O_FACE :
                 {
-                    const String& rFace = pOption->GetString();
+                    const String& rFace = rOption.GetString();
                     String aFontName;
                     xub_StrLen nPos = 0;
                     while( nPos != STRING_NOTFOUND )
@@ -1428,7 +1421,7 @@ void ScHTMLLayoutParser::FontOn( ImportInfo* pInfo )
                 break;
                 case HTML_O_SIZE :
                 {
-                    sal_uInt16 nSize = (sal_uInt16) pOption->GetNumber();
+                    sal_uInt16 nSize = (sal_uInt16) rOption.GetNumber();
                     if ( nSize == 0 )
                         nSize = 1;
                     else if ( nSize > SC_HTML_FONTSIZES )
@@ -1440,7 +1433,7 @@ void ScHTMLLayoutParser::FontOn( ImportInfo* pInfo )
                 case HTML_O_COLOR :
                 {
                     Color aColor;
-                    pOption->GetColor( aColor );
+                    rOption.GetColor( aColor );
                     pActEntry->aItemSet.Put( SvxColorItem( aColor, ATTR_FONT_COLOR ) );
                 }
                 break;
@@ -1457,7 +1450,7 @@ void ScHTMLLayoutParser::ProcToken( ImportInfo* pInfo )
     {
         case HTML_META:
         {
-            HTMLParser* pParser = (HTMLParser*) pInfo->pParser;
+            HTMLParser* pParser = static_cast<HTMLParser*>(pInfo->pParser);
             uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
                 mpDoc->GetDocumentShell()->GetModel(), uno::UNO_QUERY_THROW);
             pParser->ParseMetaOptions(
@@ -1639,8 +1632,8 @@ class ScHTMLOptionIterator
 private:
     const HTMLOptions*  mpOptions;      /// The options array.
     const HTMLOption*   mpCurrOption;   /// Current option.
-    sal_uInt16          mnCount;        /// Size of the options array.
-    sal_uInt16          mnIndex;        /// Next option to return.
+    size_t              mnCount;        /// Size of the options array.
+    size_t              mnIndex;        /// Next option to return.
 
 public:
     explicit            ScHTMLOptionIterator( const ImportInfo& rInfo );
@@ -1661,17 +1654,17 @@ ScHTMLOptionIterator::ScHTMLOptionIterator( const ImportInfo& rInfo ) :
 {
     const HTMLParser* pParser = static_cast< const HTMLParser* >( rInfo.pParser );
     if( pParser )
-        mpOptions = pParser->GetOptions();
+        mpOptions = &pParser->GetOptions();
     if( mpOptions )
-        mnCount = mpOptions->Count();
+        mnCount = mpOptions->size();
     if( mnCount )
-        mpCurrOption = mpOptions->GetObject( 0 );
+        mpCurrOption = &mpOptions->front();
 }
 
 ScHTMLOptionIterator& ScHTMLOptionIterator::operator++()
 {
     if( mnIndex < mnCount ) ++mnIndex;
-    mpCurrOption = (mnIndex < mnCount) ? mpOptions->GetObject( mnIndex ) : 0;
+    mpCurrOption = (mnIndex < mnCount) ? &(*mpOptions)[mnIndex] : 0;
     return *this;
 }
 
