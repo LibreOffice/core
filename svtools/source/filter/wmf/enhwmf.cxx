@@ -376,8 +376,11 @@ sal_Bool EnhWMFReader::ReadEnhWMF()
             break;
         }
 
-        if( aBmpSaveList.Count() && ( nRecType != EMR_STRETCHBLT ) && ( nRecType != EMR_STRETCHDIBITS ) )
-                pOut->ResolveBitmapActions( aBmpSaveList );
+        if(  !aBmpSaveList.empty()
+          && ( nRecType != EMR_STRETCHBLT )
+          && ( nRecType != EMR_STRETCHDIBITS )
+          )
+            pOut->ResolveBitmapActions( aBmpSaveList );
 
         bFlag = sal_False;
 
@@ -1016,7 +1019,7 @@ sal_Bool EnhWMFReader::ReadEnhWMF()
                     /* Pseudocomment to add more context so that make patch.unapply
                      * works better. Ha!
                      */
-                    aBmpSaveList.Insert( new BSaveStruct( aBitmap, aRect, dwRop, pOut->GetFillStyle () ), LIST_APPEND );
+                    aBmpSaveList.push_back( new BSaveStruct( aBitmap, aRect, dwRop, pOut->GetFillStyle () ) );
                     }
                 }
             }
@@ -1029,8 +1032,20 @@ sal_Bool EnhWMFReader::ReadEnhWMF()
                 sal_uInt32  nStart = pWMF->Tell() - 8;
 
                 pWMF->SeekRel( 0x10 );
-                *pWMF >> xDest >> yDest >> xSrc >> ySrc >> cxSrc >> cySrc >> offBmiSrc >> cbBmiSrc >> offBitsSrc
-                    >> cbBitsSrc >> iUsageSrc >> dwRop >> cxDest >> cyDest;
+                *pWMF >> xDest
+                      >> yDest
+                      >> xSrc
+                      >> ySrc
+                      >> cxSrc
+                      >> cySrc
+                      >> offBmiSrc
+                      >> cbBmiSrc
+                      >> offBitsSrc
+                      >> cbBitsSrc
+                      >> iUsageSrc
+                      >> dwRop
+                      >> cxDest
+                      >> cyDest;
 
                 Bitmap      aBitmap;
                 Rectangle   aRect( Point( xDest, yDest ), Size( cxDest+1, cyDest+1 ) );
@@ -1038,8 +1053,12 @@ sal_Bool EnhWMFReader::ReadEnhWMF()
                 cxDest = abs( (int)cxDest );        // sj: i37894, size can be negative
                 cyDest = abs( (int)cyDest );        // and also 122889
 
-                if ( (cbBitsSrc > (SAL_MAX_UINT32 - 14)) || ((SAL_MAX_UINT32 - 14) - cbBitsSrc < cbBmiSrc) )
+                if (  ((SAL_MAX_UINT32 - 14)             < cbBitsSrc)
+                   || ((SAL_MAX_UINT32 - 14) - cbBitsSrc < cbBmiSrc )
+                   )
+                {
                     bStatus = sal_False;
+                }
                 else
                 {
                     sal_uInt32 nSize = cbBmiSrc + cbBitsSrc + 14;
@@ -1071,7 +1090,7 @@ sal_Bool EnhWMFReader::ReadEnhWMF()
                             aBitmap.Crop( aCropRect );
                         }
                     /* Another pseudocomment to make make patch.unapply work better */
-                    aBmpSaveList.Insert( new BSaveStruct( aBitmap, aRect, dwRop, pOut->GetFillStyle () ), LIST_APPEND );
+                    aBmpSaveList.push_back( new BSaveStruct( aBitmap, aRect, dwRop, pOut->GetFillStyle () ) );
                     }
                 }
             }
@@ -1083,9 +1102,19 @@ sal_Bool EnhWMFReader::ReadEnhWMF()
                 if ( ( nIndex & ENHMETA_STOCK_OBJECT ) == 0 )
                 {
                     LOGFONTW aLogFont;
-                    *pWMF >> aLogFont.lfHeight >> aLogFont.lfWidth >> aLogFont.lfEscapement >> aLogFont.lfOrientation >> aLogFont.lfWeight >> aLogFont.lfItalic
-                                >> aLogFont.lfUnderline >> aLogFont.lfStrikeOut >> aLogFont.lfCharSet >> aLogFont.lfOutPrecision >> aLogFont.lfClipPrecision
-                                    >> aLogFont.lfQuality >> aLogFont.lfPitchAndFamily;
+                    *pWMF >> aLogFont.lfHeight
+                          >> aLogFont.lfWidth
+                          >> aLogFont.lfEscapement
+                          >> aLogFont.lfOrientation
+                          >> aLogFont.lfWeight
+                          >> aLogFont.lfItalic
+                          >> aLogFont.lfUnderline
+                          >> aLogFont.lfStrikeOut
+                          >> aLogFont.lfCharSet
+                          >> aLogFont.lfOutPrecision
+                          >> aLogFont.lfClipPrecision
+                          >> aLogFont.lfQuality
+                          >> aLogFont.lfPitchAndFamily;
 
                     sal_Unicode lfFaceName[ LF_FACESIZE ];
 
@@ -1451,7 +1480,7 @@ sal_Bool EnhWMFReader::ReadEnhWMF()
         }
         pWMF->Seek( nNextPos );
     }
-    if( aBmpSaveList.Count() )
+    if( !aBmpSaveList.empty() )
         pOut->ResolveBitmapActions( aBmpSaveList );
 
     if ( bStatus )

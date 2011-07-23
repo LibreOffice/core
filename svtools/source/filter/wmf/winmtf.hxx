@@ -537,6 +537,8 @@ struct BSaveStruct
         {}
 };
 
+typedef ::std::vector< BSaveStruct* > BSaveStructList_impl;
+
 // -----------------------------------------------------------------------------
 
 enum GDIObjectType {
@@ -754,7 +756,7 @@ public:
                             sal_Bool bRecordPath = sal_False,
                             sal_Int32 nGraphicsMode = GM_COMPATIBLE
                         );
-    void                ResolveBitmapActions( List& rSaveList );
+    void                ResolveBitmapActions( BSaveStructList_impl& rSaveList );
 
     void                IntersectClipRect( const Rectangle& rRect );
     void                ExcludeClipRect( const Rectangle& rRect );
@@ -780,11 +782,11 @@ class WinMtf
 {
 protected:
 
-    WinMtfOutput*       pOut;                   //
-    SvStream*           pWMF;                   // Die einzulesende WMF/EMF-Datei
+    WinMtfOutput*           pOut;
+    SvStream*               pWMF;               // Die einzulesende WMF/EMF-Datei
 
-    sal_uInt32          nStartPos, nEndPos;
-    List                aBmpSaveList;
+    sal_uInt32              nStartPos, nEndPos;
+    BSaveStructList_impl    aBmpSaveList;
 
     FilterConfigItem*   pFilterConfigItem;
 
@@ -801,9 +803,6 @@ protected:
                             FilterConfigItem* pConfigItem = NULL
                         );
                         ~WinMtf();
-
-public:
-
 };
 
 //============================ EMFReader ==================================
