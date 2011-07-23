@@ -26,29 +26,25 @@
  *
  ************************************************************************/
 
-
-//#define Boolean MacOSBoolean
-//#define BOOL MacOSBOOL
 #define Button MacOSButton
 #define Byte MacOSByte
 #define Control MacOSControl
 #define Cursor MacOSCursor
+#define DirInfo MacOSDirInfo
 #define FontInfo MacOSFontInfo
+#define LSize MacOSLSize
+#define Line MacOSLine
 #define MemoryBlock MacOSMemoryBlock
+#define ModalDialog MacOSModalDialog
+#define Palette MacOSPalette
+#define Pattern MacOSPattern
 #define Point MacOSPoint
-#define Size MacOSSize
-#define Region MacOSRegion
 #define Polygon MacOSPolygon
 #define Ptr MacOSPtr
-#define Palette MacOSPalette
-#define LSize MacOSLSize
-#define ModalDialog MacOSModalDialog
+#define Region MacOSRegion
 #define SetCursor MacOSSetCursor
+#define Size MacOSSize
 #define StringPtr MacOSStringPtr
-#define DirInfo MacOSDirInfo
-//#define ULONG MacOSULONG
-#define Line MacOSLine
 #define TimeValue MacOSTimeValue
-#define Pattern MacOSPattern
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
