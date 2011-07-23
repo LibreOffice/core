@@ -66,7 +66,7 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     dbaxml \
     dbmm \
     dbtools \
-    dbui \
+    dbu \
     desktop_detector \
     doctok \
     drawinglayer \
