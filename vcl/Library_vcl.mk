@@ -252,6 +252,8 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/ios/source/app/salinst \
     vcl/ios/source/app/salsys \
     vcl/ios/source/app/saltimer \
+    vcl/ios/source/gdi/salgdi \
+    vcl/ios/source/gdi/salvd \
 ))
 endif
 
