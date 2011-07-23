@@ -34,8 +34,8 @@ $(eval $(call \
 $(eval $(call \
 	gb_CustomTarget_add_outdir_dependencies,writerfilter/source,\
 		$(gb_XSLTPROCTARGET) \
-		$(OUTDIR)/inc$(UPDMINOREXT)/oox/token/tokens.txt \
-		$(OUTDIR)/inc$(UPDMINOREXT)/oox/token/namespaces.txt \
+		$(OUTDIR)/inc$(UPDMINOREXT)/oox/tokens.txt \
+		$(OUTDIR)/inc$(UPDMINOREXT)/oox/namespaces.txt \
 ))
 
 $(eval $(call \
@@ -62,8 +62,6 @@ $(eval $(call \
 		writerfilter/source/ooxml/factoryimpl.xsl \
 		writerfilter/source/ooxml/factoryimpl_ns.xsl \
 		writerfilter/source/ooxml/factory_ns.xsl \
-		writerfilter/source/rtftok/RTFScanner.lex \
-		writerfilter/source/rtftok/RTFScanner.skl \
 		writerfilter/source/doctok/sprmcodetostr.xsl \
 		writerfilter/source/doctok/qnametostr.xsl \
 		writerfilter/source/ooxml/qnametostr.xsl \

@@ -25,20 +25,26 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
+include $(realpath $(SRCDIR)/writerfilter/debug_setup.mk)
+include $(realpath $(SRCDIR)/writerfilter/source/generated.mk)
+
 $(eval $(call gb_Library_Library,ooxml))
+
+$(eval $(call gb_Library_add_package_headers,ooxml,writerfilter_generated))
 
 $(eval $(call gb_Library_set_include,ooxml,\
     $$(INCLUDE) \
     -I$(realpath $(SRCDIR)/writerfilter/inc) \
     -I$(realpath $(SRCDIR)/writerfilter/source/ooxml) \
     -I$(realpath $(SRCDIR)/writerfilter/source/dmapper) \
+	-I$(WORKDIR)/CustomTarget/writerfilter/source \
+	-I$(WORKDIR)/CustomTarget/writerfilter/source/ooxml \
+	-I$(WORKDIR)/CustomTarget/writerfilter/source/doctok \
     -I$(WORKDIR)/writerfilter/inc \
     -I$(WORKDIR)/writerfilter/inc/ooxml \
 	$(if $(filter YES,$(SYSTEM_LIBXML)),$(filter -I%,$(LIBXML_CFLAGS))) \
     -I$(OUTDIR)/inc \
 ))
-
-include $(realpath $(SRCDIR)/writerfilter/debug_setup.mk)
 
 $(eval $(call gb_Library_add_defs,ooxml,\
 	-DWRITERFILTER_OOXML_DLLIMPLEMENTATION \
@@ -55,6 +61,7 @@ $(eval $(call gb_Library_add_linked_libs,ooxml,\
     comphelper \
     cppu \
     cppuhelper \
+	doctok \
 	i18nisolang1 \
 	i18npaper \
 	resourcemodel \
@@ -105,189 +112,10 @@ $(eval $(call gb_Library_add_exception_objects,ooxml,\
     writerfilter/source/ooxml/OOXMLStreamImpl \
 ))
 
-ooxml_NAMESPACES := \
-    dml-baseStylesheet \
-    dml-baseTypes \
-    dml-chartDrawing \
-    dml-documentProperties \
-    dml-graphicalObject \
-    dml-shape3DCamera \
-    dml-shape3DLighting \
-    dml-shape3DScene \
-    dml-shape3DStyles \
-    dml-shapeEffects \
-    dml-shapeGeometry \
-    dml-shapeLineProperties \
-    dml-shapeProperties \
-    dml-styleDefaults \
-    dml-stylesheet \
-    dml-textCharacter \
-    dml-wordprocessingDrawing \
-    shared-math \
-    shared-relationshipReference \
-    sml-customXmlMappings \
-    vml-main \
-    vml-officeDrawing \
-    vml-wordprocessingDrawing \
-    wml
-
-ooxml_factory_source_stem = writerfilter/source/ooxml/OOXMLFactory_$(1)
-
-define ooxml_factory_source
-$(call gb_GenCxxObject_get_source,$(call ooxml_factory_source_stem,$(1)))
-endef
-
-define ooxml_namespace_sources
-$(foreach namespace,$(ooxml_NAMESPACES),$(call ooxml_factory_source,$(namespace)))
-endef
-
 $(eval $(call gb_Library_add_generated_exception_objects,ooxml,\
-    writerfilter/source/ooxml/OOXMLFactory_generated \
-    writerfilter/source/ooxml/OOXMLFactory_values \
-	$(foreach namespace,$(ooxml_NAMESPACES),$(call ooxml_factory_source_stem,$(namespace))) \
+    $(patsubst %,CustomTarget/writerfilter/source/OOXMLFactory_%,$(WRITERFILTER_OOXMLNAMESPACES)) \
+    CustomTarget/writerfilter/source/OOXMLFactory_generated \
+    CustomTarget/writerfilter/source/OOXMLFactory_values \
 ))
-
-SLOFACTORIESNAMESPACES= \
-    $(SLO)/ooxml_Factory_{$(NAMESPACES)}.obj
-
-ooxml_HXXOUTDIR := $(WORKDIR)/writerfilter/inc/ooxml
-ooxml_CXXOUTDIR := $(dir $(call ooxml_factory_source,generated))
-ooxml_MISCDIR := $(WORKDIR)/writerfilter/ooxml
-
-ooxml_HXXOUTDIRCREATED := $(ooxml_HXXOUTDIR)/created
-
-define ooxml_factory_header
-$(ooxml_HXXOUTDIR)/OOXMLFactory_$(1).hxx
-endef
-
-define ooxml_namespace_headers
-$(foreach namespace,$(ooxml_NAMESPACES),$(call ooxml_factory_header,$(namespace)))
-endef
-
-ooxml_BASEDIR := $(realpath $(SRCDIR)/writerfilter)
-
-ooxml_MODEL := $(ooxml_BASEDIR)/source/ooxml/model.xml
-
-ooxml_FACTORYIMPLNSXSL := $(ooxml_BASEDIR)/source/ooxml/factoryimpl_ns.xsl
-ooxml_FACTORYIMPLXSL := $(ooxml_BASEDIR)/source/ooxml/factoryimpl.xsl
-ooxml_FACTORYINCXSL := $(ooxml_BASEDIR)/source/ooxml/factoryinc.xsl
-ooxml_FACTORYNSXSL := $(ooxml_BASEDIR)/source/ooxml/factory_ns.xsl
-ooxml_FACTORYTOOLSXSL := $(ooxml_BASEDIR)/source/ooxml/factorytools.xsl
-ooxml_FACTORYVALUESIMPLXSL := $(ooxml_BASEDIR)/source/ooxml/factoryimpl_values.xsl
-ooxml_FACTORYVALUESXSL := $(ooxml_BASEDIR)/source/ooxml/factory_values.xsl
-ooxml_FASTTOKENSXSL := $(ooxml_BASEDIR)/source/ooxml/fasttokens.xsl
-ooxml_GPERFFASTTOKENXSL := $(ooxml_BASEDIR)/source/ooxml/gperffasttokenhandler.xsl
-ooxml_NAMESPACEIDSXSL := $(ooxml_BASEDIR)/source/ooxml/namespaceids.xsl
-ooxml_PREPROCESSXSL := $(ooxml_BASEDIR)/source/ooxml/modelpreprocess.xsl
-ooxml_QNAMETOSTRXSL := $(ooxml_BASEDIR)/source/ooxml/qnametostr.xsl
-ooxml_RESORUCETOKENSXSL := $(ooxml_BASEDIR)/source/ooxml/resourcestokens.xsl
-ooxml_RESOURCEIDSXSL := $(ooxml_BASEDIR)/source/ooxml/resourceids.xsl
-ooxml_RESOURCESIMPLXSL := $(ooxml_BASEDIR)/source/ooxml/resourcesimpl.xsl
-
-ooxml_NSPROCESS := $(SRCDIR)/writerfilter/source/resourcemodel/namespace_preprocess.pl
-
-ooxml_RESOURCEIDSHXX := $(ooxml_HXXOUTDIR)/resourceids.hxx
-
-ooxml_TOKENXML := $(ooxml_MISCDIR)/token.xml
-ooxml_TOKENXMLTMP := $(ooxml_MISCDIR)/token.tmp
-
-ooxml_FACTORYGENERATEDHXX := $(call ooxml_factory_header,generated)
-ooxml_FACTORYGENERATEDCXX := $(call ooxml_factory_source,generated)
-ooxml_FASTTOKENSHXX := $(ooxml_HXXOUTDIR)/OOXMLFastTokens.hxx
-ooxml_NAMESPACEIDSHXX := $(ooxml_HXXOUTDIR)/OOXMLnamespaceids.hxx
-ooxml_FACTORYVALUESHXX := $(call ooxml_factory_header,values)
-ooxml_FACTORYVALUESCXX := $(call ooxml_factory_source,values)
-ooxml_GPERFFASTTOKENHXX := $(ooxml_HXXOUTDIR)/gperffasttoken.hxx
-ooxml_GPERFFASTTOKENTMP := $(ooxml_MISCDIR)/gperffasttoken.tmp
-ooxml_QNAMETOSTRTMP := $(WORKDIR)/writerfilter/ooxml_qnameToStr.tmp
-
-ooxml_MODELPROCESSED := $(ooxml_MISCDIR)/model_preprocessed.xml
-ooxml_NSXSL := $(ooxml_MISCDIR)/namespacesmap.xsl
-ooxml_PREPROCESSXSLCOPIED := $(ooxml_MISCDIR)/modelpreprocess.xsl
-
-ooxml_NAMESPACESTXT := $(OUTDIR)/inc/oox/namespaces.txt
-
-ooxml_GENHEADERS = \
-    $(ooxml_FACTORYGENERATEDHXX) \
-    $(ooxml_FASTTOKENSHXX) \
-    $(ooxml_FACTORYVALUESHXX) \
-    $(ooxml_GPERFFASTTOKENHXX) \
-    $(ooxml_RESOURCEIDSHXX) \
-    $(ooxml_NAMESPACEIDSHXX) \
-    $(ooxml_namespace_headers)
-
-ooxml_GENERATEDFILES = \
-    $(ooxml_GENHEADERS) \
-    $(ooxml_GPERFFASTTOKENTMP) \
-    $(ooxml_FACTORYGENERATEDCXX) \
-    $(ooxml_MODELPROCESSED) \
-    $(ooxml_namespace_sources) \
-    $(ooxml_NSXSL) \
-    $(ooxml_FACTORYVALUESCXX) \
-    $(ooxml_PREPROCESSXSLCOPIED) \
-    $(ooxml_QNAMETOSTRTMP) \
-    $(ooxml_TOKENXMLTMP) \
-    $(ooxml_TOKENXML)
-
-$(ooxml_TOKENXMLTMP) : $(OUTDIR)/inc/oox/tokens.txt
-	mkdir -p $(dir $@) && sed -e 's#.*#<fasttoken>&</fasttoken>#' $< > $@
-
-$(ooxml_TOKENXML) : $(SRCDIR)/writerfilter/source/ooxml/tokenxmlheader $(ooxml_TOKENXMLTMP) $(SRCDIR)/writerfilter/source/ooxml/tokenxmlfooter
-	mkdir -p $(dir $@) && cat $(SRCDIR)/writerfilter/source/ooxml/tokenxmlheader $(ooxml_TOKENXMLTMP) $(SRCDIR)/writerfilter/source/ooxml/tokenxmlfooter > $@
-
-$(ooxml_HXXOUTDIRCREATED) :
-	mkdir -p $(dir $@) && touch $@
-
-$(ooxml_GENHEADERS) : $(ooxml_HXXOUTDIRCREATED)
-
-$(call ooxml_factory_source,%) :| $(call ooxml_factory_header,%)
-
-$(call ooxml_factory_source,%) : $(ooxml_FACTORYIMPLNSXSL) $(ooxml_MODELPROCESSED)
-	mkdir -p $(dir $@) && $(call gb_Helper_abbreviate_dirs_native,$(gb_XSLTPROC) --nonet --stringparam file $@ $(ooxml_FACTORYIMPLNSXSL) $(ooxml_MODELPROCESSED)) > $@
-
-$(call ooxml_factory_header,%) : $(ooxml_FACTORYNSXSL) $(ooxml_MODELPROCESSED)
-	mkdir -p $(dir $@) && $(call gb_Helper_abbreviate_dirs_native,$(gb_XSLTPROC) --nonet --stringparam file $@ $(ooxml_FACTORYNSXSL) $(ooxml_MODELPROCESSED)) > $@
-
-define ooxml_xsl_process
-$(1) : $(2) $(3)
-	mkdir -p $(dir $(1)) && $$(call gb_Helper_abbreviate_dirs_native,$(gb_XSLTPROC) --nonet $(2) $(3)) > $(1)
-endef
-
-define ooxml_xsl_process_model
-$(call ooxml_xsl_process,$(1),$(2),$(ooxml_MODELPROCESSED))
-endef
-
-$(eval $(call ooxml_xsl_process,$(ooxml_MODELPROCESSED),$(ooxml_NSXSL),$(ooxml_MODEL)))
-$(eval $(call ooxml_xsl_process,$(ooxml_FASTTOKENSHXX),$(ooxml_FASTTOKENSXSL),$(ooxml_TOKENXML)))
-
-$(eval $(call ooxml_xsl_process_model,$(ooxml_FACTORYGENERATEDHXX),$(ooxml_FACTORYINCXSL)))
-$(eval $(call ooxml_xsl_process_model,$(ooxml_FACTORYGENERATEDCXX),$(ooxml_FACTORYIMPLXSL)))
-$(eval $(call ooxml_xsl_process_model,$(ooxml_FACTORYVALUESHXX),$(ooxml_FACTORYVALUESXSL)))
-$(eval $(call ooxml_xsl_process_model,$(ooxml_FACTORYVALUESCXX),$(ooxml_FACTORYVALUESIMPLXSL)))
-$(eval $(call ooxml_xsl_process_model,$(ooxml_QNAMETOSTRTMP),$(ooxml_QNAMETOSTRXSL)))
-$(eval $(call ooxml_xsl_process_model,$(ooxml_RESOURCEIDSHXX),$(ooxml_RESOURCEIDSXSL)))
-$(eval $(call ooxml_xsl_process_model,$(ooxml_NAMESPACEIDSHXX),$(ooxml_NAMESPACEIDSXSL)))
-$(eval $(call ooxml_xsl_process_model,$(ooxml_GPERFFASTTOKENTMP),$(ooxml_GPERFFASTTOKENXSL)))
-
-$(ooxml_NSXSL) : $(ooxml_NAMESPACESTXT) $(ooxml_NSPROCESS) $(ooxml_PREPROCESSXSLCOPIED)
-	mkdir -p $(dir $@) && perl $(ooxml_NSPROCESS) $(ooxml_NAMESPACESTXT) > $@
-
-# this is included by relative path from $(ooxml_NSXSL)
-$(ooxml_PREPROCESSXSLCOPIED) : $(ooxml_PREPROCESSXSL)
-	mkdir -p $(dir $@) && cp $< $@
-
-$(ooxml_GPERFFASTTOKENHXX) : $(ooxml_GPERFFASTTOKENTMP) $(ooxml_HXXOUTDIRCREATED)
-	tr -d '\r' < $< | gperf -I -t -E -S1 -c -G -LC++ > $@
-
-$(ooxml_GENERATEDFILES) : $(ooxml_FACTORYTOOLSXSL)
-
-$(ooxml_FACTORYVALUESCXX) :| $(ooxml_FACTORYVALUESHXX)
-$(ooxml_FACTORYGENERATEDCXX) :| $(ooxml_FACTORYGENERATEDHXX) $(ooxml_GENHEADERS)
-
-ooxml_clean :
-	rm -rf $(ooxml_GENERATEDFILES) $(ooxml_HXXOUTDIR)
-.PHONY : ooxml_clean
-
-$(call gb_Library_get_clean_target,ooxml) : ooxml_clean
 
 # vim: set noet ts=4 sw=4:

@@ -30,9 +30,11 @@ $(eval $(call gb_Library_Library,doctok))
 $(eval $(call gb_Library_set_include,doctok,\
     $$(INCLUDE) \
     -I$(realpath $(SRCDIR)/writerfilter/inc) \
+    -I$(realpath $(SRCDIR)/writerfilter/source) \
     -I$(realpath $(SRCDIR)/writerfilter/source/doctok) \
-    -I$(WORKDIR)/writerfilter/inc \
-    -I$(WORKDIR)/writerfilter/inc/doctok \
+    -I$(WORKDIR)/CustomTarget/writerfilter/source \
+    -I$(WORKDIR)/CustomTarget/writerfilter/source/ooxml \
+    -I$(WORKDIR)/CustomTarget/writerfilter/source/doctok \
 	$(if $(filter YES,$(SYSTEM_LIBXML)),$(filter -I%,$(LIBXML_CFLAGS))) \
     -I$(OUTDIR)/inc \
 ))
@@ -84,67 +86,7 @@ $(eval $(call gb_Library_add_exception_objects,doctok,\
 ))
 
 $(eval $(call gb_Library_add_generated_exception_objects,doctok,\
-	writerfilter/source/doctok/resources \
+	CustomTarget/writerfilter/source/resources \
 ))
-
-doctok_GENDIR := $(WORKDIR)/writerfilter
-doctok_HXXOUTDIR := $(doctok_GENDIR)/inc/doctok
-doctok_HXXOUTDIRCREATED := $(doctok_HXXOUTDIR)/created
-
-ooxml_BASEDIR := $(realpath $(SRCDIR)/writerfilter)
-
-doctok_QNAMETOSTRXSL := $(ooxml_BASEDIR)/source/doctok/qnametostr.xsl
-doctok_RESOURCEIDSXSL := $(ooxml_BASEDIR)/source/doctok/resourceids.xsl
-doctok_RESOURCESIMPLXSL := $(ooxml_BASEDIR)/source/doctok/resourcesimpl.xsl
-doctok_RESOURCESXSL := $(ooxml_BASEDIR)/source/doctok/resources.xsl
-doctok_RESOURCETOOLSXSL := $(ooxml_BASEDIR)/source/doctok/resourcetools.xsl
-doctok_SPRMCODETOSTRXSL := $(ooxml_BASEDIR)/source/doctok/sprmcodetostr.xsl
-doctok_SPRMIDSXSL := $(ooxml_BASEDIR)/source/doctok/sprmids.xsl
-
-doctok_MODEL := $(ooxml_BASEDIR)/source/doctok/resources.xmi
-
-doctok_RESOURCEIDSHXX := $(doctok_HXXOUTDIR)/resourceids.hxx
-doctok_SPRMIDSHXX := $(doctok_HXXOUTDIR)/sprmids.hxx
-doctok_RESOURCESHXX := $(doctok_HXXOUTDIR)/resources.hxx
-doctok_RESOURCESCXX := $(call gb_GenCxxObject_get_source,writerfilter/source/doctok/resources)
-
-doctok_QNAMETOSTRTMP := $(doctok_GENDIR)/doctok_qnameToStr.tmp
-doctok_SPRPMCODETOSTRTMP := $(doctok_GENDIR)/sprmcodetostr.tmp
-
-doctok_GENHEADERS = \
-    $(doctok_RESOURCEIDSHXX) \
-    $(doctok_SPRMIDSHXX) \
-    $(doctok_RESOURCESHXX)
-
-doctok_GENFILES = \
-    $(doctok_GENHEADERS) \
-    $(doctok_QNAMETOSTRTMP) \
-    $(doctok_RESOURCESCXX) \
-    $(doctok_SPRPMCODETOSTRTMP)
-
-$(doctok_HXXOUTDIRCREATED) :
-	mkdir -p $(dir $@) && touch $@
-
-$(doctok_GENHEADERS) : $(doctok_HXXOUTDIRCREATED)
-
-define doctok_xsl_process_model
-$(1) : $(2) $(doctok_MODEL)
-	mkdir -p $(dir $(1)) && $$(call gb_Helper_abbreviate_dirs_native,$(gb_XSLTPROC) --nonet $(2) $(doctok_MODEL)) > $(1)
-endef
-
-$(eval $(call doctok_xsl_process_model,$(doctok_RESOURCESHXX),$(doctok_RESOURCESXSL)))
-$(eval $(call doctok_xsl_process_model,$(doctok_QNAMETOSTRTMP),$(doctok_QNAMETOSTRXSL)))
-$(eval $(call doctok_xsl_process_model,$(doctok_SPRMIDSHXX),$(doctok_SPRMIDSXSL)))
-$(eval $(call doctok_xsl_process_model,$(doctok_RESOURCESCXX),$(doctok_RESOURCESIMPLXSL)))
-$(eval $(call doctok_xsl_process_model,$(doctok_RESOURCEIDSHXX),$(doctok_RESOURCEIDSXSL)))
-$(eval $(call doctok_xsl_process_model,$(doctok_SPRPMCODETOSTRTMP),$(doctok_SPRMCODETOSTRXSL)))
-
-$(doctok_RESOURCESCXX) : $(doctok_GENHEADERS) $(doctok_RESOURCETOOLSXSL)
-
-doctok_clean:
-	rm -rf $(doctok_GENFILES) $(doctok_HXXOUTDIR)
-.PHONY: doctok_clean
-
-$(call gb_Library_get_clean_target,doctok) : doctok_clean
 
 # vim: set noet ts=4 sw=4:

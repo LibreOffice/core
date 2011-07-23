@@ -28,6 +28,7 @@
 #ifndef INCLUDED_QNAME_TO_STRING_HXX
 #define INCLUDED_QNAME_TO_STRING_HXX
 
+#include <WriterFilterDllApi.hxx>
 #include <boost/shared_ptr.hpp>
 #include <map>
 #include <string>

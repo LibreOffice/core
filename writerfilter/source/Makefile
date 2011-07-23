@@ -74,12 +74,6 @@ wf_SRC_ooxml_FactoryValuesImpl_xsl=$(WFDIR)ooxml/factoryimpl_values.xsl
 wf_SRC_ooxml_ResourceIds_xsl=$(WFDIR)ooxml/resourceids.xsl
 wf_SRC_ooxml_GperfFastTokenHandler_xsl=$(WFDIR)ooxml/gperffasttokenhandler.xsl
 wf_SRC_ooxml_Analyze_model_xsl=$(WFDIR)ooxml/analyzemodel.xsl
-wf_SRC_ooxml_Status_stage1_sh=$(WFDIR)ooxml/stage1.sh
-wf_SRC_ooxml_Status_stage2_xsl=$(WFDIR)ooxml/analyzestage2.xsl
-wf_SRC_ooxml_Status_stage3_xsl=$(WFDIR)ooxml/analyzestage3.xsl
-wf_SRC_ooxml_Status_todo_xsl=$(WFDIR)ooxml/todo.xsl
-wf_SRC_ooxml_Status_efforts_xsl=$(WFDIR)ooxml/effort.xsl
-
 wf_GEN_ooxml_ResourceIds_hxx=ooxml/resourceids.hxx
 
 wf_GEN_ooxml_token_xml=token.xml
@@ -94,11 +88,6 @@ wf_GEN_ooxml_FactoryValues_cxx=OOXMLFactory_values.cxx
 wf_GEN_ooxml_GperfFastToken_hxx=gperffasttoken.hxx
 wf_GEN_ooxml_Model_processed=model_preprocessed.xml
 wf_GEN_ooxml_Model_analyzed=ooxml/model_analyzed.xml
-wf_GEN_ooxml_Status_stage1=ooxml/status_stage1.xml
-wf_GEN_ooxml_Status_stage2=ooxml/status_stage2.xml
-wf_GEN_ooxml_Status_stage3=ooxml/status_stage3.xml
-wf_GEN_ooxml_Status_todo=ooxml/todo.xml
-wf_GEN_ooxml_Status_efforts=ooxml/efforts.csv
 
 $(wf_GEN_ooxml_token_tmp) : $(OUTDIR)/inc$(UPDMINOREXT)/oox/token/tokens.txt
 	cat $(OUTDIR)/inc$(UPDMINOREXT)/oox/token/tokens.txt \
@@ -141,21 +130,6 @@ $(wf_GEN_ooxml_GperfFastToken_hxx) : $(wf_SRC_ooxml_GperfFastTokenHandler_xsl) $
 $(wf_GEN_ooxml_Model_analyzed): $(wf_SRC_ooxml_Analyze_model_xsl) $(wf_SRC_ooxml_Model)
 	$(call gb_Helper_abbreviate_dirs_native, $(gb_XSLTPROC) $^) > $@
 
-$(wf_GEN_ooxml_Status_stage1) : $(wf_GEN_ooxml_Model_analyzed) $(wf_SRC_ooxml_stage1_sh)
-	$(wf_SRC_ooxml_Status_stage1_sh) $(wf_GEN_ooxml_Model_analyzed) $(WFDIR)dmapper > $@
-
-$(wf_GEN_ooxml_Status_stage2) : $(wf_SRC_ooxml_Status_stage2_xsl) $(wf_GEN_ooxml_Status_stage1)
-	$(call gb_Helper_abbreviate_dirs_native, $(gb_XSLTPROC) $^) > $@
-
-$(wf_GEN_ooxml_Status_stage3) : $(wf_SRC_ooxml_Status_stage3_xsl) $(wf_GEN_ooxml_Status_stage2)
-	$(call gb_Helper_abbreviate_dirs_native, $(gb_XSLTPROC) $^) > $@
-
-$(wf_GEN_ooxml_Status_todo) : $(wf_SRC_ooxml_Status_todo_xsl) $(wf_GEN_ooxml_Status_stage3)
-	$(call gb_Helper_abbreviate_dirs_native, $(gb_XSLTPROC) $^) > $@
-
-$(wf_GEN_ooxml_Status_efforts) : $(wf_SRC_ooxml_Status_efforts_xsl) $(wf_GEN_ooxml_Status_todo)
-	$(call gb_Helper_abbreviate_dirs_native, $(gb_XSLTPROC) $^) > $@
-
 # rtftok
 
 wf_SRC_rtftok_scanner_lex=$(WFDIR)rtftok/RTFScanner.lex
@@ -179,7 +153,7 @@ wf_SRC_doctok_QNameToStr_xsl=$(WFDIR)doctok/qnametostr.xsl
 wf_SRC_ooxml_QNameToStr_xsl=$(WFDIR)ooxml/qnametostr.xsl
 wf_SRC_model_NamespacePreprocess=$(WFDIR)resourcemodel/namespace_preprocess.pl
 wf_GEN_ooxml_Namespacesmap_xsl=namespacesmap.xsl
-wf_DEP_ooxml_namespaces_txt=$(OUTDIR)/inc$(UPDMINOREXT)/oox/token/namespaces.txt
+wf_DEP_ooxml_namespaces_txt=$(OUTDIR)/inc$(UPDMINOREXT)/oox/namespaces.txt
 wf_GEN_ooxml_preprocess_xsl=modelpreprocess.xsl
 
 $(wf_GEN_ooxml_QNameToStr_tmp): $(wf_SRC_ooxml_QNameToStr_xsl) $(wf_GEN_ooxml_Model_processed)
@@ -223,7 +197,6 @@ all : \
 	$(wf_GEN_ooxml_FastTokens_hxx) \
 	$(wf_GEN_ooxml_GperfFastToken_hxx) \
 	$(wf_GEN_ooxml_NamespaceIds_hxx) \
-	$(wf_GEN_ooxml_Status_efforts) \
 	$(wf_GEN_model_QNameToStr_cxx) \
 	$(wf_GEN_model_SprmCodeToStr_cxx) \
 	$(patsubst %,OOXMLFactory_%.hxx,$(WRITERFILTER_OOXMLNAMESPACES)) \

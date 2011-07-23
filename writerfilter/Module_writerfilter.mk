@@ -30,11 +30,11 @@ $(eval $(call gb_Module_Module,writerfilter))
 $(eval $(call gb_Module_add_targets,writerfilter,\
     Library_doctok \
     Library_ooxml \
-    Library_rtftok \
     Library_resourcemodel \
+    Library_rtftok \
     Library_writerfilter \
     Library_writerfilter_uno \
-    Package_generated \
+    Package_writerfilter_generated \
 ))
 
 # vim: set noet ts=4 sw=4:

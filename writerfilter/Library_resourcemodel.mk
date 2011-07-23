@@ -26,12 +26,11 @@
 # instead of those above.
 
 $(eval $(call gb_Library_Library,resourcemodel))
-$(eval $(call gb_Library_add_package_headers,resourcemodel,writerfilter_generated))
 
 $(eval $(call gb_Library_set_include,resourcemodel,\
     $$(INCLUDE) \
     -I$(realpath $(SRCDIR)/writerfilter/inc) \
-    -I$(WORKDIR)/writerfilter/inc \
+    -I$(WORKDIR)/CustomTarget/writerfilter/source \
     $(if $(filter YES,$(SYSTEM_LIBXML)),$(filter -I%,$(LIBXML_CFLAGS))) \
     -I$(OUTDIR)/inc \
 ))
@@ -71,34 +70,12 @@ $(eval $(call gb_Library_add_exception_objects,resourcemodel,\
 ))
 
 $(eval $(call gb_Library_add_generated_exception_objects,resourcemodel,\
-    writerfilter/source/resourcemodel/sprmcodetostr \
+    CustomTarget/writerfilter/source/sprmcodetostr \
 ))
 
 $(eval $(call gb_Library_add_generated_cxxobjects,resourcemodel,\
-    writerfilter/source/resourcemodel/qnametostr \
+    CustomTarget/writerfilter/source/qnametostr \
 	, $(gb_COMPILERNOOPTFLAGS) $(gb_LinkTarget_EXCEPTIONFLAGS) \
 ))
-
-define resourcemodel_gen_source
-$(call gb_GenCxxObject_get_source,$(1)) : $(2) $(SRCDIR)/$(1)header $(SRCDIR)/$(1)footer
-	mkdir -p $$(dir $$@) && cat $(SRCDIR)/$(1)header $(2) $(SRCDIR)/$(1)footer > $$@
-endef
-
-# the .tmp files are generated in doctok/ooxml library makefiles
-$(eval $(call resourcemodel_gen_source,writerfilter/source/resourcemodel/qnametostr,\
-    $(WORKDIR)/writerfilter/doctok_qnameToStr.tmp \
-    $(WORKDIR)/writerfilter/ooxml_qnameToStr.tmp \
-))
-$(eval $(call resourcemodel_gen_source,writerfilter/source/resourcemodel/sprmcodetostr,\
-    $(WORKDIR)/writerfilter/sprmcodetostr.tmp \
-))
-
-resourcemodel_clean :
-	rm -f \
-		$(call gb_GenCxxObject_get_source,writerfilter/source/resourcemodel/qnametostr) \
-		$(call gb_GenCxxObject_get_source,writerfilter/source/resourcemodel/sprmcodetostr)
-.PHONY : resourcemodel_clean
-
-$(call gb_Library_get_clean_target,resourcemodel) : resourcemodel_clean
 
 # vim: set noet ts=4 sw=4:
