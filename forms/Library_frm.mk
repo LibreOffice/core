@@ -35,11 +35,6 @@ $(eval $(call gb_Library_set_include,frm,\
     -I$(realpath $(SRCDIR)/forms/source/inc) \
     -I$(realpath $(SRCDIR)/forms/source/solar/inc) \
     -I$(OUTDIR)/inc \
-    $(if $(filter YES,$(SYSTEM_LIBXML)),$(filter -I%,$(LIBXML_CFLAGS))) \
-))
-
-$(eval $(call gb_Library_add_defs,frm,\
-    $(if $(filter YES,$(SYSTEM_LIBXML)),-DSYSTEM_LIBXML $(filter-out -I%,$(LIBXML_CFLAGS))) \
 ))
 
 $(eval $(call gb_Library_add_api,frm,\
@@ -67,9 +62,9 @@ $(eval $(call gb_Library_add_linked_libs,frm,\
     ucbhelper \
     utl \
     vcl \
-    xml2 \
     $(gb_STDLIBS) \
 ))
+$(eval $(call gb_Library_use_external,frm,libxml2))
 
 $(eval $(call gb_Library_set_componentfile,frm,forms/util/frm))
 
