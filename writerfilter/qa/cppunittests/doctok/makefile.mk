@@ -24,17 +24,47 @@
 # for a copy of the LGPLv3 License.
 #
 #*************************************************************************
+PRJ=..$/..$/..
 
-PRJ=..
-TARGET=prj
+PRJNAME=writerfilter
+TARGET=test-doctok
 
-.INCLUDE : settings.mk
+ENABLE_EXCEPTIONS=TRUE
 
-.IF "$(VERBOSE)"!=""
-VERBOSEFLAG :=
-.ELSE
-VERBOSEFLAG := -s
-.ENDIF
+# --- Settings -----------------------------------------------------
 
-all:
-    cd $(PRJ) && $(GNUMAKE) $(VERBOSEFLAG) -r -j$(MAXPROCESS) $(gb_MAKETARGET) && $(GNUMAKE) $(VERBOSEFLAG) -r deliverlog
+.INCLUDE :  settings.mk
+
+CFLAGSCXX += $(CPPUNIT_CFLAGS)
+
+# BEGIN ----------------------------------------------------------------
+# auto generated Target:doctok by codegen.pl
+SHL1OBJS=  \
+       $(SLO)$/testdoctok.obj
+
+SHL1TARGET= testdoctok
+SHL1STDLIBS=\
+   $(SALLIB) \
+    $(UCBHELPERLIB) \
+    $(CPPUHELPERLIB) \
+    $(CPPULIB) \
+   $(CPPUNITLIB)
+
+SHL1LIBS=\
+    $(SLB)$/doctok.lib
+SHL1DEPS= \
+    $(SHL1LIBS)
+
+SHL1IMPLIB= i$(SHL1TARGET)
+# SHL1DEF=    $(MISC)$/$(SHL1TARGET).def
+
+DEF1NAME    =$(SHL1TARGET)
+# DEF1EXPORTFILE= export.exp
+SHL1VERSIONMAP= export.map
+# auto generated Target:doctok
+# END ------------------------------------------------------------------
+
+# --- Targets ------------------------------------------------------
+
+.INCLUDE :  target.mk
+.INCLUDE : _cppunit.mk

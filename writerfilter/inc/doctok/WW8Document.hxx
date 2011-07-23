@@ -53,7 +53,7 @@ using namespace ::com::sun::star;
    stream consists of substreams that are identified by string
    identifiers.
 */
-class WRITERFILTER_DLLPUBLIC WW8Stream
+class WRITERFILTER_DOCTOK_DLLPUBLIC WW8Stream
 {
 public:
     /**
@@ -107,7 +107,7 @@ public:
    A property.
 
 */
-class WRITERFILTER_DLLPUBLIC WW8Property
+class WRITERFILTER_DOCTOK_DLLPUBLIC WW8Property
 {
 public:
     /**
@@ -154,7 +154,7 @@ public:
    }
    \endcode
 */
-class WRITERFILTER_DLLPUBLIC WW8PropertySetIterator
+class WRITERFILTER_DOCTOK_DLLPUBLIC WW8PropertySetIterator
 {
 public:
     typedef boost::shared_ptr<WW8PropertySetIterator> Pointer_t;
@@ -191,7 +191,7 @@ bool operator != (const WW8PropertySetIterator & rA,
 /**
    A set of properties.
 */
-class WRITERFILTER_DLLPUBLIC WW8PropertySet
+class WRITERFILTER_DOCTOK_DLLPUBLIC WW8PropertySet
 {
 public:
     typedef boost::shared_ptr<WW8PropertySet> Pointer_t;
@@ -278,7 +278,7 @@ enum PropertyType {
 
    The use of the iterator is analogous to WW8PropertySetIterator.
 */
-class WRITERFILTER_DLLPUBLIC WW8DocumentIterator
+class WRITERFILTER_DOCTOK_DLLPUBLIC WW8DocumentIterator
 {
 public:
     typedef boost::shared_ptr<WW8DocumentIterator> Pointer_t;
@@ -393,7 +393,7 @@ public:
 /**
    A Word 8 document.
 */
-class WRITERFILTER_DLLPUBLIC WW8Document :
+class WRITERFILTER_DOCTOK_DLLPUBLIC WW8Document :
     public writerfilter::Reference<Stream>
 {
 public:
@@ -425,7 +425,7 @@ public:
     virtual WW8DocumentIterator::Pointer_t end() = 0;
 };
 
-class WRITERFILTER_DLLPUBLIC WW8DocumentFactory
+class WRITERFILTER_DOCTOK_DLLPUBLIC WW8DocumentFactory
 {
 public:
     static WW8Stream::Pointer_t

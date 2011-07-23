@@ -33,8 +33,8 @@
 namespace writerfilter {
 namespace resourcemodel {
 
-void WRITERFILTER_DLLPUBLIC resolveSprmProps(Properties & rHandler, Sprm & rSprm);
-void  WRITERFILTER_DLLPUBLIC resolveAttributeProperties(Properties & rHandler, Value & rValue);
+void WRITERFILTER_RESOURCEMODEL_DLLPUBLIC resolveSprmProps(Properties & rHandler, Sprm & rSprm);
+void  WRITERFILTER_RESOURCEMODEL_DLLPUBLIC resolveAttributeProperties(Properties & rHandler, Value & rValue);
 
 }}
 

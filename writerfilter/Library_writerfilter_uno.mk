@@ -25,55 +25,47 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
-$(eval $(call gb_Library_Library,writerfilter))
+$(eval $(call gb_Library_Library,writerfilter_uno))
 
-$(eval $(call gb_Library_set_include,writerfilter,\
+$(eval $(call gb_Library_set_include,writerfilter_uno,\
     $$(INCLUDE) \
     -I$(realpath $(SRCDIR)/writerfilter/inc) \
 	$(if $(filter YES,$(SYSTEM_LIBXML)),$(filter -I%,$(LIBXML_CFLAGS))) \
     -I$(OUTDIR)/inc \
 ))
 
-$(eval $(call gb_Library_add_api,writerfilter,\
+$(eval $(call gb_Library_add_defs,writerfilter_uno,\
+	-DWRITERFILTER_WRITERFILTER_UNO_DLLIMPLEMENTATION \
+	$(if $(filter YES,$(SYSTEM_LIBXML)),$(filter-out -I%,$(LIBXML_CFLAGS))) \
+))
+
+$(eval $(call gb_Library_add_api,writerfilter_uno,\
     offapi \
     udkapi \
 ))
 
-$(eval $(call gb_Library_set_componentfile,writerfilter,writerfilter/util/writerfilter))
-
-include $(realpath $(SRCDIR)/writerfilter/debug_setup.mk)
-
-$(eval $(call gb_Library_add_defs,writerfilter,\
-	-DWRITERFILTER_WRITERFILTER_DLLIMPLEMENTATION \
-	$(writerfilter_debug_flags) \
-	$(if $(filter YES,$(SYSTEM_LIBXML)),$(filter-out -I%,$(LIBXML_CFLAGS))) \
-))
-
-$(eval $(call gb_Library_add_linked_libs,writerfilter,\
-    resourcemodel \
+$(eval $(call gb_Library_add_linked_libs,writerfilter_uno,\
     comphelper \
     cppu \
     cppuhelper \
-	doctok \
-    i18nisolang1 \
-    i18npaper \
-    oox \
+    doctok \
     ooxml \
-    rtftok \
+    resourcemodel \
     sal \
-    sot \
-    svt \
-    tl \
-    utl \
-    xml2 \
+    ucbhelper \
     $(gb_STDLIBS) \
 ))
 
-$(eval $(call gb_Library_add_exception_objects,writerfilter,\
-    writerfilter/source/filter/ImportFilter \
-    writerfilter/source/filter/RtfFilter \
-    writerfilter/source/filter/WriterFilter \
-    writerfilter/source/filter/WriterFilterDetection \
+$(eval $(call gb_Library_add_exception_objects,writerfilter_uno,\
+    writerfilter/unocomponent/component \
+    writerfilter/unocomponent/debugservices/doctok/DocTokAnalyzeService \
+    writerfilter/unocomponent/debugservices/doctok/DocTokTestService \
+    writerfilter/unocomponent/debugservices/ooxml/OOXMLAnalyzeService \
+    writerfilter/unocomponent/debugservices/ooxml/OOXMLTestService \
 ))
+
+# not used
+	# writerfilter/unocomponent/debugservices/rtftok/ScannerTestService \
+	# writerfilter/unocomponent/debugservices/rtftok/XMLScanner \
 
 # vim: set noet ts=4 sw=4:

@@ -25,16 +25,47 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
-$(eval $(call gb_Module_Module,writerfilter))
+# Not built
+$(eval $(call gb_Library_Library,rtftok))
 
-$(eval $(call gb_Module_add_targets,writerfilter,\
-    Library_doctok \
-    Library_ooxml \
-    Library_rtftok \
-    Library_resourcemodel \
-    Library_writerfilter \
-    Library_writerfilter_uno \
-    Package_generated \
+$(eval $(call gb_Library_set_include,rtftok,\
+	$$(INCLUDE) \
+	-I$(realpath $(SRCDIR)/writerfilter/inc) \
+	-I$(WORKDIR)/writerfilter/inc \
+	-I$(OUTDIR)/inc \
+	-I$(OUTDIR)/inc/offapi \
+	-I$(OUTDIR)/inc/offuh \
+	-I$(OUTDIR)/inc/udkapi \
+))
+
+include $(realpath $(SRCDIR)/writerfilter/debug_setup.mk)
+
+$(eval $(call gb_Library_add_defs,rtftok,\
+	-DWRITERFILTER_RTFTOK_DLLIMPLEMENTATION \
+	$(writerfilter_debug_flags) \
+))
+
+$(eval $(call gb_Library_add_linked_libs,rtftok,\
+	cppu \
+	cppuhelper \
+	oox \
+	sal \
+	ucbhelper \
+	utl \
+	tl \
+	resourcemodel \
+	$(gb_STDLIBS) \
+))
+
+$(eval $(call gb_Library_add_exception_objects,rtftok,\
+	writerfilter/source/rtftok/rtfdocumentfactory \
+	writerfilter/source/rtftok/rtfdocumentimpl \
+	writerfilter/source/rtftok/rtfcontrolwords \
+	writerfilter/source/rtftok/rtfcharsets \
+	writerfilter/source/rtftok/rtfreferenceproperties \
+	writerfilter/source/rtftok/rtfreferencetable \
+	writerfilter/source/rtftok/rtfvalue \
+	writerfilter/source/rtftok/rtfsprm \
 ))
 
 # vim: set noet ts=4 sw=4:

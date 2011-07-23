@@ -25,16 +25,8 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
-$(eval $(call gb_Module_Module,writerfilter))
+$(eval $(call gb_Package_Package,writerfilter_generated,$(WORKDIR)/writerfilter/inc/doctok))
 
-$(eval $(call gb_Module_add_targets,writerfilter,\
-    Library_doctok \
-    Library_ooxml \
-    Library_rtftok \
-    Library_resourcemodel \
-    Library_writerfilter \
-    Library_writerfilter_uno \
-    Package_generated \
-))
+$(eval $(call gb_Package_add_file,writerfilter_generated,inc/writerfilter/doctok/sprmids.hxx,sprmids.hxx))
 
 # vim: set noet ts=4 sw=4:

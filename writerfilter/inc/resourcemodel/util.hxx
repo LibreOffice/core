@@ -38,10 +38,10 @@ namespace writerfilter
     using namespace ::std;
     using namespace ::com::sun::star;
 
-    string WRITERFILTER_DLLPUBLIC xmlify(const string & str);
+    string WRITERFILTER_RESOURCEMODEL_DLLPUBLIC xmlify(const string & str);
 
 #if OSL_DEBUG_LEVEL > 1
-    string WRITERFILTER_DLLPUBLIC propertysetToString
+    string WRITERFILTER_RESOURCEMODEL_DLLPUBLIC propertysetToString
     (uno::Reference<beans::XPropertySet> const & rProps);
 
     string toString(uno::Reference< text::XTextRange > textRange);

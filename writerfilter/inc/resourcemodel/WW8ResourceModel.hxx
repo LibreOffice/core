@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -25,8 +26,8 @@
  *
  ************************************************************************/
 
-#ifndef INCLUDED_WW8_EVENT_HANDLER_HXX
-#define INCLUDED_WW8_EVENT_HANDLER_HXX
+#ifndef INCLUDED_WW8RESOURCEMODEL_HXX
+#define INCLUDED_WW8RESOURCEMODEL_HXX
 
 #include <string>
 #include <memory>
@@ -89,7 +90,7 @@ using namespace ::std;
 */
 
 template <class T>
-class WRITERFILTER_DLLPUBLIC Reference
+class WRITERFILTER_RESOURCEMODEL_DLLPUBLIC Reference
 {
 public:
     /**
@@ -124,7 +125,7 @@ class Sprm;
 /**
    Handler for properties.
  */
-class WRITERFILTER_DLLPUBLIC Properties
+class WRITERFILTER_RESOURCEMODEL_DLLPUBLIC Properties
 {
 public:
     /**
@@ -147,7 +148,7 @@ public:
 /**
    Handler for tables.
  */
-class WRITERFILTER_DLLPUBLIC Table
+class WRITERFILTER_RESOURCEMODEL_DLLPUBLIC Table
 {
 public:
     typedef boost::shared_ptr<Table> Pointer_t;
@@ -163,7 +164,7 @@ public:
 /**
    Handler for binary objects.
  */
-class WRITERFILTER_DLLPUBLIC BinaryObj
+class WRITERFILTER_RESOURCEMODEL_DLLPUBLIC BinaryObj
 {
 public:
     /**
@@ -180,7 +181,7 @@ public:
 /**
    Handler for a stream.
  */
-class WRITERFILTER_DLLPUBLIC Stream
+class WRITERFILTER_RESOURCEMODEL_DLLPUBLIC Stream
 {
 public:
     /**
@@ -284,7 +285,7 @@ public:
    makes no sense for a certain value, e.g. the integer value of a
    string.
  */
-class WRITERFILTER_DLLPUBLIC Value
+class WRITERFILTER_RESOURCEMODEL_DLLPUBLIC Value
 {
 public:
     /**
@@ -332,7 +333,7 @@ public:
    An SPRM.
 
  */
-class WRITERFILTER_DLLPUBLIC Sprm
+class WRITERFILTER_RESOURCEMODEL_DLLPUBLIC Sprm
 {
 public:
     typedef auto_ptr<Sprm> Pointer_t;
@@ -382,48 +383,21 @@ public:
 /**
    Creates handler for a stream.
 */
-Stream::Pointer_t WRITERFILTER_DLLPUBLIC createStreamHandler();
+Stream::Pointer_t WRITERFILTER_RESOURCEMODEL_DLLPUBLIC createStreamHandler();
 
-void WRITERFILTER_DLLPUBLIC analyzerIds();
-Stream::Pointer_t WRITERFILTER_DLLPUBLIC createAnalyzer();
+    void WRITERFILTER_RESOURCEMODEL_DLLPUBLIC analyzerIds();
+    Stream::Pointer_t WRITERFILTER_RESOURCEMODEL_DLLPUBLIC createAnalyzer();
 
-void WRITERFILTER_DLLPUBLIC logger(string prefix, string message);
+    void WRITERFILTER_RESOURCEMODEL_DLLPUBLIC logger(string prefix, string message);
 
-void WRITERFILTER_DLLPUBLIC dump(OutputWithDepth<string> & o, const char * name, writerfilter::Reference<Properties>::Pointer_t props);
-void WRITERFILTER_DLLPUBLIC dump(OutputWithDepth<string> & o, const char * name, sal_uInt32 n);
-void WRITERFILTER_DLLPUBLIC dump(OutputWithDepth<string> & /*o*/, const char * /*name*/,
-                                 const rtl::OUString & /*str*/);
-void WRITERFILTER_DLLPUBLIC dump(OutputWithDepth<string> & o, const char * name, writerfilter::Reference<BinaryObj>::Pointer_t binary);
-
-class Token_t
-{
-    sal_Int32 m_nId;
-#ifdef DEBUG
-    ::std::string m_string;
-#endif
-
-    void assign(sal_Int32 nId);
-
-public:
-    Token_t();
-    Token_t(sal_Int32 nId);
-    virtual ~Token_t();
-
-    sal_Int32 getId() const;
-    operator sal_Int32() const;
-    Token_t & operator = (sal_Int32 n);
-
-#ifdef DEBUG
-    ::std::string toString() const;
-#endif
-};
-
-struct TokenHash
-{
-    size_t operator()(const Token_t & rToken) const;
-};
+    void WRITERFILTER_RESOURCEMODEL_DLLPUBLIC dump(OutputWithDepth<string> & o, const char * name, writerfilter::Reference<Properties>::Pointer_t props);
+    void WRITERFILTER_RESOURCEMODEL_DLLPUBLIC dump(OutputWithDepth<string> & o, const char * name, sal_uInt32 n);
+    void WRITERFILTER_RESOURCEMODEL_DLLPUBLIC dump(OutputWithDepth<string> & /*o*/, const char * /*name*/,
+                                     const rtl::OUString & /*str*/);
+    void WRITERFILTER_RESOURCEMODEL_DLLPUBLIC dump(OutputWithDepth<string> & o, const char * name, writerfilter::Reference<BinaryObj>::Pointer_t binary);
 
 }
 
+#endif // INCLUDED_WW8RESOURCEMODEL_HXX
 
-#endif // INCLUDED_WW8_EVENT_HANDLER_HXX
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
