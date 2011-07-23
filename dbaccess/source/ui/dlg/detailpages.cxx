@@ -27,7 +27,7 @@
  ************************************************************************/
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_dbui.hxx"
+#include "precompiled_dbaccess.hxx"
 
 #include "detailpages.hxx"
 #include "sqlmessage.hxx"
@@ -57,7 +57,7 @@
 #include "DriverSettings.hxx"
 #include "dbadmin.hxx"
 #include <comphelper/types.hxx>
-#include "AutoControlsDef.hrc"
+#include "AutoControls.hrc"
 
 //.........................................................................
 namespace dbaui

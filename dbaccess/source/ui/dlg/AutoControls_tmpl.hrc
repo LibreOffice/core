@@ -41,7 +41,7 @@
 #ifndef _DBA_DBACCESS_HELPID_HRC_
 #include "dbaccess_helpid.hrc"
 #endif
-#include "AutoControlsDef.hrc"
+
 
 #define CHECKBOX_HEIGHT     8
 #define FIXEDTEXT_HEIGHT    8
@@ -50,7 +50,60 @@
 #define EDIT_HEIGHT         12
 #define EDIT_X              101
 
+#define FT_AUTOJDBCDRIVERCLASS      80
+#define FT_AUTOFIELDSEPARATOR       81
+#define FT_AUTOTEXTSEPARATOR        82
+#define FT_AUTODECIMALSEPARATOR     83
+#define FT_AUTOTHOUSANDSSEPARATOR   84
+#define FT_AUTOPORTNUMBER           85
+#define FT_AUTOPORTNUMBERDEFAULT    86
+#define FT_AUTOBASEDN               87
+#define FT_AUTOHOSTNAME             88
+#define FT_AUTOBROWSEURL            89
+#define FT_AUTODATABASENAME         90
+#define FT_AUTOWIZARDHELPTEXT       91
+#define FT_AUTOWIZARDHEADER         92
+#define FT_AUTOEXTENSIONHEADER      93
+#define FT_AUTOOWNEXTENSIONAPPENDIX 94
+#define FT_CHARSET                  95
+#define FT_SOCKET                   96
 
+#define FL_AUTOSEPARATOR2           80
+#define FL_DATACONVERT              81
+#define FL_SEPARATOR1               82
+
+#define CB_AUTOHEADER               80
+
+#define PB_AUTOTESTDRIVERCLASS      80
+#define PB_AUTOBROWSEURL            81
+
+#define CM_AUTOFIELDSEPARATOR       80
+#define CM_AUTOTEXTSEPARATOR        81
+#define CM_AUTODECIMALSEPARATOR     82
+#define CM_AUTOTHOUSANDSSEPARATOR   83
+
+#define NF_AUTOPORTNUMBER           80
+
+#define ET_AUTOBASEDN               80
+#define ET_AUTOHOSTNAME             81
+#define ET_AUTODATABASENAME         82
+#define ET_AUTOBROWSEURL            83
+#define ET_AUTOJDBCDRIVERCLASS      84
+#define ET_AUTOOWNEXTENSION         85
+#define ET_SOCKET                   86
+
+#define RB_AUTOACCESSCTEXTFILES     80
+#define RB_AUTOACCESSCCSVFILES      81
+#define RB_AUTOACCESSOTHERS         82
+
+#define LB_CHARSET                  80
+
+#define STR_AUTOFIELDSEPARATORLIST      100
+#define STR_AUTOTEXTSEPARATORLIST       101
+#define STR_AUTOTEXT_FIELD_SEP_NONE     102
+#define STR_AUTODELIMITER_MISSING       103
+#define STR_AUTODELIMITER_MUST_DIFFER   104
+#define STR_AUTONO_WILDCARDS            105
 
 
 #define AUTO_WIZARDHELPTEXT( AUTO_LINECOUNT )                                                       \

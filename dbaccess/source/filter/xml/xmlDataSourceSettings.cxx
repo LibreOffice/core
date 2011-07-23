@@ -27,7 +27,7 @@
  ************************************************************************/
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_dbaxml.hxx"
+#include "precompiled_dbaccess.hxx"
 #include "xmlDataSourceSettings.hxx"
 #include "xmlDataSourceSetting.hxx"
 #include "xmlfilter.hxx"

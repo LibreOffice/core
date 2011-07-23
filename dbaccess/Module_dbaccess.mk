@@ -28,21 +28,21 @@
 $(eval $(call gb_Module_Module,dbaccess))
 
 $(eval $(call gb_Module_add_targets,dbaccess,\
-    $(if $(filter WNT,$(GUI)),Executable_odbcconfig) \
+    AllLangResTarget_adabasui \
     AllLangResTarget_dba \
     AllLangResTarget_dbmm \
-    AllLangResTarget_dbui \
+    AllLangResTarget_dbu \
     AllLangResTarget_sdbt \
+    $(if $(filter WNT,$(GUI)),Executable_odbcconfig) \
+    Library_adabasui \
     Library_dba \
     Library_dbaxml \
     Library_dbmm \
-    Library_dbui \
+    Library_dbu \
     Library_sdbt \
     Package_inc \
     Package_uiconfig \
 ))
-    #AllLangResTarget_adabasui \
-    Library_adabasui \
 
 $(eval $(call gb_Module_add_subsequentcheck_targets,dbaccess,\
 	JunitTest_dbaccess_complex \

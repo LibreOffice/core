@@ -28,14 +28,14 @@
 $(eval $(call gb_Package_Package,dbaccess_inc,$(SRCDIR)/dbaccess/inc))
 
 $(eval $(call gb_Package_add_file,dbaccess_inc,inc/dbaccess/AsyncronousLink.hxx,AsyncronousLink.hxx))
-$(eval $(call gb_Package_add_file,dbaccess_inc,inc/dbaccess/IController.hxx,IController.hxx))
-$(eval $(call gb_Package_add_file,dbaccess_inc,inc/dbaccess/IReference.hxx,IReference.hxx))
-$(eval $(call gb_Package_add_file,dbaccess_inc,inc/dbaccess/ToolBoxHelper.hxx,ToolBoxHelper.hxx))
 $(eval $(call gb_Package_add_file,dbaccess_inc,inc/dbaccess/controllerframe.hxx,controllerframe.hxx))
 $(eval $(call gb_Package_add_file,dbaccess_inc,inc/dbaccess/dataview.hxx,dataview.hxx))
 $(eval $(call gb_Package_add_file,dbaccess_inc,inc/dbaccess/dbaccessdllapi.h,dbaccessdllapi.h))
 $(eval $(call gb_Package_add_file,dbaccess_inc,inc/dbaccess/dbaundomanager.hxx,dbaundomanager.hxx))
 $(eval $(call gb_Package_add_file,dbaccess_inc,inc/dbaccess/dbsubcomponentcontroller.hxx,dbsubcomponentcontroller.hxx))
 $(eval $(call gb_Package_add_file,dbaccess_inc,inc/dbaccess/genericcontroller.hxx,genericcontroller.hxx))
+$(eval $(call gb_Package_add_file,dbaccess_inc,inc/dbaccess/IController.hxx,IController.hxx))
+$(eval $(call gb_Package_add_file,dbaccess_inc,inc/dbaccess/IReference.hxx,IReference.hxx))
+$(eval $(call gb_Package_add_file,dbaccess_inc,inc/dbaccess/ToolBoxHelper.hxx,ToolBoxHelper.hxx))
 
 # vim: set noet ts=4 sw=4:

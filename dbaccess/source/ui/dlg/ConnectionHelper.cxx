@@ -27,10 +27,11 @@
  ************************************************************************/
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_dbui.hxx"
+#include "precompiled_dbaccess.hxx"
 
 #include "dsnItem.hxx"
 #include "ConnectionHelper.hxx"
+#include "AutoControls.hrc"
 #include "dbu_dlg.hrc"
 #include "dbu_misc.hrc"
 #include <svl/itemset.hxx>
@@ -69,7 +70,6 @@
 #include <tools/urlobj.hxx>
 #include <tools/diagnose_ex.h>
 #include <sfx2/docfilt.hxx>
-#include <AutoControlsDef.hrc>
 
 #ifdef _ADO_DATALINK_BROWSE_
 #include <vcl/sysdata.hxx>

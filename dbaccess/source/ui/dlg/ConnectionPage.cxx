@@ -27,7 +27,7 @@
  ************************************************************************/
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_dbui.hxx"
+#include "precompiled_dbaccess.hxx"
 
 #include "ConnectionPage.hxx"
 #include "ConnectionPage.hrc"
@@ -80,7 +80,7 @@
 #include "adodatalinks.hxx"
 #endif //_ADO_DATALINK_BROWSE_
 
-#include "AutoControlsDef.hrc"
+#include "AutoControls.hrc"
 
 //.........................................................................
 namespace dbaui

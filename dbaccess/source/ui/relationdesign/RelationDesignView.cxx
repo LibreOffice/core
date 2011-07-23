@@ -27,7 +27,7 @@
  ************************************************************************/
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_dbui.hxx"
+#include "precompiled_dbaccess.hxx"
 #include "RelationDesignView.hxx"
 #include "RelationTableView.hxx"
 #include "RelationController.hxx"

@@ -27,11 +27,11 @@
  ************************************************************************/
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_dbui.hxx"
+#include "precompiled_dbaccess.hxx"
 #include "DBSetupConnectionPages.hxx"
 #include "sqlmessage.hxx"
 #include "dbu_resource.hrc"
-#include "AutoControlsDef.hrc"
+#include "AutoControls.hrc"
 #include "dbadminsetup.hrc"
 #include <svl/itemset.hxx>
 #include <svl/stritem.hxx>

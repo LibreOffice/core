@@ -25,7 +25,7 @@
  *
  ************************************************************************/
 
-#include "precompiled_dbui.hxx"
+#include "precompiled_dbaccess.hxx"
 
 #include "dbaundomanager.hxx"
 #include "singledoccontroller.hxx"

@@ -27,7 +27,7 @@
  ************************************************************************/
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_dbui.hxx"
+#include "precompiled_dbaccess.hxx"
 #include "genericcontroller.hxx"
 #include <comphelper/uno3.hxx>
 #include <toolkit/awt/vclxwindow.hxx>

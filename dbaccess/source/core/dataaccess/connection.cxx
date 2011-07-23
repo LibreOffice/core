@@ -60,7 +60,6 @@
 #include <comphelper/sequence.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <rtl/logfile.hxx>
-#include "SharedConnection.hxx"
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;

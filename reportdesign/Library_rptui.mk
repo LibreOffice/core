@@ -48,7 +48,7 @@ $(eval $(call gb_Library_add_linked_libs,rptui,\
     cppu \
     cppuhelper \
     dbtools \
-    dbui \
+    dbu \
     editeng \
     for \
     forui \

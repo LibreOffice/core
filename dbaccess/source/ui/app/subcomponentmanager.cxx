@@ -24,7 +24,7 @@
  * for a copy of the LGPLv3 License.
  *
 ************************************************************************/
-#include "precompiled_dbui.hxx"
+
 #include "subcomponentmanager.hxx"
 #include "AppController.hxx"
 #include "dbustrings.hrc"

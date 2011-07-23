@@ -27,7 +27,7 @@
  ************************************************************************/
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_dbui.hxx"
+#include "precompiled_dbaccess.hxx"
 #include "TableFieldControl.hxx"
 #include "TableController.hxx"
 #include "TableDesignView.hxx"
@@ -66,7 +66,7 @@ sal_Bool OTableFieldControl::IsReadOnly()
     sal_Bool bRead(GetCtrl()->IsReadOnly());
     if( !bRead )
     {
-        // Die Spalten einer ::com::sun::star::sdbcx::View kï¿½nnen nicht verï¿½ndert werden
+        // Die Spalten einer ::com::sun::star::sdbcx::View können nicht verändert werden
         Reference<XPropertySet> xTable = GetCtrl()->GetView()->getController().getTable();
         if(xTable.is() && ::comphelper::getString(xTable->getPropertyValue(PROPERTY_TYPE)) == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("VIEW")))
             bRead = sal_True;

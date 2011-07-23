@@ -27,7 +27,7 @@
  ************************************************************************/
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_dbui.hxx"
+#include "precompiled_dbaccess.hxx"
 #include "toolboxcontroller.hxx"
 #include <com/sun/star/ui/ImageType.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>

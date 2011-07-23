@@ -25,7 +25,9 @@
  *
  ************************************************************************/
 
+#ifndef _DBAUI_AUTOCONTROLS_HRC_
 #include "AutoControls.hrc"
+#endif
 
 String STR_DBASE_PATH_OR_FILE
 {

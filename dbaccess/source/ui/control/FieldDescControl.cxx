@@ -27,7 +27,7 @@
  ************************************************************************/
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_dbui.hxx"
+#include "precompiled_dbaccess.hxx"
 
 #define ITEMID_HORJUSTIFY       SID_ATTR_ALIGN_HOR_JUSTIFY
 #define ITEMID_VERJUSTIFY       SID_ATTR_ALIGN_VER_JUSTIFY

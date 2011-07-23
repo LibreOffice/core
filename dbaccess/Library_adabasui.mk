@@ -25,24 +25,51 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
-$(eval $(call gb_AllLangResTarget_AllLangResTarget,adabasui))
+$(eval $(call gb_Library_Library,adabasui))
 
-$(eval $(call gb_AllLangResTarget_set_reslocation,adabasui,dbaccess))
+$(eval $(call gb_Library_add_precompiled_header,adabasui,$(SRCDIR)/dbaccess/inc/pch/precompiled_dbaccess))
 
-$(eval $(call gb_AllLangResTarget_add_srs,adabasui,\
-    dbaccess/adabasui \
-))
-
-$(eval $(call gb_SrsTarget_SrsTarget,dbaccess/adabasui))
-
-$(eval $(call gb_SrsTarget_set_include,dbaccess/adabasui,\
+$(eval $(call gb_Library_set_include,adabasui,\
     $$(INCLUDE) \
-    -I$(realpath $(SRCDIR)/dbaccess/inc) \
+    -I$(realpath $(SRCDIR)/dbaccess/inc/pch) \
     -I$(OUTDIR)/inc \
 ))
 
-$(eval $(call gb_SrsTarget_add_files,dbaccess/adabasui,\
-    dbaccess/source/ext/adabas/AdabasNewDb.src \
+$(eval $(call gb_Library_add_defs,adabasui,\
+    -DCOMPMOD_NAMESPACE=adabasui \
+))
+
+$(eval $(call gb_Library_add_api,adabasui,\
+    offapi \
+    udkapi \
+))
+
+$(eval $(call gb_Library_add_linked_libs,adabasui,\
+    comphelper \
+    cppu \
+    cppuhelper \
+    dbtools \
+    sal \
+    sfx \
+    svl \
+    svt \
+    tk \
+    tl \
+    ucbhelper \
+    utl \
+    vcl \
+    $(gb_STDLIBS) \
+))
+
+$(eval $(call gb_Library_set_componentfile,adabasui,dbaccess/source/ext/adabas/adabasui))
+
+$(eval $(call gb_Library_add_exception_objects,adabasui,\
+    dbaccess/source/ext/adabas/Acomponentmodule \
+    dbaccess/source/ext/adabas/AdabasNewDb \
+    dbaccess/source/ext/adabas/adabasuistrings \
+    dbaccess/source/ext/adabas/ANewDb \
+    dbaccess/source/ext/adabas/Aservices \
+    dbaccess/source/ext/adabas/ASqlNameEdit \
 ))
 
 # vim: set noet ts=4 sw=4:

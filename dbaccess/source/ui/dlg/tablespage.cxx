@@ -27,7 +27,7 @@
  ************************************************************************/
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_dbui.hxx"
+#include "precompiled_dbaccess.hxx"
 
 #include "tablespage.hxx"
 #include "dbu_dlg.hrc"
@@ -60,7 +60,7 @@
 #include "TablesSingleDlg.hxx"
 #include <tools/diagnose_ex.h>
 #include <cppuhelper/exc_hlp.hxx>
-#include "AutoControlsDef.hrc"
+#include "AutoControls.hrc"
 
 //.........................................................................
 namespace dbaui

@@ -27,7 +27,7 @@
  ************************************************************************/
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_dbui.hxx"
+#include "precompiled_dbaccess.hxx"
 #include "RtfReader.hxx"
 #include <tools/debug.hxx>
 #include <com/sun/star/sdbcx/XDataDescriptorFactory.hpp>

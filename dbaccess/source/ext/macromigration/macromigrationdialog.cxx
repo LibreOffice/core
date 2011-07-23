@@ -27,7 +27,7 @@
  ************************************************************************/
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_dbmm.hxx"
+#include "precompiled_dbaccess.hxx"
 
 #include "dbmm_global.hrc"
 #include "dbmm_module.hxx"

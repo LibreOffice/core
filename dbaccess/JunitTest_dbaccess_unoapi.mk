@@ -42,10 +42,6 @@ $(eval $(call gb_JunitTest_add_jars,dbaccess_unoapi,\
     $(OUTDIR)/bin/jurt.jar \
 ))
 
-$(eval $(call gb_JunitTest_add_sourcefiles,dbaccess_unoapi,\
-	dbaccess/qa/unoapi/Test \
-))
-
 $(eval $(call gb_JunitTest_add_classes,dbaccess_unoapi,\
     org.openoffice.test.UnoApiTest \
 ))

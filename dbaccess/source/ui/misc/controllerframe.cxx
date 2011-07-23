@@ -26,9 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_dbui.hxx"
-
 #include "controllerframe.hxx"
 #include "IController.hxx"
 

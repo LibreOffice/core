@@ -27,7 +27,7 @@
  ************************************************************************/
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_dbui.hxx"
+#include "precompiled_dbaccess.hxx"
 
 #include "propertystorage.hxx"
 
@@ -69,7 +69,7 @@ namespace dbaui
     namespace
     {
         //----------------------------------------------------------------
-        template < class ITEMTYPE, class UNOTYPE_Type >
+        template < class ITEMTYPE, class UNOTYPE >
         class ItemAdapter
         {
         public:
@@ -80,7 +80,7 @@ namespace dbaui
                 if ( !pTypedItem )
                     return false;
 
-                UNOTYPE_Type aValue( pTypedItem->GetValue() );
+                UNOTYPE aValue( pTypedItem->GetValue() );
                 OSL_VERIFY( _rValue >>= aValue );
                 // TODO: one could throw an IllegalArgumentException here - finally, this method
                 // is (to be) used from within an XPropertySet::setPropertyValue implementation,
@@ -97,7 +97,7 @@ namespace dbaui
                 if ( !pTypedItem )
                     return false;
 
-                _out_rValue <<= UNOTYPE_Type( pTypedItem->GetValue() );
+                _out_rValue <<= UNOTYPE( pTypedItem->GetValue() );
                 return true;
             }
         };

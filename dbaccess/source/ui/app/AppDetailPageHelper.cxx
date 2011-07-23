@@ -27,7 +27,7 @@
  ************************************************************************/
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_dbui.hxx"
+#include "precompiled_dbaccess.hxx"
 #include "AppDetailPageHelper.hxx"
 #include "moduledbu.hxx"
 #include <tools/debug.hxx>
