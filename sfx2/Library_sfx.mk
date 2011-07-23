@@ -86,7 +86,7 @@ $(eval $(call gb_Library_add_linked_libs,sfx,\
     $(gb_STDLIBS) \
 ))
 
-$(call gb_Library_use_external,sfx,libxml2)
+$(eval $(call gb_Library_use_external,sfx,libxml2))
 
 $(eval $(call gb_Library_add_exception_objects,sfx,\
     sfx2/source/appl/app \

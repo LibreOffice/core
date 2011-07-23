@@ -81,7 +81,7 @@ $(eval $(call gb_Library_add_linked_libs,qstart_gtk,\
     sfx \
 ))
 
-$(call gb_Library_use_external,qstart_gtk,libxml2)
+$(eval $(call gb_Library_use_external,qstart_gtk,libxml2))
 
 $(eval $(call gb_Library_add_exception_objects,qstart_gtk,\
     sfx2/source/appl/shutdowniconunx \

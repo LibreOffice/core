@@ -165,7 +165,7 @@ $(eval $(call gb_Library_add_linked_libs,editeng,\
     $(gb_STDLIBS) \
 ))
 
-$(call gb_Library_use_external,editeng,icuuc)
+$(eval $(call gb_Library_use_external,editeng,icuuc))
 
 # vim: set noet sw=4 ts=4:
 
