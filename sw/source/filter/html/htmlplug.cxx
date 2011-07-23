@@ -512,26 +512,26 @@ void SwHTMLParser::NewObject()
     pAppletImpl = new SwApplet_Impl( pDoc->GetAttrPool(),
                                      RES_FRMATR_BEGIN, RES_FRMATR_END-1 );
 
-    const HTMLOptions *pHTMLOptions = GetOptions();
-    for( sal_uInt16 i = pHTMLOptions->Count(); i; )
+    const HTMLOptions& rHTMLOptions = GetOptions();
+    for (size_t i = rHTMLOptions.size(); i; )
     {
-        const HTMLOption *pOption = (*pHTMLOptions)[--i];
-        switch( pOption->GetToken() )
+        const HTMLOption& rOption = rHTMLOptions[--i];
+        switch( rOption.GetToken() )
         {
         case HTML_O_ID:
-            aId = pOption->GetString();
+            aId = rOption.GetString();
             break;
         case HTML_O_STYLE:
-            aStyle = pOption->GetString();
+            aStyle = rOption.GetString();
             break;
         case HTML_O_CLASS:
-            aClass = pOption->GetString();
+            aClass = rOption.GetString();
             break;
         case HTML_O_DECLARE:
             bDeclare = sal_True;
             break;
         case HTML_O_CLASSID:
-            aClassID = pOption->GetString();
+            aClassID = rOption.GetString();
             break;
         case HTML_O_CODEBASE:
             break;
@@ -545,30 +545,30 @@ void SwHTMLParser::NewObject()
         case HTML_O_UNKNOWN:
             break;
         case HTML_O_STANDBY:
-            aStandBy = pOption->GetString();
+            aStandBy = rOption.GetString();
             break;
         case HTML_O_WIDTH:
-            bPrcWidth = (pOption->GetString().Search('%') != STRING_NOTFOUND);
-            aSize.Width() = (long)pOption->GetNumber();
+            bPrcWidth = (rOption.GetString().Search('%') != STRING_NOTFOUND);
+            aSize.Width() = (long)rOption.GetNumber();
             break;
         case HTML_O_HEIGHT:
-            bPrcHeight = (pOption->GetString().Search('%') != STRING_NOTFOUND);
-            aSize.Height() = (long)pOption->GetNumber();
+            bPrcHeight = (rOption.GetString().Search('%') != STRING_NOTFOUND);
+            aSize.Height() = (long)rOption.GetNumber();
             break;
         case HTML_O_ALIGN:
-            eVertOri = pOption->GetEnum( aHTMLImgVAlignTable, eVertOri );
-            eHoriOri = pOption->GetEnum( aHTMLImgHAlignTable, eHoriOri );
+            eVertOri = rOption.GetEnum( aHTMLImgVAlignTable, eVertOri );
+            eHoriOri = rOption.GetEnum( aHTMLImgHAlignTable, eHoriOri );
             break;
         case HTML_O_USEMAP:
             break;
         case HTML_O_NAME:
-            aName = pOption->GetString();
+            aName = rOption.GetString();
             break;
         case HTML_O_HSPACE:
-            aSpace.Width() = (long)pOption->GetNumber();
+            aSpace.Width() = (long)rOption.GetNumber();
             break;
         case HTML_O_VSPACE:
-            aSpace.Height() = (long)pOption->GetNumber();
+            aSpace.Height() = (long)rOption.GetNumber();
             break;
         case HTML_O_BORDER:
             break;
@@ -582,8 +582,8 @@ void SwHTMLParser::NewObject()
             break;
         }
         // Es werden alle Parameter auch an das Applet weitergereicht
-        pAppletImpl->AppendParam( pOption->GetTokenString(),
-                                  pOption->GetString() );
+        pAppletImpl->AppendParam( rOption.GetTokenString(),
+                                  rOption.GetString() );
 
     }
 
