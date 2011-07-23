@@ -123,7 +123,7 @@ $(eval $(call gb_Library_add_linked_libs,scui,\
 	advapi32 \
 	kernel32 \
 	msvcrt \
-	oldnames \
+	$(gb_Library_win32_OLDNAMES) \
 	user32 \
 	uwinapi \
 ))
