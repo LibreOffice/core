@@ -30,13 +30,11 @@ $(eval $(call gb_Library_Library,writerfilter_uno))
 $(eval $(call gb_Library_set_include,writerfilter_uno,\
     $$(INCLUDE) \
     -I$(realpath $(SRCDIR)/writerfilter/inc) \
-	$(if $(filter YES,$(SYSTEM_LIBXML)),$(filter -I%,$(LIBXML_CFLAGS))) \
     -I$(OUTDIR)/inc \
 ))
 
 $(eval $(call gb_Library_add_defs,writerfilter_uno,\
 	-DWRITERFILTER_WRITERFILTER_UNO_DLLIMPLEMENTATION \
-	$(if $(filter YES,$(SYSTEM_LIBXML)),$(filter-out -I%,$(LIBXML_CFLAGS))) \
 ))
 
 $(eval $(call gb_Library_add_api,writerfilter_uno,\
@@ -55,6 +53,8 @@ $(eval $(call gb_Library_add_linked_libs,writerfilter_uno,\
     ucbhelper \
     $(gb_STDLIBS) \
 ))
+
+$(eval $(call gb_Library_use_external,writerfilter_uno,libxml2))
 
 $(eval $(call gb_Library_add_exception_objects,writerfilter_uno,\
     writerfilter/unocomponent/component \

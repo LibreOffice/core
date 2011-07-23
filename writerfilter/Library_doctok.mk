@@ -35,7 +35,6 @@ $(eval $(call gb_Library_set_include,doctok,\
     -I$(WORKDIR)/CustomTarget/writerfilter/source \
     -I$(WORKDIR)/CustomTarget/writerfilter/source/ooxml \
     -I$(WORKDIR)/CustomTarget/writerfilter/source/doctok \
-	$(if $(filter YES,$(SYSTEM_LIBXML)),$(filter -I%,$(LIBXML_CFLAGS))) \
     -I$(OUTDIR)/inc \
 ))
 
@@ -44,7 +43,6 @@ include $(realpath $(SRCDIR)/writerfilter/debug_setup.mk)
 $(eval $(call gb_Library_add_defs,doctok,\
 	-DWRITERFILTER_DOCTOK_DLLIMPLEMENTATION \
 	$(writerfilter_debug_flags) \
-	$(if $(filter YES,$(SYSTEM_LIBXML)),$(filter-out -I%,$(LIBXML_CFLAGS))) \
 ))
 
 $(eval $(call gb_Library_add_api,doctok,\
@@ -59,6 +57,8 @@ $(eval $(call gb_Library_add_linked_libs,doctok,\
     sal \
     $(gb_STDLIBS) \
 ))
+
+$(eval $(call gb_Library_use_external,doctoc,libxml2))
 
 $(eval $(call gb_Library_add_exception_objects,doctok,\
     writerfilter/source/doctok/Dff \

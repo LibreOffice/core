@@ -42,14 +42,12 @@ $(eval $(call gb_Library_set_include,ooxml,\
 	-I$(WORKDIR)/CustomTarget/writerfilter/source/doctok \
     -I$(WORKDIR)/writerfilter/inc \
     -I$(WORKDIR)/writerfilter/inc/ooxml \
-	$(if $(filter YES,$(SYSTEM_LIBXML)),$(filter -I%,$(LIBXML_CFLAGS))) \
     -I$(OUTDIR)/inc \
 ))
 
 $(eval $(call gb_Library_add_defs,ooxml,\
 	-DWRITERFILTER_OOXML_DLLIMPLEMENTATION \
 	$(writerfilter_debug_flags) \
-	$(if $(filter YES,$(SYSTEM_LIBXML)),$(filter-out -I%,$(LIBXML_CFLAGS))) \
 ))
 
 $(eval $(call gb_Library_add_api,ooxml,\
@@ -69,6 +67,8 @@ $(eval $(call gb_Library_add_linked_libs,ooxml,\
     tl \
     $(gb_STDLIBS) \
 ))
+
+$(eval $(call gb_Library_use_external,ooxml,libxml2))
 
 $(eval $(call gb_Library_add_exception_objects,ooxml,\
     writerfilter/source/dmapper/BorderHandler \

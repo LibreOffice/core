@@ -30,7 +30,6 @@ $(eval $(call gb_Library_Library,writerfilter))
 $(eval $(call gb_Library_set_include,writerfilter,\
     $$(INCLUDE) \
     -I$(realpath $(SRCDIR)/writerfilter/inc) \
-	$(if $(filter YES,$(SYSTEM_LIBXML)),$(filter -I%,$(LIBXML_CFLAGS))) \
 ))
 
 $(eval $(call gb_Library_add_api,writerfilter,\
@@ -45,7 +44,6 @@ include $(realpath $(SRCDIR)/writerfilter/debug_setup.mk)
 $(eval $(call gb_Library_add_defs,writerfilter,\
 	-DWRITERFILTER_WRITERFILTER_DLLIMPLEMENTATION \
 	$(writerfilter_debug_flags) \
-	$(if $(filter YES,$(SYSTEM_LIBXML)),$(filter-out -I%,$(LIBXML_CFLAGS))) \
 ))
 
 $(eval $(call gb_Library_add_linked_libs,writerfilter,\
@@ -64,9 +62,10 @@ $(eval $(call gb_Library_add_linked_libs,writerfilter,\
     svt \
     tl \
     utl \
-    xml2 \
     $(gb_STDLIBS) \
 ))
+
+$(eval $(call gb_Library_use_external,writerfilter,libxml2))
 
 $(eval $(call gb_Library_add_exception_objects,writerfilter,\
     writerfilter/source/filter/ImportFilter \

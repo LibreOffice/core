@@ -31,7 +31,6 @@ $(eval $(call gb_Library_set_include,resourcemodel,\
     $$(INCLUDE) \
     -I$(realpath $(SRCDIR)/writerfilter/inc) \
     -I$(WORKDIR)/CustomTarget/writerfilter/source \
-    $(if $(filter YES,$(SYSTEM_LIBXML)),$(filter -I%,$(LIBXML_CFLAGS))) \
     -I$(OUTDIR)/inc \
 ))
 
@@ -40,7 +39,6 @@ include $(SRCDIR)/writerfilter/debug_setup.mk
 $(eval $(call gb_Library_add_defs,resourcemodel,\
 	-DWRITERFILTER_RESOURCEMODEL_DLLIMPLEMENTATION \
 	$(writerfilter_debug_flags) \
-    $(if $(filter YES,$(SYSTEM_LIBXML)),$(filter-out -I%,$(LIBXML_CFLAGS))) \
 ))
 
 $(eval $(call gb_Library_add_api,resourcemodel,\
@@ -53,9 +51,10 @@ $(eval $(call gb_Library_add_linked_libs,resourcemodel,\
     cppu \
     cppuhelper \
     sal \
-    xml2 \
     $(gb_STDLIBS) \
 ))
+
+$(eval $(call gb_Library_use_external,resourcemodel,libxml2))
 
 $(eval $(call gb_Library_add_exception_objects,resourcemodel,\
     writerfilter/source/resourcemodel/Fraction \
