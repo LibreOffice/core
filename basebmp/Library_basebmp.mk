@@ -33,7 +33,11 @@ $(eval $(call gb_Library_set_include,basebmp,\
 	-I$(SRCDIR)/basebmp/inc/ \
 	-I$(SRCDIR)/basebmp/inc/pch \
 	$$(INCLUDE) \
-	-I$(OUTDIR)/inc/offuh \
+))
+
+$(eval $(call gb_Library_use_api,basebmp,\
+	offapi \
+	udkapi \
 ))
 
 $(eval $(call gb_Library_add_defs,basebmp,\
