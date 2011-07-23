@@ -35,6 +35,11 @@ $(eval $(call gb_Library_set_include,cairocanvas,\
 	-I$(SRCDIR)/canvas/inc/pch \
 ))
 
+$(eval $(call gb_Library_add_api,cairocanvas,\
+    offapi \
+    udkapi \
+))
+
 ifneq ($(strip $(VERBOSE)$(verbose)),)
 $(eval $(call gb_Library_add_defs,cairocanvas,\
 	-DVERBOSE \

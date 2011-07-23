@@ -28,13 +28,15 @@
 $(eval $(call gb_Module_Module,canvas))
 
 $(eval $(call gb_Module_add_targets,canvas,\
+	Library_cairocanvas \
+	Library_canvasfactory \
 	Library_canvastools \
 	Library_nullcanvas \
 	Library_simplecanvas \
 	Library_vclcanvas \
-	Library_canvasfactory \
 	Package_inc \
 ))
+
 ifeq ($(strip $(OS)),WNT)
 ifneq ($(strip $(ENABLE_DIRECTX)),)
 
@@ -50,12 +52,6 @@ $(eval $(call gb_Module_add_targets,canvas,\
 ))
 
 endif
-endif
-
-ifeq ($(strip $(ENABLE_CAIRO_CANVAS)),TRUE)
-$(eval $(call gb_Module_add_targets,canvas,\
-	Library_cairocanvas \
-))
 endif
 
 # vim: set noet sw=4 ts=4:
