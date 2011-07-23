@@ -32,20 +32,25 @@ $(eval $(call gb_CppunitTest_add_exception_objects,writerfilter_doctok, \
 ))
 
 $(eval $(call gb_CppunitTest_add_linked_libs,writerfilter_doctok, \
-	writerfilter \
-	ucbhelper \
-	cppuhelper \
 	cppu \
+	cppuhelper \
+	doctok \
+	resourcemodel \
 	sal \
-	stl \
+	ucbhelper \
+	writerfilter \
 	$(gb_STDLIBS) \
 ))
 
 $(eval $(call gb_CppunitTest_set_include,writerfilter_doctok,\
 	$$(INCLUDE) \
-	-I$(OUTDIR)/inc/offuh \
 	-I$(OUTDIR)/inc \
 	-I$(SRCDIR)/writerfilter/inc \
+))
+
+$(eval $(call gb_CppunitTest_add_api,writerfilter_doctok,\
+	offapi \
+	udkapi \
 ))
 
 # vim: set noet sw=4 ts=4:
