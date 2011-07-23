@@ -120,14 +120,12 @@ SvxIconChoiceCtrl_Impl::SvxIconChoiceCtrl_Impl(
     pCurHighlightFrame = 0;
     pEdit = 0;
     pAnchor = 0;
-    pDraggedSelection = 0;
     pPrevDropTarget = 0;
     pHdlEntry = 0;
     pHead = NULL;
     pCursor = NULL;
     bUpdateMode = sal_True;
     bEntryEditingEnabled = sal_False;
-    bInDragDrop = sal_False;
     bHighlightFramePressed = sal_False;
     eSelectionMode = MULTIPLE_SELECTION;
     pView = pCurView;
@@ -186,7 +184,6 @@ SvxIconChoiceCtrl_Impl::~SvxIconChoiceCtrl_Impl()
     delete pDDDev;
     delete pDDBufDev;
     delete pDDTempDev;
-    delete pDraggedSelection;
     delete pEntryPaintDev;
     ClearSelectedRectList();
     ClearColumnList();
@@ -196,8 +193,6 @@ void SvxIconChoiceCtrl_Impl::Clear( sal_Bool bInCtor )
 {
     StopEntryEditing( sal_True );
     nSelectionCount = 0;
-    DELETEZ(pDraggedSelection);
-    bInDragDrop = sal_False;
     pCurHighlightFrame = 0;
     StopEditTimer();
     CancelUserEvents();
@@ -399,12 +394,6 @@ void SvxIconChoiceCtrl_Impl::RemoveEntry( SvxIconChoiceCtrlEntry* pEntry )
 
     if( pEntry == pCurHighlightFrame )
         pCurHighlightFrame = 0;
-
-    if( bInDragDrop )
-    {
-        DELETEZ(pDraggedSelection);
-        bInDragDrop = sal_False;
-    }
 
     if( pEntry->IsSelected() )
         CallSelectHandler( 0 );

@@ -219,7 +219,6 @@ class SvxIconChoiceCtrl_Impl
     LocalFocus              aFocus;                             // Data for focusrect
     ::svt::AccessibleFactoryAccess aAccFactory;
 
-    List*                   pDraggedSelection;
     SvxIconChoiceCtrlEntry* pCurEditedEntry;
     SvxIconChoiceCtrlTextMode eTextMode;
     SelectionMode           eSelectionMode;
@@ -228,7 +227,6 @@ class SvxIconChoiceCtrl_Impl
     sal_Bool                bBoundRectsDirty;
     sal_Bool                bUpdateMode;
     sal_Bool                bEntryEditingEnabled;
-    sal_Bool                bInDragDrop;
 
     void                ShowCursor( sal_Bool bShow );
 
