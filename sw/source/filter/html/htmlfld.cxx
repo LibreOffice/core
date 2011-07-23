@@ -231,35 +231,35 @@ void SwHTMLParser::NewField()
     String aValue, aNumFmt, aNumValue, aName;
     const HTMLOption *pSubOption=0, *pFmtOption=0;
 
-    const HTMLOptions *pHTMLOptions = GetOptions();
-    sal_uInt16 i;
+    const HTMLOptions& rHTMLOptions = GetOptions();
+    size_t i;
 
-    for( i = pHTMLOptions->Count(); i; )
+    for ( i = rHTMLOptions.size(); i; )
     {
-        const HTMLOption *pOption = (*pHTMLOptions)[--i];
-        switch( pOption->GetToken() )
+        const HTMLOption& rOption = rHTMLOptions[--i];
+        switch( rOption.GetToken() )
         {
         case HTML_O_TYPE:
-            bKnownType = pOption->GetEnum( nType, aHTMLFldTypeTable );
+            bKnownType = rOption.GetEnum( nType, aHTMLFldTypeTable );
             break;
         case HTML_O_SUBTYPE:
-            pSubOption = pOption;
+            pSubOption = &rOption;
             break;
         case HTML_O_FORMAT:
-            pFmtOption = pOption;
+            pFmtOption = &rOption;
             break;
         case HTML_O_NAME:
-            aName = pOption->GetString();
+            aName = rOption.GetString();
             break;
         case HTML_O_VALUE:
-            aValue = pOption->GetString();
+            aValue = rOption.GetString();
             break;
         case HTML_O_SDNUM:
-            aNumFmt = pOption->GetString();
+            aNumFmt = rOption.GetString();
             bHasNumFmt = sal_True;
             break;
         case HTML_O_SDVAL:
-            aNumValue = pOption->GetString();
+            aNumValue = rOption.GetString();
             bHasNumValue = sal_True;
             break;
         case HTML_O_SDFIXED:

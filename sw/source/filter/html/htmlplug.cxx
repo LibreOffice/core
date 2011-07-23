@@ -313,78 +313,77 @@ void SwHTMLParser::InsertEmbed()
     sal_Int16 eVertOri = text::VertOrientation::NONE;
     sal_Int16 eHoriOri = text::HoriOrientation::NONE;
     SvCommandList aCmdLst;
-    const HTMLOptions *pHTMLOptions = GetOptions();
+    const HTMLOptions& rHTMLOptions = GetOptions();
 
     // Die Optionen werden vorwaerts gelesen, weil die Plugins sie in
     // dieser Reihenfolge erwarten. Trotzdem darf immer nur der erste
     // Wert einer Option beruecksichtigt werden.
-    sal_uInt16 nArrLen = pHTMLOptions->Count();
-    for( sal_uInt16 i=0; i<nArrLen; i++ )
+    for (size_t i = 0, n = rHTMLOptions.size(); i < n; ++i)
     {
-        const HTMLOption *pOption = (*pHTMLOptions)[i];
-        switch( pOption->GetToken() )
+        const HTMLOption& rOption = rHTMLOptions[i];
+        switch( rOption.GetToken() )
         {
         case HTML_O_ID:
-            aId = pOption->GetString();
+            aId = rOption.GetString();
             break;
         case HTML_O_STYLE:
-            aStyle = pOption->GetString();
+            aStyle = rOption.GetString();
             break;
         case HTML_O_CLASS:
-            aClass = pOption->GetString();
+            aClass = rOption.GetString();
             break;
         case HTML_O_NAME:
-            aName = pOption->GetString();
+            aName = rOption.GetString();
             break;
         case HTML_O_SRC:
             if( !aURL.Len() )
-                aURL = pOption->GetString();
+                aURL = rOption.GetString();
             break;
         case HTML_O_ALT:
-            aAlt = pOption->GetString();
+            aAlt = rOption.GetString();
             break;
         case HTML_O_TYPE:
             if( !aType.Len() )
-                aType = pOption->GetString();
+                aType = rOption.GetString();
             break;
         case HTML_O_ALIGN:
             if( eVertOri==text::VertOrientation::NONE && eHoriOri==text::HoriOrientation::NONE )
             {
-                eVertOri = pOption->GetEnum( aHTMLImgVAlignTable, eVertOri );
-                eHoriOri = pOption->GetEnum( aHTMLImgHAlignTable, eHoriOri );
+                eVertOri = rOption.GetEnum( aHTMLImgVAlignTable, eVertOri );
+                eHoriOri = rOption.GetEnum( aHTMLImgHAlignTable, eHoriOri );
             }
             break;
         case HTML_O_WIDTH:
             if( USHRT_MAX==aSize.Width() )
             {
-                bPrcWidth = (pOption->GetString().Search('%') != STRING_NOTFOUND);
-                aSize.Width() = (long)pOption->GetNumber();
+                bPrcWidth = (rOption.GetString().Search('%') != STRING_NOTFOUND);
+                aSize.Width() = (long)rOption.GetNumber();
             }
             break;
         case HTML_O_HEIGHT:
             if( USHRT_MAX==aSize.Height() )
             {
-                bPrcHeight = (pOption->GetString().Search('%') != STRING_NOTFOUND);
-                aSize.Height() = (long)pOption->GetNumber();
+                bPrcHeight = (rOption.GetString().Search('%') != STRING_NOTFOUND);
+                aSize.Height() = (long)rOption.GetNumber();
             }
             break;
         case HTML_O_HSPACE:
             if( USHRT_MAX==aSpace.Width() )
-                aSpace.Width() = (long)pOption->GetNumber();
+                aSpace.Width() = (long)rOption.GetNumber();
             break;
         case HTML_O_VSPACE:
             if( USHRT_MAX==aSpace.Height() )
-                aSpace.Height() = (long)pOption->GetNumber();
+                aSpace.Height() = (long)rOption.GetNumber();
             break;
         case HTML_O_UNKNOWN:
-            if( pOption->GetTokenString().EqualsIgnoreCaseAscii( OOO_STRING_SW_HTML_O_Hidden ) )
+            if( rOption.GetTokenString().EqualsIgnoreCaseAscii( OOO_STRING_SW_HTML_O_Hidden ) )
                 bHidden =
-                    !pOption->GetString().EqualsIgnoreCaseAscii( sHTML_O_Hidden_False );
+                    !rOption.GetString().EqualsIgnoreCaseAscii( sHTML_O_Hidden_False );
             break;
         }
 
         // Es werden alle Parameter an das Plugin weitergereicht
-        aCmdLst.Append( pOption->GetTokenString(), pOption->GetString() );
+        aCmdLst.Append( rOption.GetTokenString(), rOption.GetString() );
     }
 
     SfxItemSet aItemSet( pDoc->GetAttrPool(), pCSS1Parser->GetWhichMap() );
@@ -841,44 +840,43 @@ void SwHTMLParser::InsertFloatingFrame()
     sal_Int16 eVertOri = text::VertOrientation::TOP;
     sal_Int16 eHoriOri = text::HoriOrientation::NONE;
 
-    const HTMLOptions *pHTMLOptions = GetOptions();
+    const HTMLOptions& rHTMLOptions = GetOptions();
 
     // Erstmal die Optionen f?r das Writer-Frame-Format holen
-    sal_uInt16 nArrLen = pHTMLOptions->Count();
-    for ( sal_uInt16 i=0; i<nArrLen; i++ )
+    for (size_t i = 0, n = rHTMLOptions.size(); i < n; ++i)
     {
-        const HTMLOption *pOption = (*pHTMLOptions)[i];
-        switch( pOption->GetToken() )
+        const HTMLOption& rOption = rHTMLOptions[i];
+        switch( rOption.GetToken() )
         {
         case HTML_O_ID:
-            aId = pOption->GetString();
+            aId = rOption.GetString();
             break;
         case HTML_O_STYLE:
-            aStyle = pOption->GetString();
+            aStyle = rOption.GetString();
             break;
         case HTML_O_CLASS:
-            aClass = pOption->GetString();
+            aClass = rOption.GetString();
             break;
         case HTML_O_ALT:
-            aAlt = pOption->GetString();
+            aAlt = rOption.GetString();
             break;
         case HTML_O_ALIGN:
-            eVertOri = pOption->GetEnum( aHTMLImgVAlignTable, eVertOri );
-            eHoriOri = pOption->GetEnum( aHTMLImgHAlignTable, eHoriOri );
+            eVertOri = rOption.GetEnum( aHTMLImgVAlignTable, eVertOri );
+            eHoriOri = rOption.GetEnum( aHTMLImgHAlignTable, eHoriOri );
             break;
         case HTML_O_WIDTH:
-            bPrcWidth = (pOption->GetString().Search('%') != STRING_NOTFOUND);
-            aSize.Width() = (long)pOption->GetNumber();
+            bPrcWidth = (rOption.GetString().Search('%') != STRING_NOTFOUND);
+            aSize.Width() = (long)rOption.GetNumber();
             break;
         case HTML_O_HEIGHT:
-            bPrcHeight = (pOption->GetString().Search('%') != STRING_NOTFOUND);
-            aSize.Height() = (long)pOption->GetNumber();
+            bPrcHeight = (rOption.GetString().Search('%') != STRING_NOTFOUND);
+            aSize.Height() = (long)rOption.GetNumber();
             break;
         case HTML_O_HSPACE:
-            aSpace.Width() = (long)pOption->GetNumber();
+            aSpace.Width() = (long)rOption.GetNumber();
             break;
         case HTML_O_VSPACE:
-            aSpace.Height() = (long)pOption->GetNumber();
+            aSpace.Height() = (long)rOption.GetNumber();
             break;
         }
     }
@@ -886,7 +884,7 @@ void SwHTMLParser::InsertFloatingFrame()
     // und jetzt die fuer den SfxFrame
     SfxFrameDescriptor aFrameDesc;
 
-    SfxFrameHTMLParser::ParseFrameOptions( &aFrameDesc, pHTMLOptions, sBaseURL );
+    SfxFrameHTMLParser::ParseFrameOptions( &aFrameDesc, rHTMLOptions, sBaseURL );
 
     // den Floating-Frame anlegen
     comphelper::EmbeddedObjectContainer aCnt;

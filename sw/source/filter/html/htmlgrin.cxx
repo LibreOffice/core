@@ -337,70 +337,70 @@ void SwHTMLParser::InsertImage()
     String sDfltScriptType;
     GetDefaultScriptType( eDfltScriptType, sDfltScriptType );
 
-    const HTMLOptions *pHTMLOptions = GetOptions();
-    for( sal_uInt16 i = pHTMLOptions->Count(); i; )
+    const HTMLOptions& rHTMLOptions = GetOptions();
+    for (size_t i = rHTMLOptions.size(); i; )
     {
         sal_uInt16 nEvent = 0;
         ScriptType eScriptType2 = eDfltScriptType;
-        const HTMLOption *pOption = (*pHTMLOptions)[--i];
-        switch( pOption->GetToken() )
+        const HTMLOption& rOption = rHTMLOptions[--i];
+        switch( rOption.GetToken() )
         {
             case HTML_O_ID:
-                aId = pOption->GetString();
+                aId = rOption.GetString();
                 break;
             case HTML_O_STYLE:
-                aStyle = pOption->GetString();
+                aStyle = rOption.GetString();
                 break;
             case HTML_O_CLASS:
-                aClass = pOption->GetString();
+                aClass = rOption.GetString();
                 break;
             case HTML_O_SRC:
-                sGrfNm = pOption->GetString();
+                sGrfNm = rOption.GetString();
                 if( !InternalImgToPrivateURL(sGrfNm) )
                     sGrfNm = INetURLObject::GetAbsURL( sBaseURL, sGrfNm );
                 break;
             case HTML_O_ALIGN:
                 eVertOri =
-                    pOption->GetEnum( aHTMLImgVAlignTable,
+                    rOption.GetEnum( aHTMLImgVAlignTable,
                                                     text::VertOrientation::TOP );
                 eHoriOri =
-                    pOption->GetEnum( aHTMLImgHAlignTable,
+                    rOption.GetEnum( aHTMLImgHAlignTable,
                                                     text::HoriOrientation::NONE );
                 break;
             case HTML_O_WIDTH:
                 // erstmal nur als Pixelwerte merken!
-                nWidth = pOption->GetNumber();
-                bPrcWidth = (pOption->GetString().Search('%') != STRING_NOTFOUND);
+                nWidth = rOption.GetNumber();
+                bPrcWidth = (rOption.GetString().Search('%') != STRING_NOTFOUND);
                 if( bPrcWidth && nWidth>100 )
                     nWidth = 100;
                 break;
             case HTML_O_HEIGHT:
                 // erstmal nur als Pixelwerte merken!
-                nHeight = pOption->GetNumber();
-                bPrcHeight = (pOption->GetString().Search('%') != STRING_NOTFOUND);
+                nHeight = rOption.GetNumber();
+                bPrcHeight = (rOption.GetString().Search('%') != STRING_NOTFOUND);
                 if( bPrcHeight && nHeight>100 )
                     nHeight = 100;
                 break;
             case HTML_O_VSPACE:
-                nVSpace = pOption->GetNumber();
+                nVSpace = rOption.GetNumber();
                 break;
             case HTML_O_HSPACE:
-                nHSpace = pOption->GetNumber();
+                nHSpace = rOption.GetNumber();
                 break;
             case HTML_O_ALT:
-                sAltNm = pOption->GetString();
+                sAltNm = rOption.GetString();
                 break;
             case HTML_O_BORDER:
-                nBorder = (sal_uInt16)pOption->GetNumber();
+                nBorder = (sal_uInt16)rOption.GetNumber();
                 break;
             case HTML_O_ISMAP:
                 bIsMap = sal_True;
                 break;
             case HTML_O_USEMAP:
-                aMap = pOption->GetString();
+                aMap = rOption.GetString();
                 break;
             case HTML_O_NAME:
-                sHTMLGrfName = pOption->GetString();
+                sHTMLGrfName = rOption.GetString();
                 break;
 
             case HTML_O_SDONLOAD:
@@ -422,7 +422,7 @@ void SwHTMLParser::InsertImage()
                 goto IMAGE_SETEVENT;
 IMAGE_SETEVENT:
                 {
-                    String sTmp( pOption->GetString() );
+                    String sTmp( rOption.GetString() );
                     if( sTmp.Len() )
                     {
                         sTmp.ConvertLineEnd();
@@ -816,36 +816,36 @@ void SwHTMLParser::InsertBodyOptions()
     String sDfltScriptType;
     GetDefaultScriptType( eDfltScriptType, sDfltScriptType );
 
-    const HTMLOptions *pHTMLOptions = GetOptions();
-    for( sal_uInt16 i = pHTMLOptions->Count(); i; )
+    const HTMLOptions& rHTMLOptions = GetOptions();
+    for (size_t i = rHTMLOptions.size(); i; )
     {
-        const HTMLOption *pOption = (*pHTMLOptions)[--i];
+        const HTMLOption& rOption = rHTMLOptions[--i];
         ScriptType eScriptType2 = eDfltScriptType;
         rtl::OUString aEvent;
         sal_Bool bSetEvent = sal_False;
 
-        switch( pOption->GetToken() )
+        switch( rOption.GetToken() )
         {
             case HTML_O_ID:
-                aId = pOption->GetString();
+                aId = rOption.GetString();
                 break;
             case HTML_O_BACKGROUND:
-                aBackGround = pOption->GetString();
+                aBackGround = rOption.GetString();
                 break;
             case HTML_O_BGCOLOR:
-                pOption->GetColor( aBGColor );
+                rOption.GetColor( aBGColor );
                 bBGColor = sal_True;
                 break;
             case HTML_O_TEXT:
-                pOption->GetColor( aTextColor );
+                rOption.GetColor( aTextColor );
                 bTextColor = sal_True;
                 break;
             case HTML_O_LINK:
-                pOption->GetColor( aLinkColor );
+                rOption.GetColor( aLinkColor );
                 bLinkColor = sal_True;
                 break;
             case HTML_O_VLINK:
-                pOption->GetColor( aVLinkColor );
+                rOption.GetColor( aVLinkColor );
                 bVLinkColor = sal_True;
                 break;
 
@@ -881,20 +881,20 @@ void SwHTMLParser::InsertBodyOptions()
                 break;
 
             case HTML_O_STYLE:
-                aStyle = pOption->GetString();
+                aStyle = rOption.GetString();
                 bTextColor = sal_True;
                 break;
             case HTML_O_LANG:
-                aLang = pOption->GetString();
+                aLang = rOption.GetString();
                 break;
             case HTML_O_DIR:
-                aDir = pOption->GetString();
+                aDir = rOption.GetString();
                 break;
         }
 
         if( bSetEvent )
         {
-            const String& rEvent = pOption->GetString();
+            const String& rEvent = rOption.GetString();
             if( rEvent.Len() )
                 InsertBasicDocEvent( aEvent, rEvent, eScriptType2,
                                      sDfltScriptType );
@@ -1050,43 +1050,43 @@ void SwHTMLParser::NewAnchor()
     String sDfltScriptType;
     GetDefaultScriptType( eDfltScriptType, sDfltScriptType );
 
-    const HTMLOptions *pHTMLOptions = GetOptions();
-    for( sal_uInt16 i = pHTMLOptions->Count(); i; )
+    const HTMLOptions& rHTMLOptions = GetOptions();
+    for (size_t i = rHTMLOptions.size(); i; )
     {
         sal_uInt16 nEvent = 0;
         ScriptType eScriptType2 = eDfltScriptType;
-        const HTMLOption *pOption = (*pHTMLOptions)[--i];
-        switch( pOption->GetToken() )
+        const HTMLOption& rOption = rHTMLOptions[--i];
+        switch( rOption.GetToken() )
         {
             case HTML_O_NAME:
-                aName = pOption->GetString();
+                aName = rOption.GetString();
                 break;
 
             case HTML_O_HREF:
-                sHRef = pOption->GetString();
+                sHRef = rOption.GetString();
                 bHasHRef = sal_True;
                 break;
             case HTML_O_TARGET:
-                sTarget = pOption->GetString();
+                sTarget = rOption.GetString();
                 break;
 
             case HTML_O_STYLE:
-                aStyle = pOption->GetString();
+                aStyle = rOption.GetString();
                 break;
             case HTML_O_ID:
-                aId = pOption->GetString();
+                aId = rOption.GetString();
                 break;
             case HTML_O_CLASS:
-                aClass = pOption->GetString();
+                aClass = rOption.GetString();
                 break;
             case HTML_O_SDFIXED:
                 bFixed = sal_True;
                 break;
             case HTML_O_LANG:
-                aLang = pOption->GetString();
+                aLang = rOption.GetString();
                 break;
             case HTML_O_DIR:
-                aDir = pOption->GetString();
+                aDir = rOption.GetString();
                 break;
 
             case HTML_O_SDONCLICK:
@@ -1108,7 +1108,7 @@ void SwHTMLParser::NewAnchor()
                 goto ANCHOR_SETEVENT;
 ANCHOR_SETEVENT:
                 {
-                    String sTmp( pOption->GetString() );
+                    String sTmp( rOption.GetString() );
                     if( sTmp.Len() )
                     {
                         sTmp.ConvertLineEnd();

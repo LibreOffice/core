@@ -1302,14 +1302,14 @@ void SwHTMLParser::NextToken( int nToken )
 
     case HTML_BASE:
         {
-            const HTMLOptions *pHTMLOptions = GetOptions();
-            for( sal_uInt16 i = pHTMLOptions->Count(); i; )
+            const HTMLOptions& rHTMLOptions = GetOptions();
+            for (size_t i = rHTMLOptions.size(); i; )
             {
-                const HTMLOption *pOption = (*pHTMLOptions)[ --i ];
-                switch( pOption->GetToken() )
+                const HTMLOption& rOption = rHTMLOptions[--i];
+                switch( rOption.GetToken() )
                 {
                 case HTML_O_HREF:
-                    sBaseURL = pOption->GetString();
+                    sBaseURL = rOption.GetString();
                     break;
                 case HTML_O_TARGET:
                     if( IsNewDoc() )
@@ -1324,7 +1324,7 @@ void SwHTMLParser::NextToken( int nToken )
                             OSL_ENSURE(xDocProps.is(),"no DocumentProperties");
                             if (xDocProps.is()) {
                                 xDocProps->setDefaultTarget(
-                                    pOption->GetString());
+                                    rOption.GetString());
                             }
                         }
                     }
@@ -1916,13 +1916,13 @@ void SwHTMLParser::NextToken( int nToken )
         break;      // don't evaluate further???
     case HTML_HTML_ON:
         {
-            const HTMLOptions *pHTMLOptions = GetOptions();
-            for( sal_uInt16 i = pHTMLOptions->Count(); i; )
+            const HTMLOptions& rHTMLOptions = GetOptions();
+            for (size_t i = rHTMLOptions.size(); i; )
             {
-                const HTMLOption *pOption = (*pHTMLOptions)[ --i ];
-                if( HTML_O_DIR == pOption->GetToken() )
+                const HTMLOption& rOption = rHTMLOptions[--i];
+                if( HTML_O_DIR == rOption.GetToken() )
                 {
-                    const String& rDir = pOption->GetString();
+                    const String& rDir = rOption.GetString();
                     SfxItemSet aItemSet( pDoc->GetAttrPool(),
                                          pCSS1Parser->GetWhichMap() );
                     SvxCSS1PropertyInfo aPropInfo;
@@ -3355,32 +3355,30 @@ void SwHTMLParser::InsertAttrs( _HTMLAttrs& rAttrs )
     }
 }
 
-/*  */
-
 void SwHTMLParser::NewStdAttr( int nToken )
 {
     String aId, aStyle, aClass, aLang, aDir;
 
-    const HTMLOptions *pHTMLOptions = GetOptions();
-    for( sal_uInt16 i = pHTMLOptions->Count(); i; )
+    const HTMLOptions& rHTMLOptions = GetOptions();
+    for (size_t i = rHTMLOptions.size(); i; )
     {
-        const HTMLOption *pOption = (*pHTMLOptions)[--i];
-        switch( pOption->GetToken() )
+        const HTMLOption& rOption = rHTMLOptions[--i];
+        switch( rOption.GetToken() )
         {
         case HTML_O_ID:
-            aId = pOption->GetString();
+            aId = rOption.GetString();
             break;
         case HTML_O_STYLE:
-            aStyle = pOption->GetString();
+            aStyle = rOption.GetString();
             break;
         case HTML_O_CLASS:
-            aClass = pOption->GetString();
+            aClass = rOption.GetString();
             break;
         case HTML_O_LANG:
-            aLang = pOption->GetString();
+            aLang = rOption.GetString();
             break;
         case HTML_O_DIR:
-            aDir = pOption->GetString();
+            aDir = rOption.GetString();
             break;
         }
     }
@@ -3414,26 +3412,26 @@ void SwHTMLParser::NewStdAttr( int nToken,
 {
     String aId, aStyle, aClass, aLang, aDir;
 
-    const HTMLOptions *pHTMLOptions = GetOptions();
-    for( sal_uInt16 i = pHTMLOptions->Count(); i; )
+    const HTMLOptions& rHTMLOptions = GetOptions();
+    for (size_t i = rHTMLOptions.size(); i; )
     {
-        const HTMLOption *pOption = (*pHTMLOptions)[--i];
-        switch( pOption->GetToken() )
+        const HTMLOption& rOption = rHTMLOptions[--i];
+        switch( rOption.GetToken() )
         {
         case HTML_O_ID:
-            aId = pOption->GetString();
+            aId = rOption.GetString();
             break;
         case HTML_O_STYLE:
-            aStyle = pOption->GetString();
+            aStyle = rOption.GetString();
             break;
         case HTML_O_CLASS:
-            aClass = pOption->GetString();
+            aClass = rOption.GetString();
             break;
         case HTML_O_LANG:
-            aLang = pOption->GetString();
+            aLang = rOption.GetString();
             break;
         case HTML_O_DIR:
-            aDir = pOption->GetString();
+            aDir = rOption.GetString();
             break;
         }
     }
@@ -3495,29 +3493,29 @@ void SwHTMLParser::NewBasefontAttr()
     String aId, aStyle, aClass, aLang, aDir;
     sal_uInt16 nSize = 3;
 
-    const HTMLOptions *pHTMLOptions = GetOptions();
-    for( sal_uInt16 i = pHTMLOptions->Count(); i; )
+    const HTMLOptions& rHTMLOptions = GetOptions();
+    for (size_t i = rHTMLOptions.size(); i; )
     {
-        const HTMLOption *pOption = (*pHTMLOptions)[--i];
-        switch( pOption->GetToken() )
+        const HTMLOption& rOption = rHTMLOptions[--i];
+        switch( rOption.GetToken() )
         {
         case HTML_O_SIZE:
-            nSize = (sal_uInt16)pOption->GetNumber();
+            nSize = (sal_uInt16)rOption.GetNumber();
             break;
         case HTML_O_ID:
-            aId = pOption->GetString();
+            aId = rOption.GetString();
             break;
         case HTML_O_STYLE:
-            aStyle = pOption->GetString();
+            aStyle = rOption.GetString();
             break;
         case HTML_O_CLASS:
-            aClass = pOption->GetString();
+            aClass = rOption.GetString();
             break;
         case HTML_O_LANG:
-            aLang = pOption->GetString();
+            aLang = rOption.GetString();
             break;
         case HTML_O_DIR:
-            aDir = pOption->GetString();
+            aDir = rOption.GetString();
             break;
         }
     }
@@ -3592,21 +3590,21 @@ void SwHTMLParser::NewFontAttr( int nToken )
     sal_uInt16 nSize = 0;       // Fontgroesse in Netscape-Notation (1-7)
     sal_Bool bColor = sal_False;
 
-    const HTMLOptions *pHTMLOptions = GetOptions();
-    for( sal_uInt16 i = pHTMLOptions->Count(); i; )
+    const HTMLOptions& rHTMLOptions = GetOptions();
+    for (size_t i = rHTMLOptions.size(); i; )
     {
-        const HTMLOption *pOption = (*pHTMLOptions)[--i];
-        switch( pOption->GetToken() )
+        const HTMLOption& rOption = rHTMLOptions[--i];
+        switch( rOption.GetToken() )
         {
         case HTML_O_SIZE:
-            if( HTML_FONT_ON==nToken && pOption->GetString().Len() )
+            if( HTML_FONT_ON==nToken && rOption.GetString().Len() )
             {
                 sal_Int32 nSSize;
-                if( '+' == pOption->GetString().GetChar(0) ||
-                    '-' == pOption->GetString().GetChar(0) )
-                    nSSize = nBaseSize + pOption->GetSNumber();
+                if( '+' == rOption.GetString().GetChar(0) ||
+                    '-' == rOption.GetString().GetChar(0) )
+                    nSSize = nBaseSize + rOption.GetSNumber();
                 else
-                    nSSize = (sal_Int32)pOption->GetNumber();
+                    nSSize = (sal_Int32)rOption.GetNumber();
 
                 if( nSSize < 1 )
                     nSSize = 1;
@@ -3620,28 +3618,28 @@ void SwHTMLParser::NewFontAttr( int nToken )
         case HTML_O_COLOR:
             if( HTML_FONT_ON==nToken )
             {
-                pOption->GetColor( aColor );
+                rOption.GetColor( aColor );
                 bColor = sal_True;
             }
             break;
         case HTML_O_FACE:
             if( HTML_FONT_ON==nToken )
-                aFace = pOption->GetString();
+                aFace = rOption.GetString();
             break;
         case HTML_O_ID:
-            aId = pOption->GetString();
+            aId = rOption.GetString();
             break;
         case HTML_O_STYLE:
-            aStyle = pOption->GetString();
+            aStyle = rOption.GetString();
             break;
         case HTML_O_CLASS:
-            aClass = pOption->GetString();
+            aClass = rOption.GetString();
             break;
         case HTML_O_LANG:
-            aLang = pOption->GetString();
+            aLang = rOption.GetString();
             break;
         case HTML_O_DIR:
-            aDir = pOption->GetString();
+            aDir = rOption.GetString();
             break;
         }
     }
@@ -3815,29 +3813,29 @@ void SwHTMLParser::NewPara()
     eParaAdjust = SVX_ADJUST_END;
     String aId, aStyle, aClass, aLang, aDir;
 
-    const HTMLOptions *pHTMLOptions = GetOptions();
-    for( sal_uInt16 i = pHTMLOptions->Count(); i; )
+    const HTMLOptions& rHTMLOptions = GetOptions();
+    for (size_t i = rHTMLOptions.size(); i; )
     {
-        const HTMLOption *pOption = (*pHTMLOptions)[--i];
-        switch( pOption->GetToken() )
+        const HTMLOption& rOption = rHTMLOptions[--i];
+        switch( rOption.GetToken() )
         {
             case HTML_O_ID:
-                aId = pOption->GetString();
+                aId = rOption.GetString();
                 break;
             case HTML_O_ALIGN:
-                eParaAdjust = (SvxAdjust)pOption->GetEnum( aHTMLPAlignTable, static_cast< sal_uInt16 >(eParaAdjust) );
+                eParaAdjust = (SvxAdjust)rOption.GetEnum( aHTMLPAlignTable, static_cast< sal_uInt16 >(eParaAdjust) );
                 break;
             case HTML_O_STYLE:
-                aStyle = pOption->GetString();
+                aStyle = rOption.GetString();
                 break;
             case HTML_O_CLASS:
-                aClass = pOption->GetString();
+                aClass = rOption.GetString();
                 break;
             case HTML_O_LANG:
-                aLang = pOption->GetString();
+                aLang = rOption.GetString();
                 break;
             case HTML_O_DIR:
-                aDir = pOption->GetString();
+                aDir = rOption.GetString();
                 break;
         }
     }
@@ -3935,29 +3933,29 @@ void SwHTMLParser::NewHeading( int nToken )
 
     String aId, aStyle, aClass, aLang, aDir;
 
-    const HTMLOptions *pHTMLOptions = GetOptions();
-    for( sal_uInt16 i = pHTMLOptions->Count(); i; )
+    const HTMLOptions& rHTMLOptions = GetOptions();
+    for (size_t i = rHTMLOptions.size(); i; )
     {
-        const HTMLOption *pOption = (*pHTMLOptions)[--i];
-        switch( pOption->GetToken() )
+        const HTMLOption& rOption = rHTMLOptions[--i];
+        switch( rOption.GetToken() )
         {
             case HTML_O_ID:
-                aId = pOption->GetString();
+                aId = rOption.GetString();
                 break;
             case HTML_O_ALIGN:
-                eParaAdjust = (SvxAdjust)pOption->GetEnum( aHTMLPAlignTable, static_cast< sal_uInt16 >(eParaAdjust) );
+                eParaAdjust = (SvxAdjust)rOption.GetEnum( aHTMLPAlignTable, static_cast< sal_uInt16 >(eParaAdjust) );
                 break;
             case HTML_O_STYLE:
-                aStyle = pOption->GetString();
+                aStyle = rOption.GetString();
                 break;
             case HTML_O_CLASS:
-                aClass = pOption->GetString();
+                aClass = rOption.GetString();
                 break;
             case HTML_O_LANG:
-                aLang = pOption->GetString();
+                aLang = rOption.GetString();
                 break;
             case HTML_O_DIR:
-                aDir = pOption->GetString();
+                aDir = rOption.GetString();
                 break;
         }
     }
@@ -4061,26 +4059,26 @@ void SwHTMLParser::NewTxtFmtColl( int nToken, sal_uInt16 nColl )
 {
     String aId, aStyle, aClass, aLang, aDir;
 
-    const HTMLOptions *pHTMLOptions = GetOptions();
-    for( sal_uInt16 i = pHTMLOptions->Count(); i; )
+    const HTMLOptions& rHTMLOptions = GetOptions();
+    for (size_t i = rHTMLOptions.size(); i; )
     {
-        const HTMLOption *pOption = (*pHTMLOptions)[--i];
-        switch( pOption->GetToken() )
+        const HTMLOption& rOption = rHTMLOptions[--i];
+        switch( rOption.GetToken() )
         {
             case HTML_O_ID:
-                aId = pOption->GetString();
+                aId = rOption.GetString();
                 break;
             case HTML_O_STYLE:
-                aStyle = pOption->GetString();
+                aStyle = rOption.GetString();
                 break;
             case HTML_O_CLASS:
-                aClass = pOption->GetString();
+                aClass = rOption.GetString();
                 break;
             case HTML_O_LANG:
-                aLang = pOption->GetString();
+                aLang = rOption.GetString();
                 break;
             case HTML_O_DIR:
-                aDir = pOption->GetString();
+                aDir = rOption.GetString();
                 break;
         }
     }
@@ -4190,26 +4188,26 @@ void SwHTMLParser::NewDefList()
 {
     String aId, aStyle, aClass, aLang, aDir;
 
-    const HTMLOptions *pHTMLOptions = GetOptions();
-    for( sal_uInt16 i = pHTMLOptions->Count(); i; )
+    const HTMLOptions& rHTMLOptions = GetOptions();
+    for (size_t i = rHTMLOptions.size(); i; )
     {
-        const HTMLOption *pOption = (*pHTMLOptions)[--i];
-        switch( pOption->GetToken() )
+        const HTMLOption& rOption = rHTMLOptions[--i];
+        switch( rOption.GetToken() )
         {
             case HTML_O_ID:
-                aId = pOption->GetString();
+                aId = rOption.GetString();
                 break;
             case HTML_O_STYLE:
-                aStyle = pOption->GetString();
+                aStyle = rOption.GetString();
                 break;
             case HTML_O_CLASS:
-                aClass = pOption->GetString();
+                aClass = rOption.GetString();
                 break;
             case HTML_O_LANG:
-                aLang = pOption->GetString();
+                aLang = rOption.GetString();
                 break;
             case HTML_O_DIR:
-                aDir = pOption->GetString();
+                aDir = rOption.GetString();
                 break;
         }
     }
@@ -4713,26 +4711,26 @@ void SwHTMLParser::NewCharFmt( int nToken )
 {
     String aId, aStyle, aClass, aLang, aDir;
 
-    const HTMLOptions *pHTMLOptions = GetOptions();
-    for( sal_uInt16 i = pHTMLOptions->Count(); i; )
+    const HTMLOptions& rHTMLOptions = GetOptions();
+    for (size_t i = rHTMLOptions.size(); i; )
     {
-        const HTMLOption *pOption = (*pHTMLOptions)[--i];
-        switch( pOption->GetToken() )
+        const HTMLOption& rOption = rHTMLOptions[--i];
+        switch( rOption.GetToken() )
         {
         case HTML_O_ID:
-            aId = pOption->GetString();
+            aId = rOption.GetString();
             break;
         case HTML_O_STYLE:
-            aStyle = pOption->GetString();
+            aStyle = rOption.GetString();
             break;
         case HTML_O_CLASS:
-            aClass = pOption->GetString();
+            aClass = rOption.GetString();
             break;
         case HTML_O_LANG:
-            aLang = pOption->GetString();
+            aLang = rOption.GetString();
             break;
         case HTML_O_DIR:
-            aDir = pOption->GetString();
+            aDir = rOption.GetString();
             break;
         }
     }
@@ -4785,39 +4783,39 @@ void SwHTMLParser::InsertSpacer()
     sal_Bool bPrcHeight = sal_False;
     sal_uInt16 nType = HTML_SPTYPE_HORI;
 
-    const HTMLOptions *pHTMLOptions = GetOptions();
-    for( sal_uInt16 i = pHTMLOptions->Count(); i; )
+    const HTMLOptions& rHTMLOptions = GetOptions();
+    for (size_t i = rHTMLOptions.size(); i; )
     {
-        const HTMLOption *pOption = (*pHTMLOptions)[--i];
-        switch( pOption->GetToken() )
+        const HTMLOption& rOption = rHTMLOptions[--i];
+        switch( rOption.GetToken() )
         {
         case HTML_O_ID:
-            aId = pOption->GetString();
+            aId = rOption.GetString();
             break;
         case HTML_O_TYPE:
-            pOption->GetEnum( nType, aHTMLSpacerTypeTable );
+            rOption.GetEnum( nType, aHTMLSpacerTypeTable );
             break;
         case HTML_O_ALIGN:
             eVertOri =
-                pOption->GetEnum( aHTMLImgVAlignTable,
+                rOption.GetEnum( aHTMLImgVAlignTable,
                                   eVertOri );
             eHoriOri =
-                pOption->GetEnum( aHTMLImgHAlignTable,
+                rOption.GetEnum( aHTMLImgHAlignTable,
                                   eHoriOri );
             break;
         case HTML_O_WIDTH:
             // erstmal nur als Pixelwerte merken!
-            bPrcWidth = (pOption->GetString().Search('%') != STRING_NOTFOUND);
-            aSize.Width() = (long)pOption->GetNumber();
+            bPrcWidth = (rOption.GetString().Search('%') != STRING_NOTFOUND);
+            aSize.Width() = (long)rOption.GetNumber();
             break;
         case HTML_O_HEIGHT:
             // erstmal nur als Pixelwerte merken!
-            bPrcHeight = (pOption->GetString().Search('%') != STRING_NOTFOUND);
-            aSize.Height() = (long)pOption->GetNumber();
+            bPrcHeight = (rOption.GetString().Search('%') != STRING_NOTFOUND);
+            aSize.Height() = (long)rOption.GetNumber();
             break;
         case HTML_O_SIZE:
             // erstmal nur als Pixelwerte merken!
-            nSize = pOption->GetNumber();
+            nSize = rOption.GetNumber();
             break;
         }
     }
@@ -4990,13 +4988,13 @@ SwTwips SwHTMLParser::GetCurrentBrowseWidth()
 void SwHTMLParser::InsertIDOption()
 {
     String aId;
-    const HTMLOptions *pHTMLOptions = GetOptions();
-    for( sal_uInt16 i = pHTMLOptions->Count(); i; )
+    const HTMLOptions& rHTMLOptions = GetOptions();
+    for (size_t i = rHTMLOptions.size(); i; )
     {
-        const HTMLOption *pOption = (*pHTMLOptions)[--i];
-        if( HTML_O_ID==pOption->GetToken() )
+        const HTMLOption& rOption = rHTMLOptions[--i];
+        if( HTML_O_ID==rOption.GetToken() )
         {
-            aId = pOption->GetString();
+            aId = rOption.GetString();
             break;
         }
     }
@@ -5032,15 +5030,15 @@ void SwHTMLParser::InsertLineBreak()
     sal_Bool bCleared = sal_False;  // wurde ein CLEAR ausgefuehrt?
 
     // dann holen wir mal die Optionen
-    const HTMLOptions *pHTMLOptions = GetOptions();
-    for( sal_uInt16 i = pHTMLOptions->Count(); i; )
+    const HTMLOptions& rHTMLOptions = GetOptions();
+    for (size_t i = rHTMLOptions.size(); i; )
     {
-        const HTMLOption *pOption = (*pHTMLOptions)[--i];
-        switch( pOption->GetToken() )
+        const HTMLOption& rOption = rHTMLOptions[--i];
+        switch( rOption.GetToken() )
         {
             case HTML_O_CLEAR:
                 {
-                    const String &aClear = pOption->GetString();
+                    const String &aClear = rOption.GetString();
                     if( aClear.EqualsIgnoreCaseAscii( OOO_STRING_SVTOOLS_HTML_AL_all ) )
                     {
                         bClearLeft = sal_True;
@@ -5053,13 +5051,13 @@ void SwHTMLParser::InsertLineBreak()
                 }
                 break;
             case HTML_O_ID:
-                aId = pOption->GetString();
+                aId = rOption.GetString();
                 break;
             case HTML_O_STYLE:
-                aStyle = pOption->GetString();
+                aStyle = rOption.GetString();
                 break;
             case HTML_O_CLASS:
-                aClass = pOption->GetString();
+                aClass = rOption.GetString();
                 break;
         }
     }
@@ -5179,21 +5177,21 @@ void SwHTMLParser::InsertHorzRule()
     String aId;
 
     // dann holen wir mal die Optionen
-    const HTMLOptions *pHTMLOptions = GetOptions();
-    for( sal_uInt16 i = pHTMLOptions->Count(); i; )
+    const HTMLOptions& rHTMLOptions = GetOptions();
+    for (size_t i = rHTMLOptions.size(); i; )
     {
-        const HTMLOption *pOption = (*pHTMLOptions)[--i];
-        switch( pOption->GetToken() )
+        const HTMLOption& rOption = rHTMLOptions[--i];
+        switch( rOption.GetToken() )
         {
         case HTML_O_ID:
-            aId = pOption->GetString();
+            aId = rOption.GetString();
             break;
         case HTML_O_SIZE:
-            nSize = (sal_uInt16)pOption->GetNumber();
+            nSize = (sal_uInt16)rOption.GetNumber();
             break;
         case HTML_O_WIDTH:
-            bPrcWidth = (pOption->GetString().Search('%') != STRING_NOTFOUND);
-            nWidth = (sal_uInt16)pOption->GetNumber();
+            bPrcWidth = (rOption.GetString().Search('%') != STRING_NOTFOUND);
+            nWidth = (sal_uInt16)rOption.GetNumber();
             if( bPrcWidth && nWidth>=100 )
             {
                 // 100%-Linien sind der default-Fall (keine Attrs neotig)
@@ -5203,13 +5201,13 @@ void SwHTMLParser::InsertHorzRule()
             break;
         case HTML_O_ALIGN:
             eAdjust =
-                (SvxAdjust)pOption->GetEnum( aHTMLPAlignTable, static_cast< sal_uInt16 >(eAdjust) );
+                (SvxAdjust)rOption.GetEnum( aHTMLPAlignTable, static_cast< sal_uInt16 >(eAdjust) );
             break;
         case HTML_O_NOSHADE:
             bNoShade = sal_True;
             break;
         case HTML_O_COLOR:
-            pOption->GetColor( aColor );
+            rOption.GetColor( aColor );
             bColor = sal_True;
             break;
         }
@@ -5330,22 +5328,22 @@ void SwHTMLParser::ParseMoreMetaOptions()
     String aName, aContent;
     sal_Bool bHTTPEquiv = sal_False;
 
-    const HTMLOptions *pHTMLOptions = GetOptions();
-    for( sal_uInt16 i = pHTMLOptions->Count(); i; )
+    const HTMLOptions& rHTMLOptions = GetOptions();
+    for (size_t i = rHTMLOptions.size(); i; )
     {
-        const HTMLOption *pOption = (*pHTMLOptions)[ --i ];
-        switch( pOption->GetToken() )
+        const HTMLOption& rOption = rHTMLOptions[--i];
+        switch( rOption.GetToken() )
         {
         case HTML_O_NAME:
-            aName = pOption->GetString();
+            aName = rOption.GetString();
             bHTTPEquiv = sal_False;
             break;
         case HTML_O_HTTPEQUIV:
-            aName = pOption->GetString();
+            aName = rOption.GetString();
             bHTTPEquiv = sal_True;
             break;
         case HTML_O_CONTENT:
-            aContent = pOption->GetString();
+            aContent = rOption.GetString();
             break;
         }
     }

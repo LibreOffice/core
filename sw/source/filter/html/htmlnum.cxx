@@ -180,23 +180,23 @@ void SwHTMLParser::NewNumBulList( int nToken )
     String aId, aStyle, aClass, aBulletSrc, aLang, aDir;
     sal_Int16 eVertOri = text::VertOrientation::NONE;
     sal_uInt16 nWidth=USHRT_MAX, nHeight=USHRT_MAX;
-    const HTMLOptions *pHTMLOptions = GetOptions();
-    for( sal_uInt16 i = pHTMLOptions->Count(); i; )
+    const HTMLOptions& rHTMLOptions = GetOptions();
+    for (size_t i = rHTMLOptions.size(); i; )
     {
-        const HTMLOption *pOption = (*pHTMLOptions)[--i];
-        switch( pOption->GetToken() )
+        const HTMLOption& rOption = rHTMLOptions[--i];
+        switch( rOption.GetToken() )
         {
         case HTML_O_ID:
-            aId = pOption->GetString();
+            aId = rOption.GetString();
             break;
         case HTML_O_TYPE:
-            if( bNewNumFmt && pOption->GetString().Len() )
+            if( bNewNumFmt && rOption.GetString().Len() )
             {
                 switch( nToken )
                 {
                 case HTML_ORDERLIST_ON:
                     bChangeNumFmt = sal_True;
-                    switch( pOption->GetString().GetChar(0) )
+                    switch( rOption.GetString().GetChar(0) )
                     {
                     case 'A':   aNumFmt.SetNumberingType(SVX_NUM_CHARS_UPPER_LETTER); break;
                     case 'a':   aNumFmt.SetNumberingType(SVX_NUM_CHARS_LOWER_LETTER); break;
@@ -207,7 +207,7 @@ void SwHTMLParser::NewNumBulList( int nToken )
                     break;
 
                 case HTML_UNORDERLIST_ON:
-                    aNumFmt.SetBulletChar( (sal_Unicode)pOption->GetEnum(
+                    aNumFmt.SetBulletChar( (sal_Unicode)rOption.GetEnum(
                                     aHTMLULTypeTable,aNumFmt.GetBulletChar() ) );
                     bChangeNumFmt = sal_True;
                     break;
@@ -216,7 +216,7 @@ void SwHTMLParser::NewNumBulList( int nToken )
             break;
         case HTML_O_START:
             {
-                sal_uInt16 nStart = (sal_uInt16)pOption->GetNumber();
+                sal_uInt16 nStart = (sal_uInt16)rOption.GetNumber();
                 if( bNewNumFmt )
                 {
                     aNumFmt.SetStart( nStart );
@@ -229,34 +229,34 @@ void SwHTMLParser::NewNumBulList( int nToken )
             }
             break;
         case HTML_O_STYLE:
-            aStyle = pOption->GetString();
+            aStyle = rOption.GetString();
             break;
         case HTML_O_CLASS:
-            aClass = pOption->GetString();
+            aClass = rOption.GetString();
             break;
         case HTML_O_LANG:
-            aLang = pOption->GetString();
+            aLang = rOption.GetString();
             break;
         case HTML_O_DIR:
-            aDir = pOption->GetString();
+            aDir = rOption.GetString();
             break;
         case HTML_O_SRC:
             if( bNewNumFmt )
             {
-                aBulletSrc = pOption->GetString();
+                aBulletSrc = rOption.GetString();
                 if( !InternalImgToPrivateURL(aBulletSrc) )
                     aBulletSrc = URIHelper::SmartRel2Abs( INetURLObject( sBaseURL ), aBulletSrc, Link(), false );
             }
             break;
         case HTML_O_WIDTH:
-            nWidth = (sal_uInt16)pOption->GetNumber();
+            nWidth = (sal_uInt16)rOption.GetNumber();
             break;
         case HTML_O_HEIGHT:
-            nHeight = (sal_uInt16)pOption->GetNumber();
+            nHeight = (sal_uInt16)rOption.GetNumber();
             break;
         case HTML_O_ALIGN:
             eVertOri =
-                (sal_Int16)pOption->GetEnum( aHTMLImgVAlignTable,
+                (sal_Int16)rOption.GetEnum( aHTMLImgVAlignTable,
                                                 static_cast< sal_uInt16 >(eVertOri) );
             break;
         }
@@ -485,29 +485,29 @@ void SwHTMLParser::NewNumBulListItem( int nToken )
     if( USHRT_MAX != nStart )
         GetNumInfo().SetNodeStartValue( nLevel );
 
-    const HTMLOptions *pHTMLOptions = GetOptions();
-    for( sal_uInt16 i = pHTMLOptions->Count(); i; )
+    const HTMLOptions& rHTMLOptions = GetOptions();
+    for (size_t i = rHTMLOptions.size(); i; )
     {
-        const HTMLOption *pOption = (*pHTMLOptions)[--i];
-        switch( pOption->GetToken() )
+        const HTMLOption& rOption = rHTMLOptions[--i];
+        switch( rOption.GetToken() )
         {
             case HTML_O_VALUE:
-                nStart = (sal_uInt16)pOption->GetNumber();
+                nStart = (sal_uInt16)rOption.GetNumber();
                 break;
             case HTML_O_ID:
-                aId = pOption->GetString();
+                aId = rOption.GetString();
                 break;
             case HTML_O_STYLE:
-                aStyle = pOption->GetString();
+                aStyle = rOption.GetString();
                 break;
             case HTML_O_CLASS:
-                aClass = pOption->GetString();
+                aClass = rOption.GetString();
                 break;
             case HTML_O_LANG:
-                aLang = pOption->GetString();
+                aLang = rOption.GetString();
                 break;
             case HTML_O_DIR:
-                aDir = pOption->GetString();
+                aDir = rOption.GetString();
                 break;
         }
     }

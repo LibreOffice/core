@@ -73,9 +73,6 @@
 
 using namespace ::com::sun::star;
 
-
-/*  */
-
 void SwHTMLParser::NewDivision( int nToken )
 {
     String aId, aHRef, aStyle, aClass, aLang, aDir;
@@ -83,38 +80,38 @@ void SwHTMLParser::NewDivision( int nToken )
                                                : SVX_ADJUST_END;
 
     sal_Bool bHeader=sal_False, bFooter=sal_False;
-    const HTMLOptions *pHTMLOptions = GetOptions();
-    for( sal_uInt16 i = pHTMLOptions->Count(); i; )
+    const HTMLOptions& rHTMLOptions = GetOptions();
+    for (size_t i = rHTMLOptions.size(); i; )
     {
-        const HTMLOption *pOption = (*pHTMLOptions)[--i];
-        switch( pOption->GetToken() )
+        const HTMLOption& rOption = rHTMLOptions[--i];
+        switch( rOption.GetToken() )
         {
         case HTML_O_ID:
-            aId = pOption->GetString();
+            aId = rOption.GetString();
             break;
         case HTML_O_ALIGN:
             if( HTML_DIVISION_ON==nToken )
-                eAdjust = (SvxAdjust)pOption->GetEnum( aHTMLPAlignTable,
+                eAdjust = (SvxAdjust)rOption.GetEnum( aHTMLPAlignTable,
                                                        static_cast< sal_uInt16 >(eAdjust) );
             break;
         case HTML_O_STYLE:
-            aStyle = pOption->GetString();
+            aStyle = rOption.GetString();
             break;
         case HTML_O_CLASS:
-            aClass = pOption->GetString();
+            aClass = rOption.GetString();
             break;
         case HTML_O_LANG:
-            aLang = pOption->GetString();
+            aLang = rOption.GetString();
             break;
         case HTML_O_DIR:
-            aDir = pOption->GetString();
+            aDir = rOption.GetString();
             break;
         case HTML_O_HREF:
-            aHRef =  pOption->GetString();
+            aHRef =  rOption.GetString();
             break;
         case HTML_O_TYPE:
             {
-                const String& rType = pOption->GetString();
+                const String& rType = rOption.GetString();
                 if( rType.EqualsIgnoreCaseAscii( "HEADER" ) )
                     bHeader = sal_True;
                 else if( rType.EqualsIgnoreCaseAscii( "FOOTER" ) )
@@ -547,8 +544,6 @@ sal_Bool SwHTMLParser::EndSections( sal_Bool bLFStripped )
     return bSectionClosed;
 }
 
-/*  */
-
 void SwHTMLParser::NewMultiCol()
 {
     String aId, aStyle, aClass, aLang, aDir;
@@ -556,40 +551,38 @@ void SwHTMLParser::NewMultiCol()
     sal_uInt16 nCols = 0, nGutter = 10;
     sal_Bool bPrcWidth = sal_True;
 
-    const HTMLOptions *pHTMLOptions = GetOptions();
-    sal_uInt16 i;
-
-    for( i = pHTMLOptions->Count(); i; )
+    const HTMLOptions& rHTMLOptions = GetOptions();
+    for (size_t i = rHTMLOptions.size(); i; )
     {
-        const HTMLOption *pOption = (*pHTMLOptions)[--i];
-        switch( pOption->GetToken() )
+        const HTMLOption& rOption = rHTMLOptions[--i];
+        switch( rOption.GetToken() )
         {
         case HTML_O_ID:
-            aId = pOption->GetString();
+            aId = rOption.GetString();
             break;
         case HTML_O_STYLE:
-            aStyle = pOption->GetString();
+            aStyle = rOption.GetString();
             break;
         case HTML_O_CLASS:
-            aClass = pOption->GetString();
+            aClass = rOption.GetString();
             break;
         case HTML_O_LANG:
-            aLang = pOption->GetString();
+            aLang = rOption.GetString();
             break;
         case HTML_O_DIR:
-            aDir = pOption->GetString();
+            aDir = rOption.GetString();
             break;
         case HTML_O_COLS:
-            nCols = (sal_uInt16)pOption->GetNumber();
+            nCols = (sal_uInt16)rOption.GetNumber();
             break;
         case HTML_O_WIDTH:
-            nWidth = pOption->GetNumber();
-            bPrcWidth = (pOption->GetString().Search('%') != STRING_NOTFOUND);
+            nWidth = rOption.GetNumber();
+            bPrcWidth = (rOption.GetString().Search('%') != STRING_NOTFOUND);
             if( bPrcWidth && nWidth>100 )
                 nWidth = 100;
             break;
         case HTML_O_GUTTER:
-            nGutter = (sal_uInt16)pOption->GetNumber();
+            nGutter = (sal_uInt16)rOption.GetNumber();
             break;
 
         }
@@ -600,7 +593,7 @@ void SwHTMLParser::NewMultiCol()
     //.is the multicol elememt contained in a container? That may be the
     // case for 5.0 documents.
     sal_Bool bInCntnr = sal_False;
-    i = aContexts.Count();
+    sal_uInt16 i = aContexts.Count();
     while( !bInCntnr && i > nContextStMin )
         bInCntnr = 0 != aContexts[--i]->GetFrmItemSet();
 
