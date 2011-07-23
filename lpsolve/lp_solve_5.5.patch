@@ -48,7 +48,7 @@
  rm *.o 2>/dev/null
 --- misc/build/lp_solve_5.5/lpsolve55/ccc.osx.orig	Thu Jun 23 22:53:08 2005
 +++ misc/build/lp_solve_5.5/lpsolve55/ccc.osx	Sun May 22 11:19:48 2011
-@@ -1,8 +1,12 @@
+@@ -1,23 +1,32 @@
  src='../lp_MDO.c ../shared/commonlib.c ../shared/mmio.c ../shared/myblas.c ../ini.c ../fortify.c ../colamd/colamd.c ../lp_rlp.c ../lp_crash.c ../bfp/bfp_LUSOL/lp_LUSOL.c ../bfp/bfp_LUSOL/LUSOL/lusol.c ../lp_Hash.c ../lp_lib.c ../lp_wlp.c ../lp_matrix.c ../lp_mipbb.c ../lp_MPS.c ../lp_params.c ../lp_presolve.c ../lp_price.c ../lp_pricePSE.c ../lp_report.c ../lp_scale.c ../lp_simplex.c ../lp_SOS.c ../lp_utils.c ../yacc_read.c'
 -c=cc
 +c=$CC
@@ -62,9 +62,16 @@
  if [ "$PLATFORM" = "SCO_UNIX" ]
  then def='-DLoadInverseLib=0 -DLoadLanguageLib=0 -D__HYPER=long'
  else dl=-ldl
-@@ -11,13 +15,13 @@
+      so=y
+ fi
  
- opts='-idirafter /usr/include/sys -O3 -DINTEGERTIME -Wno-long-double'
+-opts='-idirafter /usr/include/sys -O3 -DINTEGERTIME -Wno-long-double'
++if [ "$HAVE_GCC_NO_LONG_DOUBLE" = "YES" ] ; then
++    opts='-idirafter /usr/include/sys -O3 -DINTEGERTIME -Wno-long-double'
++else
++    opts='-idirafter /usr/include/sys -O3 -DINTEGERTIME'
++fi
++
  
 -$c -s -c -I.. -I../shared -I../bfp -I../bfp/bfp_LUSOL -I../bfp/bfp_LUSOL/LUSOL -I../colamd $opts $def -DYY_NEVER_INTERACTIVE -DPARSER_LP -DINVERSE_ACTIVE=INVERSE_LUSOL -DRoleIsExternalInvEngine $src
 +$c $extra_cflags -s -c -I.. -I../shared -I../bfp -I../bfp/bfp_LUSOL -I../bfp/bfp_LUSOL/LUSOL -I../colamd $opts $def -DYY_NEVER_INTERACTIVE -DPARSER_LP -DINVERSE_ACTIVE=INVERSE_LUSOL -DRoleIsExternalInvEngine $extra_cdefs $src
