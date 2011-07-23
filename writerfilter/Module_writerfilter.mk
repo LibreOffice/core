@@ -37,4 +37,12 @@ $(eval $(call gb_Module_add_targets,writerfilter,\
     Package_writerfilter_generated \
 ))
 
+$(eval $(call gb_Module_add_check_targets,writerfilter,\
+    CppunitTest_writerfilter_doctok \
+))
+
+$(eval $(call gb_Module_add_subsequentcheck_targets,writerfilter,\
+    JunitTest_writerfilter_complex \
+))
+
 # vim: set noet ts=4 sw=4:

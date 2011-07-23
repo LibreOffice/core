@@ -1,9 +1,19 @@
 
 package complex.ooxml;
+
+import com.sun.star.lang.XComponent;
 import com.sun.star.lang.XMultiServiceFactory;
+import com.sun.star.uno.UnoRuntime;
 import complexlib.ComplexTestCase;
 import java.io.File;
-import com.sun.star.text.XTextDocument;
+import org.junit.After;
+import org.junit.AfterClass;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
+import org.openoffice.test.Argument;
+import org.openoffice.test.OfficeConnection;
+import static org.junit.Assert.*;
 
 /*
  * To change this template, choose Tools | Templates
@@ -14,38 +24,54 @@ import com.sun.star.text.XTextDocument;
  *
  * @author hb137859
  */
-public class LoadDocuments extends ComplexTestCase {
-    private XMultiServiceFactory m_xMSF;
-
-    @Override
-    public String[] getTestMethodNames() {
-        return new String [] {
-            "test1"
-        };
-    }
-
-    public void before() throws Exception {
-        m_xMSF = (XMultiServiceFactory) param.getMSF();
-    }
-
-    public void test1() {
-        String testDocumentsPath = util.utils.getFullTestDocName("");
-        log.println("Test documents in:" + testDocumentsPath);
+public class LoadDocuments {
+    @Test public void test1() {
+        String testDocumentsPath = Argument.get("tdoc");
+        System.out.println("Test documents in:" + testDocumentsPath);
 
         File dir = new File(testDocumentsPath);
         String [] files = dir.list();
 
-        if (files != null) {
-            for (int i = 0; i < files.length; ++i) {
-                log.println(files[i]);
-                String url = util.utils.getFullTestURL(files[i]);
-                log.println(url);
+        try {
+            if (files != null) {
+                for (int i = 0; i < files.length; ++i) {
+                    System.out.println(files[i]);
+                    String url = TestDocument.getUrl(files[i]);
+                    System.out.println(url);
 
-                XTextDocument xDoc = util.WriterTools.loadTextDoc(m_xMSF, url);
-                util.DesktopTools.closeDoc(xDoc);
+                    XComponent xDoc = util.DesktopTools.loadDoc(getMSF(), url, null);
+                    System.out.println("loaded.");
+                    util.DesktopTools.closeDoc(xDoc);
+                    System.out.println("done.");
+                }
+            } else {
+                fail("Files not found");
             }
-        } else {
-            failed();
+        }
+        catch (Exception e) {
+            System.out.println(e);
+            fail("failed");
         }
     }
+
+    private XMultiServiceFactory getMSF()
+    {
+        final XMultiServiceFactory xMSF1 = UnoRuntime.queryInterface(XMultiServiceFactory.class, connection.getComponentContext().getServiceManager());
+        return xMSF1;
+    }
+
+    // setup and close connections
+    @BeforeClass public static void setUpConnection() throws Exception
+    {
+        System.out.println("setUpConnection()");
+        connection.setUp();
+    }
+
+    @AfterClass public static void tearDownConnection()
+            throws InterruptedException, com.sun.star.uno.Exception
+    {
+        System.out.println("tearDownConnection()");
+        connection.tearDown();
+    }
+    private static final OfficeConnection connection = new OfficeConnection();
 }
