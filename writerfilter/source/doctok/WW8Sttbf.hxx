@@ -93,13 +93,6 @@ public:
        @param nPos     the index of the entry
      */
     rtl::OUString getEntry(sal_uInt32 nPos) const;
-
-    /**
-       Return the extra data of an entry.
-
-       @param nPos     the index of the entry
-    */
-    WW8StructBase::Pointer_t getExtraData(sal_uInt32 nPos);
 };
 
 class WW8SttbTableResource : public ::writerfilter::Reference<Table>

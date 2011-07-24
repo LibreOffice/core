@@ -47,11 +47,6 @@ void WW8StyleSheet::initPayload()
     entryOffsets.push_back(nOffset);
 }
 
-sal_uInt32 WW8StyleSheet::calcSize()
-{
-    return getCount();
-}
-
 sal_uInt32 WW8StyleSheet::getEntryCount()
 {
     return get_cstd();

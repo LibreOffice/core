@@ -76,17 +76,6 @@ sal_uInt32 WW8StructBase::getU32(sal_uInt32 nOffset) const
     return doctok::getU32(mSequence, nOffset);
 }
 
-sal_Bool WW8StructBase::getBit(sal_uInt32 nValue, sal_uInt16 nBit) const
-{
-    return (nValue & (1 << nBit)) != 0;
-}
-
-sal_uInt8 WW8StructBase::getNibble(sal_uInt32 nValue,
-                                   sal_uInt16 nShift) const
-{
-    return sal::static_int_cast<sal_uInt8>((nValue >> nShift) & 0xf);
-}
-
 sal_uInt8 getU8(const WW8StructBase::Sequence & rSeq,
                 sal_uInt32 nOffset)
 {

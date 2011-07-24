@@ -289,9 +289,8 @@ void TypeDetection::impl_checkResultsAndAddBestFilter(::comphelper::MediaDescrip
             aLock.clear();
             // <- SAFE
 
-            for (  OUStringList::const_iterator pIt  = lFilters.begin();
-                   pIt != lFilters.end() && sFilter.getLength() == 0 ;
-                 ++pIt                    )
+            for (OUStringList::const_iterator pIt  = lFilters.begin();
+                  pIt != lFilters.end(); ++pIt)
             {
                 // SAFE ->
                 aLock.reset();
@@ -303,6 +302,8 @@ void TypeDetection::impl_checkResultsAndAddBestFilter(::comphelper::MediaDescrip
 
                     if ((nFlags & FLAGVAL_IMPORT) == FLAGVAL_IMPORT)
                         sFilter = *pIt;
+                    if ((nFlags & FLAGVAL_PREFERRED) == FLAGVAL_PREFERRED)
+                        break;
                 }
                 catch(const css::uno::Exception&) {}
                 aLock.clear();
