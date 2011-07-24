@@ -4332,10 +4332,8 @@ no|disable)
         AC_MSG_RESULT([internal])
         enable_python=internal
     elif test $_os = Darwin; then
-        AC_MSG_RESULT([system, MacOSX10.4u.SDK (Python 2.3)])
-        enable_python=system
-        PYTHON_CFLAGS="-I/Developer/SDKs/MacOSX10.4u.sdk/System/Library/Frameworks/Python.framework/Versions/2.3/include/python2.3"
-        PYTHON_LIBS="-framework Python"
+        AC_MSG_RESULT([internal, neither 10.4's nor 10.5's Python is compatible with Python3-ified pyuno])
+        enable_python=internal
     else
         AC_MSG_RESULT([checking below])
         enable_python=auto
@@ -4365,10 +4363,10 @@ fi
 if test "$cross_compiling" != yes; then
     if test $enable_python = system; then
         dnl This causes an error if no Python found
-        AM_PATH_PYTHON([2.2])
+        AM_PATH_PYTHON([2.6])
     elif test $enable_python = auto; then
         dnl This allows lack of system Python
-        AM_PATH_PYTHON([2.2],, [:])
+        AM_PATH_PYTHON([2.6],, [:])
 
         if test "$PYTHON" = :; then
             enable_python=internal
@@ -4379,6 +4377,12 @@ if test "$cross_compiling" != yes; then
 fi
 
 if test $enable_python = system; then
+    if test $_os = Darwin; then
+        #TODO: conditionalize for chosen Mac-SDK (configure switch not yet available)
+        AC_MSG_ERROR([system python is not compatible with pyuno anymore, you need to compile against Mac OSX 10.6 or later (needs Python 2.6 or newer)])
+        PYTHON_CFLAGS="-I/Developer/SDKs/MacOSX10.6/System/Library/Frameworks/Python.framework/Versions/2.6/include/python2.6"
+        PYTHON_LIBS="-framework Python"
+    fi
     if test -n "$PYTHON_CFLAGS" -a -n "$PYTHON_LIBS"; then
         dnl Fallback: Accept these in the environment.
       :
