@@ -1397,126 +1397,6 @@ sal_uInt32 SvtOptionsDrawinglayer::GetMaximumPaperBottomMargin() const
     return m_pDataContainer->GetMaximumPaperBottomMargin();
 }
 
-//*****************************************************************************************************************
-//  public method
-//*****************************************************************************************************************
-void SvtOptionsDrawinglayer::SetOverlayBuffer( sal_Bool bState )
-{
-    MutexGuard aGuard( GetOwnStaticMutex() );
-    m_pDataContainer->SetOverlayBuffer( bState );
-}
-
-//*****************************************************************************************************************
-//  public method
-//*****************************************************************************************************************
-void SvtOptionsDrawinglayer::SetPaintBuffer( sal_Bool bState )
-{
-    MutexGuard aGuard( GetOwnStaticMutex() );
-    m_pDataContainer->SetPaintBuffer( bState );
-}
-
-//*****************************************************************************************************************
-//  public method
-//*****************************************************************************************************************
-void SvtOptionsDrawinglayer::SetStripeColorA( Color aColor )
-{
-    MutexGuard aGuard( GetOwnStaticMutex() );
-    m_pDataContainer->SetStripeColorA( aColor );
-}
-
-//*****************************************************************************************************************
-//  public method
-//*****************************************************************************************************************
-void SvtOptionsDrawinglayer::SetStripeColorB( Color aColor )
-{
-    MutexGuard aGuard( GetOwnStaticMutex() );
-    m_pDataContainer->SetStripeColorB( aColor );
-}
-
-//*****************************************************************************************************************
-//  public method
-//*****************************************************************************************************************
-void SvtOptionsDrawinglayer::SetStripeLength( sal_uInt16 nLength )
-{
-    MutexGuard aGuard( GetOwnStaticMutex() );
-    m_pDataContainer->SetStripeLength( nLength );
-}
-
-// #i73602#
-void SvtOptionsDrawinglayer::SetOverlayBuffer_Calc( sal_Bool bState )
-{
-    MutexGuard aGuard( GetOwnStaticMutex() );
-    m_pDataContainer->SetOverlayBuffer_Calc( bState );
-}
-
-void SvtOptionsDrawinglayer::SetOverlayBuffer_Writer( sal_Bool bState )
-{
-    MutexGuard aGuard( GetOwnStaticMutex() );
-    m_pDataContainer->SetOverlayBuffer_Writer( bState );
-}
-
-void SvtOptionsDrawinglayer::SetOverlayBuffer_DrawImpress( sal_Bool bState )
-{
-    MutexGuard aGuard( GetOwnStaticMutex() );
-    m_pDataContainer->SetOverlayBuffer_DrawImpress( bState );
-}
-
-// #i74769#, #i75172#
-void SvtOptionsDrawinglayer::SetPaintBuffer_Calc( sal_Bool bState )
-{
-    MutexGuard aGuard( GetOwnStaticMutex() );
-    m_pDataContainer->SetPaintBuffer_Calc( bState );
-}
-
-void SvtOptionsDrawinglayer::SetPaintBuffer_Writer( sal_Bool bState )
-{
-    MutexGuard aGuard( GetOwnStaticMutex() );
-    m_pDataContainer->SetPaintBuffer_Writer( bState );
-}
-
-void SvtOptionsDrawinglayer::SetPaintBuffer_DrawImpress( sal_Bool bState )
-{
-    MutexGuard aGuard( GetOwnStaticMutex() );
-    m_pDataContainer->SetPaintBuffer_DrawImpress( bState );
-}
-
-// #i4219#
-void SvtOptionsDrawinglayer::SetMaximumPaperWidth( sal_uInt32 nNew )
-{
-    MutexGuard aGuard( GetOwnStaticMutex() );
-    m_pDataContainer->SetMaximumPaperWidth( nNew );
-}
-
-void SvtOptionsDrawinglayer::SetMaximumPaperHeight( sal_uInt32 nNew )
-{
-    MutexGuard aGuard( GetOwnStaticMutex() );
-    m_pDataContainer->SetMaximumPaperHeight( nNew );
-}
-
-void SvtOptionsDrawinglayer::SetMaximumPaperLeftMargin( sal_uInt32 nNew )
-{
-    MutexGuard aGuard( GetOwnStaticMutex() );
-    m_pDataContainer->SetMaximumPaperLeftMargin( nNew );
-}
-
-void SvtOptionsDrawinglayer::SetMaximumPaperRightMargin( sal_uInt32 nNew )
-{
-    MutexGuard aGuard( GetOwnStaticMutex() );
-    m_pDataContainer->SetMaximumPaperRightMargin( nNew );
-}
-
-void SvtOptionsDrawinglayer::SetMaximumPaperTopMargin( sal_uInt32 nNew )
-{
-    MutexGuard aGuard( GetOwnStaticMutex() );
-    m_pDataContainer->SetMaximumPaperTopMargin( nNew );
-}
-
-void SvtOptionsDrawinglayer::SetMaximumPaperBottomMargin( sal_uInt32 nNew )
-{
-    MutexGuard aGuard( GetOwnStaticMutex() );
-    m_pDataContainer->SetMaximumPaperBottomMargin( nNew );
-}
-
 // helper
 sal_Bool SvtOptionsDrawinglayer::IsAAPossibleOnThisSystem() const
 {
@@ -1570,42 +1450,6 @@ void SvtOptionsDrawinglayer::SetAntiAliasing( sal_Bool bState )
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
     m_pDataContainer->SetAntiAliasing( bState );
-}
-
-void SvtOptionsDrawinglayer::SetSnapHorVerLinesToDiscrete( sal_Bool bState )
-{
-    MutexGuard aGuard( GetOwnStaticMutex() );
-    m_pDataContainer->SetSnapHorVerLinesToDiscrete( bState );
-}
-
-void SvtOptionsDrawinglayer::SetSolidDragCreate( sal_Bool bState )
-{
-    MutexGuard aGuard( GetOwnStaticMutex() );
-    m_pDataContainer->SetSolidDragCreate( bState );
-}
-
-void SvtOptionsDrawinglayer::SetRenderDecoratedTextDirect( sal_Bool bState )
-{
-    MutexGuard aGuard( GetOwnStaticMutex() );
-    m_pDataContainer->SetRenderDecoratedTextDirect( bState );
-}
-
-void SvtOptionsDrawinglayer::SetRenderSimpleTextDirect( sal_Bool bState )
-{
-    MutexGuard aGuard( GetOwnStaticMutex() );
-    m_pDataContainer->SetRenderSimpleTextDirect( bState );
-}
-
-void SvtOptionsDrawinglayer::SetQuadratic3DRenderLimit(sal_uInt32 nNew)
-{
-    MutexGuard aGuard( GetOwnStaticMutex() );
-    m_pDataContainer->SetQuadratic3DRenderLimit( nNew );
-}
-
-void SvtOptionsDrawinglayer::SetQuadraticFormControlRenderLimit(sal_uInt32 nNew)
-{
-    MutexGuard aGuard( GetOwnStaticMutex() );
-    m_pDataContainer->SetQuadraticFormControlRenderLimit( nNew );
 }
 
 // #i97672# selection settings
@@ -1670,19 +1514,6 @@ sal_uInt16 SvtOptionsDrawinglayer::GetSelectionMaximumLuminancePercent() const
     }
 
     return aRetval;
-}
-
-void SvtOptionsDrawinglayer::SetSelectionMaximumLuminancePercent( sal_uInt16 nPercent )
-{
-    MutexGuard aGuard( GetOwnStaticMutex() );
-
-    // crop to range [0% .. 100%]
-    if(nPercent > 90)
-    {
-        nPercent = 90;
-    }
-
-    m_pDataContainer->SetSelectionMaximumLuminancePercent( nPercent );
 }
 
 namespace
