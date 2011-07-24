@@ -6958,11 +6958,11 @@ sal_Bool SvxMSDffManager::ReadCommonRecordHeader( SvStream& rSt,
                                               sal_uInt16&   rFbt,
                                               sal_uInt32&    rLength )
 {
-    sal_uInt16 nTmp;
+    sal_uInt16 nTmp(0);
     rSt >> nTmp >> rFbt >> rLength;
     rVer = sal::static_int_cast< sal_uInt8 >(nTmp & 15);
     rInst = nTmp >> 4;
-    return rSt.GetError() == 0;
+    return rSt.good();
 }
 
 sal_Bool SvxMSDffManager::ProcessClientAnchor(SvStream& rStData, sal_uInt32 nDatLen,
