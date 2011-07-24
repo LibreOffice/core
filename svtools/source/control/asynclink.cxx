@@ -106,12 +106,6 @@ IMPL_STATIC_LINK( AsynchronLink, HandleCall, void*, EMPTYARG )
     return 0;
 }
 
-void AsynchronLink::ForcePendingCall()
-{
-    ClearPendingCall();
-    Call_Impl( _pArg );
-}
-
 void AsynchronLink::ClearPendingCall()
 {
     if( _pMutex ) _pMutex->acquire();

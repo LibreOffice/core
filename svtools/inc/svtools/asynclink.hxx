@@ -63,7 +63,6 @@ public:
     void operator=( const Link& rLink ) { _aLink = rLink; }
     void Call( void* pObj, sal_Bool bAllowDoubles = sal_False,
                sal_Bool bUseTimer = sal_False );
-    void ForcePendingCall( );
     void ClearPendingCall( );
     sal_Bool IsSet() const { return _aLink.IsSet(); }
     Link GetLink() const { return _aLink; }
