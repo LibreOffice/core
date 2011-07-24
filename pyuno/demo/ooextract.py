@@ -43,8 +43,8 @@ def main():
 
         print(filterName)
         if not len(args):
-              usage()
-              sys.exit()
+            usage()
+            sys.exit()
 
         ctxLocal = uno.getComponentContext()
         smgrLocal = ctxLocal.ServiceManager

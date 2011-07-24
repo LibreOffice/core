@@ -43,90 +43,89 @@ systempython:
 .INCLUDE : pyversion.mk
 
 PYDIRNAME=python-core-$(PYVERSION)
-DESTROOT=$(BIN)$/$(PYDIRNAME)
+DESTROOT=$(BIN)/$(PYDIRNAME)
 .IF "$(GUI)" == "UNX"
-PYTHONBINARY=$(BIN)$/python$(EXECPOST).bin
+PYTHONBINARY=$(BIN)/python$(EXECPOST).bin
 .ELSE
 .IF "$(COM)" == "GCC"
-PYTHONBINARY=$(DESTROOT)$/bin$/python.bin
+PYTHONBINARY=$(DESTROOT)/bin/python.bin
 .ELSE
-PYTHONBINARY=$(DESTROOT)$/bin$/python$(EXECPOST)
+PYTHONBINARY=$(DESTROOT)/bin/python$(EXECPOST)
 .ENDIF
 .ENDIF
 
 .IF "$(OS)" != "MACOSX"
-FINDLIBFILES_TMP:=$(subst,/,$/ \
-    $(shell @$(FIND) $(SOLARLIBDIR)$/python -type f| $(GREP) -v "\.pyc" |$(GREP) -v "\.py~" |$(GREP) -v .orig | $(GREP) -v _failed))
-FINDLIBFILES=$(subst,$(SOLARLIBDIR)$/python, $(FINDLIBFILES_TMP))
+FINDLIBFILES:=$(subst,$(SOLARLIBDIR)/python, \
+    $(shell @$(FIND) $(SOLARLIBDIR)/python -type f| $(GREP) -v "\.pyc" |$(GREP) -v "\.py~" |$(GREP) -v .orig | $(GREP) -v _failed))
 
 FILES=\
     $(PYTHONBINARY) \
-    $(foreach,i,$(FINDLIBFILES) $(DESTROOT)$/lib$(i)) 
+    $(foreach,i,$(FINDLIBFILES) $(DESTROOT)/lib$(i))
 
 .IF "$(OS)" == "WNT"
-APP1TARGET = python
-APP1OBJS = $(OBJFILES) $(SOLARLIBDIR)$/pathutils-obj.obj
-APP1STDLIBS =
-APP1RPATH = BRAND
-OBJFILES = $(OBJ)$/python.obj
+APP1TARGET=python
+APP1OBJS=$(OBJFILES) $(SOLARLIBDIR)/pathutils-obj.obj
+APP1STDLIBS=
+APP1RPATH=BRAND
+OBJFILES=$(OBJ)/python.obj
 .ENDIF
 
 
 .INCLUDE: target.mk
 
 ALLTAR: \
-    $(BIN)$/$(PYDIRNAME).zip
+    $(BIN)/$(PYDIRNAME).zip
 .ENDIF
 
 .IF "$(GUI)" == "UNX"
-ALLTAR : $(BIN)$/python.sh
+ALLTAR : $(BIN)/python.sh
 
 STRIPMAC=-e '/^NONMACSECTION/d' -e '/^MACSECTION/,$$d'
 STRIPNONMAC=-e '/^NONMACSECTION/,/^MACSECTION/d'
 
-$(BIN)$/python.sh : python.sh
+$(BIN)/python.sh : python.sh
 	$(COMMAND_ECHO)sed -e 's/%%PYVERSION%%/$(eq,$(OS),MACOSX $(PYMAJOR).$(PYMINOR) $(PYVERSION))/g' -e 's/%%OOO_LIBRARY_PATH_VAR%%/$(OOO_LIBRARY_PATH_VAR)/g' \
 		$(eq,$(OS),MACOSX $(STRIPNONMAC) $(STRIPMAC)) < $? > $@
 	@chmod +x $@
 .ENDIF
 
-$(OBJ)$/python.obj: $(OUT)$/inc$/pyversion.hxx
+$(OBJ)/python.obj: $(OUT)/inc/pyversion.hxx
 
-$(OUT)$/inc$/pyversion.hxx: pyversion.inc
-    $(SED) $(USQ)s/@/$(PYVERSION)/g$(USQ) < $< > $@
+$(OUT)/inc/pyversion.hxx: pyversion.inc
+	$(SED) $(USQ)s/@/$(PYVERSION)/g$(USQ) < $< > $@
 
-$(BIN)$/$(PYDIRNAME).zip : $(FILES)
+$(BIN)/$(PYDIRNAME).zip : $(FILES)
 .IF "$(GUI)" == "UNX"
 .IF "$(OS)" != "AIX"
-    cd $(DESTROOT) && find . -name '*$(DLLPOST)' | xargs strip
+	cd $(DESTROOT) && find . -name '*$(DLLPOST)' | xargs strip
 .ENDIF
 .ENDIF
-    -rm -f $@
-    cd $(BIN) && zip -r $(PYDIRNAME).zip $(PYDIRNAME)
+	-rm -f $@
+	cd $(BIN) && zip -r $(PYDIRNAME).zip $(PYDIRNAME)
 
-$(DESTROOT)$/lib$/% : $(SOLARLIBDIR)$/python$/%
-    -$(MKDIRHIER) $(@:d) 
-    -rm -f $@
-    cat $< > $@
+$(DESTROOT)/lib/% : $(SOLARLIBDIR)/python/%
+	-$(MKDIRHIER) $(@:d)
+	-rm -f $@
+	cat $< > $@
 
 .IF "$(GUI)"== "UNX"
-$(BIN)$/python$(EXECPOST).bin : $(SOLARBINDIR)$/python$(EXECPOST)
-    -$(MKDIRHIER) $(@:d)
-    -rm -f $@
-    cat $< > $@
+$(BIN)/python$(EXECPOST).bin : $(SOLARBINDIR)/python$(EXECPOST)
+	-$(MKDIRHIER) $(@:d)
+	-rm -f $@
+	cat $< > $@
 .IF "$(OS)" != "MACOSX" && "$(OS)" != "AIX"
-    strip $@
+	strip $@
 .ENDIF
-    chmod +x $@
+	chmod +x $@
 .ELSE
 .IF "$(COM)" == "GCC"
-$(DESTROOT)$/bin$/python.bin : $(SOLARBINDIR)$/python$(EXECPOST)
+$(DESTROOT)/bin/python.bin : $(SOLARBINDIR)/python$(EXECPOST)
 .ELSE
-$(DESTROOT)$/bin$/python$(EXECPOST) : $(SOLARBINDIR)$/python$(EXECPOST)
+$(DESTROOT)/bin/python$(EXECPOST) : $(SOLARBINDIR)/python$(EXECPOST)
 .ENDIF
-    -$(MKDIRHIER) $(@:d)
-    -rm -f $@
-    cat $< > $@
+	-$(MKDIRHIER) $(@:d)
+	-rm -f $@
+	cat $< > $@
 .ENDIF
 
 .ENDIF

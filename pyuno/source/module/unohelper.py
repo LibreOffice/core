@@ -1,3 +1,4 @@
+# -*- tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*-
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -302,3 +303,4 @@ class _FactoryHelper_( XSingleComponentFactory, XServiceInfo, Base ):
     def createInstanceWithArgumentsAndContext( self, args, context ):
         return self.clazz( context, *args )
 
+# vim:set shiftwidth=4 softtabstop=4 expandtab:

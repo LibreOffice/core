@@ -24,7 +24,7 @@
 # for a copy of the LGPLv3 License.
 #
 #*************************************************************************
-PRJ=..$/..
+PRJ=../..
 
 PRJNAME=pyuno
 TARGET=pythonloader.uno
@@ -47,15 +47,15 @@ DIRECT= $(LINKFLAGSDEFS)
 PYTHONLIB=$(PYTHON_LIBS)
 CFLAGS+=$(PYTHON_CFLAGS)
 .IF "$(EXTRA_CFLAGS)"!=""
-PYTHONLIB+= -framework Python
+PYTHONLIB+=-framework Python
 .ENDIF # "$(EXTRA_CFLAGS)"!=""
 .ELSE
 .INCLUDE : pyversion.mk
 
-CFLAGS+= -I$(SOLARINCDIR)$/python
+CFLAGS+=-I$(SOLARINCDIR)/python
 .ENDIF
 
-SHL1TARGET= $(TARGET)
+SHL1TARGET=$(TARGET)
 
 SHL1STDLIBS= \
         $(CPPULIB) \
@@ -64,31 +64,31 @@ SHL1STDLIBS= \
         $(PYUNOLIB) \
         $(PYTHONLIB)
 
-SHL1VERSIONMAP= $(SOLARENV)$/src$/component.map
+SHL1VERSIONMAP=$(SOLARENV)/src/component.map
 SHL1DEPN=
-SHL1IMPLIB= i$(TARGET)
-SHL1LIBS= $(SLB)$/$(TARGET).lib
-SHL1DEF= $(MISC)$/$(SHL1TARGET).def
+SHL1IMPLIB=i$(TARGET)
+SHL1LIBS=$(SLB)/$(TARGET).lib
+SHL1DEF=$(MISC)/$(SHL1TARGET).def
 
-DEF1NAME= $(SHL1TARGET)
-SLOFILES= $(SLO)$/pyuno_loader.obj
+DEF1NAME=$(SHL1TARGET)
+SLOFILES=$(SLO)/pyuno_loader.obj
 
 # --- Targets ------------------------------------------------------
 
 ALL : ALLTAR \
-    $(DLLDEST)$/pythonloader.py
+    $(DLLDEST)/pythonloader.py
 .ENDIF # L10N_framework
 
 .INCLUDE :  target.mk
 .IF "$(L10N_framework)"==""
-$(DLLDEST)$/%.py: %.py
-    cp $? $@
+$(DLLDEST)/%.py: %.py
+	cp $? $@
 .ENDIF # L10N_framework
 
 ALLTAR : $(MISC)/pythonloader.component
 
 $(MISC)/pythonloader.component .ERRREMOVE : \
-        $(SOLARENV)/bin/createcomponent.xslt pythonloader.component
-    $(XSLTPROC) --nonet --stringparam uri \
-        'vnd.sun.star.expand:$$OOO_BASE_DIR/program/$(SHL1TARGETN:f)' -o $@ \
-        $(SOLARENV)/bin/createcomponent.xslt pythonloader.component
+	$(SOLARENV)/bin/createcomponent.xslt pythonloader.component
+	$(XSLTPROC) --nonet --stringparam uri \
+	    'vnd.sun.star.expand:$$OOO_BASE_DIR/program/$(SHL1TARGETN:f)' -o $@ \
+	$(SOLARENV)/bin/createcomponent.xslt pythonloader.component

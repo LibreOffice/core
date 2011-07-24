@@ -1,3 +1,4 @@
+# -*- tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*-
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -355,3 +356,5 @@ def _uno_extract_printable_stacktrace( trace ):
     else:
         ret = "Couldn't import traceback module"
     return ret
+
+# vim:set shiftwidth=4 softtabstop=4 expandtab:

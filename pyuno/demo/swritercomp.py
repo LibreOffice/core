@@ -62,9 +62,6 @@ class SWriterComp(XMain,unohelper.Base):
         insertTextIntoCell( table, "C1", "ThirdColumn", textColor )
         insertTextIntoCell( table, "D1", "SUM", textColor )
 
-        values = ( (22.5,21.5,121.5),
-                 (5615.3,615.3,-615.3),
-                  (-2315.7,315.7,415.7) )
         table.getCellByName("A2").setValue(22.5)
         table.getCellByName("B2").setValue(5615.3)
         table.getCellByName("C2").setValue(-2315.7)
