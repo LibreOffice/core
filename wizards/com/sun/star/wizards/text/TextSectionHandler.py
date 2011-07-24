@@ -56,12 +56,11 @@ class TextSectionHandler(object):
 
     def removeAllTextSections(self):
         try:
-            TextSectionCount = self.xTextDocument.TextSections.getCount()
-            i = TextSectionCount - 1
-            while i >= 0:
+            TextSectionCount = self.xTextDocument.TextSections.Count
+            xAllTextSections = self.xTextDocument.TextSections
+            for i in xrange(TextSectionCount - 1, -1, -1):
                 xTextContentTextSection = xAllTextSections.getByIndex(i)
                 self.xText.removeTextContent(xTextContentTextSection)
-                i -= 1
         except Exception, exception:
             traceback.print_exc()
 

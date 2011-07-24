@@ -81,7 +81,7 @@ class TextFieldHandler(object):
                     oTextField = xEnum.nextElement()
                     TextFieldHandler.arrayTextFields.append(oTextField)
                     xPropertySet = oTextField.TextFieldMaster
-                    if len(xPropertySet.Name) is not 0:
+                    if xPropertySet.Name:
                         TextFieldHandler.dictTextFields[xPropertySet.Name] = \
                             oTextField
         except Exception, e:

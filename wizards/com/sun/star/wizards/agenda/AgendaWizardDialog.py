@@ -178,17 +178,20 @@ class AgendaWizardDialog(WizardDialog):
         self.insertLabel("lblTitle3", self.PROPS_LABEL_B,
             (self.fontDescriptor4, 16, self.resources.reslblTitle3_value,
                 True, 91, 8, 3, 300,212))
-        self.chkMeetingTitle = self.insertCheckBox("chkMeetingTitle", None,
-            self.PROPS_CHECK,
+        self.chkMeetingTitle = self.insertCheckBox("chkMeetingTitle",
+            CHKCHECKBOX_ITEM_CHANGED, self.PROPS_CHECK,
             (8, CHKMEETINGTITLE_HID, self.resources.reschkMeetingTitle_value,
                 97, 32, 1, 3, 301, 69), self)
-        self.chkRead = self.insertCheckBox("chkRead", None, self.PROPS_CHECK,
+        self.chkRead = self.insertCheckBox("chkRead",
+            CHKCHECKBOX_ITEM_CHANGED, self.PROPS_CHECK,
             (8, CHKREAD_HID, self.resources.reschkRead_value,
                 97, 46, 0, 3, 302, 162), self)
-        self.chkBring = self.insertCheckBox("chkBring", None, self.PROPS_CHECK,
+        self.chkBring = self.insertCheckBox("chkBring",
+            CHKCHECKBOX_ITEM_CHANGED, self.PROPS_CHECK,
             (8, CHKBRING_HID, self.resources.reschkBring_value,
                 97, 60, 0, 3, 303, 162), self)
-        self.chkNotes = self.insertCheckBox("chkNotes", None, self.PROPS_CHECK,
+        self.chkNotes = self.insertCheckBox("chkNotes",
+            CHKCHECKBOX_ITEM_CHANGED, self.PROPS_CHECK,
             (8, CHKNOTES_HID, self.resources.reschkNotes_value,
                 97, 74, 1, 3, 304, 160), self)
         self.insertImage("imgHelp3", self.PROPS_IMAGE, (0, 10,

@@ -1,5 +1,6 @@
 import traceback
 from ConfigNode import *
+from Configuration import Configuration
 
 class ConfigSet(ConfigNode):
     '''
@@ -22,7 +23,8 @@ class ConfigSet(ConfigNode):
         if isinstance(name, int):
             i = name
             self.childrenList.insert(i, o)
-            self.fireListDataListenerIntervalAdded(i, i)
+            #COMMENTED
+            #self.fireListDataListenerIntervalAdded(i, i)
         else:
             i = o.cp_Index
             oldSize = self.getSize()
@@ -39,26 +41,25 @@ class ConfigSet(ConfigNode):
             #self.fireListDataListenerIntervalAdded(oldSize, i)
 
     def writeConfiguration(self, configView, param):
-        names = self.childrenMap.keySet().toArray()
+        names = self.childrenMap.keys()
         if isinstance(self.childClass, ConfigNode):
             #first I remove all the children from the configuration.
-            children = Configuration.getChildrenNames(configView)
-            i = 0
-            while i < children.length:
-                try:
-                    Configuration.removeNode(configView, children[i])
-                except Exception, ex:
-                    ex.printStackTrace()
+            children = configView.ElementNames
+            if children:
+                for i in children:
+                    try:
+                        Configuration.removeNode(configView, i)
+                    except Exception:
+                        traceback.print_exc()
 
                 # and add them new.
-                i += 1
             for i in names:
                 try:
-                    child = getElement(i)
-                    childView = Configuration.addConfigNode(configView, i)
+                    child = self.getElement(i)
+                    childView = configView.getByName(i)
                     child.writeConfiguration(childView, param)
-                except Exception, ex:
-                    ex.printStackTrace()
+                except Exception:
+                    traceback.print_exc()
         else:
             raise AttributeError (
             "Unable to write primitive sets to configuration (not implemented)")
@@ -66,15 +67,16 @@ class ConfigSet(ConfigNode):
     def readConfiguration(self, configurationView, param):
         names = configurationView.ElementNames
         if isinstance(self.childClass, ConfigNode):
-            for i in names:
-                try:
-                    child = type(self.childClass)()
-                    child.setRoot(self.root)
-                    child.readConfiguration(
-                        configurationView.getByName(i), param)
-                    self.add(i, child)
-                except Exception, ex:
-                     traceback.print_exc()
+            if names:
+                for i in names:
+                    try:
+                        child = type(self.childClass)()
+                        child.setRoot(self.root)
+                        child.readConfiguration(
+                            configurationView.getByName(i), param)
+                        self.add(i, child)
+                    except Exception, ex:
+                         traceback.print_exc()
             #remove any nulls from the list
             if self.noNulls:
                 i = 0
@@ -147,24 +149,6 @@ class ConfigSet(ConfigNode):
 
     def setRoot(self, newRoot):
         self.root = newRoot
-
-    '''
-    Notifies all registered listeners about the event.
-    @param event The event to be fired
-    '''
-
-    def fireListDataListenerIntervalAdded(self, i0, i1):
-        event = ListDataEvent(self, ListDataEvent.INTERVAL_ADDED, i0, i1)
-        if self.listenerList == None:
-            return
-
-        listeners = self.listenerList.getListenerList()
-        i = listeners.length - 2
-        while i >= 0:
-            if listeners[i] == javax.swing.event.ListDataListener:
-                (listeners[i + 1]).intervalAdded(event)
-
-            i -= 2
 
     def getElementAt(self, i):
         return self.childrenList[i]

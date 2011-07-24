@@ -661,6 +661,7 @@ public class AgendaTemplate extends TextDocument implements TemplateConsts, Data
 
     private void writeTitle(TextElement te, XTextRange tr, String text)
     {
+        System.out.println("yeeep");
         te.text = (text == null ? PropertyNames.EMPTY_STRING : text);
         te.write(tr);
     }
@@ -1498,7 +1499,7 @@ public class AgendaTemplate extends TextDocument implements TemplateConsts, Data
             int targetNumOfRows = topics * rowsPerTopic + 1;
             if (tableRows.getCount() > targetNumOfRows)
             {
-                tableRows.removeByIndex(targetNumOfRows, tableRows.getCount() - targetNumOfRows);
+                //tableRows.removeByIndex(targetNumOfRows, tableRows.getCount() - targetNumOfRows);
             }
             formatLastRow();
             while (writtenTopics.size() > topics)
@@ -1614,7 +1615,7 @@ public class AgendaTemplate extends TextDocument implements TemplateConsts, Data
     public static void removeTableRows(Object table, int start, int count)
     {
         XTableRows rows = UnoRuntime.queryInterface(XTextTable.class, table).getRows();
-        rows.removeByIndex(start, count);
+        //rows.removeByIndex(start, count);
     }
 
     /**

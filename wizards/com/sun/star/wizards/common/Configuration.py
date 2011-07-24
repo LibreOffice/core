@@ -90,22 +90,23 @@ class Configuration(object):
             return None
 
     @classmethod
-    def removeNode(self, configView, name):
+    def removeNode(self, configView, name, xmsf=None):
+        commitChanges = False
+        if xmsf is not None:
+            configView = self.getConfigurationRoot(xmsf, path, True)
+            commit = True
 
         if configView.hasByName(name):
             configView.removeByName(name)
+
+        if commitChanges:
+            configView.commitChanges()
 
     @classmethod
     def updateConfiguration(self, xmsf, path, name, node, param):
         view = self.getConfigurationRoot(xmsf, path, True)
         addConfigNode(path, name)
         node.writeConfiguration(view, param)
-        view.commitChanges()
-
-    @classmethod
-    def removeNode(self, xmsf, path, name):
-        view = self.getConfigurationRoot(xmsf, path, True)
-        removeNode(view, name)
         view.commitChanges()
 
     @classmethod

@@ -8,6 +8,8 @@ from ui.PathSelection import *
 from ui.event.UnoDataAware import *
 from ui.event.RadioDataAware import *
 
+from com.sun.star.view.DocumentZoomType import OPTIMAL
+from com.sun.star.awt.VclWindowPeerAttribute import YES_NO, DEF_NO
 from com.sun.star.awt.VclWindowPeerAttribute import OK
 from common.NoValidPathException import *
 
@@ -151,7 +153,7 @@ class AgendaWizardDialogImpl(AgendaWizardDialog):
         self.setControlProperty(
             "listPageDesign", "StringItemList", tuple(self.agendaTemplates[0]))
         self.checkSavePath()
-        #setFilename(agenda.cp_TemplatePath);
+
         UnoDataAware.attachListBox(
             self.agenda, "cp_AgendaType", self.listPageDesign, True).updateUI()
         UnoDataAware.attachCheckBox(
@@ -192,6 +194,13 @@ class AgendaWizardDialogImpl(AgendaWizardDialog):
             self.agenda, "cp_ProceedMethod",
                 (self.optCreateAgenda, self.optMakeChanges), True).updateUI()
 
+    def saveConfiguration(self):
+        self.topicsControl.saveTopics(self.agenda)
+        root = Configuration.getConfigurationRoot(
+            self.xMSF, "/org.openoffice.Office.Writer/Wizards/Agenda", True)
+        self.agenda.writeConfiguration(root, "cp_")
+        root.commitChanges()
+
     '''
     read the available agenda wizard templates.
     '''
@@ -230,6 +239,14 @@ class AgendaWizardDialogImpl(AgendaWizardDialog):
     def templateTitleChanged(self):
         title = Helper.getUnoPropertyValue(getModel(txtTemplateName), "Text")
         self.agendaTemplate.setTemplateTitle(title)
+
+    def checkBoxItemChanged(self):
+        try:
+            AgendaTemplate.xTextDocument.lockControllers()
+            AgendaTemplate.redraw(FILLIN_READ)
+            AgendaTemplate.xTextDocument.unlockControllers()
+        except Exception:
+            traceback.print_exc()
 
     '''
     convenience method.
@@ -302,11 +319,11 @@ class AgendaWizardDialogImpl(AgendaWizardDialog):
 
     def finishWizard(self):
         bSaveSuccess = False
-        # pesimistic :(
+        endWizard = True
         try:
-            fileAccess = FileAccess.FileAccess_unknown(xMSF)
+            fileAccess = FileAccess(self.xMSF)
             self.sPath = self.myPathSelection.getSelectedPath()
-            if self.sPath.equals(""):
+            if self.sPath == "":
                 self.myPathSelection.triggerPathPicker()
                 self.sPath = self.myPathSelection.getSelectedPath()
 
@@ -317,48 +334,46 @@ class AgendaWizardDialogImpl(AgendaWizardDialog):
             if not self.filenameChanged:
                 if fileAccess.exists(self.sPath, True):
                     answer = SystemDialog.showMessageBox(
-                        xMSF, xControl.Peer, "MessBox",
-                        VclWindowPeerAttribute.YES_NO + \
-                            VclWindowPeerAttribute.DEF_NO,
-                        resources.resFileExists)
-                    if (answer == 3):
-                    # user said: no, do not overwrite....
+                        self.xMSF, "MessBox", YES_NO + DEF_NO,
+                        self.resources.resFileExists,
+                        self.xUnoDialog.Peer)
+                    if answer == 3:
+                        # user said: no, do not overwrite
+                        endWizard = False
                         return False
 
             self.agendaTemplate.xTextDocument.lockControllers()
             xTextDocument = self.agendaTemplate.document
             bSaveSuccess = OfficeDocument.store(
-                xMSF, xTextDocument, self.sPath, "writer8_template", False)
+                self.xMSF, AgendaTemplate.xTextDocument, self.sPath,
+                "writer8_template")
         except Exception, e:
+            traceback.print_exc()
             SystemDialog.showMessageBox(
-                xMSF, xControl.Peer, "ErrBox", VclWindowPeerAttribute.OK,
-                resources.resErrSaveTemplate)
+                self.xMSF, "ErrBox", OK,
+                self.resources.resErrSaveTemplate, self.xUnoDialog.Peer)
 
         if bSaveSuccess:
             try:
-                self.topicsControl.saveTopics(self.agenda)
-                root = Configuration.getConfigurationRoot(
-                    xMSF, "/org.openoffice.Office.Writer/Wizards/Agenda", True)
-                self.agenda.writeConfiguration(root, "cp_")
-                Configuration.commit(root)
+                self.saveConfiguration()
 
-                self.agendaTemplate.finish(self.topicsControl.getTopicsData())
-                xStoreable = self.agendaTemplate.document
-                xStoreable.store()
+                self.agendaTemplate.finish(self.topicsControl.scrollfields)
 
-                self.agendaTemplate.xTextDocument.unlockControllers()
+                AgendaTemplate.xTextDocument.unlockControllers()
                 loadValues = range(2)
-                loadValues[0] = PropertyValue.PropertyValue()
+                loadValues[0] = uno.createUnoStruct( \
+                    'com.sun.star.beans.PropertyValue')
                 loadValues[0].Name = "AsTemplate"
                 if self.agenda.cp_ProceedMethod == 1:
-                    loadValues[0].Value = Boolean.TRUE
+                    loadValues[0].Value = True
                 else:
-                    loadValues[0].Value = Boolean.FALSE
+                    loadValues[0].Value = False
 
-                loadValues[1] = PropertyValue.PropertyValue()
+                loadValues[1] = uno.createUnoStruct( \
+                    'com.sun.star.beans.PropertyValue')
                 loadValues[1].Name = "InteractionHandler"
 
-                xIH = xMSF.createInstance(
+                xIH = self.xMSF.createInstance(
                     "com.sun.star.comp.uui.UUIInteractionHandler")
                 loadValues[1].Value = xIH
 
@@ -367,15 +382,16 @@ class AgendaWizardDialogImpl(AgendaWizardDialog):
                     self.sPath, "_default", loadValues)
                 myViewHandler = ViewHandler(self.xMSF, oDoc)
                 myViewHandler.setViewSetting("ZoomType", OPTIMAL)
-            except Exception, ex:
+            except Exception:
                 traceback.print_exc()
 
         else:
-            self.agendaTemplate.xTextDocument.unlockControllers()
+            AgendaTemplate.xTextDocument.unlockControllers()
             return False
 
-        self.xUnoDialog.endExecute()
-        self.running = False
+        if endWizard:
+            self.xUnoDialog.endExecute()
+            self.running = False
         return True
 
     def closeDocument(self):

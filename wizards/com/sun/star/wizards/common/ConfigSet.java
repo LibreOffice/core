@@ -148,7 +148,7 @@ public class ConfigSet implements ConfigNode, XMLProvider, ListModel
     public void readConfiguration(Object configurationView, Object param)
     {
         String[] names = Configuration.getChildrenNames(configurationView);
-
+        System.out.println(names.length);
         if (ConfigNode.class.isAssignableFrom(childClass))
         {
 

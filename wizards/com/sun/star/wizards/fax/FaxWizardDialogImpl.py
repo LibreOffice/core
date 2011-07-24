@@ -149,7 +149,8 @@ class FaxWizardDialogImpl(FaxWizardDialog):
                 if fileAccess.exists(self.sPath, True):
                     answer = SystemDialog.showMessageBox(
                         self.xMSF, "MessBox", YES_NO + DEF_NO,
-                        self.resources.resOverwriteWarning, self.xUnoDialog.Peer)
+                        self.resources.resOverwriteWarning,
+                        self.xUnoDialog.Peer)
                     if answer == 3:
                         # user said: no, do not overwrite...
                         endWizard = False

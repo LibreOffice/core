@@ -389,8 +389,9 @@ class AgendaTemplate(TextDocument):
 
     @synchronized(lock)
     def finish(self, topics):
-        createMinutes(topics)
-        deleteHiddenSections()
+        #COMMENTED
+        #self.createMinutes(topics)
+        self.deleteHiddenSections()
         AgendaTemplate.textSectionHandler.removeAllTextSections()
 
     '''
@@ -403,7 +404,7 @@ class AgendaTemplate(TextDocument):
         allSections = AgendaTemplate.document.TextSections.ElementNames
         try:
             for i in allSections:
-                self.section = getSection(i)
+                self.section = self.getSection(i)
                 visible = bool(Helper.getUnoPropertyValue(self.section, "IsVisible"))
                 if not visible:
                     self.section.Anchor.String = ""
@@ -422,7 +423,7 @@ class AgendaTemplate(TextDocument):
     def createMinutes(self, topicsData):
         # if the minutes section should be removed (the
         # user did not check "create minutes")
-        if not AgendaTemplate.agenda.cp_IncludeMinutes or (topicsData.size() <= 1):
+        if not AgendaTemplate.agenda.cp_IncludeMinutes or topicsData.size() <= 1:
             try:
                 minutesAllSection = getSection(SECTION_MINUTES_ALL)
                 minutesAllSection.Anchor.String = ""

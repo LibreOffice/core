@@ -1,5 +1,7 @@
 from common.HelpIds import HelpIds
 
+CHKCHECKBOX_ITEM_CHANGED =         "checkBoxItemChanged"
+TXTTEXTFIELD_TEXT_CHANGED =        ""
 LISTPAGEDESIGN_ACTION_PERFORMED =  "pageDesignChanged"
 TXTTEMPLATENAME_TEXT_CHANGED =     "templateTitleChanged"
 BTNTEMPLATEPATH_ACTION_PERFORMED = "saveAs"
