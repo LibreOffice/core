@@ -109,7 +109,7 @@ else
             . ./MacOSXPPCEnv.Set.sh
         ;;
         *-cygwin*)
-            . ./winenv.set.sh || . ./winmingw.set.sh
+            . ./WindowsMSVCEnv.Set.sh || . ./WindowsMinGWEnv.Set.sh
         ;;
         *)
             echo "$me: error: unknown *Env.Set.sh for: ${config_guess_result}"
