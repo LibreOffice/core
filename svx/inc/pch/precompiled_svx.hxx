@@ -790,7 +790,6 @@
 #include "svl/itempool.hxx"
 #include "svl/itemprop.hxx"
 #include "svl/itemset.hxx"
-#include "unotools/javaoptions.hxx"
 #include "svl/languageoptions.hxx"
 #include "unotools/lingucfg.hxx"
 #include "unotools/linguprops.hxx"
