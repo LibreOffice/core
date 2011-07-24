@@ -189,3 +189,17 @@
  endif
  CHECKLOC = $(CHECKLIBS:.$(DLL_SUFFIX)=.chk)
  
+--- /dev/null	2011-07-24 19:07:44.290563140 +0200
++++ misc/build/nss-3.12.8/mozilla/security/coreconf/Linux3.0.mk	2011-07-24 22:21:02.710513995 +0200
+@@ -0,0 +1,11 @@
++include $(CORE_DEPTH)/coreconf/Linux.mk
++
++OS_REL_CFLAGS   += -DLINUX2_1
++MKSHLIB         = $(CC) $(DSO_LDOPTS) -Wl,-soname -Wl,$(@:$(OBJDIR)/%.so=%.so) $(RPATH)
++
++ifdef MAPFILE
++	MKSHLIB += -Wl,--version-script,$(MAPFILE)
++endif
++PROCESS_MAP_FILE = grep -v ';-' $< | \
++        sed -e 's,;+,,' -e 's; DATA ;;' -e 's,;;,,' -e 's,;.*,;,' > $@
++
