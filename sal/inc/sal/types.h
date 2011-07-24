@@ -296,6 +296,18 @@ typedef void *                   sal_Handle;
 #define SAL_EXCEPTION_DLLPRIVATE
 #endif
 
+/** Use this as markup for functions and methods whose return value must be
+    checked.
+
+    Compilers that support a construct of this nature will emit a compile
+    time warning on unchecked return value.
+*/
+#if (__GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ >= 4))
+#   define SAL_WARN_UNUSED_RESULT __attribute__((warn_unused_result))
+#else
+#   define SAL_WARN_UNUSED_RESULT
+#endif
+
 /** Use this for pure virtual classes, e.g. class SAL_NO_VTABLE Foo { ...
     This hinders the compiler from setting a generic vtable stating that
     a pure virtual function was called and thus slightly reduces code size.

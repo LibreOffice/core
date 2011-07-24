@@ -732,7 +732,7 @@ oslFileError SAL_CALL osl_openFile( rtl_uString *pustrFileURL, oslFileHandle *pH
     @see    osl_getFilePos()
 */
 
-oslFileError SAL_CALL osl_setFilePos( oslFileHandle Handle, sal_uInt32 uHow, sal_Int64 uPos );
+oslFileError SAL_CALL osl_setFilePos( oslFileHandle Handle, sal_uInt32 uHow, sal_Int64 uPos ) SAL_WARN_UNUSED_RESULT;
 
 
 /** Retrieve the current position of the internal pointer of an open file.

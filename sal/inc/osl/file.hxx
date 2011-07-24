@@ -988,7 +988,7 @@ public:
         @see getPos()
     */
 
-    inline RC setPos( sal_uInt32 uHow, sal_Int64 uPos )
+    inline RC setPos( sal_uInt32 uHow, sal_Int64 uPos ) SAL_WARN_UNUSED_RESULT
     {
         return (RC) osl_setFilePos( _pData, uHow, uPos );
     }
