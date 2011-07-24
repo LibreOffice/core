@@ -98,7 +98,6 @@ $(eval $(call gb_Library_add_exception_objects,slideshow,\
     slideshow/source/engine/animationnodes/sequentialtimecontainer \
     slideshow/source/engine/attributemap \
     slideshow/source/engine/color \
-    slideshow/source/engine/debug \
     slideshow/source/engine/delayevent \
     slideshow/source/engine/effectrewinder \
     slideshow/source/engine/eventmultiplexer \

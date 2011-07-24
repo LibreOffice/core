@@ -31,7 +31,6 @@
 #include <boost/function.hpp>
 
 #include "event.hxx"
-#include "debug.hxx"
 #include <boost/noncopyable.hpp>
 
 namespace slideshow {

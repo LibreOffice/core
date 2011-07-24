@@ -29,7 +29,6 @@
 #define INCLUDED_SLIDESHOW_EVENT_HXX
 
 #include "disposable.hxx"
-#include "debug.hxx"
 #include <rtl/ustring.hxx>
 #include <boost/shared_ptr.hpp>
 #include <vector>

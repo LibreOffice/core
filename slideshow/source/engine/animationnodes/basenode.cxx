@@ -48,7 +48,6 @@
 #include "tools.hxx"
 #include "nodetools.hxx"
 #include "generateevent.hxx"
-#include "debug.hxx"
 
 #include <boost/bind.hpp>
 #include <vector>
@@ -311,10 +310,6 @@ public:
             mpNode->meCurrState = meToState;
             clear();
         }
-
-        // Uncomment the following line to write the node tree to file on
-        // every state change of one of its nodes.
-        //     Debug_ShowNodeTree(mpNode->mpSelf);
     }
 
     void clear() {
