@@ -86,9 +86,6 @@ static HTMLOptionEnum aHTMLTblVAlignTable[] =
     { 0,                    0               }
 };
 
-
-/*  */
-
 // table tags options
 
 struct HTMLTableOptions
@@ -116,10 +113,8 @@ struct HTMLTableOptions
 
     String aBGImage, aStyle, aId, aClass, aDir;
 
-    HTMLTableOptions( const HTMLOptions *pOptions, SvxAdjust eParentAdjust );
+    HTMLTableOptions( const HTMLOptions& rOptions, SvxAdjust eParentAdjust );
 };
-
-/*  */
 
 class _HTMLTableContext
 {
@@ -3232,71 +3227,71 @@ _CellSaveStruct::_CellSaveStruct( SwHTMLParser& rParser, HTMLTable *pCurTable,
 
     if( bReadOpt )
     {
-        const HTMLOptions *pOptions = rParser.GetOptions();
-        for( sal_uInt16 i = pOptions->Count(); i; )
+        const HTMLOptions& rOptions = rParser.GetOptions();
+        for (size_t i = rOptions.size(); i; )
         {
-            const HTMLOption *pOption = (*pOptions)[--i];
-            switch( pOption->GetToken() )
+            const HTMLOption& rOption = rOptions[--i];
+            switch( rOption.GetToken() )
             {
             case HTML_O_ID:
-                aId = pOption->GetString();
+                aId = rOption.GetString();
                 break;
             case HTML_O_COLSPAN:
-                nColSpan = (sal_uInt16)pOption->GetNumber();
+                nColSpan = (sal_uInt16)rOption.GetNumber();
                 break;
             case HTML_O_ROWSPAN:
-                nRowSpan = (sal_uInt16)pOption->GetNumber();
+                nRowSpan = (sal_uInt16)rOption.GetNumber();
                 break;
             case HTML_O_ALIGN:
-                eAdjust = (SvxAdjust)pOption->GetEnum(
+                eAdjust = (SvxAdjust)rOption.GetEnum(
                                         aHTMLPAlignTable, static_cast< sal_uInt16 >(eAdjust) );
                 break;
             case HTML_O_VALIGN:
-                eVertOri = pOption->GetEnum(
+                eVertOri = rOption.GetEnum(
                                         aHTMLTblVAlignTable, eVertOri );
                 break;
             case HTML_O_WIDTH:
-                nWidth = (sal_uInt16)pOption->GetNumber();  // nur fuer Netscape
-                bPrcWidth = (pOption->GetString().Search('%') != STRING_NOTFOUND);
+                nWidth = (sal_uInt16)rOption.GetNumber();   // nur fuer Netscape
+                bPrcWidth = (rOption.GetString().Search('%') != STRING_NOTFOUND);
                 if( bPrcWidth && nWidth>100 )
                     nWidth = 100;
                 break;
             case HTML_O_HEIGHT:
-                nHeight = (sal_uInt16)pOption->GetNumber(); // nur fuer Netscape
-                if( pOption->GetString().Search('%') != STRING_NOTFOUND)
+                nHeight = (sal_uInt16)rOption.GetNumber();  // nur fuer Netscape
+                if( rOption.GetString().Search('%') != STRING_NOTFOUND)
                     nHeight = 0;    // keine %-Angaben beruecksichtigen
                 break;
             case HTML_O_BGCOLOR:
                 // Leere BGCOLOR bei <TABLE>, <TR> und <TD>/<TH> wie Netscape
                 // ignorieren, bei allen anderen Tags *wirklich* nicht.
-                if( pOption->GetString().Len() )
+                if( rOption.GetString().Len() )
                 {
-                    pOption->GetColor( aBGColor );
+                    rOption.GetColor( aBGColor );
                     bBGColor = sal_True;
                 }
                 break;
             case HTML_O_BACKGROUND:
-                aBGImage = pOption->GetString();
+                aBGImage = rOption.GetString();
                 break;
             case HTML_O_STYLE:
-                aStyle = pOption->GetString();
+                aStyle = rOption.GetString();
                 break;
             case HTML_O_CLASS:
-                aClass = pOption->GetString();
+                aClass = rOption.GetString();
                 break;
             case HTML_O_LANG:
-                aLang = pOption->GetString();
+                aLang = rOption.GetString();
                 break;
             case HTML_O_DIR:
-                aDir = pOption->GetString();
+                aDir = rOption.GetString();
                 break;
             case HTML_O_SDNUM:
-                aNumFmt = pOption->GetString();
+                aNumFmt = rOption.GetString();
                 bHasNumFmt = sal_True;
                 break;
             case HTML_O_SDVAL:
                 bHasValue = sal_True;
-                aValue = pOption->GetString();
+                aValue = rOption.GetString();
                 break;
             case HTML_O_NOWRAP:
                 bNoWrap = sal_True;
@@ -3979,14 +3974,14 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, sal_Bool bReadOptions,
                         // Diese Schleife muss vorwartes sein, weil die
                         // erste Option immer gewinnt.
                         sal_Bool bNeedsSection = sal_False;
-                        const HTMLOptions *pHTMLOptions = GetOptions();
-                        for( sal_uInt16 i=0; i<pHTMLOptions->Count(); i++ )
+                        const HTMLOptions& rHTMLOptions = GetOptions();
+                        for (size_t i = 0; i < rHTMLOptions.size(); ++i)
                         {
-                            const HTMLOption *pOption = (*pHTMLOptions)[i];
-                            if( HTML_O_ALIGN==pOption->GetToken() )
+                            const HTMLOption& rOption = rHTMLOptions[i];
+                            if( HTML_O_ALIGN==rOption.GetToken() )
                             {
                                 SvxAdjust eAdjust =
-                                    (SvxAdjust)pOption->GetEnum(
+                                    (SvxAdjust)rOption.GetEnum(
                                             aHTMLPAlignTable, SVX_ADJUST_END );
                                 bNeedsSection = SVX_ADJUST_LEFT == eAdjust ||
                                                 SVX_ADJUST_RIGHT == eAdjust;
@@ -4278,40 +4273,40 @@ void SwHTMLParser::BuildTableRow( HTMLTable *pCurTable, sal_Bool bReadOptions,
 
         if( bReadOptions )
         {
-            const HTMLOptions *pHTMLOptions = GetOptions();
-            for( sal_uInt16 i = pHTMLOptions->Count(); i; )
+            const HTMLOptions& rHTMLOptions = GetOptions();
+            for (size_t i = rHTMLOptions.size(); i; )
             {
-                const HTMLOption *pOption = (*pHTMLOptions)[--i];
-                switch( pOption->GetToken() )
+                const HTMLOption& rOption = rHTMLOptions[--i];
+                switch( rOption.GetToken() )
                 {
                 case HTML_O_ID:
-                    aId = pOption->GetString();
+                    aId = rOption.GetString();
                     break;
                 case HTML_O_ALIGN:
-                    eAdjust = (SvxAdjust)pOption->GetEnum(
+                    eAdjust = (SvxAdjust)rOption.GetEnum(
                                     aHTMLPAlignTable, static_cast< sal_uInt16 >(eAdjust) );
                     break;
                 case HTML_O_VALIGN:
-                    eVertOri = pOption->GetEnum(
+                    eVertOri = rOption.GetEnum(
                                     aHTMLTblVAlignTable, eVertOri );
                     break;
                 case HTML_O_BGCOLOR:
                     // Leere BGCOLOR bei <TABLE>, <TR> und <TD>/<TH> wie Netsc.
                     // ignorieren, bei allen anderen Tags *wirklich* nicht.
-                    if( pOption->GetString().Len() )
+                    if( rOption.GetString().Len() )
                     {
-                        pOption->GetColor( aBGColor );
+                        rOption.GetColor( aBGColor );
                         bBGColor = sal_True;
                     }
                     break;
                 case HTML_O_BACKGROUND:
-                    aBGImage = pOption->GetString();
+                    aBGImage = rOption.GetString();
                     break;
                 case HTML_O_STYLE:
-                    aStyle = pOption->GetString();
+                    aStyle = rOption.GetString();
                     break;
                 case HTML_O_CLASS:
-                    aClass= pOption->GetString();
+                    aClass= rOption.GetString();
                     break;
                 }
             }
@@ -4477,23 +4472,23 @@ void SwHTMLParser::BuildTableSection( HTMLTable *pCurTable,
 
         if( bReadOptions )
         {
-            const HTMLOptions *pHTMLOptions = GetOptions();
-            for( sal_uInt16 i = pHTMLOptions->Count(); i; )
+            const HTMLOptions& rHTMLOptions = GetOptions();
+            for (size_t i = rHTMLOptions.size(); i; )
             {
-                const HTMLOption *pOption = (*pHTMLOptions)[--i];
-                switch( pOption->GetToken() )
+                const HTMLOption& rOption = rHTMLOptions[--i];
+                switch( rOption.GetToken() )
                 {
                 case HTML_O_ID:
-                    InsertBookmark( pOption->GetString() );
+                    InsertBookmark( rOption.GetString() );
                     break;
                 case HTML_O_ALIGN:
                     pSaveStruct->eAdjust =
-                        (SvxAdjust)pOption->GetEnum( aHTMLPAlignTable,
+                        (SvxAdjust)rOption.GetEnum( aHTMLPAlignTable,
                                                      static_cast< sal_uInt16 >(pSaveStruct->eAdjust) );
                     break;
                 case HTML_O_VALIGN:
                     pSaveStruct->eVertOri =
-                        pOption->GetEnum( aHTMLTblVAlignTable,
+                        rOption.GetEnum( aHTMLTblVAlignTable,
                                           pSaveStruct->eVertOri );
                     break;
                 }
@@ -4665,31 +4660,31 @@ void SwHTMLParser::BuildTableColGroup( HTMLTable *pCurTable,
         pSaveStruct = new _TblColGrpSaveStruct;
         if( bReadOptions )
         {
-            const HTMLOptions *pColGrpOptions = GetOptions();
-            for( sal_uInt16 i = pColGrpOptions->Count(); i; )
+            const HTMLOptions& rColGrpOptions = GetOptions();
+            for (size_t i = rColGrpOptions.size(); i; )
             {
-                const HTMLOption *pColGrpOption = (*pColGrpOptions)[--i];
-                switch( pColGrpOption->GetToken() )
+                const HTMLOption& rOption = rColGrpOptions[--i];
+                switch( rOption.GetToken() )
                 {
                 case HTML_O_ID:
-                    InsertBookmark( pColGrpOption->GetString() );
+                    InsertBookmark( rOption.GetString() );
                     break;
                 case HTML_O_SPAN:
-                    pSaveStruct->nColGrpSpan = (sal_uInt16)pColGrpOption->GetNumber();
+                    pSaveStruct->nColGrpSpan = (sal_uInt16)rOption.GetNumber();
                     break;
                 case HTML_O_WIDTH:
-                    pSaveStruct->nColGrpWidth = (sal_uInt16)pColGrpOption->GetNumber();
+                    pSaveStruct->nColGrpWidth = (sal_uInt16)rOption.GetNumber();
                     pSaveStruct->bRelColGrpWidth =
-                        (pColGrpOption->GetString().Search('*') != STRING_NOTFOUND);
+                        (rOption.GetString().Search('*') != STRING_NOTFOUND);
                     break;
                 case HTML_O_ALIGN:
                     pSaveStruct->eColGrpAdjust =
-                        (SvxAdjust)pColGrpOption->GetEnum( aHTMLPAlignTable,
+                        (SvxAdjust)rOption.GetEnum( aHTMLPAlignTable,
                                                 static_cast< sal_uInt16 >(pSaveStruct->eColGrpAdjust) );
                     break;
                 case HTML_O_VALIGN:
                     pSaveStruct->eColGrpVertOri =
-                        pColGrpOption->GetEnum( aHTMLTblVAlignTable,
+                        rOption.GetEnum( aHTMLTblVAlignTable,
                                                 pSaveStruct->eColGrpVertOri );
                     break;
                 }
@@ -4748,31 +4743,31 @@ void SwHTMLParser::BuildTableColGroup( HTMLTable *pCurTable,
                 SvxAdjust eColAdjust = pSaveStruct->eColGrpAdjust;
                 sal_Int16 eColVertOri = pSaveStruct->eColGrpVertOri;
 
-                const HTMLOptions *pColOptions = GetOptions();
-                for( sal_uInt16 i = pColOptions->Count(); i; )
+                const HTMLOptions& rColOptions = GetOptions();
+                for (size_t i = rColOptions.size(); i; )
                 {
-                    const HTMLOption *pColOption = (*pColOptions)[--i];
-                    switch( pColOption->GetToken() )
+                    const HTMLOption& rOption = rColOptions[--i];
+                    switch( rOption.GetToken() )
                     {
                     case HTML_O_ID:
-                        InsertBookmark( pColOption->GetString() );
+                        InsertBookmark( rOption.GetString() );
                         break;
                     case HTML_O_SPAN:
-                        nColSpan = (sal_uInt16)pColOption->GetNumber();
+                        nColSpan = (sal_uInt16)rOption.GetNumber();
                         break;
                     case HTML_O_WIDTH:
-                        nColWidth = (sal_uInt16)pColOption->GetNumber();
+                        nColWidth = (sal_uInt16)rOption.GetNumber();
                         bRelColWidth =
-                            (pColOption->GetString().Search('*') != STRING_NOTFOUND);
+                            (rOption.GetString().Search('*') != STRING_NOTFOUND);
                         break;
                     case HTML_O_ALIGN:
                         eColAdjust =
-                            (SvxAdjust)pColOption->GetEnum( aHTMLPAlignTable,
+                            (SvxAdjust)rOption.GetEnum( aHTMLPAlignTable,
                                                             static_cast< sal_uInt16 >(eColAdjust) );
                         break;
                     case HTML_O_VALIGN:
                         eColVertOri =
-                            pColOption->GetEnum( aHTMLTblVAlignTable,
+                            rOption.GetEnum( aHTMLTblVAlignTable,
                                                         eColVertOri );
                         break;
                     }
@@ -4893,13 +4888,13 @@ void SwHTMLParser::BuildTableCaption( HTMLTable *pCurTable )
         }
 
         sal_Bool bTop = sal_True;
-        const HTMLOptions *pHTMLOptions = GetOptions();
-        for ( sal_uInt16 i = pHTMLOptions->Count(); i; )
+        const HTMLOptions& rHTMLOptions = GetOptions();
+        for ( size_t i = rHTMLOptions.size(); i; )
         {
-            const HTMLOption *pOption = (*pHTMLOptions)[--i];
-            if( HTML_O_ALIGN == pOption->GetToken() )
+            const HTMLOption& rOption = rHTMLOptions[--i];
+            if( HTML_O_ALIGN == rOption.GetToken() )
             {
-                if( pOption->GetString().EqualsIgnoreCaseAscii(OOO_STRING_SVTOOLS_HTML_VA_bottom))
+                if( rOption.GetString().EqualsIgnoreCaseAscii(OOO_STRING_SVTOOLS_HTML_VA_bottom))
                     bTop = sal_False;
             }
         }
@@ -5105,7 +5100,7 @@ void _TblSaveStruct::MakeTable( sal_uInt16 nWidth, SwPosition& rPos, SwDoc *pDoc
 }
 
 
-HTMLTableOptions::HTMLTableOptions( const HTMLOptions *pOptions,
+HTMLTableOptions::HTMLTableOptions( const HTMLOptions& rOptions,
                                     SvxAdjust eParentAdjust ) :
     nCols( 0 ),
     nWidth( 0 ), nHeight( 0 ),
@@ -5122,38 +5117,38 @@ HTMLTableOptions::HTMLTableOptions( const HTMLOptions *pOptions,
     sal_Bool bBorderColor = sal_False;
     sal_Bool bHasFrame = sal_False, bHasRules = sal_False;
 
-    for( sal_uInt16 i = pOptions->Count(); i; )
+    for (size_t i = rOptions.size(); i; )
     {
-        const HTMLOption *pOption = (*pOptions)[--i];
-        switch( pOption->GetToken() )
+        const HTMLOption& rOption = rOptions[--i];
+        switch( rOption.GetToken() )
         {
         case HTML_O_ID:
-            aId = pOption->GetString();
+            aId = rOption.GetString();
             break;
         case HTML_O_COLS:
-            nCols = (sal_uInt16)pOption->GetNumber();
+            nCols = (sal_uInt16)rOption.GetNumber();
             break;
         case HTML_O_WIDTH:
-            nWidth = (sal_uInt16)pOption->GetNumber();
-            bPrcWidth = (pOption->GetString().Search('%') != STRING_NOTFOUND);
+            nWidth = (sal_uInt16)rOption.GetNumber();
+            bPrcWidth = (rOption.GetString().Search('%') != STRING_NOTFOUND);
             if( bPrcWidth && nWidth>100 )
                 nWidth = 100;
             break;
         case HTML_O_HEIGHT:
-            nHeight = (sal_uInt16)pOption->GetNumber();
-            if( pOption->GetString().Search('%') != STRING_NOTFOUND )
+            nHeight = (sal_uInt16)rOption.GetNumber();
+            if( rOption.GetString().Search('%') != STRING_NOTFOUND )
                 nHeight = 0;    // keine %-Anagben benutzen!!!
             break;
         case HTML_O_CELLPADDING:
-            nCellPadding = (sal_uInt16)pOption->GetNumber();
+            nCellPadding = (sal_uInt16)rOption.GetNumber();
             break;
         case HTML_O_CELLSPACING:
-            nCellSpacing = (sal_uInt16)pOption->GetNumber();
+            nCellSpacing = (sal_uInt16)rOption.GetNumber();
             break;
         case HTML_O_ALIGN:
             {
                 sal_uInt16 nAdjust = static_cast< sal_uInt16 >(eAdjust);
-                if( pOption->GetEnum( nAdjust, aHTMLPAlignTable ) )
+                if( rOption.GetEnum( nAdjust, aHTMLPAlignTable ) )
                 {
                     eAdjust = (SvxAdjust)nAdjust;
                     bTableAdjust = sal_True;
@@ -5161,13 +5156,13 @@ HTMLTableOptions::HTMLTableOptions( const HTMLOptions *pOptions,
             }
             break;
         case HTML_O_VALIGN:
-            eVertOri = pOption->GetEnum( aHTMLTblVAlignTable, eVertOri );
+            eVertOri = rOption.GetEnum( aHTMLTblVAlignTable, eVertOri );
             break;
         case HTML_O_BORDER:
             // BORDER und BORDER=BORDER wie BORDER=1 behandeln
-            if( pOption->GetString().Len() &&
-                !pOption->GetString().EqualsIgnoreCaseAscii(OOO_STRING_SVTOOLS_HTML_O_border) )
-                nBorder = (sal_uInt16)pOption->GetNumber();
+            if( rOption.GetString().Len() &&
+                !rOption.GetString().EqualsIgnoreCaseAscii(OOO_STRING_SVTOOLS_HTML_O_border) )
+                nBorder = (sal_uInt16)rOption.GetNumber();
             else
                 nBorder = 1;
 
@@ -5177,47 +5172,47 @@ HTMLTableOptions::HTMLTableOptions( const HTMLOptions *pOptions,
                 eRules = ( nBorder ? HTML_TR_ALL : HTML_TR_NONE );
             break;
         case HTML_O_FRAME:
-            eFrame = pOption->GetTableFrame();
+            eFrame = rOption.GetTableFrame();
             bHasFrame = sal_True;
             break;
         case HTML_O_RULES:
-            eRules = pOption->GetTableRules();
+            eRules = rOption.GetTableRules();
             bHasRules = sal_True;
             break;
         case HTML_O_BGCOLOR:
             // Leere BGCOLOR bei <TABLE>, <TR> und <TD>/<TH> wie Netscape
             // ignorieren, bei allen anderen Tags *wirklich* nicht.
-            if( pOption->GetString().Len() )
+            if( rOption.GetString().Len() )
             {
-                pOption->GetColor( aBGColor );
+                rOption.GetColor( aBGColor );
                 bBGColor = sal_True;
             }
             break;
         case HTML_O_BACKGROUND:
-            aBGImage = pOption->GetString();
+            aBGImage = rOption.GetString();
             break;
         case HTML_O_BORDERCOLOR:
-            pOption->GetColor( aBorderColor );
+            rOption.GetColor( aBorderColor );
             bBorderColor = sal_True;
             break;
         case HTML_O_BORDERCOLORDARK:
             if( !bBorderColor )
-                pOption->GetColor( aBorderColor );
+                rOption.GetColor( aBorderColor );
             break;
         case HTML_O_STYLE:
-            aStyle = pOption->GetString();
+            aStyle = rOption.GetString();
             break;
         case HTML_O_CLASS:
-            aClass = pOption->GetString();
+            aClass = rOption.GetString();
             break;
         case HTML_O_DIR:
-            aDir = pOption->GetString();
+            aDir = rOption.GetString();
             break;
         case HTML_O_HSPACE:
-            nHSpace = (sal_uInt16)pOption->GetNumber();
+            nHSpace = (sal_uInt16)rOption.GetNumber();
             break;
         case HTML_O_VSPACE:
-            nVSpace = (sal_uInt16)pOption->GetNumber();
+            nVSpace = (sal_uInt16)rOption.GetNumber();
             break;
         }
     }

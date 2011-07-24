@@ -1255,9 +1255,9 @@ bool SwDoc::MoveNodeRange( SwNodeRange& rRange, SwNodeIndex& rPos,
 }
 
 // Convert list of ranges of whichIds to a corresponding list of whichIds
-SvUShorts * lcl_RangesToUShorts(sal_uInt16 * pRanges)
+std::vector<sal_uInt16> * lcl_RangesToVector(sal_uInt16 * pRanges)
 {
-    SvUShorts * pResult = new SvUShorts();
+    std::vector<sal_uInt16> * pResult = new std::vector<sal_uInt16>();
 
     int i = 0;
     while (pRanges[i] != 0)
@@ -1265,7 +1265,7 @@ SvUShorts * lcl_RangesToUShorts(sal_uInt16 * pRanges)
         OSL_ENSURE(pRanges[i+1] != 0, "malformed ranges");
 
         for (sal_uInt16 j = pRanges[i]; j < pRanges[i+1]; j++)
-            pResult->Insert(j, pResult->Count());
+            pResult->push_back(j);
 
         i += 2;
     }
@@ -1423,8 +1423,8 @@ void lcl_JoinText( SwPaM& rPam, sal_Bool bJoinPrev )
                    first resetting all character attributes in first
                    paragraph (pTxtNd).
                 */
-                SvUShorts * pShorts =
-                    lcl_RangesToUShorts(aCharFmtSetRange);
+                std::vector<sal_uInt16> * pShorts =
+                    lcl_RangesToVector(aCharFmtSetRange);
                 pTxtNd->ResetAttr(*pShorts);
                 delete pShorts;
 

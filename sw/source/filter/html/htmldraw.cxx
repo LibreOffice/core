@@ -294,93 +294,92 @@ void SwHTMLParser::NewMarquee( HTMLTable *pCurTable )
     sal_Int16 nAmount = -6;
     Color aBGColor;
 
-    const HTMLOptions *pHTMLOptions = GetOptions();
-    sal_uInt16 nArrLen = pHTMLOptions->Count();
-    for ( sal_uInt16 i=0; i<nArrLen; i++ )
+    const HTMLOptions& rHTMLOptions = GetOptions();
+    for (size_t i = 0, n = rHTMLOptions.size(); i < n; ++i)
     {
-        const HTMLOption *pOption = (*pHTMLOptions)[i];
-        switch( pOption->GetToken() )
+        const HTMLOption& rOption = rHTMLOptions[i];
+        switch( rOption.GetToken() )
         {
             case HTML_O_ID:
-                aId = pOption->GetString();
+                aId = rOption.GetString();
                 break;
             case HTML_O_STYLE:
-                aStyle = pOption->GetString();
+                aStyle = rOption.GetString();
                 break;
             case HTML_O_CLASS:
-                aClass = pOption->GetString();
+                aClass = rOption.GetString();
                 break;
 
             case HTML_O_BEHAVIOR:
                 eAniKind =
-                    (SdrTextAniKind)pOption->GetEnum( aHTMLMarqBehaviorTable,
+                    (SdrTextAniKind)rOption.GetEnum( aHTMLMarqBehaviorTable,
                                                       static_cast< sal_uInt16 >(eAniKind) );
                 break;
 
             case HTML_O_BGCOLOR:
-                pOption->GetColor( aBGColor );
+                rOption.GetColor( aBGColor );
                 bBGColor = sal_True;
                 break;
 
             case HTML_O_DIRECTION:
                 eAniDir =
-                    (SdrTextAniDirection)pOption->GetEnum( aHTMLMarqDirectionTable,
+                    (SdrTextAniDirection)rOption.GetEnum( aHTMLMarqDirectionTable,
                                                       static_cast< sal_uInt16 >(eAniDir) );
                 bDirection = sal_True;
                 break;
 
             case HTML_O_LOOP:
-                if( pOption->GetString().
+                if( rOption.GetString().
                         EqualsIgnoreCaseAscii(OOO_STRING_SVTOOLS_HTML_LOOP_infinite) )
                 {
                     nCount = 0;
                 }
                 else
                 {
-                    sal_uInt32 nLoop = pOption->GetSNumber();
+                    sal_uInt32 nLoop = rOption.GetSNumber();
                     nCount = (sal_uInt16)(nLoop>0 ? nLoop : 0 );
                 }
                 break;
 
             case HTML_O_SCROLLAMOUNT:
-                nAmount = -((sal_Int16)pOption->GetNumber());
+                nAmount = -((sal_Int16)rOption.GetNumber());
                 break;
 
             case HTML_O_SCROLLDELAY:
-                nDelay = (sal_uInt16)pOption->GetNumber();
+                nDelay = (sal_uInt16)rOption.GetNumber();
                 break;
 
             case HTML_O_WIDTH:
                 // erstmal nur als Pixelwerte merken!
-                nWidth = pOption->GetNumber();
-                bPrcWidth = pOption->GetString().Search('%') != STRING_NOTFOUND;
+                nWidth = rOption.GetNumber();
+                bPrcWidth = rOption.GetString().Search('%') != STRING_NOTFOUND;
                 if( bPrcWidth && nWidth>100 )
                     nWidth = 100;
                 break;
 
             case HTML_O_HEIGHT:
                 // erstmal nur als Pixelwerte merken!
-                nHeight = pOption->GetNumber();
-                if( pOption->GetString().Search('%') != STRING_NOTFOUND )
+                nHeight = rOption.GetNumber();
+                if( rOption.GetString().Search('%') != STRING_NOTFOUND )
                     nHeight = 0;
                 break;
 
             case HTML_O_HSPACE:
                 // erstmal nur als Pixelwerte merken!
-                aSpace.Height() = pOption->GetNumber();
+                aSpace.Height() = rOption.GetNumber();
                 break;
 
             case HTML_O_VSPACE:
                 // erstmal nur als Pixelwerte merken!
-                aSpace.Width() = pOption->GetNumber();
+                aSpace.Width() = rOption.GetNumber();
                 break;
 
             case HTML_O_ALIGN:
                 eVertOri =
-                    pOption->GetEnum( aHTMLImgVAlignTable,
+                    rOption.GetEnum( aHTMLImgVAlignTable,
                                                     text::VertOrientation::TOP );
                 eHoriOri =
-                    pOption->GetEnum( aHTMLImgHAlignTable,
+                    rOption.GetEnum( aHTMLImgHAlignTable,
                                                     text::HoriOrientation::NONE );
                 break;
         }

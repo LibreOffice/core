@@ -1561,7 +1561,7 @@ sal_Bool SwCntntNode::ResetAttr( sal_uInt16 nWhich1, sal_uInt16 nWhich2 )
     }
     return bRet;
 }
-sal_Bool SwCntntNode::ResetAttr( const SvUShorts& rWhichArr )
+sal_Bool SwCntntNode::ResetAttr( const std::vector<sal_uInt16>& rWhichArr )
 {
     if( !GetpSwAttrSet() )
         return sal_False;
@@ -1576,10 +1576,7 @@ sal_Bool SwCntntNode::ResetAttr( const SvUShorts& rWhichArr )
     sal_uInt16 nDel = 0;
     if( IsModifyLocked() )
     {
-        std::vector<sal_uInt16> aClearWhichIds;
-        for( sal_uInt16 n = 0, nEnd = rWhichArr.Count(); n < nEnd; ++n )
-            aClearWhichIds.push_back( rWhichArr[ n ] );
-
+        std::vector<sal_uInt16> aClearWhichIds(rWhichArr);
         nDel = ClearItemsFromAttrSet( aClearWhichIds );
     }
     else
@@ -1587,8 +1584,9 @@ sal_Bool SwCntntNode::ResetAttr( const SvUShorts& rWhichArr )
         SwAttrSet aOld( *GetpSwAttrSet()->GetPool(), GetpSwAttrSet()->GetRanges() ),
                   aNew( *GetpSwAttrSet()->GetPool(), GetpSwAttrSet()->GetRanges() );
 
-        for( sal_uInt16 n = 0, nEnd = rWhichArr.Count(); n < nEnd; ++n )
-            if( AttrSetHandleHelper::ClearItem_BC( mpAttrSet, *this, rWhichArr[ n ], &aOld, &aNew ))
+        std::vector<sal_uInt16>::const_iterator it;
+        for ( it = rWhichArr.begin(); it != rWhichArr.end(); ++it )
+            if( AttrSetHandleHelper::ClearItem_BC( mpAttrSet, *this, *it, &aOld, &aNew ))
                 ++nDel;
 
         if( nDel )

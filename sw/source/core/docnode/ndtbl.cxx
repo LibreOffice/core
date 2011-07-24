@@ -339,7 +339,7 @@ const SwTable* SwDoc::InsertTable( const SwInsertTableOptions& rInsTblOpts,
                                    const SwPosition& rPos, sal_uInt16 nRows,
                                    sal_uInt16 nCols, sal_Int16 eAdjust,
                                    const SwTableAutoFmt* pTAFmt,
-                                   const SvUShorts* pColArr,
+                                   const std::vector<sal_uInt16> *pColArr,
                                    sal_Bool bCalledFromShell,
                                    sal_Bool bNewModel )
 {
@@ -354,7 +354,7 @@ const SwTable* SwDoc::InsertTable( const SwInsertTableOptions& rInsTblOpts,
 
         // sollte das ColumnArray die falsche Anzahl haben wird es ignoriert!
         if( pColArr &&
-            (nCols + ( text::HoriOrientation::NONE == eAdjust ? 2 : 1 )) != pColArr->Count() )
+            (size_t)(nCols + ( text::HoriOrientation::NONE == eAdjust ? 2 : 1 )) != pColArr->size() )
             pColArr = 0;
     }
 
@@ -426,12 +426,12 @@ const SwTable* SwDoc::InsertTable( const SwInsertTableOptions& rInsTblOpts,
     SwTwips nWidth = USHRT_MAX;
     if( pColArr )
     {
-        sal_uInt16 nSttPos = (*pColArr)[ 0 ];
-        sal_uInt16 nLastPos = (*pColArr)[ sal_uInt16(pColArr->Count()-1)];
+        sal_uInt16 nSttPos = pColArr->front();
+        sal_uInt16 nLastPos = pColArr->back();
         if( text::HoriOrientation::NONE == eAdjust )
         {
             sal_uInt16 nFrmWidth = nLastPos;
-            nLastPos = (*pColArr)[ sal_uInt16(pColArr->Count()-2)];
+            nLastPos = (*pColArr)[ pColArr->size()-2 ];
             pTableFmt->SetFmtAttr( SvxLRSpaceItem( nSttPos, nFrmWidth - nLastPos, 0, 0, RES_LR_SPACE ) );
         }
         nWidth = nLastPos - nSttPos;
@@ -531,7 +531,7 @@ const SwTable* SwDoc::InsertTable( const SwInsertTableOptions& rInsTblOpts,
             // Positionen der Spalten!! (nicht deren Breite!)
             if( pColArr )
             {
-                nWidth = (*pColArr)[ sal_uInt16(i + 1) ] - (*pColArr)[ i ];
+                nWidth = (*pColArr)[ i + 1 ] - (*pColArr)[ i ];
                 if( pBoxF->GetFrmSize().GetWidth() != nWidth )
                 {
                     if( pBoxF->GetDepends() )       // neues Format erzeugen!

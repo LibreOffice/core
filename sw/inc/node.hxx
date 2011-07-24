@@ -452,7 +452,7 @@ public:
     virtual sal_Bool SetAttr( const SfxPoolItem& );
     virtual sal_Bool SetAttr( const SfxItemSet& rSet );
     virtual sal_Bool ResetAttr( sal_uInt16 nWhich1, sal_uInt16 nWhich2 = 0 );
-    virtual sal_Bool ResetAttr( const SvUShorts& rWhichArr );
+    virtual sal_Bool ResetAttr( const std::vector<sal_uInt16>& rWhichArr );
     virtual sal_uInt16 ResetAllAttr();
 
     // Obtains attribute that is not delivered via conditional style!

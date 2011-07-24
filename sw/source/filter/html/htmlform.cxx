@@ -1342,30 +1342,30 @@ void SwHTMLParser::NewForm( sal_Bool bAppend )
     ScriptType eDfltScriptType = GetScriptType( pHeaderAttrs );
     const String& rDfltScriptType = GetScriptTypeString( pHeaderAttrs );
 
-    const HTMLOptions *pHTMLOptions = GetOptions();
-    for( sal_uInt16 i = pHTMLOptions->Count(); i; )
+    const HTMLOptions& rHTMLOptions = GetOptions();
+    for (size_t i = rHTMLOptions.size(); i; )
     {
-        const HTMLOption *pOption = (*pHTMLOptions)[--i];
+        const HTMLOption& rOption = rHTMLOptions[--i];
         ScriptType eScriptType2 = eDfltScriptType;
         sal_uInt16 nEvent = 0;
         sal_Bool bSetEvent = sal_False;
 
-        switch( pOption->GetToken() )
+        switch( rOption.GetToken() )
         {
         case HTML_O_ACTION:
-            aAction = pOption->GetString();
+            aAction = rOption.GetString();
             break;
         case HTML_O_METHOD:
-            nMethod = pOption->GetEnum( aHTMLFormMethodTable, nMethod );
+            nMethod = rOption.GetEnum( aHTMLFormMethodTable, nMethod );
             break;
         case HTML_O_ENCTYPE:
-            nEncType = pOption->GetEnum( aHTMLFormEncTypeTable, nEncType );
+            nEncType = rOption.GetEnum( aHTMLFormEncTypeTable, nEncType );
             break;
         case HTML_O_TARGET:
-            sTarget = pOption->GetString();
+            sTarget = rOption.GetString();
             break;
         case HTML_O_NAME:
-            sName = pOption->GetString();
+            sName = rOption.GetString();
             break;
 
         case HTML_O_SDONSUBMIT:
@@ -1383,15 +1383,15 @@ void SwHTMLParser::NewForm( sal_Bool bAppend )
             break;
 
         default:
-            lcl_html_getEvents( pOption->GetTokenString(),
-                                pOption->GetString(),
+            lcl_html_getEvents( rOption.GetTokenString(),
+                                rOption.GetString(),
                                 aUnoMacroTbl, aUnoMacroParamTbl );
             break;
         }
 
         if( bSetEvent )
         {
-            String sEvent( pOption->GetString() );
+            String sEvent( rOption.GetString() );
             if( sEvent.Len() )
             {
                 sEvent.ConvertLineEnd();
@@ -1516,33 +1516,33 @@ void SwHTMLParser::InsertInput()
     const String& rDfltScriptType = GetScriptTypeString( pHeaderAttrs );
 
     sal_uInt16 nKeepCRLFToken = HTML_O_VALUE;
-    const HTMLOptions *pHTMLOptions = GetOptions( &nKeepCRLFToken );
-    for( sal_uInt16 i = pHTMLOptions->Count(); i; )
+    const HTMLOptions& rHTMLOptions = GetOptions( &nKeepCRLFToken );
+    for (size_t i = rHTMLOptions.size(); i; )
     {
-        const HTMLOption *pOption = (*pHTMLOptions)[--i];
+        const HTMLOption& rOption = rHTMLOptions[--i];
         ScriptType eScriptType2 = eDfltScriptType;
         sal_uInt16 nEvent = 0;
         sal_Bool bSetEvent = sal_False;
 
-        switch( pOption->GetToken() )
+        switch( rOption.GetToken() )
         {
         case HTML_O_ID:
-            aId = pOption->GetString();
+            aId = rOption.GetString();
             break;
         case HTML_O_STYLE:
-            aStyle = pOption->GetString();
+            aStyle = rOption.GetString();
             break;
         case HTML_O_CLASS:
-            aClass = pOption->GetString();
+            aClass = rOption.GetString();
             break;
         case HTML_O_TYPE:
-            eType = pOption->GetInputType();
+            eType = rOption.GetInputType();
             break;
         case HTML_O_NAME:
-            sName = pOption->GetString();
+            sName = rOption.GetString();
             break;
         case HTML_O_VALUE:
-            sText = pOption->GetString();
+            sText = rOption.GetString();
             bValue = sal_True;
             break;
         case HTML_O_CHECKED:
@@ -1552,31 +1552,31 @@ void SwHTMLParser::InsertInput()
             bDisabled = sal_True;
             break;
         case HTML_O_MAXLENGTH:
-            nMaxLen = (sal_Int16)pOption->GetNumber();
+            nMaxLen = (sal_Int16)rOption.GetNumber();
             break;
         case HTML_O_SIZE:
-            nSize = (sal_uInt16)pOption->GetNumber();
+            nSize = (sal_uInt16)rOption.GetNumber();
             break;
         case HTML_O_SRC:
-            sImgSrc = pOption->GetString();
+            sImgSrc = rOption.GetString();
             break;
         case HTML_O_WIDTH:
             // erstmal nur als Pixelwerte merken!
-            nWidth = pOption->GetNumber();
+            nWidth = rOption.GetNumber();
             break;
         case HTML_O_HEIGHT:
             // erstmal nur als Pixelwerte merken!
-            nHeight = pOption->GetNumber();
+            nHeight = rOption.GetNumber();
             break;
         case HTML_O_ALIGN:
             eVertOri =
-                pOption->GetEnum( aHTMLImgVAlignTable, eVertOri );
+                rOption.GetEnum( aHTMLImgVAlignTable, eVertOri );
             eHoriOri =
-                pOption->GetEnum( aHTMLImgHAlignTable, eHoriOri );
+                rOption.GetEnum( aHTMLImgHAlignTable, eHoriOri );
             break;
         case HTML_O_TABINDEX:
             // erstmal nur als Pixelwerte merken!
-            nTabIndex = pOption->GetNumber();
+            nTabIndex = rOption.GetNumber();
             break;
 
         case HTML_O_SDONFOCUS:
@@ -1615,15 +1615,15 @@ void SwHTMLParser::InsertInput()
             break;
 
         default:
-            lcl_html_getEvents( pOption->GetTokenString(),
-                                pOption->GetString(),
+            lcl_html_getEvents( rOption.GetTokenString(),
+                                rOption.GetString(),
                                 aUnoMacroTbl, aUnoMacroParamTbl );
             break;
         }
 
         if( bSetEvent )
         {
-            String sEvent( pOption->GetString() );
+            String sEvent( rOption.GetString() );
             if( sEvent.Len() )
             {
                 sEvent.ConvertLineEnd();
@@ -2007,43 +2007,43 @@ void SwHTMLParser::NewTextArea()
     ScriptType eDfltScriptType = GetScriptType( pHeaderAttrs );
     const String& rDfltScriptType = GetScriptTypeString( pHeaderAttrs );
 
-    const HTMLOptions *pHTMLOptions = GetOptions();
-    for( sal_uInt16 i = pHTMLOptions->Count(); i; )
+    const HTMLOptions& rHTMLOptions = GetOptions();
+    for (size_t i = rHTMLOptions.size(); i; )
     {
-        const HTMLOption *pOption = (*pHTMLOptions)[--i];
+        const HTMLOption& rOption = rHTMLOptions[--i];
         ScriptType eScriptType2 = eDfltScriptType;
         sal_uInt16 nEvent = 0;
         sal_Bool bSetEvent = sal_False;
 
-        switch( pOption->GetToken() )
+        switch( rOption.GetToken() )
         {
         case HTML_O_ID:
-            aId = pOption->GetString();
+            aId = rOption.GetString();
             break;
         case HTML_O_STYLE:
-            aStyle = pOption->GetString();
+            aStyle = rOption.GetString();
             break;
         case HTML_O_CLASS:
-            aClass = pOption->GetString();
+            aClass = rOption.GetString();
             break;
         case HTML_O_NAME:
-            sName = pOption->GetString();
+            sName = rOption.GetString();
             break;
         case HTML_O_DISABLED:
             bDisabled = sal_True;
             break;
         case HTML_O_ROWS:
-            nRows = (sal_uInt16)pOption->GetNumber();
+            nRows = (sal_uInt16)rOption.GetNumber();
             break;
         case HTML_O_COLS:
-            nCols = (sal_uInt16)pOption->GetNumber();
+            nCols = (sal_uInt16)rOption.GetNumber();
             break;
         case HTML_O_WRAP:
-            nWrap = pOption->GetEnum( aHTMLTextAreaWrapTable, nWrap );
+            nWrap = rOption.GetEnum( aHTMLTextAreaWrapTable, nWrap );
             break;
 
         case HTML_O_TABINDEX:
-            nTabIndex = pOption->GetSNumber();
+            nTabIndex = rOption.GetSNumber();
             break;
 
         case HTML_O_SDONFOCUS:
@@ -2082,15 +2082,15 @@ void SwHTMLParser::NewTextArea()
             break;
 
         default:
-            lcl_html_getEvents( pOption->GetTokenString(),
-                                pOption->GetString(),
+            lcl_html_getEvents( rOption.GetTokenString(),
+                                rOption.GetString(),
                                 aUnoMacroTbl, aUnoMacroParamTbl );
             break;
         }
 
         if( bSetEvent )
         {
-            String sEvent( pOption->GetString() );
+            String sEvent( rOption.GetString() );
             if( sEvent.Len() )
             {
                 sEvent.ConvertLineEnd();
@@ -2297,27 +2297,27 @@ void SwHTMLParser::NewSelect()
     ScriptType eDfltScriptType = GetScriptType( pHeaderAttrs );
     const String& rDfltScriptType = GetScriptTypeString( pHeaderAttrs );
 
-    const HTMLOptions *pHTMLOptions = GetOptions();
-    for( sal_uInt16 i = pHTMLOptions->Count(); i; )
+    const HTMLOptions& rHTMLOptions = GetOptions();
+    for (size_t i = rHTMLOptions.size(); i; )
     {
-        const HTMLOption *pOption = (*pHTMLOptions)[--i];
+        const HTMLOption& rOption = rHTMLOptions[--i];
         ScriptType eScriptType2 = eDfltScriptType;
         sal_uInt16 nEvent = 0;
         sal_Bool bSetEvent = sal_False;
 
-        switch( pOption->GetToken() )
+        switch( rOption.GetToken() )
         {
         case HTML_O_ID:
-            aId = pOption->GetString();
+            aId = rOption.GetString();
             break;
         case HTML_O_STYLE:
-            aStyle = pOption->GetString();
+            aStyle = rOption.GetString();
             break;
         case HTML_O_CLASS:
-            aClass = pOption->GetString();
+            aClass = rOption.GetString();
             break;
         case HTML_O_NAME:
-            sName = pOption->GetString();
+            sName = rOption.GetString();
             break;
         case HTML_O_MULTIPLE:
             bMultiple = sal_True;
@@ -2326,11 +2326,11 @@ void SwHTMLParser::NewSelect()
             bDisabled = sal_True;
             break;
         case HTML_O_SIZE:
-            nSelectEntryCnt = (sal_uInt16)pOption->GetNumber();
+            nSelectEntryCnt = (sal_uInt16)rOption.GetNumber();
             break;
 
         case HTML_O_TABINDEX:
-            nTabIndex = pOption->GetSNumber();
+            nTabIndex = rOption.GetSNumber();
             break;
 
         case HTML_O_SDONFOCUS:
@@ -2362,15 +2362,15 @@ void SwHTMLParser::NewSelect()
             break;
 
         default:
-            lcl_html_getEvents( pOption->GetTokenString(),
-                                pOption->GetString(),
+            lcl_html_getEvents( rOption.GetTokenString(),
+                                rOption.GetString(),
                                 aUnoMacroTbl, aUnoMacroParamTbl );
             break;
         }
 
         if( bSetEvent )
         {
-            String sEvent( pOption->GetString() );
+            String sEvent( rOption.GetString() );
             if( sEvent.Len() )
             {
                 sEvent.ConvertLineEnd();
@@ -2601,11 +2601,11 @@ void SwHTMLParser::InsertSelectOption()
     bLBEntrySelected = sal_False;
     String aValue;
 
-    const HTMLOptions *pHTMLOptions = GetOptions();
-    for( sal_uInt16 i = pHTMLOptions->Count(); i; )
+    const HTMLOptions& rHTMLOptions = GetOptions();
+    for (size_t i = rHTMLOptions.size(); i; )
     {
-        HTMLOption *pOption = (*pHTMLOptions)[--i];
-        switch( pOption->GetToken() )
+        const HTMLOption& rOption = rHTMLOptions[--i];
+        switch( rOption.GetToken() )
         {
         case HTML_O_ID:
             // erstmal weglassen!!!
@@ -2614,7 +2614,7 @@ void SwHTMLParser::InsertSelectOption()
             bLBEntrySelected = sal_True;
             break;
         case HTML_O_VALUE:
-            aValue = pOption->GetString();
+            aValue = rOption.GetString();
             if( !aValue.Len() )
                 aValue.AssignAscii( "$$$empty$$$" );
             break;

@@ -4454,7 +4454,7 @@ namespace {
                                       const sal_uInt16 nWhich1,
                                       const sal_uInt16 nWhich2 );
             HandleResetAttrAtTxtNode( SwTxtNode& rTxtNode,
-                                      const SvUShorts& rWhichArr );
+                                      const std::vector<sal_uInt16>& rWhichArr );
             HandleResetAttrAtTxtNode( SwTxtNode& rTxtNode );
 
             ~HandleResetAttrAtTxtNode();
@@ -4567,7 +4567,7 @@ namespace {
     }
 
     HandleResetAttrAtTxtNode::HandleResetAttrAtTxtNode( SwTxtNode& rTxtNode,
-                                                        const SvUShorts& rWhichArr )
+                                                        const std::vector<sal_uInt16>& rWhichArr )
         : mrTxtNode( rTxtNode ),
           mbListStyleOrIdReset( false ),
           mbUpdateListLevel( false ),
@@ -4576,17 +4576,17 @@ namespace {
     {
         bool bRemoveFromList( false );
         {
-            const sal_uInt16 nEnd = rWhichArr.Count();
-            for ( sal_uInt16 n = 0; n < nEnd; ++n )
+            std::vector<sal_uInt16>::const_iterator it;
+            for ( it = rWhichArr.begin(); it != rWhichArr.end(); ++it)
             {
                 // RES_PARATR_NUMRULE and RES_PARATR_LIST_ID
-                if ( rWhichArr[ n ] == RES_PARATR_NUMRULE )
+                if ( *it == RES_PARATR_NUMRULE )
                 {
                     bRemoveFromList = bRemoveFromList ||
                                       mrTxtNode.GetNumRule() != 0;
                     mbListStyleOrIdReset = true;
                 }
-                else if ( rWhichArr[ n ] == RES_PARATR_LIST_ID )
+                else if ( *it == RES_PARATR_LIST_ID )
                 {
                     bRemoveFromList = bRemoveFromList ||
                         ( mrTxtNode.GetpSwAttrSet() &&
@@ -4596,7 +4596,7 @@ namespace {
                 }
                 // #i70748#
                 // RES_PARATR_OUTLINELEVEL
-                else if ( rWhichArr[ n ] == RES_PARATR_OUTLINELEVEL )
+                else if ( *it == RES_PARATR_OUTLINELEVEL )
                 {
                     mrTxtNode.ResetEmptyListStyleDueToResetOutlineLevelAttr();
                 }
@@ -4605,19 +4605,19 @@ namespace {
                 {
                     // RES_PARATR_LIST_LEVEL
                     mbUpdateListLevel = mbUpdateListLevel ||
-                                        ( rWhichArr[ n ] == RES_PARATR_LIST_LEVEL &&
+                                        ( *it == RES_PARATR_LIST_LEVEL &&
                                           mrTxtNode.HasAttrListLevel() );
 
                     // RES_PARATR_LIST_ISRESTART and RES_PARATR_LIST_RESTARTVALUE
                     mbUpdateListRestart = mbUpdateListRestart ||
-                                          ( rWhichArr[ n ] == RES_PARATR_LIST_ISRESTART &&
+                                          ( *it == RES_PARATR_LIST_ISRESTART &&
                                             mrTxtNode.IsListRestart() ) ||
-                                          ( rWhichArr[ n ] == RES_PARATR_LIST_RESTARTVALUE &&
+                                          ( *it == RES_PARATR_LIST_RESTARTVALUE &&
                                             mrTxtNode.HasAttrListRestartValue() );
 
                     // RES_PARATR_LIST_ISCOUNTED
                     mbUpdateListCount = mbUpdateListCount ||
-                                        ( rWhichArr[ n ] == RES_PARATR_LIST_ISCOUNTED &&
+                                        ( *it == RES_PARATR_LIST_ISCOUNTED &&
                                           !mrTxtNode.IsCountedInList() );
                 }
             }
@@ -4718,7 +4718,7 @@ sal_Bool SwTxtNode::ResetAttr( sal_uInt16 nWhich1, sal_uInt16 nWhich2 )
     return bRet;
 }
 
-sal_Bool SwTxtNode::ResetAttr( const SvUShorts& rWhichArr )
+sal_Bool SwTxtNode::ResetAttr( const std::vector<sal_uInt16>& rWhichArr )
 {
     const bool bOldIsSetOrResetAttr( mbInSetOrResetAttr );
     mbInSetOrResetAttr = true;

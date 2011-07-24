@@ -30,11 +30,6 @@
 
 #include <undobj.hxx>
 
-#ifndef _SVSTDARR_HXX
-#define _SVSTDARR_USHORTS
-#include <svl/svstdarr.hxx>
-#endif
-
 #include <vector>
 #include <set>
 #include <swtypes.hxx>
@@ -63,7 +58,7 @@ class SwUndoInsTbl : public SwUndo
     String sTblNm;
     SwInsertTableOptions aInsTblOpts;
     SwDDEFieldType* pDDEFldType;
-    SvUShorts* pColWidth;
+    std::vector<sal_uInt16> *pColWidth;
     SwRedlineData*  pRedlData;
     SwTableAutoFmt* pAutoFmt;
     sal_uLong nSttNode;
@@ -73,7 +68,7 @@ class SwUndoInsTbl : public SwUndo
 public:
     SwUndoInsTbl( const SwPosition&, sal_uInt16 nCols, sal_uInt16 nRows,
                     sal_uInt16 eAdjust, const SwInsertTableOptions& rInsTblOpts,
-                    const SwTableAutoFmt* pTAFmt, const SvUShorts* pColArr,
+                    const SwTableAutoFmt* pTAFmt, const std::vector<sal_uInt16> *pColArr,
                   const String & rName);
 
     virtual ~SwUndoInsTbl();

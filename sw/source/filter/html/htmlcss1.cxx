@@ -1723,12 +1723,12 @@ void SwHTMLParser::NewStyle()
 {
     String sType;
 
-    const HTMLOptions *pOptions2 = GetOptions();
-    for( sal_uInt16 i = pOptions2->Count(); i; )
+    const HTMLOptions& rOptions2 = GetOptions();
+    for (size_t i = rOptions2.size(); i; )
     {
-        const HTMLOption *pOption = (*pOptions2)[--i];
-        if( HTML_O_TYPE==pOption->GetToken() )
-            sType = pOption->GetString();
+        const HTMLOption& rOption = rOptions2[--i];
+        if( HTML_O_TYPE == rOption.GetToken() )
+            sType = rOption.GetString();
     }
 
     bIgnoreRawData = sType.Len() &&
@@ -1818,20 +1818,20 @@ void SwHTMLParser::InsertLink()
     {
         String sRel, sHRef, sType;
 
-        const HTMLOptions *pOptions2 = GetOptions();
-        for( sal_uInt16 i = pOptions2->Count(); i; )
+        const HTMLOptions& rOptions2 = GetOptions();
+        for (size_t i = rOptions2.size(); i; )
         {
-            const HTMLOption *pOption = (*pOptions2)[--i];
-            switch( pOption->GetToken() )
+            const HTMLOption& rOption = rOptions2[--i];
+            switch( rOption.GetToken() )
             {
                 case HTML_O_REL:
-                    sRel = pOption->GetString();
+                    sRel = rOption.GetString();
                     break;
                 case HTML_O_HREF:
-                    sHRef = URIHelper::SmartRel2Abs( INetURLObject( sBaseURL ), pOption->GetString(), Link(), false );
+                    sHRef = URIHelper::SmartRel2Abs( INetURLObject( sBaseURL ), rOption.GetString(), Link(), false );
                     break;
                 case HTML_O_TYPE:
-                    sType = pOption->GetString();
+                    sType = rOption.GetString();
                     break;
             }
         }
