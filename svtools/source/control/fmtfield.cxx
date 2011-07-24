@@ -1262,18 +1262,6 @@ DoubleCurrencyField::DoubleCurrencyField(Window* pParent, WinBits nStyle)
 }
 
 //------------------------------------------------------------------------------
-DoubleCurrencyField::DoubleCurrencyField(Window* pParent, const ResId& rResId)
-    :FormattedField(pParent, rResId)
-    ,m_bChangingFormat(sal_False)
-{
-    m_bPrependCurrSym = sal_False;
-
-    // initialize with a system currency format
-    m_sCurrencySymbol = SvtSysLocale().GetLocaleData().getCurrSymbol();
-    UpdateCurrencyFormat();
-}
-
-//------------------------------------------------------------------------------
 void DoubleCurrencyField::FormatChanged(FORMAT_CHANGE_TYPE nWhat)
 {
     if (m_bChangingFormat)

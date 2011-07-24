@@ -37,8 +37,6 @@
 #include <vcl/svapp.hxx>
 #include <vcl/wrkwin.hxx>
 #include <vcl/msgbox.hxx>
-#include <vcl/introwin.hxx>
-#include <vcl/msgbox.hxx>
 
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/servicefactory.hxx>
@@ -90,13 +88,6 @@ public:
 
 void Main()
 {
-    /*
-    IntroWindow splash;
-    splash.Show();
-    sleep(5);
-    splash.Hide();
-    */
-
     MyWin aMainWin( NULL, WB_APP | WB_STDWORK );
     aMainWin.SetText( XubString( RTL_CONSTASCII_USTRINGPARAM( "VCLDemo - VCL Workbench" ) ) );
     aMainWin.Show();

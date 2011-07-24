@@ -4184,13 +4184,6 @@ TriStateBox::~TriStateBox()
 
 // =======================================================================
 
-DisclosureButton::DisclosureButton( Window* pParent, WinBits ) :
-    CheckBox( pParent, WB_NOBORDER )
-{
-}
-
-// -----------------------------------------------------------------------
-
 DisclosureButton::DisclosureButton( Window* pParent, const ResId& rResId ) :
     CheckBox( pParent, rResId.SetRT( RSC_CHECKBOX ) )
 {

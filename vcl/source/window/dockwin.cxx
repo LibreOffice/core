@@ -806,21 +806,6 @@ void DockingWindow::ShowTitleButton( sal_uInt16 nButton, sal_Bool bVisible )
 
 // -----------------------------------------------------------------------
 
-sal_Bool DockingWindow::IsTitleButtonVisible( sal_uInt16 nButton ) const
-{
-    if ( mpFloatWin )
-        return mpFloatWin->IsTitleButtonVisible( nButton );
-    else
-    {
-        if ( nButton == TITLE_BUTTON_DOCKING )
-            return mbDockBtn;
-        else /* if ( nButton == TITLE_BUTTON_HIDE ) */
-            return mbHideBtn;
-    }
-}
-
-// -----------------------------------------------------------------------
-
 void DockingWindow::SetFloatingMode( sal_Bool bFloatMode )
 {
     ImplDockingWindowWrapper *pWrapper = ImplGetDockingManager()->GetDockingWindowWrapper( this );
@@ -947,20 +932,6 @@ WinBits DockingWindow::GetFloatStyle() const
     }
 
     return mnFloatBits;
-}
-
-// -----------------------------------------------------------------------
-
-void DockingWindow::SetTabStop()
-{
-    ImplDockingWindowWrapper *pWrapper = ImplGetDockingManager()->GetDockingWindowWrapper( this );
-    if( pWrapper )
-    {
-        pWrapper->SetTabStop();
-        return;
-    }
-
-    mpWindowImpl->mnStyle |= WB_GROUP | WB_TABSTOP;
 }
 
 // -----------------------------------------------------------------------
@@ -1107,13 +1078,6 @@ void DockingWindow::SetMaxOutputSizePixel( const Size& rSize )
     if ( mpFloatWin )
         mpFloatWin->SetMaxOutputSizePixel( rSize );
     mpImplData->maMaxOutSize = rSize;
-}
-
-const Size& DockingWindow::GetMaxOutputSizePixel() const
-{
-    if ( mpFloatWin )
-        return mpFloatWin->GetMaxOutputSizePixel();
-    return mpImplData->maMaxOutSize;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

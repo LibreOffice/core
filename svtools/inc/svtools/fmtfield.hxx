@@ -333,7 +333,6 @@ class DoubleCurrencyField : public FormattedField
 
 public:
     DoubleCurrencyField(Window* pParent, WinBits nStyle = 0);
-    DoubleCurrencyField(Window* pParent, const ResId& rResId);
 
     XubString   getCurrencySymbol() const { return m_sCurrencySymbol; }
     void        setCurrencySymbol(const XubString& _sSymbol);

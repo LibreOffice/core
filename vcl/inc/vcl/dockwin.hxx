@@ -329,7 +329,6 @@ public:
     virtual void    DataChanged( const DataChangedEvent& rDCEvt );
 
     void            ShowTitleButton( sal_uInt16 nButton, sal_Bool bVisible = sal_True );
-    sal_Bool            IsTitleButtonVisible( sal_uInt16 nButton ) const;
 
     void            SetPin( sal_Bool bPin );
     sal_Bool            IsPined() const;
@@ -345,7 +344,6 @@ public:
     const Size&     GetMinOutputSizePixel() const;
 
     void            SetMaxOutputSizePixel( const Size& rSize );
-    const Size&     GetMaxOutputSizePixel() const;
 
     sal_Bool            IsDocking() const { return mbDocking; }
     sal_Bool            IsDockable() const { return mbDockable; }
@@ -362,7 +360,6 @@ public:
 
     void            SetFloatStyle( WinBits nWinStyle );
     WinBits         GetFloatStyle() const;
-    void            SetTabStop();
 
     virtual void    SetPosSizePixel( long nX, long nY,
                                      long nWidth, long nHeight,

@@ -522,7 +522,6 @@ class DecoToolBox : public ToolBox
     using Window::ImplInit;
 public:
             DecoToolBox( Window* pParent, WinBits nStyle = 0 );
-            DecoToolBox( Window* pParent, const ResId& rResId );
     void    ImplInit();
 
     void    DataChanged( const DataChangedEvent& rDCEvt );
@@ -537,11 +536,6 @@ public:
 
 DecoToolBox::DecoToolBox( Window* pParent, WinBits nStyle ) :
     ToolBox( pParent, nStyle )
-{
-    ImplInit();
-}
-DecoToolBox::DecoToolBox( Window* pParent, const ResId& rResId ) :
-    ToolBox( pParent, rResId )
 {
     ImplInit();
 }
