@@ -387,22 +387,6 @@ sal_GetServerVendor( Display *p_display )
     return vendor_unknown;
 }
 
-static sal_Bool sal_IsTrustedSolaris (Display *p_display)
-{
-    int      n_numextensions = 0;
-    char   **p_extensions    = XListExtensions (p_display, &n_numextensions);
-    sal_Bool b_is            = sal_False;
-
-    if (p_extensions != NULL)
-    {
-        for (int i = 0; !b_is && i < n_numextensions; i++)
-            b_is = (strcmp (p_extensions[i], "SUN_TSOL") == 0);
-        XFreeExtensionList (p_extensions);
-    }
-
-    return b_is;
-}
-
 // -=-= SalDisplay -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 sal_Bool SalDisplay::BestVisual( Display     *pDisplay,
@@ -805,7 +789,6 @@ void SalDisplay::Init()
         aPointerCache_[i] = None;
 
     eWindowManager_     = otherwm;
-    nProperties_        = PROPERTY_DEFAULT;
     hEventGuard_        = NULL;
     mpFactory           = (AttributeProvider*)NULL;
     m_pCapture          = NULL;
@@ -859,80 +842,6 @@ void SalDisplay::Init()
 
     // - - - - - - - - - - Window Manager  - - - - - - - - - - -
     m_pWMAdaptor = ::vcl_sal::WMAdaptor::createWMAdaptor( this );
-
-    // - - - - - - - - - - Properties  - - - - - - - - - - - - -
-    const char *pProperties = getenv( "SAL_PROPERTIES" );
-    if( pProperties )
-        sscanf( pProperties, "%li", &nProperties_ );
-    else
-    {
-        nProperties_ |= PROPERTY_FEATURE_Maximize;
-        // Server Bugs & Properties
-        if( GetServerVendor() == vendor_excursion )
-        {
-            nProperties_ |= PROPERTY_BUG_Stipple;
-            nProperties_ |= PROPERTY_BUG_DrawLine;
-            nProperties_ &= ~PROPERTY_SUPPORT_XSetClipMask;
-        }
-        else
-        if( GetServerVendor() == vendor_attachmate )
-        {
-            nProperties_ |= PROPERTY_BUG_CopyPlane_RevertBWPixel;
-        }
-        else
-        if( GetServerVendor() == vendor_ibm )
-        {
-            nProperties_ |= PROPERTY_BUG_XA_FAMILY_NAME_nil;
-
-            if( otherwm == eWindowManager_ ) eWindowManager_ = mwm;
-        }
-        else
-        if( GetServerVendor() == vendor_sun )
-        {
-            // nicht alle! (bekannt: nur Sparc II CG3, CG6?)
-            nProperties_ &= ~PROPERTY_SUPPORT_XSetClipMask;
-
-            // trusted solaris doesn't allow to change properties on the
-            // wm decoration window
-            if (sal_IsTrustedSolaris (pDisp_))
-                nProperties_ |= PROPERTY_FEATURE_TrustedSolaris;
-
-            // Fehler im Sun-Solaris X86 Server !
-            if (ImageByteOrder(GetDisplay()) == LSBFirst)
-            {
-                nProperties_ |= PROPERTY_BUG_Tile;
-                nProperties_ |= PROPERTY_SUPPORT_3ButtonMouse;
-            }
-            else // MSBFirst Sun-Solaris Sparc Server
-            {
-                // XCopyPlane reverts black and white for 1bit bitmaps
-                // only sun, only 8bit pseudocolor target
-                if (   (GetVisual(m_nDefaultScreen).GetDepth() == 8)
-                    && (GetVisual(m_nDefaultScreen).GetClass() == PseudoColor))
-                    nProperties_ |= PROPERTY_BUG_CopyPlane_RevertBWPixel;
-                // Fehler in Solaris 2.5.1
-                if (VendorRelease ( GetDisplay() ) < 3600)
-                    nProperties_ |= PROPERTY_BUG_FillPolygon_Tile;
-            }
-        }
-        else
-        if( GetServerVendor() == vendor_hummingbird )
-        {
-            if (GetVisual(m_nDefaultScreen).GetDepth() == 24)
-                nProperties_ |= PROPERTY_BUG_CopyArea_OnlySmallSlices;
-        }
-
-        if( winmgr == eWindowManager_ )
-        {
-            nProperties_ &= ~PROPERTY_SUPPORT_WM_SetPos;
-            nProperties_ &= ~PROPERTY_SUPPORT_WM_Screen;
-            nProperties_ |= PROPERTY_FEATURE_Maximize;
-        }
-        else if( pmwm == eWindowManager_ )
-        {
-            nProperties_ &= ~PROPERTY_SUPPORT_WM_ClientPos;
-        }
-    }
 
     InitXinerama();
 

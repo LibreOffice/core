@@ -210,6 +210,19 @@ XubString JobSetup::GetDriverName() const
 
 // -----------------------------------------------------------------------
 
+String JobSetup::GetValue( const String& rKey ) const
+{
+    if( mpData )
+    {
+        ::boost::unordered_map< ::rtl::OUString, ::rtl::OUString, ::rtl::OUStringHash >::const_iterator it;
+        it = mpData->maValueMap.find( rKey );
+        return it != mpData->maValueMap.end() ? String( it->second ) : String();
+    }
+    return String();
+}
+
+// -----------------------------------------------------------------------
+
 void JobSetup::SetValue( const String& rKey, const String& rValue )
 {
     if( ! mpData )

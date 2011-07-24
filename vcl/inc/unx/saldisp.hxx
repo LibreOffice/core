@@ -57,25 +57,17 @@ class   ColorMask;
 namespace vcl_sal { class WMAdaptor; }
 
 // -=-= #defines -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#define PROPERTY_SUPPORT_WM_SetPos              0x00000001
-#define PROPERTY_SUPPORT_WM_Screen              0x00000002
 #define PROPERTY_SUPPORT_WM_Parent_Pixmap_None  0x00000004
 #define PROPERTY_SUPPORT_WM_ClientPos           0x00000008
-#define PROPERTY_SUPPORT_XSetClipMask           0x00000010  // for bitmap ops.
 #define PROPERTY_SUPPORT_3ButtonMouse           0x00000020
 
-#define PROPERTY_BUG_XA_FAMILY_NAME_nil         0x00001000
 #define PROPERTY_BUG_XCopyArea_GXxor            0x00002000  // from window
-#define PROPERTY_BUG_Stipple                    0x00004000  // 0/1 inverted
 #define PROPERTY_BUG_Tile                       0x00008000  // Recreate the
                                             // dither brush each time
 #define PROPERTY_BUG_FillPolygon_Tile           0x00010000  // always Toggle Fillstyle
 #define PROPERTY_BUG_DrawLine                   0x00020000  // a DrawLine is one point to short
-#define PROPERTY_BUG_CopyPlane_RevertBWPixel    0x00040000  // revert fg and bg for xcopyplane
-#define PROPERTY_BUG_CopyArea_OnlySmallSlices   0x00080000
 #define PROPERTY_BUG_Bitmap_Bit_Order           0x00100000
 
-#define PROPERTY_FEATURE_Maximize               0x01000000
 #define PROPERTY_FEATURE_SharedMemory           0x02000000
 #define PROPERTY_FEATURE_TrustedSolaris         0x04000000
 
@@ -352,7 +344,6 @@ protected:
 
     srv_vendor_t    meServerVendor;
     SalWM           eWindowManager_;
-    sal_uLong           nProperties_;       // PROPERTY_SUPPORT, BUG, FEATURE
     sal_Bool            bLocal_;            // Server==Client? Init
     // in SalDisplay::IsLocal()
     sal_Bool            mbLocalIsValid;     // bLocal_ is valid ?
@@ -475,7 +466,7 @@ public:
     RenderEntryMap&       GetRenderEntries( int nScreen ) const { return getDataForScreen(nScreen).m_aRenderData; }
     const Pair     &GetResolution() const { return aResolution_; }
     bool            GetExactResolution() const { return mbExactResolution; }
-    sal_uLong           GetProperties() const { return nProperties_; }
+    sal_uLong           GetProperties() const { return PROPERTY_DEFAULT; }
     sal_uLong           GetMaxRequestSize() const { return nMaxRequestSize_; }
     XLIB_Time       GetLastUserEventTime( bool bAlwaysReget = false ) const;
 

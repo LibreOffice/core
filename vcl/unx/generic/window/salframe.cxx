@@ -4273,28 +4273,6 @@ long X11SalFrame::Dispatch( XEvent *pEvent )
                     if ( mpInputContext != NULL )
                         mpInputContext->Map( this );
                     CallCallback( SALEVENT_RESIZE, NULL );
-                    if( pDisplay_->GetServerVendor() == vendor_hummingbird )
-                    {
-                        /*
-                         *  With Exceed sometimes there does not seem to be
-                         *  an Expose after the MapNotify.
-                         *  so start a delayed paint here
-                         */
-                        maPaintRegion.Union( Rectangle( Point( 0, 0 ), Size( maGeometry.nWidth, maGeometry.nHeight ) ) );
-                        XEvent aEvent;
-                        aEvent.xexpose.type     = Expose;
-                        aEvent.xexpose.display  = pDisplay_->GetDisplay();
-                        aEvent.xexpose.x        = 0;
-                        aEvent.xexpose.y        = 0;
-                        aEvent.xexpose.width    = maGeometry.nWidth;
-                        aEvent.xexpose.height   = maGeometry.nHeight;
-                        aEvent.xexpose.count    = 0;
-                        XSendEvent( pDisplay_->GetDisplay(),
-                                    GetWindow(),
-                                    True,
-                                    ExposureMask,
-                                    &aEvent );
-                    }
 
                     bool bSetFocus = m_bSetFocusOnMap;
                     /*  another workaround for sawfish: if a transient window for the same parent is shown

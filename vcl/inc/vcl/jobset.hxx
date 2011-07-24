@@ -66,6 +66,7 @@ public:
      *  by the printer driver. One possible use are phone
      *  numbers for faxes (which disguise as printers)
      */
+    String              GetValue( const String& rKey ) const;
     void                SetValue( const String& rKey, const String& rValue );
 
     JobSetup&           operator=( const JobSetup& rJob );
