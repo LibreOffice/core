@@ -343,17 +343,6 @@ sal_Bool SimpleCommunicationLinkViaSocket::SendHandshake( HandshakeType aHandsha
     return !bWasError;
 }
 
-bool SimpleCommunicationLinkViaSocket::IsReceiveReady()
-{
-    if ( !IsCommunicationError() )
-    {
-        TimeValue aTime = {30, 0};   // 30 seconds
-        return pStreamSocket->isRecvReady( &aTime );
-    }
-
-    return false;
-}
-
 CommunicationManager::CommunicationManager( sal_Bool bUseMultiChannel )
 : nInfoType( CM_NONE )
 , bIsCommunicationRunning( sal_False )

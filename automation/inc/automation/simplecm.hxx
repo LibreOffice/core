@@ -321,7 +321,6 @@ protected:
     SvStream *pReceiveStream;
     sal_Bool DoReceiveDataStream();             /// Recieve DataPacket from Socket
     virtual sal_Bool SendHandshake( HandshakeType aHandshakeType, SvStream* pData = NULL);
-    bool IsReceiveReady();
     sal_Bool bIsRequestShutdownPending;
     virtual void WaitForShutdown()=0;
     void SetNewPacketAsCurrent();

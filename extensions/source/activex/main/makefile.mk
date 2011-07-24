@@ -32,10 +32,6 @@ TARGET=so_activex
 use_shl_versions=
 
 # --- Settings ----------------------------------
-.IF "$(GUI)" == "WNT" && "$(DISABLE_ACTIVEX)"==""
-PROF_EDITION=TRUE
-.ENDIF
-
 .INCLUDE : settings.mk
 
 .IF "$(GUI)" == "WNT" && "$(DISABLE_ACTIVEX)"==""
