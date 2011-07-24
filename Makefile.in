@@ -13,7 +13,7 @@ all: Makefile dmake/dmake@EXEEXT_FOR_BUILD@ src.downloaded cross-build-toolset
 else
 all: Makefile dmake/dmake@EXEEXT_FOR_BUILD@ src.downloaded
 endif
-	@. ./*Env.Set.sh && \
+	@. ./Env.Host.sh && \
         cd instsetoo_native && \
         build.pl $(GBUILD_OPT) -P@BUILD_NCPUS@ --all -- -P@BUILD_MAX_JOBS@
 
@@ -92,7 +92,7 @@ cross-build-toolset:
 endif
 
 install:
-	@. ./*Env.Set.sh && \
+	@. ./Env.Host.sh && \
 	echo "Installing in $${prefix:-@prefix@}..." && \
 	ooinstall "$${prefix:-@prefix@}" && \
 	echo "" && \
@@ -100,7 +100,7 @@ install:
 	echo "$${prefix:-@prefix@}/program/soffice"
 
 dev-install:
-	@. ./*Env.Set.sh && \
+	@. ./Env.Host.sh && \
         cd smoketestoo_native && \
 		export SAL_USE_VCLPLUGIN="svp" && \
 		build.pl $(GBUILD_OPT) -P@BUILD_NCPUS@ --all -- -P@BUILD_MAX_JOBS@ && \
@@ -123,17 +123,17 @@ ifeq (@BUILD_DMAKE@,YES)
 endif
 
 clean:
-	. ./*Env.Set.sh && \
+	. ./Env.Host.sh && \
 	rm -rf */$$INPATH && \
 	rm -rf solver/*/$$INPATH && \
 	rm -rf install
 ifeq (@BUILD_DMAKE@,YES)
-	. ./*Env.Set.sh && \
+	. ./Env.Host.sh && \
 	(if [ -f dmake/Makefile ] ; then $$GNUMAKE -C dmake clean; fi) && \
 	rm -f solenv/*/bin/dmake*
 endif
 ifeq (@CROSS_COMPILING@,YES)
-	. ./*Env.Set.sh && \
+	. ./Env.Host.sh && \
 	rm -rf */$$INPATH_FOR_BUILD && \
 	rm -rf solver/*/$$INPATH_FOR_BUILD
 endif
@@ -143,7 +143,7 @@ dmake/dmake@EXEEXT_FOR_BUILD@:
 
 src.downloaded: ooo.lst download
 ifeq (@DO_FETCH_TARBALLS@,YES)
-	@. ./*Env.Set.sh && \
+	@. ./Env.Host.sh && \
 	$$SRC_ROOT/download $$SRC_ROOT/ooo.lst && touch $@
 else
 	@echo "Automatic fetching of external tarballs is disabled."
@@ -155,22 +155,22 @@ Makefile: configure.in ooo.lst.in set_soenv.in Makefile.in
 	./autogen.sh
 
 check: Makefile dmake/dmake@EXEEXT_FOR_BUILD@ fetch
-	@. ./*Env.Set.sh && \
+	@. ./Env.Host.sh && \
 	cd smoketestoo_native && \
 	export SAL_USE_VCLPLUGIN="svp" && \
         build.pl $(GBUILD_OPT) -P@BUILD_NCPUS@ --all -- -P@BUILD_MAX_JOBS@
-	@. ./*Env.Set.sh && $$SOLARENV/bin/subsequenttests
+	@. ./Env.Host.sh && $$SOLARENV/bin/subsequenttests
 
 id:
-	@. ./*Env.Set.sh && \
+	@. ./Env.Host.sh && \
 		create-ids
 
 tags:
-	@. ./*Env.Set.sh && \
+	@. ./Env.Host.sh && \
 		create-tags
 
 docs:
-	@. ./*Env.Set.sh && \
+	@. ./Env.Host.sh && \
 		mkdocs.sh $$SRC_ROOT/docs $$SOLARENV/inc/doxygen.cfg
 
 findunusedcode:
@@ -178,13 +178,13 @@ findunusedcode:
 # http://www.skynet.ie/~caolan/Packages/callcatcher.html
 	@which callcatcher > /dev/null 2>&1 || \
 	 (echo "callcatcher not installed" && false)
-	@. ./*Env.Set.sh && \
-	   source <(sed -e s,$$INPATH,callcatcher,g ./*Env.Set.sh) && \
+	@. ./Env.Host.sh && \
+	   source <(sed -e s,$$INPATH,callcatcher,g ./Env.Host.sh) && \
 	   . ./solenv/bin/callcatchEnv.Set.sh && \
 	   cd instsetoo_native && \
 	   build.pl $(GBUILD_OPT) --all
-	@. ./*Env.Set.sh && \
-	   source <(sed -e s,$$INPATH,callcatcher,g ./*Env.Set.sh) && \
+	@. ./Env.Host.sh && \
+	   source <(sed -e s,$$INPATH,callcatcher,g ./Env.Host.sh) && \
 	   callanalyse \
 	       $$WORKDIR/LinkTarget/*/* \
 	       */$$OUTPATH/bin/* \

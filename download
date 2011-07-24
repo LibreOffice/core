@@ -28,7 +28,7 @@
 
 # environment setup yet?
 if [ -z "$TARFILE_LOCATION" ]; then
-    . ./*Env.Set.sh
+    . ./Env.Host.sh
 fi
 
 # we want to clone if we are in the bootstrap git repo and clone does not exist yet
