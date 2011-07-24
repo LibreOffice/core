@@ -46,6 +46,18 @@ $(eval $(call gb_Library_add_defs,cairocanvas,\
 ))
 endif
 
+ifeq ($(OS),MACOSX)
+
+$(eval $(call gb_Library_add_cxxflags,cairocanvas,\
+    -x objective-c++ -fobjc-exceptions\
+))
+
+$(eval $(call gb_Library_add_libs,cairocanvas,\
+    -framework Cocoa \
+))
+
+endif
+
 $(eval $(call gb_Library_add_linked_libs,cairocanvas,\
 	sal \
 	cppu \
@@ -97,7 +109,6 @@ $(eval $(call gb_Library_add_exception_objects,cairocanvas,\
 	canvas/source/cairo/cairo_quartz_cairo \
 ))
 
-#CFLAGSCXX+=$(OBJCXXFLAGS)
 
 else
 
