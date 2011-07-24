@@ -244,9 +244,15 @@ $(call gb_LinkTarget_add_linked_libs,$(1),\
 	cairo \
 )
 ifneq ($(OS),WNT)
+ifeq ($(OS),MACOSX)
+$(call gb_LinkTarget_add_static_libs,$(1),\
+	pixman-1 \
+)
+else
 $(call gb_LinkTarget_add_linked_libs,$(1),\
 	pixman-1 \
 )
+endif
 endif
 endef
 
