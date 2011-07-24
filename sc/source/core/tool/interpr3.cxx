@@ -2094,7 +2094,7 @@ void ScInterpreter::ScTInv()
         return;
     double fDF  = ::rtl::math::approxFloor(GetDouble());
     double fP = GetDouble();
-    if (fDF < 1.0 || fDF >= 1.0E5 || fP <= 0.0 || fP > 1.0 )
+    if (fDF < 1.0 || fDF > 1.0E10 || fP <= 0.0 || fP > 1.0 )
     {
         PushIllegalArgument();
         return;
