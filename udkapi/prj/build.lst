@@ -1,3 +1,2 @@
 ua	udkapi	:	DESKTOP:idlc DESKTOP:codemaker NULL
-ua	udkapi									usr1	-	all	ua_mkout NULL
 ua	udkapi\prj	nmake	-	all	ua_prj NULL
