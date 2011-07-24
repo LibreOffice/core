@@ -186,7 +186,7 @@ namespace cairo
      *
      * @return The new surface or NULL
      **/
-    void QuartzSurface::Resize( int width, int height )
+void QuartzSurface::Resize( int /* width */, int /* height */ )
     {
         OSL_FAIL("not supposed to be called!");
     }
