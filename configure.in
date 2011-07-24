@@ -1724,9 +1724,9 @@ if test "$cross_compiling" = "yes"; then
         --disable-zenity \
         $sub_conf_opts \
         2>&1 | sed -e 's/^/    /'
-    test -f ./*Env.Set.sh 2>/dev/null || exit
-    cp *Env.Set.sh ../Env.Build.sh
-    . ./*Env.Set.sh
+    test -f ./Env.Host.sh 2>/dev/null || exit
+    cp Env.Host.sh ../Env.Build.sh
+    . ./Env.Host.sh
     for V in COM GUI GUIBASE OS CPU CPUNAME CC CXX GXX_INCLUDE_PATH MACOSX_DEPLOYMENT_TARGET INPATH OUTPATH \
              SYSTEM_LIBXSLT; do
         VV='$'$V
@@ -8701,7 +8701,7 @@ else
     echo > set_soenv.stamp
 fi
 
-dnl Run the set_soenv script to setup the *Env.sh script that sets
+dnl Run the set_soenv script to setup the Env.Host.sh script that sets
 dnl environment variables for the build.
 chmod +x set_soenv
 

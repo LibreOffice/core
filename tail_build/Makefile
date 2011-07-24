@@ -29,7 +29,7 @@
 ifeq ($(strip $(SOLARENV)),)
 
 all:
-	if test -f ./source_soenv.sh; then . ./source_soenv.sh; fi && \
+	if test -f ./Env.Host.sh; then . ./Env.Host.sh; fi && \
 	if test -z "$${SOLARENV}"; then echo "No environment set!"; exit 1; fi && \
 	$(MAKE)
 
