@@ -1693,27 +1693,6 @@ uno::Reference< util::XOfficeInstallationDirectories > SvtTmplDlg_Impl::getOffic
 
 // class SvtDocumentTemplateDialog ---------------------------------------
 
-SvtDocumentTemplateDialog::SvtDocumentTemplateDialog( Window* _pParent, SelectOnly ) :
-    ModalDialog( _pParent, SvtResId( DLG_DOCTEMPLATE ) ),
-
-    aMoreTemplatesLink  ( this, SvtResId( FT_DOCTEMPLATE_LINK ) ),
-    aLine               ( this, SvtResId( FL_DOCTEMPLATE ) ),
-    aManageBtn          ( this, SvtResId( BTN_DOCTEMPLATE_MANAGE ) ),
-    aEditBtn            ( this, SvtResId( BTN_DOCTEMPLATE_EDIT ) ),
-    aOKBtn              ( this, SvtResId( BTN_DOCTEMPLATE_OPEN ) ),
-    aCancelBtn          ( this, SvtResId( BTN_DOCTEMPLATE_CANCEL ) ),
-    aHelpBtn            ( this, SvtResId( BTN_DOCTEMPLATE_HELP ) ),
-    pImpl               ( NULL )
-{
-    FreeResource();
-    InitImpl( );
-
-    // no editing of templates
-    aEditBtn.Hide();
-
-    pImpl->bSelectNoOpen = sal_True;
-}
-
 // ------------------------------------------------------------------------
 
 SvtDocumentTemplateDialog::SvtDocumentTemplateDialog( Window* pParent ) :
@@ -1814,20 +1793,6 @@ void SvtDocumentTemplateDialog::InitImpl( )
 SvtDocumentTemplateDialog::~SvtDocumentTemplateDialog()
 {
     delete pImpl;
-}
-
-// ------------------------------------------------------------------------
-
-sal_Bool SvtDocumentTemplateDialog::IsFileSelected( ) const
-{
-    return pImpl->pWin->IsFileSelected();
-}
-
-// ------------------------------------------------------------------------
-
-String SvtDocumentTemplateDialog::GetSelectedFileURL( ) const
-{
-    return pImpl->pWin->GetSelectedFile();
 }
 
 // ------------------------------------------------------------------------
