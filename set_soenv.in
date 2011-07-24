@@ -91,7 +91,7 @@ my ( $oldPATH, $SRC_ROOT, $SO_HOME, $JAVA_HOME, $JDK, $JAVAFLAGS, $OOO_SHELL,
 # IId. Declaring the aliases.
 #-------------------------------------------
 #
-my ( $dmake, $build, $build_client, $nmake, $mkout, $deliver, $zipdep );
+my ( $dmake, $build, $build_client, $mkout, $deliver, $zipdep );
 #
 
 #-------------------------------------------------------------
@@ -1460,8 +1460,6 @@ else
 	$build           = '"perl $SOLARENV/bin/build.pl"';
 	$build_client    = '"perl $SOLARENV/bin/build_client.pl"';
 	$zipdep          = '"perl $SOLARENV/bin/zipdep.pl"';
-# 3. alias for a full product make
-$nmake           = '"dmake"';
 
 #
 #--------------------------
@@ -2085,9 +2083,6 @@ ToFile( "alias deliver",     $deliver,           "a" );
 ToFile( "alias build",       $build,             "a" );
 ToFile( "alias build_client",$build_client,      "a" );
 ToFile( "alias zipdep",      $zipdep,            "a" );
-if ( $platform !~ m/cygwin/ )
-{  ToFile( "alias nmake",       $nmake,             "a" );
-}
 
 # on Solaris, MacOSX and FreeBSD, set GNUCOPY and GNUPATCH
 if ($platform =~ m/solaris|darwin|freebsd/)
