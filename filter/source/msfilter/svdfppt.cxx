@@ -128,6 +128,7 @@
 #include <algorithm>
 #include <set>
 #include <unotools/streamwrap.hxx>
+#include <rtl/strbuf.hxx>
 
 // PPT ColorScheme Slots
 #define PPT_COLSCHEME                       (0x08000000)
@@ -4184,24 +4185,25 @@ PPTStyleSheet::PPTStyleSheet( const DffRecordHeader& rSlideHd, SvStream& rIn, Sd
             {
                 if ( rIn.GetError() == 0 )
                 {
-                    ByteString aMsg;
+                    rtl::OStringBuffer aMsg;
                     if ( rIn.Tell() > aTxMasterStyleHd.GetRecEndFilePos() )
                     {
-                        aMsg += "\n  ";
-                        aMsg += "reading too many bytes:";
-                        aMsg += ByteString::CreateFromInt32( rIn.Tell() - aTxMasterStyleHd.GetRecEndFilePos() );
+                        aMsg.append(RTL_CONSTASCII_STRINGPARAM("\n  "));
+                        aMsg.append(RTL_CONSTASCII_STRINGPARAM("reading too many bytes:"));
+                        aMsg.append(static_cast<sal_Int32>(rIn.Tell() - aTxMasterStyleHd.GetRecEndFilePos()));
                     }
                     if ( rIn.Tell() < aTxMasterStyleHd.GetRecEndFilePos() )
                     {
-                        aMsg += "\n  ";
-                        aMsg += "reading too less bytes:";
-                        aMsg += ByteString::CreateFromInt32( aTxMasterStyleHd.GetRecEndFilePos() - rIn.Tell() );
+                        aMsg.append(RTL_CONSTASCII_STRINGPARAM("\n  "));
+                        aMsg.append(RTL_CONSTASCII_STRINGPARAM("reading too few bytes:"));
+                        aMsg.append(static_cast<sal_Int32>(aTxMasterStyleHd.GetRecEndFilePos() - rIn.Tell()));
                     }
-                    if ( aMsg.Len() != 0 )
+                    if (aMsg.getLength())
                     {
-                        aMsg.Insert( "]:", 0 );
-                        aMsg.Insert( "PptStyleSheet::operator>>[", 0 );
-                        OSL_FAIL(aMsg.GetBuffer());
+                        aMsg.insert(0, RTL_CONSTASCII_STRINGPARAM("]:"));
+                        aMsg.insert(0, RTL_CONSTASCII_STRINGPARAM(
+                            "PptStyleSheet::operator>>["));
+                        OSL_FAIL(aMsg.getStr());
                     }
                 }
                 if ( rIn.Tell() != aTxMasterStyleHd.GetRecEndFilePos() )
