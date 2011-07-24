@@ -36,6 +36,10 @@ $(eval $(call gb_Module_add_targets,tools,\
     StaticLibrary_toolshelpers \
 ))
 
+$(eval $(call gb_Module_add_check_targets,tools,\
+    CppunitTest_tools_test \
+))
+
 ifneq ($(CROSS_COMPILING),YES)
 $(eval $(call gb_Module_add_targets,tools,\
     Executable_bestreversemap \

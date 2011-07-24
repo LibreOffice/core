@@ -27,11 +27,7 @@
  */
 
 #include "precompiled_tools.hxx"
-#include "sal/config.h"
-
-#include <cppunit/TestFixture.h>
-#include <cppunit/extensions/HelperMacros.h>
-#include <cppunit/plugin/TestPlugIn.h>
+#include <sal/cppunit.h>
 
 #include <rtl/ustring.hxx>
 #include <vector>
@@ -169,5 +165,7 @@ namespace
 
     CPPUNIT_TEST_SUITE_REGISTRATION(Test);
 }
+
+CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
