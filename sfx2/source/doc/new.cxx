@@ -104,19 +104,6 @@ void SfxPreviewBase_Impl::Resize()
     Invalidate();
 }
 
-void SfxPreviewBase_Impl::SetGDIFile( ::boost::shared_ptr<GDIMetaFile> pFile )
-{
-    pMetaFile = pFile;
-    Invalidate();
-}
-
-SfxFrameWindow* SfxPreviewWin_Impl::PreviewFactory(
-    SfxFrame* pFrame, const String& /*rName*/ )
-{
-    return new SfxFrameWindow( new SfxPreviewWin_Impl(
-        &pFrame->GetCurrentViewFrame()->GetWindow()  ) );
-}
-
 void SfxPreviewWin_Impl::ImpPaint(
     const Rectangle&, GDIMetaFile* pFile, Window* pWindow )
 {

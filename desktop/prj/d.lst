@@ -85,8 +85,6 @@ mkdir: %_DEST%\bin\odf4ms
 ..\%__SRC%\bin\unopkga*.dll %_DEST%\bin\unopkga*.dll
 ..\%__SRC%\lib\libunopkgapp.dylib %_DEST%\lib\libunopkgapp.dylib
 ..\%__SRC%\lib\libunopkgapp.so %_DEST%\lib\libunopkgapp.so
-..\%__SRC%\bin\rebasegui.exe %_DEST%\bin\rebasegui.exe
-..\%__SRC%\bin\rebaseoo.exe %_DEST%\bin\rebaseoo.exe
 
 ..\%__SRC%\bin\pagein %_DEST%\bin\pagein
 ..\%__SRC%\misc\pagein-* %_DEST%\bin\pagein-*

@@ -52,21 +52,20 @@
 #define STYLE_PRE               101
 
 EditHTMLParser::EditHTMLParser( SvStream& rIn, const String& rBaseURL, SvKeyValueIterator* pHTTPHeaderAttrs )
-    : HTMLParser( rIn, true )
-    , aBaseURL( rBaseURL )
+    : HTMLParser( rIn, true ),
+    aBaseURL( rBaseURL ),
+    pImpEditEngine(NULL),
+    pCurAnchor(NULL),
+    bInPara(false),
+    bWasInPara(false),
+    bFieldsInserted(false),
+    bInTitle(false),
+    nInTable(0),
+    nInCell(0),
+    nDefListLevel(0),
+    nBulletLevel(0),
+    nNumberingLevel(0)
 {
-    pImpEditEngine = 0;
-    pCurAnchor = 0;
-    bInPara = sal_False;
-    bWasInPara = sal_False;
-    nInTable = 0;
-    nInCell = 0;
-    bInTitle = sal_False;
-    nDefListLevel = 0;
-    nBulletLevel = 0;
-    nNumberingLevel = 0;
-    bFieldsInserted = sal_False;
-
     DBG_ASSERT( RTL_TEXTENCODING_DONTKNOW == GetSrcEncoding( ), "EditHTMLParser::EditHTMLParser: Where does the encoding come from?" );
     DBG_ASSERT( !IsSwitchToUCS2(), "EditHTMLParser::::EditHTMLParser: Switch to UCS2?" );
 
@@ -75,7 +74,7 @@ EditHTMLParser::EditHTMLParser( SvStream& rIn, const String& rBaseURL, SvKeyValu
     SetSrcEncoding( GetExtendedCompatibilityTextEncoding(  RTL_TEXTENCODING_ISO_8859_1 ) );
 
     // If the file starts with a BOM, switch to UCS2.
-    SetSwitchToUCS2( sal_True );
+    SetSwitchToUCS2( true );
 
     if ( pHTTPHeaderAttrs )
         SetEncodingByHTTPHeader( pHTTPHeaderAttrs );
@@ -128,24 +127,24 @@ void EditHTMLParser::NextToken( int nToken )
     {
     case HTML_META:
     {
-        const HTMLOptions *_pOptions = GetOptions();
-        sal_uInt16 nArrLen = _pOptions->Count();
-        sal_Bool bEquiv = sal_False;
-        for ( sal_uInt16 i = 0; i < nArrLen; i++ )
+        const HTMLOptions& aOptions = GetOptions();
+        size_t nArrLen = aOptions.size();
+        bool bEquiv = false;
+        for ( size_t i = 0; i < nArrLen; i++ )
         {
-            const HTMLOption *pOption = (*_pOptions)[i];
-            switch( pOption->GetToken() )
+            const HTMLOption& aOption = aOptions[i];
+            switch( aOption.GetToken() )
             {
                 case HTML_O_HTTPEQUIV:
                 {
-                    bEquiv = sal_True;
+                    bEquiv = true;
                 }
                 break;
                 case HTML_O_CONTENT:
                 {
                     if ( bEquiv )
                     {
-                        rtl_TextEncoding eEnc = GetEncodingByMIME( pOption->GetString() );
+                        rtl_TextEncoding eEnc = GetEncodingByMIME( aOption.GetString() );
                         if ( eEnc != RTL_TEXTENCODING_DONTKNOW )
                             SetSrcEncoding( eEnc );
                     }
@@ -158,11 +157,11 @@ void EditHTMLParser::NextToken( int nToken )
     break;
     case HTML_PLAINTEXT_ON:
     case HTML_PLAINTEXT2_ON:
-        bInPara = sal_True;
+        bInPara = true;
     break;
     case HTML_PLAINTEXT_OFF:
     case HTML_PLAINTEXT2_OFF:
-        bInPara = sal_False;
+        bInPara = false;
     break;
 
     case HTML_LINEBREAK:
@@ -195,7 +194,7 @@ void EditHTMLParser::NextToken( int nToken )
         if (!bInTitle)
         {
             if ( !bInPara )
-                StartPara( sal_False );
+                StartPara( false );
 
             String aText = aToken;
             if ( aText.Len() && ( aText.GetChar( 0 ) == ' ' )
@@ -244,13 +243,13 @@ void EditHTMLParser::NextToken( int nToken )
 
     case HTML_PARABREAK_ON:
         if( bInPara && HasTextInCurrentPara() )
-            EndPara( sal_True );
-        StartPara( sal_True );
+            EndPara( true );
+        StartPara( true );
         break;
 
     case HTML_PARABREAK_OFF:
         if( bInPara )
-            EndPara( sal_True );
+            EndPara( true );
         break;
 
     case HTML_HEAD1_ON:
@@ -279,7 +278,7 @@ void EditHTMLParser::NextToken( int nToken )
     case HTML_XMP_ON:
     case HTML_LISTING_ON:
     {
-        StartPara( sal_True );
+        StartPara( true );
         ImpSetStyleSheet( STYLE_PRE );
     }
     break;
@@ -318,10 +317,10 @@ void EditHTMLParser::NextToken( int nToken )
     case HTML_ORDERLIST_ON:
     case HTML_UNORDERLIST_ON:
     {
-        sal_Bool bHasText = HasTextInCurrentPara();
+        bool bHasText = HasTextInCurrentPara();
         if ( bHasText )
             ImpInsertParaBreak();
-        StartPara( sal_False );
+        StartPara( false );
     }
     break;
 
@@ -337,7 +336,7 @@ void EditHTMLParser::NextToken( int nToken )
     case HTML_DD_OFF:
     case HTML_DT_OFF:
     case HTML_ORDERLIST_OFF:
-    case HTML_UNORDERLIST_OFF:  EndPara( sal_False );
+    case HTML_UNORDERLIST_OFF:  EndPara( false );
                                 break;
 
     case HTML_TABLEROW_ON:
@@ -353,10 +352,10 @@ void EditHTMLParser::NextToken( int nToken )
                             break;
 
     case HTML_TITLE_ON:
-        bInTitle = sal_True;
+        bInTitle = true;
         break;
     case HTML_TITLE_OFF:
-        bInTitle = sal_False;
+        bInTitle = false;
         break;
 
     // globals
@@ -524,7 +523,6 @@ void EditHTMLParser::ImpInsertParaBreak()
         pImpEditEngine->aImportHdl.Call( &aImportInfo );
     }
     aCurSel = pImpEditEngine->ImpInsertParaBreak( aCurSel );
-    nLastAction = ACTION_INSERTPARABRK;
 }
 
 void EditHTMLParser::ImpSetAttribs( const SfxItemSet& rItems, EditSelection* pSel )
@@ -683,7 +681,6 @@ void EditHTMLParser::ImpInsertText( const String& rText )
     }
 
     aCurSel = pImpEditEngine->ImpInsertText( aCurSel, aText );
-    nLastAction = ACTION_INSERTTEXT;
 }
 
 void EditHTMLParser::SkipGroup( int nEndToken )
@@ -710,25 +707,24 @@ void EditHTMLParser::SkipGroup( int nEndToken )
     }
 }
 
-void EditHTMLParser::StartPara( sal_Bool bReal )
+void EditHTMLParser::StartPara( bool bReal )
 {
     if ( bReal )
     {
-        const HTMLOptions *_pOptions = GetOptions();
-        sal_uInt16 nArrLen = _pOptions->Count();
+        const HTMLOptions& aOptions = GetOptions();
         SvxAdjust eAdjust = SVX_ADJUST_LEFT;
-        for ( sal_uInt16 i = 0; i < nArrLen; i++ )
+        for ( size_t i = 0, n = aOptions.size(); i < n; ++i )
         {
-            const HTMLOption *pOption = (*_pOptions)[i];
-            switch( pOption->GetToken() )
+            const HTMLOption& aOption = aOptions[i];
+            switch( aOption.GetToken() )
             {
                 case HTML_O_ALIGN:
                 {
-                    if ( pOption->GetString().CompareIgnoreCaseToAscii( OOO_STRING_SVTOOLS_HTML_AL_right ) == COMPARE_EQUAL )
+                    if ( aOption.GetString().CompareIgnoreCaseToAscii( OOO_STRING_SVTOOLS_HTML_AL_right ) == COMPARE_EQUAL )
                         eAdjust = SVX_ADJUST_RIGHT;
-                    else if ( pOption->GetString().CompareIgnoreCaseToAscii( OOO_STRING_SVTOOLS_HTML_AL_middle ) == COMPARE_EQUAL )
+                    else if ( aOption.GetString().CompareIgnoreCaseToAscii( OOO_STRING_SVTOOLS_HTML_AL_middle ) == COMPARE_EQUAL )
                         eAdjust = SVX_ADJUST_CENTER;
-                    else if ( pOption->GetString().CompareIgnoreCaseToAscii( OOO_STRING_SVTOOLS_HTML_AL_center ) == COMPARE_EQUAL )
+                    else if ( aOption.GetString().CompareIgnoreCaseToAscii( OOO_STRING_SVTOOLS_HTML_AL_center ) == COMPARE_EQUAL )
                         eAdjust = SVX_ADJUST_CENTER;
                     else
                         eAdjust = SVX_ADJUST_LEFT;
@@ -740,33 +736,33 @@ void EditHTMLParser::StartPara( sal_Bool bReal )
         aItemSet.Put( SvxAdjustItem( eAdjust, EE_PARA_JUST ) );
         ImpSetAttribs( aItemSet );
     }
-    bInPara = sal_True;
+    bInPara = true;
 }
 
-void EditHTMLParser::EndPara( sal_Bool )
+void EditHTMLParser::EndPara( bool )
 {
     if ( bInPara )
     {
-        sal_Bool bHasText = HasTextInCurrentPara();
+        bool bHasText = HasTextInCurrentPara();
         if ( bHasText )
             ImpInsertParaBreak();
     }
-    bInPara = sal_False;
+    bInPara = false;
 }
 
-sal_Bool EditHTMLParser::ThrowAwayBlank()
+bool EditHTMLParser::ThrowAwayBlank()
 {
     // A blank must be thrown away if the new text begins with a Blank and
     // if the current paragraph is empty or ends with a Blank...
     ContentNode* pNode = aCurSel.Max().GetNode();
     if ( pNode->Len() && ( pNode->GetChar( pNode->Len()-1 ) != ' ' ) )
-        return sal_False;
-    return sal_True;
+        return false;
+    return true;
 }
 
-sal_Bool EditHTMLParser::HasTextInCurrentPara()
+bool EditHTMLParser::HasTextInCurrentPara()
 {
-    return aCurSel.Max().GetNode()->Len() ? sal_True : sal_False;
+    return aCurSel.Max().GetNode()->Len() ? true : false;
 }
 
 void EditHTMLParser::AnchorStart()
@@ -774,18 +770,16 @@ void EditHTMLParser::AnchorStart()
     // ignore anchor in anchor
     if ( !pCurAnchor )
     {
-        const HTMLOptions* _pOptions = GetOptions();
-        sal_uInt16 nArrLen = _pOptions->Count();
-
+        const HTMLOptions& aOptions = GetOptions();
         String aRef;
 
-        for ( sal_uInt16 i = 0; i < nArrLen; i++ )
+        for ( size_t i = 0, n = aOptions.size(); i < n; ++i )
         {
-            const HTMLOption* pOption = (*_pOptions)[i];
-            switch( pOption->GetToken() )
+            const HTMLOption& aOption = aOptions[i];
+            switch( aOption.GetToken() )
             {
                 case HTML_O_HREF:
-                    aRef = pOption->GetString();
+                    aRef = aOption.GetString();
                 break;
             }
         }
@@ -813,9 +807,9 @@ void EditHTMLParser::AnchorEnd()
         // Insert as URL-Field...
         SvxFieldItem aFld( SvxURLField( pCurAnchor->aHRef, pCurAnchor->aText, SVXURLFORMAT_REPR ), EE_FEATURE_FIELD  );
         aCurSel = pImpEditEngine->InsertField( aCurSel, aFld );
-        bFieldsInserted = sal_True;
+        bFieldsInserted = true;
         delete pCurAnchor;
-        pCurAnchor = 0;
+        pCurAnchor = NULL;
 
         if ( pImpEditEngine->aImportHdl.IsSet() )
         {
@@ -828,7 +822,7 @@ void EditHTMLParser::AnchorEnd()
 void EditHTMLParser::HeadingStart( int nToken )
 {
     bWasInPara = bInPara;
-    StartPara( sal_False );
+    StartPara( false );
 
     if ( bWasInPara && HasTextInCurrentPara() )
         ImpInsertParaBreak();
@@ -841,13 +835,13 @@ void EditHTMLParser::HeadingStart( int nToken )
 
 void EditHTMLParser::HeadingEnd( int )
 {
-    EndPara( sal_False );
+    EndPara( false );
     ImpSetStyleSheet( 0 );
 
     if ( bWasInPara )
     {
-        bInPara = sal_True;
-        bWasInPara = sal_False;
+        bInPara = true;
+        bWasInPara = false;
     }
 }
 

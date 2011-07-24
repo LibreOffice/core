@@ -53,29 +53,26 @@ private:
     ImpEditEngine*          pImpEditEngine;
     AnchorInfo*             pCurAnchor;
 
-    sal_Bool                    bInPara;
-    sal_Bool                    bWasInPara; // Remember bInPara before HeadingStart, because afterwards it will be gone.
-    sal_Bool                    bFieldsInserted;
+    bool                    bInPara:1;
+    bool                    bWasInPara:1; // Remember bInPara before HeadingStart, because afterwards it will be gone.
+    bool                    bFieldsInserted:1;
+    bool                    bInTitle:1;
+
     sal_uInt8                   nInTable;
     sal_uInt8                   nInCell;
-    sal_Bool                    bInTitle;
-
     sal_uInt8                   nDefListLevel;
     sal_uInt8                   nBulletLevel;
     sal_uInt8                   nNumberingLevel;
 
-    sal_uInt8                   nLastAction;
-
-    void                    StartPara( sal_Bool bReal );
-    void                    EndPara( sal_Bool bReal );
+    void                    StartPara( bool bReal );
+    void                    EndPara( bool bReal );
     void                    AnchorStart();
     void                    AnchorEnd();
     void                    HeadingStart( int nToken );
     void                    HeadingEnd( int nToken );
     void                    SkipGroup( int nEndToken );
-    sal_Bool                    ThrowAwayBlank();
-    sal_Bool                    HasTextInCurrentPara();
-    void                    ProcessUnknownControl( sal_Bool bOn );
+    bool                    ThrowAwayBlank();
+    bool                    HasTextInCurrentPara();
 
     void                    ImpInsertParaBreak();
     void                    ImpInsertText( const String& rText );

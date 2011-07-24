@@ -34,7 +34,7 @@
 // 				version information
 // -----------------------------------------------------------------------
 
-VS_VERSION_INFO versioninfo
+VS_VERSION_INFO VERSIONINFO
 	FILEVERSION    VERSION, SUBVERSION, VERVARIANT, VER_COUNT
 	PRODUCTVERSION VERSION, SUBVERSION, VERVARIANT, VER_COUNT
 	FILEFLAGSMASK 0x3F

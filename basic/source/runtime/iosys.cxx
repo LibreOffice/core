@@ -377,10 +377,12 @@ sal_uIntPtr OslStream::PutData( const void* pData, sal_uIntPtr nSize )
 
 sal_uIntPtr OslStream::SeekPos( sal_uIntPtr nPos )
 {
+    ::osl::FileBase::RC rc = ::osl::FileBase::E_None;
     if( nPos == STREAM_SEEK_TO_END )
-        maFile.setPos( osl_Pos_End, 0 );
+        rc = maFile.setPos( osl_Pos_End, 0 );
     else
-        maFile.setPos( osl_Pos_Absolut, (sal_uInt64)nPos );
+        rc = maFile.setPos( osl_Pos_Absolut, (sal_uInt64)nPos );
+    OSL_ENSURE(rc == ::osl::FileBase::E_None, "bad seek");
     sal_uInt64 nRealPos(0);
     maFile.getPos( nRealPos );
     return sal::static_int_cast<sal_uIntPtr>(nRealPos);

@@ -246,7 +246,6 @@ public:
 
     SAL_DLLPRIVATE ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > GetInputStream_Impl();
     SAL_DLLPRIVATE void CloseAndReleaseStreams_Impl();
-    SAL_DLLPRIVATE void RefreshName_Impl();
     SAL_DLLPRIVATE sal_uInt16 AddVersion_Impl( com::sun::star::util::RevisionTag& rVersion );
     SAL_DLLPRIVATE sal_Bool TransferVersionList_Impl( SfxMedium& rMedium );
     SAL_DLLPRIVATE sal_Bool SaveVersionList_Impl( sal_Bool bUseXML );
@@ -254,8 +253,6 @@ public:
 
     SAL_DLLPRIVATE void SetExpired_Impl( const DateTime& rDateTime );
     SAL_DLLPRIVATE SvKeyValueIterator* GetHeaderAttributes_Impl();
-    SAL_DLLPRIVATE const String& GetPreRedirectedURL() const;
-    SAL_DLLPRIVATE void SetOrigFilter_Impl( const SfxFilter* pFilter );
 
     // Diese Protokolle liefern MIME Typen
     SAL_DLLPRIVATE sal_Bool SupportsMIME_Impl() const;
@@ -275,12 +272,9 @@ public:
                         { aLongName = rName; }
     SAL_DLLPRIVATE const String & GetLongName() const { return aLongName; }
     SAL_DLLPRIVATE ErrCode CheckOpenMode_Impl( sal_Bool bSilent, sal_Bool bAllowRO = sal_True );
-    SAL_DLLPRIVATE sal_Bool IsDownloadDone_Impl();
     SAL_DLLPRIVATE sal_Bool IsPreview_Impl();
     SAL_DLLPRIVATE void ClearBackup_Impl();
     SAL_DLLPRIVATE void Done_Impl( ErrCode );
-    SAL_DLLPRIVATE void DataAvailable_Impl();
-    SAL_DLLPRIVATE void Cancel_Impl();
     SAL_DLLPRIVATE void SetPhysicalName_Impl(const String& rName);
     SAL_DLLPRIVATE void CanDisposeStorage_Impl( sal_Bool bDisposeStorage );
     SAL_DLLPRIVATE sal_Bool WillDisposeStorageOnClose_Impl();

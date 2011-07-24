@@ -43,7 +43,6 @@ class SfxContentHelper
 {
 public:
     static sal_Bool             IsDocument( const String& rContent );
-    static sal_Bool             Kill( const String& rContent );
 
     static ::com::sun::star::uno::Sequence< ::rtl::OUString >
                                 GetResultSet( const String& rURL );
