@@ -1659,9 +1659,6 @@ SvtBroadcaster::Forward(SvtBroadcaster&, SfxHint const&)
 SvtCommandOptions::AddCommand(SvtCommandOptions::CmdOption, rtl::OUString const&)
 SvtCommandOptions::Clear(SvtCommandOptions::CmdOption)
 SvtCommandOptions::GetList(SvtCommandOptions::CmdOption) const
-SvtDocumentTemplateDialog::GetSelectedFileURL() const
-SvtDocumentTemplateDialog::IsFileSelected() const
-SvtDocumentTemplateDialog::SvtDocumentTemplateDialog(Window*, SvtDocumentTemplateDialog::SelectOnly)
 SvtDynamicMenuOptions::AppendItem(EDynamicMenuType, rtl::OUString const&, rtl::OUString const&, rtl::OUString const&, rtl::OUString const&)
 SvtDynamicMenuOptions::Clear(EDynamicMenuType)
 SvtExtendedSecurityOptions::GetSecureExtensionList() const
