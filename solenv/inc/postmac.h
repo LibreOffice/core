@@ -26,29 +26,25 @@
  *
  ************************************************************************/
 
-//#undef Boolean
-//#undef BOOL
 #undef Button
 #undef Byte
 #undef Control
 #undef Cursor
+#undef DirInfo
 #undef FontInfo
-#undef GetItem
+#undef LSize
+#undef Line
 #undef MemoryBlock
+#undef ModalDialog
 #undef Palette
-#undef Polygon
+#undef Pattern
 #undef Point
+#undef Polygon
 #undef Ptr
 #undef Region
-#undef Size
-#undef LSize
-#undef ModalDialog
 #undef SetCursor
+#undef Size
 #undef StringPtr
-#undef DirInfo
-//#undef ULONG
-#undef Line
 #undef TimeValue
-#undef Pattern
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

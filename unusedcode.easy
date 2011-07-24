@@ -1,13 +1,5 @@
 (anonymous namespace)::getState(std::vector<cppcanvas::internal::OutDevState, std::allocator<cppcanvas::internal::OutDevState> > const&)
 (anonymous namespace)::writeInfo(com::sun::star::uno::Reference<com::sun::star::registry::XRegistryKey> const&, rtl::OUString const&, rtl::OUString const&)
-AlphaMask::Crop(Rectangle const&)
-AlphaMask::Expand(unsigned long, unsigned long, unsigned char*)
-AlphaMask::Invert()
-AlphaMask::Mirror(unsigned long)
-AlphaMask::Replace(unsigned char*, unsigned char*, unsigned long, unsigned long*)
-AlphaMask::Rotate(long, unsigned char)
-AlphaMask::Scale(Size const&, unsigned long)
-AlphaMask::Scale(double const&, double const&, unsigned long)
 Application::PostUserEvent(unsigned long, void*)
 BasicError::BasicError()
 BasicIDEDLL::Exit()
@@ -291,22 +283,16 @@ EditView::UnindentBlock()
 ElementCollector::isAbleToNotify() const
 ElementCollector::setSecurityId(int)
 EnhWMFReader::ReadGDIComment()
-ErrorHandler::ForwCreateString(ErrorInfo const*, String&, unsigned short&) const
 ExtraKernInfo::HasKernPairs() const
 ExtraPortionInfo::DestroyOrgDXArray()
 FieldEntry::GetBookmarkType()
 FileControl::ResetButtonText()
 FileControl::SetButtonText(String const&)
-FileCopier::FileCopier()
 FileCopier::GetError() const
 FileCopier::GetErrorHdl() const
 FileCopier::GetErrorSource() const
 FileCopier::GetErrorTarget() const
 FileCopier::SetErrorHdl(Link const&)
-FileDialog::RemoveAllFilter()
-FileDialog::RemoveFilter(String const&)
-FileDialog::SetCancelButtonText(String const&)
-FileDialog::SetOkButtonText(String const&)
 FileList::GetFormat()
 FileStat::FileStat(void const*, void const*)
 FileStat::SetDateTime(String const&, DateTime const&)
@@ -374,9 +360,6 @@ GalleryExplorer::InsertSdrObj(unsigned long, FmFormModel&)
 GalleryTheme::ImplRead()
 GlobalEventConfig::EstablishFrameCallback(com::sun::star::uno::Reference<com::sun::star::frame::XFrame> const&)
 GlobalEventConfig_Impl::getEvents()
-GlyphCache::CalcByteCount() const
-GlyphCache::ClearFontPath()
-GlyphCache::LoadFonts()
 GradientLB::GradientLB(Window*, long, unsigned char)
 GraphCtrl::GetStringFromDouble(double const&)
 GraphCtrl::GraphCtrl(Window*, long)
@@ -1280,19 +1263,14 @@ SfxMacroStatement::SfxMacroStatement(String const&, SfxSlot const&, unsigned cha
 SfxMailModel::GetCount() const
 SfxMailModel::MakeValueList(std::vector<String*, std::allocator<String*> >*, String&)
 SfxMedium::Cancel_Impl()
-SfxMedium::DataAvailable_Impl()
 SfxMedium::Exists(unsigned char)
 SfxMedium::GetCharset()
 SfxMedium::GetDataAvailableLink() const
 SfxMedium::GetDoneLink() const
 SfxMedium::GetHdl()
-SfxMedium::GetPreRedirectedURL() const
 SfxMedium::GetReferer() const
-SfxMedium::IsDownloadDone_Impl()
 SfxMedium::IsTemporary() const
-SfxMedium::RefreshName_Impl()
 SfxMedium::SetItemSet(SfxItemSet*)
-SfxMedium::SetOrigFilter_Impl(SfxFilter const*)
 SfxMedium::SetTemporary(unsigned char)
 SfxMedium::SfxMedium(SfxMedium const&, unsigned char)
 SfxMedium::StartDownload()
@@ -1324,7 +1302,6 @@ SfxObjectShell::IsSecure()
 SfxObjectShell::LockAutoLoad(unsigned char)
 SfxObjectShell::SetFlags(unsigned int)
 SfxObjectShell::SetTemplate(unsigned char)
-SfxObjectShell_Impl::NeedsOfficeUpdateDialog()
 SfxObjectVerbsControl::RegisterControl(unsigned short, SfxModule*)
 SfxOfficeDispatch::IsMasterUnoCommand() const
 SfxOleString16Property::SfxOleString16Property(int, String const&)
@@ -1347,14 +1324,10 @@ SfxPopupWindow::LinkStubDelete(void*, void*)
 SfxPopupWindow::RemoveStatusListener(rtl::OUString const&)
 SfxPopupWindow::SfxPopupWindow(unsigned short, com::sun::star::uno::Reference<com::sun::star::frame::XFrame> const&, Window*, ResId const&)
 SfxPopupWindow::UpdateStatus(rtl::OUString const&)
-SfxPreviewBase_Impl::SetGDIFile(boost::shared_ptr<GDIMetaFile>)
 SfxPreviewWin::SfxPreviewWin(Window*, ResId const&, SfxObjectShellLock&)
-SfxPreviewWin_Impl::PreviewFactory(SfxFrame*, String const&)
-SfxProgress::GetStateText_Impl() const
 SfxProgress::GetWaitMode() const
 SfxProgress::Lock()
 SfxProgress::SetWaitMode(unsigned char)
-SfxProgress::StatusBarManagerGone_Impl(SfxStatusBarManager*)
 SfxPtrArr::Replace(void*, void*)
 SfxRangeItem::SfxRangeItem(unsigned short, SvStream&)
 SfxRecordingFloatWrapper_Impl::GetChildWindowId()
@@ -1686,9 +1659,6 @@ SvtBroadcaster::Forward(SvtBroadcaster&, SfxHint const&)
 SvtCommandOptions::AddCommand(SvtCommandOptions::CmdOption, rtl::OUString const&)
 SvtCommandOptions::Clear(SvtCommandOptions::CmdOption)
 SvtCommandOptions::GetList(SvtCommandOptions::CmdOption) const
-SvtDocumentTemplateDialog::GetSelectedFileURL() const
-SvtDocumentTemplateDialog::IsFileSelected() const
-SvtDocumentTemplateDialog::SvtDocumentTemplateDialog(Window*, SvtDocumentTemplateDialog::SelectOnly)
 SvtDynamicMenuOptions::AppendItem(EDynamicMenuType, rtl::OUString const&, rtl::OUString const&, rtl::OUString const&, rtl::OUString const&)
 SvtDynamicMenuOptions::Clear(EDynamicMenuType)
 SvtExtendedSecurityOptions::GetSecureExtensionList() const
@@ -1787,30 +1757,6 @@ SvtModuleOptions::GetFactoryWindowAttributes(SvtModuleOptions::EFactory) const
 SvtModuleOptions::GetFeatures() const
 SvtModuleOptions::GetModuleName(SvtModuleOptions::EFactory) const
 SvtModuleOptions::SetFactoryWindowAttributes(SvtModuleOptions::EFactory, rtl::OUString const&)
-SvtOptionsDrawinglayer::SetMaximumPaperBottomMargin(unsigned int)
-SvtOptionsDrawinglayer::SetMaximumPaperHeight(unsigned int)
-SvtOptionsDrawinglayer::SetMaximumPaperLeftMargin(unsigned int)
-SvtOptionsDrawinglayer::SetMaximumPaperRightMargin(unsigned int)
-SvtOptionsDrawinglayer::SetMaximumPaperTopMargin(unsigned int)
-SvtOptionsDrawinglayer::SetMaximumPaperWidth(unsigned int)
-SvtOptionsDrawinglayer::SetOverlayBuffer(unsigned char)
-SvtOptionsDrawinglayer::SetOverlayBuffer_Calc(unsigned char)
-SvtOptionsDrawinglayer::SetOverlayBuffer_DrawImpress(unsigned char)
-SvtOptionsDrawinglayer::SetOverlayBuffer_Writer(unsigned char)
-SvtOptionsDrawinglayer::SetPaintBuffer(unsigned char)
-SvtOptionsDrawinglayer::SetPaintBuffer_Calc(unsigned char)
-SvtOptionsDrawinglayer::SetPaintBuffer_DrawImpress(unsigned char)
-SvtOptionsDrawinglayer::SetPaintBuffer_Writer(unsigned char)
-SvtOptionsDrawinglayer::SetQuadratic3DRenderLimit(unsigned int)
-SvtOptionsDrawinglayer::SetQuadraticFormControlRenderLimit(unsigned int)
-SvtOptionsDrawinglayer::SetRenderDecoratedTextDirect(unsigned char)
-SvtOptionsDrawinglayer::SetRenderSimpleTextDirect(unsigned char)
-SvtOptionsDrawinglayer::SetSelectionMaximumLuminancePercent(unsigned short)
-SvtOptionsDrawinglayer::SetSnapHorVerLinesToDiscrete(unsigned char)
-SvtOptionsDrawinglayer::SetSolidDragCreate(unsigned char)
-SvtOptionsDrawinglayer::SetStripeColorA(Color)
-SvtOptionsDrawinglayer::SetStripeColorB(Color)
-SvtOptionsDrawinglayer::SetStripeLength(unsigned short)
 SvtPathOptions::GetPath(SvtPathOptions::Pathes) const
 SvtPathOptions::IsPathReadonly(SvtPathOptions::Pathes) const
 SvtPathOptions::SetPath(SvtPathOptions::Pathes, String const&)
@@ -1913,26 +1859,6 @@ SvxHyperlinkTabPageBase::FileExists(INetURLObject const&)
 SvxIMapDlg::GetTargetList() const
 SvxIconChoiceCtrlEntry::LockPos(unsigned char)
 SvxIconChoiceCtrlEntry::SetMoved(unsigned char)
-SvxIconChoiceCtrl_Impl::GetEntryPredecessor(SvxIconChoiceCtrlEntry*, SvxIconChoiceCtrlEntry**)
-SvxIconChoiceCtrl_Impl::GetGridCount(Size const&, unsigned char, unsigned char) const
-SvxIconChoiceCtrl_Impl::GetItem(SvxIconChoiceCtrlEntry*, Point const&)
-SvxIconChoiceCtrl_Impl::GetItemColumn(unsigned short, long&) const
-SvxIconChoiceCtrl_Impl::GetPopupMenuPosPixel() const
-SvxIconChoiceCtrl_Impl::GetTextMode(SvxIconChoiceCtrlEntry const*) const
-SvxIconChoiceCtrl_Impl::GoLeftRight(SvxIconChoiceCtrlEntry*, unsigned char)
-SvxIconChoiceCtrl_Impl::GoUpDown(SvxIconChoiceCtrlEntry*, unsigned char)
-SvxIconChoiceCtrl_Impl::HideFocus()
-SvxIconChoiceCtrl_Impl::HideShowDDIcon(SvxIconChoiceCtrlEntry*, Point const&)
-SvxIconChoiceCtrl_Impl::InvalidateBoundingRect(SvxIconChoiceCtrlEntry*)
-SvxIconChoiceCtrl_Impl::LockEntryPos(SvxIconChoiceCtrlEntry*, unsigned char)
-SvxIconChoiceCtrl_Impl::PrepareCommandEvent(CommandEvent const&)
-SvxIconChoiceCtrl_Impl::RecalcAllBoundingRects()
-SvxIconChoiceCtrl_Impl::SaveSelection(List**)
-SvxIconChoiceCtrl_Impl::SetEntryFlags(SvxIconChoiceCtrlEntry*, unsigned short)
-SvxIconChoiceCtrl_Impl::SetEntryListPos(SvxIconChoiceCtrlEntry*, unsigned long)
-SvxIconChoiceCtrl_Impl::ShowEntryFocusRect(SvxIconChoiceCtrlEntry const*)
-SvxIconChoiceCtrl_Impl::Tracking(TrackingEvent const&)
-SvxIconChoiceCtrl_Impl::UpdateBoundingRects()
 SvxIconSelectorDialog::AutoScaleBitmap(BitmapEx&, long)
 SvxImportMSVBasic::Import(String const&, String const&, unsigned char, unsigned char)
 SvxInsertStatusBarControl::GetDefItemWidth(StatusBar const&)
@@ -2259,6 +2185,19 @@ WPXPropertyList::Iter::last()
 WPXPropertyListVector::Iter::last()
 WPXString::Iter::last()
 WPXSubDocument::WPXSubDocument()
+WW8Bytes::Replace(unsigned char const&, unsigned short)
+WW8Bytes::Replace(unsigned char const*, unsigned short, unsigned short)
+WW8Bytes::_ForEach(unsigned short, unsigned short, unsigned char (*)(unsigned char const&, void*), void*)
+WW8OleMaps::Insert(WW8OleMap* const&, unsigned short&)
+WW8OleMaps::Insert(WW8OleMap* const*, unsigned short)
+WW8OleMaps::Insert(WW8OleMaps const*, unsigned short, unsigned short)
+WW8OleMaps::Remove(WW8OleMap* const&, unsigned short)
+WW8OleMaps::Remove(unsigned short, unsigned short)
+WW8_WrSepInfoPtrs::Insert(WW8_WrSepInfoPtrs const*, unsigned short, unsigned short, unsigned short)
+WW8_WrSepInfoPtrs::Remove(unsigned short, unsigned short)
+WW8_WrSepInfoPtrs::Replace(WW8_SepInfo const&, unsigned short)
+WW8_WrSepInfoPtrs::Replace(WW8_SepInfo const*, unsigned short, unsigned short)
+WW8_WrSepInfoPtrs::_ForEach(unsigned short, unsigned short, unsigned char (*)(WW8_SepInfo const&, void*), void*)
 WinMtfOutput::DrawLine(Point const&, Point const&)
 WinMtfOutput::GetTextLayoutMode() const
 WinMtfOutput::SetFont(Font const&)
@@ -4639,8 +4578,6 @@ vcl::PrinterOptionsHelper::setValue(rtl::OUString const&, com::sun::star::uno::A
 vcl::RenderGraphic::RenderGraphic(boost::shared_array<unsigned char> const&, unsigned int, rtl::OUString const&)
 vcl::RowOrColumn::remove(Window*)
 vcl::RowOrColumn::remove(boost::shared_ptr<vcl::WindowArranger> const&)
-vcl::ThreadExecutor::ThreadExecutor()
-vcl::ThreadExecutor::execute()
 vcl::WindowPropertySet::WindowPropertySet(Window*, bool)
 vcl::WindowPropertySet::getPropertySet() const
 vcl::WindowPropertySet::~WindowPropertySet()
@@ -4705,6 +4642,7 @@ writerfilter::dmapper::MeasureHandler::isAutoWidth() const
 writerfilter::dmapper::SectionPropertyMap::GetPageStyleName(bool)
 writerfilter::dmapper::SectionPropertyMap::SetPageStyleName(bool, rtl::OUString const&)
 writerfilter::dmapper::StyleSheetTable::resolveSprmProps(writerfilter::Sprm&)
+writerfilter::doctok::WW8DocumentImpl::fc2cp(writerfilter::doctok::Fc const&) const
 writerfilter::doctok::WW8StructBase::getBit(unsigned int, unsigned short) const
 writerfilter::doctok::WW8StructBase::getNibble(unsigned int, unsigned short) const
 writerfilter::doctok::WW8Sttbf::getExtraData(unsigned int)

@@ -1880,16 +1880,13 @@ dnl ===================================================================
 AC_MSG_CHECKING([whether to do a debug build])
 if test -n "$enable_debug" && test "$enable_debug" != "no"; then
     ENABLE_DEBUG="TRUE"
-    ENABLE_DEBUG_STL="TRUE"
     enable_symbols="yes"
     AC_MSG_RESULT([yes])
 else
     ENABLE_DEBUG="FALSE"
-    ENABLE_DEBUG_STL="FALSE"
     AC_MSG_RESULT([no])
 fi
 AC_SUBST(ENABLE_DEBUG)
-AC_SUBST(ENABLE_DEBUG_STL)
 
 dnl Set the ENABLE_DBGUTIL variable
 dnl ===================================================================
@@ -4141,17 +4138,7 @@ dnl ===================================================================
 dnl Check for system cppunit
 dnl ===================================================================
 AC_MSG_CHECKING([which cppunit to use])
-if test -z "$ENABLE_DEBUG_STL"; then
-    AC_MSG_ERROR([Internal error, debug build check needs to precede cppunit check])
-fi
-if test "$ENABLE_DEBUG_STL" = "TRUE"; then
-    if test "$with_system_cppunit" = "yes"; then
-        AC_MSG_ERROR([--with-system-cppunit conflicts with debug build])
-    fi
-    AC_MSG_RESULT([internal, needed by debug build])
-    SYSTEM_CPPUNIT=NO
-    BUILD_TYPE="$BUILD_TYPE CPPUNIT"
-elif test -n "$with_system_cppunit" -o -n "$with_system_libs" && \
+if test -n "$with_system_cppunit" -o -n "$with_system_libs" && \
         test "$with_system_cppunit" != "no"; then
     AC_MSG_RESULT([external])
     SYSTEM_CPPUNIT=YES

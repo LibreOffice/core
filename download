@@ -181,7 +181,7 @@ if [ "$COM" = "MSC" ]; then
     case "$msvcver" in
         9.0)
           downloaditem "http://download.microsoft.com/download/9/7/7/977B481A-7BA6-4E30-AC40-ED51EB2028F2/" "vcredist_x86.exe" "fd30acc7a696c32f661b33668e73bf7b"
-          downloaditem "http://download.microsoft.com/download/d/2/4/d242c3fb-da5a-4542-ad66-f9661d0a8d19/" "vcredist_x64.exe" "a31dc1a74f1dee5caf63aec8ebb5fe20"
+          downloaditem "http://download.microsoft.com/download/9/7/7/977B481A-7BA6-4E30-AC40-ED51EB2028F2/" "vcredist_x64.exe" "3abb5efe9ad4d9728406a1a90a47575f"
         ;;
     *)
         ;;

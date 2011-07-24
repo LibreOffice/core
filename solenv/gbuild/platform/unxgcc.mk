@@ -120,10 +120,6 @@ ifeq ($(HAVE_CXX0X),TRUE)
 gb_CXXFLAGS += -std=c++0x -Wno-deprecated-declarations
 endif
 
-ifeq ($(ENABLE_DEBUG_STL),TRUE)
-gb_CXXFLAGS += -D_GLIBCXX_DEBUG
-endif
-
 ifneq ($(strip $(SYSBASE)),)
 gb_CXXFLAGS += --sysroot=$(SYSBASE)
 gb_CFLAGS += --sysroot=$(SYSBASE)
@@ -420,7 +416,7 @@ gb_SrsPartMergeTarget_TRANSEXPRECOMMAND := LD_LIBRARY_PATH=$(OUTDIR_FOR_BUILD)/l
 
 # SrsPartTarget class
 
-gb_SrsPartTarget_RSCTARGET := $(OUTDIR)/bin/rsc
+gb_SrsPartTarget_RSCTARGET := $(OUTDIR_FOR_BUILD)/bin/rsc
 gb_SrsPartTarget_RSCCOMMAND := LD_LIBRARY_PATH=$(OUTDIR_FOR_BUILD)/lib SOLARBINDIR=$(OUTDIR_FOR_BUILD)/bin $(OUTDIR_FOR_BUILD)/bin/rsc
 
 define gb_SrsPartTarget__command_dep

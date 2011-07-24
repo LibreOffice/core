@@ -199,15 +199,15 @@ OLDNAMESLIB=-lmoldname
 MSIMG32LIB=-lmsimg32
 PROPSYSLIB=-lpropsys
 
-# Libraries that neither mingw.org or mingw-w64 have.
-# Thus have to use the Windows SDK ones.
-GDIPLUSLIB=$(WINDOWS_SDK_HOME)$/lib$/gdiplus.lib
-MSILIB=$(WINDOWS_SDK_HOME)$/lib$/msi.lib
-URLMONLIB=$(WINDOWS_SDK_HOME)$/lib$/urlmon.lib
+# Libraries for which we use an import library built
+# from Wine's .def file
+MSILIB=-lmsi
+GDIPLUSLIB=-lgdiplus
+URLMONLIB=-lurlmon
 
 # Libraries that mingw-w64 has but mingw.org doesn't. At least the OBS MinGW
 # cross-compiler is based on mingw-w64. When using MinGW natively on Windows
-# (which as such I don't think we want to support) let's use the Windows SDK
+# (which as such I don't think we want to support) we  use the Windows SDK
 # libraries.
 .IF "$(CROSS_COMPILING)"=="YES"
 DBGHELPLIB=-ldbghelp

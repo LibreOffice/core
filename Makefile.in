@@ -84,9 +84,9 @@ cross-build-toolset:
 	  xmlhelp \
 	  shell; do \
 	    if grep -q gb_Module_add_targets $$D/Module_$$D.mk 2>/dev/null; then \
-	      (cd $$D && make -sr -j@BUILD_MAX_JOBS@) \
+	      (cd $$D && make -sr -j@BUILD_MAX_JOBS@) || exit 1; \
 	    else \
-	      (cd $$D && build.pl $(GBUILD_OPT) -P@BUILD_NCPUS@ -- -P@BUILD_MAX_JOBS@ && deliver.pl) \
+	      (cd $$D && build.pl $(GBUILD_OPT) -P@BUILD_NCPUS@ -- -P@BUILD_MAX_JOBS@ && deliver.pl) || exit 1; \
 	    fi; \
 	done
 endif

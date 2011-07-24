@@ -269,9 +269,10 @@ dmwaitnext( wid, status )
 
    /* If ECHILD is set from waitpid/wait then no child was left. */
    if( *wid  == -1 ) {
-      fprintf(stderr, "%s:  Internal Error: wait() failed: %d -  %s\n",
-          Pname, errno, strerror(errno) );
-      if(errno != ECHILD) {
+     int realErr = errno; // fprintf can pollute errno
+     fprintf(stderr, "%s:  Internal Error: wait() failed: %d -  %s\n",
+             Pname, errno, strerror(errno) );
+      if( realErr != ECHILD ) {
      /* Wait was interrupted or a child was terminated (SIGCHLD) */
      return -2;
       } else {
@@ -369,9 +370,10 @@ dmwaitpid( pqid, wid, status )
    }
    /* If ECHILD is set from waitpid/wait then no child was left. */
    if( *wid  == -1 ) {
+     int realErr = errno; // fprintf can pollute errno
       fprintf(stderr, "%s:  Internal Error: waitpid() failed: %d -  %s\n",
           Pname, errno, strerror(errno) );
-      if(errno != ECHILD) {
+      if(realErr != ECHILD) {
      /* Wait was interrupted or a child was terminated (SIGCHLD) */
      return -2;
       } else {

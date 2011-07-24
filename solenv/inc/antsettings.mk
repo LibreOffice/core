@@ -82,7 +82,7 @@ JAVA_HOME=
 ANT_FLAGS!:=$(ANT_COMPILER_FLAGS) -Dprj=$(PRJ) -Dprjname=$(PRJNAME) $(ANT_JAVA_VER_FLAGS) \
  -Ddebug=$(ANT_DEBUG) -Doptimize=$(ANT_OPT) -Dtarget=$(TARGET) -Dsolar.update=on \
  -Dout=$(OUT) -Dinpath=$(INPATH) -Dproext="$(PROEXT)" -Dsolar.bin=$(SOLARBINDIR) \
- -Dsolar.jar=$(SOLARBINDIR) -Dsolar.doc=$(SOLARDOCDIR) -Dcommon.jar=$(SOLARCOMMONBINDIR) \
+ -Dsolar.jar=$(SOLARVER)/$(INPATH)/bin -Dsolar.doc=$(SOLARDOCDIR) -Dcommon.jar=$(SOLARCOMMONBINDIR) \
  -Dcommon.doc=$(SOLARCOMMONDOCDIR) -Dsolar.sourceversion=$(SOURCEVERSION) \
  -Dsolar.lastminor=$(LAST_MINOR) -Dsolar.build=$(BUILD) -f $(ANT_BUILDFILE) $(ANT_FLAGS) \
  -emacs $(ANT_VERBOSE)

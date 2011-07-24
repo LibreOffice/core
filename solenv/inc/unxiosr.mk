@@ -32,7 +32,7 @@ CFLAGS=-c $(EXTRA_CFLAGS)
 LINKC*=$(CC)
 LINK*=$(CXX)
 
-STDLIBCUIMT=-framework UIKit -framework Foundation -framework CoreFoundation -Xlinker -objc_abi_version -Xlinker 2
+STDLIBCUIMT=-framework UIKit -framework Foundation -framework CoreText -framework CoreGraphics -framework CoreFoundation -Xlinker -objc_abi_version -Xlinker 2
 STDLIBGUIMT=$(STDLIBCUIMT)
 STDSHLCUIMT=
 STDSHLGUIMT=
