@@ -56,8 +56,8 @@ $(eval $(call gb_Library_add_defs,dbu,\
 endif
 
 ifeq ($(GUI)$(COM),WNTGCC) # for adoint.h
-$(eval $(call gb_Library_set_cflags,dbu,\
-    $$(CFLAGS) \
+$(eval $(call gb_Library_set_cxxflags,dbu,\
+    $$(CXXFLAGS) \
     -fpermissive \
 ))
 endif
@@ -286,16 +286,9 @@ $(eval $(call gb_Library_add_noexception_objects,dbu,\
 ))
 
 ifeq ($(GUI),WNT)
-ifneq (,$(strip $(WINDOWS_VISTA_PSDK)))
-ifeq (,$(strip $(PROF_EDITION)))
-dbu_DISABLE_ADO := $(true)
-endif
-endif
-ifneq ($(dbu_DISABLE_ADO),$(true))
 $(eval $(call gb_Library_add_noexception_objects,dbu,\
     dbaccess/source/ui/dlg/adodatalinks \
 ))
-endif
 endif
 
 # workaround for issue http://qa.openoffice.org/issues/show_bug.cgi?id=102305 Linux specific
