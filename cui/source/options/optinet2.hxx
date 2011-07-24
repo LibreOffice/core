@@ -157,7 +157,6 @@ protected:
 
 // class SvxSecurityTabPage ---------------------------------------------
 
-class SvtJavaOptions;
 class SvtSecurityOptions;
 
 class SvxSecurityTabPage : public SfxTabPage
@@ -180,7 +179,6 @@ private:
     FixedLine           maMacroSecFL;
     FixedInfo           maMacroSecFI;
     PushButton          maMacroSecPB;
-
 
     SvtSecurityOptions*         mpSecOptions;
     svx::SecurityOptionsDialog* mpSecOptDlg;

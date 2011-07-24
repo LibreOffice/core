@@ -52,7 +52,6 @@
 #include <tools/urlobj.hxx>
 #include <unotools/pathoptions.hxx>
 #include <unotools/securityoptions.hxx>
-#include <unotools/javaoptions.hxx>
 #include <unotools/localfilehelper.hxx>
 #include <unotools/extendedsecurityoptions.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
