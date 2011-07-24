@@ -34,8 +34,7 @@ TARGET=gdiplus
 ALL:
     -$(MKDIRHIER) $(OUT)/inc/wine
     cp include/* $(OUT)/inc/wine
-    $(DLLTOOL) --input-def lib/gdiplus.def --dllname=gdiplus.dll --output-lib=$(OUT)/lib/libgdiplus.dll.a
-
+    for L in gdiplus msi urlmon; do $(DLLTOOL) --input-def lib/$$L.def --dllname=$$L.dll --output-lib=$(OUT)/lib/lib$$L.dll.a; done
 .ENDIF
 
 .INCLUDE :  target.mk
