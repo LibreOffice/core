@@ -46,7 +46,6 @@ $(eval $(call gb_CppunitTest_add_linked_libs,sw_swdoc_test, \
     editeng \
     i18nisolang1 \
     i18nutil \
-    icuuc \
     lng \
     sal \
     salhelper \
@@ -65,8 +64,12 @@ $(eval $(call gb_CppunitTest_add_linked_libs,sw_swdoc_test, \
     vbahelper \
     vcl \
     xo \
-    xml2 \
     $(gb_STDLIBS) \
+))
+
+$(eval $(call gb_CppunitTest_use_externals,sw_swdoc_test,\
+	icuuc \
+	libxml2 \
 ))
 
 $(eval $(call gb_CppunitTest_set_include,sw_swdoc_test,\
