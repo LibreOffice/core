@@ -86,8 +86,6 @@ if [ -x "$sd_prog/../basis-link/ure-link/bin/javaldx" ] ; then
     fi
 fi
 
-unset XENVIRONMENT
-
 # uncomment line below to disable anti aliasing of fonts
 # SAL_ANTIALIAS_DISABLE=true; export SAL_ANTIALIAS_DISABLE
 

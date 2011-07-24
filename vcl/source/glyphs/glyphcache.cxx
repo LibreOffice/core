@@ -175,25 +175,6 @@ GlyphCache& GlyphCache::GetInstance()
 
 // -----------------------------------------------------------------------
 
-void GlyphCache::LoadFonts()
-{
-    if( const char* pFontPath = ::getenv( "SAL_FONTPATH_PRIVATE" ) )
-        AddFontPath( String::CreateFromAscii( pFontPath ) );
-    const String& rFontPath = Application::GetFontPath();
-    if( rFontPath.Len() > 0 )
-        AddFontPath( rFontPath );
-}
-
-// -----------------------------------------------------------------------
-
-void GlyphCache::ClearFontPath()
-{
-    if( mpFtManager )
-        mpFtManager->ClearFontList();
-}
-
-// -----------------------------------------------------------------------
-
 void GlyphCache::AddFontPath( const String& rFontPath )
 {
     if( !mpFtManager )
@@ -297,21 +278,6 @@ void GlyphCache::UncacheFont( ServerFont& rServerFont )
         mpCurrentGCFont = pFont;
         GarbageCollect();
     }
-}
-
-// -----------------------------------------------------------------------
-
-sal_uLong GlyphCache::CalcByteCount() const
-{
-    sal_uLong nCacheSize = sizeof(*this);
-    for( FontList::const_iterator it = maFontList.begin(); it != maFontList.end(); ++it )
-    {
-        const ServerFont* pSF = it->second;
-        if( pSF )
-            nCacheSize += pSF->GetByteCount();
-    }
-    // TODO: also account something for hashtable management
-    return nCacheSize;
 }
 
 // -----------------------------------------------------------------------

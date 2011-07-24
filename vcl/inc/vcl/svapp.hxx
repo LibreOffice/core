@@ -382,8 +382,6 @@ public:
 
     static void                 SetDialogScaleX( short nScale );
 
-    static const String&        GetFontPath();
-
     static UniqueItemId         CreateUniqueId();
 
     static ::com::sun::star::uno::Reference< ::com::sun::star::awt::XDisplayConnection > GetDisplayConnection();

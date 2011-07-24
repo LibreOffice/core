@@ -375,7 +375,6 @@ protected:
                                const DirEntry *pSource, const DirEntry *pTarget );
 
 public:
-                        FileCopier();
                         FileCopier( const DirEntry &rSource,
                                     const DirEntry &rTarget );
                         FileCopier( const FileCopier &rCopier );

@@ -41,7 +41,6 @@
 #include "unx/saldisp.hxx"
 #include "unx/salinst.h"
 #include "unx/salframe.h"
-#include "unx/dtint.hxx"
 #include "unx/salprn.h"
 #include "unx/sm.hxx"
 

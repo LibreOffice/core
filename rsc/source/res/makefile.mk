@@ -36,6 +36,11 @@ ENABLE_EXCEPTIONS=true
 
 .INCLUDE :  settings.mk
 
+.IF "$(BUILD_TYPE)"=="$(BUILD_TYPE:s/DESKTOP//)"
+ALL:
+    @echo No need for this on non-desktop OSes
+.ENDIF
+
 OBJFILES=               $(OBJ)$/rscclobj.obj                         \
                         $(OBJ)$/rsccont.obj                          \
                         $(OBJ)$/rsctop.obj                           \

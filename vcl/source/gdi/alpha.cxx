@@ -108,25 +108,6 @@ Bitmap AlphaMask::GetBitmap() const
 
 // -----------------------------------------------------------------------------
 
-sal_Bool AlphaMask::Crop( const Rectangle& rRectPixel )
-{
-    return Bitmap::Crop( rRectPixel );
-}
-
-// -----------------------------------------------------------------------------
-
-sal_Bool AlphaMask::Expand( sal_uLong nDX, sal_uLong nDY, sal_uInt8* pInitTransparency )
-{
-    Color aColor;
-
-    if( pInitTransparency )
-        aColor = Color( *pInitTransparency, *pInitTransparency, *pInitTransparency );
-
-    return Bitmap::Expand( nDX, nDY, pInitTransparency ? &aColor : NULL );
-}
-
-// -----------------------------------------------------------------------------
-
 sal_Bool AlphaMask::CopyPixel( const Rectangle& rRectDst, const Rectangle& rRectSrc,
                            const AlphaMask* pAlphaSrc )
 {
@@ -245,79 +226,6 @@ sal_Bool AlphaMask::Erase( sal_uInt8 cTransparency )
 
 // -----------------------------------------------------------------------------
 
-sal_Bool AlphaMask::Invert()
-{
-    BitmapWriteAccess*  pAcc = AcquireWriteAccess();
-    sal_Bool                bRet = sal_False;
-
-    if( pAcc && pAcc->GetBitCount() == 8 )
-    {
-        BitmapColor aCol( 0 );
-        const long  nWidth = pAcc->Width(), nHeight = pAcc->Height();
-        sal_uInt8*      pMap = new sal_uInt8[ 256 ];
-
-        for( long i = 0; i < 256; i++ )
-            pMap[ i ] = ~(sal_uInt8) i;
-
-        for( long nY = 0L; nY < nHeight; nY++ )
-        {
-            for( long nX = 0L; nX < nWidth; nX++ )
-            {
-                aCol.SetIndex( pMap[ pAcc->GetPixel( nY, nX ).GetIndex() ] );
-                pAcc->SetPixel( nY, nX, aCol );
-            }
-        }
-
-        delete[] pMap;
-        bRet = sal_True;
-    }
-
-    if( pAcc )
-        ReleaseAccess( pAcc );
-
-    return bRet;
-}
-
-// -----------------------------------------------------------------------------
-
-sal_Bool AlphaMask::Mirror( sal_uLong nMirrorFlags )
-{
-    return Bitmap::Mirror( nMirrorFlags );
-}
-
-// -----------------------------------------------------------------------------
-
-sal_Bool AlphaMask::Scale( const Size& rNewSize, sal_uLong nScaleFlag )
-{
-    sal_Bool bRet = Bitmap::Scale( rNewSize, nScaleFlag );
-
-    if( bRet && ( nScaleFlag == BMP_SCALE_INTERPOLATE ) )
-        Bitmap::Convert( BMP_CONVERSION_8BIT_GREYS );
-
-    return bRet;
-}
-
-// -----------------------------------------------------------------------------
-
-sal_Bool AlphaMask::Scale( const double& rScaleX, const double& rScaleY, sal_uLong nScaleFlag )
-{
-    sal_Bool bRet = Bitmap::Scale( rScaleX, rScaleY, nScaleFlag );
-
-    if( bRet && ( nScaleFlag == BMP_SCALE_INTERPOLATE ) )
-        Bitmap::Convert( BMP_CONVERSION_8BIT_GREYS );
-
-    return bRet;
-}
-
-// -----------------------------------------------------------------------------
-
-sal_Bool AlphaMask::Rotate( long nAngle10, sal_uInt8 cFillTransparency )
-{
-    return Bitmap::Rotate( nAngle10, Color( cFillTransparency, cFillTransparency, cFillTransparency ) );
-}
-
-// -----------------------------------------------------------------------------
-
 sal_Bool AlphaMask::Replace( const Bitmap& rMask, sal_uInt8 cReplaceTransparency )
 {
     BitmapReadAccess*   pMaskAcc = ( (Bitmap&) rMask ).AcquireReadAccess();
@@ -392,33 +300,6 @@ nTol
 
     if( pAcc )
         ReleaseAccess( pAcc );
-
-    return bRet;
-}
-
-// -----------------------------------------------------------------------------
-
-sal_Bool AlphaMask::Replace( sal_uInt8* pSearchTransparencies, sal_uInt8* pReplaceTransparencies,
-                         sal_uLong nColorCount, sal_uLong* pTols )
-{
-    Color*  pSearchColors = new Color[ nColorCount ];
-    Color*  pReplaceColors = new Color[ nColorCount ];
-    sal_Bool    bRet;
-
-    for( sal_uLong i = 0; i < nColorCount; i++ )
-    {
-        const sal_uInt8 cSearchTransparency = pSearchTransparencies[ i ];
-        const sal_uInt8 cReplaceTransparency = pReplaceTransparencies[ i ];
-
-        pSearchColors[ i ] = Color( cSearchTransparency, cSearchTransparency, cSearchTransparency );
-        pReplaceColors[ i ] = Color( cReplaceTransparency, cReplaceTransparency, cReplaceTransparency );
-    }
-
-    bRet = Bitmap::Replace( pSearchColors, pReplaceColors, nColorCount, pTols ) &&
-           Bitmap::Convert( BMP_CONVERSION_8BIT_GREYS );
-
-    delete[] pSearchColors;
-    delete[] pReplaceColors;
 
     return bRet;
 }

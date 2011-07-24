@@ -55,7 +55,6 @@ class   SalFrame;
 class   ColorMask;
 
 namespace vcl_sal { class WMAdaptor; }
-class DtIntegrator;
 
 // -=-= #defines -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #define PROPERTY_SUPPORT_WM_SetPos              0x00000001
@@ -375,7 +374,6 @@ protected:
     rtl::OString m_aKeyboardName;
 
     vcl_sal::WMAdaptor* m_pWMAdaptor;
-    DtIntegrator*       m_pDtIntegrator;
 
     bool            m_bXinerama;
     std::vector< Rectangle > m_aXineramaScreens;
@@ -497,7 +495,6 @@ public:
     { mpKbdExtension = pKbdExtension; }
     const char* GetKeyboardName( bool bRefresh = false );
     ::vcl_sal::WMAdaptor* getWMAdaptor() const { return m_pWMAdaptor; }
-    DtIntegrator* getDtIntegrator() const { return m_pDtIntegrator; }
     bool            IsXinerama() const { return m_bXinerama; }
     const std::vector< Rectangle >& GetXineramaScreens() const { return m_aXineramaScreens; }
     XLIB_Window     GetRootWindow( int nScreen ) const

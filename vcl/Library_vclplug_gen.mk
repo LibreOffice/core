@@ -109,8 +109,6 @@ $(eval $(call gb_Library_add_exception_objects,vclplug_gen,\
     vcl/unx/generic/dtrans/X11_selection \
     vcl/unx/generic/dtrans/X11_service \
     vcl/unx/generic/dtrans/X11_transferable \
-    vcl/unx/generic/gdi/cdeint \
-    vcl/unx/generic/gdi/dtint \
     vcl/unx/generic/gdi/gcach_xpeer \
     vcl/unx/generic/gdi/pspgraphics \
     vcl/unx/generic/gdi/salbmp \

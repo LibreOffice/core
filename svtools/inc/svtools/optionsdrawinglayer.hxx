@@ -129,27 +129,15 @@ class SVT_DLLPUBLIC SvtOptionsDrawinglayer
         Color       GetStripeColorB() const;
         sal_uInt16  GetStripeLength() const;
 
-        void        SetOverlayBuffer( sal_Bool bState );
-        void        SetPaintBuffer( sal_Bool bState );
-        void        SetStripeColorA( Color aColor );
-        void        SetStripeColorB( Color aColor );
-        void        SetStripeLength( sal_uInt16 nLength );
-
         // #i73602#
         sal_Bool    IsOverlayBuffer_Calc() const;
         sal_Bool    IsOverlayBuffer_Writer() const;
         sal_Bool    IsOverlayBuffer_DrawImpress() const;
-        void        SetOverlayBuffer_Calc( sal_Bool bState );
-        void        SetOverlayBuffer_Writer( sal_Bool bState );
-        void        SetOverlayBuffer_DrawImpress( sal_Bool bState );
 
         // #i74769#, #i75172#
         sal_Bool    IsPaintBuffer_Calc() const;
         sal_Bool    IsPaintBuffer_Writer() const;
         sal_Bool    IsPaintBuffer_DrawImpress() const;
-        void        SetPaintBuffer_Calc( sal_Bool bState );
-        void        SetPaintBuffer_Writer( sal_Bool bState );
-        void        SetPaintBuffer_DrawImpress( sal_Bool bState );
 
         // #i4219#
         sal_uInt32 GetMaximumPaperWidth() const;
@@ -158,13 +146,6 @@ class SVT_DLLPUBLIC SvtOptionsDrawinglayer
         sal_uInt32 GetMaximumPaperRightMargin() const;
         sal_uInt32 GetMaximumPaperTopMargin() const;
         sal_uInt32 GetMaximumPaperBottomMargin() const;
-
-        void SetMaximumPaperWidth(sal_uInt32 nNew);
-        void SetMaximumPaperHeight(sal_uInt32 nNew);
-        void SetMaximumPaperLeftMargin(sal_uInt32 nNew);
-        void SetMaximumPaperRightMargin(sal_uInt32 nNew);
-        void SetMaximumPaperTopMargin(sal_uInt32 nNew);
-        void SetMaximumPaperBottomMargin(sal_uInt32 nNew);
 
         // #i95644# helper to check if AA is allowed on this system. Currently, for WIN its disabled
         // and OutDevSupport_TransparentRect is checked (this  hits XRenderExtension, e.g.
@@ -181,12 +162,6 @@ class SVT_DLLPUBLIC SvtOptionsDrawinglayer
         sal_uInt32  GetQuadraticFormControlRenderLimit() const;
 
         void        SetAntiAliasing( sal_Bool bState );
-        void        SetSnapHorVerLinesToDiscrete( sal_Bool bState );
-        void        SetSolidDragCreate( sal_Bool bState );
-        void        SetRenderDecoratedTextDirect( sal_Bool bState );
-        void        SetRenderSimpleTextDirect( sal_Bool bState );
-           void        SetQuadratic3DRenderLimit(sal_uInt32 nNew);
-           void        SetQuadraticFormControlRenderLimit(sal_uInt32 nNew);
 
         // #i97672# selection settings
         sal_Bool    IsTransparentSelection() const;
@@ -195,7 +170,6 @@ class SVT_DLLPUBLIC SvtOptionsDrawinglayer
 
         void        SetTransparentSelection( sal_Bool bState );
         void        SetTransparentSelectionPercent( sal_uInt16 nPercent );
-        void        SetSelectionMaximumLuminancePercent( sal_uInt16 nPercent );
 
     //-------------------------------------------------------------------------------------------------------------
     //  private methods

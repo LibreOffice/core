@@ -73,7 +73,6 @@ public:
     virtual void maximizeFrame( X11SalFrame* pFrame, bool bHorizontal = true, bool bVertical = true ) const;
     virtual void shade( X11SalFrame* pFrame, bool bToShaded ) const;
     virtual void setFrameTypeAndDecoration( X11SalFrame* pFrame, WMWindowType eType, int nDecorationFlags, X11SalFrame* pTransientFrame = NULL ) const;
-    virtual bool supportsICCCMPos() const;
     virtual void enableAlwaysOnTop( X11SalFrame* pFrame, bool bEnable ) const;
     virtual int handlePropertyNotify( X11SalFrame* pFrame, XPropertyEvent* pEvent ) const;
     virtual void showFullScreen( X11SalFrame* pFrame, bool bFullScreen ) const;
@@ -184,7 +183,6 @@ static const WMAdaptorProtocol aAtomTab[] =
     { "SAL_EXTTEXTEVENT", WMAdaptor::SAL_EXTTEXTEVENT },
     { "SAL_GETTIMEEVENT", WMAdaptor::SAL_GETTIMEEVENT },
     { "VCL_SYSTEM_SETTINGS", WMAdaptor::VCL_SYSTEM_SETTINGS },
-    { "DTWM_IS_RUNNING", WMAdaptor::DTWM_IS_RUNNING },
     { "_XSETTINGS_SETTINGS", WMAdaptor::XSETTINGS },
     { "_XEMBED", WMAdaptor::XEMBED },
     { "_XEMBED_INFO", WMAdaptor::XEMBED_INFO },
@@ -268,84 +266,6 @@ WMAdaptor::WMAdaptor( SalDisplay* pDisplay ) :
     initAtoms();
     getNetWmName(); // try to discover e.g. Sawfish
 
-    // check for dtwm running
-    if( m_aWMAtoms[ DTWM_IS_RUNNING ] )
-    {
-        if (   (XGetWindowProperty( m_pDisplay,
-                                    m_pSalDisplay->GetRootWindow( m_pSalDisplay->GetDefaultScreenNumber() ),
-                                    m_aWMAtoms[ DTWM_IS_RUNNING ],
-                                    0, 1,
-                                    False,
-                                    XA_INTEGER,
-                                    &aRealType,
-                                    &nFormat,
-                                    &nItems,
-                                    &nBytesLeft,
-                                    &pProperty) == 0
-                && nItems)
-               || (XGetWindowProperty( m_pDisplay,
-                                       m_pSalDisplay->GetRootWindow( m_pSalDisplay->GetDefaultScreenNumber() ),
-                                       m_aWMAtoms[ DTWM_IS_RUNNING ],
-                                       0, 1,
-                                       False,
-                                       m_aWMAtoms[ DTWM_IS_RUNNING ],
-                                       &aRealType,
-                                       &nFormat,
-                                       &nItems,
-                                       &nBytesLeft,
-                                       &pProperty) == 0
-                   && nItems))
-        {
-            if (*pProperty)
-            {
-                m_aWMName = String(RTL_CONSTASCII_USTRINGPARAM("Dtwm"));
-                m_bTransientBehaviour = false;
-                m_nWinGravity = CenterGravity;
-            }
-            XFree (pProperty);
-        }
-        else if( pProperty )
-        {
-            XFree( pProperty );
-            pProperty = NULL;
-        }
-    }
-    if( m_aWMName.Len() == 0 )
-    {
-        // check for window maker - needs different gravity
-        Atom aWMakerRunning = XInternAtom( m_pDisplay, "_WINDOWMAKER_WM_PROTOCOLS", True );
-        if( aWMakerRunning != None &&
-            XGetWindowProperty( m_pDisplay,
-                                m_pSalDisplay->GetRootWindow( m_pSalDisplay->GetDefaultScreenNumber() ),
-                                aWMakerRunning,
-                                0, 32,
-                                False,
-                                XA_ATOM,
-                                &aRealType,
-                                &nFormat,
-                                &nItems,
-                                &nBytesLeft,
-                                &pProperty ) == 0 )
-        {
-            if( aRealType == XA_ATOM )
-                m_aWMName = String( RTL_CONSTASCII_USTRINGPARAM("Windowmaker" ) );
-            XFree( pProperty );
-            m_nInitWinGravity = NorthWestGravity;
-        }
-        else if( pProperty )
-        {
-            XFree( pProperty );
-            pProperty = NULL;
-        }
-    }
-    if( m_aWMName.Len() == 0 )
-    {
-        if( XInternAtom( m_pDisplay, "_OL_WIN_ATTR", True ) )
-        {
-            m_aWMName = String( RTL_CONSTASCII_USTRINGPARAM( "Olwm" ) );
-            m_nInitWinGravity = NorthWestGravity;
-        }
-    }
     if( m_aWMName.Len() == 0 )
     {
         // check for ReflectionX wm (as it needs a workaround in Windows mode
@@ -1079,9 +999,6 @@ void WMAdaptor::setWMName( X11SalFrame* pFrame, const String& rWMName ) const
     rtl::OString aTitle(rtl::OUStringToOString(rWMName,
         osl_getThreadTextEncoding()));
 
-    if( ! rWMName.Len() && m_aWMName.EqualsAscii( "Dtwm" ) )
-        aTitle = rtl::OString(' ');
-
     ::rtl::OString aWMLocale;
     rtl_Locale* pLocale = NULL;
     osl_getProcessLocale( &pLocale );
@@ -1513,10 +1430,6 @@ void WMAdaptor::setFrameTypeAndDecoration( X11SalFrame* pFrame, WMWindowType eTy
         if( ! pReferenceFrame->bMapped_ )
             pFrame->mbTransientForRoot = true;
     }
-    // #110333# in case no one ever sets a title prevent
-    // the Dtwm taking the class instead
-    if( m_aWMName.EqualsAscii( "Dtwm" ) )
-        setWMName( pFrame, String() );
 }
 
 /*
@@ -1675,16 +1588,6 @@ void WMAdaptor::maximizeFrame( X11SalFrame* pFrame, bool bHorizontal, bool bVert
                             RevertToNone,
                             CurrentTime
                             );
-            if( m_aWMName.EqualsAscii( "Dtwm" ) )
-            {
-                /*
-                 *  Dtwm will only position  correctly with center gravity
-                 *  and in this case the request actually changes the frame
-                 *  not the shell window
-                 */
-                aTarget = Rectangle( Point( 0, 0 ), aScreenSize );
-                aRestore.Move( -rGeom.nLeftDecoration, -rGeom.nTopDecoration );
-            }
         }
 
         if( pFrame->maRestorePosSize.IsEmpty() )
@@ -1708,11 +1611,6 @@ void WMAdaptor::maximizeFrame( X11SalFrame* pFrame, bool bHorizontal, bool bVert
         pFrame->maRestorePosSize = Rectangle();
         pFrame->nWidth_             = rGeom.nWidth;
         pFrame->nHeight_            = rGeom.nHeight;
-        if( m_aWMName.EqualsAscii( "Dtwm" ) && pFrame->bMapped_ )
-        {
-            pFrame->maGeometry.nX += rGeom.nLeftDecoration;
-            pFrame->maGeometry.nY += rGeom.nTopDecoration;
-        }
     }
 }
 
@@ -1836,27 +1734,6 @@ void GnomeWMAdaptor::maximizeFrame( X11SalFrame* pFrame, bool bHorizontal, bool 
     else
         WMAdaptor::maximizeFrame( pFrame, bHorizontal, bVertical );
 }
-
-/*
- *  WMAdaptor::supportsICCCMPos
- */
-
-bool WMAdaptor::supportsICCCMPos() const
-{
-    return
-        m_aWMName.EqualsAscii( "Sawfish" )
-        || m_aWMName.EqualsAscii( "Dtwm" );
-}
-
-/*
- *  NetWMAdaptor::supportsICCCMPos
- */
-
-bool NetWMAdaptor::supportsICCCMPos() const
-{
-    return true;
-}
-
 
 /*
  *  WMAdaptor::enableAlwaysOnTop

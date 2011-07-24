@@ -92,7 +92,6 @@ Status XineramaGetInfo(Display*, int, XRectangle*, unsigned char*, int*);
 #include <unx/salobj.h>
 #include <unx/sm.hxx>
 #include <unx/wmadaptor.hxx>
-#include <unx/dtint.hxx>
 
 #include <osl/socket.h>
 #include <poll.h>
@@ -505,7 +504,6 @@ SalDisplay::SalDisplay( Display *display ) :
         mpInputMethod( NULL ),
         pDisp_( display ),
         m_pWMAdaptor( NULL ),
-        m_pDtIntegrator( NULL ),
         m_bUseRandRWrapper( true ),
         m_nLastUserEventTime( CurrentTime )
 {
@@ -547,8 +545,6 @@ void SalDisplay::doDestruct()
 
     delete m_pWMAdaptor;
     m_pWMAdaptor = NULL;
-    delete m_pDtIntegrator;
-    m_pDtIntegrator = NULL;
     X11SalBitmap::ImplDestroyCache();
     X11SalGraphics::releaseGlyphPeer();
 
@@ -863,21 +859,6 @@ void SalDisplay::Init()
 
     // - - - - - - - - - - Window Manager  - - - - - - - - - - -
     m_pWMAdaptor = ::vcl_sal::WMAdaptor::createWMAdaptor( this );
-    const char *pWM = getenv( "SAL_WM" );
-    if( pWM )
-    {
-        long int nWM = 0;
-        sscanf( pWM, "%li", &nWM );
-        eWindowManager_ = SalWM(nWM);
-    }
-    else if( XInternAtom( pDisp_, "_SGI_TELL_WM", True ) )
-        eWindowManager_ = FourDwm;
-    else if( XInternAtom( pDisp_, "KWM_RUNNING", True ) )
-        eWindowManager_ = mwm; // naja, eigentlich kwm ...
-    else if( XInternAtom( pDisp_, "_OL_WIN_ATTR", True ) )
-        eWindowManager_ = olwm;
-    else if( m_pWMAdaptor->getWindowManagerName().EqualsAscii( "Dtwm" ) )
-        eWindowManager_ = dtwm;
 
     // - - - - - - - - - - Properties  - - - - - - - - - - - - -
     const char *pProperties = getenv( "SAL_PROPERTIES" );
@@ -933,29 +914,6 @@ void SalDisplay::Init()
                 if (VendorRelease ( GetDisplay() ) < 3600)
                     nProperties_ |= PROPERTY_BUG_FillPolygon_Tile;
             }
-
-            if( otherwm == eWindowManager_ )
-                eWindowManager_ = olwm;
-        }
-        else
-        if( GetServerVendor() == vendor_sco )
-        {
-            if( otherwm == eWindowManager_ ) eWindowManager_ = pmwm;
-        }
-        else
-        if( GetServerVendor() == vendor_sgi )
-        {
-            if( GetVisual( m_nDefaultScreen ).GetDepth() > 8 && GetVisual( m_nDefaultScreen ).GetDepth() <= 16 )
-                nProperties_ |= PROPERTY_BUG_XCopyArea_GXxor;
-            nProperties_ |= PROPERTY_SUPPORT_XSetClipMask;
-
-            if( otherwm == eWindowManager_ )
-                eWindowManager_ = FourDwm;
-        }
-        else
-        if( GetServerVendor() == vendor_hp )
-        {
-            if( otherwm == eWindowManager_ ) eWindowManager_ = dtwm;
         }
         else
         if( GetServerVendor() == vendor_hummingbird )
@@ -964,22 +922,11 @@ void SalDisplay::Init()
                 nProperties_ |= PROPERTY_BUG_CopyArea_OnlySmallSlices;
         }
 
-        if( otherwm == eWindowManager_ )
-        {
-            if( !XInternAtom( pDisp_, "_MOTIF_WM_INFO", True ) )
-                eWindowManager_ = olwm;
-            // ???
-        }
-
         if( winmgr == eWindowManager_ )
         {
             nProperties_ &= ~PROPERTY_SUPPORT_WM_SetPos;
             nProperties_ &= ~PROPERTY_SUPPORT_WM_Screen;
             nProperties_ |= PROPERTY_FEATURE_Maximize;
-        }
-        else if( dtwm == eWindowManager_ )
-        {
-            nProperties_ &= ~PROPERTY_SUPPORT_WM_ClientPos;
         }
         else if( pmwm == eWindowManager_ )
         {
@@ -988,9 +935,6 @@ void SalDisplay::Init()
     }
 
     InitXinerama();
-
-    // initialize system settings update
-    m_pDtIntegrator = DtIntegrator::CreateDtIntegrator();
 
 #ifdef DBG_UTIL
     PrintInfo();
@@ -1124,8 +1068,7 @@ void SalDisplay::ModifierMapping()
     nMod1KeySym_    = sal_XModifier2Keysym( pDisp_, pXModMap, Mod1MapIndex );
     // Auf Sun-Servern und SCO-Severn beruecksichtigt XLookupString
     // nicht den NumLock Modifier.
-    if(     (GetServerVendor() == vendor_sun)
-        ||  (GetServerVendor() == vendor_sco) )
+    if( GetServerVendor() == vendor_sun )
     {
         XLIB_KeyCode aNumLock = XKeysymToKeycode( pDisp_, XK_Num_Lock );
 
@@ -2594,22 +2537,14 @@ void SalDisplay::PrintInfo() const
     {
         fprintf( stderr, "\n" );
         fprintf( stderr, "Environment\n" );
-        fprintf( stderr, "\t$XENVIRONMENT     \t\"%s\"\n",
-                 GetEnv( "XENVIRONMENT" ) );
         fprintf( stderr, "\t$DISPLAY          \t\"%s\"\n",
                  GetEnv( "DISPLAY" ) );
         fprintf( stderr, "\t$SAL_VISUAL       \t\"%s\"\n",
                  GetEnv( "SAL_VISUAL" ) );
-        fprintf( stderr, "\t$SAL_FONTPATH     \t\"%s\"\n",
-                 GetEnv( "SAL_FONTPATH" ) );
-        fprintf( stderr, "\t$SAL_NOSEGV       \t\"%s\"\n",
-                 GetEnv( "SAL_NOSEGV" ) );
         fprintf( stderr, "\t$SAL_IGNOREXERRORS\t\"%s\"\n",
                  GetEnv( "SAL_IGNOREXERRORS" ) );
         fprintf( stderr, "\t$SAL_PROPERTIES   \t\"%s\"\n",
                  GetEnv( "SAL_PROPERTIES" ) );
-        fprintf( stderr, "\t$SAL_WM           \t\"%s\"\n",
-                 GetEnv( "SAL_WM" ) );
         fprintf( stderr, "\t$SAL_SYNCHRONIZE  \t\"%s\"\n",
                  GetEnv( "SAL_SYNCHRONIZE" ) );
 

@@ -71,9 +71,7 @@ public:
     /*virtual*/                 ~GlyphCache();
 
     static GlyphCache&      GetInstance();
-    void                        LoadFonts();
 
-    void                        ClearFontPath();
     void                        AddFontPath( const String& rFontPath );
     void                        AddFontFile( const rtl::OString& rNormalizedName,
                                     int nFaceNum, sal_IntPtr nFontId, const ImplDevFontAttributes&,
@@ -96,7 +94,6 @@ private:
     void                        GrowNotify();
 
 private:
-    sal_uLong                       CalcByteCount() const;
     void                        GarbageCollect();
 
     // the GlyphCache's FontList matches a font request to a serverfont instance

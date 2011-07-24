@@ -25,50 +25,22 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef _SV_DTINT_HXX
-#define _SV_DTINT_HXX
 
-#include <tools/link.hxx>
-#include <tools/string.hxx>
-#include <tools/color.hxx>
-#include <vcl/font.hxx>
-#include "svunx.h"
+#ifndef _SV_SALCONST_H
+#define _SV_SALCONST_H
 
-class SalBitmap;
-class SalDisplay;
-class AllSettings;
+// -------------------
+// - Constants -
+// -------------------
 
-enum DtType {
-    DtGeneric,
-    DtCDE
-};
+static const unsigned long k16BitRedColorMask   = 0x00007c00;
+static const unsigned long k16BitGreenColorMask = 0x000003e0;
+static const unsigned long k16BitBlueColorMask  = 0x0000001f;
 
-class DtIntegrator
-{
-protected:
-    DtType              meType;
-    Display*            mpDisplay;
-    SalDisplay*         mpSalDisplay;
-    int                 mnSystemLookCommandProcess;
+static const unsigned long k32BitRedColorMask   = 0x00ff0000;
+static const unsigned long k32BitGreenColorMask = 0x0000ff00;
+static const unsigned long k32BitBlueColorMask  = 0x000000ff;
 
-
-    DtIntegrator();
-
-    static String           aHomeDir;
-
-public:
-    static DtIntegrator* CreateDtIntegrator();
-
-    virtual ~DtIntegrator();
-
-    // SystemLook
-    virtual void GetSystemLook( AllSettings& rSettings );
-
-    DtType          GetDtType() { return meType; }
-    SalDisplay*     GetSalDisplay() { return mpSalDisplay; }
-    Display*        GetDisplay() { return mpDisplay; }
-};
-
-#endif
+#endif // _SV_SALCONST_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

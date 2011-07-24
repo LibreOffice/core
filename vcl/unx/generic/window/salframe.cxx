@@ -60,7 +60,6 @@
 #include "unx/salgdi.h"
 #include "unx/salframe.h"
 #include "unx/soicon.hxx"
-#include "unx/dtint.hxx"
 #include "unx/sm.hxx"
 #include "unx/wmadaptor.hxx"
 #include "unx/salprn.h"
@@ -980,7 +979,6 @@ void X11SalFrame::SetIcon( sal_uInt16 nIcon )
 #endif
 
             const int ourLargestIconSize = 48;
-            bool bFoundIconSize = false;
 
             int i;
             for( i=0; i<nSizes; i++)
@@ -997,7 +995,6 @@ void X11SalFrame::SetIcon( sal_uInt16 nIcon )
                     && pIconSize[i].max_width <= 2*ourLargestIconSize )
                 {
                     iconSize = pIconSize[i].max_width;
-                    bFoundIconSize = true;
                 }
                 iconSize = pIconSize[i].max_width;
 
@@ -1007,18 +1004,6 @@ void X11SalFrame::SetIcon( sal_uInt16 nIcon )
                         pIconSize[i].max_width, pIconSize[i].max_height,
                         pIconSize[i].width_inc, pIconSize[i].height_inc);
 #endif
-            }
-
-            if ( !bFoundIconSize )
-            {
-               // Unless someone has fixed olwm/olvwm, we have rejected
-               // the max icon size from |XGetIconSizes()|.  Provide a
-               // better icon size default value, in case our window manager
-               // is olwm/olvwm.
-               const String& rWM( pDisplay_->getWMAdaptor()->getWindowManagerName() );
-
-               if ( rWM.EqualsAscii( "Olwm" ) )
-                   iconSize = 48;
             }
 
             XFree( pIconSize );
@@ -1718,7 +1703,6 @@ void X11SalFrame::SetWindowState( const SalFrameState *pState )
             }
 
             const Size& aScreenSize = pDisplay_->getDataForScreen( m_nScreen ).m_aSize;
-            const WMAdaptor *pWM = GetDisplay()->getWMAdaptor();
 
             if( bDoAdjust && aPosSize.GetWidth() <= aScreenSize.Width()
                 && aPosSize.GetHeight() <= aScreenSize.Height() )
@@ -1752,17 +1736,7 @@ void X11SalFrame::SetWindowState( const SalFrameState *pState )
                     aPosSize.Move( 0, (long)aGeom.nTopDecoration - (long)aPosSize.Top() );
             }
 
-            // resize with new args
-            if (pWM->supportsICCCMPos())
-            {
-                if( mpParent )
-                    aPosSize.Move( -mpParent->maGeometry.nX,
-                -mpParent->maGeometry.nY );
-                SetPosSize( aPosSize );
-                bDefaultPosition_ = False;
-            }
-            else
-                SetPosSize( 0, 0, aPosSize.GetWidth(), aPosSize.GetHeight(), SAL_FRAME_POSSIZE_WIDTH | SAL_FRAME_POSSIZE_HEIGHT );
+            SetPosSize( 0, 0, aPosSize.GetWidth(), aPosSize.GetHeight(), SAL_FRAME_POSSIZE_WIDTH | SAL_FRAME_POSSIZE_HEIGHT );
         }
     }
 
@@ -2676,13 +2650,9 @@ inline Color getColorFromLong( long nColor )
 
 void X11SalFrame::UpdateSettings( AllSettings& rSettings )
 {
-
-    DtIntegrator* pIntegrator = GetDisplay()->getDtIntegrator();
-#if OSL_DEBUG_LEVEL > 1
-    fprintf( stderr, "DtIntegrator: %d\n", pIntegrator ? pIntegrator->GetDtType() : -1 );
-#endif
-    if( pIntegrator )
-        pIntegrator->GetSystemLook( rSettings );
+    StyleSettings aStyleSettings = rSettings.GetStyleSettings();
+    aStyleSettings.SetCursorBlinkTime( 500 );
+    rSettings.SetStyleSettings( aStyleSettings );
 }
 
 void X11SalFrame::CaptureMouse( sal_Bool bCapture )
@@ -4123,10 +4093,6 @@ long X11SalFrame::HandleClientMessage( XClientMessageEvent *pEvent )
             }
             else if( (Atom)pEvent->data.l[0] == rWMAdaptor.getAtom( WMAdaptor::WM_SAVE_YOURSELF ) )
             {
-                bool bSession = rWMAdaptor.getWindowManagerName().EqualsAscii( "Dtwm" );
-
-                if( ! bSession )
-                {
                     if( this == s_pSaveYourselfFrame )
                     {
                         rtl::OString aExec(rtl::OUStringToOString(SessionManagerClient::getExecName(), osl_getThreadTextEncoding()));
@@ -4141,14 +4107,6 @@ long X11SalFrame::HandleClientMessage( XClientMessageEvent *pEvent )
                     else
                         // can only happen in race between WM and window closing
                         XChangeProperty( GetXDisplay(), GetShellWindow(), rWMAdaptor.getAtom( WMAdaptor::WM_COMMAND ), XA_STRING, 8, PropModeReplace, (unsigned char*)"", 0 );
-                }
-                else
-                {
-                    // save open documents; would be good for non Dtwm, too,
-                    // but there is no real Shutdown message in the ancient
-                    // SM protocol; on Dtwm SaveYourself really means Shutdown, too.
-                    IceSalSession::handleOldX11SaveYourself( this );
-                }
             }
         }
     }
@@ -4372,22 +4330,6 @@ long X11SalFrame::Dispatch( XEvent *pEvent )
 
                     if( hPresentationWindow != None && GetShellWindow() == hPresentationWindow )
                         XSetInputFocus( GetXDisplay(), GetShellWindow(), RevertToParent, CurrentTime );
-                    /*  For unknown reasons Dtwm does respect the input_hint
-                     *  set to False, but not when mapping the window. So
-                     *  emulate the correct behaviour and set the focus back
-                     *  to where it most probably should have been.
-                     */
-                    if( (nStyle_ & SAL_FRAME_STYLE_OWNERDRAWDECORATION) &&
-                        mpParent &&
-                        GetDisplay()->getWMAdaptor()->getWindowManagerName().EqualsAscii( "Dtwm" )
-                        )
-                    {
-                        XSetInputFocus( GetXDisplay(),
-                                        mpParent->GetShellWindow(),
-                                        RevertToParent,
-                                        CurrentTime );
-                        bSetFocus = false;
-                    }
 
                     if( bSetFocus )
                     {

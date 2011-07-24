@@ -29,6 +29,7 @@
 #define _IOSVCLTYPES_H
 
 #include "premac.h"
+#import <CoreText/CoreText.h>
 #import <UIKit/UIKit.h>
 #include "postmac.h"
 

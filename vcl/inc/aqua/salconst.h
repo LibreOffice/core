@@ -33,23 +33,6 @@
 // - Constants -
 // -------------------
 
-static const unsigned short kByteMask = 0xFF;
-
-static const unsigned short kOneByte  =  8;
-static const unsigned short kTwoBytes = 16;
-
-static const unsigned short kOneBit     =  1;
-static const unsigned short kFiveBits   =  5;
-static const unsigned short kEightBits  =  8;
-static const unsigned short kTenBits    = 10;
-static const unsigned short kElevenBits = 11;
-
-static const unsigned short kBlackAndWhite  =  1;
-static const unsigned short kFourBitColor   =  4;
-static const unsigned short kEightBitColor  =  8;
-static const unsigned short kThousandsColor = 16;
-static const unsigned short kTrueColor      = 32;
-
 static const unsigned long k16BitRedColorMask   = 0x00007c00;
 static const unsigned long k16BitGreenColorMask = 0x000003e0;
 static const unsigned long k16BitBlueColorMask  = 0x0000001f;
@@ -57,14 +40,6 @@ static const unsigned long k16BitBlueColorMask  = 0x0000001f;
 static const unsigned long k32BitRedColorMask   = 0x00ff0000;
 static const unsigned long k32BitGreenColorMask = 0x0000ff00;
 static const unsigned long k32BitBlueColorMask  = 0x000000ff;
-
-static const unsigned short kPixMapCmpSizeOneBit    =  1;
-static const unsigned short kPixMapCmpSizeFourBits  =  4;
-static const unsigned short kPixMapCmpSizeFiveBits  =  5;
-static const unsigned short kPixMapCmpSizeEightBits =  8;
-
-static const long kPixMapHRes = 72;
-static const long kPixMapVRes = 72;
 
 #endif // _SV_SALCONST_H
 

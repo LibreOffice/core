@@ -25,23 +25,36 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef _SV_CDEINT_HXX
-#define _SV_CDEINT_HXX
 
-#include <unx/dtint.hxx>
+#ifndef _SV_SALCGFONTUTILS_HXX
+#define _SV_SALCGFONTUTILS_HXX
 
-class CDEIntegrator : public DtIntegrator
+class ImplIosFontData;
+class ImplDevFontList;
+
+#include <CoreText/CoreText.h>
+
+#include <map>
+
+/* This class has the responsibility of assembling a list of fonts
+   available on the system and enabling access to that list.
+ */
+class SystemFontList
 {
-    friend DtIntegrator* DtIntegrator::CreateDtIntegrator();
-private:
-    CDEIntegrator();
-
 public:
-    virtual ~CDEIntegrator();
+    SystemFontList();
+    ~SystemFontList();
 
-    virtual void GetSystemLook( AllSettings& rSettings );
+    void AnnounceFonts( ImplDevFontList& ) const;
+    ImplIosFontData* GetFontDataFromFont( CGFontRef ) const;
+
+private:
+    typedef boost::unordered_map<CGFontRef,ImplIosFontData*> IosFontContainer;
+    IosFontContainer maFontContainer;
+
+    void InitGlyphFallbacks();
 };
 
-#endif
+#endif  // _SV_SALCGFONTUTILS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

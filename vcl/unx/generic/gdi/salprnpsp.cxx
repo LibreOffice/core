@@ -1328,9 +1328,8 @@ sal_Bool PspSalPrinter::StartJob( const String* i_pFileName, const String& i_rJo
             {
                 oslFileHandle pFile = NULL;
                 osl_openFile( aPDFFiles[i].maTmpURL.pData, &pFile, osl_File_OpenFlag_Read );
-                if( pFile )
+                if (pFile && (osl_setFilePos(pFile, osl_Pos_Absolut, 0) == osl_File_E_None))
                 {
-                    osl_setFilePos( pFile, osl_Pos_Absolut, 0 );
                     std::vector< char > buffer( 0x10000, 0 );
                     // update job data with current page size
                     Size aPageSize( aPDFFiles[i].maParameters.maPageSize );

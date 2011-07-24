@@ -57,7 +57,6 @@ typedef unsigned int pthread_t;
 class VCLPLUG_GEN_PUBLIC X11SalData : public SalData
 {
 protected:
-            sal_Bool                bNoExceptions_;
             SalXLib            *pXLib_;
             SalDisplay         *m_pSalDisplay;
             pthread_t           hMainThread_;

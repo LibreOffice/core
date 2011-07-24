@@ -77,12 +77,13 @@ AppendPS (FILE* pDst, osl::File* pSrc, sal_uChar* pBuffer,
     if ((pDst == NULL) || (pSrc == NULL))
         return sal_False;
 
+    if (pSrc->setPos(osl_Pos_Absolut, 0) != osl::FileBase::E_None)
+        return sal_False;
+
     if (nBlockSize == 0)
         nBlockSize = nBLOCKSIZE;
     if (pBuffer == NULL)
         pBuffer = (sal_uChar*)alloca (nBlockSize);
-
-    pSrc->setPos (osl_Pos_Absolut, 0);
 
     sal_uInt64 nIn = 0;
     sal_uInt64 nOut = 0;

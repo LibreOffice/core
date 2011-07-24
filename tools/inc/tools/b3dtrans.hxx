@@ -213,10 +213,6 @@ protected:
     void PostSetProjection();
     void PostSetViewport();
 
-    void CalcMatObjectToDevice();
-    void CalcMatFromWorldToView();
-    void CalcMatInvTransObjectToEye();
-
     virtual void DeviceRectangleChange();
 };
 

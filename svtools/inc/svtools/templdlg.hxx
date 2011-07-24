@@ -74,13 +74,7 @@ public:
         </ul>
 
     */
-    struct SelectOnly { };
-    SvtDocumentTemplateDialog( Window* _pParent, SelectOnly );
-
     ~SvtDocumentTemplateDialog();
-
-    sal_Bool    IsFileSelected( ) const;
-    String      GetSelectedFileURL( ) const;
 
     void        SelectTemplateFolder();
 

@@ -571,7 +571,7 @@ void WMFReader::ReadRecordParams( sal_uInt16 nFunc )
                         aBmp.Crop( aCropRect );
                     }
                     Rectangle aDestRect( aPoint, Size( nSxe, nSye ) );
-                    aBmpSaveList.Insert( new BSaveStruct( aBmp, aDestRect, nWinROP, pOut->GetFillStyle () ), LIST_APPEND );
+                    aBmpSaveList.push_back( new BSaveStruct( aBmp, aDestRect, nWinROP, pOut->GetFillStyle () ) );
                 }
             }
         }
@@ -621,7 +621,7 @@ void WMFReader::ReadRecordParams( sal_uInt16 nFunc )
                         Rectangle aCropRect( Point( nSx, nSy ), Size( nSxe, nSye ) );
                         aBmp.Crop( aCropRect );
                     }
-                    aBmpSaveList.Insert( new BSaveStruct( aBmp, aDestRect, nWinROP, pOut->GetFillStyle () ), LIST_APPEND );
+                    aBmpSaveList.push_back( new BSaveStruct( aBmp, aDestRect, nWinROP, pOut->GetFillStyle () ) );
                 }
             }
         }
@@ -1121,9 +1121,14 @@ void WMFReader::ReadWMF(WMF_APMFILEHEADER *pAPMHeader)
                 }
                 *pWMF >> nRecSize >> nFunction;
 
-                if( pWMF->GetError() || ( nRecSize < 3 ) || ( nRecSize==3 && nFunction==0 ) || pWMF->IsEof() )
+                if(  pWMF->GetError()
+                  || ( nRecSize < 3 )
+                  || (  nRecSize  == 3
+                     && nFunction == 0
+                     )
+                  || pWMF->IsEof()
+                  )
                 {
-
                     if( pWMF->IsEof() )
                         pWMF->SetError( SVSTREAM_FILEFORMAT_ERROR );
 
@@ -1131,13 +1136,15 @@ void WMFReader::ReadWMF(WMF_APMFILEHEADER *pAPMHeader)
                 }
                 if ( !bEMFAvailable )
                 {
-                    if( aBmpSaveList.Count() &&
-                        ( nFunction != W_META_STRETCHDIB ) &&
-                        ( nFunction != W_META_DIBBITBLT ) &&
-                        ( nFunction != W_META_DIBSTRETCHBLT ) )
+                    if(   !aBmpSaveList.empty()
+                      && ( nFunction != W_META_STRETCHDIB    )
+                      && ( nFunction != W_META_DIBBITBLT     )
+                      && ( nFunction != W_META_DIBSTRETCHBLT )
+                      )
                     {
                         pOut->ResolveBitmapActions( aBmpSaveList );
                     }
+
                     if ( !nSkipActions )
                         ReadRecordParams( nFunction );
                     else
@@ -1181,7 +1188,7 @@ void WMFReader::ReadWMF(WMF_APMFILEHEADER *pAPMHeader)
         else
             pWMF->SetError( SVSTREAM_GENERALERROR );
 
-        if( !pWMF->GetError() && aBmpSaveList.Count() )
+        if( !pWMF->GetError() && !aBmpSaveList.empty() )
             pOut->ResolveBitmapActions( aBmpSaveList );
     }
     if ( pWMF->GetError() )

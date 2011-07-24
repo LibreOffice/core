@@ -30,7 +30,6 @@
 #include "precompiled_vcl.hxx"
 
 #include <unx/salunx.h>
-#include <unx/dtint.hxx>
 #include <unx/saldata.hxx>
 #include <unx/salinst.h>
 #include <unx/saldisp.hxx>

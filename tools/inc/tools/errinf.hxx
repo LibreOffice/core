@@ -210,8 +210,6 @@ private:
 protected:
     virtual sal_Bool        CreateString( const ErrorInfo *,
                       String &, sal_uInt16& nMask ) const = 0;
-            sal_Bool        ForwCreateString( const ErrorInfo*,
-                      String&, sal_uInt16& nMask ) const;
 
 public:
                         ErrorHandler();

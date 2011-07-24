@@ -49,7 +49,7 @@ class CGRect;
 class ImplIosFontData : public ImplFontData
 {
 public:
-    ImplIosFontData( const ImplDevFontAttributes&, NSString * );
+    ImplIosFontData( const ImplDevFontAttributes&, CTFontRef );
 
     virtual ~ImplIosFontData();
 
@@ -64,6 +64,10 @@ public:
     void                    ReadOs2Table() const;
     void                    ReadIosCmapEncoding() const;
     bool                    HasCJKSupport() const;
+
+protected:
+    friend class IosSalGraphics;
+    const CTFontRef             mpFontRef;
 
 private:
     mutable const ImplFontCharMap*  mpCharMap;
@@ -120,7 +124,13 @@ protected:
     RGBAColor                               maFillColor;
 
     // Device Font settings
-     const ImplIosFontData*                  mpIosFontData;
+    const ImplIosFontData*                  mpIosFontData;
+    /// Font attributes ???
+    NSMutableDictionary*                    mpAttributes;
+    // text color
+    SalColor                                mnColor;
+    /// text rotation ???
+    Fixed                                   mnRotation;
     /// <1.0: font is squeezed, >1.0 font is stretched, else 1.0
     float                                   mfFontStretch;
     /// allows text to be rendered without antialiasing

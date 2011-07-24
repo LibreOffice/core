@@ -227,22 +227,6 @@ static bool is_kde4_desktop( Display* pDisplay )
     return false;
 }
 
-static bool is_cde_desktop( Display* pDisplay )
-{
-    void* pLibrary = NULL;
-
-    Atom nDtAtom = XInternAtom( pDisplay, "_DT_WM_READY", True );
-    OUString aPathName( RTL_CONSTASCII_USTRINGPARAM( "file:///usr/dt/lib/libDtSvc.so" ) );
-    if( nDtAtom && ( pLibrary = osl_loadModule( aPathName.pData, SAL_LOADMODULE_DEFAULT ) ) )
-    {
-        osl_unloadModule( (oslModule)pLibrary );
-        return true;
-    }
-
-    return false;
-}
-
-
 extern "C"
 {
 
@@ -254,8 +238,6 @@ DESKTOP_DETECTOR_PUBLIC DesktopType get_desktop_environment()
     {
         OString aOver( pOverride );
 
-        if ( aOver.equalsIgnoreAsciiCase( "cde" ) )
-            return DESKTOP_CDE;
         if ( aOver.equalsIgnoreAsciiCase( "kde4" ) )
             return DESKTOP_KDE4;
         if ( aOver.equalsIgnoreAsciiCase( "gnome" ) )
@@ -323,8 +305,6 @@ DESKTOP_DETECTOR_PUBLIC DesktopType get_desktop_environment()
         ret = DESKTOP_KDE4;
     else if ( is_gnome_desktop( pDisplay ) )
         ret = DESKTOP_GNOME;
-    else if ( is_cde_desktop( pDisplay ) )
-        ret = DESKTOP_CDE;
     else if ( is_kde_desktop( pDisplay ) )
         ret = DESKTOP_KDE;
     else

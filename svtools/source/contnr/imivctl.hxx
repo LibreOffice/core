@@ -219,7 +219,6 @@ class SvxIconChoiceCtrl_Impl
     LocalFocus              aFocus;                             // Data for focusrect
     ::svt::AccessibleFactoryAccess aAccFactory;
 
-    List*                   pDraggedSelection;
     SvxIconChoiceCtrlEntry* pCurEditedEntry;
     SvxIconChoiceCtrlTextMode eTextMode;
     SelectionMode           eSelectionMode;
@@ -228,7 +227,6 @@ class SvxIconChoiceCtrl_Impl
     sal_Bool                bBoundRectsDirty;
     sal_Bool                bUpdateMode;
     sal_Bool                bEntryEditingEnabled;
-    sal_Bool                bInDragDrop;
 
     void                ShowCursor( sal_Bool bShow );
 
@@ -313,7 +311,6 @@ class SvxIconChoiceCtrl_Impl
                             sal_Bool bSelect,
                             sal_Bool bSyncPaint
                         );
-    void                SaveSelection( List** );
     void                RepaintEntries( sal_uInt16 nEntryFlagsMask );
     void                SetListPositions();
     void                SetDefaultTextSize();
@@ -332,7 +329,6 @@ class SvxIconChoiceCtrl_Impl
                         DECL_LINK( TextEditEndedHdl, IcnViewEdit_Impl* );
 
     void                ShowFocus ( Rectangle& rRect );
-    void                HideFocus ();
     void                DrawFocusRect ( OutputDevice* pOut );
 
     sal_Bool            IsMnemonicChar( sal_Unicode cChar, sal_uLong& rPos ) const;
@@ -402,7 +398,6 @@ public:
                         );
 
     void                InvalidateEntry( SvxIconChoiceCtrlEntry* );
-    IcnViewFieldType    GetItem( SvxIconChoiceCtrlEntry*, const Point& rAbsPos );
 
     void                SetNoSelection();
 
@@ -444,13 +439,14 @@ public:
                             const Point& rPos,
                             const Size& rBoundingSize
                         );
-    // berechnet alle BoundRects neu
-    void                RecalcAllBoundingRects();
     // berechnet alle ungueltigen BoundRects neu
     void                RecalcAllBoundingRectsSmart();
     const Rectangle&    GetEntryBoundRect( SvxIconChoiceCtrlEntry* );
-    void                InvalidateBoundingRect( SvxIconChoiceCtrlEntry* );
-    void                InvalidateBoundingRect( Rectangle& rRect ) { rRect.Right() = LONG_MAX; bBoundRectsDirty = sal_True; }
+    void                InvalidateBoundingRect( Rectangle& rRect )
+                        {
+                            rRect.Right() = LONG_MAX;
+                            bBoundRectsDirty = sal_True;
+                        }
     sal_Bool            IsBoundingRectValid( const Rectangle& rRect ) const { return (sal_Bool)( rRect.Right() != LONG_MAX ); }
 
     void                PaintEmphasis(
@@ -476,28 +472,18 @@ public:
     // berechnet alle BoundingRects neu, wenn bMustRecalcBoundingRects == sal_True
     void                CheckBoundingRects() { if (bBoundRectsDirty) RecalcAllBoundingRectsSmart(); }
     // berechnet alle invalidierten BoundingRects neu
-    void                UpdateBoundingRects();
     void                ShowTargetEmphasis( SvxIconChoiceCtrlEntry* pEntry, sal_Bool bShow );
-    void                PrepareCommandEvent( const CommandEvent& );
     void                Command( const CommandEvent& rCEvt );
     void                ToTop( SvxIconChoiceCtrlEntry* );
 
     sal_uLong           GetSelectionCount() const;
     void                SetGrid( const Size& );
     Size                GetMinGrid() const;
-    sal_uLong           GetGridCount(
-                        const Size& rSize,
-                        sal_Bool bCheckScrBars,
-                        sal_Bool bSmartScrBar ) const;
     void                Scroll( long nDeltaX, long nDeltaY, sal_Bool bScrollBar = sal_False );
     const Size&         GetItemSize( SvxIconChoiceCtrlEntry*, IcnViewFieldType ) const;
 
     void                HideDDIcon();
     void                ShowDDIcon( SvxIconChoiceCtrlEntry* pRefEntry, const Point& rPos );
-    void                HideShowDDIcon(
-                            SvxIconChoiceCtrlEntry* pRefEntry,
-                            const Point& rPos
-                        );
 
     sal_Bool            IsOver(
                             SvPtrarr* pSelectedRectList,
@@ -530,14 +516,11 @@ public:
                             SvxIconChoiceCtrlTextMode,
                             SvxIconChoiceCtrlEntry* pEntry = 0
                         );
-    SvxIconChoiceCtrlTextMode GetTextMode( const SvxIconChoiceCtrlEntry* pEntry = 0 ) const;
-    void                ShowEntryFocusRect( const SvxIconChoiceCtrlEntry* pEntry );
     void                EnableEntryEditing( sal_Bool bEnable ) { bEntryEditingEnabled = bEnable; }
     sal_Bool            IsEntryEditingEnabled() const { return bEntryEditingEnabled; }
     sal_Bool            IsEntryEditing() const { return (sal_Bool)(pCurEditedEntry!=0); }
     void                EditEntry( SvxIconChoiceCtrlEntry* pEntry );
     void                StopEntryEditing( sal_Bool bCancel );
-    void                LockEntryPos( SvxIconChoiceCtrlEntry* pEntry, sal_Bool bLock );
     size_t              GetEntryCount() const { return aEntries.size(); }
     SvxIconChoiceCtrlEntry* GetEntry( size_t nPos )
                             {
@@ -564,18 +547,13 @@ public:
                                 nFlags &= ~(F_MOVED_ENTRIES);
                         }
     sal_uLong           GetEntryListPos( SvxIconChoiceCtrlEntry* ) const;
-    void                SetEntryListPos( SvxIconChoiceCtrlEntry* pEntry, sal_uLong nNewPos );
     void                SetEntryImageSize( const Size& rSize ) { aImageSize = rSize; }
-    void                SetEntryFlags( SvxIconChoiceCtrlEntry* pEntry, sal_uInt16 nFlags );
-    SvxIconChoiceCtrlEntry* GoLeftRight( SvxIconChoiceCtrlEntry*, sal_Bool bRight );
-    SvxIconChoiceCtrlEntry* GoUpDown( SvxIconChoiceCtrlEntry*, sal_Bool bDown );
     void                InitSettings();
     Rectangle           GetOutputRect() const;
 
     sal_Bool            ArePredecessorsSet() const { return (sal_Bool)(pHead != 0); }
     SvxIconChoiceCtrlEntry* GetPredecessorHead() const { return pHead; }
     void                SetEntryPredecessor(SvxIconChoiceCtrlEntry* pEntry,SvxIconChoiceCtrlEntry* pPredecessor);
-    sal_Bool            GetEntryPredecessor(SvxIconChoiceCtrlEntry* pEntry,SvxIconChoiceCtrlEntry** ppPredecessor);
     // liefert gueltige Ergebnisse nur im AutoArrange-Modus!
     SvxIconChoiceCtrlEntry* FindEntryPredecessor( SvxIconChoiceCtrlEntry* pEntry, const Point& );
 
@@ -585,7 +563,6 @@ public:
     void                Flush();
     void                SetColumn( sal_uInt16 nIndex, const SvxIconChoiceCtrlColumnInfo& );
     const SvxIconChoiceCtrlColumnInfo* GetColumn( sal_uInt16 nIndex ) const;
-    const SvxIconChoiceCtrlColumnInfo* GetItemColumn( sal_uInt16 nSubItem, long& rLeft ) const;
 
     Rectangle           GetDocumentRect() const { return Rectangle( Point(), aVirtOutputSize ); }
     Rectangle           GetVisibleRect() const { return GetOutputRect(); }
@@ -601,8 +578,6 @@ public:
                             sal_Bool bHide
                         );
     void                StopSelectTimer() { aCallSelectHdlTimer.Stop(); }
-    void                Tracking( const TrackingEvent& rTEvt );
-    Point               GetPopupMenuPosPixel() const;
 
     sal_Bool            HandleShortCutKey( const KeyEvent& rKeyEvent );
 

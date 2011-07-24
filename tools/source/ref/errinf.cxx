@@ -409,11 +409,6 @@ sal_uInt16 ErrorHandler::HandleError(sal_uIntPtr lId, sal_uInt16 nFlags)
     return HandleError_Impl( lId, nFlags, sal_False, aDummy );
 }
 
-sal_Bool ErrorHandler::ForwCreateString(const ErrorInfo* pInfo, String& rStr, sal_uInt16 &rFlags) const
-{
-    return ErrHdl_Impl::CreateString(this->pImpl->pNext, pInfo, rStr, rFlags);
-}
-
 sal_Bool ErrHdl_Impl::CreateString( const ErrorHandler *pStart,
                                 const ErrorInfo* pInfo, String& pStr,
                                sal_uInt16 &rFlags)
