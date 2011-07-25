@@ -302,6 +302,23 @@ endef
 
 endif # SYSTEM_CAIRO
 
+define gb_LinkTarget__use_freetype
+$(call gb_LinkTarget_set_include,$(1),\
+	$$(INCLUDE) \
+	$(FREETYPE_CFLAGS) \
+)
+$(call gb_LinkTarget_add_libs,$(1),$(FREETYPE_LIBS))
+
+endef
+
+define gb_LinkTarget__use_fontconfig
+$(call gb_LinkTarget_set_include,$(1),\
+	$$(INCLUDE) \
+	$(FONTCONFIG_CFLAGS) \
+)
+$(call gb_LinkTarget_add_libs,$(1),$(FONTCONFIG_LIBS))
+
+endef
 
 ifeq ($(SYSTEM_GRAPHITE),YES)
 
