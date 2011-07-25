@@ -7,6 +7,7 @@ from common.FileAccess import *
 from ui.PathSelection import *
 from ui.event.UnoDataAware import *
 from ui.event.RadioDataAware import *
+from TemplateConsts import *
 
 from com.sun.star.view.DocumentZoomType import OPTIMAL
 from com.sun.star.awt.VclWindowPeerAttribute import YES_NO, DEF_NO
@@ -16,6 +17,7 @@ from common.NoValidPathException import *
 class AgendaWizardDialogImpl(AgendaWizardDialog):
 
     fileAccess1 = None
+    pageDesign = None
 
     def __init__(self, xmsf):
         super(AgendaWizardDialogImpl, self).__init__(xmsf)
@@ -56,45 +58,45 @@ class AgendaWizardDialogImpl(AgendaWizardDialog):
     def startWizard(self):
         self.running = True
         try:
-            # read configuration data.
+            #Number of steps on WizardDialog
+            self.nMaxStep = 6
+
+            # initialize the agenda template
             self.agenda = CGAgenda()
-            root = Configuration.getConfigurationRoot(
-                self.xMSF, "/org.openoffice.Office.Writer/Wizards/Agenda",
-                False)
-            self.agenda.readConfiguration(root, "cp_")
-            # initialize the agenda temself.myPathSelectionListener()plate
             self.agendaTemplate = AgendaTemplate(
                 self.xMSF, self.agenda, self.resources, self)
-            self.initializeTemplates()
-            self.agendaTemplate.load(self.agendaTemplates[1][0], [])
+
             # build the dialog.
+            self.drawNaviBar()
+
             self.buildStep1()
             self.buildStep2()
             self.buildStep3()
             self.buildStep4()
             self.buildStep5()
-            self.topicsControl = TopicsControl(self, self.xMSF, self.agenda)
             self.buildStep6()
-            self.drawNaviBar()
+
+            self.topicsControl = TopicsControl(self, self.xMSF, self.agenda)
+
             self.initializePaths()
             #special Control for setting the save Path:
             self.insertPathSelectionControl()
-            # create the peer
-            xw = self.agendaTemplate.xFrame.getContainerWindow()
-            self.createWindowPeer(xw)
-            # initialize roadmap
-            self.addRoadmap()
-            self.insertRoadMapItems(
-                [self.resources.resStep1, self.resources.resStep2,
-                    self.resources.resStep3, self.resources.resStep4,
-                    self.resources.resStep5, self.resources.resStep6],
-                [1, 2, 3, 4, 5, 6],[True, True, True, True, True, True])
-            self.nMaxStep = 6
-            self.setCurrentRoadmapItemID(1)
+
+            self.initializeTemplates()
+
             # synchronize GUI and CGAgenda object.
-            self.makeDA()
+            self.initConfiguration()
+            self.agendaTemplate.load(self.agendaTemplates[1][0], [])
+
             if self.myPathSelection.xSaveTextBox.Text.lower() == "":
                 self.myPathSelection.initializePath()
+
+            # create the peer
+            xContainerWindow = self.agendaTemplate.xFrame.ContainerWindow
+            self.createWindowPeer(xContainerWindow)
+
+            # initialize roadmap
+            self.insertRoadmap()
 
             self.executeDialogFromComponent(self.agendaTemplate.xFrame)
             self.removeTerminateListener()
@@ -141,7 +143,7 @@ class AgendaWizardDialogImpl(AgendaWizardDialog):
             try:
                 self.agenda.cp_TemplatePath = FileAccess.connectURLs(
                     FileAccess.getOfficePath(xMSF, "Work", "", ""),
-                    resources.resDefaultFilename)
+                    resources.initConfigurationresDefaultFilename)
             except Exception, ex:
                 traceback.print_exc()
 
@@ -149,7 +151,12 @@ class AgendaWizardDialogImpl(AgendaWizardDialog):
     bind controls to the agenda member (DataAware model)
     '''
 
-    def makeDA(self):
+    def initConfiguration(self):
+        # read configuration data.
+        root = Configuration.getConfigurationRoot(
+            self.xMSF, "/org.openoffice.Office.Writer/Wizards/Agenda", False)
+        self.agenda.readConfiguration(root, "cp_")
+
         self.setControlProperty(
             "listPageDesign", "StringItemList", tuple(self.agendaTemplates[0]))
         self.checkSavePath()
@@ -157,42 +164,53 @@ class AgendaWizardDialogImpl(AgendaWizardDialog):
         UnoDataAware.attachListBox(
             self.agenda, "cp_AgendaType", self.listPageDesign, True).updateUI()
         UnoDataAware.attachCheckBox(
-            self.agenda, "cp_IncludeMinutes", self.chkMinutes, True).updateUI()
+            self.agenda, "cp_IncludeMinutes", self.chkMinutes, True)
         UnoDataAware.attachEditControl(
-            self.agenda, "cp_Title", self.txtTitle, True).updateUI()
+            self.agenda, "cp_Title", self.txtTitle, True)
         UnoDataAware.attachDateControl(
-            self.agenda, "cp_Date", self.txtDate, True).updateUI()
+            self.agenda, "cp_Date", self.txtDate, True)
         UnoDataAware.attachTimeControl(
-            self.agenda, "cp_Time", self.txtTime, True).updateUI()
+            self.agenda, "cp_Time", self.txtTime, True)
         UnoDataAware.attachEditControl(
-            self.agenda, "cp_Location", self.cbLocation, True).updateUI()
+            self.agenda, "cp_Location", self.cbLocation, True)
         UnoDataAware.attachCheckBox(
-            self.agenda, "cp_ShowMeetingType", self.chkMeetingTitle, True)
+            self.agenda, "cp_ShowMeetingType", self.chkMeetingTitle, True,
+            FILLIN_MEETING_TYPE)
         UnoDataAware.attachCheckBox(
-            self.agenda, "cp_ShowRead", self.chkRead, True).updateUI()
+            self.agenda, "cp_ShowRead", self.chkRead, True,
+            FILLIN_READ)
         UnoDataAware.attachCheckBox(
-            self.agenda, "cp_ShowBring", self.chkBring, True).updateUI()
+            self.agenda, "cp_ShowBring", self.chkBring, True,
+            FILLIN_BRING)
         UnoDataAware.attachCheckBox(
-            self.agenda, "cp_ShowNotes", self.chkNotes, True).updateUI()
+            self.agenda, "cp_ShowNotes", self.chkNotes, True,
+            FILLIN_NOTES)
         UnoDataAware.attachCheckBox(
-            self.agenda, "cp_ShowCalledBy", self.chkConvenedBy, True).updateUI()
+            self.agenda, "cp_ShowCalledBy", self.chkConvenedBy, True,
+            FILLIN_CALLED_BY)
         UnoDataAware.attachCheckBox(
-            self.agenda, "cp_ShowFacilitator", self.chkPresiding, True).updateUI()
+            self.agenda, "cp_ShowFacilitator", self.chkPresiding, True,
+            FILLIN_FACILITATOR)
         UnoDataAware.attachCheckBox(
-            self.agenda, "cp_ShowNotetaker", self.chkNoteTaker, True).updateUI()
+            self.agenda, "cp_ShowNotetaker", self.chkNoteTaker, True,
+            FILLIN_NOTETAKER)
         UnoDataAware.attachCheckBox(
-            self.agenda, "cp_ShowTimekeeper", self.chkTimekeeper, True).updateUI()
+            self.agenda, "cp_ShowTimekeeper", self.chkTimekeeper, True,
+            FILLIN_TIMEKEEPER)
         UnoDataAware.attachCheckBox(
-            self.agenda, "cp_ShowAttendees", self.chkAttendees, True).updateUI()
+            self.agenda, "cp_ShowAttendees", self.chkAttendees, True,
+            FILLIN_PARTICIPANTS)
         UnoDataAware.attachCheckBox(
-            self.agenda, "cp_ShowObservers", self.chkObservers, True).updateUI()
+            self.agenda, "cp_ShowObservers", self.chkObservers, True,
+            FILLIN_OBSERVERS)
         UnoDataAware.attachCheckBox(
-            self.agenda, "cp_ShowResourcePersons",self.chkResourcePersons, True).updateUI()
+            self.agenda, "cp_ShowResourcePersons",self.chkResourcePersons, True,
+            FILLIN_RESOURCE_PERSONS)
         UnoDataAware.attachEditControl(
-            self.agenda, "cp_TemplateName", self.txtTemplateName, True).updateUI()
+            self.agenda, "cp_TemplateName", self.txtTemplateName, True)
         RadioDataAware.attachRadioButtons(
             self.agenda, "cp_ProceedMethod",
-                (self.optCreateAgenda, self.optMakeChanges), True).updateUI()
+                (self.optCreateAgenda, self.optMakeChanges), True)
 
     def saveConfiguration(self):
         self.topicsControl.saveTopics(self.agenda)
@@ -200,6 +218,19 @@ class AgendaWizardDialogImpl(AgendaWizardDialog):
             self.xMSF, "/org.openoffice.Office.Writer/Wizards/Agenda", True)
         self.agenda.writeConfiguration(root, "cp_")
         root.commitChanges()
+
+    def insertRoadmap(self):
+        self.addRoadmap()
+
+        self.insertRoadMapItems(
+            [True, True, True, True, True, True],
+            [self.resources.resStep1, self.resources.resStep2,
+                self.resources.resStep3, self.resources.resStep4,
+                self.resources.resStep5, self.resources.resStep6])
+
+        self.setRoadmapInteractive(True)
+        self.setRoadmapComplete(True)
+        self.setCurrentRoadmapItemID(1)
 
     '''
     read the available agenda wizard templates.
@@ -222,14 +253,16 @@ class AgendaWizardDialogImpl(AgendaWizardDialog):
     first page, page design listbox changed.
     '''
 
-    def pageDesignChanged(self, item):
+    def pageDesignChanged(self):
         try:
-            self.agendaTemplate.load(
-                self.agendaTemplates[1][item.Selected],
-                self.topicsControl.scrollfields)
+            SelectedItemPos = self.listPageDesign.SelectedItemPos
+            #avoid to load the same item again
+            if AgendaWizardDialogImpl.pageDesign is not SelectedItemPos:
+                AgendaWizardDialogImpl.pageDesign = SelectedItemPos
+                self.agendaTemplate.load(
+                    self.agendaTemplates[1][SelectedItemPos],
+                    self.topicsControl.scrollfields)
         except Exception:
-            SystemDialog.showMessageBox(
-                self.xMSF, "ErrBox", OK, self.resources.resErrOpenTemplate)
             traceback.print_exc()
 
     '''

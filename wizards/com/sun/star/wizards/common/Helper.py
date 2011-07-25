@@ -69,8 +69,7 @@ class Helper(object):
         try:
             if xPSet is not None:
                 oObject = xPSet.getPropertyValue(PropertyName)
-                if oObject is not None:
-                    return oObject
+                return oObject
             return None
 
         except Exception, exception:

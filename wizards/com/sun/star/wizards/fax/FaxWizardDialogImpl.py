@@ -32,6 +32,8 @@ class FaxWizardDialogImpl(FaxWizardDialog):
     RM_FOOTER = 4
     RM_FINALSETTINGS = 5
 
+    lstBusinessStylePos = None
+    lstPrivateStylePos = None
 
     def __init__(self, xmsf):
         super(FaxWizardDialogImpl, self).__init__(xmsf)
@@ -61,7 +63,7 @@ class FaxWizardDialogImpl(FaxWizardDialog):
     def startWizard(self, xMSF, CurPropertyValue):
         self.running = True
         try:
-            #Number of steps on WizardDialog:
+            #Number of steps on WizardDialog
             self.nMaxStep = 5
 
             #instatiate The Document Frame for the Preview
@@ -95,8 +97,8 @@ class FaxWizardDialogImpl(FaxWizardDialog):
             if self.myPathSelection.xSaveTextBox.Text.lower() == "":
                 self.myPathSelection.initializePath()
 
-            self.xContainerWindow = self.myFaxDoc.xFrame.ContainerWindow
-            self.createWindowPeer(self.xContainerWindow)
+            xContainerWindow = self.myFaxDoc.xFrame.ContainerWindow
+            self.createWindowPeer(xContainerWindow)
 
             #add the Roadmap to the dialog:
             self.insertRoadmap()
@@ -217,26 +219,9 @@ class FaxWizardDialogImpl(FaxWizardDialog):
 
     def insertRoadmap(self):
         self.addRoadmap()
-        i = 0
-        i = self.insertRoadmapItem(
-            0, True, self.resources.RoadmapLabels[
-            FaxWizardDialogImpl.RM_TYPESTYLE - 1],
-            FaxWizardDialogImpl.RM_TYPESTYLE)
-        i = self.insertRoadmapItem(
-            i, True, self.resources.RoadmapLabels[
-            FaxWizardDialogImpl.RM_ELEMENTS - 1],
-            FaxWizardDialogImpl.RM_ELEMENTS)
-        i = self.insertRoadmapItem(
-            i, True, self.resources.RoadmapLabels[
-            FaxWizardDialogImpl.RM_SENDERRECEIVER - 1],
-            FaxWizardDialogImpl.RM_SENDERRECEIVER)
-        i = self.insertRoadmapItem(
-            i, False, self.resources.RoadmapLabels[
-            FaxWizardDialogImpl.RM_FOOTER - 1], FaxWizardDialogImpl.RM_FOOTER)
-        i = self.insertRoadmapItem(i, True,
-            self.resources.RoadmapLabels[
-            FaxWizardDialogImpl.RM_FINALSETTINGS - 1],
-            FaxWizardDialogImpl.RM_FINALSETTINGS)
+        self.insertRoadMapItems(
+                [True, True, True, False, True], self.resources.RoadmapLabels)
+
         self.setRoadmapInteractive(True)
         self.setRoadmapComplete(True)
         self.setCurrentRoadmapItemID(1)
@@ -418,6 +403,7 @@ class FaxWizardDialogImpl(FaxWizardDialog):
             self.optPrivateFaxItemChanged()
 
     def optBusinessFaxItemChanged(self):
+        FaxWizardDialogImpl.lstPrivateStylePos = None
         DataAware.setDataObjects(self.faxDA,
             self.myConfig.cp_BusinessFax, True)
         self.setControlProperty("lblBusinessStyle",
@@ -431,14 +417,19 @@ class FaxWizardDialogImpl(FaxWizardDialog):
         self.lstBusinessStyleItemChanged()
         self.__enableSenderReceiver()
         self.__setPossibleFooter(True)
+
     def lstBusinessStyleItemChanged(self):
-        TextDocument.xTextDocument = self.myFaxDoc.loadAsPreview( \
-            self.BusinessFiles[1][self.lstBusinessStyle.SelectedItemPos],
-                False)
-        self.initializeElements()
-        self.setElements()
+        selectedItemPos = self.lstBusinessStyle.SelectedItemPos
+        #avoid to load the same item again
+        if FaxWizardDialogImpl.lstBusinessStylePos is not selectedItemPos:
+            FaxWizardDialogImpl.lstBusinessStylePos = selectedItemPos
+            TextDocument.xTextDocument = self.myFaxDoc.loadAsPreview(
+                self.BusinessFiles[1][selectedItemPos], False)
+            self.initializeElements()
+            self.setElements()
 
     def optPrivateFaxItemChanged(self):
+        FaxWizardDialogImpl.lstBusinessStylePos = None
         DataAware.setDataObjects(self.faxDA,
             self.myConfig.cp_PrivateFax, True)
         self.setControlProperty("lblBusinessStyle",
@@ -454,11 +445,14 @@ class FaxWizardDialogImpl(FaxWizardDialog):
         self.__setPossibleFooter(False)
 
     def lstPrivateStyleItemChanged(self):
-        TextDocument.xTextDocument = self.myFaxDoc.loadAsPreview( \
-            self.PrivateFiles[1][self.lstPrivateStyle.SelectedItemPos],
-                False)
-        self.initializeElements()
-        self.setElements()
+        selectedItemPos = self.lstPrivateStyle.SelectedItemPos
+        #avoid to load the same item again
+        if FaxWizardDialogImpl.lstPrivateStylePos is not selectedItemPos:
+            FaxWizardDialogImpl.lstPrivateStylePos = selectedItemPos
+            TextDocument.xTextDocument = self.myFaxDoc.loadAsPreview(
+                self.PrivateFiles[1][selectedItemPos], False)
+            self.initializeElements()
+            self.setElements()
 
     def txtTemplateNameTextChanged(self):
         xDocProps = TextDocument.xTextDocument.DocumentProperties

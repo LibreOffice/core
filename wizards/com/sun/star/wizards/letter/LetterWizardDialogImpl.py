@@ -18,12 +18,17 @@ from com.sun.star.document.UpdateDocMode import FULL_UPDATE
 from com.sun.star.document.MacroExecMode import ALWAYS_EXECUTE
 
 class LetterWizardDialogImpl(LetterWizardDialog):
+
     RM_TYPESTYLE = 1
     RM_BUSINESSPAPER = 2
     RM_ELEMENTS = 3
     RM_SENDERRECEIVER = 4
     RM_FOOTER = 5
     RM_FINALSETTINGS = 6
+
+    lstBusinessStylePos = None
+    lstPrivateStylePos = None
+    lstPrivOfficialStylePos = None
 
     def enterStep(self, OldStep, NewStep):
         pass
@@ -243,6 +248,8 @@ class LetterWizardDialogImpl(LetterWizardDialog):
             traceback.print_exc()
 
     def optBusinessLetterItemChanged(self):
+        LetterWizardDialogImpl.lstPrivateStylePos = None
+        LetterWizardDialogImpl.lstPrivOfficialStylePos = None
         DataAware.setDataObjects(
             self.letterDA, self.myConfig.cp_BusinessLetter, True)
         self.setControlProperty(
@@ -266,6 +273,8 @@ class LetterWizardDialogImpl(LetterWizardDialog):
             self.myPathSelection.initializePath()
 
     def optPrivOfficialLetterItemChanged(self):
+        LetterWizardDialogImpl.lstBusinessStylePos = None
+        LetterWizardDialogImpl.lstPrivateStylePos = None
         DataAware.setDataObjects(
             self.letterDA, self.myConfig.cp_PrivateOfficialLetter, True)
         self.setControlProperty(
@@ -290,6 +299,8 @@ class LetterWizardDialogImpl(LetterWizardDialog):
             self.myPathSelection.initializePath()
 
     def optPrivateLetterItemChanged(self):
+        LetterWizardDialogImpl.lstBusinessStylePos = None
+        LetterWizardDialogImpl.lstPrivOfficialStylePos = None
         DataAware.setDataObjects(
             self.letterDA, self.myConfig.cp_PrivateLetter, True)
         self.setControlProperty(
@@ -372,36 +383,45 @@ class LetterWizardDialogImpl(LetterWizardDialog):
             "macro:///Template.Correspondence.Database()")
 
     def lstBusinessStyleItemChanged(self):
-        TextDocument.xTextDocument = \
-            self.myLetterDoc.loadAsPreview(
-                self.BusinessFiles[1][self.lstBusinessStyle.SelectedItemPos],
-                False)
-        self.myLetterDoc.xTextDocument.lockControllers()
-        self.initializeElements()
-        self.chkBusinessPaperItemChanged()
-        self.setElements(False)
-        self.myLetterDoc.xTextDocument.unlockControllers()
+        selectedItemPos = self.lstBusinessStyle.SelectedItemPos
+        if LetterWizardDialogImpl.lstBusinessStylePos is not selectedItemPos:
+            LetterWizardDialogImpl.lstBusinessStylePos = selectedItemPos
+            TextDocument.xTextDocument = \
+                self.myLetterDoc.loadAsPreview(
+                    self.BusinessFiles[1][selectedItemPos],
+                    False)
+            self.myLetterDoc.xTextDocument.lockControllers()
+            self.initializeElements()
+            self.chkBusinessPaperItemChanged()
+            self.setElements(False)
+            self.myLetterDoc.xTextDocument.unlockControllers()
 
     def lstPrivOfficialStyleItemChanged(self):
-        TextDocument.xTextDocument = \
-            self.myLetterDoc.loadAsPreview(
-                self.OfficialFiles[1][self.lstPrivOfficialStyle.SelectedItemPos],
-                False)
-        self.myLetterDoc.xTextDocument.lockControllers()
-        self.initializeElements()
-        self.setPossibleSenderData(True)
-        self.setElements(False)
-        self.myLetterDoc.xTextDocument.unlockControllers()
+        selectedItemPos = self.lstPrivOfficialStyle.SelectedItemPos
+        if LetterWizardDialogImpl.lstPrivOfficialStylePos is not selectedItemPos:
+            LetterWizardDialogImpl.lstPrivOfficialStylePos = selectedItemPos
+            TextDocument.xTextDocument = \
+                self.myLetterDoc.loadAsPreview(
+                    self.OfficialFiles[1][selectedItemPos],
+                    False)
+            self.myLetterDoc.xTextDocument.lockControllers()
+            self.initializeElements()
+            self.setPossibleSenderData(True)
+            self.setElements(False)
+            self.myLetterDoc.xTextDocument.unlockControllers()
 
     def lstPrivateStyleItemChanged(self):
-        TextDocument.xTextDocument = \
-            self.myLetterDoc.loadAsPreview(
-                self.PrivateFiles[1][self.lstPrivateStyle.getSelectedItemPos()],
-                False)
-        self.myLetterDoc.xTextDocument.lockControllers()
-        self.initializeElements()
-        self.setElements(True)
-        self.myLetterDoc.xTextDocument.unlockControllers()
+        selectedItemPos = self.lstPrivateStyle.SelectedItemPos
+        if LetterWizardDialogImpl.lstPrivateStylePos is not selectedItemPos:
+            LetterWizardDialogImpl.lstPrivateStylePos = selectedItemPos
+            TextDocument.xTextDocument = \
+                self.myLetterDoc.loadAsPreview(
+                    self.PrivateFiles[1][selectedItemPos],
+                    False)
+            self.myLetterDoc.xTextDocument.lockControllers()
+            self.initializeElements()
+            self.setElements(True)
+            self.myLetterDoc.xTextDocument.unlockControllers()
 
     def numLogoHeightTextChanged(self):
         self.BusCompanyLogo.iHeight = int(self.numLogoHeight.Value * 1000)
@@ -1060,31 +1080,11 @@ class LetterWizardDialogImpl(LetterWizardDialog):
 
     def insertRoadmap(self):
         self.addRoadmap()
-        i = 0
-        i = self.insertRoadmapItem(
-            0, True,
-            self.resources.RoadmapLabels[LetterWizardDialogImpl.RM_TYPESTYLE -1],
-            LetterWizardDialogImpl.RM_TYPESTYLE)
-        i = self.insertRoadmapItem(
-            i, False,
-            self.resources.RoadmapLabels[LetterWizardDialogImpl.RM_BUSINESSPAPER - 1],
-            LetterWizardDialogImpl.RM_BUSINESSPAPER)
-        i = self.insertRoadmapItem(
-            i, True,
-            self.resources.RoadmapLabels[LetterWizardDialogImpl.RM_ELEMENTS - 1],
-            LetterWizardDialogImpl.RM_ELEMENTS)
-        i = self.insertRoadmapItem(
-            i, True,
-            self.resources.RoadmapLabels[LetterWizardDialogImpl.RM_SENDERRECEIVER - 1],
-            LetterWizardDialogImpl.RM_SENDERRECEIVER)
-        i = self.insertRoadmapItem(
-            i, False,
-            self.resources.RoadmapLabels[LetterWizardDialogImpl.RM_FOOTER -1],
-            LetterWizardDialogImpl.RM_FOOTER)
-        i = self.insertRoadmapItem(
-            i, True,
-            self.resources.RoadmapLabels[LetterWizardDialogImpl.RM_FINALSETTINGS - 1],
-            LetterWizardDialogImpl.RM_FINALSETTINGS)
+
+        self.insertRoadMapItems(
+                [True, False, True, True, False, True],
+                self.resources.RoadmapLabels)
+
         self.setRoadmapInteractive(True)
         self.setRoadmapComplete(True)
         self.setCurrentRoadmapItemID(1)

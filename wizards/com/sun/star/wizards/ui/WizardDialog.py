@@ -123,9 +123,6 @@ class WizardDialog(UnoDialog2):
         self.sRMItemLabels = _oResource.getResArray(
             StartResID, self.nMaxStep)
 
-    def getRMItemLabels(self):
-        return self.sRMItemLabels
-
     def insertRoadmapItem(self, Index, _bEnabled, _sLabel, _CurItemID):
         try:
             if isinstance(_sLabel, int):
@@ -137,11 +134,8 @@ class WizardDialog(UnoDialog2):
                 PropertyNames.PROPERTY_ENABLED, _bEnabled)
             Helper.setUnoPropertyValue(oRoadmapItem, "ID", _CurItemID)
             self.oRoadmap.insertByIndex(Index, oRoadmapItem)
-            NextIndex = Index + 1
-            return NextIndex
         except Exception, exception:
             traceback.print_exc()
-            return -1
 
     def getRoadmapItemByID(self, _ID):
         try:
@@ -291,9 +285,9 @@ class WizardDialog(UnoDialog2):
         except Exception, exception:
             traceback.print_exc()
 
-    def insertRoadMapItems(self, items, steps, enabled):
+    def insertRoadMapItems(self, enabled, items):
         for index, item in enumerate(items):
-            self.insertRoadmapItem(index, enabled[index], item, steps[index])
+            self.insertRoadmapItem(index, enabled[index], item, index + 1)
 
     def setStepEnabled(self, _nStep, bEnabled, enableNextButton):
         setStepEnabled(_nStep, bEnabled)
