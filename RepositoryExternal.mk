@@ -46,6 +46,7 @@ $(call gb_LinkTarget_set_include,$(1),\
 $(call gb_LinkTarget_add_libs,$(1),\
     $(CPPUNIT_LIBS) \
 )
+
 endef
 
 else
@@ -58,6 +59,7 @@ define gb_LinkTarget__use_cppunit
 $(call gb_LinkTarget_add_linked_libs,$(1),\
     cppunit \
 )
+
 endef
 
 endif
@@ -69,6 +71,7 @@ $(call gb_LinkTarget_add_defs,$(1),\
 	-DSYSTEM_ZLIB \
 )
 $(call gb_LinkTarget_add_libs,$(1),-lz)
+
 endef
 
 else # !SYSTEM_ZLIB
@@ -81,6 +84,7 @@ define gb_LinkTarget__use_zlib
 $(call gb_LinkTarget_add_linked_static_libs,$(1),\
 	zlib \
 )
+
 endef
 
 endif # SYSTEM_ZLIB
@@ -93,6 +97,7 @@ $(call gb_LinkTarget_add_libs,$(1),-ljpeg)
 $(call gb_LinkTarget_set_ldflags,$(1),\
 	$$(filter-out -L/usr/lib/jvm%,$$(T_LDFLAGS)) \
 )
+
 endef
 
 else # !SYSTEM_JPEG
@@ -105,6 +110,7 @@ define gb_LinkTarget__use_jpeg
 $(call gb_LinkTarget_add_linked_static_libs,$(1),\
 	jpeglib \
 )
+
 endef
 
 endif # SYSTEM_JPEG
@@ -120,6 +126,7 @@ $(call gb_LinkTarget_add_defs,$(1),\
 )
 
 $(call gb_LinkTarget_add_libs,$(1),-lexpat)
+
 endef
 
 else # !SYSTEM_EXPAT
@@ -142,6 +149,7 @@ $(call gb_LinkTarget_add_linked_static_libs,$(1),\
 	$(2) \
 	expat_xmltok \
 )
+
 endef
 
 endif # SYSTEM_EXPAT
@@ -149,10 +157,12 @@ endif # SYSTEM_EXPAT
 # now define 2 wrappers that select which internal static library to use...
 define gb_LinkTarget__use_expat_utf8
 $(call gb_LinkTarget__use_expat,$(1),ascii_expat_xmlparse)
+
 endef
 
 define gb_LinkTarget__use_expat_utf16
 $(call gb_LinkTarget__use_expat,$(1),expat_xmlparse)
+
 endef
 
 
@@ -167,6 +177,7 @@ $(call gb_LinkTarget_set_include,$(1),\
 	$(LIBXML_CFLAGS) \
 )
 $(call gb_LinkTarget_add_libs,$(1),$(LIBXML_LIBS))
+
 endef
 
 else # !SYSTEM_LIBXML
@@ -179,6 +190,7 @@ define gb_LinkTarget__use_libxml2
 $(call gb_LinkTarget_add_linked_libs,$(1),\
 	xml2 \
 )
+
 endef
 
 endif # SYSTEM_LIBXML
@@ -192,6 +204,7 @@ $(call gb_LinkTarget_set_include,$(1),\
 	$(LIBXSLT_CFLAGS) \
 )
 $(call gb_LinkTarget_add_libs,$(1),$(LIBXSLT_LIBS))
+
 endef
 
 else # !SYSTEM_LIBXSLT
@@ -204,6 +217,7 @@ define gb_LinkTarget__use_libxslt
 $(call gb_LinkTarget_add_linked_libs,$(1),\
 	xslt \
 )
+
 endef
 
 endif # SYSTEM_LIBXSLT
@@ -220,6 +234,7 @@ $(call gb_LinkTarget_set_include,$(1),\
 	$(REDLAND_CFLAGS) \
 )
 $(call gb_LinkTarget_add_libs,$(1),$(REDLAND_LIBS))
+
 endef
 
 else # !SYSTEM_REDLAND
@@ -232,6 +247,7 @@ define gb_LinkTarget__use_librdf
 $(call gb_LinkTarget_add_linked_libs,$(1),\
 	rdf \
 )
+
 endef
 
 endif # SYSTEM_REDLAND
@@ -247,6 +263,7 @@ $(call gb_LinkTarget_set_include,$(1),\
 	$(CAIRO_CFLAGS) \
 )
 $(call gb_LinkTarget_add_libs,$(1),$(CAIRO_LIBS))
+
 endef
 
 else # !SYSTEM_CAIRO
@@ -294,6 +311,7 @@ $(call gb_LinkTarget_set_include,$(1),\
 	$(GRAPHITE_CFLAGS) \
 )
 $(call gb_LinkTarget_add_libs,$(1),$(GRAPHITE_LIBS))
+
 endef
 
 else # !SYSTEM_GRAPHITE
@@ -305,6 +323,7 @@ define gb_LinkTarget__use_graphite
 $(call gb_LinkTarget_add_linked_static_libs,$(1),\
     graphite2_off \
 )
+
 endef
 
 endif # SYSTEM_GRAPHITE
@@ -317,9 +336,11 @@ $(call gb_LinkTarget_add_libs,$(1),-licui18n)
 endef
 define gb_LinkTarget__use_icule
 $(call gb_LinkTarget_add_libs,$(1),-licule)
+
 endef
 define gb_LinkTarget__use_icuuc
 $(call gb_LinkTarget_add_libs,$(1),-licuuc)
+
 endef
 
 else # !SYSTEM_ICU
@@ -339,11 +360,13 @@ define gb_LinkTarget__use_icule
 $(call gb_LinkTarget_add_linked_libs,$(1),\
 	icule \
 )
+
 endef
 define gb_LinkTarget__use_icuuc
 $(call gb_LinkTarget_add_linked_libs,$(1),\
 	icuuc \
 )
+
 endef
 
 endif # SYSTEM_ICU
@@ -357,6 +380,7 @@ $(call gb_LinkTarget_set_include,$(1),\
 	$(OPENSSL_CFLAGS) \
 )
 $(call gb_LinkTarget_add_libs,$(1),$(OPENSSL_LIBS))
+
 endef
 
 else # !SYSTEM_OPENSSL
@@ -391,6 +415,7 @@ $(call gb_LinkTarget_add_libs,$(1),\
 )
 endif
 endif
+
 endef
 
 endif # SYSTEM_OPENSSL
