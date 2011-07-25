@@ -52,7 +52,6 @@
 #include <unotools/historyoptions.hxx>
 #include <unotools/inetoptions.hxx>
 #include <unotools/internaloptions.hxx>
-#include <unotools/javaoptions.hxx>
 #include <unotools/lingucfg.hxx>
 #include <unotools/localisationoptions.hxx>
 #include <unotools/moduleoptions.hxx>
