@@ -13,8 +13,7 @@ setenv OO_SDK_HOME '@OO_SDK_HOME@'
 
 # Office installation directory.
 # Example: set OFFICE_HOME=/opt/libreoffice
-set OFFICE_HOME='@OFFICE_HOME@'
-OFFICE_BASE_HOME='@OFFICE_BASE_HOME@'
+setenv OFFICE_HOME '@OFFICE_HOME@'
 
 # URE installation directory.
 # Example: setenv OO_SDK_URE_HOME /opt/libreoffice/ure
@@ -227,7 +226,7 @@ if ( $?OO_SDK_JAVA_HOME == 0) then
 endif
 
 
-if [ "${platform}" == "MacOSX" ] then
+if ( "${platform}" == "MacOSX" ) then
 #    For URE, prepare symbolic links for libraries:
 #    Only necessary on MacOSX, on other Unix systems the links are already prepared
 #    in the SDK installation.
