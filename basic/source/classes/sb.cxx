@@ -166,33 +166,33 @@ namespace {
 
 typedef ::rtl::Reference< DocBasicItem > DocBasicItemRef;
 typedef boost::unordered_map< const StarBASIC *, DocBasicItemRef > DocBasicItemMap;
-    //    ::rtl::OUStringHash, ::std::equal_to< ::rtl::OUString > > ModuleInitDependencyMap;
 
-static DocBasicItemMap GaDocBasicItems;
+class GaDocBasicItems : public rtl::Static<DocBasicItemMap,GaDocBasicItems> {};
 
 const DocBasicItem* lclFindDocBasicItem( const StarBASIC* pDocBasic )
 {
-    DocBasicItemMap::iterator it = GaDocBasicItems.find( pDocBasic );
-    return (it != GaDocBasicItems.end()) ? it->second.get() : 0;
+    DocBasicItemMap::iterator it = GaDocBasicItems::get().find( pDocBasic );
+    DocBasicItemMap::iterator end = GaDocBasicItems::get().end();
+    return (it != end) ? it->second.get() : 0;
 }
 
 void lclInsertDocBasicItem( StarBASIC& rDocBasic )
 {
-    DocBasicItemRef& rxDocBasicItem = GaDocBasicItems[ &rDocBasic ];
+    DocBasicItemRef& rxDocBasicItem = GaDocBasicItems::get()[ &rDocBasic ];
     rxDocBasicItem.set( new DocBasicItem( rDocBasic ) );
     rxDocBasicItem->startListening();
 }
 
 void lclRemoveDocBasicItem( StarBASIC& rDocBasic )
 {
-    DocBasicItemMap::iterator it = GaDocBasicItems.find( &rDocBasic );
-    if( it != GaDocBasicItems.end() )
+    DocBasicItemMap::iterator it = GaDocBasicItems::get().find( &rDocBasic );
+    if( it != GaDocBasicItems::get().end() )
     {
         it->second->stopListening();
-        GaDocBasicItems.erase( it );
+        GaDocBasicItems::get().erase( it );
     }
-    DocBasicItemMap::iterator it_end = GaDocBasicItems.end();
-    for( it = GaDocBasicItems.begin(); it != it_end; ++it )
+    DocBasicItemMap::iterator it_end = GaDocBasicItems::get().end();
+    for( it = GaDocBasicItems::get().begin(); it != it_end; ++it )
         it->second->clearDependingVarsOnDelete( rDocBasic );
 }
 
