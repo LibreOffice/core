@@ -3982,27 +3982,6 @@ psp::ConverterFactory::~ConverterFactory()
 psp::GetCommandLineTokenCount(rtl::OString const&)
 psp::GlyphSet::GlyphSet()
 psp::GlyphSet::SetFont(int, unsigned char)
-psp::PPDContext::getUnconstrainedValues(psp::PPDKey const*, std::list<psp::PPDValue const*, std::allocator<psp::PPDValue const*> >&)
-psp::PPDParser::getDefaultDuplexType() const
-psp::PPDParser::getDuplex(int) const
-psp::PPDParser::getDuplexCommand(String const&) const
-psp::PPDParser::getDuplexCommand(int) const
-psp::PPDParser::getFontAttributes(String const&, String&, String&) const
-psp::PPDParser::getPaperDimension(int) const
-psp::PPDParser::getPaperDimensionCommand(String const&) const
-psp::PPDParser::getPaperDimensionCommand(int) const
-psp::PPDParser::getResolution(int, int&, int&) const
-psp::PPDParser::getResolutionCommand(int, int) const
-psp::PPDParser::getResolutions() const
-psp::PPDParser::getSlot(int) const
-psp::PPDParser::getSlotCommand(String const&) const
-psp::PPDParser::getSlotCommand(int) const
-psp::PPDParser::translateValue(rtl::OUString const&, rtl::OUString const&, rtl::OUString const&, com::sun::star::lang::Locale const&) const
-psp::PrintFontManager::getFontFamilyType(int) const
-psp::PrintFontManager::getFontLeading(int) const
-psp::PrintFontManager::getFontListWithInfo(std::list<psp::PrintFontInfo, std::allocator<psp::PrintFontInfo> >&, psp::PPDParser const*, bool)
-psp::PrintFontManager::getGlobalFontMetric(int, bool) const
-psp::PrintFontManager::hasVerticalSubstitutions(int) const
 psp::PrinterGfx::DrawBitmap(Rectangle const&, Rectangle const&, psp::PrinterBmp const&, psp::PrinterBmp const&)
 psp::PrinterGfx::DrawMask(Rectangle const&, Rectangle const&, psp::PrinterBmp const&, psp::PrinterColor&)
 psp::PrinterGfx::GetGlyphBoundRect(unsigned short, Rectangle&)
@@ -4570,29 +4549,6 @@ writerfilter::XPathLogger::XPathLogger()
 writerfilter::XPathLogger::endElement()
 writerfilter::XPathLogger::getXPath() const
 writerfilter::XPathLogger::startElement(std::basic_string<char, std::char_traits<char>, std::allocator<char> >)
-writerfilter::dmapper::FFDataHandler::getDropDownDefault() const
-writerfilter::dmapper::FFDataHandler::getEnabled() const
-writerfilter::dmapper::FFDataHandler::getTextType() const
-writerfilter::dmapper::FFDataHandler::setCalcOnExit(bool)
-writerfilter::dmapper::FFDataHandler::setCheckboxAutoHeight(bool)
-writerfilter::dmapper::FFDataHandler::setCheckboxChecked(bool)
-writerfilter::dmapper::FFDataHandler::setCheckboxDefault(bool)
-writerfilter::dmapper::FFDataHandler::setCheckboxHeight(unsigned int)
-writerfilter::dmapper::FFDataHandler::setDropDownDefault(rtl::OUString const&)
-writerfilter::dmapper::FFDataHandler::setDropDownEntries(std::vector<rtl::OUString, std::allocator<rtl::OUString> > const&)
-writerfilter::dmapper::FFDataHandler::setDropDownResult(rtl::OUString const&)
-writerfilter::dmapper::FFDataHandler::setEnabled(bool)
-writerfilter::dmapper::FFDataHandler::setEntryMacro(rtl::OUString const&)
-writerfilter::dmapper::FFDataHandler::setExitMacro(rtl::OUString const&)
-writerfilter::dmapper::FFDataHandler::setHelpText(rtl::OUString const&)
-writerfilter::dmapper::FFDataHandler::setHelpTextType(unsigned int)
-writerfilter::dmapper::FFDataHandler::setName(rtl::OUString const&)
-writerfilter::dmapper::FFDataHandler::setStatusText(rtl::OUString const&)
-writerfilter::dmapper::FFDataHandler::setStatusTextType(unsigned int)
-writerfilter::dmapper::FFDataHandler::setTextDefault(rtl::OUString const&)
-writerfilter::dmapper::FFDataHandler::setTextFormat(rtl::OUString const&)
-writerfilter::dmapper::FFDataHandler::setTextMaxLength(unsigned int)
-writerfilter::dmapper::FFDataHandler::setTextType(unsigned int)
 writerfilter::dmapper::FIB::GetData(unsigned int)
 writerfilter::dmapper::MeasureHandler::isAutoWidth() const
 writerfilter::dmapper::SectionPropertyMap::GetPageStyleName(bool)
