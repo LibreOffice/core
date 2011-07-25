@@ -332,19 +332,21 @@ void SwWW8ImplReader::Read_ParaBiDi(sal_uInt16, const sal_uInt8* pData, short nL
 bool wwSectionManager::SetCols(SwFrmFmt &rFmt, const wwSection &rSection,
     sal_uInt32 nNettoWidth) const
 {
-    //sprmSCcolumns - Anzahl der Spalten - 1
-    sal_Int16 nCols = rSection.NoCols();
+    //sprmSCcolumns - number of columns - 1
+    const sal_Int16 nCols = rSection.NoCols();
 
-    if (nCols < 2)
-        return false;                   // keine oder bloedsinnige Spalten
+    if (nCols < 2)          //check for no columns or other wierd state
+        return false;
 
-    SwFmtCol aCol;                      // Erzeuge SwFmtCol
+    SwFmtCol aCol;                      // Create SwFmtCol
 
-    //sprmSDxaColumns   - Default-Abstand 1.25 cm
+    //sprmSDxaColumns   - Default distance is 1.25 cm
     sal_Int32 nColSpace = rSection.StandardColSeperation();
 
+    const SEPr& rSep = rSection.maSep;
+
     // sprmSLBetween
-    if (rSection.maSep.fLBetween)
+    if (rSep.fLBetween)
     {
         aCol.SetLineAdj(COLADJ_TOP);      // Line
         aCol.SetLineHeight(100);
@@ -356,21 +358,20 @@ bool wwSectionManager::SetCols(SwFrmFmt &rFmt, const wwSection &rSection,
         writer_cast<sal_uInt16>(nNettoWidth));
 
     // sprmSFEvenlySpaced
-    if (!rSection.maSep.fEvenlySpaced)
+    if (!rSep.fEvenlySpaced)
     {
         aCol._SetOrtho(false);
-        int nIdx = 1;
-        for (sal_uInt16 i = 0; i < nCols; i++ )
+        const sal_uInt16 maxIdx = SAL_N_ELEMENTS(rSep.rgdxaColumnWidthSpacing);
+        for (sal_uInt16 i = 0, nIdx = 1; i < nCols && nIdx < maxIdx; i++, nIdx+=2 )
         {
             SwColumn* pCol = aCol.GetColumns()[i];
-            sal_Int32 nLeft = rSection.maSep.rgdxaColumnWidthSpacing[nIdx-1]/2;
-            sal_Int32 nRight = rSection.maSep.rgdxaColumnWidthSpacing[nIdx+1]/2;
-            sal_Int32 nWishWidth = rSection.maSep.rgdxaColumnWidthSpacing[nIdx]
+            const sal_Int32 nLeft = rSep.rgdxaColumnWidthSpacing[nIdx-1]/2;
+            const sal_Int32 nRight = rSep.rgdxaColumnWidthSpacing[nIdx+1]/2;
+            const sal_Int32 nWishWidth = rSep.rgdxaColumnWidthSpacing[nIdx]
                 + nLeft + nRight;
             pCol->SetWishWidth(writer_cast<sal_uInt16>(nWishWidth));
             pCol->SetLeft(writer_cast<sal_uInt16>(nLeft));
             pCol->SetRight(writer_cast<sal_uInt16>(nRight));
-            nIdx += 2;
         }
         aCol.SetWishWidth(writer_cast<sal_uInt16>(nNettoWidth));
     }
