@@ -142,6 +142,7 @@
 #include <com/sun/star/beans/PropertyValues.hpp>
 #include <com/sun/star/drawing/ProjectionMode.hpp>
 #include "svx/EnhancedCustomShape2d.hxx"
+#include <rtl/strbuf.hxx>
 
 using namespace ::com::sun::star    ;
 using namespace ::com::sun::star::drawing;
@@ -724,19 +725,19 @@ void DffPropertyReader::ReadPropSet( SvStream& rIn, void* pClientData ) const
             if ( IsProperty( DFF_Prop_adjustValue ) || IsProperty( DFF_Prop_pVertices ) )
             {
                 pOut->WriteLine( "" );
-                ByteString aString( "ShapeId: " );
-                aString.Append( ByteString::CreateFromInt32( nShapeId ) );
-                pOut->WriteLine( aString );
+                rtl::OStringBuffer aString(RTL_CONSTASCII_STRINGPARAM("ShapeId: "));
+                aString.append(static_cast<sal_Int32>(nShapeId));
+                pOut->WriteLine(aString.makeStringAndClear());
             }
             for ( sal_uInt32 i = DFF_Prop_adjustValue; i <= DFF_Prop_adjust10Value; i++ )
             {
                 if ( IsProperty( i ) )
                 {
-                    ByteString aString( "Prop_adjustValue" );
-                    aString.Append( ByteString::CreateFromInt32( ( i - DFF_Prop_adjustValue ) + 1 ) );
-                    aString.Append( ":" );
-                    aString.Append( ByteString::CreateFromInt32( GetPropertyValue( i ) ) );
-                    pOut->WriteLine( aString );
+                    rtl::OStringBuffer aString(RTL_CONSTASCII_STRINGPARAM("Prop_adjustValue"));
+                    aString.append(static_cast<sal_Int32>( ( i - DFF_Prop_adjustValue ) + 1 ) );
+                    aString.append(':');
+                    aString.append(static_cast<sal_Int32>(GetPropertyValue(i)));
+                    pOut->WriteLine(aString.makeStringAndClear());
                 }
             }
             sal_Int32 i;
@@ -752,18 +753,18 @@ void DffPropertyReader::ReadPropSet( SvStream& rIn, void* pClientData ) const
                         if ( nLen )
                         {
                             pOut->WriteLine( "" );
-                            ByteString aDesc( "Property:" );
-                            aDesc.Append( ByteString::CreateFromInt32( i ) );
-                            aDesc.Append( ByteString( "  Size:" ) );
-                            aDesc.Append( ByteString::CreateFromInt32( nLen ) );
-                            pOut->WriteLine( aDesc );
+                            rtl::OStringBuffer aDesc(RTL_CONSTASCII_STRINGPARAM("Property:"));
+                            aDesc.append(static_cast<sal_Int32>(i));
+                            aDesc.append(RTL_CONSTASCII_STRINGPARAM("  Size:"));
+                            aDesc.append(nLen);
+                            pOut->WriteLine(aDesc.makeStringAndClear());
                             sal_Int16   nNumElem, nNumElemMem, nNumSize;
                             rIn >> nNumElem >> nNumElemMem >> nNumSize;
-                            aDesc = ByteString( "Entries: " );
-                            aDesc.Append( ByteString::CreateFromInt32( nNumElem ) );
-                            aDesc.Append( ByteString(  "  Size:" ) );
-                            aDesc.Append( ByteString::CreateFromInt32( nNumSize ) );
-                            pOut->WriteLine( aDesc );
+                            aDesc.append(RTL_CONSTASCII_STRINGPARAM("Entries: "));
+                            aDesc.append(static_cast<sal_Int32>(nNumElem));
+                            aDesc.append(RTL_CONSTASCII_STRINGPARAM("  Size:"));
+                            aDesc.append(static_cast<sal_Int32>(nNumSize));
+                            pOut->WriteLine(aDesc.makeStringAndClear());
                             if ( nNumSize < 0 )
                                 nNumSize = ( ( -nNumSize ) >> 2 );
                             if ( !nNumSize )
@@ -801,11 +802,11 @@ void DffPropertyReader::ReadPropSet( SvStream& rIn, void* pClientData ) const
                     }
                     else
                     {
-                        ByteString aString( "Property" );
-                        aString.Append( ByteString::CreateFromInt32( i ) );
-                        aString.Append( ":" );
-                        aString.Append( ByteString::CreateFromInt32( GetPropertyValue( i ) ) );
-                        pOut->WriteLine( aString );
+                        rtl::OStringBuffer aString(RTL_CONSTASCII_STRINGPARAM("Property"));
+                        aString.append(static_cast<sal_Int32>(i));
+                        aString.append(':');
+                        aString.append(static_cast<sal_Int32>(GetPropertyValue(i)));
+                        pOut->WriteLine(aString.makeStringAndClear());
                     }
                 }
             }
