@@ -6443,7 +6443,8 @@ WW8Fonts::WW8Fonts( SvStream& rSt, WW8Fib& rFib )
                 if ((eEnc == RTL_TEXTENCODING_SYMBOL) || (eEnc == RTL_TEXTENCODING_DONTKNOW))
                     eEnc = RTL_TEXTENCODING_MS_1252;
                 p->sFontname = String(pVer6->szFfn, eEnc);
-                if (p->ibszAlt)
+                const sal_uInt16 maxStrSize = SAL_N_ELEMENTS(pVer6->szFfn);
+                if (p->ibszAlt && p->ibszAlt < maxStrSize) //don't start after end of string
                 {
                     p->sFontname.Append(';');
                     p->sFontname += String(pVer6->szFfn+p->ibszAlt, eEnc);
