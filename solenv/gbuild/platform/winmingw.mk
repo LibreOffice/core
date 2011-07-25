@@ -233,57 +233,42 @@ endef
 
 # CObject class
 
-ifeq ($(gb_FULLDEPS),$(true))
-define gb_Object__command_deponcompile
-$(call gb_Helper_abbreviate_dirs_native,\
-	$(OUTDIR_FOR_BUILD)/bin/makedepend \
-		$(filter-out -DPRECOMPILED_HEADERS,$(4)) $(5) \
-		-I$(dir $(3)) \
-		$(filter-out -I$(COMPATH)% %/pch -I$(JAVA_HOME),$(6)) \
-		$(3) \
-		-f - \
-	| $(gb_AWK) -f $(GBUILDDIR)/processdeps.awk \
-		-v OBJECTFILE=$(1) \
-		-v OUTDIR=$(OUTDIR)/ \
-		-v WORKDIR=$(WORKDIR)/ \
-		-v SRCDIR=$(SRCDIR)/ \
-		-v REPODIR=$(REPODIR)/ \
-	> $(2))
-endef
-else
-gb_Object__command_deponcompile =
-endif
+# We (LibreOffice) support MinGW only for cross-compilation. This is identical to
+# gb_CObject__command in unxgcc.mk
 
+# $(call gb_CObject__command,object,relative-source,source,dep-file)
 define gb_CObject__command
 $(call gb_Output_announce,$(2),$(true),C  ,3)
-$(call gb_Helper_abbreviate_dirs_native,\
-	mkdir -p $(dir $(1)) && \
+$(call gb_Helper_abbreviate_dirs,\
+	mkdir -p $(dir $(1)) $(dir $(4)) && \
 	$(gb_CC) \
 		$(DEFS) \
 		$(T_CFLAGS) \
 		-c $(3) \
 		-o $(1) \
+		-MMD -MT $(1) \
+		-MF $(4) \
 		-I$(dir $(3)) \
 		$(INCLUDE))
-$(call gb_Object__command_deponcompile,$(1),$(4),$(3),$(DEFS),$(T_CFLAGS),$(INCLUDE))
 endef
-
 
 
 # CxxObject class
 
+# $(call gb_CxxObject__command,object,relative-source,source,dep-file)
 define gb_CxxObject__command
 $(call gb_Output_announce,$(2),$(true),CXX,3)
-$(call gb_Helper_abbreviate_dirs_native,\
-	mkdir -p $(dir $(1)) && \
+$(call gb_Helper_abbreviate_dirs,\
+	mkdir -p $(dir $(1)) $(dir $(4)) && \
 	$(gb_CXX) \
 		$(DEFS) \
 		$(T_CXXFLAGS) \
 		-c $(3) \
 		-o $(1) \
+		-MMD -MT $(1) \
+		-MF $(4) \
 		-I$(dir $(3)) \
 		$(INCLUDE_STL) $(INCLUDE))
-$(call gb_Object__command_deponcompile,$(1),$(4),$(3),$(DEFS),$(T_CXXFLAGS),$(INCLUDE_STL) $(INCLUDE))
 endef
 
 
