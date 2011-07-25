@@ -1,3 +1,4 @@
+# -*- Mode: makefile; tab-width: 4; indent-tabs-mode: t -*-
 # Write string to temporary file by chopping into pieces that
 # fit the commandline
 # parameters: filename, maxitems (for one write), string
@@ -16,3 +17,4 @@ $(foreach item,$(3),$(eval gb_var2file_curblock += $(item)
 	))
 endef
 
+# vim: set noet sw=4 ts=4:

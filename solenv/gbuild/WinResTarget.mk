@@ -1,3 +1,4 @@
+# -*- Mode: makefile; tab-width: 4; indent-tabs-mode: t -*-
 
 # WinResTarget class
 
@@ -68,3 +69,5 @@ define gb_WinResTarget_add_dependency
 $(call gb_WinResTarget_get_target,$(1)) : $(foreach file,$(2),$(foreach repo,$(gb_REPOS),$(realpath $(repo)/$(strip $(file)))))
 
 endef
+
+# vim: set noet sw=4 ts=4:
