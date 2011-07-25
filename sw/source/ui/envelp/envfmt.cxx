@@ -233,11 +233,11 @@ SwEnvFmtPage::SwEnvFmtPage(Window* pParent, const SfxItemSet& rSet) :
                     bFound = sal_True;
             }
             aSizeFormatBox.InsertEntry(aPaperName, nPos);
-            aIDs.Insert((sal_uInt16) i, nPos);
+            aIDs.insert( aIDs.begin() + nPos, (sal_uInt16) i);
         }
     }
     aSizeFormatBox.InsertEntry(SvxPaperInfo::GetName(PAPER_USER));
-    aIDs.Insert((sal_uInt16) PAPER_USER, aIDs.Count());
+    aIDs.push_back( (sal_uInt16) PAPER_USER );
 
 }
 
@@ -260,7 +260,7 @@ IMPL_LINK_INLINE_START( SwEnvFmtPage, ModifyHdl, Edit *, pEdit )
     {
         Paper ePaper = SvxPaperInfo::GetSvxPaper(
             Size(lHeight, lWidth), MAP_TWIP, sal_True);
-        for (sal_uInt16 i = 0; i < aIDs.Count(); i++)
+        for (sal_uInt16 i = 0; i < (sal_uInt16)aIDs.size(); i++)
             if (aIDs[i] == (sal_uInt16)ePaper)
                 aSizeFormatBox.SelectEntryPos(i);
 
@@ -576,7 +576,7 @@ void SwEnvFmtPage::Reset(const SfxItemSet& rSet)
     Paper ePaper = SvxPaperInfo::GetSvxPaper(
         Size( Min(rItem.lWidth, rItem.lHeight),
         Max(rItem.lWidth, rItem.lHeight)), MAP_TWIP, sal_True);
-    for (sal_uInt16 i = 0; i < (sal_uInt16) aIDs.Count(); i++)
+    for (sal_uInt16 i = 0; i < (sal_uInt16) aIDs.size(); i++)
         if (aIDs[i] == (sal_uInt16)ePaper)
             aSizeFormatBox.SelectEntryPos(i);
 

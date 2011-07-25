@@ -28,11 +28,6 @@
 #ifndef _ENVFMT_HXX
 #define _ENVFMT_HXX
 
-
-#ifndef _SVSTDARR_HXX
-#define _SVSTDARR_USHORTS
-#include <svl/svstdarr.hxx>
-#endif
 #include <svtools/stdctrl.hxx>
 #include <vcl/field.hxx>
 #include <vcl/menubtn.hxx>
@@ -72,7 +67,7 @@ class SwEnvFmtPage : public SfxTabPage
     MetricField  aSizeHeightField;
     SwEnvPreview aPreview;
 
-    SvUShorts  aIDs;
+    std::vector<sal_uInt16>  aIDs;
 
      SwEnvFmtPage(Window* pParent, const SfxItemSet& rSet);
     ~SwEnvFmtPage();
