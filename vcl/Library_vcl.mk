@@ -32,9 +32,9 @@ $(eval $(call gb_Library_set_componentfile,vcl,vcl/vcl.macosx))
 else ifeq ($(OS),WNT)
 $(eval $(call gb_Library_set_componentfile,vcl,vcl/vcl.windows))
 else ifeq ($(GUIBASE),android)
-$(eval $(call gb_Library_set_componentfile,vcl,vcl/vcl.android,vcl/vcl))
+$(eval $(call gb_Library_set_componentfile,vcl,vcl/vcl.android))
 else ifeq ($(OS),IOS)
-$(eval $(call gb_Library_set_componentfile,vcl,vcl/vcl.ios,vcl/vcl))
+$(eval $(call gb_Library_set_componentfile,vcl,vcl/vcl.ios))
 else
 $(eval $(call gb_Library_set_componentfile,vcl,vcl/vcl.unx))
 endif
