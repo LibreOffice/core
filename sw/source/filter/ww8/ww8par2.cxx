@@ -132,6 +132,11 @@ struct WW8TabBandDesc
     bool bExist[MAX_COL];           // Existiert diese Zelle ?
     sal_uInt8 nTransCell[MAX_COL + 2];  // UEbersetzung WW-Index -> SW-Index
 
+    sal_uInt8 transCell(sal_uInt8 nWwCol) const
+    {
+        return nWwCol < SAL_N_ELEMENTS(nTransCell) ? nTransCell[nWwCol] : 0xFF;
+    }
+
     WW8TabBandDesc();
     WW8TabBandDesc(WW8TabBandDesc& rBand);    // tief kopieren
     ~WW8TabBandDesc();
@@ -2838,7 +2843,9 @@ bool WW8TabDesc::FindMergeGroup(short nX1, short nWidth, bool bExact,
 
 bool WW8TabDesc::IsValidCell(short nCol) const
 {
-    return pActBand->bExist[nCol] && (sal_uInt16)nAktRow < pTabLines->Count();
+    return (static_cast<size_t>(nCol) < SAL_N_ELEMENTS(pActBand->bExist)) &&
+           pActBand->bExist[nCol] &&
+           (sal_uInt16)nAktRow < pTabLines->Count();
 }
 
 bool WW8TabDesc::InFirstParaInCell() const
@@ -2880,7 +2887,7 @@ bool WW8TabDesc::SetPamInCell(short nWwCol, bool bPam)
 {
     OSL_ENSURE( pActBand, "pActBand ist 0" );
 
-    sal_uInt16 nCol = pActBand->nTransCell[nWwCol];
+    sal_uInt16 nCol = pActBand->transCell(nWwCol);
 
     if ((sal_uInt16)nAktRow >= pTabLines->Count())
     {
