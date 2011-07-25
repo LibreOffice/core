@@ -92,6 +92,7 @@
 #include <svx/fmglob.hxx>
 #include <svx/svdouno.hxx>
 #include <filter/msfilter/msoleexp.hxx>
+#include <svtools/miscopt.hxx>
 
 #include <docufld.hxx>
 #include <flddropdown.hxx>
@@ -926,6 +927,19 @@ void RtfAttributeOutput::StartTableRow( ww8::WW8TableNodeInfoInner::Pointer_t pT
 
     TableDefinition(pTableTextNodeInfoInner);
 
+    SvtMiscOptions aMiscOptions;
+    if (aMiscOptions.IsExperimentalMode())
+    {
+        m_aTables.push_back(m_aRowDefs.toString());
+        // Emit row properties at the start of the row as well for non-nested
+        // tables, to support old readers.
+        if ( nCurrentDepth <= 1 )
+            m_rExport.Strm() << m_aRowDefs.makeStringAndClear();
+        m_aRowDefs.setLength(0);
+        return;
+    }
+    else
+    {
     if (!m_bLastTable)
         m_aTables.push_back(m_aRowDefs.makeStringAndClear());
 
@@ -933,6 +947,7 @@ void RtfAttributeOutput::StartTableRow( ww8::WW8TableNodeInfoInner::Pointer_t pT
     if ( nCurrentDepth > 1 )
         return;
     m_rExport.Strm() << m_aRowDefs.makeStringAndClear();
+    }
 }
 
 void RtfAttributeOutput::StartTableCell( ww8::WW8TableNodeInfoInner::Pointer_t /*pTableTextNodeInfoInner*/ )
