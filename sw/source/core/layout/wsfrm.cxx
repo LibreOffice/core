@@ -95,12 +95,13 @@ SwFrm::SwFrm( SwModify *pMod, SwFrm* pSib ) :
     pUpper( 0 ),
     pNext( 0 ),
     pPrev( 0 ),
-    pDrawObjs( 0 )
-    , bInfBody( sal_False )
-    , bInfTab ( sal_False )
-    , bInfFly ( sal_False )
-    , bInfFtn ( sal_False )
-    , bInfSct ( sal_False )
+    pDrawObjs( 0 ),
+    nType(0),
+    bInfBody( sal_False ),
+    bInfTab ( sal_False ),
+    bInfFly ( sal_False ),
+    bInfFtn ( sal_False ),
+    bInfSct ( sal_False )
 {
 #if OSL_DEBUG_LEVEL > 1
     bFlag01 = bFlag02 = bFlag03 = bFlag04 = bFlag05 = 0;
