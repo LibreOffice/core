@@ -117,10 +117,12 @@ $(eval $(call gb_Library_add_exception_objects,cairocanvas,\
 ))
 
 # freetype? fontconfig? -> test on Solaris
+ifeq ($(GUIBASE),unx)
 $(eval $(call gb_Library_add_linked_libs,cairocanvas,\
 	X11 \
 	Xrender \
 ))
+endif
 
 endif
 
