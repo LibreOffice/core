@@ -28,7 +28,6 @@
 #ifndef _LAYHELP_HXX
 #define _LAYHELP_HXX
 #ifndef _SVSTDARR_HXX
-#define _SVSTDARR_USHORTS
 #define _SVSTDARR_XUB_STRLEN
 #include <svl/svstdarr.hxx>
 #endif
@@ -65,13 +64,13 @@ SV_DECL_PTRARR_DEL( SwPageFlyCache, SwFlyCachePtr, 0, 4 )
 class SwLayCacheImpl : public std::vector<sal_uLong>
 {
     SvXub_StrLens aOffset;
-    SvUShorts aType;
+    std::vector<sal_uInt16> aType;
     SwPageFlyCache aFlyCache;
     sal_Bool bUseFlyCache;
     void Insert( sal_uInt16 nType, sal_uLong nIndex, xub_StrLen nOffset );
 
 public:
-    SwLayCacheImpl() : aType( 20, 10 ) {}
+    SwLayCacheImpl() {}
     sal_Bool Read( SvStream& rStream );
 
     sal_uLong GetBreakIndex( sal_uInt16 nIdx ) const { return std::vector<sal_uLong>::operator[]( nIdx ); }

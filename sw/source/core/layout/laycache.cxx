@@ -102,7 +102,7 @@ void SwLayoutCache::Read( SvStream &rStream )
 
 void SwLayCacheImpl::Insert( sal_uInt16 nType, sal_uLong nIndex, xub_StrLen nOffset )
 {
-    aType.Insert( nType, aType.Count() );
+    aType.push_back( nType );
     std::vector<sal_uLong>::push_back( nIndex );
     aOffset.push_back( nOffset );
 }
