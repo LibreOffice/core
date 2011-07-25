@@ -90,17 +90,10 @@ public:
     virtual ~LwpBulletStyleMgr();
     rtl::OUString RegisterBulletStyle(LwpPara* pPara, LwpBulletOverride* pBullOver,
         LwpIndentOverride* pIndent);
-//  rtl::OUString RegisterBulletStyle(const rtl::OUString& rContent, sal_uInt32 nFontID, LwpIndentOverride* pIndent);
-//  rtl::OUString AddStyleToList(LwpSilverBullet* pSilverBullet, sal_uInt16 nLevel);
     inline void SetFoundry(LwpFoundry* pFoundry);
     inline void SetContinueFlag(sal_Bool bFlag);
-    void OutputBulletListHeader(IXFStream* pOutputStream, sal_Bool bIsOrdered,
-        const rtl::OUString& rStyleName, sal_Int16 nLevel, sal_Bool bIsBulletSkiped);
-    //Added by Helen
     XFContentContainer* AddBulletList(XFContentContainer* pCont, sal_Bool bIsOrdered,
         const rtl::OUString& rStyleName, sal_Int16 nLevel, sal_Bool bIsBulletSkiped);
-    //End of Add
-    void OutputBulletListTail(IXFStream* pOutputStream, sal_uInt16 nLevel);
     inline void SetCurrentPos(sal_uInt16 nNewPos);
     inline void SetCurrentSilverBullet(const LwpObjectID& rNewID);
     inline LwpObjectID GetCurrentSilverBullet();
@@ -109,7 +102,6 @@ public:
     inline LwpNumberingOverride* GetCurrentNumOver();
 
 private:
-//  void CreateNewListStyle(XFListStyle*& pListStyle, XFStyleManager* pXFStyleMgr);
     rtl::OUString GetSectionName(LwpPara* pPara);
 
 private:
