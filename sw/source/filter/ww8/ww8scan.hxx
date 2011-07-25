@@ -1783,8 +1783,11 @@ std::vector<sal_uInt8> ChpxToSprms(const Word2CHPX &rChpx);
 
 sal_uLong SafeReadString(ByteString &rStr,sal_uInt16 nLen,SvStream &rStrm);
 
-bool checkSeek(SvStream &rSt, sal_uInt32 nOffset);
-bool checkRead(SvStream &rSt, void *pDest, sal_uInt32 nLength);
+bool checkSeek(SvStream &rSt, sal_uInt32 nOffset)
+    SAL_WARN_UNUSED_RESULT;
+
+bool checkRead(SvStream &rSt, void *pDest, sal_uInt32 nLength)
+    SAL_WARN_UNUSED_RESULT;
 
 //MS has a (slightly) inaccurate view of how many twips
 //are in the default letter size of a page
