@@ -6,14 +6,6 @@ from NumberFormatter import NumberFormatter
 
 class Helper(object):
 
-    def convertUnoDatetoInteger(self, DateValue):
-        oCal = java.util.Calendar.getInstance()
-        oCal.set(DateValue.Year, DateValue.Month, DateValue.Day)
-        dTime = oCal.getTime()
-        lTime = dTime.getTime()
-        lDate = lTime / (3600 * 24000)
-        return lDate
-
     @classmethod
     def setUnoPropertyValue(self, xPSet, PropertyName, PropertyValue):
         try:
@@ -28,10 +20,10 @@ class Helper(object):
     @classmethod
     def getUnoObjectbyName(self, xName, ElementName):
         try:
-            if xName.hasByName(ElementName) == True:
+            if xName.hasByName(ElementName):
                 return xName.getByName(ElementName)
             else:
-                raise RuntimeException();
+                raise RuntimeException()
 
         except Exception, exception:
             traceback.print_exc()
@@ -45,24 +37,6 @@ class Helper(object):
                     return i.Value
 
         raise RuntimeException()
-
-    @classmethod
-    def getPropertyValuefromAny(self, CurPropertyValue, PropertyName):
-        try:
-            if CurPropertyValue is not None:
-                MaxCount = len(CurPropertyValue)
-                i = 0
-                while i < MaxCount:
-                    if CurPropertyValue[i] is not None:
-                        aValue = CurPropertyValue[i]
-                        if aValue is not None and aValue.Name == PropertyName:
-                            return aValue.Value
-
-                    i += 1
-            return None
-        except Exception, exception:
-            traceback.print_exc()
-            return None
 
     @classmethod
     def getUnoPropertyValue(self, xPSet, PropertyName):
