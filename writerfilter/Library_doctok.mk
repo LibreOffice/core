@@ -58,7 +58,7 @@ $(eval $(call gb_Library_add_linked_libs,doctok,\
     $(gb_STDLIBS) \
 ))
 
-$(eval $(call gb_Library_use_external,doctoc,libxml2))
+$(eval $(call gb_Library_use_external,doctok,libxml2))
 
 $(eval $(call gb_Library_add_exception_objects,doctok,\
     writerfilter/source/doctok/Dff \
