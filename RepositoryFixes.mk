@@ -81,10 +81,9 @@ gb_Library_SDKLIBFILENAMES:=\
 # some Windows platform libraries are missing in mingw library set
 # we have to use them from the PSDK by linking against their ilibs
 gb_Library_ILIBFILENAMES:=\
-
-	unicows \
-	uuid \
-	winmm \
+    unicows \
+    uuid \
+    winmm \
 
 gb_Library_DLLFILENAMES := $(filter-out $(foreach lib,$(gb_Library_SDKLIBFILENAMES),$(lib):%),$(gb_Library_DLLFILENAMES))
 gb_Library_DLLFILENAMES += $(foreach lib,$(gb_Library_SDKLIBFILENAMES),$(lib):$(WINDOWS_SDK_HOME)/lib/$(lib).lib)
