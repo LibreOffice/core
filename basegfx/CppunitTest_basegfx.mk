@@ -42,7 +42,6 @@ $(eval $(call gb_CppunitTest_add_linked_libs,basegfx_test, \
 	basegfx \
 	cppu \
 	cppuhelper \
-	cppunit \
 	sal \
     $(gb_STDLIBS) \
 ))

@@ -42,7 +42,6 @@ $(eval $(call gb_CppunitTest_add_exception_objects,basebmp_test, \
 $(eval $(call gb_CppunitTest_add_linked_libs,basebmp_test, \
 	basebmp \
 	basegfx \
-	cppunit \
 	sal \
     $(gb_STDLIBS) \
 ))
