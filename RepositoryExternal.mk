@@ -35,6 +35,32 @@
 # in the system case, no libraries should be registered, but the target-local
 # variable LIBS should be set to FOO_LIBS, and INCLUDES to FOO_CFLAGS.
 
+ifeq ($(SYSTEM_CPPUNIT),YES)
+
+define gb_LinkTarget__use_cppunit
+$(call gb_LinkTarget_set_include,$(1),\
+	$$(INCLUDE) \
+    $(CPPUNIT_CFLAGS) \
+)
+
+$(call gb_LinkTarget_add_libs,$(1),\
+    $(CPPUNIT_LIBS) \
+)
+endef
+
+else
+
+$(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO,\
+    cppunit \
+))
+
+define gb_LinkTarget__use_cppunit
+$(call gb_LinkTarget_add_linked_libs,$(1),\
+    cppunit \
+)
+endef
+
+endif
 
 ifeq ($(SYSTEM_ZLIB),YES)
 
