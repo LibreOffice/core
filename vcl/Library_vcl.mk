@@ -55,12 +55,6 @@ $(eval $(call gb_Library_set_include,vcl,\
     $(WINEINCLUDE) \
     -I$(WORKDIR)/CustomTarget/vcl/unx/generic/fontmanager \
 ))
-ifeq ($(GUIBASE),unx)
-$(eval $(call gb_Library_add_cxxflags,vcl,\
-    $$(FONTCONFIG_CFLAGS) \
-    $$(FREETYPE_CFLAGS) \
-))
-endif
 
 $(eval $(call gb_Library_add_defs,vcl,\
     -DVCL_DLLIMPLEMENTATION \
@@ -480,9 +474,9 @@ $(eval $(call gb_Library_use_external,vcl,cairo))
 endif
 
 ifeq ($(GUIBASE),unx)
-$(eval $(call gb_Library_add_ldflags,vcl,\
-	$$(FONTCONFIG_LIBS) \
-    $$(FREETYPE_LIBS) \
+$(eval $(call gb_Library_use_externals,vcl,\
+	fontconfig \
+	freetype \
 ))
 endif
 
