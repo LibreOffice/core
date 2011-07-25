@@ -229,9 +229,6 @@ public:
     // returns false if paper not found
     int             getPaperDimensions() const
     { return m_pPaperDimensions ? m_pPaperDimensions->countValues() : 0; }
-    String          getPaperDimension( int ) const;
-    String          getPaperDimensionCommand( int ) const;
-    String          getPaperDimensionCommand( const String & ) const;
 
     // match the best paper for width and height
     String          matchPaper( int nWidth, int nHeight ) const;
@@ -247,31 +244,18 @@ public:
     String          getDefaultInputSlot() const;
     int             getInputSlots() const
     { return m_pInputSlots ? m_pInputSlots->countValues() : 0; }
-    String          getSlot( int ) const;
-    String          getSlotCommand( int ) const;
-    String          getSlotCommand( const String& ) const;
 
     void            getDefaultResolution( int& rXRes, int& rYRes ) const;
-    int             getResolutions() const;
-    void            getResolution( int, int& rXRes, int& rYRes ) const;
-    String          getResolutionCommand( int nXRes, int nYRes ) const;
     // values in dpi
     void            getResolutionFromString( const String&, int&, int& ) const;
     // helper function
 
-    String          getDefaultDuplexType() const;
     int             getDuplexTypes() const
     { return m_pDuplexTypes ? m_pDuplexTypes->countValues() : 0; }
-    String          getDuplex( int ) const;
-    String          getDuplexCommand( int ) const;
-    String          getDuplexCommand( const String& ) const;
 
     int             getFonts() const
     { return m_pFontList ? m_pFontList->countValues() : 0; }
     void            getFontAttributes( int,
-                                       String& rEncoding,
-                                       String& rCharset ) const;
-    void            getFontAttributes( const String&,
                                        String& rEncoding,
                                        String& rCharset ) const;
     String          getFont( int ) const;
@@ -282,10 +266,6 @@ public:
     rtl::OUString   translateOption( const rtl::OUString& i_rKey,
                                      const rtl::OUString& i_rOption,
                                      const com::sun::star::lang::Locale& i_rLocale = com::sun::star::lang::Locale() ) const;
-    rtl::OUString   translateValue( const rtl::OUString& i_rKey,
-                                    const rtl::OUString& i_rOption,
-                                    const rtl::OUString& i_rValue,
-                                    const com::sun::star::lang::Locale& i_rLocale = com::sun::star::lang::Locale() ) const;
 };
 
 // ----------------------------------------------------------------------
@@ -322,8 +302,6 @@ public:
 
     // public wrapper for the private method
     bool checkConstraints( const PPDKey*, const PPDValue* );
-
-    void getUnconstrainedValues( const PPDKey*, ::std::list< const PPDValue* >& rValues );
 
     // for printer setup
     char*   getStreamableBuffer( sal_uLong& rBytes ) const;

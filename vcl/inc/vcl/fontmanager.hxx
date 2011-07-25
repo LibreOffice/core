@@ -409,8 +409,6 @@ public:
     // all fonttype::Builtin type fonts are not listed
     // which do not occur in the PPD of pParser
     void getFontList( std::list< fontID >& rFontIDs, const PPDParser* pParser = NULL, bool bUseOverrideMetrics = false );
-    // get the font list and detailed font info. see getFontList for pParser
-    void getFontListWithInfo( std::list< PrintFontInfo >& rFonts, const PPDParser* pParser = NULL, bool bUseOverrideMetrics = false );
     // get the font list and fast font info. see getFontList for pParser
     void getFontListWithFastInfo( std::list< FastPrintFontInfo >& rFonts, const PPDParser* pParser = NULL, bool bUseOverrideMetrics = false );
 
@@ -425,9 +423,6 @@ public:
     const rtl::OUString& getFontFamily( fontID nFontID ) const;
     // get a specific fonts PSName name
     const rtl::OUString& getPSName( fontID nFontID ) const;
-
-    // get a specific fonts style family
-    FontFamily getFontFamilyType( fontID nFontID ) const;
 
     // get a specific fonts family name aliases
     void getFontFamilyAliases( fontID nFontID ) const;
@@ -490,23 +485,14 @@ public:
     // get the ttc face number
     int getFontFaceNumber( fontID nFontID ) const;
 
-    // get a specific fonts global metrics
-    const CharacterMetric& getGlobalFontMetric( fontID nFontID, bool bHorizontal ) const;
-
     // get a specific fonts ascend
     int getFontAscend( fontID nFontID ) const;
 
     // get a specific fonts descent
     int getFontDescend( fontID nFontID ) const;
 
-    // get a specific fonts leading
-    int getFontLeading( fontID nFontID ) const;
-
     // get a fonts glyph bounding box
     bool getFontBoundingBox( fontID nFont, int& xMin, int& yMin, int& xMax, int& yMax );
-
-    // info whether there are vertical substitutions
-    bool hasVerticalSubstitutions( fontID nFontID ) const;
 
     // info whether an array of glyphs has vertical substitutions
     void hasVerticalSubstitutions( fontID nFontID, const sal_Unicode* pCharacters,

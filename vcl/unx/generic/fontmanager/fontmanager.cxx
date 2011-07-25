@@ -2717,24 +2717,6 @@ void PrintFontManager::fillPrintFontInfo( PrintFont* pFont, PrintFontInfo& rInfo
 
 // -------------------------------------------------------------------------
 
-void PrintFontManager::getFontListWithInfo( ::std::list< PrintFontInfo >& rFonts, const PPDParser* pParser, bool bUseOverrideMetrics )
-{
-    rFonts.clear();
-    ::std::list< fontID > aFontList;
-    getFontList( aFontList, pParser, bUseOverrideMetrics );
-
-    ::std::list< fontID >::iterator it;
-    for( it = aFontList.begin(); it != aFontList.end(); ++it )
-    {
-        PrintFontInfo aInfo;
-        aInfo.m_nID = *it;
-        fillPrintFontInfo( getFont( *it ), aInfo );
-        rFonts.push_back( aInfo );
-    }
-}
-
-// -------------------------------------------------------------------------
-
 void PrintFontManager::getFontListWithFastInfo( ::std::list< FastPrintFontInfo >& rFonts, const PPDParser* pParser, bool bUseOverrideMetrics )
 {
     rFonts.clear();
@@ -2883,20 +2865,6 @@ FontFamily PrintFontManager::matchFamilyName( const ::rtl::OUString& rFamily ) c
 
 // -------------------------------------------------------------------------
 
-FontFamily PrintFontManager::getFontFamilyType( fontID nFontID ) const
-{
-    PrintFont* pFont = getFont( nFontID );
-    if( !pFont )
-        return FAMILY_DONTKNOW;
-
-    ::boost::unordered_map< int, FontFamily >::const_iterator it =
-          m_aFamilyTypes.find( pFont->m_nFamilyName );
-    return (it != m_aFamilyTypes.end()) ? it->second : FAMILY_DONTKNOW;
-}
-
-
-// -------------------------------------------------------------------------
-
 const ::rtl::OUString& PrintFontManager::getFontFamily( fontID nFontID ) const
 {
     PrintFont* pFont = getFont( nFontID );
@@ -2975,15 +2943,6 @@ const ::rtl::OUString& PrintFontManager::getPSName( fontID nFontID ) const
 
 // -------------------------------------------------------------------------
 
-const CharacterMetric& PrintFontManager::getGlobalFontMetric( fontID nFontID, bool bHorizontal ) const
-{
-    static CharacterMetric aMetric;
-    PrintFont* pFont = getFont( nFontID );
-    return pFont ? ( bHorizontal ? pFont->m_aGlobalMetricX : pFont->m_aGlobalMetricY ) : aMetric;
-}
-
-// -------------------------------------------------------------------------
-
 int PrintFontManager::getFontAscend( fontID nFontID ) const
 {
     PrintFont* pFont = getFont( nFontID );
@@ -3012,34 +2971,6 @@ int PrintFontManager::getFontDescend( fontID nFontID ) const
             pFont->readAfmMetrics( getAfmFile( pFont ), m_pAtoms, false, true );
     }
     return pFont->m_nDescend;
-}
-
-// -------------------------------------------------------------------------
-
-int PrintFontManager::getFontLeading( fontID nFontID ) const
-{
-    PrintFont* pFont = getFont( nFontID );
-    if( pFont->m_nAscend == 0 && pFont->m_nDescend == 0 )
-    {
-        // might be a truetype font not yet analyzed
-        if( pFont->m_eType == fonttype::TrueType )
-            analyzeTrueTypeFile( pFont );
-    }
-    return pFont->m_nLeading;
-}
-
-// -------------------------------------------------------------------------
-
-bool PrintFontManager::hasVerticalSubstitutions( fontID nFontID ) const
-{
-    PrintFont* pFont = getFont( nFontID );
-    if( pFont->m_nAscend == 0 && pFont->m_nDescend == 0 )
-    {
-        // might be a truetype font not yet analyzed
-        if( pFont->m_eType == fonttype::TrueType )
-            analyzeTrueTypeFile( pFont );
-    }
-    return pFont->m_bHaveVerticalSubstitutedGlyphs;
 }
 
 // -------------------------------------------------------------------------

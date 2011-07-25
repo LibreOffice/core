@@ -1421,86 +1421,6 @@ String PPDParser::getDefaultInputSlot() const
     return String();
 }
 
-String PPDParser::getSlot( int nSlot ) const
-{
-    if( ! m_pInputSlots )
-        return String();
-
-    if( nSlot > 0 && nSlot < m_pInputSlots->countValues() )
-        return m_pInputSlots->getValue( nSlot )->m_aOption;
-    else if( m_pInputSlots->countValues() > 0 )
-        return m_pInputSlots->getValue( (sal_uLong)0 )->m_aOption;
-
-    return String();
-}
-
-String PPDParser::getSlotCommand( int nSlot ) const
-{
-    if( ! m_pInputSlots )
-        return String();
-
-    if( nSlot > 0 && nSlot < m_pInputSlots->countValues() )
-        return m_pInputSlots->getValue( nSlot )->m_aValue;
-    else if( m_pInputSlots->countValues() > 0 )
-        return m_pInputSlots->getValue( (sal_uLong)0 )->m_aValue;
-
-    return String();
-}
-
-String PPDParser::getSlotCommand( const String& rSlot ) const
-{
-    if( ! m_pInputSlots )
-        return String();
-
-    for( int i=0; i < m_pInputSlots->countValues(); i++ )
-    {
-        const PPDValue* pValue = m_pInputSlots->getValue( i );
-        if( pValue->m_aOption == rSlot )
-            return pValue->m_aValue;
-    }
-    return String();
-}
-
-String PPDParser::getPaperDimension( int nPaperDimension ) const
-{
-    if( ! m_pPaperDimensions )
-        return String();
-
-    if( nPaperDimension > 0 && nPaperDimension < m_pPaperDimensions->countValues() )
-        return m_pPaperDimensions->getValue( nPaperDimension )->m_aOption;
-    else if( m_pPaperDimensions->countValues() > 0 )
-        return m_pPaperDimensions->getValue( (sal_uLong)0 )->m_aOption;
-
-    return String();
-}
-
-String PPDParser::getPaperDimensionCommand( int nPaperDimension ) const
-{
-    if( ! m_pPaperDimensions )
-        return String();
-
-    if( nPaperDimension > 0 && nPaperDimension < m_pPaperDimensions->countValues() )
-        return m_pPaperDimensions->getValue( nPaperDimension )->m_aValue;
-    else if( m_pPaperDimensions->countValues() > 0 )
-        return m_pPaperDimensions->getValue( (sal_uLong)0 )->m_aValue;
-
-    return String();
-}
-
-String PPDParser::getPaperDimensionCommand( const String& rPaperDimension ) const
-{
-    if( ! m_pPaperDimensions )
-        return String();
-
-    for( int i=0; i < m_pPaperDimensions->countValues(); i++ )
-    {
-        const PPDValue* pValue = m_pPaperDimensions->getValue( i );
-        if( pValue->m_aOption == rPaperDimension )
-            return pValue->m_aValue;
-    }
-    return String();
-}
-
 void PPDParser::getResolutionFromString(
                                         const String& rString,
                                         int& rXRes, int& rYRes ) const
@@ -1535,94 +1455,6 @@ void PPDParser::getDefaultResolution( int& rXRes, int& rYRes ) const
     rYRes = 300;
 }
 
-int PPDParser::getResolutions() const
-{
-    if( ( ! m_pResolutions || m_pResolutions->countValues() == 0 ) &&
-        m_pDefaultResolution )
-        return 1;
-    return m_pResolutions ? m_pResolutions->countValues() : 0;
-}
-
-void PPDParser::getResolution( int nNr, int& rXRes, int& rYRes ) const
-{
-    if( ( ! m_pResolutions || m_pResolutions->countValues() == 0 ) && m_pDefaultResolution && nNr == 0 )
-    {
-        getDefaultResolution( rXRes, rYRes );
-        return;
-    }
-    if( ! m_pResolutions )
-        return;
-
-    getResolutionFromString( m_pResolutions->getValue( nNr )->m_aOption,
-                             rXRes, rYRes );
-}
-
-String PPDParser::getResolutionCommand( int nXRes, int nYRes ) const
-{
-    if( ( ! m_pResolutions || m_pResolutions->countValues() == 0 ) && m_pDefaultResolution )
-        return m_pDefaultResolution->m_aValue;
-
-    if( ! m_pResolutions )
-        return String();
-
-    int nX, nY;
-    for( int i = 0; i < m_pResolutions->countValues(); i++ )
-    {
-        getResolutionFromString( m_pResolutions->getValue( i )->m_aOption,
-                                 nX, nY );
-        if( nX == nXRes && nY == nYRes )
-            return m_pResolutions->getValue( i )->m_aValue;
-    }
-    return String();
-}
-
-String PPDParser::getDefaultDuplexType() const
-{
-    if( m_pDefaultDuplexType )
-        return m_pDefaultDuplexType->m_aValue;
-    return String();
-}
-
-String PPDParser::getDuplex( int nDuplex ) const
-{
-    if( ! m_pDuplexTypes )
-        return String();
-
-    if( nDuplex > 0 && nDuplex < m_pDuplexTypes->countValues() )
-        return m_pDuplexTypes->getValue( nDuplex )->m_aOption;
-    else if( m_pDuplexTypes->countValues() > 0 )
-        return m_pDuplexTypes->getValue( (sal_uLong)0 )->m_aOption;
-
-    return String();
-}
-
-String PPDParser::getDuplexCommand( int nDuplex ) const
-{
-    if( ! m_pDuplexTypes )
-        return String();
-
-    if( nDuplex > 0 && nDuplex < m_pDuplexTypes->countValues() )
-        return m_pDuplexTypes->getValue( nDuplex )->m_aValue;
-    else if( m_pDuplexTypes->countValues() > 0 )
-        return m_pDuplexTypes->getValue( (sal_uLong)0 )->m_aValue;
-
-    return String();
-}
-
-String PPDParser::getDuplexCommand( const String& rDuplex ) const
-{
-    if( ! m_pDuplexTypes )
-        return String();
-
-    for( int i=0; i < m_pDuplexTypes->countValues(); i++ )
-    {
-        const PPDValue* pValue = m_pDuplexTypes->getValue( i );
-        if( pValue->m_aOption == rDuplex )
-            return pValue->m_aValue;
-    }
-    return String();
-}
-
 void PPDParser::getFontAttributes(
                                   int nFont,
                                   String& rEncoding,
@@ -1634,19 +1466,6 @@ void PPDParser::getFontAttributes(
             WhitespaceToSpace( m_pFontList->getValue( nFont )->m_aValue );
         rEncoding   = GetCommandLineToken( 0, aAttribs );
         rCharset    = GetCommandLineToken( 2, aAttribs );
-    }
-}
-
-void PPDParser::getFontAttributes(
-                                  const String& rFont,
-                                  String& rEncoding,
-                                  String& rCharset ) const
-{
-    if( m_pFontList )
-    {
-        for( int i = 0; i < m_pFontList->countValues(); i++ )
-            if( m_pFontList->getValue( i )->m_aOption == rFont )
-                getFontAttributes( i, rEncoding, rCharset );
     }
 }
 
@@ -1676,17 +1495,6 @@ rtl::OUString PPDParser::translateOption( const rtl::OUString& i_rKey,
     rtl::OUString aResult( m_pTranslator->translateOption( i_rKey, i_rOption, i_rLocale ) );
     if( aResult.getLength() == 0 )
         aResult = i_rOption;
-    return aResult;
-}
-
-rtl::OUString PPDParser::translateValue( const rtl::OUString& i_rKey,
-                                         const rtl::OUString& i_rOption,
-                                         const rtl::OUString& i_rValue,
-                                         const com::sun::star::lang::Locale& i_rLocale ) const
-{
-    rtl::OUString aResult( m_pTranslator->translateValue( i_rKey, i_rOption, i_rValue, i_rLocale ) );
-    if( aResult.getLength() == 0 )
-        aResult = i_rValue;
     return aResult;
 }
 
@@ -2024,25 +1832,6 @@ bool PPDContext::checkConstraints( const PPDKey* pKey, const PPDValue* pNewValue
     }
     return true;
 }
-
-// -------------------------------------------------------------------
-
-void PPDContext::getUnconstrainedValues( const PPDKey* pKey, ::std::list< const PPDValue* >& rValues )
-{
-    rValues.clear();
-
-    if( ! m_pParser || ! pKey || ! m_pParser->hasKey( pKey ) )
-        return;
-
-    int nValues = pKey->countValues();
-    for( int i = 0; i < nValues; i++ )
-    {
-        const PPDValue* pValue = pKey->getValue( i );
-        if( checkConstraints( pKey, pValue ) )
-            rValues.push_back( pValue );
-    }
-}
-
 
 // -------------------------------------------------------------------
 
