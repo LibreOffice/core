@@ -380,10 +380,11 @@ endef
 gb_LinkTarget_CFLAGS := $(gb_CFLAGS) $(gb_CFLAGS_WERROR)
 gb_LinkTarget_CXXFLAGS := $(gb_CXXFLAGS) $(gb_CXXFLAGS_WERROR)
 
-endif
 ifeq ($(gb_SYMBOL),$(true))
 gb_LinkTarget_CXXFLAGS += -ggdb2
 gb_LinkTarget_CFLAGS += -ggdb2
+endif
+
 gb_LinkTarget_INCLUDE :=\
 	$(filter-out %/stl, $(subst -I. , ,$(SOLARINC))) \
 	$(foreach inc,$(subst ;, ,$(JDKINC)),-I$(inc)) \
@@ -711,7 +712,7 @@ gb_Library_COMPONENTPREFIXES := \
 	OOO:vnd.sun.star.expand:\dBRAND_BASE_DIR/program/ \
 	URELIB:vnd.sun.star.expand:\dURE_INTERNAL_LIB_DIR/ \
 	NONE:vnd.sun.star.expand:\dOOO_INBUILD_SHAREDLIB_DIR/ \
-	
+
 # UnoApiTarget
 
 gb_UnoApiTarget_IDLCTARGET := $(OUTDIR_FOR_BUILD)/bin/idlc
