@@ -3193,9 +3193,15 @@ void DomainMapper_Impl::SetCurrentRedlineAuthor( rtl::OUString sAuthor )
 
 void DomainMapper_Impl::SetCurrentRedlineDate( rtl::OUString sDate )
 {
-    RedlineParamsPtr pCurrent( GetTopRedline(  ) );
-    if ( pCurrent.get(  ) )
-        pCurrent->m_sDate = sDate;
+    if (!m_xAnnotationField.is())
+    {
+        RedlineParamsPtr pCurrent( GetTopRedline(  ) );
+        if ( pCurrent.get(  ) )
+            pCurrent->m_sDate = sDate;
+    }
+    else
+        m_xAnnotationField->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DateTimeValue")),
+                uno::makeAny(lcl_DateStringToDateTime(sDate)));
 }
 
 void DomainMapper_Impl::SetCurrentRedlineId( sal_Int32 sId )
