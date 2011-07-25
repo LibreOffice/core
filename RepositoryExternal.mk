@@ -289,11 +289,6 @@ ifeq ($(SYSTEM_GRAPHITE),YES)
 
 #check for building with stlport, but graphite was not built with stlport
 define gb_LinkTarget__use_graphite
-ifneq ($(USE_SYSTEM_STL),YES)
-$(call gb_LinkTarget_add_defs,$(1),\
-	-DADAPT_EXT_STL \
-)
-endif
 $(call gb_LinkTarget_set_include,$(1),\
 	$$(INCLUDE) \
 	$(GRAPHITE_CFLAGS) \
