@@ -49,11 +49,19 @@ endif
 ifeq ($(OS),MACOSX)
 
 $(eval $(call gb_Library_add_cxxflags,cairocanvas,\
-    -x objective-c++ -fobjc-exceptions\
+    $(gb_OBJCXXFLAGS) \
 ))
 
 $(eval $(call gb_Library_add_libs,cairocanvas,\
     -framework Cocoa \
+))
+
+endif
+
+ifeq ($(OS),IOS)
+
+$(eval $(call gb_Library_add_cxxflags,cairocanvas,\
+    $(gb_OBJCXXFLAGS) \
 ))
 
 endif
@@ -104,26 +112,20 @@ $(eval $(call gb_Library_add_linked_libs,cairocanvas,\
 
 else
 
-ifeq ($(OS),MACOSX)
+ifneq (,$(filter MACOSX IOS,$(OS)))
 $(eval $(call gb_Library_add_exception_objects,cairocanvas,\
 	canvas/source/cairo/cairo_quartz_cairo \
 ))
-
-
-else
-
+else ifeq ($(GUIBASE),unx)
 $(eval $(call gb_Library_add_exception_objects,cairocanvas,\
 	canvas/source/cairo/cairo_xlib_cairo \
 ))
 
 # freetype? fontconfig? -> test on Solaris
-ifeq ($(GUIBASE),unx)
 $(eval $(call gb_Library_add_linked_libs,cairocanvas,\
 	X11 \
 	Xrender \
 ))
-endif
-
 endif
 
 endif
