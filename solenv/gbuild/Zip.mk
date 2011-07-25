@@ -38,11 +38,11 @@ $(call gb_Zip_get_clean_target,%) :
 		rm -f $(call gb_Zip_get_outdir_target,$*))
 
 # rule to create zip package in workdir
-# -FS makes sure that all files in the zip package will be removed that no longer are in $(FILES)
+# --filesync makes sure that all files in the zip package will be removed that no longer are in $(FILES)
 $(call gb_Zip_get_target,%) :
 	$(call gb_Helper_abbreviate_dirs_native,\
 	mkdir -p $(dir $(call gb_Zip_get_target,$*)) && \
-	cd $(LOCATION) && $(gb_Zip_ZIPCOMMAND) -rX -FS $(call gb_Zip_get_target,$*) $(FILES) )
+	cd $(LOCATION) && $(gb_Zip_ZIPCOMMAND) -rX --filesync $(call gb_Zip_get_target,$*) $(FILES) )
 
 # the final target is a touch target; we use it as registered targets should be in workdir, not in outdir
 # the outdir target depends on the workdir target and is built by delivering the latter
