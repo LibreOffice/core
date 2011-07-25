@@ -519,19 +519,19 @@ class LetterWizardDialogImpl(LetterWizardDialog):
                 int(self.numAddressX.Value * 1000),
                 int(self.numAddressY.Value * 1000))
             self.setControlProperty(
-            "self.numAddressHeight", PropertyNames.PROPERTY_ENABLED, True)
+            "numAddressHeight", PropertyNames.PROPERTY_ENABLED, True)
             self.setControlProperty(
             "lblCompanyAddressHeight", PropertyNames.PROPERTY_ENABLED, True)
             self.setControlProperty(
-            "self.numAddressWidth", PropertyNames.PROPERTY_ENABLED, True)
+            "numAddressWidth", PropertyNames.PROPERTY_ENABLED, True)
             self.setControlProperty(
             "lblCompanyAddressWidth", PropertyNames.PROPERTY_ENABLED, True)
             self.setControlProperty(
-            "self.numAddressX", PropertyNames.PROPERTY_ENABLED, True)
+            "numAddressX", PropertyNames.PROPERTY_ENABLED, True)
             self.setControlProperty(
             "lblCompanyAddressX", PropertyNames.PROPERTY_ENABLED, True)
             self.setControlProperty(
-            "self.numAddressY", PropertyNames.PROPERTY_ENABLED, True)
+            "numAddressY", PropertyNames.PROPERTY_ENABLED, True)
             self.setControlProperty(
             "lblCompanyAddressY", PropertyNames.PROPERTY_ENABLED, True)
             if self.myLetterDoc.hasElement("Sender Address"):
@@ -544,21 +544,20 @@ class LetterWizardDialogImpl(LetterWizardDialog):
         else:
             if self.BusCompanyAddress is not None:
                 self.BusCompanyAddress.removeFrame()
-
             self.setControlProperty(
-            "self.numAddressHeight", PropertyNames.PROPERTY_ENABLED, False)
+            "numAddressHeight", PropertyNames.PROPERTY_ENABLED, False)
             self.setControlProperty(
             "lblCompanyAddressHeight", PropertyNames.PROPERTY_ENABLED, False)
             self.setControlProperty(
-            "self.numAddressWidth", PropertyNames.PROPERTY_ENABLED, False)
+            "numAddressWidth", PropertyNames.PROPERTY_ENABLED, False)
             self.setControlProperty(
             "lblCompanyAddressWidth", PropertyNames.PROPERTY_ENABLED, False)
             self.setControlProperty(
-            "self.numAddressX", PropertyNames.PROPERTY_ENABLED, False)
+            "numAddressX", PropertyNames.PROPERTY_ENABLED, False)
             self.setControlProperty(
             "lblCompanyAddressX", PropertyNames.PROPERTY_ENABLED, False)
             self.setControlProperty(
-            "self.numAddressY", PropertyNames.PROPERTY_ENABLED, False)
+            "numAddressY", PropertyNames.PROPERTY_ENABLED, False)
             self.setControlProperty(
             "lblCompanyAddressY", PropertyNames.PROPERTY_ENABLED, False)
             if self.myLetterDoc.hasElement("Sender Address"):
@@ -619,7 +618,7 @@ class LetterWizardDialogImpl(LetterWizardDialog):
                 int(self.myLetterDoc.DocSize.Height - \
                     (self.numFooterHeight.Value * 1000)))
             self.setControlProperty(
-            "self.numFooterHeight", PropertyNames.PROPERTY_ENABLED, True)
+            "numFooterHeight", PropertyNames.PROPERTY_ENABLED, True)
             self.setControlProperty(
             "lblFooterHeight", PropertyNames.PROPERTY_ENABLED, True)
             self.setPossibleFooter(False)
@@ -628,7 +627,7 @@ class LetterWizardDialogImpl(LetterWizardDialog):
                 self.BusFooter.removeFrame()
 
             self.setControlProperty(
-            "self.numFooterHeight", PropertyNames.PROPERTY_ENABLED, False)
+            "numFooterHeight", PropertyNames.PROPERTY_ENABLED, False)
             self.setControlProperty(
             "lblFooterHeight", PropertyNames.PROPERTY_ENABLED, False)
             self.setPossibleFooter(True)
