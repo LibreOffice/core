@@ -32,7 +32,6 @@ $(eval $(call gb_CppunitTest_add_exception_objects,sax_cppunit, \
 ))
 
 $(eval $(call gb_CppunitTest_add_linked_libs,sax_cppunit, \
-	cppunit \
 	sax \
 	sal \
     $(gb_STDLIBS) \
