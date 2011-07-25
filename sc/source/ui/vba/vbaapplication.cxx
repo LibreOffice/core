@@ -1460,19 +1460,8 @@ ScVbaApplication::GetOpenFilename(const uno::Any& FileFilter, const uno::Any& Fi
 
         if ( xFilePicker.is() && xFilePicker->execute() )
         {
-            sal_Bool bUseXFilePicker2 = false;
-            uno::Reference< lang::XServiceInfo > xServiceInfo( xFilePicker, UNO_QUERY );
-            if ( xServiceInfo.is() )
-            {
-                rtl::OUString sImplName = xServiceInfo->getImplementationName();
-                if ( sImplName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.comp.fpicker.VistaFileDialog")) ||
-                    sImplName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.ui.dialogs.SalGtkFilePicker")) )
-                {
-                    bUseXFilePicker2 = sal_True;
-                }
-            }
             uno::Sequence< rtl::OUString > aSelectedFiles;
-            if ( bUseXFilePicker2 && xFilePicker2.is() )
+            if ( xFilePicker2.is() )
             {
                 // On Linux, XFilePicker->getFiles() always return one selected file although we select more than one file, also on Vista
                 // XFilePicker->getFiles() does not work well too, so we call XFilePicker2->getSelectedFiles() to get selected files.

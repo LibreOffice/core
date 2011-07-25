@@ -103,18 +103,7 @@ ScVbaFileDialog::Show( ) throw (::com::sun::star::uno::RuntimeException)
             xFilePicker->setMultiSelectionMode(sal_True);
             if ( xFilePicker->execute() )
             {
-                sal_Bool bUseXFilePicker2 = false;
-                Reference< lang::XServiceInfo > xServiceInfo( xFilePicker, UNO_QUERY );
-                if (xServiceInfo.is())
-                {
-                    rtl::OUString sImplName = xServiceInfo->getImplementationName();
-                    if (sImplName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.comp.fpicker.VistaFileDialog")) ||
-                        sImplName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.ui.dialogs.SalGtkFilePicker")))
-                    {
-                        bUseXFilePicker2 = sal_True;
-                    }
-                }
-                if ( bUseXFilePicker2 && xFilePicker2.is() )
+                if ( xFilePicker2.is() )
                 {
                     // On Linux, XFilePicker->getFiles() always return one selected file although we select
                     // more than one file, also on Vista XFilePicker->getFiles() does not work well too,
