@@ -288,7 +288,6 @@ endif # SYSTEM_CAIRO
 
 ifeq ($(SYSTEM_GRAPHITE),YES)
 
-#check for building with stlport, but graphite was not built with stlport
 define gb_LinkTarget__use_graphite
 $(call gb_LinkTarget_set_include,$(1),\
 	$$(INCLUDE) \
