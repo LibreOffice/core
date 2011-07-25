@@ -4303,8 +4303,6 @@ svx::DialControl::GetModifyHdl() const
 svx::DialControl::SetModifyHdl(Link const&)
 svx::DocRecovery::PluginProgress::getPlugWindow()
 svx::DocRecovery::RecoveryDialog::impl_refreshDocList()
-svx::FeatureSlotTranslation::getControllerFeatureURLForSlotId(int)
-svx::FeatureSlotTranslation::isFeatureURL(rtl::OUString const&)
 svx::FontWorkGalleryDialog::changeText(SdrTextObj*)
 svx::FormControllerHelper::moveLeft() const
 svx::FormControllerHelper::moveRight() const
