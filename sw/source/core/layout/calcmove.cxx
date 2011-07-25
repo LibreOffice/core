@@ -313,9 +313,9 @@ void SwFrm::PrepareMake()
         else if ( bCnt && sal_True == (bFoll = pThis->IsFollow()) &&
              GetPrev() )
         {
-            //Wenn der Master gereade ein CalcFollow ruft braucht die Kette
-            //nicht durchlaufen werden. Das spart Zeit und vermeidet Probleme.
-            if ( ((SwTxtFrm*)((SwTxtFrm*)this)->FindMaster())->IsLocked() )
+            //Do not follow the chain when we need only one instance
+            const SwTxtFrm* pMaster = ((SwCntntFrm*)this)->FindMaster();
+            if ( pMaster && pMaster->IsLocked() )
             {
                 MakeAll();
                 return;
