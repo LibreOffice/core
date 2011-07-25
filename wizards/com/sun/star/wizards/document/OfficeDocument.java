@@ -81,7 +81,7 @@ public class OfficeDocument
     {
         try
         {
-            XEventsSupplier xEventsSuppl = UnoRuntime.queryInterface(XEventsSupplier.class, xComponent);
+            XEventsSupplier xEventssSuppl = UnoRuntime.queryInterface(XEventsSupplier.class, xComponent);
             PropertyValue[] oEventProperties = new PropertyValue[2];
             oEventProperties[0] = new PropertyValue();
             oEventProperties[0].Name = "EventType";
@@ -89,7 +89,7 @@ public class OfficeDocument
             oEventProperties[1] = new PropertyValue();
             oEventProperties[1].Name = "Script"; //PropertyNames.URL;
             oEventProperties[1].Value = EventURL;
-            xEventsSuppl.getEvents().replaceByName(EventName, oEventProperties);
+            xEventssSuppl.getEvents().replaceByName(EventName, oEventProperties);
         }
         catch (Exception exception)
         {

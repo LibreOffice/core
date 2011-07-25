@@ -1,10 +1,13 @@
 from UnoDialog2 import *
 from common.Resource import Resource
 from abc import ABCMeta, abstractmethod
+from common.HelpIds import *
+from document.OfficeDocument import OfficeDocument
+from text.TextDocument import TextDocument
+
 from com.sun.star.lang import NoSuchMethodException
 from com.sun.star.lang import IllegalArgumentException
 from com.sun.star.frame import TerminationVetoException
-from common.HelpIds import *
 from com.sun.star.awt.PushButtonType import HELP, STANDARD
 from ui.XPathSelectionListener import XPathSelectionListener
 
@@ -467,6 +470,22 @@ class WizardDialog(UnoDialog2):
     def queryTermination(self):
         self.activate()
         raise TerminationVetoException()
+
+    def optCreateFromTemplateItemChanged(self):
+        self.bEditTemplate = False
+
+    def optMakeChangesItemChanged(self):
+        self.bEditTemplate = True
+
+    def optReceiverPlaceholderItemChanged(self):
+        OfficeDocument.attachEventCall(
+            TextDocument.xTextDocument, "OnNew", "StarBasic",
+            "macro:///Template.Correspondence.Placeholder()")
+
+    def optReceiverDatabaseItemChanged(self):
+        OfficeDocument.attachEventCall(
+            TextDocument.xTextDocument, "OnNew", "StarBasic",
+            "macro:///Template.Correspondence.Database()")
 
     class myPathSelectionListener(XPathSelectionListener):
 

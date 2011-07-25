@@ -1,19 +1,21 @@
 import uno
-from common.Desktop import Desktop
-from com.sun.star.view.DocumentZoomType import ENTIRE_PAGE
-from com.sun.star.beans.PropertyState import DIRECT_VALUE
-from common.Helper import Helper
-from document.OfficeDocument import OfficeDocument
 import traceback
-from text.ViewHandler import ViewHandler
-from text.TextFieldHandler import TextFieldHandler
-from com.sun.star.container import NoSuchElementException
-from com.sun.star.lang import WrappedTargetException
-from common.Configuration import Configuration
 import time
 from datetime import date as dateTimeObject
+
+from common.Desktop import Desktop
+from common.Helper import Helper
+from document.OfficeDocument import OfficeDocument
+from text.ViewHandler import ViewHandler
+from text.TextFieldHandler import TextFieldHandler
+from common.Configuration import Configuration
+
+from com.sun.star.container import NoSuchElementException
+from com.sun.star.lang import WrappedTargetException
 from com.sun.star.util import DateTime
 from com.sun.star.i18n.NumberFormatIndex import DATE_SYS_DDMMYY
+from com.sun.star.view.DocumentZoomType import ENTIRE_PAGE
+from com.sun.star.beans.PropertyState import DIRECT_VALUE
 
 class TextDocument(object):
 
@@ -277,9 +279,3 @@ class TextDocument(object):
             return xTD.TextFrames.getByName(sFrameName)
 
         return None
-
-    '''
-    Possible Values for "OptionString" are: "LoadCellStyles",
-    "LoadTextStyles", "LoadFrameStyles",
-    "LoadPageStyles", "LoadNumberingStyles", "OverwriteStyles"
-    '''

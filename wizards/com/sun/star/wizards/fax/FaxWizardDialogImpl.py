@@ -1,19 +1,17 @@
 from FaxWizardDialog import *
 from CGFaxWizard import *
 from FaxDocument import *
-from ui.PathSelection import *
-from common.FileAccess import *
-from ui.event.UnoDataAware import *
-from ui.event.RadioDataAware import *
-from common.Configuration import *
-from document.OfficeDocument import OfficeDocument
+from ui.PathSelection import PathSelection
+from common.FileAccess import FileAccess
+from ui.event.UnoDataAware import UnoDataAware
+from ui.event.RadioDataAware import RadioDataAware
 from text.TextFieldHandler import TextFieldHandler
-from com.sun.star.awt.VclWindowPeerAttribute import YES_NO, DEF_NO
+from common.SystemDialog import SystemDialog
+from common.NoValidPathException import NoValidPathException
 
-from common.NoValidPathException import *
+from com.sun.star.awt.VclWindowPeerAttribute import YES_NO, DEF_NO
 from com.sun.star.uno import RuntimeException
 from com.sun.star.util import CloseVetoException
-
 from com.sun.star.view.DocumentZoomType import OPTIMAL
 from com.sun.star.document.UpdateDocMode import FULL_UPDATE
 from com.sun.star.document.MacroExecMode import ALWAYS_EXECUTE
@@ -495,20 +493,6 @@ class FaxWizardDialogImpl(FaxWizardDialog):
         self.txtSenderCityTextChanged()
         self.txtSenderFaxTextChanged()
 
-    def optReceiverPlaceholderItemChanged(self):
-        OfficeDocument.attachEventCall(TextDocument.xTextDocument, "OnNew",
-            "StarBasic", "macro:#/Template.Correspondence.Placeholder()")
-
-    def optReceiverDatabaseItemChanged(self):
-        OfficeDocument.attachEventCall(TextDocument.xTextDocument, "OnNew",
-            "StarBasic", "macro:#/Template.Correspondence.Database()")
-
-    def optCreateFaxItemChanged(self):
-        self.bEditTemplate = False
-
-    def optMakeChangesItemChanged(self):
-        self.bEditTemplate = True
-
     def txtSenderNameTextChanged(self):
         self.myFieldHandler.changeUserFieldContent(
             "Company", self.txtSenderName.Text)
@@ -555,13 +539,13 @@ class FaxWizardDialogImpl(FaxWizardDialog):
         if self.optReceiverDatabase.State:
             self.optReceiverDatabaseItemChanged()
 
-        if self.optReceiverPlaceholder.State:
+        elif self.optReceiverPlaceholder.State:
             self.optReceiverPlaceholderItemChanged()
 
         if self.optCreateFax.State:
-            self.optCreateFaxItemChanged()
+            self.optCreateFromTemplateItemChanged()
 
-        if self.optMakeChanges.State:
+        elif self.optMakeChanges.State:
             self.optMakeChangesItemChanged()
 
     def chkUseLogoItemChanged(self):

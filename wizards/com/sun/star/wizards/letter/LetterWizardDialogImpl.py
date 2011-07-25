@@ -1,18 +1,17 @@
-import traceback
 from LetterWizardDialog import *
 from LetterDocument import *
-from common.NoValidPathException import *
-from common.FileAccess import *
+from common.NoValidPathException import NoValidPathException
+from common.FileAccess import FileAccess
 from LocaleCodes import LocaleCodes
-from ui.PathSelection import *
-from common.Configuration import *
+from ui.PathSelection import PathSelection
+from common.Configuration import Configuration
 from CGLetterWizard import CGLetterWizard
-from ui.event.UnoDataAware import *
-from ui.event.RadioDataAware import *
-from document.OfficeDocument import OfficeDocument
+from ui.event.UnoDataAware import UnoDataAware
+from ui.event.RadioDataAware import RadioDataAware
 from text.TextFieldHandler import TextFieldHandler
-from com.sun.star.awt.VclWindowPeerAttribute import YES_NO, DEF_NO
+from common.SystemDialog import SystemDialog
 
+from com.sun.star.awt.VclWindowPeerAttribute import YES_NO, DEF_NO
 from com.sun.star.view.DocumentZoomType import OPTIMAL
 from com.sun.star.document.UpdateDocMode import FULL_UPDATE
 from com.sun.star.document.MacroExecMode import ALWAYS_EXECUTE
@@ -358,22 +357,6 @@ class LetterWizardDialogImpl(LetterWizardDialog):
         self.txtSenderPostCodeTextChanged()
         self.txtSenderStateTextChanged()
         self.txtSenderCityTextChanged()
-
-    def optCreateLetterItemChanged(self):
-        self.bEditTemplate = False
-
-    def optMakeChangesItemChanged(self):
-        self.bEditTemplate = True
-
-    def optReceiverPlaceholderItemChanged(self):
-        OfficeDocument.attachEventCall(
-            TextDocument.xTextDocument, "OnNew", "StarBasic",
-            "macro:///Template.Correspondence.Placeholder()")
-
-    def optReceiverDatabaseItemChanged(self):
-        OfficeDocument.attachEventCall(
-            TextDocument.xTextDocument, "OnNew", "StarBasic",
-            "macro:///Template.Correspondence.Database()")
 
     def lstBusinessStyleItemChanged(self):
         selectedItemPos = self.lstBusinessStyle.SelectedItemPos
@@ -1064,7 +1047,7 @@ class LetterWizardDialogImpl(LetterWizardDialog):
             self.optReceiverPlaceholderItemChanged()
 
         if self.optCreateLetter.State:
-            self.optCreateLetterItemChanged()
+            self.optCreateFromTemplateItemChanged()
 
         if self.optMakeChanges.State:
             self.optMakeChangesItemChanged()

@@ -1,7 +1,5 @@
 from text.TextDocument import *
 from text.TextSectionHandler import TextSectionHandler
-from text.TextFieldHandler import TextFieldHandler
-from common.Configuration import Configuration
 from common.PropertyNames import PropertyNames
 
 from com.sun.star.text.ControlCharacter import PARAGRAPH_BREAK

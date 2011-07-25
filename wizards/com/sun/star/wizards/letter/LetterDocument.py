@@ -1,6 +1,5 @@
 from text.TextDocument import *
 from text.TextSectionHandler import TextSectionHandler
-from text.TextFieldHandler import TextFieldHandler
 from com.sun.star.table import BorderLine
 from common.PropertyNames import PropertyNames
 

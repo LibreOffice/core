@@ -1,12 +1,12 @@
-from com.sun.star.awt.WindowClass import TOP
-import traceback
 import uno
+import traceback
+import unohelper
 from ui.event.CommonListener import TerminateListenerProcAdapter
 from common.Desktop import Desktop
+
 from com.sun.star.awt import WindowDescriptor
 from com.sun.star.awt import Rectangle
-import unohelper
-
+from com.sun.star.awt.WindowClass import TOP
 from com.sun.star.task import ErrorCodeIOException
 
 #Window Constants
