@@ -713,7 +713,7 @@ void DffPropertyReader::ReadPropSet( SvStream& rIn, void* pClientData ) const
 
     String aURLStr;
 
-    if( ::utl::LocalFileHelper::ConvertPhysicalNameToURL( String( RTL_CONSTASCII_STRINGPARAM( "d:\\ashape.dbg" ) ), aURLStr ) )
+    if( ::utl::LocalFileHelper::ConvertPhysicalNameToURL( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("d:\\ashape.dbg")), aURLStr ) )
     {
         SvStream* pOut = ::utl::UcbStreamHelper::CreateStream( aURLStr, STREAM_WRITE );
 
