@@ -83,6 +83,7 @@
 
 using namespace com::sun::star;
 using ::std::vector;
+using ::std::unary_function;
 using ::boost::shared_ptr;
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::Reference;
@@ -2570,6 +2571,25 @@ ScDPCollection::~ScDPCollection()
     maTables.clear();
 }
 
+namespace {
+
+/**
+ * Unary predicate to match DP objects by the table ID.
+ */
+class MatchByTable : public unary_function<ScDPObject, bool>
+{
+    SCTAB mnTab;
+public:
+    MatchByTable(SCTAB nTab) : mnTab(nTab) {}
+
+    bool operator() (const ScDPObject& rObj) const
+    {
+        return rObj.GetOutRange().aStart.Tab() == mnTab;
+    }
+};
+
+}
+
 bool ScDPCollection::ClearCache(ScDPObject* pDPObj)
 {
     if (pDPObj->IsSheetData())
@@ -2607,15 +2627,7 @@ bool ScDPCollection::ClearCache(ScDPObject* pDPObj)
 
 void ScDPCollection::DeleteOnTab( SCTAB nTab )
 {
-    TablesType aNewTables;
-    while (!maTables.empty())
-    {
-        TablesType::auto_type xDP = maTables.pop_back();
-        if (xDP->GetOutRange().aStart.Tab() != nTab)
-            // Not on this sheet.  Keep it.
-            aNewTables.push_back(xDP.release());
-    }
-    maTables.swap(aNewTables);
+    maTables.erase_if(MatchByTable(nTab));
 }
 
 void ScDPCollection::UpdateReference( UpdateRefMode eUpdateRefMode,
