@@ -79,7 +79,7 @@ zh_CN = "创建编辑图形、图表和标志。"
 zn_TW = "建立與編輯繪圖、流程圖與標誌。"
 
 [calc]
-en-US = "Perform calculation, analyze information and manage lists in spreadsheets by using Calc."
+en-US = "Perform calculations, analyze information and manage lists in spreadsheets by using Calc."
 ast = "Fai cálculos, analiza información y xestiona llistes en fueyes de cálculu."
 ca = "Executeu càlculs, analitzeu informació i gestioneu llistats en fulls de càlcul."
 da = "Udfør beregninger, analysér information og håndter lister i regneark."
