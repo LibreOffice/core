@@ -30,8 +30,13 @@ $(eval $(call gb_Module_Module,basegfx))
 $(eval $(call gb_Module_add_targets,basegfx,\
 	Library_basegfx \
 	Package_inc \
+))
+
+ifneq ($(OS),IOS)
+$(eval $(call gb_Module_add_targets,basegfx,\
 	StaticLibrary_basegfx_s \
 ))
+endif
 
 $(eval $(call gb_Module_add_check_targets,basegfx,\
 	CppunitTest_basegfx \
