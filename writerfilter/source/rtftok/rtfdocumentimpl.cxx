@@ -120,12 +120,12 @@ static void lcl_putNestedSprm(RTFSprms_t& rSprms, Id nParent, Id nId, RTFValue::
 static RTFSprms_t& lcl_getLastAttributes(RTFSprms_t& rSprms, Id nId)
 {
     RTFValue::Pointer_t p = RTFSprm::find(rSprms, nId);
-    if (p->getSprms().size())
+    if (p.get() && p->getSprms().size())
         return p->getSprms().back().second->getAttributes();
     else
     {
         OSL_FAIL("trying to set property when no type is defined");
-        return p->getSprms();
+        return rSprms;
     }
 }
 
