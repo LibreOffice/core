@@ -191,21 +191,6 @@ sal_uInt16 SvBaseEventDescriptor::mapNameToEventID(const OUString& rName) const
     return 0;
 }
 
-OUString SvBaseEventDescriptor::mapEventIDToName(sal_uInt16 nPoolID) const
-{
-    // iterate over known event IDs
-    for(sal_Int16 i = 0; i < mnMacroItems; i++)
-    {
-        if (nPoolID == mpSupportedMacroItems[i].mnEvent)
-        {
-            return OUString::createFromAscii(mpSupportedMacroItems[i].mpEventName);
-        }
-    }
-
-    // not found -> return empty string
-    return OUString();
-}
-
 sal_uInt16 SvBaseEventDescriptor::getMacroID(const OUString& rName) const
 {
     return mapNameToEventID(rName);

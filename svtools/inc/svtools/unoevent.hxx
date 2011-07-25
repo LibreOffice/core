@@ -171,9 +171,6 @@ protected:
     /// convert an API event name to the event ID as used by SvxMacroItem
     sal_uInt16 mapNameToEventID(const ::rtl::OUString& rName) const;
 
-    /// convert an event ID to an API event name
-    ::rtl::OUString mapEventIDToName(sal_uInt16 nPoolID) const;
-
     /// get the event ID for the name; return 0 if not supported
     sal_uInt16 getMacroID(const ::rtl::OUString& rName) const;
 
