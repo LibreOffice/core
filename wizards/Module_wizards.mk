@@ -35,16 +35,6 @@ $(eval $(call gb_Module_add_targets,wizards,\
 	AllLangResTarget_tpl \
 	AllLangResTarget_wwz \
 	AllLangResTarget_wzi \
-	Jar_commonwizards \
-	Jar_agenda \
-	Jar_fax \
-	Jar_form \
-	Jar_letter \
-	Jar_query \
-	Jar_report \
-	Jar_reportbuilder \
-	Jar_table \
-	Jar_web \
 	Zip_depot \
 	Zip_euro \
 	Zip_form \
@@ -60,5 +50,20 @@ $(eval $(call gb_Module_add_targets,wizards,\
 	Zip_usr \
 	Zip_web \
 ))
+
+ifeq ($(SOLAR_JAVA),TRUE)
+$(eval $(call gb_Module_add_targets,wizards,\
+	Jar_commonwizards \
+	Jar_agenda \
+	Jar_fax \
+	Jar_form \
+	Jar_letter \
+	Jar_query \
+	Jar_report \
+	Jar_reportbuilder \
+	Jar_table \
+	Jar_web \
+))
+endif
 
 # vim: set noet sw=4 ts=4:
