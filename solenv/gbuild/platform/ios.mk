@@ -1,3 +1,4 @@
+# -*- Mode: makefile; tab-width: 4; indent-tabs-mode: t -*-
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -138,14 +139,14 @@ endef
 define gb_CObject__command
 $(call gb_Output_announce,$(2),$(true),C  ,3)
 $(call gb_Helper_abbreviate_dirs,\
-	mkdir -p $(dir $(1)) && \
-	mkdir -p $(dir $(call gb_CObject_get_dep_target,$(2))) && \
+	mkdir -p $(dir $(1)) $(dir $(4)) && \
 	$(gb_CC) \
-		$(DEFS) $(CFLAGS) \
+		$(DEFS) \
+		$(T_CFLAGS) \
 		-c $(3) \
 		-o $(1) \
-		-MMD -MT $(call gb_CObject_get_target,$(2)) \
-		-MF $(call gb_CObject_get_dep_target,$(2)) \
+		-MMD -MT $(1) \
+		-MF $(4) \
 		-I$(dir $(3)) \
 		$(INCLUDE))
 endef
@@ -153,18 +154,18 @@ endef
 
 # CxxObject class
 
-# N.B: $(CXXFLAGS) may contain -x objective-c++, which must come before -c
+# N.B: $(T_CXXFLAGS) may contain -x objective-c++, which must come before -c
 define gb_CxxObject__command
 $(call gb_Output_announce,$(2),$(true),CXX,3)
 $(call gb_Helper_abbreviate_dirs,\
-	mkdir -p $(dir $(1)) && \
-	mkdir -p $(dir $(call gb_CxxObject_get_dep_target,$(2))) && \
+	mkdir -p $(dir $(1)) $(dir $(4)) && \
 	$(gb_CXX) \
-		$(DEFS) $(CXXFLAGS) \
+		$(DEFS) \
+		$(T_CXXFLAGS) \
 		-c $(3) \
 		-o $(1) \
-		-MMD -MT $(call gb_CxxObject_get_target,$(2)) \
-		-MF $(call gb_CxxObject_get_dep_target,$(2)) \
+		-MMD -MT $(1) \
+		-MF $(4) \
 		-I$(dir $(3)) \
 		$(INCLUDE_STL) $(INCLUDE))
 endef
@@ -175,14 +176,14 @@ endef
 define gb_ObjCxxObject__command
 $(call gb_Output_announce,$(2),$(true),OCX,3)
 $(call gb_Helper_abbreviate_dirs,\
-	mkdir -p $(dir $(1)) && \
-	mkdir -p $(dir $(call gb_ObjCxxObject_get_dep_target,$(2))) && \
+	mkdir -p $(dir $(1)) $(dir $(4)) && \
 	$(gb_CXX) \
-		$(DEFS) $(OBJCXXFLAGS) \
+		$(DEFS) \
+		$(T_OBJCXXFLAGS) \
 		-c $(3) \
 		-o $(1) \
-		-MMD -MT $(call gb_ObjCxxObject_get_target,$(2)) \
-		-MF $(call gb_ObjCxxObject_get_dep_target,$(2)) \
+		-MMD -MT $(1) \
+		-MF $(4) \
 		-I$(dir $(3)) \
 		$(INCLUDE_STL) $(INCLUDE))
 endef
