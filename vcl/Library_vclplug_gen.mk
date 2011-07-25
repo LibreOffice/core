@@ -67,21 +67,7 @@ $(eval $(call gb_Library_use_externals,vclplug_gen,\
 	icuuc \
 ))
 
-ifeq ($(SYSTEM_CAIRO),YES)
-$(eval $(call gb_Library_set_ldflags,vclplug_gen,\
-    $$(LDFLAGS) \
-    $$(CAIRO_LIBS) \
-))
-else
-$(eval $(call gb_Library_add_cxxflags,vclplug_gen,\
-    $$(FONTCONFIG_CFLAGS) \
-    $$(FREETYPE_CFLAGS) \
-))
-
-$(eval $(call gb_Library_add_linked_libs,vclplug_gen,\
-    cairo \
-))
-endif
+$(eval $(call gb_Library_use_external,vclplug_gen,cairo))
 
 $(eval $(call gb_Library_add_exception_objects,vclplug_gen,\
     vcl/unx/generic/app/i18n_cb \

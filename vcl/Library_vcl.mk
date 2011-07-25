@@ -476,41 +476,9 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
 $(eval $(call gb_Library_add_defs,vcl,\
     -DENABLE_LIBRSVG \
 ))
-ifeq ($(SYSTEM_CAIRO),YES)
-$(eval $(call gb_Library_set_cxxflags,vcl,\
-    $$(CXXFLAGS) \
-    $$(CAIRO_CFLAGS) \
-    -DSYSTEM_CAIRO \
-))
-
-# CAIRO_LIBS contains both -L and -l options. Thes sets LDFLAGS which
-# goes early into the linking command line before the object files. So
-# on platforms where libraries are searched for symbols undefined at
-# that point as they occur on the command line, it is pointless to
-# search the cairo library at that point as no references to cairo
-# entries have been read from object files yet.
-$(eval $(call gb_Library_add_ldflags,vcl,\
-    $$(CAIRO_LIBS) \
-))
-
-# Thus we also need to add cairo to the list of linked libs. These go
-# after the object files on the linking command line.
-$(eval $(call gb_Library_add_linked_libs,vcl,\
-    cairo \
-))
-
-else
-$(eval $(call gb_Library_add_linked_libs,vcl,\
-    cairo \
-))
-ifeq ($(OS),LINUX)
-$(eval $(call gb_Library_add_linked_libs,vcl,\
-    freetype \
-    fontconfig \
-))
 endif
-endif
-endif
+
+$(eval $(call gb_Library_use_external,vcl,cairo))
 
 ifeq ($(GUIBASE),unx)
 $(eval $(call gb_Library_add_ldflags,vcl,\

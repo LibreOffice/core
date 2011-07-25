@@ -35,13 +35,12 @@ $(eval $(call gb_Library_set_include,vclplug_gtk3,\
     -I$(OUTDIR)/inc \
 ))
 
-$(eval $(call gb_Library_set_cxxflags,vclplug_gtk3,\
-    $$(CXXFLAGS) \
+$(eval $(call gb_Library_add_cxxflags,vclplug_gtk3,\
+    $$(INCLUDE) \
     $$(GTK3_CFLAGS) \
 ))
 
-$(eval $(call gb_Library_set_defs,vclplug_gtk3,\
-    $$(DEFS) \
+$(eval $(call gb_Library_add_defs,vclplug_gtk3,\
     -DVCLPLUG_GTK_IMPLEMENTATION \
     -DVERSION=\"$(UPD)$(LAST_MINOR)\" \
 ))
@@ -56,18 +55,15 @@ $(eval $(call gb_Library_set_include,vclplug_gtk3,\
 	$$(INCLUDE) \
 	$(filter -I%,$(shell pkg-config --cflags dbus-glib-1)) \
 ))
-$(eval $(call gb_Library_set_defs,vclplug_gtk3,\
-    $$(DEFS) \
+$(eval $(call gb_Library_add_defs,vclplug_gtk3,\
     -DENABLE_DBUS \
 ))
-$(eval $(call gb_Library_set_ldflags,vclplug_gtk3,\
-    $$(LDFLAGS) \
+$(eval $(call gb_Library_add_libs,vclplug_gtk3,\
     $(shell pkg-config --libs dbus-glib-1)\
 ))
 endif
 
-$(eval $(call gb_Library_set_ldflags,vclplug_gtk3,\
-    $$(LDFLAGS) \
+$(eval $(call gb_Library_add_libs,vclplug_gtk3,\
     $$(GTK3_LIBS) \
     $$(GTHREAD_LIBS) \
 ))
@@ -80,10 +76,9 @@ $(eval $(call gb_Library_add_linked_libs,vclplug_gtk3,\
     sot \
     ucbhelper \
     basegfx \
+    basebmp \
     comphelper \
     cppuhelper \
-    icuuc \
-    icule \
     i18nisolang1 \
     i18npaper \
     i18nutil \
