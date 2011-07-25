@@ -4341,7 +4341,6 @@ svt::table::TableControl::GetTopRow() const
 svt::table::TableControl::SetSelectHdl(Link const&)
 svt::table::TableControl::SetTopRow(int)
 svt::table::TableDataWindow::SetBackground()
-svtools::AsynchronLink::ForcePendingCall()
 svtools::EditableExtendedColorConfig::GetColorValue(rtl::OUString const&, rtl::OUString const&) const
 svtools::EditableExtendedColorConfig::GetComponentDisplayName(rtl::OUString const&) const
 svtools::EditableExtendedColorConfig::GetCurrentSchemeName() const
