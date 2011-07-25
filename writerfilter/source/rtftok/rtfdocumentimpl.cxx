@@ -2593,7 +2593,7 @@ int RTFDocumentImpl::popState()
     }
 
     // This is the end of the doc, see if we need to close the last section.
-    if (m_nGroup == 1)
+    if (m_nGroup == 1 && !m_bFirstRun)
         sectBreak(true);
 
     m_aStates.pop();
