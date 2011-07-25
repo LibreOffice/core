@@ -73,11 +73,7 @@
 - (void)prepareOpenGL
 {
     // for overriding to initialize OpenGL state, occurs after context creation
-#ifdef MAC_OS_X_VERSION_10_4
     long swapInt = 1;
-#else /* build target 10.5 */ 
-    int swapInt = 1;
-#endif
 
     [[self openGLContext] setValues:&swapInt forParameter:NSOpenGLCPSwapInterval]; // set to vbl sync
 
