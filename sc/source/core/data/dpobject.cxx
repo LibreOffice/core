@@ -84,7 +84,6 @@
 using namespace com::sun::star;
 using ::std::vector;
 using ::std::unary_function;
-using ::std::remove_if;
 using ::boost::shared_ptr;
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::Reference;
@@ -2561,7 +2560,7 @@ namespace {
 /**
  * Unary predicate to match DP objects by the table ID.
  */
-class MatchByTable : public unary_function<bool, ScDPObject>
+class MatchByTable : public unary_function<ScDPObject, bool>
 {
     SCTAB mnTab;
 public:
@@ -2612,9 +2611,7 @@ bool ScDPCollection::ClearCache(ScDPObject* pDPObj)
 
 void ScDPCollection::DeleteOnTab( SCTAB nTab )
 {
-    maTables.erase(
-        remove_if(maTables.begin(), maTables.end(), MatchByTable(nTab)),
-        maTables.end());
+    maTables.erase_if(MatchByTable(nTab));
 }
 
 void ScDPCollection::UpdateReference( UpdateRefMode eUpdateRefMode,
