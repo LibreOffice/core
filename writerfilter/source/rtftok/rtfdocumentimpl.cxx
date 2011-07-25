@@ -675,6 +675,7 @@ void RTFDocumentImpl::text(OUString& rString)
         case DESTINATION_COMPANY:
         case DESTINATION_COMMENT:
         case DESTINATION_OBJDATA:
+        case DESTINATION_ANNOTATIONDATE:
             m_aDestinationText.append(rString);
             break;
         default: bRet = false; break;
@@ -1019,6 +1020,9 @@ int RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
             break;
         case RTF_RESULT:
             m_aStates.top().nDestinationState = DESTINATION_RESULT;
+            break;
+        case RTF_ATNDATE:
+            m_aStates.top().nDestinationState = DESTINATION_ANNOTATIONDATE;
             break;
         case RTF_LISTTEXT:
             // Should be ignored by any reader that understands Word 97 through Word 2007 numbering.
@@ -2579,6 +2583,16 @@ int RTFDocumentImpl::popState()
             m_pObjectData = 0;
         }
         m_bObject = false;
+    }
+    else if (m_aStates.top().nDestinationState == DESTINATION_ANNOTATIONDATE)
+    {
+        OUString aStr(OStringToOUString(lcl_DTTM22OString(m_aDestinationText.makeStringAndClear().toInt32()),
+                    m_aStates.top().nCurrentEncoding));
+        RTFValue::Pointer_t pValue(new RTFValue(aStr));
+        RTFSprms_t aAnnAttributes;
+        aAnnAttributes.push_back(make_pair(NS_ooxml::LN_CT_TrackChange_date, pValue));
+        writerfilter::Reference<Properties>::Pointer_t const pProperties(new RTFReferenceProperties(aAnnAttributes));
+        Mapper().props(pProperties);
     }
 
     // See if we need to end a track change

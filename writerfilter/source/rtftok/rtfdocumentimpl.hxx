@@ -108,7 +108,8 @@ namespace writerfilter {
             DESTINATION_COMMENT,
             DESTINATION_OBJECT,
             DESTINATION_OBJDATA,
-            DESTINATION_RESULT
+            DESTINATION_RESULT,
+            DESTINATION_ANNOTATIONDATE
         };
 
         enum RTFBorderState
