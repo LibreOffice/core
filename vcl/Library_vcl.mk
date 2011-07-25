@@ -465,7 +465,6 @@ endif
 $(eval $(call gb_Library_use_external,vcl,graphite))
 endif
 
-## handle Cairo
 ifneq ($(ENABLE_LIBRSVG),NO)
 
 $(eval $(call gb_Library_add_exception_objects,vcl,\
@@ -475,9 +474,10 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
 $(eval $(call gb_Library_add_defs,vcl,\
     -DENABLE_LIBRSVG \
 ))
-endif
 
 $(eval $(call gb_Library_use_external,vcl,cairo))
+
+endif
 
 ifeq ($(GUIBASE),unx)
 $(eval $(call gb_Library_add_ldflags,vcl,\

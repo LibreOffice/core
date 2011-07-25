@@ -63,11 +63,10 @@ $(eval $(call gb_Library_add_linked_libs,vclplug_gen,\
 ))
 
 $(eval $(call gb_Library_use_externals,vclplug_gen,\
+	cairo \
 	icule \
 	icuuc \
 ))
-
-$(eval $(call gb_Library_use_external,vclplug_gen,cairo))
 
 $(eval $(call gb_Library_add_exception_objects,vclplug_gen,\
     vcl/unx/generic/app/i18n_cb \

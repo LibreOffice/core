@@ -38,11 +38,7 @@
 #include <cppuhelper/implbase2.hxx>
 #include <osl/module.h>
 
-#ifdef SYSTEM_CAIRO
 #include <cairo.h>
-#else
-#include <cairo/cairo.h>
-#endif
 
 #include <vector>
 
