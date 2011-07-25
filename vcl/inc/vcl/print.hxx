@@ -309,7 +309,6 @@ public:
 
     sal_Bool                        SetJobSetup( const JobSetup& rSetup );
     const JobSetup&             GetJobSetup() const { return maJobSetup; }
-    String                      GetJobValue( const String& rKey ) const { return maJobSetup.GetValue( rKey ); }
     void                        SetJobValue( const String& rKey, const String& rValue ) { maJobSetup.SetValue( rKey, rValue ); }
 
     sal_Bool                        Setup( Window* pWindow = NULL );
