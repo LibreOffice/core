@@ -45,6 +45,14 @@
              }
          }
  
+@@ -671,6 +671,7 @@
+         void range_check_impl( iterator first, iterator last,
+                                std::random_access_iterator_tag )
+         {
++            (void)first; (void)last;
+             BOOST_ASSERT( first <= last && "out of range unique()/erase_if()" );
+             BOOST_ASSERT( this->begin() <= first && "out of range unique()/erase_if()" );
+             BOOST_ASSERT( last <= this->end() && "out of range unique()/erase_if)(" );             
 --- misc/boost_1_44_0/boost/spirit/home/classic/error_handling/exceptions.hpp	2010-04-07 02:41:42.000000000 +0200
 +++ misc/build/boost_1_44_0/boost/spirit/home/classic/error_handling/exceptions.hpp	2011-02-04 16:39:19.000000000 +0100
 @@ -222,9 +222,9 @@
