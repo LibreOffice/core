@@ -956,7 +956,7 @@ else
 $SOLARVERSION         = '$SOLARVER';
 
 #Location of gnu make directories.
-$WORKDIR              = '$SRC_ROOT/workdir';
+$WORKDIR              = '$SRC_ROOT/workdir/$INPATH';
 $OUTDIR              = '$SOLARVER/$INPATH';
 #Some directories that are symlinks under rawbuild, have to use realpath on Cygwin
 $SOLARDEFIMG          = PathFormat($SRC_ROOT.$DEFIMGS);
