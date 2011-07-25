@@ -24,6 +24,6 @@
 # instead of those above.
 
 $(eval $(call gb_Package_Package,vcl_kde4moc,$(WORKDIR)/CustomTarget/vcl/unx/kde4))
-$(eval $(call gb_Package_add_customtarget,vcl_kde4moc,vcl/unx/kde4))
+$(eval $(call gb_Package_add_customtarget,vcl_kde4moc,vcl/unx/kde4,SRCDIR))
 
 # vim: set noet sw=4:
