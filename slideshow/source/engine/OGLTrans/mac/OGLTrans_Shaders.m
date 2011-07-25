@@ -87,7 +87,7 @@
   /* Load and compile both shaders */
   if (vertexString) {
     vertex_shader   = glCreateShaderObjectARB(GL_VERTEX_SHADER_ARB);
-    vertex_string   = (GLcharARB *) [vertexString cString];
+    vertex_string   = (GLcharARB *) [vertexString cStringUsingEncoding:NSASCIIStringEncoding];
     glShaderSourceARB(vertex_shader, 1, &vertex_string, NULL);
     glCompileShaderARB(vertex_shader);
     glGetObjectParameterivARB(vertex_shader, GL_OBJECT_COMPILE_STATUS_ARB, &vertex_compiled);
@@ -99,7 +99,7 @@
     
   if (fragmentString) {
     fragment_shader   = glCreateShaderObjectARB(GL_FRAGMENT_SHADER_ARB);
-    fragment_string   = [fragmentString cString];
+    fragment_string   = [fragmentString cStringUsingEncoding:NSASCIIStringEncoding];
     glShaderSourceARB(fragment_shader, 1, &fragment_string, NULL);
     glCompileShaderARB(fragment_shader);
     glGetObjectParameterivARB(fragment_shader, GL_OBJECT_COMPILE_STATUS_ARB, &fragment_compiled);
