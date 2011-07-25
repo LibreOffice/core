@@ -594,12 +594,11 @@ public:
 
     static void MSDFFReadZString( SvStream& rIn, String& rStr, sal_uLong nMaxLen, bool bUniCode = sal_False );
 
-    static sal_Bool ReadCommonRecordHeader( DffRecordHeader& rRec, SvStream& rIn );
-    static sal_Bool ReadCommonRecordHeader( SvStream& rSt,
-                                        sal_uInt8&     rVer,
-                                        sal_uInt16&   rInst,
-                                        sal_uInt16&   rFbt,
-                                        sal_uInt32&    rLength );
+    static bool ReadCommonRecordHeader(DffRecordHeader& rRec, SvStream& rIn)
+        SAL_WARN_UNUSED_RESULT;
+    static bool ReadCommonRecordHeader(SvStream& rSt, sal_uInt8& rVer,
+        sal_uInt16& rInst, sal_uInt16& rFbt, sal_uInt32& rLength)
+        SAL_WARN_UNUSED_RESULT;
 /*
     Konstruktor
     ===========
