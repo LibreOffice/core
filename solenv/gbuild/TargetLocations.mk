@@ -134,6 +134,7 @@ $(eval $(call gb_Helper_make_clean_targets,\
 	Module \
 	NoexPrecompiledHeader \
 	PackagePart \
+	Package \
 	PrecompiledHeader \
 	RdbTarget \
 	ResTarget \
@@ -150,7 +151,6 @@ $(eval $(call gb_Helper_make_clean_targets,\
 $(eval $(call gb_Helper_make_outdir_clean_targets,\
 	Executable \
 	Library \
-	Package \
 	StaticLibrary \
 	UnoApiOutTarget \
 ))
