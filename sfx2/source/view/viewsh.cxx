@@ -57,7 +57,6 @@
 #include <svtools/soerr.hxx>
 #include <unotools/internaloptions.hxx>
 
-#include <unotools/javaoptions.hxx>
 #include <basic/basmgr.hxx>
 #include <basic/sbuno.hxx>
 #include <framework/actiontriggerhelper.hxx>
