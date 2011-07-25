@@ -280,6 +280,7 @@ $(call gb_LinkTarget_add_linked_libs,$(1),\
 )
 endif
 endif
+
 endef
 
 endif # SYSTEM_CAIRO
