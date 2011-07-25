@@ -28,7 +28,7 @@
 en-US = "%PRODUCTNAME Calc"
 
 [STR_DESC_MODULE_PRG_CALC]
-en-US = "Perform calculation, analyze information and manage lists in spreadsheets by using %PRODUCTNAME Calc."
+en-US = "Perform calculations, analyze information and manage lists in spreadsheets by using %PRODUCTNAME Calc."
 
 [STR_NAME_MODULE_PRG_CALC_BIN]
 en-US = "Program Module"
