@@ -109,7 +109,8 @@ namespace writerfilter {
             DESTINATION_OBJECT,
             DESTINATION_OBJDATA,
             DESTINATION_RESULT,
-            DESTINATION_ANNOTATIONDATE
+            DESTINATION_ANNOTATIONDATE,
+            DESTINATION_ANNOTATIONAUTHOR
         };
 
         enum RTFBorderState
@@ -263,6 +264,7 @@ namespace writerfilter {
 
                 Stream& Mapper();
                 void setSubstream(bool bIsSubtream);
+                void setAuthor(rtl::OUString& rAuthor);
                 bool isSubstream();
                 void setIgnoreFirst(rtl::OUString& rIgnoreFirst);
                 void seek(sal_uInt32 nPos);
@@ -356,6 +358,8 @@ namespace writerfilter {
                 std::map<rtl::OUString, int> m_aBookmarks;
                 /// Revision index <-> author map.
                 std::map<int, rtl::OUString> m_aAuthors;
+                /// Annotation author of the next annotation.
+                rtl::OUString m_aAuthor;
                 /// Text from special destinations.
                 rtl::OUStringBuffer m_aDestinationText;
 

@@ -308,6 +308,11 @@ void RTFDocumentImpl::setSubstream(bool bIsSubtream)
     m_bIsSubstream = bIsSubtream;
 }
 
+void RTFDocumentImpl::setAuthor(rtl::OUString& rAuthor)
+{
+    m_aAuthor = rAuthor;
+}
+
 bool RTFDocumentImpl::isSubstream()
 {
     return m_bIsSubstream;
@@ -330,6 +335,11 @@ void RTFDocumentImpl::resolveSubstream(sal_uInt32 nPos, Id nId, OUString& rIgnor
     RTFDocumentImpl::Pointer_t pImpl(new RTFDocumentImpl(m_xContext, m_xInputStream, m_xDstDoc, m_xFrame));
     pImpl->setSubstream(true);
     pImpl->setIgnoreFirst(rIgnoreFirst);
+    if (m_aAuthor.getLength())
+    {
+        pImpl->setAuthor(m_aAuthor);
+        m_aAuthor = OUString();
+    }
     pImpl->seek(nPos);
     OSL_TRACE("substream start");
     Mapper().substream(nId, pImpl);
@@ -676,6 +686,7 @@ void RTFDocumentImpl::text(OUString& rString)
         case DESTINATION_COMMENT:
         case DESTINATION_OBJDATA:
         case DESTINATION_ANNOTATIONDATE:
+        case DESTINATION_ANNOTATIONAUTHOR:
             m_aDestinationText.append(rString);
             break;
         default: bRet = false; break;
@@ -966,6 +977,18 @@ int RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
                 resolveSubstream(m_nGroupStartPos - 1, NS_rtf::LN_annotation);
                 m_aStates.top().nDestinationState = DESTINATION_SKIP;
             }
+            else
+            {
+                // If there is an author set, emit it now.
+                if (m_aAuthor.getLength())
+                {
+                    RTFValue::Pointer_t pValue(new RTFValue(m_aAuthor));
+                    RTFSprms_t aAttributes;
+                    aAttributes.push_back(make_pair(NS_ooxml::LN_CT_TrackChange_author, pValue));
+                    writerfilter::Reference<Properties>::Pointer_t const pProperties(new RTFReferenceProperties(aAttributes));
+                    Mapper().props(pProperties);
+                }
+            }
             break;
         case RTF_SHPTXT:
             m_aStates.top().nDestinationState = DESTINATION_SHAPETEXT;
@@ -1023,6 +1046,9 @@ int RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
             break;
         case RTF_ATNDATE:
             m_aStates.top().nDestinationState = DESTINATION_ANNOTATIONDATE;
+            break;
+        case RTF_ATNAUTHOR:
+            m_aStates.top().nDestinationState = DESTINATION_ANNOTATIONAUTHOR;
             break;
         case RTF_LISTTEXT:
             // Should be ignored by any reader that understands Word 97 through Word 2007 numbering.
@@ -2594,6 +2620,8 @@ int RTFDocumentImpl::popState()
         writerfilter::Reference<Properties>::Pointer_t const pProperties(new RTFReferenceProperties(aAnnAttributes));
         Mapper().props(pProperties);
     }
+    else if (m_aStates.top().nDestinationState == DESTINATION_ANNOTATIONAUTHOR)
+        m_aAuthor = m_aDestinationText.makeStringAndClear();
 
     // See if we need to end a track change
     RTFValue::Pointer_t pTrackchange = RTFSprm::find(m_aStates.top().aCharacterSprms, NS_ooxml::LN_trackchange);
