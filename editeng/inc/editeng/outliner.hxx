@@ -306,7 +306,6 @@ public:
                     sal_Bool bWithChilds=sal_False );
 
     sal_uLong       Read( SvStream& rInput, const String& rBaseURL, EETextFormat eFormat, sal_Bool bSelect = sal_False, SvKeyValueIterator* pHTTPHeaderAttrs = NULL );
-    sal_uLong       Write( SvStream& rOutput, EETextFormat eFormat );
 
     void        InsertText( const String& rNew, sal_Bool bSelect = sal_False );
     void        InsertText( const OutlinerParaObject& rParaObj );

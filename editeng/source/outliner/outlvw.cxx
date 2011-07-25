@@ -1622,12 +1622,6 @@ sal_uLong OutlinerView::Read( SvStream& rInput,  const String& rBaseURL, EETextF
     return nRet;
 }
 
-sal_uLong OutlinerView::Write( SvStream& rOutput, EETextFormat eFormat )
-{
-    DBG_CHKTHIS(OutlinerView,0);
-    return pEditView->Write( rOutput, eFormat );
-}
-
 void OutlinerView::SetBackgroundColor( const Color& rColor )
 {
     DBG_CHKTHIS(OutlinerView,0);
