@@ -95,6 +95,7 @@ GtkSalDisplay::GtkSalDisplay( GdkDisplay* pDisplay ) :
 #else
     m_bUseRandRWrapper = false; // use gdk signal instead
     Init ();
+    hEventGuard_ = NULL;
 #endif
 
     gdk_window_add_filter( NULL, call_filterGdkEvent, this );
@@ -119,7 +120,8 @@ GtkSalDisplay::~GtkSalDisplay()
         if( m_aCursors[ i ] )
             gdk_cursor_unref( m_aCursors[ i ] );
 
-    osl_destroyMutex( hEventGuard_ );
+    if (hEventGuard_)
+        osl_destroyMutex( hEventGuard_ );
     hEventGuard_ = NULL;
 }
 
