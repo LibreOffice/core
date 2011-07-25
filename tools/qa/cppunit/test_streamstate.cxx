@@ -68,7 +68,7 @@ namespace
 
         aMemStream.Seek(STREAM_SEEK_TO_END);
         //seeking to end doesn't set eof, reading past eof does
-        CPPUNIT_ASSERT(!aMemStream.IsEof());
+        CPPUNIT_ASSERT(!aMemStream.eof());
         CPPUNIT_ASSERT(aMemStream.good());
 
         std_a = 78;
@@ -86,13 +86,22 @@ namespace
         tools_a = 78;
         aMemStream >> tools_a;
         //so, now eof is set
-        CPPUNIT_ASSERT(aMemStream.IsEof());
+        CPPUNIT_ASSERT(aMemStream.eof());
         //a failed read doesn't change the data, it remains unchanged
         CPPUNIT_ASSERT(tools_a == 78);
         //nothing wrong with the stream, so not bad
         CPPUNIT_ASSERT(!aMemStream.GetError());
         //yet, the read didn't succeed
         CPPUNIT_ASSERT(!aMemStream.good());
+
+        sal_uInt16 tools_b = 0x1122;
+        aMemStream.SeekRel(-1);
+        CPPUNIT_ASSERT(!aMemStream.eof());
+        CPPUNIT_ASSERT(aMemStream.good());
+        aMemStream >> tools_b;
+        CPPUNIT_ASSERT(!aMemStream.good());
+        CPPUNIT_ASSERT(aMemStream.eof());
+//        CPPUNIT_ASSERT(tools_b == 0x1122); //nasty, real nasty
 
         iss.clear();
         iss.seekg(0);
