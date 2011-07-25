@@ -168,8 +168,8 @@ $(eval $(call gb_Library_add_cxxflags,tk,\
 endif
 
 ifeq ($(GUIBASE),cocoatouch)
-$(eval $(call gb_Library_set_cxxflags,tk,\
-    $$(CXXFLAGS) $(gb_OBJCXXFLAGS)))
+$(eval $(call gb_Library_add_cxxflags,tk,\
+    $(gb_OBJCXXFLAGS)))
 endif
 
 ifneq (,$(filter LINUX DRAGONFLY OPENBSD FREEBSD NETBSD, $(OS)))
