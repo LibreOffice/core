@@ -92,6 +92,8 @@ int RTFTokenizer::resolveParse()
                 case 0x0a:
                     break; // ignore these
                 default:
+                    if (m_rImport.isEmpty())
+                        return ERROR_CHAR_OVER;
                     if (m_rImport.getState().nInternalState == INTERNAL_NORMAL)
                     {
                         if ((ret = m_rImport.resolveChars(ch)))

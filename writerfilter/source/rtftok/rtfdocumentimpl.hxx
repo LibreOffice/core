@@ -125,7 +125,8 @@ namespace writerfilter {
             ERROR_GROUP_UNDER,
             ERROR_GROUP_OVER,
             ERROR_EOF,
-            ERROR_HEX_INVALID
+            ERROR_HEX_INVALID,
+            ERROR_CHAR_OVER
         };
 
         /// Minimalistic buffer of elements for nested cells.

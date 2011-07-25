@@ -460,6 +460,9 @@ void RTFDocumentImpl::resolve(Stream & rMapper)
         case ERROR_HEX_INVALID:
             OSL_TRACE("%s: invalid hex char", OSL_THIS_FUNC);
             break;
+        case ERROR_CHAR_OVER:
+            OSL_TRACE("%s: characters after last '}'", OSL_THIS_FUNC);
+            break;
     }
 }
 
@@ -2397,7 +2400,7 @@ int RTFDocumentImpl::popState()
         aAttributes = m_aStates.top().aCharacterAttributes;
         if (m_aStates.top().nDestinationState == DESTINATION_SHAPEPROPERTYNAME)
             aShape.aProperties.push_back(make_pair(m_aDestinationText.makeStringAndClear(), OUString()));
-        else if (m_aStates.top().nDestinationState == DESTINATION_SHAPEPROPERTYVALUE)
+        else if (m_aStates.top().nDestinationState == DESTINATION_SHAPEPROPERTYVALUE && aShape.aProperties.size())
             aShape.aProperties.back().second = m_aDestinationText.makeStringAndClear();
         bPopShapeProperties = true;
     }
