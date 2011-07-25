@@ -1,6 +1,6 @@
 --- misc/build/boost_1_44_0/boost/pool/detail/mutex.hpp
 +++ misc/build/boost_1_44_0/boost/pool/detail/mutex.hpp
-@@ -46,7 +46,9 @@
+@@ -45,7 +45,9 @@
  
  #ifndef BOOST_NO_MT
  # ifdef BOOST_WINDOWS
