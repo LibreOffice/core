@@ -30,7 +30,9 @@ SOLARINC += $(JDKINCS)
 
 OUTDIR := $(SOLARVERSION)/$(INPATH)
 OUTDIR_FOR_BUILD := $(SOLARVERSION)/$(INPATH_FOR_BUILD)
-WORKDIR := $(SOLARVERSION)/$(INPATH)/workdir
+ifeq ($(strip $(WORKDIR)),)
+$(error WORKDIR variable is empty, no environment set, aborting)
+endif
 
 # Override for SetupLocal
 ifneq ($(and $(gb_LOCALBUILDDIR),$(wildcard $(gb_LOCALBUILDDIR)/SetupLocal.mk)),)
