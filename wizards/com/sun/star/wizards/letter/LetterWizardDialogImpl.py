@@ -39,9 +39,6 @@ class LetterWizardDialogImpl(LetterWizardDialog):
     def __init__(self, xmsf):
         super(LetterWizardDialogImpl, self).__init__(xmsf)
         self.xmsf = xmsf
-        self.mainDA = []
-        self.letterDA = []
-        self.businessDA = []
         self.bSaveSuccess = False
         self.filenameChanged = False
         self.BusCompanyLogo = None
@@ -122,7 +119,6 @@ class LetterWizardDialogImpl(LetterWizardDialog):
                 self.myConfig.cp_PrivateLetter.cp_Salutation = \
                     self.resources.SalutationLabels[2]
 
-            self.updateUI()
             if self.myPathSelection.xSaveTextBox.Text.lower() == "":
                 self.myPathSelection.initializePath()
 
@@ -250,8 +246,6 @@ class LetterWizardDialogImpl(LetterWizardDialog):
     def optBusinessLetterItemChanged(self):
         LetterWizardDialogImpl.lstPrivateStylePos = None
         LetterWizardDialogImpl.lstPrivOfficialStylePos = None
-        DataAware.setDataObjects(
-            self.letterDA, self.myConfig.cp_BusinessLetter, True)
         self.setControlProperty(
             "lblBusinessStyle", PropertyNames.PROPERTY_ENABLED, True)
         self.setControlProperty(
@@ -275,8 +269,6 @@ class LetterWizardDialogImpl(LetterWizardDialog):
     def optPrivOfficialLetterItemChanged(self):
         LetterWizardDialogImpl.lstBusinessStylePos = None
         LetterWizardDialogImpl.lstPrivateStylePos = None
-        DataAware.setDataObjects(
-            self.letterDA, self.myConfig.cp_PrivateOfficialLetter, True)
         self.setControlProperty(
             "lblBusinessStyle", PropertyNames.PROPERTY_ENABLED, False)
         self.setControlProperty(
@@ -301,8 +293,6 @@ class LetterWizardDialogImpl(LetterWizardDialog):
     def optPrivateLetterItemChanged(self):
         LetterWizardDialogImpl.lstBusinessStylePos = None
         LetterWizardDialogImpl.lstPrivOfficialStylePos = None
-        DataAware.setDataObjects(
-            self.letterDA, self.myConfig.cp_PrivateLetter, True)
         self.setControlProperty(
             "lblBusinessStyle", PropertyNames.PROPERTY_ENABLED, False)
         self.setControlProperty(
@@ -549,7 +539,7 @@ class LetterWizardDialogImpl(LetterWizardDialog):
                 self.setPossibleSenderData(False)
 
         else:
-            if self.BusCompanyAddress != None:
+            if self.BusCompanyAddress is not None:
                 self.BusCompanyAddress.removeFrame()
 
             self.setControlProperty(
@@ -569,8 +559,7 @@ class LetterWizardDialogImpl(LetterWizardDialog):
             self.setControlProperty(
             "lblCompanyAddressY", PropertyNames.PROPERTY_ENABLED, False)
             if self.myLetterDoc.hasElement("Sender Address"):
-                self.myLetterDoc.switchElement(
-                "Sender Address", (True))
+                self.myLetterDoc.switchElement("Sender Address", True)
 
             self.setPossibleSenderData(True)
             if self.optSenderDefine.State:
@@ -1110,153 +1099,109 @@ class LetterWizardDialogImpl(LetterWizardDialog):
                 self.xMSF, "/org.openoffice.Office.Writer/Wizards/Letter",
                 False)
             self.myConfig.readConfiguration(root, "cp_")
-            self.mainDA.append(
-                RadioDataAware.attachRadioButtons(
-                    self.myConfig, "cp_LetterType",
-                    (self.optBusinessLetter, self.optPrivOfficialLetter,
-                        self.optPrivateLetter), True))
-            self.mainDA.append(
-                UnoDataAware.attachListBox(
-                    self.myConfig.cp_BusinessLetter, "cp_Style",
-                    self.lstBusinessStyle, True))
-            self.mainDA.append(
-                UnoDataAware.attachListBox(
-                    self.myConfig.cp_PrivateOfficialLetter, "cp_Style",
-                    self.lstPrivOfficialStyle, True))
-            self.mainDA.append(
-                UnoDataAware.attachListBox(
-                    self.myConfig.cp_PrivateLetter, "cp_Style",
-                    self.lstPrivateStyle, True))
-            self.mainDA.append(
-                UnoDataAware.attachCheckBox(
-                    self.myConfig.cp_BusinessLetter, "cp_BusinessPaper",
-                    self.chkBusinessPaper, True))
+            RadioDataAware.attachRadioButtons(self.myConfig, "cp_LetterType",
+                (self.optBusinessLetter, self.optPrivOfficialLetter,
+                    self.optPrivateLetter), True).updateUI()
+            UnoDataAware.attachListBox(
+                self.myConfig.cp_BusinessLetter, "cp_Style",
+                self.lstBusinessStyle, True).updateUI()
+            UnoDataAware.attachListBox(
+                self.myConfig.cp_PrivateOfficialLetter, "cp_Style",
+                self.lstPrivOfficialStyle, True).updateUI()
+            UnoDataAware.attachListBox(
+                self.myConfig.cp_PrivateLetter, "cp_Style",
+                self.lstPrivateStyle, True).updateUI()
+            UnoDataAware.attachCheckBox(
+                self.myConfig.cp_BusinessLetter, "cp_BusinessPaper",
+                self.chkBusinessPaper, True).updateUI()
             cgl = self.myConfig.cp_BusinessLetter
             cgpl = self.myConfig.cp_BusinessLetter.cp_CompanyLogo
             cgpa = self.myConfig.cp_BusinessLetter.cp_CompanyAddress
-            self.businessDA.append(
-                UnoDataAware.attachCheckBox(
-                    cgpl, "cp_Display", self.chkPaperCompanyLogo, True))
-            self.businessDA.append(
-                UnoDataAware.attachNumericControl(
-                    cgpl, "cp_Width", self.numLogoWidth, True))
-            self.businessDA.append(
-                UnoDataAware.attachNumericControl(
-                    cgpl, "cp_Height", self.numLogoHeight, True))
-            self.businessDA.append(
-                UnoDataAware.attachNumericControl(
-                    cgpl, "cp_X", self.numLogoX, True))
-            self.businessDA.append(
-                UnoDataAware.attachNumericControl(
-                    cgpl, "cp_Y", self.numLogoY, True))
-            self.businessDA.append(
-                UnoDataAware.attachCheckBox(
-                    cgpa, "cp_Display", self.chkPaperCompanyAddress, True))
-            self.businessDA.append(
-                UnoDataAware.attachNumericControl(
-                    cgpa, "cp_Width", self.numAddressWidth, True))
-            self.businessDA.append(
-                UnoDataAware.attachNumericControl(
-                    cgpa, "cp_Height", self.numAddressHeight, True))
-            self.businessDA.append(
-                UnoDataAware.attachNumericControl(
-                    cgpa, "cp_X", self.numAddressX, True))
-            self.businessDA.append(
-                UnoDataAware.attachNumericControl(
-                    cgpa, "cp_Y", self.numAddressY, True))
-            self.businessDA.append(
-                UnoDataAware.attachCheckBox(
-                    cgl, "cp_PaperCompanyAddressReceiverField",
-                    self.chkCompanyReceiver, True))
-            self.businessDA.append(
-                UnoDataAware.attachCheckBox(
-                    cgl, "cp_PaperFooter", self.chkPaperFooter, True))
-            self.businessDA.append(
-                UnoDataAware.attachNumericControl(
-                    cgl, "cp_PaperFooterHeight", self.numFooterHeight, True))
-            self.businessDA.append(
-                UnoDataAware.attachListBox(
-                    cgl, "cp_Norm", self.lstLetterNorm, True))
-            self.businessDA.append(
-                UnoDataAware.attachCheckBox(
-                    cgl, "cp_PrintCompanyLogo", self.chkUseLogo, True))
-            self.businessDA.append(
-                UnoDataAware.attachCheckBox(
-                    cgl, "cp_PrintCompanyAddressReceiverField",
-                    self.chkUseAddressReceiver, True))
-            self.businessDA.append(
-                UnoDataAware.attachCheckBox(
-                    cgl, "cp_PrintLetterSigns", self.chkUseSigns, True))
-            self.businessDA.append(
-                UnoDataAware.attachCheckBox(
-                    cgl, "cp_PrintSubjectLine", self.chkUseSubject, True))
-            self.businessDA.append(
-                UnoDataAware.attachCheckBox(
-                    cgl, "cp_PrintSalutation", self.chkUseSalutation, True))
-            self.businessDA.append(
-                UnoDataAware.attachCheckBox(
-                    cgl, "cp_PrintBendMarks", self.chkUseBendMarks, True))
-            self.businessDA.append(
-                UnoDataAware.attachCheckBox(
-                    cgl, "cp_PrintGreeting", self.chkUseGreeting, True))
-            self.businessDA.append(
-                UnoDataAware.attachCheckBox(
-                    cgl, "cp_PrintFooter", self.chkUseFooter, True))
-            self.businessDA.append(
-                UnoDataAware.attachEditControl(
-                    cgl, "cp_Salutation", self.lstSalutation, True))
-            self.businessDA.append(
-                UnoDataAware.attachEditControl(
-                    cgl, "cp_Greeting", self.lstGreeting, True))
-            self.letterDA.append(RadioDataAware.attachRadioButtons(
-                    cgl, "cp_SenderAddressType",
-                    (self.optSenderDefine, self.optSenderPlaceholder), True))
-            self.businessDA.append(
-                UnoDataAware.attachEditControl(
-                    cgl, "cp_SenderCompanyName", self.txtSenderName, True))
-            self.businessDA.append(
-                UnoDataAware.attachEditControl(
-                    cgl, "cp_SenderStreet", self.txtSenderStreet, True))
-            self.businessDA.append(
-                UnoDataAware.attachEditControl(
-                    cgl, "cp_SenderPostCode", self.txtSenderPostCode, True))
-            self.businessDA.append(
-                UnoDataAware.attachEditControl(
-                    cgl, "cp_SenderState", self.txtSenderState, True))
-            self.businessDA.append(
-                UnoDataAware.attachEditControl(
-                    cgl, "cp_SenderCity", self.txtSenderCity, True))
-            self.letterDA.append(RadioDataAware.attachRadioButtons(
-                    cgl, "cp_ReceiverAddressType",
-                    (self.optReceiverDatabase, self.optReceiverPlaceholder),
-                    True))
-            self.businessDA.append(
-                UnoDataAware.attachEditControl(
-                    cgl, "cp_Footer", self.txtFooter, True))
-            self.businessDA.append(
-                UnoDataAware.attachCheckBox(
-                    cgl, "cp_FooterOnlySecondPage",
-                    self.chkFooterNextPages, True))
-            self.businessDA.append(
-                UnoDataAware.attachCheckBox(
-                    cgl, "cp_FooterPageNumbers",
-                    self.chkFooterPageNumbers, True))
-            self.letterDA.append(RadioDataAware.attachRadioButtons(
-                    cgl, "cp_CreationType",
-                    (self.optCreateLetter, self.optMakeChanges), True))
-            self.businessDA.append(
-                UnoDataAware.attachEditControl(
-                    cgl, "cp_TemplateName", self.txtTemplateName, True))
-            self.businessDA.append(
-                UnoDataAware.attachEditControl(
-                    cgl, "cp_TemplatePath", self.myPathSelection.xSaveTextBox, True))
+            UnoDataAware.attachCheckBox(
+                cgpl, "cp_Display", self.chkPaperCompanyLogo, True).updateUI()
+            UnoDataAware.attachNumericControl(
+                cgpl, "cp_Width", self.numLogoWidth, True).updateUI()
+            UnoDataAware.attachNumericControl(
+                cgpl, "cp_Height", self.numLogoHeight, True).updateUI()
+            UnoDataAware.attachNumericControl(
+                cgpl, "cp_X", self.numLogoX, True).updateUI()
+            UnoDataAware.attachNumericControl(
+                cgpl, "cp_Y", self.numLogoY, True).updateUI()
+            UnoDataAware.attachCheckBox(
+                cgpa, "cp_Display", self.chkPaperCompanyAddress, True).updateUI()
+            UnoDataAware.attachNumericControl(
+                cgpa, "cp_Width", self.numAddressWidth, True).updateUI()
+            UnoDataAware.attachNumericControl(
+                cgpa, "cp_Height", self.numAddressHeight, True).updateUI()
+            UnoDataAware.attachNumericControl(
+                cgpa, "cp_X", self.numAddressX, True).updateUI()
+            UnoDataAware.attachNumericControl(
+                cgpa, "cp_Y", self.numAddressY, True).updateUI()
+            UnoDataAware.attachCheckBox(
+                cgl, "cp_PaperCompanyAddressReceiverField",
+                self.chkCompanyReceiver, True).updateUI()
+            UnoDataAware.attachCheckBox(
+                cgl, "cp_PaperFooter", self.chkPaperFooter, True).updateUI()
+            UnoDataAware.attachNumericControl(
+                cgl, "cp_PaperFooterHeight", self.numFooterHeight, True).updateUI()
+            UnoDataAware.attachListBox(
+                cgl, "cp_Norm", self.lstLetterNorm, True).updateUI()
+            UnoDataAware.attachCheckBox(
+                cgl, "cp_PrintCompanyLogo", self.chkUseLogo, True).updateUI()
+            UnoDataAware.attachCheckBox(
+                cgl, "cp_PrintCompanyAddressReceiverField",
+                self.chkUseAddressReceiver, True).updateUI()
+            UnoDataAware.attachCheckBox(
+                cgl, "cp_PrintLetterSigns", self.chkUseSigns, True).updateUI()
+            UnoDataAware.attachCheckBox(
+                cgl, "cp_PrintSubjectLine", self.chkUseSubject, True).updateUI()
+            UnoDataAware.attachCheckBox(
+                cgl, "cp_PrintSalutation", self.chkUseSalutation, True).updateUI()
+            UnoDataAware.attachCheckBox(
+                cgl, "cp_PrintBendMarks", self.chkUseBendMarks, True).updateUI()
+            UnoDataAware.attachCheckBox(
+                cgl, "cp_PrintGreeting", self.chkUseGreeting, True).updateUI()
+            UnoDataAware.attachCheckBox(
+                cgl, "cp_PrintFooter", self.chkUseFooter, True).updateUI()
+            UnoDataAware.attachEditControl(
+                cgl, "cp_Salutation", self.lstSalutation, True).updateUI()
+            UnoDataAware.attachEditControl(
+                cgl, "cp_Greeting", self.lstGreeting, True).updateUI()
+            RadioDataAware.attachRadioButtons(
+                cgl, "cp_SenderAddressType",
+                (self.optSenderDefine, self.optSenderPlaceholder), True).updateUI()
+            UnoDataAware.attachEditControl(
+                cgl, "cp_SenderCompanyName", self.txtSenderName, True).updateUI()
+            UnoDataAware.attachEditControl(
+                cgl, "cp_SenderStreet", self.txtSenderStreet, True).updateUI()
+            UnoDataAware.attachEditControl(
+                cgl, "cp_SenderPostCode", self.txtSenderPostCode, True).updateUI()
+            UnoDataAware.attachEditControl(
+                cgl, "cp_SenderState", self.txtSenderState, True).updateUI()
+            UnoDataAware.attachEditControl(
+                cgl, "cp_SenderCity", self.txtSenderCity, True).updateUI()
+            RadioDataAware.attachRadioButtons(
+                cgl, "cp_ReceiverAddressType",
+                (self.optReceiverDatabase, self.optReceiverPlaceholder),
+                True).updateUI()
+            UnoDataAware.attachEditControl(
+                cgl, "cp_Footer", self.txtFooter, True).updateUI()
+            UnoDataAware.attachCheckBox(
+                cgl, "cp_FooterOnlySecondPage",
+                self.chkFooterNextPages, True).updateUI()
+            UnoDataAware.attachCheckBox(
+                cgl, "cp_FooterPageNumbers",
+                self.chkFooterPageNumbers, True).updateUI()
+            RadioDataAware.attachRadioButtons(
+                cgl, "cp_CreationType",
+                (self.optCreateLetter, self.optMakeChanges), True).updateUI()
+            UnoDataAware.attachEditControl(
+                cgl, "cp_TemplateName", self.txtTemplateName, True).updateUI()
+            UnoDataAware.attachEditControl(
+                cgl, "cp_TemplatePath", self.myPathSelection.xSaveTextBox,
+                True).updateUI()
         except Exception, exception:
             traceback.print_exc()
-
-    def updateUI(self):
-        UnoDataAware.updateUIs(self.mainDA)
-        UnoDataAware.updateUIs(self.letterDA)
-        UnoDataAware.updateUIs(self.businessDA)
 
     def saveConfiguration(self):
         try:

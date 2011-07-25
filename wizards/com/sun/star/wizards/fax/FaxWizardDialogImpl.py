@@ -37,8 +37,6 @@ class FaxWizardDialogImpl(FaxWizardDialog):
 
     def __init__(self, xmsf):
         super(FaxWizardDialogImpl, self).__init__(xmsf)
-        self.mainDA = []
-        self.faxDA = []
         self.bSaveSuccess = False
         self.filenameChanged = False
         self.UserTemplatePath = ""
@@ -92,8 +90,6 @@ class FaxWizardDialogImpl(FaxWizardDialog):
 
             self.initializeTemplates(xMSF)
 
-            #update the dialog UI according to the loaded Configuration
-            self.__updateUI()
             if self.myPathSelection.xSaveTextBox.Text.lower() == "":
                 self.myPathSelection.initializePath()
 
@@ -240,10 +236,6 @@ class FaxWizardDialogImpl(FaxWizardDialog):
         self.myPathSelection.addSelectionListener( \
             self.myPathSelectionListener())
 
-    def __updateUI(self):
-        UnoDataAware.updateUIs(self.mainDA)
-        UnoDataAware.updateUIs(self.faxDA)
-
     def __initializePaths(self):
         try:
             self.sTemplatePath = FileAccess.getOfficePath2(self.xMSF,
@@ -317,72 +309,66 @@ class FaxWizardDialogImpl(FaxWizardDialog):
             root = Configuration.getConfigurationRoot(self.xMSF,
                 "/org.openoffice.Office.Writer/Wizards/Fax", False)
             self.myConfig.readConfiguration(root, "cp_")
-            self.mainDA.append(RadioDataAware.attachRadioButtons(
+            RadioDataAware.attachRadioButtons(
                 self.myConfig, "cp_FaxType",
-                (self.optBusinessFax, self.optPrivateFax), True))
-            self.mainDA.append(UnoDataAware.attachListBox(
+                (self.optBusinessFax, self.optPrivateFax), True).updateUI()
+            UnoDataAware.attachListBox(
                 self.myConfig.cp_BusinessFax, "cp_Style",
-                self.lstBusinessStyle, True))
-            self.mainDA.append(UnoDataAware.attachListBox(
+                self.lstBusinessStyle, True).updateUI()
+            UnoDataAware.attachListBox(
                 self.myConfig.cp_PrivateFax, "cp_Style", self.lstPrivateStyle,
-                True))
+                True).updateUI()
             cgl = self.myConfig.cp_BusinessFax
-            self.faxDA.append(UnoDataAware.attachCheckBox(cgl,
-                "cp_PrintCompanyLogo", self.chkUseLogo, True))
-            self.faxDA.append(UnoDataAware.attachCheckBox(cgl,
-                "cp_PrintSubjectLine", self.chkUseSubject, True))
-            self.faxDA.append(UnoDataAware.attachCheckBox(cgl,
-                "cp_PrintSalutation", self.chkUseSalutation, True))
-            self.faxDA.append(UnoDataAware.attachCheckBox(cgl,
-                "cp_PrintDate", self.chkUseDate, True))
-            self.faxDA.append(UnoDataAware.attachCheckBox(cgl,
-                "cp_PrintCommunicationType", self.chkUseCommunicationType,
-                True))
-            self.faxDA.append(UnoDataAware.attachCheckBox(cgl,
-                "cp_PrintGreeting", self.chkUseGreeting, True))
-            self.faxDA.append(UnoDataAware.attachCheckBox(cgl,
-                "cp_PrintFooter", self.chkUseFooter, True))
-            self.faxDA.append(UnoDataAware.attachEditControl(cgl,
-                "cp_Salutation", self.lstSalutation, True))
-            self.faxDA.append(UnoDataAware.attachEditControl(cgl,
-                "cp_Greeting", self.lstGreeting, True))
-            self.faxDA.append(UnoDataAware.attachEditControl(cgl,
-                "cp_CommunicationType", self.lstCommunicationType,
-                True))
-            self.faxDA.append(RadioDataAware.attachRadioButtons(cgl,
-                "cp_SenderAddressType", (self.optSenderDefine, \
-                self.optSenderPlaceholder), True))
-            self.faxDA.append(UnoDataAware.attachEditControl(cgl,
-                "cp_SenderCompanyName", self.txtSenderName, True))
-            self.faxDA.append(UnoDataAware.attachEditControl(cgl,
-                "cp_SenderStreet", self.txtSenderStreet, True))
-            self.faxDA.append(UnoDataAware.attachEditControl(cgl,
-                "cp_SenderPostCode", self.txtSenderPostCode, True))
-            self.faxDA.append(UnoDataAware.attachEditControl(cgl,
-                "cp_SenderState", self.txtSenderState, True))
-            self.faxDA.append(UnoDataAware.attachEditControl(cgl,
-                "cp_SenderCity", self.txtSenderCity, True))
-            self.faxDA.append(UnoDataAware.attachEditControl(cgl,
-                "cp_SenderFax", self.txtSenderFax, True))
-            self.faxDA.append(RadioDataAware.attachRadioButtons(cgl,
-                "cp_ReceiverAddressType", (self.optReceiverDatabase,
-                self.optReceiverPlaceholder), True))
-            self.faxDA.append(UnoDataAware.attachEditControl(cgl,
-                "cp_Footer", self.txtFooter, True))
-            self.faxDA.append(UnoDataAware.attachCheckBox(cgl,
-                "cp_FooterOnlySecondPage", self.chkFooterNextPages,
-                True))
-            self.faxDA.append(UnoDataAware.attachCheckBox(cgl,
-                "cp_FooterPageNumbers", self.chkFooterPageNumbers,
-                True))
-            self.faxDA.append(RadioDataAware.attachRadioButtons(cgl,
-                "cp_CreationType", (self.optCreateFax, self.optMakeChanges),
-                True))
-            self.faxDA.append(UnoDataAware.attachEditControl(cgl,
-                "cp_TemplateName", self.txtTemplateName, True))
-            self.faxDA.append(UnoDataAware.attachEditControl(cgl,
-                "cp_TemplatePath", self.myPathSelection.xSaveTextBox,
-                True))
+            UnoDataAware.attachCheckBox(cgl,
+                "cp_PrintCompanyLogo", self.chkUseLogo, True).updateUI()
+            UnoDataAware.attachCheckBox(cgl,
+                "cp_PrintSubjectLine", self.chkUseSubject, True).updateUI()
+            UnoDataAware.attachCheckBox(cgl,
+                "cp_PrintSalutation", self.chkUseSalutation, True).updateUI()
+            UnoDataAware.attachCheckBox(cgl,
+                "cp_PrintDate", self.chkUseDate, True).updateUI()
+            UnoDataAware.attachCheckBox(cgl, "cp_PrintCommunicationType",
+                self.chkUseCommunicationType, True).updateUI()
+            UnoDataAware.attachCheckBox(cgl,
+                "cp_PrintGreeting", self.chkUseGreeting, True).updateUI()
+            UnoDataAware.attachCheckBox(cgl,
+                "cp_PrintFooter", self.chkUseFooter, True).updateUI()
+            UnoDataAware.attachEditControl(cgl,
+                "cp_Salutation", self.lstSalutation, True).updateUI()
+            UnoDataAware.attachEditControl(cgl,
+                "cp_Greeting", self.lstGreeting, True).updateUI()
+            UnoDataAware.attachEditControl(cgl, "cp_CommunicationType",
+                self.lstCommunicationType, True).updateUI()
+            RadioDataAware.attachRadioButtons(cgl, "cp_SenderAddressType",
+                (self.optSenderDefine, self.optSenderPlaceholder),
+                True).updateUI()
+            UnoDataAware.attachEditControl(cgl, "cp_SenderCompanyName",
+                self.txtSenderName, True).updateUI()
+            UnoDataAware.attachEditControl(cgl, "cp_SenderStreet",
+                self.txtSenderStreet, True).updateUI()
+            UnoDataAware.attachEditControl(cgl, "cp_SenderPostCode",
+                self.txtSenderPostCode, True).updateUI()
+            UnoDataAware.attachEditControl(cgl, "cp_SenderState",
+                self.txtSenderState, True).updateUI()
+            UnoDataAware.attachEditControl(cgl, "cp_SenderCity",
+                self.txtSenderCity, True).updateUI()
+            UnoDataAware.attachEditControl(cgl, "cp_SenderFax",
+                self.txtSenderFax, True).updateUI()
+            RadioDataAware.attachRadioButtons(cgl, "cp_ReceiverAddressType",
+                (self.optReceiverDatabase, self.optReceiverPlaceholder),
+                True).updateUI()
+            UnoDataAware.attachEditControl(cgl, "cp_Footer",
+                self.txtFooter, True).updateUI()
+            UnoDataAware.attachCheckBox(cgl, "cp_FooterOnlySecondPage",
+                self.chkFooterNextPages, True).updateUI()
+            UnoDataAware.attachCheckBox(cgl, "cp_FooterPageNumbers",
+                self.chkFooterPageNumbers, True).updateUI()
+            RadioDataAware.attachRadioButtons(cgl, "cp_CreationType",
+                (self.optCreateFax, self.optMakeChanges), True).updateUI()
+            UnoDataAware.attachEditControl(cgl,
+                "cp_TemplateName", self.txtTemplateName, True).updateUI()
+            UnoDataAware.attachEditControl(cgl, "cp_TemplatePath",
+                self.myPathSelection.xSaveTextBox, True).updateUI()
         except Exception, exception:
             traceback.print_exc()
 
@@ -404,8 +390,6 @@ class FaxWizardDialogImpl(FaxWizardDialog):
 
     def optBusinessFaxItemChanged(self):
         FaxWizardDialogImpl.lstPrivateStylePos = None
-        DataAware.setDataObjects(self.faxDA,
-            self.myConfig.cp_BusinessFax, True)
         self.setControlProperty("lblBusinessStyle",
             PropertyNames.PROPERTY_ENABLED, True)
         self.setControlProperty("lstBusinessStyle",
@@ -430,8 +414,6 @@ class FaxWizardDialogImpl(FaxWizardDialog):
 
     def optPrivateFaxItemChanged(self):
         FaxWizardDialogImpl.lstBusinessStylePos = None
-        DataAware.setDataObjects(self.faxDA,
-            self.myConfig.cp_PrivateFax, True)
         self.setControlProperty("lblBusinessStyle",
             PropertyNames.PROPERTY_ENABLED, False)
         self.setControlProperty("lstBusinessStyle",
