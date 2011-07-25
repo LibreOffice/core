@@ -275,7 +275,7 @@ void EnhWMFReader::ReadEMFPlusComment(sal_uInt32 length, sal_Bool& bHaveDC)
     sal_uInt32 nRemainder = length >= 4 ? length-4 : length;
 
     const size_t nRequiredHeaderSize = 12;
-    while (nRemainder > nRequiredHeaderSize)
+    while (nRemainder >= nRequiredHeaderSize)
     {
         sal_uInt16 type(0), flags(0);
         sal_uInt32 size(0), dataSize(0);
