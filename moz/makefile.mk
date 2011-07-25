@@ -152,11 +152,10 @@ MOZILLA_CONFIGURE_FLAGS +=  --disable-tests \
 
 .IF "$(GUI)"=="UNX"
 .IF "$(GUIBASE)"=="aqua"
-MACDEVSDK*=/Developer/SDKs/MacOSX10.4u.sdk
 MOZILLA_CONFIGURE_FLAGS+= \
-    --with-macos-sdk=$(MACDEVSDK) \
+    --with-macos-sdk=$(MACOSX_DEV_SDK) \
     --disable-glibtest \
-    --enable-macos-target=10.4 \
+    --enable-macos-target=$(MACOSX_DEPLOYMENT_TARGET) \
     --disable-libxul
 DEFAULT_MOZILLA_TOOLKIT=mac
 .ELSE

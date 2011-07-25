@@ -93,8 +93,7 @@ PATCH_FILES+=Python-2.6.1-py8067.patch Python-2.6.1-dylib_dynload.patch
 # don't build dual-arch version as OOo itself is not universal binary either
 PATCH_FILES+=Python-2.6.1-arch_$(eq,$(CPU),I i386 ppc).patch
 
-MACDEVSDK*=/Developer/SDKs/MacOSX10.4u.sdk
-CONFIGURE_ACTION+=--enable-universalsdk=$(MACDEVSDK) --with-universal-archs=32-bit --enable-framework=/python-inst --with-framework-name=OOoPython
+CONFIGURE_ACTION+=--enable-universalsdk=$(MACOSX_SDK_PATH) --with-universal-archs=32-bit --enable-framework=/python-inst --with-framework-name=OOoPython
 ALLTAR: $(MISC)/OOoPython.framework.zip
 
 .ENDIF
