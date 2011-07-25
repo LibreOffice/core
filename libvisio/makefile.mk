@@ -58,7 +58,8 @@ TARFILE_NAME=libvisio-0.0.3
 TARFILE_MD5=90882496f9ff4cd6d75d61dac2f62f66
 
 PATCH_FILES=\
-    libvisio-0.0.3.patch
+    libvisio-0.0.3.patch \
+    libvisio-0.0.3-uint8_t.patch
 
 
 BUILD_ACTION=dmake $(MFLAGS) $(CALLMACROS)
