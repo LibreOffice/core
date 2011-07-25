@@ -236,9 +236,8 @@ $(eval $(call gb_Library_add_nativeres,vcl,src))
 endif
 
 ifeq ($(GUIBASE),cocoatouch)
-$(eval $(call gb_Library_set_cxxflags,vcl,\
-    $$(CXXFLAGS) \
-    $$(OBJCXXFLAGS) \
+$(eval $(call gb_Library_add_cxxflags,vcl,\
+    $(gb_OBJCXXFLAGS) \
 ))
 $(eval $(call gb_Library_add_objcxxobjects,vcl,\
     vcl/ios/source/app/salnstimer \
