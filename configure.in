@@ -6283,11 +6283,12 @@ dnl We need zip and unzip
 dnl ===================================================================
 AC_PATH_PROG(ZIP, zip)
 test -z "$ZIP" && AC_MSG_ERROR([zip is required])
-AC_PATH_PROG(UNZIP, unzip)
-test -z "$UNZIP" && AC_MSG_ERROR([unzip is required])
 if "$ZIP" -FS < /dev/null 2>&1 | $EGREP "no such option: S" > /dev/null; then
     AC_MSG_ERROR([Zip version 3.0 or newer is required to build, please install or use --with-zip-home],,)
 fi
+
+AC_PATH_PROG(UNZIP, unzip)
+test -z "$UNZIP" && AC_MSG_ERROR([unzip is required])
 
 dnl ===================================================================
 dnl Zip must be a specific type for different build types.
