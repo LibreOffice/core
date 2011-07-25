@@ -2949,7 +2949,7 @@ SwRedlineExtraData_Format::SwRedlineExtraData_Format( const SfxItemSet& rSet )
     const SfxPoolItem* pItem = aIter.FirstItem();
     while( sal_True )
     {
-        aWhichIds.Insert( pItem->Which(), aWhichIds.Count() );
+        aWhichIds.push_back( pItem->Which() );
         if( aIter.IsAtEnd() )
             break;
         pItem = aIter.NextItem();
@@ -2958,9 +2958,9 @@ SwRedlineExtraData_Format::SwRedlineExtraData_Format( const SfxItemSet& rSet )
 
 SwRedlineExtraData_Format::SwRedlineExtraData_Format(
         const SwRedlineExtraData_Format& rCpy )
-    : SwRedlineExtraData(), aWhichIds( (sal_uInt8)rCpy.aWhichIds.Count() )
+    : SwRedlineExtraData()
 {
-    aWhichIds.Insert( &rCpy.aWhichIds, 0 );
+    aWhichIds.insert( aWhichIds.begin(), rCpy.aWhichIds.begin(), rCpy.aWhichIds.end() );
 }
 
 SwRedlineExtraData_Format::~SwRedlineExtraData_Format()
@@ -2980,9 +2980,10 @@ void SwRedlineExtraData_Format::Reject( SwPaM& rPam ) const
     pDoc->SetRedlineMode_intern((RedlineMode_t)(eOld & ~(nsRedlineMode_t::REDLINE_ON | nsRedlineMode_t::REDLINE_IGNORE)));
 
     // eigentlich muesste hier das Attribut zurueck gesetzt werden!!!
-    for( sal_uInt16 n = 0, nEnd = aWhichIds.Count(); n < nEnd; ++n )
+    std::vector<sal_uInt16>::const_iterator it;
+    for( it = aWhichIds.begin(); it != aWhichIds.end(); ++it )
     {
-        pDoc->InsertPoolItem( rPam, *GetDfltAttr( aWhichIds[ n ] ),
+        pDoc->InsertPoolItem( rPam, *GetDfltAttr( *it ),
                 nsSetAttrMode::SETATTR_DONTEXPAND );
     }
 
@@ -2992,8 +2993,9 @@ void SwRedlineExtraData_Format::Reject( SwPaM& rPam ) const
 int SwRedlineExtraData_Format::operator == ( const SwRedlineExtraData& rCmp ) const
 {
     int nRet = 1;
-    sal_uInt16 n = 0, nEnd = aWhichIds.Count();
-    if( nEnd != ((SwRedlineExtraData_Format&)rCmp).aWhichIds.Count() )
+    size_t n = 0;
+    size_t nEnd = aWhichIds.size();
+    if( nEnd != ((SwRedlineExtraData_Format&)rCmp).aWhichIds.size() )
         nRet = 0;
     else
         for( ; n < nEnd; ++n )

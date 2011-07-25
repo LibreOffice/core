@@ -31,13 +31,12 @@
 #include <tools/datetime.hxx>
 #include <tools/string.hxx>
 
-#define _SVSTDARR_USHORTS
-#include <svl/svstdarr.hxx>
 #include <pam.hxx>
 
 #include <IDocumentRedlineAccess.hxx>
 
 #include <svl/smplhint.hxx>
+#include <vector>
 
 class SfxItemSet;
 class SwView;
@@ -77,7 +76,7 @@ public:
 
 class SwRedlineExtraData_Format : public SwRedlineExtraData
 {
-    SvUShorts aWhichIds;
+    std::vector<sal_uInt16> aWhichIds;
 
     SwRedlineExtraData_Format( const SwRedlineExtraData_Format& rCpy );
 
