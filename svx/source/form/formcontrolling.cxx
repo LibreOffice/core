@@ -188,21 +188,6 @@ namespace svx
     }
 
     //--------------------------------------------------------------------
-    ::rtl::OUString  FeatureSlotTranslation::getControllerFeatureURLForSlotId( sal_Int32 _nSlotId )
-    {
-        const FeatureDescriptions& rDescriptions( getFeatureDescriptions() );
-        FeatureDescriptions::const_iterator pos = ::std::find_if( rDescriptions.begin(), rDescriptions.end(), MatchFeatureDescriptionBySlotId( _nSlotId ) );
-        OSL_ENSURE( pos != rDescriptions.end(), "FeatureSlotTranslation::getControllerFeatureURLForSlotId: not found!" );
-        return ( pos != rDescriptions.end() ) ? pos->sURL : ::rtl::OUString();
-    }
-
-    //--------------------------------------------------------------------
-    sal_Bool FeatureSlotTranslation::isFeatureURL( const ::rtl::OUString& _rMainURL )
-    {
-        return ( _rMainURL.indexOf( FMURL_FORMSLOTS_PREFIX ) == 0 );
-    }
-
-    //--------------------------------------------------------------------
     sal_Int16 FeatureSlotTranslation::getFormFeatureForSlotId( sal_Int32 _nSlotId )
     {
         const FeatureDescriptions& rDescriptions( getFeatureDescriptions() );

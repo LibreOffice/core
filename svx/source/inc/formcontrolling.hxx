@@ -55,12 +55,6 @@ namespace svx
         /// retrieves the feature id for a given feature URL
         static  sal_Int32       getControllerFeatureSlotIdForURL( const ::rtl::OUString& _rMainURL );
 
-        /// retrieves the feature URL for a given feature id
-        static ::rtl::OUString  getControllerFeatureURLForSlotId( sal_Int32 _nSlotId );
-
-        /// determines whether the given URL is a controller feature URL
-        static sal_Bool         isFeatureURL( const ::rtl::OUString& _rMainURL );
-
         /// retrieves the css.form.runtime.FormFeature ID for a given slot ID
         static  sal_Int16       getFormFeatureForSlotId( sal_Int32 _nSlotId );
 
