@@ -183,12 +183,10 @@ public:
     sal_uLong   GetAdviseFlags() const { return nAdvFlags; }
     void    SetAdviseFlags( sal_uLong nAdv ) { nAdvFlags = nAdv; }
     void    SetSize( const Size & rSize ) { aSize = rSize; }
-    Size GetSize() const { return aSize; } //Add by , 10/26/2005
+    Size GetSize() const { return aSize; }
     /// return FALSE => unknown format
     sal_Bool    Read( SvStream & rStm );
-    void    Write( SvStream & rStm );
 };
-//End by
 
 
 #endif
