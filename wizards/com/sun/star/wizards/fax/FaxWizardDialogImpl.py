@@ -84,11 +84,12 @@ class FaxWizardDialogImpl(FaxWizardDialog):
             #special Control fFrameor setting the save Path:
             self.insertPathSelectionControl()
 
+            self.initializeTemplates(xMSF)
+
             #load the last used settings
             #from the registry and apply listeners to the controls:
             self.initConfiguration()
 
-            self.initializeTemplates(xMSF)
 
             if self.myPathSelection.xSaveTextBox.Text.lower() == "":
                 self.myPathSelection.initializePath()

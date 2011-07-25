@@ -86,15 +86,18 @@ class LetterWizardDialogImpl(LetterWizardDialog):
             #special Control fFrameor setting the save Path:
             self.insertPathSelectionControl()
 
-            #load the last used settings
-            #from the registry and apply listeners to the controls:
-            self.initConfiguration()
+            self.myConfig = CGLetterWizard()
 
             oL = self.getOfficeLinguistic()
             self.myConfig.cp_BusinessLetter.cp_Norm = oL
             self.myConfig.cp_PrivateOfficialLetter.cp_Norm = oL
             self.myConfig.cp_PrivateLetter.cp_Norm = oL
             self.initializeTemplates(xMSF)
+
+            #load the last used settings
+            #from the registry and apply listeners to the controls:
+            self.initConfiguration()
+
             if self.myConfig.cp_BusinessLetter.cp_Greeting == "":
                 self.myConfig.cp_BusinessLetter.cp_Greeting = \
                     self.resources.GreetingLabels[0]
@@ -1094,7 +1097,6 @@ class LetterWizardDialogImpl(LetterWizardDialog):
 
     def initConfiguration(self):
         try:
-            self.myConfig = CGLetterWizard()
             root = Configuration.getConfigurationRoot(
                 self.xMSF, "/org.openoffice.Office.Writer/Wizards/Letter",
                 False)
