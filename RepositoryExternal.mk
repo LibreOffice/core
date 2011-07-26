@@ -452,4 +452,14 @@ $(call gb_LinkTarget_add_libs,$(1),$(GTHREAD_LIBS))
 
 endef
 
+define gb_LinkTarget__use_dbusmenugtk
+$(call gb_LinkTarget_set_include,$(1),\
+	$$(INCLUDE) \
+	$(DBUSMENUGTK_CFLAGS) \
+)
+
+$(call gb_LinkTarget_add_libs,$(1),$(DBUSMENUGTK_LIBS))
+
+endef
+
 # vim: set noet sw=4 ts=4:
