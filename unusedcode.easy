@@ -1,8 +1,6 @@
 (anonymous namespace)::getState(std::vector<cppcanvas::internal::OutDevState, std::allocator<cppcanvas::internal::OutDevState> > const&)
 (anonymous namespace)::writeInfo(com::sun::star::uno::Reference<com::sun::star::registry::XRegistryKey> const&, rtl::OUString const&, rtl::OUString const&)
 Application::PostUserEvent(unsigned long, void*)
-B3dTransformationSet::GetScale()
-B3dTransformationSet::GetTranslate()
 BasicError::BasicError()
 BasicIDEDLL::Exit()
 BasicIDEShell::LinkStubAccelSelectHdl(void*, void*)
@@ -101,9 +99,6 @@ CIccTagResponseCurveSet16::NewResponseCurves(icMeasurementUnitSig)
 CIccTagResponseCurveSet16::SetNumChannels(unsigned short)
 CIccXform::Create(CIccProfile&, bool, icRenderingIntent, icXformInterp, icXformLutType, bool)
 CIccXformMpe::Create(CIccProfile*, bool, icRenderingIntent, icXformInterp, icXformLutType)
-CLUT::Iterate(IIccCLUTExec*)
-CLUT::adaptedXYZToMeasuredXYZ(float*, float const*, float const*, float, CAT const*)
-CLUT::makeAToBxTag(unsigned int, float const*, float const*, float const*, CAT const*, float, std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, float const*, bool)
 CNames::Insert(CNames const*, unsigned short, unsigned short)
 CNames::Insert(ControlItem const*&, unsigned short&)
 CNames::Insert(ControlItem const**, unsigned short)
@@ -170,12 +165,6 @@ CommunicationLinkList::Insert(CommunicationLink const*&, unsigned short&)
 CommunicationLinkList::Insert(CommunicationLink const**, unsigned short)
 CommunicationLinkList::Insert(CommunicationLinkList const*, unsigned short, unsigned short)
 CommunicationLinkList::Remove(CommunicationLink const*&, unsigned short)
-Config::Config()
-Config::EnterLock()
-Config::GetLineEnd() const
-Config::LeaveLock()
-Config::SetLineEnd(LineEnd)
-Config::Update()
 Container::GetObjectPtr(unsigned long)
 Container::GetPos(void const*, unsigned long, unsigned char) const
 Container::Insert(void*, void*)
@@ -212,8 +201,6 @@ DffPropSet::SetPropertyValue(unsigned int, unsigned int) const
 Dialog::Dialog(Window*, ResId const&)
 Dialog::ImplCenterDialog()
 Dialog::IsStartedModal() const
-DicEntry::DicEntry()
-Dir::ImpSetSort(__va_list_tag*, int)
 DirEntry::GetDevice() const
 DirEntry::GetPathStyle()
 DlgEdObj::LinkStubOnCreate(void*, void*)
@@ -338,7 +325,6 @@ GalleryExplorer::InsertSdrObj(unsigned long, FmFormModel&)
 GalleryTheme::ImplRead()
 GlobalEventConfig::EstablishFrameCallback(com::sun::star::uno::Reference<com::sun::star::frame::XFrame> const&)
 GlobalEventConfig_Impl::getEvents()
-GlyphCache::AddFontPath(String const&)
 GradientLB::GradientLB(Window*, long, unsigned char)
 GraphCtrl::GetStringFromDouble(double const&)
 GraphCtrl::GraphCtrl(Window*, long)
@@ -385,7 +371,6 @@ HttpRequest::GetStatus()
 HttpRequest::~HttpRequest()
 IMapWindow::GetSdrObj(IMapObject const*) const
 INetURLObject::hasPassword() const
-IceSalSession::handleOldX11SaveYourself(SalFrame*)
 IconChoiceDialog::RemoveResetButton()
 IconChoiceDialog::RemoveTabPage(unsigned short)
 ImageAryData::ImageAryData()
@@ -401,8 +386,6 @@ ImpDefaultMapper::ImpDefaultMapper(com::sun::star::uno::Reference<com::sun::star
 ImpEditEngine::ImplFillTextMarkingVector(com::sun::star::lang::Locale const&, std::vector<EEngineData::TextMarkingClass, std::allocator<EEngineData::TextMarkingClass> >&, String const&, unsigned short, unsigned short) const
 ImpEditEngine::Repeat(EditView*)
 ImpEditView::CalcSelectedRegion()
-ImpFileDialog::RemoveAllFilter()
-ImpFileDialog::RemoveFilter(String const&)
 ImpLabelList::ImplFirst()
 ImpLabelList::ImplNext()
 ImpSdrHdcMerk::ImpSdrHdcMerk(OutputDevice const&, unsigned short, bool)
@@ -431,14 +414,6 @@ ImplDockingWindowWrapper::SetPin(unsigned char)
 ImplDockingWindowWrapper::SetRollUpOutputSizePixel(Size const&)
 ImplEntryList::IsEntrySelected(String const&) const
 ImplFontSelectData::ImplFontSelectData(ImplFontData const&, Size const&, float, int, bool)
-ImplImageBmp::Create(long, long, unsigned short)
-ImplImageBmp::Expand(unsigned short)
-ImplImageBmp::GetBitmapEx(unsigned short, unsigned short*) const
-ImplImageBmp::Invert()
-ImplImageBmp::Replace(unsigned short, BitmapEx const&)
-ImplImageBmp::Replace(unsigned short, ImplImageBmp const&, unsigned short)
-ImplImageBmp::Replace(unsigned short, unsigned short)
-ImplImageBmp::ReplaceColors(Color const*, Color const*, unsigned long)
 ImplImageList::GetImageCount() const
 ImplListBox::GetEntryFlags(unsigned short) const
 ImplRegionBand::IsInside(long, long)
@@ -457,9 +432,6 @@ InternalResMgr::GetBitmapStream(unsigned int)
 IntlWrapper::ImplNewCalendar() const
 IntlWrapper::ImplNewCharClass() const
 ItemList::FindAttrib(unsigned short)
-JavaChildWindow::JavaChildWindow(Window*, ResId const&)
-JavaChildWindow::JavaChildWindow(Window*, long)
-JavaChildWindow::getParentWindowHandleForJava()
 KeyCode::GetSymbolName(String const&, Window*) const
 KeyEvent::InitKeyEvent(com::sun::star::awt::KeyEvent&) const
 KeyEvent::KeyEvent(com::sun::star::awt::KeyEvent const&)
@@ -559,8 +531,6 @@ MSFilterTracer::StartElement(rtl::OUString const&, com::sun::star::uno::Referenc
 MachineSettings::CopyData()
 MailDispatcher::removeListener(rtl::Reference<IMailDispatcherListener>)
 MaskSet::MaskSet(SvxBmpMask*, long)
-Matrix3d::Inverse() const
-Matrix3d::Matrix3d()
 Menu::ConvertPoint(Point&, Window*) const
 Menu::GetAccessibleDescription(unsigned short) const
 Menu::GetDisplayItemId(long) const
@@ -858,14 +828,6 @@ ScAttrArray::HasLines(int, int, Rectangle&, unsigned char, unsigned char) const
 ScCellMergeOption::ScCellMergeOption()
 ScChangeActionContent::SetNewValue(String const&, ScDocument*)
 ScColumn::GetSimpleTextNeededSize(unsigned long, OutputDevice*, bool)
-ScCompressedArray<int, unsigned char>::GetEntryCount() const
-ScCompressedArray<int, unsigned short>::CopyFrom(ScCompressedArray<int, unsigned short> const&, int, int, long)
-ScCompressedArray<int, unsigned short>::GetValue(int) const
-ScCompressedArray<int, unsigned short>::Insert(int, unsigned long)
-ScCompressedArray<int, unsigned short>::Remove(int, unsigned long)
-ScCompressedArray<int, unsigned short>::ScCompressedArray(int, unsigned short const&, unsigned long)
-ScCompressedArray<int, unsigned short>::ScCompressedArray(int, unsigned short const*, unsigned long)
-ScCompressedArray<int, unsigned short>::SetValue(int, unsigned short const&)
 ScConditionalFormatList::MarkUsedExternalReferences() const
 ScConditionalFormats_Impl::Insert(ScConditionalFormat* const&, unsigned short&)
 ScConditionalFormats_Impl::Insert(ScConditionalFormat* const*, unsigned short)
@@ -1288,7 +1250,6 @@ SfxPopupWindow::LinkStubDelete(void*, void*)
 SfxPopupWindow::RemoveStatusListener(rtl::OUString const&)
 SfxPopupWindow::SfxPopupWindow(unsigned short, com::sun::star::uno::Reference<com::sun::star::frame::XFrame> const&, Window*, ResId const&)
 SfxPopupWindow::UpdateStatus(rtl::OUString const&)
-SfxPreviewBase_Impl::SfxPreviewBase_Impl(Window*)
 SfxPreviewWin::SfxPreviewWin(Window*, ResId const&, SfxObjectShellLock&)
 SfxProgress::GetWaitMode() const
 SfxProgress::Lock()
@@ -1400,25 +1361,7 @@ SotStorage::SotStorage(ucbhelper::Content const&, String const&, unsigned short,
 SourceTreeIterator::EndExecute()
 SpinButton::SpinButton(Window*, ResId const&)
 SplitWindow::CalcWindowSizePixel(Size const&, WindowAlign, long, unsigned char)
-SplitWindow::GetBaseSet() const
-SplitWindow::GetFadeInRect() const
-SplitWindow::GetFadeOutRect() const
-SplitWindow::GetItemBackground(unsigned short) const
-SplitWindow::GetItemBitmap(unsigned short) const
-SplitWindow::GetItemBits(unsigned short) const
-SplitWindow::GetItemSizeRange(unsigned short) const
 SplitWindow::GetItemWindow(unsigned short) const
-SplitWindow::GetSet(unsigned short, unsigned short&, unsigned short&) const
-SplitWindow::GetSplitSize(unsigned short) const
-SplitWindow::IsItemBackground(unsigned short) const
-SplitWindow::MoveItem(unsigned short, unsigned short, unsigned short)
-SplitWindow::SetBaseSet(unsigned short)
-SplitWindow::SetItemBackground(unsigned short)
-SplitWindow::SetItemBitmap(unsigned short, Bitmap const&)
-SplitWindow::SetItemBits(unsigned short, unsigned short)
-SplitWindow::SetNoAlign(unsigned char)
-SplitWindow::SetSplitSize(unsigned short, long, unsigned char)
-SplitWindow::SplitWindow(Window*, ResId const&)
 Splitter::GetKeyboardStepSize() const
 SrchAttrItemList::Replace(SearchAttrItem const&, unsigned short)
 SrchAttrItemList::Replace(SearchAttrItem const*, unsigned short, unsigned short)
@@ -1527,25 +1470,6 @@ SvStringsSortDtor::Insert(SvStringsSortDtor const*, unsigned short, unsigned sho
 SvStringsSortDtor::Remove(String* const&, unsigned short)
 SvStringsSortDtor::Remove(unsigned short, unsigned short)
 SvTabListBox::GetTabJustify(unsigned short) const
-SvTreeList::CheckIntegrity() const
-SvTreeList::Copy(SvListEntry*, SvListEntry*)
-SvTreeList::InsertTree(SvListEntry*, SvListEntry*)
-SvTreeList::SelectChilds(SvListView*, SvListEntry*, unsigned char)
-SvTreeListBox::CancelEditing()
-SvTreeListBox::CancelPendingEdit()
-SvTreeListBox::GetCollapsedNodeBmp() const
-SvTreeListBox::GetExtendedWinBits() const
-SvTreeListBox::GetFirstDynamicItem(SvLBoxEntry*)
-SvTreeListBox::GetTextOffset() const
-SvTreeListBox::IsAddMode() const
-SvTreeListBox::IsNodeButton(Point const&) const
-SvTreeListBox::IsSublistOpenWithLeftRight() const
-SvTreeListBox::IsSublistOpenWithReturn() const
-SvTreeListBox::RemoveHighlightRange()
-SvTreeListBox::SetAddMode(unsigned char)
-SvTreeListBox::SetTabBar(TabBar*)
-SvTreeListBox::SetUpdateModeFast(unsigned char)
-SvTreeListBox::ShowExpandBitmapOnCursor(unsigned char)
 SvULongs::Replace(unsigned long const&, unsigned short)
 SvULongs::Replace(unsigned long const*, unsigned short, unsigned short)
 SvULongs::_ForEach(unsigned short, unsigned short, unsigned char (*)(unsigned long const&, void*), void*)
@@ -1667,18 +1591,6 @@ SvtInternalOptions::IsRemoveMenuEntryBackToWebtop() const
 SvtInternalOptions::IsRemoveMenuEntryClose() const
 SvtInternalOptions::IsRemoveMenuEntryLogout() const
 SvtInternalOptions::IsRemoveMenuEntryNewWebtop() const
-SvtJavaOptions::GetNetAccess() const
-SvtJavaOptions::GetUserClassPath() const
-SvtJavaOptions::IsEnabled() const
-SvtJavaOptions::IsExecuteApplets() const
-SvtJavaOptions::IsReadOnly(SvtJavaOptions::EOption) const
-SvtJavaOptions::IsSecurity() const
-SvtJavaOptions::SetEnabled(unsigned char)
-SvtJavaOptions::SetExecuteApplets(unsigned char)
-SvtJavaOptions::SetNetAccess(int)
-SvtJavaOptions::SetSecurity(unsigned char)
-SvtJavaOptions::SetUserClassPath(rtl::OUString const&)
-SvtJavaOptions::SvtJavaOptions()
 SvtLanguageOptions::IsCTLSequenceChecking() const
 SvtLanguageOptions::IsCTLSequenceCheckingRestricted() const
 SvtLanguageOptions::IsCTLSequenceCheckingTypeAndReplace() const
@@ -1839,9 +1751,6 @@ SvxHyperlinkTabPageBase::FileExists(INetURLObject const&)
 SvxIMapDlg::GetTargetList() const
 SvxIconChoiceCtrlEntry::LockPos(unsigned char)
 SvxIconChoiceCtrlEntry::SetMoved(unsigned char)
-SvxIconChoiceCtrl_Impl::CalcScrollOffsets(Point const&, long&, long&, unsigned char, unsigned short)
-SvxIconChoiceCtrl_Impl::GetNextSelectedEntry(unsigned long&) const
-SvxIconChoiceCtrl_Impl::ShowDDIcon(SvxIconChoiceCtrlEntry*, Point const&)
 SvxIconSelectorDialog::AutoScaleBitmap(BitmapEx&, long)
 SvxImportMSVBasic::Import(String const&, String const&, unsigned char, unsigned char)
 SvxInsertStatusBarControl::GetDefItemWidth(StatusBar const&)
@@ -1896,12 +1805,6 @@ SvxReloadControllerItem::RegisterControl(unsigned short, SfxModule*)
 SvxRubyChildWindow::GetChildWindowId()
 SvxRuler::GetDefTabDist() const
 SvxScriptOrgDialog::LinkStubMacroDoubleClickHdl(void*, void*)
-SvxSearchConfig::Count()
-SvxSearchConfig::GetData(rtl::OUString const&)
-SvxSearchConfig::GetData(unsigned short)
-SvxSearchConfig::RemoveData(rtl::OUString const&)
-SvxSearchConfig::SetData(SvxSearchEngineData const&)
-SvxSearchConfig::SvxSearchConfig(unsigned char)
 SvxSearchDialog::GetReplaceItems(SfxItemSet&)
 SvxSearchDialog::GetSearchItems(SfxItemSet&)
 SvxSearchDialog::SvxSearchDialog(Window*, SfxBindings&)
@@ -2184,37 +2087,6 @@ WW8_WrSepInfoPtrs::_ForEach(unsigned short, unsigned short, unsigned char (*)(WW
 WinMtfOutput::DrawLine(Point const&, Point const&)
 WinMtfOutput::GetTextLayoutMode() const
 WinMtfOutput::SetFont(Font const&)
-Window::EnableChildNotify(unsigned char)
-Window::GetAccessibleRelationMemberOf() const
-Window::GetDragSourceDropTarget(com::sun::star::uno::Reference<com::sun::star::datatransfer::dnd::XDragSource>&, com::sun::star::uno::Reference<com::sun::star::datatransfer::dnd::XDropTarget>&)
-Window::GetPrevExtendedStyle() const
-Window::ImplCalcChildOverlapToTop(ImplCalcToTopData*)
-Window::ImplFrameToOutput(Rectangle&)
-Window::ImplGetCurrentBackgroundColor(Color&)
-Window::ImplGetSameParent(Window const*) const
-Window::ImplInit(Window*, long, com::sun::star::uno::Any const&)
-Window::ImplIsInTaskPaneList()
-Window::ImplIsMouseTransparent() const
-Window::ImplIsToolbox() const
-Window::ImplOutputToFrame(Rectangle&)
-Window::ImplSetActive(unsigned char)
-Window::InterceptChildWindowKeyDown(unsigned char)
-Window::IsAllResizeEnabled() const
-Window::IsAlwaysDisableInput() const
-Window::IsAutoScroll() const
-Window::IsChildNotify() const
-Window::IsChildPointerOverwrite() const
-Window::IsClipSiblingsEnabled() const
-Window::IsExtTextInput() const
-Window::IsParentPathVisible() const
-Window::IsParentUpdateMode() const
-Window::IsPointerVisible() const
-Window::PostUserEvent(unsigned long, void*)
-Window::SetAccessibleRelationLabelFor(Window*)
-Window::Validate(Rectangle const&, unsigned short)
-Window::Validate(Region const&, unsigned short)
-Window::removeWindow(Window*, Window*)
-Window::setIdentifier(rtl::OUString const&)
 WizardDialog::IsButtonFixedLineVisible()
 WordArr::Remove(short)
 Writer::OutHex(SvStream&, unsigned long, unsigned char)
@@ -2533,8 +2405,6 @@ avmedia::priv::MediaWindowImpl::update()
 basebmp::debugDump(boost::shared_ptr<basebmp::BitmapDevice> const&, std::basic_ostream<char, std::char_traits<char> >&)
 basegfx::B1DRange::B1DRange(basegfx::B1IRange const&)
 basegfx::B2DCubicBezier::B2DCubicBezier(basegfx::B2DPoint const&, basegfx::B2DPoint const&)
-basegfx::B2DCubicBezier::getMaxDistancePositions(double*) const
-basegfx::B2DCubicBezierHelper::relativeToDistance(double) const
 basegfx::B2DEllipse::B2DEllipse()
 basegfx::B2DEllipse::setB2DEllipseCenter(basegfx::B2DPoint const&)
 basegfx::B2DEllipse::setB2DEllipseRadius(basegfx::B2DTuple const&)
@@ -2584,25 +2454,11 @@ basegfx::B2IVector::angle(basegfx::B2IVector const&) const
 basegfx::B2IVector::cross(basegfx::B2IVector const&) const
 basegfx::B2IVector::getEmptyVector()
 basegfx::B2IVector::getLength() const
-basegfx::B3DHomMatrix::isInvertible() const
-basegfx::B3DHomMatrix::isNormalized() const
-basegfx::B3DHomMatrix::makeUnique()
-basegfx::B3DHomMatrix::normalize()
-basegfx::B3DHomMatrix::shearXZ(double, double)
-basegfx::B3DHomMatrix::shearYZ(double, double)
-basegfx::B3DHomMatrix::trace() const
-basegfx::B3DHomMatrix::transpose()
-basegfx::B3DHomPoint::implHomogenize()
-basegfx::B3DPolyPolygon::insert(unsigned int, basegfx::B3DPolyPolygon const&)
-basegfx::B3DPolyPolygon::insert(unsigned int, basegfx::B3DPolygon const&, unsigned int)
-basegfx::B3DPolyPolygon::makeUnique()
-basegfx::B3DPolyPolygon::setClosed(bool)
 basegfx::B3DPolygon::B3DPolygon(basegfx::B3DPolygon const&, unsigned int, unsigned int)
 basegfx::B3DPolygon::insert(unsigned int, basegfx::B3DPoint const&, unsigned int)
 basegfx::B3DPolygon::insert(unsigned int, basegfx::B3DPolygon const&, unsigned int, unsigned int)
 basegfx::B3DRange::B3DRange(basegfx::B3IRange const&)
 basegfx::B3DTuple::B3DTuple(basegfx::B3ITuple const&)
-basegfx::B3DVector::getProjectionOnPlane(basegfx::B3DVector const&) const
 basegfx::B3I64Tuple::getEmptyTuple()
 basegfx::B3ITuple::getEmptyTuple()
 basegfx::DebugPlotter::DebugPlotter(char const*)
@@ -3831,9 +3687,6 @@ linguistic::GetTextEncoding(short)
 linguistic::IsLower(String const&, unsigned short, unsigned short, short)
 linguistic::LangSeqToLocaleSeq(com::sun::star::uno::Sequence<short> const&)
 linguistic::MergeProposals(com::sun::star::uno::Reference<com::sun::star::linguistic2::XSpellAlternatives>&, com::sun::star::uno::Reference<com::sun::star::linguistic2::XSpellAlternatives>&)
-linguistic::PropertyHelper_Spelling::GetMaxNumberOfSuggestions() const
-linguistic::PropertyHelper_Spelling::RemoveAsPropListener()
-linguistic::PropertyHelper_Spelling::~PropertyHelper_Spelling()
 linguistic::SearchFileInPaths(String const&, com::sun::star::uno::Sequence<rtl::OUString> const&)
 linguistic::SpellAlternatives::SpellAlternatives(rtl::OUString const&, short, short, rtl::OUString const&)
 linguistic::StripTrailingChars(rtl::OUString&, unsigned short)
@@ -4316,8 +4169,6 @@ svx::DialControl::GetModifyHdl() const
 svx::DialControl::SetModifyHdl(Link const&)
 svx::DocRecovery::PluginProgress::getPlugWindow()
 svx::DocRecovery::RecoveryDialog::impl_refreshDocList()
-svx::FeatureSlotTranslation::getControllerFeatureURLForSlotId(int)
-svx::FeatureSlotTranslation::isFeatureURL(rtl::OUString const&)
 svx::FontWorkGalleryDialog::changeText(SdrTextObj*)
 svx::FormControllerHelper::moveLeft() const
 svx::FormControllerHelper::moveRight() const
@@ -4568,7 +4419,6 @@ writerfilter::dmapper::SectionPropertyMap::GetPageStyleName(bool)
 writerfilter::dmapper::SectionPropertyMap::SetPageStyleName(bool, rtl::OUString const&)
 writerfilter::dmapper::StyleSheetTable::resolveSprmProps(writerfilter::Sprm&)
 writerfilter::doctok::WW8DocumentImpl::fc2cp(writerfilter::doctok::Fc const&) const
-writerfilter::doctok::WW8Sttbf::getExtraOffset(unsigned int) const
 writerfilter::doctoktest::ScannerTestService_supportsService(rtl::OUString const&)
 writerfilter::ooxml::OOXMLFastContextHandler::getResourceString() const
 writerfilter::ooxmltest::ScannerTestService_supportsService(rtl::OUString const&)
