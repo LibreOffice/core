@@ -47,18 +47,6 @@ struct FWE_DLLPUBLIC EventsConfig
     ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >   aEventsProperties;
 };
 
-class FWE_DLLPUBLIC EventsConfiguration
-{
-    public:
-        static sal_Bool LoadEventsConfig(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
-            SvStream& rInStream, EventsConfig& aItems );
-
-        static sal_Bool StoreEventsConfig(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
-            SvStream& rOutStream, const EventsConfig& aItems );
-};
-
 } // namespace framework
 
 #endif // __FRAMEWORK_XML_EVENTSCONFIGURATION_HXX_

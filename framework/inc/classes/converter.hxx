@@ -67,24 +67,12 @@ namespace framework{
 class FWI_DLLPUBLIC Converter
 {
     public:
-        // Seq<Any> <=> Seq<beans.PropertyValue>
-        static css::uno::Sequence< css::uno::Any >             convert_seqProp2seqAny          ( const css::uno::Sequence< css::beans::PropertyValue >& lSource );
-        static css::uno::Sequence< css::beans::PropertyValue > convert_seqAny2seqProp          ( const css::uno::Sequence< css::uno::Any >&             lSource );
-
         // Seq<beans.NamedValue> <=> Seq<beans.PropertyValue>
-        static css::uno::Sequence< css::beans::PropertyValue > convert_seqNamedVal2seqPropVal  ( const css::uno::Sequence< css::beans::NamedValue >&    lSource );
         static css::uno::Sequence< css::beans::NamedValue >    convert_seqPropVal2seqNamedVal  ( const css::uno::Sequence< css::beans::PropertyValue >& lSource );
 
         // Seq<String> => Vector<String>
         static OUStringList                                    convert_seqOUString2OUStringList( const css::uno::Sequence< ::rtl::OUString >&           lSource );
-        static css::uno::Sequence< ::rtl::OUString >           convert_OUStringList2seqOUString( const OUStringList&                                    lSource );
 
-        static css::uno::Sequence< css::beans::PropertyValue > convert_OUStringHash2seqProp    ( const OUStringHash&                                    lSource );
-        static OUStringHash                                    convert_seqProp2OUStringHash    ( const css::uno::Sequence< css::beans::PropertyValue >& lSource );
-
-        // String <=> tools.DateTime
-        static DateTime                                        convert_String2DateTime         ( const ::rtl::OUString&                                 sSource );
-        static ::rtl::OUString                                 convert_DateTime2String         ( const DateTime&                                        aSource );
         static ::rtl::OUString                                 convert_DateTime2ISO8601        ( const DateTime&                                        aSource );
 };
 
