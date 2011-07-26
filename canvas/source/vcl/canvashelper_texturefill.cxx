@@ -454,7 +454,7 @@ namespace vclcanvas
                                (sal_uInt8)(basegfx::tools::lerp(rColors[nIndex].GetGreen(),rColors[nIndex+1].GetGreen(),fAlpha)),
                                (sal_uInt8)(basegfx::tools::lerp(rColors[nIndex].GetBlue(),rColors[nIndex+1].GetBlue(),fAlpha)) ));
 
-#if defined(VERBOSE) && OSL_DEBUG_LEVEL > 0
+#if OSL_DEBUG_LEVEL > 2
                     if( i && !(i % 10) )
                         rOutDev.SetFillColor( COL_RED );
 #endif
@@ -705,7 +705,8 @@ namespace vclcanvas
             }
 #endif // complex-clipping vs. XOR-trick
 
-#if 0 //defined(VERBOSE) && OSL_DEBUG_LEVEL > 0
+#if OSL_DEBUG_LEVEL > 3
+            // extra-verbosity
             {
                 ::basegfx::B2DRectangle aRect(0.0, 0.0, 1.0, 1.0);
                 ::basegfx::B2DRectangle aTextureDeviceRect;

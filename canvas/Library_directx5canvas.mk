@@ -44,12 +44,6 @@ $(eval $(call gb_Library_add_defs,directx5canvas,\
 	-DDIRECTX_VERSION=0x0500 \
 ))
 
-ifneq ($(strip $(VERBOSE)$(verbose)),)
-$(eval $(call gb_Library_add_defs,directx5canvas,\
-	-DVERBOSE \
-))
-endif
-
 $(eval $(call gb_Library_add_linked_libs,directx5canvas,\
 	cppu \
 	tk \

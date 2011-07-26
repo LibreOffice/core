@@ -40,12 +40,6 @@ $(eval $(call gb_Library_add_api,cairocanvas,\
     udkapi \
 ))
 
-ifneq ($(strip $(VERBOSE)$(verbose)),)
-$(eval $(call gb_Library_add_defs,cairocanvas,\
-	-DVERBOSE \
-))
-endif
-
 ifeq ($(OS),MACOSX)
 
 $(eval $(call gb_Library_add_cxxflags,cairocanvas,\

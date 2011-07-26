@@ -40,12 +40,6 @@ $(eval $(call gb_Library_add_api,simplecanvas,\
 	udkapi \
 ))
 
-ifneq ($(strip $(VERBOSE)$(verbose)),)
-$(eval $(call gb_Library_add_defs,simplecanvas,\
-	-DVERBOSE \
-))
-endif
-
 $(eval $(call gb_Library_add_linked_libs,simplecanvas,\
 	basegfx \
 	canvastools \

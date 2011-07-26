@@ -412,11 +412,8 @@ namespace vclcanvas
                                                                         2,'.',NULL,' ') );
 
                     rTargetSurface.DrawText( aOutPos+Point(2,2), text );
-
-#if defined(VERBOSE) && OSL_DEBUG_LEVEL > 0
-                    OSL_TRACE( "SpriteHelper::redraw(): sprite %X has prio %f\n",
-                               this, getPriority() );
-#endif
+                    VERBOSE_TRACE( "SpriteHelper::redraw(): sprite %X has prio %f\n",
+                                   this, getPriority() );
                 }
             }
         }

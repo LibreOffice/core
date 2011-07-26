@@ -483,7 +483,7 @@ namespace canvas
                 ( SourceLimits::is_signed && arg<TargetLimits::min()) ||    // underflow will happen
                 ( arg>TargetLimits::max() ) )                               // overflow will happen
             {
-#if defined(VERBOSE) && defined(DBG_UTIL)
+# if OSL_DEBUG_LEVEL > 2
                 OSL_TRACE("numeric_cast detected data loss");
 #endif
                 throw ::com::sun::star::uno::RuntimeException(

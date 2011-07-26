@@ -29,7 +29,7 @@
 #ifndef INCLUDED_CANVAS_VERBOSETRACE_HXX
 #define INCLUDED_CANVAS_VERBOSETRACE_HXX
 
-#if defined(VERBOSE) && defined(DBG_UTIL)
+#if OSL_DEBUG_LEVEL > 2
 /// Wrap OSL_TRACE with a verbosity switch
 #define VERBOSE_TRACE     OSL_TRACE
 #else

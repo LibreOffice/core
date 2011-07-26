@@ -113,7 +113,7 @@ namespace dxcanvas
         maScrapRect(),
         mbShowSpriteBounds( false )
     {
-#if defined(VERBOSE) && defined(DBG_UTIL)
+#if OSL_DEBUG_LEVEL > 2
         // inverse default for verbose debug mode
         mbShowSpriteBounds = true;
 #endif

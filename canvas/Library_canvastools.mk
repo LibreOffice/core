@@ -46,18 +46,6 @@ $(eval $(call gb_Library_add_defs,canvastools,\
 	-DCANVASTOOLS_DLLIMPLEMENTATION \
 ))
 
-ifneq ($(strip $(VERBOSE)$(verbose)),)
-$(eval $(call gb_Library_add_defs,canvastools,\
-	-DVERBOSE \
-))
-endif
-
-ifneq ($(strip $(PROFILER)$(profiler)),)
-$(eval $(call gb_Library_add_defs,canvastools,\
-	-DPROFILER \
-))
-endif
-
 $(eval $(call gb_Library_add_linked_libs,canvastools,\
 	basegfx \
 	comphelper \

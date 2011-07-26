@@ -1735,7 +1735,7 @@ namespace dxcanvas
                 // ignore area and offset for page flipping device
                 if( mbPageFlipping )
                 {
-#if defined(VERBOSE) && defined(DBG_UTIL)
+#if OSL_DEBUG_LEVEL > 2
                     renderFPSCounter();
                     renderMemAvailable();
 #endif
@@ -1816,7 +1816,7 @@ namespace dxcanvas
                                 *mpBackBufferSurface,
                                 pBltFX,false ) )
                     {
-#if defined(VERBOSE) && defined(DBG_UTIL)
+#if OSL_DEBUG_LEVEL > 2
                         renderFPSCounter();
                         renderMemAvailable();
 #endif

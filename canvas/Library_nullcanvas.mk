@@ -38,12 +38,6 @@ $(eval $(call gb_Library_add_api,nullcanvas,\
 	udkapi \
 ))
 
-ifneq ($(strip $(VERBOSE)$(verbose)),)
-$(eval $(call gb_Library_add_defs,nullcanvas,\
-	-DVERBOSE \
-))
-endif
-
 $(eval $(call gb_Library_add_linked_libs,nullcanvas,\
 	basegfx \
 	canvastools \

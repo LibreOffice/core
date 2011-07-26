@@ -40,12 +40,6 @@ $(eval $(call gb_Library_add_api,vclcanvas,\
     udkapi \
 ))
 
-ifneq ($(strip $(VERBOSE)$(verbose)),)
-$(eval $(call gb_Library_add_defs,vclcanvas,\
-	-DVERBOSE \
-))
-endif
-
 $(eval $(call gb_Library_add_linked_libs,vclcanvas,\
 	basegfx \
 	canvastools \

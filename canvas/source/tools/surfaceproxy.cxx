@@ -156,7 +156,7 @@ namespace canvas
         const ::basegfx::B2DPolygon& rTriangulatedPolygon(
             ::basegfx::triangulator::triangulate(rClipPoly));
 
-#if defined(VERBOSE) && OSL_DEBUG_LEVEL > 0
+#if OSL_DEBUG_LEVEL > 2
         // dump polygons
         OSL_TRACE( "Original clip polygon: %s\n"
                    "Triangulated polygon: %s\n",

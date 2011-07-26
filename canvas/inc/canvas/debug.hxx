@@ -39,7 +39,7 @@
 
 ::std::size_t find_unreachable_objects( bool );
 
-# ifdef VERBOSE
+# if OSL_DEBUG_LEVEL > 2
 #  include <osl/diagnose.h>
 #  define SHARED_PTR_LEFTOVERS(a) OSL_TRACE("%s\n%s: Unreachable objects still use %d bytes\n", \
                                             BOOST_CURRENT_FUNCTION, a, \

@@ -194,7 +194,7 @@ namespace vclcanvas
         mbShowSpriteBounds( false ),
         mbIsUnsafeScrolling( false )
     {
-#if defined(VERBOSE) && OSL_DEBUG_LEVEL > 0
+#if OSL_DEBUG_LEVEL > 2
         // inverse defaults for verbose debug mode
         mbShowSpriteBounds = mbShowFrameInfo = true;
 #endif
@@ -353,7 +353,7 @@ namespace vclcanvas
             renderMemUsage( rOutDev );
         }
 
-#if defined(VERBOSE) && OSL_DEBUG_LEVEL > 0
+#if OSL_DEBUG_LEVEL > 2
         static ::canvas::tools::ElapsedTime aElapsedTime;
 
         // log time immediately after surface flip
