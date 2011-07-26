@@ -60,7 +60,6 @@ $(eval $(call gb_Library_add_linked_libs,cui,\
     cppuhelper \
     editeng \
     i18nisolang1 \
-    icuuc \
     jvmfwk \
     lng \
     sal \
@@ -78,6 +77,10 @@ $(eval $(call gb_Library_add_linked_libs,cui,\
     utl \
     vcl \
     $(gb_STDLIBS) \
+))
+
+$(eval $(call gb_Library_use_externals,cui,\
+    icuuc \
 ))
 
 ifeq ($(GUI),WNT)
