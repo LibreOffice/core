@@ -99,7 +99,7 @@ sub sniff_target($)
 
     opendir ($dirhandle, $build_dir) || die "Can't open $build_dir";
     while ($fname = readdir ($dirhandle)) {
-	$fname =~ /Set.sh$/ || next;
+	$fname =~ /Host.sh$/ || next;
 
 	my $file;
 	open ($file, "$build_dir/$fname") || die "Can't open $build_dir/$fname";
