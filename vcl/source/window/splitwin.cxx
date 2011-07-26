@@ -3346,6 +3346,19 @@ void SplitWindow::SetItemSizeRange (sal_uInt16 nId, const Range aRange)
 
 // -----------------------------------------------------------------------
 
+Window* SplitWindow::GetItemWindow( sal_uInt16 nId ) const
+{
+    sal_uInt16          nPos;
+    ImplSplitSet*   pSet = ImplFindItem( mpBaseSet, nId, nPos );
+
+    if ( pSet )
+        return pSet->mpItems[nPos].mpWindow;
+    else
+        return NULL;
+}
+
+// -----------------------------------------------------------------------
+
 sal_uInt16 SplitWindow::GetSet( sal_uInt16 nId ) const
 {
     sal_uInt16          nPos;

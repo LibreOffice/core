@@ -201,6 +201,7 @@ public:
     /** Return the current size limits for the specified item.
     */
     long                GetItemSize( sal_uInt16 nId, SplitWindowItemBits nBits ) const;
+    Window*             GetItemWindow( sal_uInt16 nId ) const;
     sal_uInt16              GetSet( sal_uInt16 nId ) const;
     sal_uInt16              GetItemId( Window* pWindow ) const;
     sal_uInt16              GetItemId( const Point& rPos ) const;
