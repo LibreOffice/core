@@ -1,5 +1,9 @@
 from common.HelpIds import HelpIds
 
+TXTTITLE_TEXT_CHANGED = "txtTitleTextChanged"
+TXTDATE_TEXT_CHANGED = "txtDateTextChanged"
+TXTTIME_TEXT_CHANGED = "txtTimeTextChanged"
+TXTLOCATION_TEXT_CHANGED = "txtLocationTextChanged"
 CHKUSEMEETINGTYPE_ITEM_CHANGED = "chkUseMeetingTypeItemChanged"
 CHKUSEREAD_ITEM_CHANGED = "chkUseReadItemChanged"
 CHKUSEBRING_ITEM_CHANGED = "chkUseBringItemChanged"

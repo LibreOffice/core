@@ -130,11 +130,12 @@ class AgendaWizardDialog(WizardDialog):
                 self.resources.reslblTitle2_value, True,91, 8, 2, 200,212))
         self.insertLabel("lblDate", self.PROPS_TEXT,
             (8, self.resources.reslblDate_value, 97, 32, 2, 201,66))
-        self.txtDate = self.insertDateField("txtDate", None, self.PROPS_LIST,
+        self.txtDate = self.insertDateField(
+            "txtDate", TXTDATE_TEXT_CHANGED, self.PROPS_LIST,
             (True, 12, TXTDATE_HID,166,30, 2, 202,70), self)
         self.insertLabel("lblTime", self.PROPS_TEXT,
             (8, self.resources.reslblTime_value, 97, 50, 2, 203, 66))
-        self.txtTime = self.insertTimeField("txtTime", None,
+        self.txtTime = self.insertTimeField("txtTime", TXTTIME_TEXT_CHANGED,
             (PropertyNames.PROPERTY_HEIGHT,
                 PropertyNames.PROPERTY_HELPURL,
                 PropertyNames.PROPERTY_POSITION_X,
@@ -146,7 +147,8 @@ class AgendaWizardDialog(WizardDialog):
             (12, TXTTIME_HID, 166, 48, 2, True, 204,70), self)
         self.insertLabel("lblTitle", self.PROPS_TEXT,
             (8, self.resources.reslblTitle_value, 97, 68, 2, 205,66))
-        self.txtTitle = self.insertTextField("txtTitle", None,
+        self.txtTitle = self.insertTextField(
+            "txtTitle", TXTTITLE_TEXT_CHANGED,
             (PropertyNames.PROPERTY_HEIGHT,
                 PropertyNames.PROPERTY_HELPURL,
                 PropertyNames.PROPERTY_MULTILINE,
@@ -158,7 +160,8 @@ class AgendaWizardDialog(WizardDialog):
             (26, TXTTITLE_HID, True, 166, 66, 2, 206, 138), self)
         self.insertLabel("lblLocation", self.PROPS_TEXT,
             (8, self.resources.reslblLocation_value, 97, 100, 2, 207, 66))
-        self.cbLocation = self.insertTextField("cbLocation", None,
+        self.cbLocation = self.insertTextField(
+            "cbLocation", TXTLOCATION_TEXT_CHANGED,
             (PropertyNames.PROPERTY_HEIGHT,
                 PropertyNames.PROPERTY_HELPURL,
                 PropertyNames.PROPERTY_MULTILINE,

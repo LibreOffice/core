@@ -312,8 +312,7 @@ class FaxWizardDialog(WizardDialog):
                 PropertyNames.PROPERTY_STEP,
                 PropertyNames.PROPERTY_TABINDEX,
                 PropertyNames.PROPERTY_WIDTH),
-            (12, TXTSENDERNAME_HID, 182, 67, 3,
-                17, 119), self)
+            (12, TXTSENDERNAME_HID, 182, 67, 3, 17, 119), self)
         self.txtSenderStreet = self.insertTextField("txtSenderStreet",
             TXTSENDERSTREET_TEXT_CHANGED,
             (PropertyNames.PROPERTY_HEIGHT,
@@ -323,8 +322,7 @@ class FaxWizardDialog(WizardDialog):
                 PropertyNames.PROPERTY_STEP,
                 PropertyNames.PROPERTY_TABINDEX,
                 PropertyNames.PROPERTY_WIDTH),
-            (12, TXTSENDERSTREET_HID, 182, 81, 3,
-                18, 119), self)
+            (12, TXTSENDERSTREET_HID, 182, 81, 3, 18, 119), self)
         self.txtSenderPostCode = self.insertTextField("txtSenderPostCode",
             TXTSENDERPOSTCODE_TEXT_CHANGED,
             (PropertyNames.PROPERTY_HEIGHT,
@@ -334,8 +332,7 @@ class FaxWizardDialog(WizardDialog):
                 PropertyNames.PROPERTY_STEP,
                 PropertyNames.PROPERTY_TABINDEX,
                 PropertyNames.PROPERTY_WIDTH),
-            (12, TXTSENDERPOSTCODE_HID, 182, 95, 3,
-                19, 25), self)
+            (12, TXTSENDERPOSTCODE_HID, 182, 95, 3, 19, 25), self)
         self.txtSenderState = self.insertTextField("txtSenderState",
             TXTSENDERSTATE_TEXT_CHANGED,
             (PropertyNames.PROPERTY_HEIGHT,
@@ -345,8 +342,7 @@ class FaxWizardDialog(WizardDialog):
                 PropertyNames.PROPERTY_STEP,
                 PropertyNames.PROPERTY_TABINDEX,
                 PropertyNames.PROPERTY_WIDTH),
-            (12, TXTSENDERSTATE_HID, 211, 95, 3,
-                20, 21), self)
+            (12, TXTSENDERSTATE_HID, 211, 95, 3, 20, 21), self)
         self.txtSenderCity = self.insertTextField("txtSenderCity",
             TXTSENDERCITY_TEXT_CHANGED,
             (PropertyNames.PROPERTY_HEIGHT,
@@ -356,8 +352,7 @@ class FaxWizardDialog(WizardDialog):
                 PropertyNames.PROPERTY_STEP,
                 PropertyNames.PROPERTY_TABINDEX,
                 PropertyNames.PROPERTY_WIDTH),
-            (12, TXTSENDERCITY_HID, 236, 95, 3,
-                21, 65), self)
+            (12, TXTSENDERCITY_HID, 236, 95, 3, 21, 65), self)
         self.txtSenderFax = self.insertTextField("txtSenderFax",
             TXTSENDERFAX_TEXT_CHANGED,
             (PropertyNames.PROPERTY_HEIGHT,
@@ -367,8 +362,7 @@ class FaxWizardDialog(WizardDialog):
                 PropertyNames.PROPERTY_STEP,
                 PropertyNames.PROPERTY_TABINDEX,
                 PropertyNames.PROPERTY_WIDTH),
-            (12, TXTSENDERFAX_HID, 182, 109, 3,
-                22, 119), self)
+            (12, TXTSENDERFAX_HID, 182, 109, 3, 22, 119), self)
         self.optReceiverPlaceholder = self.insertRadioButton(
             "optReceiverPlaceholder",
             OPTRECEIVERPLACEHOLDER_ITEM_CHANGED,
@@ -421,8 +415,7 @@ class FaxWizardDialog(WizardDialog):
                 PropertyNames.PROPERTY_STEP,
                 PropertyNames.PROPERTY_TABINDEX,
                 PropertyNames.PROPERTY_WIDTH),
-            (8, self.resources.reslblSenderName_value, 113, 69, 3,
-                52, 68))
+            (8, self.resources.reslblSenderName_value, 113, 69, 3, 52, 68))
         self.insertLabel("lblSenderStreet",
             (PropertyNames.PROPERTY_HEIGHT,
                 PropertyNames.PROPERTY_LABEL,
@@ -431,8 +424,7 @@ class FaxWizardDialog(WizardDialog):
                 PropertyNames.PROPERTY_STEP,
                 PropertyNames.PROPERTY_TABINDEX,
                 PropertyNames.PROPERTY_WIDTH),
-            (8, self.resources.reslblSenderStreet_value, 113, 82, 3,
-                53, 68))
+            (8, self.resources.reslblSenderStreet_value, 113, 82, 3, 53, 68))
         self.insertLabel("lblPostCodeCity",
             (PropertyNames.PROPERTY_HEIGHT,
                 PropertyNames.PROPERTY_LABEL,
@@ -441,8 +433,7 @@ class FaxWizardDialog(WizardDialog):
                 PropertyNames.PROPERTY_STEP,
                 PropertyNames.PROPERTY_TABINDEX,
                 PropertyNames.PROPERTY_WIDTH),
-            (8, self.resources.reslblPostCodeCity_value,
-                113, 97, 3, 54, 68))
+            (8, self.resources.reslblPostCodeCity_value, 113, 97, 3, 54, 68))
         self.insertLabel("lblTitle4",
             ("FontDescriptor",
                 PropertyNames.PROPERTY_HEIGHT,

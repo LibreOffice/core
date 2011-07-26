@@ -23,16 +23,18 @@ def synchronized(lock):
 
 '''
 The classes here implement the whole document-functionality of the agenda wizard:
-the live-preview and the final "creation" of the document, when the user clicks "finish". <br/>
+the live-preview and the final "creation" of the document,
+when the user clicks "finish". <br/>
 <br/>
 <h2>Some terminology:<h2/>
 items are names or headings. we don't make any distinction.
 
 <br/>
-The Agenda Template is used as general "controller" of the whole document, whereas the
-two child-classes ItemsTable and TopicsTable control the item tables (note plural!) and the
-topics table (note singular).
-<br/>   <br/>
+The Agenda Template is used as general "controller"
+of the whole document, whereas the two child-classes ItemsTable
+and TopicsTable control the item tables (note plural!) and the
+topics table (note singular).<br/>
+<br/>
 Other small classes are used to abstract the handling of cells and text and we
 try to use them as components.
 <br/><br/>
@@ -42,7 +44,8 @@ To keep the template flexible the following decisions were made:<br/>
 1. Item tables.<br/>
 1.a. there might be arbitrary number of Item tables.<br/>
 1.b. Item tables design (bordewr, background) is arbitrary.<br/>
-1.c. Items text styles are individual, and use stylelist styles with predefined names.<br/>
+1.c. Items text styles are individual,
+and use stylelist styles with predefined names.<br/>
 As result the following limitations:<br/>
 Pairs of Name->value for each item.<br/>
 Tables contain *only* those pairs.<br/>
@@ -75,6 +78,7 @@ class AgendaTemplate(TextDocument):
     template = None
     agenda = None
     lock = RLock()
+    initDictionary = False
 
     '''constructor. The document is *not* loaded here.
     only some formal members are set.
@@ -88,6 +92,10 @@ class AgendaTemplate(TextDocument):
             "WIZARD_LIVE_PREVIEW")
         AgendaTemplate.agenda = agenda_
         self.resources = resources_
+
+        if not AgendaTemplate.initDictionary:
+            self.initializeDictionary()
+
         if AgendaTemplate.itemsCache is None:
             self.initItemsCache()
 
@@ -166,6 +174,20 @@ class AgendaTemplate(TextDocument):
     def setTemplateTitle(self, newTitle):
         self.m_xDocProps.Title = newTitle
 
+    def initializeDictionary(self):
+        AgendaTemplate.isShowItemDict = \
+            {FILLIN_MEETING_TYPE:AgendaTemplate.agenda.cp_ShowMeetingType,
+            FILLIN_READ:AgendaTemplate.agenda.cp_ShowRead,
+            FILLIN_BRING:AgendaTemplate.agenda.cp_ShowBring,
+            FILLIN_NOTES:AgendaTemplate.agenda.cp_ShowNotes,
+            FILLIN_FACILITATOR:AgendaTemplate.agenda.cp_ShowFacilitator,
+            FILLIN_TIMEKEEPER:AgendaTemplate.agenda.cp_ShowTimekeeper,
+            FILLIN_NOTETAKER:AgendaTemplate.agenda.cp_ShowNotetaker,
+            FILLIN_PARTICIPANTS:AgendaTemplate.agenda.cp_ShowAttendees,
+            FILLIN_CALLED_BY:AgendaTemplate.agenda.cp_ShowCalledBy,
+            FILLIN_OBSERVERS:AgendaTemplate.agenda.cp_ShowObservers,
+            FILLIN_RESOURCE_PERSONS:AgendaTemplate.agenda.cp_ShowResourcePersons}
+
     '''checks the data model if the
     item corresponding to the given string should be shown
     @param itemName a string representing an Item (name or heading).
@@ -174,29 +196,9 @@ class AgendaTemplate(TextDocument):
 
     @classmethod
     def isShowItem(self, itemName):
-        if itemName == FILLIN_MEETING_TYPE:
-            return AgendaTemplate.agenda.cp_ShowMeetingType
-        elif itemName == FILLIN_READ:
-            return AgendaTemplate.agenda.cp_ShowRead
-        elif itemName == FILLIN_BRING:
-            return AgendaTemplate.agenda.cp_ShowBring
-        elif itemName == FILLIN_NOTES:
-            return AgendaTemplate.agenda.cp_ShowNotes
-        elif itemName == FILLIN_FACILITATOR:
-            return AgendaTemplate.agenda.cp_ShowFacilitator
-        elif itemName == FILLIN_TIMEKEEPER:
-            return AgendaTemplate.agenda.cp_ShowTimekeeper
-        elif itemName == FILLIN_NOTETAKER:
-            return AgendaTemplate.agenda.cp_ShowNotetaker
-        elif itemName == FILLIN_PARTICIPANTS:
-            return AgendaTemplate.agenda.cp_ShowAttendees
-        elif itemName == FILLIN_CALLED_BY:
-            return AgendaTemplate.agenda.cp_ShowCalledBy
-        elif itemName == FILLIN_OBSERVERS:
-            return AgendaTemplate.agenda.cp_ShowObservers
-        elif itemName == FILLIN_RESOURCE_PERSONS:
-            return AgendaTemplate.agenda.cp_ShowResourcePersons
-        else:
+        try:
+            return AgendaTemplate.isShowItemDict[itemName]
+        except KeyError:
             raise ValueError("No such item")
 
     '''itemsCache is a Map containing all agenda item. These are object which
@@ -292,9 +294,9 @@ class AgendaTemplate(TextDocument):
         and create the date and time formatters.
         '''
         dateUtils = Helper.DateUtils(self.xMSF, AgendaTemplate.document)
-        self.formatter = dateUtils.formatter
-        self.dateFormat = dateUtils.getFormat(DATE_SYSTEM_LONG)
-        self.timeFormat = dateUtils.getFormat(TIME_HHMM)
+        AgendaTemplate.formatter = dateUtils.formatter
+        AgendaTemplate.dateFormat = dateUtils.getFormat(DATE_SYSTEM_LONG)
+        AgendaTemplate.timeFormat = dateUtils.getFormat(TIME_HHMM)
 
         '''
         get the document properties object.
@@ -322,35 +324,35 @@ class AgendaTemplate(TextDocument):
             workwith = AgendaTemplate._allItems[i]
             text = workwith.String.lstrip().lower()
             if text == FILLIN_TITLE:
-                self.teTitle = PlaceholderTextElement(
+                AgendaTemplate.teTitle = PlaceholderTextElement(
                     workwith, self.resources.resPlaceHolderTitle,
                     self.resources.resPlaceHolderHint,
                     AgendaTemplate.document)
-                self.trTitle = workwith
+                AgendaTemplate.trTitle = workwith
                 del AgendaTemplate._allItems[i]
                 i -= 1
             elif text == FILLIN_DATE:
-                self.teDate = PlaceholderTextElement(
+                AgendaTemplate.teDate = PlaceholderTextElement(
                     workwith, self.resources.resPlaceHolderDate,
                     self.resources.resPlaceHolderHint,
                     AgendaTemplate.document)
-                self.trDate = workwith
+                AgendaTemplate.trDate = workwith
                 del AgendaTemplate._allItems[i]
                 i -= 1
             elif text == FILLIN_TIME:
-                self.teTime = PlaceholderTextElement(
+                AgendaTemplate.teTime = PlaceholderTextElement(
                     workwith, self.resources.resPlaceHolderTime,
                     self.resources.resPlaceHolderHint,
                     AgendaTemplate.document)
-                self.trTime = workwith
+                AgendaTemplate.trTime = workwith
                 del AgendaTemplate._allItems[i]
                 i -= 1
             elif text == FILLIN_LOCATION:
-                self.teLocation = PlaceholderTextElement(
+                AgendaTemplate.teLocation = PlaceholderTextElement(
                     workwith, self.resources.resPlaceHolderLocation,
                     self.resources.resPlaceHolderHint,
                     AgendaTemplate.document)
-                self.trLocation = workwith
+                AgendaTemplate.trLocation = workwith
                 del AgendaTemplate._allItems[i]
                 i -= 1
             i += 1
@@ -409,38 +411,32 @@ class AgendaTemplate(TextDocument):
     def getTable(self, name):
         return getattr(AgendaTemplate.document.TextTables, name)
 
-    '''
-    implementation of DataAware.Listener, is
-    called when title/date/time or location are
-    changed.
-    '''
-
-    @synchronized(lock)
-    def eventPerformed(self, param):
-        controlName = Helper.getUnoPropertyValue(
-            UnoDialog2.getModel(param.Source), PropertyNames.PROPERTY_NAME)
-        self.redrawTitle(controlName)
-
+    @classmethod
     @synchronized(lock)
     def redrawTitle(self, controlName):
-        if controlName == "txtTitle":
-            self.writeTitle(
-                self.teTitle, self.trTitle, AgendaTemplate.agenda.cp_Title)
-        elif controlName == "txtDate":
-            self.writeTitle(
-                self.teDate, self.trDate,
-                self.getDateString(AgendaTemplate.agenda.cp_Date))
-        elif controlName == "txtTime":
-            self.writeTitle(
-                self.teTime, self.trTime,
-                self.getTimeString(AgendaTemplate.agenda.cp_Time))
-        elif controlName == "cbLocation":
-            self.writeTitle(
-                self.teLocation, self.trLocation,
-                AgendaTemplate.agenda.cp_Location)
-        else:
-            raise IllegalArgumentException ("No such title control...")
+        try:
+            if controlName == "txtTitle":
+                self.writeTitle(
+                    AgendaTemplate.teTitle, AgendaTemplate.trTitle,
+                    AgendaTemplate.agenda.cp_Title)
+            elif controlName == "txtDate":
+                self.writeTitle(
+                    AgendaTemplate.teDate, AgendaTemplate.trDate,
+                    self.getDateString(AgendaTemplate.agenda.cp_Date))
+            elif controlName == "txtTime":
+                self.writeTitle(
+                    AgendaTemplate.teTime, AgendaTemplate.trTime,
+                    self.getTimeString(AgendaTemplate.agenda.cp_Time))
+            elif controlName == "cbLocation":
+                self.writeTitle(
+                    AgendaTemplate.teLocation, AgendaTemplate.trLocation,
+                    AgendaTemplate.agenda.cp_Location)
+            else:
+                raise IllegalArgumentException ("No such title control...")
+        except Exception:
+            traceback.print_exc()
 
+    @classmethod
     def writeTitle(self, te, tr, text):
         if text is None:
             te.text = ""
@@ -448,6 +444,7 @@ class AgendaTemplate(TextDocument):
             te.text = text
         te.write(tr)
 
+    @classmethod
     def getDateString(self, d):
         if d is None or d == "":
             return ""
@@ -461,15 +458,17 @@ class AgendaTemplate(TextDocument):
         I need a day...
         '''
         daysDiff = (date1 - self.docNullTime) / self.__class__.DAY_IN_MILLIS + 1
-        return self.formatter.convertNumberToString(self.dateFormat, daysDiff)
+        return AgendaTemplate.formatter.convertNumberToString(
+            self.dateFormat, daysDiff)
 
+    @classmethod
     def getTimeString(self, s):
         if s is None or s == "":
             return ""
-
         time = int(s)
-        #t = (int(s) / 1000000) / 24) + (time % 1000000) / 1000) / (24 * 60)
-        return self.formatter.convertNumberToString(self.timeFormat, t)
+        t = ((time / float(1000000)) / float(24)) \
+            + ((time % 1000000) / float(1000000)) / float(35)
+        return self.formatter.convertNumberToString(AgendaTemplate.timeFormat, t)
 
     @synchronized(lock)
     def finish(self, topics):
@@ -1191,6 +1190,7 @@ class ParaStyled(object):
     def format(self, textRange):
         if textRange is None:
             textRange = textRange.Text
+
         cursor = textRange.createTextCursorByRange(textRange)
         Helper.setUnoPropertyValue(
             cursor, "ParaStyleName", ParaStyled.paraStyle)
@@ -1218,8 +1218,9 @@ class TextElement(ParaStyled):
 
     def write(self, textRange):
         textRange.String = self.text
-        if not self.text == "":
-           super(TextElement,self).write(textRange)
+        #COMMENTED
+        #if not self.text == "":
+        #   super(TextElement,self).write(textRange)
 
 '''
 A Text element which, if the text to write is empty (null or "")

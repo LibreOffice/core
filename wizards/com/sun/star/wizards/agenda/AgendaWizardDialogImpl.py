@@ -267,6 +267,19 @@ class AgendaWizardDialogImpl(AgendaWizardDialog):
         title = Helper.getUnoPropertyValue(getModel(txtTemplateName), "Text")
         self.agendaTemplate.setTemplateTitle(title)
 
+    #textFields listeners
+    def txtTitleTextChanged(self):
+        AgendaTemplate.redrawTitle("txtTitle")
+
+    def txtDateTextChanged(self):
+        AgendaTemplate.redrawTitle("txtDate")
+
+    def txtTimeTextChanged(self):
+        AgendaTemplate.redrawTitle("txtTime")
+
+    def txtLocationTextChanged(self):
+        AgendaTemplate.redrawTitle("cbLocation")
+
     #checkbox listeners
     def chkUseMeetingTypeItemChanged(self):
         AgendaTemplate.redraw(FILLIN_MEETING_TYPE)
