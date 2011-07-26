@@ -552,16 +552,6 @@ void ImpEditEngine::SetAttribs( EditSelection aSel, const SfxItemSet& rSet, sal_
             nEndPos = aSel.Max().GetIndex();
 
         // Iterate over the Items...
-#ifdef EDITDEBUG
-//      FILE* fp = fopen( "d:\\debug.log", "a" );
-//      if ( fp )
-//      {
-//          fprintf( fp, "\n\n=> Character-Attribute: Paragraph %i, %i-%i\n", nNode, nStartPos, nEndPos );
-//          DbgOutItemSet( fp, rSet, sal_True, sal_False );
-//          fclose( fp );
-//      }
-#endif
-
         for ( sal_uInt16 nWhich = EE_ITEMS_START; nWhich <= EE_CHAR_END; nWhich++)
         {
             if ( rSet.GetItemState( nWhich ) == SFX_ITEM_ON )
@@ -717,16 +707,6 @@ void ImpEditEngine::SetParaAttribs( sal_uInt16 nPara, const SfxItemSet& rSet )
 
     if ( !pNode )
         return;
-
-#ifdef EDITDEBUG
-//      FILE* fp = fopen( "d:\\debug.log", "a" );
-//      if ( fp )
-//      {
-//          fprintf( fp, "\n\n=> Paragraph-Attribute: Paragraph %i\n", nPara );
-//          DbgOutItemSet( fp, rSet, sal_True, sal_False );
-//          fclose( fp );
-//      }
-#endif
 
     if ( !( pNode->GetContentAttribs().GetItems() == rSet ) )
     {
