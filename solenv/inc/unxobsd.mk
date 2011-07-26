@@ -27,44 +27,6 @@
 
 # Makefile for OpenBSD
 
-<<<<<<< HEAD
-$(eval $(call gb_Module_add_moduledirs,ooo,\
-	basebmp \
-	basegfx \
-    dbaccess \
-	canvas \
-    comphelper \
-	cppcanvas \
-        editeng \
-    framework \
-    idl \
-	linguistic \
-    oox \
-    padmin \
-	regexp \
-	reportdesign \
-	sax \
-    sfx2 \
-    sot \
-    starmath \
-    svl \
-    svtools \
-    svx \
-    sw \
-    toolkit \
-    tools \
-	ucbhelper \
-    unotools \
-    unoxml \
-    vbahelper \
-    wizards \
-    writerfilter \
-    vcl \
-    xmloff \
-	xmlreader \
-	xmlscript \
-))
-=======
 # arch specific defines
 .IF "$(CPUNAME)" == "INTEL"
 CDEFS+=-DX86
@@ -74,7 +36,6 @@ CDEFS+=-DX86_64
 ARCH_FLAGS*=
 BUILD64=1
 .ENDIF
->>>>>>> master
 
 .INCLUDE : unxgcc.mk
 
