@@ -1,13 +1,13 @@
-from text.TextDocument import *
 import uno
 from TemplateConsts import *
-from common.FileAccess import FileAccess
-from common.Helper import Helper
-from com.sun.star.i18n.NumberFormatIndex import TIME_HHMM, DATE_SYSTEM_LONG
-from text.TextSectionHandler import TextSectionHandler
-from com.sun.star.text.PlaceholderType import TEXT
-from TopicsControl import TopicsControl
 from threading import RLock
+from text.TextDocument import *
+from common.FileAccess import FileAccess
+from text.TextSectionHandler import TextSectionHandler
+from TopicsControl import TopicsControl
+
+from com.sun.star.text.PlaceholderType import TEXT
+from com.sun.star.i18n.NumberFormatIndex import TIME_HHMM, DATE_SYSTEM_LONG
 
 def synchronized(lock):
     ''' Synchronization decorator. '''
@@ -145,15 +145,18 @@ class AgendaTemplate(TextDocument):
     @param itemName
     '''
 
+    @classmethod
     @synchronized(lock)
     def redraw(self, itemName):
+        AgendaTemplate.xTextDocument.lockControllers()
         try:
             # get the table in which the item is...
-            itemsTable = AgendaTemplate.itemsMap.get(itemName)
+            itemsTable = AgendaTemplate.itemsMap[itemName]
             # rewrite the table.
             itemsTable.write(None)
         except Exception, e:
             traceback.print_exc()
+        AgendaTemplate.xTextDocument.unlockControllers()
 
     '''update the documents title property to the given title
     @param newTitle title.

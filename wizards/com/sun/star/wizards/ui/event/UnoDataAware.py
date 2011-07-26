@@ -58,10 +58,11 @@ class UnoDataAware(DataAware):
             data, prop, unoControl, "Value", field, float(0))
 
     @classmethod
-    def attachCheckBox(self, data, prop, checkBox, field, listener=None):
+    def attachCheckBox(
+            self, data, prop, checkBox, field):
         uda = UnoDataAware(data, prop, checkBox, PropertyNames.PROPERTY_STATE)
         method = getattr(uda,"updateData")
-        checkBox.addItemListener(ItemListenerProcAdapter(method, listener))
+        checkBox.addItemListener(ItemListenerProcAdapter(method))
         return uda
 
     def attachLabel(self, data, prop, label, field):

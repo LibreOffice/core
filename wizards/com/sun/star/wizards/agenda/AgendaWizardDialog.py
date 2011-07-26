@@ -1,7 +1,8 @@
 from ui.WizardDialog import *
-from com.sun.star.awt.FontUnderline import SINGLE
 from AgendaWizardDialogConst import *
-from AgendaWizardDialogResources import *
+from AgendaWizardDialogResources import AgendaWizardDialogResources
+
+from com.sun.star.awt.FontUnderline import SINGLE
 
 class AgendaWizardDialog(WizardDialog):
 
@@ -179,19 +180,19 @@ class AgendaWizardDialog(WizardDialog):
             (self.fontDescriptor4, 16, self.resources.reslblTitle3_value,
                 True, 91, 8, 3, 300,212))
         self.chkMeetingTitle = self.insertCheckBox("chkMeetingTitle",
-            None, self.PROPS_CHECK,
+            CHKUSEMEETINGTYPE_ITEM_CHANGED, self.PROPS_CHECK,
             (8, CHKMEETINGTITLE_HID, self.resources.reschkMeetingTitle_value,
                 97, 32, 1, 3, 301, 69), self)
         self.chkRead = self.insertCheckBox("chkRead",
-            None, self.PROPS_CHECK,
+            CHKUSEREAD_ITEM_CHANGED, self.PROPS_CHECK,
             (8, CHKREAD_HID, self.resources.reschkRead_value,
                 97, 46, 0, 3, 302, 162), self)
         self.chkBring = self.insertCheckBox("chkBring",
-            None, self.PROPS_CHECK,
+            CHKUSEBRING_ITEM_CHANGED, self.PROPS_CHECK,
             (8, CHKBRING_HID, self.resources.reschkBring_value,
                 97, 60, 0, 3, 303, 162), self)
         self.chkNotes = self.insertCheckBox("chkNotes",
-            None, self.PROPS_CHECK,
+            CHKUSENOTES_ITEM_CHANGED, self.PROPS_CHECK,
             (8, CHKNOTES_HID, self.resources.reschkNotes_value,
                 97, 74, 1, 3, 304, 160), self)
         self.insertImage("imgHelp3", self.PROPS_IMAGE, (0, 10,
@@ -204,33 +205,39 @@ class AgendaWizardDialog(WizardDialog):
         self.insertLabel("lblTitle5", self.PROPS_LABEL_B,
             (self.fontDescriptor4, 16, self.resources.reslblTitle5_value,
                 True, 91, 8, 4, 400, 212))
-        self.chkConvenedBy = self.insertCheckBox("chkConvenedBy", None,
-            self.PROPS_CHECK, (8, CHKCONVENEDBY_HID,
-                self.resources.reschkConvenedBy_value, 97, 32, 1, 4, 401, 150), self)
-        self.chkPresiding = self.insertCheckBox("chkPresiding", None,
-            self.PROPS_CHECK, (8, CHKPRESIDING_HID,
-                self.resources.reschkPresiding_value, 97, 46, 0, 4, 402, 150), self)
-        self.chkNoteTaker = self.insertCheckBox("chkNoteTaker", None,
-            self.PROPS_CHECK, (8, CHKNOTETAKER_HID,
-                self.resources.reschkNoteTaker_value, 97, 60, 0, 4, 403, 150), self)
-        self.chkTimekeeper = self.insertCheckBox("chkTimekeeper", None,
-            self.PROPS_CHECK, (8, CHKTIMEKEEPER_HID,
-                self.resources.reschkTimekeeper_value, 97, 74, 0, 4, 404, 150), self)
-        self.chkAttendees = self.insertCheckBox("chkAttendees", None,
-            self.PROPS_CHECK, (8, CHKATTENDEES_HID,
-                self.resources.reschkAttendees_value, 97, 88, 1, 4, 405, 150), self)
-        self.chkObservers = self.insertCheckBox("chkObservers", None,
-            self.PROPS_CHECK, (8, CHKOBSERVERS_HID,
-                self.resources.reschkObservers_value, 97, 102, 0, 4, 406, 150), self)
-        self.chkResourcePersons = self.insertCheckBox("chkResourcePersons", None,
-            self.PROPS_CHECK, (8, CHKRESOURCEPERSONS_HID,
-                self.resources.reschkResourcePersons_value, 97, 116, 0,
-                4, 407, 150), self)
+        self.chkConvenedBy = self.insertCheckBox("chkConvenedBy",
+            CHKUSECALLEDBYNAME_ITEM_CHANGED, self.PROPS_CHECK,
+            (8, CHKCONVENEDBY_HID, self.resources.reschkConvenedBy_value,
+                97, 32, 1, 4, 401, 150), self)
+        self.chkPresiding = self.insertCheckBox("chkPresiding",
+            CHKUSEFACILITATOR_ITEM_CHANGED, self.PROPS_CHECK,
+            (8, CHKPRESIDING_HID, self.resources.reschkPresiding_value,
+                97, 46, 0, 4, 402, 150), self)
+        self.chkNoteTaker = self.insertCheckBox("chkNoteTaker",
+            CHKUSENOTETAKER_ITEM_CHANGED, self.PROPS_CHECK,
+            (8, CHKNOTETAKER_HID, self.resources.reschkNoteTaker_value,
+                97, 60, 0, 4, 403, 150), self)
+        self.chkTimekeeper = self.insertCheckBox("chkTimekeeper",
+            CHKUSETIMEKEEPER_ITEM_CHANGED, self.PROPS_CHECK,
+            (8, CHKTIMEKEEPER_HID, self.resources.reschkTimekeeper_value,
+                97, 74, 0, 4, 404, 150), self)
+        self.chkAttendees = self.insertCheckBox("chkAttendees",
+            CHKUSEATTENDEES_ITEM_CHANGED, self.PROPS_CHECK,
+            (8, CHKATTENDEES_HID, self.resources.reschkAttendees_value,
+                97, 88, 1, 4, 405, 150), self)
+        self.chkObservers = self.insertCheckBox("chkObservers",
+            CHKUSEOBSERVERS_ITEM_CHANGED, self.PROPS_CHECK,
+            (8, CHKOBSERVERS_HID, self.resources.reschkObservers_value,
+                97, 102, 0, 4, 406, 150), self)
+        self.chkResourcePersons = self.insertCheckBox("chkResourcePersons",
+            CHKUSERESOURCEPERSONS_ITEM_CHANGED, self.PROPS_CHECK,
+            (8, CHKRESOURCEPERSONS_HID, self.resources.reschkResourcePersons_value,
+                97, 116, 0, 4, 407, 150), self)
         self.insertImage("imgHelp4", self.PROPS_IMAGE,
             (0, 10, self.IMGHELP1_HID, INFO_IMAGE_URL,
                 92, 145, False, 4, 408, 10))
         self.insertLabel("lblHelp4", self.PROPS_TEXTAREA,
-            (39, self.resources.reslblHelp4_value, True,104, 145, 4, 409, 199))
+            (39, self.resources.reslblHelp4_value, True, 104, 145, 4, 409, 199))
 
     def buildStep5(self):
         self.insertLabel("lblTitle4", self.PROPS_LABEL_B,

@@ -1,18 +1,15 @@
 from AgendaWizardDialog import *
-from common.Configuration import *
-from CGAgenda import CGAgenda
 from AgendaTemplate import *
-from common.NoValidPathException import *
-from common.FileAccess import *
-from ui.PathSelection import *
-from ui.event.UnoDataAware import *
-from ui.event.RadioDataAware import *
-from TemplateConsts import *
+from CGAgenda import CGAgenda
+from ui.PathSelection import PathSelection
+from ui.event.UnoDataAware import UnoDataAware
+from ui.event.RadioDataAware import RadioDataAware
+from common.NoValidPathException import NoValidPathException
+from common.SystemDialog import SystemDialog
 
 from com.sun.star.view.DocumentZoomType import OPTIMAL
 from com.sun.star.awt.VclWindowPeerAttribute import YES_NO, DEF_NO
 from com.sun.star.awt.VclWindowPeerAttribute import OK
-from common.NoValidPathException import *
 
 class AgendaWizardDialogImpl(AgendaWizardDialog):
 
@@ -160,57 +157,54 @@ class AgendaWizardDialogImpl(AgendaWizardDialog):
         self.setControlProperty(
             "listPageDesign", "StringItemList", tuple(self.agendaTemplates[0]))
         self.checkSavePath()
-
         UnoDataAware.attachListBox(
             self.agenda, "cp_AgendaType", self.listPageDesign, True).updateUI()
         UnoDataAware.attachCheckBox(
-            self.agenda, "cp_IncludeMinutes", self.chkMinutes, True)
+            self.agenda, "cp_IncludeMinutes", self.chkMinutes, True).updateUI()
         UnoDataAware.attachEditControl(
-            self.agenda, "cp_Title", self.txtTitle, True)
+            self.agenda, "cp_Title", self.txtTitle, True).updateUI()
         UnoDataAware.attachDateControl(
-            self.agenda, "cp_Date", self.txtDate, True)
+            self.agenda, "cp_Date", self.txtDate, True).updateUI()
         UnoDataAware.attachTimeControl(
-            self.agenda, "cp_Time", self.txtTime, True)
+            self.agenda, "cp_Time", self.txtTime, True).updateUI()
         UnoDataAware.attachEditControl(
-            self.agenda, "cp_Location", self.cbLocation, True)
+            self.agenda, "cp_Location", self.cbLocation, True).updateUI()
         UnoDataAware.attachCheckBox(
-            self.agenda, "cp_ShowMeetingType", self.chkMeetingTitle, True,
-            FILLIN_MEETING_TYPE)
+            self.agenda, "cp_ShowMeetingType", self.chkMeetingTitle,
+            True).updateUI()
         UnoDataAware.attachCheckBox(
-            self.agenda, "cp_ShowRead", self.chkRead, True,
-            FILLIN_READ)
+            self.agenda, "cp_ShowRead", self.chkRead, True).updateUI()
         UnoDataAware.attachCheckBox(
-            self.agenda, "cp_ShowBring", self.chkBring, True,
-            FILLIN_BRING)
+            self.agenda, "cp_ShowBring", self.chkBring, True).updateUI()
         UnoDataAware.attachCheckBox(
-            self.agenda, "cp_ShowNotes", self.chkNotes, True,
-            FILLIN_NOTES)
+            self.agenda, "cp_ShowNotes", self.chkNotes, True).updateUI()
         UnoDataAware.attachCheckBox(
-            self.agenda, "cp_ShowCalledBy", self.chkConvenedBy, True,
-            FILLIN_CALLED_BY)
+            self.agenda, "cp_ShowCalledBy", self.chkConvenedBy,
+            True).updateUI()
         UnoDataAware.attachCheckBox(
-            self.agenda, "cp_ShowFacilitator", self.chkPresiding, True,
-            FILLIN_FACILITATOR)
+            self.agenda, "cp_ShowFacilitator", self.chkPresiding,
+            True).updateUI()
         UnoDataAware.attachCheckBox(
-            self.agenda, "cp_ShowNotetaker", self.chkNoteTaker, True,
-            FILLIN_NOTETAKER)
+            self.agenda, "cp_ShowNotetaker", self.chkNoteTaker,
+            True).updateUI()
         UnoDataAware.attachCheckBox(
-            self.agenda, "cp_ShowTimekeeper", self.chkTimekeeper, True,
-            FILLIN_TIMEKEEPER)
+            self.agenda, "cp_ShowTimekeeper", self.chkTimekeeper,
+            True).updateUI()
         UnoDataAware.attachCheckBox(
-            self.agenda, "cp_ShowAttendees", self.chkAttendees, True,
-            FILLIN_PARTICIPANTS)
+            self.agenda, "cp_ShowAttendees", self.chkAttendees,
+            True).updateUI()
         UnoDataAware.attachCheckBox(
-            self.agenda, "cp_ShowObservers", self.chkObservers, True,
-            FILLIN_OBSERVERS)
+            self.agenda, "cp_ShowObservers", self.chkObservers,
+            True).updateUI()
         UnoDataAware.attachCheckBox(
-            self.agenda, "cp_ShowResourcePersons",self.chkResourcePersons, True,
-            FILLIN_RESOURCE_PERSONS)
+            self.agenda, "cp_ShowResourcePersons",self.chkResourcePersons,
+            True).updateUI()
         UnoDataAware.attachEditControl(
-            self.agenda, "cp_TemplateName", self.txtTemplateName, True)
+            self.agenda, "cp_TemplateName", self.txtTemplateName,
+            True).updateUI()
         RadioDataAware.attachRadioButtons(
             self.agenda, "cp_ProceedMethod",
-                (self.optCreateAgenda, self.optMakeChanges), True)
+                (self.optCreateAgenda, self.optMakeChanges), True).updateUI()
 
     def saveConfiguration(self):
         self.topicsControl.saveTopics(self.agenda)
@@ -273,13 +267,39 @@ class AgendaWizardDialogImpl(AgendaWizardDialog):
         title = Helper.getUnoPropertyValue(getModel(txtTemplateName), "Text")
         self.agendaTemplate.setTemplateTitle(title)
 
-    def checkBoxItemChanged(self):
-        try:
-            AgendaTemplate.xTextDocument.lockControllers()
-            AgendaTemplate.redraw(FILLIN_READ)
-            AgendaTemplate.xTextDocument.unlockControllers()
-        except Exception:
-            traceback.print_exc()
+    #checkbox listeners
+    def chkUseMeetingTypeItemChanged(self):
+        AgendaTemplate.redraw(FILLIN_MEETING_TYPE)
+
+    def chkUseReadItemChanged(self):
+        AgendaTemplate.redraw(FILLIN_READ)
+
+    def chkUseBringItemChanged(self):
+        AgendaTemplate.redraw(FILLIN_BRING)
+
+    def chkUseNotesItemChanged(self):
+        AgendaTemplate.redraw(FILLIN_NOTES)
+
+    def chkUseCalledByItemChanged(self):
+        AgendaTemplate.redraw(FILLIN_CALLED_BY)
+
+    def chkUseFacilitatorItemChanged(self):
+        AgendaTemplate.redraw(FILLIN_FACILITATOR)
+
+    def chkUseNoteTakerItemChanged(self):
+        AgendaTemplate.redraw(FILLIN_NOTETAKER)
+
+    def chkUseTimeKeeperItemChanged(self):
+        AgendaTemplate.redraw(FILLIN_TIMEKEEPER)
+
+    def chkUseAttendeesItemChanged(self):
+        AgendaTemplate.redraw(FILLIN_PARTICIPANTS)
+
+    def chkUseObserversItemChanged(self):
+        AgendaTemplate.redraw(FILLIN_OBSERVERS)
+
+    def chkUseResourcePersonsItemChanged(self):
+        AgendaTemplate.redraw(FILLIN_RESOURCE_PERSONS)
 
     '''
     convenience method.
