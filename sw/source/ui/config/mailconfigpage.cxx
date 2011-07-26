@@ -337,6 +337,8 @@ void SwTestAccountSettingsDialog::Test()
 {
     uno::Reference<XMultiServiceFactory> rMgr = ::comphelper::getProcessServiceFactory();
 
+    rtl::OUString sException;
+
     bool bIsLoggedIn = false;
     bool bIsServer = false;
     if (rMgr.is())
@@ -412,9 +414,9 @@ void SwTestAccountSettingsDialog::Test()
             if( xMailService->isConnected())
                 xMailService->disconnect();
         }
-        catch(uno::Exception&)
+        catch (const uno::Exception& e)
         {
-            OSL_FAIL("exception caught");
+            sException = e.Message;
         }
     }
 
@@ -437,7 +439,10 @@ void SwTestAccountSettingsDialog::Test()
 
     if(!bIsServer || !bIsLoggedIn )
     {
-        m_eErrorsED.SetText( m_sErrorServer );
+        rtl::OUStringBuffer aErrorMessage(m_sErrorServer);
+        if (!sException.isEmpty())
+            aErrorMessage.appendAscii(RTL_CONSTASCII_STRINGPARAM("\n--\n")).append(sException);
+        m_eErrorsED.SetText(aErrorMessage.makeStringAndClear());
     }
 }
 
