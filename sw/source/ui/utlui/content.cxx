@@ -3107,14 +3107,14 @@ void NaviContentBookmark::Copy( TransferDataContainer& rData ) const
 {
     rtl_TextEncoding eSysCSet = gsl_getSystemTextEncoding();
 
-    ByteString sStr( aUrl, eSysCSet );
-    sStr += static_cast< char >(NAVI_BOOKMARK_DELIM);
-    sStr += ByteString( aDescr, eSysCSet );
-    sStr += static_cast< char >(NAVI_BOOKMARK_DELIM);
-    sStr += ByteString::CreateFromInt32( nDefDrag );
-    sStr += static_cast< char >(NAVI_BOOKMARK_DELIM);
-    sStr += ByteString::CreateFromInt32( nDocSh );
-    rData.CopyByteString( SOT_FORMATSTR_ID_SONLK, sStr );
+    rtl::OStringBuffer sStrBuf(rtl::OUStringToOString(aUrl, eSysCSet));
+    sStrBuf.append(static_cast<char>(NAVI_BOOKMARK_DELIM));
+    sStrBuf.append(rtl::OUStringToOString(aDescr, eSysCSet));
+    sStrBuf.append(static_cast<char>(NAVI_BOOKMARK_DELIM));
+    sStrBuf.append(static_cast<sal_Int32>(nDefDrag));
+    sStrBuf.append(static_cast<char>(NAVI_BOOKMARK_DELIM));
+    sStrBuf.append(static_cast<sal_Int32>(nDocSh));
+    rData.CopyByteString(SOT_FORMATSTR_ID_SONLK, sStrBuf.makeStringAndClear());
 }
 
 sal_Bool NaviContentBookmark::Paste( TransferableDataHelper& rData )
