@@ -50,8 +50,6 @@ $(eval $(call gb_Library_add_linked_libs,frm,\
     dbtools \
     editeng \
     i18nisolang1 \
-    icui18n \
-    icuuc \
     sal \
     sfx \
     svl \
@@ -64,7 +62,11 @@ $(eval $(call gb_Library_add_linked_libs,frm,\
     vcl \
     $(gb_STDLIBS) \
 ))
-$(eval $(call gb_Library_use_external,frm,libxml2))
+$(eval $(call gb_Library_use_externals,frm,\
+    icui18n \
+    icuuc \
+    libxml2 \
+))
 
 $(eval $(call gb_Library_set_componentfile,frm,forms/util/frm))
 
