@@ -61,8 +61,8 @@
 /post_download.log
 /install
 /downloaded
-/*.Set.sh
 /Env.Build.sh
+/Env.Host.sh
 /ID
 /tags
 /docs
