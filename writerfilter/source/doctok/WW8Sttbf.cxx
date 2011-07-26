@@ -67,11 +67,6 @@ sal_uInt32 WW8Sttbf::getEntryOffset(sal_uInt32 nPos) const
     return mEntryOffsets[nPos];
 }
 
-sal_uInt32 WW8Sttbf::getExtraOffset(sal_uInt32 nPos) const
-{
-    return mExtraOffsets[nPos];
-}
-
 sal_uInt32 WW8Sttbf::getEntryCount() const
 {
     return mnCount;

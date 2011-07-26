@@ -70,13 +70,6 @@ class WW8Sttbf : public WW8StructBase
     */
     sal_uInt32 getEntryOffset(sal_uInt32 nPos) const;
 
-    /**
-       Return offset of extra data of an entry.
-
-       @param nPos    the index of the entry
-     */
-    sal_uInt32 getExtraOffset(sal_uInt32 nPos) const;
-
 public:
     typedef boost::shared_ptr<WW8Sttbf> Pointer_t;
 
