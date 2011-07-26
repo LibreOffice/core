@@ -138,7 +138,7 @@ class AbstractAssistentDlg_Impl : public AbstractAssistentDlg
     virtual String GetDocPath() const;
     virtual sal_Bool GetStartWithFlag() const;
     virtual sal_Bool IsDocEmpty() const;
-    virtual String GetPassword();
+    virtual com::sun::star::uno::Sequence< com::sun::star::beans::NamedValue > GetPassword();
 };
 
 // add for SdModifyFieldDlg

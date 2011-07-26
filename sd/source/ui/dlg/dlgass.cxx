@@ -116,7 +116,7 @@ const char* PageHelpIds[] =
 class PasswordEntry
 {
 public:
-    String maPassword;
+    uno::Sequence< beans::NamedValue > aEncryptionData;
     String maPath;
 };
 
@@ -206,7 +206,7 @@ public:
 
     void SavePassword( SfxObjectShellLock xDoc, const String& rPath );
     void RestorePassword( SfxItemSet* pSet, const String& rPath );
-    String GetPassword( const String rPath );
+    uno::Sequence < beans::NamedValue > GetPassword( const String rPath );
     void DeletePasswords();
 
     boost::ptr_vector< PasswordEntry > maPasswordList;
@@ -1668,14 +1668,15 @@ void AssistentDlgImpl::SavePassword( SfxObjectShellLock xDoc, const String& rPat
         SfxMedium * pMedium = xDoc->GetMedium();
         if(pMedium && pMedium->IsStorage())
         {
-            SfxItemSet * pSet = pMedium->GetItemSet();
-          const SfxPoolItem *pItem = 0;
-          if( pSet->GetItemState(SID_PASSWORD, sal_True, &pItem) == SFX_ITEM_SET )
+          SfxItemSet * pSet = pMedium->GetItemSet();
+          SFX_ITEMSET_ARG( pSet, pEncryptionDataItem, SfxUnoAnyItem, SID_ENCRYPTIONDATA, sal_False);
+          uno::Sequence < beans::NamedValue > aEncryptionData;
+          if (pEncryptionDataItem)
+              pEncryptionDataItem->GetValue() >>= aEncryptionData;
+          else
+              return;
+          if( aEncryptionData.getLength() )
           {
-            //TODO/MBA: testing
-            String aPass( ((const SfxStringItem*)pItem)->GetValue());
-            if(aPass.Len() == 0)
-                return;
 
             PasswordEntry* pEntry = NULL;
             for ( size_t i = 0, n = maPasswordList.size(); i < n; ++i )
@@ -1695,7 +1696,7 @@ void AssistentDlgImpl::SavePassword( SfxObjectShellLock xDoc, const String& rPat
             }
 
             if(pEntry)
-                pEntry->maPassword = aPass;
+                pEntry->aEncryptionData = aEncryptionData;
           }
         }
     }
@@ -1703,21 +1704,21 @@ void AssistentDlgImpl::SavePassword( SfxObjectShellLock xDoc, const String& rPat
 
 void AssistentDlgImpl::RestorePassword( SfxItemSet* pSet, const String& rPath )
 {
-    String aPassword( GetPassword( rPath ) );
+    uno::Sequence < beans::NamedValue > aEncryptionData( GetPassword( rPath ) );
 
-    if(aPassword.Len())
-        pSet->Put( SfxStringItem( SID_PASSWORD, aPassword ) );
+    if(aEncryptionData.getLength())
+        pSet->Put( SfxUnoAnyItem( SID_ENCRYPTIONDATA, uno::makeAny( aEncryptionData ) ) );
 }
 
-String AssistentDlgImpl::GetPassword( const String rPath )
+uno::Sequence < beans::NamedValue > AssistentDlgImpl::GetPassword( const String rPath )
 {
     for ( size_t i = 0, n = maPasswordList.size(); i < n; ++i )
     {
         PasswordEntry* pEntry = &maPasswordList[ i ];
         if(pEntry->maPath == rPath)
-            return pEntry->maPassword;
+            return pEntry->aEncryptionData;
     }
-    return String();
+    return uno::Sequence < beans::NamedValue > ();;
 }
 
 void AssistentDlgImpl::DeletePasswords()
@@ -1954,7 +1955,7 @@ sal_Bool AssistentDlg::IsDocEmpty() const
            mpImpl->GetLayoutFileName().Len() == 0;
 }
 
-String AssistentDlg::GetPassword()
+uno::Sequence< beans::NamedValue > AssistentDlg::GetPassword()
 {
     return mpImpl->GetPassword( mpImpl->maDocFile );
 }

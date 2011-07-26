@@ -48,6 +48,7 @@
 #include <editeng/paperinf.hxx>
 #include <editeng/eeitem.hxx>
 #include <unotools/useroptions.hxx>
+#include <com/sun/star/uno/Sequence.h>
 
 #include "app.hrc"
 #include "glob.hrc"
@@ -84,6 +85,7 @@
 using ::sd::framework::FrameworkHelper;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::frame::XFrame;
+using ::com::sun::star::uno::Sequence;
 
 namespace {
 
@@ -615,11 +617,11 @@ SfxFrame* SdModule::ExecuteNewDocument( SfxRequest& rReq )
                     DBG_ASSERT( aFileToOpen.Len()!=0, "The autopilot should have asked for a file itself already!" );
                     if(aFileToOpen.Len() != 0)
                     {
-                        const String aPasswrd( pPilotDlg->GetPassword() );
+                        com::sun::star::uno::Sequence< com::sun::star::beans::NamedValue > aPasswrd( pPilotDlg->GetPassword() );
 
                         SfxStringItem aFile( SID_FILE_NAME, aFileToOpen );
                         SfxStringItem aReferer( SID_REFERER, UniString() );
-                        SfxStringItem aPassword( SID_PASSWORD, aPasswrd );
+                        SfxUnoAnyItem aPassword( SID_ENCRYPTIONDATA, com::sun::star::uno::makeAny(aPasswrd) );
 
                         if ( xTargetFrame.is() )
                         {
@@ -628,7 +630,7 @@ SfxFrame* SdModule::ExecuteNewDocument( SfxRequest& rReq )
                             aSet.Put( aReferer );
                             // Put the password into the request
                             // only if it is not empty.
-                            if (aPasswrd.Len() > 0)
+                            if (aPasswrd.getLength() > 0)
                                 aSet.Put( aPassword );
 
                             const SfxPoolItem* pRet = SfxFrame::OpenDocumentSynchron( aSet, xTargetFrame );
@@ -643,7 +645,7 @@ SfxFrame* SdModule::ExecuteNewDocument( SfxRequest& rReq )
                             aRequest.AppendItem (aReferer);
                             // Put the password into the request
                             // only if it is not empty.
-                            if (aPasswrd.Len() > 0)
+                            if (aPasswrd.getLength() > 0)
                                 aRequest.AppendItem (aPassword);
                             aRequest.AppendItem (SfxStringItem (
                                 SID_TARGETNAME,

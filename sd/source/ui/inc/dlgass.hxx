@@ -38,6 +38,7 @@
 #include "assclass.hxx"
 #include <vcl/lstbox.hxx>
 #include <sfx2/app.hxx>
+#include <com/sun/star/uno/Sequence.h>
 
 #include "sdenumdef.hxx"
 
@@ -62,7 +63,7 @@ public:
     sal_Bool GetStartWithFlag() const;
 
     sal_Bool IsDocEmpty() const;
-    String GetPassword();
+    com::sun::star::uno::Sequence< com::sun::star::beans::NamedValue > GetPassword();
 };
 
 #endif

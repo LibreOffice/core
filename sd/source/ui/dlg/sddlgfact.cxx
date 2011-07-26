@@ -222,7 +222,7 @@ sal_Bool AbstractAssistentDlg_Impl::IsDocEmpty() const
 {
     return pDlg->IsDocEmpty();
 }
-String AbstractAssistentDlg_Impl::GetPassword()
+com::sun::star::uno::Sequence< com::sun::star::beans::NamedValue > AbstractAssistentDlg_Impl::GetPassword()
 {
     return pDlg->GetPassword();
 }

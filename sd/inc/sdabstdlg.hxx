@@ -34,6 +34,7 @@
 #include <tools/string.hxx>
 #include <sfx2/sfxdlg.hxx>
 #include <com/sun/star/uno/Sequence.h>
+#include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/beans/XPropertyAccess.hpp>
 #include "prlayout.hxx"
 #include "sdenumdef.hxx"
@@ -95,7 +96,7 @@ public:
     virtual String GetDocPath() const = 0;
     virtual sal_Bool GetStartWithFlag() const = 0;
     virtual sal_Bool IsDocEmpty() const = 0;
-    virtual String GetPassword() = 0;
+    virtual com::sun::star::uno::Sequence< com::sun::star::beans::NamedValue > GetPassword() = 0;
 };
 
 class AbstractSdModifyFieldDlg : public VclAbstractDialog  //add for SdModifyFieldDlg
