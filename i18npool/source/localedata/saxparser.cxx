@@ -370,7 +370,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
     }
     else
     {
-        printf( "couln't create sax-parser component\n" );
+        printf( "couldn't create sax-parser component\n" );
         exit(1);
     }
 

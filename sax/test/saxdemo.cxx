@@ -575,7 +575,7 @@ int main (int argc, char **argv)
     }
     else
     {
-        printf( "couln't create sax-parser component\n" );
+        printf( "couldn't create sax-parser component\n" );
     }
 
 
@@ -647,7 +647,7 @@ int main (int argc, char **argv)
     }
     else
     {
-        printf( "couln't create sax-writer component\n" );
+        printf( "couldn't create sax-writer component\n" );
     }
 }
 
