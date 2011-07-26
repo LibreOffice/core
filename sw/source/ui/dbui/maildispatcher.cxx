@@ -232,12 +232,12 @@ void MailDispatcher::sendMailMessageNotifyListener(uno::Reference<mail::XMailMes
         MailDispatcherListenerContainer_t listeners_cloned(cloneListener());
         std::for_each(listeners_cloned.begin(), listeners_cloned.end(), MailDeliveryNotifier(this, message));
     }
-    catch (mail::MailException& ex)
+    catch (const mail::MailException& ex)
     {
         MailDispatcherListenerContainer_t listeners_cloned(cloneListener());
         std::for_each(listeners_cloned.begin(), listeners_cloned.end(), MailDeliveryErrorNotifier(this, message, ex.Message));
     }
-    catch (uno::RuntimeException& ex)
+    catch (const uno::RuntimeException& ex)
     {
         MailDispatcherListenerContainer_t listeners_cloned(cloneListener());
         std::for_each(listeners_cloned.begin(), listeners_cloned.end(), MailDeliveryErrorNotifier(this, message, ex.Message));

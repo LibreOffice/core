@@ -173,7 +173,7 @@ uno::Reference< mail::XSmtpService > ConnectToSmtpServer(
             xSmtpServer->connect(xConnectionContext, xAuthenticator);
             rxInMailService = uno::Reference< mail::XMailService >( xSmtpServer, uno::UNO_QUERY );
         }
-        catch(uno::Exception& )
+        catch (const uno::Exception&)
         {
             OSL_FAIL("exception caught");
         }
@@ -539,7 +539,7 @@ String SwAddressPreview::FillData(
                             aItem.sText = sReplace;
                         }
                     }
-                    catch( sdbc::SQLException& )
+                    catch (const sdbc::SQLException&)
                     {
                         OSL_FAIL("SQLException caught");
                     }

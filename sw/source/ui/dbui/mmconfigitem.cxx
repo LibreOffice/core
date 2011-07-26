@@ -928,7 +928,7 @@ Reference< XResultSet>   SwMailMergeConfigItem::GetResultSet() const
                     xRowProperties->setPropertyValue(C2U("ApplyFilter"), makeAny(m_pImpl->sFilter.getLength()>0));
                     xRowProperties->setPropertyValue(C2U("Filter"), makeAny(m_pImpl->sFilter));
                 }
-                catch(Exception&)
+                catch (const Exception&)
                 {
                     OSL_FAIL("exception caught in xResultSet->SetFilter()");
                 }
@@ -938,7 +938,7 @@ Reference< XResultSet>   SwMailMergeConfigItem::GetResultSet() const
                 m_pImpl->nResultSetCursorPos = 1;
             }
         }
-        catch(Exception& )
+        catch (const Exception&)
         {
             OSL_FAIL("exception caught in: SwMailMergeConfigItem::GetResultSet() ");
         }
@@ -976,7 +976,7 @@ void  SwMailMergeConfigItem::SetFilter(::rtl::OUString& rFilter)
                 uno::Reference<XRowSet> xRowSet( m_pImpl->xResultSet, UNO_QUERY_THROW );
                 xRowSet->execute();
             }
-            catch(Exception&)
+            catch (const Exception&)
             {
                 OSL_FAIL("exception caught in SwMailMergeConfigItem::SetFilter()");
             }
@@ -1011,7 +1011,7 @@ sal_Int32 SwMailMergeConfigItem::MoveResultSet(sal_Int32 nTarget)
                 m_pImpl->nResultSetCursorPos = m_pImpl->xResultSet->getRow();
             }
         }
-        catch(Exception&)
+        catch (const Exception&)
         {
         }
     }
@@ -1031,7 +1031,7 @@ bool SwMailMergeConfigItem::IsResultSetFirstLast(bool& bIsFirst, bool& bIsLast)
             bIsLast = m_pImpl->xResultSet->isLast();
             bRet = true;
         }
-        catch(Exception&)
+        catch (const Exception&)
         {
         }
     }

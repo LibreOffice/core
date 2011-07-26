@@ -263,7 +263,7 @@ SwAddressListDialog::SwAddressListDialog(SwMailMergeAddressBlockPage* pParent) :
                         SWUnoHelper::UCB_IsFile( pUserData->sURL ) && //#i97577#
                         !SWUnoHelper::UCB_IsReadOnlyFileName( pUserData->sURL );
                 }
-                catch(const uno::Exception& )
+                catch (const uno::Exception&)
                 {
                     bEnableOK = sal_False;
                 }
@@ -345,7 +345,7 @@ IMPL_LINK(SwAddressListDialog, FilterHdl_Impl, PushButton*, EMPTYARG)
                 }
                 ::comphelper::disposeComponent(xRowSet);
             }
-            catch(Exception& )
+            catch (const Exception&)
             {
                 OSL_FAIL("exception caught in SwAddressListDialog::FilterHdl_Impl");
             }
@@ -448,7 +448,7 @@ IMPL_LINK(SwAddressListDialog, CreateHdl_Impl, PushButton*, pButton)
             m_aCreateListPB.Enable(sal_False);
 
         }
-        catch(Exception& )
+        catch (const Exception&)
         {
         }
     }
@@ -645,7 +645,7 @@ void SwAddressListDialog::DetectTablesAndQueries(
         m_aFilterPB.Enable( pUserData->xConnection.is() && sCommand.Len() );
         m_aTablePB.Enable( pUserData->nTableAndQueryCount > 1 );
     }
-    catch(Exception& )
+    catch (const Exception&)
     {
         OSL_FAIL("exception caught in SwAddressListDialog::DetectTablesAndQueries");
         m_aOK.Enable( sal_False );

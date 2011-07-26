@@ -208,7 +208,7 @@ void SwMailMergeGreetingsPage::UpdatePreview()
                         }
                     }
                 }
-                catch( sdbc::SQLException& )
+                catch (const sdbc::SQLException&)
                 {
                     OSL_FAIL("SQLException caught");
                 }

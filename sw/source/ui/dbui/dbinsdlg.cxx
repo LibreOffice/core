@@ -352,7 +352,7 @@ SwInsertDBColAutoPilot::SwInsertDBColAutoPilot( SwView& rView,
                                 }
                                 pNew->nDBNumFmt = nKey;
                             }
-                            catch(const Exception& )
+                            catch (const Exception&)
                             {
                                 OSL_FAIL("illegal number format key");
                             }
@@ -1097,7 +1097,7 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
                 else if(!i)
                     bBreak = !xResultSet->first();
             }
-            catch(const Exception& )
+            catch (const Exception&)
             {
                 bBreak = sal_True;
             }
@@ -1177,14 +1177,12 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
                         }
                     }
                 }
-                catch(Exception&
-#if OSL_DEBUG_LEVEL > 1
-                            aExcept
-#endif
-                )
+                catch (const Exception& rExcept)
                 {
 #if OSL_DEBUG_LEVEL > 1
-                    OSL_FAIL(ByteString(String(aExcept.Message), gsl_getSystemTextEncoding()).GetBuffer());
+                    OSL_FAIL(ByteString(String(rExcept.Message), gsl_getSystemTextEncoding()).GetBuffer());
+#else
+                    (void)rExcept;
 #endif
                 }
             }
@@ -1299,7 +1297,7 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
                     else if(!i)
                         bBreak = !xResultSet->first();
                 }
-                catch(Exception&)
+                catch (const Exception&)
                 {
                     bBreak = sal_True;
                 }

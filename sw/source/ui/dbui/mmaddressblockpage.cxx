@@ -1057,13 +1057,15 @@ SwAssignFieldsControl::SwAssignFieldsControl(
             uno::Reference< XColumn > xColumn;
             aCol >>= xColumn;
             if(xColumn.is())
+            {
                 try
                 {
                     pNewPreview->SetText(xColumn->getString());
                 }
-                catch(SQLException& )
+                catch (const SQLException&)
                 {
                 }
+            }
         }
         if(!i)
         {
@@ -1198,7 +1200,7 @@ IMPL_LINK(SwAssignFieldsControl, MatchHdl_Impl, ListBox*, pBox)
             {
                 sPreview = xColumn->getString();
             }
-            catch( sdbc::SQLException& )
+            catch (const sdbc::SQLException&)
             {
             }
         }

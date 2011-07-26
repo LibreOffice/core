@@ -693,11 +693,11 @@ IMPL_LINK(SwMailMergeOutputPage, SaveOutputHdl_Impl, PushButton*, pButton)
         {
             xStore->storeToURL( sPath, aValues );
         }
-        catch( task::ErrorCodeIOException& aErrorEx )
+        catch (const task::ErrorCodeIOException& rErrorEx)
         {
-            nErrorCode = (sal_uInt32)aErrorEx.ErrCode;
+            nErrorCode = (sal_uInt32)rErrorEx.ErrCode;
         }
-        catch( Exception& )
+        catch (const Exception&)
         {
             nErrorCode = ERRCODE_IO_GENERAL;
         }
@@ -745,11 +745,11 @@ IMPL_LINK(SwMailMergeOutputPage, SaveOutputHdl_Impl, PushButton*, pButton)
         {
             xStore->storeToURL( sTargetTempURL, aValues );
         }
-        catch( task::ErrorCodeIOException& aErrorEx )
+        catch (const task::ErrorCodeIOException& rErrorEx)
         {
-            nErrorCode = (sal_uInt32)aErrorEx.ErrCode;
+            nErrorCode = (sal_uInt32)rErrorEx.ErrCode;
         }
-        catch( Exception& )
+        catch (const Exception&)
         {
             nErrorCode = ERRCODE_IO_GENERAL;
         }
@@ -824,7 +824,7 @@ IMPL_LINK(SwMailMergeOutputPage, SaveOutputHdl_Impl, PushButton*, pButton)
                     uno::Reference< frame::XStorable > xTempStore( xTempDocShell->GetModel(), uno::UNO_QUERY);
                     xTempStore->storeToURL( sOutPath, aValues   );
                 }
-                catch( const uno::Exception& )
+                catch (const uno::Exception&)
                 {
                     bFailed = true;
                 }

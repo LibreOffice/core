@@ -314,8 +314,9 @@ void  SwDBTreeList::RequestingChilds(SvLBoxEntry* pParent)
                             aTable >>= xPropSet;
                             xColsSupplier = Reference<XColumnsSupplier>(xPropSet, UNO_QUERY);
                         }
-                        catch(Exception&)
-                        {}
+                        catch (const Exception&)
+                        {
+                        }
                     }
                 }
                 else
@@ -332,8 +333,9 @@ void  SwDBTreeList::RequestingChilds(SvLBoxEntry* pParent)
                             aQuery >>= xPropSet;
                             xColsSupplier = Reference<XColumnsSupplier>(xPropSet, UNO_QUERY);
                         }
-                        catch(Exception&)
-                        {}
+                        catch (const Exception&)
+                        {
+                        }
                     }
                 }
 
@@ -353,7 +355,7 @@ void  SwDBTreeList::RequestingChilds(SvLBoxEntry* pParent)
                     }
                 }
             }
-            catch(const Exception&)
+            catch (const Exception&)
             {
             }
         }
@@ -403,7 +405,7 @@ void  SwDBTreeList::RequestingChilds(SvLBoxEntry* pParent)
                     }
                 }
             }
-            catch(const Exception&)
+            catch (const Exception&)
             {
             }
         }
