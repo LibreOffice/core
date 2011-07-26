@@ -463,35 +463,35 @@ $(call gb_LinkTarget_add_libs,$(1),$(DBUSMENUGTK_LIBS))
 endef
 
 define gb_LinkTarget__use_uikit
-$(call gb_Library_add_libs,$(1), \
+$(call gb_LinkTarget__add_libs,$(1), \
 	-framework UIKit \
 )
 
 endef
 
 define gb_LinkTarget__use_corefoundation
-$(call gb_Library_add_libs,$(1), \
+$(call gb_LinkTarget_add_libs,$(1), \
 	-framework CoreFoundation \
 )
 
 endef
 
 define gb_LinkTarget__use_cocoa
-$(call gb_Library_add_libs,$(1), \
+$(call gb_LinkTarget_add_libs,$(1), \
 	-framework Cocoa \
 )
 
 endef
 
 define gb_LinkTarget__use_carbon
-$(call gb_Library_add_libs,$(1), \
+$(call gb_LinkTarget_add_libs,$(1), \
 	-framework Carbon \
 )
 
 endef
 
 define gb_LinkTarget__use_quicktime
-$(call gb_Library_add_libs,$(1), \
+$(call gb_LinkTarget_add_libs,$(1), \
 	-framework QuickTime \
 )
 
