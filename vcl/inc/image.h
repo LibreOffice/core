@@ -44,21 +44,8 @@ public:
                 ImplImageBmp();
                 ~ImplImageBmp();
 
-    void        Create( long nItemWidth, long nItemHeight, sal_uInt16 nInitSize );
     void        Create( const BitmapEx& rBmpEx, long nItemWidth, long nItemHeight,sal_uInt16 nInitSize );
-
-    void        Expand( sal_uInt16 nGrowSize );
-
-    void        Replace( sal_uInt16 nPos, sal_uInt16 nSrcPos );
-    void        Replace( sal_uInt16 nPos, const ImplImageBmp& rImageBmp, sal_uInt16 nSrcPos );
-    void        Replace( sal_uInt16 nPos, const BitmapEx& rBmpEx );
-
-    void        ReplaceColors( const Color* pSrcColors, const Color* pDstColors, sal_uIntPtr nColorCount );
     void        ColorTransform();
-    void            Invert();
-
-    BitmapEx    GetBitmapEx( sal_uInt16 nPosCount, sal_uInt16* pPosAry ) const;
-
     void        Draw( sal_uInt16 nPos, OutputDevice* pDev, const Point& rPos, sal_uInt16 nStyle, const Size* pSize = NULL );
 
 private:
