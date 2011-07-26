@@ -103,7 +103,6 @@ $(eval $(call gb_Package_add_file,svl_inc,inc/svl/sharecontrolfile.hxx,svl/share
 $(eval $(call gb_Package_add_file,svl_inc,inc/svl/slstitm.hxx,svl/slstitm.hxx))
 $(eval $(call gb_Package_add_file,svl_inc,inc/svl/smplhint.hxx,svl/smplhint.hxx))
 $(eval $(call gb_Package_add_file,svl_inc,inc/svl/solar.hrc,svl/solar.hrc))
-$(eval $(call gb_Package_add_file,svl_inc,inc/svl/srchcfg.hxx,svl/srchcfg.hxx))
 $(eval $(call gb_Package_add_file,svl_inc,inc/svl/srchdefs.hxx,svl/srchdefs.hxx))
 $(eval $(call gb_Package_add_file,svl_inc,inc/svl/srchitem.hxx,svl/srchitem.hxx))
 $(eval $(call gb_Package_add_file,svl_inc,inc/svl/stritem.hxx,svl/stritem.hxx))
