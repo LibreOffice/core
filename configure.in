@@ -1705,11 +1705,7 @@ dnl ===================================================================
 if test "$_os" = "Darwin" ; then
 
     if test "$with_macosx_version_min_required" = "" ; then
-        if test "$with_macosx_version_max_allowed" = "" ; then
-            with_macosx_version_min_required="10.4"
-        else
-            with_macosx_version_min_required="$with_macosx_version_max_allowed"
-        fi
+        with_macosx_version_min_required="10.4"
     fi
 
     if test "$with_macosx_version_max_allowed" = "" ; then
