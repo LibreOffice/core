@@ -56,6 +56,8 @@ gb_OSDEFS := \
 	-D_REENTRANT \
 	-DNO_PTHREAD_PRIORITY \
 	-DQUARTZ \
+	-DMAC_OS_X_VERSION_MIN_REQUIRED=$(MAC_OS_X_VERSION_MIN_REQUIRED) \
+	-DMAC_OS_X_VERSION_MAX_ALLOWED=$(MAC_OS_X_VERSION_MAX_ALLOWED) \
 	$(EXTRA_CDEFS) \
 
 gb_COMPILERDEFS := \
@@ -70,12 +72,7 @@ else
 gb_CPUDEFS := -DX86
 endif
 
-ifeq ($(strip $(SYSBASE)),)
-gb_SDKDIR := /Developer/SDKs/MacOSX10.4u.sdk
-else
-gb_SDKDIR := $(SYSBASE)/MacOSX10.4u.sdk
-endif
-
+gb_SDKDIR := $(MACOSX_SDK_PATH)
 
 gb_CFLAGS := \
 	-isysroot $(gb_SDKDIR) \
