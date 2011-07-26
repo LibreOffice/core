@@ -159,8 +159,6 @@ public:
     virtual             ~ImpFileDialog();
 
     void                AddFilter( const String& rFilter, const String& rMask );
-    void                RemoveFilter( const String& rFilter );
-    void                RemoveAllFilter();
     void                SetCurFilter( const String& rFilter );
     String              GetCurFilter() const;
 

@@ -183,10 +183,6 @@ public:
     const Rectangle& GetViewportRectangle() { return maViewportRectangle; }
     void CalcViewport();
 
-    // Bounds des Viewports lesen
-    const basegfx::B3DVector& GetScale();
-    const basegfx::B3DVector& GetTranslate();
-
     // Direkter Zugriff auf verschiedene Transformationen
     const basegfx::B3DPoint WorldToEyeCoor(const basegfx::B3DPoint& rVec);
     const basegfx::B3DPoint EyeToWorldCoor(const basegfx::B3DPoint& rVec);

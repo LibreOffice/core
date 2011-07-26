@@ -56,7 +56,6 @@ private:
 #endif
 
 public:
-                        Config();
                         Config( const XubString& rFileName );
                         ~Config();
 
@@ -81,18 +80,12 @@ public:
     ByteString          ReadKey( sal_uInt16 nKey ) const;
     sal_uInt16              GetKeyCount() const;
 
-    void                EnterLock();
-    void                LeaveLock();
     sal_Bool                IsLocked() const { return (mnLockCount != 0); }
-    sal_Bool                Update();
     void                Flush();
 
     void                EnablePersistence( sal_Bool bPersistence = sal_True )
                             { mbPersistence = bPersistence; }
     sal_Bool                IsPersistenceEnabled() const { return mbPersistence; }
-
-    void                SetLineEnd( LineEnd eLineEnd );
-    LineEnd             GetLineEnd() const;
 
 private:
     TOOLS_DLLPRIVATE                Config( const Config& rConfig );

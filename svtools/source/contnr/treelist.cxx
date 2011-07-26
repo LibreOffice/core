@@ -1326,31 +1326,6 @@ sal_Bool SvTreeList::Remove( SvListEntry* pEntry )
 |*
 *************************************************************************/
 
-sal_uLong SvTreeList::SelectChilds(SvListView* pView, SvListEntry* pParent,sal_Bool bSelect )
-{
-    DBG_ASSERT(pView&&pParent,"SelChilds:View/Parent?");
-    if ( !pParent->pChilds )
-        return 0;
-    if ( pParent->pChilds->empty() )
-        return 0;
-
-    sal_uInt16 nRefDepth = GetDepth( pParent );
-    sal_uInt16 nDepth = nRefDepth;
-    sal_uLong nCount = 0;
-    pParent = Next( pParent );
-    do
-    {
-        if ( Select( pView, pParent, bSelect ) )
-            nCount++; // nur die tatsaechlichen Selektierungen zaehlen
-        pParent = Next( pParent, &nDepth );
-    }
-    while( pParent && nDepth > nRefDepth );
-#ifdef CHECK_INTEGRITY
-    CheckIntegrity();
-#endif
-    return nCount;
-}
-
 void SvTreeList::SelectAll( SvListView* pView, sal_Bool bSelect )
 {
     DBG_ASSERT(pView,"SelectAll:NoView");

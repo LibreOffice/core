@@ -135,20 +135,6 @@ bool IceSalSession::cancelShutdown()
     return false;
 }
 
-void IceSalSession::handleOldX11SaveYourself( SalFrame* pFrame )
-{
-    // do this only once
-    if( ! pOldStyleSaveFrame )
-    {
-        pOldStyleSaveFrame = static_cast<X11SalFrame*>(pFrame);
-        if( pOneInstance )
-        {
-            SalSessionSaveRequestEvent aEvent( true, false );
-            pOneInstance->CallCallback( &aEvent );
-        }
-    }
-}
-
 extern "C" void SAL_CALL ICEConnectionWorker( void* );
 
 class ICEConnectionObserver

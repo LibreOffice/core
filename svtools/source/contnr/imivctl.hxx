@@ -483,7 +483,6 @@ public:
     const Size&         GetItemSize( SvxIconChoiceCtrlEntry*, IcnViewFieldType ) const;
 
     void                HideDDIcon();
-    void                ShowDDIcon( SvxIconChoiceCtrlEntry* pRefEntry, const Point& rPos );
 
     sal_Bool            IsOver(
                             SvPtrarr* pSelectedRectList,
@@ -494,14 +493,6 @@ public:
                             const Rectangle&,
                             sal_Bool bAdd = sal_True,
                             SvPtrarr* pOtherRects = 0
-                        );
-
-    void                CalcScrollOffsets(
-                            const Point& rRefPosPixel,
-                            long& rX,
-                            long& rY,
-                            sal_Bool bDragDrop = sal_False,
-                            sal_uInt16 nBorderWidth = 10
                         );
 
     sal_Bool            IsTextHit( SvxIconChoiceCtrlEntry* pEntry, const Point& rDocPos );
@@ -531,7 +522,6 @@ public:
                                 return aEntries[ nPos ];
                             }
     SvxIconChoiceCtrlEntry* GetFirstSelectedEntry( sal_uLong& ) const;
-    SvxIconChoiceCtrlEntry* GetNextSelectedEntry( sal_uLong& ) const;
     SvxIconChoiceCtrlEntry* GetHdlEntry() const { return pHdlEntry; }
     void                SetHdlEntry( SvxIconChoiceCtrlEntry* pEntry ) { pHdlEntry = pEntry; }
 

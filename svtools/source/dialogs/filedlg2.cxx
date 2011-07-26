@@ -1184,31 +1184,6 @@ void ImpFileDialog::AddFilter( const UniString& rFilter, const UniString& rMask 
         SetCurFilter( rFilter );
 }
 
-void ImpFileDialog::RemoveFilter( const UniString& rFilter )
-{
-    for ( ImpFilterList::iterator it = aFilterList.begin(); it < aFilterList.end(); ++it ) {
-        if ( (*it)->aName == rFilter ) {
-            delete *it;
-            aFilterList.erase( it );
-            if ( pTypeList ) {
-                pTypeList->RemoveEntry( rFilter );
-            }
-            break;
-        }
-    }
-}
-
-void ImpFileDialog::RemoveAllFilter()
-{
-    for ( size_t i = 0, n = aFilterList.size(); i < n ; ++i ) {
-        delete aFilterList[ i ];
-    }
-    aFilterList.clear();
-
-    if( pTypeList )
-        pTypeList->Clear();
-}
-
 void ImpFileDialog::SetCurFilter( const UniString& rFilter )
 {
     if( !pTypeList )

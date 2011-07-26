@@ -70,9 +70,6 @@ namespace basegfx
         /// Calc the matrix determinant
         double determinant() const;
 
-        /// Transpose the matrix
-        void transpose();
-
         /// Rotation
         void rotate(double fAngleX,double fAngleY,double fAngleZ);
 

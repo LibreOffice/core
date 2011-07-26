@@ -2414,57 +2414,6 @@ void SvxIconChoiceCtrl_Impl::ImpHideDDIcon()
     }
 }
 
-
-void SvxIconChoiceCtrl_Impl::ShowDDIcon( SvxIconChoiceCtrlEntry* pRefEntry, const Point& rPosPix )
-{
-    pView->Update();
-    if( pRefEntry != pDDRefEntry )
-    {
-        DELETEZ(pDDDev);
-        DELETEZ(pDDBufDev);
-    }
-    sal_Bool bSelected = pRefEntry->IsSelected();
-    pRefEntry->ClearFlags( ICNVIEW_FLAG_SELECTED );
-    if( !pDDDev )
-    {
-        if( pDDBufDev )
-        {
-            // nicht bei jedem Move ein Device anlegen, da dies besonders
-            // auf Remote-Clients zu langsam ist
-            pDDDev = pDDBufDev;
-            pDDBufDev = 0;
-        }
-        else
-        {
-            pDDDev = new VirtualDevice( *pView );
-            pDDDev->SetFont( pView->GetFont() );
-        }
-    }
-    else
-    {
-        ImpHideDDIcon();
-    }
-    const Rectangle& rRect = GetEntryBoundRect( pRefEntry );
-    pDDDev->SetOutputSizePixel( rRect.GetSize() );
-
-    Point aPos( rPosPix );
-    ToDocPos( aPos );
-
-    Size aSize( pDDDev->GetOutputSizePixel() );
-    pDDRefEntry = pRefEntry;
-    aDDLastEntryPos = aPos;
-    aDDLastRectPos = aPos;
-
-    // Hintergrund sichern
-    pDDDev->DrawOutDev( Point(), aSize, aPos, aSize, *pView );
-    // Icon in pView malen
-    pRefEntry->SetFlags( ICNVIEW_FLAG_BLOCK_EMPHASIS );
-    PaintEntry( pRefEntry, aPos );
-    pRefEntry->ClearFlags( ICNVIEW_FLAG_BLOCK_EMPHASIS );
-    if( bSelected )
-        pRefEntry->SetFlags( ICNVIEW_FLAG_SELECTED );
-}
-
 sal_Bool SvxIconChoiceCtrl_Impl::HandleScrollCommand( const CommandEvent& rCmd )
 {
     Rectangle aDocRect( GetDocumentRect() );
@@ -3125,51 +3074,6 @@ void SvxIconChoiceCtrl_Impl::ClearSelectedRectList()
     aSelectedRectList.Remove( 0, aSelectedRectList.Count() );
 }
 
-void SvxIconChoiceCtrl_Impl::CalcScrollOffsets( const Point& rPosPixel,
-    long& rX, long& rY, sal_Bool isInDragDrop, sal_uInt16 nBorderWidth)
-{
-    // Scrolling der View, falls sich der Mauszeiger im Grenzbereich des
-    // Fensters befindet
-    long nPixelToScrollX = 0;
-    long nPixelToScrollY = 0;
-    Size aWndSize = aOutputSize;
-
-    nBorderWidth = (sal_uInt16)(Min( (long)(aWndSize.Height()-1), (long)nBorderWidth ));
-    nBorderWidth = (sal_uInt16)(Min( (long)(aWndSize.Width()-1), (long)nBorderWidth ));
-
-    if ( rPosPixel.X() < nBorderWidth )
-    {
-        if( isInDragDrop )
-            nPixelToScrollX = -DD_SCROLL_PIXEL;
-        else
-            nPixelToScrollX = rPosPixel.X()- nBorderWidth;
-    }
-    else if ( rPosPixel.X() > aWndSize.Width() - nBorderWidth )
-    {
-        if( isInDragDrop )
-            nPixelToScrollX = DD_SCROLL_PIXEL;
-        else
-            nPixelToScrollX = rPosPixel.X() - (aWndSize.Width() - nBorderWidth);
-    }
-    if ( rPosPixel.Y() < nBorderWidth )
-    {
-        if( isInDragDrop )
-            nPixelToScrollY = -DD_SCROLL_PIXEL;
-        else
-            nPixelToScrollY = rPosPixel.Y() - nBorderWidth;
-    }
-    else if ( rPosPixel.Y() > aWndSize.Height() - nBorderWidth )
-    {
-        if( isInDragDrop )
-            nPixelToScrollY = DD_SCROLL_PIXEL;
-        else
-            nPixelToScrollY = rPosPixel.Y() - (aWndSize.Height() - nBorderWidth);
-    }
-
-    rX = nPixelToScrollX;
-    rY = nPixelToScrollY;
-}
-
 IMPL_LINK(SvxIconChoiceCtrl_Impl, AutoArrangeHdl, void*, EMPTYARG )
 {
     aAutoArrangeTimer.Stop();
@@ -3545,43 +3449,6 @@ SvxIconChoiceCtrlEntry* SvxIconChoiceCtrl_Impl::GetFirstSelectedEntry( sal_uLong
             }
         }
     }
-    return 0;
-}
-
-// kein Round Robin!
-SvxIconChoiceCtrlEntry* SvxIconChoiceCtrl_Impl::GetNextSelectedEntry( sal_uLong& rStartPos ) const
-{
-    size_t nCount = aEntries.size();
-    if( rStartPos > nCount || !GetSelectionCount() )
-        return 0;
-    if( !pHead )
-    {
-        for( size_t nCur = rStartPos+1; nCur < nCount; nCur++ )
-        {
-            SvxIconChoiceCtrlEntry* pEntry = aEntries[ nCur ];
-            if( pEntry->IsSelected() )
-            {
-                rStartPos = nCur;
-                return pEntry;
-            }
-        }
-    }
-    else
-    {
-        SvxIconChoiceCtrlEntry* pEntry = aEntries[ rStartPos ];
-        pEntry = pEntry->pflink;
-        while( pEntry != pHead )
-        {
-            if( pEntry->IsSelected() )
-            {
-                rStartPos = GetEntryListPos( pEntry );
-                return pEntry;
-            }
-            pEntry = pEntry->pflink;
-        }
-    }
-
-    rStartPos = 0xffffffff;
     return 0;
 }
 

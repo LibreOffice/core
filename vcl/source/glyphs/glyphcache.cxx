@@ -175,25 +175,6 @@ GlyphCache& GlyphCache::GetInstance()
 
 // -----------------------------------------------------------------------
 
-void GlyphCache::AddFontPath( const String& rFontPath )
-{
-    if( !mpFtManager )
-        return;
-
-    for( xub_StrLen nBreaker1 = 0, nBreaker2 = 0; nBreaker2 != STRING_LEN; nBreaker1 = nBreaker2 + 1 )
-    {
-        nBreaker2 = rFontPath.Search( ';', nBreaker1 );
-        if( nBreaker2 == STRING_NOTFOUND )
-            nBreaker2 = STRING_LEN;
-
-        ::rtl::OUString aUrlName;
-        osl::FileBase::getFileURLFromSystemPath( rFontPath.Copy( nBreaker1, nBreaker2 ), aUrlName );
-        mpFtManager->AddFontDir( aUrlName );
-    }
-}
-
-// -----------------------------------------------------------------------
-
 void GlyphCache::AddFontFile( const rtl::OString& rNormalizedName, int nFaceNum,
     sal_IntPtr nFontId, const ImplDevFontAttributes& rDFA, const ExtraKernInfo* pExtraKern )
 {

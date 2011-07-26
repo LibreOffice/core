@@ -114,11 +114,6 @@ namespace basegfx
         return mpImpl->doDeterminant();
     }
 
-    void B3DHomMatrix::transpose()
-    {
-        mpImpl->doTranspose();
-    }
-
     B3DHomMatrix& B3DHomMatrix::operator+=(const B3DHomMatrix& rMat)
     {
         mpImpl->doAddMatrix(*rMat.mpImpl);

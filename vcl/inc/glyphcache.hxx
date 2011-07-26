@@ -72,7 +72,6 @@ public:
 
     static GlyphCache&      GetInstance();
 
-    void                        AddFontPath( const String& rFontPath );
     void                        AddFontFile( const rtl::OString& rNormalizedName,
                                     int nFaceNum, sal_IntPtr nFontId, const ImplDevFontAttributes&,
                                     const ExtraKernInfo* = NULL );

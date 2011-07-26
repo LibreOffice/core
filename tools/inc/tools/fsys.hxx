@@ -429,7 +429,6 @@ private:
     TOOLS_DLLPRIVATE Dir&           operator=( const Dir& );    // not allowed
 
 #ifdef _DIR_CXX
-    TOOLS_DLLPRIVATE FSysError      ImpSetSort( std::va_list pArgs, FSysSort nSort );
     TOOLS_DLLPRIVATE void           Construct( DirEntryKind nKind = FSYS_KIND_DIR|FSYS_KIND_FILE );
 #endif
 

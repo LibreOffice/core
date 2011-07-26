@@ -87,8 +87,6 @@ public:
     virtual void interactionDone();
     virtual void saveDone();
     virtual bool cancelShutdown();
-
-    static void handleOldX11SaveYourself( SalFrame* pFrame );
 };
 
 #endif

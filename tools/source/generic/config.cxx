@@ -726,7 +726,7 @@ sal_Bool Config::ImplUpdateConfig() const
         return sal_False;
 }
 
-// -----------------------------------------------------------------------
+// =======================================================================
 
 ImplGroupData* Config::ImplGetGroup() const
 {
@@ -768,23 +768,6 @@ ImplGroupData* Config::ImplGetGroup() const
 }
 
 // =======================================================================
-
-Config::Config()
-{
-    // Daten initialisieren und einlesen
-    maFileName      = ImplMakeConfigName( NULL, NULL );
-    mpData          = ImplGetConfigData( maFileName );
-    mpActGroup      = NULL;
-    mnDataUpdateId  = 0;
-    mnLockCount     = 1;
-    mbPersistence   = sal_True;
-
-#ifdef DBG_UTIL
-    OSL_TRACE( "Config::Config()" );
-#endif
-}
-
-// -----------------------------------------------------------------------
 
 Config::Config( const XubString& rFileName )
 {
@@ -1258,55 +1241,10 @@ ByteString Config::ReadKey( sal_uInt16 nKey ) const
     return getEmptyByteString();
 }
 
-// -----------------------------------------------------------------------
-
-void Config::EnterLock()
-{
-    // Config-Daten evt. updaten
-    if ( !mnLockCount )
-        ImplUpdateConfig();
-
-    mnLockCount++;
-}
-
-// -----------------------------------------------------------------------
-
-void Config::LeaveLock()
-{
-    DBG_ASSERT( mnLockCount, "Config::LeaveLook() without Config::EnterLook()" );
-    mnLockCount--;
-
-    if ( (mnLockCount == 0) && mpData->mbModified && mbPersistence )
-        ImplWriteConfig( mpData );
-}
-
-// -----------------------------------------------------------------------
-
-sal_Bool Config::Update()
-{
-    return ImplUpdateConfig();
-}
-
-// -----------------------------------------------------------------------
-
 void Config::Flush()
 {
     if ( mpData->mbModified && mbPersistence )
         ImplWriteConfig( mpData );
-}
-
-// -----------------------------------------------------------------------
-
-void Config::SetLineEnd( LineEnd eLineEnd )
-{
-    mpData->meLineEnd = eLineEnd;
-}
-
-// -----------------------------------------------------------------------
-
-LineEnd Config::GetLineEnd() const
-{
-    return mpData->meLineEnd;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

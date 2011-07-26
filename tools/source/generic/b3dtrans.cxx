@@ -433,20 +433,6 @@ void B3dTransformationSet::PostSetViewport()
 {
 }
 
-const basegfx::B3DVector& B3dTransformationSet::GetScale()
-{
-    if(!mbProjectionValid)
-        CalcViewport();
-    return maScale;
-}
-
-const basegfx::B3DVector& B3dTransformationSet::GetTranslate()
-{
-    if(!mbProjectionValid)
-        CalcViewport();
-    return maTranslate;
-}
-
 /*************************************************************************
 |*
 |* Direkter Zugriff auf verschiedene Transformationen
