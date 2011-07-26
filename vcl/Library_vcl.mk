@@ -156,6 +156,15 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/aqua/source/window/salmenu \
     vcl/aqua/source/window/salobj \
 ))
+$(eval $(call gb_Library_add_linked_libs,vcl,\
+    AppleRemote \
+))
+$(eval $(call gb_Library_use_externals,vcl,\
+    quicktime \
+    cocoa \
+    carbon \
+    corefoundation \
+))
 endif
 
 ifeq ($(GUIBASE),unx)
@@ -523,18 +532,5 @@ $(eval $(call gb_Library_add_ldflags,vcl,\
 ))
 endif
 endif
-
-ifeq ($(GUIBASE),aqua)
-$(eval $(call gb_Library_add_linked_libs,vcl,\
-    AppleRemote \
-))
-$(eval $(call gb_Library_use_externals,vcl,\
-    quicktime \
-    cocoa \
-    carbon \
-    corefoundation \
-))
-endif
-
 
 # vim: set noet sw=4 ts=4:
