@@ -637,19 +637,19 @@ Any ODatabaseContext::getByName(const rtl::OUString& _rName) throw( NoSuchElemen
             xExistent = loadObjectFromURL( _rName, sURL );
         return makeAny( xExistent );
     }
-    catch (NoSuchElementException&)
+    catch (const NoSuchElementException&)
     {   // let these exceptions through
         throw;
     }
-    catch (WrappedTargetException&)
+    catch (const WrappedTargetException&)
     {   // let these exceptions through
         throw;
     }
-    catch (RuntimeException&)
+    catch (const RuntimeException&)
     {   // let these exceptions through
         throw;
     }
-    catch (Exception& e)
+    catch (const Exception&)
     {   // exceptions other than the speciafied ones -> wrap
         Any aError = ::cppu::getCaughtException();
         throw WrappedTargetException(_rName, *this, aError );
