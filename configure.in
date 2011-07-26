@@ -1278,6 +1278,71 @@ AC_ARG_WITH(max-jobs,
          Defaults to 1, unless you configure --enable-icecream - then to 10.]),
 ,)
 
+dnl ===================================================================
+dnl MacOSX build and runtime environment options
+dnl ===================================================================
+
+AC_ARG_WITH(macosx-sdk,
+    AS_HELP_STRING([--with-macosx-sdk],
+        [Use a specific SDK for building.])
+    [
+                          Usage:     --with-macosx-sdk=<version>
+
+                          e. g.: --with-macosx-sdk=10.4
+
+                          there are 3 options to controle the MacOSX build:
+                          --with-macosx-sdk (refered as 'sdl' below)
+                          --with-macosx-version-min-required (refered as 'min' below)
+                          --with-macosx-version-max-allowed (refered as 'max' below)
+
+                          the connection between these value and the default they take is as follow:
+                          ( ? means not specified on the command line, constraint: x <= y <= z)
+
+                          ==========================================
+                           command line      || config result
+                          ==========================================
+                          min  | max  | sdk  || min  | max  | sdk  |
+                          ?    | ?    | ?    || 10.4 | 10.4 | 10.4 |
+                          ?    | ?    | 10.x || 10.4 | 10.4 | 10.x |
+                          ?    | 10.x | ?    || 10.4 | 10.x | 10.x |
+                          ?    | 10.x | 10.y || 10.4 | 10.x | 10.y |
+                          10.x | ?    | ?    || 10.x | 10.x | 10.x |
+                          10.x | ?    | 10.y || 10.x | 10.x | 10.y |
+                          10.x | 10.y | ?    || 10.x | 10.y | 10.y |
+                          10.x | 10.y | 10.z || 10.x | 10.y | 10.z |
+
+
+                          see: http://developer.apple.com/library/mac/#technotes/tn2064/_index.html
+                          for a detailled technical explanation of these variables
+
+                          Note: MACOSX_DEPLOYMENT_TARGET will be set to the value of 'min'.
+
+    ],
+,)
+
+AC_ARG_WITH(macosx-version-min-required,
+    AS_HELP_STRING([--with-macosx-version-min-required],
+        [set the minimum version needed to run])
+    [
+                          Usage:     --with-macosx-version-min-required=<version>
+
+                          e. g.: --with-macos-version-min-required=10.4
+                          see --with-macosx-sdk for more info
+    ],
+,)
+
+AC_ARG_WITH(macosx-version-max-allowed,
+    AS_HELP_STRING([--with-macosx-version-max-allowed],
+        [set the minimum version needed to run])
+    [
+                          Usage:     --with-macosx-version-max-allowed=<version>
+
+                          e. g.: --with-macos-version-max-allowed=10.6
+                          see --with-macosx-sdk for more info
+    ],
+,)
+
+
 BUILD_TYPE="LibO"
 SCPDEFS=""
 
@@ -1635,6 +1700,128 @@ fi
 COMPATH=`echo $COMPATH | $SED "s@/[[Bb]][[Ii]][[Nn]]\\\$@@"`;
 
 dnl ===================================================================
+dnl  Test MacOSX sdk and version requirement
+dnl ===================================================================
+if test "$_os" = "Darwin" ; then
+
+    if test "$with_macosx_version_min_required" = "" ; then
+        if test "$with_macosx_version_max_allowed" = "" ; then
+            with_macosx_version_min_required="10.4"
+        else
+            with_macosx_version_min_required="$with_macosx_version_max_allowed"
+        fi
+    fi
+
+    if test "$with_macosx_version_max_allowed" = "" ; then
+        with_macosx_version_max_allowed="$with_macosx_version_min_required"
+    fi
+
+    if test "$with_macosx_sdk" = "" ; then
+        with_macosx_sdk="$with_macosx_version_max_allowed"
+    fi
+
+    case "$with_macosx_sdk" in
+
+    10.4)
+        MACOSX_SDK_PATH="/Developer/SDKs/MacOSX10.4u.sdk"
+        macosx_sdk_value="1040"
+        ;;
+    10.5)
+        MACOSX_SDK_PATH="/Developer/SDKs/MacOSX10.5.sdk"
+        macosx_sdk_value="1050"
+        AC_MSG_WARN([Building with a SDK > 10.4 is experimental])
+        echo "Building with a SDK > 10.4 is experimental" >> warn
+        ;;
+    10.6)
+        MACOSX_SDK_PATH="/Developer/SDKs/MacOSX10.6.sdk"
+        macosx_sdk_value="1060"
+        AC_MSG_WARN([Building with a SDK > 10.4 is experimental])
+        echo "Building with a SDK > 10.4 is experimental" >> warn
+        ;;
+    10.7)
+        MACOSX_SDK_PATH="/Developer/SDKs/MacOSX10.6.sdk"
+        macosx_sdk_value="1060"
+        AC_MSG_WARN([Building with a SDK > 10.4 is experimental])
+        echo "Building with a SDK > 10.4 is experimental" >> warn
+        ;;
+    *)
+        AC_MSG_ERROR([$with_macosx_sdk is not a supported SDK value, supported value are 10.4, 10.5, 10.6 and 10.7])
+        ;;
+    esac
+    AC_MSG_CHECKING([the presence of the SDK $with_macosx_sdk])
+    if test -d "$MACOSX_SDK_PATH" ; then
+        AC_MSG_RESULT([$MACOSX_SDK_PATH ok])
+    else
+        AC_MSG_ERROR([$MACOSX_SDK_PATH not found])
+    fi
+    MACOSX_DEPLOYMENT_TARGET="$with_macosx_version_min_required"
+
+    case "$with_macosx_version_min_required" in
+
+    10.4)
+        MAC_OS_X_VERSION_MIN_REQUIRED="1040"
+        ;;
+    10.5)
+        MAC_OS_X_VERSION_MIN_REQUIRED="1050"
+        AC_MSG_WARN([Building with a minimum version requirement > 10.4 break 10.4 compatibility. do not use for deliverable build])
+        echo "Building with a minimum version requirement > 10.4 break 10.4 compatibility. do not use for deliverable build" >>warn
+        ;;
+    10.6)
+        MAC_OS_X_VERSION_MIN_REQUIRED="1060"
+        AC_MSG_WARN([Building with a minimum version requirement > 10.4 break 10.4 compatibility. do not use for deliverable build])
+        echo "Building with a minimum version requirement > 10.4 break 10.4 compatibility. do not use for deliverable build" >>warn
+        ;;
+    10.7)
+        MAC_OS_X_VERSION_MIN_REQUIRED="1070"
+        AC_MSG_WARN([Building with a minimum version requirement > 10.4 break 10.4 compatibility. do not use for deliverable build])
+        echo "Building with a minimum version requirement > 10.4 break 10.4 compatibility. do not use for deliverable build" >>warn
+        ;;
+    *)
+        AC_MSG_ERROR([with-macosx-version-min-required $with_macosx_version_min_required is not a supported value, supported value are 10.4, 10.5, 10.6 and 10.7])
+        ;;
+    esac
+
+    case "$with_macosx_version_max_allowed" in
+
+    10.4)
+        MAC_OS_X_VERSION_MAX_ALLOWED="1040"
+        ;;
+    10.5)
+        MAC_OS_X_VERSION_MAX_ALLOWED="1050"
+        ;;
+    10.6)
+        MAC_OS_X_VERSION_MAX_ALLOWED="1060"
+        ;;
+    10.7)
+        MAC_OS_X_VERSION_MAX_ALLOWED="1070"
+        ;;
+    *)
+        AC_MSG_ERROR([with-macosx-version-max-allowed $with_macosx_version_max_allowed is not a supported value, supported value are 10.4, 10.5, 10.6 and 10.7])
+        ;;
+    esac
+
+    AC_MSG_CHECKING([that macosx-verion-min-required is coherent with macosx-version-max-allowed])
+    if test $MAC_OS_X_VERSION_MIN_REQUIRED -gt $MAC_OS_X_VERSION_MAX_ALLOWED ; then
+        AC_MSG_ERROR([the version minimumn required must be inferior or equal to the version maximum allowed])
+    else
+        AC_MSG_RESULT([ok])
+    fi
+
+    AC_MSG_CHECKING([that macosx-verion-max-allowed is coherent macos-with-sdk])
+    if test $MAC_OS_X_VERSION_MAX_ALLOWED -gt $macosx_sdk_value ; then
+        AC_MSG_ERROR([the version maximum allowed cannot be greater thatn the sdk level])
+    else
+        AC_MSG_RESULT([ok])
+    fi
+    AC_MSG_NOTICE([MAC_OS_X_VERSION_MIN_REQUIRED=$MAC_OS_X_VERSION_MIN_REQUIRED])
+    AC_MSG_NOTICE([MAC_OS_X_VERSION_MAX_ALLOWED=$MAC_OS_X_VERSION_MAX_ALLOWED])
+fi
+AC_SUBST(MACOSX_SDK_PATH)
+AC_SUBST(MACOSX_DEPLOYMENT_TARGET)
+AC_SUBST(MAC_OS_X_VERSION_MIN_REQUIRED)
+AC_SUBST(MAC_OS_X_VERSION_MAX_ALLOWED)
+
+dnl ===================================================================
 dnl  Test the gcc version,  3 is OK
 dnl ===================================================================
 if test \( "$_os" != "WINNT" -o "$WITH_MINGW" = "yes" \) -a "$GCC" = "yes"; then
@@ -1643,7 +1830,7 @@ if test \( "$_os" != "WINNT" -o "$WITH_MINGW" = "yes" \) -a "$GCC" = "yes"; then
     _gcc_major=`echo $_gcc_version | $AWK -F. '{ print \$1 }'`
     GCCVER=`echo $_gcc_version | $AWK -F. '{ print \$1*10000+\$2*100+\$3 }'`
 
-    if test "$_os" = "Darwin" -a "$GCCVER" -ge "040100" ; then
+    if test "$_os" = "Darwin" -a "$with_macosx_sdk" = "10.4" -a "$GCCVER" -ge "040100" ; then
         if test -z "$save_CC" -a -x "$GCC_HOME/bin/gcc-4.0" ; then
             export CC=$GCC_HOME/bin/gcc-4.0
             dnl  export CC to have it available in set_soenv -> config.guess
@@ -2728,7 +2915,7 @@ if test "$GXX" = "yes"; then
     _gpp_version=`$CXX -dumpversion`
     _gpp_majmin=`echo $_gpp_version | $AWK -F. '{ print \$1*100+\$2 }'`
 
-    if test "$_os" = "Darwin" -a "$_gpp_majmin" -ge "401" ; then
+    if test "$_os" = "Darwin" -a "$with_macosx_sdk" = "10.4" -a "$_gpp_majmin" -ge "401" ; then
         if test -z "$save_CXX" -a -x "$GCC_HOME/bin/g++-4.0" ; then
             CXX=$GCC_HOME/bin/g++-4.0
             _gpp_majmin_2=`"$CXX" -dumpversion | $AWK -F. '{ print \$1*100+\$2 }'`
