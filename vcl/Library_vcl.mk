@@ -42,17 +42,13 @@ endif
 $(eval $(call gb_Library_add_package_headers,vcl,vcl_inc))
 $(eval $(call gb_Library_add_package_headers,vcl,vcl_afmhash))
 
-ifeq ($(OS)$(COM),WNTGCC)
-WINEINCLUDE=-I$(OUTDIR)/inc/external/wine
-endif
-
 $(eval $(call gb_Library_set_include,vcl,\
     $$(INCLUDE) \
     -I$(realpath $(SRCDIR)/vcl/inc) \
     -I$(realpath $(SRCDIR)/vcl/inc/pch) \
     -I$(SRCDIR)/solenv/inc \
     -I$(OUTDIR)/inc \
-    $(WINEINCLUDE) \
+	$(if $(filter WNTGCC,$(OS)$(COM)),-I$(OUTDIR)/inc/external/wine) \
     -I$(WORKDIR)/CustomTarget/vcl/unx/generic/fontmanager \
 ))
 
@@ -226,7 +222,30 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/win/source/window/salobj \
 ))
 
+$(eval $(call gb_Library_add_linked_libs,vcl,\
+    advapi32 \
+    gdi32 \
+    gdiplus \
+    imm32 \
+    kernel32 \
+    mpr \
+    msimg32 \
+    msvcrt \
+    $(gb_Library_win32_OLDNAMES) \
+    ole32 \
+    shell32 \
+    user32 \
+    uuid \
+    uwinapi \
+    winspool \
+))
+
 $(eval $(call gb_Library_add_nativeres,vcl,src))
+ifeq ($(COM),MSC)
+$(eval $(call gb_Library_add_ldflags,vcl,\
+    /ENTRY:LibMain@12 \
+))
+endif
 endif
 
 ifeq ($(GUIBASE),cocoatouch)
@@ -517,29 +536,5 @@ $(eval $(call gb_Library_use_externals,vcl,\
 ))
 endif
 
-ifeq ($(OS),WNT)
-ifeq ($(COM),MSC)
-$(eval $(call gb_Library_add_ldflags,vcl,\
-    /ENTRY:LibMain@12 \
-))
-endif
-$(eval $(call gb_Library_add_linked_libs,vcl,\
-    advapi32 \
-    gdi32 \
-    gdiplus \
-    imm32 \
-    kernel32 \
-    mpr \
-    msimg32 \
-    msvcrt \
-    $(gb_Library_win32_OLDNAMES) \
-    ole32 \
-    shell32 \
-    user32 \
-    uuid \
-    uwinapi \
-    winspool \
-))
-endif
 
 # vim: set noet sw=4 ts=4:
