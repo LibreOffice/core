@@ -29,22 +29,15 @@ $(eval $(call gb_Library_Library,lomenubar))
 
 $(eval $(call gb_Library_set_componentfile,lomenubar,framework/util/lomenubar))
 
-# FIXME pkg-config call belong in ./configure obviously
-
-$(eval $(call gb_Library_set_include,lomenubar,\
-	$$(INCLUDE) \
-	$(shell pkg-config --cflags-only-I dbusmenu-gtk-0.4) \
-))
 
 $(eval $(call gb_Library_add_api,lomenubar,\
     offapi \
     udkapi \
 ))
 
-$(eval $(call gb_Library_set_ldflags,lomenubar,\
-	$$(LDFLAGS) \
-	$(shell pkg-config --libs dbusmenu-gtk-0.4) \
-	$(GTK_LIBS) \
+$(eval $(call gb_Library_use_externals,lomenubar,\
+	gtk \
+	dbusmenugtk \
 ))
 
 $(eval $(call gb_Library_add_linked_libs,lomenubar,\
