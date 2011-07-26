@@ -245,6 +245,11 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/ios/source/gdi/salgdi \
     vcl/ios/source/gdi/salvd \
 ))
+$(eval $(call gb_Library_use_externals,vcl,\
+	uikit \
+	corefoundation \
+))
+
 endif
 
 $(eval $(call gb_Library_add_cobjects,vcl,\
@@ -504,11 +509,11 @@ ifeq ($(GUIBASE),aqua)
 $(eval $(call gb_Library_add_linked_libs,vcl,\
     AppleRemote \
 ))
-$(eval $(call gb_Library_add_libs,vcl,\
-    -framework QuickTime \
-    -framework Cocoa \
-    -framework Carbon \
-    -framework CoreFoundation \
+$(eval $(call gb_Library_use_externals,vcl,\
+    quicktime \
+    cocoa \
+    carbon \
+    corefoundation \
 ))
 endif
 
@@ -516,11 +521,6 @@ ifeq ($(OS),WNT)
 ifeq ($(COM),MSC)
 $(eval $(call gb_Library_add_ldflags,vcl,\
     /ENTRY:LibMain@12 \
-))
-endif
-ifeq ($(COM),GCC)
-$(eval $(call gb_Library_add_ldflags,vcl,\
-    $$(LDFLAGS) \
 ))
 endif
 $(eval $(call gb_Library_add_linked_libs,vcl,\
@@ -541,13 +541,5 @@ $(eval $(call gb_Library_add_linked_libs,vcl,\
     winspool \
 ))
 endif
-
-ifeq ($(GUIBASE),cocoatouch)
-$(eval $(call gb_Library_add_ldflags,vcl,\
-    -framework UIKit \
-    -framework CoreFoundation \
-))
-endif
-
 
 # vim: set noet sw=4 ts=4:
