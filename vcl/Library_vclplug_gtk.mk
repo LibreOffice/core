@@ -35,17 +35,13 @@ $(eval $(call gb_Library_set_include,vclplug_gtk,\
     -I$(OUTDIR)/inc \
 ))
 
-$(eval $(call gb_Library_set_include,vclplug_gtk,\
-	$$(INCLUDE) \
-    $$(GTK_CFLAGS) \
-))
-
 $(eval $(call gb_Library_add_defs,vclplug_gtk,\
     -DVCLPLUG_GTK_IMPLEMENTATION \
     -DVERSION=\"$(UPD)$(LAST_MINOR)\" \
 ))
 
 ifneq ($(ENABLE_DBUS),)
+# FIXME: pkg-config calls should be done in configure, and this should be _use_external
 $(eval $(call gb_Library_set_include,vclplug_gtk,\
 	$$(INCLUDE) \
 	$(filter -I%,$(shell pkg-config --cflags dbus-glib-1)) \
@@ -61,11 +57,6 @@ endif
 $(eval $(call gb_Library_add_api,vclplug_gtk,\
     offapi \
     udkapi \
-))
-
-$(eval $(call gb_Library_add_libs,vclplug_gtk,\
-    $$(GTK_LIBS) \
-    $$(GTHREAD_LIBS) \
 ))
 
 $(eval $(call gb_Library_add_linked_libs,vclplug_gtk,\
@@ -92,6 +83,8 @@ $(eval $(call gb_Library_add_linked_libs,vclplug_gtk,\
 ))
 
 $(eval $(call gb_Library_use_externals,vclplug_gtk,\
+	gtk \
+	gthread \
 	icule \
 	icuuc \
 ))
