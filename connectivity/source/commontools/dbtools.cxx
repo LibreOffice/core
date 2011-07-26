@@ -1422,7 +1422,9 @@ namespace
         ::rtl::OUString& _out_rCatalog, ::rtl::OUString& _out_rSchema, ::rtl::OUString& _out_rName )
     {
         ::dbtools::OPropertyMap& rPropMap = OMetaConnection::getPropMap();
-        Reference< XPropertySetInfo > xInfo = _xTable->getPropertySetInfo();
+        Reference< XPropertySetInfo > xInfo;
+        if (_xTable.is())
+            xInfo = _xTable->getPropertySetInfo();
         if (    xInfo.is()
             &&  xInfo->hasPropertyByName(rPropMap.getNameByIndex(PROPERTY_ID_NAME)) )
         {
