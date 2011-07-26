@@ -54,6 +54,7 @@
 #include <tools/fsys.hxx>
 #define _TOOLS_HXX
 #include <tools/urlobj.hxx>
+#include <vector>
 
 #ifdef UNX
 #define _MAX_PATH 260
@@ -205,8 +206,11 @@ FSysRedirector* FSysRedirector::Redirector()
 
 //--------------------------------------------------------------------
 
-class DirEntryStack: public List
+class DirEntryStack
 {
+private:
+    ::std::vector< DirEntry* >  maStack;
+
 public:
                         DirEntryStack() {};
                         ~DirEntryStack();
@@ -215,26 +219,37 @@ public:
     inline  DirEntry*   Pop();
     inline  DirEntry*   Top();
     inline  DirEntry*   Bottom();
+    inline  bool        Empty();
 };
 
 inline void DirEntryStack::Push( DirEntry *pEntry )
 {
-    List::Insert( pEntry, LIST_APPEND );
+    maStack.push_back( pEntry );
 }
 
 inline DirEntry* DirEntryStack::Pop()
 {
-    return (DirEntry*) List::Remove( Count() - 1 );
+    DirEntry*   pEntry = NULL;
+    if ( !maStack.empty() ) {
+        pEntry = maStack.back();
+        maStack.pop_back();
+    }
+    return pEntry;
 }
 
 inline DirEntry* DirEntryStack::Top()
 {
-    return (DirEntry*) List::GetObject( Count() - 1 );
+    return maStack.empty() ? NULL : maStack.back();
 }
 
 inline DirEntry* DirEntryStack::Bottom()
 {
-    return (DirEntry*) List::GetObject( 0 );
+    return maStack.empty() ? NULL : maStack.front();
+}
+
+inline bool DirEntryStack::Empty()
+{
+    return maStack.empty();
 }
 
 //--------------------------------------------------------------------
@@ -249,8 +264,7 @@ DBG_NAME( DirEntry );
 
 DirEntryStack::~DirEntryStack()
 {
-    while ( Count() )
-        delete Pop();
+    maStack.clear();
 }
 
 /*************************************************************************
@@ -392,7 +406,7 @@ FSysError DirEntry::ImpParseOs2Name( const ByteString& rPfad, FSysPathStyle eSty
                 {
                     // schon was auf dem Stack?
                     // oder Novell-Format? (not supported wegen URLs)
-                        if ( aStack.Count() || aName.Len() > 2 )
+                        if ( !aStack.Empty() || aName.Len() > 2 )
                         {
                             aName = rPfad;
                             return FSYS_ERR_MISPLACEDCHAR;
@@ -403,7 +417,7 @@ FSysError DirEntry::ImpParseOs2Name( const ByteString& rPfad, FSysPathStyle eSty
                 else
                 {
                     // liegt ein anderes Drive auf dem Stack?
-                    if ( aStack.Count() )
+                    if ( !aStack.Empty() )
                     {
                         rtl::OString aThis(aStack.Bottom()->aName);
                         aThis = aThis.toAsciiLowerCase();
@@ -414,7 +428,7 @@ FSysError DirEntry::ImpParseOs2Name( const ByteString& rPfad, FSysPathStyle eSty
                     }
 
                     // liegt jetzt nichts mehr auf dem Stack?
-                    if ( !aStack.Count() )
+                    if ( aStack.empty() )
                         aStack.Push( new DirEntry( aName, FSYS_FLAG_RELROOT, eStyle ) );
                 }
             }
@@ -434,7 +448,7 @@ FSysError DirEntry::ImpParseOs2Name( const ByteString& rPfad, FSysPathStyle eSty
                 {
                     // ist nichts, ein Parent oder eine relative Root
                     // auf dem Stack?
-                    if ( ( aStack.Count() == 0 ) ||
+                    if ( ( aStack.Empty() ) ||
                          ( aStack.Top()->eFlag == FSYS_FLAG_PARENT ) ||
                          ( aStack.Top()->eFlag == FSYS_FLAG_RELROOT ) )
                         // fuehrende Parents kommen auf den Stack
@@ -477,7 +491,7 @@ FSysError DirEntry::ImpParseOs2Name( const ByteString& rPfad, FSysPathStyle eSty
 
     sal_uIntPtr nErr = ERRCODE_NONE;
     // Haupt-Entry (selbst) zuweisen
-    if ( aStack.Count() == 0 )
+    if ( aStack.Empty() )
     {
         eFlag = FSYS_FLAG_CURRENT;
         aName.Erase();
@@ -492,7 +506,7 @@ FSysError DirEntry::ImpParseOs2Name( const ByteString& rPfad, FSysPathStyle eSty
 
     // die Parent-Entries vom Stack holen
     DirEntry** pTemp = &pParent; // Zeiger auf den Member pParent setzen
-    while ( aStack.Count() )
+    while ( !aStack.Empty() )
     {
         *pTemp = aStack.Pop();
 
@@ -1740,7 +1754,7 @@ FSysError DirEntry::ImpParseUnixName( const ByteString& rPfad, FSysPathStyle eSt
             {
                 // ist nichts, ein Parent oder eine relative Root
                 // auf dem Stack?
-                if ( ( aStack.Count() == 0 ) ||
+                if ( ( aStack.Empty() ) ||
                      ( aStack.Top()->eFlag == FSYS_FLAG_PARENT ) )
                     // fuehrende Parents kommen auf den Stack
                     aStack.Push( new DirEntry( ByteString(), FSYS_FLAG_PARENT, eStyle ) );
@@ -1778,7 +1792,7 @@ FSysError DirEntry::ImpParseUnixName( const ByteString& rPfad, FSysPathStyle eSt
     while ( aPfad.Len() );
 
     // Haupt-Entry (selbst) zuweisen
-    if ( aStack.Count() == 0 )
+    if ( aStack.Empty() )
     {
         eFlag = FSYS_FLAG_CURRENT;
         aName.Erase();
@@ -1792,7 +1806,7 @@ FSysError DirEntry::ImpParseUnixName( const ByteString& rPfad, FSysPathStyle eSt
 
     // die Parent-Entries vom Stack holen
     DirEntry** pTemp = &pParent;
-    while ( aStack.Count() )
+    while ( !aStack.Empty() )
     {
         *pTemp = aStack.Pop();
         pTemp = &( (*pTemp)->pParent );
