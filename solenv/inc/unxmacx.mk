@@ -48,8 +48,10 @@ CDEFS+=-DGLIBC=2 -D_PTHREADS -D_REENTRANT -DNO_PTHREAD_PRIORITY $(PROCESSOR_DEFI
 # done in setsolar/configure now. left here for documentation
 #MACOSX_DEPLOYMENT_TARGET=10.4
 #.EXPORT: MACOSX_DEPLOYMENT_TARGET
-CDEFS+=-DQUARTZ 
-EXTRA_CDEFS*=-isysroot /Developer/SDKs/MacOSX10.4u.sdk
+CDEFS+=-DQUARTZ
+CDEFS+:= -DMAC_OS_X_VERSION_MIN_REQUIRED=$(MAC_OS_X_VERSION_MIN_REQUIRED) -DMAC_OS_X_VERSION_MAX_ALLOWED=$(MAC_OS_X_VERSION_MAX_ALLOWED)
+
+EXTRA_CDEFS*:=-isysroot $(MACOSX_SDK_PATH)
 .ENDIF
 
 # Name of library where static data members are initialized
@@ -174,7 +176,7 @@ LINKC*=$(CC)
 
 LINKFLAGSDEFS*=-Wl,-multiply_defined,suppress
 # assure backwards-compatibility
-EXTRA_LINKFLAGS*=-Wl,-syslibroot,/Developer/SDKs/MacOSX10.4u.sdk
+EXTRA_LINKFLAGS*:=-Wl,-syslibroot,$(MACOSX_SDK_PATH)
 # Very long install_names are needed so that install_name_tool -change later on
 # does not complain that "larger updated load commands do not fit:"
 LINKFLAGSRUNPATH_URELIB=-install_name '@__________________________________________________URELIB/$(@:f)'
