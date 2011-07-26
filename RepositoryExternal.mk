@@ -476,6 +476,20 @@ $(call gb_LinkTarget_add_libs,$(1), \
 
 endef
 
+define gb_LinkTarget__use_coretext
+$(call gb_Library_add_libs,$(1), \
+	-framework CoreText \
+)
+
+endef
+
+define gb_LinkTarget__use_coregraphics
+$(call gb_Library_add_libs,$(1), \
+	-framework CoreGraphics \
+)
+
+endef
+
 define gb_LinkTarget__use_cocoa
 $(call gb_LinkTarget_add_libs,$(1), \
 	-framework Cocoa \
