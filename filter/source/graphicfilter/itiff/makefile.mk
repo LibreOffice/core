@@ -37,9 +37,6 @@ DEPTARGET=vitiff
 
 # --- Allgemein ----------------------------------------------------------
 
-.IF "$(editdebug)"!="" || "$(EDITDEBUG)"!=""
-CDEFS+= -DEDITDEBUG
-.ENDIF
 .IF "$(L10N_framework)"==""
 SLOFILES =  $(SLO)$/itiff.obj    \
             $(SLO)$/lzwdecom.obj \

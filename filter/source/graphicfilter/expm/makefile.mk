@@ -38,9 +38,6 @@ DEPTARGET=vexpm
 
 # --- Allgemein ----------------------------------------------------------
 
-.IF "$(editdebug)"!="" || "$(EDITDEBUG)"!=""
-CDEFS+= -DEDITDEBUG
-.ENDIF
 .IF "$(L10N_framework)"==""
 SLOFILES =	$(SLO)$/expm.obj
 EXCEPTIONSFILES =	$(SLO)$/expm.obj

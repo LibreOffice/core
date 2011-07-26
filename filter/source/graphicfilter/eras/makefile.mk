@@ -37,10 +37,6 @@ DEPTARGET=veras
 
 # --- Allgemein ----------------------------------------------------------
 .IF "$(L10N_framework)"==""
-.IF "$(editdebug)"!="" || "$(EDITDEBUG)"!=""
-CDEFS+= -DEDITDEBUG
-.ENDIF
-
 SLOFILES =	$(SLO)$/eras.obj
 EXCEPTIONSFILES =	$(SLO)$/eras.obj
 

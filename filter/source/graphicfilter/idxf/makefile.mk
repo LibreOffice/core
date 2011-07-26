@@ -37,9 +37,6 @@ DEPTARGET=vidxf
 
 # --- Allgemein ----------------------------------------------------------
 
-.IF "$(editdebug)"!="" || "$(EDITDEBUG)"!=""
-CDEFS+= -DEDITDEBUG
-.ENDIF
 .IF "$(L10N_framework)"==""
 EXCEPTIONSFILES=\
             $(SLO)$/dxf2mtf.obj  \

@@ -37,10 +37,6 @@ DEPTARGET=veps
 
 # --- Allgemein ----------------------------------------------------------
 
-.IF "$(editdebug)"!="" || "$(EDITDEBUG)"!=""
-CDEFS+= -DEDITDEBUG
-.ENDIF
-
 SRS1NAME=$(TARGET)
 SRC1FILES =	epsstr.src
 .IF "$(L10N_framework)"==""

@@ -37,9 +37,6 @@ DEPTARGET=viras
 
 # --- Allgemein ----------------------------------------------------------
 
-.IF "$(editdebug)"!="" || "$(EDITDEBUG)"!=""
-CDEFS+= -DEDITDEBUG
-.ENDIF
 .IF "$(L10N_framework)"==""
 SLOFILES =	$(SLO)$/iras.obj
 EXCEPTIONSFILES = $(SLO)$/iras.obj

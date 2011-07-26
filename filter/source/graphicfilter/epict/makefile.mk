@@ -39,10 +39,6 @@ DEPTARGET=vepict
 
 # --- Allgemein ----------------------------------------------------------
 
-.IF "$(editdebug)"!="" || "$(EDITDEBUG)"!=""
-CDEFS+= -DEDITDEBUG
-.ENDIF
-
 .IF "$(L10N_framework)"==""
 SLOFILES =  $(SLO)$/epict.obj
 EXCEPTIONSFILES =  $(SLO)$/epict.obj \

@@ -37,9 +37,6 @@ DEPTARGET=vieps
 
 # --- Allgemein ----------------------------------------------------------
 
-.IF "$(editdebug)"!="" || "$(EDITDEBUG)"!=""
-CDEFS+= -DEDITDEBUG
-.ENDIF
 .IF "$(L10N_framework)"==""
 SLOFILES =  $(SLO)$/ieps.obj
 EXCEPTIONSFILES =  $(SLO)$/ieps.obj

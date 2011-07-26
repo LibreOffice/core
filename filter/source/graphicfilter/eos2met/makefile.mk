@@ -38,10 +38,6 @@ DEPTARGET=veos2met
 
 # --- Allgemein ----------------------------------------------------------
 
-.IF "$(editdebug)"!="" || "$(EDITDEBUG)"!=""
-CDEFS+= -DEDITDEBUG
-.ENDIF
-
 .IF "$(L10N_framework)"==""
 SLOFILES =  $(SLO)$/eos2met.obj
 

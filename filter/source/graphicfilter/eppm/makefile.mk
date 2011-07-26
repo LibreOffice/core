@@ -38,10 +38,6 @@ DEPTARGET=veppm
 
 # --- Allgemein ----------------------------------------------------------
 
-.IF "$(editdebug)"!="" || "$(EDITDEBUG)"!=""
-CDEFS+= -DEDITDEBUG
-.ENDIF
-
 .IF "$(L10N_framework)"==""
 SLOFILES =	$(SLO)$/eppm.obj
 .ENDIF

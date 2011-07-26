@@ -37,9 +37,6 @@ DEPTARGET=vipcd
 
 # --- Allgemein ----------------------------------------------------------
 
-.IF "$(editdebug)"!="" || "$(EDITDEBUG)"!=""
-CDEFS+= -DEDITDEBUG
-.ENDIF
 .IF "$(L10N_framework)"==""
 SLOFILES =  $(EXCEPTIONSFILES)
 EXCEPTIONSFILES = $(SLO)$/ipcd.obj
