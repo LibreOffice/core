@@ -1101,7 +1101,7 @@ LanguageType MsLangId::convertUnxByteStringToLanguage(
 // static
 const MsLangId::IsoLangEntry* MsLangId::getIsoLangEntry( size_t nIndex )
 {
-    if (nIndex < sizeof( aImplIsoLangEntries) / sizeof( IsoLangEntry))
+    if (nIndex < SAL_N_ELEMENTS(aImplIsoLangEntries))
         return &aImplIsoLangEntries[ nIndex];
     return 0;
 }
