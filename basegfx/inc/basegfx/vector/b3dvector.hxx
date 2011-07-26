@@ -233,19 +233,6 @@ namespace basegfx
         */
         B3DVector getPerpendicular(const B3DVector& rNormalizedVec) const;
 
-        /** get the projection of this Vector on the given Plane
-
-            @attention This only works if the given 3D Vector defining
-            the Plane is normalized.
-
-            @param rNormalizedPlane
-            A normalized 3D Vector defining a Plane.
-
-            @return
-            The projected 3D Vector
-        */
-        B3DVector getProjectionOnPlane(const B3DVector& rNormalizedPlane) const;
-
         /** Calculate the Scalar product
 
             This method calculates the Scalar product between this

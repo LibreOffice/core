@@ -67,19 +67,6 @@ namespace basegfx
         return aNew;
     }
 
-    B3DVector B3DVector::getProjectionOnPlane(const B3DVector& rNormalizedPlane) const
-    {
-        B3DVector aNew(*this);
-        aNew = cross(aNew, rNormalizedPlane);
-        aNew = cross(aNew, rNormalizedPlane);
-
-        aNew.mfX = mfX - aNew.mfX;
-        aNew.mfY = mfY - aNew.mfY;
-        aNew.mfZ = mfZ - aNew.mfZ;
-
-        return aNew;
-    }
-
     B3DVector& B3DVector::operator*=( const ::basegfx::B3DHomMatrix& rMat )
     {
         const double fTempX( rMat.get(0,0)*mfX + rMat.get(0,1)*mfY + rMat.get(0,2)*mfZ );

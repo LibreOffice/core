@@ -56,7 +56,6 @@ namespace basegfx
 
         double getLength() const { if(maLengthArray.size()) return maLengthArray[maLengthArray.size() - 1]; else return 0.0; }
         double distanceToRelative(double fDistance) const;
-        double relativeToDistance(double fRelative) const;
     };
 } // end of namespace basegfx
 

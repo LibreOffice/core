@@ -126,37 +126,6 @@ namespace basegfx
         return (static_cast< double >(nIndex) + fLinearInterpolatedLength) / static_cast< double >(mnEdgeCount);
     }
 
-    double B2DCubicBezierHelper::relativeToDistance(double fRelative) const
-    {
-        if(fRelative <= 0.0)
-        {
-            return 0.0;
-        }
-
-        const double fLength(getLength());
-
-        if(fTools::moreOrEqual(fRelative, 1.0))
-        {
-            return fLength;
-        }
-
-        // fRelative is in ]0.0 .. 1.0[
-
-        if(1 == mnEdgeCount)
-        {
-            // not a bezier, linear edge
-            return fRelative * fLength;
-        }
-
-        // fRelative is in ]0.0 .. 1.0[
-        const double fIndex(fRelative * static_cast< double >(mnEdgeCount));
-        double fIntIndex;
-        const double fFractIndex(modf(fIndex, &fIntIndex));
-        const sal_uInt32 nIntIndex(static_cast< sal_uInt32 >(fIntIndex));
-        const double fStartDistance(nIntIndex ? maLengthArray[nIntIndex - 1] : 0.0);
-
-        return fStartDistance + ((maLengthArray[nIntIndex] - fStartDistance) * fFractIndex);
-    }
 } // end of namespace basegfx
 
 //////////////////////////////////////////////////////////////////////////////
