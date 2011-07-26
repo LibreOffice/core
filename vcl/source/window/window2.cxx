@@ -810,15 +810,6 @@ void Window::EndAutoScroll()
 
 // -----------------------------------------------------------------------
 
-sal_Bool Window::IsAutoScroll() const
-{
-    DBG_CHKTHIS( Window, ImplDbgCheckWindow );
-
-    return (ImplGetSVData()->maWinData.mpAutoScrollWin == this);
-}
-
-// -----------------------------------------------------------------------
-
 void Window::SaveBackground( const Point& rPos, const Size& rSize,
                              const Point& rDestOff, VirtualDevice& rSaveDevice )
 {
@@ -1418,11 +1409,6 @@ sal_Bool Window::ImplIsFloatingWindow() const
     return mpWindowImpl->mbFloatWin;
 }
 
-sal_Bool Window::ImplIsToolbox() const
-{
-    return mpWindowImpl->mbToolBox;
-}
-
 sal_Bool Window::ImplIsSplitter() const
 {
     return mpWindowImpl->mbSplitter;
@@ -1438,16 +1424,6 @@ sal_Bool Window::ImplIsOverlapWindow() const
     return mpWindowImpl->mbOverlapWin;
 }
 
-void Window::ImplSetActive( sal_Bool bActive )
-{
-    mpWindowImpl->mbActive = bActive;
-}
-
-sal_Bool Window::ImplIsMouseTransparent() const
-{
-    return mpWindowImpl->mbMouseTransparent;
-}
-
 void Window::ImplSetMouseTransparent( sal_Bool bTransparent )
 {
     mpWindowImpl->mbMouseTransparent = bTransparent;
@@ -1456,19 +1432,6 @@ void Window::ImplSetMouseTransparent( sal_Bool bTransparent )
 Point Window::ImplOutputToFrame( const Point& rPos )
 {
     return Point( rPos.X()+mnOutOffX, rPos.Y()+mnOutOffY );
-}
-
-Point Window::ImplFrameToOutput( const Point& rPos )
-{
-    return Point( rPos.X()-mnOutOffX, rPos.Y()-mnOutOffY );
-}
-
-void Window::ImplOutputToFrame( Rectangle& rRect )
-{
-    rRect.Left()+=mnOutOffX;
-    rRect.Top()+=mnOutOffY;
-    rRect.Right()+=mnOutOffX;
-    rRect.Bottom()+=mnOutOffY;
 }
 
 void Window::ImplFrameToOutput( Rectangle& rRect )
@@ -1509,11 +1472,6 @@ WinBits Window::GetExtendedStyle() const
     return mpWindowImpl->mnExtendedStyle;
 }
 
-WinBits Window::GetPrevExtendedStyle() const
-{
-    return mpWindowImpl->mnExtendedStyle;
-}
-
 void Window::SetType( WindowType nType )
 {
     mpWindowImpl->mnType = nType;
@@ -1546,16 +1504,6 @@ sal_Bool Window::IsToolbarFloatingWindow() const
 void Window::EnableAllResize( sal_Bool bEnable )
 {
     mpWindowImpl->mbAllResize = bEnable;
-}
-
-sal_Bool Window::IsAllResizeEnabled() const
-{
-    return mpWindowImpl->mbAllResize;
-}
-
-sal_Bool Window::IsClipSiblingsEnabled() const
-{
-    return mpWindowImpl->mbClipSiblings;
 }
 
 void Window::EnableChildTransparentMode( sal_Bool bEnable )
@@ -1603,21 +1551,6 @@ const InputContext& Window::GetInputContext() const
     return mpWindowImpl->maInputContext;
 }
 
-sal_Bool Window::IsExtTextInput() const
-{
-    return mpWindowImpl->mbExtTextInput;
-}
-
-void Window::EnableChildNotify( sal_Bool bEnable )
-{
-    mpWindowImpl->mbChildNotify = bEnable;
-}
-
-sal_Bool Window::IsChildNotify() const
-{
-    return mpWindowImpl->mbChildNotify;
-}
-
 sal_Bool Window::IsControlFont() const
 {
     return (mpWindowImpl->mpControlFont != 0);
@@ -1663,11 +1596,6 @@ sal_Bool Window::IsReallyVisible() const
     return mpWindowImpl->mbReallyVisible;
 }
 
-sal_Bool Window::IsParentPathVisible() const
-{
-    return mpWindowImpl->mbReallyVisible;
-}
-
 sal_Bool Window::IsReallyShown() const
 {
     return mpWindowImpl->mbReallyShown;
@@ -1691,11 +1619,6 @@ sal_Bool Window::IsInputEnabled() const
 sal_Bool Window::IsAlwaysEnableInput() const
 {
     return mpWindowImpl->meAlwaysInputMode == AlwaysInputEnabled;
-}
-
-sal_Bool Window::IsAlwaysDisableInput() const
-{
-    return mpWindowImpl->meAlwaysInputMode == AlwaysInputDisabled;
 }
 
 sal_uInt16 Window::GetActivateMode() const
@@ -1739,11 +1662,6 @@ void Window::SetParentUpdateMode( sal_Bool bUpdate )
     mpWindowImpl->mbNoParentUpdate = !bUpdate;
 }
 
-sal_Bool Window::IsParentUpdateMode() const
-{
-    return !mpWindowImpl->mbNoParentUpdate;
-}
-
 sal_Bool Window::IsActive() const
 {
     return mpWindowImpl->mbActive;
@@ -1757,16 +1675,6 @@ sal_uInt16 Window::GetGetFocusFlags() const
 sal_Bool Window::IsCompoundControl() const
 {
     return mpWindowImpl->mbCompoundControl;
-}
-
-sal_Bool Window::IsChildPointerOverwrite() const
-{
-    return mpWindowImpl->mbChildPtrOverwrite;
-}
-
-sal_Bool Window::IsPointerVisible() const
-{
-    return !mpWindowImpl->mbNoPtrVisible;
 }
 
 sal_Bool Window::IsWait() const

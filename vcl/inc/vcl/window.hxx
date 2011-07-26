@@ -387,7 +387,6 @@ private:
     friend Window* ImplFindWindow( const SalFrame* pFrame, Point& rSalFramePos );
 public:
     SAL_DLLPRIVATE void                ImplInit( Window* pParent, WinBits nStyle, SystemParentData* pSystemParentData );
-    SAL_DLLPRIVATE void                ImplInit( Window* pParent, WinBits nStyle, const ::com::sun::star::uno::Any& aSystemWorkWindowToken );
     SAL_DLLPRIVATE WinBits             ImplInitRes( const ResId& rResId );
     SAL_DLLPRIVATE void                ImplLoadRes( const ResId& rResId );
     SAL_DLLPRIVATE void                ImplWindowRes( const ResId& rResId );
@@ -411,15 +410,11 @@ public:
     SAL_DLLPRIVATE sal_Bool                ImplIsRealParentPath( const Window* pWindow ) const;
     SAL_DLLPRIVATE sal_Bool                ImplIsChild( const Window* pWindow, sal_Bool bSystemWindow = sal_False ) const;
     SAL_DLLPRIVATE sal_Bool                ImplIsWindowOrChild( const Window* pWindow, sal_Bool bSystemWindow = sal_False ) const;
-    SAL_DLLPRIVATE Window*             ImplGetSameParent( const Window* pWindow ) const;
     SAL_DLLPRIVATE sal_Bool                ImplIsDockingWindow() const;
     SAL_DLLPRIVATE sal_Bool                ImplIsFloatingWindow() const;
-    SAL_DLLPRIVATE sal_Bool                ImplIsToolbox() const;
     SAL_DLLPRIVATE sal_Bool                ImplIsSplitter() const;
     SAL_DLLPRIVATE sal_Bool                ImplIsPushButton() const;
     SAL_DLLPRIVATE sal_Bool                ImplIsOverlapWindow() const;
-    SAL_DLLPRIVATE void                ImplSetActive( sal_Bool bActive );
-    SAL_DLLPRIVATE sal_Bool                ImplIsMouseTransparent() const;
     SAL_DLLPRIVATE void                ImplSetMouseTransparent( sal_Bool bTransparent );
     SAL_DLLPRIVATE int                 ImplTestMousePointerSet();
     SAL_DLLPRIVATE PointerStyle        ImplGetMousePointer() const;
@@ -432,8 +427,6 @@ public:
     SAL_DLLPRIVATE void                ImplPointToLogic( Font& rFont ) const;
     SAL_DLLPRIVATE void                ImplLogicToPoint( Font& rFont ) const;
     SAL_DLLPRIVATE Point               ImplOutputToFrame( const Point& rPos );
-    SAL_DLLPRIVATE Point               ImplFrameToOutput( const Point& rPos );
-    SAL_DLLPRIVATE void                ImplOutputToFrame( Rectangle& rRect );
     SAL_DLLPRIVATE void                ImplFrameToOutput( Rectangle& rRect );
     SAL_DLLPRIVATE sal_Bool                ImplSysObjClip( const Region* pOldRegion );
     SAL_DLLPRIVATE void                ImplUpdateSysObjChildsClip();
@@ -501,7 +494,6 @@ public:
     SAL_DLLPRIVATE void        ImplPosSizeWindow( long nX, long nY, long nWidth, long nHeight, sal_uInt16 nFlags );
     SAL_DLLPRIVATE void        ImplToBottomChild();
     SAL_DLLPRIVATE void        ImplCalcToTop( ImplCalcToTopData* pPrevData );
-    SAL_DLLPRIVATE void        ImplCalcChildOverlapToTop( ImplCalcToTopData* pPrevData );
     SAL_DLLPRIVATE void        ImplToTop( sal_uInt16 nFlags );
     SAL_DLLPRIVATE void        ImplStartToTop( sal_uInt16 nFlags );
     SAL_DLLPRIVATE void        ImplFocusToTop( sal_uInt16 nFlags, sal_Bool bReallyVisible );
@@ -539,7 +531,6 @@ public:
 
     SAL_DLLPRIVATE static void ImplCalcSymbolRect( Rectangle& rRect );
     SAL_DLLPRIVATE void        ImplHandleScroll( ScrollBar* pHScrl, long nX, ScrollBar* pVScrl, long nY );
-    SAL_DLLPRIVATE sal_Bool        ImplGetCurrentBackgroundColor( Color& rCol );
     SAL_DLLPRIVATE sal_Bool        ImplIsAccessibleCandidate() const;
     SAL_DLLPRIVATE sal_Bool        ImplIsAccessibleNativeFrame() const;
     SAL_DLLPRIVATE sal_uInt16      ImplGetAccessibleCandidateChildWindowCount( sal_uInt16 nFirstWindowType ) const;
@@ -567,7 +558,6 @@ public:
     SAL_DLLPRIVATE static void ImplInitAppFontData( Window* pWindow );
     SAL_DLLPRIVATE void        ImplPaintToDevice( OutputDevice* pTargetOutDev, const Point& rPos );
 
-    SAL_DLLPRIVATE sal_Bool        ImplIsInTaskPaneList();
     SAL_DLLPRIVATE void        ImplIsInTaskPaneList( sal_Bool mbIsInTaskList );
     SAL_DLLPRIVATE ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XCanvas >
                                ImplGetCanvas( const Size& rFullscreenSize, bool bFullscreen, bool bSpriteCanvas ) const;
@@ -630,7 +620,6 @@ public:
     /*virtual*/ void    AddChildEventListener( const Link& rEventListener );
     /*virtual*/ void    RemoveChildEventListener( const Link& rEventListener );
 
-    sal_uLong               PostUserEvent( sal_uLong nEvent, void* pEventData = NULL );
     sal_uLong               PostUserEvent( const Link& rLink, void* pCaller = NULL );
     sal_Bool                PostUserEvent( sal_uLong& rEventId, sal_uLong nEvent, void* pEventData = NULL );
     sal_Bool                PostUserEvent( sal_uLong& rEventId, const Link& rLink, void* pCaller = NULL );
@@ -650,7 +639,6 @@ public:
     WinBits             GetPrevStyle() const;
     void                SetExtendedStyle( WinBits nExtendedStyle );
     WinBits             GetExtendedStyle() const;
-    WinBits             GetPrevExtendedStyle() const;
     void                SetType( WindowType nType );
     WindowType          GetType() const;
     sal_Bool                IsSystemWindow() const;
@@ -661,7 +649,6 @@ public:
     SystemWindow*       GetSystemWindow() const;
 
     void                EnableAllResize( sal_Bool bEnable = sal_True );
-    sal_Bool                IsAllResizeEnabled() const;
 
     void                SetBorderStyle( sal_uInt16 nBorderStyle );
     sal_uInt16              GetBorderStyle() const;
@@ -672,7 +659,6 @@ public:
     long                CalcTitleWidth() const;
 
     void                EnableClipSiblings( sal_Bool bClipSiblings = sal_True );
-    sal_Bool                IsClipSiblingsEnabled() const;
 
     void                EnableChildTransparentMode( sal_Bool bEnable = sal_True );
     sal_Bool                IsChildTransparentModeEnabled() const;
@@ -699,13 +685,9 @@ public:
     void                SetInputContext( const InputContext& rInputContext );
     const InputContext& GetInputContext() const;
     void                EndExtTextInput( sal_uInt16 nFlags );
-    sal_Bool                IsExtTextInput() const;
     void                SetCursorRect( const Rectangle* pRect = NULL, long nExtTextInputWidth = 0 );
     const Rectangle*    GetCursorRect() const;
     long                GetCursorExtTextInputWidth() const;
-
-    void                EnableChildNotify( sal_Bool bEnable );
-    sal_Bool                IsChildNotify() const;
 
     using               OutputDevice::SetSettings;
     virtual void        SetSettings( const AllSettings& rSettings );
@@ -754,8 +736,6 @@ public:
     void                Hide( sal_uInt16 nFlags = 0 ) { Show( sal_False, nFlags ); }
     sal_Bool                IsVisible() const;
     sal_Bool                IsReallyVisible() const;
-    // Do not use this function, use IsReallyVisible()
-    sal_Bool                IsParentPathVisible() const;
     sal_Bool                IsReallyShown() const;
     sal_Bool                IsInInitShow() const;
 
@@ -801,11 +781,7 @@ public:
         if true children are recursively set to AlwaysDisableInput
     */
     void                AlwaysDisableInput( sal_Bool bAlways, sal_Bool bChild = sal_True );
-    /** returns the current AlwaysDisableInput state
-    @return
-    true if window is in AlwaysEnableInput state
-    */
-    sal_Bool                IsAlwaysDisableInput() const;
+
     /** usually event handlers (see AddEventListener and AddChildEventListener)
     are not called on disabled, modal or input disabled windows. There are however rare cases
     in which one wants a Window or rather one of its Control subclasses to
@@ -879,8 +855,6 @@ public:
     virtual void        Invalidate( const Rectangle& rRect, sal_uInt16 nFlags = 0 );
     virtual void        Invalidate( const Region& rRegion, sal_uInt16 nFlags = 0 );
     void                Validate( sal_uInt16 nFlags = 0 );
-    void                Validate( const Rectangle& rRect, sal_uInt16 nFlags = 0 );
-    void                Validate( const Region& rRegion, sal_uInt16 nFlags = 0 );
     sal_Bool                HasPaintEvent() const;
     void                Update();
     void                Flush();
@@ -896,7 +870,6 @@ public:
     void                SetUpdateMode( sal_Bool bUpdate );
     sal_Bool                IsUpdateMode() const;
     void                SetParentUpdateMode( sal_Bool bUpdate );
-    sal_Bool                IsParentUpdateMode() const;
 
     void                GrabFocus();
     sal_Bool                HasFocus() const;
@@ -925,12 +898,10 @@ public:
     void                SetPointer( const Pointer& rPointer );
     const Pointer&      GetPointer() const;
     void                EnableChildPointerOverwrite( sal_Bool bOverwrite = sal_True );
-    sal_Bool                IsChildPointerOverwrite() const;
     void                SetPointerPosPixel( const Point& rPos );
     Point               GetPointerPosPixel();
     Point               GetLastPointerPosPixel();
     void                ShowPointer( sal_Bool bVisible );
-    sal_Bool                IsPointerVisible() const;
     void                EnterWait();
     void                LeaveWait();
     sal_Bool                IsWait() const;
@@ -1006,7 +977,6 @@ public:
 
     void                StartAutoScroll( sal_uInt16 nFlags );
     void                EndAutoScroll();
-    sal_Bool                IsAutoScroll() const;
 
     sal_Bool                HandleScrollCommand( const CommandEvent& rCmd,
                                              ScrollBar* pHScrl = NULL,
@@ -1043,12 +1013,9 @@ public:
     void    SetAccessibleRelationLabeledBy( Window* pLabeledBy );
     Window* GetAccessibleRelationLabeledBy() const;
 
-    void    SetAccessibleRelationLabelFor( Window* pLabelFor );
     Window* GetAccessibleRelationLabelFor() const;
 
     void    SetAccessibleRelationMemberOf( Window* pMemberOf );
-    Window* GetAccessibleRelationMemberOf() const;
-
 
     // to avoid sending accessibility events in cases like closing dialogs
     // by default checks complete parent path
@@ -1087,8 +1054,6 @@ public:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::dnd::XDropTarget > GetDropTarget();
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::dnd::XDragSource > GetDragSource();
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::dnd::XDragGestureRecognizer > GetDragGestureRecognizer();
-    // only for RVP transmission
-    void GetDragSourceDropTarget(::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::dnd::XDragSource >& xDragSource,::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::dnd::XDropTarget > &xDropTarget );
 
     // Clipboard/Selection interfaces
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::clipboard::XClipboard > GetClipboard();
@@ -1128,9 +1093,6 @@ public:
 
     void SimulateKeyPress( sal_uInt16 nKeyCode ) const;
 
-    // let the window intercept the KeyDown messages of the system children
-    void InterceptChildWindowKeyDown( sal_Bool bIntercept );
-
     virtual XubString GetSurroundingText() const;
     virtual Selection GetSurroundingTextSelection() const;
 
@@ -1151,23 +1113,9 @@ public:
     */
     void addWindow( Window* i_pWin, bool i_bTakeOwnership = true );
 
-    /* remove a child Window
-       the remove window functions will
-       - reparent the searched window (equivalent to i_pWin->SetParent( i_pNewParent ))
-       - return a pointer to the removed window or NULL if i_pWin was not found
-       caution: ownership passes to the new parent or the caller, if the new parent was NULL
-    */
-    Window* removeWindow( Window* i_pWin, Window* i_pNewParent = NULL );
-
     /* return the identifier of this window
     */
     const rtl::OUString& getIdentifier() const;
-    /* set an identifier
-       identifiers have only loosely defined rules per se
-       in context of Window they must be unique over the window
-       hierarchy you'd like to find them again using the findWindow method
-    */
-    void setIdentifier( const rtl::OUString& );
 
     /* returns the first found descendant that matches
        the passed identifier or NULL

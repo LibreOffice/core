@@ -729,13 +729,6 @@ void Window::ImplInitWindowData( WindowType nType )
 
 // -----------------------------------------------------------------------
 
-void Window::ImplInit( Window* pParent, WinBits nStyle, const ::com::sun::star::uno::Any& /*aSystemWorkWindowToken*/ )
-{
-    ImplInit( pParent, nStyle, NULL );
-}
-
-// -----------------------------------------------------------------------
-
 void Window::ImplInit( Window* pParent, WinBits nStyle, SystemParentData* pSystemParentData )
 {
     DBG_ASSERT( mpWindowImpl->mbFrame || pParent, "Window::Window(): pParent == NULL" );
@@ -1472,26 +1465,6 @@ sal_Bool Window::ImplIsWindowOrChild( const Window* pWindow, sal_Bool bSystemWin
     if ( this == pWindow )
         return sal_True;
     return ImplIsChild( pWindow, bSystemWindow );
-}
-
-// -----------------------------------------------------------------------
-
-Window* Window::ImplGetSameParent( const Window* pWindow ) const
-{
-    if ( mpWindowImpl->mpFrameWindow != pWindow->mpWindowImpl->mpFrameWindow )
-        return NULL;
-    else
-    {
-        if ( pWindow->ImplIsChild( this ) )
-            return (Window*)pWindow;
-        else
-        {
-            Window* pTestWindow = (Window*)this;
-            while ( (pTestWindow == pWindow) || pTestWindow->ImplIsChild( pWindow ) )
-                pTestWindow = pTestWindow->ImplGetParent();
-            return pTestWindow;
-        }
-    }
 }
 
 // -----------------------------------------------------------------------
@@ -3566,26 +3539,6 @@ void Window::ImplCalcToTop( ImplCalcToTopData* pPrevData )
 
 // -----------------------------------------------------------------------
 
-void Window::ImplCalcChildOverlapToTop( ImplCalcToTopData* pPrevData )
-{
-    DBG_ASSERT( ImplIsOverlapWindow(), "Window::ImplCalcChildOverlapToTop(): Is not a OverlapWindow" );
-
-    ImplCalcToTop( pPrevData );
-    if ( pPrevData->mpNext )
-        pPrevData = pPrevData->mpNext;
-
-    Window* pOverlap = mpWindowImpl->mpFirstOverlap;
-    while ( pOverlap )
-    {
-        pOverlap->ImplCalcToTop( pPrevData );
-        if ( pPrevData->mpNext )
-            pPrevData = pPrevData->mpNext;
-        pOverlap = pOverlap->mpWindowImpl->mpNext;
-    }
-}
-
-// -----------------------------------------------------------------------
-
 void Window::ImplToTop( sal_uInt16 nFlags )
 {
     DBG_ASSERT( ImplIsOverlapWindow(), "Window::ImplToTop(): Is not a OverlapWindow" );
@@ -4710,13 +4663,6 @@ void Window::SimulateKeyPress( sal_uInt16 nKeyCode ) const
 }
 
 // -----------------------------------------------------------------------
-void Window::InterceptChildWindowKeyDown( sal_Bool bIntercept )
-{
-    if( mpWindowImpl->mpSysObj )
-        mpWindowImpl->mpSysObj->InterceptChildWindowKeyDown( bIntercept );
-}
-
-// -----------------------------------------------------------------------
 
 void Window::MouseMove( const MouseEvent& rMEvt )
 {
@@ -5316,15 +5262,6 @@ void Window::AddChildEventListener( const Link& rEventListener )
 void Window::RemoveChildEventListener( const Link& rEventListener )
 {
     mpWindowImpl->maChildEventListeners.removeListener( rEventListener );
-}
-
-// -----------------------------------------------------------------------
-
-sal_uLong Window::PostUserEvent( sal_uLong nEvent, void* pEventData )
-{
-    sal_uLong nEventId;
-    PostUserEvent( nEventId, nEvent, pEventData );
-    return nEventId;
 }
 
 // -----------------------------------------------------------------------
@@ -7450,42 +7387,6 @@ void Window::Validate( sal_uInt16 nFlags )
 
 // -----------------------------------------------------------------------
 
-void Window::Validate( const Rectangle& rRect, sal_uInt16 nFlags )
-{
-    DBG_CHKTHIS( Window, ImplDbgCheckWindow );
-
-    if ( !IsDeviceOutputNecessary() || !mnOutWidth || !mnOutHeight )
-        return;
-
-    Rectangle aRect = ImplLogicToDevicePixel( rRect );
-    if ( !aRect.IsEmpty() )
-    {
-        Region aRegion( aRect );
-        ImplValidate( &aRegion, nFlags );
-    }
-}
-
-// -----------------------------------------------------------------------
-
-void Window::Validate( const Region& rRegion, sal_uInt16 nFlags )
-{
-    DBG_CHKTHIS( Window, ImplDbgCheckWindow );
-
-    if ( !IsDeviceOutputNecessary() || !mnOutWidth || !mnOutHeight )
-        return;
-
-    if ( rRegion.IsNull() )
-        ImplValidate( NULL, nFlags );
-    else
-    {
-        Region aRegion = ImplPixelToDevicePixel( LogicToPixel( rRegion ) );
-        if ( !aRegion.IsEmpty() )
-            ImplValidate( &aRegion, nFlags );
-    }
-}
-
-// -----------------------------------------------------------------------
-
 sal_Bool Window::HasPaintEvent() const
 {
     DBG_CHKTHIS( Window, ImplDbgCheckWindow );
@@ -8476,24 +8377,6 @@ uno::Reference< XDragSource > Window::GetDragSource()
 
 // -----------------------------------------------------------------------
 
-void Window::GetDragSourceDropTarget(uno::Reference< XDragSource >& xDragSource, uno::Reference< XDropTarget > &xDropTarget )
-// only for RVP transmission
-{
-    if( mpWindowImpl->mpFrameData )
-    {
-        // initialization is done in GetDragSource
-        xDragSource = GetDragSource();
-        xDropTarget = mpWindowImpl->mpFrameData->mxDropTarget;
-    }
-    else
-    {
-        xDragSource.clear();
-        xDropTarget.clear();
-    }
-}
-
-// -----------------------------------------------------------------------
-
 uno::Reference< XDragGestureRecognizer > Window::GetDragGestureRecognizer()
 {
     return uno::Reference< XDragGestureRecognizer > ( GetDropTarget(), UNO_QUERY );
@@ -9133,13 +9016,6 @@ void Window::SetAccessibleRelationLabeledBy( Window* pLabeledBy )
     mpWindowImpl->mpAccessibleInfos->pLabeledByWindow = pLabeledBy;
 }
 
-void Window::SetAccessibleRelationLabelFor( Window* pLabelFor )
-{
-    if ( !mpWindowImpl->mpAccessibleInfos )
-        mpWindowImpl->mpAccessibleInfos = new ImplAccessibleInfos;
-    mpWindowImpl->mpAccessibleInfos->pLabelForWindow = pLabelFor;
-}
-
 void Window::SetAccessibleRelationMemberOf( Window* pMemberOfWin )
 {
     if ( !mpWindowImpl->mpAccessibleInfos )
@@ -9181,39 +9057,6 @@ void Window::RecordLayoutData( vcl::ControlLayoutData* pLayout, const Rectangle&
 }
 
 // -----------------------------------------------------------------------
-// -----------------------------------------------------------------------
-
-
-// returns background color used in this control
-// false: could not determine color
-sal_Bool Window::ImplGetCurrentBackgroundColor( Color& rCol )
-{
-    sal_Bool bRet = sal_True;
-
-    switch ( GetType() )
-    {
-        // peform special handling here
-        case WINDOW_PUSHBUTTON:
-        case WINDOW_OKBUTTON:
-        case WINDOW_CANCELBUTTON:
-        // etc.
-        default:
-            if( IsControlBackground() )
-                rCol = GetControlBackground();
-            else if( IsBackground() )
-                {
-                    Wallpaper aWall = GetBackground();
-                    if( !aWall.IsGradient() && !aWall.IsBitmap() )
-                        rCol = aWall.GetColor();
-                    else
-                        bRet = sal_False;
-                }
-            else
-                rCol = GetSettings().GetStyleSettings().GetFaceColor();
-            break;
-    }
-    return bRet;
-}
 
 void Window::DrawSelectionBackground( const Rectangle& rRect, sal_uInt16 highlight, sal_Bool bChecked, sal_Bool bDrawBorder, sal_Bool bDrawExtBorderOnly )
 {
@@ -9480,10 +9323,7 @@ void Window::ImplDecModalCount()
         pFrameWindow = pParent ? pParent->mpWindowImpl->mpFrameWindow : NULL;
     }
 }
-sal_Bool Window::ImplIsInTaskPaneList()
-{
-    return mpWindowImpl->mbIsInTaskPaneList;
-}
+
 void Window::ImplIsInTaskPaneList( sal_Bool mbIsInTaskList )
 {
     mpWindowImpl->mbIsInTaskPaneList = mbIsInTaskList;

@@ -133,27 +133,6 @@ void Window::addWindow( Window* i_pWin, bool i_bTakeOwnership )
     }
 }
 
-Window* Window::removeWindow( Window* i_pWin, Window* i_pNewParent )
-{
-    Window* pRet = NULL;
-    if( i_pWin )
-    {
-        vcl::ExtWindowImpl* pImpl = ImplGetExtWindowImpl();
-        if( pImpl )
-        {
-            vcl::ExtWindowImpl* pChildImpl = i_pWin->ImplGetExtWindowImpl();
-            if( pChildImpl )
-            {
-                if( ! i_pNewParent )
-                   pChildImpl->mbOwnedByParent = false;
-               i_pWin->SetParent( i_pNewParent );
-               pRet = i_pWin;
-            }
-        }
-    }
-    return pRet;
-}
-
 Window* Window::findWindow( const rtl::OUString& i_rIdentifier ) const
 {
     if( getIdentifier() == i_rIdentifier )
@@ -176,13 +155,6 @@ const rtl::OUString& Window::getIdentifier() const
     static rtl::OUString aEmptyStr;
 
     return (mpWindowImpl && mpWindowImpl->mpExtImpl) ? mpWindowImpl->mpExtImpl->maIdentifier : aEmptyStr;
-}
-
-void Window::setIdentifier( const rtl::OUString& i_rIdentifier )
-{
-    vcl::ExtWindowImpl* pImpl = ImplGetExtWindowImpl();
-    if( pImpl )
-        pImpl->maIdentifier = i_rIdentifier;
 }
 
 void Window::setProperties( const uno::Sequence< beans::PropertyValue >& i_rProps )
