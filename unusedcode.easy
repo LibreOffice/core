@@ -1444,15 +1444,6 @@ StgEntry::GetTime(StgEntryTime) const
 StgEntry::SetTime(StgEntryTime, int*)
 StgHeader::SetClassId(ClsId const&)
 StorageStream::ValidateMode(unsigned short, StgDirEntry*) const
-String::CompareIgnoreCaseToAscii(unsigned short const*, unsigned short) const
-String::CompareTo(unsigned short const*, unsigned short) const
-String::Equals(unsigned short const*) const
-String::EqualsIgnoreCaseAscii(unsigned short const*, unsigned short, unsigned short) const
-String::Insert(unsigned short const*, unsigned short)
-String::Match(unsigned short const*) const
-String::SearchAndReplace(unsigned short const*, String const&, unsigned short)
-String::SearchAndReplaceAll(unsigned short const*, String const&)
-SvBaseEventDescriptor::mapEventIDToName(unsigned short) const
 SvBasicPropertyDataControl::GetData()
 SvBasicPropertyDataControl::GetName() const
 SvBasicPropertyDataControl::GetProperty() const
