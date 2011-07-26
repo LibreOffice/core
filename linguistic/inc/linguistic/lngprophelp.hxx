@@ -266,12 +266,9 @@ public:
                 ::com::sun::star::uno::XInterface > &rxSource,
             ::com::sun::star::uno::Reference<
                 ::com::sun::star::beans::XPropertySet > &rxPropSet );
-    ~PropertyHelper_Spelling();
 
     void    AddAsPropListener();
-    void    RemoveAsPropListener();
     void SetTmpPropVals( const com::sun::star::beans::PropertyValues &rPropVals );
-    sal_Int16   GetMaxNumberOfSuggestions() const;
     sal_Bool    IsSpellUpperCase() const;
     sal_Bool    IsSpellWithDigits() const;
     sal_Bool    IsSpellCapitalization() const;

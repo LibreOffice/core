@@ -45,7 +45,6 @@ protected:
 public:
                     SfxPreviewBase_Impl( Window* pParent,
                                          const ResId& rResId );
-                    SfxPreviewBase_Impl( Window* pParent );
                     ~SfxPreviewBase_Impl(  );
     void            SetObjectShell( SfxObjectShell* pObj );
     virtual void    Resize();
@@ -61,8 +60,6 @@ public:
                     SfxPreviewWin_Impl( Window* pParent,
                                     const ResId& rResId )
                     : SfxPreviewBase_Impl( pParent, rResId ){};
-                    SfxPreviewWin_Impl( Window* pParent )
-                    : SfxPreviewBase_Impl( pParent ){};
     static void     ImpPaint(
         const Rectangle& rRect, GDIMetaFile* pFile, Window* pWindow );
 };

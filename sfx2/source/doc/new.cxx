@@ -88,13 +88,6 @@ SfxPreviewBase_Impl::SfxPreviewBase_Impl(
 {
 }
 
-SfxPreviewBase_Impl::SfxPreviewBase_Impl( Window* pParent )
-    : Window(pParent, 0 ), pMetaFile()
-{
-    Resize();
-    Show();
-}
-
 SfxPreviewBase_Impl::~SfxPreviewBase_Impl()
 {
 }

@@ -806,28 +806,14 @@ PropertyHelper_Spelling::PropertyHelper_Spelling(
     xPropHelper = pInst;
 }
 
-PropertyHelper_Spelling::~PropertyHelper_Spelling()
-{
-}
-
 void PropertyHelper_Spelling::AddAsPropListener()
 {
     pInst->AddAsPropListener();
 }
 
-void PropertyHelper_Spelling::RemoveAsPropListener()
-{
-    pInst->RemoveAsPropListener();
-}
-
 void PropertyHelper_Spelling::SetTmpPropVals( const com::sun::star::beans::PropertyValues &rPropVals )
 {
     pInst->SetTmpPropVals( rPropVals );
-}
-
-sal_Int16 PropertyHelper_Spelling::GetMaxNumberOfSuggestions() const
-{
-    return pInst->GetMaxNumberOfSuggestions();
 }
 
 sal_Bool PropertyHelper_Spelling::IsSpellUpperCase() const
