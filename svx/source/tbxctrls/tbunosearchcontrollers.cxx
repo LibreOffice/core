@@ -48,6 +48,7 @@ namespace svx
 
 static const ::rtl::OUString SEARCHITEM_SEARCHSTRING( RTL_CONSTASCII_USTRINGPARAM( "SearchItem.SearchString" ) );
 static const ::rtl::OUString SEARCHITEM_SEARCHBACKWARD( RTL_CONSTASCII_USTRINGPARAM( "SearchItem.Backward" ) );
+static const ::rtl::OUString SEARCHITEM_SEARCHFLAGS( RTL_CONSTASCII_USTRINGPARAM( "SearchItem.SearchFlags" ) );
 
 static const ::rtl::OUString COMMAND_EXECUTESEARCH( RTL_CONSTASCII_USTRINGPARAM( ".uno:ExecuteSearch" ) );
 static const ::rtl::OUString COMMAND_FINDTEXT( RTL_CONSTASCII_USTRINGPARAM( ".uno:FindText" ) );
@@ -161,7 +162,7 @@ long FindTextFieldControl::PreNotify( NotifyEvent& rNEvt )
                 Remember_Impl(GetText());
 
                 ::rtl::OUString sFindText = GetText();
-                css::uno::Sequence< css::beans::PropertyValue > lArgs(2);
+                css::uno::Sequence< css::beans::PropertyValue > lArgs(3);
 
                 lArgs[0].Name = SEARCHITEM_SEARCHSTRING;
                 lArgs[0].Value <<= sFindText;
@@ -171,6 +172,9 @@ long FindTextFieldControl::PreNotify( NotifyEvent& rNEvt )
                     lArgs[1].Value <<= sal_True;
                 else
                     lArgs[1].Value <<= sal_False;
+
+                lArgs[2].Name = SEARCHITEM_SEARCHFLAGS;
+                lArgs[2].Value <<= 0;
 
                 impl_executeSearch(m_xServiceManager, m_xFrame, lArgs);
                 nRet = 1;
@@ -556,11 +560,13 @@ void SAL_CALL DownSearchToolboxController::execute( sal_Int16 /*KeyModifier*/ ) 
         }
     }
 
-    css::uno::Sequence< css::beans::PropertyValue > lArgs(2);
+    css::uno::Sequence< css::beans::PropertyValue > lArgs(3);
     lArgs[0].Name = SEARCHITEM_SEARCHSTRING;
     lArgs[0].Value <<= sFindText;
     lArgs[1].Name = SEARCHITEM_SEARCHBACKWARD;
     lArgs[1].Value <<= sal_False;
+    lArgs[2].Name = SEARCHITEM_SEARCHFLAGS;
+    lArgs[2].Value <<= 0;
 
     impl_executeSearch(m_xServiceManager, m_xFrame, lArgs);
 
@@ -685,11 +691,13 @@ void SAL_CALL UpSearchToolboxController::execute( sal_Int16 /*KeyModifier*/ ) th
         }
     }
 
-    css::uno::Sequence< css::beans::PropertyValue > lArgs(2);
+    css::uno::Sequence< css::beans::PropertyValue > lArgs(3);
     lArgs[0].Name = SEARCHITEM_SEARCHSTRING;
     lArgs[0].Value <<= sFindText;
-    lArgs[1].Name =  SEARCHITEM_SEARCHBACKWARD;
+    lArgs[1].Name = SEARCHITEM_SEARCHBACKWARD;
     lArgs[1].Value <<= sal_True;
+    lArgs[2].Name = SEARCHITEM_SEARCHFLAGS;
+    lArgs[2].Value <<= 0;
 
     impl_executeSearch(m_xServiceManager, m_xFrame, lArgs);
 
