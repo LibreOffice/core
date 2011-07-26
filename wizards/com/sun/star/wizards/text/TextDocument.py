@@ -12,7 +12,6 @@ from common.Configuration import Configuration
 
 from com.sun.star.container import NoSuchElementException
 from com.sun.star.lang import WrappedTargetException
-from com.sun.star.util import DateTime
 from com.sun.star.i18n.NumberFormatIndex import DATE_SYS_DDMMYY
 from com.sun.star.view.DocumentZoomType import ENTIRE_PAGE
 from com.sun.star.beans.PropertyState import DIRECT_VALUE
@@ -214,14 +213,10 @@ class TextDocument(object):
             gn = xNA.getByName("givenname")
             sn = xNA.getByName("sn")
             fullname = str(gn) + " " + str(sn)
-            currentDate = DateTime()
             now = time.localtime(time.time())
             year = time.strftime("%Y", now)
             month = time.strftime("%m", now)
             day = time.strftime("%d", now)
-            currentDate.Day = day
-            currentDate.Year = year
-            currentDate.Month = month
             dateObject = dateTimeObject(int(year), int(month), int(day))
             du = Helper.DateUtils(self.xMSF, TextDocument.xTextDocument)
             ff = du.getFormat(DATE_SYS_DDMMYY)

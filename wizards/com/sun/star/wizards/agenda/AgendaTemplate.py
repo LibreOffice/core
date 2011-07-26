@@ -5,6 +5,7 @@ from text.TextDocument import *
 from common.FileAccess import FileAccess
 from text.TextSectionHandler import TextSectionHandler
 from TopicsControl import TopicsControl
+from datetime import date as dateTimeObject
 
 from com.sun.star.text.PlaceholderType import TEXT
 from com.sun.star.i18n.NumberFormatIndex import TIME_HHMM, DATE_SYSTEM_LONG
@@ -293,10 +294,11 @@ class AgendaTemplate(TextDocument):
         Get the default locale of the document,
         and create the date and time formatters.
         '''
-        dateUtils = Helper.DateUtils(self.xMSF, AgendaTemplate.document)
-        AgendaTemplate.formatter = dateUtils.formatter
-        AgendaTemplate.dateFormat = dateUtils.getFormat(DATE_SYSTEM_LONG)
-        AgendaTemplate.timeFormat = dateUtils.getFormat(TIME_HHMM)
+        AgendaTemplate.dateUtils = Helper.DateUtils(
+            self.xMSF, AgendaTemplate.document)
+        AgendaTemplate.formatter = AgendaTemplate.dateUtils.formatter
+        AgendaTemplate.dateFormat = AgendaTemplate.dateUtils.getFormat(DATE_SYSTEM_LONG)
+        AgendaTemplate.timeFormat = AgendaTemplate.dateUtils.getFormat(TIME_HHMM)
 
         '''
         get the document properties object.
@@ -448,18 +450,13 @@ class AgendaTemplate(TextDocument):
     def getDateString(self, d):
         if d is None or d == "":
             return ""
-
-        date = Integer(d).intValue.intValue()
-        self.calendar.clear()
-        self.calendar.set(date / 10000, (date % 10000) / 100 - 1, date % 100)
-        date1 = JavaTools.getTimeInMillis(self.calendar)
-        '''
-        docNullTime and date1 are in millis, but
-        I need a day...
-        '''
-        daysDiff = (date1 - self.docNullTime) / self.__class__.DAY_IN_MILLIS + 1
-        return AgendaTemplate.formatter.convertNumberToString(
-            self.dateFormat, daysDiff)
+        date = int(d)
+        year = date / 10000
+        month = (date % 10000) / 100
+        day = date % 100
+        dateObject = dateTimeObject(year, month, day)
+        return AgendaTemplate.dateUtils.format(
+            AgendaTemplate.dateFormat, dateObject)
 
     @classmethod
     def getTimeString(self, s):
