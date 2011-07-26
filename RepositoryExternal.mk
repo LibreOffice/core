@@ -447,4 +447,9 @@ $(call gb_LinkTarget_add_libs,$(1),$(GTK_LIBS))
 
 endef
 
+define gb_LinkTarget__use_gthread
+$(call gb_LinkTarget_add_libs,$(1),$(GTHREAD_LIBS))
+
+endef
+
 # vim: set noet sw=4 ts=4:
