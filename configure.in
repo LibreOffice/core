@@ -7744,6 +7744,7 @@ if test "z$enable_lomenubar" = "z" -o "z$enable_lomenubar" = "zno" ; then
     ENABLE_LOMENUBAR="FALSE"
 else
     AC_MSG_RESULT([yes])
+    PKG_CHECK_MODULES(DBUSMENUGTK, dbusmenu-gtk-0.4,, AC_MSG_ERROR([requirements to build lo-menubar not met. Use --disable-lomenubar or install the missing packages]))
     ENABLE_LOMENUBAR="TRUE"
 fi
 AC_SUBST(ENABLE_LOMENUBAR)
