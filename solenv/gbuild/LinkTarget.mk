@@ -889,7 +889,7 @@ endef
 
 # $(call gb_LinkTarget_use_externals,library,externals)
 gb_LinkTarget_use_externals = \
- $(foreach external,$(2),$(call gb_LinkTarget_use_external,$(1),$(external)))
+ $(foreach external,$(2),$(eval $(call gb_LinkTarget_use_external,$(1),$(external))))
 
 
 # vim: set noet sw=4:
