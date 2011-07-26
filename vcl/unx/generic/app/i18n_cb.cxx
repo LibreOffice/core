@@ -620,8 +620,10 @@ StatusDrawCallback (XIC ic, XPointer client_data, XIMStatusDrawCallbackStruct *c
     }
 #if OSL_DEBUG_LEVEL > 1
     else
+    {
         fprintf( stderr, "XIMStatusDataType %s not supported\n",
-                 call_data->type == XIMBitmapType ? "XIMBitmapType" : ByteString::CreateFromInt32( call_data->type ).GetBuffer() );
+            call_data->type == XIMBitmapType ? "XIMBitmapType" : rtl::OString::valueOf(static_cast<sal_Int32>(call_data->type)).getStr() );
+    }
 #endif
     return;
 }
