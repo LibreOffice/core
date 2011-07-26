@@ -73,7 +73,7 @@ class PyMailSMTPService(unohelper.Base, XSmtpService):
 		server = xConnectionContext.getValueByName("ServerName")
 		if dbg:
 			print >> sys.stderr, server
-		port = xConnectionContext.getValueByName("Port")
+		port = int(xConnectionContext.getValueByName("Port"))
 		if dbg:
 			print >> sys.stderr, port
 		self.server = smtplib.SMTP(server, port)
@@ -254,7 +254,7 @@ class PyMailIMAPService(unohelper.Base, XMailService):
 		server = xConnectionContext.getValueByName("ServerName")
 		if dbg:
 			print >> sys.stderr, server
-		port = xConnectionContext.getValueByName("Port")
+		port = int(xConnectionContext.getValueByName("Port"))
 		if dbg:
 			print >> sys.stderr, port
 		connectiontype = xConnectionContext.getValueByName("ConnectionType")
@@ -323,7 +323,7 @@ class PyMailPOP3Service(unohelper.Base, XMailService):
 		server = xConnectionContext.getValueByName("ServerName")
 		if dbg:
 			print >> sys.stderr, server
-		port = xConnectionContext.getValueByName("Port")
+		port = int(xConnectionContext.getValueByName("Port"))
 		if dbg:
 			print >> sys.stderr, port
 		connectiontype = xConnectionContext.getValueByName("ConnectionType")
