@@ -95,8 +95,11 @@
 #include "outdevstate.hxx"
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 
+#if OSL_DEBUG_LEVEL > 1
+#define EMFP_DEBUG(x) x
+#else
 #define EMFP_DEBUG(x)
-//#define EMFP_DEBUG(x) x
+#endif
 
 using namespace ::com::sun::star;
 
