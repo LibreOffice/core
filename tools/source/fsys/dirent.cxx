@@ -220,6 +220,7 @@ public:
     inline  DirEntry*   Top();
     inline  DirEntry*   Bottom();
     inline  bool        Empty();
+    inline  void        Clear();
 };
 
 inline void DirEntryStack::Push( DirEntry *pEntry )
@@ -250,6 +251,11 @@ inline DirEntry* DirEntryStack::Bottom()
 inline bool DirEntryStack::Empty()
 {
     return maStack.empty();
+}
+
+inline void DirEntryStack::Clear()
+{
+    maStack.clear();
 }
 
 //--------------------------------------------------------------------
@@ -428,7 +434,7 @@ FSysError DirEntry::ImpParseOs2Name( const ByteString& rPfad, FSysPathStyle eSty
                     }
 
                     // liegt jetzt nichts mehr auf dem Stack?
-                    if ( aStack.empty() )
+                    if ( aStack.Empty() )
                         aStack.Push( new DirEntry( aName, FSYS_FLAG_RELROOT, eStyle ) );
                 }
             }

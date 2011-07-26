@@ -46,6 +46,10 @@ $(eval $(call gb_CppunitTest_add_linked_libs,tools_test, \
     $(gb_STDLIBS) \
 ))
 
+$(eval $(call gb_CppunitTest_add_linked_static_libs,tools_test, \
+    ooopathutils \
+))
+
 $(eval $(call gb_CppunitTest_set_include,tools_test,\
     $$(INCLUDE) \
     -I$(realpath $(SRCDIR)/tools/inc) \
