@@ -85,201 +85,6 @@ $(eval $(call gb_Library_use_externals,vcl,\
 	icuuc \
 ))
 
-ifeq ($(GUIBASE),aqua)
-$(eval $(call gb_Library_add_cxxflags,vcl,\
-    $(gb_OBJCXXFLAGS) \
-))
-$(eval $(call gb_Library_add_objcxxobjects,vcl,\
-    vcl/aqua/source/a11y/aqua11yactionwrapper \
-    vcl/aqua/source/a11y/aqua11ycomponentwrapper \
-    vcl/aqua/source/a11y/aqua11yfactory \
-    vcl/aqua/source/a11y/aqua11yrolehelper \
-    vcl/aqua/source/a11y/aqua11yselectionwrapper \
-    vcl/aqua/source/a11y/aqua11ytablewrapper \
-    vcl/aqua/source/a11y/aqua11ytextattributeswrapper \
-    vcl/aqua/source/a11y/aqua11ytextwrapper \
-    vcl/aqua/source/a11y/aqua11yutil \
-    vcl/aqua/source/a11y/aqua11yvaluewrapper \
-    vcl/aqua/source/a11y/aqua11ywrapper \
-    vcl/aqua/source/a11y/aqua11ywrapperbutton \
-    vcl/aqua/source/a11y/aqua11ywrappercheckbox \
-    vcl/aqua/source/a11y/aqua11ywrappercombobox \
-    vcl/aqua/source/a11y/aqua11ywrappergroup \
-    vcl/aqua/source/a11y/aqua11ywrapperlist \
-    vcl/aqua/source/a11y/aqua11ywrapperradiobutton \
-    vcl/aqua/source/a11y/aqua11ywrapperradiogroup \
-    vcl/aqua/source/a11y/aqua11ywrapperrow \
-    vcl/aqua/source/a11y/aqua11ywrapperscrollarea \
-    vcl/aqua/source/a11y/aqua11ywrapperscrollbar \
-    vcl/aqua/source/a11y/aqua11ywrappersplitter \
-    vcl/aqua/source/a11y/aqua11ywrapperstatictext \
-    vcl/aqua/source/a11y/aqua11ywrappertabgroup \
-    vcl/aqua/source/a11y/aqua11ywrappertextarea \
-    vcl/aqua/source/a11y/aqua11ywrappertoolbar \
-    vcl/aqua/source/app/salnstimer \
-    vcl/aqua/source/app/vclnsapp \
-    vcl/aqua/source/gdi/aquaprintaccessoryview \
-    vcl/aqua/source/gdi/aquaprintview \
-    vcl/aqua/source/window/salframeview \
-    vcl/aqua/source/window/salnsmenu \
-))
-$(eval $(call gb_Library_add_exception_objects,vcl,\
-    vcl/aqua/source/a11y/aqua11yfocuslistener \
-    vcl/aqua/source/a11y/aqua11yfocustracker \
-    vcl/aqua/source/a11y/aqua11ylistener \
-    vcl/aqua/source/a11y/documentfocuslistener \
-    vcl/aqua/source/app/saldata \
-    vcl/aqua/source/app/salinst \
-    vcl/aqua/source/app/salsys \
-    vcl/aqua/source/app/saltimer \
-    vcl/aqua/source/dtrans/DataFlavorMapping \
-    vcl/aqua/source/dtrans/DragActionConversion \
-    vcl/aqua/source/dtrans/DragSource \
-    vcl/aqua/source/dtrans/DragSourceContext \
-    vcl/aqua/source/dtrans/DropTarget \
-    vcl/aqua/source/dtrans/HtmlFmtFlt \
-    vcl/aqua/source/dtrans/OSXTransferable \
-    vcl/aqua/source/dtrans/PictToBmpFlt \
-    vcl/aqua/source/dtrans/aqua_clipboard \
-    vcl/aqua/source/dtrans/service_entry \
-    vcl/aqua/source/gdi/salatslayout \
-    vcl/aqua/source/gdi/salatsuifontutils \
-    vcl/aqua/source/gdi/salbmp \
-    vcl/aqua/source/gdi/salcolorutils \
-    vcl/aqua/source/gdi/salgdi \
-    vcl/aqua/source/gdi/salgdiutils \
-    vcl/aqua/source/gdi/salmathutils \
-    vcl/aqua/source/gdi/salnativewidgets \
-    vcl/aqua/source/gdi/salprn \
-    vcl/aqua/source/gdi/salvd \
-    vcl/aqua/source/window/salframe \
-    vcl/aqua/source/window/salmenu \
-    vcl/aqua/source/window/salobj \
-))
-$(eval $(call gb_Library_add_linked_libs,vcl,\
-    AppleRemote \
-))
-$(eval $(call gb_Library_use_externals,vcl,\
-    quicktime \
-    cocoa \
-    carbon \
-    corefoundation \
-))
-endif
-
-ifeq ($(GUIBASE),unx)
-$(eval $(call gb_Library_add_defs,vcl,\
-    -DSAL_DLLPREFIX=\"$(gb_Library_SYSPRE)\" \
-    -DSAL_DLLPOSTFIX=\"$(gb_Library_OOOEXT)\" \
-    -D_XSALSET_LIBNAME=\"$(call gb_Library_get_runtime_filename,spa)\" \
-))
-## handle CUPS
-ifneq ($(ENABLE_CUPS),)
-$(eval $(call gb_Library_add_defs,vcl,\
-    -DENABLE_CUPS \
-))
-endif
-$(eval $(call gb_Library_add_exception_objects,vcl,\
-    vcl/source/glyphs/gcach_ftyp \
-    vcl/source/glyphs/gcach_layout \
-    vcl/source/glyphs/gcach_rbmp \
-    vcl/source/glyphs/glyphcache \
-    vcl/unx/generic/fontmanager/fontcache \
-    vcl/unx/generic/fontmanager/fontconfig \
-    vcl/unx/generic/fontmanager/fontmanager \
-    vcl/unx/generic/fontmanager/helper \
-    vcl/unx/generic/fontmanager/parseAFM \
-    vcl/unx/generic/plugadapt/salplug \
-    vcl/unx/generic/printer/cupsmgr \
-    vcl/unx/generic/printer/jobdata \
-    vcl/unx/generic/printer/ppdparser \
-    vcl/unx/generic/printer/printerinfomanager \
-))
-endif
-
-ifeq ($(GUIBASE),android)
-$(eval $(call gb_Library_add_defs,vcl,\
-    -DSAL_DLLPREFIX=\"$(gb_Library_SYSPRE)\" \
-    -DSAL_DLLPOSTFIX=\"$(gb_Library_OOOEXT)\" \
-    -D_XSALSET_LIBNAME=\"$(call gb_Library_get_runtime_filename,spa)\" \
-))
-$(eval $(call gb_Library_add_exception_objects,vcl,\
-    vcl/unx/generic/plugadapt/salplug \
-    vcl/null/printerinfomanager \
-))
-endif
-
-ifeq ($(OS),WNT)
-$(eval $(call gb_Library_add_exception_objects,vcl,\
-    vcl/win/source/app/saldata \
-    vcl/win/source/app/salinfo \
-    vcl/win/source/app/salinst \
-    vcl/win/source/app/salshl \
-    vcl/win/source/app/saltimer \
-    vcl/win/source/gdi/salbmp \
-    vcl/win/source/gdi/salgdi \
-    vcl/win/source/gdi/salgdi2 \
-    vcl/win/source/gdi/salgdi3 \
-    vcl/win/source/gdi/salgdi_gdiplus \
-    vcl/win/source/gdi/salnativewidgets-luna \
-    vcl/win/source/gdi/salprn \
-    vcl/win/source/gdi/salvd \
-    vcl/win/source/gdi/winlayout \
-    vcl/win/source/gdi/wntgdi \
-    vcl/win/source/window/salframe \
-    vcl/win/source/window/salmenu \
-    vcl/win/source/window/salobj \
-))
-
-$(eval $(call gb_Library_add_linked_libs,vcl,\
-    advapi32 \
-    gdi32 \
-    gdiplus \
-    imm32 \
-    kernel32 \
-    mpr \
-    msimg32 \
-    msvcrt \
-    $(gb_Library_win32_OLDNAMES) \
-    ole32 \
-    shell32 \
-    user32 \
-    uuid \
-    uwinapi \
-    winspool \
-))
-
-$(eval $(call gb_Library_add_nativeres,vcl,src))
-ifeq ($(COM),MSC)
-$(eval $(call gb_Library_add_ldflags,vcl,\
-    /ENTRY:LibMain@12 \
-))
-endif
-endif
-
-ifeq ($(GUIBASE),cocoatouch)
-$(eval $(call gb_Library_add_cxxflags,vcl,\
-    $(gb_OBJCXXFLAGS) \
-))
-$(eval $(call gb_Library_add_objcxxobjects,vcl,\
-    vcl/ios/source/app/salnstimer \
-    vcl/ios/source/app/vcluiapp \
-))
-$(eval $(call gb_Library_add_exception_objects,vcl,\
-    vcl/ios/source/app/saldata \
-    vcl/ios/source/app/salinst \
-    vcl/ios/source/app/salsys \
-    vcl/ios/source/app/saltimer \
-    vcl/ios/source/gdi/salgdi \
-    vcl/ios/source/gdi/salvd \
-))
-$(eval $(call gb_Library_use_externals,vcl,\
-	uikit \
-	corefoundation \
-))
-
-endif
-
 $(eval $(call gb_Library_add_cobjects,vcl,\
     vcl/source/fontsubset/list \
 ))
@@ -461,11 +266,9 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/window/wpropset \
     vcl/source/window/wrkwin \
 ))
-ifneq ($(OS),IOS)
-$(eval $(call gb_Library_add_exception_objects,vcl,\
-    vcl/source/salmain/salmain \
-))
-endif
+
+# optional parts
+
 ## handle Graphite
 ifneq ($(ENABLE_GRAPHITE),)
 # add defines, graphite sources for all platforms
@@ -490,10 +293,10 @@ $(eval $(call gb_Library_add_linked_libs,vcl,\
 endif
 
 $(eval $(call gb_Library_use_external,vcl,graphite))
+
 endif
 
 ifneq ($(ENABLE_LIBRSVG),NO)
-
 $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/components/rasterizer_rsvg \
 ))
@@ -506,11 +309,203 @@ $(eval $(call gb_Library_use_external,vcl,cairo))
 
 endif
 
+# GUIBASE specific stuff
+
+ifeq ($(GUIBASE),aqua)
+$(eval $(call gb_Library_add_cxxflags,vcl,\
+    $(gb_OBJCXXFLAGS) \
+))
+$(eval $(call gb_Library_add_objcxxobjects,vcl,\
+    vcl/aqua/source/a11y/aqua11yactionwrapper \
+    vcl/aqua/source/a11y/aqua11ycomponentwrapper \
+    vcl/aqua/source/a11y/aqua11yfactory \
+    vcl/aqua/source/a11y/aqua11yrolehelper \
+    vcl/aqua/source/a11y/aqua11yselectionwrapper \
+    vcl/aqua/source/a11y/aqua11ytablewrapper \
+    vcl/aqua/source/a11y/aqua11ytextattributeswrapper \
+    vcl/aqua/source/a11y/aqua11ytextwrapper \
+    vcl/aqua/source/a11y/aqua11yutil \
+    vcl/aqua/source/a11y/aqua11yvaluewrapper \
+    vcl/aqua/source/a11y/aqua11ywrapper \
+    vcl/aqua/source/a11y/aqua11ywrapperbutton \
+    vcl/aqua/source/a11y/aqua11ywrappercheckbox \
+    vcl/aqua/source/a11y/aqua11ywrappercombobox \
+    vcl/aqua/source/a11y/aqua11ywrappergroup \
+    vcl/aqua/source/a11y/aqua11ywrapperlist \
+    vcl/aqua/source/a11y/aqua11ywrapperradiobutton \
+    vcl/aqua/source/a11y/aqua11ywrapperradiogroup \
+    vcl/aqua/source/a11y/aqua11ywrapperrow \
+    vcl/aqua/source/a11y/aqua11ywrapperscrollarea \
+    vcl/aqua/source/a11y/aqua11ywrapperscrollbar \
+    vcl/aqua/source/a11y/aqua11ywrappersplitter \
+    vcl/aqua/source/a11y/aqua11ywrapperstatictext \
+    vcl/aqua/source/a11y/aqua11ywrappertabgroup \
+    vcl/aqua/source/a11y/aqua11ywrappertextarea \
+    vcl/aqua/source/a11y/aqua11ywrappertoolbar \
+    vcl/aqua/source/app/salnstimer \
+    vcl/aqua/source/app/vclnsapp \
+    vcl/aqua/source/gdi/aquaprintaccessoryview \
+    vcl/aqua/source/gdi/aquaprintview \
+    vcl/aqua/source/window/salframeview \
+    vcl/aqua/source/window/salnsmenu \
+))
+$(eval $(call gb_Library_add_exception_objects,vcl,\
+    vcl/aqua/source/a11y/aqua11yfocuslistener \
+    vcl/aqua/source/a11y/aqua11yfocustracker \
+    vcl/aqua/source/a11y/aqua11ylistener \
+    vcl/aqua/source/a11y/documentfocuslistener \
+    vcl/aqua/source/app/saldata \
+    vcl/aqua/source/app/salinst \
+    vcl/aqua/source/app/salsys \
+    vcl/aqua/source/app/saltimer \
+    vcl/aqua/source/dtrans/DataFlavorMapping \
+    vcl/aqua/source/dtrans/DragActionConversion \
+    vcl/aqua/source/dtrans/DragSource \
+    vcl/aqua/source/dtrans/DragSourceContext \
+    vcl/aqua/source/dtrans/DropTarget \
+    vcl/aqua/source/dtrans/HtmlFmtFlt \
+    vcl/aqua/source/dtrans/OSXTransferable \
+    vcl/aqua/source/dtrans/PictToBmpFlt \
+    vcl/aqua/source/dtrans/aqua_clipboard \
+    vcl/aqua/source/dtrans/service_entry \
+    vcl/aqua/source/gdi/salatslayout \
+    vcl/aqua/source/gdi/salatsuifontutils \
+    vcl/aqua/source/gdi/salbmp \
+    vcl/aqua/source/gdi/salcolorutils \
+    vcl/aqua/source/gdi/salgdi \
+    vcl/aqua/source/gdi/salgdiutils \
+    vcl/aqua/source/gdi/salmathutils \
+    vcl/aqua/source/gdi/salnativewidgets \
+    vcl/aqua/source/gdi/salprn \
+    vcl/aqua/source/gdi/salvd \
+    vcl/aqua/source/window/salframe \
+    vcl/aqua/source/window/salmenu \
+    vcl/aqua/source/window/salobj \
+))
+$(eval $(call gb_Library_add_linked_libs,vcl,\
+    AppleRemote \
+))
+$(eval $(call gb_Library_use_externals,vcl,\
+    quicktime \
+    cocoa \
+    carbon \
+    corefoundation \
+))
+endif
+
 ifeq ($(GUIBASE),unx)
+$(eval $(call gb_Library_add_defs,vcl,\
+    -DSAL_DLLPREFIX=\"$(gb_Library_SYSPRE)\" \
+    -DSAL_DLLPOSTFIX=\"$(gb_Library_OOOEXT)\" \
+    -D_XSALSET_LIBNAME=\"$(call gb_Library_get_runtime_filename,spa)\" \
+))
+$(eval $(call gb_Library_add_defs,vcl,\
+    $(if $(ENABLE_CUPS),-DENABLE_CUPS) \
+))
+$(eval $(call gb_Library_add_exception_objects,vcl,\
+    vcl/source/glyphs/gcach_ftyp \
+    vcl/source/glyphs/gcach_layout \
+    vcl/source/glyphs/gcach_rbmp \
+    vcl/source/glyphs/glyphcache \
+    vcl/unx/generic/fontmanager/fontcache \
+    vcl/unx/generic/fontmanager/fontconfig \
+    vcl/unx/generic/fontmanager/fontmanager \
+    vcl/unx/generic/fontmanager/helper \
+    vcl/unx/generic/fontmanager/parseAFM \
+    vcl/unx/generic/plugadapt/salplug \
+    vcl/unx/generic/printer/cupsmgr \
+    vcl/unx/generic/printer/jobdata \
+    vcl/unx/generic/printer/ppdparser \
+    vcl/unx/generic/printer/printerinfomanager \
+))
 $(eval $(call gb_Library_use_externals,vcl,\
 	fontconfig \
 	freetype \
 ))
+endif
+
+ifeq ($(GUIBASE),android)
+$(eval $(call gb_Library_add_defs,vcl,\
+    -DSAL_DLLPREFIX=\"$(gb_Library_SYSPRE)\" \
+    -DSAL_DLLPOSTFIX=\"$(gb_Library_OOOEXT)\" \
+    -D_XSALSET_LIBNAME=\"$(call gb_Library_get_runtime_filename,spa)\" \
+))
+$(eval $(call gb_Library_add_exception_objects,vcl,\
+    vcl/unx/generic/plugadapt/salplug \
+    vcl/null/printerinfomanager \
+))
+endif
+
+ifeq ($(GUIBASE),cocoatouch)
+$(eval $(call gb_Library_add_cxxflags,vcl,\
+    $(gb_OBJCXXFLAGS) \
+))
+$(eval $(call gb_Library_add_objcxxobjects,vcl,\
+    vcl/ios/source/app/salnstimer \
+    vcl/ios/source/app/vcluiapp \
+))
+$(eval $(call gb_Library_add_exception_objects,vcl,\
+    vcl/ios/source/app/saldata \
+    vcl/ios/source/app/salinst \
+    vcl/ios/source/app/salsys \
+    vcl/ios/source/app/saltimer \
+    vcl/ios/source/gdi/salgdi \
+    vcl/ios/source/gdi/salvd \
+))
+$(eval $(call gb_Library_use_externals,vcl,\
+	uikit \
+	corefoundation \
+))
+endif
+
+# OS-specific stuff
+
+ifeq ($(OS),WNT)
+$(eval $(call gb_Library_add_exception_objects,vcl,\
+    vcl/win/source/app/saldata \
+    vcl/win/source/app/salinfo \
+    vcl/win/source/app/salinst \
+    vcl/win/source/app/salshl \
+    vcl/win/source/app/saltimer \
+    vcl/win/source/gdi/salbmp \
+    vcl/win/source/gdi/salgdi \
+    vcl/win/source/gdi/salgdi2 \
+    vcl/win/source/gdi/salgdi3 \
+    vcl/win/source/gdi/salgdi_gdiplus \
+    vcl/win/source/gdi/salnativewidgets-luna \
+    vcl/win/source/gdi/salprn \
+    vcl/win/source/gdi/salvd \
+    vcl/win/source/gdi/winlayout \
+    vcl/win/source/gdi/wntgdi \
+    vcl/win/source/window/salframe \
+    vcl/win/source/window/salmenu \
+    vcl/win/source/window/salobj \
+))
+
+$(eval $(call gb_Library_add_linked_libs,vcl,\
+    advapi32 \
+    gdi32 \
+    gdiplus \
+    imm32 \
+    kernel32 \
+    mpr \
+    msimg32 \
+    msvcrt \
+    $(gb_Library_win32_OLDNAMES) \
+    ole32 \
+    shell32 \
+    user32 \
+    uuid \
+    uwinapi \
+    winspool \
+))
+
+$(eval $(call gb_Library_add_nativeres,vcl,src))
+ifeq ($(COM),MSC)
+$(eval $(call gb_Library_add_ldflags,vcl,\
+    /ENTRY:LibMain@12 \
+))
+endif
 endif
 
 ifeq ($(OS),LINUX)
@@ -531,6 +526,12 @@ $(eval $(call gb_Library_add_ldflags,vcl,\
     -R/usr/sfw/lib \
 ))
 endif
+endif
+
+ifneq ($(OS),IOS)
+$(eval $(call gb_Library_add_exception_objects,vcl,\
+    vcl/source/salmain/salmain \
+))
 endif
 
 # vim: set noet sw=4 ts=4:
