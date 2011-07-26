@@ -101,13 +101,19 @@ String lcl_GetExtensionForDocType(sal_uLong nDocType)
 ::rtl::OUString lcl_GetColumnValueOf(const ::rtl::OUString& rColumn, Reference < container::XNameAccess>& rxColAccess )
 {
     ::rtl::OUString sRet;
-    if(rxColAccess->hasByName(rColumn))
+    try
     {
-        Any aCol = rxColAccess->getByName(rColumn);
-        Reference< sdb::XColumn > xColumn;
-        aCol >>= xColumn;
-        if(xColumn.is())
-            sRet = xColumn->getString();
+        if (rxColAccess->hasByName(rColumn))
+        {
+            Any aCol = rxColAccess->getByName(rColumn);
+            Reference< sdb::XColumn > xColumn;
+            aCol >>= xColumn;
+            if(xColumn.is())
+                sRet = xColumn->getString();
+        }
+    }
+    catch (const uno::Exception&)
+    {
     }
     return sRet;
 }
