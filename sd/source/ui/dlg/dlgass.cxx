@@ -207,7 +207,7 @@ public:
     void SavePassword( SfxObjectShellLock xDoc, const String& rPath );
     void RestorePassword( SfxItemSet* pSet, const String& rPath );
     String GetPassword( const String rPath );
-    void DeletePassords();
+    void DeletePasswords();
 
     boost::ptr_vector< PasswordEntry > maPasswordList;
 
@@ -676,7 +676,7 @@ AssistentDlgImpl::~AssistentDlgImpl()
 {
     CloseDocShell();
 
-    DeletePassords();
+    DeletePasswords();
 
     //  Delete the template file infos.
     std::vector<TemplateDir*>::iterator I;
@@ -1720,7 +1720,7 @@ String AssistentDlgImpl::GetPassword( const String rPath )
     return String();
 }
 
-void AssistentDlgImpl::DeletePassords()
+void AssistentDlgImpl::DeletePasswords()
 {
     maPasswordList.clear();
 }
