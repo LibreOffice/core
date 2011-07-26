@@ -92,8 +92,11 @@
 #define EmfPlusRegionInitialStateEmpty 0x10000002
 #define EmfPlusRegionInitialStateInfinite 0x10000003
 
+#if OSL_DEBUG_LEVEL > 1
+#define EMFP_DEBUG(x) x
+#else
 #define EMFP_DEBUG(x)
-//#define EMFP_DEBUG(x) x
+#endif
 
 using namespace ::com::sun::star;
 
