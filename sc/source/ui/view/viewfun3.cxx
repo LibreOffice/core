@@ -276,14 +276,11 @@ void ScViewFunc::CutToClip( ScDocument* pClipDoc, sal_Bool bIncludeObjects )
 
 sal_Bool ScViewFunc::CopyToClip( ScDocument* pClipDoc, sal_Bool bCut, sal_Bool bApi, sal_Bool bIncludeObjects, sal_Bool bStopEdit )
 {
-    sal_Bool bDone = false;
-    if ( bStopEdit )
-        UpdateInputLine();
-
     ScRange aRange;
     ScMarkType eMarkType = GetViewData()->GetSimpleArea( aRange );
     ScDocument* pDoc = GetViewData()->GetDocument();
     ScMarkData& rMark = GetViewData()->GetMarkData();
+    sal_Bool bDone = sal_False;
 
     if( !pClipDoc ) // System Copy - adjust the ranges.
     {
@@ -305,37 +302,76 @@ sal_Bool ScViewFunc::CopyToClip( ScDocument* pClipDoc, sal_Bool bCut, sal_Bool b
     }
     if ( eMarkType == SC_MARK_SIMPLE || eMarkType == SC_MARK_SIMPLE_FILTERED )
     {
-        if ( !pDoc->HasSelectedBlockMatrixFragment(
-                        aRange.aStart.Col(), aRange.aStart.Row(),
-                        aRange.aEnd.Col(),   aRange.aEnd.Row(),
-                        rMark ) )
+       ScRangeList aRangeList;
+       aRangeList.Append( aRange );
+       bDone = CopyToClip( pClipDoc, aRangeList, bCut, bApi, bIncludeObjects, bStopEdit, sal_False );
+    }
+    else if (eMarkType == SC_MARK_MULTI)
+    {
+        ScRangeList aRangeList;
+        rMark.MarkToSimple();
+        rMark.FillRangeListWithMarks(&aRangeList, false);
+        bDone = CopyToClip( pClipDoc, aRangeList, bCut, bApi, bIncludeObjects, bStopEdit, sal_False );
+    }
+    else
+    {
+        if (!bApi)
+            ErrorMessage(STR_NOMULTISELECT);
+    }
+
+    return bDone;
+}
+
+// Copy the content of the Range into clipboard. Adding this method for VBA API: Range.Copy().
+// also combine the old content of CopyToClip method to share this implementation
+sal_Bool ScViewFunc::CopyToClip( ScDocument* pClipDoc, const ScRangeList& rRanges, sal_Bool bCut, sal_Bool bApi, sal_Bool bIncludeObjects, sal_Bool bStopEdit, sal_Bool bUseRangeForVBA )
+{
+    if ( rRanges.empty() )
+        return false;
+    sal_Bool bDone = false;
+    if ( bStopEdit )
+        UpdateInputLine();
+
+    ScRange aRange = *rRanges[0];
+    ScClipParam aClipParam( aRange, bCut );
+    aClipParam.maRanges = rRanges;
+
+    ScDocument* pDoc = GetViewData()->GetDocument();
+    ScMarkData& rMark = GetViewData()->GetMarkData();
+
+    if ( !aClipParam.isMultiRange() )
+    {
+        if ( pDoc && ( ( bUseRangeForVBA &&  !pDoc->HasSelectedBlockMatrixFragment( aRange.aStart.Col(), aRange.aStart.Row(), aRange.aEnd.Col(), aRange.aEnd.Row(), aRange.aStart.Tab() ) ) || ( !bUseRangeForVBA && !pDoc->HasSelectedBlockMatrixFragment( aRange.aStart.Col(), aRange.aStart.Row(), aRange.aEnd.Col(), aRange.aEnd.Row(), rMark ) ) ) )
         {
             sal_Bool bSysClip = false;
             if ( !pClipDoc )                                    // no clip doc specified
             {
-                pClipDoc = new ScDocument( SCDOCMODE_CLIP );    // create one (deleted by ScTransferObj)
+                // Create one (deleted by ScTransferObj).
+                pClipDoc = new ScDocument( SCDOCMODE_CLIP );
                 bSysClip = sal_True;                                // and copy into system
             }
-
             if ( !bCut )
             {
                 ScChangeTrack* pChangeTrack = pDoc->GetChangeTrack();
                 if ( pChangeTrack )
-                    pChangeTrack->ResetLastCut();   // kein CutMode mehr
+                    pChangeTrack->ResetLastCut();
             }
 
             if ( bSysClip && bIncludeObjects )
             {
-                sal_Bool bAnyOle = pDoc->HasOLEObjectsInArea( aRange, &rMark );
-                // update ScGlobal::pDrawClipDocShellRef
+                sal_Bool bAnyOle = pDoc->HasOLEObjectsInArea( aRange );
+                // Update ScGlobal::pDrawClipDocShellRef.
                 ScDrawLayer::SetGlobalDrawPersist( ScTransferObj::SetDrawClipDoc( bAnyOle ) );
             }
 
-            ScClipParam aClipParam(aRange, bCut);
-            aClipParam.setSourceDocID( pDoc->GetDocumentID() );
-            pDoc->CopyToClip(aClipParam, pClipDoc, &rMark, false, false, bIncludeObjects);
+            if ( !bUseRangeForVBA )
+                // is this necessary?, will setting the doc id upset the
+                // following paste operation with range? would be nicer to just set this always
+                // and lose the 'if' above
+                aClipParam.setSourceDocID( pDoc->GetDocumentID() );
 
-            if ( pDoc && pClipDoc )
+            pDoc->CopyToClip( aClipParam, pClipDoc, &rMark, false, bIncludeObjects, bUseRangeForVBA );
+            if ( !bUseRangeForVBA && pDoc && pClipDoc )
             {
                 ScDrawLayer* pDrawLayer = pClipDoc->GetDrawLayer();
                 if ( pDrawLayer )
@@ -354,15 +390,14 @@ sal_Bool ScViewFunc::CopyToClip( ScDocument* pClipDoc, sal_Bool bCut, sal_Bool b
                 }
             }
 
-            if (bSysClip)
+            if ( bSysClip )
             {
                 ScDrawLayer::SetGlobalDrawPersist(NULL);
-
                 ScGlobal::SetClipDocName( pDoc->GetDocumentShell()->GetTitle( SFX_TITLE_FULLNAME ) );
             }
-            pClipDoc->ExtendMerge( aRange, sal_True );
+            pClipDoc->ExtendMerge( aRange, true );
 
-            if (bSysClip)
+            if ( bSysClip )
             {
                 ScDocShell* pDocSh = GetViewData()->GetDocShell();
                 TransferableObjectDescriptor aObjDesc;
@@ -372,32 +407,23 @@ sal_Bool ScViewFunc::CopyToClip( ScDocument* pClipDoc, sal_Bool bCut, sal_Bool b
 
                 ScTransferObj* pTransferObj = new ScTransferObj( pClipDoc, aObjDesc );
                 uno::Reference<datatransfer::XTransferable> xTransferable( pTransferObj );
-
                 if ( ScGlobal::pDrawClipDocShellRef )
                 {
                     SfxObjectShellRef aPersistRef( &(*ScGlobal::pDrawClipDocShellRef) );
-                    pTransferObj->SetDrawPersist( aPersistRef );    // keep persist for ole objects alive
-                }
+                    pTransferObj->SetDrawPersist( aPersistRef );// keep persist for ole objects alive
 
-                pTransferObj->CopyToClipboard( GetActiveWin() );    // system clipboard
-                SC_MOD()->SetClipObject( pTransferObj, NULL );      // internal clipboard
+                }
+                pTransferObj->CopyToClipboard( GetActiveWin() );
+                SC_MOD()->SetClipObject( pTransferObj, NULL );
             }
 
-            bDone = sal_True;
-        }
-        else
-        {
-            if (!bApi)
-                ErrorMessage(STR_MATRIXFRAGMENTERR);
+            bDone = true;
         }
     }
-    else if (eMarkType == SC_MARK_MULTI)
+    else
     {
         bool bSuccess = false;
-        ScClipParam aClipParam;
         aClipParam.mbCutMode = false;
-        rMark.MarkToSimple();
-        rMark.FillRangeListWithMarks(&aClipParam.maRanges, false);
 
         do
         {
@@ -423,8 +449,9 @@ sal_Bool ScViewFunc::CopyToClip( ScDocument* pClipDoc, sal_Bool bCut, sal_Bool b
             for ( size_t i = 1; i < aClipParam.maRanges.size(); ++i )
             {
                 p = aClipParam.maRanges[i];
-                if (pDoc->HasSelectedBlockMatrixFragment(
-                    p->aStart.Col(), p->aStart.Row(), p->aEnd.Col(), p->aEnd.Row(), rMark))
+                if ( ( bUseRangeForVBA && pDoc->HasSelectedBlockMatrixFragment(
+                    p->aStart.Col(), p->aStart.Row(), p->aEnd.Col(), p->aEnd.Row(), p->aStart.Tab() ) ) || ( !bUseRangeForVBA && pDoc->HasSelectedBlockMatrixFragment(
+                    p->aStart.Col(), p->aStart.Row(), p->aEnd.Col(), p->aEnd.Row(), rMark) ) )
                 {
                     if (!bApi)
                         ErrorMessage(STR_MATRIXFRAGMENTERR);
@@ -474,8 +501,7 @@ sal_Bool ScViewFunc::CopyToClip( ScDocument* pClipDoc, sal_Bool bCut, sal_Bool b
             }
             if (!bValidRanges)
                 break;
-
-            pDoc->CopyToClip(aClipParam, pDocClip.get(), &rMark, false, false, bIncludeObjects);
+            pDoc->CopyToClip(aClipParam, pDocClip.get(), &rMark, false, false, bIncludeObjects, bUseRangeForVBA );
 
             ScChangeTrack* pChangeTrack = pDoc->GetChangeTrack();
             if ( pChangeTrack )
@@ -509,81 +535,6 @@ sal_Bool ScViewFunc::CopyToClip( ScDocument* pClipDoc, sal_Bool bCut, sal_Bool b
             ErrorMessage(STR_NOMULTISELECT);
 
         bDone = bSuccess;
-    }
-    else
-    {
-        if (!bApi)
-            ErrorMessage(STR_NOMULTISELECT);
-    }
-
-    return bDone;
-}
-
-// Copy the content of the Range into clipboard. Adding this method for VBA API: Range.Copy().
-sal_Bool ScViewFunc::CopyToClip( ScDocument* pClipDoc, const ScRange& rRange, sal_Bool bCut, sal_Bool bApi, sal_Bool bIncludeObjects, sal_Bool bStopEdit )
-{
-    sal_Bool bDone = false;
-    if ( bStopEdit )
-        UpdateInputLine();
-
-    ScRange aRange = rRange;
-    ScDocument* pDoc = GetViewData()->GetDocument();
-    if ( pDoc && !pDoc->HasSelectedBlockMatrixFragment( aRange.aStart.Col(), aRange.aStart.Row(), aRange.aEnd.Col(), aRange.aEnd.Row(), aRange.aStart.Tab() ) )
-    {
-        sal_Bool bSysClip = false;
-        if ( !pClipDoc )
-        {
-            // Create one (deleted by ScTransferObj).
-            pClipDoc = new ScDocument( SCDOCMODE_CLIP );
-            bSysClip = true;
-        }
-        if ( !bCut )
-        {
-            ScChangeTrack* pChangeTrack = pDoc->GetChangeTrack();
-            if ( pChangeTrack )
-                pChangeTrack->ResetLastCut();
-        }
-
-        if ( bSysClip && bIncludeObjects )
-        {
-            sal_Bool bAnyOle = pDoc->HasOLEObjectsInArea( aRange );
-            // Update ScGlobal::pDrawClipDocShellRef.
-            ScDrawLayer::SetGlobalDrawPersist( ScTransferObj::SetDrawClipDoc( bAnyOle ) );
-        }
-
-        ScClipParam aClipParam( aRange, bCut );
-        pDoc->CopyToClip4VBA( aClipParam, pClipDoc, false, bIncludeObjects );
-        if ( bSysClip )
-        {
-            ScDrawLayer::SetGlobalDrawPersist(NULL);
-            ScGlobal::SetClipDocName( pDoc->GetDocumentShell()->GetTitle( SFX_TITLE_FULLNAME ) );
-        }
-        pClipDoc->ExtendMerge( aRange, true );
-
-        if ( bSysClip )
-        {
-            ScDocShell* pDocSh = GetViewData()->GetDocShell();
-            TransferableObjectDescriptor aObjDesc;
-            pDocSh->FillTransferableObjectDescriptor( aObjDesc );
-            aObjDesc.maDisplayName = pDocSh->GetMedium()->GetURLObject().GetURLNoPass();
-
-            ScTransferObj* pTransferObj = new ScTransferObj( pClipDoc, aObjDesc );
-            uno::Reference<datatransfer::XTransferable> xTransferable( pTransferObj );
-            if ( ScGlobal::pDrawClipDocShellRef )
-            {
-                SfxObjectShellRef aPersistRef( &(*ScGlobal::pDrawClipDocShellRef) );
-                pTransferObj->SetDrawPersist( aPersistRef );
-            }
-            pTransferObj->CopyToClipboard( GetActiveWin() );
-            SC_MOD()->SetClipObject( pTransferObj, NULL );
-        }
-
-        bDone = true;
-    }
-    else
-    {
-        if ( !bApi )
-            ErrorMessage(STR_MATRIXFRAGMENTERR);
     }
 
     return bDone;

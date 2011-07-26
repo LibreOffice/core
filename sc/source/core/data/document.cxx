@@ -1860,9 +1860,12 @@ void ScDocument::UndoToDocument(const ScRange& rRange,
     pDestDoc->SetAutoCalc( bOldAutoCalc );
 }
 
+// bUseRangeForVBA added for VBA api support to allow content of a specified
+// range to be copied ( e.g. don't use marked data but the just the range
+// specified by rClipParam
 void ScDocument::CopyToClip(const ScClipParam& rClipParam,
                             ScDocument* pClipDoc, const ScMarkData* pMarks,
-                            bool bAllTabs, bool bKeepScenarioFlags, bool bIncludeObjects, bool bCloneNoteCaptions)
+                            bool bAllTabs, bool bKeepScenarioFlags, bool bIncludeObjects, bool bCloneNoteCaptions, bool bUseRangeForVBA )
 {
     OSL_ENSURE( bAllTabs || pMarks, "CopyToClip: ScMarkData fails" );
 
@@ -1877,12 +1880,23 @@ void ScDocument::CopyToClip(const ScClipParam& rClipParam,
 
     pClipDoc->aDocName = aDocName;
     pClipDoc->SetClipParam(rClipParam);
-    pClipDoc->ResetClip(this, pMarks);
-
     ScRange aClipRange = rClipParam.getWholeRange();
+    SCTAB nTab = aClipRange.aStart.Tab();
+    SCTAB i = 0;
+    SCTAB nEndTab =  static_cast<SCTAB>(maTabs.size());
+
+    if ( bUseRangeForVBA )
+    {
+        pClipDoc->ResetClip( this, nTab );
+        i = nTab;
+        nEndTab = nTab;
+    }
+    else
+        pClipDoc->ResetClip(this, pMarks);
+
     CopyRangeNamesToClip(pClipDoc, aClipRange, pMarks, bAllTabs);
 
-    for (SCTAB i = 0; i < static_cast<SCTAB>(maTabs.size()); ++i)
+    for ( ; i < nTab; ++i)
     {
         if (!maTabs[i] || i >= static_cast<SCTAB>(pClipDoc->maTabs.size()) || !pClipDoc->maTabs[i])
             continue;
@@ -1903,40 +1917,6 @@ void ScDocument::CopyToClip(const ScClipParam& rClipParam,
 
     // Make sure to mark overlapped cells.
     pClipDoc->ExtendMerge(aClipRange, true);
-}
-
-// Copy the content of the Range into clipboard. Adding this method for VBA API: Range.Copy().
-void ScDocument::CopyToClip4VBA(const ScClipParam& rClipParam, ScDocument* pClipDoc, bool bKeepScenarioFlags, bool bIncludeObjects, bool bCloneNoteCaptions)
-{
-    if ( !bIsClip )
-    {
-        pClipDoc = pClipDoc ? pClipDoc : SC_MOD()->GetClipDoc();
-        if ( !pClipDoc )
-        {
-            return;
-        }
-        ScRange aClipRange = rClipParam.getWholeRange();
-        SCTAB nTab = aClipRange.aStart.Tab();
-        pClipDoc->aDocName = aDocName;
-        pClipDoc->SetClipParam( rClipParam );
-        pClipDoc->ResetClip( this, nTab );
-
-        CopyRangeNamesToClip( pClipDoc, aClipRange, nTab );
-        if ( nTab < static_cast<SCTAB>(maTabs.size()) && nTab < static_cast<SCTAB>(pClipDoc->maTabs.size()) )
-            if ( maTabs[nTab] && pClipDoc->maTabs[nTab] )
-            {
-                maTabs[nTab]->CopyToClip( rClipParam.maRanges, pClipDoc->maTabs[nTab], bKeepScenarioFlags, bCloneNoteCaptions );
-                if ( pDrawLayer && bIncludeObjects )
-                {
-                    // Also copy drawing objects.
-                    Rectangle aObjRect = GetMMRect( aClipRange.aStart.Col(), aClipRange.aStart.Row(), aClipRange.aEnd.Col(), aClipRange.aEnd.Row(), nTab );
-                    pDrawLayer->CopyToClip( pClipDoc, nTab, aObjRect );
-                }
-            }
-
-        // Make sure to mark overlapped cells.
-        pClipDoc->ExtendMerge( aClipRange, true );
-    }
 }
 
 void ScDocument::CopyTabToClip(SCCOL nCol1, SCROW nRow1,

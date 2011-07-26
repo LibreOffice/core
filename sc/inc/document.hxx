@@ -1030,10 +1030,7 @@ public:
 
     void            CopyToClip(const ScClipParam& rClipParam, ScDocument* pClipDoc,
                                const ScMarkData* pMarks = NULL, bool bAllTabs = false, bool bKeepScenarioFlags = false,
-                               bool bIncludeObjects = false, bool bCloneNoteCaptions = true);
-
-    void            CopyToClip4VBA(const ScClipParam& rClipParam, ScDocument* pClipDoc, bool bKeepScenarioFlags = false,
-                                   bool bIncludeObjects = false, bool bCloneNoteCaptions = true);
+                               bool bIncludeObjects = false, bool bCloneNoteCaptions = true, bool bUseRangeForVBA = false );
 
     void            CopyTabToClip(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                                 SCTAB nTab, ScDocument* pClipDoc = NULL);

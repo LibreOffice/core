@@ -2596,8 +2596,6 @@ ScVbaRange::getMergeCells() throw (script::BasicErrorException, uno::RuntimeExce
 void
 ScVbaRange::Copy(const ::uno::Any& Destination) throw (uno::RuntimeException)
 {
-    if ( m_Areas->getCount() > 1 )
-        throw uno::RuntimeException( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("That command cannot be used on multiple selections" ) ), uno::Reference< uno::XInterface >() );
     if ( Destination.hasValue() )
     {
         uno::Reference< excel::XRange > xRange( Destination, uno::UNO_QUERY_THROW );
@@ -2615,11 +2613,24 @@ ScVbaRange::Copy(const ::uno::Any& Destination) throw (uno::RuntimeException)
     }
     else
     {
-        ScRange aRange;
-        RangeHelper thisRange( mxRange );
-        ScUnoConversion::FillScRange( aRange, thisRange.getCellRangeAddressable()->getRangeAddress() );
-        uno::Reference< frame::XModel > xModel = excel::GetModelFromRange( mxRange );
-        excel::implnCopyRange( xModel, aRange );
+        if ( m_Areas->getCount() > 1 )
+        {
+            uno::Reference< frame::XModel > xModel = excel::GetModelFromRange( mxRanges );
+            ScCellRangesBase* pUnoRangesBase = getCellRangesBase();
+            ScRangeList aList =  pUnoRangesBase->GetRangeList();
+            if ( !excel::implnCopyRanges( xModel, aList ) )
+            {
+                throw uno::RuntimeException( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("That command cannot be used on multiple selections" ) ), uno::Reference< uno::XInterface >() );
+            }
+        }
+        else
+        {
+            ScRange aRange;
+            RangeHelper thisRange( mxRange );
+            uno::Reference< frame::XModel > xModel = excel::GetModelFromRange( mxRange );
+            ScUnoConversion::FillScRange( aRange, thisRange.getCellRangeAddressable()->getRangeAddress() );
+            excel::implnCopyRange( xModel, aRange );
+        }
     }
 }
 

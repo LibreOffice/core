@@ -108,8 +108,8 @@ public:
     SC_DLLPUBLIC void           CutToClip( ScDocument* pClipDoc = NULL, sal_Bool bIncludeObjects = false );
     SC_DLLPUBLIC sal_Bool           CopyToClip( ScDocument* pClipDoc = NULL, sal_Bool bCut = false, sal_Bool bApi = false,
                                 sal_Bool bIncludeObjects = false, sal_Bool bStopEdit = true );
-    SC_DLLPUBLIC sal_Bool           CopyToClip( ScDocument* pClipDoc, const ScRange& rRange, sal_Bool bCut = false,
-                                sal_Bool bApi = false, sal_Bool bIncludeObjects = false, sal_Bool bStopEdit = true );
+    SC_DLLPUBLIC sal_Bool           CopyToClip( ScDocument* pClipDoc, const ScRangeList& rRange, sal_Bool bCut = false,
+                                sal_Bool bApi = false, sal_Bool bIncludeObjects = false, sal_Bool bStopEdit = true, sal_Bool bUseRangeForVBA = true );
     ScTransferObj*              CopyToTransferable();
     SC_DLLPUBLIC sal_Bool           PasteFromClip( sal_uInt16 nFlags, ScDocument* pClipDoc,
                                     sal_uInt16 nFunction = PASTE_NOFUNC, sal_Bool bSkipEmpty = false,

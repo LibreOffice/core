@@ -275,13 +275,22 @@ void implnPasteSpecial( const uno::Reference< frame::XModel>& xModel, sal_uInt16
 
 }
 
-void implnCopyRange( const uno::Reference< frame::XModel>& xModel, const ScRange& rRange )
+bool implnCopyRanges( const uno::Reference< frame::XModel>& xModel, ScRangeList& rRangeList )
 {
+    bool bResult = false;
     ScTabViewShell* pViewShell = getBestViewShell( xModel );
     if ( pViewShell )
     {
-        pViewShell->CopyToClip( NULL, rRange, false, true, true );
+        bResult = pViewShell->CopyToClip( NULL, rRangeList, false, true, true );
     }
+    return bResult;
+}
+
+bool implnCopyRange( const uno::Reference< frame::XModel>& xModel, const ScRange& rRange )
+{
+    ScRangeList aRanges;
+    aRanges.Append( rRange );
+    return implnCopyRanges( xModel, aRanges );
 }
 
 ScDocShell*
