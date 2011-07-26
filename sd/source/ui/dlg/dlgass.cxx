@@ -82,6 +82,7 @@
 
 #include <comphelper/processfactory.hxx>
 #include <vector>
+#include <boost/ptr_container/ptr_vector.hpp>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -208,7 +209,7 @@ public:
     String GetPassword( const String rPath );
     void DeletePassords();
 
-    vector< PasswordEntry* > maPasswordList;
+    boost::ptr_vector< PasswordEntry > maPasswordList;
 
     String maDocFile;
     String maLayoutFile;
@@ -1679,9 +1680,9 @@ void AssistentDlgImpl::SavePassword( SfxObjectShellLock xDoc, const String& rPat
             PasswordEntry* pEntry = NULL;
             for ( size_t i = 0, n = maPasswordList.size(); i < n; ++i )
             {
-                if ( maPasswordList[ i ]->maPath == rPath )
+                if ( maPasswordList[ i ].maPath == rPath )
                 {
-                    pEntry = maPasswordList[ i ];
+                    pEntry = &maPasswordList[ i ];
                     break;
                 }
             }
@@ -1712,7 +1713,7 @@ String AssistentDlgImpl::GetPassword( const String rPath )
 {
     for ( size_t i = 0, n = maPasswordList.size(); i < n; ++i )
     {
-        PasswordEntry* pEntry = maPasswordList[ i ];
+        PasswordEntry* pEntry = &maPasswordList[ i ];
         if(pEntry->maPath == rPath)
             return pEntry->maPassword;
     }
@@ -1721,8 +1722,6 @@ String AssistentDlgImpl::GetPassword( const String rPath )
 
 void AssistentDlgImpl::DeletePassords()
 {
-    for ( size_t i = 0, n = maPasswordList.size(); i < n; ++i )
-        delete maPasswordList[ i ];
     maPasswordList.clear();
 }
 
