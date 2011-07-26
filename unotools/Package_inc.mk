@@ -66,7 +66,6 @@ $(eval $(call gb_Package_add_file,unotools_inc,inc/unotools/inetoptions.hxx,unot
 $(eval $(call gb_Package_add_file,unotools_inc,inc/unotools/internaloptions.hxx,unotools/internaloptions.hxx))
 $(eval $(call gb_Package_add_file,unotools_inc,inc/unotools/intlwrapper.hxx,unotools/intlwrapper.hxx))
 $(eval $(call gb_Package_add_file,unotools_inc,inc/unotools/itemholderbase.hxx,unotools/itemholderbase.hxx))
-$(eval $(call gb_Package_add_file,unotools_inc,inc/unotools/javaoptions.hxx,unotools/javaoptions.hxx))
 $(eval $(call gb_Package_add_file,unotools_inc,inc/unotools/lingucfg.hxx,unotools/lingucfg.hxx))
 $(eval $(call gb_Package_add_file,unotools_inc,inc/unotools/linguprops.hxx,unotools/linguprops.hxx))
 $(eval $(call gb_Package_add_file,unotools_inc,inc/unotools/localedatawrapper.hxx,unotools/localedatawrapper.hxx))

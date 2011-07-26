@@ -99,7 +99,6 @@ $(eval $(call gb_Library_add_exception_objects,utl,\
     unotools/source/config/inetoptions \
     unotools/source/config/internaloptions \
     unotools/source/config/itemholder1 \
-    unotools/source/config/javaoptions \
     unotools/source/config/lingucfg \
     unotools/source/config/localisationoptions \
     unotools/source/config/misccfg \
