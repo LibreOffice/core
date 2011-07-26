@@ -427,7 +427,7 @@ public:
     SAL_DLLPRIVATE void                ImplPointToLogic( Font& rFont ) const;
     SAL_DLLPRIVATE void                ImplLogicToPoint( Font& rFont ) const;
     SAL_DLLPRIVATE Point               ImplOutputToFrame( const Point& rPos );
-    SAL_DLLPRIVATE void                ImplFrameToOutput( Rectangle& rRect );
+    SAL_DLLPRIVATE Point               ImplFrameToOutput( const Point& rPos );
     SAL_DLLPRIVATE sal_Bool                ImplSysObjClip( const Region* pOldRegion );
     SAL_DLLPRIVATE void                ImplUpdateSysObjChildsClip();
     SAL_DLLPRIVATE void                ImplUpdateSysObjOverlapsClip();

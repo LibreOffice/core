@@ -1434,12 +1434,9 @@ Point Window::ImplOutputToFrame( const Point& rPos )
     return Point( rPos.X()+mnOutOffX, rPos.Y()+mnOutOffY );
 }
 
-void Window::ImplFrameToOutput( Rectangle& rRect )
+Point Window::ImplFrameToOutput( const Point& rPos )
 {
-    rRect.Left()-=mnOutOffX;
-    rRect.Top()-=mnOutOffY;
-    rRect.Right()-=mnOutOffX;
-    rRect.Bottom()-=mnOutOffY;
+    return Point( rPos.X()-mnOutOffX, rPos.Y()-mnOutOffY );
 }
 
 void Window::SetCompoundControl( sal_Bool bCompound )
