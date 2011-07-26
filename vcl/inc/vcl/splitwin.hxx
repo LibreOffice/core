@@ -153,7 +153,6 @@ private:
     SAL_DLLPRIVATE      SplitWindow & operator= (const SplitWindow &);
 public:
                         SplitWindow( Window* pParent, WinBits nStyle = 0 );
-                        SplitWindow( Window* pParent, const ResId& rResId );
                         ~SplitWindow();
 
     virtual void        StartSplit();
@@ -180,22 +179,10 @@ public:
     void                InsertItem( sal_uInt16 nId, long nSize,
                                     sal_uInt16 nPos = SPLITWINDOW_APPEND, sal_uInt16 nSetId = 0,
                                     SplitWindowItemBits nBits = 0 );
-    void                MoveItem( sal_uInt16 nId, sal_uInt16 nNewPos, sal_uInt16 nNewSetId = 0 );
     void                RemoveItem( sal_uInt16 nId, sal_Bool bHide = sal_True );
     void                Clear();
 
-    void                SetBaseSet( sal_uInt16 nSetId = 0 );
-    sal_uInt16              GetBaseSet() const;
-
-    void                SetSplitSize( sal_uInt16 nSetId, long nSplitSize,
-                                      sal_Bool bWithChilds = sal_False );
-    long                GetSplitSize( sal_uInt16 nSetId ) const;
-    void                SetItemBackground( sal_uInt16 nSetId );
     void                SetItemBackground( sal_uInt16 nSetId, const Wallpaper& rWallpaper );
-    Wallpaper           GetItemBackground( sal_uInt16 nSetId ) const;
-    sal_Bool                IsItemBackground( sal_uInt16 nSetId ) const;
-    void                SetItemBitmap( sal_uInt16 nSetId, const Bitmap& rBitmap );
-    Bitmap              GetItemBitmap( sal_uInt16 nSetId ) const;
 
     void                SplitItem( sal_uInt16 nId, long nNewSize,
                                    sal_Bool bPropSmall = sal_False,
@@ -213,13 +200,8 @@ public:
     void                SetItemSizeRange (sal_uInt16 nId, const Range aRange);
     /** Return the current size limits for the specified item.
     */
-    Range               GetItemSizeRange (sal_uInt16 nId) const;
     long                GetItemSize( sal_uInt16 nId, SplitWindowItemBits nBits ) const;
-    void                SetItemBits( sal_uInt16 nId, SplitWindowItemBits nNewBits );
-    SplitWindowItemBits GetItemBits( sal_uInt16 nId ) const;
-    Window*             GetItemWindow( sal_uInt16 nId ) const;
     sal_uInt16              GetSet( sal_uInt16 nId ) const;
-    sal_Bool                GetSet( sal_uInt16 nId, sal_uInt16& rSetId, sal_uInt16& rPos ) const;
     sal_uInt16              GetItemId( Window* pWindow ) const;
     sal_uInt16              GetItemId( const Point& rPos ) const;
     sal_uInt16              GetItemPos( sal_uInt16 nId, sal_uInt16 nSetId = 0 ) const;
@@ -227,7 +209,6 @@ public:
     sal_uInt16              GetItemCount( sal_uInt16 nSetId = 0 ) const;
     sal_Bool                IsItemValid( sal_uInt16 nId ) const;
 
-    void                SetNoAlign( sal_Bool bNoAlign );
     sal_Bool                IsNoAlign() const { return mbNoAlign; }
     void                SetAlign( WindowAlign eNewAlign = WINDOWALIGN_TOP );
     WindowAlign         GetAlign() const { return meAlign; }
@@ -261,8 +242,6 @@ public:
     sal_Bool                GetAutoHideState() const { return mbAutoHideIn; }
 
     Rectangle           GetAutoHideRect() const;
-    Rectangle           GetFadeInRect() const;
-    Rectangle           GetFadeOutRect() const;
 
     void                SetStartSplitHdl( const Link& rLink ) { maStartSplitHdl = rLink; }
     const Link&         GetStartSplitHdl() const { return maStartSplitHdl; }
