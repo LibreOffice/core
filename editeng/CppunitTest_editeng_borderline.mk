@@ -49,10 +49,13 @@ $(eval $(call gb_CppunitTest_add_linked_libs,editeng_borderline, \
     cppu \
     sal \
     salhelper \
-    icuuc \
     i18nisolang1 \
     i18npaper \
     $(gb_STDLIBS) \
+))
+
+$(eval $(call gb_CppunitTest_use_externals,editeng_borderline,\
+    icuuc \
 ))
 
 $(eval $(call gb_CppunitTest_set_include,editeng_borderline,\
