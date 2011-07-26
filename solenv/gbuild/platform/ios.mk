@@ -255,7 +255,7 @@ $(call gb_Helper_abbreviate_dirs,\
 		$(foreach object,$(OBJCXXOBJECTS),$(call gb_ObjCxxObject_get_target,$(object))) \
 		$(foreach object,$(GENCXXOBJECTS),$(call gb_GenCxxObject_get_target,$(object))) \
 		$(foreach extraobjectlist,$(EXTRAOBJECTLISTS),@$(extraobjectlist)) \
-		2> /dev/null)
+		$(if $(findstring s,$(MAKEFLAGS)),2> /dev/null))
 endef
 
 define gb_LinkTarget__command
