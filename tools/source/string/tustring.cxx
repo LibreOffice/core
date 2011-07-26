@@ -231,32 +231,6 @@ STRING& STRING::Reverse()
 
 // -----------------------------------------------------------------------
 
-xub_StrLen STRING::Match( const STRCODE* pCharStr ) const
-{
-    DBG_CHKTHIS( STRING, DBGCHECKSTRING );
-
-    // Ist dieser String leer
-    if ( !mpData->mnLen )
-        return STRING_MATCH;
-
-    // Suche bis Stringende nach dem ersten nicht uebereinstimmenden Zeichen
-    const STRCODE*  pStr = mpData->maStr;
-    xub_StrLen      i = 0;
-    while ( i < mpData->mnLen )
-    {
-        // Stimmt das Zeichen nicht ueberein, dann abbrechen
-        if ( *pStr != *pCharStr )
-            return i;
-        ++pStr,
-        ++pCharStr,
-        ++i;
-    }
-
-    return STRING_MATCH;
-}
-
-// -----------------------------------------------------------------------
-
 STRING& STRING::Insert( const STRING& rStr, xub_StrLen nPos, xub_StrLen nLen,
                         xub_StrLen nIndex )
 {
@@ -456,19 +430,6 @@ sal_Bool STRING::EqualsIgnoreCaseAscii( const STRING& rStr, xub_StrLen nIndex, x
 
     // String vergleichen
     return (ImplStringICompareWithoutZero( mpData->maStr+nIndex, rStr.mpData->maStr, nLen ) == 0);
-}
-
-// -----------------------------------------------------------------------
-
-sal_Bool STRING::EqualsIgnoreCaseAscii( const STRCODE* pCharStr, xub_StrLen nIndex, xub_StrLen nLen ) const
-{
-    DBG_CHKTHIS( STRING, DBGCHECKSTRING );
-
-    // Are there enough codes for comparing?
-    if ( nIndex > mpData->mnLen )
-        return (*pCharStr == 0);
-
-    return (ImplStringICompare( mpData->maStr+nIndex, pCharStr, nLen ) == 0);
 }
 
 // -----------------------------------------------------------------------

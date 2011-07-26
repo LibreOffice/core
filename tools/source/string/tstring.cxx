@@ -227,4 +227,153 @@ sal_Bool ByteString::IsAlphaNumericAscii() const
     return sal_True;
 }
 
+void STRING::SearchAndReplaceAll( const STRCODE* pCharStr, const STRING& rRepStr )
+{
+    DBG_CHKTHIS( STRING, DBGCHECKSTRING );
+    DBG_CHKOBJ( &rRepStr, STRING, DBGCHECKSTRING );
+
+    xub_StrLen nCharLen = ImplStringLen( pCharStr );
+    xub_StrLen nSPos = Search( pCharStr, 0 );
+    while ( nSPos != STRING_NOTFOUND )
+    {
+        Replace( nSPos, nCharLen, rRepStr );
+        nSPos = nSPos + rRepStr.Len();
+        nSPos = Search( pCharStr, nSPos );
+    }
+}
+
+xub_StrLen STRING::SearchAndReplace( const STRCODE* pCharStr, const STRING& rRepStr,
+                                     xub_StrLen nIndex )
+{
+    DBG_CHKTHIS( STRING, DBGCHECKSTRING );
+    DBG_CHKOBJ( &rRepStr, STRING, DBGCHECKSTRING );
+
+    xub_StrLen nSPos = Search( pCharStr, nIndex );
+    if ( nSPos != STRING_NOTFOUND )
+        Replace( nSPos, ImplStringLen( pCharStr ), rRepStr );
+
+    return nSPos;
+}
+
+static sal_Int32 ImplStringICompare( const STRCODE* pStr1, const STRCODE* pStr2,
+                                     xub_StrLen nCount )
+{
+    sal_Int32   nRet = 0;
+    STRCODE     c1;
+    STRCODE     c2;
+    do
+    {
+        if ( !nCount )
+            break;
+
+        // Ist das Zeichen zwischen 'A' und 'Z' dann umwandeln
+        c1 = *pStr1;
+        c2 = *pStr2;
+        if ( (c1 >= 65) && (c1 <= 90) )
+            c1 += 32;
+        if ( (c2 >= 65) && (c2 <= 90) )
+            c2 += 32;
+        nRet = ((sal_Int32)((STRCODEU)c1))-((sal_Int32)((STRCODEU)c2));
+        if ( nRet != 0 )
+            break;
+
+        ++pStr1,
+        ++pStr2,
+        --nCount;
+    }
+    while ( c2 );
+
+    return nRet;
+}
+
+StringCompare STRING::CompareIgnoreCaseToAscii( const STRCODE* pCharStr,
+                                                xub_StrLen nLen ) const
+{
+    DBG_CHKTHIS( STRING, DBGCHECKSTRING );
+
+    // String vergleichen
+    sal_Int32 nCompare = ImplStringICompare( mpData->maStr, pCharStr, nLen );
+
+    // Rueckgabewert anpassen
+    if ( nCompare == 0 )
+        return COMPARE_EQUAL;
+    else if ( nCompare < 0 )
+        return COMPARE_LESS;
+    else
+        return COMPARE_GREATER;
+}
+
+StringCompare STRING::CompareTo( const STRCODE* pCharStr, xub_StrLen nLen ) const
+{
+    DBG_CHKTHIS( STRING, DBGCHECKSTRING );
+
+    // String vergleichen
+    sal_Int32 nCompare = ImplStringCompare( mpData->maStr, pCharStr, nLen );
+
+    // Rueckgabewert anpassen
+    if ( nCompare == 0 )
+        return COMPARE_EQUAL;
+    else if ( nCompare < 0 )
+        return COMPARE_LESS;
+    else
+        return COMPARE_GREATER;
+}
+
+// =======================================================================
+
+static sal_Int32 ImplStringCompare( const STRCODE* pStr1, const STRCODE* pStr2 )
+{
+    sal_Int32 nRet;
+    while ( ((nRet = ((sal_Int32)((STRCODEU)*pStr1))-((sal_Int32)((STRCODEU)*pStr2))) == 0) &&
+            *pStr2 )
+    {
+        ++pStr1,
+        ++pStr2;
+    }
+
+    return nRet;
+}
+
+sal_Bool STRING::Equals( const STRCODE* pCharStr ) const
+{
+    DBG_CHKTHIS( STRING, DBGCHECKSTRING );
+
+    return (ImplStringCompare( mpData->maStr, pCharStr ) == 0);
+}
+
+STRING& STRING::Insert( const STRCODE* pCharStr, xub_StrLen nIndex )
+{
+    DBG_CHKTHIS( STRING, DBGCHECKSTRING );
+    DBG_ASSERT( pCharStr, "String::Insert() - pCharStr is NULL" );
+
+    // Stringlaenge ermitteln
+    sal_Int32 nCopyLen = ImplStringLen( pCharStr );
+
+    // Ueberlauf abfangen
+    nCopyLen = ImplGetCopyLen( mpData->mnLen, nCopyLen );
+
+    // Ist der einzufuegende String ein Leerstring
+    if ( !nCopyLen )
+        return *this;
+
+    // Index groesser als Laenge
+    if ( nIndex > mpData->mnLen )
+        nIndex = static_cast< xub_StrLen >(mpData->mnLen);
+
+    // Neue Laenge ermitteln und neuen String anlegen
+    STRINGDATA* pNewData = ImplAllocData( mpData->mnLen+nCopyLen );
+
+    // String kopieren
+    memcpy( pNewData->maStr, mpData->maStr, nIndex*sizeof( STRCODE ) );
+    memcpy( pNewData->maStr+nIndex, pCharStr, nCopyLen*sizeof( STRCODE ) );
+    memcpy( pNewData->maStr+nIndex+nCopyLen, mpData->maStr+nIndex,
+            (mpData->mnLen-nIndex)*sizeof( STRCODE ) );
+
+    // Alte Daten loeschen und Neue zuweisen
+    STRING_RELEASE((STRING_TYPE *)mpData);
+    mpData = pNewData;
+
+    return *this;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

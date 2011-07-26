@@ -519,7 +519,6 @@ public:
     UniString&          Insert( const UniString& rStr, xub_StrLen nIndex = STRING_LEN );
     UniString&          Insert( const UniString& rStr, xub_StrLen nPos, xub_StrLen nLen,
                                 xub_StrLen nIndex = STRING_LEN );
-    UniString&          Insert( const sal_Unicode* pCharStr, xub_StrLen nIndex = STRING_LEN );
     UniString&          Insert( sal_Unicode c, xub_StrLen nIndex = STRING_LEN );
     UniString&          InsertAscii( const sal_Char* pAsciiStr, xub_StrLen nIndex = STRING_LEN );
     UniString&          Replace( xub_StrLen nIndex, xub_StrLen nLen, const UniString& rStr );
@@ -546,18 +545,13 @@ public:
 
     StringCompare       CompareTo( const UniString& rStr,
                                    xub_StrLen nLen = STRING_LEN ) const;
-    StringCompare       CompareTo( const sal_Unicode* pCharStr,
-                                   xub_StrLen nLen = STRING_LEN ) const;
     StringCompare       CompareToAscii( const sal_Char* pAsciiStr,
                                         xub_StrLen nLen = STRING_LEN ) const;
     StringCompare       CompareIgnoreCaseToAscii( const UniString& rStr,
                                                   xub_StrLen nLen = STRING_LEN ) const;
-    StringCompare       CompareIgnoreCaseToAscii( const sal_Unicode* pCharStr,
-                                                  xub_StrLen nLen = STRING_LEN ) const;
     StringCompare       CompareIgnoreCaseToAscii( const sal_Char* pAsciiStr,
                                                   xub_StrLen nLen = STRING_LEN ) const;
     sal_Bool                Equals( const UniString& rStr ) const;
-    sal_Bool                Equals( const sal_Unicode* pCharStr ) const;
     sal_Bool                EqualsAscii( const sal_Char* pAsciiStr ) const;
     sal_Bool                EqualsIgnoreCaseAscii( const UniString& rStr ) const;
     sal_Bool                EqualsIgnoreCaseAscii( const sal_Unicode* pCharStr ) const;
@@ -570,13 +564,10 @@ public:
                                      xub_StrLen nIndex, xub_StrLen nLen ) const;
     sal_Bool                EqualsIgnoreCaseAscii( const UniString& rStr,
                                                xub_StrLen nIndex, xub_StrLen nLen ) const;
-    sal_Bool                EqualsIgnoreCaseAscii( const sal_Unicode* pCharStr,
-                                               xub_StrLen nIndex, xub_StrLen nLen ) const;
     sal_Bool                EqualsIgnoreCaseAscii( const sal_Char* pAsciiStr,
                                                xub_StrLen nIndex, xub_StrLen nLen ) const;
 
     xub_StrLen          Match( const UniString& rStr ) const;
-    xub_StrLen          Match( const sal_Unicode* pCharStr ) const;
 
     xub_StrLen          Search( sal_Unicode c, xub_StrLen nIndex = 0 ) const;
     xub_StrLen          Search( const UniString& rStr, xub_StrLen nIndex = 0 ) const;
@@ -589,13 +580,10 @@ public:
                                           xub_StrLen nIndex = 0 );
     xub_StrLen          SearchAndReplace( const UniString& rStr, const UniString& rRepStr,
                                           xub_StrLen nIndex = 0 );
-    xub_StrLen          SearchAndReplace( const sal_Unicode* pCharStr, const UniString& rRepStr,
-                                          xub_StrLen nIndex = 0 );
     xub_StrLen          SearchAndReplaceAscii( const sal_Char* pAsciiStr, const UniString& rRepStr,
                                                xub_StrLen nIndex = 0 );
     void                SearchAndReplaceAll( sal_Unicode c, sal_Unicode cRep );
     void                SearchAndReplaceAll( const UniString& rStr, const UniString& rRepStr );
-    void                SearchAndReplaceAll( const sal_Unicode* pCharStr, const UniString& rRepStr );
     void                SearchAndReplaceAllAscii( const sal_Char* pAsciiStr, const UniString& rRepStr );
 
     xub_StrLen          GetTokenCount( sal_Unicode cTok = ';' ) const;
