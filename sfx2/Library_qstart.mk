@@ -34,7 +34,6 @@ $(eval $(call gb_Library_set_include,qstart_gtk,\
     -I$(SRCDIR)/sfx2/inc/sfx2 \
     -I$(SRCDIR)/sfx2/inc/pch \
     -I$(OUTDIR)/inc \
-    $(filter -I%,$(GTK_CFLAGS)) \
 ))
 
 $(eval $(call gb_Library_add_api,qstart_gtk,\
@@ -52,14 +51,6 @@ $(eval $(call gb_Library_add_defs,qstart_gtk,\
     -DENABLE_SYSTRAY_GTK \
 ))
 endif
-
-$(eval $(call gb_Library_add_cflags,qstart_gtk,\
-    $(filter-out -I%,$(GTK_CFLAGS)) \
-))
-
-$(eval $(call gb_Library_add_libs,qstart_gtk,\
-    $(GTK_LIBS) \
-))
 
 $(eval $(call gb_Library_add_linked_libs,qstart_gtk,\
     comphelper \
@@ -81,7 +72,10 @@ $(eval $(call gb_Library_add_linked_libs,qstart_gtk,\
     sfx \
 ))
 
-$(eval $(call gb_Library_use_external,qstart_gtk,libxml2))
+$(eval $(call gb_Library_use_externals,qstart_gtk,\
+	gtk \
+	libxml2 \
+))
 
 $(eval $(call gb_Library_add_exception_objects,qstart_gtk,\
     sfx2/source/appl/shutdowniconunx \
