@@ -2290,8 +2290,7 @@ SwTwips SwWW8ImplReader::MoveOutsideFly(SwFrmFmt *pFlyFmt,
                                 aSize.SetHeightSizeType(ATT_MIN_SIZE);
                                 aSize.SetHeight(MINLAY);
                                 pFlyFmt->SetFmtAttr(aSize);
-                                SwFmtHoriOrient aHori = pTblFmt->GetHoriOrient();
-                                pTblFmt->SetFmtAttr(SwFmtHoriOrient(0, aHori.GetHoriOrient() ) );
+                                pTblFmt->SetFmtAttr(SwFmtHoriOrient(0,text::HoriOrientation::FULL));
                                 nRetWidth = aSize.GetWidth();
                             }
                         }
