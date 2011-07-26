@@ -417,54 +417,6 @@ void SvTreeList::Move( SvListEntry* pSrcEntry, SvListEntry* pDstEntry )
     Move( pSrcEntry, pParent, nPos );
 }
 
-/*************************************************************************
-|*
-|*    SvTreeList::
-|*
-*************************************************************************/
-
-void SvTreeList::Copy( SvListEntry* pSrcEntry, SvListEntry* pDstEntry )
-{
-    SvListEntry* pParent;
-    sal_uLong nPos;
-
-    if ( !pDstEntry )
-    {
-        pParent = pRootItem;
-        nPos = 0UL;
-    }
-    else
-    {
-        pParent = pDstEntry->pParent;
-        nPos = pDstEntry->GetChildListPos()+1;
-    }
-    Copy( pSrcEntry, pParent, nPos );
-}
-
-/*************************************************************************
-|*
-|*    SvTreeList::
-|*
-*************************************************************************/
-void SvTreeList::InsertTree( SvListEntry* pSrcEntry, SvListEntry* pDstEntry)
-{
-    SvListEntry* pParent;
-    sal_uLong nPos;
-
-    if ( !pDstEntry )
-    {
-        pParent = pRootItem;
-        nPos = 0UL;
-    }
-    else
-    {
-        pParent = pDstEntry->pParent;
-        nPos = pDstEntry->GetChildListPos()+1;
-    }
-    InsertTree( pSrcEntry, pParent, nPos );
-}
-
-
 void SvTreeList::InsertTree(SvListEntry* pSrcEntry,
     SvListEntry* pTargetParent,sal_uLong nListPos)
 {
@@ -1483,24 +1435,6 @@ void lcl_CheckList( SvTreeEntryList* pList )
         pEntry = (SvListEntry*)(pList->Next());
         nPos++;
     }
-}
-
-void SvTreeList::CheckIntegrity() const
-{
-    sal_uLong nMyEntryCount = 0;
-    if ( pRootItem->pChilds )
-    {
-        lcl_CheckList( pRootItem->pChilds );
-        SvListEntry* pEntry = First();
-        while( pEntry )
-        {
-            nMyEntryCount++;
-            if ( pEntry->pChilds )
-                lcl_CheckList( pEntry->pChilds );
-            pEntry = Next( pEntry );
-        }
-    }
-    DBG_ASSERT(nMyEntryCount==GetEntryCount(),"Entry count invalid");
 }
 
 SvListEntry* SvTreeList::GetRootLevelParent( SvListEntry* pEntry ) const

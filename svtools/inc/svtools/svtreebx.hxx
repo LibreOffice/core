@@ -174,7 +174,6 @@ public:
     ~SvTreeListBox();
 
     void                SetExtendedWinBits( ExtendedWinBits _nBits );
-    ExtendedWinBits     GetExtendedWinBits() const;
 
     void            DisconnectFromModel();
 
@@ -224,7 +223,6 @@ public:
     void            SetCheckButtonState( SvLBoxEntry*, SvButtonState );
     SvButtonState   GetCheckButtonState( SvLBoxEntry* ) const;
 
-    void            ShowExpandBitmapOnCursor( sal_Bool );
     sal_Bool            IsExpandBitmapOnCursor() const  { return (sal_Bool)(aContextBmpMode & SVLISTENTRYFLAG_FOCUSED)!=0; }
 
     void            SetEntryText(SvLBoxEntry*, const XubString& );
@@ -245,16 +243,13 @@ public:
     virtual sal_uInt16  IsA();
 
     void            SetSublistOpenWithReturn( sal_Bool bMode = sal_True );      // open/close sublist with return/enter
-    sal_Bool            IsSublistOpenWithReturn() const;
     void            SetSublistOpenWithLeftRight( sal_Bool bMode = sal_True );   // open/close sublist with cursor left/right
-    sal_Bool            IsSublistOpenWithLeftRight() const;
 
     void            EnableInplaceEditing( sal_Bool bEnable );
     sal_Bool            IsInplaceEditingEnabled() const { return SvLBox::IsInplaceEditingEnabled(); }
     inline void     ForbidEmptyText() { SvLBox::ForbidEmptyText(); }
     // Editiert das erste StringItem des Entries, 0==Cursor
     void            EditEntry( SvLBoxEntry* pEntry = NULL );
-    void            CancelEditing();
     virtual sal_Bool    EditingEntry( SvLBoxEntry* pEntry, Selection& );
     virtual sal_Bool    EditedEntry( SvLBoxEntry* pEntry, const XubString& rNewText );
     sal_Bool            IsEditingActive() const { return SvLBox::IsEditingActive(); }
@@ -272,8 +267,6 @@ public:
     virtual void    GetFocus();
     virtual void    LoseFocus();
     void            SetUpdateMode( sal_Bool );
-    // aktualisiert nicht die vertikale ScrollBar
-    void            SetUpdateModeFast( sal_Bool );
 
     using SvListView::SetModel;
     void            SetModel( SvLBoxTreeList* );
@@ -306,7 +299,6 @@ public:
 
     void            SetCollapsedNodeBmp( const Image& );
     void            SetExpandedNodeBmp( const Image& );
-    Image           GetCollapsedNodeBmp( ) const;
     Image           GetExpandedNodeBmp( ) const;
 
     void            SetFont( const Font& rFont );
@@ -327,12 +319,9 @@ public:
     void            InvalidateEntry( SvLBoxEntry* );
     SvLBoxItem*     GetItem( SvLBoxEntry*, long nX, SvLBoxTab** ppTab);
     SvLBoxItem*     GetItem( SvLBoxEntry*, long nX );
-    SvLBoxItem*     GetFirstDynamicItem( SvLBoxEntry* pEntry );
 
     void            SetDragDropMode( DragDropMode );
     void            SetSelectionMode( SelectionMode );
-    void            SetAddMode( sal_Bool bAdd );
-    sal_Bool            IsAddMode() const;
 
     virtual sal_Bool    Expand( SvLBoxEntry* pParent );
     virtual sal_Bool    Collapse( SvLBoxEntry* pParent );
@@ -348,7 +337,6 @@ public:
     virtual void    Invalidate( const Rectangle&, sal_uInt16 nFlags = 0 );
 
     void            SetHighlightRange(sal_uInt16 nFirstTab=0,sal_uInt16 nLastTab=0xffff);
-    void            RemoveHighlightRange();
 
     virtual Region  GetDragRegion() const;
 
@@ -359,9 +347,7 @@ public:
     virtual void    ModelNotification( sal_uInt16 nActionId, SvListEntry* pEntry1,
                         SvListEntry* pEntry2, sal_uLong nPos );
 
-    long            GetTextOffset() const;
     void            EndSelection();
-    sal_Bool            IsNodeButton( const Point& rPos ) const;
     void            RepaintScrollBars() const;
     ScrollBar*      GetVScroll();
     ScrollBar*      GetHScroll();
@@ -373,11 +359,7 @@ public:
     void            ScrollToAbsPos( long nPos );
 
     void            ShowFocusRect( const SvLBoxEntry* pEntry );
-    void            SetTabBar( TabBar* pTabBar );
     void            InitStartEntry();
-
-    // reset all what could lead to editingText in e.g. a contextmenu call
-    void            CancelPendingEdit();
 
     virtual PopupMenu* CreateContextMenu( void );
     virtual void    ExcecuteContextMenuAction( sal_uInt16 nSelectedPopupEntry );

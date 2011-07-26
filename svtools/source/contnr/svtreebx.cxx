@@ -126,11 +126,6 @@ void SvTreeListBox::SetExtendedWinBits( ExtendedWinBits _nBits )
     pImp->SetExtendedWindowBits( _nBits );
 }
 
-ExtendedWinBits SvTreeListBox::GetExtendedWinBits() const
-{
-    return pImp->GetExtendedWindowBits();
-}
-
 void SvTreeListBox::SetModel( SvLBoxTreeList* pNewModel )
 {
     DBG_CHKTHIS(SvTreeListBox,0);
@@ -157,19 +152,9 @@ void SvTreeListBox::SetSublistOpenWithReturn( sal_Bool b )
     pImp->bSubLstOpRet = b;
 }
 
-sal_Bool SvTreeListBox::IsSublistOpenWithReturn() const
-{
-    return pImp->bSubLstOpRet;
-}
-
 void SvTreeListBox::SetSublistOpenWithLeftRight( sal_Bool b )
 {
     pImp->bSubLstOpLR = b;
-}
-
-sal_Bool SvTreeListBox::IsSublistOpenWithLeftRight() const
-{
-    return pImp->bSubLstOpLR;
 }
 
 void SvTreeListBox::Resize()
@@ -626,15 +611,6 @@ SvLBoxEntry* SvTreeListBox::CloneEntry( SvLBoxEntry* pSource )
     pClone->SetUserData( pSource->GetUserData() );
 
     return pClone;
-}
-
-void SvTreeListBox::ShowExpandBitmapOnCursor( sal_Bool bYes )
-{
-    DBG_CHKTHIS(SvTreeListBox,0);
-    if( bYes )
-        aContextBmpMode = SVLISTENTRYFLAG_FOCUSED;
-    else
-        aContextBmpMode = SVLISTENTRYFLAG_EXPANDED;
 }
 
 void SvTreeListBox::SetIndent( short nNewIndent )
@@ -1186,12 +1162,6 @@ void SvTreeListBox::SetUpdateMode( sal_Bool bUpdate )
     pImp->SetUpdateMode( bUpdate );
 }
 
-void SvTreeListBox::SetUpdateModeFast( sal_Bool bUpdate )
-{
-    DBG_CHKTHIS(SvTreeListBox,0);
-    pImp->SetUpdateModeFast( bUpdate );
-}
-
 void SvTreeListBox::SetSpaceBetweenEntries( short nOffsLogic )
 {
     DBG_CHKTHIS(SvTreeListBox,0);
@@ -1216,11 +1186,6 @@ void SvTreeListBox::SetCurEntry( SvLBoxEntry* pEntry )
 {
     DBG_CHKTHIS(SvTreeListBox,0);
     pImp->SetCurEntry( pEntry );
-}
-
-Image SvTreeListBox::GetCollapsedNodeBmp( ) const
-{
-    return pImp->GetCollapsedNodeBmp( );
 }
 
 Image SvTreeListBox::GetExpandedNodeBmp( ) const
@@ -1294,12 +1259,6 @@ void SvTreeListBox::EditItemText( SvLBoxEntry* pEntry, SvLBoxString* pItem,
     aSize.Width() -= aOrigin.X();
     Rectangle aRect( aPos, aSize );
     EditText( pItem->GetText(), aRect, rSelection );
-}
-
-void SvTreeListBox::CancelEditing()
-{
-    DBG_CHKTHIS(SvTreeListBox,0);
-    SvLBox::CancelTextEditing();
 }
 
 void SvTreeListBox::EditEntry( SvLBoxEntry* pEntry )
@@ -1993,24 +1952,6 @@ SvLBoxItem* SvTreeListBox::GetItem(SvLBoxEntry* pEntry,long nX )
     return GetItem_Impl( pEntry, nX, &pDummyTab, 0 );
 }
 
-SvLBoxItem* SvTreeListBox::GetFirstDynamicItem( SvLBoxEntry* pEntry )
-{
-    DBG_CHKTHIS(SvTreeListBox,0);
-
-    SvLBoxTab* pTab = (SvLBoxTab*)aTabs.GetObject(0);
-    SvLBoxItem* pItem = pEntry->GetItem(0);
-    sal_uInt16 nTabCount = aTabs.Count();
-
-    sal_uInt16 nNext = 1;
-    while ( !pTab->IsDynamic() && nNext < nTabCount )
-    {
-        pItem = pEntry->GetItem( nNext );
-        pTab = (SvLBoxTab*)aTabs.GetObject( nNext );
-        nNext++;
-    }
-    return pItem;
-}
-
 void SvTreeListBox::AddTab(long nTabPos,sal_uInt16 nFlags,void* pUserData )
 {
     DBG_CHKTHIS(SvTreeListBox,0);
@@ -2151,14 +2092,6 @@ void SvTreeListBox::SetHighlightRange( sal_uInt16 nStart, sal_uInt16 nEnd)
     pImp->RecalcFocusRect();
 }
 
-void SvTreeListBox::RemoveHighlightRange()
-{
-    DBG_CHKTHIS(SvTreeListBox,0);
-    nTreeFlags &= (~TREEFLAG_USESEL);
-    if( IsUpdateMode() )
-        Invalidate();
-}
-
 sal_uLong SvTreeListBox::GetAscInsertionPos(SvLBoxEntry*,SvLBoxEntry*)
 {
     return LIST_APPEND;
@@ -2245,16 +2178,6 @@ SvLBoxTab* SvTreeListBox::GetLastTab( sal_uInt16 nFlagMask, sal_uInt16& rTabPos 
     return 0;
 }
 
-void SvTreeListBox::SetAddMode( sal_Bool bAdd )
-{
-    pImp->SetAddMode( bAdd );
-}
-
-sal_Bool SvTreeListBox::IsAddMode() const
-{
-    return pImp->IsAddMode();
-}
-
 void SvTreeListBox::RequestHelp( const HelpEvent& rHEvt )
 {
     if( !pImp->RequestHelp( rHEvt ) )
@@ -2321,96 +2244,9 @@ void SvTreeListBox::ModelNotification( sal_uInt16 nActionId, SvListEntry* pEntry
     }
 }
 
-// bei Aenderungen SetTabs beruecksichtigen
-long SvTreeListBox::GetTextOffset() const
-{
-    DBG_CHKTHIS(SvTreeListBox,0);
-    const WinBits nWindowStyle = GetStyle();
-    sal_Bool bHasButtons = (nWindowStyle & WB_HASBUTTONS)!=0;
-    sal_Bool bHasButtonsAtRoot = (nWindowStyle & (WB_HASLINESATROOT |
-                                              WB_HASBUTTONSATROOT))!=0;
-    long nStartPos = TAB_STARTPOS;
-    long nNodeWidthPixel = GetExpandedNodeBmp().GetSizePixel().Width();
-
-    long nCheckWidth = 0;
-    if( nTreeFlags & TREEFLAG_CHKBTN )
-        nCheckWidth = pCheckButtonData->aBmps[0].GetSizePixel().Width();
-    long nCheckWidthDIV2 = nCheckWidth / 2;
-
-    long nContextWidth = nContextBmpWidthMax;
-    long nContextWidthDIV2 = nContextWidth / 2;
-
-    int nCase = NO_BUTTONS;
-    if( !(nTreeFlags & TREEFLAG_CHKBTN) )
-    {
-        if( bHasButtons )
-            nCase = NODE_BUTTONS;
-    }
-    else
-    {
-        if( bHasButtons )
-            nCase = NODE_AND_CHECK_BUTTONS;
-         else
-            nCase = CHECK_BUTTONS;
-    }
-
-    switch( nCase )
-    {
-        case NO_BUTTONS :
-            nStartPos += nContextWidthDIV2;  // wg. Zentrierung
-            nStartPos += nContextWidthDIV2;  // rechter Rand der Context-Bmp
-            if( nContextBmpWidthMax )
-                nStartPos += 5; // Abstand Context-Bmp - Text
-            break;
-
-        case NODE_BUTTONS :
-            if( bHasButtonsAtRoot )
-                nStartPos += ( nIndent + (nNodeWidthPixel/2) );
-            else
-                nStartPos += nContextWidthDIV2;
-            nStartPos += nContextWidthDIV2;  // rechter Rand der Context-Bmp
-            if( nContextBmpWidthMax )
-                nStartPos += 5; // Abstand Context-Bmp - Text
-            break;
-
-        case NODE_AND_CHECK_BUTTONS :
-            if( bHasButtonsAtRoot )
-                nStartPos += ( nIndent + nNodeWidthPixel );
-            else
-                nStartPos += nCheckWidthDIV2;
-            nStartPos += nCheckWidthDIV2;  // rechter Rand des CheckButtons
-            nStartPos += 3;  // Abstand CheckButton Context-Bmp
-            nStartPos += nContextWidthDIV2;  // Mitte der Context-Bmp
-            nStartPos += nContextWidthDIV2;  // rechter Rand der Context-Bmp
-            // Abstand setzen nur wenn Bitmaps da
-            if( nContextBmpWidthMax )
-                nStartPos += 5; // Abstand Context-Bmp - Text
-            break;
-
-        case CHECK_BUTTONS :
-            nStartPos += nCheckWidthDIV2;
-            nStartPos += nCheckWidthDIV2;  // rechter Rand CheckButton
-            nStartPos += 3;  // Abstand CheckButton Context-Bmp
-            nStartPos += nContextWidthDIV2;  // Mitte der Context-Bmp
-            nStartPos += nContextWidthDIV2;  // rechter Rand der Context-Bmp
-            if( nContextBmpWidthMax )
-                nStartPos += 5; // Abstand Context-Bmp - Text
-            break;
-    }
-    return nStartPos;
-}
-
 void SvTreeListBox::EndSelection()
 {
     pImp->EndSelection();
-}
-
-sal_Bool SvTreeListBox::IsNodeButton( const Point& rPos ) const
-{
-    SvLBoxEntry* pEntry = GetEntry( rPos );
-    if( pEntry )
-        return pImp->IsNodeButton( rPos, pEntry );
-    return sal_False;
 }
 
 void SvTreeListBox::RepaintScrollBars() const
@@ -2479,11 +2315,6 @@ void SvTreeListBox::ShowFocusRect( const SvLBoxEntry* pEntry )
     pImp->ShowFocusRect( pEntry );
 }
 
-void SvTreeListBox::SetTabBar( TabBar* pTabBar )
-{
-    pImp->SetTabBar( pTabBar );
-}
-
 void SvTreeListBox::DataChanged( const DataChangedEvent& rDCEvt )
 {
     if( (rDCEvt.GetType()==DATACHANGED_SETTINGS) && (rDCEvt.GetFlags() & SETTINGS_STYLE) )
@@ -2550,12 +2381,6 @@ void SvTreeListBox::InitStartEntry()
 {
     if( !pImp->pStartEntry )
         pImp->pStartEntry = GetModel()->First();
-}
-
-void SvTreeListBox::CancelPendingEdit()
-{
-    if( pImp )
-        pImp->CancelPendingEdit();
 }
 
 PopupMenu* SvTreeListBox::CreateContextMenu( void )

@@ -289,7 +289,6 @@ class SVT_DLLPUBLIC SvTreeList
     SvListEntry*        LastSelected( const SvListView*) const;
 
     sal_Bool            Select( SvListView*,SvListEntry* pEntry, sal_Bool bSelect=sal_True );
-    sal_uLong           SelectChilds( SvListView*,SvListEntry* pParent, sal_Bool bSelect );
     void                SelectAll( SvListView*,sal_Bool bSelect ); // ruft nicht Select-Hdl
     sal_uLong           GetChildSelectionCount( const SvListView*,SvListEntry* pParent ) const;
 
@@ -355,7 +354,6 @@ public:
     sal_uLong           Insert( SvListEntry* pEntry,sal_uLong nRootPos = ULONG_MAX )
     { return Insert(pEntry, pRootItem, nRootPos ); }
 
-    void                InsertTree( SvListEntry* pTree, SvListEntry* pTarget );
     void                InsertTree( SvListEntry* pTree, SvListEntry* pTargetParent, sal_uLong nListPos );
 
     // Entries muessen im gleichen Model stehen!
@@ -363,7 +361,6 @@ public:
 
     // erzeugt ggf. Child-List
     sal_uLong           Move( SvListEntry* pSource, SvListEntry* pTargetParent, sal_uLong nListPos);
-    void                Copy( SvListEntry* pSource, SvListEntry* pTarget );
     sal_uLong           Copy( SvListEntry* pSource, SvListEntry* pTargetParent, sal_uLong nListPos);
 
     sal_Bool            Remove( SvListEntry* pEntry );
