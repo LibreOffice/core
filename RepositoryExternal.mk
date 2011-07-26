@@ -317,6 +317,9 @@ endif # SYSTEM_GRAPHITE
 
 ifeq ($(SYSTEM_ICU),YES)
 
+define gb_LinkTarget__use_icui18n
+$(call gb_LinkTarget_add_libs,$(1),-licui18n)
+endef
 define gb_LinkTarget__use_icule
 $(call gb_LinkTarget_add_libs,$(1),-licule)
 endef
@@ -327,10 +330,16 @@ endef
 else # !SYSTEM_ICU
 
 $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
+	icui18n \
 	icule \
 	icuuc \
 ))
 
+define gb_LinkTarget__use_icui18n
+$(call gb_LinkTarget_add_linked_libs,$(1),\
+	icui18n \
+)
+endef
 define gb_LinkTarget__use_icule
 $(call gb_LinkTarget_add_linked_libs,$(1),\
 	icule \
