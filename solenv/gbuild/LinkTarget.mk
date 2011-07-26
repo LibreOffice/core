@@ -430,6 +430,7 @@ $(call gb_LinkTarget_get_target,$(1)) : T_CXXFLAGS := $$(gb_LinkTarget_CXXFLAGS)
 $(call gb_LinkTarget_get_headers_target,$(1)) \
 $(call gb_LinkTarget_get_target,$(1)) : PCH_CXXFLAGS := $$(gb_LinkTarget_CXXFLAGS) $(CXXFLAGS)
 $(call gb_LinkTarget_get_target,$(1)) : T_OBJCXXFLAGS := $$(gb_LinkTarget_OBJCXXFLAGS) $(OBJCXXFLAGS)
+$(call gb_LinkTarget_get_target,$(1)) : T_OBJCFLAGS := $$(gb_LinkTarget_OBJCFLAGS) $(OBJCFLAGS)
 $(call gb_LinkTarget_get_headers_target,$(1)) \
 $(call gb_LinkTarget_get_target,$(1)) : DEFS := $$(gb_LinkTarget_DEFAULTDEFS) $(CPPFLAGS)
 $(call gb_LinkTarget_get_headers_target,$(1)) \
@@ -462,6 +463,7 @@ $(call gb_LinkTarget_get_dep_target,$(1)) : T_CFLAGS := $$(gb_LinkTarget_CFLAGS)
 $(call gb_LinkTarget_get_dep_target,$(1)) : T_CXXFLAGS := $$(gb_LinkTarget_CXXFLAGS)
 $(call gb_LinkTarget_get_dep_target,$(1)) : PCH_CXXFLAGS := $$(gb_LinkTarget_CXXFLAGS) $(CXXFLAGS)
 $(call gb_LinkTarget_get_dep_target,$(1)) : T_OBJCXXFLAGS := $$(gb_LinkTarget_OBJCXXFLAGS) $(OBJCXXFLAGS)
+$(call gb_LinkTarget_get_dep_target,$(1)) : T_OBJCFLAGS := $$(gb_LinkTarget_OBJCFLAGS) $(OBJCFLAGS)
 $(call gb_LinkTarget_get_dep_target,$(1)) : DEFS := $$(gb_LinkTarget_DEFAULTDEFS) $(CPPFLAGS)
 $(call gb_LinkTarget_get_dep_target,$(1)) : PCH_DEFS := $$(gb_LinkTarget_DEFAULTDEFS) $(CPPFLAGS)
 $(call gb_LinkTarget_get_dep_target,$(1)) : INCLUDE := $$(gb_LinkTarget_INCLUDE)
@@ -572,9 +574,9 @@ endif
 endef
 
 define gb_LinkTarget_set_objcflags
-$(call gb_LinkTarget_get_target,$(1)) : OBJCFLAGS := $(2)
+$(call gb_LinkTarget_get_target,$(1)) : T_OBJCFLAGS := $(2)
 ifeq ($(gb_FULLDEPS),$(true))
-$(call gb_LinkTarget_get_dep_target,$(1)) : OBJCFLAGS := $(2)
+$(call gb_LinkTarget_get_dep_target,$(1)) : T_OBJCFLAGS := $(2)
 endif
 
 endef
@@ -695,7 +697,7 @@ $(call gb_LinkTarget_get_clean_target,$(1)) : OBJCOBJECTS += $(2)
 
 $(call gb_LinkTarget_get_target,$(1)) : $(call gb_ObjCObject_get_target,$(2))
 $(call gb_ObjCObject_get_target,$(2)) : | $(call gb_LinkTarget_get_headers_target,$(1))
-$(call gb_ObjCObject_get_target,$(2)) : OBJCFLAGS += $(3)
+$(call gb_ObjCObject_get_target,$(2)) : T_OBJCFLAGS += $(3)
 
 ifeq ($(gb_FULLDEPS),$(true))
 $(call gb_LinkTarget_get_dep_target,$(1)) : OBJCOBJECTS += $(2)

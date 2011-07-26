@@ -226,7 +226,7 @@ $(call gb_Helper_abbreviate_dirs,\
 	mkdir -p $(dir $(1)) && \
 	mkdir -p $(dir $(call gb_ObjCObject_get_dep_target,$(2))) && \
 	$(gb_CC) \
-		$(DEFS) $(OBJCFLAGS) \
+		$(DEFS) $(T_OBJCFLAGS) \
 		-c $(3) \
 		-o $(1) \
 		-MMD -MT $(call gb_ObjCObject_get_target,$(2)) \
