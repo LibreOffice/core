@@ -79,19 +79,8 @@ $(eval $(call gb_Library_add_exception_objects,vclcanvas,\
 	canvas/source/vcl/spritedevicehelper \
 	canvas/source/vcl/spritehelper \
 	canvas/source/vcl/textlayout \
+	canvas/source/vcl/canvashelper_texturefill \
 	canvas/source/vcl/windowoutdevholder \
 ))
-
-# Solaris Sparc with Sun Compiler: noopt
-ifneq ($(strip($OS)),SOLARIS)
-$(eval $(call gb_Library_add_exception_objects,vclcanvas,\
-	canvas/source/vcl/canvashelper_texturefill \
-))
-else
-$(eval $(call gb_Library_add_cxxobjects,vclcanvas,\
-	canvas/source/vcl/canvashelper_texturefill \
-    , $(gb_COMPILERNOOPTFLAGS) $(gb_LinkTarget_EXCEPTIONFLAGS) \
-))
-endif
 
 # vim: set noet sw=4 ts=4:
