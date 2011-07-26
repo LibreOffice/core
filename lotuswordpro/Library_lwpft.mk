@@ -41,8 +41,6 @@ $(eval $(call gb_Library_add_linked_libs,lwpft,\
     comphelper \
     cppu \
     cppuhelper \
-    icui18n \
-    icuuc \
     sal \
     sfx \
     sot \
@@ -53,6 +51,11 @@ $(eval $(call gb_Library_add_linked_libs,lwpft,\
     vcl \
     xo \
     $(gb_STDLIBS) \
+))
+
+$(eval $(call gb_Library_use_externals,lwpft,\
+    icui18n \
+    icuuc \
 ))
 
 $(eval $(call gb_Library_set_componentfile,lwpft,lotuswordpro/util/lwpfilter))
