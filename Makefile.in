@@ -101,13 +101,14 @@ install:
 
 dev-install:
 	@. ./Env.Host.sh && \
-        cd smoketestoo_native && \
+	cd smoketestoo_native && \
 		export SAL_USE_VCLPLUGIN="svp" && \
-		build.pl $(GBUILD_OPT) -P@BUILD_NCPUS@ --all -- -P@BUILD_MAX_JOBS@ && \
+		build.pl $(GBUILD_OPT) -P@BUILD_NCPUS@ --all:instsetoo_native -- -P@BUILD_MAX_JOBS@ && \
 		cd @abs_builddir@ && ln -s $$SOLARVER/$$INPATH/installation/opt/ install && \
 		echo "" && \
-        echo "Developer installation finished, you can now execute:"
-	@if test `uname -s` = Darwin; then \
+	$$SOLARENV/bin/linkoo $$SRC_ROOT/install $$SRC_ROOT && \
+	echo && echo "Developer installation finished, you can now execute:" && echo && \
+	if test `uname -s` = Darwin; then \
 		echo open install/LibreOffice.app; \
 	else \
 		echo "cd @abs_builddir@/install/program" && \
