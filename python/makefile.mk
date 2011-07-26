@@ -55,7 +55,8 @@ PATCH_FILES=\
     Python-aix.patch \
     Python-2.6.1-urllib.patch \
     Python-2.6.1-sysbase.patch \
-    Python-2.6.1-nohardlink.patch
+    Python-2.6.1-nohardlink.patch \
+    Python-2.6.1-py2422.patch
 
 CONFIGURE_DIR=
 
