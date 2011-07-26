@@ -159,8 +159,11 @@
 #define EMR_SETLINKEDUFIS              119
 #define EMR_SETTEXTJUSTIFICATION       120
 
+#if OSL_DEBUG_LEVEL > 1
+#define EMFP_DEBUG(x) x
+#else
 #define EMFP_DEBUG(x)
-//#define EMFP_DEBUG(x) x
+#endif
 
 //-----------------------------------------------------------------------------------
 
@@ -288,7 +291,7 @@ void EnhWMFReader::ReadEMFPlusComment(sal_uInt32 length, sal_Bool& bHaveDC)
         // GetDC
         if( type == 16388 ) {
             bHaveDC = true;
-            EMFP_DEBUG(printf ("\t\tEMF+ lock DC (device context)\n", type));
+            EMFP_DEBUG(printf ("\t\tEMF+ lock DC (device context)\n"));
         }
 
         //Get the length of the remaining data of this record based
