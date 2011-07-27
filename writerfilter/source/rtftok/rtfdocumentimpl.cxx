@@ -1672,20 +1672,6 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
         return 0;
     }
 
-    // Trivial paragraph attributes.
-    switch (nKeyword)
-    {
-        // NS_sprm::LN_PDyaLine could be used, but that won't work with slmult
-        case RTF_SL: nSprm = NS_ooxml::LN_CT_Spacing_line; break;
-        default: break;
-    }
-    if (nSprm > 0)
-    {
-        m_aStates.top().aParagraphAttributes.push_back(make_pair(nSprm, pIntValue));
-        skipDestination(bParsed);
-        return 0;
-    }
-
     // Trivial character attributes.
     switch (nKeyword)
     {
@@ -1849,6 +1835,13 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
                 m_aStates.top().aCharacterAttributes.push_back(make_pair(NS_ooxml::LN_CT_EastAsianLayout_combine, pValue));
                 if (nParam > 0)
                     m_aStates.top().aCharacterAttributes.push_back(make_pair(NS_ooxml::LN_CT_EastAsianLayout_combineBrackets, pIntValue));
+            }
+            break;
+        case RTF_SL:
+            if (nParam > 0)
+            {
+                // NS_sprm::LN_PDyaLine could be used, but that won't work with slmult
+                m_aStates.top().aParagraphAttributes.push_back(make_pair(nSprm, pIntValue));
             }
             break;
         case RTF_SLMULT:
