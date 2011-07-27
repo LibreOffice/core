@@ -1249,8 +1249,6 @@ CSS1Selector::~CSS1Selector()
     delete pNext;
 }
 
-/*  */
-
 CSS1Expression::~CSS1Expression()
 {
     delete pNext;

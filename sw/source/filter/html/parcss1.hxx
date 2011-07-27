@@ -33,8 +33,6 @@
 
 class Color;
 
-/*  */
-
 // Die Tokens des CSS1-Parsers
 enum CSS1Token
 {
@@ -74,7 +72,6 @@ enum CSS1Token
     CSS1_RGB
 };
 
-
 // die Zustaende des Parsers
 enum CSS1ParserState
 {
@@ -82,9 +79,6 @@ enum CSS1ParserState
     CSS1_PAR_WORKING,
     CSS1_PAR_ERROR
 };
-
-
-/*  */
 
 enum CSS1SelectorType
 {
@@ -129,9 +123,6 @@ public:
     void SetNext( CSS1Selector *pNxt ) { pNext = pNxt; }
     const CSS1Selector *GetNext() const { return pNext; }
 };
-
-
-/*  */
 
 // Die folegende Klasse beschreibt einen Teil-Ausdruck einer
 // CSS1-Deklaration sie besteht aus
@@ -192,8 +183,6 @@ inline sal_Int32 CSS1Expression::GetSLength() const
 {
     return (sal_Int32)(nValue + (nValue < 0. ? -.5 : .5 ));
 }
-
-/*  */
 
 // Diese Klasse parst den Inhalt eines Style-Elements oder eine Style-Option
 // und bereitet ihn ein wenig auf.
