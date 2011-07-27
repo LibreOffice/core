@@ -170,6 +170,7 @@ $(eval $(call gb_Helper_register_libraries,UNOLIBS_OOO, \
     hatchwindowfactory \
     lomenubar \
         msforms \
+	mtfrenderer \
 	nullcanvas \
     OGLTrans \
     passwordcontainer \
