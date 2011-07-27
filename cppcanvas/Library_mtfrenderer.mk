@@ -2,7 +2,7 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2000, 2011 Oracle and/or its affiliates.
+# Copyright 2000, 2011 Novell Inc.
 #
 # OpenOffice.org - a multi-platform office productivity suite
 #
@@ -25,12 +25,27 @@
 #
 #*************************************************************************
 
-$(eval $(call gb_Module_Module,cppcanvas))
+$(eval $(call gb_Library_Library,mtfrenderer))
 
-$(eval $(call gb_Module_add_targets,cppcanvas,\
-	Library_cppcanvas \
-	Library_mtfrenderer \
-	Package_inc \
+$(eval $(call gb_Library_set_componentfile,mtfrenderer,cppcanvas/source/uno/mtfrenderer))
+
+$(eval $(call gb_Library_add_linked_libs,mtfrenderer,\
+	sal \
+	cppu \
+	cppuhelper \
+	comphelper \
+	cppcanvas \
+	basegfx \
+    $(gb_STDLIBS) \
+))
+
+$(eval $(call gb_Library_add_api,mtfrenderer,\
+    offapi \
+    udkapi \
+))
+
+$(eval $(call gb_Library_add_exception_objects,mtfrenderer,\
+	cppcanvas/source/uno/uno_mtfrenderer \
 ))
 
 # vim: set noet sw=4 ts=4:
