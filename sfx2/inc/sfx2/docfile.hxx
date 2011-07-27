@@ -176,7 +176,6 @@ public:
     void                SetDoneLink( const Link& rLink );
     Link                GetDoneLink( ) const;
     void                SetDataAvailableLink( const Link& rLink );
-    Link                GetDataAvailableLink( ) const;
 
     sal_uInt32          GetErrorCode() const;
     sal_uInt32          GetError() const

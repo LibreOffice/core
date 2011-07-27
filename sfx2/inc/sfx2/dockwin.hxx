@@ -118,10 +118,8 @@ public:
     SAL_DLLPRIVATE void Disappear_Impl();
     SAL_DLLPRIVATE void Reappear_Impl();
     SAL_DLLPRIVATE sal_Bool IsAutoHide_Impl() const;
-    SAL_DLLPRIVATE sal_Bool IsPinned_Impl() const;
     SAL_DLLPRIVATE void AutoShow_Impl( sal_Bool bShow = sal_True );
     SAL_DLLPRIVATE void Pin_Impl( sal_Bool bPinned );
-    SAL_DLLPRIVATE SfxSplitWindow* GetSplitWindow_Impl() const;
     SAL_DLLPRIVATE void ReleaseChildWindow_Impl();
 };
 

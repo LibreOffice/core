@@ -1907,13 +1907,6 @@ sal_Bool SfxDockingWindow::IsAutoHide_Impl() const
         return sal_False;
 }
 
-sal_Bool SfxDockingWindow::IsPinned_Impl() const
-{
-    if ( pImp->pSplitWin )
-        return pImp->pSplitWin->IsPinned();
-    else
-        return sal_True;
-}
 void SfxDockingWindow::AutoShow( sal_Bool bShow )
 {
     AutoShow_Impl(bShow);
@@ -1928,11 +1921,6 @@ void SfxDockingWindow::AutoShow_Impl( sal_Bool bShow )
         else
             pImp->pSplitWin->FadeOut();
     }
-}
-
-SfxSplitWindow* SfxDockingWindow::GetSplitWindow_Impl() const
-{
-    return pImp->pSplitWin;
 }
 
 void SfxDockingWindow::FadeIn( sal_Bool /*bFadeIn*/ )

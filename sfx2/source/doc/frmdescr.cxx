@@ -119,26 +119,10 @@ sal_Bool SfxFrameDescriptor::IsEditable() const
     return pImp->bEditable;
 }
 
-sal_Bool SfxFrameDescriptor::CompareOriginal( SfxFrameDescriptor& rDescr ) const
-{
-    if( aURL != rDescr.aURL )
-        return sal_False;
-    else
-        return sal_True;
-}
-
 sal_Bool SfxFrameDescriptor::CheckContent() const
 {
     sal_Bool bRet = !( aURL == aActualURL );
     return bRet;
-}
-
-void SfxFrameDescriptor::UnifyContent( sal_Bool bTakeActual )
-{
-    if ( bTakeActual )
-        aURL = aActualURL;
-    else
-        aActualURL = aURL;
 }
 
 SfxFrameDescriptor* SfxFrameDescriptor::Clone( sal_Bool bWithIds ) const

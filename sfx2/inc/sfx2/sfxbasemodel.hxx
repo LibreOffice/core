@@ -1472,7 +1472,6 @@ public:
     */
 
     void changing() ;
-    SAL_DLLPRIVATE void impl_change() ;
 
     /**___________________________________________________________________________________________________
         @short      -
@@ -1488,7 +1487,6 @@ public:
     */
 
     SfxObjectShell* GetObjectShell() const ;
-    SAL_DLLPRIVATE SfxObjectShell* impl_getObjectShell() const ;
 
     SAL_DLLPRIVATE sal_Bool impl_isDisposed() const ;
     sal_Bool IsInitialized() const;

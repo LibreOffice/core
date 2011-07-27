@@ -117,8 +117,6 @@ public:
     void                    SetActualURL( const INetURLObject& rURL );
     void                    SetActualURL( const String& rURL );
     sal_Bool                    CheckContent() const;
-    sal_Bool                    CompareOriginal( SfxFrameDescriptor& rSet ) const;
-    void                    UnifyContent( sal_Bool );
     void                    SetReadOnly( sal_Bool bSet ) { bReadOnly = bSet;}
     sal_Bool                    IsReadOnly(  ) const { return bReadOnly;}
     void                    SetEditable( sal_Bool bSet );

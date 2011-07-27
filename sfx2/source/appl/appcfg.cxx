@@ -900,61 +900,6 @@ void SfxApplication::SetOptions(const SfxItemSet &rSet)
 }
 
 //--------------------------------------------------------------------
-
-// Save all Documents
-
-sal_Bool SfxApplication::SaveAll_Impl(sal_Bool bPrompt, sal_Bool bAutoSave)
-{
-    bAutoSave = sal_False; // functionality moved to new AutoRecovery Service!
-
-    sal_Bool bFunc = sal_True;
-    short nRet;
-
-    for ( SfxObjectShell *pDoc = SfxObjectShell::GetFirst();
-          pDoc;
-          pDoc = SfxObjectShell::GetNext(*pDoc) )
-    {
-        if( SFX_CREATE_MODE_STANDARD == pDoc->GetCreateMode() &&
-            SfxViewFrame::GetFirst(pDoc) &&
-            !pDoc->IsInModalMode() &&
-            !pDoc->HasModalViews() )
-        {
-            if ( pDoc->GetProgress() == 0 )
-            {
-                if ( !pDoc->IsModified() )
-                    continue;
-
-                if ( bPrompt || (bAutoSave && !pDoc->HasName()) )
-                    nRet = QuerySave_Impl( *pDoc, bAutoSave );
-                else
-                    nRet = RET_YES;
-
-                if ( nRet == RET_YES )
-                {
-                    SfxRequest aReq( SID_SAVEDOC, 0, pDoc->GetPool() );
-                    const SfxPoolItem *pPoolItem = pDoc->ExecuteSlot( aReq );
-                    if ( !pPoolItem || !pPoolItem->ISA(SfxBoolItem) ||
-                        !( (const SfxBoolItem*) pPoolItem )->GetValue() )
-                        bFunc = sal_False;
-                }
-                else if ( nRet == RET_CANCEL )
-                {
-                    bFunc = sal_False;
-                    break;
-                }
-                else if ( nRet == RET_NO )
-                {
-                }
-            }
-        }
-    }
-
-    return bFunc;
-}
-
-//--------------------------------------------------------------------
-
-//--------------------------------------------------------------------
 void SfxApplication::NotifyEvent( const SfxEventHint& rEventHint, bool bSynchron )
 {
     SfxObjectShell *pDoc = rEventHint.GetObjShell();

@@ -143,7 +143,6 @@ class SFX2_DLLPUBLIC SfxApplication: public SfxShell
     SfxAppData_Impl*            pAppData_Impl;
 
     DECL_DLLPRIVATE_LINK(       GlobalBasicErrorHdl_Impl, StarBASIC* );
-    SAL_DLLPRIVATE sal_Bool     SaveAll_Impl(sal_Bool bPrompt = sal_False, sal_Bool bAutoSave = sal_False);
     SAL_DLLPRIVATE short        QuerySave_Impl(SfxObjectShell &, sal_Bool bAutoSave = sal_False);
 
     static SfxApplication*      Create();

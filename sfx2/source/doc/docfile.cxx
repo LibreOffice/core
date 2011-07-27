@@ -775,12 +775,6 @@ sal_Bool SfxMedium::IsStorage()
 }
 
 //------------------------------------------------------------------
-Link SfxMedium::GetDataAvailableLink() const
-{
-    return pImp->aAvailableLink.GetLink();
-}
-
-//------------------------------------------------------------------
 Link SfxMedium::GetDoneLink() const
 {
     return pImp->aDoneLink.GetLink();

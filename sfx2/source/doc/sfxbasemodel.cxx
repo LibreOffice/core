@@ -2643,25 +2643,11 @@ void SfxBaseModel::changing()
     NotifyModifyListeners_Impl();
 }
 
-void SfxBaseModel::impl_change()
-{
-    // object already disposed?
-    if ( impl_isDisposed() )
-        return;
-
-    NotifyModifyListeners_Impl();
-}
-
 //________________________________________________________________________________________________________
 //  public impl.
 //________________________________________________________________________________________________________
 
 SfxObjectShell* SfxBaseModel::GetObjectShell() const
-{
-    return m_pData ? (SfxObjectShell*) m_pData->m_pObjectShell : 0;
-}
-
-SfxObjectShell* SfxBaseModel::impl_getObjectShell() const
 {
     return m_pData ? (SfxObjectShell*) m_pData->m_pObjectShell : 0;
 }
