@@ -51,7 +51,23 @@ else
 ifeq ($(OS),MACOSX)
 include $(GBUILDDIR)/platform/macosx.mk
 else
+ifeq ($(OS),OPENBSD)
+include $(GBUILDDIR)/platform/openbsd.mk
+else
+ifeq ($(OS),FREEBSD)
+include $(GBUILDDIR)/platform/freebsd.mk
+else
+ifeq ($(OS),NETBSD)
+include $(GBUILDDIR)/platform/netbsd.mk
+else
+ifeq ($(OS),DRAGONFLY)
+include $(GBUILDDIR)/platform/dragonfly.mk
+else
 $(eval $(call gb_Output_error,Unsupported OS: $(OS)))
+endif
+endif
+endif
+endif
 endif
 endif
 endif
