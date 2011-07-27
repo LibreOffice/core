@@ -1,7 +1,7 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
+#
 # Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
@@ -25,24 +25,16 @@
 #
 #*************************************************************************
 
-PRJ=..$/..
+PRJ=..
+TARGET=prj
 
-PRJNAME=basctl
-TARGET=accessibility
-ENABLE_EXCEPTIONS=TRUE
-VISIBILITY_HIDDEN=TRUE
+.INCLUDE : settings.mk
 
-# --- Settings -----------------------------------------------------
+.IF "$(VERBOSE)"!=""
+VERBOSEFLAG :=
+.ELSE
+VERBOSEFLAG := -s
+.ENDIF
 
-.INCLUDE :  settings.mk
-
-# --- Files --------------------------------------------------------
-
-SLOFILES=\
-    $(SLO)$/accessibledialogwindow.obj			\
-    $(SLO)$/accessibledialogcontrolshape.obj
-    
-# --- Targets -------------------------------------------------------
-
-.INCLUDE :  target.mk
-
+all:
+	cd $(PRJ) && $(GNUMAKE) $(VERBOSEFLAG) -r -j$(MAXPROCESS) $(gb_MAKETARGET) && $(GNUMAKE) $(VERBOSEFLAG) -r deliverlog

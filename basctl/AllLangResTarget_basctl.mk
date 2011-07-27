@@ -1,8 +1,8 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
-# Copyright 2000, 2010 Oracle and/or its affiliates.
+#
+# Copyright 2000, 2011 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
 #
@@ -25,23 +25,30 @@
 #
 #*************************************************************************
 
-PRJ=..
+$(eval $(call gb_AllLangResTarget_AllLangResTarget,basctl))
 
-PRJNAME=basctl
-TARGET=inc
+$(eval $(call gb_AllLangResTarget_add_srs,basctl,\
+	basctl/res \
+))
 
-# --- Settings -----------------------------------------------------
+$(eval $(call gb_SrsTarget_SrsTarget,basctl/res))
 
-.INCLUDE :  settings.mk
+$(eval $(call gb_SrsTarget_set_include,basctl/res,\
+	-I$(realpath $(SRCDIR)/basctl/inc) \
+	-I$(realpath $(SRCDIR)/basctl/source/inc) \
+	$$(INCLUDE) \
+))
 
-# --- Files --------------------------------------------------------
-# --- Targets -------------------------------------------------------
+$(eval $(call gb_SrsTarget_add_files,basctl/res,\
+	basctl/source/basicide/basicprint.src \
+	basctl/source/basicide/basidesh.src \
+	basctl/source/basicide/brkdlg.src \
+	basctl/source/basicide/macrodlg.src \
+	basctl/source/basicide/moduldlg.src \
+	basctl/source/basicide/moptions.src \
+	basctl/source/basicide/objdlg.src \
+	basctl/source/dlged/dlgresid.src \
+	basctl/source/dlged/managelang.src \
+))
 
-.INCLUDE :  target.mk
-
-.IF "$(ENABLE_PCH)"!=""
-ALLTAR : \
-    $(SLO)$/precompiled.pch \
-    $(SLO)$/precompiled_ex.pch
-    
-.ENDIF			# "$(ENABLE_PCH)"!=""
+# vim: set noet sw=4:

@@ -1,8 +1,8 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
-# Copyright 2000, 2010 Oracle and/or its affiliates.
+#
+# Copyright 2000, 2011 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
 #
@@ -25,29 +25,14 @@
 #
 #*************************************************************************
 
-PRJ=..
+ifeq ($(strip $(SOLARENV)),)
+$(error No environment set!)
+endif
 
-PRJNAME=basctl
-TARGET=basslots
+gb_PARTIALBUILD := T
+GBUILDDIR := $(SOLARENV)/gbuild
+include $(GBUILDDIR)/gbuild.mk
 
-# --- Settings -----------------------------------------------------
+$(eval $(call gb_Module_make_global_targets,$(shell ls $(dir $(realpath $(firstword $(MAKEFILE_LIST))))/Module*.mk)))
 
-.INCLUDE :  settings.mk
-.IF "$(L10N_framework)"==""
-SDI1NAME=$(TARGET)
-SDI1EXPORT=basctl
-
-# --- Files --------------------------------------------------------
-
-SVSDI1DEPEND= \
-        $(SOLARINCXDIR)$/sfx2/sfx.sdi \
-        $(SOLARINCXDIR)$/sfx2/sfxitems.sdi \
-        $(SOLARINCXDIR)$/svx/svx.sdi \
-        $(SOLARINCXDIR)$/svx/svxitems.sdi \
-        $(SOLARINCXDIR)$/svx/xoitems.sdi \
-    baside.sdi
-
-# --- Targets -------------------------------------------------------
-.ENDIF
-.INCLUDE :  target.mk
-
+# vim: set noet sw=4 ts=4:
