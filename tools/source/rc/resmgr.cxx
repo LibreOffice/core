@@ -121,8 +121,6 @@ class InternalResMgr
                                            void **pResHandle );
 public:
     static void                 FreeGlobalRes( void *, void * );
-
-    SvStream *              GetBitmapStream( sal_uInt32 nResId );
 };
 
 // =======================================================================
@@ -532,29 +530,7 @@ struct ImpContentMixLessCompare : public ::std::binary_function< ImpContent, sal
     }
 };
 
-
-// =======================================================================
-
 static ResHookProc pImplResHookProc = 0;
-
-// =======================================================================
-
-SvStream * InternalResMgr::GetBitmapStream( sal_uInt32 nId )
-{
-    // Anfang der Strings suchen
-    ImpContent * pFind = ::std::lower_bound(pContent,
-                                            pContent + nEntries,
-                                            ((sal_uInt64(RT_SYS_BITMAP) << 32) | nId),
-                                            ImpContentMixLessCompare());
-    if ( (pFind != (pContent + nEntries)) && (pFind->nTypeAndId == ((sal_uInt64(RT_SYS_BITMAP) << 32) | nId)) )
-    {
-        pStm->Seek( pFind->nOffset );
-        return pStm;
-    }
-    return NULL;
-}
-
-// -----------------------------------------------------------------------
 
 InternalResMgr::InternalResMgr( const OUString& rFileURL,
                                 const OUString& rPrefix,

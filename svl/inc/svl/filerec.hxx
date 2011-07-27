@@ -298,10 +298,7 @@ protected:
                         }
 
 public:
-    static sal_uInt16       ScanRecordType( SvStream *pStream );
-
-                        SfxMiniRecordReader( SvStream *pStream );
-                        SfxMiniRecordReader( SvStream *pStream, sal_uInt8 nTag );
+    SfxMiniRecordReader( SvStream *pStream, sal_uInt8 nTag );
     inline              ~SfxMiniRecordReader();
 
     inline sal_uInt8        GetTag() const;
