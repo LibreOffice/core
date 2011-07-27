@@ -2289,9 +2289,6 @@ int RTFDocumentImpl::popState()
 {
     //OSL_TRACE("%s before pop: m_nGroup %d, dest state: %d", OSL_THIS_FUNC, m_nGroup, m_aStates.top().nDestinationState);
 
-    RTFReferenceTable::Entry_t aEntry;
-    bool bFontEntryEnd = false;
-    bool bStyleEntryEnd = false;
     RTFSprms_t aSprms;
     RTFSprms_t aAttributes;
     bool bListEntryEnd = false;
@@ -2326,24 +2323,20 @@ int RTFDocumentImpl::popState()
         RTFValue::Pointer_t pValue(new RTFValue(m_aDestinationText.makeStringAndClear()));
         m_aStates.top().aTableAttributes.push_back(make_pair(NS_rtf::LN_XSZFFN, pValue));
 
-        bFontEntryEnd = true;
         writerfilter::Reference<Properties>::Pointer_t const pProp(
                 new RTFReferenceProperties(m_aStates.top().aTableAttributes, m_aStates.top().aTableSprms)
                 );
-        aEntry.first = m_nCurrentFontIndex;
-        aEntry.second = pProp;
+        m_aFontTableEntries.insert(make_pair(m_nCurrentFontIndex, pProp));
     }
     else if (m_aStates.top().nDestinationState == DESTINATION_STYLEENTRY)
     {
         RTFValue::Pointer_t pValue(new RTFValue(m_aDestinationText.makeStringAndClear()));
         m_aStates.top().aTableAttributes.push_back(make_pair(NS_rtf::LN_XSTZNAME1, pValue));
 
-        bStyleEntryEnd = true;
         writerfilter::Reference<Properties>::Pointer_t const pProp(
                 new RTFReferenceProperties(mergeAttributes(), mergeSprms())
                 );
-        aEntry.first = m_nCurrentStyleIndex;
-        aEntry.second = pProp;
+        m_aStyleTableEntries.insert(make_pair(m_nCurrentStyleIndex, pProp));
     }
     else if (m_aStates.top().nDestinationState == DESTINATION_LISTENTRY)
     {
@@ -2646,12 +2639,8 @@ int RTFDocumentImpl::popState()
 
     m_nGroup--;
 
-    if (bFontEntryEnd)
-        m_aFontTableEntries.insert(make_pair(aEntry.first, aEntry.second));
-    else if (bStyleEntryEnd)
-        m_aStyleTableEntries.insert(make_pair(aEntry.first, aEntry.second));
     // list table
-    else if (bListEntryEnd)
+    if (bListEntryEnd)
     {
         RTFValue::Pointer_t pValue(new RTFValue(aAttributes, aSprms));
         m_aListTableSprms.push_back(make_pair(NS_ooxml::LN_CT_Numbering_abstractNum, pValue));
