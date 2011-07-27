@@ -205,6 +205,7 @@ SCP1FILES += \
 
 SCP1FILES += \
              vclcanvas.par \
+			 mtfrenderer.par
 
 .IF "$(GUI)"=="UNX"
 #X11 MacOSX has no cairo-canvas
