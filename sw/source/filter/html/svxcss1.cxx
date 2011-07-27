@@ -71,11 +71,6 @@ typedef void (*FnParseCSS1Prop)( const CSS1Expression *pExpr,
                                  SvxCSS1PropertyInfo& rPropInfo,
                                  const SvxCSS1Parser& rParser );
 
-SV_IMPL_PTRARR( CSS1Selectors, CSS1Selector* )
-
-
-/*  */
-
 static CSS1PropertyEnum const aFontSizeTable[] =
 {
     { sCSS1_PV_xx_small,    0                   },
@@ -720,31 +715,26 @@ sal_Bool SvxCSS1Parser::StyleParsed( const CSS1Selector * /*pSelector*/,
     return sal_True;
 }
 
-sal_Bool SvxCSS1Parser::SelectorParsed( const CSS1Selector *pSelector,
-                                    sal_Bool bFirst )
+bool SvxCSS1Parser::SelectorParsed( CSS1Selector *pSelector, bool bFirst )
 {
     if( bFirst )
     {
         OSL_ENSURE( pSheetItemSet, "Where is the Item-Set for Style-Sheets?" );
 
-        // Dieses ist der erste Selektor einer Rule, also muessen
-        // die bisher geparsten Items auf die Styles verteilt werden
-//      pSheetPropInfo->CreateBoxItem( *pSheetItemSet, GetDfltBorderDist() );
-        for( sal_uInt16 i=0; i<aSelectors.Count(); i++ )
+        for (size_t i = 0; i < aSelectors.size(); ++i)
         {
-            StyleParsed( aSelectors[i], *pSheetItemSet, *pSheetPropInfo );
+            StyleParsed( &aSelectors[i], *pSheetItemSet, *pSheetPropInfo );
         }
         pSheetItemSet->ClearItem();
         pSheetPropInfo->Clear();
 
         // und die naechste Rule vorbereiten
-        if( aSelectors.Count() )
-            aSelectors.DeleteAndDestroy( 0, aSelectors.Count() );
+        aSelectors.clear();
     }
 
-    aSelectors.C40_INSERT( CSS1Selector, pSelector, aSelectors.Count() );
+    aSelectors.push_back(pSelector);
 
-    return sal_False; // den Selektor haben wir gespeichert. Loeschen toedlich!
+    return false; // den Selektor haben wir gespeichert. Loeschen toedlich!
 }
 
 
@@ -840,14 +830,13 @@ sal_Bool SvxCSS1Parser::ParseStyleSheet( const String& rIn )
 
     sal_Bool bSuccess = CSS1Parser::ParseStyleSheet( rIn );
 
-    for( sal_uInt16 i=0; i<aSelectors.Count(); i++ )
+    for (size_t i = 0; i < aSelectors.size(); ++i)
     {
-        StyleParsed( aSelectors[i], *pSheetItemSet, *pSheetPropInfo );
+        StyleParsed( &aSelectors[i], *pSheetItemSet, *pSheetPropInfo );
     }
 
     // und etwas aufrauemen
-    if( aSelectors.Count() )
-        aSelectors.DeleteAndDestroy( 0, aSelectors.Count() );
+    aSelectors.clear();
     pSheetItemSet->ClearItem();
     pSheetPropInfo->Clear();
 

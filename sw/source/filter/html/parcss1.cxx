@@ -1230,10 +1230,10 @@ sal_Bool CSS1Parser::ParseStyleOption( const String& rIn )
     return sal_True;
 }
 
-sal_Bool CSS1Parser::SelectorParsed( const CSS1Selector * /* pSelector */, sal_Bool /*bFirst*/ )
+bool CSS1Parser::SelectorParsed( CSS1Selector* /* pSelector */, bool /*bFirst*/ )
 {
     // Selektor loeschen
-    return sal_True;
+    return true;
 }
 
 sal_Bool CSS1Parser::DeclarationParsed( const String& /*rProperty*/,

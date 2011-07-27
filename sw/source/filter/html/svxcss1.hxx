@@ -39,6 +39,8 @@
 #include <rtl/textenc.h>
 #include "parcss1.hxx"
 
+#include <boost/ptr_container/ptr_vector.hpp>
+
 class SfxItemPool;
 class SvxBoxItem;
 class FontList;
@@ -93,20 +95,13 @@ enum SvxCSS1PageBreak
 #define CSS1_SCRIPT_CTL     0x04
 #define CSS1_SCRIPT_ALL     0x07
 
-/*  */
-
 struct CSS1PropertyEnum
 {
     const sal_Char *pName;  // Wert einer Property
     sal_uInt16 nEnum;           // und der dazugehoerige Wert eines Enums
 };
 
-
-/*  */
-
 namespace editeng { class SvxBorderLine; }
-
-SV_DECL_PTRARR_DEL( CSS1Selectors, CSS1Selector*, 1, 1 )
 
 #define SVX_CSS1_BORDERINFO_WIDTH 1
 #define SVX_CSS1_BORDERINFO_COLOR 2
@@ -227,6 +222,7 @@ inline sal_Bool operator<( const SvxCSS1MapEntry& rE1,  const SvxCSS1MapEntry& r
 
 class SvxCSS1Parser : public CSS1Parser
 {
+    typedef ::boost::ptr_vector<CSS1Selector> CSS1Selectors;
     CSS1Selectors aSelectors;   // Liste der "offenen" Selectoren
 
     SvxCSS1Map aIds;
@@ -277,8 +273,7 @@ protected:
     // zuletzt angelegten Styles kopiert.
     // Diese Methode sollte in abgleiteten Parsern nicht mehr
     // ueberladen werden!
-    virtual sal_Bool SelectorParsed( const CSS1Selector *pSelector,
-                                 sal_Bool bFirst );
+    virtual bool SelectorParsed( CSS1Selector *pSelector, bool bFirst );
 
     // Diese Methode wird fuer jede geparste Property aufgerufen
     // sie fuegt das Item in den ItemSet 'pItemSet' ein

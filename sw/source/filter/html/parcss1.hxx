@@ -270,8 +270,7 @@ protected:
     // Deklaration. Wird sal_True zurueckgegeben, wird der Selektor
     // geloscht, sonst nicht.
     // Die Implementierung dieser Methode gibt nur sal_True zuruck.
-    virtual sal_Bool SelectorParsed( const CSS1Selector *pSelector,
-                                 sal_Bool bFirst );
+    virtual bool SelectorParsed( CSS1Selector* pSelector, bool bFirst );
 
     // Diese Methode wird fuer jede geparsete Property aufgerufen. Wird
     // sal_True zurueckgegeben wird der Selektor geloscht, sonst nicht.
