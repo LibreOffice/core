@@ -1296,7 +1296,8 @@ class AgendaItem(object):
         #second field is actually always null...
         # this is a preparation for adding placeholders.
         if self.field is not None:
-            self.field.write(cell)
+            self.field.write(Topics.table.getCellByName(
+                tableCursor.RangeName))
 
 '''
 reads/write a table cell format from/to a table cell or a group of cells.
