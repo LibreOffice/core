@@ -1238,7 +1238,7 @@ SwCharFmt* SwCSS1Parser::GetChrFmt( sal_uInt16 nToken2, const String& rClass ) c
         }
         else
         {
-            SvxCSS1MapEntry *pClass = GetClass( aClass );
+            const SvxCSS1MapEntry *pClass = GetClass( aClass );
             if( pClass )
             {
                 pCFmt = pDoc->MakeCharFmt( aTmp, pCFmt );
@@ -1884,7 +1884,7 @@ sal_Bool SwCSS1Parser::ParseStyleSheet( const String& rIn )
     SwPageDesc *pMasterPageDesc =
         pDoc->GetPageDescFromPool( RES_POOLPAGE_HTML, false );
 
-    SvxCSS1MapEntry *pPageEntry = GetPage( aEmptyStr, sal_False );
+    SvxCSS1MapEntry *pPageEntry = GetPage( aEmptyStr, false );
     if( pPageEntry )
     {
         // @page (wirkt auf alle Seiten, die es schon gibt
@@ -1942,7 +1942,7 @@ sal_Bool SwHTMLParser::ParseStyleOptions( const String &rStyle,
     {
         String aClass( rClass );
         SwCSS1Parser::GetScriptFromClass( aClass );
-        SvxCSS1MapEntry *pClass = pCSS1Parser->GetClass( aClass );
+        const SvxCSS1MapEntry *pClass = pCSS1Parser->GetClass( aClass );
         if( pClass )
         {
             pCSS1Parser->MergeStyles( pClass->GetItemSet(),
@@ -1954,7 +1954,7 @@ sal_Bool SwHTMLParser::ParseStyleOptions( const String &rStyle,
 
     if( rId.Len() )
     {
-        SvxCSS1MapEntry *pId = pCSS1Parser->GetId( rId );
+        const SvxCSS1MapEntry *pId = pCSS1Parser->GetId( rId );
         if( pId )
             pCSS1Parser->MergeStyles( pId->GetItemSet(),
                                       pId->GetPropertyInfo(),

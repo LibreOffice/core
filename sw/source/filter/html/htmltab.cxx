@@ -3027,14 +3027,14 @@ SvxBrushItem* SwHTMLParser::CreateBrushItem( const Color *pColor,
         {
             String aClass( rClass );
             SwCSS1Parser::GetScriptFromClass( aClass );
-            SvxCSS1MapEntry *pClass = pCSS1Parser->GetClass( aClass );
+            const SvxCSS1MapEntry *pClass = pCSS1Parser->GetClass( aClass );
             if( pClass )
                 aItemSet.Put( pClass->GetItemSet() );
         }
 
         if( rId.Len() )
         {
-            SvxCSS1MapEntry *pId = pCSS1Parser->GetId( rId );
+            const SvxCSS1MapEntry *pId = pCSS1Parser->GetId( rId );
             if( pId )
                 aItemSet.Put( pId->GetItemSet() );
         }

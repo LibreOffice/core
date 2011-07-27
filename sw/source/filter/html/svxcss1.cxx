@@ -65,6 +65,8 @@
 #include "css1kywd.hxx"
 #include "svxcss1.hxx"
 
+#include <memory>
+
 // die Funktionen zum Parsen einer CSS1-Property sind von folgendem Typ:
 typedef void (*FnParseCSS1Prop)( const CSS1Expression *pExpr,
                                  SfxItemSet& rItemSet,
@@ -139,8 +141,6 @@ static CSS1PropertyEnum const aDirectionTable[] =
     { 0,                    0                   }
 };
 
-/*  */
-
 static CSS1PropertyEnum const aBGRepeatTable[] =
 {
     { sCSS1_PV_repeat,      GPOS_TILED                  },
@@ -166,8 +166,6 @@ static CSS1PropertyEnum const aBGVertPosTable[] =
     { 0,                    0                       }
 };
 
-/*  */
-
 static CSS1PropertyEnum const aTextAlignTable[] =
 {
     { sCSS1_PV_left,        SVX_ADJUST_LEFT     },
@@ -176,8 +174,6 @@ static CSS1PropertyEnum const aTextAlignTable[] =
     { sCSS1_PV_justify,     SVX_ADJUST_BLOCK    },
     { 0,                    0                   }
 };
-
-/*  */
 
 static CSS1PropertyEnum const aBorderWidthTable[] =
 {
@@ -240,8 +236,6 @@ static CSS1PropertyEnum const aPageBreakTable[] =
 
 // /Feature: PrintExt
 
-/*  */
-
 static sal_uInt16 const aBorderWidths[] =
 {
     DEF_LINE_WIDTH_0,
@@ -251,8 +245,6 @@ static sal_uInt16 const aBorderWidths[] =
 
 #undef SBORDER_ENTRY
 #undef DBORDER_ENTRY
-
-/*  */
 
 struct SvxCSS1ItemIds
 {
@@ -370,9 +362,6 @@ void SvxCSS1BorderInfo::SetBorderLine( sal_uInt16 nLine, SvxBoxItem &rBoxItem ) 
 
     rBoxItem.SetLine( &aBorderLine, nLine );
 }
-
-
-/*  */
 
 SvxCSS1PropertyInfo::SvxCSS1PropertyInfo()
 {
@@ -678,9 +667,6 @@ void SvxCSS1PropertyInfo::SetBoxItem( SfxItemSet& rItemSet,
     DestroyBorderInfos();
 }
 
-
-/*  */
-
 SvxCSS1MapEntry::SvxCSS1MapEntry( const String& rKey, const SfxItemSet& rItemSet,
                                   const SvxCSS1PropertyInfo& rProp ) :
     aKey( rKey ),
@@ -702,10 +688,6 @@ sal_Bool operator<( const SvxCSS1MapEntry& rE1, const SvxCSS1MapEntry& rE2 )
     return  rE1.aKey<rE2.aKey;
 }
 #endif
-
-SV_IMPL_OP_PTRARR_SORT( SvxCSS1Map, SvxCSS1MapEntryPtr )
-
-/*  */
 
 sal_Bool SvxCSS1Parser::StyleParsed( const CSS1Selector * /*pSelector*/,
                                  SfxItemSet& /*rItemSet*/,
@@ -920,36 +902,24 @@ const FontList *SvxCSS1Parser::GetFontList() const
         return 0;
 }
 
-SvxCSS1MapEntry *SvxCSS1Parser::GetMapEntry( const String& rKey,
-                                             const SvxCSS1Map& rMap ) const
-{
-    pSearchEntry->SetKey( rKey );
-
-    SvxCSS1MapEntry *pRet = 0;
-    sal_uInt16 nPos;
-    if( rMap.Seek_Entry( pSearchEntry, &nPos ) )
-        pRet = rMap[nPos];
-
-    return pRet;
-}
-
 void SvxCSS1Parser::InsertMapEntry( const String& rKey,
                                     const SfxItemSet& rItemSet,
                                     const SvxCSS1PropertyInfo& rProp,
-                                    SvxCSS1Map& rMap )
+                                    CSS1Map& rMap )
 {
-    SvxCSS1MapEntry *pEntry = GetMapEntry( rKey, rMap );
-    if( pEntry )
+    CSS1Map::iterator itr = rMap.find(rKey);
+    if (itr == rMap.end())
     {
-        MergeStyles( rItemSet, rProp,
-                     pEntry->GetItemSet(), pEntry->GetPropertyInfo(), sal_True );
+        std::auto_ptr<SvxCSS1MapEntry> p(new SvxCSS1MapEntry(rKey, rItemSet, rProp));
+        rMap.insert(rKey, p);
     }
     else
     {
-        rMap.Insert( new SvxCSS1MapEntry( rKey, rItemSet, rProp ) );
+        SvxCSS1MapEntry* p = itr->second;
+        MergeStyles( rItemSet, rProp,
+                     p->GetItemSet(), p->GetPropertyInfo(), sal_True );
     }
 }
-
 
 void SvxCSS1Parser::MergeStyles( const SfxItemSet& rSrcSet,
                                  const SvxCSS1PropertyInfo& rSrcInfo,
