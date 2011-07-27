@@ -2,30 +2,15 @@
 (anonymous namespace)::writeInfo(com::sun::star::uno::Reference<com::sun::star::registry::XRegistryKey> const&, rtl::OUString const&, rtl::OUString const&)
 Application::PostUserEvent(unsigned long, void*)
 BasicError::BasicError()
-BasicIDEDLL::Exit()
-BasicIDEShell::LinkStubAccelSelectHdl(void*, void*)
 BasicLibInfo::BasicLibInfo(String const&)
-BasicLibInfo::Store(SotStorageStream&, String const&, unsigned char)
-BasicLibs::Last()
-BasicLibs::Prev()
 BasicManager::BasicManager()
 BasicManager::ClearErrors()
-BasicManager::SetFlagToAllLibs(short, unsigned char) const
 BasicPrinter::BasicPrinter()
 BitSet::BitSet(Range const&)
 BitSet::BitSet(unsigned short*, unsigned short)
-Bitmap::GetSourceSizePixel() const
-Bitmap::SetSizePixel(Size const&)
 BitmapEx::Draw(OutputDevice*, Point const&, Size const&, Point const&, Size const&) const
 BitmapLB::SelectEntryByList(XBitmapList const*, String const&, Bitmap const&)
 BitmapPalette::IsGreyPalette() const
-BitmapReadAccess::Flush()
-BitmapReadAccess::ReAccess(unsigned char)
-BitmapWriteAccess::DrawPolyPolygon(PolyPolygon const&)
-BitmapWriteAccess::GetFillColor() const
-BitmapWriteAccess::GetLineColor() const
-BitmapWriteAccess::SetFillColor()
-BitmapWriteAccess::SetLineColor()
 BreakPointList::clear()
 BreakPointList::push_back(BreakPoint*)
 BreakpointWindow::FindBreakpoint(Point const&)
@@ -125,7 +110,6 @@ CalendarField::CalendarField(Window*, ResId const&)
 CalendarWrapper::getMinimumNumberOfDaysForFirstWeek() const
 CertificateContainer::impl_createFactory(com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory> const&)
 CertificateExtension_XmlSecImpl::setCertExtn(com::sun::star::uno::Sequence<signed char>, com::sun::star::uno::Sequence<signed char>, unsigned char)
-CffSubsetterContext::getHintPair(int, float*, float*) const
 CfgStack::Push(CfgStackData*)
 CharAttribList::DbgCheckAttribs()
 CharAttribList::HasAttrib(unsigned short) const
@@ -181,9 +165,6 @@ CurrencyBox::InsertValue(long, unsigned short)
 CurrencyBox::RemoveValue(long)
 CurrencyField::CurrencyField(Window*, ResId const&)
 CurrencyFormatter::SetCurrencySymbol(String const&)
-Cursor::SetHeight(long)
-Cursor::SetOffsetY(long)
-Cursor::SetSlant(long)
 CustomPropertiesControl::Initialize()
 CustomPropertiesWindow::DoesCustomPropertyExist(String const&) const
 CustomToolBarImportHelper::showToolbar(rtl::OUString const&)
@@ -252,7 +233,6 @@ ElementCollector::isAbleToNotify() const
 ElementCollector::setSecurityId(int)
 EnhWMFReader::ReadGDIComment()
 ExtraKernInfo::HasKernPairs() const
-ExtraPortionInfo::DestroyOrgDXArray()
 FieldEntry::GetBookmarkType()
 FileControl::ResetButtonText()
 FileControl::SetButtonText(String const&)
@@ -278,7 +258,6 @@ FixedBorder::FixedBorder(Window*, long)
 FixedBorder::SetBorderType(unsigned short)
 FixedBorder::SetTransparent(unsigned char)
 FixedImage::CalcImagePos(Point const&, Size const&, Size const&)
-FloatingWindow::RemovePopupModeWindow(Window*)
 FmEntryDataArray::DeleteAndDestroy(unsigned short, unsigned short)
 FmEntryDataArray::Insert(FmEntryData* const&, unsigned short&)
 FmEntryDataArray::Insert(FmEntryData* const*, unsigned short)
@@ -318,8 +297,6 @@ GDIMetaFile::SaveStatus()
 GDIMetaFile::Wind(unsigned long)
 GDIMetaFile::WindEnd()
 GDIMetaFile::WindNext()
-GHEditWindow::Clear()
-Gallery::CreateImportTheme(INetURLObject const&, String const&)
 GalleryExplorer::DrawCentered(OutputDevice*, FmFormModel const&)
 GalleryExplorer::GetObjCount(unsigned long)
 GalleryExplorer::GetVCDrawModel(FmFormModel&) const
@@ -369,9 +346,6 @@ HeaderBar::SetItemData(unsigned short, void*)
 HeaderBar::SetItemImage(unsigned short, Image const&)
 HelpTextWindow::RegisterAccessibleParent()
 HelpTextWindow::RevokeAccessibleParent()
-HttpRequest::Abort()
-HttpRequest::GetStatus()
-HttpRequest::~HttpRequest()
 IMapWindow::GetSdrObj(IMapObject const*) const
 INetURLObject::hasPassword() const
 IconChoiceDialog::RemoveResetButton()
