@@ -68,7 +68,6 @@ events fired too often.
 '''
 class AgendaTemplate(TextDocument):
 
-    DAY_IN_MILLIS = (24 * 60 * 60 * 1000)
     writtenTopics = []
     itemsCache = None
     _allItems = []
@@ -79,7 +78,6 @@ class AgendaTemplate(TextDocument):
     template = None
     agenda = None
     lock = RLock()
-    initDictionary = False
 
     '''constructor. The document is *not* loaded here.
     only some formal members are set.
@@ -93,9 +91,6 @@ class AgendaTemplate(TextDocument):
             "WIZARD_LIVE_PREVIEW")
         AgendaTemplate.agenda = agenda_
         self.resources = resources_
-
-        if not AgendaTemplate.initDictionary:
-            self.initializeDictionary()
 
         if AgendaTemplate.itemsCache is None:
             self.initItemsCache()
@@ -175,20 +170,6 @@ class AgendaTemplate(TextDocument):
     def setTemplateTitle(self, newTitle):
         self.m_xDocProps.Title = newTitle
 
-    def initializeDictionary(self):
-        AgendaTemplate.isShowItemDict = \
-            {FILLIN_MEETING_TYPE:AgendaTemplate.agenda.cp_ShowMeetingType,
-            FILLIN_READ:AgendaTemplate.agenda.cp_ShowRead,
-            FILLIN_BRING:AgendaTemplate.agenda.cp_ShowBring,
-            FILLIN_NOTES:AgendaTemplate.agenda.cp_ShowNotes,
-            FILLIN_FACILITATOR:AgendaTemplate.agenda.cp_ShowFacilitator,
-            FILLIN_TIMEKEEPER:AgendaTemplate.agenda.cp_ShowTimekeeper,
-            FILLIN_NOTETAKER:AgendaTemplate.agenda.cp_ShowNotetaker,
-            FILLIN_PARTICIPANTS:AgendaTemplate.agenda.cp_ShowAttendees,
-            FILLIN_CALLED_BY:AgendaTemplate.agenda.cp_ShowCalledBy,
-            FILLIN_OBSERVERS:AgendaTemplate.agenda.cp_ShowObservers,
-            FILLIN_RESOURCE_PERSONS:AgendaTemplate.agenda.cp_ShowResourcePersons}
-
     '''checks the data model if the
     item corresponding to the given string should be shown
     @param itemName a string representing an Item (name or heading).
@@ -197,9 +178,29 @@ class AgendaTemplate(TextDocument):
 
     @classmethod
     def isShowItem(self, itemName):
-        try:
-            return AgendaTemplate.isShowItemDict[itemName]
-        except KeyError:
+        if itemName == FILLIN_MEETING_TYPE:
+            return AgendaTemplate.agenda.cp_ShowMeetingType
+        elif itemName == FILLIN_READ:
+            return AgendaTemplate.agenda.cp_ShowRead
+        elif itemName == FILLIN_BRING:
+            return AgendaTemplate.agenda.cp_ShowBring
+        elif itemName == FILLIN_NOTES:
+            return AgendaTemplate.agenda.cp_ShowNotes
+        elif itemName == FILLIN_FACILITATOR:
+            return AgendaTemplate.agenda.cp_ShowFacilitator
+        elif itemName == FILLIN_TIMEKEEPER:
+            return AgendaTemplate.agenda.cp_ShowTimekeeper
+        elif itemName == FILLIN_NOTETAKER:
+            return AgendaTemplate.agenda.cp_ShowNotetaker
+        elif itemName == FILLIN_PARTICIPANTS:
+            return AgendaTemplate.agenda.cp_ShowAttendees
+        elif itemName == FILLIN_CALLED_BY:
+            return AgendaTemplate.agenda.cp_ShowCalledBy
+        elif itemName == FILLIN_OBSERVERS:
+            return AgendaTemplate.agenda.cp_ShowObservers
+        elif itemName == FILLIN_RESOURCE_PERSONS:
+            return AgendaTemplate.agenda.cp_ShowResourcePersons
+        else:
             raise ValueError("No such item")
 
     '''itemsCache is a Map containing all agenda item. These are object which
@@ -702,10 +703,12 @@ class ItemsTable(object):
     '''
     the items in the table.
     '''
+    items = []
 
     def __init__(self, section_, table_):
         Topics.table = table_
         self.section = section_
+        self.items = []
         '''
         go through all <*> items in the document
         and each one if it is in this table.
@@ -719,13 +722,14 @@ class ItemsTable(object):
             t = Helper.getUnoPropertyValue(workwith, "TextTable")
             if t == Topics.table:
                 iText = workwith.String.lower().lstrip()
-                ai = AgendaTemplate.itemsCache.get(iText)
+                ai = AgendaTemplate.itemsCache[iText]
                 if ai is not None:
-                    AgendaTemplate.items.append(ai)
+                    self.items.append(ai)
                     del AgendaTemplate._allItems[i]
                     AgendaTemplate.itemsMap[iText] = self
                     i -= 1
             i += 1
+
     '''
     link the section to the template. this will restore the original table
     with all the items.<br/>
@@ -763,7 +767,7 @@ class ItemsTable(object):
             two cells to the table: a title (text) and a placeholder.
             see AgendaItem class below.
             '''
-            for i in AgendaTemplate.items:
+            for i in self.items:
                 if AgendaTemplate.isShowItem(i.name):
                     visible = True
                     i.table = Topics.table
@@ -1179,10 +1183,8 @@ Window - Preferences - Java - Code Style - Code Templates
 '''
 class ParaStyled(object):
 
-    paraStyle = ""
-
     def __init__(self, paraStyle_):
-        ParaStyled.paraStyle = paraStyle_
+        self.paraStyle = paraStyle_
 
     def format(self, textRange):
         if textRange is None:
@@ -1190,7 +1192,7 @@ class ParaStyled(object):
 
         cursor = textRange.createTextCursorByRange(textRange)
         Helper.setUnoPropertyValue(
-            cursor, "ParaStyleName", ParaStyled.paraStyle)
+            cursor, "ParaStyleName", self.paraStyle)
 
     def write(self, textRange):
         self.format(textRange)
@@ -1215,17 +1217,13 @@ class TextElement(ParaStyled):
 
     def write(self, textRange):
         textRange.String = self.text
-        #COMMENTED
-        #if not self.text == "":
-        #   super(TextElement,self).write(textRange)
+        if not self.text == "":
+           super(TextElement,self).write(textRange)
 
 '''
 A Text element which, if the text to write is empty (null or "")
 inserts a placeholder instead.
 @author rp143992
-
-TODO To change the template for this generated type comment go to
-Window - Preferences - Java - Code Style - Code Templates
 '''
 
 class PlaceholderTextElement(TextElement):
@@ -1238,7 +1236,7 @@ class PlaceholderTextElement(TextElement):
         self.xmsf = xmsf_
 
     def write(self, textRange):
-        super(PlaceholderTextElement,self).write(textRange)
+        textRange.String = self.text
         if self.text is None or self.text == "":
             try:
                 xTextContent = AgendaTemplate.createPlaceHolder(
@@ -1247,7 +1245,6 @@ class PlaceholderTextElement(TextElement):
                     textRange.Start, xTextContent, True)
             except Exception, ex:
                 traceback.print_exc()
-
 
 '''
 An Agenda element which writes no text, but inserts a placeholder, and formats
