@@ -318,23 +318,23 @@ public:
     void InsertId( const String& rId, const SfxItemSet& rItemSet,
                    const SvxCSS1PropertyInfo& rProp );
 
-    inline const SvxCSS1MapEntry* GetId( const String& rId ) const;
+    const SvxCSS1MapEntry* GetId( const String& rId ) const;
 
     void InsertClass( const String& rClass, const SfxItemSet& rItemSet,
                       const SvxCSS1PropertyInfo& rProp );
 
-    inline const SvxCSS1MapEntry* GetClass( const String& rClass ) const;
+    const SvxCSS1MapEntry* GetClass( const String& rClass ) const;
 
-    inline void InsertPage( const String& rPage, sal_Bool bPseudo,
+    void InsertPage( const String& rPage, sal_Bool bPseudo,
                             const SfxItemSet& rItemSet,
                             const SvxCSS1PropertyInfo& rProp );
 
-    inline SvxCSS1MapEntry* GetPage( const String& rPage, bool bPseudo );
+    SvxCSS1MapEntry* GetPage( const String& rPage, bool bPseudo );
 
     void InsertTag( const String& rTag, const SfxItemSet& rItemSet,
                       const SvxCSS1PropertyInfo& rProp );
 
-    inline SvxCSS1MapEntry* GetTag( const String& rTag );
+    SvxCSS1MapEntry* GetTag( const String& rTag );
 
     void MergeStyles( const SfxItemSet& rSrcSet,
                       const SvxCSS1PropertyInfo& rSrcInfo,
@@ -354,67 +354,6 @@ public:
     const String& GetBaseURL() const { return sBaseURL;}
 
 };
-
-inline void SvxCSS1Parser::InsertId( const String& rId,
-                                     const SfxItemSet& rItemSet,
-                                     const SvxCSS1PropertyInfo& rProp )
-{
-    InsertMapEntry( rId, rItemSet, rProp, aIds );
-}
-
-inline const SvxCSS1MapEntry* SvxCSS1Parser::GetId( const String& rId ) const
-{
-    CSS1Map::const_iterator itr = aIds.find(rId);
-    return itr == aIds.end() ? NULL : itr->second;
-}
-
-inline void SvxCSS1Parser::InsertClass( const String& rClass,
-                                        const SfxItemSet& rItemSet,
-                                        const SvxCSS1PropertyInfo& rProp )
-{
-    InsertMapEntry( rClass, rItemSet, rProp, aClasses );
-}
-
-inline const SvxCSS1MapEntry* SvxCSS1Parser::GetClass( const String& rClass ) const
-{
-    CSS1Map::const_iterator itr = aClasses.find(rClass);
-    return itr == aClasses.end() ? NULL : itr->second;
-}
-
-inline void SvxCSS1Parser::InsertPage( const String& rPage,
-                                       sal_Bool bPseudo,
-                                       const SfxItemSet& rItemSet,
-                                       const SvxCSS1PropertyInfo& rProp )
-{
-    String aKey( rPage );
-    if( bPseudo )
-        aKey.Insert( ':', 0 );
-    InsertMapEntry( aKey, rItemSet, rProp, aPages );
-}
-
-inline SvxCSS1MapEntry* SvxCSS1Parser::GetPage( const String& rPage, bool bPseudo )
-{
-    String aKey( rPage );
-    if( bPseudo )
-        aKey.Insert( ':', 0 );
-
-    CSS1Map::iterator itr = aPages.find(aKey);
-    return itr == aPages.end() ? NULL : itr->second;
-}
-
-inline void SvxCSS1Parser::InsertTag( const String& rTag,
-                                        const SfxItemSet& rItemSet,
-                                        const SvxCSS1PropertyInfo& rProp )
-{
-    InsertMapEntry( rTag, rItemSet, rProp, aTags );
-}
-
-inline SvxCSS1MapEntry* SvxCSS1Parser::GetTag( const String& rTag )
-{
-    CSS1Map::iterator itr = aTags.find(rTag);
-    return itr == aTags.end() ? NULL : itr->second;
-}
-
 
 #endif
 

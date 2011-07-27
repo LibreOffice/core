@@ -802,8 +802,65 @@ SvxCSS1Parser::~SvxCSS1Parser()
     delete pSearchEntry;
 }
 
+void SvxCSS1Parser::InsertId( const String& rId,
+                              const SfxItemSet& rItemSet,
+                              const SvxCSS1PropertyInfo& rProp )
+{
+    InsertMapEntry( rId, rItemSet, rProp, aIds );
+}
 
-/*  */
+const SvxCSS1MapEntry* SvxCSS1Parser::GetId( const String& rId ) const
+{
+    CSS1Map::const_iterator itr = aIds.find(rId);
+    return itr == aIds.end() ? NULL : itr->second;
+}
+
+void SvxCSS1Parser::InsertClass( const String& rClass,
+                                 const SfxItemSet& rItemSet,
+                                 const SvxCSS1PropertyInfo& rProp )
+{
+    InsertMapEntry( rClass, rItemSet, rProp, aClasses );
+}
+
+const SvxCSS1MapEntry* SvxCSS1Parser::GetClass( const String& rClass ) const
+{
+    CSS1Map::const_iterator itr = aClasses.find(rClass);
+    return itr == aClasses.end() ? NULL : itr->second;
+}
+
+void SvxCSS1Parser::InsertPage( const String& rPage,
+                                sal_Bool bPseudo,
+                                const SfxItemSet& rItemSet,
+                                const SvxCSS1PropertyInfo& rProp )
+{
+    String aKey( rPage );
+    if( bPseudo )
+        aKey.Insert( ':', 0 );
+    InsertMapEntry( aKey, rItemSet, rProp, aPages );
+}
+
+SvxCSS1MapEntry* SvxCSS1Parser::GetPage( const String& rPage, bool bPseudo )
+{
+    String aKey( rPage );
+    if( bPseudo )
+        aKey.Insert( ':', 0 );
+
+    CSS1Map::iterator itr = aPages.find(aKey);
+    return itr == aPages.end() ? NULL : itr->second;
+}
+
+void SvxCSS1Parser::InsertTag( const String& rTag,
+                               const SfxItemSet& rItemSet,
+                               const SvxCSS1PropertyInfo& rProp )
+{
+    InsertMapEntry( rTag, rItemSet, rProp, aTags );
+}
+
+SvxCSS1MapEntry* SvxCSS1Parser::GetTag( const String& rTag )
+{
+    CSS1Map::iterator itr = aTags.find(rTag);
+    return itr == aTags.end() ? NULL : itr->second;
+}
 
 sal_Bool SvxCSS1Parser::ParseStyleSheet( const String& rIn )
 {
