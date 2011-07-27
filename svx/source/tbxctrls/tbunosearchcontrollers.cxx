@@ -174,7 +174,7 @@ long FindTextFieldControl::PreNotify( NotifyEvent& rNEvt )
                     lArgs[1].Value <<= sal_False;
 
                 lArgs[2].Name = SEARCHITEM_SEARCHFLAGS;
-                lArgs[2].Value <<= 0;
+                lArgs[2].Value <<= (sal_Int32)0;
 
                 impl_executeSearch(m_xServiceManager, m_xFrame, lArgs);
                 nRet = 1;
@@ -566,7 +566,7 @@ void SAL_CALL DownSearchToolboxController::execute( sal_Int16 /*KeyModifier*/ ) 
     lArgs[1].Name = SEARCHITEM_SEARCHBACKWARD;
     lArgs[1].Value <<= sal_False;
     lArgs[2].Name = SEARCHITEM_SEARCHFLAGS;
-    lArgs[2].Value <<= 0;
+    lArgs[2].Value <<= (sal_Int32)0;
 
     impl_executeSearch(m_xServiceManager, m_xFrame, lArgs);
 
@@ -697,7 +697,7 @@ void SAL_CALL UpSearchToolboxController::execute( sal_Int16 /*KeyModifier*/ ) th
     lArgs[1].Name = SEARCHITEM_SEARCHBACKWARD;
     lArgs[1].Value <<= sal_True;
     lArgs[2].Name = SEARCHITEM_SEARCHFLAGS;
-    lArgs[2].Value <<= 0;
+    lArgs[2].Value <<= (sal_Int32)0;
 
     impl_executeSearch(m_xServiceManager, m_xFrame, lArgs);
 
