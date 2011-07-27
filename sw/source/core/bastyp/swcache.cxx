@@ -126,35 +126,63 @@ SwCache::SwCache( const sal_uInt16 nInitSize, const sal_uInt16 nGrowSize
 SwCache::~SwCache()
 {
     {
-        ByteString sOut( aName ); sOut += '\n';
-        (( sOut += "Number of new entries:                 " )
-                    += ByteString::CreateFromInt32( nAppend ))+= '\n';
-        (( sOut += "Number of insert on free places:       " )
-                    += ByteString::CreateFromInt32( nInsertFree ))+= '\n';
-        (( sOut += "Number of replacements:                " )
-                    += ByteString::CreateFromInt32( nReplace ))+= '\n';
-        (( sOut += "Number of successful Get's:            " )
-                    += ByteString::CreateFromInt32( nGetSuccess ))+= '\n';
-        (( sOut += "Number of failed Get's:                " )
-                    += ByteString::CreateFromInt32( nGetFail ))+= '\n';
-        (( sOut += "Number or reordering (LRU):            " )
-                    += ByteString::CreateFromInt32( nToTop ))+= '\n';
-        (( sOut += "Number of suppressions:                " )
-                    += ByteString::CreateFromInt32( nDelete ))+= '\n';
-        (( sOut += "Number of Get's without Index:         " )
-                    += ByteString::CreateFromInt32( nGetSeek ))+= '\n';
-        (( sOut += "Number of Seek for Get without Index:  " )
-                    += ByteString::CreateFromInt32( nAverageSeekCnt ))+= '\n';
-        (( sOut += "Number of Flush calls:                 " )
-                    += ByteString::CreateFromInt32( nFlushCnt ))+= '\n';
-        (( sOut += "Number of flushed objects:             " )
-                    += ByteString::CreateFromInt32( nFlushedObjects ))+= '\n';
-        (( sOut += "Number of Cache expansions:            " )
-                    += ByteString::CreateFromInt32( nIncreaseMax ))+= '\n';
-        (( sOut += "Number of Cache reductions:            " )
-                    += ByteString::CreateFromInt32( nDecreaseMax ))+= '\n';
+        rtl::OStringBuffer sOut(aName);
 
-        OSL_TRACE( sOut.GetBuffer() );
+        sOut.append('\n').
+            append(RTL_CONSTASCII_STRINGPARAM(
+                "Number of new entries:                 ")).
+            append(static_cast<sal_Int32>(nAppend)).
+            append('\n').
+            append(RTL_CONSTASCII_STRINGPARAM(
+                "Number of insert on free places:       ")).
+            append(static_cast<sal_Int32<(nInsertFree)).
+            append('\n').
+            append(RTL_CONSTASCII_STRINGPARAM(
+                "Number of replacements:                ")).
+            append(static_cast<sal_Int32>(nReplace)).
+            append('\n').
+            append(RTL_CONSTASCII_STRINGPARAM(
+                "Number of successful Get's:            ")).
+            append(static_cast<sal_Int32>(nGetSuccess)).
+            append('\n').
+            append(RTL_CONSTASCII_STRINGPARAM(
+                "Number of failed Get's:                ")).
+            append(static_cast<sal_Int32>(nGetFail)).
+            append('\n').
+            append(RTL_CONSTASCII_STRINGPARAM(
+                "Number or reordering (LRU):            ")).
+            append(static_cast<sal_Int32>(nToTop)).
+            append('\n').
+            append(RTL_CONSTASCII_STRINGPARAM(
+                "Number of suppressions:                ")).
+            append(static_cast<sal_Int32>(nDelete)).
+            append('\n').
+            append(RTL_CONSTASCII_STRINGPARAM(
+                "Number of Get's without Index:         ")).
+            append(static_cast<sal_Int32>(nGetSeek)).
+            append('\n').
+            append(RTL_CONSTASCII_STRINGPARAM(
+                "Number of Seek for Get without Index:  ")).
+            append(static_cast<sal_Int32>(nAverageSeekCnt)).
+            append('\n').
+            append(RTL_CONSTASCII_STRINGPARAM(
+                "Number of Flush calls:                 " )).
+            append(static_cast<sal_Int32>(nFlushCnt)).
+            append('\n').
+            append(RTL_CONSTASCII_STRINGPARAM(
+                "Number of flushed objects:             ")).
+            append(static_cast<sal_Int32>(nFlushedObjects)).
+            append('\n').
+            append(RTL_CONSTASCII_STRINGPARAM(
+                "Number of Cache expansions:            ")).
+            append(static_cast<sal_Int32>(nIncreaseMax)).
+            append('\n').
+            append(RTL_CONSTASCII_STRINGPARAM(
+                "Number of Cache reductions:            ")).
+            append(static_cast<sal_Int32>(nDecreaseMax)).
+            append('\n');
+
+        OSL_TRACE(sOut.getStr());
     }
     Check();
 }

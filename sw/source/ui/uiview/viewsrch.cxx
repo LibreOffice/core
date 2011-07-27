@@ -413,10 +413,11 @@ void SwView::ExecSearch(SfxRequest& rReq, sal_Bool bNoMessage)
 #if OSL_DEBUG_LEVEL > 1
             if(nSlot)
             {
-                ByteString sStr( "nSlot: " );
-                sStr += ByteString::CreateFromInt32( nSlot );
-                sStr += " wrong Dispatcher (viewsrch.cxx)";
-                OSL_FAIL(sStr.GetBuffer() );
+                rtl::OStringBuffer sStr(RTL_CONSTASCII_STRINGPARAM("nSlot: "));
+                sStr.append(static_cast<sal_Int32>(nSlot));
+                sStr.append(RTL_CONSTASCII_STRINGPARAM(
+                    " wrong Dispatcher (viewsrch.cxx)"));
+                OSL_FAIL(sStr.getStr());
             }
 #endif
             return;
