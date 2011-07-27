@@ -84,13 +84,11 @@ cp -a sysui/desktop/share/create_tree.sh "$sysui_temp"
 builddir=`pwd`
 cd $sysui_temp
 # we want non-versioned stuff in the distro packages
-for file in * ; do
-    sed -e "s/\($INSTALLDIRNAME\)$PRODUCTVERSION_NODOT/\1/" \
-        -e "s/\($INSTALLDIRNAME\)$PRODUCTVERSION/\1/" \
-        -e "s/\($PRODUCTNAME\) $PRODUCTVERSION/\1/" \
-        "$file" >"$file.new"
-    mv "$file.new" "$file"
-done
+sed -i \
+    -e "s/\($INSTALLDIRNAME\)$PRODUCTVERSION_NODOT/\1/" \
+    -e "s/\($INSTALLDIRNAME\)$PRODUCTVERSION/\1/" \
+    -e "s/\($PRODUCTNAME\) $PRODUCTVERSION/\1/" \
+    *
 # call in subshell to do not malfrom PRODUCTVERSION, ...
 (
     export OFFICE_PREFIX=$LIBDIR
@@ -118,13 +116,11 @@ fi
 # we want non-versioned desktop files
 cd $DESTDIR/$INSTALLDIR/share/xdg
 # we want non-versioned stuff in the distro packages
-for file in *.desktop ; do
-    sed -e "s/\($INSTALLDIRNAME\)$PRODUCTVERSION_NODOT/\1/" \
-        -e "s/\($INSTALLDIRNAME\)$PRODUCTVERSION/\1/" \
-        -e "s/\($PRODUCTNAME\) $PRODUCTVERSION/\1/" \
-        "$file" >"$file.new"
-    mv -f "$file.new" "$file"
-done
+sed -i \
+    -e "s/\($INSTALLDIRNAME\)$PRODUCTVERSION_NODOT/\1/" \
+    -e "s/\($INSTALLDIRNAME\)$PRODUCTVERSION/\1/" \
+    -e "s/\($PRODUCTNAME\) $PRODUCTVERSION/\1/" \
+    *.desktop
 cd -
 
 # put the stuff installed by create_tree.sh into the right file lists
