@@ -42,45 +42,7 @@ FILLIN_NOTETAKER = "<notetaker>"
 FILLIN_TIMEKEEPER = "<timekeeper>"
 FILLIN_OBSERVERS = "<observers>"
 FILLIN_RESOURCE_PERSONS = "<resource-persons>"
-'''
-Styles (paragraph styles) used for agenda items.
-headings styles
 
-'''
-STYLE_MEETING_TYPE = "MeetingType"
-STYLE_BRING = "Bring"
-STYLE_READ = "Read"
-STYLE_NOTES = "Notes"
-'''
-names styles
-'''
-STYLE_CALLED_BY = "CalledBy"
-STYLE_FACILITATOR = "Facilitator"
-STYLE_PARTICIPANTS = "Attendees"
-STYLE_NOTETAKER = "Notetaker"
-STYLE_TIMEKEEPER = "Timekeeper"
-STYLE_OBSERVERS = "Observers"
-STYLE_RESOURCE_PERSONS = "ResourcePersons"
-'''
-Styles (paragraph styles) used for the <b>text</b> of agenda items
-The agenda wizard creates fill-in fields with the given styles...)
-
-headings fields styles
-'''
-STYLE_MEETING_TYPE_TEXT = "MeetingTypeText"
-STYLE_BRING_TEXT = "BringText"
-STYLE_READ_TEXT = "ReadText"
-STYLE_NOTES_TEXT = "NotesText"
-'''
-names field styles
-'''
-STYLE_CALLED_BY_TEXT = "CalledByText"
-STYLE_FACILITATOR_TEXT = "FacilitatorText"
-STYLE_PARTICIPANTS_TEXT = "AttendeesText"
-STYLE_NOTETAKER_TEXT = "NotetakerText"
-STYLE_TIMEKEEPER_TEXT = "TimekeeperText"
-STYLE_OBSERVERS_TEXT = "ObserversText"
-STYLE_RESOURCE_PERSONS_TEXT = "ResourcePersonsText"
 '''
 Fillins for the topic table.
 These strings will be searched inside the topic table as

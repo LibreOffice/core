@@ -214,67 +214,67 @@ class AgendaTemplate(TextDocument):
         # Headings
         AgendaTemplate.itemsCache[FILLIN_MEETING_TYPE] = AgendaItem(
             FILLIN_MEETING_TYPE,
-            TextElement (self.resources.itemMeetingType, STYLE_MEETING_TYPE),
-            PlaceholderElement(STYLE_MEETING_TYPE_TEXT,
+            TextElement (self.resources.itemMeetingType),
+            PlaceholderElement(
                 self.resources.reschkMeetingTitle_value,
                 self.resources.resPlaceHolderHint, self.xMSF))
         AgendaTemplate.itemsCache[FILLIN_BRING] = AgendaItem(
-            FILLIN_BRING, TextElement (self.resources.itemBring, STYLE_BRING),
-            PlaceholderElement (STYLE_BRING_TEXT,
+            FILLIN_BRING, TextElement (self.resources.itemBring),
+            PlaceholderElement (
                 self.resources.reschkBring_value,
                 self.resources.resPlaceHolderHint,  self.xMSF))
         AgendaTemplate.itemsCache[FILLIN_READ] = AgendaItem (
-            FILLIN_READ, TextElement (self.resources.itemRead, STYLE_READ),
-            PlaceholderElement (STYLE_READ_TEXT,
+            FILLIN_READ, TextElement (self.resources.itemRead),
+            PlaceholderElement (
                 self.resources.reschkRead_value,
                 self.resources.resPlaceHolderHint,  self.xMSF))
         AgendaTemplate.itemsCache[FILLIN_NOTES] = AgendaItem (
-            FILLIN_NOTES, TextElement (self.resources.itemNote, STYLE_NOTES),
-            PlaceholderElement (STYLE_NOTES_TEXT,
+            FILLIN_NOTES, TextElement (self.resources.itemNote),
+            PlaceholderElement (
                 self.resources.reschkNotes_value,
                 self.resources.resPlaceHolderHint,  self.xMSF))
 
         # Names
         AgendaTemplate.itemsCache[FILLIN_CALLED_BY] = AgendaItem(
             FILLIN_CALLED_BY,
-            TextElement (self.resources.itemCalledBy, STYLE_CALLED_BY),
-            PlaceholderElement (STYLE_CALLED_BY_TEXT,
+            TextElement (self.resources.itemCalledBy),
+            PlaceholderElement (
                 self.resources.reschkConvenedBy_value,
                 self.resources.resPlaceHolderHint,  self.xMSF))
         AgendaTemplate.itemsCache[FILLIN_FACILITATOR] = AgendaItem(
             FILLIN_FACILITATOR,
-            TextElement (self.resources.itemFacilitator, STYLE_FACILITATOR),
-            PlaceholderElement (STYLE_FACILITATOR_TEXT,
+            TextElement (self.resources.itemFacilitator),
+            PlaceholderElement (
                 self.resources.reschkPresiding_value,
                 self.resources.resPlaceHolderHint,  self.xMSF))
         AgendaTemplate.itemsCache[FILLIN_PARTICIPANTS] = AgendaItem(
             FILLIN_PARTICIPANTS,
-            TextElement (self.resources.itemAttendees, STYLE_PARTICIPANTS),
-            PlaceholderElement(STYLE_PARTICIPANTS_TEXT,
+            TextElement (self.resources.itemAttendees),
+            PlaceholderElement(
                 self.resources.reschkAttendees_value,
                 self.resources.resPlaceHolderHint,  self.xMSF))
         AgendaTemplate.itemsCache[FILLIN_NOTETAKER] = AgendaItem(
             FILLIN_NOTETAKER,
-            TextElement(self.resources.itemNotetaker, STYLE_NOTETAKER),
-            PlaceholderElement(STYLE_NOTETAKER_TEXT,
+            TextElement(self.resources.itemNotetaker),
+            PlaceholderElement(
                 self.resources.reschkNoteTaker_value,
                 self.resources.resPlaceHolderHint,  self.xMSF))
         AgendaTemplate.itemsCache[FILLIN_TIMEKEEPER] = AgendaItem(
             FILLIN_TIMEKEEPER,
-            TextElement (self.resources.itemTimekeeper, STYLE_TIMEKEEPER),
-            PlaceholderElement(STYLE_TIMEKEEPER_TEXT,
+            TextElement (self.resources.itemTimekeeper),
+            PlaceholderElement(
                 self.resources.reschkTimekeeper_value,
                 self.resources.resPlaceHolderHint,  self.xMSF))
         AgendaTemplate.itemsCache[FILLIN_OBSERVERS] = AgendaItem(
             FILLIN_OBSERVERS,
-            TextElement(self.resources.itemObservers, STYLE_OBSERVERS),
-            PlaceholderElement(STYLE_OBSERVERS_TEXT,
+            TextElement(self.resources.itemObservers),
+            PlaceholderElement(
                 self.resources.reschkObservers_value,
                 self.resources.resPlaceHolderHint,  self.xMSF))
         AgendaTemplate.itemsCache[FILLIN_RESOURCE_PERSONS] = AgendaItem(
             FILLIN_RESOURCE_PERSONS,
-            TextElement(self.resources.itemResource, STYLE_RESOURCE_PERSONS),
-            PlaceholderElement(STYLE_RESOURCE_PERSONS_TEXT,
+            TextElement(self.resources.itemResource),
+            PlaceholderElement(
                 self.resources.reschkResourcePersons_value,
                 self.resources.resPlaceHolderHint,  self.xMSF))
 
@@ -1178,47 +1178,18 @@ class Topics(object):
                 cursor.goRight(1, False)
 
 '''
-TODO To change the template for this generated type comment go to
-Window - Preferences - Java - Code Style - Code Templates
-'''
-class ParaStyled(object):
-
-    def __init__(self, paraStyle_):
-        self.paraStyle = paraStyle_
-
-    def format(self, textRange):
-        if textRange is None:
-            textRange = textRange.Text
-
-        cursor = textRange.createTextCursorByRange(textRange)
-        Helper.setUnoPropertyValue(
-            cursor, "ParaStyleName", self.paraStyle)
-
-    def write(self, textRange):
-        self.format(textRange)
-
-'''
 A basic implementation of AgendaElement:
 writes a String to the given XText/XTextRange, and applies
 a ParaStyle to it (using the parent class).
 @author rp143992
 '''
-class TextElement(ParaStyled):
+class TextElement(object):
 
-    def __init__(self, text_, paraStyle_=None):
-        if paraStyle_ is None:
-            self.text = text_.String
-            paraStyle_ = Helper.getUnoPropertyValue(
-                text_.Start, "ParaStyleName")
-        else:
-            self.text = text_
-
-        super(TextElement,self).__init__(paraStyle_)
+    def __init__(self, text_):
+        self.text = text_
 
     def write(self, textRange):
         textRange.String = self.text
-        if not self.text == "":
-           super(TextElement,self).write(textRange)
 
 '''
 A Text element which, if the text to write is empty (null or "")
@@ -1252,10 +1223,9 @@ it using a ParaStyleName.
 @author rp143992
 '''
 
-class PlaceholderElement(ParaStyled):
+class PlaceholderElement(object):
 
-    def __init__(self, paraStyle, placeHolderText_, hint_,  xmsf_):
-        super(PlaceholderElement,self).__init__(paraStyle)
+    def __init__(self, placeHolderText_, hint_,  xmsf_):
         self.placeHolderText = placeHolderText_
         self.hint = hint_
         self.xmsf =  xmsf_
@@ -1266,7 +1236,6 @@ class PlaceholderElement(ParaStyled):
                 AgendaTemplate.document, self.placeHolderText, self.hint)
             textRange.Text.insertTextContent(
                 textRange.Start, xTextContent, True)
-            super(PlaceholderElement,self).write(textRange)
         except Exception, ex:
             traceback.print_exc()
 
@@ -1276,9 +1245,6 @@ gets as a parameter a table cursor, and writes
 a text to the cell marked by this table cursor, and
 a place holder to the next cell.
 @author rp143992
-
-TODO To change the template for this generated type comment go to
-Window - Preferences - Java - Code Style - Code Templates
 '''
 
 class AgendaItem(object):
