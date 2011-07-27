@@ -127,6 +127,7 @@ clean:
 	. ./Env.Host.sh && \
 	rm -rf */$$INPATH && \
 	rm -rf solver/*/$$INPATH && \
+	rm -rf workdir && \
 	rm -rf install
 ifeq (@BUILD_DMAKE@,YES)
 	. ./Env.Host.sh && \

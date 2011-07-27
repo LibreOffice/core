@@ -29,7 +29,8 @@
 /*/unxios?.pro
 /*/unxand?
 /*/unxand?.pro
-/solver/*
+/workdir
+/solver
 /instsetoo_native/util/LibreOffice
 /instsetoo_native/util/LibreOffice_SDK
 
