@@ -73,6 +73,7 @@
 #define EmfPlusRecordTypeSave 16421
 #define EmfPlusRecordTypeSetWorldTransform 16426
 #define EmfPlusRecordTypeResetWorldTransform 16427
+#define EmfPlusRecordTypeMultiplyWorldTransform 16428
 #define EmfPlusRecordTypeSetPageTransform 16432
 #define EmfPlusRecordTypeSetClipPath 16435
 #define EmfPlusRecordTypeSetClipRegion 16436
@@ -1491,6 +1492,28 @@ namespace cppcanvas
                     EMFP_DEBUG (printf ("EMF+ ResetWorldTransform\n"));
                     aWorldTransform.SetIdentity ();
                     break;
+                case EmfPlusRecordTypeMultiplyWorldTransform: {
+                    EMFP_DEBUG (printf ("EMF+ MultiplyWorldTransform\n"));
+                    XForm transform;
+                    rMF >> transform;
+
+                    EMFP_DEBUG (printf ("EMF+\tmatrix m11: %f m12: %f\nEMF+\tm21: %f m22: %f\nEMF+\tdx: %f dy: %f\n",
+                            transform.eM11, transform.eM12,
+                            transform.eM21, transform.eM22,
+                            transform.eDx, transform.eDy));
+
+                    if (flags & 0x2000)  // post multiply
+                        aWorldTransform.Multiply (transform);
+                    else {               // pre multiply
+                        transform.Multiply (aWorldTransform);
+                        aWorldTransform.Set (transform);
+                    }
+                    EMFP_DEBUG (printf ("EMF+\tresult world matrix m11: %f m12: %f\nEMF+\tm21: %f m22: %f\nEMF+\tdx: %f dy: %f\n",
+                            aWorldTransform.eM11, aWorldTransform.eM12,
+                            aWorldTransform.eM21, aWorldTransform.eM22,
+                            aWorldTransform.eDx, aWorldTransform.eDy));
+                    break;
+                }
                 case EmfPlusRecordTypeSetClipPath:
                     {
                         EMFP_DEBUG (printf ("EMF+ SetClipPath\n"));
