@@ -384,6 +384,7 @@ class AgendaWizardDialogImpl(AgendaWizardDialog):
         self.running = False
 
     def finishWizard(self):
+        self.switchToStep(self.getCurrentStep(), self.nMaxStep)
         bSaveSuccess = False
         endWizard = True
         try:
