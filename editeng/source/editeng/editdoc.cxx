@@ -841,8 +841,8 @@ void ContentNode::ExpandAttribs( sal_uInt16 nIndex, sal_uInt16 nNew, SfxItemPool
         pWrongList->TextInserted( nIndex, nNew, bSep );
     }
 
-#ifdef EDITDEBUG
-    DBG_ASSERT( CheckOrderedList( aCharAttribList.GetAttribs(), sal_True ), "Expand: Start List distorted" );
+#if OSL_DEBUG_LEVEL > 2
+    OSL_ENSURE( CheckOrderedList( aCharAttribList.GetAttribs(), sal_True ), "Expand: Start List distorted" );
 #endif
 }
 
@@ -929,8 +929,8 @@ void ContentNode::CollapsAttribs( sal_uInt16 nIndex, sal_uInt16 nDeleted, SfxIte
     if ( pWrongList )
         pWrongList->TextDeleted( nIndex, nDeleted );
 
-#ifdef EDITDEBUG
-    DBG_ASSERT( CheckOrderedList( aCharAttribList.GetAttribs(), sal_True ), "Collaps: Start list distorted" );
+#if OSL_DEBUG_LEVEL > 2
+    OSL_ENSURE( CheckOrderedList( aCharAttribList.GetAttribs(), sal_True ), "Collaps: Start list distorted" );
 #endif
 }
 
@@ -991,8 +991,8 @@ void ContentNode::AppendAttribs( ContentNode* pNextNode )
 
     sal_uInt16 nNewStart = Len();
 
-#ifdef EDITDEBUG
-    DBG_ASSERT( aCharAttribList.DbgCheckAttribs(), "Attribute before AppendAttribs broken" );
+#if OSL_DEBUG_LEVEL > 2
+    OSL_ENSURE( aCharAttribList.DbgCheckAttribs(), "Attribute before AppendAttribs broken" );
 #endif
 
     sal_uInt16 nAttr = 0;
@@ -1038,8 +1038,8 @@ void ContentNode::AppendAttribs( ContentNode* pNextNode )
     // For the Attributes that just moved over:
     pNextNode->GetCharAttribs().Clear();
 
-#ifdef EDITDEBUG
-    DBG_ASSERT( aCharAttribList.DbgCheckAttribs(), "Attribute after AppendAttribs broken" );
+#if OSL_DEBUG_LEVEL > 2
+    OSL_ENSURE( aCharAttribList.DbgCheckAttribs(), "Attribute after AppendAttribs broken" );
 #endif
 }
 

@@ -39,10 +39,6 @@ ENABLE_EXCEPTIONS=TRUE
 
 # --- General ----------------------------------------------------------
 
-.IF "$(editdebug)" != "" || "$(EDITDEBUG)" != ""
-CDEFS+=-DEDITDEBUG
-.ENDIF
-
 SLOFILES =	\
             $(SLO)$/textconv.obj \
             $(SLO)$/editattr.obj \

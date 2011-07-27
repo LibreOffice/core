@@ -41,12 +41,6 @@ $(eval $(call gb_Library_add_defs,editeng,\
     -DEDITENG_DLLIMPLEMENTATION \
 ))
 
-ifneq ($(strip $(EDITDEBUG)),)
-$(eval $(call gb_Library_add_defs,editeng,\
-    -DEDITDEBUG \
-))
-endif
-
 $(eval $(call gb_Library_add_api,editeng,\
 	udkapi \
 	offapi \

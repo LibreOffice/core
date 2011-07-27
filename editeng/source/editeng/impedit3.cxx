@@ -2347,8 +2347,8 @@ void ImpEditEngine::CreateTextPortions( ParaPortion* pParaPortion, sal_uInt16& r
     }
 
     DBG_ASSERT( pParaPortion->GetTextPortions().Count(), "No Portions?!" );
-#ifdef EDITDEBUG
-    DBG_ASSERT( pParaPortion->DbgCheckTextPortions(), "Portion is broken?" );
+#if OSL_DEBUG_LEVEL > 2
+    OSL_ENSURE( pParaPortion->DbgCheckTextPortions(), "Portion is broken?" );
 #endif
 }
 
@@ -2463,8 +2463,8 @@ void ImpEditEngine::RecalcTextPortion( ParaPortion* pParaPortion, sal_uInt16 nSt
             delete pTP;
         }
     }
-#ifdef EDITDEBUG
-    DBG_ASSERT( pParaPortion->DbgCheckTextPortions(), "Portions are broken?" );
+#if OSL_DEBUG_LEVEL > 2
+    OSL_ENSURE( pParaPortion->DbgCheckTextPortions(), "Portions are broken?" );
 #endif
 }
 
@@ -2956,7 +2956,7 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRec, Point aSta
                                     bDrawFrame = sal_True;
                                 }
 
-#ifdef EDITDEBUG
+#if OSL_DEBUG_LEVEL > 2
                                 if ( pTextPortion->GetKind() == PORTIONKIND_HYPHENATOR )
                                 {
                                     aTmpFont.SetFillColor( COL_LIGHTGRAY );

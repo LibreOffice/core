@@ -2239,7 +2239,7 @@ EditSelection ImpEditEngine::ImpMoveParagraphs( Range aOldPositions, sal_uInt16 
 
     aTmpPortionList.Remove( 0, aTmpPortionList.Count() );   // important !
 
-#ifdef EDITDEBUG
+#if OSL_DEBUG_LEVEL > 2
     GetParaPortions().DbgCheck(aEditDoc);
 #endif
     return aSelection;

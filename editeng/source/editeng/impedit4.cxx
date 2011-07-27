@@ -159,7 +159,7 @@ EditPaM ImpEditEngine::ReadXML( SvStream& rInput, EditSelection aSel )
 
 EditPaM ImpEditEngine::ReadRTF( SvStream& rInput, EditSelection aSel )
 {
-#if defined (EDITDEBUG) && !defined( UNX )
+#if (OSL_DEBUG_LEVEL > 2) && !defined( UNX )
     SvFileStream aRTFOut( String( RTL_CONSTASCII_USTRINGPARAM ( "d:\\rtf_in.rtf" ) ), STREAM_WRITE );
     aRTFOut << rInput;
     aRTFOut.Close();
@@ -690,7 +690,7 @@ sal_uInt32 ImpEditEngine::WriteRTF( SvStream& rOutput, EditSelection aSel )
     rOutput << "}}";    // 1xparentheses paragraphs, 1xparentheses RTF document
     rOutput.Flush();
 
-#if defined (EDITDEBUG) && !defined( UNX )
+#if (OSL_DEBUG_LEVEL > 2) && !defined( UNX )
     {
         SvFileStream aStream( String( RTL_CONSTASCII_USTRINGPARAM ( "d:\\rtf_out.rtf" ) ), STREAM_WRITE|STREAM_TRUNC );
         sal_uLong nP = rOutput.Tell();
