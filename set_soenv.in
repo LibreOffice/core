@@ -1645,7 +1645,10 @@ if ( $platform =~ m/darwin/ && $platform !~ m/^arm/)
 # unless you want to do runtime checks for 10.5 api, you also want to use the 10.4 sdk
 # (safer/easier than dealing with the MAC_OS_X_VERSION_MAX_ALLOWED macro)
 # http://developer.apple.com/technotes/tn2002/tn2064.html
-    ToFile( "MACOSX_DEPLOYMENT_TARGET",       "10.4",       "e" );
+    ToFile( "MACOSX_DEPLOYMENT_TARGET",       "@MACOSX_DEPLOYMENT_TARGET@",       "e" );
+    ToFile( "MACOSX_SDK_PATH",                "@MACOSX_SDK_PATH@",                "e" );
+    ToFile( "MAC_OS_X_VERSION_MIN_REQUIRED",  "@MAC_OS_X_VERSION_MIN_REQUIRED@", "e" );
+    ToFile( "MAC_OS_X_VERSION_MAX_ALLOWED",   "@MAC_OS_X_VERSION_MAX_ALLOWED@",  "e" );
 }
 
 #
