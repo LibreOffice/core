@@ -56,6 +56,7 @@ my_components = \
     component/canvas/source/simplecanvas/simplecanvas \
     component/canvas/source/vcl/vclcanvas \
     component/comphelper/util/comphelp \
+	component/cppcanvas/source/uno/mtfrenderer \
     component/cui/util/cui \
     component/dbaccess/source/ext/macromigration/dbmm \
     component/dbaccess/source/filter/xml/dbaxml \
