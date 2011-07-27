@@ -45,6 +45,7 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
 	adabas \
 	adabasui \
 	agg \
+	animcore \
 	basebmp \
 	canvastools \
 	forui \

@@ -33,7 +33,7 @@ File gid_File_Lib_Placeware
 End
 
 File gid_File_Lib_Animcore
-	Name = SPECIAL_NAME(animcore);
+	Name = LIBNAME(animcore);
 	PACKED_LIB_FILE_BODY;
 End
 
