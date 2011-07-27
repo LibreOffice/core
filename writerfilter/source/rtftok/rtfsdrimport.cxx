@@ -116,12 +116,12 @@ void RTFSdrImport::resolve(RTFShape& rShape)
         else if (i->first.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("wzName")))
         {
             RTFValue::Pointer_t pValue(new RTFValue(i->second));
-            m_rImport.getState().aCharacterAttributes.push_back(make_pair(NS_ooxml::LN_CT_NonVisualDrawingProps_name, pValue));
+            m_rImport.getState().aCharacterAttributes->push_back(make_pair(NS_ooxml::LN_CT_NonVisualDrawingProps_name, pValue));
         }
         else if (i->first.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("wzDescription")))
         {
             RTFValue::Pointer_t pValue(new RTFValue(i->second));
-            m_rImport.getState().aCharacterAttributes.push_back(make_pair(NS_ooxml::LN_CT_NonVisualDrawingProps_descr, pValue));
+            m_rImport.getState().aCharacterAttributes->push_back(make_pair(NS_ooxml::LN_CT_NonVisualDrawingProps_descr, pValue));
         }
         else if (i->first.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("pib")))
         {

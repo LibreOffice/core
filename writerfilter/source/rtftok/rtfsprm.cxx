@@ -96,31 +96,39 @@ std::string RTFSprm::toString() const
     return aBuf.makeStringAndClear().getStr();
 }
 
-RTFValue::Pointer_t RTFSprm::find(RTFSprms_t &rVector, Id nKeyword)
+RTFValue::Pointer_t RTFSprm::find(RTFSprms &rVector, Id nKeyword)
 {
-    for (RTFSprms_t::iterator i = rVector.begin(); i != rVector.end(); ++i)
+    for (RTFSprms::Iterator_t i = rVector->begin(); i != rVector->end(); ++i)
         if (i->first == nKeyword)
             return i->second;
     RTFValue::Pointer_t pValue;
     return pValue;
 }
 
-void RTFSprm::erase(RTFSprms_t &rVector, Id nKeyword)
+void RTFSprm::erase(RTFSprms &rVector, Id nKeyword)
 {
-    for (RTFSprms_t::iterator i = rVector.begin(); i != rVector.end(); ++i)
+    for (RTFSprms::Iterator_t i = rVector->begin(); i != rVector->end(); ++i)
         if (i->first == nKeyword)
         {
-            rVector.erase(i);
+            rVector->erase(i);
             return;
         }
 }
 
-RTFSprms_t RTFSprm::Clone(RTFSprms_t& rVector)
+RTFSprms::RTFSprms()
+    : m_aSprms()
 {
-    RTFSprms_t aRet;
-    for (RTFSprms_t::iterator i = rVector.begin(); i != rVector.end(); ++i)
-        aRet.push_back(std::make_pair(i->first, RTFValue::Pointer_t(i->second->Clone())));
-    return aRet;
+}
+
+RTFSprms::RTFSprms(const RTFSprms& rSprms)
+{
+    for (std::vector< std::pair<Id, RTFValue::Pointer_t> >::const_iterator i = rSprms.m_aSprms.begin(); i != rSprms.m_aSprms.end(); ++i)
+        m_aSprms.push_back(std::make_pair(i->first, RTFValue::Pointer_t(i->second->Clone())));
+}
+
+std::vector< std::pair<Id, RTFValue::Pointer_t> >* RTFSprms::operator->()
+{
+    return &m_aSprms;
 }
 
 } // namespace rtftok

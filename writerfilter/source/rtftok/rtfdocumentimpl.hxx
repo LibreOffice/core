@@ -180,31 +180,29 @@ namespace writerfilter {
         {
             public:
                 RTFParserState();
-                /// Does a deep copy of the state data.
-                RTFParserState Clone();
                 RTFInternalState nInternalState;
                 RTFDesitnationState nDestinationState;
                 RTFBorderState nBorderState;
                 // font table, stylesheet table
-                RTFSprms_t aTableSprms;
-                RTFSprms_t aTableAttributes;
+                RTFSprms aTableSprms;
+                RTFSprms aTableAttributes;
                 // reset by plain
-                RTFSprms_t aCharacterSprms;
-                RTFSprms_t aCharacterAttributes;
+                RTFSprms aCharacterSprms;
+                RTFSprms aCharacterAttributes;
                 // reset by pard
-                RTFSprms_t aParagraphSprms;
-                RTFSprms_t aParagraphAttributes;
+                RTFSprms aParagraphSprms;
+                RTFSprms aParagraphAttributes;
                 // reset by sectd
-                RTFSprms_t aSectionSprms;
-                RTFSprms_t aSectionAttributes;
+                RTFSprms aSectionSprms;
+                RTFSprms aSectionAttributes;
                 // reset by trowd
-                RTFSprms_t aTableRowSprms;
-                RTFSprms_t aTableRowAttributes;
+                RTFSprms aTableRowSprms;
+                RTFSprms aTableRowAttributes;
                 // reset by cellx
-                RTFSprms_t aTableCellSprms;
-                RTFSprms_t aTableCellAttributes;
+                RTFSprms aTableCellSprms;
+                RTFSprms aTableCellAttributes;
                 // reset by tx
-                RTFSprms_t aTabAttributes;
+                RTFSprms aTabAttributes;
 
                 RTFColorTableEntry aCurrentColor;
 
@@ -218,7 +216,7 @@ namespace writerfilter {
                 /// Next list level index to use when parsing list table.
                 int nListLevelNum;
                 /// List level entries, which will form a list entry later.
-                RTFSprms_t aListLevelEntries;
+                RTFSprms aListLevelEntries;
 
                 /// List of character positions in leveltext to replace.
                 std::vector<sal_Int32> aLevelNumbers;
@@ -290,8 +288,8 @@ namespace writerfilter {
                 SvStream& Strm();
                 sal_uInt32 getColorTable(sal_uInt32 nIndex);
                 sal_uInt32 getEncodingTable(sal_uInt32 nFontIndex);
-                RTFSprms_t mergeSprms();
-                RTFSprms_t mergeAttributes();
+                RTFSprms mergeSprms();
+                RTFSprms mergeAttributes();
                 void resetSprms();
                 void resetAttributes();
                 void resolveSubstream(sal_uInt32 nPos, Id nId);
@@ -329,9 +327,9 @@ namespace writerfilter {
                 /// If paragraph properties should be emitted on next run.
                 bool m_bNeedPap;
                 /// The list table and list override table combined.
-                RTFSprms_t m_aListTableSprms;
+                RTFSprms m_aListTableSprms;
                 /// The settings table.
-                RTFSprms_t m_aSettingsTableSprms;
+                RTFSprms m_aSettingsTableSprms;
 
                 oox::StorageRef m_xStorage;
                 oox::GraphicHelper* m_pGraphicHelper;
@@ -361,12 +359,12 @@ namespace writerfilter {
                 /// Text from special destinations.
                 rtl::OUStringBuffer m_aDestinationText;
 
-                RTFSprms_t m_aFormfieldSprms;
-                RTFSprms_t m_aFormfieldAttributes;
+                RTFSprms m_aFormfieldSprms;
+                RTFSprms m_aFormfieldAttributes;
                 RTFFormFieldTypes m_nFormFieldType;
 
-                RTFSprms_t m_aObjectSprms;
-                RTFSprms_t m_aObjectAttributes;
+                RTFSprms m_aObjectSprms;
+                RTFSprms m_aObjectAttributes;
                 /// If we are in an object group.
                 bool m_bObject;
                 /// Contents of the objdata group, stored here so we can delete it when we leave the object group.
