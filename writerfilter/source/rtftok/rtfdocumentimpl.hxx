@@ -180,6 +180,8 @@ namespace writerfilter {
         {
             public:
                 RTFParserState();
+                /// Does a deep copy of the state data.
+                RTFParserState Clone();
                 RTFInternalState nInternalState;
                 RTFDesitnationState nDestinationState;
                 RTFBorderState nBorderState;

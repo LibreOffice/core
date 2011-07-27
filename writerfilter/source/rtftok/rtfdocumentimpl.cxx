@@ -2275,9 +2275,9 @@ int RTFDocumentImpl::pushState()
     m_nGroupStartPos = Strm().Tell();
     RTFParserState aState;
     if (m_aStates.empty())
-        aState = m_aDefaultState;
+        aState = m_aDefaultState.Clone();
     else
-        aState = m_aStates.top();
+        aState = m_aStates.top().Clone();
     m_aStates.push(aState);
 
     m_nGroup++;
@@ -2786,6 +2786,26 @@ RTFParserState::RTFParserState()
     nHour(0),
     nMinute(0)
 {
+}
+
+RTFParserState RTFParserState::Clone()
+{
+    RTFParserState aRet(*this);
+    aRet.aTableSprms = RTFSprm::Clone(aTableSprms);
+    aRet.aTableAttributes = RTFSprm::Clone(aTableAttributes);
+    aRet.aCharacterSprms = RTFSprm::Clone(aCharacterSprms);
+    aRet.aCharacterAttributes = RTFSprm::Clone(aCharacterAttributes);
+    aRet.aParagraphSprms = RTFSprm::Clone(aParagraphSprms);
+    aRet.aParagraphAttributes = RTFSprm::Clone(aParagraphAttributes);
+    aRet.aSectionSprms = RTFSprm::Clone(aSectionSprms);
+    aRet.aSectionAttributes = RTFSprm::Clone(aSectionAttributes);
+    aRet.aTableRowSprms = RTFSprm::Clone(aTableRowSprms);
+    aRet.aTableRowAttributes = RTFSprm::Clone(aTableRowAttributes);
+    aRet.aTableCellSprms = RTFSprm::Clone(aTableCellSprms);
+    aRet.aTableCellAttributes = RTFSprm::Clone(aTableCellAttributes);
+    aRet.aTabAttributes = RTFSprm::Clone(aTabAttributes);
+    aRet.aListLevelEntries = RTFSprm::Clone(aListLevelEntries);
+    return aRet;
 }
 
 RTFColorTableEntry::RTFColorTableEntry()
