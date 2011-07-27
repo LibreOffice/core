@@ -428,7 +428,6 @@ InsCapOptArr::Insert(InsCaptionOpt* const&, unsigned short&)
 InsCapOptArr::Insert(InsCaptionOpt* const*, unsigned short)
 InsCapOptArr::Remove(InsCaptionOpt* const&, unsigned short)
 InsCapOptArr::Remove(unsigned short, unsigned short)
-InternalResMgr::GetBitmapStream(unsigned int)
 IntlWrapper::ImplNewCalendar() const
 IntlWrapper::ImplNewCharClass() const
 ItemList::FindAttrib(unsigned short)
@@ -1094,9 +1093,6 @@ SfxApplication::GetStatusIndicator() const
 SfxApplication::InitializeDde()
 SfxApplication::LeaveAsynchronCall_Impl()
 SfxApplication::Main()
-SfxApplication::SaveAll_Impl(unsigned char, unsigned char)
-SfxBaseModel::impl_change()
-SfxBaseModel::impl_getObjectShell() const
 SfxBasicManagerHolder::isAnyContainerModified() const
 SfxBindings::ExecuteGlobal_Impl(unsigned short)
 SfxBindings::GetPopupAction_Impl() const
@@ -1122,8 +1118,6 @@ SfxDispatcher::SetModalMode_Impl(unsigned char)
 SfxDispatcher::_Execute(SfxSlotServer const&)
 SfxDocInfoEditDlg::SfxDocInfoEditDlg(Window*)
 SfxDocTemplate_Impl::GetTemplates(ucbhelper::Content&, ucbhelper::Content&, RegionData_Impl*)
-SfxDockingWindow::GetSplitWindow_Impl() const
-SfxDockingWindow::IsPinned_Impl() const
 SfxDockingWrapper::GetChildWindowId()
 SfxDocumentTemplateDlg::GetTemplatePath()
 SfxDocumentTemplateDlg::NewTemplate(String const&)
@@ -1150,14 +1144,12 @@ SfxFrame::PositionWindow_Impl(Rectangle const&) const
 SfxFrame::SetDescriptor(SfxFrameDescriptor*)
 SfxFrame::SetWorkWindow_Impl(SfxWorkWindow*)
 SfxFrameDescriptor::CheckContent() const
-SfxFrameDescriptor::CompareOriginal(SfxFrameDescriptor&) const
 SfxFrameDescriptor::GetItemPos() const
 SfxFrameDescriptor::GetSize() const
 SfxFrameDescriptor::GetWallpaper() const
 SfxFrameDescriptor::GetWinBits() const
 SfxFrameDescriptor::SetURL(INetURLObject const&)
 SfxFrameDescriptor::TakeProperties(SfxFrameProperties const&)
-SfxFrameDescriptor::UnifyContent(unsigned char)
 SfxFrameHTMLWriter::CreateURL(SfxFrame*)
 SfxFrameProperties::SfxFrameProperties(SfxFrameDescriptor const*)
 SfxFrameWindow_Impl::LinkStubCloserHdl(void*, void*)
@@ -1191,7 +1183,6 @@ SfxMailModel::GetCount() const
 SfxMailModel::MakeValueList(std::vector<String*, std::allocator<String*> >*, String&)
 SfxMedium::Exists(unsigned char)
 SfxMedium::GetCharset()
-SfxMedium::GetDataAvailableLink() const
 SfxMedium::GetDoneLink() const
 SfxMedium::GetHdl()
 SfxMedium::GetReferer() const
@@ -1206,8 +1197,6 @@ SfxMenuControl::RemovePopup()
 SfxMenuControl::SetOwnMenu(SfxVirtualMenu*)
 SfxMenuManager::Construct_Impl(Menu*, unsigned char)
 SfxMenuManager::UseDefault()
-SfxMiniRecordReader::ScanRecordType(SvStream*)
-SfxMiniRecordReader::SfxMiniRecordReader(SvStream*)
 SfxModelessDialog::SfxModelessDialog(SfxBindings*, SfxChildWindow*, Window*, long)
 SfxModule::IsActive() const
 SfxModule::RegisterChildWindowContext(unsigned short, SfxChildWinContextFactory*)
@@ -1523,7 +1512,6 @@ SvXMLUnitConverter::clearUndefinedChars(rtl::OUString&, rtl::OUString const&)
 SvXMLUnitConverter::convertAny(com::sun::star::uno::Any&, rtl::OUString const&, rtl::OUString const&)
 SvXMLUnitConverter::convertEnum(rtl::OUStringBuffer&, unsigned short, SvXMLEnumStringMapEntry const*, char*)
 SvXMLUnitConverter::convertNumber64(rtl::OUStringBuffer&, long)
-SvXMLUnitConverter::initXMLStrings()
 SvXPropEvListener::GetKeyCode() const
 SvXPropertyComboBox::SvXPropertyComboBox(Window*, ResId const&)
 SvXPropertyEdit::SvXPropertyEdit(Window*, ResId const&)
