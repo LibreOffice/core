@@ -1951,8 +1951,6 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
                 replayBuffer(m_aTableBuffer);
 
                 // Reset cell properties.
-                RTFSprms::Pointer_t pTableCellSprms(new RTFSprms(m_aStates.top().aTableCellSprms));
-                RTFSprms::Pointer_t pTableCellAttributes(new RTFSprms(m_aStates.top().aTableCellAttributes));
                 m_aStates.top().aTableCellSprms = m_aDefaultState.aTableCellSprms;
                 m_aStates.top().aTableCellAttributes = m_aDefaultState.aTableCellAttributes;
             }
