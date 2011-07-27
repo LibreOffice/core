@@ -270,7 +270,11 @@ RTFDocumentImpl::RTFDocumentImpl(uno::Reference<uno::XComponentContext> const& x
     m_aObjectSprms(),
     m_aObjectAttributes(),
     m_bObject(false),
-    m_pObjectData(0)
+    m_pObjectData(0),
+    m_aFontTableEntries(),
+    m_nCurrentFontIndex(0),
+    m_aStyleTableEntries(),
+    m_nCurrentStyleIndex(0)
 {
     OSL_ASSERT(xInputStream.is());
     m_pInStream = utl::UcbStreamHelper::CreateStream(xInputStream, sal_True);
@@ -1670,7 +1674,7 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
     {
         case RTF_F:
             if (m_aStates.top().nDestinationState == DESTINATION_FONTENTRY)
-                m_aStates.top().nCurrentFontIndex = nParam;
+                m_nCurrentFontIndex = nParam;
             else
             {
                 m_aStates.top().aCharacterSprms.push_back(make_pair(NS_sprm::LN_CRgFtc0, pIntValue));
@@ -1699,7 +1703,7 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
                 if (i == nRTFEncodings)
                     // not found
                     return 0;
-                m_aFontEncodings[m_aStates.top().nCurrentFontIndex] = rtl_getTextEncodingFromWindowsCodePage(aRTFEncodings[i].codepage);
+                m_aFontEncodings[m_nCurrentFontIndex] = rtl_getTextEncodingFromWindowsCodePage(aRTFEncodings[i].codepage);
             }
             break;
         case RTF_CF:
@@ -1711,7 +1715,7 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
         case RTF_S:
             if (m_aStates.top().nDestinationState == DESTINATION_STYLEENTRY)
             {
-                m_aStates.top().nCurrentStyleIndex = nParam;
+                m_nCurrentStyleIndex = nParam;
                 m_aStates.top().aTableAttributes.push_back(make_pair(NS_rtf::LN_ISTD, pIntValue));
             }
             else
@@ -1720,7 +1724,7 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
         case RTF_CS:
             if (m_aStates.top().nDestinationState == DESTINATION_STYLEENTRY)
             {
-                m_aStates.top().nCurrentStyleIndex = nParam;
+                m_nCurrentStyleIndex = nParam;
                 m_aStates.top().aTableAttributes.push_back(make_pair(NS_rtf::LN_ISTD, pIntValue));
                 RTFValue::Pointer_t pValue(new RTFValue(2));
                 m_aStates.top().aTableAttributes.push_back(make_pair(NS_rtf::LN_SGC, pValue)); // character style
@@ -2300,12 +2304,12 @@ int RTFDocumentImpl::popState()
 
     if (m_aStates.top().nDestinationState == DESTINATION_FONTTABLE)
     {
-        writerfilter::Reference<Table>::Pointer_t const pTable(new RTFReferenceTable(m_aStates.top().aFontTableEntries));
+        writerfilter::Reference<Table>::Pointer_t const pTable(new RTFReferenceTable(m_aFontTableEntries));
         Mapper().table(NS_rtf::LN_FONTTABLE, pTable);
     }
     else if (m_aStates.top().nDestinationState == DESTINATION_STYLESHEET)
     {
-        writerfilter::Reference<Table>::Pointer_t const pTable(new RTFReferenceTable(m_aStates.top().aStyleTableEntries));
+        writerfilter::Reference<Table>::Pointer_t const pTable(new RTFReferenceTable(m_aStyleTableEntries));
         Mapper().table(NS_rtf::LN_STYLESHEET, pTable);
     }
     else if (m_aStates.top().nDestinationState == DESTINATION_LISTOVERRIDETABLE)
@@ -2326,7 +2330,7 @@ int RTFDocumentImpl::popState()
         writerfilter::Reference<Properties>::Pointer_t const pProp(
                 new RTFReferenceProperties(m_aStates.top().aTableAttributes, m_aStates.top().aTableSprms)
                 );
-        aEntry.first = m_aStates.top().nCurrentFontIndex;
+        aEntry.first = m_nCurrentFontIndex;
         aEntry.second = pProp;
     }
     else if (m_aStates.top().nDestinationState == DESTINATION_STYLEENTRY)
@@ -2338,7 +2342,7 @@ int RTFDocumentImpl::popState()
         writerfilter::Reference<Properties>::Pointer_t const pProp(
                 new RTFReferenceProperties(mergeAttributes(), mergeSprms())
                 );
-        aEntry.first = m_aStates.top().nCurrentStyleIndex;
+        aEntry.first = m_nCurrentStyleIndex;
         aEntry.second = pProp;
     }
     else if (m_aStates.top().nDestinationState == DESTINATION_LISTENTRY)
@@ -2643,9 +2647,9 @@ int RTFDocumentImpl::popState()
     m_nGroup--;
 
     if (bFontEntryEnd)
-        m_aStates.top().aFontTableEntries.insert(make_pair(aEntry.first, aEntry.second));
+        m_aFontTableEntries.insert(make_pair(aEntry.first, aEntry.second));
     else if (bStyleEntryEnd)
-        m_aStates.top().aStyleTableEntries.insert(make_pair(aEntry.first, aEntry.second));
+        m_aStyleTableEntries.insert(make_pair(aEntry.first, aEntry.second));
     // list table
     else if (bListEntryEnd)
     {
@@ -2742,11 +2746,7 @@ RTFParserState::RTFParserState()
     aTableCellSprms(),
     aTableCellAttributes(),
     aTabAttributes(),
-    aFontTableEntries(),
-    nCurrentFontIndex(0),
     aCurrentColor(),
-    aStyleTableEntries(),
-    nCurrentStyleIndex(0),
     nCurrentEncoding(0),
     nUc(1),
     nCharsToSkip(0),

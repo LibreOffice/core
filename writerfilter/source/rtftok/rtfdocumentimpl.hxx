@@ -204,13 +204,7 @@ namespace writerfilter {
                 // reset by tx
                 RTFSprms_t aTabAttributes;
 
-                RTFReferenceTable::Entries_t aFontTableEntries;
-                int nCurrentFontIndex;
-
                 RTFColorTableEntry aCurrentColor;
-
-                RTFReferenceTable::Entries_t aStyleTableEntries;
-                int nCurrentStyleIndex;
 
                 rtl_TextEncoding nCurrentEncoding;
 
@@ -373,6 +367,13 @@ namespace writerfilter {
                 bool m_bObject;
                 /// Contents of the objdata group, stored here so we can delete it when we leave the object group.
                 SvStream* m_pObjectData;
+
+                RTFReferenceTable::Entries_t m_aFontTableEntries;
+                int m_nCurrentFontIndex;
+
+                RTFReferenceTable::Entries_t m_aStyleTableEntries;
+                int m_nCurrentStyleIndex;
+
         };
     } // namespace rtftok
 } // namespace writerfilter
