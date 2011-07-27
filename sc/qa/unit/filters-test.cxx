@@ -83,9 +83,7 @@ public:
     void testODSs();
 
     CPPUNIT_TEST_SUITE(FiltersTest);
-#if !defined(__OpenBSD__)
     CPPUNIT_TEST(testCVEs);
-#endif
     CPPUNIT_TEST(testODSs);
     CPPUNIT_TEST_SUITE_END();
 
