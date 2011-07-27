@@ -56,7 +56,15 @@ CONFIGURE_ACTION=config
 CONFIGURE_FLAGS=-I$(SYSBASE)$/usr$/include -L$(SYSBASE)$/usr$/lib shared no-idea
 
 BUILD_DIR=.
-BUILD_ACTION=make CC='$(CC)'
+
+COMPILER_AND_FLAGS=$(CC)
+#See fdo#35404 If we're only interested in getting a .a (i.e. not windows) then
+#force everything, when possible, as hidden symbols
+.IF "$(OS)" != "WNT" && "$(HAVE_GCC_VISIBILITY_FEATURE)" == "TRUE"
+COMPILER_AND_FLAGS+=-fvisibility=hidden
+.ENDIF
+
+BUILD_ACTION=make build_libs CC='$(COMPILER_AND_FLAGS)'
 
 OUT2LIB = libssl.*
 OUT2LIB += libcrypto.*
