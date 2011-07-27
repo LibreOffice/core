@@ -33,7 +33,7 @@ File gid_File_Lib_MtfRenderer
     RegistryID = gid_Starregistry_Services_Rdb;
     Dir = SCP2_OOO_BIN_DIR;
   #ifdef UNX
-    Name = STRING(CONCAT2(libmtfrenderer.uno,UNXSUFFIX));
+    Name = STRING(CONCAT2(mtfrenderer.uno,UNXSUFFIX));
   #else
     Name = "mtfrenderer.uno.dll";
   #endif
