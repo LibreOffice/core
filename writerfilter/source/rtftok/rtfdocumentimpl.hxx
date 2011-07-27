@@ -290,6 +290,8 @@ namespace writerfilter {
                 sal_uInt32 getEncodingTable(sal_uInt32 nFontIndex);
                 RTFSprms_t mergeSprms();
                 RTFSprms_t mergeAttributes();
+                void resetSprms();
+                void resetAttributes();
                 void resolveSubstream(sal_uInt32 nPos, Id nId);
                 void resolveSubstream(sal_uInt32 nPos, Id nId, rtl::OUString& rIgnoreFirst);
 

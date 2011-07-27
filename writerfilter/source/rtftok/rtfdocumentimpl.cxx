@@ -669,12 +669,60 @@ void RTFDocumentImpl::text(OUString& rString)
     bool bRet = true;
     switch (m_aStates.top().nDestinationState)
     {
+        case DESTINATION_FONTTABLE:
         case DESTINATION_FONTENTRY:
+        case DESTINATION_STYLESHEET:
         case DESTINATION_STYLEENTRY:
+        case DESTINATION_REVISIONTABLE:
         case DESTINATION_REVISIONENTRY:
-            // drop the ; at the end if it's there
-            if (rString.endsWithAsciiL(";", 1))
-                rString = rString.copy(0, rString.getLength() - 1);
+            {
+                // ; is the end of the entry
+                bool bEnd = false;
+                if (rString.endsWithAsciiL(";", 1))
+                {
+                    rString = rString.copy(0, rString.getLength() - 1);
+                    bEnd = true;
+                }
+                m_aDestinationText.append(rString);
+                if (bEnd)
+                {
+                    switch (m_aStates.top().nDestinationState)
+                    {
+                        case DESTINATION_FONTTABLE:
+                        case DESTINATION_FONTENTRY:
+                            {
+                                RTFValue::Pointer_t pValue(new RTFValue(m_aDestinationText.makeStringAndClear()));
+                                m_aStates.top().aTableAttributes.push_back(make_pair(NS_rtf::LN_XSZFFN, pValue));
+
+                                writerfilter::Reference<Properties>::Pointer_t const pProp(
+                                        new RTFReferenceProperties(m_aStates.top().aTableAttributes, m_aStates.top().aTableSprms)
+                                        );
+                                m_aFontTableEntries.insert(make_pair(m_nCurrentFontIndex, pProp));
+                            }
+                            break;
+                        case DESTINATION_STYLESHEET:
+                        case DESTINATION_STYLEENTRY:
+                            {
+                                RTFValue::Pointer_t pValue(new RTFValue(m_aDestinationText.makeStringAndClear()));
+                                m_aStates.top().aTableAttributes.push_back(make_pair(NS_rtf::LN_XSTZNAME1, pValue));
+
+                                writerfilter::Reference<Properties>::Pointer_t const pProp(
+                                        new RTFReferenceProperties(mergeAttributes(), mergeSprms())
+                                        );
+                                m_aStyleTableEntries.insert(make_pair(m_nCurrentStyleIndex, pProp));
+                            }
+                            break;
+                        case DESTINATION_REVISIONTABLE:
+                        case DESTINATION_REVISIONENTRY:
+                            m_aAuthors[m_aAuthors.size()] = m_aDestinationText.makeStringAndClear();
+                            break;
+                        default: break;
+                    }
+                    resetAttributes();
+                    resetSprms();
+                }
+            }
+            break;
         case DESTINATION_LEVELTEXT:
         case DESTINATION_SHAPEPROPERTYNAME:
         case DESTINATION_SHAPEPROPERTYVALUE:
@@ -1673,7 +1721,7 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
     switch (nKeyword)
     {
         case RTF_F:
-            if (m_aStates.top().nDestinationState == DESTINATION_FONTENTRY)
+            if (m_aStates.top().nDestinationState == DESTINATION_FONTTABLE || m_aStates.top().nDestinationState == DESTINATION_FONTENTRY)
                 m_nCurrentFontIndex = nParam;
             else
             {
@@ -1713,7 +1761,7 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
             }
             break;
         case RTF_S:
-            if (m_aStates.top().nDestinationState == DESTINATION_STYLEENTRY)
+            if (m_aStates.top().nDestinationState == DESTINATION_STYLESHEET || m_aStates.top().nDestinationState == DESTINATION_STYLEENTRY)
             {
                 m_nCurrentStyleIndex = nParam;
                 m_aStates.top().aTableAttributes.push_back(make_pair(NS_rtf::LN_ISTD, pIntValue));
@@ -1722,7 +1770,7 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
                 m_aStates.top().aParagraphAttributes.push_back(make_pair(NS_rtf::LN_ISTD, pIntValue));
             break;
         case RTF_CS:
-            if (m_aStates.top().nDestinationState == DESTINATION_STYLEENTRY)
+            if (m_aStates.top().nDestinationState == DESTINATION_STYLESHEET)
             {
                 m_nCurrentStyleIndex = nParam;
                 m_aStates.top().aTableAttributes.push_back(make_pair(NS_rtf::LN_ISTD, pIntValue));
@@ -2270,6 +2318,13 @@ RTFSprms_t RTFDocumentImpl::mergeSprms()
     return aSprms;
 }
 
+void RTFDocumentImpl::resetSprms()
+{
+    m_aStates.top().aTableSprms.clear();
+    m_aStates.top().aCharacterSprms.clear();
+    m_aStates.top().aParagraphSprms.clear();
+}
+
 RTFSprms_t RTFDocumentImpl::mergeAttributes()
 {
     RTFSprms_t aAttributes;
@@ -2283,6 +2338,13 @@ RTFSprms_t RTFDocumentImpl::mergeAttributes()
             i != m_aStates.top().aParagraphAttributes.end(); ++i)
         aAttributes.push_back(make_pair(i->first, i->second));
     return aAttributes;
+}
+
+void RTFDocumentImpl::resetAttributes()
+{
+    m_aStates.top().aTableAttributes.clear();
+    m_aStates.top().aCharacterAttributes.clear();
+    m_aStates.top().aParagraphAttributes.clear();
 }
 
 int RTFDocumentImpl::popState()
@@ -2317,26 +2379,6 @@ int RTFDocumentImpl::popState()
         aListTableEntries.insert(make_pair(0, pProp));
         writerfilter::Reference<Table>::Pointer_t const pTable(new RTFReferenceTable(aListTableEntries));
         Mapper().table(NS_rtf::LN_LISTTABLE, pTable);
-    }
-    else if (m_aStates.top().nDestinationState == DESTINATION_FONTENTRY)
-    {
-        RTFValue::Pointer_t pValue(new RTFValue(m_aDestinationText.makeStringAndClear()));
-        m_aStates.top().aTableAttributes.push_back(make_pair(NS_rtf::LN_XSZFFN, pValue));
-
-        writerfilter::Reference<Properties>::Pointer_t const pProp(
-                new RTFReferenceProperties(m_aStates.top().aTableAttributes, m_aStates.top().aTableSprms)
-                );
-        m_aFontTableEntries.insert(make_pair(m_nCurrentFontIndex, pProp));
-    }
-    else if (m_aStates.top().nDestinationState == DESTINATION_STYLEENTRY)
-    {
-        RTFValue::Pointer_t pValue(new RTFValue(m_aDestinationText.makeStringAndClear()));
-        m_aStates.top().aTableAttributes.push_back(make_pair(NS_rtf::LN_XSTZNAME1, pValue));
-
-        writerfilter::Reference<Properties>::Pointer_t const pProp(
-                new RTFReferenceProperties(mergeAttributes(), mergeSprms())
-                );
-        m_aStyleTableEntries.insert(make_pair(m_nCurrentStyleIndex, pProp));
     }
     else if (m_aStates.top().nDestinationState == DESTINATION_LISTENTRY)
     {
@@ -2437,8 +2479,6 @@ int RTFDocumentImpl::popState()
         if (!m_bObject)
             m_pSdrImport->resolve(m_aStates.top().aShape);
     }
-    else if (m_aStates.top().nDestinationState == DESTINATION_REVISIONENTRY)
-        m_aAuthors[m_aAuthors.size()] = m_aDestinationText.makeStringAndClear();
     else if (m_aStates.top().nDestinationState == DESTINATION_BOOKMARKSTART)
     {
         OUString aStr = m_aDestinationText.makeStringAndClear();
