@@ -1883,13 +1883,11 @@ void ScDocument::CopyToClip(const ScClipParam& rClipParam,
     ScRange aClipRange = rClipParam.getWholeRange();
     SCTAB nTab = aClipRange.aStart.Tab();
     SCTAB i = 0;
-    SCTAB nEndTab =  static_cast<SCTAB>(maTabs.size());
 
     if ( bUseRangeForVBA )
     {
         pClipDoc->ResetClip( this, nTab );
         i = nTab;
-        nEndTab = nTab;
     }
     else
         pClipDoc->ResetClip(this, pMarks);
