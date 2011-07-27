@@ -28,7 +28,8 @@
 $(eval $(call gb_Module_Module,ooo))
 
 $(eval $(call gb_Module_add_moduledirs,ooo,\
-	animations \
+    animations \
+    basctl \
     chart2 \
     comphelper \
     cui \
@@ -46,6 +47,8 @@ $(eval $(call gb_Module_add_moduledirs,ooo,\
     oox \
     padmin \
     sc \
+    scaddins \
+    sccomp \
     sd \
     sfx2 \
     slideshow \
