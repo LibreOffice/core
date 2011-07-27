@@ -41,13 +41,13 @@ GTK_TWO_FOUR=$(shell @+-$(PKG_CONFIG) --exists 'gtk+-2.0 >= 2.4.0' && echo YES)
 my_components = \
     abp \
     analysis \
-    animcore \
     avmedia \
     basctl \
     basprov \
     bib \
     cached1 \
     calc \
+    component/animations/source/animcore/animcore \
     component/chart2/source/controller/chartcontroller \
     component/chart2/source/model/chartmodel \
     component/chart2/source/tools/charttools \
