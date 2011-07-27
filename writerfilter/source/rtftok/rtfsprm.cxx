@@ -96,21 +96,21 @@ std::string RTFSprm::toString() const
     return aBuf.makeStringAndClear().getStr();
 }
 
-RTFValue::Pointer_t RTFSprm::find(RTFSprms &rVector, Id nKeyword)
+RTFValue::Pointer_t RTFSprms::find(Id nKeyword)
 {
-    for (RTFSprms::Iterator_t i = rVector->begin(); i != rVector->end(); ++i)
+    for (RTFSprms::Iterator_t i = m_aSprms.begin(); i != m_aSprms.end(); ++i)
         if (i->first == nKeyword)
             return i->second;
     RTFValue::Pointer_t pValue;
     return pValue;
 }
 
-void RTFSprm::erase(RTFSprms &rVector, Id nKeyword)
+void RTFSprms::erase(Id nKeyword)
 {
-    for (RTFSprms::Iterator_t i = rVector->begin(); i != rVector->end(); ++i)
+    for (RTFSprms::Iterator_t i = m_aSprms.begin(); i != m_aSprms.end(); ++i)
         if (i->first == nKeyword)
         {
-            rVector->erase(i);
+            m_aSprms.erase(i);
             return;
         }
 }

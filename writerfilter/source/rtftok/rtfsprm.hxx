@@ -44,6 +44,8 @@ namespace writerfilter {
                 RTFSprms();
                 RTFSprms(const RTFSprms& rSprms);
                 std::vector< std::pair<Id, RTFValue::Pointer_t> >* operator->();
+                RTFValue::Pointer_t find(Id nKeyword);
+                void erase(Id nKeyword);
             private:
                 std::vector< std::pair<Id, RTFValue::Pointer_t> > m_aSprms;
         };
@@ -62,8 +64,6 @@ namespace writerfilter {
                 virtual Kind getKind();
                 virtual std::string getName() const;
                 virtual std::string toString() const;
-                static RTFValue::Pointer_t find(RTFSprms& rVector, Id nKeyword);
-                static void erase(RTFSprms& rVector, Id nKeyword);
             private:
                 Id m_nKeyword;
                 RTFValue::Pointer_t& m_pValue;

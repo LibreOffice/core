@@ -68,14 +68,14 @@ namespace rtftok {
 static RTFSprms& lcl_getNumPr(std::stack<RTFParserState>& aStates)
 {
     // insert the numpr sprm if necessary
-    RTFValue::Pointer_t p = RTFSprm::find(aStates.top().aParagraphSprms, NS_ooxml::LN_CT_PPrBase_numPr);
+    RTFValue::Pointer_t p = aStates.top().aParagraphSprms.find(NS_ooxml::LN_CT_PPrBase_numPr);
     if (!p.get())
     {
         RTFSprms aAttributes;
         RTFSprms aSprms;
         RTFValue::Pointer_t pValue(new RTFValue(aAttributes, aSprms));
         aStates.top().aParagraphSprms->push_back(make_pair(NS_ooxml::LN_CT_PPrBase_numPr, pValue));
-        p = RTFSprm::find(aStates.top().aParagraphSprms, NS_ooxml::LN_CT_PPrBase_numPr);
+        p = aStates.top().aParagraphSprms.find(NS_ooxml::LN_CT_PPrBase_numPr);
     }
     return p->getSprms();
 }
@@ -93,7 +93,7 @@ static Id lcl_getParagraphBorder(sal_uInt32 nIndex)
 static void lcl_putNestedAttribute(RTFSprms& rSprms, Id nParent, Id nId, RTFValue::Pointer_t pValue,
         bool bOverwrite = false, bool bAttribute = true)
 {
-    RTFValue::Pointer_t pParent = RTFSprm::find(rSprms, nParent);
+    RTFValue::Pointer_t pParent = rSprms.find(nParent);
     if (!pParent.get())
     {
         RTFSprms aAttributes;
@@ -119,7 +119,7 @@ static void lcl_putNestedSprm(RTFSprms& rSprms, Id nParent, Id nId, RTFValue::Po
 
 static RTFSprms& lcl_getLastAttributes(RTFSprms& rSprms, Id nId)
 {
-    RTFValue::Pointer_t p = RTFSprm::find(rSprms, nId);
+    RTFValue::Pointer_t p = rSprms.find(nId);
     if (p.get() && p->getSprms()->size())
         return p->getSprms()->back().second->getAttributes();
     else
@@ -134,7 +134,7 @@ static void lcl_putBorderProperty(std::stack<RTFParserState>& aStates, Id nId, R
     if (aStates.top().nBorderState == BORDER_PARAGRAPH)
         for (int i = 0; i < 4; i++)
         {
-            RTFValue::Pointer_t p = RTFSprm::find(aStates.top().aParagraphSprms, lcl_getParagraphBorder(i));
+            RTFValue::Pointer_t p = aStates.top().aParagraphSprms.find(lcl_getParagraphBorder(i));
             if (p.get())
             {
                 RTFSprms& rAttributes = p->getAttributes();
@@ -410,10 +410,10 @@ void RTFDocumentImpl::sectBreak(bool bFinal = false)
         resolveSubstream(aPair.second, aPair.first);
     }
 
-    RTFValue::Pointer_t pBreak = RTFSprm::find(m_aStates.top().aSectionSprms, NS_sprm::LN_SBkc);
+    RTFValue::Pointer_t pBreak = m_aStates.top().aSectionSprms.find(NS_sprm::LN_SBkc);
     // In case the last section is a continous one, we don't need to output a section break.
     if (bFinal && pBreak.get() && !pBreak->getInt())
-        RTFSprm::erase(m_aStates.top().aSectionSprms, NS_sprm::LN_SBkc);
+        m_aStates.top().aSectionSprms.erase(NS_sprm::LN_SBkc);
 
     // Section properties are a paragraph sprm.
     RTFValue::Pointer_t pValue(new RTFValue(m_aStates.top().aSectionAttributes, m_aStates.top().aSectionSprms));
@@ -2434,8 +2434,8 @@ int RTFDocumentImpl::popState()
     }
     else if (m_aStates.top().nDestinationState == DESTINATION_LEVELNUMBERS)
     {
-        RTFSprms& rAttributes = RTFSprm::find(m_aStates.top().aTableSprms, NS_ooxml::LN_CT_Lvl_lvlText)->getAttributes();
-        RTFValue::Pointer_t pValue = RTFSprm::find(rAttributes, NS_ooxml::LN_CT_LevelText_val);
+        RTFSprms& rAttributes = m_aStates.top().aTableSprms.find(NS_ooxml::LN_CT_Lvl_lvlText)->getAttributes();
+        RTFValue::Pointer_t pValue = rAttributes.find(NS_ooxml::LN_CT_LevelText_val);
         OUString aOrig = pValue->getString();
 
         OUStringBuffer aBuf;
@@ -2624,7 +2624,7 @@ int RTFDocumentImpl::popState()
         aObjSprms->push_back(make_pair(NS_ooxml::LN_object, pValue));
         writerfilter::Reference<Properties>::Pointer_t const pProperties(new RTFReferenceProperties(aObjAttributes, aObjSprms));
         uno::Reference<drawing::XShape> xShape;
-        RTFValue::Pointer_t pShape = RTFSprm::find(m_aObjectAttributes, NS_ooxml::LN_shape);
+        RTFValue::Pointer_t pShape = m_aObjectAttributes.find(NS_ooxml::LN_shape);
         OSL_ASSERT(pShape.get());
         if (pShape.get())
             pShape->getAny() >>= xShape;
@@ -2654,7 +2654,7 @@ int RTFDocumentImpl::popState()
         m_aAuthor = m_aDestinationText.makeStringAndClear();
 
     // See if we need to end a track change
-    RTFValue::Pointer_t pTrackchange = RTFSprm::find(m_aStates.top().aCharacterSprms, NS_ooxml::LN_trackchange);
+    RTFValue::Pointer_t pTrackchange = m_aStates.top().aCharacterSprms.find(NS_ooxml::LN_trackchange);
     if (pTrackchange.get())
     {
         RTFSprms aTCAttributes;
