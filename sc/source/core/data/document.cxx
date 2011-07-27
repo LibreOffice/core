@@ -1896,7 +1896,7 @@ void ScDocument::CopyToClip(const ScClipParam& rClipParam,
 
     CopyRangeNamesToClip(pClipDoc, aClipRange, pMarks, bAllTabs);
 
-    for ( ; i < nTab; ++i)
+    for ( ; i < nEndTab; ++i)
     {
         if (!maTabs[i] || i >= static_cast<SCTAB>(pClipDoc->maTabs.size()) || !pClipDoc->maTabs[i])
             continue;
