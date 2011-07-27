@@ -104,7 +104,7 @@ gb_CXXFLAGS := \
 	#-fsigned-char \ might be removed?
 	#-malign-natural \ might be removed?
 
-ifeq($(HAVE_GCC_NO_LONG_DOUBLE),TRUE)
+ifeq ($(HAVE_GCC_NO_LONG_DOUBLE),TRUE)
 gb_CXXFLAGS +:= -Wno-long-double
 endif
 
