@@ -1,0 +1,118 @@
+/*************************************************************************
+*
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+************************************************************************/
+
+
+#include <com/sun/star/uno/XInterface.idl>
+#include <com/sun/star/beans/XPropertySet.idl>
+#include <com/sun/star/sheet/LocalizedName.idl>
+
+module com
+{
+module sun
+{
+module star
+{
+module sheet
+{
+module addin
+{
+    interface XCompatibilityNames  : com::sun::star::uno::XInterface
+    {
+        /// @return a sequence with all localized names for a programmatic name
+        sequence< com::sun::star::sheet::LocalizedName > getCompatibilityNames ( [in] string aProgrammaticName );
+    };
+
+    /**
+     * Interface with date functions.
+     */
+    interface XDateFunctions : com::sun::star::uno::XInterface
+    {
+        /// calculates the number of weeks between two dates.
+        long getDiffWeeks(
+                    [in] com::sun::star::beans::XPropertySet xOptions,
+                    [in] long nStartDate, [in] long nEndDate, [in] long nMode )
+            raises( com::sun::star::lang::IllegalArgumentException );
+
+        /// calculates the number of months between two dates.
+        long getDiffMonths(
+                    [in] com::sun::star::beans::XPropertySet xOptions,
+                    [in] long nStartDate, [in] long nEndDate, [in] long nMode )
+            raises( com::sun::star::lang::IllegalArgumentException );
+
+        /// calculates the number of years between two dates.
+        long getDiffYears(
+                    [in] com::sun::star::beans::XPropertySet xOptions,
+                    [in] long nStartDate, [in] long nEndDate, [in] long nMode )
+            raises( com::sun::star::lang::IllegalArgumentException );
+
+        /// checks if a date is in a leap year.
+        long getIsLeapYear(
+                    [in] com::sun::star::beans::XPropertySet xOptions,
+                    [in] long nDate )
+            raises( com::sun::star::lang::IllegalArgumentException );
+
+        /// calculates the number of days in a month.
+        long getDaysInMonth(
+                    [in] com::sun::star::beans::XPropertySet xOptions,
+                    [in] long nDate )
+            raises( com::sun::star::lang::IllegalArgumentException );
+
+        /// calculates the number of days in a year.
+        long getDaysInYear(
+                    [in] com::sun::star::beans::XPropertySet xOptions,
+                    [in] long nDate )
+            raises( com::sun::star::lang::IllegalArgumentException );
+
+        /// calculates the number of weeks in a year.
+        long getWeeksInYear(
+                    [in] com::sun::star::beans::XPropertySet xOptions,
+                    [in] long nDate )
+            raises( com::sun::star::lang::IllegalArgumentException );
+    };
+
+    /**
+     * Interface with miscellaneous functions.
+     */
+    interface XMiscFunctions : com::sun::star::uno::XInterface
+    {
+        /// Encrypts or decrypts a string using the ROT13 algorithm.
+        string getRot13( [in] string aSrcString )
+            raises( com::sun::star::lang::IllegalArgumentException );
+    };
+
+    service DateFunctions
+    {
+        // exported interfaces:
+        interface XDateFunctions;
+        interface XMiscFunctions;
+    };
+};
+};
+};
+};
+};
+
