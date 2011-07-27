@@ -1,4 +1,3 @@
 scc	sccomp	:    TRANSLATIONS:translations offapi comphelper LPSOLVE:lpsolve tools DESKTOP:rsc LIBXSLT:libxslt NULL
 scc	sccomp									usr1	-	all	scc_mkout NULL
-scc	sccomp\prj								get		-	all	scc_prj NULL
-scc	sccomp\source\solver					nmake	-	all	scc_solver NULL
+scc	sccomp\prj								nmake	-	all	scc_prj NULL
