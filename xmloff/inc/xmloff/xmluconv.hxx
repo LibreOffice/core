@@ -101,11 +101,6 @@ private:
     // #110680#
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > mxServiceFactory;
 
-    SAL_DLLPRIVATE static ::rtl::OUString msXML_false;
-    SAL_DLLPRIVATE static ::rtl::OUString msXML_true;
-
-    SAL_DLLPRIVATE static void initXMLStrings();
-
     SAL_DLLPRIVATE void createNumTypeInfo() const;
 
 public:

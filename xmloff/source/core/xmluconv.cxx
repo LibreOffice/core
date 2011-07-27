@@ -71,18 +71,6 @@ const sal_Int8 XML_MAXDIGITSCOUNT_TIME = 11;
 const sal_Int8 XML_MAXDIGITSCOUNT_DATETIME = 6;
 #define XML_NULLDATE "NullDate"
 
-OUString SvXMLUnitConverter::msXML_true;
-OUString SvXMLUnitConverter::msXML_false;
-
-void SvXMLUnitConverter::initXMLStrings()
-{
-    if( msXML_true.getLength() == 0 )
-    {
-        msXML_true = GetXMLToken(XML_TRUE);
-        msXML_false = GetXMLToken(XML_FALSE);
-    }
-}
-
 void SvXMLUnitConverter::createNumTypeInfo() const
 {
     if( mxServiceFactory.is() )
