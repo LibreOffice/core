@@ -1735,8 +1735,8 @@ if test "$_os" = "Darwin" ; then
         echo "Building with a SDK > 10.4 is experimental" >> warn
         ;;
     10.7)
-        MACOSX_SDK_PATH="/Developer/SDKs/MacOSX10.6.sdk"
-        macosx_sdk_value="1060"
+        MACOSX_SDK_PATH="/Developer/SDKs/MacOSX10.7.sdk"
+        macosx_sdk_value="1070"
         AC_MSG_WARN([Building with a SDK > 10.4 is experimental])
         echo "Building with a SDK > 10.4 is experimental" >> warn
         ;;
@@ -4443,7 +4443,7 @@ if test -n "$with_system_libxslt" -o -n "$with_system_libs" -o \
     SYSTEM_LIBXSLT=YES
     if test "$_os" = "Darwin"; then
         dnl make sure to use SDK path
-        LIBXSLT_CFLAGS="-I/Developer/SDKs/MacOSX10.4u.sdk/usr/include/libxml2"
+        LIBXSLT_CFLAGS="-I$MACOSX_SDK_PATH/usr/include/libxml2"
         dnl omit -L/usr/lib
         LIBXSLT_LIBS="-lxslt -lxml2 -lz -lpthread -liconv -lm"
     else
@@ -4483,7 +4483,7 @@ if test -n "$with_system_libxml" -o -n "$with_system_libs" -o \
     SYSTEM_LIBXML=YES
     if test "$_os" = "Darwin"; then
         dnl make sure to use SDK path
-        LIBXML_CFLAGS="-I/Developer/SDKs/MacOSX10.4u.sdk/usr/include/libxml2"
+        LIBXML_CFLAGS="-I$MACOSX_SDK_PATH/usr/include/libxml2"
         dnl omit -L/usr/lib
         LIBXML_LIBS="-lxml2 -lz -lpthread -liconv -lm"
     elif test $_os = iOS; then
