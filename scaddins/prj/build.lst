@@ -1,4 +1,3 @@
 ca	scaddins	: LIBXSLT:libxslt TRANSLATIONS:translations vcl NULL
 ca	scaddins								usr1	-	all	sc_mkout NULL
-ca	scaddins\source\datefunc				nmake	-	all	sc_dfunc NULL
-ca	scaddins\source\analysis				nmake	-	all	sc_analysis NULL
+ca	scaddins\prj				            nmake	-	all	sc_prj NULL
