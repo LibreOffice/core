@@ -85,6 +85,7 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     lwpft \
     msfilter \
     msword \
+    mtfrenderer \
     qstart_gtk \
     resourcemodel \
     rpt \
