@@ -3193,6 +3193,17 @@ if test "$GCC" = "yes"; then
         AC_MSG_RESULT([no])
     fi
 
+    AC_MSG_CHECKING([whether $CC supports -Wno-long-double])
+    save_CFLAGS=$CFLAGS
+    CFLAGS="$CFLAGS -Werror -Wno-long-double"
+    AC_TRY_LINK([], [ return 0; ], [ HAVE_GCC_NO_LONG_DOUBLE=TRUE ], [])
+    CFLAGS=$save_CFLAGS
+    if test "$HAVE_GCC_NO_LONG_DOUBLE" = "TRUE"; then
+        AC_MSG_RESULT([yes])
+    else
+        AC_MSG_RESULT([no])
+    fi
+
     AC_MSG_CHECKING([whether $CC supports -std=c++0x without Language Defect 757])
     save_CXXFLAGS=$CFLAGS
     CXXFLAGS="$CXXFLAGS -std=c++0x"
@@ -3234,6 +3245,7 @@ return !(i != 0 && j != 0);
 fi
 
 AC_SUBST(HAVE_CXX0X)
+AC_SUBST(HAVE_GCC_NO_LONG_DOUBLE)
 
 # ===================================================================
 # use ccache?
