@@ -115,6 +115,14 @@ void RTFSprm::erase(RTFSprms_t &rVector, Id nKeyword)
         }
 }
 
+RTFSprms_t RTFSprm::Clone(RTFSprms_t& rVector)
+{
+    RTFSprms_t aRet;
+    for (RTFSprms_t::iterator i = rVector.begin(); i != rVector.end(); ++i)
+        aRet.push_back(std::make_pair(i->first, RTFValue::Pointer_t(i->second->Clone())));
+    return aRet;
+}
+
 } // namespace rtftok
 } // namespace writerfilter
 

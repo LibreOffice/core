@@ -175,7 +175,7 @@ std::string RTFValue::toString() const
 
 RTFValue* RTFValue::Clone()
 {
-    return new RTFValue(m_nValue, m_sValue, m_rAttributes, m_rSprms, m_rShape, m_rStream);
+    return new RTFValue(m_nValue, m_sValue, RTFSprm::Clone(m_rAttributes), RTFSprm::Clone(m_rSprms), m_rShape, m_rStream);
 }
 
 RTFSprms_t& RTFValue::getAttributes()
