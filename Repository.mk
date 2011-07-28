@@ -89,6 +89,7 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     lwpft \
     msfilter \
     msword \
+	msworks \
     qstart_gtk \
     resourcemodel \
     rpt \
@@ -133,6 +134,9 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     vclplug_kde \
     vclplug_kde4 \
     vclplug_svp \
+	visioimport \
+	wpft \
+	wpgimport \
     writerfilter \
     xcr \
     xo \
@@ -196,13 +200,16 @@ $(eval $(call gb_Helper_register_libraries,UNOVERLIBS, \
 ))
 
 $(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
+	app \
 	basegfx_s \
     libeay32 \
     ssleay32 \
     ooopathutils \
+	sample \
     salcpprt \
     toolshelpers \
 	vclmain \
+	writerperfect \
 ))
 
 # vim: set noet sw=4 ts=4:

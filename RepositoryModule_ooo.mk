@@ -30,6 +30,7 @@ $(eval $(call gb_Module_Module,ooo))
 $(eval $(call gb_Module_add_moduledirs,ooo,\
     animations \
     basctl \
+    basic \
     chart2 \
     comphelper \
     cui \
@@ -46,6 +47,7 @@ $(eval $(call gb_Module_add_moduledirs,ooo,\
     oovbaapi \
     oox \
     padmin \
+    salhelper \
     sc \
     scaddins \
     sccomp \
@@ -65,6 +67,7 @@ $(eval $(call gb_Module_add_moduledirs,ooo,\
     xmloff \
     vbahelper \
     writerfilter \
+    writerperfect \
 ))
 
 # these have only migrated subsequentcheck for now
