@@ -47,6 +47,7 @@ my_components = \
     calc \
     component/animations/source/animcore/animcore \
     component/basctl/util/basctl \
+    component/basic/util/sb \
     component/chart2/source/controller/chartcontroller \
     component/chart2/source/model/chartmodel \
     component/chart2/source/tools/charttools \
@@ -111,6 +112,10 @@ my_components = \
     component/unoxml/source/service/unoxml \
     component/vbahelper/util/msforms \
     component/writerfilter/util/writerfilter \
+    component/writerperfect/util/msworksfilter \
+    component/writerperfect/util/visiofilter \
+    component/writerperfect/util/wpft \
+    component/writerperfect/util/wpgfilter \
     component/xmloff/source/transform/xof \
     component/xmloff/util/xo \
     component/xmlscript/util/xcr \
@@ -140,7 +145,6 @@ my_components = \
     mcnttype \
     migrationoo2 \
     msfilter \
-    msworksfilter \
     mysql \
     odbc \
     odfflatxml \
@@ -152,7 +156,6 @@ my_components = \
     placeware \
     protocolhandler \
     res \
-    sb \
     scn \
     scriptframe \
     sdbc2 \
@@ -178,9 +181,6 @@ my_components = \
     updchk.uno \
     uui \
     vbaevents \
-    visiofilter \
-    wpft \
-    wpgfilter \
     xmlfa \
     xmlfd \
     xmx \
