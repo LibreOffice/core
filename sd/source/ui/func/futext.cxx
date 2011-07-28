@@ -140,6 +140,7 @@ static sal_Bool bTestText = 0;
 FuText::FuText( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq )
 : FuConstruct(pViewSh, pWin, pView, pDoc, rReq)
 , bFirstObjCreated(sal_False)
+, bJustEndedEdit(false)
 , rRequest (rReq)
 {
 }
@@ -400,6 +401,7 @@ sal_Bool FuText::MouseButtonDown(const MouseEvent& rMEvt)
                             if( mpView->IsTextEdit() )
                             {
                                 mpView->SdrEndTextEdit();
+                                bJustEndedEdit = true;
 
                                 if(aVEvt.pHdl)
                                 {
@@ -682,7 +684,7 @@ sal_Bool FuText::MouseButtonUp(const MouseEvent& rMEvt)
 
         sal_uInt16 nDrgLog = sal_uInt16 ( mpWindow->PixelToLogic(Size(DRGPIX,0)).Width() );
 
-        if ( mpView->IsRotateAllowed() && mpViewShell->GetFrameView()->IsClickChangeRotation() && (rMEvt.GetClicks() != 2) &&
+        if ( mpView->IsRotateAllowed() && mpViewShell->GetFrameView()->IsClickChangeRotation() && (rMEvt.GetClicks() != 2) && !bJustEndedEdit &&
             !rMEvt.IsShift() && !rMEvt.IsMod1() && !rMEvt.IsMod2() && !rMEvt.IsRight() &&
             Abs(aPnt.X() - aMDPos.X()) < nDrgLog &&
             Abs(aPnt.Y() - aMDPos.Y()) < nDrgLog)
@@ -690,6 +692,9 @@ sal_Bool FuText::MouseButtonUp(const MouseEvent& rMEvt)
             // toggle to rotation mode
             mpViewShell->GetViewFrame()->GetDispatcher()->Execute( SID_OBJECT_ROTATE, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD );
         }
+
+        if( bJustEndedEdit )
+            bJustEndedEdit = false;
     }
     else if( mpView && mpView->IsCreateObj() && rMEvt.IsLeft())
     {
