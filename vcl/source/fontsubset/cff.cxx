@@ -453,7 +453,6 @@ public: // TODO: is public really needed?
     void    addHints( bool bVerticalHints);
     int     getHorzHintCount( void) const { return (mnHorzHintSize/2);}
     int     getVertHintCount( void) const { return (mnHintSize-mnHorzHintSize)/2;}
-    void    getHintPair( int nIndex, ValType* nMin, ValType* nEnd) const;
 
     // accessing other charstring specifics
     bool    hasCharWidth( void) const { return (maCharWidth > 0);}
@@ -578,18 +577,6 @@ void CffSubsetterContext::addHints( bool bVerticalHints)
 
     // clear all values from the stack
     mnStackIdx = 0;
-}
-
-// --------------------------------------------------------------------
-
-void CffSubsetterContext::getHintPair( int nIndex, ValType* pMin, ValType* pEnd) const
-{
-    nIndex *= 2;
-    assert( nIndex < mnHintSize);
-    assert( nIndex >= 0);
-    const ValType* pHint = &mnHintStack[ nIndex ];
-    *pMin = pHint[0];
-    *pEnd = pHint[1];
 }
 
 // --------------------------------------------------------------------

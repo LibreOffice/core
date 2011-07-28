@@ -42,14 +42,6 @@
 // - BitmapWriteAccess -
 // ---------------------
 
-void BitmapWriteAccess::SetLineColor()
-{
-    delete mpLineColor;
-    mpLineColor = NULL;
-}
-
-// ------------------------------------------------------------------
-
 void BitmapWriteAccess::SetLineColor( const Color& rColor )
 {
     delete mpLineColor;
@@ -62,28 +54,6 @@ void BitmapWriteAccess::SetLineColor( const Color& rColor )
 
 // ------------------------------------------------------------------
 
-Color BitmapWriteAccess::GetLineColor() const
-{
-    Color aRet;
-
-    if( mpLineColor )
-        aRet = (const Color&) *mpLineColor;
-    else
-        aRet.SetTransparency( 255 );
-
-    return aRet;
-}
-
-// ------------------------------------------------------------------
-
-void BitmapWriteAccess::SetFillColor()
-{
-    delete mpFillColor;
-    mpFillColor = NULL;
-}
-
-// ------------------------------------------------------------------
-
 void BitmapWriteAccess::SetFillColor( const Color& rColor )
 {
     delete mpFillColor;
@@ -92,20 +62,6 @@ void BitmapWriteAccess::SetFillColor( const Color& rColor )
         mpFillColor = NULL;
     else
         mpFillColor = ( HasPalette() ? new BitmapColor(  (sal_uInt8) GetBestPaletteIndex( rColor ) ) : new BitmapColor( rColor ) );
-}
-
-// ------------------------------------------------------------------
-
-Color BitmapWriteAccess::GetFillColor() const
-{
-    Color aRet;
-
-    if( mpFillColor )
-        aRet = (const Color&) *mpFillColor;
-    else
-        aRet.SetTransparency( 255 );
-
-    return aRet;
 }
 
 // ------------------------------------------------------------------
@@ -383,32 +339,6 @@ void BitmapWriteAccess::FillPolyPolygon( const PolyPolygon& rPolyPoly )
                         SetPixel( nY, nX, rFillColor );
 
             aRegion.EndEnumRects( aRegHandle );
-        }
-    }
-}
-
-// ------------------------------------------------------------------
-
-void BitmapWriteAccess::DrawPolyPolygon( const PolyPolygon& rPolyPoly )
-{
-    if( mpFillColor )
-        FillPolyPolygon( rPolyPoly );
-
-    if( mpLineColor && ( !mpFillColor || ( *mpFillColor != *mpLineColor ) ) )
-    {
-        for( sal_uInt16 n = 0, nCount = rPolyPoly.Count(); n < nCount; )
-        {
-            const Polygon&  rPoly = rPolyPoly[ n++ ];
-            const sal_uInt16    nSize = rPoly.GetSize();
-
-            if( nSize )
-            {
-                for( sal_uInt16 i = 0, nSize1 = nSize - 1; i < nSize1; i++ )
-                    DrawLine( rPoly[ i ], rPoly[ i + 1 ] );
-
-                if( rPoly[ nSize - 1 ] != rPoly[ 0 ] )
-                    DrawLine( rPoly[ nSize - 1 ], rPoly[ 0 ] );
-            }
         }
     }
 }

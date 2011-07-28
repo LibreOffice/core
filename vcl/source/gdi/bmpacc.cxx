@@ -301,29 +301,6 @@ void BitmapReadAccess::ImplZeroInitUnusedBits()
 
 // ------------------------------------------------------------------
 
-void BitmapReadAccess::Flush()
-{
-    ImplDestroy();
-}
-
-// ------------------------------------------------------------------
-
-void BitmapReadAccess::ReAccess( sal_Bool bModify )
-{
-    const ImpBitmap* pImpBmp = maBitmap.ImplGetImpBitmap();
-
-    DBG_ASSERT( !mpBuffer, "No ReAccess possible while bitmap is being accessed!" );
-    DBG_ASSERT( pImpBmp && ( pImpBmp->ImplGetRefCount() > 1UL ), "Accessed bitmap does not exist anymore!" );
-
-    if( !mpBuffer && pImpBmp && ( pImpBmp->ImplGetRefCount() > 1UL ) )
-    {
-        mbModify = bModify;
-        ImplCreate( maBitmap );
-    }
-}
-
-// ------------------------------------------------------------------
-
 sal_uInt16 BitmapReadAccess::GetBestPaletteIndex( const BitmapColor& rBitmapColor ) const
 {
     return( HasPalette() ? mpBuffer->maPalette.GetBestIndex( rBitmapColor ) : 0 );

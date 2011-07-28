@@ -878,13 +878,4 @@ void FloatingWindow::AddPopupModeWindow( Window* pWindow )
     mpFirstPopupModeWin = pWindow;
 }
 
-// -----------------------------------------------------------------------
-
-void FloatingWindow::RemovePopupModeWindow( Window* pWindow )
-{
-    // !!! bisher erst 1 Fenster und noch keine Liste
-    if ( mpFirstPopupModeWin == pWindow )
-        mpFirstPopupModeWin = NULL;
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

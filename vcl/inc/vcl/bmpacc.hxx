@@ -128,9 +128,6 @@ SAL_DLLPRIVATE  BitmapBuffer*   ImplGetBitmapBuffer() const { return mpBuffer; }
 protected:
                                 BitmapReadAccess( Bitmap& rBitmap, sal_Bool bModify );
 
-    void                        Flush();
-    void                        ReAccess( sal_Bool bModify );
-
 public:
                                 BitmapReadAccess( Bitmap& rBitmap );
     virtual                     ~BitmapReadAccess();
@@ -194,13 +191,9 @@ public:
 
     inline void                 SetPixel( long nY, long nX, const BitmapColor& rBitmapColor );
 
-    void                        SetLineColor();
     void                        SetLineColor( const Color& rColor );
-    Color                       GetLineColor() const;
 
-    void                        SetFillColor();
     void                        SetFillColor( const Color& rColor );
-    Color                       GetFillColor() const;
 
     void                        Erase( const Color& rColor );
 
@@ -213,7 +206,6 @@ public:
     void                        DrawPolygon( const Polygon& rPoly );
 
     void                        FillPolyPolygon( const PolyPolygon& rPoly );
-    void                        DrawPolyPolygon( const PolyPolygon& rPolyPoly );
 
 private:
 

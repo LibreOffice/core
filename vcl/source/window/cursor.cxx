@@ -380,17 +380,6 @@ void Cursor::SetPos( const Point& rPoint )
 
 // -----------------------------------------------------------------------
 
-void Cursor::SetOffsetY( long nNewOffsetY )
-{
-    if ( mnOffsetY != nNewOffsetY )
-    {
-        mnOffsetY = nNewOffsetY;
-        ImplNew();
-    }
-}
-
-// -----------------------------------------------------------------------
-
 void Cursor::SetSize( const Size& rSize )
 {
     if ( maSize != rSize )
@@ -407,28 +396,6 @@ void Cursor::SetWidth( long nNewWidth )
     if ( maSize.Width() != nNewWidth )
     {
         maSize.Width() = nNewWidth;
-        ImplNew();
-    }
-}
-
-// -----------------------------------------------------------------------
-
-void Cursor::SetHeight( long nNewHeight )
-{
-    if ( maSize.Height() != nNewHeight )
-    {
-        maSize.Height() = nNewHeight;
-        ImplNew();
-    }
-}
-
-// -----------------------------------------------------------------------
-
-void Cursor::SetSlant( long nNewSlant )
-{
-    if ( mnSlant != nNewSlant )
-    {
-        mnSlant = nNewSlant;
         ImplNew();
     }
 }

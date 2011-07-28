@@ -92,17 +92,14 @@ public:
 
     void            SetPos( const Point& rNewPos );
     const Point&    GetPos() const { return maPos; }
-    void            SetOffsetY( long mnOffsetY = 0 );
     long            GetOffsetY() const { return mnOffsetY; }
 
     void            SetSize( const Size& rNewSize );
     const Size&     GetSize() const { return maSize; }
     void            SetWidth( long nNewWidth );
     long            GetWidth() const { return maSize.Width(); }
-    void            SetHeight( long nNewHeight );
     long            GetHeight() const { return maSize.Height(); }
 
-    void            SetSlant( long nSlant = 0 );
     long            GetSlant() const { return mnSlant; }
 
     void            SetOrientation( short nOrientation = 0 );

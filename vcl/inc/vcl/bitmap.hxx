@@ -328,14 +328,12 @@ public:
     inline void             SetPrefSize( const Size& rSize );
 
     Size                    GetSizePixel() const;
-    void                    SetSizePixel( const Size& rNewSize );
 
     /**
      * The pixel size of a bitmap's source (e.g. an image file)
      * and the pixel size of its resulting bitmap can differ,
      * e.g. when the image reader has its preview mode enabled.
      */
-    Size                    GetSourceSizePixel() const;
     void                    SetSourceSizePixel( const Size& );
 
 

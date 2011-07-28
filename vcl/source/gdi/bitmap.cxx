@@ -293,20 +293,6 @@ Size Bitmap::GetSizePixel() const
 }
 // ------------------------------------------------------------------
 
-void Bitmap::SetSizePixel( const Size& rNewSize )
-{
-    Scale( rNewSize );
-}
-
-// ------------------------------------------------------------------
-
-Size Bitmap::GetSourceSizePixel() const
-{
-    return( mpImpBmp ? mpImpBmp->ImplGetSourceSize() : Size() );
-}
-
-// ------------------------------------------------------------------
-
 void Bitmap::SetSourceSizePixel( const Size& rSize)
 {
     if( mpImpBmp )

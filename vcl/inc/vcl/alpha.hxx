@@ -98,10 +98,6 @@ public:
                             {
                                 return Bitmap::GetSizePixel();
                             }
-    void                    SetSizePixel( const Size& rNewSize )
-                            {
-                                Bitmap::SetSizePixel( rNewSize );
-                            }
 
     sal_uLong               GetSizeBytes() const
                             {

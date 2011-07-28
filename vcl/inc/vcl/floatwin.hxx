@@ -142,7 +142,6 @@ public:
     void            StartPopupMode( ToolBox* pBox, sal_uLong nFlags = 0  );
     void            EndPopupMode( sal_uInt16 nFlags = 0 );
     void            AddPopupModeWindow( Window* pWindow );
-    void            RemovePopupModeWindow( Window* pWindow );
     sal_uLong           GetPopupModeFlags() const { return mnPopupModeFlags; }
     void            SetPopupModeFlags( sal_uLong nFlags ) { mnPopupModeFlags = nFlags; }
     sal_Bool            IsInPopupMode() const { return mbPopupMode; }
