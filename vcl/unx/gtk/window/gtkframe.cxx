@@ -630,11 +630,10 @@ void GtkSalFrame::InitCommon()
     m_ePointerStyle     = 0xffff;
     m_bSetFocusOnMap    = false;
 
-#if GTK_CHECK_VERSION(3,0,0)
-    gtk_widget_set_app_paintable( m_pWindow, sal_True );
+    gtk_widget_set_app_paintable( m_pWindow, TRUE );
     gtk_widget_set_double_buffered( m_pWindow, FALSE );
     gtk_widget_set_redraw_on_allocate( m_pWindow, FALSE );
-#endif
+
     gtk_widget_add_events( m_pWindow,
                            GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK |
                            GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK |
@@ -668,7 +667,6 @@ void GtkSalFrame::InitCommon()
     m_aSystemData.pAppContext   = NULL;
     m_aSystemData.aShellWindow  = m_aSystemData.aWindow;
     m_aSystemData.pShellWidget  = m_aSystemData.pWidget;
-
 
     // fake an initial geometry, gets updated via configure event or SetPosSize
     if( m_bDefaultPos || m_bDefaultSize )
@@ -3361,22 +3359,11 @@ gboolean GtkSalFrame::signalConfigure( GtkWidget*, GdkEventConfigure* pEvent, gp
         return sal_False;
 
 
-#if !GTK_CHECK_VERSION(3,0,0)
-    // in child case the coordinates are not root coordinates,
-    // need to transform
-
-    /* #i31785# sadly one cannot really trust the x,y members of the event;
-     * they are e.g. not set correctly on maximize/demaximize; this rather
-     * sounds like a bug in gtk we have to workaround.
+    /* #i31785# claims we cannot trust the x,y members of the event;
+     * they are e.g. not set correctly on maximize/demaximize;
+     * yet the gdkdisplay-x11.c code handling configure_events has
+     * done this XTranslateCoordinates work since the day ~zero.
      */
-    XLIB_Window aChild;
-    XTranslateCoordinates( pThis->getDisplay()->GetDisplay(),
-                           GDK_WINDOW_XWINDOW(widget_get_window(GTK_WIDGET(pThis->m_pWindow))),
-                           pThis->getDisplay()->GetRootWindow( pThis->getDisplay()->GetDefaultScreenNumber() ),
-                           0, 0,
-                           &x, &y,
-                           &aChild );
-
     if( x != pThis->maGeometry.nX || y != pThis->maGeometry.nY )
     {
         bMoved = true;
@@ -3428,7 +3415,6 @@ gboolean GtkSalFrame::signalConfigure( GtkWidget*, GdkEventConfigure* pEvent, gp
     else if( bSized )
         pThis->CallCallback( SALEVENT_RESIZE, NULL );
 
-#endif
     return sal_False;
 }
 
