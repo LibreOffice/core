@@ -305,7 +305,7 @@ void SAL_CALL ParagraphImpl::grabFocus() throw (::css::uno::RuntimeException)
     {
         m_xDocument->changeParagraphSelection(this, 0, 0);
     }
-    catch (::css::lang::IndexOutOfBoundsException & rEx)
+    catch (const ::css::lang::IndexOutOfBoundsException & rEx)
     {
         OSL_TRACE(
             "textwindowaccessibility.cxx: ParagraphImpl::grabFocus:"

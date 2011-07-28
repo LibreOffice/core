@@ -360,7 +360,7 @@ Reference< XAccessibleTable > AccessibleGridControlTable::implGetHeaderBar(
         {
             xRet = xContext->getAccessibleChild( nChildIndex );
         }
-        catch( lang::IndexOutOfBoundsException& )
+        catch (const lang::IndexOutOfBoundsException&)
         {
             OSL_FAIL( "implGetHeaderBar - wrong child index" );
         }
