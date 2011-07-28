@@ -433,30 +433,6 @@ sal_Bool SfxFrame::IsMenuBarOn_Impl() const
     return pImp->bMenuBarOn;
 }
 
-void SfxFrame::PositionWindow_Impl( const Rectangle& rWinArea ) const
-{
-    Window *pWin = pImp->pExternalContainerWindow;
-
-    const Size aAppWindow( pImp->pExternalContainerWindow->GetDesktopRectPixel().GetSize() );
-    Point aPos( rWinArea.TopLeft() );
-    Size aSz( rWinArea.GetSize() );
-    if ( aSz.Width() && aSz.Height() )
-    {
-        aPos.X() = Min(aPos.X(),
-                        long(aAppWindow.Width() - aSz.Width() + aSz.Width() / 2) );
-        aPos.Y() = Min(aPos.Y(),
-                        long( aAppWindow.Height() - aSz.Height() + aSz.Height() / 2) );
-        if ( aPos.X() + aSz.Width() <
-                aAppWindow.Width() + aSz.Width() / 2 &&
-                aPos.Y() + aSz.Height() <
-                aAppWindow.Height() + aSz.Height() / 2 )
-        {
-            pWin->SetPosPixel( aPos );
-            pWin->SetOutputSizePixel( aSz );
-        }
-    }
-}
-
 void SfxFrame::PrepareForDoc_Impl( SfxObjectShell& i_rDoc )
 {
     const ::comphelper::NamedValueCollection aDocumentArgs( i_rDoc.GetModel()->getArgs() );

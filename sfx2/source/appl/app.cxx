@@ -505,25 +505,6 @@ void SfxApplication::SetViewFrame_Impl( SfxViewFrame *pFrame )
         pFrame->GetViewShell()->SetCurrentDocument();
 }
 
-//--------------------------------------------------------------------
-
-short SfxApplication::QuerySave_Impl( SfxObjectShell& rDoc, sal_Bool /*bAutoSave*/ )
-{
-    if ( !rDoc.IsModified() )
-        return RET_NO;
-
-    String aMsg( SfxResId( STR_ISMODIFIED ) );
-    aMsg.SearchAndReplaceAscii( "%1", rDoc.GetTitle() );
-
-    SfxFrame& rFrame = SfxViewFrame::GetFirst(&rDoc)->GetFrame();
-    rFrame.Appear();
-
-    WinBits nBits = WB_YES_NO_CANCEL | WB_DEF_NO;
-    QueryBox aBox( &rFrame.GetWindow(), nBits, aMsg );
-
-    return aBox.Execute();
-}
-
 //---------------------------------------------------------------------
 
 ResMgr* SfxApplication::CreateResManager( const char *pPrefix )

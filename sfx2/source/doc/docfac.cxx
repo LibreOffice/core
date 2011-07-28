@@ -372,19 +372,6 @@ const SfxFilter* SfxObjectFactory::GetTemplateFilter() const
     return pFilter;
 }
 
-void SfxObjectFactory::SetDocumentTypeNameResource( const ResId& rId )
-{
-    DBG_ASSERT( !pImpl->pNameResId, "UI-Name resource set multiple times!" );
-    pImpl->pNameResId = new ResId( rId );
-}
-
-String SfxObjectFactory::GetDocumentTypeName() const
-{
-    if ( pImpl->pNameResId )
-        return String( *pImpl->pNameResId );
-    return String();
-}
-
 void SfxObjectFactory::SetDocumentServiceName( const ::rtl::OUString& rServiceName )
 {
     pImpl->aServiceName = rServiceName;

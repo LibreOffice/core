@@ -195,7 +195,6 @@ public:
     SAL_DLLPRIVATE void ContextChanged_Impl();
     SAL_DLLPRIVATE void Execute_Impl( SfxRequest& rReq, const SfxSlot* pSlot, SfxShell* pShell );
     SAL_DLLPRIVATE void DeleteControllers_Impl();
-    SAL_DLLPRIVATE SfxPopupAction GetPopupAction_Impl() const;
     SAL_DLLPRIVATE SfxDispatcher* GetDispatcher_Impl()  { return pDispatcher; }
     SAL_DLLPRIVATE void ClearCache_Impl( sal_uInt16 nSlotId );
     SAL_DLLPRIVATE sal_Bool IsInUpdate_Impl() const{ return IsInUpdate(); }
@@ -209,7 +208,6 @@ public:
     SAL_DLLPRIVATE void ReleaseUnoController_Impl( SfxUnoControllerItem* );
     SAL_DLLPRIVATE sal_Bool ExecuteCommand_Impl( const String& rCommand );
     SAL_DLLPRIVATE void SetRecorder_Impl( com::sun::star::uno::Reference< com::sun::star::frame::XDispatchRecorder >& );
-    SAL_DLLPRIVATE void ExecuteGlobal_Impl( sal_uInt16 nId );
     SAL_DLLPRIVATE void InvalidateSlotsInMap_Impl();
     SAL_DLLPRIVATE void AddSlotToInvalidateSlotsMap_Impl( sal_uInt16 nId );
 };

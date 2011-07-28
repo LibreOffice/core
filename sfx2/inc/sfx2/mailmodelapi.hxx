@@ -85,7 +85,6 @@ private:
     sal_Bool            mbLoadDone;
 
     void                ClearList( AddressList_Impl* pList );
-    void                MakeValueList( AddressList_Impl* pList, String& rValueList );
     SaveResult          SaveDocumentAsFormat( const rtl::OUString& aSaveFileName,
                                               const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& xFrameOrModel,
                                               const rtl::OUString& rType,

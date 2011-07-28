@@ -345,14 +345,6 @@ void SfxBindings::DeleteControllers_Impl()
 
 //--------------------------------------------------------------------
 
-SfxPopupAction SfxBindings::GetPopupAction_Impl() const
-{
-    return pImp->ePopupAction;
-}
-
-
-//--------------------------------------------------------------------
-
 void SfxBindings::HidePopups( bool bHide )
 {
     // Hide SfxPopupWindows
@@ -1117,12 +1109,6 @@ sal_Bool SfxBindings::Execute( sal_uInt16 nId, const SfxPoolItem** ppItems, sal_
 
     const SfxPoolItem* pRet = Execute_Impl( nId, ppItems, nModi, nCallMode, ppInternalArgs );
     return ( pRet != 0 );
-}
-
-void SfxBindings::ExecuteGlobal_Impl( sal_uInt16 nId )
-{
-    if( nId && pDispatcher )
-        Execute_Impl( nId, NULL, 0, SFX_CALLMODE_ASYNCHRON, NULL, sal_True );
 }
 
 const SfxPoolItem* SfxBindings::Execute_Impl( sal_uInt16 nId, const SfxPoolItem** ppItems, sal_uInt16 nModi, SfxCallMode nCallMode,

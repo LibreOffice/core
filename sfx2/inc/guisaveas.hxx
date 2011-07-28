@@ -96,12 +96,6 @@ public:
                                     ::rtl::OUString aDefUIName,
                                     sal_Bool bCanProceedFurther );
 
-    static void ExecuteFilterDialog( SfxStoringHelper& _rStorageHelper
-                                    ,const ::rtl::OUString& sFilterName
-                                    ,const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& xModel
-                                    ,/*OUT*/::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& rArgsSequence
-                                );
-
     static Window* GetModelWindow( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& xModel );
 
 };

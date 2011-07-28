@@ -86,8 +86,6 @@ public:
     String          GetFactoryURL() const;  // shortcut for "private:factory/GetShortName()"
     String          GetFactoryName() const { return String::CreateFromAscii( pShortName ); }
     String          GetModuleName() const;
-    void            SetDocumentTypeNameResource( const ResId& rId );
-    String          GetDocumentTypeName() const;
     SfxFilterContainer *GetFilterContainer( sal_Bool bForceLoad = sal_True) const;
 
     // Views

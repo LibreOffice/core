@@ -160,20 +160,6 @@ void SfxMailModel::ClearList( AddressList_Impl* pList )
     }
 }
 
-void SfxMailModel::MakeValueList( AddressList_Impl* pList, String& rValueList )
-{
-    rValueList.Erase();
-    if ( pList )
-    {
-        for( size_t i = 0, n = pList->size(); i < n; ++i )
-        {
-            if ( rValueList.Len() > 0 )
-                rValueList += ',';
-            rValueList += *pList->at(i);
-        }
-    }
-}
-
 sal_Bool HasDocumentValidSignature( const css::uno::Reference< css::frame::XModel >& xModel )
 {
     try

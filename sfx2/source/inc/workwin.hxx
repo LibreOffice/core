@@ -120,17 +120,6 @@ struct SfxChild_Impl
     }
 };
 
-//--------------------------------------------------------------------
-class SfxChildWinController_Impl : public SfxControllerItem
-{
-    SfxWorkWindow*  pWorkwin;
-
-    public:
-                    SfxChildWinController_Impl( sal_uInt16 nId, SfxWorkWindow *pWin );
-    virtual void    StateChanged( sal_uInt16 nSID, SfxItemState eState,
-                            const SfxPoolItem* pState );
-};
-
 struct SfxChildWin_Impl
 {
     sal_uInt16                         nSaveId;       // the ChildWindow-Id
