@@ -76,15 +76,6 @@ E3dSphereObj::E3dSphereObj(E3dDefaultAttributes& rDefault, const basegfx::B3DPoi
     aSize = r3DSize;
 }
 
-E3dSphereObj::E3dSphereObj()
-:   E3dCompoundObject()
-{
-    // Set defaults
-    E3dDefaultAttributes aDefault;
-    SetDefaultAttributes(aDefault);
-}
-
-
 // Create Sphere without creating the Polygons within
 
 // This call is from the 3D Object Factory (objfac3d.cxx) and only when loading

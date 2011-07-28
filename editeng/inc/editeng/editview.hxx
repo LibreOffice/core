@@ -181,7 +181,6 @@ public:
     void                RemoveAttribsKeepLanguages( sal_Bool bRemoveParaAttribs = sal_False );
 
     sal_uLong           Read( SvStream& rInput, const String& rBaseURL, EETextFormat eFormat, sal_Bool bSelect = sal_False, SvKeyValueIterator* pHTTPHeaderAttrs = NULL );
-    sal_uLong           Write( SvStream& rOutput, EETextFormat eFormat );
 
     void            SetBackgroundColor( const Color& rColor );
     Color           GetBackgroundColor() const;

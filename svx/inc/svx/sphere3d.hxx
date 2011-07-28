@@ -53,7 +53,6 @@ protected:
 public:
     TYPEINFO();
     E3dSphereObj(E3dDefaultAttributes& rDefault, const basegfx::B3DPoint& rCenter, const basegfx::B3DVector& r3DSize);
-    E3dSphereObj();
 
     // FG: Dieser Konstruktor wird nur von MakeObject aus der 3d-Objectfactory beim
     //     Laden von Dokumenten mit Kugeln aufgerufen. Dieser Konstruktor ruft kein

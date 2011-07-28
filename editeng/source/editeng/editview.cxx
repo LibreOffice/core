@@ -601,15 +601,6 @@ sal_uLong EditView::Read( SvStream& rInput, const String& rBaseURL, EETextFormat
     return rInput.GetError();
 }
 
-sal_uLong EditView::Write( SvStream& rOutput, EETextFormat eFormat )
-{
-    DBG_CHKTHIS( EditView, 0 );
-    DBG_CHKOBJ( pImpEditView->pEditEngine, EditEngine, 0 );
-    PIMPEE->Write( rOutput, eFormat, pImpEditView->GetEditSelection() );
-    ShowCursor();
-    return rOutput.GetError();
-}
-
 void EditView::Cut()
 {
     DBG_CHKTHIS( EditView, 0 );
