@@ -188,6 +188,14 @@ void EditHTMLParser::NextToken( int nToken )
         }
     }
     break;
+    case HTML_RAWDATA:
+        if (IsReadStyle() && aToken.Len())
+        {
+            // Each token represents a single line.
+            maStyleSource.append(aToken);
+            maStyleSource.append(sal_Unicode('\n'));
+        }
+    break;
     case HTML_TEXTTOKEN:
     {
         // #i110937# for <title> content, call aImportHdl (no SkipGroup), but don't insert the text into the EditEngine
@@ -361,6 +369,8 @@ void EditHTMLParser::NextToken( int nToken )
     // globals
     case HTML_HTML_ON:
     case HTML_HTML_OFF:
+    case HTML_STYLE_ON:
+    case HTML_STYLE_OFF:
     case HTML_BODY_ON:
     case HTML_BODY_OFF:
     case HTML_HEAD_ON:
@@ -510,6 +520,8 @@ void EditHTMLParser::NextToken( int nToken )
         aImportInfo.nTokenValue = (short)nTokenValue;
         if ( nToken == HTML_TEXTTOKEN )
             aImportInfo.aText = aToken;
+        else if (nToken == HTML_STYLE_OFF)
+            aImportInfo.aText = maStyleSource.makeStringAndClear();
         pImpEditEngine->aImportHdl.Call( &aImportInfo );
     }
 
