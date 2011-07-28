@@ -545,6 +545,9 @@ protected:
     /// Sfx item RES_KEEP
     virtual void FormatKeep( const SvxFmtKeepItem& ) = 0;
 
+    /// Compute the grid character pitch
+    sal_uInt32 GridCharacterPitch( const SwTextGridItem& rGrid ) const;
+
     /// Sfx item RES_TEXTGRID
     virtual void FormatTextGrid( const SwTextGridItem& ) = 0;
 

@@ -1172,7 +1172,7 @@ void SwRTFParser::ReadShpTxt(String& s)
 }
 
 /*
- * Very basic support for the "Buchhalternase".
+ * Very basic support for the Z-line.
  */
 void SwRTFParser::ReadDrawingObject()
 {
@@ -1184,6 +1184,9 @@ void SwRTFParser::ReadDrawingObject()
     ::basegfx::B2DPoint aPoint;
     bool bPolygonActive(false);
 
+    SwFmtHoriOrient aHori( 0, text::HoriOrientation::NONE, text::RelOrientation::PAGE_FRAME );
+    SwFmtVertOrient aVert( 0, text::VertOrientation::NONE, text::RelOrientation::PAGE_FRAME );
+
     while (level>0 && IsParserWorking())
     {
         nToken = GetNextToken();
@@ -1194,6 +1197,12 @@ void SwRTFParser::ReadDrawingObject()
                 break;
             case '{':
                 level++;
+                break;
+            case RTF_DOBXMARGIN:
+                aHori.SetRelationOrient( text::RelOrientation::PAGE_PRINT_AREA );
+                break;
+            case RTF_DOBYMARGIN:
+                aVert.SetRelationOrient( text::RelOrientation::PAGE_PRINT_AREA );
                 break;
             case RTF_DPX:
                 aRect.setX(nTokenValue);
@@ -1207,6 +1216,7 @@ void SwRTFParser::ReadDrawingObject()
             case RTF_DPYSIZE:
                 aRect.setHeight(nTokenValue);
                 break;
+            case RTF_DPLINE:
             case RTF_DPPOLYCOUNT:
                 bPolygonActive = true;
                 break;
@@ -1243,9 +1253,7 @@ void SwRTFParser::ReadDrawingObject()
         aAnchor.SetAnchor( pPam->GetPoint() );
         aFlySet.Put( aAnchor );
 
-        SwFmtHoriOrient aHori( 0, text::HoriOrientation::NONE, text::RelOrientation::PAGE_FRAME );
         aFlySet.Put( aHori );
-        SwFmtVertOrient aVert( 0, text::VertOrientation::NONE, text::RelOrientation::PAGE_FRAME );
         aFlySet.Put( aVert );
 
         pDoc->GetOrCreateDrawModel();
