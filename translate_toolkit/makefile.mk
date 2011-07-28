@@ -55,15 +55,17 @@ PYTHONPATH:=$(PWD)$/$(BIN):$(SOLARLIBDIR):$(SOLARLIBDIR)$/python:$(SOLARLIBDIR)$
 .ENDIF			# "$(GUI)"=="WNT"
 .EXPORT: PYTHONPATH
 
-.IF "$(SYSTEM_PYTHON)" == "YES"
+# internal python on mac does not yield usable python executable. 
+# use the system one unconditionally
 .IF "$(OS)"=="MACOSX"
 PY_CMD=$(AUGMENT_LIBRARY_PATH) && unset MACOSX_DEPLOYMENT_TARGET && $(WRAPCMD) $(PYTHON)
 .ELSE
+.IF "$(SYSTEM_PYTHON)" == "YES"
 PY_CMD=$(AUGMENT_LIBRARY_PATH) $(WRAPCMD) $(PYTHON)
-.ENDIF
 .ELSE                   # "$(SYSTEM_PYTHON)" == "YES"
 PY_CMD=$(AUGMENT_LIBRARY_PATH) $(WRAPCMD) $(SOLARBINDIR)/python
 .ENDIF                  # "$(SYSTEM_PYTHON)" == "YES"
+.ENDIF                  # "$(OS)"=="MACOSX"
 
 # --- Files --------------------------------------------------------
 
