@@ -159,7 +159,6 @@ static sal_uInt8 aPal8[ 256 * 4 ] =
 };
 
 
-/*  */
 
 
 inline long SwapLong( long n )
