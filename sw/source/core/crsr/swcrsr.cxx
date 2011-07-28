@@ -2097,7 +2097,6 @@ void SwCursor::RestoreSavePos()
 }
 
 
-/*  */
 
 SwTableCursor::SwTableCursor( const SwPosition &rPos, SwPaM* pRing )
     : SwCursor( rPos, pRing, false )

@@ -526,7 +526,6 @@ sal_Bool SwBoxAutoFmt::SaveVerionNo( SvStream& rStream ) const
     return 0 == rStream.GetError();
 }
 
-/*  */
 
 
 SwTableAutoFmt::SwTableAutoFmt( const String& rName )

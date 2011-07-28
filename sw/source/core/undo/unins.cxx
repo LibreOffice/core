@@ -869,7 +869,6 @@ void SwUndoReRead::SaveGraphicData( const SwGrfNode& rGrfNd )
     nMirr = rGrfNd.GetSwAttrSet().GetMirrorGrf().GetValue();
 }
 
-/*  */
 
 SwUndoInsertLabel::SwUndoInsertLabel( const SwLabelType eTyp,
                                       const String &rTxt,

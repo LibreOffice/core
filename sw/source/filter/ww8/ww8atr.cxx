@@ -928,7 +928,6 @@ String MSWordExportBase::GetBookmarkName( sal_uInt16 nTyp, const String* pName, 
 }
 
 //-----------------------------------------------------------------------
-/*  */
 /* File CHRATR.HXX: */
 void WW8AttributeOutput::RTLAndCJKState( bool bIsRTL, sal_uInt16 nScript )
 {

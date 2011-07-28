@@ -769,7 +769,6 @@ void SwHTMLParser::NewMultiCol()
     PushContext( pCntxt );
 }
 
-/*  */
 
 void SwHTMLParser::InsertFlyFrame( const SfxItemSet& rItemSet,
                                    _HTMLAttrContext *pCntxt,
@@ -798,7 +797,6 @@ void SwHTMLParser::InsertFlyFrame( const SfxItemSet& rItemSet,
 }
 
 
-/*  */
 
 void SwHTMLParser::MovePageDescAttrs( SwNode *pSrcNd,
                                       sal_uLong nDestIdx,

@@ -2614,7 +2614,6 @@ void SwDoc::SetRedlinePassword(
     SetModified();
 }
 
-/*  */
 
 sal_Bool SwRedlineTbl::Insert( SwRedlinePtr& p, sal_Bool bIns )
 {
@@ -2848,7 +2847,6 @@ sal_uInt16 SwRedlineTbl::FindPrevSeqNo( sal_uInt16 nSeqNo, sal_uInt16 nSttPos,
     return nRet;
 }
 
-/*  */
 
 SwRedlineExtraData::~SwRedlineExtraData()
 {

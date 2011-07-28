@@ -958,7 +958,6 @@ sal_uLong SwWriter::Write( WriterRef& rxWriter, const String* pRealFileName )
 }
 
 
-/*  */
 
 // ----------------------------------------------------------------------
 

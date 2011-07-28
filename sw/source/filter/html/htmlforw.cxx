@@ -76,7 +76,6 @@
 
 using namespace ::com::sun::star;
 using ::rtl::OUString;
-/*  */
 
 const sal_uInt32 HTML_FRMOPTS_CONTROL   =
     0;
@@ -93,7 +92,6 @@ const sal_uInt32 HTML_FRMOPTS_IMG_CONTROL_CSS1 =
     HTML_FRMOPT_S_SPACE;
 
 
-/*  */
 
 struct HTMLControl
 {
@@ -119,7 +117,6 @@ struct HTMLControl
 
 SV_IMPL_OP_PTRARR_SORT( HTMLControls, HTMLControl* )
 
-/*  */
 
 void lcl_html_outEvents( SvStream& rStrm,
                          const uno::Reference< form::XFormComponent > rFormComp,
@@ -679,7 +676,6 @@ void SwHTMLWriter::OutHiddenControls(
     }
 }
 
-/*  */
 
 // hier folgen die Ausgabe-Routinen, dadurch sind die form::Forms gebuendelt:
 
@@ -1345,7 +1341,6 @@ Writer& OutHTML_DrawFrmFmtAsControl( Writer& rWrt,
     return rWrt;
 }
 
-/*  */
 
 // Ermitteln, ob eine Format zu einem Control gehoert und wenn ja
 // dessen Form zurueckgeben
@@ -1430,7 +1425,6 @@ void SwHTMLWriter::GetControls()
     }
 }
 
-/*  */
 
 HTMLControl::HTMLControl(
         const uno::Reference< container::XIndexContainer > & rFormComps,

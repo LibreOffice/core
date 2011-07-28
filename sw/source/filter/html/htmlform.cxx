@@ -184,7 +184,6 @@ const sal_Char * aEventOptionTable[] =
     0
 };
 
-/*  */
 
 class SwHTMLForm_Impl
 {

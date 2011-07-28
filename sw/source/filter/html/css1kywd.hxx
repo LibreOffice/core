@@ -38,11 +38,9 @@
 #define CSS1_CONSTASCII_DEF( n, s ) n[sizeof(s)] = s
 #endif
 
-/*  */
 
 extern sal_Char CSS1_CONSTASCII_DECL( sCSS_mimetype, "text/css" );
 
-/*  */
 
 // ein par allgemeine Strings
 
@@ -77,7 +75,6 @@ extern sal_Char CSS1_CONSTASCII_DECL( sCSS1_UNIT_px, "px" );
 extern sal_Char CSS1_CONSTASCII_DECL( sCSS1_UNIT_em, "em" );
 extern sal_Char CSS1_CONSTASCII_DECL( sCSS1_UNIT_ex, "ex" );
 
-/*  */
 
 // Strings fuer Font-Properties
 
@@ -139,7 +136,6 @@ extern sal_Char CSS1_CONSTASCII_DECL( sCSS1_P_font, "font" );
 
 
 
-/*  */
 
 // Strings fuer Farb- und Hintergrund-Properties
 
@@ -163,7 +159,6 @@ extern sal_Char CSS1_CONSTASCII_DECL( sCSS1_PV_bottom, "bottom" );
 extern sal_Char CSS1_CONSTASCII_DECL( sCSS1_PV_scroll, "scroll" );
 
 
-/*  */
 
 // Strings fuer Text-Properties
 
@@ -193,7 +188,6 @@ extern sal_Char CSS1_CONSTASCII_DECL( sCSS1_P_text_indent, "text-indent" );
 extern sal_Char CSS1_CONSTASCII_DECL( sCSS1_P_line_height, "line-height" );
 
 
-/*  */
 
 // Strings fuer Box-Properties
 
@@ -244,7 +238,6 @@ extern sal_Char CSS1_CONSTASCII_DECL( sCSS1_P_height, "height" );
 
 extern sal_Char CSS1_CONSTASCII_DECL( sCSS1_P_float, "float" );
 
-/*  */
 
 // Strings fuer Positioning
 
@@ -258,7 +251,6 @@ extern sal_Char CSS1_CONSTASCII_DECL( sCSS1_P_left, "left" );
 
 extern sal_Char CSS1_CONSTASCII_DECL( sCSS1_P_top, "top" );
 
-/*  */
 
 // Feature: PrintExt
 

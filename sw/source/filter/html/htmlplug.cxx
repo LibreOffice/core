@@ -128,7 +128,6 @@ const sal_uLong HTML_FRMOPTS_OLE_CSS1       =
     HTML_FRMOPT_S_ALIGN |
     HTML_FRMOPT_S_SPACE;
 
-/*  */
 
 void SwHTMLParser::SetFixSize( const Size& rPixSize,
                                const Size& rTwipDfltSize,
@@ -302,7 +301,6 @@ void SwHTMLParser::SetSpace( const Size& rPixSpace,
     }
 }
 
-/*  */
 
 void SwHTMLParser::InsertEmbed()
 {
@@ -493,7 +491,6 @@ void SwHTMLParser::InsertEmbed()
     }
 }
 
-/*  */
 
 #ifdef SOLAR_JAVA
 void SwHTMLParser::NewObject()
@@ -829,7 +826,6 @@ void SwHTMLParser::InsertParam()
 }
 
 
-/*  */
 
 void SwHTMLParser::InsertFloatingFrame()
 {
@@ -965,7 +961,6 @@ void SwHTMLParser::InsertFloatingFrame()
     bInFloatingFrame = sal_True;
 }
 
-/*  */
 
 sal_uInt16 SwHTMLWriter::GuessOLENodeFrmType( const SwNode& rNode )
 {

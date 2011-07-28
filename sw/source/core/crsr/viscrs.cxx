@@ -456,7 +456,6 @@ void SwSelPaintRects::Get1PixelInLogic( const ViewShell& rSh,
 }
 
 
-/*  */
 
 SwShellCrsr::SwShellCrsr( const SwCrsrShell& rCShell, const SwPosition &rPos )
     : SwCursor(rPos,0,false), SwSelPaintRects(rCShell), pPt(SwPaM::GetPoint())
@@ -624,7 +623,6 @@ sal_Bool SwShellCrsr::IsAtValidPos( sal_Bool bPoint ) const
     return SwCursor::IsAtValidPos( bPoint );
 }
 
-/*  */
 
 SwShellTableCrsr::SwShellTableCrsr( const SwCrsrShell& rCrsrSh,
                                     const SwPosition& rPos )

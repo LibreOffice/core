@@ -1279,7 +1279,6 @@ const SwRedlineData* SwWW8AttrIter::GetRedline( xub_StrLen nPos )
     return NULL;
 }
 
-/*  */
 
 short MSWordExportBase::GetCurrentPageDirection() const
 {
@@ -2430,7 +2429,6 @@ bool MSWordExportBase::NoPageBreakSection( const SfxItemSet* pSet )
     return bRet;
 }
 
-/*  */
 
 void MSWordExportBase::OutputSectionNode( const SwSectionNode& rSectionNode )
 {
@@ -2486,7 +2484,6 @@ void WW8Export::AppendSection( const SwPageDesc *pPageDesc, const SwSectionFmt* 
     pSepx->AppendSep(Fc2Cp(Strm().Tell()), pPageDesc, pFmt, nLnNum);
 }
 
-/*  */
 
 //---------------------------------------------------------------------------
 //       Flys
@@ -2743,7 +2740,6 @@ void WW8AttributeOutput::Redline( const SwRedlineData* pRedline )
     }
 }
 
-/*  */
 
 void MSWordExportBase::OutputContentNode( const SwCntntNode& rNode )
 {

@@ -1014,7 +1014,6 @@ void SwHistoryChangeCharFmt::SetInDoc(SwDoc * pDoc, bool )
 }
 // <- #i27615#
 
-/*  */
 
 
 SwHistory::SwHistory( sal_uInt16 nInitSz, sal_uInt16 nGrowSz )

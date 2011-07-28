@@ -169,7 +169,6 @@ public:
     sal_uInt16 GetContextStAttrMin() const { return nContextStAttrMin; }
 };
 
-/*  */
 
 // Cell content is a linked list with SwStartNodes and
 // HTMLTables.
@@ -214,7 +213,6 @@ public:
     SwHTMLTableLayoutCnts *CreateLayoutInfo();
 };
 
-/*  */
 
 // Cell of a HTML table
 class HTMLTableCell
@@ -282,7 +280,6 @@ public:
     sal_Bool IsCovered() const { return mbCovered; }
 };
 
-/*  */
 
 // Row of a HTML table
 typedef HTMLTableCell* HTMLTableCellPtr;
@@ -671,7 +668,6 @@ SV_IMPL_PTRARR(HTMLTableCells,HTMLTableCellPtr)
 SV_IMPL_PTRARR(HTMLTableRows,HTMLTableRowPtr)
 SV_IMPL_PTRARR(HTMLTableColumns,HTMLTableColumnPtr)
 
-/*  */
 
 
 void HTMLTableCnts::InitCtor()
@@ -731,7 +727,6 @@ SwHTMLTableLayoutCnts *HTMLTableCnts::CreateLayoutInfo()
     return pLayoutInfo;
 }
 
-/*  */
 
 HTMLTableCell::HTMLTableCell():
     pContents(0),
@@ -825,7 +820,6 @@ SwHTMLTableLayoutCell *HTMLTableCell::CreateLayoutInfo()
                                       bRelWidth, bNoWrap );
 }
 
-/*  */
 
 HTMLTableRow::HTMLTableRow( sal_uInt16 nCells ):
     pCells(new HTMLTableCells),
@@ -926,7 +920,6 @@ void HTMLTableRow::Shrink( sal_uInt16 nCells )
     pCells->DeleteAndDestroy( nCells, pCells->Count()-nCells );
 }
 
-/*  */
 
 HTMLTableColumn::HTMLTableColumn():
     bIsEndOfGroup(sal_False),
@@ -982,7 +975,6 @@ inline SwFrmFmt *HTMLTableColumn::GetFrmFmt( sal_Bool bBorderLine,
     return aFrmFmts[GetFrmFmtIdx(bBorderLine,eVertOrient)];
 }
 
-/*  */
 
 
 void HTMLTable::InitCtor( const HTMLTableOptions *pOptions )
@@ -2862,7 +2854,6 @@ void _HTMLTableContext::RestorePREListingXMP( SwHTMLParser& rParser )
         rParser.StartListing();
 }
 
-/*  */
 
 const SwStartNode *SwHTMLParser::InsertTableSection
     ( const SwStartNode *pPrevStNd )
@@ -3065,7 +3056,6 @@ SvxBrushItem* SwHTMLParser::CreateBrushItem( const Color *pColor,
     return pBrushItem;
 }
 
-/*  */
 
 class _SectionSaveStruct : public SwPendingStackData
 {
@@ -3146,7 +3136,6 @@ void _SectionSaveStruct::Restore( SwHTMLParser& rParser )
         rParser.aParaAttrs.Remove( 0, rParser.aParaAttrs.Count() );
 }
 
-/*  */
 
 class _CellSaveStruct : public _SectionSaveStruct
 {

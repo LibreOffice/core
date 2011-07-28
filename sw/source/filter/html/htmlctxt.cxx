@@ -51,7 +51,6 @@
 using namespace ::com::sun::star;
 
 
-/*  */
 
 
 class _HTMLAttrContext_SaveDoc
@@ -128,7 +127,6 @@ _HTMLAttrTable *_HTMLAttrContext_SaveDoc::GetAttrTab( sal_Bool bCreate )
     return pAttrTab;
 }
 
-/*  */
 
 _HTMLAttrContext_SaveDoc *_HTMLAttrContext::GetSaveDocContext( sal_Bool bCreate )
 {
@@ -144,7 +142,6 @@ void _HTMLAttrContext::ClearSaveDocContext()
     pSaveDocContext = 0;
 }
 
-/*  */
 
 void SwHTMLParser::SplitAttrTab( const SwPosition& rNewPos )
 {
@@ -347,7 +344,6 @@ void SwHTMLParser::RestoreDocContext( _HTMLAttrContext *pCntxt )
     pCntxt->ClearSaveDocContext();
 }
 
-/*  */
 
 void SwHTMLParser::EndContext( _HTMLAttrContext *pContext )
 {
@@ -434,7 +430,6 @@ void SwHTMLParser::ClearContext( _HTMLAttrContext *pContext )
         StartListing();
 }
 
-/*  */
 
 sal_Bool SwHTMLParser::DoPositioning( SfxItemSet &rItemSet,
                                   SvxCSS1PropertyInfo &rPropInfo,
@@ -508,7 +503,6 @@ sal_Bool SwHTMLParser::CreateContainer( const String& rClass,
     return bRet;
 }
 
-/*  */
 
 void SwHTMLParser::InsertAttrs( SfxItemSet &rItemSet,
                                 SvxCSS1PropertyInfo &rPropInfo,

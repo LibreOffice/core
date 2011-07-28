@@ -32,11 +32,9 @@
 
 #include "css1kywd.hxx"
 
-/*  */
 
 sal_Char CSS1_CONSTASCII_DEF( sCSS_mimetype, "text/css" );
 
-/*  */
 
 // ein par allgemeine Strings
 
@@ -71,7 +69,6 @@ sal_Char CSS1_CONSTASCII_DEF( sCSS1_UNIT_px, "px" );
 sal_Char CSS1_CONSTASCII_DEF( sCSS1_UNIT_em, "em" );
 sal_Char CSS1_CONSTASCII_DEF( sCSS1_UNIT_ex, "ex" );
 
-/*  */
 
 // Strings fuer Font-Properties
 
@@ -133,7 +130,6 @@ sal_Char CSS1_CONSTASCII_DEF( sCSS1_P_font, "font" );
 
 
 
-/*  */
 
 // Strings fuer Farb- und Hintergrund-Properties
 
@@ -157,7 +153,6 @@ sal_Char CSS1_CONSTASCII_DEF( sCSS1_PV_bottom, "bottom" );
 sal_Char CSS1_CONSTASCII_DEF( sCSS1_PV_scroll, "scroll" );
 
 
-/*  */
 
 // Strings fuer Text-Properties
 
@@ -187,7 +182,6 @@ sal_Char CSS1_CONSTASCII_DEF( sCSS1_P_text_indent, "text-indent" );
 sal_Char CSS1_CONSTASCII_DEF( sCSS1_P_line_height, "line-height" );
 
 
-/*  */
 
 // Strings fuer Box-Properties
 
@@ -238,7 +232,6 @@ sal_Char CSS1_CONSTASCII_DEF( sCSS1_P_height, "height" );
 
 sal_Char CSS1_CONSTASCII_DEF( sCSS1_P_float, "float" );
 
-/*  */
 
 // Strings fuer Positioning
 
@@ -252,7 +245,6 @@ sal_Char CSS1_CONSTASCII_DEF( sCSS1_P_left, "left" );
 
 sal_Char CSS1_CONSTASCII_DEF( sCSS1_P_top, "top" );
 
-/*  */
 
 // Feature: PrintExt
 

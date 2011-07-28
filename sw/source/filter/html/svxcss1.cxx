@@ -289,7 +289,6 @@ struct SvxCSS1ItemIds
 static SvxCSS1ItemIds aItemIds;
 
 
-/*  */
 
 struct SvxCSS1BorderInfo
 {
@@ -733,7 +732,6 @@ sal_Bool SvxCSS1Parser::DeclarationParsed( const String& rProperty,
     return sal_True;    // die Deklaration brauchen wir nicht mehr. Loeschen!
 }
 
-/*  */
 
 SvxCSS1Parser::SvxCSS1Parser( SfxItemPool& rPool, const String& rBaseURL, sal_uInt16 nMinFixLineSp,
                               sal_uInt16 *pWhichIds, sal_uInt16 nWhichIds ) :
@@ -901,7 +899,6 @@ sal_Bool SvxCSS1Parser::ParseStyleOption( const String& rIn,
     return bSuccess;
 }
 
-/*  */
 
 sal_Bool SvxCSS1Parser::GetEnum( const CSS1PropertyEnum *pPropTable,
                           const String &rValue, sal_uInt16& rEnum )
@@ -1034,7 +1031,6 @@ void SvxCSS1Parser::SetDfltEncoding( rtl_TextEncoding eEnc )
     eDfltEnc = eEnc;
 }
 
-/*  */
 
 static void ParseCSS1_font_size( const CSS1Expression *pExpr,
                                  SfxItemSet &rItemSet,
@@ -1098,7 +1094,6 @@ static void ParseCSS1_font_size( const CSS1Expression *pExpr,
     }
 }
 
-/*  */
 
 
 static void ParseCSS1_font_family( const CSS1Expression *pExpr,
@@ -1180,7 +1175,6 @@ static void ParseCSS1_font_family( const CSS1Expression *pExpr,
     }
 }
 
-/*  */
 
 static void ParseCSS1_font_weight( const CSS1Expression *pExpr,
                                    SfxItemSet &rItemSet,
@@ -1239,7 +1233,6 @@ static void ParseCSS1_font_weight( const CSS1Expression *pExpr,
     }
 }
 
-/*  */
 
 static void ParseCSS1_font_style( const CSS1Expression *pExpr,
                                   SfxItemSet &rItemSet,
@@ -1310,7 +1303,6 @@ static void ParseCSS1_font_style( const CSS1Expression *pExpr,
         rItemSet.Put( SvxCaseMapItem( eCaseMap, aItemIds.nCaseMap ) );
 }
 
-/*  */
 
 static void ParseCSS1_font_variant( const CSS1Expression *pExpr,
                                     SfxItemSet &rItemSet,
@@ -1364,7 +1356,6 @@ static void ParseCSS1_text_transform( const CSS1Expression *pExpr,
     }
 }
 
-/*  */
 
 static void ParseCSS1_color( const CSS1Expression *pExpr,
                              SfxItemSet &rItemSet,
@@ -1415,7 +1406,6 @@ static void ParseCSS1_direction( const CSS1Expression *pExpr,
     }
 }
 
-/*  */
 
 static void MergeHori( SvxGraphicPosition& ePos, SvxGraphicPosition eHori )
 {
@@ -1663,7 +1653,6 @@ static void ParseCSS1_background_color( const CSS1Expression *pExpr,
     }
 }
 
-/*  */
 
 static void ParseCSS1_line_height( const CSS1Expression *pExpr,
                                    SfxItemSet &rItemSet,
@@ -1728,7 +1717,6 @@ static void ParseCSS1_line_height( const CSS1Expression *pExpr,
 
 }
 
-/*  */
 
 static void ParseCSS1_font( const CSS1Expression *pExpr,
                             SfxItemSet &rItemSet,
@@ -1838,7 +1826,6 @@ static void ParseCSS1_font( const CSS1Expression *pExpr,
     ParseCSS1_font_family( pExpr, rItemSet, rPropInfo, rParser );
 }
 
-/*  */
 
 static void ParseCSS1_letter_spacing( const CSS1Expression *pExpr,
                                       SfxItemSet &rItemSet,
@@ -1883,7 +1870,6 @@ static void ParseCSS1_letter_spacing( const CSS1Expression *pExpr,
     }
 }
 
-/*  */
 
 static void ParseCSS1_text_decoration( const CSS1Expression *pExpr,
                                        SfxItemSet &rItemSet,
@@ -1993,7 +1979,6 @@ static void ParseCSS1_text_decoration( const CSS1Expression *pExpr,
         rItemSet.Put( SvxBlinkItem( bBlinkOn, aItemIds.nBlink ) );
 }
 
-/*  */
 
 static void ParseCSS1_text_align( const CSS1Expression *pExpr,
                                   SfxItemSet &rItemSet,
@@ -2015,7 +2000,6 @@ static void ParseCSS1_text_align( const CSS1Expression *pExpr,
     }
 }
 
-/*  */
 
 static void ParseCSS1_text_indent( const CSS1Expression *pExpr,
                                    SfxItemSet &rItemSet,
@@ -2068,7 +2052,6 @@ static void ParseCSS1_text_indent( const CSS1Expression *pExpr,
     }
 }
 
-/*  */
 
 static void ParseCSS1_margin_left( const CSS1Expression *pExpr,
                                    SfxItemSet &rItemSet,
@@ -2125,7 +2108,6 @@ static void ParseCSS1_margin_left( const CSS1Expression *pExpr,
     }
 }
 
-/*  */
 
 static void ParseCSS1_margin_right( const CSS1Expression *pExpr,
                                     SfxItemSet &rItemSet,
@@ -2182,7 +2164,6 @@ static void ParseCSS1_margin_right( const CSS1Expression *pExpr,
     }
 }
 
-/*  */
 
 static void ParseCSS1_margin_top( const CSS1Expression *pExpr,
                                   SfxItemSet &rItemSet,
@@ -2242,7 +2223,6 @@ static void ParseCSS1_margin_top( const CSS1Expression *pExpr,
     }
 }
 
-/*  */
 
 static void ParseCSS1_margin_bottom( const CSS1Expression *pExpr,
                                      SfxItemSet &rItemSet,
@@ -2302,7 +2282,6 @@ static void ParseCSS1_margin_bottom( const CSS1Expression *pExpr,
     }
 }
 
-/*  */
 
 static void ParseCSS1_margin( const CSS1Expression *pExpr,
                               SfxItemSet &rItemSet,
@@ -2444,7 +2423,6 @@ static void ParseCSS1_margin( const CSS1Expression *pExpr,
     }
 }
 
-/*  */
 
 static sal_Bool ParseCSS1_padding_xxx( const CSS1Expression *pExpr,
                                    SfxItemSet & /*rItemSet*/,
@@ -2504,7 +2482,6 @@ static sal_Bool ParseCSS1_padding_xxx( const CSS1Expression *pExpr,
     return bSet;
 }
 
-/*  */
 
 static void ParseCSS1_padding_top( const CSS1Expression *pExpr,
                                    SfxItemSet &rItemSet,
@@ -2566,7 +2543,6 @@ static void ParseCSS1_padding( const CSS1Expression *pExpr,
     }
 }
 
-/*  */
 
 static void ParseCSS1_border_xxx( const CSS1Expression *pExpr,
                                   SfxItemSet & /*rItemSet*/,
@@ -2711,7 +2687,6 @@ static void ParseCSS1_border_xxx_width( const CSS1Expression *pExpr,
     pInfo->nNamedWidth = nNWidth;
 }
 
-/*  */
 
 static void ParseCSS1_border_top_width( const CSS1Expression *pExpr,
                                         SfxItemSet &rItemSet,
@@ -2854,7 +2829,6 @@ static void ParseCSS1_border( const CSS1Expression *pExpr,
     ParseCSS1_border_xxx( pExpr, rItemSet, rPropInfo, rParser, 0, sal_True );
 }
 
-/*  */
 
 static void ParseCSS1_float( const CSS1Expression *pExpr,
                              SfxItemSet & /*rItemSet*/,
@@ -2872,7 +2846,6 @@ static void ParseCSS1_float( const CSS1Expression *pExpr,
 }
 
 
-/*  */
 
 static void ParseCSS1_position( const CSS1Expression *pExpr,
                                 SfxItemSet & /*rItemSet*/,
@@ -2889,7 +2862,6 @@ static void ParseCSS1_position( const CSS1Expression *pExpr,
     }
 }
 
-/*  */
 
 static void ParseCSS1_length( const CSS1Expression *pExpr,
                               long& rLength,
@@ -2935,7 +2907,6 @@ static void ParseCSS1_length( const CSS1Expression *pExpr,
     }
 }
 
-/*  */
 
 static void ParseCSS1_width( const CSS1Expression *pExpr,
                              SfxItemSet & /*rItemSet*/,
@@ -2969,7 +2940,6 @@ static void ParseCSS1_top( const CSS1Expression *pExpr,
     ParseCSS1_length( pExpr, rPropInfo.nTop, rPropInfo.eTopType, sal_False );
 }
 
-/*  */
 
 // Feature: PrintExt
 static void ParseCSS1_size( const CSS1Expression *pExpr,
@@ -3023,7 +2993,6 @@ static void ParseCSS1_size( const CSS1Expression *pExpr,
 
 // /Feature: PrintExt
 
-/*  */
 
 // Feature: PrintExt
 
@@ -3142,7 +3111,6 @@ static void ParseCSS1_so_language( const CSS1Expression *pExpr,
     }
 }
 
-/*  */
 
 // die Zuordung Property zu parsender Funktion
 struct CSS1PropEntry
@@ -3217,7 +3185,6 @@ static CSS1PropEntry aCSS1PropFnTab[] =
     CSS1_PROP_ENTRY(so_language)
 };
 
-/*  */
 
 static int bSortedPropFns = sal_False;
 

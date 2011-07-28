@@ -305,7 +305,6 @@ void SwServerObject::SetDdeBookmark( ::sw::mark::IMark& rBookmark)
             " - setting an bookmark that is not DDE-capable");
 }
 
-/*  */
 
 
 SwDataChanged::SwDataChanged( const SwPaM& rPam, sal_uInt16 nTyp )

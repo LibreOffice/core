@@ -253,7 +253,6 @@ SwComparePosition ComparePosition(
     return nRet;
 }
 
-/*  */
 
 enum CHKSECTION { Chk_Both, Chk_One, Chk_None };
 
