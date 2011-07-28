@@ -470,8 +470,7 @@ class AgendaTemplate(TextDocument):
 
     @synchronized(lock)
     def finish(self, topics):
-        #COMMENTED
-        #self.createMinutes(topics)
+        self.createMinutes(topics)
         self.deleteHiddenSections()
         AgendaTemplate.textSectionHandler.removeAllTextSections()
 
@@ -508,9 +507,9 @@ class AgendaTemplate(TextDocument):
         # if the minutes section should be removed (the
         # user did not check "create minutes")
         if not AgendaTemplate.agenda.cp_IncludeMinutes \
-                or topicsData.size() <= 1:
+                or len(topicsData) <= 1:
             try:
-                minutesAllSection = getSection(SECTION_MINUTES_ALL)
+                minutesAllSection = self.getSection(SECTION_MINUTES_ALL)
                 minutesAllSection.Anchor.String = ""
             except Exception, ex:
                 traceback.print_exc()
@@ -518,18 +517,12 @@ class AgendaTemplate(TextDocument):
         # the user checked "create minutes"
         else:
             try:
-                topicStartTime = 0
-                try:
-                    topicStartTime = int(AgendaTemplate.agenda.cp_Time)
-                except Exception, ex:
-                    pass
+                topicStartTime = int(AgendaTemplate.agenda.cp_Time)
                 #first I replace the minutes titles...
-                AgendaTemplate.items = searchFillInItems()
+                AgendaTemplate.items = self.searchFillInItems()
                 itemIndex = 0
-                while itemIndex < self.items.size():
-                    item = (XTextRange)
-                    self.items.get(itemIndex)
-                    itemText = item.getString().trim().toLowerCase()
+                for item in self.items:
+                    itemText = item.String.lstrip().lower()
                     if itemText == FILLIN_MINUTES_TITLE:
                         self.fillMinutesItem(
                             item, AgendaTemplate.agenda.cp_Title,
@@ -547,7 +540,6 @@ class AgendaTemplate(TextDocument):
                             item, getTimeString(AgendaTemplate.agenda.cp_Time),
                             self.resources.resPlaceHolderTime)
 
-                    itemIndex += 1
                 self.items.clear()
                 '''
                 now add minutes for each topic.
@@ -556,14 +548,12 @@ class AgendaTemplate(TextDocument):
                 topics data has *always* an empty topic at the end...
                 '''
 
-                for i in xrange(topicsData.size() - 1):
-                    topic = topicsData.get(i)
-                    AgendaTemplate.items = searchFillInItems()
+                for i in xrange(len(topicsData) - 1):
+                    topic = topicsData[i]
+                    AgendaTemplate.items = self.searchFillInItems()
                     itemIndex = 0
-                    while itemIndex < self.items.size():
-                        item = (XTextRange)
-                        self.items.get(itemIndex)
-                        itemText = item.getString().trim().toLowerCase()
+                    for item in self.items:
+                        itemText = item.String.lstrip().lower()
                         if itemText == FILLIN_MINUTE_NUM:
                             fillMinutesItem(item, topic[0].Value, "")
                         elif itemText == FILLIN_MINUTE_TOPIC:
@@ -582,8 +572,7 @@ class AgendaTemplate(TextDocument):
                             display any time here.
                             '''
                             if topicTime == 0 or topicStartTime == 0:
-                                time = (String)
-                                topic[3].Value
+                                time = topic[3].Value
                             else:
                                 time = getTimeString(str(topicStartTime)) + " - "
                                 topicStartTime += topicTime * 1000
@@ -591,15 +580,13 @@ class AgendaTemplate(TextDocument):
 
                             fillMinutesItem(item, time, "")
 
-                        itemIndex += 1
                     AgendaTemplate.textSectionHandler.removeTextSectionbyName(
                         SECTION_MINUTES)
                     # after the last section we do not insert a one.
-                    if i < topicsData.size() - 2:
+                    if i < len(topicsData) - 2:
                         AgendaTemplate.textSectionHandler.insertTextSection(
                             SECTION_MINUTES, AgendaTemplate.template, False)
 
-                    i += 1
             except Exception, ex:
                 traceback.print_exc()
 

@@ -83,7 +83,6 @@ class AgendaWizardDialogImpl(AgendaWizardDialog):
 
             # synchronize GUI and CGAgenda object.
             self.initConfiguration()
-            self.agendaTemplate.load(self.agendaTemplates[1][0], [])
 
             if self.myPathSelection.xSaveTextBox.Text.lower() == "":
                 self.myPathSelection.initializePath()
@@ -94,6 +93,8 @@ class AgendaWizardDialogImpl(AgendaWizardDialog):
 
             # initialize roadmap
             self.insertRoadmap()
+
+            self.pageDesignChanged()
 
             self.executeDialogFromComponent(self.agendaTemplate.xFrame)
             self.removeTerminateListener()
@@ -139,8 +140,8 @@ class AgendaWizardDialogImpl(AgendaWizardDialog):
                 FileAccess.getParentDir(self.agenda.cp_TemplatePath)):
             try:
                 self.agenda.cp_TemplatePath = FileAccess.connectURLs(
-                    FileAccess.getOfficePath(xMSF, "Work", "", ""),
-                    resources.initConfigurationresDefaultFilename)
+                    FileAccess.getOfficePath2(self.xMSF, "Work", "", ""),
+                    self.resources.resDefaultFilename)
             except Exception, ex:
                 traceback.print_exc()
 
@@ -281,6 +282,9 @@ class AgendaWizardDialogImpl(AgendaWizardDialog):
         AgendaTemplate.redrawTitle("cbLocation")
 
     #checkbox listeners
+    def chkUseMeetingTypeItemChanged(self):
+        AgendaTemplate.agenda.cp_IncludeMinutes = bool(self.chkMinutes.State)
+
     def chkUseMeetingTypeItemChanged(self):
         AgendaTemplate.redraw(FILLIN_MEETING_TYPE)
 

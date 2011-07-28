@@ -67,7 +67,8 @@ class TextDocument(object):
                 TextDocument.xTextDocument = xMSF.createInstance(
                     "com.sun.star.text.TextDocument")
                 TextDocument.xTextDocument.initNew()
-                TextDocument.xTextDocument.setIdentifier(_moduleIdentifier.Identifier)
+                TextDocument.xTextDocument.setIdentifier(
+                    _moduleIdentifier.Identifier)
                 # load the document into a blank frame
                 xDesktop = Desktop.getDesktop(xMSF)
                 loadArgs = range(1)
@@ -238,21 +239,6 @@ class TextDocument(object):
         except Exception, e:
             # TODO Auto-generated catch block
             traceback.print_exc()
-
-    '''
-    removes an arbitrary Object which supports the  'XTextContent' interface
-    @param oTextContent
-    @return
-    '''
-
-    def removeTextContent(self, oTextContent):
-        try:
-            self.xText.removeTextContent(oxTextContent)
-            print "remove"
-            return True
-        except NoSuchElementException, e:
-            traceback.print_exc()
-            return False
 
     '''
     Apparently there is no other way to get the

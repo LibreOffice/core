@@ -18,7 +18,7 @@ class ViewHandler(object):
             oPageStyle = oPageStyles.getByName("First Page")
             xAllTextTables = oTextTableHandler.xTextTablesSupplier.TextTables
             xTextTable = xAllTextTables.getByIndex(0)
-            xRange = xTextTable.getAnchor().getText()
+            xRange = xTextTable.Anchor.Text
             xPageCursor.gotoRange(xRange, False)
             if not com.sun.star.uno.AnyConverter.isVoid(XTextRange):
                 xViewTextCursor.gotoRange(xHeaderRange, False)
