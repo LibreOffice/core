@@ -1841,24 +1841,6 @@ sal_Bool BasicManager::IsBasicModified() const
     return sal_False;
 }
 
-void BasicManager::SetFlagToAllLibs( short nFlag, sal_Bool bSet ) const
-{
-    sal_uInt16 nLibs = GetLibCount();
-    for ( sal_uInt16 nL = 0; nL < nLibs; nL++ )
-    {
-        BasicLibInfo* pInfo = pLibs->GetObject( nL );
-        DBG_ASSERT( pInfo, "Info?!" );
-        StarBASIC* pLib = pInfo->GetLib();
-        if ( pLib )
-        {
-            if ( bSet )
-                pLib->SetFlag( nFlag );
-            else
-                pLib->ResetFlag( nFlag );
-        }
-    }
-}
-
 sal_Bool BasicManager::HasErrors()
 {
     DBG_CHKTHIS( BasicManager, 0 );

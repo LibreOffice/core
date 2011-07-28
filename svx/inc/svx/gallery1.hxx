@@ -167,7 +167,6 @@ public:
     String                      GetThemeName( sal_uIntPtr nThemeId ) const;
 
     SVX_DLLPUBLIC sal_Bool          CreateTheme( const String& rThemeName, sal_uInt32 nNumFrom = 0 );
-    sal_Bool                        CreateImportTheme( const INetURLObject& rURL, const String& rFileName );
     sal_Bool                        RenameTheme( const String& rOldName, const String& rNewName );
     SVX_DLLPUBLIC sal_Bool                      RemoveTheme( const String& rThemeName );
 

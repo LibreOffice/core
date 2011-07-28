@@ -382,7 +382,6 @@ struct ExtraPortionInfo
             ~ExtraPortionInfo();
 
     void    SaveOrgDXArray( const sal_Int32* pDXArray, sal_uInt16 nLen );
-    void    DestroyOrgDXArray();
 };
 
 
