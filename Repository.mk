@@ -45,9 +45,12 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
 	adabas \
 	adabasui \
 	agg \
+	analysis \
 	animcore \
+	basctl \
 	basebmp \
 	canvastools \
+	date \
 	forui \
 	odbc \
 	odbcbase \
@@ -106,6 +109,7 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     sfx \
     sm \
     smd \
+	solver \
     sot \
     spa \
     svl \

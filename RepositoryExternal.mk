@@ -437,6 +437,30 @@ endef
 
 endif # SYSTEM_OPENSSL
 
+
+ifeq ($(SYSTEM_LPSOLVE),YES)
+
+define gb_LinkTarget__use_lpsolve55
+$(call gb_LinkTarget_add_libs,$(1),-llpsolve55)
+
+endef
+
+else # !SYSTEM_LPSOLVE
+
+$(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
+	lpsolve55 \
+))
+
+define gb_LinkTarget__use_lpsolve55
+$(call gb_LinkTarget_add_linked_libs,$(1),\
+	lpsolve55 \
+)
+
+endef
+
+endif # SYSTEM_LPSOLVE
+
+
 define gb_LinkTarget__use_gtk
 $(call gb_LinkTarget_set_include,$(1),\
 	$$(INCLUDE) \
