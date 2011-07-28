@@ -44,6 +44,7 @@
 #include <com/sun/star/sdb/XColumn.hpp>
 
 #include <vector>
+#include <boost/scoped_ptr.hpp>
 #include <mmaddressblockpage.hrc>
 #include <dbui.hrc>
 #include <helpid.h>
@@ -174,22 +175,29 @@ sal_Bool    SwMailMergeAddressBlockPage::commitPage( ::svt::WizardTypes::CommitP
 
 IMPL_LINK(SwMailMergeAddressBlockPage, AddressListHdl_Impl, PushButton*, EMPTYARG)
 {
-    SwAddressListDialog* pAddrDialog = new SwAddressListDialog(this);
-    if(RET_OK == pAddrDialog->Execute())
+    try
     {
-        SwMailMergeConfigItem& rConfigItem = m_pWizard->GetConfigItem();
-        rConfigItem.SetCurrentConnection(
-                        pAddrDialog->GetSource(),
-                        pAddrDialog->GetConnection(),
-                        pAddrDialog->GetColumnsSupplier(),
-                        pAddrDialog->GetDBData());
-        ::rtl::OUString sFilter = pAddrDialog->GetFilter();
-        rConfigItem.SetFilter( sFilter );
-        InsertDataHdl_Impl(0);
-        GetWizard()->UpdateRoadmap();
-        GetWizard()->enableButtons(WZB_NEXT, GetWizard()->isStateEnabled(MM_GREETINGSPAGE));
+        boost::scoped_ptr<SwAddressListDialog> xAddrDialog(new SwAddressListDialog(this));
+        if(RET_OK == xAddrDialog->Execute())
+        {
+            SwMailMergeConfigItem& rConfigItem = m_pWizard->GetConfigItem();
+            rConfigItem.SetCurrentConnection(
+                            xAddrDialog->GetSource(),
+                            xAddrDialog->GetConnection(),
+                            xAddrDialog->GetColumnsSupplier(),
+                            xAddrDialog->GetDBData());
+            ::rtl::OUString sFilter = xAddrDialog->GetFilter();
+            rConfigItem.SetFilter( sFilter );
+            InsertDataHdl_Impl(0);
+            GetWizard()->UpdateRoadmap();
+            GetWizard()->enableButtons(WZB_NEXT, GetWizard()->isStateEnabled(MM_GREETINGSPAGE));
+        }
     }
-    delete pAddrDialog;
+    catch (const uno::Exception& e)
+    {
+        OSL_FAIL(rtl::OUStringToOString(e.Message, osl_getThreadTextEncoding()));
+        ErrorBox(this, WB_OK, e.Message).Execute();
+    }
     return 0;
 }
 
