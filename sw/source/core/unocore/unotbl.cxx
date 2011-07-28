@@ -74,6 +74,7 @@
 #include <com/sun/star/table/ShadowFormat.hpp>
 #include <com/sun/star/table/TableBorder.hpp>
 #include <com/sun/star/table/BorderLine2.hpp>
+#include <com/sun/star/table/BorderLineStyle.hpp>
 #include <com/sun/star/table/TableBorderDistances.hpp>
 #include <com/sun/star/style/PageStyleLayout.hpp>
 #include <com/sun/star/style/BreakType.hpp>
@@ -136,20 +137,14 @@ table::BorderLine lcl_SvxLineToLine(const SvxBorderLine* pLine)
 
 sal_Bool lcl_LineToSvxLine(const table::BorderLine& rLine, SvxBorderLine& rSvxLine)
 {
-    const table::BorderLine2& rLine2 = static_cast< const table::BorderLine2& >( rLine );
-    rSvxLine.SetColor(   Color(rLine.Color));
+    rSvxLine.SetColor(Color(rLine.Color));
 
-    if ( rLine2.LineWidth > 0 )
-    {
-        rSvxLine.SetStyle( editeng::SvxBorderStyle( rLine2.LineStyle ) );
-        rSvxLine.SetWidth( MM100_TO_TWIP_UNSIGNED( rLine2.LineWidth ) );
-    }
-    else
-        rSvxLine.GuessLinesWidths( editeng::SvxBorderStyle( rLine2.LineStyle ),
-                                    MM100_TO_TWIP( rLine.OuterLineWidth ),
-                                    MM100_TO_TWIP( rLine.InnerLineWidth ),
-                                    MM100_TO_TWIP( rLine.LineDistance   ) );
-    sal_Bool bRet = rLine.InnerLineWidth > 0 || rLine.OuterLineWidth > 0 || rLine2.LineWidth > 0;
+    rSvxLine.GuessLinesWidths( editeng::SvxBorderStyle(table::BorderLineStyle::SOLID),
+                                MM100_TO_TWIP( rLine.OuterLineWidth ),
+                                MM100_TO_TWIP( rLine.InnerLineWidth ),
+                                MM100_TO_TWIP( rLine.LineDistance ) );
+
+    sal_Bool bRet = rLine.InnerLineWidth > 0 || rLine.OuterLineWidth > 0;
     return bRet;
 }
 
