@@ -40,6 +40,8 @@
 #include <tools/debug.hxx>
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
+#include <sfx2/doctempl.hxx>
+#include <sfx2/templatelocnames.hrc>
 #include <com/sun/star/frame/XDocumentTemplates.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
@@ -266,7 +268,7 @@ TemplateScanner::State TemplateScanner::ScanEntry (void)
                     ||  (sContentType == IMPRESS_XML_TEMPLATE)
                     ||  (sContentType == IMPRESS_XML_TEMPLATE_B))
                 {
-                    ::rtl::OUString sLocalisedTitle = ConvertResourceString(
+                    ::rtl::OUString sLocalisedTitle = SfxDocumentTemplates::ConvertResourceString(
                         STR_TEMPLATE_NAME1_DEF, STR_TEMPLATE_NAME1, NUM_TEMPLATE_NAMES, sTitle );
                     mpLastAddedEntry = new TemplateEntry(sLocalisedTitle, sTargetURL);
                     mpTemplateDirectory->maEntries.push_back(mpLastAddedEntry);
