@@ -332,6 +332,8 @@ namespace writerfilter {
                 /// Color index <-> RGB color value map
                 std::vector<sal_uInt32> m_aColorTable;
                 bool m_bFirstRun;
+                /// If this is the first row in a table - there we send cell widths.
+                bool m_bFirstRow;
                 /// If paragraph properties should be emitted on next run.
                 bool m_bNeedPap;
                 /// The list table and list override table combined.

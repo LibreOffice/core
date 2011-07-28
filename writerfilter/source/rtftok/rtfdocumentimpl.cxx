@@ -250,6 +250,7 @@ RTFDocumentImpl::RTFDocumentImpl(uno::Reference<uno::XComponentContext> const& x
     m_aFontEncodings(),
     m_aColorTable(),
     m_bFirstRun(true),
+    m_bFirstRow(true),
     m_bNeedPap(false),
     m_aListTableSprms(),
     m_aSettingsTableSprms(),
@@ -396,6 +397,11 @@ void RTFDocumentImpl::parBreak()
     runBreak();
     Mapper().endCharacterGroup();
     Mapper().endParagraphGroup();
+
+    // If we are not in a table, then the next table row will be the first one.
+    RTFValue::Pointer_t pValue = m_aStates.top().aParagraphSprms.find(NS_sprm::LN_PFInTable);
+    if (!pValue.get())
+        m_bFirstRow = true;
 
     // start new one
     Mapper().startParagraphGroup();
@@ -1211,6 +1217,7 @@ int RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
         case RTF_ROW:
         case RTF_NESTROW:
             {
+                m_bFirstRow = false;
                 if (m_aStates.top().nCells)
                 {
                     // Make a backup before we start popping elements
@@ -1224,6 +1231,8 @@ int RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
                     m_aStates.top().aTableCellsSprms = m_aStates.top().aTableInheritingCellsSprms;
                     m_aStates.top().aTableCellsAttributes = m_aStates.top().aTableInheritingCellsAttributes;
                     m_aStates.top().nCells = m_aStates.top().nInheritingCells;
+                    // This can't be the first row, and we need cell width only there
+                    while(m_aStates.top().aTableRowSprms.erase(NS_ooxml::LN_CT_TblGridBase_gridCol));
                 }
                 for (int i = 0; i < m_aStates.top().nCells; ++i)
                 {
@@ -1974,8 +1983,11 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
             {
                 int nCellX = nParam - m_aStates.top().nCellX;
                 m_aStates.top().nCellX = nParam;
-                RTFValue::Pointer_t pXValue(new RTFValue(nCellX));
-                m_aStates.top().aTableRowSprms->push_back(make_pair(NS_ooxml::LN_CT_TblGridBase_gridCol, pXValue));
+                if (m_bFirstRow)
+                {
+                    RTFValue::Pointer_t pXValue(new RTFValue(nCellX));
+                    m_aStates.top().aTableRowSprms->push_back(make_pair(NS_ooxml::LN_CT_TblGridBase_gridCol, pXValue));
+                }
                 m_aStates.top().nCells++;
 
                 // Push cell properties.
