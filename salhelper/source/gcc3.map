@@ -1,6 +1,7 @@
 UDK_3_0_0 { # should have been UDK_3.0
     global:
-    GetVersionInfo;
+    _ZTI*; _ZTS*; # weak RTTI symbols for C++ exceptions
+
     _ZN9salhelper18ORealDynamicLoader11newInstanceEPPS0_RKN3rtl8OUStringES6_;
     _ZN9salhelper18ORealDynamicLoader7acquireEv;
     _ZN9salhelper18ORealDynamicLoader7releaseEv;
@@ -94,3 +95,9 @@ UDK_3.1 {
 
 
 } UDK_3_0_0;
+
+# Unique libstdc++ symbols:
+GLIBCXX_3.4 {
+global:
+_ZGVNSt7num_put*; _ZNSt7num_put*;
+};

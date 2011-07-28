@@ -72,6 +72,7 @@ $(eval $(call gb_Module_add_moduledirs,ooo,\
     qadevOOo \
     regexp \
     reportdesign \
+    salhelper \
     sane \
     sax \
     sc \

@@ -32,13 +32,14 @@
 #include <sal/types.h>
 #include <rtl/ustring.hxx>
 #include <osl/module.h>
+#include "salhelperdllapi.h"
 
 namespace salhelper
 {
 
 /** The ORealDynamicLoader is an implementation helper class for the template loader ODynamicLoader.
  */
-class ORealDynamicLoader
+class SALHELPER_DLLPUBLIC ORealDynamicLoader
 {
 public:
     /** initializes the loader, loads the library and call the initialization fucntion.

@@ -31,6 +31,7 @@
 
 #include "osl/interlck.h"
 #include "sal/types.h"
+#include "salhelperdllapi.h"
 
 #ifndef INCLUDED_CSTDDEF
 #include <cstddef>
@@ -69,7 +70,7 @@ namespace salhelper {
     objects are of no use, anyway, it seems best to simply declare and not
     define (private) operators new[] and delete[].
  */
-class SimpleReferenceObject
+class SALHELPER_DLLPUBLIC SimpleReferenceObject
 {
 public:
     inline SimpleReferenceObject() SAL_THROW(()): m_nCount(0) {}
@@ -114,12 +115,12 @@ private:
     /** not implemented
         @internal
      */
-    SimpleReferenceObject(SimpleReferenceObject &);
+    SALHELPER_DLLPRIVATE SimpleReferenceObject(SimpleReferenceObject &);
 
     /** not implemented
         @internal
      */
-    void operator =(SimpleReferenceObject);
+    SALHELPER_DLLPRIVATE void operator =(SimpleReferenceObject);
 
 #ifdef _MSC_VER
 /* We can't now have these private with MSVC2008 at least, it leads to

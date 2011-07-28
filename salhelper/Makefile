@@ -1,8 +1,9 @@
+# -*- Mode: makefile; tab-width: 4; indent-tabs-mode: t -*-
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
-# Copyright 2000, 2010 Oracle and/or its affiliates.
+#
+# Copyright 2000, 2011 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
 #
@@ -25,20 +26,16 @@
 #
 #*************************************************************************
 
-# target
-SALHELPER_TARGET=salhelper
+gb_PARTIALBUILD := T
+ifeq ($(strip $(SOLARENV)),)
+include $(dir $(realpath $(firstword $(MAKEFILE_LIST))))/../solenv/gbuild/source_and_rerun.mk
+else
 
-# the major 
-SALHELPER_MAJOR=2
-# the minor 
-SALHELPER_MINOR=0
-# the micro 
-SALHELPER_MICRO=0
+gb_SourceEnvAndRecurse_STAGE=gbuild
+include $(SOLARENV)/gbuild/gbuild.mk
 
-# this is a c++ compatible library 
-SALHELPER_CPP=1
+$(eval $(call gb_Module_make_global_targets,$(shell ls $(dir $(realpath $(firstword $(MAKEFILE_LIST))))/Module*.mk)))
 
-SALHELPER=$(SALHELPER_TARGET)_$(CMPEXT)
+endif
 
-LIBSALHELPER_UNX=lib$(SALHELPER).a.$(SALHELPER_MAJOR)
-LIBSALHELPER_WIN=$(SALHELPER_TARGET)$(SALHELPER_MAJOR)$(CMPEXT).dll
+# vim: set noet sw=4 ts=4:
