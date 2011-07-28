@@ -38,6 +38,7 @@
 #include <unx/sm.hxx>
 #include <unx/salbmp.h>
 #include <unx/salprn.h>
+#include <unx/headless/svpgdi.hxx>
 #include <vcl/floatwin.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
@@ -567,24 +568,11 @@ ooo_fixed_get_type()
 
 void GtkSalFrame::updateScreenNumber()
 {
-#if !GTK_CHECK_VERSION(3,0,0)
-    if( getDisplay()->IsXinerama() && getDisplay()->GetXineramaScreens().size() > 1 )
-    {
-        Point aPoint( maGeometry.nX, maGeometry.nY );
-        const std::vector<Rectangle>& rScreenRects( getDisplay()->GetXineramaScreens() );
-        size_t nScreens = rScreenRects.size();
-        for( size_t i = 0; i < nScreens; i++ )
-        {
-            if( rScreenRects[i].IsInside( aPoint ) )
-            {
-                maGeometry.nScreenNumber = static_cast<unsigned int>(i);
-                break;
-            }
-        }
-    }
-    else
-        maGeometry.nScreenNumber = static_cast<unsigned int>(m_nScreen);
-#endif
+    int nScreen = 0;
+    GdkScreen *pScreen = gtk_widget_get_screen( m_pWindow );
+    if( pScreen )
+        nScreen = GtkSalSystem::getScreenMonitorIdx( getGdkDisplay(), pScreen, maGeometry.nX, maGeometry.nY );
+    maGeometry.nScreenNumber = nScreen;
 }
 
 void GtkSalFrame::InitCommon()
@@ -1277,39 +1265,24 @@ void GtkSalFrame::Center()
     {
         nX = ((long)m_pParent->maGeometry.nWidth - (long)maGeometry.nWidth)/2;
         nY = ((long)m_pParent->maGeometry.nHeight - (long)maGeometry.nHeight)/2;
-
     }
     else
     {
-        long    nScreenWidth, nScreenHeight;
-        long    nScreenX = 0, nScreenY = 0;
+        GdkScreen *pScreen = NULL;
+        gint px, py;
+        GdkModifierType nMask;
+        gdk_display_get_pointer( getGdkDisplay(), &pScreen, &px, &py, &nMask );
+        if( !pScreen )
+            pScreen = gtk_widget_get_screen( m_pWindow );
 
-        Size aScreenSize = GetGtkSalData()->GetDisplay()->GetScreenSize( m_nScreen );
-        nScreenWidth        = aScreenSize.Width();
-        nScreenHeight       = aScreenSize.Height();
-        if( GetGtkSalData()->GetDisplay()->IsXinerama() )
-        {
-            // get xinerama screen we are on
-            // if there is a parent, use its center for screen determination
-            // else use the pointer
-            GdkScreen* pScreen;
-            gint x, y;
-            GdkModifierType aMask;
-            gdk_display_get_pointer( getGdkDisplay(), &pScreen, &x, &y, &aMask );
+        gint nMonitor;
+        nMonitor = gdk_screen_get_monitor_at_point( pScreen, px, py );
 
-            const std::vector< Rectangle >& rScreens = GetGtkSalData()->GetDisplay()->GetXineramaScreens();
-            for( unsigned int i = 0; i < rScreens.size(); i++ )
-                if( rScreens[i].IsInside( Point( x, y ) ) )
-                {
-                    nScreenX            = rScreens[i].Left();
-                    nScreenY            = rScreens[i].Top();
-                    nScreenWidth        = rScreens[i].GetWidth();
-                    nScreenHeight       = rScreens[i].GetHeight();
-                    break;
-                }
-        }
-        nX = nScreenX + (nScreenWidth - (long)maGeometry.nWidth)/2;
-        nY = nScreenY + (nScreenHeight - (long)maGeometry.nHeight)/2;
+        GdkRectangle aMonitor;
+        gdk_screen_get_monitor_geometry( pScreen, nMonitor, &aMonitor );
+
+        nX = aMonitor.x + (aMonitor.width - (long)maGeometry.nWidth)/2;
+        nY = aMonitor.y + (aMonitor.height - (long)maGeometry.nHeight)/2;
     }
     SetPosSize( nX, nY, 0, 0, SAL_FRAME_POSSIZE_X | SAL_FRAME_POSSIZE_Y );
 }
@@ -1562,9 +1535,9 @@ void GtkSalFrame::SetMinClientSize( long nWidth, long nHeight )
     }
 }
 
-#if GTK_CHECK_VERSION(3,0,0)
 void GtkSalFrame::AllocateFrame()
 {
+#if GTK_CHECK_VERSION(3,0,0)
     basegfx::B2IVector aFrameSize( maGeometry.nWidth, maGeometry.nHeight );
     if( ! m_aFrame.get() || m_aFrame->getSize() != aFrameSize )
     {
@@ -1576,7 +1549,7 @@ void GtkSalFrame::AllocateFrame()
                                                 basebmp::Format::TWENTYFOUR_BIT_TC_MASK,
                                                 this );
 //                                              basebmp::Format::THIRTYTWO_BIT_TC_MASK_ARGB );
-        fprintf( stderr, "allocate m_aFrame size of %dx%d \n",
+        fprintf( stderr, "allocated m_aFrame size of %dx%d \n",
                  (int)maGeometry.nWidth, (int)maGeometry.nHeight );
 
 #if OSL_DEBUG_LEVEL > 0 // set background to orange
@@ -1584,15 +1557,15 @@ void GtkSalFrame::AllocateFrame()
 #endif
 
         // update device in existing graphics
-        for( unsigned int i = 0; i < SAL_N_ELEMENTS(m_aGraphics); ++i )
+        for( unsigned int i = 0; i < SAL_N_ELEMENTS( m_aGraphics ); ++i )
         {
             if( !m_aGraphics[i].pGraphics )
                 continue;
             m_aGraphics[i].pGraphics->setDevice( m_aFrame );
         }
     }
-}
 #endif
+}
 
 void GtkSalFrame::SetPosSize( long nX, long nY, long nWidth, long nHeight, sal_uInt16 nFlags )
 {
@@ -1677,10 +1650,8 @@ void GtkSalFrame::SetPosSize( long nX, long nY, long nWidth, long nHeight, sal_u
 
     m_bDefaultPos = false;
 
-#if GTK_CHECK_VERSION(3,0,0)
-    if( bSized)
+    if( bSized )
         AllocateFrame();
-#endif
 
     if( bSized && ! bMoved )
         CallCallback( SALEVENT_RESIZE, NULL );
@@ -1741,10 +1712,12 @@ void GtkSalFrame::SetWindowState( const SalFrameState* pState )
         maGeometry.nWidth   = pState->mnMaximizedWidth;
         maGeometry.nHeight  = pState->mnMaximizedHeight;
         updateScreenNumber();
+        AllocateFrame();
 
         m_nState = GdkWindowState( m_nState | GDK_WINDOW_STATE_MAXIMIZED );
         m_aRestorePosSize = Rectangle( Point( pState->mnX, pState->mnY ),
                                        Size( pState->mnWidth, pState->mnHeight ) );
+        CallCallback( SALEVENT_RESIZE, NULL );
     }
     else if( pState->mnMask & (SAL_FRAMESTATE_MASK_X | SAL_FRAMESTATE_MASK_Y |
                                SAL_FRAMESTATE_MASK_WIDTH | SAL_FRAMESTATE_MASK_HEIGHT ) )
@@ -1813,7 +1786,6 @@ sal_Bool GtkSalFrame::GetWindowState( SalFrameState* pState )
     }
     else
     {
-
         pState->mnX         = maGeometry.nX;
         pState->mnY         = maGeometry.nY;
         pState->mnWidth     = maGeometry.nWidth;
@@ -1827,89 +1799,109 @@ sal_Bool GtkSalFrame::GetWindowState( SalFrameState* pState )
     return sal_True;
 }
 
-void GtkSalFrame::moveToScreen( int nScreen )
+typedef enum {
+    SET_RETAIN_SIZE,
+    SET_FULLSCREEN,
+    SET_UN_FULLSCREEN
+} SetType;
+
+void GtkSalFrame::SetScreen( unsigned int nNewScreen, int eType, Rectangle *pSize )
 {
-#if !GTK_CHECK_VERSION(3,0,0)
-    if( isChild() )
+    if( !m_pWindow )
         return;
 
-    if( nScreen < 0 || nScreen >= gdk_display_get_n_screens( getGdkDisplay() ) )
-        nScreen = m_nScreen;
-    if( nScreen == m_nScreen )
-        return;
+    gint nMonitor;
+    GdkScreen *pScreen = NULL;
+    pScreen = GtkSalSystem::getScreenMonitorFromIdx( getGdkDisplay(), nNewScreen, nMonitor );
 
-    GdkScreen* pScreen = gdk_display_get_screen( getGdkDisplay(), nScreen );
-    if( pScreen )
+    // Heavy lifting, need to move screen ...
+    if( pScreen != gtk_widget_get_screen( m_pWindow ))
+        gtk_window_set_screen( GTK_WINDOW( m_pWindow ), pScreen );
+
+    gint nOldMonitor = gdk_screen_get_monitor_at_window(
+                            pScreen, widget_get_window( m_pWindow ) );
+    if( nMonitor == nOldMonitor )
+        g_warning( "FIXME: do we get a lot of pointless SetScreens ?" );
+
+    GdkRectangle aOldMonitor, aNewMonitor;
+    gdk_screen_get_monitor_geometry( pScreen, nOldMonitor, &aOldMonitor );
+    gdk_screen_get_monitor_geometry( pScreen, nMonitor, &aNewMonitor );
+
+    bool bResize = false;
+    bool bVisible = IS_WIDGET_MAPPED( m_pWindow );
+    if( bVisible )
+        Show( sal_False );
+
+    maGeometry.nX = aNewMonitor.x + maGeometry.nX - aOldMonitor.x;
+    maGeometry.nY = aNewMonitor.y + maGeometry.nY - aOldMonitor.y;
+
+    if( eType == SET_FULLSCREEN )
     {
-        m_nScreen = nScreen;
-        gtk_window_set_screen( GTK_WINDOW(m_pWindow), pScreen );
-        // realize the window, we need an XWindow id
-        gtk_widget_realize( m_pWindow );
-        // update system data
-        GtkSalDisplay* pDisp = getDisplay();
-        m_aSystemData.aWindow       = GDK_WINDOW_XWINDOW(widget_get_window(m_pWindow));
-#if !GTK_CHECK_VERSION(3,0,0)
-        m_aSystemData.pVisual       = pDisp->GetVisual( m_nScreen ).GetVisual();
-        m_aSystemData.nDepth        = pDisp->GetVisual( m_nScreen ).GetDepth();
-        m_aSystemData.aColormap     = pDisp->GetColormap( m_nScreen ).GetXColormap();
-#endif
-        m_aSystemData.nScreen		= nScreen;
-        m_aSystemData.pAppContext   = NULL;
-        m_aSystemData.aShellWindow  = m_aSystemData.aWindow;
-        // update graphics if necessary
-        for( unsigned int i = 0; i < SAL_N_ELEMENTS(m_aGraphics); i++ )
-        {
-            if( m_aGraphics[i].bInUse )
-                m_aGraphics[i].pGraphics->SetDrawable( GDK_WINDOW_XWINDOW(widget_get_window(m_pWindow)), m_nScreen );
-        }
-        updateScreenNumber();
+        maGeometry.nX = aNewMonitor.x;
+        maGeometry.nY = aNewMonitor.x;
+        maGeometry.nWidth = aNewMonitor.width;
+        maGeometry.nHeight = aNewMonitor.height;
+        m_nStyle |= SAL_FRAME_STYLE_PARTIAL_FULLSCREEN;
+        bResize = true;
+
+        // #i110881# for the benefit of compiz set a max size here
+        // else setting to fullscreen fails for unknown reasons
+        m_aMaxSize.Width() = aNewMonitor.width+100;
+        m_aMaxSize.Height() = aNewMonitor.height+100;
     }
 
-    if( m_pParent && m_pParent->m_nScreen != m_nScreen )
+    if( pSize && eType == SET_UN_FULLSCREEN )
+    {
+        maGeometry.nX = pSize->Left();
+        maGeometry.nY = pSize->Top();
+        maGeometry.nWidth = pSize->GetWidth();
+        maGeometry.nHeight = pSize->GetHeight();
+        m_nStyle &= ~SAL_FRAME_STYLE_PARTIAL_FULLSCREEN;
+        bResize = true;
+    }
+
+    if (bResize)
+    {
+        // temporarily re-sizeable
+        if( !(m_nStyle & SAL_FRAME_STYLE_SIZEABLE) )
+            gtk_window_set_resizable( GTK_WINDOW(m_pWindow), TRUE );
+        gtk_window_resize( GTK_WINDOW( m_pWindow ), maGeometry.nWidth, maGeometry.nHeight );
+    }
+
+    gtk_window_move( GTK_WINDOW( m_pWindow ), maGeometry.nX, maGeometry.nY );
+
+#if !GTK_CHECK_VERSION(3,0,0)
+    // _NET_WM_STATE_FULLSCREEN (Metacity <-> KWin)
+    if( ! getDisplay()->getWMAdaptor()->isLegacyPartialFullscreen() )
+#endif
+    {
+        if( eType == SET_FULLSCREEN )
+            gtk_window_fullscreen( GTK_WINDOW( m_pWindow ) );
+        else if( eType == SET_UN_FULLSCREEN )
+            gtk_window_unfullscreen( GTK_WINDOW( m_pWindow ) );
+    }
+    if( eType == SET_UN_FULLSCREEN &&
+        !(m_nStyle & SAL_FRAME_STYLE_SIZEABLE) )
+        gtk_window_set_resizable( GTK_WINDOW( m_pWindow ), FALSE );
+
+    // FIXME: we should really let gtk+ handle our widget hierarchy ...
+    if( m_pParent && gtk_widget_get_screen( m_pParent->m_pWindow ) != pScreen )
         SetParent( NULL );
     std::list< GtkSalFrame* > aChildren = m_aChildren;
     for( std::list< GtkSalFrame* >::iterator it = aChildren.begin(); it != aChildren.end(); ++it )
-        (*it)->moveToScreen( m_nScreen );
+        (*it)->SetScreen( nNewScreen, SET_RETAIN_SIZE );
 
-    // FIXME: SalObjects
-#endif
+    m_bDefaultPos = m_bDefaultSize = false;
+    updateScreenNumber();
+    CallCallback( SALEVENT_MOVERESIZE, NULL );
+
+    if( bVisible )
+        Show( sal_True );
 }
 
 void GtkSalFrame::SetScreenNumber( unsigned int nNewScreen )
 {
-    if( nNewScreen == maGeometry.nScreenNumber )
-        return;
-
-    if( m_pWindow && ! isChild() )
-    {
-        GtkSalDisplay* pDisp = getDisplay();
-        if( pDisp->IsXinerama() && pDisp->GetXineramaScreens().size() > 1 )
-        {
-            if( nNewScreen >= pDisp->GetXineramaScreens().size() )
-                return;
-
-            Rectangle aOldScreenRect( pDisp->GetXineramaScreens()[maGeometry.nScreenNumber] );
-            Rectangle aNewScreenRect( pDisp->GetXineramaScreens()[nNewScreen] );
-            bool bVisible = IS_WIDGET_MAPPED(m_pWindow);
-            if( bVisible )
-                Show( sal_False );
-            maGeometry.nX = aNewScreenRect.Left() + (maGeometry.nX - aOldScreenRect.Left());
-            maGeometry.nY = aNewScreenRect.Top() + (maGeometry.nY - aOldScreenRect.Top());
-#if !GTK_CHECK_VERSION(3,0,0)
-            createNewWindow( None, false, m_nScreen );
-#endif
-            gtk_window_move( GTK_WINDOW(m_pWindow), maGeometry.nX, maGeometry.nY );
-            if( bVisible )
-                Show( sal_True );
-            maGeometry.nScreenNumber = nNewScreen;
-        }
-        else if( sal_Int32(nNewScreen) < pDisp->GetScreenCount() )
-        {
-            moveToScreen( (int)nNewScreen );
-            maGeometry.nScreenNumber = nNewScreen;
-            gtk_window_move( GTK_WINDOW(m_pWindow), maGeometry.nX, maGeometry.nY );
-        }
-    }
+    SetScreen( nNewScreen, SET_RETAIN_SIZE );
 }
 
 void GtkSalFrame::updateWMClass()
@@ -1950,101 +1942,23 @@ void GtkSalFrame::SetApplicationID( const rtl::OUString &rWMClass )
 
 void GtkSalFrame::ShowFullScreen( sal_Bool bFullScreen, sal_Int32 nScreen )
 {
-#if !GTK_CHECK_VERSION(3,0,0)
-    if( m_pWindow && ! isChild() )
-    {
-        GtkSalDisplay* pDisp = getDisplay();
-        // xinerama ?
-        if( pDisp->IsXinerama() && pDisp->GetXineramaScreens().size() > 1 )
-        {
-            if( bFullScreen )
-            {
-                m_aRestorePosSize = Rectangle( Point( maGeometry.nX, maGeometry.nY ),
-                                               Size( maGeometry.nWidth, maGeometry.nHeight ) );
-                bool bVisible = IS_WIDGET_MAPPED(m_pWindow);
-                if( bVisible )
-                    Show( sal_False );
-                m_nStyle |= SAL_FRAME_STYLE_PARTIAL_FULLSCREEN;
-                createNewWindow( None, false, m_nScreen );
-                Rectangle aNewPosSize;
-                if( nScreen < 0 || nScreen >= static_cast<int>(pDisp->GetXineramaScreens().size()) )
-                    aNewPosSize = Rectangle( Point( 0, 0 ), pDisp->GetScreenSize(m_nScreen) );
-                else
-                    aNewPosSize = pDisp->GetXineramaScreens()[ nScreen ];
-                gtk_window_resize( GTK_WINDOW(m_pWindow),
-                                   maGeometry.nWidth = aNewPosSize.GetWidth(),
-                                   maGeometry.nHeight = aNewPosSize.GetHeight() );
-                gtk_window_move( GTK_WINDOW(m_pWindow),
-                                 maGeometry.nX = aNewPosSize.Left(),
-                                 maGeometry.nY = aNewPosSize.Top() );
-                // #i110881# for the benefit of compiz set a max size here
-                // else setting to fullscreen fails for unknown reasons
-                m_aMaxSize.Width() = aNewPosSize.GetWidth()+100;
-                m_aMaxSize.Height() = aNewPosSize.GetHeight()+100;
-                // workaround different legacy version window managers have different opinions about
-                // _NET_WM_STATE_FULLSCREEN (Metacity <-> KWin)
-                if( ! getDisplay()->getWMAdaptor()->isLegacyPartialFullscreen() )
-                {
-                    if( !(m_nStyle & SAL_FRAME_STYLE_SIZEABLE) )
-                        gtk_window_set_resizable( GTK_WINDOW(m_pWindow), sal_True );
-                    gtk_window_fullscreen( GTK_WINDOW( m_pWindow ) );
-                }
-                if( bVisible )
-                    Show( sal_True );
-            }
-            else
-            {
-                bool bVisible = IS_WIDGET_MAPPED(m_pWindow);
-                if( ! getDisplay()->getWMAdaptor()->isLegacyPartialFullscreen() )
-                    gtk_window_unfullscreen( GTK_WINDOW(m_pWindow) );
-                if( bVisible )
-                    Show( sal_False );
-                m_nStyle &= ~SAL_FRAME_STYLE_PARTIAL_FULLSCREEN;
-                createNewWindow( None, false, m_nScreen );
-                if( ! m_aRestorePosSize.IsEmpty() )
-                {
-                    gtk_window_resize( GTK_WINDOW(m_pWindow),
-                                       maGeometry.nWidth = m_aRestorePosSize.GetWidth(),
-                                       maGeometry.nHeight = m_aRestorePosSize.GetHeight() );
-                    gtk_window_move( GTK_WINDOW(m_pWindow),
-                                     maGeometry.nX = m_aRestorePosSize.Left(),
-                                     maGeometry.nY = m_aRestorePosSize.Top() );
-                    m_aRestorePosSize = Rectangle();
-                }
-                if( bVisible )
-                    Show( sal_True );
-            }
-        }
-        else
-        {
-            if( bFullScreen )
-            {
-                if( !(m_nStyle & SAL_FRAME_STYLE_SIZEABLE) )
-                    gtk_window_set_resizable( GTK_WINDOW(m_pWindow), TRUE );
-                gtk_window_fullscreen( GTK_WINDOW(m_pWindow) );
-                moveToScreen( nScreen );
-                Size aScreenSize = pDisp->GetScreenSize( m_nScreen );
-                maGeometry.nX       = 0;
-                maGeometry.nY       = 0;
-                maGeometry.nWidth   = aScreenSize.Width();
-                maGeometry.nHeight  = aScreenSize.Height();
-            }
-            else
-            {
-                gtk_window_unfullscreen( GTK_WINDOW(m_pWindow) );
-                if( !(m_nStyle & SAL_FRAME_STYLE_SIZEABLE) )
-                    gtk_window_set_resizable( GTK_WINDOW(m_pWindow), FALSE );
-                moveToScreen( nScreen );
-            }
-        }
-        m_bDefaultPos = m_bDefaultSize = false;
-        updateScreenNumber();
-        CallCallback( SALEVENT_MOVERESIZE, NULL );
-    }
     m_bFullscreen = bFullScreen;
-#else
-#  warning No fullscreening - fix me !
-#endif
+
+    if( !m_pWindow || isChild() )
+        return;
+
+    if( bFullScreen )
+    {
+        m_aRestorePosSize = Rectangle( Point( maGeometry.nX, maGeometry.nY ),
+                                       Size( maGeometry.nWidth, maGeometry.nHeight ) );
+        SetScreen( nScreen, SET_FULLSCREEN );
+    }
+    else
+    {
+        SetScreen( nScreen, SET_UN_FULLSCREEN,
+                   !m_aRestorePosSize.IsEmpty() ? &m_aRestorePosSize : NULL );
+        m_aRestorePosSize = Rectangle();
+    }
 }
 
 /* definitions from xautolock.c (pl15) */
@@ -2192,16 +2106,20 @@ void GtkSalFrame::StartPresentation( sal_Bool bStart )
 
     int nTimeout, nInterval, bPreferBlanking, bAllowExposures;
 
+#if !GTK_CHECK_VERSION(3,0,0)
     XGetScreenSaver( pDisplay, &nTimeout, &nInterval,
                      &bPreferBlanking, &bAllowExposures );
+#endif
     if( bStart )
     {
         if ( nTimeout )
         {
             m_nSavedScreenSaverTimeout = nTimeout;
+#if !GTK_CHECK_VERSION(3,0,0)
             XResetScreenSaver( pDisplay );
             XSetScreenSaver( pDisplay, 0, nInterval,
                              bPreferBlanking, bAllowExposures );
+#endif
         }
 #ifdef ENABLE_DBUS
         m_nGSMCookie = dbus_inhibit_gsm(g_get_application_name(), "presentation",
@@ -2210,10 +2128,12 @@ void GtkSalFrame::StartPresentation( sal_Bool bStart )
     }
     else
     {
+#if !GTK_CHECK_VERSION(3,0,0)
         if( m_nSavedScreenSaverTimeout )
             XSetScreenSaver( pDisplay, m_nSavedScreenSaverTimeout,
                              nInterval, bPreferBlanking,
                              bAllowExposures );
+#endif
         m_nSavedScreenSaverTimeout = 0;
 #ifdef ENABLE_DBUS
         dbus_uninhibit_gsm(m_nGSMCookie);
@@ -2221,8 +2141,10 @@ void GtkSalFrame::StartPresentation( sal_Bool bStart )
     }
 }
 
-void GtkSalFrame::SetAlwaysOnTop( sal_Bool /*bOnTop*/ )
+void GtkSalFrame::SetAlwaysOnTop( sal_Bool bOnTop )
 {
+    if( m_pWindow )
+        gtk_window_set_keep_above( GTK_WINDOW( m_pWindow ), bOnTop );
 }
 
 void GtkSalFrame::ToTop( sal_uInt16 nFlags )
@@ -2489,6 +2411,16 @@ SalBitmap* GtkSalFrame::SnapShot()
     if( !m_pWindow )
         return NULL;
 
+#if GTK_CHECK_VERSION(3,0,0)
+    SvpSalGraphics *pGraphics = static_cast<SvpSalGraphics *>(GetGraphics());
+    if (!pGraphics)
+        return NULL;
+
+    SalBitmap *pRet = pGraphics->getBitmap( 0, 0, maGeometry.nWidth, maGeometry.nHeight );
+    ReleaseGraphics( pGraphics );
+
+    return pRet;
+#else
     X11SalBitmap *pBmp = new X11SalBitmap;
     GdkWindow *pWin = widget_get_window(m_pWindow);
     if( pBmp->SnapShot( GDK_DISPLAY_XDISPLAY( getGdkDisplay() ),
@@ -2496,15 +2428,13 @@ SalBitmap* GtkSalFrame::SnapShot()
         return pBmp;
     else
         delete pBmp;
+#endif
 
     return NULL;
 }
 
 void GtkSalFrame::UpdateSettings( AllSettings& rSettings )
 {
-    (void)rSettings;
-
-#if !GTK_CHECK_VERSION(3,0,0)
     if( ! m_pWindow )
         return;
 
@@ -2516,13 +2446,10 @@ void GtkSalFrame::UpdateSettings( AllSettings& rSettings )
         bFreeGraphics = true;
     }
 
-#ifndef GTK_GRAPHICS_DISABLED
     pGraphics->updateSettings( rSettings );
-#endif
 
     if( bFreeGraphics )
         ReleaseGraphics( pGraphics );
-#endif
 }
 
 void GtkSalFrame::Beep( SoundType eType )
@@ -2748,6 +2675,7 @@ bool GtkSalFrame::Dispatch( const XEvent* pEvent )
                 maGeometry.nWidth  = pEvent->xconfigure.width;
                 maGeometry.nHeight = pEvent->xconfigure.height;
                 setMinMaxSize();
+                AllocateFrame();
                 getDisplay()->SendInternalEvent( this, NULL, SALEVENT_RESIZE );
             }
         }
@@ -3044,7 +2972,9 @@ void GtkSalFrame::popIgnoreDamage()
 
 void GtkSalFrame::damaged (const basegfx::B2IRange& rDamageRect)
 {
-#if GTK_CHECK_VERSION(3,0,0)
+#if !GTK_CHECK_VERSION(3,0,0)
+    (void)rDamageRect;
+#else
     if (m_nDuringRender)
         return;
 #if OSL_DEBUG_LEVEL > 1
@@ -3350,14 +3280,11 @@ gboolean GtkSalFrame::signalConfigure( GtkWidget*, GdkEventConfigure* pEvent, gp
      *  already exact; even worse: due to the asynchronicity of configure
      *  events the borderwindow which would evaluate this event
      *  would size/move based on wrong data if we would actually evaluate
-     *  this event. So let's swallow it; this is also a performance
-     *  improvement as one can omit the synchronous XTranslateCoordinates
-     *  call below.
+     *  this event. So let's swallow it.
      */
     if( (pThis->m_nStyle & SAL_FRAME_STYLE_OWNERDRAWDECORATION) &&
         pThis->getDisplay()->GetCaptureFrame() == pThis )
         return sal_False;
-
 
     /* #i31785# claims we cannot trust the x,y members of the event;
      * they are e.g. not set correctly on maximize/demaximize;
@@ -3378,6 +3305,12 @@ gboolean GtkSalFrame::signalConfigure( GtkWidget*, GdkEventConfigure* pEvent, gp
      * - which is not good since the window manager will now size the window back to this
      * wrong size at some point.
      */
+    fprintf (stderr, "configure %d %d %d (%d) %d, %d diff? %d\n",
+             (int)pThis->m_bFullscreen, (pThis->m_nStyle & (SAL_FRAME_STYLE_SIZEABLE | SAL_FRAME_STYLE_PLUG)), SAL_FRAME_STYLE_SIZEABLE,
+             !!( pThis->m_bFullscreen || (pThis->m_nStyle & (SAL_FRAME_STYLE_SIZEABLE | SAL_FRAME_STYLE_PLUG)) == SAL_FRAME_STYLE_SIZEABLE ),
+             pEvent->width, pEvent->height,
+             !!(pEvent->width != (int)pThis->maGeometry.nWidth || pEvent->height != (int)pThis->maGeometry.nHeight)
+             );
     if( pThis->m_bFullscreen || (pThis->m_nStyle & (SAL_FRAME_STYLE_SIZEABLE | SAL_FRAME_STYLE_PLUG)) == SAL_FRAME_STYLE_SIZEABLE )
     {
         if( pEvent->width != (int)pThis->maGeometry.nWidth || pEvent->height != (int)pThis->maGeometry.nHeight )
@@ -3406,8 +3339,11 @@ gboolean GtkSalFrame::signalConfigure( GtkWidget*, GdkEventConfigure* pEvent, gp
             pThis->maGeometry.nRightDecoration = 0;
     }
 
-    GTK_YIELD_GRAB();
     pThis->updateScreenNumber();
+    if( bSized )
+        pThis->AllocateFrame();
+
+    GTK_YIELD_GRAB();
     if( bMoved && bSized )
         pThis->CallCallback( SALEVENT_MOVERESIZE, NULL );
     else if( bMoved )
@@ -4226,6 +4162,11 @@ GtkSalGraphics::GtkSalGraphics( GtkSalFrame *pFrame, GtkWidget *pWindow )
 {
 }
 
+void GtkSalGraphics::updateSettings( AllSettings& rSettings )
+{
+    g_warning ("unimplemented GtkSalGraphics update");
+}
+
 static void print_cairo_region (cairo_region_t *region, const char *msg)
 {
     if (!region) {
@@ -4307,3 +4248,13 @@ void GtkSalGraphics::copyArea( long nDestX, long nDestY,
 
 #endif
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
+
+Size GtkSalDisplay::GetScreenSize( int nScreen )
+{
+    GdkScreen *pScreen = gdk_display_get_screen (m_pGdkDisplay, nScreen);
+    if (!pScreen)
+        return Size();
+    else
+        return Size( gdk_screen_get_width (pScreen),
+                     gdk_screen_get_height (pScreen) );
+}

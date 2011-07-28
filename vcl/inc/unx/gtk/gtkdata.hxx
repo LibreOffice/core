@@ -37,6 +37,7 @@
 
 #include <unx/saldisp.hxx>
 #include <unx/saldata.hxx>
+#include <unx/gtk/gtksys.hxx>
 #include <vcl/ptrstyle.hxx>
 #include <osl/conditn.h>
 
@@ -143,6 +144,7 @@ class GtkSalDisplay
 class GtkSalDisplay : public SalDisplay
 #endif
 {
+    GtkSalSystem*                   m_pSys;
     GdkDisplay*                     m_pGdkDisplay;
     GdkCursor                      *m_aCursors[ POINTER_COUNT ];
     bool                            m_bStartupCompleted;
@@ -159,9 +161,12 @@ public:
     virtual void deregisterFrame( SalFrame* pFrame );
     GdkCursor *getCursor( PointerStyle ePointerStyle );
     virtual int CaptureMouse( SalFrame* pFrame );
-    virtual void initScreen( int nScreen ) const;
 
-    virtual int GetDefaultMonitorNumber() const;
+    bool IsXinerama() { return !m_pSys->IsMultiDisplay(); }
+    int  GetDefaultScreenNumber() { return m_pSys->GetDefaultDisplayNumber(); }
+    int  GetScreenCount() { return m_pSys->GetDisplayScreenCount(); }
+    Size GetScreenSize( int screen );
+    virtual void initScreen( int nScreen ) const;
 
     GdkFilterReturn filterGdkEvent( GdkXEvent* sys_event,
                                     GdkEvent* event );
@@ -180,14 +185,9 @@ public:
 #if !GTK_CHECK_VERSION(3,0,0)
     virtual long Dispatch( XEvent *pEvent );
 #else
-    bool IsXinerama() { return false; }
-    int  GetDefaultScreenNumber() const { return 0; }
-    int  GetScreenCount() const { return 1; }
-    std::vector<Rectangle> GetXineramaScreens() { return std::vector<Rectangle>(); }
-    Size GetScreenSize( int screen );
     void  SendInternalEvent( SalFrame* pFrame, void* pData, sal_uInt16 nEvent = SALEVENT_USEREVENT );
-    void            CancelInternalEvent( SalFrame* pFrame, void* pData, sal_uInt16 nEvent );
-    bool			DispatchInternalEvent();
+    void  CancelInternalEvent( SalFrame* pFrame, void* pData, sal_uInt16 nEvent );
+    bool  DispatchInternalEvent();
 
     SalFrame *m_pCapture;
     sal_Bool MouseCaptured( const SalFrame *pFrameData ) const

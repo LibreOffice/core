@@ -243,11 +243,7 @@ int WinSalSystem::ShowNativeMessageBox(const String& rTitle, const String& rMess
         nDefaultButton <= SALSYSTEM_SHOWNATIVEMSGBOX_BTN_NO)
         nFlags |= DEFAULT_BTN_MAPPING_TABLE[nButtonCombination][nDefaultButton];
 
-    //#107209 hide the splash screen if active
-    ImplSVData* pSVData = ImplGetSVData();
-    if (pSVData->mpIntroWindow)
-        pSVData->mpIntroWindow->Hide();
-
+    ImplHideSplash();
     return MessageBoxW(
         0,
         reinterpret_cast<LPCWSTR>(rMessage.GetBuffer()),

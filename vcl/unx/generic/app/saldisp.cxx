@@ -576,12 +576,9 @@ void SalDisplay::doDestruct()
         pSalData->SetSalDisplay( NULL );
 }
 
-static int DisplayHasEvent( int
-#ifdef DBG_UTIL
-fd
-#endif
-, SalX11Display *pDisplay  )
+static int DisplayHasEvent( int fd, SalX11Display *pDisplay  )
 {
+  (void)fd;
   DBG_ASSERT( ConnectionNumber( pDisplay->GetDisplay() ) == fd,
               "wrong fd in DisplayHasEvent" );
   if( ! pDisplay->IsDisplay() )
@@ -594,12 +591,9 @@ fd
   GetSalData()->m_pInstance->GetYieldMutex()->release();
   return result;
 }
-static int DisplayQueue( int
-#ifdef DBG_UTIL
-fd
-#endif
-, SalX11Display *pDisplay )
+static int DisplayQueue( int fd, SalX11Display *pDisplay )
 {
+  (void)fd;
   DBG_ASSERT( ConnectionNumber( pDisplay->GetDisplay() ) == fd,
               "wrong fd in DisplayHasEvent" );
   int result;
@@ -611,12 +605,9 @@ fd
 
   return result;
 }
-static int DisplayYield( int
-#ifdef DBG_UTIL
-fd
-#endif
-, SalX11Display *pDisplay )
+static int DisplayYield( int fd, SalX11Display *pDisplay )
 {
+  (void)fd;
   DBG_ASSERT( ConnectionNumber( pDisplay->GetDisplay() ) == fd,
               "wrong fd in DisplayHasEvent" );
 

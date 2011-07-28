@@ -446,7 +446,6 @@ public:
     XLIB_Window     GetDrawable( int nScreen ) const { return getDataForScreen( nScreen ).m_aRefWindow; }
     Display        *GetDisplay() const { return pDisp_; }
     int             GetDefaultScreenNumber() const { return m_nDefaultScreen; }
-    virtual int     GetDefaultMonitorNumber() const { return 0; }
     const Size&     GetScreenSize( int nScreen ) const { return getDataForScreen( nScreen ).m_aSize; }
     srv_vendor_t    GetServerVendor() const { return meServerVendor; }
     void            SetServerVendor() { meServerVendor = sal_GetServerVendor(pDisp_); }

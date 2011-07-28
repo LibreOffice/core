@@ -115,38 +115,6 @@ public:
     virtual bool				AnyInput( sal_uInt16 nType );
 };
 
-#if GTK_CHECK_VERSION(3,0,0)
-class GtkSalSystem : public SalSystem
-{
-public:
-    GtkSalSystem() : SalSystem() {}
-#else
-class GtkSalSystem : public X11SalSystem
-{
-public:
-    GtkSalSystem() : X11SalSystem() {}
-#endif
-    virtual ~GtkSalSystem();
-
-#if GTK_CHECK_VERSION(3,0,0)
-    virtual unsigned int GetDisplayScreenCount();
-    virtual bool IsMultiDisplay();
-    virtual unsigned int GetDefaultDisplayNumber();
-    virtual Rectangle GetDisplayScreenPosSizePixel( unsigned int nScreen );
-    virtual Rectangle GetDisplayWorkAreaPosSizePixel( unsigned int nScreen );
-    virtual rtl::OUString GetScreenName( unsigned int nScreen );
-    virtual int ShowNativeMessageBox( const String& rTitle,
-                                      const String& rMessage,
-                                      int nButtonCombination,
-                                      int nDefaultButton);
-#endif
-
-    virtual int ShowNativeDialog( const String& rTitle,
-                                  const String& rMessage,
-                                  const std::list< String >& rButtons,
-                                  int nDefButton );
-};
-
 #endif // _VCL_GTKINST_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

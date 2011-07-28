@@ -181,7 +181,6 @@ struct ImplSVAppData
     ImeStatusWindowMode meShowImeStatusWindow;
 
     DECL_STATIC_LINK( ImplSVAppData, ImplQuitMsg, void* );
-
 };
 
 
@@ -394,6 +393,7 @@ long        ImplCallEvent( NotifyEvent& rEvt );
 extern VCL_PLUGIN_PUBLIC ImplSVData* pImplSVData;
 inline VCL_PLUGIN_PUBLIC ImplSVData* ImplGetSVData() { return pImplSVData; }
 inline ImplSVData* ImplGetAppSVData() { return ImplGetSVData(); }
+VCL_PLUGIN_PUBLIC void ImplHideSplash();
 
 bool ImplInitAccessBridge( sal_Bool bAllowCancel, sal_Bool &rCancelled );
 

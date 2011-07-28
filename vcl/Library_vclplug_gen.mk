@@ -113,7 +113,11 @@ $(eval $(call gb_Library_add_exception_objects,vclplug_gen,\
     vcl/unx/generic/window/FWS \
     vcl/unx/generic/window/salframe \
     vcl/unx/generic/window/salobj \
+    vcl/unx/x11/x11sys \
 ))
+
+# ultimately we want to split the x11 dependencies out
+# into their own library I think.
 
 $(eval $(call gb_Library_add_defs,vclplug_gen,\
     -D_XSALSET_LIBNAME=\"$(call gb_Library_get_runtime_filename,spa)\" \

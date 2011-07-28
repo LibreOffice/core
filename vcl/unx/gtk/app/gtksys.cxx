@@ -1,153 +1,190 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
-/*************************************************************************
+/*
+ * Version: MPL 1.1 / GPLv3+ / LGPLv3+
  *
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * The contents of this file are subject to the Mozilla Public License Version
+ * 1.1 (the "License"); you may not use this file except in compliance with
+ * the License or as specified alternatively below. You may obtain a copy of
+ * the License at http://www.mozilla.org/MPL/
  *
- * Copyright 2000, 2010 Oracle and/or its affiliates.
+ * Software distributed under the License is distributed on an "AS IS" basis,
+ * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+ * for the specific language governing rights and limitations under the
+ * License.
  *
- * OpenOffice.org - a multi-platform office productivity suite
+ * The Initial Developer of the Original Code is
+ *       Michael Meeks <michael.meeks@novell.com>
+ * Portions created by the Initial Developer are Copyright (C) 2010 the
+ * Initial Developer. All Rights Reserved.
  *
- * This file is part of OpenOffice.org.
+ * Major Contributor(s):
  *
- * OpenOffice.org is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License version 3
- * only, as published by the Free Software Foundation.
+ * For minor contributions see the git repository.
  *
- * OpenOffice.org is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License version 3 for more details
- * (a copy is included in the LICENSE file that accompanied this code).
- *
- * You should have received a copy of the GNU Lesser General Public License
- * version 3 along with OpenOffice.org.  If not, see
- * <http://www.openoffice.org/license.html>
- * for a copy of the LGPLv3 License.
- *
- ************************************************************************/
-
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_vcl.hxx"
-
-#ifdef AIX
-#define _LINUX_SOURCE_COMPAT
-#include <sys/timer.h>
-#undef _LINUX_SOURCE_COMPAT
-#endif
-
-#include <unx/svunx.h>
-#include <svdata.hxx>
-
-#include <vcl/window.hxx>
-#include <unx/gtk/gtkinst.hxx>
-#include <cstdio>
-#include <gdk/gdk.h>
+ * Alternatively, the contents of this file may be used under the terms of
+ * either the GNU General Public License Version 3 or later (the "GPLv3+"), or
+ * the GNU Lesser General Public License Version 3 or later (the "LGPLv3+"),
+ * in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
+ * instead of those above.
+ */
+#include <string.h>
 #include <gtk/gtk.h>
-#include <X11/Xlib.h>
+#include <unx/gtk/gtkinst.hxx>
+#include <unx/gtk/gtksys.hxx>
+
+GtkSalSystem *GtkSalSystem::GetSingleton()
+{
+    static GtkSalSystem *pSingleton = NULL;
+    if (!pSingleton)
+        pSingleton = new GtkSalSystem();
+    return pSingleton;
+}
 
 SalSystem *GtkInstance::CreateSalSystem()
 {
-        return new GtkSalSystem();
+    return GtkSalSystem::GetSingleton();
+}
+
+GtkSalSystem::GtkSalSystem() : UnxSalSystem()
+{
+    mpDisplay = gdk_display_get_default();
 }
 
 GtkSalSystem::~GtkSalSystem()
 {
 }
 
-#if GTK_CHECK_VERSION(3,0,0)
+GdkScreen *
+GtkSalSystem::getScreenMonitorFromIdx (GdkDisplay *pDisplay, int nIdx, gint &nMonitor)
+{
+    GdkScreen *pScreen = NULL;
+    for (gint i = 0; i < gdk_display_get_n_screens (pDisplay); i++)
+    {
+        pScreen = gdk_display_get_screen (pDisplay, i++);
+        if (!pScreen)
+            break;
+        if (nIdx > gdk_screen_get_n_monitors (pScreen))
+            nIdx -= gdk_screen_get_n_monitors (pScreen);
+        else
+            break;
+    }
+    nMonitor = nIdx;
+    return pScreen;
+}
+
+int
+GtkSalSystem::getScreenIdxFromPtr (GdkDisplay *pDisplay, GdkScreen *pScreen)
+{
+    int nIdx = 0;
+    for (gint i = 0; i < gdk_display_get_n_screens (pDisplay); i++)
+    {
+        GdkScreen *pCmp = gdk_display_get_screen (pDisplay, i);
+        if (pCmp == pScreen)
+            return nIdx;
+        nIdx += gdk_screen_get_n_monitors (pCmp);
+    }
+    g_warning ("failed to find screen %p", pScreen);
+    return 0;
+}
+
+int GtkSalSystem::getScreenMonitorIdx (GdkDisplay *pDisplay,
+                                       GdkScreen *pScreen,
+                                       int nX, int nY)
+{
+    return getScreenIdxFromPtr (pDisplay, pScreen) +
+        gdk_screen_get_monitor_at_point (pScreen, nX, nY);
+}
+
 unsigned int GtkSalSystem::GetDisplayScreenCount()
 {
-    return 1;
+    gint nMonitor;
+    (void)getScreenMonitorFromIdx (mpDisplay, G_MAXINT, nMonitor);
+    return G_MAXINT - nMonitor;
 }
 
 bool GtkSalSystem::IsMultiDisplay()
 {
-    return false;
+    return gdk_display_get_n_screens (mpDisplay) > 1;
 }
 
-unsigned int GtkSalSystem::GetDefaultDisplayNumber()
+namespace {
+int _fallback_get_primary_monitor (GdkScreen *pScreen)
 {
+    // Use monitor name as primacy heuristic
+    int ret = -1;
+    int max = gdk_screen_get_n_monitors (pScreen);
+    for (int i = 0; i < max && ret < 0; i++)
+    {
+        char *name = gdk_screen_get_monitor_plug_name (pScreen, i);
+        if (!g_ascii_strncasecmp (name, "LVDS", 4))
+            ret = i;
+        g_free (name);
+    }
     return 0;
 }
 
-Rectangle GtkSalSystem::GetDisplayScreenPosSizePixel( unsigned int nScreen )
+int _get_primary_monitor (GdkScreen *pScreen)
 {
-    g_warning ("FIXME: GetDisplayScreenPosSizePixel unimplemented");
-    return Rectangle (0, 0, 1024, 768);
+    static int (*get_fn) (GdkScreen *) = NULL;
+#if GTK_CHECK_VERSION(3,0,0)
+    get_fn = gdk_screen_get_primary_monitor;
+#endif
+    // Perhaps we have a newer gtk+ with this symbol:
+    if (!get_fn)
+    {
+        GModule *module = g_module_open (NULL, (GModuleFlags) 0);
+        if (!g_module_symbol (module, "gdk_screen_get_primary_monitor",
+                              (gpointer *)&get_fn))
+            get_fn = NULL;
+        g_module_close (module);
+    }
+    if (!get_fn)
+        get_fn = _fallback_get_primary_monitor;
+
+    return get_fn (pScreen);
+}
+} // end anonymous namespace
+
+unsigned int GtkSalSystem::GetDefaultDisplayNumber()
+{
+    GdkScreen *pDefault = gdk_display_get_default_screen (mpDisplay);
+    int idx = getScreenIdxFromPtr (mpDisplay, pDefault);
+    return idx + _get_primary_monitor (pDefault);
 }
 
-Rectangle GtkSalSystem::GetDisplayWorkAreaPosSizePixel( unsigned int nScreen )
+Rectangle GtkSalSystem::GetDisplayScreenPosSizePixel (unsigned int nScreen)
 {
+    gint nMonitor;
+    GdkScreen *pScreen;
+    GdkRectangle aRect;
+    pScreen = getScreenMonitorFromIdx (mpDisplay, nScreen, nMonitor);
+    if (!pScreen)
+        return Rectangle();
+    gdk_screen_get_monitor_geometry (pScreen, nMonitor, &aRect);
+    return Rectangle (aRect.x, aRect.y, aRect.width, aRect.height);
+}
+
+Rectangle GtkSalSystem::GetDisplayWorkAreaPosSizePixel (unsigned int nScreen)
+{
+    // FIXME: in theory we need extra code here to collect
+    // the work area, ignoring fixed panels etc. on the screen.
+    // surely gtk+ should have API to get this for us (?)
     return GetDisplayScreenPosSizePixel( nScreen );
 }
 
-rtl::OUString GtkSalSystem::GetScreenName( unsigned int nScreen )
+rtl::OUString GtkSalSystem::GetScreenName(unsigned int nScreen)
 {
-    return rtl::OUString::createFromAscii( "Jim" );
+    gchar *pStr;
+    gint nMonitor;
+    GdkScreen *pScreen;
+    pScreen = getScreenMonitorFromIdx (mpDisplay, nScreen, nMonitor);
+    if (!pScreen)
+        return rtl::OUString();
+    pStr = gdk_screen_get_monitor_plug_name (pScreen, nMonitor);
+    rtl::OUString aRet (pStr, strlen (pStr), RTL_TEXTENCODING_UTF8);
+    g_free (pStr);
+    return aRet;
 }
-
-// FIXME: shocking cut/paste from X11SalSystem ... [!] - push me lower ...
-#include <vcl/msgbox.hxx>
-#include <vcl/button.hxx>
-
-int GtkSalSystem::ShowNativeMessageBox( const String& rTitle,
-                                        const String& rMessage,
-                                        int nButtonCombination,
-                                        int nDefaultButton)
-{
-    int nDefButton = 0;
-    std::list< String > aButtons;
-    int nButtonIds[5], nBut = 0;
-
-    if( nButtonCombination == SALSYSTEM_SHOWNATIVEMSGBOX_BTNCOMBI_OK ||
-        nButtonCombination == SALSYSTEM_SHOWNATIVEMSGBOX_BTNCOMBI_OK_CANCEL )
-    {
-        aButtons.push_back( Button::GetStandardText( BUTTON_OK ) );
-        nButtonIds[nBut++] = SALSYSTEM_SHOWNATIVEMSGBOX_BTN_OK;
-    }
-    if( nButtonCombination == SALSYSTEM_SHOWNATIVEMSGBOX_BTNCOMBI_YES_NO_CANCEL ||
-        nButtonCombination == SALSYSTEM_SHOWNATIVEMSGBOX_BTNCOMBI_YES_NO )
-    {
-        aButtons.push_back( Button::GetStandardText( BUTTON_YES ) );
-        nButtonIds[nBut++] = SALSYSTEM_SHOWNATIVEMSGBOX_BTN_YES;
-        aButtons.push_back( Button::GetStandardText( BUTTON_NO ) );
-        nButtonIds[nBut++] = SALSYSTEM_SHOWNATIVEMSGBOX_BTN_NO;
-        if( nDefaultButton == SALSYSTEM_SHOWNATIVEMSGBOX_BTN_NO )
-            nDefButton = 1;
-    }
-    if( nButtonCombination == SALSYSTEM_SHOWNATIVEMSGBOX_BTNCOMBI_OK_CANCEL ||
-        nButtonCombination == SALSYSTEM_SHOWNATIVEMSGBOX_BTNCOMBI_YES_NO_CANCEL ||
-        nButtonCombination == SALSYSTEM_SHOWNATIVEMSGBOX_BTNCOMBI_RETRY_CANCEL )
-    {
-        if( nButtonCombination == SALSYSTEM_SHOWNATIVEMSGBOX_BTNCOMBI_RETRY_CANCEL )
-        {
-            aButtons.push_back( Button::GetStandardText( BUTTON_RETRY ) );
-            nButtonIds[nBut++] = SALSYSTEM_SHOWNATIVEMSGBOX_BTN_RETRY;
-        }
-        aButtons.push_back( Button::GetStandardText( BUTTON_CANCEL ) );
-        nButtonIds[nBut++] = SALSYSTEM_SHOWNATIVEMSGBOX_BTN_CANCEL;
-        if( nDefaultButton == SALSYSTEM_SHOWNATIVEMSGBOX_BTN_CANCEL )
-            nDefButton = aButtons.size()-1;
-    }
-    if( nButtonCombination == SALSYSTEM_SHOWNATIVEMSGBOX_BTNCOMBI_ABORT_RETRY_IGNORE )
-    {
-        aButtons.push_back( Button::GetStandardText( BUTTON_ABORT ) );
-        nButtonIds[nBut++] = SALSYSTEM_SHOWNATIVEMSGBOX_BTN_ABORT;
-        aButtons.push_back( Button::GetStandardText( BUTTON_RETRY ) );
-        nButtonIds[nBut++] = SALSYSTEM_SHOWNATIVEMSGBOX_BTN_RETRY;
-        aButtons.push_back( Button::GetStandardText( BUTTON_IGNORE ) );
-        nButtonIds[nBut++] = SALSYSTEM_SHOWNATIVEMSGBOX_BTN_IGNORE;
-        switch( nDefaultButton )
-        {
-            case SALSYSTEM_SHOWNATIVEMSGBOX_BTN_RETRY: nDefButton = 1;break;
-            case SALSYSTEM_SHOWNATIVEMSGBOX_BTN_IGNORE: nDefButton = 2;break;
-        }
-    }
-    int nResult = ShowNativeDialog( rTitle, rMessage, aButtons, nDefButton );
-
-    return nResult != -1 ? nButtonIds[ nResult ] : 0;
-}
-#endif
 
 // convert ~ to indicate mnemonic to '_'
 static rtl::OString MapToGtkAccelerator(const String &rStr)
@@ -157,59 +194,32 @@ static rtl::OString MapToGtkAccelerator(const String &rStr)
     return rtl::OUStringToOString(aRet, RTL_TEXTENCODING_UTF8);
 }
 
-int GtkSalSystem::ShowNativeDialog( const String& rTitle,
-                                    const String& rMessage,
-                                    const std::list< String >& rButtons,
-                                    int nDefButton )
+int GtkSalSystem::ShowNativeDialog (const String& rTitle, const String& rMessage,
+                                    const std::list< String >& rButtonNames,
+                                    int nDefaultButton)
 {
+    rtl::OString aTitle (rtl::OUStringToOString (rTitle, RTL_TEXTENCODING_UTF8));
+    rtl::OString aMessage (rtl::OUStringToOString (rMessage, RTL_TEXTENCODING_UTF8));
 
-    ImplSVData* pSVData = ImplGetSVData();
-    if( pSVData->mpIntroWindow )
-            pSVData->mpIntroWindow->Hide();
-
-#if OSL_DEBUG_LEVEL > 1
-    std::fprintf( stderr, "GtkSalSystem::ShowNativeDialog\n");
-#endif
-
-    rtl::OString aTitle(rtl::OUStringToOString(rTitle,
-        RTL_TEXTENCODING_UTF8));
-    rtl::OString aMessage(rtl::OUStringToOString(rMessage,
-        RTL_TEXTENCODING_UTF8));
-
-    /* Create the dialogue */
-    GtkWidget* mainwin = gtk_message_dialog_new
-            ( NULL, (GtkDialogFlags)0, GTK_MESSAGE_WARNING,
-              GTK_BUTTONS_NONE, aMessage.getStr(), NULL );
-    gtk_window_set_title( GTK_WINDOW( mainwin ), aTitle.getStr() );
-
-    gint nButtons = 0, nResponse;
-
+    GtkDialog *pDialog = GTK_DIALOG (
+        g_object_new (GTK_TYPE_MESSAGE_DIALOG,
+                      "title", aTitle.getStr(),
+                      "message-type", (int)GTK_MESSAGE_WARNING,
+                      "text", aMessage.getStr(),
+                      NULL));
     int nButton = 0;
-    for( std::list< String >::const_iterator it = rButtons.begin(); it != rButtons.end(); ++it )
-    {
-        if( nButton == nDefButton )
-        {
-            gtk_dialog_add_button(GTK_DIALOG( mainwin ),
-                MapToGtkAccelerator(*it).getStr(), nButtons);
-            gtk_dialog_set_default_response(GTK_DIALOG(mainwin), nButtons);
-        }
-        else
-        {
-            rtl::OString aLabel(rtl::OUStringToOString(*it,
-                RTL_TEXTENCODING_UTF8));
-            gtk_dialog_add_button(GTK_DIALOG(mainwin), aLabel.getStr(),
-                nButtons);
-        }
-        nButtons++;
-    }
+    std::list< String >::const_iterator it;
+    for (it = rButtonNames.begin(); it != rButtonNames.end(); ++it)
+        gtk_dialog_add_button (pDialog, MapToGtkAccelerator(*it).getStr(), nButton++);
+    gtk_dialog_set_default_response (pDialog, nDefaultButton);
 
-    nResponse = gtk_dialog_run( GTK_DIALOG(mainwin) );
-    if( nResponse == GTK_RESPONSE_NONE || nResponse == GTK_RESPONSE_DELETE_EVENT )
-        nResponse = -1;
+    nButton = gtk_dialog_run (pDialog);
+    if (nButton < 0)
+        nButton = -1;
 
-    gtk_widget_destroy( GTK_WIDGET(mainwin) );
+    gtk_widget_destroy (GTK_WIDGET (pDialog));
 
-    return nResponse;
+    return nButton;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

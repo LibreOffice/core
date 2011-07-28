@@ -84,6 +84,7 @@ GtkSalDisplay::GtkSalDisplay( GdkDisplay* pDisplay ) :
 #if !GTK_CHECK_VERSION(3,0,0)
             SalDisplay( gdk_x11_display_get_xdisplay( pDisplay ) ),
 #endif
+            m_pSys( GtkSalSystem::GetSingleton() ),
             m_pGdkDisplay( pDisplay ),
             m_bStartupCompleted( false )
 {
@@ -243,99 +244,26 @@ GdkFilterReturn GtkSalDisplay::filterGdkEvent( GdkXEvent* sys_event,
 void GtkSalDisplay::screenSizeChanged( GdkScreen* pScreen )
 {
 #if !GTK_CHECK_VERSION(3,0,0)
-    if( pScreen )
-    {
-        int nScreen = gdk_screen_get_number( pScreen );
-        if( nScreen < static_cast<int>(m_aScreens.size()) )
-        {
-            ScreenData& rSD = const_cast<ScreenData&>(m_aScreens[nScreen]);
-            if( rSD.m_bInit )
-            {
-                rSD.m_aSize = Size( gdk_screen_get_width( pScreen ),
-                                    gdk_screen_get_height( pScreen ) );
-                if( ! m_aFrames.empty() )
-                    m_aFrames.front()->CallCallback( SALEVENT_DISPLAYCHANGED, 0 );
-            }
-        }
-        else
-        {
-            OSL_FAIL( "unknown screen changed size" );
-        }
-    }
+    if (pScreen)
+        m_aFrames.front()->CallCallback( SALEVENT_DISPLAYCHANGED, 0 );
+#else
+#warning get this right
 #endif
 }
 
 void GtkSalDisplay::monitorsChanged( GdkScreen* pScreen )
 {
 #if !GTK_CHECK_VERSION(3,0,0)
-    if( pScreen )
-    {
-        if( gdk_display_get_n_screens(m_pGdkDisplay) == 1 )
-        {
-            int nScreen = gdk_screen_get_number( pScreen );
-            if( nScreen == m_nDefaultScreen ) //To-Do, make m_aXineramaScreens a per-screen thing ?
-            {
-                gint nMonitors = gdk_screen_get_n_monitors(pScreen);
-                m_aXineramaScreens = std::vector<Rectangle>();
-                m_aXineramaScreenIndexMap = std::vector<int>(nMonitors);
-                for (gint i = 0; i < nMonitors; ++i)
-                {
-                    GdkRectangle dest;
-                    gdk_screen_get_monitor_geometry(pScreen, i, &dest);
-                    addXineramaScreenUnique( i, dest.x, dest.y, dest.width, dest.height );
-                }
-                m_bXinerama = m_aXineramaScreens.size() > 1;
-                if( ! m_aFrames.empty() )
-                    m_aFrames.front()->CallCallback( SALEVENT_DISPLAYCHANGED, 0 );
-            }
-            else
-            {
-                OSL_FAIL( "monitors for non-default screen changed, extend-me" );
-            }
-        }
-    }
+    if (pScreen)
+        m_aFrames.front()->CallCallback( SALEVENT_DISPLAYCHANGED, 0 );
+#else
+#warning get this right
 #endif
 }
 
 extern "C"
 {
     typedef gint(* screen_get_primary_monitor)(GdkScreen *screen);
-}
-
-int GtkSalDisplay::GetDefaultMonitorNumber() const
-{
-    int n = 0;
-#if !GTK_CHECK_VERSION(3,0,0)
-    GdkScreen* pScreen = gdk_display_get_screen( m_pGdkDisplay, m_nDefaultScreen );
-#if GTK_CHECK_VERSION(2,20,0)
-    n = gdk_screen_get_primary_monitor(pScreen);
-#else
-    static screen_get_primary_monitor sym_gdk_screen_get_primary_monitor =
-        (screen_get_primary_monitor)osl_getAsciiFunctionSymbol( GetSalData()->m_pPlugin, "gdk_screen_get_primary_monitor" );
-    if (sym_gdk_screen_get_primary_monitor)
-        n = sym_gdk_screen_get_primary_monitor( pScreen );
-    else
-    {
-#if GTK_CHECK_VERSION(2,14,0)
-        //gdk_screen_get_primary_monitor unavailable, take the first laptop monitor
-        //as the default
-        gint nMonitors = gdk_screen_get_n_monitors(pScreen);
-        for (gint i = 0; i < nMonitors; ++i)
-        {
-            if (g_ascii_strncasecmp (gdk_screen_get_monitor_plug_name(pScreen, i), "LVDS", 4) == 0)
-            {
-                n = i;
-                break;
-            }
-        }
-#endif
-    }
-#endif
-
-    if( n >= 0 && size_t(n) < m_aXineramaScreenIndexMap.size() )
-        n = m_aXineramaScreenIndexMap[n];
-#endif
-    return n;
 }
 
 void GtkSalDisplay::initScreen( int nScreen ) const
@@ -1010,16 +938,6 @@ void GtkSalDisplay::CancelInternalEvent( SalFrame* pFrame, void* pData, sal_uInt
     else {
         DBG_ASSERT( 1, "SalDisplay::CancelInternalEvent !acquireMutex\n" );
     }
-}
-
-Size GtkSalDisplay::GetScreenSize( int nScreen )
-{
-    GdkScreen *pScreen = gdk_display_get_screen (m_pGdkDisplay, nScreen);
-    if (!pScreen)
-        return Size();
-    else
-        return Size( gdk_screen_get_width (pScreen),
-                     gdk_screen_get_height (pScreen) );
 }
 
 #endif

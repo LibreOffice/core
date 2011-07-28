@@ -114,6 +114,16 @@ static sal_Bool ImplIsMnemonicCtrl( Window* pWindow )
 
 // -----------------------------------------------------------------------
 
+// Called by native error dialog popup implementations
+void ImplHideSplash()
+{
+    ImplSVData* pSVData = ImplGetSVData();
+    if( pSVData->mpIntroWindow )
+            pSVData->mpIntroWindow->Hide();
+}
+
+// -----------------------------------------------------------------------
+
 void ImplWindowAutoMnemonic( Window* pWindow )
 {
     MnemonicGenerator   aMnemonicGenerator;

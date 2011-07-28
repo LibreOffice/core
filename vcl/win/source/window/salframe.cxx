@@ -5730,9 +5730,7 @@ LRESULT CALLBACK SalFrameWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lP
 
     if ( WM_USER_SYSTEM_WINDOW_ACTIVATED == nMsg )
     {
-        if (pSVData->mpIntroWindow)
-            pSVData->mpIntroWindow->Hide();
-
+        ImplHideSplash();
         return 0;
     }
 
@@ -5918,10 +5916,7 @@ LRESULT CALLBACK SalFrameWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lP
                     ImplSVData* pSVData = ImplGetSVData();
                     pSVData->maAppData.mnModalMode++;
 
-                    // #106431#, hide SplashScreen
-                    if( pSVData->mpIntroWindow )
-                        pSVData->mpIntroWindow->Hide();
-
+                    ImplHideSplash();
                     if( pWin )
                     {
                         pWin->EnableInput( FALSE, TRUE, TRUE, NULL );

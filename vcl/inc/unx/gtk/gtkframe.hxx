@@ -298,6 +298,7 @@ class GtkSalFrame : public SalFrame, basebmp::BitmapDeviceDamageTracker
     void AllocateFrame();
 
     void updateWMClass();
+    void SetScreen( unsigned int nNewScreen, int eType, Rectangle *pSize = NULL );
 
     DECL_LINK( ImplDelayedFullScreenHdl, void* );
 public:
@@ -328,8 +329,6 @@ public:
     void pushIgnoreDamage();
     void popIgnoreDamage();
     void renderArea( cairo_t *cr, cairo_rectangle_t *src );
-
-    void moveToScreen( int nScreen );
 
     virtual ~GtkSalFrame();
 

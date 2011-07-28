@@ -45,7 +45,8 @@
 #define GTK_GRAPHICS_DISABLED
 
 class GtkSalFrame;
-class GtkSalGraphics : public SvpSalGraphics {
+class GtkSalGraphics : public SvpSalGraphics
+{
     GtkSalFrame *mpFrame;
 public:
     GtkSalGraphics( GtkSalFrame *pFrame, GtkWidget *pWindow );
@@ -53,6 +54,7 @@ public:
                            long nSrcX, long nSrcY,
                            long nSrcWidth, long nSrcHeight,
                            sal_uInt16 /*nFlags*/ );
+    void updateSettings( AllSettings& rSettings );
 };
 
 #else

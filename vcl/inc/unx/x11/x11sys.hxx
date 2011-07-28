@@ -27,28 +27,34 @@
  ************************************************************************/
 
 // -=-= includes -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#ifndef _SV_SALSYS_H
-#define _SV_SALSYS_H
+#ifndef _SV_X11SYS_H
+#define _SV_X11SYS_H
 
-#include <salsys.hxx>
+#include <vcl/sv.h>
+#include <osl/mutex.hxx>
+#include <osl/thread.hxx>
+#include <unx/salsys.h>
 #include <vclpluginapi.h>
-#include <list>
 
-class VCLPLUG_GEN_PUBLIC UnxSalSystem : public SalSystem
+class VCLPLUG_GEN_PUBLIC X11SalSystem : public UnxSalSystem
 {
- public:
-    UnxSalSystem();
-    virtual ~UnxSalSystem();
+public:
+    X11SalSystem() {}
+    virtual ~X11SalSystem();
+
+    // overload pure virtual methods
+    virtual unsigned int GetDisplayScreenCount();
+    virtual bool IsMultiDisplay();
+    virtual unsigned int GetDefaultDisplayNumber();
+    virtual Rectangle GetDisplayScreenPosSizePixel( unsigned int nScreen );
+    virtual Rectangle GetDisplayWorkAreaPosSizePixel( unsigned int nScreen );
+    virtual rtl::OUString GetScreenName( unsigned int nScreen );
     virtual int ShowNativeDialog( const String& rTitle,
                                   const String& rMessage,
                                   const std::list< String >& rButtons,
-                                  int nDefButton ) = 0;
-    virtual int ShowNativeMessageBox( const String& rTitle,
-                                      const String& rMessage,
-                                      int nButtonCombination,
-                                      int nDefaultButton);
+                                  int nDefButton );
 };
 
-#endif // _SV_SALSYS_H
+#endif // _SV_X11SYS_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
