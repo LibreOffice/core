@@ -1211,6 +1211,18 @@ int RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
         case RTF_ROW:
         case RTF_NESTROW:
             {
+                for (int i = 0; i < m_aStates.top().nCells; ++i)
+                {
+                    m_aStates.top().aTableCellSprms = m_aStates.top().aTableCellsSprms.front();
+                    m_aStates.top().aTableCellsSprms.pop_front();
+                    m_aStates.top().aTableCellAttributes = m_aStates.top().aTableCellsAttributes.front();
+                    m_aStates.top().aTableCellsAttributes.pop_front();
+                    replayBuffer(m_aTableBuffer);
+                }
+                m_aStates.top().nCells = 0;
+                m_aStates.top().aTableCellSprms = m_aDefaultState.aTableCellSprms;
+                m_aStates.top().aTableCellAttributes = m_aDefaultState.aTableCellAttributes;
+
                 writerfilter::Reference<Properties>::Pointer_t const pParagraphProperties(
                         new RTFReferenceProperties(m_aStates.top().aParagraphAttributes, m_aStates.top().aParagraphSprms)
                         );
@@ -1234,6 +1246,8 @@ int RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
                 tableBreak();
                 m_bNeedPap = true;
                 m_aTableBuffer.clear();
+                m_aStates.top().aTableCellsSprms.clear();
+                m_aStates.top().aTableCellsAttributes.clear();
             }
             break;
         case RTF_COLUMN:
@@ -1947,10 +1961,11 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
                 m_aStates.top().nCellX = nParam;
                 RTFValue::Pointer_t pXValue(new RTFValue(nCellX));
                 m_aStates.top().aTableRowSprms->push_back(make_pair(NS_ooxml::LN_CT_TblGridBase_gridCol, pXValue));
+                m_aStates.top().nCells++;
 
-                replayBuffer(m_aTableBuffer);
-
-                // Reset cell properties.
+                // Push cell properties.
+                m_aStates.top().aTableCellsSprms.push_back(m_aStates.top().aTableCellSprms);
+                m_aStates.top().aTableCellsAttributes.push_back(m_aStates.top().aTableCellAttributes);
                 m_aStates.top().aTableCellSprms = m_aDefaultState.aTableCellSprms;
                 m_aStates.top().aTableCellAttributes = m_aDefaultState.aTableCellAttributes;
             }
@@ -2765,6 +2780,8 @@ RTFParserState::RTFParserState()
     aTableRowAttributes(),
     aTableCellSprms(),
     aTableCellAttributes(),
+    aTableCellsSprms(),
+    aTableCellsAttributes(),
     aTabAttributes(),
     aCurrentColor(),
     nCurrentEncoding(0),
@@ -2777,6 +2794,7 @@ RTFParserState::RTFParserState()
     nPictureScaleY(0),
     aShape(),
     nCellX(0),
+    nCells(0),
     bIsCjk(false),
     nYear(0),
     nMonth(0),

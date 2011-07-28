@@ -201,6 +201,9 @@ namespace writerfilter {
                 // reset by cellx
                 RTFSprms aTableCellSprms;
                 RTFSprms aTableCellAttributes;
+                // reset by row/nestrow
+                std::deque<RTFSprms> aTableCellsSprms;
+                std::deque<RTFSprms> aTableCellsAttributes;
                 // reset by tx
                 RTFSprms aTabAttributes;
 
@@ -227,6 +230,7 @@ namespace writerfilter {
 
                 /// Current cellx value.
                 int nCellX;
+                int nCells;
 
                 /// CJK or CTL?
                 bool bIsCjk;
