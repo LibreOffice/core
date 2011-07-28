@@ -406,65 +406,6 @@ String SvGlobalName::GetHexName() const
     return rtl::OStringToOUString(aHexBuffer.makeStringAndClear(), RTL_TEXTENCODING_ASCII_US);
 }
 
-/************** SvGlobalNameList ****************************************/
-/************************************************************************/
-/*************************************************************************
-|*    SvGlobalNameList::SvGlobalNameList()
-*************************************************************************/
-SvGlobalNameList::SvGlobalNameList()
-{
-}
-
-/*************************************************************************
-|*    SvGlobalNameList::~SvGlobalNameList()
-*************************************************************************/
-SvGlobalNameList::~SvGlobalNameList()
-{
-    ImpSvGlobalName *pImp = 0;
-    std::vector<ImpSvGlobalName*>::iterator piter;
-
-    for (piter = aList.begin(); piter != aList.end(); ++piter)
-    {
-        pImp = *piter;
-
-        --pImp->nRefCount;
-        if( !pImp->nRefCount )
-            delete pImp;
-    }
-}
-
-/*************************************************************************
-|*    SvGlobalNameList::Append()
-*************************************************************************/
-void SvGlobalNameList::Append( const SvGlobalName & rName )
-{
-    rName.pImp->nRefCount++;
-    aList.push_back(rName.pImp);
-}
-
-/*************************************************************************
-|*    SvGlobalNameList::GetObject()
-*************************************************************************/
-SvGlobalName SvGlobalNameList::GetObject( sal_uLong nPos )
-{
-    return SvGlobalName(nPos < aList.size() ? aList[nPos] : NULL);
-}
-
-/*************************************************************************
-|*    SvGlobalNameList::IsEntry()
-*************************************************************************/
-sal_Bool SvGlobalNameList::IsEntry( const SvGlobalName & rName )
-{
-    std::vector<ImpSvGlobalName*>::iterator piter;
-    for (piter = aList.begin(); piter != aList.end(); ++piter)
-    {
-        if (*rName.pImp == *(*piter))
-            return sal_True;
-    }
-
-    return sal_False;
-}
-
 com::sun::star::uno::Sequence < sal_Int8 > SvGlobalName::GetByteSequence() const
 {
     // platform independent representation of a "GlobalName"

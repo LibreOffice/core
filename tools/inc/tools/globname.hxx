@@ -59,10 +59,8 @@ struct GUID;
 #endif
 typedef GUID CLSID;
 class SvStream;
-class SvGlobalNameList;
 class TOOLS_DLLPUBLIC SvGlobalName
 {
-friend class SvGlobalNameList;
     ImpSvGlobalName * pImp;
     void    NewImp();
 public:
@@ -117,23 +115,6 @@ public:
     // platform independent representation of a "GlobalName"
     // maybe transported remotely
     com::sun::star::uno::Sequence < sal_Int8 > GetByteSequence() const;
-};
-
-class SvGlobalNameList
-{
-    std::vector<ImpSvGlobalName*> aList;
-public:
-                    SvGlobalNameList();
-                    ~SvGlobalNameList();
-
-    void            Append( const SvGlobalName & );
-    SvGlobalName    GetObject( sal_uLong );
-    sal_Bool            IsEntry( const SvGlobalName & rName );
-    size_t          Count() const { return aList.size(); }
-private:
-                // nicht erlaubt
-                SvGlobalNameList( const SvGlobalNameList & );
-    SvGlobalNameList & operator = ( const SvGlobalNameList & );
 };
 
 #endif // _GLOBNAME_HXX
