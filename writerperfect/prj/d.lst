@@ -1,5 +1,0 @@
-..\%__SRC%\lib\lib*.so %_DEST%\lib
-..\%__SRC%\bin\*.dll %_DEST%\bin
-..\%__SRC%\bin\wpftgo.dll %_DEST%\bin\wpftgo.dll
-..\%__SRC%\lib\*.dylib %_DEST%\lib\*.dylib
-..\%__SRC%\misc\*.component %_DEST%\xml\*.component
