@@ -113,14 +113,6 @@ public:
 
     virtual void    EndList(IXFStream *pStrm);
 
-    static void     StartListHeader(IXFStream *pStrm);
-
-    static void     EndListHeader(IXFStream *pStrm);
-
-    static void     StartListItem(IXFStream *pStrm);
-
-    static void     EndListItem(IXFStream *pStrm);
-
 private:
     sal_Bool    m_bOrdered;
     sal_Bool    m_bContinueNumber;

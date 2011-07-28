@@ -275,52 +275,6 @@ void LwpOleObject::RegisterStyle()
 {
 }
 
-
-#include <sot/exchange.hxx>
-#include <sot/storinfo.hxx>
-#include <svtools/wmf.hxx>
-/**
-* @descr:   For SODC_2667, To get the OLE object size by reading OLE object picture information.
-*/
-Rectangle LwpOleObject::GetOLEObjectSize( SotStorage * pStor ) const
-{
-    Rectangle aSize(0,0,0,0);
-    String aStreamName;
-    if( pStor->IsContained( String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "\002OlePres000" ) ) ) )
-        aStreamName = String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "\002OlePres000" ) );
-    else if( pStor->IsContained( String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "\1Ole10Native" ) ) ) )
-        aStreamName = String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "\1Ole10Native" ) );
-
-    if( aStreamName.Len() == 0 )
-        return aSize;
-
-
-    for( sal_uInt16 i = 1; i < 10; i++ )
-    {
-        SotStorageStreamRef xStm = pStor->OpenSotStream( aStreamName,
-            STREAM_READ | STREAM_NOCREATE );
-        if( xStm->GetError() )
-            break;
-
-        xStm->SetBufferSize( 8192 );
-        LwpOlePres * pEle = new LwpOlePres( 0 );
-        if( pEle->Read( *xStm ) && !xStm->GetError() )
-        {
-            if( pEle->GetFormat() == FORMAT_GDIMETAFILE || pEle->GetFormat() == FORMAT_BITMAP )
-            {
-                aSize = Rectangle( Point(), pEle->GetSize());
-                delete pEle;
-                break;
-            }
-        }
-        delete pEle;
-        pEle = NULL;
-        aStreamName = String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "\002OlePres00" ) );
-        aStreamName += String( i );
-    };
-
-    return aSize;
-}
 /**
 * @descr:   Read OLE object picture information
 */

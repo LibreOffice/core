@@ -156,33 +156,4 @@ void    XFList::EndList(IXFStream *pStrm)
         pStrm->EndElement( A2OUSTR("text:unordered-list") );
 }
 
-void    XFList::StartListHeader(IXFStream *pStrm)
-{
-    IXFAttrList *pAttrList = pStrm->GetAttrList();
-    pAttrList->Clear();
-
-    pStrm->StartElement( A2OUSTR("text:list-header") );
-}
-
-void    XFList::EndListHeader(IXFStream *pStrm)
-{
-    IXFAttrList *pAttrList = pStrm->GetAttrList();
-    pAttrList->Clear();
-
-    pStrm->EndElement( A2OUSTR("text:list-header") );
-}
-
-void    XFList::StartListItem(IXFStream *pStrm)
-{
-    IXFAttrList *pAttrList = pStrm->GetAttrList();
-    assert(NULL!=pAttrList);
-
-    pAttrList->Clear();
-    pStrm->StartElement( A2OUSTR("text:list-item") );
-}
-
-void    XFList::EndListItem(IXFStream *pStrm)
-{
-    pStrm->EndElement( A2OUSTR("text:list-item") );
-}
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

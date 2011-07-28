@@ -129,8 +129,6 @@ public:
     virtual void RegisterStyle();
     void GetGrafOrgSize(double& rWidth, double& rHeight) ;
 private:
-    Rectangle GetOLEObjectSize( SotStorage * pStor ) const;
-
     sal_uInt16 cPersistentFlags;
 
     Rectangle m_SizeRect;
