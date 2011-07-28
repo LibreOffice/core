@@ -1,8 +1,8 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
-# Copyright 2000, 2010 Oracle and/or its affiliates.
+#
+# Copyright 2000, 2011 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
 #
@@ -25,39 +25,12 @@
 #
 #*************************************************************************
 
-PRJ=..$/..
+$(eval $(call gb_Module_Module,basctl))
 
-PRJNAME=basctl
-TARGET=dlged
-AUTOSEG=true
-VISIBILITY_HIDDEN=TRUE
+$(eval $(call gb_Module_add_targets,basctl,\
+	AllLangResTarget_basctl \
+	Library_basctl \
+	Package_xml \
+))
 
-# --- Settings -----------------------------------------------------
-
-.INCLUDE :  settings.mk
-
-# --- Files --------------------------------------------------------
-
-EXCEPTIONSFILES= \
-                $(SLO)$/dlged.obj	\
-                $(SLO)$/dlgedclip.obj	\
-                $(SLO)$/dlgedfac.obj	\
-                $(SLO)$/dlgedfunc.obj	\
-                $(SLO)$/dlgedlist.obj	\
-                $(SLO)$/dlgedmod.obj	\
-                $(SLO)$/dlgedobj.obj	\
-                $(SLO)$/dlgedpage.obj	\
-                $(SLO)$/dlgedview.obj	\
-                $(SLO)$/managelang.obj	\
-                $(SLO)$/propbrw.obj
-
-SLOFILES=       $(EXCEPTIONSFILES)
-
-SRS1NAME=$(TARGET)
-SRC1FILES=	dlgresid.src \
-            managelang.src
-
-# --- Targets -------------------------------------------------------
-
-.INCLUDE :  target.mk
-
+# vim: set noet sw=4:

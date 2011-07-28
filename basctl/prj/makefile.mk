@@ -1,7 +1,7 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
+#
 # Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
@@ -26,28 +26,15 @@
 #*************************************************************************
 
 PRJ=..
+TARGET=prj
 
-PRJNAME=basctl
-TARGET=basslots
+.INCLUDE : settings.mk
 
-# --- Settings -----------------------------------------------------
-
-.INCLUDE :  settings.mk
-.IF "$(L10N_framework)"==""
-SDI1NAME=$(TARGET)
-SDI1EXPORT=basctl
-
-# --- Files --------------------------------------------------------
-
-SVSDI1DEPEND= \
-        $(SOLARINCXDIR)$/sfx2/sfx.sdi \
-        $(SOLARINCXDIR)$/sfx2/sfxitems.sdi \
-        $(SOLARINCXDIR)$/svx/svx.sdi \
-        $(SOLARINCXDIR)$/svx/svxitems.sdi \
-        $(SOLARINCXDIR)$/svx/xoitems.sdi \
-    baside.sdi
-
-# --- Targets -------------------------------------------------------
+.IF "$(VERBOSE)"!=""
+VERBOSEFLAG :=
+.ELSE
+VERBOSEFLAG := -s
 .ENDIF
-.INCLUDE :  target.mk
 
+all:
+	cd $(PRJ) && $(GNUMAKE) $(VERBOSEFLAG) -r -j$(MAXPROCESS) $(gb_MAKETARGET) && $(GNUMAKE) $(VERBOSEFLAG) -r deliverlog
