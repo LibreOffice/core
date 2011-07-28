@@ -1158,58 +1158,89 @@ sal_Size SvStream::SeekRel( sal_sSize nPos )
 |*
 *************************************************************************/
 
-SvStream& SvStream::operator >> ( sal_uInt16& r )
+SvStream& SvStream::operator>>(sal_uInt16& r)
 {
-    READNUMBER_WITHOUT_SWAP(sal_uInt16,r)
-    if( bSwap )
-        SwapUShort(r);
+    sal_uInt16 n;
+    READNUMBER_WITHOUT_SWAP(sal_uInt16, n)
+    if (good())
+    {
+        if (bSwap)
+            SwapUShort(n);
+        r = n;
+    }
     return *this;
 }
 
-SvStream& SvStream::operator>> ( sal_uInt32& r )
+SvStream& SvStream::operator>>(sal_uInt32& r)
 {
-    READNUMBER_WITHOUT_SWAP(sal_uInt32,r)
-    if( bSwap )
-        SwapULong(r);
+    sal_uInt32 n;
+    READNUMBER_WITHOUT_SWAP(sal_uInt32, n)
+    if (good())
+    {
+        if (bSwap)
+            SwapULong(n);
+        r = n;
+    }
     return *this;
 }
 
 
-SvStream& SvStream::operator>> ( sal_uInt64& r )
+SvStream& SvStream::operator>>(sal_uInt64& r)
 {
-    READNUMBER_WITHOUT_SWAP(sal_uInt64,r)
-    if( bSwap )
-        SwapUInt64(r);
+    sal_uInt64 n;
+    READNUMBER_WITHOUT_SWAP(sal_uInt64, n)
+    if (good())
+    {
+        if (bSwap)
+            SwapUInt64(n);
+        r = n;
+    }
     return *this;
 }
 
-SvStream& SvStream::operator >> ( long& r )
+SvStream& SvStream::operator >>(long& r) //puke!, kill this
 {
 #if(SAL_TYPES_SIZEOFLONG != 4)
-    int tmp = r;
-    *this >> tmp;
-    r = tmp;
+    int n;
+    *this >> n;
+    if (good())
+        r = n;
 #else
-    READNUMBER_WITHOUT_SWAP(long,r)
-    if( bSwap )
-        SwapLong(r);
+    long n;
+    READNUMBER_WITHOUT_SWAP(long, n)
+    if (good())
+    {
+        if (bSwap)
+            SwapLong(n);
+        r = n;
+    }
 #endif
     return *this;
 }
 
-SvStream& SvStream::operator >> ( short& r )
+SvStream& SvStream::operator>>(short& r)
 {
-    READNUMBER_WITHOUT_SWAP(short,r)
-    if( bSwap )
-        SwapShort(r);
+    short n;
+    READNUMBER_WITHOUT_SWAP(short, n)
+    if (good())
+    {
+        if(bSwap)
+            SwapShort(n);
+        r = n;
+    }
     return *this;
 }
 
-SvStream& SvStream::operator >> ( int& r )
+SvStream& SvStream::operator>>(int& r)
 {
-    READNUMBER_WITHOUT_SWAP(int,r)
-    if( bSwap )
-        SwapLongInt(r);
+    int n;
+    READNUMBER_WITHOUT_SWAP(int, n)
+    if (good())
+    {
+        if (bSwap)
+            SwapLongInt(n);
+        r = n;
+    }
     return *this;
 }
 
@@ -1260,25 +1291,33 @@ SvStream& SvStream::operator>>( unsigned char& r )
     return *this;
 }
 
-SvStream& SvStream::operator>>( float& r )
+SvStream& SvStream::operator>>(float& r)
 {
-    // Read( (char*)&r, sizeof(float) );
-    READNUMBER_WITHOUT_SWAP(float,r)
+    float n;
+    READNUMBER_WITHOUT_SWAP(float, n)
+    if (good())
+    {
 #if defined UNX
-    if( bSwap )
-      SwapFloat(r);
+        if (bSwap)
+          SwapFloat(n);
 #endif
+        r = n;
+    }
     return *this;
 }
 
-SvStream& SvStream::operator>>( double& r )
+SvStream& SvStream::operator>>(double& r)
 {
-    // Read( (char*)&r, sizeof(double) );
-    READNUMBER_WITHOUT_SWAP(double,r)
+    double n;
+    READNUMBER_WITHOUT_SWAP(double, n)
+    if (good())
+    {
 #if defined UNX
-    if( bSwap )
-      SwapDouble(r);
+        if (bSwap)
+          SwapDouble(n);
+        r = n;
 #endif
+    }
     return *this;
 }
 

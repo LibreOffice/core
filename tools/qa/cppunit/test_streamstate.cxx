@@ -94,6 +94,9 @@ namespace
         //yet, the read didn't succeed
         CPPUNIT_ASSERT(!aMemStream.good());
 
+        //set things up so that there is only one byte available on an attempt
+        //to read a two-byte sal_uInt16.  The byte should be consumed, but the
+        //operation should fail, and tools_b should remain unchanged,
         sal_uInt16 tools_b = 0x1122;
         aMemStream.SeekRel(-1);
         CPPUNIT_ASSERT(!aMemStream.eof());
@@ -101,7 +104,7 @@ namespace
         aMemStream >> tools_b;
         CPPUNIT_ASSERT(!aMemStream.good());
         CPPUNIT_ASSERT(aMemStream.eof());
-//        CPPUNIT_ASSERT(tools_b == 0x1122); //nasty, real nasty
+        CPPUNIT_ASSERT(tools_b == 0x1122);
 
         iss.clear();
         iss.seekg(0);

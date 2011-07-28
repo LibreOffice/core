@@ -526,18 +526,22 @@ public:
 
     friend SvStream& operator<<( SvStream& rStr, SvStrPtr f ); // fuer Manips
 
-    //end of input seen
+    //end of input seen during previous i/o operation
     bool eof() const { return bIsEof; }
 
     // stream is broken
     bool bad() const { return GetError() != 0; }
 
-    //next operation might succeed. If the state is good() the previous i/o
-    //operation succeeded. If the state is good(), the next input operation
-    //might succeed; otherwise, it will fail. Applying an input operation to a
-    //stream that is not in the good() state is a null operation as far as the
-    //variable being read into is concerned. If we try to read into a variable
-    //v and the operation fails, the value of v should be unchanged,
+    //If the state is good() the previous i/o operation succeeded.
+    //
+    //If the state is good(), the next input operation might succeed;
+    //otherwise, it will fail.
+    //
+    //Applying an input operation to a stream that is not in the good() state
+    //is a null operation as far as the variable being read into is concerned.
+    //
+    //If we try to read into a variable v and the operation fails, the value of
+    //v should be unchanged,
     bool good() const { return !(eof() || bad()); }
 };
 
