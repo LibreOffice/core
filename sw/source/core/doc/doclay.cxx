@@ -473,12 +473,12 @@ SwFrmFmt *SwDoc::CopyLayoutFmt( const SwFrmFmt& rSource,
 
         // sorge dafuer das auch Fly's in Fly's kopiert werden
         aIdx = *pSttNd->EndOfSectionNode();
-        bool bDrawingLayerUndoState = GetIDocumentUndoRedo().DoesDrawUndo();
-        //fdo#36631 disable any undo operations associated with the contact
-        //object itself. They should be managed by SwUndoInsLayFmt.
-        GetIDocumentUndoRedo().DoDrawUndo(false);
+
+        //fdo#36631 disable (scoped) any undo operations associated with the
+        //contact object itself. They should be managed by SwUndoInsLayFmt.
+        const ::sw::DrawUndoGuard drawUndoGuard(GetIDocumentUndoRedo());
+
         pSrcDoc->CopyWithFlyInFly( aRg, 0, aIdx, sal_False, sal_True, sal_True );
-        GetIDocumentUndoRedo().DoDrawUndo(bDrawingLayerUndoState);
     }
     else
     {

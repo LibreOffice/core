@@ -1705,6 +1705,8 @@ void SwWW8ImplReader::SetStylesList(sal_uInt16 nStyle, sal_uInt16 nActLFO,
             {
                 rStyleInf.nLFOIndex  = nActLFO;
                 rStyleInf.nListLevel = nActLevel;
+                if (nActLevel > 0) // it must be an outline list
+                    rStyleInf.nOutlineLevel = nActLevel;
 
                 if (
                     (USHRT_MAX > nActLFO) &&
