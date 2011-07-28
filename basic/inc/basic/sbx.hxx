@@ -39,6 +39,7 @@
 #include <basic/sbxobj.hxx>
 #include <basic/sbxprop.hxx>
 #include <basic/sbxmeth.hxx>
+#include "basicdllapi.h"
 
 class String;
 class UniString;
@@ -80,7 +81,7 @@ SV_DECL_PTRARR_DEL(SbxParams,SbxParamInfo*,4,4)
 #ifndef __SBX_SBXINFO
 #define __SBX_SBXINFO
 
-class SbxInfo : public SvRefBase
+class BASIC_DLLPUBLIC SbxInfo : public SvRefBase
 {
     friend class SbxVariable;
     friend class SbMethod;
@@ -115,7 +116,7 @@ public:
 #ifndef __SBX_SBXHINT_HXX
 #define __SBX_SBXHINT_HXX
 
-class SbxHint : public SfxSimpleHint
+class BASIC_DLLPUBLIC SbxHint : public SfxSimpleHint
 {
     SbxVariable* pVar;
 public:
@@ -130,7 +131,7 @@ public:
 #define __SBX_SBXALIAS_HXX
 
 // SbxAlias is an alias for a var or object
-class SbxAlias : public SbxVariable, public SfxListener
+class BASIC_DLLPUBLIC SbxAlias : public SbxVariable, public SfxListener
 {
     SbxVariableRef xAlias;
     virtual ~SbxAlias();
@@ -157,13 +158,13 @@ class SbxVariableRef;
 
 class SbxArrayImpl;
 
-class SbxArray : public SbxBase
+class BASIC_DLLPUBLIC SbxArray : public SbxBase
 {
 // #100883 Method to set method directly to parameter array
     friend class SbMethod;
     friend class SbClassModuleObject;
     friend SbxObject* cloneTypeObjectImpl( const SbxObject& rTypeObj );
-    void PutDirect( SbxVariable* pVar, sal_uInt32 nIdx );
+    BASIC_DLLPRIVATE void PutDirect( SbxVariable* pVar, sal_uInt32 nIdx );
 
     SbxArrayImpl* mpSbxArrayImpl; // Impl data
     SbxVarRefs*   pData;          // The variables
@@ -215,13 +216,13 @@ struct SbxDim;
 
 class SbxDimArrayImpl;
 
-class SbxDimArray : public SbxArray
+class BASIC_DLLPUBLIC SbxDimArray : public SbxArray
 {
     SbxDimArrayImpl* mpSbxDimArrayImpl;   // Impl data
 
     SbxDim* pFirst, *pLast;               // Links to Dimension table
     short   nDim;                         // Number of dimensions
-    void   AddDimImpl32( sal_Int32, sal_Int32, sal_Bool bAllowSize0 );
+    BASIC_DLLPRIVATE void AddDimImpl32( sal_Int32, sal_Int32, sal_Bool bAllowSize0 );
     bool mbHasFixedSize;
 protected:
     sal_uInt16  Offset( const short* );
@@ -271,9 +272,9 @@ public:
 #ifndef __SBX_SBXCOLLECTION_HXX
 #define __SBX_SBXCOLLECTION_HXX
 
-class SbxCollection : public SbxObject
+class BASIC_DLLPUBLIC SbxCollection : public SbxObject
 {
-    void Initialize();
+    BASIC_DLLPRIVATE void Initialize();
 protected:
     virtual ~SbxCollection();
     virtual sal_Bool LoadData( SvStream&, sal_uInt16 );
@@ -300,7 +301,7 @@ public:
 #ifndef __SBX_SBXSTDCOLLECTION_HXX
 #define __SBX_SBXSTDCOLLECTION_HXX
 
-class SbxStdCollection : public SbxCollection
+class BASIC_DLLPUBLIC SbxStdCollection : public SbxCollection
 {
 protected:
     String aElemClass;

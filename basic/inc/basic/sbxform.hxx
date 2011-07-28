@@ -85,8 +85,9 @@
 #define _with_sprintf   // use a)
 
 #include <tools/string.hxx>
+#include "basicdllapi.h"
 
-class SbxBasicFormater {
+class BASIC_DLLPUBLIC SbxBasicFormater {
   public:
     // Constructor takes signs for decimal point, thousand separation sign
     // and necessary resource strings.
@@ -115,33 +116,33 @@ class SbxBasicFormater {
     static  sal_Bool isBasicFormat( String sFormatStrg );
 
   private:
-    inline void ShiftString( String& sStrg, sal_uInt16 nStartPos );
-    inline void StrAppendChar( String& sStrg, sal_Unicode ch );
-    void    AppendDigit( String& sStrg, short nDigit );
-    void    LeftShiftDecimalPoint( String& sStrg );
-    void    StrRoundDigit( String& sStrg, short nPos, sal_Bool& bOverflow );
-    void    StrRoundDigit( String& sStrg, short nPos );
-    void    ParseBack( String& sStrg, const String& sFormatStrg,
+    BASIC_DLLPRIVATE inline void    ShiftString( String& sStrg, sal_uInt16 nStartPos );
+    BASIC_DLLPRIVATE inline void    StrAppendChar( String& sStrg, sal_Unicode ch );
+    BASIC_DLLPRIVATE void   AppendDigit( String& sStrg, short nDigit );
+    BASIC_DLLPRIVATE void   LeftShiftDecimalPoint( String& sStrg );
+    BASIC_DLLPRIVATE void   StrRoundDigit( String& sStrg, short nPos, sal_Bool& bOverflow );
+    BASIC_DLLPRIVATE void   StrRoundDigit( String& sStrg, short nPos );
+    BASIC_DLLPRIVATE void   ParseBack( String& sStrg, const String& sFormatStrg,
                 short nFormatPos );
 #ifdef _with_sprintf
     // Methods for string conversion with sprintf():
-    void    InitScan( double _dNum );
-    void    InitExp( double _dNewExp );
-    short   GetDigitAtPosScan( short nPos, sal_Bool& bFoundFirstDigit );
-    short   GetDigitAtPosExpScan( double dNewExponent, short nPos,
+    BASIC_DLLPRIVATE void   InitScan( double _dNum );
+    BASIC_DLLPRIVATE void   InitExp( double _dNewExp );
+    BASIC_DLLPRIVATE short  GetDigitAtPosScan( short nPos, sal_Bool& bFoundFirstDigit );
+    BASIC_DLLPRIVATE short  GetDigitAtPosExpScan( double dNewExponent, short nPos,
                 sal_Bool& bFoundFirstDigit );
-    short   GetDigitAtPosExpScan( short nPos, sal_Bool& bFoundFirstDigit );
+    BASIC_DLLPRIVATE short  GetDigitAtPosExpScan( short nPos, sal_Bool& bFoundFirstDigit );
 #else
     // Methods for direct 'calculation' with log10() and pow():
-    short   GetDigitAtPos( double dNumber, short nPos, double& dNextNumber,
+    BASIC_DLLPRIVATE short  GetDigitAtPos( double dNumber, short nPos, double& dNextNumber,
                 sal_Bool& bFoundFirstDigit );
-    short   RoundDigit( double dNumber );
+    BASIC_DLLPRIVATE short  RoundDigit( double dNumber );
 #endif
-    String  GetPosFormatString( const String& sFormatStrg, sal_Bool & bFound );
-    String  GetNegFormatString( const String& sFormatStrg, sal_Bool & bFound );
-    String  Get0FormatString( const String& sFormatStrg, sal_Bool & bFound );
-    String  GetNullFormatString( const String& sFormatStrg, sal_Bool & bFound );
-    short   AnalyseFormatString( const String& sFormatStrg,
+    BASIC_DLLPRIVATE String GetPosFormatString( const String& sFormatStrg, sal_Bool & bFound );
+    BASIC_DLLPRIVATE String GetNegFormatString( const String& sFormatStrg, sal_Bool & bFound );
+    BASIC_DLLPRIVATE String Get0FormatString( const String& sFormatStrg, sal_Bool & bFound );
+    BASIC_DLLPRIVATE String GetNullFormatString( const String& sFormatStrg, sal_Bool & bFound );
+    BASIC_DLLPRIVATE short  AnalyseFormatString( const String& sFormatStrg,
                 short& nNoOfDigitsLeft, short& nNoOfDigitsRight,
                 short& nNoOfOptionalDigitsLeft,
                 short& nNoOfExponentDigits,
@@ -149,7 +150,7 @@ class SbxBasicFormater {
                 sal_Bool& bPercent, sal_Bool& bCurrency, sal_Bool& bScientific,
                 sal_Bool& bGenerateThousandSeparator,
                 short& nMultipleThousandSeparators );
-    void    ScanFormatString( double dNumber, const String& sFormatStrg,
+    BASIC_DLLPRIVATE void   ScanFormatString( double dNumber, const String& sFormatStrg,
                 String& sReturnStrg, sal_Bool bCreateSign );
 
     //*** Data ***

@@ -31,13 +31,14 @@
 
 #include <tools/string.hxx>
 #include <osl/process.h>
+#include "basicdllapi.h"
 
 #include <map>
 
 typedef std::map< String, String > Environment;
 typedef Environment::value_type EnvironmentVariable;
 
-class Process
+class BASIC_DLLPUBLIC Process
 {
     // Internal members and methods
     sal_uInt32                  m_nArgumentCount;
@@ -46,8 +47,8 @@ class Process
     rtl_uString               **m_pEnvList;
     rtl::OUString               m_aProcessName;
     oslProcess                  m_pProcess;
-    sal_Bool ImplIsRunning();
-    long ImplGetExitCode();
+    BASIC_DLLPRIVATE sal_Bool ImplIsRunning();
+    BASIC_DLLPRIVATE long ImplGetExitCode();
     sal_Bool bWasGPF;
     sal_Bool bHasBeenStarted;
 

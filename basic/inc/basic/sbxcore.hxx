@@ -34,6 +34,7 @@
 #include <tools/debug.hxx>
 
 #include <basic/sbxdef.hxx>
+#include "basicdllapi.h"
 
 class SvStream;
 class String;
@@ -79,7 +80,7 @@ DBG_NAMEEX(SbxBase)
 
 class SbxBaseImpl;
 
-class SbxBase : virtual public SvRefBase
+class BASIC_DLLPUBLIC SbxBase : virtual public SvRefBase
 {
     SbxBaseImpl* mpSbxBaseImpl; // Impl data
 

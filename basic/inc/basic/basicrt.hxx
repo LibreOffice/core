@@ -30,11 +30,12 @@
 
 #include <tools/string.hxx>
 #include <basic/sbxdef.hxx>
+#include "basicdllapi.h"
 
 class SbiRuntime;
 class SbErrorStackEntry;
 
-class BasicRuntime
+class BASIC_DLLPUBLIC BasicRuntime
 {
     SbiRuntime* pRun;
 public:
@@ -50,7 +51,7 @@ public:
     BasicRuntime GetNextRuntime();
 };
 
-class BasicErrorStackEntry
+class BASIC_DLLPUBLIC BasicErrorStackEntry
 {
     SbErrorStackEntry *pEntry;
 public:
@@ -63,7 +64,7 @@ public:
     xub_StrLen GetCol2();
 };
 
-class BasicRuntimeAccess
+class BASIC_DLLPUBLIC BasicRuntimeAccess
 {
 public:
     static BasicRuntime GetRuntime();

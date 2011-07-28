@@ -1,8 +1,8 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
-# Copyright 2000, 2010 Oracle and/or its affiliates.
+#
+# Copyright 2000, 2011 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
 #
@@ -25,33 +25,24 @@
 #
 #*************************************************************************
 
-PRJ=..$/..
+$(eval $(call gb_AllLangResTarget_AllLangResTarget,stt))
 
-PRJNAME=basic
-TARGET=comp
+$(eval $(call gb_AllLangResTarget_add_srs,stt,\
+	stt/res \
+))
 
-# --- Settings ------------------------------------------------------------
+$(eval $(call gb_SrsTarget_SrsTarget,stt/res))
 
-.INCLUDE :  settings.mk
+$(eval $(call gb_SrsTarget_set_include,stt/res,\
+	$$(INCLUDE) \
+))
 
-SLOFILES= \
-    $(EXCEPTIONSFILES)		\
-    $(SLO)$/buffer.obj		\
-    $(SLO)$/exprgen.obj		\
-    $(SLO)$/exprnode.obj	\
-    $(SLO)$/io.obj		\
-    $(SLO)$/loops.obj		\
-    $(SLO)$/symtbl.obj		\
-    $(SLO)$/token.obj
+$(eval $(call gb_SrsTarget_add_files,stt/res,\
+	basic/source/app/basic.src \
+	basic/source/app/basmsg.src \
+	basic/source/app/svtmsg.src \
+	basic/source/app/testtool.src \
+	basic/source/app/ttmsg.src \
+))
 
-EXCEPTIONSFILES= \
-    $(SLO)$/codegen.obj     \
-    $(SLO)$/dim.obj         \
-    $(SLO)$/exprtree.obj    \
-    $(SLO)$/parser.obj      \
-    $(SLO)$/scanner.obj     \
-    $(SLO)$/sbcomp.obj
-
-# --- Targets --------------------------------------------------------------
-
-.INCLUDE :  target.mk
+# vim: set noet sw=4:

@@ -1,8 +1,8 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
-# Copyright 2000, 2010 Oracle and/or its affiliates.
+#
+# Copyright 2000, 2011 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
 #
@@ -14,34 +14,37 @@
 #
 # OpenOffice.org is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	See the
 # GNU Lesser General Public License version 3 for more details
 # (a copy is included in the LICENSE file that accompanied this code).
 #
 # You should have received a copy of the GNU Lesser General Public License
-# version 3 along with OpenOffice.org.  If not, see
+# version 3 along with OpenOffice.org.	If not, see
 # <http://www.openoffice.org/license.html>
 # for a copy of the LGPLv3 License.
 #
 #*************************************************************************
-PRJ=..$/..
 
-PRJNAME=basic
-TARGET=basicmgr
-ENABLE_EXCEPTIONS=TRUE
+$(eval $(call gb_StaticLibrary_StaticLibrary,sample))
 
-# --- Settings -----------------------------------------------------------
+$(eval $(call gb_StaticLibrary_add_package_headers,sample,basic_inc))
 
-.INCLUDE :  settings.mk
+$(eval $(call gb_StaticLibrary_add_precompiled_header,sample,$(SRCDIR)/basic/inc/pch/precompiled_basic))
 
+$(eval $(call gb_StaticLibrary_set_include,sample,\
+	$$(INCLUDE) \
+	-I$(realpath $(SRCDIR)/basic/inc/pch) \
+	-I$(realpath $(SRCDIR)/basic/source/inc) \
+))
 
-# --- Allgemein -----------------------------------------------------------
+$(eval $(call gb_StaticLibrary_add_api,sample,\
+	udkapi \
+	offapi \
+))
 
-SLOFILES= \
-        $(SLO)$/basmgr.obj \
-        $(SLO)$/basicmanagerrepository.obj\
-        $(SLO)$/vbahelper.obj
+$(eval $(call gb_StaticLibrary_add_exception_objects,sample,\
+	basic/source/sample/collelem \
+	basic/source/sample/object \
+))
 
-# --- Targets -------------------------------------------------------------
-
-.INCLUDE :  target.mk
+# vim: set noet sw=4:

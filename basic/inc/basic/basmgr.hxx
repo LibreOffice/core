@@ -33,10 +33,11 @@
 #include <basic/sbstar.hxx>
 #include <com/sun/star/script/XStorageBasedLibraryContainer.hpp>
 #include <com/sun/star/script/XStarBasicAccess.hpp>
+#include "basicdllapi.h"
 
 
 // Basic XML Import/Export
-com::sun::star::uno::Reference< com::sun::star::script::XStarBasicAccess >
+BASIC_DLLPUBLIC com::sun::star::uno::Reference< com::sun::star::script::XStarBasicAccess >
     getStarBasicAccess( BasicManager* pMgr );
 
 
@@ -65,7 +66,7 @@ class SotStorage;
 
 #define BASERR_REASON_STDLIB            0x0100
 
-class BasicError
+class BASIC_DLLPUBLIC BasicError
 {
 private:
     sal_uIntPtr nErrorId;
@@ -95,7 +96,7 @@ class BasicErrorManager;
 namespace basic { class BasicManagerCleaner; }
 
 // Library password handling for 5.0 documents
-class OldBasicPassword
+class BASIC_DLLPUBLIC OldBasicPassword
 {
 public:
     virtual void setLibraryPassword( const String& rLibraryName, const String& rPassword ) = 0;
@@ -132,7 +133,7 @@ struct BasicManagerImpl;
 
 #define LIB_NOTFOUND    0xFFFF
 
-class BasicManager : public SfxBroadcaster
+class BASIC_DLLPUBLIC BasicManager : public SfxBroadcaster
 {
     friend class LibraryContainer_Impl;
     friend class StarBasicAccess_Impl;
@@ -150,7 +151,7 @@ private:
 
     BasicManagerImpl*   mpImpl;
 
-    void                Init();
+    BASIC_DLLPRIVATE void Init();
 
 protected:
     sal_Bool            ImpLoadLibary( BasicLibInfo* pLibInfo ) const;
@@ -243,25 +244,25 @@ public:
     ErrCode         ExecuteMacro( String const& i_fullyQualifiedName, String const& i_commaSeparatedArgs, SbxValue* i_retValue );
 
 private:
-    sal_Bool            IsReference( sal_uInt16 nLib );
+    BASIC_DLLPRIVATE sal_Bool IsReference( sal_uInt16 nLib );
 
-    sal_Bool            SetLibName( sal_uInt16 nLib, const String& rName );
+    BASIC_DLLPRIVATE sal_Bool SetLibName( sal_uInt16 nLib, const String& rName );
 
-    StarBASIC*      GetStdLib() const;
-    StarBASIC*      AddLib( SotStorage& rStorage, const String& rLibName, sal_Bool bReference );
-    sal_Bool            RemoveLib( sal_uInt16 nLib );
-    sal_Bool            HasLib( const String& rName ) const;
+    BASIC_DLLPRIVATE StarBASIC* GetStdLib() const;
+    BASIC_DLLPRIVATE StarBASIC* AddLib( SotStorage& rStorage, const String& rLibName, sal_Bool bReference );
+    BASIC_DLLPRIVATE sal_Bool RemoveLib( sal_uInt16 nLib );
+    BASIC_DLLPRIVATE sal_Bool HasLib( const String& rName ) const;
 
-    StarBASIC*      CreateLibForLibContainer( const String& rLibName,
+    BASIC_DLLPRIVATE StarBASIC* CreateLibForLibContainer( const String& rLibName,
                         const com::sun::star::uno::Reference< com::sun::star::script::XLibraryContainer >&
                             xScriptCont );
     // For XML import/export:
-    StarBASIC*      CreateLib( const String& rLibName );
-    StarBASIC*      CreateLib( const String& rLibName, const String& Password,
+    BASIC_DLLPRIVATE StarBASIC* CreateLib( const String& rLibName );
+    BASIC_DLLPRIVATE StarBASIC* CreateLib( const String& rLibName, const String& Password,
                                const String& LinkTargetURL );
 };
 
-void SetAppBasicManager( BasicManager* pBasMgr );
+BASIC_DLLPUBLIC void SetAppBasicManager( BasicManager* pBasMgr );
 
 #endif  //_BASMGR_HXX
 

@@ -1,8 +1,8 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
-# Copyright 2000, 2010 Oracle and/or its affiliates.
+#
+# Copyright 2000, 2011 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
 #
@@ -24,24 +24,24 @@
 # for a copy of the LGPLv3 License.
 #
 #*************************************************************************
-PRJ=..
 
-PRJNAME=basic
-TARGET=inc
+$(eval $(call gb_AllLangResTarget_AllLangResTarget,sb))
 
-# --- Settings -----------------------------------------------------
 
-.INCLUDE :  settings.mk
+$(eval $(call gb_AllLangResTarget_add_srs,sb,\
+	sb/res \
+))
 
-# --- Files --------------------------------------------------------
-# --- Targets -------------------------------------------------------
+$(eval $(call gb_SrsTarget_SrsTarget,sb/res))
 
-.INCLUDE :  target.mk
+$(eval $(call gb_SrsTarget_set_include,sb/res,\
+	$$(INCLUDE) \
+    -I$(realpath $(SRCDIR)/basic/inc) \
+))
 
-.IF "$(ENABLE_PCH)"!=""
-ALLTAR : \
-    $(SLO)$/precompiled.pch \
-    $(SLO)$/precompiled_ex.pch
-    
-.ENDIF			# "$(ENABLE_PCH)"!=""
+$(eval $(call gb_SrsTarget_add_files,sb/res,\
+	basic/source/classes/sb.src \
+	basic/source/sbx/format.src \
+))
 
+# vim: set noet sw=4:

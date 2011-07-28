@@ -31,6 +31,7 @@
 
 #include <svl/lstner.hxx>
 #include <basic/sbxvar.hxx>
+#include "basicdllapi.h"
 
 
 class SbxProperty;
@@ -38,13 +39,13 @@ class SvDispatch;
 
 class SbxObjectImpl;
 
-class SbxObject : public SbxVariable, public SfxListener
+class BASIC_DLLPUBLIC SbxObject : public SbxVariable, public SfxListener
 {
     SbxObjectImpl* mpSbxObjectImpl; // Impl data
 
-    SbxArray* FindVar( SbxVariable*, sal_uInt16& );
+    BASIC_DLLPRIVATE SbxArray* FindVar( SbxVariable*, sal_uInt16& );
     // AB 23.3.1997, special method for VCPtrRemove (see below)
-    SbxArray* VCPtrFindVar( SbxVariable*, sal_uInt16& );
+    BASIC_DLLPRIVATE SbxArray* VCPtrFindVar( SbxVariable*, sal_uInt16& );
 protected:
     SbxArrayRef  pMethods;                  // Methods
     SbxArrayRef  pProps;                    // Properties

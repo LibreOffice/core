@@ -1,8 +1,8 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
-# Copyright 2000, 2010 Oracle and/or its affiliates.
+#
+# Copyright 2000, 2011 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
 #
@@ -25,25 +25,15 @@
 #
 #*************************************************************************
 
-PRJ=..$/..
+$(eval $(call gb_Module_Module,basic))
 
-PRJNAME=basic
-TARGET=uno
+$(eval $(call gb_Module_add_targets,basic,\
+	AllLangResTarget_sb \
+	AllLangResTarget_stt \
+	Library_sb \
+	Package_inc \
+	StaticLibrary_app \
+	StaticLibrary_sample \
+))
 
-ENABLE_EXCEPTIONS=TRUE
-
-# --- Settings ------------------------------------------------------------
-
-.INCLUDE :  settings.mk
-
-SLOFILES= \
-    $(SLO)$/namecont.obj \
-    $(SLO)$/scriptcont.obj \
-    $(SLO)$/dlgcont.obj \
-    $(SLO)$/sbmodule.obj \
-    $(SLO)$/sbservices.obj \
-    $(SLO)$/modsizeexceeded.obj
-
-# --- Targets --------------------------------------------------------------
-
-.INCLUDE :  target.mk
+# vim: set noet sw=4:

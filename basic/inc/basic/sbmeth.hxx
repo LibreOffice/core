@@ -32,11 +32,12 @@
 #include <tools/errcode.hxx>
 #include <basic/sbxmeth.hxx>
 #include <basic/sbdef.hxx>
+#include "basicdllapi.h"
 
 class SbModule;
 class SbMethodImpl;
 
-class SbMethod : public SbxMethod
+class BASIC_DLLPUBLIC SbMethod : public SbxMethod
 {
     friend class SbiRuntime;
     friend class SbiFactory;
@@ -54,8 +55,8 @@ class SbMethod : public SbxMethod
     sal_uInt32    nStart;
     sal_Bool      bInvalid;
     SbxArrayRef refStatics;
-    SbMethod( const String&, SbxDataType, SbModule* );
-    SbMethod( const SbMethod& );
+    BASIC_DLLPRIVATE SbMethod( const String&, SbxDataType, SbModule* );
+    BASIC_DLLPRIVATE SbMethod( const SbMethod& );
     virtual sal_Bool LoadData( SvStream&, sal_uInt16 );
     virtual sal_Bool StoreData( SvStream& ) const;
     virtual ~SbMethod();
@@ -83,7 +84,7 @@ public:
 SV_DECL_IMPL_REF(SbMethod)
 #endif
 
-class SbIfaceMapperMethod : public SbMethod
+class BASIC_DLLPUBLIC SbIfaceMapperMethod : public SbMethod
 {
     friend class SbiRuntime;
 

@@ -29,6 +29,7 @@
 #ifndef _SB_INTERN_HXX
 #define _SB_INTERN_HXX
 
+#include <basic/basicdllapi.h>
 #include <basic/sbxfac.hxx>
 #include <unotools/transliterationwrapper.hxx>
 #include "sb.hxx"
@@ -69,7 +70,7 @@ struct SbClassData
 
 // #115824: Factory class to create class objects (type command)
 // Implementation: sb.cxx
-class SbClassFactory : public SbxFactory
+class BASIC_DLLPUBLIC SbClassFactory : public SbxFactory
 {
     SbxObjectRef    xClassModules;
 
@@ -87,7 +88,7 @@ public:
 };
 
 // Stack fuer die im Fehlerfall abgebaute SbiRuntime Kette
-class SbErrorStackEntry
+class BASIC_DLLPUBLIC SbErrorStackEntry
 {
 public:
     SbErrorStackEntry(SbMethodRef aM, xub_StrLen nL, xub_StrLen nC1, xub_StrLen nC2)
@@ -97,8 +98,57 @@ public:
     xub_StrLen nCol1, nCol2;
 };
 
-SV_DECL_PTRARR_DEL(SbErrorStack, SbErrorStackEntry*, 1, 1)
+typedef sal_Bool (*FnForEach_SbErrorStack)( const SbErrorStackEntry* &, void* );
+class BASIC_DLLPUBLIC SbErrorStack: public SvPtrarr
+{
+public:
+    SbErrorStack( sal_uInt16 nIni=1, sal_uInt8 nG=1 )
+        : SvPtrarr(nIni,nG) {}
+    ~SbErrorStack() { DeleteAndDestroy( 0, Count() ); }
+    void Insert( const SbErrorStack *pI, sal_uInt16 nP,
+            sal_uInt16 nS = 0, sal_uInt16 nE = USHRT_MAX ) {
+        SvPtrarr::Insert((const SvPtrarr*)pI, nP, nS, nE);
+    }
+    void Insert( const SbErrorStackEntry* & aE, sal_uInt16 nP ) {
+        SvPtrarr::Insert((const VoidPtr &)aE, nP );
+    }
+    void Insert( const SbErrorStackEntry* *pE, sal_uInt16 nL, sal_uInt16 nP ) {
+        SvPtrarr::Insert( (const VoidPtr *)pE, nL, nP );
+    }
+    void Replace( const SbErrorStackEntry* & aE, sal_uInt16 nP ) {
+        SvPtrarr::Replace( (const VoidPtr &)aE, nP );
+    }
+    void Replace( const SbErrorStackEntry* *pE, sal_uInt16 nL, sal_uInt16 nP ) {
+        SvPtrarr::Replace( (const VoidPtr*)pE, nL, nP );
+    }
+    void Remove( sal_uInt16 nP, sal_uInt16 nL = 1) {
+        SvPtrarr::Remove(nP,nL);
+    }
+    const SbErrorStackEntry** GetData() const {
+        return (const SbErrorStackEntry**)SvPtrarr::GetData();
+    }
+    void ForEach( CONCAT( FnForEach_, SbErrorStack ) fnForEach, void* pArgs = 0 )
+    {
+        _ForEach( 0, nA, (FnForEach_SvPtrarr)fnForEach, pArgs );
+    }
+    void ForEach( sal_uInt16 nS, sal_uInt16 nE,
+                    CONCAT( FnForEach_, SbErrorStack ) fnForEach, void* pArgs = 0 )
+    {
+        _ForEach( nS, nE, (FnForEach_SvPtrarr)fnForEach, pArgs );
+    }
+    SbErrorStackEntry* operator[]( sal_uInt16 nP )const  {
+        return (SbErrorStackEntry*)SvPtrarr::operator[](nP); }
+    SbErrorStackEntry* GetObject( sal_uInt16 nP )const  {
+        return (SbErrorStackEntry*)SvPtrarr::GetObject(nP); }
 
+    sal_uInt16 GetPos( const SbErrorStackEntry* & aE ) const {
+        return SvPtrarr::GetPos((const VoidPtr &)aE);
+    }
+    void DeleteAndDestroy( sal_uInt16 nP, sal_uInt16 nL=1 );
+private:
+    BASIC_DLLPRIVATE SbErrorStack( const SbErrorStack& );
+    BASIC_DLLPRIVATE SbErrorStack& operator=( const SbErrorStack& );
+};
 
 
 struct SbiGlobals
@@ -135,7 +185,7 @@ struct SbiGlobals
 
 // Utility-Makros und -Routinen
 
-SbiGlobals* GetSbData();
+BASIC_DLLPUBLIC SbiGlobals* GetSbData();
 
 #define pINST       GetSbData()->pInst
 #define pMOD        GetSbData()->pMod

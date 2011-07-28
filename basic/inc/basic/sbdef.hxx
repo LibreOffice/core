@@ -32,6 +32,7 @@
 #include <basic/sbxdef.hxx>
 #include <svl/svarray.hxx>
 #include <rtl/ustring.hxx>
+#include "basicdllapi.h"
 
 using rtl::OUString;
 
@@ -66,24 +67,65 @@ struct SbTextPortion
     SbTextType eType;        // Type of the portion
 };
 
-SV_DECL_VARARR(SbTextPortions, SbTextPortion,16,16)
+typedef sal_Bool (*FnForEach_SbTextPortions)( const SbTextPortion &, void* );
+class BASIC_DLLPUBLIC SbTextPortions
+{
+protected:
+    SbTextPortion *pData;
+    sal_uInt16 nFree;
+    sal_uInt16 nA;
+
+    void _resize(size_t n);
+
+public:
+    SbTextPortions( sal_uInt16= 16, sal_uInt8= 16 );
+    ~SbTextPortions() { rtl_freeMemory( pData ); }
+
+    _SVVARARR_DEF_GET_OP_INLINE(SbTextPortions, SbTextPortion )
+    SbTextPortion & GetObject(sal_uInt16 nP) const { return (*this)[nP]; }
+
+    void Insert( const SbTextPortion & aE, sal_uInt16 nP );
+    void Insert( const SbTextPortion *pE, sal_uInt16 nL, sal_uInt16 nP );
+    void Remove( sal_uInt16 nP, sal_uInt16 nL = 1 );
+    void Replace( const SbTextPortion & aE, sal_uInt16 nP );
+    void Replace( const SbTextPortion *pE, sal_uInt16 nL, sal_uInt16 nP );
+    sal_uInt16 Count() const { return nA; }
+    const SbTextPortion* GetData() const { return (const SbTextPortion*)pData; }
+
+    void ForEach( CONCAT( FnForEach_, SbTextPortions ) fnForEach, void* pArgs = 0 )
+    {
+        _ForEach( 0, nA, fnForEach, pArgs );
+    }
+    void ForEach( sal_uInt16 nS, sal_uInt16 nE,
+                    CONCAT( FnForEach_, SbTextPortions ) fnForEach, void* pArgs = 0 )
+    {
+        _ForEach( nS, nE, fnForEach, pArgs );
+    }
+
+    void _ForEach( sal_uInt16 nStt, sal_uInt16 nE,
+            CONCAT( FnForEach_, SbTextPortions ) fnCall, void* pArgs = 0 );
+private:
+    BASIC_DLLPRIVATE SbTextPortions( const SbTextPortions& );
+    BASIC_DLLPRIVATE SbTextPortions& operator=( const SbTextPortions& );
+};
+
 #else
 class SbTextPortions;
 #endif
 
 // Returns type name for Basic type, array flag is ignored
 // implementation: basic/source/runtime/methods.cxx
-String getBasicTypeName( SbxDataType eType );
+BASIC_DLLPUBLIC String getBasicTypeName( SbxDataType eType );
 
 // Returns type name for Basic objects, especially
 // important for SbUnoObj instances
 // implementation: basic/source/classes/sbunoobj.cxx
 class SbxObject;
-::rtl::OUString getBasicObjectTypeName( SbxObject* pObj );
+BASIC_DLLPUBLIC ::rtl::OUString getBasicObjectTypeName( SbxObject* pObj );
 
 // Allows Basic IDE to set watch mode to suppress errors
 // implementation: basic/source/runtime/runtime.cxx
-void setBasicWatchMode( bool bOn );
+BASIC_DLLPUBLIC void setBasicWatchMode( bool bOn );
 
 // Debug Flags:
 #define SbDEBUG_BREAK       0x0001          // Break-Callback

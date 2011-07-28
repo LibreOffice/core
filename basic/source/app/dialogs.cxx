@@ -63,7 +63,6 @@
 #include "app.hxx"
 #include "basrid.hxx"
 
-#include "_version.h"
 
 AboutDialog::AboutDialog( Window* pParent, const ResId& id )
 : ModalDialog( pParent, id )

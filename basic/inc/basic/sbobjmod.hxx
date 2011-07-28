@@ -38,15 +38,16 @@
 #include <com/sun/star/lang/XEventListener.hpp>
 #include <com/sun/star/awt/XDialog.hpp>
 #include <com/sun/star/frame/XModel.hpp>
+#include "basicdllapi.h"
 
 namespace css = ::com::sun::star;
 
 // Basic-Module for excel object.
 
-class SbObjModule : public SbModule
+class BASIC_DLLPUBLIC SbObjModule : public SbModule
 {
-    SbObjModule( const SbObjModule& );
-    SbObjModule();
+    BASIC_DLLPRIVATE SbObjModule( const SbObjModule& );
+    BASIC_DLLPRIVATE SbObjModule();
 
 protected:
     virtual ~SbObjModule();
@@ -66,7 +67,7 @@ public:
 
 class FormObjEventListenerImpl;
 
-class SbUserFormModule : public SbObjModule
+class BASIC_DLLPUBLIC SbUserFormModule : public SbObjModule
 {
     com::sun::star::script::ModuleInfo m_mInfo;
     ::rtl::Reference< FormObjEventListenerImpl > m_DialogListener;
@@ -74,8 +75,8 @@ class SbUserFormModule : public SbObjModule
     css::uno::Reference<css::frame::XModel> m_xModel;
     String sFormName;
     bool mbInit;
-    SbUserFormModule( const SbUserFormModule& );
-    SbUserFormModule();
+    BASIC_DLLPRIVATE SbUserFormModule( const SbUserFormModule& );
+    BASIC_DLLPRIVATE SbUserFormModule();
 
 //protected:
     virtual void InitObject();
@@ -104,7 +105,7 @@ public:
     class SbUserFormModuleInstance* CreateInstance();
 };
 
-class SbUserFormModuleInstance : public SbUserFormModule
+class BASIC_DLLPUBLIC SbUserFormModuleInstance : public SbUserFormModule
 {
     SbUserFormModule* m_pParentModule;
 

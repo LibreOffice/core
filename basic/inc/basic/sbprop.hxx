@@ -31,17 +31,18 @@
 
 #include <basic/sbxprop.hxx>
 #include <basic/sbdef.hxx>
+#include "basicdllapi.h"
 
 class SbModule;
 
-class SbProperty : public SbxProperty
+class BASIC_DLLPUBLIC SbProperty : public SbxProperty
 {
     friend class SbiFactory;
     friend class SbModule;
     friend class SbProcedureProperty;
     SbModule* pMod;
     sal_Bool     bInvalid;
-    SbProperty( const String&, SbxDataType, SbModule* );
+    BASIC_DLLPRIVATE SbProperty( const String&, SbxDataType, SbModule* );
     virtual ~SbProperty();
 public:
     SBX_DECL_PERSIST_NODATA(SBXCR_SBX,SBXID_BASICPROP,1);
@@ -54,7 +55,7 @@ public:
 SV_DECL_IMPL_REF(SbProperty)
 #endif
 
-class SbProcedureProperty : public SbxProperty
+class BASIC_DLLPUBLIC SbProcedureProperty : public SbxProperty
 {
     bool mbSet;     // Flag for set command
 

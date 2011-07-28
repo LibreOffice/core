@@ -37,6 +37,7 @@
 #include <vector>
 
 #include <deque>
+#include "basicdllapi.h"
 
 class SbMethod;
 class SbProperty;
@@ -52,7 +53,7 @@ struct ClassModuleRunInitItem;
 struct SbClassData;
 class SbModuleImpl;
 
-class SbModule : public SbxObject
+class BASIC_DLLPUBLIC SbModule : public SbxObject
 {
     friend class    TestToolObj;    // allows module initialisation at runtime
     friend class    SbiCodeGen;
@@ -63,10 +64,10 @@ class SbModule : public SbxObject
 
     SbModuleImpl*   mpSbModuleImpl;     // Impl data
     std::vector< String > mModuleVariableNames;
-    SbModule();
-    SbModule(const SbModule&);
+    BASIC_DLLPRIVATE SbModule();
+    BASIC_DLLPRIVATE SbModule(const SbModule&);
 
-    void            implClearIfVarDependsOnDeletedBasic( SbxVariable* pVar, StarBASIC* pDeletedBasic );
+    BASIC_DLLPRIVATE void implClearIfVarDependsOnDeletedBasic( SbxVariable* pVar, StarBASIC* pDeletedBasic );
 
 protected:
     com::sun::star::uno::Reference< com::sun::star::script::XInvocation > mxWrapper;
@@ -164,7 +165,7 @@ SV_DECL_IMPL_REF(SbModule)
 class SbClassModuleImpl;
 
 // Object class for instances of class modules
-class SbClassModuleObject : public SbModule
+class BASIC_DLLPUBLIC SbClassModuleObject : public SbModule
 {
     SbClassModuleImpl* mpSbClassModuleImpl;
 

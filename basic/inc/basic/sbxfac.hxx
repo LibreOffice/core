@@ -30,13 +30,14 @@
 #define __SBX_SBX_FACTORY_HXX
 
 #include <basic/sbxdef.hxx>
+#include "basicdllapi.h"
 
 class SbxBase;
 class SbxObject;
 class String;
 class UniString;
 
-class SbxFactory
+class BASIC_DLLPUBLIC SbxFactory
 {
     sal_Bool bHandleLast;   // sal_True: Factory is asked at last because of its expensiveness
 public:

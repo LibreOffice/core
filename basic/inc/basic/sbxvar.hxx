@@ -33,6 +33,7 @@
 #include <tools/string.hxx>
 #include <com/sun/star/bridge/oleautomation/Decimal.hpp>
 #include <basic/sbxcore.hxx>
+#include "basicdllapi.h"
 
 #ifndef __SBX_SBXVALUES_HXX
 #define __SBX_SBXVALUES_HXX
@@ -107,13 +108,13 @@ struct SbxValues;
 
 class SbxValueImpl;
 
-class SbxValue : public SbxBase
+class BASIC_DLLPUBLIC SbxValue : public SbxBase
 {
     SbxValueImpl* mpSbxValueImplImpl;   // Impl data
 
     // #55226 Transport additional infos
-    SbxValue* TheRealValue( sal_Bool bObjInObjError ) const;
-    SbxValue* TheRealValue() const;
+    BASIC_DLLPRIVATE SbxValue* TheRealValue( sal_Bool bObjInObjError ) const;
+    BASIC_DLLPRIVATE SbxValue* TheRealValue() const;
 protected:
     SbxValues aData; // Data
     ::rtl::OUString aPic;  // Picture-String
@@ -320,7 +321,7 @@ class SfxBroadcaster;
 class SbxVariableImpl;
 class StarBASIC;
 
-class SbxVariable : public SbxValue
+class BASIC_DLLPUBLIC SbxVariable : public SbxValue
 {
     friend class SbMethod;
 
@@ -330,7 +331,7 @@ class SbxVariable : public SbxValue
     SbxArrayRef      mpPar;             // Parameter-Array, if set
     sal_uInt16           nHash;             // Hash-ID for search
 
-    SbxVariableImpl* getImpl( void );
+    BASIC_DLLPRIVATE SbxVariableImpl* getImpl( void );
 
 protected:
     SbxInfoRef  pInfo;              // Probably called information

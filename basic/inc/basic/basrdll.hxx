@@ -32,8 +32,9 @@
 class ResMgr;
 
 #include <vcl/accel.hxx>
+#include "basicdllapi.h"
 
-class BasicDLL
+class BASIC_DLLPUBLIC BasicDLL
 {
 private:
     ResMgr*     pSttResMgr;

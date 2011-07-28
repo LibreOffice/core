@@ -38,6 +38,7 @@
 #include <basic/sberrors.hxx>
 #include <com/sun/star/script/ModuleInfo.hpp>
 #include <com/sun/star/frame/XModel.hpp>
+#include "basicdllapi.h"
 
 class SbModule;                     // completed module
 class SbiInstance;                  // runtime instance
@@ -51,7 +52,7 @@ class DocBasicItem;
 
 class StarBASICImpl;
 
-class StarBASIC : public SbxObject
+class BASIC_DLLPUBLIC StarBASIC : public SbxObject
 {
     friend class SbiScanner;
     friend class SbiExpression; // Access to RTL
@@ -77,17 +78,17 @@ class StarBASIC : public SbxObject
     sal_Bool            bQuit;
 
     SbxObjectRef pVBAGlobals;
-    SbxObject* getVBAGlobals( );
+    BASIC_DLLPRIVATE SbxObject* getVBAGlobals( );
 
-    void implClearDependingVarsOnDelete( StarBASIC* pDeletedBasic );
+    BASIC_DLLPRIVATE void implClearDependingVarsOnDelete( StarBASIC* pDeletedBasic );
 
 protected:
     sal_Bool            CError( SbError, const String&, xub_StrLen, xub_StrLen, xub_StrLen );
 private:
-    sal_Bool            RTError( SbError, xub_StrLen, xub_StrLen, xub_StrLen );
-    sal_Bool            RTError( SbError, const String& rMsg, xub_StrLen, xub_StrLen, xub_StrLen );
-    sal_uInt16          BreakPoint( xub_StrLen nLine, xub_StrLen nCol1, xub_StrLen nCol2 );
-    sal_uInt16          StepPoint( xub_StrLen nLine, xub_StrLen nCol1, xub_StrLen nCol2 );
+    BASIC_DLLPRIVATE sal_Bool           RTError( SbError, xub_StrLen, xub_StrLen, xub_StrLen );
+    BASIC_DLLPRIVATE sal_Bool           RTError( SbError, const String& rMsg, xub_StrLen, xub_StrLen, xub_StrLen );
+    BASIC_DLLPRIVATE sal_uInt16             BreakPoint( xub_StrLen nLine, xub_StrLen nCol1, xub_StrLen nCol2 );
+    BASIC_DLLPRIVATE sal_uInt16             StepPoint( xub_StrLen nLine, xub_StrLen nCol1, xub_StrLen nCol2 );
     virtual sal_Bool LoadData( SvStream&, sal_uInt16 );
     virtual sal_Bool StoreData( SvStream& ) const;
 

@@ -1,7 +1,7 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
+#
 # Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
@@ -25,53 +25,16 @@
 #
 #*************************************************************************
 
-PRJ=..$/..
+PRJ=..
+TARGET=prj
 
-PRJNAME=basic
-TARGET=sbx
+.INCLUDE : settings.mk
 
-# --- Settings -----------------------------------------------------------
+.IF "$(VERBOSE)"!=""
+VERBOSEFLAG :=
+.ELSE
+VERBOSEFLAG := -s
+.ENDIF
 
-.INCLUDE :  settings.mk
-
-
-# --- Allgemein -----------------------------------------------------------
-
-SRS1NAME=$(TARGET)
-SRC1FILES=	format.src
-
-SLOFILES=	\
-    $(EXCEPTIONSFILES)	\
-    $(SLO)$/sbxbase.obj		\
-    $(SLO)$/sbxbool.obj		\
-    $(SLO)$/sbxbyte.obj		\
-    $(SLO)$/sbxchar.obj		\
-    $(SLO)$/sbxcoll.obj		\
-    $(SLO)$/sbxdec.obj		\
-    $(SLO)$/sbxform.obj		\
-    $(SLO)$/sbxint.obj 		\
-    $(SLO)$/sbxlng.obj 		\
-    $(SLO)$/sbxmstrm.obj	\
-    $(SLO)$/sbxobj.obj		\
-    $(SLO)$/sbxres.obj  	\
-    $(SLO)$/sbxsng.obj 		\
-    $(SLO)$/sbxuint.obj		\
-    $(SLO)$/sbxulng.obj		\
-    $(SLO)$/sbxvar.obj
-
-
-EXCEPTIONSFILES=	\
-    $(SLO)$/sbxarray.obj	\
-    $(SLO)$/sbxcurr.obj 	\
-    $(SLO)$/sbxdate.obj		\
-    $(SLO)$/sbxdbl.obj 		\
-    $(SLO)$/sbxexec.obj		\
-    $(SLO)$/sbxscan.obj 	\
-    $(SLO)$/sbxstr.obj 		\
-    $(SLO)$/sbxvalue.obj	\
-
-# --- Targets -------------------------------------------------------------
-
-.INCLUDE :  target.mk
-
-
+all:
+	cd $(PRJ) && $(GNUMAKE) $(VERBOSEFLAG) -r -j$(MAXPROCESS) $(gb_MAKETARGET) && $(GNUMAKE) $(VERBOSEFLAG) -r deliverlog

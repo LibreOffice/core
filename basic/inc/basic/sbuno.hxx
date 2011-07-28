@@ -30,20 +30,21 @@
 #define _SB_SBUNO_HXX
 
 #include <basic/sbxobj.hxx>
+#include "basicdllapi.h"
 
 namespace com { namespace sun { namespace star { namespace uno { class Any; }}}}
 
 // Returns a SbxObject that wrapps an Uno Interface
 // Implementation in basic/source/classes/sbunoobj.cxx
-SbxObjectRef GetSbUnoObject( const ::rtl::OUString& aName, const com::sun::star::uno::Any& aUnoObj_ );
+BASIC_DLLPUBLIC SbxObjectRef GetSbUnoObject( const ::rtl::OUString& aName, const com::sun::star::uno::Any& aUnoObj_ );
 
 // Force creation of all properties for debugging
-void createAllObjectProperties( SbxObject* pObj );
-void SetSbUnoObjectDfltPropName( SbxObject* pObj );
+BASIC_DLLPUBLIC void createAllObjectProperties( SbxObject* pObj );
+BASIC_DLLPUBLIC void SetSbUnoObjectDfltPropName( SbxObject* pObj );
 
-::com::sun::star::uno::Any sbxToUnoValue( SbxVariable* pVar );
+BASIC_DLLPUBLIC ::com::sun::star::uno::Any sbxToUnoValue( SbxVariable* pVar );
 
-void unoToSbxValue( SbxVariable* pVar, const ::com::sun::star::uno::Any& aValue );
+BASIC_DLLPUBLIC void unoToSbxValue( SbxVariable* pVar, const ::com::sun::star::uno::Any& aValue );
 
 #endif
 

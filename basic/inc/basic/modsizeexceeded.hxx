@@ -31,8 +31,9 @@
 
 #include <com/sun/star/task/XInteractionHandler.hpp>
 #include <cppuhelper/implbase1.hxx>
+#include "basicdllapi.h"
 
-class ModuleSizeExceeded : public ::cppu::WeakImplHelper1< ::com::sun::star::task::XInteractionRequest >
+class BASIC_DLLPUBLIC ModuleSizeExceeded : public ::cppu::WeakImplHelper1< ::com::sun::star::task::XInteractionRequest >
 {
     // C++ interface
     public:

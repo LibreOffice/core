@@ -31,6 +31,7 @@
 
 #include <basic/sbstar.hxx>
 #include <vector>
+#include "basicdllapi.h"
 
 class BasicApp;
 class AppBasEd;
@@ -40,7 +41,7 @@ class ErrorEntry;
 #define SBXCR_TEST      0x54534554  // TEST
 
 //-----------------------------------------------------------------------------
-class BasicError {
+class BASIC_DLLPUBLIC BasicError {
     AppBasEd* pWin;
     sal_uInt16  nLine, nCol1, nCol2;
     String aText;
@@ -50,7 +51,7 @@ public:
 };
 
 //-----------------------------------------------------------------------------
-class MyBasic : public StarBASIC
+class BASIC_DLLPUBLIC MyBasic : public StarBASIC
 {
     SbError nError;
     virtual sal_Bool ErrorHdl();

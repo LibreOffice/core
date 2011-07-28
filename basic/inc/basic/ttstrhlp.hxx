@@ -29,6 +29,7 @@
 #define _BASIC_TTSTRHLP_HXX
 
 #include <tools/string.hxx>
+#include "basicdllapi.h"
 
 #define CByteString( constAsciiStr ) ByteString( RTL_CONSTASCII_STRINGPARAM ( constAsciiStr ) )
 #define CUniString( constAsciiStr ) UniString( RTL_CONSTASCII_USTRINGPARAM ( constAsciiStr ) )
@@ -58,10 +59,10 @@
 #define ResString(nNumber) MakeStringNumber(ResKenn,nNumber)
 #define ArgString(nNumber, aText) MakeStringParam(ArgKenn(nNumber),aText)
 
-UniString GEN_RES_STR0( sal_uIntPtr nResId );
-UniString GEN_RES_STR1( sal_uIntPtr nResId, const String &Text1 );
-UniString GEN_RES_STR2( sal_uIntPtr nResId, const String &Text1, const String &Text2 );
-UniString GEN_RES_STR3( sal_uIntPtr nResId, const String &Text1, const String &Text2, const String &Text3 );
+BASIC_DLLPUBLIC UniString GEN_RES_STR0( sal_uIntPtr nResId );
+BASIC_DLLPUBLIC UniString GEN_RES_STR1( sal_uIntPtr nResId, const String &Text1 );
+BASIC_DLLPUBLIC UniString GEN_RES_STR2( sal_uIntPtr nResId, const String &Text1, const String &Text2 );
+BASIC_DLLPUBLIC UniString GEN_RES_STR3( sal_uIntPtr nResId, const String &Text1, const String &Text2, const String &Text3 );
 
 #define GEN_RES_STR1c( nResId, Text1 ) GEN_RES_STR1( nResId, CUniString(Text1) )
 #define GEN_RES_STR2c2( nResId, Text1, Text2 ) GEN_RES_STR2( nResId, Text1, CUniString(Text2) )
