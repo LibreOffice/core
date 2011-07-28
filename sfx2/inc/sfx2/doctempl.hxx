@@ -95,7 +95,14 @@ public:
     ::rtl::OUString     GetTemplateTargetURLFromComponent( const ::rtl::OUString& aGroupName,
                                                          const ::rtl::OUString& aTitle );
 
-    // Save as template worked -> update
+    // Convert a resource string - a template name - to its localised pair
+    // if it exists in templatelocnames.src
+    static ::rtl::OUString ConvertResourceString(int nSourceResIds,
+                            int nDestResIds,
+                            int nCount,
+                            const ::rtl::OUString& rString);
+
+    // Speichern als Vorlage hat geklappt -> Aktualisieren
     void            NewTemplate(sal_uInt16 nRegion,
                                 const String &rLongName,
                                 const String &rFileName);

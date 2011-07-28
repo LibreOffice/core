@@ -778,6 +778,31 @@ String SfxDocumentTemplates::GetDefaultTemplatePath
 
 //------------------------------------------------------------------------
 
+/** Convert a resource string - a template name - to its localised pair if it exists.
+    @param nSourceResIds
+        Resource ID where the list of original en-US template names begin.
+    @param nDestResIds
+        Resource ID where the list of localised template names begin.
+    @param nCount
+        The number of names that have been localised.
+    @param rString
+        Name to be translated.
+    @return
+        The localised pair of rString or rString if the former does not exist.
+*/
+OUString SfxDocumentTemplates::ConvertResourceString (
+    int nSourceResIds, int nDestResIds, int nCount, const OUString& rString )
+{
+    for( int i = 0; i < nCount; ++i )
+    {
+        if( rString == ResId::toString( SfxResId( nSourceResIds + i) ) )
+            return ResId::toString( SfxResId( nDestResIds + i ) );
+    }
+    return rString;
+}
+
+//------------------------------------------------------------------------
+
 sal_Bool SfxDocumentTemplates::SaveDir
 (
 //  SfxTemplateDir& rDir        //  Save Directory
@@ -1764,7 +1789,7 @@ DocTempl_EntryData_Impl::DocTempl_EntryData_Impl( RegionData_Impl* pParent,
                                 const OUString& rTitle )
 {
     mpParent    = pParent;
-    maTitle     = ConvertResourceString(
+    maTitle     = SfxDocumentTemplates::ConvertResourceString(
                   STR_TEMPLATE_NAME1_DEF, STR_TEMPLATE_NAME1, NUM_TEMPLATE_NAMES, rTitle );
     mbIsOwner   = sal_False;
     mbDidConvert= sal_False;
@@ -1790,7 +1815,7 @@ int DocTempl_EntryData_Impl::Compare( const OUString& rTitle ) const
     return maTitle.compareTo( rTitle );
 }
 
-//------------------------------------------------------------------------
+// -----------------------------------------------------------------------
 SfxObjectShellRef DocTempl_EntryData_Impl::CreateObjectShell()
 {
     if( ! mxObjShell.Is() )
