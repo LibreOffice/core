@@ -636,6 +636,7 @@ SvNumberformat::SvNumberformat(String& rString,
 
     sal_Bool bCancel = sal_False;
     sal_Bool bCondition = sal_False;
+    sal_Bool bHasValidBracketPrefix = sal_False;
     short eSymbolType;
     xub_StrLen nPos = 0;
     xub_StrLen nPosOld;
@@ -727,6 +728,8 @@ SvNumberformat::SvNumberformat(String& rString,
                                 bCancel = sal_True;     // break for
                                 nCheckPos = nPosOld;
                             }
+                            else
+                                bHasValidBracketPrefix = sal_True;
                         }
                     }
                     break;
@@ -763,6 +766,7 @@ SvNumberformat::SvNumberformat(String& rString,
                             sal_uInt8 nNum = sal::static_int_cast< sal_uInt8 >(0 - (eSymbolType - BRACKET_SYMBOLTYPE_NATNUM0));
                             sStr += String::CreateFromInt32( nNum );
                             NumFor[nIndex].SetNatNumNum( nNum, sal_False );
+                            bHasValidBracketPrefix = sal_True;
                         }
                     }
                     break;
@@ -788,6 +792,7 @@ SvNumberformat::SvNumberformat(String& rString,
                             sal_uInt8 nNum = sal::static_int_cast< sal_uInt8 >(1 - (eSymbolType - BRACKET_SYMBOLTYPE_DBNUM1));
                             sStr += static_cast< sal_Unicode >('0' + nNum);
                             NumFor[nIndex].SetNatNumNum( nNum, sal_True );
+                            bHasValidBracketPrefix = sal_True;
                         }
                     }
                     break;
@@ -812,6 +817,7 @@ SvNumberformat::SvNumberformat(String& rString,
                                 sStr.AssignAscii( RTL_CONSTASCII_STRINGPARAM("$-") );
                                 sStr = sStr + maLocale.generateCode();
                                 NumFor[nIndex].SetNatNumLang(maLocale.meLanguage);
+                                bHasValidBracketPrefix = sal_True;
                             }
                         }
                     }
@@ -820,7 +826,7 @@ SvNumberformat::SvNumberformat(String& rString,
                 if ( !bCancel )
                 {
                     rString.Erase(nPosOld,nPos-nPosOld);
-                    if (maLocale.meLanguage != 0)
+                    if ( bHasValidBracketPrefix )
                     {
                         rString.Insert(sStr,nPosOld);
                         nPos = nPosOld + sStr.Len();
