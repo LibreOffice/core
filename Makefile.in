@@ -93,11 +93,18 @@ endif
 
 install:
 	@. ./Env.Host.sh && \
-	echo "Installing in $${prefix:-@prefix@}..." && \
-	ooinstall "$${prefix:-@prefix@}" && \
+	@. ./*[Ee]nv.[Ss]et.sh && \
+	echo "Installing in @INSTALLDIR@..." && \
+	ooinstall "@INSTALLDIR@" && \
 	echo "" && \
 	echo "Installation finished, you can now execute:" && \
-	echo "$${prefix:-@prefix@}/program/soffice"
+	echo "@INSTALLDIR@/program/soffice"
+
+distro-pack-install: install
+	./bin/distro-install-clean-up
+	./bin/distro-install-desktop-integration
+	./bin/distro-install-sdk
+	./bin/distro-install-file-lists
 
 dev-install:
 	@. ./Env.Host.sh && \

@@ -271,10 +271,23 @@ AC_ARG_ENABLE(systray,
         [Determines whether to build the systray quickstarter.]),
 ,enable_systray=yes)
 
+AC_ARG_ENABLE(split-app-modules,
+    AS_HELP_STRING([--enable-split-app-modules],
+        [Split file lists for app modules, e.g. base, calc.
+         Has effect only with make distro-pack-install]),
+,)
+
+AC_ARG_ENABLE(split-opt-features,
+    AS_HELP_STRING([--enable-split-opt-features],
+        [Split file lists for some optional features, .e.g. pyuno, testtool.
+         Has effect only with make distro-pack-install]),
+,)
+
 AC_ARG_ENABLE(cairo-canvas,
 [  --disable-cairo-canvas  Determines whether to build the Cairo canvas on
                           platforms where Cairo is available.
 ],,enable_cairo_canvas=yes)
+
 AC_ARG_ENABLE(librsvg,
     AS_HELP_STRING([--enable-librsvg=<no/auto/system/internal>],
         [Enables or disables use of librsvg to render SVG at run-time.
@@ -1214,6 +1227,13 @@ AC_ARG_WITH(unix-wrapper,
     [
                           Usage:     --with-unix-wrapper=ooffice
     ],
+,)
+
+AC_ARG_WITH(compat-oowrappers,
+    AS_HELP_STRING([--with-compat-oowrappers],
+        [Install oo* wrappers in parallel with
+         lo* ones to keep backward compatibility.
+         Has effect only with make distro-pack-install]),
 ,)
 
 AC_ARG_WITH(asm-home,
@@ -6644,13 +6664,25 @@ else
 fi
 AC_SUBST(ENABLE_QUICKSTART_LIBPNG)
 
-dnl ===================================================================
+SPLIT_APP_MODULES=""
+if test "$enable_split_app_modules" = "yes"; then
+    SPLIT_APP_MODULES="YES"
+fi
+AC_SUBST(SPLIT_APP_MODULES)
+
+SPLIT_OPT_FEATURES=""
+if test "$enable_split_opt_features" = "yes"; then
+    SPLIT_OPT_FEATURES="YES"
+fi
+AC_SUBST(SPLIT_OPT_FEATURES)
 
 ENABLE_CAIRO_CANVAS="FALSE"
-if test "$enable_cairo_canvas" = "yes" -a "$ENABLE_CAIRO" = "TRUE" ; then
+if test "$enable_cairo_canvas" = "yes" ; then
    ENABLE_CAIRO_CANVAS="TRUE"
 fi
 AC_SUBST(ENABLE_CAIRO_CANVAS)
+
+dnl ===================================================================
 dnl Check whether the GStreamer libraries are available.
 dnl ===================================================================
 
@@ -8657,6 +8689,14 @@ fi
 AC_SUBST(OOO_JUNIT_JAR)
 
 dnl ===================================================================
+dnl Product version
+dnl ===================================================================
+AC_MSG_CHECKING([for product version])
+[eval $(sed -n -e 's/ //g' -e '/PRODUCTVERSION=/p' solenv/inc/productversion.mk)]
+AC_MSG_RESULT([$PRODUCTVERSION])
+AC_SUBST(PRODUCTVERSION)
+
+dnl ===================================================================
 dnl Dealing with l10n options
 dnl ===================================================================
 GIT_REPO_NAMES="artwork base calc components extensions extras filters help impress libs-core libs-extern libs-extern-sys libs-gui postprocess sdk testing ure writer"
@@ -8688,8 +8728,14 @@ for lang in $WITH_LANG ; do
     test `echo "$all_langs" | sed "s|.* $lang .*|found|"` = "found" && continue;
     AC_MSG_ERROR([invalid language: $lang; supported languages are: $ALL_LANGS])
 done
+# list with substituted ALL
+WITH_LANG_LIST=`echo $WITH_LANG | sed "s/ALL/$ALL_LANGS/"`
+# this variable is used only by bin/distro-install-* helper scripts
+# they need a real list of languages
+test -z "$WITH_LANG_LIST" && WITH_LANG_LIST="en-US"
 AC_SUBST(ALL_LANGS)
 AC_SUBST(WITH_LANG)
+AC_SUBST(WITH_LANG_LIST)
 AC_SUBST(GIT_REPO_NAMES)
 
 AC_MSG_CHECKING([for another 'intro' bitmap])
@@ -8739,6 +8785,59 @@ else
     AC_MSG_RESULT([$UNIXWRAPPERNAME])
 fi
 AC_SUBST(UNIXWRAPPERNAME)
+
+AC_MSG_CHECKING([whether to install the compat oo* wrappers])
+if test "$with_compat_oowrappers" = "yes" ; then
+    WITH_COMPAT_OOWRAPPERS=YES
+    AC_MSG_RESULT(yes)
+else
+    WITH_COMPAT_OOWRAPPERS=
+    AC_MSG_RESULT(no)
+fi
+AC_SUBST(WITH_COMPAT_OOWRAPPERS)
+
+AC_MSG_CHECKING([for product name])
+PRODUCTNAME=AC_PACKAGE_NAME
+AC_MSG_RESULT([$PRODUCTNAME])
+AC_SUBST(PRODUCTNAME)
+
+INSTALLDIRNAME=`echo AC_PACKAGE_NAME | tr [[:upper:]] [[:lower:]]`
+AC_MSG_CHECKING([for install dirname])
+if test -n "$with_install_dirname" -a "$with_install_dirname" != "no" -a "$with_install_dirname" != "yes" ; then
+   INSTALLDIRNAME="$with_install_dirname"
+fi
+AC_MSG_RESULT([$INSTALLDIRNAME])
+AC_SUBST(INSTALLDIRNAME)
+
+AC_MSG_CHECKING([for prefix])
+PREFIXDIR="$prefix"
+AC_MSG_RESULT([$PREFIXDIR])
+AC_SUBST(PREFIXDIR)
+
+AC_MSG_CHECKING([for libdir])
+LIBDIR=[$(eval echo $(eval echo $libdir))]
+AC_MSG_RESULT([$LIBDIR])
+AC_SUBST(LIBDIR)
+
+AC_MSG_CHECKING([for data dir])
+DATADIR=[$(eval echo $(eval echo $datadir))]
+AC_MSG_RESULT([$DATADIR])
+AC_SUBST(DATADIR)
+
+AC_MSG_CHECKING([for man dir])
+MANDIR=[$(eval echo $(eval echo $mandir))]
+AC_MSG_RESULT([$MANDIR])
+AC_SUBST(MANDIR)
+
+AC_MSG_CHECKING([for doc dir])
+DOCDIR=[$(eval echo $(eval echo $docdir))]
+AC_MSG_RESULT([$DOCDIR])
+AC_SUBST(DOCDIR)
+
+AC_MSG_CHECKING([for install dir])
+INSTALLDIR="$LIBDIR/$INSTALLDIRNAME"
+AC_MSG_RESULT([$INSTALLDIR])
+AC_SUBST(INSTALLDIR)
 
 AC_MSG_CHECKING([whether to statically link to Gtk])
 if test -n "$enable_static_gtk" && test "$enable_static_gtk" != "no"; then

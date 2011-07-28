@@ -199,14 +199,7 @@ if [ -f $start_dir/bootstrap.ver -a ! -d $start_dir/.git ] ; then
         if [ ! -f "$TARFILE_LOCATION/$tarname.tar.bz2" ] ; then
 	    downloaditem "http://download.documentfoundation.org/libreoffice/src/" "$tarname.tar.bz2" ""
 	fi
-	if [ ! -d $lo_src_dir/$tarname ] ; then
-	    echo "Unpacking $tarname.tar.bz2..."
-	    tar -xf "$TARFILE_LOCATION/$tarname.tar.bz2" -C "$lo_src_dir"
-	fi
-	# create symlinks
-	for dir in `find "$lo_src_dir/$tarname" -mindepth 1 -maxdepth 1 -type d` ; do
-	    ln -sf "$dir" "$start_dir"
-	done
+	$start_dir/bin/unpack-sources $start_dir $TARFILE_LOCATION/$tarname.tar.bz2
     done
 fi
 

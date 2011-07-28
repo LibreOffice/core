@@ -1,0 +1,64 @@
+#!/bin/sh
+
+#*****************************************************************************
+#
+#  java-set-classpath - Utility to update the default CLASSPATH for OpenOffice.org
+#
+#  Initial version by: Petr Mladek <pmladek@suse.cz>
+#
+#  This program is free software; you can redistribute it and/or modify
+#  it under the terms of the GNU General Public License version 2, as
+#  published by the Free Software Foundation.
+#
+#  This program is distributed in the hope that it will be useful,
+#  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#  GNU General Public License for more details.
+#
+#  You should have received a copy of the GNU General Public License
+#  along with this program; if not, write to the Free Software
+#  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+#
+#*****************************************************************************
+
+if test "z$1" = "z" ; then
+    echo "Update the default CLASSPATH for OpenOffice.org"
+    echo ""
+    echo "Usage: $0 [dir|jar]..."
+    echo ""
+    echo "The utility updates the OpenOffice.org system setting. It adds or removes"
+    echo "the given directories and jar-files to or from the default CLASSPATH"
+    echo "depending on if they are available on the system or not."
+    echo ""
+    echo "Parameters:"
+    echo "        dir - absolute path to a directory"
+    echo "        jar - absolute path to a jar-file"
+    exit 0;
+fi
+
+JVM_CONFIG_FILE=@OOINSTBASE@/basis-link/program/fundamentalbasisrc
+
+for path in $@ ; do
+    if test "z${path%%/*}" != "z" ; then
+	echo "Warning: the path "$path" is not absolute and will be ignored"
+	continue
+    fi
+    if test -e $path ; then
+	# the file exist
+	grep "URE_MORE_JAVA_CLASSPATH_URLS.*file:/*$path\([[:space:]].*\)\?$" $JVM_CONFIG_FILE >/dev/null && continue
+	# it is not registered
+	TMP_FILE=`mktemp /tmp/ooset-java-class.XXXXXXXXXX` || exit 1
+	sed -e "s|^\(.*URE_MORE_JAVA_CLASSPATH_URLS.*\)$|\1 file://$path|" $JVM_CONFIG_FILE >$TMP_FILE
+	mv -f $TMP_FILE $JVM_CONFIG_FILE
+	chmod 644 $JVM_CONFIG_FILE
+    else
+	# the file does not exist, remove it from the configuration
+	TMP_FILE=`mktemp /tmp/ooset-java-class.XXXXXXXXXX` || exit 1;
+	sed -e "s|^\(.*URE_MORE_JAVA_CLASSPATH_URLS.*\)file:/*$path\([[:space:]].*\)\?$|\1\2|" \
+	    -e "s/\(URE_MORE_JAVA_CLASSPATH_URLS=\)[[:space:]]\+/\1/" \
+	    -e "/^.*URE_MORE_JAVA_CLASSPATH_URLS/s/[[:space:]]\+/ /g" \
+	    -e "/^.*URE_MORE_JAVA_CLASSPATH_URLS/s/[[:space:]]*$//" $JVM_CONFIG_FILE >$TMP_FILE
+	mv -f $TMP_FILE $JVM_CONFIG_FILE
+	chmod 644 $JVM_CONFIG_FILE
+    fi
+done
