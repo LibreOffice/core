@@ -448,8 +448,6 @@ LineListBox::GetEntryDistance(unsigned short) const
 LineListBox::GetEntryLine1(unsigned short) const
 LineListBox::GetEntryLine2(unsigned short) const
 LinguMgr::UpdateAll()
-LinguOptions::GetValue(com::sun::star::uno::Any&, int) const
-LinguOptions::SetValue(com::sun::star::uno::Any&, com::sun::star::uno::Any const&, int)
 LinkStructArr::DeleteAndDestroy(unsigned short, unsigned short)
 ListBox::CalcWindowSizePixel(unsigned short) const
 ListBox::GetMRUEntries(unsigned short) const
@@ -463,7 +461,6 @@ ListBox::SetMaxMRUCount(unsigned short)
 ListBox::SetProminentEntryType(ProminentEntry)
 ListBox::SetSeparatorPos()
 ListBox::ShowProminentEntry(unsigned short)
-LngSvcMgr::RemoveLngSvcEvtBroadcaster(com::sun::star::uno::Reference<com::sun::star::linguistic2::XLinguServiceEventBroadcaster> const&)
 LocaleDataWrapper::getCollatorImplementations() const
 LocaleDataWrapper::getTransliterations() const
 LongCurrencyBox::GetValue(unsigned short) const
@@ -507,6 +504,7 @@ LwpObject::LwpObject()
 LwpObjectID::GetBuffer(char*)
 LwpObjectID::ReadCompressed(LwpSvStream*, LwpObjectID&)
 LwpObjectStream::QuickReadInt8(bool*)
+LwpOlePres::Read(SvStream&)
 LwpPara::GetLayoutWithMyStory()
 LwpPara::IsNumberRight()
 LwpPara::OverrideTab(LwpTabOverride*, LwpTabOverride*, XFParaStyle*)
@@ -532,6 +530,8 @@ MSFilterTracer::StartElement(rtl::OUString const&, com::sun::star::uno::Referenc
 MachineSettings::CopyData()
 MailDispatcher::removeListener(rtl::Reference<IMailDispatcherListener>)
 MaskSet::MaskSet(SvxBmpMask*, long)
+Matrix3d::Inverse() const
+Matrix3d::Matrix3d()
 Menu::ConvertPoint(Point&, Window*) const
 Menu::GetAccessibleDescription(unsigned short) const
 Menu::GetDisplayItemId(long) const
@@ -715,7 +715,6 @@ Polygon::IsSmooth(unsigned short) const
 Polygon::Remove(unsigned short, unsigned short)
 PopupMenu::SetSelectedEntry(unsigned short)
 PropBrwMgr::GetChildWindowId()
-ProposalList::Remove(rtl::OUString const&)
 PushButton::GetSymbolAlign() const
 REResourceList::REResourceList()
 REResourceList::~REResourceList()
@@ -1103,6 +1102,7 @@ SfxApplication::GetStatusIndicator() const
 SfxApplication::InitializeDde()
 SfxApplication::LeaveAsynchronCall_Impl()
 SfxApplication::Main()
+SfxApplication::QuerySave_Impl(SfxObjectShell&, unsigned char)
 SfxBasicManagerHolder::isAnyContainerModified() const
 SfxBindings::ExecuteGlobal_Impl(unsigned short)
 SfxBindings::GetPopupAction_Impl() const
@@ -1175,6 +1175,7 @@ SfxItemIter::PrevItem()
 SfxItemPool::Cleanup()
 SfxItemPool::GetVersion() const
 SfxItemPool::SetStoringPool(SfxItemPool const*)
+SfxItemPropertyMap::getSize() const
 SfxItemPropertySetInfo::getMap() const
 SfxItemSetHint::SfxItemSetHint(SfxItemSet*)
 SfxListener::EndListening(unsigned short)
@@ -1223,6 +1224,7 @@ SfxObjectList::GetFileName(unsigned short) const
 SfxObjectShell::Count()
 SfxObjectShell::CreateAndLoadObject(SfxItemSet const&, SfxFrame*)
 SfxObjectShell::DisconnectFromShared()
+SfxObjectShell::HasModalViews() const
 SfxObjectShell::IsSecure()
 SfxObjectShell::LockAutoLoad(unsigned char)
 SfxObjectShell::SetFlags(unsigned int)
@@ -2871,6 +2873,10 @@ binfilter::Sw3Bytes::Insert(binfilter::Sw3Bytes const*, unsigned short, unsigned
 binfilter::Sw3Bytes::Replace(unsigned char const&, unsigned short)
 binfilter::Sw3Bytes::Replace(unsigned char const*, unsigned short, unsigned short)
 binfilter::Sw3Bytes::_ForEach(unsigned short, unsigned short, unsigned char (*)(unsigned char const&, void*), void*)
+binfilter::Sw3IoImp::ConvertStringNoDbDelim(String const&, unsigned short)
+binfilter::Sw3IoImp::OutEndNoteInfo(binfilter::SwEndNoteInfo const&)
+binfilter::Sw3IoImp::OutPageFtnInfo(binfilter::SwPageFtnInfo const&)
+binfilter::Sw3IoImp::OutRedline(binfilter::SwRedline const&)
 binfilter::Sw3Marks::GetPos(binfilter::Sw3Mark const*) const
 binfilter::Sw3Marks::Insert(binfilter::Sw3Mark*)
 binfilter::Sw3Marks::Remove(binfilter::Sw3Mark*)
@@ -2885,10 +2891,14 @@ binfilter::Sw3SortFmts::Insert(binfilter::SwFmt* const&)
 binfilter::Sw3SortFmts::Insert(binfilter::SwFmt* const*, unsigned short)
 binfilter::Sw3SortFmts::Remove(binfilter::SwFmt* const&, unsigned short)
 binfilter::Sw3SortFmts::Remove(unsigned short, unsigned short)
+binfilter::Sw3StringPool::Setup(binfilter::SwDoc&, binfilter::SwFmt const&, unsigned short)
+binfilter::Sw3StringPool::SetupRedlines(binfilter::SwDoc&)
+binfilter::Sw3StringPool::SetupTxtCollByName(binfilter::SwDoc&, String const&)
 binfilter::Sw3ULongs::Insert(binfilter::Sw3ULongs const*, unsigned short, unsigned short, unsigned short)
 binfilter::Sw3ULongs::Replace(unsigned int const&, unsigned short)
 binfilter::Sw3ULongs::Replace(unsigned int const*, unsigned short, unsigned short)
 binfilter::Sw3ULongs::_ForEach(unsigned short, unsigned short, unsigned char (*)(unsigned int const&, void*), void*)
+binfilter::SwAuthorityField::GetHandlePosition() const
 binfilter::SwBookmarks::Insert(binfilter::SwBookmark* const&, unsigned short&)
 binfilter::SwBookmarks::Insert(binfilter::SwBookmark* const*, unsigned short)
 binfilter::SwBookmarks::Insert(binfilter::SwBookmarks const*, unsigned short, unsigned short)
@@ -2908,19 +2918,25 @@ binfilter::SwCurrShells::Insert(binfilter::CurrShell* const&, unsigned short&)
 binfilter::SwCurrShells::Insert(binfilter::CurrShell* const*, unsigned short)
 binfilter::SwCurrShells::Insert(binfilter::SwCurrShells const*, unsigned short, unsigned short)
 binfilter::SwCurrShells::Remove(unsigned short, unsigned short)
+binfilter::SwDBField::GetOldContent()
 binfilter::SwDependentFields::DeleteAndDestroy(unsigned short, unsigned short)
 binfilter::SwDestroyList::DeleteAndDestroy(unsigned short, unsigned short)
 binfilter::SwDestroyList::Insert(binfilter::SwDestroyList const*, unsigned short, unsigned short)
 binfilter::SwDestroyList::Insert(binfilter::SwSectionFrm* const&, unsigned short&)
 binfilter::SwDestroyList::Insert(binfilter::SwSectionFrm* const*, unsigned short)
 binfilter::SwDestroyList::Remove(binfilter::SwSectionFrm* const&, unsigned short)
+binfilter::SwDoc::GetAllUsedDB(binfilter::SvStringsDtor&, binfilter::SvStringsDtor const*)
 binfilter::SwDoc::ReadLayoutCache(SvStream&)
 binfilter::SwDoc::Replace(binfilter::SwPaM&, String const&, unsigned char)
 binfilter::SwDocShell::CalcLayoutForOLEObjects()
 binfilter::SwDocShell::RemoveOLEObjects()
 binfilter::SwFlyFrm::ConvertHoriTo40(binfilter::SwHoriOrient&, binfilter::SwRelationOrient&, long&) const
+binfilter::SwForm::ConvertPatternTo51(String const&)
+binfilter::SwForm::GetFirstTabPos() const
+binfilter::SwForm::IsFirstTabPosFlag() const
 binfilter::SwGrfNode::SaveCompleted(unsigned char)
 binfilter::SwLineLayout::DebugPortions(SvStream&, String const&, unsigned short)
+binfilter::SwNewDBMgr::GetDSSelection(binfilter::SwDBData const&, long&, long&)
 binfilter::SwOLELRUCache::Remove(binfilter::SwOLEObj&)
 binfilter::SwOutlineNodes::Insert(binfilter::SwNode* const&, unsigned short&)
 binfilter::SwOutlineNodes::Insert(binfilter::SwNode* const*, unsigned short)
@@ -2929,6 +2945,8 @@ binfilter::SwPageIter::GetPageDesc() const
 binfilter::SwPageIter::GetPosition(binfilter::SwPosition&) const
 binfilter::SwPageIter::NextPage()
 binfilter::SwPageIter::SwPageIter(binfilter::SwDoc const&, binfilter::SwPosition const&)
+binfilter::SwPosFlyFrm::SwPosFlyFrm(binfilter::SwNodeIndex const&, binfilter::SwFrmFmt const*, unsigned short)
+binfilter::SwPosFlyFrms::Insert(binfilter::SwPosFlyFrm* const&)
 binfilter::SwPosFlyFrms::Insert(binfilter::SwPosFlyFrm* const&, unsigned short&)
 binfilter::SwPosFlyFrms::Insert(binfilter::SwPosFlyFrm* const*, unsigned short)
 binfilter::SwPosFlyFrms::Insert(binfilter::SwPosFlyFrms const*, unsigned short, unsigned short)
@@ -3078,6 +3096,9 @@ binfilter::frm::OErrorBroadcaster::onError(com::sun::star::sdbc::SQLException co
 binfilter::frm::OFilterControl::implInitFilterList()
 binfilter::frm::OImageControlModel::UpdateFromField()
 binfilter::frm::OListBoxModel::GetCurValueSeq() const
+binfilter::lcl_sw3io_HasFixedFields40(binfilter::Sw3IoImp&, unsigned short)
+binfilter::lcl_sw3io_OutSetExpField(binfilter::Sw3IoImp&, binfilter::SwField*)
+binfilter::lcl_sw3io_OutSetExpField40(binfilter::Sw3IoImp&, binfilter::SwField*)
 binfilter::registerServiceProvider(rtl::OUString const&, com::sun::star::uno::Sequence<rtl::OUString> const&, com::sun::star::registry::XRegistryKey*)
 cairocanvas::CanvasHelper::flush() const
 cairocanvas::CanvasHelper::getPalette()
@@ -3684,15 +3705,21 @@ libwpg::WPGDashArray::at(unsigned int) const
 libwpg::WPGDashArray::count() const
 libwpg::WPGraphics::generateSVG(unsigned char const*, unsigned long, WPXString&, libwpg::WPGFileFormat)
 libwpg::WPGraphics::parse(unsigned char const*, unsigned long, libwpg::WPGPaintInterface*, libwpg::WPGFileFormat)
+linguistic::GetIgnoreAllList()
 linguistic::GetLinguisticPaths(short)
+linguistic::GetLocaleDataWrapper(short)
+linguistic::GetSearchableDictionaryList()
 linguistic::GetTextEncoding(short)
+linguistic::IsIgnoreControlChars(com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue> const&, com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet> const&)
 linguistic::IsLower(String const&, unsigned short, unsigned short, short)
+linguistic::IsUseDicList(com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue> const&, com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet> const&)
 linguistic::LangSeqToLocaleSeq(com::sun::star::uno::Sequence<short> const&)
-linguistic::MergeProposals(com::sun::star::uno::Reference<com::sun::star::linguistic2::XSpellAlternatives>&, com::sun::star::uno::Reference<com::sun::star::linguistic2::XSpellAlternatives>&)
+linguistic::LevDistance(rtl::OUString const&, rtl::OUString const&)
+linguistic::LocaleSeqToLangSeq(com::sun::star::uno::Sequence<com::sun::star::lang::Locale>&)
+linguistic::RebuildHyphensAndControlChars(rtl::OUString const&, com::sun::star::uno::Reference<com::sun::star::linguistic2::XHyphenatedWord>&)
+linguistic::RemoveControlChars(rtl::OUString&)
 linguistic::SearchFileInPaths(String const&, com::sun::star::uno::Sequence<rtl::OUString> const&)
-linguistic::SpellAlternatives::SpellAlternatives(rtl::OUString const&, short, short, rtl::OUString const&)
 linguistic::StripTrailingChars(rtl::OUString&, unsigned short)
-linguistic::ThesaurusMeaning::ThesaurusMeaning(rtl::OUString const&, rtl::OUString const&, short)
 linguistic::ToLower(unsigned short, short)
 linguistic::ToTitle(String const&, short)
 linguistic::ToUpper(String const&, short)
