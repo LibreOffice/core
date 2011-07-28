@@ -162,7 +162,6 @@ public:
                         FreetypeManager();
                         ~FreetypeManager();
 
-    long                AddFontDir( const String& rUrlName );
     void                AddFontFile( const rtl::OString& rNormalizedName,
                             int nFaceNum, sal_IntPtr nFontId, const ImplDevFontAttributes&,
                             const ExtraKernInfo* );

@@ -3393,17 +3393,6 @@ void SvImpLBox::SetUpdateMode( sal_Bool bMode )
     }
 }
 
-void SvImpLBox::SetUpdateModeFast( sal_Bool bMode )
-{
-    if( bUpdateMode != bMode )
-    {
-        bUpdateMode = bMode;
-        if( bUpdateMode )
-            UpdateAll( sal_False, sal_False );
-    }
-}
-
-
 sal_Bool SvImpLBox::SetMostRight( SvLBoxEntry* pEntry )
 {
     if( pView->nTreeFlags & TREEFLAG_RECALCTABS )
@@ -3543,18 +3532,6 @@ void SvImpLBox::ShowFocusRect( const SvLBoxEntry* pEntry )
     {
         pView->HideFocus();
     }
-}
-
-void SvImpLBox::SetTabBar( TabBar* _pTabBar )
-{
-    pTabBar = _pTabBar;
-}
-
-void SvImpLBox::CancelPendingEdit()
-{
-    if( aEditTimer.IsActive() )
-        aEditTimer.Stop();
-    nFlags &= ~F_START_EDITTIMER;
 }
 
 // -----------------------------------------------------------------------

@@ -353,14 +353,10 @@ public:
     void                RepaintScrollBars();
     void                EnableAsyncDrag( sal_Bool b) { bAsyncBeginDrag = b; }
     void                SetUpdateMode( sal_Bool );
-    void                SetUpdateModeFast( sal_Bool );
     sal_Bool                GetUpdateMode() const { return bUpdateMode; }
     Rectangle           GetClipRegionRect() const;
     sal_Bool                HasHorScrollBar() const { return aHorSBar.IsVisible(); }
     void                ShowFocusRect( const SvLBoxEntry* pEntry );
-    void                SetTabBar( TabBar* pTabBar );
-    void                CancelPendingEdit();
-
     void                CallEventListeners( sal_uLong nEvent, void* pData = NULL );
 
     /** Enables, that one cell of a tablistbox entry can be focused */

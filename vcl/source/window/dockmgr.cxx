@@ -1485,13 +1485,6 @@ WinBits ImplDockingWindowWrapper::GetFloatStyle() const
 
 // -----------------------------------------------------------------------
 
-void ImplDockingWindowWrapper::SetTabStop()
-{
-    GetWindow()->SetStyle( GetWindow()->GetStyle() | (WB_GROUP | WB_TABSTOP) );
-}
-
-// -----------------------------------------------------------------------
-
 void ImplDockingWindowWrapper::SetPosSizePixel( long nX, long nY,
                                      long nWidth, long nHeight,
                                      sal_uInt16 nFlags )

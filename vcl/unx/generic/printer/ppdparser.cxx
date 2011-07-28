@@ -1455,20 +1455,6 @@ void PPDParser::getDefaultResolution( int& rXRes, int& rYRes ) const
     rYRes = 300;
 }
 
-void PPDParser::getFontAttributes(
-                                  int nFont,
-                                  String& rEncoding,
-                                  String& rCharset ) const
-{
-    if( m_pFontList && nFont >= 0 && nFont < m_pFontList->countValues() )
-    {
-        String aAttribs =
-            WhitespaceToSpace( m_pFontList->getValue( nFont )->m_aValue );
-        rEncoding   = GetCommandLineToken( 0, aAttribs );
-        rCharset    = GetCommandLineToken( 2, aAttribs );
-    }
-}
-
 String PPDParser::getFont( int nFont ) const
 {
     if( ! m_pFontList )

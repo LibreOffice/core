@@ -198,7 +198,6 @@ public:
 
     void            SetFloatStyle( WinBits nWinStyle );
     WinBits         GetFloatStyle() const;
-    void            SetTabStop();
 
     virtual void    SetPosSizePixel( long nX, long nY,
                                      long nWidth, long nHeight,

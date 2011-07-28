@@ -255,9 +255,6 @@ public:
 
     int             getFonts() const
     { return m_pFontList ? m_pFontList->countValues() : 0; }
-    void            getFontAttributes( int,
-                                       String& rEncoding,
-                                       String& rCharset ) const;
     String          getFont( int ) const;
 
 

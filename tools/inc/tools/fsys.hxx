@@ -450,7 +450,6 @@ public:
     void            Reset();
     sal_uInt16          Scan( sal_uInt16 nCount = 5 );
     size_t          Count( sal_Bool bUpdated = sal_True ) const;
-    sal_Bool            Update();
 
     Dir&            operator +=( const Dir& rDir );
     DirEntry&       operator []( size_t nIndex ) const;
