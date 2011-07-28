@@ -105,7 +105,7 @@ gb_CXXFLAGS := \
 	#-malign-natural \ might be removed?
 
 ifeq ($(HAVE_GCC_NO_LONG_DOUBLE),TRUE)
-gb_CXXFLAGS +:= -Wno-long-double
+gb_CXXFLAGS += -Wno-long-double
 endif
 
 # these are to get g++ to switch to Objective-C++ mode
