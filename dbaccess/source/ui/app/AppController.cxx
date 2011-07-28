@@ -1937,7 +1937,8 @@ Reference< XComponent > OApplicationController::openElementWithArguments( const 
 IMPL_LINK( OApplicationController, OnSelectContainer, void*, _pType )
 {
     ElementType eType = (ElementType)reinterpret_cast< sal_IntPtr >( _pType );
-    getContainer()->selectContainer(eType);
+    if (getContainer())
+        getContainer()->selectContainer(eType);
     return 0L;
 }
 // -----------------------------------------------------------------------------
