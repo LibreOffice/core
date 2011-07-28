@@ -1417,6 +1417,9 @@ void ScTable::UpdateInsertTab(SCTAB nTable, SCTAB nNewSheets)
     if (mpRangeName)
         mpRangeName->UpdateTabRef( nTable, 1, 0, nNewSheets);
 
+    if (mpRangeName)
+        mpRangeName->UpdateTabRef( nTable, 1);
+
     if (IsStreamValid())
         SetStreamValid(false);
 }
@@ -1442,6 +1445,11 @@ void ScTable::UpdateDeleteTab( SCTAB nTable, sal_Bool bIsMove, ScTable* pRefUndo
         {
             mpRangeName->UpdateTabRef( nTable + aTab, 2 );
         }
+    }
+
+    if (mpRangeName)
+    {
+        mpRangeName->UpdateTabRef( nTable, 2 );
     }
 
     if (IsStreamValid())
