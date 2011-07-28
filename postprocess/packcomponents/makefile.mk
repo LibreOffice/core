@@ -40,14 +40,13 @@ GTK_TWO_FOUR=$(shell @+-$(PKG_CONFIG) --exists 'gtk+-2.0 >= 2.4.0' && echo YES)
 
 my_components = \
     abp \
-    analysis \
     avmedia \
-    basctl \
     basprov \
     bib \
     cached1 \
     calc \
     component/animations/source/animcore/animcore \
+    component/basctl/util/basctl \
     component/chart2/source/controller/chartcontroller \
     component/chart2/source/model/chartmodel \
     component/chart2/source/tools/charttools \
@@ -82,6 +81,9 @@ my_components = \
     component/sc/util/scd \
     component/sc/util/scfilt \
     component/sc/util/vbaobj \
+    component/scaddins/source/analysis/analysis \
+    component/scaddins/source/datefunc/date \
+    component/sccomp/source/solver/solver \
     component/sd/util/sd \
     component/sd/util/sdd \
     component/sd/util/sdfilt \
@@ -114,7 +116,6 @@ my_components = \
     component/xmlscript/util/xcr \
     configmgr \
     ctl \
-    date \
     dbase \
     dbp \
     dbpool2 \
@@ -155,7 +156,6 @@ my_components = \
     scn \
     scriptframe \
     sdbc2 \
-    solver \
     spell \
     spl \
     srtrs1 \
