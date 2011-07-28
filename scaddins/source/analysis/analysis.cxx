@@ -47,17 +47,11 @@
 using namespace                 ::rtl;
 using namespace                 ::com::sun::star;
 
-//------------------------------------------------------------------
-//
-//  entry points for service registration / instantiation
-//
-//------------------------------------------------------------------
 
-extern "C" {
-
-SAL_DLLPUBLIC_EXPORT void* SAL_CALL component_getFactory( const sal_Char* pImplName, void* pServiceManager, void* /*pRegistryKey*/ )
+extern "C" SAL_DLLPUBLIC_EXPORT void* SAL_CALL analysis_component_getFactory(
+    const sal_Char* pImplName, void* pServiceManager, void* /*pRegistryKey*/ )
 {
-    void*                                   pRet = 0;
+    void* pRet = 0;
 
     if( pServiceManager && STRING::createFromAscii( pImplName ) == AnalysisAddIn::getImplementationName_Static() )
     {
@@ -76,11 +70,6 @@ SAL_DLLPUBLIC_EXPORT void* SAL_CALL component_getFactory( const sal_Char* pImplN
 
     return pRet;
 }
-
-
-}   // extern C
-
-
 
 
 //------------------------------------------------------------------------

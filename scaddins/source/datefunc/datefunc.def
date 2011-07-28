@@ -1,5 +1,0 @@
-LIBRARY	  datefunc
-DESCRIPTION	'StarView 3.00 Uno BE Reflection data 551 '
-HEAPSIZE	  0
-EXPORTS
-component_getFactory
