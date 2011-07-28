@@ -1402,6 +1402,7 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
     if (nParam >= 0)
     {
         RTFValue::Pointer_t pValue(new RTFValue(1));
+        m_aStates.top().aParagraphSprms.erase(NS_sprm::LN_PFInTable);
         m_aStates.top().aParagraphSprms->push_back(make_pair(nParam, pValue));
         skipDestination(bParsed);
         return 0;
