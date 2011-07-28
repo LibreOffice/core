@@ -670,6 +670,8 @@ $(eval $(call gb_UnoApiTarget_add_idlfiles_noheader,offapi,\
     offapi/com/sun/star/report/inspection/DataProviderHandler \
     offapi/com/sun/star/report/inspection/ReportComponentHandler \
     offapi/com/sun/star/report/modules \
+	offapi/com/sun/star/scaddins/analysisadd \
+	offapi/com/sun/star/scaddins/dateadd \
     offapi/com/sun/star/scanner/ScannerManager \
     offapi/com/sun/star/script/browse/BrowseNode \
     offapi/com/sun/star/script/browse/BrowseNodeFactory \

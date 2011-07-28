@@ -209,7 +209,7 @@ Reference<XInterface> SAL_CALL DllComponentLoader::activate(
                 rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("/UNO/ACTIVATOR") ) );
         if (xActivatorKey.is() && xActivatorKey->getValueType() == RegistryValueType_ASCII )
         {
-            Reference<XRegistryKey > xPrefixKey = xActivatorKey->openKey(
+            Reference<XRegistryKey > xPrefixKey = xKey->openKey(
                 rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("/UNO/PREFIX") ) );
             if( xPrefixKey.is() && xPrefixKey->getValueType() == RegistryValueType_ASCII )
             {
