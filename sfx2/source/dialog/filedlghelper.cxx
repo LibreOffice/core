@@ -2289,20 +2289,6 @@ FileDialogHelper::FileDialogHelper(
     mpImp->addFilters( nFlags, SfxObjectShell::GetServiceNameFromFactory(rFact), nMust, nDont );
 }
 
-FileDialogHelper::FileDialogHelper(
-    sal_Int64 nFlags,
-    const String& rFact,
-    sal_Int16 nDialog,
-    SfxFilterFlags nMust,
-    SfxFilterFlags nDont )
-{
-    mpImp = new FileDialogHelper_Impl( this, getDialogType( nFlags ), nFlags, nDialog );
-    mxImp = mpImp;
-
-    // create the list of filters
-    mpImp->addFilters( nFlags, SfxObjectShell::GetServiceNameFromFactory(rFact), nMust, nDont );
-}
-
 // ------------------------------------------------------------------------
 FileDialogHelper::FileDialogHelper( sal_Int64 nFlags )
 {

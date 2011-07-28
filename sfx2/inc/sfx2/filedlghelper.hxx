@@ -139,12 +139,6 @@ private:
 
 public:
                             FileDialogHelper( sal_Int64 nFlags,
-                                              const String& rFactory,
-                                              sal_Int16 nDialog,
-                                              SfxFilterFlags nMust,
-                                              SfxFilterFlags nDont );
-
-                            FileDialogHelper( sal_Int64 nFlags,
                                               const String& rFact,
                                               sal_Int16 nDialog,
                                               SfxFilterFlags nMust,
