@@ -39,7 +39,7 @@ private:
     static void         InsertRangeName( ScDocument* pDoc, const String& rName, const ScRange& rRange );
 
 public:
-    ScHTMLImport( ScDocument* pDoc, const String& rBaseURL, const ScRange& rRange, sal_Bool bCalcWidthHeight = sal_True );
+    ScHTMLImport( ScDocument* pDoc, const String& rBaseURL, const ScRange& rRange, bool bCalcWidthHeight );
     virtual ~ScHTMLImport();
     const ScHTMLParser* GetParser() const { return (ScHTMLParser*)mpParser; }
 

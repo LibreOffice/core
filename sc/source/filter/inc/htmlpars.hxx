@@ -35,6 +35,8 @@
 #include <vector>
 #include <list>
 #include <map>
+#include <boost/ptr_container/ptr_map.hpp>
+#include <boost/unordered_map.hpp>
 
 #include "rangelst.hxx"
 #include "eeparser.hxx"
@@ -51,9 +53,40 @@ const sal_uInt16 SC_HTML_OFFSET_TOLERANCE_LARGE = 10;   // nested
 
 class ScHTMLTable;
 
+/**
+ * Collection of HTML style data parsed from the content of <style>
+ * elements.
+ */
+class ScHTMLStyles
+{
+    typedef ::boost::unordered_map<rtl::OUString, rtl::OUString, rtl::OUStringHash> PropsType;
+    typedef ::boost::ptr_map<rtl::OUString, PropsType> NamePropsType;
+    typedef ::boost::ptr_map<rtl::OUString, NamePropsType> ElemsType;
+
+    NamePropsType maGlobalProps;     /// global properties (for a given class for all elements)
+    NamePropsType maElemGlobalProps; /// element global properties (no class specified)
+    ElemsType maElemProps;           /// element to class to properties (both element and class are given)
+    const rtl::OUString maEmpty;     /// just a persistent empty string.
+public:
+    void add(const char* pElemName, size_t nElemName, const char* pClassName, size_t nClassName,
+             const rtl::OUString& aProp, const rtl::OUString& aValue);
+
+    /**
+     * Find best-matching property value for given element and class names.
+     */
+    const rtl::OUString& getPropertyValue(
+        const rtl::OUString& rElem, const rtl::OUString& rClass, const rtl::OUString& rPropName) const;
+
+private:
+    static void insertProp(
+        NamePropsType& rProps, const rtl::OUString& aName,
+        const rtl::OUString& aProp, const rtl::OUString& aValue);
+};
+
 /** Base class for HTML parser classes. */
 class ScHTMLParser : public ScEEParser
 {
+    ScHTMLStyles                maStyles;
 protected:
     sal_uInt32                  maFontHeights[ SC_HTML_FONTSIZES ];
     ScDocument*                 mpDoc;          /// The destination document.
@@ -63,6 +96,9 @@ public:
     virtual                     ~ScHTMLParser();
 
     virtual sal_uLong               Read( SvStream& rStrm, const String& rBaseURL  ) = 0;
+
+    ScHTMLStyles&               GetStyles();
+    ScDocument&                 GetDoc();
 
     /** Returns the "global table" which contains the entire HTML document. */
     virtual const ScHTMLTable*  GetGlobalTable() const = 0;
@@ -436,6 +472,8 @@ public:
     /** Applies border formatting to the passed document. */
     void                ApplyCellBorders( ScDocument* pDoc, const ScAddress& rFirstPos ) const;
 
+    SvNumberFormatter* GetFormatTable();
+
 protected:
     /** Creates a new HTML table without parent.
         @descr  This constructor is used to create the "global table". */
@@ -443,7 +481,7 @@ protected:
                             SfxItemPool& rPool,
                             EditEngine& rEditEngine,
                             ::std::vector< ScEEParseEntry* >& rEEParseList,
-                            ScHTMLTableId& rnUnusedId );
+                            ScHTMLTableId& rnUnusedId, ScHTMLParser* pParser );
 
     /** Fills all empty cells in this and nested tables with dummy parse entries. */
     void                FillEmptyCells();
@@ -550,6 +588,7 @@ private:
     ScHTMLSize          maSize;             /// Size of the table.
     ScHTMLPos           maCurrCell;         /// Address of current cell to fill.
     ScHTMLPos           maDocBasePos;       /// Resulting base address in a Calc document.
+    ScHTMLParser*       mpParser;
     bool                mbBorderOn;         /// true = Table borders on.
     bool                mbPreFormText;      /// true = Table from preformatted text (<pre> tag).
     bool                mbRowOn;            /// true = Inside of <tr> </tr>.
@@ -567,7 +606,7 @@ public:
                             SfxItemPool& rPool,
                             EditEngine& rEditEngine,
                             ::std::vector< ScEEParseEntry* >& rEEParseList,
-                            ScHTMLTableId& rnUnusedId );
+                            ScHTMLTableId& rnUnusedId, ScHTMLParser* pParser );
 
     virtual             ~ScHTMLGlobalTable();
 
@@ -619,6 +658,8 @@ private:
 
     /** Closes the current table, regardless on opening tag. */
     void                CloseTable( const ImportInfo& rInfo );
+
+    void                ParseStyle(const rtl::OUString& rStrm);
 
     DECL_LINK( HTMLImportHdl, const ImportInfo* );
 

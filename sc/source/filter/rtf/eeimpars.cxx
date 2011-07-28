@@ -160,7 +160,7 @@ void ScEEImport::WriteToDocument( sal_Bool bSizeColsRows, double nOutputFactor, 
     }
     ScDocumentPool* pDocPool = mpDoc->GetPool();
     ScRangeName* pRangeNames = mpDoc->GetRangeName();
-    for ( size_t i = 0, nListSize = mpParser->ListSize(); i < nListSize; ++i )
+    for ( size_t i = 0, n = mpParser->ListSize(); i < n; ++i )
     {
         pE = mpParser->ListEntry( i );
         SCROW nRow = nStartRow + pE->nRow;
@@ -274,6 +274,10 @@ void ScEEImport::WriteToDocument( sal_Bool bSizeColsRows, double nOutputFactor, 
                 const SfxPoolItem* pPosture;
                 if ( rESet.GetItemState( ATTR_FONT_POSTURE, false, &pPosture) != SFX_ITEM_SET )
                     pPosture = 0;
+                // Number format
+                const SfxPoolItem* pNumFmt = NULL;
+                if ( rESet.GetItemState(ATTR_VALUE_FORMAT, false, &pNumFmt) == SFX_ITEM_SET )
+                    rSet.Put(*pNumFmt);
                 if ( pFont || pHeight || pWeight || pPosture )
                 {
                     String aStr( mpEngine->GetText( pE->aSel ) );
@@ -358,10 +362,21 @@ void ScEEImport::WriteToDocument( sal_Bool bSizeColsRows, double nOutputFactor, 
                         aStr.EraseLeadingAndTrailingChars();
                     }
 
+                    bool bTextFormat = false;
+
+                    const SfxPoolItem* pNumFmt = NULL;
+                    if (rSet.GetItemState(ATTR_VALUE_FORMAT, false, &pNumFmt) == SFX_ITEM_SET)
+                    {
+                        sal_uInt32 nNumFmt = static_cast<const SfxUInt32Item*>(pNumFmt)->GetValue();
+                        sal_uInt16 nType = pFormatter->GetType(nNumFmt);
+                        if (nType == NUMBERFORMAT_TEXT)
+                            // Format is set to Text.
+                            bTextFormat = true;
+                    }
+
                     // TODO: RTF import should follow the language tag,
                     // currently this follows the HTML options for both, HTML
                     // and RTF.
-                    bool bEnUsRecognized = false;
                     if (bNumbersEnglishUS)
                     {
                         pFormatter->ChangeIntl( LANGUAGE_ENGLISH_US);
@@ -369,13 +384,14 @@ void ScEEImport::WriteToDocument( sal_Bool bSizeColsRows, double nOutputFactor, 
                         double fEnVal = 0.0;
                         if (pFormatter->IsNumberFormat( aStr, nIndex, fEnVal))
                         {
-                            bEnUsRecognized = true;
                             sal_uInt32 nNewIndex =
                                 pFormatter->GetFormatForLanguageIfBuiltIn(
                                         nIndex, LANGUAGE_SYSTEM);
                             OSL_ENSURE( nNewIndex != nIndex, "ScEEImport::WriteToDocument: NumbersEnglishUS not a built-in format?");
                             pFormatter->GetInputLineString( fEnVal, nNewIndex, aStr);
                         }
+                        else
+                            bTextFormat = true;
                         pFormatter->ChangeIntl( LANGUAGE_SYSTEM);
                     }
 
@@ -384,7 +400,7 @@ void ScEEImport::WriteToDocument( sal_Bool bSizeColsRows, double nOutputFactor, 
                     aStr.SearchAndReplaceAll( (sal_Unicode)'\t', (sal_Unicode)' ' );
                     aStr.SearchAndReplaceAll( (sal_Unicode)'\n', (sal_Unicode)' ' );
 
-                    if (bNumbersEnglishUS && !bEnUsRecognized)
+                    if (bTextFormat)
                         mpDoc->PutCell( nCol, nRow, nTab, new ScStringCell( aStr));
                     else
                     {

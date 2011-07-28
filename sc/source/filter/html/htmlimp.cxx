@@ -77,7 +77,7 @@ ScEEAbsImport *ScFormatFilterPluginImpl::CreateHTMLImport( ScDocument* pDocP, co
     return new ScHTMLImport( pDocP, rBaseURL, rRange, bCalcWidthHeight );
 }
 
-ScHTMLImport::ScHTMLImport( ScDocument* pDocP, const String& rBaseURL, const ScRange& rRange, sal_Bool bCalcWidthHeight ) :
+ScHTMLImport::ScHTMLImport( ScDocument* pDocP, const String& rBaseURL, const ScRange& rRange, bool bCalcWidthHeight ) :
     ScEEImport( pDocP, rRange )
 {
     Size aPageSize;
@@ -150,8 +150,7 @@ void ScHTMLImport::WriteToDocument(
     pGlobTable->ApplyCellBorders( mpDoc, maRange.aStart );
 
     // correct cell borders for merged cells
-    size_t ListSize = pParser->ListSize();
-    for ( size_t i = 0; i < ListSize; ++i )
+    for ( size_t i = 0, n = pParser->ListSize(); i < n; ++i )
     {
         const ScEEParseEntry* pEntry = pParser->ListEntry( i );
         if( (pEntry->nColOverlap > 1) || (pEntry->nRowOverlap > 1) )

@@ -49,6 +49,7 @@
 #include <editeng/justifyitem.hxx>
 #include <sfx2/objsh.hxx>
 #include <svl/eitem.hxx>
+#include <svl/intitem.hxx>
 #include <svtools/filter.hxx>
 #include <svtools/parhtml.hxx>
 #include <svtools/htmlkywd.hxx>
@@ -64,12 +65,125 @@
 #include "document.hxx"
 #include "rangelst.hxx"
 
+#include <orcus/css_parser.hpp>
+
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 
 using ::editeng::SvxBorderLine;
 using namespace ::com::sun::star;
 
+void ScHTMLStyles::add(const char* pElemName, size_t nElemName, const char* pClassName, size_t nClassName,
+                       const rtl::OUString& aProp, const rtl::OUString& aValue)
+{
+    if (pElemName)
+    {
+        rtl::OUString aElem(pElemName, nElemName, RTL_TEXTENCODING_UTF8);
+        aElem = aElem.toAsciiLowerCase();
+        if (pClassName)
+        {
+            // Both element and class names given.
+
+            ElemsType::iterator itrElem = maElemProps.find(aElem);
+            if (itrElem == maElemProps.end())
+            {
+                // new element
+                std::auto_ptr<NamePropsType> p(new NamePropsType);
+                std::pair<ElemsType::iterator, bool> r = maElemProps.insert(aElem, p);
+                if (!r.second)
+                    // insertion failed.
+                    return;
+                itrElem = r.first;
+            }
+
+            NamePropsType* pClsProps = itrElem->second;
+            rtl::OUString aClass(pClassName, nClassName, RTL_TEXTENCODING_UTF8);
+            aClass = aClass.toAsciiLowerCase();
+            insertProp(*pClsProps, aClass, aProp, aValue);
+        }
+        else
+        {
+            // Element name only. Add it to the element global.
+            insertProp(maElemGlobalProps, aElem, aProp, aValue);
+        }
+    }
+    else
+    {
+        if (pClassName)
+        {
+            // Class name only. Add it to the global.
+            rtl::OUString aClass(pClassName, nClassName, RTL_TEXTENCODING_UTF8);
+            aClass = aClass.toAsciiLowerCase();
+            insertProp(maGlobalProps, aClass, aProp, aValue);
+        }
+    }
+}
+
+const rtl::OUString& ScHTMLStyles::getPropertyValue(
+    const rtl::OUString& rElem, const rtl::OUString& rClass, const rtl::OUString& rPropName) const
+{
+    // First, look into the element-class storage.
+    {
+        ElemsType::const_iterator itr = maElemProps.find(rElem);
+        if (itr != maElemProps.end())
+        {
+            const NamePropsType* pClasses = itr->second;
+            NamePropsType::const_iterator itr2 = pClasses->find(rClass);
+            if (itr2 != pClasses->end())
+            {
+                const PropsType* pProps = itr2->second;
+                PropsType::const_iterator itr3 = pProps->find(rPropName);
+                if (itr3 != pProps->end())
+                    return itr3->second;
+            }
+        }
+    }
+    // Next, look into the class global storage.
+    {
+        NamePropsType::const_iterator itr = maGlobalProps.find(rClass);
+        if (itr != maGlobalProps.end())
+        {
+            const PropsType* pProps = itr->second;
+            PropsType::const_iterator itr2 = pProps->find(rPropName);
+            if (itr2 != pProps->end())
+                return itr2->second;
+        }
+    }
+    // As the last resort, look into the element global storage.
+    {
+        NamePropsType::const_iterator itr = maElemGlobalProps.find(rClass);
+        if (itr != maElemGlobalProps.end())
+        {
+            const PropsType* pProps = itr->second;
+            PropsType::const_iterator itr2 = pProps->find(rPropName);
+            if (itr2 != pProps->end())
+                return itr2->second;
+        }
+    }
+
+    return maEmpty; // nothing found.
+}
+
+void ScHTMLStyles::insertProp(
+    NamePropsType& rStore, const rtl::OUString& aName,
+    const rtl::OUString& aProp, const rtl::OUString& aValue)
+{
+    NamePropsType::iterator itr = rStore.find(aName);
+    if (itr == rStore.end())
+    {
+        // new element
+        std::auto_ptr<PropsType> p(new PropsType);
+        std::pair<NamePropsType::iterator, bool> r = rStore.insert(aName, p);
+        if (!r.second)
+            // insertion failed.
+            return;
+
+        itr = r.first;
+    }
+
+    PropsType* pProps = itr->second;
+    pProps->insert(PropsType::value_type(aProp, aValue));
+}
 
 SV_IMPL_VARARR_SORT( ScHTMLColOffset, sal_uLong );
 
@@ -91,10 +205,21 @@ ScHTMLParser::~ScHTMLParser()
 {
 }
 
+ScHTMLStyles& ScHTMLParser::GetStyles()
+{
+    return maStyles;
+}
+
+ScDocument& ScHTMLParser::GetDoc()
+{
+    return *mpDoc;
+}
 
 // ============================================================================
 
-ScHTMLLayoutParser::ScHTMLLayoutParser( EditEngine* pEditP, const String& rBaseURL, const Size& aPageSizeP, ScDocument* pDocP ) :
+ScHTMLLayoutParser::ScHTMLLayoutParser(
+    EditEngine* pEditP, const String& rBaseURL, const Size& aPageSizeP,
+    ScDocument* pDocP ) :
         ScHTMLParser( pEditP, pDocP ),
         aPageSize( aPageSizeP ),
         aBaseURL( rBaseURL ),
@@ -1867,6 +1992,7 @@ ScHTMLTable::ScHTMLTable( ScHTMLTable& rParentTable, const ImportInfo& rInfo, bo
     mrEEParseList( rParentTable.mrEEParseList ),
     mpCurrEntryList( 0 ),
     maSize( 1, 1 ),
+    mpParser(rParentTable.mpParser),
     mbBorderOn( false ),
     mbPreFormText( bPreFormText ),
     mbRowOn( false ),
@@ -1902,7 +2028,7 @@ ScHTMLTable::ScHTMLTable(
     SfxItemPool& rPool,
     EditEngine& rEditEngine,
     ::std::vector< ScEEParseEntry* >& rEEParseList,
-    ScHTMLTableId& rnUnusedId
+    ScHTMLTableId& rnUnusedId, ScHTMLParser* pParser
 ) :
     mpParentTable( 0 ),
     maTableId( rnUnusedId ),
@@ -1911,6 +2037,7 @@ ScHTMLTable::ScHTMLTable(
     mrEEParseList( rEEParseList ),
     mpCurrEntryList( 0 ),
     maSize( 1, 1 ),
+    mpParser(pParser),
     mbBorderOn( false ),
     mbPreFormText( false ),
     mbRowOn( false ),
@@ -2044,6 +2171,52 @@ void ScHTMLTable::RowOff( const ImportInfo& rInfo )
     CreateNewEntry( rInfo );
 }
 
+namespace {
+
+/**
+ * Decode a numbert format string stored in Excel-generated HTML's CSS
+ * region.
+ */
+rtl::OUString decodeNumberFormat(const rtl::OUString& rFmt)
+{
+    rtl::OUStringBuffer aBuf;
+    const sal_Unicode* p = rFmt.getStr();
+    sal_Int32 n = rFmt.getLength();
+    for (sal_Int32 i = 0; i < n; ++i, ++p)
+    {
+        if (*p == '\\')
+        {
+            // Skip '\'.
+            ++i;
+            ++p;
+
+            // Parse all subsequent digits until first non-digit is found.
+            sal_Int32 nDigitCount = 0;
+            const sal_Unicode* p1 = p;
+            for (; i < n; ++i, ++p, ++nDigitCount)
+            {
+                if (*p < '0' || '9' < *p)
+                {
+                    --i;
+                    --p;
+                    break;
+                }
+
+            }
+            if (nDigitCount)
+            {
+                sal_Int32 nVal = rtl::OUString(p1, nDigitCount).toInt32(16);
+                aBuf.append(static_cast<sal_Unicode>(nVal));
+            }
+        }
+        else
+            aBuf.append(*p);
+    }
+    return aBuf.makeStringAndClear();
+}
+
+}
+
 void ScHTMLTable::DataOn( const ImportInfo& rInfo )
 {
     PushEntry( rInfo, true );
@@ -2072,6 +2245,38 @@ void ScHTMLTable::DataOn( const ImportInfo& rInfo )
         }
 
         ImplDataOn( aSpanSize );
+
+        const HTMLOptions& rOptions = static_cast<HTMLParser*>(rInfo.pParser)->GetOptions();
+        HTMLOptions::const_iterator itr = rOptions.begin(), itrEnd = rOptions.end();
+        for (; itr != itrEnd; ++itr)
+        {
+            if (itr->GetToken() == HTML_O_CLASS)
+            {
+                // This <td> has class property.  Pick up the number format
+                // associated with this class (if any).
+                rtl::OUString aElem(RTL_CONSTASCII_USTRINGPARAM("td"));
+                rtl::OUString aClass = itr->GetString();
+                rtl::OUString aProp(RTL_CONSTASCII_USTRINGPARAM("mso-number-format"));
+                const ScHTMLStyles& rStyles = mpParser->GetStyles();
+                const rtl::OUString& rVal = rStyles.getPropertyValue(aElem, aClass, aProp);
+                rtl::OUString aNumFmt = decodeNumberFormat(rVal);
+
+                sal_uInt32 nNumberFormat = GetFormatTable()->GetEntryKey(aNumFmt);
+                bool bValidFmt = false;
+                if ( nNumberFormat == NUMBERFORMAT_ENTRY_NOT_FOUND )
+                {
+                    xub_StrLen nErrPos  = 0;
+                    short nDummy;
+                    bValidFmt = GetFormatTable()->PutEntry(aNumFmt, nErrPos, nDummy, nNumberFormat);
+                }
+                else
+                    bValidFmt = true;
+
+                if (bValidFmt)
+                    mxDataItemSet->Put( SfxUInt32Item(ATTR_VALUE_FORMAT, nNumberFormat) );
+            }
+        }
+
         ProcessFormatOptions( *mxDataItemSet, rInfo );
         CreateNewEntry( rInfo );
         mxCurrEntry->pValStr = pValStr.release();
@@ -2222,6 +2427,11 @@ void ScHTMLTable::ApplyCellBorders( ScDocument* pDoc, const ScAddress& rFirstPos
 
     for( ScHTMLTableIterator aIter( mxNestedTables.get() ); aIter.is(); ++aIter )
         aIter->ApplyCellBorders( pDoc, rFirstPos );
+}
+
+SvNumberFormatter* ScHTMLTable::GetFormatTable()
+{
+    return mpParser->GetDoc().GetFormatTable();
 }
 
 // ----------------------------------------------------------------------------
@@ -2690,9 +2900,10 @@ ScHTMLGlobalTable::ScHTMLGlobalTable(
     SfxItemPool& rPool,
     EditEngine& rEditEngine,
     ::std::vector< ScEEParseEntry* >& rEEParseList,
-    ScHTMLTableId& rnUnusedId
+    ScHTMLTableId& rnUnusedId,
+    ScHTMLParser* pParser
 ) :
-    ScHTMLTable( rPool, rEditEngine, rEEParseList, rnUnusedId )
+    ScHTMLTable( rPool, rEditEngine, rEEParseList, rnUnusedId, pParser )
 {
 }
 
@@ -2717,7 +2928,8 @@ ScHTMLQueryParser::ScHTMLQueryParser( EditEngine* pEditEngine, ScDocument* pDoc 
     mnUnusedId( SC_HTML_GLOBAL_TABLE ),
     mbTitleOn( false )
 {
-    mxGlobTable.reset( new ScHTMLGlobalTable( *pPool, *pEdit, maList, mnUnusedId ) );
+    mxGlobTable.reset(
+        new ScHTMLGlobalTable(*pPool, *pEdit, maList, mnUnusedId, this));
     mpCurrTable = mxGlobTable.get();
 }
 
@@ -2778,6 +2990,9 @@ void ScHTMLQueryParser::ProcessToken( const ImportInfo& rInfo )
 // --- title handling ---
         case HTML_TITLE_ON:         TitleOn( rInfo );               break;  // <title>
         case HTML_TITLE_OFF:        TitleOff( rInfo );              break;  // </title>
+
+        case HTML_STYLE_ON:                                         break;
+        case HTML_STYLE_OFF:        ParseStyle(rInfo.aText);        break;
 
 // --- body handling ---
         case HTML_BODY_ON:          mpCurrTable->BodyOn( rInfo );   break;  // <body>
@@ -2954,6 +3169,109 @@ void ScHTMLQueryParser::PreOff( const ImportInfo& rInfo )
 void ScHTMLQueryParser::CloseTable( const ImportInfo& rInfo )
 {
     mpCurrTable = mpCurrTable->CloseTable( rInfo );
+}
+
+namespace {
+
+/**
+ * Handler class for the CSS parser.
+ */
+class CSSHandler
+{
+    struct MemStr
+    {
+        const char* mp;
+        size_t      mn;
+
+        MemStr() : mp(NULL), mn(0) {}
+        MemStr(const char* p, size_t n) : mp(p), mn(n) {}
+        MemStr(const MemStr& r) : mp(r.mp), mn(r.mn) {}
+        MemStr& operator=(const MemStr& r)
+        {
+            mp = r.mp;
+            mn = r.mn;
+            return *this;
+        }
+    };
+
+    typedef std::pair<MemStr, MemStr> SelectorName; // element : class
+    typedef std::vector<SelectorName> SelectorNames;
+    SelectorNames maSelectorNames; /// current selector names.
+    MemStr maPropName;  /// current property name.
+    MemStr maPropValue; /// current property value.
+
+    ScHTMLStyles& mrStyles;
+public:
+    CSSHandler(ScHTMLStyles& rStyles) : mrStyles(rStyles) {}
+
+    void at_rule_name(const char* /*p*/, size_t /*n*/)
+    {
+        // For now, we ignore at-rule properties.
+    }
+
+    void selector_name(const char* p_elem, size_t n_elem, const char* p_class, size_t n_class)
+    {
+        MemStr aElem(p_elem, n_elem), aClass(p_class, n_class);
+        SelectorName aName(aElem, aClass);
+        maSelectorNames.push_back(aName);
+    }
+
+    void property_name(const char* p, size_t n)
+    {
+        maPropName = MemStr(p, n);
+    }
+
+    void value(const char* p, size_t n)
+    {
+        maPropValue = MemStr(p, n);
+    }
+
+    void begin_parse() {}
+
+    void end_parse() {}
+
+    void begin_block() {}
+
+    void end_block()
+    {
+        maSelectorNames.clear();
+    }
+
+    void begin_property() {}
+
+    void end_property()
+    {
+        SelectorNames::const_iterator itr = maSelectorNames.begin(), itrEnd = maSelectorNames.end();
+        for (; itr != itrEnd; ++itr)
+        {
+            // Add this property to the collection for each selector.
+            const SelectorName& rSelName = *itr;
+            const MemStr& rElem = rSelName.first;
+            const MemStr& rClass = rSelName.second;
+            rtl::OUString aName(maPropName.mp, maPropName.mn, RTL_TEXTENCODING_UTF8);
+            rtl::OUString aValue(maPropValue.mp, maPropValue.mn, RTL_TEXTENCODING_UTF8);
+            mrStyles.add(rElem.mp, rElem.mn, rClass.mp, rClass.mn, aName, aValue);
+        }
+        maPropName = MemStr();
+        maPropValue = MemStr();
+    }
+};
+
+}
+
+void ScHTMLQueryParser::ParseStyle(const rtl::OUString& rStrm)
+{
+    rtl::OString aStr = rtl::OUStringToOString(rStrm, RTL_TEXTENCODING_UTF8);
+    CSSHandler aHdl(GetStyles());
+    orcus::css_parser<CSSHandler> aParser(aStr.getStr(), aStr.getLength(), aHdl);
+    try
+    {
+        aParser.parse();
+    }
+    catch (const orcus::css_parse_error&)
+    {
+        // Parsing of CSS failed.  Do nothing for now.
+    }
 }
 
 // ----------------------------------------------------------------------------
