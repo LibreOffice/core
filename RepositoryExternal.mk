@@ -438,6 +438,98 @@ endef
 endif # SYSTEM_OPENSSL
 
 
+ifeq ($(SYSTEM_LIBVISIO),YES)
+
+define gb_LinkTarget__use_visio
+$(call gb_LinkTarget_add_libs,$(1),-llibvisio)
+
+endef
+
+else # !SYSTEM_LIBVISIO
+
+$(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
+	visiolib \
+))
+
+define gb_LinkTarget__use_visio
+$(call gb_LinkTarget_add_linked_static_libs,$(1),\
+	visiolib \
+)
+
+endef
+
+endif # SYSTEM_LIBVISIO
+
+
+ifeq ($(SYSTEM_LIBWPD),YES)
+
+define gb_LinkTarget__use_wpd
+$(call gb_LinkTarget_add_libs,$(1),-llibwpd)
+
+endef
+
+else # !SYSTEM_LIBWPD
+
+$(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
+	wpdlib \
+))
+
+define gb_LinkTarget__use_wpd
+$(call gb_LinkTarget_add_linked_static_libs,$(1),\
+	wpdlib \
+)
+
+endef
+
+endif # SYSTEM_LIBWPD
+
+
+ifeq ($(SYSTEM_LIBWPG),YES)
+
+define gb_LinkTarget__use_wpg
+$(call gb_LinkTarget_add_libs,$(1),-llibwpg)
+
+endef
+
+else # !SYSTEM_LIBWPG
+
+$(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
+	wpglib \
+))
+
+define gb_LinkTarget__use_wpg
+$(call gb_LinkTarget_add_linked_static_libs,$(1),\
+	wpglib \
+)
+
+endef
+
+endif # SYSTEM_LIBWPG
+
+
+ifeq ($(SYSTEM_LIBWPS),YES)
+
+define gb_LinkTarget__use_wps
+$(call gb_LinkTarget_add_libs,$(1),-llibwps)
+
+endef
+
+else # !SYSTEM_LIBWPS
+
+$(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
+	wpslib \
+))
+
+define gb_LinkTarget__use_wps
+$(call gb_LinkTarget_add_linked_static_libs,$(1),\
+	wpslib \
+)
+
+endef
+
+endif # SYSTEM_LIBWPS
+
+
 ifeq ($(SYSTEM_LPSOLVE),YES)
 
 define gb_LinkTarget__use_lpsolve55
