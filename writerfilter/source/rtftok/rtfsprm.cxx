@@ -105,14 +105,15 @@ RTFValue::Pointer_t RTFSprms::find(Id nKeyword)
     return pValue;
 }
 
-void RTFSprms::erase(Id nKeyword)
+bool RTFSprms::erase(Id nKeyword)
 {
     for (RTFSprms::Iterator_t i = m_aSprms.begin(); i != m_aSprms.end(); ++i)
         if (i->first == nKeyword)
         {
             m_aSprms.erase(i);
-            return;
+            return true;
         }
+    return false;
 }
 
 RTFSprms::RTFSprms()
