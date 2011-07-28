@@ -69,6 +69,7 @@
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/passwd.hxx>
+#include <sfx2/filedlghelper.hxx>
 #include "helper.hxx"
 #include <sfx2/objsh.hxx>
 #include <sfx2/docfile.hxx>
@@ -924,15 +925,12 @@ IMPL_LINK( SfxDocumentPage, ChangePassHdl, PushButton*, EMPTYARG )
         SfxItemSet* pMedSet = pShell->GetMedium()->GetItemSet();
         if (!pMedSet)
             break;
+        const SfxFilter* pFilter = pShell->GetMedium()->GetFilter();
+        if (!pFilter)
+             break;
 
-        ::std::auto_ptr<SfxPasswordDialog> pDlg(new SfxPasswordDialog(this));
-        pDlg->SetMinLen(1);
-        pDlg->ShowExtras(SHOWEXTRAS_CONFIRM);
-        if (pDlg->Execute() != RET_OK)
-            break;
-
-        String aNewPass = pDlg->GetPassword();
-        pMedSet->Put( SfxStringItem(SID_PASSWORD, aNewPass) );
+        rtl::OUString aDocName;
+        sfx2::RequestPassword(pFilter, aDocName, pMedSet);
         pShell->SetModified(true);
     }
     while (false);
@@ -986,15 +984,15 @@ void SfxDocumentPage::ImplCheckPasswordState()
         if (!pMedSet)
             break;
 
-        const SfxPoolItem* pItem;
-        if (!pMedSet->GetItemState(SID_PASSWORD, true, &pItem))
-            break;
+        SFX_ITEMSET_ARG( pMedSet, pEncryptionDataItem, SfxUnoAnyItem, SID_ENCRYPTIONDATA, sal_False);
+        uno::Sequence< beans::NamedValue > aEncryptionData;
+        if (pEncryptionDataItem)
+            pEncryptionDataItem->GetValue() >>= aEncryptionData;
+        else
+             break;
 
-        const SfxStringItem* pStrItem = dynamic_cast<const SfxStringItem*>(pItem);
-        if (!pStrItem)
-            break;
-
-        String aPass = pStrItem->GetValue();
+        if (!aEncryptionData.getLength())
+             break;
         aChangePassBtn.Enable();
         return;
     }

@@ -43,6 +43,7 @@
 #include <vcl/graph.hxx>
 #include <sfx2/sfxdefs.hxx>
 #include <sfx2/sfxuno.hxx>
+#include <sfx2/docfilt.hxx>
 
 //-----------------------------------------------------------------------------
 
@@ -303,6 +304,9 @@ ErrCode FileOpenDialog_Impl( sal_Int64 nFlags,
                              sal_Int16 nDialog = SFX2_IMPL_DIALOG_CONFIG,
                              const String& rStandardDir = String::CreateFromAscii( "" ),
                              const ::com::sun::star::uno::Sequence< ::rtl::OUString >& rBlackList = ::com::sun::star::uno::Sequence< ::rtl::OUString >());
+
+
+ErrCode RequestPassword(const SfxFilter* pCurrentFilter, rtl::OUString& aURL, SfxItemSet* pSet);
 }
 
 //-----------------------------------------------------------------------------
