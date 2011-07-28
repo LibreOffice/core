@@ -1204,7 +1204,7 @@ extern "C"
     { 0, 0, 0, 0, 0, 0 }
 };
 
-SAL_DLLPUBLIC_EXPORT void* SAL_CALL component_getFactory( const sal_Char* pImplName, XMultiServiceFactory* pServiceManager, XRegistryKey*  pRegistryKey )
+SAL_DLLPUBLIC_EXPORT void* SAL_CALL scfilt_component_getFactory( const sal_Char* pImplName, XMultiServiceFactory* pServiceManager, XRegistryKey*  pRegistryKey )
 {
     return ::cppu::component_getFactoryHelper( pImplName, pServiceManager, pRegistryKey, entries );
 

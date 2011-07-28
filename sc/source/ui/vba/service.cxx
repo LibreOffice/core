@@ -78,11 +78,11 @@ extern sdecl::ServiceDecl const serviceDecl;
 
 extern "C"
 {
-    SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(
+    SAL_DLLPUBLIC_EXPORT void * SAL_CALL vbaobj_component_getFactory(
         const sal_Char * pImplName, lang::XMultiServiceFactory * pServiceManager,
         registry::XRegistryKey * pRegistryKey )
     {
-        OSL_TRACE("In component_getFactory for %s", pImplName );
+        OSL_TRACE("In vbaobj_component_getFactory for %s", pImplName );
     void* pRet =  component_getFactoryHelper(
             pImplName, pServiceManager, pRegistryKey, range::serviceDecl, workbook::serviceDecl, worksheet::serviceDecl, globals::serviceDecl, window::serviceDecl, hyperlink::serviceDecl, application::serviceDecl );
     if( !pRet )

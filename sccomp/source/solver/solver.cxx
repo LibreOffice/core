@@ -596,7 +596,7 @@ uno::Reference<uno::XInterface> SolverComponent_createInstance( const uno::Refer
 
 extern "C"
 {
-    SAL_DLLPUBLIC_EXPORT void* SAL_CALL component_getFactory( const sal_Char * pImplName, void * pServiceManager, void * /*pRegistryKey*/ )
+    SAL_DLLPUBLIC_EXPORT void* SAL_CALL solver_component_getFactory( const sal_Char * pImplName, void * pServiceManager, void * /*pRegistryKey*/ )
     {
         OUString    aImplName( OUString::createFromAscii( pImplName ) );
         void*       pRet = 0;
