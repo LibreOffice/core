@@ -1333,8 +1333,8 @@ void UnoControl::createPeer( const Reference< XToolkit >& rxToolkit, const Refer
         sal_Bool bDesignMode(mbDesignMode);
 
         Reference< XGraphics >  xGraphics( mxGraphics           );
-        Reference< XView >      xView    ( getPeer(), UNO_QUERY );
-        Reference< XWindow >    xWindow  ( getPeer(), UNO_QUERY );
+        Reference< XView >      xView    ( getPeer(), UNO_QUERY_THROW );
+        Reference< XWindow >    xWindow  ( getPeer(), UNO_QUERY_THROW );
 
         aGuard.clear();
 
