@@ -98,7 +98,6 @@ static SotAction_Impl const aEmptyArr[] =                         \
         { 0xffff, 0, 0 }                                                  \
     };
 
-/*  */
 #define EXCHG_DEST_DOC_OLEOBJ_ARRAY                                         \
 static SotAction_Impl const aEXCHG_DEST_DOC_OLEOBJ_Def[] =        \
     {                                                                       \
@@ -129,7 +128,6 @@ static SotAction_Impl const aEXCHG_DEST_DOC_OLEOBJ_Link[] =       \
         { 0xffff, 0, 0 }                                                          \
     };
 
-/*  */
 #define EXCHG_DEST_CHARTDOC_OLEOBJ_ARRAY                                    \
 static SotAction_Impl const aEXCHG_DEST_CHARTDOC_OLEOBJ_Def[] =   \
     {                                                                       \
@@ -160,7 +158,6 @@ static SotAction_Impl const aEXCHG_DEST_CHARTDOC_OLEOBJ_Link[] =  \
         { 0xffff, 0, 0 }                                                          \
     };
 
-/*  */
 #define EXCHG_DEST_DOC_TEXTFRAME_ARRAY                                      \
 static SotAction_Impl const aEXCHG_DEST_DOC_TEXTFRAME_Def[] =     \
     {                                                                       \
@@ -342,7 +339,6 @@ static SotAction_Impl const aEXCHG_DEST_DOC_TEXTFRAME_WEB_Link[] =    \
         { 0xffff, 0, 0 }                                                          \
     };
 
-/*  */
 #define EXCHG_DEST_DOC_GRAPHOBJ_ARRAY                                       \
 static SotAction_Impl const aEXCHG_DEST_DOC_GRAPHOBJ_Def[] =      \
     {                                                                       \
@@ -401,7 +397,6 @@ static SotAction_Impl const aEXCHG_DEST_DOC_GRAPHOBJ_Link[] =     \
         { 0xffff, 0, 0 }                                                          \
     };
 
-/*  */
 #define EXCHG_DEST_DOC_LNKD_GRAPHOBJ_ARRAY                                  \
 static SotAction_Impl const aEXCHG_DEST_DOC_LNKD_GRAPHOBJ_Def[] = \
     {                                                                       \
@@ -460,7 +455,6 @@ static SotAction_Impl const aEXCHG_DEST_DOC_LNKD_GRAPHOBJ_Link[] =\
         { 0xffff, 0, 0 }                                                          \
     };
 
-/*  */
 #define EXCHG_DEST_DOC_GRAPH_W_IMAP_ARRAY                                   \
 static SotAction_Impl const aEXCHG_DEST_DOC_GRAPH_W_IMAP_Def[] =  \
     {                                                                       \
@@ -520,7 +514,6 @@ static SotAction_Impl const aEXCHG_DEST_DOC_GRAPH_W_IMAP_Link[] = \
         { 0xffff, 0, 0 }                                                          \
     };
 
-/*  */
 #define EXCHG_DEST_DOC_LNKD_GRAPH_W_IMAP_ARRAY                              \
 static SotAction_Impl const aEXCHG_DEST_DOC_LNKD_GRAPH_W_IMAP_Def[] =\
     {                                                                       \
@@ -581,7 +574,6 @@ static SotAction_Impl const aEXCHG_DEST_DOC_LNKD_GRAPH_W_IMAP_Link[] =\
     };
 
 
-/*  */
 #define EXCHG_DEST_DOC_IMAPREGION_ARRAY                                     \
 static SotAction_Impl const aEXCHG_DEST_DOC_IMAPREGION_Def[] =    \
     {                                                                       \
@@ -601,7 +593,6 @@ static SotAction_Impl const aEXCHG_DEST_DOC_IMAPREGION_Copy[] =   \
     };
 
 
-/*  */
 #define EXCHG_DEST_DOC_DRAWOBJ_ARRAY                                        \
 static SotAction_Impl const aEXCHG_DEST_DOC_DRAWOBJ_Def[] =       \
     {                                                                       \
@@ -661,7 +652,6 @@ static SotAction_Impl const aEXCHG_DEST_DOC_DRAWOBJ_Link[] =      \
     };
 
 
-/*  */
 #define EXCHG_DEST_DOC_URLBUTTON_ARRAY                                      \
 static SotAction_Impl const aEXCHG_DEST_DOC_URLBUTTON_Def[] =     \
     {                                                                       \
@@ -698,7 +688,6 @@ static SotAction_Impl const aEXCHG_DEST_DOC_URLBUTTON_Copy[] =    \
     };
 
 
-/*  */
 #define EXCHG_DEST_DOC_URLFIELD_ARRAY                                       \
 static SotAction_Impl const aEXCHG_DEST_DOC_URLFIELD_Def[] =      \
     {                                                                       \
@@ -722,7 +711,6 @@ static SotAction_Impl const aEXCHG_DEST_DOC_URLFIELD_Link[] =     \
         { 0xffff, 0, 0 }                                                          \
     };
 
-/*  */
 #define EXCHG_DEST_DOC_GROUPOBJ_ARRAY                                       \
 static SotAction_Impl const aEXCHG_DEST_DOC_GROUPOBJ_Def[] =      \
     {                                                                       \
@@ -782,7 +770,6 @@ static SotAction_Impl const aEXCHG_DEST_DOC_GROUPOBJ_Link[] =     \
     };
 
 
-/*  */
 #define EXCHG_DEST_SWDOC_FREE_AREA_ARRAY                                    \
 static SotAction_Impl const aEXCHG_DEST_SWDOC_FREE_AREA_Def[] =   \
     {                                                                       \
@@ -963,7 +950,6 @@ static SotAction_Impl const aEXCHG_DEST_SWDOC_FREE_AREA_WEB_Link[] =  \
     };
 
 
-/*  */
 #define EXCHG_DEST_SCDOC_FREE_AREA_ARRAY                                    \
 static SotAction_Impl const aEXCHG_DEST_SCDOC_FREE_AREA_Def[] =   \
     {                                                                       \
@@ -1056,7 +1042,6 @@ static SotAction_Impl const aEXCHG_DEST_SCDOC_FREE_AREA_Link[] =  \
     };
 
 
-/*  */
 #define EXCHG_DEST_SDDOC_FREE_AREA_ARRAY                                    \
 static SotAction_Impl const aEXCHG_DEST_SDDOC_FREE_AREA_Def[] =   \
     {                                                                       \
@@ -1143,7 +1128,6 @@ static SotAction_Impl const aEXCHG_DEST_SDDOC_FREE_AREA_Link[] =  \
     };
 
 
-/*  */
 
 #define IMPL_DATA_ARRAY_1                                                 \
 EXCHG_EMPYT_ARRAY                                                         \
