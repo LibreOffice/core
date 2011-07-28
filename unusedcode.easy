@@ -4083,7 +4083,6 @@ sdr::table::TableLayouter::getColumnStart(int) const
 sdr::table::TableLayouter::getRowStart(int) const
 sdr::table::TableLayouter::setColumnWidth(int, int)
 sdr::table::TableLayouter::setRowHeight(int, int)
-sfx2::FileDialogHelper::FileDialogHelper(long, String const&, short, unsigned long, unsigned long)
 sfx2::IFrameWindow_Impl::SetBorder(unsigned char)
 sfx2::LinkManager::InsertFileLink(sfx2::SvBaseLink&)
 sfx2::ModuleTaskPane::ModuleHasToolPanels(rtl::OUString const&)
