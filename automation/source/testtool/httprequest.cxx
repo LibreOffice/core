@@ -50,15 +50,6 @@ HttpRequest::HttpRequest()
 {
 }
 
-HttpRequest::~HttpRequest()
-{
-    delete pStream;
-    pStream = NULL;
-
-    delete pOutSocket;
-    pOutSocket = NULL;
-}
-
 void HttpRequest::SetRequest( rtl::OString aHost, rtl::OString aPath, sal_uInt16 nPort )
 {
     nStatus = HTTP_REQUEST_SET;
@@ -215,24 +206,9 @@ sal_Bool HttpRequest::IsItem( rtl::OString aItem, rtl::OString aLine )
 }
 
 
-void HttpRequest::Abort()
-{
-    if ( pOutSocket )
-    {
-        nStatus = HTTP_REQUEST_ERROR;
-        pOutSocket->shutdown();
-        pOutSocket->close();
-    }
-}
-
 SvMemoryStream* HttpRequest::GetBody()
 {
     return pStream;
-}
-
-sal_uInt16 HttpRequest::GetStatus()
-{
-    return nStatus;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

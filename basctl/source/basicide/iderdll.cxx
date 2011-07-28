@@ -115,20 +115,6 @@ void BasicIDEDLL::Init()
     PropBrwMgr::RegisterChildWindow();
 }
 
-/*************************************************************************
-|*
-|* Deinitialisierung
-|*
-\************************************************************************/
-void BasicIDEDLL::Exit()
-{
-    // the BasicIDEModule must be destroyed
-    BasicIDEModule** ppShlPtr = (BasicIDEModule**) GetAppData(SHL_IDE);
-    delete (*ppShlPtr);
-    (*ppShlPtr) = NULL;
-    DELETEZ( pBasicIDEDLL );
-}
-
 BasicIDEData* BasicIDEDLL::GetExtraData()
 {
     if ( !pExtraData )
