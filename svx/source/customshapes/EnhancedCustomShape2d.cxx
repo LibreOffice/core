@@ -66,7 +66,7 @@
 
 // #i76201#
 #include <basegfx/polygon/b2dpolygontools.hxx>
-
+#include <rtl/strbuf.hxx>
 #include <math.h>
 
 using namespace ::com::sun::star::uno;
@@ -1711,9 +1711,10 @@ void EnhancedCustomShape2d::CreateSubPath( sal_uInt16& rSrcPt, sal_uInt16& rSegm
                 case UNKNOWN :
                 default :
                 {
-                    ByteString aString( "CustomShapes::unknown PolyFlagValue :" );
-                    aString.Append( ByteString::CreateFromInt32( nCommand ) );
-                    OSL_FAIL( aString.GetBuffer() );
+                    rtl::OStringBuffer aString(RTL_CONSTASCII_STRINGPARAM(
+                        "CustomShapes::unknown PolyFlagValue :"));
+                    aString.append(static_cast<sal_Int32>(nCommand));
+                    OSL_FAIL(aString.getStr());
                 }
                 break;
 #endif

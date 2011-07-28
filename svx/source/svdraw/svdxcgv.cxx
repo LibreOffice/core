@@ -63,6 +63,7 @@
 
 // #i72535#
 #include "fmobj.hxx"
+#include <rtl/strbuf.hxx>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -445,22 +446,25 @@ sal_Bool SdrExchangeView::Paste(const SdrModel& rMod, const Point& rPos, SdrObjL
         if(0L != nCloneErrCnt)
         {
 #ifdef DBG_UTIL
-            ByteString aStr("SdrExchangeView::Paste(): Fehler beim Clonen ");
+            rtl::OStringBuffer aStr(RTL_CONSTASCII_STRINGPARAM(
+                "SdrExchangeView::Paste(): Fehler beim Clonen "));
 
             if(nCloneErrCnt == 1)
             {
-                aStr += "eines Zeichenobjekts.";
+                aStr.append(RTL_CONSTASCII_STRINGPARAM(
+                    "eines Zeichenobjekts."));
             }
             else
             {
-                aStr += "von ";
-                aStr += ByteString::CreateFromInt32( nCloneErrCnt );
-                aStr += " Zeichenobjekten.";
+                aStr.append(RTL_CONSTASCII_STRINGPARAM("von "));
+                aStr.append(static_cast<sal_Int32>(nCloneErrCnt));
+                aStr.append(RTL_CONSTASCII_STRINGPARAM(" Zeichenobjekten."));
             }
 
-            aStr += " Objektverbindungen werden nicht mitkopiert.";
+            aStr.append(RTL_CONSTASCII_STRINGPARAM(
+                " Objektverbindungen werden nicht mitkopiert."));
 
-            OSL_FAIL(aStr.GetBuffer());
+            OSL_FAIL(aStr.getStr());
 #endif
         }
     }
@@ -829,22 +833,25 @@ SdrModel* SdrExchangeView::GetMarkedObjModel() const
         if(0L != nCloneErrCnt)
         {
 #ifdef DBG_UTIL
-            ByteString aStr("SdrExchangeView::GetMarkedObjModel(): Fehler beim Clonen ");
+            rtl::OStringBuffer aStr(RTL_CONSTASCII_STRINGPARAM(
+                "SdrExchangeView::GetMarkedObjModel(): Fehler beim Clonen "));
 
             if(nCloneErrCnt == 1)
             {
-                aStr += "eines Zeichenobjekts.";
+                aStr.append(RTL_CONSTASCII_STRINGPARAM(
+                    "eines Zeichenobjekts."));
             }
             else
             {
-                aStr += "von ";
-                aStr += ByteString::CreateFromInt32( nCloneErrCnt );
-                aStr += " Zeichenobjekten.";
+                aStr.append(RTL_CONSTASCII_STRINGPARAM("von "));
+                aStr.append(static_cast<sal_Int32>(nCloneErrCnt));
+                aStr.append(RTL_CONSTASCII_STRINGPARAM(" Zeichenobjekten."));
             }
 
-            aStr += " Objektverbindungen werden nicht mitkopiert.";
+            aStr.append(RTL_CONSTASCII_STRINGPARAM(
+                " Objektverbindungen werden nicht mitkopiert."));
 
-            OSL_FAIL(aStr.GetBuffer());
+            OSL_FAIL(aStr.getStr());
 #endif
         }
     }

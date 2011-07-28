@@ -44,6 +44,7 @@
 #include "svx/svdstr.hrc"   // Namen aus der Resource
 #include "svx/svdglob.hxx"  // StringCache
 #include <svx/e3dsceneupdater.hxx>
+#include <rtl/strbuf.hxx>
 
 // #i13033#
 #include <clonelist.hxx>
@@ -976,21 +977,23 @@ void SdrEditView::CopyMarkedObj()
     if(0L != nCloneErrCnt)
     {
 #ifdef DBG_UTIL
-        ByteString aStr("SdrEditView::CopyMarkedObj(): Fehler beim Clonen ");
+        rtl::OStringBuffer aStr(RTL_CONSTASCII_STRINGPARAM(
+            "SdrEditView::CopyMarkedObj(): Fehler beim Clonen "));
 
         if(nCloneErrCnt == 1)
         {
-            aStr += "eines Zeichenobjekts.";
+            aStr.append(RTL_CONSTASCII_STRINGPARAM("eines Zeichenobjekts."));
         }
         else
         {
-            aStr += "von ";
-            aStr += ByteString::CreateFromInt32( nCloneErrCnt );
-            aStr += " Zeichenobjekten.";
+            aStr.append(RTL_CONSTASCII_STRINGPARAM("von "));
+            aStr.append(static_cast<sal_Int32>(nCloneErrCnt));
+            aStr.append(RTL_CONSTASCII_STRINGPARAM(" Zeichenobjekten."));
         }
 
-        aStr += " Objektverbindungen werden nicht mitkopiert.";
-        OSL_FAIL(aStr.GetBuffer());
+        aStr.append(RTL_CONSTASCII_STRINGPARAM(
+            " Objektverbindungen werden nicht mitkopiert."));
+        OSL_FAIL(aStr.getStr());
 #endif
     }
     MarkListHasChanged();

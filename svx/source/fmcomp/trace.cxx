@@ -30,6 +30,7 @@
 #include "precompiled_svx.hxx"
 #include "trace.hxx"
 #include <tools/debug.hxx>
+#include <rtl/strbuf.hxx>
 
 #if defined(DBG_UTIL)
 
@@ -47,18 +48,15 @@ Tracer::Tracer(const char* _pBlockDescription)
     ::osl::MutexGuard aGuard(s_aMapSafety);
     sal_uInt32 nIndent = s_aThreadIndents[ ::osl::Thread::getCurrentIdentifier() ]++;
 
-    ByteString sIndent;
+    rtl::OStringBuffer sMessage;
+    sMessage.append(static_cast<sal_Int32>(
+        ::osl::Thread::getCurrentIdentifier()));
+    sMessage.append('\t');
     while (nIndent--)
-        sIndent += '\t';
-
-    ByteString sThread( ByteString::CreateFromInt32( (sal_Int32)::osl::Thread::getCurrentIdentifier() ) );
-    sThread += '\t';
-
-    ByteString sMessage(sThread);
-    sMessage += sIndent;
-    sMessage += m_sBlockDescription;
-    sMessage += " {";
-    OSL_TRACE(sMessage.GetBuffer());
+        sMessage.append('\t');
+    sMessage.append(m_sBlockDescription);
+    sMessage.append(RTL_CONSTASCII_STRINGPARAM(" {"));
+    OSL_TRACE(sMessage.getStr());
 }
 
 //------------------------------------------------------------------------------
@@ -67,18 +65,15 @@ Tracer::~Tracer()
     ::osl::MutexGuard aGuard(s_aMapSafety);
     sal_Int32 nIndent = --s_aThreadIndents[ ::osl::Thread::getCurrentIdentifier() ];
 
-    ByteString sIndent;
+    rtl::OStringBuffer sMessage;
+    sMessage.append(static_cast<sal_Int32>(
+        ::osl::Thread::getCurrentIdentifier()));
+    sMessage.append('\t');
     while (nIndent--)
-        sIndent += '\t';
-
-    ByteString sThread( ByteString::CreateFromInt32( (sal_Int32)::osl::Thread::getCurrentIdentifier() ) );
-    sThread += '\t';
-
-    ByteString sMessage(sThread);
-    sMessage += sIndent;
-    sMessage += "} // ";
-    sMessage += m_sBlockDescription;
-    OSL_TRACE(sMessage.GetBuffer());
+        sMessage.append('\t');
+    sMessage.append(RTL_CONSTASCII_STRINGPARAM("} // "));
+    sMessage.append(m_sBlockDescription);
+    OSL_TRACE(sMessage.getStr());
 }
 
 //------------------------------------------------------------------------------
@@ -87,19 +82,16 @@ void Tracer::TraceString(const char* _pMessage)
     ::osl::MutexGuard aGuard(s_aMapSafety);
     sal_Int32 nIndent = s_aThreadIndents[ ::osl::Thread::getCurrentIdentifier() ];
 
-    ByteString sIndent;
+    rtl::OStringBuffer sMessage;
+    sMessage.append(static_cast<sal_Int32>(
+        ::osl::Thread::getCurrentIdentifier()));
+    sMessage.append('\t');
     while (nIndent--)
-        sIndent += '\t';
-
-    ByteString sThread( ByteString::CreateFromInt32( (sal_Int32)::osl::Thread::getCurrentIdentifier() ) );
-    sThread += '\t';
-
-    ByteString sMessage(sThread);
-    sMessage += sIndent;
-    sMessage += m_sBlockDescription;
-    sMessage += ": ";
-    sMessage += _pMessage;
-    OSL_TRACE(sMessage.GetBuffer());
+        sMessage.append('\t');
+    sMessage.append(m_sBlockDescription);
+    sMessage.append(RTL_CONSTASCII_STRINGPARAM(": "));
+    sMessage.append(_pMessage);
+    OSL_TRACE(sMessage.getStr());
 }
 
 //------------------------------------------------------------------------------
@@ -108,19 +100,16 @@ void Tracer::TraceString1StringParam(const char* _pMessage, const char* _pParam)
     ::osl::MutexGuard aGuard(s_aMapSafety);
     sal_Int32 nIndent = s_aThreadIndents[ ::osl::Thread::getCurrentIdentifier() ];
 
-    ByteString sIndent;
+    rtl::OStringBuffer sMessage;
+    sMessage.append(static_cast<sal_Int32>(
+        ::osl::Thread::getCurrentIdentifier()));
+    sMessage.append('\t');
     while (nIndent--)
-        sIndent += '\t';
-
-    ByteString sThread( ByteString::CreateFromInt32( (sal_Int32)::osl::Thread::getCurrentIdentifier() ) );
-    sThread += '\t';
-
-    ByteString sMessage(sThread);
-    sMessage += sIndent;
-    sMessage += m_sBlockDescription;
-    sMessage += ": ";
-    sMessage += _pMessage;
-    OSL_TRACE(sMessage.GetBuffer(), _pParam);
+        sMessage.append('\t');
+    sMessage.append(m_sBlockDescription);
+    sMessage.append(RTL_CONSTASCII_STRINGPARAM(": "));
+    sMessage.append(_pMessage);
+    OSL_TRACE(sMessage.getStr(), _pParam);
 }
 #endif
 

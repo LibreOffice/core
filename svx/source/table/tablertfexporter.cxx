@@ -147,7 +147,7 @@ void SdrTableRtfExporter::WriteRow( const Reference< XPropertySet >& xRowSet, sa
     xRowSet->getPropertyValue( msSize ) >>= nRowHeight;
 
     mrStrm << OOO_STRING_SVTOOLS_RTF_TROWD << OOO_STRING_SVTOOLS_RTF_TRGAPH << "30" << OOO_STRING_SVTOOLS_RTF_TRLEFT << "-30";
-    mrStrm << OOO_STRING_SVTOOLS_RTF_TRRH << ByteString::CreateFromInt32( nRowHeight ).GetBuffer();
+    mrStrm << OOO_STRING_SVTOOLS_RTF_TRRH << rtl::OString::valueOf(nRowHeight).getStr();
 
     const sal_Int32 nColCount = mxTable->getColumnCount();
     for( sal_Int32 nCol = 0; nCol < nColCount; nCol++ )
@@ -157,29 +157,7 @@ void SdrTableRtfExporter::WriteRow( const Reference< XPropertySet >& xRowSet, sa
         if( !xCell.is() )
             continue;
 
-/*
-        const sal_Bool bIsMerged = xCell->isMerged();
-        const sal_Int32 nRowSpan = xCell->getRowSpan();
-        const sal_Int32 nColSpan = xCell->getColumnSpan();
-
-        const sal_Char* pChar;
-
-        if( !bIsMerged && ((nRowSpan > 1) || (nColSpan > 1)) )
-            mrStrm << OOO_STRING_SVTOOLS_RTF_CLMGF; // The first cell in a range of table cells to be merged.
-
-        SdrTextVertAdjust eVAdj = xCell->GetTextVerticalAdjust();
-        switch( eVAdj )
-        {
-            case SVX_VER_JUSTIFY_TOP:       pChar = OOO_STRING_SVTOOLS_RTF_CLVERTALT;   break;
-            case SVX_VER_JUSTIFY_CENTER:    pChar = OOO_STRING_SVTOOLS_RTF_CLVERTALC;   break;
-            case SVX_VER_JUSTIFY_BOTTOM:    pChar = OOO_STRING_SVTOOLS_RTF_CLVERTALB;   break;
-            case SVX_VER_JUSTIFY_STANDARD:  pChar = OOO_STRING_SVTOOLS_RTF_CLVERTALB;   break;  //! Bottom
-            default:                        pChar = NULL;           break;
-        }
-        if ( pChar )
-            mrStrm << pChar;
-*/
-        mrStrm << OOO_STRING_SVTOOLS_RTF_CELLX << ByteString::CreateFromInt32( aColumnStart[nCol] ).GetBuffer();
+        mrStrm << OOO_STRING_SVTOOLS_RTF_CELLX << rtl::OString::valueOf(aColumnStart[nCol]).getStr();
         if ( (nCol & 0x0F) == 0x0F )
             mrStrm << RTFOutFuncs::sNewLine;        // Zeilen nicht zu lang werden lassen
     }

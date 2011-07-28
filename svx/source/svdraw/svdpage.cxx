@@ -68,6 +68,7 @@
 #include <svx/sdr/contact/displayinfo.hxx>
 #include <algorithm>
 #include <svl/smplhint.hxx>
+#include <rtl/strbuf.hxx>
 
 using namespace ::com::sun::star;
 
@@ -208,22 +209,24 @@ void SdrObjList::CopyObjects(const SdrObjList& rSrcList)
         }
     } else {
 #ifdef DBG_UTIL
-        ByteString aStr("SdrObjList::operator=(): Fehler beim Clonen ");
+        rtl::OStringBuffer aStr(RTL_CONSTASCII_STRINGPARAM(
+            "SdrObjList::operator=(): Fehler beim Clonen "));
 
         if(nCloneErrCnt == 1)
         {
-            aStr += "eines Zeichenobjekts.";
+            aStr.append(RTL_CONSTASCII_STRINGPARAM("eines Zeichenobjekts."));
         }
         else
         {
-            aStr += "von ";
-            aStr += ByteString::CreateFromInt32( nCloneErrCnt );
-            aStr += " Zeichenobjekten.";
+            aStr.append(RTL_CONSTASCII_STRINGPARAM("von "));
+            aStr.append(static_cast<sal_Int32>(nCloneErrCnt));
+            aStr.append(RTL_CONSTASCII_STRINGPARAM(" Zeichenobjekten."));
         }
 
-        aStr += " Objektverbindungen werden nicht mitkopiert.";
+        aStr.append(RTL_CONSTASCII_STRINGPARAM(
+            " Objektverbindungen werden nicht mitkopiert."));
 
-        OSL_FAIL(aStr.GetBuffer());
+        OSL_FAIL(aStr.getStr());
 #endif
     }
 }
