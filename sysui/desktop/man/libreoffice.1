@@ -1,0 +1,246 @@
+.TH libreoffice "1" "2010-12-18" "LibreOffice" "User Commands"
+.SH Name
+libreoffice \- LibreOffice office suite
+
+.SH SYNOPSIS
+.B libreoffice
+[\fB\-accept\=\fIaccept\-string\fR] [\fB\-base\fR] [\fB\-calc\fR]
+[\fB\-convert\-to\fR output_file_extension[:output_filter_name] [\-outdir output_dir] \fIfile\fR]...
+[\fB\-display \fIdisplay\fR] [\fB\-draw\fR] [\fB\-global\fR] [\fB\-headless\fR]
+[\fB\-help\fR|\fB\-h\fR|\fB\-?\fR] [\fB\-impress\fR] [\fB\-invisible\fR] [\fB\-infilter="<filter>"\fR]
+[\fB\-math\fR] [\fB\-minimized\fR] [\fB\-n \fIfile\fR]... [\fB\-nodefault\fR]
+[\fB\-nolockcheck\fR] [\fB\-nologo\fR] [\fB\-norestore\fR]
+[\fB\-o \fIfile\fR]... [\fB\-p \fIfile\fR...]
+[\fB\-print\-to\-file [\-printer\-name printer_name] [\-outdir output_dir] file]...
+[\fB\-pt \fIprintername\fR \fIfile\fR...]
+[\fB\-show \fIImpress file\fR]... [\fB\-unaccept=\fIaccept\-string\fR]
+[\fB\-terminate_after_init\fR] [\fB\-view \fIfile\fR]... [\fB\-web\fR]
+[\fB\-writer\fR]  [\fIfile\fR...]
+.br
+.B lobase
+.br
+.B localc
+.br
+.B lodraw
+.br
+.B lofromtemplate
+.br
+.B loimpress
+.br
+.B lomath
+.br
+.B loweb
+.br
+.B lowriter
+.br
+
+.SH DESCRIPTION
+LibreOffice (LO for short) is a multi-platform office productivity suite.
+It was derived from OpenOffice.org 3.3 Beta on September 28, 2010.
+
+\fBlibreoffice\fR is a shell script that sets up the environment and
+passes the command line arguments to the \fBsoffice.bin\fR binary.
+
+Alternatively, the following helper scripts start the respective module:
+
+sbase, scalc, sdraw, simpress, smath, sofficerc, spadmin, swriter
+
+.SH OPTIONS
+.TP
+\fB\-accept=\fIaccept\-string\fR
+Specify a UNO connect-string to create a UNO acceptor through which other
+programs can connect to access the API.
+
+.TP
+\fB\-base\fR
+Starts the wizard for a new Base document.
+
+.TP
+\fB\-calc\fR
+Starts with a new Calc document.
+
+.TP
+\fB\-convert\-to\fR output_file_extension[:output_filter_name] [\-outdir output_dir] \fIfile\fR...
+Batch converts files.
+If \fI-outdir\fR is not specified then the current working directory is used as the output directory
+for the converted files.
+
+Examples:
+
+\fB\-convert\-to\fR pdf *.doc
+
+Converts all .doc files to PDFs.
+
+\fB\-convert\-to\fR pdf:writer_pdf_Export \-outdir /home/user *.doc
+
+Converts all .doc files to PDFs using the settings in the Writer PDF export dialog and saving them
+in /home/user.
+
+.TP
+\fB\-display \fIdisplay\fR
+This option specifies the X server to use; see \fBX\fR(7)
+
+.TP
+\fB\-draw\fR
+Starts with a new Draw document.
+
+.TP
+\fB\-global\fR
+Starts with a new Global document.
+
+.TP
+\fB\-headless\fR
+Starts in "headless mode", which allows using the application without user a
+interface.
+
+This special mode can be used when the application is controlled by external
+clients via the API.
+
+It implies \-invisible and strictly ignores any GUI environment.
+\-quickstart does not work with this parameter.
+
+.TP
+\fB\-help\fR|\fB\-h\fR|\fB\-?\fR
+Lists LibreOffice command line parameters.
+
+.TP
+\fB\-impress\fR
+Starts with a new Impress document.
+
+.TP
+\fB\-invisible\fR
+Starts in invisible mode.
+
+Neither the start\-up logo nor the initial program window will be visible.
+LO can be controlled and documents and dialogs can be opened via the API.
+
+When started with this parameter, it can only be quit using the taskmanager (Windows)
+or the kill command (UNIX based systems).
+
+\-quickstart does not work with this parameter.
+
+.TP
+\fB\-infilter="<filter>"\fR
+Force an input filter type if possible.
+For example -infilter="Calc Office Open XML" only
+
+.TP
+\fB\-math\fR
+Starts with a new Math document.
+
+.TP
+\fB\-minimized\fR
+Keeps the splash screen minimized.
+
+.TP
+\fB\-n \fItemplate\fR...
+Creates the a new document from the given templates.
+
+.TP
+\fB\-nodefault\fR
+Starts LO without creating an new document.
+The next time you start LO, the welcome screen is show.
+
+It's used together with \fB\-nologo\fR by quick starters. Note that \fB\-quickstart\fR
+has no longer been supported since OpenOffice.org 2.0.0.
+
+.TP
+\fB\-nolockcheck\fR
+Disables the check for remote instances using the installation.
+
+.TP
+\fB\-nologo\fR
+Disables the splash screen at program start.
+
+.TP
+\fB\-norestore\fR
+Disables restart and file recovery after a system crash. It is possible that LO
+will try to restore a file it keeps crashing on, if that happens \fB\-norestore\fR
+is the only way to start LO.
+
+.TP
+\fB\-nosplash\fR
+Disables the splash screen at program start.
+
+.TP
+\fB\-o \fIfile\fR...
+Opens the given files for editing, even templates.
+
+Without \fb\-o\fR a template file would create a new document derived from that template.
+
+.TP
+\fB\-p \fIfile\fR...
+Prints the given files to the default printer and ends. The splash screen
+does not appear.
+
+If the file name contains spaces, then it must be enclosed in quotation marks.
+
+.TP
+\fB\-print\-to\-file [\-printer\-name printer_name] [\-outdir output_dir] file...
+Batch print files to file.
+If \-printer\-name is not specified the default printer is used.
+If \-outdir is not specified then the current working directory is used as the output directory
+for the converted files.
+
+Examples:
+
+\-print\-to\-file *.doc
+
+Prints all .doc files to the current working directory using the default printer.
+
+\-print\-to\-file \-printer\-name nasty_lowres_printer \-outdir /home/user *.doc
+
+Prints all .doc files to /home/user directory using the nasty_lowres_printer.
+
+.TP
+\fB\-pt \fIprintername\fR \fIfile\fR...
+Prints the given files to the printer \fIprintername\fR and ends. The splash
+screen does not appear.
+
+If a file name contains spaces, then it must be enclosed in quotation marks.
+
+.TP
+\fB\-quickstart \fB\-quickstart=no
+Starts LO with it's quick starter.
+\fB\-quickstart disable the quick starter.
+
+Does not work with \-invisible or \-headless.
+
+.TP
+\fB\-show \fIImpress file\fR...
+Opens the given Impress files, starts the presentation and quits after they have finished.
+
+.TP
+\fB\-unaccept=\fIaccept\-string\fR
+Closes an acceptor that was created with \fB\-accept\fR option.
+
+Use \fB\-unaccept\fR=\fIall\fR to close all open acceptors.
+
+.TP
+\fB\-terminate_after_init\fR
+Starts LO and terminates after it registers some UNO services.
+Doesn't show the splash during startup.
+
+.TP
+\fB\-view \fIfile\fR...
+Opens the given files read-only creating a temporary copy of them at $TMPDIR.
+
+.TP
+\fB\-web\fR
+Starts with a new HTML document.
+
+.TP
+\fB\-writer\fR
+Starts with a new Writer document.
+
+.SH TROUBLESHOOTING PROBLEMS
+See \fBhttp://wiki.documentfoundation.org/BugReport\fR for more details on how to report
+bugs in LibreOffice.
+.SH SEE ALSO
+.BR http://www.documentfoundation.org/
+
+.SH AUTHOR
+This manual page was created by Rene Engelhard <rene@debian.org> for
+the Debian GNU/Linux Distribution, because the original package does not have
+one. It was updated for Novell by Petr Mladek <petr.mladek@novell.com> and
+adapted for LibreOffice by Philipp Weissenbacher <philipp.weissenbacher@gmail.com>.

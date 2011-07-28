@@ -2688,7 +2688,7 @@ sal_Bool SfxObjectShell::PreDoSaveAs_Impl
     pMergedParams->ClearItem( SID_ENCRYPTIONDATA );
     pMergedParams->ClearItem( SID_PASSWORD );
     pMergedParams->ClearItem( SID_DOCINFO_TITLE );
-
+    pMergedParams->ClearItem( SID_ENCRYPTIONDATA );
     pMergedParams->ClearItem( SID_INPUTSTREAM );
     pMergedParams->ClearItem( SID_STREAM );
     pMergedParams->ClearItem( SID_CONTENT );
