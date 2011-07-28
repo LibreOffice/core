@@ -1211,6 +1211,20 @@ int RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
         case RTF_ROW:
         case RTF_NESTROW:
             {
+                if (m_aStates.top().nCells)
+                {
+                    // Make a backup before we start popping elements
+                    m_aStates.top().aTableInheritingCellsSprms = m_aStates.top().aTableCellsSprms;
+                    m_aStates.top().aTableInheritingCellsAttributes = m_aStates.top().aTableCellsAttributes;
+                    m_aStates.top().nInheritingCells = m_aStates.top().nCells;
+                }
+                else
+                {
+                    // No table definition? Then inherit from the previous row
+                    m_aStates.top().aTableCellsSprms = m_aStates.top().aTableInheritingCellsSprms;
+                    m_aStates.top().aTableCellsAttributes = m_aStates.top().aTableInheritingCellsAttributes;
+                    m_aStates.top().nCells = m_aStates.top().nInheritingCells;
+                }
                 for (int i = 0; i < m_aStates.top().nCells; ++i)
                 {
                     m_aStates.top().aTableCellSprms = m_aStates.top().aTableCellsSprms.front();

@@ -204,6 +204,9 @@ namespace writerfilter {
                 // reset by row/nestrow
                 std::deque<RTFSprms> aTableCellsSprms;
                 std::deque<RTFSprms> aTableCellsAttributes;
+                // backup of the above two, to support inheriting cell props
+                std::deque<RTFSprms> aTableInheritingCellsSprms;
+                std::deque<RTFSprms> aTableInheritingCellsAttributes;
                 // reset by tx
                 RTFSprms aTabAttributes;
 
@@ -231,6 +234,7 @@ namespace writerfilter {
                 /// Current cellx value.
                 int nCellX;
                 int nCells;
+                int nInheritingCells;
 
                 /// CJK or CTL?
                 bool bIsCjk;
