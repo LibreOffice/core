@@ -523,21 +523,6 @@ const SwNode * WW8TableNodeInfo::getNextNode() const
     return mpNextNode;
 }
 
-const SwRect & WW8TableNodeInfo::getRect() const
-{
-    return getInnerForDepth(mnDepth)->getRect();
-}
-
-bool WW8TableNodeInfo::isEndOfLine() const
-{
-    return getInnerForDepth(mnDepth)->isEndOfLine();
-}
-
-bool WW8TableNodeInfo::isEndOfCell() const
-{
-    return getInnerForDepth(mnDepth)->isEndOfCell();
-}
-
 sal_uInt32 WW8TableNodeInfo::getCell() const
 {
     return getInnerForDepth(mnDepth)->getCell();
@@ -1029,25 +1014,6 @@ bool CellInfo::operator < (const CellInfo & aCellInfo) const
     return aRet;
 }
 
-::std::string CellInfo::toString() const
-{
-    static char sBuffer[256];
-
-    snprintf(sBuffer, sizeof(sBuffer),
-             "<cellinfo left=\"%ld\""
-             " right=\"%ld\""
-             " top=\"%ld\""
-             " bottom=\"%ld\""
-             " node=\"%p\"/>",
-             left(),
-             right(),
-             top(),
-             bottom(),
-             m_pNodeInfo);
-
-    return sBuffer;
-}
-
 WW8TableNodeInfo * WW8TableInfo::reorderByLayout(const SwTable * pTable)
 {
     WW8TableNodeInfo * pPrev = NULL;
@@ -1312,86 +1278,6 @@ WW8TableNodeInfo * WW8TableCellGrid::connectCells()
     }
 
     return pLastNodeInfo;
-}
-
-string WW8TableCellGrid::toString()
-{
-    string sResult = "<WW8TableCellGrid>";
-
-    RowTops_t::const_iterator aTopsIt = getRowTopsBegin();
-    static char sBuffer[1024];
-    while (aTopsIt != getRowTopsEnd())
-    {
-        sprintf(sBuffer, "<row y=\"%ld\">", *aTopsIt);
-        sResult += sBuffer;
-
-        CellInfoMultiSet::const_iterator aCellIt = getCellsBegin(*aTopsIt);
-        CellInfoMultiSet::const_iterator aCellsEnd = getCellsEnd(*aTopsIt);
-
-        while (aCellIt != aCellsEnd)
-        {
-            snprintf(sBuffer, sizeof(sBuffer), "<cellInfo top=\"%ld\" bottom=\"%ld\" left=\"%ld\" right=\"%ld\">",
-                     aCellIt->top(), aCellIt->bottom(), aCellIt->left(), aCellIt->right());
-            sResult += sBuffer;
-
-            WW8TableNodeInfo * pInfo = aCellIt->getTableNodeInfo();
-            if (pInfo != NULL)
-                sResult += pInfo->toString();
-            else
-                sResult += "<shadow/>\n";
-
-            sResult += "</cellInfo>\n";
-            ++aCellIt;
-        }
-
-        WW8TableCellGridRow::Pointer_t pRow = getRow(*aTopsIt);
-        WidthsPtr pWidths = pRow->getWidths();
-        if (pWidths != NULL)
-        {
-            sResult += "<widths>";
-
-            Widths::const_iterator aItEnd = pWidths->end();
-            for (Widths::const_iterator aIt = pWidths->begin();
-                 aIt != aItEnd;
-                 ++aIt)
-            {
-                if (aIt != pWidths->begin())
-                    sResult += ", ";
-
-                snprintf(sBuffer, sizeof(sBuffer), "%" SAL_PRIxUINT32 "", *aIt);
-                sResult += sBuffer;
-            }
-
-            sResult += "</widths>";
-        }
-
-        RowSpansPtr pRowSpans = pRow->getRowSpans();
-        if (pRowSpans.get() != NULL)
-        {
-            sResult += "<rowspans>";
-
-            RowSpans::const_iterator aItEnd = pRowSpans->end();
-            for (RowSpans::const_iterator aIt = pRowSpans->begin();
-                 aIt != aItEnd;
-                 ++aIt)
-            {
-                if (aIt != pRowSpans->begin())
-                    sResult += ", ";
-
-                snprintf(sBuffer, sizeof(sBuffer), "%" SAL_PRIxUINT32 "", *aIt);
-                sResult += sBuffer;
-            }
-
-            sResult += "</rowspans>";
-        }
-
-        sResult += "</row>\n";
-        ++aTopsIt;
-    }
-
-    sResult += "</WW8TableCellGrid>\n";
-
-    return sResult;
 }
 
 TableBoxVectorPtr WW8TableCellGrid::getTableBoxesOfRow

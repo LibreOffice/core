@@ -110,40 +110,5 @@ namespace ww8
         return aResult;
 
     }
-
-    ::rtl::OUString WW8Struct::getString(sal_uInt32 nOffset,
-                                         sal_uInt32 nCount)
-    {
-        ::rtl::OUString aResult;
-
-        if (nCount > 0)
-        {
-            //clip to available
-            sal_uInt32 nStartOff = mn_offset + nOffset;
-            if (nStartOff >= mn_size)
-                return aResult;
-            sal_uInt32 nAvailable = (mn_size - nStartOff);
-            if (nCount > nAvailable)
-                nCount = nAvailable;
-
-            rtl::OString aOStr(reinterpret_cast<const sal_Char *>(
-                mp_data.get() + nStartOff), nCount);
-
-            ::rtl::OUString aOUStr(rtl::OStringToOUString(aOStr, RTL_TEXTENCODING_ASCII_US));
-            aResult = rtl::OUString(aOUStr);
-        }
-
-#if OSL_DEBUG_LEVEL > 1
-        char sBuffer[256];
-        snprintf(sBuffer, sizeof(sBuffer), "offset=\"%" SAL_PRIuUINT32 "\" count=\"%" SAL_PRIuUINT32 "\"",
-                 nOffset, nCount);
-        ::std::clog << "<WW8Struct-getString " << sBuffer << ">"
-                    << dbg_out(aResult) << "</WW8Struct-getUString>"
-                    << ::std::endl;
-#endif
-
-        return aResult;
-    }
 }
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
