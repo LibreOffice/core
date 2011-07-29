@@ -1014,13 +1014,11 @@ void OHTMLImportExport::WriteCell( sal_Int32 nFormat,sal_Int32 nWidthPixel,sal_I
         try
         {
             fVal = m_xFormatter->convertStringToNumber(nFormat,rValue);
-            ByteString aTmpString(aStrTD);
-            HTMLOutFuncs::CreateTableDataOptionsValNum( aTmpString, sal_False, fVal,nFormat, *pFormatter );
+            HTMLOutFuncs::CreateTableDataOptionsValNum(sal_False, fVal,nFormat, *pFormatter);
         }
-        catch(Exception&)
+        catch(const Exception&)
         {
-            ByteString aTmpString(aStrTD);
-            HTMLOutFuncs::CreateTableDataOptionsValNum( aTmpString, sal_False, fVal,nFormat, *pFormatter );
+            HTMLOutFuncs::CreateTableDataOptionsValNum(sal_False, fVal,nFormat, *pFormatter);
         }
     }
 
