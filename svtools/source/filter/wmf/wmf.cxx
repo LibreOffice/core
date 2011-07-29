@@ -33,6 +33,7 @@
 #include "emfwr.hxx"
 #include "wmfwr.hxx"
 #include <svtools/wmf.hxx>
+#include <comphelper/scopeguard.hxx>
 
 // -----------------------------------------------------------------------------
 
@@ -62,13 +63,23 @@ sal_Bool ConvertWMFToGDIMetaFile( SvStream & rStreamWMF, GDIMetaFile & rGDIMetaF
 
 sal_Bool ReadWindowMetafile( SvStream& rStream, GDIMetaFile& rMTF, FilterConfigItem* pFilterConfigItem )
 {
-    sal_uInt32 nMetaType;
+    sal_uInt32 nMetaType(0);
     sal_uInt32 nOrgPos = rStream.Tell();
+
     sal_uInt16 nOrigNumberFormat = rStream.GetNumberFormatInt();
     rStream.SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
+    //exception-safe reset nOrigNumberFormat at end of scope
+    const ::comphelper::ScopeGuard aScopeGuard(
+        boost::bind(&SvStream::SetNumberFormatInt, ::boost::ref(rStream),
+          nOrigNumberFormat));
+
     rStream.Seek( 0x28 );
     rStream >> nMetaType;
     rStream.Seek( nOrgPos );
+
+    if (!rStream.good())
+        return false;
+
     if ( nMetaType == 0x464d4520 )
     {
         if ( EnhWMFReader( rStream, rMTF, NULL ).ReadEnhWMF() == sal_False )
@@ -78,8 +89,8 @@ sal_Bool ReadWindowMetafile( SvStream& rStream, GDIMetaFile& rMTF, FilterConfigI
     {
         WMFReader( rStream, rMTF, pFilterConfigItem ).ReadWMF();
     }
-    rStream.SetNumberFormatInt( nOrigNumberFormat );
-    return !rStream.GetError();
+
+    return rStream.good();
 }
 
 // -----------------------------------------------------------------------------

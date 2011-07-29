@@ -1000,14 +1000,17 @@ void WMFReader::ReadRecordParams( sal_uInt16 nFunc )
 
 sal_Bool WMFReader::ReadHeader(WMF_APMFILEHEADER *pAPMHeader)
 {
-    Rectangle   aPlaceableBound;
-    sal_uInt32  nl, nStrmPos = pWMF->Tell();
+    sal_Size nStrmPos = pWMF->Tell();
 
+    sal_uInt32 nPlaceableMetaKey(0);
     // Einlesen des METAFILEHEADER, falls vorhanden
-    *pWMF >> nl;
+    *pWMF >> nPlaceableMetaKey;
+    if (!pWMF->good())
+        return false;
 
-    Size aWMFSize;
-    if ( nl == 0x9ac6cdd7L )
+    Rectangle aPlaceableBound;
+
+    if (nPlaceableMetaKey == 0x9ac6cdd7L)
     {
         sal_Int16 nVal;
 
@@ -1015,10 +1018,14 @@ sal_Bool WMFReader::ReadHeader(WMF_APMFILEHEADER *pAPMHeader)
         pWMF->SeekRel(2);
 
         // BoundRect
-        *pWMF >> nVal; aPlaceableBound.Left() = nVal;
-        *pWMF >> nVal; aPlaceableBound.Top() = nVal;
-        *pWMF >> nVal; aPlaceableBound.Right() = nVal;
-        *pWMF >> nVal; aPlaceableBound.Bottom() = nVal;
+        *pWMF >> nVal;
+        aPlaceableBound.Left() = nVal;
+        *pWMF >> nVal;
+        aPlaceableBound.Top() = nVal;
+        *pWMF >> nVal;
+        aPlaceableBound.Right() = nVal;
+        *pWMF >> nVal;
+        aPlaceableBound.Bottom() = nVal;
 
         // inch
         *pWMF >> nUnitsPerInch;
@@ -1031,22 +1038,23 @@ sal_Bool WMFReader::ReadHeader(WMF_APMFILEHEADER *pAPMHeader)
     }
     else
     {
-      nUnitsPerInch = (pAPMHeader!=NULL?pAPMHeader->inch:96);
-      pWMF->Seek( nStrmPos + 18 );    // set the streampos to the start of the the metaactions
-      GetPlaceableBound( aPlaceableBound, pWMF );
-      pWMF->Seek( nStrmPos );
-      if (pAPMHeader!=NULL) {
-        // #n417818#: If we have an external header then overwrite the bounds!
-        aPlaceableBound=Rectangle(pAPMHeader->left*567*nUnitsPerInch/1440/1000,
-                      pAPMHeader->top*567*nUnitsPerInch/1440/1000,
-                      pAPMHeader->right*567*nUnitsPerInch/1440/1000,
-                      pAPMHeader->bottom*567*nUnitsPerInch/1440/1000);
-      }
+        nUnitsPerInch = (pAPMHeader!=NULL?pAPMHeader->inch:96);
+        pWMF->Seek( nStrmPos + 18 );    // set the streampos to the start of the the metaactions
+        GetPlaceableBound( aPlaceableBound, pWMF );
+        pWMF->Seek( nStrmPos );
+        if (pAPMHeader!=NULL)
+        {
+            // #n417818#: If we have an external header then overwrite the bounds!
+            aPlaceableBound=Rectangle(pAPMHeader->left*567*nUnitsPerInch/1440/1000,
+                          pAPMHeader->top*567*nUnitsPerInch/1440/1000,
+                          pAPMHeader->right*567*nUnitsPerInch/1440/1000,
+                          pAPMHeader->bottom*567*nUnitsPerInch/1440/1000);
+        }
     }
 
     pOut->SetUnitsPerInch( nUnitsPerInch );
     pOut->SetWinOrg( aPlaceableBound.TopLeft() );
-    aWMFSize = Size( labs( aPlaceableBound.GetWidth() ), labs( aPlaceableBound.GetHeight() ) );
+    Size aWMFSize( labs( aPlaceableBound.GetWidth() ), labs( aPlaceableBound.GetHeight() ) );
     pOut->SetWinExt( aWMFSize );
 
     Size aDevExt( 10000, 10000 );
@@ -1060,12 +1068,14 @@ sal_Bool WMFReader::ReadHeader(WMF_APMFILEHEADER *pAPMHeader)
     pOut->SetDevExt( aDevExt );
 
     // Einlesen des METAHEADER
-    *pWMF >> nl; // Typ und Headergroesse
-
-    if( nl != 0x00090001 )
+    sal_uInt32 nMetaKey(0);
+    *pWMF >> nMetaKey; // Typ und Headergroesse
+    if (!pWMF->good())
+        return false;
+    if (nMetaKey != 0x00090001)
     {
         pWMF->SetError( SVSTREAM_FILEFORMAT_ERROR );
-        return sal_False;
+        return false;
     }
 
     pWMF->SeekRel( 2 ); // Version (von Windows)
@@ -1074,7 +1084,7 @@ sal_Bool WMFReader::ReadHeader(WMF_APMFILEHEADER *pAPMHeader)
     pWMF->SeekRel( 4 ); // MaxRecord (Groesse des groessten Records in Words)
     pWMF->SeekRel( 2 ); // NoParameters (Unused
 
-    return sal_True;
+    return pWMF->good();
 }
 
 void WMFReader::ReadWMF(WMF_APMFILEHEADER *pAPMHeader)
