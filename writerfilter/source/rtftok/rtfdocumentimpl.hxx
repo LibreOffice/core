@@ -69,6 +69,7 @@ namespace writerfilter {
             DESTINATION_COLORTABLE,
             DESTINATION_STYLESHEET,
             DESTINATION_STYLEENTRY,
+            DESTINATION_EQINSTRUCTION,
             DESTINATION_FIELDINSTRUCTION,
             DESTINATION_FIELDRESULT,
             DESTINATION_LISTTABLE,
@@ -385,6 +386,7 @@ namespace writerfilter {
 
                 RTFReferenceTable::Entries_t m_aStyleTableEntries;
                 int m_nCurrentStyleIndex;
+                bool m_bEq;
 
         };
     } // namespace rtftok

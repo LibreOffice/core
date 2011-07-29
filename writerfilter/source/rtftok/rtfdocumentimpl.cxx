@@ -275,7 +275,8 @@ RTFDocumentImpl::RTFDocumentImpl(uno::Reference<uno::XComponentContext> const& x
     m_aFontTableEntries(),
     m_nCurrentFontIndex(0),
     m_aStyleTableEntries(),
-    m_nCurrentStyleIndex(0)
+    m_nCurrentStyleIndex(0),
+    m_bEq(false)
 {
     OSL_ASSERT(xInputStream.is());
     m_pInStream = utl::UcbStreamHelper::CreateStream(xInputStream, sal_True);
@@ -747,6 +748,11 @@ void RTFDocumentImpl::text(OUString& rString)
         case DESTINATION_ANNOTATIONAUTHOR:
             m_aDestinationText.append(rString);
             break;
+        case DESTINATION_EQINSTRUCTION:
+            if (rString.copy(0, 2).equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("do"))
+                    && rString.copy(2).toInt32() > 0)
+                dispatchFlag(RTF_SUB);
+            break;
         default: bRet = false; break;
     }
     if (bRet)
@@ -884,10 +890,26 @@ int RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
             break;
         case RTF_FLDINST:
             {
-                sal_uInt8 sFieldStart[] = { 0x13 };
-                Mapper().startCharacterGroup();
-                Mapper().text(sFieldStart, 1);
-                Mapper().endCharacterGroup();
+                sal_Int32 nPos = Strm().Tell();
+                OStringBuffer aBuf;
+                char ch;
+                for (int i = 0; i < 4; ++i)
+                {
+                    Strm() >> ch;
+                    aBuf.append(ch);
+                }
+                Strm().Seek(nPos);
+
+                // EQ fields are not really fields in fact.
+                if (aBuf.toString().equals("{ EQ"))
+                    m_bEq = true;
+                else
+                {
+                    sal_uInt8 sFieldStart[] = { 0x13 };
+                    Mapper().startCharacterGroup();
+                    Mapper().text(sFieldStart, 1);
+                    Mapper().endCharacterGroup();
+                }
                 m_aStates.top().nDestinationState = DESTINATION_FIELDINSTRUCTION;
             }
             break;
@@ -2329,10 +2351,14 @@ int RTFDocumentImpl::pushState()
     else if (m_aStates.top().nDestinationState == DESTINATION_FIELDRESULT ||
             m_aStates.top().nDestinationState == DESTINATION_SHAPETEXT ||
             m_aStates.top().nDestinationState == DESTINATION_FORMFIELD ||
-            m_aStates.top().nDestinationState == DESTINATION_FIELDINSTRUCTION)
+            (m_aStates.top().nDestinationState == DESTINATION_FIELDINSTRUCTION && !m_bEq))
         m_aStates.top().nDestinationState = DESTINATION_NORMAL;
+    else if (m_aStates.top().nDestinationState == DESTINATION_FIELDINSTRUCTION && m_bEq)
+        m_aStates.top().nDestinationState = DESTINATION_EQINSTRUCTION;
     else if (m_aStates.top().nDestinationState == DESTINATION_REVISIONTABLE)
         m_aStates.top().nDestinationState = DESTINATION_REVISIONENTRY;
+    else if (m_aStates.top().nDestinationState == DESTINATION_EQINSTRUCTION)
+        m_aStates.top().nDestinationState = DESTINATION_NORMAL;
 
     return 0;
 }
@@ -2448,17 +2474,25 @@ int RTFDocumentImpl::popState()
             m_aFormfieldAttributes->clear();
             m_aFormfieldSprms->clear();
         }
-        sal_uInt8 sFieldSep[] = { 0x14 };
-        Mapper().startCharacterGroup();
-        Mapper().text(sFieldSep, 1);
-        Mapper().endCharacterGroup();
+        if (!m_bEq)
+        {
+            sal_uInt8 sFieldSep[] = { 0x14 };
+            Mapper().startCharacterGroup();
+            Mapper().text(sFieldSep, 1);
+            Mapper().endCharacterGroup();
+        }
     }
     else if (m_aStates.top().nDestinationState == DESTINATION_FIELDRESULT)
     {
-        sal_uInt8 sFieldEnd[] = { 0x15 };
-        Mapper().startCharacterGroup();
-        Mapper().text(sFieldEnd, 1);
-        Mapper().endCharacterGroup();
+        if (!m_bEq)
+        {
+            sal_uInt8 sFieldEnd[] = { 0x15 };
+            Mapper().startCharacterGroup();
+            Mapper().text(sFieldEnd, 1);
+            Mapper().endCharacterGroup();
+        }
+        else
+            m_bEq = false;
     }
     else if (m_aStates.top().nDestinationState == DESTINATION_LEVELTEXT)
     {
