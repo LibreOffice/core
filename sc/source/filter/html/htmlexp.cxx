@@ -101,6 +101,7 @@
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
+#include <rtl/strbuf.hxx>
 
 using ::editeng::SvxBorderLine;
 
@@ -220,18 +221,18 @@ static void lcl_AddStamp( String& rStr, const String& rName,
 }
 
 
-static void lcl_AppendHTMLColorTripel( ByteString& rStr, const Color& rColor )
+static rtl::OString lcl_makeHTMLColorTriplet(const Color& rColor)
 {
+    rtl::OStringBuffer aStr(RTL_CONSTASCII_STRINGPARAM("\"#"));
     // <font COLOR="#00FF40">hallo</font>
     sal_Char    buf[64];
     sal_Char*   p = buf;
-
-    rStr += "\"#";
     p += sprintf( p, "%02X", rColor.GetRed() );
     p += sprintf( p, "%02X", rColor.GetGreen() );
     p += sprintf( p, "%02X", rColor.GetBlue() );
-    rStr += buf;
-    rStr += '\"';
+    aStr.append(buf);
+    aStr.append('\"');
+    return aStr.makeStringAndClear();
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -514,26 +515,37 @@ const SfxItemSet& ScHTMLExport::PageDefaults( SCTAB nTab )
 }
 
 
-void ScHTMLExport::BorderToStyle( ByteString& rOut, const char* pBorderName,
-        const SvxBorderLine* pLine, bool& bInsertSemicolon )
+rtl::OString ScHTMLExport::BorderToStyle(const char* pBorderName,
+        const SvxBorderLine* pLine, bool& bInsertSemicolon)
 {
+    rtl::OStringBuffer aOut;
+
     if ( pLine )
     {
         if ( bInsertSemicolon )
-            rOut += "; ";
+            aOut.append(RTL_CONSTASCII_STRINGPARAM("; "));
 
         // which border
-        ((rOut += "border-") += pBorderName) += ": ";
+        aOut.append(RTL_CONSTASCII_STRINGPARAM("border-")).
+            append(pBorderName).append(RTL_CONSTASCII_STRINGPARAM(": "));
 
         // thickness
         int nWidth = pLine->GetWidth();
-        int nPxWidth = ( nWidth > 0 )? std::max( int( nWidth / TWIPS_PER_PIXEL ), 1 ): 0;
-        (rOut += ByteString::CreateFromInt32( nPxWidth )) += "px ";
+        int nPxWidth = (nWidth > 0) ?
+            std::max(int(nWidth / TWIPS_PER_PIXEL), 1) : 0;
+        aOut.append(static_cast<sal_Int32>(nPxWidth)).
+            append(RTL_CONSTASCII_STRINGPARAM("px "));
         switch ( pLine->GetStyle() )
         {
-            case ::editeng::SOLID:     rOut += "solid"; break;
-            case ::editeng::DOTTED:    rOut += "dotted"; break;
-            case ::editeng::DASHED:    rOut += "dashed"; break;
+            case ::editeng::SOLID:
+                aOut.append(RTL_CONSTASCII_STRINGPARAM("solid"));
+                break;
+            case ::editeng::DOTTED:
+                aOut.append(RTL_CONSTASCII_STRINGPARAM("dotted"));
+                break;
+            case ::editeng::DASHED:
+                aOut.append(RTL_CONSTASCII_STRINGPARAM("dashed"));
+                break;
             case ::editeng::DOUBLE:
             case ::editeng::THINTHICK_SMALLGAP:
             case ::editeng::THINTHICK_MEDIUMGAP:
@@ -541,25 +553,36 @@ void ScHTMLExport::BorderToStyle( ByteString& rOut, const char* pBorderName,
             case ::editeng::THICKTHIN_SMALLGAP:
             case ::editeng::THICKTHIN_MEDIUMGAP:
             case ::editeng::THICKTHIN_LARGEGAP:
-                            rOut += "double";
-                            break;
-            case ::editeng::EMBOSSED:  rOut += "ridge"; break;
-            case ::editeng::ENGRAVED:  rOut += "groove"; break;
-            case ::editeng::OUTSET:    rOut += "outset"; break;
-            case ::editeng::INSET:     rOut += "inset"; break;
-            default:        rOut += "hidden";
+                aOut.append(RTL_CONSTASCII_STRINGPARAM("double"));
+                break;
+            case ::editeng::EMBOSSED:
+                aOut.append(RTL_CONSTASCII_STRINGPARAM("ridge"));
+                break;
+            case ::editeng::ENGRAVED:
+                aOut.append(RTL_CONSTASCII_STRINGPARAM("groove"));
+                break;
+            case ::editeng::OUTSET:
+                aOut.append(RTL_CONSTASCII_STRINGPARAM("outset"));
+                break;
+            case ::editeng::INSET:
+                aOut.append(RTL_CONSTASCII_STRINGPARAM("inset"));
+                break;
+            default:
+                aOut.append(RTL_CONSTASCII_STRINGPARAM("hidden"));
         }
-        rOut += " #";
+        aOut.append(RTL_CONSTASCII_STRINGPARAM(" #"));
 
         // color
         char hex[7];
         snprintf( hex, 7, "%06x", static_cast< unsigned int >( pLine->GetColor().GetRGBColor() ) );
         hex[6] = 0;
 
-        rOut += hex;
+        aOut.append(hex);
 
         bInsertSemicolon = true;
     }
+
+    return aOut.makeStringAndClear();
 }
 
 void ScHTMLExport::WriteBody()
@@ -890,22 +913,26 @@ void ScHTMLExport::WriteCell( SCCOL nCol, SCROW nRow, SCTAB nTab )
     if ( nScriptType == 0 )
         nScriptType = aHTMLStyle.nDefaultScriptType;
 
-
-    ByteString aStrTD = OOO_STRING_SVTOOLS_HTML_tabledata;
+    rtl::OStringBuffer aStrTD(OOO_STRING_SVTOOLS_HTML_tabledata);
 
     // border of the cells
     SvxBoxItem* pBorder = (SvxBoxItem*) pDoc->GetAttr( nCol, nRow, nTab, ATTR_BORDER );
     if ( pBorder && (pBorder->GetTop() || pBorder->GetBottom() || pBorder->GetLeft() || pBorder->GetRight()) )
     {
-        ((aStrTD += ' ') += OOO_STRING_SVTOOLS_HTML_style) += "=\"";
+        aStrTD.append(' ').append(OOO_STRING_SVTOOLS_HTML_style).
+            append(RTL_CONSTASCII_STRINGPARAM("=\""));
 
         bool bInsertSemicolon = false;
-        BorderToStyle( aStrTD, "top", pBorder->GetTop(), bInsertSemicolon );
-        BorderToStyle( aStrTD, "bottom", pBorder->GetBottom(), bInsertSemicolon );
-        BorderToStyle( aStrTD, "left", pBorder->GetLeft(), bInsertSemicolon );
-        BorderToStyle( aStrTD, "right", pBorder->GetRight(), bInsertSemicolon );
+        aStrTD.append(BorderToStyle("top", pBorder->GetTop(),
+            bInsertSemicolon));
+        aStrTD.append(BorderToStyle("bottom", pBorder->GetBottom(),
+            bInsertSemicolon));
+        aStrTD.append(BorderToStyle("left", pBorder->GetLeft(),
+            bInsertSemicolon));
+        aStrTD.append(BorderToStyle("right", pBorder->GetRight(),
+            bInsertSemicolon));
 
-        aStrTD += '"';
+        aStrTD.append('"');
     }
 
     const sal_Char* pChar;
@@ -924,7 +951,8 @@ void ScHTMLExport::WriteCell( SCCOL nCol, SCROW nRow, SCTAB nTab )
             nC = rMergeAttr.GetColMerge();
         if ( nC > 1 )
         {
-            (((aStrTD += ' ') += OOO_STRING_SVTOOLS_HTML_O_colspan) += '=') += ByteString::CreateFromInt32( nC );
+            aStrTD.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_colspan).
+                append('=').append(static_cast<sal_Int32>(nC));
             nC = nC + nCol;
             for ( jC=nCol, v=0; jC<nC; jC++ )
                 v += pDoc->GetColWidth( jC, nTab );
@@ -937,7 +965,8 @@ void ScHTMLExport::WriteCell( SCCOL nCol, SCROW nRow, SCTAB nTab )
             nR = rMergeAttr.GetRowMerge();
         if ( nR > 1 )
         {
-            (((aStrTD += ' ') += OOO_STRING_SVTOOLS_HTML_O_rowspan) += '=') += ByteString::CreateFromInt32( nR );
+            aStrTD.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_rowspan).
+                append('=').append(static_cast<sal_Int32>(nR));
             nR += nRow;
             v = pDoc->GetRowHeight( nRow, nR-1, nTab );
             nHeightPixel = ToPixel( static_cast< sal_uInt16 >( v ) );
@@ -949,7 +978,11 @@ void ScHTMLExport::WriteCell( SCCOL nCol, SCROW nRow, SCTAB nTab )
         nHeightPixel = ToPixel( pDoc->GetRowHeight( nRow, nTab ) );
 
     if ( bTableDataHeight )
-        ((((aStrTD += ' ') += OOO_STRING_SVTOOLS_HTML_O_height) += "=\"") += ByteString::CreateFromInt32( nHeightPixel )) += '"';
+    {
+        aStrTD.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_height).
+            append(RTL_CONSTASCII_STRINGPARAM("=\"")).
+            append(static_cast<sal_Int32>(nHeightPixel)).append('"');
+    }
 
     const SvxFontItem& rFontItem = (const SvxFontItem&) pAttr->GetItem(
             ScGlobal::GetScriptedWhichID( nScriptType, ATTR_FONT),
@@ -1021,7 +1054,8 @@ void ScHTMLExport::WriteCell( SCCOL nCol, SCROW nRow, SCTAB nTab )
         default:                        pChar = OOO_STRING_SVTOOLS_HTML_AL_left;    break;
     }
 
-    ((((aStrTD += ' ') += OOO_STRING_SVTOOLS_HTML_O_align) += "=\"") += pChar)+='"';
+    aStrTD.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_align).
+        append(RTL_CONSTASCII_STRINGPARAM("=\"")).append(pChar).append('"');
 
     switch( rVerJustifyItem.GetValue() )
     {
@@ -1032,12 +1066,16 @@ void ScHTMLExport::WriteCell( SCCOL nCol, SCROW nRow, SCTAB nTab )
         default:                        pChar = NULL;
     }
     if ( pChar )
-        (((aStrTD += ' ') += OOO_STRING_SVTOOLS_HTML_O_valign) += '=') += pChar;
+    {
+        aStrTD.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_valign).
+            append('=').append(pChar);
+    }
 
     if ( aHTMLStyle.aBackgroundColor != aBgColor )
     {
-        ((aStrTD += ' ') += OOO_STRING_SVTOOLS_HTML_O_bgcolor) += '=';
-        lcl_AppendHTMLColorTripel( aStrTD, aBgColor );
+        aStrTD.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_bgcolor).
+            append('=');
+        aStrTD.append(lcl_makeHTMLColorTriplet(aBgColor));
     }
 
     double fVal = 0.0;
@@ -1063,10 +1101,11 @@ void ScHTMLExport::WriteCell( SCCOL nCol, SCROW nRow, SCTAB nTab )
             }
         }
     }
-    HTMLOutFuncs::CreateTableDataOptionsValNum( aStrTD, bValueData, fVal,
-        nFormat, *pFormatter, eDestEnc, &aNonConvertibleChars );
 
-    TAG_ON( aStrTD.GetBuffer() );
+    aStrTD.append(HTMLOutFuncs::CreateTableDataOptionsValNum(bValueData, fVal,
+        nFormat, *pFormatter, eDestEnc, &aNonConvertibleChars));
+
+    TAG_ON(aStrTD.makeStringAndClear().getStr());
 
     if ( bBold )        TAG_ON( OOO_STRING_SVTOOLS_HTML_bold );
     if ( bItalic )      TAG_ON( OOO_STRING_SVTOOLS_HTML_italic );
@@ -1075,17 +1114,18 @@ void ScHTMLExport::WriteCell( SCCOL nCol, SCROW nRow, SCTAB nTab )
 
     if ( bSetFont )
     {
-        ByteString  aStr = OOO_STRING_SVTOOLS_HTML_font;
+        rtl::OStringBuffer aStr(OOO_STRING_SVTOOLS_HTML_font);
         if ( bSetFontName )
         {
-            ((aStr += ' ') += OOO_STRING_SVTOOLS_HTML_O_face) += "=\"";
+            aStr.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_face).
+                append(RTL_CONSTASCII_STRINGPARAM("=\""));
             xub_StrLen nFonts = rFontItem.GetFamilyName().GetTokenCount( ';' );
             if ( nFonts == 1 )
             {
                 ByteString  aTmpStr;
                 HTMLOutFuncs::ConvertStringToHTML( rFontItem.GetFamilyName(),
                     aTmpStr, eDestEnc, &aNonConvertibleChars );
-                aStr += aTmpStr;
+                aStr.append(aTmpStr);
             }
             else
             {   // Fontliste, VCL: Semikolon als Separator, HTML: Komma
@@ -1096,17 +1136,17 @@ void ScHTMLExport::WriteCell( SCCOL nCol, SCROW nRow, SCTAB nTab )
                     HTMLOutFuncs::ConvertStringToHTML(
                         rList.GetToken( 0, ';', nPos ), aTmpStr, eDestEnc,
                         &aNonConvertibleChars );
-                    aStr += aTmpStr;
+                    aStr.append(aTmpStr);
                     if ( j < nFonts-1 )
-                        aStr += ',';
+                        aStr.append(',');
                 }
             }
-            aStr += '\"';
+            aStr.append('\"');
         }
         if ( nSetFontSizeNumber )
         {
-            (((aStr += ' ') += OOO_STRING_SVTOOLS_HTML_O_size) += '=')
-                += ByteString::CreateFromInt32( nSetFontSizeNumber );
+            aStr.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_size).
+                append('=').append(static_cast<sal_Int32>(nSetFontSizeNumber));
         }
         if ( bSetFontColor )
         {
@@ -1116,10 +1156,10 @@ void ScHTMLExport::WriteCell( SCCOL nCol, SCROW nRow, SCTAB nTab )
             if ( aColor.GetColor() == COL_AUTO )
                 aColor.SetColor( COL_BLACK );
 
-            ((aStr += ' ') += OOO_STRING_SVTOOLS_HTML_O_color) += '=';
-            lcl_AppendHTMLColorTripel( aStr, aColor );
+            aStr.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_color).
+                append('=').append(lcl_makeHTMLColorTriplet(aColor));
         }
-        TAG_ON( aStr.GetBuffer() );
+        TAG_ON(aStr.makeStringAndClear().getStr());
     }
 
     String aStrOut;

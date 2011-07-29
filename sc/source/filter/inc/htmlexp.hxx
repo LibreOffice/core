@@ -153,8 +153,8 @@ class ScHTMLExport : public ScExportBase
                                         SCCOL nStartCol, SCROW nStartRow,
                                         SCCOL nEndCol, SCROW nEndRow );
 
-    void                BorderToStyle( ByteString& rOut, const char* pBorderName,
-                                       const ::editeng::SvxBorderLine* pLine, bool& bInsertSemicolon );
+    rtl::OString BorderToStyle(const char* pBorderName,
+        const ::editeng::SvxBorderLine* pLine, bool& bInsertSemicolon);
 
     sal_uInt16              GetFontSizeNumber( sal_uInt16 nHeight );
     const char*         GetFontSizeCss( sal_uInt16 nHeight );
