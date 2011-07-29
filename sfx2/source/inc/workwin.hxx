@@ -338,7 +338,6 @@ public:
     SfxSplitWindow*         GetSplitWindow_Impl(SfxChildAlignment);
 
     sal_Bool                    IsVisible_Impl( sal_uInt16 nMode ) const;
-    void                    DisableChildWindow_Impl( sal_uInt16 nId, sal_Bool bDisable );
     sal_Bool                    IsFloating( sal_uInt16 nId );
     void                    SetActiveChild_Impl( Window *pChild );
     virtual sal_Bool            ActivateNextChild_Impl( sal_Bool bForward = sal_True );

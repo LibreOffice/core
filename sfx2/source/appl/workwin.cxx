@@ -2753,22 +2753,6 @@ Rectangle SfxWorkWindow::GetFreeArea( sal_Bool bAutoHide ) const
         return aClientArea;
 }
 
-void SfxWorkWindow::DisableChildWindow_Impl( sal_uInt16 nId, sal_Bool bDisable )
-{
-    sal_uInt16 nCount = pChildWins->Count();
-    sal_uInt16 n;
-    for (n=0; n<nCount; n++)
-        if ((*pChildWins)[n]->nSaveId == nId)
-             break;
-    if ( n<nCount && (*pChildWins)[n]->bDisabled != bDisable )
-    {
-        (*pChildWins)[n]->bDisabled = bDisable;
-        UpdateChildWindows_Impl();
-        ArrangeChilds_Impl();
-        ShowChilds_Impl();
-    }
-}
-
 void SfxWorkWindow::SetActiveChild_Impl( Window *pChild )
 {
     pActiveChild = pChild;
