@@ -63,6 +63,7 @@
 #include "markdata.hxx"
 
 #include "docsh.hxx"
+#include "dbdocfun.hxx"
 #include "funcdesc.hxx"
 #include "externalrefmgr.hxx"
 
@@ -245,6 +246,7 @@ public:
     void testSheetMove();
     void testExternalRef();
     void testDataArea();
+    void testAutofilter();
 
     /**
      * Make sure the sheet streams are invalidated properly.
@@ -285,6 +287,7 @@ public:
     CPPUNIT_TEST(testStreamValid);
     CPPUNIT_TEST(testFunctionLists);
     CPPUNIT_TEST(testToggleRefFlag);
+    CPPUNIT_TEST(testAutofilter);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -2113,6 +2116,59 @@ void Test::testToggleRefFlag()
 
     // TODO: Add more test cases esp. for 3D references, Excel A1 syntax, and
     // partial selection within formula string.
+
+    m_pDoc->DeleteTab(0);
+}
+
+void Test::testAutofilter()
+{
+    OUString aTabName(RTL_CONSTASCII_USTRINGPARAM("Test"));
+    m_pDoc->InsertTab( 0, aTabName );
+
+    OUString aCol1(RTL_CONSTASCII_USTRINGPARAM("COL1"));
+    OUString aCol2(RTL_CONSTASCII_USTRINGPARAM("COL2"));
+    OUString aDBName(RTL_CONSTASCII_USTRINGPARAM("NONAME"));
+
+    //set column headers
+    m_pDoc->SetString(0,0,0,aCol1);
+    m_pDoc->SetString(1,0,1,aCol2);
+
+    //set values
+    m_pDoc->SetValue(0,1,0,0);
+    m_pDoc->SetValue(1,1,0,1);
+    m_pDoc->SetValue(0,2,0,1);
+    m_pDoc->SetValue(1,2,0,3);
+    m_pDoc->SetValue(0,3,0,1);
+    m_pDoc->SetValue(1,3,0,2);
+
+    //create db data and set it to autofilter
+    ScDBData* pDBData = new ScDBData(aDBName,0,0,0,1,3);
+    m_pDoc->SetAnonymousDBData(0,pDBData);
+
+    pDBData->SetAutoFilter(true);
+    ScRange aRange;
+    pDBData->GetArea(aRange);
+    m_pDoc->ApplyFlagsTab( aRange.aStart.Col(), aRange.aStart.Row(),
+                                aRange.aEnd.Col(), aRange.aStart.Row(),
+                                aRange.aStart.Tab(), 4 );
+
+    //create the query param
+    ScQueryParam aParam;
+    aParam.Resize(1);
+    ScQueryEntry& aEntry = aParam.GetEntry(0);
+    aEntry.bDoQuery = true;
+    aEntry.eOp = SC_EQUAL;
+    aEntry.nVal = 0;
+    //add queryParam to autofilter
+    pDBData->SetQueryParam(aParam);
+    //perform the query
+    ScDBDocFunc aDBFunc(*m_xDocShRef);
+    aDBFunc.RepeatDB(aCol1,true,true,true,0);
+
+    //control output
+    SCROW nRow1, nRow2;
+    bool bHidden = m_pDoc->RowHidden(2, 0, &nRow1, &nRow2);
+    CPPUNIT_ASSERT_MESSAGE("rows 2 & 3 should be hidden", bHidden && nRow1 == 2 && nRow2 == 3);
 
     m_pDoc->DeleteTab(0);
 }
