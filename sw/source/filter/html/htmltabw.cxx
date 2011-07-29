@@ -67,6 +67,7 @@
 #include <viewsh.hxx>
 #include <viewopt.hxx>
 #endif
+#include <rtl/strbuf.hxx>
 #include <sal/types.h>
 
 #define MAX_DEPTH (3)
@@ -320,17 +321,21 @@ void SwHTMLWrtTable::OutTableCell( SwHTMLWriter& rWrt,
     }
 
     rWrt.OutNewLine();  // <TH>/<TD> in neue Zeile
-    ByteString sOut( '<' );
-    sOut += (bHead ? OOO_STRING_SVTOOLS_HTML_tableheader : OOO_STRING_SVTOOLS_HTML_tabledata );
+    rtl::OStringBuffer sOut;
+    sOut.append('<');
+    sOut.append(bHead ? OOO_STRING_SVTOOLS_HTML_tableheader : OOO_STRING_SVTOOLS_HTML_tabledata);
 
     // ROW- und COLSPAN ausgeben
     if( nRowSpan>1 )
-        (((sOut += ' ' ) += OOO_STRING_SVTOOLS_HTML_O_rowspan ) += '=')
-            += ByteString::CreateFromInt32( nRowSpan );
+    {
+        sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_rowspan).
+            append('=').append(static_cast<sal_Int32>(nRowSpan));
+    }
     if( nColSpan > 1 )
-        (((sOut += ' ' ) += OOO_STRING_SVTOOLS_HTML_O_colspan ) += '=')
-            += ByteString::CreateFromInt32( nColSpan );
-
+    {
+        sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_colspan).
+            append('=').append(static_cast<sal_Int32>(nColSpan));
+    }
 #ifndef PURE_HTML
     long nWidth = 0;
     sal_uInt32 nPrcWidth = USHRT_MAX;
@@ -378,19 +383,24 @@ void SwHTMLWrtTable::OutTableCell( SwHTMLWriter& rWrt,
     // WIDTH ausgeben: Aus Layout oder berechnet
     if( bOutWidth )
     {
-        ((sOut += ' ' ) += OOO_STRING_SVTOOLS_HTML_O_width ) += '=';
+        sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_width).
+            append('=');
         if( nPrcWidth != USHRT_MAX )
-            (sOut += ByteString::CreateFromInt32(nPrcWidth)) += '%';
+        {
+            sOut.append(static_cast<sal_Int32>(nPrcWidth)).append('%');
+        }
         else
-            sOut += ByteString::CreateFromInt32(aPixelSz.Width());
+        {
+            sOut.append(static_cast<sal_Int32>(aPixelSz.Width()));
+        }
         if( !bLayoutExport && nColSpan==1 )
             pCol->SetOutWidth( sal_False );
     }
 
     if( nHeight )
     {
-        (((sOut += ' ') += OOO_STRING_SVTOOLS_HTML_O_height) += '=')
-            += ByteString::CreateFromInt32(aPixelSz.Height());
+        sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_height).
+            append('=').append(static_cast<sal_Int32>(aPixelSz.Height()));
     }
 #endif
 
@@ -405,13 +415,14 @@ void SwHTMLWrtTable::OutTableCell( SwHTMLWriter& rWrt,
         sal_Int16 eVertOri = pCell->GetVertOri();
         if( text::VertOrientation::TOP==eVertOri || text::VertOrientation::BOTTOM==eVertOri )
         {
-            (((sOut += ' ') += OOO_STRING_SVTOOLS_HTML_O_valign) += '=')
-                += (text::VertOrientation::TOP==eVertOri ? OOO_STRING_SVTOOLS_HTML_VA_top : OOO_STRING_SVTOOLS_HTML_VA_bottom);
+            sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_valign).
+                append('=').append(text::VertOrientation::TOP==eVertOri ?
+                    OOO_STRING_SVTOOLS_HTML_VA_top :
+                    OOO_STRING_SVTOOLS_HTML_VA_bottom);
         }
     }
 
-    rWrt.Strm() << sOut.GetBuffer();
-    sOut.Erase();
+    rWrt.Strm() << sOut.makeStringAndClear().getStr();
 
     rWrt.bTxtAttr = sal_False;
     rWrt.bOutOpts = sal_True;
@@ -433,10 +444,11 @@ void SwHTMLWrtTable::OutTableCell( SwHTMLWriter& rWrt,
             OutCSS1_TableBGStyleOpt( rWrt, *pBrushItem );
     }
 
-    ((sOut += ' ') += OOO_STRING_SVTOOLS_HTML_style ) += "=\"";
-    rWrt.Strm() << sOut.GetBuffer( );
+    sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_style).
+        append(RTL_CONSTASCII_STRINGPARAM("=\""));
+    rWrt.Strm() << sOut.makeStringAndClear().getStr();
     OutCSS1_SvxBox( rWrt, pBox->GetFrmFmt()->GetBox() );
-    sOut = '"';
+    sOut.append('"');
 
     sal_uInt32 nNumFmt = 0;
     double nValue = 0.0;
@@ -455,11 +467,13 @@ void SwHTMLWrtTable::OutTableCell( SwHTMLWriter& rWrt,
     }
 
     if( bNumFmt || bValue )
-        sOut = HTMLOutFuncs::CreateTableDataOptionsValNum( sOut,
-                    bValue, nValue, nNumFmt, *rWrt.pDoc->GetNumberFormatter(),
-                    rWrt.eDestEnc, &rWrt.aNonConvertableCharacters );
-    sOut += '>';
-    rWrt.Strm() << sOut.GetBuffer();
+    {
+        sOut.append(HTMLOutFuncs::CreateTableDataOptionsValNum(bValue, nValue,
+            nNumFmt, *rWrt.pDoc->GetNumberFormatter(), rWrt.eDestEnc,
+            &rWrt.aNonConvertableCharacters));
+    }
+    sOut.append('>');
+    rWrt.Strm() << sOut.makeStringAndClear().getStr();
     rWrt.bLFPossible = sal_True;
 
     rWrt.IncIndentLevel();  // den Inhalt von <TD>...</TD> einruecken

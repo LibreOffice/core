@@ -45,6 +45,7 @@
 #include "flddat.hxx"
 #include "htmlfld.hxx"
 #include "wrthtml.hxx"
+#include <rtl/strbuf.hxx>
 
 using namespace nsSwDocInfoSubType;
 
@@ -269,40 +270,51 @@ static Writer& OutHTML_SwField( Writer& rWrt, const SwField* pFld,
     // <SDFIELD>-Tag ausgeben
     if( pTypeStr )
     {
-        ByteString sOut( '<' );
-        ((((sOut += OOO_STRING_SVTOOLS_HTML_sdfield) += ' ') += OOO_STRING_SVTOOLS_HTML_O_type) += '=')
-            += pTypeStr;
+        rtl::OStringBuffer sOut;
+        sOut.append('<');
+        sOut.append(OOO_STRING_SVTOOLS_HTML_sdfield).append(' ').
+            append(OOO_STRING_SVTOOLS_HTML_O_type).append('=').
+            append(pTypeStr);
         if( pSubStr )
-            (((sOut += ' ') += OOO_STRING_SVTOOLS_HTML_O_subtype) += '=') += pSubStr;
+        {
+            sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_subtype).
+                append('=').append(pSubStr);
+        }
         if( pFmtStr )
-            (((sOut += ' ') += OOO_STRING_SVTOOLS_HTML_O_format) += '=') += pFmtStr;
+        {
+            sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_format).
+                append('=').append(pFmtStr);
+        }
         if( aName.Len() )
         {
-            (((sOut += ' ') += OOO_STRING_SVTOOLS_HTML_O_name) += "=\"");
-            rWrt.Strm() << sOut.GetBuffer();
+            sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_name).
+                append(RTL_CONSTASCII_STRINGPARAM("=\""));
+            rWrt.Strm() << sOut.makeStringAndClear().getStr();
             HTMLOutFuncs::Out_String( rWrt.Strm(), aName, rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters );
-            sOut = '\"';
+            sOut.append('\"');
         }
         if( aValue.Len() )
         {
-            ((sOut += ' ') += OOO_STRING_SVTOOLS_HTML_O_value) += "=\"";
-            rWrt.Strm() << sOut.GetBuffer();
+            sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_value).
+                append(RTL_CONSTASCII_STRINGPARAM("=\""));
+            rWrt.Strm() << sOut.makeStringAndClear().getStr();
             HTMLOutFuncs::Out_String( rWrt.Strm(), aValue, rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters );
-            sOut = '\"';
+            sOut.append('\"');
         }
         if( bNumFmt )
         {
             OSL_ENSURE( nFmt, "Zahlenformat ist 0" );
-            sOut = HTMLOutFuncs::CreateTableDataOptionsValNum( sOut,
-                        bNumValue, dNumValue, nFmt,
-                        *rHTMLWrt.pDoc->GetNumberFormatter(),
-                        rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters );
-
+            sOut.append(HTMLOutFuncs::CreateTableDataOptionsValNum(
+                bNumValue, dNumValue, nFmt,
+                *rHTMLWrt.pDoc->GetNumberFormatter(), rHTMLWrt.eDestEnc,
+                &rHTMLWrt.aNonConvertableCharacters));
         }
         if( bFixed )
-            (sOut += ' ') += OOO_STRING_SVTOOLS_HTML_O_sdfixed;
-        sOut += '>';
-        rWrt.Strm() << sOut.GetBuffer();
+        {
+            sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_sdfixed);
+        }
+        sOut.append('>');
+        rWrt.Strm() << sOut.makeStringAndClear().getStr();
     }
 
     // Inhalt des Feldes ausgeben
