@@ -1,12 +1,8 @@
-from ui.ControlScroller import ControlScroller
-from common.PropertyNames import PropertyNames
 from threading import RLock
+from CGTopic import CGTopic
+from ui.ControlScroller import *
 from AgendaWizardDialogConst import LAST_HID
 from common.Properties import Properties
-import traceback
-import inspect
-from common.HelpIds import HelpIds
-from CGTopic import CGTopic
 
 '''
 @author rpiterman

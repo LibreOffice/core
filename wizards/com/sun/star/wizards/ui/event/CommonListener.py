@@ -74,13 +74,23 @@ class TextListenerProcAdapter( unohelper.Base, XTextListener ):
             apply( self.oProcToCall )
 
 from com.sun.star.frame import XTerminateListener
-class TerminateListenerProcAdapter( unohelper.Base, XTerminateListener  ):
+class TerminateListenerProcAdapter( unohelper.Base, XTerminateListener ):
+    def __init__( self, oProcToCall, tParams=() ):
+        self.oProcToCall = oProcToCall # a python procedure
+        self.tParams = tParams # a tuple
+
+    def queryTermination(self, TerminateEvent):
+        self.oProcToCall = getattr(self.oProcToCall,"queryTermination")
+        if callable( self.oProcToCall ):
+            apply( self.oProcToCall )
+
+from com.sun.star.awt import XWindowListener
+class WindowListenerProcAdapter( unohelper.Base, XWindowListener ):
     def __init__( self, oProcToCall, tParams=() ):
         self.oProcToCall = oProcToCall # a python procedure
         self.tParams = tParams # a tuple
 
     # oTextEvent is a com.sun.star.awt.TextEvent struct.
-    def queryTermination(self, TerminateEvent):
-        self.oProcToCall = getattr(self.oProcToCall,"queryTermination")
+    def windowShown(self, TerminateEvent):
         if callable( self.oProcToCall ):
             apply( self.oProcToCall )

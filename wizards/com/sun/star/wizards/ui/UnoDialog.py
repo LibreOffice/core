@@ -1,11 +1,13 @@
 import uno
 import traceback
+import UIConsts
 from common.PropertyNames import PropertyNames
-from com.sun.star.awt import Rectangle
 from common.Helper import Helper
+from ui.PeerConfig import PeerConfig
+
+from com.sun.star.awt import Rectangle
 from com.sun.star.awt import Rectangle
 from com.sun.star.awt.PosSize import POS
-import UIConsts
 
 class UnoDialog(object):
 
@@ -40,7 +42,7 @@ class UnoDialog(object):
         return iKey
 
     def getPeerConfiguration(self):
-        if self.m_oPeerConfig == None:
+        if self.m_oPeerConfig is None:
             self.m_oPeerConfig = PeerConfig(self)
         return self.m_oPeerConfig
 
