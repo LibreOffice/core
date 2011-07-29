@@ -714,31 +714,28 @@ TestToolObj::~TestToolObj()
         pImpl->pMyVars[i].Clear();
     }
 
-    if (m_pControls)
-        delete m_pControls;
-    if (m_pReverseSlots)
-        delete m_pReverseSlots;
-    if (m_pReverseControls)
-        delete m_pReverseControls;
-    if (m_pReverseControlsSon)
-        delete m_pReverseControlsSon;
-    if (m_pReverseUIds)
-        delete m_pReverseUIds;
-    if (m_pSIds)
-        delete m_pSIds;
+    delete m_pControls;
+    delete m_pReverseSlots;
+    delete m_pReverseControls;
+    delete m_pReverseControlsSon;
+    delete m_pReverseUIds;
+    delete m_pSIds;
+
     if (pFehlerListe)
     {
         delete pFehlerListe;
         pFehlerListe = NULL;    // da pFehlerListe static ist!!
     }
+
     if ( pCommunicationManager )
     {
         pCommunicationManager->StopCommunication();
         delete pCommunicationManager;
     }
+
     delete In;
-    if ( pImpl->pTTSfxBroadcaster )
-        delete pImpl->pTTSfxBroadcaster;
+    delete pImpl->pTTSfxBroadcaster;
+    delete pImpl->pHttpRequest;
     delete pImpl->pChildEnv;
     delete pImpl->pHttpRequest;
 
