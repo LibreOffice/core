@@ -1867,7 +1867,7 @@ void ScDocument::CopyToClip(const ScClipParam& rClipParam,
                             ScDocument* pClipDoc, const ScMarkData* pMarks,
                             bool bAllTabs, bool bKeepScenarioFlags, bool bIncludeObjects, bool bCloneNoteCaptions, bool bUseRangeForVBA )
 {
-    OSL_ENSURE( bAllTabs || pMarks, "CopyToClip: ScMarkData fails" );
+    OSL_ENSURE( !bUseRangeForVBA && ( bAllTabs ||  pMarks ), "CopyToClip: ScMarkData fails" );
 
     if (bIsClip)
         return;
@@ -1894,14 +1894,17 @@ void ScDocument::CopyToClip(const ScClipParam& rClipParam,
     else
         pClipDoc->ResetClip(this, pMarks);
 
-    CopyRangeNamesToClip(pClipDoc, aClipRange, pMarks, bAllTabs);
+    if ( bUseRangeForVBA )
+        CopyRangeNamesToClip(pClipDoc, aClipRange, nTab );
+    else
+        CopyRangeNamesToClip(pClipDoc, aClipRange, pMarks, bAllTabs);
 
     for ( ; i < nEndTab; ++i)
     {
         if (!maTabs[i] || i >= static_cast<SCTAB>(pClipDoc->maTabs.size()) || !pClipDoc->maTabs[i])
             continue;
 
-        if (pMarks && !pMarks->GetTableSelect(i))
+        if ( !bUseRangeForVBA && ( pMarks && !pMarks->GetTableSelect(i) ) )
             continue;
 
         maTabs[i]->CopyToClip(rClipParam.maRanges, pClipDoc->maTabs[i], bKeepScenarioFlags, bCloneNoteCaptions);
