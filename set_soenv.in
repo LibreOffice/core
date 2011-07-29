@@ -86,7 +86,7 @@ my ( $oldPATH, $SRC_ROOT, $SO_HOME, $JAVA_HOME, $JDK, $JAVAFLAGS, $OOO_SHELL,
      $WIN_GNUCOPY, $WIN_TOUCH, $MOZILLA_VERSION, $MOZILLA_TOOLKIT, $PREBUILD_MOZAB, $MOZILLABUILD,
      $PROEXT, $TARFILE_LOCATION, $GNUMAKE,
      $PYTHON, $SYSTEM_PYTHON, $SYSTEM_MOZILLA, $EPM_FLAGS,
-     $MACOSX_SDK_PATH);
+     $MACOSX_SDK_PATH, $CPATH, $LIBRARY_PATH);
 #
 #-------------------------------------------
 # IId. Declaring the aliases.
@@ -2491,7 +2491,7 @@ sub GetCorrectPath
 	    my $cmd = shift;
 	    while (@_) {
 		my $elem = shift;
-		
+
 		-x "$elem/$cmd" && return $elem;
 	    }
 	    return '';
@@ -2508,7 +2508,7 @@ sub GetCorrectPath
 		}
 	    }
 	    return 0;
-	}	
+	}
 
 	sub CleanupPath
 	{

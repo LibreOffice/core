@@ -1742,6 +1742,10 @@ if test "$_os" = "Darwin" ; then
         MACOSX_SDK_PATH="/Developer/SDKs/MacOSX10.4u.sdk"
         if ! [ test -d "$MACOSX_SDK_PATH" ]; then
           MACOSX_SDK_PATH="/Developer-old/SDKs/MacOSX10.4u.sdk"
+          CPATH="$MACOSX_SDK_PATH/usr/include:$MACOSX_SDK_PATH/usr/include/c++/4.0.0"
+          LIBRARY_PATH="$MACOSX_SDK_PATH/usr/lib:$MACOSX_SDK_PATH/usr/lib/gcc/i686-apple-darwin10/4.0.1"
+          AC_SUBST(CPATH)
+          AC_SUBST(LIBRARY_PATH)
         fi
         macosx_sdk_value="1040"
         ;;
