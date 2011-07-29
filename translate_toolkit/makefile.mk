@@ -42,30 +42,28 @@ TARGET=trt
 
 .IF "$(SYSTEM_TRANSLATE_TOOLKIT)" == "YES"
 @all:
-    @echo "Using system translate toolkit..."
+	@echo "Using system translate toolkit..."
 .ENDIF
 
 # --- Python paths --------------------------------------------------
 
+.IF "$(SYSTEM_PYTHON)" == "YES"
+PY_CMD=$(PYTHON)
+.ELSE                   # "$(SYSTEM_PYTHON)" == "YES"
+.IF "$(OS)"=="MACOSX"
+# the framework only gets delivered as zip, so call it from python's output-dir
+PY_CMD=$(SRC_ROOT)/python/$(INPATH)/misc/build/python-inst/OOoPython.framework/Versions/2.6/Resources/Python.app/Contents/MacOS/OOoPython
+.ELSE
+PY_CMD=$(SOLARBINDIR)/python
 # watch for the path delimiter
 .IF "$(GUI)"=="WNT"
-PYTHONPATH:=$(PWD)$/$(BIN);$(SOLARLIBDIR);$(SOLARLIBDIR)$/python;$(SOLARLIBDIR)$/python$/lib-dynload
-.ELSE			# "$(GUI)"=="WNT"
-PYTHONPATH:=$(PWD)$/$(BIN):$(SOLARLIBDIR):$(SOLARLIBDIR)$/python:$(SOLARLIBDIR)$/python$/lib-dynload
-.ENDIF			# "$(GUI)"=="WNT"
+PYTHONPATH:=$(SOLARLIBDIR);$(SOLARLIBDIR)/python;$(SOLARLIBDIR)/python/lib-dynload
+.ELSE                   # "$(GUI)"=="WNT"
+PYTHONPATH:=$(SOLARLIBDIR):$(SOLARLIBDIR)/python:$(SOLARLIBDIR)/python/lib-dynload
+.ENDIF                  # "$(GUI)"=="WNT"
 .EXPORT: PYTHONPATH
-
-# internal python on mac does not yield usable python executable. 
-# use the system one unconditionally
-.IF "$(OS)"=="MACOSX"
-PY_CMD=$(AUGMENT_LIBRARY_PATH) && unset MACOSX_DEPLOYMENT_TARGET && $(WRAPCMD) $(PYTHON)
-.ELSE
-.IF "$(SYSTEM_PYTHON)" == "YES"
-PY_CMD=$(AUGMENT_LIBRARY_PATH) $(WRAPCMD) $(PYTHON)
-.ELSE                   # "$(SYSTEM_PYTHON)" == "YES"
-PY_CMD=$(AUGMENT_LIBRARY_PATH) $(WRAPCMD) $(SOLARBINDIR)/python
-.ENDIF                  # "$(SYSTEM_PYTHON)" == "YES"
 .ENDIF                  # "$(OS)"=="MACOSX"
+.ENDIF                  # "$(SYSTEM_PYTHON)" == "YES"
 
 # --- Files --------------------------------------------------------
 
@@ -78,5 +76,5 @@ BUILD_DIR=
 # --- Targets ------------------------------------------------------
 
 .INCLUDE : set_ext.mk
-.INCLUDE :	target.mk
-.INCLUDE :	tg_ext.mk
+.INCLUDE : target.mk
+.INCLUDE : tg_ext.mk
