@@ -4,5 +4,6 @@
   <toolbar:toolbaritem xlink:href=".uno:FindText"/>
   <toolbar:toolbaritem xlink:href=".uno:DownSearch"/>
   <toolbar:toolbaritem xlink:href=".uno:UpSearch"/>
+  <toolbar:toolbarseparator/>
   <toolbar:toolbaritem xlink:href=".uno:SearchDialog"/>
 </toolbar:toolbar>
