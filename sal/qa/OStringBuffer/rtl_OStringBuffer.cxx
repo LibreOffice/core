@@ -136,7 +136,7 @@ namespace rtl_OStringBuffer
 
             CPPUNIT_ASSERT_MESSAGE
             (
-                "New OStringBuffer from Ostring",
+                "New OStringBuffer from OString",
                 aStrBuf.getStr() == aStrtmp &&
                 leg == aStrtmp.pData->length &&
                 aStrBuf.getCapacity() == leg+16
@@ -150,6 +150,21 @@ namespace rtl_OStringBuffer
             rtl::OStringBuffer b2(b1);
         }
 
+        void ctor_006()
+        {
+            //pass in a const char*, get a temp
+            //OString
+            ::rtl::OStringBuffer aStrBuf(kTestStr1);
+            sal_Int32 leg = aStrBuf.getLength();
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "New OStringBuffer from const char*",
+                leg == rtl_str_getLength(kTestStr1) &&
+                aStrBuf.getCapacity() == leg+16
+            );
+        }
+
         CPPUNIT_TEST_SUITE(ctors);
         CPPUNIT_TEST(ctor_001);
         CPPUNIT_TEST(ctor_002);
@@ -157,6 +172,7 @@ namespace rtl_OStringBuffer
         CPPUNIT_TEST(ctor_003_1);
         CPPUNIT_TEST(ctor_004);
         CPPUNIT_TEST(ctor_005);
+        CPPUNIT_TEST(ctor_006);
         CPPUNIT_TEST_SUITE_END();
     };
 
