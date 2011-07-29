@@ -205,8 +205,6 @@ public:
     void                        FillPolygon( const Polygon& rPoly );
     void                        DrawPolygon( const Polygon& rPoly );
 
-    void                        FillPolyPolygon( const PolyPolygon& rPoly );
-
 private:
 
     BitmapColor*                mpLineColor;
