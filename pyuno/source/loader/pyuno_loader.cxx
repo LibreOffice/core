@@ -29,7 +29,7 @@
 #include <pyuno/pyuno.hxx>
 
 #include <osl/process.h>
-#include <osl/file.h>
+#include <osl/file.hxx>
 #include <osl/thread.h>
 
 #include <rtl/ustrbuf.hxx>
@@ -196,6 +196,22 @@ Reference< XInterface > CreateInstance( const Reference< XComponentContext > & c
 
         if( pythonPath.getLength() )
             prependPythonPath( pythonPath );
+
+#if WNT
+    //extend PATH under windows to include the branddir/program so ssl libs will be found
+    //for use by terminal mailmerge dependency _ssl.pyd
+    rtl::OUString sEnvName(RTL_CONSTASCII_USTRINGPARAM("PATH"));
+    rtl::OUString sPath;
+    osl_getEnvironment(sEnvName.pData, &sPath.pData);
+    rtl::OUString sBrandLocation(RTL_CONSTASCII_USTRINGPARAM("$BRAND_BASE_DIR/program"));
+    rtl::Bootstrap::expandMacros(sBrandLocation);
+    osl::FileBase::getSystemPathFromFileURL(sBrandLocation, sBrandLocation);
+    sPath = rtl::OUStringBuffer(sPath).
+        append(static_cast<sal_Unicode>(SAL_PATHSEPARATOR)).
+        append(sBrandLocation).makeStringAndClear();
+    osl_setEnvironment(sEnvName.pData, sPath.pData);
+#endif
+
 #if PY_MAJOR_VERSION >= 3
         PyImport_AppendInittab( (char*)"pyuno", PyInit_pyuno );
 #else
