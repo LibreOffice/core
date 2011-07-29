@@ -370,7 +370,7 @@ sal_Bool ScViewFunc::CopyToClip( ScDocument* pClipDoc, const ScRangeList& rRange
                 // and lose the 'if' above
                 aClipParam.setSourceDocID( pDoc->GetDocumentID() );
 
-            pDoc->CopyToClip( aClipParam, pClipDoc, &rMark, false, bIncludeObjects, bUseRangeForVBA );
+            pDoc->CopyToClip( aClipParam, pClipDoc, &rMark, false, false, bIncludeObjects, true, bUseRangeForVBA );
             if ( !bUseRangeForVBA && pDoc && pClipDoc )
             {
                 ScDrawLayer* pDrawLayer = pClipDoc->GetDrawLayer();
@@ -501,7 +501,7 @@ sal_Bool ScViewFunc::CopyToClip( ScDocument* pClipDoc, const ScRangeList& rRange
             }
             if (!bValidRanges)
                 break;
-            pDoc->CopyToClip(aClipParam, pDocClip.get(), &rMark, false, false, bIncludeObjects, bUseRangeForVBA );
+            pDoc->CopyToClip(aClipParam, pDocClip.get(), &rMark, false, false, bIncludeObjects, true, bUseRangeForVBA );
 
             ScChangeTrack* pChangeTrack = pDoc->GetChangeTrack();
             if ( pChangeTrack )
