@@ -2598,6 +2598,9 @@ ScVbaRange::Copy(const ::uno::Any& Destination) throw (uno::RuntimeException)
 {
     if ( Destination.hasValue() )
     {
+        // #TODO support ( if necessary ) multi-area range in this scenario
+        if ( m_Areas->getCount() > 1 )
+            throw uno::RuntimeException( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("!!! That command cannot be used on multiple selections" ) ), uno::Reference< uno::XInterface >() );
         uno::Reference< excel::XRange > xRange( Destination, uno::UNO_QUERY_THROW );
         uno::Any aRange = xRange->getCellRange();
         uno::Reference< table::XCellRange > xCellRange;
