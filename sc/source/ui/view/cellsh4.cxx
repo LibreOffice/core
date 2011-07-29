@@ -227,19 +227,32 @@ void ScCellShell::ExecuteCursorSel( SfxRequest& rReq )
         pViewShell->ExecuteInputDirect();
     }
 
+    SCsCOLROW nRepeat = 1;
+    const SfxItemSet* pReqArgs = rReq.GetArgs();
+    // get repetition
+    if ( pReqArgs != NULL )
+    {
+        const SfxPoolItem* pItem;
+        if( IS_AVAILABLE( FN_PARAM_1, &pItem ) )
+            nRepeat = static_cast<SCsCOLROW>(((const SfxInt16Item*)pItem)->GetValue());
+    }
+
+    SCsROW nMovY = nRepeat;
     // Horizontal direction depends on whether or not the UI language is RTL.
-    SCsCOL nMovX = 1;
+    SCsCOL nMovX = nRepeat;
     if (GetViewData()->GetDocument()->IsLayoutRTL(GetViewData()->GetTabNo()))
+    {
         // mirror horizontal movement for right-to-left mode.
-        nMovX = -1;
+        nMovX = -nRepeat;
+    }
 
     switch (nSlotId)
     {
         case SID_CURSORDOWN_SEL:
-            pViewShell->ExpandBlock(0, 1, SC_FOLLOW_LINE);
+            pViewShell->ExpandBlock(0, nMovY, SC_FOLLOW_LINE);
         break;
         case SID_CURSORUP_SEL:
-            pViewShell->ExpandBlock(0, -1, SC_FOLLOW_LINE);
+            pViewShell->ExpandBlock(0, -nMovY, SC_FOLLOW_LINE);
         break;
         case SID_CURSORRIGHT_SEL:
             pViewShell->ExpandBlock(nMovX, 0, SC_FOLLOW_LINE);
@@ -248,10 +261,10 @@ void ScCellShell::ExecuteCursorSel( SfxRequest& rReq )
             pViewShell->ExpandBlock(-nMovX, 0, SC_FOLLOW_LINE);
         break;
         case SID_CURSORPAGEUP_SEL:
-            pViewShell->ExpandBlockPage(0, -1);
+            pViewShell->ExpandBlockPage(0, -nMovY);
         break;
         case SID_CURSORPAGEDOWN_SEL:
-            pViewShell->ExpandBlockPage(0, 1);
+            pViewShell->ExpandBlockPage(0, nMovY);
         break;
         case SID_CURSORPAGERIGHT_SEL:
             pViewShell->ExpandBlockPage(nMovX, 0);
@@ -260,13 +273,13 @@ void ScCellShell::ExecuteCursorSel( SfxRequest& rReq )
             pViewShell->ExpandBlockPage(-nMovX, 0);
         break;
         case SID_CURSORBLKDOWN_SEL:
-            pViewShell->ExpandBlockArea(0, 1);
+            pViewShell->ExpandBlockArea(0, nMovY);
         break;
         case SID_CURSORBLKUP_SEL:
-            pViewShell->ExpandBlockArea(0, -1);
+            pViewShell->ExpandBlockArea(0, -nMovY);
         break;
         case SID_CURSORBLKRIGHT_SEL:
-            pViewShell->ExpandBlockArea(nMovX, 0);
+            pViewShell->ExpandBlockArea(nMovX , 0);
         break;
         case SID_CURSORBLKLEFT_SEL:
             pViewShell->ExpandBlockArea(-nMovX, 0);
@@ -275,6 +288,8 @@ void ScCellShell::ExecuteCursorSel( SfxRequest& rReq )
             ;
     }
     pViewShell->ShowAllCursors();
+
+    rReq.AppendItem( SfxInt16Item(FN_PARAM_1,static_cast<sal_Int16>(nRepeat)) );
     rReq.Done();
 }
 
