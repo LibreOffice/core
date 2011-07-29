@@ -32,6 +32,7 @@
 #include "svtools/svtdllapi.h"
 #include <tools/solar.h>
 #include <rtl/textenc.h>
+#include <rtl/string.hxx>
 #include <svl/macitem.hxx>
 
 class Color;
@@ -113,11 +114,11 @@ struct HTMLOutFuncs
                         String *pNonConvertableChars = 0 );
 
     // <TD SDVAL="..." SDNUM="...">
-    SVT_DLLPUBLIC static ByteString&    CreateTableDataOptionsValNum( ByteString& aStrTD,
+    SVT_DLLPUBLIC static rtl::OString CreateTableDataOptionsValNum(
                 sal_Bool bValue, double fVal, sal_uLong nFormat,
                 SvNumberFormatter& rFormatter,
                 rtl_TextEncoding eDestEnc = RTL_TEXTENCODING_MS_1252,
-                String *pNonConvertableChars = 0 );
+                String *pNonConvertableChars = 0);
 
     SVT_DLLPUBLIC static sal_Bool PrivateURLToInternalImg( String& rURL );
 };

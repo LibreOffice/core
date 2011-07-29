@@ -44,10 +44,6 @@
 #include <svtools/imappoly.hxx>
 #include "svl/urihelper.hxx"
 
-#ifndef RTL_CONSTASCII_STRINGPARAM
-#define RTL_CONSTASCII_STRINGPARAM( c ) c, sizeof(c)-1
-#endif
-
 #if defined(UNX)
 const sal_Char HTMLOutFuncs::sNewLine = '\012';
 #else
@@ -939,25 +935,32 @@ SvStream& HTMLOutFuncs::Out_Events( SvStream& rStrm,
     return rStrm;
 }
 
-ByteString& HTMLOutFuncs::CreateTableDataOptionsValNum( ByteString& aStrTD,
+rtl::OString HTMLOutFuncs::CreateTableDataOptionsValNum(
             sal_Bool bValue,
             double fVal, sal_uLong nFormat, SvNumberFormatter& rFormatter,
-            rtl_TextEncoding eDestEnc, String* pNonConvertableChars )
+            rtl_TextEncoding eDestEnc, String* pNonConvertableChars)
 {
+    rtl::OStringBuffer aStrTD;
+
     if ( bValue )
     {
         // printf / scanf ist zu ungenau
         String aValStr;
         rFormatter.GetInputLineString( fVal, 0, aValStr );
         ByteString sTmp( aValStr, eDestEnc );
-        ((((aStrTD += ' ') += OOO_STRING_SVTOOLS_HTML_O_SDval) += "=\"") += sTmp) += '\"';
+        aStrTD.append(' ').
+            append(OOO_STRING_SVTOOLS_HTML_O_SDval).
+            append(RTL_CONSTASCII_STRINGPARAM("=\"")).
+            append(sTmp).append('\"');
     }
     if ( bValue || nFormat )
     {
-        ((aStrTD += ' ') += OOO_STRING_SVTOOLS_HTML_O_SDnum) += "=\"";
-        (aStrTD += ByteString::CreateFromInt32(
-                                Application::GetSettings().GetLanguage() ))
-            += ';'; // Language fuer Format 0
+        aStrTD.append(' ').
+            append(OOO_STRING_SVTOOLS_HTML_O_SDnum).
+            append(RTL_CONSTASCII_STRINGPARAM("=\"")).
+            append(static_cast<sal_Int32>(
+                Application::GetSettings().GetLanguage())).
+            append(';'); // Language fuer Format 0
         if ( nFormat )
         {
             ByteString aNumStr;
@@ -971,11 +974,12 @@ ByteString& HTMLOutFuncs::CreateTableDataOptionsValNum( ByteString& aStrTD,
             }
             else
                 nLang = LANGUAGE_SYSTEM;
-            ((aStrTD += ByteString::CreateFromInt32(nLang)) += ';') += aNumStr;
+            aStrTD.append(static_cast<sal_Int32>(nLang)).append(';').
+                append(aNumStr);
         }
-        aStrTD += '\"';
+        aStrTD.append('\"');
     }
-    return aStrTD;
+    return aStrTD.makeStringAndClear();
 }
 
 sal_Bool HTMLOutFuncs::PrivateURLToInternalImg( String& rURL )
