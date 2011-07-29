@@ -1740,10 +1740,16 @@ if test "$_os" = "Darwin" ; then
 
     10.4)
         MACOSX_SDK_PATH="/Developer/SDKs/MacOSX10.4u.sdk"
+        if ! [ test -d "$MACOSX_SDK_PATH" ]; then
+          MACOSX_SDK_PATH="/Developer-old/SDKs/MacOSX10.4u.sdk"
+        fi
         macosx_sdk_value="1040"
         ;;
     10.5)
         MACOSX_SDK_PATH="/Developer/SDKs/MacOSX10.5.sdk"
+        if ! [ test -d "$MACOSX_SDK_PATH" ] ; then
+          MACOSX_SDK_PATH="/Developer-old/SDKs/MacOSX10.5.sdk"
+        fi
         macosx_sdk_value="1050"
         AC_MSG_WARN([Building with a SDK > 10.4 is experimental])
         echo "Building with a SDK > 10.4 is experimental" >> warn
