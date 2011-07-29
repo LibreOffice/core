@@ -413,24 +413,16 @@ class AgendaWizardDialogImpl(AgendaWizardDialog):
                         endWizard = False
                         return False
 
-            self.agendaTemplate.xTextDocument.lockControllers()
             xTextDocument = self.agendaTemplate.document
             bSaveSuccess = OfficeDocument.store(
                 self.xMSF, AgendaTemplate.xTextDocument, self.sPath,
                 "writer8_template")
-        except Exception, e:
-            traceback.print_exc()
-            SystemDialog.showMessageBox(
-                self.xMSF, "ErrBox", OK,
-                self.resources.resErrSaveTemplate, self.xUnoDialog.Peer)
 
-        if bSaveSuccess:
-            try:
+            if bSaveSuccess:
                 self.saveConfiguration()
 
                 self.agendaTemplate.finish(self.topicsControl.scrollfields)
 
-                AgendaTemplate.xTextDocument.unlockControllers()
                 loadValues = range(2)
                 loadValues[0] = uno.createUnoStruct( \
                     'com.sun.star.beans.PropertyValue')
@@ -453,16 +445,15 @@ class AgendaWizardDialogImpl(AgendaWizardDialog):
                     self.sPath, "_default", loadValues)
                 myViewHandler = ViewHandler(self.xMSF, oDoc)
                 myViewHandler.setViewSetting("ZoomType", OPTIMAL)
-            except Exception:
-                traceback.print_exc()
+            else:
+                pass
 
-        else:
-            AgendaTemplate.xTextDocument.unlockControllers()
-            return False
-
-        if endWizard:
-            self.xUnoDialog.endExecute()
-            self.running = False
+        except Exception, e:
+            traceback.print_exc()
+        finally:
+            if endWizard:
+                self.xUnoDialog.endExecute()
+                self.running = False
         return True
 
     def closeDocument(self):
