@@ -1293,7 +1293,7 @@ AC_ARG_WITH(num-cpus,
 
 AC_ARG_WITH(max-jobs,
     AS_HELP_STRING([--with-max-jobs],
-        [Maximum number of jobs per one CPU that will be issued at the same time my dmake.
+        [Maximum number of jobs per one CPU that will be issued at the same time by dmake.
          The real number of the jobs is affected by the --with-num-cpus too, it can get up to CPUS*max_jobs.
          Defaults to 1, unless you configure --enable-icecream - then to 10.]),
 ,)
