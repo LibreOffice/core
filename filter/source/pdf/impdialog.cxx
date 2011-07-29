@@ -469,10 +469,7 @@ ImpPDFTabGeneralPage::ImpPDFTabGeneralPage( Window* pParent,
         Size aNewSize = maCbExportNotes.GetSizePixel();
         long nDelta = aSize.Height() - aNewSize.Height();
         maCbExportEmptyPages.SetSizePixel( aNewSize );
-        Point aNewPos = maCbAddStream.GetPosPixel();
-        aNewPos.Y() -= nDelta;
-        maCbAddStream.SetPosPixel( aNewPos );
-        aNewPos = maCbEmbedStandardFonts.GetPosPixel();
+        Point aNewPos = maCbEmbedStandardFonts.GetPosPixel();
         aNewPos.Y() -= nDelta;
         maCbEmbedStandardFonts.SetPosPixel( aNewPos );
     }
@@ -573,8 +570,6 @@ void ImpPDFTabGeneralPage::SetFilterConfigItem( const ImpPDFTabDialog* paParent 
 
         Point aPos = maCbExportEmptyPages.GetPosPixel();
         maCbExportEmptyPages.SetPosPixel( Point( aPos.X(), aPos.Y() - nCheckBoxHeight ) );
-        aPos = maCbAddStream.GetPosPixel();
-        maCbAddStream.SetPosPixel( Point( aPos.X(), aPos.Y() - nCheckBoxHeight ) );
         aPos = maCbEmbedStandardFonts.GetPosPixel();
         maCbEmbedStandardFonts.SetPosPixel( Point( aPos.X(), aPos.Y() - nCheckBoxHeight ) );
         maCbExportNotesPages.Show( sal_False );

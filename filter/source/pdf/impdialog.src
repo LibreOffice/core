@@ -167,10 +167,18 @@ TabPage  RID_PDF_TAB_GENER
         Size = MAP_APPFONT ( 164 , 8 ) ;
         Text[ en-US ] = "General";
     };
+    CheckBox CB_ADDSTREAM
+    {
+        HelpID = "filter:CheckBox:RID_PDF_TAB_GENER:CB_ADDSTREAM";
+        Pos = MAP_APPFONT ( 188 , 14 ) ;
+        Size = MAP_APPFONT ( 158 , 10 ) ;
+        TabStop = TRUE ;
+        Text[ en-US ] = "Create ~LibreOffice fully editable file";
+    };
     CheckBox CB_PDFA_1B_SELECT
     {
         HelpID = "filter:CheckBox:RID_PDF_TAB_GENER:CB_PDFA_1B_SELECT";
-        Pos = MAP_APPFONT ( 188, 14 ) ;
+        Pos = MAP_APPFONT ( 188, 27 ) ;
         Size = MAP_APPFONT ( 158 , 10 ) ;
         TabStop = TRUE ;
         Text[ en-US ] = "P~DF/A-1a";
@@ -178,7 +186,7 @@ TabPage  RID_PDF_TAB_GENER
     CheckBox CB_TAGGEDPDF
     {
         HelpID = "filter:CheckBox:RID_PDF_TAB_GENER:CB_TAGGEDPDF";
-        Pos = MAP_APPFONT ( 188 , 27 ) ;
+        Pos = MAP_APPFONT ( 188 , 40 ) ;
         Size = MAP_APPFONT ( 158 , 10 ) ;
         TabStop = TRUE ;
         Text[ en-US ] = "~Tagged PDF";
@@ -186,14 +194,14 @@ TabPage  RID_PDF_TAB_GENER
     CheckBox CB_EXPORTFORMFIELDS
     {
         HelpID = "filter:CheckBox:RID_PDF_TAB_GENER:CB_EXPORTFORMFIELDS";
-        Pos = MAP_APPFONT ( 188 , 40 ) ;
+        Pos = MAP_APPFONT ( 188 , 54 ) ;
         Size = MAP_APPFONT ( 158 , 10 ) ;
         TabStop = TRUE ;
         Text[ en-US ] = "~Create PDF form";
     };
     FixedText FT_FORMSFORMAT
     {
-        Pos = MAP_APPFONT ( 206 , 54 ) ;
+        Pos = MAP_APPFONT ( 206 , 64 ) ;
         Size = MAP_APPFONT ( 93, 8 ) ;
         Text[ en-US ] = "Submit ~format";
     };
@@ -201,7 +209,7 @@ TabPage  RID_PDF_TAB_GENER
     {
         HelpID = "filter:ListBox:RID_PDF_TAB_GENER:LB_FORMSFORMAT";
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 302, 52 ) ;
+        Pos = MAP_APPFONT ( 302, 62 ) ;
         Size = MAP_APPFONT ( 38, 48 ) ;
         DeltaLang = < Default ; Default ; Default ; Default ; > ;
         TabStop = TRUE ;
@@ -217,7 +225,7 @@ TabPage  RID_PDF_TAB_GENER
     CheckBox CB_ALLOWDUPLICATEFIELDNAMES
     {
         HelpID = "filter:CheckBox:RID_PDF_TAB_GENER:CB_ALLOWDUPLICATEFIELDNAMES";
-        Pos = MAP_APPFONT( 206, 64 );
+        Pos = MAP_APPFONT( 206, 76 );
         Size = MAP_APPFONT( 128, 10 );
         TabStop = TRUE;
         Text [ en-US ] = "Allow duplicate field ~names";
@@ -225,7 +233,7 @@ TabPage  RID_PDF_TAB_GENER
     CheckBox CB_EXPORTBOOKMARKS
     {
         HelpID = "filter:CheckBox:RID_PDF_TAB_GENER:CB_EXPORTBOOKMARKS";
-        Pos = MAP_APPFONT ( 188 , 76 ) ;
+        Pos = MAP_APPFONT ( 188 , 89 ) ;
         Size = MAP_APPFONT ( 158 , 10 ) ;
         TabStop = TRUE ;
         Text[ en-US ] = "Export ~bookmarks";
@@ -233,7 +241,7 @@ TabPage  RID_PDF_TAB_GENER
     CheckBox CB_EXPORTNOTES
     {
         HelpID = "filter:CheckBox:RID_PDF_TAB_GENER:CB_EXPORTNOTES";
-        Pos = MAP_APPFONT ( 188 , 89 ) ;
+        Pos = MAP_APPFONT ( 188 , 102 ) ;
         Size = MAP_APPFONT ( 158 , 10 ) ;
         TabStop = TRUE ;
         Text[ en-US ] = "~Export comments";
@@ -241,7 +249,7 @@ TabPage  RID_PDF_TAB_GENER
     CheckBox CB_EXPORTNOTESPAGES
     {
         HelpID = "filter:CheckBox:RID_PDF_TAB_GENER:CB_EXPORTNOTESPAGES";
-        Pos = MAP_APPFONT ( 188 , 102 ) ;
+        Pos = MAP_APPFONT ( 188 , 118 ) ;
         Size = MAP_APPFONT ( 158 , 10 ) ;
         TabStop = TRUE ;
         Text[ en-US ] = "Export ~notes pages";
@@ -249,7 +257,7 @@ TabPage  RID_PDF_TAB_GENER
     CheckBox CB_EXPORTEMPTYPAGES
     {
         HelpID = "filter:CheckBox:RID_PDF_TAB_GENER:CB_EXPORTEMPTYPAGES";
-        Pos = MAP_APPFONT ( 188 , 115 ) ;
+        Pos = MAP_APPFONT ( 188 , 125 ) ;
         Size = MAP_APPFONT ( 158 , 16 ) ;
         TabStop = TRUE ;
         WordBreak = TRUE ;
@@ -258,18 +266,10 @@ TabPage  RID_PDF_TAB_GENER
     CheckBox CB_EMBEDSTANDARDFONTS
     {
         HelpID = "filter:CheckBox:RID_PDF_TAB_GENER:CB_EMBEDSTANDARDFONTS";
-        Pos = MAP_APPFONT ( 188 , 134 ) ;
-        Size = MAP_APPFONT ( 158 , 10 ) ;
-        TabStop = TRUE ;
-        Text[ en-US ] = "E~mbed standard fonts";
-    };
-    CheckBox CB_ADDSTREAM
-    {
-        HelpID = "filter:CheckBox:RID_PDF_TAB_GENER:CB_ADDSTREAM";
         Pos = MAP_APPFONT ( 188 , 147 ) ;
         Size = MAP_APPFONT ( 158 , 10 ) ;
         TabStop = TRUE ;
-        Text[ en-US ] = "Create ~hybrid file";
+        Text[ en-US ] = "E~mbed standard fonts";
     };
 };
 
