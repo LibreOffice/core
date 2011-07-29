@@ -207,7 +207,7 @@ ModelessDialog /*ModalDialog*/ DLG_MM_SENDMAILS
     };
     String ST_FAILED
     {
-        Text[ en-US ] = "Sending failed (invalid address)";
+        Text[ en-US ] = "Sending failed";
     };
     String ST_TERMINATEQUERY
     {
