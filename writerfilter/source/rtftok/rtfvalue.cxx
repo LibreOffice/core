@@ -36,65 +36,89 @@ namespace rtftok {
 using rtl::OString;
 using rtl::OUString;
 
-RTFValue::RTFValue(int nValue, rtl::OUString sValue, RTFSprms_t rAttributes,
-        RTFSprms_t rSprms, uno::Reference<drawing::XShape> rShape)
+RTFValue::RTFValue(int nValue, rtl::OUString sValue, RTFSprms rAttributes,
+        RTFSprms rSprms, uno::Reference<drawing::XShape> rShape,
+        uno::Reference<io::XInputStream> rStream)
     : m_nValue(nValue),
     m_sValue(sValue),
-    m_rAttributes(rAttributes),
-    m_rSprms(rSprms),
     m_rShape(rShape),
+    m_rStream(rStream),
     m_bForceString(false)
 {
+    m_pAttributes = new RTFSprms(rAttributes);
+    m_pSprms = new RTFSprms(rSprms);
 }
 
 RTFValue::RTFValue(int nValue)
     : m_nValue(nValue),
     m_sValue(),
-    m_rAttributes(),
-    m_rSprms(),
     m_rShape(),
+    m_rStream(),
     m_bForceString(false)
 {
+    m_pAttributes = new RTFSprms();
+    m_pSprms = new RTFSprms();
 }
 
 RTFValue::RTFValue(OUString sValue, bool bForce)
     : m_nValue(),
     m_sValue(sValue),
-    m_rAttributes(),
-    m_rSprms(),
     m_rShape(),
+    m_rStream(),
     m_bForceString(bForce)
 {
+    m_pAttributes = new RTFSprms();
+    m_pSprms = new RTFSprms();
 }
 
-RTFValue::RTFValue(RTFSprms_t rAttributes)
+RTFValue::RTFValue(RTFSprms rAttributes)
     : m_nValue(),
     m_sValue(),
-    m_rAttributes(rAttributes),
-    m_rSprms(),
     m_rShape(),
+    m_rStream(),
     m_bForceString(false)
 {
+    m_pAttributes = new RTFSprms(rAttributes);
+    m_pSprms = new RTFSprms();
 }
 
-RTFValue::RTFValue(RTFSprms_t rAttributes, RTFSprms_t rSprms)
+RTFValue::RTFValue(RTFSprms rAttributes, RTFSprms rSprms)
     : m_nValue(),
     m_sValue(),
-    m_rAttributes(rAttributes),
-    m_rSprms(rSprms),
     m_rShape(),
+    m_rStream(),
     m_bForceString(false)
 {
+    m_pAttributes = new RTFSprms(rAttributes);
+    m_pSprms = new RTFSprms(rSprms);
 }
 
 RTFValue::RTFValue(uno::Reference<drawing::XShape> rShape)
     : m_nValue(),
     m_sValue(),
-    m_rAttributes(),
-    m_rSprms(),
     m_rShape(rShape),
+    m_rStream(),
     m_bForceString(false)
 {
+    m_pAttributes = new RTFSprms();
+    m_pSprms = new RTFSprms();
+}
+
+RTFValue::RTFValue(uno::Reference<io::XInputStream> rStream)
+    : m_nValue(),
+    m_sValue(),
+    m_rShape(),
+    m_rStream(rStream),
+    m_bForceString(false)
+{
+    m_pAttributes = new RTFSprms();
+    m_pSprms = new RTFSprms();
+}
+
+RTFValue::~RTFValue()
+{
+    delete m_pAttributes;
+    delete m_pSprms;
 }
 
 int RTFValue::getInt() const
@@ -122,6 +146,8 @@ uno::Any RTFValue::getAny() const
         ret <<= m_sValue;
     else if (m_rShape.is())
         ret <<= m_rShape;
+    else if (m_rStream.is())
+        ret <<= m_rStream;
     else
         ret <<= static_cast<sal_Int32>(m_nValue);
     return ret;
@@ -130,7 +156,7 @@ uno::Any RTFValue::getAny() const
 writerfilter::Reference<Properties>::Pointer_t RTFValue::getProperties()
 {
     writerfilter::Reference<Properties>::Pointer_t const pProperties(
-            new RTFReferenceProperties(m_rAttributes, m_rSprms)
+            new RTFReferenceProperties(*m_pAttributes, *m_pSprms)
             );
     return pProperties;
 }
@@ -155,17 +181,17 @@ std::string RTFValue::toString() const
 
 RTFValue* RTFValue::Clone()
 {
-    return new RTFValue(m_nValue, m_sValue, m_rAttributes, m_rSprms, m_rShape);
+    return new RTFValue(m_nValue, m_sValue, *m_pAttributes, *m_pSprms, m_rShape, m_rStream);
 }
 
-RTFSprms_t& RTFValue::getAttributes()
+RTFSprms& RTFValue::getAttributes()
 {
-    return m_rAttributes;
+    return *m_pAttributes;
 }
 
-RTFSprms_t& RTFValue::getSprms()
+RTFSprms& RTFValue::getSprms()
 {
-    return m_rSprms;
+    return *m_pSprms;
 }
 
 } // namespace rtftok

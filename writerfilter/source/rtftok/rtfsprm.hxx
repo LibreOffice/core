@@ -35,11 +35,21 @@
 
 namespace writerfilter {
     namespace rtftok {
-        /// A list of RTFSprm
-        typedef std::vector< std::pair<Id, RTFValue::Pointer_t> > RTFSprms_t;
-        namespace RTFSprms {
-            typedef ::boost::shared_ptr<RTFSprms_t> Pointer_t;
-        }
+        /// A list of RTFSprm with a copy constructor that performs a deep copy.
+        class RTFSprms
+        {
+            public:
+                typedef ::boost::shared_ptr<RTFSprms> Pointer_t;
+                typedef std::vector< std::pair<Id, RTFValue::Pointer_t> >::iterator Iterator_t;
+                RTFSprms();
+                RTFSprms(const RTFSprms& rSprms);
+                std::vector< std::pair<Id, RTFValue::Pointer_t> >* operator->();
+                RTFValue::Pointer_t find(Id nKeyword);
+                bool erase(Id nKeyword);
+            private:
+                std::vector< std::pair<Id, RTFValue::Pointer_t> > m_aSprms;
+        };
+
         /// RTF keyword with a parameter
         class RTFSprm
             : public Sprm
@@ -54,8 +64,6 @@ namespace writerfilter {
                 virtual Kind getKind();
                 virtual std::string getName() const;
                 virtual std::string toString() const;
-                static RTFValue::Pointer_t find(RTFSprms_t& rVector, Id nKeyword);
-                static void erase(RTFSprms_t& rVector, Id nKeyword);
             private:
                 Id m_nKeyword;
                 RTFValue::Pointer_t& m_pValue;

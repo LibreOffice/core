@@ -1846,6 +1846,26 @@ enum RTFKeyword
     RTF_ZWNJ
 };
 
+/// Types of an RTF Control Word
+enum RTFControlTypes
+{
+    CONTROL_FLAG, // eg \sbknone takes no parameter
+    CONTROL_DESTINATION, // eg \fonttbl, if ignored, the whole group should be skipped
+    CONTROL_SYMBOL, // eg \tab
+    CONTROL_TOGGLE, // eg \b (between on and off)
+    CONTROL_VALUE // eg \fs (requires parameter)
+};
+
+/// Respresents an RTF Control Word
+typedef struct
+{
+    const char *sKeyword;
+    int nControlType;
+    RTFKeyword nIndex;
+} RTFSymbol;
+
+extern RTFSymbol aRTFControlWords[];
+extern int nRTFControlWords;
 } // namespace rtftok
 } // namespace writerfilter
 

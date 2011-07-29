@@ -41,14 +41,14 @@ namespace writerfilter {
             : public writerfilter::Reference<Properties>
         {
             public:
-                RTFReferenceProperties(RTFSprms_t rAttributes, RTFSprms_t rSprms);
-                RTFReferenceProperties(RTFSprms_t rAttributes);
+                RTFReferenceProperties(RTFSprms rAttributes, RTFSprms rSprms);
+                RTFReferenceProperties(RTFSprms rAttributes);
                 virtual ~RTFReferenceProperties();
                 virtual void resolve(Properties & rHandler);
                 virtual std::string getType() const;
             private:
-                RTFSprms_t m_rAttributes;
-                RTFSprms_t m_rSprms;
+                RTFSprms m_rAttributes;
+                RTFSprms m_rSprms;
         };
     } // namespace rtftok
 } // namespace writerfilter

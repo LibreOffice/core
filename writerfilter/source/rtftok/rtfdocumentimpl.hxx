@@ -31,11 +31,14 @@
 #include <memory>
 #include <stack>
 #include <vector>
+#include <queue>
 
-#include <rtl/strbuf.hxx>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/document/XDocumentProperties.hpp>
 #include <oox/helper/graphichelper.hxx>
 #include <oox/helper/storagebase.hxx>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <rtl/strbuf.hxx>
 
 #include <resourcemodel/WW8ResourceModel.hxx>
 #include <rtftok/RTFDocument.hxx>
@@ -54,6 +57,9 @@ namespace writerfilter {
             INTERNAL_HEX
         };
 
+        // Note that this is not a 1:1 mapping between destination control
+        // words, e.g. RTF_PICT gets mapped to DESTINATION_PICT or
+        // DESTINATION_SHAPEPROPERTYVALUEPICT, etc.
         enum RTFDesitnationState
         {
             DESTINATION_NORMAL,
@@ -63,6 +69,7 @@ namespace writerfilter {
             DESTINATION_COLORTABLE,
             DESTINATION_STYLESHEET,
             DESTINATION_STYLEENTRY,
+            DESTINATION_EQINSTRUCTION,
             DESTINATION_FIELDINSTRUCTION,
             DESTINATION_FIELDRESULT,
             DESTINATION_LISTTABLE,
@@ -86,7 +93,25 @@ namespace writerfilter {
             DESTINATION_BOOKMARKSTART,
             DESTINATION_BOOKMARKEND,
             DESTINATION_REVISIONTABLE,
-            DESTINATION_REVISIONENTRY
+            DESTINATION_REVISIONENTRY,
+            DESTINATION_SHAPETEXT,
+            DESTINATION_FORMFIELD,
+            DESTINATION_FORMFIELDNAME,
+            DESTINATION_FORMFIELDLIST,
+            DESTINATION_DATAFIELD,
+            DESTINATION_INFO,
+            DESTINATION_CREATIONTIME,
+            DESTINATION_REVISIONTIME,
+            DESTINATION_PRINTTIME,
+            DESTINATION_AUTHOR,
+            DESTINATION_OPERATOR,
+            DESTINATION_COMPANY,
+            DESTINATION_COMMENT,
+            DESTINATION_OBJECT,
+            DESTINATION_OBJDATA,
+            DESTINATION_RESULT,
+            DESTINATION_ANNOTATIONDATE,
+            DESTINATION_ANNOTATIONAUTHOR
         };
 
         enum RTFBorderState
@@ -103,19 +128,11 @@ namespace writerfilter {
             ERROR_GROUP_UNDER,
             ERROR_GROUP_OVER,
             ERROR_EOF,
-            ERROR_HEX_INVALID
+            ERROR_HEX_INVALID,
+            ERROR_CHAR_OVER
         };
 
-        enum RTFControlTypes
-        {
-            CONTROL_FLAG, // eg \sbknone takes no parameter
-            CONTROL_DESTINATION, // eg \fonttbl, if ignored, the whole group should be skipped
-            CONTROL_SYMBOL, // eg \tab
-            CONTROL_TOGGLE, // eg \b (between on and off)
-            CONTROL_VALUE // eg \fs (requires parameter)
-        };
-
-        /// Minimalistic buffer elements for nested cells.
+        /// Minimalistic buffer of elements for nested cells.
         enum RTFBufferTypes
         {
             BUFFER_PROPS,
@@ -125,6 +142,18 @@ namespace writerfilter {
             BUFFER_ENDRUN,
             BUFFER_PAR
         };
+
+        /// Form field types
+        enum RTFFormFieldTypes
+        {
+            FORMFIELD_NONE,
+            FORMFIELD_TEXT,
+            FORMFIELD_CHECKBOX,
+            FORMFIELD_LIST
+        };
+
+        /// A buffer storing dmapper calls.
+        typedef std::deque< std::pair<RTFBufferTypes, RTFValue::Pointer_t> > RTFBuffer_t;
 
         /// An entry in the color table.
         class RTFColorTableEntry
@@ -136,6 +165,17 @@ namespace writerfilter {
                 sal_uInt8 nBlue;
         };
 
+        /// Stores the properties of a shape.
+        class RTFShape
+        {
+            public:
+                std::vector< std::pair<rtl::OUString, rtl::OUString> > aProperties;
+                int nLeft;
+                int nTop;
+                int nRight;
+                int nBottom;
+        };
+
         /// State of the parser, which gets saved / restored when changing groups.
         class RTFParserState
         {
@@ -145,33 +185,33 @@ namespace writerfilter {
                 RTFDesitnationState nDestinationState;
                 RTFBorderState nBorderState;
                 // font table, stylesheet table
-                RTFSprms_t aTableSprms;
-                RTFSprms_t aTableAttributes;
+                RTFSprms aTableSprms;
+                RTFSprms aTableAttributes;
                 // reset by plain
-                RTFSprms_t aCharacterSprms;
-                RTFSprms_t aCharacterAttributes;
+                RTFSprms aCharacterSprms;
+                RTFSprms aCharacterAttributes;
                 // reset by pard
-                RTFSprms_t aParagraphSprms;
-                RTFSprms_t aParagraphAttributes;
+                RTFSprms aParagraphSprms;
+                RTFSprms aParagraphAttributes;
                 // reset by sectd
-                RTFSprms_t aSectionSprms;
-                RTFSprms_t aSectionAttributes;
+                RTFSprms aSectionSprms;
+                RTFSprms aSectionAttributes;
                 // reset by trowd
-                RTFSprms_t aTableRowSprms;
-                RTFSprms_t aTableRowAttributes;
+                RTFSprms aTableRowSprms;
+                RTFSprms aTableRowAttributes;
                 // reset by cellx
-                RTFSprms_t aTableCellSprms;
-                RTFSprms_t aTableCellAttributes;
+                RTFSprms aTableCellSprms;
+                RTFSprms aTableCellAttributes;
+                // reset by row/nestrow
+                std::deque<RTFSprms> aTableCellsSprms;
+                std::deque<RTFSprms> aTableCellsAttributes;
+                // backup of the above two, to support inheriting cell props
+                std::deque<RTFSprms> aTableInheritingCellsSprms;
+                std::deque<RTFSprms> aTableInheritingCellsAttributes;
                 // reset by tx
-                RTFSprms_t aTabAttributes;
-
-                RTFReferenceTable::Entries_t aFontTableEntries;
-                int nCurrentFontIndex;
+                RTFSprms aTabAttributes;
 
                 RTFColorTableEntry aCurrentColor;
-
-                RTFReferenceTable::Entries_t aStyleTableEntries;
-                int nCurrentStyleIndex;
 
                 rtl_TextEncoding nCurrentEncoding;
 
@@ -183,23 +223,33 @@ namespace writerfilter {
                 /// Next list level index to use when parsing list table.
                 int nListLevelNum;
                 /// List level entries, which will form a list entry later.
-                RTFSprms_t aListLevelEntries;
+                RTFSprms aListLevelEntries;
 
                 /// List of character positions in leveltext to replace.
                 std::vector<sal_Int32> aLevelNumbers;
 
                 float nPictureScaleX;
                 float nPictureScaleY;
-                std::vector< std::pair<rtl::OUString, rtl::OUString> > aShapeProperties;
+                RTFShape aShape;
 
                 /// Current cellx value.
                 int nCellX;
-                std::deque<RTFSprms::Pointer_t> aTableCellsSprms;
-                std::deque<RTFSprms::Pointer_t> aTableCellsAttributes;
+                int nCells;
+                int nInheritingCells;
 
                 /// CJK or CTL?
                 bool bIsCjk;
+
+                // Info group.
+                int nYear;
+                int nMonth;
+                int nDay;
+                int nHour;
+                int nMinute;
         };
+
+        class RTFTokenizer;
+        class RTFSdrImport;
 
         /// Implementation of the RTFDocument interface.
         class RTFDocumentImpl
@@ -215,47 +265,63 @@ namespace writerfilter {
                 virtual void resolve(Stream & rHandler);
                 virtual std::string getType() const;
 
-                SvStream& Strm();
                 Stream& Mapper();
-                sal_uInt32 getColorTable(sal_uInt32 nIndex);
-                sal_uInt32 getEncodingTable(sal_uInt32 nFontIndex);
-                void skipDestination(bool bParsed);
-                RTFSprms_t mergeSprms();
-                RTFSprms_t mergeAttributes();
                 void setSubstream(bool bIsSubtream);
+                void setAuthor(rtl::OUString& rAuthor);
+                bool isSubstream();
                 void setIgnoreFirst(rtl::OUString& rIgnoreFirst);
-                void resolveSubstream(sal_uInt32 nPos, Id nId);
-                void resolveSubstream(sal_uInt32 nPos, Id nId, rtl::OUString& rIgnoreFirst);
                 void seek(sal_uInt32 nPos);
-            private:
-                int resolveParse();
-                int resolveKeyword();
-                void resolveShapeProperties(std::vector< std::pair<rtl::OUString, rtl::OUString> >& rShapeProperties);
+                com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory> getModelFactory();
+                RTFParserState& getState();
+                /// If the stack of states is empty.
+                bool isEmpty();
+                int getGroup();
+                void setDestinationText(rtl::OUString& rString);
+                void skipDestination(bool bParsed);
+                /// Resolve a picture: If not inline, then anchored.
+                int resolvePict(bool bInline);
+                void runBreak();
+                void replayShapetext();
 
-                int dispatchKeyword(rtl::OString& rKeyword, bool bParam, int nParam);
+                // These callbacks are invoked by the tokenizer.
+                int resolveChars(char ch);
+                int pushState();
+                int popState();
                 int dispatchFlag(RTFKeyword nKeyword);
                 int dispatchDestination(RTFKeyword nKeyword);
                 int dispatchSymbol(RTFKeyword nKeyword);
                 int dispatchToggle(RTFKeyword nKeyword, bool bParam, int nParam);
                 int dispatchValue(RTFKeyword nKeyword, int nParam);
 
-                int resolveChars(char ch);
-                /// Resolve a picture: If not inline, then anchored.
-                int resolvePict(char ch, bool bInline);
-                int pushState();
-                int popState();
+            private:
+                SvStream& Strm();
+                sal_uInt32 getColorTable(sal_uInt32 nIndex);
+                sal_uInt32 getEncodingTable(sal_uInt32 nFontIndex);
+                RTFSprms mergeSprms();
+                RTFSprms mergeAttributes();
+                void resetSprms();
+                void resetAttributes();
+                void resolveSubstream(sal_uInt32 nPos, Id nId);
+                void resolveSubstream(sal_uInt32 nPos, Id nId, rtl::OUString& rIgnoreFirst);
+
                 void text(rtl::OUString& rString);
                 void parBreak();
+                void tableBreak();
+                /// If this is the first run of the document, starts the initial paragraph.
+                void checkFirstRun();
                 void sectBreak(bool bFinal);
-                void replayBuffer(std::deque< std::pair<RTFBufferTypes, RTFValue::Pointer_t> >& rBuffer);
+                void replayBuffer(RTFBuffer_t& rBuffer);
 
                 com::sun::star::uno::Reference<com::sun::star::uno::XComponentContext> const& m_xContext;
                 com::sun::star::uno::Reference<com::sun::star::io::XInputStream> const& m_xInputStream;
                 com::sun::star::uno::Reference<com::sun::star::lang::XComponent> const& m_xDstDoc;
                 com::sun::star::uno::Reference<com::sun::star::frame::XFrame> const& m_xFrame;
                 com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory> m_xModelFactory;
+                com::sun::star::uno::Reference<com::sun::star::document::XDocumentProperties> m_xDocumentProperties;
                 SvStream* m_pInStream;
                 Stream* m_pMapperStream;
+                RTFSdrImport* m_pSdrImport;
+                RTFTokenizer* m_pTokenizer;
                 /// Same as m_aStates.size(), except that this can be negative for invalid input.
                 int m_nGroup;
                 std::stack<RTFParserState> m_aStates;
@@ -267,26 +333,31 @@ namespace writerfilter {
                 /// Color index <-> RGB color value map
                 std::vector<sal_uInt32> m_aColorTable;
                 bool m_bFirstRun;
+                /// If this is the first row in a table - there we send cell widths.
+                bool m_bFirstRow;
                 /// If paragraph properties should be emitted on next run.
                 bool m_bNeedPap;
                 /// The list table and list override table combined.
-                RTFSprms_t m_aListTableSprms;
+                RTFSprms m_aListTableSprms;
                 /// The settings table.
-                RTFSprms_t m_aSettingsTableSprms;
+                RTFSprms m_aSettingsTableSprms;
 
                 oox::StorageRef m_xStorage;
                 oox::GraphicHelper* m_pGraphicHelper;
 
                 /// Buffered table cells, till cell definitions are not reached.
-                std::deque< std::pair<RTFBufferTypes, RTFValue::Pointer_t> > m_aTableBuffer;
-                bool m_bTable;
+                RTFBuffer_t m_aTableBuffer;
                 /// Buffered superscript, till footnote is reached (or not).
-                std::deque< std::pair<RTFBufferTypes, RTFValue::Pointer_t> > m_aSuperBuffer;
-                bool m_bSuper;
+                RTFBuffer_t m_aSuperBuffer;
+                /// Buffered shape text.
+                RTFBuffer_t m_aShapetextBuffer;
+                /// Points to the active buffer, if there is one.
+                RTFBuffer_t* m_pCurrentBuffer;
+
                 bool m_bHasFootnote;
                 /// If this is a substream.
                 bool m_bIsSubstream;
-                std::deque< std::pair<Id, sal_uInt32> > m_nHeaderFooterPositions;
+                std::queue< std::pair<Id, sal_uInt32> > m_nHeaderFooterPositions;
                 sal_uInt32 m_nGroupStartPos;
                 /// Ignore the first occurrence of this text.
                 rtl::OUString m_aIgnoreFirst;
@@ -294,8 +365,29 @@ namespace writerfilter {
                 std::map<rtl::OUString, int> m_aBookmarks;
                 /// Revision index <-> author map.
                 std::map<int, rtl::OUString> m_aAuthors;
+                /// Annotation author of the next annotation.
+                rtl::OUString m_aAuthor;
                 /// Text from special destinations.
                 rtl::OUStringBuffer m_aDestinationText;
+
+                RTFSprms m_aFormfieldSprms;
+                RTFSprms m_aFormfieldAttributes;
+                RTFFormFieldTypes m_nFormFieldType;
+
+                RTFSprms m_aObjectSprms;
+                RTFSprms m_aObjectAttributes;
+                /// If we are in an object group.
+                bool m_bObject;
+                /// Contents of the objdata group, stored here so we can delete it when we leave the object group.
+                SvStream* m_pObjectData;
+
+                RTFReferenceTable::Entries_t m_aFontTableEntries;
+                int m_nCurrentFontIndex;
+
+                RTFReferenceTable::Entries_t m_aStyleTableEntries;
+                int m_nCurrentStyleIndex;
+                bool m_bEq;
+
         };
     } // namespace rtftok
 } // namespace writerfilter

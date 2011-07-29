@@ -1335,6 +1335,7 @@ void DomainMapper_Impl::PushAnnotation()
 
 void DomainMapper_Impl::PopFootOrEndnote()
 {
+    RemoveLastParagraph();
     m_aTextAppendStack.pop();
 }
 
@@ -1388,6 +1389,7 @@ void DomainMapper_Impl::PopShapeContext()
 {
     if ( m_bShapeContextAdded )
     {
+        RemoveLastParagraph();
         m_aTextAppendStack.pop();
         m_bShapeContextAdded = false;
     }
@@ -3184,16 +3186,28 @@ sal_Int32 DomainMapper_Impl::GetCurrentRedlineToken(  )
 
 void DomainMapper_Impl::SetCurrentRedlineAuthor( rtl::OUString sAuthor )
 {
-    RedlineParamsPtr pCurrent( GetTopRedline(  ) );
-    if ( pCurrent.get(  ) )
-        pCurrent->m_sAuthor = sAuthor;
+    if (!m_xAnnotationField.is())
+    {
+        RedlineParamsPtr pCurrent( GetTopRedline(  ) );
+        if ( pCurrent.get(  ) )
+            pCurrent->m_sAuthor = sAuthor;
+    }
+    else
+        m_xAnnotationField->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Author")),
+                uno::makeAny(sAuthor));
 }
 
 void DomainMapper_Impl::SetCurrentRedlineDate( rtl::OUString sDate )
 {
-    RedlineParamsPtr pCurrent( GetTopRedline(  ) );
-    if ( pCurrent.get(  ) )
-        pCurrent->m_sDate = sDate;
+    if (!m_xAnnotationField.is())
+    {
+        RedlineParamsPtr pCurrent( GetTopRedline(  ) );
+        if ( pCurrent.get(  ) )
+            pCurrent->m_sDate = sDate;
+    }
+    else
+        m_xAnnotationField->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DateTimeValue")),
+                uno::makeAny(lcl_DateStringToDateTime(sDate)));
 }
 
 void DomainMapper_Impl::SetCurrentRedlineId( sal_Int32 sId )

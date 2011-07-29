@@ -25,51 +25,35 @@
  * instead of those above.
  */
 
-#include <rtfcharsets.hxx>
-#include <sal/macros.h>
+#ifndef _RTFSDRIMPORT_HXX_
+#define _RTFSDRIMPORT_HXX_
+
+#include <com/sun/star/drawing/XDrawPage.hpp>
+
+#include <rtfdocumentimpl.hxx>
 
 namespace writerfilter {
-namespace rtftok {
+    namespace rtftok {
+        /// Handles the import of drawings using RTF markup.
+        class RTFSdrImport
+        {
+            public:
+                RTFSdrImport(RTFDocumentImpl& rImport,
+                        com::sun::star::uno::Reference<com::sun::star::lang::XComponent> const& xDstDoc);
+                virtual ~RTFSdrImport();
 
-// See RTF spec v1.9.1, page 19
-RTFEncoding aRTFEncodings[] = {
-    // charset  codepage    Windows / Mac name
-    {0, 1252}, // ANSI
-    {1, 0}, // Default
-    {2, 42}, // Symbol
-    {77, 10000}, // Mac Roman
-    {78, 10001}, // Mac Shift Jis
-    {79, 10003}, // Mac Hangul
-    {80, 10008}, // Mac GB2312
-    {81, 10002}, // Mac Big5
-    {83, 10005}, // Mac Herbrew
-    {84, 10004}, // Mac Arabic
-    {85, 10006}, // Mac Greek
-    {86, 10081}, // Mac Turkish
-    {87, 10021}, // Mac Thai
-    {88, 10029}, // Mac East Europe
-    {89, 10007}, // Mac Russian
-    {128, 932}, // Shift JIS
-    {129, 949}, // Hangul
-    {130, 1361}, // Johab
-    {134, 936}, // GB2312
-    {136, 950}, // Big5
-    {161, 1253}, // Greek
-    {162, 1254}, // Turkish
-    {163, 1258}, // Viatnamese
-    {177, 1255}, // Herbrew
-    {178, 1256}, // Arabic
-    {186, 1257}, // Baltic
-    {204, 1251}, // Russian
-    {222, 874}, // Thai
-    {238, 1250}, // Eastern European
-    {254, 437}, // PC 437
-    {255, 850}, // OEM
-};
+                void resolve(RTFShape& rShape);
+            private:
+                void createShape(rtl::OUString aService,
+                        com::sun::star::uno::Reference<drawing::XShape>& xShape,
+                        com::sun::star::uno::Reference<beans::XPropertySet>& xPropertySet);
 
-int nRTFEncodings = SAL_N_ELEMENTS(aRTFEncodings);
-
-} // namespace rtftok
+                RTFDocumentImpl& m_rImport;
+                com::sun::star::uno::Reference<com::sun::star::drawing::XDrawPage> m_xDrawPage;
+        };
+    } // namespace rtftok
 } // namespace writerfilter
+
+#endif // _RTFSDRIPORT_HXX_
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

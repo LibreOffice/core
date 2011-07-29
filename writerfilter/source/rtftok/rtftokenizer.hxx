@@ -25,34 +25,35 @@
  * instead of those above.
  */
 
-#ifndef _RTFTYPES_HXX_
-#define _RTFTYPES_HXX_
+#ifndef _RTFTOKENIZER_HXX_
+#define _RTFTOKENIZER_HXX_
 
-#include <rtfcontrolwords.hxx>
+#include <rtfdocumentimpl.hxx>
+
+class SvStream;
 
 namespace writerfilter {
     namespace rtftok {
-        /// Respresents an RTF Control Word
-        typedef struct
+        /// RTF tokenizer that separates control words from text.
+        class RTFTokenizer
         {
-            const char *sKeyword;
-            int nControlType;
-            RTFKeyword nIndex;
-        } RTFSymbol;
-        extern RTFSymbol aRTFControlWords[];
-        extern int nRTFControlWords;
+            public:
+                RTFTokenizer(RTFDocumentImpl& rImport, SvStream* pInStream);
+                virtual ~RTFTokenizer();
 
-        /// RTF legacy charsets
-        typedef struct
-        {
-            int charset;
-            int codepage;
-        } RTFEncoding;
-        extern RTFEncoding aRTFEncodings[];
-        extern int nRTFEncodings;
+                int resolveParse();
+                int asHex(char ch);
+            private:
+                SvStream& Strm();
+                int resolveKeyword();
+                int dispatchKeyword(rtl::OString& rKeyword, bool bParam, int nParam);
+
+                RTFDocumentImpl& m_rImport;
+                SvStream* m_pInStream;
+        };
     } // namespace rtftok
 } // namespace writerfilter
 
-#endif // _RTFTYPES_HXX_
+#endif // _RTFTOKENIZER_HXX_
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
