@@ -1137,7 +1137,9 @@ int RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
             m_aStates.top().nDestinationState = DESTINATION_SKIP;
             break;
         default:
+#if OSL_DEBUG_LEVEL > 1
             OSL_TRACE("%s: TODO handle destination '%s'", OSL_THIS_FUNC, lcl_RtfToString(nKeyword));
+#endif
             // Make sure we skip destinations (even without \*) till we don't handle them
             m_aStates.top().nDestinationState = DESTINATION_SKIP;
             bParsed = false;
@@ -1307,7 +1309,9 @@ int RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
             // Nothing to do, dmapper assumes this is the default.
             break;
         default:
+#if OSL_DEBUG_LEVEL > 1
             OSL_TRACE("%s: TODO handle symbol '%s'", OSL_THIS_FUNC, lcl_RtfToString(nKeyword));
+#endif
             bParsed = false;
             break;
     }
@@ -1650,7 +1654,9 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
             }
             break;
         default:
+#if OSL_DEBUG_LEVEL > 1
             OSL_TRACE("%s: TODO handle flag '%s'", OSL_THIS_FUNC, lcl_RtfToString(nKeyword));
+#endif
             bParsed = false;
             break;
     }
@@ -2209,7 +2215,9 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
             // Ignore this for now, later the RTF writer version could be used to add hacks for older buggy writers.
             break;
         default:
+#if OSL_DEBUG_LEVEL > 1
             OSL_TRACE("%s: TODO handle value '%s'", OSL_THIS_FUNC, lcl_RtfToString(nKeyword));
+#endif
             bParsed = false;
             break;
     }
@@ -2309,7 +2317,9 @@ int RTFDocumentImpl::dispatchToggle(RTFKeyword nKeyword, bool bParam, int nParam
             }
             break;
         default:
+#if OSL_DEBUG_LEVEL > 1
             OSL_TRACE("%s: TODO handle toggle '%s'", OSL_THIS_FUNC, lcl_RtfToString(nKeyword));
+#endif
             bParsed = false;
             break;
     }
