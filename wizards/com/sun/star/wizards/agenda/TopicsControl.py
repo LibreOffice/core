@@ -133,6 +133,7 @@ class TopicsControl(ControlScroller):
     end, which enables the user to enter data...
     '''
 
+    @classmethod
     def insertRowAtEnd(self):
         l = len(ControlScroller.scrollfields)
         self.registerControlGroup(self.newRow(l), l)
@@ -304,6 +305,7 @@ class TopicsControl(ControlScroller):
     @return
     '''
 
+    @classmethod
     def newRow(self, i):
         pv = [None] * 4
         pv[0] = Properties.createProperty(
@@ -338,11 +340,11 @@ class TopicsControl(ControlScroller):
     @return true if empty. false if not.
     '''
 
+    @classmethod
     def isRowEmpty(self, row):
-        data = getTopicData(row)
+        data = self.getTopicData(row)
         # now - is this row empty?
-        return data[1].Value.equals("") and data[2].Value.equals("") \
-                and data[3].Value.equals("")
+        return data[1].Value and data[2].Value and data[3].Value
 
     '''
     update the preview document and
@@ -350,34 +352,26 @@ class TopicsControl(ControlScroller):
     @param guiRow
     @param column
     '''
+    oldData = []
 
+    @classmethod
     def fieldChanged(self, guiRow, column):
         with TopicsControl.lock:
             try:
                 # First, I update the document
-                data = getTopicData(guiRow + TopicsControl.nscrollvalue)
-                if data == None:
+                data = self.getTopicData(guiRow + TopicsControl.nscrollvalue)
+                if data is None:
                     return
 
-                equal = True
-                if self.oldData != None:
-                    i = 0
-                    while i < data.length and equal:
-                        equal = equal & data[i].Value == self.oldData[i]
-                        i += 1
-                    if equal:
-                        return
-
+                dataValue = [i.Value for i in data]
+                if dataValue == TopicsControl.oldData:
+                    return
                 else:
-                    self.oldData = range(4)
+                    TopicsControl.oldData = dataValue
 
-                i = 0
-                while i < data.length:
-                    self.oldData[i] = data[i].Value
-                    i += 1
-                updateDocumentCell(
+                self.updateDocumentCell(
                     guiRow + TopicsControl.nscrollvalue, column, data)
-                if isRowEmpty(guiRow + TopicsControl.nscrollvalue):
+                if self.isRowEmpty(guiRow + TopicsControl.nscrollvalue):
                     '''
                     if this is the row before the last one
                     (the last row is always empty)
@@ -407,10 +401,10 @@ class TopicsControl(ControlScroller):
                     # is this the last row?
                     if (guiRow + TopicsControl.nscrollvalue + 1) \
                             == len(ControlScroller.scrollfields):
-                        insertRowAtEnd()
+                        self.insertRowAtEnd()
 
-            except Exception, e:
-                e.printStackTrace()
+            except Exception:
+                traceback.print_exc()
 
     '''
     return the corresponding row data for the given index.
@@ -418,9 +412,10 @@ class TopicsControl(ControlScroller):
     @return a PropertyValue array with the data for the given topic.
     '''
 
+    @classmethod
     def getTopicData(self, topic):
         if topic < len(ControlScroller.scrollfields):
-            return ControlScroller.scrollfields.get(topic)
+            return ControlScroller.scrollfields[topic]
         else:
             return None
 
@@ -709,6 +704,7 @@ class TopicsControl(ControlScroller):
     @param data the data of the entire row.
     '''
 
+    @classmethod
     def updateDocumentCell(self, row, column, data):
         try:
             ControlScroller.CurUnoDialog.agendaTemplate.topics.writeCell(
@@ -789,11 +785,11 @@ class ControlRow(object):
     def topicTextChanged(self):
         try:
             # update the data model
-            fieldInfo(self.offset, 1)
+            ControlScroller.fieldInfo(self.offset, 1)
             # update the preview document
-            fieldChanged(self.offset, 1)
-        except Exception, ex:
-            ex.printStackTrace()
+            TopicsControl.fieldChanged(self.offset, 1)
+        except Exception:
+            traceback.print_exc()
 
     '''
     called through an event listener when the
@@ -804,11 +800,11 @@ class ControlRow(object):
     def responsibleTextChanged(self):
         try:
             # update the data model
-            fieldInfo(self.offset, 2)
+            ControlScroller.fieldInfo(self.offset, 2)
             # update the preview document
-            fieldChanged(self.offset, 2)
-        except Exception, ex:
-            ex.printStackTrace()
+            TopicsControl.fieldChanged(self.offset, 2)
+        except Exception:
+            traceback.print_exc()
 
     '''
     called through an event listener when the
@@ -819,11 +815,11 @@ class ControlRow(object):
     def timeTextChanged(self):
         try:
             # update the data model
-            fieldInfo(self.offset, 3)
+            ControlScroller.fieldInfo(self.offset, 3)
             # update the preview document
-            fieldChanged(self.offset, 3)
-        except Exception, ex:
-            ex.printStackTrace()
+            TopicsControl.fieldChanged(self.offset, 3)
+        except Exception:
+            traceback.print_exc()
 
     '''
     enables/disables the row.

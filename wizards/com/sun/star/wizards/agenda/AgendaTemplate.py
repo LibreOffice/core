@@ -991,8 +991,8 @@ class Topics(object):
     '''
 
     def isWritten(self, topic):
-        return (AgendaTemplate.writtenTopics.size() > topic \
-            and AgendaTemplate.writtenTopics.get(topic) != None)
+        return (len(AgendaTemplate.writtenTopics) > topic \
+            and AgendaTemplate.writtenTopics[topic] is not None)
 
     '''rewrites a single cell containing.
     This is used in order to refresh the topic/responsible/duration data
@@ -1010,28 +1010,28 @@ class Topics(object):
 
     def writeCell(self, topic, what, data):
         # if the whole row should be written...
-        if not isWritten(topic):
-            write(topic, data)
+        if not self.isWritten(topic):
+            self.write(topic, data)
             # write only the "what" cell.
         else:
             # calculate the table row.
             firstRow = 1 + (topic * Topics.rowsPerTopic) + 1
             # go to the first cell of this topic.
-            cursor = Topics.table.createCursorByCellName("A" + firstRow)
+            cursor = Topics.table.createCursorByCellName("A" + str(firstRow))
             te = None
             cursorMoves = 0
             tmp_switch_var1 = what
             if tmp_switch_var1 == 0:
-                te = setItemText(Topics.numCell, data[0].Value)
+                te = self.setItemText(Topics.numCell, data[0].Value)
                 cursorMoves = Topics.numCell
             elif tmp_switch_var1 == 1:
-                te = setItemText(Topics.topicCell, data[1].Value)
+                te = self.setItemText(Topics.topicCell, data[1].Value)
                 cursorMoves = Topics.topicCell
             elif tmp_switch_var1 == 2:
-                te = setItemText(Topics.responsibleCell, data[2].Value)
+                te = self.setItemText(Topics.responsibleCell, data[2].Value)
                 cursorMoves = Topics.responsibleCell
             elif tmp_switch_var1 == 3:
-                te = setItemText(Topics.timeCell, data[3].Value)
+                te = self.setItemText(Topics.timeCell, data[3].Value)
                 cursorMoves = Topics.timeCell
 
             # move the cursor to the needed cell...
@@ -1039,7 +1039,7 @@ class Topics(object):
             xc = Topics.table.getCellByName(cursor.RangeName)
             # and write it !
             te.write(xc)
-            (Topics.topicCellFormats.get(cursorMoves)).format(xc)
+            Topics.topicCellFormats[cursorMoves].format(xc)
 
     '''writes the given topic.
     if the first topic was involved, reformat the
