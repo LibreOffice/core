@@ -52,9 +52,8 @@
 #define STR_BACKING_TEMPLATE                4
 #define STR_BACKING_FILE                    5
 #define STR_BACKING_EXTHELP                 6
-#define STR_BACKING_REGHELP                 7
-#define STR_BACKING_INFOHELP                8
-#define STR_BACKING_TPLREP                  9
+#define STR_BACKING_INFOHELP                7
+#define STR_BACKING_TPLREP                  8
 
 #define RES_BACKING_IMAGES                  (DLG_BACKING+1)
 

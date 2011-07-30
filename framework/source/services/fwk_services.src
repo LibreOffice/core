@@ -57,10 +57,6 @@ Window DLG_BACKING
     {
         Text [ en-US ] = "Add new features to %PRODUCTNAME";
     };
-    String STR_BACKING_REGHELP
-    {
-        Text [ en-US ] = "Register your %PRODUCTNAME";
-    };
     String STR_BACKING_INFOHELP
     {
         Text [ en-US ] = "Get more information about %PRODUCTNAME";
