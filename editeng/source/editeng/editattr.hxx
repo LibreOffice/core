@@ -121,11 +121,11 @@ public:
 
     virtual void    SetFont( SvxFont& rFont, OutputDevice* pOutDev );
 
-    sal_Bool    IsIn( sal_uInt16 nIndex )
+    sal_Bool    IsIn( sal_uInt16 nIndex ) const
                 { return ( ( nStart <= nIndex ) && ( nEnd >= nIndex ) ); }
-    sal_Bool    IsInside( sal_uInt16 nIndex )
+    sal_Bool    IsInside( sal_uInt16 nIndex ) const
                 { return ( ( nStart < nIndex ) && ( nEnd > nIndex ) ); }
-    sal_Bool    IsEmpty()
+    sal_Bool    IsEmpty() const
                 { return nStart == nEnd; }
 
     sal_Bool    IsFeature() const   { return bFeature; }
