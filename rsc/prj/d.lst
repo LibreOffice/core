@@ -1,5 +1,0 @@
-..\%__SRC%\bin\rsc.exe %_DEST%\bin\rsc.exe
-..\%__SRC%\bin\rsc %_DEST%\bin\rsc
-
-mkdir: %_DEST%\inc\rsc
-..\inc\rsc/rscsfx.hxx %_DEST%\inc\rsc\rscsfx.hxx

@@ -1,8 +1,9 @@
+# -*- Mode: makefile; tab-width: 4; indent-tabs-mode: t -*-
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
-# Copyright 2000, 2010 Oracle and/or its affiliates.
+#
+# Copyright 2000, 2011 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
 #
@@ -25,28 +26,14 @@
 #
 #*************************************************************************
 
-PRJ=..$/..
+ifeq ($(strip $(SOLARENV)),)
+$(error No environment set!)
+endif
 
-PRJNAME=rsc
-TARGET=rscmis
+gb_PARTIALBUILD := T
+GBUILDDIR := $(SOLARENV)/gbuild
+include $(GBUILDDIR)/gbuild.mk
 
-# --- Settings ------------------------------------------------------
+$(eval $(call gb_Module_make_global_targets,$(shell ls $(dir $(realpath $(firstword $(MAKEFILE_LIST))))/Module*.mk)))
 
-ENABLE_EXCEPTIONS=true
-
-.INCLUDE :  settings.mk
-
-.IF "$(BUILD_TYPE)"=="$(BUILD_TYPE:s/DESKTOP//)"
-ALL:
-    @echo No need for this on non-desktop OSes
-.ENDIF
-
-# --- Files ---------------------------------------------------------
-
-CXXFILES= 	rsclst.cxx	\
-        rscdbl.cxx
-
-OBJFILES=	$(OBJ)$/rsclst.obj	\
-        $(OBJ)$/rscdbl.obj
-        
-.INCLUDE :  target.mk
+# vim: set noet sw=4 ts=4:
