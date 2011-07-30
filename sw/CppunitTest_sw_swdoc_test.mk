@@ -1,3 +1,4 @@
+# -*- Mode: makefile; tab-width: 4; indent-tabs-mode: t -*-
 #*************************************************************************
 # Version: MPL 1.1 / GPLv3+ / LGPLv3+
 #
@@ -124,4 +125,4 @@ $(eval $(call gb_RdbTarget_add_old_components,sw_swdoc_test,\
 # runtime
 $(call gb_CppunitTest_get_target,sw_swdoc_test) : $(WORKDIR)/AllLangRes/sw
 
-# vim: set noet sw=4:
+# vim: set noet sw=4 ts=4:

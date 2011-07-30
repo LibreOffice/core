@@ -1,3 +1,4 @@
+# -*- Mode: makefile; tab-width: 4; indent-tabs-mode: t -*-
 #*************************************************************************
 # Version: MPL 1.1 / GPLv3+ / LGPLv3+
 #
@@ -107,4 +108,4 @@ $(eval $(call gb_RdbTarget_add_old_components,sw_filters_test,\
 # by a link relation
 $(call gb_CppunitTest_get_target,sw_filters_test) : $(call gb_Library_get_target,msword)
 
-# vim: set noet sw=4:
+# vim: set noet sw=4 ts=4:

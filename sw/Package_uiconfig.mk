@@ -1,3 +1,4 @@
+# -*- Mode: makefile; tab-width: 4; indent-tabs-mode: t -*-
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -260,3 +261,5 @@ $(eval $(call gb_Package_add_file,sw_uiconfig,xml/uiconfig/modules/swxform/toolb
 $(eval $(call gb_Package_add_file,sw_uiconfig,xml/uiconfig/modules/swxform/toolbar/textobjectbar.xml,swxform/toolbar/textobjectbar.xml))
 $(eval $(call gb_Package_add_file,sw_uiconfig,xml/uiconfig/modules/swxform/toolbar/toolbar.xml,swxform/toolbar/toolbar.xml))
 $(eval $(call gb_Package_add_file,sw_uiconfig,xml/uiconfig/modules/swxform/toolbar/viewerbar.xml,swxform/toolbar/viewerbar.xml))
+
+# vim: set noet sw=4 ts=4:

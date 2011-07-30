@@ -1,3 +1,4 @@
+# -*- Mode: makefile; tab-width: 4; indent-tabs-mode: t -*-
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -31,3 +32,5 @@ $(eval $(call gb_Package_add_file,sm_uiconfig,xml/uiconfig/modules/smath/statusb
 $(eval $(call gb_Package_add_file,sm_uiconfig,xml/uiconfig/modules/smath/toolbar/fullscreenbar.xml,smath/toolbar/fullscreenbar.xml))
 $(eval $(call gb_Package_add_file,sm_uiconfig,xml/uiconfig/modules/smath/toolbar/standardbar.xml,smath/toolbar/standardbar.xml))
 $(eval $(call gb_Package_add_file,sm_uiconfig,xml/uiconfig/modules/smath/toolbar/toolbar.xml,smath/toolbar/toolbar.xml))
+
+# vim: set noet sw=4 ts=4:
