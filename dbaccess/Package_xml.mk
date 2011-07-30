@@ -1,3 +1,4 @@
+# -*- Mode: makefile; tab-width: 4; indent-tabs-mode: t -*-
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,3 +29,5 @@
 $(eval $(call gb_Package_Package,dbaccess_xml,$(SRCDIR)/dbaccess/prj))
 $(eval $(call gb_Package_add_file,dbaccess_xml,prj/dba.xml,dba.xml))
 $(eval $(call gb_Package_add_file,dbaccess_xml,prj/dbu.xml,dbu.xml))
+
+# vim: set noet sw=4 ts=4:
