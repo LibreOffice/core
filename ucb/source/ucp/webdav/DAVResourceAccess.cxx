@@ -1172,7 +1172,7 @@ sal_Bool DAVResourceAccess::detectRedirectCycle(
 void DAVResourceAccess::resetUri()
 {
     osl::Guard< osl::Mutex > aGuard( m_aMutex );
-    if ( m_aRedirectURIs.size() > 0 )
+    if ( !m_aRedirectURIs.empty() )
     {
         std::vector< NeonUri >::const_iterator it  = m_aRedirectURIs.begin();
 

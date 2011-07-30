@@ -809,7 +809,7 @@ sal_Bool SAL_CALL CachedContentResultSet
                 m_bAfterLastApplied = nRow != m_nLastAppliedPos;
             }
             else
-                throw rEx;
+                throw;
         }
 
         return nRow == m_nLastAppliedPos;

@@ -616,7 +616,7 @@ void SAL_CALL ContentResultSetWrapper
         catch( Exception& rEx )
         {
             m_pPropertyChangeListeners->removeInterface( aPropertyName, xListener );
-            throw rEx;
+            throw;
         }
     }
 }
@@ -667,7 +667,7 @@ void SAL_CALL ContentResultSetWrapper
         catch( Exception& rEx )
         {
             m_pVetoableChangeListeners->removeInterface( rPropertyName, xListener );
-            throw rEx;
+            throw;
         }
     }
 }

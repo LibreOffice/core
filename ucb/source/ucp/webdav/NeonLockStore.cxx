@@ -203,7 +203,7 @@ void NeonLockStore::removeLock( NeonLock * pLock )
     m_aLockInfoMap.erase( pLock );
     ne_lockstore_remove( m_pNeonLockStore, pLock );
 
-    if ( m_aLockInfoMap.size() == 0 )
+    if ( m_aLockInfoMap.empty() )
         stopTicker();
 }
 

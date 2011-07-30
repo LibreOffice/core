@@ -420,7 +420,7 @@ namespace ftp {
 FILE* FTPURL::open()
     throw(curl_exception)
 {
-    if(!m_aPathSegmentVec.size())
+    if(m_aPathSegmentVec.empty())
         throw curl_exception(CURLE_FTP_COULDNT_RETR_FILE);
 
     CURL *curl = m_pFCP->handle();
@@ -597,7 +597,7 @@ rtl::OUString FTPURL::net_title() const
             // We  were  either denied access when trying to login to
             //  an FTP server or when trying to change working directory
             //  to the one given in the URL.
-            if(m_aPathSegmentVec.size())
+            if(!m_aPathSegmentVec.empty())
                 // determine title form url
                 aNetTitle = decodePathSegment(m_aPathSegmentVec.back());
             else
@@ -701,7 +701,7 @@ void FTPURL::mkdir(bool ReplaceExisting) const
     throw(curl_exception)
 {
     rtl::OString title;
-    if(m_aPathSegmentVec.size()) {
+    if(!m_aPathSegmentVec.empty()) {
         rtl::OUString titleOU = m_aPathSegmentVec.back();
         titleOU = decodePathSegment(titleOU);
         title = rtl::OString(titleOU.getStr(),

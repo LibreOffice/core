@@ -429,7 +429,7 @@ rtl::OUString Databases::getInstallPathAsURL()
 
 const std::vector< rtl::OUString >& Databases::getModuleList( const rtl::OUString& Language )
 {
-    if( m_avModules.size() == 0 )
+    if( m_avModules.empty() )
     {
         rtl::OUString  fileName,dirName = getInstallPathAsURL() + processLang( Language );
         osl::Directory dirFile( dirName );
