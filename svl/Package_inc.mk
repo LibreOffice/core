@@ -1,3 +1,4 @@
+# -*- Mode: makefile; tab-width: 4; indent-tabs-mode: t -*-
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -126,3 +127,5 @@ $(eval $(call gb_Package_add_file,svl_inc,inc/svl/whiter.hxx,svl/whiter.hxx))
 $(eval $(call gb_Package_add_file,svl_inc,inc/svl/xmlement.hxx,svl/xmlement.hxx))
 $(eval $(call gb_Package_add_file,svl_inc,inc/svl/zforlist.hxx,svl/zforlist.hxx))
 $(eval $(call gb_Package_add_file,svl_inc,inc/svl/zformat.hxx,svl/zformat.hxx))
+
+# vim: set noet sw=4 ts=4:

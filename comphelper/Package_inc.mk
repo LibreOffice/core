@@ -1,3 +1,4 @@
+# -*- Mode: makefile; tab-width: 4; indent-tabs-mode: t -*-
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -135,3 +136,5 @@ $(eval $(call gb_Package_add_file,comphelper_inc,inc/comphelper/namecontainer.hx
 $(eval $(call gb_Package_add_file,comphelper_inc,inc/comphelper/processfactory.hxx,comphelper/processfactory.hxx))
 $(eval $(call gb_Package_add_file,comphelper_inc,inc/comphelper/sequenceashashmap.hxx,comphelper/sequenceashashmap.hxx))
 $(eval $(call gb_Package_add_file,comphelper_inc,inc/comphelper/configurationhelper.hxx,comphelper/configurationhelper.hxx))
+
+# vim: set noet sw=4 ts=4:

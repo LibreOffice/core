@@ -1,3 +1,4 @@
+# -*- Mode: makefile; tab-width: 4; indent-tabs-mode: t -*-
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -192,3 +193,5 @@ $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/wizdlg.hxx,svtools/wiz
 $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/wmf.hxx,svtools/wmf.hxx))
 $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/xtextedt.hxx,svtools/xtextedt.hxx))
 $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/xwindowitem.hxx,svtools/xwindowitem.hxx))
+
+# vim: set noet sw=4 ts=4:

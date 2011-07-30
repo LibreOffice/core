@@ -1,3 +1,4 @@
+# -*- Mode: makefile; tab-width: 4; indent-tabs-mode: t -*-
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -121,3 +122,5 @@ $(eval $(call gb_WinResTarget_add_dependency,vcl/src,\
     vcl/win/source/src/movebw.cur \
     vcl/win/source/src/refhand.cur \
 ))
+
+# vim: set noet sw=4 ts=4:

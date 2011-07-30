@@ -1,3 +1,4 @@
+# -*- Mode: makefile; tab-width: 4; indent-tabs-mode: t -*-
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -64,3 +65,5 @@ $(eval $(call gb_Package_add_file,toolkit_inc,inc/toolkit/helper/unopropertyarra
 $(eval $(call gb_Package_add_file,toolkit_inc,inc/toolkit/helper/unowrapper.hxx,toolkit/helper/unowrapper.hxx))
 $(eval $(call gb_Package_add_file,toolkit_inc,inc/toolkit/helper/vclunohelper.hxx,toolkit/helper/vclunohelper.hxx))
 $(eval $(call gb_Package_add_file,toolkit_inc,inc/toolkit/unohlp.hxx,toolkit/helper/vclunohelper.hxx))
+
+# vim: set noet sw=4 ts=4:

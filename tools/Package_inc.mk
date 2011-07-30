@@ -1,3 +1,4 @@
+# -*- Mode: makefile; tab-width: 4; indent-tabs-mode: t -*-
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -101,3 +102,5 @@ $(eval $(call gb_Package_add_file,tools_inc,inc/tools/weakbase.hxx,tools/weakbas
 $(eval $(call gb_Package_add_file,tools_inc,inc/tools/wintypes.hxx,tools/wintypes.hxx))
 $(eval $(call gb_Package_add_file,tools_inc,inc/tools/wldcrd.hxx,tools/wldcrd.hxx))
 $(eval $(call gb_Package_add_file,tools_inc,inc/tools/zcodec.hxx,tools/zcodec.hxx))
+
+# vim: set noet sw=4 ts=4:

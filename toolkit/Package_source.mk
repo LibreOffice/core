@@ -1,3 +1,4 @@
+# -*- Mode: makefile; tab-width: 4; indent-tabs-mode: t -*-
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -45,3 +46,5 @@ $(eval $(call gb_Package_add_file,toolkit_source,inc/layout/core/translate.hxx,l
 $(eval $(call gb_Package_add_file,toolkit_source,inc/layout/core/vcl.hxx,layout/core/vcl.hxx))
 $(eval $(call gb_Package_add_file,toolkit_source,inc/layout/vcl/wrapper.hxx,layout/vcl/wrapper.hxx))
 $(eval $(call gb_Package_add_file,toolkit_source,inc/toolkit/awt/vclxdialog.hxx,awt/vclxdialog.hxx))
+
+# vim: set noet sw=4 ts=4:

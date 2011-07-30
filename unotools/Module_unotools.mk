@@ -1,3 +1,4 @@
+# -*- Mode: makefile; tab-width: 4; indent-tabs-mode: t -*-
 # Version: MPL 1.1 / GPLv3+ / LGPLv3+
 #
 # OpenOffice.org - a multi-platform office productivity suite
@@ -33,4 +34,4 @@ $(eval $(call gb_Module_add_subsequentcheck_targets,unotools,\
     JunitTest_unotools_complex \
 ))
 
-# vim: set noet ts=4 sw=4:
+# vim: set noet sw=4 ts=4:

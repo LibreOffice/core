@@ -1,3 +1,4 @@
+# -*- Mode: makefile; tab-width: 4; indent-tabs-mode: t -*-
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -39,3 +40,5 @@ $(eval $(call gb_Package_add_file,sot_inc,inc/sot/sotref.hxx,sot/sotref.hxx))
 $(eval $(call gb_Package_add_file,sot_inc,inc/sot/stg.hxx,sot/stg.hxx))
 $(eval $(call gb_Package_add_file,sot_inc,inc/sot/storage.hxx,sot/storage.hxx))
 $(eval $(call gb_Package_add_file,sot_inc,inc/sot/storinfo.hxx,sot/storinfo.hxx))
+
+# vim: set noet sw=4 ts=4:

@@ -1,3 +1,4 @@
+# -*- Mode: makefile; tab-width: 4; indent-tabs-mode: t -*-
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,3 +29,4 @@
 $(eval $(call gb_Package_Package,padmin_src,$(SRCDIR)/padmin/source))
 $(eval $(call gb_Package_add_file,padmin_src,bin/spadmin,spadmin.sh))
 
+# vim: set noet sw=4 ts=4:
