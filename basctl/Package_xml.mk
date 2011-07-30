@@ -1,3 +1,4 @@
+# -*- Mode: makefile; tab-width: 4; indent-tabs-mode: t -*-
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -38,4 +39,4 @@ $(eval $(call gb_Package_add_file,basctl_xml,xml/uiconfig/modules/BasicIDE/toolb
 $(eval $(call gb_Package_add_file,basctl_xml,xml/uiconfig/modules/BasicIDE/toolbar/standardbar.xml,uiconfig/basicide/toolbar/standardbar.xml))
 $(eval $(call gb_Package_add_file,basctl_xml,xml/uiconfig/modules/BasicIDE/toolbar/translationbar.xml,uiconfig/basicide/toolbar/translationbar.xml))
 
-# vim: set noet sw=4:
+# vim: set noet sw=4 ts=4:
