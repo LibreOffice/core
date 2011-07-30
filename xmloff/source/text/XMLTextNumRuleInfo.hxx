@@ -159,6 +159,7 @@ inline XMLTextNumRuleInfo& XMLTextNumRuleInfo::operator=(
     msListId = rInfo.msListId;
     mnListStartValue = rInfo.mnListStartValue;
     mnListLevel = rInfo.mnListLevel;
+    mnListLevelStartValue = rInfo.mnListLevelStartValue;
     mbIsNumbered = rInfo.mbIsNumbered;
     mbIsRestart = rInfo.mbIsRestart;
     // Written OpenDocument file format doesn't fit to the created text document (#i69627#)

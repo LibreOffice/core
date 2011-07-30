@@ -196,7 +196,7 @@ void XMLIndexMarkExport::ExportTOCMarkAttributes(
 
 void lcl_ExportPropertyString( SvXMLExport& rExport,
                                const Reference<XPropertySet> & rPropSet,
-                               const OUString sProperty,
+                               const OUString & sProperty,
                                XMLTokenEnum eToken,
                                Any& rAny )
 {
@@ -214,7 +214,7 @@ void lcl_ExportPropertyString( SvXMLExport& rExport,
 
 void lcl_ExportPropertyBool( SvXMLExport& rExport,
                              const Reference<XPropertySet> & rPropSet,
-                             const OUString sProperty,
+                             const OUString & sProperty,
                              XMLTokenEnum eToken,
                              Any& rAny )
 {

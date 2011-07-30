@@ -222,11 +222,11 @@ sal_Int32 XMLPropertySetMapper::FindEntryIndex(
 
 sal_Int32 XMLPropertySetMapper::FindEntryIndex( const sal_Int16 nContextId ) const
 {
-    sal_Int32 nIndex = 0;
     const sal_Int32 nEntries = GetEntryCount();
 
     if ( nEntries )
     {
+        sal_Int32 nIndex = 0;
         do
         {
             const XMLPropertySetMapperEntry_Impl& rEntry = aMapEntries[nIndex];

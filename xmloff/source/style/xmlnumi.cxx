@@ -858,7 +858,7 @@ SvxXMLListLevelStyleAttrContext_Impl::SvxXMLListLevelStyleAttrContext_Impl(
                 OUString sTmp;
                 sal_Int16 nTmp = 0;
                 ::std::vector< XMLPropertyState >::iterator i;
-                for( i = aProps.begin(); i != aProps.end(); i++ )
+                for( i = aProps.begin(); i != aProps.end(); ++i )
                 {
                     switch( i->mnIndex )
                     {

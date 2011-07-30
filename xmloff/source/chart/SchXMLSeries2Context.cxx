@@ -131,10 +131,10 @@ void lcl_setAutomaticSymbolSize( const uno::Reference< beans::XPropertySet >& xS
 {
     awt::Size aSymbolSize(140,140);//old default for standard sized charts 7cm height
 
-    double fScale = 1;
     uno::Reference< chart::XChartDocument > xChartDoc( rImport.GetModel(), uno::UNO_QUERY );
     if( xChartDoc.is() )
     {
+        double fScale = 1;
         uno::Reference< beans::XPropertySet > xLegendProp( xChartDoc->getLegend(), uno::UNO_QUERY );
         chart::ChartLegendPosition aLegendPosition = chart::ChartLegendPosition_NONE;
         if( xLegendProp.is() && (xLegendProp->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "Alignment" ))) >>= aLegendPosition)
@@ -705,7 +705,7 @@ void SchXMLSeries2Context::initSeriesPropertySets( SeriesDefaultsAndStyles& rSer
     // iterate over series first and remind propertysets in map
     // new api <-> old api wrapper
     ::std::map< Reference< chart2::XDataSeries >, Reference< beans::XPropertySet > > aSeriesMap;
-    for( iStyle = rSeriesDefaultsAndStyles.maSeriesStyleList.begin(); iStyle != rSeriesDefaultsAndStyles.maSeriesStyleList.end(); iStyle++ )
+    for( iStyle = rSeriesDefaultsAndStyles.maSeriesStyleList.begin(); iStyle != rSeriesDefaultsAndStyles.maSeriesStyleList.end(); ++iStyle )
     {
         if( iStyle->meType != DataRowPointStyle::DATA_SERIES )
             continue;
@@ -718,7 +718,7 @@ void SchXMLSeries2Context::initSeriesPropertySets( SeriesDefaultsAndStyles& rSer
     }
 
     //initialize m_xOldAPISeries for all other styles also
-    for( iStyle = rSeriesDefaultsAndStyles.maSeriesStyleList.begin(); iStyle != rSeriesDefaultsAndStyles.maSeriesStyleList.end(); iStyle++ )
+    for( iStyle = rSeriesDefaultsAndStyles.maSeriesStyleList.begin(); iStyle != rSeriesDefaultsAndStyles.maSeriesStyleList.end(); ++iStyle )
     {
         if( iStyle->meType == DataRowPointStyle::DATA_SERIES )
             continue;
@@ -733,7 +733,7 @@ void SchXMLSeries2Context::setDefaultsToSeries( SeriesDefaultsAndStyles& rSeries
     // iterate over series
     // call initSeriesPropertySets first
 
-    for( iStyle = rSeriesDefaultsAndStyles.maSeriesStyleList.begin(); iStyle != rSeriesDefaultsAndStyles.maSeriesStyleList.end(); iStyle++ )
+    for( iStyle = rSeriesDefaultsAndStyles.maSeriesStyleList.begin(); iStyle != rSeriesDefaultsAndStyles.maSeriesStyleList.end(); ++iStyle )
     {
         if( iStyle->meType != DataRowPointStyle::DATA_SERIES )
             continue;
@@ -787,7 +787,7 @@ void SchXMLSeries2Context::setStylesToSeries( SeriesDefaultsAndStyles& rSeriesDe
     ::std::list< DataRowPointStyle >::iterator iStyle;
 
     // iterate over series
-    for( iStyle = rSeriesDefaultsAndStyles.maSeriesStyleList.begin(); iStyle != rSeriesDefaultsAndStyles.maSeriesStyleList.end(); iStyle++ )
+    for( iStyle = rSeriesDefaultsAndStyles.maSeriesStyleList.begin(); iStyle != rSeriesDefaultsAndStyles.maSeriesStyleList.end(); ++iStyle )
     {
         if( iStyle->meType == DataRowPointStyle::DATA_SERIES )
         {
@@ -876,7 +876,7 @@ void SchXMLSeries2Context::setStylesToStatisticsObjects( SeriesDefaultsAndStyles
     ::std::list< DataRowPointStyle >::iterator iStyle;
 
     // iterate over regession etc
-    for( iStyle = rSeriesDefaultsAndStyles.maSeriesStyleList.begin(); iStyle != rSeriesDefaultsAndStyles.maSeriesStyleList.end(); iStyle++ )
+    for( iStyle = rSeriesDefaultsAndStyles.maSeriesStyleList.begin(); iStyle != rSeriesDefaultsAndStyles.maSeriesStyleList.end(); ++iStyle )
     {
         if( iStyle->meType == DataRowPointStyle::REGRESSION ||
             iStyle->meType == DataRowPointStyle::ERROR_INDICATOR ||
@@ -961,7 +961,7 @@ void SchXMLSeries2Context::setStylesToDataPoints( SeriesDefaultsAndStyles& rSeri
         , bool bIsStockChart, bool bIsDonutChart, bool bSwitchOffLinesForScatter )
 {
     ::std::list< DataRowPointStyle >::iterator iStyle;
-    for( iStyle = rSeriesDefaultsAndStyles.maSeriesStyleList.begin(); iStyle != rSeriesDefaultsAndStyles.maSeriesStyleList.end(); iStyle++ )
+    for( iStyle = rSeriesDefaultsAndStyles.maSeriesStyleList.begin(); iStyle != rSeriesDefaultsAndStyles.maSeriesStyleList.end(); ++iStyle )
     {
         if( iStyle->meType != DataRowPointStyle::DATA_POINT )
             continue;
@@ -1056,7 +1056,7 @@ void SchXMLSeries2Context::switchSeriesLinesOff( ::std::list< DataRowPointStyle 
     ::std::list< DataRowPointStyle >::iterator iStyle;
     // iterate over series
 
-    for( iStyle = rSeriesStyleList.begin(); iStyle != rSeriesStyleList.end(); iStyle++ )
+    for( iStyle = rSeriesStyleList.begin(); iStyle != rSeriesStyleList.end(); ++iStyle )
     {
         if( iStyle->meType != DataRowPointStyle::DATA_SERIES )
             continue;

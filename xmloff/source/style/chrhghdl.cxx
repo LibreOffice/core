@@ -58,10 +58,9 @@ XMLCharHeightHdl::~XMLCharHeightHdl()
 
 sal_Bool XMLCharHeightHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& ) const
 {
-    double fSize;
-
     if( rStrImpValue.indexOf( sal_Unicode('%') ) == -1 )
     {
+        double fSize;
         MapUnit eSrcUnit = SvXMLExportHelper::GetUnitFromString( rStrImpValue, MAP_POINT );
         if( SvXMLUnitConverter::convertDouble( fSize, rStrImpValue, eSrcUnit, MAP_POINT ))
         {
@@ -101,10 +100,9 @@ XMLCharHeightPropHdl::~XMLCharHeightPropHdl()
 
 sal_Bool XMLCharHeightPropHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& ) const
 {
-    sal_Int32 nPrc = 100;
-
     if( rStrImpValue.indexOf( sal_Unicode('%') ) != -1 )
     {
+        sal_Int32 nPrc = 100;
         if( SvXMLUnitConverter::convertPercent( nPrc, rStrImpValue ) )
         {
             rValue <<= (sal_Int16)nPrc;

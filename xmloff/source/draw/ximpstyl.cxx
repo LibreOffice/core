@@ -227,7 +227,7 @@ void SdXMLDrawingPageStyleContext::Finish( sal_Bool bOverwrite )
     const UniReference< XMLPropertySetMapper >& rImpPrMap = GetStyles()->GetImportPropertyMapper( GetFamily() )->getPropertySetMapper();
 
     ::std::vector< XMLPropertyState >::iterator property = rProperties.begin();
-    for(; property != rProperties.end(); property++)
+    for(; property != rProperties.end(); ++property)
     {
         if( property->mnIndex == -1 )
             continue;

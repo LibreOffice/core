@@ -2617,7 +2617,7 @@ SvI18NMap& XMLTextImportHelper::GetRenameMap()
 }
 
 void XMLTextImportHelper::InsertBookmarkStartRange(
-    const OUString sName,
+    const OUString & sName,
     const Reference<XTextRange> & rRange,
     OUString const& i_rXmlId,
     ::boost::shared_ptr< ::xmloff::ParsedRDFaAttributes > & i_rpRDFaAttributes)
@@ -2628,7 +2628,7 @@ void XMLTextImportHelper::InsertBookmarkStartRange(
 }
 
 sal_Bool XMLTextImportHelper::FindAndRemoveBookmarkStartRange(
-    const OUString sName,
+    const OUString & sName,
     Reference<XTextRange> & o_rRange,
     OUString & o_rXmlId,
     ::boost::shared_ptr< ::xmloff::ParsedRDFaAttributes > & o_rpRDFaAttributes)

@@ -154,7 +154,7 @@ void XMLShapeStyleContext::FillPropertySet( const Reference< beans::XPropertySet
 
         // first, look for the old format, where we had a text:list-style-name
         // attribute in the style:properties element
-        for( property = rProperties.begin(); property != end; property++ )
+        for( property = rProperties.begin(); property != end; ++property )
         {
             // find properties with context
             if( (property->mnIndex != -1) && (rMapper->GetEntryContextId( property->mnIndex ) == CTF_SD_NUMBERINGRULES_NAME) )

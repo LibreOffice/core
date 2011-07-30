@@ -63,7 +63,7 @@ void SchXMLAutoStylePoolP::exportStyleAttributes(
     if( nFamily == XML_STYLE_FAMILY_SCH_CHART_ID )
     {
         for( ::std::vector< XMLPropertyState >::const_iterator iter = rProperties.begin();
-             (iter != rProperties.end()); iter++ )
+             (iter != rProperties.end()); ++iter )
         {
             if( iter->mnIndex == -1 )
                 continue;

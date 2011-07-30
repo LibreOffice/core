@@ -246,10 +246,10 @@ const ::rtl::OUString& XMLTextListsHelper::GetListStyleOfLastProcessedList() con
     // Value of xml:id in element <text:list> has to be a valid ID type (#i92478#)
     sTmpStr += ::rtl::OUString::valueOf( n );
 
-    long nHitCount = 0;
     ::rtl::OUString sNewListId( sTmpStr );
     if ( mpProcessedLists != 0 )
     {
+        long nHitCount = 0;
         while ( mpProcessedLists->find( sNewListId ) != mpProcessedLists->end() )
         {
             ++nHitCount;

@@ -413,7 +413,7 @@ public:
           _aId( id )
         { OSL_ASSERT( _xControlModel.is() ); }
 
-    inline css::uno::Reference< css::beans::XPropertySet > getControlModel()
+    inline css::uno::Reference< css::beans::XPropertySet > getControlModel() const
         { return _xControlModel; }
 
     void importDefaults(
