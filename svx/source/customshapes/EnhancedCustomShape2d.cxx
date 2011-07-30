@@ -2103,7 +2103,7 @@ SdrObject* EnhancedCustomShape2d::CreatePathObj( sal_Bool bLineGeometryNeededOnl
     }
 
     // #i37011#
-    if(vObjectList.size())
+    if(!vObjectList.empty())
     {
         // copy remaining objects to pRet
         if(vObjectList.size() > 1L)

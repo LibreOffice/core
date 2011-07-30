@@ -329,7 +329,7 @@ Reference< XFormController >  FormViewPageWindowAdapter::getController( const Re
 {
     Reference< XTabControllerModel >  xModel(xForm, UNO_QUERY);
     for (::std::vector< Reference< XFormController > >::const_iterator i = m_aControllerList.begin();
-         i != m_aControllerList.end(); i++)
+         i != m_aControllerList.end(); ++i)
     {
         if ((XTabControllerModel*)(*i)->getModel().get() == (XTabControllerModel*)xModel.get())
             return *i;

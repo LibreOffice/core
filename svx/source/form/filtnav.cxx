@@ -161,7 +161,7 @@ TYPEINIT1(FmParentData, FmFilterData);
 FmParentData::~FmParentData()
 {
     for (::std::vector<FmFilterData*>::const_iterator i = m_aChildren.begin();
-         i != m_aChildren.end(); i++)
+         i != m_aChildren.end(); ++i)
         delete (*i);
 }
 
@@ -588,7 +588,7 @@ void FmFilterModel::Clear()
     m_xControllers   = NULL;
 
     for (::std::vector<FmFilterData*>::const_iterator i = m_aChildren.begin();
-         i != m_aChildren.end(); i++)
+         i != m_aChildren.end(); ++i)
         delete (*i);
 
     m_aChildren.clear();
@@ -700,7 +700,7 @@ void FmFilterModel::Update(const Reference< XIndexAccess > & xControllers, FmPar
 FmFormItem* FmFilterModel::Find(const ::std::vector<FmFilterData*>& rItems, const Reference< XFormController > & xController) const
 {
     for (::std::vector<FmFilterData*>::const_iterator i = rItems.begin();
-         i != rItems.end(); i++)
+         i != rItems.end(); ++i)
     {
         FmFormItem* pForm = PTR_CAST(FmFormItem,*i);
         if (pForm)
@@ -722,7 +722,7 @@ FmFormItem* FmFilterModel::Find(const ::std::vector<FmFilterData*>& rItems, cons
 FmFormItem* FmFilterModel::Find(const ::std::vector<FmFilterData*>& rItems, const Reference< XForm >& xForm) const
 {
     for (::std::vector<FmFilterData*>::const_iterator i = rItems.begin();
-         i != rItems.end(); i++)
+         i != rItems.end(); ++i)
     {
         FmFormItem* pForm = PTR_CAST(FmFormItem,*i);
         if (pForm)
@@ -1903,7 +1903,7 @@ void FmFilterNavigator::DeleteSelection()
 
     for (::std::vector<SvLBoxEntry*>::reverse_iterator i = aEntryList.rbegin();
         // link problems with operator ==
-        i.base() != aEntryList.rend().base(); i++)
+        i.base() != aEntryList.rend().base(); ++i)
     {
         m_pModel->Remove((FmFilterData*)(*i)->GetUserData());
     }

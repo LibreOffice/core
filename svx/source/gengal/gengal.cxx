@@ -144,7 +144,7 @@ static void createTheme( rtl::OUString aThemeName,
 
     FileNameList::const_iterator aIter;
 
-    for( aIter = rFiles.begin(); aIter != rFiles.end(); aIter++ )
+    for( aIter = rFiles.begin(); aIter != rFiles.end(); ++aIter )
     {
 //  Should/could use:
 //  if ( ! pGalTheme->InsertFileOrDirURL( aURL ) ) {

@@ -662,7 +662,7 @@ void FitTextOutlinesToShapeOutlines( const PolyPolygon& aOutlines2d, FWData& rFW
                 std::vector< double > vDistances;
                 vDistances.reserve( nPointCount );
                 CalcDistances( rOutlinePoly, vDistances );
-                if ( vDistances.size() )
+                if ( !vDistances.empty() )
                 {
                     std::vector< FWParagraphData >::iterator aParagraphIter( aTextAreaIter->vParagraphs.begin() );
                     std::vector< FWParagraphData >::iterator aParagraphIEnd( aTextAreaIter->vParagraphs.end() );
@@ -793,7 +793,7 @@ void FitTextOutlinesToShapeOutlines( const PolyPolygon& aOutlines2d, FWData& rFW
 SdrObject* CreateSdrObjectFromParagraphOutlines( const FWData& rFWData, const SdrObject* pCustomShape )
 {
     SdrObject* pRet = NULL;
-    if ( rFWData.vTextAreas.size() )
+    if ( !rFWData.vTextAreas.empty() )
     {
         pRet = new SdrObjGroup();
         std::vector< FWTextArea >::const_iterator aTextAreaIter = rFWData.vTextAreas.begin();

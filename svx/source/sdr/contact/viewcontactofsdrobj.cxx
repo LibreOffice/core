@@ -174,7 +174,7 @@ namespace sdr
                         aGluepointVector.push_back(basegfx::B2DPoint(aPosition.X(), aPosition.Y()));
                     }
 
-                    if(aGluepointVector.size())
+                    if(!aGluepointVector.empty())
                     {
                         const basegfx::BColor aBackPen(1.0, 1.0, 1.0);
                         const basegfx::BColor aRGBFrontColor(0.0, 0.0, 1.0); // COL_LIGHTBLUE

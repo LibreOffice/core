@@ -3153,7 +3153,7 @@ void FormController::setFilter(::std::vector<FmFieldInfo>& rFieldInfos)
             Reference< XColumnsSupplier >( m_xComposer, UNO_QUERY_THROW )->getColumns();
 
         for (::std::vector<FmFieldInfo>::iterator iter = rFieldInfos.begin();
-            iter != rFieldInfos.end(); iter++)
+            iter != rFieldInfos.end(); ++iter)
         {
             if ( xQueryColumns->hasByName((*iter).aFieldName) )
             {
@@ -3229,7 +3229,7 @@ void FormController::setFilter(::std::vector<FmFieldInfo>& rFieldInfos)
 
                 // find the text component
                 for (::std::vector<FmFieldInfo>::iterator iter = rFieldInfos.begin();
-                    iter != rFieldInfos.end(); iter++)
+                    iter != rFieldInfos.end(); ++iter)
                 {
                     // we found the field so insert a new entry to the filter row
                     if ((*iter).xField == xField)

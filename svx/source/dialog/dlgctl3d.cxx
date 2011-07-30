@@ -511,7 +511,7 @@ void Svx3DLightControl::TrySelection(Point aPosPixel)
         std::vector< const E3dCompoundObject* > aResult;
         getAllHit3DObjectsSortedFrontToBack(aPoint, *mpScene, aResult);
 
-        if(aResult.size())
+        if(!aResult.empty())
         {
             // exclude expansion object which will be part of
             // the hits. It's invisible, but for HitTest, it's included
