@@ -1,3 +1,4 @@
+# -*- Mode: makefile; tab-width: 4; indent-tabs-mode: t -*-
 #*************************************************************************
 # Version: MPL 1.1 / GPLv3+ / LGPLv3+
 #
@@ -80,4 +81,4 @@ $(eval $(call gb_RdbTarget_add_components,lotuswordpro_test_lotuswordpro,\
 # by a link relation
 $(call gb_CppunitTest_get_target,lotuswordpro_test_lotuswordpro) : $(call gb_Library_get_target,lwpft)
 
-# vim: set noet sw=4:
+# vim: set noet sw=4 ts=4:

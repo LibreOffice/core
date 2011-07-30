@@ -1,3 +1,4 @@
+# -*- Mode: makefile; tab-width: 4; indent-tabs-mode: t -*-
 # Version: MPL 1.1 / GPLv3+ / LGPLv3+
 #
 # The contents of this file are subject to the Mozilla Public License Version
@@ -35,4 +36,4 @@ $(eval $(call gb_Module_add_check_targets,lotuswordpro,\
     CppunitTest_lotuswordpro_test_lotuswordpro \
 ))
 
-# vim: set noet ts=4 sw=4:
+# vim: set noet sw=4 ts=4:
