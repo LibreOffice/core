@@ -6,8 +6,7 @@ from common.Properties import Properties
 from ui.event.CommonListener import FocusListenerProcAdapter, KeyListenerProcAdapter
 
 from com.sun.star.awt.Key import DOWN, UP, TAB
-
-import inspect
+from com.sun.star.awt.KeyModifier import SHIFT, MOD1
 
 '''
 @author rpiterman
@@ -454,7 +453,7 @@ class TopicsControl(ControlScroller):
     def firstControlKeyPressed(self, event):
         # if tab with shift was pressed...
         if (event.KeyCode == TAB) and \
-                (event.Modifiers == KeyModifier.SHIFT):
+                (event.Modifiers == SHIFT):
             if TopicsControl.nscrollvalue > 0:
                 setScrollValue(TopicsControl.nscrollvalue - 1)
                 focus(self.lastTime)
@@ -464,6 +463,7 @@ class TopicsControl(ControlScroller):
     @param textControl
     '''
 
+    @classmethod
     def focus(self, textControl):
         textControl.setFocus()
         text = textControl.Text
@@ -534,6 +534,7 @@ class TopicsControl(ControlScroller):
     @param control
     '''
 
+    @classmethod
     @synchronized(lock)
     def cursorUp(self, guiRow, control):
         # is this the last full row ?
@@ -550,7 +551,7 @@ class TopicsControl(ControlScroller):
         else:
             upperRow = self.ControlGroupVector[guiRow - 1]
 
-        focus(getControl(upperRow, control))
+        self.focus(self.getControl(upperRow, control))
 
     '''
     moves the cursor down
@@ -558,6 +559,7 @@ class TopicsControl(ControlScroller):
     @param control
     '''
 
+    @classmethod
     @synchronized(lock)
     def cursorDown(self, guiRow, control):
         # is this the last full row ?
@@ -576,7 +578,7 @@ class TopicsControl(ControlScroller):
             #otherwise..
             lowerRow = self.ControlGroupVector[guiRow + 1]
 
-        focus(getControl(lowerRow, control))
+        self.focus(self.getControl(lowerRow, control))
 
     '''
     changes the values of the given rows with eachother
@@ -647,6 +649,7 @@ class TopicsControl(ControlScroller):
     @return the control...
     '''
 
+    @classmethod
     def getControlByIndex(self, cr, column):
         tmp_switch_var1 = column
         if tmp_switch_var1 == 0:
@@ -668,6 +671,7 @@ class TopicsControl(ControlScroller):
     @return
     '''
 
+    @classmethod
     def getControl(self, cr, control):
         column = self.getColumn(control)
         return self.getControlByIndex(cr, column)
@@ -678,6 +682,7 @@ class TopicsControl(ControlScroller):
     @return
     '''
 
+    @classmethod
     def getColumn(self, control):
         name = Helper.getUnoPropertyValue(
             control.Model, PropertyNames.PROPERTY_NAME)
@@ -855,23 +860,23 @@ class ControlRow(object):
     def keyPressed(self, event):
         try:
             if self.isMoveDown(event):
-                self.rowDown(self.offset, event.Source)
+                TopicsControl.rowDown(self.offset, event.Source)
             elif self.isMoveUp(event):
-                self.rowUp(self.offset, event.Source)
+                TopicsControl.rowUp(self.offset, event.Source)
             elif self.isDown(event):
-                self.cursorDown(self.offset, event.Source)
+                TopicsControl.cursorDown(self.offset, event.Source)
             elif self.isUp(event):
-                self.cursorUp(self.offset, event.Source)
+                TopicsControl.cursorUp(self.offset, event.Source)
 
             TopicsControl.enableButtons()
         except Exception:
             traceback.print_exc()
 
     def isMoveDown(self, e):
-        return (e.KeyCode == DOWN) and (e.Modifiers == KeyModifier.MOD1)
+        return (e.KeyCode == DOWN) and (e.Modifiers == MOD1)
 
     def isMoveUp(self, e):
-        return (e.KeyCode == UP) and (e.Modifiers == KeyModifier.MOD1)
+        return (e.KeyCode == UP) and (e.Modifiers == MOD1)
 
     def isDown(self, e):
         return (e.KeyCode == DOWN) and (e.Modifiers == 0)
