@@ -239,7 +239,7 @@ bool SbxDecimal::setString( ::rtl::OUString* pOUString )
             i++;
         }
         hResult = VarDecFromStr( (OLECHAR*)pBuffer, nLANGID, 0, &maDec );
-        delete pBuffer;
+        delete pBuffer[];
     }
     else
     {

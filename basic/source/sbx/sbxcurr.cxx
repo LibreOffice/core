@@ -529,7 +529,6 @@ start:
                 SbxBase::SetError( SbxERR_OVERFLOW ); val = 0;
             }
             *p->pULong = (sal_uInt32) val; break;
-            break;
         }
         case SbxBYREF | SbxCURRENCY:
             *p->pnInt64 = r; break;

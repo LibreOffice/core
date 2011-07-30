@@ -576,7 +576,7 @@ sal_Bool DispatchWatcher::executeDispatchRequests( const DispatchList& aDispatch
         }
     }
 
-    if ( aDispatches.size() > 0 )
+    if ( !aDispatches.empty() )
     {
         // Execute all asynchronous dispatches now after we placed them into our request container!
         Sequence < PropertyValue > aArgs( 2 );

@@ -1105,7 +1105,7 @@ void UpdateDialog::getIgnoredUpdates()
 //------------------------------------------------------------------------------
 void UpdateDialog::storeIgnoredUpdates()
 {
-    if ( m_bModified && ( m_ignoredUpdates.size() != 0 ) )
+    if ( m_bModified && ( !m_ignoredUpdates.empty() ) )
     {
         uno::Reference< lang::XMultiServiceFactory > xConfig( m_context->getServiceManager()->createInstanceWithContext(
             OUSTR("com.sun.star.configuration.ConfigurationProvider"), m_context ), uno::UNO_QUERY_THROW );
@@ -1146,7 +1146,7 @@ bool UpdateDialog::isIgnoredUpdate( UpdateDialog::Index * index )
 {
     bool bIsIgnored = false;
 
-    if ( m_ignoredUpdates.size() != 0 )
+    if (! m_ignoredUpdates.empty() )
     {
         rtl::OUString aExtensionID;
         rtl::OUString aVersion;

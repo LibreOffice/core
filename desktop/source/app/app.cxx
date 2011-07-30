@@ -1690,7 +1690,7 @@ int Desktop::Main()
         std::vector< String > aUnrestrictedFolders;
         svt::getUnrestrictedFolders( aUnrestrictedFolders );
 
-        if ( aUnrestrictedFolders.size() > 0 )
+        if ( !aUnrestrictedFolders.empty() )
         {
             // Set different working directory. The first entry is
             // the new work path.

@@ -3947,7 +3947,7 @@ RTLFUNC(StrConv)
         sal_Char* pChar = new sal_Char[nSize+1];
         for( sal_uInt16 i=0; i < nSize; i++ )
         {
-            pChar[i] = static_cast< sal_Char >( i%2 ? ((*pSrc) >> 8) & 0xff : (*pSrc) & 0xff );
+            pChar[i] = static_cast< sal_Char >( (i%2) ? ((*pSrc) >> 8) & 0xff : (*pSrc) & 0xff );
             if( i%2 )
                 pSrc++;
         }

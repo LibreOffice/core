@@ -278,7 +278,7 @@ SbxArray* StringToByteArray(const ::rtl::OUString& rStr)
     for( sal_uInt16 i=0; i< nArraySize; i++)
     {
         SbxVariable* pNew = new SbxVariable( SbxBYTE );
-        sal_uInt8 aByte = static_cast< sal_uInt8 >( i%2 ? ((*pSrc) >> 8) & 0xff : (*pSrc) & 0xff );
+        sal_uInt8 aByte = static_cast< sal_uInt8 >( (i%2) ? ((*pSrc) >> 8) & 0xff : (*pSrc) & 0xff );
         pNew->PutByte( aByte );
         pNew->SetFlag( SBX_WRITE );
         pArray->Put( pNew, i );
