@@ -65,6 +65,7 @@ class HttpRequest
     void Init();
 public:
     HttpRequest();
+    ~HttpRequest();
 
     void SetRequest( rtl::OString aHost, rtl::OString aPath, sal_uInt16 nPort );
     void SetProxy( rtl::OString aHost, sal_uInt16 nPort );

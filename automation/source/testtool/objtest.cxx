@@ -740,6 +740,7 @@ TestToolObj::~TestToolObj()
     if ( pImpl->pTTSfxBroadcaster )
         delete pImpl->pTTSfxBroadcaster;
     delete pImpl->pChildEnv;
+    delete pImpl->pHttpRequest;
 
     pImpl->xErrorList.Clear();
     pImpl->xWarningList.Clear();

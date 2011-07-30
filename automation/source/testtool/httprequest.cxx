@@ -50,6 +50,15 @@ HttpRequest::HttpRequest()
 {
 }
 
+HttpRequest::~HttpRequest()
+{
+    delete pStream;
+    pStream = NULL;
+
+    delete pOutSocket;
+    pOutSocket = NULL;
+}
+
 void HttpRequest::SetRequest( rtl::OString aHost, rtl::OString aPath, sal_uInt16 nPort )
 {
     nStatus = HTTP_REQUEST_SET;
