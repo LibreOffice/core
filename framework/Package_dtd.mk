@@ -1,3 +1,4 @@
+# -*- Mode: makefile; tab-width: 4; indent-tabs-mode: t -*-
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -33,3 +34,5 @@ $(eval $(call gb_Package_add_file,framework_dtd,bin/image.dtd,image.dtd))
 $(eval $(call gb_Package_add_file,framework_dtd,bin/menubar.dtd,menubar.dtd))
 $(eval $(call gb_Package_add_file,framework_dtd,bin/statusbar.dtd,statusbar.dtd))
 $(eval $(call gb_Package_add_file,framework_dtd,bin/toolbar.dtd,toolbar.dtd))
+
+# vim: set noet sw=4 ts=4:

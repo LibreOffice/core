@@ -1,3 +1,4 @@
+# -*- Mode: makefile; tab-width: 4; indent-tabs-mode: t -*-
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -64,4 +65,4 @@ $(eval $(call gb_Package_add_file,basic_inc,inc/basic/ttmsg.hrc,basic/ttmsg.hrc)
 $(eval $(call gb_Package_add_file,basic_inc,inc/basic/ttstrhlp.hxx,basic/ttstrhlp.hxx))
 $(eval $(call gb_Package_add_file,basic_inc,inc/basic/vbahelper.hxx,basic/vbahelper.hxx))
 
-# vim: set noet sw=4:
+# vim: set noet sw=4 ts=4:

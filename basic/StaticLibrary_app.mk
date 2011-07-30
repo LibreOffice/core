@@ -1,3 +1,4 @@
+# -*- Mode: makefile; tab-width: 4; indent-tabs-mode: t -*-
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -61,4 +62,4 @@ $(eval $(call gb_StaticLibrary_add_exception_objects,app,\
 	basic/source/app/textedit \
 ))
 
-# vim: set noet sw=4:
+# vim: set noet sw=4 ts=4:

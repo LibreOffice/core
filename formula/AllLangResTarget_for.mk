@@ -1,3 +1,4 @@
+# -*- Mode: makefile; tab-width: 4; indent-tabs-mode: t -*-
 # Version: MPL 1.1 / GPLv3+ / LGPLv3+
 #
 # The contents of this file are subject to the Mozilla Public License Version
@@ -45,4 +46,4 @@ $(eval $(call gb_SrsTarget_add_files,formula/res,\
     formula/source/core/resource/core_resource.src \
 ))
 
-# vim: set noet ts=4 sw=4:
+# vim: set noet sw=4 ts=4:

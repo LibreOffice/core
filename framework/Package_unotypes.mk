@@ -1,3 +1,4 @@
+# -*- Mode: makefile; tab-width: 4; indent-tabs-mode: t -*-
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,3 +29,5 @@
 $(eval $(call gb_Package_Package,framework_unotypes,$(SRCDIR)/framework/source/unotypes))
 $(eval $(call gb_Package_add_file,framework_unotypes,xml/fwk.xml,fwk.xml))
 $(eval $(call gb_Package_add_file,framework_unotypes,xml/fwl.xml,fwl.xml))
+
+# vim: set noet sw=4 ts=4:

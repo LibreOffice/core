@@ -1,3 +1,4 @@
+# -*- Mode: makefile; tab-width: 4; indent-tabs-mode: t -*-
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,3 +30,5 @@ $(eval $(call gb_Package_Package,framework_uiconfig,$(SRCDIR)/framework/uiconfig
 $(eval $(call gb_Package_add_file,framework_uiconfig,xml/uiconfig/modules/StartModule/menubar/menubar.xml,startmodule/menubar/menubar.xml))
 $(eval $(call gb_Package_add_file,framework_uiconfig,xml/uiconfig/modules/StartModule/statusbar/statusbar.xml,startmodule/statusbar/statusbar.xml))
 $(eval $(call gb_Package_add_file,framework_uiconfig,xml/uiconfig/modules/StartModule/toolbar/standardbar.xml,startmodule/toolbar/standardbar.xml))
+
+# vim: set noet sw=4 ts=4:

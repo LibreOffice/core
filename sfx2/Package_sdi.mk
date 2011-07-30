@@ -1,3 +1,4 @@
+# -*- Mode: makefile; tab-width: 4; indent-tabs-mode: t -*-
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -28,3 +29,5 @@
 $(eval $(call gb_Package_Package,sfx2_sdi,$(SRCDIR)/sfx2/sdi))
 $(eval $(call gb_Package_add_file,sfx2_sdi,inc/sfx2/sfx.sdi,sfx.sdi))
 $(eval $(call gb_Package_add_file,sfx2_sdi,inc/sfx2/sfxitems.sdi,sfxitems.sdi))
+
+# vim: set noet sw=4 ts=4:

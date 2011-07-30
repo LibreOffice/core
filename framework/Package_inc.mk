@@ -1,3 +1,4 @@
+# -*- Mode: makefile; tab-width: 4; indent-tabs-mode: t -*-
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -49,3 +50,5 @@ $(eval $(call gb_Package_add_file,framework_inc,inc/framework/toolboxconfigurati
 $(eval $(call gb_Package_add_file,framework_inc,inc/framework/fwedllapi.h,framework/fwedllapi.h))
 $(eval $(call gb_Package_add_file,framework_inc,inc/fwkdllapi.h,fwkdllapi.h))
 $(eval $(call gb_Package_add_file,framework_inc,inc/fwidllapi.h,fwidllapi.h))
+
+# vim: set noet sw=4 ts=4:

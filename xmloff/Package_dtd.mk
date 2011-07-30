@@ -1,3 +1,4 @@
+# -*- Mode: makefile; tab-width: 4; indent-tabs-mode: t -*-
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -43,3 +44,5 @@ $(eval $(call gb_Package_add_file,xmloff_dtd,bin/settings.mod,settings.mod))
 $(eval $(call gb_Package_add_file,xmloff_dtd,bin/style.mod,style.mod))
 $(eval $(call gb_Package_add_file,xmloff_dtd,bin/table.mod,table.mod))
 $(eval $(call gb_Package_add_file,xmloff_dtd,bin/text.mod,text.mod))
+
+# vim: set noet sw=4 ts=4:

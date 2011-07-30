@@ -1,3 +1,4 @@
+# -*- Mode: makefile; tab-width: 4; indent-tabs-mode: t -*-
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -80,4 +81,4 @@ $(eval $(call gb_SrsTarget_add_files,sfx/res,\
     sfx2/source/view/view.src \
 ))
 
-
+# vim: set noet sw=4 ts=4:

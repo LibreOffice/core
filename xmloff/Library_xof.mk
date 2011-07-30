@@ -1,3 +1,4 @@
+# -*- Mode: makefile; tab-width: 4; indent-tabs-mode: t -*-
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -92,4 +93,4 @@ $(eval $(call gb_Library_add_exception_objects,xof,\
     xmloff/source/transform/XMLFilterRegistration \
 ))
 
-# vim: set noet ts=4 sw=4:
+# vim: set noet sw=4 ts=4:

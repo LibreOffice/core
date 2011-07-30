@@ -1,3 +1,4 @@
+# -*- Mode: makefile; tab-width: 4; indent-tabs-mode: t -*-
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -30,4 +31,4 @@ $(eval $(call gb_Package_add_file,svx_sdi,inc/svx/svx.sdi,svx.sdi))
 $(eval $(call gb_Package_add_file,svx_sdi,inc/svx/svxitems.sdi,svxitems.sdi))
 $(eval $(call gb_Package_add_file,svx_sdi,inc/svx/xoitems.sdi,xoitems.sdi))
 
-
+# vim: set noet sw=4 ts=4:

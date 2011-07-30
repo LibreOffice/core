@@ -1,3 +1,4 @@
+# -*- Mode: makefile; tab-width: 4; indent-tabs-mode: t -*-
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -557,3 +558,4 @@ $(eval $(call gb_Package_add_file,svx_inc,inc/svx/colrctrl.hxx,svx/colrctrl.hxx)
 $(eval $(call gb_Package_add_file,svx_inc,inc/svx/fmdpage.hxx,svx/fmdpage.hxx))
 $(eval $(call gb_Package_add_file,svx_inc,inc/svx/sxmtpitm.hxx,svx/sxmtpitm.hxx))
 
+# vim: set noet sw=4 ts=4:
