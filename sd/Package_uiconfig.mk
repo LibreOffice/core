@@ -1,3 +1,4 @@
+# -*- Mode: makefile; tab-width: 4; indent-tabs-mode: t -*-
 # Version: MPL 1.1 / GPLv3+ / LGPLv3+
 #
 # The contents of this file are subject to the Mozilla Public License Version
@@ -126,4 +127,4 @@ $(eval $(call gb_Package_add_file,sd_uiconfig,xml/uiconfig/modules/simpress/tool
 $(eval $(call gb_Package_add_file,sd_uiconfig,xml/uiconfig/modules/simpress/toolbar/viewerbar.xml,simpress/toolbar/viewerbar.xml))
 $(eval $(call gb_Package_add_file,sd_uiconfig,xml/uiconfig/modules/simpress/toolbar/zoombar.xml,simpress/toolbar/zoombar.xml))
 
-# vim: set noet ts=4 sw=4:
+# vim: set noet sw=4 ts=4:

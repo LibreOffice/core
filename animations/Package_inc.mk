@@ -1,3 +1,4 @@
+# -*- Mode: makefile; tab-width: 4; indent-tabs-mode: t -*-
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -29,4 +30,4 @@ $(eval $(call gb_Package_Package,animations_inc,$(SRCDIR)/animations/inc))
 
 $(eval $(call gb_Package_add_file,animations_inc,inc/animations/animationnodehelper.hxx,animations/animationnodehelper.hxx))
 
-# vim: set noet ts=4 sw=4:
+# vim: set noet sw=4 ts=4:
