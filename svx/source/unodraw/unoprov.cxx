@@ -909,8 +909,9 @@ uno::Sequence< OUString > UHashMap::getServiceNames()
     uno::Sequence< OUString > aSeq( rMap.size() );
     OUString* pStrings = aSeq.getArray();
 
-    for (int i = 0, UHashMapImpl::const_iterator it = rMap.begin(); it != rMap.end(); ++it, ++i)
-        pStrings[i] = it->first;
+    int i = 0;
+    for (UHashMapImpl::const_iterator it = rMap.begin(); it != rMap.end(); it++)
+        pStrings[i++] = it->first;
 
     return aSeq;
 }
