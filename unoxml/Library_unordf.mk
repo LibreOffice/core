@@ -48,6 +48,7 @@ $(eval $(call gb_Library_add_linked_libs,unordf,\
 $(eval $(call gb_Library_use_externals,unordf,\
 	librdf \
 	libxslt \
+	libxml2 \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,unordf,\
