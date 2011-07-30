@@ -449,8 +449,15 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/ios/source/app/salinst \
     vcl/ios/source/app/salsys \
     vcl/ios/source/app/saltimer \
+    vcl/ios/source/dtrans/iOSTransferable \
+    vcl/ios/source/dtrans/ios_clipboard \
+    vcl/ios/source/dtrans/service_entry \
+    vcl/ios/source/gdi/salbmp \
     vcl/ios/source/gdi/salgdi \
     vcl/ios/source/gdi/salvd \
+    vcl/ios/source/window/salframe \
+    vcl/ios/source/window/salmenu \
+    vcl/ios/source/window/salobj \
 ))
 $(eval $(call gb_Library_use_externals,vcl,\
 	uikit \

@@ -584,6 +584,77 @@ void IosSalInstance::DestroyObject( SalObject* pObject )
     delete ( pObject );
 }
 
+// -----------------------------------------------------------------------
+
+SalPrinter* IosSalInstance::CreatePrinter( SalInfoPrinter* pInfoPrinter )
+{
+    return NULL;
+}
+
+// -----------------------------------------------------------------------
+
+void IosSalInstance::DestroyPrinter( SalPrinter* pPrinter )
+{
+    delete pPrinter;
+}
+
+// -----------------------------------------------------------------------
+
+void IosSalInstance::GetPrinterQueueInfo( ImplPrnQueueList* pList )
+{
+    // ???
+}
+
+// -----------------------------------------------------------------------
+
+void IosSalInstance::GetPrinterQueueState( SalPrinterQueueInfo* )
+{
+    // ???
+}
+
+// -----------------------------------------------------------------------
+
+void IosSalInstance::DeletePrinterQueueInfo( SalPrinterQueueInfo* pInfo )
+{
+    delete pInfo;
+}
+
+// -----------------------------------------------------------------------
+
+XubString IosSalInstance::GetDefaultPrinter()
+{
+    // #i113170# may not be the main thread if called from UNO API
+    SalData::ensureThreadAutoreleasePool();
+
+    // ???
+    return maDefaultPrinter;
+}
+
+// -----------------------------------------------------------------------
+
+SalInfoPrinter* IosSalInstance::CreateInfoPrinter( SalPrinterQueueInfo* pQueueInfo,
+                                                ImplJobSetup* pSetupData )
+{
+    // #i113170# may not be the main thread if called from UNO API
+    SalData::ensureThreadAutoreleasePool();
+
+    SalInfoPrinter* pNewInfoPrinter = NULL;
+    // ???
+    return pNewInfoPrinter;
+}
+
+// -----------------------------------------------------------------------
+
+void IosSalInstance::DestroyInfoPrinter( SalInfoPrinter* pPrinter )
+{
+    // #i113170# may not be the main thread if called from UNO API
+    SalData::ensureThreadAutoreleasePool();
+
+    delete pPrinter;
+}
+
+// -----------------------------------------------------------------------
+
 SalSystem* IosSalInstance::CreateSystem()
 {
     return new IosSalSystem();
@@ -700,6 +771,14 @@ SalBitmap* IosSalInstance::CreateSalBitmap()
 
 SalSession* IosSalInstance::CreateSalSession()
 {
+    return NULL;
+}
+
+// -----------------------------------------------------------------------
+
+SalI18NImeStatus* IosSalInstance::CreateI18NImeStatus()
+{
+    // ???
     return NULL;
 }
 

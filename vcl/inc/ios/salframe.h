@@ -73,6 +73,8 @@ public:
     bool                mbGraphics:1;           // is Graphics used?
     bool                            mbShown:1;
     bool                            mbInitShow:1;
+    bool                            mbPositioned:1;
+    bool                            mbSized:1;
     bool                            mbPresentation:1;
 
     sal_uLong                       mnStyle;
@@ -182,6 +184,15 @@ public:
     unsigned int getStyleMask() const { return mnStyleMask; }
 
     void getResolution( long& o_rDPIX, long& o_rDPIY );
+
+    // actually the follwing methods do the same thing: flipping y coordinates
+    // but having two of them makes clearer what the coordinate system
+    // is supposed to be before and after
+    void VCLToCocoaTouch( CGRect& io_rRect, bool bRelativeToScreen = true );
+    void CocoaTouchToVCL( CGRect& io_rRect, bool bRelativeToScreen = true );
+
+    void VCLToCocoaTouch( CGPoint& io_rPoint, bool bRelativeToScreen = true );
+    void CocoaTouchToVCL( CGPoint& io_Point, bool bRelativeToScreen = true );
 
     CGMutablePathRef getClipPath() const { return mrClippingPath; }
 

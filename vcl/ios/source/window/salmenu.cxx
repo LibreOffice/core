@@ -26,28 +26,47 @@
  *
  ************************************************************************/
 
-#ifndef _SV_SALMENU_H
-#define _SV_SALMENU_H
+#include "rtl/ustrbuf.hxx"
 
-#include "premac.h"
-#include <UIKit/UIKit.h>
-#include "postmac.h"
+#include "vcl/cmdevt.hxx"
+#include "vcl/floatwin.hxx"
+#include "vcl/window.hxx"
+#include "vcl/svapp.hxx"
 
-#include "salmenu.hxx"
+#include "ios/saldata.hxx"
+#include "ios/salinst.h"
+#include "ios/salmenu.h"
+#include "ios/salframe.h"
+#include "ios/salbmp.h"
 
-#include <vector>
+#include "svids.hrc"
+#include "window.h"
 
-class IosSalFrame;
-class IosSalMenuItem;
+// =======================================================================
 
-class IosSalMenu : public SalMenu
+SalMenu* IosSalInstance::CreateMenu( sal_Bool bMenuBar, Menu* pVCLMenu )
 {
-};
+    // ???
+    return NULL;
+}
 
-class IosSalMenuItem : public SalMenuItem
+void IosSalInstance::DestroyMenu( SalMenu* pSalMenu )
 {
-};
+    delete pSalMenu;
+}
 
-#endif // _SV_SALMENU_H
+SalMenuItem* IosSalInstance::CreateMenuItem( const SalItemParams* pItemData )
+{
+    // ???
+    return NULL;
+}
+
+void IosSalInstance::DestroyMenuItem( SalMenuItem* pSalMenuItem )
+{
+    delete pSalMenuItem;
+}
+
+
+// =======================================================================
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -26,28 +26,48 @@
  *
  ************************************************************************/
 
-#ifndef _SV_SALMENU_H
-#define _SV_SALMENU_H
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_vcl.hxx"
 
-#include "premac.h"
-#include <UIKit/UIKit.h>
-#include "postmac.h"
+#include "osl/diagnose.h"
 
-#include "salmenu.hxx"
+#include "vcl/svapp.hxx"
 
-#include <vector>
+#include "ios/saldata.hxx"
+#include "ios/salinst.h"
 
-class IosSalFrame;
-class IosSalMenuItem;
+#include "ios_clipboard.hxx"
 
-class IosSalMenu : public SalMenu
+using namespace ::osl;
+using namespace ::rtl;
+using namespace ::com::sun::star;
+using namespace ::com::sun::star::uno;
+using namespace ::cppu;
+using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::datatransfer::clipboard;
+
+
+uno::Reference< XInterface > IosSalInstance::CreateClipboard( const Sequence< Any >& i_rArguments )
 {
-};
+    if ( Application::IsHeadlessModeEnabled() )
+        return SalInstance::CreateClipboard( i_rArguments );
 
-class IosSalMenuItem : public SalMenuItem
+    SalData* pSalData = GetSalData();
+    if( ! pSalData->mxClipboard.is() )
+        pSalData->mxClipboard = uno::Reference<XInterface>(static_cast< XClipboard* >(new IosClipboard()), UNO_QUERY);
+    return pSalData->mxClipboard;
+}
+
+uno::Reference<XInterface> IosSalInstance::CreateDragSource()
 {
-};
+    // ???
+    return SalInstance::CreateDragSource();
+}
 
-#endif // _SV_SALMENU_H
+uno::Reference<XInterface> IosSalInstance::CreateDropTarget()
+{
+    // ???
+    return SalInstance::CreateDropTarget();
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

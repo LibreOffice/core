@@ -35,6 +35,7 @@
 
 #include "vcl/salbtype.hxx"
 
+#include "ios/salconst.h"
 #include "ios/salgdi.h"
 
 #include "saldata.hxx"

@@ -88,12 +88,12 @@
 
 -(void)addFallbackMenuItem: (UIMenuItem*)pNewItem
 {
-    IosSalMenu::addFallbackMenuItem( pNewItem );
+    // ???
 }
 
 -(void)removeFallbackMenuItem: (UIMenuItem*)pItem
 {
-    IosSalMenu::removeFallbackMenuItem( pItem );
+    // ???
 }
 
 @end
