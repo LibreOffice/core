@@ -1101,15 +1101,15 @@ class Topics(object):
         if topics <= 0:
             topics = 1
 
-        tableRows = Topics.table.getRows()
+        tableRows = Topics.table.Rows
         targetNumOfRows = topics * Topics.rowsPerTopic + 1
-        if tableRows.getCount() > targetNumOfRows:
+        '''if tableRows.Count > targetNumOfRows:
             tableRows.removeByIndex(
-                targetNumOfRows, tableRows.getCount() - targetNumOfRows)
+                targetNumOfRows, tableRows.Count - targetNumOfRows)'''
 
-        formatLastRow()
-        while AgendaTemplate.writtenTopics.size() > topics:
-            AgendaTemplate.writtenTopics.remove(topics)
+        self.formatLastRow()
+        while len(AgendaTemplate.writtenTopics) > topics:
+            del AgendaTemplate.writtenTopics[topics]
 
     '''reapply the format of the first (header) row.
     '''

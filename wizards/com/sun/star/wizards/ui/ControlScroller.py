@@ -78,7 +78,8 @@ class ControlScroller(object):
             setPeerProperties(self.oImgControl, "MouseTransparent", True)
 
     def setScrollBarOrientationHorizontal(self):
-        Helper.setUnoPropertyValue(ControlScroller.xScrollBar, "Orientation",HORIZONTAL)
+        Helper.setUnoPropertyValue(
+            ControlScroller.xScrollBar, "Orientation", HORIZONTAL)
 
     '''
     @author bc93774
@@ -92,7 +93,8 @@ class ControlScroller(object):
             self.setCurFieldCount()
             ControlScroller.nscrollvalue = 0
             Helper.setUnoPropertyValue(
-                ControlScroller.xScrollBar.Model, "ScrollValue", ControlScroller.nscrollvalue)
+                ControlScroller.xScrollBar.Model, "ScrollValue",
+                ControlScroller.nscrollvalue)
             if self.ntotfieldcount > ControlScroller.nblockincrement:
                 Helper.setUnoPropertyValues(
                     ControlScroller.xScrollBar.Model, (PropertyNames.PROPERTY_ENABLED,
@@ -190,7 +192,8 @@ class ControlScroller(object):
             ControlScroller.xScrollBar.Model,
             (PropertyNames.PROPERTY_ENABLED, "BlockIncrement",
                 "ScrollValueMax"),
-            (self.ntotfieldcount > ControlScroller.nblockincrement, ControlScroller.nblockincrement,
+            (self.ntotfieldcount > ControlScroller.nblockincrement,
+                ControlScroller.nblockincrement,
                 self.ntotfieldcount - ControlScroller.nblockincrement))
 
     def scrollControls(self):
@@ -240,7 +243,7 @@ class ControlScroller(object):
             return None
 
     def unregisterControlGroup(self, _index):
-        ControlScroller.scrollfields.remove(_index)
+        del ControlScroller.scrollfields[_index]
 
     @classmethod
     def registerControlGroup(self, _currowproperties, _i):
