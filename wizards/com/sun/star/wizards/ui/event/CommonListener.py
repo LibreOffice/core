@@ -90,7 +90,36 @@ class WindowListenerProcAdapter( unohelper.Base, XWindowListener ):
         self.oProcToCall = oProcToCall # a python procedure
         self.tParams = tParams # a tuple
 
-    # oTextEvent is a com.sun.star.awt.TextEvent struct.
     def windowShown(self, TerminateEvent):
         if callable( self.oProcToCall ):
             apply( self.oProcToCall )
+
+from com.sun.star.awt import XAdjustmentListener
+class AdjustmentListenerProcAdapter( unohelper.Base, XAdjustmentListener ):
+    def __init__( self, oProcToCall, tParams=() ):
+        self.oProcToCall = oProcToCall # a python procedure
+        self.tParams = tParams # a tuple
+
+    def adjustmentValueChanged(self, TerminateEvent):
+        if callable( self.oProcToCall ):
+            apply( self.oProcToCall )
+
+from com.sun.star.awt import XFocusListener
+class FocusListenerProcAdapter( unohelper.Base, XFocusListener ):
+    def __init__( self, oProcToCall, tParams=() ):
+        self.oProcToCall = oProcToCall # a python procedure
+        self.tParams = tParams # a tuple
+
+    def focusGained(self, FocusEvent):
+        if callable( self.oProcToCall ):
+            apply( self.oProcToCall, (FocusEvent,) + self.tParams )
+
+from com.sun.star.awt import XKeyListener
+class KeyListenerProcAdapter( unohelper.Base, XKeyListener ):
+    def __init__( self, oProcToCall, tParams=() ):
+        self.oProcToCall = oProcToCall # a python procedure
+        self.tParams = tParams # a tuple
+
+    def keyPressed(self, KeyEvent):
+        if callable( self.oProcToCall ):
+            apply( self.oProcToCall, (KeyEvent,) + self.tParams )

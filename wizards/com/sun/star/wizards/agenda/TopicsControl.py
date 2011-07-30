@@ -3,6 +3,11 @@ from CGTopic import CGTopic
 from ui.ControlScroller import *
 from AgendaWizardDialogConst import LAST_HID
 from common.Properties import Properties
+from ui.event.CommonListener import FocusListenerProcAdapter, KeyListenerProcAdapter
+
+from com.sun.star.awt.Key import DOWN, UP, TAB
+
+import inspect
 
 '''
 @author rpiterman
@@ -90,7 +95,7 @@ class TopicsControl(ControlScroller):
         PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y,
         PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX,
         PropertyNames.PROPERTY_WIDTH)
-    lastFocusRow = []
+    lastFocusRow = 0
 
     def __init__(self, dialog, xmsf, agenda):
         try:
@@ -103,10 +108,12 @@ class TopicsControl(ControlScroller):
             self.lastTime = \
                 self.ControlGroupVector[self.nblockincrement - 1].timebox
 
-            self.lastTime.addKeyListener(None)
+            self.lastTime.addKeyListener(KeyListenerProcAdapter(
+                self.lastControlKeyPressed))
             #prepare scroll up on tab press...
             self.firstTopic = self.ControlGroupVector[0].textbox
-            self.firstTopic.addKeyListener(None)
+            self.firstTopic.addKeyListener(KeyListenerProcAdapter(
+                self.firstControlKeyPressed))
         except Exception:
             traceback.print_exc()
 
@@ -193,9 +200,10 @@ class TopicsControl(ControlScroller):
     @param fe
     '''
 
+    @classmethod
     def focusGained(self, fe):
         xc = fe.Source
-        focusGained(xc)
+        self.focusGained2(xc)
 
     '''
     Sometimes I set the focus programatically to a control
@@ -207,34 +215,35 @@ class TopicsControl(ControlScroller):
     @param control
     '''
 
-    def focusGained(self, control):
+    @classmethod
+    def focusGained2(self, control):
         try:
             #calculate in which row we are...
             name = Helper.getUnoPropertyValue(
                 control.Model, PropertyNames.PROPERTY_NAME)
-            i = name.indexOf("_")
-            num = name.substring(i + 1)
+            num = name[name.index("_") + 1:]
             TopicsControl.lastFocusRow = int(num) + TopicsControl.nscrollvalue
             self.lastFocusControl = control
             # enable/disable the buttons...
-            enableButtons()
-        except Exception, ex:
-            ex.printStackTrace()
+            self.enableButtons()
+        except Exception:
+            traceback.print_exc()
 
     '''
     enable or disable the buttons according to the
     current row we are in.
     '''
 
+    @classmethod
     def enableButtons(self):
         UnoDialog.setEnabled(
-            getAD().btnInsert, TopicsControl.lastFocusRow < len(ControlScroller.scrollfields) - 1)
+            ControlScroller.CurUnoDialog.btnInsert, TopicsControl.lastFocusRow < len(ControlScroller.scrollfields) - 1)
         UnoDialog.setEnabled(
-            getAD().btnRemove, TopicsControl.lastFocusRow < len(ControlScroller.scrollfields) - 1)
+            ControlScroller.CurUnoDialog.btnRemove, TopicsControl.lastFocusRow < len(ControlScroller.scrollfields) - 1)
         UnoDialog.setEnabled(
-            getAD().btnUp, TopicsControl.lastFocusRow > 0)
+            ControlScroller.CurUnoDialog.btnUp, TopicsControl.lastFocusRow > 0)
         UnoDialog.setEnabled(
-            getAD().btnDown, TopicsControl.lastFocusRow < len(ControlScroller.scrollfields) - 1)
+            ControlScroller.CurUnoDialog.btnDown, TopicsControl.lastFocusRow < len(ControlScroller.scrollfields) - 1)
 
     '''
     Removes the current row.
@@ -271,8 +280,8 @@ class TopicsControl(ControlScroller):
     def insertRow(self):
         try:
             self.insertRowAtEnd()
-            i = len(ControlScroller.scrollfields) - 2
-            while i > TopicsControl.lastFocusRow:
+            for i in xrange(len(ControlScroller.scrollfields) - 2,
+                    TopicsControl.lastFocusRow, -1):
                 pv1 = ControlScroller.scrollfields[i]
                 pv2 = ControlScroller.scrollfields[i - 1]
                 pv1[1].Value = pv2[1].Value
@@ -282,13 +291,12 @@ class TopicsControl(ControlScroller):
                 if i - TopicsControl.nscrollvalue < self.nblockincrement:
                     self.fillupControl(i - TopicsControl.nscrollvalue)
 
-                i -= 1
             # after rotating all the properties from this row on,
             # we clear the row, so it is practically a new one...
-            '''pv1 = ControlScroller.scrollfields[TopicsControl.lastFocusRow]
+            pv1 = ControlScroller.scrollfields[TopicsControl.lastFocusRow]
             pv1[1].Value = ""
             pv1[2].Value = ""
-            pv1[3].Value = ""'''
+            pv1[3].Value = ""
             # update the preview document.
             self.updateDocumentRow(TopicsControl.lastFocusRow)
             self.fillupControl(TopicsControl.lastFocusRow - TopicsControl.nscrollvalue)
@@ -427,13 +435,15 @@ class TopicsControl(ControlScroller):
 
     def lastControlKeyPressed(self, event):
         # if tab without shift was pressed...
-        if event.KeyCode == Key.TAB and event.Modifiers == 0:
-            # if there is another row...
-            if (self.nblockincrement + TopicsControl.nscrollvalue) \
-                    < len(ControlScroller.scrollfields):
-                setScrollValue(TopicsControl.nscrollvalue + 1)
-                #focus(firstTopic);
-                focus(getControl(self.ControlGroupVector[4], 1))
+        try:
+            if event.KeyCode == TAB and event.Modifiers == 0:
+                # if there is another row...
+                if (self.nblockincrement + TopicsControl.nscrollvalue) \
+                        < len(ControlScroller.scrollfields):
+                    self.setScrollValue(TopicsControl.nscrollvalue + 1)
+                    self.focus(self.getControlByIndex(self.ControlGroupVector[4], 1))
+        except Exception:
+            traceback.print_exc()
 
     '''
     If the user presses shift-tab on the first control, and
@@ -443,7 +453,7 @@ class TopicsControl(ControlScroller):
 
     def firstControlKeyPressed(self, event):
         # if tab with shift was pressed...
-        if (event.KeyCode == Key.TAB) and \
+        if (event.KeyCode == TAB) and \
                 (event.Modifiers == KeyModifier.SHIFT):
             if TopicsControl.nscrollvalue > 0:
                 setScrollValue(TopicsControl.nscrollvalue - 1)
@@ -457,8 +467,9 @@ class TopicsControl(ControlScroller):
     def focus(self, textControl):
         textControl.setFocus()
         text = textControl.Text
-        textControl.Selection = Selection (0, len(text))
-        focusGained(textControl)
+        textControl.Selection = uno.createUnoStruct( \
+                    'com.sun.star.awt.Selection', 0, len(text))
+        self.focusGained2(textControl)
 
     '''
     moves the given row one row down.
@@ -636,7 +647,7 @@ class TopicsControl(ControlScroller):
     @return the control...
     '''
 
-    def getControl(self, cr, column):
+    def getControlByIndex(self, cr, column):
         tmp_switch_var1 = column
         if tmp_switch_var1 == 0:
             return cr.label
@@ -658,8 +669,8 @@ class TopicsControl(ControlScroller):
     '''
 
     def getControl(self, cr, control):
-        column = getColumn(control)
-        return getControl(cr, column)
+        column = self.getColumn(control)
+        return self.getControlByIndex(cr, column)
 
     '''
     returns the column number of the given control.
@@ -669,7 +680,7 @@ class TopicsControl(ControlScroller):
 
     def getColumn(self, control):
         name = Helper.getUnoPropertyValue(
-            UnoDialog2.getModel(control), PropertyNames.PROPERTY_NAME)
+            control.Model, PropertyNames.PROPERTY_NAME)
         if name.startswith(TopicsControl.TOPIC):
             return 1
         if name.startswith(TopicsControl.RESP):
@@ -775,12 +786,15 @@ class ControlRow(object):
             HelpIds.getHelpIdString(ControlScroller.curHelpIndex + i * 3 + 3),
             x + 175, y, ControlScroller.iStep, tabindex + 3, 20), self)
         self.setEnabled(False)
-        self.textbox.addKeyListener(None)
-        self.combobox.addKeyListener(None)
-        self.timebox.addKeyListener(None)
-        self.textbox.addFocusListener(None)
-        self.combobox.addFocusListener(None)
-        self.timebox.addFocusListener(None)
+        self.textbox.addKeyListener(KeyListenerProcAdapter(self.keyPressed))
+        self.combobox.addKeyListener(KeyListenerProcAdapter(self.keyPressed))
+        self.timebox.addKeyListener(KeyListenerProcAdapter(self.keyPressed))
+        self.textbox.addFocusListener(FocusListenerProcAdapter(
+            TopicsControl.focusGained))
+        self.combobox.addFocusListener(FocusListenerProcAdapter(
+            TopicsControl.focusGained))
+        self.timebox.addFocusListener(FocusListenerProcAdapter(
+            TopicsControl.focusGained))
 
     def topicTextChanged(self):
         try:
@@ -839,45 +853,28 @@ class ControlRow(object):
     '''
 
     def keyPressed(self, event):
-        if isMoveDown(event):
-            rowDown(self.offset, event.Source)
-        elif isMoveUp(event):
-            rowUp(self.offset, event.Source)
-        elif isDown(event):
-            cursorDown(self.offset, event.Source)
-        elif isUp(event):
-            cursorUp(self.offset, event.Source)
+        try:
+            if self.isMoveDown(event):
+                self.rowDown(self.offset, event.Source)
+            elif self.isMoveUp(event):
+                self.rowUp(self.offset, event.Source)
+            elif self.isDown(event):
+                self.cursorDown(self.offset, event.Source)
+            elif self.isUp(event):
+                self.cursorUp(self.offset, event.Source)
 
-        enableButtons()
-
-    '''
-    returns the column number of the given control.
-    The given control must belong to this row or
-    an IllegalArgumentException will accure.
-    @param control
-    @return an int columnd number of the given control (0 to 3).
-    '''
-
-    def getColumn(self, control):
-        if control == self.textbox:
-            return 1
-        elif control == self.combobox:
-            return 2
-        elif control == self.timebox:
-            return 3
-        elif control == self.label:
-            return 0
-        else:
-            raise AttributeError("Control is not part of this ControlRow")
+            TopicsControl.enableButtons()
+        except Exception:
+            traceback.print_exc()
 
     def isMoveDown(self, e):
-        return (e.KeyCode == Key.DOWN) and (e.Modifiers == KeyModifier.MOD1)
+        return (e.KeyCode == DOWN) and (e.Modifiers == KeyModifier.MOD1)
 
     def isMoveUp(self, e):
-        return (e.KeyCode == Key.UP) and (e.Modifiers == KeyModifier.MOD1)
+        return (e.KeyCode == UP) and (e.Modifiers == KeyModifier.MOD1)
 
     def isDown(self, e):
-        return (e.KeyCode == Key.DOWN) and (e.Modifiers == 0)
+        return (e.KeyCode == DOWN) and (e.Modifiers == 0)
 
     def isUp(self, e):
-        return (e.KeyCode == Key.UP) and (e.Modifiers == 0)
+        return (e.KeyCode == UP) and (e.Modifiers == 0)

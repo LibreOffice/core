@@ -131,11 +131,11 @@ class ControlScroller(object):
 
     def setScrollValue(self, _nscrollvalue, _ntotfieldcount=None):
         if _ntotfieldcount is not None:
-            setTotalFieldCount(_ntotfieldcount)
+            self.setTotalFieldCount(_ntotfieldcount)
         if _nscrollvalue >= 0:
             Helper.setUnoPropertyValue(
                 ControlScroller.xScrollBar.Model, "ScrollValue", _nscrollvalue)
-            scrollControls()
+            self.scrollControls()
 
     @classmethod
     def setCurFieldCount(self):
@@ -195,29 +195,27 @@ class ControlScroller(object):
 
     def scrollControls(self):
         try:
-            scrollRowsInfo()
+            self.scrollRowsInfo()
             ControlScroller.nscrollvalue = int(Helper.getUnoPropertyValue(
                     ControlScroller.xScrollBar.Model, "ScrollValue"))
-            if ControlScroller.nscrollvalue + ControlScroller.nblockincrement >= self.ntotfieldcount:
-                ControlScroller.nscrollvalue = self.ntotfieldcount - ControlScroller.nblockincrement
+            if ControlScroller.nscrollvalue + ControlScroller.nblockincrement \
+                    >= self.ntotfieldcount:
+                ControlScroller.nscrollvalue = \
+                    self.ntotfieldcount - ControlScroller.nblockincrement
 
-            fillupControls(False)
-        except java.lang.Exception, ex:
-            ex.printStackTrace()
+            self.fillupControls(False)
+        except Exception:
+            traceback.print_exc()
 
     def scrollRowsInfo(self):
-        if ControlScroller.scrollfields.size() > 0:
+        if len(ControlScroller.scrollfields) > 0:
             cols = len(ControlScroller.scrollfields[0])
         else:
             cols = 0
 
-        a = 0
-        while a < self.ncurfieldcount:
-            n = 0
-            while n < cols:
-                fieldInfo(a, n)
-                n += 1
-            a += 1
+        for a in xrange(self.ncurfieldcount):
+            for n in xrange(cols):
+                self.fieldInfo(a, n)
 
     '''
     updates the corresponding data to

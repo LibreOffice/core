@@ -215,7 +215,9 @@ class UnoDialog2(UnoDialog):
             "com.sun.star.awt.UnoControlScrollBarModel",
             sName, sPropNames, oPropValues)
         if listener is not None:
-            oScrollBar.addAdjustmentListener(None)
+            method = getattr(listener, "scrollControls")
+            oScrollBar.addAdjustmentListener(
+                AdjustmentListenerProcAdapter(method))
         if self.ControlList is not None:
             self.ControlList[sName] = iControlKey
         return oScrollBar
