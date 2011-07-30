@@ -819,7 +819,7 @@ bool GraphicExporter::GetGraphic( ExportSettings& rSettings, Graphic& aGraphic, 
                 aShapes.push_back( pObj );
         }
 
-        if( 0 == aShapes.size() )
+        if( aShapes.empty() )
             bRet = false;
     }
 
@@ -949,7 +949,7 @@ bool GraphicExporter::GetGraphic( ExportSettings& rSettings, Graphic& aGraphic, 
                 }
             }
 
-            if(aShapes.size())
+            if(!aShapes.empty())
             {
                 // more effective way to paint a vector of SdrObjects. Hand over the processed page
                 // to have it in the

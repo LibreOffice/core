@@ -1234,8 +1234,6 @@ XPolygon SdrEdgeObj::ImpCalcEdgeTrack(const Point& rPt1, long nAngle1, const Rec
         else if (nPntAnz==4) { // Z oder U
             if (nAngle1==nAngle2) cForm='U';
             else cForm='Z';
-        } else if (nPntAnz==4) { /* �-�  �-�  */
-            /* ...                 -�     -�  */
         } else if (nPntAnz==6) { // S oder C oder ...
             if (nAngle1!=nAngle2) {
                 // Fuer Typ S hat Linie2 dieselbe Richtung wie Linie4.

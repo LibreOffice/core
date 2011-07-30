@@ -494,7 +494,7 @@ namespace
     {
         // only create a line primitive when we had content; there is no need for
         // empty line primitives (contrary to paragraphs, see below).
-        if(maTextPortionPrimitives.size())
+        if(!maTextPortionPrimitives.empty())
         {
             drawinglayer::primitive2d::Primitive2DSequence aLineSequence(impConvertVectorToPrimitive2DSequence(maTextPortionPrimitives));
             maTextPortionPrimitives.clear();
@@ -661,13 +661,13 @@ namespace
 
     drawinglayer::primitive2d::Primitive2DSequence impTextBreakupHandler::getPrimitive2DSequence()
     {
-        if(maTextPortionPrimitives.size())
+        if(!maTextPortionPrimitives.empty())
         {
             // collect non-closed lines
             impFlushTextPortionPrimitivesToLinePrimitives();
         }
 
-        if(maLinePrimitives.size())
+        if(!maLinePrimitives.empty())
         {
             // collect non-closed paragraphs
             impFlushLinePrimitivesToParagraphPrimitives();

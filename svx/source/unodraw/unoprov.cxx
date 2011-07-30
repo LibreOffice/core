@@ -893,7 +893,7 @@ rtl::OUString UHashMap::getNameFromId(sal_uInt32 nId)
 {
     const UHashMapImpl &rMap = GetUHashImpl();
 
-    for (UHashMapImpl::const_iterator it = rMap.begin(); it != rMap.end(); it++)
+    for (UHashMapImpl::const_iterator it = rMap.begin(); it != rMap.end(); ++it)
     {
         if (it->second == nId)
             return it->first;
@@ -906,12 +906,11 @@ uno::Sequence< OUString > UHashMap::getServiceNames()
 {
     const UHashMapImpl &rMap = GetUHashImpl();
 
-    int i = 0;
     uno::Sequence< OUString > aSeq( rMap.size() );
     OUString* pStrings = aSeq.getArray();
 
-    for (UHashMapImpl::const_iterator it = rMap.begin(); it != rMap.end(); it++)
-        pStrings[i++] = it->first;
+    for (int i = 0, UHashMapImpl::const_iterator it = rMap.begin(); it != rMap.end(); ++it, ++i)
+        pStrings[i] = it->first;
 
     return aSeq;
 }

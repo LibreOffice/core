@@ -500,7 +500,7 @@ void SdrDragMethod::createSdrDragEntries_PointDrag()
         }
     }
 
-    if(aPositions.size())
+    if(!aPositions.empty())
     {
         addSdrDragEntry(new SdrDragEntryPointGlueDrag(aPositions, true));
     }
@@ -544,7 +544,7 @@ void SdrDragMethod::createSdrDragEntries_GlueDrag()
         }
     }
 
-    if(aPositions.size())
+    if(!aPositions.empty())
     {
         addSdrDragEntry(new SdrDragEntryPointGlueDrag(aPositions, false));
     }

@@ -582,7 +582,7 @@ public:
 
     /// save the start of a range reference
     void InsertBookmarkStartRange(
-        const ::rtl::OUString sName,
+        const ::rtl::OUString & sName,
         const ::com::sun::star::uno::Reference<
                 ::com::sun::star::text::XTextRange> & rRange,
         ::rtl::OUString const& i_rXmlId,
@@ -591,7 +591,7 @@ public:
 
     /// process the start of a range reference
     sal_Bool FindAndRemoveBookmarkStartRange(
-        const ::rtl::OUString sName,
+        const ::rtl::OUString & sName,
         ::com::sun::star::uno::Reference<
                 ::com::sun::star::text::XTextRange> & o_rRange,
         ::rtl::OUString & o_rXmlId,

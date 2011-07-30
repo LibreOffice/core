@@ -319,7 +319,7 @@ void SdrEditView::RotateMarkedObj(const Point& rRef, long nWink, bool bCopy)
         }
 
         // fire scene updaters
-        while(aUpdaters.size())
+        while(!aUpdaters.empty())
         {
             delete aUpdaters.back();
             aUpdaters.pop_back();
@@ -379,7 +379,7 @@ void SdrEditView::MirrorMarkedObj(const Point& rRef1, const Point& rRef2, bool b
         }
 
         // fire scene updaters
-        while(aUpdaters.size())
+        while(!aUpdaters.empty())
         {
             delete aUpdaters.back();
             aUpdaters.pop_back();
@@ -1052,7 +1052,7 @@ void SdrEditView::SetAttrToMarked(const SfxItemSet& rAttr, sal_Bool bReplaceAll)
             {
                 SdrTextObj* pTextObj = ((SdrTextObj*)pObj);
 
-                if(0 != aCharWhichIds.size())
+                if(!aCharWhichIds.empty())
                 {
                     Rectangle aOldBoundRect = pTextObj->GetLastBoundRect();
 
@@ -1080,7 +1080,7 @@ void SdrEditView::SetAttrToMarked(const SfxItemSet& rAttr, sal_Bool bReplaceAll)
         }
 
         // fire scene updaters
-        while(aUpdaters.size())
+        while(!aUpdaters.empty())
         {
             delete aUpdaters.back();
             aUpdaters.pop_back();
