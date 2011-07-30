@@ -1,3 +1,4 @@
+# -*- Mode: makefile; tab-width: 4; indent-tabs-mode: t -*-
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -53,3 +54,5 @@ $(eval $(call gb_Library_use_external,solver,lpsolve55))
 $(eval $(call gb_Library_add_exception_objects,solver,\
 	sccomp/source/solver/solver \
 ))
+
+# vim: set noet sw=4 ts=4:

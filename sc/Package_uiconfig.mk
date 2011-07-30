@@ -1,3 +1,4 @@
+# -*- Mode: makefile; tab-width: 4; indent-tabs-mode: t -*-
 # Version: MPL 1.1 / GPLv3+ / LGPLv3+
 #
 # The contents of this file are subject to the Mozilla Public License Version
@@ -59,3 +60,4 @@ $(eval $(call gb_Package_add_file,sc_uiconfig,xml/uiconfig/modules/scalc/toolbar
 $(eval $(call gb_Package_add_file,sc_uiconfig,xml/uiconfig/modules/scalc/toolbar/toolbar.xml,scalc/toolbar/toolbar.xml))
 $(eval $(call gb_Package_add_file,sc_uiconfig,xml/uiconfig/modules/scalc/toolbar/viewerbar.xml,scalc/toolbar/viewerbar.xml))
 
+# vim: set noet sw=4 ts=4:

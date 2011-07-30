@@ -1,3 +1,4 @@
+# -*- Mode: makefile; tab-width: 4; indent-tabs-mode: t -*-
 # Version: MPL 1.1 / GPLv3+ / LGPLv3+
 #
 # The contents of this file are subject to the Mozilla Public License Version
@@ -55,3 +56,5 @@ $(eval $(call gb_Library_add_exception_objects,scd,\
 	sc/source/ui/unoobj/detreg \
 	sc/source/ui/unoobj/scdetect \
 ))
+
+# vim: set noet sw=4 ts=4:

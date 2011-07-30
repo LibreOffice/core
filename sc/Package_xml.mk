@@ -1,3 +1,4 @@
+# -*- Mode: makefile; tab-width: 4; indent-tabs-mode: t -*-
 # Version: MPL 1.1 / GPLv3+ / LGPLv3+
 #
 # The contents of this file are subject to the Mozilla Public License Version
@@ -138,4 +139,4 @@ $(eval $(call gb_Package_add_file,sc_xml,xml/ScViewPaneObj.xml,ScViewPaneObj.xml
 $(eval $(call gb_Package_add_file,sc_xml,xml/ScXMLExport.xml,ScXMLExport.xml))
 $(eval $(call gb_Package_add_file,sc_xml,xml/ScXMLImport.xml,ScXMLImport.xml))
 
-
+# vim: set noet sw=4 ts=4:

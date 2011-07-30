@@ -1,3 +1,4 @@
+# -*- Mode: makefile; tab-width: 4; indent-tabs-mode: t -*-
 #*************************************************************************
 # Version: MPL 1.1 / GPLv3+ / LGPLv3+
 #
@@ -107,4 +108,4 @@ $(eval $(call gb_RdbTarget_add_old_components,sc_filters_test,\
 # b) explicitly depend on the sc resource files needed at unit-test runtime
 $(call gb_CppunitTest_get_target,sc_filters_test) : $(call gb_Library_get_target,scfilt) $(WORKDIR)/AllLangRes/sc
 
-# vim: set noet sw=4:
+# vim: set noet sw=4 ts=4:

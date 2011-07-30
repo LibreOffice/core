@@ -1,3 +1,4 @@
+# -*- Mode: makefile; tab-width: 4; indent-tabs-mode: t -*-
 #*************************************************************************
 # Version: MPL 1.1 / GPLv3+ / LGPLv3+
 #
@@ -109,4 +110,4 @@ $(eval $(call gb_RdbTarget_add_old_components,sc_ucalc,\
     ucpfile1 \
 ))
 
-# vim: set noet sw=4:
+# vim: set noet sw=4 ts=4:
