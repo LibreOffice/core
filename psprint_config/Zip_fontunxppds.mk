@@ -1,8 +1,8 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
-# Copyright 2000, 2010 Oracle and/or its affiliates.
+#
+# Copyright 2000, 2011 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
 #
@@ -24,23 +24,12 @@
 # for a copy of the LGPLv3 License.
 #
 #*************************************************************************
-PRJ=..$/..
-PRJNAME=psp_config
-TARGET=unxfontsxp3ppds
 
-.INCLUDE : settings.mk
+$(eval $(call gb_Zip_Zip,fontunxppds,$(SRCDIR)/psprint_config/configuration/ppds))
 
-.IF "$(WITHOUT_PPDS)"=="YES"
-all:
-    @echo "Building without OOo postscript printer definition files."
-.ENDIF
+$(eval $(call gb_Zip_add_files,fontunxppds,\
+	SGENPRT.PS \
+	SGENT42.PS \
+))
 
-ZIP1TARGET      = fontunxppds
-.IF "$(WITH_SYSTEM_PPD_DIR)" != ""
-ZIP1LIST = SGENPRT.PS SGENT42.PS GENERIC.PS
-.ELSE
-ZIP1LIST        = * -x makefile.* -x delzip -x *.orig
-.ENDIF
-
-.INCLUDE : target.mk
-
+# vim: set noet sw=4 ts=4:
