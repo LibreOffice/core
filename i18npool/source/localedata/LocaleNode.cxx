@@ -598,8 +598,11 @@ void LCFormatNode::generateCode (const OFileWriter &of) const
     OUString str;
     if (mnSection >= 2)
         incError("more than 2 LC_FORMAT sections");
-    of.writeParameter("replaceFrom", getAttr().getValueByName("replaceFrom"), mnSection);
+    OUString strFrom( getAttr().getValueByName("replaceFrom"));
+    of.writeParameter("replaceFrom", strFrom, mnSection);
     str = getAttr().getValueByName("replaceTo");
+    if (strFrom.getLength() && !str.getLength())
+        incErrorStr("replaceFrom=\"%s\" replaceTo=\"\" is empty replacement.", strFrom);
     // Locale data generator inserts FFFF for LangID, we need to adapt that.
     if (str.endsWithIgnoreAsciiCaseAsciiL( "-FFFF]", 6))
         incErrorStr("replaceTo=\"%s\" needs FFFF to be adapted to the real LangID value.", str);

@@ -34,7 +34,7 @@
 <TimePM>n tmeddit</TimePM>
 <MeasurementSystem>metric</MeasurementSystem>
 </LC_CTYPE>
-<LC_FORMAT replaceFrom="[CURRENCY]" replaceTo="">
+<LC_FORMAT replaceFrom="[CURRENCY]" replaceTo="[$DA-85F]">
 <FormatElement msgid="FixedFormatskey1" default="true" type="medium" usage="FIXED_NUMBER" formatindex="0">
 <FormatCode>General</FormatCode>
 </FormatElement>
@@ -69,7 +69,7 @@
 <FormatCode>[CURRENCY]#.##0;-[CURRENCY]#.##0</FormatCode>
 </FormatElement>
 <FormatElement msgid="CurrencyFormatskey2" default="false" type="medium" usage="CURRENCY" formatindex="13">
-<FormatCode>[CURRENCY]#.##0,00;-[CURRENCY]#,##0,00</FormatCode>
+<FormatCode>[CURRENCY]#.##0,00;-[CURRENCY]#.##0,00</FormatCode>
 </FormatElement>
 <FormatElement msgid="CurrencyFormatskey3" default="false" type="medium" usage="CURRENCY" formatindex="14">
 <FormatCode>[CURRENCY]#.##0;[RED]-[CURRENCY]#.##0</FormatCode>

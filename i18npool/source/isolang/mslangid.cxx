@@ -414,6 +414,9 @@ LanguageType MsLangId::getReplacementForObsoleteLanguage( LanguageType nLang )
         case LANGUAGE_OBSOLETE_USER_LUXEMBOURGISH:
             nLang = LANGUAGE_LUXEMBOURGISH_LUXEMBOURG;
             break;
+        case LANGUAGE_OBSOLETE_USER_KABYLE:
+            nLang = LANGUAGE_TAMAZIGHT_LATIN;
+            break;
 
         // The following are not strictly obsolete but should be mapped to a
         // replacement locale when encountered.

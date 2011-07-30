@@ -520,7 +520,8 @@ typedef unsigned short LanguageType;
 #define LANGUAGE_USER_YIDDISH_US            0x083D  /* makeLangID( 0x20, getPrimaryLanguage( LANGUAGE_YIDDISH)) */
 #define LANGUAGE_USER_LIMBU                 0x0657
 #define LANGUAGE_USER_LOJBAN                0x0658  /* no locale */
-#define LANGUAGE_USER_KABYLE                0x0659
+#define LANGUAGE_OBSOLETE_USER_KABYLE       0x0659
+#define LANGUAGE_USER_KABYLE                LANGUAGE_TAMAZIGHT_LATIN
 #define LANGUAGE_USER_HAITIAN               0x065A
 #define LANGUAGE_USER_BEEMBE                0x065B
 #define LANGUAGE_USER_BEKWEL                0x065C

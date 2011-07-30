@@ -386,6 +386,7 @@ static MsLangId::IsoLangEntry const aImplIsoLangEntries[] =
 //  { LANGUAGE_IBIBIO_NIGERIA,             "nic", "NG" },   // ISO "nic" is only a collective language code
     { LANGUAGE_YI,                          "ii", "CN" },
     { LANGUAGE_TAMAZIGHT_LATIN,            "kab", "DZ" },   // In practice Kabyle is the language used for this
+    { LANGUAGE_OBSOLETE_USER_KABYLE,       "kab", "DZ" },
     { LANGUAGE_TAMAZIGHT_LATIN,            "ber", "DZ" },   // In practice Algeria has standardized on Kabyle as the member of the "ber" collective which gets used there.
     { LANGUAGE_TAMAZIGHT_TIFINAGH,         "ber", "MA" },   // Morocco is officially using Tifinagh for its Berber languages so store it to distinguish explicitly from LANGUAGE_TAMAZIGHT_LATIN, even though as a collective language its not of much use
 //  { LANGUAGE_TAMAZIGHT_ARABIC,           "ber", ""   },   // ISO "ber" only collective!
@@ -467,7 +468,6 @@ static MsLangId::IsoLangEntry const aImplIsoLangEntries[] =
     { LANGUAGE_USER_RUSYN_SLOVAKIA,        "rue", "SK" },
     { LANGUAGE_USER_LIMBU,                 "lif", "NP" },
     { LANGUAGE_USER_LOJBAN,                "jbo", ""   },
-    { LANGUAGE_USER_KABYLE,                "kab", "DZ" },
     { LANGUAGE_USER_HAITIAN,                "ht", "HT" },
     { LANGUAGE_FRENCH_HAITI,                "fr", "HT" },
     { LANGUAGE_USER_BEEMBE,                "beq", "CG" },
