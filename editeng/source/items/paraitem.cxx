@@ -1010,7 +1010,7 @@ bool SvxTabStopItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
         case MID_STD_TAB:
         {
             const SvxTabStop &rTab = *(GetStart());
-            rVal <<= static_cast<sal_Int32>(bConvert ? TWIP_TO_MM100(rTab.GetTabPos()) : rTab.GetTabPos());
+            rVal <<= (static_cast<sal_Int32>(bConvert ? TWIP_TO_MM100(rTab.GetTabPos()) : rTab.GetTabPos()));
             break;
         }
     }

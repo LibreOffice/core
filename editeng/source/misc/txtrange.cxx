@@ -258,7 +258,7 @@ void SvxBoundArgs::NoteRange( sal_Bool bToggle )
     DBG_ASSERT( nCount == 2 * aBoolArr.size(), "NoteRange: Incompatible Sizes" );
     while( nIdx < nCount && (*pLongArr)[ nIdx ] < nMin )
         ++nIdx;
-    sal_Bool bOdd = nIdx % 2 ? sal_True : sal_False;
+    sal_Bool bOdd = (nIdx % 2) ? sal_True : sal_False;
     // No overlap with existing intervals?
     if( nIdx == nCount || ( !bOdd && nMax < (*pLongArr)[ nIdx ] ) )
     {   // Then a new one is inserted ...
@@ -643,7 +643,7 @@ LongDqPtr TextRanger::GetTextRanges( const Range& rRange )
 {
     DBG_ASSERT( rRange.Min() || rRange.Max(), "Zero-Range not allowed, Bye Bye" );
     //Can we find the result we need in the cache?
-    for (std::deque<RangeCache>::iterator it = mRangeCache.begin(); it < mRangeCache.end(); ++it)
+    for (std::deque<RangeCache>::iterator it = mRangeCache.begin(); it != mRangeCache.end(); ++it)
     {
         if (it->range == rRange)
             return &(it->results);

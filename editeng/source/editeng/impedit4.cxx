@@ -2919,7 +2919,7 @@ EditSelection ImpEditEngine::TransliterateText( const EditSelection& rSelection,
             } while( nCurrentEnd < nEndPos );
         }
 
-        if (aChanges.size() > 0)
+        if (!aChanges.empty())
         {
             // Create a single UndoAction on Demand for all the changes ...
             if ( !pUndo && IsUndoEnabled() && !IsInUndo() )

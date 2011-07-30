@@ -1037,7 +1037,7 @@ EditPaM ImpEditEngine::CursorVisualStartEnd( EditView* pEditView, const EditPaM&
         sal_uInt16 nTextPortion = pParaPortion->GetTextPortions().FindPortion( aPaM.GetIndex(), nTmp, sal_True );
         TextPortion* pTextPortion = pParaPortion->GetTextPortions().GetObject( nTextPortion );
         sal_uInt16 nRTLLevel = pTextPortion->GetRightToLeft();
-        sal_Bool bPortionRTL = nRTLLevel%2 ? sal_True : sal_False;
+        sal_Bool bPortionRTL = (nRTLLevel%2) ? sal_True : sal_False;
 
         if ( bStart )
         {
