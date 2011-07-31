@@ -2887,10 +2887,7 @@ binfilter::SwDestroyList::Remove(binfilter::SwSectionFrm* const&, unsigned short
 binfilter::SwDoc::GetAllUsedDB(binfilter::SvStringsDtor&, binfilter::SvStringsDtor const*)
 binfilter::SwDoc::ReadLayoutCache(SvStream&)
 binfilter::SwDoc::Replace(binfilter::SwPaM&, String const&, unsigned char)
-binfilter::SwForm::GetFirstTabPos() const
-binfilter::SwForm::IsFirstTabPosFlag() const
 binfilter::SwGrfNode::SaveCompleted(unsigned char)
-binfilter::SwLineLayout::DebugPortions(SvStream&, String const&, unsigned short)
 binfilter::SwOLELRUCache::Remove(binfilter::SwOLEObj&)
 binfilter::SwOutlineNodes::Insert(binfilter::SwNode* const&, unsigned short&)
 binfilter::SwOutlineNodes::Insert(binfilter::SwNode* const*, unsigned short)
