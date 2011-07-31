@@ -7026,33 +7026,6 @@ SdrObject* SvxMSDffManager::ImportOLE( long nOLEId,
     return pRet;
 }
 
-const GDIMetaFile* SvxMSDffManager::lcl_GetMetaFileFromGrf_Impl( const Graphic& rGrf,
-                                                        GDIMetaFile& rMtf )
-{
-    const GDIMetaFile* pMtf;
-    if( GRAPHIC_BITMAP == rGrf.GetType() )
-    {
-        Point aPt;
-        const Size aSz(lcl_GetPrefSize(rGrf, MAP_100TH_MM));
-
-        VirtualDevice aVirtDev;
-        aVirtDev.EnableOutput( sal_False );
-        MapMode aMM(MAP_100TH_MM);
-        aVirtDev.SetMapMode( aMM );
-
-        rMtf.Record( &aVirtDev );
-        rGrf.Draw( &aVirtDev, aPt, aSz );
-        rMtf.Stop();
-        rMtf.SetPrefMapMode(aMM);
-        rMtf.SetPrefSize( aSz );
-
-        pMtf = &rMtf;
-    }
-    else
-        pMtf = &rGrf.GetGDIMetaFile();
-    return pMtf;
-}
-
 sal_Bool SvxMSDffManager::MakeContentStream( SotStorage * pStor, const GDIMetaFile & rMtf )
 {
     String aPersistStream( String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( SVEXT_PERSIST_STREAM ) ) );

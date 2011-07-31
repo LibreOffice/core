@@ -532,7 +532,6 @@ protected :
                                   const int _nCalledByGroup,
                                   sal_Int64 nAspect ) const;
     SdrObject* GetAutoForm( MSO_SPT eTyp ) const;
-    static const GDIMetaFile* lcl_GetMetaFileFromGrf_Impl( const Graphic& rGrf, GDIMetaFile& rMtf );
     static com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject > CheckForConvertToSOObj(
                 sal_uInt32 nConvertFlags, SotStorage& rSrcStg,
                 const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >& xDestStg,
