@@ -203,7 +203,6 @@ public:
         return rtl::OString (reinterpret_cast<rtl_String*>(mpData));
     }
 
-    static ByteString   CreateFromInt32( sal_Int32 n, sal_Int16 nRadix = 10 );
     sal_Int32           ToInt32() const;
     sal_Int64           ToInt64() const;
 

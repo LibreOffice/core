@@ -31,8 +31,6 @@
 
 #include <string.h>
 
-#include "boost/static_assert.hpp"
-
 #include "osl/diagnose.h"
 #include <osl/interlck.h>
 #include <rtl/alloc.h>
@@ -89,17 +87,6 @@ xub_StrLen ImplStringLen( const sal_Unicode* pStr )
 
 #include <strimp.cxx>
 #include <strcvt.cxx>
-
-// -----------------------------------------------------------------------
-
-ByteString ByteString::CreateFromInt32( sal_Int32 n, sal_Int16 nRadix )
-{
-    sal_Char aBuf[RTL_STR_MAX_VALUEOFINT32];
-    BOOST_STATIC_ASSERT(RTL_STR_MAX_VALUEOFINT32 <= STRING_MAXLEN);
-    return ByteString(
-        aBuf,
-        static_cast< xub_StrLen >(rtl_str_valueOfInt32( aBuf, n, nRadix )) );
-}
 
 // -----------------------------------------------------------------------
 
