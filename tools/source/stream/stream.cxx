@@ -920,13 +920,6 @@ sal_Bool SvStream::WriteLine( const ByteString& rStr )
     return nError == SVSTREAM_OK;
 }
 
-sal_Bool SvStream::WriteUniStringLine( const String& rStr )
-{
-    WriteUnicodeText( rStr );
-    endlu(*this);
-    return nError == SVSTREAM_OK;
-}
-
 /*************************************************************************
 |*
 |*    Stream::WriteLines()

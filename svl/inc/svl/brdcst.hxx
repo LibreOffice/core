@@ -64,9 +64,6 @@ public:
     virtual                 ~SfxBroadcaster();
 
     void                    Broadcast( const SfxHint &rHint );
-    void                    BroadcastDelayed( const SfxHint& rHint );
-    void                    BroadcastInIdle( const SfxHint& rHint );
-
     sal_Bool                    HasListeners() const;
     sal_uInt16                  GetListenerCount() const { return aListeners.Count(); }
     SfxListener*            GetListener( sal_uInt16 nNo ) const

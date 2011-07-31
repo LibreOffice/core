@@ -972,28 +972,6 @@ sal_Bool SvtLinguConfig::GetElementNamesFor(
     return bSuccess;
 }
 
-static uno::Reference< container::XNameAccess > GetOrCreateSetEntry_Impl(
-    const uno::Reference< container::XNameAccess > &rxSetNameAccess,
-    const rtl::OUString &rEntryName )
-{
-    uno::Reference< container::XNameAccess > xResult;
-    try
-    {
-        if (!rxSetNameAccess->hasByName( rEntryName ))
-        {
-            uno::Reference< lang::XSingleServiceFactory > xFactory( rxSetNameAccess, uno::UNO_QUERY_THROW);
-            uno::Reference< uno::XInterface > xNewEntry( xFactory->createInstance() );
-            uno::Reference< container::XNameContainer > xNC( rxSetNameAccess, uno::UNO_QUERY_THROW );
-            xNC->insertByName( rEntryName, makeAny( xNewEntry ) );
-        }
-        xResult.set( rxSetNameAccess->getByName( rEntryName ), uno::UNO_QUERY_THROW );
-    }
-    catch (uno::Exception &)
-    {
-    }
-    return xResult;
-}
-
 sal_Bool SvtLinguConfig::GetSupportedDictionaryFormatsFor(
     const rtl::OUString &rSetName,
     const rtl::OUString &rSetEntry,
@@ -1018,38 +996,10 @@ sal_Bool SvtLinguConfig::GetSupportedDictionaryFormatsFor(
     return bSuccess;
 }
 
-void SvtLinguConfig::SetOrCreateSupportedDictionaryFormatsFor(
-    const rtl::OUString &rSetName,
-    const rtl::OUString &rSetEntry,
-    const uno::Sequence< rtl::OUString > &rFormatList  ) const
-{
-    if (rSetName.getLength() == 0 || rSetEntry.getLength() == 0)
-        return;
-    try
-    {
-        DBG_ASSERT( rFormatList.getLength(), "applying empty format list. Really??" );
-
-        uno::Reference< util::XChangesBatch > xUpdateAccess( GetMainUpdateAccess() );
-        uno::Reference< container::XNameAccess > xNA( xUpdateAccess, uno::UNO_QUERY_THROW );
-        xNA.set( xNA->getByName(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ServiceManager"))), uno::UNO_QUERY_THROW );
-        xNA.set( xNA->getByName( rSetName ), uno::UNO_QUERY_THROW );
-        xNA = GetOrCreateSetEntry_Impl( xNA, rSetEntry );
-
-        uno::Reference< container::XNameReplace > xNR( xNA, uno::UNO_QUERY_THROW );
-        xNR->replaceByName( aG_SupportedDictionaryFormats, uno::makeAny( rFormatList ) );
-
-        xUpdateAccess->commitChanges();
-    }
-    catch (uno::Exception &)
-    {
-    }
-}
-
-
-static uno::WeakReference< util::XMacroExpander > aG_xMacroExpander;
-
 static uno::Reference< util::XMacroExpander > lcl_GetMacroExpander()
 {
+    static uno::WeakReference< util::XMacroExpander > aG_xMacroExpander;
+
     uno::Reference< util::XMacroExpander > xMacroExpander( aG_xMacroExpander );
     if ( !xMacroExpander.is() )
     {
@@ -1163,36 +1113,6 @@ sal_Bool SvtLinguConfig::GetDictionaryEntry(
     return bSuccess;
 }
 
-void SvtLinguConfig::SetOrCreateDictionaryEntry(
-    const rtl::OUString &rNodeName,
-    const SvtLinguConfigDictionaryEntry &rDicEntry ) const
-{
-    if (rNodeName.getLength() == 0)
-        return;
-    try
-    {
-        uno::Reference< util::XChangesBatch > xUpdateAccess( GetMainUpdateAccess() );
-        uno::Reference< container::XNameAccess > xNA( xUpdateAccess, uno::UNO_QUERY_THROW );
-        xNA.set( xNA->getByName(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ServiceManager"))), uno::UNO_QUERY_THROW );
-        xNA.set( xNA->getByName( aG_Dictionaries ), uno::UNO_QUERY_THROW );
-        xNA = GetOrCreateSetEntry_Impl( xNA, rNodeName );
-
-        DBG_ASSERT( rDicEntry.aLocations.getLength(), "Applying empty dictionary locations. Really correct??" );
-        DBG_ASSERT( rDicEntry.aFormatName.getLength(), "Applying empty dictionary format name. Really correct??" );
-        DBG_ASSERT( rDicEntry.aLocaleNames.getLength(), "Applying empty list of locales for the dictionary. Really correct??" );
-
-        uno::Reference< container::XNameReplace > xNR( xNA, uno::UNO_QUERY_THROW );
-        xNR->replaceByName( aG_Locations, uno::makeAny( rDicEntry.aLocations ) );
-        xNR->replaceByName( aG_Format,    uno::makeAny( rDicEntry.aFormatName ) );
-        xNR->replaceByName( aG_Locales,   uno::makeAny( rDicEntry.aLocaleNames ) );
-
-        xUpdateAccess->commitChanges();
-    }
-    catch (uno::Exception &)
-    {
-    }
-}
-
 uno::Sequence< rtl::OUString > SvtLinguConfig::GetDisabledDictionaries() const
 {
     uno::Sequence< rtl::OUString > aResult;
@@ -1206,32 +1126,6 @@ uno::Sequence< rtl::OUString > SvtLinguConfig::GetDisabledDictionaries() const
     {
     }
     return aResult;
-}
-
-void SvtLinguConfig::SetDisabledDictionaries(
-    const uno::Sequence< rtl::OUString > &rDictionaries ) const
-{
-    try
-    {
-        uno::Reference< util::XChangesBatch > xUpdateAccess( GetMainUpdateAccess() );
-        uno::Reference< container::XNameAccess > xNA( xUpdateAccess, uno::UNO_QUERY_THROW );
-        xNA.set( xNA->getByName(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ServiceManager"))), uno::UNO_QUERY_THROW );
-        if (xNA->hasByName( aG_DisabledDictionaries ))
-        {
-            uno::Reference< container::XNameReplace > xNR( xNA, uno::UNO_QUERY_THROW );
-            xNR->replaceByName( aG_DisabledDictionaries, makeAny( rDictionaries ) );
-        }
-        else
-        {
-            uno::Reference< container::XNameContainer > xNC( xNA, uno::UNO_QUERY_THROW );
-            xNC->insertByName( aG_DisabledDictionaries, makeAny( rDictionaries ) );
-        }
-
-        xUpdateAccess->commitChanges();
-    }
-    catch (uno::Exception &)
-    {
-    }
 }
 
 std::vector< SvtLinguConfigDictionaryEntry > SvtLinguConfig::GetActiveDictionariesByFormat(

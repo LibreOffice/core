@@ -68,27 +68,6 @@ void SfxBroadcaster::Broadcast( const SfxHint &rHint )
     }
 }
 
-//--------------------------------------------------------------------
-
-// broadcast after a timeout
-
-
-void SfxBroadcaster::BroadcastDelayed( const SfxHint& rHint )
-{
-    DBG_WARNING( "not implemented" );
-    Broadcast(rHint);
-}
-//--------------------------------------------------------------------
-
-// broadcast in idle-handler
-
-void SfxBroadcaster::BroadcastInIdle( const SfxHint& rHint )
-{
-    DBG_WARNING( "not implemented" );
-    Broadcast(rHint);
-}
-//--------------------------------------------------------------------
-
 // unregister all listeners
 
 SfxBroadcaster::~SfxBroadcaster()

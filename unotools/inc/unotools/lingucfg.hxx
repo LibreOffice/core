@@ -217,14 +217,11 @@ public:
     sal_Bool GetElementNamesFor( const rtl::OUString &rNodeName, com::sun::star::uno::Sequence< rtl::OUString > &rElementNames ) const;
     //
     sal_Bool GetSupportedDictionaryFormatsFor( const rtl::OUString &rSetName, const rtl::OUString &rSetEntry, com::sun::star::uno::Sequence< rtl::OUString > &rFormatList ) const;
-    void SetOrCreateSupportedDictionaryFormatsFor( const rtl::OUString &rSetName, const rtl::OUString &rSetEntry, const com::sun::star::uno::Sequence< rtl::OUString > &rFormatList  ) const;
-    //
+
     sal_Bool GetDictionaryEntry( const rtl::OUString &rNodeName, SvtLinguConfigDictionaryEntry &rDicEntry ) const;
-    void SetOrCreateDictionaryEntry( const rtl::OUString &rNodeName, const SvtLinguConfigDictionaryEntry &rDicEntry ) const;
-    //
+
     com::sun::star::uno::Sequence< rtl::OUString > GetDisabledDictionaries() const;
-    void SetDisabledDictionaries( const com::sun::star::uno::Sequence< rtl::OUString > &rDictionaries ) const;
-    //
+
     std::vector< SvtLinguConfigDictionaryEntry > GetActiveDictionariesByFormat( const rtl::OUString &rFormatName );
 
     // functions returning file URLs to the respective images (if found) and empty string otherwise

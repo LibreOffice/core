@@ -331,13 +331,6 @@ SvtScriptedTextHelper::SvtScriptedTextHelper( OutputDevice& _rOutDevice ) :
 {
 }
 
-SvtScriptedTextHelper::SvtScriptedTextHelper(
-        OutputDevice& _rOutDevice,
-        Font* _pLatinFont, Font* _pAsianFont, Font* _pCmplxFont ) :
-    mpImpl( new SvtScriptedTextHelper_Impl( _rOutDevice, _pLatinFont, _pAsianFont, _pCmplxFont ) )
-{
-}
-
 SvtScriptedTextHelper::SvtScriptedTextHelper( const SvtScriptedTextHelper& _rCopy ) :
     mpImpl( new SvtScriptedTextHelper_Impl( *_rCopy.mpImpl ) )
 {

@@ -1193,14 +1193,6 @@ public:
     Bitmap              GetDownsampledBitmap( const Size& rDstSz,
                                               const Point& rSrcPt, const Size& rSrcSz,
                                               const Bitmap& rBmp, long nMaxBmpDPIX, long nMaxBmpDPIY );
-    /** Retrieve downsampled and cropped bitmapEx
-
-        @attention This method ignores negative rDstSz values, thus
-        mirroring must happen outside this method (e.g. in DrawBitmapEx)
-     */
-    BitmapEx            GetDownsampledBitmapEx( const Size& rDstSz,
-                                                const Point& rSrcPt, const Size& rSrcSz,
-                                                const BitmapEx& rBmpEx, long nMaxBmpDPIX, long nMaxBmpDPIY );
 
     //-------------------------------------
     //  Native Widget Rendering functions

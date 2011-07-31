@@ -56,9 +56,7 @@ protected:
 
     sal_Bool        ImplGetPropertyValue_BOOL( sal_uInt16 nProp );
     sal_Int16       ImplGetPropertyValue_INT16( sal_uInt16 nProp );
-    sal_uInt16      ImplGetPropertyValue_UINT16( sal_uInt16 nProp );
     sal_Int32       ImplGetPropertyValue_INT32( sal_uInt16 nProp );
-    sal_uInt32      ImplGetPropertyValue_UINT32( sal_uInt16 nProp );
     double          ImplGetPropertyValue_DOUBLE( sal_uInt16 nProp );
     ::rtl::OUString ImplGetPropertyValue_UString( sal_uInt16 nProp );
 

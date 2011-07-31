@@ -59,21 +59,6 @@ public:
                                     A reference to an output device. */
                                 SvtScriptedTextHelper( OutputDevice& _rOutDevice );
 
-                                /** Constructor sets an output device and fonts for all script types.
-                                    @param  _rOutDevice
-                                    A reference to an output device.
-                                    @param  _pLatinFont
-                                    The font for latin characters.
-                                    @param  _pAsianFont
-                                    The font for asian characters.
-                                    @param  _pCmplxFont
-                                    The font for complex text layout. */
-                                SvtScriptedTextHelper(
-                                    OutputDevice& _rOutDevice,
-                                    Font* _pLatinFont,
-                                    Font* _pAsianFont,
-                                    Font* _pCmplxFont );
-
                                 /** Copy constructor. */
                                 SvtScriptedTextHelper(
                                     const SvtScriptedTextHelper& _rCopy );

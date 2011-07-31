@@ -153,31 +153,9 @@ sal_Int16 UnoControlBase::ImplGetPropertyValue_INT16( sal_uInt16 nProp )
     return n;
 }
 
-sal_uInt16 UnoControlBase::ImplGetPropertyValue_UINT16( sal_uInt16 nProp )
-{
-    sal_uInt16 n = 0;
-    if ( mxModel.is() )
-    {
-        ::com::sun::star::uno::Any aVal = ImplGetPropertyValue( GetPropertyName( nProp ) );
-        aVal >>= n;
-    }
-    return n;
-}
-
 sal_Int32 UnoControlBase::ImplGetPropertyValue_INT32( sal_uInt16 nProp )
 {
     sal_Int32 n = 0;
-    if ( mxModel.is() )
-    {
-        ::com::sun::star::uno::Any aVal = ImplGetPropertyValue( GetPropertyName( nProp ) );
-        aVal >>= n;
-    }
-    return n;
-}
-
-sal_uInt32 UnoControlBase::ImplGetPropertyValue_UINT32( sal_uInt16 nProp )
-{
-    sal_uInt32 n = 0;
     if ( mxModel.is() )
     {
         ::com::sun::star::uno::Any aVal = ImplGetPropertyValue( GetPropertyName( nProp ) );

@@ -1639,7 +1639,6 @@ void SvtTemplateWindow::SelectFolder(sal_Int32 nFolderPosition)
 {
     pIconWin->SelectFolder(nFolderPosition);
 }
-// struct SvtTmplDlg_Impl ------------------------------------------------
 
 struct SvtTmplDlg_Impl
 {
@@ -1654,46 +1653,7 @@ struct SvtTmplDlg_Impl
     SvtTmplDlg_Impl( Window* pParent ) : pWin( new SvtTemplateWindow( pParent ) ) ,bSelectNoOpen( sal_False ) {}
 
     ~SvtTmplDlg_Impl() { delete pWin; }
-
-    uno::Reference< util::XOfficeInstallationDirectories > getOfficeInstDirs();
 };
-
-uno::Reference< util::XOfficeInstallationDirectories > SvtTmplDlg_Impl::getOfficeInstDirs()
-{
-    if ( !m_xOfficeInstDirs.is() )
-    {
-        try
-        {
-            uno::Reference< lang::XMultiServiceFactory > xSMgr = comphelper::getProcessServiceFactory();
-
-            uno::Reference< beans::XPropertySet > xPropSet( xSMgr, uno::UNO_QUERY );
-            if ( xPropSet.is() )
-            {
-                uno::Reference< uno::XComponentContext > xCtx;
-                xPropSet->getPropertyValue(
-                    rtl::OUString(
-                        RTL_CONSTASCII_USTRINGPARAM( "DefaultContext" ) ) )
-                >>= xCtx;
-
-                if ( xCtx.is() )
-                {
-                    xCtx->getValueByName(
-                        rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
-                            "/singletons/com.sun.star.util.theOfficeInstallationDirectories" ) ) )
-                    >>= m_xOfficeInstDirs;
-                }
-            }
-        }
-        catch( uno::Exception& )
-        {}
-    }
-
-    return m_xOfficeInstDirs;
-}
-
-// class SvtDocumentTemplateDialog ---------------------------------------
-
-// ------------------------------------------------------------------------
 
 SvtDocumentTemplateDialog::SvtDocumentTemplateDialog( Window* pParent ) :
 

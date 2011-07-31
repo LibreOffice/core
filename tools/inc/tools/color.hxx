@@ -177,10 +177,6 @@ public:
     static ColorData    HSBtoRGB( sal_uInt16 nHue, sal_uInt16 nSat, sal_uInt16 nBri );
     void                RGBtoHSB( sal_uInt16& nHue, sal_uInt16& nSat, sal_uInt16& nBri ) const;
 
-    // the range for cymk is 0 to 1.0
-    static ColorData    CMYKtoRGB( double fCyan, double fMagenta, double fYellow, double fKey );
-    void                RGBtoCMYK( double& fCyan, double& fMagenta, double& fYellow, double& fKey );
-
     sal_Bool            operator==( const Color& rColor ) const
                         { return (mnColor == rColor.mnColor); }
     sal_Bool            operator!=( const Color& rColor ) const
