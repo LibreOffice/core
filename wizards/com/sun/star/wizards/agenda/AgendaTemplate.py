@@ -691,9 +691,10 @@ class ItemsTable(object):
     the items in the table.
     '''
     items = []
+    table = None
 
     def __init__(self, section_, table_):
-        Topics.table = table_
+        ItemsTable.table = table_
         self.section = section_
         self.items = []
         '''
@@ -707,7 +708,7 @@ class ItemsTable(object):
         while i < len(AgendaTemplate._allItems):
             workwith = AgendaTemplate._allItems[i]
             t = Helper.getUnoPropertyValue(workwith, "TextTable")
-            if t == Topics.table:
+            if t == ItemsTable.table:
                 iText = workwith.String.lower().lstrip()
                 ai = AgendaTemplate.itemsCache[iText]
                 if ai is not None:
@@ -738,9 +739,9 @@ class ItemsTable(object):
             AgendaTemplate.textSectionHandler.breakLinkOfTextSection(
                 self.section)
             # we need to get a instance after linking.
-            Topics.table = AgendaTemplate.getTable(name)
+            ItemsTable.table = AgendaTemplate.getTable(name)
             self.section = AgendaTemplate.getSection(name)
-            cursor = Topics.table.createCursorByCellName("A1")
+            cursor = ItemsTable.table.createCursorByCellName("A1")
             # should this section be visible?
             visible = False
             # write items
@@ -757,7 +758,7 @@ class ItemsTable(object):
             for i in self.items:
                 if AgendaTemplate.isShowItem(i.name):
                     visible = True
-                    i.table = Topics.table
+                    i.table = ItemsTable.table
                     i.write(cursor)
                     # I store the cell name which was last written...
                     cellName = cursor.RangeName
@@ -789,7 +790,7 @@ class ItemsTable(object):
 
             while not cellName == cursor.RangeName and \
                     not cursor.RangeName.startswith("A"):
-                cell = Topics.table.getCellByName(cursor.RangeName)
+                cell = ItemsTable.table.getCellByName(cursor.RangeName)
                 cell.String = ""
                 cellName = cursor.RangeName
                 cursor.goRight(1, False)
@@ -801,7 +802,7 @@ class ItemsTable(object):
                 return
 
             rowIndex = AgendaTemplate.getRowIndex(cursor)
-            rowsCount = AgendaTemplate.getRowCount(Topics.table)
+            rowsCount = AgendaTemplate.getRowCount(ItemsTable.table)
             '''
             now before deleteing i move the cursor up so it
             does not disappear, because it will crash office.
@@ -810,7 +811,7 @@ class ItemsTable(object):
             if rowsCount >= rowIndex:
                 pass
                 #COMMENTED
-                #removeTableRows(Topics.table, rowIndex - 1, (rowsCount - rowIndex) + 1)
+                #removeTableRows(table, rowIndex - 1, (rowsCount - rowIndex) + 1)
 
 '''
 This class handles the preview of the topics table.
@@ -1020,17 +1021,16 @@ class Topics(object):
             cursor = Topics.table.createCursorByCellName("A" + str(firstRow))
             te = None
             cursorMoves = 0
-            tmp_switch_var1 = what
-            if tmp_switch_var1 == 0:
+            if what == 0:
                 te = self.setItemText(Topics.numCell, data[0].Value)
                 cursorMoves = Topics.numCell
-            elif tmp_switch_var1 == 1:
+            elif what == 1:
                 te = self.setItemText(Topics.topicCell, data[1].Value)
                 cursorMoves = Topics.topicCell
-            elif tmp_switch_var1 == 2:
+            elif what == 2:
                 te = self.setItemText(Topics.responsibleCell, data[2].Value)
                 cursorMoves = Topics.responsibleCell
-            elif tmp_switch_var1 == 3:
+            elif what == 3:
                 te = self.setItemText(Topics.timeCell, data[3].Value)
                 cursorMoves = Topics.timeCell
 
@@ -1243,13 +1243,13 @@ class AgendaItem(object):
 
     def write(self, tableCursor):
         cellname = tableCursor.RangeName
-        cell = Topics.table.getCellByName(cellname)
+        cell = ItemsTable.table.getCellByName(cellname)
         self.textElement.write(cell)
         tableCursor.goRight(1, False)
         #second field is actually always null...
         # this is a preparation for adding placeholders.
         if self.field is not None:
-            self.field.write(Topics.table.getCellByName(
+            self.field.write(ItemsTable.table.getCellByName(
                 tableCursor.RangeName))
 
 '''

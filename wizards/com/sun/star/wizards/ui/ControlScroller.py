@@ -224,6 +224,7 @@ class ControlScroller(object):
         else:
             return None
 
+    @classmethod
     def unregisterControlGroup(self, _index):
         del ControlScroller.scrollfields[_index]
 

@@ -167,6 +167,7 @@ class TopicsControl(ControlScroller):
     remove the last row
     '''
 
+    @classmethod
     def removeLastRow(self):
         l = len(ControlScroller.scrollfields)
         # if we should scroll up...
@@ -394,7 +395,7 @@ class TopicsControl(ControlScroller):
                     '''
                     if (guiRow + TopicsControl.nscrollvalue) \
                             == len(ControlScroller.scrollfields) - 2:
-                        removeLastRow()
+                        self.removeLastRow()
                         '''now consequentially check the last two rows,
                         and remove the last one if they are both empty.
                         (actually I check always the "before last" row,
@@ -407,9 +408,9 @@ class TopicsControl(ControlScroller):
                             ControlScroller.scrollfields.size - TopicsControl.nscrollvalue - 1]
                         # if a remove was performed, set focus
                         #to the last row with some data in it...
-                        focus(getControl(cr, column))
+                        self.focus(getControl(cr, column))
                         # update the preview document.
-                        reduceDocumentToTopics()
+                        self.reduceDocumentToTopics()
 
                 else:
                     # row contains data
