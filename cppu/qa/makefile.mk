@@ -33,12 +33,11 @@ ENABLE_EXCEPTIONS := TRUE
 
 .INCLUDE: settings.mk
 
-.IF "$(CROSS_COMPILING)"=="YES"
-all:
-    @echo Nothing done when cross-compiling
-.ENDIF
-
 CFLAGSCXX+=$(CPPUNIT_CFLAGS)
+
+.IF "$(OS)" == "IOS"
+CFLAGSCXX += -x objective-c++ -fobjc-abi-version=2 -fobjc-legacy-dispatch -D__IPHONE_OS_VERSION_MIN_REQUIRED=40300
+.ENDIF
 
 DLLPRE=# no leading "lib" on .so files
 
@@ -73,6 +72,13 @@ SHL4IMPLIB = i$(SHL4TARGET)
 DEF4NAME = $(SHL4TARGET)
 
 SLOFILES = $(SHL1OBJS) $(SHL2OBJS) $(SHL3OBJS) $(SHL4OBJS)
+
+.IF "$(OS)" == "IOS"
+APP5OBJS = $(OBJ)/cppu_cppunittester_all.obj $(SHL1OBJS) $(SHL2OBJS) $(SHL3OBJS) $(SHL4OBJS)
+APP5RPATH = NONE
+APP5STDLIBS = $(CPPUNITLIB) $(CPPULIB) $(SALLIB)
+APP5TARGET = cppu_cppunittester_all
+.ENDIF
 
 .INCLUDE: target.mk
 

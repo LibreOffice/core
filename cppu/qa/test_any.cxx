@@ -29,6 +29,10 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_cppu.hxx"
 
+#ifdef IOS
+#define CPPUNIT_PLUGIN_EXPORTED_NAME cppunitTest_qa_cppu_any
+#endif
+
 #include "sal/config.h"
 
 #include <stdlib.h> // wntmsci10 does not like <cstdlib>
