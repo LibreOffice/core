@@ -130,9 +130,7 @@ CntContentTypeItem::SetPresentation(String const&)
 CollatorWrapper::compareSubstring(rtl::OUString const&, int, int, rtl::OUString const&, int, int) const
 CollatorWrapper::listCollatorOptions(rtl::OUString const&) const
 CollatorWrapper::loadCollatorAlgorithmWithEndUserOption(rtl::OUString const&, com::sun::star::lang::Locale const&, com::sun::star::uno::Sequence<int> const&)
-Color::CMYKtoRGB(double, double, double, double)
 Color::IncreaseContrast(unsigned char)
-Color::RGBtoCMYK(double&, double&, double&, double&)
 ComboBox::GetEntryPos(void const*) const
 ComboBox::GetListPosSizePixel() const
 ComboBox::GetProminentEntryType() const
@@ -638,7 +636,6 @@ OutlinerView::SetStyleSheet(SfxStyleSheet*)
 OutlinerView::SpellIgnoreWord()
 OutlinerView::Undo()
 OutputDevice::DrawNativeControlText(unsigned int, unsigned int, Rectangle const&, unsigned int, ImplControlValue const&, rtl::OUString)
-OutputDevice::GetDownsampledBitmapEx(Size const&, Point const&, Size const&, BitmapEx const&, long, long)
 OutputDevice::GetFontSubstitute(unsigned short, String&, String&, unsigned short&)
 OutputDevice::GetMinKashida(Font const&) const
 OutputDevice::GetPixel(Polygon const&) const
@@ -1067,7 +1064,6 @@ SetOfByte::IsFull() const
 SfxAllEnumItem::RemoveAllValues()
 SfxAllEnumItem::SfxAllEnumItem(unsigned short, unsigned short, String const&)
 SfxAppMenuControl_Impl::RegisterControl(unsigned short, SfxModule*)
-SfxApplication::DdeCreateLinkSource(String const&)
 SfxApplication::DdeGetData(String const&, String const&, com::sun::star::uno::Any&)
 SfxApplication::DdeSetData(String const&, String const&, com::sun::star::uno::Any const&)
 SfxApplication::EnterAsynchronCall_Impl()
@@ -1077,10 +1073,7 @@ SfxApplication::InitializeDde()
 SfxApplication::LeaveAsynchronCall_Impl()
 SfxApplication::Main()
 SfxBasicManagerHolder::isAnyContainerModified() const
-SfxBroadcaster::BroadcastDelayed(SfxHint const&)
-SfxBroadcaster::BroadcastInIdle(SfxHint const&)
 SfxBrushItemLink::Set(SfxBrushItemLink*)
-SfxChildWindow::SetHideAtToggle(unsigned char)
 SfxChildWindow::SetPosSizePixel(Point const&, Size&)
 SfxChildWindowContext::GetAlignment() const
 SfxColumnDateTimeItem::SfxColumnDateTimeItem(SfxDateTimeItem const&)
@@ -1229,7 +1222,6 @@ SfxRequest::SetTarget(String const&)
 SfxScriptOrganizerItem::SfxScriptOrganizerItem(String const&)
 SfxShell::GetBroadcaster()
 SfxShell::RemoveItem(unsigned short)
-SfxSimpleResId::SfxSimpleResId(unsigned short)
 SfxSingleRecordReader::SfxSingleRecordReader(SvStream*)
 SfxSingleRecordWriter::SfxSingleRecordWriter(SvStream*, unsigned short, unsigned char, unsigned int)
 SfxSingleTabDialog::GetInputRanges(SfxItemPool const&)
@@ -1412,7 +1404,6 @@ SvPropertyLine::IsShownAsHyperlink()
 SvPropertyLine::IsVisibleXButton()
 SvPropertyLine::SvPropertyLine(Window*, ResId const&)
 SvPtrarr::Replace(void* const*, unsigned short, unsigned short)
-SvStream::WriteUniStringLine(String const&)
 SvStringsISort::DeleteAndDestroy(unsigned short, unsigned short)
 SvStringsISort::Insert(String* const&)
 SvStringsISort::Insert(String* const&, unsigned short&)
@@ -1560,10 +1551,7 @@ SvtLanguageOptions::IsEmphasisMarksEnabled() const
 SvtLanguageOptions::IsRubyEnabled() const
 SvtLanguageOptions::IsVerticalCallOutEnabled() const
 SvtLinguConfig::IsReadOnly(int) const
-SvtLinguConfig::SetDisabledDictionaries(com::sun::star::uno::Sequence<rtl::OUString> const&) const
 SvtLinguConfig::SetOptions(SvtLinguOptions const&)
-SvtLinguConfig::SetOrCreateDictionaryEntry(rtl::OUString const&, SvtLinguConfigDictionaryEntry const&) const
-SvtLinguConfig::SetOrCreateSupportedDictionaryFormatsFor(rtl::OUString const&, rtl::OUString const&, com::sun::star::uno::Sequence<rtl::OUString> const&) const
 SvtListenerIter::First(void* (*)())
 SvtListenerIter::GoEnd()
 SvtListenerIter::GoPrev()
@@ -1621,7 +1609,6 @@ SvtSaveOptions::SetUseSHA1InODF12(unsigned char)
 SvtScriptedTextHelper::GetText() const
 SvtScriptedTextHelper::GetTextHeight() const
 SvtScriptedTextHelper::GetTextWidth() const
-SvtScriptedTextHelper::SvtScriptedTextHelper(OutputDevice&, Font*, Font*, Font*)
 SvtSearchOptions::IsSearchForStyles() const
 SvtSecurityOptions::IsTrustedAuthorsEnabled()
 SvtStartOptions::EnableIntro(unsigned char)
@@ -1629,7 +1616,6 @@ SvtStartOptions::IsIntroEnabled() const
 SvtStartOptions::SetConnectionURL(rtl::OUString const&)
 SvtSysLocaleOptions::GetUILocale() const
 SvtTabAppearanceCfg::SetDragMode(unsigned short)
-SvtTmplDlg_Impl::getOfficeInstDirs()
 SvtURLBox::GetUrlFilter() const
 SvtUserOptions::GetLocale() const
 SvtWorkingSetOptions::GetWindowList() const
@@ -1722,7 +1708,6 @@ SvxMSDffManager::ImportFontWork(SvStream&, SfxItemSet&, Rectangle&) const
 SvxMSDffManager::ReadObjText(SvStream&, SdrObject*) const
 SvxMSDffManager::Scale(PolyPolygon&) const
 SvxMSDffManager::Scale(Rectangle&) const
-SvxMSDffManager::lcl_GetMetaFileFromGrf_Impl(Graphic const&, GDIMetaFile&)
 SvxMSDffShapeInfos::Insert(SvxMSDffShapeInfo* const&, unsigned short&)
 SvxMSDffShapeInfos::Insert(SvxMSDffShapeInfo* const*, unsigned short)
 SvxMSDffShapeInfos::Insert(SvxMSDffShapeInfos const*, unsigned short, unsigned short)
@@ -1978,8 +1963,6 @@ UniqueIdContainer::CreateIdProt(unsigned long)
 UniqueIndex::Replace(unsigned long, void*)
 UnoComboBoxControl::getActionListeners()
 UnoComboBoxControl::getItemListeners()
-UnoControlBase::ImplGetPropertyValue_UINT16(unsigned short)
-UnoControlBase::ImplGetPropertyValue_UINT32(unsigned short)
 UnoControlBase::UnoControlBase()
 UnoControlModel::Clone() const
 UnoControlModel::GetImplementation(com::sun::star::uno::Reference<com::sun::star::uno::XInterface> const&)
@@ -2594,7 +2577,6 @@ binfilter::GeometryIndexValueBucketMemArr::Insert(binfilter::GeometryIndexValueB
 binfilter::GeometryIndexValueBucketMemArr::Replace(char const*&, unsigned short)
 binfilter::GeometryIndexValueBucketMemArr::Replace(char const**, unsigned short, unsigned short)
 binfilter::GeometryIndexValueBucketMemArr::_ForEach(unsigned short, unsigned short, unsigned char (*)(char const*&, void*), void*)
-binfilter::GetCHOBJIDName(long)
 binfilter::GetLangName(unsigned short)
 binfilter::GetPortionName(unsigned short)
 binfilter::GetPrepName(binfilter::PrepareHint)
@@ -2622,9 +2604,7 @@ binfilter::PaddWithBlanks_Impl(SvStream&, unsigned short)
 binfilter::ReadThroughComponent(binfilter::SvStorage*, com::sun::star::uno::Reference<com::sun::star::lang::XComponent>, char const*, char const*, com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory>&, char const*, com::sun::star::uno::Sequence<com::sun::star::uno::Any>, rtl::OUString const&, unsigned char)
 binfilter::Registration::~Registration()
 binfilter::SaveBookmarks::DeleteAndDestroy(unsigned short, unsigned short)
-binfilter::SbiCloseRecord(SvStream&, unsigned long)
 binfilter::SbiGlobals::~SbiGlobals()
-binfilter::SbiOpenRecord(SvStream&, unsigned short, unsigned short)
 binfilter::SbxFacs::DeleteAndDestroy(unsigned short, unsigned short)
 binfilter::SbxValue::GetCoreString() const
 binfilter::ScAddInAsyncs::Insert(binfilter::ScAddInAsync* const&, unsigned short&)
@@ -2651,11 +2631,7 @@ binfilter::ScConditionalFormats_Impl::Insert(binfilter::ScConditionalFormats_Imp
 binfilter::ScConditionalFormats_Impl::Remove(binfilter::ScConditionalFormat* const&, unsigned short)
 binfilter::ScConditionalFormats_Impl::Remove(unsigned short, unsigned short)
 binfilter::ScDBData::IsBeyond(unsigned short) const
-binfilter::ScDocShell::SaveXML(binfilter::SfxMedium*, binfilter::SvStorage*)
 binfilter::ScDocument::GetWeightedCount() const
-binfilter::ScDocument::ImplSaveDocOptions(SvStream&) const
-binfilter::ScDocument::ImplSaveViewOptions(SvStream&) const
-binfilter::ScDocument::SaveAreaLinks(SvStream&) const
 binfilter::ScDocument::SetConditionalUsed(unsigned long)
 binfilter::ScDocument::SetValidationUsed(unsigned long)
 binfilter::ScFieldChangerEditEngine::ConvertFields()
@@ -2832,7 +2808,6 @@ binfilter::Sw3Bytes::Insert(binfilter::Sw3Bytes const*, unsigned short, unsigned
 binfilter::Sw3Bytes::Replace(unsigned char const&, unsigned short)
 binfilter::Sw3Bytes::Replace(unsigned char const*, unsigned short, unsigned short)
 binfilter::Sw3Bytes::_ForEach(unsigned short, unsigned short, unsigned char (*)(unsigned char const&, void*), void*)
-binfilter::Sw3IoImp::ConvertStringNoDbDelim(String const&, unsigned short)
 binfilter::Sw3IoImp::OutEndNoteInfo(binfilter::SwEndNoteInfo const&)
 binfilter::Sw3IoImp::OutPageFtnInfo(binfilter::SwPageFtnInfo const&)
 binfilter::Sw3IoImp::OutRedline(binfilter::SwRedline const&)
@@ -2864,7 +2839,6 @@ binfilter::SwBookmarks::Insert(binfilter::SwBookmarks const*, unsigned short, un
 binfilter::SwBookmarks::Remove(binfilter::SwBookmark* const&, unsigned short)
 binfilter::SwCache::Check()
 binfilter::SwChartBoxes::DeleteAndDestroy(unsigned short, unsigned short)
-binfilter::SwCrsrShell::GetCrsrDocPos(unsigned char) const
 binfilter::SwCrsrShell::GetSwCrsr(bool) const
 binfilter::SwCrsrShell::IsCrsrInTbl(unsigned char) const
 binfilter::SwCrsrShell::IsCrsrPtAtEnd() const
@@ -2885,7 +2859,6 @@ binfilter::SwDestroyList::Insert(binfilter::SwSectionFrm* const&, unsigned short
 binfilter::SwDestroyList::Insert(binfilter::SwSectionFrm* const*, unsigned short)
 binfilter::SwDestroyList::Remove(binfilter::SwSectionFrm* const&, unsigned short)
 binfilter::SwDoc::GetAllUsedDB(binfilter::SvStringsDtor&, binfilter::SvStringsDtor const*)
-binfilter::SwDoc::ReadLayoutCache(SvStream&)
 binfilter::SwDoc::Replace(binfilter::SwPaM&, String const&, unsigned char)
 binfilter::SwGrfNode::SaveCompleted(unsigned char)
 binfilter::SwOLELRUCache::Remove(binfilter::SwOLEObj&)
@@ -2952,7 +2925,6 @@ binfilter::SwpHtStart::Insert(binfilter::SwTxtAttr const**, unsigned short)
 binfilter::SwpHtStart::Insert(binfilter::SwpHtStart const*, unsigned short, unsigned short)
 binfilter::SwpHtStart::Remove(binfilter::SwTxtAttr const*&, unsigned short)
 binfilter::ViewShell::Init(binfilter::SwViewOption const*)
-binfilter::W4WSttEndPos::W4WSttEndPos(binfilter::SwTxtAttr const*, unsigned short, unsigned short)
 binfilter::W4WStyleIdTab::Insert(binfilter::W4WStyleIdTab const*, unsigned short, unsigned short)
 binfilter::W4WStyleIdTab::Insert(binfilter::W4WStyleIdTabEntry* const&, unsigned short&)
 binfilter::W4WStyleIdTab::Insert(binfilter::W4WStyleIdTabEntry* const*, unsigned short)
@@ -3199,7 +3171,6 @@ cppu::createOneInstanceRegistryFactory(com::sun::star::uno::Reference<com::sun::
 dbaccess::ORowSetNotifier::getChangedBookmarks() const
 dbaccess::OptimisticSet::getComposedTableName(rtl::OUString const&, rtl::OUString const&, rtl::OUString const&)
 dbaui::LoadFormHelper::LoadFormHelper(com::sun::star::uno::Reference<com::sun::star::sdbc::XRowSet> const&)
-dbaui::LoadFormHelper::WaitUntilReallyLoaded(bool)
 dbaui::LoadFormHelper::cancel()
 dbaui::OApplicationController::LinkStubOnInvalidateClipboard(void*, void*)
 dbaui::OFieldDescControl::LinkStubDelayedGrabFocus(void*, void*)
