@@ -2872,13 +2872,6 @@ public:
     // ::com::sun::star::lang::XEventListener
     virtual void SAL_CALL disposing(const ::com::sun::star::lang::EventObject& Source) throw( RuntimeException );
 
-
-    bool WaitUntilReallyLoaded(bool _bOnlyIfLoaded);
-        // waits 'til the first positioned event after the loaded event. returns true if successfull,
-        // false if the form was disposed or unloaded before or while waiting
-        // if _bOnlyIfLoaded is false and the form isn't loaded already loaded, false will be returned
-        // (without any wating)
-
     void cancel();
 
 protected:
@@ -2982,33 +2975,6 @@ void SAL_CALL LoadFormHelper::disposing(const ::com::sun::star::lang::EventObjec
 void LoadFormHelper::cancel()
 {
     implDispose();
-}
-
-//------------------------------------------------------------------------------
-bool LoadFormHelper::WaitUntilReallyLoaded(bool _bOnlyIfLoaded)
-{
-    ::osl::ResettableMutexGuard aGuard( m_aAccessSafety );
-    if (DISPOSED == m_eState)
-        return false;
-
-    if (_bOnlyIfLoaded && (STARTED == m_eState))
-        // we did't get a "loaded" event ....
-        return false;
-
-    sal_Bool bDone = (POSITIONED == m_eState);
-    aGuard.clear();
-
-    while (!bDone)
-    {
-        aGuard.reset();
-        bDone = (POSITIONED == m_eState);
-        aGuard.clear();
-    }
-
-    aGuard.reset();
-    implDispose();
-
-    return true;
 }
 
 // -----------------------------------------------------------------------------
