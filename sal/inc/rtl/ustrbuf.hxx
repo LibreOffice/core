@@ -110,7 +110,7 @@ public:
 
         @param      length   the initial capacity.
      */
-    OUStringBuffer(sal_Int32 length)
+    explicit OUStringBuffer(sal_Int32 length)
         : pData(NULL)
         , nCapacity( length )
     {
