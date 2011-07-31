@@ -402,7 +402,7 @@ void Desktop::CreateTemporaryDirectory()
         else
             aMsg = OUString( RTL_CONSTASCII_USTRINGPARAM( "The path manager is not available.\n" ));
         e.Message = aMsg + e.Message;
-        throw e;
+        throw;
     }
 
     // remove possible old directory and base directory

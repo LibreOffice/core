@@ -145,16 +145,19 @@ SV_DECL_REF(SbxBase)
 #endif
 
 inline void SbxBase::SetFlags( sal_uInt16 n )
-{ DBG_CHKTHIS( SbxBase, 0 ); nFlags = n; }
+{ //DBG_CHKTHIS( SbxBase, 0 );
+ nFlags = n; }
 
 inline sal_uInt16 SbxBase::GetFlags() const
 { DBG_CHKTHIS( SbxBase, 0 ); return nFlags; }
 
 inline void SbxBase::SetFlag( sal_uInt16 n )
-{ DBG_CHKTHIS( SbxBase, 0 ); nFlags |= n; }
+{ //DBG_CHKTHIS( SbxBase, 0 );
+ nFlags |= n; }
 
 inline void SbxBase::ResetFlag( sal_uInt16 n )
-{ DBG_CHKTHIS( SbxBase, 0 ); nFlags &= ~n; }
+{ //DBG_CHKTHIS( SbxBase, 0 );
+ nFlags &= ~n; }
 
 inline sal_Bool SbxBase::IsSet( sal_uInt16 n ) const
 { DBG_CHKTHIS( SbxBase, 0 ); return sal_Bool( ( nFlags & n ) != 0 ); }

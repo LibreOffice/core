@@ -108,6 +108,7 @@ int pagein_execute (int argc, char **argv)
         if ((argv[i][0] == '@') && ((fp = fopen (argv[i], "r")) == 0))
         {
             char fullpath[4096];
+            memset(fullpath, 0, sizeof(fullpath));
             char *path;
             strncpy (fullpath, argv[i] + 1, 3000);
             if (!(path = strrchr (fullpath, '/')))
