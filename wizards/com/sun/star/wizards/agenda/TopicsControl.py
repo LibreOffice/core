@@ -400,7 +400,7 @@ class TopicsControl(ControlScroller):
                         because the last one is always empty...
                         '''
                         while len(ControlScroller.scrollfields) > 1 \
-                                and isRowEmpty(len(ControlScroller.scrollfields) - 2):
+                                and self.isRowEmpty(len(ControlScroller.scrollfields) - 2):
                             removeLastRow()
                         cr = self.ControlGroupVector[
                             ControlScroller.scrollfields.size - ControlScroller.nscrollvalue - 1]

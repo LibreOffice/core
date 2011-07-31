@@ -182,7 +182,6 @@ class ControlScroller(object):
     @classmethod
     def scrollControls(self):
         try:
-            self.scrollRowsInfo()
             ControlScroller.nscrollvalue = int(Helper.getUnoPropertyValue(
                     ControlScroller.xScrollBar.Model, "ScrollValue"))
             if ControlScroller.nscrollvalue + ControlScroller.nblockincrement \
@@ -192,17 +191,6 @@ class ControlScroller(object):
             self.fillupControls(False)
         except Exception:
             traceback.print_exc()
-
-    @classmethod
-    def scrollRowsInfo(self):
-        if len(ControlScroller.scrollfields) > 0:
-            cols = len(ControlScroller.scrollfields[0])
-        else:
-            cols = 0
-
-        for a in xrange(self.ncurfieldcount):
-            for n in xrange(cols):
-                self.fieldInfo(a, n)
 
     '''
     updates the corresponding data to
@@ -261,7 +249,6 @@ class ControlScroller(object):
             return None
 
     def getScrollFieldValues(self):
-        scrollRowsInfo()
         retproperties = [[ControlScroller.scrollfields.size()],[]]
         try:
             i = 0
