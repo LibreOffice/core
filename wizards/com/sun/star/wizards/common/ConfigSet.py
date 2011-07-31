@@ -23,8 +23,6 @@ class ConfigSet(ConfigNode):
         if isinstance(name, int):
             i = name
             self.childrenList.insert(i, o)
-            #COMMENTED
-            #self.fireListDataListenerIntervalAdded(i, i)
         else:
             i = o.cp_Index
             oldSize = self.getSize()
@@ -37,62 +35,6 @@ class ConfigSet(ConfigNode):
             self.childrenList.insert(i, o);
             if oldSize > i:
                 oldSize = i
-            #COMMENTED
-            #self.fireListDataListenerIntervalAdded(oldSize, i)
-
-    def writeConfiguration(self, configView, param):
-        names = self.childrenMap.keys()
-        if isinstance(self.childClass, ConfigNode):
-            #first I remove all the children from the configuration.
-            children = configView.ElementNames
-            if children:
-                for i in children:
-                    try:
-                        Configuration.removeNode(configView, i)
-                    except Exception:
-                        traceback.print_exc()
-
-                # and add them new.
-            for i in names:
-                try:
-                    child = self.getElement(i)
-                    childView = configView.getByName(i)
-                    child.writeConfiguration(childView, param)
-                except Exception:
-                    traceback.print_exc()
-        else:
-            raise AttributeError (
-            "Unable to write primitive sets to configuration (not implemented)")
-
-    def readConfiguration(self, configurationView, param):
-        names = configurationView.ElementNames
-        if isinstance(self.childClass, ConfigNode):
-            if names:
-                for i in names:
-                    try:
-                        child = type(self.childClass)()
-                        child.setRoot(self.root)
-                        child.readConfiguration(
-                            configurationView.getByName(i), param)
-                        self.add(i, child)
-                    except Exception, ex:
-                         traceback.print_exc()
-            #remove any nulls from the list
-            if self.noNulls:
-                i = 0
-                while i < len(self.childrenList):
-                    if self.childrenList[i] is None:
-                        del self.childrenList[i]
-                        i -= 1
-                    i += 1
-
-        else:
-            for i in names:
-                try:
-                    child = configurationView.getByName(i)
-                    self.add(i, child)
-                except Exception, ex:
-                    traceback.print_exc()
 
     def remove(self, obj):
         key = getKey(obj)
@@ -108,9 +50,6 @@ class ConfigSet(ConfigNode):
     def clear(self):
         self.childrenMap.clear()
         del self.childrenList[:]
-
-    def update(self, i):
-        fireListDataListenerContentsChanged(i, i)
 
     def createDOM(self, parent):
         items = items()

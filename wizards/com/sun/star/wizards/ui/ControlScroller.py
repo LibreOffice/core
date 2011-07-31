@@ -80,38 +80,6 @@ class ControlScroller(object):
         Helper.setUnoPropertyValue(
             ControlScroller.xScrollBar, "Orientation", HORIZONTAL)
 
-    '''
-    @author bc93774
-    @param _ntotfieldcount: The number of fields that are
-    to be administered by the ControlScroller
-    '''
-
-    def initialize(self, _ntotfieldcount):
-        try:
-            self.ntotfieldcount = _ntotfieldcount
-            self.setCurFieldCount()
-            ControlScroller.nscrollvalue = 0
-            Helper.setUnoPropertyValue(
-                ControlScroller.xScrollBar.Model, "ScrollValue",
-                ControlScroller.nscrollvalue)
-            if self.ntotfieldcount > ControlScroller.nblockincrement:
-                Helper.setUnoPropertyValues(
-                    ControlScroller.xScrollBar.Model, (PropertyNames.PROPERTY_ENABLED,
-                        "BlockIncrement", "LineIncrement",
-                        "ScrollValue", "ScrollValueMax"),
-                    (True, ControlScroller.nblockincrement, self.nlineincrement,
-                        ControlScroller.nscrollvalue,
-                        self.ntotfieldcount - ControlScroller.nblockincrement))
-            else:
-                Helper.setUnoPropertyValues(
-                    ControlScroller.xScrollBar.Model,
-                    (PropertyNames.PROPERTY_ENABLED, "ScrollValue"),
-                    (False, ControlScroller.nscrollvalue))
-
-            self.fillupControls(True)
-        except Exception:
-            traceback.print_exc()
-
     @classmethod
     def fillupControls(self, binitialize):
         for i in xrange(ControlScroller.nblockincrement):

@@ -138,7 +138,6 @@ class AgendaTemplate(TextDocument):
         self.redrawTitle("txtDate")
         self.redrawTitle("txtTime")
         self.redrawTitle("cbLocation")
-        Topics.writeAll(topicsData)
         if AgendaTemplate.agenda.cp_TemplateName is None:
             AgendaTemplate.agenda.cp_TemplateName = ""
         self.setTemplateTitle(AgendaTemplate.agenda.cp_TemplateName)
@@ -644,17 +643,6 @@ class AgendaTemplate(TextDocument):
                 v.append(i)
         return v
 
-    '''convenience method, for removing a number of cells from a table.
-    @param table
-    @param start
-    @param count
-    '''
-
-    @classmethod
-    def removeTableRows(self, table, start, count):
-        rows = table.Rows
-        rows.removeByIndex(start, count)
-
     '''Convenience method for inserting some cells into a table.
     @param table
     @param start
@@ -808,10 +796,6 @@ class ItemsTable(object):
             does not disappear, because it will crash office.
             '''
             cursor.gotoStart(False)
-            if rowsCount >= rowIndex:
-                pass
-                #COMMENTED
-                #removeTableRows(table, rowIndex - 1, (rowsCount - rowIndex) + 1)
 
 '''
 This class handles the preview of the topics table.
@@ -853,7 +837,6 @@ class Topics(object):
     timeCell = -1
     rowsPerTopic = None
     topicCells = []
-    topicCellFormats = []
 
     def __init__(self):
         self.topicItems = {}
@@ -910,14 +893,12 @@ class Topics(object):
                 pass
 
             Topics.topicCells.append(ae)
-            # and store the format of the cell.
-            Topics.topicCellFormats.append( TableCellFormatter(
-                Topics.table.getCellByName(cursor.RangeName)))
             # goto next cell.
             cursor.goRight(1, False)
         '''
         now - in which cell is every fillin?
         '''
+
         Topics.numCell = Topics.topicCells.index(
             self.topicItems[FILLIN_TOPIC_NUMBER])
         Topics.topicCell = Topics.topicCells.index(
@@ -926,28 +907,6 @@ class Topics(object):
             self.topicItems[FILLIN_TOPIC_RESPONSIBLE])
         Topics.timeCell = Topics.topicCells.index(
             self.topicItems[FILLIN_TOPIC_TIME])
-        '''now that we know how the topics look like,
-        we get the format of the first and last rows.
-        '''
-        # format of first row
-        cursor.gotoStart(False)
-        tmp_do_var1 = True
-        while tmp_do_var1:
-            self.firstRowFormat.append(TableCellFormatter (
-                Topics.table.getCellByName(cursor.RangeName)))
-            cursor.goRight(1, False)
-            tmp_do_var1 = not cursor.RangeName.startswith("A")
-        # format of the last row
-        cursor.gotoEnd(False)
-        while not cursor.RangeName.startswith("A"):
-            Topics.lastRowFormat.append(TableCellFormatter (
-                Topics.table.getCellByName(cursor.RangeName)))
-            cursor.goLeft(1, False)
-        # we missed the A cell - so we have to add it also..
-        Topics.lastRowFormat.append(TableCellFormatter (
-            Topics.table.getCellByName(cursor.RangeName)))
-        #COMMENTED
-        #AgendaTemplate.removeTableRows(Topics.table, 1 + Topics.rowsPerTopic, rows - Topics.rowsPerTopic - 1)
 
     '''@param topic the topic number to write
     @param data the data of the topic.
@@ -981,7 +940,6 @@ class Topics(object):
             cursor.goRight(1, False)
         # now format !
         cursor.gotoCellByName("A" + str(firstRow), False)
-        self.formatTable(cursor, Topics.topicCellFormats, False)
         return diff
 
     '''check if the topic with the given index is written to the table.
@@ -1039,7 +997,6 @@ class Topics(object):
             xc = Topics.table.getCellByName(cursor.RangeName)
             # and write it !
             te.write(xc)
-            Topics.topicCellFormats[cursorMoves].format(xc)
 
     '''writes the given topic.
     if the first topic was involved, reformat the
@@ -1066,19 +1023,6 @@ class Topics(object):
 
         if diff > 0:
             self.formatLastRow()
-
-    '''Writes all the topics to thetopics table.
-    @param topicsData a List containing all Topic's Data.
-    '''
-
-    @classmethod
-    def writeAll(self, topicsData):
-        try:
-            for i in xrange(len(topicsData) - 1):
-                self.write2(i, topicsData[i])
-            self.formatLastRow()
-        except Exception, ex:
-            traceback.print_exc()
 
     '''removes obsolete rows, reducing the
     topics table to the given number of topics.
@@ -1251,25 +1195,3 @@ class AgendaItem(object):
         if self.field is not None:
             self.field.write(ItemsTable.table.getCellByName(
                 tableCursor.RangeName))
-
-'''
-reads/write a table cell format from/to a table cell or a group of cells.
-'''
-class TableCellFormatter(object):
-    properties = ("BackColor", "BackTransparent", "BorderDistance",
-        "BottomBorderDistance", "LeftBorder",
-        "LeftBorderDistance", "RightBorder", "RightBorderDistance",
-        "TopBorder", "TopBorderDistance")
-
-    def __init__(self, tableCell):
-        self.values = []
-        for i in TableCellFormatter.properties:
-            pass
-            #COMMENTED
-            #self.values.append( Helper.getUnoPropertyValue(tableCell, i) )
-
-    def format(self, tableCell):
-        pass
-        #COMMENTED
-        #Helper.setUnoPropertyValues(
-        #    tableCell, TableCellFormatter.properties, tuple(self.values))

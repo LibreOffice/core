@@ -100,8 +100,7 @@ class TopicsControl(ControlScroller):
             super(TopicsControl, self).__init__(
                 dialog, xmsf, 5, 92, 38, 212, 5, 18, LAST_HID)
             self.initializeScrollFields(agenda)
-            self.initialize(agenda.cp_Topics.getSize() + 1)
-        # set some focus listeners for TAB scroll down and up...
+            # set some focus listeners for TAB scroll down and up...
             # prepare scroll down on tab press...
             self.lastTime = \
                 self.ControlGroupVector[self.nblockincrement - 1].timebox
@@ -149,17 +148,6 @@ class TopicsControl(ControlScroller):
         if l - ControlScroller.nscrollvalue < self.nblockincrement:
             self.ControlGroupVector[l - ControlScroller.nscrollvalue].\
                 setEnabled(True)
-
-    '''
-    The Topics Set in the CGAgenda object is synchronized to
-    the current content of the topics.
-    @param agenda
-    '''
-
-    def saveTopics(self, agenda):
-        agenda.cp_Topics.clear()
-        for i in xrange(len(ControlScroller.scrollfields) - 1):
-            agenda.cp_Topics.add(i, CGTopic(ControlScroller.scrollfields[i]))
 
     '''
     remove the last row

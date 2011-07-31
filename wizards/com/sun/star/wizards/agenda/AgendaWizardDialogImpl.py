@@ -208,7 +208,6 @@ class AgendaWizardDialogImpl(AgendaWizardDialog):
                 (self.optCreateAgenda, self.optMakeChanges), True).updateUI()
 
     def saveConfiguration(self):
-        self.topicsControl.saveTopics(self.agenda)
         root = Configuration.getConfigurationRoot(
             self.xMSF, "/org.openoffice.Office.Writer/Wizards/Agenda", True)
         self.agenda.writeConfiguration(root, "cp_")
