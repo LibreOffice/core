@@ -17,7 +17,6 @@ class ControlScroller(object):
     iStep = None
     curHelpIndex = None
 
-
     # TODO add parameters for tabindices and helpindex
     def __init__(self, _CurUnoDialog, _xMSF, _iStep, _iCompPosX, _iCompPosY,
             _iCompWidth, _nblockincrement, _nlinedistance, _firsthelpindex):
@@ -113,8 +112,9 @@ class ControlScroller(object):
         except Exception:
             traceback.print_exc()
 
+    @classmethod
     def fillupControls(self, binitialize):
-        for i in xrange(0, ControlScroller.nblockincrement):
+        for i in xrange(ControlScroller.nblockincrement):
             if i < self.ncurfieldcount:
                 self.fillupControl(i)
 
@@ -125,12 +125,13 @@ class ControlScroller(object):
     def fillupControl(self, guiRow):
         nameProps = ControlScroller.scrollfields[guiRow]
         valueProps = ControlScroller.scrollfields[guiRow + ControlScroller.nscrollvalue]
-        for i in nameProps:
-            if ControlScroller.CurUnoDialog.xDialogModel.hasByName(i.Name):
-                self.setControlData(i.Name, i.Value)
+        for index, item in enumerate(nameProps):
+            if ControlScroller.CurUnoDialog.xDialogModel.hasByName(item.Name):
+                self.setControlData(item.Name, valueProps[index].Value)
             else:
                 raise AttributeError("No such control !")
 
+    @classmethod
     def setScrollValue(self, _nscrollvalue, _ntotfieldcount=None):
         if _ntotfieldcount is not None:
             self.setTotalFieldCount(_ntotfieldcount)
@@ -178,6 +179,7 @@ class ControlScroller(object):
                 m += 1
             n += 1
 
+    @classmethod
     def scrollControls(self):
         try:
             self.scrollRowsInfo()
@@ -187,11 +189,11 @@ class ControlScroller(object):
                     >= self.ntotfieldcount:
                 ControlScroller.nscrollvalue = \
                     self.ntotfieldcount - ControlScroller.nblockincrement
-
             self.fillupControls(False)
         except Exception:
             traceback.print_exc()
 
+    @classmethod
     def scrollRowsInfo(self):
         if len(ControlScroller.scrollfields) > 0:
             cols = len(ControlScroller.scrollfields[0])

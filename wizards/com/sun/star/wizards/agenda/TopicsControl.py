@@ -83,8 +83,6 @@ class TopicsControl(ControlScroller):
     TOPIC = "txtTopicTopic_"
     RESP = "cbTopicResp_"
     TIME = "txtTopicTime_"
-    I_12 = 12
-    I_8 = 8
     nscrollvalue = 0
     LABEL_PROPS = (PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_LABEL,
         PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y,
@@ -148,8 +146,8 @@ class TopicsControl(ControlScroller):
         self.setTotalFieldCount(l + 1)
         # if the new row is visible, it must have been disabled
         # so it should be now enabled...
-        if l - TopicsControl.nscrollvalue < self.nblockincrement:
-            self.ControlGroupVector[l - TopicsControl.nscrollvalue].\
+        if l - ControlScroller.nscrollvalue < self.nblockincrement:
+            self.ControlGroupVector[l - ControlScroller.nscrollvalue].\
                 setEnabled(True)
 
     '''
@@ -171,15 +169,15 @@ class TopicsControl(ControlScroller):
     def removeLastRow(self):
         l = len(ControlScroller.scrollfields)
         # if we should scroll up...
-        if (l - TopicsControl.nscrollvalue) >= 1 \
-                and (l - TopicsControl.nscrollvalue) <= self.nblockincrement \
-                and TopicsControl.nscrollvalue > 0:
-            while (l - TopicsControl.nscrollvalue >= 1) \
-                    and l - TopicsControl.nscrollvalue <= self.nblockincrement \
-                    and TopicsControl.nscrollvalue > 0:
-                setScrollValue(TopicsControl.nscrollvalue - 1)
+        if (l - ControlScroller.nscrollvalue) >= 1 \
+                and (l - ControlScroller.nscrollvalue) <= self.nblockincrement \
+                and ControlScroller.nscrollvalue > 0:
+            while (l - ControlScroller.nscrollvalue >= 1) \
+                    and l - ControlScroller.nscrollvalue <= self.nblockincrement \
+                    and ControlScroller.nscrollvalue > 0:
+                self.setScrollValue(ControlScroller.nscrollvalue - 1)
         # if we should disable a row...
-        elif TopicsControl.nscrollvalue == 0 and l - 1 < self.nblockincrement:
+        elif ControlScroller.nscrollvalue == 0 and l - 1 < self.nblockincrement:
             self.ControlGroupVector[l - 1].setEnabled(False)
 
         self.unregisterControlGroup(l - 1)
@@ -214,7 +212,7 @@ class TopicsControl(ControlScroller):
             name = Helper.getUnoPropertyValue(
                 control.Model, PropertyNames.PROPERTY_NAME)
             num = name[name.index("_") + 1:]
-            TopicsControl.lastFocusRow = int(num) + TopicsControl.nscrollvalue
+            TopicsControl.lastFocusRow = int(num) + ControlScroller.nscrollvalue
             TopicsControl.lastFocusControl = control
             # enable/disable the buttons...
             self.enableButtons()
@@ -262,8 +260,8 @@ class TopicsControl(ControlScroller):
                 pv1[2].Value = pv2[2].Value
                 pv1[3].Value = pv2[3].Value
                 self.updateDocumentRow(i)
-                if i - TopicsControl.nscrollvalue < self.nblockincrement:
-                    self.fillupControl(i - TopicsControl.nscrollvalue)
+                if i - ControlScroller.nscrollvalue < self.nblockincrement:
+                    self.fillupControl(i - ControlScroller.nscrollvalue)
 
             self.removeLastRow()
             # update the live preview background document
@@ -292,8 +290,8 @@ class TopicsControl(ControlScroller):
                 pv1[2].Value = pv2[2].Value
                 pv1[3].Value = pv2[3].Value
                 self.updateDocumentRow(i)
-                if i - TopicsControl.nscrollvalue < self.nblockincrement:
-                    self.fillupControl(i - TopicsControl.nscrollvalue)
+                if i - ControlScroller.nscrollvalue < self.nblockincrement:
+                    self.fillupControl(i - ControlScroller.nscrollvalue)
 
             # after rotating all the properties from this row on,
             # we clear the row, so it is practically a new one...
@@ -304,7 +302,7 @@ class TopicsControl(ControlScroller):
             # update the preview document.
             self.updateDocumentRow(TopicsControl.lastFocusRow)
             self.fillupControl(
-                TopicsControl.lastFocusRow - TopicsControl.nscrollvalue)
+                TopicsControl.lastFocusRow - ControlScroller.nscrollvalue)
             self.enableButtons()
 
             if TopicsControl.lastFocusControl is not None:
@@ -360,7 +358,7 @@ class TopicsControl(ControlScroller):
     def isRowEmpty(self, row):
         data = self.getTopicData(row)
         # now - is this row empty?
-        return data[1].Value and data[2].Value and data[3].Value
+        return data[1].Value  and data[2].Value and data[3].Value
 
     '''
     update the preview document and
@@ -375,7 +373,7 @@ class TopicsControl(ControlScroller):
         with TopicsControl.lock:
             try:
                 # First, I update the document
-                data = self.getTopicData(guiRow + TopicsControl.nscrollvalue)
+                data = self.getTopicData(guiRow + ControlScroller.nscrollvalue)
                 if data is None:
                     return
 
@@ -386,14 +384,14 @@ class TopicsControl(ControlScroller):
                     TopicsControl.oldData = dataValue
 
                 self.updateDocumentCell(
-                    guiRow + TopicsControl.nscrollvalue, column, data)
-                if self.isRowEmpty(guiRow + TopicsControl.nscrollvalue):
+                    guiRow + ControlScroller.nscrollvalue, column, data)
+                if self.isRowEmpty(guiRow + ControlScroller.nscrollvalue):
                     '''
                     if this is the row before the last one
                     (the last row is always empty)
                     delete the last row...
                     '''
-                    if (guiRow + TopicsControl.nscrollvalue) \
+                    if (guiRow + ControlScroller.nscrollvalue) \
                             == len(ControlScroller.scrollfields) - 2:
                         self.removeLastRow()
                         '''now consequentially check the last two rows,
@@ -405,7 +403,7 @@ class TopicsControl(ControlScroller):
                                 and isRowEmpty(len(ControlScroller.scrollfields) - 2):
                             removeLastRow()
                         cr = self.ControlGroupVector[
-                            ControlScroller.scrollfields.size - TopicsControl.nscrollvalue - 1]
+                            ControlScroller.scrollfields.size - ControlScroller.nscrollvalue - 1]
                         # if a remove was performed, set focus
                         #to the last row with some data in it...
                         self.focus(getControl(cr, column))
@@ -415,7 +413,7 @@ class TopicsControl(ControlScroller):
                 else:
                     # row contains data
                     # is this the last row?
-                    if (guiRow + TopicsControl.nscrollvalue + 1) \
+                    if (guiRow + ControlScroller.nscrollvalue + 1) \
                             == len(ControlScroller.scrollfields):
                         self.insertRowAtEnd()
 
@@ -446,9 +444,9 @@ class TopicsControl(ControlScroller):
         try:
             if event.KeyCode == TAB and event.Modifiers == 0:
                 # if there is another row...
-                if (self.nblockincrement + TopicsControl.nscrollvalue) \
+                if (self.nblockincrement + ControlScroller.nscrollvalue) \
                         < len(ControlScroller.scrollfields):
-                    self.setScrollValue(TopicsControl.nscrollvalue + 1)
+                    self.setScrollValue(ControlScroller.nscrollvalue + 1)
                     self.focus(self.getControlByIndex(self.ControlGroupVector[4], 1))
         except Exception:
             traceback.print_exc()
@@ -463,8 +461,8 @@ class TopicsControl(ControlScroller):
         # if tab with shift was pressed...
         if (event.KeyCode == TAB) and \
                 (event.Modifiers == SHIFT):
-            if TopicsControl.nscrollvalue > 0:
-                setScrollValue(TopicsControl.nscrollvalue - 1)
+            if ControlScroller.nscrollvalue > 0:
+                setScrollValue(ControlScroller.nscrollvalue - 1)
                 focus(self.lastTime)
 
     '''
@@ -490,26 +488,26 @@ class TopicsControl(ControlScroller):
     def rowDown(self, guiRow=None, control=None):
         try:
             if guiRow is None and control is None:
-                guiRow = TopicsControl.lastFocusRow - TopicsControl.nscrollvalue
+                guiRow = TopicsControl.lastFocusRow - ControlScroller.nscrollvalue
                 control = TopicsControl.lastFocusControl
             # only perform if this is not the last row.
-            actuallRow = guiRow + TopicsControl.nscrollvalue
+            actuallRow = guiRow + ControlScroller.nscrollvalue
             if actuallRow + 1 < len(ControlScroller.scrollfields):
                 # get the current selection
                 selection = control.Selection
                 # the last row should scroll...
-                scroll = guiRow == (self.nblockincrement - 1)
+                scroll = (guiRow == self.nblockincrement - 1)
                 if scroll:
-                    setScrollValue(TopicsControl.nscrollvalue + 1)
+                    self.setScrollValue(ControlScroller.nscrollvalue + 1)
 
-                scroll1 = TopicsControl.nscrollvalue
+                scroll1 = ControlScroller.nscrollvalue
                 if scroll:
                     aux = -1
                 else:
                     aux = 1
                 self.switchRows(guiRow, guiRow + aux)
-                if TopicsControl.nscrollvalue != scroll1:
-                    guiRow += (TopicsControl.nscrollvalue - scroll1)
+                if ControlScroller.nscrollvalue != scroll1:
+                    guiRow += (ControlScroller.nscrollvalue - scroll1)
 
                 self.setSelection(guiRow + (not scroll), control, selection)
         except Exception:
@@ -523,17 +521,17 @@ class TopicsControl(ControlScroller):
     def rowUp(self, guiRow=None, control=None):
         try:
             if guiRow is None and control is None:
-                guiRow = TopicsControl.lastFocusRow - TopicsControl.nscrollvalue
+                guiRow = TopicsControl.lastFocusRow - ControlScroller.nscrollvalue
                 control = TopicsControl.lastFocusControl
             # only perform if this is not the first row
-            actuallRow = guiRow + TopicsControl.nscrollvalue
+            actuallRow = guiRow + ControlScroller.nscrollvalue
             if actuallRow > 0:
                 # get the current selection
                 selection = control.Selection
                 # the last row should scroll...
                 scroll = (guiRow == 0)
                 if scroll:
-                    setScrollValue(TopicsControl.nscrollvalue - 1)
+                    self.setScrollValue(ControlScroller.nscrollvalue - 1)
                 if scroll:
                     aux = 1
                 else:
@@ -553,7 +551,7 @@ class TopicsControl(ControlScroller):
     @synchronized(lock)
     def cursorUp(self, guiRow, control):
         # is this the last full row ?
-        actuallRow = guiRow + TopicsControl.nscrollvalue
+        actuallRow = guiRow + ControlScroller.nscrollvalue
         #if this is the first row
         if actuallRow == 0:
             return
@@ -561,7 +559,7 @@ class TopicsControl(ControlScroller):
 
         scroll = (guiRow == 0)
         if scroll:
-            setScrollValue(TopicsControl.nscrollvalue - 1)
+            self.setScrollValue(ControlScroller.nscrollvalue - 1)
             upperRow = self.ControlGroupVector[guiRow]
         else:
             upperRow = self.ControlGroupVector[guiRow - 1]
@@ -578,7 +576,7 @@ class TopicsControl(ControlScroller):
     @synchronized(lock)
     def cursorDown(self, guiRow, control):
         # is this the last full row ?
-        actuallRow = guiRow + TopicsControl.nscrollvalue
+        actuallRow = guiRow + ControlScroller.nscrollvalue
         #if this is the last row, exit
         if actuallRow == len(ControlScroller.scrollfields) - 1:
             return
@@ -586,7 +584,7 @@ class TopicsControl(ControlScroller):
 
         scroll = (guiRow == self.nblockincrement - 1)
         if scroll:
-            setScrollValue(TopicsControl.nscrollvalue + 1)
+            self.setScrollValue(ControlScroller.nscrollvalue + 1)
             lowerRow = self.ControlGroupVector[guiRow]
         else:
             # if we scrolled we are done...
@@ -602,8 +600,8 @@ class TopicsControl(ControlScroller):
     '''
 
     def switchRows(self, row1, row2):
-        o1 = ControlScroller.scrollfields[row1 + TopicsControl.nscrollvalue]
-        o2 = ControlScroller.scrollfields[row2 + TopicsControl.nscrollvalue]
+        o1 = ControlScroller.scrollfields[row1 + ControlScroller.nscrollvalue]
+        o2 = ControlScroller.scrollfields[row2 + ControlScroller.nscrollvalue]
         temp = None
         for i in xrange(1, len(o1)):
             temp = o1[i].Value
@@ -611,15 +609,15 @@ class TopicsControl(ControlScroller):
             o2[i].Value = temp
         self.fillupControl(row1)
         self.fillupControl(row2)
-        self.updateDocumentRow(row1 + TopicsControl.nscrollvalue, o1)
-        self.updateDocumentRow(row2 + TopicsControl.nscrollvalue, o2)
+        self.updateDocumentRow(row1 + ControlScroller.nscrollvalue, o1)
+        self.updateDocumentRow(row2 + ControlScroller.nscrollvalue, o2)
 
         '''
         if we changed the last row, add another one...
         '''
-        if (row1 + TopicsControl.nscrollvalue + 1 == \
+        if (row1 + ControlScroller.nscrollvalue + 1 == \
                     len(ControlScroller.scrollfields)) \
-            or (row2 + TopicsControl.nscrollvalue + 1 == \
+            or (row2 + ControlScroller.nscrollvalue + 1 == \
                     len(ControlScroller.scrollfields)):
 
             self.insertRowAtEnd()
@@ -629,8 +627,8 @@ class TopicsControl(ControlScroller):
             have two empty rows at the end.
             If so, delete the last one...
             '''
-        elif (row1 + TopicsControl.nscrollvalue) + \
-                (row2 + TopicsControl.nscrollvalue) \
+        elif (row1 + ControlScroller.nscrollvalue) + \
+                (row2 + ControlScroller.nscrollvalue) \
                 == (len(ControlScroller.scrollfields) * 2 - 5):
             if self.isRowEmpty(len(ControlScroller.scrollfields) - 2) \
                     and self.isRowEmpty(len(ControlScroller.scrollfields) - 1):
@@ -765,8 +763,8 @@ Note that the instance methods of this class
 are being called and handle controls of
 a single row.
 '''
-class ControlRow(object):
 
+class ControlRow(object):
 
     tabIndex = 520
     '''
@@ -788,25 +786,22 @@ class ControlRow(object):
         self.label = self.dialog.insertLabel(
             TopicsControl.LABEL + str(i),
             TopicsControl.LABEL_PROPS,
-            (TopicsControl.I_8, "" + str(i + 1) + ".",
+            (8, "" + str(i + 1) + ".",
             x + 4, y + 2, ControlScroller.iStep, tabindex, 10))
         self.textbox = self.dialog.insertTextField(
             TopicsControl.TOPIC + str(i), "topicTextChanged",
             TopicsControl.TEXT_PROPS,
-            (TopicsControl.I_12,
-            HelpIds.getHelpIdString(ControlScroller.curHelpIndex + i * 3 + 1),
+            (12, HelpIds.getHelpIdString(ControlScroller.curHelpIndex + i * 3 + 1),
             x + 15, y, ControlScroller.iStep, tabindex + 1, 84), self)
         self.combobox = self.dialog.insertTextField(
             TopicsControl.RESP + str(i), "responsibleTextChanged",
             TopicsControl.TEXT_PROPS,
-            (TopicsControl.I_12,
-            HelpIds.getHelpIdString(ControlScroller.curHelpIndex + i * 3 + 2),
+            (12, HelpIds.getHelpIdString(ControlScroller.curHelpIndex + i * 3 + 2),
             x + 103, y, ControlScroller.iStep, tabindex + 2, 68), self)
         self.timebox = self.dialog.insertTextField(
             TopicsControl.TIME + str(i), "timeTextChanged",
             TopicsControl.TEXT_PROPS,
-            (TopicsControl.I_12,
-            HelpIds.getHelpIdString(ControlScroller.curHelpIndex + i * 3 + 3),
+            (12, HelpIds.getHelpIdString(ControlScroller.curHelpIndex + i * 3 + 3),
             x + 175, y, ControlScroller.iStep, tabindex + 3, 20), self)
         self.setEnabled(False)
         self.textbox.addKeyListener(KeyListenerProcAdapter(self.keyPressed))
