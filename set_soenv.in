@@ -21,9 +21,6 @@
 # VI.   Open the output file.
 # VII.  Writing the data to the output file.
 # VIII. Closing output file.
-# IX.   Sourcing the output file.
-# X.    Set up the build environment.
-# XI.   Moving the output file to the build home directory.
 #
 #---------------------------------------------------------------------------
 #
