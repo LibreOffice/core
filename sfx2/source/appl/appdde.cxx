@@ -240,27 +240,6 @@ long SfxApplication::DdeSetData
     return 0;
 }
 
-//--------------------------------------------------------------------
-
-::sfx2::SvLinkSource* SfxApplication::DdeCreateLinkSource
-(
-    const String&  // the Item to be addressed
-)
-
-/*  [Description]
-
-    This method can be overloaded by application developers, to establish
-    a DDE-hotlink to thier SfxApplication subclass.
-
-    The base implementation is not generate a link and returns 0.
-*/
-
-{
-    return 0;
-}
-
-//========================================================================
-
 long SfxObjectShell::DdeExecute
 (
     const String&   rCmd  // Expressed in our BASIC-Syntax

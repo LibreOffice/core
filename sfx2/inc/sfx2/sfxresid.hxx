@@ -40,20 +40,6 @@ public:
     static void DeleteResMgr();
 };
 
-//============================================================================
-class SfxSimpleResId
-{
-    String m_sText;
-
-public:
-    SfxSimpleResId(sal_uInt16 nID);
-
-    String getText() const { return m_sText; }
-
-    operator String() const { return getText(); }
-};
-
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

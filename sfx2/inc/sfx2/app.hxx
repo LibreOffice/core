@@ -176,7 +176,6 @@ public:
     long                        DdeSetData( const String& rItem,
                                             const String& rMimeType,
                                 const ::com::sun::star::uno::Any & rValue );
-    ::sfx2::SvLinkSource*       DdeCreateLinkSource( const String& rItem );
     sal_Bool                        InitializeDde();
     const DdeService*           GetDdeService() const;
     DdeService*                 GetDdeService();

@@ -44,14 +44,6 @@ SfxResId::SfxResId( sal_uInt16 nId ) :
 {
 }
 
-//============================================================================
-// SfxSimpleResId Implementation.
-//============================================================================
-
-SfxSimpleResId::SfxSimpleResId(sal_uInt16 nID):
-    m_sText( SFX_APP()->GetSimpleResManager()->ReadString(nID) )
-{}
-
 ResMgr* SfxResId::GetResMgr()
 {
     if ( !pMgr )

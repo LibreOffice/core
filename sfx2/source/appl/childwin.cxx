@@ -583,11 +583,6 @@ sal_Bool SfxChildWindow::IsHideNotDelete() const
     return pImp->bHideNotDelete;
 }
 
-void SfxChildWindow::SetHideAtToggle( sal_Bool bOn )
-{
-    pImp->bHideAtToggle = bOn;
-}
-
 sal_Bool SfxChildWindow::IsHideAtToggle() const
 {
     return pImp->bHideAtToggle;
