@@ -67,7 +67,6 @@ namespace drawinglayer
                 const bool bCreateNormals(::com::sun::star::drawing::NormalsKind_SPECIFIC == eNormalsKind);
                 const bool bCreateTextureCoordiantesX(::com::sun::star::drawing::TextureProjectionMode_OBJECTSPECIFIC == getSdr3DObjectAttribute().getTextureProjectionX());
                 const bool bCreateTextureCoordiantesY(::com::sun::star::drawing::TextureProjectionMode_OBJECTSPECIFIC == getSdr3DObjectAttribute().getTextureProjectionY());
-                double fRelativeTextureWidth(1.0);
                 basegfx::B2DHomMatrix aTexTransform;
 
                 if(!getSdrLFSAttribute().getFill().isDefault() && (bCreateTextureCoordiantesX || bCreateTextureCoordiantesY))
@@ -76,7 +75,7 @@ namespace drawinglayer
                     const double fFrontLength(basegfx::tools::getLength(aFirstPolygon));
                     const double fFrontArea(basegfx::tools::getArea(aFirstPolygon));
                     const double fSqrtFrontArea(sqrt(fFrontArea));
-                    fRelativeTextureWidth = basegfx::fTools::equalZero(fSqrtFrontArea) ? 1.0 : fFrontLength / fSqrtFrontArea;
+                    double fRelativeTextureWidth = basegfx::fTools::equalZero(fSqrtFrontArea) ? 1.0 : fFrontLength / fSqrtFrontArea;
                     fRelativeTextureWidth = (double)((sal_uInt32)(fRelativeTextureWidth - 0.5));
 
                     if(fRelativeTextureWidth < 1.0)

@@ -399,11 +399,11 @@ namespace drawinglayer
             {
                 // adapt object's transformation to the correct scale
                 basegfx::B2DVector aScale, aTranslate;
-                double fRotate, fShearX;
                 const Size aSizePixel(aModifiedBitmapEx.GetSizePixel());
 
                 if(0 != aSizePixel.Width() && 0 != aSizePixel.Height())
                 {
+                    double fRotate, fShearX;
                     rBitmapCandidate.getTransform().decompose(aScale, aTranslate, fRotate, fShearX);
                     const basegfx::B2DHomMatrix aNewMatrix(basegfx::tools::createScaleShearXRotateTranslateB2DHomMatrix(
                         aScale.getX() / aSizePixel.Width(), aScale.getY() / aSizePixel.Height(),

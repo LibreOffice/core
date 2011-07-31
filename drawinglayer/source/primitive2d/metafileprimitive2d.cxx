@@ -234,7 +234,7 @@ namespace
             maPropertyHolders.push_back(new PropertyHolder());
         }
 
-        sal_uInt32 size()
+        sal_uInt32 size() const
         {
             return maPropertyHolders.size();
         }
@@ -450,7 +450,7 @@ namespace
             }
         }
 
-        sal_uInt32 size()
+        sal_uInt32 size() const
         {
             return aTargets.size();
         }
@@ -515,7 +515,7 @@ namespace
             maTargetHolders.push_back(new TargetHolder());
         }
 
-        sal_uInt32 size()
+        sal_uInt32 size() const
         {
             return maTargetHolders.size();
         }
