@@ -453,7 +453,6 @@ sal_Bool PropertyHelper_Spell::propertyChange_Impl( const PropertyChangeEvent& r
 
     if (!bRes  &&  GetPropSet().is()  &&  rEvt.Source == GetPropSet())
     {
-        sal_Int16 nLngSvcFlags = 0;
         sal_Bool bSCWA = sal_False, // SPELL_CORRECT_WORDS_AGAIN ?
              bSWWA = sal_False; // SPELL_WRONG_WORDS_AGAIN ?
 
@@ -490,6 +489,7 @@ sal_Bool PropertyHelper_Spell::propertyChange_Impl( const PropertyChangeEvent& r
         bRes = (pbVal != 0);
         if (bRes)
         {
+            sal_Int16 nLngSvcFlags = 0;
             if (bSCWA)
                 nLngSvcFlags |= LinguServiceEventFlags::SPELL_CORRECT_WORDS_AGAIN;
             if (bSWWA)

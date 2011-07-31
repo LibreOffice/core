@@ -104,7 +104,7 @@ throw ( lang::IllegalArgumentException,
     {
         results = m_xScriptInfoAccess->getScriptLogicalNames();
     }
-    catch ( Exception e )
+    catch ( Exception &e )
     {
         OUString temp = OUSTR( "StorageBridge::getScriptLogicalNames: " );
         throw RuntimeException( temp.concat( e.Message ), Reference< XInterface >() );
@@ -123,7 +123,7 @@ throw ( lang::IllegalArgumentException, RuntimeException )
     {
         results = m_xScriptInfoAccess->getImplementations( queryURI );
     }
-    catch ( Exception e )
+    catch ( Exception &e )
     {
         OUString temp = OUSTR( "StorageBridge::getImplementations: " );
         throw RuntimeException( temp.concat( e.Message ), Reference< XInterface >() );

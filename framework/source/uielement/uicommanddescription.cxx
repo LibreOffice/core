@@ -439,7 +439,7 @@ sal_Bool ConfigurationAccess_UICommand::addGenericInfoToCache()
         }
         catch ( RuntimeException& e )
         {
-            throw e;
+            throw;
         }
         catch ( Exception& )
         {
@@ -453,7 +453,7 @@ sal_Bool ConfigurationAccess_UICommand::addGenericInfoToCache()
         }
         catch ( RuntimeException& e )
         {
-            throw e;
+            throw;
         }
         catch ( Exception& )
         {

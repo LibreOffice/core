@@ -188,7 +188,7 @@ ProviderCache::populateCache() throw ( RuntimeException )
             }
         }
     }
-    catch ( Exception e )
+    catch ( Exception &e )
     {
         ::rtl::OUString temp = OUSTR(
             "ProviderCache::populateCache: couldn't obtain XSingleComponentFactory for " );
