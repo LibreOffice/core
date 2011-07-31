@@ -86,9 +86,9 @@
 #include <htmlnum.hxx>
 #include <htmlfly.hxx>
 #include <swmodule.hxx>
-
 #include <statstr.hrc>      // ResId fuer Statusleiste
 #include <swerror.h>
+#include <rtl/strbuf.hxx>
 
 #define MAX_INDENT_LEVEL 20
 
@@ -527,27 +527,28 @@ void lcl_html_OutSectionStartTag( SwHTMLWriter& rHTMLWrt,
 
     const sal_Char *pTag = pCol ? OOO_STRING_SVTOOLS_HTML_multicol : OOO_STRING_SVTOOLS_HTML_division;
 
-    ByteString sOut( '<' );
-    sOut += pTag;
+    rtl::OStringBuffer sOut;
+    sOut.append('<').append(pTag);
 
     const String& rName = rSection.GetSectionName();
     if( rName.Len() && !bContinued )
     {
-        ((sOut += ' ') += OOO_STRING_SVTOOLS_HTML_O_id) += "=\"";
-        rHTMLWrt.Strm() << sOut.GetBuffer();
+        sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_id).
+            append(RTL_CONSTASCII_STRINGPARAM("=\""));
+        rHTMLWrt.Strm() << sOut.makeStringAndClear().getStr();
         HTMLOutFuncs::Out_String( rHTMLWrt.Strm(), rName, rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters );
-        sOut = '\"';
+        sOut.append('\"');
     }
 
     sal_uInt16 nDir = rHTMLWrt.GetHTMLDirection( rFmt.GetAttrSet() );
-    rHTMLWrt.Strm() << sOut.GetBuffer();
-    sOut.Erase();
+    rHTMLWrt.Strm() << sOut.makeStringAndClear().getStr();
     rHTMLWrt.OutDirection( nDir );
 
     if( FILE_LINK_SECTION == rSection.GetType() )
     {
-        ((sOut += ' ') += OOO_STRING_SVTOOLS_HTML_O_href) += "=\"";
-        rHTMLWrt.Strm() << sOut.GetBuffer();
+        sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_href).
+            append(RTL_CONSTASCII_STRINGPARAM("=\""));
+        rHTMLWrt.Strm() << sOut.makeStringAndClear().getStr();
 
         const String& aFName = rSection.GetLinkFileName();
         String aURL( aFName.GetToken(0,sfx2::cTokenSeperator) );
@@ -589,12 +590,12 @@ void lcl_html_OutSectionStartTag( SwHTMLWriter& rHTMLWrt,
             HTMLOutFuncs::Out_String( rHTMLWrt.Strm(), aSection,
                                       rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters );
         }
-        sOut = '\"';
+        sOut.append('\"');
     }
     else if( pCol )
     {
-        (((sOut += ' ') += OOO_STRING_SVTOOLS_HTML_O_cols) += '=')
-            += ByteString::CreateFromInt32( pCol->GetNumCols() );
+        sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_cols).
+            append('=').append(static_cast<sal_Int32>(pCol->GetNumCols()));
 
         // minumum gutter width
         sal_uInt16 nGutter = pCol->GetGutterWidth( sal_True );
@@ -606,12 +607,12 @@ void lcl_html_OutSectionStartTag( SwHTMLWriter& rHTMLWrt,
                                 ->LogicToPixel( Size(nGutter,0),
                                                 MapMode(MAP_TWIP) ).Width();
             }
-            (((sOut += ' ') += OOO_STRING_SVTOOLS_HTML_O_gutter) += '=')
-                += ByteString::CreateFromInt32( nGutter );
+            sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_gutter).
+                append('=').append(static_cast<sal_Int32>(nGutter));
         }
     }
 
-    rHTMLWrt.Strm() << sOut.GetBuffer();
+    rHTMLWrt.Strm() << sOut.makeStringAndClear().getStr();
     if( rHTMLWrt.IsHTMLMode( rHTMLWrt.bCfgOutStyles ) )
         rHTMLWrt.OutCSS1_SectionFmtOptions( rFmt );
 

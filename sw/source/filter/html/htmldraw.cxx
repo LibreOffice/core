@@ -67,6 +67,7 @@
 #include "swcss1.hxx"
 #include "swhtml.hxx"
 #include "wrthtml.hxx"
+#include <rtl/strbuf.hxx>
 
 using namespace ::com::sun::star;
 
@@ -698,8 +699,8 @@ Writer& OutHTML_DrawFrmFmtAsMarquee( Writer& rWrt,
     if( !pOutlinerParaObj )
         return rWrt;
 
-    ByteString sOut( '<' );
-    sOut += OOO_STRING_SVTOOLS_HTML_marquee;
+    rtl::OStringBuffer sOut;
+    sOut.append('<').append(OOO_STRING_SVTOOLS_HTML_marquee);
 
     // Die Attribute des Objektd holen
     const SfxItemSet& rItemSet = pTextObj->GetMergedItemSet();
@@ -722,7 +723,10 @@ Writer& OutHTML_DrawFrmFmtAsMarquee( Writer& rWrt,
     }
 
     if( pStr )
-        (((sOut += ' ') += OOO_STRING_SVTOOLS_HTML_O_behavior) += '=') += pStr;
+    {
+        sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_behavior).
+            append('=').append(pStr);
+    }
 
     // DIRECTION
     pStr = 0;
@@ -736,7 +740,10 @@ Writer& OutHTML_DrawFrmFmtAsMarquee( Writer& rWrt,
     }
 
     if( pStr )
-        (((sOut += ' ') += OOO_STRING_SVTOOLS_HTML_O_direction) += '=') += pStr;
+    {
+        sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_direction).
+            append('=').append(pStr);
+    }
 
     // LOOP
     sal_Int32 nCount =
@@ -744,15 +751,15 @@ Writer& OutHTML_DrawFrmFmtAsMarquee( Writer& rWrt,
                                              .GetValue();
     if( 0==nCount )
         nCount = SDRTEXTANI_SLIDE==eAniKind ? 1 : -1;
-    (((sOut += ' ') += OOO_STRING_SVTOOLS_HTML_O_loop) += '=')
-        += ByteString::CreateFromInt32( nCount );
+    sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_loop).append('=').
+        append(nCount);
 
     // SCROLLDELAY
     sal_uInt16 nDelay =
         ((const SdrTextAniDelayItem&)rItemSet.Get( SDRATTR_TEXT_ANIDELAY ))
                                             .GetValue();
-    (((sOut += ' ') += OOO_STRING_SVTOOLS_HTML_O_scrolldelay) += '=')
-        += ByteString::CreateFromInt32( nDelay );
+    sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_scrolldelay).
+        append('=').append(static_cast<sal_Int32>(nDelay));
 
     // SCROLLAMOUNT
     sal_Int16 nAmount =
@@ -769,8 +776,10 @@ Writer& OutHTML_DrawFrmFmtAsMarquee( Writer& rWrt,
                                             MapMode(MAP_TWIP) ).Width());
     }
     if( nAmount )
-        (((sOut += ' ') += OOO_STRING_SVTOOLS_HTML_O_scrollamount) += '=')
-            += ByteString::CreateFromInt32( nAmount );
+    {
+        sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_scrollamount).
+            append('=').append(static_cast<sal_Int32>(nAmount));
+    }
 
     Size aTwipSz( pTextObj->GetLogicRect().GetSize() );
     if( pTextObj->IsAutoGrowWidth() )
@@ -799,12 +808,16 @@ Writer& OutHTML_DrawFrmFmtAsMarquee( Writer& rWrt,
             aPixelSz.Height() = 1;
 
         if( aPixelSz.Width() )
-            (((sOut += ' ') += OOO_STRING_SVTOOLS_HTML_O_width) += '=')
-                += ByteString::CreateFromInt32( aPixelSz.Width() );
+        {
+            sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_width).
+                append('=').append(static_cast<sal_Int32>(aPixelSz.Width()));
+        }
 
         if( aPixelSz.Height() )
-            (((sOut += ' ') += OOO_STRING_SVTOOLS_HTML_O_height) += '=')
-                += ByteString::CreateFromInt32( aPixelSz.Height() );
+        {
+            sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_height).
+                append('=').append(static_cast<sal_Int32>(aPixelSz.Height()));
+        }
     }
 
     // BGCOLOR
@@ -815,14 +828,13 @@ Writer& OutHTML_DrawFrmFmtAsMarquee( Writer& rWrt,
         const Color& rFillColor =
             ((const XFillColorItem&)rItemSet.Get(XATTR_FILLCOLOR)).GetColorValue();
 
-        ((sOut += ' ') += OOO_STRING_SVTOOLS_HTML_O_bgcolor) += '=';
-        rWrt.Strm() << sOut.GetBuffer();
+        sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_bgcolor).append('=');
+        rWrt.Strm() << sOut.makeStringAndClear().getStr();
         HTMLOutFuncs::Out_Color( rWrt.Strm(), rFillColor, rHTMLWrt.eDestEnc );
-        sOut.Erase();
     }
 
-    if( sOut.Len() )
-        rWrt.Strm() << sOut.GetBuffer();
+    if (sOut.getLength())
+        rWrt.Strm() << sOut.makeStringAndClear().getStr();
 
     // und nun noch ALIGN, HSPACE und VSPACE
     ByteString aEndTags;

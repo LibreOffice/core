@@ -645,52 +645,63 @@ void SwHTMLWrtTable::Write( SwHTMLWriter& rWrt, sal_Int16 eAlign,
 
     if( rWrt.bLFPossible )
         rWrt.OutNewLine();  // <TABLE> in neue Zeile
-    ByteString sOut( '<' );
-    sOut += OOO_STRING_SVTOOLS_HTML_table;
+    rtl::OStringBuffer sOut;
+    sOut.append('<').append(OOO_STRING_SVTOOLS_HTML_table);
 
     sal_uInt16 nOldDirection = rWrt.nDirection;
     if( pFrmFmt )
         rWrt.nDirection = rWrt.GetHTMLDirection( pFrmFmt->GetAttrSet() );
     if( rWrt.bOutFlyFrame || nOldDirection != rWrt.nDirection )
     {
-        rWrt.Strm() << sOut.GetBuffer();
-        sOut.Erase();
+        rWrt.Strm() << sOut.makeStringAndClear().getStr();
         rWrt.OutDirection( rWrt.nDirection );
     }
 
     // COLS ausgeben: Nur bei Export ueber Layout, wenn es beim Import
     // vorhanden war.
     if( bColsOption )
-        (((sOut += ' ') += OOO_STRING_SVTOOLS_HTML_O_cols) += '=')
-            += ByteString::CreateFromInt32( aCols.Count() );
+    {
+        sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_cols).
+            append('=').append(static_cast<sal_Int32>(aCols.Count()));
+    }
 
     // ALIGN= ausgeben
     if( text::HoriOrientation::RIGHT == eAlign )
-        (((sOut += ' ') += OOO_STRING_SVTOOLS_HTML_O_align ) += '=') += OOO_STRING_SVTOOLS_HTML_AL_right;
+    {
+        sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_align).
+            append('=').append(OOO_STRING_SVTOOLS_HTML_AL_right);
+    }
     else if( text::HoriOrientation::CENTER == eAlign )
-        (((sOut += ' ') += OOO_STRING_SVTOOLS_HTML_O_align ) += '=') += OOO_STRING_SVTOOLS_HTML_AL_center;
+    {
+        sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_align).
+            append('=').append(OOO_STRING_SVTOOLS_HTML_AL_center);
+    }
     else if( text::HoriOrientation::LEFT == eAlign )
-        (((sOut += ' ') += OOO_STRING_SVTOOLS_HTML_O_align ) += '=') += OOO_STRING_SVTOOLS_HTML_AL_left;
+    {
+        sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_align).
+            append('=').append(OOO_STRING_SVTOOLS_HTML_AL_left);
+    }
 
     // WIDTH ausgeben: Stammt aus Layout oder ist berechnet
     if( nTabWidth )
     {
-        ((sOut += ' ') += OOO_STRING_SVTOOLS_HTML_O_width ) += '=';
+        sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_width).
+            append('=');
         if( HasRelWidths() )
-            (sOut += ByteString::CreateFromInt32( nTabWidth )) += '%';
+            sOut.append(static_cast<sal_Int32>(nTabWidth)).append('%');
         else if( Application::GetDefaultDevice() )
         {
-            long nPixWidth = Application::GetDefaultDevice()->LogicToPixel(
+            sal_Int32 nPixWidth = Application::GetDefaultDevice()->LogicToPixel(
                         Size(nTabWidth,0), MapMode(MAP_TWIP) ).Width();
             if( !nPixWidth )
                 nPixWidth = 1;
 
-            sOut += ByteString::CreateFromInt32( nPixWidth );
+            sOut.append(nPixWidth);
         }
         else
         {
             OSL_ENSURE( Application::GetDefaultDevice(), "kein Application-Window!?" );
-            sOut += "100%";
+            sOut.append(RTL_CONSTASCII_STRINGPARAM("100%"));
         }
     }
 
@@ -706,14 +717,14 @@ void SwHTMLWrtTable::Write( SwHTMLWriter& rWrt, sal_Int16 eAlign,
 
         if( aPixelSpc.Width() )
         {
-            (((sOut += ' ') += OOO_STRING_SVTOOLS_HTML_O_hspace) += '=')
-                += ByteString::CreateFromInt32( aPixelSpc.Width() );
+            sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_hspace).
+                append('=').append(static_cast<sal_Int32>(aPixelSpc.Width()));
         }
 
         if( aPixelSpc.Height() )
         {
-            (((sOut += ' ') += OOO_STRING_SVTOOLS_HTML_O_vspace) += '=')
-                += ByteString::CreateFromInt32( aPixelSpc.Height() );
+            sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_vspace).
+                append('=').append(static_cast<sal_Int32>(aPixelSpc.Height()));
         }
     }
 
@@ -724,12 +735,12 @@ void SwHTMLWrtTable::Write( SwHTMLWriter& rWrt, sal_Int16 eAlign,
     sal_Bool bHasAnyBorders = nFrameMask || bColsHaveBorder || bRowsHaveBorder;
 
     // CELLPADDING ausgeben: Stammt aus Layout oder ist berechnet
-    (((sOut += ' ' ) += OOO_STRING_SVTOOLS_HTML_O_cellpadding ) += '=')
-        += ByteString::CreateFromInt32( rWrt.ToPixel( nCellPadding ) );
+    sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_cellpadding).
+        append('=').append(static_cast<sal_Int32>(rWrt.ToPixel(nCellPadding)));
 
     // CELLSPACING ausgeben: Stammt aus Layout oder ist berechnet
-    (((sOut += ' ' ) += OOO_STRING_SVTOOLS_HTML_O_cellspacing ) += '=')
-        += ByteString::CreateFromInt32( rWrt.ToPixel( nCellSpacing ) );
+    sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_cellspacing).
+        append('=').append(static_cast<sal_Int32>(rWrt.ToPixel(nCellSpacing)));
 
     // FRAME/RULES ausgeben (nur sinnvoll, wenn border!=0)
     if( nBorder!=0 && (bCollectBorderWidth || bHasAnyBorders) )
@@ -746,7 +757,10 @@ void SwHTMLWrtTable::Write( SwHTMLWriter& rWrt, sal_Int16 eAlign,
             case 12: pFrame = OOO_STRING_SVTOOLS_HTML_TF_vsides ;break;
         };
         if( pFrame )
-            (((sOut += ' ' ) += OOO_STRING_SVTOOLS_HTML_O_frame ) += '=') += pFrame;
+        {
+            sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_frame).
+                append('=').append(pFrame);
+        }
 
         const sal_Char *pRules = 0;
         if( aCols.Count() > 1 && aRows.Count() > 1 )
@@ -791,9 +805,12 @@ void SwHTMLWrtTable::Write( SwHTMLWriter& rWrt, sal_Int16 eAlign,
         }
 
         if( pRules )
-            (((sOut += ' ' ) += OOO_STRING_SVTOOLS_HTML_O_rules ) += '=') += pRules;
+        {
+            sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_rules).
+                append('=').append(pRules);
+        }
     }
-    rWrt.Strm() << sOut.GetBuffer();
+    rWrt.Strm() << sOut.makeStringAndClear().getStr();
 
     // Hintergrund ausgeben
     if( pFrmFmt )
@@ -805,8 +822,8 @@ void SwHTMLWrtTable::Write( SwHTMLWriter& rWrt, sal_Int16 eAlign,
             rWrt.OutCSS1_TableFrmFmtOptions( *pFrmFmt );
     }
 
-    sOut = '>';
-    rWrt.Strm() << sOut.GetBuffer();
+    sOut.append('>');
+    rWrt.Strm() << sOut.makeStringAndClear().getStr();
 
     rWrt.IncIndentLevel(); // Inhalte von Table einruecken
 
@@ -843,8 +860,8 @@ void SwHTMLWrtTable::Write( SwHTMLWriter& rWrt, sal_Int16 eAlign,
 
             const SwWriteTableCol *pColumn = aCols[nCol];
 
-            ByteString sOutStr( '<' );
-            sOutStr += OOO_STRING_SVTOOLS_HTML_col;
+            rtl::OStringBuffer sOutStr;
+            sOutStr.append('<').append(OOO_STRING_SVTOOLS_HTML_col);
 
             sal_uInt32 nWidth;
             sal_Bool bRel;
@@ -859,17 +876,14 @@ void SwHTMLWrtTable::Write( SwHTMLWriter& rWrt, sal_Int16 eAlign,
                 nWidth = bRel ? GetRelWidth(nCol,1) : GetAbsWidth(nCol,1);
             }
 
-            ((sOutStr += ' ' ) += OOO_STRING_SVTOOLS_HTML_O_width ) += '=';
+            sOutStr.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_width).
+                append('=');
             if( bRel )
-            {
-                (sOutStr += ByteString::CreateFromInt32( nWidth ) ) += '*';
-            }
+                sOutStr.append(static_cast<sal_Int32>(nWidth)).append('*');
             else
-            {
-                sOutStr += ByteString::CreateFromInt32( rWrt.ToPixel( nWidth ) );
-            }
-            sOutStr += '>';
-            rWrt.Strm() << sOutStr.GetBuffer();
+                sOutStr.append(static_cast<sal_Int32>(rWrt.ToPixel(nWidth)));
+            sOutStr.append('>');
+            rWrt.Strm() << sOutStr.makeStringAndClear().getStr();
 
             if( bColGroups && pColumn->bRightBorder && nCol<nCols-1 )
             {

@@ -53,6 +53,7 @@
 #include "wrthtml.hxx"
 
 #include <SwNodeNum.hxx>
+#include <rtl/strbuf.hxx>
 
 using namespace ::com::sun::star;
 
@@ -801,13 +802,14 @@ Writer& OutHTML_NumBulListStart( SwHTMLWriter& rWrt,
         rWrt.OutNewLine(); // <OL>/<UL> in eine neue Zeile
 
         rWrt.aBulletGrfs[i].Erase();
-        ByteString sOut( '<' );
+        rtl::OStringBuffer sOut;
+        sOut.append('<');
         const SwNumFmt& rNumFmt = rInfo.GetNumRule()->Get( i );
         sal_Int16 eType = rNumFmt.GetNumberingType();
         if( SVX_NUM_CHAR_SPECIAL == eType )
         {
             // Aufzaehlungs-Liste: <OL>
-            sOut += OOO_STRING_SVTOOLS_HTML_unorderlist;
+            sOut.append(OOO_STRING_SVTOOLS_HTML_unorderlist);
 
             // den Typ ueber das Bullet-Zeichen bestimmen
             const sal_Char *pStr = 0;
@@ -825,14 +827,16 @@ Writer& OutHTML_NumBulListStart( SwHTMLWriter& rWrt,
             }
 
             if( pStr )
-                (((sOut += ' ') += OOO_STRING_SVTOOLS_HTML_O_type) += '=') += pStr;
+            {
+                sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_type).
+                    append('=').append(pStr);
+            }
         }
         else if( SVX_NUM_BITMAP == eType )
         {
             // Aufzaehlungs-Liste: <OL>
-            sOut += OOO_STRING_SVTOOLS_HTML_unorderlist;
-            rWrt.Strm() << sOut.GetBuffer();
-            sOut.Erase();
+            sOut.append(OOO_STRING_SVTOOLS_HTML_unorderlist);
+            rWrt.Strm() << sOut.makeStringAndClear().getStr();
 
             OutHTML_BulletImage( rWrt,
                                     0,
@@ -844,7 +848,7 @@ Writer& OutHTML_NumBulListStart( SwHTMLWriter& rWrt,
         else
         {
             // Numerierungs-Liste: <UL>
-            sOut += OOO_STRING_SVTOOLS_HTML_orderlist;
+            sOut.append(OOO_STRING_SVTOOLS_HTML_orderlist);
 
             // den Typ ueber das Format bestimmen
             sal_Char cType = 0;
@@ -856,7 +860,10 @@ Writer& OutHTML_NumBulListStart( SwHTMLWriter& rWrt,
             case SVX_NUM_ROMAN_LOWER:           cType = 'i'; break;
             }
             if( cType )
-                (((sOut += ' ') += OOO_STRING_SVTOOLS_HTML_O_type) += '=') += cType;
+            {
+                sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_type).
+                    append('=').append(cType);
+            }
 
             sal_uInt16 nStartVal = rNumFmt.GetStart();
             if( bStartValue && 1 == nStartVal && i == rInfo.GetDepth()-1 )
@@ -874,13 +881,13 @@ Writer& OutHTML_NumBulListStart( SwHTMLWriter& rWrt,
             }
             if( nStartVal != 1 )
             {
-                (((sOut += ' ') += OOO_STRING_SVTOOLS_HTML_O_start) += '=')
-                    += ByteString::CreateFromInt32( nStartVal );
+                sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_start).
+                    append('=').append(static_cast<sal_Int32>(nStartVal));
             }
         }
 
-        if( sOut.Len() )
-            rWrt.Strm() << sOut.GetBuffer();
+        if (sOut.getLength())
+            rWrt.Strm() << sOut.makeStringAndClear().getStr();
 
         if( rWrt.bCfgOutStyles )
             OutCSS1_NumBulListStyleOpt( rWrt, *rInfo.GetNumRule(), (sal_uInt8)i );
