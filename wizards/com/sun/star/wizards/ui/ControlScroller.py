@@ -178,24 +178,6 @@ class ControlScroller(object):
                 m += 1
             n += 1
 
-    def setLineIncrementation(self, _nlineincrement):
-        self.nlineincrement = _nlineincrement
-        Helper.setUnoPropertyValue(
-            ControlScroller.xScrollBar.Model, "LineIncrement", self.nlineincrement)
-
-    def getLineIncrementation(self):
-        return self.nlineincrement
-
-    def setBlockIncrementation(self, _nblockincrement):
-        ControlScroller.nblockincrement = _nblockincrement
-        Helper.setUnoPropertyValues(
-            ControlScroller.xScrollBar.Model,
-            (PropertyNames.PROPERTY_ENABLED, "BlockIncrement",
-                "ScrollValueMax"),
-            (self.ntotfieldcount > ControlScroller.nblockincrement,
-                ControlScroller.nblockincrement,
-                self.ntotfieldcount - ControlScroller.nblockincrement))
-
     def scrollControls(self):
         try:
             self.scrollRowsInfo()
@@ -254,9 +236,6 @@ class ControlScroller(object):
             ControlScroller.scrollfields.append(_currowproperties)
         else:
             ControlScroller.scrollfields.insert(_currowproperties, _i)
-
-    def getControlGroupInfo(self, _i):
-        return ControlScroller.scrollfields.index(_i)
 
     @classmethod
     def setControlData(self, controlname, newvalue):

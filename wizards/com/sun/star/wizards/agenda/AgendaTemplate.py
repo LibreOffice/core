@@ -789,7 +789,7 @@ class ItemsTable(object):
 
             while not cellName == cursor.RangeName and \
                     not cursor.RangeName.startswith("A"):
-                cell = xTextTable.getCellByName(cursor.RangeName)
+                cell = Topics.table.getCellByName(cursor.RangeName)
                 cell.String = ""
                 cellName = cursor.RangeName
                 cursor.goRight(1, False)
