@@ -155,7 +155,6 @@ const char *ModuleList[] = {
     "sw",
     "swext",
     "sysui",
-    "ucbhelper",
     "uui",
     "vcl",
     "wizards",
