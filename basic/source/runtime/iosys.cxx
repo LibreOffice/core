@@ -382,7 +382,7 @@ sal_uIntPtr OslStream::SeekPos( sal_uIntPtr nPos )
         rc = maFile.setPos( osl_Pos_End, 0 );
     else
         rc = maFile.setPos( osl_Pos_Absolut, (sal_uInt64)nPos );
-    OSL_ENSURE(rc == ::osl::FileBase::E_None, "bad seek");
+    OSL_VERIFY(rc == ::osl::FileBase::E_None);
     sal_uInt64 nRealPos(0);
     maFile.getPos( nRealPos );
     return sal::static_int_cast<sal_uIntPtr>(nRealPos);
