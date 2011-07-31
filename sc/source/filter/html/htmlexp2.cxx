@@ -52,6 +52,7 @@
 #include "document.hxx"
 #include "drwlayer.hxx"
 #include "ftools.hxx"
+#include <rtl/strbuf.hxx>
 
 using namespace com::sun::star;
 
@@ -138,18 +139,19 @@ void ScHTMLExport::FillGraphList( const SdrPage* pPage, SCTAB nTab,
 void ScHTMLExport::WriteGraphEntry( ScHTMLGraphEntry* pE )
 {
     SdrObject* pObject = pE->pObject;
-    ByteString aOpt;
-    (((aOpt += ' ') += OOO_STRING_SVTOOLS_HTML_O_width) += '=') +=
-        ByteString::CreateFromInt32( pE->aSize.Width() );
-    (((aOpt += ' ') += OOO_STRING_SVTOOLS_HTML_O_height) += '=') +=
-        ByteString::CreateFromInt32( pE->aSize.Height() );
+    rtl::OStringBuffer aBuf;
+    aBuf.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_width).append('=').
+        append(static_cast<sal_Int32>(pE->aSize.Width()));
+    aBuf.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_height).append('=').
+        append(static_cast<sal_Int32>(pE->aSize.Height()));
     if ( pE->bInCell )
     {
-        (((aOpt += ' ') += OOO_STRING_SVTOOLS_HTML_O_hspace) += '=') +=
-            ByteString::CreateFromInt32( pE->aSpace.Width() );
-        (((aOpt += ' ') += OOO_STRING_SVTOOLS_HTML_O_vspace) += '=') +=
-            ByteString::CreateFromInt32( pE->aSpace.Height() );
+        aBuf.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_hspace).append('=').
+            append(static_cast<sal_Int32>(pE->aSpace.Width()));
+        aBuf.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_vspace).append('=').
+            append(static_cast<sal_Int32>(pE->aSpace.Height()));
     }
+    rtl::OString aOpt = aBuf.makeStringAndClear();
     switch ( pObject->GetObjIdentifier() )
     {
         case OBJ_GRAF:

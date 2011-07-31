@@ -125,7 +125,7 @@ void ScRTFExport::WriteTab( SCTAB nTab )
 void ScRTFExport::WriteRow( SCTAB nTab, SCROW nRow )
 {
     rStrm << OOO_STRING_SVTOOLS_RTF_TROWD << OOO_STRING_SVTOOLS_RTF_TRGAPH << "30" << OOO_STRING_SVTOOLS_RTF_TRLEFT << "-30";
-    rStrm << OOO_STRING_SVTOOLS_RTF_TRRH << ByteString::CreateFromInt32( pDoc->GetRowHeight( nRow, nTab ) ).GetBuffer();
+    rStrm << OOO_STRING_SVTOOLS_RTF_TRRH << rtl::OString::valueOf(static_cast<sal_Int32>(pDoc->GetRowHeight(nRow, nTab))).getStr();
     SCCOL nCol;
     SCCOL nEndCol = aRange.aEnd.Col();
     for ( nCol = aRange.aStart.Col(); nCol <= nEndCol; nCol++ )
@@ -156,7 +156,7 @@ void ScRTFExport::WriteRow( SCTAB nTab, SCROW nRow )
         if ( pChar )
             rStrm << pChar;
 
-        rStrm << OOO_STRING_SVTOOLS_RTF_CELLX << ByteString::CreateFromInt32( pCellX[nCol+1] ).GetBuffer();
+        rStrm << OOO_STRING_SVTOOLS_RTF_CELLX << rtl::OString::valueOf(static_cast<sal_Int32>(pCellX[nCol+1])).getStr();
         if ( (nCol & 0x0F) == 0x0F )
             rStrm << sNewLine;      // Zeilen nicht zu lang werden lassen
     }

@@ -169,22 +169,22 @@ FltError ScFormatFilterPluginImpl::ScExportHTML( SvStream& rStrm, const String& 
 }
 
 
-static ByteString lcl_getColGroupString( sal_Int32 nSpan, sal_Int32 nWidth )
+static rtl::OString lcl_getColGroupString(sal_Int32 nSpan, sal_Int32 nWidth)
 {
-        ByteString aByteStr = OOO_STRING_SVTOOLS_HTML_colgroup;
-        aByteStr += ' ';
-        if( nSpan > 1 )
-        {
-            aByteStr += OOO_STRING_SVTOOLS_HTML_O_span;
-            aByteStr += "=\"";
-            aByteStr += ByteString::CreateFromInt32( nSpan );
-            aByteStr += "\" ";
-        }
-        aByteStr += OOO_STRING_SVTOOLS_HTML_O_width;
-        aByteStr += "=\"";
-        aByteStr += ByteString::CreateFromInt32( nWidth );
-        aByteStr += '"';
-        return aByteStr;
+    rtl::OStringBuffer aByteStr(OOO_STRING_SVTOOLS_HTML_colgroup);
+    aByteStr.append(' ');
+    if( nSpan > 1 )
+    {
+        aByteStr.append(OOO_STRING_SVTOOLS_HTML_O_span);
+        aByteStr.append(RTL_CONSTASCII_STRINGPARAM("=\""));
+        aByteStr.append(nSpan);
+        aByteStr.append(RTL_CONSTASCII_STRINGPARAM("\" "));
+    }
+    aByteStr.append(OOO_STRING_SVTOOLS_HTML_O_width);
+    aByteStr.append(RTL_CONSTASCII_STRINGPARAM("=\""));
+    aByteStr.append(nWidth);
+    aByteStr.append('"');
+    return aByteStr.makeStringAndClear();
 }
 
 
@@ -453,7 +453,7 @@ void ScHTMLExport::WriteOverview()
             {
                 pDoc->GetName( nTab, aStr );
                 rStrm << "<A HREF=\"#table"
-                    << ByteString::CreateFromInt32( nTab ).GetBuffer()
+                    << rtl::OString::valueOf(static_cast<sal_Int32>(nTab)).getStr()
                     << "\">";
                 OUT_STR( aStr );
                 rStrm << "</A>";
@@ -715,7 +715,7 @@ void ScHTMLExport::WriteTables()
 
                 // Anker festlegen:
                 rStrm << "<A NAME=\"table"
-                    << ByteString::CreateFromInt32( nTab ).GetBuffer()
+                    << rtl::OString::valueOf(static_cast<sal_Int32>(nTab)).getStr()
                     << "\">";
                 TAG_ON( OOO_STRING_SVTOOLS_HTML_head1 );
                 OUT_STR( aStrOut );
@@ -740,10 +740,12 @@ void ScHTMLExport::WriteTables()
         }
 
         // <TABLE ...>
-        ByteString  aByteStrOut = OOO_STRING_SVTOOLS_HTML_table;
+        rtl::OStringBuffer aByteStrOut(OOO_STRING_SVTOOLS_HTML_table);
 
         // FRAME=VOID, we do the styling of the cells in <TD>
-        ((((aByteStrOut += ' ') += OOO_STRING_SVTOOLS_HTML_frame) += "=\"") += OOO_STRING_SVTOOLS_HTML_TF_void) += '"';
+        aByteStrOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_frame).
+            append(RTL_CONSTASCII_STRINGPARAM("=\"")).
+            append(OOO_STRING_SVTOOLS_HTML_TF_void).append('"');
 
         bTabHasGraphics = bTabAlignedLeft = false;
         if ( bAll && pDrawLayer )
@@ -752,11 +754,16 @@ void ScHTMLExport::WriteTables()
 
         // more <TABLE ...>
         if ( bTabAlignedLeft )
-            ((((aByteStrOut += ' ') += OOO_STRING_SVTOOLS_HTML_O_align) += "=\"") += OOO_STRING_SVTOOLS_HTML_AL_left) += '"';
+        {
+            aByteStrOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_align).
+                append(RTL_CONSTASCII_STRINGPARAM("=\"")).
+                append(OOO_STRING_SVTOOLS_HTML_AL_left).append('"');
+        }
             // ALIGN=LEFT allow text and graphics to flow around
         // CELLSPACING
-        ((((aByteStrOut += ' ' ) += OOO_STRING_SVTOOLS_HTML_O_cellspacing ) += "=\"") +=
-                 ByteString::CreateFromInt32( nCellSpacing )) += '"';
+        aByteStrOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_cellspacing).
+            append(RTL_CONSTASCII_STRINGPARAM("=\"")).
+            append(static_cast<sal_Int32>(nCellSpacing)).append('"');
         // COLS=n
         SCCOL nColCnt = 0;
         SCCOL nCol;
@@ -765,14 +772,19 @@ void ScHTMLExport::WriteTables()
             if ( !pDoc->ColHidden(nCol, nTab) )
                 ++nColCnt;
         }
-        ((((aByteStrOut += ' ') += OOO_STRING_SVTOOLS_HTML_O_cols) += "=\"") += ByteString::CreateFromInt32( nColCnt ))+='"';
+        aByteStrOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_cols).
+            append(RTL_CONSTASCII_STRINGPARAM("=\"")).
+            append(static_cast<sal_Int32>(nColCnt)).append('"');
 
         // RULES=NONE, we do the styling of the cells in <TD>
-        ((((aByteStrOut += ' ') += OOO_STRING_SVTOOLS_HTML_O_rules) += "=\"") += OOO_STRING_SVTOOLS_HTML_TR_none)+='"';
+        aByteStrOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_rules).
+            append(RTL_CONSTASCII_STRINGPARAM("=\"")).
+            append(OOO_STRING_SVTOOLS_HTML_TR_none).append('"');
 
         // BORDER=0, we do the styling of the cells in <TD>
-        ((aByteStrOut += ' ') += OOO_STRING_SVTOOLS_HTML_O_border) += "=\"0\"";
-        IncIndent(1); TAG_ON_LF( aByteStrOut.GetBuffer() );
+        aByteStrOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_border).
+            append(RTL_CONSTASCII_STRINGPARAM("=\"0\""));
+        IncIndent(1); TAG_ON_LF( aByteStrOut.makeStringAndClear().getStr() );
 
         // --- <COLGROUP> ----
         {
@@ -787,7 +799,7 @@ void ScHTMLExport::WriteTables()
                 {
                     if( nSpan != 0 )
                     {
-                        TAG_ON(lcl_getColGroupString(nSpan, nWidth).GetBuffer());
+                        TAG_ON(lcl_getColGroupString(nSpan, nWidth).getStr());
                         TAG_OFF_LF( OOO_STRING_SVTOOLS_HTML_colgroup );
                     }
                     nWidth = ToPixel( pDoc->GetColWidth( nCol, nTab ) );
@@ -799,7 +811,7 @@ void ScHTMLExport::WriteTables()
             }
             if( nSpan )
             {
-                TAG_ON(lcl_getColGroupString(nSpan, nWidth).GetBuffer());
+                TAG_ON(lcl_getColGroupString(nSpan, nWidth).getStr());
                 TAG_OFF_LF( OOO_STRING_SVTOOLS_HTML_colgroup );
             }
         }
@@ -856,10 +868,13 @@ void ScHTMLExport::WriteTables()
             }
             aGraphList.clear();
             if ( bTabAlignedLeft )
-            {   // clear <TABLE ALIGN=LEFT> with <BR CLEAR=LEFT>
-                aByteStrOut = OOO_STRING_SVTOOLS_HTML_linebreak;
-                (((aByteStrOut += ' ') += OOO_STRING_SVTOOLS_HTML_O_clear) += '=') += OOO_STRING_SVTOOLS_HTML_AL_left;
-                TAG_ON_LF( aByteStrOut.GetBuffer() );
+            {
+                // clear <TABLE ALIGN=LEFT> with <BR CLEAR=LEFT>
+                aByteStrOut.append(OOO_STRING_SVTOOLS_HTML_linebreak);
+                aByteStrOut.append(' ').
+                    append(OOO_STRING_SVTOOLS_HTML_O_clear).append('=').
+                    append(OOO_STRING_SVTOOLS_HTML_AL_left);
+                TAG_ON_LF( aByteStrOut.makeStringAndClear().getStr() );
             }
         }
 
