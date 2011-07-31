@@ -478,7 +478,7 @@ OleComponent::~OleComponent()
 
     for ( FormatEtcList::iterator aIter = m_pNativeImpl->m_aFormatsList.begin();
           aIter != m_pNativeImpl->m_aFormatsList.end();
-          aIter++ )
+          ++aIter )
     {
         delete (*aIter);
         (*aIter) = NULL;
@@ -500,7 +500,7 @@ FORMATETC* OleComponentNative_Impl::GetSupportedFormatForAspect( sal_uInt32 nReq
 {
     for ( FormatEtcList::iterator aIter = m_aFormatsList.begin();
           aIter != m_aFormatsList.end();
-          aIter++ )
+          ++aIter )
         if ( (*aIter) && (*aIter)->dwAspect == nRequestedAspect )
             return (*aIter);
 

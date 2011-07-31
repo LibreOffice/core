@@ -398,8 +398,6 @@ throw(  SAXException, RuntimeException )
                                             nItemBits |= ::com::sun::star::ui::ItemStyle::ALIGN_LEFT;
                                         else if ( nHashCode == m_nHashCode_Style_AutoSize )
                                             nItemBits |= ::com::sun::star::ui::ItemStyle::AUTO_SIZE;
-                                        else if ( nHashCode == m_nHashCode_Style_DropDown )
-                                            nItemBits |= ::com::sun::star::ui::ItemStyle::DROP_DOWN;
                                         else if ( nHashCode == m_nHashCode_Style_Repeat )
                                             nItemBits |= ::com::sun::star::ui::ItemStyle::REPEAT;
                                         else if ( nHashCode == m_nHashCode_Style_DropDownOnly )

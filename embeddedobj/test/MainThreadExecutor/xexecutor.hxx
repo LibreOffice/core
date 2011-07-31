@@ -81,7 +81,7 @@ public:
 
     DECL_LINK( executor, void* );
 
-    sal_Bool isExecuted() { return m_bExecuted; }
+    sal_Bool isExecuted() const { return m_bExecuted; }
 };
 
 #endif

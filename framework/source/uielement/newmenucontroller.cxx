@@ -531,7 +531,7 @@ void NewMenuController::impl_setPopupMenu()
         }
         catch ( RuntimeException& e )
         {
-            throw e;
+            throw;
         }
         catch ( Exception& )
         {

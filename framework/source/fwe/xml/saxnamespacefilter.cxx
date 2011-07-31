@@ -117,7 +117,7 @@ void SAL_CALL SaxNamespaceFilter::startElement(
     catch ( SAXException& e )
     {
         e.Message = ::rtl::OUString( getErrorLineString() + e.Message );
-        throw e;
+        throw;
     }
 
     ::rtl::OUString aNamespaceElementName;
@@ -129,7 +129,7 @@ void SAL_CALL SaxNamespaceFilter::startElement(
     catch ( SAXException& e )
     {
         e.Message = ::rtl::OUString( getErrorLineString() + e.Message );
-        throw e;
+        throw;
     }
 
     xDocumentHandler->startElement( aNamespaceElementName, pNewList );
@@ -148,7 +148,7 @@ void SAL_CALL SaxNamespaceFilter::endElement(const rtl::OUString& aName)
     catch ( SAXException& e )
     {
         e.Message = ::rtl::OUString( getErrorLineString() + e.Message );
-        throw e;
+        throw;
     }
 
     xDocumentHandler->endElement( aNamespaceElementName );

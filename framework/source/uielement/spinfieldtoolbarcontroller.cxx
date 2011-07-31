@@ -373,12 +373,11 @@ void SpinfieldToolbarController::executeControlCommand( const ::com::sun::star::
     {
         for ( sal_Int32 i = 0; i < rControlCommand.Arguments.getLength(); i++ )
         {
-            sal_Int32   nValue;
-            double      fValue;
-            bool        bFloat( false );
-
             if ( rControlCommand.Arguments[i].Name.equalsAsciiL( "Step", 4 ))
             {
+                sal_Int32   nValue;
+                double      fValue;
+                bool        bFloat( false );
                 if ( impl_getValue( rControlCommand.Arguments[i].Value, nValue, fValue, bFloat ))
                     aStep = bFloat ? ::rtl::OUString::valueOf( fValue ) :
                                      ::rtl::OUString::valueOf( nValue );
@@ -439,12 +438,11 @@ void SpinfieldToolbarController::executeControlCommand( const ::com::sun::star::
     {
         for ( sal_Int32 i = 0; i < rControlCommand.Arguments.getLength(); i++ )
         {
-            sal_Int32   nValue;
-            double      fValue;
-            bool        bFloat( false );
-
             if ( rControlCommand.Arguments[i].Name.equalsAsciiL( "LowerLimit", 10 ))
             {
+                sal_Int32   nValue;
+                double      fValue;
+                bool        bFloat( false );
                 if ( impl_getValue( rControlCommand.Arguments[i].Value, nValue, fValue, bFloat ))
                     aMin = bFloat ? ::rtl::OUString::valueOf( fValue ) :
                                     ::rtl::OUString::valueOf( nValue );
@@ -456,12 +454,11 @@ void SpinfieldToolbarController::executeControlCommand( const ::com::sun::star::
     {
         for ( sal_Int32 i = 0; i < rControlCommand.Arguments.getLength(); i++ )
         {
-            sal_Int32   nValue;
-            double      fValue;
-            bool        bFloat( false );
-
             if ( rControlCommand.Arguments[i].Name.equalsAsciiL( "UpperLimit", 10 ))
             {
+                sal_Int32   nValue;
+                double      fValue;
+                bool        bFloat( false );
                 if ( impl_getValue( rControlCommand.Arguments[i].Value, nValue, fValue, bFloat ))
                     aMax = bFloat ? ::rtl::OUString::valueOf( fValue ) :
                                     ::rtl::OUString::valueOf( nValue );

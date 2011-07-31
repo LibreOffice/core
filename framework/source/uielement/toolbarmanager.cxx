@@ -1584,7 +1584,7 @@ void ToolBarManager::notifyRegisteredControllers( const rtl::OUString& aUIElemen
                     }
                     catch ( RuntimeException& e )
                     {
-                        throw e;
+                        throw;
                     }
                     catch ( Exception& )
                     {
