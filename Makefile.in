@@ -93,7 +93,6 @@ endif
 
 install:
 	@. ./Env.Host.sh && \
-	@. ./*[Ee]nv.[Ss]et.sh && \
 	echo "Installing in @INSTALLDIR@..." && \
 	ooinstall "@INSTALLDIR@" && \
 	echo "" && \
