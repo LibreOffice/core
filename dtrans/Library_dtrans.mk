@@ -1,8 +1,9 @@
+# -*- Mode: makefile; tab-width: 4; indent-tabs-mode: t -*-
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
-# Copyright 2000, 2010 Oracle and/or its affiliates.
+#
+# Copyright 2000, 2011 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
 #
@@ -25,29 +26,33 @@
 #
 #*************************************************************************
 
-PRJ=..$/..
+$(eval $(call gb_Library_Library,dtrans))
 
-PRJNAME=dtrans
-TARGET=mcnttype
-ENABLE_EXCEPTIONS=TRUE
-COMP1TYPELIST=$(TARGET)
-USE_BOUNDCHK=
+$(eval $(call gb_Library_add_precompiled_header,dtrans,$(SRCDIR)/dtrans/inc/pch/precompiled_dtrans))
 
-.IF "$(USE_BOUNDCHK)"=="TR"
-bndchk=tr
-stoponerror=tr
-.ENDIF
+$(eval $(call gb_Library_set_componentfile,dtrans,dtrans/source/generic/dtrans))
 
-# --- Settings -----------------------------------------------------
+$(eval $(call gb_Library_set_include,dtrans,\
+	$$(INCLUDE) \
+	-I$(realpath $(SRCDIR)/dtrans/inc/pch) \
+))
 
-.INCLUDE :  settings.mk
+$(eval $(call gb_Library_add_api,dtrans,\
+	udkapi \
+	offapi \
+))
 
-# ------------------------------------------------------------------
+$(eval $(call gb_Library_add_linked_libs,dtrans,\
+	cppu \
+	cppuhelper \
+	sal \
+	$(gb_STDLIBS) \
+))
 
-SLOFILES=$(SLO)$/mctfentry.obj \
-         $(SLO)$/mcnttfactory.obj \
-         $(SLO)$/mcnttype.obj
+$(eval $(call gb_Library_add_exception_objects,dtrans,\
+	dtrans/source/generic/clipboardmanager \
+	dtrans/source/generic/dtrans \
+	dtrans/source/generic/generic_clipboard \
+))
 
-# --- Targets ------------------------------------------------------
-
-.INCLUDE :	target.mk
+# vim: set noet sw=4 ts=4:

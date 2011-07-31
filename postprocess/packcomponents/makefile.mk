@@ -63,6 +63,7 @@ my_components = \
     component/dbaccess/util/dba \
     component/dbaccess/util/dbu \
     component/dbaccess/util/sdbt \
+    component/dtrans/util/mcnttype \
     component/fileaccess/source/fileacc \
     component/forms/util/frm \
     component/formula/util/for \
@@ -142,7 +143,6 @@ my_components = \
     lnth \
     localebe1 \
     log \
-    mcnttype \
     migrationoo2 \
     msfilter \
     mysql \
@@ -299,15 +299,15 @@ my_components += \
 .IF "$(OS)" == "WNT"
 my_components += \
     ado \
-    dnd \
-    dtrans \
     fop \
     fps \
-    ftransl \
     java_uno_accessbridge \
     smplmail \
-    sysdtrans \
     wininetbe1 \
+    component/dtrans/source/generic/dtrans \
+    component/dtrans/util/dnd \
+    component/dtrans/util/ftransl \
+    component/dtrans/util/sysdtrans \
     component/vcl/vcl.windows
 .END
 

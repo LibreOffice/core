@@ -1,0 +1,74 @@
+# -*- Mode: makefile; tab-width: 4; indent-tabs-mode: t -*-
+#*************************************************************************
+#
+# DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+#
+# Copyright 2000, 2011 Oracle and/or its affiliates.
+#
+# OpenOffice.org - a multi-platform office productivity suite
+#
+# This file is part of OpenOffice.org.
+#
+# OpenOffice.org is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Lesser General Public License version 3
+# only, as published by the Free Software Foundation.
+#
+# OpenOffice.org is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Lesser General Public License version 3 for more details
+# (a copy is included in the LICENSE file that accompanied this code).
+#
+# You should have received a copy of the GNU Lesser General Public License
+# version 3 along with OpenOffice.org.  If not, see
+# <http://www.openoffice.org/license.html>
+# for a copy of the LGPLv3 License.
+#
+#*************************************************************************
+
+$(eval $(call gb_Library_Library,dnd))
+
+$(eval $(call gb_Library_add_precompiled_header,dnd,$(SRCDIR)/dtrans/inc/pch/precompiled_dtrans))
+
+$(eval $(call gb_Library_set_componentfile,dnd,dtrans/util/dnd))
+
+$(eval $(call gb_Library_set_include,dnd,\
+	$$(INCLUDE) \
+	-I$(realpath $(SRCDIR)/dtrans/inc/pch) \
+))
+
+$(eval $(call gb_Library_add_api,dnd,\
+	udkapi \
+	offapi \
+))
+
+$(eval $(call gb_Library_add_linked_libs,dnd,\
+	advapi32 \
+	cppu \
+	cppuhelper \
+	gdi32 \
+	ole32 \
+	oleaut32 \
+	sal \
+	shell32 \
+	uuid \
+	uwinapi \
+	$(gb_STDLIBS) \
+))
+
+$(eval $(call gb_Library_add_linked_static_libs,dnd,\
+	dtobj \
+))
+
+$(eval $(call gb_Library_add_exception_objects,dnd,\
+	dtrans/source/win32/dnd/dndentry \
+	dtrans/source/win32/dnd/globals \
+	dtrans/source/win32/dnd/idroptarget \
+	dtrans/source/win32/dnd/sourcecontext \
+	dtrans/source/win32/dnd/source \
+	dtrans/source/win32/dnd/target \
+	dtrans/source/win32/dnd/targetdragcontext \
+	dtrans/source/win32/dnd/targetdropcontext \
+))
+
+# vim: set noet sw=4 ts=4:

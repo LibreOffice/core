@@ -149,9 +149,19 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_URE, \
 ))
 
 $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
+	mcnttype \
 	test \
     fileacc \
 ))
+
+ifeq ($(OS),WNT)
+$(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
+	dnd \
+	dtrans \
+	ftransl \
+	sysdtrans \
+))
+endif
 
 ifeq ($(OS),IOS)
 $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \

@@ -1,8 +1,9 @@
+# -*- Mode: makefile; tab-width: 4; indent-tabs-mode: t -*-
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
-# Copyright 2000, 2010 Oracle and/or its affiliates.
+#
+# Copyright 2000, 2011 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
 #
@@ -25,35 +26,12 @@
 #
 #*************************************************************************
 
-PRJ=..$/..$/..
+$(eval $(call gb_Package_Package,dtrans_xml,$(SRCDIR)/dtrans/source))
 
-PRJNAME=dtrans
-TARGET=dnd
-ENABLE_EXCEPTIONS=TRUE
-COMP1TYPELIST=$(TARGET)
-USE_BOUNDCHK=
+$(eval $(call gb_Package_add_file,dtrans_xml,xml/dnd.xml,win32/dnd/dnd.xml))
+$(eval $(call gb_Package_add_file,dtrans_xml,xml/dtrans.xml,generic/dtrans.xml))
+$(eval $(call gb_Package_add_file,dtrans_xml,xml/ftransl.xml,win32/ftransl/ftransl.xml))
+$(eval $(call gb_Package_add_file,dtrans_xml,xml/mcnttype.xml,cnttype/mcnttype.xml))
+$(eval $(call gb_Package_add_file,dtrans_xml,xml/sysdtrans.xml,win32/clipb/sysdtrans.xml))
 
-.IF "$(USE_BOUNDCHK)"=="TR"
-bndchk=tr
-stoponerror=tr
-.ENDIF
-
-# --- Settings -----------------------------------------------------
-
-.INCLUDE :  settings.mk
-
-# ------------------------------------------------------------------
-
-SLOFILES=	$(SLO)$/dndentry.obj	\
-            $(SLO)$/target.obj		\
-            $(SLO)$/idroptarget.obj	\
-            $(SLO)$/source.obj		\
-            $(SLO)$/globals.obj		\
-            $(SLO)$/targetdropcontext.obj	\
-            $(SLO)$/targetdragcontext.obj	\
-            $(SLO)$/sourcecontext.obj
-
-
-# --- Targets ------------------------------------------------------
-
-.INCLUDE :	target.mk
+# vim: set noet sw=4 ts=4:

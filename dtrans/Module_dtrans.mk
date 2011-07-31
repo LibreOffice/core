@@ -1,8 +1,9 @@
+# -*- Mode: makefile; tab-width: 4; indent-tabs-mode: t -*-
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
-# Copyright 2000, 2010 Oracle and/or its affiliates.
+#
+# Copyright 2000, 2011 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
 #
@@ -24,24 +25,20 @@
 # for a copy of the LGPLv3 License.
 #
 #*************************************************************************
-PRJ=..
 
-PRJNAME=dtrans
-TARGET=inc
+$(eval $(call gb_Module_Module,dtrans))
 
-# --- Settings -----------------------------------------------------
+$(eval $(call gb_Module_add_targets,dtrans,\
+	Library_mcnttype \
+))
 
-.INCLUDE :  settings.mk
+ifeq ($(OS),WNT)
+$(eval $(call gb_Module_add_targets,dtrans,\
+	Library_dnd \
+	Library_dtrans \
+	Library_ftransl \
+	Library_sysdtrans \
+))
+endif
 
-# --- Files --------------------------------------------------------
-# --- Targets -------------------------------------------------------
-
-.INCLUDE :  target.mk
-
-.IF "$(ENABLE_PCH)"!=""
-ALLTAR : \
-    $(SLO)$/precompiled.pch \
-    $(SLO)$/precompiled_ex.pch
-    
-.ENDIF			# "$(ENABLE_PCH)"!=""
-
+# vim: set noet sw=4 ts=4:

@@ -41,6 +41,7 @@ $(eval $(call gb_Module_add_moduledirs,ooo,\
     cui \
     dbaccess \
     drawinglayer \
+    dtrans \
     editeng \
     fileaccess \
     forms \

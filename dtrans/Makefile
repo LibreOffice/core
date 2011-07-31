@@ -1,8 +1,9 @@
+# -*- Mode: makefile; tab-width: 4; indent-tabs-mode: t -*-
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
-# Copyright 2000, 2010 Oracle and/or its affiliates.
+#
+# Copyright 2000, 2011 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
 #
@@ -25,30 +26,14 @@
 #
 #*************************************************************************
 
-PRJ=..$/..$/..
-PRJNAME=dtrans
-TARGET=mtaolecb
-LIBTARGET=NO
-ENABLE_EXCEPTIONS=YES
+ifeq ($(strip $(SOLARENV)),)
+$(error No environment set!)
+endif
 
-# --- Settings ----------------------------------
+gb_PARTIALBUILD := T
+GBUILDDIR := $(SOLARENV)/gbuild
+include $(GBUILDDIR)/gbuild.mk
 
-.INCLUDE : settings.mk
+$(eval $(call gb_Module_make_global_targets,$(shell ls $(dir $(realpath $(firstword $(MAKEFILE_LIST))))/Module*.mk)))
 
-# --- Targets ----------------------------------
-
-.IF "$(GUI)"=="WNT"
-
-# --- static lib --------------------------
-
-# don't do this in the source file. breaks pch
-CDEFS+=-DUNICODE
-
-SLOFILES=$(SLO)$/MtaOleClipb.obj
-
-LIB1TARGET=$(SLB)$/$(TARGET).lib
-LIB1OBJFILES=$(SLOFILES)
-                 
-.ENDIF
-
-.INCLUDE : target.mk
+# vim: set noet sw=4 ts=4:

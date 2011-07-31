@@ -1,7 +1,7 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
+#
 # Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
@@ -25,27 +25,16 @@
 #
 #*************************************************************************
 
-PRJ=..$/..$/..
-PRJNAME=dtrans
-TARGET=ftransl
-ENABLE_EXCEPTIONS=TRUE
-COMP1TYPELIST=$(TARGET)
-USE_BOUNDCHK=
+PRJ=..
+TARGET=prj
 
-.IF "$(USE_BOUNDCHK)"=="TR"
-bndchk=tr
-stoponerror=tr
+.INCLUDE : settings.mk
+
+.IF "$(VERBOSE)"!=""
+VERBOSEFLAG :=
+.ELSE
+VERBOSEFLAG := -s
 .ENDIF
 
-# --- Settings -----------------------------------------------------
-
-.INCLUDE :  settings.mk
-
-# ------------------------------------------------------------------
-
-SLOFILES=$(SLO)$/ftranslentry.obj \
-         $(SLO)$/ftransl.obj
-
-# --- Targets ------------------------------------------------------
-
-.INCLUDE :	target.mk
+all:
+	cd $(PRJ) && $(GNUMAKE) $(VERBOSEFLAG) -r -j$(MAXPROCESS) $(gb_MAKETARGET) && $(GNUMAKE) $(VERBOSEFLAG) -r deliverlog

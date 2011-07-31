@@ -1,8 +1,9 @@
+# -*- Mode: makefile; tab-width: 4; indent-tabs-mode: t -*-
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
-# Copyright 2000, 2010 Oracle and/or its affiliates.
+#
+# Copyright 2000, 2011 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
 #
@@ -25,35 +26,39 @@
 #
 #*************************************************************************
 
-PRJ=..$/..$/..
+$(eval $(call gb_Library_Library,mcnttype))
 
-PRJNAME=dtrans
-TARGET=sysdtrans
-ENABLE_EXCEPTIONS=TRUE
-COMP1TYPELIST=$(TARGET)
-USE_BOUNDCHK=
+$(eval $(call gb_Library_add_precompiled_header,mcnttype,$(SRCDIR)/dtrans/inc/pch/precompiled_dtrans))
 
-.IF "$(USE_BOUNDCHK)"=="TR"
-bndchk=tr
-stoponerror=tr
-.ENDIF
+$(eval $(call gb_Library_set_componentfile,mcnttype,dtrans/util/mcnttype))
 
-# --- Settings -----------------------------------------------------
+$(eval $(call gb_Library_set_include,mcnttype,\
+	$$(INCLUDE) \
+	-I$(realpath $(SRCDIR)/dtrans/inc/pch) \
+))
 
-.INCLUDE :  settings.mk
+$(eval $(call gb_Library_add_api,mcnttype,\
+	udkapi \
+	offapi \
+))
 
-# ------------------------------------------------------------------
+$(eval $(call gb_Library_add_linked_libs,mcnttype,\
+	cppu \
+	cppuhelper \
+	sal \
+	$(gb_STDLIBS) \
+))
 
-.IF "$(COM)" != "GCC"
-CFLAGS+=-GR
-.ENDIF
-CFLAGS+=-DUNICODE -D_UNICODE
+$(eval $(call gb_Library_add_exception_objects,mcnttype,\
+	dtrans/source/cnttype/mcnttfactory \
+	dtrans/source/cnttype/mcnttype \
+	dtrans/source/cnttype/mctfentry \
+))
 
-SLOFILES=$(SLO)$/WinClipboard.obj \
-         $(SLO)$/WinClipbImpl.obj \
-         $(SLO)$/wcbentry.obj
+ifeq ($(GUI),WNT)
+$(eval $(call gb_Library_add_linked_libs,mcnttype,\
+	uwinapi \
+))
+endif
 
-
-# --- Targets ------------------------------------------------------
-
-.INCLUDE :	target.mk
+# vim: set noet sw=4 ts=4:
