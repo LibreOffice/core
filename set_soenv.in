@@ -1428,11 +1428,6 @@ elsif ($platform =~ m/mingw32/)
 elsif ($platform =~ m/darwin/ && $platform !~ m/^arm/)
 {  $SOLARINC         .= $I.$FRAMEWORKSHOME.$ds."JavaVM.framework".$ds."Versions".$ds."Current".$ds."Headers".
                         $I.$FRAMEWORKSHOME.$ds."JavaVM.framework".$ds."Headers";
-   # [ed] 6/15/02 Add in X11 headers as appropriate for the build
-   if ($GUIBASE eq "unx") {
-      $SOLARINC      .= $I.$XINC.
-                        $I.$XINC.$ds."freetype2";
-   }
 }
 elsif ($platform =~ m/^arm-apple/)
 {
