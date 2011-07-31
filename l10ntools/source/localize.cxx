@@ -58,7 +58,6 @@ const char *ExeTable[][5] = {
     { "ulf", "ulfex", " -e", "negative", "noiso" },
     { "xcd", "cfgex", "-UTF8 -e", "negative", "iso" },
     { "xcu", "cfgex", "-UTF8 -e", "negative", "iso" },
-    { "xcs", "cfgex", "-UTF8 -e -f", "negative", "iso" },
     { "xrm", "xrmex", "-UTF8 -e", "negative", "iso" },
     { "xhp", "helpex", " -e", "negative", "noiso" },
     { "NULL", "NULL", "NULL", "NULL", "NULL" }
