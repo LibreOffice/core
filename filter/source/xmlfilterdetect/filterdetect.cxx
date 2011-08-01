@@ -32,6 +32,7 @@
 #include <stdlib.h>
 #include <ctype.h>
 #include <stdio.h>
+#include <cstring>
 #include "filterdetect.hxx"
 #include <osl/diagnose.h>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -43,7 +44,6 @@
 #include <com/sun/star/xml/sax/XParser.hpp>
 #include <com/sun/star/xml/XImportFilter.hpp>
 #include <com/sun/star/xml/XExportFilter.hpp>
-#include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/task/XStatusIndicator.hpp>
 #include <com/sun/star/task/XStatusIndicatorFactory.hpp>
@@ -91,11 +91,54 @@ using namespace com::sun::star::container;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::beans;
 
+namespace {
 
-Reference< com::sun::star::frame::XModel > xModel;
+bool isXMLStream(const ::rtl::OString& aHeaderStrm)
+{
+    const char* p = aHeaderStrm.getStr();
+    size_t n = aHeaderStrm.getLength();
+    size_t i = 0;
 
-::rtl::OUString SAL_CALL supportedByType( const ::rtl::OUString  clipBoardFormat ,  const ::rtl::OString resultString, const ::rtl::OUString checkType);
+    // Skip all preceding blank characters.
+    for (i = 0; i < n; ++i, ++p)
+    {
+        sal_Char c = *p;
+        if (c == ' ' || c == '\n' || c == '\t')
+            continue;
+        break;
+    }
 
+    n -= i;
+
+    // First text must be '<?xml', else it's not a valid XML file stream.
+    const char* sInitChars = "<?xml";
+    const size_t nInitCharLen = std::strlen(sInitChars);
+    for (i = 0; i < n; ++i, ++p)
+    {
+        if (i < nInitCharLen)
+        {
+            if (*p != sInitChars[i])
+                return false;
+        }
+    }
+    return true;
+}
+
+::rtl::OUString supportedByType( const ::rtl::OUString clipBoardFormat ,  const ::rtl::OString resultString, const ::rtl::OUString checkType)
+{
+    ::rtl::OUString sTypeName;
+    if ( clipBoardFormat.match(OUString(RTL_CONSTASCII_USTRINGPARAM("doctype:"))) )
+    {
+        ::rtl::OString tryStr = ::rtl::OUStringToOString(clipBoardFormat.copy(8),RTL_TEXTENCODING_ASCII_US).getStr();
+        if (resultString.indexOf(tryStr) >= 0)
+        {
+            sTypeName = checkType;
+        }
+    }
+    return sTypeName;
+}
+
+}
 
 ::rtl::OUString SAL_CALL FilterDetect::detect( com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >& aArguments ) throw( com::sun::star::uno::RuntimeException )
 {
@@ -145,6 +188,11 @@ Reference< com::sun::star::frame::XModel > xModel;
         long bytestRead =xInStream->readBytes (aData,  4000);
         resultString=::rtl::OString((const sal_Char *)aData.getConstArray(),bytestRead) ;
 
+        if (!isXMLStream(resultString))
+            // This is not an XML stream.  It makes no sense to try to detect
+            // a non-XML file type here.
+            return ::rtl::OUString();
+
         // test typedetect code
         Reference <XNameAccess> xTypeCont(mxMSF->createInstance(OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.document.TypeDetection" ))),UNO_QUERY);
         Sequence < ::rtl::OUString > myTypes= xTypeCont->getElementNames();
@@ -186,23 +234,6 @@ Reference< com::sun::star::frame::XModel > xModel;
         aArguments[location].Value <<=sTypeName;
     }
 
-    return sTypeName;
-}
-
-
-
-::rtl::OUString SAL_CALL supportedByType( const ::rtl::OUString clipBoardFormat ,  const ::rtl::OString resultString, const ::rtl::OUString checkType)
-{
-
-    ::rtl::OUString sTypeName;
-    if((clipBoardFormat.match(OUString( RTL_CONSTASCII_USTRINGPARAM( "doctype:" )))))
-    {
-            ::rtl::OString tryStr = ::rtl::OUStringToOString(clipBoardFormat.copy(8),RTL_TEXTENCODING_ASCII_US).getStr();
-            if (resultString.indexOf(tryStr) >= 0)
-            {
-                    sTypeName = checkType;
-            }
-    }
     return sTypeName;
 }
 
