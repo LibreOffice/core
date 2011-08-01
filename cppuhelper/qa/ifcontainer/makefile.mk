@@ -41,8 +41,6 @@ CFLAGSCXX += $(CPPUNIT_CFLAGS)
 CFLAGSCXX += -DCPPUNIT_PLUGIN_EXPORTED_NAME=cppunitTest_$(TARGET)
 .ENDIF
 
-# BEGIN ----------------------------------------------------------------
-# auto generated Target:joblist by codegen.pl
 SHL1OBJS=  \
     $(SLO)$/cppu_ifcontainer.obj
 SHL1TARGET= cppu_ifcontainer
@@ -54,8 +52,8 @@ SHL1STDLIBS=\
 SHL1IMPLIB= i$(SHL1TARGET)
 DEF1NAME    =$(SHL1TARGET)
 SHL1VERSIONMAP= export.map
-# auto generated Target:joblist
-# END ------------------------------------------------------------------
+
+SLOFILES = $(SHL1OBJS)
 
 # --- Targets ------------------------------------------------------
 

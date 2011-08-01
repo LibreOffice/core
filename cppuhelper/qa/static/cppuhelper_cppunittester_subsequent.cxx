@@ -113,13 +113,12 @@ public:
 }
 
 extern "C" CppUnitTestPlugIn
-           *cppunitTest_cppu_ifcontainer(void),
-           *cppunitTest_cppu_unourl(void);
+            *cppunitTest_cppuhelper_propertysetmixin(void);
+
 
 SAL_IMPLEMENT_MAIN() {
     TestPlugInSignature plugs[] = {
-        cppunitTest_cppu_ifcontainer,
-        cppunitTest_cppu_unourl,
+        cppunitTest_cppuhelper_propertysetmixin,
         NULL
     };
     CppUnit::TestResult result;

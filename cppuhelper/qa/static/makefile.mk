@@ -25,10 +25,6 @@
 #
 #***********************************************************************/
 
-.IF "$(OOO_SUBSEQUENT_TESTS)" == ""
-nothing .PHONY:
-.ELSE
-
 PRJ = ../..
 PRJNAME = cppuhelper
 TARGET = cppuhelper_cppunittester_all
@@ -49,9 +45,9 @@ ALL :
 
 CFLAGSCXX += $(OBJCXXFLAGS)
 
-OBJFILES = $(APP1OBJS)
+.IF "$(OOO_SUBSEQUENT_TESTS)" != ""
 
-APP1OBJS = $(OBJ)/cppuhelper_cppunittester_all.obj
+APP1OBJS = $(OBJ)/cppuhelper_cppunittester_subsequent.obj
 APP1RPATH = NONE
 APP1LIBS += \
     $(SLB)/qa_propertysetmixin.lib \
@@ -60,6 +56,18 @@ APP1LIBS += \
 APP1STDLIBS = $(CPPUNITLIB) $(CPPULIB) $(SALLIB) $(SALHELPERLIB)
 APP1TARGET = $(TARGET)
 
-.INCLUDE: target.mk
+.ELSE
+
+APP1OBJS = $(OBJ)/cppuhelper_cppunittester_all.obj
+APP1RPATH = NONE
+APP1LIBS += \
+    $(SLB)/cppu_ifcontainer.lib \
+    $(SLB)/cppu_unourl.lib \
+    $(SLB)/cppuhelper.lib
+
+APP1STDLIBS = $(CPPUNITLIB) $(CPPULIB) $(SALLIB) $(SALHELPERLIB)
+APP1TARGET = $(TARGET)
 
 .ENDIF
+
+.INCLUDE: target.mk
