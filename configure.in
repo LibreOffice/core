@@ -3279,8 +3279,8 @@ AC_SUBST(HAVE_GCC_NO_LONG_DOUBLE)
 dnl need to check for ccache version: otherwise prevents
 dnl caching of the results (like "-x objective-c++" for Mac)
 AC_MSG_CHECKING([whether we are able to use --ccache-skip])
-if test "$_os" != "Darwin" ; then
-    AC_MSG_RESULT([only used on Mac currently, skipping])
+if test $_os != Darwin -a $_os != iOS; then
+    AC_MSG_RESULT([only needed on Mac and iOS currently, skipping])
 else
     # checking for ccache presence/version
     AC_MSG_RESULT([probing...])
