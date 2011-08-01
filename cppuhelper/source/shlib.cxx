@@ -354,6 +354,7 @@ Reference< XInterface > SAL_CALL loadSharedLibComponentFactory(
     OUString const & rPrefix )
     SAL_THROW( (loader::CannotActivateFactoryException) )
 {
+#ifndef IOS
     OUString aModulePath( makeComponentPath( rLibName, rPath ) );
     if (! checkAccessPath( &aModulePath ))
     {
@@ -371,6 +372,16 @@ Reference< XInterface > SAL_CALL loadSharedLibComponentFactory(
             OUSTR("loading component library failed: ") + aModulePath,
             Reference< XInterface >() );
     }
+#else
+    oslModule lib;
+    OUString aModulePath(OUSTR("MAIN"));
+    if (! osl_getModuleHandle( NULL, &lib))
+    {
+        throw loader::CannotActivateFactoryException(
+            OUSTR("osl_getModuleHandle of the executable: "),
+            Reference< XInterface >() );
+    }
+#endif
 
     Reference< XInterface > xRet;
 
