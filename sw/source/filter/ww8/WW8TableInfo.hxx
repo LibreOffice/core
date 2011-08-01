@@ -246,7 +246,9 @@ public:
     void addShadowCells();
     WW8TableNodeInfo * connectCells();
 
+#if OSL_DEBUG_LEVEL > 1
     string toString();
+#endif
 
     TableBoxVectorPtr getTableBoxesOfRow(WW8TableNodeInfoInner * pNodeInfo);
     WidthsPtr getWidthsOfRow(WW8TableNodeInfoInner * pNodeInfo);
@@ -352,7 +354,9 @@ public:
         m_nFmtFrmWidth = nFmtFrmWidth;
     }
 
+#if OSL_DEBUG_LEVEL > 1
     ::std::string toString() const;
+#endif
 };
 
 }
