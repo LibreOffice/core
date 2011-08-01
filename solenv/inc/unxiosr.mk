@@ -25,28 +25,55 @@
 #
 #*************************************************************************
 
-# --- Unix Environment for iOS cross-compilation -------------
-
-CFLAGS=-c $(EXTRA_CFLAGS)
-
-LINKC*=$(CC)
-LINK*=$(CXX)
-
-STDLIBCUIMT=-framework UIKit -framework Foundation -framework CoreText -framework CoreGraphics -framework CoreFoundation -Xlinker -objc_abi_version -Xlinker 2
-STDLIBGUIMT=$(STDLIBCUIMT)
-STDSHLCUIMT=
-STDSHLGUIMT=
-
-LIBMGR*=ar
-LIBFLAGS=-r
+##########################################################################
+# Platform MAKEFILE for iOS, both devices and the simulator
+##########################################################################
 
 PROCESSOR_DEFINES=-DARM32
 
-DLLPRE=lib
-DLLPOST=.a
-
 # flags to enable build with symbols
 CFLAGSENABLESYMBOLS=-g
+
+ASM=
+AFLAGS=
+LINKOUTPUT_FILTER=
+
+CFLAGS=-fmessage-length=0 -c $(EXTRA_CFLAGS)
+
+# enable visibility define in "sal/types.h"
+.IF "$(HAVE_GCC_VISIBILITY_FEATURE)" == "TRUE"
+CDEFS += -DHAVE_GCC_VISIBILITY_FEATURE
+.ENDIF # "$(HAVE_GCC_VISIBILITY_FEATURE)" == "TRUE"
+
+# ---------------------------------
+#  Compilation flags
+# ---------------------------------
+# Normal C compilation flags
+CFLAGSCC=-pipe -fsigned-char $(ARCH_FLAGS)
+
+# Normal Objective C compilation flags
+OBJCFLAGS=-fexceptions -fobjc-abi-version=2 -fobjc-legacy-dispatch -D__IPHONE_OS_VERSION_MIN_REQUIRED=40300
+# -x options generally ignored by ccache, tell it that it can cache
+# the result nevertheless
+CCACHE_SKIP:=$(eq,$(USE_CCACHE),YES --ccache-skip $(NULL))
+OBJCXXFLAGS:=$(CCACHE_SKIP) -x $(CCACHE_SKIP) objective-c++ $(OBJCFLAGS)
+
+# Comp Flags for files that need exceptions enabled (C and C++)
+CFLAGSEXCEPTIONS=-fexceptions -fno-enforce-eh-specs
+
+# Comp Flags for files that do not need exceptions enabled (C and C++)
+CFLAGS_NO_EXCEPTIONS=-fno-exceptions
+
+# Normal C++ compilation flags
+CFLAGSCXX=-pipe -fsigned-char $(ARCH_FLAGS) -Wno-ctor-dtor-privacy
+
+# No PIC needed as we don't build dynamic objects
+PICSWITCH:=
+# Other flags
+CFLAGSOBJGUIMT=$(PICSWITCH) -fno-common
+CFLAGSOBJCUIMT=$(PICSWITCH) -fno-common
+CFLAGSSLOGUIMT=$(PICSWITCH) -fno-common
+CFLAGSSLOCUIMT=$(PICSWITCH) -fno-common
 
 # Flag for including debugging information in object files
 CFLAGSDEBUG=-g
@@ -55,22 +82,55 @@ CFLAGSDBGUTIL=
 # Flag to specify output file to compiler/linker
 CFLAGSOUTOBJ=-o
 
-# # Include generic Mac OS X makefile
-# .INCLUDE : unxmacx.mk
+# ---------------------------------
+#  Optimization flags
+# ---------------------------------
+CFLAGSOPT=-O2 -fno-strict-aliasing
+CFLAGSNOOPT=-O0
 
-# --- general *ix settings ---
-HC=hc
-HCFLAGS=
-PATH_SEPERATOR*=:
-CDEFS+=-D__DMAKE
+# -Wshadow does not work for C with nested uses of pthread_cleanup_push:
+# -Wshadow does not work for C++ as /usr/include/c++/4.0.0/ext/hashtable.h
+# l. 717 contains a declaration of __cur2 shadowing the declaration at l. 705,
+# in template code for which a #pragma gcc system_header would not work:
+# -Wextra doesn not work for gcc-3.3
+CFLAGSWARNCC=-Wall -Wendif-labels
+CFLAGSWARNCXX=$(CFLAGSWARNCC) -Wno-ctor-dtor-privacy -Wno-non-virtual-dtor
+CFLAGSWALLCC=$(CFLAGSWARNCC)
+CFLAGSWALLCXX=$(CFLAGSWARNCXX)
+CFLAGSWERRCC=-Werror
 
-CDEFS+=-DUNIX
+LINK*=$(CXX)
+LINKC*=$(CC)
 
-YACC*=yacc
-YACCFLAGS*=-d -t
+LINKFLAGSDEFS*=-Wl,-multiply_defined,suppress
 
-EXECPOST=
-SCPPOST=.ins
-DLLDEST=$(LB)
+# Tag to identify an output file as a library
+DLLPRE=lib
+# We don't use dynamic shared libraries on iOS
+DLLPOST=.a
+# Precompiled header file extension
+PCHPOST=.gch
+
+STDOBJVCL=$(L)/salmain.o
+
+STDLIBCUIMT=-framework UIKit -framework Foundation -framework CoreText -framework CoreGraphics -framework CoreFoundation -Xlinker -objc_abi_version -Xlinker 2
+STDLIBGUIMT=$(STDLIBCUIMT)
+STDSHLCUIMT=
+STDSHLGUIMT=
+
+LIBMGR=ar
+LIBFLAGS=-r
+
+IMPLIB=:
+IMPLIBFLAGS=
+
+MAPSYM=:
+MAPSYMFLAGS=
+
+RC=:
+RCFLAGS=
+RCLINK=
+RCLINKFLAGS=
+RCSETVERSION=
 
 OOO_LIBRARY_PATH_VAR = DYLD_LIBRARY_PATH
