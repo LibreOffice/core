@@ -85,6 +85,11 @@ using ::rtl::OUStringToOString;
 
 IMPL_GEN_RES_STR;
 
+SttResId::SttResId( sal_uInt32 nId ) :
+    ResId( nId, *((*(BasicDLL**)GetAppData(SHL_BASIC))->GetSttResMgr()) )
+{
+}
+
 #ifdef DBG_UTIL
 // filter Messages generated due to missing configuration  Bug:#83887#
 void TestToolDebugMessageFilter( const sal_Char *pString, sal_Bool bIsOsl )

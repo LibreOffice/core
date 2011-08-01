@@ -39,11 +39,6 @@
 #include <basrid.hxx>
 #include <sb.hrc>
 
-SttResId::SttResId( sal_uInt32 nId ) :
-    ResId( nId, *((*(BasicDLL**)GetAppData(SHL_BASIC))->GetSttResMgr()) )
-{
-}
-
 BasResId::BasResId( sal_uInt32 nId ) :
     ResId( nId, *((*(BasicDLL**)GetAppData(SHL_BASIC))->GetBasResMgr()) )
 {
