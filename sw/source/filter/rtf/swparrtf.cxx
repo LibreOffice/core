@@ -103,6 +103,9 @@
 #include <svx/xflclit.hxx>
 #include <svx/xlnwtit.hxx>
 #include <svx/svdoutl.hxx>
+#include <svtools/miscopt.hxx>
+#include <unotools/streamwrap.hxx>
+#include <comphelper/processfactory.hxx>
 #include <editeng/outlobj.hxx>
 #include <editeng/paperinf.hxx>
 
@@ -112,6 +115,9 @@
 #include <vcl/salbtype.hxx>     // FRound
 
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
+#include <com/sun/star/document/XFilter.hpp>
+#include <com/sun/star/document/XImporter.hpp>
+#include <com/sun/star/document/XExporter.hpp>
 
 
 using namespace ::com::sun::star;
@@ -125,8 +131,41 @@ inline const SvxLRSpaceItem& GetLRSpace(const SfxItemSet& rSet,sal_Bool bInP=sal
     { return (const SvxLRSpaceItem&)rSet.Get( RES_LR_SPACE,bInP); }
 
 
+/// Glue class to call RtfImport as an internal filter, needed by copy&paste support.
+class SwRTFReader : public Reader
+{
+    virtual sal_uLong Read( SwDoc &, const String& rBaseURL, SwPaM &,const String &);
+};
+
+sal_uLong SwRTFReader::Read( SwDoc &rDoc, const String& /*rBaseURL*/, SwPaM& /*rPam*/, const String &)
+{
+    if (!pStrm)
+        return ERR_SWG_READ_ERROR;
+
+    SwDocShell *pDocShell(rDoc.GetDocShell());
+    uno::Reference<lang::XMultiServiceFactory> xMultiServiceFactory(comphelper::getProcessServiceFactory());
+    uno::Reference<uno::XInterface> xInterface(xMultiServiceFactory->createInstance(
+        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.Writer.RtfFilter"))), uno::UNO_QUERY_THROW);
+
+    uno::Reference<document::XImporter> xImporter(xInterface, uno::UNO_QUERY_THROW);
+    uno::Reference<lang::XComponent> xDstDoc(pDocShell->GetModel(), uno::UNO_QUERY_THROW);
+    xImporter->setTargetDocument(xDstDoc);
+
+    uno::Reference<document::XFilter> xFilter(xInterface, uno::UNO_QUERY_THROW);
+    uno::Sequence<beans::PropertyValue> aDescriptor(1);
+    aDescriptor[0].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("InputStream"));
+    uno::Reference<io::XStream> xStream(new utl::OStreamWrapper(*pStrm));
+    aDescriptor[0].Value <<= xStream;
+    xFilter->filter(aDescriptor);
+
+    return 0;
+}
+
 extern "C" SAL_DLLPUBLIC_EXPORT Reader* SAL_CALL ImportRTF()
 {
+    SvtMiscOptions aMiscOptions;
+    if (aMiscOptions.IsExperimentalMode())
+        return new SwRTFReader();
     return new RtfReader();
 }
 
