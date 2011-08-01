@@ -54,7 +54,7 @@ PY_CMD=$(PYTHON)
 # the framework only gets delivered as zip, so call it from python's output-dir
 PY_CMD=$(SRC_ROOT)/python/$(INPATH)/misc/build/python-inst/OOoPython.framework/Versions/2.6/Resources/Python.app/Contents/MacOS/OOoPython
 .ELSE
-PY_CMD=$(SOLARBINDIR)/python
+PY_CMD=$(AUGMENT_LIBRARY_PATH) $(SOLARBINDIR)/python
 # watch for the path delimiter
 .IF "$(GUI)"=="WNT"
 PYTHONPATH:=$(SOLARLIBDIR);$(SOLARLIBDIR)/python;$(SOLARLIBDIR)/python/lib-dynload
