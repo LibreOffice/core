@@ -134,13 +134,13 @@ void FiltersTest::recursiveScan(const rtl::OUString &rURL, int nExpected)
 
 void FiltersTest::testCVEs()
 {
-    recursiveScan(m_aSrcRoot + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/clone/libs-gui/svtools/qa/cppunit/data/wmf/pass")), true);
-    recursiveScan(m_aSrcRoot + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/clone/libs-gui/svtools/qa/cppunit/data/wmf/fail")), false);
-    recursiveScan(m_aSrcRoot + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/clone/libs-gui/svtools/qa/cppunit/data/wmf/indeterminate")), 2);
+    recursiveScan(m_aSrcRoot + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/svtools/qa/cppunit/data/wmf/pass")), true);
+    recursiveScan(m_aSrcRoot + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/svtools/qa/cppunit/data/wmf/fail")), false);
+    recursiveScan(m_aSrcRoot + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/svtools/qa/cppunit/data/wmf/indeterminate")), 2);
 
-    recursiveScan(m_aSrcRoot + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/clone/libs-gui/svtools/qa/cppunit/data/emf/pass")), true);
-    recursiveScan(m_aSrcRoot + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/clone/libs-gui/svtools/qa/cppunit/data/emf/fail")), false);
-    recursiveScan(m_aSrcRoot + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/clone/libs-gui/svtools/qa/cppunit/data/emf/indeterminate")), 2);
+    recursiveScan(m_aSrcRoot + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/svtools/qa/cppunit/data/emf/pass")), true);
+    recursiveScan(m_aSrcRoot + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/svtools/qa/cppunit/data/emf/fail")), false);
+    recursiveScan(m_aSrcRoot + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/svtools/qa/cppunit/data/emf/indeterminate")), 2);
 }
 
 FiltersTest::FiltersTest()
