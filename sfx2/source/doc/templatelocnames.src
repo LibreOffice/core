@@ -50,7 +50,7 @@ String STR_TEMPLATE_NAME4_DEF
 
 String STR_TEMPLATE_NAME5_DEF
 {
-    Text = "Blue with Bottom Title" ;
+    Text = "Blue with Bottom Title " ;
 };
 
 String STR_TEMPLATE_NAME6_DEF
