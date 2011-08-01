@@ -76,7 +76,7 @@ class SbxBase;
 class SbxFactory;
 class SbxObject;
 
-DBG_NAMEEX(SbxBase)
+DBG_NAMEEX_VISIBILITY(SbxBase, BASIC_DLLPUBLIC)
 
 class SbxBaseImpl;
 
