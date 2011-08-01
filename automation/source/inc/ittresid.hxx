@@ -26,17 +26,17 @@
  *
  ************************************************************************/
 
-#ifndef _STTRESID_HXX_
-#define _STTRESID_HXX_
+#ifndef _ITTRESID_HXX_
+#define _ITTRESID_HXX_
 
 #include <tools/resmgr.hxx>
 #include <tools/resid.hxx>
 
-class SttResId : public ResId
+class IttResId : public ResId
 {
-    static ResMgr* getSttResMgr();
+    static ResMgr* getIttResMgr();
     public:
-    SttResId( sal_uInt32 nId ) : ResId( nId, *getSttResMgr() ) {}
+    IttResId( sal_uInt32 nId ) : ResId( nId, *getIttResMgr() ) {}
 };
 
 

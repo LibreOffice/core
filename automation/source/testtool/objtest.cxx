@@ -31,7 +31,7 @@
 
 #include "sysdir_win.hxx"
 #include "registry_win.hxx"
-#include "sttresid.hxx"
+#include "ittresid.hxx"
 #include <osl/file.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/sound.hxx>
@@ -787,7 +787,7 @@ void TestToolObj::ReadNames( String Filename, CNames *&pNames, CNames *&pUIds, s
     {
         String aFileName = (pImpl->aHIDDir + DirEntry(CUniString("hid.lst"))).GetFull();
         {
-            TTExecutionStatusHint aHint( TT_EXECUTION_SHOW_ACTION, String(SttResId(S_READING_LONGNAMES)), aFileName );
+            TTExecutionStatusHint aHint( TT_EXECUTION_SHOW_ACTION, String(IttResId(S_READING_LONGNAMES)), aFileName );
             GetTTBroadcaster().Broadcast( aHint );
         }
         ReadFlat( aFileName ,pUIds, sal_True );
@@ -814,12 +814,12 @@ void TestToolObj::ReadNames( String Filename, CNames *&pNames, CNames *&pUIds, s
 
     if ( bIsFlat && !pNames )
     {
-        TTExecutionStatusHint aHint( TT_EXECUTION_SHOW_ACTION, String(SttResId(S_READING_SLOT_IDS)), Filename );
+        TTExecutionStatusHint aHint( TT_EXECUTION_SHOW_ACTION, String(IttResId(S_READING_SLOT_IDS)), Filename );
         GetTTBroadcaster().Broadcast( aHint );
     }
     else
     {
-        TTExecutionStatusHint aHint( TT_EXECUTION_SHOW_ACTION, String(SttResId(S_READING_CONTROLS)), Filename );
+        TTExecutionStatusHint aHint( TT_EXECUTION_SHOW_ACTION, String(IttResId(S_READING_CONTROLS)), Filename );
         GetTTBroadcaster().Broadcast( aHint );
     }
 
@@ -1590,7 +1590,7 @@ void TestToolObj::SFX_NOTIFY( SfxBroadcaster&, const TypeId&,
                         aTmpStr += ' ';
                         aTmpStr += pImpl->ProgParam;
                         {
-                            TTExecutionStatusHint aHint( TT_EXECUTION_SHOW_ACTION, String(SttResId(S_STARTING_APPLICATION)), aTmpStr );
+                            TTExecutionStatusHint aHint( TT_EXECUTION_SHOW_ACTION, String(IttResId(S_STARTING_APPLICATION)), aTmpStr );
                             GetTTBroadcaster().Broadcast( aHint );
                         }
 
@@ -1787,7 +1787,7 @@ void TestToolObj::SFX_NOTIFY( SfxBroadcaster&, const TypeId&,
                         else if ( Ext.CompareIgnoreCaseToAscii("Inc") == COMPARE_EQUAL )
                         {
                             {
-                                TTExecutionStatusHint aHint( TT_EXECUTION_SHOW_ACTION, String(SttResId(S_READING_BASIC_MODULE)), FilePath.GetFull() );
+                                TTExecutionStatusHint aHint( TT_EXECUTION_SHOW_ACTION, String(IttResId(S_READING_BASIC_MODULE)), FilePath.GetFull() );
                                 GetTTBroadcaster().Broadcast( aHint );
                             }
                             String aFullPathname = FilePath.GetFull();
@@ -3085,7 +3085,7 @@ void TestToolObj::ReadHidLstByNumber()
         String aName = (pImpl->aHIDDir + DirEntry(CUniString("hid.lst"))).GetFull();
 
         {
-            TTExecutionStatusHint aHint( TT_EXECUTION_SHOW_ACTION, String(SttResId(S_READING_LONGNAMES)), aName );
+            TTExecutionStatusHint aHint( TT_EXECUTION_SHOW_ACTION, String(IttResId(S_READING_LONGNAMES)), aName );
             GetTTBroadcaster().Broadcast( aHint );
         }
 

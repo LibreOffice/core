@@ -35,7 +35,7 @@
 #include "cmdstrm.hxx"
 #include "rcontrol.hxx"
 #include "objtest.hxx"
-#include "sttresid.hxx"
+#include "ittresid.hxx"
 #include "svcommstream.hxx"
 #include <basic/testtool.hrc>
 
@@ -43,7 +43,7 @@ ControlDefLoad const CmdStream::arKeyCodes [] =
 #include <keycodes.hxx>
 CNames *CmdStream::pKeyCodes = NULL;
 
-ResMgr* SttResId::getSttResMgr()
+ResMgr* IttResId::getIttResMgr()
 {
     static ResMgr* pMgr = NULL;
     if( ! pMgr )
@@ -153,7 +153,7 @@ String CmdStream::WandleKeyEventString( String aKeys )
                     Result += '<';
                     Result += Token;
                     Result += ' ';
-                    Result += String( SttResId( S_INVALID_KEYCODE ) );
+                    Result += String( IttResId( S_INVALID_KEYCODE ) );
                     Result += '>';
                 }
             }
