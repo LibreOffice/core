@@ -30,7 +30,6 @@
 
 
 #define HTMLMODE_ON                 0x0001
-#define HTMLMODE_PARA_BORDER        0x0002
 #define HTMLMODE_PARA_DISTANCE      0x0004
 #define HTMLMODE_SMALL_CAPS         0x0008
 #define HTMLMODE_FRM_COLUMNS        0x0010

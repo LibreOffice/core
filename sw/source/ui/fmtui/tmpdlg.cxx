@@ -218,8 +218,6 @@ SwTemplateDlg::SwTemplateDlg(Window*            pParent,
                     RemoveTabPage(TP_BACKGROUND);
                     RemoveTabPage(TP_DROPCAPS);
                 }
-                if(!(nHtmlMode & HTMLMODE_PARA_BORDER))
-                    RemoveTabPage(TP_BORDER);
             }
             else
             {

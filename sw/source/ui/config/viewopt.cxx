@@ -338,18 +338,18 @@ sal_uInt16      GetHtmlMode(const SwDocShell* pShell)
         switch ( rHtmlOpt.GetExportMode() )
         {
             case HTML_CFG_MSIE_40:
-                nRet |= HTMLMODE_PARA_BORDER|HTMLMODE_SMALL_CAPS|
+                nRet |= HTMLMODE_SMALL_CAPS|
                         HTMLMODE_SOME_STYLES|
                         HTMLMODE_FULL_STYLES|HTMLMODE_GRAPH_POS|
                         HTMLMODE_FULL_ABS_POS|HTMLMODE_SOME_ABS_POS;
             break;
             case HTML_CFG_NS40:
-                nRet |= HTMLMODE_PARA_BORDER|HTMLMODE_SOME_STYLES|
+                nRet |= HTMLMODE_SOME_STYLES|
                         HTMLMODE_FRM_COLUMNS|HTMLMODE_BLINK|HTMLMODE_GRAPH_POS|
                         HTMLMODE_SOME_ABS_POS;
             break;
             case HTML_CFG_WRITER:
-                nRet |= HTMLMODE_PARA_BORDER|HTMLMODE_SMALL_CAPS|
+                nRet |= HTMLMODE_SMALL_CAPS|
                         HTMLMODE_SOME_STYLES|
                         HTMLMODE_FRM_COLUMNS|HTMLMODE_FULL_STYLES|
                         HTMLMODE_BLINK|HTMLMODE_DROPCAPS|HTMLMODE_GRAPH_POS|
