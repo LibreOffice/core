@@ -49,7 +49,7 @@ CFLAGS += -DBROKEN_ALLOCA
 
 # In case someone enabled the non-standard -fomit-frame-pointer which does not
 # work with the .cxx sources in this directory:
-CFLAGSCXX += -fno-omit-frame-pointer
+CFLAGSCXX += -fno-omit-frame-pointer -mno-avx
 
 NOOPTFILES= \
     $(SLO)$/uno2cpp.obj
