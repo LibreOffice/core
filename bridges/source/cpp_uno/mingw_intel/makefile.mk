@@ -51,6 +51,12 @@ CFLAGS += -DBROKEN_ALLOCA
 # work with the .cxx sources in this directory:
 CFLAGSCXX += -fno-omit-frame-pointer
 
+# In case the compiler supports AVX this code segfaults so specifically turn
+# it off.
+.IF "$(HAVE_GCC_AVX)" == "YES"
+    CFLAGSCXX+= -mno-avx
+.ENDIF
+
 NOOPTFILES= \
     $(SLO)$/uno2cpp.obj
 

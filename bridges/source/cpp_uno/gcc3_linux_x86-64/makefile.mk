@@ -52,6 +52,12 @@ CFLAGS += -DLEAK_STATIC_DATA
 # work with the .cxx sources in this directory:
 CFLAGSCXX += -fno-omit-frame-pointer -fno-strict-aliasing
 
+# In case the compiler supports AVX this code segfaults so specifically turn
+# it off.
+.IF "$(HAVE_GCC_AVX)" == "YES"
+    CFLAGSCXX+= -mno-avx
+.ENDIF
+
 SLOFILES= \
     $(SLO)$/abi.obj			\
     $(SLO)$/except.obj		\
