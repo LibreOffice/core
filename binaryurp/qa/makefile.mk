@@ -33,12 +33,11 @@ ENABLE_EXCEPTIONS = TRUE
 
 .INCLUDE: settings.mk
 
-.IF "$(CROSS_COMPILING)"=="YES"
-all:
-    @echo Nothing done when cross-compiling
-.ENDIF
-
 CFLAGSCXX += $(CPPUNIT_CFLAGS)
+
+.IF "$(OS)" == "IOS"
+CFLAGSCXX += $(OBJCXXFLAGS)
+.ENDIF
 
 DLLPRE =
 
@@ -77,6 +76,13 @@ SHL2STDLIBS = \
 SHL2TARGET = test-unmarshal
 SHL2VERSIONMAP = version.map
 DEF2NAME = $(SHL2TARGET)
+
+.IF "$(OS)" == "IOS"
+APP3OBJS = $(OBJ)/binaryurp_cppunittester_all.obj $(SHL1OBJS) $(SHL2OBJS) 
+APP3RPATH = NONE
+APP3STDLIBS = $(SHL1STDLIBS) $(SHL2STDLIBS)
+APP3TARGET = binaryurp_cppunittester_all
+.ENDIF
 
 .INCLUDE: target.mk
 .INCLUDE: _cppunit.mk

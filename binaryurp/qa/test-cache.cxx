@@ -26,6 +26,10 @@
 *
 ************************************************************************/
 
+#ifdef IOS
+#define CPPUNIT_PLUGIN_EXPORTED_NAME cppunitTest_binaryurp_cache
+#endif
+
 #include "sal/config.h"
 
 #include "cppunit/TestAssert.h"

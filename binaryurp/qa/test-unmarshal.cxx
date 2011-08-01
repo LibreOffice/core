@@ -26,6 +26,10 @@
 *
 ************************************************************************/
 
+#ifdef IOS
+#define CPPUNIT_PLUGIN_EXPORTED_NAME cppunitTest_binaryurp_unmarshal
+#endif
+
 #include "sal/config.h"
 
 #include "com/sun/star/io/IOException.hpp"
