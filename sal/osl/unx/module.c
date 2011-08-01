@@ -112,7 +112,7 @@ sal_Bool SAL_CALL
 osl_getModuleHandle(rtl_uString *pModuleName, oslModule *pResult)
 {
     (void) pModuleName; /* avoid warning about unused parameter */
-#ifndef NO_DL_FUNCTIONS
+#if !defined(NO_DL_FUNCTIONS) || defined(IOS)
     *pResult = (oslModule) RTLD_DEFAULT;
 #else
     *pResult = NULL;
@@ -161,7 +161,8 @@ osl_getAsciiFunctionSymbol(oslModule Module, const sal_Char *pSymbol)
 {
     void *fcnAddr = NULL;
 
-#ifndef NO_DL_FUNCTIONS
+/* We do want to use dlsym on iOS */
+#if !defined(NO_DL_FUNCTIONS) || defined(IOS)
     if (pSymbol)
     {
         fcnAddr = dlsym(Module, pSymbol);
