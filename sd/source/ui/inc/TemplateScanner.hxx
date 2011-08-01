@@ -214,20 +214,6 @@ private:
             Returns one of the states ERROR, SCAN_ENTRY, or SCAN_FOLDER.
     */
     State ScanEntry (void);
-
-    /** Convert a resource string - a template name - to its localised pair if it exists.
-        @param nSourceResIds
-            Resource ID where the list of original en-US template names begin.
-        @param nDestResIds
-            Resource ID where the list of localised template names begin.
-        @param nCount
-            The number of names that have been localised.
-        @param rString
-            Name to be translated.
-        @return
-            The localised pair of rString or rString if the former does not exist.
-    */
-    ::rtl::OUString ConvertResourceString ( int nSourceResIds, int nDestResIds, int nCount, const ::rtl::OUString& rString );
 };
 
 } // end of namespace sd

@@ -31,9 +31,6 @@
 
 #include "TemplateScanner.hxx"
 
-#include <sfx2/templatelocnames.hrc>
-#include <sfx2/sfxresid.hxx>
-
 #include <comphelper/processfactory.hxx>
 #include <comphelper/documentconstants.hxx>
 
@@ -496,22 +493,6 @@ bool TemplateScanner::HasNextStep (void)
 const TemplateEntry* TemplateScanner::GetLastAddedEntry (void) const
 {
     return mpLastAddedEntry;
-}
-
-
-
-
-::rtl::OUString TemplateScanner::ConvertResourceString (
-    int nSourceResIds, int nDestResIds, int nCount, const ::rtl::OUString& rString )
-{
-    for( int i = 0; i < nCount; ++i )
-    {
-        if( rString == ResId::toString( (const ResId)SfxResId( (sal_uInt16)(nSourceResIds + i) ) ) )
-        {
-            return ResId::toString( (const ResId)SfxResId( (sal_uInt16)(nDestResIds + i) ) );
-        }
-    }
-    return rString;
 }
 
 }
