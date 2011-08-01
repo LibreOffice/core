@@ -30,6 +30,7 @@
 #include "precompiled_sw.hxx"
 
 #include <swcache.hxx>
+#include <rtl/strbuf.hxx>
 
 SV_IMPL_PTRARR(SwCacheObjArr,SwCacheObj*);
 
@@ -135,7 +136,7 @@ SwCache::~SwCache()
             append('\n').
             append(RTL_CONSTASCII_STRINGPARAM(
                 "Number of insert on free places:       ")).
-            append(static_cast<sal_Int32<(nInsertFree)).
+            append(static_cast<sal_Int32>(nInsertFree)).
             append('\n').
             append(RTL_CONSTASCII_STRINGPARAM(
                 "Number of replacements:                ")).
