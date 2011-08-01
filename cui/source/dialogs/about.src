@@ -72,9 +72,25 @@ ModalDialog RID_DEFAULTABOUT
     {
         Text[ en-US ] = "%PRODUCTNAME %ABOUTBOXPRODUCTVERSION %PRODUCTEXTENSION";
     };
+    String ABOUT_STR_VENDOR
+    {
+        Text[ en-US ] = "This product was supplied by %OOOVENDOR.";
+    };
     String ABOUT_STR_COPYRIGHT
     {
-        Text[ en-US ] = "Copyright © 2000, 2010 LibreOffice contributors and/or their affiliates. All rights reserved.\n\nThis product was created by %OOOVENDOR, based on OpenOffice.org, which is Copyright 2000, 2010 Oracle and/or its affiliates.\n\n%OOOVENDOR acknowledges all community members, please find more info at the link below:";
+        Text[ en-US ] = "LibreOffice is copyright © 2000, 2011 LibreOffice contributors and/or their affiliates. All rights reserved.";
+    };
+    String ABOUT_STR_COPYRIGHT_DERIVED
+    {
+        Text[ en-US ] = "%PRODUCTNAME is derived from LibreOffice. LibreOffice is copyright © 2000, 2011 LibreOffice contributors and/or their affiliates. All rights reserved.";
+    };
+    String ABOUT_STR_COPYRIGHT_ORACLE_DERIVED
+    {
+        Text[ en-US ] = "LibreOffice is derived from OpenOffice.org. OpenOffice.org is copyright © 2000, 2011 Oracle and/or its affiliates. All rights reserved.";
+    };
+    String ABOUT_STR_ACKNOWLEDGEMENT
+    {
+        Text[ en-US ] = "%OOOVENDOR acknowledges all community members, please find more info at the link below:";
     };
     String ABOUT_STR_LINK
     {

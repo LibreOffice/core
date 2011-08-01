@@ -53,10 +53,12 @@ private:
     MultiLineEdit       aCopyrightText;
     svt::FixedHyperlink aInfoLink;
 
-    String          aVersionData;
-    String          aVersionTextStr;
-    String          aCopyrightTextStr;
-    String          aLinkStr;
+    String aVersionData;
+    String aVersionTextStr;
+    String m_aVendorTextStr;
+    String m_aOracleCopyrightTextStr;
+    String m_aAcknowledgementTextStr;
+    String m_aLinkStr;
     String m_sBuildStr;
 
 protected:
