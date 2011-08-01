@@ -2925,7 +2925,7 @@ void MSWordExportBase::ExportDocument( bool bWriteAll )
     if ( !pOleMap)
         pOleMap = new WW8OleMaps;
 
-    if ( !pOCXExp )
+    if ( !pOCXExp && pDoc->GetDocShell() )
         pOCXExp = new SwMSConvertControls( pDoc->GetDocShell(), pCurPam );
 
     // #i81405# - Collect anchored objects before changing the redline mode.
