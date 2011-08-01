@@ -495,7 +495,7 @@ Reference< XEnumeration > SAL_CALL OSDBCDriverManager::createEnumeration(  ) thr
 
     ODriverEnumeration::DriverArray aDrivers;
 
-    // ensure that all our bootstrapped drivers are insatntiated
+    // ensure that all our bootstrapped drivers are instantiated
     ::std::for_each( m_aDriversBS.begin(), m_aDriversBS.end(), EnsureDriver() );
 
     // copy the bootstrapped drivers
