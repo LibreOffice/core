@@ -99,97 +99,92 @@ Reference< com::sun::star::frame::XModel > xModel;
 
 ::rtl::OUString SAL_CALL FilterDetect::detect( com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >& aArguments ) throw( com::sun::star::uno::RuntimeException )
 {
-        ::rtl::OUString sTypeName;
-        ::rtl::OUString sUrl;
-        ::rtl::OUString originalTypeName;
-        Sequence<PropertyValue > lProps ;
+    ::rtl::OUString sTypeName;
+    ::rtl::OUString sUrl;
+    ::rtl::OUString originalTypeName;
+    Sequence<PropertyValue > lProps ;
 
-        com::sun::star::uno::Reference< com::sun::star::io::XInputStream > xInStream;
-        ::rtl::OUString temp;
-        const PropertyValue * pValue = aArguments.getConstArray();
-        sal_Int32 nLength;
-        ::rtl::OString resultString;
+    com::sun::star::uno::Reference< com::sun::star::io::XInputStream > xInStream;
+    ::rtl::OUString temp;
+    const PropertyValue * pValue = aArguments.getConstArray();
+    sal_Int32 nLength;
+    ::rtl::OString resultString;
 
-        nLength = aArguments.getLength();
-        sal_Int32 location=nLength;
-        for ( sal_Int32 i = 0 ; i < nLength; i++)
+    nLength = aArguments.getLength();
+    sal_Int32 location=nLength;
+    for (sal_Int32 i = 0 ; i < nLength; i++)
+    {
+        if (pValue[i].Name.equalsAsciiL ( RTL_CONSTASCII_STRINGPARAM ( "TypeName" ) ))
         {
-            if ( pValue[i].Name.equalsAsciiL ( RTL_CONSTASCII_STRINGPARAM ( "TypeName" ) ) )
-            {
-                location=i;
-            }
-            else if ( pValue[i].Name.equalsAsciiL ( RTL_CONSTASCII_STRINGPARAM ( "URL" ) ) )
-            {
-                pValue[i].Value >>= sUrl;
-            }
-            else if ( pValue[i].Name.equalsAsciiL ( RTL_CONSTASCII_STRINGPARAM ( "InputStream" ) ) )
-            {
-                pValue[i].Value >>= xInStream ;
-            }
-
-
+            location=i;
         }
-        try{
-            Reference< com::sun::star::ucb::XCommandEnvironment > xEnv;
+        else if (pValue[i].Name.equalsAsciiL ( RTL_CONSTASCII_STRINGPARAM ( "URL" ) ))
+        {
+            pValue[i].Value >>= sUrl;
+        }
+        else if (pValue[i].Name.equalsAsciiL ( RTL_CONSTASCII_STRINGPARAM ( "InputStream" ) ))
+        {
+            pValue[i].Value >>= xInStream ;
+        }
+    }
+    try
+    {
+        Reference< com::sun::star::ucb::XCommandEnvironment > xEnv;
+        if (!xInStream.is())
+        {
+            ::ucbhelper::Content aContent(sUrl,xEnv);
+            xInStream = aContent.openStream();
             if (!xInStream.is())
-             {
-                ::ucbhelper::Content aContent(sUrl,xEnv);
-                xInStream = aContent.openStream();
-                 if (!xInStream.is())
-                 {
-                         return sTypeName;
-                 }
-             }
-        com::sun::star::uno::Sequence< sal_Int8 > aData;
-            /* long nBytesToRead= */ xInStream->available();
-            xInStream->skipBytes (0);
-            long bytestRead =xInStream->readBytes (aData,  4000);
-            resultString=::rtl::OString((const sal_Char *)aData.getConstArray(),bytestRead) ;
-
-
-             // test typedetect code
-            Reference <XNameAccess> xTypeCont(mxMSF->createInstance(OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.document.TypeDetection" ))),UNO_QUERY);
-            Sequence < ::rtl::OUString > myTypes= xTypeCont->getElementNames();
-            nLength = myTypes.getLength();
-
-
-            sal_Int32 new_nlength=0;
-            sal_Int32 i = 0 ;
-             while(  (i < nLength) && (sTypeName.getLength() == 0))
             {
+                return sTypeName;
+            }
+        }
+        com::sun::star::uno::Sequence< sal_Int8 > aData;
+        /* long nBytesToRead= */ xInStream->available();
+        xInStream->skipBytes (0);
+        long bytestRead =xInStream->readBytes (aData,  4000);
+        resultString=::rtl::OString((const sal_Char *)aData.getConstArray(),bytestRead) ;
 
-                Any elem = xTypeCont->getByName(myTypes[i]);
-                elem >>=lProps;
-                new_nlength = lProps.getLength();
-                sal_Int32 j =0;
-                while( j < new_nlength && (sTypeName.getLength() == 0))
+        // test typedetect code
+        Reference <XNameAccess> xTypeCont(mxMSF->createInstance(OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.document.TypeDetection" ))),UNO_QUERY);
+        Sequence < ::rtl::OUString > myTypes= xTypeCont->getElementNames();
+        nLength = myTypes.getLength();
+
+        sal_Int32 new_nlength=0;
+        sal_Int32 i = 0 ;
+        while ((i < nLength) && (sTypeName.getLength() == 0))
+        {
+            Any elem = xTypeCont->getByName(myTypes[i]);
+            elem >>=lProps;
+            new_nlength = lProps.getLength();
+            sal_Int32 j =0;
+            while (j < new_nlength && (sTypeName.getLength() == 0))
+            {
+                ::rtl::OUString tmpStr;
+                lProps[j].Value >>=tmpStr;
+                if ((lProps[j].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("ClipboardFormat"))) && tmpStr.getLength())
                 {
-                    ::rtl::OUString tmpStr;
-                    lProps[j].Value >>=tmpStr;
-                    if((lProps[j].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("ClipboardFormat"))) && tmpStr.getLength() )
-                    {
-                        sTypeName = supportedByType(tmpStr,resultString, myTypes[i]);
-                    }
-                 j++;
+                    sTypeName = supportedByType(tmpStr,resultString, myTypes[i]);
                 }
+                j++;
+            }
             i++;
         }
-        //end test
+    }
+    catch (Exception &)
+    {
+        OSL_FAIL( "An Exception occurred while opening File stream" );
+    }
 
-        }
-        catch(Exception &)
+    if (sTypeName.getLength())
+    {
+        if (location == aArguments.getLength())
         {
-                 OSL_FAIL( "An Exception occurred while opening File stream" );
+            aArguments.realloc(nLength+1);
+            aArguments[location].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "TypeName" ));
         }
-        if (sTypeName.getLength())
-        {
-            if ( location == aArguments.getLength() )
-            {
-                aArguments.realloc(nLength+1);
-                aArguments[location].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "TypeName" ));
-            }
-            aArguments[location].Value <<=sTypeName;
-        }
+        aArguments[location].Value <<=sTypeName;
+    }
 
     return sTypeName;
 }
