@@ -1,7 +1,7 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
+#
 # Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
@@ -23,38 +23,37 @@
 # <http://www.openoffice.org/license.html>
 # for a copy of the LGPLv3 License.
 #
-#*************************************************************************
+#***********************************************************************/
 
-PRJ=..$/..
-PRJNAME=cppuhelper
-TARGET=cppu_unourl
+PRJ = ../..
+PRJNAME = cppuhelper
+TARGET = cppuhelper_cppunittester_all
 
-ENABLE_EXCEPTIONS=TRUE
+ENABLE_EXCEPTIONS = TRUE
+LIBTARGET = NO
 
-# --- Settings -----------------------------------------------------
-
-.INCLUDE :  settings.mk
+.INCLUDE: settings.mk
 
 CFLAGSCXX += $(CPPUNIT_CFLAGS)
 
-# BEGIN ----------------------------------------------------------------
-# auto generated Target:joblist by codegen.pl
-SHL1OBJS=  \
-    $(SLO)$/cppu_unourl.obj
-SHL1TARGET= cppu_unourl
-SHL1STDLIBS=\
-    $(CPPUHELPERLIB) \
-    $(SALLIB) \
-    $(CPPULIB) \
-    $(CPPUNITLIB)
-SHL1IMPLIB= i$(SHL1TARGET)
-DEF1NAME    =$(SHL1TARGET)
-SHL1VERSIONMAP= export.map
-# auto generated Target:joblist
-# END ------------------------------------------------------------------
+.IF "$(OS)" != "IOS"
 
-# --- Targets ------------------------------------------------------
+ALL :
+    @echo This is only for iOS
 
-.INCLUDE :  target.mk
-.INCLUDE : _cppunit.mk
+.ENDIF
 
+CFLAGSCXX += $(OBJCXXFLAGS)
+
+OBJFILES = $(APP1OBJS)
+
+APP1OBJS = $(OBJ)/cppuhelper_cppunittester_all.obj
+APP1RPATH = NONE
+APP1LIBS += \
+    $(SLB)/qa_propertysetmixin.lib \
+    $(SLB)/cppuhelper.lib
+
+APP1STDLIBS = $(CPPUNITLIB) $(CPPULIB) $(SALLIB) $(SALHELPERLIB)
+APP1TARGET = $(TARGET)
+
+.INCLUDE: target.mk

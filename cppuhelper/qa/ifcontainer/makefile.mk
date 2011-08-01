@@ -35,12 +35,11 @@ ENABLE_EXCEPTIONS=TRUE
 
 .INCLUDE :  settings.mk
 
-.IF "$(CROSS_COMPILING)"=="YES"
-all:
-    @echo Nothing done when cross-compiling
-.ENDIF
-
 CFLAGSCXX += $(CPPUNIT_CFLAGS)
+
+.IF "$(OS)" == "IOS"
+CFLAGSCXX += -DCPPUNIT_PLUGIN_EXPORTED_NAME=cppunitTest_$(TARGET)
+.ENDIF
 
 # BEGIN ----------------------------------------------------------------
 # auto generated Target:joblist by codegen.pl

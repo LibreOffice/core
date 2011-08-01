@@ -6,3 +6,4 @@ ch	cppuhelper\unotypes						nmake	-	all	ch_unotypes NULL
 ch cppuhelper\qa\propertysetmixin nmake - all ch_qa_propertysetmixin ch_source NULL
 ch  cppuhelper\qa\ifcontainer               nmake   -   all ch_qa_ifcontainer ch_source NULL
 ch  cppuhelper\qa\unourl                    nmake   -   all ch_qa_unourl ch_source NULL
+ch  cppuhelper\qa\static                    nmake   -   all ch_qa_static ch_qa_propertysetmixin ch_qa_ifcontainer ch_qa_unourl NULL

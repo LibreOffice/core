@@ -29,6 +29,10 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_cppuhelper.hxx"
 
+#ifdef IOS
+#define CPPUNIT_PLUGIN_EXPORTED_NAME cppunitTest_cppuhelper_propertysetmixin
+#endif
+
 #include "sal/config.h"
 
 #include "test/cppuhelper/propertysetmixin/CppSupplier.hpp"

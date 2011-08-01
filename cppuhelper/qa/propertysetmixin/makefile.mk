@@ -25,7 +25,7 @@
 #
 #*************************************************************************
 
-.IF "$(OOO_SUBSEQUENT_TESTS)" == ""
+.IF "$(OOO_SUBSEQUENT_TESTS)" == "" && "$(OS)" != "IOS"
 nothing .PHONY:
 .ELSE
 
@@ -40,11 +40,6 @@ ENABLE_EXCEPTIONS := TRUE
 my_components = $(TARGET).cpp $(TARGET).java
 
 .INCLUDE: settings.mk
-
-.IF "$(CROSS_COMPILING)"=="YES"
-all:
-    @echo Nothing done when cross-compiling
-.ENDIF
 
 .IF "$(OS)" == "WNT"
 my_file = file:///
@@ -99,7 +94,9 @@ $(MISC)/$(TARGET)/javamaker.flag: $(MISC)/$(TARGET)/types.rdb
     $(JAVAMAKER) -O$(CLASSDIR) -BUCR -nD -Gc -X$(SOLARBINDIR)/udkapi.rdb $<
     $(TOUCH) $@
 
+.IF "$(SOLAR_JAVA)"!=""
 $(JAVATARGET): $(MISC)/$(TARGET)/javamaker.flag
+.ENDIF
 
 $(MISC)/$(TARGET)/services.rdb .ERRREMOVE: $(SOLARENV)/bin/packcomponents.xslt \
         $(MISC)/$(TARGET)/services.input \
