@@ -25,6 +25,10 @@
 #
 #***********************************************************************/
 
+.IF "$(OOO_SUBSEQUENT_TESTS)" == ""
+nothing .PHONY:
+.ELSE
+
 PRJ = ../..
 PRJNAME = cppuhelper
 TARGET = cppuhelper_cppunittester_all
@@ -57,3 +61,5 @@ APP1STDLIBS = $(CPPUNITLIB) $(CPPULIB) $(SALLIB) $(SALHELPERLIB)
 APP1TARGET = $(TARGET)
 
 .INCLUDE: target.mk
+
+.ENDIF

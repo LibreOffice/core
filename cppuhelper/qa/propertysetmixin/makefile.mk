@@ -25,7 +25,7 @@
 #
 #*************************************************************************
 
-.IF "$(OOO_SUBSEQUENT_TESTS)" == "" && "$(OS)" != "IOS"
+.IF "$(OOO_SUBSEQUENT_TESTS)" == ""
 nothing .PHONY:
 .ELSE
 
