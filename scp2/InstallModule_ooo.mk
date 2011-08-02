@@ -38,6 +38,7 @@ $(eval $(call gb_InstallModule_define_if_set,scp2/ooo,\
 	ENABLE_KAB \
 	ENABLE_KDE \
 	ENABLE_KDE4 \
+	ENABLE_MONO \
 	ENABLE_LIBLANGTAG \
 	ENABLE_NPAPI_FROM_BROWSER \
 	ENABLE_NPAPI_INTO_BROWSER \

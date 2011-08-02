@@ -110,7 +110,7 @@ STD_LIB_FILE(gid_File_Lib_Chartcontroller, chartcontroller)
 STD_LIB_FILE(gid_File_Lib_Chartcore, chartcore)
 
 
-#if defined _MSC_VER
+#if defined _MSC_VER || defined ENABLE_MONO
 
 File gid_File_Lib_Cli_Oootypes_Assembly
     TXT_FILE_BODY;
@@ -127,7 +127,7 @@ End
 
 #endif
 
-#if defined _MSC_VER
+#if defined _MSC_VER || defined ENABLE_MONO
 File gid_File_Lib_Policy_Cli_Oootypes_Assembly
     TXT_FILE_BODY;
     Styles = (PACKED, ASSEMBLY, DONTRENAMEINPATCH);
@@ -143,7 +143,7 @@ End
 
 #endif
 
-#if defined _MSC_VER
+#if defined _MSC_VER || defined ENABLE_MONO
 
 File gid_File_Lib_Policy_Cli_Oootypes_Config
     TXT_FILE_BODY;
