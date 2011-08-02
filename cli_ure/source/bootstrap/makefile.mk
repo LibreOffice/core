@@ -73,8 +73,12 @@ $(ASSEMBLY_ATTRIBUTES) .PHONY: assembly.cs $(BIN)$/cliuno.snk $(BIN)$/cliurevers
 
 EXTERNAL_DIR=$(PRJ)$/..$/external/cli
 
-$(OUT)$/bin$/cli_uretypes.dll : $(EXTERNAL_DIR)$/cli_uretypes.dll
-    +$(COPY) $< $@
+.IF "$(ENABLE_MONO_CLIMAKER)" != "YES"
+
+$(OUT)$/bin$/cli_uretypes.dll : $(EXTERNAL_DIR)$/cli_uretypes.dll $(EXTERNAL_DIR)$/cli_uretypes.config $(EXTERNAL_DIR)$/policy.1.0.cli_uretypes.dll
+    +$(COPY) $? $(OUT)$/bin$/
+
+.ENDIF
 
 $(BIN)$/cli_cppuhelper.dll : $(CSFILES) $(OUT)$/bin$/cli_uretypes.dll
     +$(CSC) $(CSCFLAGS) \

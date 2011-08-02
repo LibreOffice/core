@@ -41,7 +41,35 @@ CCACHE_DISABLE=TRUE
 .INCLUDE :  settings.mk
 .INCLUDE : $(PRJ)$/util$/makefile.pmk
 
-.IF "$(BUILD_FOR_CLI)" != ""
+.IF "$(ENABLE_MONO)" == "YES"
+
+.IF "$(ENABLE_MONO_CLIMAKER)" != "YES"
+
+ALLTAR :   # do nothing
+
+.ELSE # "$(ENABLE_MONO_CLIMAKER)" != "YES"
+
+SLOFILES = $(SLO)$/climaker_mono.obj
+SHL1OBJS=$(SLOFILES)
+SHL1STDLIBS= $(CPPULIB) $(CPPUHELPERLIB) $(SALLIB)
+SHL1TARGET=$(TARGET)
+
+ALLTAR : $(BIN)$/climaker
+
+$(BIN)$/climaker : climaker_csharp.cs
+    gmcs -debug -unsafe climaker_csharp.cs -reference:$(BIN)/cli_basetypes.dll -out:$(BIN)$/climaker.exe
+    $(MKBUNDLE) -L $(OUT)/lib --deps -o $(BIN)$/climaker $(BIN)$/climaker.exe $(BIN)/cli_basetypes.dll
+
+.INCLUDE :  target.mk
+.ENDIF # "$(ENABLE_MONO_CLIMAKER)" != "YES"
+
+.ELSE # "$(ENABLE_MONO)" == "YES"
+
+.IF "$(BUILD_FOR_CLI)" == ""
+
+ALLTAR :   # do nothing
+
+.ELSE # "$(BUILD_FOR_CLI)" == ""
 
 NO_OFFUH=TRUE
 CPPUMAKERFLAGS =
@@ -122,5 +150,7 @@ $(CLIMAKER_CONFIG): climaker.exe.config
 .IF "$(BUILD_FOR_CLI)" != ""
 
 $(OBJFILES): $(BIN)$/cli_basetypes.dll
+
+.ENDIF
 
 .ENDIF

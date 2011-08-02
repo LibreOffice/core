@@ -37,7 +37,14 @@ TARGET = unotypes
 .INCLUDE : $(PRJ)$/util$/target.pmk
 .INCLUDE : target.mk
 
-.IF "$(BUILD_FOR_CLI)" != ""
+.IF "$(BUILD_FOR_CLI)" != "" && ("$(GUI)" == "WNT" || "$(ENABLE_MONO_CLIMAKER)" == "YES")
+
+.IF "$(ENABLE_MONO_CLIMAKER)" == "YES"
+WRAPCMD=MONO_PATH=$(OUT)/bin:$(MONO_PATH) LD_LIBRARY_PATH=$(SOLARLIBDIR):$(OUT)/lib
+CLIMAKER=$(BIN)$/climaker
+.ELSE
+CLIMAKER=climaker.exe
+.ENDIF
 
 .INCLUDE : $(BIN)$/cliureversion.mk
 
@@ -53,8 +60,8 @@ CLIMAKERFLAGS += --verbose
 .ENDIF
 
 #When changing the assembly version then this must also be done in scp2
-$(OUT)$/bin$/cli_uretypes.dll : $(BIN)$/climaker.exe $(SOLARBINDIR)$/types.rdb $(BIN)$/cliureversion.mk
-    $(subst,$(SOLARBINDIR)$/climaker,$(BIN)$/climaker $(CLIMAKER)) $(CLIMAKERFLAGS) \
+$(OUT)$/bin$/cli_uretypes.dll : $(CLIMAKER) $(SOLARBINDIR)$/types.rdb $(BIN)$/cliureversion.mk
+    $(WRAPCMD) $(CLIMAKER) $(CLIMAKERFLAGS) \
         --out $@ \
         --keyfile $(BIN)$/cliuno.snk \
         --assembly-version $(CLI_URETYPES_NEW_VERSION) \
@@ -65,7 +72,7 @@ $(OUT)$/bin$/cli_uretypes.dll : $(BIN)$/climaker.exe $(SOLARBINDIR)$/types.rdb $
 #do not forget to deliver cli_uretypes.config. It is NOT embedded in the policy file.
 #see i62886 for the dependency on cli_uretypes.dll
 $(POLICY_ASSEMBLY_FILE) : $(BIN)$/cli_uretypes.config $(OUT)$/bin$/cli_uretypes.dll
-    $(WRAPCMD) AL.exe -out:$@ \
+    $(WRAPCMD) $(AL) -out:$@ \
             -version:$(CLI_URETYPES_POLICY_VERSION) \
             -keyfile:$(BIN)$/cliuno.snk \
             -link:cli_uretypes.config,$(BIN)$/cli_uretypes.config
