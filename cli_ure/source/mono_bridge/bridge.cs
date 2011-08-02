@@ -1646,9 +1646,9 @@ public unsafe class Bridge
 
         for (int i = 0; i < nParams; ++i)
         {
-            // FIXME it's a TypeDescriptionReference
-            TypeDescription *type = (TypeDescription *)parameters[i].pTypeRef;
-
+            TypeDescriptionReference *typeref = (TypeDescriptionReference *)parameters[i].pTypeRef;
+            TypeDescription *type = null;
+            TypeDescriptionReference.GetDescription(&type, typeref);
             unoArgPtrs[i] = unoArgs + i;
             if ((type->eTypeClass == TypeClass.STRUCT ||
                  type->eTypeClass == TypeClass.EXCEPTION) &&
@@ -1663,7 +1663,7 @@ public unsafe class Bridge
             if (parameters[i].bIn != 0)
             {
                 // FIXME error handling
-                MapToUno(unoArgPtrs[i], args[i], type, false /* no assign */);
+                MapToUno(unoArgPtrs[i], args[i], (TypeDescription*)typeref, false /* no assign */);
             }
         }
 
@@ -1795,13 +1795,27 @@ public unsafe class Bridge
                 MapToManaged(ref args[i], unoArgs[i], parameters[i].pTypeRef, null, false);
 
         object invocationResult = null;
+        Exception exc = null;
         try
         {
             invocationResult = method.Invoke(managedI, args);
         }
         catch (TargetInvocationException e)
         {
-            Exception exc = e.InnerException;
+            exc = e.InnerException;
+        }
+        catch (Exception e)
+        {
+            exc = e;
+        }
+        if ( exc != null )
+        {
+            if ( !( exc is unoidl.com.sun.star.uno.Exception ) )
+            {
+                // #FIXME put more info in here trace, stack etc. ( when I
+                // figure out how to do that in mono )
+                exc = new unoidl.com.sun.star.uno.RuntimeException( exc.ToString(), null );
+            }
             TypeDescription* td = null;
             // FIXME leak
             TypeDescriptionReference.GetDescription(&td, MapManagedType(exc.GetType()));
@@ -1811,11 +1825,6 @@ public unsafe class Bridge
             (*unoExc)->pData = memExc;
             return;
         }
-        catch (Exception e)
-        {
-            // FIXME
-        }
-
         // convert out, in/out params
         for (int i = 0; i < nParams; ++i)
         {
