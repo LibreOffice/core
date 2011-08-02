@@ -5356,6 +5356,23 @@ AC_SUBST(HSQLDB_JAR)
 fi
 
 dnl ===================================================================
+dnl Check for PostgreSQL stuff
+dnl ===================================================================
+AC_PATH_PROG(PGCONFIG, pg_config)
+if test -z "$PGCONFIG"; then
+    AC_MSG_ERROR([pg_config needed])
+fi
+save_CFLAGS=$CFLAGS
+save_LIBS=$LIBS
+CFLAGS="-I`pg_config --includedir`"
+AC_CHECK_HEADER([libpq-fe.h], [], [AC_MSG_ERROR([libpq-fe.h is needed])], [])
+AC_HAVE_LIBRARY(pq, [], [AC_MSG_ERROR(libpq is needed)], [])
+CFLAGS=$save_CFLAGS
+LIBS=$save_LIBS
+SYSTEM_POSTGRESQL=YES # only option atm :-)
+AC_SUBST(SYSTEM_POSTGRESQL)
+
+dnl ===================================================================
 dnl Check for system beanshell
 dnl ===================================================================
 if test "$with_java" != "no"; then
