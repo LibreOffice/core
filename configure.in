@@ -550,12 +550,6 @@ AC_ARG_WITH(theme,
          Possible choices: *default, *crystal, *hicontrast, *oxygen, *tango, classic, industrial.]),
 ,)
 
-AC_ARG_WITH(theme,
-    AS_HELP_STRING([--with-theme="theme1 theme2..."],
-        [Choose which themes to include. By default those themes with an '*' are included.
-         Possible choices: *default, *crystal, *hicontrast, *oxygen, *tango, classic, industrial.]),
-,)
-
 AC_ARG_WITH(extension-integration,
     AS_HELP_STRING([--with-extension-integration],
         [It will integrate the builded extensions to the installer of the product.
