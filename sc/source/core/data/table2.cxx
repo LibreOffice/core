@@ -768,7 +768,15 @@ void ScTable::CopyToTable(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
         return;
 
     if (pDBDataNoName)
-        pDestTab->SetAnonymousDBData(new ScDBData(*pDBDataNoName));
+    {
+        ScDBData* pNewDBData = new ScDBData(*pDBDataNoName);
+        SCCOL aCol1, aCol2;
+        SCROW aRow1, aRow2;
+        SCTAB aTab;
+        pNewDBData->GetArea(aTab, aCol1, aRow1, aCol2, aRow2);
+        pNewDBData->MoveTo(pDestTab->nTab, aCol1, aRow1, aCol2, aRow2);
+        pDestTab->SetAnonymousDBData(pNewDBData);
+    }
     //  Charts muessen beim Ein-/Ausblenden angepasst werden
     ScChartListenerCollection* pCharts = pDestTab->pDocument->GetChartListenerCollection();
 
