@@ -595,30 +595,12 @@ $(call gb_LinkTarget_add_libs,$(1),$(DBUSMENUGTK_LIBS))
 
 endef
 
-define gb_LinkTarget__use_uikit
-$(call gb_LinkTarget__add_libs,$(1), \
-	-framework UIKit \
-)
+# MacOSX-only frameworks
+# (in alphabetical order)
 
-endef
-
-define gb_LinkTarget__use_corefoundation
+define gb_LinkTarget__use_carbon
 $(call gb_LinkTarget_add_libs,$(1), \
-	-framework CoreFoundation \
-)
-
-endef
-
-define gb_LinkTarget__use_coretext
-$(call gb_Library_add_libs,$(1), \
-	-framework CoreText \
-)
-
-endef
-
-define gb_LinkTarget__use_coregraphics
-$(call gb_Library_add_libs,$(1), \
-	-framework CoreGraphics \
+	-framework Carbon \
 )
 
 endef
@@ -630,16 +612,48 @@ $(call gb_LinkTarget_add_libs,$(1), \
 
 endef
 
-define gb_LinkTarget__use_carbon
+define gb_LinkTarget__use_quicktime
 $(call gb_LinkTarget_add_libs,$(1), \
-	-framework Carbon \
+	-framework QuickTime \
 )
 
 endef
 
-define gb_LinkTarget__use_quicktime
+# Common MacOSX and iOS frameworks
+
+define gb_LinkTarget__use_corefoundation
 $(call gb_LinkTarget_add_libs,$(1), \
-	-framework QuickTime \
+	-framework CoreFoundation \
+)
+
+endef
+
+define gb_LinkTarget__use_coregraphics
+$(call gb_Library_add_libs,$(1), \
+	-framework CoreGraphics \
+)
+
+endef
+
+define gb_LinkTarget__use_coretext
+$(call gb_Library_add_libs,$(1), \
+	-framework CoreText \
+)
+
+endef
+
+define gb_LinkTarget__use_foundation
+$(call gb_LinkTarget_add_libs,$(1), \
+	-framework Foundation \
+)
+
+endef
+
+# iOS-only frameworks
+
+define gb_LinkTarget__use_uikit
+$(call gb_LinkTarget_add_libs,$(1), \
+	-framework UIKit \
 )
 
 endef
