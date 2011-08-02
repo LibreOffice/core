@@ -59,6 +59,7 @@
  *
  *  Non-Sun changes:
  *  * august 2011: switch to unordered_map instead of deprecated hash_map
+ *  * august 2011: calcSearchable: actually set return value, not fresh variable.
  *
  ************************************************************************/
 #include <algorithm>
@@ -1777,7 +1778,7 @@ static sal_Int32 calcSearchable( sal_Int32 dataType )
     if( com::sun::star::sdbc::DataType::BINARY == dataType ||
         com::sun::star::sdbc::DataType::VARBINARY == dataType ||
         com::sun::star::sdbc::DataType::LONGVARBINARY == dataType )
-        sal_Int32 ret = com::sun::star::sdbc::ColumnSearch::NONE;
+        ret = com::sun::star::sdbc::ColumnSearch::NONE;
 
     return ret;
 }
