@@ -154,7 +154,7 @@ com::sun::star::uno::Sequence< sal_Int32 > string2intarray( const ::rtl::OUStrin
 com::sun::star::uno::Sequence< rtl::OUString > convertMappedIntArray2StringArray(
     const Int2StringMap &map, const com::sun::star::uno::Sequence< sal_Int32> &source );
 
-typedef std::hash_map
+typedef std::unordered_map
 <
     ::rtl::OString,
     ::rtl::OString,

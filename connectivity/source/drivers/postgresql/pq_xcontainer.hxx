@@ -61,7 +61,7 @@
 
 #ifndef _PQ_CONTAINER_HXX_
 #define _PQ_CONTAINER_HXX_
-#include <hash_map>
+#include <unordered_map>
 #include <vector>
 
 #include <com/sun/star/container/XNameAccess.hpp>
@@ -111,7 +111,7 @@ public:
     }
 };
 
-typedef ::std::hash_map
+typedef ::std::unordered_map
 <
    rtl::OUString,
    sal_Int32,

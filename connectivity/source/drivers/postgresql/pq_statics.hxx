@@ -61,7 +61,7 @@
 #ifndef _PQ_STATICS_HXX_
 #define _PQ_STATICS_HXX_
 
-#include <hash_map>
+#include <unordered_map>
 #include <vector>
 
 #include <rtl/uuid.h>
@@ -131,7 +131,7 @@ struct TypeDetails
     sal_Bool isSearchable;
 };
 
-typedef ::std::hash_map
+typedef ::std::unordered_map
 <
    rtl::OUString,
    sal_Int32,

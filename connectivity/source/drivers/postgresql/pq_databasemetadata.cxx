@@ -1107,7 +1107,7 @@ struct DatabaseTypeDescription
     OUString typeType;
 };
 
-typedef std::hash_map
+typedef std::unordered_map
 <
     sal_Int32,
     DatabaseTypeDescription,
