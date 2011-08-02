@@ -18,6 +18,7 @@ cn  connectivity\source\drivers\calc                nmake   -   all cn_calc cn_f
 cn  connectivity\source\drivers\odbcbase            nmake   -   all cn_odbcbase cn_dbtools cn_inc NULL
 cn  connectivity\source\drivers\odbc                nmake   -   all cn_odbc cn_odbcbase cn_inc NULL
 cn  connectivity\source\drivers\mysql               nmake   -   all cn_mysql cn_dbtools cn_inc NULL
+cn  connectivity\source\drivers\postgresql          nmake   -   all cn_postgresql cn_dbtools cn_inc NULL
 cn  connectivity\source\drivers\jdbc                nmake   -   all cn_jdbc cn_dbtools cn_inc NULL
 cn  connectivity\source\drivers\file                nmake   -   all cn_file cn_dbtools cn_inc NULL
 cn  connectivity\source\drivers\flat                nmake   -   all cn_flat cn_dbtools cn_file cn_inc NULL
