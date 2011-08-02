@@ -441,7 +441,11 @@ endif # SYSTEM_OPENSSL
 ifeq ($(SYSTEM_LIBVISIO),YES)
 
 define gb_LinkTarget__use_visio
-$(call gb_LinkTarget_add_libs,$(1),-llibvisio)
+$(call gb_LinkTarget_set_include,$(1),\
+	$$(INCLUDE) \
+    $(LIBVISIO_CFLAGS) \
+)
+$(call gb_LinkTarget_add_libs,$(1),$(LIBVISIO_LIBS))
 
 endef
 
@@ -464,7 +468,11 @@ endif # SYSTEM_LIBVISIO
 ifeq ($(SYSTEM_LIBWPD),YES)
 
 define gb_LinkTarget__use_wpd
-$(call gb_LinkTarget_add_libs,$(1),-llibwpd)
+$(call gb_LinkTarget_set_include,$(1),\
+	$$(INCLUDE) \
+    $(LIBWPD_CFLAGS) \
+)
+$(call gb_LinkTarget_add_libs,$(1),$(LIBWPD_LIBS))
 
 endef
 
@@ -487,7 +495,11 @@ endif # SYSTEM_LIBWPD
 ifeq ($(SYSTEM_LIBWPG),YES)
 
 define gb_LinkTarget__use_wpg
-$(call gb_LinkTarget_add_libs,$(1),-llibwpg)
+$(call gb_LinkTarget_set_include,$(1),\
+	$$(INCLUDE) \
+    $(LIBWPG_CFLAGS) \
+)
+$(call gb_LinkTarget_add_libs,$(1),$(LIBWPG_LIBS))
 
 endef
 
@@ -510,7 +522,11 @@ endif # SYSTEM_LIBWPG
 ifeq ($(SYSTEM_LIBWPS),YES)
 
 define gb_LinkTarget__use_wps
-$(call gb_LinkTarget_add_libs,$(1),-llibwps)
+$(call gb_LinkTarget_set_include,$(1),\
+	$$(INCLUDE) \
+    $(LIBWPS_CFLAGS) \
+)
+$(call gb_LinkTarget_add_libs,$(1),$(LIBWPS_LIBS))
 
 endef
 
