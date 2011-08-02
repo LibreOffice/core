@@ -1003,7 +1003,7 @@ sal_uLong Sc10Import::Import()
 #if OSL_DEBUG_LEVEL > 0
     if (nError)
     {
-        OSL_FAIL( ByteString::CreateFromInt32( nError ).GetBuffer() );
+        OSL_FAIL( rtl::OString::valueOf(static_cast<sal_Int32>(nError)).getStr());
     }
 #endif
 

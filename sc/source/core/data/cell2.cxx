@@ -54,6 +54,7 @@
 #include "externalrefmgr.hxx"
 #include "scitems.hxx"
 #include "patattr.hxx"
+#include <rtl/strbuf.hxx>
 
 using namespace formula;
 
@@ -684,22 +685,22 @@ sal_uInt16 ScFormulaCell::GetMatrixEdge( ScAddress& rOrgPos )
 #if OSL_DEBUG_LEVEL > 0
             else
             {
-                String aTmp;
-                ByteString aMsg( "broken Matrix, Pos: " );
+                rtl::OUString aTmp;
+                rtl::OStringBuffer aMsg( "broken Matrix, Pos: " );
                 aPos.Format( aTmp, SCA_VALID_COL | SCA_VALID_ROW, pDocument );
-                aMsg += ByteString( aTmp, RTL_TEXTENCODING_ASCII_US );
-                aMsg += ", MatOrg: ";
+                aMsg.append(rtl::OUStringToOString(aTmp, RTL_TEXTENCODING_UTF8 ));
+                aMsg.append(RTL_CONSTASCII_STRINGPARAM(", MatOrg: "));
                 aOrg.Format( aTmp, SCA_VALID_COL | SCA_VALID_ROW, pDocument );
-                aMsg += ByteString( aTmp, RTL_TEXTENCODING_ASCII_US );
-                aMsg += ", MatCols: ";
-                aMsg += ByteString::CreateFromInt32( nC );
-                aMsg += ", MatRows: ";
-                aMsg += ByteString::CreateFromInt32( nR );
-                aMsg += ", DiffCols: ";
-                aMsg += ByteString::CreateFromInt32( dC );
-                aMsg += ", DiffRows: ";
-                aMsg += ByteString::CreateFromInt32( dR );
-                OSL_FAIL( aMsg.GetBuffer() );
+                aMsg.append(rtl::OUStringToOString(aTmp, RTL_TEXTENCODING_UTF8 ));
+                aMsg.append(RTL_CONSTASCII_STRINGPARAM(", MatCols: "));
+                aMsg.append(static_cast<sal_Int32>( nC ));
+                aMsg.append(RTL_CONSTASCII_STRINGPARAM(", MatRows: "));
+                aMsg.append(static_cast<sal_Int32>( nR ));
+                aMsg.append(RTL_CONSTASCII_STRINGPARAM(", DiffCols: "));
+                aMsg.append(static_cast<sal_Int32>( dC ));
+                aMsg.append(RTL_CONSTASCII_STRINGPARAM(", DiffRows: "));
+                aMsg.append(static_cast<sal_Int32>( dR ));
+                OSL_FAIL( aMsg.makeStringAndClear().getStr());
             }
 #endif
             return nEdges;
