@@ -744,6 +744,16 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
                                 OUSTR("com.sun.star.loader.Python"),
                                 bRemoved, identifier);
                         }
+                        if (value.EqualsIgnoreCaseAscii("Mono") || value.EqualsIgnoreCaseAscii("Cli") ){
+                            return new BackendImpl::ComponentPackageImpl(
+                                this, url, name, m_xPythonComponentTypeInfo,
+ #if WNT
+                                OUSTR("org.openoffice.loader.CliLoader"),
+ #else
+                                OUSTR("org.openoffice.loader.MonoLoader"),
+ #endif
+                                bRemoved, identifier);
+                        }
                     }
                 }
             }

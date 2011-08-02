@@ -41,6 +41,12 @@ TARGET = ure
 
 .INCLUDE : $(BIN)$/cliureversion.mk
 
+TMPCSC = $(CSC)
+
+.IF "$(ENABLE_MONO)" == "YES"
+TMPCSC = gmcs
+.ENDIF
+
 ASSEMBLY_ATTRIBUTES = $(MISC)$/assembly_ure_$(TARGET).cs
 
 POLICY_ASSEMBLY_FILE=$(BIN)$/$(CLI_URE_POLICY_ASSEMBLY).dll
@@ -57,6 +63,9 @@ CSFILES = \
     uno$/util$/WeakAdapter.cs					\
     uno$/util$/WeakBase.cs						\
     uno$/util$/WeakComponentBase.cs	\
+    uno$/util$/RegistrationClassFinder.cs \
+    uno$/util$/Factory.cs \
+    uno$/util$/ManagedCodeLoader.cs \
     $(ASSEMBLY_ATTRIBUTES)
 
 .IF "$(CCNUMVER)" <= "001399999999"
@@ -74,11 +83,12 @@ $(ASSEMBLY_ATTRIBUTES) : assembly.cs makefile.mk $(BIN)$/cliuno.snk $(BIN)$/cliu
     >> $@
 .ENDIF
 
-$(BIN)$/cli_ure.dll : $(CSFILES) $(BIN)$/cli_uretypes.dll $(BIN)$/cliureversion.mk 
-    $(CSC) $(CSCFLAGS) \
+$(BIN)$/cli_ure.dll : $(CSFILES) $(BIN)$/cli_uretypes.dll $(BIN)$/cliureversion.mk $(BIN)$/cli_basetypes.dll
+    $(TMPCSC) $(CSCFLAGS) \
         -target:library \
         -out:$@ \
         -reference:$(OUT)$/bin$/cli_uretypes.dll \
+        -reference:$(OUT)$/bin$/cli_basetypes.dll \
         -reference:System.dll \
         $(CSFILES)
     @echo "If code has changed then provide a policy assembly and change the version!"
