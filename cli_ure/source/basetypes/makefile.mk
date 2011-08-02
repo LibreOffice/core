@@ -47,8 +47,8 @@ POLICY_ASSEMBLY_FILE=$(BIN)$/$(CLI_BASETYPES_POLICY_ASSEMBLY).dll
 ALLTAR : \
     $(BIN)$/cli_basetypes.dll \
     $(POLICY_ASSEMBLY_FILE)
-    
-.IF "$(CCNUMVER)" >= "001399999999"
+
+.IF "$(COM)" != "MSC" || "$(CCNUMVER)" >= "001399999999"
 CSCFLAGS+=-keyfile:"$(BIN)$/cliuno.snk"
 .ENDIF
 
@@ -63,7 +63,7 @@ CSFILES = \
     uno$/PolymorphicType.cs \
     $(ASSEMBLY_ATTRIBUTES)
 
-.IF "$(CCNUMVER)" <= "001399999999"
+.IF "$(COM)" == "MSC" && "$(CCNUMVER)" <= "001399999999"
 $(ASSEMBLY_ATTRIBUTES) : assembly.cs makefile.mk $(BIN)$/cliuno.snk $(BIN)$/cliureversion.mk 
     $(GNUCOPY) -p assembly.cs $@
     echo \

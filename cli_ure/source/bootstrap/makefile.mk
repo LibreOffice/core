@@ -69,7 +69,6 @@ $(ASSEMBLY_ATTRIBUTES) .PHONY: assembly.cs $(BIN)$/cliuno.snk $(BIN)$/cliurevers
     $(GNUCOPY) -p assembly.cs $@
     +echo $(ECHOQUOTE) \
     [assembly:System.Reflection.AssemblyVersion( "$(CLI_CPPUHELPER_NEW_VERSION)" )] $(ECHOQUOTE) \
-    $(ECHOQUOTE) [assembly:System.Reflection.AssemblyKeyFile($(ASSEMBLY_KEY))] $(ECHOQUOTE) \
     >> $@
 
 EXTERNAL_DIR=$(PRJ)$/..$/external/cli
@@ -81,6 +80,7 @@ $(BIN)$/cli_cppuhelper.dll : $(CSFILES) $(OUT)$/bin$/cli_uretypes.dll
     +$(CSC) $(CSCFLAGS) \
         -target:library \
         -out:$@ \
+        -keyfile:$(BIN)$/cliuno.snk \
         -reference:$(OUT)$/bin$/cli_uretypes.dll \
         -reference:System.dll \
         $(CSFILES)

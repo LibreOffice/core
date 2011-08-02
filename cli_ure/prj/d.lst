@@ -12,3 +12,5 @@
 ..\%__SRC%\bin\cliuno.snk %_DEST%\bin\cliuno.snk
 
 ..\%__SRC%\bin\cliureversion.mk %_DEST%\bin\cliureversion.mk
+
+..\%__SRC%\bin\cliuno.snk %_DEST%\bin\cliuno.snk
