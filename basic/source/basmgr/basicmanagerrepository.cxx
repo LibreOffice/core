@@ -315,7 +315,12 @@ namespace basic
         // The first dir in the path as destination:
         String aFileName( aAppBasic.getName() );
         aAppBasic = INetURLObject( aAppBasicDir.GetToken(1) );
-        DBG_ASSERT( aAppBasic.GetProtocol() != INET_PROT_NOT_VALID, "Invalid URL!" );
+        DBG_ASSERT(aAppBasic.GetProtocol() != INET_PROT_NOT_VALID,
+            rtl::OStringBuffer(RTL_CONSTASCII_STRINGPARAM("Invalid URL: \"")).
+            append(rtl::OUStringToOString(aAppBasicDir,
+                osl_getThreadTextEncoding())).
+            append('"').getStr()
+        );
         aAppBasic.insertName( aFileName );
         pBasicManager->SetStorageName( aAppBasic.PathToFileName() );
 
