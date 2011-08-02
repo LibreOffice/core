@@ -27,7 +27,7 @@
 
 # no translation here anyway
 .IF "$(L10N_framework)"==""
-.IF "$(COM)" == "MSC"
+.IF "$(COM)$(COMEX)" == "MSC11" || "$(COM)$(COMEX)"== "MSC10" || "$(ENABLE_MONO)" == "YES"
 BUILD_FOR_CLI = "true"
 CFLAGSENABLESYMBOLS:=-Z7
 .ENDIF

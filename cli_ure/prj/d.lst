@@ -3,6 +3,7 @@
 ..\%__SRC%\bin\climaker.exe.config %_DEST%\bin\climaker.exe.config
 
 ..\%__SRC%\bin\cli_*.dll %_DEST%\bin\cli_*.dll
+..\%__SRC%\lib\libcli*.so %_DEST%\lib\libcli*.so
 ..\%__SRC%\bin\cli_*.pdb %_DEST%\bin\cli_*.pdb
 ..\%__SRC%\bin\cli_*.config %_DEST%\bin\cli_*.config
 ..\%__SRC%\bin\policy*.dll %_DEST%\bin\policy*.dll

@@ -34,7 +34,7 @@ CSCFLAGS = -warnaserror+ -noconfig
 .IF "$(product)" == ""
 CSCFLAGS += -checked+ -define:DEBUG -define:TRACE
 .ELSE
-CSCFLAGS += -o
+CSCFLAGS += -optimize
 .ENDIF
 
 .ELSE # debug

@@ -88,7 +88,7 @@ $(BIN)$/cli_basetypes.dll : $(CSFILES) $(BIN)$/cliureversion.mk
 
 #do not forget to deliver cli_uretypes.config. It is NOT embedded in the policy file.
 $(POLICY_ASSEMBLY_FILE) : $(BIN)$/cli_basetypes.config
-    $(WRAPCMD) AL.exe -out:$@ \
+    $(WRAPCMD) $(AL) -out:$@ \
             -version:$(CLI_BASETYPES_POLICY_VERSION) \
             -keyfile:$(BIN)$/cliuno.snk \
             -link:$(BIN)$/cli_basetypes.config

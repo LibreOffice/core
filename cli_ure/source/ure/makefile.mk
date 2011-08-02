@@ -96,7 +96,7 @@ $(BIN)$/cli_ure.dll : $(CSFILES) $(BIN)$/cli_uretypes.dll $(BIN)$/cliureversion.
 
 #do not forget to deliver cli_ure.config. It is NOT embedded in the policy file.
 $(POLICY_ASSEMBLY_FILE) : $(BIN)$/cli_ure.config
-    $(WRAPCMD) AL.exe -out:$@ \
+    $(WRAPCMD) $(AL) -out:$@ \
             -version:$(CLI_URE_POLICY_VERSION) \
             -keyfile:$(BIN)$/cliuno.snk \
             -link:$(BIN)$/cli_ure.config

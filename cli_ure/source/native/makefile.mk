@@ -147,7 +147,7 @@ $(SIGN): $(SHL1TARGETN)
 # cli_cppuhelper.dll but the system cannot locate it. It possibly assumes that the
 # assembly is also 'MSIL'  like its policy file.
 $(POLICY_ASSEMBLY_FILE) : $(BIN)$/cli_cppuhelper.config
-    $(WRAPCMD) AL.exe -out:$@ \
+    $(WRAPCMD) $(AL) -out:$@ \
             -version:$(CLI_CPPUHELPER_POLICY_VERSION) \
             -keyfile:$(BIN)$/cliuno.snk \
             -link:$(BIN)$/cli_cppuhelper.config \
