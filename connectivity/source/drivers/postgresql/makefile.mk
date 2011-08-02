@@ -81,7 +81,7 @@ DLLPRE=
 
 PQ_SDBC_MAJOR=0
 PQ_SDBC_MINOR=7
-PQ_SDBC_MICRO=6b
+PQ_SDBC_MICRO=7
 .IF "$(SYSTEM_POSTGRESQL)" == "YES"
 POSTGRESQL_MAJOR=`pg_config --version | awk '{ print $$2 }' | cut -d. -f1`
 POSTGRESQL_MINOR=`pg_config --version | awk '{ print $$2 }' | cut -d. -f2`
