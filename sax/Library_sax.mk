@@ -34,7 +34,7 @@ $(eval $(call gb_Library_add_package_headers,sax,\
 
 $(eval $(call gb_Library_set_include,sax,\
 	$$(INCLUDE) \
-	-I$(SRCDIR)/sax/inc \
+	-I$(realpath $(SRCDIR)/sax/inc) \
 ))
 
 $(eval $(call gb_Library_add_api,sax,\

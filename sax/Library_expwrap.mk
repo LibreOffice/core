@@ -32,7 +32,7 @@ $(eval $(call gb_Library_set_componentfile,expwrap,sax/source/expatwrap/expwrap)
 
 $(eval $(call gb_Library_set_include,expwrap,\
 	$$(INCLUDE) \
-	-I$(SRCDIR)/sax/inc \
+	-I$(realpath $(SRCDIR)/sax/inc) \
 ))
 
 $(eval $(call gb_Library_add_api,expwrap,\
