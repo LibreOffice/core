@@ -1568,9 +1568,11 @@ static void addPrivilegesToVector(
         }
     }
 
-    Reference< XCloseable > closeable( statement, UNO_QUERY );
-    if( closeable.is() )
-        closeable->close();
+    {
+        Reference< XCloseable > closeable( statement, UNO_QUERY );
+        if( closeable.is() )
+            closeable->close();
+    }
 
 
     SequenceAnyVector::iterator ii = vec.begin();
@@ -1609,9 +1611,11 @@ static void addPrivilegesToVector(
             row[4] <<= OUString::valueOf( index );
             index ++;
         }
-        Reference< XCloseable > closeable( statement, UNO_QUERY );
-        if( closeable.is() )
-            closeable->close();
+        {
+            Reference< XCloseable > closeable( statement, UNO_QUERY );
+            if( closeable.is() )
+                closeable->close();
+        }
         ret[elements] = row;
         elements ++;
     }
