@@ -240,7 +240,7 @@ static void ensureContentProviderForURL( const ContentBroker & rBroker,
         {
             throw ContentCreationException(
                 rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                    "No Content Provider available for given URL!" )),
+                    "No Content Provider available for URL: ")) + rURL,
                 Reference< XInterface >(),
                 ContentCreationError_NO_CONTENT_PROVIDER );
         }
