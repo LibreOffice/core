@@ -175,6 +175,15 @@ public:
         new ((void*)p)T(value);
     }
 
+    // LEM: GNU libstdc++ vectors expect this one to exist,
+    // at least if one intends to create vectors by giving
+    // only a size and no initialising value.
+    //-----------------------------------------
+    void construct (pointer p)
+    {
+        new ((void*)p)T;
+    }
+
     //-----------------------------------------
     void destroy (pointer p)
     {
