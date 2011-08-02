@@ -11,6 +11,10 @@ include $(SRCDIR)/cli_ure/version/version.txt
 
 $(eval $(call gb_CliLibrary_CliLibrary,cli_ure))
 
+ifeq ($(ENABLE_MONO),YES)
+$(eval $(call gb_CliLibrary_set_csc,cli_ure,gmcs))
+endif
+
 $(eval $(call gb_CliLibrary_set_configfile,cli_ure,cli_ure/source/ure/cli_ure_config))
 
 $(eval $(call gb_CliLibrary_set_keyfile,cli_ure,$(SRCDIR)/cli_ure/source/cliuno.snk))
@@ -18,6 +22,7 @@ $(eval $(call gb_CliLibrary_set_keyfile,cli_ure,$(SRCDIR)/cli_ure/source/cliuno.
 $(eval $(call gb_CliLibrary_set_policy,cli_ure,$(CLI_URE_POLICY_ASSEMBLY),$(CLI_URE_POLICY_VERSION)))
 
 $(eval $(call gb_CliLibrary_use_assemblies,cli_ure,\
+	cli_basetypes \
 	cli_uretypes \
 ))
 
@@ -26,6 +31,9 @@ $(eval $(call gb_CliLibrary_add_csfiles,cli_ure,\
     cli_ure/source/ure/uno/util/WeakAdapter \
     cli_ure/source/ure/uno/util/WeakBase \
     cli_ure/source/ure/uno/util/WeakComponentBase \
+    cli_ure/source/ure/uno/util/RegistrationClassFinder \
+    cli_ure/source/ure/uno/util/Factory \
+    cli_ure/source/ure/uno/util/ManagedCodeLoader \
 ))
 
 $(eval $(call gb_CliLibrary_add_generated_csfiles,cli_ure,\
