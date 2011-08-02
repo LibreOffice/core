@@ -14,6 +14,7 @@
 import unohelper
 import uno
 import re
+import os
 
 #to implement com::sun::star::mail::XMailServiceProvider
 #and
@@ -77,7 +78,11 @@ class PyMailSMTPService(unohelper.Base, XSmtpService):
 		if dbg:
 			print >> sys.stderr, port
 		self.server = smtplib.SMTP(server, port)
-		if dbg:
+		#stderr not available for us under windows, but
+		#set_debuglevel outputs there, and so throw
+		#an exception under windows on debugging mode
+		#with this enabled
+		if dbg and os.name != 'nt':
 			self.server.set_debuglevel(1)
 		connectiontype = xConnectionContext.getValueByName("ConnectionType")
 		if dbg:
