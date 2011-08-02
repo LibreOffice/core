@@ -623,14 +623,6 @@ void SalLayout::AdjustLayout( ImplLayoutArgs& rArgs )
 
 // -----------------------------------------------------------------------
 
-void SalLayout::Reference() const
-{
-    // TODO: protect when multiple threads can access this
-    ++mnRefCount;
-}
-
-// -----------------------------------------------------------------------
-
 void SalLayout::Release() const
 {
     // TODO: protect when multiple threads can access this

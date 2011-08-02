@@ -676,27 +676,6 @@ Polygon::~Polygon()
 
 // -----------------------------------------------------------------------
 
-Point* Polygon::ImplGetPointAry()
-{
-    DBG_CHKTHIS( Polygon, NULL );
-
-    ImplMakeUnique();
-    return (Point*)mpImplPolygon->mpPointAry;
-}
-
-// -----------------------------------------------------------------------
-
-sal_uInt8* Polygon::ImplGetFlagAry()
-{
-    DBG_CHKTHIS( Polygon, NULL );
-
-    ImplMakeUnique();
-    mpImplPolygon->ImplCreateFlagArray();
-    return mpImplPolygon->mpFlagAry;
-}
-
-// -----------------------------------------------------------------------
-
 const Point* Polygon::GetConstPointAry() const
 {
     DBG_CHKTHIS( Polygon, NULL );
@@ -769,32 +748,6 @@ PolyFlags Polygon::GetFlags( sal_uInt16 nPos ) const
 sal_Bool Polygon::HasFlags() const
 {
     return mpImplPolygon->mpFlagAry != NULL;
-}
-
-// -----------------------------------------------------------------------
-
-sal_Bool Polygon::IsControl(sal_uInt16 nPos) const
-{
-    DBG_CHKTHIS( Polygon, NULL );
-    DBG_ASSERT( nPos < mpImplPolygon->mnPoints,
-                "Polygon::GetFlags(): nPos >= nPoints" );
-    PolyFlags eFlags = mpImplPolygon->mpFlagAry ?
-                       (PolyFlags) mpImplPolygon->mpFlagAry[ nPos ] : POLY_NORMAL;
-
-    return( POLY_CONTROL == eFlags );
-}
-
-// -----------------------------------------------------------------------
-
-sal_Bool Polygon::IsSmooth(sal_uInt16 nPos) const
-{
-    DBG_CHKTHIS( Polygon, NULL );
-    DBG_ASSERT( nPos < mpImplPolygon->mnPoints,
-                "Polygon::GetFlags(): nPos >= nPoints" );
-    PolyFlags eFlags = mpImplPolygon->mpFlagAry ?
-                       (PolyFlags) mpImplPolygon->mpFlagAry[ nPos ] : POLY_NORMAL;
-
-    return( ( POLY_SMOOTH == eFlags ) || ( POLY_SYMMTR == eFlags ) );
 }
 
 // -----------------------------------------------------------------------
@@ -1083,38 +1036,6 @@ void Polygon::AdaptiveSubdivide( Polygon& rResult, const double d ) const
         rResult = Polygon( (sal_uInt16)aPoints.size() ); // ensure sufficient size for copy
         ::std::copy(aPoints.begin(), aPoints.end(), rResult.mpImplPolygon->mpPointAry);
     }
-}
-
-// -----------------------------------------------------------------------
-
-void Polygon::GetIntersection( const PolyPolygon& rPolyPoly, PolyPolygon& rResult ) const
-{
-    const PolyPolygon aTmp( *this );
-    aTmp.GetIntersection( rPolyPoly, rResult );
-}
-
-// -----------------------------------------------------------------------
-
-void Polygon::GetUnion( const PolyPolygon& rPolyPoly, PolyPolygon& rResult ) const
-{
-    const PolyPolygon aTmp( *this );
-    aTmp.GetUnion( rPolyPoly, rResult );
-}
-
-// -----------------------------------------------------------------------
-
-void Polygon::GetDifference( const PolyPolygon& rPolyPoly, PolyPolygon& rResult ) const
-{
-    const PolyPolygon aTmp( *this );
-    aTmp.GetDifference( rPolyPoly, rResult );
-}
-
-// -----------------------------------------------------------------------
-
-void Polygon::GetXOR( const PolyPolygon& rPolyPoly, PolyPolygon& rResult ) const
-{
-    const PolyPolygon aTmp( *this );
-    aTmp.GetXOR( rPolyPoly, rResult );
 }
 
 // -----------------------------------------------------------------------
@@ -1654,14 +1575,6 @@ Rectangle Polygon::GetBoundRect() const
 
 // -----------------------------------------------------------------------
 
-double Polygon::GetArea() const
-{
-    const double fArea = GetSignedArea();
-    return( ( fArea < 0.0 ) ? -fArea : fArea );
-}
-
-// -----------------------------------------------------------------------
-
 double Polygon::GetSignedArea() const
 {
     DBG_CHKTHIS( Polygon, NULL );
@@ -1786,18 +1699,6 @@ void Polygon::Insert( sal_uInt16 nPos, const Polygon& rPoly )
             mpImplPolygon->ImplCreateFlagArray();
 
         mpImplPolygon->ImplSplit( nPos, nInsertCount, rPoly.mpImplPolygon );
-    }
-}
-
-// -----------------------------------------------------------------------
-
-void Polygon::Remove( sal_uInt16 nPos, sal_uInt16 nCount )
-{
-    DBG_CHKTHIS( Polygon, NULL );
-    if( nCount && ( nPos < mpImplPolygon->mnPoints ) )
-    {
-        ImplMakeUnique();
-        mpImplPolygon->ImplRemove( nPos, nCount );
     }
 }
 

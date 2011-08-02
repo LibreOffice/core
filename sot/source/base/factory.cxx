@@ -67,51 +67,6 @@ SotData_Impl * SOTDATA()
     return &ImplData::get();
 }
 
-/*************************************************************************
-|*    SotFactory::DeInit()
-|*
-|*    Beschreibung
-*************************************************************************/
-void SotFactory::DeInit()
-{
-    SotData_Impl * pSotData = SOTDATA();
-
-    if( pSotData->nSvObjCount )
-    {
-#ifdef DBG_UTIL
-        rtl::OStringBuffer aStr(RTL_CONSTASCII_STRINGPARAM("Objects alive: "));
-        aStr.append(static_cast<sal_Int32>(pSotData->nSvObjCount));
-        DBG_WARNING(aStr.getStr());
-#endif
-        return;
-    }
-
-    // Muss von hinten nach vorne zerstoert werden. Das ist die umgekehrte
-    // Reihenfolge der Erzeugung
-    SotFactoryList* pFactoryList = pSotData->pFactoryList;
-    if( pFactoryList )
-    {
-        for ( size_t i = pFactoryList->size(); i > 0 ; )
-            delete (*pFactoryList)[ --i ];
-        pFactoryList->clear();
-        delete pFactoryList;
-        pSotData->pFactoryList = NULL;
-
-    }
-
-    pSotData->aObjectList.clear();
-
-    if( pSotData->pDataFlavorList )
-    {
-
-        for( size_t i = 0, nMax = pSotData->pDataFlavorList->size(); i < nMax; i++ )
-            delete (*pSotData->pDataFlavorList)[ i ];
-        delete pSotData->pDataFlavorList;
-        pSotData->pDataFlavorList = NULL;
-    }
-}
-
-
 /************** class SotFactory *****************************************/
 /*************************************************************************
 |*    SotFactory::SotFactory()
@@ -152,23 +107,6 @@ SotFactory::SotFactory( const SvGlobalName & rName,
 SotFactory::~SotFactory()
 {
     delete [] pSuperClasses;
-}
-
-
-/*************************************************************************
-|*    SotFactory::
-|*
-|*    Beschreibung      Zugriffsmethoden auf SotData_Impl-Daten
-*************************************************************************/
-sal_uInt32 SotFactory::GetSvObjectCount()
-{
-    return SOTDATA()->nSvObjCount;
-}
-
-
-const SotFactoryList * SotFactory::GetFactoryList()
-{
-    return SOTDATA()->pFactoryList;
 }
 
 /*************************************************************************

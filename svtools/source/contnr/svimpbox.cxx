@@ -1041,35 +1041,6 @@ void SvImpLBox::ScrollToAbsPos( long nPos )
     }
 }
 
-void SvImpLBox::RepaintSelectionItems()
-{
-    if( !pView->GetVisibleCount() )
-        return;
-
-    if( !pStartEntry )
-        pStartEntry = pView->First();
-
-    if( nNodeBmpTabDistance == NODE_BMP_TABDIST_NOTVALID )
-        SetNodeBmpTabDistance();
-
-    ShowCursor( sal_False );
-
-    long nEntryHeight = pView->GetEntryHeight();
-
-    sal_uLong nCount = nVisibleCount;
-    long nY = 0;
-    SvLBoxEntry* pEntry = pStartEntry;
-    for( sal_uLong n=0; n< nCount && pEntry; n++ )
-    {
-        pView->PaintEntry1( pEntry, nY, 0xffff ); //wg. ItemsetBrowser SV_LBOXTAB_SHOW_SELECTION );
-        nY += nEntryHeight;
-        pEntry = (SvLBoxEntry*)(pView->NextVisible( pEntry ));
-    }
-
-    ShowCursor( sal_True );
-}
-
-
 void SvImpLBox::DrawNet()
 {
     if( pView->GetVisibleCount() < 2 && !pStartEntry->HasChildsOnDemand() &&
@@ -1586,8 +1557,6 @@ void SvImpLBox::SetEntryHeight( short /* nHeight */ )
 // ***********************************************************************
 // Callback-Functions
 // ***********************************************************************
-
-void SvImpLBox::IndentChanged( short /* nIndentPixel */ ) {}
 
 void SvImpLBox::EntryExpanded( SvLBoxEntry* pEntry )
 {

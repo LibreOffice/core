@@ -541,61 +541,6 @@ void PolyPolygon::Rotate( const Point& rCenter, double fSin, double fCos )
 
 // -----------------------------------------------------------------------
 
-void PolyPolygon::SlantX( long nYRef, double fSin, double fCos )
-{
-    DBG_CHKTHIS( PolyPolygon, NULL );
-
-    // Referenzcounter beruecksichtigen
-    if( mpImplPolyPolygon->mnRefCount > 1 )
-    {
-        mpImplPolyPolygon->mnRefCount--;
-        mpImplPolyPolygon = new ImplPolyPolygon( *mpImplPolyPolygon );
-    }
-
-    // Punkte verschieben
-    for ( sal_uInt16 i = 0, nCount = mpImplPolyPolygon->mnCount; i < nCount; i++ )
-        mpImplPolyPolygon->mpPolyAry[ i ]->SlantX( nYRef, fSin, fCos );
-}
-
-// -----------------------------------------------------------------------
-
-void PolyPolygon::SlantY( long nXRef, double fSin, double fCos )
-{
-    DBG_CHKTHIS( PolyPolygon, NULL );
-
-    // Referenzcounter beruecksichtigen
-    if( mpImplPolyPolygon->mnRefCount > 1 )
-    {
-        mpImplPolyPolygon->mnRefCount--;
-        mpImplPolyPolygon = new ImplPolyPolygon( *mpImplPolyPolygon );
-    }
-
-    // Punkte verschieben
-    for ( sal_uInt16 i = 0, nCount = mpImplPolyPolygon->mnCount; i < nCount; i++ )
-        mpImplPolyPolygon->mpPolyAry[ i ]->SlantY( nXRef, fSin, fCos );
-}
-
-// -----------------------------------------------------------------------
-
-void PolyPolygon::Distort( const Rectangle& rRefRect, const Polygon& rDistortedRect )
-{
-    DBG_CHKTHIS( PolyPolygon, NULL );
-
-    // Referenzcounter beruecksichtigen
-    if( mpImplPolyPolygon->mnRefCount > 1 )
-    {
-        mpImplPolyPolygon->mnRefCount--;
-        mpImplPolyPolygon = new ImplPolyPolygon( *mpImplPolyPolygon );
-    }
-
-    // Punkte verschieben
-    for ( sal_uInt16 i = 0, nCount = mpImplPolyPolygon->mnCount; i < nCount; i++ )
-        mpImplPolyPolygon->mpPolyAry[ i ]->Distort( rRefRect, rDistortedRect );
-}
-
-
-// -----------------------------------------------------------------------
-
 void PolyPolygon::Clip( const Rectangle& rRect )
 {
     // Polygon-Clippen

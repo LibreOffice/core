@@ -275,14 +275,12 @@ public:
     void                EntryMoved( SvLBoxEntry* pEntry );
     void                TreeInserted( SvLBoxEntry* pEntry );
 
-    void                IndentChanged( short nIndentPixel );
     void                EntryExpanded( SvLBoxEntry* pEntry );
     void                EntryCollapsed( SvLBoxEntry* pEntry );
     void                CollapsingEntry( SvLBoxEntry* pEntry );
     void                EntrySelected( SvLBoxEntry*, sal_Bool bSelect );
 
     void                Paint( const Rectangle& rRect );
-    void                RepaintSelectionItems();
     void                MouseButtonDown( const MouseEvent& );
     void                MouseButtonUp( const MouseEvent& );
     void                MouseMove( const MouseEvent&);

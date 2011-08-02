@@ -184,7 +184,6 @@ public:
     void            EntrySelected( SvLBoxEntry*, sal_Bool bSelect );
 
     void            Paint( const Rectangle& rRect );
-    void            RepaintSelectionItems();
     void            MouseButtonDown( const MouseEvent& );
     void            MouseButtonUp( const MouseEvent& );
     void            MouseMove( const MouseEvent&);

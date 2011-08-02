@@ -2765,41 +2765,6 @@ SalVisual::~SalVisual()
 #define SALCOLOR        RGB
 #define SALCOLORREVERSE BGR
 
-sal_Bool SalVisual::Convert( int &n0, int &n1, int &n2, int &n3 )
-{
-    int n;
-
-    switch( GetMode() )
-    {
-        case otherSalRGB:
-            return sal_False;
-        case SALCOLOR:
-            break;
-        case SALCOLORREVERSE:
-        case RBG:
-        case BRG:
-        case GBR:
-        case GRB:
-            return Convert( n0, n1, n2 );
-        case RGBA:
-            n  = n0;
-            n0 = n1;
-            n1 = n2;
-            n2 = n3;
-            n3 = n;
-            break;
-        case BGRA:
-        case RBGA:
-        case BRGA:
-        case GBRA:
-        case GRBA:
-        default:
-            fprintf( stderr, "SalVisual::Convert %d\n", GetMode() );
-            abort();
-    }
-    return sal_True;
-}
-
 sal_Bool SalVisual::Convert( int &n0, int &n1, int &n2 )
 {
     int n;

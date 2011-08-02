@@ -215,7 +215,6 @@ public:
     virtual bool    IsSpacingGlyph( sal_GlyphId ) const;
 
     // reference counting
-    void            Reference() const;
     void            Release() const;
 
     // used by glyph+font+script fallback

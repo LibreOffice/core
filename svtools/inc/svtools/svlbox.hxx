@@ -489,12 +489,6 @@ public:
     virtual SvLBoxEntry*
                     GetCurEntry() const = 0;
 
-    // Model
-    void            SetInUseEmphasis( SvLBoxEntry* pEntry, sal_Bool bInUse=sal_True);
-    // View
-    void            SetCursorEmphasis( SvLBoxEntry* pEntry, sal_Bool bCursored=sal_True);
-    sal_Bool            HasCursorEmphasis( SvLBoxEntry* pEntry ) const;
-
     void            SetSelectHdl( const Link& rNewHdl ) {aSelectHdl=rNewHdl; }
     void            SetDeselectHdl( const Link& rNewHdl ) {aDeselectHdl=rNewHdl; }
     void            SetDoubleClickHdl(const Link& rNewHdl) {aDoubleClickHdl=rNewHdl;}
@@ -533,7 +527,6 @@ public:
     sal_Int8        GetDragOptions() const { return nDragOptions; }
 
     SvLBox*         GetSourceView() const;
-    SvLBox*         GetTargetView() const;
 
     virtual void    NotifyRemoving( SvLBoxEntry* );
     virtual void    ShowTargetEmphasis( SvLBoxEntry*, sal_Bool bShow );

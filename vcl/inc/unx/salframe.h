@@ -150,7 +150,6 @@ class VCLPLUG_GEN_PUBLIC X11SalFrame : public SalFrame
     void            Minimize();
     void            Maximize();
     void            Restore();
-    void            SetWindowGravity (int nGravity ) const;
 
     void            RestackChildren( XLIB_Window* pTopLevelWindows, int nTopLevelWindows );
     void            RestackChildren();
@@ -201,8 +200,6 @@ public:
     inline  sal_Bool            IsCaptured() const { return nCaptured_ == 1; }
 #if !defined(__synchronous_extinput__)
     void            HandleExtTextEvent (XClientMessageEvent *pEvent);
-    void            PostExtTextEvent (sal_uInt16 nExtTextEventType,
-                                      void *pExtTextEvent);
 #endif
     bool                    IsOverrideRedirect() const;
     bool                    IsChildWindow() const { return (nStyle_ & (SAL_FRAME_STYLE_PLUG|SAL_FRAME_STYLE_SYSTEMCHILD)) != 0; }

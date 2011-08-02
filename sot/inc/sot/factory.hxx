@@ -56,14 +56,11 @@ protected:
     virtual             ~SotFactory();
 public:
                         TYPEINFO();
-    static  void        DeInit();
     static  void        IncSvObjectCount( SotObject * = NULL );
     static  void        DecSvObjectCount( SotObject * = NULL );
-    static  sal_uInt32      GetSvObjectCount();
     static  void        TestInvariant();
 
     static  const SotFactory *      Find( const SvGlobalName & );
-    static  const SotFactoryList *  GetFactoryList();
 
             SotFactory( const SvGlobalName &,
                        const String & rClassName, CreateInstanceType );

@@ -1408,24 +1408,6 @@ void X11SalFrame::GetClientSize( long &rWidth, long &rHeight )
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
-void X11SalFrame::SetWindowGravity (int nGravity) const
-{
-    if( ! IsChildWindow() )
-    {
-        XSizeHints* pHint = XAllocSizeHints();
-        long        nFlag;
-
-        XGetWMNormalHints (GetXDisplay(), GetShellWindow(), pHint, &nFlag);
-        pHint->flags       |= PWinGravity;
-        pHint->win_gravity  = nGravity;
-
-        XSetWMNormalHints (GetXDisplay(), GetShellWindow(), pHint);
-        XSync (GetXDisplay(), False);
-
-        XFree (pHint);
-    }
-}
-
 void X11SalFrame::Center( )
 {
     int             nX, nY, nScreenWidth, nScreenHeight;
@@ -2476,35 +2458,6 @@ void X11SalFrame::SetPointerPos(long nX, long nY)
 
 // delay handling of extended text input
 #if !defined(__synchronous_extinput__)
-void
-X11SalFrame::PostExtTextEvent (sal_uInt16 nExtTextEventType, void *pExtTextEvent)
-{
-    XLIB_Window nFocusWindow = GetWindow();
-    Atom        nEventAtom   = GetDisplay()->getWMAdaptor()->getAtom( WMAdaptor::SAL_EXTTEXTEVENT );
-
-    XEvent aEvent;
-    aEvent.xclient.type         = ClientMessage;
-    aEvent.xclient.serial       = 0;
-    aEvent.xclient.send_event   = True;
-    aEvent.xclient.display      = GetXDisplay();
-    aEvent.xclient.window       = nFocusWindow;
-    aEvent.xclient.message_type = nEventAtom;
-    aEvent.xclient.format       = 32;
-
-#if SAL_TYPES_SIZEOFLONG > 4
-    aEvent.xclient.data.l[0] = (sal_uInt32)((long)pExtTextEvent & 0xffffffff);
-    aEvent.xclient.data.l[1] = (sal_uInt32)((long)pExtTextEvent >> 32);
-#else
-    aEvent.xclient.data.l[0] = (sal_uInt32)((long)pExtTextEvent);
-    aEvent.xclient.data.l[1] = 0;
-#endif
-    aEvent.xclient.data.l[2] = (sal_uInt32)nExtTextEventType;
-    aEvent.xclient.data.l[3] = 0;
-    aEvent.xclient.data.l[4] = 0;
-
-    XPutBackEvent( GetXDisplay(), &aEvent );
-}
-
 void
 X11SalFrame::HandleExtTextEvent (XClientMessageEvent *pEvent)
 {

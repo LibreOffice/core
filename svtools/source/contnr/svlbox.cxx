@@ -1163,11 +1163,6 @@ SvLBox* SvLBox::GetSourceView() const
     return pDDSource;
 }
 
-SvLBox* SvLBox::GetTargetView() const
-{
-    return pDDTarget;
-}
-
 void SvLBox::RequestingChilds( SvLBoxEntry*  )
 {
     DBG_CHKTHIS(SvLBox,0);
@@ -1656,52 +1651,6 @@ void SvLBox::ModelHasEntryInvalidated( SvListEntry* pEntry )
         SvLBoxItem* pItem = ((SvLBoxEntry*)pEntry)->GetItem( nIdx );
         pItem->InitViewData( this, (SvLBoxEntry*)pEntry, 0 );
     }
-}
-
-void SvLBox::SetInUseEmphasis( SvLBoxEntry* pEntry, sal_Bool bInUse )
-{
-    DBG_CHKTHIS(SvLBox,0);
-    DBG_ASSERT(pEntry,"SetInUseEmphasis:No Entry");
-    if( bInUse )
-    {
-        if( !pEntry->HasInUseEmphasis() )
-        {
-            pEntry->nEntryFlags |= SV_ENTRYFLAG_IN_USE;
-            pModel->InvalidateEntry( pEntry );
-        }
-    }
-    else
-    {
-        if( pEntry->HasInUseEmphasis() )
-        {
-            pEntry->nEntryFlags &= (~SV_ENTRYFLAG_IN_USE);
-            pModel->InvalidateEntry( pEntry );
-        }
-    }
-}
-
-void SvLBox::SetCursorEmphasis( SvLBoxEntry* pEntry, sal_Bool bCursored )
-{
-    DBG_CHKTHIS(SvLBox,0);
-    DBG_ASSERT(pEntry,"SetInUseEmphasis:No Entry");
-    SvViewDataEntry* pViewData = GetViewDataEntry( pEntry );
-    if( pViewData && (bCursored != pViewData->IsCursored()) )
-    {
-        pViewData->SetCursored( bCursored );
-        // paintet in allen Views
-        // pModel->InvalidateEntry( pEntry );
-        // invalidiert nur in dieser View
-        ModelHasEntryInvalidated( pEntry );
-    }
-}
-
-sal_Bool SvLBox::HasCursorEmphasis( SvLBoxEntry* pEntry ) const
-{
-    DBG_CHKTHIS(SvLBox,0);
-    DBG_ASSERT(pEntry,"SetInUseEmphasis:No Entry");
-    SvViewDataEntry* pViewData = GetViewDataEntry( pEntry );
-    DBG_ASSERT(pViewData,"Entry not in View");
-    return pViewData->IsCursored();
 }
 
 void SvLBox::WriteDragServerInfo( const Point&, SvLBoxDDInfo* )

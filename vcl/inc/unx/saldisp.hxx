@@ -141,7 +141,6 @@ public:
 
             Pixel           GetTCPixel( SalColor nColor ) const;
             SalColor        GetTCColor( Pixel nPixel ) const;
-            sal_Bool            Convert( int &n0, int &n1, int &n2, int &n3 ); // 32bit
              sal_Bool           Convert( int &n0, int &n1, int &n2 ); // 24bit
 };
 

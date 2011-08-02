@@ -123,9 +123,6 @@ private:
 
 public:
 
-    Point*              ImplGetPointAry();
-    sal_uInt8*               ImplGetFlagAry();
-
     static void         ImplReduceEdges( Polygon& rPoly, const double& rArea, sal_uInt16 nPercent );
     void                ImplRead( SvStream& rIStream );
     void                ImplWrite( SvStream& rOStream ) const;
@@ -158,8 +155,6 @@ public:
     PolyFlags           GetFlags( sal_uInt16 nPos ) const;
     sal_Bool            HasFlags() const;
 
-    sal_Bool                IsControl( sal_uInt16 nPos ) const;
-    sal_Bool                IsSmooth( sal_uInt16 nPos ) const;
     sal_Bool                IsRect() const;
 
     void                SetSize( sal_uInt16 nNewSize );
@@ -168,7 +163,6 @@ public:
     void                Clear();
 
     Rectangle           GetBoundRect() const;
-    double              GetArea() const;
     double              GetSignedArea() const;
     sal_Bool                IsInside( const Point& rPt ) const;
     sal_Bool                IsRightOrientated() const;
@@ -196,11 +190,6 @@ public:
      */
     void                AdaptiveSubdivide( Polygon& rResult, const double d = 1.0 ) const;
 
-    void                GetIntersection( const PolyPolygon& rPolyPoly, PolyPolygon& rResult ) const;
-    void                GetUnion( const PolyPolygon& rPolyPoly, PolyPolygon& rResult ) const;
-    void                GetDifference( const PolyPolygon& rPolyPoly, PolyPolygon& rResult ) const;
-    void                GetXOR( const PolyPolygon& rPolyPoly, PolyPolygon& rResult ) const;
-
     void                Move( long nHorzMove, long nVertMove );
     void                Translate( const Point& rTrans );
     void                Scale( double fScaleX, double fScaleY );
@@ -212,7 +201,6 @@ public:
 
     void                Insert( sal_uInt16 nPos, const Point& rPt, PolyFlags eFlags = POLY_NORMAL );
     void                Insert( sal_uInt16 nPos, const Polygon& rPoly );
-    void                Remove( sal_uInt16 nPos, sal_uInt16 nCount );
 
     const Point&        operator[]( sal_uInt16 nPos ) const { return GetPoint( nPos ); }
     Point&              operator[]( sal_uInt16 nPos );
@@ -309,9 +297,6 @@ public:
     void                Scale( double fScaleX, double fScaleY );
     void                Rotate( const Point& rCenter, double fSin, double fCos );
     void                Rotate( const Point& rCenter, sal_uInt16 nAngle10 );
-    void                SlantX( long nYRef, double fSin, double fCos );
-    void                SlantY( long nXRef, double fSin, double fCos );
-    void                Distort( const Rectangle& rRefRect, const Polygon& rDistortedRect );
 
     const Polygon&      operator[]( sal_uInt16 nPos ) const { return GetObject( nPos ); }
     Polygon&            operator[]( sal_uInt16 nPos );
