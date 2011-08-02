@@ -1077,7 +1077,14 @@ sal_Bool ImpGraphic::ImplReadEmbedded( SvStream& rIStm, sal_Bool bSwap )
 
                 if( aTmpURL.GetMainURL( INetURLObject::NO_DECODE ).getLength() )
                 {
-                    SvStream* pOStm = ::utl::UcbStreamHelper::CreateStream( aTmpURL.GetMainURL( INetURLObject::NO_DECODE ), STREAM_READWRITE | STREAM_SHARE_DENYWRITE );
+                    SvStream* pOStm = NULL;
+                    try
+                    {
+                        pOStm = ::utl::UcbStreamHelper::CreateStream( aTmpURL.GetMainURL( INetURLObject::NO_DECODE ), STREAM_READWRITE | STREAM_SHARE_DENYWRITE );
+                    }
+                    catch( const ::com::sun::star::uno::Exception& )
+                    {
+                    }
 
                     if( pOStm )
                     {
@@ -1282,8 +1289,14 @@ sal_Bool ImpGraphic::ImplSwapOut()
 
             if( aTmpURL.GetMainURL( INetURLObject::NO_DECODE ).getLength() )
             {
-                SvStream* pOStm = ::utl::UcbStreamHelper::CreateStream( aTmpURL.GetMainURL( INetURLObject::NO_DECODE ), STREAM_READWRITE | STREAM_SHARE_DENYWRITE );
-
+                SvStream* pOStm = NULL;
+                try
+                {
+                    pOStm = ::utl::UcbStreamHelper::CreateStream( aTmpURL.GetMainURL( INetURLObject::NO_DECODE ), STREAM_READWRITE | STREAM_SHARE_DENYWRITE );
+                }
+                catch( const ::com::sun::star::uno::Exception& )
+                {
+                }
                 if( pOStm )
                 {
                     pOStm->SetVersion( SOFFICE_FILEFORMAT_50 );
@@ -1382,7 +1395,14 @@ sal_Bool ImpGraphic::ImplSwapIn()
 
         if( aSwapURL.Len() )
         {
-            SvStream* pIStm = ::utl::UcbStreamHelper::CreateStream( aSwapURL, STREAM_READWRITE | STREAM_SHARE_DENYWRITE );
+            SvStream* pIStm = NULL;
+            try
+            {
+                pIStm = ::utl::UcbStreamHelper::CreateStream( aSwapURL, STREAM_READWRITE | STREAM_SHARE_DENYWRITE );
+            }
+            catch( const ::com::sun::star::uno::Exception& )
+            {
+            }
 
             if( pIStm )
             {
