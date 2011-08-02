@@ -100,7 +100,12 @@ extern "C" {
 
 // Yes - we should use the unpleasant to use templatized
 // sal:: doublecheckfoo thing here.
+#ifndef IOS
 static TextEncodingFunction pTables;
+#else
+extern "C" ImplTextEncodingData *tables_Impl_getTextEncodingData(rtl_TextEncoding);
+#define pTables tables_Impl_getTextEncodingData
+#endif
 
 #define DOSTRING( x )  #x
 #define STRING( x )    DOSTRING( x )
@@ -137,6 +142,7 @@ Impl_getTextEncodingData(rtl_TextEncoding nEncoding) SAL_THROW_EXTERN_C()
 // ----------------------------------------------
 #endif
         default:
+#ifndef IOS
             if (!pTables)
             {
                 static char const pName[] = STRING(PLUGIN_NAME);
@@ -148,6 +154,7 @@ Impl_getTextEncodingData(rtl_TextEncoding nEncoding) SAL_THROW_EXTERN_C()
                     pTables = (TextEncodingFunction)osl_getAsciiFunctionSymbol(aModule, pSymbol);
                 }
             }
+#endif
             if (pTables)
                 return pTables(nEncoding);
 //          else

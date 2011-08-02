@@ -26,6 +26,10 @@
  *
  ************************************************************************/
 
+#ifdef IOS
+#define Impl_getTextEncodingData tables_Impl_getTextEncodingData
+#endif
+
 #ifndef INCLUDED_RTL_TEXTENC_GETTEXTENCODINGDATA_H
 #include "gettextencodingdata.h"
 #endif
@@ -127,12 +131,6 @@ static sal_uInt16 const aImplDoubleByteIdentifierTab[1] = { 0 };
 
 ImplTextEncodingData const *
 Impl_getTextEncodingData(rtl_TextEncoding nEncoding)
-#ifdef IOS
-    // Dunno if the g++ for iOS is just pickier, or why other g++
-    // versions don't complain about the lack of throw to match the
-    // one in the declaration in gettextencodingdata.h.o
-    SAL_THROW_EXTERN_C()
-#endif
 {
     static ImplTextEncodingData const * const aData[]
         = { NULL, /* DONTKNOW */
