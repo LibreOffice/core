@@ -2,7 +2,7 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
+#
 # Copyright 2000, 2011 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
@@ -26,23 +26,38 @@
 #
 #*************************************************************************
 
-$(eval $(call gb_Module_Module,sax))
+$(eval $(call gb_Executable_Executable,sax_cppunittester_all))
 
-$(eval $(call gb_Module_add_targets,sax,\
-	Library_sax \
-	Library_expwrap \
-	Library_fastsax \
-	Package_inc \
+$(eval $(call gb_Executable_set_include,sax_cppunittester_all,\
+	$$(INCLUDE) \
+	-I$(SRCDIR)/sax/inc \
 ))
 
-ifneq ($(OS),IOS)
-$(eval $(call gb_Module_add_check_targets,sax,\
-	CppunitTest_sax \
+$(eval $(call gb_Executable_add_defs,sax_cppunittester_all,\
+	$(gb_OBJCXXFLAGS) \
 ))
-else
-$(eval $(call gb_Module_add_targets,sax,\
-	Executable_sax_cppunittester_all \
+
+$(eval $(call gb_Executable_add_linked_libs,sax_cppunittester_all,\
+	cppu \
+	cppunit \
+	sal \
+	sax \
+	$(gb_STDLIBS) \
+    objc \
 ))
-endif
+
+$(eval $(call gb_Executable_use_externals,sax_cppunittester_all,\
+	uikit \
+	foundation \
+))
+
+$(eval $(call gb_Executable_add_exception_objects,sax_cppunittester_all,\
+	sax/qa/cppunit/sax_cppunittester_all \
+))
+
+$(eval $(call gb_Executable_add_api,sax_cppunittester_all,\
+    offapi \
+    udkapi \
+))
 
 # vim: set noet sw=4 ts=4:
