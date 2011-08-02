@@ -1858,8 +1858,8 @@ static void pgTypeInfo2ResultSet(
         sal_Int32 precision = xRow->getString(3).toInt32();
 
         if( dataType == com::sun::star::sdbc::DataType::CHAR  ||
-            dataType == com::sun::star::sdbc::DataType::VARCHAR &&
-            xRow->getString(TYPE_NAME+1).equalsIgnoreAsciiCaseAscii( "varchar") )
+            ( dataType == com::sun::star::sdbc::DataType::VARCHAR &&
+              xRow->getString(TYPE_NAME+1).equalsIgnoreAsciiCaseAscii( "varchar") ) )
         {
             // reflect varchar as varchar with upper limit !
             //NOTE: the sql spec requires varchar to have an upper limit, however
