@@ -439,6 +439,16 @@ File gid_File_Dl_LogUnoUno
     Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
 End
 
+#if ( defined UNX && defined ENABLE_MONO ) // currently we only will build this on unix
+File gid_File_Dl_MonoLoader
+    TXT_FILE_BODY;
+    Dir = SCP2_URE_DL_DIR;
+    Name = STRING(CONCAT4(mono_loader,DLLPOSTFIX,.uno,UNXSUFFIX));
+    Styles = (PACKED, UNO_COMPONENT, VERSION_INDEPENDENT_COMP_ID);
+    RegistryID = gid_Starregistry_Services_Rdb_Ure;
+End
+#endif
+
 #if defined _MSC_VER || defined ENABLE_MONO
 File gid_File_Dl_Cli_Uno
     LIB_FILE_BODY;

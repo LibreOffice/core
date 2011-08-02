@@ -9,6 +9,7 @@
 ..\%__SRC%\bin\cli_*.config %_DEST%\bin\cli_*.config
 ..\%__SRC%\bin\policy*.dll %_DEST%\bin\policy*.dll
 ..\%__SRC%\bin\cli_uno.* %_DEST%\bin\cli_uno.*
+..\%__SRC%\lib\mono_loader*.so %_DEST%\lib\mono_loader*.so
 
 ..\%__SRC%\bin\cliuno.snk %_DEST%\bin\cliuno.snk
 

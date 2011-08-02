@@ -10,5 +10,6 @@ ure cli_ure\unotypes			nmake	-	all		ure_unotypes ure_source_version ure_source_s
 ure	cli_ure\source\ure                      nmake   -       all     ure_source_ure ure_source_bootstrap.u ure_source_version ure_source_source ure_source_basetypes ure_unotypes ure_inc NULL
 ure cli_ure\source\uno_bridge	nmake	-	w,vc7	ure_source_uno_bridge ure_source_basetypes ure_unotypes ure_source_ure ure_inc NULL
 ure	cli_ure\source\mono_bridge	nmake	-	u		ure_source_mono_bridge ure_unotypes ure_source_ure ure_inc NULL
+ure	cli_ure\source\mono_loader      nmake   -       u       ure_source_mono_loader ure_unotypes ure_source_ure ure_inc NULL
 ure cli_ure\source\native		nmake	-	w,vc7	ure_source_native ure_source_version ure_source_source ure_source_ure ure_unotypes ure_source_uno_bridge ure_inc NULL
 #ure cli_ure\util				nmake	-	w,vc7	ure_util ure_source_ure ure_source_native NULL
