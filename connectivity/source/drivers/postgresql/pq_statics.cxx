@@ -635,6 +635,7 @@ Statics & getStatics()
             statics.resultSetArrayColumnNames =
                 createStringSequence( resultSetArrayColumnNames );
 
+            // LEM TODO see if a refresh is needed; obtain automatically from pg_catalog.pg_type?
             BaseTypeDef baseTypeDefs[] =
             {
                 { "bool" , com::sun::star::sdbc::DataType::BIT },
@@ -708,6 +709,8 @@ Statics & getStatics()
                            baseTypeDefs[i].value;
             }
 
+            // LEM TODO: this bears a passing resemblance with the structure of pg_catalog.pg_type
+            // LEM TODO: isSigned (last field) is not initialised
             DefColumnMetaData defTypeInfoMetaData[] =
                 {
                     { "TYPE_NAME", "TYPEINFO", "pg_catalog", "", com::sun::star::sdbc::DataType::VARCHAR, 0,50,0,0,0,0 },  // 0

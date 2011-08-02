@@ -217,11 +217,11 @@ void Table::rename( const ::rtl::OUString& newName )
     {
         // maintain view list (really strange API !)
         Any a = m_pSettings->pViewsImpl->getByName( fullOldName );
-        Reference< com::sun::star::sdbcx::XRename > rename;
-        a >>= rename;
-        if( rename.is() )
+        Reference< com::sun::star::sdbcx::XRename > Xrename;
+        a >>= Xrename;
+        if( Xrename.is() )
         {
-            rename->rename( newName );
+            Xrename->rename( newName );
             setPropertyValue_NoBroadcast_public( st.SCHEMA_NAME, makeAny(newSchemaName) );
         }
     }
