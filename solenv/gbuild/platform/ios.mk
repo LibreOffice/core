@@ -226,7 +226,7 @@ gb_LinkTarget_INCLUDE_STL := $(filter %/stl, $(subst -I. , ,$(SOLARINC)))
 
 # FIXME framework handling very hackish
 define gb_LinkTarget__get_liblinkflags
-$(patsubst lib%.dylib,-l%,$(foreach lib,$(filter-out $(gb_Library__FRAMEWORKS),$(1)),$(call gb_Library_get_filename,$(lib)))) \
+$(patsubst lib%.a,-l%,$(foreach lib,$(filter-out $(gb_Library__FRAMEWORKS),$(1)),$(call gb_Library_get_filename,$(lib)))) \
 $(addprefix -framework ,$(filter $(gb_Library__FRAMEWORKS),$(1)))
 endef
 
@@ -236,13 +236,24 @@ $(if $(filter Executable,$(1)),\
 	$$(call gb_Library_get_layer,$(2)))
 endef
 
-# Just create a dummy executable
-# It is pointless to build actual iOS executables here anyway.
-# Hmm, except for the simulator? Nah, use Xcode for that, too.
+
 define gb_LinkTarget__command_dynamiclink
-$(call gb_Helper_abbreviate_dirs,\
+	$(if $(filter Library CppunitTest,$(TARGETTYPE)),@echo No dynamic libraries should be built for iOS && exit 1, \
 	mkdir -p $(dir $(1)) && \
-	((echo '#!/bin/sh' && echo 'echo Nope.') >$(1)))
+	$(gb_CXX) \
+		$(gb_Executable_TARGETTYPEFLAGS) \
+		$(subst \d,$$,$(RPATH)) \
+		$(T_LDFLAGS) \
+		$(foreach object,$(COBJECTS),$(call gb_CObject_get_target,$(object))) \
+		$(foreach object,$(CXXOBJECTS),$(call gb_CxxObject_get_target,$(object))) \
+		$(foreach object,$(OBJCOBJECTS),$(call gb_ObjCObject_get_target,$(object))) \
+		$(foreach object,$(OBJCXXOBJECTS),$(call gb_ObjCxxObject_get_target,$(object))) \
+		$(foreach object,$(GENCXXOBJECTS),$(call gb_GenCxxObject_get_target,$(object))) \
+		$(foreach extraobjectlist,$(EXTRAOBJECTLISTS),`cat $(extraobjectlist)`) \
+		$(foreach lib,$(LINKED_STATIC_LIBS),$(call gb_StaticLibrary_get_target,$(lib))) \
+		$(call gb_LinkTarget__get_liblinkflags,$(LINKED_LIBS)) \
+		$(LIBS) \
+		-o $(1))
 endef
 
 # parameters: 1-linktarget 2-cobjects 3-cxxobjects
@@ -279,8 +290,12 @@ gb_Library_OOOEXT := $(gb_Library_DLLPOSTFIX)$(gb_Library_PLAINEXT)
 gb_Library_UNOEXT := .uno$(gb_Library_PLAINEXT)
 
 gb_Library__FRAMEWORKS := \
+    Foundation \
+    CoreFoundation \
+    CoreGraphics \
 
 gb_Library_PLAINLIBS_NONE += \
+    objc \
 	jpeg \
 	m \
 	pthread \
@@ -331,7 +346,7 @@ gb_StaticLibrary_StaticLibrary_platform =
 # Executable class
 
 gb_Executable_EXT :=
-gb_Executable_TARGETTYPEFLAGS := -bind_at_load
+gb_Executable_TARGETTYPEFLAGS := -dead_strip
 
 gb_Executable_LAYER := \
 	$(foreach exe,$(gb_Executable_UREBIN),$(exe):OOO) \
