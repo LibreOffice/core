@@ -35,6 +35,7 @@
 #include <tools/debug.hxx>
 #include <tools/datetime.hxx>
 #include <rtl/tencinfo.h>
+#include <rtl/strbuf.hxx>
 
 // ============================================================================
 
@@ -300,7 +301,10 @@ String SfxOleStringHelper::ImplLoadString8( SvStream& rStrm ) const
     sal_Int32 nSize(0);
     rStrm >> nSize;
     // size field includes trailing NUL character
-    DBG_ASSERT( (0 < nSize) && (nSize <= 0xFFFF), "SfxOleStringHelper::ImplLoadString8 - invalid string" );
+    DBG_ASSERT( (0 < nSize) && (nSize <= 0xFFFF),
+        rtl::OStringBuffer(RTL_CONSTASCII_STRINGPARAM(
+            "SfxOleStringHelper::ImplLoadString8 - invalid string of len ")).
+        append(nSize).getStr() );
     if( (0 < nSize) && (nSize <= 0xFFFF) )
     {
         // load character buffer
