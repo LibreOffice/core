@@ -42,7 +42,6 @@
 #include "framework/addonsoptions.hxx"
 #include <classes/fwkresid.hxx>
 #include <classes/menumanager.hxx>
-#include <framework/acceleratorinfo.hxx>
 #include <helper/mischelper.hxx>
 #include <framework/menuextensionsupplier.hxx>
 #include <classes/resource.hrc>

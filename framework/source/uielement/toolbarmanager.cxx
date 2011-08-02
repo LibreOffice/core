@@ -47,7 +47,6 @@
 #include <classes/resource.hrc>
 #include <framework/addonsoptions.hxx>
 #include <uielement/toolbarmerger.hxx>
-#include <framework/acceleratorinfo.hxx>
 
 //_________________________________________________________________________________________________________________
 //  interface includes

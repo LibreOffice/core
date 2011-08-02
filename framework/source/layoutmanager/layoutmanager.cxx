@@ -35,7 +35,6 @@
 //      my own includes
 #include <services/layoutmanager.hxx>
 #include <helpers.hxx>
-#include <panelmanager.hxx>
 #include <threadhelp/resetableguard.hxx>
 #include <services.h>
 
@@ -165,7 +164,6 @@ LayoutManager::LayoutManager( const Reference< XMultiServiceFactory >& xServiceM
         , m_aPropLocked( RTL_CONSTASCII_USTRINGPARAM( WINDOWSTATE_PROPERTY_LOCKED ))
         , m_aCustomizeCmd( RTL_CONSTASCII_USTRINGPARAM( "ConfigureDialog" ))
         , m_aListenerContainer( m_aLock.getShareableOslMutex() )
-        , m_pPanelManager( 0 )
         , m_pToolbarManager( 0 )
 {
     // Initialize statusbar member
@@ -505,22 +503,6 @@ uno::Reference< ui::XUIElement > LayoutManager::implts_findElement( const rtl::O
         return m_aProgressBarElement.m_xUIElement;
 
     return uno::Reference< ui::XUIElement >();
-}
-
-UIElement& LayoutManager::impl_findElement( const rtl::OUString& aName )
-{
-    static UIElement aEmptyElement;
-
-    ::rtl::OUString aElementType;
-    ::rtl::OUString aElementName;
-
-    parseResourceURL( aName, aElementType, aElementName );
-    if (( aElementType.equalsIgnoreAsciiCaseAscii( "statusbar" ) && aElementName.equalsIgnoreAsciiCaseAscii( "statusbar" )) || ( m_aStatusBarElement.m_aName == aName ))
-        return m_aStatusBarElement;
-    else if ( aElementType.equalsIgnoreAsciiCaseAscii( "progressbar" ) && aElementName.equalsIgnoreAsciiCaseAscii( "progressbar" ))
-        return m_aProgressBarElement;
-
-    return aEmptyElement;
 }
 
 sal_Bool LayoutManager::implts_readWindowStateData( const rtl::OUString& aName, UIElement& rElementData )
@@ -1587,7 +1569,6 @@ throw (RuntimeException)
             if ( xUIElement.is() )
             {
                 impl_addWindowListeners( xThis, xUIElement );
-                m_pPanelManager->addDockingWindow( aName, xUIElement );
             }
 
             // The docking window is created by a factory method located in the sfx2 library.
@@ -2662,15 +2643,6 @@ sal_Bool LayoutManager::implts_resetMenuBar()
     }
 
     return sal_False;
-}
-
-void LayoutManager::implts_setMenuBarCloser(sal_Bool bCloserState)
-{
-    WriteGuard aWriteLock( m_aLock );
-    m_bMenuBarCloser = bCloserState;
-    aWriteLock.unlock();
-
-    implts_updateMenuBarClose();
 }
 
 IMPL_LINK( LayoutManager, MenuBarClose, MenuBar *, EMPTYARG )

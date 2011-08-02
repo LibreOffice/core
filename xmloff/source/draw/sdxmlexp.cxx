@@ -75,8 +75,6 @@
 #include "PropertySetMerger.hxx"
 #include "layerexp.hxx"
 
-
-#include "xmloff/VisAreaExport.hxx"
 #include "XMLNumberStylesExport.hxx"
 #include <tools/string.hxx>
 

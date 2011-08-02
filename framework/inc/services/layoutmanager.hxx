@@ -95,7 +95,6 @@ class MenuBar;
 namespace framework
 {
     class ToolbarLayoutManager;
-    class PanelManager;
     class GlobalSettings;
     namespace detail
     {
@@ -231,7 +230,6 @@ namespace framework
             //---------------------------------------------------------------------------------------------------------
             void impl_clearUpMenuBar();
             void implts_reset( sal_Bool bAttach );
-            void implts_setMenuBarCloser(sal_Bool bCloserState);
             void implts_updateMenuBarClose();
             sal_Bool implts_resetMenuBar();
 
@@ -245,7 +243,6 @@ namespace framework
             //  query
             //---------------------------------------------------------------------------------------------------------
             ::com::sun::star::uno::Reference< ::com::sun::star::ui::XUIElement > implts_findElement( const rtl::OUString& aName );
-            UIElement& impl_findElement( const rtl::OUString& aName );
 
             void implts_writeNewStateData( const rtl::OUString aName, const ::com::sun::star::uno::Reference< com::sun::star::awt::XWindow >& xWindow );
             sal_Bool implts_readWindowStateData( const rtl::OUString& rName, UIElement& rElementData );
@@ -371,7 +368,6 @@ namespace framework
             sal_Int16                                                                   m_eSymbolsStyle;
         Timer                                                                       m_aAsyncLayoutTimer;
             ::cppu::OMultiTypeInterfaceContainerHelper                                  m_aListenerContainer; // container for ALL Listener
-            PanelManager*                                                               m_pPanelManager;
             ToolbarLayoutManager*                                                       m_pToolbarManager;
             css::uno::Reference< ::com::sun::star::ui::XUIConfigurationListener >       m_xToolbarManager;
 

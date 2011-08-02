@@ -74,7 +74,6 @@ $(eval $(call gb_Library_add_exception_objects,fwe,\
     framework/source/fwe/classes/rootactiontriggercontainer \
     framework/source/fwe/classes/sfxhelperfunctions \
     framework/source/fwe/dispatch/interaction \
-    framework/source/fwe/helper/acceleratorinfo \
     framework/source/fwe/helper/actiontriggerhelper \
     framework/source/fwe/helper/configimporter \
     framework/source/fwe/helper/imageproducer \

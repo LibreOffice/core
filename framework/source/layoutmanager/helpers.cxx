@@ -272,27 +272,6 @@ void parseResourceURL( const rtl::OUString& aResourceURL, rtl::OUString& aElemen
     return aRect;
 }
 
-css::awt::Rectangle convertRectangleToAWT( const ::Rectangle& rRect )
-{
-    css::awt::Rectangle aRect;
-    aRect.X = rRect.Left();
-    aRect.Y = rRect.Top();
-    aRect.Width = rRect.GetWidth();
-    aRect.Height = rRect.GetHeight();
-    return aRect;
-}
-
-::Rectangle convertAWTToRectangle( const ::com::sun::star::awt::Rectangle& rRect )
-{
-    ::Rectangle aRect;
-    aRect.Left()   = rRect.X;
-    aRect.Top()    = rRect.Y;
-    aRect.Right()  = rRect.X + rRect.Width;
-    aRect.Bottom() = rRect.Y + rRect.Height;
-
-    return aRect;
-}
-
 bool equalRectangles( const css::awt::Rectangle& rRect1,
                       const css::awt::Rectangle& rRect2 )
 {

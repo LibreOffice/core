@@ -114,7 +114,6 @@ $(eval $(call gb_Library_add_exception_objects,fwk,\
     framework/source/layoutmanager/helpers \
     framework/source/layoutmanager/layoutmanager \
     framework/source/layoutmanager/panel \
-    framework/source/layoutmanager/panelmanager \
     framework/source/layoutmanager/toolbarlayoutmanager \
     framework/source/layoutmanager/uielement \
     framework/source/loadenv/loadenv \
@@ -125,7 +124,6 @@ $(eval $(call gb_Library_add_exception_objects,fwk,\
     framework/source/services/backingwindow \
     framework/source/services/desktop \
     framework/source/services/frame \
-    framework/source/services/modelwinservice \
     framework/source/services/modulemanager \
     framework/source/services/pathsettings \
     framework/source/services/sessionlistener \
@@ -142,7 +140,6 @@ $(eval $(call gb_Library_add_exception_objects,fwk,\
     framework/source/uiconfiguration/moduleuiconfigurationmanager \
     framework/source/uiconfiguration/uicategorydescription \
     framework/source/uiconfiguration/uiconfigurationmanager \
-    framework/source/uiconfiguration/uiconfigurationmanagerimpl \
     framework/source/uiconfiguration/windowstateconfiguration \
     framework/source/uielement/addonstoolbarmanager \
     framework/source/uielement/addonstoolbarwrapper \
@@ -160,7 +157,6 @@ $(eval $(call gb_Library_add_exception_objects,fwk,\
     framework/source/uielement/menubarwrapper \
     framework/source/uielement/objectmenucontroller \
     framework/source/uielement/panelwindow \
-    framework/source/uielement/panelwrapper \
     framework/source/uielement/progressbarwrapper \
     framework/source/uielement/recentfilesmenucontroller \
     framework/source/uielement/spinfieldtoolbarcontroller \

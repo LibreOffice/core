@@ -267,7 +267,6 @@ namespace
 }
 
 #include <framework/imageproducer.hxx>
-#include <framework/acceleratorinfo.hxx>
 #include <framework/sfxhelperfunctions.hxx>
 #include "sfx2/imagemgr.hxx"
 #include "fwkhelper.hxx"

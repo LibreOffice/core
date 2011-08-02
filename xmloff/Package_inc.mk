@@ -44,7 +44,6 @@ $(eval $(call gb_Package_add_file,xmloff_inc,inc/xmloff/SchXMLImportHelper.hxx,x
 $(eval $(call gb_Package_add_file,xmloff_inc,inc/xmloff/SettingsExportHelper.hxx,xmloff/SettingsExportHelper.hxx))
 $(eval $(call gb_Package_add_file,xmloff_inc,inc/xmloff/SinglePropertySetInfoCache.hxx,xmloff/SinglePropertySetInfoCache.hxx))
 $(eval $(call gb_Package_add_file,xmloff_inc,inc/xmloff/VisAreaContext.hxx,xmloff/VisAreaContext.hxx))
-$(eval $(call gb_Package_add_file,xmloff_inc,inc/xmloff/VisAreaExport.hxx,xmloff/VisAreaExport.hxx))
 $(eval $(call gb_Package_add_file,xmloff_inc,inc/xmloff/WordWrapPropertyHdl.hxx,xmloff/WordWrapPropertyHdl.hxx))
 $(eval $(call gb_Package_add_file,xmloff_inc,inc/xmloff/XMLBase64ImportContext.hxx,xmloff/XMLBase64ImportContext.hxx))
 $(eval $(call gb_Package_add_file,xmloff_inc,inc/xmloff/XMLCharContext.hxx,xmloff/XMLCharContext.hxx))

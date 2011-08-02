@@ -27,7 +27,6 @@
 #*************************************************************************
 
 $(eval $(call gb_Package_Package,framework_inc,$(SRCDIR)/framework/inc))
-$(eval $(call gb_Package_add_file,framework_inc,inc/framework/acceleratorinfo.hxx,framework/acceleratorinfo.hxx))
 $(eval $(call gb_Package_add_file,framework_inc,inc/framework/actiontriggerhelper.hxx,framework/actiontriggerhelper.hxx))
 $(eval $(call gb_Package_add_file,framework_inc,inc/framework/addonmenu.hxx,framework/addonmenu.hxx))
 $(eval $(call gb_Package_add_file,framework_inc,inc/framework/addonsoptions.hxx,framework/addonsoptions.hxx))

@@ -163,32 +163,6 @@ virtual
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-#define SDRHDC_SAVEPEN                1 /* Save Linecolor                     */
-#define SDRHDC_SAVEBRUSH              2 /* Save Fillcolorn                    */
-#define SDRHDC_SAVEFONT               4 /* Save Font                          */
-#define SDRHDC_SAVEPENANDBRUSH        3 /* Save Line- and FillColor           */
-#define SDRHDC_SAVEPENANDBRUSHANDFONT 7 /* Save Font, Line- and fillcolor     */
-#define SDRHDC_SAVECLIPPING           8 /* Save Clipping                      */
-#define SDRHDC_SAVEALL               15 /* Save Clipping, Font, fill- and linecolor */
-
-class ImpClipMerk;
-class ImpColorMerk;
-class ImpSdrHdcMerk
-{
-    ImpColorMerk* pFarbMerk;
-    ImpClipMerk*  pClipMerk;
-    Color*        pLineColorMerk;
-    sal_uInt16        nMode;
-public:
-    ImpSdrHdcMerk(const OutputDevice& rOut, sal_uInt16 nNewMode=SDRHDC_SAVEALL, bool bAutoMerk = true);
-    ~ImpSdrHdcMerk();
-    void Save(const OutputDevice& rOut);
-    bool IsSaved() const                 { return pFarbMerk!=NULL || pClipMerk!=NULL || pLineColorMerk!=NULL; }
-    void Restore(OutputDevice& rOut, sal_uInt16 nMask=SDRHDC_SAVEALL) const;
-};
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-
 // Ein ItemSet auf Outliner- bzw. EditEngine-Items durchsuchen
 // Liefert sal_True, wenn der Set solchen Items enthaelt.
 sal_Bool SearchOutlinerItems(const SfxItemSet& rSet, sal_Bool bInklDefaults, sal_Bool* pbOnlyEE=NULL);
@@ -196,8 +170,6 @@ sal_Bool SearchOutlinerItems(const SfxItemSet& rSet, sal_Bool bInklDefaults, sal
 // zurueck erhaelt man einen neuen WhichTable den
 // man dann irgendwann mit delete platthauen muss.
 sal_uInt16* RemoveWhichRange(const sal_uInt16* pOldWhichTable, sal_uInt16 nRangeBeg, sal_uInt16 nRangeEnd);
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 

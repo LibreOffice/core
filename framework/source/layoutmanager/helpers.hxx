@@ -81,8 +81,6 @@ WindowAlign ImplConvertAlignment( sal_Int16 aAlignment );
 void parseResourceURL( const rtl::OUString& aResourceURL, rtl::OUString& aElementType, rtl::OUString& aElementName );
 ::Rectangle putAWTToRectangle( const ::com::sun::star::awt::Rectangle& rRect );
 ::com::sun::star::awt::Rectangle putRectangleValueToAWT( const ::Rectangle& rRect );
-::com::sun::star::awt::Rectangle convertRectangleToAWT( const ::Rectangle& rRect );
-::Rectangle convertAWTToRectangle( const ::com::sun::star::awt::Rectangle& rRect );
 ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > impl_getModelFromFrame( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame );
 sal_Bool implts_isPreviewModel( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& xModel );
 sal_Bool implts_isFrameOrWindowTop( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& xFrame );
