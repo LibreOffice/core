@@ -2733,8 +2733,6 @@ binfilter::SvI18NMap_Impl::Remove(unsigned short, unsigned short)
 binfilter::SvLongs::Replace(long const&, unsigned short)
 binfilter::SvLongs::Replace(long const*, unsigned short, unsigned short)
 binfilter::SvLongs::_ForEach(unsigned short, unsigned short, unsigned char (*)(long const&, void*), void*)
-binfilter::SvNumberformat::Build50Formatstring(String&) const
-binfilter::SvNumberformat::HasNewCurrency() const
 binfilter::SvObjectServerList::Remove(SvGlobalName const&)
 binfilter::SvOutPlaceObject::MakeWorkStorageWrap_Impl(binfilter::SvStorage*)
 binfilter::SvPersist::DoSaveContent(binfilter::SvStorage*, unsigned char)
