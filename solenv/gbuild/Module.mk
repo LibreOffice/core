@@ -152,11 +152,25 @@ $(call gb_Module_get_clean_target,$(1)) : $$(gb_Module_CURRENTCLEANTARGET)
 
 endef
 
+# We don't build normal unit test dynamic libraries (CppUnit
+# "plugins") for iOS, but instead statically linked unit test
+# executables, so make gb_Module_add_check_target a no-op for iOS.
+
+# As such we could build normal "plugins", as dynamic loading of
+# modules presumably does work on iOS, it is just not allowed in apps
+# distributed through the App Store. Unit testing at LO development
+# time obviously is not anything that would be distributed as
+# apps. But let's not, as we have to make this stuff work without
+# dynamic loading anyway if the App Store is an eventual target, and
+# why shouldn't it be.
+
 define gb_Module_add_check_target
+$(if $(filter-out IOS,$(OS)),\
 $(call gb_Module__read_targetfile,$(1),$(2),check target)
 
 $(call gb_Module_get_check_target,$(1)) : $$(gb_Module_CURRENTTARGET)
 $(call gb_Module_get_clean_target,$(1)) : $$(gb_Module_CURRENTCLEANTARGET)
+)
 
 endef
 
