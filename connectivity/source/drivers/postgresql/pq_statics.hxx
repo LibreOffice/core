@@ -51,11 +51,14 @@
  *  The Initial Developer of the Original Code is: Joerg Budischewski
  *
  *   Copyright: 2000 by Sun Microsystems, Inc.
+ *              2011 Lionel Elie Mamane <lionel@mamane.lu>
  *
  *   All Rights Reserved.
  *
  *   Contributor(s): Joerg Budischewski
  *
+ *  Non-Sun changes:
+ *  * august 2011: switch to unordered_map instead of deprecated hash_map
  *
  ************************************************************************/
 #ifndef _PQ_STATICS_HXX_

@@ -51,11 +51,14 @@
  *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
  *
  *  Copyright: 2002 by Sun Microsystems, Inc.
+ *             2011 Lionel Elie Mamane <lionel@mamane.lu>
  *
  *  All Rights Reserved.
  *
  *  Contributor(s): _______________________________________
  *
+ *  Non-Sun changes:
+ *  * august 2011: implement one-argument construct member
  *
  ************************************************************************/
 
