@@ -153,6 +153,11 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
     fileacc \
 ))
 
+ifeq ($(OS),IOS)
+$(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
+    sal_textenc \
+))
+endif
 
 $(eval $(call gb_Helper_register_libraries,RTLIBS, \
     comphelper \
