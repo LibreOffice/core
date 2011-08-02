@@ -71,7 +71,6 @@ class TextRectInfo;
 class FontInfo;
 class FontMetric;
 class GDIMetaFile;
-class List;
 class GfxLink;
 class Line;
 class LineInfo;
