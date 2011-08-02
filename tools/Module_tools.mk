@@ -50,4 +50,10 @@ $(eval $(call gb_Module_add_targets,tools,\
 ))
 endif
 
+ifeq ($(OS),IOS)
+$(eval $(call gb_Module_add_targets,tools,\
+	Executable_tools_cppunittester_all \
+))
+endif
+
 # vim: set noet sw=4 ts=4:

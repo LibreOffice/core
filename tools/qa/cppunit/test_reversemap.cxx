@@ -26,6 +26,10 @@
  * instead of those above.
  */
 
+#ifdef IOS
+#define CPPUNIT_PLUGIN_EXPORTED_NAME cppunitTest_tools_reversemap
+#endif
+
 #include "precompiled_tools.hxx"
 #include <sal/cppunit.h>
 
