@@ -737,7 +737,6 @@ TestToolObj::~TestToolObj()
     delete pImpl->pTTSfxBroadcaster;
     delete pImpl->pHttpRequest;
     delete pImpl->pChildEnv;
-    delete pImpl->pHttpRequest;
 
     pImpl->xErrorList.Clear();
     pImpl->xWarningList.Clear();
