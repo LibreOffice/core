@@ -460,7 +460,7 @@ short SwGrfNode::SwapIn( sal_Bool bWaitForData )
                     delete pStrm;
                 }
             }
-            catch ( uno::Exception& )
+            catch (const uno::Exception&)
             {
                 // #i48434#
                 OSL_FAIL( "<SwGrfNode::SwapIn(..)> - unhandled exception!" );
@@ -730,7 +730,7 @@ void SwGrfNode::DelStreamName()
                 if ( xTrans.is() )
                     xTrans->commit();
             }
-            catch ( uno::Exception& )
+            catch (const uno::Exception&)
             {
                 // #i48434#
                 OSL_FAIL( "<SwGrfNode::DelStreamName()> - unhandled exception!" );
@@ -882,7 +882,7 @@ SwCntntNode* SwGrfNode::MakeCopy( SwDoc* pDoc, const SwNodeIndex& rIdx ) const
                 delete pStrm;
             }
         }
-        catch ( uno::Exception& )
+        catch (const uno::Exception&)
         {
             // #i48434#
             OSL_FAIL( "<SwGrfNode::MakeCopy(..)> - unhandled exception!" );
@@ -971,7 +971,7 @@ IMPL_LINK( SwGrfNode, SwapGraphic, GraphicObject*, pGrfObj )
                     delete pStrm;
                 }
             }
-            catch ( uno::Exception& )
+            catch (const uno::Exception&)
             {
                 // #i48434#
                 OSL_FAIL( "<SwapGraphic> - unhandled exception!" );
