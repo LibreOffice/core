@@ -239,7 +239,6 @@ public:
                                         return pMaster; }
     void                            FreezeIdRanges();
 
-    void                            Cleanup();
     void                            Delete();
 
 #ifdef TF_POOLABLE
@@ -274,7 +273,6 @@ public:
                                         return nId && nId > SFX_WHICH_MAX; }
 
     static const SfxItemPool*       GetStoringPool();
-    static void                     SetStoringPool( const SfxItemPool * );
 
 private:
     const SfxItemPool&              operator=(const SfxItemPool &);   // n.i.!!

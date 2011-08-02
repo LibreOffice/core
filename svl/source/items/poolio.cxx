@@ -46,27 +46,6 @@ DBG_NAME(SfxItemPool);
 
 //========================================================================
 
-void SfxItemPool::SetStoringPool( const SfxItemPool *pStoringPool )
-
-/*  [Beschreibung]
-
-    Diese Methode setzt den <SfxItemPool>, der gerade gespeichert wird.
-    Sie sollte nur in Notf"allen verwendet werden, um z.B. File-Format-
-    Kompatibilit"at zu gew"ahrleisten o."o. - z.B. in der "uberladung eines
-    <SfxPoolItem::Store()> zus"atzliche Daten aus dem dazuge"horigen
-    Pool mit <SfxItemPool::GetStoringPool()> zu besorgen.
-
-    Sie wird von <SfxItemPool::Store()> bedient, kann jedoch f"ur nicht
-    poolable Items auch direkt gerufen werden. Bitte m"oglichst nicht
-    f"ur jedes Item einzeln, da 2 Calls!
-*/
-
-{
-    ImpSvlData::GetSvlData().pStoringPool = pStoringPool;
-}
-
-//-------------------------------------------------------------------------
-
 const SfxItemPool* SfxItemPool::GetStoringPool()
 
 /*  [Beschreibung]
@@ -1476,39 +1455,6 @@ bool SfxItemPool::IsCurrentVersionLoading() const
 }
 
 // -----------------------------------------------------------------------
-
-sal_uInt16 SfxItemPool::GetVersion() const
-
-/*  [Beschreibung]
-
-    Diese Methode liefert die aktuelle Versionsnummer des SfxItemPool-Aufbaus
-    (also des Which-Bereichs).
-
-    Precondition:   keine
-    Postcondition:  unver"andert
-    Laufzeit:       2
-
-
-    [Anmerkung]
-
-    Achtung: Es mu\s ggf. die Versionsnummer von Sekund"arpools
-    ber"ucksichtigt werden.
-
-
-    [Querverweise]
-
-    <SfxItemPool::IsLoadingVersionCurrent()const>
-    <SfxItemPool::SetVersionMap(sal_uInt16,sal_uInt16,sal_uInt16,sal_uInt16*)>
-    <SfxItemPool::GetNewWhich(sal_uInt16)const>
-*/
-
-{
-    return pImp->nVersion;
-}
-
-// -----------------------------------------------------------------------
-
-//-------------------------------------------------------------------------
 
 bool SfxItemPool::IsVer2_Impl() const
 {

@@ -629,57 +629,6 @@ void SfxItemPool::Delete()
 
 // ----------------------------------------------------------------------
 
-void SfxItemPool::Cleanup()
-{
-    DBG_CHKTHIS(SfxItemPool, 0);
-
-    //MA 16. Apr. 97: siehe ::Delete()
-
-    SfxPoolItemArray_Impl** ppItemArr = pImp->ppPoolItems;
-    SfxPoolItem** ppDefaultItem = ppPoolDefaults;
-    SfxPoolItem** ppStaticDefaultItem = ppStaticDefaults;
-    sal_uInt16 nArrCnt;
-
-    HACK( "fuer Image, dort gibt es derzeit keine Statics - Bug" )
-    if ( ppStaticDefaults ) //HACK fuer Image, dort gibt es keine Statics!!
-    {
-        for ( nArrCnt = GetSize_Impl();
-                nArrCnt;
-                --nArrCnt, ++ppItemArr, ++ppDefaultItem, ++ppStaticDefaultItem )
-        {
-            //Fuer jedes Item gibt es entweder ein Default oder ein static Default!
-            if ( *ppItemArr &&
-                 ((*ppDefaultItem && (*ppDefaultItem)->ISA(SfxSetItem)) ||
-                  (*ppStaticDefaultItem)->ISA(SfxSetItem)) )
-            {
-                SfxPoolItemArrayBase_Impl::iterator ppHtArr = (*ppItemArr)->begin();
-                for ( size_t n = (*ppItemArr)->size(); n; --n, ++ppHtArr )
-                    if ( *ppHtArr && !(*ppHtArr)->GetRefCount() )
-                    {
-                         DELETEZ(*ppHtArr);
-                    }
-            }
-        }
-    }
-
-    ppItemArr = pImp->ppPoolItems;
-
-    for ( nArrCnt = GetSize_Impl();
-          nArrCnt;
-          --nArrCnt, ++ppItemArr )
-    {
-        if ( *ppItemArr )
-        {
-            SfxPoolItemArrayBase_Impl::iterator ppHtArr = (*ppItemArr)->begin();
-            for ( size_t n = (*ppItemArr)->size(); n; --n, ++ppHtArr )
-                if ( *ppHtArr && !(*ppHtArr)->GetRefCount() )
-                    DELETEZ( *ppHtArr );
-        }
-    }
-}
-
-// ----------------------------------------------------------------------
-
 void SfxItemPool::SetPoolDefaultItem(const SfxPoolItem &rItem)
 {
     DBG_CHKTHIS(SfxItemPool, 0);

@@ -376,101 +376,6 @@ void Window::SetHelpId( const rtl::OString& id )
     GetWindow()->SetHelpId( id );
 }
 
-const rtl::OString& Window::GetHelpId() const
-{
-    return GetWindow()->GetHelpId();
-}
-
-void Window::EnterWait ()
-{
-    GetWindow()->EnterWait ();
-}
-void Window::LeaveWait ()
-{
-    GetWindow()->LeaveWait ();
-}
-bool Window::IsWait () const
-{
-    return GetWindow()->IsWait ();
-}
-
-bool Window::IsVisible () const
-{
-    if (GetWindow ())
-        return GetWindow()->IsVisible ();
-    return false;
-}
-
-bool Window::HasChildPathFocus (bool systemWindow) const
-{
-    return GetWindow()->HasChildPathFocus (systemWindow);
-}
-
-void Window::SetPosPixel (Point const&)
-{
-}
-
-Point Window::GetPosPixel () const
-{
-    return Point ();
-}
-
-void Window::SetSizePixel (Size const&)
-{
-}
-
-void Window::SetPosSizePixel (Point const&, Size const&)
-{
-}
-
-Size Window::GetSizePixel () const
-{
-    return Size ();
-}
-
-// void Window::Enable (bool enable, bool child);
-// {
-//     GetWindow ()->Enable (enable, child);
-// }
-
-// void Window::Disable (bool child)
-// {
-//     GetWindow ()->Disable (child);
-// }
-
-bool Window::IsEnabled () const
-{
-    return GetWindow ()->IsEnabled ();
-//     if (getImpl().mxWindow.is ())
-//         return getImpl ().mxWindow->isEnabled ();
-//     return false;
-}
-
-void Window::EnableInput (bool enable, bool child)
-{
-    GetWindow ()->EnableInput (enable, child);
-}
-
-bool Window::IsInputEnabled () const
-{
-    return GetWindow ()->IsInputEnabled ();
-}
-
-bool Window::HasFocus () const
-{
-    return GetWindow ()->HasFocus ();
-}
-
-Font& Window::GetFont () const
-{
-    return const_cast <Font&> (GetWindow ()->GetFont ());
-}
-
-void Window::SetFont (Font const& font)
-{
-    GetWindow ()->SetFont (font);
-}
-
 void Window::Invalidate (sal_uInt8 flags)
 {
     GetWindow ()->Invalidate (flags);
@@ -541,52 +446,6 @@ static const ToolkitVclPropsMap toolkitVclPropsMap[] =
 static const int toolkitVclPropsMapLen =
     sizeof( toolkitVclPropsMap ) / sizeof( ToolkitVclPropsMap );
 
-void Window::SetStyle( WinBits nStyle )
-{
-    uno::Reference< awt::XVclWindowPeer > xPeer = mpImpl->mxVclPeer;
-    for (int i = 0; i < toolkitVclPropsMapLen; i++)
-    {
-        if ( toolkitVclPropsMap[ i ].propName )
-        {
-            short nValue;
-            if ( nStyle & toolkitVclPropsMap[ i ].vclStyle )
-                nValue = toolkitVclPropsMap[ i ].enableProp;
-            else
-                nValue = toolkitVclPropsMap[ i ].disableProp;
-            uno::Any aValue;
-            if ( toolkitVclPropsMap[ i ].isBoolean )
-                aValue = uno::makeAny( (bool) nValue );
-            else
-                aValue = uno::makeAny( (short) nValue );
-            mpImpl->setProperty( toolkitVclPropsMap[ i ].propName, aValue );
-        }
-    }
-}
-
-WinBits Window::GetStyle()
-{
-    uno::Reference< awt::XVclWindowPeer > xPeer = mpImpl->mxVclPeer;
-    WinBits ret = 0;
-    for (int i = 0; i < toolkitVclPropsMapLen; i++)
-    {
-        if ( toolkitVclPropsMap[ i ].propName )
-        {
-            short nValue = 0;
-            if ( toolkitVclPropsMap[ i ].isBoolean )
-            {
-                bool bValue = false;
-                mpImpl->getProperty( toolkitVclPropsMap[ i ].propName ) >>= bValue;
-                nValue = bValue ? 1 : 0;
-            }
-            else
-                mpImpl->getProperty( toolkitVclPropsMap[ i ].propName ) >>= nValue;
-            if ( nValue == toolkitVclPropsMap[ i ].enableProp )
-                ret |= toolkitVclPropsMap[i].vclStyle;
-        }
-    }
-    return ret;
-}
-
 /* Unpleasant way to get an xToolkit pointer ... */
 uno::Reference< awt::XToolkit > getToolkit()
 {
@@ -616,13 +475,6 @@ PeerHandle Window::CreatePeer( Window *parent, WinBits nStyle, const char *pName
     return layoutimpl::WidgetFactory::createWidget (getToolkit(), parent->GetPeer(), OUString::createFromAscii( pName ), nWinAttrbs);
 }
 
-void Window::Enable( bool bEnable )
-{
-    if ( !getImpl().mxWindow.is() )
-        return;
-    getImpl().mxWindow->setEnable( bEnable );
-}
-
 void Window::Show( bool bVisible )
 {
     if ( !getImpl().mxWindow.is() )
@@ -637,51 +489,9 @@ void Window::Show( bool bVisible )
     }
 }
 
-void Window::GrabFocus()
-{
-    if ( !getImpl().mxWindow.is() )
-        return;
-    getImpl().mxWindow->setFocus();
-}
-
-void Window::SetUpdateMode(bool mode)
-{
-    GetWindow()->SetUpdateMode( mode );
-}
-
-void Window::SetPointer( Pointer const& pointer )
-{
-    GetWindow()->SetPointer( pointer );
-}
-
-Pointer const& Window::GetPointer() const
-{
-    return GetWindow()->GetPointer();
-}
-
 void Window::SetText( OUString const& str )
 {
     GetWindow()->SetText( str );
-}
-
-String Window::GetText() const
-{
-    return GetWindow()->GetText();
-}
-
-sal_Int32 Window::GetCtrlTextWidth (OUString const&) const
-{
-    return 0;
-}
-
-sal_Int32 Window::GetTextHeight () const
-{
-    return 0;
-}
-
-Size Window::LogicToPixel( Size const& size, MapMode const&) const
-{
-    return size;
 }
 
 ControlImpl::ControlImpl (Context *context, const PeerHandle &peer, Window *window)
@@ -1099,8 +909,6 @@ TabControl::~TabControl ()
 void TabControl::InsertPage (sal_uInt16 id, OUString const& title, sal_uInt16 pos)
 {
     (void) pos;
-//    GetTabControl ()->InsertPage (id, title, pos);
-//    GetTabControl ()->SetTabPage (id, new ::TabPage (GetTabControl ()));
 
     MX_TABCONTROL->insertTab ();
     SetCurPageId (id);
@@ -1177,9 +985,6 @@ Link& TabControl::GetDeactivatePageHdl () const
 void TabControl::SetTabPageSizePixel (Size const& size)
 {
     GetTabControl ()->SetTabPageSizePixel (size);
-//    GetParent()->SetSizePixel (size);
-//    GetWindow()->SetSizePixel (size);
-    //GetVCLXTabControl->SetTabSize (size);
 }
 Size TabControl::GetTabPageSizePixel () const
 {

@@ -95,24 +95,4 @@ const SfxPoolItem* SfxItemIter::NextItem()
     return 0;
 }
 
-// --------------------------------------------------------------------------
-
-
-const SfxPoolItem* SfxItemIter::PrevItem()
-{
-    DBG_CHKTHIS(SfxItemIter, 0);
-    SfxItemArray ppFnd = _rSet._aItems;
-
-    if ( _nAkt > _nStt )
-    {
-        do {
-            --_nAkt;
-        } while( _nAkt && !*(ppFnd + _nAkt ));
-        return *(ppFnd+_nAkt);
-    }
-    return 0;
-}
-
-
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

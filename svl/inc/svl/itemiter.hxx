@@ -56,7 +56,6 @@ public:
     const SfxPoolItem* GetCurItem()
                        { return _rSet._nCount ? *(_rSet._aItems+_nAkt) : 0; }
     const SfxPoolItem* NextItem();
-    const SfxPoolItem* PrevItem();
 
     sal_Bool               IsAtStart() const { return _nAkt == _nStt; }
     sal_Bool               IsAtEnd() const   { return _nAkt == _nEnd; }

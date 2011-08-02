@@ -71,7 +71,6 @@
 #include "unx/pspgraphics.h"
 #include "unx/salvd.h"
 
-#include "salcvt.hxx"
 #include "gcach_xpeer.hxx"
 #include "xrender_peer.hxx"
 #include "impfont.hxx"

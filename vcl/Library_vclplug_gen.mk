@@ -98,7 +98,6 @@ $(eval $(call gb_Library_add_exception_objects,vclplug_gen,\
     vcl/unx/generic/gdi/gcach_xpeer \
     vcl/unx/generic/gdi/pspgraphics \
     vcl/unx/generic/gdi/salbmp \
-    vcl/unx/generic/gdi/salcvt \
     vcl/unx/generic/gdi/salgdi2 \
     vcl/unx/generic/gdi/salgdi3 \
     vcl/unx/generic/gdi/salgdi \
