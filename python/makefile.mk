@@ -56,7 +56,8 @@ PATCH_FILES=\
     Python-2.6.1-urllib.patch \
     Python-2.6.1-sysbase.patch \
     Python-2.6.1-nohardlink.patch \
-    Python-2.6.1-py2422.patch
+    Python-2.6.1-py2422.patch \
+    Python-2.6.1-py4768.patch
 
 CONFIGURE_DIR=
 

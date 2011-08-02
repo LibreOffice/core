@@ -1,0 +1,11 @@
+--- misc/Python-2.6.1/Lib/email/encoders.py
++++ misc/build/Python-2.6.1/Lib/email/encoders.py
+@@ -42,7 +42,7 @@
+     Also, add an appropriate Content-Transfer-Encoding header.
+     """
+     orig = msg.get_payload()
+-    encdata = _bencode(orig)
++    encdata = str(_bencode(orig)).encode('ascii')
+     msg.set_payload(encdata)
+     msg['Content-Transfer-Encoding'] = 'base64'
+ 
