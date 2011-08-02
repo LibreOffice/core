@@ -318,6 +318,8 @@ XMLREADERLIB=-lxmlreader
 # dependencies, recursively. Start from the bottom of the dependency
 # stack. This is experimental and obviously incomplete.
 
+SALLIB+=-lsal_textenc
+
 UCBHELPERLIB+=$(SALHELPERLIB)
 
 UNOTOOLSLIB+=$(I18NISOLANGLIB)
