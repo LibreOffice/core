@@ -56,6 +56,7 @@ $(eval $(call gb_Library_add_linked_static_libs,visioimport,\
 
 $(eval $(call gb_Library_use_externals,visioimport,\
 	wpd \
+	wpg \
 	visio \
 ))
 

@@ -33,6 +33,11 @@ $(eval $(call gb_StaticLibrary_set_include,writerperfect,\
     -I$(realpath $(SRCDIR)/writerperfect/source) \
 ))
 
+$(echo $(call gb_StaticLibrary_use_externals,writerperfect,\
+	wpd \
+	wpg \
+))
+
 $(eval $(call gb_StaticLibrary_add_api,writerperfect,\
     offapi \
     udkapi \
