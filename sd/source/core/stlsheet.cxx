@@ -1017,7 +1017,11 @@ void SAL_CALL SdStyleSheet::setParentStyle( const OUString& rParentName  ) throw
     {
         const SfxStyles& rStyles = mxPool->GetStyles();
 
-            for( SfxStyles::const_iterator iter( rStyles.begin() ); iter != rStyles.end(); ++iter )
+        /* Use reverse iterator to find the parents quicker - most probably its inserted recently.
+         * Also avoids/fixes the issue n#708518
+         * To fix it completely its probably wiser to compare this->GetName() and pStyle->GetName() or use complete names for styles (?)
+         */
+        for( SfxStyles::const_reverse_iterator iter( rStyles.rbegin() ); iter != rStyles.rend(); ++iter )
         {
             SdStyleSheet* pStyle = static_cast< SdStyleSheet* >( (*iter).get() );
             if( pStyle && (pStyle->nFamily == nFamily) && (pStyle->msApiName == rParentName) )
