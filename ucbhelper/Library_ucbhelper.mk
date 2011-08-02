@@ -34,8 +34,8 @@ $(eval $(call gb_Library_add_precompiled_header,ucbhelper,$(SRCDIR)/ucbhelper/in
 
 $(eval $(call gb_Library_set_include,ucbhelper,\
 	$$(INCLUDE) \
-	-I$(SRCDIR)/ucbhelper/inc \
-	-I$(SRCDIR)/ucbhelper/inc/pch \
+	-I$(realpath $(SRCDIR)/ucbhelper/inc) \
+	-I$(realpath $(SRCDIR)/ucbhelper/inc/pch) \
 ))
 
 $(eval $(call gb_Library_add_defs,ucbhelper,\
