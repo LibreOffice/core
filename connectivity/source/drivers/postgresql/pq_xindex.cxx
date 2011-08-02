@@ -1,0 +1,267 @@
+/*************************************************************************
+ *
+ *  $RCSfile: pq_xindex.cxx,v $
+ *
+ *  $Revision: 1.1.2.1 $
+ *
+ *  last change: $Author: jbu $ $Date: 2004/06/10 15:27:01 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Joerg Budischewski
+ *
+ *   Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *   All Rights Reserved.
+ *
+ *   Contributor(s): Joerg Budischewski
+ *
+ *
+ ************************************************************************/
+
+#include <rtl/ustrbuf.hxx>
+
+#include <cppuhelper/typeprovider.hxx>
+#include <cppuhelper/queryinterface.hxx>
+
+#include <com/sun/star/beans/PropertyAttribute.hpp>
+
+#include <com/sun/star/sdbc/XRow.hpp>
+#include <com/sun/star/sdbc/XParameters.hpp>
+
+#include "pq_xindex.hxx"
+#include "pq_xindexcolumns.hxx"
+#include "pq_tools.hxx"
+#include "pq_statics.hxx"
+
+using osl::MutexGuard;
+using osl::Mutex;
+
+using rtl::OUString;
+using rtl::OUStringBuffer;
+
+using com::sun::star::container::XNameAccess;
+using com::sun::star::container::XIndexAccess;
+using com::sun::star::container::ElementExistException;
+using com::sun::star::container::NoSuchElementException;
+
+using com::sun::star::uno::Reference;
+using com::sun::star::uno::Exception;
+using com::sun::star::uno::UNO_QUERY;
+using com::sun::star::uno::XInterface;
+using com::sun::star::uno::Sequence;
+using com::sun::star::uno::Any;
+using com::sun::star::uno::makeAny;
+using com::sun::star::uno::Type;
+using com::sun::star::uno::RuntimeException;
+
+using com::sun::star::lang::IllegalArgumentException;
+using com::sun::star::lang::IndexOutOfBoundsException;
+
+using com::sun::star::beans::XPropertySetInfo;
+using com::sun::star::beans::XFastPropertySet;
+using com::sun::star::beans::XMultiPropertySet;
+using com::sun::star::beans::XPropertySet;
+using com::sun::star::beans::Property;
+
+using com::sun::star::sdbc::XResultSet;
+using com::sun::star::sdbc::XPreparedStatement;
+using com::sun::star::sdbc::XStatement;
+using com::sun::star::sdbc::XParameters;
+using com::sun::star::sdbc::XRow;
+using com::sun::star::sdbc::SQLException;
+
+namespace pq_sdbc_driver
+{
+#define ASCII_STR(x) OUString( RTL_CONSTASCII_USTRINGPARAM( x ) )
+
+Index::Index( const ::rtl::Reference< RefCountedMutex > & refMutex,
+          const Reference< com::sun::star::sdbc::XConnection > & connection,
+          ConnectionSettings *pSettings,
+          const rtl::OUString & schemaName,
+          const rtl::OUString & tableName )
+    : ReflectionBase(
+        getStatics().refl.index.implName,
+        getStatics().refl.index.serviceNames,
+        refMutex,
+        connection,
+        pSettings,
+        * getStatics().refl.index.pProps ),
+      m_schemaName( schemaName ),
+      m_tableName( tableName )
+{}
+
+Reference< XPropertySet > Index::createDataDescriptor(  ) throw (RuntimeException)
+{
+    IndexDescriptor * pIndex = new IndexDescriptor(
+        m_refMutex, m_conn, m_pSettings );
+    pIndex->copyValuesFrom( this );
+
+    return Reference< XPropertySet > ( pIndex );
+}
+
+Reference< XNameAccess > Index::getColumns(  ) throw (::com::sun::star::uno::RuntimeException)
+{
+    if( ! m_indexColumns.is() )
+    {
+        Sequence< OUString > columnNames;
+        getPropertyValue( getStatics().PRIVATE_COLUMN_INDEXES ) >>= columnNames;
+        OUString indexName = extractStringProperty( this, getStatics().NAME );
+        m_indexColumns = IndexColumns::create(
+             m_refMutex, m_conn, m_pSettings, m_schemaName,
+             m_tableName, indexName, columnNames );
+    }
+    return m_indexColumns;
+}
+
+Sequence<Type > Index::getTypes() throw( RuntimeException )
+{
+    static cppu::OTypeCollection *pCollection;
+    if( ! pCollection )
+    {
+        MutexGuard guard( osl::Mutex::getGlobalMutex() );
+        if( !pCollection )
+        {
+            static cppu::OTypeCollection collection(
+                getCppuType( (Reference< com::sun::star::sdbcx::XColumnsSupplier> *) 0 ),
+                ReflectionBase::getTypes());
+            pCollection = &collection;
+        }
+    }
+    return pCollection->getTypes();
+}
+
+Sequence< sal_Int8> Index::getImplementationId() throw( RuntimeException )
+{
+    return getStatics().refl.index.implementationId;
+}
+
+Any Index::queryInterface( const Type & reqType ) throw (RuntimeException)
+{
+    Any ret;
+
+    ret = ReflectionBase::queryInterface( reqType );
+    if( ! ret.hasValue() )
+        ret = ::cppu::queryInterface(
+            reqType,
+            static_cast< com::sun::star::sdbcx::XColumnsSupplier * > ( this ) );
+    return ret;
+}
+
+
+//___________________________________________________________________________________
+IndexDescriptor::IndexDescriptor(
+    const ::rtl::Reference< RefCountedMutex > & refMutex,
+    const Reference< com::sun::star::sdbc::XConnection > & connection,
+    ConnectionSettings *pSettings )
+    : ReflectionBase(
+        getStatics().refl.indexDescriptor.implName,
+        getStatics().refl.indexDescriptor.serviceNames,
+        refMutex,
+        connection,
+        pSettings,
+        * getStatics().refl.indexDescriptor.pProps )
+{}
+
+Reference< XPropertySet > IndexDescriptor::createDataDescriptor(  ) throw (RuntimeException)
+{
+    IndexDescriptor * pIndex = new IndexDescriptor(
+        m_refMutex, m_conn, m_pSettings );
+    pIndex->copyValuesFrom( this );
+    return Reference< XPropertySet > ( pIndex );
+}
+
+Reference< XNameAccess > IndexDescriptor::getColumns(  ) throw (::com::sun::star::uno::RuntimeException)
+{
+    if( ! m_indexColumns.is() )
+    {
+        m_indexColumns = IndexColumnDescriptors::create(
+            m_refMutex, m_conn, m_pSettings );
+//         Sequence< OUString > columnNames;
+//         getPropertyValue( getStatics().PRIVATE_COLUMN_INDEXES ) >>= columnNames;
+//         OUString indexName = extractStringProperty( this, getStatics().NAME );
+//         m_indexColumns = IndexColumns::create(
+//              m_refMutex, m_conn, m_pSettings, m_schemaName,
+//              m_tableName, indexName, columnNames );
+    }
+    return m_indexColumns;
+}
+
+Sequence<Type > IndexDescriptor::getTypes() throw( RuntimeException )
+{
+    static cppu::OTypeCollection *pCollection;
+    if( ! pCollection )
+    {
+        MutexGuard guard( osl::Mutex::getGlobalMutex() );
+        if( !pCollection )
+        {
+            static cppu::OTypeCollection collection(
+                getCppuType( (Reference< com::sun::star::sdbcx::XColumnsSupplier> *) 0 ),
+                ReflectionBase::getTypes());
+            pCollection = &collection;
+        }
+    }
+    return pCollection->getTypes();
+}
+
+Sequence< sal_Int8> IndexDescriptor::getImplementationId() throw( RuntimeException )
+{
+    return getStatics().refl.indexDescriptor.implementationId;
+}
+
+Any IndexDescriptor::queryInterface( const Type & reqType ) throw (RuntimeException)
+{
+    Any ret;
+
+    ret = ReflectionBase::queryInterface( reqType );
+    if( ! ret.hasValue() )
+        ret = ::cppu::queryInterface(
+            reqType,
+            static_cast< com::sun::star::sdbcx::XColumnsSupplier * > ( this ) );
+    return ret;
+}
+
+
+
+
+}

@@ -1,0 +1,118 @@
+#include "pq_sequenceresultset.hxx"
+#include "pq_resultsetmetadata.hxx"
+
+#include <com/sun/star/sdbc/XResultSetUpdate.hpp>
+#include <com/sun/star/sdbc/XRowUpdate.hpp>
+
+namespace pq_sdbc_driver
+{
+
+struct UpdateableField
+{
+    UpdateableField( )
+        : isTouched(false)
+    {}
+    com::sun::star::uno::Any value;
+    bool    isTouched;
+};
+
+typedef ::std::vector< UpdateableField , Allocator< UpdateableField > > UpdateableFieldVector;
+
+class UpdateableResultSet :
+        public SequenceResultSet,
+        public com::sun::star::sdbc::XResultSetUpdate,
+        public com::sun::star::sdbc::XRowUpdate
+{
+    ConnectionSettings **m_ppSettings;
+    rtl::OUString m_schema;
+    rtl::OUString m_table;
+    com::sun::star::uno::Sequence< rtl::OUString > m_primaryKey;
+    UpdateableFieldVector m_updateableField;
+    com::sun::star::uno::Reference< com::sun::star::sdbc::XResultSetMetaData > m_meta;
+    bool  m_insertRow;
+
+protected:
+    UpdateableResultSet(
+        const ::rtl::Reference< RefCountedMutex > & mutex,
+        const com::sun::star::uno::Reference< com::sun::star::uno::XInterface > &owner,
+        const com::sun::star::uno::Sequence< rtl::OUString > &colNames,
+        const com::sun::star::uno::Sequence< com::sun::star::uno::Sequence< com::sun::star::uno::Any > > &data,
+        ConnectionSettings **ppSettings,
+        const rtl::OUString &schema,
+        const rtl::OUString &table,
+        const com::sun::star::uno::Sequence< ::rtl::OUString > &primaryKey)
+        : SequenceResultSet( mutex, owner, colNames, data, (*ppSettings)->tc ),
+          m_insertRow( false ),
+          m_primaryKey( primaryKey ),
+          m_table( table ),
+          m_schema( schema ),
+          m_ppSettings( ppSettings )
+    {
+    }
+
+    rtl::OUString buildWhereClause();
+    void checkUpdate( sal_Int32 column );
+
+public:
+    static com::sun::star::uno::Reference< com::sun::star::sdbc::XCloseable > createFromPGResultSet(
+        const ::rtl::Reference< RefCountedMutex > & mutex,
+        const com::sun::star::uno::Reference< com::sun::star::uno::XInterface > &owner,
+        ConnectionSettings **ppSettings,
+        PGresult *result,
+        const rtl::OUString &schema,
+        const rtl::OUString &table,
+        const com::sun::star::uno::Sequence< ::rtl::OUString > &primaryKey );
+
+public: // XInterface
+    virtual void SAL_CALL acquire() throw() { SequenceResultSet::acquire(); }
+    virtual void SAL_CALL release() throw() { SequenceResultSet::release(); }
+    virtual com::sun::star::uno::Any  SAL_CALL queryInterface(
+        const com::sun::star::uno::Type & reqType )
+        throw (com::sun::star::uno::RuntimeException);
+
+public: // XTypeProvider
+    virtual com::sun::star::uno::Sequence< com::sun::star::uno::Type > SAL_CALL getTypes()
+        throw( com::sun::star::uno::RuntimeException );
+    virtual com::sun::star::uno::Sequence< sal_Int8> SAL_CALL getImplementationId()
+        throw( com::sun::star::uno::RuntimeException );
+
+public: // XResultSetUpdate
+    virtual void SAL_CALL insertRow(  ) throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL updateRow(  ) throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL deleteRow(  ) throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL cancelRowUpdates(  ) throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL moveToInsertRow(  ) throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL moveToCurrentRow(  ) throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+
+public: // XRowUpdate
+    virtual void SAL_CALL updateNull( sal_Int32 columnIndex ) throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL updateBoolean( sal_Int32 columnIndex, sal_Bool x ) throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL updateByte( sal_Int32 columnIndex, sal_Int8 x ) throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL updateShort( sal_Int32 columnIndex, sal_Int16 x ) throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL updateInt( sal_Int32 columnIndex, sal_Int32 x ) throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL updateLong( sal_Int32 columnIndex, sal_Int64 x ) throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL updateFloat( sal_Int32 columnIndex, float x ) throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL updateDouble( sal_Int32 columnIndex, double x ) throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL updateString( sal_Int32 columnIndex, const ::rtl::OUString& x ) throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL updateBytes( sal_Int32 columnIndex, const ::com::sun::star::uno::Sequence< sal_Int8 >& x ) throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL updateDate( sal_Int32 columnIndex, const ::com::sun::star::util::Date& x ) throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL updateTime( sal_Int32 columnIndex, const ::com::sun::star::util::Time& x ) throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL updateTimestamp( sal_Int32 columnIndex, const ::com::sun::star::util::DateTime& x ) throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL updateBinaryStream( sal_Int32 columnIndex, const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& x, sal_Int32 length ) throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL updateCharacterStream( sal_Int32 columnIndex, const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& x, sal_Int32 length ) throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL updateObject( sal_Int32 columnIndex, const ::com::sun::star::uno::Any& x ) throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL updateNumericObject( sal_Int32 columnIndex, const ::com::sun::star::uno::Any& x, sal_Int32 scale ) throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+
+public: // XResultSetMetaDataSupplier
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetMetaData > SAL_CALL getMetaData(  )
+        throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+
+
+    static com::sun::star::uno::Sequence< com::sun::star::uno::Type > getStaticTypes( bool updateable )
+        throw( com::sun::star::uno::RuntimeException );
+
+};
+
+
+
+}

@@ -1,0 +1,206 @@
+#include "pq_fakedupdateableresultset.hxx"
+#include <cppuhelper/typeprovider.hxx>
+#include <cppuhelper/queryinterface.hxx>
+
+using osl::MutexGuard;
+
+using rtl::OUString;
+
+using com::sun::star::uno::Reference;
+using com::sun::star::uno::makeAny;
+using com::sun::star::uno::Sequence;
+using com::sun::star::uno::UNO_QUERY;
+using com::sun::star::uno::Any;
+using com::sun::star::uno::Type;
+using com::sun::star::uno::RuntimeException;
+
+using com::sun::star::sdbc::SQLException;
+using com::sun::star::sdbc::XResultSet;
+using com::sun::star::sdbc::XResultSetUpdate;
+using com::sun::star::sdbc::XRowUpdate;
+using com::sun::star::sdbc::XRow;
+using com::sun::star::sdbc::XStatement;
+
+namespace pq_sdbc_driver
+{
+
+FakedUpdateableResultSet::FakedUpdateableResultSet(
+        const ::rtl::Reference< RefCountedMutex > & mutex,
+        const com::sun::star::uno::Reference< com::sun::star::uno::XInterface > &owner,
+        ConnectionSettings **pSettings,
+        PGresult *result,
+        const rtl::OUString &schema,
+        const rtl::OUString &table,
+        const rtl::OUString &aReason )
+    : ResultSet( mutex, owner, pSettings, result, schema, table ),
+      m_aReason( aReason )
+{}
+
+
+com::sun::star::uno::Any  FakedUpdateableResultSet::queryInterface(
+    const com::sun::star::uno::Type & reqType )
+    throw (com::sun::star::uno::RuntimeException)
+{
+    Any ret = ResultSet::queryInterface( reqType );
+    if( ! ret.hasValue() )
+        ret = ::cppu::queryInterface(
+            reqType,
+            static_cast< XResultSetUpdate * > ( this ),
+            static_cast< XRowUpdate * > ( this ) );
+    return ret;
+}
+
+
+com::sun::star::uno::Sequence< com::sun::star::uno::Type > FakedUpdateableResultSet::getTypes()
+        throw( com::sun::star::uno::RuntimeException )
+{
+    static cppu::OTypeCollection *pCollection;
+    if( ! pCollection )
+    {
+        MutexGuard guard( osl::Mutex::getGlobalMutex() );
+        if( !pCollection )
+        {
+            static cppu::OTypeCollection collection(
+                getCppuType( (Reference< XResultSetUpdate> *) 0 ),
+                getCppuType( (Reference< XRowUpdate> *) 0 ),
+                ResultSet::getTypes());
+            pCollection = &collection;
+        }
+    }
+    return pCollection->getTypes();
+
+}
+
+com::sun::star::uno::Sequence< sal_Int8> FakedUpdateableResultSet::getImplementationId()
+        throw( com::sun::star::uno::RuntimeException )
+{
+    static cppu::OImplementationId *pId;
+    if( ! pId )
+    {
+        MutexGuard guard( osl::Mutex::getGlobalMutex() );
+        if( ! pId )
+        {
+            static cppu::OImplementationId id(sal_False);
+            pId = &id;
+        }
+    }
+    return pId->getImplementationId();
+}
+
+void FakedUpdateableResultSet::insertRow(  ) throw (SQLException, RuntimeException)
+{
+    throw SQLException( m_aReason, *this, OUString(),1,Any() );
+}
+
+void FakedUpdateableResultSet::updateRow(  ) throw (SQLException, RuntimeException)
+{
+    throw SQLException( m_aReason, *this, OUString(),1,Any() );
+}
+
+void FakedUpdateableResultSet::deleteRow(  ) throw (SQLException, RuntimeException)
+{
+    throw SQLException( m_aReason, *this, OUString(),1,Any() );
+ }
+
+void FakedUpdateableResultSet::cancelRowUpdates(  ) throw (SQLException, RuntimeException)
+{
+    throw SQLException( m_aReason, *this, OUString(),1,Any() );
+}
+
+void FakedUpdateableResultSet::moveToInsertRow(  ) throw (SQLException, RuntimeException)
+{
+    throw SQLException( m_aReason, *this, OUString(),1,Any() );
+}
+
+void FakedUpdateableResultSet::moveToCurrentRow(  ) throw (SQLException, RuntimeException)
+{
+    throw SQLException( m_aReason, *this, OUString(),1,Any() );
+}
+
+
+void FakedUpdateableResultSet::updateNull( sal_Int32 columnIndex ) throw (SQLException, RuntimeException)
+{
+    throw SQLException( m_aReason, *this, OUString(),1,Any() );
+}
+
+void FakedUpdateableResultSet::updateBoolean( sal_Int32 columnIndex, sal_Bool x ) throw (SQLException, RuntimeException)
+{
+    throw SQLException( m_aReason, *this, OUString(),1,Any() );
+}
+
+void FakedUpdateableResultSet::updateByte( sal_Int32 columnIndex, sal_Int8 x ) throw (SQLException, RuntimeException)
+{
+    throw SQLException( m_aReason, *this, OUString(),1,Any() );
+}
+
+void FakedUpdateableResultSet::updateShort( sal_Int32 columnIndex, sal_Int16 x ) throw (SQLException, RuntimeException)
+{
+    throw SQLException( m_aReason, *this, OUString(),1,Any() );
+}
+
+void FakedUpdateableResultSet::updateInt( sal_Int32 columnIndex, sal_Int32 x ) throw (SQLException, RuntimeException)
+{
+    throw SQLException( m_aReason, *this, OUString(),1,Any() );
+}
+
+void FakedUpdateableResultSet::updateLong( sal_Int32 columnIndex, sal_Int64 x ) throw (SQLException, RuntimeException)
+{
+    throw SQLException( m_aReason, *this, OUString(),1,Any() );
+}
+
+void FakedUpdateableResultSet::updateFloat( sal_Int32 columnIndex, float x ) throw (SQLException, RuntimeException)
+{
+    throw SQLException( m_aReason, *this, OUString(),1,Any() );
+}
+
+void FakedUpdateableResultSet::updateDouble( sal_Int32 columnIndex, double x ) throw (SQLException, RuntimeException)
+{
+    throw SQLException( m_aReason, *this, OUString(),1,Any() );
+}
+
+void FakedUpdateableResultSet::updateString( sal_Int32 columnIndex, const ::rtl::OUString& x ) throw (SQLException, RuntimeException)
+{
+    throw SQLException( m_aReason, *this, OUString(),1,Any() );
+}
+
+void FakedUpdateableResultSet::updateBytes( sal_Int32 columnIndex, const ::com::sun::star::uno::Sequence< sal_Int8 >& x ) throw (SQLException, RuntimeException)
+{
+    throw SQLException( m_aReason, *this, OUString(),1,Any() );
+}
+
+void FakedUpdateableResultSet::updateDate( sal_Int32 columnIndex, const ::com::sun::star::util::Date& x ) throw (SQLException, RuntimeException)
+{
+    throw SQLException( m_aReason, *this, OUString(),1,Any() );
+}
+
+void FakedUpdateableResultSet::updateTime( sal_Int32 columnIndex, const ::com::sun::star::util::Time& x ) throw (SQLException, RuntimeException)
+{
+    throw SQLException( m_aReason, *this, OUString(),1,Any() );
+}
+
+void FakedUpdateableResultSet::updateTimestamp( sal_Int32 columnIndex, const ::com::sun::star::util::DateTime& x ) throw (SQLException, RuntimeException)
+{
+    throw SQLException( m_aReason, *this, OUString(),1,Any() );
+}
+
+void FakedUpdateableResultSet::updateBinaryStream( sal_Int32 columnIndex, const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& x, sal_Int32 length ) throw (SQLException, RuntimeException)
+{
+    throw SQLException( m_aReason, *this, OUString(),1,Any() );
+}
+
+void FakedUpdateableResultSet::updateCharacterStream( sal_Int32 columnIndex, const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& x, sal_Int32 length ) throw (SQLException, RuntimeException)
+{
+    throw SQLException( m_aReason, *this, OUString(),1,Any() );
+}
+
+void FakedUpdateableResultSet::updateObject( sal_Int32 columnIndex, const ::com::sun::star::uno::Any& x ) throw (SQLException, RuntimeException)
+{
+    throw SQLException( m_aReason, *this, OUString(),1,Any() );
+}
+
+void FakedUpdateableResultSet::updateNumericObject( sal_Int32 columnIndex, const ::com::sun::star::uno::Any& x, sal_Int32 scale ) throw (SQLException, RuntimeException)
+{
+    throw SQLException( m_aReason, *this, OUString(),1,Any() );
+}
+
+}

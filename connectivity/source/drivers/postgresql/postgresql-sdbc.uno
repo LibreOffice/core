@@ -1,0 +1,2 @@
+[Bootstrap]
+PQ_LOGLEVEL=NONE
