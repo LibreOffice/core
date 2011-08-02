@@ -629,12 +629,6 @@ sal_uInt16 SdrEdgeObj::ImpCalcEscAngle(SdrObject* pObj, const Point& rPt) const
     }
 }
 
-bool SdrEdgeObj::ImpStripPolyPoints(XPolygon& /*rXP*/) const
-{
-    // fehlende Implementation !!!
-    return sal_False;
-}
-
 XPolygon SdrEdgeObj::ImpCalcObjToCenter(const Point& rStPt, long nEscAngle, const Rectangle& rRect, const Point& rMeeting) const
 {
     XPolygon aXP;

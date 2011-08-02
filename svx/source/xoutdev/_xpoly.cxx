@@ -446,30 +446,6 @@ void XPolygon::CheckReference()
 
 /*************************************************************************
 |*
-|*    XPolygon::SetSize()
-|*
-*************************************************************************/
-
-void XPolygon::SetSize( sal_uInt16 nNewSize )
-{
-    CheckReference();
-    pImpXPolygon->Resize( nNewSize );
-}
-
-/*************************************************************************
-|*
-|*    XPolygon::GetSize()
-|*
-*************************************************************************/
-
-sal_uInt16 XPolygon::GetSize() const
-{
-    pImpXPolygon->CheckPointDelete();
-    return pImpXPolygon->nSize;
-}
-
-/*************************************************************************
-|*
 |*    XPolygon::SetPointCount()
 |*
 *************************************************************************/
@@ -539,28 +515,6 @@ void XPolygon::Insert( sal_uInt16 nPos, const XPolygon& rXPoly )
     memcpy( &(pImpXPolygon->pFlagAry[nPos]),
             rXPoly.pImpXPolygon->pFlagAry,
             nPoints );
-}
-
-/*************************************************************************
-|*
-|*    XPolygon::Insert()
-|*
-*************************************************************************/
-
-void XPolygon::Insert( sal_uInt16 nPos, const Polygon& rPoly )
-{
-    CheckReference();
-    if (nPos>pImpXPolygon->nPoints) nPos=pImpXPolygon->nPoints;
-
-    sal_uInt16 nPoints = rPoly.GetSize();
-
-    pImpXPolygon->InsertSpace( nPos, nPoints );
-
-    sal_uInt16 i;
-    for( i=0; i < nPoints; i++ )
-        pImpXPolygon->pPointAry[i] = rPoly[i];
-
-    // Die Flags sind durch das InsertSpace bereits auf 0 gesetzt
 }
 
 /*************************************************************************
@@ -1073,25 +1027,6 @@ void XPolygon::PointsToBezier(sal_uInt16 nFirst)
 
 /*************************************************************************
 |*
-|*    XPolygon::Translate()
-|*
-|*    Polygon auf den uebergebenen Punkt verschieben
-|*
-*************************************************************************/
-
-void XPolygon::Translate(const Point& rTrans)
-{
-    pImpXPolygon->CheckPointDelete();
-    CheckReference();
-
-    sal_uInt16 nPntCnt = pImpXPolygon->nPoints;
-
-    for (sal_uInt16 i = 0; i < nPntCnt; i++)
-        pImpXPolygon->pPointAry[i] += rTrans;
-}
-
-/*************************************************************************
-|*
 |*    XPolygon::Rotate()
 |*
 |*    Alle Punkte um den Punkt rCenter drehen, Sinus und Cosinus
@@ -1136,28 +1071,6 @@ void XPolygon::Rotate(const Point& rCenter, double fSin, double fCos)
         P.Y() = -(long)floor(fSin * X - fCos * Y + 0.5);
         pImpXPolygon->pPointAry[i] = P + rCenter;
     */
-    }
-}
-
-/*************************************************************************
-|*
-|*    XPolygon::Rotate()
-|*
-|*    Alle Punkte um den Punkt rCenter mit dem Winkel nAngle drehen
-|*    Winkel in 10tel Grad, Wertebereich 0 - 3600
-|*
-*************************************************************************/
-
-void XPolygon::Rotate(const Point& rCenter, sal_uInt16 nAngle)
-{
-    nAngle %= 3600;
-
-    if ( nAngle != 0 )
-    {
-        double fAngle = F_PI * nAngle / 1800;
-        double fSin = sin(fAngle);
-        double fCos = cos(fAngle);
-        Rotate(rCenter, fSin, fCos);
     }
 }
 
@@ -1437,20 +1350,6 @@ XPolyPolygon::XPolyPolygon( sal_uInt16 /*nInitSize*/, sal_uInt16 /*nResize*/ )
     pImpXPolyPolygon = new ImpXPolyPolygon();
 }
 
-
-/*************************************************************************
-|*
-|*    XPolyPolygon::XPolyPolygon()
-|*
-*************************************************************************/
-
-XPolyPolygon::XPolyPolygon( const XPolygon& rXPoly )
-{
-    DBG_CTOR(XPolyPolygon,NULL);
-    pImpXPolyPolygon = new ImpXPolyPolygon();
-    pImpXPolyPolygon->aXPolyList.push_back( new XPolygon( rXPoly ) );
-}
-
 /*************************************************************************
 |*
 |*    XPolyPolygon::XPolyPolygon()
@@ -1462,24 +1361,6 @@ XPolyPolygon::XPolyPolygon( const XPolyPolygon& rXPolyPoly )
     DBG_CTOR(XPolyPolygon,NULL);
     pImpXPolyPolygon = rXPolyPoly.pImpXPolyPolygon;
     pImpXPolyPolygon->nRefCount++;
-}
-
-/*************************************************************************
-|*
-|*    XPolyPolygon::XPolyPolygon()
-|*
-|*    XPolyPolygon aus einen Standard-PolyPolygon erzeugen
-|*
-*************************************************************************/
-
-XPolyPolygon::XPolyPolygon( const PolyPolygon& rPolyPoly )
-{
-    DBG_CTOR(XPolyPolygon,NULL);
-    pImpXPolyPolygon = new ImpXPolyPolygon;
-
-    for (sal_uInt16 i = 0; i < rPolyPoly.Count(); i++)
-        pImpXPolyPolygon->aXPolyList.push_back(
-                                    new XPolygon(rPolyPoly.GetObject(i)) );
 }
 
 /*************************************************************************
@@ -1583,24 +1464,6 @@ XPolygon XPolyPolygon::Remove( sal_uInt16 nPos )
 
 /*************************************************************************
 |*
-|*    XPolyPolygon::Replace()
-|*
-*************************************************************************/
-
-XPolygon XPolyPolygon::Replace( const XPolygon& rXPoly, sal_uInt16 nPos )
-{
-    CheckReference();
-    XPolygon* pXPoly = new XPolygon( rXPoly );
-    XPolygon* pTmpXPoly = pImpXPolyPolygon->aXPolyList[ nPos ];
-    pImpXPolyPolygon->aXPolyList[ nPos ] = pXPoly;
-    XPolygon  aXPoly( *pTmpXPoly );
-    delete pTmpXPoly;
-    return aXPoly;
-}
-
-
-/*************************************************************************
-|*
 |*    XPolyPolygon::GetObject()
 |*
 *************************************************************************/
@@ -1642,30 +1505,6 @@ void XPolyPolygon::Clear()
 sal_uInt16 XPolyPolygon::Count() const
 {
     return (sal_uInt16)(pImpXPolyPolygon->aXPolyList.size());
-}
-
-
-/*************************************************************************
-|*
-|*    XPolyPolygon::Move()
-|*
-*************************************************************************/
-
-void XPolyPolygon::Move( long nHorzMove, long nVertMove )
-{
-    // Diese Abfrage sollte man fuer die DrawEngine durchfuehren
-    if ( !nHorzMove && !nVertMove )
-        return;
-
-    // Referenzcounter beruecksichtigen
-    CheckReference();
-
-    // Punkte verschieben
-    for ( size_t i = 0, n = pImpXPolyPolygon->aXPolyList.size(); i < n; ++i )
-    {
-        XPolygon* pXPoly = pImpXPolyPolygon->aXPolyList[ i ];
-        pXPoly->Move( nHorzMove, nVertMove );
-    }
 }
 
 /*************************************************************************
@@ -1748,22 +1587,6 @@ sal_Bool XPolyPolygon::operator!=( const XPolyPolygon& rXPolyPoly ) const
 
 /*************************************************************************
 |*
-|*    XPolyPolygon::Translate()
-|*
-|*    Alle Polygone auf den uebergebenen Punkt verschieben
-|*
-*************************************************************************/
-
-void XPolyPolygon::Translate(const Point& rTrans)
-{
-    CheckReference();
-
-    for (size_t i = 0; i < Count(); i++)
-        pImpXPolyPolygon->aXPolyList[ i ]->Translate(rTrans);
-}
-
-/*************************************************************************
-|*
 |*    XPolyPolygon::Rotate()
 |*
 |*    Alle Polygone um den Punkt rCenter drehen, Sinus und Cosinus
@@ -1777,93 +1600,6 @@ void XPolyPolygon::Rotate(const Point& rCenter, double fSin, double fCos)
 
     for (size_t i = 0; i < Count(); i++)
         pImpXPolyPolygon->aXPolyList[ i ]->Rotate(rCenter, fSin, fCos);
-}
-
-/*************************************************************************
-|*
-|* Bestimme den linken, unteren Punkt des Polygons und richte das
-|* Polygon so aus, dass dieser Punkt auf dem Index 0 liegt
-|*
-\************************************************************************/
-
-void XPolyPolygon::Rotate20()
-{
-    CheckReference();
-
-    for (size_t i = 0; i < Count(); i++)
-        pImpXPolyPolygon->aXPolyList[ i ]->Rotate20();
-}
-
-/*************************************************************************
-|*
-|*    XPolyPolygon::Rotate()
-|*
-|*    Alle Poylgone um den Punkt rCenter mit dem Winkel nAngle drehen
-|*    Winkel in 10tel Grad, Wertebereich 0 - 3600
-|*
-*************************************************************************/
-
-void XPolyPolygon::Rotate(const Point& rCenter, sal_uInt16 nAngle)
-{
-    nAngle %= 3600;
-
-    if ( nAngle != 0 )
-    {
-        double fAngle = F_PI * nAngle / 1800;
-        double fSin = sin(fAngle);
-        double fCos = cos(fAngle);
-        Rotate(rCenter, fSin, fCos);
-    }
-}
-
-/*************************************************************************
-|*
-|*    XPolyPolygon::Scale()
-|*
-|*    Alle Polygone in X- und/oder Y-Richtung skalieren
-|*
-*************************************************************************/
-
-void XPolyPolygon::Scale(double fSx, double fSy)
-{
-    CheckReference();
-
-    for (size_t i = 0; i < Count(); i++)
-        pImpXPolyPolygon->aXPolyList[ i ]->Scale(fSx, fSy);
-}
-
-/*************************************************************************
-|*
-|*    XPolyPolygon::SlantX()
-|*
-|*    Alle Polygone in X-Richtung um einen beliebigen Winkel kippen,
-|*    bezogen auf eine Referenz-Y-Koordinate
-|*
-*************************************************************************/
-
-void XPolyPolygon::SlantX(long nYRef, double fSin, double fCos)
-{
-    CheckReference();
-
-    for (size_t i = 0; i < Count(); i++)
-        pImpXPolyPolygon->aXPolyList[ i ]->SlantX(nYRef, fSin, fCos);
-}
-
-/*************************************************************************
-|*
-|*    XPolyPolygon::SlantY()
-|*
-|*    Alle Polygone in Y-Richtung um einen beliebigen Winkel kippen,
-|*    bezogen auf eine Referenz-X-Koordinate
-|*
-*************************************************************************/
-
-void XPolyPolygon::SlantY(long nXRef, double fSin, double fCos)
-{
-    CheckReference();
-
-    for (size_t i = 0; i < Count(); i++)
-        pImpXPolyPolygon->aXPolyList[ i ]->SlantY(nXRef, fSin, fCos);
 }
 
 /*************************************************************************

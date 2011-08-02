@@ -211,7 +211,6 @@ protected:
         sal_uIntPtr* pnQuality, SdrEdgeInfoRec* pInfo) const;
     static bool ImpFindConnector(const Point& rPt, const SdrPageView& rPV, SdrObjConnection& rCon, const SdrEdgeObj* pThis, OutputDevice* pOut=NULL);
     sal_uInt16 ImpCalcEscAngle(SdrObject* pObj, const Point& aPt2) const;
-    bool ImpStripPolyPoints(XPolygon& rXP) const; // entfernen ueberfluessiger Punkte
     void ImpSetTailPoint(bool bTail1, const Point& rPt);
     void ImpUndirtyEdgeTrack();  // eventuelle Neuberechnung des Verbindungsverlaufs
     void ImpDirtyEdgeTrack();   // invalidate connector path, so it will be recalculated next time

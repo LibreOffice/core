@@ -93,15 +93,11 @@ public:
 
     ~XPolygon();
 
-    void        SetSize( sal_uInt16 nSize );
-    sal_uInt16      GetSize() const;
-
     void        SetPointCount( sal_uInt16 nPoints );
     sal_uInt16      GetPointCount() const;
 
     void        Insert( sal_uInt16 nPos, const Point& rPt, XPolyFlags eFlags );
     void        Insert( sal_uInt16 nPos, const XPolygon& rXPoly );
-    void        Insert( sal_uInt16 nPos, const Polygon& rPoly );
     void        Remove( sal_uInt16 nPos, sal_uInt16 nCount );
     void        Move( long nHorzMove, long nVertMove );
     Rectangle   GetBoundRect() const;
@@ -128,7 +124,6 @@ public:
     // Transformationen
     void Translate(const Point& rTrans);
     void Rotate(const Point& rCenter, double fSin, double fCos);
-    void Rotate(const Point& rCenter, sal_uInt16 nAngle);
     void Scale(double fSx, double fSy);
     void SlantX(long nYRef, double fSin, double fCos);
     void SlantY(long nXRef, double fSin, double fCos);
@@ -162,9 +157,7 @@ protected:
 
 public:
                     XPolyPolygon( sal_uInt16 nInitSize = 16, sal_uInt16 nResize = 16 );
-                    XPolyPolygon( const XPolygon& rXPoly );
                     XPolyPolygon( const XPolyPolygon& rXPolyPoly );
-                    XPolyPolygon( const PolyPolygon& rPolyPoly);
 
                     ~XPolyPolygon();
 
@@ -173,13 +166,11 @@ public:
     void            Insert( const XPolyPolygon& rXPoly,
                             sal_uInt16 nPos=XPOLYPOLY_APPEND );
     XPolygon        Remove( sal_uInt16 nPos );
-    XPolygon        Replace( const XPolygon& rXPoly, sal_uInt16 nPos );
     const XPolygon& GetObject( sal_uInt16 nPos ) const;
 
     void            Clear();
     sal_uInt16          Count() const;
 
-    void            Move( long nHorzMove, long nVertMove );
     Rectangle       GetBoundRect() const;
 
     const XPolygon& operator[]( sal_uInt16 nPos ) const
@@ -191,14 +182,8 @@ public:
     sal_Bool            operator!=( const XPolyPolygon& rXPolyPoly ) const;
 
     // Transformationen
-    void Translate(const Point& rTrans);
     void Rotate(const Point& rCenter, double fSin, double fCos);
-    void Rotate(const Point& rCenter, sal_uInt16 nAngle);
-    void Scale(double fSx, double fSy);
-    void SlantX(long nYRef, double fSin, double fCos);
-    void SlantY(long nXRef, double fSin, double fCos);
     void Distort(const Rectangle& rRefRect, const XPolygon& rDistortedRect);
-    void Rotate20 ();
 
     // #116512# convert to basegfx::B2DPolyPolygon and return
     basegfx::B2DPolyPolygon getB2DPolyPolygon() const;

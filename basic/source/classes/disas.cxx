@@ -327,17 +327,6 @@ sal_Bool SbiDisas::Fetch()
         return sal_False;
 }
 
-void SbiDisas::Disas( SvStream& r )
-{
-    String aText;
-    nOff = 0;
-    while( DisasLine( aText ) )
-    {
-        ByteString aByteText( aText, gsl_getSystemTextEncoding() );
-        r.WriteLine( aByteText );
-    }
-}
-
 void SbiDisas::Disas( String& r )
 {
     r.Erase();
@@ -521,14 +510,6 @@ void SbiDisas::ResumeOp( String& rText )
         case 1: rText.AppendAscii( "NEXT" ); break;
         case 2: LblOp( rText );
     }
-}
-
-// print Prompt
-// sal_False/TRUE
-void SbiDisas::PromptOp( String& rText )
-{
-    if( nOp1 )
-        rText.AppendAscii( "\"? \"" );
 }
 
 // 0 or 1

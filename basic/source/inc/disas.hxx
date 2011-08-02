@@ -48,7 +48,6 @@ class SbiDisas {
     sal_Bool     Fetch();               // naechster Opcode
 public:
     SbiDisas( SbModule*, const SbiImage* );
-    void Disas( SvStream& );
     void Disas( String& );
                                     // NICHT AUFRUFEN
     void     StrOp( String& );
@@ -58,7 +57,6 @@ public:
     void     LblOp( String& );
     void     ReturnOp( String& );
     void     ResumeOp( String& );
-    void     PromptOp( String& );
     void     CloseOp( String& );
     void     CharOp( String& );
     void     VarOp( String& );
