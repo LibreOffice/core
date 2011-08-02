@@ -65,10 +65,13 @@ $(unoil_CLIDIR)/$(CLI_OOOTYPES_POLICY_ASSEMBLY).dll : \
 		$(unoil_CLIDIR)/cli_oootypes.config \
 		$(unoil_CLIDIR)/cli_oootypes.dll $(OUTDIR)/bin/cliuno.snk
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),AL ,1)
+    # al in mono seems broken and doesn't allow -link with filenames containing path
+	$(GNUCOPY) $(unoil_CLIDIR)/cli_oootypes.config .
 	$(call gb_Helper_abbreviate_dirs, \
-	al -out:$@ \
+	$(AL) -out:$@ \
 		-version:$(CLI_OOOTYPES_POLICY_VERSION) \
 		-keyfile:$(OUTDIR)/bin/cliuno.snk \
-		-link:$<)
+		-link:cli_oootypes.config)
+	rm cli_oootypes.config
 
 # vim:set shiftwidth=4 tabstop=4 noexpandtab:
