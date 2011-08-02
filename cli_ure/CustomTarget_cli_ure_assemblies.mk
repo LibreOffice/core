@@ -16,6 +16,7 @@ $(eval $(call gb_CustomTarget_CustomTarget,cli_ure/source))
 $(call gb_CustomTarget_get_target,cli_ure/source) : \
 	$(call gb_CustomTarget_get_workdir,cli_ure/source)/basetypes/assembly.cs \
 	$(call gb_CustomTarget_get_workdir,cli_ure/source)/native/assembly.cxx \
+	$(call gb_CustomTarget_get_workdir,cli_ure/source)/bootstrap/assembly.cs \
 	$(call gb_CustomTarget_get_workdir,cli_ure/source)/ure/assembly.cs
 
 $(call gb_CustomTarget_get_workdir,cli_ure/source)/basetypes/assembly.cs : \
@@ -29,6 +30,12 @@ $(call gb_CustomTarget_get_workdir,cli_ure/source)/native/assembly.cxx : \
 	$(SRCDIR)/cli_ure/version/version.txt \
 	$(cli_ure_source_MAKEFILE) \
 	| $(call gb_CustomTarget_get_workdir,cli_ure/source)/native/.dir
+
+$(call gb_CustomTarget_get_workdir,cli_ure/source)/bootstrap/assembly.cs : \
+	$(SRCDIR)/cli_ure/source/bootstrap/assembly.cs \
+	$(SRCDIR)/cli_ure/version/version.txt \
+	$(cli_ure_source_MAKEFILE) \
+	| $(call gb_CustomTarget_get_workdir,cli_ure/source)/bootstrap/.dir
 
 $(call gb_CustomTarget_get_workdir,cli_ure/source)/ure/assembly.cs : \
 	$(SRCDIR)/cli_ure/source/ure/assembly.cs \
@@ -45,6 +52,11 @@ $(call gb_CustomTarget_get_workdir,cli_ure/source)/basetypes/assembly.cs :
 $(call gb_CustomTarget_get_workdir,cli_ure/source)/native/assembly.cxx :
 	$(GNUCOPY) $< $@.tmp && \
 	echo '[assembly:System::Reflection::AssemblyVersion( "$(CLI_CPPUHELPER_NEW_VERSION)" )];' >> $@.tmp && \
+	mv $@.tmp $@
+
+$(call gb_CustomTarget_get_workdir,cli_ure/source)/bootstrap/assembly.cs :
+	$(GNUCOPY) $< $@.tmp && \
+	echo '[assembly:System.Reflection.AssemblyVersion( "$(CLI_CPPUHELPER_NEW_VERSION)" )]' >> $@.tmp && \
 	mv $@.tmp $@
 
 $(call gb_CustomTarget_get_workdir,cli_ure/source)/ure/assembly.cs :
