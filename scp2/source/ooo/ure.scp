@@ -439,7 +439,7 @@ File gid_File_Dl_LogUnoUno
     Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
 End
 
-#if defined _MSC_VER
+#if defined _MSC_VER || defined ENABLE_MONO
 File gid_File_Dl_Cli_Uno
     LIB_FILE_BODY;
     Dir = SCP2_URE_DL_DIR;
@@ -449,7 +449,7 @@ File gid_File_Dl_Cli_Uno
 End
 #endif
 
-#if defined _MSC_VER
+#if defined _MSC_VER || defined ENABLE_MONO
 
 File gid_File_Dl_Cli_Ure_Assembly
     TXT_FILE_BODY;
@@ -466,7 +466,7 @@ End
 
 #endif
 
-#if defined _MSC_VER
+#if defined _MSC_VER || defined ENABLE_MONO
 
 File gid_File_Dl_Policy_Cli_Ure_Assembly
     TXT_FILE_BODY;
@@ -483,7 +483,7 @@ End
 
 #endif
 
-#if defined _MSC_VER 
+#if defined _MSC_VER || defined ENABLE_MONO
 
 File gid_File_Dl_Policy_Cli_Ure_Config
     TXT_FILE_BODY;
@@ -495,7 +495,7 @@ End
 
 #endif
 
-#if defined _MSC_VER
+#if defined _MSC_VER || defined ENABLE_MONO
 
 File gid_File_Dl_Cli_Basetypes_Assembly
     TXT_FILE_BODY;
@@ -512,7 +512,7 @@ End
 
 #endif
 
-#if defined _MSC_VER
+#if defined _MSC_VER || defined ENABLE_MONO
 
 File gid_File_Dl_Policy_Cli_Basetypes_Assembly
     TXT_FILE_BODY;
@@ -528,7 +528,7 @@ File gid_File_Dl_Policy_Cli_Basetypes_Assembly
 End
 
 #endif
-#if defined _MSC_VER
+#if defined _MSC_VER || defined ENABLE_MONO
 
 File gid_File_Dl_Policy_Cli_Basetypes_Config
     TXT_FILE_BODY;
@@ -541,7 +541,7 @@ End
 #endif
 
 
-#if defined _MSC_VER
+#if defined _MSC_VER || defined ENABLE_MONO
 
 File gid_File_Dl_Cli_Uretypes_Assembly
     TXT_FILE_BODY;
@@ -558,7 +558,7 @@ End
 
 #endif
 
-#if defined _MSC_VER
+#if defined _MSC_VER || defined ENABLE_MONO
 
 File gid_File_Dl_Policy_Cli_Uretypes_Assembly
     TXT_FILE_BODY;
@@ -575,7 +575,7 @@ End
 
 #endif
 
-#if defined _MSC_VER 
+#if defined _MSC_VER || defined ENABLE_MONO
 
 File gid_File_Dl_Policy_Cli_Uretypes_Config
     TXT_FILE_BODY;
@@ -587,7 +587,7 @@ End
 
 #endif
 
-#if defined _MSC_VER
+#if defined _MSC_VER || defined ENABLE_MONO
 
 File gid_File_Lib_Cli_Cppuhelper_Assembly
     TXT_FILE_BODY;
@@ -604,7 +604,7 @@ End
 
 #endif
 
-#if defined _MSC_VER
+#if defined _MSC_VER || defined ENABLE_MONO
 
 File gid_File_Lib_Policy_Cli_Cppuhelper_Assembly
     TXT_FILE_BODY;
@@ -621,7 +621,7 @@ End
 
 #endif
 
-#if defined _MSC_VER
+#if defined _MSC_VER || defined ENABLE_MONO
 
 File gid_File_Lib_Policy_Cli_Cppuhelper_Config
     TXT_FILE_BODY;
@@ -629,6 +629,33 @@ File gid_File_Lib_Policy_Cli_Cppuhelper_Config
     Name = "cli_cppuhelper.config";
     Dir = SCP2_URE_DL_DIR;
     AssignComponent = gid_File_Lib_Policy_Cli_Cppuhelper_Assembly;
+End
+
+#endif
+
+#ifdef ENABLE_MONO
+
+File gid_File_Lib_Cli_Uno_Glue
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = SCP2_URE_DL_DIR;
+  #ifdef UNX
+    Name = STRING(CONCAT2(libcli_uno_glue,UNXSUFFIX));
+  #else
+    Name = "cli_uno_glue.dll";
+  #endif
+End
+
+File gid_File_Lib_Cli_Uno_Bridge_Assembly
+    TXT_FILE_BODY;
+    Styles = (PACKED, ASSEMBLY);
+    Name = "cli_uno_bridge.dll";
+    Dir = SCP2_URE_DL_DIR;
+    Assemblyname = "cli_uno_bridge";
+    PublicKeyToken = "ce2cb7e279207b9e";
+    Version = "1.0.0.0";
+    Culture = "neutral";
+    Attributes = "0";
 End
 
 #endif
@@ -1050,6 +1077,7 @@ Module gid_Module_Root_Ure_Hidden
             gid_File_Lib_Cli_Cppuhelper_Assembly,
             gid_File_Lib_Policy_Cli_Cppuhelper_Assembly,
             gid_File_Lib_Policy_Cli_Cppuhelper_Config,
+            gid_File_Lib_Cli_Uno_Glue,
             gid_File_Dl_Cppu,
             gid_Unixlink_File_Dl_Cppu,
             gid_File_Dl_Cppuhelper,

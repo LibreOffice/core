@@ -43,6 +43,7 @@ $(eval $(call gb_InstallModule_define_if_set,scp2/ooo,\
 	ENABLE_KDE \
 	ENABLE_KDE4 \
 	ENABLE_LOMENUBAR \
+	ENABLE_MONO \
 	ENABLE_NSPLUGIN \
 	ENABLE_ONLINE_UPDATE \
 	ENABLE_OPENGL \
