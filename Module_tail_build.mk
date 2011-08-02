@@ -1,3 +1,4 @@
+# -*- Mode: makefile; tab-width: 4; indent-tabs-mode: t -*-
 #
 # Version: MPL 1.1 / GPLv3+ / LGPLv3+
 #
@@ -43,4 +44,4 @@ $(eval $(call gb_Module_add_moduledirs,tail_end,\
     writerfilter \
 ))
 
-# vim: set noet ts=4 sw=4:
+# vim: set noet sw=4 ts=4:

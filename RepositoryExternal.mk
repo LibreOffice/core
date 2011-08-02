@@ -1,3 +1,4 @@
+# -*- Mode: makefile; tab-width: 4; indent-tabs-mode: t -*-
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -642,4 +643,5 @@ $(call gb_LinkTarget_add_libs,$(1), \
 )
 
 endef
+
 # vim: set noet sw=4 ts=4:
