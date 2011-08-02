@@ -2,7 +2,7 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 #
-# Copyright 2000, 2010 Oracle and/or its affiliates.
+# Copyright 2000, 2011 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
 #
@@ -25,10 +25,13 @@
 #
 #*************************************************************************
 
-UDK_3_0_0 {
-    global:
-        cppunitTestPlugIn;
+$(eval $(call gb_Package_Package,o3tl_inc,$(SRCDIR)/o3tl/inc))
 
-    local:
-        *;
-};
+$(eval $(call gb_Package_add_file,o3tl_inc,inc/o3tl/compat_functional.hxx,o3tl/compat_functional.hxx))
+$(eval $(call gb_Package_add_file,o3tl_inc,inc/o3tl/cow_wrapper.hxx,o3tl/cow_wrapper.hxx))
+$(eval $(call gb_Package_add_file,o3tl_inc,inc/o3tl/heap_ptr.hxx,o3tl/heap_ptr.hxx))
+$(eval $(call gb_Package_add_file,o3tl_inc,inc/o3tl/lazy_update.hxx,o3tl/lazy_update.hxx))
+$(eval $(call gb_Package_add_file,o3tl_inc,inc/o3tl/range.hxx,o3tl/range.hxx))
+$(eval $(call gb_Package_add_file,o3tl_inc,inc/o3tl/vector_pool.hxx,o3tl/vector_pool.hxx))
+
+# vim: set noet sw=4:
