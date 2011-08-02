@@ -71,11 +71,7 @@ $(eval $(call gb_Library_add_exception_objects,resourcemodel,\
 
 $(eval $(call gb_Library_add_generated_exception_objects,resourcemodel,\
     CustomTarget/writerfilter/source/sprmcodetostr \
-))
-
-$(eval $(call gb_Library_add_generated_cxxobjects,resourcemodel,\
     CustomTarget/writerfilter/source/qnametostr \
-	, $(gb_COMPILERNOOPTFLAGS) $(gb_LinkTarget_EXCEPTIONFLAGS) \
 ))
 
 # vim: set noet sw=4 ts=4:
