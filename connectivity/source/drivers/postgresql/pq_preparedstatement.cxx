@@ -77,6 +77,8 @@
 #include <com/sun/star/sdbc/ResultSetConcurrency.hpp>
 #include <com/sun/star/sdbc/ResultSetType.hpp>
 
+#include <string.h>
+
 using osl::Mutex;
 using osl::MutexGuard;
 

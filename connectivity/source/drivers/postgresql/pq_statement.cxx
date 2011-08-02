@@ -86,6 +86,7 @@
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 
+#include <string.h>
 
 using osl::Mutex;
 using osl::MutexGuard;

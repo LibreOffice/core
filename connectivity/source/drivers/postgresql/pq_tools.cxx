@@ -16,6 +16,7 @@
 #include "pq_statics.hxx"
 
 #include <libpq-fe.h>
+#include <string.h>
 
 using rtl::OUString;
 using rtl::OUStringBuffer;

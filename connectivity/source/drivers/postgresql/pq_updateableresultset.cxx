@@ -12,6 +12,8 @@
 #include "pq_tools.hxx"
 #include "pq_statics.hxx"
 
+#include <string.h>
+
 using osl::MutexGuard;
 
 using rtl::OUString;
