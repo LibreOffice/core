@@ -33,6 +33,7 @@
 #endif
 #include <rtl/memory.h>
 #include <rtl/alloc.h>
+#include "i18nutildllapi.h"
 
 
 /**
@@ -44,14 +45,14 @@
  * @param   [output] newStr
  * @param   [input]  nLen
  */
-inline void SAL_CALL x_rtl_uString_new_WithLength( rtl_uString ** newStr, sal_Int32 nLen, sal_Int32 _refCount = 0 )
+I18NUTIL_DLLPUBLIC inline void SAL_CALL x_rtl_uString_new_WithLength( rtl_uString ** newStr, sal_Int32 nLen, sal_Int32 _refCount = 0 )
 {
   *newStr = (rtl_uString*) rtl_allocateMemory ( sizeof(rtl_uString) + sizeof(sal_Unicode) * nLen);
   (*newStr)->refCount = _refCount;
   (*newStr)->length = nLen;
 }
 
-inline rtl_uString * SAL_CALL x_rtl_uString_new_WithLength( sal_Int32 nLen, sal_Int32 _refCount = 0 )
+I18NUTIL_DLLPUBLIC inline rtl_uString * SAL_CALL x_rtl_uString_new_WithLength( sal_Int32 nLen, sal_Int32 _refCount = 0 )
 {
   rtl_uString *newStr = (rtl_uString*) rtl_allocateMemory ( sizeof(rtl_uString) + sizeof(sal_Unicode) * nLen);
   newStr->refCount = _refCount;
@@ -62,7 +63,7 @@ inline rtl_uString * SAL_CALL x_rtl_uString_new_WithLength( sal_Int32 nLen, sal_
 /**
  * Release <code>rtl_uString</code> regardless its reference count.
  */
-inline void SAL_CALL x_rtl_uString_release( rtl_uString * value )
+I18NUTIL_DLLPUBLIC inline void SAL_CALL x_rtl_uString_release( rtl_uString * value )
 {
   rtl_freeMemory(value);
 }

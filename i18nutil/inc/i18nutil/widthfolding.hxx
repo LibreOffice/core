@@ -31,12 +31,13 @@
 #include <sal/types.h>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <i18nutil/oneToOneMapping.hxx>
+#include "i18nutildllapi.h"
 
 namespace com { namespace sun { namespace star { namespace i18n {
 
 #define WIDTHFOLDNIG_DONT_USE_COMBINED_VU 0x01
 
-class widthfolding
+class I18NUTIL_DLLPUBLIC widthfolding
 {
 public:
     static oneToOneMapping& getfull2halfTable();

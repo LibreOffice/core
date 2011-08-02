@@ -1,3 +1,2 @@
 inu  i18nutil    :   sal cppu offapi NULL
-inu  i18nutil                                   usr1    -   all inu_mkout NULL
-inu  i18nutil\source\utility                    nmake   -   all inu_utility NULL
+inu  i18nutil\prj       nmake   -   all inu_prj NULL

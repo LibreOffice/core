@@ -32,6 +32,7 @@
 #include <com/sun/star/i18n/TransliterationModules.hpp>
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/uno/RuntimeException.hpp>
+#include "i18nutildllapi.h"
 
 namespace com { namespace sun { namespace star { namespace i18n {
 
@@ -71,7 +72,7 @@ struct MappingElement
     sal_Int8 current;
 };
 
-class casefolding
+class I18NUTIL_DLLPUBLIC casefolding
 {
 public:
     static Mapping& getValue(const sal_Unicode* str, sal_Int32 pos, sal_Int32 len, com::sun::star::lang::Locale& aLocale, sal_uInt8 nMappingType) throw (com::sun::star::uno::RuntimeException);

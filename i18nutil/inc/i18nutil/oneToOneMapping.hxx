@@ -30,6 +30,7 @@
 
 #include <utility>
 #include <rtl/ustring.hxx>
+#include "i18nutildllapi.h"
 
 namespace com { namespace sun { namespace star { namespace i18n {
 
@@ -47,12 +48,12 @@ typedef struct _UnicodePairWithFlag
     UnicodePairFlag flag;
 } UnicodePairWithFlag;
 
-class oneToOneMapping
+class I18NUTIL_DLLPUBLIC oneToOneMapping
 {
 private:
     // no copy, no substitution
-    oneToOneMapping( const oneToOneMapping& );
-    oneToOneMapping& operator=( const oneToOneMapping& );
+    I18NUTIL_DLLPRIVATE oneToOneMapping( const oneToOneMapping& );
+    I18NUTIL_DLLPRIVATE oneToOneMapping& operator=( const oneToOneMapping& );
 public:
     oneToOneMapping( OneToOneMappingTable_t *rpTable, const size_t rnSize, const size_t rnUnitSize = sizeof(OneToOneMappingTable_t) );
     virtual ~oneToOneMapping();
@@ -68,14 +69,14 @@ protected:
     size_t                  mnSize;
 };
 
-class oneToOneMappingWithFlag : public oneToOneMapping
+class I18NUTIL_DLLPUBLIC oneToOneMappingWithFlag : public oneToOneMapping
 {
     friend class widthfolding;
 
 private:
     // no copy, no substitution
-    oneToOneMappingWithFlag( const oneToOneMappingWithFlag& );
-    oneToOneMappingWithFlag& operator=( const oneToOneMappingWithFlag& );
+    I18NUTIL_DLLPRIVATE oneToOneMappingWithFlag( const oneToOneMappingWithFlag& );
+    I18NUTIL_DLLPRIVATE oneToOneMappingWithFlag& operator=( const oneToOneMappingWithFlag& );
 public:
     oneToOneMappingWithFlag( UnicodePairWithFlag *rpTableWF, const size_t rnSize, const UnicodePairFlag rnFlag );
     virtual ~oneToOneMappingWithFlag();

@@ -30,6 +30,7 @@
 
 #include <com/sun/star/i18n/UnicodeScript.hpp>
 #include <sal/types.h>
+#include "i18nutildllapi.h"
 
 typedef struct _ScriptTypeList {
     sal_Int16 from;
@@ -37,7 +38,7 @@ typedef struct _ScriptTypeList {
     sal_Int16 value;
 } ScriptTypeList;
 
-class unicode
+class I18NUTIL_DLLPUBLIC unicode
 {
 public:
 
