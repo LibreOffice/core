@@ -35,11 +35,11 @@ $(eval $(call gb_Module_add_targets,sax,\
 	Package_inc \
 ))
 
-ifneq ($(OS),IOS)
 $(eval $(call gb_Module_add_check_targets,sax,\
 	CppunitTest_sax \
 ))
-else
+
+ifeq ($(OS),IOS)
 $(eval $(call gb_Module_add_targets,sax,\
 	Executable_sax_cppunittester_all \
 ))
