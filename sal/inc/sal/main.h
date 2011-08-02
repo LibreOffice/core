@@ -102,6 +102,8 @@ static int sal_main(void);
 
 - (BOOL)application: (UIApplication *) application didFinishLaunchingWithOptions: (NSDictionary *) launchOptions
 {
+  (void) application;
+  (void) launchOptions;
   UIWindow *uiw = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
   uiw.backgroundColor = [UIColor redColor];
   self.window = uiw;
