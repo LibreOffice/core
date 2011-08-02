@@ -176,7 +176,7 @@ SHL2VERSIONMAP=$(SOLARENV)$/src$/component.map
 SLOFILES=       $(LIB1OBJFILES) $(LIB2OBJFILES)
 
 
-DRIVERNAME=postgresql-sdbc-$(PQ_SDBC_MAJOR).$(PQ_SDBC_MINOR).$(PQ_SDBC_MICRO).zip
+DRIVERNAME=postgresql-sdbc-$(PQ_SDBC_MAJOR).$(PQ_SDBC_MINOR).$(PQ_SDBC_MICRO).oxt
 ALLTAR : $(DLLDEST)$/$(DRIVERNAME)
 
 # --- Targets ------------------------------------------------------
@@ -191,18 +191,28 @@ INI_EXT=.ini
 $(DLLDEST)$/$(SHL1TARGET)$(INI_EXT): $(SHL1TARGET)
     +cp $? $@
 
-
 $(DLLDEST)$/$(DRIVERNAME): \
+        $(DLLDEST)$/META-INF$/manifest.xml \
+        $(DLLDEST)$/description.xml \
         $(DLLDEST)$/postgresql.xcu \
         $(DLLDEST)$/$(SHL1TARGET)$(DLLPOST) \
         $(DLLDEST)$/$(SHL2TARGET)$(DLLPOST) \
         $(DLLDEST)$/$(SHL1TARGET)$(INI_EXT)
     +cd $(DLLDEST) && \
         zip -r  $(DRIVERNAME) \
+            META-INF$/manifest.xml \
             $(SHL1TARGET)$(DLLPOST) \
             $(SHL2TARGET)$(DLLPOST) \
             $(SHL1TARGET)$(INI_EXT) \
+            description.xml \
             postgresql.xcu
+
+$(DLLDEST)$/META-INF$/manifest.xml : manifest.xml
+    -mkdir -p $(DLLDEST)$/META-INF
+    +cp $? $@
+
+$(DLLDEST)$/description.xml : description.xml
+    +cp $? $@
 
 $(DLLDEST)$/postgresql.xcu : postgresql.xcu
     -rm -f $@
