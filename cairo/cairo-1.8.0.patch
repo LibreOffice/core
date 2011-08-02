@@ -7,8 +7,8 @@ diff -ur misc/build/cairo-1.8.0.org/build/Makefile.win32.common misc/build/cairo
  
 -PIXMAN_CFLAGS := -I$(top_srcdir)/../pixman/pixman
 -PIXMAN_LIBS := $(top_builddir)/../pixman/pixman/$(CFG)/pixman-1.lib
-+PIXMAN_CFLAGS := -I$(SOLARSRC)/cairo/$(INPATH)/inc
-+PIXMAN_LIBS := $(SOLARSRC)/cairo/$(INPATH)/lib/pixman-1.lib
++PIXMAN_CFLAGS :=  -I../../../../inc
++PIXMAN_LIBS := ../../../../lib/pixman-1.lib
  
  CAIRO_LIBS =  gdi32.lib msimg32.lib user32.lib
  ifeq ($(CAIRO_HAS_PNG_FUNCTIONS),1)
