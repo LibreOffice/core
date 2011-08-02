@@ -3667,7 +3667,7 @@ SwWW8ImplReader::SwWW8ImplReader(sal_uInt8 nVersionPara, SvStorage* pStorage,
 
     mpPostProcessAttrsInfo = 0;
 
-    bNoAttrImport = bPgChpLevel = bEmbeddObj = false;
+    bNoAttrImport = bEmbeddObj = false;
     bAktAND_fNumberAcross = false;
     bNoLnNumYet = true;
     bInHyperlink = false;

@@ -1232,7 +1232,6 @@ private:
     bool bVer7;             //   (7 == nVersion);
     bool bVer8;             //   (8 == nVersion);
 
-    bool bPgChpLevel;       // ChapterLevel of Heading from PageNum
     bool bEmbeddObj;        // EmbeddField gelesen
 
     bool bAktAND_fNumberAcross; // current active Annotated List Deskriptor - ROW flag

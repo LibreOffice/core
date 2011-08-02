@@ -1919,31 +1919,6 @@ eF_ResT SwWW8ImplReader::Read_F_Anz( WW8FieldDesc* pF, String& rStr )
 
 eF_ResT SwWW8ImplReader::Read_F_CurPage( WW8FieldDesc*, String& rStr )
 {
-    // zusaetzlich mit Kapitelnummer?
-    if( bPgChpLevel )
-    {
-        SwChapterField aFld( (SwChapterFieldType*)
-                    rDoc.GetSysFldType( RES_CHAPTERFLD ), CF_NUMBER );
-        aFld.SetLevel( nPgChpLevel );
-        rDoc.InsertPoolItem( *pPaM, SwFmtFld( aFld ), 0 );
-
-        static const sal_Char aDelim[] = "-.:\x97\x96";
-        sal_uInt8 nDelim = nPgChpDelim;
-        if( nDelim > 4 )
-            nDelim = 0;
-
-        sal_Unicode c = ByteString::ConvertToUnicode( aDelim[ nDelim ],
-                                        RTL_TEXTENCODING_MS_1252 );
-        if( '-' == c )
-        {
-            rDoc.InsertString( *pPaM, CHAR_HARDHYPHEN );
-        }
-        else
-        {
-            rDoc.InsertString( *pPaM, c ); // maybe insert ZWNBSP?
-        }
-    }
-
     // Seitennummer
     SwPageNumberField aFld( (SwPageNumberFieldType*)
         rDoc.GetSysFldType( RES_PAGENUMBERFLD ), PG_RANDOM,
