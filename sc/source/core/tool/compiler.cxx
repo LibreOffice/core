@@ -2895,7 +2895,9 @@ sal_Bool ScCompiler::IsNamedRange( const String& rUpperName )
     // try local names first
     bool bGlobal = false;
     ScRangeName* pRangeName = pDoc->GetRangeName(aPos.Tab());
-    const ScRangeData* pData = pRangeName->findByUpperName(rUpperName);
+    const ScRangeData* pData = NULL;
+    if (pRangeName)
+        pData = pRangeName->findByUpperName(rUpperName);
     if (!pData)
     {
         pRangeName = pDoc->GetRangeName();
