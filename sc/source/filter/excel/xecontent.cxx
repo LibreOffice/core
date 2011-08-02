@@ -73,11 +73,6 @@ using ::rtl::OUStringBuffer;
 
 // Shared string table ========================================================
 
-// 1 = SST hash table statistics prompt
-#define EXC_INCL_SST_STATISTICS 0
-
-// ----------------------------------------------------------------------------
-
 /** A single string entry in the hash table. */
 struct XclExpHashEntry
 {
@@ -168,48 +163,6 @@ void XclExpSstImpl::Save( XclExpStream& rStrm )
 {
     if( maStringList.empty() )
         return;
-
-#if (OSL_DEBUG_LEVEL > 1) && EXC_INCL_SST_STATISTICS
-    { // own scope for the statistics
-#define APPENDINT( value ) Append( ByteString::CreateFromInt32( value ) )
-        ScfUInt32Vec aVec;
-        size_t nPerBucket = mnSize / EXC_SST_HASHTABLE_SIZE + 1, nEff = 0;
-        for( XclExpHashTab::const_iterator aTIt = maHashTab.begin(), aTEnd = maHashTab.end(); aTIt != aTEnd; ++aTIt )
-        {
-            size_t nSize = aTIt->size();
-            if( nSize >= aVec.size() ) aVec.resize( nSize + 1, 0 );
-            ++aVec[ nSize ];
-            if( nSize > nPerBucket ) nEff += nSize - nPerBucket;
-        }
-        ByteString aStr( "SST HASHING STATISTICS\n\n" );
-        aStr.Append( "Total count:\t" ).APPENDINT( mnTotal ).Append( " strings\n" );
-        aStr.Append( "Reduced to:\t" ).APPENDINT( mnSize ).Append( " strings (" );
-        aStr.APPENDINT( 100 * mnSize / mnTotal ).Append( "%)\n" );
-        aStr.Append( "Effectivity:\t\t" ).APPENDINT( 100 - 100 * nEff / mnSize );
-        aStr.Append( "% (best: " ).APPENDINT( nPerBucket ).Append( " strings per bucket)\n" );
-        aStr.Append( "\t\tCount of buckets\nBucket size\ttotal\tmax\tTotal strings\n" );
-        for( size_t nIx = 0, nSize = aVec.size(), nInc = 1; nIx < nSize; nIx += nInc )
-        {
-            if( (nIx == 10) || (nIx == 100) || (nIx == 1000) ) nInc = nIx;
-            size_t nMaxIx = ::std::min( nIx + nInc, nSize ), nCount = 0, nMaxCount = 0, nStrings = 0;
-            for( size_t nSubIx = nIx; nSubIx < nMaxIx; ++nSubIx )
-            {
-                nCount += aVec[ nSubIx ];
-                if( aVec[ nSubIx ] > nMaxCount ) nMaxCount = aVec[ nSubIx ];
-                nStrings += nSubIx * aVec[ nSubIx ];
-            }
-            if( nMaxCount )
-            {
-                aStr.APPENDINT( nIx );
-                if( nMaxIx - nIx > 1 ) aStr.Append( '-' ).APPENDINT( nMaxIx - 1 );
-                aStr.Append( "\t\t" ).APPENDINT( nCount ).Append( '\t' ).APPENDINT( nMaxCount );
-                aStr.Append( '\t' ).APPENDINT( nStrings ).Append( '\n' );
-            }
-        }
-        OSL_FAIL( aStr.GetBuffer() );
-#undef APPENDINT
-    }
-#endif
 
     SvMemoryStream aExtSst( 8192 );
 
