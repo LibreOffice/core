@@ -280,10 +280,14 @@ my_components += ldapbe2
 
 .IF "$(WITH_MOZILLA)" != "NO"
 my_components += \
-    xmlsecurity \
-    xsec_fw \
-    xsec_xmlsec \
+    component/xmlsecurity/util/xmlsecurity \
+    component/xmlsecurity/util/xsec_fw \
     pl
+.IF "$(OS)" == "WNT"
+my_components += component/xmlsecurity/util/xsec_xmlsec.windows
+.ELSE
+my_components += component/xmlsecurity/util/xsec_xmlsec
+.END
 .END
 
 .IF "$(OS)" == "MACOSX"

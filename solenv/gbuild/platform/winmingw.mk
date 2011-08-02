@@ -466,6 +466,7 @@ gb_Library_PLAINLIBS_NONE += \
 	$(gb_MINGW_LIBSTDCPP) \
 	$(gb_MINGW_LIBGCC) \
 	advapi32 \
+	crypt32 \
 	d3d9 \
 	d3dx \
 	ddraw \

@@ -23,49 +23,18 @@
 # <http://www.openoffice.org/license.html>
 # for a copy of the LGPLv3 License.
 #
-#***********************************************************************/
-.IF "$(OOO_SUBSEQUENT_TESTS)" == ""
-nothing .PHONY:
-.ELSE 
+#*************************************************************************
 
-PRJ = ../..
-PRJNAME = xmlsecurity
-TARGET = qa_certext
+PRJ=..
+TARGET=prj
 
-ENABLE_EXCEPTIONS = TRUE
+.INCLUDE : settings.mk
 
-.INCLUDE: settings.mk
-.INCLUDE :	$(PRJ)$/util$/target.pmk
+.IF "$(VERBOSE)"!=""
+VERBOSEFLAG :=
+.ELSE
+VERBOSEFLAG := -s
+.ENDIF
 
-CFLAGSCXX += $(CPPUNIT_CFLAGS)
-
-SHL1IMPLIB = i$(SHL1TARGET)
-SHL1OBJS = $(SLOFILES)
-SHL1RPATH = NONE
-SHL1STDLIBS = $(CPPUNITLIB)     \
-              $(SALLIB)         \
-              $(NEON3RDLIB)     \
-              $(CPPULIB)        \
-              $(XMLOFFLIB)      \
-              $(CPPUHELPERLIB)	\
-              $(SVLLIB)			\
-              $(TOOLSLIB)	    \
-              $(COMPHELPERLIB) \
-              $(TESTLIB)
-
-SHL1TARGET = qa_CertExt
-SHL1VERSIONMAP = $(PRJ)/qa/certext/export.map
-DEF1NAME = $(SHL1TARGET)
-
-SLOFILES = $(SLO)/SanCertExt.obj
-
-.INCLUDE: target.mk
-.INCLUDE: installationtest.mk
-
-ALLTAR : cpptest
-
-cpptest : $(SHL1TARGETN)
-
-CPPTEST_LIBRARY = $(SHL1TARGETN)
-
-.END
+all:
+	cd $(PRJ) && $(GNUMAKE) $(VERBOSEFLAG) -r -j$(MAXPROCESS) $(gb_MAKETARGET) && $(GNUMAKE) $(VERBOSEFLAG) -r deliverlog

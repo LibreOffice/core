@@ -41,10 +41,7 @@
 #include "com/sun/star/uno/Reference.hxx"
 
 #include "cppuhelper/bootstrap.hxx"
-#include "cppunit/TestAssert.h"
-#include "cppunit/TestFixture.h"
-#include "cppunit/extensions/HelperMacros.h"
-#include "cppunit/plugin/TestPlugIn.h"
+#include <sal/cppunit.h>
 #include "sal/types.h"
 #include "comphelper/sequence.hxx"
 #include <rtl/ustring.hxx>

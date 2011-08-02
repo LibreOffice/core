@@ -1,12 +1,2 @@
 xs	xmlsecurity	:    TRANSLATIONS:translations xmloff unotools offapi unoil svx MOZ:moz LIBXMLSEC:libxmlsec NSS:nss LIBXSLT:libxslt NEON:neon NULL
-xs	xmlsecurity                                                        usr1	 -	all	xs_mkout	NULL
-xs	xmlsecurity\inc				                                       nmake -	all	xs_inc NULL
-xs	xmlsecurity\source\framework                                       nmake -	all	xs_fw xs_inc NULL
-xs	xmlsecurity\source\xmlsec\nss                                      nmake -	all	xs_nss xs_inc NULL
-xs	xmlsecurity\source\xmlsec\mscrypt                                  nmake -	all	xs_mscrypt xs_inc NULL
-xs	xmlsecurity\source\xmlsec                                          nmake -	all	xs_xmlsec xs_nss xs_mscrypt xs_inc NULL
-xs	xmlsecurity\source\helper                                          nmake -	all	xs_helper xs_inc NULL
-xs	xmlsecurity\source\dialogs                                         nmake -	all	xs_dialogs xs_inc NULL
-xs	xmlsecurity\source\component                                       nmake -	all	xs_component xs_inc NULL
-xs	xmlsecurity\util                                                   nmake -	all	xs_util xs_fw xs_xmlsec xs_nss xs_mscrypt xs_helper xs_dialogs xs_component NULL
-xs	xmlsecurity\qa\certext                                             nmake -	all	xs_certext xs_util NULL
+xs	xmlsecurity\prj				                                       nmake -	all	xs_prj NULL

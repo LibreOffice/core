@@ -149,9 +149,16 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_URE, \
 ))
 
 $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
+	fileacc \
 	mcnttype \
+	neon \
+	nspr4 \
+	nss3 \
+	plc4 \
 	test \
-    fileacc \
+	xmlsecurity \
+	xsec_fw \
+	xsec_xmlsec \
 ))
 
 ifeq ($(OS),WNT)
@@ -226,6 +233,9 @@ $(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
     toolshelpers \
 	vclmain \
 	writerperfect \
+	xmlsec1 \
+	xmlsec1-nss \
+	xmlsec1-mscrypto \
 ))
 
 # vim: set noet sw=4 ts=4:
