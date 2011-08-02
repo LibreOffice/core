@@ -68,7 +68,7 @@ $(POLICY_ASSEMBLY_FILE) : $(BIN)$/cli_uretypes.config $(OUT)$/bin$/cli_uretypes.
     $(WRAPCMD) AL.exe -out:$@ \
             -version:$(CLI_URETYPES_POLICY_VERSION) \
             -keyfile:$(BIN)$/cliuno.snk \
-            -link:$(BIN)$/cli_uretypes.config
+            -link:cli_uretypes.config,$(BIN)$/cli_uretypes.config
 
 #Create the config file that is used with the policy assembly
 $(BIN)$/cli_uretypes.config: cli_uretypes_config $(BIN)$/cliureversion.mk 

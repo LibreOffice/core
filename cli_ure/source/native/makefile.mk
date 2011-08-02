@@ -150,7 +150,7 @@ $(POLICY_ASSEMBLY_FILE) : $(BIN)$/cli_cppuhelper.config
     $(WRAPCMD) $(AL) -out:$@ \
             -version:$(CLI_CPPUHELPER_POLICY_VERSION) \
             -keyfile:$(BIN)$/cliuno.snk \
-            -link:$(BIN)$/cli_cppuhelper.config \
+            -link:cli_cppuhelper.config,$(BIN)$/cli_cppuhelper.config \
             -platform:x86
 
 #Create the config file that is used with the policy assembly
