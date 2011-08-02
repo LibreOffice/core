@@ -143,6 +143,7 @@
 #include <com/sun/star/drawing/ProjectionMode.hpp>
 #include "svx/EnhancedCustomShape2d.hxx"
 #include <rtl/strbuf.hxx>
+#include <boost/scoped_array.hpp>
 
 using namespace ::com::sun::star    ;
 using namespace ::com::sun::star::drawing;
@@ -4126,16 +4127,14 @@ void SvxMSDffManager::MSDFFReadZString( SvStream& rIn, String& rStr,
     sal_uInt16 nLen = (sal_uInt16)nRecLen;
     if( nLen )
     {
-        if ( bUniCode )
-            nLen >>= 1;
-
         String sBuf;
-        sal_Unicode* pBuf = sBuf.AllocBuffer( nLen );
 
         if( bUniCode )
         {
-            rIn.Read( (sal_Char*)pBuf, nLen << 1 );
+            nLen >>= 1;
 
+            sal_Unicode* pBuf = sBuf.AllocBuffer(nLen);
+            rIn.Read( (sal_Char*)pBuf, nLen << 1 );
 #ifdef OSL_BIGENDIAN
             for( sal_uInt16 n = 0; n < nLen; ++n, ++pBuf )
                 *pBuf = SWAPSHORT( *pBuf );
@@ -4143,12 +4142,9 @@ void SvxMSDffManager::MSDFFReadZString( SvStream& rIn, String& rStr,
         }
         else
         {
-            // use the String-Data as buffer for the 8bit characters and
-            // change then all to unicode
-            sal_Char* pReadPos = ((sal_Char*)pBuf) + nLen;
-            rIn.Read( (sal_Char*)pReadPos, nLen );
-            for( sal_uInt16 n = 0; n < nLen; ++n, ++pBuf, ++pReadPos )
-                *pBuf = ByteString::ConvertToUnicode( *pReadPos, RTL_TEXTENCODING_MS_1252 );
+            boost::scoped_array<sal_Char> xBuffer(new sal_Char[nLen]);
+            nLen = rIn.Read(xBuffer.get(), nLen);
+            sBuf = rtl::OUString(xBuffer.get(), nLen, RTL_TEXTENCODING_MS_1252);
         }
 
         rStr = sBuf.EraseTrailingChars( 0 );
