@@ -371,26 +371,11 @@ void X11SalGraphics::DrawCairoAAFontString( const ServerFontLayout& rLayout )
 
     ServerFont& rFont = rLayout.GetServerFont();
 
-    cairo_font_face_t* font_face = NULL;
-
     void* pFace = rFont.GetFtFace();
     CairoFontsCache::CacheId aId;
     aId.mpFace = pFace;
     aId.mpOptions = rFont.GetFontOptions().get();
     aId.mbEmbolden = rFont.NeedsArtificialBold();
-    font_face = (cairo_font_face_t*)m_aCairoFontsCache.FindCachedFont(aId);
-    if (!font_face)
-    {
-        const ImplFontOptions *pOptions = rFont.GetFontOptions().get();
-        void *pPattern = pOptions ? pOptions->GetPattern(pFace, aId.mbEmbolden) : NULL;
-        if (pPattern)
-            font_face = cairo_ft_font_face_create_for_pattern(reinterpret_cast<FcPattern*>(pPattern));
-        if (!font_face)
-            font_face = cairo_ft_font_face_create_for_ft_face(reinterpret_cast<FT_Face>(pFace), rFont.GetLoadFlags());
-        m_aCairoFontsCache.CacheFont(font_face, aId);
-    }
-
-    cairo_set_font_face(cr, font_face);
 
     cairo_matrix_t m;
     const ImplFontSelectData& rFSD = rFont.GetFontSelData();
@@ -408,6 +393,20 @@ void X11SalGraphics::DrawCairoAAFontString( const ServerFontLayout& rLayout )
 
         size_t nStartIndex = std::distance(aStart, aI);
         size_t nLen = std::distance(aI, aNext);
+
+        aId.mbVerticalMetrics = nGlyphRotation != 0.0;
+        cairo_font_face_t* font_face = (cairo_font_face_t*)m_aCairoFontsCache.FindCachedFont(aId);
+        if (!font_face)
+        {
+            const ImplFontOptions *pOptions = rFont.GetFontOptions().get();
+            void *pPattern = pOptions ? pOptions->GetPattern(pFace, aId.mbEmbolden, aId.mbVerticalMetrics) : NULL;
+            if (pPattern)
+                font_face = cairo_ft_font_face_create_for_pattern(reinterpret_cast<FcPattern*>(pPattern));
+            if (!font_face)
+                font_face = cairo_ft_font_face_create_for_ft_face(reinterpret_cast<FT_Face>(pFace), rFont.GetLoadFlags());
+            m_aCairoFontsCache.CacheFont(font_face, aId);
+        }
+        cairo_set_font_face(cr, font_face);
 
         cairo_set_font_size(cr, nHeight);
 

@@ -72,11 +72,13 @@ public:
         const void *mpFace;
         const void *mpOptions;
         bool mbEmbolden;
+        bool mbVerticalMetrics;
         bool operator ==(const CacheId& rOther) const
         {
             return mpFace == rOther.mpFace &&
                 mpOptions == rOther.mpOptions &&
-                mbEmbolden == rOther.mbEmbolden;
+                mbEmbolden == rOther.mbEmbolden &&
+                mbVerticalMetrics == rOther.mbVerticalMetrics;
         }
     };
 private:

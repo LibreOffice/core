@@ -870,13 +870,17 @@ public:
     {
         FcPatternDestroy(mpPattern);
     }
-    virtual void *GetPattern(void * face, bool bEmbolden) const
+    virtual void *GetPattern(void * face, bool bEmbolden, bool bVerticalLayout) const
     {
         FcValue value;
         value.type = FcTypeFTFace;
         value.u.f = face;
+        FcPatternDel(mpPattern, FC_FT_FACE);
         FcPatternAdd (mpPattern, FC_FT_FACE, value, FcTrue);
+        FcPatternDel(mpPattern, FC_EMBOLDEN);
         FcPatternAddBool(mpPattern, FC_EMBOLDEN, bEmbolden ? FcTrue : FcFalse);
+        FcPatternDel(mpPattern, FC_VERTICAL_LAYOUT);
+        FcPatternAddBool(mpPattern, FC_VERTICAL_LAYOUT, bVerticalLayout ? FcTrue : FcFalse);
         return mpPattern;
     }
     FcPattern* mpPattern;
