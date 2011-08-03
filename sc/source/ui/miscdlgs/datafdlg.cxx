@@ -286,13 +286,13 @@ IMPL_LINK( ScDataFormDlg, Impl_NewHdl, PushButton*, EMPTYARG )
     ScDocShell* pDocSh = pViewData->GetDocShell();
     if ( pDoc )
     {
-        sal_Bool bHasData = false;
+        bool bHasData = false;
         boost::ptr_vector<Edit>::iterator itr = maEdits.begin(), itrEnd = maEdits.end();
         for(; itr != itrEnd; ++itr)
             if (!boost::is_null(itr))
                 if ( (*itr).GetText().Len() != 0 )
                 {
-                    bHasData = sal_True;
+                    bHasData = true;
                     break;
                 }
 

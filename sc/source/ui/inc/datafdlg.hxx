@@ -73,7 +73,7 @@ private:
     SCROW           nStartRow;
     SCROW           nEndRow;
     SCTAB           nTab;
-    sal_Bool            bNoSelection;
+    bool            bNoSelection;
 
     boost::ptr_vector<FixedText> maFixedTexts;
     boost::ptr_vector<Edit> maEdits;
