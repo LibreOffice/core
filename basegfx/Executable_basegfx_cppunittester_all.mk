@@ -46,7 +46,6 @@ $(eval $(call gb_Executable_add_linked_libs,basegfx_cppunittester_all, \
     sal \
     sal_textenc \
     $(gb_STDLIBS) \
-	objc \
 ))
 
 $(eval $(call gb_Executable_use_externals,basegfx_cppunittester_all, \
