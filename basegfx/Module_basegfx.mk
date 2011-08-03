@@ -43,4 +43,10 @@ $(eval $(call gb_Module_add_check_targets,basegfx,\
 	CppunitTest_basegfx \
 ))
 
+ifeq ($(OS),IOS)
+$(eval $(call gb_Module_add_targets,basegfx,\
+	Executable_basegfx_cppunittester_all \
+))
+endif
+
 # vim: set noet sw=4 ts=4:
