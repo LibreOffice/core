@@ -33,10 +33,10 @@ $(eval $(call gb_StaticLibrary_add_package_headers,basegfx_s,basegfx_inc))
 $(eval $(call gb_StaticLibrary_add_precompiled_header,basegfx_s,$(SRCDIR)/basegfx/inc/pch/precompiled_basegfx))
 
 $(eval $(call gb_StaticLibrary_set_include,basegfx_s,\
-	-I$(SRCDIR)/basegfx/inc \
-	-I$(SRCDIR)/basegfx/source/inc \
+	-I$(realpath $(SRCDIR)/basegfx/inc) \
+	-I$(realpath $(SRCDIR)/basegfx/source/inc) \
 	$$(INCLUDE) \
-	-I$(SRCDIR)/basegfx/inc/pch \
+	-I$(realpath $(SRCDIR)/basegfx/inc/pch) \
 	-I$(OUTDIR)/inc \
 ))
 

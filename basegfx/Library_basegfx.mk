@@ -33,9 +33,9 @@ $(eval $(call gb_Library_add_package_headers,basegfx,basegfx_inc))
 $(eval $(call gb_Library_add_precompiled_header,basegfx,$(SRCDIR)/basegfx/inc/pch/precompiled_basegfx))
 
 $(eval $(call gb_Library_set_include,basegfx,\
-	-I$(SRCDIR)/basegfx/inc \
-	-I$(SRCDIR)/basegfx/source/inc \
-	-I$(SRCDIR)/basegfx/inc/pch \
+	-I$(realpath $(SRCDIR)/basegfx/inc) \
+	-I$(realpath $(SRCDIR)/basegfx/source/inc) \
+	-I$(realpath $(SRCDIR)/basegfx/inc/pch) \
 	$$(INCLUDE) \
 ))
 
