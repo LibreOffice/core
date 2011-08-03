@@ -519,7 +519,7 @@ PropertySetRegistry::openPropertySet( const OUString& key, sal_Bool create )
                 }
             }
 
-            OSL_FAIL( "PropertySetRegistry::openPropertySet - Error!" );
+            OSL_TRACE( "PropertySetRegistry::openPropertySet no root access" );
         }
     }
 
@@ -546,14 +546,6 @@ void SAL_CALL PropertySetRegistry::removePropertySet( const OUString& key )
         Reference< XChangesBatch > xBatch(
                             getConfigWriteAccess( OUString() ), UNO_QUERY );
         Reference< XNameContainer > xContainer( xBatch, UNO_QUERY );
-
-        OSL_ENSURE( xBatch.is(),
-                    "PropertySetRegistry::removePropertySet - "
-                    "No batch!" );
-
-        OSL_ENSURE( xContainer.is(),
-                    "PropertySetRegistry::removePropertySet - "
-                    "No conteiner!" );
 
         if ( xBatch.is() && xContainer.is() )
         {
@@ -588,7 +580,7 @@ void SAL_CALL PropertySetRegistry::removePropertySet( const OUString& key )
         return;
     }
 
-    OSL_FAIL( "PropertySetRegistry::removePropertySet - Error!" );
+    OSL_TRACE( "PropertySetRegistry::removePropertySet - no root access" );
 }
 
 //=========================================================================
@@ -1065,16 +1057,11 @@ Reference< XMultiServiceFactory > PropertySetRegistry::getConfigProvider()
                                 OUString(RTL_CONSTASCII_USTRINGPARAM(
                                     "com.sun.star.configuration."
                                     "ConfigurationProvider" )) ),
-                            UNO_QUERY );
-
-                    OSL_ENSURE( m_pImpl->m_xConfigProvider.is(),
-                                "PropertySetRegistry::getConfigProvider - "
-                                "No config provider!" );
-
+                            UNO_QUERY_THROW );
                 }
                 catch (const Exception&)
                 {
-                    OSL_FAIL( "PropertySetRegistry::getConfigProvider - "
+                    OSL_TRACE( "PropertySetRegistry::getConfigProvider - "
                                 "caught exception!" );
                 }
             }
@@ -1141,7 +1128,7 @@ Reference< XInterface > PropertySetRegistry::getRootConfigReadAccess()
         return Reference< XInterface >();
     }
 
-    OSL_FAIL( "PropertySetRegistry::getRootConfigReadAccess - Error!" );
+    OSL_TRACE( "PropertySetRegistry::getRootConfigReadAccess - Error!" );
     return Reference< XInterface >();
 }
 

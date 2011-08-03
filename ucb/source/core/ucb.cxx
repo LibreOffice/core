@@ -790,7 +790,7 @@ bool UniversalContentBroker::configureUcb()
     ContentProviderDataList aData;
     if (!getContentProviderData(aKey1, aKey2, aData))
     {
-        OSL_FAIL("UniversalContentBroker::configureUcb(): No configuration");
+        OSL_TRACE("UniversalContentBroker::configureUcb(): No configuration");
         return false;
     }
 
@@ -916,14 +916,14 @@ bool UniversalContentBroker::getContentProviderData(
     }
     catch (const uno::RuntimeException&)
     {
-        OSL_FAIL( "UniversalContentBroker::getContentProviderData - caught RuntimeException!" );
+        OSL_TRACE( "UniversalContentBroker::getContentProviderData - caught RuntimeException!" );
         return false;
     }
     catch (const uno::Exception&)
     {
         // createInstance, createInstanceWithArguments
 
-        OSL_FAIL( "UniversalContentBroker::getContentProviderData - caught Exception!" );
+        OSL_TRACE( "UniversalContentBroker::getContentProviderData - caught Exception!" );
         return false;
     }
 
