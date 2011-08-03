@@ -104,8 +104,6 @@ namespace avmedia
 
         public:
 
-            void            update();
-
             void            setPosSize( const Rectangle& rRect );
 
             void            setPointer( const Pointer& rPointer );

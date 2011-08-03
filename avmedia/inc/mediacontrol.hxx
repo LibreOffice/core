@@ -70,7 +70,6 @@ public:
     const Size&         getMinSizePixel() const;
 
     void                setState( const MediaItem& rItem );
-    void                getState( MediaItem& rItem ) const;
 
 protected:
 

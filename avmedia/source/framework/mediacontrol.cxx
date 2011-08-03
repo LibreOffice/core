@@ -291,25 +291,6 @@ void MediaControl::setState( const MediaItem& rItem )
 
 // ------------------------------------------------------------------------------
 
-void MediaControl::getState( MediaItem& rItem ) const
-{
-    rItem.merge( maItem );
-}
-
-// ------------------------------------------------------------------------------
-
-void MediaControl::update()
-{
-}
-
-// ------------------------------------------------------------------------------
-
-void MediaControl::execute( const MediaItem& )
-{
-}
-
-// ------------------------------------------------------------------------------
-
 void MediaControl::implUpdateToolboxes()
 {
     const bool bValidURL = ( maItem.getURL().getLength() > 0 );

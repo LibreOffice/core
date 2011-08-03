@@ -88,44 +88,16 @@ namespace avmedia
         Window*             getWindow() const;
 
         void                setPosSize( const Rectangle& rNewRect );
-        Rectangle           getPosSize() const;
 
         void                setPointer( const Pointer& rPointer );
-        const Pointer&      getPointer() const;
-
-        bool                setZoom( ::com::sun::star::media::ZoomLevel eLevel );
-        ::com::sun::star::media::ZoomLevel  getZoom() const;
 
         bool                start();
-        void                stop();
-
-        bool                isPlaying() const;
-
-        double              getDuration() const;
-
-        void                setMediaTime( double fTime );
-        double              getMediaTime() const;
-
-        void                setStopTime( double fTime );
-        double              getStopTime() const;
-
-        void                setRate( double fRate );
-        double              getRate() const;
-
-        void                setPlaybackLoop( bool bSet );
-        bool                isPlaybackLoop() const;
-
-        void                setMute( bool bSet );
-        bool                isMute() const;
 
         void                updateMediaItem( MediaItem& rItem ) const;
         void                executeMediaItem( const MediaItem& rItem );
 
         void                show();
         void                hide();
-
-        void                enable();
-        void                disable();
 
     public:
 

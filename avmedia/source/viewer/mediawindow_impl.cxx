@@ -280,16 +280,6 @@ void MediaWindowImpl::onURLChanged()
 
 // ---------------------------------------------------------------------
 
-void MediaWindowImpl::update()
-{
-    uno::Reference< media::XPlayerWindow > xPlayerWindow( getPlayerWindow() );
-
-    if( xPlayerWindow.is() )
-        xPlayerWindow->update();
-}
-
-// ---------------------------------------------------------------------
-
 void MediaWindowImpl::setPosSize( const Rectangle& rRect )
 {
     SetPosSizePixel( rRect.TopLeft(), rRect.GetSize() );

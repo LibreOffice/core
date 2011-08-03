@@ -170,13 +170,6 @@ void MediaWindow::setPosSize( const Rectangle& rNewRect )
 
 // -------------------------------------------------------------------------
 
-Rectangle MediaWindow::getPosSize() const
-{
-    return Rectangle( mpImpl->GetPosPixel(), mpImpl->GetSizePixel() );
-}
-
-// -------------------------------------------------------------------------
-
 void MediaWindow::setPointer( const Pointer& rPointer )
 {
     if( mpImpl )
@@ -185,127 +178,9 @@ void MediaWindow::setPointer( const Pointer& rPointer )
 
 // -------------------------------------------------------------------------
 
-const Pointer& MediaWindow::getPointer() const
-{
-    return mpImpl->getPointer();
-}
-
-// -------------------------------------------------------------------------
-
-bool MediaWindow::setZoom( ::com::sun::star::media::ZoomLevel eLevel )
-{
-    return( mpImpl != NULL && mpImpl->setZoom( eLevel ) );
-}
-
-// -------------------------------------------------------------------------
-
-::com::sun::star::media::ZoomLevel MediaWindow::getZoom() const
-{
-    return mpImpl->getZoom();
-}
-
-// -------------------------------------------------------------------------
-
 bool MediaWindow::start()
 {
     return( mpImpl != NULL && mpImpl->start() );
-}
-
-// -------------------------------------------------------------------------
-
-void MediaWindow::stop()
-{
-    if( mpImpl )
-        mpImpl->stop();
-}
-
-// -------------------------------------------------------------------------
-
-bool MediaWindow::isPlaying() const
-{
-    return( mpImpl != NULL && mpImpl->isPlaying() );
-}
-
-// -------------------------------------------------------------------------
-
-double MediaWindow::getDuration() const
-{
-    return mpImpl->getDuration();
-}
-
-// -------------------------------------------------------------------------
-
-void MediaWindow::setMediaTime( double fTime )
-{
-    if( mpImpl )
-        mpImpl->setMediaTime( fTime );
-}
-
-// -------------------------------------------------------------------------
-
-double MediaWindow::getMediaTime() const
-{
-    return mpImpl->getMediaTime();
-}
-
-// -------------------------------------------------------------------------
-
-void MediaWindow::setStopTime( double fTime )
-{
-    if( mpImpl )
-        mpImpl->setStopTime( fTime );
-}
-
-// -------------------------------------------------------------------------
-
-double MediaWindow::getStopTime() const
-{
-    return mpImpl->getStopTime();
-}
-
-// -------------------------------------------------------------------------
-
-void MediaWindow::setRate( double fRate )
-{
-    if( mpImpl )
-        mpImpl->setRate( fRate );
-}
-
-// -------------------------------------------------------------------------
-
-double MediaWindow::getRate() const
-{
-    return mpImpl->getRate();
-}
-
-// -------------------------------------------------------------------------
-
-void MediaWindow::setPlaybackLoop( bool bSet )
-{
-    if( mpImpl )
-        mpImpl->setPlaybackLoop( bSet );
-}
-
-// -------------------------------------------------------------------------
-
-bool MediaWindow::isPlaybackLoop() const
-{
-    return mpImpl->isPlaybackLoop();
-}
-
-// -------------------------------------------------------------------------
-
-void MediaWindow::setMute( bool bSet )
-{
-    if( mpImpl )
-        mpImpl->setMute( bSet );
-}
-
-// -------------------------------------------------------------------------
-
-bool MediaWindow::isMute() const
-{
-    return mpImpl->isMute();
 }
 
 // -------------------------------------------------------------------------
@@ -338,22 +213,6 @@ void MediaWindow::hide()
 {
     if( mpImpl )
         mpImpl->Hide();
-}
-
-// -------------------------------------------------------------------------
-
-void MediaWindow::enable()
-{
-    if( mpImpl )
-        mpImpl->Enable();
-}
-
-// -------------------------------------------------------------------------
-
-void MediaWindow::disable()
-{
-    if( mpImpl )
-        mpImpl->Disable();
 }
 
 // -------------------------------------------------------------------------
