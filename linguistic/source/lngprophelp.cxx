@@ -806,9 +806,18 @@ PropertyHelper_Spelling::PropertyHelper_Spelling(
     xPropHelper = pInst;
 }
 
+PropertyHelper_Spelling::~PropertyHelper_Spelling()
+{
+}
+
 void PropertyHelper_Spelling::AddAsPropListener()
 {
     pInst->AddAsPropListener();
+}
+
+void PropertyHelper_Spelling::RemoveAsPropListener()
+{
+    pInst->RemoveAsPropListener();
 }
 
 void PropertyHelper_Spelling::SetTmpPropVals( const com::sun::star::beans::PropertyValues &rPropVals )
@@ -846,8 +855,6 @@ sal_Bool PropertyHelper_Spelling::removeLinguServiceEventListener(
 {
     return pInst->removeLinguServiceEventListener( rxListener );
 }
-
-
 
 }   // namespace linguistic
 
