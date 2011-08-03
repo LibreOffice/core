@@ -150,7 +150,6 @@ public:
     SfxObjectShellArr_Impl*     pObjShells;
     ResMgr*                     pSfxResManager;
     ResMgr*                     pOfaResMgr;
-    SimpleResMgr*               pSimpleResManager;
     SfxBasicManagerHolder*      pBasicManager;
     SfxBasicManagerCreationListener*
                                 pBasMgrListener;

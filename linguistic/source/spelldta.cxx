@@ -55,59 +55,7 @@ using ::rtl::OUString;
 namespace linguistic
 {
 
-
-
 #define MAX_PROPOSALS   40
-
-Reference< XSpellAlternatives > MergeProposals(
-            Reference< XSpellAlternatives > &rxAlt1,
-            Reference< XSpellAlternatives > &rxAlt2)
-{
-    Reference< XSpellAlternatives > xMerged;
-
-    if (!rxAlt1.is())
-        xMerged = rxAlt2;
-    else if (!rxAlt2.is())
-        xMerged = rxAlt1;
-    else
-    {
-        sal_Int32 nAltCount1 = rxAlt1->getAlternativesCount();
-        Sequence< OUString > aAlt1( rxAlt1->getAlternatives() );
-        const OUString *pAlt1 = aAlt1.getConstArray();
-
-        sal_Int32 nAltCount2 = rxAlt2->getAlternativesCount();
-        Sequence< OUString > aAlt2( rxAlt2->getAlternatives() );
-        const OUString *pAlt2 = aAlt2.getConstArray();
-
-        sal_Int32 nCountNew = Min( nAltCount1 + nAltCount2, (sal_Int32) MAX_PROPOSALS );
-        Sequence< OUString > aAltNew( nCountNew );
-        OUString *pAltNew = aAltNew.getArray();
-
-        sal_Int32 nIndex = 0;
-        sal_Int32 i = 0;
-        for (int j = 0;  j < 2;  j++)
-        {
-            sal_Int32           nCount  = j == 0 ? nAltCount1 : nAltCount2;
-            const OUString  *pAlt   = j == 0 ? pAlt1 : pAlt2;
-            for (i = 0;  i < nCount  &&  nIndex < MAX_PROPOSALS;  i++)
-            {
-                if (pAlt[i].getLength())
-                    pAltNew[ nIndex++ ] = pAlt[ i ];
-            }
-        }
-        DBG_ASSERT(nIndex == nCountNew, "lng : wrong number of proposals");
-
-        SpellAlternatives *pSpellAlt = new SpellAlternatives;
-        pSpellAlt->SetWordLanguage( rxAlt1->getWord(),
-                            LocaleToLanguage( rxAlt1->getLocale() ) );
-        pSpellAlt->SetFailureType( rxAlt1->getFailureType() );
-        pSpellAlt->SetAlternatives( aAltNew );
-        xMerged = pSpellAlt;
-    }
-
-    return xMerged;
-}
-
 
 sal_Bool SeqHasEntry(
         const Sequence< OUString > &rSeq,

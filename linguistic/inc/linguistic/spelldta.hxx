@@ -49,16 +49,6 @@ namespace com { namespace sun { namespace star {
 namespace linguistic
 {
 
-///////////////////////////////////////////////////////////////////////////
-
-::com::sun::star::uno::Reference<
-    ::com::sun::star::linguistic2::XSpellAlternatives >
-        MergeProposals(
-                ::com::sun::star::uno::Reference<
-                    ::com::sun::star::linguistic2::XSpellAlternatives > &rxAlt1,
-                ::com::sun::star::uno::Reference<
-                    ::com::sun::star::linguistic2::XSpellAlternatives > &rxAlt2 );
-
 ::com::sun::star::uno::Sequence< ::rtl::OUString >
         MergeProposalSeqs(
                 ::com::sun::star::uno::Sequence< ::rtl::OUString > &rAlt1,

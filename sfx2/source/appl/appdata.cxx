@@ -121,7 +121,6 @@ SfxAppData_Impl::SfxAppData_Impl( SfxApplication* ) :
     , pObjShells(0)
     , pSfxResManager(0)
     , pOfaResMgr(0)
-    , pSimpleResManager(0)
     , pBasicManager( new SfxBasicManagerHolder )
     , pBasMgrListener( new SfxBasicManagerCreationListener( *this ) )
     , pViewFrame( 0 )

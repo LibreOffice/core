@@ -530,15 +530,6 @@ ResMgr* SfxApplication::GetSfxResManager()
     return SfxResId::GetResMgr();
 }
 
-//--------------------------------------------------------------------
-
-SimpleResMgr* SfxApplication::GetSimpleResManager()
-{
-    if ( !pAppData_Impl->pSimpleResManager )
-        pAppData_Impl->pSimpleResManager = CreateSimpleResManager();
-    return pAppData_Impl->pSimpleResManager;
-}
-
 //------------------------------------------------------------------------
 
 void SfxApplication::SetProgress_Impl

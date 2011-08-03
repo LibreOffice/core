@@ -102,84 +102,11 @@ LocaleDataWrapper & GetLocaleDataWrapper( sal_Int16 nLang )
     return aLclDtaWrp;
 }
 
-
-/**
-    returns text-encoding used for ByteString unicode String conversion
- */
-rtl_TextEncoding GetTextEncoding( sal_Int16 nLanguage )
-{
-    DBG_ASSERT( nLanguage != LANGUAGE_NONE, "invalid language argument" );
-    static sal_Int16 nLastLanguage = LANGUAGE_NONE;
-
-    // set default value for unknown languages
-    static rtl_TextEncoding nEncoding = RTL_TEXTENCODING_DONTKNOW;
-
-    if (nLastLanguage != nLanguage)
-    {
-        //!! IPR uses textencodings Latin-1, Latin-2, Latin-5 and Latin-7 !!
-
-        nLastLanguage = nLanguage;
-        switch (nLanguage)
-        {
-            case LANGUAGE_GERMAN :
-            case LANGUAGE_GERMAN_SWISS :
-            case LANGUAGE_ENGLISH_US :
-            case LANGUAGE_ENGLISH_UK :
-            case LANGUAGE_FRENCH :
-            case LANGUAGE_ITALIAN :
-            case LANGUAGE_SPANISH :
-            case LANGUAGE_CATALAN :
-            case LANGUAGE_PORTUGUESE :
-            case LANGUAGE_PORTUGUESE_BRAZILIAN :
-            case LANGUAGE_DANISH :
-            case LANGUAGE_DUTCH :
-            case LANGUAGE_SWEDISH :
-            case LANGUAGE_FINNISH :
-            case LANGUAGE_NORWEGIAN_BOKMAL :
-            case LANGUAGE_NORWEGIAN_NYNORSK :
-            case LANGUAGE_AFRIKAANS :
-            case LANGUAGE_ENGLISH_EIRE :
-            case LANGUAGE_ENGLISH_AUS :
-#ifdef WNT
-                    nEncoding = RTL_TEXTENCODING_MS_1252;   break;
-#else
-                    nEncoding = RTL_TEXTENCODING_ISO_8859_1;   break;
-#endif
-            case LANGUAGE_CZECH :
-            case LANGUAGE_HUNGARIAN :
-            case LANGUAGE_POLISH :
-#ifdef WNT
-                    nEncoding = RTL_TEXTENCODING_MS_1250;   break;
-#else
-                    nEncoding = RTL_TEXTENCODING_ISO_8859_2;   break;
-#endif
-            case LANGUAGE_RUSSIAN :
-#ifdef WNT
-                    nEncoding = RTL_TEXTENCODING_MS_1251;   break;
-#else
-                    nEncoding = RTL_TEXTENCODING_ISO_8859_5;   break;
-#endif
-            case LANGUAGE_GREEK :
-#ifdef WNT
-                    nEncoding = RTL_TEXTENCODING_MS_1253;   break;
-#else
-                    nEncoding = RTL_TEXTENCODING_ISO_8859_7;   break;
-#endif
-            default:
-                    DBG_ASSERT( 0, "unexpected language" );
-        }
-    }
-
-    return nEncoding;
-}
-
-
 static inline sal_Int32 Minimum( sal_Int32 n1, sal_Int32 n2, sal_Int32 n3 )
 {
     sal_Int32 nMin = n1 < n2 ? n1 : n2;
     return nMin < n3 ? nMin : n3;
 }
-
 
 class IntArray2D
 {
@@ -479,21 +406,6 @@ Locale CreateLocale( LanguageType eLang )
         return MsLangId::convertLanguageToLocale( eLang );
 
     return aLocale;
-}
-
-uno::Sequence< Locale > LangSeqToLocaleSeq( const uno::Sequence< sal_Int16 > &rLangSeq )
-{
-    const sal_Int16 *pLang = rLangSeq.getConstArray();
-    sal_Int32 nCount = rLangSeq.getLength();
-
-    uno::Sequence< Locale > aLocales( nCount );
-    Locale *pLocale = aLocales.getArray();
-    for (sal_Int32 i = 0;  i < nCount;  ++i)
-    {
-        LanguageToLocale( pLocale[i], pLang[ i ] );
-    }
-
-    return aLocales;
 }
 
 uno::Sequence< sal_Int16 >

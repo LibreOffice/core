@@ -71,21 +71,6 @@ sal_Bool FileExists( const String &rMainURL )
     return bExists;
 }
 
-
-rtl::OUString StripTrailingChars( rtl::OUString &rTxt, sal_Unicode cChar )
-{
-    sal_Int32 nTrailing = 0;
-    sal_Int32 nTxtLen = rTxt.getLength();
-    sal_Int32 nIdx = nTxtLen - 1;
-    while (nIdx >= 0 && rTxt[ nIdx-- ] == cChar)
-        ++nTrailing;
-
-    rtl::OUString aRes( rTxt.copy( nTxtLen - nTrailing ) );
-    rTxt = rTxt.copy( 0, nTxtLen - nTrailing );
-    return aRes;
-}
-
-
 static uno::Sequence< rtl::OUString > GetMultiPaths_Impl(
     const rtl::OUString &rPathPrefix,
     sal_Int16 nPathFlags )
@@ -166,11 +151,6 @@ uno::Sequence< rtl::OUString > GetDictionaryPaths( sal_Int16 nPathFlags )
     return GetMultiPaths_Impl( A2OU("Dictionary"), nPathFlags );
 }
 
-uno::Sequence< rtl::OUString > GetLinguisticPaths( sal_Int16 nPathFlags )
-{
-    return GetMultiPaths_Impl( A2OU("Linguistic"), nPathFlags );
-}
-
 String  GetWritableDictionaryURL( const String &rDicName )
 {
     // new user writable dictionaries should be created in the 'writable' path
@@ -190,50 +170,6 @@ String  GetWritableDictionaryURL( const String &rDicName )
     return aURLObj.GetMainURL( INetURLObject::NO_DECODE );
 }
 
-
-String SearchFileInPaths(
-    const String &rFile,
-    const uno::Sequence< rtl::OUString > &rPaths )
-{
-    //!! see also SvtPathOptions::SearchFile for the riginal code
-
-    String aRes;
-
-    // check in all paths...
-    const sal_Int32 nPaths = rPaths.getLength();
-    for (sal_Int32 k = 0;  k < nPaths;  ++k)
-    {
-        sal_Bool bIsURL = sal_True;
-        INetURLObject aObj( rPaths[k] );
-        if ( aObj.HasError() )
-        {
-            bIsURL = sal_False;
-            String aURL;
-            if ( utl::LocalFileHelper::ConvertPhysicalNameToURL( rPaths[k], aURL ) )
-                aObj.SetURL( aURL );
-        }
-
-        xub_StrLen i, nCount = rFile.GetTokenCount( '/' );
-        for ( i = 0; i < nCount; ++i )
-            aObj.insertName( rFile.GetToken( i, '/' ) );
-        bool bRet = ::utl::UCBContentHelper::Exists( aObj.GetMainURL( INetURLObject::NO_DECODE ) );
-
-        if ( bRet )
-        {
-            if ( !bIsURL )
-                ::utl::LocalFileHelper::ConvertURLToPhysicalName(
-                                    aObj.GetMainURL( INetURLObject::NO_DECODE ), aRes );
-            else
-                aRes = aObj.GetMainURL( INetURLObject::NO_DECODE );
-            break;
-        }
-    }
-
-    return aRes;
-}
-
-
 }   // namespace linguistic
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

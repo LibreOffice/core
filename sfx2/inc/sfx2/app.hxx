@@ -164,7 +164,6 @@ public:
     // Resource Manager
     SfxResourceManager&         GetResourceManager() const;
     ResMgr*                     GetSfxResManager();
-    SimpleResMgr*               GetSimpleResManager();
     static ResMgr*              CreateResManager( const char *pPrefix );
     SimpleResMgr*               CreateSimpleResManager();
 

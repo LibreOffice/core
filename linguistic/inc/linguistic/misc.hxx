@@ -80,7 +80,7 @@ namespace linguistic
 #define A2OU(x) ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( x ))
 
 /// Flags to be used with the multi-path related functions
-/// @see GetDictionaryPaths, GetLinguisticPaths
+/// @see GetDictionaryPaths
 #define PATH_FLAG_INTERNAL  0x01
 #define PATH_FLAG_USER      0x02
 #define PATH_FLAG_WRITABLE  0x04
@@ -99,10 +99,6 @@ LNG_DLLPUBLIC ::osl::Mutex& GetLinguMutex();
 
 LocaleDataWrapper & GetLocaleDataWrapper( sal_Int16 nLang );
 
-rtl_TextEncoding GetTextEncoding( sal_Int16 nLanguage );
-
-rtl::OUString StripTrailingChars( rtl::OUString &rTxt, sal_Unicode cChar );
-
 sal_Int32 LevDistance( const rtl::OUString &rTxt1, const rtl::OUString &rTxt2 );
 
 ::com::sun::star::lang::Locale
@@ -113,9 +109,6 @@ LNG_DLLPUBLIC LanguageType
 
 ::com::sun::star::lang::Locale&
     LanguageToLocale( ::com::sun::star::lang::Locale& rLocale, LanguageType eLang );
-
-::com::sun::star::uno::Sequence< ::com::sun::star::lang::Locale >
-    LangSeqToLocaleSeq( const ::com::sun::star::uno::Sequence< sal_Int16 > &rLangSeq );
 
 ::com::sun::star::uno::Sequence< sal_Int16 >
     LocaleSeqToLangSeq( ::com::sun::star::uno::Sequence<
@@ -131,16 +124,10 @@ sal_Bool    FileExists( const String &rURL );
 
 ::rtl::OUString     GetDictionaryWriteablePath();
 ::com::sun::star::uno::Sequence< ::rtl::OUString > GetDictionaryPaths( sal_Int16 nPathFlags = PATH_FLAG_ALL );
-::com::sun::star::uno::Sequence< ::rtl::OUString > GetLinguisticPaths( sal_Int16 nPathFlags = PATH_FLAG_ALL );
 
 /// @returns an URL for a new and writable dictionary rDicName.
 ///     The URL will point to the path given by 'GetDictionaryWriteablePath'
 LNG_DLLPUBLIC String  GetWritableDictionaryURL( const String &rDicName );
-
-// looks for the specified file in the list of paths.
-// In case of multiple occurrences only the first found is returned.
-String     SearchFileInPaths( const String &rFile, const ::com::sun::star::uno::Sequence< ::rtl::OUString > &rPaths );
-
 
 LNG_DLLPUBLIC sal_Int32 GetPosInWordToCheck( const rtl::OUString &rTxt, sal_Int32 nPos );
 

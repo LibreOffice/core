@@ -490,7 +490,6 @@ private:
 
 public:
     BasicLibInfo();
-    BasicLibInfo( const String& rStorageName );
 
     sal_Bool            IsReference() const     { return bReference; }
     sal_Bool&           IsReference()           { return bReference; }
@@ -530,7 +529,6 @@ public:
     sal_Bool            IsFoundInPath() const               { return bFoundInPath; }
     void            SetFoundInPath( sal_Bool bInPath )      { bFoundInPath = bInPath; }
 
-    void                    Store( SotStorageStream& rSStream, const String& rBasMgrStorageName, sal_Bool bUseOldReloadInfo );
     static BasicLibInfo*    Create( SotStorageStream& rSStream );
 
     Reference< XLibraryContainer > GetLibraryContainer( void )
@@ -653,83 +651,6 @@ BasicLibInfo::BasicLibInfo()
     mxScriptCont        = NULL;
     aStorageName        = String::CreateFromAscii(szImbedded);
     aRelStorageName     = String::CreateFromAscii(szImbedded);
-}
-
-BasicLibInfo::BasicLibInfo( const String& rStorageName )
-{
-    bReference          = sal_True;
-    bPasswordVerified   = sal_False;
-    bDoLoad             = sal_False;
-    mxScriptCont        = NULL;
-    aStorageName        = rStorageName;
-}
-
-void BasicLibInfo::Store( SotStorageStream& rSStream, const String& rBasMgrStorageName, sal_Bool bUseOldReloadInfo )
-{
-    sal_uIntPtr nStartPos = rSStream.Tell();
-    sal_uInt32 nEndPos = 0;
-
-    sal_uInt16 nId = LIBINFO_ID;
-    sal_uInt16 nVer = CURR_VER;
-
-    rSStream << nEndPos;
-    rSStream << nId;
-    rSStream << nVer;
-
-    String aCurStorageName = INetURLObject(rBasMgrStorageName, INET_PROT_FILE).GetMainURL( INetURLObject::NO_DECODE );
-    DBG_ASSERT(aCurStorageName.Len() != 0, "Bad storage name");
-
-    // If not set initialize StorageName
-    if ( aStorageName.Len() == 0 )
-        aStorageName = aCurStorageName;
-
-    // Load again?
-    sal_Bool bDoLoad_ = xLib.Is();
-    if ( bUseOldReloadInfo )
-        bDoLoad_ = DoLoad();
-    rSStream << bDoLoad_;
-
-    // The name of the lib...
-    rSStream.WriteByteString(GetLibName());
-
-    // Absolute path...
-    if ( ! GetStorageName().EqualsAscii(szImbedded) )
-    {
-        String aSName = INetURLObject( GetStorageName(), INET_PROT_FILE).GetMainURL( INetURLObject::NO_DECODE );
-        DBG_ASSERT(aSName.Len() != 0, "Bad storage name");
-        rSStream.WriteByteString( aSName );
-    }
-    else
-        rSStream.WriteByteString( szImbedded );
-
-    // Relative path...
-    if ( ( aStorageName == aCurStorageName ) || ( aStorageName.EqualsAscii(szImbedded) ) )
-        rSStream.WriteByteString( szImbedded );
-    else
-    {
-        // Do not determine the relative path if the file was only found in path:
-        // because the relative path would change and after moving the lib the
-        // the file cannot be found.
-        if ( !IsFoundInPath() )
-            CalcRelStorageName( aCurStorageName );
-        rSStream.WriteByteString(aRelStorageName);
-    }
-
-    // ------------------------------
-    // Version 2
-    // ------------------------------
-
-    // reference...
-    rSStream << bReference;
-
-    // ------------------------------
-    // End
-    // ------------------------------
-
-    nEndPos = rSStream.Tell();
-    rSStream.Seek( nStartPos );
-    rSStream << nEndPos;
-    rSStream.Seek( nEndPos );
 }
 
 BasicLibInfo* BasicLibInfo::Create( SotStorageStream& rSStream )
