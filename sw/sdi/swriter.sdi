@@ -10419,7 +10419,7 @@ SfxVoidItem NavigateForward FN_NAVIGATION_FORWARD
 ]
 
 //--------------------------------------------------------------------------
-SfxVoidItem EditHeaderFooter FN_EDIT_HEADER_FOOTER
+SfxVoidItem EditHeaderAndFooter FN_EDIT_HEADER_FOOTER
 [
     /* flags: */
     AutoUpdate = FALSE,
