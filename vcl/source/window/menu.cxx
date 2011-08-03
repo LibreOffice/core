@@ -200,10 +200,10 @@ public:
     void            Remove( size_t nPos );
 
 
-    MenuItemData*   GetData( sal_uInt16 nSVId, sal_uInt16& rPos ) const;
+    MenuItemData*   GetData( sal_uInt16 nSVId, size_t& rPos ) const;
     MenuItemData*   GetData( sal_uInt16 nSVId ) const
                     {
-                        sal_uInt16 nTemp;
+                        size_t nTemp;
                         return GetData( nSVId, nTemp );
                     }
     MenuItemData*   GetDataFromPos( size_t nPos ) const
@@ -220,7 +220,7 @@ public:
                     ) const;
     size_t          GetItemCount( xub_Unicode cSelectChar ) const;
     size_t          GetItemCount( KeyCode aKeyCode ) const;
-    size_t          Count()
+    size_t          size()
                     {
                         return maItemList.size();
                     }
@@ -320,7 +320,7 @@ void MenuItemList::Remove( size_t nPos )
     }
 }
 
-MenuItemData* MenuItemList::GetData( sal_uInt16 nSVId, sal_uInt16& rPos ) const
+MenuItemData* MenuItemList::GetData( sal_uInt16 nSVId, size_t& rPos ) const
 {
     for( size_t i = 0, n = maItemList.size(); i < n; ++i )
     {
@@ -1022,15 +1022,15 @@ void Menu::CreateAutoMnemonics()
 {
     MnemonicGenerator aMnemonicGenerator;
     size_t n;
-    for ( n = 0; n < pItemList->Count(); n++ )
+    for ( n = 0; n < pItemList->size(); n++ )
     {
-        MenuItemData* pData = pItemList->GetDataFromPos(n);
+        MenuItemData* pData = pItemList->GetDataFromPos( n );
         if ( ! (pData->nBits & MIB_NOSELECT ) )
             aMnemonicGenerator.RegisterMnemonic( pData->aText );
     }
-    for ( n = 0; n < pItemList->Count(); n++ )
+    for ( n = 0; n < pItemList->size(); n++ )
     {
-        MenuItemData* pData = pItemList->GetDataFromPos(n);
+        MenuItemData* pData = pItemList->GetDataFromPos( n );
         if ( ! (pData->nBits & MIB_NOSELECT ) )
             aMnemonicGenerator.CreateMnemonic( pData->aText );
     }
@@ -1066,7 +1066,7 @@ void Menu::Activate()
 
 void Menu::Deactivate()
 {
-    for ( size_t n = pItemList->Count(); n; )
+    for ( size_t n = pItemList->size(); n; )
     {
         MenuItemData* pData = pItemList->GetDataFromPos( --n );
         if ( pData->bIsTemporary )
@@ -1230,7 +1230,7 @@ void Menu::InsertItem( sal_uInt16 nItemId, const XubString& rStr, MenuItemBits n
                 "Menu::InsertItem(): ItemId already exists" );
 
     // if Position > ItemCount, append
-    if ( nPos >= (sal_uInt16)pItemList->Count() )
+    if ( nPos >= pItemList->size() )
         nPos = MENU_APPEND;
 
     // put Item in MenuItemList
@@ -1378,14 +1378,14 @@ void Menu::InsertSeparator( sal_uInt16 nPos )
         return;
 
     // if position > ItemCount, append
-    if ( nPos >= (sal_uInt16)pItemList->Count() )
+    if ( nPos >= pItemList->size() )
         nPos = MENU_APPEND;
 
     // put separator in item list
     pItemList->InsertSeparator( nPos );
 
     // update native menu
-    size_t itemPos = nPos != MENU_APPEND ? nPos : pItemList->Count() - 1;
+    size_t itemPos = ( nPos != MENU_APPEND ) ? nPos : pItemList->size() - 1;
     MenuItemData *pData = pItemList->GetDataFromPos( itemPos );
     if( ImplGetSalMenu() && pData && pData->pSalMenuItem )
         ImplGetSalMenu()->InsertItem( pData->pSalMenuItem, nPos );
@@ -1487,13 +1487,13 @@ void Menu::Clear()
 
 sal_uInt16 Menu::GetItemCount() const
 {
-    return (sal_uInt16)pItemList->Count();
+    return (sal_uInt16)pItemList->size();
 }
 
 sal_uInt16 Menu::ImplGetVisibleItemCount() const
 {
     sal_uInt16 nItems = 0;
-    for ( sal_uInt16 n = (sal_uInt16)pItemList->Count(); n; )
+    for ( size_t n = pItemList->size(); n; )
     {
         if ( ImplIsVisible( --n ) )
             nItems++;
@@ -1503,7 +1503,7 @@ sal_uInt16 Menu::ImplGetVisibleItemCount() const
 
 sal_uInt16 Menu::ImplGetFirstVisible() const
 {
-    for ( sal_uInt16 n = 0; n < pItemList->Count(); n++ )
+    for ( size_t n = 0; n < pItemList->size(); n++ )
     {
         if ( ImplIsVisible( n ) )
             return n;
@@ -1513,7 +1513,7 @@ sal_uInt16 Menu::ImplGetFirstVisible() const
 
 sal_uInt16 Menu::ImplGetPrevVisible( sal_uInt16 nPos ) const
 {
-    for ( sal_uInt16 n = nPos; n; )
+    for ( size_t n = nPos; n; )
     {
         if ( n && ImplIsVisible( --n ) )
             return n;
@@ -1523,7 +1523,7 @@ sal_uInt16 Menu::ImplGetPrevVisible( sal_uInt16 nPos ) const
 
 sal_uInt16 Menu::ImplGetNextVisible( sal_uInt16 nPos ) const
 {
-    for ( sal_uInt16 n = nPos+1; n < pItemList->Count(); n++ )
+    for ( size_t n = nPos+1; n < pItemList->size(); n++ )
     {
         if ( ImplIsVisible( n ) )
             return n;
@@ -1543,11 +1543,11 @@ sal_uInt16 Menu::GetItemId( sal_uInt16 nPos ) const
 
 sal_uInt16 Menu::GetItemPos( sal_uInt16 nItemId ) const
 {
-    sal_uInt16          nPos;
+    size_t          nPos;
     MenuItemData*   pData = pItemList->GetData( nItemId, nPos );
 
     if ( pData )
-        return nPos;
+        return (sal_uInt16)nPos;
     else
         return MENU_ITEM_NOTFOUND;
 }
@@ -1598,7 +1598,7 @@ sal_uLong Menu::GetUserValue( sal_uInt16 nItemId ) const
 
 void Menu::SetPopupMenu( sal_uInt16 nItemId, PopupMenu* pMenu )
 {
-    sal_uInt16          nPos;
+    size_t          nPos;
     MenuItemData*   pData = pItemList->GetData( nItemId, nPos );
 
     // Item does not exist -> return NULL
@@ -1640,7 +1640,7 @@ PopupMenu* Menu::GetPopupMenu( sal_uInt16 nItemId ) const
 
 void Menu::SetAccelKey( sal_uInt16 nItemId, const KeyCode& rKeyCode )
 {
-    sal_uInt16          nPos;
+    size_t          nPos;
     MenuItemData*   pData = pItemList->GetData( nItemId, nPos );
 
     if ( !pData )
@@ -1693,8 +1693,8 @@ KeyEvent Menu::GetActivationKey( sal_uInt16 nItemId ) const
 
 void Menu::CheckItem( sal_uInt16 nItemId, sal_Bool bCheck )
 {
-    sal_uInt16 nPos;
-    MenuItemData* pData = pItemList->GetData( nItemId, nPos );
+    size_t          nPos;
+    MenuItemData*   pData = pItemList->GetData( nItemId, nPos );
 
     if ( !pData || pData->bChecked == bCheck )
         return;
@@ -1758,7 +1758,7 @@ void Menu::CheckItem( sal_uInt16 nItemId, sal_Bool bCheck )
 
 sal_Bool Menu::IsItemChecked( sal_uInt16 nItemId ) const
 {
-    sal_uInt16          nPos;
+    size_t          nPos;
     MenuItemData*   pData = pItemList->GetData( nItemId, nPos );
 
     if ( !pData )
@@ -1769,7 +1769,7 @@ sal_Bool Menu::IsItemChecked( sal_uInt16 nItemId ) const
 
 void Menu::EnableItem( sal_uInt16 nItemId, sal_Bool bEnable )
 {
-    sal_uInt16          nPos;
+    size_t          nPos;
     MenuItemData*   pItemData = pItemList->GetData( nItemId, nPos );
 
     if ( pItemData && ( pItemData->bEnabled != bEnable ) )
@@ -1781,8 +1781,8 @@ void Menu::EnableItem( sal_uInt16 nItemId, sal_Bool bEnable )
         {
             DBG_ASSERT( bIsMenuBar, "Menu::EnableItem - Popup visible!" );
             long nX = 0;
-            sal_uLong nCount = pItemList->Count();
-            for ( sal_uLong n = 0; n < nCount; n++ )
+            size_t nCount = pItemList->size();
+            for ( size_t n = 0; n < nCount; n++ )
             {
                 MenuItemData* pData = pItemList->GetDataFromPos( n );
                 if ( n == nPos )
@@ -1803,7 +1803,7 @@ void Menu::EnableItem( sal_uInt16 nItemId, sal_Bool bEnable )
 
 sal_Bool Menu::IsItemEnabled( sal_uInt16 nItemId ) const
 {
-    sal_uInt16          nPos;
+    size_t          nPos;
     MenuItemData*   pData = pItemList->GetData( nItemId, nPos );
 
     if ( !pData )
@@ -1814,7 +1814,7 @@ sal_Bool Menu::IsItemEnabled( sal_uInt16 nItemId ) const
 
 void Menu::ShowItem( sal_uInt16 nItemId, sal_Bool bVisible )
 {
-    sal_uInt16          nPos;
+    size_t          nPos;
     MenuItemData*   pData = pItemList->GetData( nItemId, nPos );
 
     DBG_ASSERT( !bIsMenuBar, "Menu::ShowItem - ignored for menu bar entries!" );
@@ -1838,7 +1838,7 @@ void Menu::ShowItem( sal_uInt16 nItemId, sal_Bool bVisible )
 
 void Menu::SetItemText( sal_uInt16 nItemId, const XubString& rStr )
 {
-    sal_uInt16          nPos;
+    size_t          nPos;
     MenuItemData*   pData = pItemList->GetData( nItemId, nPos );
 
     if ( !pData )
@@ -1867,7 +1867,7 @@ void Menu::SetItemText( sal_uInt16 nItemId, const XubString& rStr )
 
 XubString Menu::GetItemText( sal_uInt16 nItemId ) const
 {
-    sal_uInt16          nPos;
+    size_t          nPos;
     MenuItemData*   pData = pItemList->GetData( nItemId, nPos );
 
     if ( pData )
@@ -1878,7 +1878,7 @@ XubString Menu::GetItemText( sal_uInt16 nItemId ) const
 
 void Menu::SetItemImage( sal_uInt16 nItemId, const Image& rImage )
 {
-    sal_uInt16          nPos;
+    size_t          nPos;
     MenuItemData*   pData = pItemList->GetData( nItemId, nPos );
 
     if ( !pData )
@@ -1904,7 +1904,7 @@ static inline Image ImplRotImage( const Image& rImage, long nAngle10 )
 
 void Menu::SetItemImageAngle( sal_uInt16 nItemId, long nAngle10 )
 {
-    sal_uInt16          nPos;
+    size_t          nPos;
     MenuItemData*   pData = pItemList->GetData( nItemId, nPos );
 
     if ( pData )
@@ -1931,7 +1931,7 @@ static inline Image ImplMirrorImage( const Image& rImage )
 
 void Menu::SetItemImageMirrorMode( sal_uInt16 nItemId, sal_Bool bMirror )
 {
-    sal_uInt16          nPos;
+    size_t          nPos;
     MenuItemData*   pData = pItemList->GetData( nItemId, nPos );
 
     if ( pData )
@@ -2132,8 +2132,8 @@ sal_Bool Menu::ImplIsVisible( sal_uInt16 nPos ) const
         else
         {
             // always avoid adjacent separators
-            sal_uInt16 nCount = (sal_uInt16) pItemList->Count();
-            sal_uInt16 n;
+            size_t nCount = pItemList->size();
+            size_t n;
             MenuItemData* pNextData = NULL;
             // search next visible item
             for( n = nPos + 1; n < nCount; n++ )
@@ -2393,10 +2393,14 @@ Size Menu::ImplCalcSize( Window* pWin )
     if ( rSettings.GetUseImagesInMenus() )
     {
         nMinMenuItemHeight = 16;
-        for ( sal_uInt16 i = (sal_uInt16)pItemList->Count(); i; )
+        for ( size_t i = pItemList->size(); i; )
         {
             MenuItemData* pData = pItemList->GetDataFromPos( --i );
-            if ( ImplIsVisible( i ) && (( pData->eType == MENUITEM_IMAGE ) || ( pData->eType == MENUITEM_STRINGIMAGE )))
+            if ( ImplIsVisible( i )
+               && (  ( pData->eType == MENUITEM_IMAGE )
+                  || ( pData->eType == MENUITEM_STRINGIMAGE )
+                  )
+               )
             {
                 // we have an icon, don't add the extra space
                 bSpaceForCheckbox = false;
@@ -2411,7 +2415,7 @@ Size Menu::ImplCalcSize( Window* pWin )
         }
     }
 
-    for ( sal_uInt16 n = (sal_uInt16)pItemList->Count(); n; )
+    for ( size_t n = pItemList->size(); n; )
     {
         MenuItemData* pData = pItemList->GetDataFromPos( --n );
 
@@ -2658,10 +2662,11 @@ void Menu::ImplPaint( Window* pWin, sal_uInt16 nBorder, long nStartY, MenuItemDa
     }
 
     Size aOutSz = pWin->GetOutputSizePixel();
-    sal_uInt16 nCount = (sal_uInt16)pItemList->Count();
+    size_t nCount = pItemList->size();
     if( bLayout )
         mpLayoutData->m_aVisibleItemBoundRects.clear();
-    for ( sal_uInt16 n = 0; n < nCount; n++ )
+
+    for ( size_t n = 0; n < nCount; n++ )
     {
         MenuItemData* pData = pItemList->GetDataFromPos( n );
         if ( ImplIsVisible( n ) && ( !pThisItemOnly || ( pData == pThisItemOnly ) ) )
@@ -3019,7 +3024,7 @@ Menu* Menu::ImplFindSelectMenu()
 {
     Menu* pSelMenu = nEventId ? this : NULL;
 
-    for ( sal_uLong n = GetItemList()->Count(); n && !pSelMenu; )
+    for ( size_t n = GetItemList()->size(); n && !pSelMenu; )
     {
         MenuItemData* pData = GetItemList()->GetDataFromPos( --n );
 
@@ -3034,7 +3039,7 @@ Menu* Menu::ImplFindMenu( sal_uInt16 nItemId )
 {
     Menu* pSelMenu = NULL;
 
-    for ( sal_uLong n = GetItemList()->Count(); n && !pSelMenu; )
+    for ( size_t n = GetItemList()->size(); n && !pSelMenu; )
     {
         MenuItemData* pData = GetItemList()->GetDataFromPos( --n );
 
@@ -3210,7 +3215,7 @@ Rectangle Menu::GetBoundingRectangle( sal_uInt16 nPos ) const
 
 void Menu::SetAccessibleName( sal_uInt16 nItemId, const XubString& rStr )
 {
-    sal_uInt16        nPos;
+    size_t        nPos;
     MenuItemData* pData = pItemList->GetData( nItemId, nPos );
 
     if ( pData && !rStr.Equals( pData->aAccessibleName ) )
@@ -3583,7 +3588,7 @@ void PopupMenu::SelectEntry( sal_uInt16 nId )
     {
         if( nId != ITEMPOS_INVALID )
         {
-            sal_uInt16 nPos;
+            size_t nPos;
             MenuItemData* pData = GetItemList()->GetData( nId, nPos );
             if ( pData->pSubMenu )
                 ImplGetFloatingWindow()->ChangeHighlightItem( nPos, sal_True );
@@ -3595,7 +3600,7 @@ void PopupMenu::SelectEntry( sal_uInt16 nId )
             MenuFloatingWindow* pFloat = ImplGetFloatingWindow();
             pFloat->GrabFocus();
 
-            for( size_t nPos = 0; nPos < GetItemList()->Count(); nPos++ )
+            for( size_t nPos = 0; nPos < GetItemList()->size(); nPos++ )
             {
                 MenuItemData* pData = GetItemList()->GetDataFromPos( nPos );
                 if( pData->pSubMenu )
@@ -3802,12 +3807,17 @@ sal_uInt16 PopupMenu::ImplExecute( Window* pW, const Rectangle& rRect, sal_uLong
     }
     if ( bPreSelectFirst )
     {
-        sal_uInt16 nCount = (sal_uInt16)pItemList->Count();
-        for ( sal_uInt16 n = 0; n < nCount; n++ )
+        size_t nCount = pItemList->size();
+        for ( size_t n = 0; n < nCount; n++ )
         {
             MenuItemData* pData = pItemList->GetDataFromPos( n );
-            if (   ( pData->bEnabled || !Application::GetSettings().GetStyleSettings().GetSkipDisabledInMenus() )
-                && ( pData->eType != MENUITEM_SEPARATOR ) && ImplIsVisible( n ) && ImplIsSelectable( n ) )
+            if (  (  pData->bEnabled
+                  || !Application::GetSettings().GetStyleSettings().GetSkipDisabledInMenus()
+                  )
+               && ( pData->eType != MENUITEM_SEPARATOR )
+               && ImplIsVisible( n )
+               && ImplIsSelectable( n )
+               )
             {
                 pWin->ChangeHighlightItem( n, sal_False );
                 break;
@@ -3875,13 +3885,13 @@ sal_uInt16 PopupMenu::ImplCalcVisEntries( long nMaxHeight, sal_uInt16 nStartEntr
     nMaxHeight -= 2 * ImplGetFloatingWindow()->GetScrollerHeight();
 
     long nHeight = 0;
-    sal_uInt16 nEntries = (sal_uInt16) pItemList->Count();
+    size_t nEntries = pItemList->size();
     sal_uInt16 nVisEntries = 0;
 
     if ( pLastVisible )
         *pLastVisible = 0;
 
-    for ( sal_uInt16 n = nStartEntry; n < nEntries; n++ )
+    for ( size_t n = nStartEntry; n < nEntries; n++ )
     {
         if ( ImplIsVisible( n ) )
         {
@@ -3903,7 +3913,7 @@ long PopupMenu::ImplCalcHeight( sal_uInt16 nEntries ) const
     long nHeight = 0;
 
     sal_uInt16 nFound = 0;
-    for ( sal_uInt16 n = 0; ( nFound < nEntries ) && ( n < pItemList->Count() ); n++ )
+    for ( size_t n = 0; ( nFound < nEntries ) && ( n < pItemList->size() ); n++ )
     {
         if ( ImplIsVisible( (sal_uInt16) n ) )
         {
@@ -4006,7 +4016,7 @@ void MenuFloatingWindow::doShutdown()
         {
             // #102461# remove highlight in parent
             MenuItemData* pData;
-            sal_uInt16 i, nCount = (sal_uInt16)pMenu->pStartedFrom->pItemList->Count();
+            size_t i, nCount = pMenu->pStartedFrom->pItemList->size();
             for(i = 0; i < nCount; i++)
             {
                 pData = pMenu->pStartedFrom->pItemList->GetDataFromPos( i );
@@ -4100,9 +4110,9 @@ void MenuFloatingWindow::ImplHighlightItem( const MouseEvent& rMEvt, sal_Bool bM
     if ( ( nMouseY >= nY ) && ( nMouseY < ( aOutSz.Height() - nY ) ) )
     {
         sal_Bool bHighlighted = sal_False;
-        sal_uInt16 nCount = (sal_uInt16)pMenu->pItemList->Count();
+        size_t nCount = pMenu->pItemList->size();
         nY += ImplGetStartY();  // ggf. gescrollt.
-        for ( sal_uInt16 n = 0; !bHighlighted && ( n < nCount ); n++ )
+        for ( size_t n = 0; !bHighlighted && ( n < nCount ); n++ )
         {
             if ( pMenu->ImplIsVisible( n ) )
             {
@@ -4439,7 +4449,7 @@ void MenuFloatingWindow::EndExecute()
 
 void MenuFloatingWindow::EndExecute( sal_uInt16 nId )
 {
-    sal_uInt16 nPos;
+    size_t nPos;
     if ( pMenu && pMenu->GetItemList()->GetData( nId, nPos ) )
         nHighlightedItem = nPos;
     else
@@ -4644,7 +4654,7 @@ void MenuFloatingWindow::ChangeHighlightItem( sal_uInt16 n, sal_Bool bStartPopup
         {
             // #102461# make sure parent entry is highlighted as well
             MenuItemData* pData;
-            sal_uInt16 i, nCount = (sal_uInt16)pMenu->pStartedFrom->pItemList->Count();
+            size_t i, nCount = pMenu->pStartedFrom->pItemList->size();
             for(i = 0; i < nCount; i++)
             {
                 pData = pMenu->pStartedFrom->pItemList->GetDataFromPos( i );
@@ -4696,8 +4706,8 @@ void MenuFloatingWindow::HighlightItem( sal_uInt16 nPos, sal_Bool bHighlight )
     int nOuterSpace = ImplGetSVData()->maNWFData.mnMenuFormatExtraBorder;
     nY += nOuterSpace;
 
-    sal_uInt16 nCount = (sal_uInt16)pMenu->pItemList->Count();
-    for ( sal_uInt16 n = 0; n < nCount; n++ )
+    size_t nCount = pMenu->pItemList->size();
+    for ( size_t n = 0; n < nCount; n++ )
     {
         MenuItemData* pData = pMenu->pItemList->GetDataFromPos( n );
         if ( n == nPos )
@@ -4789,8 +4799,8 @@ Rectangle MenuFloatingWindow::ImplGetItemRect( sal_uInt16 nPos )
     if ( pMenu->pLogo )
         nX = pMenu->pLogo->aBitmap.GetSizePixel().Width();
 
-    sal_uInt16 nCount = (sal_uInt16)pMenu->pItemList->Count();
-    for ( sal_uInt16 n = 0; n < nCount; n++ )
+    size_t nCount = pMenu->pItemList->size();
+    for ( size_t n = 0; n < nCount; n++ )
     {
         MenuItemData* pData = pMenu->pItemList->GetDataFromPos( n );
         if ( n == nPos )
@@ -5561,8 +5571,8 @@ void MenuBarWindow::HighlightItem( sal_uInt16 nPos, sal_Bool bHighlight )
         return;
 
     long nX = 0;
-    sal_uLong nCount = pMenu->pItemList->Count();
-    for ( sal_uLong n = 0; n < nCount; n++ )
+    size_t nCount = pMenu->pItemList->size();
+    for ( size_t n = 0; n < nCount; n++ )
     {
         MenuItemData* pData = pMenu->pItemList->GetDataFromPos( n );
         if ( n == nPos )
@@ -5639,8 +5649,8 @@ Rectangle MenuBarWindow::ImplGetItemRect( sal_uInt16 nPos )
     if( pMenu )
     {
         long nX = 0;
-        sal_uLong nCount = pMenu->pItemList->Count();
-        for ( sal_uLong n = 0; n < nCount; n++ )
+        size_t nCount = pMenu->pItemList->size();
+        for ( size_t n = 0; n < nCount; n++ )
         {
             MenuItemData* pData = pMenu->pItemList->GetDataFromPos( n );
             if ( n == nPos )
@@ -5916,8 +5926,8 @@ sal_uInt16 MenuBarWindow::ImplFindEntry( const Point& rMousePos ) const
     if( pMenu )
     {
         long nX = 0;
-        sal_uInt16 nCount = (sal_uInt16)pMenu->pItemList->Count();
-        for ( sal_uInt16 n = 0; n < nCount; n++ )
+        size_t nCount = pMenu->pItemList->size();
+        for ( size_t n = 0; n < nCount; n++ )
         {
             MenuItemData* pData = pMenu->pItemList->GetDataFromPos( n );
             if ( pMenu->ImplIsVisible( n ) )
