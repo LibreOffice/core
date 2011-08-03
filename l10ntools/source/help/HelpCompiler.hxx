@@ -60,8 +60,6 @@
 
 #include <compilehelp.hxx>
 
-#define EMULATEORIGINAL 1
-
 #if OSL_DEBUG_LEVEL > 2
     #define HCDBG(foo) do { if (1) foo; } while(0)
 #else
@@ -141,11 +139,7 @@ namespace fs
     };
 
     void create_directory(const fs::path indexDirName);
-    void rename(const fs::path &src, const fs::path &dest);
     void copy(const fs::path &src, const fs::path &dest);
-    bool exists(const fs::path &in);
-    void remove_all(const fs::path &in);
-    void remove(const fs::path &in);
 }
 
 struct joaat_hash
@@ -169,57 +163,6 @@ struct joaat_hash
 
 #define get16bits(d) ((((sal_uInt32)(((const sal_uInt8 *)(d))[1])) << 8)\
                        +(sal_uInt32)(((const sal_uInt8 *)(d))[0]) )
-
-struct SuperFastHash
-{
-    size_t operator()(const std::string &str) const
-    {
-        const char * data = str.data();
-        int len = str.size();
-        size_t hash = len, tmp;
-        if (len <= 0 || data == NULL) return 0;
-
-        int rem = len & 3;
-        len >>= 2;
-
-        /* Main loop */
-        for (;len > 0; len--)
-        {
-            hash  += get16bits (data);
-            tmp    = (get16bits (data+2) << 11) ^ hash;
-            hash   = (hash << 16) ^ tmp;
-            data  += 2*sizeof (sal_uInt16);
-            hash  += hash >> 11;
-        }
-
-        /* Handle end cases */
-        switch (rem)
-        {
-            case 3: hash += get16bits (data);
-                    hash ^= hash << 16;
-                    hash ^= data[sizeof (sal_uInt16)] << 18;
-                    hash += hash >> 11;
-                    break;
-            case 2: hash += get16bits (data);
-                    hash ^= hash << 11;
-                    hash += hash >> 17;
-                    break;
-            case 1: hash += *data;
-                    hash ^= hash << 10;
-                    hash += hash >> 1;
-        }
-
-        /* Force "avalanching" of final 127 bits */
-        hash ^= hash << 3;
-        hash += hash >> 5;
-        hash ^= hash << 4;
-        hash += hash >> 17;
-        hash ^= hash << 25;
-        hash += hash >> 6;
-
-        return hash;
-    }
-};
 
 #define pref_hash joaat_hash
 

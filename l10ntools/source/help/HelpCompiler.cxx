@@ -517,62 +517,9 @@ namespace fs
         osl::Directory::createPath(indexDirName.data);
     }
 
-    void rename(const fs::path &src, const fs::path &dest)
-    {
-        osl::File::move(src.data, dest.data);
-    }
-
     void copy(const fs::path &src, const fs::path &dest)
     {
         osl::File::copy(src.data, dest.data);
-    }
-
-    bool exists(const fs::path &in)
-    {
-        osl::File tmp(in.data);
-        return (tmp.open(osl_File_OpenFlag_Read) == osl::FileBase::E_None);
-    }
-
-    void remove(const fs::path &in)
-    {
-        osl::File::remove(in.data);
-    }
-
-    void removeRecursive(rtl::OUString const& _suDirURL)
-    {
-        {
-            osl::Directory aDir(_suDirURL);
-            aDir.open();
-            if (aDir.isOpen())
-            {
-                osl::DirectoryItem aItem;
-                osl::FileStatus aStatus(osl_FileStatus_Mask_FileName | osl_FileStatus_Mask_Attributes);
-                while (aDir.getNextItem(aItem) == ::osl::FileBase::E_None)
-                {
-                    if (osl::FileBase::E_None == aItem.getFileStatus(aStatus) &&
-                        aStatus.isValid(osl_FileStatus_Mask_FileName | osl_FileStatus_Mask_Attributes))
-                    {
-                        rtl::OUString suFilename = aStatus.getFileName();
-                        rtl::OUString suFullFileURL;
-                        suFullFileURL += _suDirURL;
-                        suFullFileURL += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
-                        suFullFileURL += suFilename;
-
-                        if (aStatus.getFileType() == osl::FileStatus::Directory)
-                            removeRecursive(suFullFileURL);
-                        else
-                            osl::File::remove(suFullFileURL);
-                    }
-                }
-                aDir.close();
-            }
-        }
-        osl::Directory::remove(_suDirURL);
-    }
-
-    void remove_all(const fs::path &in)
-    {
-        removeRecursive(in.data);
     }
 }
 
