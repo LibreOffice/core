@@ -76,6 +76,7 @@
 #include "vcl/lazydelete.hxx"
 
 #include <map>
+#include <vector>
 
 namespace vcl
 {
@@ -174,51 +175,74 @@ MenuItemData::~MenuItemData()
         ImplGetSVData()->mpDefInst->DestroyMenuItem( pSalMenuItem );
 }
 
-class MenuItemList : public List
+class MenuItemList
 {
 private:
+    typedef ::std::vector< MenuItemData* > MenuItemDataList_impl;
+    MenuItemDataList_impl maItemList;
+
     uno::Reference< i18n::XCharacterClassification > xCharClass;
 
-
 public:
-                    MenuItemList() : List( 16, 4 ) {}
+                    MenuItemList() {}
                     ~MenuItemList();
 
-    MenuItemData*   Insert( sal_uInt16 nId, MenuItemType eType, MenuItemBits nBits,
-                            const XubString& rStr, const Image& rImage,
-                            Menu* pMenu, sal_uInt16 nPos );
-    void            InsertSeparator( sal_uInt16 nPos );
-    void            Remove( sal_uInt16 nPos );
+    MenuItemData*   Insert(
+                        sal_uInt16 nId,
+                        MenuItemType eType,
+                        MenuItemBits nBits,
+                        const XubString& rStr,
+                        const Image& rImage,
+                        Menu* pMenu,
+                        size_t nPos
+                    );
+    void            InsertSeparator( size_t nPos );
+    void            Remove( size_t nPos );
 
 
     MenuItemData*   GetData( sal_uInt16 nSVId, sal_uInt16& rPos ) const;
     MenuItemData*   GetData( sal_uInt16 nSVId ) const
-                        { sal_uInt16 nTemp; return GetData( nSVId, nTemp ); }
-    MenuItemData*   GetDataFromPos( sal_uLong nPos ) const
-                        { return (MenuItemData*)List::GetObject( nPos ); }
+                    {
+                        sal_uInt16 nTemp;
+                        return GetData( nSVId, nTemp );
+                    }
+    MenuItemData*   GetDataFromPos( size_t nPos ) const
+                    {
+                        return ( nPos < maItemList.size() ) ? maItemList[ nPos ] : NULL;
+                    }
 
-    MenuItemData*   SearchItem( xub_Unicode cSelectChar, KeyCode aKeyCode, sal_uInt16& rPos, sal_uInt16& nDuplicates, sal_uInt16 nCurrentPos ) const;
-    sal_uInt16          GetItemCount( xub_Unicode cSelectChar ) const;
-    sal_uInt16          GetItemCount( KeyCode aKeyCode ) const;
-
-    uno::Reference< i18n::XCharacterClassification > GetCharClass() const;
+    MenuItemData*   SearchItem(
+                        xub_Unicode cSelectChar,
+                        KeyCode aKeyCode,
+                        sal_uInt16& rPos,
+                        sal_uInt16& nDuplicates,
+                        sal_uInt16 nCurrentPos
+                    ) const;
+    size_t          GetItemCount( xub_Unicode cSelectChar ) const;
+    size_t          GetItemCount( KeyCode aKeyCode ) const;
+    size_t          Count()
+                    {
+                        return maItemList.size();
+                    }
 };
 
 
 
 MenuItemList::~MenuItemList()
 {
-    for ( sal_uLong n = Count(); n; )
-    {
-        MenuItemData* pData = GetDataFromPos( --n );
-        delete pData;
-    }
+    for( size_t i = 0, n = maItemList.size(); i < n; ++i )
+        delete maItemList[ i ];
 }
 
-MenuItemData* MenuItemList::Insert( sal_uInt16 nId, MenuItemType eType,
-                                    MenuItemBits nBits,
-                                    const XubString& rStr, const Image& rImage,
-                                    Menu* pMenu, sal_uInt16 nPos )
+MenuItemData* MenuItemList::Insert(
+    sal_uInt16 nId,
+    MenuItemType eType,
+    MenuItemBits nBits,
+    const XubString& rStr,
+    const Image& rImage,
+    Menu* pMenu,
+    size_t nPos
+)
 {
     MenuItemData* pData     = new MenuItemData( rStr, rImage );
     pData->nId              = nId;
@@ -245,11 +269,15 @@ MenuItemData* MenuItemList::Insert( sal_uInt16 nId, MenuItemType eType,
     // Native-support: returns NULL if not supported
     pData->pSalMenuItem = ImplGetSVData()->mpDefInst->CreateMenuItem( &aSalMIData );
 
-    List::Insert( (void*)pData, nPos );
+    if( nPos < maItemList.size() ) {
+        maItemList.insert( maItemList.begin() + nPos, pData );
+    } else {
+        maItemList.push_back( pData );
+    }
     return pData;
 }
 
-void MenuItemList::InsertSeparator( sal_uInt16 nPos )
+void MenuItemList::InsertSeparator( size_t nPos )
 {
     MenuItemData* pData     = new MenuItemData;
     pData->nId              = 0;
@@ -276,37 +304,46 @@ void MenuItemList::InsertSeparator( sal_uInt16 nPos )
     // Native-support: returns NULL if not supported
     pData->pSalMenuItem = ImplGetSVData()->mpDefInst->CreateMenuItem( &aSalMIData );
 
-    List::Insert( (void*)pData, nPos );
+    if( nPos < maItemList.size() ) {
+        maItemList.insert( maItemList.begin() + nPos, pData );
+    } else {
+        maItemList.push_back( pData );
+    }
 }
 
-void MenuItemList::Remove( sal_uInt16 nPos )
+void MenuItemList::Remove( size_t nPos )
 {
-    MenuItemData* pData = (MenuItemData*)List::Remove( (sal_uLong)nPos );
-    if ( pData )
-        delete pData;
+    if( nPos < maItemList.size() )
+    {
+        delete maItemList[ nPos ];
+        maItemList.erase( maItemList.begin() + nPos );
+    }
 }
 
 MenuItemData* MenuItemList::GetData( sal_uInt16 nSVId, sal_uInt16& rPos ) const
 {
-    rPos = 0;
-    MenuItemData* pData = (MenuItemData*)GetObject( rPos );
-    while ( pData )
+    for( size_t i = 0, n = maItemList.size(); i < n; ++i )
     {
-        if ( pData->nId == nSVId )
-            return pData;
-
-        rPos++;
-        pData = (MenuItemData*)GetObject( rPos );
+        if ( maItemList[ i ]->nId == nSVId )
+        {
+            rPos = i;
+            return maItemList[ i ];
+        }
     }
-
     return NULL;
 }
 
-MenuItemData* MenuItemList::SearchItem( xub_Unicode cSelectChar, KeyCode aKeyCode, sal_uInt16& rPos, sal_uInt16& nDuplicates, sal_uInt16 nCurrentPos ) const
+MenuItemData* MenuItemList::SearchItem(
+    xub_Unicode cSelectChar,
+    KeyCode aKeyCode,
+    sal_uInt16& rPos,
+    sal_uInt16& nDuplicates,
+    sal_uInt16 nCurrentPos
+) const
 {
     const vcl::I18nHelper& rI18nHelper = Application::GetSettings().GetUILocaleI18nHelper();
 
-    sal_uInt16 nListCount = (sal_uInt16)Count();
+    size_t nListCount = maItemList.size();;
 
     // try character code first
     nDuplicates = GetItemCount( cSelectChar );  // return number of duplicates
@@ -314,7 +351,7 @@ MenuItemData* MenuItemList::SearchItem( xub_Unicode cSelectChar, KeyCode aKeyCod
     {
         for ( rPos = 0; rPos < nListCount; rPos++)
         {
-            MenuItemData* pData = GetDataFromPos( rPos );
+            MenuItemData* pData = maItemList[ rPos ];
             if ( pData->bEnabled && rI18nHelper.MatchMnemonic( pData->aText, cSelectChar ) )
             {
                 if( nDuplicates > 1 && rPos == nCurrentPos )
@@ -336,7 +373,7 @@ MenuItemData* MenuItemList::SearchItem( xub_Unicode cSelectChar, KeyCode aKeyCod
 
         for ( rPos = 0; rPos < nListCount; rPos++)
         {
-            MenuItemData* pData = GetDataFromPos( rPos );
+            MenuItemData* pData = maItemList[ rPos ];
             if ( pData->bEnabled )
             {
                 sal_uInt16 n = pData->aText.Search( '~' );
@@ -345,10 +382,14 @@ MenuItemData* MenuItemList::SearchItem( xub_Unicode cSelectChar, KeyCode aKeyCod
                     KeyCode mnKeyCode;
                     xub_Unicode mnUnicode = pData->aText.GetChar(n+1);
                     Window* pDefWindow = ImplGetDefaultWindow();
-                    if( (pDefWindow && pDefWindow->ImplGetFrame()->MapUnicodeToKeyCode( mnUnicode, Application::GetSettings().GetUILanguage(), mnKeyCode )
-                        && aKeyCode.GetCode() == mnKeyCode.GetCode())
-                        || (ascii && rI18nHelper.MatchMnemonic( pData->aText, ascii ) ) )
-
+                    if(  (  pDefWindow
+                         && pDefWindow->ImplGetFrame()->MapUnicodeToKeyCode( mnUnicode, Application::GetSettings().GetUILanguage(), mnKeyCode )
+                         && aKeyCode.GetCode() == mnKeyCode.GetCode()
+                         )
+                      || (  ascii
+                         && rI18nHelper.MatchMnemonic( pData->aText, ascii )
+                         )
+                      )
                     {
                         if( nDuplicates > 1 && rPos == nCurrentPos )
                             continue;   // select next entry with the same mnemonic
@@ -363,15 +404,15 @@ MenuItemData* MenuItemList::SearchItem( xub_Unicode cSelectChar, KeyCode aKeyCod
     return NULL;
 }
 
-sal_uInt16 MenuItemList::GetItemCount( xub_Unicode cSelectChar ) const
+size_t MenuItemList::GetItemCount( xub_Unicode cSelectChar ) const
 {
     // returns number of entries with same mnemonic
     const vcl::I18nHelper& rI18nHelper = Application::GetSettings().GetUILocaleI18nHelper();
 
-    sal_uInt16 nItems = 0, nPos;
-    for ( nPos = (sal_uInt16)Count(); nPos; )
+    size_t nItems = 0;
+    for ( size_t nPos = maItemList.size(); nPos; )
     {
-        MenuItemData* pData = GetDataFromPos( --nPos );
+        MenuItemData* pData = maItemList[ --nPos ];
         if ( pData->bEnabled && rI18nHelper.MatchMnemonic( pData->aText, cSelectChar ) )
             nItems++;
     }
@@ -379,7 +420,7 @@ sal_uInt16 MenuItemList::GetItemCount( xub_Unicode cSelectChar ) const
     return nItems;
 }
 
-sal_uInt16 MenuItemList::GetItemCount( KeyCode aKeyCode ) const
+size_t MenuItemList::GetItemCount( KeyCode aKeyCode ) const
 {
     // returns number of entries with same mnemonic
     // uses key codes instead of character codes
@@ -388,10 +429,10 @@ sal_uInt16 MenuItemList::GetItemCount( KeyCode aKeyCode ) const
     if( aKeyCode.GetCode() >= KEY_A && aKeyCode.GetCode() <= KEY_Z )
         ascii = sal::static_int_cast<char>('A' + (aKeyCode.GetCode() - KEY_A));
 
-    sal_uInt16 nItems = 0, nPos;
-    for ( nPos = (sal_uInt16)Count(); nPos; )
+    size_t nItems = 0;
+    for ( size_t nPos = maItemList.size(); nPos; )
     {
-        MenuItemData* pData = GetDataFromPos( --nPos );
+        MenuItemData* pData = maItemList[ --nPos ];
         if ( pData->bEnabled )
         {
             sal_uInt16 n = pData->aText.Search( '~' );
@@ -401,9 +442,14 @@ sal_uInt16 MenuItemList::GetItemCount( KeyCode aKeyCode ) const
                 // if MapUnicodeToKeyCode fails or is unsupported we try the pure ascii mapping of the keycodes
                 // so we have working shortcuts when ascii mnemonics are used
                 Window* pDefWindow = ImplGetDefaultWindow();
-                if( (pDefWindow && pDefWindow->ImplGetFrame()->MapUnicodeToKeyCode( pData->aText.GetChar(n+1), Application::GetSettings().GetUILanguage(), mnKeyCode )
-                    && aKeyCode.GetCode() == mnKeyCode.GetCode())
-                    || ( ascii && rI18nHelper.MatchMnemonic( pData->aText, ascii ) ) )
+                if(  (  pDefWindow
+                     && pDefWindow->ImplGetFrame()->MapUnicodeToKeyCode( pData->aText.GetChar(n+1), Application::GetSettings().GetUILanguage(), mnKeyCode )
+                     && aKeyCode.GetCode() == mnKeyCode.GetCode()
+                     )
+                  || (  ascii
+                     && rI18nHelper.MatchMnemonic( pData->aText, ascii )
+                     )
+                  )
                     nItems++;
             }
         }
@@ -411,14 +457,6 @@ sal_uInt16 MenuItemList::GetItemCount( KeyCode aKeyCode ) const
 
     return nItems;
 }
-
-uno::Reference< i18n::XCharacterClassification > MenuItemList::GetCharClass() const
-{
-    if ( !xCharClass.is() )
-        ((MenuItemList*)this)->xCharClass = vcl::unohelper::CreateCharacterClassification();
-    return xCharClass;
-}
-
 
 
 // ----------------------
@@ -988,7 +1026,7 @@ void Menu::ImplLoadRes( const ResId& rResId )
 void Menu::CreateAutoMnemonics()
 {
     MnemonicGenerator aMnemonicGenerator;
-    sal_uLong n;
+    size_t n;
     for ( n = 0; n < pItemList->Count(); n++ )
     {
         MenuItemData* pData = pItemList->GetDataFromPos(n);
@@ -1033,7 +1071,7 @@ void Menu::Activate()
 
 void Menu::Deactivate()
 {
-    for ( sal_uInt16 n = (sal_uInt16)pItemList->Count(); n; )
+    for ( size_t n = pItemList->Count(); n; )
     {
         MenuItemData* pData = pItemList->GetDataFromPos( --n );
         if ( pData->bIsTemporary )
@@ -1352,7 +1390,7 @@ void Menu::InsertSeparator( sal_uInt16 nPos )
     pItemList->InsertSeparator( nPos );
 
     // update native menu
-    sal_uInt16 itemPos = nPos != MENU_APPEND ? nPos : (sal_uInt16)pItemList->Count() - 1;
+    size_t itemPos = nPos != MENU_APPEND ? nPos : pItemList->Count() - 1;
     MenuItemData *pData = pItemList->GetDataFromPos( itemPos );
     if( ImplGetSalMenu() && pData && pData->pSalMenuItem )
         ImplGetSalMenu()->InsertItem( pData->pSalMenuItem, nPos );
@@ -3632,10 +3670,10 @@ void PopupMenu::SelectEntry( sal_uInt16 nId )
         {
             MenuFloatingWindow* pFloat = ImplGetFloatingWindow();
             pFloat->GrabFocus();
-            sal_uInt16 nPos;
-            for( nPos = 0; nPos < GetItemList()->Count(); nPos++ )
+
+            for( size_t nPos = 0; nPos < GetItemList()->Count(); nPos++ )
             {
-                MenuItemData* pData = (MenuItemData*)GetItemList()->GetObject( nPos );
+                MenuItemData* pData = GetItemList()->GetDataFromPos( nPos );
                 if( pData->pSubMenu )
                 {
                     pFloat->KillActivePopup();
