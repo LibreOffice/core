@@ -507,9 +507,6 @@ MailDispatcher::removeListener(rtl::Reference<IMailDispatcherListener>)
 MaskSet::MaskSet(SvxBmpMask*, long)
 Matrix3d::Inverse() const
 Matrix3d::Matrix3d()
-MenuBar::AddMenuBarButton(Image const&, Link const&, unsigned short)
-MenuBar::ShowFloatButton(unsigned char)
-MenuBar::ShowHideButton(unsigned char)
 MergeData::~MergeData()
 MergeDataFile::Dump()
 MessBox::GetModeImage() const
