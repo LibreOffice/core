@@ -144,6 +144,12 @@ void RtfTest::recursiveScan(const rtl::OUString &rURL, bool bExpected)
             recursiveScan(sURL, bExpected);
         else
         {
+            //ignore .files
+            sal_Int32 nLastSlash = sURL.lastIndexOf('/');
+            if ((nLastSlash != -1) && (nLastSlash+1 < sURL.getLength()) &&
+                    (sURL.getStr()[nLastSlash+1] == '.'))
+                continue;
+
             bool bRes = load(sURL);
             rtl::OString aRes(rtl::OUStringToOString(sURL, osl_getThreadTextEncoding()));
             CPPUNIT_ASSERT_MESSAGE(aRes.getStr(), bRes == bExpected);
