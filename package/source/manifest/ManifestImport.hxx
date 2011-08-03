@@ -106,6 +106,7 @@ protected:
     const ::rtl::OUString sWhiteSpace;
 
     const ::rtl::OUString sSHA256_URL;
+    const ::rtl::OUString sSHA256_URL_TYPO;
     const ::rtl::OUString sSHA1_Name;
     const ::rtl::OUString sSHA1_URL;
 

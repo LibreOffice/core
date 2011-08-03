@@ -88,6 +88,7 @@ ManifestImport::ManifestImport( vector < Sequence < PropertyValue > > & rNewManV
 , sWhiteSpace                   ( RTL_CONSTASCII_USTRINGPARAM ( " " ) )
 
 , sSHA256_URL                   ( RTL_CONSTASCII_USTRINGPARAM ( SHA256_URL ) )
+, sSHA256_URL_TYPO              ( RTL_CONSTASCII_USTRINGPARAM ( SHA256_URL_TYPO ) )
 , sSHA1_Name                    ( RTL_CONSTASCII_USTRINGPARAM ( SHA1_NAME ) )
 , sSHA1_URL                     ( RTL_CONSTASCII_USTRINGPARAM ( SHA1_URL ) )
 
@@ -281,7 +282,7 @@ void SAL_CALL ManifestImport::startElement( const OUString& aName, const uno::Re
             else if ( aConvertedName == sStartKeyAlgElement )
             {
                 OUString aString = aConvertedAttribs[sStartKeyAlgNameAttribute];
-                if ( aString.equals( sSHA256_URL ) )
+                if (aString.equals(sSHA256_URL) || aString.equals(sSHA256_URL_TYPO))
                 {
                     aSequence[nNumProperty].Name = sStartKeyAlgProperty;
                     aSequence[nNumProperty++].Value <<= xml::crypto::DigestID::SHA256;
