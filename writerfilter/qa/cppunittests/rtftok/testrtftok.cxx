@@ -154,7 +154,8 @@ void RtfTest::recursiveScan(const rtl::OUString &rURL, bool bExpected)
 
 void RtfTest::test()
 {
-    recursiveScan(m_aSrcRoot + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/writerfilter/qa/cppunittests/rtftok/data/pass")), true);
+    recursiveScan(m_aSrcRoot + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/clone/filters/writerfilter/qa/cppunittests/rtftok/data/pass")), true);
+    recursiveScan(m_aSrcRoot + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/clone/filters/writerfilter/qa/cppunittests/rtftok/data/fail")), false);
 
     printf("Rtf: tested %d files\n", m_nLoadedDocs);
 }
