@@ -62,7 +62,7 @@
 
 #define EMULATEORIGINAL 1
 
-#ifdef CMCDEBUG
+#if OSL_DEBUG_LEVEL > 2
     #define HCDBG(foo) do { if (1) foo; } while(0)
 #else
     #define HCDBG(foo) do { if (0) foo; } while(0)
