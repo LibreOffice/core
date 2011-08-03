@@ -73,7 +73,8 @@ RTFSdrImport::~RTFSdrImport()
 
 void RTFSdrImport::createShape(OUString aStr, uno::Reference<drawing::XShape>& xShape, uno::Reference<beans::XPropertySet>& xPropertySet)
 {
-    xShape.set(m_rImport.getModelFactory()->createInstance(aStr), uno::UNO_QUERY);
+    if (m_rImport.getModelFactory().is())
+        xShape.set(m_rImport.getModelFactory()->createInstance(aStr), uno::UNO_QUERY);
     xPropertySet.set(xShape, uno::UNO_QUERY);
 }
 
@@ -279,7 +280,8 @@ void RTFSdrImport::resolve(RTFShape& rShape)
         return;
     }
 
-    m_xDrawPage->add(xShape);
+    if (m_xDrawPage.is())
+        m_xDrawPage->add(xShape);
     if (bCustom)
     {
         uno::Reference<drawing::XEnhancedCustomShapeDefaulter> xDefaulter(xShape, uno::UNO_QUERY);
@@ -314,8 +316,11 @@ void RTFSdrImport::resolve(RTFShape& rShape)
         xPropertySet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("CustomShapeGeometry")), uno::Any(aGeomPropSeq));
 
     // Set position and size
-    xShape->setPosition(awt::Point(rShape.nLeft, rShape.nTop));
-    xShape->setSize(awt::Size(rShape.nRight - rShape.nLeft, rShape.nBottom - rShape.nTop));
+    if (xShape.is())
+    {
+        xShape->setPosition(awt::Point(rShape.nLeft, rShape.nTop));
+        xShape->setSize(awt::Size(rShape.nRight - rShape.nLeft, rShape.nBottom - rShape.nTop));
+    }
 
     // Send it to dmapper
     m_rImport.Mapper().startShape(xShape);
