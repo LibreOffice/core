@@ -2780,11 +2780,16 @@ void SwWW8ImplReader::Read_Symbol(sal_uInt16, const sal_uInt8* pData, short nLen
             {
                 if( bVer67 )
                 {
-                    cSymbol = ByteString::ConvertToUnicode(
-                        *(sal_Char*)(pData+2), RTL_TEXTENCODING_MS_1252 );
+                    //convert single byte from MS1252 to Unicode
+                    cSymbol = rtl::OUString(
+                        reinterpret_cast<const sal_Char*>(pData+2), 1,
+                        RTL_TEXTENCODING_MS_1252).toChar();
                 }
                 else
+                {
+                    //already is Unicode
                     cSymbol = SVBT16ToShort( pData+2 );
+                }
                 bSymbol = true;
             }
         }
