@@ -58,9 +58,6 @@ public:
                                                   sal_uInt32 nShiftState,
                                                   sal_uInt32 nGroup ) const ;
 
-    inline sal_uInt32   LookupKeysymInDefaultGroup(
-                                                sal_uInt32 nKeyCode,
-                                                sal_uInt32 nShiftState ) const ;
     inline sal_uInt32   GetGroup() const ;          // the current keyboard group
     inline sal_uInt32   GetDefaultGroup() const ;   // base group, usually group 1
     inline int          GetEventBase() const ;
@@ -85,13 +82,6 @@ inline void
 SalI18N_KeyboardExtension::UseExtension( sal_Bool bState )
 {
     mbUseExtension = mbUseExtension && bState;
-}
-
-inline sal_uInt32
-SalI18N_KeyboardExtension::LookupKeysymInDefaultGroup( sal_uInt32 nKeyCode,
-                                                       sal_uInt32 nShiftState ) const
-{
-    return LookupKeysymInGroup( nKeyCode, nShiftState, mnDefaultGroup );
 }
 
 inline sal_uInt32
