@@ -40,6 +40,7 @@ $(eval $(call gb_Module_add_targets,writerfilter,\
 
 $(eval $(call gb_Module_add_check_targets,writerfilter,\
     CppunitTest_writerfilter_doctok \
+    CppunitTest_writerfilter_rtftok \
 ))
 
 $(eval $(call gb_Module_add_subsequentcheck_targets,writerfilter,\
