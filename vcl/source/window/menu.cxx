@@ -3327,16 +3327,6 @@ void MenuBar::ShowCloser( sal_Bool bShow )
     ShowButtons( bShow, mbFloatBtnVisible, mbHideBtnVisible );
 }
 
-void MenuBar::ShowFloatButton( sal_Bool bShow )
-{
-    ShowButtons( mbCloserVisible, bShow, mbHideBtnVisible );
-}
-
-void MenuBar::ShowHideButton( sal_Bool bShow )
-{
-    ShowButtons( mbCloserVisible, mbFloatBtnVisible, bShow );
-}
-
 void MenuBar::ShowButtons( sal_Bool bClose, sal_Bool bFloat, sal_Bool bHide )
 {
     if ( (bClose != mbCloserVisible)    ||
@@ -3504,11 +3494,6 @@ sal_Bool MenuBar::HandleMenuCommandEvent( Menu *pMenu, sal_uInt16 nCommandEventI
     }
     else
         return sal_False;
-}
-
-sal_uInt16 MenuBar::AddMenuBarButton( const Image& i_rImage, const Link& i_rLink, sal_uInt16 i_nPos )
-{
-    return AddMenuBarButton( i_rImage, i_rLink, String(), i_nPos );
 }
 
 sal_uInt16 MenuBar::AddMenuBarButton( const Image& i_rImage, const Link& i_rLink, const String& i_rToolTip, sal_uInt16 i_nPos )

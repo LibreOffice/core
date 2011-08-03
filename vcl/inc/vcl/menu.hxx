@@ -409,9 +409,7 @@ public:
 
     void                ShowCloser( sal_Bool bShow = sal_True );
     sal_Bool                HasCloser() const { return mbCloserVisible; }
-    void                ShowFloatButton( sal_Bool bShow = sal_True );
     sal_Bool                HasFloatButton() const { return mbFloatBtnVisible; }
-    void                ShowHideButton( sal_Bool bShow = sal_True );
     sal_Bool                HasHideButton() const { return mbHideBtnVisible; }
     void                ShowButtons( sal_Bool bClose, sal_Bool bFloat, sal_Bool bHide );
 
@@ -442,9 +440,6 @@ public:
         bool        bHighlight;      // highlight on/off
         MenuBar*    pMenuBar;        // menubar the button belongs to
     };
-    // add an arbitrary button to the menubar (will appear next to closer)
-    // passed link will be call with a MenuBarButtonCallbackArg on press
-    sal_uInt16              AddMenuBarButton( const Image&, const Link&, sal_uInt16 nPos = 0 );
     // add an arbitrary button to the menubar (will appear next to closer)
     // passed link will be call with a MenuBarButtonCallbackArg on press
     // passed string will be set as tooltip
