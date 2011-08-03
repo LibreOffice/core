@@ -1790,12 +1790,6 @@ void SvtFileView::SetUrlFilter( const IUrlFilter* _pFilter )
 }
 
 // -----------------------------------------------------------------------
-const IUrlFilter* SvtFileView::GetUrlFilter( ) const
-{
-    return mpImp->mpUrlFilter;
-}
-
-// -----------------------------------------------------------------------
 void SvtFileView::StateChanged( StateChangedType nStateChange )
 {
     if ( nStateChange == STATE_CHANGE_ENABLE )

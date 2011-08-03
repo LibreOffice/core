@@ -118,20 +118,4 @@ SalI18N_KeyboardExtension::Dispatch( XEvent* pEvent )
     }
 }
 
-sal_uInt32
-SalI18N_KeyboardExtension::LookupKeysymInGroup( sal_uInt32 nKeyCode,
-                                                 sal_uInt32 nShiftState,
-                                                   sal_uInt32 nGroup ) const
-{
-    if ( !mbUseExtension )
-        return NoSymbol;
-
-    nShiftState &= ShiftMask;
-
-    KeySym      nKeySymbol;
-    nKeySymbol = XkbKeycodeToKeysym( mpDisplay, nKeyCode, nGroup, nShiftState );
-    return nKeySymbol;
-}
-
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -608,7 +608,6 @@ public:
 
     void            Open( const String& rFileName, StreamMode eOpenMode );
     void            Close();
-    void            ReOpen(); // Aufruf nach Close, FilePointer == 0
     sal_Bool            IsOpen() const { return bIsOpen; }
     sal_Bool            IsLocked() const { return ( nLockCounter!=0 ); }
     virtual sal_uInt16  IsA() const;

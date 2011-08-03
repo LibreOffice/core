@@ -54,10 +54,6 @@ public:
                         ~FontInfo();
 
     FontType            GetType() const;
-    sal_Bool                IsDeviceFont() const;
-    sal_Bool                SupportsLatin() const;
-    sal_Bool                SupportsCJK() const;
-    sal_Bool                SupportsCTL() const;
 
     FontInfo&           operator=( const FontInfo& );
     sal_Bool                operator==( const FontInfo& ) const;

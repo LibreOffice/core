@@ -58,8 +58,6 @@ public:
     sal_Bool        IsHelpAgentAutoStartMode() const;
     void            SetHelpAgentTimeoutPeriod( sal_Int32 _nSeconds );
     sal_Int32       GetHelpAgentTimeoutPeriod( ) const;
-    void            SetHelpAgentRetryLimit( sal_Int32 _nTrials );
-    sal_Int32       GetHelpAgentRetryLimit( ) const;
 
     const String&   GetHelpStyleSheet()const;
     void            SetHelpStyleSheet(const String& rStyleSheet);

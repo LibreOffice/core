@@ -648,20 +648,6 @@ sal_Bool SvtHelpOptions::IsHelpTips() const
 
 // -----------------------------------------------------------------------
 
-void SvtHelpOptions::SetHelpAgentRetryLimit( sal_Int32 _nTrials )
-{
-    pImp->SetHelpAgentRetryLimit( _nTrials );
-}
-
-// -----------------------------------------------------------------------
-
-sal_Int32 SvtHelpOptions::GetHelpAgentRetryLimit( ) const
-{
-    return pImp->GetHelpAgentRetryLimit( );
-}
-
-// -----------------------------------------------------------------------
-
 void SvtHelpOptions::SetHelpAgentTimeoutPeriod( sal_Int32 _nSeconds )
 {
     pImp->SetHelpAgentTimeoutPeriod( _nSeconds );

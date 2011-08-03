@@ -85,7 +85,6 @@ class TOOLS_DLLPUBLIC UniqueIdContainer : private UniqueIndex
 
 public: // Irgend etwas mit protected falsch
     void                Clear( sal_Bool bAll );
-    UniqueItemId        CreateIdProt( sal_uIntPtr nId );
 
 public:
                         UniqueIdContainer( sal_uIntPtr _nStartIndex,
@@ -104,7 +103,6 @@ public:
                             { return UniqueIndex::IsIndexValid( nIndex ); }
 
     UniqueItemId        CreateId();
-    static UniqueItemId CreateFreeId( sal_uIntPtr nId ); // freies Id
 };
 
 #endif // _UNQID_HXX

@@ -97,7 +97,6 @@ public:
 
     void                            SetFilter(const String& _sFilter);
     void                            SetUrlFilter( const IUrlFilter* _pFilter );
-    const IUrlFilter*               GetUrlFilter( ) const;
 
     inline void                     EnableAutocompletion( sal_Bool _bEnable = sal_True )
                                         { bIsAutoCompleteEnabled = _bEnable; }

@@ -54,10 +54,6 @@ public:
 
     void                Dispatch( XEvent *pEvent ); // keep track of group changes
 
-    sal_uInt32          LookupKeysymInGroup(    sal_uInt32 nKeyCode,
-                                                  sal_uInt32 nShiftState,
-                                                  sal_uInt32 nGroup ) const ;
-
     inline sal_uInt32   GetGroup() const ;          // the current keyboard group
     inline sal_uInt32   GetDefaultGroup() const ;   // base group, usually group 1
     inline int          GetEventBase() const ;

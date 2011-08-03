@@ -598,17 +598,6 @@ XubString FontList::GetFontMapText( const FontInfo& rInfo ) const
 
 // -----------------------------------------------------------------------
 
-sal_uInt16 FontList::GetFontNameType( const XubString& rFontName ) const
-{
-    ImplFontListNameInfo* pData = ImplFindByName( rFontName );
-    if ( pData )
-        return pData->mnType;
-    else
-        return 0;
-}
-
-// -----------------------------------------------------------------------
-
 FontInfo FontList::Get( const XubString& rName, const XubString& rStyleName ) const
 {
     ImplFontListNameInfo* pData = ImplFindByName( rName );

@@ -1352,11 +1352,6 @@ void SvtURLBox::SetUrlFilter( const IUrlFilter* _pFilter )
     pImp->pUrlFilter = _pFilter;
 }
 
-//-------------------------------------------------------------------------
-const IUrlFilter* SvtURLBox::GetUrlFilter( ) const
-{
-    return pImp->pUrlFilter;
-}
 // -----------------------------------------------------------------------------
 void SvtURLBox::SetFilter(const String& _sFilter)
 {

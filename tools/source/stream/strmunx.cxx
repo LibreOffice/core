@@ -728,18 +728,6 @@ void SvFileStream::Open( const String& rFilename, StreamMode nOpenMode )
 
 /*************************************************************************
 |*
-|*    SvFileStream::ReOpen()
-|*
-*************************************************************************/
-
-void SvFileStream::ReOpen()
-{
-    if ( !bIsOpen && aFilename.Len() )
-        Open( aFilename, eStreamMode );
-}
-
-/*************************************************************************
-|*
 |*    SvFileStream::Close()
 |*
 *************************************************************************/

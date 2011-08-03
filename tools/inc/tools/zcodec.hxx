@@ -112,7 +112,6 @@ public:
     void            SetBreak( sal_uIntPtr );
     sal_uIntPtr         GetBreak( void );
     void            SetCRC( sal_uIntPtr nCurrentCRC );
-    sal_uIntPtr         UpdateCRC( sal_uIntPtr nLatestCRC, sal_uIntPtr nSource );
     sal_uIntPtr         UpdateCRC( sal_uIntPtr nLatestCRC, sal_uInt8* pSource, long nDatSize );
     sal_uIntPtr         GetCRC();
 };

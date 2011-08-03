@@ -145,36 +145,6 @@ FontType FontInfo::GetType() const
     return (mpImplMetric->IsScalable() ? TYPE_SCALABLE : TYPE_RASTER);
 }
 
-// -----------------------------------------------------------------------
-
-sal_Bool FontInfo::IsDeviceFont() const
-{
-    return mpImplMetric->IsDeviceFont();
-}
-
-// -----------------------------------------------------------------------
-
-sal_Bool FontInfo::SupportsLatin() const
-{
-    return mpImplMetric->SupportsLatin();
-}
-
-// -----------------------------------------------------------------------
-
-sal_Bool FontInfo::SupportsCJK() const
-{
-    return mpImplMetric->SupportsCJK();
-}
-
-// -----------------------------------------------------------------------
-
-sal_Bool FontInfo::SupportsCTL() const
-{
-    return mpImplMetric->SupportsCTL();
-}
-
-// =======================================================================
-
 FontMetric::FontMetric( const FontMetric& rMetric )
 :    FontInfo( rMetric )
 {}

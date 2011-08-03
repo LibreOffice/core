@@ -209,7 +209,6 @@ public:
     void                    SetConfigString( const String& rCfgStr );
 
     void                    SetUrlFilter( const IUrlFilter* _pFilter );
-    const IUrlFilter*       GetUrlFilter( ) const;
 
     void                    EndInplaceEditing( bool _bCancel );
 

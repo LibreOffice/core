@@ -463,17 +463,6 @@ void ZCodec::ImplInitBuf ( sal_Bool nIOFlag )
 
 // ------------------------------------------------------------------------
 
-sal_uIntPtr ZCodec::UpdateCRC ( sal_uIntPtr nLatestCRC, sal_uIntPtr nNumber )
-{
-
-#ifdef OSL_LITENDIAN
-    nNumber = SWAPLONG( nNumber );
-#endif
-    return rtl_crc32( nLatestCRC, &nNumber, 4 );
-}
-
-// ------------------------------------------------------------------------
-
 sal_uIntPtr ZCodec::UpdateCRC ( sal_uIntPtr nLatestCRC, sal_uInt8* pSource, long nDatSize)
 {
     return rtl_crc32( nLatestCRC, pSource, nDatSize );

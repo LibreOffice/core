@@ -190,7 +190,6 @@ public:
     OutputDevice*           GetDevice() const { return mpDev; }
     OutputDevice*           GetDevice2() const { return mpDev2; }
     XubString               GetFontMapText( const FontInfo& rInfo ) const;
-    sal_uInt16                  GetFontNameType( const XubString& rFontName ) const;
 
     const XubString&        GetNormalStr() const { return maNormal; }
     const XubString&        GetItalicStr() const { return maNormalItalic; }

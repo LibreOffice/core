@@ -468,41 +468,4 @@ UniqueItemId UniqueIdContainer::CreateId()
     return UniqueItemId( pId );
 }
 
-/*************************************************************************
-|*
-|*    UniqueIdContainer::CreateIdProt()
-|*
-*************************************************************************/
-
-UniqueItemId UniqueIdContainer::CreateFreeId( sal_uIntPtr nId )
-{
-    // Einfach erzeugen, fuer abgeleitete Klasse
-    ImpUniqueId * pId = new ImpUniqueId;
-    pId->nRefCount = 0;
-    pId->nId = nId;
-    return UniqueItemId( pId );
-}
-
-/*************************************************************************
-|*
-|*    UniqueIdContainer::CreateIdProt()
-|*
-*************************************************************************/
-
-UniqueItemId UniqueIdContainer::CreateIdProt( sal_uIntPtr nId )
-{
-    if ( IsIndexValid( nId ) )
-        return UniqueItemId( (ImpUniqueId *)Get( nId ) );
-
-    ImpUniqueId * pId;
-    do
-    {
-        pId = new ImpUniqueId;
-        pId->nRefCount = 1;
-        pId->nId = Insert( pId );
-    }
-    while( pId->nId != nId );
-    return UniqueItemId( pId );
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

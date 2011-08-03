@@ -54,33 +54,6 @@ SvCacheStream::SvCacheStream( sal_uIntPtr nMaxMemSize )
 
 /*************************************************************************
 |*
-|*    SvCacheStream::SvCacheStream()
-|*
-*************************************************************************/
-
-SvCacheStream::SvCacheStream( const String &rFileName,
-                              sal_uIntPtr nExpectedSize,
-                              sal_uIntPtr nMaxMemSize )
-{
-    if( !nMaxMemSize )
-        nMaxMemSize = 20480;
-
-    if( nExpectedSize > nMaxMemSize )
-        nExpectedSize = nMaxMemSize; // oder gleich in File schreiben
-    else if( !nExpectedSize )
-        nExpectedSize = 4096;
-
-    SvStream::bIsWritable = sal_True;
-    nMaxSize        = nMaxMemSize;
-    bPersistent     = sal_True;
-    aFileName       = rFileName;
-    pSwapStream     = 0;
-    pCurrentStream  = new SvMemoryStream( nExpectedSize );
-    pTempFile       = 0;
-}
-
-/*************************************************************************
-|*
 |*    SvCacheStream::~SvCacheStream()
 |*
 *************************************************************************/
@@ -112,22 +85,8 @@ void SvCacheStream::SwapOut()
     {
         if( !pSwapStream && !aFileName.Len() )
         {
-            if (aFilenameLinkHdl.IsSet())
-            {
-                // pSwapStream wird zum Schutz gegen Reentranz genutzt
-                pSwapStream = pCurrentStream;
-                Link aLink( aFilenameLinkHdl );
-                aFilenameLinkHdl = Link();
-                aLink.Call(this);
-                // pSwapStream nur zuruecksetzen, wenn nicht ueber
-                // SetSwapStream geaendert
-                if( pSwapStream == pCurrentStream ) pSwapStream = 0;
-            }
-            else
-            {
-                pTempFile = new TempFile;
-                aFileName = pTempFile->GetName();
-            }
+            pTempFile = new TempFile;
+            aFileName = pTempFile->GetName();
         }
 
         sal_uIntPtr nPos = pCurrentStream->Tell();
@@ -234,16 +193,6 @@ sal_uIntPtr SvCacheStream::GetSize()
     sal_uIntPtr nLength = Seek( STREAM_SEEK_TO_END );
     Seek( nTemp );
     return nLength;
-}
-
-void    SvCacheStream::SetFilenameHdl( const Link& rLink)
-{
-    aFilenameLinkHdl = rLink;
-}
-
-const Link& SvCacheStream::GetFilenameHdl() const
-{
-    return aFilenameLinkHdl;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

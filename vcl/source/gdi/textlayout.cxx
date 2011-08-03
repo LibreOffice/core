@@ -304,10 +304,6 @@ namespace vcl
             n /= (double)_zoom.GetDenominator();
             return (long)::rtl::math::round( n );
         }
-        long unzoomBy( long _value, const Fraction& _zoom )
-        {
-            return zoomBy( _value, Fraction( _zoom.GetDenominator(), _zoom.GetNumerator() ) );
-        }
     }
 
     //--------------------------------------------------------------------

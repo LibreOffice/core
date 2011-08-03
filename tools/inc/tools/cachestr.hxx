@@ -50,8 +50,6 @@ private:
     SvStream*       pCurrentStream;
     TempFile*       pTempFile;
 
-    Link            aFilenameLinkHdl;
-
     TOOLS_DLLPRIVATE virtual sal_uIntPtr   GetData( void* pData, sal_uIntPtr nSize );
     TOOLS_DLLPRIVATE virtual sal_uIntPtr   PutData( const void* pData, sal_uIntPtr nSize );
     TOOLS_DLLPRIVATE virtual sal_uIntPtr   SeekPos( sal_uIntPtr nPos );
@@ -60,13 +58,8 @@ private:
 
 public:
                     SvCacheStream( sal_uIntPtr nMaxMemSize = 0 );
-                    SvCacheStream( const String &rFileName,
-                                   sal_uIntPtr nExpectedSize = 0,
-                                   sal_uIntPtr nMaxMemSize = 0 );
                     ~SvCacheStream();
 
-    void            SetFilenameHdl( const Link& rLink);
-    const Link&     GetFilenameHdl() const;
     void            SetFilename( const String& rFN )
                  { aFileName = rFN; } // darf nur vom FilenameHdl gerufen werden!
     const String&   GetFilename() const { return aFileName; }
