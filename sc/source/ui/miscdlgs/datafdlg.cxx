@@ -201,7 +201,8 @@ ScDataFormDlg::ScDataFormDlg( Window* pParent, ScTabViewShell*  pTabViewShellOri
                 pFixedTexts[nIndex] = NULL;
                 pEdits[nIndex] = NULL;
             }
-        pEdits[nIndex]->SetModifyHdl( HDL(Impl_DataModifyHdl) );
+            if (pEdits[nIndex])
+                pEdits[nIndex]->SetModifyHdl( HDL(Impl_DataModifyHdl) );
         }
 
         Size nDialogSize = this->GetSizePixel();
