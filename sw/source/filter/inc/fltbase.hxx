@@ -48,7 +48,6 @@ protected:
     inline void ReadChar( char &rC );
     inline void ReadByte( sal_uInt8 &rN );
     inline void Read( short &rN );
-    inline void ReadUnicode( sal_Unicode &rU );
     inline void Read( sal_uInt8 &rN0, sal_uInt16 &rN1, sal_uInt16 &rN2 );
     inline void Read( sal_uInt16 &rN );
     inline void Read( sal_uInt16 &rN1, sal_uInt16 &rN2 );
@@ -70,16 +69,6 @@ inline void SwFilterBase::ReadByte( sal_uInt8 &rN )
     *pIn >> rN;
     nBytesLeft--;
     }
-
-inline void SwFilterBase::ReadUnicode( sal_Unicode &rU )
-{
-    {
-    sal_Char cC;
-    *pIn >> cC;
-    rU = ByteString::ConvertToUnicode(cC, eQuellChar);
-    nBytesLeft--;
-    }
-}
 
 inline void SwFilterBase::Read( short &rN )
     {
