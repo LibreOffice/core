@@ -514,7 +514,6 @@ Menu::doLazyDelete()
 MenuBar::AddMenuBarButton(Image const&, Link const&, unsigned short)
 MenuBar::ShowFloatButton(unsigned char)
 MenuBar::ShowHideButton(unsigned char)
-MenuItemList::GetCharClass() const
 MergeData::~MergeData()
 MergeDataFile::Dump()
 MessBox::GetModeImage() const
