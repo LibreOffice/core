@@ -501,16 +501,6 @@ MailDispatcher::removeListener(rtl::Reference<IMailDispatcherListener>)
 MaskSet::MaskSet(SvxBmpMask*, long)
 Matrix3d::Inverse() const
 Matrix3d::Matrix3d()
-Menu::ConvertPoint(Point&, Window*) const
-Menu::GetAccessibleDescription(unsigned short) const
-Menu::GetDisplayItemId(long) const
-Menu::GetDisplayText() const
-Menu::GetItemStartEnd(unsigned short) const
-Menu::GetLineCount() const
-Menu::ImplSelectWithStart(Menu*)
-Menu::IsItemVisible(unsigned short) const
-Menu::SetAccessibleDescription(unsigned short, String const&)
-Menu::doLazyDelete()
 MenuBar::AddMenuBarButton(Image const&, Link const&, unsigned short)
 MenuBar::ShowFloatButton(unsigned char)
 MenuBar::ShowHideButton(unsigned char)
