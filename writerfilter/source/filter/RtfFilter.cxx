@@ -71,7 +71,7 @@ sal_Bool RtfFilter::filter( const uno::Sequence< beans::PropertyValue >& aDescri
     }
 
     SvtMiscOptions aMiscOptions;
-    if (aMiscOptions.IsExperimentalMode())
+    if (aMiscOptions.IsExperimentalMode() || !m_xDstDoc.is() )
     {
         MediaDescriptor aMediaDesc( aDescriptor );
 #ifdef DEBUG_IMPORT
