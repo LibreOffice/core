@@ -60,6 +60,7 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
 	sdbc \
     AppleRemote \
     avmedia \
+	avmediaQuickTime \
     basegfx \
     chartcontroller \
     chartmodel \
@@ -150,6 +151,8 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_URE, \
 ))
 
 $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
+	avmediagst \
+	avmediawin \
 	collator_data \
 	dict_ja \
 	dict_zh \

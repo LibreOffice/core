@@ -1,7 +1,7 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
+#
 # Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
@@ -25,31 +25,16 @@
 #
 #*************************************************************************
 
-PRJ=..$/..
-PRJNAME=avmedia
-TARGET=viewer
+PRJ=..
+TARGET=prj
 
-# --- Settings ----------------------------------
+.INCLUDE : settings.mk
 
-.INCLUDE :  settings.mk
+.IF "$(VERBOSE)"!=""
+VERBOSEFLAG :=
+.ELSE
+VERBOSEFLAG := -s
+.ENDIF
 
-# --- Resources ---------------------------------
-
-SRS1NAME=$(TARGET)
-SRC1FILES =\
-        mediawindow.src					
-
-# --- Files -------------------------------------
-
-SLOFILES= \
-	$(EXCEPTIONSFILES)
-
-EXCEPTIONSFILES= \
-        $(SLO)$/mediaevent_impl.obj     	\
-        $(SLO)$/mediawindow.obj         	\
-        $(SLO)$/mediawindow_impl.obj		\
-        $(SLO)$/mediawindowbase_impl.obj 	\
-        
-# --- Targets ----------------------------------
-
-.INCLUDE : target.mk
+all:
+	cd $(PRJ) && $(GNUMAKE) $(VERBOSEFLAG) -r -j$(MAXPROCESS) $(gb_MAKETARGET) && $(GNUMAKE) $(VERBOSEFLAG) -r deliverlog

@@ -661,6 +661,13 @@ $(call gb_LinkTarget_add_libs,$(1), \
 
 endef
 
+define gb_LinkTarget__use_qtkit
+$(call gb_LinkTarget_add_libs,$(1), \
+	-framework QTKit \
+)
+
+endef
+
 define gb_LinkTarget__use_quicktime
 $(call gb_LinkTarget_add_libs,$(1), \
 	-framework QuickTime \

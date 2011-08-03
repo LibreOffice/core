@@ -40,12 +40,12 @@ GTK_TWO_FOUR=$(shell @+-$(PKG_CONFIG) --exists 'gtk+-2.0 >= 2.4.0' && echo YES)
 
 my_components = \
     abp \
-    avmedia \
     basprov \
     bib \
     cached1 \
     calc \
     component/animations/source/animcore/animcore \
+    component/avmedia/util/avmedia \
     component/basctl/util/basctl \
     component/basic/util/sb \
     component/chart2/source/controller/chartcontroller \
@@ -290,11 +290,14 @@ my_components += component/xmlsecurity/util/xsec_xmlsec
 .IF "$(OS)" == "MACOSX"
 my_components += \
     MacOSXSpell \
-    avmediaQuickTime \
     fps_aqua \
     macab1 \
     macbe1 \
     component/vcl/vcl.macosx
+.END
+
+.IF "$(GUIBASE)" == "aqua"
+my_components += component/avmedia/source/quicktime/avmediaQuickTime
 .END
 
 .IF "$(OS)" == "WNT"
@@ -326,7 +329,7 @@ my_components += \
 
 .IF "$(OS)" == "WNT" && "$(ENABLE_DIRECTX)" != ""
 my_components += \
-    avmediawin \
+    component/avmedia/source/win/avmediawin \
     component/canvas/source/directx/directx9canvas \
     component/canvas/source/directx/gdipluscanvas
 .END
@@ -359,7 +362,7 @@ my_components += evoab
 .END
 
 .IF "$(OS)" != "WNT" && "$(ENABLE_GSTREAMER)" != ""
-my_components += avmediagstreamer
+my_components += component/avmedia/source/gstreamer/avmediagstreamer
 .END
 
 my_ooo_components = mailmerge
