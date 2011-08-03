@@ -108,7 +108,6 @@ Thesaurus::Thesaurus() :
 
 Thesaurus::~Thesaurus()
 {
-
     if (aThes)
     {
         for (int i = 0; i < numthes; i++)
@@ -138,8 +137,10 @@ Thesaurus::~Thesaurus()
     aTNames = NULL;
 
     if (pPropHelper)
+    {
         pPropHelper->RemoveAsPropListener();
-    delete pPropHelper;
+        delete pPropHelper;
+    }
 }
 
 
@@ -686,6 +687,12 @@ void SAL_CALL Thesaurus::dispose()
         bDisposing = sal_True;
         EventObject aEvtObj( (XThesaurus *) this );
         aEvtListeners.disposeAndClear( aEvtObj );
+        if (pPropHelper)
+        {
+            pPropHelper->RemoveAsPropListener();
+            delete pPropHelper;
+            pPropHelper = NULL;
+        }
     }
 }
 

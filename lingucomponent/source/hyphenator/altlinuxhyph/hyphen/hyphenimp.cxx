@@ -97,9 +97,6 @@ Hyphenator::Hyphenator() :
 
 Hyphenator::~Hyphenator()
 {
-    if (pPropHelper)
-        pPropHelper->RemoveAsPropListener();
-
     if (numdict && aDicts)
     {
         for (int i=0; i < numdict; ++i)
@@ -108,10 +105,14 @@ Hyphenator::~Hyphenator()
             if (aDicts[i].aPtr)
                 hnj_hyphen_free(aDicts[i].aPtr);
         }
-    delete pPropHelper;
     }
-
     delete[] aDicts;
+
+    if (pPropHelper)
+    {
+        pPropHelper->RemoveAsPropListener();
+        delete pPropHelper;
+    }
 }
 
 PropertyHelper_Hyphenation& Hyphenator::GetPropHelper_Impl()
@@ -124,7 +125,6 @@ PropertyHelper_Hyphenation& Hyphenator::GetPropHelper_Impl()
         pPropHelper->AddAsPropListener();   //! after a reference is established
     }
     return *pPropHelper;
-
 }
 
 
@@ -870,6 +870,12 @@ void SAL_CALL Hyphenator::dispose()
         bDisposing = sal_True;
         EventObject aEvtObj( (XHyphenator *) this );
         aEvtListeners.disposeAndClear( aEvtObj );
+        if (pPropHelper)
+        {
+            pPropHelper->RemoveAsPropListener();
+            delete pPropHelper;
+            pPropHelper = NULL;
+        }
     }
 }
 
