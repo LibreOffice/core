@@ -2251,29 +2251,6 @@ accessibility::DbgName_AccessibleGridControlTableBase()
 accessibility::DescriptionGenerator::AddPropertyNames()
 accessibility::DescriptionGenerator::AddUnknown(rtl::OUString const&, rtl::OUString const&)
 accessibility::ShapeTypeHandler::GetServiceName(int) const
-avmedia::MediaControl::execute(avmedia::MediaItem const&)
-avmedia::MediaControl::getState(avmedia::MediaItem&) const
-avmedia::MediaControl::update()
-avmedia::MediaWindow::disable()
-avmedia::MediaWindow::enable()
-avmedia::MediaWindow::getDuration() const
-avmedia::MediaWindow::getMediaTime() const
-avmedia::MediaWindow::getPointer() const
-avmedia::MediaWindow::getPosSize() const
-avmedia::MediaWindow::getRate() const
-avmedia::MediaWindow::getStopTime() const
-avmedia::MediaWindow::getZoom() const
-avmedia::MediaWindow::isMute() const
-avmedia::MediaWindow::isPlaybackLoop() const
-avmedia::MediaWindow::isPlaying() const
-avmedia::MediaWindow::setMediaTime(double)
-avmedia::MediaWindow::setMute(bool)
-avmedia::MediaWindow::setPlaybackLoop(bool)
-avmedia::MediaWindow::setRate(double)
-avmedia::MediaWindow::setStopTime(double)
-avmedia::MediaWindow::setZoom(com::sun::star::media::ZoomLevel)
-avmedia::MediaWindow::stop()
-avmedia::priv::MediaWindowImpl::update()
 basebmp::debugDump(boost::shared_ptr<basebmp::BitmapDevice> const&, std::basic_ostream<char, std::char_traits<char> >&)
 basegfx::B1DRange::B1DRange(basegfx::B1IRange const&)
 basegfx::B2DCubicBezier::B2DCubicBezier(basegfx::B2DPoint const&, basegfx::B2DPoint const&)
