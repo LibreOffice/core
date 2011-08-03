@@ -41,6 +41,7 @@ $(eval $(call gb_Executable_add_linked_libs,sax_cppunittester_all,\
 	cppu \
 	cppunit \
 	sal \
+	sal_textenc \
 	sax \
 	$(gb_STDLIBS) \
     objc \
