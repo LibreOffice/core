@@ -247,9 +247,9 @@ ScDataFormDlg::~ScDataFormDlg()
             delete pFixedTexts[i];
     }
     if (pEdits)
-        delete pEdits;
+        delete[] pEdits;
     if (pFixedTexts)
-        delete pFixedTexts;
+        delete[] pFixedTexts;
 }
 
 void ScDataFormDlg::FillCtrls(SCROW /*nCurrentRow*/)
