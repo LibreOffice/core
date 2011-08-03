@@ -24,6 +24,11 @@
  * in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
  * instead of those above.
  */
+
+#ifdef IOS
+#define CPPUNIT_PLUGIN_EXPORTED_NAME cppunitTest_i18npool_breakiterator
+#endif
+
 #include "precompiled_i18npool.hxx"
 
 #include <cppunit/TestSuite.h>

@@ -37,12 +37,12 @@ my_components = qa_i18npool
 
 .INCLUDE :  settings.mk
 
-.IF "$(CROSS_COMPILING)"=="YES"
-all:
-    @echo Nothing done when cross-compiling
+CFLAGSCXX += $(CPPUNIT_CFLAGS)
+
+.IF "$(OS)" == "IOS"
+CFLAGSCXX += $(OBJCXXFLAGS)
 .ENDIF
 
-CFLAGSCXX += $(CPPUNIT_CFLAGS)
 DLLPRE = # no leading "lib" on .so files
 
 # --- Libs ---------------------------------------------------------
@@ -62,6 +62,13 @@ SHL1RPATH = NONE
 SHL1IMPLIB= i$(SHL1TARGET)
 DEF1NAME=$(SHL1TARGET)
 SHL1VERSIONMAP= version.map
+
+.IF "$(OS)" == "IOS"
+APP2OBJS = $(OBJ)/i18npool_cppunittester_all.obj $(SHL1OBJS)
+APP2RPATH = NONE
+APP2STDLIBS = $(SHL1STDLIBS)
+APP2TARGET = i18npool_cppunittester_all
+.ENDIF
 
 # --- All object files ---------------------------------------------
 
