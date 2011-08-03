@@ -212,9 +212,9 @@ public:
                             Menu();
                             Menu( sal_Bool bMenuBar );
     SAL_DLLPRIVATE Window*  ImplGetWindow() const { return pWindow; }
-
-
+    // ImplSelectWithStart() is used in vcl/aqua/source/window/salnsmenu.mm
     SAL_DLLPRIVATE void ImplSelectWithStart( Menu* pStartMenu = NULL );
+
 public:
     virtual             ~Menu();
 
@@ -279,7 +279,6 @@ public:
     void                ShowItem( sal_uInt16 nItemId, sal_Bool bVisible = sal_True );
     void                HideItem( sal_uInt16 nItemId ) { ShowItem( nItemId, sal_False ); }
 
-    sal_Bool                IsItemVisible( sal_uInt16 nItemId ) const;
     sal_Bool                IsItemPosVisible( sal_uInt16 nItemPos ) const;
     sal_Bool                IsMenuVisible() const;
     sal_Bool                IsMenuBar() const { return bIsMenuBar; }
@@ -345,8 +344,6 @@ public:
 
     // accessibility helpers
 
-    // gets the displayed text
-    String GetDisplayText() const;
     // returns the bounding box for the character at index nIndex
     // where nIndex is relative to the starting index of the item
     // with id nItemId (in coordinates of the displaying window)
@@ -354,18 +351,11 @@ public:
     // -1 is returned if no character is at that point
     // if an index is found the corresponding item id is filled in (else 0)
     long GetIndexForPoint( const Point& rPoint, sal_uInt16& rItemID ) const;
-    // returns the number of lines in the result of GetDisplayText()
-    long GetLineCount() const;
     // returns the interval [start,end] of line nLine
     // returns [-1,-1] for an invalid line
     Pair GetLineStartEnd( long nLine ) const;
-    // like GetLineStartEnd but first finds the line number for the item
-    Pair GetItemStartEnd( sal_uInt16 nItemId ) const;
-    // returns the item id for line nLine or 0 if nLine is invalid
-    sal_uInt16 GetDisplayItemId( long nLine ) const;
     // returns the bounding rectangle for an item at pos nItemPos
     Rectangle GetBoundingRectangle( sal_uInt16 nItemPos ) const;
-    sal_Bool ConvertPoint( Point& rPoint, Window* pReferenceWindow ) const;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > GetAccessible();
     void SetAccessible( const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& rxAccessible );
@@ -378,17 +368,11 @@ public:
     void                SetAccessibleName( sal_uInt16 nItemId, const XubString& rStr );
     XubString           GetAccessibleName( sal_uInt16 nItemId ) const;
 
-    void                SetAccessibleDescription( sal_uInt16 nItemId, const XubString& rStr );
-    XubString           GetAccessibleDescription( sal_uInt16 nItemId ) const;
-
     // returns whether the item a position nItemPos is highlighted or not.
     bool  IsHighlighted( sal_uInt16 nItemPos ) const;
 
     void                HighlightItem( sal_uInt16 nItemPos );
     void                DeHighlight() { HighlightItem( 0xFFFF ); } // MENUITEMPOS_INVALID
-
-
-    void doLazyDelete();
 };
 
 // -----------

@@ -958,11 +958,6 @@ Menu::~Menu()
     ImplSetSalMenu( NULL );
 }
 
-void Menu::doLazyDelete()
-{
-    vcl::LazyDeletor<Menu>::Delete( this );
-}
-
 void Menu::ImplInit()
 {
     mnHighlightedItemPos = ITEMPOS_INVALID;
@@ -2190,11 +2185,6 @@ sal_Bool Menu::ImplIsVisible( sal_uInt16 nPos ) const
     return bVisible;
 }
 
-sal_Bool Menu::IsItemVisible( sal_uInt16 nItemId ) const
-{
-    return IsMenuVisible() && ImplIsVisible( GetItemPos( nItemId ) );
-}
-
 sal_Bool Menu::IsItemPosVisible( sal_uInt16 nItemPos ) const
 {
     return IsMenuVisible() && ImplIsVisible( nItemPos );
@@ -3152,13 +3142,6 @@ void Menu::ImplFillLayoutData() const
     }
 }
 
-String Menu::GetDisplayText() const
-{
-    if( ! mpLayoutData )
-        ImplFillLayoutData();
-    return mpLayoutData ? mpLayoutData->m_aDisplayText : String();
-}
-
 Rectangle Menu::GetCharacterBounds( sal_uInt16 nItemID, long nIndex ) const
 {
     long nItemIndex = -1;
@@ -3203,52 +3186,11 @@ long Menu::GetIndexForPoint( const Point& rPoint, sal_uInt16& rItemID ) const
     return nIndex;
 }
 
-long Menu::GetLineCount() const
-{
-    if( ! mpLayoutData )
-        ImplFillLayoutData();
-    return mpLayoutData ? mpLayoutData->GetLineCount() : 0;
-}
-
 Pair Menu::GetLineStartEnd( long nLine ) const
 {
     if( ! mpLayoutData )
         ImplFillLayoutData();
     return mpLayoutData ? mpLayoutData->GetLineStartEnd( nLine ) : Pair( -1, -1 );
-}
-
-Pair Menu::GetItemStartEnd( sal_uInt16 nItem ) const
-{
-    if( ! mpLayoutData )
-        ImplFillLayoutData();
-
-    for( size_t i = 0; i < mpLayoutData->m_aLineItemIds.size(); i++ )
-        if( mpLayoutData->m_aLineItemIds[i] == nItem )
-            return GetLineStartEnd( i );
-
-    return Pair( -1, -1 );
-}
-
-sal_uInt16 Menu::GetDisplayItemId( long nLine ) const
-{
-    sal_uInt16 nItemId = 0;
-    if( ! mpLayoutData )
-        ImplFillLayoutData();
-    if( mpLayoutData && ( nLine >= 0 ) && ( nLine < (long)mpLayoutData->m_aLineItemIds.size() ) )
-        nItemId = mpLayoutData->m_aLineItemIds[nLine];
-    return nItemId;
-}
-
-sal_Bool Menu::ConvertPoint( Point& rPoint, Window* pReferenceWindow ) const
-{
-    sal_Bool bRet = sal_False;
-    if( pWindow && pReferenceWindow )
-    {
-        rPoint = pReferenceWindow->OutputToAbsoluteScreenPixel( rPoint );
-        rPoint = pWindow->AbsoluteScreenToOutputPixel( rPoint );
-        bRet = sal_True;
-    }
-    return bRet;
 }
 
 Rectangle Menu::GetBoundingRectangle( sal_uInt16 nPos ) const
@@ -3284,24 +3226,6 @@ XubString Menu::GetAccessibleName( sal_uInt16 nItemId ) const
 
     if ( pData )
         return pData->aAccessibleName;
-    else
-        return ImplGetSVEmptyStr();
-}
-
-void Menu::SetAccessibleDescription( sal_uInt16 nItemId, const XubString& rStr )
-{
-    MenuItemData* pData = pItemList->GetData( nItemId );
-
-    if ( pData )
-        pData->aAccessibleDescription = rStr;
-}
-
-XubString Menu::GetAccessibleDescription( sal_uInt16 nItemId ) const
-{
-    MenuItemData* pData = pItemList->GetData( nItemId );
-
-    if ( pData )
-        return pData->aAccessibleDescription;
     else
         return ImplGetSVEmptyStr();
 }
