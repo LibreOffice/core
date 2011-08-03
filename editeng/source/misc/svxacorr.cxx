@@ -353,8 +353,8 @@ SvxAutoCorrect::SvxAutoCorrect( const String& rShareAutocorrFile,
 {
     nFlags = SvxAutoCorrect::GetDefaultFlags();
 
-    cEmDash = ByteString::ConvertToUnicode( '\x97', RTL_TEXTENCODING_MS_1252 );
-    cEnDash = ByteString::ConvertToUnicode( '\x96', RTL_TEXTENCODING_MS_1252 );
+    cEmDash = 0x2014;
+    cEnDash = 0x2013;
 }
 
 SvxAutoCorrect::SvxAutoCorrect( const SvxAutoCorrect& rCpy )
