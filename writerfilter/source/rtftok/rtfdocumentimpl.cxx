@@ -30,6 +30,7 @@
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/graphic/XGraphicProvider.hpp>
+#include <com/sun/star/io/UnexpectedEOFException.hpp>
 #include <com/sun/star/util/DateTime.hpp>
 #include <editeng/borderline.hxx>
 #include <rtl/strbuf.hxx>
@@ -475,12 +476,15 @@ void RTFDocumentImpl::resolve(Stream & rMapper)
             break;
         case ERROR_GROUP_OVER:
             OSL_TRACE("%s: unmatched '{'", OSL_THIS_FUNC);
+            throw io::UnexpectedEOFException();
             break;
         case ERROR_EOF:
             OSL_TRACE("%s: unexpected end of file", OSL_THIS_FUNC);
+            throw io::UnexpectedEOFException();
             break;
         case ERROR_HEX_INVALID:
             OSL_TRACE("%s: invalid hex char", OSL_THIS_FUNC);
+            throw io::WrongFormatException();
             break;
         case ERROR_CHAR_OVER:
             OSL_TRACE("%s: characters after last '}'", OSL_THIS_FUNC);
