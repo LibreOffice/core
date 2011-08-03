@@ -2175,12 +2175,14 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
                 m_aFormfieldSprms->push_back(make_pair(NS_ooxml::LN_CT_FFDDList_result, pIntValue));
             break;
         case RTF_EDMINS:
-            m_xDocumentProperties->setEditingDuration(nParam);
+            if (m_xDocumentProperties.is())
+                m_xDocumentProperties->setEditingDuration(nParam);
             break;
         case RTF_NOFPAGES:
         case RTF_NOFWORDS:
         case RTF_NOFCHARS:
         case RTF_NOFCHARSWS:
+            if (m_xDocumentProperties.is())
             {
                 uno::Sequence<beans::NamedValue> aSet = m_xDocumentProperties->getDocumentStatistics();
                 OUString aName;
@@ -2210,7 +2212,8 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
             }
             break;
         case RTF_VERSION:
-            m_xDocumentProperties->setEditingCycles(nParam);
+            if (m_xDocumentProperties.is())
+                m_xDocumentProperties->setEditingCycles(nParam);
             break;
         case RTF_VERN:
             // Ignore this for now, later the RTF writer version could be used to add hacks for older buggy writers.
@@ -2645,9 +2648,12 @@ int RTFDocumentImpl::popState()
     {
         OUString aName = m_aStates.top().nDestinationState == DESTINATION_OPERATOR ?
             OUString(RTL_CONSTASCII_USTRINGPARAM("Operator")) : OUString(RTL_CONSTASCII_USTRINGPARAM("Company"));
-        uno::Reference<beans::XPropertyContainer> xUserDefinedProperties = m_xDocumentProperties->getUserDefinedProperties();
-        xUserDefinedProperties->addProperty(aName, beans::PropertyAttribute::REMOVEABLE,
-                uno::makeAny(m_aDestinationText.makeStringAndClear()));
+        if (m_xDocumentProperties.is())
+        {
+            uno::Reference<beans::XPropertyContainer> xUserDefinedProperties = m_xDocumentProperties->getUserDefinedProperties();
+            xUserDefinedProperties->addProperty(aName, beans::PropertyAttribute::REMOVEABLE,
+                    uno::makeAny(m_aDestinationText.makeStringAndClear()));
+        }
     }
     else if (m_aStates.top().nDestinationState == DESTINATION_OBJDATA)
     {
