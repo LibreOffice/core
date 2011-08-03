@@ -285,7 +285,8 @@ RTFDocumentImpl::RTFDocumentImpl(uno::Reference<uno::XComponentContext> const& x
     OSL_ASSERT(m_xModelFactory.is());
 
     uno::Reference<document::XDocumentPropertiesSupplier> xDocumentPropertiesSupplier(m_xDstDoc, uno::UNO_QUERY);
-    m_xDocumentProperties.set(xDocumentPropertiesSupplier->getDocumentProperties(), uno::UNO_QUERY);
+    if (xDocumentPropertiesSupplier.is())
+        m_xDocumentProperties.set(xDocumentPropertiesSupplier->getDocumentProperties(), uno::UNO_QUERY);
 
     m_pGraphicHelper = new oox::GraphicHelper(m_xContext, xFrame, m_xStorage);
 
@@ -2629,15 +2630,15 @@ int RTFDocumentImpl::popState()
         RTFValue::Pointer_t pDValue(new RTFValue(OStringToOUString(aDefaultText, m_aStates.top().nCurrentEncoding)));
         m_aFormfieldSprms->push_back(make_pair(NS_ooxml::LN_CT_FFTextInput_default, pDValue));
     }
-    else if (m_aStates.top().nDestinationState == DESTINATION_CREATIONTIME)
+    else if (m_aStates.top().nDestinationState == DESTINATION_CREATIONTIME && m_xDocumentProperties.is())
         m_xDocumentProperties->setCreationDate(lcl_getDateTime(m_aStates));
-    else if (m_aStates.top().nDestinationState == DESTINATION_REVISIONTIME)
+    else if (m_aStates.top().nDestinationState == DESTINATION_REVISIONTIME && m_xDocumentProperties.is())
         m_xDocumentProperties->setModificationDate(lcl_getDateTime(m_aStates));
-    else if (m_aStates.top().nDestinationState == DESTINATION_PRINTTIME)
+    else if (m_aStates.top().nDestinationState == DESTINATION_PRINTTIME && m_xDocumentProperties.is())
         m_xDocumentProperties->setPrintDate(lcl_getDateTime(m_aStates));
-    else if (m_aStates.top().nDestinationState == DESTINATION_AUTHOR)
+    else if (m_aStates.top().nDestinationState == DESTINATION_AUTHOR && m_xDocumentProperties.is())
         m_xDocumentProperties->setAuthor(m_aDestinationText.makeStringAndClear());
-    else if (m_aStates.top().nDestinationState == DESTINATION_COMMENT)
+    else if (m_aStates.top().nDestinationState == DESTINATION_COMMENT && m_xDocumentProperties.is())
         m_xDocumentProperties->setGenerator(m_aDestinationText.makeStringAndClear());
     else if (m_aStates.top().nDestinationState == DESTINATION_OPERATOR
             || m_aStates.top().nDestinationState == DESTINATION_COMPANY)

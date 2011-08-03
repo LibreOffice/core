@@ -222,7 +222,8 @@ void SettingsTable::ApplyProperties( uno::Reference< text::XTextDocument > xDoc 
     uno::Reference< beans::XPropertySet> xDocProps( xDoc, uno::UNO_QUERY );
 
     // Record changes value
-    xDocProps->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("RecordChanges")), uno::makeAny( m_pImpl->m_bRecordChanges ) );
+    if (xDocProps.is())
+        xDocProps->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("RecordChanges")), uno::makeAny( m_pImpl->m_bRecordChanges ) );
 }
 
 

@@ -242,7 +242,8 @@ uno::Reference< container::XNameContainer >    DomainMapper_Impl::GetPageStyles(
     if(!m_xPageStyles.is())
     {
         uno::Reference< style::XStyleFamiliesSupplier > xSupplier( m_xTextDocument, uno::UNO_QUERY );
-        xSupplier->getStyleFamilies()->getByName(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PageStyles"))) >>= m_xPageStyles;
+        if (xSupplier.is())
+            xSupplier->getStyleFamilies()->getByName(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PageStyles"))) >>= m_xPageStyles;
     }
     return m_xPageStyles;
 }
@@ -260,7 +261,7 @@ uno::Reference< text::XText > DomainMapper_Impl::GetBodyText()
 
 uno::Reference< beans::XPropertySet > DomainMapper_Impl::GetDocumentSettings()
 {
-    if( !m_xDocumentSettings.is() )
+    if( !m_xDocumentSettings.is() && m_xTextFactory.is())
     {
         m_xDocumentSettings = uno::Reference< beans::XPropertySet >(
             m_xTextFactory->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.document.Settings"))), uno::UNO_QUERY );
@@ -287,6 +288,8 @@ void DomainMapper_Impl::SetDocumentSettingsProperty( const ::rtl::OUString& rPro
 void DomainMapper_Impl::RemoveLastParagraph( )
 {
     uno::Reference< text::XTextAppend >  xTextAppend = m_aTextAppendStack.top().xTextAppend;
+    if (!xTextAppend.is())
+        return;
     try
     {
         uno::Reference< text::XTextCursor > xCursor = xTextAppend->createTextCursor();
@@ -3265,7 +3268,7 @@ void DomainMapper_Impl::ResetParaRedline( )
 
 void DomainMapper_Impl::ApplySettingsTable()
 {
-    if( m_pSettingsTable )
+    if( m_pSettingsTable && m_xTextFactory.is() )
     {
         try
         {

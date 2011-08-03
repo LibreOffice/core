@@ -390,9 +390,10 @@ uno::Reference< beans::XPropertySet > SectionPropertyMap::GetPageStyle(
                 m_aFirstPageStyle = uno::Reference< beans::XPropertySet > (
                         xTextFactory->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.style.PageStyle") )),
                         uno::UNO_QUERY);
-                xPageStyles->insertByName( m_sFirstPageStyleName, uno::makeAny(m_aFirstPageStyle) );
+                if (xPageStyles.is())
+                    xPageStyles->insertByName( m_sFirstPageStyleName, uno::makeAny(m_aFirstPageStyle) );
             }
-            else if( !m_aFirstPageStyle.is() )
+            else if( !m_aFirstPageStyle.is() && xPageStyles.is() )
             {
                 xPageStyles->getByName(m_sFirstPageStyleName) >>= m_aFirstPageStyle;
             }
@@ -400,7 +401,7 @@ uno::Reference< beans::XPropertySet > SectionPropertyMap::GetPageStyle(
         }
         else
         {
-            if( !m_sFollowPageStyleName.getLength() )
+            if( !m_sFollowPageStyleName.getLength() && xPageStyles.is() )
             {
                 uno::Sequence< ::rtl::OUString > aPageStyleNames = xPageStyles->getElementNames();
                 m_sFollowPageStyleName = lcl_FindUnusedPageStyleName(aPageStyleNames);
@@ -409,7 +410,7 @@ uno::Reference< beans::XPropertySet > SectionPropertyMap::GetPageStyle(
                         uno::UNO_QUERY);
                 xPageStyles->insertByName( m_sFollowPageStyleName, uno::makeAny(m_aFollowPageStyle) );
             }
-            else if(!m_aFollowPageStyle.is() )
+            else if(!m_aFollowPageStyle.is() && xPageStyles.is() )
             {
                 xPageStyles->getByName(m_sFollowPageStyleName) >>= m_aFollowPageStyle;
             }
@@ -1005,7 +1006,8 @@ void SectionPropertyMap::_ApplyProperties( uno::Reference< beans::XPropertySet >
     {
         try
         {
-            xStyle->setPropertyValue( rPropNameSupplier.GetName( aMapIter->first.eId ), aMapIter->second );
+            if (xStyle.is())
+                xStyle->setPropertyValue( rPropNameSupplier.GetName( aMapIter->first.eId ), aMapIter->second );
         }
         catch( const uno::Exception& )
         {
