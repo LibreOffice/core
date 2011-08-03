@@ -344,11 +344,9 @@ public:
     XMLFontStylesContext *GetFontDecls();
     SvXMLStylesContext *GetStyles();
     SvXMLStylesContext *GetAutoStyles();
-    SvXMLStylesContext *GetMasterStyles();
     const XMLFontStylesContext *GetFontDecls() const;
     const SvXMLStylesContext *GetStyles() const;
     const SvXMLStylesContext *GetAutoStyles() const;
-    const SvXMLStylesContext *GetMasterStyles() const;
 
     sal_uInt16  getImportFlags() const { return mnImportFlags; }
     sal_Bool    IsFormsSupported() const { return mbIsFormsSupported; }

@@ -1570,11 +1570,6 @@ SvXMLStylesContext *SvXMLImport::GetAutoStyles()
     return (SvXMLStylesContext *)&mxAutoStyles;
 }
 
-SvXMLStylesContext *SvXMLImport::GetMasterStyles()
-{
-    return (SvXMLStylesContext *)&mxMasterStyles;
-}
-
 const XMLFontStylesContext *SvXMLImport::GetFontDecls() const
 {
     return (const XMLFontStylesContext *)&mxFontDecls;
@@ -1588,11 +1583,6 @@ const SvXMLStylesContext *SvXMLImport::GetStyles() const
 const SvXMLStylesContext *SvXMLImport::GetAutoStyles() const
 {
     return (const SvXMLStylesContext *)&mxAutoStyles;
-}
-
-const SvXMLStylesContext *SvXMLImport::GetMasterStyles() const
-{
-    return (const SvXMLStylesContext *)&mxMasterStyles;
 }
 
 OUString SvXMLImport::GetAbsoluteReference(const OUString& rValue) const
