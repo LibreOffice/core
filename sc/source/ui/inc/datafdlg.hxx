@@ -39,6 +39,8 @@
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
 
+#include <boost/ptr_container/ptr_vector.hpp>
+
 #define MAX_DATAFORM_COLS   256
 #define MAX_DATAFORM_ROWS   32000
 #define CTRL_HEIGHT         22
@@ -73,8 +75,8 @@ private:
     SCTAB           nTab;
     sal_Bool            bNoSelection;
 
-    FixedText** pFixedTexts;
-    Edit** pEdits;
+    boost::ptr_vector<FixedText> maFixedTexts;
+    boost::ptr_vector<Edit> maEdits;
 
 public:
     ScDataFormDlg( Window* pParent, ScTabViewShell* pTabViewShell);

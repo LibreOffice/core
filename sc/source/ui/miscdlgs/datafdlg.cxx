@@ -174,8 +174,8 @@ ScDataFormDlg::ScDataFormDlg( Window* pParent, ScTabViewShell*  pTabViewShellOri
         aColLength = nEndCol - nStartCol + 1;
 
         //new the controls
-        pFixedTexts = new FixedText*[aColLength];
-        pEdits = new Edit*[aColLength];
+        maFixedTexts.reserve(aColLength);
+        maEdits.reserve(aColLength);
 
         for(sal_uInt16 nIndex = 0; nIndex < aColLength; nIndex++)
         {
@@ -183,26 +183,26 @@ ScDataFormDlg::ScDataFormDlg( Window* pParent, ScTabViewShell*  pTabViewShellOri
             int nColWidth = pDoc->GetColWidth( nIndex + nStartCol, nTab );
             if (nColWidth)
             {
-                pFixedTexts[nIndex] = new FixedText(this);
-                pEdits[nIndex] = new Edit(this, WB_BORDER);
+                maFixedTexts.push_back( new FixedText(this) );
+                maEdits.push_back( new Edit(this, WB_BORDER) );
 
-                pFixedTexts[nIndex]->SetSizePixel(nFixedSize);
-                pEdits[nIndex]->SetSizePixel(nEditSize);
-                pFixedTexts[nIndex]->SetPosPixel(Point(FIXED_LEFT, nTop));
-                pEdits[nIndex]->SetPosPixel(Point(EDIT_LEFT, nTop));
-                pFixedTexts[nIndex]->SetText(aFieldName);
-                pFixedTexts[nIndex]->Show();
-                pEdits[nIndex]->Show();
+                maFixedTexts[nIndex].SetSizePixel(nFixedSize);
+                maEdits[nIndex].SetSizePixel(nEditSize);
+                maFixedTexts[nIndex].SetPosPixel(Point(FIXED_LEFT, nTop));
+                maEdits[nIndex].SetPosPixel(Point(EDIT_LEFT, nTop));
+                maFixedTexts[nIndex].SetText(aFieldName);
+                maFixedTexts[nIndex].Show();
+                maEdits[nIndex].Show();
 
                 nTop += LINE_HEIGHT;
             }
             else
             {
-                pFixedTexts[nIndex] = NULL;
-                pEdits[nIndex] = NULL;
+                maFixedTexts.push_back( NULL );
+                maEdits.push_back( NULL );
             }
-            if (pEdits[nIndex])
-                pEdits[nIndex]->SetModifyHdl( HDL(Impl_DataModifyHdl) );
+            if (!maEdits.is_null(nIndex))
+                maEdits[nIndex].SetModifyHdl( HDL(Impl_DataModifyHdl) );
         }
 
         Size nDialogSize = this->GetSizePixel();
@@ -239,17 +239,7 @@ ScDataFormDlg::ScDataFormDlg( Window* pParent, ScTabViewShell*  pTabViewShellOri
 
 ScDataFormDlg::~ScDataFormDlg()
 {
-    for(sal_uInt16 i = 0; i < aColLength; i++)
-    {
-        if (pEdits[i])
-            delete pEdits[i];
-        if (pFixedTexts[i])
-            delete pFixedTexts[i];
-    }
-    if (pEdits)
-        delete[] pEdits;
-    if (pFixedTexts)
-        delete[] pFixedTexts;
+
 }
 
 void ScDataFormDlg::FillCtrls(SCROW /*nCurrentRow*/)
@@ -257,15 +247,15 @@ void ScDataFormDlg::FillCtrls(SCROW /*nCurrentRow*/)
     String  aFieldName;
     for (sal_uInt16 i = 0; i < aColLength; ++i)
     {
-        if (pEdits[i])
+        if (!maEdits.is_null(i))
         {
             if (aCurrentRow<=nEndRow)
             {
                 pDoc->GetString( i + nStartCol, aCurrentRow, nTab, aFieldName );
-                pEdits[i]->SetText(aFieldName);
+                maEdits[i].SetText(aFieldName);
             }
             else
-                pEdits[i]->SetText(String());
+                maEdits[i].SetText(String());
         }
     }
 
@@ -297,9 +287,10 @@ IMPL_LINK( ScDataFormDlg, Impl_NewHdl, PushButton*, EMPTYARG )
     if ( pDoc )
     {
         sal_Bool bHasData = false;
-        for(sal_uInt16 i = 0; i < aColLength; i++)
-            if (pEdits[i])
-                if ( pEdits[i]->GetText().Len() != 0 )
+        boost::ptr_vector<Edit>::iterator itr = maEdits.begin(), itrEnd = maEdits.end();
+        for(; itr != itrEnd; ++itr)
+            if (!boost::is_null(itr))
+                if ( (*itr).GetText().Len() != 0 )
                 {
                     bHasData = sal_True;
                     break;
@@ -307,7 +298,7 @@ IMPL_LINK( ScDataFormDlg, Impl_NewHdl, PushButton*, EMPTYARG )
 
         if ( bHasData )
         {
-            pTabViewShell->DataFormPutData( aCurrentRow , nStartRow , nStartCol , nEndRow , nEndCol , pEdits , aColLength );
+            pTabViewShell->DataFormPutData( aCurrentRow , nStartRow , nStartCol , nEndRow , nEndCol , maEdits.c_array() , aColLength );
             aCurrentRow++;
             if (aCurrentRow >= nEndRow + 2)
             {
@@ -410,8 +401,8 @@ void ScDataFormDlg::SetButtonState()
         aBtnLast.Enable( false );
 
     aBtnRestore.Enable( false );
-    if ( pEdits )
-        pEdits[0]->GrabFocus();
+    if ( maEdits.size()>=1 && !maEdits.is_null(0) )
+        maEdits[0].GrabFocus();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
