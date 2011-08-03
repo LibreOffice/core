@@ -708,12 +708,16 @@ void DomainMapperTableHandler::endTable()
     {
         try
         {
-            uno::Reference<text::XTextTable> xTable = m_xText->convertToTable(*m_pTableSeq,
-                                    aCellProperties,
-                                    aRowProperties,
-                                    aTableInfo.aTableProperties);
+            if (m_xText.is())
+            {
+                uno::Reference<text::XTextTable> xTable = m_xText->convertToTable(*m_pTableSeq,
+                        aCellProperties,
+                        aRowProperties,
+                        aTableInfo.aTableProperties);
 
-            m_xTableRange = xTable->getAnchor( );
+                if (xTable.is())
+                    m_xTableRange = xTable->getAnchor( );
+            }
         }
         catch (lang::IllegalArgumentException)
         {
