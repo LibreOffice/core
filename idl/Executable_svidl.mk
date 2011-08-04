@@ -31,8 +31,8 @@ $(eval $(call gb_Executable_Executable,svidl))
 $(eval $(call gb_Executable_set_include,svidl,\
 	$$(INCLUDE) \
 	-I$(OUTDIR)/inc/ \
-	-I$(SRCDIR)/idl/inc/pch \
-	-I$(SRCDIR)/idl/inc \
+	-I$(realpath $(SRCDIR)/idl/inc/pch) \
+	-I$(realpath $(SRCDIR)/idl/inc) \
 ))
 
 $(eval $(call gb_Executable_add_api,svidl,\
