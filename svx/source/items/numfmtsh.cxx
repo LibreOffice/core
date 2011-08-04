@@ -289,6 +289,20 @@ sal_Bool SvxNumberFormatShell::AddFormat( String& rFormat,  xub_StrLen& rErrPos,
         bInserted = pFormatter->PutEntry( rFormat, rErrPos,
                                           nCurCategory, nAddKey,
                                           eCurLanguage );
+        if (bInserted)
+        {
+            // May be sorted under a different locale if LCID was parsed.
+            const SvNumberformat* pEntry = pFormatter->GetEntry( nAddKey);
+            if (pEntry)
+            {
+                LanguageType nLang = pEntry->GetLanguage();
+                if (eCurLanguage != nLang)
+                {
+                    // Current language's list would not show entry, adapt.
+                    eCurLanguage = nLang;
+                }
+            }
+        }
     }
 
     if ( bInserted ) // eingefuegt
