@@ -33,8 +33,8 @@ $(eval $(call gb_Library_add_package_headers,xcr,xmlscript_inc))
 $(eval $(call gb_Library_set_componentfile,xcr,xmlscript/util/xcr))
 
 $(eval $(call gb_Library_set_include,xcr,\
-	-I$(SRCDIR)/xmlscript/source/inc \
-	-I$(SRCDIR)/xmlscript/inc/pch \
+	-I$(realpath $(SRCDIR)/xmlscript/source/inc) \
+	-I$(realpath $(SRCDIR)/xmlscript/inc/pch) \
 	$$(INCLUDE) \
 ))
 
