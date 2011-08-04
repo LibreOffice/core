@@ -669,7 +669,9 @@ oslFileError osl_getAbsoluteFileURL(rtl_uString*  ustrBaseDirURL, rtl_uString* u
         rtl::OUString base;
         sal_Int32 last_slash = unresolved_path.lastIndexOf( UNICHAR_SLASH );
 
-        if (last_slash >= 0 && last_slash + 1 < unresolved_path.getLength())
+        if (last_slash >= 0 && last_slash + 1 < unresolved_path.getLength()
+            && ! ( last_slash + 2 == unresolved_path.getLength() && unresolved_path.matchAsciiL(RTL_CONSTASCII_STRINGPARAM("."), last_slash + 1) )
+            && ! ( last_slash + 3 == unresolved_path.getLength() && unresolved_path.matchAsciiL(RTL_CONSTASCII_STRINGPARAM(".."), last_slash + 1) ))
         {
             base = unresolved_path.copy(last_slash+1);
             unresolved_path = unresolved_path.copy(0, last_slash);
