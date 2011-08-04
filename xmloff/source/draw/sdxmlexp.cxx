@@ -406,7 +406,7 @@ ImpXMLAutoLayoutInfo::ImpXMLAutoLayoutInfo(sal_uInt16 nTyp, ImpXMLEXPPageMasterI
 SdXMLExport::SdXMLExport(
     const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
     sal_Bool bIsDraw, sal_uInt16 nExportFlags )
-:   SvXMLExport( xServiceFactory, MAP_CM, bIsDraw ? XML_DRAWING : XML_PRESENTATION, nExportFlags ),
+:   SvXMLExport( xServiceFactory, MAP_CM, bIsDraw ? XML_GRAPHICS : XML_PRESENTATION, nExportFlags ),
     mnDocMasterPageCount(0L),
     mnDocDrawPageCount(0L),
     mnShapeStyleInfoIndex(0L),
