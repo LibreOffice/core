@@ -48,7 +48,7 @@ JAVA_HOME=
 .EXPORT : JAVA_HOME
 BUILD_ACTION=$(ANT) -v -Dsolver.ooo.dir=$(SOLARVER)$/$(INPATH)$/bin -Dbuild.compiler=gcj dist
 .ELSE
-BUILD_ACTION=$(ANT) -v -Dsolver.ooo.dir=$(SOLARVER)$/$(INPATH)$/bin -Dant.build.javac.source=$(JAVA_SOURCE_VER) -Dant.build.javac.target=$(JAVA_TARGET_VER) dist
+BUILD_ACTION=$(ANT) -v -Dsolver.ooo.dir=$(SOLARVER)$/$(INPATH)$/bin -Dant.build.javac.target=$(JAVA_TARGET_VER) dist
 .ENDIF
 
 # --- Targets ------------------------------------------------------
