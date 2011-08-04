@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -232,3 +233,5 @@ void SAL_CALL VCLXTabPageContainer::elementRemoved( const ::com::sun::star::cont
 void SAL_CALL VCLXTabPageContainer::elementReplaced( const ::com::sun::star::container::ContainerEvent& /*Event*/ ) throw (::com::sun::star::uno::RuntimeException)
 {
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

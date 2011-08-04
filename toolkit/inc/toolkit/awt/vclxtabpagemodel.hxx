@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 //  ----------------------------------------------------
 //  class VCLXDialog
 /*************************************************************************
@@ -80,3 +81,5 @@ protected:
     ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper();
 };
 #endif // _TOOLKIT_AWT_VCLXTABPAGEMODEL_HXX_
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
