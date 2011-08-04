@@ -53,7 +53,7 @@ CFLAGSCXX += -fno-omit-frame-pointer
 
 # In case the compiler supports AVX this code segfaults so specifically turn
 # it off.
-.IF "$(HAVE_GCC_AVX)" == "YES"
+.IF "$(HAVE_GCC_AVX)" == "TRUE"
     CFLAGSCXX+= -mno-avx
 .ENDIF
 
