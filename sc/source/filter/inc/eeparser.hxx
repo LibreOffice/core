@@ -80,27 +80,29 @@ struct ScEEParseEntry
     bool                bHasGraphic:1;  // HTML any image loaded
     bool                bEntirePara:1;  // true = use entire paragraph, false = use selection
 
-                        ScEEParseEntry( SfxItemPool* pPool ) :
-                            aItemSet( *pPool ), pValStr( NULL ),
-                            pNumStr( NULL ), pName( NULL ),
-                            nCol(SCCOL_MAX), nRow(SCROW_MAX), nTab(0),
-                            nColOverlap(1), nRowOverlap(1),
-                            nOffset(0), nWidth(0), bHasGraphic(false), bEntirePara(true)
-                            {}
-                        ScEEParseEntry( const SfxItemSet& rItemSet ) :
-                            aItemSet( rItemSet ), pValStr( NULL ),
-                            pNumStr( NULL ), pName( NULL ),
-                            nCol(SCCOL_MAX), nRow(SCROW_MAX), nTab(0),
-                            nColOverlap(1), nRowOverlap(1),
-                            nOffset(0), nWidth(0), bHasGraphic(false), bEntirePara(true)
-                            {}
-                        ~ScEEParseEntry()
-                            {
-                                delete pValStr;
-                                delete pNumStr;
-                                delete pName;
-                                maImageList.clear();
-                            }
+    ScEEParseEntry( SfxItemPool* pPool ) :
+        aItemSet( *pPool ), pValStr( NULL ),
+        pNumStr( NULL ), pName( NULL ),
+        nCol(SCCOL_MAX), nRow(SCROW_MAX), nTab(0),
+        nColOverlap(1), nRowOverlap(1),
+        nOffset(0), nWidth(0), bHasGraphic(false), bEntirePara(true)
+        {}
+
+    ScEEParseEntry( const SfxItemSet& rItemSet ) :
+        aItemSet( rItemSet ), pValStr( NULL ),
+        pNumStr( NULL ), pName( NULL ),
+        nCol(SCCOL_MAX), nRow(SCROW_MAX), nTab(0),
+        nColOverlap(1), nRowOverlap(1),
+        nOffset(0), nWidth(0), bHasGraphic(false), bEntirePara(true)
+        {}
+
+    ~ScEEParseEntry()
+    {
+        delete pValStr;
+        delete pNumStr;
+        delete pName;
+        maImageList.clear();
+    }
 };
 
 
