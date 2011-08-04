@@ -554,7 +554,10 @@ void GrammarCheckingIterator::DequeueAndCheck()
 
                         //!! work-around to prevent looping if the grammar checker
                         //!! failed to properly identify the sentence end
-                        if (aRes.nBehindEndOfSentencePosition <= nStartPos)
+                        if (
+                            aRes.nBehindEndOfSentencePosition <= nStartPos &&
+                            aRes.nBehindEndOfSentencePosition != nSuggestedEnd
+                           )
                         {
                             DBG_ASSERT( 0, "!! Grammarchecker failed to provide end of sentence !!" );
                             aRes.nBehindEndOfSentencePosition = nSuggestedEnd;
