@@ -1749,52 +1749,6 @@ template< typename Type >
 inline Type getLimitedValue( const Type& rValue, const Type& rMin, const Type& rMax )
 { return ::std::max( ::std::min( rValue, rMax ), rMin ); }
 
-// ============================================================================
-
-/** Iterates through all HTML tag options of the passed ImportInfo struct. */
-class ScHTMLOptionIterator
-{
-private:
-    const HTMLOptions*  mpOptions;      /// The options array.
-    const HTMLOption*   mpCurrOption;   /// Current option.
-    size_t              mnCount;        /// Size of the options array.
-    size_t              mnIndex;        /// Next option to return.
-
-public:
-    explicit            ScHTMLOptionIterator( const ImportInfo& rInfo );
-
-    inline bool         is() const { return mnIndex < mnCount; }
-    inline const HTMLOption* operator->() const { return mpCurrOption; }
-    inline const HTMLOption& operator*() const { return *mpCurrOption; }
-    ScHTMLOptionIterator& operator++();
-};
-
-// ----------------------------------------------------------------------------
-
-ScHTMLOptionIterator::ScHTMLOptionIterator( const ImportInfo& rInfo ) :
-    mpOptions( 0 ),
-    mpCurrOption( 0 ),
-    mnCount( 0 ),
-    mnIndex( 0 )
-{
-    const HTMLParser* pParser = static_cast< const HTMLParser* >( rInfo.pParser );
-    if( pParser )
-        mpOptions = &pParser->GetOptions();
-    if( mpOptions )
-        mnCount = mpOptions->size();
-    if( mnCount )
-        mpCurrOption = &mpOptions->front();
-}
-
-ScHTMLOptionIterator& ScHTMLOptionIterator::operator++()
-{
-    if( mnIndex < mnCount ) ++mnIndex;
-    mpCurrOption = (mnIndex < mnCount) ? &(*mpOptions)[mnIndex] : 0;
-    return *this;
-}
-
-// ============================================================================
-
 ScHTMLEntry::ScHTMLEntry( const SfxItemSet& rItemSet, ScHTMLTableId nTableId ) :
     ScEEParseEntry( rItemSet ),
     mbImportAlways( false )
@@ -2007,15 +1961,17 @@ ScHTMLTable::ScHTMLTable( ScHTMLTable& rParentTable, const ImportInfo& rInfo, bo
     else
     {
         ProcessFormatOptions( maTableItemSet, rInfo );
-        for( ScHTMLOptionIterator aIter( rInfo ); aIter.is(); ++aIter )
+        const HTMLOptions& rOptions = static_cast<HTMLParser*>(rInfo.pParser)->GetOptions();
+        HTMLOptions::const_iterator itr = rOptions.begin(), itrEnd = rOptions.end();
+        for (; itr != itrEnd; ++itr)
         {
-            switch( aIter->GetToken() )
+            switch( itr->GetToken() )
             {
                 case HTML_O_BORDER:
-                    mbBorderOn = ((aIter->GetString().Len() == 0) || (aIter->GetNumber() != 0));
+                    mbBorderOn = ((itr->GetString().Len() == 0) || (itr->GetNumber() != 0));
                 break;
                 case HTML_O_ID:
-                    maTableName = aIter->GetString();
+                    maTableName = itr->GetString();
                 break;
             }
         }
@@ -2640,14 +2596,16 @@ void ScHTMLTable::ProcessFormatOptions( SfxItemSet& rItemSet, const ImportInfo& 
         rItemSet.Put( SvxHorJustifyItem( SVX_HOR_JUSTIFY_CENTER, ATTR_HOR_JUSTIFY ) );
     }
 
-    for( ScHTMLOptionIterator aIter( rInfo ); aIter.is(); ++aIter )
+    const HTMLOptions& rOptions = static_cast<HTMLParser*>(rInfo.pParser)->GetOptions();
+    HTMLOptions::const_iterator itr = rOptions.begin(), itrEnd = rOptions.end();
+    for (; itr != itrEnd; ++itr)
     {
-        switch( aIter->GetToken() )
+        switch( itr->GetToken() )
         {
             case HTML_O_ALIGN:
             {
                 SvxCellHorJustify eVal = SVX_HOR_JUSTIFY_STANDARD;
-                const String& rOptVal = aIter->GetString();
+                const String& rOptVal = itr->GetString();
                 if( rOptVal.EqualsIgnoreCaseAscii( OOO_STRING_SVTOOLS_HTML_AL_right ) )
                     eVal = SVX_HOR_JUSTIFY_RIGHT;
                 else if( rOptVal.EqualsIgnoreCaseAscii( OOO_STRING_SVTOOLS_HTML_AL_center ) )
@@ -2662,7 +2620,7 @@ void ScHTMLTable::ProcessFormatOptions( SfxItemSet& rItemSet, const ImportInfo& 
             case HTML_O_VALIGN:
             {
                 SvxCellVerJustify eVal = SVX_VER_JUSTIFY_STANDARD;
-                const String& rOptVal = aIter->GetString();
+                const String& rOptVal = itr->GetString();
                 if( rOptVal.EqualsIgnoreCaseAscii( OOO_STRING_SVTOOLS_HTML_VA_top ) )
                     eVal = SVX_VER_JUSTIFY_TOP;
                 else if( rOptVal.EqualsIgnoreCaseAscii( OOO_STRING_SVTOOLS_HTML_VA_middle ) )
@@ -2677,7 +2635,7 @@ void ScHTMLTable::ProcessFormatOptions( SfxItemSet& rItemSet, const ImportInfo& 
             case HTML_O_BGCOLOR:
             {
                 Color aColor;
-                aIter->GetColor( aColor );
+                itr->GetColor( aColor );
                 rItemSet.Put( SvxBrushItem( aColor, ATTR_BACKGROUND ) );
             }
             break;
@@ -3068,13 +3026,15 @@ void ScHTMLQueryParser::InsertText( const ImportInfo& rInfo )
 
 void ScHTMLQueryParser::FontOn( const ImportInfo& rInfo )
 {
-    for( ScHTMLOptionIterator aIter( rInfo ); aIter.is(); ++aIter )
+    const HTMLOptions& rOptions = static_cast<HTMLParser*>(rInfo.pParser)->GetOptions();
+    HTMLOptions::const_iterator itr = rOptions.begin(), itrEnd = rOptions.end();
+    for (; itr != itrEnd; ++itr)
     {
-        switch( aIter->GetToken() )
+        switch( itr->GetToken() )
         {
             case HTML_O_FACE :
             {
-                const String& rFace = aIter->GetString();
+                const String& rFace = itr->GetString();
                 String aFontName;
                 xub_StrLen nPos = 0;
                 while( nPos != STRING_NOTFOUND )
@@ -3092,14 +3052,14 @@ void ScHTMLQueryParser::FontOn( const ImportInfo& rInfo )
             break;
             case HTML_O_SIZE :
             {
-                sal_uInt32 nSize = getLimitedValue< sal_uInt32 >( aIter->GetNumber(), 1, SC_HTML_FONTSIZES );
+                sal_uInt32 nSize = getLimitedValue< sal_uInt32 >( itr->GetNumber(), 1, SC_HTML_FONTSIZES );
                 mpCurrTable->PutItem( SvxFontHeightItem( maFontHeights[ nSize - 1 ], 100, ATTR_FONT_HEIGHT ) );
             }
             break;
             case HTML_O_COLOR :
             {
                 Color aColor;
-                aIter->GetColor( aColor );
+                itr->GetColor( aColor );
                 mpCurrTable->PutItem( SvxColorItem( aColor, ATTR_FONT_COLOR ) );
             }
             break;
