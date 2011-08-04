@@ -225,6 +225,7 @@ SfxItemSet::SfxItemSet( SfxItemPool& rPool,
             pArgs, sal::static_int_cast< sal_uInt16 >(nWh1),
             sal::static_int_cast< sal_uInt16 >(nWh2),
             sal::static_int_cast< sal_uInt16 >(nNull));
+        va_end(pArgs);
     }
 }
 

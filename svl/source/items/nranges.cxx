@@ -93,7 +93,6 @@ NUMTYPE InitializeRanges_Impl( NUMTYPE *&rpRanges, va_list pArgs,
             nSize += nIns - aNumArr[ nCnt-2 ] + 1;
         }
     }
-    va_end( pArgs );
 
     DBG_ASSERT( 0 == (nCnt & 1), "ungerade Anzahl von Which-Paaren!" );
 
@@ -208,6 +207,7 @@ SfxNumRanges::SfxNumRanges( NUMTYPE_ARG nWh0, NUMTYPE_ARG nWh1, NUMTYPE_ARG nNul
         _pRanges, pArgs, sal::static_int_cast< NUMTYPE >(nWh0),
         sal::static_int_cast< NUMTYPE >(nWh1),
         sal::static_int_cast< NUMTYPE >(nNull));
+    va_end(pArgs);
     DBG_CHECK_RANGES(NUMTYPE, _pRanges);
 }
 
