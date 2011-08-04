@@ -1401,7 +1401,7 @@ void ScHTMLLayoutParser::Image( ImportInfo* pInfo )
             break;
         }
     }
-    if ( !pImage->aURL.Len() )
+    if (pImage->aURL.isEmpty())
     {
         OSL_FAIL( "Image: Grafik ohne URL ?!?" );
         return ;

@@ -45,19 +45,19 @@ const sal_Char nHoriVerti = nHorizontal | nVertical;
 
 struct ScHTMLImage
 {
-    String              aURL;
+    rtl::OUString       aURL;
     Size                aSize;
     Point               aSpace;
-    String              aFilterName;
+    rtl::OUString       aFilterName;
     Graphic*            pGraphic;       // wird von WriteToDocument uebernommen
     sal_Char            nDir;           // 1==hori, 2==verti, 3==beides
 
-                        ScHTMLImage() :
-                            aSize( 0, 0 ), aSpace( 0, 0 ), pGraphic( NULL ),
-                            nDir( nHorizontal )
-                            {}
-                        ~ScHTMLImage()
-                            { if ( pGraphic ) delete pGraphic; }
+    ScHTMLImage() :
+        aSize( 0, 0 ), aSpace( 0, 0 ), pGraphic( NULL ),
+        nDir( nHorizontal )
+        {}
+
+    ~ScHTMLImage() { delete pGraphic; }
 };
 
 struct ScEEParseEntry
