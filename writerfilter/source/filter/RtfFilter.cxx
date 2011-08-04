@@ -69,10 +69,11 @@ sal_Bool RtfFilter::filter( const uno::Sequence< beans::PropertyValue >& aDescri
         xExprtr->setSourceDocument(m_xSrcDoc);
         return xFltr->filter(aDescriptor);
     }
-    else if ( m_xDstDoc.is() )
+
+    SvtMiscOptions aMiscOptions;
+    if (aMiscOptions.IsExperimentalMode() || !m_xDstDoc.is() )
     {
-        SvtMiscOptions aMiscOptions;
-        if (aMiscOptions.IsExperimentalMode())
+        try
         {
             MediaDescriptor aMediaDesc( aDescriptor );
 #ifdef DEBUG_IMPORT
@@ -80,7 +81,7 @@ sal_Bool RtfFilter::filter( const uno::Sequence< beans::PropertyValue >& aDescri
             ::std::string sURLc = OUStringToOString(sURL, RTL_TEXTENCODING_ASCII_US).getStr();
 
             writerfilter::TagLogger::Pointer_t dmapperLogger
-            (writerfilter::TagLogger::getInstance("DOMAINMAPPER"));
+                (writerfilter::TagLogger::getInstance("DOMAINMAPPER"));
             dmapperLogger->setFileName(sURLc);
             dmapperLogger->startDocument();
 #endif
@@ -102,20 +103,23 @@ sal_Bool RtfFilter::filter( const uno::Sequence< beans::PropertyValue >& aDescri
 #endif
             return sal_True;
         }
-
-        // if not, then use the old importer
-        uno::Reference< lang::XMultiServiceFactory > xMSF(m_xContext->getServiceManager(), uno::UNO_QUERY_THROW);
-        uno::Reference< uno::XInterface > xIfc( xMSF->createInstance( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.comp.Writer.RtfImport" ))), uno::UNO_QUERY_THROW);
-        if (!xIfc.is())
+        catch( const uno::Exception& rEx)
+        {
             return sal_False;
-        uno::Reference< document::XImporter > xImprtr(xIfc, uno::UNO_QUERY_THROW);
-        uno::Reference< document::XFilter > xFltr(xIfc, uno::UNO_QUERY_THROW);
-        if (!xImprtr.is() || !xFltr.is())
-            return sal_False;
-        xImprtr->setTargetDocument(m_xDstDoc);
-        return xFltr->filter(aDescriptor);
+        }
     }
-    return sal_False;
+
+    // if not, then use the old importer
+    uno::Reference< lang::XMultiServiceFactory > xMSF(m_xContext->getServiceManager(), uno::UNO_QUERY_THROW);
+    uno::Reference< uno::XInterface > xIfc( xMSF->createInstance( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.comp.Writer.RtfImport" ))), uno::UNO_QUERY_THROW);
+    if (!xIfc.is())
+        return sal_False;
+    uno::Reference< document::XImporter > xImprtr(xIfc, uno::UNO_QUERY_THROW);
+    uno::Reference< document::XFilter > xFltr(xIfc, uno::UNO_QUERY_THROW);
+    if (!xImprtr.is() || !xFltr.is())
+        return sal_False;
+    xImprtr->setTargetDocument(m_xDstDoc);
+    return xFltr->filter(aDescriptor);
 }
 
 void RtfFilter::cancel(  ) throw (uno::RuntimeException)

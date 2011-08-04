@@ -30,6 +30,7 @@
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/graphic/XGraphicProvider.hpp>
+#include <com/sun/star/io/UnexpectedEOFException.hpp>
 #include <com/sun/star/util/DateTime.hpp>
 #include <editeng/borderline.hxx>
 #include <rtl/strbuf.hxx>
@@ -285,7 +286,8 @@ RTFDocumentImpl::RTFDocumentImpl(uno::Reference<uno::XComponentContext> const& x
     OSL_ASSERT(m_xModelFactory.is());
 
     uno::Reference<document::XDocumentPropertiesSupplier> xDocumentPropertiesSupplier(m_xDstDoc, uno::UNO_QUERY);
-    m_xDocumentProperties.set(xDocumentPropertiesSupplier->getDocumentProperties(), uno::UNO_QUERY);
+    if (xDocumentPropertiesSupplier.is())
+        m_xDocumentProperties.set(xDocumentPropertiesSupplier->getDocumentProperties(), uno::UNO_QUERY);
 
     m_pGraphicHelper = new oox::GraphicHelper(m_xContext, xFrame, m_xStorage);
 
@@ -474,12 +476,15 @@ void RTFDocumentImpl::resolve(Stream & rMapper)
             break;
         case ERROR_GROUP_OVER:
             OSL_TRACE("%s: unmatched '{'", OSL_THIS_FUNC);
+            throw io::UnexpectedEOFException();
             break;
         case ERROR_EOF:
             OSL_TRACE("%s: unexpected end of file", OSL_THIS_FUNC);
+            throw io::UnexpectedEOFException();
             break;
         case ERROR_HEX_INVALID:
             OSL_TRACE("%s: invalid hex char", OSL_THIS_FUNC);
+            throw io::WrongFormatException();
             break;
         case ERROR_CHAR_OVER:
             OSL_TRACE("%s: characters after last '}'", OSL_THIS_FUNC);
@@ -2174,12 +2179,14 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
                 m_aFormfieldSprms->push_back(make_pair(NS_ooxml::LN_CT_FFDDList_result, pIntValue));
             break;
         case RTF_EDMINS:
-            m_xDocumentProperties->setEditingDuration(nParam);
+            if (m_xDocumentProperties.is())
+                m_xDocumentProperties->setEditingDuration(nParam);
             break;
         case RTF_NOFPAGES:
         case RTF_NOFWORDS:
         case RTF_NOFCHARS:
         case RTF_NOFCHARSWS:
+            if (m_xDocumentProperties.is())
             {
                 uno::Sequence<beans::NamedValue> aSet = m_xDocumentProperties->getDocumentStatistics();
                 OUString aName;
@@ -2209,7 +2216,8 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
             }
             break;
         case RTF_VERSION:
-            m_xDocumentProperties->setEditingCycles(nParam);
+            if (m_xDocumentProperties.is())
+                m_xDocumentProperties->setEditingCycles(nParam);
             break;
         case RTF_VERN:
             // Ignore this for now, later the RTF writer version could be used to add hacks for older buggy writers.
@@ -2629,24 +2637,27 @@ int RTFDocumentImpl::popState()
         RTFValue::Pointer_t pDValue(new RTFValue(OStringToOUString(aDefaultText, m_aStates.top().nCurrentEncoding)));
         m_aFormfieldSprms->push_back(make_pair(NS_ooxml::LN_CT_FFTextInput_default, pDValue));
     }
-    else if (m_aStates.top().nDestinationState == DESTINATION_CREATIONTIME)
+    else if (m_aStates.top().nDestinationState == DESTINATION_CREATIONTIME && m_xDocumentProperties.is())
         m_xDocumentProperties->setCreationDate(lcl_getDateTime(m_aStates));
-    else if (m_aStates.top().nDestinationState == DESTINATION_REVISIONTIME)
+    else if (m_aStates.top().nDestinationState == DESTINATION_REVISIONTIME && m_xDocumentProperties.is())
         m_xDocumentProperties->setModificationDate(lcl_getDateTime(m_aStates));
-    else if (m_aStates.top().nDestinationState == DESTINATION_PRINTTIME)
+    else if (m_aStates.top().nDestinationState == DESTINATION_PRINTTIME && m_xDocumentProperties.is())
         m_xDocumentProperties->setPrintDate(lcl_getDateTime(m_aStates));
-    else if (m_aStates.top().nDestinationState == DESTINATION_AUTHOR)
+    else if (m_aStates.top().nDestinationState == DESTINATION_AUTHOR && m_xDocumentProperties.is())
         m_xDocumentProperties->setAuthor(m_aDestinationText.makeStringAndClear());
-    else if (m_aStates.top().nDestinationState == DESTINATION_COMMENT)
+    else if (m_aStates.top().nDestinationState == DESTINATION_COMMENT && m_xDocumentProperties.is())
         m_xDocumentProperties->setGenerator(m_aDestinationText.makeStringAndClear());
     else if (m_aStates.top().nDestinationState == DESTINATION_OPERATOR
             || m_aStates.top().nDestinationState == DESTINATION_COMPANY)
     {
         OUString aName = m_aStates.top().nDestinationState == DESTINATION_OPERATOR ?
             OUString(RTL_CONSTASCII_USTRINGPARAM("Operator")) : OUString(RTL_CONSTASCII_USTRINGPARAM("Company"));
-        uno::Reference<beans::XPropertyContainer> xUserDefinedProperties = m_xDocumentProperties->getUserDefinedProperties();
-        xUserDefinedProperties->addProperty(aName, beans::PropertyAttribute::REMOVEABLE,
-                uno::makeAny(m_aDestinationText.makeStringAndClear()));
+        if (m_xDocumentProperties.is())
+        {
+            uno::Reference<beans::XPropertyContainer> xUserDefinedProperties = m_xDocumentProperties->getUserDefinedProperties();
+            xUserDefinedProperties->addProperty(aName, beans::PropertyAttribute::REMOVEABLE,
+                    uno::makeAny(m_aDestinationText.makeStringAndClear()));
+        }
     }
     else if (m_aStates.top().nDestinationState == DESTINATION_OBJDATA)
     {

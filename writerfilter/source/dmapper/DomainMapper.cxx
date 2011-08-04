@@ -160,8 +160,12 @@ DomainMapper::~DomainMapper()
     try
     {
         uno::Reference< text::XDocumentIndexesSupplier> xIndexesSupplier( m_pImpl->GetTextDocument(), uno::UNO_QUERY );
-        uno::Reference< container::XIndexAccess > xIndexes = xIndexesSupplier->getDocumentIndexes();
-        sal_Int32 nIndexes = xIndexes->getCount();
+        sal_Int32 nIndexes = 0;
+        if( xIndexesSupplier.is() )
+        {
+            uno::Reference< container::XIndexAccess > xIndexes = xIndexesSupplier->getDocumentIndexes();
+            nIndexes = xIndexes->getCount();
+        }
         if( nIndexes )
         {
             //index update has to wait until first view is created

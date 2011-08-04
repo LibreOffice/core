@@ -178,6 +178,10 @@ int RTFTokenizer::resolveKeyword()
         aBuf.append(ch);
         Strm() >> ch;
     }
+    if (aBuf.getLength() > 32)
+        // See RTF spec v1.9.1, page 7
+        // A control word's name cannot be longer than 32 letters.
+        throw io::BufferSizeExceededException();
 
     if (ch == '-')
     {
