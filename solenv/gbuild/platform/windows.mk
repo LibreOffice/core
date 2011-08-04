@@ -304,7 +304,7 @@ $(call gb_Helper_abbreviate_dirs_native,\
 		-I$(realpath $(dir $(3))) \
 		$(INCLUDE_STL) $(INCLUDE) \
 		-c $(realpath $(3)) \
-		-Fo$(1))  $(call gb_create_deps,$(1),$(call gb_CxxObject_get_dep_target,$(2)),$(realpath $(3)))
+		-Fo$(1))  $(call gb_create_deps,$(1),$(4),$(realpath $(3)))
 $(call gb_Object__command_deponcompile,$(1),$(4),$(3),$(DEFS),$(T_CXXFLAGS),$(INCLUDE))
 endef
 
