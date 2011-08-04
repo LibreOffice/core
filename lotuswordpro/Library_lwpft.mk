@@ -124,7 +124,6 @@ $(eval $(call gb_Library_add_exception_objects,lwpft,\
     lotuswordpro/source/filter/lwpnumberingoverride \
     lotuswordpro/source/filter/lwpnumericfmt \
     lotuswordpro/source/filter/lwpobj \
-    lotuswordpro/source/filter/lwpobjfactory \
     lotuswordpro/source/filter/lwpobjhdr \
     lotuswordpro/source/filter/lwpobjid \
     lotuswordpro/source/filter/lwpobjstrm \

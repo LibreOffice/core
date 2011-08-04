@@ -299,7 +299,6 @@ public: // Internal methods
     BenError CreateGraphicStreams(std::vector<SvStream *> * pStreamVector)  ;
     BenError CreateGraphicStream(SvStream * &pStream,  const char *pObjectName);
 
-    SotStorageStreamRef ConvertAswStorageToOLE2Stream(const char * sObjectName);
     LtcUtBenValueStream * FindOLEStorageStreamWithObjectName(const char * sObjectName, AswEntry& rDirStruct);
     void ReadAswEntry(SvStream * pStream, AswEntry& rEntry);
 

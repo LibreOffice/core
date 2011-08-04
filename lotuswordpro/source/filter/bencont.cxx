@@ -538,72 +538,9 @@ BenError LtcBenContainer::CreateGraphicStream(SvStream * &pStream, const char *p
     pStream = pMemStream;
     return BenErr_OK;
 }
-/**
-*   Find ole object stream according to object name
-*   @date   10/24/2005
-*   @param
-*   @return the value ole storage stream pointers
-*/
+
 #include <tools/globname.hxx>
-SotStorageStreamRef LtcBenContainer::ConvertAswStorageToOLE2Stream(const char * sObjectName)
-{
-    SotStorageStreamRef xOleObjStm;
 
-    SvStream* pOleStorageStream = NULL;
-    //Get Ole Storage stream
-    AswEntry aEntry;
-    pOleStorageStream = FindOLEStorageStreamWithObjectName(sObjectName, aEntry);
-
-    if( !pOleStorageStream )
-        return xOleObjStm;
-    //Find it, create Ole stream
-    //xOleObjStm = new SotStorageStream(String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "Ole-Object" ) ));
-    xOleObjStm = new SotStorageStream(String());
-    if( xOleObjStm->GetError() )
-        return xOleObjStm;
-    xOleObjStm->SetBufferSize( 0xff00 );
-
-    SotStorageRef xOleObjStor = new SotStorage( *xOleObjStm );
-    if( xOleObjStor->GetError() )
-        return xOleObjStm;
-    //Set class id
-    ClsId aClsId = aEntry.GetClassId();
-    SvGlobalName aGName( aClsId.n1, aClsId.n2, aClsId.n3, aClsId.n4,
-                        aClsId.n5, aClsId.n6,aClsId.n7,aClsId.n8,
-                        aClsId.n9,aClsId.n10,aClsId.n11);
-    xOleObjStor->SetClass( aGName, 0, String());
-
-    xOleObjStor->SetVersion( SOFFICE_FILEFORMAT_60 );
-    std::string aOleStreamName("OleStream");
-    sal_uInt32 nDLen = 0;
-    nDLen = GetSvStreamSize(pOleStorageStream);
-    for(sal_uInt32 nIndex = 0; nIndex < nDLen / ASWENTRY_SIZE; nIndex ++)
-    {
-        AswEntry aOleEntry;
-        ReadAswEntry(pOleStorageStream, aOleEntry);
-        if(aOleEntry.GetType()== BEN_STGTY_STREAM)
-        {
-            SvStream* pOleStream = FindObjectValueStreamWithObjectIDAndProperty(aOleEntry.GetObjectID(),  aOleStreamName.c_str());
-            if(pOleStream)
-            {
-                String strName;
-                aOleEntry.GetName(strName);
-                SotStorageStreamRef xStm = xOleObjStor->OpenSotStream( strName );
-                if( xStm->GetError() )
-                    break;
-                xStm->SetBufferSize( 8192 );
-                (*pOleStream) >> (*xStm);
-                xStm->Commit();
-                delete pOleStream;
-                pOleStream = NULL;
-            }
-        }
-    }
-    xOleObjStor->Commit();
-    xOleObjStm->Commit();
-
-    return xOleObjStm;
-}
 /**
 *   Find ole object storage stream data according to object name
 *   @date   10/24/2005

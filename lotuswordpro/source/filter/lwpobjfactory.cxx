@@ -690,7 +690,6 @@ LwpObject* LwpObjectFactory::CreateObject(sal_uInt32 type, LwpObjectHeader &objH
             //Unknown object type
             assert(false);
             newObj = NULL;
-            //newObj = new LwpDefaultObject(objHdr, m_pSvStream);
             break;
         }
     }
