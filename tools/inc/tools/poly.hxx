@@ -195,9 +195,6 @@ public:
     void                Scale( double fScaleX, double fScaleY );
     void                Rotate( const Point& rCenter, double fSin, double fCos );
     void                Rotate( const Point& rCenter, sal_uInt16 nAngle10 );
-    void                SlantX( long nYRef, double fSin, double fCos );
-    void                SlantY( long nXRef, double fSin, double fCos );
-    void                Distort( const Rectangle& rRefRect, const Polygon& rDistortedRect );
 
     void                Insert( sal_uInt16 nPos, const Point& rPt, PolyFlags eFlags = POLY_NORMAL );
     void                Insert( sal_uInt16 nPos, const Polygon& rPoly );

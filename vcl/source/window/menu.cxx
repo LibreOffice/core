@@ -1154,6 +1154,7 @@ void Menu::Select()
     }
 }
 
+#if defined(QUARTZ)
 void Menu::ImplSelectWithStart( Menu* pSMenu )
 {
     Menu* pOldStartedFrom = pStartedFrom;
@@ -1164,6 +1165,7 @@ void Menu::ImplSelectWithStart( Menu* pSMenu )
         pOldStartedFrom->pStartedFrom = pOldStartedStarted;
     pStartedFrom = pOldStartedFrom;
 }
+#endif
 
 void Menu::RequestHelp( const HelpEvent& )
 {
@@ -3189,13 +3191,6 @@ long Menu::GetIndexForPoint( const Point& rPoint, sal_uInt16& rItemID ) const
         }
     }
     return nIndex;
-}
-
-Pair Menu::GetLineStartEnd( long nLine ) const
-{
-    if( ! mpLayoutData )
-        ImplFillLayoutData();
-    return mpLayoutData ? mpLayoutData->GetLineStartEnd( nLine ) : Pair( -1, -1 );
 }
 
 Rectangle Menu::GetBoundingRectangle( sal_uInt16 nPos ) const

@@ -2765,50 +2765,6 @@ SalVisual::~SalVisual()
 #define SALCOLOR        RGB
 #define SALCOLORREVERSE BGR
 
-sal_Bool SalVisual::Convert( int &n0, int &n1, int &n2 )
-{
-    int n;
-
-    switch( GetMode() )
-    {
-        case otherSalRGB:
-            return sal_False;
-        case SALCOLOR:
-            break;
-        case RBG:
-            n  = n0;
-            n0 = n1;
-            n1 = n;
-            break;
-        case GRB:
-            n  = n1;
-            n1 = n2;
-            n2 = n;
-            break;
-        case SALCOLORREVERSE:
-            n  = n0;
-            n0 = n2;
-            n2 = n;
-            break;
-        case BRG:
-            n  = n0;
-            n0 = n1;
-            n1 = n2;
-            n2 = n;
-            break;
-        case GBR:
-            n  = n2;
-            n2 = n1;
-            n1 = n0;
-            n0 = n;
-            break;
-        default:
-            fprintf( stderr, "SalVisual::Convert %d\n", GetMode() );
-            abort();
-    }
-    return sal_True;
-}
-
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 SalColor SalVisual::GetTCColor( Pixel nPixel ) const
 {

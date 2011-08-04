@@ -361,9 +361,6 @@ protected:
 public:
                     SfxSingleRecordWriter( SvStream *pStream,
                                            sal_uInt16 nTag, sal_uInt8 nCurVer );
-                    SfxSingleRecordWriter( SvStream *pStream,
-                                           sal_uInt16 nTag, sal_uInt8 nCurVer,
-                                           sal_uInt32 nSize );
 
     inline void     Reset();
 
@@ -417,7 +414,6 @@ protected:
     bool                ReadHeader_Impl( sal_uInt16 nTypes );
 
 public:
-                        SfxSingleRecordReader( SvStream *pStream );
                         SfxSingleRecordReader( SvStream *pStream, sal_uInt16 nTag );
 
     inline sal_uInt16       GetTag() const;
@@ -489,9 +485,6 @@ protected:
                                              sal_uInt32 nContentSize );
 
 public:
-                    SfxMultiFixRecordWriter( SvStream *pStream,
-                                             sal_uInt16 nTag, sal_uInt8 nCurVer,
-                                             sal_uInt32 nContentSize );
     inline          ~SfxMultiFixRecordWriter();
 
     inline void     NewContent();
@@ -672,7 +665,6 @@ class SVL_DLLPUBLIC SfxMultiRecordReader: public SfxSingleRecordReader
     bool                ReadHeader_Impl();
 
 public:
-                        SfxMultiRecordReader( SvStream *pStream );
                         SfxMultiRecordReader( SvStream *pStream, sal_uInt16 nTag );
                         ~SfxMultiRecordReader();
 

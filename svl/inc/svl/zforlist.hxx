@@ -798,10 +798,6 @@ public:
         language/country, used in XML import */
     String GetStandardName( LanguageType eLnge );
 
-    /// Skip a NumberFormatter in stream, Chart needs this
-    static void SkipNumberFormatterInStream( SvStream& );
-
-
 private:
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceManager;
     ::com::sun::star::lang::Locale aLocale;

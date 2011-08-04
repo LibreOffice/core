@@ -212,9 +212,10 @@ public:
                             Menu();
                             Menu( sal_Bool bMenuBar );
     SAL_DLLPRIVATE Window*  ImplGetWindow() const { return pWindow; }
+#if defined(QUARTZ)
     // ImplSelectWithStart() is used in vcl/aqua/source/window/salnsmenu.mm
     SAL_DLLPRIVATE void ImplSelectWithStart( Menu* pStartMenu = NULL );
-
+#endif
 public:
     virtual             ~Menu();
 
@@ -351,9 +352,6 @@ public:
     // -1 is returned if no character is at that point
     // if an index is found the corresponding item id is filled in (else 0)
     long GetIndexForPoint( const Point& rPoint, sal_uInt16& rItemID ) const;
-    // returns the interval [start,end] of line nLine
-    // returns [-1,-1] for an invalid line
-    Pair GetLineStartEnd( long nLine ) const;
     // returns the bounding rectangle for an item at pos nItemPos
     Rectangle GetBoundingRectangle( sal_uInt16 nItemPos ) const;
 

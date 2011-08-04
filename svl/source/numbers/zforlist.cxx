@@ -940,12 +940,6 @@ sal_Bool SvNumberFormatter::Save( SvStream& rStream ) const
         return sal_True;
 }
 
-// static
-void SvNumberFormatter::SkipNumberFormatterInStream( SvStream& rStream )
-{
-    ImpSvNumMultipleReadHeader::Skip( rStream );
-}
-
 void SvNumberFormatter::GetUsedLanguages( SvUShorts& rList )
 {
     rList.Remove( 0, rList.Count() );

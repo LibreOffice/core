@@ -285,29 +285,6 @@ SfxSingleRecordWriter::SfxSingleRecordWriter
     *pStream << SFX_REC_HEADER( SFX_REC_TYPE_SINGLE, nContentTag, nContentVer);
 }
 
-//-------------------------------------------------------------------------
-
-SfxSingleRecordWriter::SfxSingleRecordWriter
-(
-    SvStream*       pStream,        // Stream, in dem der Record angelegt wird
-    sal_uInt16          nContentTag,    // Inhalts-Art-Kennung
-    sal_uInt8           nContentVer,    // Inhalts-Versions-Kennung
-    sal_uInt32          nContentSize    // Gr"o\se des Inhalts in Bytes
-)
-
-/*  [Beschreibung]
-
-    Legt in 'pStream' einen 'SfxSingleRecord' an, dessen Content-Gr"o\se
-    von vornherein bekannt ist.
-*/
-
-:   SfxMiniRecordWriter( pStream, SFX_REC_PRETAG_EXT,
-                         nContentSize + SFX_REC_HEADERSIZE_SINGLE )
-{
-    // Erweiterten Header hinter den des SfxMiniRec schreiben
-    *pStream << SFX_REC_HEADER( SFX_REC_TYPE_SINGLE, nContentTag, nContentVer);
-}
-
 //=========================================================================
 
 inline bool SfxSingleRecordReader::ReadHeader_Impl( sal_uInt16 nTypes )
@@ -340,29 +317,6 @@ inline bool SfxSingleRecordReader::ReadHeader_Impl( sal_uInt16 nTypes )
         bRet = 0 != ( nTypes & _nRecordType);
     }
     return bRet;
-}
-
-//-------------------------------------------------------------------------
-
-SfxSingleRecordReader::SfxSingleRecordReader( SvStream *pStream )
-:   SfxMiniRecordReader()
-{
-    // Startposition merken, um im Fehlerfall zur"uck-seeken zu k"onnen
-    #ifdef DBG_UTIL
-    sal_uInt32 nStartPos = pStream->Tell();
-    DBG( DbgOutf( "SfxFileRec: reading record at %ul", nStartPos ) );
-    #endif
-
-    // Basisklasse initialisieren (nicht via Ctor, da der nur MiniRecs akzept.)
-    Construct_Impl( pStream );
-
-    // nur Header mit korrektem Record-Type akzeptieren
-    if ( !ReadHeader_Impl( SFX_REC_TYPE_SINGLE ) )
-    {
-        // Error-Code setzen und zur"uck-seeken
-        pStream->SeekRel( - SFX_REC_HEADERSIZE_SINGLE );
-        pStream->SetError( ERRCODE_IO_WRONGFORMAT );
-    }
 }
 
 //-------------------------------------------------------------------------
@@ -465,30 +419,6 @@ SfxMultiFixRecordWriter::SfxMultiFixRecordWriter
 */
 
 :   SfxSingleRecordWriter( nRecordType, pStream, nContentTag, nContentVer ),
-    _nContentCount( 0 )
-{
-    // Platz f"ur eigenen Header
-    pStream->SeekRel( + SFX_REC_HEADERSIZE_MULTI );
-}
-
-//------------------------------------------------------------------------
-
-SfxMultiFixRecordWriter::SfxMultiFixRecordWriter
-(
-    SvStream*       pStream,        // Stream, in dem der Record angelegt wird
-    sal_uInt16          nContentTag,    // Content-Art-Kennung
-    sal_uInt8           nContentVer,    // Content-Versions-Kennung
-    sal_uInt32                          // Gr"o\se jedes einzelnen Contents in Bytes
-)
-
-/*  [Beschreibung]
-
-    Legt in 'pStream' einen 'SfxMultiFixRecord' an, dessen Content-Gr"o\se
-    konstant und von vornherein bekannt ist.
-*/
-
-:   SfxSingleRecordWriter( SFX_REC_TYPE_FIXSIZE,
-                           pStream, nContentTag, nContentVer ),
     _nContentCount( 0 )
 {
     // Platz f"ur eigenen Header
@@ -734,29 +664,6 @@ bool SfxMultiRecordReader::ReadHeader_Impl()
 
     // Header konnte gelesen werden, wenn am Stream kein Error gesetzt ist
     return !_pStream->GetError();
-}
-
-//-------------------------------------------------------------------------
-
-SfxMultiRecordReader::SfxMultiRecordReader( SvStream *pStream )
-    : _pContentOfs(0)
-    , _nContentSize(0)
-    , _nContentCount(0)
-    , _nContentNo(0)
-{
-    // Position im Stream merken, um im Fehlerfall zur"uck-seeken zu k"onnen
-    _nStartPos = pStream->Tell();
-
-    // Basisklasse konstruieren (normaler Ctor w"urde nur SingleRecs lesen)
-    SfxSingleRecordReader::Construct_Impl( pStream );
-
-    // Header der Basisklasse lesen
-    if ( !SfxSingleRecordReader::ReadHeader_Impl( SFX_REC_TYPE_FIXSIZE |
-                SFX_REC_TYPE_VARSIZE | SFX_REC_TYPE_VARSIZE_RELOC |
-                SFX_REC_TYPE_MIXTAGS | SFX_REC_TYPE_MIXTAGS_RELOC ) ||
-         !ReadHeader_Impl() )
-        // als ung"ultig markieren und zur"uck-seeken
-        SetInvalid_Impl( _nStartPos );
 }
 
 //-------------------------------------------------------------------------

@@ -303,41 +303,6 @@ void ImplPolygon::ImplSplit( sal_uInt16 nPos, sal_uInt16 nSpace, ImplPolygon* pI
 
 // -----------------------------------------------------------------------
 
-void ImplPolygon::ImplRemove( sal_uInt16 nPos, sal_uInt16 nCount )
-{
-    const sal_uInt16 nRemoveCount = Min( (sal_uInt16) ( mnPoints - nPos ), (sal_uInt16) nCount );
-
-    if( nRemoveCount )
-    {
-        const sal_uInt16    nNewSize = mnPoints - nRemoveCount;
-        const sal_uInt16    nSecPos = nPos + nRemoveCount;
-        const sal_uInt16    nRest = mnPoints - nSecPos;
-
-        Point* pNewAry = (Point*) new char[ (sal_uIntPtr) nNewSize * sizeof( Point ) ];
-
-        memcpy( pNewAry, mpPointAry, nPos * sizeof( Point ) );
-        memcpy( pNewAry + nPos, mpPointAry + nSecPos, nRest * sizeof( Point ) );
-
-        delete[] (char*) mpPointAry;
-
-        // ggf. FlagArray beruecksichtigen
-        if( mpFlagAry )
-        {
-            sal_uInt8* pNewFlagAry = new sal_uInt8[ nNewSize ];
-
-            memcpy( pNewFlagAry, mpFlagAry, nPos );
-            memcpy( pNewFlagAry + nPos, mpFlagAry + nSecPos, nRest );
-            delete[] mpFlagAry;
-            mpFlagAry = pNewFlagAry;
-        }
-
-        mpPointAry = pNewAry;
-        mnPoints   = nNewSize;
-    }
-}
-
-// -----------------------------------------------------------------------
-
 void ImplPolygon::ImplCreateFlagArray()
 {
     if( !mpFlagAry )
@@ -1220,84 +1185,6 @@ void Polygon::Rotate( const Point& rCenter, double fSin, double fCos )
         nY = rPt.Y() - nCenterY;
         rPt.X() = (long) FRound( fCos * nX + fSin * nY ) + nCenterX;
         rPt.Y() = -(long) FRound( fSin * nX - fCos * nY ) + nCenterY;
-    }
-}
-
-// -----------------------------------------------------------------------
-
-void Polygon::SlantX( long nYRef, double fSin, double fCos )
-{
-    DBG_CHKTHIS( Polygon, NULL );
-    ImplMakeUnique();
-
-    for( sal_uInt16 i = 0, nCount = mpImplPolygon->mnPoints; i < nCount; i++ )
-    {
-        Point&      rPnt = mpImplPolygon->mpPointAry[ i ];
-        const long  nDy = rPnt.Y() - nYRef;
-
-        rPnt.X() += (long)( fSin * nDy );
-        rPnt.Y() = nYRef + (long)( fCos * nDy );
-    }
-}
-
-// -----------------------------------------------------------------------
-
-void Polygon::SlantY( long nXRef, double fSin, double fCos )
-{
-    DBG_CHKTHIS( Polygon, NULL );
-    ImplMakeUnique();
-
-    for( sal_uInt16 i = 0, nCount = mpImplPolygon->mnPoints; i < nCount; i++ )
-    {
-        Point&      rPnt = mpImplPolygon->mpPointAry[ i ];
-        const long  nDx = rPnt.X() - nXRef;
-
-        rPnt.X() = nXRef + (long)( fCos * nDx );
-        rPnt.Y() -= (long)( fSin * nDx );
-    }
-}
-
-// -----------------------------------------------------------------------
-
-void Polygon::Distort( const Rectangle& rRefRect, const Polygon& rDistortedRect )
-{
-    DBG_CHKTHIS( Polygon, NULL );
-    ImplMakeUnique();
-
-    long    Xr, Wr, X1, X2, X3, X4;
-    long    Yr, Hr, Y1, Y2, Y3, Y4;
-    double  fTx, fTy, fUx, fUy;
-
-    Xr = rRefRect.Left();
-    Yr = rRefRect.Top();
-    Wr = rRefRect.GetWidth();
-    Hr = rRefRect.GetHeight();
-
-    if( Wr && Hr )
-    {
-        DBG_ASSERT( rDistortedRect.mpImplPolygon->mnPoints >= 4, "Distort rect too small!" );
-
-        X1 = rDistortedRect[0].X();
-        Y1 = rDistortedRect[0].Y();
-        X2 = rDistortedRect[1].X();
-        Y2 = rDistortedRect[1].Y();
-        X3 = rDistortedRect[3].X();
-        Y3 = rDistortedRect[3].Y();
-        X4 = rDistortedRect[2].X();
-        Y4 = rDistortedRect[2].Y();
-
-        for( sal_uInt16 i = 0, nCount = mpImplPolygon->mnPoints; i < nCount; i++ )
-        {
-            Point& rPnt = mpImplPolygon->mpPointAry[ i ];
-
-            fTx = (double)( rPnt.X() - Xr) / Wr;
-            fTy = (double)( rPnt.Y() - Yr) / Hr;
-            fUx = 1.0 - fTx;
-            fUy = 1.0 - fTy;
-
-            rPnt.X() = (long) ( fUy * (fUx * X1 + fTx * X2) + fTy * (fUx * X3 + fTx * X4) );
-            rPnt.Y() = (long) ( fUx * (fUy * Y1 + fTy * Y3) + fTx * (fUy * Y2 + fTy * Y4) );
-        }
     }
 }
 

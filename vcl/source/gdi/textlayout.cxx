@@ -295,18 +295,6 @@ namespace vcl
     }
 
     //--------------------------------------------------------------------
-    namespace
-    {
-        long zoomBy( long _value, const Fraction& _zoom )
-        {
-            double n = (double)_value;
-            n *= (double)_zoom.GetNumerator();
-            n /= (double)_zoom.GetDenominator();
-            return (long)::rtl::math::round( n );
-        }
-    }
-
-    //--------------------------------------------------------------------
     Rectangle ReferenceDeviceTextLayout::DrawText( const Rectangle& _rRect, const XubString& _rText, sal_uInt16 _nStyle, MetricVector* _pVector, String* _pDisplayText )
     {
         if ( !_rText.Len() )

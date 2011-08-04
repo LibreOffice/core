@@ -61,7 +61,6 @@ public:
     void            ImplSetSize( sal_uInt16 nSize, sal_Bool bResize = sal_True );
     void            ImplCreateFlagArray();
     void            ImplSplit( sal_uInt16 nPos, sal_uInt16 nSpace, ImplPolygon* pInitPoly = NULL );
-    void            ImplRemove( sal_uInt16 nPos, sal_uInt16 nCount );
 };
 
 // -------------------
