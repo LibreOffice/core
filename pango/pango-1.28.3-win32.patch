@@ -181,7 +181,7 @@
  
  pango-enum-types.h: $(pango_headers) makefile.msc
 -	$(PERL) $(GLIB)\gobject\glib-mkenums  \
-+	$(PERL) $(OUTDIR)\bin\glib-mkenums  \
++	perl $(OUTDIR)\bin\glib-mkenums  \
  		--fhead "#ifndef __PANGO_ENUM_TYPES_H__\n#define __PANGO_ENUM_TYPES_H__\n\n#include <glib-object.h>\n\nG_BEGIN_DECLS\n" \
  		--fprod "/* enumerations from \"@filename@\" */\n" \
  		--vhead "GType @enum_name@_get_type (void);\n#define PANGO_TYPE_@ENUMSHORT@ (@enum_name@_get_type())\n" 	\
@@ -190,7 +190,7 @@
  
  pango-enum-types.c: $(pango_headers) pango-enum-types.h makefile.msc
 -	$(PERL) $(GLIB)\gobject\glib-mkenums  \
-+	$(PERL) $(OUTDIR)\bin\glib-mkenums  \
++	perl $(OUTDIR)\bin\glib-mkenums  \
  		--fhead "#include <pango.h>" \
  		--fprod "\n/* enumerations from \"@filename@\" */" \
  		--vhead "GType\n@enum_name@_get_type (void)\n{\n  static GType etype = 0;\n  if (etype == 0) {\n    static const G@Type@Value values[] = {" 	\
