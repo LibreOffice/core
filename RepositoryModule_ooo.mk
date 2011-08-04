@@ -31,9 +31,13 @@ $(eval $(call gb_Module_Module,ooo))
 $(eval $(call gb_Module_add_moduledirs,ooo,\
     animations \
     basctl \
+    basebmp \
+    basegfx \
     basic \
+    canvas \
     chart2 \
     comphelper \
+    cppcanvas \
     cui \
     dbaccess \
     drawinglayer \
@@ -43,12 +47,19 @@ $(eval $(call gb_Module_add_moduledirs,ooo,\
     formula \
     framework \
     hwpfilter \
+    i18nutil \
+    idl \
+    linguistic \
     lotuswordpro \
+    o3tl \
     offapi \
     oovbaapi \
     oox \
     padmin \
-    salhelper \
+    psprint_config \
+    regexp \
+    reportdesign \
+    sax \
     sc \
     scaddins \
     sccomp \
@@ -56,25 +67,30 @@ $(eval $(call gb_Module_add_moduledirs,ooo,\
     sfx2 \
     slideshow \
     sot \
+    starmath \
     svl \
     svtools \
     svx \
     sw \
     toolkit \
     tools \
+    ucbhelper \
     udkapi \
     unotools \
     unoxml \
-    xmloff \
     vbahelper \
+    vcl \
+    wizards \
     writerfilter \
     writerperfect \
+    xmloff \
+    xmlreader \
+    xmlscript \
 ))
 
 # these have only migrated subsequentcheck for now
 $(eval $(call gb_Module_add_moduledirs,ooo,\
     configmgr \
-    linguistic \
     qadevOOo \
     sal \
     ucb \
