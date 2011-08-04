@@ -213,7 +213,8 @@ SvxBulletItem::SvxBulletItem( SvStream& rStrm, sal_uInt16 _nWhich ) :
 
     char cTmpSymbol;
     rStrm >> cTmpSymbol;
-    cSymbol = ByteString::ConvertToUnicode( cTmpSymbol, aFont.GetCharSet() );
+    //convert single byte to unicode
+    cSymbol = rtl::OUString(&cTmpSymbol, 1, aFont.GetCharSet()).toChar();
 
     rStrm >> nScale;
 
