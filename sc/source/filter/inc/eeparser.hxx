@@ -64,10 +64,10 @@ struct ScEEParseEntry
 {
     SfxItemSet          aItemSet;
     ESelection          aSel;           // Selection in EditEngine
-    String*             pValStr;        // HTML evtl. SDVAL String
-    String*             pNumStr;        // HTML evtl. SDNUM String
-    String*             pName;          // HTML evtl. Anchor/RangeName
-    String              aAltText;       // HTML IMG ALT Text
+    rtl::OUString*      pValStr;        // HTML evtl. SDVAL String
+    rtl::OUString*      pNumStr;        // HTML evtl. SDNUM String
+    rtl::OUString*      pName;          // HTML evtl. Anchor/RangeName
+    rtl::OUString       aAltText;       // HTML IMG ALT Text
     boost::ptr_vector< ScHTMLImage > maImageList;       // Grafiken in dieser Zelle
     SCCOL               nCol;           // relativ zum Beginn des Parse
     SCROW               nRow;
@@ -77,8 +77,8 @@ struct ScEEParseEntry
     SCROW               nRowOverlap;    // merged cells wenn >1
     sal_uInt16          nOffset;        // HTML PixelOffset
     sal_uInt16          nWidth;         // HTML PixelWidth
-    bool                bHasGraphic;    // HTML any image loaded
-    bool                bEntirePara;    // TRUE = use entire paragraph, false = use selection
+    bool                bHasGraphic:1;  // HTML any image loaded
+    bool                bEntirePara:1;  // true = use entire paragraph, false = use selection
 
                         ScEEParseEntry( SfxItemPool* pPool ) :
                             aItemSet( *pPool ), pValStr( NULL ),

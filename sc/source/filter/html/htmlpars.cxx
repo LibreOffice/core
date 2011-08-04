@@ -1038,12 +1038,12 @@ void ScHTMLLayoutParser::TableDataOn( ImportInfo* pInfo )
             break;
             case HTML_O_SDVAL:
             {
-                pActEntry->pValStr = new String( rOption.GetString() );
+                pActEntry->pValStr = new rtl::OUString( rOption.GetString() );
             }
             break;
             case HTML_O_SDNUM:
             {
-                pActEntry->pNumStr = new String( rOption.GetString() );
+                pActEntry->pNumStr = new rtl::OUString( rOption.GetString() );
             }
             break;
         }
@@ -1372,8 +1372,9 @@ void ScHTMLLayoutParser::Image( ImportInfo* pInfo )
             {
                 if ( !pActEntry->bHasGraphic )
                 {   // ALT text only if not any image loaded
-                    if ( pActEntry->aAltText.Len() )
-                        pActEntry->aAltText.AppendAscii( "; " );
+                    if (!pActEntry->aAltText.isEmpty())
+                        pActEntry->aAltText += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("; "));
+
                     pActEntry->aAltText += rOption.GetString();
                 }
             }
@@ -1418,7 +1419,7 @@ void ScHTMLLayoutParser::Image( ImportInfo* pInfo )
     if ( !pActEntry->bHasGraphic )
     {   // discard any ALT text in this cell if we have any image
         pActEntry->bHasGraphic = sal_True;
-        pActEntry->aAltText.Erase();
+        pActEntry->aAltText = rtl::OUString();
     }
     pImage->aFilterName = rFilter.GetImportFormatName( nFormat );
     pImage->pGraphic = pGraphic;
@@ -1498,7 +1499,7 @@ void ScHTMLLayoutParser::AnchorOn( ImportInfo* pInfo )
         {
             case HTML_O_NAME:
             {
-                pActEntry->pName = new String( rOption.GetString() );
+                pActEntry->pName = new rtl::OUString(rOption.GetString());
             }
             break;
         }
@@ -1759,7 +1760,7 @@ ScHTMLEntry::ScHTMLEntry( const SfxItemSet& rItemSet, ScHTMLTableId nTableId ) :
 
 bool ScHTMLEntry::HasContents() const
 {
-     return mbImportAlways || aSel.HasRange() || aAltText.Len() || IsTable();
+     return mbImportAlways || aSel.HasRange() || !aAltText.isEmpty() || IsTable();
 }
 
 void ScHTMLEntry::AdjustStart( const ImportInfo& rInfo )
@@ -2180,7 +2181,7 @@ void ScHTMLTable::DataOn( const ImportInfo& rInfo )
     {
         // read needed options from the <td> tag
         ScHTMLSize aSpanSize( 1, 1 );
-        ::std::auto_ptr< String > pValStr, pNumStr;
+        ::std::auto_ptr<rtl::OUString> pValStr, pNumStr;
         const HTMLOptions& rOptions = static_cast<HTMLParser*>(rInfo.pParser)->GetOptions();
         HTMLOptions::const_iterator itr = rOptions.begin(), itrEnd = rOptions.end();
         sal_uInt32 nNumberFormat = NUMBERFORMAT_ENTRY_NOT_FOUND;
@@ -2195,10 +2196,10 @@ void ScHTMLTable::DataOn( const ImportInfo& rInfo )
                     aSpanSize.mnRows = static_cast<SCROW>( getLimitedValue<sal_Int32>( itr->GetString().ToInt32(), 1, 256 ) );
                 break;
                 case HTML_O_SDVAL:
-                    pValStr.reset( new String( itr->GetString() ) );
+                    pValStr.reset(new rtl::OUString(itr->GetString()));
                 break;
                 case HTML_O_SDNUM:
-                    pNumStr.reset( new String( itr->GetString() ) );
+                    pNumStr.reset(new rtl::OUString(itr->GetString()));
                 break;
                 case HTML_O_CLASS:
                 {

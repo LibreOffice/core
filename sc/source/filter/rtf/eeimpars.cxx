@@ -218,7 +218,7 @@ void ScEEImport::WriteToDocument( sal_Bool bSizeColsRows, double nOutputFactor, 
             }
 
             // HTML
-            String aValStr, aNumStr;
+            rtl::OUString aValStr, aNumStr;
             double fVal;
             sal_uInt32 nNumForm = 0;
             LanguageType eNumLang = LANGUAGE_NONE;
@@ -235,7 +235,7 @@ void ScEEImport::WriteToDocument( sal_Bool bSizeColsRows, double nOutputFactor, 
             ScPatternAttr aAttr( pDocPool );
             aAttr.GetFromEditItemSet( &aSet );
             SfxItemSet& rSet = aAttr.GetItemSet();
-            if ( aNumStr.Len() )
+            if (!aNumStr.isEmpty())
             {
                 rSet.Put( SfxUInt32Item( ATTR_VALUE_FORMAT, nNumForm ) );
                 rSet.Put( SvxLanguageItem( eNumLang, ATTR_LANGUAGE_FORMAT ) );
@@ -341,7 +341,7 @@ void ScEEImport::WriteToDocument( sal_Bool bSizeColsRows, double nOutputFactor, 
                 aParam.mbDetectNumberFormat = true;
                 aParam.mbSetTextCellFormat = true;
 
-                if ( aValStr.Len() )
+                if (!aValStr.isEmpty())
                     mpDoc->SetValue( nCol, nRow, nTab, fVal );
                 else if ( !pE->aSel.HasRange() )
                 {
