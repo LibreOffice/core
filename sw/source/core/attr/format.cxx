@@ -38,6 +38,7 @@
 #include <paratr.hxx>           // fuer SwParaFmt - SwHyphenBug
 #include <swcache.hxx>
 #include <fmtcolfunc.hxx>
+#include <rtl/strbuf.hxx>
 
 TYPEINIT1( SwFmt, SwClient );   //rtti fuer SwFmt
 
@@ -254,7 +255,9 @@ SwFmt::~SwFmt()
         SwFmt *pParentFmt = DerivedFrom();
         if (!pParentFmt)
         {
-            OSL_FAIL( "~SwFmt: parent format missing" );
+            OSL_FAIL(rtl::OStringBuffer(
+                    RTL_CONSTASCII_STRINGPARAM("~SwFmt: parent format missing from: ")).
+                append(rtl::OUStringToOString(GetName(), osl_getThreadTextEncoding())).getStr());
         }
         else
         {
