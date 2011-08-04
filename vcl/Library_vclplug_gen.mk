@@ -30,8 +30,8 @@ $(eval $(call gb_Library_Library,vclplug_gen))
 
 $(eval $(call gb_Library_set_include,vclplug_gen,\
     $$(INCLUDE) \
-    -I$(SRCDIR)/vcl/inc \
-    -I$(SRCDIR)/vcl/inc/pch \
+    -I$(realpath $(SRCDIR)/vcl/inc) \
+    -I$(realpath $(SRCDIR)/vcl/inc/pch) \
     -I$(SRCDIR)/solenv/inc \
     -I$(OUTDIR)/inc \
 ))

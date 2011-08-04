@@ -287,7 +287,6 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
 ))
 else
 $(eval $(call gb_Library_add_linked_libs,vcl,\
-    graphite2_off \
     version \
 ))
 endif
