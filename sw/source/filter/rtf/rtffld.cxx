@@ -891,7 +891,7 @@ void SwRTFParser::ReadXEField()
 {
     bReadSwFly = false; //#it may be that any uses of this need to be removed and replaced
     int nNumOpenBrakets = 1;
-    String sFieldStr;
+    rtl::OUStringBuffer sFieldStr;
     sal_uInt8 cCh;
 
     int nToken;
@@ -903,9 +903,9 @@ void SwRTFParser::ReadXEField()
             {
                 --nNumOpenBrakets;
 
-                if( sFieldStr.Len())
+                if (sFieldStr.getLength())
                 {
-                    String sXE(sFieldStr);
+                    String sXE(sFieldStr.makeStringAndClear());
                     sXE.Insert('\"', 0);
                     sXE.Append('\"');
 
@@ -921,8 +921,6 @@ void SwRTFParser::ReadXEField()
                     }
 
                     sw::ms::ImportXE(*pDoc, *pPam, sXE);
-
-                    sFieldStr.Erase();
                 }
             }
             break;
@@ -948,9 +946,9 @@ void SwRTFParser::ReadXEField()
         case RTF_U:
             {
                 if( nTokenValue )
-                    sFieldStr += (sal_Unicode)nTokenValue;
+                    sFieldStr.append(static_cast<sal_Unicode>(nTokenValue));
                 else
-                    sFieldStr += aToken;
+                    sFieldStr.append(aToken);
             }
             break;
 
@@ -965,13 +963,15 @@ void SwRTFParser::ReadXEField()
         case RTF_LDBLQUOTE:     cCh = 147;  goto INSINGLECHAR;
         case RTF_RDBLQUOTE:     cCh = 148;  goto INSINGLECHAR;
 INSINGLECHAR:
-            sFieldStr += ByteString::ConvertToUnicode( cCh,
-                                               RTL_TEXTENCODING_MS_1252 );
+            //convert single byte from MS1252 to unicode and append
+            sFieldStr.append(rtl::OUString(
+                reinterpret_cast<const sal_Char*>(&cCh), 1,
+                RTL_TEXTENCODING_MS_1252));
             break;
 
         // kein Break, aToken wird als Text gesetzt
         case RTF_TEXTTOKEN:
-            sFieldStr += aToken;
+            sFieldStr.append(aToken);
             break;
 
         case RTF_BKMK_KEY:
@@ -983,7 +983,7 @@ INSINGLECHAR:
             break;
 
         case RTF_PAR:
-            sFieldStr.Append('\x0a');
+            sFieldStr.append(static_cast<sal_Unicode>('\x0a'));
             break;
         default:
             SvxRTFParser::NextToken( nToken );
