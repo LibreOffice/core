@@ -333,7 +333,7 @@ const SmTokenTableEntry * SmParser::GetTokenTableEntry( const String &rName )
 
 ///////////////////////////////////////////////////////////////////////////
 
-#if OSL_DEBUG_LEVEL
+#if OSL_DEBUG_LEVEL > 1
 
 bool SmParser::IsDelimiter( const String &rTxt, xub_StrLen nPos )
     // returns 'true' iff cChar is '\0' or a delimeter

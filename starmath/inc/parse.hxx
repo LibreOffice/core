@@ -217,7 +217,7 @@ class SmParser
     SmParser & operator = (const SmParser &);
 
 protected:
-#if OSL_DEBUG_LEVEL
+#if OSL_DEBUG_LEVEL > 1
     bool            IsDelimiter( const String &rTxt, xub_StrLen nPos );
 #endif
     void            NextToken();
