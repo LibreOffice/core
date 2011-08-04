@@ -119,7 +119,6 @@ ScDataFormDlg::ScDataFormDlg( Window* pParent, ScTabViewShell*  pTabViewShellOri
             //skip leading hide column
             for (int i=1;i<=MAX_DATAFORM_COLS;i++)
             {
-                String  aColName;
                 int nColWidth = pDoc->GetColWidth( nStartCol, nTab );
                 if (nColWidth)
                     break;
@@ -298,7 +297,7 @@ IMPL_LINK( ScDataFormDlg, Impl_NewHdl, PushButton*, EMPTYARG )
 
         if ( bHasData )
         {
-            pTabViewShell->DataFormPutData( aCurrentRow , nStartRow , nStartCol , nEndRow , nEndCol , maEdits.c_array() , aColLength );
+            pTabViewShell->DataFormPutData( aCurrentRow , nStartRow , nStartCol , nEndRow , nEndCol , maEdits , aColLength );
             aCurrentRow++;
             if (aCurrentRow >= nEndRow + 2)
             {

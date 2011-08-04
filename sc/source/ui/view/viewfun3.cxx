@@ -1839,7 +1839,7 @@ sal_Bool ScViewFunc::LinkBlock( const ScRange& rSource, const ScAddress& rDestPo
 void ScViewFunc::DataFormPutData( SCROW nCurrentRow ,
                                   SCROW nStartRow , SCCOL nStartCol ,
                                   SCROW nEndRow , SCCOL nEndCol ,
-                                  Edit** pEdits ,
+                                  boost::ptr_vector<boost::nullable<Edit> >& aEdits,
                                   sal_uInt16 aColLength )
 {
     ScDocument* pDoc = GetViewData()->GetDocument();
@@ -1881,9 +1881,9 @@ void ScViewFunc::DataFormPutData( SCROW nCurrentRow ,
 
         for(sal_uInt16 i = 0; i < aColLength; i++)
         {
-            if (pEdits[i])
+            if (!aEdits.is_null(i))
             {
-                String  aFieldName=pEdits[i]->GetText();
+                String  aFieldName=aEdits[i].GetText();
                 pDoc->SetString( nStartCol + i, nCurrentRow, nTab, aFieldName );
             }
         }

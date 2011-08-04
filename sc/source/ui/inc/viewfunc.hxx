@@ -41,6 +41,7 @@
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <com/sun/star/embed/Aspects.hpp>
 #include <vector>
+#include <boost/ptr_container/ptr_vector.hpp>
 
 class ScPatternAttr;
 class ScAutoFormatData;
@@ -342,7 +343,7 @@ public:
         SC_DLLPUBLIC void                   DataFormPutData( SCROW nCurrentRow ,
                                                              SCROW nStartRow , SCCOL nStartCol ,
                                                              SCROW nEndRow , SCCOL nEndCol ,
-                                                             Edit** pEdits ,
+                                                             boost::ptr_vector<boost::nullable<Edit> >& aEdits,
                                                              sal_uInt16 aColLength );
 
                                                 // interne Hilfsfunktionen

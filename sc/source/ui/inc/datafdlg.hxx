@@ -75,8 +75,8 @@ private:
     SCTAB           nTab;
     bool            bNoSelection;
 
-    boost::ptr_vector<FixedText> maFixedTexts;
-    boost::ptr_vector<Edit> maEdits;
+    boost::ptr_vector<boost::nullable<FixedText> > maFixedTexts;
+    boost::ptr_vector<boost::nullable<Edit> > maEdits;
 
 public:
     ScDataFormDlg( Window* pParent, ScTabViewShell* pTabViewShell);
