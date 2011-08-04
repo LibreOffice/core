@@ -126,7 +126,7 @@ struct DisposeControlModel : public ::std::unary_function< Reference< XControlMo
         {
             ::comphelper::disposeComponent( _rxModel );
         }
-        catch( const Exception& )
+        catch (const Exception&)
         {
             OSL_TRACE( "DisposeControlModel::(): caught an exception while disposing a component!" );
         }
@@ -657,11 +657,16 @@ void ControlModelContainerBase::removeByName( const ::rtl::OUString& aName ) thr
     mbGroupsUpToDate = sal_False;
 
     if ( xPS.is() )
+    {
         try
         {
             xPS->setPropertyValue( PROPERTY_RESOURCERESOLVER, makeAny( Reference< resource::XStringResourceResolver >() ) );
         }
-        catch( const Exception& ) { DBG_UNHANDLED_EXCEPTION(); }
+        catch (const Exception&)
+        {
+            DBG_UNHANDLED_EXCEPTION();
+        }
+    }
 
     // our "tab controller model" has potentially changed -> notify this
     implNotifyTabModelChange( aName );
@@ -849,7 +854,7 @@ namespace
             Reference< XPropertySet > xModelProps( _rxModel, UNO_QUERY );
             xModelProps->getPropertyValue( getStepPropertyName() ) >>= nStep;
         }
-        catch( const Exception& )
+        catch (const Exception&)
         {
             OSL_TRACE( "lcl_getDialogStep: caught an exception while determining the dialog page!" );
         }
@@ -1206,11 +1211,11 @@ void ResourceListener::startListening(
             m_bListening = true;
             // --- SAFE ---
         }
-        catch ( RuntimeException& )
+        catch (const RuntimeException&)
         {
             throw;
         }
-        catch ( Exception& )
+        catch (const Exception&)
         {
         }
     }
@@ -1241,11 +1246,11 @@ void ResourceListener::stopListening()
 
             xModifyBroadcaster->removeModifyListener( xThis );
         }
-        catch ( RuntimeException& )
+        catch (const RuntimeException&)
         {
             throw;
         }
-        catch ( Exception& )
+        catch (const Exception&)
         {
         }
     }
@@ -1270,11 +1275,11 @@ throw ( RuntimeException )
         {
             xListener->modified( aEvent );
         }
-        catch ( RuntimeException& )
+        catch (const RuntimeException&)
         {
             throw;
         }
-        catch ( Exception& )
+        catch (const Exception&)
         {
         }
     }
@@ -1312,11 +1317,11 @@ throw ( RuntimeException )
             {
                 xListener->disposing( Source );
             }
-            catch ( RuntimeException& )
+            catch (const RuntimeException&)
             {
                 throw;
             }
-            catch ( Exception& )
+            catch (const Exception&)
             {
             }
         }
@@ -1342,11 +1347,11 @@ throw ( RuntimeException )
             {
                 xModifyBroadcaster->removeModifyListener( xThis );
             }
-            catch ( RuntimeException& )
+            catch (const RuntimeException&)
             {
                 throw;
             }
-            catch ( Exception& )
+            catch (const Exception&)
             {
             }
         }
@@ -1412,7 +1417,7 @@ void ControlContainerBase::ImplRemoveControl( Reference< XControlModel >& rxMode
             Reference< XComponent > const xControlComp( xCtrl, UNO_QUERY_THROW );
             xControlComp->dispose();
         }
-        catch( Exception const & )
+        catch (const Exception&)
         {
             DBG_UNHANDLED_EXCEPTION();
         }
@@ -1608,8 +1613,11 @@ void ControlContainerBase::elementInserted( const ContainerEvent& Event ) throw(
     {
         ImplInsertControl( xModel, aName );
     }
-    catch ( const RuntimeException& e ) { throw; }
-    catch( const Exception& )
+    catch (const RuntimeException&)
+    {
+        throw;
+    }
+    catch (const Exception&)
     {
         DBG_UNHANDLED_EXCEPTION();
     }
@@ -1626,8 +1634,11 @@ void ControlContainerBase::elementRemoved( const ContainerEvent& Event ) throw(R
     {
         ImplRemoveControl( xModel );
     }
-    catch ( const RuntimeException& e ) { throw; }
-    catch( const Exception& )
+    catch (const RuntimeException&)
+    {
+        throw;
+    }
+    catch (const Exception&)
     {
         DBG_UNHANDLED_EXCEPTION();
     }
@@ -1645,8 +1656,11 @@ void ControlContainerBase::elementReplaced( const ContainerEvent& Event ) throw(
         if ( xModel.is() )
             ImplRemoveControl( xModel );
     }
-    catch ( const RuntimeException& e ) { throw; }
-    catch( const Exception& )
+    catch (const RuntimeException&)
+    {
+        throw;
+    }
+    catch (const Exception&)
     {
         DBG_UNHANDLED_EXCEPTION();
     }
@@ -1659,8 +1673,11 @@ void ControlContainerBase::elementReplaced( const ContainerEvent& Event ) throw(
     {
         ImplInsertControl( xModel, aName );
     }
-    catch ( const RuntimeException& e ) { throw; }
-    catch( const Exception& )
+    catch (const RuntimeException&)
+    {
+        throw;
+    }
+    catch (const Exception&)
     {
         DBG_UNHANDLED_EXCEPTION();
     }
@@ -1792,8 +1809,7 @@ void lcl_ApplyResolverToNestedContainees(  const Reference< resource::XStringRes
             else
                 xPropertySet->setPropertyValue( aPropName, xNewStringResourceResolver );
         }
-        /*catch ( NoSuchElementException& )*/ // that's nonsense, this is never thrown above ...
-        catch ( const Exception& )
+        catch (const Exception&)
         {
         }
 
@@ -1859,7 +1875,7 @@ uno::Reference< graphic::XGraphic > ControlContainerBase::Impl_getGraphicFromURL
             xGraphic = xProvider->queryGraphic( aMediaProperties );
         }
     }
-    catch( const Exception& )
+    catch (const Exception&)
     {
         DBG_UNHANDLED_EXCEPTION();
     }
