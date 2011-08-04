@@ -77,8 +77,8 @@ $(eval $(call gb_RdbTarget_add_old_components,writerfilter_rtftok,\
 	ucpfile1 \
 ))
 
-# we need to explicitly depend on library rtftok because it is not implied
+# we need to explicitly depend on library rtftok and writerfilter because it is not implied
 # by a link relation
-$(call gb_CppunitTest_get_target,writerfilter_rtftok) : $(call gb_Library_get_target,rtftok)
+$(call gb_CppunitTest_get_target,writerfilter_rtftok) : $(call gb_Library_get_target,rtftok) $(call gb_Library_get_target,writerfilter)
 
 # vim: set noet sw=4 ts=4:
