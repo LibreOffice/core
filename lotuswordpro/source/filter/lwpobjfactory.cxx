@@ -69,7 +69,6 @@
 #endif
 
 #include "lwpdoc.hxx"
-#include "lwpdefobj.hxx"
 #include "lwptemp.hxx"
 #include "lwpstory.hxx"
 #include "lwplayout.hxx"
