@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  *  $RCSfile: pq_driver.cxx,v $
@@ -149,7 +150,7 @@ Reference< XConnection > Driver::connect(
 sal_Bool Driver::acceptsURL( const ::rtl::OUString& url )
     throw (SQLException, RuntimeException)
 {
-    return url.compareToAscii( RTL_CONSTASCII_STRINGPARAM( "sdbc:postgresql:" ) ) == 0;
+    return url.matchAsciiL( RTL_CONSTASCII_STRINGPARAM( "sdbc:postgresql:" ) );
 }
 
 Sequence< DriverPropertyInfo > Driver::getPropertyInfo(
