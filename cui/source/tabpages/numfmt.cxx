@@ -1394,6 +1394,10 @@ IMPL_LINK( SvxNumberFormatTabPage, ClickHdl_Impl, ImageButton*, pIB)
 
         if ( !nErrPos ) // Syntax ok?
         {
+            // May be sorted under a different locale if LCID was parsed.
+            if (bAdded)
+                aLbLanguage.SelectLanguage( pNumFmtShell->GetCurLanguage() );
+
             if(nCatLbSelPos==CAT_CURRENCY)
             {
                 aLbCurrency.SelectEntryPos((sal_uInt16)pNumFmtShell->GetCurrencySymbol());
