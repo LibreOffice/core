@@ -41,6 +41,7 @@ $(eval $(call gb_CppunitTest_add_linked_libs,writerfilter_rtftok, \
 	sal \
 	ucbhelper \
 	vcl \
+	writerfilter \
 	$(gb_STDLIBS) \
 ))
 
