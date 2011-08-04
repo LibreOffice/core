@@ -595,6 +595,46 @@ sal_Bool lcl_SvNumberformat_IsBracketedPrefix( short nSymbolType )
     return sal_False;
 }
 
+
+String SvNumberformat::ImpObtainCalendarAndNumerals( String & rString,
+        xub_StrLen & nPos, LanguageType & nLang, const LocaleType & aTmpLocale )
+{
+    String sCalendar;
+    /* TODO: this could be enhanced to allow other possible locale dependent
+     * calendars and numerals. BUT only if our locale data allows it! For LCID
+     * numerals and calendars see
+     * http://office.microsoft.com/en-us/excel/HA010346351033.aspx */
+    if (MsLangId::getRealLanguage( aTmpLocale.meLanguage) == LANGUAGE_THAI)
+    {
+        // Numeral shape code "D" = Thai digits.
+        if (aTmpLocale.mnNumeralShape == 0xD)
+            rString.InsertAscii( "[NatNum1]", nPos);
+
+        // Calendar type code "07" = Thai Buddhist calendar, insert this after
+        // all prefixes have been consumed as it is actually a format modifier
+        // and not a prefix.
+        if (aTmpLocale.mnCalendarType == 0x07)
+        {
+            // Currently calendars are tied to the locale of the entire number
+            // format, e.g. [~buddhist] in en_US doesn't work.
+            // => Having different locales in sub formats does not work!
+            /* TODO: calendars could be tied to a sub format's NatNum info
+             * instead, or even better be available for any locale. Needs a
+             * different implementation of GetCal() and locale data calendars.
+             * */
+            // If this is not Thai yet, make it so.
+            if (MsLangId::getRealLanguage( maLocale.meLanguage) != LANGUAGE_THAI)
+            {
+                maLocale = aTmpLocale;
+                nLang = maLocale.meLanguage = LANGUAGE_THAI;
+            }
+            sCalendar.AssignAscii( RTL_CONSTASCII_STRINGPARAM( "[~buddhist]"));
+        }
+    }
+    return sCalendar;
+}
+
+
 SvNumberformat::SvNumberformat(String& rString,
                                ImpSvNumberformatScan* pSc,
                                ImpSvNumberInputScan* pISc,
@@ -636,7 +676,6 @@ SvNumberformat::SvNumberformat(String& rString,
 
     sal_Bool bCancel = sal_False;
     sal_Bool bCondition = sal_False;
-    sal_Bool bHasValidBracketPrefix = sal_False;
     short eSymbolType;
     xub_StrLen nPos = 0;
     xub_StrLen nPosOld;
@@ -651,6 +690,7 @@ SvNumberformat::SvNumberformat(String& rString,
         if (rScan.GetConvertMode())
             (rScan.GetNumberformatter())->ChangeIntl(rScan.GetTmpLnge());
 
+        String sInsertCalendar;     // a calendar resulting from parsing LCID
         String sStr;
         nPosOld = nPos;                         // Start position of substring
         // first get bracketed prefixes; e.g. conditions, color
@@ -710,6 +750,7 @@ SvNumberformat::SvNumberformat(String& rString,
             }
             else if ( lcl_SvNumberformat_IsBracketedPrefix( eSymbolType ) )
             {
+                String sSymbol( sStr);
                 switch ( eSymbolType )
                 {
                     case BRACKET_SYMBOLTYPE_COLOR :
@@ -728,8 +769,6 @@ SvNumberformat::SvNumberformat(String& rString,
                                 bCancel = sal_True;     // break for
                                 nCheckPos = nPosOld;
                             }
-                            else
-                                bHasValidBracketPrefix = sal_True;
                         }
                     }
                     break;
@@ -766,7 +805,6 @@ SvNumberformat::SvNumberformat(String& rString,
                             sal_uInt8 nNum = sal::static_int_cast< sal_uInt8 >(0 - (eSymbolType - BRACKET_SYMBOLTYPE_NATNUM0));
                             sStr += String::CreateFromInt32( nNum );
                             NumFor[nIndex].SetNatNumNum( nNum, sal_False );
-                            bHasValidBracketPrefix = sal_True;
                         }
                     }
                     break;
@@ -792,13 +830,16 @@ SvNumberformat::SvNumberformat(String& rString,
                             sal_uInt8 nNum = sal::static_int_cast< sal_uInt8 >(1 - (eSymbolType - BRACKET_SYMBOLTYPE_DBNUM1));
                             sStr += static_cast< sal_Unicode >('0' + nNum);
                             NumFor[nIndex].SetNatNumNum( nNum, sal_True );
-                            bHasValidBracketPrefix = sal_True;
                         }
                     }
                     break;
                     case BRACKET_SYMBOLTYPE_LOCALE :
                     {
-                        if ( NumFor[nIndex].GetNatNum().GetLang() != LANGUAGE_DONTKNOW )
+                        if ( NumFor[nIndex].GetNatNum().GetLang() != LANGUAGE_DONTKNOW ||
+                                rString.GetChar(nPos-1) != ']' )
+                                // Check also for ']' to avoid pulling in
+                                // locale data for the preview string for not
+                                // yet completed LCIDs in the dialog.
                         {
                             bCancel = sal_True;         // break for
                             nCheckPos = nPosOld;
@@ -806,18 +847,50 @@ SvNumberformat::SvNumberformat(String& rString,
                         else
                         {
                             xub_StrLen nTmp = 2;
-                            maLocale = ImpGetLocaleType( sStr, nTmp );
-                            if (maLocale.meLanguage == LANGUAGE_DONTKNOW)
+                            LocaleType aTmpLocale( ImpGetLocaleType( sStr, nTmp));
+                            if (aTmpLocale.meLanguage == LANGUAGE_DONTKNOW)
                             {
                                 bCancel = sal_True;         // break for
                                 nCheckPos = nPosOld;
                             }
-                            else if (maLocale.meLanguage != 0)
+                            else
                             {
+                                // Only the first sub format's locale will be
+                                // used as the format's overall locale.
+                                // Sorts this also under the corresponding
+                                // locale for the dialog.
+                                // If we don't support the locale this would
+                                // result in an unknown (empty) language
+                                // listbox entry and the user would never see
+                                // this format.
+                                if (nIndex == 0 && (aTmpLocale.meLanguage == 0 ||
+                                            SvNumberFormatter::IsLocaleInstalled( aTmpLocale.meLanguage)))
+                                {
+                                    maLocale = aTmpLocale;
+                                    eLan = aTmpLocale.meLanguage;   // return to caller
+                                    /* TODO: fiddle with scanner to make this
+                                     * known? A change in the locale may affect
+                                     * separators and keywords. On the other
+                                     * hand they may have been entered as used
+                                     * in the originating locale, there's no
+                                     * way to predict other than analyzing the
+                                     * format code, we assume here the current
+                                     * context is used, which is most likely
+                                     * the case.
+                                     * */
+                                }
                                 sStr.AssignAscii( RTL_CONSTASCII_STRINGPARAM("$-") );
-                                sStr = sStr + maLocale.generateCode();
-                                NumFor[nIndex].SetNatNumLang(maLocale.meLanguage);
-                                bHasValidBracketPrefix = sal_True;
+                                sStr += String( aTmpLocale.generateCode());
+                                NumFor[nIndex].SetNatNumLang( MsLangId::getRealLanguage( aTmpLocale.meLanguage));
+
+                                // "$-NNCCLLLL" Numerals and Calendar
+                                if (sSymbol.Len() > 6)
+                                    sInsertCalendar = ImpObtainCalendarAndNumerals( rString, nPos, eLan, aTmpLocale);
+                                    /* NOTE: there can be only one calendar
+                                     * inserted so the last one wins, though
+                                     * our own calendar modifiers support
+                                     * multiple calendars within one sub format
+                                     * code if at different positions. */
                             }
                         }
                     }
@@ -825,19 +898,24 @@ SvNumberformat::SvNumberformat(String& rString,
                 }
                 if ( !bCancel )
                 {
-                    rString.Erase(nPosOld,nPos-nPosOld);
-                    if ( bHasValidBracketPrefix )
-                    {
-                        rString.Insert(sStr,nPosOld);
-                        nPos = nPosOld + sStr.Len();
-                        rString.Insert(']', nPos);
-                        rString.Insert('[', nPosOld);
-                        nPos += 2;
-                        nPosOld = nPos;     // position before string
-                    }
+                    if (sStr == sSymbol)
+                        nPosOld = nPos;
                     else
                     {
-                        nPos = nPosOld;     // Excel LCID removed
+                        rString.Erase(nPosOld,nPos-nPosOld);
+                        if (sStr.Len())
+                        {
+                            rString.Insert(sStr,nPosOld);
+                            nPos = nPosOld + sStr.Len();
+                            rString.Insert(']', nPos);
+                            rString.Insert('[', nPosOld);
+                            nPos += 2;
+                            nPosOld = nPos;     // position before string
+                        }
+                        else
+                        {
+                            nPos = nPosOld;     // prefix removed for whatever reason
+                        }
                     }
                 }
             }
@@ -857,6 +935,9 @@ SvNumberformat::SvNumberformat(String& rString,
                 }
                 else
                 {
+                    if (sInsertCalendar.Len())
+                        sStr.Insert( sInsertCalendar, 0);
+
                     xub_StrLen nStrPos = pSc->ScanFormat( sStr, aComment );
                     sal_uInt16 nAnz = pSc->GetAnzResStrings();
                     if (nAnz == 0)              // error
@@ -1136,7 +1217,8 @@ OUString SvNumberformat::LocaleType::generateCode() const
         for (sal_uInt8 i = 0; i < 2; ++i)
         {
             sal_uInt8 n = (nVal & 0xF0) >> 4;
-            aBuf.append(toUniChar(n));
+            if (n || aBuf.getLength())
+                aBuf.append(toUniChar(n));
             nVal = nVal << 4;
         }
     }
@@ -1147,7 +1229,8 @@ OUString SvNumberformat::LocaleType::generateCode() const
         for (sal_uInt8 i = 0; i < 2; ++i)
         {
             sal_uInt8 n = (nVal & 0xF0) >> 4;
-            aBuf.append(toUniChar(n));
+            if (n || aBuf.getLength())
+                aBuf.append(toUniChar(n));
             nVal = nVal << 4;
         }
     }
@@ -1157,7 +1240,9 @@ OUString SvNumberformat::LocaleType::generateCode() const
     for (sal_uInt8 i = 0; i < 4; ++i)
     {
         sal_uInt8 n = static_cast<sal_uInt8>((n16 & 0xF000) >> 12);
-        aBuf.append(toUniChar(n));
+        // Omit leading zeros for consistency.
+        if (n || aBuf.getLength() || i == 3)
+            aBuf.append(toUniChar(n));
         n16 = n16 << 4;
     }
 
@@ -1189,8 +1274,9 @@ SvNumberformat::LocaleType SvNumberformat::ImpGetLocaleType(
 {
     sal_uInt32 nNum = 0;
     sal_Unicode cToken = 0;
+    xub_StrLen nStart = nPos;
     xub_StrLen nLen = rString.Len();
-    while ( nPos < nLen && ((cToken = rString.GetChar(nPos)) != ']') )
+    while ( nPos < nLen && (nPos - nStart < 8) && ((cToken = rString.GetChar(nPos)) != ']') )
     {
         if ( '0' <= cToken && cToken <= '9' )
         {
@@ -1212,7 +1298,7 @@ SvNumberformat::LocaleType SvNumberformat::ImpGetLocaleType(
         ++nPos;
     }
 
-    return (nNum && (cToken == ']' || nPos == nLen)) ? LocaleType(nNum) : LocaleType();
+    return (cToken == ']' || nPos == nLen) ? LocaleType(nNum) : LocaleType();
 }
 
 short SvNumberformat::ImpNextSymbol(String& rString,
@@ -1296,16 +1382,6 @@ short SvNumberformat::ImpNextSymbol(String& rString,
                     {
                         if ( rString.GetChar(nPos) == '-' )
                         {   // [$-xxx] locale
-                            if ( rString.GetChar(nPos+2) == '0' && rString.GetChar(nPos+3) == '7' ) // calendar type code "07" = Thai
-                            {
-                              rString.InsertAscii( "[~buddhist]", nPos+9 );
-                              nLen += 11;
-                            }
-                            if ( rString.GetChar(nPos+1) == 'D' ) // numeral shape code "D" = Thai digits
-                            {
-                              rString.InsertAscii( "[NatNum1]", nPos+9 );
-                              nLen += 9;
-                            }
                             sSymbol.EraseAllChars('[');
                             eSymbolType = BRACKET_SYMBOLTYPE_LOCALE;
                             eState = SsGetPrefix;

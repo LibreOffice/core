@@ -529,6 +529,22 @@ private:
      */
     SVL_DLLPRIVATE static LocaleType ImpGetLocaleType( const String& rString, xub_StrLen& nPos );
 
+    /** Obtain calendar and numerals from a LocaleType that was parsed from a
+        LCID with ImpGetLocaleType().
+
+        Inserts a NatNum modifier to rString at nPos if needed as determined
+        from the numeral code.
+
+        @ATTENTION: may modify <member>maLocale</member> to make it follow
+        aTmpLocale, in which case also nLang is adapted.
+
+        @returns a string with the calendar if one was determined from the
+        calendar code, else an empty string. The calendar string needs to be
+        inserted at a proper positon to rString after all bracketed prefixes.
+     */
+    SVL_DLLPRIVATE String ImpObtainCalendarAndNumerals( String & rString,
+            xub_StrLen & nPos, LanguageType & nLang, const LocaleType & aTmpLocale );
+
     // standard number output
     SVL_DLLPRIVATE void ImpGetOutputStandard( double& fNumber, String& OutString );
     SVL_DLLPRIVATE void ImpGetOutputStdToPrecision( double& rNumber, String& rOutString, sal_uInt16 nPrecision ) const;

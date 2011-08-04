@@ -195,6 +195,7 @@ SV_IMPL_PTRARR( NfWSStringsDtor, String* );
 
 const sal_uInt16 SvNumberFormatter::UNLIMITED_PRECISION   = ::std::numeric_limits<sal_uInt16>::max();
 const sal_uInt16 SvNumberFormatter::INPUTSTRING_PRECISION = ::std::numeric_limits<sal_uInt16>::max()-1;
+NfInstalledLocales SvNumberFormatter::theInstalledLocales;
 
 SvNumberFormatter::SvNumberFormatter(
             const Reference< XMultiServiceFactory >& xSMgr,
@@ -3627,6 +3628,7 @@ void SvNumberFormatter::ImpInitCurrencyTable()
     {
         LanguageType eLang = MsLangId::convertLocaleToLanguage(
                 pLocales[nLocale]);
+        theInstalledLocales.insert( eLang);
         pLocaleData->setLocale( pLocales[nLocale] );
         Sequence< Currency2 > aCurrSeq = pLocaleData->getAllCurrencies();
         sal_Int32 nCurrencyCount = aCurrSeq.getLength();

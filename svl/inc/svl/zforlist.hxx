@@ -42,6 +42,7 @@
 #include <svl/nfkeytab.hxx>
 
 #include <map>
+#include <set>
 
 class Date;
 class SvStream;
@@ -225,6 +226,8 @@ typedef Table SvNumberFormatterIndexTable;
 
 typedef ::std::map< sal_uInt32, sal_uInt32 > SvNumberFormatterMergeMap;
 
+typedef ::std::set< LanguageType > NfInstalledLocales;
+
 
 /** Language/country dependent currency entries
  */
@@ -342,6 +345,9 @@ public:
      * Calc's formula input bar.
      */
     static const sal_uInt16 INPUTSTRING_PRECISION;
+
+    /** THE set of installed locales. */
+    static NfInstalledLocales theInstalledLocales;
 
     /// Preferred ctor with service manager and language/country enum
     SvNumberFormatter(
@@ -797,6 +803,20 @@ public:
     /** Return the GENERAL keyword in proper case ("General") for a
         language/country, used in XML import */
     String GetStandardName( LanguageType eLnge );
+
+    /// Skip a NumberFormatter in stream, Chart needs this
+    static void SkipNumberFormatterInStream( SvStream& );
+
+    /** Check if a specific locale has supported locale data. */
+    static bool IsLocaleInstalled( LanguageType eLang )
+    {
+        // The set is initialized as a side effect of the currency table
+        // created, make sure that exists, which usually is the case unless a
+        // SvNumberFormatter was never instanciated.
+        GetTheCurrencyTable();
+        return theInstalledLocales.find( eLang) != theInstalledLocales.end();
+    }
+
 
 private:
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceManager;
