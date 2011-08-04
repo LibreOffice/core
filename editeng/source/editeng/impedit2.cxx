@@ -1625,11 +1625,12 @@ EditSelection ImpEditEngine::SelectSentence( const EditSelection& rCurSel )
     String sParagraph(*pNode);
     sParagraph.SearchAndReplaceAll(0x01,0x0a);
     //return Null if search starts at the beginning of the string
-    long nStart = rPaM.GetIndex() ? _xBI->beginOfSentence( sParagraph, rPaM.GetIndex(), GetLocale( rPaM ) ) : 0;
+    sal_Int32 nStart = rPaM.GetIndex() ? _xBI->beginOfSentence( sParagraph, rPaM.GetIndex(), GetLocale( rPaM ) ) : 0;
 
-    long nEnd = _xBI->endOfSentence( *pNode, rPaM.GetIndex(), GetLocale( rPaM ) );
+    sal_Int32 nEnd = _xBI->endOfSentence( *pNode, rPaM.GetIndex(), GetLocale( rPaM ) );
     EditSelection aNewSel( rCurSel );
-    OSL_ENSURE(nStart < pNode->Len() && nEnd <= pNode->Len(), "sentence indices out of range");
+    OSL_ENSURE(pNode->Len() ? (nStart < pNode->Len()) : (nStart == 0), "sentence start index out of range");
+    OSL_ENSURE(nEnd <= pNode->Len(), "sentence end index out of range");
     aNewSel.Min().SetIndex( (sal_uInt16)nStart );
     aNewSel.Max().SetIndex( (sal_uInt16)nEnd );
     return aNewSel;
