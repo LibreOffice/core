@@ -31,10 +31,6 @@
 
 #include <tools/solar.h>        // UINTXX
 #include <tools/gen.hxx>
-#ifndef _SVSTDARR_HXX
-#define _SVSTDARR_ULONGS
-#include <svl/svstdarr.hxx>
-#endif
 #include <editeng/editdata.hxx>
 
 #include <map>
@@ -179,15 +175,13 @@ struct WW8_SepInfo
     bool IsProtected() const;
 };
 
-SV_DECL_VARARR( WW8_WrSepInfoPtrs, WW8_SepInfo, 4, 4 )
-
 /// Class to collect and output the sections/headers/footers.
 // Plc fuer PageDescs -> Sepx ( Section Extensions )
 class MSWordSections
 {
 protected:
     bool mbDocumentIsProtected;
-    WW8_WrSepInfoPtrs aSects;   // PTRARR von SwPageDesc und SwSectionFmt
+    std::vector<WW8_SepInfo> aSects;
 
     void CheckForFacinPg( WW8Export& rWrt ) const;
     void WriteOlst( WW8Export& rWrt, const WW8_SepInfo& rSectionInfo );
@@ -231,7 +225,7 @@ public:
 
 class WW8_WrPlcSepx : public MSWordSections
 {
-    SvULongs aCps;              // PTRARR von CPs
+    std::vector<WW8_CP> aCps;
     WW8_PdAttrDesc* pAttrs;
     WW8_WrPlc0* pTxtPos;        // Pos der einzelnen Header / Footer
     bool bNoMoreSections;
@@ -252,7 +246,7 @@ public:
                     const SwNode& rNd,
                     const SwSectionFmt* pSectionFmt,
                     sal_uLong nLnNumRestartNo );
-    void Finish( WW8_CP nEndCp ) { aCps.Insert( nEndCp, aCps.Count() ); }
+    void Finish( WW8_CP nEndCp ) { aCps.push_back( nEndCp ); }
 
     bool WriteKFTxt( WW8Export& rWrt );
     void WriteSepx( SvStream& rStrm ) const;
@@ -1157,7 +1151,7 @@ private:
     WW8_WrPlcSubDoc(const WW8_WrPlcSubDoc&);
     WW8_WrPlcSubDoc& operator=(const WW8_WrPlcSubDoc&);
 protected:
-    SvULongs aCps;                  // PTRARR CP-Pos der Verweise
+    std::vector<WW8_CP> aCps;
     SvPtrarr aCntnt;                // PTRARR von SwFmtFtn/PostIts/..
     WW8_WrPlc0* pTxtPos;            // Pos der einzelnen Texte
 
@@ -1168,7 +1162,7 @@ protected:
     void WriteGenericPlc( WW8Export& rWrt, sal_uInt8 nTTyp, WW8_FC& rTxtStt,
         sal_Int32& rTxtCnt, WW8_FC& rRefStt, sal_Int32& rRefCnt ) const;
 
-    virtual const SvULongs* GetShapeIdArr() const;
+    virtual const std::vector<sal_uInt32>* GetShapeIdArr() const;
 };
 
 // Doppel-Plc fuer Footnotes/Endnotes
@@ -1221,8 +1215,8 @@ class WW8_WrPlcTxtBoxes : public WW8_WrPlcSubDoc // Doppel-Plc fuer Textboxen
 {                        // Rahmen/DrawTextboxes!
 private:
     sal_uInt8 nTyp;
-    SvULongs aShapeIds;        // VARARR of ShapeIds for the SwFrmFmts
-    virtual const SvULongs* GetShapeIdArr() const;
+    std::vector<sal_uInt32> aShapeIds;        // VARARR of ShapeIds for the SwFrmFmts
+    virtual const std::vector<sal_uInt32>* GetShapeIdArr() const;
 
     //No copying
     WW8_WrPlcTxtBoxes(const WW8_WrPlcTxtBoxes&);
@@ -1266,7 +1260,7 @@ public:
 class WW8_WrPlc1
 {
 private:
-    SvULongs aPos;              // PTRARR von CPs
+    std::vector<WW8_CP> aPos;
     sal_uInt8* pData;                // Inhalte ( Strukturen )
     sal_uLong nDataLen;
     sal_uInt16 nStructSiz;
@@ -1275,7 +1269,7 @@ private:
     WW8_WrPlc1(const WW8_WrPlc1&);
     WW8_WrPlc1& operator=(const WW8_WrPlc1&);
 protected:
-    sal_uInt16 Count() const { return aPos.Count(); }
+    sal_uInt16 Count() const { return aPos.size(); }
     void Write( SvStream& rStrm );
     WW8_CP Prev() const;
 public:

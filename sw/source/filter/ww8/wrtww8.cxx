@@ -42,8 +42,6 @@
 #include <osl/endian.h>
 #include <docsh.hxx>
 
-#include <svl/svstdarr.hxx>
-
 #include <unotools/fltrcfg.hxx>
 #include <vcl/salbtype.hxx>
 #include <sot/storage.hxx>
@@ -602,7 +600,7 @@ const SfxPoolItem& MSWordExportBase::GetItem(sal_uInt16 nWhich) const
 //------------------------------------------------------------------------------
 
 WW8_WrPlc1::WW8_WrPlc1( sal_uInt16 nStructSz )
-    : aPos( 16, 16 ), nStructSiz( nStructSz )
+    : nStructSiz( nStructSz )
 {
     nDataLen = 16 * nStructSz;
     pData = new sal_uInt8[ nDataLen ];
@@ -615,15 +613,15 @@ WW8_WrPlc1::~WW8_WrPlc1()
 
 WW8_CP WW8_WrPlc1::Prev() const
 {
-    sal_uInt16 nLen = aPos.Count();
-    OSL_ENSURE(nLen,"Prev called on empty list");
-    return nLen ? aPos[nLen-1] : 0;
+    bool b = !aPos.empty();
+    OSL_ENSURE(b,"Prev called on empty list");
+    return b ? aPos.back() : 0;
 }
 
 void WW8_WrPlc1::Append( WW8_CP nCp, const void* pNewData )
 {
-    sal_uLong nInsPos = aPos.Count() * nStructSiz;
-    aPos.Insert( nCp, aPos.Count() );
+    sal_uLong nInsPos = aPos.size() * nStructSiz;
+    aPos.push_back( nCp );
     if( nDataLen < nInsPos + nStructSiz )
     {
         sal_uInt8* pNew = new sal_uInt8[ 2 * nDataLen ];
@@ -637,11 +635,11 @@ void WW8_WrPlc1::Append( WW8_CP nCp, const void* pNewData )
 
 void WW8_WrPlc1::Finish( sal_uLong nLastCp, sal_uLong nSttCp )
 {
-    if( aPos.Count() )
+    if( !aPos.empty() )
     {
-        aPos.Insert( nLastCp, aPos.Count() );
+        aPos.push_back( nLastCp );
         if( nSttCp )
-            for( sal_uInt16 n = 0; n < aPos.Count(); ++n )
+            for( sal_uInt32 n = 0; n < aPos.size(); ++n )
                 aPos[ n ] -= nSttCp;
     }
 }
@@ -649,8 +647,8 @@ void WW8_WrPlc1::Finish( sal_uLong nLastCp, sal_uLong nSttCp )
 
 void WW8_WrPlc1::Write( SvStream& rStrm )
 {
-    sal_uInt16 i;
-    for( i = 0; i < aPos.Count(); ++i )
+    sal_uInt32 i;
+    for( i = 0; i < aPos.size(); ++i )
         SwWW8Writer::WriteLong( rStrm, aPos[i] );
     if( i )
         rStrm.Write( pData, (i-1) * nStructSiz );

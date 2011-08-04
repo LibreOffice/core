@@ -93,14 +93,12 @@ struct WW8_SED
                         //  cbSED is 12 (decimal)), C (hex).
 };
 
-SV_IMPL_VARARR( WW8_WrSepInfoPtrs, WW8_SepInfo )
-
 // class WW8_WrPlc0 ist erstmal nur fuer Header / Footer-Positionen, d.h. es
 // gibt keine inhaltstragende Struktur.
 class WW8_WrPlc0
 {
 private:
-    SvULongs aPos;      // PTRARR von CPs / FCs
+    std::vector<sal_uLong> aPos;      // PTRARR von CPs / FCs
     sal_uLong nOfs;
 
     //No copying
@@ -108,7 +106,7 @@ private:
     WW8_WrPlc0 &operator=(const WW8_WrPlc0&);
 public:
     WW8_WrPlc0( sal_uLong nOffset );
-    sal_uInt16 Count() const                { return aPos.Count(); }
+    sal_uInt16 Count() const                { return aPos.size(); }
     void Append( sal_uLong nStartCpOrFc );
     void Write( SvStream& rStrm );
 };
@@ -903,22 +901,22 @@ void wwFontHelper::WriteFontTable( const RtfAttributeOutput& rAttrOutput )
 
 
 WW8_WrPlc0::WW8_WrPlc0( sal_uLong nOffset )
-    : aPos( 4, 4 ), nOfs( nOffset )
+    : nOfs( nOffset )
 {
 }
 
 void WW8_WrPlc0::Append( sal_uLong nStartCpOrFc )
 {
-    aPos.Insert( nStartCpOrFc - nOfs, aPos.Count() );
+    aPos.push_back( nStartCpOrFc - nOfs );
 }
 
 void WW8_WrPlc0::Write( SvStream& rStrm )
 {
-    sal_uInt16 nLen = aPos.Count();
-    for( sal_uInt16 i = 0; i < nLen; ++i )
+    std::vector<sal_uLong>::const_iterator iter;
+    for( iter = aPos.begin(); iter != aPos.end(); ++iter )
     {
         SVBT32 nP;
-        UInt32ToSVBT32( aPos[i], nP );
+        UInt32ToSVBT32( *iter, nP );
         rStrm.Write( nP, 4 );
     }
 }
@@ -931,8 +929,7 @@ void WW8_WrPlc0::Write( SvStream& rStrm )
 //------------------------------------------------------------------------------
 
 MSWordSections::MSWordSections( MSWordExportBase& rExport )
-    : mbDocumentIsProtected( false ),
-      aSects( 4, 4 )
+    : mbDocumentIsProtected( false )
 {
     const SwSectionFmt *pFmt = 0;
     rExport.pAktPageDesc = &const_cast<const SwDoc *>(rExport.pDoc)->GetPageDesc( 0 );
@@ -981,14 +978,13 @@ MSWordSections::MSWordSections( MSWordExportBase& rExport )
 
 WW8_WrPlcSepx::WW8_WrPlcSepx( MSWordExportBase& rExport )
     : MSWordSections( rExport ),
-      aCps( 4, 4 ),
       pAttrs( 0 ),
       pTxtPos( 0 ),
       bNoMoreSections( false )
 {
     // to be in sync with the AppendSection() call in the MSWordSections
     // constructor
-    aCps.Insert( sal_uLong( 0 ), aCps.Count() );
+    aCps.push_back( 0 );
 }
 
 MSWordSections::~MSWordSections()
@@ -997,7 +993,7 @@ MSWordSections::~MSWordSections()
 
 WW8_WrPlcSepx::~WW8_WrPlcSepx()
 {
-    sal_uInt16 nLen = aSects.Count();
+    sal_uInt16 nLen = aSects.size();
     if( pAttrs )
     {
         while( nLen )
@@ -1009,11 +1005,11 @@ WW8_WrPlcSepx::~WW8_WrPlcSepx()
 
 sal_uInt16 MSWordSections::CurrentNumberOfColumns( const SwDoc &rDoc ) const
 {
-    OSL_ENSURE( aSects.Count(), "no segement inserted yet" );
-    if ( !aSects.Count() )
+    OSL_ENSURE( !aSects.empty(), "no segement inserted yet" );
+    if ( aSects.empty() )
         return 1;
 
-    return NumberOfColumns( rDoc, aSects[aSects.Count() - 1] );
+    return NumberOfColumns( rDoc, aSects.back() );
 }
 
 sal_uInt16 MSWordSections::NumberOfColumns( const SwDoc &rDoc, const WW8_SepInfo& rInfo ) const
@@ -1043,8 +1039,8 @@ sal_uInt16 MSWordSections::NumberOfColumns( const SwDoc &rDoc, const WW8_SepInfo
 
 const WW8_SepInfo* MSWordSections::CurrentSectionInfo()
 {
-    if ( aSects.Count() > 0 )
-        return &aSects[aSects.Count() - 1];
+    if ( !aSects.empty() )
+        return &aSects.back();
 
     return NULL;
 }
@@ -1052,9 +1048,8 @@ const WW8_SepInfo* MSWordSections::CurrentSectionInfo()
 void MSWordSections::AppendSection( const SwPageDesc* pPd,
     const SwSectionFmt* pSectionFmt, sal_uLong nLnNumRestartNo )
 {
-    aSects.Insert( WW8_SepInfo( pPd, pSectionFmt, nLnNumRestartNo ),
-            aSects.Count() );
-    NeedsDocumentProtected( aSects[aSects.Count()-1] );
+    aSects.push_back( WW8_SepInfo( pPd, pSectionFmt, nLnNumRestartNo ) );
+    NeedsDocumentProtected( aSects.back() );
 }
 
 void WW8_WrPlcSepx::AppendSep( WW8_CP nStartCp, const SwPageDesc* pPd,
@@ -1062,7 +1057,7 @@ void WW8_WrPlcSepx::AppendSep( WW8_CP nStartCp, const SwPageDesc* pPd,
 {
     if ( !bNoMoreSections )
     {
-        aCps.Insert( nStartCp, aCps.Count() );
+        aCps.push_back( nStartCp );
 
         AppendSection( pPd, pSectionFmt, nLnNumRestartNo );
     }
@@ -1073,7 +1068,7 @@ void MSWordSections::AppendSection( const SwFmtPageDesc& rPD,
 {
     WW8_SepInfo aI( rPD.GetPageDesc(), pSectionFmt, nLnNumRestartNo,
             rPD.GetNumOffset(), &rNd );
-    aSects.Insert( aI, aSects.Count() );
+    aSects.push_back( aI );
     NeedsDocumentProtected( aI );
 }
 
@@ -1082,7 +1077,7 @@ void WW8_WrPlcSepx::AppendSep( WW8_CP nStartCp, const SwFmtPageDesc& rPD,
 {
     if ( !bNoMoreSections )
     {
-        aCps.Insert(nStartCp, aCps.Count());
+        aCps.push_back( nStartCp );
 
         AppendSection( rPD, rNd, pSectionFmt, nLnNumRestartNo );
     }
@@ -1094,7 +1089,7 @@ void WW8_WrPlcSepx::AppendSep( WW8_CP nStartCp, const SwFmtPageDesc& rPD,
 
 void MSWordSections::SetNum( const SwTxtNode* pNumNd )
 {
-    WW8_SepInfo& rInfo = aSects[ aSects.Count() - 1 ];
+    WW8_SepInfo& rInfo = aSects.back();
     if ( !rInfo.pNumNd ) // noch nicht belegt
         rInfo.pNumNd = pNumNd;
 }
@@ -1234,9 +1229,10 @@ void MSWordSections::CheckForFacinPg( WW8Export& rWrt ) const
     // 2 Werte werden gesetzt
     //      Dop.fFacingPages            == Kopf-/Fusszeilen unterschiedlich
     //      Dop.fSwapBordersFacingPgs   == gespiegelte Raender
-    for( sal_uInt16 i = 0, nEnde = 0; i < aSects.Count(); ++i )
+    std::vector<WW8_SepInfo>::const_iterator iter = aSects.begin();
+    for( sal_uInt16 nEnde = 0; iter != aSects.end(); ++iter )
     {
-        WW8_SepInfo& rSepInfo = aSects[i];
+        const WW8_SepInfo& rSepInfo = *iter;
         if( !rSepInfo.pSectionFmt )
         {
             const SwPageDesc* pPd = rSepInfo.pPageDesc;
@@ -1764,7 +1760,7 @@ void MSWordExportBase::SectionProperties( const WW8_SepInfo& rSepInfo, WW8_PdAtt
 
 bool WW8_WrPlcSepx::WriteKFTxt( WW8Export& rWrt )
 {
-    pAttrs = new WW8_PdAttrDesc[ aSects.Count() ];
+    pAttrs = new WW8_PdAttrDesc[ aSects.size() ];
     sal_uLong nCpStart = rWrt.Fc2Cp( rWrt.Strm().Tell() );
 
     OSL_ENSURE( !pTxtPos, "wer hat den Pointer gesetzt?" );
@@ -1775,7 +1771,7 @@ bool WW8_WrPlcSepx::WriteKFTxt( WW8Export& rWrt )
 
     unsigned int nOldIndex = rWrt.GetHdFtIndex();
     rWrt.SetHdFtIndex( 0 );
-    for ( sal_uInt16 i = 0; i < aSects.Count(); ++i )
+    for ( sal_uInt16 i = 0; i < aSects.size(); ++i )
     {
         WW8_PdAttrDesc* pA = pAttrs + i;
         pA->pData = 0;
@@ -1814,7 +1810,7 @@ bool WW8_WrPlcSepx::WriteKFTxt( WW8Export& rWrt )
 void WW8_WrPlcSepx::WriteSepx( SvStream& rStrm ) const
 {
     sal_uInt16 i;
-    for( i = 0; i < aSects.Count(); i++ ) // ueber alle Sections
+    for( i = 0; i < aSects.size(); i++ )
     {
         WW8_PdAttrDesc* pA = pAttrs + i;
         if( pA->nLen && pA->pData != NULL)
@@ -1830,12 +1826,11 @@ void WW8_WrPlcSepx::WriteSepx( SvStream& rStrm ) const
 
 void WW8_WrPlcSepx::WritePlcSed( WW8Export& rWrt ) const
 {
-    OSL_ENSURE( aCps.Count() == aSects.Count() + 1, "WrPlcSepx: DeSync" );
+    OSL_ENSURE( aCps.size() == aSects.size() + 1, "WrPlcSepx: DeSync" );
     sal_uLong nFcStart = rWrt.pTableStrm->Tell();
 
     sal_uInt16 i;
-    // ( ueber alle Sections )
-    for( i = 0; i <= aSects.Count(); i++ )
+    for( i = 0; i <= aSects.size(); i++ )
     {
         sal_uInt32 nP = aCps[i];
         SVBT32 nPos;
@@ -1845,8 +1840,7 @@ void WW8_WrPlcSepx::WritePlcSed( WW8Export& rWrt ) const
 
     static WW8_SED aSed = {{4, 0},{0, 0, 0, 0},{0, 0},{0xff, 0xff, 0xff, 0xff}};
 
-    // ( ueber alle Sections )
-    for( i = 0; i < aSects.Count(); i++ )
+    for( i = 0; i < aSects.size(); i++ )
     {
         WW8_PdAttrDesc* pA = pAttrs + i;
         UInt32ToSVBT32( pA->nSepxFcPos, aSed.fcSepx );    // Sepx-Pos
@@ -1921,7 +1915,7 @@ void MSWordExportBase::WriteHeaderFooterText( const SwFmt& rFmt, bool bHeader )
 // WW8_WrPlcFtnEdn ist die Klasse fuer Fuss- und Endnoten
 //------------------------------------------------------------------------------
 WW8_WrPlcSubDoc::WW8_WrPlcSubDoc()
-    : aCps( 0, 16 ), aCntnt( 0, 16 ), pTxtPos( 0 )
+    : aCntnt( 0, 16 ), pTxtPos( 0 )
 {
 }
 
@@ -1932,7 +1926,7 @@ WW8_WrPlcSubDoc::~WW8_WrPlcSubDoc()
 
 void WW8_WrPlcFtnEdn::Append( WW8_CP nCp, const SwFmtFtn& rFtn )
 {
-    aCps.Insert( nCp, aCps.Count() );
+    aCps.push_back( nCp );
     void* p = (void*)&rFtn;
     aCntnt.Insert( p, aCntnt.Count() );
 }
@@ -1955,7 +1949,7 @@ WW8_Annotation::WW8_Annotation(const SwRedlineData* pRedline) : mpRichText(0)
 
 void WW8_WrPlcAnnotations::Append( WW8_CP nCp, const SwPostItField *pPostIt )
 {
-    aCps.Insert( nCp, aCps.Count() );
+    aCps.push_back( nCp );
     WW8_Annotation* p = new WW8_Annotation(pPostIt);
     aCntnt.Insert( p, aCntnt.Count() );
 }
@@ -1963,7 +1957,7 @@ void WW8_WrPlcAnnotations::Append( WW8_CP nCp, const SwPostItField *pPostIt )
 void WW8_WrPlcAnnotations::Append( WW8_CP nCp, const SwRedlineData *pRedline )
 {
     maProcessedRedlines.insert(pRedline);
-    aCps.Insert( nCp, aCps.Count() );
+    aCps.push_back( nCp );
     WW8_Annotation* p = new WW8_Annotation(pRedline);
     aCntnt.Insert( p, aCntnt.Count() );
 }
@@ -2017,7 +2011,7 @@ bool WW8_WrPlcSubDoc::WriteGenericTxt( WW8Export& rWrt, sal_uInt8 nTTyp,
             {
                 // textbox - content
                 WW8_CP nCP = rWrt.Fc2Cp( rWrt.Strm().Tell() );
-                aCps.Insert( nCP, i );
+                aCps.insert( aCps.begin()+i, nCP );
                 pTxtPos->Append( nCP );
 
                 // is it an writer or sdr - textbox?
@@ -2111,11 +2105,11 @@ void WW8_WrPlcSubDoc::WriteGenericPlc( WW8Export& rWrt, sal_uInt8 nTTyp,
     typedef ::std::vector<String>::iterator myiter;
 
     sal_uLong nFcStart = rWrt.pTableStrm->Tell();
-    sal_uInt16 nLen = aCps.Count();
+    sal_uInt16 nLen = aCps.size();
     if ( !nLen )
         return;
 
-    OSL_ENSURE( aCps.Count() + 2 == pTxtPos->Count(), "WritePlc: DeSync" );
+    OSL_ENSURE( aCps.size() + 2 == pTxtPos->Count(), "WritePlc: DeSync" );
 
     ::std::vector<String> aStrArr;
     WW8Fib& rFib = *rWrt.pFib;              // n+1-te CP-Pos nach Handbuch
@@ -2191,7 +2185,7 @@ void WW8_WrPlcSubDoc::WriteGenericPlc( WW8Export& rWrt, sal_uInt8 nTTyp,
         case TXT_HFTXTBOX:
             {
                 pTxtPos->Write( *rWrt.pTableStrm );
-                const SvULongs* pShapeIds = GetShapeIdArr();
+                const std::vector<sal_uInt32>* pShapeIds = GetShapeIdArr();
                 OSL_ENSURE( pShapeIds, "wo sind die ShapeIds?" );
 
                 for ( i = 0; i < nLen; ++i )
@@ -2330,7 +2324,7 @@ void WW8_WrPlcSubDoc::WriteGenericPlc( WW8Export& rWrt, sal_uInt8 nTTyp,
     rTxtCount = rWrt.pTableStrm->Tell() - nFcStart;
 }
 
-const SvULongs* WW8_WrPlcSubDoc::GetShapeIdArr() const
+const std::vector<sal_uInt32>* WW8_WrPlcSubDoc::GetShapeIdArr() const
 {
     return 0;
 }

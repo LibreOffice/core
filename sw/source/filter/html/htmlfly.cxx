@@ -1832,20 +1832,20 @@ void SwHTMLWriter::AddLinkTarget( const String& rURL )
         SwPosition aPos( *pCurPam->GetPoint() );
         if( pDoc->GotoOutline( aPos, aOutline ) )
         {
-            sal_uLong nIdx = aPos.nNode.GetIndex();
+            sal_uInt32 nIdx = aPos.nNode.GetIndex();
 
-            sal_uInt16 nIns=0;
-            while( nIns < aOutlineMarkPoss.Count() &&
+            sal_uInt32 nIns=0;
+            while( nIns < aOutlineMarkPoss.size() &&
                    aOutlineMarkPoss[nIns] < nIdx )
                 nIns++;
 
-            aOutlineMarkPoss.Insert( nIdx, nIns );
+            aOutlineMarkPoss.insert( aOutlineMarkPoss.begin()+nIns, nIdx );
             if( bEncoded )
             {
                 aURL.Erase( nPos, 2 );
                 aURL.SetChar( nPos-1, cMarkSeperator );
             }
-            aOutlineMarks.Insert( new String( aURL ), nIns );
+            aOutlineMarks.insert( aOutlineMarks.begin()+nIns, new String( aURL ) );
         }
     }
     else if( sCmp.EqualsAscii( pMarkToText ) )

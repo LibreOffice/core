@@ -28,13 +28,14 @@
 #ifndef _WRTHTML_HXX
 #define _WRTHTML_HXX
 
+#include <boost/ptr_container/ptr_vector.hpp>
+#include <vector>
 
 #include <com/sun/star/container/XIndexContainer.hpp>
 #include <com/sun/star/form/XForm.hpp>
 #include <vcl/field.hxx>
 #define _SVSTDARR_STRINGSDTOR
 #define _SVSTDARR_STRINGSSORTDTOR
-#define _SVSTDARR_ULONGS
 #include <svl/svstdarr.hxx>
 #include <i18npool/lang.h>
 #include <tools/stream.hxx>
@@ -227,11 +228,11 @@ public:
 
     SvStringsDtor aImgMapNames;     // geschriebene Image Maps
     SvStringsSortDtor aImplicitMarks;// implizite Stprungmarken
-    SvStringsDtor aOutlineMarks;        // geschriebene Image Maps
     SvStringsSortDtor aNumRuleNames;// Names of exported num rules
     SvStringsSortDtor aScriptParaStyles;// script dependent para styles
     SvStringsSortDtor aScriptTextStyles;// script dependent text styles
-    SvULongs aOutlineMarkPoss;
+    boost::ptr_vector<String> aOutlineMarks;
+    std::vector<sal_uInt32> aOutlineMarkPoss;
     HTMLControls aHTMLControls;     // die zu schreibenden ::com::sun::star::form::Forms
     SwHTMLFmtInfos aChrFmtInfos;
     SwHTMLFmtInfos aTxtCollInfos;

@@ -402,11 +402,9 @@ sal_uLong SwHTMLWriter::WriteStream()
     if( aImplicitMarks.Count() )
         aImplicitMarks.DeleteAndDestroy( sal_uInt16(0), aImplicitMarks.Count() );
 
-    if( aOutlineMarks.Count() )
-        aOutlineMarks.DeleteAndDestroy( sal_uInt16(0), aOutlineMarks.Count() );
+    aOutlineMarks.clear();
 
-    if( aOutlineMarkPoss.Count() )
-        aOutlineMarkPoss.Remove( sal_uInt16(0), aOutlineMarkPoss.Count() );
+    aOutlineMarkPoss.clear();
 
     if( aNumRuleNames.Count() )
         aNumRuleNames.DeleteAndDestroy( sal_uInt16(0), aNumRuleNames.Count() );
@@ -1066,18 +1064,18 @@ void SwHTMLWriter::OutBookmarks()
             pBookmark = (pMarkAccess->getMarksBegin() + nBkmkTabPos)->get();
     }
 
-    sal_uInt16 nPos;
-    for( nPos = 0; nPos < aOutlineMarkPoss.Count() &&
+    sal_uInt32 nPos;
+    for( nPos = 0; nPos < aOutlineMarkPoss.size() &&
                    aOutlineMarkPoss[nPos] < nNode; nPos++ )
         ;
 
-    while( nPos < aOutlineMarkPoss.Count() && aOutlineMarkPoss[nPos] == nNode )
+    while( nPos < aOutlineMarkPoss.size() && aOutlineMarkPoss[nPos] == nNode )
     {
-        String sMark( *aOutlineMarks[nPos] );
+        String sMark( aOutlineMarks[nPos] );
         sMark.SearchAndReplaceAll( '?', '_' );  // '?' causes problems in IE/Netscape 5
         OutAnchor( sMark );
-        aOutlineMarkPoss.Remove( nPos, 1 );
-        aOutlineMarks.DeleteAndDestroy( nPos, 1 );
+        aOutlineMarkPoss.erase( aOutlineMarkPoss.begin()+nPos );
+        aOutlineMarks.erase( aOutlineMarks.begin() + nPos );
     }
 }
 

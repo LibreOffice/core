@@ -782,10 +782,10 @@ void WW8_WrPlcTxtBoxes::Append( const SdrObject& rObj, sal_uInt32 nShapeId )
 {
     void* p = (void*)&rObj;
     aCntnt.Insert( p, aCntnt.Count() );
-    aShapeIds.Insert( nShapeId, aShapeIds.Count() );
+    aShapeIds.push_back( nShapeId );
 }
 
-const SvULongs* WW8_WrPlcTxtBoxes::GetShapeIdArr() const
+const std::vector<sal_uInt32>* WW8_WrPlcTxtBoxes::GetShapeIdArr() const
 {
     return &aShapeIds;
 }
