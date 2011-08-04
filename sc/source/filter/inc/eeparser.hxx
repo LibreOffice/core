@@ -96,14 +96,10 @@ struct ScEEParseEntry
                             {}
                         ~ScEEParseEntry()
                             {
-                                if ( pValStr )
-                                    delete pValStr;
-                                if ( pNumStr )
-                                    delete pNumStr;
-                                if ( pName )
-                                    delete pName;
-                                if ( maImageList.size() )
-                                    maImageList.clear();
+                                delete pValStr;
+                                delete pNumStr;
+                                delete pName;
+                                maImageList.clear();
                             }
 };
 
