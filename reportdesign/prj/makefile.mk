@@ -1,9 +1,8 @@
-# -*- Mode: makefile; tab-width: 4; indent-tabs-mode: t -*-
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 #
-# Copyright 2000, 2011 Oracle and/or its affiliates.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
 #
@@ -26,7 +25,16 @@
 #
 #*************************************************************************
 
-$(eval $(call gb_Package_Package,reportdesign_xml,$(SRCDIR)/reportdesign/prj))
-$(eval $(call gb_Package_add_file,reportdesign_xml,prj/rpt.xml,rpt.xml))
+PRJ=..
+TARGET=prj
 
-# vim: set noet sw=4 ts=4:
+.INCLUDE : settings.mk
+
+.IF "$(VERBOSE)"!=""
+VERBOSEFLAG :=
+.ELSE
+VERBOSEFLAG := -s
+.ENDIF
+
+all:
+	cd $(PRJ) && $(GNUMAKE) $(VERBOSEFLAG) -r -j$(MAXPROCESS) $(gb_MAKETARGET) && $(GNUMAKE) $(VERBOSEFLAG) -r deliverlog
