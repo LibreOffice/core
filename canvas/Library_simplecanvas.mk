@@ -32,8 +32,8 @@ $(eval $(call gb_Library_set_componentfile,simplecanvas,canvas/source/simplecanv
 
 $(eval $(call gb_Library_set_include,simplecanvas,\
 	$$(INCLUDE) \
-	-I$(SRCDIR)/canvas/inc \
-	-I$(SRCDIR)/canvas/inc/pch \
+	-I$(realpath $(SRCDIR)/canvas/inc) \
+	-I$(realpath $(SRCDIR)/canvas/inc/pch) \
 ))
 
 $(eval $(call gb_Library_add_api,simplecanvas,\

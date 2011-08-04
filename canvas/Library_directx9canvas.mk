@@ -32,8 +32,8 @@ $(eval $(call gb_Library_set_componentfile,directx9canvas,canvas/source/directx/
 
 $(eval $(call gb_Library_set_include,directx9canvas,\
 	$$(INCLUDE) \
-	-I$(SRCDIR)/canvas/inc \
-	-I$(SRCDIR)/canvas/inc/pch \
+	-I$(realpath $(SRCDIR)/canvas/inc) \
+	-I$(realpath $(SRCDIR)/canvas/inc/pch) \
 ))
 
 $(eval $(call gb_Library_add_defs,directx9canvas,\

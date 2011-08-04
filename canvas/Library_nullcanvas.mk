@@ -30,8 +30,8 @@ $(eval $(call gb_Library_Library,nullcanvas))
 
 $(eval $(call gb_Library_set_include,nullcanvas,\
 	$$(INCLUDE) \
-	-I$(SRCDIR)/canvas/inc \
-	-I$(SRCDIR)/canvas/inc/pch \
+	-I$(realpath $(SRCDIR)/canvas/inc) \
+	-I$(realpath $(SRCDIR)/canvas/inc/pch) \
 ))
 
 $(eval $(call gb_Library_add_api,nullcanvas,\
