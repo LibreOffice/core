@@ -267,7 +267,6 @@ public:
                         eDefaultNumberFormatPositionAndSpaceMode
                                 = SvxNumberFormat::LABEL_WIDTH_AND_POSITION );
     SvxNumRule(const SvxNumRule& rCopy);
-    SvxNumRule(SvStream &rStream);
     virtual ~SvxNumRule();
 
     int                     operator==( const SvxNumRule& ) const;

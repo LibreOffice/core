@@ -319,7 +319,6 @@ class SVX_DLLPUBLIC SvxDoubleItem : public SfxPoolItem
 public:
     TYPEINFO();
     SvxDoubleItem(double fValue /*= 0.0*/, sal_uInt16 nId );
-    SvxDoubleItem(SvStream& rIn, sal_uInt16 nId );
     SvxDoubleItem(const SvxDoubleItem& rItem);
 
     virtual bool QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;

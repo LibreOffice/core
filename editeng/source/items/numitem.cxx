@@ -744,41 +744,6 @@ SvxNumRule::SvxNumRule(const SvxNumRule& rCopy)
     }
 }
 
-SvxNumRule::SvxNumRule(SvStream &rStream)
-{
-    ++nRefCount;
-    LanguageType eLang = Application::GetSettings().GetLanguage();
-    aLocale = SvxCreateLocale(eLang);
-    sal_uInt16 nVersion;
-    sal_uInt16 nTemp;
-    rStream >> nVersion;
-    rStream >> nLevelCount;
-    rStream >> nTemp;
-    nFeatureFlags = nTemp;
-    rStream >> nTemp;
-    bContinuousNumbering = (sal_Bool)nTemp;
-    rStream >> nTemp;
-    eNumberingType       = (SvxNumRuleType)nTemp;
-    memset( aFmts, 0, sizeof( aFmts ));
-
-    for(sal_uInt16 i = 0; i < SVX_MAX_NUM; i++)
-    {
-        sal_uInt16 nSet;
-        rStream >> nSet;
-        if(nSet)
-            aFmts[i] = new SvxNumberFormat(rStream);
-        else
-            aFmts[i] = 0;
-        aFmtsSet[i] = aFmts[i] ? sal_True : sal_False;
-    }
-    if(NUMITEM_VERSION_02 <= nVersion)
-    {
-        sal_uInt16 nShort;
-        rStream >> nShort;
-        nFeatureFlags = nShort;
-    }
-}
-
 SvStream&   SvxNumRule::Store(SvStream &rStream)
 {
     rStream<<(sal_uInt16)NUMITEM_VERSION_03;

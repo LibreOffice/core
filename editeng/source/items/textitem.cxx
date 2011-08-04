@@ -2779,13 +2779,6 @@ SvxLineColorItem::SvxLineColorItem( const Color& rCol, const sal_uInt16 nId ) :
 
 // -----------------------------------------------------------------------
 
-SvxLineColorItem::SvxLineColorItem( SvStream &rStrm, const sal_uInt16 nId ) :
-    SvxColorItem( rStrm, nId )
-{
-}
-
-// -----------------------------------------------------------------------
-
 SvxLineColorItem::SvxLineColorItem( const SvxLineColorItem &rCopy ) :
     SvxColorItem( rCopy )
 {

@@ -264,14 +264,6 @@ SvxDoubleItem::SvxDoubleItem(double fValue, sal_uInt16 nId) :
 
 // -----------------------------------------------------------------------
 
-SvxDoubleItem::SvxDoubleItem(SvStream& rIn, sal_uInt16 nId) :
-    SfxPoolItem(nId)
-{
-    rIn >> fVal;
-}
-
-// -----------------------------------------------------------------------
-
 SvxDoubleItem::SvxDoubleItem(const SvxDoubleItem& rItem) :
     SfxPoolItem(rItem),
     fVal(rItem.fVal)

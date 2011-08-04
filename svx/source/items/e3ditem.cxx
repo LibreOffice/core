@@ -68,18 +68,6 @@ SvxB3DVectorItem::SvxB3DVectorItem( sal_uInt16 _nWhich, const basegfx::B3DVector
 
 // -----------------------------------------------------------------------
 
-SvxB3DVectorItem::SvxB3DVectorItem( sal_uInt16 _nWhich, SvStream& rStream ) :
-    SfxPoolItem( _nWhich )
-{
-    DBG_CTOR(SvxB3DVectorItem, 0);
-    double fValue;
-    rStream >> fValue; aVal.setX(fValue);
-    rStream >> fValue; aVal.setY(fValue);
-    rStream >> fValue; aVal.setZ(fValue);
-}
-
-// -----------------------------------------------------------------------
-
 SvxB3DVectorItem::SvxB3DVectorItem( const SvxB3DVectorItem& rItem ) :
     SfxPoolItem( rItem ),
     aVal( rItem.aVal )

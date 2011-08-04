@@ -46,7 +46,6 @@ public:
                             TYPEINFO();
                             SvxB3DVectorItem();
                             SvxB3DVectorItem( sal_uInt16 nWhich, const basegfx::B3DVector& rVal );
-                            SvxB3DVectorItem( sal_uInt16 nWhich, SvStream & );
                             SvxB3DVectorItem( const SvxB3DVectorItem& );
                             ~SvxB3DVectorItem();
 
