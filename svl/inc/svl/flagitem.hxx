@@ -49,7 +49,6 @@ public:
                              TYPEINFO();
 
                              SfxFlagItem( sal_uInt16 nWhich = 0, sal_uInt16 nValue = 0 );
-                             SfxFlagItem( sal_uInt16 nWhich, SvStream & );
                              SfxFlagItem( const SfxFlagItem& );
 
                              ~SfxFlagItem() {

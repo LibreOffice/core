@@ -41,9 +41,6 @@ public:
     SfxByteItem(sal_uInt16 which = 0, sal_uInt8 nValue = 0):
         CntByteItem(which, nValue) {}
 
-    SfxByteItem(sal_uInt16 which, SvStream & rStream):
-        CntByteItem(which, rStream) {}
-
     virtual SfxPoolItem * Create(SvStream & rStream, sal_uInt16) const;
 
     virtual SfxPoolItem * Clone(SfxItemPool * = 0) const

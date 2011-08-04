@@ -60,7 +60,6 @@ public:
                     SvtAcceleratorConfiguration();
 
                     // get special accelerators
-    static SvtAcceleratorConfiguration* CreateFromStream( SvStream& rStream );
     static String   GetStreamName();
     static SvStream* GetDefaultStream( StreamMode );
 

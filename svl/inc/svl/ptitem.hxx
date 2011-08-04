@@ -46,7 +46,6 @@ public:
                              TYPEINFO();
                              SfxPointItem();
                              SfxPointItem( sal_uInt16 nWhich, const Point& rVal );
-                             SfxPointItem( sal_uInt16 nWhich, SvStream & );
                              SfxPointItem( const SfxPointItem& );
                              ~SfxPointItem() {
                                  DBG_DTOR(SfxPointItem, 0); }

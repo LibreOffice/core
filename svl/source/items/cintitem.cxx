@@ -44,14 +44,6 @@ DBG_NAME(CntByteItem)
 TYPEINIT1_AUTOFACTORY(CntByteItem, SfxPoolItem);
 
 //============================================================================
-CntByteItem::CntByteItem(sal_uInt16 which, SvStream & rStream):
-    SfxPoolItem(which)
-{
-    DBG_CTOR(CntByteItem, 0);
-    rStream >> m_nValue;
-}
-
-//============================================================================
 // virtual
 int CntByteItem::operator ==(const SfxPoolItem & rItem) const
 {

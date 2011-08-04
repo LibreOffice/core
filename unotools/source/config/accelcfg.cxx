@@ -173,31 +173,6 @@ SvtAcceleratorConfiguration::SvtAcceleratorConfiguration()
     pImp = pOptions;
 }
 
-SvtAcceleratorConfiguration* SvtAcceleratorConfiguration::CreateFromStream( SvStream& rStream )
-{
-    SvtAcceleratorConfiguration* pRet = new SvtAcceleratorConfiguration;
-    ::utl::OInputStreamWrapper aHelper( rStream );
-    com::sun::star::uno::Reference < ::com::sun::star::io::XInputStream > xOut( &aHelper );
-    try
-    {
-        pRet->pImp = new SvtAcceleratorConfig_Impl( xOut );
-    }
-    catch ( RuntimeException& )
-    {
-        DELETEZ( pRet );
-    }
-    catch( SAXException& )
-    {
-        DELETEZ( pRet );
-    }
-    catch( ::com::sun::star::io::IOException& )
-    {
-        DELETEZ( pRet );
-    }
-
-    return pRet;
-}
-
 // -----------------------------------------------------------------------
 
 SvtAcceleratorConfiguration::~SvtAcceleratorConfiguration()

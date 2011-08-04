@@ -61,15 +61,6 @@ SfxFlagItem::SfxFlagItem( sal_uInt16 nW, sal_uInt16 nV ) :
 
 // -----------------------------------------------------------------------
 
-SfxFlagItem::SfxFlagItem( sal_uInt16 nW, SvStream &rStream) :
-    SfxPoolItem( nW )
-{
-    DBG_CTOR(SfxFlagItem, 0);
-    rStream >> nVal;
-}
-
-// -----------------------------------------------------------------------
-
 SfxFlagItem::SfxFlagItem( const SfxFlagItem& rItem ) :
     SfxPoolItem( rItem ),
     nVal( rItem.nVal )

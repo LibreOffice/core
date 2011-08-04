@@ -67,15 +67,6 @@ SfxPointItem::SfxPointItem( sal_uInt16 nW, const Point& rVal ) :
 
 // -----------------------------------------------------------------------
 
-SfxPointItem::SfxPointItem( sal_uInt16 nW, SvStream &rStream ) :
-    SfxPoolItem( nW )
-{
-    DBG_CTOR(SfxPointItem, 0);
-    rStream >> aVal;
-}
-
-// -----------------------------------------------------------------------
-
 SfxPointItem::SfxPointItem( const SfxPointItem& rItem ) :
     SfxPoolItem( rItem ),
     aVal( rItem.aVal )

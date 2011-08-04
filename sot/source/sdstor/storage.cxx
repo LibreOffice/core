@@ -1209,16 +1209,6 @@ const SvStream* SotStorage::GetSvStream()
     return pResult;
 }
 
-SvStream* SotStorage::GetTargetSvStream() const
-{
-    SvStream* pResult = 0;
-    DBG_ASSERT( Owner(), "must be owner" );
-    if( m_pOwnStg )
-        pResult = (SvStream*)(m_pOwnStg->GetSvStream());
-    return pResult;
-}
-
-
 sal_Bool SotStorage::Validate()
 {
     DBG_ASSERT( m_bIsRoot, "Validate nur an Rootstorage" );

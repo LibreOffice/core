@@ -231,7 +231,6 @@ public:
     virtual sal_Bool        MoveTo( const String & rEleName, SotStorage * pDest,
                                 const String & rNewName );
 
-    SvStream*           GetTargetSvStream() const;
     sal_Bool                SetProperty( const String& rName, const ::com::sun::star::uno::Any& rValue );
     sal_Bool                GetProperty( const String& rName, ::com::sun::star::uno::Any& rValue );
     sal_Bool                GetProperty( const String& rEleName, const String& rName, ::com::sun::star::uno::Any& rValue );

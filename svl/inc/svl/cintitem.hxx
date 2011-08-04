@@ -46,8 +46,6 @@ public:
     CntByteItem(sal_uInt16 which = 0, sal_uInt8 nTheValue = 0):
         SfxPoolItem(which), m_nValue(nTheValue) { DBG_CTOR(CntByteItem, 0); }
 
-    CntByteItem(sal_uInt16 which, SvStream & rStream);
-
     CntByteItem(const CntByteItem & rItem):
         SfxPoolItem(rItem), m_nValue(rItem.m_nValue)
     { DBG_CTOR(CntByteItem, 0); }
