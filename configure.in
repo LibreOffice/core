@@ -906,7 +906,7 @@ AC_ARG_WITH(system-odbc,
         [Use the odbc headers already on system.]))
 
 AC_ARG_WITH(system-sane,
-    AS_HELP_STRING([--with-system-sane-header],
+    AS_HELP_STRING([--with-system-sane],
         [Use sane.h already on system.]))
 
 AC_ARG_WITH(system-xrender-headers,
