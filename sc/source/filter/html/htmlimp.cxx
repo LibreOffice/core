@@ -206,7 +206,7 @@ void ScHTMLImport::WriteToDocument(
         // insert table number as name
         InsertRangeName( mpDoc, ScfTools::GetNameFromHTMLIndex( nTableId ), aNewRange );
         // insert table id as name
-        if( pTable->GetTableName().Len() )
+        if (!pTable->GetTableName().isEmpty())
         {
             String aName( ScfTools::GetNameFromHTMLName( pTable->GetTableName() ) );
             if (!mpDoc->GetRangeName()->findByName(aName))

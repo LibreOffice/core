@@ -239,7 +239,7 @@ ScHTMLLayoutParser::ScHTMLLayoutParser(
         nMetaCnt(0),
         nOffsetTolerance( SC_HTML_OFFSET_TOLERANCE_SMALL ),
         bTabInTabCell( false ),
-        bFirstRow( sal_True ),
+        bFirstRow( true ),
         bInCell( false ),
         bInTitle( false )
 {
@@ -910,7 +910,7 @@ IMPL_LINK( ScHTMLLayoutParser, HTMLImportHdl, ImportInfo*, pInfo )
                 {
                     bInCell = false;
                     NextRow( pInfo );
-                    bInCell = sal_True;
+                    bInCell = true;
                 }
                 CloseEntry( pInfo );
             }
@@ -973,7 +973,7 @@ void ScHTMLLayoutParser::TableDataOn( ImportInfo* pInfo )
         OSL_FAIL( "Dummbatz-Dok! <TH> oder <TD> ohne vorheriges <TABLE>" );
         TableOn( pInfo );
     }
-    bInCell = sal_True;
+    bInCell = true;
     sal_Bool bHorJustifyCenterTH = (pInfo->nToken == HTML_TABLEHEADER_ON);
     const HTMLOptions& rOptions = static_cast<HTMLParser*>(pInfo->pParser)->GetOptions();
     for (size_t i = 0, n = rOptions.size(); i < n; ++i)
@@ -1333,8 +1333,8 @@ void ScHTMLLayoutParser::TableOff( ImportInfo* pInfo )
             pActEntry = pE;
             delete pS;
         }
-        bTabInTabCell = sal_True;
-        bInCell = sal_True;
+        bTabInTabCell = true;
+        bInCell = true;
     }
     else
     {   // einfache Table beendet
@@ -1586,17 +1586,16 @@ void ScHTMLLayoutParser::ProcToken( ImportInfo* pInfo )
         break;
         case HTML_TITLE_ON:
         {
-            bInTitle = sal_True;
-            aString.Erase();
+            bInTitle = true;
+            aString = rtl::OUString();
         }
         break;
         case HTML_TITLE_OFF:
         {
-            if ( bInTitle && aString.Len() )
+            if ( bInTitle && !aString.isEmpty() )
             {
                 // Leerzeichen von Zeilenumbruechen raus
-                aString.EraseLeadingChars();
-                aString.EraseTrailingChars();
+                aString = aString.trim();
                 uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
                     mpDoc->GetDocumentShell()->GetModel(),
                     uno::UNO_QUERY_THROW);

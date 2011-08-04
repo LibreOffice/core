@@ -168,9 +168,9 @@ class ScHTMLLayoutParser : public ScHTMLParser
 {
 private:
     Size                aPageSize;
-    String              aBaseURL;
+    rtl::OUString       aBaseURL;
     ScHTMLTableStack    aTableStack;
-    String              aString;
+    rtl::OUString       aString;
     ScRangeListRef      xLockedList;        // je Table
     Table*              pTables;
     ScHTMLColOffset*    pColOffset;
@@ -186,12 +186,10 @@ private:
     sal_uInt16              nColOffsetStart;    // Startwert je Table, in Pixel
     sal_uInt16              nMetaCnt;           // fuer ParseMetaOptions
     sal_uInt16              nOffsetTolerance;   // for use with SeekOffset and related
-    sal_Bool                bCalcWidthHeight;   // TRUE: calculate real column width
-                                            // FALSE: 1 html-col = 1 sc-col
-    sal_Bool                bTabInTabCell;
-    sal_Bool                bFirstRow;          // je Table, ob in erster Zeile
-    sal_Bool                bInCell;
-    sal_Bool                bInTitle;
+    bool                bTabInTabCell:1;
+    bool                bFirstRow:1;          // je Table, ob in erster Zeile
+    bool                bInCell:1;
+    bool                bInTitle:1;
 
     DECL_LINK( HTMLImportHdl, ImportInfo* );
     void                NewActEntry( ScEEParseEntry* );
@@ -388,7 +386,7 @@ public:
     virtual             ~ScHTMLTable();
 
     /** Returns the name of the table, specified in the TABLE tag. */
-    inline const String& GetTableName() const { return maTableName; }
+    inline const rtl::OUString& GetTableName() const { return maTableName; }
     /** Returns the unique identifier of the table. */
     inline ScHTMLTableId GetTableId() const { return maTableId.mnTableId; }
     /** Returns the table size. */
@@ -571,7 +569,7 @@ private:
 private:
     ScHTMLTable*        mpParentTable;      /// Pointer to parent table.
     ScHTMLTableMapPtr   mxNestedTables;     /// Table of nested HTML tables.
-    String              maTableName;        /// Table name from <table id> option.
+    rtl::OUString       maTableName;        /// Table name from <table id> option.
     ScHTMLTableAutoId   maTableId;          /// Unique identifier of this table.
     SfxItemSet          maTableItemSet;     /// Items for the entire table.
     SfxItemSetPtr       mxRowItemSet;       /// Items for the current table row.
@@ -589,11 +587,11 @@ private:
     ScHTMLPos           maCurrCell;         /// Address of current cell to fill.
     ScHTMLPos           maDocBasePos;       /// Resulting base address in a Calc document.
     ScHTMLParser*       mpParser;
-    bool                mbBorderOn;         /// true = Table borders on.
-    bool                mbPreFormText;      /// true = Table from preformatted text (<pre> tag).
-    bool                mbRowOn;            /// true = Inside of <tr> </tr>.
-    bool                mbDataOn;           /// true = Inside of <td> </td> or <th> </th>.
-    bool                mbPushEmptyLine;    /// true = Insert empty line before current entry.
+    bool                mbBorderOn:1;       /// true = Table borders on.
+    bool                mbPreFormText:1;    /// true = Table from preformatted text (<pre> tag).
+    bool                mbRowOn:1;          /// true = Inside of <tr> </tr>.
+    bool                mbDataOn:1;         /// true = Inside of <td> </td> or <th> </th>.
+    bool                mbPushEmptyLine:1;  /// true = Insert empty line before current entry.
 };
 
 // ----------------------------------------------------------------------------
