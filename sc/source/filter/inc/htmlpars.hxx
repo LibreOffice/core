@@ -68,6 +68,8 @@ class ScHTMLStyles
     ElemsType maElemProps;           /// element to class to properties (both element and class are given)
     const rtl::OUString maEmpty;     /// just a persistent empty string.
 public:
+    ScHTMLStyles();
+
     void add(const char* pElemName, size_t nElemName, const char* pClassName, size_t nClassName,
              const rtl::OUString& aProp, const rtl::OUString& aValue);
 

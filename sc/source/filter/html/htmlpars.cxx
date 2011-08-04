@@ -73,6 +73,8 @@
 using ::editeng::SvxBorderLine;
 using namespace ::com::sun::star;
 
+ScHTMLStyles::ScHTMLStyles() : maEmpty() {}
+
 void ScHTMLStyles::add(const char* pElemName, size_t nElemName, const char* pClassName, size_t nClassName,
                        const rtl::OUString& aProp, const rtl::OUString& aValue)
 {
