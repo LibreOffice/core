@@ -3208,8 +3208,7 @@ bool SwWW8ImplReader::ReadChar(long nPosCp, long nCpOfs)
 
     if( '\x0' != cInsert )
     {
-        String sInsert = ByteString::ConvertToUnicode(cInsert,
-            RTL_TEXTENCODING_MS_1252 );
+        rtl::OUString sInsert(&cInsert, 1, RTL_TEXTENCODING_MS_1252);
         emulateMSWordAddTextToParagraph(sInsert);
     }
     if (!maApos.back()) //a para end in apo doesn't count

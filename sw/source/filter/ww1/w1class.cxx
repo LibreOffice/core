@@ -72,7 +72,7 @@ sal_Unicode Ww1PlainText::operator [] ( sal_uLong ulOffset )
     if( rFib.GetStream().Seek( ulFilePos + ulOffset ) == ulFilePos+ulOffset &&
         rFib.GetStream().Read( &cRead, sizeof( cRead ) ) == sizeof( cRead ) )
     {
-        cRet = ByteString::ConvertToUnicode( cRead, RTL_TEXTENCODING_MS_1252 );
+        cRet = rtl::OUString(&cRead, 1, RTL_TEXTENCODING_MS_1252).toChar();
     }
     else
         cRet = ' ';

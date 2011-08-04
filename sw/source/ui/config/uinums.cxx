@@ -403,8 +403,10 @@ SwNumRulesWithName::_SwNumFmtGlobal::_SwNumFmtGlobal( SvStream& rStream,
             nCharSet = RTL_TEXTENCODING_SYMBOL;
 
         if( VERSION_53A > nVersion )
-            aFmt.SetBulletChar( ByteString::ConvertToUnicode(
-                                            sal_Char(aFmt.GetBulletChar()), nCharSet ));
+        {
+            sal_Char cEncoded(aFmt.GetBulletChar());
+            aFmt.SetBulletChar(rtl::OUString(&cEncoded, 1, nCharSet).toChar());
+        }
     }
 
     if( VERSION_30B != nVersion )

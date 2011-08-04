@@ -674,7 +674,6 @@ int MathType::HandleRecords(int nLevel,sal_uInt8 nSelector,
     sal_uInt8 nTag,nRecord;
     sal_uInt8 nTabType,nTabStops;
     sal_uInt16 nTabOffset;
-    sal_Char nChar8;
     String sFontName;
     int i,nRet=1,newline=0;
     bool bSilent=false;
@@ -1762,14 +1761,17 @@ int MathType::HandleRecords(int nLevel,sal_uInt8 nSelector,
                     aFont.nTface = 128-aFont.nTface;
                     *pS >> aFont.nStyle;
                     aUserStyles.insert(aFont);
-                    sFontName.Erase();
-                    do
+                    std::vector<sal_Char> aSeq;
+                    while(1)
                     {
+                        sal_Char nChar8(0);
                         *pS >> nChar8;
-                        sFontName.Append(ByteString::ConvertToUnicode(
-                            nChar8,RTL_TEXTENCODING_MS_1252));
+                        if (nChar8 == 0)
+                            break;
+                        aSeq.push_back(nChar8);
                     }
-                    while(nChar8);
+                    sFontName = rtl::OUString(&aSeq[0], aSeq.size(),
+                        RTL_TEXTENCODING_MS_1252);
                 }
                 break;
             case SIZE:
