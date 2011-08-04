@@ -160,7 +160,6 @@ JobExecutor::~JobExecutor()
     css::uno::Reference< css::container::XContainer > xNotifier(m_aConfig.cfg(), css::uno::UNO_QUERY);
     if (xNotifier.is())
         xNotifier->removeContainerListener(m_xConfigListener);
-    LOG_ASSERT(m_aConfig.getMode() == ConfigAccess::E_CLOSED, "JobExecutor::~JobExecutor()\nConfiguration don't send dispoing() message!\n")
 }
 
 //________________________________
