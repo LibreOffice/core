@@ -3021,7 +3021,7 @@ void ScHTMLQueryParser::InsertText( const ImportInfo& rInfo )
 {
     mpCurrTable->PutText( rInfo );
     if( mbTitleOn )
-        maTitle.Append( rInfo.aText );
+        maTitle.append(rInfo.aText);
 }
 
 void ScHTMLQueryParser::FontOn( const ImportInfo& rInfo )
@@ -3084,19 +3084,20 @@ void ScHTMLQueryParser::MetaOn( const ImportInfo& rInfo )
 void ScHTMLQueryParser::TitleOn( const ImportInfo& /*rInfo*/ )
 {
     mbTitleOn = true;
-    maTitle.Erase();
+    maTitle.makeStringAndClear();
 }
 
 void ScHTMLQueryParser::TitleOff( const ImportInfo& rInfo )
 {
     if( mbTitleOn )
     {
-        maTitle.EraseLeadingAndTrailingChars();
-        if( maTitle.Len() && mpDoc->GetDocumentShell() ) {
+        rtl::OUString aTitle = maTitle.makeStringAndClear().trim();
+        if (!aTitle.isEmpty() && mpDoc->GetDocumentShell())
+        {
             uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
                 mpDoc->GetDocumentShell()->GetModel(), uno::UNO_QUERY_THROW);
 
-            xDPS->getDocumentProperties()->setTitle(maTitle);
+            xDPS->getDocumentProperties()->setTitle(aTitle);
         }
         InsertText( rInfo );
         mbTitleOn = false;

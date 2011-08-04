@@ -664,7 +664,7 @@ private:
 private:
     typedef ::std::auto_ptr< ScHTMLGlobalTable >    ScHTMLGlobalTablePtr;
 
-    String              maTitle;            /// The title of the document.
+    rtl::OUStringBuffer maTitle;            /// The title of the document.
     ScHTMLGlobalTablePtr mxGlobTable;       /// Contains the entire imported document.
     ScHTMLTable*        mpCurrTable;        /// Pointer to current table (performance).
     ScHTMLTableId       mnUnusedId;         /// First unused table identifier.
