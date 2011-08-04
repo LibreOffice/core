@@ -483,14 +483,6 @@ public:
     SvStream& OutLong( SvStream& rStrm, long nVal );
     SvStream& OutULong( SvStream& rStrm, sal_uLong nVal );
 
-    // Output hex number; default is two-digit number.
-    SvStream& OutHex( SvStream& rStrm, sal_uLong nHex, sal_uInt8 nLen = 2 );
-    // Output four-digit hex number.
-    inline SvStream& OutHex4( SvStream& rStrm, sal_uInt16 nHex )
-        {   return OutHex( rStrm, nHex, 4 ); }
-
-    inline SvStream& OutHex( sal_uInt16 nHex, sal_uInt8 nLen = 2 )      { return OutHex( Strm(), nHex, nLen ); }
-    inline SvStream& OutHex4( sal_uInt16 nHex )     { return OutHex( Strm(), nHex, 4 ); }
     inline SvStream& OutLong( long nVal )       { return OutLong( Strm(), nVal ); }
     inline SvStream& OutULong( sal_uLong nVal )     { return OutULong( Strm(), nVal ); }
 

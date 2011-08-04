@@ -261,21 +261,6 @@ SvStream& Writer::Strm()
 void Writer::SetStream(SvStream *const pStream)
 { m_pImpl->m_pStream = pStream; }
 
-
-SvStream& Writer::OutHex( SvStream& rStrm, sal_uLong nHex, sal_uInt8 nLen )
-{                                                  // in einen Stream aus
-    // Pointer an das Bufferende setzen
-    sal_Char* pStr = aNToABuf + (NTOABUFLEN-1);
-    for( sal_uInt8 n = 0; n < nLen; ++n )
-    {
-        *(--pStr) = (sal_Char)(nHex & 0xf ) + 48;
-        if( *pStr > '9' )
-            *pStr += 39;
-        nHex >>= 4;
-    }
-    return rStrm << pStr;
-}
-
 SvStream& Writer::OutLong( SvStream& rStrm, long nVal )
 {
     // Pointer an das Bufferende setzen
