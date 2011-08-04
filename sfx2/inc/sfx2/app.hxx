@@ -165,7 +165,6 @@ public:
     SfxResourceManager&         GetResourceManager() const;
     ResMgr*                     GetSfxResManager();
     static ResMgr*              CreateResManager( const char *pPrefix );
-    SimpleResMgr*               CreateSimpleResManager();
 
     // DDE
     long                        DdeExecute( const String& rCmd );

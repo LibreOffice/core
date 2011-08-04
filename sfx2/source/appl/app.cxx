@@ -511,18 +511,6 @@ ResMgr* SfxApplication::CreateResManager( const char *pPrefix )
     return ResMgr::CreateResMgr(pPrefix);
 }
 
-//---------------------------------------------------------------------
-
-SimpleResMgr* SfxApplication::CreateSimpleResManager()
-{
-    SimpleResMgr    *pRet;
-    const AllSettings& rAllSettings = Application::GetSettings();
-    ::com::sun::star::lang::Locale aLocale = rAllSettings.GetUILocale();
-    pRet = new SimpleResMgr( CREATEVERSIONRESMGR_NAME(sfx), aLocale );
-
-    return pRet;
-}
-
 //--------------------------------------------------------------------
 
 ResMgr* SfxApplication::GetSfxResManager()

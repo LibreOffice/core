@@ -80,17 +80,6 @@ XPropertyTable::XPropertyTable(
 
 /*************************************************************************
 |*
-|* XPropertyTable::XPropertyTable( SvStraem& )
-|*
-*************************************************************************/
-
-XPropertyTable::XPropertyTable( SvStream& /*rIn*/) :
-            pBmpTable   ( NULL )
-{
-}
-
-/*************************************************************************
-|*
 |* XPropertyTable::~XPropertyTable()
 |*
 *************************************************************************/
@@ -307,17 +296,6 @@ XPropertyList::XPropertyList(
         pXPool = new XOutdevItemPool;
         DBG_ASSERT( pXPool, "XOutPool konnte nicht erzeugt werden!" );
     }
-}
-
-/*************************************************************************
-|*
-|* XPropertyList::XPropertyList( SvStraem& )
-|*
-*************************************************************************/
-
-XPropertyList::XPropertyList( SvStream& /*rIn*/) :
-            pBmpList    ( NULL )
-{
 }
 
 /*************************************************************************

@@ -347,7 +347,6 @@ class AddonsOptions_Impl : public ConfigItem
         void                 InsertToolBarSeparator( Sequence< Sequence< PropertyValue > >& rAddonOfficeToolBarSeq );
         ::rtl::OUString          GeneratePrefixURL();
 
-        Sequence< ::rtl::OUString > GetPropertyNamesMergeMenuInstruction( const ::rtl::OUString& aPropertyRootName ) const;
         Sequence< ::rtl::OUString > GetPropertyNamesMenuItem( const ::rtl::OUString& aPropertyRootNode ) const;
         Sequence< ::rtl::OUString > GetPropertyNamesPopupMenu( const ::rtl::OUString& aPropertyRootNode ) const;
         Sequence< ::rtl::OUString > GetPropertyNamesToolBarItem( const ::rtl::OUString& aPropertyRootNode ) const;
@@ -1539,24 +1538,6 @@ sal_Bool AddonsOptions_Impl::CreateImageFromSequence( Image& rImage, sal_Bool bB
     }
 
     return bResult;
-}
-
-//*****************************************************************************************************************
-//  private methods
-//*****************************************************************************************************************
-Sequence< ::rtl::OUString > AddonsOptions_Impl::GetPropertyNamesMergeMenuInstruction( const ::rtl::OUString& aPropertyRootNode ) const
-{
-    Sequence< ::rtl::OUString > lResult( PROPERTYCOUNT_MERGE_MENUBAR );
-
-    // Create property names dependent from the root node name
-    lResult[ OFFSET_MERGEMENU_MERGEPOINT            ] = ::rtl::OUString( aPropertyRootNode + m_aPropMergeMenuNames[ OFFSET_MERGEMENU_MERGEPOINT    ] );
-    lResult[ OFFSET_MERGEMENU_MERGECOMMAND          ] = ::rtl::OUString( aPropertyRootNode + m_aPropMergeMenuNames[ OFFSET_MERGEMENU_MERGECOMMAND  ] );
-    lResult[ OFFSET_MERGEMENU_MERGECOMMANDPARAMETER ] = ::rtl::OUString( aPropertyRootNode + m_aPropMergeMenuNames[ OFFSET_MERGEMENU_MERGECOMMANDPARAMETER ] );
-    lResult[ OFFSET_MERGEMENU_MERGEFALLBACK         ] = ::rtl::OUString( aPropertyRootNode + m_aPropMergeMenuNames[ OFFSET_MERGEMENU_MERGEFALLBACK ] );
-    lResult[ OFFSET_MERGEMENU_MERGECONTEXT          ] = ::rtl::OUString( aPropertyRootNode + m_aPropMergeMenuNames[ OFFSET_MERGEMENU_MERGECONTEXT  ] );
-    lResult[ OFFSET_MERGEMENU_MENUITEMS             ] = ::rtl::OUString( aPropertyRootNode + m_aPropMergeMenuNames[ OFFSET_MERGEMENU_MENUITEMS     ] );
-
-    return lResult;
 }
 
 Sequence< ::rtl::OUString > AddonsOptions_Impl::GetPropertyNamesMenuItem( const ::rtl::OUString& aPropertyRootNode ) const

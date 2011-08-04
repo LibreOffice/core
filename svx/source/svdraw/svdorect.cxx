@@ -105,15 +105,6 @@ SdrRectObj::SdrRectObj(SdrObjKind eNewTextKind, const Rectangle& rRect)
     bClosedObj=sal_True;
 }
 
-SdrRectObj::SdrRectObj(SdrObjKind eNewTextKind, const Rectangle& rNewRect, SvStream& rInput, const String& rBaseURL, sal_uInt16 eFormat)
-:    SdrTextObj(eNewTextKind,rNewRect,rInput,rBaseURL,eFormat)
-{
-    DBG_ASSERT(eTextKind==OBJ_TEXT || eTextKind==OBJ_TEXTEXT ||
-               eTextKind==OBJ_OUTLINETEXT || eTextKind==OBJ_TITLETEXT,
-               "SdrRectObj::SdrRectObj(SdrObjKind,...) ist nur fuer Textrahmen gedacht");
-    bClosedObj=sal_True;
-}
-
 SdrRectObj::~SdrRectObj()
 {
 }

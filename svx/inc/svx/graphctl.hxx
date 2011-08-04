@@ -130,8 +130,6 @@ public:
     void                SetUpdateLink( const Link& rLink ) { aUpdateLink = rLink; }
     const Link&         GetUpdateLink() const { return aUpdateLink; }
 
-    static String       GetStringFromDouble( const double& rDouble );
-
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible();
 };
 

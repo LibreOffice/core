@@ -85,8 +85,6 @@ public:
     // Konstruktion eines Textrahmens
     SdrRectObj(SdrObjKind eNewTextKind);
     SdrRectObj(SdrObjKind eNewTextKind, const Rectangle& rRect);
-    // der sal_uInt16 eFormat nimmt Werte des enum EETextFormat entgegen
-    SdrRectObj(SdrObjKind eNewTextKind, const Rectangle& rNewRect, SvStream& rInput, const String& rBaseURL, sal_uInt16 eFormat);
     virtual ~SdrRectObj();
 
     virtual void TakeObjInfo(SdrObjTransformInfoRec& rInfo) const;

@@ -107,7 +107,6 @@ namespace avmedia
             void            setPosSize( const Rectangle& rRect );
 
             void            setPointer( const Pointer& rPointer );
-            const Pointer&  getPointer() const;
 
         protected:
 

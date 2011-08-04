@@ -129,7 +129,6 @@ public:
                                     const SfxItemSet* pSet=0,
                                     sal_Bool bRoot = sal_False );
 
-                        SfxMedium( const SfxMedium &rMedium, sal_Bool bCreateTemporary = sal_False );
                         SfxMedium( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aArgs );
 
                         ~SfxMedium();
@@ -153,7 +152,6 @@ public:
     const String&       GetOrigURL() const;
 
     SfxItemSet  *       GetItemSet() const;
-    void                SetItemSet(SfxItemSet *pSet);
     void                Close();
     void                CloseAndRelease();
     void                ReOpen();
@@ -167,8 +165,6 @@ public:
 
     ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContent > GetContent() const;
     const String&       GetPhysicalName() const;
-    void                SetTemporary( sal_Bool bTemp );
-    sal_Bool            IsTemporary() const;
     sal_Bool            IsRemote();
     sal_Bool            IsOpen() const; // { return aStorage.Is() || pInStream; }
     void                StartDownload();
@@ -227,7 +223,6 @@ public:
     ::rtl::OUString     SwitchDocumentToTempFile();
     sal_Bool            SwitchDocumentToFile( ::rtl::OUString aURL );
 
-    ::rtl::OUString     GetCharset();
     void                SetCharset( ::rtl::OUString );
     ::rtl::OUString     GetBaseURL( bool bForSaving=false );
 

@@ -446,14 +446,6 @@ BasicError* BasicErrorManager::GetNextError()
 }
 
 
-//=====================================================================
-
-BasicError::BasicError()
-{
-    nErrorId    = 0;
-    nReason     = 0;
-}
-
 BasicError::BasicError( sal_uIntPtr nId, sal_uInt16 nR, const String& rErrStr ) :
     aErrStr( rErrStr )
 {

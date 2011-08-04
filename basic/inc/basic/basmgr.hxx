@@ -74,7 +74,6 @@ private:
     String  aErrStr;
 
 public:
-            BasicError();
             BasicError( const BasicError& rErr );
             BasicError( sal_uIntPtr nId, sal_uInt16 nR, const String& rErrStr );
 

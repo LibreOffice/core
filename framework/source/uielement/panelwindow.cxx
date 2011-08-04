@@ -21,32 +21,6 @@ PanelWindow::~PanelWindow()
 {
 }
 
-const ::rtl::OUString& PanelWindow::getResourceURL() const
-{
-    return m_aResourceURL;
-}
-
-void PanelWindow::setResourceURL(const ::rtl::OUString& rResourceURL)
-{
-    m_aResourceURL = rResourceURL;
-}
-
-Window* PanelWindow::getContentWindow() const
-{
-    return m_pContentWindow;
-}
-
-void PanelWindow::setContentWindow( Window* pContentWindow )
-{
-    m_pContentWindow = pContentWindow;
-    if ( m_pContentWindow != NULL )
-    {
-        m_pContentWindow->SetParent(this);
-        m_pContentWindow->SetSizePixel( GetOutputSizePixel() );
-        m_pContentWindow->Show();
-    }
-}
-
 void PanelWindow::Command( const CommandEvent& rCEvt )
 {
     if ( m_aCommandHandler.IsSet() )

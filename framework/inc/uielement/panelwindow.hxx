@@ -51,11 +51,6 @@ class PanelWindow : public DockingWindow
                         PanelWindow( Window* pParent, WinBits nWinBits  =0);
         virtual         ~PanelWindow();
 
-        const ::rtl::OUString& getResourceURL() const;
-        void            setResourceURL(const ::rtl::OUString& rResourceURL);
-        Window*         getContentWindow() const;
-        void            setContentWindow( Window* pContentWindow );
-
         virtual void    Command ( const CommandEvent& rCEvt );
         virtual void    StateChanged( StateChangedType nType );
         virtual void    DataChanged( const DataChangedEvent& rDCEvt );

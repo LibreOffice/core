@@ -81,22 +81,6 @@ static Reference< XDocumentHandler > GetSaxWriter(
 }
 
 sal_Bool StatusBarConfiguration::LoadStatusBar(
-    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&,
-    SvStream&, StatusBarDescriptor& )
-{
-    // obsolete - only support linkage of binary filters!
-    return sal_True;
-}
-
-sal_Bool StatusBarConfiguration::StoreStatusBar(
-    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&,
-    SvStream&, const StatusBarDescriptor& )
-{
-    // obsolete - only support linkage of binary filters!
-    return sal_True;
-}
-
-sal_Bool StatusBarConfiguration::LoadStatusBar(
     const Reference< XMultiServiceFactory >& xServiceFactory,
     const Reference< XInputStream >& xInputStream,
     const Reference< XIndexContainer >& rStatusbarConfiguration )

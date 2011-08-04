@@ -314,13 +314,6 @@ void MediaWindowImpl::setPointer( const Pointer& rPointer )
 
 // ---------------------------------------------------------------------
 
-const Pointer& MediaWindowImpl::getPointer() const
-{
-    return GetPointer();
-}
-
-// ---------------------------------------------------------------------
-
 void MediaWindowImpl::Resize()
 {
     uno::Reference< media::XPlayerWindow >  xPlayerWindow( getPlayerWindow() );

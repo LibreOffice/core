@@ -208,7 +208,6 @@ protected:
                             sal_uInt16 nInitSize = 16,
                             sal_uInt16 nReSize = 16
                         );
-                        XPropertyTable( SvStream& rIn );
     void                Clear();
 
 public:
@@ -265,7 +264,6 @@ protected:
                             const String& rPath,
                             XOutdevItemPool* pXPool = NULL
                         );
-                        XPropertyList( SvStream& rIn );
     void                Clear();
 
 public:

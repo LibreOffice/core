@@ -758,15 +758,6 @@ void GraphCtrl::SetObjKind( const SdrObjKind _eObjKind )
         eObjKind = OBJ_NONE;
 }
 
-String GraphCtrl::GetStringFromDouble( const double& rDouble )
-{
-    sal_Unicode cSep =
-        SvtSysLocale().GetLocaleData().getNumDecimalSep().GetChar(0);
-    String aStr( ::rtl::math::doubleToUString( rDouble,
-                rtl_math_StringFormat_F, 2, cSep ));
-    return aStr;
-}
-
 IMPL_LINK( GraphCtrl, UpdateHdl, Timer*, pTimer )
 {
     if ( aUpdateLink.IsSet() )

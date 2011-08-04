@@ -2486,28 +2486,6 @@ SfxMedium::SfxMedium()
 {
     Init_Impl();
 }
-//------------------------------------------------------------------
-
-SfxMedium::SfxMedium( const SfxMedium& rMedium, sal_Bool bTemporary )
-:   SvRefBase(),
-    IMPL_CTOR( sal_True,    // bRoot, pURLObj
-        rMedium.pURLObj ? new INetURLObject(*rMedium.pURLObj) : 0 ),
-    pImp(new SfxMedium_Impl( this ))
-{
-    bDirect       = rMedium.IsDirect();
-    nStorOpenMode = rMedium.GetOpenMode();
-    if ( !bTemporary )
-        aName = rMedium.aName;
-
-    pImp->bIsTemp = bTemporary;
-    DBG_ASSERT( ! rMedium.pImp->bIsTemp, "Temporary Medium may not be copied" );
-    aLogicName = rMedium.aLogicName;
-    pSet =  rMedium.GetItemSet() ? new SfxItemSet(*rMedium.GetItemSet()) : 0;
-    pFilter = rMedium.pFilter;
-    Init_Impl();
-    if( bTemporary )
-        CreateTempFile( sal_True );
-}
 
 //------------------------------------------------------------------
 
@@ -2795,18 +2773,6 @@ void SfxMedium::SetPhysicalName_Impl( const String& rNameP )
 }
 
 //------------------------------------------------------------------
-void SfxMedium::SetTemporary( sal_Bool bTemp )
-{
-    pImp->bIsTemp = bTemp;
-}
-
-//------------------------------------------------------------------
-sal_Bool SfxMedium::IsTemporary() const
-{
-    return pImp->bIsTemp;
-}
-
-//------------------------------------------------------------------
 
 sal_Bool SfxMedium::Exists( sal_Bool /*bForceSession*/ )
 {
@@ -2987,13 +2953,6 @@ SfxMedium::~SfxMedium()
 
     delete pURLObj;
     delete pImp;
-}
-
-//------------------------------------------------------------------
-void SfxMedium::SetItemSet(SfxItemSet *pNewSet)
-{
-    delete pSet;
-    pSet = pNewSet;
 }
 
 //----------------------------------------------------------------
@@ -3427,40 +3386,6 @@ void SfxMedium::CreateTempFileNoCopy()
 
     CloseOutStream_Impl();
     CloseStorage();
-}
-
-::rtl::OUString SfxMedium::GetCharset()
-{
-    if( !pImp->bIsCharsetInitialized )
-    {
-        // Set an error in case there is no content?
-        if ( GetContent().is() )
-        {
-            pImp->bIsCharsetInitialized = sal_True;
-
-            try
-            {
-                Any aAny = pImp->aContent.getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MediaType")) );
-                ::rtl::OUString aField;
-                aAny >>= aField;
-
-                String sType, sSubType;
-                INetContentTypeParameterList aParameters;
-
-                if (INetContentTypes::parse(aField, sType, sSubType, &aParameters))
-                {
-                    const INetContentTypeParameter * pCharset = aParameters.find("charset");
-                    if (pCharset != 0)
-                        pImp->aCharset = pCharset->m_sValue;
-                }
-            }
-            catch ( const ::com::sun::star::uno::Exception& )
-            {
-            }
-        }
-    }
-
-    return pImp->aCharset;
 }
 
 void SfxMedium::SetCharset( ::rtl::OUString aChs )

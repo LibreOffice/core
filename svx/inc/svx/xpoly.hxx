@@ -85,7 +85,6 @@ protected:
 public:
     XPolygon( sal_uInt16 nSize=16, sal_uInt16 nResize=16 );
     XPolygon( const XPolygon& rXPoly );
-    XPolygon( const Polygon& rPoly );
     XPolygon( const Rectangle& rRect, long nRx = 0, long nRy = 0 );
     XPolygon( const Point& rCenter, long nRx, long nRy,
               sal_uInt16 nStartAngle = 0, sal_uInt16 nEndAngle = 3600,
@@ -125,10 +124,7 @@ public:
     void Translate(const Point& rTrans);
     void Rotate(const Point& rCenter, double fSin, double fCos);
     void Scale(double fSx, double fSy);
-    void SlantX(long nYRef, double fSin, double fCos);
-    void SlantY(long nXRef, double fSin, double fCos);
     void Distort(const Rectangle& rRefRect, const XPolygon& rDistortedRect);
-    void Rotate20 ();
 
     // #116512# convert to basegfx::B2DPolygon and return
     basegfx::B2DPolygon getB2DPolygon() const;
@@ -182,7 +178,6 @@ public:
     sal_Bool            operator!=( const XPolyPolygon& rXPolyPoly ) const;
 
     // Transformationen
-    void Rotate(const Point& rCenter, double fSin, double fCos);
     void Distort(const Rectangle& rRefRect, const XPolygon& rDistortedRect);
 
     // #116512# convert to basegfx::B2DPolyPolygon and return
