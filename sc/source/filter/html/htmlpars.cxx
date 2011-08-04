@@ -2225,57 +2225,54 @@ void ScHTMLTable::DataOn( const ImportInfo& rInfo )
         // read needed options from the <td> tag
         ScHTMLSize aSpanSize( 1, 1 );
         ::std::auto_ptr< String > pValStr, pNumStr;
-        for( ScHTMLOptionIterator aIter( rInfo ); aIter.is(); ++aIter )
+        const HTMLOptions& rOptions = static_cast<HTMLParser*>(rInfo.pParser)->GetOptions();
+        HTMLOptions::const_iterator itr = rOptions.begin(), itrEnd = rOptions.end();
+        sal_uInt32 nNumberFormat = NUMBERFORMAT_ENTRY_NOT_FOUND;
+        for (; itr != itrEnd; ++itr)
         {
-            switch( aIter->GetToken() )
+            switch (itr->GetToken())
             {
                 case HTML_O_COLSPAN:
-                    aSpanSize.mnCols = static_cast< SCCOL >( getLimitedValue< sal_Int32 >( aIter->GetString().ToInt32(), 1, 256 ) );
+                    aSpanSize.mnCols = static_cast<SCCOL>( getLimitedValue<sal_Int32>( itr->GetString().ToInt32(), 1, 256 ) );
                 break;
                 case HTML_O_ROWSPAN:
-                    aSpanSize.mnRows = static_cast< SCROW >( getLimitedValue< sal_Int32 >( aIter->GetString().ToInt32(), 1, 256 ) );
+                    aSpanSize.mnRows = static_cast<SCROW>( getLimitedValue<sal_Int32>( itr->GetString().ToInt32(), 1, 256 ) );
                 break;
                 case HTML_O_SDVAL:
-                    pValStr.reset( new String( aIter->GetString() ) );
+                    pValStr.reset( new String( itr->GetString() ) );
                 break;
                 case HTML_O_SDNUM:
-                    pNumStr.reset( new String( aIter->GetString() ) );
+                    pNumStr.reset( new String( itr->GetString() ) );
+                break;
+                case HTML_O_CLASS:
+                {
+                    // Pick up the number format associated with this class (if
+                    // any).
+                    rtl::OUString aElem(RTL_CONSTASCII_USTRINGPARAM("td"));
+                    rtl::OUString aClass = itr->GetString();
+                    rtl::OUString aProp(RTL_CONSTASCII_USTRINGPARAM("mso-number-format"));
+                    const ScHTMLStyles& rStyles = mpParser->GetStyles();
+                    const rtl::OUString& rVal = rStyles.getPropertyValue(aElem, aClass, aProp);
+                    rtl::OUString aNumFmt = decodeNumberFormat(rVal);
+
+                    nNumberFormat = GetFormatTable()->GetEntryKey(aNumFmt);
+                    if (nNumberFormat == NUMBERFORMAT_ENTRY_NOT_FOUND)
+                    {
+                        xub_StrLen nErrPos  = 0;
+                        short nDummy;
+                        bool bValidFmt = GetFormatTable()->PutEntry(aNumFmt, nErrPos, nDummy, nNumberFormat);
+                        if (!bValidFmt)
+                            nNumberFormat = NUMBERFORMAT_ENTRY_NOT_FOUND;
+                    }
+                }
                 break;
             }
         }
 
         ImplDataOn( aSpanSize );
 
-        const HTMLOptions& rOptions = static_cast<HTMLParser*>(rInfo.pParser)->GetOptions();
-        HTMLOptions::const_iterator itr = rOptions.begin(), itrEnd = rOptions.end();
-        for (; itr != itrEnd; ++itr)
-        {
-            if (itr->GetToken() == HTML_O_CLASS)
-            {
-                // This <td> has class property.  Pick up the number format
-                // associated with this class (if any).
-                rtl::OUString aElem(RTL_CONSTASCII_USTRINGPARAM("td"));
-                rtl::OUString aClass = itr->GetString();
-                rtl::OUString aProp(RTL_CONSTASCII_USTRINGPARAM("mso-number-format"));
-                const ScHTMLStyles& rStyles = mpParser->GetStyles();
-                const rtl::OUString& rVal = rStyles.getPropertyValue(aElem, aClass, aProp);
-                rtl::OUString aNumFmt = decodeNumberFormat(rVal);
-
-                sal_uInt32 nNumberFormat = GetFormatTable()->GetEntryKey(aNumFmt);
-                bool bValidFmt = false;
-                if ( nNumberFormat == NUMBERFORMAT_ENTRY_NOT_FOUND )
-                {
-                    xub_StrLen nErrPos  = 0;
-                    short nDummy;
-                    bValidFmt = GetFormatTable()->PutEntry(aNumFmt, nErrPos, nDummy, nNumberFormat);
-                }
-                else
-                    bValidFmt = true;
-
-                if (bValidFmt)
-                    mxDataItemSet->Put( SfxUInt32Item(ATTR_VALUE_FORMAT, nNumberFormat) );
-            }
-        }
+        if (nNumberFormat != NUMBERFORMAT_ENTRY_NOT_FOUND)
+            mxDataItemSet->Put( SfxUInt32Item(ATTR_VALUE_FORMAT, nNumberFormat) );
 
         ProcessFormatOptions( *mxDataItemSet, rInfo );
         CreateNewEntry( rInfo );
