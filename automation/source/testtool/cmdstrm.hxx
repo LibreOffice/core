@@ -51,9 +51,7 @@ public:
 
 
     void GenCmdFlow( sal_uInt16 nArt );
-    void GenCmdFlow( sal_uInt16 nArt, sal_uInt16 nNr1 );
     void GenCmdFlow( sal_uInt16 nArt, comm_UINT32 nNr1 );
-    void GenCmdFlow( sal_uInt16 nArt, String aString1 );
 
     void Reset(comm_UINT32 nSequence);
 

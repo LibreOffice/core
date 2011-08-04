@@ -422,28 +422,12 @@ void CmdStream::GenCmdFlow( sal_uInt16 nArt )
     Write(sal_uInt16(PARAM_NONE));              // Typ der folgenden Parameter
 }
 
-void CmdStream::GenCmdFlow( sal_uInt16 nArt, sal_uInt16 nNr1 )
-{
-    Write(sal_uInt16(SIFlow));
-    Write(nArt);
-    Write(sal_uInt16(PARAM_UINT16_1));          // Typ der folgenden Parameter
-    Write(nNr1);
-}
-
 void CmdStream::GenCmdFlow( sal_uInt16 nArt, comm_UINT32 nNr1 )
 {
     Write(sal_uInt16(SIFlow));
     Write(nArt);
     Write(sal_uInt16(PARAM_UINT32_1));          // Typ der folgenden Parameter
     Write(nNr1);
-}
-
-void CmdStream::GenCmdFlow( sal_uInt16 nArt, String aString1 )
-{
-    Write(sal_uInt16(SIFlow));
-    Write(nArt);
-    Write(sal_uInt16(PARAM_STR_1));             // Typ der folgenden Parameter
-    Write(aString1);
 }
 
 void CmdStream::Write( String aString, sal_Bool IsKeyString )
