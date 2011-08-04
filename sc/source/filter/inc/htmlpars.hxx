@@ -125,14 +125,14 @@ struct ScHTMLTableStackEntry
     sal_uInt16              nTableWidth;
     sal_uInt16              nColOffset;
     sal_uInt16              nColOffsetStart;
-    sal_Bool                bFirstRow;
+    bool                bFirstRow;
                         ScHTMLTableStackEntry( ScEEParseEntry* pE,
                                 const ScRangeListRef& rL, ScHTMLColOffset* pTO,
                                 sal_uLong nFTC,
                                 SCCOL nCol, SCROW nRow,
                                 SCCOL nStart, SCCOL nMax, sal_uInt16 nTab,
                                 sal_uInt16 nTW, sal_uInt16 nCO, sal_uInt16 nCOS,
-                                sal_Bool bFR )
+                                bool bFR )
                             : xLockedList( rL ), pCellEntry( pE ),
                             pLocalColOffset( pTO ),
                             nFirstTableCell( nFTC ),
@@ -199,8 +199,8 @@ private:
     void                ProcToken( ImportInfo* );
     void                CloseEntry( ImportInfo* );
     void                NextRow(  ImportInfo*  );
-    void                SkipLocked( ScEEParseEntry*, sal_Bool bJoin = sal_True );
-    static sal_Bool         SeekOffset( ScHTMLColOffset*, sal_uInt16 nOffset,
+    void                SkipLocked( ScEEParseEntry*, bool bJoin = true );
+    static bool         SeekOffset( ScHTMLColOffset*, sal_uInt16 nOffset,
                                     SCCOL* pCol, sal_uInt16 nOffsetTol );
     static void         MakeCol( ScHTMLColOffset*, sal_uInt16& nOffset,
                                 sal_uInt16& nWidth, sal_uInt16 nOffsetTol,
@@ -216,7 +216,7 @@ private:
     void                Adjust();
 
     sal_uInt16              GetWidthPixel( const HTMLOption& );
-    sal_Bool                IsAtBeginningOfText( ImportInfo* );
+    bool                IsAtBeginningOfText( ImportInfo* );
 
     void                TableOn( ImportInfo* );
     void                ColOn( ImportInfo* );

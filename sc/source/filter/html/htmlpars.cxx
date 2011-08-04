@@ -289,7 +289,7 @@ sal_uLong ScHTMLLayoutParser::Read( SvStream& rStream, const String& rBaseURL )
     pEdit->SetImportHdl( LINK( this, ScHTMLLayoutParser, HTMLImportHdl ) );
 
     SfxObjectShell* pObjSh = mpDoc->GetDocumentShell();
-    sal_Bool bLoading = pObjSh && pObjSh->IsLoading();
+    bool bLoading = pObjSh && pObjSh->IsLoading();
 
     SvKeyValueIteratorRef xValues;
     SvKeyValueIterator* pAttributes = NULL;
@@ -384,26 +384,26 @@ void ScHTMLLayoutParser::NextRow( ImportInfo* pInfo )
 }
 
 
-sal_Bool ScHTMLLayoutParser::SeekOffset( ScHTMLColOffset* pOffset, sal_uInt16 nOffset,
+bool ScHTMLLayoutParser::SeekOffset( ScHTMLColOffset* pOffset, sal_uInt16 nOffset,
         SCCOL* pCol, sal_uInt16 nOffsetTol )
 {
     OSL_ENSURE( pOffset, "ScHTMLLayoutParser::SeekOffset - illegal call" );
     sal_uInt16 nPos;
-    sal_Bool bFound = pOffset->Seek_Entry( nOffset, &nPos );
+    bool bFound = pOffset->Seek_Entry( nOffset, &nPos );
     *pCol = static_cast<SCCOL>(nPos);
     if ( bFound )
-        return sal_True;
+        return true;
     sal_uInt16 nCount = pOffset->Count();
     if ( !nCount )
         return false;
     // nPos ist Einfuegeposition, da liegt der Naechsthoehere (oder auch nicht)
     if ( nPos < nCount && (((*pOffset)[nPos] - nOffsetTol) <= nOffset) )
-        return sal_True;
+        return true;
     // nicht kleiner als alles andere? dann mit Naechstniedrigerem vergleichen
     else if ( nPos && (((*pOffset)[nPos-1] + nOffsetTol) >= nOffset) )
     {
         (*pCol)--;
-        return sal_True;
+        return true;
     }
     return false;
 }
@@ -486,12 +486,12 @@ void ScHTMLLayoutParser::ModifyOffset( ScHTMLColOffset* pOffset, sal_uInt16& nOl
 }
 
 
-void ScHTMLLayoutParser::SkipLocked( ScEEParseEntry* pE, sal_Bool bJoin )
+void ScHTMLLayoutParser::SkipLocked( ScEEParseEntry* pE, bool bJoin )
 {
     if ( ValidCol(pE->nCol) )
     {   // wuerde sonst bei ScAddress falschen Wert erzeugen, evtl. Endlosschleife!
-        sal_Bool bBadCol = false;
-        sal_Bool bAgain;
+        bool bBadCol = false;
+        bool bAgain;
         ScRange aRange( pE->nCol, pE->nRow, 0,
             pE->nCol + pE->nColOverlap - 1, pE->nRow + pE->nRowOverlap - 1, 0 );
         do
@@ -505,10 +505,10 @@ void ScHTMLLayoutParser::SkipLocked( ScEEParseEntry* pE, sal_Bool bJoin )
                     pE->nCol = pR->aEnd.Col() + 1;
                     SCCOL nTmp = pE->nCol + pE->nColOverlap - 1;
                     if ( pE->nCol > MAXCOL || nTmp > MAXCOL )
-                        bBadCol = sal_True;
+                        bBadCol = true;
                     else
                     {
-                        bAgain = sal_True;
+                        bAgain = true;
                         aRange.aStart.SetCol( pE->nCol );
                         aRange.aEnd.SetCol( nTmp );
                     }
@@ -712,7 +712,7 @@ void ScHTMLLayoutParser::SetWidths()
                         else
                         {   // try to find a single undefined width
                             sal_uInt16 nTotal = 0;
-                            sal_Bool bFound = false;
+                            bool bFound = false;
                             SCCOL nHere = 0;
                             SCCOL nStop = Min( static_cast<SCCOL>(nCol + pE->nColOverlap), nColsPerRow );
                             for ( ; nCol < nStop; nCol++ )
@@ -726,7 +726,7 @@ void ScHTMLLayoutParser::SetWidths()
                                         bFound = false;
                                         break;  // for
                                     }
-                                    bFound = sal_True;
+                                    bFound = true;
                                     nHere = nCol;
                                 }
                             }
@@ -976,7 +976,7 @@ void ScHTMLLayoutParser::TableDataOn( ImportInfo* pInfo )
         TableOn( pInfo );
     }
     bInCell = true;
-    sal_Bool bHorJustifyCenterTH = (pInfo->nToken == HTML_TABLEHEADER_ON);
+    bool bHorJustifyCenterTH = (pInfo->nToken == HTML_TABLEHEADER_ON);
     const HTMLOptions& rOptions = static_cast<HTMLParser*>(pInfo->pParser)->GetOptions();
     for (size_t i = 0, n = rOptions.size(); i < n; ++i)
     {
@@ -1420,7 +1420,7 @@ void ScHTMLLayoutParser::Image( ImportInfo* pInfo )
     }
     if ( !pActEntry->bHasGraphic )
     {   // discard any ALT text in this cell if we have any image
-        pActEntry->bHasGraphic = sal_True;
+        pActEntry->bHasGraphic = true;
         pActEntry->aAltText = rtl::OUString();
     }
     pImage->aFilterName = rFilter.GetImportFormatName( nFormat );
@@ -1509,7 +1509,7 @@ void ScHTMLLayoutParser::AnchorOn( ImportInfo* pInfo )
 }
 
 
-sal_Bool ScHTMLLayoutParser::IsAtBeginningOfText( ImportInfo* pInfo )
+bool ScHTMLLayoutParser::IsAtBeginningOfText( ImportInfo* pInfo )
 {
     ESelection& rSel = pActEntry->aSel;
     return rSel.nStartPara == rSel.nEndPara &&
@@ -1573,7 +1573,7 @@ void ScHTMLLayoutParser::FontOn( ImportInfo* pInfo )
 
 void ScHTMLLayoutParser::ProcToken( ImportInfo* pInfo )
 {
-    sal_Bool bSetLastToken = sal_True;
+    bool bSetLastToken = true;
     switch ( pInfo->nToken )
     {
         case HTML_META:
@@ -1620,7 +1620,7 @@ void ScHTMLLayoutParser::ProcToken( ImportInfo* pInfo )
         {
             if ( bInCell )
                 CloseEntry( pInfo );
-            // bInCell nicht sal_True setzen, das macht TableDataOn
+            // bInCell nicht true setzen, das macht TableDataOn
             pActEntry->aItemSet.Put(
                 SvxWeightItem( WEIGHT_BOLD, ATTR_FONT_WEIGHT) );
         }   // fall thru
