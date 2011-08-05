@@ -88,14 +88,9 @@ namespace svt
         );
         ~RoadmapWizard( );
 
-        void            SetRoadmapBitmap( const BitmapEx& _rBitmap );
-        const BitmapEx& GetRoadmapBitmap( ) const;
-
         void            SetRoadmapHelpId( const rtl::OString& _rId );
-        const rtl::OString& GetRoadmapHelpId() const;
 
         void            SetRoadmapInteractive( sal_Bool _bInteractive );
-        sal_Bool        IsRoadmapInteractive();
         virtual void    Resize();
         virtual void    StateChanged( StateChangedType nStateChange );
 

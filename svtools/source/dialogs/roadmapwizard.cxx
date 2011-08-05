@@ -228,39 +228,15 @@ namespace svt
     }
 
     //--------------------------------------------------------------------
-    void RoadmapWizard::SetRoadmapBitmap( const BitmapEx& _rBitmap )
-    {
-        m_pImpl->pRoadmap->SetRoadmapBitmap( _rBitmap );
-    }
-
-    //--------------------------------------------------------------------
-    const BitmapEx& RoadmapWizard::GetRoadmapBitmap( ) const
-    {
-        return m_pImpl->pRoadmap->GetRoadmapBitmap();
-    }
-
-    //--------------------------------------------------------------------
     void RoadmapWizard::SetRoadmapHelpId( const rtl::OString& _rId )
     {
         m_pImpl->pRoadmap->SetHelpId( _rId );
     }
 
     //--------------------------------------------------------------------
-    const rtl::OString& RoadmapWizard::GetRoadmapHelpId() const
-    {
-        return m_pImpl->pRoadmap->GetHelpId();
-    }
-
-    //--------------------------------------------------------------------
     void RoadmapWizard::SetRoadmapInteractive( sal_Bool _bInteractive )
     {
         m_pImpl->pRoadmap->SetRoadmapInteractive( _bInteractive );
-    }
-
-    //--------------------------------------------------------------------
-    sal_Bool RoadmapWizard::IsRoadmapInteractive()
-    {
-        return m_pImpl->pRoadmap->IsRoadmapInteractive();
     }
 
     //--------------------------------------------------------------------
