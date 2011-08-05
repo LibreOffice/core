@@ -29,8 +29,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_comphelper.hxx"
 
-#include <deque>
-
 #if defined( UNX )
 #include <wchar.h>
 #endif
@@ -56,6 +54,9 @@
 #include <cppuhelper/interfacecontainer.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/implbase2.hxx>
+
+#include <deque>
+#include <algorithm>
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::io;
@@ -457,38 +458,36 @@ Reference< XIdlReflection > ImplEventAttacherManager::getReflection() throw( Exc
     return aIt;
 }
 
-//-----------------------------------------------------------------------------
-void detachAll_Impl
-(
-    ImplEventAttacherManager * pMgr,
-    sal_Int32 nIdx,
-    ::std::deque< AttachedObject_Impl > & rList
-)
-{
-    ::std::deque< AttachedObject_Impl >::iterator aObjIt =  rList.begin();
-    ::std::deque< AttachedObject_Impl >::iterator aObjEnd = rList.end();
-    while( aObjIt != aObjEnd )
-    {
-        pMgr->detach( nIdx, (*aObjIt).xTarget );
-        ++aObjIt;
-    }
-}
+namespace {
 
-//-----------------------------------------------------------------------------
-void attachAll_Impl
-(
-    ImplEventAttacherManager * pMgr,
-    sal_Int32 nIdx,
-    ::std::deque< AttachedObject_Impl > & rList
-)
+class DetachObject : public std::unary_function<AttachedObject_Impl, void>
 {
-    ::std::deque< AttachedObject_Impl >::iterator aObjIt =  rList.begin();
-    ::std::deque< AttachedObject_Impl >::iterator aObjEnd = rList.end();
-    while( aObjIt != aObjEnd )
+    ImplEventAttacherManager& mrMgr;
+    sal_Int32 mnIdx;
+public:
+    DetachObject(ImplEventAttacherManager& rMgr, sal_Int32 nIdx) :
+        mrMgr(rMgr), mnIdx(nIdx) {}
+
+    void operator() (AttachedObject_Impl& rObj)
     {
-        pMgr->attach( nIdx, (*aObjIt).xTarget, (*aObjIt).aHelper );
-        ++aObjIt;
+        mrMgr.detach(mnIdx, rObj.xTarget);
     }
+};
+
+class AttachObject : public std::unary_function<AttachedObject_Impl, void>
+{
+    ImplEventAttacherManager& mrMgr;
+    sal_Int32 mnIdx;
+public:
+    AttachObject(ImplEventAttacherManager& rMgr, sal_Int32 nIdx) :
+        mrMgr(rMgr), mnIdx(nIdx) {}
+
+    void operator() (AttachedObject_Impl& rObj)
+    {
+        mrMgr.attach(mnIdx, rObj.xTarget, rObj.aHelper);
+    }
+};
+
 }
 
 //-----------------------------------------------------------------------------
@@ -559,14 +558,14 @@ void SAL_CALL ImplEventAttacherManager::registerScriptEvents
     ::std::deque<AttacherIndex_Impl>::iterator aIt = implCheckIndex( nIndex );
 
     ::std::deque< AttachedObject_Impl > aList = (*aIt).aObjList;
-    detachAll_Impl( this, nIndex, aList );
+    ::std::for_each(aList.begin(), aList.end(), DetachObject(*this, nIndex));
 
     const ScriptEventDescriptor* pArray = ScriptEvents.getConstArray();
     sal_Int32 nLen = ScriptEvents.getLength();
     for( sal_Int32 i = 0 ; i < nLen ; i++ )
         registerScriptEvent( nIndex, pArray[ i ] );
 
-    attachAll_Impl( this, nIndex, aList );
+    ::std::for_each(aList.begin(), aList.end(), AttachObject(*this, nIndex));
 }
 
 //-----------------------------------------------------------------------------
@@ -584,7 +583,7 @@ void SAL_CALL ImplEventAttacherManager::revokeScriptEvent
     ::std::deque<AttacherIndex_Impl>::iterator aIt = implCheckIndex( nIndex );
 
     ::std::deque< AttachedObject_Impl > aList = (*aIt).aObjList;
-    detachAll_Impl( this, nIndex, aList );
+    ::std::for_each(aList.begin(), aList.end(), DetachObject(*this, nIndex));
 
     OUString aLstType = ListenerType;
     const sal_Unicode * pLastDot = aLstType.getStr();
@@ -630,7 +629,7 @@ void SAL_CALL ImplEventAttacherManager::revokeScriptEvent
         }
     }
 #endif
-    attachAll_Impl( this, nIndex, aList );
+    ::std::for_each(aList.begin(), aList.end(), AttachObject(*this, nIndex));
 }
 
 //-----------------------------------------------------------------------------
@@ -641,13 +640,13 @@ void SAL_CALL ImplEventAttacherManager::revokeScriptEvents(sal_Int32 nIndex )
     ::std::deque<AttacherIndex_Impl>::iterator aIt = implCheckIndex( nIndex );
 
     ::std::deque< AttachedObject_Impl > aList = (*aIt).aObjList;
-    detachAll_Impl( this, nIndex, aList );
+    ::std::for_each(aList.begin(), aList.end(), DetachObject(*this, nIndex));
 #ifdef DEQUE_OK
     (*aIt).aEventList = ::std::deque< ScriptEventDescriptor >();
 #else
     (*aIt).aEventList.realloc( 0 );
 #endif
-    attachAll_Impl( this, nIndex, aList );
+    ::std::for_each(aList.begin(), aList.end(), AttachObject(*this, nIndex));
 }
 
 //-----------------------------------------------------------------------------
@@ -657,10 +656,6 @@ void SAL_CALL ImplEventAttacherManager::insertEntry(sal_Int32 nIndex)
     Guard< Mutex > aGuard( aLock );
     if( nIndex < 0 )
         throw IllegalArgumentException();
-
-//    ::std::deque<AttacherIndex_Impl>::iterator aIt = aIndex.begin();
-//    while( nIndex-- )
-//        aIt++;
 
     if ( static_cast< ::std::deque< AttacherIndex_Impl >::size_type>(nIndex) >= aIndex.size() )
         aIndex.resize(nIndex+1);
@@ -677,7 +672,7 @@ void SAL_CALL ImplEventAttacherManager::removeEntry(sal_Int32 nIndex)
     ::std::deque<AttacherIndex_Impl>::iterator aIt = implCheckIndex( nIndex );
 
     ::std::deque< AttachedObject_Impl > aList = (*aIt).aObjList;
-    detachAll_Impl( this, nIndex, aList );
+    ::std::for_each(aList.begin(), aList.end(), DetachObject(*this, nIndex));
     aIndex.erase( aIt );
 }
 
