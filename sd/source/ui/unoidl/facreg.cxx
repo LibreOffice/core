@@ -255,7 +255,7 @@ enum FactoryId
     SlideLayoutControllerFactoryId,
     InsertSlideControllerFactoryId,
 };
-typedef ::boost::unordered_map<OUString, FactoryId, comphelper::UStringHash, comphelper::UStringEqual> FactoryMap;
+typedef ::boost::unordered_map<OUString, FactoryId, rtl::OUStringHash, comphelper::UStringEqual> FactoryMap;
 
 
 namespace {

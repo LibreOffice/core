@@ -97,7 +97,7 @@ private:
     typedef ::boost::unordered_map<
         ::rtl::OUString,
         css::uno::Reference<css::drawing::framework::XResourceFactory>,
-        ::comphelper::UStringHash,
+        ::rtl::OUStringHash,
         ::comphelper::UStringEqual> FactoryMap;
     FactoryMap maFactoryMap;
 

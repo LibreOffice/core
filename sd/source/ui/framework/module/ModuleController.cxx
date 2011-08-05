@@ -59,7 +59,7 @@ class ModuleController::ResourceToFactoryMap
     : public ::boost::unordered_map<
     rtl::OUString,
     rtl::OUString,
-    ::comphelper::UStringHash,
+    ::rtl::OUStringHash,
     ::comphelper::UStringEqual>
 {
 public:
@@ -71,7 +71,7 @@ class ModuleController::LoadedFactoryContainer
     : public ::boost::unordered_map<
     rtl::OUString,
     WeakReference<XInterface>,
-    ::comphelper::UStringHash,
+    ::rtl::OUStringHash,
     ::comphelper::UStringEqual>
 {
 public:

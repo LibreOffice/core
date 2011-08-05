@@ -169,7 +169,7 @@ private:
         sal_Int32 nId;
         sal_Int32 nLastIndex;
     };
-    typedef ::boost::unordered_map< ::rtl::OUString, struct AuthorComments, comphelper::UStringHash, comphelper::UStringEqual > AuthorsMap;
+    typedef ::boost::unordered_map< ::rtl::OUString, struct AuthorComments, rtl::OUStringHash, comphelper::UStringEqual > AuthorsMap;
     AuthorsMap maAuthors;
 
     void WriteAuthors();

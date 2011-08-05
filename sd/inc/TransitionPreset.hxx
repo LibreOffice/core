@@ -50,7 +50,7 @@ namespace sd {
 class TransitionPreset;
 typedef boost::shared_ptr< TransitionPreset > TransitionPresetPtr;
 typedef std::list< TransitionPresetPtr > TransitionPresetList;
-typedef boost::unordered_map< rtl::OUString, rtl::OUString, comphelper::UStringHash, comphelper::UStringEqual > UStringMap;
+typedef boost::unordered_map< rtl::OUString, rtl::OUString, rtl::OUStringHash, comphelper::UStringEqual > UStringMap;
 
 class TransitionPreset
 {

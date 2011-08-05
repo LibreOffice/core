@@ -40,8 +40,8 @@
 
 namespace sd {
 
-typedef boost::unordered_map< rtl::OUString, CustomAnimationEffectPtr, comphelper::UStringHash, comphelper::UStringEqual > EffectsSubTypeMap;
-typedef boost::unordered_map< rtl::OUString, rtl::OUString, comphelper::UStringHash, comphelper::UStringEqual > UStringMap;
+typedef boost::unordered_map< rtl::OUString, CustomAnimationEffectPtr, rtl::OUStringHash, comphelper::UStringEqual > EffectsSubTypeMap;
+typedef boost::unordered_map< rtl::OUString, rtl::OUString, rtl::OUStringHash, comphelper::UStringEqual > UStringMap;
 typedef std::vector< rtl::OUString > UStringList;
 
 class CustomAnimationPreset
@@ -80,7 +80,7 @@ private:
 };
 
 typedef boost::shared_ptr< CustomAnimationPreset > CustomAnimationPresetPtr;
-typedef boost::unordered_map<rtl::OUString, CustomAnimationPresetPtr, comphelper::UStringHash, comphelper::UStringEqual> EffectDescriptorMap;
+typedef boost::unordered_map<rtl::OUString, CustomAnimationPresetPtr, rtl::OUStringHash, comphelper::UStringEqual> EffectDescriptorMap;
 typedef std::vector< CustomAnimationPresetPtr > EffectDescriptorList;
 
 struct PresetCategory

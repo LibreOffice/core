@@ -130,7 +130,7 @@ private:
     typedef ::boost::unordered_map
         <rtl::OUString,
          ListenerList,
-         ::comphelper::UStringHash,
+         ::rtl::OUStringHash,
          ::comphelper::UStringEqual> ListenerMap;
     ListenerMap maListenerMap;
 

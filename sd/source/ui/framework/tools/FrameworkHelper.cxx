@@ -305,7 +305,7 @@ class FrameworkHelper::ViewURLMap
     : public ::boost::unordered_map<
           rtl::OUString,
           ViewShell::ShellType,
-          ::comphelper::UStringHash,
+          ::rtl::OUStringHash,
           ::comphelper::UStringEqual>
 {
 public:
