@@ -86,11 +86,7 @@ struct AttachedObject_Impl
 
 struct AttacherIndex_Impl
 {
-#ifdef DEQUE_OK
     ::std::deque< ScriptEventDescriptor > aEventList;
-#else
-    Sequence< ScriptEventDescriptor >   aEventList;
-#endif
     ::std::deque< AttachedObject_Impl > aObjList;
 
     bool    operator<( const AttacherIndex_Impl & ) const;
@@ -512,12 +508,7 @@ void SAL_CALL ImplEventAttacherManager::registerScriptEvent
     pLastDot += rtl_ustr_lastIndexOfChar( pLastDot, '.' );
     if( pLastDot )
         aEvt.ListenerType = pLastDot +1;
-#ifdef DEQUE_OK
     (*aIt).aEventList.push_back( aEvt );
-#else
-    (*aIt).aEventList.realloc( (*aIt).aEventList.getLength() +1 );
-    (*aIt).aEventList.getArray()[(*aIt).aEventList.getLength() -1] = aEvt;
-#endif
 
     // register new new Event
     ::std::deque< AttachedObject_Impl >::iterator aObjIt =  (*aIt).aObjList.begin();
@@ -592,7 +583,6 @@ void SAL_CALL ImplEventAttacherManager::revokeScriptEvent
     if( pLastDot )
         aLstType = pLastDot +1;
 
-#ifdef DEQUE_OK
     ::std::deque< ScriptEventDescriptor >::iterator aEvtIt =    (*aIt).aEventList.begin();
     ::std::deque< ScriptEventDescriptor >::iterator aEvtEnd =   (*aIt).aEventList.end();
     while( aEvtIt != aEvtEnd )
@@ -607,29 +597,6 @@ void SAL_CALL ImplEventAttacherManager::revokeScriptEvent
 
         ++aEvtIt;
     }
-#else
-    Sequence< ScriptEventDescriptor >& rEventList = (*aIt).aEventList;
-
-            ScriptEventDescriptor* pEventList = rEventList.getArray();
-    const   ScriptEventDescriptor* pEventListEnd = pEventList + rEventList.getLength();
-    for( ; pEventList < pEventListEnd; ++pEventList )
-    {
-        if  (   (aLstType               == pEventList->ListenerType )
-            &&  (EventMethod            == pEventList->EventMethod      )
-            &&  (ToRemoveListenerParam  == pEventList->AddListenerParam)
-            )
-        {
-            ScriptEventDescriptor* pMoveTo = pEventList;
-            const ScriptEventDescriptor* pMoveFrom = pMoveTo + 1;
-            while (pMoveFrom < pEventListEnd)
-            {
-                *pMoveTo++ = *pMoveFrom++;
-            }
-            rEventList.realloc( rEventList.getLength() - 1 );
-            break;
-        }
-    }
-#endif
     ::std::for_each(aList.begin(), aList.end(), AttachObject(*this, nIndex));
 }
 
@@ -642,11 +609,7 @@ void SAL_CALL ImplEventAttacherManager::revokeScriptEvents(sal_Int32 nIndex )
 
     ::std::deque< AttachedObject_Impl > aList = (*aIt).aObjList;
     ::std::for_each(aList.begin(), aList.end(), DetachObject(*this, nIndex));
-#ifdef DEQUE_OK
     (*aIt).aEventList.clear();
-#else
-    (*aIt).aEventList.realloc( 0 );
-#endif
     ::std::for_each(aList.begin(), aList.end(), AttachObject(*this, nIndex));
 }
 
@@ -684,7 +647,6 @@ Sequence< ScriptEventDescriptor > SAL_CALL ImplEventAttacherManager::getScriptEv
     Guard< Mutex > aGuard( aLock );
     ::std::deque<AttacherIndex_Impl>::iterator aIt = implCheckIndex( nIndex );
 
-#ifdef DEQUE_OK
     Sequence< ScriptEventDescriptor > aSeq( (*aIt).aEventList.size() );
     ScriptEventDescriptor * pArray = aSeq.getArray();
 
@@ -697,9 +659,6 @@ Sequence< ScriptEventDescriptor > SAL_CALL ImplEventAttacherManager::getScriptEv
         ++aEvtIt;
     }
     return aSeq;
-#else
-    return (*aIt).aEventList;
-#endif
 }
 
 //-----------------------------------------------------------------------------
@@ -732,14 +691,9 @@ void SAL_CALL ImplEventAttacherManager::attach(sal_Int32 nIndex, const Reference
 
     //::std::deque< AttachedObject_Impl >::iterator aObjIt = (*aIt).aObjList.back();
     AttachedObject_Impl & rCurObj = aCurrentPosition->aObjList.back();
-#ifdef DEQUE_OK
     rCurObj.aAttachedListenerSeq = Sequence< Reference< XEventListener > >( aCurrentPosition->aEventList.size() );
-#else
-    rCurObj.aAttachedListenerSeq = Sequence< Reference< XEventListener > >( aCurrentPosition->aEventList.getLength() );
-#endif
     Reference< XEventListener > * pArray = rCurObj.aAttachedListenerSeq.getArray();
 
-#ifdef DEQUE_OK
     ::std::deque< ScriptEventDescriptor >::iterator aEvtIt =    aCurrentPosition->aEventList.begin();
     ::std::deque< ScriptEventDescriptor >::iterator aEvtEnd =   aCurrentPosition->aEventList.end();
     sal_Int32 i = 0;
@@ -761,27 +715,6 @@ void SAL_CALL ImplEventAttacherManager::attach(sal_Int32 nIndex, const Reference
         pArray[i++] = xAdapter;
         ++aEvtIt;
     }
-#else
-    sal_Int32 nLen = aCurrentPosition->aEventList.getLength();
-    ScriptEventDescriptor * pEL = aCurrentPosition->aEventList.getArray();
-    for(sal_Int32 i = 0; i < nLen; ++i )
-    {
-        Reference< XAllListener > xAll =
-            new AttacherAllListener_Impl( this, pEL[i].ScriptType, pEL[i].ScriptCode );
-        Reference< XEventListener > xAdapter;
-        try
-        {
-        xAdapter = xAttacher->attachSingleEventListener( rCurObj.xTarget, xAll,
-                        rCurObj.aHelper, pEL[i].ListenerType,
-                        pEL[i].AddListenerParam, pEL[i].EventMethod );
-        }
-        catch( Exception& )
-        {
-        }
-
-        pArray[i] = xAdapter;
-    }
-#endif
 }
 
 //-----------------------------------------------------------------------------
@@ -801,7 +734,6 @@ void SAL_CALL ImplEventAttacherManager::detach(sal_Int32 nIndex, const Reference
         if( (*aObjIt).xTarget == xObject )
         {
             Reference< XEventListener > * pArray = (*aObjIt).aAttachedListenerSeq.getArray();
-#ifdef DEQUE_OK
 
             ::std::deque< ScriptEventDescriptor >::iterator aEvtIt =    aCurrentPosition->aEventList.begin();
             ::std::deque< ScriptEventDescriptor >::iterator aEvtEnd =   aCurrentPosition->aEventList.end();
@@ -822,24 +754,6 @@ void SAL_CALL ImplEventAttacherManager::detach(sal_Int32 nIndex, const Reference
                 i++;
                 ++aEvtIt;
             }
-#else
-            sal_Int32 nLen = aCurrentPosition->aEventList.getLength();
-            ScriptEventDescriptor * pEL = aCurrentPosition->aEventList.getArray();
-            for( sal_Int32 i = 0; i < nLen; i++ )
-            {
-                if( pArray[i].is() )
-                {
-                    try
-                    {
-                    xAttacher->removeListener( (*aObjIt).xTarget, pEL[i].ListenerType,
-                                                pEL[i].AddListenerParam, pArray[i] );
-                    }
-                    catch( Exception& )
-                    {
-                    }
-                }
-            }
-#endif
             aCurrentPosition->aObjList.erase( aObjIt );
             break;
         }
@@ -892,7 +806,6 @@ void SAL_CALL ImplEventAttacherManager::write(const Reference< XObjectOutputStre
     ::std::deque<AttacherIndex_Impl>::iterator aEnd = aIndex.end();
     while( aIt != aEnd )
     {
-#ifdef DEQUE_OK
         // Laenge der Sequence und alle Descriptoren schreiben
         OutStream->writeLong( (*aIt).aEventList.size() );
         ::std::deque< ScriptEventDescriptor >::iterator aEvtIt =    (*aIt).aEventList.begin();
@@ -908,21 +821,6 @@ void SAL_CALL ImplEventAttacherManager::write(const Reference< XObjectOutputStre
 
             ++aEvtIt;
         }
-#else
-        sal_Int32 nLen = (*aIt).aEventList.getLength();
-        // Laenge der Sequence und alle Descriptoren schreiben
-        OutStream->writeLong( nLen );
-        ScriptEventDescriptor * pEL = (*aIt).aEventList.getArray();
-        for( sal_Int32 i = 0; i < nLen; i++ )
-        {
-            const ScriptEventDescriptor& rDesc = pEL[i];
-            OutStream->writeUTF( rDesc.ListenerType );
-            OutStream->writeUTF( rDesc.EventMethod );
-            OutStream->writeUTF( rDesc.AddListenerParam );
-            OutStream->writeUTF( rDesc.ScriptType );
-            OutStream->writeUTF( rDesc.ScriptCode );
-        }
-#endif
         ++aIt;
     }
 
