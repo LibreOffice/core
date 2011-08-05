@@ -47,7 +47,7 @@
 #define FILEVIEW_SHOW_SIZE          0x0020
 #define FILEVIEW_SHOW_DATE          0x0040
 #define FILEVIEW_SHOW_ALL           0x0070
-#define FILEVIEW_SHOW_NONE          0x00A0
+#define FILEVIEW_SHOW_NONE          0x0080
 
 class ViewTabListBox_Impl;
 class SvtFileView_Impl;
