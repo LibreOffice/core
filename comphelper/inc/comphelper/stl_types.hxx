@@ -91,12 +91,6 @@ struct UStringIEqual
 };
 
 //------------------------------------------------------------------------
-struct UStringHash
-{
-    size_t operator() (const ::rtl::OUString& rStr) const {return rStr.hashCode();}
-};
-
-//------------------------------------------------------------------------
 class UStringMixEqual
 {
     sal_Bool m_bCaseSensitive;

@@ -453,7 +453,7 @@
     //====================================================================
     //--------------------------------------------------------------------
 
-    typedef ::boost::unordered_map< ::rtl::OUString, sal_Int32, ::comphelper::UStringHash > HashMapString2Int;
+    typedef ::boost::unordered_map< ::rtl::OUString, sal_Int32, ::rtl::OUStringHash > HashMapString2Int;
     typedef ::std::vector< ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property > >   PropSeqArray;
     typedef ::std::vector< ::std::vector< sal_Int32 > > IntArrayArray;
 

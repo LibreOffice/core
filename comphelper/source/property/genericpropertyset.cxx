@@ -69,7 +69,7 @@ namespace comphelper
     {
     private:
         GenericAnyMapImpl   maAnyMap;
-        ::cppu::OMultiTypeInterfaceContainerHelperVar< ::rtl::OUString,UStringHash,UStringEqual> m_aListener;
+        ::cppu::OMultiTypeInterfaceContainerHelperVar< ::rtl::OUString, ::rtl::OUStringHash,UStringEqual> m_aListener;
 
     protected:
         virtual void _setPropertyValues( const PropertyMapEntry** ppEntries, const  Any* pValues ) throw( UnknownPropertyException,  PropertyVetoException,  IllegalArgumentException,  WrappedTargetException );
