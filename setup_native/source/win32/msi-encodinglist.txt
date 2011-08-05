@@ -66,6 +66,7 @@ kok      0  1111   # Konkani
 ks       0  1120   # Kashmiri
 ku       0  1574
 ky       0  2100
+lb    1252  1134
 lo       0  1108   # Lao
 lt    1257  1063   # Lithuanian
 lv    1257  1062   # Latvian
