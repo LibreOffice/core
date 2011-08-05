@@ -804,9 +804,6 @@ public:
         language/country, used in XML import */
     String GetStandardName( LanguageType eLnge );
 
-    /// Skip a NumberFormatter in stream, Chart needs this
-    static void SkipNumberFormatterInStream( SvStream& );
-
     /** Check if a specific locale has supported locale data. */
     static bool IsLocaleInstalled( LanguageType eLang )
     {
