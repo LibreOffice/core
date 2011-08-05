@@ -105,7 +105,6 @@ class SalSystem;
 class SalProcessWindowList;
 class SalTrayList;
 class UniqueIdContainer;
-class List;
 class ImplPrnQueueList;
 class ImplVDevCache;
 class UnoWrapperBase;
