@@ -211,7 +211,7 @@ namespace dbaui
             ,public listenerclass                                                           \
     {                                                                                       \
         typedef ::cppu::OMultiTypeInterfaceContainerHelperVar<                              \
-                ::rtl::OUString, ::comphelper::UStringHash, ::comphelper::UStringEqual >    ListenerContainerMap;   \
+                ::rtl::OUString, ::rtl::OUStringHash, ::comphelper::UStringEqual >  ListenerContainerMap;   \
         ListenerContainerMap    m_aListeners;                                               \
                                                                                             \
     public:                                                                                 \

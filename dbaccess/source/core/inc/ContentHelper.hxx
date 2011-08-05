@@ -86,7 +86,7 @@ namespace dbaccess
 
 
     typedef ::cppu::OMultiTypeInterfaceContainerHelperVar<  ::rtl::OUString,
-                                                            ::comphelper::UStringHash,
+                                                            ::rtl::OUStringHash,
                                                             ::comphelper::UStringEqual
                                                         > PropertyChangeListenerContainer;
     typedef ::comphelper::OBaseMutex    OContentHelper_MBASE;
