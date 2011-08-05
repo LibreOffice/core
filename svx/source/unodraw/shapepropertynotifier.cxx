@@ -79,7 +79,7 @@ namespace svx
     typedef ::boost::unordered_map< ShapeProperty, PPropertyValueProvider, ShapePropertyHash  >    PropertyProviders;
 
     typedef ::cppu::OMultiTypeInterfaceContainerHelperVar   <   ::rtl::OUString
-                                                            ,   ::comphelper::UStringHash
+                                                            ,   ::rtl::OUStringHash
                                                             ,   ::comphelper::UStringEqual
                                                             >   PropertyChangeListenerContainer;
 

@@ -207,7 +207,6 @@ private:
     typedef ::boost::unordered_map<
         ::rtl::OUString,ShapeTypeId,
         ::rtl::OUStringHash,
-        //        ::comphelper::UStringHash,
         ::comphelper::UStringEqual> tServiceNameToSlotId;
     mutable tServiceNameToSlotId maServiceNameToSlotId;
 
