@@ -57,6 +57,7 @@ fa \
 fi \
 fr \
 ga \
+gd \
 gl \
 gu \
 he \
@@ -75,6 +76,7 @@ ko \
 kok \
 ks \
 ku \
+lb \
 lo \
 lt \
 lv \
@@ -122,6 +124,7 @@ tr \
 tk \
 ts \
 tg \
+tt \
 ug \
 uk \
 uz \
