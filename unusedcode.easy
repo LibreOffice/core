@@ -3790,10 +3790,6 @@ svt::OWizardPage::OWizardPage(Window*, long)
 svt::RoadmapItem::GetClickHdl() const
 svt::RoadmapItem::SetLabel(rtl::OUString const&)
 svt::RoadmapItem::SetZOrder(svt::RoadmapItem*, unsigned short)
-svt::RoadmapWizard::GetRoadmapBitmap() const
-svt::RoadmapWizard::GetRoadmapHelpId() const
-svt::RoadmapWizard::IsRoadmapInteractive()
-svt::RoadmapWizard::SetRoadmapBitmap(BitmapEx const&)
 svt::SelectableFixedText::SelectableFixedText(Window*, long)
 svt::StatusbarController::getLayoutManager() const
 svt::StatusbarController::getServiceManager() const
