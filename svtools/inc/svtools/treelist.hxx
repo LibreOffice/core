@@ -289,7 +289,6 @@ class SVT_DLLPUBLIC SvTreeList
     SvListEntry*        LastSelected( const SvListView*) const;
 
     sal_Bool            Select( SvListView*,SvListEntry* pEntry, sal_Bool bSelect=sal_True );
-    sal_uLong           SelectChilds( SvListView*,SvListEntry* pParent, sal_Bool bSelect );
     void                SelectAll( SvListView*,sal_Bool bSelect ); // ruft nicht Select-Hdl
     sal_uLong           GetChildSelectionCount( const SvListView*,SvListEntry* pParent ) const;
 
@@ -520,9 +519,6 @@ public:
 
     sal_Bool            Select( SvListEntry* pEntry, sal_Bool bSelect=sal_True )
     { return pModel->Select((SvListView*)this,pEntry,bSelect); }
-
-    sal_uLong           SelectChilds( SvListEntry* pParent, sal_Bool bSelect )
-    { return pModel->SelectChilds((SvListView*)this,pParent, bSelect); }
 
     // ruft nicht Select-Hdl
     virtual void        SelectAll( sal_Bool bSelect, sal_Bool )

@@ -568,7 +568,6 @@ protected:
     using SvListView::Expand;
     using SvListView::Collapse;
     using SvListView::Select;
-    using SvListView::SelectChilds;
     using SvListView::SelectAll;
 };
 
