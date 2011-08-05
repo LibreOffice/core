@@ -86,8 +86,49 @@
   <draw:color draw:name="Pale yellow" draw:color="#ffffcc"/>
   <draw:color draw:name="Pale green" draw:color="#ccffff"/>
   <draw:color draw:name="Dark violet" draw:color="#660066"/>
-  <draw:color draw:name="Salmon" draw:color="#ff8080"/>
   <draw:color draw:name="Sea blue" draw:color="#0066cc"/>
+  <draw:color draw:name="SUSE Green" draw:color="#7ac142"/>
+  <draw:color draw:name="SUSE Blue Green" draw:color="#006f66"/>
+  <draw:color draw:name="SUSE Dark Neutral" draw:color="#454c51"/>
+  <draw:color draw:name="SUSE Bright Blue" draw:color="#00aeef"/>
+  <draw:color draw:name="SUSE Bright Green" draw:color="#c1d82f"/>
+  <draw:color draw:name="SUSE Bright Orange" draw:color="#f8981d"/>
+  <draw:color draw:name="SUSE Bright Yellow" draw:color="#ffdd00"/>
+  <draw:color draw:name="SUSE Bright Magenta" draw:color="#ec008c"/>
+  <draw:color draw:name="SUSE Bright Red" draw:color="#ed1c24"/>
+  <draw:color draw:name="SUSE Medium Dark Neutral" draw:color="#6a737b"/>
+  <draw:color draw:name="SUSE Medium Neutral" draw:color="#94a0a9"/>
+  <draw:color draw:name="SUSE Light Neutral" draw:color="#e4e5e6"/>
+  <draw:color draw:name="SUSE Tint Neutral" draw:color="#eff0f0"/>
+  <draw:color draw:name="SUSE Dark Blue" draw:color="#007fb2"/>
+  <draw:color draw:name="SUSE Medium Blue" draw:color="#63cae1"/>
+  <draw:color draw:name="SUSE Light Blue" draw:color="#ade0ee"/>
+  <draw:color draw:name="SUSE Tint Blue" draw:color="#ddf1f7"/>
+  <draw:color draw:name="SUSE Dark Green" draw:color="#439539"/>
+  <draw:color draw:name="SUSE Medium Green" draw:color="#7ac142"/>
+  <draw:color draw:name="SUSE Light Green" draw:color="#d0e4a6"/>
+  <draw:color draw:name="SUSE Tint Green" draw:color="#ebf6dc"/>
+  <draw:color draw:name="SUSE Dark Yellow" draw:color="#e37f1c"/>
+  <draw:color draw:name="SUSE Medium Yellow" draw:color="#f7ac07"/>
+  <draw:color draw:name="SUSE Light Yellow" draw:color="#ffd457"/>
+  <draw:color draw:name="SUSE Tint Yellow" draw:color="#fff6d4"/>
+  <draw:color draw:name="SUSE Dark Teal" draw:color="#5a9a98"/>
+  <draw:color draw:name="SUSE Medium Teal" draw:color="#72aeb6"/>
+  <draw:color draw:name="SUSE Light Teal" draw:color="#c3dfe0"/>
+  <draw:color draw:name="SUSE Tint Teal" draw:color="#d8e9e8"/>
+  <draw:color draw:name="SUSE Dark Purple" draw:color="#363c74"/>
+  <draw:color draw:name="SUSE Medium Purple" draw:color="#546291"/>
+  <draw:color draw:name="SUSE Light Purple" draw:color="#b5bbd4"/>
+  <draw:color draw:name="SUSE Tint Purple" draw:color="#dee6f3"/>
+  <draw:color draw:name="Novell red" draw:color="#e00000"/>
+  <draw:color draw:name="Novell orange" draw:color="#e67814"/>
+  <draw:color draw:name="Novell yellow" draw:color="#ffdd00"/>
+  <draw:color draw:name="Novell green" draw:color="#629e1f"/>
+  <draw:color draw:name="Novell teal" draw:color="#6ea19b"/>
+  <draw:color draw:name="Novell blue" draw:color="#1c82b9"/>
+  <draw:color draw:name="Novell light gray" draw:color="#cccccd"/>
+  <draw:color draw:name="Novell medium gray" draw:color="#5a5a64"/>
+  <draw:color draw:name="Novell dark gray" draw:color="#3c3c41"/>
   <draw:color draw:name="Chart 1" draw:color="#004586"/>
   <draw:color draw:name="Chart 2" draw:color="#ff420e"/>
   <draw:color draw:name="Chart 3" draw:color="#ffd320"/>
