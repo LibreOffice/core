@@ -583,7 +583,7 @@ sal_Bool SbaTableQueryBrowser::InitializeForm( const Reference< XPropertySet > &
             PROPERTY_HAVING_CLAUSE,
             PROPERTY_ORDER
         };
-        for ( size_t i=0; i < sizeof( aTransferProperties ) / sizeof( aTransferProperties[0] ); ++i )
+        for (size_t i = 0; i < SAL_N_ELEMENTS(aTransferProperties); ++i)
         {
             if ( !xPSI->hasPropertyByName( aTransferProperties[i] ) )
                 continue;
