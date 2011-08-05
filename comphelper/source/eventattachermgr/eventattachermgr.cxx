@@ -643,7 +643,7 @@ void SAL_CALL ImplEventAttacherManager::revokeScriptEvents(sal_Int32 nIndex )
     ::std::deque< AttachedObject_Impl > aList = (*aIt).aObjList;
     ::std::for_each(aList.begin(), aList.end(), DetachObject(*this, nIndex));
 #ifdef DEQUE_OK
-    (*aIt).aEventList = ::std::deque< ScriptEventDescriptor >();
+    (*aIt).aEventList.clear();
 #else
     (*aIt).aEventList.realloc( 0 );
 #endif
@@ -751,7 +751,7 @@ void SAL_CALL ImplEventAttacherManager::attach(sal_Int32 nIndex, const Reference
            try
         {
         xAdapter = xAttacher->attachSingleEventListener( rCurObj.xTarget, xAll,
-                        rCurObj.aHelper, (*aEvtIt).ScriptType,
+                        rCurObj.aHelper, (*aEvtIt).ListenerType,
                         (*aEvtIt).AddListenerParam, (*aEvtIt).EventMethod );
         }
         catch( Exception& )
