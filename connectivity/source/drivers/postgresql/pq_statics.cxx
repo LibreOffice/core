@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  *  $RCSfile: pq_statics.cxx,v $
@@ -51,6 +52,7 @@
  *  The Initial Developer of the Original Code is: Joerg Budischewski
  *
  *   Copyright: 2000 by Sun Microsystems, Inc.
+ *              2011 Lionel Elie Mamane <lionel@mamane.lu>
  *
  *   All Rights Reserved.
  *
@@ -80,10 +82,10 @@ namespace pq_sdbc_driver
 
 struct DefColumnMetaData
 {
-    sal_Char * columnName;
-    sal_Char * tableName;
-    sal_Char * schemaTableName;
-    sal_Char * typeName;
+    const sal_Char * columnName;
+    const sal_Char * tableName;
+    const sal_Char * schemaTableName;
+    const sal_Char * typeName;
     sal_Int32 type;
     sal_Int32 precision;
     sal_Int32 scale;

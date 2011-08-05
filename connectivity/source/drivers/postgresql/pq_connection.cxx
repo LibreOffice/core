@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  *  $RCSfile: pq_connection.cxx,v $
@@ -51,6 +52,7 @@
  *  The Initial Developer of the Original Code is: Joerg Budischewski
  *
  *   Copyright: 2000 by Sun Microsystems, Inc.
+ *              2011 Lionel Elie Mamane <lionel@mamane.lu>
  *
  *   All Rights Reserved.
  *
@@ -138,7 +140,7 @@ class ClosableReference : public cppu::WeakImplHelper1< com::sun::star::uno::XRe
     ::rtl::ByteSequence m_id;
 public:
     ClosableReference( const ::rtl::ByteSequence & id , Connection *that )
-        : m_id( id ), m_conn( that )
+      :  m_conn( that ), m_id( id )
     {
         that->acquire();
     }

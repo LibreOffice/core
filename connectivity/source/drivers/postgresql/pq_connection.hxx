@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  *  $RCSfile: pq_connection.hxx,v $
@@ -132,9 +133,9 @@ class Views;
 struct ConnectionSettings
 {
     ConnectionSettings() :
-        showSystemColumns( sal_False ),
-        pConnection(0),
         encoding( RTL_TEXTENCODING_UTF8),
+        pConnection(0),
+        showSystemColumns( sal_False ),
         logFile( 0 ),
         loglevel( LogLevel::INFO )
     {}

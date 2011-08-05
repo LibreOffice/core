@@ -1,3 +1,5 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+
 #include "pq_sequenceresultset.hxx"
 #include "pq_resultsetmetadata.hxx"
 
@@ -42,11 +44,11 @@ protected:
         const rtl::OUString &table,
         const com::sun::star::uno::Sequence< ::rtl::OUString > &primaryKey)
         : SequenceResultSet( mutex, owner, colNames, data, (*ppSettings)->tc ),
-          m_insertRow( false ),
-          m_primaryKey( primaryKey ),
-          m_table( table ),
+          m_ppSettings( ppSettings ),
           m_schema( schema ),
-          m_ppSettings( ppSettings )
+          m_table( table ),
+          m_primaryKey( primaryKey ),
+          m_insertRow( false )
     {
     }
 

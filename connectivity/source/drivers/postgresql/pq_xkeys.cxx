@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  *  $RCSfile: pq_xkeys.cxx,v $
@@ -51,6 +52,7 @@
  *  The Initial Developer of the Original Code is: Joerg Budischewski
  *
  *   Copyright: 2000 by Sun Microsystems, Inc.
+ *              2011 Lionel Elie Mamane <lionel@mamane.lu>
  *
  *   All Rights Reserved.
  *
@@ -124,9 +126,9 @@ Keys::~Keys()
 static sal_Int32 string2keytype( const rtl::OUString &type )
 {
     sal_Int32 ret = com::sun::star::sdbcx::KeyType::UNIQUE;
-    if( type.compareToAscii( RTL_CONSTASCII_STRINGPARAM( "p" ) ) == 0 )
+    if( type.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("p")) )
         ret = com::sun::star::sdbcx::KeyType::PRIMARY;
-    else if( type.compareToAscii( RTL_CONSTASCII_STRINGPARAM( "f" ) ) == 0 )
+    else if( type.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("f")) )
         ret =  com::sun::star::sdbcx::KeyType::FOREIGN;
     return ret;
 }

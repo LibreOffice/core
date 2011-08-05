@@ -52,6 +52,7 @@
  *  The Initial Developer of the Original Code is: Joerg Budischewski
  *
  *   Copyright: 2000 by Sun Microsystems, Inc.
+ *              2011 Lionel Elie Mamane <lionel@mamane.lu>
  *
  *   All Rights Reserved.
  *
@@ -236,9 +237,9 @@ public:
         const Sequence< OUString > & serviceNames,
         const Reference< XComponentContext > & defaultContext) :
         WeakComponentImplHelper2< XSingleComponentFactory, XServiceInfo >( this->m_mutex ),
-        m_implName( rImplementationName_ ),
         m_create( fptr ),
         m_serviceNames( serviceNames ),
+        m_implName( rImplementationName_ ),
         m_defaultContext( defaultContext )
     {
     }
