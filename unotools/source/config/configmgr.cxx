@@ -122,17 +122,23 @@ ConfigManager::~ConfigManager()
 {
     //check list content -> should be empty!
 #if OSL_DEBUG_LEVEL > 0
-    OSL_ENSURE(pMgrImpl->aItemList.empty(), "some ConfigItems are still alive");
+    if(!pMgrImpl->aItemList.empty())
+    {
+        ConfigItemList::iterator aListIter;
+        for (aListIter = pMgrImpl->aItemList.begin(); aListIter != pMgrImpl->aItemList.end(); ++aListIter)
+        {
+            ConfigItemListEntry_Impl& rEntry = *aListIter;
+            fprintf(stderr, "Dangling config item of %s\n", rtl::OUStringToOString(rEntry.pConfigItem->GetSubTreeName(), RTL_TEXTENCODING_UTF8).getStr());
+        }
+    }
 #endif
+    OSL_ENSURE(pMgrImpl->aItemList.empty(), "some ConfigItems are still alive");
     if(!pMgrImpl->aItemList.empty())
     {
         ConfigItemList::iterator aListIter;
         for(aListIter = pMgrImpl->aItemList.begin(); aListIter != pMgrImpl->aItemList.end(); ++aListIter)
         {
             ConfigItemListEntry_Impl& rEntry = *aListIter;
-#if OSL_DEBUG_LEVEL > 0
-            fprintf(stderr, "Dangling config item of %s\n", rtl::OUStringToOString(rEntry.pConfigItem->GetSubTreeName(), RTL_TEXTENCODING_UTF8).getStr());
-#endif
             rEntry.pConfigItem->ReleaseConfigMgr();
         }
         pMgrImpl->aItemList.erase(pMgrImpl->aItemList.begin(), pMgrImpl->aItemList.end());
