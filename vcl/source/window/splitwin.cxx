@@ -1434,6 +1434,7 @@ SplitWindow::~SplitWindow()
 {
     // Sets loeschen
     ImplDeleteSet( mpMainSet );
+    mpMainSet = NULL; //NULL for base-class callbacks during dtoring
 }
 
 // -----------------------------------------------------------------------
@@ -3375,7 +3376,7 @@ sal_uInt16 SplitWindow::GetSet( sal_uInt16 nId ) const
 sal_Bool SplitWindow::IsItemValid( sal_uInt16 nId ) const
 {
     sal_uInt16          nPos;
-    ImplSplitSet*   pSet = ImplFindItem( mpBaseSet, nId, nPos );
+    ImplSplitSet* pSet = mpBaseSet ? ImplFindItem(mpBaseSet, nId, nPos) : NULL;
 
     if ( pSet )
         return sal_True;
