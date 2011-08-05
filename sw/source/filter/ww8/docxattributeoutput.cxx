@@ -808,6 +808,8 @@ void DocxAttributeOutput::EndField_Impl( FieldInfos& rInfos )
         m_pSerializer->startElementNS( XML_w, XML_r, FSEND );
 
         String sExpand( rInfos.pField->ExpandField( true ) );
+        // newlines embedded in fields are 0x0B in MSO and 0x0A for us
+        // [maybe this is not necessary in docx, but safer to do]
         sExpand.SearchAndReplaceAll( 0x0A, 0x0B );
         RunText( sExpand );
 
