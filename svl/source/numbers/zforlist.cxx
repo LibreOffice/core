@@ -1525,9 +1525,31 @@ void SvNumberFormatter::GetInputLineString(const double& fOutNumber,
     }
     sal_uInt32 nKey = nFIndex;
     switch ( eType )
-    {   // #61619# immer vierstelliges Jahr editieren
+    {   // #61619# always edit using 4-digit year
         case NUMBERFORMAT_DATE :
-            nKey = GetFormatIndex( NF_DATE_SYS_DDMMYYYY, eLang );
+            if (::rtl::math::approxFloor( fOutNumber) != fOutNumber)
+                nKey = GetFormatIndex( NF_DATETIME_SYS_DDMMYYYY_HHMMSS, eLang );
+                // fdo#34977 preserve time when editing even if only date was
+                // displayed.
+            else
+                nKey = GetFormatIndex( NF_DATE_SYS_DDMMYYYY, eLang );
+        break;
+        case NUMBERFORMAT_TIME :
+            if (fOutNumber < 0.0 || fOutNumber >= 1.0)
+            {
+                /* XXX NOTE: this is a purely arbitrary value within the limits
+                 * of a signed 16-bit. 32k hours are 3.7 years ... or
+                 * 1903-09-26 if date. */
+                if (fabs( fOutNumber) * 24 < 0x7fff)
+                    nKey = GetFormatIndex( NF_TIME_HH_MMSS, eLang );
+                    // Preserve duration, use [HH]:MM:SS instead of time.
+                else
+                    nKey = GetFormatIndex( NF_DATETIME_SYS_DDMMYYYY_HHMMSS, eLang );
+                    // Assume that a large value is a datetime with only time
+                    // displayed.
+            }
+            else
+                nKey = GetStandardFormat( fOutNumber, nFIndex, eType, eLang );
         break;
         case NUMBERFORMAT_DATETIME :
             nKey = GetFormatIndex( NF_DATETIME_SYS_DDMMYYYY_HHMMSS, eLang );
