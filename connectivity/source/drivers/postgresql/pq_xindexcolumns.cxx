@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  *  $RCSfile: pq_xindexcolumns.cxx,v $
@@ -51,6 +52,7 @@
  *  The Initial Developer of the Original Code is: Joerg Budischewski
  *
  *   Copyright: 2000 by Sun Microsystems, Inc.
+ *              2011 Lionel Elie Mamane <lionel@mamane.lu>
  *
  *   All Rights Reserved.
  *
@@ -119,8 +121,8 @@ IndexColumns::IndexColumns(
     : Container( refMutex, origin, pSettings,  ASCII_STR( "INDEX_COLUMN" ) ),
       m_schemaName( schemaName ),
       m_tableName( tableName ),
-      m_columns( columns ),
-      m_indexName( indexName )
+      m_indexName( indexName ),
+      m_columns( columns )
 {}
 
 IndexColumns::~IndexColumns()

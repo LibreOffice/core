@@ -49,10 +49,10 @@ ResultSet::ResultSet( const ::rtl::Reference< RefCountedMutex > & refMutex,
     : BaseResultSet(
         refMutex, owner, PQntuples( result ),
         PQnfields( result ),(*ppSettings)->tc ),
-      m_ppSettings( ppSettings ),
       m_result( result ),
       m_schema( schema ),
-      m_table( table )
+      m_table( table ),
+      m_ppSettings( ppSettings )
 {
     sal_Bool b = sal_True;
 //     m_props[RESULTSET_IS_BOOKMARKABLE] = Any( &b, getBooleanCppuType() );
@@ -176,7 +176,6 @@ static bool isInteger( const char * data, sal_Int32 len )
 
 static bool isDate( const char * data, sal_Int32 len )
 {
-    bool ret = false;
     return 10 == len &&
         '-' == data[4] &&
         '-' == data[7] &&
@@ -187,7 +186,6 @@ static bool isDate( const char * data, sal_Int32 len )
 
 static bool isTime( const char * data, sal_Int32 len )
 {
-    bool ret = false;
     return 8 == len &&
         ':' == data[2] &&
         ':' == data[5] &&

@@ -196,10 +196,10 @@ PreparedStatement::PreparedStatement(
     const ::rtl::OString & stmt )
     : OComponentHelper( refMutex->mutex ),
       OPropertySetHelper( OComponentHelper::rBHelper ),
-      m_refMutex( refMutex ),
       m_connection( conn ),
       m_pSettings( pSettings ),
       m_stmt( stmt ),
+      m_refMutex( refMutex ),
       m_lastOidInserted( InvalidOid )
 {
     m_props[PREPARED_STATEMENT_QUERY_TIME_OUT] = makeAny( (sal_Int32)0 );
@@ -396,8 +396,8 @@ sal_Bool PreparedStatement::execute( )
 
     OStringBuffer buf( m_stmt.getLength() *2 );
 
-    int vars = 0;
-    for( int i = 0 ; i < m_splittedStatement.size() ; i ++ )
+    OStringVector::size_type vars = 0;
+    for( OStringVector::size_type i = 0 ; i < m_splittedStatement.size() ; ++i )
     {
         const OString &str = m_splittedStatement[i];
 //         printf( "Splitted %d %s\n" , i , str.getStr() );

@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  *  $RCSfile: pq_databasemetadata.cxx,v $
@@ -151,12 +152,10 @@ DatabaseMetaData::DatabaseMetaData(
     const ::rtl::Reference< RefCountedMutex > & refMutex,
     const ::com::sun::star::uno::Reference< com::sun::star::sdbc::XConnection >  & origin,
     ConnectionSettings *pSettings )
-    : m_pSettings( pSettings ),
-      m_origin( origin ),
-      m_refMutex( refMutex )
-
+  : m_refMutex( refMutex ),
+    m_pSettings( pSettings ),
+    m_origin( origin )
 {
-
 }
 
 sal_Bool DatabaseMetaData::allProceduresAreCallable(  ) throw (SQLException, RuntimeException)

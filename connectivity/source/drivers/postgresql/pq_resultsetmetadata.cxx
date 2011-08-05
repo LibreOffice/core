@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  *  $RCSfile: pq_resultsetmetadata.cxx,v $
@@ -51,6 +52,7 @@
  *  The Initial Developer of the Original Code is: Joerg Budischewski
  *
  *   Copyright: 2000 by Sun Microsystems, Inc.
+ *              2011 Lionel Elie Mamane <lionel@mamane.lu>
  *
  *   All Rights Reserved.
  *
@@ -154,15 +156,15 @@ ResultSetMetaData::ResultSetMetaData(
     const rtl::OUString &schemaName,
     const rtl::OUString &tableName ) :
     m_refMutex( refMutex ),
-    m_origin( origin ),
     m_ppSettings( ppSettings ),
-    m_colCount( PQnfields( pResult ) ),
+    m_origin( origin ),
     m_tableName( tableName ),
     m_schemaName( schemaName ),
+    m_colDesc( PQnfields( pResult ) ),
+    m_pResultSet( pResultSet ),
     m_checkedForTable( false ),
     m_checkedForTypes( false ),
-    m_colDesc( PQnfields( pResult ) ),
-    m_pResultSet( pResultSet )
+    m_colCount( PQnfields( pResult ) )
 {
 
     // extract all needed information from the result object, so that we don't
@@ -219,7 +221,7 @@ void ResultSetMetaData::checkForTypes()
 
             sal_Int32 type = typeNameToDataType( typeName, typType );
 
-            for( int j = 0; j < m_colCount ; j ++ )
+            for( sal_Int32 j = 0; j < m_colCount ; j ++ )
             {
                 if( m_colDesc[j].typeOid == oid )
                 {

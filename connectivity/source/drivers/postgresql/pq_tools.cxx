@@ -1,3 +1,5 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+
 #include <rtl/strbuf.hxx>
 #include <rtl/ustrbuf.hxx>
 
@@ -1110,7 +1112,7 @@ void extractNameValuePairsFromInsert( String2StringMap & map, const rtl::OString
             {
                 n +=2;
 //                 printf( "3\n" );
-                for ( int i = 0 ; i < names.size() && nSize > n ; i ++ )
+                for ( OStringVector::size_type i = 0 ; i < names.size() && nSize > n ; i ++ )
                 {
                     map[names[i]] = vec[n];
                     if( nSize > n+1 && equalsIgnoreCase( vec[n+1] , RTL_CONSTASCII_STRINGPARAM(",") ) )

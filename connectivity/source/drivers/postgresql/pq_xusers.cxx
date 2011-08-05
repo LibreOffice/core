@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  *  $RCSfile: pq_xusers.cxx,v $
@@ -51,6 +52,7 @@
  *  The Initial Developer of the Original Code is: Joerg Budischewski
  *
  *   Copyright: 2000 by Sun Microsystems, Inc.
+ *              2011 Lionel Elie Mamane <lionel@mamane.lu>
  *
  *   All Rights Reserved.
  *
@@ -165,7 +167,6 @@ void Users::appendByDescriptor(
            ::com::sun::star::uno::RuntimeException)
 {
     osl::MutexGuard guard( m_refMutex->mutex );
-    Statics &st = getStatics();
 
     OUStringBuffer update( 128 );
     update.appendAscii( RTL_CONSTASCII_STRINGPARAM( "CREATE USER " ) );
@@ -217,7 +218,6 @@ void Users::dropByIndex( sal_Int32 index )
 
     Reference< XPropertySet > set;
     m_values[index] >>= set;
-    Statics &st = getStatics();
     OUString name;
     set->getPropertyValue( getStatics().NAME ) >>= name;
 

@@ -243,7 +243,15 @@ public: // OPropertySetHelper
         const ::com::sun::star::uno::Any& rValue )
         throw (::com::sun::star::uno::Exception);
 
-    virtual void SAL_CALL getFastPropertyValue(
+    ::com::sun::star::uno::Any SAL_CALL getFastPropertyValue( sal_Int32 nHandle )
+        throw(::com::sun::star::beans::UnknownPropertyException,
+              ::com::sun::star::lang::WrappedTargetException,
+              ::com::sun::star::uno::RuntimeException)
+    {
+        return ::cppu::OPropertySetHelper::getFastPropertyValue(nHandle);
+    }
+
+    void SAL_CALL getFastPropertyValue(
         ::com::sun::star::uno::Any& rValue,
         sal_Int32 nHandle ) const;
 

@@ -162,7 +162,7 @@ public:
     }
 };
 
-OUString 	ConnectionGetImplementationName()
+OUString    ConnectionGetImplementationName()
 {
     return OUString( RTL_CONSTASCII_USTRINGPARAM( "org.openoffice.comp.connectivity.pq.Connection" ) );
 }
@@ -462,8 +462,7 @@ static OString properties2String( const OString initialString,
     if( initialString.getLength() )
         ret.append( " " );
 
-    bool initial = false;
-    for( int i = 0; i < args.getLength() ; i ++)
+    for( int i = 0; i < args.getLength() ; ++i )
     {
         bool append = true;
         if( args[i].Name.matchIgnoreAsciiCaseAsciiL( RTL_CONSTASCII_STRINGPARAM( "password" ) ) )
@@ -498,6 +497,7 @@ static OString properties2String( const OString initialString,
         {
             append = false;
             // ignore for now
+        OSL_TRACE("sdbc-postgresql: unknown argument '%s'", ::rtl::OUStringToOString( args[i].Name, RTL_TEXTENCODING_UTF8 ).getStr() );
         }
         if( append )
         {

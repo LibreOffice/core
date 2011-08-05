@@ -61,7 +61,6 @@
  ************************************************************************/
 
 #include <vector>
-#include <hash_map>
 
 #include <rtl/ustrbuf.hxx>
 #include <rtl/strbuf.hxx>

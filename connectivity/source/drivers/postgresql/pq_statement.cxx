@@ -52,6 +52,7 @@
  *  The Initial Developer of the Original Code is: Joerg Budischewski
  *
  *   Copyright: 2000 by Sun Microsystems, Inc.
+ *              2011 Lionel Elie Mamane <lionel@mamane.lu>
  *
  *   All Rights Reserved.
  *
@@ -190,9 +191,9 @@ Statement::Statement( const ::rtl::Reference< RefCountedMutex > & refMutex,
                       struct ConnectionSettings *pSettings )
     : OComponentHelper( refMutex->mutex ),
       OPropertySetHelper( OComponentHelper::rBHelper ),
-      m_refMutex( refMutex ),
       m_connection( conn ),
       m_pSettings( pSettings ),
+      m_refMutex( refMutex ),
       m_lastOidInserted( InvalidOid )
 {
     m_props[STATEMENT_QUERY_TIME_OUT] = makeAny( (sal_Int32)0 );
@@ -746,6 +747,8 @@ static void getAutoValues(
                   "WHERE pg_attribute.attrelid = pg_class.oid AND "
                         "pg_class.relnamespace = pg_namespace.oid AND "
                         "pg_namespace.nspname = ? AND "
+                  // LEM TODO: this is weird; why "LIKE" and not "="?
+                  // Most probably gives problems if tableName contains '%'
                         "pg_class.relname LIKE ? AND "
                         "pg_attrdef.adsrc != ''"
             ) );
@@ -807,7 +810,7 @@ Reference< XResultSet > getGeneratedValuesFromLastInsert(
 //             buf.append( "," );
 //         }
 //         buf.append( "]\n" );
-//         printf( buf.makeStringAndClear() );
+//         printf( "%s", buf.makeStringAndClear() );
 
         // TODO: make also unqualified tables names work here. Have a look at 2.8.3. The Schema Search Path
         //       in postgresql doc
@@ -844,29 +847,29 @@ Reference< XResultSet > getGeneratedValuesFromLastInsert(
                         getAutoValues( autoValues, connection, schemaName, tableName );
                     }
                     // this could mean, that the column is a default or auto value, check this ...
-                    String2StringMap::iterator ii = autoValues.begin();
-                    for( ; ii != autoValues.end() ; ++ii )
+                    String2StringMap::iterator j = autoValues.begin();
+                    for( ; j != autoValues.end() ; ++j )
                     {
-                        if( columnName.equalsIgnoreAsciiCase( ii->first ) )
+                        if( columnName.equalsIgnoreAsciiCase( j->first ) )
                         {
                             // it is indeed an auto value.
-                            value = OStringToOUString(ii->second, RTL_TEXTENCODING_ASCII_US );
+                            value = OStringToOUString(j->second, RTL_TEXTENCODING_ASCII_US );
                             // check, whether it is a sequence
 
                             if( rtl_str_shortenedCompare_WithLength(
-                                    ii->second.getStr(), ii->second.getLength(),
+                                    j->second.getStr(), j->second.getLength(),
                                     RTL_CONSTASCII_STRINGPARAM( "nextval(" ), 8 ) == 0 )
                             {
                                 // retrieve current sequence value:
                                 OUStringBuffer myBuf(128 );
                                 myBuf.appendAscii( RTL_CONSTASCII_STRINGPARAM( "SELECT currval(" ) );
-                                myBuf.appendAscii( &(ii->second.getStr()[8]));
+                                myBuf.appendAscii( &(j->second.getStr()[8]));
                                 value = querySingleValue( connection, myBuf.makeStringAndClear() );
                             }
                             break;
                         }
                     }
-                    if( ii == autoValues.end() )
+                    if( j == autoValues.end() )
                     {
                         // it even was no autovalue, no sense to continue as we can't query the
                         // inserted row

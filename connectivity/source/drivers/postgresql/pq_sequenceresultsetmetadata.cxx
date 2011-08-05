@@ -18,8 +18,8 @@ SequenceResultSetMetaData::SequenceResultSetMetaData(
     const ColumnMetaDataVector &metaDataVector,
     int colCount ) :
     m_refMutex( refMutex ),
-    m_colCount( colCount ),
-    m_columnData( metaDataVector )
+    m_columnData( metaDataVector ),
+    m_colCount( colCount )
 {
 }
 

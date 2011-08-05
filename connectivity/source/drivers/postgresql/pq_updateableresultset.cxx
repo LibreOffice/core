@@ -206,9 +206,8 @@ void UpdateableResultSet::insertRow(  ) throw (SQLException, RuntimeException)
     bufferQuoteQualifiedIdentifier( buf, m_schema, m_table );
     buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( " ( " ) );
 
-    int i;
     int columns = 0;
-    for( i = 0 ; i < m_updateableField.size() ; i++ )
+    for( UpdateableFieldVector::size_type i = 0 ; i < m_updateableField.size() ; i++ )
     {
         if( m_updateableField[i].isTouched )
         {
@@ -221,7 +220,7 @@ void UpdateableResultSet::insertRow(  ) throw (SQLException, RuntimeException)
     buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( " ) VALUES ( " ) );
 
     columns = 0;
-    for( i = 0 ; i < m_updateableField.size() ; i ++ )
+    for( UpdateableFieldVector::size_type i = 0 ; i < m_updateableField.size() ; i ++ )
     {
         if( m_updateableField[i].isTouched )
         {
@@ -256,7 +255,7 @@ void UpdateableResultSet::insertRow(  ) throw (SQLException, RuntimeException)
         {
             Reference< XColumnLocate > columnLocate( rs, UNO_QUERY );
             Reference< XRow> xRow ( rs, UNO_QUERY );
-            for( i = 0 ; i < m_fieldCount ; i++ )
+            for( int i = 0 ; i < m_fieldCount ; i++ )
             {
                 int field = columnLocate->findColumn( m_columnNames[i] );
                 if( field >= 1 )
@@ -301,8 +300,8 @@ void UpdateableResultSet::updateRow(  ) throw (SQLException, RuntimeException)
     bufferQuoteQualifiedIdentifier( buf, m_schema, m_table );
     buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( "SET " ) );
 
-    int columns = 0,i;
-    for( i = 0; i < m_updateableField.size() ; i ++ )
+    int columns = 0;
+    for( UpdateableFieldVector::size_type i = 0; i < m_updateableField.size() ; i ++ )
     {
         if( m_updateableField[i].isTouched )
         {
@@ -326,7 +325,7 @@ void UpdateableResultSet::updateRow(  ) throw (SQLException, RuntimeException)
     stmt->executeUpdate( buf.makeStringAndClear() );
 
     // reflect the changes !
-    for( i = 0 ; i < m_fieldCount ; i ++ )
+    for( int i = 0 ; i < m_fieldCount ; i ++ )
     {
         if( m_updateableField[i].isTouched  )
             m_data[m_row][i] = m_updateableField[i].value;

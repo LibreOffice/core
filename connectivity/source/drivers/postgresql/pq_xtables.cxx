@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  *  $RCSfile: pq_xtables.cxx,v $
@@ -267,7 +268,6 @@ static void appendKeyList(
         Reference< XEnumerationAccess > keys( keySupplier->getKeys(), UNO_QUERY );
         if(keys.is() )
         {
-            Statics &st = getStatics();
             Reference< XEnumeration > xEnum = keys->createEnumeration();
             while( xEnum.is() && xEnum->hasMoreElements() )
             {

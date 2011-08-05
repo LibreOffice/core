@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  *  $RCSfile: pq_baseresultset.cxx,v $
@@ -51,6 +52,7 @@
  *  The Initial Developer of the Original Code is: Joerg Budischewski
  *
  *   Copyright: 2000 by Sun Microsystems, Inc.
+ *              2011 Lionel Elie Mamane <lionel@mamane.lu>
  *
  *   All Rights Reserved.
  *
@@ -161,12 +163,12 @@ BaseResultSet::BaseResultSet(
     const Reference< com::sun::star::script::XTypeConverter > & tc )
     : OComponentHelper( refMutex->mutex ),
       OPropertySetHelper( OComponentHelper::rBHelper ),
-      m_refMutex( refMutex ),
       m_owner( owner ),
+      m_tc( tc ),
+      m_refMutex( refMutex ),
       m_row( -1 ),
       m_rowCount( rowCount ),
-      m_fieldCount( colCount ),
-      m_tc( tc )
+      m_fieldCount( colCount )
 {
     POSTGRE_TRACE( "ctor BaseResultSet" );
 }
@@ -431,8 +433,6 @@ sal_Bool BaseResultSet::getBoolean( sal_Int32 columnIndex ) throw (SQLException,
     checkColumnIndex( columnIndex );
     checkRowIndex( sal_True /* must be on row */ );
 
-    sal_Bool b = sal_False;
-
     OUString str = getString( columnIndex );
 
     if( str.getLength() > 0 )
@@ -579,6 +579,7 @@ Sequence< sal_Int8 > BaseResultSet::getBytes( sal_Int32 columnIndex )
     return string2DateTime( getString( columnIndex ) );
 }
 
+  // LEM TODO: these look like they are missing an actual implementation
 Reference< ::com::sun::star::io::XInputStream > BaseResultSet::getBinaryStream( sal_Int32 columnIndex )
         throw (SQLException, RuntimeException)
 {

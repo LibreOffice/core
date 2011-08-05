@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  *  $RCSfile: pq_array.hxx,v $
@@ -51,6 +52,7 @@
  *  The Initial Developer of the Original Code is: Joerg Budischewski
  *
  *   Copyright: 2000 by Sun Microsystems, Inc.
+ *              2011 Lionel Elie Mamane <lionel@mamane.lu>
  *
  *   All Rights Reserved.
  *
@@ -82,10 +84,10 @@ public:
         const com::sun::star::uno::Sequence< com::sun::star::uno::Any > & data,
         const com::sun::star::uno::Reference< com::sun::star::uno::XInterface > & owner,
         const com::sun::star::uno::Reference< com::sun::star::script::XTypeConverter > &tc) :
-        m_refMutex( mutex ),
         m_data( data ),
         m_owner( owner ),
-        m_tc( tc )
+        m_tc( tc ),
+        m_refMutex( mutex )
     {}
 
 public: // XArray
