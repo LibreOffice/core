@@ -354,7 +354,6 @@ public:
     sal_uLong           Insert( SvListEntry* pEntry,sal_uLong nRootPos = ULONG_MAX )
     { return Insert(pEntry, pRootItem, nRootPos ); }
 
-    void                InsertTree( SvListEntry* pTree, SvListEntry* pTarget );
     void                InsertTree( SvListEntry* pTree, SvListEntry* pTargetParent, sal_uLong nListPos );
 
     // Entries muessen im gleichen Model stehen!

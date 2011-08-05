@@ -324,7 +324,6 @@ protected:
 
     virtual sal_uLong Insert( SvLBoxEntry* pEnt,SvLBoxEntry* pPar,sal_uLong nPos=LIST_APPEND);
     virtual sal_uLong Insert( SvLBoxEntry* pEntry,sal_uLong nRootPos = LIST_APPEND );
-    void            InsertTree( SvLBoxEntry* pTree, SvLBoxEntry* pTarget) {pModel->InsertTree( pTree, pTarget ); }
 
     // Inplace-Editing
     SvInplaceEdit2*  pEdCtrl;
