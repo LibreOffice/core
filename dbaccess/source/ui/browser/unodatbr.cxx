@@ -590,7 +590,8 @@ sal_Bool SbaTableQueryBrowser::InitializeForm( const Reference< XPropertySet > &
             aPropertyValues.put( aTransferProperties[i], pData->xObjectProperties->getPropertyValue( aTransferProperties[i] ) );
         }
 
-        const ::std::vector< ::rtl::OUString > aNames( aPropertyValues.getNames() );
+        ::std::vector< ::rtl::OUString > aNames( aPropertyValues.getNames() );
+        ::std::sort(aNames.begin(), aNames.end());
         Sequence< ::rtl::OUString > aPropNames( aNames.size() );
         ::std::copy( aNames.begin(), aNames.end(), aPropNames.getArray() );
 
