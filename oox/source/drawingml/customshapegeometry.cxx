@@ -91,7 +91,7 @@ static FormularCommandNameTable pFormularCommandNameTable[] =
     { "val",    FC_VAL }
 
 };
-typedef boost::unordered_map< rtl::OUString, FormularCommand, comphelper::UStringHash, comphelper::UStringEqual > FormulaCommandHMap;
+typedef boost::unordered_map< rtl::OUString, FormularCommand, rtl::OUStringHash, comphelper::UStringEqual > FormulaCommandHMap;
 
 static const FormulaCommandHMap* pCommandHashMap;
 
