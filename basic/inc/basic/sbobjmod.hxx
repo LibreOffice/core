@@ -46,9 +46,6 @@ namespace css = ::com::sun::star;
 
 class BASIC_DLLPUBLIC SbObjModule : public SbModule
 {
-    BASIC_DLLPRIVATE SbObjModule( const SbObjModule& );
-    BASIC_DLLPRIVATE SbObjModule();
-
 protected:
     virtual ~SbObjModule();
 
@@ -75,8 +72,6 @@ class BASIC_DLLPUBLIC SbUserFormModule : public SbObjModule
     css::uno::Reference<css::frame::XModel> m_xModel;
     String sFormName;
     bool mbInit;
-    BASIC_DLLPRIVATE SbUserFormModule( const SbUserFormModule& );
-    BASIC_DLLPRIVATE SbUserFormModule();
 
 //protected:
     virtual void InitObject();

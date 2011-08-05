@@ -35,8 +35,8 @@
 #include <basic/sbxdef.hxx>
 #include <rtl/ustring.hxx>
 #include <vector>
-
 #include <deque>
+#include <boost/utility.hpp>
 #include "basicdllapi.h"
 
 class SbMethod;
@@ -53,7 +53,7 @@ struct ClassModuleRunInitItem;
 struct SbClassData;
 class SbModuleImpl;
 
-class BASIC_DLLPUBLIC SbModule : public SbxObject
+class BASIC_DLLPUBLIC SbModule : public SbxObject, private ::boost::noncopyable
 {
     friend class    TestToolObj;    // allows module initialisation at runtime
     friend class    SbiCodeGen;
@@ -64,8 +64,6 @@ class BASIC_DLLPUBLIC SbModule : public SbxObject
 
     SbModuleImpl*   mpSbModuleImpl;     // Impl data
     std::vector< String > mModuleVariableNames;
-    BASIC_DLLPRIVATE SbModule();
-    BASIC_DLLPRIVATE SbModule(const SbModule&);
 
     BASIC_DLLPRIVATE void implClearIfVarDependsOnDeletedBasic( SbxVariable* pVar, StarBASIC* pDeletedBasic );
 
