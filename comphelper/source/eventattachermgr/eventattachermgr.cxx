@@ -57,6 +57,7 @@
 
 #include <deque>
 #include <algorithm>
+#include <functional>
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::io;
