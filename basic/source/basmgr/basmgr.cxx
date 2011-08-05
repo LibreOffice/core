@@ -42,7 +42,6 @@
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 #include <basic/sbmod.hxx>
-#include <basic/sbobjmod.hxx>
 #include <unotools/intlwrapper.hxx>
 #include <comphelper/processfactory.hxx>
 
