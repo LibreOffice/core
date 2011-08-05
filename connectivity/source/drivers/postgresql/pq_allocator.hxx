@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  *  $RCSfile: pq_allocator.hxx,v $
@@ -67,6 +68,8 @@
 
 #include <cstddef>
 #include "sal/types.h"
+
+#include "pq_common.hxx"
 
 /** jbu: This source has been copied from sal/inc/internal/allocator.hxx,
          because it is not a public interface. Thx a lot for figuring this
@@ -160,14 +163,14 @@ public:
        are not enabled, e.g. GCC under Linux and it is
        in general not desired to compile sal with exceptions
        enabled. */
-    pointer allocate (size_type n, const void* hint = 0)
+    pointer allocate (size_type n, const void* UNUSED(hint) = 0)
     {
         return reinterpret_cast<pointer>(
             rtl_allocateMemory(sal_uInt32(n * sizeof(T))));
     }
 
     //-----------------------------------------
-    void deallocate (pointer p, size_type n)
+    void deallocate (pointer p, size_type UNUSED(n))
     {
         rtl_freeMemory(p);
     }
@@ -234,4 +237,4 @@ namespace _STL
 #endif
 #endif
 
-#endif /* INCLUDED_SAL_INTERNAL_ALLOCATOR_HXX */
+#endif /* _PQ_ALLOCATOR_ */
