@@ -137,8 +137,6 @@ public:
     PeerHandle GetPeer() const;
     Context *getContext();
 
-    void Enable( bool bEnable = true );
-    inline void Disable() { Enable( false ); }
     void Show( bool bVisible = true );
     inline void Hide() { Show( false ); }
     void GrabFocus();
