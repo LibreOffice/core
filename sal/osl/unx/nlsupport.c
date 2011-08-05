@@ -908,8 +908,8 @@ void _imp_getProcessLocale( rtl_Locale ** ppLocale )
     setenv("LC_CTYPE", locale, 1 );
     setenv("LANG", locale, 1 );
 
-#ifdef DEBUG
-    fprintf( stderr, "nlsupport.c:  _imp_getProcessLocale() returning %s as current locale.\n", locale );
+#if OSL_DEBUG_LEVEL > 1
+    OSL_TRACE("_imp_getProcessLocale() returning %s as current locale.\n", locale );
 #endif
 
 //    pthread_mutex_unlock( &aLocalMutex );
