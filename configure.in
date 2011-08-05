@@ -4920,12 +4920,6 @@ AC_MSG_CHECKING([whether to build the MySQL Connector extension])
 if test -n "$enable_ext_mysql_connector" -a "$enable_ext_mysql_connector" != "no"; then
     AC_MSG_RESULT([yes])
     ENABLE_MYSQLC=YES
-    AC_MSG_CHECKING([for mysqlc module])
-    if test -d mysqlc; then
-        AC_MSG_RESULT([OK])
-    else
-        AC_MSG_ERROR([not existing. get it (did you get the -extensions tarball?)])
-    fi
     BUILD_TYPE="$BUILD_TYPE MYSQLC"
 else
     AC_MSG_RESULT([no])
