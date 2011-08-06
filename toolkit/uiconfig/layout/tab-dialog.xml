@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<dialog xmlns="http://openoffice.org/2007/layout"
+    xmlns:cnt="http://openoffice.org/2007/layout/container"
+    _title="layout::TabDialog" optimumsize="true"
+    id="tab-dialog"
+    has_border="true" sizeable="true" moveable="true">
+    <vbox spacing="5" border="5">
+    <tabcontrol id="ID_TABCONTROL"/>
+    <dialogbuttonhbox border="5" spacing="5" cnt:expand="false">
+        <flow/>
+        <okbutton defbutton="true" id="BTN_OK" show="false"/>
+        <pushbutton id="BTN_USER" _label="&lt;User&gt;" show="false"/>
+        <cancelbutton id="BTN_CANCEL" show="false"/>
+        <helpbutton id="BTN_HELP" show="false"/>
+        <resetbutton id="BTN_RESET" show="false"/>
+        <pushbutton id="BTN_BASEFMT" _label="&lt;Base Format&gt;" show="false"/>
+    </dialogbuttonhbox>
+    </vbox>
+</dialog>

@@ -1,0 +1,35 @@
+### i85237 ###
+svtools.AccessibleBrowseBox::com::sun::star::accessibility::XAccessibleEventBroadcaster
+
+### i85238 ###
+svtools.AccessibleBrowseBox::com::sun::star::accessibility::XAccessibleContext
+
+### i85239 ###
+svtools.AccessibleBrowseBoxHeaderBar::com::sun::star::accessibility::XAccessibleEventBroadcaster
+
+### i85240 ###
+svtools.AccessibleTabBar::com::sun::star::accessibility::XAccessibleEventBroadcaster
+
+### i85244 ###
+svtools.AccessibleTabBarPage::com::sun::star::accessibility::XAccessibleEventBroadcaster
+
+### i85245 ###
+svtools.AccessibleBrowseBoxTableCell
+# -> test is disabled in svtools.sce
+
+### i85246 ###
+svtools.AccessibleTabBarPageList
+# -> test is disabled in svtools.sce
+
+### i88276 ###
+svtools.AccessibleIconChoiceCtrlEntry
+# -> test is disabled in svtools.sce
+
+### i88296 ###
+svtools.AccessibleTreeListBox::com::sun::star::accessibility::XAccessibleEventBroadcaster
+
+### i88300 ###
+svtools.AccessibleTreeListBoxEntry::com::sun::star::accessibility::XAccessibleText
+
+### i88647 ###
+svtools.AccessibleTabBarPage

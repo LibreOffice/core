@@ -1,0 +1,59 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef _SVTOOLS_TEMPLWIN_HRC
+#define _SVTOOLS_TEMPLWIN_HRC
+
+#define FL_DOCTEMPLATE          10
+#define BTN_DOCTEMPLATE_MANAGE  11
+#define BTN_DOCTEMPLATE_EDIT    12
+#define BTN_DOCTEMPLATE_OPEN    13
+#define BTN_DOCTEMPLATE_CANCEL  14
+#define BTN_DOCTEMPLATE_HELP    15
+#define FT_DOCTEMPLATE_LINK     16
+
+#define TI_DOCTEMPLATE_BACK     1
+#define TI_DOCTEMPLATE_PREV     2
+#define TI_DOCTEMPLATE_PRINT    3
+#define TI_DOCTEMPLATE_DOCINFO  4
+#define TI_DOCTEMPLATE_PREVIEW  5
+
+#define HBI_CATEGORY            1
+
+#define DI_TITLE                1
+#define DI_FROM                 2
+#define DI_DATE                 3
+#define DI_KEYWORDS             4
+#define DI_DESCRIPTION          5
+#define DI_MIMETYPE             6
+#define DI_MODIFIEDDATE         7
+#define DI_MODIFIEDBY           8
+#define DI_PRINTDATE            9
+#define DI_PRINTBY              10
+#define DI_THEME                11
+#define DI_SIZE                 12
+
+#endif // _SVTOOLS_TEMPLWIN_HRC

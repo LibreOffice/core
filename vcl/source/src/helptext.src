@@ -1,0 +1,138 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#define _SV_HELPTEXT_SRC
+
+#include <svids.hrc>
+
+String SV_HELPTEXT_CLOSE
+{
+    Text [ en-US ] = "Close";
+};
+String SV_HELPTEXT_CLOSEDOCUMENT
+{
+    Text [ en-US ] = "Close Document";
+};
+String SV_HELPTEXT_MINIMIZE
+{
+    Text [ en-US ] = "Minimize";
+};
+
+String SV_HELPTEXT_MAXIMIZE
+{
+    Text [ en-US ] = "Maximize";
+};
+
+String SV_HELPTEXT_RESTORE
+{
+    Text [ en-US ] = "Restore";
+};
+
+String SV_HELPTEXT_ROLLDOWN
+{
+    Text [ en-US ] = "Drop down";
+};
+
+String SV_HELPTEXT_ROLLUP
+{
+    Text [ en-US ] = "Roll up";
+};
+
+String SV_HELPTEXT_HELP
+{
+    Text [ en-US ] = "Help";
+};
+
+String SV_HELPTEXT_ALWAYSVISIBLE
+{
+    Text [ en-US ] = "Always visible";
+};
+
+String SV_HELPTEXT_FADEIN
+{
+    Text [ en-US ] = "Show";
+};
+
+String SV_HELPTEXT_FADEOUT
+{
+    Text [ en-US ] = "Hide";
+};
+
+String SV_HELPTEXT_SPLITFLOATING
+{
+    Text [ en-US ] = "Floating";
+};
+
+String SV_HELPTEXT_SPLITFIXED
+{
+    Text [ en-US ] = "Stick";
+};
+
+String SV_SHORTCUT_HELP
+{
+    Text [ en-US ] = "Help" ;
+};
+
+String SV_SHORTCUT_CONTEXTHELP
+{
+    Text [ en-US ] = "Context Help";
+};
+
+String SV_SHORTCUT_ACTIVEHELP
+{
+    Text [ en-US ] = "Extended Tips";
+};
+
+String SV_SHORTCUT_DOCKUNDOCK
+{
+    Text [ en-US ] = "Dock/Undock Windows";
+};
+
+String SV_SHORTCUT_NEXTSUBWINDOW
+{
+    Text [ en-US ] = "To Next Toolbar/Window";
+};
+
+String SV_SHORTCUT_PREVSUBWINDOW
+{
+    Text [ en-US ] = "To Previous Toolbar/Window";
+};
+
+String SV_SHORTCUT_TODOCUMENT
+{
+    Text [ en-US ] = "To Document";
+};
+
+String SV_SHORTCUT_MENUBAR
+{
+    Text [ en-US ] = "To Menu Bar";
+};
+
+String SV_SHORTCUT_SPLITTER
+{
+    Text [ en-US ] = "Split window separator" ;
+};

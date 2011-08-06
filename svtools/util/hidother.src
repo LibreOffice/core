@@ -1,0 +1,79 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#include "../inc/svtools/helpid.hrc"         // HID_XXX
+
+hidspecial HID_TEMPLATEDLG_ICONCTRL             { HelpID = HID_TEMPLATEDLG_ICONCTRL; }
+hidspecial HID_TEMPLATEDLG_FILEVIEW             { HelpID = HID_TEMPLATEDLG_FILEVIEW; };
+
+hidspecial HID_ADDRTEMPL_FIELD_ASSIGNMENT       { HelpID = HID_ADDRTEMPL_FIELD_ASSIGNMENT; };
+
+hidspecial HID_FILESAVE_LEVELUP                 { HelpID = HID_FILESAVE_LEVELUP; };
+hidspecial HID_FILESAVE_CREATEDIRECTORY         { HelpID = HID_FILESAVE_CREATEDIRECTORY; };
+hidspecial HID_FILESAVE_DEFAULTDIRECTORY        { HelpID = HID_FILESAVE_DEFAULTDIRECTORY; };
+hidspecial HID_FILESAVE_FILEVIEW                { HelpID = HID_FILESAVE_FILEVIEW; };
+hidspecial HID_FILESAVE_TEMPLATE                { HelpID = HID_FILESAVE_TEMPLATE; };
+hidspecial HID_FILESAVE_FILEURL                 { HelpID = HID_FILESAVE_FILEURL; };
+hidspecial HID_FILESAVE_FILETYPE                { HelpID = HID_FILESAVE_FILETYPE; };
+hidspecial HID_FILESAVE_DOSAVE                  { HelpID = HID_FILESAVE_DOSAVE; };
+hidspecial HID_FILESAVE_AUTOEXTENSION           { HelpID = HID_FILESAVE_AUTOEXTENSION; };
+hidspecial HID_FILESAVE_SAVEWITHPASSWORD        { HelpID = HID_FILESAVE_SAVEWITHPASSWORD; };
+hidspecial HID_FILESAVE_CUSTOMIZEFILTER         { HelpID = HID_FILESAVE_CUSTOMIZEFILTER; };
+hidspecial HID_FILESAVE_SELECTION               { HelpID = HID_FILESAVE_SELECTION; };
+hidspecial HID_FILESAVE_DIALOG                  { HelpID = HID_FILESAVE_DIALOG; };
+hidspecial HID_FILESAVE_DOPLAY                  { HelpID = HID_FILESAVE_DOPLAY; };
+hidspecial HID_FILEOPEN_READONLY                { HelpID = HID_FILEOPEN_READONLY; };
+hidspecial HID_FILEOPEN_VERSION                 { HelpID = HID_FILEOPEN_VERSION; };
+hidspecial HID_FILEOPEN_IMAGE_TEMPLATE          { HelpID = HID_FILEOPEN_IMAGE_TEMPLATE; };
+hidspecial HID_HELPAGENT_WINDOW                 { HelpID = HID_HELPAGENT_WINDOW; };
+
+hidspecial HID_REGISTRATION_DIALOG              { HelpID = HID_REGISTRATION_DIALOG; };
+
+hidspecial HID_PRINTDIALOG_TOFILE               { HelpID = HID_PRINTDIALOG_TOFILE; };
+
+hidspecial HID_WIZARD_NEXT                  { HelpID = HID_WIZARD_NEXT; };
+hidspecial HID_WIZARD_PREVIOUS              { HelpID = HID_WIZARD_PREVIOUS; };
+hidspecial HID_FILEDLG_LINK_CB                  { HelpID = HID_FILEDLG_LINK_CB; };
+hidspecial HID_FILEDLG_PREVIEW_CB               { HelpID = HID_FILEDLG_PREVIEW_CB; };
+hidspecial HID_FILEDLG_FILE                     { HelpID = HID_FILEDLG_FILE; };
+hidspecial HID_FILEDLG_MANAGER                  { HelpID = HID_FILEDLG_MANAGER; };
+hidspecial HID_FILEDLG_READ_ONLY                { HelpID = HID_FILEDLG_READ_ONLY; };
+hidspecial HID_FILEDLG_STANDARD                 { HelpID = HID_FILEDLG_STANDARD; };
+hidspecial HID_FILEDLG_URL                      { HelpID = HID_FILEDLG_URL; };
+hidspecial HID_FILEDLG_USE_PASSWD               { HelpID = HID_FILEDLG_USE_PASSWD; };
+hidspecial HID_FILEDLG_AUTOCOMPLETEBOX          { HelpID = HID_FILEDLG_AUTOCOMPLETEBOX; };
+hidspecial HID_FILEDLG_SAVE_BTN                 { HelpID = HID_FILEDLG_SAVE_BTN; };
+hidspecial HID_FILEDLG_SAVE_FILENAME            { HelpID = HID_FILEDLG_SAVE_FILENAME; };
+hidspecial HID_FILEDLG_SAVE_FILETYPE            { HelpID = HID_FILEDLG_SAVE_FILETYPE; };
+hidspecial HID_FILEDLG_INSERT_BTN               { HelpID = HID_FILEDLG_INSERT_BTN; };
+hidspecial HID_FILEDLG_PATH_BTN                 { HelpID = HID_FILEDLG_PATH_BTN; };
+hidspecial HID_FILEDLG_PATH_FILENAME            { HelpID = HID_FILEDLG_PATH_FILENAME; };
+hidspecial HID_FILEDLG_FOLDER_BTN               { HelpID = HID_FILEDLG_FOLDER_BTN; };
+hidspecial HID_FILEDLG_FOLDER_FILENAME          { HelpID = HID_FILEDLG_FOLDER_FILENAME; };
+hidspecial HID_FILEDLG_SRCHFOLDER_BTN           { HelpID = HID_FILEDLG_SRCHFOLDER_BTN; };
+hidspecial HID_FILEDLG_EDIT_FAVORITES_LISTBOX   { HelpID = HID_FILEDLG_EDIT_FAVORITES_LISTBOX; };
+hidspecial HID_FILEDLG_EDIT_FAVORITES_HEADERBAR { HelpID = HID_FILEDLG_EDIT_FAVORITES_HEADERBAR; };

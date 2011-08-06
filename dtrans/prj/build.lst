@@ -1,0 +1,15 @@
+dr	dtrans	:	unotools offapi DESKTOP:rdbmaker stoc LIBXSLT:libxslt NULL
+dr	dtrans									usr1	-	all	dr_mkout NULL
+dr	dtrans\inc								nmake	-	all	dr_inc NULL
+dr	dtrans\source\cnttype					nmake	-	all	dr_cnttype dr_generic dr_inc NULL
+dr	dtrans\source\win32\misc				nmake	-	w	dr_win32_misc dr_inc NULL
+dr	dtrans\source\win32\mtaole				nmake	-	w	dr_win32_mtaole dr_inc NULL
+dr	dtrans\source\win32\ftransl				nmake	-	w	dr_win32_ftransl dr_cnttype dr_win32_misc.w dr_inc NULL 
+dr	dtrans\source\win32\clipb				nmake	-	w	dr_win32_clipb dr_win32_misc.w dr_inc NULL
+dr	dtrans\source\win32\dnd					nmake	-	w	dr_win32_dnd dr_cnttype dr_win32_misc.w dr_win32_dtobj.w dr_inc NULL
+dr	dtrans\source\win32\dtobj				nmake	-	w	dr_win32_dtobj dr_win32_clipb.w dr_win32_misc.w dr_win32_ftransl.w dr_inc NULL
+dr	dtrans\source\os2\clipb					nmake	-	p	dr_os2_clipb dr_inc NULL
+dr	dtrans\util								nmake	-	all	dr_util dr_cnttype dr_win32_misc.w dr_win32_mtaole.w dr_win32_ftransl.w dr_win32_clipb.w dr_win32_dnd.w dr_win32_dtobj.w dr_inc NULL
+dr	dtrans\source\generic					nmake	-	all	dr_generic dr_inc NULL
+
+

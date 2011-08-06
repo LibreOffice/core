@@ -1,0 +1,122 @@
+/* -*- Mode: Fundamental; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*************************************************************************
+*
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * 
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+**************************************************************************/
+
+// for WINVER
+#include <windows.h>
+
+#include <win/salids.hrc>
+
+SAL_RESID_POINTER_NULL                  CURSOR          nullptr.cur
+#if ( WINVER < 0x0400 )
+SAL_RESID_POINTER_HELP                  CURSOR          help.cur
+#endif
+#ifndef WNT
+SAL_RESID_POINTER_HSIZE                 CURSOR          hsize.cur
+SAL_RESID_POINTER_VSIZE                 CURSOR          vsize.cur
+SAL_RESID_POINTER_NESWSIZE              CURSOR          neswsize.cur
+SAL_RESID_POINTER_NWSESIZE              CURSOR          nwsesize.cur
+#endif
+SAL_RESID_POINTER_CROSS                 CURSOR          cross.cur
+SAL_RESID_POINTER_MOVE                  CURSOR          move.cur
+SAL_RESID_POINTER_HSPLIT                CURSOR          hsplit.cur
+SAL_RESID_POINTER_VSPLIT                CURSOR          vsplit.cur
+SAL_RESID_POINTER_HSIZEBAR              CURSOR          hsizebar.cur
+SAL_RESID_POINTER_VSIZEBAR              CURSOR          vsizebar.cur
+SAL_RESID_POINTER_HAND                  CURSOR          hand.cur
+SAL_RESID_POINTER_REFHAND               CURSOR          refhand.cur
+SAL_RESID_POINTER_PEN                   CURSOR          pen.cur
+SAL_RESID_POINTER_MAGNIFY               CURSOR          magnify.cur
+SAL_RESID_POINTER_FILL                  CURSOR          fill.cur
+SAL_RESID_POINTER_ROTATE                CURSOR          rotate.cur
+SAL_RESID_POINTER_HSHEAR                CURSOR          hshear.cur
+SAL_RESID_POINTER_VSHEAR                CURSOR          vshear.cur
+SAL_RESID_POINTER_MIRROR                CURSOR          mirror.cur
+SAL_RESID_POINTER_CROOK                 CURSOR          crook.cur
+SAL_RESID_POINTER_CROP                  CURSOR          crop.cur
+SAL_RESID_POINTER_MOVEPOINT             CURSOR          movept.cur
+SAL_RESID_POINTER_MOVEBEZIERWEIGHT      CURSOR          movebw.cur
+SAL_RESID_POINTER_MOVEDATA              CURSOR          movedata.cur
+SAL_RESID_POINTER_COPYDATA              CURSOR          copydata.cur
+SAL_RESID_POINTER_LINKDATA              CURSOR          linkdata.cur
+SAL_RESID_POINTER_MOVEDATALINK          CURSOR          movedlnk.cur
+SAL_RESID_POINTER_COPYDATALINK          CURSOR          copydlnk.cur
+SAL_RESID_POINTER_MOVEFILE              CURSOR          movef.cur
+SAL_RESID_POINTER_COPYFILE              CURSOR          copyf.cur
+SAL_RESID_POINTER_LINKFILE              CURSOR          linkf.cur
+SAL_RESID_POINTER_MOVEFILELINK          CURSOR          moveflnk.cur
+SAL_RESID_POINTER_COPYFILELINK          CURSOR          copyflnk.cur
+SAL_RESID_POINTER_MOVEFILES             CURSOR          movef2.cur
+SAL_RESID_POINTER_COPYFILES             CURSOR          copyf2.cur
+SAL_RESID_POINTER_NOTALLOWED            CURSOR          notallow.cur
+SAL_RESID_POINTER_DRAW_LINE             CURSOR          dline.cur
+SAL_RESID_POINTER_DRAW_RECT             CURSOR          drect.cur
+SAL_RESID_POINTER_DRAW_POLYGON          CURSOR          dpolygon.cur
+SAL_RESID_POINTER_DRAW_BEZIER           CURSOR          dbezier.cur
+SAL_RESID_POINTER_DRAW_ARC              CURSOR          darc.cur
+SAL_RESID_POINTER_DRAW_PIE              CURSOR          dpie.cur
+SAL_RESID_POINTER_DRAW_CIRCLECUT        CURSOR          dcirccut.cur
+SAL_RESID_POINTER_DRAW_ELLIPSE          CURSOR          dellipse.cur
+SAL_RESID_POINTER_DRAW_FREEHAND         CURSOR          dfree.cur
+SAL_RESID_POINTER_DRAW_CONNECT          CURSOR          dconnect.cur
+SAL_RESID_POINTER_DRAW_TEXT             CURSOR          dtext.cur
+SAL_RESID_POINTER_DRAW_CAPTION          CURSOR          dcapt.cur
+SAL_RESID_POINTER_CHART                 CURSOR          chart.cur
+SAL_RESID_POINTER_DETECTIVE             CURSOR          detectiv.cur
+SAL_RESID_POINTER_PIVOT_COL             CURSOR          pivotcol.cur
+SAL_RESID_POINTER_PIVOT_ROW             CURSOR          pivotrow.cur
+SAL_RESID_POINTER_PIVOT_FIELD           CURSOR          pivotfld.cur
+SAL_RESID_POINTER_PIVOT_DELETE          CURSOR          pivotdel.cur
+SAL_RESID_POINTER_CHAIN                 CURSOR          chain.cur
+SAL_RESID_POINTER_CHAIN_NOTALLOWED      CURSOR          chainnot.cur
+SAL_RESID_POINTER_TIMEEVENT_MOVE        CURSOR          timemove.cur
+SAL_RESID_POINTER_TIMEEVENT_SIZE        CURSOR          timesize.cur
+SAL_RESID_POINTER_AUTOSCROLL_N          CURSOR          asn.cur
+SAL_RESID_POINTER_AUTOSCROLL_S          CURSOR          ass.cur
+SAL_RESID_POINTER_AUTOSCROLL_W          CURSOR          asw.cur
+SAL_RESID_POINTER_AUTOSCROLL_E          CURSOR          ase.cur
+SAL_RESID_POINTER_AUTOSCROLL_NW         CURSOR          asnw.cur
+SAL_RESID_POINTER_AUTOSCROLL_NE         CURSOR          asne.cur
+SAL_RESID_POINTER_AUTOSCROLL_SW         CURSOR          assw.cur
+SAL_RESID_POINTER_AUTOSCROLL_SE         CURSOR          asse.cur
+SAL_RESID_POINTER_AUTOSCROLL_NS         CURSOR          asns.cur
+SAL_RESID_POINTER_AUTOSCROLL_WE         CURSOR          aswe.cur
+SAL_RESID_POINTER_AUTOSCROLL_NSWE       CURSOR          asnswe.cur
+SAL_RESID_POINTER_AIRBRUSH              CURSOR          airbrush.cur
+SAL_RESID_POINTER_TEXT_VERTICAL         CURSOR          vtext.cur
+SAL_RESID_POINTER_TAB_SELECT_S          CURSOR          tblsels.cur
+SAL_RESID_POINTER_TAB_SELECT_E          CURSOR          tblsele.cur
+SAL_RESID_POINTER_TAB_SELECT_SE         CURSOR          tblselse.cur
+SAL_RESID_POINTER_TAB_SELECT_W          CURSOR          tblselw.cur
+SAL_RESID_POINTER_TAB_SELECT_SW         CURSOR          tblselsw.cur
+SAL_RESID_POINTER_PAINTBRUSH            CURSOR          pntbrsh.cur
+
+SAL_RESID_BITMAP_50                     BITMAP          "50.bmp"
+
+SAL_RESID_ICON_DEFAULT                  ICON            sd.ico
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,0 +1,1211 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#include "padialog.hrc"
+
+ModalDialog RID_FONTIMPORT_DIALOG
+{
+    HelpID = "padmin:ModalDialog:RID_FONTIMPORT_DIALOG";
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 230 , 185 );
+    Moveable = TRUE ;
+    Closeable = TRUE ;
+
+    ListBox RID_FIMP_BOX_NEWFONTS
+    {
+        HelpID = "padmin:ListBox:RID_FONTIMPORT_DIALOG:RID_FIMP_BOX_NEWFONTS";
+        Border = TRUE;
+        Sort=TRUE;
+        AutoHScroll = TRUE;
+        Pos = MAP_APPFONT( 5, 5 );
+        Size = MAP_APPFONT( 155, 75 );
+    };
+    FixedText RID_FIMP_TXT_HELP
+    {
+        Pos = MAP_APPFONT( 5, 155 );
+        Size = MAP_APPFONT( 220, 24 );
+        WordBreak=TRUE;
+        Text [ en-US ] = "Please select the folder from which you want to import fonts. Add the selected fonts by clicking the OK button.";
+    };
+    FixedLine RID_FIMP_FL_FROM
+    {
+        Pos = MAP_APPFONT( 5, 85 );
+        Size = MAP_APPFONT( 160, 8 );
+        Text [ en-US ] = "Source directory";
+    };
+    Edit RID_FIMP_EDT_FROM
+    {
+        HelpID = "padmin:Edit:RID_FONTIMPORT_DIALOG:RID_FIMP_EDT_FROM";
+        Border = TRUE;
+        Pos = MAP_APPFONT( 10, 97 );
+        Size = MAP_APPFONT( 130, 12 );
+    };
+    PushButton RID_FIMP_BTN_FROM
+    {
+        HelpID = "padmin:PushButton:RID_FONTIMPORT_DIALOG:RID_FIMP_BTN_FROM";
+        Pos = MAP_APPFONT( 145, 97 );
+        Size = MAP_APPFONT( 15, 12 );
+        Text = "...";
+    };
+    CheckBox RID_FIMP_BOX_SUBDIRS
+    {
+        HelpID = "padmin:CheckBox:RID_FONTIMPORT_DIALOG:RID_FIMP_BOX_SUBDIRS";
+        Pos = MAP_APPFONT( 10, 115 );
+        Size = MAP_APPFONT( 145, 10 );
+        Text [ en-US ] = "Sea~rch Subdirectories";
+    };
+    FixedLine RID_FIMP_FL_TARGETOPTS
+    {
+        Pos = MAP_APPFONT( 5, 130 );
+        Size = MAP_APPFONT( 160, 8 );
+        Text [ en-US ] = "Target options";
+    };
+
+    CheckBox RID_FIMP_BOX_LINKONLY
+    {
+        HelpID = "padmin:CheckBox:RID_FONTIMPORT_DIALOG:RID_FIMP_BOX_LINKONLY";
+        Pos = MAP_APPFONT( 10, 140 );
+        Size = MAP_APPFONT( 145, 10 );
+        Text [ en-US ] = "Create ~soft links only";
+    };
+    OKButton RID_FIMP_BTN_OK
+    {
+        DefButton = TRUE;
+        Pos = MAP_APPFONT( 175, 10 );
+        Size = MAP_APPFONT( 50, 12 );
+    };
+    CancelButton RID_FIMP_BTN_CANCEL
+    {
+        Pos = MAP_APPFONT( 175, 27 );
+        Size = MAP_APPFONT( 50, 12 );
+    };
+    PushButton RID_FIMP_BTN_SELECTALL
+    {
+        HelpID = "padmin:PushButton:RID_FONTIMPORT_DIALOG:RID_FIMP_BTN_SELECTALL";
+        Pos = MAP_APPFONT( 175, 44 );
+        Size = MAP_APPFONT( 50, 12 );
+        Text [ en-US ] = "~Select All";
+    };
+    String RID_FIMP_STR_IMPORTOP
+    {
+        Text [ en-US ] = "Add fonts";
+    };
+    String RID_FIMP_STR_QUERYOVERWRITE
+    {
+        Text [ en-US ] = "Do you really want to overwrite this font file?\n   %s";
+    };
+    String RID_FIMP_STR_OVERWRITEALL
+    {
+        Text [ en-US ] = "All";
+    };
+    String RID_FIMP_STR_OVERWRITENONE
+    {
+        Text [ en-US ] = "None";
+    };
+
+    String RID_FIMP_STR_NOAFM
+    {
+        Text [ en-US ] = "A format file (with an .afm extension) has not been found for the font\n%s\ntherefore, the font cannot be installed. Format files can be created with ghostscript, for example, and have to be located in the same directory as the font files or its afm subdirectory.";
+    };
+    String RID_FIMP_STR_AFMCOPYFAILED
+    {
+        Text [ en-US ] = "The metric file for the font file\n   %s\ncould not be copied. The font will not be installed.";
+    };
+    String RID_FIMP_STR_FONTCOPYFAILED
+    {
+        Text [ en-US ] = "The font file\n   %s\ncould not be copied. The font will not be installed.";
+    };
+    String RID_FIMP_STR_NOWRITEABLEFONTSDIR
+    {
+        Text [ en-US ] = "A directory containing a writable fonts.dir file is not located in the Fontpath. Therefore, fonts cannot be installed.";
+    };
+    String RID_FIMP_STR_NUMBEROFFONTSIMPORTED
+    {
+        Text [ en-US ] = "%d new fonts were added.";
+    };
+    Text [ en-US ] = "Add Fonts";
+};
+
+ModalDialog RID_PADIALOG
+{
+    HelpID = "padmin:ModalDialog:RID_PADIALOG";
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 260 , 198 ) ;
+    Moveable = TRUE ;
+    Closeable = TRUE ;
+
+    FixedLine RID_PA_FL_CUPSUSAGE
+    {
+        Pos = MAP_APPFONT( 6, 145 );
+        Size = MAP_APPFONT( 248, 8 );
+        Text [ en-US ] = "CUPS support";
+    };
+    CheckBox RID_PA_CB_CUPSUSAGE
+    {
+        HelpID = "padmin:CheckBox:RID_PADIALOG:RID_PA_CB_CUPSUSAGE";
+        Pos = MAP_APPFONT( 12, 158 );
+        Size = MAP_APPFONT( 168, 8 );
+        Text [ en-US ] = "Disable CUPS Support";
+    };
+
+    FixedLine RID_PA_FL_SEPBUTTON
+    {
+        Pos = MAP_APPFONT( 0, 176 );
+        Size = MAP_APPFONT( 260, 2 );
+    };
+    CancelButton RID_PA_BTN_CANCEL
+    {
+        DefButton = TRUE;
+        Pos = MAP_APPFONT( 190, 181 );
+        Size = MAP_APPFONT( 60, 12 );
+        Text [ en-US ] = "Close";
+    };
+
+    FixedLine RID_PA_FL_PRINTERS
+    {
+        Pos = MAP_APPFONT( 6, 5 );
+        Size = MAP_APPFONT( 248, 8 );
+        Text [ en-US ] = "Installed ~printers";
+    };
+    ListBox RID_PA_LB_DEV
+    {
+        HelpID = "padmin:ListBox:RID_PADIALOG:RID_PA_LB_DEV";
+        Pos = MAP_APPFONT( 12, 15 );
+        Size = MAP_APPFONT( 168, 80 );
+        Border = TRUE;
+        Sort = TRUE;
+    };
+    FixedText RID_PA_TXT_COMMAND
+    {
+        Pos = MAP_APPFONT( 10, 100 );
+        Size = MAP_APPFONT( 40, 8 );
+        Text [ en-US ] = "Command:";
+    };
+    FixedText RID_PA_TXT_COMMAND_STRING
+    {
+        Pos = MAP_APPFONT( 55, 100 );
+        Size = MAP_APPFONT( 135, 8 );
+    };
+    FixedText RID_PA_TXT_DRIVER
+    {
+        Pos = MAP_APPFONT( 10, 110 );
+        Size = MAP_APPFONT( 40, 8 );
+        Text [ en-US ] = "Driver:";
+    };
+    FixedText RID_PA_TXT_DRIVER_STRING
+    {
+        Pos = MAP_APPFONT( 55, 110 );
+        Size = MAP_APPFONT( 135, 8 );
+    };
+    FixedText RID_PA_TXT_LOCATION
+    {
+        Pos = MAP_APPFONT( 10, 120 );
+        Size = MAP_APPFONT( 40, 8 );
+        Text [ en-US ] = "Location:";
+    };
+    FixedText RID_PA_TXT_LOCATION_STRING
+    {
+        Pos = MAP_APPFONT( 55, 120 );
+        Size = MAP_APPFONT( 135, 8 );
+    };
+    FixedText RID_PA_TXT_COMMENT
+    {
+        Pos = MAP_APPFONT( 10, 130 );
+        Size = MAP_APPFONT( 40, 8 );
+        Text [ en-US ] = "Comment:";
+    };
+    FixedText RID_PA_TXT_COMMENT_STRING
+    {
+        Pos = MAP_APPFONT( 55, 130 );
+        Size = MAP_APPFONT( 135, 8 );
+    };
+    PushButton RID_PA_BTN_CONF
+    {
+        HelpID = "padmin:PushButton:RID_PADIALOG:RID_PA_BTN_CONF";
+        Pos = MAP_APPFONT( 190, 15 );
+        Size = MAP_APPFONT( 60, 12 );
+        Text [ en-US ] = "Properties...";
+    };
+    PushButton RID_PA_BTN_RENAME
+    {
+        HelpID = "padmin:PushButton:RID_PADIALOG:RID_PA_BTN_RENAME";
+        Pos = MAP_APPFONT( 190, 32 );
+        Size = MAP_APPFONT( 60, 12 );
+        Text [ en-US ] = "R~ename...";
+    };
+    PushButton RID_PA_BTN_STD
+    {
+        HelpID = "padmin:PushButton:RID_PADIALOG:RID_PA_BTN_STD";
+        Pos = MAP_APPFONT( 190, 49 );
+        Size = MAP_APPFONT( 60, 12 );
+        Text [ en-US ] = "~Default";
+    };
+    PushButton RID_PA_BTN_DEL
+    {
+        HelpID = "padmin:PushButton:RID_PADIALOG:RID_PA_BTN_DEL";
+        Pos = MAP_APPFONT( 190, 66 );
+        Size = MAP_APPFONT( 60, 12 );
+        Text [ en-US ] = "Remo~ve...";
+    };
+    PushButton RID_PA_TESTPAGE
+    {
+        HelpID = "padmin:PushButton:RID_PADIALOG:RID_PA_TESTPAGE";
+        Pos = MAP_APPFONT( 190, 83 );
+        Size = MAP_APPFONT( 60, 12 );
+        Text [ en-US ] = "Test ~Page";
+    };
+
+    PushButton RID_PA_BTN_FONTS
+    {
+        HelpID = "padmin:PushButton:RID_PADIALOG:RID_PA_BTN_FONTS";
+        Pos = MAP_APPFONT( 80, 181 );
+        Size = MAP_APPFONT( 70, 12 );
+        Text [ en-US ] = "Fon~ts...";
+    };
+    PushButton RID_PA_BTN_ADD
+    {
+        HelpID = "padmin:PushButton:RID_PADIALOG:RID_PA_BTN_ADD";
+        Pos = MAP_APPFONT( 5, 181 );
+        Size = MAP_APPFONT( 70, 12 );
+        Text [ en-US ] = "New Printer...";
+    };
+
+    String RID_PA_STR_DEFPRT
+    {
+        Text [ en-US ] = "Default printer";
+    };
+    String RID_PA_STR_RENAME
+    {
+        Text [ en-US ] = "Rename";
+    };
+    Text [ en-US ] = "Printer Administration";
+};
+
+ModalDialog RID_STRINGQUERYDLG
+{
+    HelpID = "padmin:ModalDialog:RID_STRINGQUERYDLG";
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Pos = MAP_APPFONT ( 10 , 10 ) ;
+    Size = MAP_APPFONT ( 200 , 42 ) ;
+    Moveable = TRUE ;
+    Closeable = TRUE ;
+    FixedText RID_STRQRY_TXT_RENAME
+    {
+        Pos = MAP_APPFONT ( 6 , 6 ) ;
+        Size = MAP_APPFONT ( 130 , 16 ) ;
+        Wordbreak=TRUE;
+    };
+    Edit RID_STRQRY_EDT_NEWNAME
+    {
+        HelpID = "padmin:Edit:RID_STRINGQUERYDLG:RID_STRQRY_EDT_NEWNAME";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 6 , 23 ) ;
+        Size = MAP_APPFONT ( 130 , 12 ) ;
+    };
+    ComboBox RID_STRQRY_BOX_NEWNAME
+    {
+        HelpID = "padmin:ComboBox:RID_STRINGQUERYDLG:RID_STRQRY_BOX_NEWNAME";
+        Border = TRUE ;
+        DropDown = TRUE;
+        Pos = MAP_APPFONT ( 6 , 23 ) ;
+        Size = MAP_APPFONT ( 130 , 200 ) ;
+    };
+    OKButton RID_STRQRY_BTN_OK
+    {
+        DefButton = TRUE ;
+        Pos = MAP_APPFONT ( 145 , 6 ) ;
+        Size = MAP_APPFONT ( 50 , 12 ) ;
+    };
+    CancelButton RID_STRQRY_BTN_CANCEL
+    {
+        Pos = MAP_APPFONT ( 145 , 23 ) ;
+        Size = MAP_APPFONT ( 50 , 12 ) ;
+    };
+};
+
+String RID_ERR_NOPRINTER
+{
+    Text [ en-US ] = "Could not open printer %s.";
+};
+
+String RID_PA_TXT_TESTPAGE_PRINTED
+{
+    Text [ en-US ] = "The test page was printed succesfully. Please check the result.";
+};
+
+String RID_ERR_NOWRITE
+{
+    Text [en-US] = "No printers can be installed, because the file system is read-only.\nPlease contact your system administrator.";
+};
+
+String RID_QRY_PRTNAME
+{
+    Text [ en-US ] = "~New printer name";
+};
+
+String RID_TXT_TESTPAGE_MODEL
+{
+    Text [ en-US ] = "Model";
+};
+
+String RID_TXT_TESTPAGE_NAME
+{
+    Text [ en-US ] = "Name";
+};
+
+String RID_TXT_TESTPAGE_COMMENT
+{
+    Text [ en-US ] = "Comment";
+};
+
+String RID_TXT_TESTPAGE_QUEUE
+{
+    Text [ en-US ] = "Queue";
+};
+
+String RID_TXT_TESTPAGE_DATE
+{
+    Text [ en-US ] = "Date";
+};
+
+String RID_TXT_TESTPAGE_TIME
+{
+    Text [ en-US ] = "Time";
+};
+
+
+ModalDialog RID_FONTNAMEDIALOG
+{
+    HelpID = "padmin:ModalDialog:RID_FONTNAMEDIALOG";
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 255 , 110 ) ;
+    Moveable = TRUE ;
+    Closeable = TRUE ;
+    OKButton RID_FNTNM_BTN_OK
+    {
+        DefButton = TRUE ;
+        Pos = MAP_APPFONT ( 196 , 6 ) ;
+        Size = MAP_APPFONT ( 50 , 12 ) ;
+        Text [ en-US ] = "Close";
+    };
+    PushButton RID_FNTNM_BTN_RENAME
+    {
+        HelpID = "padmin:PushButton:RID_FONTNAMEDIALOG:RID_FNTNM_BTN_RENAME";
+        Pos = MAP_APPFONT( 196, 31 );
+        Size = MAP_APPFONT( 50, 12 );
+        Text [ en-US ] = "Re~name...";
+    };
+    PushButton RID_FNTNM_BTN_REMOVE
+    {
+        HelpID = "padmin:PushButton:RID_FONTNAMEDIALOG:RID_FNTNM_BTN_REMOVE";
+        Pos = MAP_APPFONT ( 196 , 48 ) ;
+        Size = MAP_APPFONT ( 50 , 12 ) ;
+        Text [ en-US ] = "~Remove...";
+    };
+    PushButton RID_FNTNM_BTN_IMPORT
+    {
+        HelpID = "padmin:PushButton:RID_FONTNAMEDIALOG:RID_FNTNM_BTN_IMPORT";
+        Pos = MAP_APPFONT ( 196 , 65 ) ;
+        Size = MAP_APPFONT ( 50 , 12 ) ;
+        Text [ en-US ] = "~Add...";
+    };
+    ListBox RID_FNTNM_LB_FONTS
+    {
+        HelpID = "padmin:ListBox:RID_FONTNAMEDIALOG:RID_FNTNM_LB_FONTS";
+        Border = TRUE ;
+        Sort = TRUE ;
+        AutoHScroll = TRUE;
+        Pos = MAP_APPFONT ( 6 , 6 ) ;
+        Size = MAP_APPFONT ( 185 , 70 ) ;
+    };
+    FixedText RID_FNTNM_FIXED
+    {
+        Pos = MAP_APPFONT ( 6 , 81 ) ;
+        Size = MAP_APPFONT ( 175 , 24 ) ;
+        WordBreak = TRUE;
+        Text [ en-US ] = "Note: The fonts are only available to the applications.";
+    };
+    String RID_FNTNM_STR_RENAME
+    {
+        Text [ en-US ] = "~New name for %s";
+    };
+    String RID_FNTNM_STR_TTCRENAME
+    {
+        Text [ en-US ] = "~New name for %s (%d1 of %d2)";
+    };
+    String RID_FNTNM_STR_NOTRENAMABLE
+    {
+        Text [ en-US ] = "The font %s cannot be renamed due to missing write permission.";
+    };
+    Text [ en-US ] = "Fonts";
+};
+
+String RID_BXT_TESTPAGE
+{
+    Text [ en-US ] = "Test page";
+};
+
+String RID_BXT_ENVIRONMENT
+{
+    Text [ en-US ] = "Wrong environment";
+};
+
+String RID_YOU_SURE
+{
+    Text [ en-US ] = "Are you sure ?";
+};
+
+Bitmap RID_BUTTERFLY
+{
+    File = "source/butter.png" ;
+};
+
+Bitmap RID_BMP_SMALL_PRINTER
+{
+    File = "source/print.png";
+};
+
+Bitmap RID_BMP_SMALL_FAX
+{
+    File = "source/fax.png";
+};
+
+Bitmap RID_BMP_SMALL_PDF
+{
+    File = "source/pdf.png";
+};
+
+Bitmap RID_BMP_PRINTER
+{
+    File = "source/printer_large.png";
+};
+
+String RID_AFMERROR_OK
+{
+    Text [ en-US ] = "No error";
+};
+
+String RID_AFMERROR_NO_FONT_NAME
+{
+    Text [ en-US ] = "The metric does not contain a 'FontName' entry.";
+};
+
+String RID_AFMERROR_NO_FULL_NAME
+{
+    Text [ en-US ] = "The metric does not contain a 'FullName' entry.";
+};
+
+String RID_AFMERROR_NO_FAMILY_NAME
+{
+    Text [ en-US ] = "The metric does not contain a 'FamilyName' entry.";
+};
+
+String RID_AFMERROR_MOVETO_FAILED
+{
+    Text [ en-US ] = "The converted metric could not be written.";
+};
+
+String RID_AFMERROR_STREAM_READ_FAILED
+{
+    Text [ en-US ] = "The metric could not be read.";
+};
+
+String RID_AFMERROR_STREAM_WRITE_FAILED
+{
+    Text [ en-US ] = "A temporary file could not be created.";
+};
+
+STRING RID_AFMERROR_NOT_A_METRIC
+{
+    Text [ en-US ] = "The file does not contain a metric.";
+};
+
+String RID_AFMERROR_BOX_TXT
+{
+    Text [ en-US ] = "The metric\n\n%s\n\ncould not be converted for the following reason:\n\n";
+};
+
+ModelessDialog RID_PROGRESS_DLG
+{
+    HelpID = "padmin:ModelessDialog:RID_PROGRESS_DLG";
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Pos = MAP_APPFONT ( 10 , 10 ) ;
+    Size = MAP_APPFONT ( 150 , 90 ) ;
+    Moveable = TRUE ;
+    Closeable = FALSE ;
+    CancelButton RID_PROGRESS_BTN_CANCEL
+    {
+        Pos = MAP_APPFONT ( 50 , 71 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+    };
+    FixedText RID_PROGRESS_OPERATION_TXT
+    {
+        Pos = MAP_APPFONT ( 6 , 6 ) ;
+        Size = MAP_APPFONT ( 140 , 18 ) ;
+    };
+    FixedText RID_PROGRESS_PROGRESS_TXT
+    {
+        Pos = MAP_APPFONT( 6, 48 );
+        Size = MAP_APPFONT( 140, 8 );
+        Text [ en-US ] = "Progress";
+    };
+    Window RID_PROGRESS_STATUSBAR
+    {
+        SVLook = TRUE;
+        Border = TRUE;
+        Pos = MAP_APPFONT ( 6 , 58 ) ;
+        Size = MAP_APPFONT( 140, 8 );
+    };
+    FixedText RID_PROGRESS_FILENAME_TXT
+    {
+        Pos = MAP_APPFONT ( 6 , 28 ) ;
+        Size = MAP_APPFONT ( 140 , 8 ) ;
+    };
+    Text [ en-US ] = "Please wait";
+};
+
+String RID_OPERATION_CONVERTMETRIC
+{
+    Text [ en-US ] = "Font metrics conversion";
+};
+
+
+ModalDialog RID_PPDIMPORT_DLG
+{
+    HelpID = "padmin:ModalDialog:RID_PPDIMPORT_DLG";
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 265 , 225 ) ;
+    Moveable = TRUE ;
+    Closeable = TRUE ;
+
+    FixedLine RID_PPDIMP_GROUP_PATH
+    {
+        Pos = MAP_APPFONT( 5, 5 );
+        Size = MAP_APPFONT( 200, 8 );
+        Text [ en-US ] = "Dri~ver directory";
+    };
+    FixedText RID_PPDIMP_TXT_PATH
+    {
+        Pos = MAP_APPFONT( 10, 33 );
+        Size = MAP_APPFONT( 190, 8 );
+        Text [ en-US ] = "Please select the driver directory.";
+    };
+    ComboBox RID_PPDIMP_LB_PATH
+    {
+        HelpID = "padmin:ComboBox:RID_PPDIMPORT_DLG:RID_PPDIMP_LB_PATH";
+        Dropdown = TRUE;
+        Border = TRUE;
+        Sort = TRUE;
+
+        Pos = MAP_APPFONT( 10, 15 );
+        Size = MAP_APPFONT( 130, 80 );
+    };
+    PushButton RID_PPDIMP_BTN_SEARCH
+    {
+        HelpID = "padmin:PushButton:RID_PPDIMPORT_DLG:RID_PPDIMP_BTN_SEARCH";
+        Pos = MAP_APPFONT( 145, 15 );
+        Size = MAP_APPFONT( 50, 14 );
+        Text [ en-US ] = "Browse...";
+    };
+
+    FixedLine RID_PPDIMP_GROUP_DRIVER
+    {
+        Pos = MAP_APPFONT( 5, 60 );
+        Size = MAP_APPFONT( 200, 8 );
+        Text [ en-US ] = "~Selection of drivers";
+    };
+    MultiListBox RID_PPDIMP_LB_DRIVER
+    {
+        HelpID = "padmin:MultiListBox:RID_PPDIMPORT_DLG:RID_PPDIMP_LB_DRIVER";
+        Border = TRUE;
+        Sort = TRUE;
+        SimpleMode = TRUE;
+        AutoHScroll = TRUE;
+        Pos = MAP_APPFONT( 10, 70 );
+        Size = MAP_APPFONT( 190, 120 );
+    };
+    FixedText RID_PPDIMP_TXT_DRIVER
+    {
+        Pos = MAP_APPFONT( 10, 195 );
+        Size = MAP_APPFONT( 190, 60 );
+        WordBreak = TRUE;
+        Text [ en-US ] = "Please select the drivers to install and press \"%s\".";
+    };
+    String RID_PPDIMP_STR_LOADINGPPD
+    {
+        Text [ en-US ] = "Searching for drivers";
+    };
+    OKButton RID_PPDIMP_BTN_OK
+    {
+        DefButton = TRUE;
+        Pos = MAP_APPFONT( 210, 10 );
+        Size = MAP_APPFONT( 50, 14 );
+    };
+    CancelButton RID_PPDIMP_BTN_CANCEL
+    {
+        Pos = MAP_APPFONT( 210, 29 );
+        Size = MAP_APPFONT( 50, 14 );
+    };
+
+    Text [ en-US ] = "Driver Installation";
+};
+
+String RID_QUERY_REMOVEDRIVER
+{
+    Text [ en-US ] = "Do you really want to remove the driver \"%s\"?";
+};
+
+String RID_QUERY_REMOVEPRINTER
+{
+    Text [ en-US ] = "Do you really want to remove this printer ?";
+};
+
+String RID_QUERY_REMOVEFONTFROMLIST
+{
+    Text [ en-US ] = "Do you really want to remove the selected fonts ?";
+};
+
+String RID_QUERY_DRIVERUSED
+{
+    Text [ en-US ] = "There are still printers using the driver \"%s\". Do you really want to remove it? The corresponding printers will also be removed.";
+};
+
+String RID_ERR_REMOVESGENPRT
+{
+    Text [ en-US ] = "The driver \"%s\" is always needed and can therefore not be removed.";
+};
+
+String RID_ERR_REMOVEDRIVERFAILED
+{
+    Text [ en-US ] = "The driver \"%s1\" could not be removed. It was not possible to remove the file\n\n%s2.";
+};
+
+String RID_ERR_REMOVEDEFAULTDRIVER
+{
+    Text [ en-US ] = "The driver \"%s\" is used by your default printer. Therefore, it cannot be removed.";
+};
+
+String RID_ERR_PRINTERNOTREMOVEABLE
+{
+    Text [ en-US ] = "The printer %s cannot be removed.";
+};
+
+String RID_TXT_PRINTERALREADYEXISTS
+{
+    Text [ en-US ] = "A printer named \"%s\" already exists. This printer will not be imported.";
+};
+
+String RID_TXT_PRINTERWITHOUTCOMMAND
+{
+    Text [ en-US ] = "The printer \"%s\" has no valid configuration and, therefore, cannot be imported.";
+};
+
+String RID_TXT_DRIVERDOESNOTEXIST
+{
+    Text [ en-US ] = "The driver for the printer \"%s1\" (%s2) is not installed. Therefore the printer cannot be imported.";
+};
+
+String RID_TXT_PRINTERADDFAILED
+{
+    Text [ en-US ] = "The printer \"%s\" could not be added.";
+};
+
+ModalDialog RID_ADD_PRINTER_DIALOG
+{
+    HelpID = "padmin:ModalDialog:RID_ADD_PRINTER_DIALOG";
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 240 , 172 ) ;
+    Moveable = TRUE ;
+    Closeable = TRUE ;
+
+    Control RID_ADDP_CTRL_TITLE
+    {
+        Pos = MAP_APPFONT( 0, 0 );
+        Size = MAP_APPFONT( 240, 26 );
+    };
+    FixedLine RID_ADDP_LINE
+    {
+        Pos = MAP_APPFONT( 0, 150 );
+        Size = MAP_APPFONT( 240, 2 );
+    };
+    OKButton RID_ADDP_BTN_FINISH
+    {
+        Pos = MAP_APPFONT( 185, 155 );
+        Size = MAP_APPFONT( 50, 12 );
+        Text [ en-US ] = "~Finish";
+    };
+    CancelButton RID_ADDP_BTN_CANCEL
+    {
+        Pos = MAP_APPFONT( 5, 155 );
+        Size = MAP_APPFONT( 50, 12 );
+    };
+    PushButton RID_ADDP_BTN_NEXT
+    {
+        HelpID = "padmin:PushButton:RID_ADD_PRINTER_DIALOG:RID_ADDP_BTN_NEXT";
+        Pos = MAP_APPFONT( 130, 155 );
+        Size = MAP_APPFONT( 50, 12 );
+        Text [ en-US ] = "~Next >>";
+    };
+    PushButton RID_ADDP_BTN_PREV
+    {
+        HelpID = "padmin:PushButton:RID_ADD_PRINTER_DIALOG:RID_ADDP_BTN_PREV";
+        Pos = MAP_APPFONT( 75, 155 );
+        Size = MAP_APPFONT( 50, 12 );
+        Text [ en-US ] = "<< ~Back";
+    };
+    Text [ en-US ] = "Add Printer";
+};
+
+TabPage RID_ADDP_PAGE_CHOOSEDRIVER
+{
+    HelpID = "padmin:TabPage:RID_ADDP_PAGE_CHOOSEDRIVER";
+    Hide = TRUE;
+    Pos = MAP_APPFONT( 0, 30 );
+    Size = MAP_APPFONT( 240, 120 );
+    String RID_ADDP_STR_TITLE
+    {
+        Text [ en-US ] = "Choose a driver";
+    };
+    FixedText RID_ADDP_CHDRV_TXT_DRIVER
+    {
+        Pos = MAP_APPFONT( 5, 5 );
+        Size = MAP_APPFONT( 230, 8 );
+        Text [ en-US ] = "Please select a s~uitable driver.";
+    };
+    ListBox RID_ADDP_CHDRV_BOX_DRIVER
+    {
+        HelpID = "padmin:ListBox:RID_ADDP_PAGE_CHOOSEDRIVER:RID_ADDP_CHDRV_BOX_DRIVER";
+        Pos = MAP_APPFONT( 5, 15 );
+        Size = MAP_APPFONT( 175, 100 );
+        Border = TRUE;
+        Sort = TRUE;
+    };
+    PushButton RID_ADDP_CHDRV_BTN_ADD
+    {
+        HelpID = "padmin:PushButton:RID_ADDP_PAGE_CHOOSEDRIVER:RID_ADDP_CHDRV_BTN_ADD";
+        Pos = MAP_APPFONT( 185, 15 );
+        Size = MAP_APPFONT( 50, 12 );
+        Text [ en-US ] = "~Import...";
+    };
+    PushButton RID_ADDP_CHDRV_BTN_REMOVE
+    {
+        HelpID = "padmin:PushButton:RID_ADDP_PAGE_CHOOSEDRIVER:RID_ADDP_CHDRV_BTN_REMOVE";
+        Pos = MAP_APPFONT( 185, 32 );
+        Size = MAP_APPFONT( 50, 12 );
+        Text [ en-US ] = "~Delete";
+    };
+    String RID_ADDP_CHDRV_STR_REMOVE
+    {
+        Text [ en-US ] = "Delete driver";
+    };
+};
+
+TabPage RID_ADDP_PAGE_CHOOSEDEV
+{
+    HelpID = "padmin:TabPage:RID_ADDP_PAGE_CHOOSEDEV";
+    Hide = TRUE;
+    Pos = MAP_APPFONT( 0, 30 );
+    Size = MAP_APPFONT( 240, 120 );
+    String RID_ADDP_STR_TITLE
+    {
+        Text [ en-US ] = "Choose a device type";
+    };
+    FixedText RID_ADDP_CHDEV_TXT_OVER
+    {
+        Pos = MAP_APPFONT( 40, 25 );
+        Size = MAP_APPFONT( 180, 8 );
+        Text [ en-US ] = "Do you want to";
+    };
+    RadioButton RID_ADDP_CHDEV_BTN_PRINTER
+    {
+        HelpID = "padmin:RadioButton:RID_ADDP_PAGE_CHOOSEDEV:RID_ADDP_CHDEV_BTN_PRINTER";
+        Pos = MAP_APPFONT ( 40, 40 );
+        Size = MAP_APPFONT( 180, 10 );
+        Text [ en-US ] = "Add a ~printer";
+    };
+    RadioButton RID_ADDP_CHDEV_BTN_FAX
+    {
+        HelpID = "padmin:RadioButton:RID_ADDP_PAGE_CHOOSEDEV:RID_ADDP_CHDEV_BTN_FAX";
+        Pos = MAP_APPFONT ( 40, 50 );
+        Size = MAP_APPFONT( 180, 10 );
+        Text [ en-US ] = "Connect a fa~x device";
+    };
+    RadioButton RID_ADDP_CHDEV_BTN_PDF
+    {
+        HelpID = "padmin:RadioButton:RID_ADDP_PAGE_CHOOSEDEV:RID_ADDP_CHDEV_BTN_PDF";
+        Pos = MAP_APPFONT ( 40, 60 );
+        Size = MAP_APPFONT( 180, 10 );
+        Text [ en-US ] = "Connect a P~DF converter";
+    };
+    RadioButton RID_ADDP_CHDEV_BTN_OLD
+    {
+        HelpID = "padmin:RadioButton:RID_ADDP_PAGE_CHOOSEDEV:RID_ADDP_CHDEV_BTN_OLD";
+        Pos = MAP_APPFONT ( 40, 70 );
+        Size = MAP_APPFONT( 180, 10 );
+        Text [ en-US ] = "~Import printers from a StarOffice installation";
+    };
+};
+
+TabPage RID_ADDP_PAGE_NAME
+{
+    HelpID = "padmin:TabPage:RID_ADDP_PAGE_NAME";
+    Hide = TRUE;
+    Pos = MAP_APPFONT( 0, 30 );
+    Size = MAP_APPFONT( 240, 120 );
+    String RID_ADDP_STR_TITLE
+    {
+        Text [ en-US ] = "Choose a name";
+    };
+    FixedText RID_ADDP_NAME_TXT_NAME
+    {
+        Pos = MAP_APPFONT( 40, 25 );
+        Size = MAP_APPFONT( 220, 8 );
+        Text [ en-US ] = "Please enter a name for the printer.";
+    };
+    FixedText RID_ADDP_NAME_TXT_FAXNAME
+    {
+        Pos = MAP_APPFONT( 40, 25 );
+        Size = MAP_APPFONT( 220, 8 );
+        Text [ en-US ] = "Please enter a name for the fax connection.";
+    };
+    FixedText RID_ADDP_NAME_TXT_PDFNAME
+    {
+        Pos = MAP_APPFONT( 40, 25 );
+        Size = MAP_APPFONT( 220, 8 );
+        Text [ en-US ] = "Please enter a name for the PDF connection.";
+    };
+    Edit RID_ADDP_NAME_EDT_NAME
+    {
+        HelpID = "padmin:Edit:RID_ADDP_PAGE_NAME:RID_ADDP_NAME_EDT_NAME";
+        Pos = MAP_APPFONT( 40, 35 );
+        Size = MAP_APPFONT( 160, 12 );
+        Border = TRUE;
+    };
+    Edit RID_ADDP_NAME_EDT_FAXNAME
+    {
+        HelpID = "padmin:Edit:RID_ADDP_PAGE_NAME:RID_ADDP_NAME_EDT_FAXNAME";
+        Pos = MAP_APPFONT( 40, 35 );
+        Size = MAP_APPFONT( 160, 12 );
+        Border = TRUE;
+        Text [ en-US ] = "Fax printer";
+    };
+    Edit RID_ADDP_NAME_EDT_PDFNAME
+    {
+        HelpID = "padmin:Edit:RID_ADDP_PAGE_NAME:RID_ADDP_NAME_EDT_PDFNAME";
+        Pos = MAP_APPFONT( 40, 35 );
+        Size = MAP_APPFONT( 160, 12 );
+        Border = TRUE;
+        Text [ en-US ] = "PDF converter";
+    };
+    CheckBox RID_ADDP_NAME_BOX_DEFAULT
+    {
+        HelpID = "padmin:CheckBox:RID_ADDP_PAGE_NAME:RID_ADDP_NAME_BOX_DEFAULT";
+        Pos = MAP_APPFONT( 40, 50 );
+        Size = MAP_APPFONT( 160, 12 );
+        Text [ en-US ] = "~Use as default printer";
+    };
+    CheckBox RID_ADDP_NAME_BOX_FAXSWALLOW
+    {
+        HelpID = "padmin:CheckBox:RID_ADDP_PAGE_NAME:RID_ADDP_NAME_BOX_FAXSWALLOW";
+        Pos = MAP_APPFONT( 40, 50 );
+        Size = MAP_APPFONT( 160, 12 );
+        Text [ en-US ] = "Remo~ve fax number from output";
+    };
+};
+
+TabPage RID_ADDP_PAGE_COMMAND
+{
+    HelpID = "padmin:TabPage:RID_ADDP_PAGE_COMMAND";
+    Hide = TRUE;
+    Pos = MAP_APPFONT( 0, 30 );
+    Size = MAP_APPFONT( 240, 120 );
+    String RID_ADDP_STR_TITLE
+    {
+        Text [ en-US ] = "Choose a command line";
+    };
+    FixedText RID_ADDP_CMD_TXT_COMMAND
+    {
+        Pos = MAP_APPFONT( 10, 2 );
+        Size = MAP_APPFONT( 160, 24 );
+        WordBreak = TRUE;
+        Text [ en-US ] = "Please enter a c~ommand line appropriate for this device.";
+    };
+    ComboBox RID_ADDP_CMD_BOX_COMMAND
+    {
+        HelpID = "padmin:ComboBox:RID_ADDP_PAGE_COMMAND:RID_ADDP_CMD_BOX_COMMAND";
+        Pos = MAP_APPFONT( 10, 30);
+        Size = MAP_APPFONT( 220, 85 );
+        Border = TRUE;
+    };
+    ComboBox RID_ADDP_CMD_BOX_PDFCOMMAND
+    {
+        HelpID = "padmin:ComboBox:RID_ADDP_PAGE_COMMAND:RID_ADDP_CMD_BOX_PDFCOMMAND";
+        Pos = MAP_APPFONT( 10, 30);
+        Size = MAP_APPFONT( 220, 60 );
+        Border = TRUE;
+    };
+    FixedText RID_ADDP_CMD_TXT_PDFDIR
+    {
+        Pos = MAP_APPFONT( 10, 95 );
+        Size = MAP_APPFONT( 220, 8 );
+        Text [ en-US ] = "PDF ~target directory";
+    };
+    Edit RID_ADDP_CMD_EDT_PDFDIR
+    {
+        HelpID = "padmin:Edit:RID_ADDP_PAGE_COMMAND:RID_ADDP_CMD_EDT_PDFDIR";
+        Border = TRUE;
+        Pos = MAP_APPFONT( 10, 104 );
+        Size = MAP_APPFONT( 190, 12 );
+    };
+    PushButton RID_ADDP_CMD_BTN_PDFDIR
+    {
+        HelpID = "padmin:PushButton:RID_ADDP_PAGE_COMMAND:RID_ADDP_CMD_BTN_PDFDIR";
+        Pos = MAP_APPFONT( 205, 104 );
+        Size = MAP_APPFONT( 25, 12 );
+        Text = "~...";
+    };
+    PushButton RID_ADDP_CMD_BTN_HELP
+    {
+        HelpID = "padmin:PushButton:RID_ADDP_PAGE_COMMAND:RID_ADDP_CMD_BTN_HELP";
+        Pos = MAP_APPFONT( 180, 2 );
+        Size = MAP_APPFONT( 50, 12 );
+        Text [ en-US ] = "~Help";
+    };
+    String RID_ADDP_CMD_STR_PDFHELP
+    {
+        Text [ en-US ] = "The command line for PDF converters is executed as follows: for each document printed, \"(TMP)\" in the command line is replaced by a temporary file and \"(OUTFILE)\" in the command line is replaced by the target PDF file name. If \"(TMP)\" is in the command line, the PostScript code will be supplied via a file, otherwise via standard input (i.e. as a pipe).";
+    };
+    String RID_ADDP_CMD_STR_FAXHELP
+    {
+        Text [ en-US ] = "The command line for fax connections is executed as follows: for each fax sent, \"(TMP)\" in the command line is replaced by a temporary file and \"(PHONE)\" in the command line is replaced by the fax number. If \"(TMP)\" appears in the command line, the PostScript code will be supplied via a file, otherwise it is passed as standard input (i.e. as a pipe).";
+    };
+};
+
+TabPage RID_ADDP_PAGE_OLDPRINTERS
+{
+    HelpID = "padmin:TabPage:RID_ADDP_PAGE_OLDPRINTERS";
+    Hide = TRUE;
+    Pos = MAP_APPFONT( 0, 30 );
+    Size = MAP_APPFONT( 240, 120 );
+    String RID_ADDP_STR_TITLE
+    {
+        Text [ en-US ] = "Import printers from old versions";
+    };
+    FixedText RID_ADDP_OLD_TXT_PRINTERS
+    {
+        Pos = MAP_APPFONT( 10, 10 );
+        Size = MAP_APPFONT( 165, 25 );
+        WordBreak = TRUE;
+        Text [ en-US ] = "~These printers can be imported. Please select the ones you want to import.";
+    };
+    MultiListBox RID_ADDP_OLD_BOX_PRINTERS
+    {
+        HelpID = "padmin:MultiListBox:RID_ADDP_PAGE_OLDPRINTERS:RID_ADDP_OLD_BOX_PRINTERS";
+        Pos = MAP_APPFONT( 10, 35 );
+        Size = MAP_APPFONT( 165, 80 );
+        Border = TRUE;
+    };
+    PushButton RID_ADDP_OLD_BTN_SELECTALL
+    {
+        HelpID = "padmin:PushButton:RID_ADDP_PAGE_OLDPRINTERS:RID_ADDP_OLD_BTN_SELECTALL";
+        Pos = MAP_APPFONT( 180, 35 );
+        Size = MAP_APPFONT( 50, 12 );
+        Text [ en-US ] = "~Select All";
+    };
+};
+
+TabPage RID_ADDP_PAGE_FAXDRIVER
+{
+    HelpID = "padmin:TabPage:RID_ADDP_PAGE_FAXDRIVER";
+    Hide = TRUE;
+    Pos = MAP_APPFONT( 0, 30 );
+    Size = MAP_APPFONT( 240, 120 );
+    String RID_ADDP_STR_TITLE
+    {
+        Text [ en-US ] = "Choose a driver";
+    };
+    FixedText RID_ADDP_FAXDRV_TXT_DRIVER
+    {
+        Pos = MAP_APPFONT( 40, 20 );
+        Size = MAP_APPFONT( 160, 19 );
+        WordBreak = TRUE;
+        Text [ en-US ] = "Use the following driver for this fax connection";
+    };
+    RadioButton RID_ADDP_FAXDRV_BTN_DEFAULT
+    {
+        HelpID = "padmin:RadioButton:RID_ADDP_PAGE_FAXDRIVER:RID_ADDP_FAXDRV_BTN_DEFAULT";
+        Pos = MAP_APPFONT( 40,40 );
+        Size = MAP_APPFONT( 160, 10 );
+        Text [ en-US ] = "T~he default driver";
+    };
+    RadioButton RID_ADDP_FAXDRV_BTN_SELECT
+    {
+        HelpID = "padmin:RadioButton:RID_ADDP_PAGE_FAXDRIVER:RID_ADDP_FAXDRV_BTN_SELECT";
+        Pos = MAP_APPFONT( 40, 50 );
+        Size = MAP_APPFONT( 160,24 );
+        Text [ en-US ] = "A speci~fic driver, to adapt the format to another printer";
+    };
+};
+
+TabPage RID_ADDP_PAGE_PDFDRIVER
+{
+    HelpID = "padmin:TabPage:RID_ADDP_PAGE_PDFDRIVER";
+    Hide = TRUE;
+    Pos = MAP_APPFONT( 0, 30 );
+    Size = MAP_APPFONT( 240, 120 );
+    String RID_ADDP_STR_TITLE
+    {
+        Text [ en-US ] = "Choose a driver";
+    };
+    FixedText RID_ADDP_PDFDRV_TXT_DRIVER
+    {
+        Pos = MAP_APPFONT( 40, 20 );
+        Size = MAP_APPFONT( 160, 19 );
+        WordBreak = TRUE;
+        Text [ en-US ] = "Use the following driver for this PDF converter";
+    };
+    RadioButton RID_ADDP_PDFDRV_BTN_DEFAULT
+    {
+        HelpID = "padmin:RadioButton:RID_ADDP_PAGE_PDFDRIVER:RID_ADDP_PDFDRV_BTN_DEFAULT";
+        Pos = MAP_APPFONT( 40, 40 );
+        Size = MAP_APPFONT( 160, 10 );
+        Text [ en-US ] = "T~he default driver";
+    };
+    RadioButton RID_ADDP_PDFDRV_BTN_DIST
+    {
+        HelpID = "padmin:RadioButton:RID_ADDP_PAGE_PDFDRIVER:RID_ADDP_PDFDRV_BTN_DIST";
+        Pos = MAP_APPFONT( 40,50 );
+        Size = MAP_APPFONT( 160, 10 );
+        Text [ en-US ] = "The Adobe D~istiller(tm) driver";
+    };
+    RadioButton RID_ADDP_PDFDRV_BTN_SELECT
+    {
+        HelpID = "padmin:RadioButton:RID_ADDP_PAGE_PDFDRIVER:RID_ADDP_PDFDRV_BTN_SELECT";
+        Pos = MAP_APPFONT( 40, 60 );
+        Size = MAP_APPFONT( 160, 24 );
+        Text [ en-US ] = "A spec~ific driver, to adapt the format to another printer";
+    };
+};
+
+String RID_TXT_FONT_ITALIC
+{
+    Text [ en-US ] = "Italic";
+};
+
+String RID_TXT_FONT_OBLIQUE
+{
+    Text [ en-US ] = "Oblique";
+};
+
+String RID_TXT_FONT_THIN
+{
+    Text [ en-US ] = "Thin";
+};
+
+String RID_TXT_FONT_ULTRALIGHT
+{
+    Text [ en-US ] = "Ultralight";
+};
+
+String RID_TXT_FONT_SEMILIGHT
+{
+    Text [ en-US ] = "Semilight";
+};
+
+String RID_TXT_FONT_LIGHT
+{
+    Text [ en-US ] = "Light";
+};
+
+String RID_TXT_FONT_SEMIBOLD
+{
+    Text [ en-US ] = "Semibold";
+};
+
+String RID_TXT_FONT_BOLD
+{
+    Text [ en-US ] = "Bold";
+};
+
+String RID_TXT_FONT_ULTRABOLD
+{
+    Text [ en-US ] = "Ultrabold";
+};
+
+String RID_TXT_FONT_ULTRACONDENSED
+{
+    Text [ en-US ] = "Ultracondensed";
+};
+
+String RID_TXT_FONT_EXTRACONDENSED
+{
+    Text [ en-US ] = "Extracondensed";
+};
+
+String RID_TXT_FONT_CONDENSED
+{
+    Text [ en-US ] = "Condensed";
+};
+
+String RID_TXT_FONT_SEMICONDENSED
+{
+    Text [ en-US ] = "Semicondensed";
+};
+
+String RID_TXT_FONT_SEMIEXPANDED
+{
+    Text [ en-US ] = "Semiexpanded";
+};
+
+String RID_TXT_FONT_EXPANDED
+{
+    Text [ en-US ] = "Expanded";
+};
+
+String RID_TXT_FONT_EXTRAEXPANDED
+{
+    Text [ en-US ] = "Extraexpanded";
+};
+
+String RID_TXT_FONT_ULTRAEXPANDED
+{
+    Text [ en-US ] = "Ultraexpanded";
+};
+
+String RID_TXT_FONT_REGULAR
+{
+    Text [ en-US ] = "Regular";
+};
+
+

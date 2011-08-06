@@ -1,0 +1,1659 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+/*
+ * TrueTypeCreator method implementation
+ *
+ * @author: Alexander Gelfenbain
+ *
+ */
+
+#if OSL_DEBUG_LEVEL == 0
+#  ifndef NDEBUG
+#    define NDEBUG
+#  endif
+#endif
+#include <assert.h>
+
+#include "ttcr.hxx"
+#include "list.h"
+#include "string.h"
+
+
+
+namespace vcl
+{
+
+/*
+ * Private Data Types
+ */
+
+    struct _TrueTypeCreator {
+        sal_uInt32 tag;                         /**< TrueType file tag */
+        list   tables;                      /**< List of table tags and pointers */
+    };
+
+/* These must be #defined so that they can be used in initializers */
+#define T_maxp  0x6D617870
+#define T_glyf  0x676C7966
+#define T_head  0x68656164
+#define T_loca  0x6C6F6361
+#define T_name  0x6E616D65
+#define T_hhea  0x68686561
+#define T_hmtx  0x686D7478
+#define T_cmap  0x636D6170
+#define T_vhea  0x76686561
+#define T_vmtx  0x766D7478
+#define T_OS2   0x4F532F32
+#define T_post  0x706F7374
+#define T_kern  0x6B65726E
+#define T_cvt   0x63767420
+
+typedef struct {
+    sal_uInt32 tag;
+    sal_uInt32 length;
+    sal_uInt8  *data;
+} TableEntry;
+
+/*
+ * this is a duplicate code from sft.c but it is left here for performance reasons
+ */
+#ifdef __GNUC__
+#define _inline static __inline__
+#else
+#define _inline static
+#endif
+
+_inline sal_uInt32 mkTag(sal_uInt8 a, sal_uInt8 b, sal_uInt8 c, sal_uInt8 d) {
+    return (a << 24) | (b << 16) | (c << 8) | d;
+}
+
+/*- Data access macros for data stored in big-endian or little-endian format */
+_inline sal_Int16 GetInt16( const sal_uInt8* ptr, sal_uInt32 offset, int bigendian)
+{
+    sal_Int16 t;
+    assert(ptr != 0);
+
+    if (bigendian) {
+        t = (ptr+offset)[0] << 8 | (ptr+offset)[1];
+    } else {
+        t = (ptr+offset)[1] << 8 | (ptr+offset)[0];
+    }
+
+    return t;
+}
+
+_inline sal_uInt16 GetUInt16( const sal_uInt8* ptr, sal_uInt32 offset, int bigendian)
+{
+    sal_uInt16 t;
+    assert(ptr != 0);
+
+    if (bigendian) {
+        t = (ptr+offset)[0] << 8 | (ptr+offset)[1];
+    } else {
+        t = (ptr+offset)[1] << 8 | (ptr+offset)[0];
+    }
+
+    return t;
+}
+
+_inline sal_Int32 GetInt32( const sal_uInt8* ptr, sal_uInt32 offset, int bigendian)
+{
+    sal_Int32 t;
+    assert(ptr != 0);
+
+    if (bigendian) {
+        t = (ptr+offset)[0] << 24 | (ptr+offset)[1] << 16 |
+            (ptr+offset)[2] << 8  | (ptr+offset)[3];
+    } else {
+        t = (ptr+offset)[3] << 24 | (ptr+offset)[2] << 16 |
+            (ptr+offset)[1] << 8  | (ptr+offset)[0];
+    }
+
+    return t;
+}
+
+_inline sal_uInt32 GetUInt32( const sal_uInt8* ptr, sal_uInt32 offset, int bigendian)
+{
+    sal_uInt32 t;
+    assert(ptr != 0);
+
+
+    if (bigendian) {
+        t = (ptr+offset)[0] << 24 | (ptr+offset)[1] << 16 |
+            (ptr+offset)[2] << 8  | (ptr+offset)[3];
+    } else {
+        t = (ptr+offset)[3] << 24 | (ptr+offset)[2] << 16 |
+            (ptr+offset)[1] << 8  | (ptr+offset)[0];
+    }
+
+    return t;
+}
+
+
+_inline void PutInt16(sal_Int16 val, sal_uInt8 *ptr, sal_uInt32 offset, int bigendian)
+{
+    assert(ptr != 0);
+
+    if (bigendian) {
+        ptr[offset] = (sal_uInt8)((val >> 8) & 0xFF);
+        ptr[offset+1] = (sal_uInt8)(val & 0xFF);
+    } else {
+        ptr[offset+1] = (sal_uInt8)((val >> 8) & 0xFF);
+        ptr[offset] = (sal_uInt8)(val & 0xFF);
+    }
+}
+
+_inline void PutUInt16(sal_uInt16 val, sal_uInt8 *ptr, sal_uInt32 offset, int bigendian)
+{
+    assert(ptr != 0);
+
+    if (bigendian) {
+        ptr[offset] = (sal_uInt8)((val >> 8) & 0xFF);
+        ptr[offset+1] = (sal_uInt8)(val & 0xFF);
+    } else {
+        ptr[offset+1] = (sal_uInt8)((val >> 8) & 0xFF);
+        ptr[offset] = (sal_uInt8)(val & 0xFF);
+    }
+}
+
+_inline void PutUInt32(sal_uInt32 val, sal_uInt8 *ptr, sal_uInt32 offset, int bigendian)
+{
+    assert(ptr != 0);
+
+    if (bigendian) {
+        ptr[offset]   = (sal_uInt8)((val >> 24) & 0xFF);
+        ptr[offset+1] = (sal_uInt8)((val >> 16) & 0xFF);
+        ptr[offset+2] = (sal_uInt8)((val >> 8) & 0xFF);
+        ptr[offset+3] = (sal_uInt8)(val & 0xFF);
+    } else {
+        ptr[offset+3] = (sal_uInt8)((val >> 24) & 0xFF);
+        ptr[offset+2] = (sal_uInt8)((val >> 16) & 0xFF);
+        ptr[offset+1] = (sal_uInt8)((val >> 8) & 0xFF);
+        ptr[offset]   = (sal_uInt8)(val & 0xFF);
+    }
+
+}
+
+
+_inline void PutInt32(sal_Int32 val, sal_uInt8 *ptr, sal_uInt32 offset, int bigendian)
+{
+    assert(ptr != 0);
+
+    if (bigendian) {
+        ptr[offset]   = (sal_uInt8)((val >> 24) & 0xFF);
+        ptr[offset+1] = (sal_uInt8)((val >> 16) & 0xFF);
+        ptr[offset+2] = (sal_uInt8)((val >> 8) & 0xFF);
+        ptr[offset+3] = (sal_uInt8)(val & 0xFF);
+    } else {
+        ptr[offset+3] = (sal_uInt8)((val >> 24) & 0xFF);
+        ptr[offset+2] = (sal_uInt8)((val >> 16) & 0xFF);
+        ptr[offset+1] = (sal_uInt8)((val >> 8) & 0xFF);
+        ptr[offset]   = (sal_uInt8)(val & 0xFF);
+    }
+
+}
+
+static int TableEntryCompareF(const void *l, const void *r)
+{
+    return ((const TableEntry *) l)->tag - ((const TableEntry *) r)->tag;
+}
+
+static int NameRecordCompareF(const void *l, const void *r)
+{
+    NameRecord *ll = (NameRecord *) l;
+    NameRecord *rr = (NameRecord *) r;
+
+    if (ll->platformID != rr->platformID) {
+        return ll->platformID - rr->platformID;
+    } else if (ll->encodingID != rr->encodingID) {
+        return ll->encodingID - rr->encodingID;
+    } else if (ll->languageID != rr->languageID) {
+        return ll->languageID - rr->languageID;
+    } else if (ll->nameID != rr->nameID) {
+        return ll->nameID - rr->nameID;
+    }
+    return 0;
+}
+
+
+static sal_uInt32 CheckSum(sal_uInt32 *ptr, sal_uInt32 length)
+{
+    sal_uInt32 sum = 0;
+    sal_uInt32 *endptr = ptr + ((length + 3) & (sal_uInt32) ~3) / 4;
+
+    while (ptr < endptr) sum += *ptr++;
+
+    return sum;
+}
+
+_inline void *smalloc(sal_uInt32 size)
+{
+    void *res = malloc(size);
+    assert(res != 0);
+    return res;
+}
+
+_inline void *scalloc(sal_uInt32 n, sal_uInt32 size)
+{
+    void *res = calloc(n, size);
+    assert(res != 0);
+    return res;
+}
+
+/*
+ * Public functions
+ */
+
+void TrueTypeCreatorNewEmpty(sal_uInt32 tag, TrueTypeCreator **_this)
+{
+    TrueTypeCreator* ptr = (TrueTypeCreator*)smalloc(sizeof(TrueTypeCreator));
+
+    ptr->tables = listNewEmpty();
+    listSetElementDtor(ptr->tables, (list_destructor)TrueTypeTableDispose);
+
+    ptr->tag = tag;
+
+    *_this = ptr;
+}
+
+int AddTable(TrueTypeCreator *_this, TrueTypeTable *table)
+{
+    if (table != 0) {
+        listAppend(_this->tables, table);
+    }
+    return SF_OK;
+}
+
+void RemoveTable(TrueTypeCreator *_this, sal_uInt32 tag)
+{
+    int done = 0;
+
+    if (listCount(_this->tables)) {
+        listToFirst(_this->tables);
+        do {
+            if (((TrueTypeTable *) listCurrent(_this->tables))->tag == tag) {
+                listRemove(_this->tables);
+            } else {
+                if (listNext(_this->tables)) {
+                    done = 1;
+                }
+            }
+        } while (!done);
+    }
+}
+
+static void ProcessTables(TrueTypeCreator *);
+
+int StreamToMemory(TrueTypeCreator *_this, sal_uInt8 **ptr, sal_uInt32 *length)
+{
+    sal_uInt16 numTables, searchRange=1, entrySelector=0, rangeShift;
+    sal_uInt32 s, offset, checkSumAdjustment = 0;
+    sal_uInt32 *p;
+    int i=0, n;
+    sal_uInt8 *head = NULL;     /* saved pointer to the head table data for checkSumAdjustment calculation */
+
+    if ((n = listCount(_this->tables)) == 0) return SF_TTFORMAT;
+
+    ProcessTables(_this);
+
+    /* ProcessTables() adds 'loca' and 'hmtx' */
+
+    n = listCount(_this->tables);
+    numTables = (sal_uInt16) n;
+
+
+    TableEntry* te = (TableEntry*)scalloc(n, sizeof(TableEntry));
+
+    listToFirst(_this->tables);
+    for (i = 0; i < n; i++) {
+        GetRawData((TrueTypeTable *) listCurrent(_this->tables), &te[i].data, &te[i].length, &te[i].tag);
+        listNext(_this->tables);
+    }
+
+    qsort(te, n, sizeof(TableEntry), TableEntryCompareF);
+
+    do {
+        searchRange *= 2;
+        entrySelector++;
+    } while (searchRange <= numTables);
+
+    searchRange *= 8;
+    entrySelector--;
+    rangeShift = numTables * 16 - searchRange;
+
+    s = offset = 12 + 16 * n;
+
+    for (i = 0; i < n; i++) {
+        s += (te[i].length + 3) & (sal_uInt32) ~3;
+        /* if ((te[i].length & 3) != 0) s += (4 - (te[i].length & 3)) & 3; */
+    }
+
+    sal_uInt8* ttf = (sal_uInt8*)smalloc(s);
+
+    /* Offset Table */
+    PutUInt32(_this->tag, ttf, 0, 1);
+    PutUInt16(numTables, ttf, 4, 1);
+    PutUInt16(searchRange, ttf, 6, 1);
+    PutUInt16(entrySelector, ttf, 8, 1);
+    PutUInt16(rangeShift, ttf, 10, 1);
+
+    /* Table Directory */
+    for (i = 0; i < n; i++) {
+        PutUInt32(te[i].tag, ttf + 12, 16 * i, 1);
+        PutUInt32(CheckSum((sal_uInt32 *) te[i].data, te[i].length), ttf + 12, 16 * i + 4, 1);
+        PutUInt32(offset, ttf + 12, 16 * i + 8, 1);
+        PutUInt32(te[i].length, ttf + 12, 16 * i + 12, 1);
+
+        if (te[i].tag == T_head) {
+            head = ttf + offset;
+        }
+
+        memcpy(ttf+offset, te[i].data, (te[i].length + 3) & (sal_uInt32) ~3 );
+        offset += (te[i].length + 3) & (sal_uInt32) ~3;
+        /* if ((te[i].length & 3) != 0) offset += (4 - (te[i].length & 3)) & 3; */
+    }
+
+    free(te);
+
+    p = (sal_uInt32 *) ttf;
+    for (i = 0; i < (int)s / 4; i++) checkSumAdjustment += p[i];
+    PutUInt32(0xB1B0AFBA - checkSumAdjustment, head, 8, 1);
+
+    *ptr = ttf;
+    *length = s;
+
+    return SF_OK;
+}
+
+int StreamToFile(TrueTypeCreator *_this, const char* fname)
+{
+    sal_uInt8 *ptr;
+    sal_uInt32 length;
+    int r;
+    FILE* fd;
+
+    if ((r = StreamToMemory(_this, &ptr, &length)) != SF_OK) return r;
+    if (fname && (fd = fopen(fname, "wb")) != NULL)
+    {
+        if (fwrite(ptr, 1, length, fd) != length) {
+            r = SF_FILEIO;
+        } else {
+            r = SF_OK;
+        }
+        fclose(fd);
+    }
+    else
+    {
+        r = SF_BADFILE;
+    }
+    free(ptr);
+    return r;
+}
+
+
+
+/*
+ * TrueTypeTable private methods
+ */
+
+#define TABLESIZE_head 54
+#define TABLESIZE_hhea 36
+#define TABLESIZE_maxp 32
+
+
+
+/*    Table         data points to
+ * --------------------------------------------
+ *    generic       tdata_generic struct
+ *    'head'        TABLESIZE_head bytes of memory
+ *    'hhea'        TABLESIZE_hhea bytes of memory
+ *    'loca'        tdata_loca struct
+ *    'maxp'        TABLESIZE_maxp bytes of memory
+ *    'glyf'        list of GlyphData structs (defined in sft.h)
+ *    'name'        list of NameRecord structs (defined in sft.h)
+ *    'post'        tdata_post struct
+ *
+ */
+
+
+#define CMAP_SUBTABLE_INIT 10
+#define CMAP_SUBTABLE_INCR 10
+#define CMAP_PAIR_INIT 500
+#define CMAP_PAIR_INCR 500
+
+typedef struct {
+    sal_uInt32  id;                         /* subtable ID (platform/encoding ID)    */
+    sal_uInt32  n;                          /* number of used translation pairs      */
+    sal_uInt32  m;                          /* number of allocated translation pairs */
+    sal_uInt32 *xc;                         /* character array                       */
+    sal_uInt32 *xg;                         /* glyph array                           */
+} CmapSubTable;
+
+typedef struct {
+    sal_uInt32 n;                           /* number of used CMAP sub-tables       */
+    sal_uInt32 m;                           /* number of allocated CMAP sub-tables  */
+    CmapSubTable *s;                    /* sotred array of sub-tables           */
+} table_cmap;
+
+typedef struct {
+    sal_uInt32 tag;
+    sal_uInt32 nbytes;
+    sal_uInt8 *ptr;
+} tdata_generic;
+
+typedef struct {
+    sal_uInt32 nbytes;                      /* number of bytes in loca table */
+    sal_uInt8 *ptr;                          /* pointer to the data */
+} tdata_loca;
+
+typedef struct {
+    sal_uInt32 format;
+    sal_uInt32 italicAngle;
+    sal_Int16  underlinePosition;
+    sal_Int16  underlineThickness;
+    sal_uInt32 isFixedPitch;
+    void   *ptr;                        /* format-specific pointer */
+} tdata_post;
+
+
+/* allocate memory for a TT table */
+static sal_uInt8 *ttmalloc(sal_uInt32 nbytes)
+{
+    sal_uInt32 n;
+
+    n = (nbytes + 3) & (sal_uInt32) ~3;
+    sal_uInt8* res = (sal_uInt8*)malloc(n);
+    assert(res != 0);
+    memset(res, 0, n);
+
+    return res;
+}
+
+static void FreeGlyphData(void *ptr)
+{
+    GlyphData *p = (GlyphData *) ptr;
+    if (p->ptr) free(p->ptr);
+    free(p);
+}
+
+static void TrueTypeTableDispose_generic(TrueTypeTable *_this)
+{
+    if (_this) {
+        if (_this->data) {
+            tdata_generic *pdata = (tdata_generic *) _this->data;
+            if (pdata->nbytes) free(pdata->ptr);
+            free(_this->data);
+        }
+        free(_this);
+    }
+}
+
+static void TrueTypeTableDispose_head(TrueTypeTable *_this)
+{
+    if (_this) {
+        if (_this->data) free(_this->data);
+        free(_this);
+    }
+}
+
+static void TrueTypeTableDispose_hhea(TrueTypeTable *_this)
+{
+    if (_this) {
+        if (_this->data) free(_this->data);
+        free(_this);
+    }
+}
+
+static void TrueTypeTableDispose_loca(TrueTypeTable *_this)
+{
+    if (_this) {
+        if (_this->data) {
+            tdata_loca *p = (tdata_loca *) _this->data;
+            if (p->ptr) free(p->ptr);
+            free(_this->data);
+        }
+        free(_this);
+    }
+}
+
+static void TrueTypeTableDispose_maxp(TrueTypeTable *_this)
+{
+    if (_this) {
+        if (_this->data) free(_this->data);
+        free(_this);
+    }
+}
+
+static void TrueTypeTableDispose_glyf(TrueTypeTable *_this)
+{
+    if (_this) {
+        if (_this->data) listDispose((list) _this->data);
+        free(_this);
+    }
+}
+
+static void TrueTypeTableDispose_cmap(TrueTypeTable *_this)
+{
+    table_cmap *t;
+    CmapSubTable *s;
+    sal_uInt32 i;
+
+    if (_this) {
+        t = (table_cmap *) _this->data;
+        if (t) {
+            s = t->s;
+            if (s) {
+                for (i = 0; i < t->m; i++) {
+                    if (s[i].xc) free(s[i].xc);
+                    if (s[i].xg) free(s[i].xg);
+                }
+                free(s);
+            }
+            free(t);
+        }
+        free(_this);
+    }
+}
+
+static void TrueTypeTableDispose_name(TrueTypeTable *_this)
+{
+    if (_this) {
+        if (_this->data) listDispose((list) _this->data);
+        free(_this);
+    }
+}
+
+static void TrueTypeTableDispose_post(TrueTypeTable *_this)
+{
+    if (_this) {
+        tdata_post *p = (tdata_post *) _this->data;
+        if (p) {
+            if (p->format == 0x00030000) {
+                /* do nothing */
+            } else {
+                fprintf(stderr, "Unsupported format of a 'post' table: %08X.\n", (int)p->format);
+            }
+            free(p);
+        }
+        free(_this);
+    }
+}
+
+/* destructor vtable */
+
+static struct {
+    sal_uInt32 tag;
+    void (*f)(TrueTypeTable *);
+} vtable1[] =
+{
+    {0,      TrueTypeTableDispose_generic},
+    {T_head, TrueTypeTableDispose_head},
+    {T_hhea, TrueTypeTableDispose_hhea},
+    {T_loca, TrueTypeTableDispose_loca},
+    {T_maxp, TrueTypeTableDispose_maxp},
+    {T_glyf, TrueTypeTableDispose_glyf},
+    {T_cmap, TrueTypeTableDispose_cmap},
+    {T_name, TrueTypeTableDispose_name},
+    {T_post, TrueTypeTableDispose_post}
+
+};
+
+static int GetRawData_generic(TrueTypeTable *_this, sal_uInt8 **ptr, sal_uInt32 *len, sal_uInt32 *tag)
+{
+    assert(_this != 0);
+    assert(_this->data != 0);
+
+    *ptr = ((tdata_generic *) _this->data)->ptr;
+    *len = ((tdata_generic *) _this->data)->nbytes;
+    *tag = ((tdata_generic *) _this->data)->tag;
+
+    return TTCR_OK;
+}
+
+
+static int GetRawData_head(TrueTypeTable *_this, sal_uInt8 **ptr, sal_uInt32 *len, sal_uInt32 *tag)
+{
+    *len = TABLESIZE_head;
+    *ptr = (sal_uInt8 *) _this->data;
+    *tag = T_head;
+
+    return TTCR_OK;
+}
+
+static int GetRawData_hhea(TrueTypeTable *_this, sal_uInt8 **ptr, sal_uInt32 *len, sal_uInt32 *tag)
+{
+    *len = TABLESIZE_hhea;
+    *ptr = (sal_uInt8 *) _this->data;
+    *tag = T_hhea;
+
+    return TTCR_OK;
+}
+
+static int GetRawData_loca(TrueTypeTable *_this, sal_uInt8 **ptr, sal_uInt32 *len, sal_uInt32 *tag)
+{
+    tdata_loca *p;
+
+    assert(_this->data != 0);
+
+    p = (tdata_loca *) _this->data;
+
+    if (p->nbytes == 0) return TTCR_ZEROGLYPHS;
+
+    *ptr = p->ptr;
+    *len = p->nbytes;
+    *tag = T_loca;
+
+    return TTCR_OK;
+}
+
+static int GetRawData_maxp(TrueTypeTable *_this, sal_uInt8 **ptr, sal_uInt32 *len, sal_uInt32 *tag)
+{
+    *len = TABLESIZE_maxp;
+    *ptr = (sal_uInt8 *) _this->data;
+    *tag = T_maxp;
+
+    return TTCR_OK;
+}
+
+static int GetRawData_glyf(TrueTypeTable *_this, sal_uInt8 **ptr, sal_uInt32 *len, sal_uInt32 *tag)
+{
+    sal_uInt32 n, nbytes = 0;
+    list l = (list) _this->data;
+    /* sal_uInt16 curID = 0;    */               /* to check if glyph IDs are sequential and start from zero */
+    sal_uInt8 *p;
+
+    *ptr = 0;
+    *len = 0;
+    *tag = 0;
+
+    if (listCount(l) == 0) return TTCR_ZEROGLYPHS;
+
+    listToFirst(l);
+    do {
+        /* if (((GlyphData *) listCurrent(l))->glyphID != curID++) return TTCR_GLYPHSEQ; */
+        nbytes += ((GlyphData *) listCurrent(l))->nbytes;
+    } while (listNext(l));
+
+    p = _this->rawdata = ttmalloc(nbytes);
+
+    listToFirst(l);
+    do {
+        n = ((GlyphData *) listCurrent(l))->nbytes;
+        if (n != 0) {
+            memcpy(p, ((GlyphData *) listCurrent(l))->ptr, n);
+            p += n;
+        }
+    } while (listNext(l));
+
+    *len = nbytes;
+    *ptr = _this->rawdata;
+    *tag = T_glyf;
+
+    return TTCR_OK;
+}
+
+/* cmap packers */
+static sal_uInt8 *PackCmapType0(CmapSubTable *s, sal_uInt32 *length)
+{
+    sal_uInt8* ptr = (sal_uInt8*)smalloc(262);
+    sal_uInt8 *p = ptr + 6;
+    sal_uInt32 i, j;
+    sal_uInt16 g;
+
+    PutUInt16(0, ptr, 0, 1);
+    PutUInt16(262, ptr, 2, 1);
+    PutUInt16(0, ptr, 4, 1);
+
+    for (i = 0; i < 256; i++) {
+        g = 0;
+        for (j = 0; j < s->n; j++) {
+            if (s->xc[j] == i) {
+                g = (sal_uInt16) s->xg[j];
+            }
+        }
+        p[i] = (sal_uInt8) g;
+    }
+    *length = 262;
+    return ptr;
+}
+
+static sal_uInt8 *PackCmapType6(CmapSubTable *s, sal_uInt32 *length)
+{
+    sal_uInt8* ptr = (sal_uInt8*)smalloc(s->n*2 + 10);
+    sal_uInt8 *p = ptr + 10;
+    sal_uInt32 i, j;
+    sal_uInt16 g;
+
+    PutUInt16(6, ptr, 0, 1);
+    PutUInt16((sal_uInt16)(s->n*2+10), ptr, 2, 1);
+    PutUInt16(0, ptr, 4, 1);
+    PutUInt16(0, ptr, 6, 1);
+    PutUInt16((sal_uInt16)(s->n), ptr, 8, 1 );
+
+    for (i = 0; i < s->n; i++) {
+        g = 0;
+        for (j = 0; j < s->n; j++) {
+            if (s->xc[j] == i) {
+                g = (sal_uInt16) s->xg[j];
+            }
+        }
+        PutUInt16( g, p, 2*i, 1 );
+    }
+    *length = s->n*2+10;
+    return ptr;
+}
+
+
+
+/* XXX it only handles Format 0 encoding tables */
+static sal_uInt8 *PackCmap(CmapSubTable *s, sal_uInt32 *length)
+{
+    if( s->xg[s->n-1] > 0xff )
+        return PackCmapType6(s, length);
+    else
+        return PackCmapType0(s, length);
+}
+
+static int GetRawData_cmap(TrueTypeTable *_this, sal_uInt8 **ptr, sal_uInt32 *len, sal_uInt32 *tag)
+{
+    table_cmap *t;
+    sal_uInt32 i;
+    sal_uInt32 tlen = 0;
+    sal_uInt32 l;
+    sal_uInt32 cmapsize;
+    sal_uInt8 *cmap;
+    sal_uInt32 coffset;
+
+    assert(_this != 0);
+    t = (table_cmap *) _this->data;
+    assert(t != 0);
+    assert(t->n != 0);
+
+    sal_uInt8** subtables = (sal_uInt8**)scalloc(t->n, sizeof(sal_uInt8 *));
+    sal_uInt32* sizes = (sal_uInt32*)scalloc(t->n, sizeof(sal_uInt32));
+
+    for (i = 0; i < t->n; i++) {
+        subtables[i] = PackCmap(t->s+i, &l);
+        sizes[i] = l;
+        tlen += l;
+    }
+
+    cmapsize = tlen + 4 + 8 * t->n;
+    _this->rawdata = cmap = ttmalloc(cmapsize);
+
+    PutUInt16(0, cmap, 0, 1);
+    PutUInt16((sal_uInt16)t->n, cmap, 2, 1);
+    coffset = 4 + t->n * 8;
+
+    for (i = 0; i < t->n; i++) {
+        PutUInt16((sal_uInt16)(t->s[i].id >> 16), cmap + 4, i * 8, 1);
+        PutUInt16((sal_uInt16)(t->s[i].id & 0xFF), cmap + 4, 2 + i * 8, 1);
+        PutUInt32(coffset, cmap + 4, 4 + i * 8, 1);
+        memcpy(cmap + coffset, subtables[i], sizes[i]);
+        free(subtables[i]);
+        coffset += sizes[i];
+    }
+
+    free(subtables);
+    free(sizes);
+
+    *ptr = cmap;
+    *len = cmapsize;
+    *tag = T_cmap;
+
+    return TTCR_OK;
+}
+
+
+static int GetRawData_name(TrueTypeTable *_this, sal_uInt8 **ptr, sal_uInt32 *len, sal_uInt32 *tag)
+{
+    list l;
+    sal_Int16 i=0, n;                          /* number of Name Records */
+    int stringLen = 0;
+    sal_uInt8 *p1, *p2;
+
+    *ptr = 0;
+    *len = 0;
+    *tag = 0;
+
+    assert(_this != 0);
+    l = (list) _this->data;
+    assert(l != 0);
+
+    if ((n = (sal_Int16)listCount(l)) == 0) return TTCR_NONAMES;
+
+    NameRecord* nr = (NameRecord*)scalloc(n, sizeof(NameRecord));
+
+    listToFirst(l);
+
+    do {
+        memcpy(nr+i, listCurrent(l), sizeof(NameRecord));
+        stringLen += nr[i].slen;
+        i++;
+    } while (listNext(l));
+
+    if (stringLen > 65535) {
+        free(nr);
+        return TTCR_NAMETOOLONG;
+    }
+
+    qsort(nr, n, sizeof(NameRecord), NameRecordCompareF);
+
+    int nameLen = stringLen + 12 * n + 6;
+    sal_uInt8* name = (sal_uInt8*)ttmalloc(nameLen);
+
+    PutUInt16(0, name, 0, 1);
+    PutUInt16(n, name, 2, 1);
+    PutUInt16((sal_uInt16)(6 + 12 * n), name, 4, 1);
+
+    p1 = name + 6;
+    p2 = p1 + 12 * n;
+
+    for (i = 0; i < n; i++) {
+        PutUInt16(nr[i].platformID, p1, 0, 1);
+        PutUInt16(nr[i].encodingID, p1, 2, 1);
+        PutUInt16(nr[i].languageID, p1, 4, 1);
+        PutUInt16(nr[i].nameID, p1, 6, 1);
+        PutUInt16(nr[i].slen, p1, 8, 1);
+        PutUInt16((sal_uInt16)(p2 - (name + 6 + 12 * n)), p1, 10, 1);
+        memcpy(p2, nr[i].sptr, nr[i].slen);
+        /* {int j; for(j=0; j<nr[i].slen; j++) printf("%c", nr[i].sptr[j]); printf("\n"); }; */
+        p2 += nr[i].slen;
+        p1 += 12;
+    }
+
+    free(nr);
+    _this->rawdata = name;
+
+    *ptr = name;
+    *len = (sal_uInt16)nameLen;
+    *tag = T_name;
+
+    /*{int j; for(j=0; j<nameLen; j++) printf("%c", name[j]); }; */
+
+    return TTCR_OK;
+}
+
+static int GetRawData_post(TrueTypeTable *_this, sal_uInt8 **ptr, sal_uInt32 *len, sal_uInt32 *tag)
+{
+    tdata_post *p = (tdata_post *) _this->data;
+    sal_uInt8 *post = 0;
+    sal_uInt32 postLen = 0;
+    int ret;
+
+    if (_this->rawdata) free(_this->rawdata);
+
+    if (p->format == 0x00030000) {
+        postLen = 32;
+        post = ttmalloc(postLen);
+        PutUInt32(0x00030000, post, 0, 1);
+        PutUInt32(p->italicAngle, post, 4, 1);
+        PutUInt16(p->underlinePosition, post, 8, 1);
+        PutUInt16(p->underlineThickness, post, 10, 1);
+        PutUInt16((sal_uInt16)p->isFixedPitch, post, 12, 1);
+        ret = TTCR_OK;
+    } else {
+        fprintf(stderr, "Unrecognized format of a post table: %08X.\n", (int)p->format);
+        ret = TTCR_POSTFORMAT;
+    }
+
+    *ptr = _this->rawdata = post;
+    *len = postLen;
+    *tag = T_post;
+
+    return ret;
+}
+
+
+
+
+
+static struct {
+    sal_uInt32 tag;
+    int (*f)(TrueTypeTable *, sal_uInt8 **, sal_uInt32 *, sal_uInt32 *);
+} vtable2[] =
+{
+    {0,      GetRawData_generic},
+    {T_head, GetRawData_head},
+    {T_hhea, GetRawData_hhea},
+    {T_loca, GetRawData_loca},
+    {T_maxp, GetRawData_maxp},
+    {T_glyf, GetRawData_glyf},
+    {T_cmap, GetRawData_cmap},
+    {T_name, GetRawData_name},
+    {T_post, GetRawData_post}
+
+
+};
+
+/*
+ * TrueTypeTable public methods
+ */
+
+/* Note: Type42 fonts only need these tables:
+ *        head, hhea, loca, maxp, cvt, prep, glyf, hmtx, fpgm
+ *
+ * Microsoft required tables
+ *        cmap, glyf, head, hhea, hmtx, loca, maxp, name, post, OS/2
+ *
+ * Apple required tables
+ *        cmap, glyf, head, hhea, hmtx, loca, maxp, name, post
+ *
+ */
+
+TrueTypeTable *TrueTypeTableNew(sal_uInt32 tag,
+                                sal_uInt32 nbytes,
+                                const sal_uInt8* ptr)
+{
+    TrueTypeTable* table = (TrueTypeTable*)smalloc(sizeof(TrueTypeTable));
+    tdata_generic* pdata = (tdata_generic*)smalloc(sizeof(tdata_generic));
+    pdata->nbytes = nbytes;
+    pdata->tag = tag;
+    if (nbytes) {
+        pdata->ptr = ttmalloc(nbytes);
+        memcpy(pdata->ptr, ptr, nbytes);
+    } else {
+        pdata->ptr = 0;
+    }
+
+    table->tag = 0;
+    table->data = pdata;
+    table->rawdata = 0;
+
+    return table;
+}
+
+TrueTypeTable *TrueTypeTableNew_head(sal_uInt32 fontRevision,
+                                     sal_uInt16 flags,
+                                     sal_uInt16 unitsPerEm,
+                                     const sal_uInt8* created,
+                                     sal_uInt16 macStyle,
+                                     sal_uInt16 lowestRecPPEM,
+                                     sal_Int16  fontDirectionHint)
+{
+    assert(created != 0);
+
+    TrueTypeTable* table  = (TrueTypeTable*)smalloc(sizeof(TrueTypeTable));
+    sal_uInt8* ptr = (sal_uInt8*)ttmalloc(TABLESIZE_head);
+
+
+    PutUInt32(0x00010000, ptr, 0, 1);             /* version */
+    PutUInt32(fontRevision, ptr, 4, 1);
+    PutUInt32(0x5F0F3CF5, ptr, 12, 1);            /* magic number */
+    PutUInt16(flags, ptr, 16, 1);
+    PutUInt16(unitsPerEm, ptr, 18, 1);
+    memcpy(ptr+20, created, 8);                   /* Created Long Date */
+    memset(ptr+28, 0, 8);                         /* Modified Long Date */
+    PutUInt16(macStyle, ptr, 44, 1);
+    PutUInt16(lowestRecPPEM, ptr, 46, 1);
+    PutUInt16(fontDirectionHint, ptr, 48, 1);
+    PutUInt16(0, ptr, 52, 1);                     /* glyph data format: 0 */
+
+    table->data = (void *) ptr;
+    table->tag = T_head;
+    table->rawdata = 0;
+
+    return table;
+}
+
+TrueTypeTable *TrueTypeTableNew_hhea(sal_Int16  ascender,
+                                     sal_Int16  descender,
+                                     sal_Int16  linegap,
+                                     sal_Int16  caretSlopeRise,
+                                     sal_Int16  caretSlopeRun)
+{
+    TrueTypeTable* table = (TrueTypeTable*)smalloc(sizeof(TrueTypeTable));
+    sal_uInt8* ptr = (sal_uInt8*)ttmalloc(TABLESIZE_hhea);
+
+    PutUInt32(0x00010000, ptr, 0, 1);             /* version */
+    PutUInt16(ascender, ptr, 4, 1);
+    PutUInt16(descender, ptr, 6, 1);
+    PutUInt16(linegap, ptr, 8, 1);
+    PutUInt16(caretSlopeRise, ptr, 18, 1);
+    PutUInt16(caretSlopeRun, ptr, 20, 1);
+    PutUInt16(0, ptr, 22, 1);                     /* reserved 1 */
+    PutUInt16(0, ptr, 24, 1);                     /* reserved 2 */
+    PutUInt16(0, ptr, 26, 1);                     /* reserved 3 */
+    PutUInt16(0, ptr, 28, 1);                     /* reserved 4 */
+    PutUInt16(0, ptr, 30, 1);                     /* reserved 5 */
+    PutUInt16(0, ptr, 32, 1);                     /* metricDataFormat */
+
+    table->data = (void *) ptr;
+    table->tag = T_hhea;
+    table->rawdata = 0;
+
+    return table;
+}
+
+TrueTypeTable *TrueTypeTableNew_loca(void)
+{
+    TrueTypeTable* table = (TrueTypeTable*)smalloc(sizeof(TrueTypeTable));
+    table->data = smalloc(sizeof(tdata_loca));
+
+    ((tdata_loca *)table->data)->nbytes = 0;
+    ((tdata_loca *)table->data)->ptr = 0;
+
+    table->tag = T_loca;
+    table->rawdata = 0;
+
+    return table;
+}
+
+TrueTypeTable *TrueTypeTableNew_maxp( const sal_uInt8* maxp, int size)
+{
+    TrueTypeTable* table = (TrueTypeTable*)smalloc(sizeof(TrueTypeTable));
+    table->data = ttmalloc(TABLESIZE_maxp);
+
+    if (maxp && size == TABLESIZE_maxp) {
+        memcpy(table->data, maxp, TABLESIZE_maxp);
+    }
+
+    table->tag = T_maxp;
+    table->rawdata = 0;
+
+    return table;
+}
+
+TrueTypeTable *TrueTypeTableNew_glyf(void)
+{
+    TrueTypeTable* table = (TrueTypeTable*)smalloc(sizeof(TrueTypeTable));
+    list l = listNewEmpty();
+
+    assert(l != 0);
+
+    listSetElementDtor(l, (list_destructor)FreeGlyphData);
+
+    table->data = l;
+    table->rawdata = 0;
+    table->tag = T_glyf;
+
+    return table;
+}
+
+TrueTypeTable *TrueTypeTableNew_cmap(void)
+{
+    TrueTypeTable* table = (TrueTypeTable*)smalloc(sizeof(TrueTypeTable));
+    table_cmap* cmap = (table_cmap*)smalloc(sizeof(table_cmap));
+
+    cmap->n = 0;
+    cmap->m = CMAP_SUBTABLE_INIT;
+    cmap->s = (CmapSubTable *) scalloc(CMAP_SUBTABLE_INIT, sizeof(CmapSubTable));
+    memset(cmap->s, 0, sizeof(CmapSubTable) * CMAP_SUBTABLE_INIT);
+
+    table->data = (table_cmap *) cmap;
+
+    table->rawdata = 0;
+    table->tag = T_cmap;
+
+    return table;
+}
+
+static void DisposeNameRecord(void *ptr)
+{
+    if (ptr != 0) {
+        NameRecord *nr = (NameRecord *) ptr;
+        if (nr->sptr) free(nr->sptr);
+        free(ptr);
+    }
+}
+
+static NameRecord* NameRecordNewCopy(NameRecord *nr)
+{
+    NameRecord* p = (NameRecord*)smalloc(sizeof(NameRecord));
+
+    memcpy(p, nr, sizeof(NameRecord));
+
+    if (p->slen) {
+        p->sptr = (sal_uInt8*)smalloc(p->slen);
+        memcpy(p->sptr, nr->sptr, p->slen);
+    }
+
+    return p;
+}
+
+TrueTypeTable *TrueTypeTableNew_name(int n, NameRecord *nr)
+{
+    TrueTypeTable* table = (TrueTypeTable*)smalloc(sizeof(TrueTypeTable));
+    list l = listNewEmpty();
+
+    assert(l != 0);
+
+    listSetElementDtor(l, (list_destructor)DisposeNameRecord);
+
+    if (n != 0) {
+        int i;
+        for (i = 0; i < n; i++) {
+            listAppend(l, NameRecordNewCopy(nr+i));
+        }
+    }
+
+    table->data = l;
+    table->rawdata = 0;
+    table->tag = T_name;
+
+    return table;
+}
+
+TrueTypeTable *TrueTypeTableNew_post(sal_uInt32 format,
+                                     sal_uInt32 italicAngle,
+                                     sal_Int16 underlinePosition,
+                                     sal_Int16 underlineThickness,
+                                     sal_uInt32 isFixedPitch)
+{
+    assert(format == 0x00030000);                 /* Only format 3.0 is supported at this time */
+    TrueTypeTable* table = (TrueTypeTable*)smalloc(sizeof(TrueTypeTable));
+    tdata_post* post = (tdata_post*)smalloc(sizeof(tdata_post));
+
+    post->format = format;
+    post->italicAngle = italicAngle;
+    post->underlinePosition = underlinePosition;
+    post->underlineThickness = underlineThickness;
+    post->isFixedPitch = isFixedPitch;
+    post->ptr = 0;
+
+    table->data = post;
+    table->rawdata = 0;
+    table->tag = T_post;
+
+    return table;
+}
+
+int GetRawData(TrueTypeTable *_this, sal_uInt8 **ptr, sal_uInt32 *len, sal_uInt32 *tag)
+{
+    /* XXX do a binary search */
+    unsigned int i;
+
+    assert(_this != 0);
+    assert(ptr != 0);
+    assert(len != 0);
+    assert(tag != 0);
+
+    *ptr = 0; *len = 0; *tag = 0;
+
+    if (_this->rawdata) {
+        free(_this->rawdata);
+        _this->rawdata = 0;
+    }
+
+    for(i=0; i < sizeof(vtable2)/sizeof(*vtable2); i++) {
+        if (_this->tag == vtable2[i].tag) {
+            return vtable2[i].f(_this, ptr, len, tag);
+        }
+    }
+
+    assert(!"Unknwon TrueType table.\n");
+    return TTCR_UNKNOWN;
+}
+
+void cmapAdd(TrueTypeTable *table, sal_uInt32 id, sal_uInt32 c, sal_uInt32 g)
+{
+    sal_uInt32 i, found;
+    table_cmap *t;
+    CmapSubTable *s;
+
+    assert(table != 0);
+    assert(table->tag == T_cmap);
+    t = (table_cmap *) table->data; assert(t != 0);
+    s = t->s; assert(s != 0);
+
+    found = 0;
+
+    for (i = 0; i < t->n; i++) {
+        if (s[i].id == id) {
+            found = 1;
+            break;
+        }
+    }
+
+    if (!found) {
+        if (t->n == t->m) {
+            CmapSubTable* tmp = (CmapSubTable*)scalloc(t->m + CMAP_SUBTABLE_INCR, sizeof(CmapSubTable));
+            memset(tmp, 0, t->m + CMAP_SUBTABLE_INCR * sizeof(CmapSubTable));
+            memcpy(tmp, s, sizeof(CmapSubTable) * t->m);
+            t->m += CMAP_SUBTABLE_INCR;
+            free(s);
+            s = tmp;
+            t->s = s;
+        }
+
+        for (i = 0; i < t->n; i++) {
+            if (s[i].id > id) break;
+        }
+
+        if (i < t->n) {
+            memmove(s+i+1, s+i, t->n-i);
+        }
+
+        t->n++;
+
+        s[i].id = id;
+        s[i].n = 0;
+        s[i].m = CMAP_PAIR_INIT;
+        s[i].xc = (sal_uInt32*)scalloc(CMAP_PAIR_INIT, sizeof(sal_uInt32));
+        s[i].xg = (sal_uInt32*)scalloc(CMAP_PAIR_INIT, sizeof(sal_uInt32));
+    }
+
+    if (s[i].n == s[i].m) {
+        sal_uInt32* tmp1 = (sal_uInt32*)scalloc(s[i].m + CMAP_PAIR_INCR, sizeof(sal_uInt32));
+        sal_uInt32* tmp2 = (sal_uInt32*)scalloc(s[i].m + CMAP_PAIR_INCR, sizeof(sal_uInt32));
+        assert(tmp1 != 0);
+        assert(tmp2 != 0);
+        memcpy(tmp1, s[i].xc, sizeof(sal_uInt32) * s[i].m);
+        memcpy(tmp2, s[i].xg, sizeof(sal_uInt32) * s[i].m);
+        s[i].m += CMAP_PAIR_INCR;
+        free(s[i].xc);
+        free(s[i].xg);
+        s[i].xc = tmp1;
+        s[i].xg = tmp2;
+    }
+
+    s[i].xc[s[i].n] = c;
+    s[i].xg[s[i].n] = g;
+    s[i].n++;
+}
+
+sal_uInt32 glyfAdd(TrueTypeTable *table, GlyphData *glyphdata, TrueTypeFont *fnt)
+{
+    list l;
+    sal_uInt32 currentID;
+    int ret, n, ncomponents;
+    GlyphData *gd;
+
+    assert(table != 0);
+    assert(table->tag == T_glyf);
+
+    if (!glyphdata) return (sal_uInt32)~0;
+
+    std::vector< sal_uInt32 > glyphlist;
+
+    ncomponents = GetTTGlyphComponents(fnt, glyphdata->glyphID, glyphlist);
+
+    l = (list) table->data;
+    if (listCount(l) > 0) {
+        listToLast(l);
+        ret = n = ((GlyphData *) listCurrent(l))->newID + 1;
+    } else {
+        ret = n = 0;
+    }
+    glyphdata->newID = n++;
+    listAppend(l, glyphdata);
+
+    if (ncomponents > 1 && glyphlist.size() > 1 )
+    {
+        std::vector< sal_uInt32 >::const_iterator it = glyphlist.begin();
+        ++it;
+        /* glyphData->glyphID is always the first glyph on the list */
+        do
+        {
+            int found = 0;
+            currentID = *it;
+            /* XXX expensive! should be rewritten with sorted arrays! */
+            listToFirst(l);
+            do {
+                if (((GlyphData *) listCurrent(l))->glyphID == currentID) {
+                    found = 1;
+                    break;
+                }
+            } while (listNext(l));
+
+            if (!found) {
+                gd = GetTTRawGlyphData(fnt, currentID);
+                gd->newID = n++;
+                listAppend(l, gd);
+            }
+        } while( ++it !=  glyphlist.end() );
+    }
+
+    return ret;
+}
+
+sal_uInt32 glyfCount(const TrueTypeTable *table)
+{
+    assert(table != 0);
+    assert(table->tag == T_glyf);
+    return listCount((list) table->data);
+}
+
+
+void nameAdd(TrueTypeTable *table, NameRecord *nr)
+{
+    list l;
+
+    assert(table != 0);
+    assert(table->tag == T_name);
+
+    l = (list) table->data;
+
+    listAppend(l, NameRecordNewCopy(nr));
+}
+
+static TrueTypeTable *FindTable(TrueTypeCreator *tt, sal_uInt32 tag)
+{
+    if (listIsEmpty(tt->tables)) return 0;
+
+    listToFirst(tt->tables);
+
+    do {
+        if (((TrueTypeTable *) listCurrent(tt->tables))->tag == tag) {
+            return (TrueTypeTable*)listCurrent(tt->tables);
+        }
+    } while (listNext(tt->tables));
+
+    return 0;
+}
+
+/* This function processes all the tables and synchronizes them before creating
+ * the output TrueType stream.
+ *
+ * *** It adds two TrueType tables to the font: 'loca' and 'hmtx' ***
+ *
+ * It does:
+ *
+ * - Re-numbers glyph IDs and creates 'glyf', 'loca', and 'hmtx' tables.
+ * - Calculates xMin, yMin, xMax, and yMax and stores values in 'head' table.
+ * - Stores indexToLocFormat in 'head'
+ * - updates 'maxp' table
+ * - Calculates advanceWidthMax, minLSB, minRSB, xMaxExtent and numberOfHMetrics
+ *   in 'hhea' table
+ *
+ */
+static void ProcessTables(TrueTypeCreator *tt)
+{
+    TrueTypeTable *glyf, *loca, *head, *maxp, *hhea;
+    list glyphlist;
+    sal_uInt32 nGlyphs, locaLen = 0, glyfLen = 0;
+    sal_Int16 xMin = 0, yMin = 0, xMax = 0, yMax = 0;
+    sal_uInt32 i = 0;
+    sal_Int16 indexToLocFormat;
+    sal_uInt8 *hmtxPtr, *hheaPtr;
+    sal_uInt32 hmtxSize;
+    sal_uInt8 *p1, *p2;
+    sal_uInt16 maxPoints = 0, maxContours = 0, maxCompositePoints = 0, maxCompositeContours = 0;
+    int nlsb = 0;
+    sal_uInt32 *gid;                        /* array of old glyphIDs */
+
+    glyf = FindTable(tt, T_glyf);
+    glyphlist = (list) glyf->data;
+    nGlyphs = listCount(glyphlist);
+    assert(nGlyphs != 0);
+    gid = (sal_uInt32*)scalloc(nGlyphs, sizeof(sal_uInt32));
+
+    RemoveTable(tt, T_loca);
+    RemoveTable(tt, T_hmtx);
+
+    /* XXX Need to make sure that composite glyphs do not break during glyph renumbering */
+
+    listToFirst(glyphlist);
+    do {
+        GlyphData *gd = (GlyphData *) listCurrent(glyphlist);
+        sal_Int16 z;
+        glyfLen += gd->nbytes;
+        /* XXX if (gd->nbytes & 1) glyfLen++; */
+
+
+        assert(gd->newID == i);
+        gid[i++] = gd->glyphID;
+        /* gd->glyphID = i++; */
+
+        /* printf("IDs: %d %d.\n", gd->glyphID, gd->newID); */
+
+        if (gd->nbytes != 0) {
+            z = GetInt16(gd->ptr, 2, 1);
+            if (z < xMin) xMin = z;
+
+            z = GetInt16(gd->ptr, 4, 1);
+            if (z < yMin) yMin = z;
+
+            z = GetInt16(gd->ptr, 6, 1);
+            if (z > xMax) xMax = z;
+
+            z = GetInt16(gd->ptr, 8, 1);
+            if (z > yMax) yMax = z;
+        }
+
+        if (gd->compflag == 0) {                            /* non-composite glyph */
+            if (gd->npoints > maxPoints) maxPoints = gd->npoints;
+            if (gd->ncontours > maxContours) maxContours = gd->ncontours;
+        } else {                                            /* composite glyph */
+            if (gd->npoints > maxCompositePoints) maxCompositePoints = gd->npoints;
+            if (gd->ncontours > maxCompositeContours) maxCompositeContours = gd->ncontours;
+        }
+
+    } while (listNext(glyphlist));
+
+    indexToLocFormat = (glyfLen / 2 > 0xFFFF) ? 1 : 0;
+    locaLen = indexToLocFormat ?  (nGlyphs + 1) << 2 : (nGlyphs + 1) << 1;
+
+    sal_uInt8* glyfPtr = ttmalloc(glyfLen);
+    sal_uInt8* locaPtr = ttmalloc(locaLen);
+    TTSimpleGlyphMetrics* met = (TTSimpleGlyphMetrics*)scalloc(nGlyphs, sizeof(TTSimpleGlyphMetrics));
+    i = 0;
+
+    listToFirst(glyphlist);
+    p1 = glyfPtr;
+    p2 = locaPtr;
+    do {
+        GlyphData *gd = (GlyphData *) listCurrent(glyphlist);
+
+        if (gd->compflag) {                       /* re-number all components */
+            sal_uInt16 flags, index;
+            sal_uInt8 *ptr = gd->ptr + 10;
+            do {
+                sal_uInt32 j;
+                flags = GetUInt16(ptr, 0, 1);
+                index = GetUInt16(ptr, 2, 1);
+                /* XXX use the sorted array of old to new glyphID mapping and do a binary search */
+                for (j = 0; j < nGlyphs; j++) {
+                    if (gid[j] == index) {
+                        break;
+                    }
+                }
+                /* printf("X: %d -> %d.\n", index, j); */
+
+                PutUInt16((sal_uInt16) j, ptr, 2, 1);
+
+                ptr += 4;
+
+                if (flags & ARG_1_AND_2_ARE_WORDS) {
+                    ptr += 4;
+                } else {
+                    ptr += 2;
+                }
+
+                if (flags & WE_HAVE_A_SCALE) {
+                    ptr += 2;
+                } else if (flags & WE_HAVE_AN_X_AND_Y_SCALE) {
+                    ptr += 4;
+                } else if (flags & WE_HAVE_A_TWO_BY_TWO) {
+                    ptr += 8;
+                }
+            } while (flags & MORE_COMPONENTS);
+        }
+
+        if (gd->nbytes != 0) {
+            memcpy(p1, gd->ptr, gd->nbytes);
+        }
+        if (indexToLocFormat == 1) {
+            PutUInt32(p1 - glyfPtr, p2, 0, 1);
+            p2 += 4;
+        } else {
+            PutUInt16((sal_uInt16)((p1 - glyfPtr) >> 1), p2, 0, 1);
+            p2 += 2;
+        }
+        p1 += gd->nbytes;
+
+        /* fill the array of metrics */
+        met[i].adv = gd->aw;
+        met[i].sb  = gd->lsb;
+        i++;
+    } while (listNext(glyphlist));
+
+    free(gid);
+
+    if (indexToLocFormat == 1) {
+        PutUInt32(p1 - glyfPtr, p2, 0, 1);
+    } else {
+        PutUInt16((sal_uInt16)((p1 - glyfPtr) >> 1), p2, 0, 1);
+    }
+
+    glyf->rawdata = glyfPtr;
+
+    loca = TrueTypeTableNew_loca(); assert(loca != 0);
+    ((tdata_loca *) loca->data)->ptr = locaPtr;
+    ((tdata_loca *) loca->data)->nbytes = locaLen;
+
+    AddTable(tt, loca);
+
+    head = FindTable(tt, T_head);
+    sal_uInt8* const pHeadData = (sal_uInt8*)head->data;
+    PutInt16(xMin, pHeadData, 36, 1);
+    PutInt16(yMin, pHeadData, 38, 1);
+    PutInt16(xMax, pHeadData, 40, 1);
+    PutInt16(yMax, pHeadData, 42, 1);
+    PutInt16(indexToLocFormat, pHeadData,  50, 1);
+
+    maxp = FindTable(tt, T_maxp);
+
+    sal_uInt8* const pMaxpData = (sal_uInt8*)maxp->data;
+    PutUInt16((sal_uInt16)nGlyphs, pMaxpData, 4, 1);
+    PutUInt16(maxPoints, pMaxpData, 6, 1);
+    PutUInt16(maxContours, pMaxpData, 8, 1);
+    PutUInt16(maxCompositePoints, pMaxpData, 10, 1);
+    PutUInt16(maxCompositeContours, pMaxpData, 12, 1);
+
+    /*
+     * Generate an htmx table and update hhea table
+     */
+    hhea = FindTable(tt, T_hhea); assert(hhea != 0);
+    hheaPtr = (sal_uInt8 *) hhea->data;
+    if (nGlyphs > 2) {
+        for (i = nGlyphs - 1; i > 0; i--) {
+            if (met[i].adv != met[i-1].adv) break;
+        }
+        nlsb = nGlyphs - 1 - i;
+    }
+    hmtxSize = (nGlyphs - nlsb) * 4 + nlsb * 2;
+    hmtxPtr = ttmalloc(hmtxSize);
+    p1 = hmtxPtr;
+
+    for (i = 0; i < nGlyphs; i++) {
+        if (i < nGlyphs - nlsb) {
+            PutUInt16(met[i].adv, p1, 0, 1);
+            PutUInt16(met[i].sb, p1, 2, 1);
+            p1 += 4;
+        } else {
+            PutUInt16(met[i].sb, p1, 0, 1);
+            p1 += 2;
+        }
+    }
+
+    AddTable(tt, TrueTypeTableNew(T_hmtx, hmtxSize, hmtxPtr));
+    PutUInt16((sal_uInt16)(nGlyphs - nlsb), hheaPtr, 34, 1);
+    free(hmtxPtr);
+    free(met);
+}
+
+} // namespace vcl
+
+extern "C"
+{
+    /**
+     * TrueTypeCreator destructor. It calls destructors for all TrueTypeTables added to it.
+     */
+     void TrueTypeCreatorDispose(vcl::TrueTypeCreator *_this)
+    {
+        listDispose(_this->tables);
+        free(_this);
+    }
+
+
+    /**
+     * Destructor for the TrueTypeTable object.
+     */
+     void TrueTypeTableDispose(vcl::TrueTypeTable *_this)
+    {
+        /* XXX do a binary search */
+        unsigned int i;
+
+        assert(_this != 0);
+
+        if (_this->rawdata) free(_this->rawdata);
+
+        for(i=0; i < sizeof(vcl::vtable1)/sizeof(*vcl::vtable1); i++) {
+            if (_this->tag == vcl::vtable1[i].tag) {
+                vcl::vtable1[i].f(_this);
+                return;
+            }
+        }
+        assert(!"Unknown TrueType table.\n");
+    }
+}
+
+
+#ifdef TEST_TTCR
+int main(void)
+{
+    TrueTypeCreator *ttcr;
+    sal_uInt8 *t1, *t2, *t3, *t4, *t5, *t6, *t7;
+
+    TrueTypeCreatorNewEmpty(mkTag('t','r','u','e'), &ttcr);
+
+    t1 = malloc(1000); memset(t1, 'a', 1000);
+    t2 = malloc(2000); memset(t2, 'b', 2000);
+    t3 = malloc(3000); memset(t3, 'c', 3000);
+    t4 = malloc(4000); memset(t4, 'd', 4000);
+    t5 = malloc(5000); memset(t5, 'e', 5000);
+    t6 = malloc(6000); memset(t6, 'f', 6000);
+    t7 = malloc(7000); memset(t7, 'g', 7000);
+
+    AddTable(ttcr, TrueTypeTableNew(0x6D617870, 1000, t1));
+    AddTable(ttcr, TrueTypeTableNew(0x4F532F32, 2000, t2));
+    AddTable(ttcr, TrueTypeTableNew(0x636D6170, 3000, t3));
+    AddTable(ttcr, TrueTypeTableNew(0x6C6F6361, 4000, t4));
+    AddTable(ttcr, TrueTypeTableNew(0x68686561, 5000, t5));
+    AddTable(ttcr, TrueTypeTableNew(0x676C7966, 6000, t6));
+    AddTable(ttcr, TrueTypeTableNew(0x6B65726E, 7000, t7));
+
+    free(t1);
+    free(t2);
+    free(t3);
+    free(t4);
+    free(t5);
+    free(t6);
+    free(t7);
+
+
+    StreamToFile(ttcr, "ttcrout.ttf");
+
+    TrueTypeCreatorDispose(ttcr);
+    return 0;
+}
+#endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

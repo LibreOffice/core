@@ -1,0 +1,3 @@
+pc	psprint_config	: soltools AFMS:afms NULL
+pc	psprint_config							usr1	-	all	pc_mkout NULL
+pc	psprint_config\prj			nmake   -   all	pc_prj NULL

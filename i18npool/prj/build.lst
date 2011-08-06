@@ -1,0 +1,27 @@
+inp  i18npool    :   bridges sax stoc comphelper CPPUNIT:cppunit ICU:icu i18nutil regexp DESKTOP:cpputools LIBXSLT:libxslt NULL
+inp  i18npool                                   usr1    -   all inp_mkout NULL
+inp  i18npool\inc                               nmake   -   all inp_inc NULL
+inp  i18npool\source\registerservices           nmake   -   all inp_rserv inp_inc NULL
+inp  i18npool\source\breakiterator              nmake   -   all inp_brkit inp_inc NULL
+inp  i18npool\source\characterclassification    nmake   -   all inp_chclass inp_inc NULL
+inp  i18npool\source\breakiterator\data         nmake   -   all inp_dict inp_brkit inp_inc NULL
+inp  i18npool\source\transliteration            nmake   -   all inp_translit inp_inc NULL
+inp  i18npool\source\isolang                    nmake   -   all inp_isolang inp_inc NULL
+inp  i18npool\source\localedata                 nmake   -   all inp_localedata inp_isolang inp_inc NULL
+inp  i18npool\source\localedata\data            nmake   -   all inp_locdata_data inp_localedata inp_inc NULL
+inp  i18npool\source\paper	                nmake   -   all inp_paper inp_isolang inp_inc NULL
+inp  i18npool\source\calendar                   nmake   -   all inp_cal inp_inc NULL
+inp  i18npool\source\numberformatcode           nmake   -   all inp_numformat inp_inc NULL
+inp  i18npool\source\defaultnumberingprovider   nmake   -   all inp_dnum inp_inc NULL
+inp  i18npool\source\nativenumber               nmake   -   all inp_natnum inp_inc NULL
+inp  i18npool\source\indexentry                 nmake   -   all inp_index inp_inc NULL
+inp  i18npool\source\indexentry\data            nmake   -   all inp_index_data inp_index inp_inc NULL
+inp  i18npool\source\collator                   nmake   -   all inp_collator inp_inc NULL
+inp  i18npool\source\collator\data              nmake   -   all inp_collator_data inp_collator inp_inc NULL
+inp  i18npool\source\inputchecker               nmake   -   all inp_inputchecker inp_inc NULL
+inp  i18npool\source\textconversion             nmake   -   all inp_textconversion inp_inc NULL
+inp  i18npool\source\textconversion\data        nmake   -   all inp_textconv_dict inp_textconversion inp_inc NULL
+inp  i18npool\source\search                     nmake   -   all inp_search inp_inc NULL
+inp  i18npool\source\ordinalsuffix              nmake   -   all inp_ordinalsuffix NULL
+inp  i18npool\util                              nmake   -   all inp_util inp_brkit inp_dict inp_chclass inp_translit inp_cal inp_dnum inp_natnum inp_localedata inp_locdata_data inp_numformat inp_rserv inp_index inp_index_data inp_collator inp_collator_data inp_inputchecker inp_textconversion inp_textconv_dict inp_search inp_isolang inp_paper inp_ordinalsuffix NULL
+inp  i18npool\qa\cppunit                        nmake   -   all inp_qa_cppunit inp_util NULL

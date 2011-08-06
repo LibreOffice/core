@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE Locale SYSTEM 'locale.dtd'>
+<Locale versionDTD="2.0.3" allowUpdateFromCLDR="no" version="1.3">
+  <LC_INFO>
+    <Language>
+      <LangID>af</LangID>
+      <DefaultName>Afrikaans</DefaultName>
+    </Language>
+    <Country>
+      <CountryID>NA</CountryID>
+      <DefaultName>Namibia</DefaultName>
+    </Country>
+  </LC_INFO>
+  <LC_CTYPE ref="af_ZA"/>
+  <LC_FORMAT ref="en_NA" replaceTo="[$$-8036]"/>
+  <LC_COLLATION ref="en_US"/>
+  <LC_SEARCH ref="en_US"/>
+  <LC_INDEX ref="af_ZA"/>
+  <LC_CALENDAR ref="af_ZA"/>
+  <LC_CURRENCY ref="en_NA"/>
+  <LC_TRANSLITERATION ref="en_US"/>
+  <LC_MISC ref="af_ZA"/>
+  <LC_NumberingLevel ref="en_US"/>
+  <LC_OutLineNumberingLevel ref="en_US"/>
+</Locale>

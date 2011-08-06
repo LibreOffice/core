@@ -1,0 +1,55 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#define TTSTART             12345
+
+#define DisplayHidToolBox   ( TTSTART + 0 )
+#define TT_SHOW             1
+#define TT_SHOW2            ( TTSTART + 1 )
+#define TT_OUTPUT           3
+#define TT_SEND_DATA        4
+#define TT_ALLWIN           5
+#define TT_KURZNAME         6
+#define TT_LANGNAME         7
+#define TT_ALTERNATE_CAPTION ( TTSTART + 2 )
+
+#define TT_INLINE_TRANSLATION ( TTSTART + 3)
+#define TT_GB_TRANSLATION   1
+#define TT_E_NEW            2
+#define TT_FT_OLD           3
+#define TT_GB_COMMENT       4
+#define TT_E_COMMENT        5
+
+#define TT_PB_SELECT        6
+#define TT_PB_RESTORE       7
+#define TT_PB_ACCEPT        8
+#define TT_PB_NEXT          9
+
+#define TT_DISCARD_CHANGED_DATA ( TTSTART + 4 )
+#define TT_NO_CONTROL       ( TTSTART + 5 )
+
+
+#define TT_GPF              ( TTSTART + 6 )

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<modaldialog xmlns="http://openoffice.org/2007/layout"
+             xmlns:cnt="http://openoffice.org/2007/layout/container"
+             id="dialog" title="Dialog Button Ordering" optimumsize="true"
+             has_border="true" sizeable="true" moveable="true">
+    <vbox border="5" spacing="5">
+    <fixedline text="Platform default"/>
+    <dialogbuttonhbox border="5" spacing="5">
+        <flow/>
+        <yesbutton/>
+        <cancelbutton/>
+        <helpbutton/>
+        <nobutton xlabel="~Alternate"/>
+    </dialogbuttonhbox>
+    <fixedline text="GNOME"/>
+    <dialogbuttonhbox border="5" spacing="5" ordering="gnome">
+        <flow/>
+        <yesbutton/>
+        <cancelbutton/>
+        <helpbutton/>
+        <nobutton xlabel="~Alternate"/>
+    </dialogbuttonhbox>
+    <fixedline text="KDE"/>
+    <dialogbuttonhbox border="5" spacing="5" ordering="kde">
+        <flow/>
+        <yesbutton/>
+        <cancelbutton/>
+        <helpbutton/>
+        <nobutton xlabel="~Alternate"/>
+    </dialogbuttonhbox>
+    <fixedline text="MacOS"/>
+    <dialogbuttonhbox border="5" spacing="5" ordering="macos">
+        <flow/>
+        <yesbutton/>
+        <cancelbutton/>
+        <helpbutton/>
+        <nobutton xlabel="~Alternate"/>
+    </dialogbuttonhbox>
+    <fixedline text="Windows"/>
+    <dialogbuttonhbox border="5" spacing="5" ordering="windows">
+        <flow/>
+        <yesbutton/>
+        <cancelbutton/>
+        <helpbutton/>
+        <nobutton xlabel="~Alternate"/>
+    </dialogbuttonhbox>
+    </vbox>
+</modaldialog>
