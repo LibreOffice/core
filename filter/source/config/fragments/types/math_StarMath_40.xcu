@@ -1,0 +1,12 @@
+    <node oor:name="math_StarMath_40" oor:op="replace" >
+        <prop oor:name="DetectService"><value>com.sun.star.comp.sfx2.BinaryFormatDetector</value></prop>
+        <prop oor:name="URLPattern"/>
+        <prop oor:name="Extensions"><value>smf</value></prop>
+        <prop oor:name="MediaType"><value>application/x-starmath</value></prop>
+        <prop oor:name="Preferred"><value>false</value></prop>
+        <prop oor:name="PreferredFilter"><value>StarMath 4.0</value></prop>
+        <prop oor:name="UIName">
+            <value>StarMath 4.0</value>
+        </prop>
+        <prop oor:name="ClipboardFormat"><value>StarMathDocument 4.0</value></prop>
+    </node>

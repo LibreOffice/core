@@ -1,0 +1,13 @@
+    <node oor:name="StarWriter 4.0 (StarWriter/Web)" oor:op="replace">
+        <prop oor:name="Flags"><value>TEMPLATE ALIEN 3RDPARTYFILTER</value></prop>
+        <prop oor:name="UIComponent"/>
+        <prop oor:name="FilterService"><value>com.sun.star.comp.office.BF_MigrateFilter</value></prop>
+        <prop oor:name="UserData"><value>CSW4</value></prop>
+        <prop oor:name="UIName">
+            <value xml:lang="x-default">StarWriter 4.0 (%productname% Writer/Web)</value>
+        </prop>
+        <prop oor:name="FileFormatVersion"><value>3580</value></prop>
+        <prop oor:name="Type"><value>writer_StarWriter_40</value></prop>
+        <prop oor:name="TemplateName"/>
+        <prop oor:name="DocumentService"><value>com.sun.star.text.WebDocument</value></prop>
+    </node>

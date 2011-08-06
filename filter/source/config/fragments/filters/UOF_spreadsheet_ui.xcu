@@ -1,0 +1,5 @@
+    <node oor:name="UOF spreadsheet" oor:op="replace">
+         <prop oor:name="UIName">
+            <value xml:lang="en-US">Unified Office Format spreadsheet</value>
+        </prop>
+    </node>

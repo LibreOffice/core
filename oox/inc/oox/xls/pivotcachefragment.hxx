@@ -1,0 +1,158 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef OOX_XLS_PIVOTCACHEFRAGMENT_HXX
+#define OOX_XLS_PIVOTCACHEFRAGMENT_HXX
+
+#include "oox/xls/excelhandlers.hxx"
+
+namespace oox {
+namespace xls {
+
+class PivotCache;
+class PivotCacheField;
+
+// ============================================================================
+
+class PivotCacheFieldContext : public WorkbookContextBase
+{
+public:
+    explicit            PivotCacheFieldContext(
+                            WorkbookFragmentBase& rFragment,
+                            PivotCacheField& rCacheField );
+
+protected:
+    virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
+    virtual void        onStartElement( const AttributeList& rAttribs );
+    virtual ::oox::core::ContextHandlerRef onCreateRecordContext( sal_Int32 nRecId, SequenceInputStream& rStrm );
+    virtual void        onStartRecord( SequenceInputStream& rStrm );
+
+private:
+    PivotCacheField&    mrCacheField;
+};
+
+// ============================================================================
+
+class PivotCacheDefinitionFragment : public WorkbookFragmentBase
+{
+public:
+    explicit            PivotCacheDefinitionFragment(
+                            const WorkbookHelper& rHelper,
+                            const ::rtl::OUString& rFragmentPath,
+                            PivotCache& rPivotCache );
+
+protected:
+    virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
+    virtual ::oox::core::ContextHandlerRef onCreateRecordContext( sal_Int32 nRecId, SequenceInputStream& rStrm );
+    virtual const ::oox::core::RecordInfo* getRecordInfos() const;
+    virtual void        finalizeImport();
+
+private:
+    PivotCache&         mrPivotCache;
+};
+
+// ============================================================================
+
+class PivotCacheRecordsFragment : public WorksheetFragmentBase
+{
+public:
+    explicit            PivotCacheRecordsFragment(
+                            const WorksheetHelper& rHelper,
+                            const ::rtl::OUString& rFragmentPath,
+                            const PivotCache& rPivotCache );
+
+protected:
+    virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
+    virtual ::oox::core::ContextHandlerRef onCreateRecordContext( sal_Int32 nRecId, SequenceInputStream& rStrm );
+    virtual const ::oox::core::RecordInfo* getRecordInfos() const;
+
+private:
+    void                startCacheRecord();
+    void                importPCRecord( SequenceInputStream& rStrm );
+    void                importPCRecordItem( sal_Int32 nRecId, SequenceInputStream& rStrm );
+
+private:
+    const PivotCache&   mrPivotCache;
+    sal_Int32           mnColIdx;           /// Relative column index in source data.
+    sal_Int32           mnRowIdx;           /// Relative row index in source data.
+    bool                mbInRecord;
+};
+
+// ============================================================================
+// ============================================================================
+
+class BiffPivotCacheFragment : public BiffWorkbookFragmentBase
+{
+public:
+    explicit            BiffPivotCacheFragment(
+                            const WorkbookHelper& rHelper,
+                            const ::rtl::OUString& rStrmName,
+                            PivotCache& rPivotCache );
+
+    /** Imports the entire fragment, returns true, if EOF record has been reached. */
+    virtual bool        importFragment();
+
+private:
+    PivotCache&         mrPivotCache;
+};
+
+// ============================================================================
+
+class BiffPivotCacheRecordsContext : public BiffWorksheetContextBase
+{
+public:
+    explicit            BiffPivotCacheRecordsContext(
+                            const WorksheetHelper& rHelper,
+                            const PivotCache& rPivotCache );
+
+    /** Reads the current record from stream and tries to insert a cell into
+        the source data sheet. */
+    virtual void        importRecord( BiffInputStream& rStrm );
+
+private:
+    void                startNextRow();
+
+private:
+    typedef ::std::vector< sal_Int32 > ColumnIndexVector;
+
+    const PivotCache&   mrPivotCache;
+    ColumnIndexVector   maUnsharedCols; /// Column indexes of all unshared cache fields.
+    size_t              mnColIdx;       /// Current index into maUnsharedCols.
+    sal_Int32           mnRowIdx;       /// Current row in source data (0-based).
+    bool                mbHasShared;    /// True = pivot cache contains fields with shared items.
+    bool                mbInRow;        /// True = a data row has been started.
+};
+
+// ============================================================================
+
+} // namespace xls
+} // namespace oox
+
+#endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

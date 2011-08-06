@@ -1,0 +1,11 @@
+    <node oor:name="MS Word 2007 XML Template" oor:op="replace">
+        <prop oor:name="Flags"><value>IMPORT ALIEN 3RDPARTYFILTER TEMPLATE TEMPLATEPATH</value></prop>
+        <prop oor:name="UIComponent"/>
+        <prop oor:name="FilterService"><value>com.sun.star.comp.Writer.WriterFilter</value></prop>
+        <prop oor:name="UserData"><value>OXML</value></prop>
+        <prop oor:name="UIName"><value xml:lang="en-US">Microsoft Word 2007/2010 XML Template</value></prop>
+        <prop oor:name="FileFormatVersion"><value>0</value></prop>
+        <prop oor:name="Type"><value>writer_MS_Word_2007_Template</value></prop>
+        <prop oor:name="TemplateName"/>
+        <prop oor:name="DocumentService"><value>com.sun.star.text.TextDocument</value></prop>
+    </node>

@@ -1,0 +1,53 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef _XMLFILTERTESTDIALOG_HRC_
+#define _XMLFILTERTESTDIALOG_HRC_
+
+#include "xmlfiltercommon.hrc"
+
+#define FL_EXPORT                   1
+#define FT_EXPORT_XSLT              2
+#define FT_EXPORT_XSLT_FILE         3
+#define FT_TRANSFORM_DOCUMENT       4
+#define PB_EXPORT_BROWSE            5
+#define PB_CURRENT_DOCUMENT         6
+#define FT_NAME_OF_CURRENT_FILE     7
+#define FL_IMPORT                   8
+#define FT_IMPORT_XSLT              9
+#define FT_IMPORT_XSLT_FILE         10
+#define FT_IMPORT_TEMPLATE          11
+#define FT_IMPORT_TEMPLATE_FILE     12
+#define FT_TRANSFORM_FILE           13
+#define CBX_DISPLAY_SOURCE          14
+#define PB_IMPORT_BROWSE            15
+#define PB_RECENT_DOCUMENT          16
+#define FT_NAME_OF_RECENT_FILE      17
+#define PB_HELP                     18
+#define PB_CLOSE                    19
+
+#endif

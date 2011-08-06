@@ -1,0 +1,3 @@
+    <node oor:name="com.sun.star.sdb.ContentLoader" oor:op="replace"  >
+        <prop oor:name="Types"><value>component_DB</value></prop>
+    </node>

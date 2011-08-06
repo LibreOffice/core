@@ -1,0 +1,12 @@
+    <node oor:name="pbm_Portable_Bitmap" oor:op="replace" >
+        <prop oor:name="DetectService"><value>com.sun.star.comp.draw.FormatDetector</value></prop>
+        <prop oor:name="URLPattern"/>
+        <prop oor:name="Extensions"><value>pbm</value></prop>
+        <prop oor:name="MediaType"><value>image/x-portable-bitmap</value></prop>
+        <prop oor:name="Preferred"><value>false</value></prop>
+        <prop oor:name="PreferredFilter"><value>PBM - Portable Bitmap</value></prop>
+        <prop oor:name="UIName">
+            <value>PBM - Portable Bitmap</value>
+        </prop>
+        <prop oor:name="ClipboardFormat"/>
+    </node>

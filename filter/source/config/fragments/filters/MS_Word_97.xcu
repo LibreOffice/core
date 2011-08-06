@@ -1,0 +1,13 @@
+    <node oor:name="MS Word 97" oor:op="replace">
+        <prop oor:name="Flags"><value>IMPORT EXPORT ALIEN PREFERRED ENCRYPTION PASSWORDTOMODIFY</value></prop>
+        <prop oor:name="UIComponent"/>
+        <prop oor:name="FilterService"/>
+        <prop oor:name="UserData"><value>CWW8</value></prop>
+        <prop oor:name="UIName">
+            <value xml:lang="x-default">Microsoft Word 97/2000/XP/2003</value>
+        </prop>
+        <prop oor:name="FileFormatVersion"><value>0</value></prop>
+        <prop oor:name="Type"><value>writer_MS_Word_97</value></prop>
+        <prop oor:name="TemplateName"/>
+        <prop oor:name="DocumentService"><value>com.sun.star.text.TextDocument</value></prop>
+    </node>

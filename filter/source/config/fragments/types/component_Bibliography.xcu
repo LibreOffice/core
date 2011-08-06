@@ -1,0 +1,12 @@
+    <node oor:name="component_Bibliography" oor:op="replace" >
+        <prop oor:name="URLPattern"><value>.component:Bibliography/*</value></prop>
+        <prop oor:name="Extensions"/>
+        <prop oor:name="MediaType"/>
+        <prop oor:name="Preferred"><value>false</value></prop>
+        <prop oor:name="UIName">
+            <value>Bibliography component</value>
+        </prop>
+        <prop oor:name="ClipboardFormat"/>
+        <prop oor:name="DetectService"/>
+        <prop oor:name="PreferredFilter"/>
+    </node>

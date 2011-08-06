@@ -1,0 +1,5 @@
+    <node oor:name="UOF text" oor:op="replace">
+         <prop oor:name="UIName">
+            <value xml:lang="en-US">Unified Office Format text</value>
+        </prop>
+    </node>

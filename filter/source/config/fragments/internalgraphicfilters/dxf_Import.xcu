@@ -1,0 +1,10 @@
+    <node oor:name="dxf_Import" oor:op="replace"  >
+        <prop oor:name="Type"><value>dxf_AutoCAD_Interchange</value></prop>
+        <prop oor:name="FormatName"><value>idx</value></prop>
+        <prop oor:name="RealFilterName"><value>DXF - AutoCAD Interchange</value></prop>
+        <prop oor:name="UIComponent"/>
+        <prop oor:name="UIName">
+            <value xml:lang="en-US">DXF - AutoCAD Interchange Format</value>
+        </prop>
+        <prop oor:name="Flags"><value>IMPORT</value></prop>
+    </node>

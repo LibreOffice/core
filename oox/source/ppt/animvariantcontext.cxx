@@ -1,0 +1,114 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#include "animvariantcontext.hxx"
+
+#include "comphelper/anytostring.hxx"
+#include "cppuhelper/exc_hlp.hxx"
+#include <osl/diagnose.h>
+
+#include <com/sun/star/uno/Any.hxx>
+#include <rtl/ustring.hxx>
+
+#include "oox/helper/attributelist.hxx"
+#include "oox/core/fragmenthandler.hxx"
+#include "oox/core/xmlfilterbase.hxx"
+#include "oox/drawingml/colorchoicecontext.hxx"
+#include "pptfilterhelpers.hxx"
+
+using ::rtl::OUString;
+using namespace ::oox::core;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::xml::sax;
+
+namespace oox { namespace ppt {
+
+    AnimVariantContext::AnimVariantContext( FragmentHandler2& rParent, sal_Int32 aElement, Any & aValue )
+        : FragmentHandler2( rParent )
+            , mnElement( aElement )
+            , maValue( aValue )
+    {
+    }
+
+    AnimVariantContext::~AnimVariantContext( ) throw( )
+    {
+    }
+
+    void AnimVariantContext::onEndElement()
+    {
+        if( isCurrentElement( mnElement ) && maColor.isUsed() )
+        {
+            maValue = makeAny( maColor.getColor( getFilter().getGraphicHelper() ) );
+        }
+    }
+
+
+    ContextHandlerRef AnimVariantContext::onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs )
+    {
+        switch( aElementToken )
+        {
+        case PPT_TOKEN( boolVal ):
+        {
+            bool val = rAttribs.getBool( XML_val, false );
+            maValue = makeAny( val );
+            return this;
+        }
+        case PPT_TOKEN( clrVal ):
+            return new ::oox::drawingml::ColorContext( *this, maColor );
+            // we'll defer setting the Any until the end.
+        case PPT_TOKEN( fltVal ):
+        {
+            double val = rAttribs.getDouble( XML_val, 0.0 );
+            maValue = makeAny( val );
+            return this;
+        }
+        case PPT_TOKEN( intVal ):
+        {
+            sal_Int32 val = rAttribs.getInteger( XML_val, 0 );
+            maValue = makeAny( val );
+            return this;
+        }
+        case PPT_TOKEN( strVal ):
+        {
+            OUString val = rAttribs.getString( XML_val, OUString() );
+            convertMeasure( val ); // ignore success or failure if it fails, use as is
+            maValue = makeAny( val );
+            return this;
+        }
+        default:
+            break;
+        }
+
+        return this;
+    }
+
+
+
+} }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

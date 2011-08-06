@@ -1,0 +1,10 @@
+    <node oor:name="MS Word 95 Vorlage" oor:op="replace">
+        <prop oor:name="Flags"><value>IMPORT TEMPLATE TEMPLATEPATH ALIEN</value></prop>
+        <prop oor:name="UIComponent"/>
+        <prop oor:name="FilterService"/>
+        <prop oor:name="UserData"><value>CWW6</value></prop>
+        <prop oor:name="FileFormatVersion"><value>0</value></prop>
+        <prop oor:name="Type"><value>writer_MS_Word_95_Vorlage</value></prop>
+        <prop oor:name="TemplateName"/>
+        <prop oor:name="DocumentService"><value>com.sun.star.text.TextDocument</value></prop>
+    </node>
