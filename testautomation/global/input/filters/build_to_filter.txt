@@ -1,0 +1,68 @@
+# This is the matching table for configuration filter names to 
+# build id related filter names
+
+[569]
+WRITER=StarWriter 5.0
+CALC=StarCalc 5.0
+IMPRESS=StarImpress 5.0
+DRAW=StarDraw 5.0
+MATH=StarMath 5.0
+MASTERDOCUMENT=StarWriter 5.0/GlobalDocument
+DATABASE=
+CHART=StarChart 5.0
+HTML=HTML
+
+[641]
+WRITER=StarOffice XML (Writer)
+CALC=StarOffice XML (Calc)
+IMPRESS=StarOffice XML (Impress)
+DRAW=StarOffice XML (Draw)
+MATH=StarOffice XML (Math)
+MASTERDOCUMENT=writer_globaldocument_StarOffice_XML_Writer_GlobalDocument
+DATABASE=
+CHART=StarOffice XML (Chart)
+HTML=Text (StarWriter/Web)
+
+[645]
+WRITER=StarOffice XML (Writer)
+CALC=StarOffice XML (Calc)
+IMPRESS=StarOffice XML (Impress)
+DRAW=StarOffice XML (Draw)
+MATH=StarOffice XML (Math)
+MASTERDOCUMENT=writer_globaldocument_StarOffice_XML_Writer_GlobalDocument
+DATABASE=
+CHART=StarOffice XML (Chart)
+HTML=HTML
+
+[680]
+WRITER=writer8
+CALC=calc8
+IMPRESS=impress8
+DRAW=draw8
+MATH=math8
+MASTERDOCUMENT=writerglobal8
+DATABASE=
+CHART=chart8
+HTML=HTML
+
+[300]
+WRITER=writer8
+CALC=calc8
+IMPRESS=impress8
+DRAW=draw8
+MATH=math8
+MASTERDOCUMENT=writerglobal8
+DATABASE=
+CHART=chart8
+HTML=HTML
+
+[Current]
+WRITER=writer8
+CALC=calc8
+IMPRESS=impress8
+DRAW=draw8
+MATH=math8
+MASTERDOCUMENT=writerglobal8
+DATABASE=
+CHART=chart8
+HTML=HTML

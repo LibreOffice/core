@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
+                  "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd">
+<article>
+<articleinfo>
+<title>Unit Test: qandaset.002</title>
+<releaseinfo role="CVS">$Id: qandaset.002.xml,v 1.2 2008-07-11 07:55:10 rt Exp $</releaseinfo>
+<author><firstname>Norman</firstname><surname>Walsh</surname>
+        <affiliation><address><email>ndw@nwalsh.com</email></address></affiliation>
+</author>
+</articleinfo>
+
+       <qandaset>
+    <?dbhtml toc="0"?>
+         <qandaentry id="qa1">
+           <question id="q1">
+             <para>Blah blah blah.</para>
+           </question>
+      <answer id="a1">
+        <example>
+          <title><filename
+              moreinfo="none">file.name</filename></title>
+          <programlisting format="linespecific">// Hello, World</programlisting>
+        </example>
+        <example>
+          <title><filename
+              moreinfo="none">file2.name</filename></title>
+          <programlisting format="linespecific">// Goodbye, World</programlisting>
+        </example>
+      </answer>
+         </qandaentry>
+       </qandaset>
+
+
+</article>

@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="sw_SwXTextGraphicObject" script:language="StarBasic">
+
+
+'*************************************************************************
+'
+' DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+' 
+' Copyright 2000, 2010 Oracle and/or its affiliates.
+'
+' OpenOffice.org - a multi-platform office productivity suite
+'
+' This file is part of OpenOffice.org.
+'
+' OpenOffice.org is free software: you can redistribute it and/or modify
+' it under the terms of the GNU Lesser General Public License version 3
+' only, as published by the Free Software Foundation.
+'
+' OpenOffice.org is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU Lesser General Public License version 3 for more details
+' (a copy is included in the LICENSE file that accompanied this code).
+'
+' You should have received a copy of the GNU Lesser General Public License
+' version 3 along with OpenOffice.org.  If not, see
+' <http://www.openoffice.org/license.html>
+' for a copy of the LGPLv3 License.
+'
+'*************************************************************************
+'*************************************************************************
+
+
+
+' Be sure that all variables are dimensioned:
+option explicit
+
+
+' REQUIRED VARIABLES for interface/service tests:
+
+'Required for com.sun.star.lang.XComponent
+Global oComponentInstance As Object
+
+Global oXTextContent as Object
+Global oXTextContentRange as Object
+
+
+Sub CreateObj()
+
+'*************************************************************************
+' COMPONENT: 
+' sw.SwXTextGraphicObject
+'*************************************************************************
+On Error Goto ErrHndl
+    Dim oGrphObj As Object
+    Dim aFrame As Object
+    Dim sSize As new com.sun.star.awt.Size
+    
+    oDoc = utils.createDocument("swriter", cObjectName)
+
+    oGrphObj = oDoc.createInstance("com.sun.star.text.GraphicObject")
+    aFrame = oDoc.createInstance("com.sun.star.text.TextFrame")
+    sSize.Height = 8000
+    sSize.Width = 8000
+    aFrame.Size = sSize
+
+    oDoc.Text.insertTextContent(oDoc.Text.createTextCursor, aFrame, false)
+    aFrame.Text.insertTextContent(aFrame.Text.createTextCursor, oGrphObj, false)
+
+    oGrphObj.setPropertyValue("GraphicURL", Path2URL(cTestDocsDir + "space-metal.jpg"))
+    oGrphObj.setPropertyValue("HoriOrientPosition", 5500)
+    oGrphObj.setPropertyValue("VertOrientPosition", 4200)
+    oGrphObj.setPropertyValue("Width", 4400)
+    oGrphObj.setPropertyValue("Height", 4000)
+
+    oComponentInstance = oDoc.createInstance("com.sun.star.text.GraphicObject")
+    oDoc.Text.insertTextContent(oDoc.Text.createTextCursor, oComponentInstance, false)
+
+    oObj = oGrphObj
+	
+	oXTextContent = oDoc.createInstance("com.sun.star.text.GraphicObject")
+	oXTextContentRange = oDoc.Text.createTextCursor()
+	
+Exit Sub
+ErrHndl:
+    Test.Exception()
+End Sub
+</script:module>

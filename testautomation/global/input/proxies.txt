@@ -1,0 +1,25 @@
+# This file contains information about the proxies used within your
+# network. Please replace the sample strings (name, ports etc.) with
+# valid servernames and ports. Note that authentication is not supported.
+# Use the function hGetProxyInfo( section, item ) to retrieve this data.
+
+[http_proxy]
+Name=MyHttpProxy
+Port=3128
+#User=
+#Password=
+
+[ftp_proxy]
+Name=MyFtpProxy
+Port=3128
+#User=
+#Password=
+
+[socks_proxy]
+Name=MySocksProxy
+Port=1080
+#User=
+#Password=
+
+[no_proxy_for]
+Name=.MyDomain.tv;.YourDomain.uk

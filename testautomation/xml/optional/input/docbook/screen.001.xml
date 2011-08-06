@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
+                  "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd">
+<article>
+<articleinfo>
+<title>Unit Test: screen.001</title>
+<releaseinfo role="CVS">$Id: screen.001.xml,v 1.2 2008-07-11 07:56:36 rt Exp $</releaseinfo>
+<author><firstname>Norman</firstname><surname>Walsh</surname>
+        <affiliation><address><email>ndw@nwalsh.com</email></address></affiliation>
+</author>
+</articleinfo>
+
+<screen>
+(let <co id="dl1"/>loopvar <co id="dl2"/>((count 1))
+  <co id="dl3"/>(if (> count 10)
+    <co id="dl4"/>#t
+    (<co id="dl5"/>loopvar <co id="dl6"/>(+ count 1))))</screen>
+
+</article>

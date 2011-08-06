@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="svx_SvxUnoTextRangeEnumeration" script:language="StarBasic">
+
+
+'*************************************************************************
+'
+' DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+' 
+' Copyright 2000, 2010 Oracle and/or its affiliates.
+'
+' OpenOffice.org - a multi-platform office productivity suite
+'
+' This file is part of OpenOffice.org.
+'
+' OpenOffice.org is free software: you can redistribute it and/or modify
+' it under the terms of the GNU Lesser General Public License version 3
+' only, as published by the Free Software Foundation.
+'
+' OpenOffice.org is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU Lesser General Public License version 3 for more details
+' (a copy is included in the LICENSE file that accompanied this code).
+'
+' You should have received a copy of the GNU Lesser General Public License
+' version 3 along with OpenOffice.org.  If not, see
+' <http://www.openoffice.org/license.html>
+' for a copy of the LGPLv3 License.
+'
+'*************************************************************************
+'*************************************************************************
+
+
+
+' Be sure that all variables are dimensioned:
+option explicit
+
+
+
+Sub CreateObj()
+
+'*************************************************************************
+' COMPONENT: 
+' svx.SvxUnoTextRangeEnumeration
+'*************************************************************************
+On Error Goto ErrHndl
+
+    Dim bOK As Boolean
+    bOK = true
+    Dim oEnum As Object
+
+    oDoc = utils.createDocument("sdraw", cObjectName)
+
+    Dim oShape As Object
+    oShape = oDoc.createInstance("com.sun.star.drawing.TextShape")
+    oDoc.DrawPages(0).Add(oShape)
+
+    Dim oSize As new com.sun.star.awt.Size
+    Dim oPos As new com.sun.star.awt.Point
+    oSize.Width = 5000
+    oSize.Height = 3500
+    oPos.X = 7500
+    oPos.Y = 5000
+    oShape.Size = oSize
+    oShape.Position = oPos
+
+    Dim oCursor As Object
+    oCursor = oShape.createTextCursor()
+    oShape.insertString(oCursor, "String1 from SvxUnoText", false)
+    oShape.insertControlCharacter(oCursor, com.sun.star.text.ControlCharacter.PARAGRAPH_BREAK, false)
+    oShape.insertString(oCursor, "String2 from SvxUnoText", false)
+    oShape.insertControlCharacter(oCursor, com.sun.star.text.ControlCharacter.PARAGRAPH_BREAK, false)
+
+    oObj = oShape.CreateEnumeration()
+
+Exit Sub
+ErrHndl:
+    Test.Exception()
+End Sub
+</script:module>
