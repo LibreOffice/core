@@ -1605,6 +1605,7 @@ int Desktop::Main()
     Reference< XMultiServiceFactory > xSMgr =
         ::comphelper::getProcessServiceFactory();
 
+    Reference< XDesktop > xDesktop;
     Reference< ::com::sun::star::task::XRestartManager > xRestartManager;
     try
     {
@@ -1698,6 +1699,9 @@ int Desktop::Main()
             SvtPathOptions().SetWorkPath( aWorkPath );
         }
 
+        xDesktop = Reference<XDesktop>( xSMgr->createInstance(
+            OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.Desktop" ))), UNO_QUERY );
+
         // create service for loadin SFX (still needed in startup)
         pExecGlobals->xGlobalBroadcaster = Reference < css::document::XEventListener >
             ( xSMgr->createInstance(
@@ -1781,7 +1785,7 @@ int Desktop::Main()
                 (!Application::AnyInput( INPUT_APPEVENT )                              ))
             {
                  RTL_LOGFILE_CONTEXT_TRACE( aLog, "{ create BackingComponent" );
-                 Reference< XFrame > xDesktopFrame( xSMgr->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.Desktop" ))), UNO_QUERY );
+                 Reference< XFrame > xDesktopFrame( xDesktop, UNO_QUERY );
                  if (xDesktopFrame.is())
                  {
                    SetSplashScreenProgress(60);
@@ -1861,8 +1865,6 @@ int Desktop::Main()
         RTL_LOGFILE_CONTEXT( aLog2, "desktop (cd100003) createInstance com.sun.star.frame.Desktop" );
         try
         {
-            Reference< XDesktop > xDesktop( xSMgr->createInstance(
-                OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.Desktop" ))), UNO_QUERY );
             if ( xDesktop.is() )
                 xDesktop->addTerminateListener( new OfficeIPCThreadController );
             SetSplashScreenProgress(100);
@@ -1922,6 +1924,11 @@ int Desktop::Main()
             OfficeIPCThread::SetDowning();
             FatalError( MakeStartupErrorMessage(exAnyCfg.Message) );
         }
+    }
+    else
+    {
+        if (xDesktop.is())
+            xDesktop->terminate();
     }
     // CAUTION: you do not necessarily get here e.g. on the Mac.
     // please put all deinitialization code into doShutdown
