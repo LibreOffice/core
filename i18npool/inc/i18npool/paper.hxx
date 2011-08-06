@@ -128,7 +128,7 @@ enum Paper
 // - Paper -
 // ---------
 
-class I18NPOOL_DLLPUBLIC PaperInfo
+class I18NPAPER_DLLPUBLIC PaperInfo
 {
     Paper m_eType;
     long m_nPaperWidth;     // width in 100thMM

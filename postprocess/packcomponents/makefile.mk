@@ -71,6 +71,8 @@ my_components = \
     component/framework/util/fwl \
     component/framework/util/fwm \
     component/hwpfilter/source/hwp \
+    component/i18npool/source/search/i18nsearch \
+    component/i18npool/util/i18npool \
     component/linguistic/source/lng \
     component/lotuswordpro/util/lwpfilter \
     component/oox/util/oox \
@@ -139,8 +141,6 @@ my_components = \
     fps_office \
     guesslang \
     hyphen \
-    i18npool \
-    i18nsearch \
     lnth \
     localebe1 \
     log \

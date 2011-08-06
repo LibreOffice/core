@@ -48,6 +48,7 @@ $(eval $(call gb_Module_add_moduledirs,ooo,\
     formula \
     framework \
     hwpfilter \
+    i18npool \
     i18nutil \
     idl \
     linguistic \

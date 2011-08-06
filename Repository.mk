@@ -150,10 +150,19 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_URE, \
 ))
 
 $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
+	collator_data \
+	dict_ja \
+	dict_zh \
 	fileacc \
+	index_data \
+	localedata_en \
+	localedata_es \
+	localedata_euro \
+	localedata_others \
 	mcnttype \
 	neon \
 	test \
+	textconv_dict \
 	xmlsecurity \
 	xsec_fw \
 	xsec_xmlsec \
@@ -197,6 +206,8 @@ $(eval $(call gb_Helper_register_libraries,UNOLIBS_OOO, \
     fsstorage \
 	gdipluscanvas \
     hatchwindowfactory \
+	i18npool \
+	i18nsearch \
     lomenubar \
         msforms \
 	mtfrenderer \
