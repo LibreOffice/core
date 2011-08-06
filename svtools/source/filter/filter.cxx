@@ -74,6 +74,7 @@
 #include <comphelper/processfactory.hxx>
 #include <rtl/bootstrap.hxx>
 #include <rtl/instance.hxx>
+#include <vector>
 
 #include "SvFilterOptionsDialog.hxx"
 
@@ -91,7 +92,8 @@
 using namespace ::rtl;
 using namespace ::com::sun::star;
 
-static List*        pFilterHdlList = NULL;
+typedef ::std::vector< GraphicFilter* > FilterList_impl;
+static FilterList_impl* pFilterHdlList = NULL;
 
 static ::osl::Mutex& getListMutex()
 {
@@ -1029,8 +1031,18 @@ GraphicFilter::~GraphicFilter()
 {
     {
         ::osl::MutexGuard aGuard( getListMutex() );
-        pFilterHdlList->Remove( (void*)this );
-        if ( !pFilterHdlList->Count() )
+        for(
+            FilterList_impl::iterator it = pFilterHdlList->begin();
+            it < pFilterHdlList->end();
+            ++it
+        ) {
+            if( *it == this )
+            {
+                pFilterHdlList->erase( it );
+                break;
+            }
+        }
+        if( pFilterHdlList->empty() )
         {
             delete pFilterHdlList, pFilterHdlList = NULL;
             delete pConfig;
@@ -1049,13 +1061,13 @@ void GraphicFilter::ImplInit()
 
         if ( !pFilterHdlList )
         {
-            pFilterHdlList = new List;
+            pFilterHdlList = new FilterList_impl;
             pConfig = new FilterConfigCache( bUseConfig );
         }
         else
-            pConfig = ((GraphicFilter*)pFilterHdlList->First())->pConfig;
+            pConfig = pFilterHdlList->front()->pConfig;
 
-        pFilterHdlList->Insert( (void*)this );
+        pFilterHdlList->push_back( this );
     }
 
     if( bUseConfig )
