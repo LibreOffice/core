@@ -1,0 +1,11 @@
+--- misc/librepository-1.1.6/source/org/pentaho/reporting/libraries/repository/ContentIOException.java	2010-04-27 16:04:50.000000000 +0200
++++ misc/build/librepository-1.1.6/source/org/pentaho/reporting/libraries/repository/ContentIOException.java	2011-06-13 01:44:35.000000000 +0200
+@@ -43,7 +43,7 @@
+    */
+   public ContentIOException(final String message, final Exception ex)
+   {
+-    super(message, ex);
++    super(message, (Throwable) ex);
+   }
+ 
+   /**

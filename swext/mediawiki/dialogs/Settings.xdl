@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--***********************************************************************
+
+  DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+  
+  Copyright 2000, 2010 Oracle and/or its affiliates.
+ 
+  OpenOffice.org - a multi-platform office productivity suite
+ 
+  This file is part of OpenOffice.org.
+ 
+  OpenOffice.org is free software: you can redistribute it and/or modify
+  it under the terms of the GNU Lesser General Public License version 3
+  only, as published by the Free Software Foundation.
+ 
+  OpenOffice.org is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU Lesser General Public License version 3 for more details
+  (a copy is included in the LICENSE file that accompanied this code).
+ 
+  You should have received a copy of the GNU Lesser General Public License
+  version 3 along with OpenOffice.org.  If not, see
+  <http://www.openoffice.org/license.html>
+  for a copy of the LGPLv3 License.
+ 
+ ************************************************************************ -->
+<!DOCTYPE dlg:window PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "dialog.dtd">
+<dlg:window xmlns:dlg="http://openoffice.org/2000/dialog" xmlns:script="http://openoffice.org/2000/script" dlg:id="Settings" dlg:left="142" dlg:top="89" dlg:width="260" dlg:height="185" dlg:closeable="true" dlg:withtitlebar="false" dlg:help-url="vnd.com.sun.star.wiki:settings">
+ <dlg:bulletinboard>
+  <dlg:button dlg:id="AddButton" dlg:tab-index="1" dlg:left="204" dlg:top="20" dlg:width="50" dlg:height="14" dlg:help-url="com.sun.star.wiki.MediaWiki.Settings.AddButton" dlg:value="Add...">
+   <script:event script:event-name="on-performaction" script:macro-name="vnd.sun.star.UNO:Add" script:language="UNO"/>
+  </dlg:button>
+  <dlg:button dlg:id="EditButton" dlg:tab-index="2" dlg:left="204" dlg:top="36" dlg:width="50" dlg:height="14" dlg:help-url="com.sun.star.wiki.MediaWiki.Settings.EditButton" dlg:value="Edit...">
+   <script:event script:event-name="on-performaction" script:macro-name="vnd.sun.star.UNO:Edit" script:language="UNO"/>
+  </dlg:button>
+  <dlg:button dlg:id="RemoveButton" dlg:tab-index="3" dlg:left="204" dlg:top="52" dlg:width="50" dlg:height="14" dlg:help-url="com.sun.star.wiki.MediaWiki.Settings.RemoveButton" dlg:value="Remove">
+   <script:event script:event-name="on-performaction" script:macro-name="vnd.sun.star.UNO:Remove" script:language="UNO"/>
+  </dlg:button>
+  <dlg:menulist dlg:id="WikiList" dlg:tab-index="0" dlg:left="9" dlg:top="20" dlg:width="189" dlg:height="120" dlg:help-url="com.sun.star.wiki.MediaWiki.Settings.WikiList" dlg:multiselection="true">
+   <script:event script:event-name="on-itemstatechange" script:macro-name="vnd.sun.star.UNO:ListStatus" script:language="UNO"/>
+   <script:event script:event-name="on-performaction" script:macro-name="vnd.sun.star.UNO:ListEdit" script:language="UNO"/>
+  </dlg:menulist>
+  <dlg:fixedline dlg:id="FixedLine1" dlg:tab-index="1" dlg:left="6" dlg:top="6" dlg:width="248" dlg:height="8" dlg:help-text="" dlg:value="Wiki Publisher"/>
+ </dlg:bulletinboard>
+</dlg:window>

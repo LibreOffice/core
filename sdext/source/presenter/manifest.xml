@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE manifest:manifest PUBLIC "-//OpenOffice.org//DTD Manifest 1.0//EN" "Manifest.dtd">
+<manifest:manifest xmlns:manifest="http://openoffice.org/2001/manifest">
+  <manifest:file-entry manifest:media-type="application/vnd.sun.star.uno-component;type=native"
+    manifest:full-path="PresenterScreen.unoSHARED_EXTENSION"/>
+  <manifest:file-entry manifest:media-type="application/vnd.sun.star.configuration-data"
+    manifest:full-path="registry/data/org/openoffice/Office/Jobs.xcu"/>
+  <manifest:file-entry manifest:media-type="application/vnd.sun.star.configuration-data"
+    manifest:full-path="registry/data/org/openoffice/Office/ProtocolHandler.xcu"/>
+  <manifest:file-entry manifest:media-type="application/vnd.sun.star.configuration-data"
+    manifest:full-path="registry/data/org/openoffice/Office/extension/PresenterScreen.xcu"/>
+  <manifest:file-entry manifest:media-type="application/vnd.sun.star.configuration-schema"
+    manifest:full-path="registry/schema/org/openoffice/Office/extension/PresenterScreen.xcs"/>
+  <manifest:file-entry manifest:media-type="application/vnd.sun.star.help"
+    manifest:full-path="help"/>
+  <manifest:file-entry manifest:media-type="application/vnd.sun.star.package-bundle-description"
+    manifest:full-path="help/component.txt"/>
+</manifest:manifest>

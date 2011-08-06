@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--***********************************************************************
+ *
+  DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+
+  Copyright 2000, 2010 Oracle and/or its affiliates.
+
+  OpenOffice.org - a multi-platform office productivity suite
+
+  This file is part of OpenOffice.org.
+
+  OpenOffice.org is free software: you can redistribute it and/or modify
+  it under the terms of the GNU Lesser General Public License version 3
+  only, as published by the Free Software Foundation.
+
+  OpenOffice.org is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU Lesser General Public License version 3 for more details
+  (a copy is included in the LICENSE file that accompanied this code).
+
+  You should have received a copy of the GNU Lesser General Public License
+  version 3 along with OpenOffice.org.  If not, see
+  <http://www.openoffice.org/license.html>
+  for a copy of the LGPLv3 License.
+
+ ************************************************************************ -->
+<project default="all">
+    <target name="init">
+        <property environment="env"/>
+        <property name="ext" value="oxt"/>
+        <property name="officeroot" value="/export/home/mav/OFFICES/OOG680/m5_netbeans_pro"/>
+        <property name="office.home" value="${officeroot}"/>
+
+        <!-- fallbacks for locations, when solenv is not used -->
+        <condition property="target" value="wikiaddon">
+            <not><isset property="target"/></not>
+        </condition>
+        <condition property="out" value="./build">
+            <not><isset property="out"/></not>
+        </condition>
+        <condition property="solar.jar" value="${officeroot}/program/classes">
+            <not><isset property="solar.jar"/></not>
+        </condition>
+
+        <!-- locations used throughout the build -->
+        <property name="name" value="wiki-publisher"/>
+        <property name="dist" value="${out}/bin"/>
+        <property name="classes" value="${out}/class"/>
+        <property name="classes.test" value="${out}/class-test"/>
+        <property name="officeclasses" value="${solar.jar}"/>
+
+        <!-- build options -->
+        <property name="sourcelevel" value="1.4"/>
+        <property name="verbose" value="false"/>
+        <property name="debug" value="${antdebug}"/>
+
+        <!-- build classpath -->
+        <path id="classpath">
+            <pathelement location="${officeclasses}/juh.jar"/>
+            <pathelement location="${officeclasses}/jurt.jar"/>
+            <pathelement location="${officeclasses}/ridl.jar"/>
+            <pathelement location="${officeclasses}/unoil.jar"/>
+            <!-- 3rd party libs -->
+            <pathelement location="${commons-codec-jar}"/>
+            <pathelement location="${commons-httpclient-jar}"/>
+            <pathelement location="${commons-lang-jar}"/>
+            <pathelement location="${commons-logging-jar}"/>
+        </path>
+
+        <!-- create output directories -->
+        <mkdir dir="${classes}"/>
+        <mkdir dir="${classes.test}"/>
+        <mkdir dir="${dist}"/>
+    </target>
+
+    <target name="compile" depends="init">
+        <javac debug="${debug}" debuglevel="lines,vars,source" destdir="${classes}" classpathref="classpath"
+               source="${sourcelevel}" verbose="${verbose}">
+            <src path="src"/>
+        </javac>
+    </target>
+
+    <target name="xcucheck" depends="init">
+        <condition property="no.merge.present">
+            <not>
+                <available file="${out}/misc/${target}/merge/org/openoffice/Office/Custom/WikiExtension.xcu" type="file"/>
+            </not>
+        </condition>
+    </target>
+
+    <target name="xcumerge" depends="xcucheck, init" if="no.merge.present">
+        <copy todir="${out}/misc/${target}/merge">
+            <fileset dir="${out}/misc/${target}/registry/data" includes="**/*.xcu" casesensitive="yes"/>
+        </copy>
+    </target>
+
+    <target name="jar" depends="compile, init">
+        <jar basedir="${classes}" compress="true" jarfile="${dist}/${target}.jar">
+            <manifest>
+        <!-- FIXME: Set Class-Path correctly for the system case !-->
+                <attribute name="Class-Path" value="commons-codec-1.3.jar commons-lang-2.3.jar commons-httpclient-3.1.jar commons-logging-1.1.1.jar"/>
+                <attribute name="RegistrationClassName" value="com.sun.star.wiki.WikiEditorImpl"/>
+            </manifest>
+        </jar>
+    </target>
+
+    <target name="tmpdir" depends="xcumerge, jar, init">
+        <copy todir="${out}/misc/${target}/package_tmp" overwrite="true" encoding="UTF-8">
+            <fileset dir="${out}/misc/${target}" includes="description.xml" casesensitive="yes"/>
+            <fileset dir="${out}/misc/${target}/registry/schema/org/openoffice/Office/Custom" includes="*.xcs" casesensitive="yes"/>
+            <fileset dir="${out}/misc/${target}/registry/data/org/openoffice/Office" includes="ProtocolHandler.xcu,Paths.xcu" casesensitive="yes"/>
+            <fileset dir="${out}/misc/${target}/merge/org/openoffice/Office/Custom" includes="*.xcu" casesensitive="yes"/>
+            <fileset dir="${out}/misc/${target}/merge/org/openoffice/Office" includes="*.xcu" casesensitive="yes"/>
+        <!-- FIXME: currently the build xcu files can not be used since the tag containing x-default attribute is thrown away, issue 99378
+            <fileset dir="${out}/misc/${target}/merge/org/openoffice/TypeDetection" includes="*.xcu" casesensitive="yes"/>
+         -->
+            <fileset dir="src/registry/data/org/openoffice/TypeDetection" includes="*.xcu" casesensitive="yes"/>
+            <fileset dir="${out}/misc/${target}" includes="help/component.txt" casesensitive="yes"/>
+            <filterset>
+                <filter token="WIKIEXTENSIONPRODUCTNAME" value="Wiki Publisher"/>
+                <filter token="WIKIEXTENSIONID" value="com.sun.wiki-publisher"/>
+                <filter token="WIKIEXTENSIONFILENAME" value="${name}"/>
+            </filterset>
+        </copy>
+    </target>
+
+    <target name="uno-package" depends="tmpdir, xcumerge, jar, init">
+        <delete file="${dist}/${name}.${ext}"/>
+        <zip  destfile="${dist}/${name}.${ext}">
+            <fileset dir="${out}/misc/${target}/package_tmp" casesensitive="yes"/>
+            <fileset dir="${dist}" includes="${target}.jar" casesensitive="yes"/>
+            <fileset file="${commons-codec-jar}" casesensitive="yes"/>
+            <fileset file="${commons-httpclient-jar}" casesensitive="yes"/>
+            <fileset file="${commons-lang-jar}" casesensitive="yes"/>
+            <fileset file="${commons-logging-jar}" casesensitive="yes"/>
+            <zipfileset file="src/filter/odt2mediawiki.xsl" casesensitive="yes" fullpath="filter/odt2mediawiki.xsl"/>
+            <zipfileset file="src/filter/mediawiki.ott" casesensitive="yes" fullpath="templates/MediaWiki/mediawiki.ott"/>
+            <zipfileset dir="${solar.bin}/xslt/export/xsltml" casesensitive="yes" prefix="filter/math"/>
+            <zipfileset dir="src" includes="uno-extension-manifest.xml" casesensitive="yes" fullpath="META-INF/manifest.xml"/>
+            <zipfileset dir="dialogs" includes="**/*.xdl,**/*.xba,**/*.xlb" casesensitive="yes" prefix="WikiEditor"/>
+            <zipfileset dir="${out}/misc/${target}/help" includes="**/*.idxl/*,**/*.*_,**/*.jar" casesensitive="yes" prefix="help"/>
+            <zipfileset dir="${out}/misc/${target}/help" includes="**/*.xhp" casesensitive="yes" prefix="help"/>
+            <zipfileset dir="src" includes="THIRDPARTYLICENSEREADME.html" casesensitive="yes" prefix="license"/>
+        </zip>
+    </target>
+
+    <target name="development-package" depends="jar, init">
+        <delete file="${dist}/${target}_develop.zip"/>
+        <zip  destfile="${dist}/${target}_develop.zip">
+            <zipfileset dir="${dist}" includes="${target}.jar" casesensitive="yes" filemode="664" dirmode="775"/>
+            <zipfileset dir="${out}/misc/${target}" includes="description.xml" casesensitive="yes" filemode="664" dirmode="775"/>
+            <zipfileset dir="${out}/misc/${target}/registry/schema/org/openoffice/Office/Custom" includes="*.xcs" casesensitive="yes" filemode="664" dirmode="775"/>
+            <zipfileset dir="${out}/misc/${target}/registry/data/org/openoffice/Office" includes="ProtocolHandler.xcu,Paths.xcu" casesensitive="yes" filemode="664" dirmode="775"/>
+            <zipfileset dir="${out}/misc/${target}/merge/org/openoffice/Office/Custom" includes="*.xcu" casesensitive="yes" filemode="664" dirmode="775"/>
+            <zipfileset dir="${out}/misc/${target}/merge/org/openoffice/Office" includes="*.xcu"  excludes="**/ProtocolHandler.xcu,**/Paths.xcu" casesensitive="yes" filemode="664" dirmode="775"/>
+        <!-- FIXME: currently the build xcu files can not be used since the tag containing x-default attribute is thrown away, issue 99378
+            <fileset dir="${out}/misc/${target}/merge/org/openoffice/TypeDetection" includes="*.xcu" casesensitive="yes" filemode="664" dirmode="775"/>
+         -->
+            <zipfileset dir="src/registry/data/org/openoffice/TypeDetection" includes="*.xcu" casesensitive="yes" filemode="664" dirmode="775"/>
+            <zipfileset file="src/filter/odt2mediawiki.xsl" casesensitive="yes" fullpath="filter/odt2mediawiki.xsl" filemode="664" dirmode="775"/>
+            <zipfileset file="src/filter/mediawiki.ott" casesensitive="yes" fullpath="templates/MediaWiki/mediawiki.ott" filemode="664" dirmode="775"/>
+            <zipfileset dir="${out}/misc/${target}/help" includes="component.txt" casesensitive="yes" prefix="help" filemode="664" dirmode="775"/>
+            <zipfileset dir="${out}/misc/${target}_merge/help" includes="**/*.xhp" casesensitive="yes" prefix="help" filemode="664" dirmode="775"/>
+            <zipfileset dir="dialogs" includes="**/*.xdl,**/*.xba,**/*.xlb" casesensitive="yes" prefix="WikiEditor" filemode="664" dirmode="775"/>
+            <zipfileset dir="src" includes="uno-extension-manifest.xml" casesensitive="yes" fullpath="META-INF/manifest.xml" filemode="664" dirmode="775"/>
+            <zipfileset dir="src" includes="THIRDPARTYLICENSEREADME.html" casesensitive="yes" prefix="license" filemode="664" dirmode="775"/>
+        </zip>
+    </target>
+
+    <target depends="init, jar, uno-package, development-package" description="Build everything." name="all">
+        <echo message="${name} built."/>
+    </target>
+
+    <target depends="init" description="Clean all build products." name="clean">
+        <delete dir="${classes}/com/sun/star/wiki"/>
+        <delete dir="${out}/misc/${target}"/>
+        <delete dir="${dist}/${target}.jar"/>
+        <delete dir="${dist}/${name}.${ext}"/>
+        <delete dir="${dist}/${target}_develop.zip"/>
+    </target>
+
+    <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+
+    <target name="uno-deploy" description="Deploys UNO extension package" depends="uno-package">
+        <echo message="deploying UNO extension package ..."/>
+        <echo message="${office.unopkg} add -f ${uno.package.name}"/>
+        <exec executable="${office.unopkg}" dir="${office.program.dir}" failonerror="true">
+            <arg value="add"/>
+            <arg value="-f"/>
+            <arg file="${uno.package.name}"/>
+        </exec>
+    </target>
+
+    <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+
+    <target name="uno-debug" description="Debugss UNO extension package in Target Office" depends="uno-package">
+        <!-- security fail for executing this without netbeans -->
+        <fail unless="netbeans.home">This target can only run inside the NetBeans IDE.</fail>
+        <!-- start debugger and get connection address jpda.address -->
+        <nbjpdastart name="Debug Office" addressproperty="jpda.address" transport="dt_socket">
+            <classpath path="${build.classes.dir}"/>
+            <sourcepath path="${src.dir}"/>
+        </nbjpdastart>
+        <!-- register component in temporaary user installation -->
+        <echo message="debugging UNO extension package ..."/>
+        <echo message="wait until preparation is finished."/>
+        <echo message="  deploying UNO extension package for debugging ..."/>
+        <echo message="  ${office.unopkg} add -f ${uno.package.name}"/>
+        <exec executable="${office.unopkg}" dir="${office.program.dir}">
+            <arg value="add"/>
+            <arg value="-f"/>
+            <arg file="${uno.package.name}"/>
+            <env key="UserInstallation" value="${office.debug.user.directory}"/>
+        </exec>
+        <!-- start Office with debug Java and user installation -->
+        <echo message="  starting the Office with ..."/>
+        <echo message="  user installation: ${office.debug.user.directory}"/>
+        <echo message="  debug options:     &quot;-Xdebug&quot; &quot;-Xrunjdwp:transport=dt_socket,address=${jpda.address}&quot;"/>
+        <echo message="  ${office.soffice}"/>
+        <echo message="preparation finished."/>
+        <exec executable="${office.soffice}" dir="${office.program.dir}" failonerror="true">
+            <env key="UserInstallation" value="${office.debug.user.directory}"/>
+            <env key="JAVA_TOOL_OPTIONS" value="&quot;-Xdebug&quot; &quot;-Xrunjdwp:transport=dt_socket,address=${jpda.address}&quot;"/>
+        </exec>
+   </target>
+</project>

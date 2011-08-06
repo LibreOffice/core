@@ -1,0 +1,11 @@
+--- misc/libfonts-1.1.6/source/org/pentaho/reporting/libraries/fonts/FontException.java	2010-04-27 16:09:00.000000000 +0200
++++ misc/build/libfonts-1.1.6/source/org/pentaho/reporting/libraries/fonts/FontException.java	2011-06-13 02:04:51.000000000 +0200
+@@ -39,7 +39,7 @@
+    */
+   public FontException(final String message, final Exception ex)
+   {
+-    super(message, ex);
++    super(message, (Throwable) ex);
+   }
+ 
+   /**

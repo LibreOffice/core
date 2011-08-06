@@ -1,0 +1,5 @@
+mkdir: %_DEST%\bin\swext
+..\%__SRC%\bin\wiki-publisher.oxt %_DEST%\bin\swext\wiki-publisher.oxt
+..\%__SRC%\bin\wiki-publisher.oxt %_DEST%\bin\wiki-publisher.oxt
+..\%__SRC%\bin\mediawiki_develop.zip %_DEST%\bin\swext\mediawiki_develop.zip
+

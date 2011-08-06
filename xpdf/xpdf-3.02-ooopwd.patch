@@ -1,0 +1,101 @@
+--- misc/xpdf-3.02/xpdf/SecurityHandler.cc	2007-02-27 23:05:52.000000000 +0100
++++ misc/build/xpdf-3.02/xpdf/SecurityHandler.cc	2011-02-03 16:41:49.000000000 +0100
+@@ -40,7 +40,7 @@
+ 
+   encryptDictA->dictLookup("Filter", &filterObj);
+   if (filterObj.isName("Standard")) {
+-    secHdlr = new StandardSecurityHandler(docA, encryptDictA);
++    secHdlr = new OOoImportSecurityhandler(docA, encryptDictA);
+   } else if (filterObj.isName()) {
+ #ifdef ENABLE_PLUGINS
+     if ((xsh = globalParams->getSecurityHandler(filterObj.getName()))) {
+@@ -310,6 +310,60 @@
+   return gTrue;
+ }
+ 
++//------------------------------------------------------------------------
++// OOoImportSecurityhandler
++//------------------------------------------------------------------------
++
++OOoImportSecurityhandler::~OOoImportSecurityhandler()
++{
++}
++
++inline Guchar toNum( Guchar digit )
++{
++    return (digit >= '0') && digit <= '9'
++           ? digit - '0'
++           : (digit >= 'A' && digit <= 'F')
++             ? digit - 'A' + 10
++             : (digit >= 'a' && digit <= 'f')
++               ? digit - 'a' + 10
++               : Guchar(0xff);
++}
++
++GBool OOoImportSecurityhandler::authorize(void* authData)
++{
++    if( !ok )
++        return gFalse;
++    if( authData )
++    {
++        GString* ownerPassword = ((StandardAuthData *)authData)->ownerPassword;
++        if( ownerPassword )
++        {
++            const char* pStr = ownerPassword->getCString();
++            if( strncmp( pStr, "_OOO_pdfi_Credentials_", 22 ) == 0 )
++            {
++                // a hex encoded byte sequence should follow until end of string
++                // the length must match fileKeyLength
++                // if this is the case we can assume that the password checked out
++                // and the file key is valid
++                // max len is 16 (the size of the fileKey array)
++                pStr += 22;
++                size_t i = 0;
++                while( pStr[0] && pStr[1] && i < sizeof( fileKey ) )
++                {
++                    fileKey[i++] = (toNum( *pStr++ ) << 4)
++                                 | (toNum( *pStr++ ));
++                }
++                if( i == size_t(fileKeyLength) )
++                {
++                    ownerPasswordOk = gTrue;
++                    return gTrue;
++                }
++            }
++        }
++    }
++    return StandardSecurityHandler::authorize( authData );
++}
++
+ #ifdef ENABLE_PLUGINS
+ 
+ //------------------------------------------------------------------------
+--- misc/xpdf-3.02/xpdf/SecurityHandler.h	2007-02-27 23:05:52.000000000 +0100
++++ misc/build/xpdf-3.02/xpdf/SecurityHandler.h	2011-02-03 16:26:17.000000000 +0100
+@@ -103,7 +103,7 @@
+   virtual int getEncVersion() { return encVersion; }
+   virtual CryptAlgorithm getEncAlgorithm() { return encAlgorithm; }
+ 
+-private:
++protected:
+ 
+   int permFlags;
+   GBool ownerPasswordOk;
+@@ -119,6 +119,17 @@
+   GBool ok;
+ };
+ 
++class OOoImportSecurityhandler : public StandardSecurityHandler
++{
++public:
++    OOoImportSecurityhandler( PDFDoc* docA, Object* encryptDictA )
++    : StandardSecurityHandler( docA, encryptDictA )
++    {}
++    virtual ~OOoImportSecurityhandler();
++    
++    virtual  GBool authorize(void* authData);
++};
++
+ #ifdef ENABLE_PLUGINS
+ //------------------------------------------------------------------------
+ // ExternalSecurityHandler
