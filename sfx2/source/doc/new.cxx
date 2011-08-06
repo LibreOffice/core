@@ -378,6 +378,7 @@ IMPL_LINK( SfxNewFileDialog_Impl, RegionSelect, ListBox *, pBox )
     aTemplateLb.SetUpdateMode(sal_True);
     aTemplateLb.Invalidate();
     aTemplateLb.Update();
+    TemplateSelect(&aTemplateLb);
     return 0;
 }
 
@@ -629,6 +630,7 @@ SfxNewFileDialog_Impl::SfxNewFileDialog_Impl(
     if( nTokCount > 1 && nFlags )
         aPreviewBtn.Check( rExtra.GetToken( 1 ,'|' ) == 'Y' );
 
+    aTemplateLb.SetSelectHdl(LINK(this, SfxNewFileDialog_Impl, TemplateSelect));
     aTemplateLb.SetDoubleClickHdl(LINK(this, SfxNewFileDialog_Impl, DoubleClick));
 
     // update the template configuration if necessary
