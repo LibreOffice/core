@@ -1,0 +1,202 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#include "app.hrc"
+#include "DocumentRenderer.hrc"
+
+Resource _STR_IMPRESS_PRINT_UI_OPTIONS
+{
+    String _STR_IMPRESS_PRINT_UI_GROUP_NAME
+    {
+        Text [en-US] = "%PRODUCTNAME %s";
+    };
+    String _STR_IMPRESS_PRINT_UI_PRINT_CONTENT
+    {
+        Text [ en-US ] = "Print content";
+    };
+    String _STR_IMPRESS_PRINT_UI_PRINT_GROUP
+    {
+        Text [ en-US ] = "Print";
+    };
+    String _STR_IMPRESS_PRINT_UI_CONTENT
+    {
+        Text [ en-US ] = "Document";
+    };
+    StringArray _STR_IMPRESS_PRINT_UI_CONTENT_CHOICES
+    {
+        ItemList [ en-US ] =
+        {
+            < "Slides" ; > ;
+            < "Handouts" ; > ;
+            < "Notes" ; > ;
+            < "Outline" ; > ;
+        };
+    };
+    String _STR_IMPRESS_PRINT_UI_SLIDESPERPAGE
+    {
+        Text [ en-US ] = "Slides per page" ;
+    };
+    StringArray _STR_IMPRESS_PRINT_UI_SLIDESPERPAGE_CHOICES
+    {
+        ItemList [ en-US ] =
+        {
+            < "Default" ; > ;
+            < "1" ; > ;
+            < "2" ; > ;
+            < "3" ; > ;
+            < "4" ; > ;
+            < "6" ; > ;
+            < "9" ; > ;
+        };
+    };
+    String _STR_IMPRESS_PRINT_UI_ORDER
+    {
+        Text [ en-US ] = "Order" ;
+    };
+    StringArray _STR_IMPRESS_PRINT_UI_ORDER_CHOICES
+    {
+        ItemList [ en-US ] =
+        {
+            < "Left to right, then down" ; > ;
+            < "Top to bottom, then right" ; > ;
+        };
+    };
+    String _STR_IMPRESS_PRINT_UI_INCLUDE_CONTENT
+    {
+        Text [ en-US ] = "~Contents";
+    };
+    String _STR_IMPRESS_PRINT_UI_IS_PRINT_NAME
+    {
+        Text [ en-US ] = "~Slide name";
+    };
+    String _STR_DRAW_PRINT_UI_IS_PRINT_NAME
+    {
+        Text [ en-US ] = "P~age name";
+    };
+    String _STR_IMPRESS_PRINT_UI_IS_PRINT_DATE
+    {
+        Text [ en-US ] = "~Date and time";
+    };
+    String _STR_IMPRESS_PRINT_UI_IS_PRINT_HIDDEN
+    {
+        Text [ en-US ] = "Hidden pages";
+    };
+    String _STR_IMPRESS_PRINT_UI_OUTPUT_OPTIONS_GROUP
+    {
+        Text [ en-US ] = "Output options";
+    };
+    String _STR_IMPRESS_PRINT_UI_QUALITY
+    {
+        Text [ en-US ] = "Color";
+    };
+    StringArray _STR_IMPRESS_PRINT_UI_QUALITY_CHOICES
+    {
+        ItemList [ en-US ] =
+        {
+            < "Original colors" ; > ;
+            < "Grayscale" ; > ;
+            < "Black & white" ; > ;
+        };
+    };
+    String _STR_IMPRESS_PRINT_UI_PAGE_OPTIONS
+    {
+        Text [ en-US ] = "~Size";
+    };
+    StringArray _STR_IMPRESS_PRINT_UI_PAGE_OPTIONS_CHOICES
+    {
+        ItemList [ en-US ] =
+        {
+            < "Original size" ; > ;
+            < "Fit to printable page" ; > ;
+            < "Distribute on multiple sheets of paper" ; > ;
+            < "Tile sheet of paper with repeated slides" ; > ;
+        };
+    };
+    StringArray _STR_IMPRESS_PRINT_UI_PAGE_OPTIONS_CHOICES_DRAW
+    {
+        ItemList [ en-US ] =
+        {
+            < "Original size" ; > ;
+            < "Fit to printable page" ; > ;
+            < "Distribute on multiple sheets of paper" ; > ;
+            < "Tile sheet of paper with repeated pages" ; > ;
+        };
+    };
+    String _STR_IMPRESS_PRINT_UI_BROCHURE
+    {
+        Text [en-US] = "Brochure";
+    };
+    String _STR_IMPRESS_PRINT_UI_PAGE_SIDES
+    {
+        Text [ en-US ] = "Page sides";
+    };
+    String _STR_IMPRESS_PRINT_UI_BROCHURE_INCLUDE
+    {
+        Text [ en-US ] = "Include";
+    };
+    StringArray _STR_IMPRESS_PRINT_UI_BROCHURE_INCLUDE_LIST
+    {
+        ItemList [ en-US ] =
+        {
+            < "All pages" ; > ;
+            < "Front sides / right pages" ; > ;
+            < "Back sides / left pages" ; > ;
+        };
+    };
+
+    String _STR_IMPRESS_PRINT_UI_PAPER_TRAY_GROUP
+    {
+        Text [ en-US ] = "Paper tray";
+    };
+    String _STR_IMPRESS_PRINT_UI_PAPER_TRAY
+    {
+        Text [ en-US ] = "~Use only paper tray from printer preferences";
+    };
+    String _STR_IMPRESS_PRINT_UI_PAGE_RANGE
+    {
+        Text [en-US] = "Print range";
+    };
+    StringArray _STR_IMPRESS_PRINT_UI_PAGE_RANGE_CHOICE
+    {
+        ItemList [ en-US ] =
+        {
+            < "~All slides"; >;
+            < "~Slides"; >;
+            < "Se~lection"; >;
+        };
+    };
+
+    StringArray _STR_DRAW_PRINT_UI_PAGE_RANGE_CHOICE
+    {
+        ItemList [ en-US ] =
+        {
+            < "~All pages"; >;
+            < "Pa~ges"; >;
+            < "Se~lection"; >;
+        };
+    };
+};

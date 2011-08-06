@@ -1,0 +1,148 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#include "CustomAnimationCreateDialog.hrc"
+#include "CustomAnimation.hrc"
+
+TabDialog DLG_CUSTOMANIMATION_CREATE
+{
+    Size = MAP_APPFONT ( 162 , 244 ) ;
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Moveable = TRUE ;
+    Closeable = TRUE ;
+
+    Text [ en-US ] = "Custom Animation" ;
+
+    TabControl 1
+    {
+        OutputSize = TRUE ;
+        Pos = MAP_APPFONT ( 3 , 3 ) ;
+        Size = MAP_APPFONT ( 156, 217 ) ;
+        PageList =
+        {
+            PageItem
+            {
+                Identifier = RID_TP_CUSTOMANIMATION_ENTRANCE ;
+                Text [ en-US ] = "Entrance" ;
+            };
+
+            PageItem
+            {
+                Identifier = RID_TP_CUSTOMANIMATION_EMPHASIS;
+                Text [ en-US ] = "Emphasis";
+            };
+
+            PageItem
+            {
+                Identifier = RID_TP_CUSTOMANIMATION_EXIT;
+                Text [ en-US ] = "Exit";
+            };
+
+            PageItem
+            {
+                Identifier = RID_TP_CUSTOMANIMATION_MOTIONPATH;
+                Text [ en-US ] = "Motion Paths";
+            };
+
+            PageItem
+            {
+                Identifier = RID_TP_CUSTOMANIMATION_MISCEFFECTS;
+                Text [ en-US ] = "Misc Effects";
+            };
+        };
+    };
+    OKButton 1
+    {
+        Pos = MAP_APPFONT ( 3 , 223 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    CancelButton 1
+    {
+        Pos = MAP_APPFONT ( 56 , 223 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    HelpButton 1
+    {
+        Pos = MAP_APPFONT ( 109 , 223 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+};
+
+TabPage RID_TP_CUSTOMANIMATION_ENTRANCE
+{
+    HelpID = "sd:TabPage:RID_TP_CUSTOMANIMATION_ENTRANCE";
+    Hide = TRUE;
+    Size = MAP_APPFONT ( 156, 217 );
+
+    ListBox LB_EFFECTS
+    {
+        HelpID = "sd:ListBox:RID_TP_CUSTOMANIMATION_ENTRANCE:LB_EFFECTS";
+        Pos = MAP_APPFONT ( 3 , 3  ) ;
+        Size = MAP_APPFONT( 144, 160 );
+        OutputSize = TRUE;
+        TabStop = TRUE ;
+        Border = TRUE ;
+    };
+
+    FixedText FT_SPEED
+    {
+        OutputSize = TRUE;
+        Pos = MAP_APPFONT ( 3 , 167  ) ;
+        Size = MAP_APPFONT( 42, 8 );
+
+        Text [ en-US ] = "Speed";
+    };
+
+    ComboBox CB_SPEED
+    {
+        HelpID = "sd:ComboBox:RID_TP_CUSTOMANIMATION_ENTRANCE:CB_SPEED";
+        Pos = MAP_APPFONT ( 48 , 166 ) ;
+        Size = MAP_APPFONT ( 101, 48 );
+        TabStop = TRUE ;
+        Border = TRUE ;
+        DropDown = TRUE ;
+    };
+
+    CheckBox CBX_PREVIEW
+    {
+        HelpID = "sd:CheckBox:RID_TP_CUSTOMANIMATION_ENTRANCE:CBX_PREVIEW";
+        Pos = MAP_APPFONT ( 3 , 181 ) ;
+        Size = MAP_APPFONT ( 143 , 10 ) ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "Automatic preview" ;
+    };
+
+    String STR_USERPATH
+    {
+        Text [ en-US ] = "User paths";
+    };
+};
+

@@ -1,0 +1,220 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#include "CustomAnimation.hrc"
+#include "SlideTransitionPane.hrc"
+#include "helpids.h"
+
+#ifndef _SVT_CONTROLDIMS_HRC_
+#include <svtools/controldims.hrc>
+#endif
+
+// Note: Sizes of 1 usually mean they are auto-calculated
+
+Control DLG_SLIDE_TRANSITION_PANE
+{
+    OutputSize = TRUE;
+    DialogControl = TRUE;
+    Size = MAP_APPFONT( 1, 1 );
+
+    Text [ en-US ] = "Slide Transition";
+
+    FixedLine FL_APPLY_TRANSITION
+    {
+        Size = MAP_APPFONT( 1, RSC_CD_FIXEDLINE_HEIGHT );
+        Text [ en-US ] = "Apply to selected slides";
+    };
+
+    ListBox LB_SLIDE_TRANSITIONS
+    {
+        HelpId = HID_SD_SLIDETRANSITIONPANE_LB_SLIDE_TRANSITIONS;
+        Border = TRUE ;
+        TabStop = TRUE ;
+        AutoHScroll = TRUE ;
+
+        Size = MAP_APPFONT( 1, 1 );
+    };
+
+    Fixedline FL_MODIFY_TRANSITION
+    {
+        Size = MAP_APPFONT( 1, RSC_CD_FIXEDLINE_HEIGHT );
+        Text [ en-US ] = "Modify transition";
+    };
+
+    FixedText FT_SPEED
+    {
+        Size = MAP_APPFONT( 1, RSC_CD_FIXEDTEXT_HEIGHT );
+        Text [ en-US ] = "Speed";
+    };
+
+    ListBox LB_SPEED
+    {
+        HelpId = HID_SD_SLIDETRANSITIONPANE_LB_SPEED;
+        Border = TRUE ;
+        DropDown = TRUE ;
+        TabStop = TRUE ;
+
+        Size = MAP_APPFONT( 1, RSC_CD_DROPDOWN_HEIGHT );
+        StringList [ en-US ] =
+        {
+            < "Slow" ; > ;
+            < "Medium" ; > ;
+            < "Fast" ; > ;
+        };
+    };
+
+    FixedText FT_SOUND
+    {
+        Size = MAP_APPFONT( 1, RSC_CD_FIXEDTEXT_HEIGHT );
+        Text [ en-US ] = "Sound";
+    };
+
+    ListBox LB_SOUND
+    {
+        HelpId = HID_SD_SLIDETRANSITIONPANE_LB_SOUND;
+        Border = TRUE ;
+        DropDown = TRUE ;
+        TabStop = TRUE ;
+
+        Size = MAP_APPFONT( 1, RSC_CD_DROPDOWN_HEIGHT );
+
+        StringList [ en-US ] =
+        {
+            < "<No Sound>" ; > ;
+            < "<Stop Previous Sound>" ; > ;
+            < "Other Sound..." ; > ;
+        };
+    };
+
+    Checkbox CB_LOOP_SOUND
+    {
+        HelpId = HID_SD_SLIDETRANSITIONPANE_CB_LOOP_SOUND;
+        Size = MAP_APPFONT( 1, RSC_CD_CHECKBOX_HEIGHT );
+        TabStop = TRUE ;
+
+        Text [ en-US ] = "Loop until next sound";
+    };
+
+    Fixedline FL_ADVANCE_SLIDE
+    {
+        Size = MAP_APPFONT( 1, RSC_CD_FIXEDLINE_HEIGHT );
+        Text [ en-US ] = "Advance slide";
+    };
+
+    RadioButton RB_ADVANCE_ON_MOUSE
+    {
+        HelpId = HID_SD_SLIDETRANSITIONPANE_RB_ADVANCE_ON_MOUSE;
+        Size = MAP_APPFONT( 1, RSC_CD_RADIOBUTTON_HEIGHT );
+        TabStop = TRUE ;
+
+        Text [ en-US ] = "On mouse click";
+    };
+
+    RadioButton RB_ADVANCE_AUTO
+    {
+        HelpId = HID_SD_SLIDETRANSITIONPANE_RB_ADVANCE_AUTO;
+        Size = MAP_APPFONT( 1, RSC_CD_RADIOBUTTON_HEIGHT );
+        TabStop = TRUE ;
+
+        Text [ en-US ] = "Automatically after";
+    };
+
+    MetricField MF_ADVANCE_AUTO_AFTER
+    {
+        HelpId = HID_SD_SLIDETRANSITIONPANE_MF_ADVANCE_AUTO_AFTER;
+        Size = MAP_APPFONT( 1, RSC_CD_TEXTBOX_HEIGHT );
+
+        Border = TRUE ;
+        TabStop = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Minimum = 0 ;
+        Maximum = 999 ;
+        // decimal digits should be 1, but for now the model only supports whole seconds
+        DecimalDigits = 0 ;
+        // spin size (increment value) should be 5 if digits are 1
+        SpinSize = 1 ;
+
+        Unit = FUNIT_CUSTOM ;
+        CustomUnitText [ en-US ] = "sec";
+    };
+
+    FixedLine FL_EMPTY1
+    {
+        Size = MAP_APPFONT( 1, RSC_CD_FIXEDLINE_HEIGHT );
+    };
+
+    PushButton PB_APPLY_TO_ALL
+    {
+        HelpId = HID_SD_SLIDETRANSITIONPANE_PB_APPLY_TO_ALL;
+        Size = MAP_APPFONT( 1, RSC_CD_PUSHBUTTON_HEIGHT );
+        TabStop = TRUE ;
+
+        Text [ en-US ] = "Apply to All Slides";
+    };
+
+
+    PushButton PB_PLAY
+    {
+        HelpId = HID_SD_SLIDETRANSITIONPANE_PB_PLAY;
+        Size = MAP_APPFONT( 1, RSC_CD_PUSHBUTTON_HEIGHT );
+        TabStop = TRUE ;
+
+        Text [ en-US ] = "Play";
+    };
+
+    PushButton PB_SLIDE_SHOW
+    {
+        HelpId = HID_SD_SLIDETRANSITIONPANE_PB_SLIDE_SHOW;
+        Size = MAP_APPFONT( 1, RSC_CD_PUSHBUTTON_HEIGHT );
+        TabStop = TRUE ;
+
+        Text [ en-US ] = "Slide Show";
+    };
+
+    FixedLine FL_EMPTY2
+    {
+        Size = MAP_APPFONT( 1, RSC_CD_FIXEDLINE_HEIGHT );
+    };
+
+    Checkbox CB_AUTO_PREVIEW
+    {
+        HelpId = HID_SD_SLIDETRANSITIONPANE_CB_AUTO_PREVIEW;
+        Size = MAP_APPFONT( 1, RSC_CD_CHECKBOX_HEIGHT );
+        TabStop = TRUE ;
+
+        Text [ en-US ] = "Automatic preview";
+    };
+
+    // --------------------
+
+    String STR_NO_TRANSITION
+    {
+        Text [ en-US ] = "No Transition";
+    };
+};
+

@@ -1,0 +1,245 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef _GLOBLMN_HRC
+#include <svx/globlmn.hrc>
+#endif
+#define MN_CHANGEBEZIER \
+    MenuItem\
+    {\
+        Identifier = SID_CHANGEBEZIER ; \
+        HelpId = CMD_SID_CHANGEBEZIER ; \
+        Text [ en-US ] = "To ~Curve" ; \
+    };
+
+#define MN_CHANGEPOLYGON \
+    MenuItem\
+    {\
+        Identifier = SID_CHANGEPOLYGON ; \
+        HelpId = CMD_SID_CHANGEPOLYGON ; \
+        Text [ en-US ] = "To ~Polygon" ; \
+    };
+
+#define MN_CONVERT_TO_CONTOUR \
+    MenuItem\
+    {\
+        Identifier = SID_CONVERT_TO_CONTOUR ; \
+        HelpId = CMD_SID_CONVERT_TO_CONTOUR ; \
+        Text [ en-US ] = "To C~ontour";\
+    };
+
+#define MN_CONVERT_TO_3D \
+    MenuItem\
+    {\
+        Identifier = SID_CONVERT_TO_3D ; \
+        HelpId = CMD_SID_CONVERT_TO_3D ; \
+        Text [ en-US ] = "To 3~D" ; \
+    };
+
+#define MN_CONVERT_TO_BITMAP \
+    MenuItem\
+    {\
+        Identifier = SID_CONVERT_TO_BITMAP ; \
+        HelpId = CMD_SID_CONVERT_TO_BITMAP ; \
+        Text [ en-US ] = "To ~Bitmap" ; \
+    };
+
+#define MN_CONVERT_TO_METAFILE \
+    MenuItem\
+    {\
+        Identifier = SID_CONVERT_TO_METAFILE ; \
+        HelpId = CMD_SID_CONVERT_TO_METAFILE ; \
+        Text [ en-US ] = "To ~Metafile" ; \
+    };
+
+#define MN_CONVERT_TO_3D_LATHE_FAST \
+    MenuItem\
+    {\
+        Identifier = SID_CONVERT_TO_3D_LATHE_FAST ; \
+        HelpId = CMD_SID_CONVERT_TO_3D_LATHE_FAST ; \
+        Text [ en-US ] = "To 3D ~Rotation Object" ; \
+    };
+
+#define MN_VERTICAL \
+    MenuItem\
+    {\
+        Identifier = SID_VERTICAL ; \
+        HelpId = CMD_SID_VERTICAL ; \
+        Text [ en-US ] = "~Vertically" ; \
+    };
+
+#define MN_HORIZONTAL \
+    MenuItem\
+    {\
+        Identifier = SID_HORIZONTAL ; \
+        HelpId = CMD_SID_HORIZONTAL ; \
+        Text [ en-US ] = "~Horizontally" ; \
+    };
+
+#define MN_3D_WIN \
+    MenuItem\
+    {\
+        Identifier = SID_3D_WIN ; \
+        HelpId = CMD_SID_3D_WIN ; \
+        Text [ en-US ] = "~3D Effects" ; \
+    };
+
+#define MN_PRESENTATION_LAYOUT \
+    MenuItem\
+    {\
+        Identifier = SID_PRESENTATION_LAYOUT ; \
+        HelpId = CMD_SID_PRESENTATION_LAYOUT ; \
+        Text [ en-US ] = "~Slide Design" ; \
+    };
+
+#define MN_DIA \
+    MenuItem\
+    {\
+        Identifier = SID_SLIDE_TRANSITIONS_PANEL ; \
+        HelpId = CMD_SID_SLIDE_TRANSITIONS_PANEL ; \
+        Text [ en-US ] = "Slide ~Transition" ; \
+    };
+
+#define MN_SHOW_SLIDE \
+    MenuItem\
+    {\
+        Identifier = SID_SHOW_SLIDE ; \
+        HelpId = CMD_SID_SHOW_SLIDE ; \
+        Text [ en-US ] = "~Show Slide" ; \
+    };
+
+#define MN_HIDE_SLIDE \
+    MenuItem\
+    {\
+        Identifier = SID_HIDE_SLIDE ; \
+        HelpId = CMD_SID_HIDE_SLIDE ; \
+        Text [ en-US ] = "~Hide Slide" ; \
+    };
+
+#define MN_GROUP_IMPRESS \
+    MenuItem\
+    {\
+        Identifier = SID_GROUP ; \
+        HelpId = CMD_SID_GROUP ; \
+        Text [ en-US ] = "~Group" ; \
+    };
+
+#define MN_UNGROUP_IMPRESS \
+    MenuItem\
+    {\
+        Identifier = SID_UNGROUP ; \
+        HelpId = CMD_SID_UNGROUP ; \
+        Text [ en-US ] = "~Ungroup" ; \
+    };
+
+#define MN_ENTER_GROUP_IMPRESS \
+    MenuItem\
+    {\
+        Identifier = SID_ENTER_GROUP ; \
+        HelpId = CMD_SID_ENTER_GROUP ; \
+        Text [ en-US ] = "~Edit Group" ; \
+    };
+
+#define MN_LEAVE_GROUP_IMPRESS \
+    MenuItem\
+    {\
+        Identifier = SID_LEAVE_GROUP ; \
+        HelpId = CMD_SID_LEAVE_GROUP ; \
+        Text [ en-US ] = "E~xit group" ; \
+    };
+
+#define MNSUB_GROUP \
+    MenuItem\
+    {\
+        Identifier = MN_SUB_GROUP ; \
+        HelpID = HID_MN_SUB_GROUP ; \
+        Command = ".uno:GroupMenu" ; \
+        Text [ en-US ] = "~Group" ; \
+        SubMenu = Menu\
+        {\
+            ItemList = \
+            {\
+                MN_GROUP_IMPRESS\
+                MN_UNGROUP_IMPRESS\
+                MN_ENTER_GROUP_IMPRESS\
+                MN_LEAVE_GROUP_IMPRESS\
+            };\
+        };\
+    };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

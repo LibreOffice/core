@@ -1,0 +1,1284 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#include <svx/dialogs.hrc>
+#include "app.hrc"
+#include "res_bmp.hrc"
+#include "helpids.h"
+
+#define SEPARATOR       MenuItem { Separator = TRUE; };
+ // DUMMY ist eine ID wo ein SubMenu folgt
+ // (muss jeweils immer erhoeht werden!)
+#define DUMMY 333
+ // Nichtobjektbezogen
+
+#define MN_DISTRIBUTE \
+    MenuItem\
+    {\
+        Identifier = SID_DISTRIBUTE_DLG ; \
+        HelpId = CMD_SID_DISTRIBUTE_DLG ; \
+        Text [ en-US ] = "~Distribution..." ; \
+    };
+
+#define MN_DRAWINGMODE \
+    MenuItem\
+    {\
+        Identifier = SID_DRAWINGMODE ; \
+        HelpId = CMD_SID_DRAWINGMODE ; \
+        Check = TRUE ; \
+        Text [ en-US ] = "~Drawing View" ; \
+    };
+
+#define MN_OUTLINEMODE \
+    MenuItem\
+    {\
+        Identifier = SID_OUTLINEMODE ; \
+        HelpId = CMD_SID_OUTLINEMODE ; \
+        Check = TRUE ; \
+        Text [ en-US ] = "~Outline View" ; \
+    };
+
+#define MN_DIAMODE \
+    MenuItem\
+    {\
+        Identifier = SID_DIAMODE ; \
+        HelpId = CMD_SID_DIAMODE ; \
+        Check = TRUE ; \
+        Text [ en-US ] = "~Slide Sorter" ; \
+    };
+
+#define MN_PRESENTATION \
+    MenuItem\
+    {\
+        Identifier = SID_PRESENTATION ; \
+        HelpId = CMD_SID_PRESENTATION ; \
+        Text [ en-US ] = "Slide Sho~w" ; \
+    };
+
+#define MN_CAPTUREPOINT \
+    MenuItem\
+    {\
+        Identifier = SID_CAPTUREPOINT ; \
+        HelpId = CMD_SID_CAPTUREPOINT ; \
+        Text [ en-US ] = "~Insert Snap Point/Line..." ; \
+    };
+
+#define MN_SET_SNAPITEM \
+    MenuItem\
+    {\
+        Identifier = SID_SET_SNAPITEM ; \
+        HelpId = CMD_SID_SET_SNAPITEM ; \
+        Text [ en-US ] = "~Edit..." ; \
+    };
+
+#define MN_DELETE_SNAPITEM \
+    MenuItem\
+    {\
+        Identifier = SID_DELETE_SNAPITEM ; \
+        HelpId = CMD_SID_DELETE_SNAPITEM ; \
+        Text [ en-US ] = "~Delete" ; \
+    };
+
+ // Seiten-Attribute
+#define MN_MODIFY_PAGE \
+    MenuItem\
+    {\
+        Identifier = SID_MODIFYPAGE ; \
+        HelpId = CMD_SID_MODIFYPAGE ; \
+        Text [ en-US ] = "Slide ~Layout" ; \
+    };
+
+#define MN_FORMAT_PAGE \
+    MenuItem\
+    {\
+        Identifier = SID_PAGESETUP ; \
+        HelpId = CMD_SID_PAGESETUP ; \
+        Text [ en-US ] = "~Page Setup..." ; \
+    };
+
+
+#define MN_INSERT_SLIDE \
+    MenuItem\
+    {\
+        Identifier = SID_INSERTPAGE ; \
+        HelpId = CMD_SID_INSERTPAGE ; \
+        Text [ en-US ] = "~New Slide" ; \
+    };
+
+#define MN_INSERT_MASTER \
+    MenuItem\
+    {\
+        Identifier = SID_INSERT_MASTER_PAGE ; \
+        HelpId = CMD_SID_INSERT_MASTER_PAGE ; \
+        Text [ en-US ] = "~New Master" ; \
+    };
+
+#define MN_INSERT_PAGE \
+    MenuItem\
+    {\
+        Identifier = SID_INSERTPAGE ; \
+        HelpId = CMD_SID_INSERTPAGE ; \
+        Text [ en-US ] = "~New Page" ; \
+    };
+#define MN_SELECT_BACKGROUND \
+    MenuItem\
+    {\
+        Identifier = SID_SELECT_BACKGROUND ; \
+        HelpId = CMD_SID_SELECT_BACKGROUND ; \
+        Text [ en-US ] = "Set Background Picture for Slide ..." ; \
+    };
+#define MN_DISPLAY_MASTER_BACKGROUND \
+    MenuItem\
+    {\
+        Identifier = SID_DISPLAY_MASTER_BACKGROUND ; \
+        HelpId = CMD_SID_DISPLAY_MASTER_BACKGROUND ; \
+        Text [ en-US ] = "Display Background of Master" ; \
+    };
+#define MN_DISPLAY_MASTER_OBJECTS \
+    MenuItem\
+    {\
+        Identifier = SID_DISPLAY_MASTER_OBJECTS ; \
+        HelpId = CMD_SID_DISPLAY_MASTER_OBJECTS ; \
+        Text [ en-US ] = "Display Objects from Master" ; \
+    };
+
+
+#define MN_PAGE_MENU \
+    MenuItem\
+    {\
+        Identifier = DUMMY + 3 ; \
+        Command = ".uno:PageMenu" ; \
+        SubMenu = Menu\
+        {\
+            ItemList = \
+            {\
+                MN_FORMAT_PAGE\
+                MN_PRESENTATION_LAYOUT\
+                MN_RENAME_PAGE\
+                SEPARATOR\
+                MN_INSERT_PAGE\
+                MN_DELETE_PAGE\
+            };\
+        };\
+        Text [ en-US ] = "Pag~e" ; \
+    };
+
+#define MN_SLIDE_MENU \
+    MenuItem\
+    {\
+        Identifier = DUMMY + 8 ; \
+        Command = ".uno:PageMenu" ; \
+        SubMenu = Menu\
+        {\
+            ItemList = \
+            {\
+                MN_FORMAT_PAGE\
+                MN_PRESENTATION_LAYOUT\
+                MN_MODIFY_PAGE\
+                MN_SELECT_BACKGROUND\
+                MN_RENAME_SLIDE\
+                SEPARATOR\
+                MN_DISPLAY_MASTER_BACKGROUND\
+                MN_DISPLAY_MASTER_OBJECTS\
+                SEPARATOR\
+                MN_INSERT_SLIDE\
+                MN_DELETE_SLIDE\
+            };\
+        };\
+        Text [ en-US ] = "Slid~e" ; \
+    };
+
+ // Layer
+#define MN_RENAME_LAYER \
+    MenuItem\
+    {\
+        Identifier = SID_RENAMELAYER ; \
+        HelpId = CMD_SID_RENAMELAYER ; \
+        Text [ en-US ] = "~Rename Layer..." ; \
+    };
+
+#define MN_DELETE_SLIDE \
+    MenuItem\
+    {\
+        Identifier = SID_DELETE_PAGE ; \
+        HelpId = CMD_SID_DELETE_PAGE ; \
+        Text [ en-US ] = "D~elete Slide" ; \
+    };
+
+#define MN_DELETE_MASTER \
+    MenuItem\
+    {\
+        Identifier = SID_DELETE_MASTER_PAGE ; \
+        HelpId = CMD_SID_DELETE_MASTER_PAGE ; \
+        Text [ en-US ] = "D~elete Master" ; \
+    };
+
+
+
+#define MN_DELETE_PAGE \
+    MenuItem\
+    {\
+        Identifier = SID_DELETE_PAGE ; \
+        HelpId = CMD_SID_DELETE_PAGE ; \
+        Text [ en-US ] = "D~elete Page" ; \
+    };
+
+#define MN_RENAME_SLIDE \
+    MenuItem\
+    {\
+        Identifier = SID_RENAMEPAGE ; \
+        HelpId = CMD_SID_RENAMEPAGE ; \
+        Text [ en-US ] = "~Rename Slide" ; \
+    };
+
+#define MN_RENAME_MASTER \
+    MenuItem\
+    {\
+        Identifier = SID_RENAME_MASTER_PAGE ; \
+        HelpId = CMD_SID_RENAME_MASTER_PAGE ; \
+        Text [ en-US ] = "~Rename Master" ; \
+    };
+
+#define MN_RENAME_PAGE \
+    MenuItem\
+    {\
+        Identifier = SID_RENAMEPAGE ; \
+        HelpId = CMD_SID_RENAMEPAGE ; \
+        Text [ en-US ] = "~Rename Page" ; \
+    };
+
+ // Grafik-Attribute
+#define MN_LINE \
+    MenuItem\
+    {\
+        Identifier = SID_ATTRIBUTES_LINE ; \
+        HelpId = CMD_SID_ATTRIBUTES_LINE ; \
+        Text [ en-US ] = "L~ine..." ; \
+    };
+
+#define MN_AREA \
+    MenuItem\
+    {\
+        Identifier = SID_ATTRIBUTES_AREA ; \
+        HelpId = CMD_SID_ATTRIBUTES_AREA ; \
+        Text [ en-US ] = "~Area..." ; \
+    };
+
+#define MN_TEXTATTR \
+    MenuItem\
+    {\
+        Identifier = SID_TEXTATTR_DLG ; \
+        HelpId = CMD_SID_TEXTATTR_DLG ; \
+        Text [ en-US ] = "~Text..." ; \
+    };
+
+#define MN_OUTLINE_TEXT_AUTOFIT \
+    MenuItem\
+    {\
+        Identifier = SID_OUTLINE_TEXT_AUTOFIT ; \
+        HelpID = CMD_SID_OUTLINE_TEXT_AUTOFIT ; \
+        Text [ en-US ] = "~Autofit Text" ; \
+    };
+
+#define MN_CONNECTION \
+    MenuItem\
+    {\
+        Identifier = SID_CONNECTION_DLG ; \
+        HelpId = CMD_SID_CONNECTION_DLG ; \
+        Text [ en-US ] = "~Connector..." ; \
+    };
+
+#define MN_NEW_ROUTING \
+    MenuItem\
+    {\
+        Identifier = SID_CONNECTION_NEW_ROUTING ; \
+        HelpId = CMD_SID_CONNECTION_NEW_ROUTING ; \
+        Text [ en-US ] = "Reset ~Routing" ; \
+    };
+
+#define MN_MEASURE \
+    MenuItem\
+    {\
+        Identifier = SID_MEASURE_DLG ; \
+        HelpId = CMD_SID_MEASURE_DLG ; \
+        Text [ en-US ] = "Dimen~sions..." ; \
+    };
+
+#define MN_TRANSFORM \
+    MenuItem\
+    {\
+        Identifier = SID_ATTR_TRANSFORM ; \
+        HelpId = CMD_SID_ATTR_TRANSFORM ; \
+        Text [ en-US ] = "Position and Si~ze..." ; \
+    };
+
+#define MN_EDIT_POINTS \
+    MenuItem\
+    {\
+        Identifier = SID_BEZIER_EDIT ; \
+        HelpId = CMD_SID_BEZIER_EDIT ; \
+        Text [ en-US ] = "Edit ~Points" ; \
+    };
+
+ // Anordnung
+#define MN_POSITION \
+    MenuItem\
+    {\
+        Identifier = SID_POSITION ; \
+        HelpId = CMD_SID_POSITION ; \
+        Command = ".uno:ObjectPosition"; \
+        Text [ en-US ] = "Arra~nge" ; \
+        SubMenu = Menu\
+        {\
+            ItemList = \
+            {\
+                MenuItem\
+                {\
+                    Identifier = SID_FRAME_TO_TOP ; \
+                    HelpId = CMD_SID_FRAME_TO_TOP ; \
+                    Text [ en-US ] = "~Bring to Front" ; \
+                };\
+                MenuItem\
+                {\
+                    Identifier = SID_MOREFRONT ; \
+                    HelpId = CMD_SID_MOREFRONT ; \
+                    Text [ en-US ] = "Bring ~Forward" ; \
+                };\
+                MenuItem\
+                {\
+                    Identifier = SID_MOREBACK ; \
+                    HelpId = CMD_SID_MOREBACK ; \
+                    Text [ en-US ] = "Send Back~ward" ; \
+                };\
+                MenuItem\
+                {\
+                    Identifier = SID_FRAME_TO_BOTTOM ; \
+                    HelpId = CMD_SID_FRAME_TO_BOTTOM ; \
+                    Text [ en-US ] = "~Send to Back" ; \
+                };\
+                MenuItem\
+                {\
+                    Separator = TRUE ; \
+                };\
+                MenuItem\
+                {\
+                    Identifier = SID_BEFORE_OBJ ; \
+                    HelpId = CMD_SID_BEFORE_OBJ ; \
+                    Text [ en-US ] = "In Front of ~Object" ; \
+                };\
+                MenuItem\
+                {\
+                    Identifier = SID_BEHIND_OBJ ; \
+                    HelpId = CMD_SID_BEHIND_OBJ ; \
+                    Text [ en-US ] = "Be~hind Object" ; \
+                };\
+                MenuItem\
+                {\
+                    Separator = TRUE ; \
+                };\
+                MenuItem\
+                {\
+                    Identifier = SID_REVERSE_ORDER ; \
+                    HelpId = CMD_SID_REVERSE_ORDER ; \
+                    Text [ en-US ] = "~Reverse" ; \
+                };\
+            };\
+        };\
+    };
+
+ // Text-Elemente
+#define MN_CHAR \
+    MenuItem\
+    {\
+        Identifier = SID_CHAR_DLG ; \
+        HelpId = CMD_SID_CHAR_DLG ; \
+        Text [ en-US ] = "C~haracter..." ; \
+    };
+
+#define MN_CHAR_PARAGRAPH \
+    MN_CHAR \
+    MenuItem {\
+        Identifier = SID_PARA_DLG;\
+        HelpId = CMD_SID_PARA_DLG;\
+        Text [ en-US ] = "P~aragraph...";\
+    };
+
+#define MN_TEXT_ATTR\
+    MenuItem\
+    {\
+        Identifier = SID_ATTR_CHAR_FONT ; \
+        HelpId = CMD_SID_ATTR_CHAR_FONT ; \
+        Text [ en-US ] = "~Font" ; \
+    };\
+    MenuItem\
+    {\
+        Identifier = SID_ATTR_CHAR_FONTHEIGHT ; \
+        HelpId = CMD_SID_ATTR_CHAR_FONTHEIGHT ; \
+        Text [ en-US ] = "~Size" ; \
+    };\
+    MenuItem\
+    {\
+        Identifier = DUMMY ; \
+        Command = ".uno:StyleMenu" ; \
+        Text [ en-US ] = "St~yle" ; \
+        SubMenu = Menu\
+        {\
+            ItemList = \
+            {\
+                MenuItem\
+                {\
+                    Identifier = SID_ATTR_CHAR_WEIGHT ; \
+                    HelpId = CMD_SID_ATTR_CHAR_WEIGHT ; \
+                    Text [ en-US ] = "Bold" ; \
+                };\
+                MenuItem\
+                {\
+                    Identifier = SID_ATTR_CHAR_POSTURE ; \
+                    HelpId = CMD_SID_ATTR_CHAR_POSTURE ; \
+                    Text [ en-US ] = "Italic" ; \
+                };\
+                MenuItem\
+                {\
+                    Identifier = SID_ATTR_CHAR_OVERLINE ; \
+                    HelpId = CMD_SID_ATTR_CHAR_OVERLINE ; \
+                    Text [ en-US ] = "Overline" ; \
+                };\
+                MenuItem\
+                {\
+                    Identifier = SID_ATTR_CHAR_UNDERLINE ; \
+                    HelpId = CMD_SID_ATTR_CHAR_UNDERLINE ; \
+                    Text [ en-US ] = "Underline" ; \
+                };\
+                MenuItem\
+                {\
+                    Identifier = SID_ATTR_CHAR_STRIKEOUT ; \
+                    HelpId = CMD_SID_ATTR_CHAR_STRIKEOUT ; \
+                    Text [ en-US ] = "Strikethrough" ; \
+                };\
+                MenuItem\
+                {\
+                    Identifier = SID_ATTR_CHAR_SHADOWED ; \
+                    HelpId = CMD_SID_ATTR_CHAR_SHADOWED ; \
+                    Text [ en-US ] = "Shadow" ; \
+                };\
+                MenuItem\
+                {\
+                    Identifier = SID_ATTR_CHAR_CONTOUR ; \
+                    HelpId = CMD_SID_ATTR_CHAR_CONTOUR ; \
+                    Text [ en-US ] = "~Contour" ; \
+                };\
+            };\
+        };\
+    };
+
+#define MN_LINESPACING_ATTR\
+    MenuItem\
+    {\
+        Identifier = DUMMY + 1 ; \
+        Command = ".uno:LineSpacingMenu" ; \
+        Text [ en-US ] = "~Line Spacing" ; \
+        SubMenu = Menu\
+        {\
+            ItemList = \
+            {\
+                MenuItem\
+                {\
+                    Identifier = SID_ATTR_PARA_LINESPACE_10 ; \
+                    HelpId = CMD_SID_ATTR_PARA_LINESPACE_10 ; \
+                    RadioCheck = TRUE ; \
+                    Text [ en-US ] = "Single Line Spacing" ; \
+                };\
+                MenuItem\
+                {\
+                    Identifier = SID_ATTR_PARA_LINESPACE_15 ; \
+                    HelpId = CMD_SID_ATTR_PARA_LINESPACE_15 ; \
+                    RadioCheck = TRUE ; \
+                    Text [ en-US ] = "1.5 Lines" ; \
+                };\
+                MenuItem\
+                {\
+                    Identifier = SID_ATTR_PARA_LINESPACE_20 ; \
+                    HelpId = CMD_SID_ATTR_PARA_LINESPACE_20 ; \
+                    RadioCheck = TRUE ; \
+                    Text [ en-US ] = "~Double" ; \
+                };\
+            };\
+        };\
+    };
+
+#define MN_BULLET \
+    MenuItem\
+    {\
+        Identifier = SID_CHARMAP ; \
+        HelpId = CMD_SID_CHARMAP ; \
+        Text [ en-US ] = "S~pecial Character..." ; \
+    };
+
+ // Text-Ausrichtung
+#define MN_TEXT_ALIGN\
+    MenuItem\
+    {\
+        Identifier = DUMMY + 2 ; \
+        Command = ".uno:AlignTextMenu" ; \
+        Text [ en-US ] = "A~lignment" ; \
+        SubMenu = Menu\
+        {\
+            ItemList = \
+            {\
+                MenuItem\
+                {\
+                    Identifier = SID_ATTR_PARA_ADJUST_LEFT ; \
+                    HelpId = CMD_SID_ATTR_PARA_ADJUST_LEFT ; \
+                    RadioCheck = TRUE ; \
+                    Text [ en-US ] = "~Left" ; \
+                };\
+                MenuItem\
+                {\
+                    Identifier = SID_ATTR_PARA_ADJUST_RIGHT ; \
+                    HelpId = CMD_SID_ATTR_PARA_ADJUST_RIGHT ; \
+                    RadioCheck = TRUE ; \
+                    Text [ en-US ] = "~Right" ; \
+                };\
+                MenuItem\
+                {\
+                    Identifier = SID_ATTR_PARA_ADJUST_CENTER ; \
+                    HelpId = CMD_SID_ATTR_PARA_ADJUST_CENTER ; \
+                    RadioCheck = TRUE ; \
+                    Text [ en-US ] = "~Centered" ; \
+                };\
+                MenuItem\
+                {\
+                    Identifier = SID_ATTR_PARA_ADJUST_BLOCK ; \
+                    HelpId = CMD_SID_ATTR_PARA_ADJUST_BLOCK ; \
+                    RadioCheck = TRUE ; \
+                    Text [ en-US ] = "Justified" ; \
+                };\
+            };\
+        };\
+    };
+
+ // Objekt-Ausrichtung
+#define MN_OBJECT_ALIGN \
+    MenuItem\
+    {\
+        Identifier = SID_OBJECT_ALIGN ; \
+        Command = ".uno:AlignObjetMenu" ; \
+        HelpId = CMD_SID_OBJECT_ALIGN ; \
+        Text [ en-US ] = "Al~ignment" ; \
+        SubMenu = Menu\
+        {\
+            ItemList = \
+            {\
+                MenuItem\
+                {\
+                    Identifier = SID_OBJECT_ALIGN_LEFT ; \
+                    HelpId = CMD_SID_OBJECT_ALIGN_LEFT ; \
+                    Text [ en-US ] = "~Left" ; \
+                };\
+                MenuItem\
+                {\
+                    Identifier = SID_OBJECT_ALIGN_CENTER ; \
+                    HelpId = CMD_SID_OBJECT_ALIGN_CENTER ; \
+                    Text [ en-US ] = "~Centered" ; \
+                };\
+                MenuItem\
+                {\
+                    Identifier = SID_OBJECT_ALIGN_RIGHT ; \
+                    HelpId = CMD_SID_OBJECT_ALIGN_RIGHT ; \
+                    Text [ en-US ] = "~Right" ; \
+                };\
+                SEPARATOR\
+                MenuItem\
+                {\
+                    Identifier = SID_OBJECT_ALIGN_UP ; \
+                    HelpId = CMD_SID_OBJECT_ALIGN_UP ; \
+                    Text [ en-US ] = "~Top" ; \
+                };\
+                MenuItem\
+                {\
+                    Identifier = SID_OBJECT_ALIGN_MIDDLE ; \
+                    HelpId = CMD_SID_OBJECT_ALIGN_MIDDLE ; \
+                    Text [ en-US ] = "C~enter" ; \
+                };\
+                MenuItem\
+                {\
+                    Identifier = SID_OBJECT_ALIGN_DOWN ; \
+                    HelpId = CMD_SID_OBJECT_ALIGN_DOWN ; \
+                    Text [ en-US ] = "~Bottom" ; \
+                };\
+            };\
+        };\
+    };
+
+ // Bezier-Funktionen
+#define MN_CLOSE_OBJECT \
+    MenuItem\
+    {\
+        Identifier = SID_OBJECT_CLOSE ; \
+        HelpId = CMD_SID_OBJECT_CLOSE ; \
+        Text [ en-US ] = "Close ~Object" ; \
+    };
+
+#define MN_BEZIER \
+    MenuItem\
+    {\
+        Identifier = SID_BEZIER_EDIT ; \
+        HelpId = CMD_SID_BEZIER_EDIT ; \
+        Text [ en-US ] = "Edit ~Points" ; \
+    };\
+    SEPARATOR\
+    MenuItem\
+    {\
+        Identifier = SID_BEZIER_MOVE ; \
+        HelpId = CMD_SID_BEZIER_MOVE ; \
+        Text [ en-US ] = "~Move Points" ; \
+    };\
+    MenuItem\
+    {\
+        Identifier = SID_BEZIER_INSERT ; \
+        HelpId = CMD_SID_BEZIER_INSERT ; \
+        Text [ en-US ] = "Insert ~Points" ; \
+    };\
+    MenuItem\
+    {\
+        Identifier = SID_BEZIER_DELETE ; \
+        HelpId = CMD_SID_BEZIER_DELETE ; \
+        Text [ en-US ] = "~Delete Points" ; \
+    };\
+    SEPARATOR\
+    MenuItem\
+    {\
+        Identifier = SID_BEZIER_CLOSE ; \
+        HelpId = CMD_SID_BEZIER_CLOSE ; \
+        Text [ en-US ] = "Close ~Object" ; \
+    };\
+    MenuItem\
+    {\
+        Identifier = SID_BEZIER_CUTLINE ; \
+        HelpId = CMD_SID_BEZIER_CUTLINE ; \
+        Text [ en-US ] = "~Split Curve" ; \
+    };\
+    MenuItem\
+    {\
+        Identifier = SID_BEZIER_CONVERT ; \
+        HelpId = CMD_SID_BEZIER_CONVERT ; \
+        Text [ en-US ] = "Con~vert to Curve" ; \
+    };\
+    SEPARATOR\
+    MenuItem\
+    {\
+        Identifier = SID_BEZIER_EDGE ; \
+        HelpId = CMD_SID_BEZIER_EDGE ; \
+        Text [ en-US ] = "~Corner" ; \
+    };\
+    MenuItem\
+    {\
+        Identifier = SID_BEZIER_SMOOTH ; \
+        HelpId = CMD_SID_BEZIER_SMOOTH ; \
+        Text [ en-US ] = "Smoot~h" ; \
+    };\
+    MenuItem\
+    {\
+        Identifier = SID_BEZIER_SYMMTR ; \
+        HelpId = CMD_SID_BEZIER_SYMMTR ; \
+        Text [ en-US ] = "S~ymmetric" ; \
+    };\
+    SEPARATOR\
+    MenuItem\
+    {\
+        Identifier = SID_BEZIER_ELIMINATE_POINTS ; \
+        HelpId = CMD_SID_BEZIER_ELIMINATE_POINTS ; \
+        Text [ en-US ] = "~Reduce Points" ; \
+    };
+
+ // Gruppen-/Kombination-Funktionen
+#define MN_GROUP \
+    MenuItem\
+    {\
+        Identifier = SID_GROUP ; \
+        HelpId = CMD_SID_GROUP ; \
+        Text [ en-US ] = "~Group" ; \
+    };
+
+#define MN_UNGROUP \
+    MenuItem\
+    {\
+        Identifier = SID_UNGROUP ; \
+        HelpId = CMD_SID_UNGROUP ; \
+        Text [ en-US ] = "~Ungroup" ; \
+    };
+
+#define MN_COMBINE \
+    MenuItem\
+    {\
+        Identifier = SID_COMBINE ; \
+        HelpId = CMD_SID_COMBINE ; \
+        Text [ en-US ] = "Comb~ine" ; \
+    };
+
+#define MN_DISMANTLE \
+    MenuItem\
+    {\
+        Identifier = SID_DISMANTLE ; \
+        HelpId = CMD_SID_DISMANTLE ; \
+        Text [ en-US ] = "~Split" ; \
+    };
+
+#define MN_ENTER_GROUP \
+    MenuItem\
+    {\
+        Identifier = SID_ENTER_GROUP ; \
+        HelpId = CMD_SID_ENTER_GROUP ; \
+        Text [ en-US ] = "~Enter Group" ; \
+    };
+
+#define MN_LEAVE_GROUP \
+    MenuItem\
+    {\
+        Identifier = SID_LEAVE_GROUP ; \
+        HelpId = CMD_SID_LEAVE_GROUP ; \
+        Text [ en-US ] = "E~xit Group" ; \
+    };
+
+#define MN_NAME_GROUP \
+    MenuItem\
+    {\
+        Identifier = SID_NAME_GROUP ; \
+        HelpId = CMD_SID_NAME_GROUP ; \
+        Text [ en-US ] = "Name..." ; \
+    };
+
+// #i68101#
+#define MN_OBJECT_TITLE_DESCRIPTION \
+    MenuItem\
+    {\
+        Identifier = SID_OBJECT_TITLE_DESCRIPTION; \
+        HelpId = CMD_SID_OBJECT_TITLE_DESCRIPTION; \
+        Text [ en-US ] = "Description..." ; \
+    };
+
+ // Dia-Funktionen
+#define MN_REHEARSE_TIMINGS \
+    MenuItem\
+    {\
+        Identifier = SID_REHEARSE_TIMINGS ; \
+        HelpId = CMD_SID_REHEARSE_TIMINGS ; \
+        Text [ en-US ] = "~Rehearse Timings" ; \
+    };
+
+#define MN_EFFECT \
+    MenuItem\
+    {\
+        Identifier = SID_CUSTOM_ANIMATION_PANEL ; \
+        HelpId = CMD_SID_CUSTOM_ANIMATION_PANEL ; \
+        Text [ en-US ] = "Custom Animation..." ; \
+    };
+
+#define MN_ACTION \
+    MenuItem\
+    {\
+        Identifier = SID_ANIMATION_EFFECTS ; \
+        HelpId = CMD_SID_ANIMATION_EFFECTS ; \
+        Text [ en-US ] = "Int~eraction..." ; \
+    };
+
+#define MN_PRESENTATIONOBJECT \
+    MenuItem\
+    {\
+        Identifier = SID_PRESENTATIONOBJECT ; \
+        HelpId = CMD_SID_PRESENTATIONOBJECT ; \
+        Text [ en-US ] = "Presentation ~Object..." ; \
+    };
+
+ // Diverse allgemeine Funktionen
+#define MN_DELETE \
+    MenuItem\
+    {\
+        Identifier = SID_DELETE ; \
+        HelpId = CMD_SID_DELETE ; \
+        Text [ en-US ] = "~Delete" ; \
+    };
+
+
+#define MN_SET_DEFAULT\
+    MenuItem\
+    {\
+        Identifier = SID_SET_DEFAULT ; \
+        HelpId = CMD_SID_SET_DEFAULT ; \
+        Text [ en-US ] = "~Default" ; \
+    };
+
+#define MN_FONTWORK\
+    MenuItem\
+    {\
+        Identifier = SID_FONTWORK ; \
+        HelpId = CMD_SID_FONTWORK ; \
+        Text [ en-US ] = "F~ontwork" ; \
+    };
+
+#define MN_OLE_OBJECT\
+    MenuItem\
+    {\
+        Identifier = SID_OBJECT ; \
+        HelpId = CMD_SID_OBJECT ; \
+        Text [ en-US ] = "~OLE Object" ; \
+    };
+
+#define MN_ORIGINAL_SIZE\
+    MenuItem\
+    {\
+        Identifier = SID_ORIGINAL_SIZE ; \
+        HelpId = CMD_SID_ORIGINAL_SIZE ; \
+        Text [ en-US ] = "~Original Size" ; \
+    };
+
+#define MN_SAVEGRAPHIC\
+    MenuItem\
+    {\
+        Identifier = SID_SAVEGRAPHIC ; \
+        HelpId = CMD_SID_SAVEGRAPHIC ; \
+        Text [ en-US ] = "Save as Picture..." ; \
+    };
+
+#define MN_CROP\
+    MenuItem\
+    {\
+        Identifier = SID_ATTR_GRAF_CROP ; \
+        HelpId = CMD_SID_ATTR_GRAF_CROP ; \
+        Text [ en-US ] = "Crop Picture..." ; \
+    };
+
+#define MN_NAVIGATOR\
+    MenuItem\
+    {\
+        Identifier = SID_NAVIGATOR ; \
+        Command = ".uno:Navigator" ; \
+        HelpId = CMD_SID_NAVIGATOR ; \
+        Text [ en-US ] = "Na~vigator" ; \
+    };
+
+#define MN_GLUE_INSERT_POINT\
+    MenuItem\
+    {\
+        Identifier = SID_GLUE_INSERT_POINT ; \
+        HelpId = CMD_SID_GLUE_INSERT_POINT ; \
+        Text [ en-US ] = "Insert ~Point" ; \
+    };
+
+#define MN_GLUE_ESC_DIR_LEFT\
+    MenuItem\
+    {\
+        Identifier = SID_GLUE_ESCDIR_LEFT ; \
+        HelpId = CMD_SID_GLUE_ESCDIR_LEFT ; \
+        Text [ en-US ] = "~Left" ; \
+    };
+
+#define MN_GLUE_ESC_DIR_TOP\
+    MenuItem\
+    {\
+        Identifier = SID_GLUE_ESCDIR_TOP ; \
+        HelpId = CMD_SID_GLUE_ESCDIR_TOP ; \
+        Text [ en-US ] = "~Top" ; \
+    };
+
+#define MN_GLUE_ESC_DIR_RIGHT\
+    MenuItem\
+    {\
+        Identifier = SID_GLUE_ESCDIR_RIGHT ; \
+        HelpId = CMD_SID_GLUE_ESCDIR_RIGHT ; \
+        Text [ en-US ] = "~Right" ; \
+    };
+
+#define MN_GLUE_ESC_DIR_BOTTOM\
+    MenuItem\
+    {\
+        Identifier = SID_GLUE_ESCDIR_BOTTOM ; \
+        HelpId = CMD_SID_GLUE_ESCDIR_BOTTOM ; \
+        Text [ en-US ] = "~Bottom" ; \
+    };
+
+#define MN_GLUE_PERCENT\
+    MenuItem\
+    {\
+        Identifier = SID_GLUE_PERCENT ; \
+        HelpId = CMD_SID_GLUE_PERCENT ; \
+        Text [ en-US ] = "~Adapt Position to Object" ; \
+    };
+
+#define MN_GLUE_HORZALIGN_LEFT\
+    MenuItem\
+    {\
+        Identifier = SID_GLUE_HORZALIGN_LEFT ; \
+        HelpId = CMD_SID_GLUE_HORZALIGN_LEFT ; \
+        RadioCheck = TRUE ; \
+        Text [ en-US ] = "Fixed ~Horizontal Left" ; \
+    };
+
+#define MN_GLUE_HORZALIGN_CENTER\
+    MenuItem\
+    {\
+        Identifier = SID_GLUE_HORZALIGN_CENTER ; \
+        HelpId = CMD_SID_GLUE_HORZALIGN_CENTER ; \
+        RadioCheck = TRUE ; \
+        Text [ en-US ] = "Fixed Horizontal ~Center" ; \
+    };
+
+#define MN_GLUE_HORZALIGN_RIGHT\
+    MenuItem\
+    {\
+        Identifier = SID_GLUE_HORZALIGN_RIGHT ; \
+        HelpId = CMD_SID_GLUE_HORZALIGN_RIGHT ; \
+        RadioCheck = TRUE ; \
+        Text [ en-US ] = "Fixed Hori~zontal Right" ; \
+    };
+
+#define MN_GLUE_VERTALIGN_TOP\
+    MenuItem\
+    {\
+        Identifier = SID_GLUE_VERTALIGN_TOP ; \
+        HelpId = CMD_SID_GLUE_VERTALIGN_TOP ; \
+        RadioCheck = TRUE ; \
+        Text [ en-US ] = "Fixed ~Vertical Top" ; \
+    };
+
+#define MN_GLUE_VERTALIGN_CENTER\
+    MenuItem\
+    {\
+        Identifier = SID_GLUE_VERTALIGN_CENTER ; \
+        HelpId = CMD_SID_GLUE_VERTALIGN_CENTER ; \
+        RadioCheck = TRUE ; \
+        Text [ en-US ] = "Fixed V~ertical Center" ; \
+    };
+
+#define MN_GLUE_VERTALIGN_BOTTOM\
+    MenuItem\
+    {\
+        Identifier = SID_GLUE_VERTALIGN_BOTTOM ; \
+        HelpId = CMD_SID_GLUE_VERTALIGN_BOTTOM ; \
+        RadioCheck = TRUE ; \
+        Text [ en-US ] = "Fixed Ver~tical Bottom" ; \
+    };
+
+#define MN_GRID_VISIBLE\
+    MenuItem\
+    {\
+        Identifier = SID_GRID_VISIBLE ; \
+        HelpId = CMD_SID_GRID_VISIBLE ; \
+        Text [ en-US ] = "~Display Grid" ; \
+    };
+
+#define MN_GRID_USE\
+    MenuItem\
+    {\
+        Identifier = SID_GRID_USE ; \
+        HelpId = CMD_SID_GRID_USE; \
+        Text [ en-US ] = "Snap to Grid"; \
+    };
+
+#define MN_GRID_FRONT\
+    MenuItem\
+    {\
+        Identifier = SID_GRID_FRONT ; \
+        HelpId = CMD_SID_GRID_FRONT ; \
+        Text [ en-US ] = "Grid to ~Front" ; \
+    };
+
+#define MN_GRID \
+    MenuItem\
+    {\
+        Identifier = DUMMY + 5 ; \
+        Command = ".uno:GridMenu" ; \
+        SubMenu = Menu\
+        {\
+            ItemList = \
+            {\
+                MN_GRID_VISIBLE\
+                MN_GRID_USE\
+                MN_GRID_FRONT\
+            };\
+        };\
+        Text [ en-US ] = "~Grid";\
+    };
+
+#define MN_HELPLINES_VISIBLE\
+    MenuItem\
+    {\
+        Identifier = SID_HELPLINES_VISIBLE ; \
+        HelpId = CMD_SID_HELPLINES_VISIBLE ; \
+        Text [ en-US ] = "~Display Snap Lines" ; \
+    };
+
+#define MN_HELPLINES_USE\
+    MenuItem\
+    {\
+        Identifier = SID_HELPLINES_USE ; \
+        HelpId = CMD_SID_HELPLINES_USE ; \
+        Text [ en-US ] = "~Snap to Snap Lines"; \
+    };
+
+#define MN_HELPLINES_FRONT\
+    MenuItem\
+    {\
+        Identifier = SID_HELPLINES_FRONT ; \
+        HelpId = CMD_SID_HELPLINES_FRONT ; \
+        Text [ en-US ] = "Snap Lines to ~Front" ; \
+    };
+
+#define MN_HELPLINES \
+    MenuItem\
+    {\
+        Identifier = DUMMY + 6 ; \
+        Command = ".uno:SnapLinesMenu" ; \
+        SubMenu = Menu\
+        {\
+            ItemList = \
+            {\
+                MN_HELPLINES_VISIBLE\
+                MN_HELPLINES_USE\
+                MN_HELPLINES_FRONT\
+            };\
+        };\
+        Text [ en-US ] = "~Snap Lines";\
+    };
+
+#define MN_CONTROL_SHOW_BROWSER\
+    MenuItem\
+    {\
+        Identifier = SID_SHOW_BROWSER ; \
+        HelpId = CMD_SID_SHOW_BROWSER ; \
+        Text [ en-US ] = "Propert~ies..." ; \
+    };
+
+#define MN_CONVERT_TO_1BIT_THRESHOLD\
+    MenuItem\
+    {\
+        Identifier = SID_CONVERT_TO_1BIT_THRESHOLD ; \
+        HelpId = CMD_SID_CONVERT_TO_1BIT_THRESHOLD ; \
+        Text [ en-US ] = "1Bit ~Threshold" ; \
+    };
+
+#define MN_CONVERT_TO_1BIT_MATRIX\
+    MenuItem\
+    {\
+        Identifier = SID_CONVERT_TO_1BIT_MATRIX ; \
+        HelpId = CMD_SID_CONVERT_TO_1BIT_MATRIX ; \
+        Text [ en-US ] = "1 Bit ~Dithering" ; \
+    };
+
+#define MN_CONVERT_TO_4BIT_GRAYS\
+    MenuItem\
+    {\
+        Identifier = SID_CONVERT_TO_4BIT_GRAYS ; \
+        HelpId = CMD_SID_CONVERT_TO_4BIT_GRAYS ; \
+        Text [ en-US ] = "4 Bit G~rayscales" ; \
+    };
+
+#define MN_CONVERT_TO_4BIT_COLORS\
+    MenuItem\
+    {\
+        Identifier = SID_CONVERT_TO_4BIT_COLORS ; \
+        HelpId = CMD_SID_CONVERT_TO_4BIT_COLORS ; \
+        Text [ en-US ] = "4 Bit ~Color Palette" ; \
+    };
+
+#define MN_CONVERT_TO_8BIT_GRAYS\
+    MenuItem\
+    {\
+        Identifier = SID_CONVERT_TO_8BIT_GRAYS ; \
+        HelpId = CMD_SID_CONVERT_TO_8BIT_GRAYS ; \
+        Text [ en-US ] = "8 Bit Gr~ayscales" ; \
+    };
+
+#define MN_CONVERT_TO_8BIT_COLORS\
+    MenuItem\
+    {\
+        Identifier = SID_CONVERT_TO_8BIT_COLORS ; \
+        HelpId = CMD_SID_CONVERT_TO_8BIT_COLORS ; \
+        Text [ en-US ] = "8 Bit C~olor Palette" ; \
+    };
+
+#define MN_CONVERT_TO_24BIT\
+    MenuItem\
+    {\
+        Identifier = SID_CONVERT_TO_24BIT ; \
+        HelpId = CMD_SID_CONVERT_TO_24BIT ; \
+        Text [ en-US ] = "24 Bit ~True Colors" ; \
+    };
+
+#define MN_COLORRESOLUTION \
+    MenuItem\
+    {\
+        Identifier = DUMMY + 4 ; \
+        Command = ".uno:ColorResMenu" ; \
+        SubMenu = Menu\
+        {\
+            ItemList = \
+            {\
+                MN_CONVERT_TO_1BIT_THRESHOLD\
+                MN_CONVERT_TO_1BIT_MATRIX\
+                MN_CONVERT_TO_4BIT_GRAYS\
+                MN_CONVERT_TO_4BIT_COLORS\
+                MN_CONVERT_TO_8BIT_GRAYS\
+                MN_CONVERT_TO_8BIT_COLORS\
+                MN_CONVERT_TO_24BIT\
+            };\
+        };\
+        Text [ en-US ] = "~Color Resolution" ; \
+    };
+
+#define MNSUB_CONVERT \
+    MenuItem\
+    {\
+        Identifier = SID_CONVERT ; \
+        Command = ".uno:ConvertMenu" ; \
+        HelpId = HID_MN_SUB_CONVERT ; \
+        Text [ en-US ] = "Con~vert" ; \
+        SubMenu = Menu\
+        {\
+            ItemList = \
+            {\
+                MN_CHANGEBEZIER\
+                MN_CHANGEPOLYGON\
+                MN_CONVERT_TO_CONTOUR\
+                MN_CONVERT_TO_3D\
+                MN_CONVERT_TO_3D_LATHE_FAST\
+                MN_CONVERT_TO_BITMAP\
+                MN_CONVERT_TO_METAFILE\
+            };\
+        };\
+    };
+
+#define MNSUB_MIRROR \
+    MenuItem\
+    {\
+        Identifier = SID_MIRROR ; \
+        HelpId = HID_MN_SUB_MIRROR ; \
+        Command = ".uno:MirrorMenu" ; \
+        Text [ en-US ] = "~Flip" ; \
+        SubMenu = Menu\
+        {\
+            ItemList = \
+            {\
+                MN_VERTICAL\
+                MN_HORIZONTAL\
+            };\
+        };\
+    };
+
+#define MNSUB_ROTATE \
+    MenuItem\
+    {\
+        Identifier = SID_OBJECT_ROTATE ; \
+        HelpId = CMD_SID_OBJECT_ROTATE ; \
+        Text [ en-US ] = "~Rotate";\
+    };
+
+#define MN_CONNECT \
+    MenuItem\
+    {\
+        Identifier = SID_CONNECT ; \
+        HelpId = CMD_SID_CONNECT ; \
+        Text [ en-US ] = "C~onnect" ; \
+    };
+
+#define MN_BREAK \
+    MenuItem\
+    {\
+        Identifier = SID_BREAK ; \
+        HelpId = CMD_SID_BREAK ; \
+        Text [ en-US ] = "~Break" ; \
+    };
+
+#define MN_STYLEDT \
+    MenuItem\
+    {\
+        Identifier = SID_STYLE_EDIT ; \
+        HelpId = CMD_SID_STYLE_EDIT ; \
+        Text [ en-US ] = "Edit Style..." ; \
+    };
+
+#define MN_EDIT_HYPERLINK \
+    MenuItem\
+    {\
+        Identifier = SID_EDIT_HYPERLINK ; \
+        HelpId = CMD_SID_EDIT_HYPERLINK ; \
+        Text [ en-US ] = "H~yperlink..." ; \
+    };
+
+#define MN_POINT_EDITMODE \
+    MenuItem\
+    {\
+        Identifier = SID_BEZIER_EDIT ; \
+        HelpId = CMD_SID_BEZIER_EDIT ; \
+        Text [ en-US ] = "Poi~nts";\
+    };
+
+#define MN_GLUE_EDITMODE \
+    MenuItem\
+    {\
+        Identifier = SID_GLUE_EDITMODE ; \
+        HelpId = CMD_SID_GLUE_EDITMODE ; \
+        Text [ en-US ] = "~Glue Points";\
+    };
+
+#define MN_LAYER_EDITMODE \
+    MenuItem\
+    {\
+        Identifier = DUMMY + 7 ; \
+        Command = ".uno:LayerMenu" ; \
+        Text [ en-US ] =  "La~yer"; \
+        SubMenu = Menu \
+        {\
+            ItemList = \
+            {\
+                MenuItem \
+                {\
+                    Identifier = SID_INSERTLAYER ; \
+                    HelpId = CMD_SID_INSERTLAYER ; \
+                    Text [ en-US ] = "~Insert";\
+                };\
+                MenuItem \
+                {\
+                    Identifier = SID_MODIFYLAYER ; \
+                    HelpId = CMD_SID_MODIFYLAYER ; \
+                    Text [ en-US ] = "~Modify";\
+                };\
+                MenuItem \
+                {\
+                    Identifier = SID_DELETE_LAYER ; \
+                    HelpId = CMD_SID_DELETE_LAYER ; \
+                    Text [ en-US ] = "Delete";\
+                };\
+                MenuItem \
+                {\
+                    Identifier = SID_RENAMELAYER ; \
+                    HelpId = CMD_SID_RENAMELAYER ; \
+                    Text [ en-US ] = "~Rename";\
+                }; \
+            };\
+        };\
+    };
+

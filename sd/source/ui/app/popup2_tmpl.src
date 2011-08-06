@@ -1,0 +1,911 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+
+
+#include "menuids3.src"
+
+#ifndef SD_POPUP
+#define SD_POPUP RID_DRAW_TEXTOBJ_POPUP
+#include "menuids.src"
+#endif
+
+
+
+//
+// TEXTOBJ_POPUP
+//
+#if SD_POPUP == RID_DRAW_TEXTOBJ_POPUP
+    Menu RID_DRAW_TEXTOBJ_POPUP
+#elif  SD_POPUP == RID_GRAPHIC_TEXTOBJ_POPUP
+    Menu RID_GRAPHIC_TEXTOBJ_POPUP
+#endif
+{
+    ItemList =
+    {
+        MN_SET_DEFAULT
+        SEPARATOR
+        MN_LINE
+        MN_AREA
+        MN_TEXTATTR
+        MN_TRANSFORM
+        MN_FONTWORK
+        SEPARATOR
+        MN_CHAR_PARAGRAPH
+        SEPARATOR
+        MN_POSITION
+        MN_OBJECT_ALIGN
+        MN_DISTRIBUTE
+        MNSUB_CONVERT
+
+        //-#i68101#----------------------
+        SEPARATOR
+        MN_OBJECT_TITLE_DESCRIPTION
+        MN_NAME_GROUP
+        //-#i68101#----------------------
+
+#if SD_POPUP == RID_DRAW_TEXTOBJ_POPUP
+        SEPARATOR
+        MN_EFFECT
+        MN_ACTION
+#endif
+        SEPARATOR
+        MN_STYLEDT
+    };
+};
+
+//
+// OUTLINETEXTOBJ_POPUP
+//
+#if SD_POPUP == RID_DRAW_TEXTOBJ_POPUP
+    Menu RID_DRAW_OUTLINETEXTOBJ_POPUP
+#elif  SD_POPUP == RID_GRAPHIC_TEXTOBJ_POPUP
+    Menu RID_GRAPHIC_OUTLINETEXTOBJ_POPUP
+#endif
+{
+    ItemList =
+    {
+        MN_SET_DEFAULT
+        SEPARATOR
+        MN_LINE
+        MN_AREA
+        MN_TEXTATTR
+        MN_OUTLINE_TEXT_AUTOFIT
+        MN_TRANSFORM
+        MN_FONTWORK
+        SEPARATOR
+        MN_CHAR_PARAGRAPH
+        SEPARATOR
+        MN_POSITION
+        MN_OBJECT_ALIGN
+        MN_DISTRIBUTE
+        MNSUB_CONVERT
+
+        //-#i68101#----------------------
+        SEPARATOR
+        MN_OBJECT_TITLE_DESCRIPTION
+        MN_NAME_GROUP
+        //-#i68101#----------------------
+
+#if SD_POPUP == RID_DRAW_TEXTOBJ_POPUP
+        SEPARATOR
+        MN_EFFECT
+        MN_ACTION
+#endif
+        SEPARATOR
+        MN_STYLEDT
+    };
+};
+
+//
+// GEOMOBJ_POPUP
+//
+#if SD_POPUP == RID_DRAW_TEXTOBJ_POPUP
+    Menu RID_DRAW_GEOMOBJ_POPUP
+#elif SD_POPUP == RID_GRAPHIC_TEXTOBJ_POPUP
+    Menu RID_GRAPHIC_GEOMOBJ_POPUP
+#endif
+{
+    ItemList =
+    {
+        MN_LINE
+        MN_AREA
+        MN_TEXTATTR
+        MN_TRANSFORM
+        MN_EDIT_POINTS
+        SEPARATOR
+        MN_CHAR_PARAGRAPH
+        SEPARATOR
+        MN_POSITION
+        MN_OBJECT_ALIGN
+        MN_DISTRIBUTE
+        MNSUB_MIRROR
+        MNSUB_CONVERT
+        SEPARATOR
+        MN_LEAVE_GROUP
+        MN_DISMANTLE
+
+        //-#i68101#----------------------
+        SEPARATOR
+        MN_OBJECT_TITLE_DESCRIPTION
+        MN_NAME_GROUP
+        //-#i68101#----------------------
+
+#if SD_POPUP == RID_DRAW_TEXTOBJ_POPUP
+        SEPARATOR
+        MN_EFFECT
+        MN_ACTION
+#endif
+        SEPARATOR
+        MN_STYLEDT
+    };
+};
+
+//
+// Customshape POPUP
+//
+#if SD_POPUP == RID_DRAW_TEXTOBJ_POPUP
+    Menu RID_DRAW_CUSTOMSHAPE_POPUP
+#elif SD_POPUP == RID_GRAPHIC_TEXTOBJ_POPUP
+    Menu RID_GRAPHIC_CUSTOMSHAPE_POPUP
+#endif
+{
+    ItemList =
+    {
+        MN_LINE
+        MN_AREA
+        MN_TEXTATTR
+        MN_TRANSFORM
+        SEPARATOR
+        MN_CHAR_PARAGRAPH
+        SEPARATOR
+        MN_POSITION
+        MN_OBJECT_ALIGN
+        MN_DISTRIBUTE
+        MNSUB_MIRROR
+        // #i37263#
+        MNSUB_CONVERT
+        SEPARATOR
+        MN_LEAVE_GROUP
+        MN_DISMANTLE
+
+        //-#i68101#----------------------
+        SEPARATOR
+        MN_OBJECT_TITLE_DESCRIPTION
+        MN_NAME_GROUP
+        //-#i68101#----------------------
+
+#if SD_POPUP == RID_DRAW_TEXTOBJ_POPUP
+        SEPARATOR
+        MN_EFFECT
+        MN_ACTION
+#endif
+        SEPARATOR
+        MN_STYLEDT
+        SEPARATOR
+
+    };
+};
+
+//
+// 3DOSCENE_POPUP
+//
+#if SD_POPUP == RID_DRAW_TEXTOBJ_POPUP
+    Menu RID_DRAW_3DSCENE_POPUP
+#elif SD_POPUP == RID_GRAPHIC_TEXTOBJ_POPUP
+    Menu RID_GRAPHIC_3DSCENE_POPUP
+#endif
+{
+    ItemList =
+    {
+        MN_LINE
+        MN_AREA
+        MN_TRANSFORM
+        SEPARATOR
+        MN_POSITION
+        MN_OBJECT_ALIGN
+        MN_DISTRIBUTE
+        MNSUB_CONVERT
+        SEPARATOR
+        MN_ENTER_GROUP
+        MN_3D_WIN
+
+        //-#i68101#----------------------
+        SEPARATOR
+        MN_OBJECT_TITLE_DESCRIPTION
+        MN_NAME_GROUP
+        //-#i68101#----------------------
+
+#if SD_POPUP == RID_DRAW_TEXTOBJ_POPUP
+        SEPARATOR
+        MN_EFFECT
+        MN_ACTION
+#endif
+//      SEPARATOR
+//      MN_STYLEDT
+    };
+};
+
+//
+// 3DOSCENE2_POPUP
+//
+#if SD_POPUP == RID_DRAW_TEXTOBJ_POPUP
+    Menu RID_DRAW_3DSCENE2_POPUP
+#elif SD_POPUP == RID_GRAPHIC_TEXTOBJ_POPUP
+    Menu RID_GRAPHIC_3DSCENE2_POPUP
+#endif
+{
+    ItemList =
+    {
+        MN_LINE
+        MN_AREA
+        MN_TRANSFORM
+        SEPARATOR
+        MN_POSITION
+        MN_OBJECT_ALIGN
+        MN_DISTRIBUTE
+        MNSUB_CONVERT
+        SEPARATOR
+        MN_ENTER_GROUP
+        MN_LEAVE_GROUP
+        MN_3D_WIN
+
+        //-#i68101#----------------------
+        SEPARATOR
+        MN_OBJECT_TITLE_DESCRIPTION
+        MN_NAME_GROUP
+        //-#i68101#----------------------
+
+#if SD_POPUP == RID_DRAW_TEXTOBJ_POPUP
+        SEPARATOR
+        MN_EFFECT
+        MN_ACTION
+#endif
+//      SEPARATOR
+//      MN_STYLEDT
+    };
+};
+
+//
+// 3DOBJ_POPUP
+//
+#if SD_POPUP == RID_DRAW_TEXTOBJ_POPUP
+    Menu RID_DRAW_3DOBJ_POPUP
+#elif SD_POPUP == RID_GRAPHIC_TEXTOBJ_POPUP
+    Menu RID_GRAPHIC_3DOBJ_POPUP
+#endif
+{
+    ItemList =
+    {
+        MN_LINE
+        MN_AREA
+        MN_TRANSFORM
+        SEPARATOR
+        MN_POSITION
+        MN_OBJECT_ALIGN
+        MN_DISTRIBUTE
+        MNSUB_CONVERT
+        SEPARATOR
+        MN_LEAVE_GROUP
+        MN_3D_WIN
+
+        //-#i68101#----------------------
+        SEPARATOR
+        MN_OBJECT_TITLE_DESCRIPTION
+        MN_NAME_GROUP
+        //-#i68101#----------------------
+
+#if SD_POPUP == RID_DRAW_TEXTOBJ_POPUP
+        SEPARATOR
+        MN_EFFECT
+        MN_ACTION
+#endif
+        SEPARATOR
+        MN_STYLEDT
+    };
+};
+
+//
+// GROUPOBJ_POPUP
+//
+#if SD_POPUP == RID_DRAW_TEXTOBJ_POPUP
+    Menu RID_DRAW_GROUPOBJ_POPUP
+#elif SD_POPUP == RID_GRAPHIC_TEXTOBJ_POPUP
+    Menu RID_GRAPHIC_GROUPOBJ_POPUP
+#endif
+{
+    ItemList =
+    {
+        MN_LINE
+        MN_AREA
+        MN_TRANSFORM
+        MN_EDIT_POINTS
+        SEPARATOR
+        MN_CHAR_PARAGRAPH
+        SEPARATOR
+        MN_POSITION
+        MN_OBJECT_ALIGN
+        MN_DISTRIBUTE
+        MNSUB_MIRROR
+        MNSUB_CONVERT
+
+        //-#i68101#----------------------
+        SEPARATOR
+        MN_OBJECT_TITLE_DESCRIPTION
+        MN_NAME_GROUP
+        //-#i68101#----------------------
+
+        SEPARATOR
+        MN_UNGROUP
+        MN_ENTER_GROUP
+#if SD_POPUP == RID_DRAW_TEXTOBJ_POPUP
+        SEPARATOR
+        MN_EFFECT
+        MN_ACTION
+#endif
+    };
+};
+
+//
+// LINEOBJ_POPUP
+//
+#if SD_POPUP == RID_DRAW_TEXTOBJ_POPUP
+    Menu RID_DRAW_LINEOBJ_POPUP
+#elif SD_POPUP == RID_GRAPHIC_TEXTOBJ_POPUP
+    Menu RID_GRAPHIC_LINEOBJ_POPUP
+#endif
+{
+    ItemList =
+    {
+        MN_LINE
+        MN_TRANSFORM
+        MN_EDIT_POINTS
+        SEPARATOR
+        MN_CHAR_PARAGRAPH
+        SEPARATOR
+        MN_POSITION
+        MN_OBJECT_ALIGN
+        MN_DISTRIBUTE
+        MNSUB_MIRROR
+        MNSUB_CONVERT
+        SEPARATOR
+        MN_LEAVE_GROUP
+        MN_DISMANTLE
+
+        //-#i68101#----------------------
+        SEPARATOR
+        MN_OBJECT_TITLE_DESCRIPTION
+        MN_NAME_GROUP
+        //-#i68101#----------------------
+
+#if SD_POPUP == RID_DRAW_TEXTOBJ_POPUP
+        SEPARATOR
+        MN_EFFECT
+        MN_ACTION
+#endif
+        SEPARATOR
+        MN_STYLEDT
+    };
+};
+
+//
+// EDGEOBJ_POPUP
+//
+#if SD_POPUP == RID_DRAW_TEXTOBJ_POPUP
+    Menu RID_DRAW_EDGEOBJ_POPUP
+#elif SD_POPUP == RID_GRAPHIC_TEXTOBJ_POPUP
+    Menu RID_GRAPHIC_EDGEOBJ_POPUP
+#endif
+{
+    ItemList =
+    {
+        MN_NEW_ROUTING
+        SEPARATOR
+        MN_LINE
+        MN_CONNECTION
+        MN_TRANSFORM
+        MN_EDIT_POINTS
+        SEPARATOR
+        MN_CHAR_PARAGRAPH
+        SEPARATOR
+        MN_POSITION
+        MN_OBJECT_ALIGN
+        MN_DISTRIBUTE
+        MNSUB_CONVERT
+        SEPARATOR
+        MN_LEAVE_GROUP
+        MN_DISMANTLE
+
+        //-#i68101#----------------------
+        SEPARATOR
+        MN_OBJECT_TITLE_DESCRIPTION
+        MN_NAME_GROUP
+        //-#i68101#----------------------
+
+#if SD_POPUP == RID_DRAW_TEXTOBJ_POPUP
+        SEPARATOR
+        MN_EFFECT
+        MN_ACTION
+#endif
+        SEPARATOR
+        MN_STYLEDT
+    };
+};
+
+//
+// MEASUREOBJ_POPUP
+//
+#if SD_POPUP == RID_DRAW_TEXTOBJ_POPUP
+    Menu RID_DRAW_MEASUREOBJ_POPUP
+#elif SD_POPUP == RID_GRAPHIC_TEXTOBJ_POPUP
+    Menu RID_GRAPHIC_MEASUREOBJ_POPUP
+#endif
+{
+    ItemList =
+    {
+        MN_LINE
+        MN_TEXTATTR
+        MN_MEASURE
+        MN_TRANSFORM
+        MN_EDIT_POINTS
+        SEPARATOR
+        MN_CHAR_PARAGRAPH
+        SEPARATOR
+        MN_POSITION
+        MN_OBJECT_ALIGN
+        MN_DISTRIBUTE
+        MNSUB_MIRROR
+        MNSUB_CONVERT
+        SEPARATOR
+        MN_LEAVE_GROUP
+        MN_DISMANTLE
+
+        //-#i68101#----------------------
+        SEPARATOR
+        MN_OBJECT_TITLE_DESCRIPTION
+        MN_NAME_GROUP
+        //-#i68101#----------------------
+
+#if SD_POPUP == RID_DRAW_TEXTOBJ_POPUP
+        SEPARATOR
+        MN_EFFECT
+        MN_ACTION
+#endif
+        SEPARATOR
+        MN_STYLEDT
+    };
+};
+
+
+//
+// POLYLINEOBJ_POPUP
+//
+#if SD_POPUP == RID_DRAW_TEXTOBJ_POPUP
+    Menu RID_DRAW_POLYLINEOBJ_POPUP
+#elif SD_POPUP == RID_GRAPHIC_TEXTOBJ_POPUP
+    Menu RID_GRAPHIC_POLYLINEOBJ_POPUP
+#endif
+{
+    ItemList =
+    {
+        MN_LINE
+        MN_TRANSFORM
+        MN_EDIT_POINTS
+        MN_CLOSE_OBJECT
+        SEPARATOR
+        MN_CHAR_PARAGRAPH
+        SEPARATOR
+        MN_POSITION
+        MN_OBJECT_ALIGN
+        MN_DISTRIBUTE
+        MNSUB_MIRROR
+        MNSUB_CONVERT
+        SEPARATOR
+        MN_LEAVE_GROUP
+        MN_DISMANTLE
+        MN_BREAK
+
+        //-#i68101#----------------------
+        SEPARATOR
+        MN_OBJECT_TITLE_DESCRIPTION
+        MN_NAME_GROUP
+        //-#i68101#----------------------
+
+#if SD_POPUP == RID_DRAW_TEXTOBJ_POPUP
+        SEPARATOR
+        MN_EFFECT
+        MN_ACTION
+#endif
+        SEPARATOR
+        MN_STYLEDT
+    };
+};
+
+//
+// NOSEL_POPUP
+//
+#if SD_POPUP == RID_DRAW_TEXTOBJ_POPUP
+    Menu RID_DRAW_NOSEL_POPUP
+#elif SD_POPUP == RID_GRAPHIC_TEXTOBJ_POPUP
+    Menu RID_GRAPHIC_NOSEL_POPUP
+#endif
+{
+    ItemList =
+    {
+#if SD_POPUP == RID_DRAW_TEXTOBJ_POPUP
+        MN_SLIDE_MENU
+#elif SD_POPUP == RID_GRAPHIC_TEXTOBJ_POPUP
+        MN_PAGE_MENU
+#endif
+        MN_NAVIGATOR
+#if SD_POPUP == RID_DRAW_TEXTOBJ_POPUP
+        MN_OUTLINEMODE
+        MN_DIAMODE
+        MN_PRESENTATION
+#endif
+        SEPARATOR
+        MN_GRID
+        MN_HELPLINES
+        MN_CAPTUREPOINT
+        SEPARATOR
+        MN_LEAVE_GROUP
+    };
+};
+
+//
+// MULTISELECTION_POPUP
+//
+#if SD_POPUP == RID_DRAW_TEXTOBJ_POPUP
+    Menu RID_DRAW_MULTISELECTION_POPUP
+#elif SD_POPUP == RID_GRAPHIC_TEXTOBJ_POPUP
+    Menu RID_GRAPHIC_MULTISELECTION_POPUP
+#endif
+{
+    ItemList =
+    {
+        MN_SET_DEFAULT
+        SEPARATOR
+        MN_LINE
+        MN_AREA
+        MN_TRANSFORM
+        SEPARATOR
+        MN_CHAR_PARAGRAPH
+        SEPARATOR
+        MN_POSITION
+        MN_OBJECT_ALIGN
+        MN_DISTRIBUTE
+        MNSUB_MIRROR
+        MNSUB_CONVERT
+        SEPARATOR
+        MN_GROUP
+        MN_UNGROUP
+        MN_LEAVE_GROUP
+        MN_COMBINE
+        MNSUB_FORMEN
+        MN_DISMANTLE
+        MN_CONNECT
+        MN_BREAK
+#if SD_POPUP == RID_DRAW_TEXTOBJ_POPUP
+        SEPARATOR
+        MN_EFFECT
+        MN_ACTION
+#endif
+    };
+};
+
+//
+// GRAPHIC_POPUP
+//
+#if SD_POPUP == RID_DRAW_TEXTOBJ_POPUP
+    Menu RID_DRAW_GRAPHIC_POPUP
+#elif SD_POPUP == RID_GRAPHIC_TEXTOBJ_POPUP
+    Menu RID_GRAPHIC_GRAPHIC_POPUP
+#endif
+{
+    ItemList =
+    {
+        MN_TRANSFORM
+        MN_ORIGINAL_SIZE
+        MN_LINE
+        MN_AREA
+        MN_TEXTATTR
+        SEPARATOR
+        MN_CHAR_PARAGRAPH
+        SEPARATOR
+        MN_CROP
+        MN_OBJECT_ALIGN
+        MN_POSITION
+        MN_DISTRIBUTE
+        MNSUB_MIRROR
+        MNSUB_CONVERT
+        MN_BREAK
+
+        //-#i68101#----------------------
+        SEPARATOR
+        MN_OBJECT_TITLE_DESCRIPTION
+        MN_NAME_GROUP
+        //-#i68101#----------------------
+
+#if SD_POPUP == RID_DRAW_TEXTOBJ_POPUP
+        SEPARATOR
+        MN_EFFECT
+        MN_ACTION
+#endif
+        SEPARATOR
+        MN_STYLEDT
+        SEPARATOR
+        MN_SAVEGRAPHIC
+    };
+};
+
+//
+// OLE2_POPUP
+//
+#if SD_POPUP == RID_DRAW_TEXTOBJ_POPUP
+    Menu RID_DRAW_OLE2_POPUP
+#elif SD_POPUP == RID_GRAPHIC_TEXTOBJ_POPUP
+    Menu RID_GRAPHIC_OLE2_POPUP
+#endif
+{
+    ItemList =
+    {
+        MN_TRANSFORM
+        MN_ORIGINAL_SIZE
+        MN_OLE_OBJECT
+        SEPARATOR
+        MN_POSITION
+        MN_OBJECT_ALIGN
+        MN_DISTRIBUTE
+        MN_BREAK
+
+        //-#i68101#----------------------
+        SEPARATOR
+        MN_OBJECT_TITLE_DESCRIPTION
+        MN_NAME_GROUP
+        //-#i68101#----------------------
+
+#if SD_POPUP == RID_DRAW_TEXTOBJ_POPUP
+        SEPARATOR
+        MN_EFFECT
+        MN_ACTION
+#endif
+    };
+};
+
+
+//
+// PAGETAB_POPUP
+//
+#if SD_POPUP == RID_DRAW_TEXTOBJ_POPUP
+    Menu RID_DRAW_PAGETAB_POPUP
+#elif SD_POPUP == RID_GRAPHIC_TEXTOBJ_POPUP
+    Menu RID_GRAPHIC_PAGETAB_POPUP
+#endif
+{
+    ItemList =
+    {
+#if SD_POPUP == RID_DRAW_TEXTOBJ_POPUP
+        MN_INSERT_SLIDE
+        MN_DELETE_SLIDE
+        MN_MODIFY_PAGE
+#else
+        MN_INSERT_PAGE
+        MN_DELETE_PAGE
+#endif
+        MN_RENAME_PAGE
+    };
+};
+
+//
+// Media_POPUP
+//
+#if SD_POPUP == RID_DRAW_TEXTOBJ_POPUP
+    Menu RID_DRAW_MEDIA_POPUP
+#elif SD_POPUP == RID_GRAPHIC_TEXTOBJ_POPUP
+    Menu RID_GRAPHIC_MEDIA_POPUP
+#endif
+{
+    ItemList =
+    {
+        MN_TRANSFORM
+        SEPARATOR
+        MN_POSITION
+        MN_OBJECT_ALIGN
+        MN_DISTRIBUTE
+        MN_BREAK
+
+        //-#i68101#----------------------
+        SEPARATOR
+        MN_OBJECT_TITLE_DESCRIPTION
+        MN_NAME_GROUP
+        //-#i68101#----------------------
+
+#if SD_POPUP == RID_DRAW_TEXTOBJ_POPUP
+        SEPARATOR
+        MN_EFFECT
+        MN_ACTION
+#endif
+    };
+};
+
+//
+// Table shape context menu
+//
+#if SD_POPUP == RID_DRAW_TEXTOBJ_POPUP
+    Menu RID_DRAW_TABLE_POPUP
+#elif  SD_POPUP == RID_GRAPHIC_TEXTOBJ_POPUP
+    Menu RID_GRAPHIC_TABLE_POPUP
+#endif
+{
+    ItemList =
+    {
+        MN_SET_DEFAULT
+        SEPARATOR
+        MN_TRANSFORM
+        SEPARATOR
+        MN_CHAR_PARAGRAPH
+        SEPARATOR
+        MenuItem
+        {
+            Identifier = SID_FORMAT_TABLE_DLG;
+            HelpId = CMD_SID_FORMAT_TABLE_DLG;
+            Text [ en-US ] = "~Table...";
+        };
+        MenuItem
+        {
+            Identifier = DUMMY + 10 ;
+            Command = ".uno:CellMenu" ;
+            Text [ en-US ] = "~Cell" ;
+            SubMenu = Menu
+            {
+                ItemList =
+                {
+                    MenuItem
+                    {
+                        Identifier = SID_TABLE_MERGE_CELLS;
+                        HelpId = CMD_SID_TABLE_MERGE_CELLS;
+                        Text [ en-US ] = "~Merge";
+                    };
+                    MenuItem
+                    {
+                        Identifier = SID_TABLE_SPLIT_CELLS;
+                        HelpId = CMD_SID_TABLE_SPLIT_CELLS;
+                        Text [ en-US ] = "~Split...";
+                    };
+                    SEPARATOR
+                    MenuItem
+                    {
+                        Identifier = SID_TABLE_VERT_NONE;
+                        HelpId = CMD_SID_TABLE_VERT_NONE;
+                        Text [ en-US ] = "~Top";
+                    };
+                    MenuItem
+                    {
+                        Identifier = SID_TABLE_VERT_CENTER;
+                        HelpId = CMD_SID_TABLE_VERT_CENTER;
+                        Text [ en-US ] = "C~enter";
+                    };
+                    MenuItem
+                    {
+                        Identifier = SID_TABLE_VERT_BOTTOM;
+                        HelpId = CMD_SID_TABLE_VERT_BOTTOM;
+                        Text [ en-US ] = "~Bottom";
+                    };
+                };
+            };
+        };
+        MenuItem
+        {
+            Identifier = DUMMY + 11 ;
+            Command = ".uno:RowMenu" ;
+            Text [ en-US ] = "~Row" ;
+            SubMenu = Menu
+            {
+                ItemList =
+                {
+                    MenuItem
+                    {
+                        Identifier = SID_TABLE_DISTRIBUTE_ROWS;
+                        HelpId = CMD_SID_TABLE_DISTRIBUTE_ROWS;
+                        Text [ en-US ] = "Space ~Equally";
+                    };
+                    SEPARATOR
+                    MenuItem
+                    {
+                        Identifier = SID_TABLE_SELECT_ROW;
+                        HelpId = CMD_SID_TABLE_SELECT_ROW;
+                        Text [ en-US ] = "~Select";
+                    };
+                    MenuItem
+                    {
+                        Identifier = SID_TABLE_INSERT_ROW_DLG;
+                        HelpId = CMD_SID_TABLE_INSERT_ROW_DLG;
+                        Text [ en-US ] = "~Insert...";
+                    };
+                    MenuItem
+                    {
+                        Identifier = SID_TABLE_DELETE_ROW;
+                        HelpId = CMD_SID_TABLE_DELETE_ROW;
+                        Text [ en-US ] = "~Delete";
+                    };
+                };
+            };
+        };
+        MenuItem
+        {
+            Identifier = DUMMY + 12 ;
+            Command = ".uno:ColumnMenu" ;
+            Text [ en-US ] = "Colu~mn" ;
+            SubMenu = Menu
+            {
+                ItemList =
+                {
+                    MenuItem
+                    {
+                        Identifier = SID_TABLE_DISTRIBUTE_COLUMNS;
+                        HelpId = CMD_SID_TABLE_DISTRIBUTE_COLUMNS;
+                        Text [ en-US ] = "Space ~Equally";
+                    };
+                    SEPARATOR
+                    MenuItem
+                    {
+                        Identifier = SID_TABLE_SELECT_COL;
+                        HelpId = CMD_SID_TABLE_SELECT_COL;
+                        Text [ en-US ] = "~Select";
+                    };
+                    MenuItem
+                    {
+                        Identifier = SID_TABLE_INSERT_COL_DLG;
+                        HelpId = CMD_SID_TABLE_INSERT_COL_DLG;
+                        Text [ en-US ] = "~Insert...";
+                    };
+                    MenuItem
+                    {
+                        Identifier = SID_TABLE_DELETE_COL;
+                        HelpId = CMD_SID_TABLE_DELETE_COL;
+                        Text [ en-US ] = "~Delete";
+                    };
+                };
+            };
+        };
+        SEPARATOR
+        MN_POSITION
+        MN_OBJECT_ALIGN
+        MN_DISTRIBUTE
+        MNSUB_CONVERT
+        SEPARATOR
+        MN_OBJECT_TITLE_DESCRIPTION
+        MN_NAME_GROUP
+#if SD_POPUP == RID_DRAW_TEXTOBJ_POPUP
+        SEPARATOR
+        MN_EFFECT
+        MN_ACTION
+#endif
+        SEPARATOR
+        MN_STYLEDT
+    };
+};

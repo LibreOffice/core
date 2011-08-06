@@ -1,0 +1,132 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#include "dlgfield.hrc"
+ModalDialog DLG_FIELD_MODIFY
+{
+    HelpID = "sd:ModalDialog:DLG_FIELD_MODIFY";
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 138 , 154 ) ;
+    Moveable = TRUE ;
+    Closeable = TRUE ;
+    FixedLine GRP_TYPE
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 70 , 8 ) ;
+        Text [ en-US ] = "Field type" ;
+    };
+    RadioButton RBT_FIX
+    {
+        HelpID = "sd:RadioButton:DLG_FIELD_MODIFY:RBT_FIX";
+        Pos = MAP_APPFONT ( 12 , 14 ) ;
+        Size = MAP_APPFONT ( 64 , 10 ) ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "~Fixed" ;
+    };
+    RadioButton RBT_VAR
+    {
+        HelpID = "sd:RadioButton:DLG_FIELD_MODIFY:RBT_VAR";
+        Pos = MAP_APPFONT ( 12 , 25 ) ;
+        Size = MAP_APPFONT ( 64 , 10 ) ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "~Variable" ;
+    };
+    FixedText FT_LANGUAGE
+    {
+        Pos = MAP_APPFONT ( 6 , 67 ) ;
+        Size = MAP_APPFONT ( 40 , 10 ) ;
+        Text [ en-US ] = "~Language" ;
+    };
+
+    ListBox LB_LANGUAGE
+    {
+        HelpID = "sd:ListBox:DLG_FIELD_MODIFY:LB_LANGUAGE";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 52 , 65 ) ;
+        Size = MAP_APPFONT ( 80 , 70 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+    };
+
+    ListBox LB_FORMAT
+    {
+        HelpID = "sd:ListBox:DLG_FIELD_MODIFY:LB_FORMAT";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 6 , 94 ) ;
+        Size = MAP_APPFONT ( 126 , 54 ) ;
+        TabStop = TRUE ;
+    };
+    FixedText FT_FORMAT
+    {
+        Pos = MAP_APPFONT ( 6 , 83 ) ;
+        Size = MAP_APPFONT ( 70 , 10 ) ;
+        Text [ en-US ] = "F~ormat" ;
+    };
+    OKButton BTN_OK
+    {
+        Pos = MAP_APPFONT ( 82 , 6 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        DefButton = TRUE ;
+    };
+    CancelButton BTN_CANCEL
+    {
+        Pos = MAP_APPFONT ( 82 , 23 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    HelpButton BTN_HELP
+    {
+        Pos = MAP_APPFONT ( 82 , 43 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    Text [ en-US ] = "Edit Field" ;
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
