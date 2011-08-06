@@ -1,0 +1,299 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef CHART_STRINGS_HRC
+#define CHART_STRINGS_HRC
+
+// this includes no link dependency
+#include <svl/solar.hrc>
+
+//next free is 293
+//single free: 139
+
+//-----------------------------------------------------------------------------
+//chart types
+//see Strings_ChartTypes.src
+
+#define STR_NORMAL                          (RID_APP_START + 10)
+#define STR_STACKED                         (RID_APP_START + 11)
+#define STR_PERCENT                         (RID_APP_START + 12)
+#define STR_DEEP                            (RID_APP_START + 13)
+#define STR_FILLED                          (RID_APP_START + 285)
+
+#define STR_DONUT                           (RID_APP_START + 8)
+#define STR_TYPE_PIE                        (RID_APP_START + 187)
+#define STR_PIE_EXPLODED                    (RID_APP_START + 188)
+#define STR_DONUT_EXPLODED                  (RID_APP_START + 189)
+
+#define STR_TYPE_COLUMN                     (RID_APP_START + 190)
+#define STR_TYPE_BAR                        (RID_APP_START + 191)
+#define STR_TYPE_AREA                       (RID_APP_START + 192)
+
+#define STR_LINES_3D                        (RID_APP_START + 193)
+#define STR_POINTS_ONLY                     (RID_APP_START + 194)
+#define STR_LINES_ONLY                      (RID_APP_START + 116)
+#define STR_POINTS_AND_LINES                (RID_APP_START + 124)
+#define STR_TYPE_LINE                       (RID_APP_START + 125)
+#define STR_TYPE_XY                         (RID_APP_START + 240)
+
+#define STR_LINE_COLUMN                     (RID_APP_START + 22)
+#define STR_LINE_STACKEDCOLUMN              (RID_APP_START + 23)
+#define STR_TYPE_COMBI_COLUMN_LINE          (RID_APP_START + 24)
+
+#define STR_TYPE_NET                        (RID_APP_START + 52)
+
+#define STR_TYPE_STOCK                      (RID_APP_START + 126)
+#define STR_STOCK_1                         (RID_APP_START + 143)
+#define STR_STOCK_2                         (RID_APP_START + 144)
+#define STR_STOCK_3                         (RID_APP_START + 145)
+#define STR_STOCK_4                         (RID_APP_START + 146)
+
+#define STR_TYPE_BUBBLE                     (RID_APP_START + 282)
+#define STR_BUBBLE_1                        (RID_APP_START + 283)
+
+//-----------------------------------------------------------------------------
+//additional controls for wizard:
+
+#define STR_BAR_GEOMETRY                     (RID_APP_START + 127)
+#define STR_NUMBER_OF_LINES                  (RID_APP_START + 128)
+#define STR_TIP_SELECT_RANGE                 (RID_APP_START + 196)
+
+#define STR_3DSCHEME_SIMPLE                  (RID_APP_START + 231)
+#define STR_3DSCHEME_REALISTIC               (RID_APP_START + 232)
+#define STR_3DSCHEME_CUSTOM                  (RID_APP_START + 259)
+
+//additional strings
+#define STR_TEXT_SEPARATOR                   (RID_APP_START + 20)
+
+//-----------------------------------------------------------------------------
+//SchStatisticTabPage and SchDataStatisticsDlg
+//see Strings_Statistic.src
+
+#define STR_INDICATE_BOTH                   (RID_APP_START + 131)
+#define STR_INDICATE_UP                     (RID_APP_START + 132)
+#define STR_INDICATE_DOWN                   (RID_APP_START + 133)
+
+#define STR_REGRESSION_LINEAR               (RID_APP_START + 135)
+#define STR_REGRESSION_LOG                  (RID_APP_START + 136)
+#define STR_REGRESSION_EXP                  (RID_APP_START + 137)
+#define STR_REGRESSION_POWER                (RID_APP_START + 138)
+#define STR_REGRESSION_MEAN                 (RID_APP_START + 180)
+
+//-----------------------------------------------------------------------------
+//for scale tab page
+//see Strings_Scale.src
+
+#define STR_INVALID_NUMBER                  (RID_APP_START + 100)
+#define STR_STEP_GT_ZERO                    (RID_APP_START + 102)
+#define STR_BAD_LOGARITHM                   (RID_APP_START + 111)
+#define STR_MIN_GREATER_MAX                 (RID_APP_START + 101)
+#define STR_INVALID_INTERVALS               (RID_APP_START + 291)
+#define STR_INVALID_TIME_UNIT               (RID_APP_START + 292)
+
+//-----------------------------------------------------------------------------
+//for range didalog
+#define STR_DATA_ROLE_LABEL                 (RID_APP_START + 241)
+#define STR_DATA_ROLE_X                     (RID_APP_START + 242)
+#define STR_DATA_ROLE_Y                     (RID_APP_START + 243)
+#define STR_DATA_ROLE_X_ERROR               (RID_APP_START + 244)
+#define STR_DATA_ROLE_X_ERROR_POSITIVE      (RID_APP_START + 272)
+#define STR_DATA_ROLE_X_ERROR_NEGATIVE      (RID_APP_START + 273)
+#define STR_DATA_ROLE_Y_ERROR               (RID_APP_START + 245)
+#define STR_DATA_ROLE_Y_ERROR_POSITIVE      (RID_APP_START + 274)
+#define STR_DATA_ROLE_Y_ERROR_NEGATIVE      (RID_APP_START + 275)
+#define STR_DATA_ROLE_FIRST                 (RID_APP_START + 246)
+#define STR_DATA_ROLE_LAST                  (RID_APP_START + 247)
+#define STR_DATA_ROLE_MIN                   (RID_APP_START + 248)
+#define STR_DATA_ROLE_MAX                   (RID_APP_START + 249)
+#define STR_DATA_ROLE_CATEGORIES            (RID_APP_START + 260)
+#define STR_DATA_ROLE_SIZE                  (RID_APP_START + 284)
+
+#define STR_DATA_UNNAMED_SERIES             (RID_APP_START + 250)
+#define STR_DATA_UNNAMED_SERIES_WITH_INDEX  (RID_APP_START + 251)
+
+#define STR_DATA_SELECT_RANGE_FOR_SERIES    (RID_APP_START + 252)
+#define STR_DATA_SELECT_RANGE_FOR_CATEGORIES (RID_APP_START + 253)
+#define STR_DATA_SELECT_RANGE_FOR_DATALABELS (RID_APP_START + 195)
+#define STR_DATA_SELECT_RANGE_FOR_POSITIVE_ERRORBARS (RID_APP_START + 21)
+#define STR_DATA_SELECT_RANGE_FOR_NEGATIVE_ERRORBARS (RID_APP_START + 267)
+
+//-----------------------------------------------------------------------------
+//chart objects
+//e.g. used as titles for insert dialogs and object properties dialog
+//also used in tip help, in status descriptions e.g. '%object% marked' or in undo action e.g. 'moved %object%'
+
+#define STR_PAGE_CHARTTYPE                  (RID_APP_START + 197)
+#define STR_PAGE_DATA_RANGE                 (RID_APP_START + 238)
+#define STR_ACTION_EDIT_CHART_DATA          (RID_APP_START + 198)
+
+#define STR_OBJECT_PAGE                     (RID_APP_START + 30)
+#define STR_OBJECT_DIAGRAM                  (RID_APP_START + 31)
+#define STR_OBJECT_DIAGRAM_WALL             (RID_APP_START + 32)
+#define STR_OBJECT_DIAGRAM_FLOOR            (RID_APP_START + 33)
+#define STR_OBJECT_LEGEND                   (RID_APP_START + 48)
+#define STR_OBJECT_LEGEND_SYMBOL            (RID_APP_START + 49)
+
+#define STR_OBJECT_DATALABELS               (RID_APP_START + 45)
+#define STR_OBJECT_LABEL                    (RID_APP_START + 199)
+
+#define STR_OBJECT_TITLE                    (RID_APP_START + 200)
+#define STR_OBJECT_TITLES                   (RID_APP_START + 201)
+
+#define STR_OBJECT_TITLE_MAIN               (RID_APP_START + 254)
+#define STR_OBJECT_TITLE_SUB                (RID_APP_START + 255)
+#define STR_OBJECT_TITLE_X_AXIS             (RID_APP_START + 256)
+#define STR_OBJECT_TITLE_Y_AXIS             (RID_APP_START + 257)
+#define STR_OBJECT_TITLE_Z_AXIS             (RID_APP_START + 258)
+#define STR_OBJECT_TITLE_SECONDARY_X_AXIS   (RID_APP_START + 87)
+#define STR_OBJECT_TITLE_SECONDARY_Y_AXIS   (RID_APP_START + 88)
+
+#define STR_OBJECT_DATAPOINT                (RID_APP_START + 202)
+#define STR_OBJECT_DATAPOINTS               (RID_APP_START + 203)
+#define STR_OBJECT_DATASERIES               (RID_APP_START + 204)
+#define STR_OBJECT_DATASERIES_PLURAL        (RID_APP_START + 205)
+
+#define STR_OBJECT_FOR_SERIES               (RID_APP_START + 288)
+#define STR_OBJECT_FOR_ALL_SERIES           (RID_APP_START + 289)
+
+#define STR_OBJECT_AVERAGE_LINE             (RID_APP_START + 174)
+#define STR_OBJECT_ERROR_BARS               (RID_APP_START + 175)
+#define STR_OBJECT_CURVE                    (RID_APP_START + 176)
+#define STR_OBJECT_CURVES                   (RID_APP_START + 130)
+
+#define STR_OBJECT_STOCK_LOSS               (RID_APP_START + 207)
+#define STR_OBJECT_STOCK_GAIN               (RID_APP_START + 208)
+
+#define STR_OBJECT_AXES                     (RID_APP_START + 209)
+#define STR_OBJECT_AXIS                     (RID_APP_START + 210)
+#define STR_OBJECT_AXIS_X                   (RID_APP_START + 211)
+#define STR_OBJECT_AXIS_Y                   (RID_APP_START + 212)
+#define STR_OBJECT_AXIS_Z                   (RID_APP_START + 213)
+
+#define STR_OBJECT_SECONDARY_X_AXIS         (RID_APP_START + 286)
+#define STR_OBJECT_SECONDARY_Y_AXIS         (RID_APP_START + 287)
+
+#define STR_OBJECT_GRID                     (RID_APP_START + 214)
+#define STR_OBJECT_GRIDS                    (RID_APP_START + 215)
+
+#define STR_OBJECT_GRID_MAJOR_X             (RID_APP_START + 37)
+#define STR_OBJECT_GRID_MAJOR_Y             (RID_APP_START + 38)
+#define STR_OBJECT_GRID_MAJOR_Z             (RID_APP_START + 39)
+#define STR_OBJECT_GRID_MINOR_X             (RID_APP_START + 40)
+#define STR_OBJECT_GRID_MINOR_Y             (RID_APP_START + 41)
+#define STR_OBJECT_GRID_MINOR_Z             (RID_APP_START + 42)
+
+#define STR_OBJECT_CURVE_WITH_PARAMETERS    (RID_APP_START + 264)
+#define STR_OBJECT_AVERAGE_LINE_WITH_PARAMETERS (RID_APP_START + 265)
+
+#define STR_OBJECT_CURVE_EQUATION           (RID_APP_START + 268)
+#define STR_OBJECT_SHAPE                    (RID_APP_START + 290)
+
+//-----------------------------------------------------------------------------
+//Titles for tabpages and dialogs
+
+#define STR_PAGE_LINE                        (RID_APP_START + 216)
+#define STR_PAGE_BORDER                      (RID_APP_START + 217)
+#define STR_PAGE_AREA                        (RID_APP_START + 218)
+#define STR_PAGE_TRANSPARENCY                (RID_APP_START + 219)
+#define STR_PAGE_FONT                        (RID_APP_START + 220)
+#define STR_PAGE_FONT_EFFECTS                (RID_APP_START + 221)
+#define STR_PAGE_LAYOUT                      (RID_APP_START + 222)
+#define STR_PAGE_OPTIONS                     (RID_APP_START + 223)
+#define STR_PAGE_SCALE                       (RID_APP_START + 224)
+#define STR_PAGE_NUMBERS                     (RID_APP_START + 225)
+#define STR_PAGE_ALIGNMENT                   (RID_APP_START + 226)
+#define STR_PAGE_POSITION                    (RID_APP_START + 227)
+
+#define STR_PAGE_PERSPECTIVE                 (RID_APP_START + 235)
+#define STR_PAGE_APPEARANCE                  (RID_APP_START + 236)
+#define STR_PAGE_ILLUMINATION                (RID_APP_START + 237)
+
+#define STR_PAGE_TRENDLINE_TYPE              (RID_APP_START + 89)
+#define STR_PAGE_YERROR_BARS                 (RID_APP_START + 206)
+#define STR_CONTROLTEXT_ERROR_BARS_FROM_DATA (RID_APP_START + 276)
+
+#define STR_DLG_CHART_WIZARD                 (RID_APP_START + 228)
+#define STR_PAGE_CHART_ELEMENTS              (RID_APP_START + 229)
+#define STR_PAGE_CHART_LOCATION              (RID_APP_START + 230)
+
+#define STR_DLG_SMOOTH_LINE_PROPERTIES              (RID_APP_START + 239)
+#define STR_DLG_NUMBERFORMAT_FOR_PERCENTAGE_VALUE   (RID_APP_START + 266)
+
+#define STR_PAGE_POSITIONING  (RID_APP_START + 277)
+#define STR_PAGE_ASIAN                       (RID_APP_START + 281)
+
+//-----------------------------------------------------------------------------
+//strings used as description for actions on toolbar icons, as tip help or for undo
+
+#define STR_ACTION_EDIT_CHARTTYPE           (RID_APP_START + 78)
+#define STR_ACTION_EDIT_DATA_RANGES         (RID_APP_START + 64)
+#define STR_ACTION_EDIT_3D_VIEW             (RID_APP_START + 80)
+#define STR_ACTION_TOGGLE_LEGEND            (RID_APP_START + 83)
+#define STR_ACTION_TOGGLE_GRID_HORZ         (RID_APP_START + 86)
+#define STR_ACTION_SCALE_TEXT               (RID_APP_START + 93)
+#define STR_ACTION_REARRANGE_CHART          (RID_APP_START + 94)
+#define STR_ACTION_EDIT_TEXT                (RID_APP_START + 95)
+
+#define STR_TIP_CHOOSECOLOR                 (RID_APP_START + 233)
+#define STR_TIP_LIGHTSOURCE_X               (RID_APP_START + 234)
+
+//-----------------------------------------------------------------------------
+//statusbar strings and balloon help
+
+#define STR_STATUS_PIE_SEGMENT_EXPLODED     (RID_APP_START + 179)
+#define STR_STATUS_OBJECT_MARKED            (RID_APP_START + 51)
+#define STR_STATUS_DATAPOINT_MARKED         (RID_APP_START + 44)
+#define STR_TIP_DATASERIES                  (RID_APP_START + 43)
+#define STR_TIP_DATAPOINT                   (RID_APP_START + 140)
+#define STR_TIP_DATAPOINT_INDEX             (RID_APP_START + 141)
+#define STR_TIP_DATAPOINT_VALUES            (RID_APP_START + 142)
+
+//-----------------------------------------------------------------------------
+//warning and info boxes
+#define STR_ACTION_NOTPOSSIBLE              (RID_APP_START + 107)
+
+#define STR_COLUMN_LABEL                    (RID_APP_START + 262)
+#define STR_ROW_LABEL                       (RID_APP_START + 263)
+
+#define STR_DATA_EDITOR_INCORRECT_INPUT     (RID_APP_START + 269)
+
+// frame direction ------------------------------------------------------------
+
+#define STR_TEXT_DIRECTION_LTR              (RID_APP_START + 278)
+#define STR_TEXT_DIRECTION_RTL              (RID_APP_START + 279)
+#define STR_TEXT_DIRECTION_SUPER            (RID_APP_START + 280)
+
+//IAccessibility2 Implementation 2009-----
+#define STR_BUTTON_UP                       (RID_APP_START + 500)
+#define STR_BUTTON_DOWN                     (RID_APP_START + 501)
+//-----IAccessibility2 Implementation 2009
+//-----------------------------------------------------------------------------
+
+// ids must not exceed RID_APP_START + 499
+// ids >= RID_APP_START + 500 are defined in glob.hrc
+
+// CHART_STRINGS_HRC
+#endif

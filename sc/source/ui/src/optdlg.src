@@ -1,0 +1,957 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#include "optdlg.hrc"
+
+/**************************************************************************/
+/*                                                                        */
+/*                                                                        */
+/*                                                                        */
+/**************************************************************************/
+
+TabPage RID_SCPAGE_CALC
+{
+    HelpId = HID_SCPAGE_CALC ;
+    SVLook = TRUE ;
+    Hide = TRUE ;
+    Pos = MAP_APPFONT ( 0 , 0 ) ;
+    Size = MAP_APPFONT ( 260 , 185 ) ;
+    CheckBox BTN_ITERATE
+    {
+        HelpID = "sc:CheckBox:RID_SCPAGE_CALC:BTN_ITERATE";
+        Pos = MAP_APPFONT ( 12 , 14 ) ;
+        Size = MAP_APPFONT ( 112 , 10 ) ;
+        Text [ en-US ] = "~Iterations" ;
+    };
+    FixedText FT_STEPS
+    {
+        Pos = MAP_APPFONT ( 20 , 28 ) ;
+        Size = MAP_APPFONT ( 58 , 8 ) ;
+        Text [ en-US ] = "~Steps" ;
+    };
+    FixedText FT_EPS
+    {
+        Pos = MAP_APPFONT ( 20 , 42 ) ;
+        Size = MAP_APPFONT ( 58 , 16 ) ;
+        Text [ en-US ] = "~Minimum Change" ;
+        WordBreak = TRUE ;
+    };
+    NumericField ED_STEPS
+    {
+        HelpID = "sc:NumericField:RID_SCPAGE_CALC:ED_STEPS";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 82 , 26 ) ;
+        Size = MAP_APPFONT ( 42 , 12 ) ;
+        TabStop = TRUE ;
+        Minimum = 1 ;
+        Maximum = 1000 ;
+        Left = TRUE ;
+    };
+    Edit ED_EPS
+    {
+        HelpID = "sc:Edit:RID_SCPAGE_CALC:ED_EPS";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 82 , 42 ) ;
+        Size = MAP_APPFONT ( 42 , 12 ) ;
+    };
+    FixedLine GB_ZREFS
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 121 , 8 ) ;
+        Text [ en-US ] = "Iterative references" ;
+    };
+    RadioButton BTN_DATESTD
+    {
+        HelpID = "sc:RadioButton:RID_SCPAGE_CALC:BTN_DATESTD";
+        Pos = MAP_APPFONT ( 139 , 14 ) ;
+        Size = MAP_APPFONT ( 112 , 10 ) ;
+        Text [ en-US ] = "12/30/1899 (defa~ult)" ;
+        QuickHelpText [ en-US ] = "Value 0 corresponds to 12/30/1899" ;
+    };
+    RadioButton BTN_DATESC10
+    {
+        HelpID = "sc:RadioButton:RID_SCPAGE_CALC:BTN_DATESC10";
+        Pos = MAP_APPFONT ( 139 , 28 ) ;
+        Size = MAP_APPFONT ( 112 , 10 ) ;
+        Text [ en-US ] = "01/01/1900 (Star~Calc 1.0)" ;
+        QuickHelpText [ en-US ] = "Value 0 corresponds to 01/01/1900" ;
+    };
+    RadioButton BTN_DATE1904
+    {
+        HelpID = "sc:RadioButton:RID_SCPAGE_CALC:BTN_DATE1904";
+        Pos = MAP_APPFONT ( 139 , 42 ) ;
+        Size = MAP_APPFONT ( 112 , 10 ) ;
+        Text [ en-US ] = "~01/01/1904" ;
+        QuickHelpText [ en-US ] = "0 corresponds to 01/01/1904" ;
+    };
+    FixedLine FL_SEPARATOR
+    {
+        Pos = MAP_APPFONT ( 130 , 14 ) ;
+        Size = MAP_APPFONT ( 1 , 44 ) ;
+    };
+    FixedLine GB_DATE
+    {
+        Pos = MAP_APPFONT ( 133 , 3 ) ;
+        Size = MAP_APPFONT ( 121 , 8 ) ;
+        Text [ en-US ] = "Date" ;
+    };
+    CheckBox BTN_CASE
+    {
+        HelpID = "sc:CheckBox:RID_SCPAGE_CALC:BTN_CASE";
+        Pos = MAP_APPFONT ( 12 , 77 ) ;
+        Size = MAP_APPFONT ( 130 , 10 ) ;
+        Text [ en-US ] = "Case se~nsitive" ;
+    };
+    CheckBox BTN_CALC
+    {
+        HelpID = "sc:CheckBox:RID_SCPAGE_CALC:BTN_CALC";
+        Pos = MAP_APPFONT ( 12 , 91 ) ;
+        Size = MAP_APPFONT ( 239 , 10 ) ;
+        Text [ en-US ] = "~Precision as shown" ;
+    };
+    CheckBox BTN_MATCH
+    {
+        HelpID = "sc:CheckBox:RID_SCPAGE_CALC:BTN_MATCH";
+        Pos = MAP_APPFONT ( 12 , 105 ) ;
+        Size = MAP_APPFONT ( 239 , 10 ) ;
+        Text [ en-US ] = "Search criteria = and <> must apply to ~whole cells" ;
+    };
+    CheckBox BTN_REGEX
+    {
+        HelpID = "sc:CheckBox:RID_SCPAGE_CALC:BTN_REGEX";
+        Pos = MAP_APPFONT ( 12 , 119 ) ;
+        Size = MAP_APPFONT ( 239 , 10 ) ;
+        Text [ en-US ] = "~Enable regular expressions in formulas" ;
+    };
+    CheckBox BTN_LOOKUP
+    {
+        HelpID = "sc:CheckBox:RID_SCPAGE_CALC:BTN_LOOKUP";
+        Pos = MAP_APPFONT ( 12 , 133 ) ;
+        Size = MAP_APPFONT ( 239 , 10 ) ;
+        Text [ en-US ] = "~Automatically find column and row labels " ;
+    };
+    CheckBox BTN_GENERAL_PREC
+    {
+        HelpID = "sc:CheckBox:RID_SCPAGE_CALC:BTN_GENERAL_PREC";
+        Pos = MAP_APPFONT ( 12 , 147 ) ;
+        Size = MAP_APPFONT ( 164 , 10 ) ;
+        Text [ en-US ] = "~Limit decimals for general number format" ;
+    };
+    FixedText FT_PREC
+    {
+        Pos = MAP_APPFONT ( 169 , 147 ) ;
+        Size = MAP_APPFONT ( 53 , 8 ) ;
+        Text [ en-US ] = "~Decimal places" ;
+        Right = TRUE ;
+    };
+    NumericField ED_PREC
+    {
+        HelpID = "sc:NumericField:RID_SCPAGE_CALC:ED_PREC";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 226 , 145 ) ;
+        Size = MAP_APPFONT ( 25 , 12 ) ;
+        Maximum = 20 ;
+        Spin = TRUE ;
+        Repeat = TRUE ;
+    };
+};
+
+/**************************************************************************/
+/*                                                                        */
+/*                                                                        */
+/*                                                                        */
+/**************************************************************************/
+
+TabPage RID_SCPAGE_FORMULA
+{
+    HelpId = HID_SCPAGE_FORMULA ;
+    SVLook = TRUE ;
+    Hide = TRUE ;
+    Pos = MAP_APPFONT ( 0 , 0 ) ;
+    Size = MAP_APPFONT ( 260 , 185 ) ;
+
+    FixedLine FL_FORMULA_OPTIONS
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
+        Text [ en-US ] = "Formula options";
+    };
+
+    FixedText FT_FORMULA_SYNTAX
+    {
+        Pos = MAP_APPFONT ( 21, 16 ) ;
+        Size = MAP_APPFONT ( 80, 8 ) ;
+        Text [ en-US ] = "Formula ~syntax" ;
+    };
+
+    ListBox LB_FORMULA_SYNTAX
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 85, 14 ) ;
+        Size = MAP_APPFONT ( 60, 46 ) ;
+        DropDown = TRUE ;
+        StringList [ en-US ] =
+        {
+            < "Calc A1" ; Default ; > ;
+            < "Excel A1" ; Default ; > ;
+            < "Excel R1C1" ; Default ; > ;
+        };
+    };
+
+    CheckBox CB_ENGLISH_FUNC_NAME
+    {
+        Pos = MAP_APPFONT ( 12, 31 ) ;
+        Size = MAP_APPFONT ( 120, 8 ) ;
+        Text [ en-US ] = "Use English function names" ;
+    };
+
+    FixedLine FL_FORMULA_SEPS
+    {
+        Pos = MAP_APPFONT ( 6 , 46 ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
+        Text [ en-US ] = "Separators";
+    };
+
+    FixedText FT_FORMULA_SEP_ARG
+    {
+        Pos = MAP_APPFONT ( 21, 59 );
+        Size = MAP_APPFONT ( 60, 8 );
+        Text [ en-US ] = "~Function";
+    };
+
+    Edit ED_FORMULA_SEP_ARG
+    {
+        Border = TRUE;
+        Pos = MAP_APPFONT ( 75, 57 );
+        Size = MAP_APPFONT ( 10, 12 );
+    };
+
+    FixedText FT_FORMULA_SEP_ARRAY_C
+    {
+        Pos = MAP_APPFONT ( 21, 77 );
+        Size = MAP_APPFONT ( 60, 8 );
+        Text [ en-US ] = "Array co~lumn";
+    };
+
+    Edit ED_FORMULA_SEP_ARRAY_C
+    {
+        Border = TRUE;
+        Pos = MAP_APPFONT ( 75, 75 );
+        Size = MAP_APPFONT ( 10, 12 );
+    };
+
+    FixedText FT_FORMULA_SEP_ARRAY_R
+    {
+        Pos = MAP_APPFONT ( 21, 95 );
+        Size = MAP_APPFONT ( 60, 8 );
+        Text [ en-US ] = "Array ~row";
+    };
+
+    Edit ED_FORMULA_SEP_ARRAY_R
+    {
+        Border = TRUE;
+        Pos = MAP_APPFONT ( 75, 93 );
+        Size = MAP_APPFONT ( 10, 12 );
+    };
+
+    PushButton BTN_FORMULA_SEP_RESET
+    {
+        Pos = MAP_APPFONT ( 21, 113 );
+        Size = MAP_APPFONT ( 40, 14 );
+        Text [ en-US ] = "Rese~t";
+    };
+};
+
+TabPage RID_SCPAGE_COMPATIBILITY
+{
+    HelpId = HID_SCPAGE_COMPATIBILITY ;
+    SVLook = TRUE ;
+    Hide = TRUE ;
+    Pos = MAP_APPFONT ( 0 , 0 ) ;
+    Size = MAP_APPFONT ( 260 , 185 ) ;
+
+    FixedLine FL_KEY_BINDINGS
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
+        Text [ en-US ] = "Key bindings";
+    };
+
+    FixedText FT_KEY_BINDINGS
+    {
+        Pos = MAP_APPFONT ( 12, 16 ) ;
+        Size = MAP_APPFONT ( 165, 24 ) ;
+        Wordbreak = TRUE;
+        Text [ en-US ] = "Select desired ~key binding type. Changing the key binding type may overwrite some of the existing key bindings." ;
+    };
+
+    ListBox LB_KEY_BINDINGS
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 179, 20 ) ;
+        Size = MAP_APPFONT ( 75, 46 ) ;
+        DropDown = TRUE ;
+        StringList [ en-US ] =
+        {
+            < "Default" ; Default ; > ;
+            < "OpenOffice.org legacy" ; Default ; > ;
+        };
+    };
+};
+
+/**************************************************************************/
+/*                                                                        */
+/*                                                                        */
+/*                                                                        */
+/**************************************************************************/
+
+TabPage RID_SCPAGE_USERLISTS
+{
+    HelpId = HID_SCPAGE_USERLISTS ;
+    SVLook = TRUE ;
+    Hide = TRUE ;
+    Pos = MAP_APPFONT ( 0 , 0 ) ;
+    Size = MAP_APPFONT ( 260 , 185 ) ;
+    FixedText FT_LISTS
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 93 , 8 ) ;
+        Text [ en-US ] = "~Lists" ;
+    };
+    ListBox LB_LISTS
+    {
+        HelpID = "sc:ListBox:RID_SCPAGE_USERLISTS:LB_LISTS";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 6 , 15 ) ;
+        Size = MAP_APPFONT ( 93 , 148 ) ;
+    };
+    FixedText FT_ENTRIES
+    {
+        Pos = MAP_APPFONT ( 105 , 3 ) ;
+        Size = MAP_APPFONT ( 93 , 8 ) ;
+        Text [ en-US ] = "~Entries" ;
+    };
+    MultiLineEdit ED_ENTRIES
+    {
+        HelpID = "sc:MultiLineEdit:RID_SCPAGE_USERLISTS:ED_ENTRIES";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 105 , 15 ) ;
+        Size = MAP_APPFONT ( 93 , 148 ) ;
+        VScroll = TRUE ;
+        IgnoreTab = TRUE ;
+    };
+    Edit ED_COPYFROM
+    {
+        HelpID = "sc:Edit:RID_SCPAGE_USERLISTS:ED_COPYFROM";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 70 , 167 ) ;
+        Size = MAP_APPFONT ( 128 , 12 ) ;
+    };
+    FixedText FT_COPYFROM
+    {
+        Pos = MAP_APPFONT ( 6 , 168 ) ;
+        Size = MAP_APPFONT ( 62 , 8 ) ;
+        Text [ en-US ] = "Copy list ~from" ;
+    };
+    PushButton BTN_NEW
+    {
+        HelpID = "sc:PushButton:RID_SCPAGE_USERLISTS:BTN_NEW";
+        Pos = MAP_APPFONT ( 204 , 15 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Text [ en-US ] = "~New" ;
+    };
+    PushButton BTN_ADD
+    {
+        HelpID = "sc:PushButton:RID_SCPAGE_USERLISTS:BTN_ADD";
+        Pos = MAP_APPFONT ( 204 , 36 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Text [ en-US ] = "~Add" ;
+        Disable = TRUE ;
+    };
+    PushButton BTN_REMOVE
+    {
+        HelpID = "sc:PushButton:RID_SCPAGE_USERLISTS:BTN_REMOVE";
+        Pos = MAP_APPFONT ( 204 , 54 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Text [ en-US ] = "~Delete" ;
+    };
+    PushButton BTN_COPY
+    {
+        HelpID = "sc:PushButton:RID_SCPAGE_USERLISTS:BTN_COPY";
+        Pos = MAP_APPFONT ( 204 , 166 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Text [ en-US ] = "~Copy" ;
+    };
+    String STR_DISMISS
+    {
+        Text [ en-US ] = "~Discard" ;
+    };
+    String STR_QUERYREMOVE
+    {
+        Text [ en-US ] = "Should the entry\n#\nbe deleted?" ;
+    };
+    String STR_COPYLIST
+    {
+        Text [ en-US ] = "Copy List" ;
+    };
+    String STR_COPYFROM
+    {
+        Text [ en-US ] = "List from" ;
+    };
+    String STR_COPYERR
+    {
+        Text [ en-US ] = "Cells without text have been ignored." ;
+    };
+};
+
+/**************************************************************************/
+/*                                                                        */
+/*                                                                        */
+/*                                                                        */
+/**************************************************************************/
+
+TabPage RID_SCPAGE_CONTENT
+{
+    HelpId = HID_SCPAGE_CONTENT ;
+    SVLook = TRUE ;
+    Hide = TRUE ;
+    Pos = MAP_APPFONT ( 0 , 0 ) ;
+    Size = MAP_APPFONT ( 260 , 185 ) ;
+    FixedLine GB_LINES
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 121 , 8 ) ;
+        Text [ en-US ] = "Visual aids";
+    };
+    FixedText FT_GRID
+    {
+        HelpID = "sc:CheckBox:RID_SCPAGE_CONTENT:FT_GRID";
+        Pos = MAP_APPFONT ( 12 , 14 ) ;
+        Size = MAP_APPFONT ( 40 , 8 ) ;
+        Text [ en-US ] = "~Grid lines" ;
+    };
+    ListBox LB_GRID
+    {
+        HelpID = "sc:ListBox:RID_SCPAGE_CONTENT:LB_GRID";
+        Pos = MAP_APPFONT ( 54 , 12 ) ;
+        Size = MAP_APPFONT ( 70 , 46 ) ;
+        Border = TRUE ;
+        DropDown = TRUE ;
+        StringList [ en-US ] =
+        {
+            < "Show" ; Default ; > ;
+            < "Show on colored cells" ; Default ; > ;
+            < "Hide" ; Default ; > ;
+        };
+
+    };
+    FixedText FT_COLOR
+    {
+        Pos = MAP_APPFONT ( 21 , 28 ) ;
+        Size = MAP_APPFONT ( 31 , 8 ) ;
+        Text [ en-US ] = "~Color" ;
+    };
+    ListBox LB_COLOR
+    {
+        HelpID = "sc:ListBox:RID_SCPAGE_CONTENT:LB_COLOR";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 54 , 26 ) ;
+        Size = MAP_APPFONT ( 70 , 86 ) ;
+        DropDown = TRUE ;
+        DDExtraWidth = TRUE ;
+    };
+    CheckBox CB_PAGEBREAKS
+    {
+        HelpID = "sc:CheckBox:RID_SCPAGE_CONTENT:CB_PAGEBREAKS";
+        Pos = MAP_APPFONT ( 12 , 42 ) ;
+        Size = MAP_APPFONT ( 112 , 10 ) ;
+        Text [ en-US ] = "~Page breaks" ;
+    };
+    CheckBox CB_GUIDELINE
+    {
+        HelpID = "sc:CheckBox:RID_SCPAGE_CONTENT:CB_GUIDELINE";
+        Pos = MAP_APPFONT ( 12 , 56 ) ;
+        Size = MAP_APPFONT ( 112 , 10 ) ;
+        Text [ en-US ] = "Helplines ~While Moving";
+    };
+    CheckBox CB_HANDLES
+    {
+        HelpID = "sc:CheckBox:RID_SCPAGE_CONTENT:CB_HANDLES";
+        Pos = MAP_APPFONT ( 12 , 70 ) ;
+        Size = MAP_APPFONT ( 112 , 10 ) ;
+        Text [ en-US ] = "~Simple handles";
+    };
+    CheckBox CB_BIGHANDLES
+    {
+        HelpID = "sc:CheckBox:RID_SCPAGE_CONTENT:CB_BIGHANDLES";
+        Pos = MAP_APPFONT ( 12 , 84 ) ;
+        Size = MAP_APPFONT ( 112 , 10 ) ;
+        Text [ en-US ] = "~Large handles";
+    };
+    FixedLine FL_SEPARATOR1
+    {
+        Pos = MAP_APPFONT ( 130 , 14 ) ;
+        Size = MAP_APPFONT ( 1 , 88 ) ;
+    };
+    FixedLine GB_DISPLAY
+    {
+        Pos = MAP_APPFONT ( 133 , 3 ) ;
+        Size = MAP_APPFONT ( 121 , 8 ) ;
+        Text [ en-US ] = "Display" ;
+    };
+    CheckBox CB_FORMULA
+    {
+        HelpID = "sc:CheckBox:RID_SCPAGE_CONTENT:CB_FORMULA";
+        Pos = MAP_APPFONT ( 139 , 14 ) ;
+        Size = MAP_APPFONT ( 112 , 10 ) ;
+        Text [ en-US ] = "~Formulas" ;
+    };
+    CheckBox CB_NIL
+    {
+        HelpID = "sc:CheckBox:RID_SCPAGE_CONTENT:CB_NIL";
+        Pos = MAP_APPFONT ( 139 , 27 ) ;
+        Size = MAP_APPFONT ( 112 , 10 ) ;
+        Text [ en-US ] = "Zero val~ues" ;
+    };
+    CheckBox CB_ANNOT
+    {
+        HelpID = "sc:CheckBox:RID_SCPAGE_CONTENT:CB_ANNOT";
+        Pos = MAP_APPFONT ( 139 , 40 ) ;
+        Size = MAP_APPFONT ( 112 , 10 ) ;
+        Text [ en-US ] = "~Comment indicator" ;
+    };
+    CheckBox CB_VALUE
+    {
+        HelpID = "sc:CheckBox:RID_SCPAGE_CONTENT:CB_VALUE";
+        Pos = MAP_APPFONT ( 139 , 53 ) ;
+        Size = MAP_APPFONT ( 112 , 10 ) ;
+        Text [ en-US ] = "Value h~ighlighting" ;
+    };
+    CheckBox CB_ANCHOR
+    {
+        HelpID = "sc:CheckBox:RID_SCPAGE_CONTENT:CB_ANCHOR";
+        Pos = MAP_APPFONT ( 139 , 66 ) ;
+        Size = MAP_APPFONT ( 112 , 10 ) ;
+        Text [ en-US ] = "~Anchor" ;
+    };
+    CheckBox CB_CLIP
+    {
+        HelpID = "sc:CheckBox:RID_SCPAGE_CONTENT:CB_CLIP";
+        Pos = MAP_APPFONT ( 139 , 79 ) ;
+        Size = MAP_APPFONT ( 112 , 10 ) ;
+        Text [ en-US ] = "Te~xt overflow" ;
+    };
+    CheckBox CB_RFIND
+    {
+        HelpID = "sc:CheckBox:RID_SCPAGE_CONTENT:CB_RFIND";
+        Pos = MAP_APPFONT ( 139 , 92 ) ;
+        Size = MAP_APPFONT ( 112 , 10 ) ;
+        Text [ en-US ] = "Show references in color" ;
+    };
+    FixedLine GB_OBJECT
+    {
+        Pos = MAP_APPFONT ( 6 , 100 ) ;
+        Size = MAP_APPFONT ( 121 , 8 ) ;
+        Text [ en-US ] = "Objects" ;
+    };
+    FixedText FT_OBJGRF
+    {
+        Pos = MAP_APPFONT ( 12 , 113 ) ;
+        Size = MAP_APPFONT ( 68 , 8 ) ;
+        Text [ en-US ] = "Ob~jects/Graphics" ;
+    };
+    ListBox LB_OBJGRF
+    {
+        HelpID = "sc:ListBox:RID_SCPAGE_CONTENT:LB_OBJGRF";
+        Pos = MAP_APPFONT ( 84 , 111 ) ;
+        Size = MAP_APPFONT ( 40 , 46 ) ;
+        Border = TRUE ;
+        DropDown = TRUE ;
+        StringList [ en-US ] =
+        {
+            < "Show" ; Default ; > ;
+            < "Hide" ; Default ; > ;
+        };
+    };
+    FixedText FT_DIAGRAM
+    {
+        Pos = MAP_APPFONT ( 12 , 129 ) ;
+        Size = MAP_APPFONT ( 68 , 8 ) ;
+        Text [ en-US ] = "Cha~rts" ;
+    };
+    ListBox LB_DIAGRAM
+    {
+        HelpID = "sc:ListBox:RID_SCPAGE_CONTENT:LB_DIAGRAM";
+        Pos = MAP_APPFONT ( 84 , 127 ) ;
+        Size = MAP_APPFONT ( 40 , 46 ) ;
+        Border = TRUE ;
+        DropDown = TRUE ;
+        StringList [ en-US ] =
+        {
+            < "Show" ; Default ; > ;
+            < "Hide" ; Default ; > ;
+        };
+
+    };
+    FixedText FT_DRAW
+    {
+        Pos = MAP_APPFONT ( 12 , 145 ) ;
+        Size = MAP_APPFONT ( 68 , 8 ) ;
+        Text [ en-US ] = "~Drawing objects" ;
+    };
+    ListBox LB_DRAW
+    {
+        HelpID = "sc:ListBox:RID_SCPAGE_CONTENT:LB_DRAW";
+        Pos = MAP_APPFONT ( 84 , 143 ) ;
+        Size = MAP_APPFONT ( 40 , 46 ) ;
+        Border = TRUE ;
+        DropDown = TRUE ;
+        StringList [ en-US ] =
+        {
+            < "Show" ; Default ; > ;
+            < "Hide" ; Default ; > ;
+        };
+
+    };
+    FixedLine GB_ZOOM
+    {
+        Pos = MAP_APPFONT ( 6 , 160 ) ;
+        Size = MAP_APPFONT ( 121 , 8 ) ;
+        Text [ en-US ] = "Zoom";
+    };
+    CheckBox CB_SYNCZOOM
+    {
+        HelpID = "sc:CheckBox:RID_SCPAGE_CONTENT:CB_SYNCZOOM";
+        Pos = MAP_APPFONT ( 12 , 171 ) ;
+        Size = MAP_APPFONT ( 112 , 10 ) ;
+        Text [ en-US ] = "S~ynchronize sheets" ;
+    };
+    FixedLine FL_SEPARATOR2
+    {
+        Pos = MAP_APPFONT ( 130 , 119 ) ;
+        Size = MAP_APPFONT ( 1 , 62 ) ;
+    };
+    FixedLine GB_WINDOW
+    {
+        Pos = MAP_APPFONT ( 133 , 108 ) ;
+        Size = MAP_APPFONT ( 121 , 8 ) ;
+        Text [ en-US ] = "Window" ;
+    };
+    CheckBox CB_ROWCOLHEADER
+    {
+        HelpID = "sc:CheckBox:RID_SCPAGE_CONTENT:CB_ROWCOLHEADER";
+        Pos = MAP_APPFONT ( 139 , 119 ) ;
+        Size = MAP_APPFONT ( 112 , 10 ) ;
+        Text [ en-US ] = "Colu~mn/row headers" ;
+    };
+    CheckBox CB_HSCROLL
+    {
+        HelpID = "sc:CheckBox:RID_SCPAGE_CONTENT:CB_HSCROLL";
+        Pos = MAP_APPFONT ( 139 , 132 ) ;
+        Size = MAP_APPFONT ( 112 , 10 ) ;
+        Text [ en-US ] = "Hori~zontal scroll bar" ;
+    };
+    CheckBox CB_VSCROLL
+    {
+        HelpID = "sc:CheckBox:RID_SCPAGE_CONTENT:CB_VSCROLL";
+        Pos = MAP_APPFONT ( 139 , 145 ) ;
+        Size = MAP_APPFONT ( 112 , 10 ) ;
+        Text [ en-US ] = "~Vertical scroll bar" ;
+    };
+    CheckBox CB_TBLREG
+    {
+        HelpID = "sc:CheckBox:RID_SCPAGE_CONTENT:CB_TBLREG";
+        Pos = MAP_APPFONT ( 139 , 158 ) ;
+        Size = MAP_APPFONT ( 112 , 10 ) ;
+        Text [ en-US ] = "Sh~eet tabs" ;
+    };
+    CheckBox CB_OUTLINE
+    {
+        HelpID = "sc:CheckBox:RID_SCPAGE_CONTENT:CB_OUTLINE";
+        Pos = MAP_APPFONT ( 139 , 171 ) ;
+        Size = MAP_APPFONT ( 112 , 10 ) ;
+        Text [ en-US ] = "~Outline symbols" ;
+    };
+};
+
+/**************************************************************************/
+/*                                                                        */
+/*                                                                        */
+/*                                                                        */
+/**************************************************************************/
+
+
+TabPage RID_SCPAGE_LAYOUT
+{
+    HelpId = HID_SCPAGE_LAYOUT ;
+    SVLook = TRUE ;
+    Hide = TRUE ;
+    Pos = MAP_APPFONT ( 0 , 0 ) ;
+    Size = MAP_APPFONT ( 260 , 185 ) ;
+    FixedLine GB_UNIT
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 115 , 8 ) ;
+        Text [ en-US ] = "Metrics";
+    };
+    FixedText FT_UNIT
+    {
+        Pos = MAP_APPFONT ( 12 , 16 ) ;
+        Size = MAP_APPFONT ( 60 , 8 ) ;
+        Text [ en-US ] = "Measurement ~unit";
+    };
+    ListBox LB_UNIT
+    {
+        HelpID = "sc:ListBox:RID_SCPAGE_LAYOUT:LB_UNIT";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 72 , 14 ) ;
+        Size = MAP_APPFONT ( 46 , 52 ) ;
+        DropDown = TRUE ;
+    };
+    StringArray ST_UNIT
+    {
+        ItemList [ en-US ] =
+        {
+            < "Millimeter" ; FUNIT_MM ; > ;
+            < "Centimeter" ; FUNIT_CM ; > ;
+            < "Meter" ; FUNIT_M ; > ;
+            < "Kilometer" ; FUNIT_KM ; > ;
+            < "Inch" ; FUNIT_INCH ; > ;
+            < "Foot" ; FUNIT_FOOT ; > ;
+            < "Miles" ; FUNIT_MILE ; > ;
+            < "Pica" ; FUNIT_PICA ; > ;
+            < "Point" ; FUNIT_POINT ; > ;
+        };
+    };
+    FixedText FT_TAB
+    {
+        Pos = MAP_APPFONT ( 12 , 32 ) ;
+        Size = MAP_APPFONT ( 60 , 8 ) ;
+        Text [ en-US ] = "~Tab stops";
+    };
+    MetricField MF_TAB
+    {
+        HelpID = "sc:MetricField:RID_SCPAGE_LAYOUT:MF_TAB";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 72 , 30 ) ;
+        Size = MAP_APPFONT ( 46 , 12 ) ;
+        Left = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        DecimalDigits = 2 ;
+        Unit = FUNIT_CM ;
+        SpinSize = 10 ;
+        Minimum = 50 ;
+        Maximum = 9999 ;
+        First = 50 ;
+        Last = 2000 ;
+    };
+    FixedLine FL_SEPARATOR
+    {
+        Pos = MAP_APPFONT ( 124 , 14 ) ;
+        Size = MAP_APPFONT ( 1 , 49 ) ;
+    };
+    FixedLine GB_LINK
+    {
+        Pos = MAP_APPFONT ( 127 , 3 ) ;
+        Size = MAP_APPFONT ( 127 , 8 ) ;
+        Text [ en-US ] = "Updating";
+    };
+    FixedText FT_UPDATE_LINKS
+    {
+        Pos = MAP_APPFONT ( 133 , 14 ) ;
+        Size = MAP_APPFONT ( 121 , 8 ) ;
+        Text [ en-US ] = "Update links when opening";
+    };
+    RadioButton RB_ALWAYS
+    {
+        HelpID = "sc:RadioButton:RID_SCPAGE_LAYOUT:RB_ALWAYS";
+        Pos = MAP_APPFONT ( 139 , 25 ) ;
+        Size = MAP_APPFONT ( 112 , 10 ) ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "~Always";
+    };
+    RadioButton RB_REQUEST
+    {
+        HelpID = "sc:RadioButton:RID_SCPAGE_LAYOUT:RB_REQUEST";
+        Pos = MAP_APPFONT ( 139 , 39 ) ;
+        Size = MAP_APPFONT ( 112 , 10 ) ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "~On request";
+    };
+    RadioButton RB_NEVER
+    {
+        HelpID = "sc:RadioButton:RID_SCPAGE_LAYOUT:RB_NEVER";
+        Pos = MAP_APPFONT ( 139 , 53 ) ;
+        Size = MAP_APPFONT ( 112 , 10 ) ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "~Never";
+    };
+    FixedLine GB_OPTIONS
+    {
+        Pos = MAP_APPFONT ( 6 , 69 ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
+        Text [ en-US ] = "Input settings";
+    };
+    CheckBox CB_ALIGN
+    {
+        HelpID = "sc:CheckBox:RID_SCPAGE_LAYOUT:CB_ALIGN";
+        Pos = MAP_APPFONT ( 12 , 82 ) ;
+        Size = MAP_APPFONT ( 175 , 10 ) ;
+        Text [ en-US ] = "Press Enter to ~move selection" ;
+    };
+    ListBox LB_ALIGN
+    {
+        HelpID = "sc:ListBox:RID_SCPAGE_LAYOUT:LB_ALIGN";
+        Pos = MAP_APPFONT ( 191 , 80 ) ;
+        Size = MAP_APPFONT ( 60 , 60 ) ;
+        Border = TRUE ;
+        DropDown = TRUE ;
+         // Reihenfolge der Strings wie enum ScDirection
+        StringList [ en-US ] =
+        {
+            < "Down" ; Default ; > ;
+            < "Right" ; Default ; > ;
+            < "Up" ; Default ; > ;
+            < "Left" ; Default ; > ;
+        };
+    };
+    CheckBox CB_EDITMODE
+    {
+        HelpID = "sc:CheckBox:RID_SCPAGE_LAYOUT:CB_EDITMODE";
+        Pos = MAP_APPFONT ( 12 , 96 ) ;
+        Size = MAP_APPFONT ( 239 , 10 ) ;
+        Text [ en-US ] = "Press Enter to switch to ~edit mode" ;
+    };
+    CheckBox CB_FORMAT
+    {
+        HelpID = "sc:CheckBox:RID_SCPAGE_LAYOUT:CB_FORMAT";
+        Pos = MAP_APPFONT ( 12 , 110 ) ;
+        Size = MAP_APPFONT ( 239 , 10 ) ;
+        Text [ en-US ] = "Expand ~formatting" ;
+    };
+    CheckBox CB_EXPREF
+    {
+        HelpID = "sc:CheckBox:RID_SCPAGE_LAYOUT:CB_EXPREF";
+        Pos = MAP_APPFONT ( 12 , 124 ) ;
+        Size = MAP_APPFONT ( 239 , 10 ) ;
+        Text [ en-US ] = "Expand ~references when new columns/rows are inserted" ;
+    };
+    CheckBox CB_MARKHDR
+    {
+        HelpID = "sc:CheckBox:RID_SCPAGE_LAYOUT:CB_MARKHDR";
+        Pos = MAP_APPFONT ( 12 , 138 ) ;
+        Size = MAP_APPFONT ( 239 , 10 ) ;
+        Text [ en-US ] = "Highlight sele~ction in column/row headers" ;
+    };
+    CheckBox CB_TEXTFMT
+    {
+        HelpID = "sc:CheckBox:RID_SCPAGE_LAYOUT:CB_TEXTFMT";
+        Pos = MAP_APPFONT ( 12 , 152 ) ;
+        Size = MAP_APPFONT ( 239 , 10 ) ;
+        Text [ en-US ] = "Use printer metrics for text formatting";
+    };
+    CheckBox CB_REPLWARN
+    {
+        HelpID = "sc:CheckBox:RID_SCPAGE_LAYOUT:CB_REPLWARN";
+        Pos = MAP_APPFONT ( 12 , 166 ) ;
+        Size = MAP_APPFONT ( 239 , 10 ) ;
+        Text [ en-US ] = "Show overwrite ~warning when pasting data";
+    };
+};
+
+/**************************************************************************/
+/*                                                                        */
+/*                                                                        */
+/*                                                                        */
+/**************************************************************************/
+
+TabPage RID_SCPAGE_PRINT
+{
+    HelpId = HID_SCPAGE_PRINT ;
+    SVLook = TRUE ;
+    Hide = TRUE ;
+    Pos = MAP_APPFONT ( 0 , 0 ) ;
+    Size = MAP_APPFONT ( 260 , 185 ) ;
+    FixedLine FL_PAGES
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
+        Text [ en-US ] = "Pages";
+    };
+    CheckBox BTN_SKIPEMPTYPAGES
+    {
+        HelpID = "sc:CheckBox:RID_SCPAGE_PRINT:BTN_SKIPEMPTYPAGES";
+        Pos = MAP_APPFONT ( 12 , 14 ) ;
+        Size = MAP_APPFONT ( 239 , 10 ) ;
+        Text [ en-US ] = "~Suppress output of empty pages";
+    };
+    FixedLine FL_SHEETS
+    {
+        Pos = MAP_APPFONT ( 6 , 30 ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
+        Text [ en-US ] = "Sheets";
+    };
+    CheckBox BTN_SELECTEDSHEETS
+    {
+        HelpID = "sc:CheckBox:RID_SCPAGE_PRINT:BTN_SELECTEDSHEETS";
+        Pos = MAP_APPFONT ( 12 , 41 ) ;
+        Size = MAP_APPFONT ( 239 , 10 ) ;
+        Text [ en-US ] = "~Print only selected sheets";
+    };
+};
+
+TabPage RID_SCPAGE_DEFAULTS
+{
+    HelpId = HID_SCPAGE_DEFAULTS ;
+    SVLook = TRUE ;
+    Hide = TRUE ;
+    Pos = MAP_APPFONT ( 0 , 0 ) ;
+    Size = MAP_APPFONT ( 260 , 185 ) ;
+    FixedLine FL_INIT_SPREADSHEET
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
+        Text [ en-US ] = "New Spreadsheet";
+    };
+    FixedText FT_NSHEETS
+    {
+        Pos = MAP_APPFONT ( 12 , 16 ) ;
+        Size = MAP_APPFONT ( 120 , 8 ) ;
+        Text [ en-US ] = "Number of worksheets in new document";
+    };
+    NumericField ED_NSHEETS
+    {
+        HelpID = "sc:NumericField:RID_SCPAGE_CALC:ED_NSHEETS";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 150 , 14 ) ;
+        Size = MAP_APPFONT ( 25 , 12 ) ;
+        Minimum = 1 ;
+        Maximum = 32000 ;
+        Spin = TRUE ;
+        Repeat = TRUE ;
+    };
+};

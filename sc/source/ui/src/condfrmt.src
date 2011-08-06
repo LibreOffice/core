@@ -1,0 +1,442 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#include "condfrmt.hrc"
+
+ModelessDialog RID_SCDLG_CONDFORMAT
+{
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 326 , 161 ) ;
+    Moveable = TRUE ;
+    Closeable = TRUE ;
+    HelpId = HID_SCDLG_CONDFORMAT ;
+    Hide = TRUE ;
+    CheckBox CBX_COND1
+    {
+        HelpID = "sc:CheckBox:RID_SCDLG_CONDFORMAT:CBX_COND1";
+        Pos = MAP_APPFONT ( 6 , 6 ) ;
+        Size = MAP_APPFONT ( 248 , 10 ) ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "Condition ~1" ;
+    };
+    ListBox LB_COND1_1
+    {
+        HelpID = "sc:ListBox:RID_SCDLG_CONDFORMAT:LB_COND1_1";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 6 , 19 ) ;
+        Size = MAP_APPFONT ( 48 , 40 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+        StringList [ en-US ] =
+        {
+            < "Cell value is" ; Default ; > ;
+            < "Formula is" ; Default ; > ;
+        };
+    };
+    ListBox LB_COND1_2
+    {
+        HelpID = "sc:ListBox:RID_SCDLG_CONDFORMAT:LB_COND1_2";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 58 , 19 ) ;
+        Size = MAP_APPFONT ( 62 , 88 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+        StringList [ en-US ] =
+        {
+            < "equal to" ; Default ; > ;
+            < "less than" ; Default ; > ;
+            < "greater than" ; Default ; > ;
+            < "less than or equal to" ; Default ; > ;
+            < "greater than or equal to" ; Default ; > ;
+            < "not equal to" ; Default ; > ;
+            < "between" ; Default ; > ;
+            < "not between" ; Default ; > ;
+            < "duplicated values" ; Default ; > ;
+            < "non duplicated values" ; Default ; > ;
+        };
+    };
+    Edit EDT_COND1_1
+    {
+        HelpID = "sc:Edit:RID_SCDLG_CONDFORMAT:EDT_COND1_1";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 124 , 19 ) ;
+        Size = MAP_APPFONT ( 41 , 12 ) ;
+        TabStop = TRUE ;
+    };
+    ImageButton RB_COND1_1
+    {
+        HelpID = "sc:ImageButton:RID_SCDLG_CONDFORMAT:RB_COND1_1";
+        Pos = MAP_APPFONT ( 167 , 18 ) ;
+        Size = MAP_APPFONT ( 13 , 15 ) ;
+        TabStop = FALSE ;
+        QuickHelpText [ en-US ] = "Shrink" ;
+    };
+    FixedText FT_COND1_AND
+    {
+        Pos = MAP_APPFONT ( 181 , 21 ) ;
+        Size = MAP_APPFONT ( 16 , 8 ) ;
+        Center = TRUE ;
+        Text [ en-US ] = "and" ;
+    };
+    Edit EDT_COND1_2
+    {
+        HelpID = "sc:Edit:RID_SCDLG_CONDFORMAT:EDT_COND1_2";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 199 , 19 ) ;
+        Size = MAP_APPFONT ( 41 , 12 ) ;
+        TabStop = TRUE ;
+    };
+    ImageButton RB_COND1_2
+    {
+        HelpID = "sc:ImageButton:RID_SCDLG_CONDFORMAT:RB_COND1_2";
+        Pos = MAP_APPFONT ( 242 , 18 ) ;
+        Size = MAP_APPFONT ( 13 , 15 ) ;
+        TabStop = FALSE ;
+        QuickHelpText [ en-US ] = "Shrink" ;
+    };
+    FixedText FT_COND1_TEMPLATE
+    {
+        Pos = MAP_APPFONT ( 6 , 37 ) ;
+        Size = MAP_APPFONT ( 46 , 8 ) ;
+        Right = TRUE ;
+        Text [ en-US ] = "~Cell Style" ;
+    };
+    ListBox LB_COND1_TEMPLATE
+    {
+        HelpID = "sc:ListBox:RID_SCDLG_CONDFORMAT:LB_COND1_TEMPLATE";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 58 , 35 ) ;
+        Size = MAP_APPFONT ( 62 , 80 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+        Sort = TRUE ;
+    };
+    Window WIN_CHAR_PREVIEW_COND1
+    {
+        Border = FALSE ;
+        Pos = MAP_APPFONT ( 124 , 34 ) ;
+        Size = MAP_APPFONT ( 41 , 14 ) ;
+        Text [ en-US ] = "Example";
+    };
+    PushButton BTN_COND1_NEW
+    {
+        HelpID = "sc:PushButton:RID_SCDLG_CONDFORMAT:BTN_COND1_NEW";
+        Pos = MAP_APPFONT ( 169 , 34 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "~New Style..." ;
+    };
+    FixedLine FL_SEP1
+    {
+        Pos = MAP_APPFONT ( 6 , 51 ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
+    };
+    CheckBox CBX_COND2
+    {
+        HelpID = "sc:CheckBox:RID_SCDLG_CONDFORMAT:CBX_COND2";
+        Pos = MAP_APPFONT ( 6 , 60 ) ;
+        Size = MAP_APPFONT ( 248 , 10 ) ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "Condition ~2" ;
+    };
+    ListBox LB_COND2_1
+    {
+        HelpID = "sc:ListBox:RID_SCDLG_CONDFORMAT:LB_COND2_1";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 6 , 73 ) ;
+        Size = MAP_APPFONT ( 48 , 40 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+        StringList [ en-US ] =
+        {
+            < "Cell value is" ; Default ; > ;
+            < "Formula is" ; Default ; > ;
+        };
+    };
+    ListBox LB_COND2_2
+    {
+        HelpID = "sc:ListBox:RID_SCDLG_CONDFORMAT:LB_COND2_2";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 58 , 73 ) ;
+        Size = MAP_APPFONT ( 62 , 88 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+        StringList [ en-US ] =
+        {
+            < "equal to" ; Default ; > ;
+            < "less than" ; Default ; > ;
+            < "greater than" ; Default ; > ;
+            < "less than or equal to" ; Default ; > ;
+            < "greater than or equal to" ; Default ; > ;
+            < "not equal to" ; Default ; > ;
+            < "between" ; Default ; > ;
+            < "not between" ; Default ; > ;
+            < "duplicated values" ; Default ; > ;
+            < "non duplicated values" ; Default ; > ;
+        };
+    };
+    Edit EDT_COND2_1
+    {
+        HelpID = "sc:Edit:RID_SCDLG_CONDFORMAT:EDT_COND2_1";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 124 , 73 ) ;
+        Size = MAP_APPFONT ( 41 , 12 ) ;
+        TabStop = TRUE ;
+    };
+    ImageButton RB_COND2_1
+    {
+        HelpID = "sc:ImageButton:RID_SCDLG_CONDFORMAT:RB_COND2_1";
+        Pos = MAP_APPFONT ( 167 , 72 ) ;
+        Size = MAP_APPFONT ( 13 , 15 ) ;
+        TabStop = FALSE ;
+        QuickHelpText [ en-US ] = "Shrink" ;
+    };
+    FixedText FT_COND2_AND
+    {
+        Pos = MAP_APPFONT ( 181 , 75 ) ;
+        Size = MAP_APPFONT ( 16 , 8 ) ;
+        Center = TRUE ;
+        Text [ en-US ] = "and" ;
+    };
+    Edit EDT_COND2_2
+    {
+        HelpID = "sc:Edit:RID_SCDLG_CONDFORMAT:EDT_COND2_2";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 199 , 73 ) ;
+        Size = MAP_APPFONT ( 41 , 12 ) ;
+        TabStop = TRUE ;
+    };
+    ImageButton RB_COND2_2
+    {
+        HelpID = "sc:ImageButton:RID_SCDLG_CONDFORMAT:RB_COND2_2";
+        Pos = MAP_APPFONT ( 242 , 72 ) ;
+        Size = MAP_APPFONT ( 13 , 15 ) ;
+        TabStop = FALSE ;
+        QuickHelpText [ en-US ] = "Shrink" ;
+    };
+    FixedText FT_COND2_TEMPLATE
+    {
+        Pos = MAP_APPFONT ( 6 , 91 ) ;
+        Size = MAP_APPFONT ( 46 , 8 ) ;
+        Right = TRUE ;
+        Text [ en-US ] = "C~ell Style" ;
+    };
+    ListBox LB_COND2_TEMPLATE
+    {
+        HelpID = "sc:ListBox:RID_SCDLG_CONDFORMAT:LB_COND2_TEMPLATE";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 58 , 89 ) ;
+        Size = MAP_APPFONT ( 62 , 80 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+        Sort = TRUE ;
+    };
+    Window WIN_CHAR_PREVIEW_COND2
+    {
+        Border = FALSE ;
+        Pos = MAP_APPFONT ( 124 , 88 ) ;
+        Size = MAP_APPFONT ( 41 , 14 ) ;
+        Text [ en-US ] = "Example";
+    };
+    PushButton BTN_COND2_NEW
+    {
+        HelpID = "sc:PushButton:RID_SCDLG_CONDFORMAT:BTN_COND2_NEW";
+        Pos = MAP_APPFONT ( 169 , 88 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "Ne~w Style..." ;
+    };
+    FixedLine FL_SEP2
+    {
+        Pos = MAP_APPFONT ( 6 , 105 ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
+    };
+    CheckBox CBX_COND3
+    {
+        HelpID = "sc:CheckBox:RID_SCDLG_CONDFORMAT:CBX_COND3";
+        Pos = MAP_APPFONT ( 6 , 114 ) ;
+        Size = MAP_APPFONT ( 248 , 10 ) ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "Condition ~3" ;
+    };
+    ListBox LB_COND3_1
+    {
+        HelpID = "sc:ListBox:RID_SCDLG_CONDFORMAT:LB_COND3_1";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 6 , 127 ) ;
+        Size = MAP_APPFONT ( 48 , 40 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+        StringList [ en-US ] =
+        {
+            < "Cell value is" ; Default ; > ;
+            < "Formula is" ; Default ; > ;
+        };
+    };
+    ListBox LB_COND3_2
+    {
+        HelpID = "sc:ListBox:RID_SCDLG_CONDFORMAT:LB_COND3_2";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 58 , 127 ) ;
+        Size = MAP_APPFONT ( 62 , 88 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+        StringList [ en-US ] =
+        {
+            < "equal to" ; Default ; > ;
+            < "less than" ; Default ; > ;
+            < "greater than" ; Default ; > ;
+            < "less than or equal to" ; Default ; > ;
+            < "greater than or equal to" ; Default ; > ;
+            < "not equal to" ; Default ; > ;
+            < "between" ; Default ; > ;
+            < "not between" ; Default ; > ;
+            < "duplicated values" ; Default ; > ;
+            < "non duplicated values" ; Default ; > ;
+        };
+    };
+    Edit EDT_COND3_1
+    {
+        HelpID = "sc:Edit:RID_SCDLG_CONDFORMAT:EDT_COND3_1";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 124 , 127 ) ;
+        Size = MAP_APPFONT ( 41 , 12 ) ;
+        TabStop = TRUE ;
+    };
+    ImageButton RB_COND3_1
+    {
+        HelpID = "sc:ImageButton:RID_SCDLG_CONDFORMAT:RB_COND3_1";
+        Pos = MAP_APPFONT ( 167 , 126 ) ;
+        Size = MAP_APPFONT ( 13 , 15 ) ;
+        TabStop = FALSE ;
+        QuickHelpText [ en-US ] = "Shrink" ;
+    };
+    FixedText FT_COND3_AND
+    {
+        Pos = MAP_APPFONT ( 181 , 129 ) ;
+        Size = MAP_APPFONT ( 16 , 8 ) ;
+        Center = TRUE ;
+        Text [ en-US ] = "and" ;
+    };
+    Edit EDT_COND3_2
+    {
+        HelpID = "sc:Edit:RID_SCDLG_CONDFORMAT:EDT_COND3_2";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 199 , 127 ) ;
+        Size = MAP_APPFONT ( 41 , 12 ) ;
+        TabStop = TRUE ;
+    };
+    ImageButton RB_COND3_2
+    {
+        HelpID = "sc:ImageButton:RID_SCDLG_CONDFORMAT:RB_COND3_2";
+        Pos = MAP_APPFONT ( 242 , 126 ) ;
+        Size = MAP_APPFONT ( 13 , 15 ) ;
+        TabStop = FALSE ;
+        QuickHelpText [ en-US ] = "Shrink" ;
+    };
+    FixedText FT_COND3_TEMPLATE
+    {
+        Pos = MAP_APPFONT ( 6 , 145 ) ;
+        Size = MAP_APPFONT ( 46 , 8 ) ;
+        Right = TRUE ;
+        Text [ en-US ] = "Ce~ll Style" ;
+    };
+    ListBox LB_COND3_TEMPLATE
+    {
+        HelpID = "sc:ListBox:RID_SCDLG_CONDFORMAT:LB_COND3_TEMPLATE";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 58 , 143 ) ;
+        Size = MAP_APPFONT ( 62 , 80 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+        Sort = TRUE ;
+    };
+    Window WIN_CHAR_PREVIEW_COND3
+    {
+        Border = FALSE ;
+        Pos = MAP_APPFONT ( 124 , 142 ) ;
+        Size = MAP_APPFONT ( 41 , 14 ) ;
+        Text [ en-US ] = "Example";
+    };
+    PushButton BTN_COND3_NEW
+    {
+        HelpID = "sc:PushButton:RID_SCDLG_CONDFORMAT:BTN_COND3_NEW";
+        Pos = MAP_APPFONT ( 169 , 142 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "New ~Style..." ;
+    };
+    ScrollBar LB_SCROLL
+    {
+        Pos = MAP_APPFONT ( 260, 6 ) ;
+        Size = MAP_APPFONT ( 8 , 150 ) ;
+        TabStop = TRUE ;
+        VScroll = TRUE ;
+    };
+    OKButton BTN_OK
+    {
+        Pos = MAP_APPFONT ( 270 , 6 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        DefButton = TRUE ;
+    };
+    CancelButton BTN_CANCEL
+    {
+        Pos = MAP_APPFONT ( 270 , 23 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    HelpButton BTN_HELP
+    {
+        Pos = MAP_APPFONT ( 270 , 40 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    PushButton BTN_ADD
+    {
+        Pos = MAP_APPFONT ( 270 , 74 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "~Add" ;
+    };
+    Text [ en-US ] = "Conditional Formatting" ;
+};
+
+String LABEL_FORMARTTING_CONDITIONS
+{
+    Text [ en-US ] = "Formatting Conditions" ;
+};
+String LABEL_CONDITIONS
+{
+    Text [ en-US ] = "Conditions" ;
+};
+String LABEL_CONDITION_VALUE
+{
+    Text [ en-US ] = "Condition Value" ;
+};
+

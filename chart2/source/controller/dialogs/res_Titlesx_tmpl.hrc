@@ -1,0 +1,149 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef _CHART2_RES_TITLES_SRC
+#define _CHART2_RES_TITLES_SRC
+
+#include "res_Titles.hrc"
+#include "HelpIds.hrc"
+
+#define TITLES_HEIGHT 12
+#define indentLabel 3
+#define fixedLinesHeight RSC_CD_FIXEDLINE_HEIGHT
+
+#define TITLES( xpos, ypos, availableWidth, indentLabel, fixedLinesHeight ) \
+Edit ED_MAINTITLE \
+{ \
+    HelpID = HID_SCH_TITLE_MAIN; \
+    Border = TRUE ; \
+    Pos = MAP_APPFONT ( xpos+indentLabel+(availableWidth-2*indentLabel-4)/2+4 , ypos  ) ; \
+    Size = MAP_APPFONT ( (availableWidth-2*indentLabel-4)/2 , TITLES_HEIGHT ) ; \
+    TabStop = TRUE ; \
+}; \
+Edit ED_SUBTITLE \
+{ \
+    HelpID = HID_SCH_TITLE_SUB; \
+    Border = TRUE ; \
+    Pos = MAP_APPFONT ( xpos+indentLabel+(availableWidth-2*indentLabel-4)/2+4 , ypos+TITLES_HEIGHT+4 ) ; \
+    Size = MAP_APPFONT ( (availableWidth-2*indentLabel-4)/2 , TITLES_HEIGHT ) ; \
+    TabStop = TRUE ; \
+}; \
+Edit ED_X_AXIS \
+{ \
+    HelpID = HID_SCH_TITLE_X; \
+    Border = TRUE ; \
+    Pos = MAP_APPFONT ( xpos+indentLabel+(availableWidth-2*indentLabel-4)/2+4 , ypos+2*(TITLES_HEIGHT+4)+4+(fixedLinesHeight+3)  ) ; \
+    Size = MAP_APPFONT ( (availableWidth-2*indentLabel-4)/2 , TITLES_HEIGHT ) ; \
+    TabStop = TRUE ; \
+}; \
+Edit ED_Y_AXIS \
+{ \
+    HelpID = HID_SCH_TITLE_Y; \
+    Border = TRUE ; \
+    Pos = MAP_APPFONT ( xpos+indentLabel+(availableWidth-2*indentLabel-4)/2+4 , ypos+3*(TITLES_HEIGHT+4)+4+(fixedLinesHeight+3)  ) ; \
+    Size = MAP_APPFONT ( (availableWidth-2*indentLabel-4)/2 , TITLES_HEIGHT ) ; \
+    TabStop = TRUE ; \
+}; \
+Edit ED_Z_AXIS \
+{ \
+    HelpID = HID_SCH_TITLE_Z; \
+    Border = TRUE ; \
+    Pos = MAP_APPFONT ( xpos+indentLabel+(availableWidth-2*indentLabel-4)/2+4 , ypos+4*(TITLES_HEIGHT+4)+4+(fixedLinesHeight+3)  ) ; \
+    Size = MAP_APPFONT ( (availableWidth-2*indentLabel-4)/2 , TITLES_HEIGHT ) ; \
+    TabStop = TRUE ; \
+}; \
+Edit ED_SECONDARY_X_AXIS \
+{ \
+    HelpID = HID_SCH_TITLE_SECONDARY_X; \
+    Border = TRUE ; \
+    Pos = MAP_APPFONT ( xpos+indentLabel+(availableWidth-2*indentLabel-4)/2+4 , ypos+5*(TITLES_HEIGHT+4)+8+2*(fixedLinesHeight+3)  ) ; \
+    Size = MAP_APPFONT ( (availableWidth-2*indentLabel-4)/2 , TITLES_HEIGHT ) ; \
+    TabStop = TRUE ; \
+}; \
+Edit ED_SECONDARY_Y_AXIS \
+{ \
+    HelpID = HID_SCH_TITLE_SECONDARY_Y; \
+    Border = TRUE ; \
+    Pos = MAP_APPFONT ( xpos+indentLabel+(availableWidth-2*indentLabel-4)/2+4 , ypos+6*(TITLES_HEIGHT+4)+8+2*(fixedLinesHeight+3)  ) ; \
+    Size = MAP_APPFONT ( (availableWidth-2*indentLabel-4)/2 , TITLES_HEIGHT ) ; \
+    TabStop = TRUE ; \
+}; \
+FixedText FT_MAINTITLE \
+{ \
+    Pos = MAP_APPFONT ( xpos+indentLabel , ypos+2  ) ; \
+    Size = MAP_APPFONT ( (availableWidth-2*indentLabel-4)/2 , TITLES_HEIGHT ) ; \
+    Text [ en-US ] = "~Title" ; \
+}; \
+FixedText FT_SUBTITLE \
+{ \
+    Pos = MAP_APPFONT ( xpos+indentLabel , ypos+2+TITLES_HEIGHT+4  ) ; \
+    Size = MAP_APPFONT ( (availableWidth-2*indentLabel-4)/2 , TITLES_HEIGHT ) ; \
+    Text [ en-US ] = "~Subtitle" ; \
+}; \
+FixedLine FL_AXES \
+{ \
+    Pos = MAP_APPFONT( xpos ,ypos+2+2*(TITLES_HEIGHT+4)+0  ); \
+    Size = MAP_APPFONT( availableWidth ,fixedLinesHeight ); \
+    Text[ en-US ] = "Axes"; \
+}; \
+FixedText FT_TITLE_X_AXIS \
+{ \
+    Pos = MAP_APPFONT ( xpos+indentLabel , ypos+2+2*(TITLES_HEIGHT+4)+4+(fixedLinesHeight+3)  ) ; \
+    Size = MAP_APPFONT ( (availableWidth-2*indentLabel-4)/2 , TITLES_HEIGHT ) ; \
+    Text [ en-US ] = "~X axis" ; \
+}; \
+FixedText FT_TITLE_Y_AXIS \
+{ \
+    Pos = MAP_APPFONT ( xpos+indentLabel , ypos+2+3*(TITLES_HEIGHT+4)+4+(fixedLinesHeight+3)  ) ; \
+    Size = MAP_APPFONT ( (availableWidth-2*indentLabel-4)/2 , TITLES_HEIGHT ) ; \
+    Text [ en-US ] = "~Y axis" ; \
+}; \
+FixedText FT_TITLE_Z_AXIS \
+{ \
+    Pos = MAP_APPFONT ( xpos+indentLabel , ypos+2+4*(TITLES_HEIGHT+4)+4+(fixedLinesHeight+3)  ) ; \
+    Size = MAP_APPFONT ( (availableWidth-2*indentLabel-4)/2 , TITLES_HEIGHT ) ; \
+    Text [ en-US ] = "~Z axis" ; \
+}; \
+FixedLine FL_SECONDARY_AXES \
+{ \
+    Pos = MAP_APPFONT( xpos ,ypos+2+5*(TITLES_HEIGHT+4)+3+(fixedLinesHeight+3)  ); \
+    Size = MAP_APPFONT( availableWidth ,fixedLinesHeight ); \
+    Text[ en-US ] = "Secondary Axes"; \
+}; \
+FixedText FT_TITLE_SECONDARY_X_AXIS \
+{ \
+    Pos = MAP_APPFONT ( xpos+indentLabel , ypos+2+5*(TITLES_HEIGHT+4)+8+2*(fixedLinesHeight+3)  ) ; \
+    Size = MAP_APPFONT ( (availableWidth-2*indentLabel-4)/2 , TITLES_HEIGHT ) ; \
+    Text [ en-US ] = "X ~axis" ; \
+}; \
+FixedText FT_TITLE_SECONDARY_Y_AXIS \
+{ \
+    Pos = MAP_APPFONT ( xpos+indentLabel , ypos+2+6*(TITLES_HEIGHT+4)+8+2*(fixedLinesHeight+3)  ) ; \
+    Size = MAP_APPFONT ( (availableWidth-2*indentLabel-4)/2 , TITLES_HEIGHT ) ; \
+    Text [ en-US ] = "Y ax~is" ; \
+};
+
+#endif

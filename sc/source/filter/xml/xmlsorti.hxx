@@ -1,0 +1,109 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef SC_XMLSORTI_HXX
+#define SC_XMLSORTI_HXX
+
+#include <xmloff/xmlictxt.hxx>
+#include <xmloff/xmlimp.hxx>
+#include <com/sun/star/util/SortField.hpp>
+#include <com/sun/star/table/CellAddress.hpp>
+
+#include "xmldrani.hxx"
+
+class ScXMLImport;
+
+class ScXMLSortContext : public SvXMLImportContext
+{
+    ScXMLDatabaseRangeContext* pDatabaseRangeContext;
+
+    com::sun::star::uno::Sequence <com::sun::star::util::SortField> aSortFields;
+    com::sun::star::table::CellAddress aOutputPosition;
+    rtl::OUString   sCountry;
+    rtl::OUString   sLanguage;
+    rtl::OUString   sAlgorithm;
+    sal_Int16   nUserListIndex;
+    sal_Bool    bCopyOutputData;
+    sal_Bool    bBindFormatsToContent;
+    sal_Bool    bIsCaseSensitive;
+    sal_Bool    bEnabledUserList;
+
+    const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
+    ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
+
+public:
+
+    ScXMLSortContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
+                        const ::rtl::OUString& rLName,
+                        const ::com::sun::star::uno::Reference<
+                                        ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
+                                        ScXMLDatabaseRangeContext* pTempDatabaseRangeContext);
+
+    virtual ~ScXMLSortContext();
+
+    virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
+                                     const ::rtl::OUString& rLocalName,
+                                     const ::com::sun::star::uno::Reference<
+                                          ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
+
+    virtual void EndElement();
+
+    void AddSortField(const rtl::OUString& sFieldNumber, const rtl::OUString& sDataType, const rtl::OUString& sOrder);
+};
+
+class ScXMLSortByContext : public SvXMLImportContext
+{
+    ScXMLSortContext* pSortContext;
+
+    rtl::OUString   sFieldNumber;
+    rtl::OUString   sDataType;
+    rtl::OUString   sOrder;
+
+    const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
+    ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
+
+public:
+
+    ScXMLSortByContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
+                        const ::rtl::OUString& rLName,
+                        const ::com::sun::star::uno::Reference<
+                                        ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
+                                        ScXMLSortContext* pTempSortContext);
+
+    virtual ~ScXMLSortByContext();
+
+    virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
+                                     const ::rtl::OUString& rLocalName,
+                                     const ::com::sun::star::uno::Reference<
+                                          ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
+
+    virtual void EndElement();
+};
+
+#endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

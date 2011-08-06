@@ -1,0 +1,200 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#include "sc.hrc"
+
+
+
+#define PART1 \
+    MenuItem\
+    {\
+        Identifier = FID_CELL_FORMAT ; \
+        HelpId = CMD_FID_CELL_FORMAT ; \
+        Text [ en-US ] = "~Format Cells..." ; \
+    };
+
+
+#define PART2 \
+    MenuItem\
+    {\
+        Identifier = SID_CUT ; \
+        HelpId = CMD_SID_CUT ; \
+        Text [ en-US ] = "Cu~t" ; \
+    };\
+    MenuItem\
+    {\
+        Identifier = SID_COPY ; \
+        HelpId = CMD_SID_COPY ; \
+        Text [ en-US ] = "~Copy" ; \
+    };\
+    MenuItem\
+    {\
+        Identifier = SID_PASTE ; \
+        HelpId = CMD_SID_PASTE ; \
+        Text [ en-US ] = "~Paste" ; \
+    };
+
+ //-------------------------------------------------------------------------------
+
+Menu RID_POPUP_ROWHEADER
+{
+    ItemList =
+    {
+        PART1
+         //------------------------------
+        MenuItem { Separator = TRUE ; };
+         //------------------------------
+        MenuItem
+        {
+            Identifier = FID_ROW_HEIGHT ;
+            HelpId = CMD_FID_ROW_HEIGHT ;
+            Text [ en-US ] = "Row Hei~ght..." ;
+        };
+        MenuItem
+        {
+            Identifier = FID_ROW_OPT_HEIGHT ;
+            HelpId = CMD_FID_ROW_OPT_HEIGHT ;
+            Text [ en-US ] = "Optimal ~Row Height..." ;
+        };
+         //------------------------------
+        MenuItem { Separator = TRUE ; };
+         //------------------------------
+        MenuItem
+        {
+            Identifier = FID_INS_ROW ;
+            HelpId = CMD_FID_INS_ROW ;
+            Text [ en-US ] = "~Insert Rows" ;
+        };
+        MenuItem
+        {
+            Identifier = SID_DEL_ROWS ;
+            HelpId = CMD_SID_DEL_ROWS ;
+            Text [ en-US ] = "~Delete Rows" ;
+        };
+        MenuItem
+        {
+            Identifier = SID_DELETE ;
+            HelpId = CMD_SID_DELETE ;
+            Text [ en-US ] = "De~lete Contents..." ;
+        };
+         //------------------------------
+        MenuItem { Separator = TRUE ; };
+         //------------------------------
+        MenuItem
+        {
+            Identifier = FID_ROW_HIDE ;
+            HelpId = CMD_FID_ROW_HIDE ;
+            Text [ en-US ] = "~Hide" ;
+        };
+        MenuItem
+        {
+            Identifier = FID_ROW_SHOW ;
+            HelpId = CMD_FID_ROW_SHOW ;
+            Text [ en-US ] = "~Show" ;
+        };
+         //------------------------------
+        MenuItem { Separator = TRUE ; };
+         //------------------------------
+        PART2
+        MenuItem
+        {
+            Identifier = SID_PASTE_SPECIAL ;
+            HelpId = CMD_SID_PASTE_SPECIAL ;
+            Text [ en-US ] = "P~aste Special..." ;
+        };
+    };
+};
+
+ //-------------------------------------------------------------------
+
+Menu RID_POPUP_COLHEADER
+{
+    ItemList =
+    {
+        PART1
+         //------------------------------
+        MenuItem { Separator = TRUE ; };
+         //------------------------------
+        MenuItem
+        {
+            Identifier = FID_COL_WIDTH ;
+            HelpId = CMD_FID_COL_WIDTH ;
+            Text [ en-US ] = "Col~umn Width..." ;
+        };
+        MenuItem
+        {
+            Identifier = FID_COL_OPT_WIDTH ;
+            HelpId = CMD_FID_COL_OPT_WIDTH ;
+            Text [ en-US ] = "O~ptimal Column Width..." ;
+        };
+         //------------------------------
+        MenuItem { Separator = TRUE ; };
+         //------------------------------
+        MenuItem
+        {
+            Identifier = FID_INS_COLUMN ;
+            HelpId = CMD_FID_INS_COLUMN ;
+            Text [ en-US ] = "~Insert Columns" ;
+        };
+        MenuItem
+        {
+            Identifier = SID_DEL_COLS ;
+            HelpId = CMD_SID_DEL_COLS ;
+            Text [ en-US ] = "~Delete Columns" ;
+        };
+        MenuItem
+        {
+            Identifier = SID_DELETE ;
+            HelpId = CMD_SID_DELETE ;
+            Text [ en-US ] = "D~elete Contents..." ;
+        };
+         //------------------------------
+        MenuItem { Separator = TRUE ; };
+         //------------------------------
+        MenuItem
+        {
+            Identifier = FID_COL_HIDE ;
+            HelpId = CMD_FID_COL_HIDE ;
+            Text [ en-US ] = "~Hide" ;
+        };
+        MenuItem
+        {
+            Identifier = FID_COL_SHOW ;
+            HelpId = CMD_FID_COL_SHOW ;
+            Text [ en-US ] = "~Show" ;
+        };
+         //------------------------------
+        MenuItem { Separator = TRUE ; };
+         //------------------------------
+        PART2
+        MenuItem
+        {
+            Identifier = SID_PASTE_SPECIAL ;
+            HelpId = CMD_SID_PASTE_SPECIAL ;
+            Text [ en-US ] = "Paste ~Special..." ;
+        };
+    };
+};

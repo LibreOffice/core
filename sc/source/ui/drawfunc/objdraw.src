@@ -1,0 +1,685 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#include "sc.hrc"
+#include "submenu.hrc"
+#include <svx/globlmn.hrc>
+ //
+ // Defines -------------------------------------------------------------------------------
+ //
+#define MN_RESET\
+    MenuItem\
+    {\
+        Identifier = SID_TEXT_STANDARD ; \
+        HelpID = CMD_SID_TEXT_STANDARD ; \
+        Text [ en-US ] = "~Default" ; \
+        Text [ x-comment ] = " ";\
+    };
+
+ // Font (SID_ATTR_CHAR_FONT) und Groesse (SID_ATTR_CHAR_FONTHEIGHT) duerfen nicht im
+ // Formatmenue auftauchen, weil die Controller im ExeEnv sonst im Container angelegt werden
+#define MN_TEXT_ATTR\
+    MenuItem\
+    {\
+        Identifier = RID_MN_FORMAT_STYLE ; \
+        HelpID = HID_MN_FORMAT_STYLE ; \
+        Text [ en-US ] = "~Style" ; \
+        SubMenu = Menu\
+        {\
+            ItemList = \
+            {\
+                MenuItem\
+                {\
+                    ITEM_FORMAT_ATTR_CHAR_WEIGHT\
+                };\
+                MenuItem\
+                {\
+                    ITEM_FORMAT_ATTR_CHAR_POSTURE\
+                };\
+                MenuItem\
+                {\
+                    ITEM_FORMAT_ATTR_CHAR_OVERLINE\
+                };\
+                MenuItem\
+                {\
+                    ITEM_FORMAT_ATTR_CHAR_UNDERLINE\
+                };\
+                MenuItem\
+                {\
+                    ITEM_FORMAT_ATTR_CHAR_STRIKEOUT\
+                };\
+                MenuItem\
+                {\
+                    ITEM_FORMAT_ATTR_CHAR_SHADOWED\
+                };\
+                MenuItem\
+                {\
+                    ITEM_FORMAT_ATTR_CHAR_CONTOUR\
+                };\
+                MenuItem\
+                {\
+                    Separator = TRUE ; \
+                };\
+                MenuItem\
+                {\
+                    Identifier = SID_SET_SUPER_SCRIPT ; \
+                    HelpID = CMD_SID_SET_SUPER_SCRIPT ; \
+                    Text [ en-US ] = "~Superscript" ; \
+                    Text [ x-comment ] = " ";\
+                };\
+                MenuItem\
+                {\
+                    Identifier = SID_SET_SUB_SCRIPT ; \
+                    HelpID = CMD_SID_SET_SUB_SCRIPT ; \
+                    Text [ en-US ] = "S~ubscript" ; \
+                    Text [ x-comment ] = " ";\
+                };\
+            };\
+        };\
+        Text [ x-comment ] = " ";\
+    };\
+    MenuItem\
+    {\
+        Identifier = RID_MN_FORMAT_ALGN ; \
+        HelpID = HID_MN_FORMAT_ALGN ; \
+        Text [ en-US ] = "~Alignment" ; \
+        RadioCheck = TRUE ; \
+        SubMenu = Menu\
+        {\
+            ItemList = \
+            {\
+                MenuItem\
+                {\
+                    Identifier = SID_ALIGNLEFT ; \
+                    HelpID = CMD_SID_ATTR_PARA_ADJUST_LEFT ; \
+                    RadioCheck = TRUE ; \
+                    Text [ en-US ] = "~Left" ;\
+                    Text [ x-comment ] = " ";   \
+                };\
+                MenuItem\
+                {\
+                    Identifier = SID_ALIGNRIGHT ; \
+                    HelpID = CMD_SID_ATTR_PARA_ADJUST_RIGHT ; \
+                    RadioCheck = TRUE ; \
+                    Text [ en-US ] = "~Right" ;\
+                };\
+                MenuItem\
+                {\
+                    Identifier = SID_ALIGNCENTERHOR ; \
+                    HelpID = CMD_SID_ATTR_PARA_ADJUST_CENTER ; \
+                    RadioCheck = TRUE ; \
+                    Text [ en-US ] = "~Centered" ;\
+                };\
+                MenuItem\
+                {\
+                    Identifier = SID_ALIGNBLOCK ; \
+                    HelpID = CMD_SID_ATTR_PARA_ADJUST_BLOCK ; \
+                    RadioCheck = TRUE ; \
+                    Text [ en-US ] = "~Justified" ; \
+                    Text [ x-comment ] = " ";\
+                };\
+            };\
+        };\
+        Text [ x-comment ] = " ";\
+    };\
+    MenuItem\
+    {\
+        Identifier = RID_MN_FORMAT_LINESPACE ; \
+        HelpID = HID_MN_FORMAT_LINESPACE ; \
+        Text [ en-US ] = "~Line Spacing" ; \
+        _MenuItemFlags = MIB_RADIOCHECK ; \
+        SubMenu = Menu\
+        {\
+            ItemList = \
+            {\
+                MenuItem\
+                {\
+                    ITEM_FORMAT_PARA_LINESPACE_10\
+                    RadioCheck = TRUE ; \
+                };\
+                MenuItem\
+                {\
+                    ITEM_FORMAT_PARA_LINESPACE_15\
+                    RadioCheck = TRUE ; \
+                };\
+                MenuItem\
+                {\
+                    ITEM_FORMAT_PARA_LINESPACE_20\
+                    RadioCheck = TRUE ; \
+                };\
+            };\
+        };\
+        Text [ x-comment ] = " ";\
+    };
+
+#define MN_DRWTXT \
+    MenuItem\
+    {\
+        ITEM_FORMAT_CHAR_DLG\
+    };\
+    MenuItem\
+    {\
+        ITEM_FORMAT_PARA_DLG\
+    };
+
+#define MN_EDITLNK \
+    MenuItem\
+    {\
+        Identifier = SID_DRAW_HLINK_EDIT ; \
+        Text [ en-US ] = "~Hyperlink..." ; \
+    };
+
+#define MN_DELLNK \
+    MenuItem\
+    {\
+        Identifier = SID_DRAW_HLINK_DELETE ; \
+        Text [ en-US ] = "~Remove Hyperlink" ; \
+    };
+
+#define MN_DRWTXTATTR \
+    MenuItem\
+    {\
+        Identifier = SID_DRAWTEXT_ATTR_DLG ; \
+        HelpID = CMD_SID_DRAWTEXT_ATTR_DLG ; \
+        Text [ en-US ] = "Te~xt..." ; \
+        Text [ x-comment ] = " ";\
+    };
+
+#define MN_ASSIGNMACRO \
+     MenuItem\
+     {\
+         Identifier = SID_ASSIGNMACRO ; \
+         HelpID = CMD_SID_ASSIGNMACRO ; \
+         Text [ en-US ] = "Assig~n Macro..." ; \
+         Text [ x-comment ] = " ";\
+     };
+
+#define MN_ORIGINALSIZE \
+    MenuItem\
+    {\
+        Identifier = SID_ORIGINALSIZE ; \
+        HelpId = CMD_SID_ORIGINALSIZE ; \
+        Text [ en-US ] = "~Original Size" ; \
+        Text [ x-comment ] = " ";\
+    };
+
+#define MN_RENAME_OBJECT \
+    MenuItem\
+    {\
+        Identifier = SID_RENAME_OBJECT ; \
+        HelpId = CMD_SID_RENAME_OBJECT ; \
+        Text [ en-US ] = "Name...";\
+    };
+
+// #i68101#
+#define MN_TITLE_DESCRIPTION_OBJECT \
+    MenuItem\
+    {\
+        Identifier = SID_TITLE_DESCRIPTION_OBJECT; \
+        HelpId = CMD_SID_TITLE_DESCRIPTION_OBJECT; \
+        Text [ en-US ] = "Description...";\
+    };
+
+#define MN_MIRRORSUB \
+    MenuItem\
+    {\
+        Identifier = SUBMENU_OBJMIRROR ; \
+        HelpID = HID_SCMENU_OBJMIRROR ; \
+        Text [ en-US ] = "~Flip" ; \
+        SubMenu = Menu\
+        {\
+            ItemList = \
+            {\
+                MenuItem\
+                {\
+                    Identifier = SID_MIRROR_VERTICAL ; \
+                    HelpId = CMD_SID_MIRROR_VERTICAL ; \
+                    Text [ en-US ] = "~Vertically" ; \
+                    Text [ x-comment ] = " ";\
+                };\
+                MenuItem\
+                {\
+                    Identifier = SID_MIRROR_HORIZONTAL ; \
+                    HelpId = CMD_SID_MIRROR_HORIZONTAL ; \
+                    Text [ en-US ] = "~Horizontal" ; \
+                    Text [ x-comment ] = " ";\
+                };\
+            };\
+        };\
+        Text [ x-comment ] = " ";\
+    };
+
+#define MN_ARRANGESUB \
+    MenuItem\
+    {\
+        Identifier = SUBMENU_OBJARRANGE ; \
+        HelpID = HID_SCMENU_OBJARRANGE ; \
+        Text [ en-US ] = "~Arrange" ; \
+        SubMenu = Menu\
+        {\
+            ItemList = \
+            {\
+                MenuItem\
+                {\
+                    ITEM_FORMAT_FRAME_TO_TOP\
+                };\
+                MenuItem\
+                {\
+                    Identifier = SID_FRAME_UP ; \
+                    HelpId = CMD_SID_FRAME_UP ; \
+                    Text [ en-US ] = "Bring ~Forward" ; \
+                    Text [ x-comment ] = " ";\
+                };\
+                MenuItem\
+                {\
+                    Identifier = SID_FRAME_DOWN ; \
+                    HelpId = CMD_SID_FRAME_DOWN ; \
+                    Text [ en-US ] = "Send Back~ward" ; \
+                    Text [ x-comment ] = " ";\
+                };\
+                MenuItem\
+                {\
+                    ITEM_FORMAT_FRAME_TO_BOTTOM\
+                };\
+                MenuItem { Separator = TRUE ; }; \
+                MenuItem\
+                {\
+                    ITEM_FORMAT_OBJECT_HEAVEN\
+                };\
+                MenuItem\
+                {\
+                    ITEM_FORMAT_OBJECT_HELL\
+                };\
+            };\
+        };\
+        Text [ x-comment ] = " ";\
+    };
+
+#define MN_ANCHORSUB \
+    MenuItem\
+    {\
+        Identifier = SUBMENU_ANCHOR ; \
+        HelpID = HID_SCMENU_ANCHOR ; \
+        Text [ en-US ] = "An~chor" ; \
+        SubMenu = Menu\
+        {\
+            ItemList = \
+            {\
+                MenuItem\
+                {\
+                    RadioCheck = TRUE ; \
+                    Identifier = SID_ANCHOR_PAGE ; \
+                    HelpId = CMD_SID_ANCHOR_PAGE ; \
+                    Text [ en-US ] = "To P~age" ; \
+                    Text [ x-comment ] = " ";\
+                };\
+                MenuItem\
+                {\
+                    RadioCheck = TRUE ; \
+                    Identifier = SID_ANCHOR_CELL ; \
+                    HelpId = CMD_SID_ANCHOR_CELL ; \
+                    Text [ en-US ] = "To ~Cell" ; \
+                    Text [ x-comment ] = " ";\
+                };\
+            };\
+        };\
+        Text [ x-comment ] = " ";\
+    };
+
+#define MN_ALIGNSUB \
+    MenuItem\
+    {\
+        Identifier = SID_OBJECT_ALIGN ; \
+        HelpId = CMD_SID_OBJECT_ALIGN ; \
+        Text [ en-US ] = "A~lignment" ; \
+        SubMenu = Menu\
+        {\
+            ItemList = \
+            {\
+                MenuItem\
+                {\
+                    ITEM_FORMAT_OBJECT_ALIGN_LEFT\
+                };\
+                MenuItem\
+                {\
+                    ITEM_FORMAT_OBJECT_ALIGN_CENTER\
+                };\
+                MenuItem\
+                {\
+                    ITEM_FORMAT_OBJECT_ALIGN_RIGHT\
+                };\
+                MenuItem\
+                {\
+                    Separator = TRUE ; \
+                };\
+                MenuItem\
+                {\
+                    ITEM_FORMAT_OBJECT_ALIGN_UP\
+                };\
+                MenuItem\
+                {\
+                    ITEM_FORMAT_OBJECT_ALIGN_MIDDLE\
+                };\
+                MenuItem\
+                {\
+                    ITEM_FORMAT_OBJECT_ALIGN_DOWN\
+                };\
+            };\
+        };\
+        Text [ x-comment ] = " ";\
+    };
+
+ //
+ // ------------------------------------------------------------------------------
+ //
+ //
+ //     Objekt-Leisten
+ //
+String RID_DRAW_OBJECTBAR
+{
+    Text [ en-US ] = "Drawing Object Bar" ;
+    Text [ x-comment ] = " ";
+};
+ //
+ // Text-Toolbox
+ //
+String RID_TEXT_TOOLBOX
+{
+    Text [ en-US ] = "Text Object Bar" ;
+    Text [ x-comment ] = " ";
+};
+ //
+ // Graphics toolbox
+ //
+String RID_GRAPHIC_OBJECTBAR
+{
+    Text [ en-US ] = "Graphics Object Bar";
+};
+ //
+ // Popup-Menues ---------------------------------------------------------------------
+ //
+String RID_POPUP_DRAW
+{
+    Text [ en-US ] = "Pop-up menu for drawing objects" ;
+    Text [ x-comment ] = " ";
+};
+ //
+ //     Popup-Menue fuer (allgemeine) Zeichenobjekte
+ //
+Menu RID_POPUP_DRAW
+{
+    ItemList =
+    {
+        MenuItem { ITEM_FORMAT_ATTRIBUTES_LINE };
+        MenuItem { ITEM_FORMAT_ATTRIBUTES_AREA };
+        MN_DRWTXTATTR // Text...
+        MenuItem { ITEM_FORMAT_ATTR_TRANSFORM };
+
+        //-#i68101#----------------------
+        MenuItem { Separator = TRUE ; };
+        MN_TITLE_DESCRIPTION_OBJECT
+        MN_RENAME_OBJECT
+        //-#i68101#----------------------
+
+         //------------------------------
+        MenuItem { Separator = TRUE ; };
+         //------------------------------
+        MN_MIRRORSUB
+        MN_ARRANGESUB
+        MN_ALIGNSUB
+        MN_ANCHORSUB
+        MN_ASSIGNMACRO
+         //------------------------------
+        MenuItem { Separator = TRUE ; };
+         //------------------------------
+        MenuItem
+        {
+            ITEM_FORMAT_BEZIER_EDIT
+            RadioCheck = FALSE ;
+            AutoCheck = TRUE ;
+        };
+        MenuItem
+        {
+            ITEM_FORMAT_FONTWORK
+        };
+         //------------------------------
+        MenuItem { Separator = TRUE ; };
+         //------------------------------
+        ITEM_GROUP_MENU
+         //------------------------------
+        MenuItem { Separator = TRUE ; };
+         //------------------------------
+        MN_EDITLNK
+        MN_DELLNK
+        MenuItem { ITEM_OPEN_HYPERLINK };
+    };
+};
+
+ //
+ //     Popup-Menue fuer (Uno-) Controls
+ //
+
+Menu RID_POPUP_CONTROL
+{
+    ItemList =
+    {
+        MenuItem { ITEM_FORMAT_ATTR_TRANSFORM };
+
+        //-#i68101#----------------------
+        MenuItem { Separator = TRUE ; };
+        MN_TITLE_DESCRIPTION_OBJECT
+        MN_RENAME_OBJECT
+        //-#i68101#----------------------
+
+         //------------------------------
+        MenuItem { Separator = TRUE ; };
+         //------------------------------
+        MenuItem { ITEM_FORM_CONTROL_PROPERTIES };
+        MenuItem { ITEM_FORM_PROPERTIES };
+         //------------------------------
+        MenuItem { Separator = TRUE ; };
+         //------------------------------
+        MN_ARRANGESUB
+        MN_ALIGNSUB
+        MN_ANCHORSUB
+         //------------------------------
+        MenuItem { Separator = TRUE ; };
+         //------------------------------
+        ITEM_GROUP_MENU
+    };
+};
+
+ //
+ //     Grafik
+ //
+
+Menu RID_POPUP_GRAPHIC
+{
+    ItemList =
+    {
+        MenuItem { ITEM_FORMAT_ATTRIBUTES_LINE }; // #i25616#
+        MenuItem { ITEM_FORMAT_ATTRIBUTES_AREA }; // #i25616#
+        MN_DRWTXTATTR
+        MenuItem { ITEM_FORMAT_ATTR_TRANSFORM };
+        MN_ORIGINALSIZE
+
+        //-#i68101#----------------------
+        MenuItem { Separator = TRUE ; };
+        MN_TITLE_DESCRIPTION_OBJECT
+        MN_RENAME_OBJECT
+        //-#i68101#----------------------
+
+         //------------------------------
+        MenuItem { Separator = TRUE ; };
+         //------------------------------
+        MN_MIRRORSUB
+        MN_ARRANGESUB
+        MN_ALIGNSUB
+        MN_ANCHORSUB
+        MN_ASSIGNMACRO
+         //------------------------------
+        MenuItem { Separator = TRUE ; };
+         //------------------------------
+        ITEM_GROUP_MENU
+         //------------------------------
+        MenuItem { Separator = TRUE ; };
+         //------------------------------
+        MN_EDITLNK
+        MN_DELLNK
+        MenuItem { ITEM_OPEN_HYPERLINK };
+    };
+};
+
+ //
+ //     Media
+ //
+
+Menu RID_POPUP_MEDIA
+{
+    ItemList =
+    {
+        MenuItem { ITEM_FORMAT_ATTR_TRANSFORM };
+
+        //-#i68101#----------------------
+        MenuItem { Separator = TRUE ; };
+        MN_TITLE_DESCRIPTION_OBJECT
+        MN_RENAME_OBJECT
+        //-#i68101#----------------------
+
+         //------------------------------
+        MenuItem { Separator = TRUE ; };
+         //------------------------------
+        MN_MIRRORSUB
+        MN_ARRANGESUB
+        MN_ALIGNSUB
+        MN_ANCHORSUB
+         //------------------------------
+        MenuItem { Separator = TRUE ; };
+         //------------------------------
+        ITEM_GROUP_MENU
+       };
+};
+
+ //
+ //     Ole-Objekt
+ //
+
+Menu RID_POPUP_OLE
+{
+    ItemList =
+    {
+        MenuItem { ITEM_FORMAT_ATTR_TRANSFORM };
+        MN_ORIGINALSIZE
+
+        //-#i68101#----------------------
+        MenuItem { Separator = TRUE ; };
+        MN_TITLE_DESCRIPTION_OBJECT
+        MN_RENAME_OBJECT
+        //-#i68101#----------------------
+
+         //------------------------------
+        MenuItem { Separator = TRUE ; };
+         //------------------------------
+        MN_ARRANGESUB
+        MN_ALIGNSUB
+        MN_ANCHORSUB
+         //------------------------------
+        MenuItem { Separator = TRUE ; };
+         //------------------------------
+        ITEM_GROUP_MENU
+    };
+};
+
+ //
+ //     Charts
+ //
+
+Menu RID_POPUP_CHART
+{
+    ItemList =
+    {
+        MenuItem { ITEM_FORMAT_ATTR_TRANSFORM };
+        MN_ORIGINALSIZE
+
+        //-#i68101#----------------------
+        MenuItem { Separator = TRUE ; };
+        MN_TITLE_DESCRIPTION_OBJECT
+        MN_RENAME_OBJECT
+        //-#i68101#----------------------
+
+         //------------------------------
+        MenuItem { Separator = TRUE ; };
+         //------------------------------
+        MN_ARRANGESUB
+        MN_ALIGNSUB
+        MN_ANCHORSUB
+         //------------------------------
+        MenuItem { Separator = TRUE ; };
+         //------------------------------
+        ITEM_GROUP_MENU
+    };
+};
+
+ //
+ //  PopUpDraw Text
+ //
+
+String RID_POPUP_DRAWTEXT
+{
+    Text [ en-US ] = "Pop-up menu for text objects" ;
+    Text [ x-comment ] = " ";
+};
+
+Menu RID_POPUP_DRAWTEXT
+{
+    ItemList =
+    {
+        MN_RESET
+        MenuItem { Separator = TRUE ; };
+        MN_DRWTXTATTR
+        MenuItem { Separator = TRUE ; };
+        MenuItem
+        {
+            ITEM_FORMAT_ATTR_CHAR_FONT
+        };
+        MenuItem
+        {
+            ITEM_FORMAT_ATTR_CHAR_FONTHEIGHT
+        };
+         // Stil, Ausrichtung, Zeilenabstand
+        MN_TEXT_ATTR
+        MenuItem { Separator = TRUE ; };
+         // Zeichen, Absatz
+        MN_DRWTXT
+        MenuItem { Separator = TRUE ; };
+        MenuItem
+        {
+            ITEM_OPEN_HYPERLINK
+        };
+    };
+};
+

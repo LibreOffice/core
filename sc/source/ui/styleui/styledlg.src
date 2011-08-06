@@ -1,0 +1,137 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#include "sc.hrc"
+#include "styledlg.hrc" // -> TP_xxx
+
+TabDialog RID_SCDLG_STYLES_PAR
+{
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 289 , 176 ) ;
+    Text [ en-US ] = "Cell Style" ;
+    Moveable = TRUE ;
+    Closeable = FALSE ;
+    TabControl 1
+    {
+        OutputSize = TRUE ;
+        Pos = MAP_APPFONT ( 3 , 3 ) ;
+        Size = MAP_APPFONT ( 260 , 135 ) ;
+        PageList =
+        {
+            PageItem
+            {
+                Identifier = TP_NUMBER ;
+                Text [ en-US ] = "Numbers" ;
+            };
+            PageItem
+            {
+                Identifier = TP_FONT ;
+                Text [ en-US ] = "Font" ;
+            };
+            PageItem
+            {
+                Identifier = TP_FONTEFF ;
+                Text [ en-US ] = "Font Effects";
+            };
+            PageItem
+            {
+                Identifier = TP_ALIGNMENT ;
+                Text [ en-US ] = "Alignment" ;
+            };
+            PageItem
+            {
+                Identifier = TP_ASIAN ;
+                Text [ en-US ] = "Asian Typography";
+            };
+            PageItem
+            {
+                Identifier = TP_BORDER ;
+                Text [ en-US ] = "Borders" ;
+            };
+            PageItem
+            {
+                Identifier = TP_BACKGROUND ;
+                Text [ en-US ] = "Background" ;
+            };
+            PageItem
+            {
+                Identifier = TP_PROTECTION ;
+                Text [ en-US ] = "Cell Protection" ;
+            };
+        };
+    };
+};
+
+TabDialog RID_SCDLG_STYLES_PAGE
+{
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 280 , 165 ) ;
+    Text [ en-US ] = "Page Style" ;
+    Moveable = TRUE ;
+    Closeable = FALSE ;
+    TabControl 1
+    {
+        OutputSize = TRUE ;
+        Pos = MAP_APPFONT ( 3 , 6 ) ;
+        Size = MAP_APPFONT ( 260 , 135 ) ;
+        PageList =
+        {
+            PageItem
+            {
+                Identifier = TP_PAGE_STD ;
+                Text [ en-US ] = "Page" ;
+            };
+            PageItem
+            {
+                Identifier = TP_BORDER ;
+                Text [ en-US ] = "Borders" ;
+            };
+            PageItem
+            {
+                Identifier = TP_BACKGROUND ;
+                Text [ en-US ] = "Background" ;
+            };
+            PageItem
+            {
+                Identifier = TP_PAGE_HEADER ;
+                Text [ en-US ] = "Header" ;
+            };
+            PageItem
+            {
+                Identifier = TP_PAGE_FOOTER ;
+                Text [ en-US ] = "Footer" ;
+            };
+            PageItem
+            {
+                Identifier = TP_TABLE ;
+                Text [ en-US ] = "Sheet" ;
+            };
+        };
+    };
+};

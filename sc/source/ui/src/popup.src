@@ -1,0 +1,543 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#include "sc.hrc" // -> #include <sfx.hrc>
+#include <svx/globlmn.hrc>
+
+
+ // Popup-Menues ----------------------------------------------------------------
+
+String RID_POPUP_CELLS
+{
+    Text [ en-US ] = "Cell pop-up menu" ;
+};
+
+Menu RID_POPUP_CELLS
+{
+    ItemList =
+    {
+        MenuItem
+        {
+            Identifier = SID_CELL_FORMAT_RESET ;
+            HelpId = CMD_SID_CELL_FORMAT_RESET ;
+            Text [ en-US ] = "Clear ~Direct Formatting" ;
+        };
+         //------------------------------
+        MenuItem { Separator = TRUE ; };
+         //------------------------------
+        MenuItem
+        {
+            Identifier = FID_CELL_FORMAT ;
+            HelpId = CMD_FID_CELL_FORMAT ;
+            Text [ en-US ] = "~Format Cells..." ;
+        };
+         //------------------------------
+        MenuItem { Separator = TRUE ; };
+         //------------------------------
+        MenuItem
+        {
+            Identifier = FID_INS_CELL ;
+            HelpId = CMD_FID_INS_CELL ;
+            Text [ en-US ] = "~Insert..." ;
+        };
+        MenuItem
+        {
+            Identifier = FID_DELETE_CELL ;
+            HelpId = CMD_FID_DELETE_CELL ;
+            Text [ en-US ] = "De~lete..." ;
+        };
+        MenuItem
+        {
+            Identifier = SID_DELETE ;
+            HelpId = CMD_SID_DELETE ;
+            Text [ en-US ] = "Delete C~ontents..." ;
+        };
+         //------------------------------
+        MenuItem { Separator = TRUE ; };
+         //------------------------------
+        MenuItem
+        {
+            Identifier = SID_INSERT_POSTIT ;
+            HelpId = CMD_SID_INSERT_POSTIT ;
+            Text [ en-US ] = "Insert Co~mment" ;
+        };
+        MenuItem
+        {
+            Identifier = SID_DELETE_NOTE ;
+            HelpId = CMD_SID_DELETE_NOTE ;
+            Text [ en-US ] = "D~elete Comment" ;
+        };
+        MenuItem
+        {
+            Identifier = FID_NOTE_VISIBLE ;
+            HelpId = CMD_FID_NOTE_VISIBLE ;
+            Text [ en-US ] = "Sho~w Comment" ;
+        };
+         //------------------------------
+        MenuItem { Separator = TRUE ; };
+         //------------------------------
+
+        MenuItem
+        {
+            Identifier = SID_CUT ;
+            HelpId = CMD_SID_CUT ;
+            Text [ en-US ] = "Cu~t" ;
+        };
+        MenuItem
+        {
+            Identifier = SID_COPY ;
+            HelpId = CMD_SID_COPY ;
+            Text [ en-US ] = "~Copy" ;
+        };
+
+        MenuItem
+        {
+            Identifier = SID_PASTE ;
+            HelpID = CMD_SID_PASTE ;
+            Text [ en-US ] = "~Paste" ;
+        };
+
+        MenuItem
+        {
+            Identifier = SID_PASTE_SPECIAL ;
+            HelpId = CMD_SID_PASTE_SPECIAL ;
+            Text [ en-US ] = "P~aste Special..." ;
+        };
+         //------------------------------
+        MenuItem { Separator = TRUE ; };
+         //------------------------------
+        MenuItem
+        {
+            Identifier = SID_DATA_SELECT ;
+            HelpId = CMD_SID_DATA_SELECT ;
+            Text [ en-US ] = "~Selection List..." ;
+        };
+    };
+};
+
+String RID_POPUP_TAB
+{
+    Text [ en-US ] = "Sheet bar pop-up menu" ;
+};
+
+Menu RID_POPUP_TAB
+{
+    ItemList =
+    {
+        MenuItem
+        {
+            Identifier = FID_INS_TABLE ;
+            HelpId = CMD_FID_INS_TABLE ;
+            Text [ en-US ] = "~Insert Sheet..." ;
+        };
+        MenuItem
+        {
+            Identifier = FID_DELETE_TABLE ;
+            HelpId = CMD_FID_DELETE_TABLE ;
+            Text [ en-US ] = "~Delete Sheet..." ;
+        };
+        MenuItem
+        {
+            Identifier = FID_TAB_MENU_RENAME ;
+            HelpId = CMD_FID_TAB_MENU_RENAME ;
+            Text [ en-US ] = "~Rename Sheet..." ;
+        };
+        MenuItem
+        {
+            Identifier = FID_TAB_MOVE ;
+            HelpId = CMD_FID_TAB_MOVE ;
+            Text [ en-US ] = "~Move/Copy Sheet..." ;
+        };
+        MenuItem
+        {
+            Identifier = FID_TAB_SELECTALL ;
+            HelpId = CMD_FID_TAB_SELECTALL ;
+            Text [ en-US ] = "Select All S~heets" ;
+        };
+        MenuItem
+        {
+            Identifier = FID_TAB_DESELECTALL ;
+            HelpId = CMD_FID_TAB_DESELECTALL ;
+            Text [ en-US ] = "D~eselect All Sheets" ;
+        };
+        MenuItem
+        {
+            Identifier = FID_TAB_RTL ;
+            HelpId = CMD_FID_TAB_RTL ;
+            Text [ en-US ] = "S~heet Right-To-Left" ;
+        };
+        MenuItem
+        {
+            Identifier = FID_TAB_EVENTS ;
+            HelpId = CMD_FID_TAB_EVENTS ;
+            Text [ en-US ] = "Sheet E~vents..." ;
+        };
+        //------------------------------
+        MenuItem { Separator = TRUE ; };
+        //------------------------------
+        MenuItem
+        {
+            Identifier = FID_TAB_MENU_SET_TAB_BG_COLOR ;
+            HelpId = CMD_FID_TAB_MENU_SET_TAB_BG_COLOR ;
+            Text [ en-US ] = "~Tab Color..." ;
+        };
+    };
+};
+
+String RID_POPUP_PIVOT
+{
+    Text [ en-US ] = "Pivot table pop-up menu" ;
+};
+
+Menu RID_POPUP_PIVOT
+{
+    ItemList =
+    {
+        MenuItem
+        {
+            Identifier = SID_OPENDLG_PIVOTTABLE ;
+            HelpId = CMD_SID_OPENDLG_PIVOTTABLE ;
+            Text [ en-US ] = "~Edit Layout..." ;
+        };
+        MenuItem
+        {
+            Identifier = SID_PIVOT_RECALC ;
+            HelpId = CMD_SID_PIVOT_RECALC ;
+            Text [ en-US ] = "~Refresh" ;
+        };
+        MenuItem
+        {
+            Identifier = SID_DP_FILTER ;
+            HelpId = CMD_SID_DP_FILTER ;
+            Text [ en-US ] = "~Filter..." ;
+        };
+        MenuItem
+        {
+            Identifier = SID_PIVOT_KILL ;
+            HelpId = CMD_SID_PIVOT_KILL ;
+            Text [ en-US ] = "~Delete" ;
+        };
+    };
+};
+
+String RID_POPUP_PREVIEW
+{
+    Text [ en-US ] = "Page Preview pop-up menu" ;
+};
+
+Menu RID_POPUP_PREVIEW
+{
+    ItemList =
+    {
+        MenuItem
+        {
+            Identifier = SID_PREVIEW_PREVIOUS ;
+            HelpId = CMD_SID_PREVIEW_PREVIOUS ;
+            Text [ en-US ] = "~Previous Page" ;
+        };
+        MenuItem
+        {
+            Identifier = SID_PREVIEW_NEXT ;
+            HelpId = CMD_SID_PREVIEW_NEXT ;
+            Text [ en-US ] = "~Next Page" ;
+        };
+        MenuItem
+        {
+            Identifier = SID_FORMATPAGE ;
+            HelpId = CMD_SID_FORMATPAGE ;
+            Text [ en-US ] = "Pa~ge Layout..." ;
+        };
+        MenuItem
+        {
+            Identifier = SID_CLOSEWIN ;
+            HelpId = CMD_SID_CLOSEWIN ;
+            Text [ en-US ] = "~Close" ;
+        };
+        MenuItem { Separator = TRUE; };
+        MenuItem
+        {
+            Identifier = SID_PREVIEW_CLOSE ;
+            HelpId = CMD_SID_PRINTPREVIEW ;
+            Text [ en-US ] = "Close Pre~view" ;
+        };
+    };
+};
+
+
+String RID_POPUP_EDIT
+{
+    Text [ en-US ] = "Text Input pop-up menu" ;
+};
+
+Menu RID_POPUP_EDIT
+{
+    ItemList =
+    {
+        MenuItem
+        {
+            Identifier = SID_CELL_FORMAT_RESET ;
+            HelpId = CMD_SID_CELL_FORMAT_RESET ;
+            Text [ en-US ] = "~Default" ;
+        };
+         //------------------------------
+        MenuItem { Separator = TRUE ; };
+         //------------------------------
+        MenuItem // Menu-Controller
+         // Menu-Controller
+         // Menu-Controller
+         // Menu-Controller
+        {
+            ITEM_FORMAT_ATTR_CHAR_FONT
+        };
+        MenuItem // Menu-Controller
+         // Menu-Controller
+         // Menu-Controller
+         // Menu-Controller
+        {
+            ITEM_FORMAT_ATTR_CHAR_FONTHEIGHT
+        };
+        MenuItem
+        {
+            Text [ en-US ] = "Style" ;
+            Identifier = RID_MN_FORMAT_STYLE ;
+            HelpID = HID_MN_FORMAT_STYLE ;
+            SubMenu = Menu
+            {
+                ItemList =
+                {
+                    MenuItem
+                    {
+                        ITEM_FORMAT_ATTR_CHAR_WEIGHT
+                    };
+                    MenuItem
+                    {
+                        ITEM_FORMAT_ATTR_CHAR_POSTURE
+                    };
+                    MenuItem
+                    {
+                        ITEM_FORMAT_ATTR_CHAR_OVERLINE
+                    };
+                    MenuItem
+                    {
+                        ITEM_FORMAT_ATTR_CHAR_UNDERLINE
+                    };
+                    MenuItem
+                    {
+                        Identifier = SID_ULINE_VAL_DOUBLE ;
+                        HelpID = CMD_SID_ULINE_VAL_DOUBLE ;
+                        Text [ en-US ] = "Do~uble Underline" ;
+                    };
+                    MenuItem
+                    {
+                        ITEM_FORMAT_ATTR_CHAR_STRIKEOUT
+                    };
+                    MenuItem
+                    {
+                        ITEM_FORMAT_ATTR_CHAR_SHADOWED
+                    };
+                    MenuItem
+                    {
+                        ITEM_FORMAT_ATTR_CHAR_CONTOUR
+                    };
+                    MenuItem
+                    {
+                        Separator = TRUE ;
+                    };
+                    MenuItem
+                    {
+                        Identifier = SID_SET_SUPER_SCRIPT ;
+                        HelpID = CMD_SID_SET_SUPER_SCRIPT ;
+                        Text [ en-US ] = "Su~perscript" ;
+                    };
+                    MenuItem
+                    {
+                        Identifier = SID_SET_SUB_SCRIPT ;
+                        HelpID = CMD_SID_SET_SUB_SCRIPT ;
+                        Text [ en-US ] = "Su~bscript" ;
+                    };
+                };
+            };
+        };
+         //------------------------------
+        MenuItem { Separator = TRUE ; };
+         //------------------------------
+        MenuItem
+        {
+            ITEM_FORMAT_CHAR_DLG
+        };
+         //------------------------------
+        MenuItem { Separator = TRUE ; };
+         //------------------------------
+        MenuItem
+        {
+            ITEM_OPEN_HYPERLINK
+        };
+    };
+};
+
+String RID_POPUP_AUDIT
+{
+    Text [ en-US ] = "Detective Fill Mode pop-up menu" ;
+};
+
+Menu RID_POPUP_AUDIT
+{
+    ItemList =
+    {
+        MenuItem
+        {
+            Identifier = SID_FILL_ADD_PRED ;
+            HelpId = CMD_SID_FILL_ADD_PRED ;
+            Text [ en-US ] = "Trace ~Precedent" ;
+        };
+        MenuItem
+        {
+            Identifier = SID_FILL_DEL_PRED ;
+            HelpId = CMD_SID_FILL_DEL_PRED ;
+            Text [ en-US ] = "~Remove Precedent" ;
+        };
+        MenuItem
+        {
+            Identifier = SID_FILL_ADD_SUCC ;
+            HelpId = CMD_SID_FILL_ADD_SUCC ;
+            Text [ en-US ] = "~Trace Dependent" ;
+        };
+        MenuItem
+        {
+            Identifier = SID_FILL_DEL_SUCC ;
+            HelpId = CMD_SID_FILL_DEL_SUCC ;
+            Text [ en-US ] = "Remove Dependent" ;
+        };
+        MenuItem
+        {
+            Identifier = SID_DETECTIVE_DEL_ALL ;
+            HelpId = CMD_SID_DETECTIVE_DEL_ALL ;
+            Text [ en-US ] = "Remove ~All Traces" ;
+        };
+        MenuItem
+        {
+            Identifier = SID_FILL_NONE ;
+            HelpId = CMD_SID_FILL_NONE ;
+            Text [ en-US ] = "Exit Fill Mode" ;
+        };
+    };
+};
+
+String RID_POPUP_PAGEBREAK
+{
+    Text [ en-US ] = "Page Break Preview pop-up menu" ;
+};
+
+Menu RID_POPUP_PAGEBREAK
+{
+    ItemList =
+    {
+        MenuItem
+        {
+            Identifier = SID_CELL_FORMAT_RESET ;
+            HelpId = CMD_SID_CELL_FORMAT_RESET ;
+            Text [ en-US ] = "~Default" ;
+        };
+         //------------------------------
+        MenuItem { Separator = TRUE ; };
+         //------------------------------
+        MenuItem
+        {
+            Identifier = FID_CELL_FORMAT ;
+            HelpId = CMD_FID_CELL_FORMAT ;
+            Text [ en-US ] = "~Format Cells..." ;
+        };
+         //------------------------------
+        MenuItem { Separator = TRUE ; };
+         //------------------------------
+        MenuItem
+        {
+            Identifier = FID_INS_ROWBRK ;
+            HelpId = CMD_FID_INS_ROWBRK ;
+            Text [ en-US ] = "Insert ~Row Break" ;
+        };
+        MenuItem
+        {
+            Identifier = FID_INS_COLBRK ;
+            HelpId = CMD_FID_INS_COLBRK ;
+            Text [ en-US ] = "Insert ~Column Break" ;
+        };
+        MenuItem
+        {
+            Identifier = FID_DEL_MANUALBREAKS ;
+            HelpId = CMD_FID_DEL_MANUALBREAKS ;
+            Text [ en-US ] = "Delete All Manual Breaks" ;
+        };
+        MenuItem
+        {
+            Identifier = FID_RESET_PRINTZOOM ;
+            HelpId = CMD_FID_RESET_PRINTZOOM ;
+            Text [ en-US ] = "Reset Scale" ;
+        };
+         //------------------------------
+        MenuItem { Separator = TRUE ; };
+         //------------------------------
+        MenuItem
+        {
+            Identifier = SID_DEFINE_PRINTAREA ;
+            HelpId = CMD_SID_DEFINE_PRINTAREA ;
+            Text [ en-US ] = "Define Print Range" ;
+        };
+        MenuItem
+        {
+            Identifier = SID_ADD_PRINTAREA ;
+            HelpId = CMD_SID_ADD_PRINTAREA ;
+            Text [ en-US ] = "Add Print Range" ;
+        };
+        MenuItem
+        {
+            Identifier = SID_DELETE_PRINTAREA ;
+            HelpId = CMD_SID_DELETE_PRINTAREA ;
+            Text [ en-US ] = "Undo Print Range" ;
+        };
+         //------------------------------
+        MenuItem { Separator = TRUE ; };
+         //------------------------------
+        MenuItem
+        {
+            Identifier = SID_FORMATPAGE ;
+            HelpId = CMD_SID_FORMATPAGE ;
+            Text [ en-US ] = "Page Format..." ;
+        };
+         //------------------------------
+        MenuItem { Separator = TRUE ; };
+         //------------------------------
+        MenuItem
+        {
+            Identifier = FID_NOTE_VISIBLE ;
+            HelpId = CMD_FID_NOTE_VISIBLE ;
+            Text [ en-US ] = "Sho~w Comment" ;
+        };
+    };
+};
+
+

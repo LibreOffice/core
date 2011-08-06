@@ -1,0 +1,5 @@
+The headers in this directory are directly copied from the orcus project[1].
+When modifying any of these files, please ping me so that the changes can be
+upstreamed.
+
+[1] http://gitorious.org/orcus

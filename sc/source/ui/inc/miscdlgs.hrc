@@ -1,0 +1,183 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#include "sc.hrc"   // -> RID_SCDLG_DELCELL
+                    // -> RID_SCDLG_INSCELL
+                    // -> RID_SCDLG_DELCONT
+                    // -> RID_SCDLG_INSCONT
+                    // -> RID_SCDLG_MOVETAB
+                    // -> RID_SCDLG_STRINPUT
+                    // -> RID_SCDLG_MTRINPUT
+                    // -> RID_SCDLG_SELENTRY
+                    // -> RID_SCDLG_FILLSERIES
+                    // -> RID_SCDLG_AUTOFORMAT
+
+// allgemein
+#define BTN_OK          100
+#define BTN_CANCEL      102
+#define BTN_HELP        103
+#define BTN_MORE        104
+#define BTN_ADD         105
+#define BTN_REMOVE      106
+#define FT_LABEL        110
+#define FL_FRAME        112
+#define STR_BTN_CLOSE   200
+
+// Zellen loeschen/einfuegen Dialog
+#define BTN_CELLSUP     10
+#define BTN_CELLSDOWN   11
+#define BTN_CELLSRIGHT  12
+#define BTN_CELLSLEFT   13
+#define BTN_DELROWS     14
+#define BTN_DELCOLS     15
+#define BTN_INSROWS     16
+#define BTN_INSCOLS     17
+
+// Inhalte loeschen/einfuegen Dialog
+#define BTN_DELALL      10
+#define BTN_DELSTRINGS  11
+#define BTN_DELNUMBERS  12
+#define BTN_DELDATETIME 13
+#define BTN_DELFORMULAS 14
+#define BTN_DELATTRS    15
+#define BTN_DELNOTES    16
+#define BTN_DELOBJECTS  17
+#define BTN_INSALL      20
+#define BTN_INSSTRINGS  21
+#define BTN_INSNUMBERS  22
+#define BTN_INSDATETIME 23
+#define BTN_INSFORMULAS 24
+#define BTN_INSATTRS    25
+#define BTN_INSNOTES    26
+#define BTN_OP_NOOP     27
+#define BTN_OP_ADD      28
+#define BTN_OP_SUB      29
+#define BTN_OP_MUL      30
+#define BTN_OP_DIV      31
+#define FL_OPERATION    32
+#define BTN_SKIP_EMPTY  33
+#define BTN_TRANSPOSE   34
+#define BTN_LINK        35
+#define FL_OPTIONS      36
+#define BTN_MV_NONE     37
+#define BTN_MV_DOWN     38
+#define BTN_MV_RIGHT    39
+#define FL_MOVE         40
+#define BTN_INSOBJECTS  41
+#define FL_SEP1         51
+#define FL_SEP2         52
+
+// Tabelle einfuegen/loeschen
+#define FT_DEST         1
+#define LB_DEST         2
+#define FT_INSERT       3
+#define LB_INSERT       4
+#define BTN_COPY        5
+#define STR_NEWDOC      6
+#define BTN_MOVE        7
+#define FL_ACTION       8
+#define FL_LOCATION     9
+#define FL_NAME         11
+#define FT_TABNAME      12
+#define FT_TABNAME_WARN 13
+#define STR_CURRENTDOC  14
+#define STR_TABNAME_WARN_USED    15
+#define STR_TABNAME_WARN_EMPTY   16
+#define STR_TABNAME_WARN_INVALID 17
+
+// Eingabe eines Strings
+#define ED_INPUT        10
+
+// Eingabe einer Metrik
+#define ED_VALUE        1
+#define BTN_DEFVAL      1
+
+// Auswahl aus einer (String-)ListBox
+#define FL_ENTRYLIST    10
+#define LB_ENTRYLIST    11
+
+// Reihen fuellen
+#define FL_DIRECTION    1
+#define BTN_LEFT        2
+#define BTN_RIGHT       3
+#define BTN_TOP         4
+#define BTN_BOTTOM      5
+#define FL_SEP11        10
+#define FL_TYPE         11
+#define BTN_ARITHMETIC  12
+#define BTN_GEOMETRIC   13
+#define BTN_DATE        14
+#define BTN_AUTOFILL    15
+#define FL_SEP12        20
+#define FL_TIME_UNIT    21
+#define BTN_DAY         22
+#define BTN_DAY_OF_WEEK 23
+#define BTN_MONTH       24
+#define BTN_YEAR        25
+#define FT_INCREMENT    30
+#define ED_INCREMENT    39
+#define FT_END_VALUE    40
+#define ED_END_VALUES   49
+#define STR_VALERR      50
+#define FT_START_VALUE  51
+#define ED_START_VALUES 52
+
+// Autoformat
+#define LB_FORMAT           1
+#define FL_FORMAT           9
+#define WND_PREVIEW         19
+#define BTN_NUMFORMAT       20
+#define BTN_BORDER          21
+#define BTN_FONT            23
+#define BTN_PATTERN         24
+#define BTN_ALIGNMENT       25
+#define BTN_ADJUST          26
+#define BTN_RENAME          27
+#define FL_FORMATTING       29
+#define STR_ADD_TITLE       100
+#define STR_ADD_LABEL       101
+#define STR_DEL_TITLE       102
+#define STR_DEL_MSG         103
+#define STR_RENAME_TITLE    104
+    // Autoformat-Preview:
+#define STR_JAN         121
+#define STR_FEB         122
+#define STR_MAR         123
+#define STR_NORTH       124
+#define STR_MID         125
+#define STR_SOUTH       126
+#define STR_SUM         127
+
+// Gruppierung setzen/aufheben:
+#define BTN_GROUP_COLS  1
+#define BTN_GROUP_ROWS  3
+#define STR_GROUP       1
+#define STR_UNGROUP     2
+
+// Tab Bg Color
+#define TAB_BG_COLOR_CT_BORDER 1
+#define TAB_BG_COLOR_SET_BGDCOLOR 2

@@ -1,0 +1,329 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#include "pivot.hrc"
+
+ModelessDialog RID_SCDLG_PIVOT_LAYOUT
+{
+    OutputSize = TRUE ;
+    HelpId = CMD_SID_OPENDLG_PIVOTTABLE ;
+    Size = MAP_APPFONT ( 350 , 216 ) ;
+    Hide = TRUE ;
+    SVLook = TRUE ;
+    Moveable = TRUE ;
+    Closeable = FALSE ;
+    Text [ en-US ] = "Pivot table" ;
+
+    FixedText FT_PAGE
+    {
+        Pos = MAP_APPFONT ( 194 , 168 ) ;
+        Size = MAP_APPFONT ( 37 , 8 ) ;
+        Text[ en-US ] = "Page Fields" ;
+    };
+    Control WND_PAGE
+    {
+        /* Size is calculated in the dialog code. */
+        Pos = MAP_APPFONT ( 20 , 14 ) ;
+        Size = MAP_APPFONT ( 1 , 1 ) ;
+        TabStop = TRUE ;
+    };
+    FixedText FT_COL
+    {
+        Pos = MAP_APPFONT ( 231 , 168 ) ;
+        Size = MAP_APPFONT ( 37 , 8 ) ;
+        Text [ en-US ] = "Column Fields" ;
+    };
+    Control WND_COL
+    {
+        /* Size is calculated in the dialog code. */
+        Pos = MAP_APPFONT ( 56 , 56 ) ;
+        Size = MAP_APPFONT ( 1 , 1 ) ;
+        TabStop = TRUE ;
+    };
+    FixedText FT_ROW
+    {
+        Pos = MAP_APPFONT ( 194 , 176 ) ;
+        Size = MAP_APPFONT ( 37 , 8 ) ;
+        Text [ en-US ] = "Row\nFields" ;
+    };
+    Control WND_ROW
+    {
+        /* Size is calculated in the dialog code. */
+        Pos = MAP_APPFONT ( 6 , 98 ) ;
+        Size = MAP_APPFONT ( 1 , 1 ) ;
+        TabStop = TRUE ;
+    };
+    FixedText FT_DATA
+    {
+        Pos = MAP_APPFONT ( 227, 176 ) ;
+        Size = MAP_APPFONT ( 37 , 8 ) ;
+        Text [ en-US ] = "Data Fields" ;
+    };
+    Control WND_DATA
+    {
+        /* Size is calculated in the dialog code. */
+        Pos = MAP_APPFONT ( 56 , 98 ) ;
+        Size = MAP_APPFONT ( 1 , 1 ) ;
+        TabStop = TRUE ;
+    };
+    Control WND_SELECT
+    {
+        /* Size is calculated in the dialog code. */
+        Pos = MAP_APPFONT ( 210 , 14 ) ;
+        Size = MAP_APPFONT ( 1 , 1 ) ;
+        TabStop = TRUE ;
+    };
+    String STR_SELECT
+    {
+        Text [ en-US ] = "Selection area";
+    };
+    FixedText FT_INFO
+    {
+        Pos = MAP_APPFONT ( 6 , 200 ) ;
+        Size = MAP_APPFONT ( 182 , 16 ) ;
+        WordBreak = TRUE ;
+        Text [ en-US ] = "Drag the fields from the right into the desired position." ;
+    };
+    FixedLine FL_LAYOUT
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 282 , 8 ) ;
+        Text [ en-US ] = "Layout";
+    };
+    OKButton BTN_OK
+    {
+        Pos = MAP_APPFONT ( 294 , 6 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        DefButton = TRUE ;
+    };
+    CancelButton BTN_CANCEL
+    {
+        Pos = MAP_APPFONT ( 294 , 23 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    HelpButton BTN_HELP
+    {
+        Pos = MAP_APPFONT ( 294 , 43 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    PushButton BTN_REMOVE
+    {
+        HelpID = "sc:PushButton:RID_SCDLG_PIVOT_LAYOUT:BTN_REMOVE";
+        Pos = MAP_APPFONT ( 294 , 63 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "Remove";
+    };
+    PushButton BTN_OPTIONS
+    {
+        HelpID = "sc:PushButton:RID_SCDLG_PIVOT_LAYOUT:BTN_OPTIONS";
+        Pos = MAP_APPFONT ( 294 , 80 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "Options...";
+    };
+    MoreButton BTN_MORE
+    {
+        HelpID = "sc:MoreButton:RID_SCDLG_PIVOT_LAYOUT:BTN_MORE";
+        Pos = MAP_APPFONT ( 294 , 190 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        MapUnit = MAP_APPFONT ;
+        Delta = 90 ;
+    };
+    FixedLine FL_OUTPUT
+    {
+        Pos = MAP_APPFONT ( 6 , 216 ) ;
+        Size = MAP_APPFONT ( 268 , 8 ) ;
+        Text [ en-US ] = "Result" ;
+        Hide = TRUE ;
+    };
+
+    FixedText FT_INAREA
+    {
+        Pos = MAP_APPFONT ( 12 , 229 ) ;
+        Size = MAP_APPFONT ( 59 , 8 ) ;
+        Hide = TRUE ;
+        Text [ en-US ] = "Selection from" ;
+    };
+    Edit ED_INAREA
+    {
+        HelpID = "sc:Edit:RID_SCDLG_PIVOT_LAYOUT:ED_INAREA";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 73 , 227 ) ;
+        Size = MAP_APPFONT ( 100 , 12 ) ;
+        TabStop = TRUE ;
+        Hide = TRUE ;
+    };
+    ImageButton RB_INAREA
+    {
+        HelpID = "sc:ImageButton:RID_SCDLG_PIVOT_LAYOUT:RB_INAREA";
+        Pos = MAP_APPFONT ( 177 , 226 ) ;
+        Size = MAP_APPFONT ( 13 , 15 ) ;
+        TabStop = TRUE ;
+        Hide = TRUE ;
+        QuickHelpText [ en-US ] = "Shrink" ;
+    };
+
+    FixedText FT_OUTAREA
+    {
+        Pos = MAP_APPFONT ( 12 , 247 ) ;
+        Size = MAP_APPFONT ( 59 , 8 ) ;
+        Hide = TRUE ;
+        Text [ en-US ] = "Results to" ;
+    };
+    ListBox LB_OUTAREA
+    {
+        HelpID = "sc:ListBox:RID_SCDLG_PIVOT_LAYOUT:LB_OUTAREA";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 73 , 245 ) ;
+        Size = MAP_APPFONT ( 75 , 90 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+        Hide = TRUE ;
+    };
+    Edit ED_OUTAREA
+    {
+        HelpID = "sc:Edit:RID_SCDLG_PIVOT_LAYOUT:ED_OUTAREA";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 152 , 245 ) ;
+        Size = MAP_APPFONT ( 100 , 12 ) ;
+        TabStop = TRUE ;
+        Hide = TRUE ;
+    };
+    ImageButton RB_OUTAREA
+    {
+        HelpID = "sc:ImageButton:RID_SCDLG_PIVOT_LAYOUT:RB_OUTAREA";
+        Pos = MAP_APPFONT ( 256 , 244 ) ;
+        Size = MAP_APPFONT ( 13 , 15 ) ;
+        TabStop = TRUE ;
+        Hide = TRUE ;
+        QuickHelpText [ en-US ] = "Shrink" ;
+    };
+    CheckBox BTN_IGNEMPTYROWS
+    {
+        HelpID = "sc:CheckBox:RID_SCDLG_PIVOT_LAYOUT:BTN_IGNEMPTYROWS";
+        Pos = MAP_APPFONT ( 12 , 263 ) ;
+        Size = MAP_APPFONT ( 124 , 10 ) ;
+        TabStop = TRUE ;
+        Hide = TRUE ;
+        Text [ en-US ] = "Ignore ~empty rows" ;
+    };
+    CheckBox BTN_DETECTCAT
+    {
+        HelpID = "sc:CheckBox:RID_SCDLG_PIVOT_LAYOUT:BTN_DETECTCAT";
+        Pos = MAP_APPFONT ( 142 , 263 ) ;
+        Size = MAP_APPFONT ( 124 , 10 ) ;
+        TabStop = TRUE ;
+        Hide = TRUE ;
+        Text [ en-US ] = "~Identify categories" ;
+    };
+    CheckBox BTN_TOTALCOL
+    {
+        HelpID = "sc:CheckBox:RID_SCDLG_PIVOT_LAYOUT:BTN_TOTALCOL";
+        Pos = MAP_APPFONT ( 12 , 277 ) ;
+        Size = MAP_APPFONT ( 124 , 10 ) ;
+        TabStop = TRUE ;
+        Hide = TRUE ;
+        Text [ en-US ] = "Total columns" ;
+    };
+    CheckBox BTN_TOTALROW
+    {
+        HelpID = "sc:CheckBox:RID_SCDLG_PIVOT_LAYOUT:BTN_TOTALROW";
+        Pos = MAP_APPFONT ( 142 , 277 ) ;
+        Size = MAP_APPFONT ( 124 , 10 ) ;
+        TabStop = TRUE ;
+        Hide = TRUE ;
+        Text [ en-US ] = "~Total rows" ;
+    };
+    CheckBox BTN_FILTER
+    {
+        HelpID = "sc:CheckBox:RID_SCDLG_PIVOT_LAYOUT:BTN_FILTER";
+        Pos = MAP_APPFONT ( 12 , 291 ) ;
+        Size = MAP_APPFONT ( 124 , 10 ) ;
+        TabStop = TRUE ;
+        Hide = TRUE ;
+        Text [ en-US ] = "~Add filter" ;
+    };
+    CheckBox BTN_DRILLDOWN
+    {
+        HelpID = "sc:CheckBox:RID_SCDLG_PIVOT_LAYOUT:BTN_DRILLDOWN";
+        Pos = MAP_APPFONT ( 142 , 291 ) ;
+        Size = MAP_APPFONT ( 124 , 10 ) ;
+        TabStop = TRUE ;
+        Hide = TRUE ;
+        Text [ en-US ] = "Ena~ble drill to details" ;
+    };
+    String PIVOTSTR_SUM
+    {
+        Text [ en-US ] = "Sum - " ;
+    };
+    String PIVOTSTR_COUNT
+    {
+        Text [ en-US ] = "Count - " ;
+    };
+    String PIVOTSTR_AVG
+    {
+        Text [ en-US ] = "Mean - " ;
+    };
+    String PIVOTSTR_MAX
+    {
+        Text [ en-US ] = "Max - " ;
+    };
+    String PIVOTSTR_MIN
+    {
+        Text [ en-US ] = "Min - " ;
+    };
+    String PIVOTSTR_PROD
+    {
+        Text [ en-US ] = "Product - " ;
+    };
+    String PIVOTSTR_COUNT2
+    {
+        Text [ en-US ] = "Count - " ;
+    };
+    String PIVOTSTR_DEV
+    {
+        Text [ en-US ] = "StDev - " ;
+    };
+    String PIVOTSTR_DEV2
+    {
+        Text [ en-US ] = "StDevP - " ;
+    };
+    String PIVOTSTR_VAR
+    {
+        Text [ en-US ] = "Var - " ;
+    };
+    String PIVOTSTR_VAR2
+    {
+        Text [ en-US ] = "VarP - " ;
+    };
+};
+

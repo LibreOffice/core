@@ -1,0 +1,101 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#include "HelpIds.hrc"
+#include "tp_RangeChooser.hrc"
+#include "SchSlotIds.hxx"
+#include "dlg_CreationWizard.hrc"
+
+#ifndef _SVT_CONTROLDIMS_HRC_
+#include <svtools/controldims.hrc>
+#endif
+
+#define MASKCOLOR MaskColor = Color { Red = 0xC000 ; Green = 0xC000 ; Blue = 0xC000 ; }
+
+TabPage TP_RANGECHOOSER
+{
+    HelpID = "chart2:TabPage:TP_RANGECHOOSER";
+    Hide = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 248, 140 ) ;
+
+    FixedText FT_CAPTION_FOR_WIZARD
+    {
+        Pos = MAP_APPFONT ( 5 , 8  ) ;
+        Size = MAP_APPFONT ( 238 , 10 ) ;
+        Text [ en-US ] = "Choose a data range" ;
+    };
+    FixedText FT_RANGE
+    {
+        Pos = MAP_APPFONT ( 6 , 22  ) ;
+        Size = MAP_APPFONT ( 236 , 8 ) ;
+        Text [ en-US ] = "~Data range" ;
+    };
+    Edit ED_RANGE
+    {
+        HelpID = "chart2:Edit:TP_RANGECHOOSER:ED_RANGE";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 6 , 32  ) ;
+        Size = MAP_APPFONT ( 220 , 12 ) ;
+    };
+    ImageButton IB_RANGE
+    {
+        HelpID = "chart2:ImageButton:TP_RANGECHOOSER:IB_RANGE";
+        Pos = MAP_APPFONT ( 228 , 31  ) ;
+        Size = MAP_APPFONT ( 14 , 14 ) ;
+        TabStop = FALSE ;
+    };
+    RadioButton RB_DATAROWS
+    {
+        HelpID = "chart2:RadioButton:TP_RANGECHOOSER:RB_DATAROWS";
+        Pos = MAP_APPFONT ( 6 , 52  ) ;
+        Size = MAP_APPFONT ( 236 , 10 ) ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "Data series in ~rows" ;
+    };
+    RadioButton RB_DATACOLS
+    {
+        HelpID = "chart2:RadioButton:TP_RANGECHOOSER:RB_DATACOLS";
+        Pos = MAP_APPFONT ( 6 , 66  ) ;
+        Size = MAP_APPFONT ( 236 , 10 ) ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "Data series in ~columns" ;
+    };
+    CheckBox CB_FIRST_ROW_ASLABELS
+    {
+        HelpID = "chart2:CheckBox:TP_RANGECHOOSER:CB_FIRST_ROW_ASLABELS";
+        Pos = MAP_APPFONT ( 6 , 84  ) ;
+        Size = MAP_APPFONT ( 236 , 10 ) ;
+        Text [ en-US ] = "~First row as label" ;
+    };
+    CheckBox CB_FIRST_COLUMN_ASLABELS
+    {
+        HelpID = "chart2:CheckBox:TP_RANGECHOOSER:CB_FIRST_COLUMN_ASLABELS";
+        Pos = MAP_APPFONT ( 6 , 98  ) ;
+        Size = MAP_APPFONT ( 236 , 10 ) ;
+        Text [ en-US ] = "F~irst column as label" ;
+    };
+};

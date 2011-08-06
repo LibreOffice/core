@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<menu:menubar xmlns:menu="http://openoffice.org/2001/menu" menu:id="menubar">
+    <menu:menu menu:id=".uno:PickList" menu:label="" >
+        <menu:menupopup>
+            <menu:menuitem menu:id=".uno:AddDirect" menu:helpid="5537" menu:label="" />
+            <menu:menuitem menu:id=".uno:Open" menu:helpid="5501" menu:label="" />
+            <menu:menuitem menu:id=".uno:AutoPilotMenu" menu:helpid="6381" menu:label="" />
+            <menu:menuseparator/>
+            <menu:menuitem menu:id=".uno:CloseDoc" menu:helpid="5503" menu:label="" />
+            <menu:menuitem menu:id=".uno:Save" menu:helpid="5505" menu:label="" />
+            <menu:menuitem menu:id=".uno:SaveAs" menu:helpid="5502" menu:label="" />
+            <menu:menuitem menu:id=".uno:SaveAll" menu:helpid="5309" menu:label="" />
+            <menu:menuitem menu:id=".uno:Reload" menu:helpid="5508" menu:label="" />
+            <menu:menuitem menu:id=".uno:VersionDialog" menu:helpid="6583" menu:label="" />
+            <menu:menuitem menu:id=".uno:SendMail" menu:helpid="5331" menu:label="" />
+            <menu:menuseparator/>
+            <menu:menuitem menu:id=".uno:SetDocumentProperties" menu:helpid="5535" menu:label="" />
+            <menu:menuseparator/>
+            <menu:menuitem menu:id=".uno:Print" menu:helpid="5504" menu:label="" />
+            <menu:menuitem menu:id=".uno:PrinterSetup" menu:helpid="5302" menu:label="" />
+            <menu:menuseparator/>
+            <menu:menuitem menu:id=".uno:Quit" menu:helpid="5300" menu:label="" />
+        </menu:menupopup>
+    </menu:menu>
+    <menu:menu menu:id=".uno:EditMenu" menu:label="" >
+        <menu:menupopup>
+            <menu:menuitem menu:id=".uno:Undo" menu:helpid="5701" menu:label="" />
+            <menu:menuitem menu:id=".uno:Redo" menu:helpid="5700" menu:label="" />
+            <menu:menuseparator/>
+            <menu:menuitem menu:id=".uno:Cut" menu:helpid="5710" menu:label="" />
+            <menu:menuitem menu:id=".uno:Copy" menu:helpid="5711" menu:label="" />
+            <menu:menuitem menu:id=".uno:Paste" menu:helpid="5712" menu:label="" />
+        </menu:menupopup>
+    </menu:menu>
+    <menu:menu menu:id=".uno:ViewMenu" menu:label="" >
+        <menu:menupopup>
+            <menu:menuitem menu:id=".uno:AvailableToolbars" menu:label="" />
+            <menu:menuitem menu:id=".uno:StatusBarVisible" menu:helpid="5920" menu:label="" />
+            <menu:menuitem menu:id=".uno:ShowImeStatusWindow" menu:helpid="6680" menu:label="" />
+            <menu:menuseparator/>
+            <menu:menuitem menu:id=".uno:DiagramData" menu:helpid="30514" menu:label="" />
+        </menu:menupopup>
+    </menu:menu>
+    <menu:menu menu:id=".uno:InsertMenu" menu:label="" >
+        <menu:menupopup>
+                <menu:menuitem menu:id=".uno:InsertMenuTitles" menu:label="" />
+                <menu:menuitem menu:id=".uno:InsertMenuLegend" menu:label="" />
+                <menu:menuitem menu:id=".uno:InsertMenuAxes" menu:label="" />
+                <menu:menuitem menu:id=".uno:InsertMenuGrids" menu:label="" />
+            <menu:menuseparator/>
+                <menu:menuitem menu:id=".uno:InsertMenuDataLabels" menu:label="" />
+                <menu:menuitem menu:id=".uno:InsertMenuTrendlines" menu:label="" />
+                <menu:menuitem menu:id=".uno:InsertMenuMeanValues" menu:label="" />
+                <menu:menuitem menu:id=".uno:InsertMenuYErrorBars" menu:label="" />
+            <menu:menuseparator/>
+                <menu:menuitem menu:id=".uno:InsertSymbol" menu:helpid="10503" menu:label="" />
+        </menu:menupopup>
+    </menu:menu>
+    <menu:menu menu:id=".uno:FormatMenu" menu:label="" >
+        <menu:menupopup>
+            <menu:menuitem menu:id=".uno:FormatSelection" menu:label="" />
+            <menu:menuitem menu:id=".uno:TransformDialog" menu:helpid="10087" menu:label="" />
+            <menu:menu menu:id=".uno:ArrangeRow" menu:label="" >
+                <menu:menupopup>
+                    <menu:menuitem menu:id=".uno:Forward" menu:helpid="30594" menu:label="" />
+                    <menu:menuitem menu:id=".uno:Backward" menu:helpid="30595" menu:label="" />
+                </menu:menupopup>
+            </menu:menu>
+            <menu:menuseparator/>
+            <menu:menu menu:id=".uno:ChartTitleMenu" menu:label="" >
+                <menu:menupopup>
+                    <menu:menuitem menu:id=".uno:MainTitle" menu:helpid="30557" menu:label="" />
+                    <menu:menuitem menu:id=".uno:SubTitle" menu:helpid="30558" menu:label="" />
+                    <menu:menuseparator/>
+                    <menu:menuitem menu:id=".uno:XTitle" menu:helpid="30559" menu:label="" />
+                    <menu:menuitem menu:id=".uno:YTitle" menu:helpid="30560" menu:label="" />
+                    <menu:menuitem menu:id=".uno:ZTitle" menu:helpid="30561" menu:label="" />
+                    <menu:menuseparator/>
+                    <menu:menuitem menu:id=".uno:SecondaryXTitle" menu:label="" />
+                    <menu:menuitem menu:id=".uno:SecondaryYTitle" menu:label="" />
+                    <menu:menuseparator/>
+                    <menu:menuitem menu:id=".uno:AllTitles" menu:helpid="30562" menu:label="" />
+                </menu:menupopup>
+            </menu:menu>
+            <menu:menuitem menu:id=".uno:Legend" menu:helpid="30521" menu:label="" />
+            <menu:menu menu:id=".uno:DiagramAxisMenu" menu:label="" >
+                <menu:menupopup>
+                    <menu:menuitem menu:id=".uno:DiagramAxisX" menu:helpid="30552" menu:label="" />
+                    <menu:menuitem menu:id=".uno:DiagramAxisY" menu:helpid="30553" menu:label="" />
+                    <menu:menuitem menu:id=".uno:DiagramAxisZ" menu:helpid="30554" menu:label="" />
+                    <menu:menuseparator/>
+                    <menu:menuitem menu:id=".uno:DiagramAxisA" menu:helpid="30616" menu:label="" />
+                    <menu:menuitem menu:id=".uno:DiagramAxisB" menu:helpid="30617" menu:label="" />
+                    <menu:menuseparator/>
+                    <menu:menuitem menu:id=".uno:DiagramAxisAll" menu:helpid="30555" menu:label="" />
+                </menu:menupopup>
+            </menu:menu>
+            <menu:menu menu:id=".uno:DiagramGridMenu" menu:label="" >
+                <menu:menupopup>
+                    <menu:menuitem menu:id=".uno:DiagramGridYMain" menu:helpid="30564" menu:label="" />
+                    <menu:menuitem menu:id=".uno:DiagramGridXMain" menu:helpid="30563" menu:label="" />
+                    <menu:menuitem menu:id=".uno:DiagramGridZMain" menu:helpid="30565" menu:label="" />
+                    <menu:menuseparator/>
+                    <menu:menuitem menu:id=".uno:DiagramGridYHelp" menu:helpid="30579" menu:label="" />
+                    <menu:menuitem menu:id=".uno:DiagramGridXHelp" menu:helpid="30578" menu:label="" />
+                    <menu:menuitem menu:id=".uno:DiagramGridZHelp" menu:helpid="30580" menu:label="" />
+                    <menu:menuseparator/>
+                    <menu:menuitem menu:id=".uno:DiagramGridAll" menu:helpid="30566" menu:label="" />
+                </menu:menupopup>
+            </menu:menu>
+            <menu:menuseparator/>
+                <menu:menuitem menu:id=".uno:DiagramWall" menu:helpid="30524" menu:label="" />
+                <menu:menuitem menu:id=".uno:DiagramFloor" menu:helpid="30525" menu:label="" />
+                <menu:menuitem menu:id=".uno:DiagramArea" menu:helpid="30526" menu:label="" />
+            <menu:menuseparator/>
+                <menu:menuitem menu:id=".uno:DiagramType" menu:helpid="30528" menu:label="" />
+                <menu:menuitem menu:id=".uno:DataRanges" menu:helpid="30514" menu:label="" />
+                <menu:menuitem menu:id=".uno:View3D" menu:helpid="30527" menu:label="" />
+
+        </menu:menupopup>
+    </menu:menu>
+    <menu:menu menu:id=".uno:ToolsMenu" menu:label="" >
+        <menu:menupopup>
+            <menu:menu menu:id=".uno:MacrosMenu" menu:label="" >
+                <menu:menupopup>
+                    <menu:menuitem menu:id=".uno:MacroRecorder" menu:helpid="6669" menu:label="" />
+                    <menu:menuitem menu:id=".uno:RunMacro" menu:helpid="40011" menu:label="" />
+                    <menu:menu menu:id=".uno:ScriptOrganizer" menu:label="" />
+                    <menu:menuseparator/>
+                    <menu:menuitem menu:id=".uno:MacroOrganizer?TabId:short=1" menu:helpid="40013" menu:label="" />
+                </menu:menupopup>
+            </menu:menu>
+            <menu:menuitem menu:id="service:com.sun.star.deployment.ui.PackageManagerDialog" menu:helpid="42772" />
+            <menu:menuitem menu:id=".uno:ConfigureDialog" menu:helpid="5904" menu:label="" />
+            <menu:menuitem menu:id=".uno:OptionsTreeDialog" menu:helpid="31630" menu:label="" />
+        </menu:menupopup>
+    </menu:menu>
+    <menu:menu menu:id=".uno:WindowList" menu:label="" >
+        <menu:menupopup>
+            <menu:menuitem menu:id=".uno:NewWindow" menu:helpid="5620" menu:label="" />
+            <menu:menuitem menu:id=".uno:CloseWin" menu:helpid="5621" menu:label="" />
+            <menu:menuseparator/>
+        </menu:menupopup>
+    </menu:menu>
+    <menu:menu menu:id=".uno:HelpMenu">
+        <menu:menupopup>
+            <menu:menuitem menu:id=".uno:HelpIndex"/>
+            <menu:menuitem menu:id=".uno:ExtendedHelp"/>
+            <menu:menuseparator/>
+            <menu:menuitem menu:id=".uno:ShowLicense"/>
+            <menu:menuseparator/>
+            <menu:menuitem menu:id=".uno:ShowCredits"/>
+            <menu:menuitem menu:id=".uno:About"/>
+        </menu:menupopup>
+    </menu:menu>
+</menu:menubar>

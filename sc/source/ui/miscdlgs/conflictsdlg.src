@@ -1,0 +1,112 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#include "conflictsdlg.hrc"
+
+ModalDialog RID_SCDLG_CONFLICTS
+{
+    OutputSize = TRUE ;
+    HelpId = HID_SCDLG_CONFLICTS ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 338 , 192 ) ;
+    Text [ en-US ] = "Resolve Conflicts" ;
+    Moveable = TRUE ;
+    Sizeable = TRUE ;
+    Closeable = TRUE ;
+    FixedText FT_CONFLICTS
+    {
+        Pos = MAP_APPFONT ( 6 , 6 ) ;
+        Size = MAP_APPFONT ( 326 , 26 ) ;
+        WordBreak = TRUE ;
+        Text [ en-US ] = "There are conflicting changes in this shared spreadsheet. Conflicts must be resolved before saving the spreadsheet. Keep either own or other changes." ;
+    };
+    Control LB_CONFLICTS
+    {
+        Pos = MAP_APPFONT ( 6 , 34 ) ;
+        Size = MAP_APPFONT ( 326 , 104 ) ;
+        Border = TRUE ;
+    };
+    PushButton BTN_KEEPMINE
+    {
+        HelpID = "sc:PushButton:RID_SCDLG_CONFLICTS:BTN_KEEPMINE";
+        Pos = MAP_APPFONT ( 72 , 145 ) ;
+        Size = MAP_APPFONT ( 76 , 14 ) ;
+        Text [ en-US ] = "Keep ~Mine" ;
+    };
+    PushButton BTN_KEEPOTHER
+    {
+        HelpID = "sc:PushButton:RID_SCDLG_CONFLICTS:BTN_KEEPOTHER";
+        Pos = MAP_APPFONT ( 190 , 145 ) ;
+        Size = MAP_APPFONT ( 76 , 14 ) ;
+        Text [ en-US ] = "Keep ~Other" ;
+    };
+    FixedLine FL_CONFLICTS
+    {
+        Pos = MAP_APPFONT ( 1 , 162 ) ;
+        Size = MAP_APPFONT ( 338 , 8 ) ;
+    };
+    PushButton BTN_KEEPALLMINE
+    {
+        HelpID = "sc:PushButton:RID_SCDLG_CONFLICTS:BTN_KEEPALLMINE";
+        Pos = MAP_APPFONT ( 6 , 172 ) ;
+        Size = MAP_APPFONT ( 104 , 14 ) ;
+        Text [ en-US ] = "~Keep All Mine" ;
+    };
+    PushButton BTN_KEEPALLOTHERS
+    {
+        HelpID = "sc:PushButton:RID_SCDLG_CONFLICTS:BTN_KEEPALLOTHERS";
+        Pos = MAP_APPFONT ( 116 , 172 ) ;
+        Size = MAP_APPFONT ( 104 , 14 ) ;
+        Text [ en-US ] = "Keep ~All Others" ;
+    };
+    CancelButton BTN_CANCEL
+    {
+        Pos = MAP_APPFONT ( 226 , 172 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+    };
+    HelpButton BTN_HELP
+    {
+        Pos = MAP_APPFONT ( 282 , 172 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+    };
+    String STR_TITLE_CONFLICT
+    {
+        Text [ en-US ] = "Conflict" ;
+    };
+    String STR_TITLE_AUTHOR
+    {
+        Text [ en-US ] = "Author" ;
+    };
+    String STR_TITLE_DATE
+    {
+        Text [ en-US ] = "Date" ;
+    };
+    String STR_UNKNOWN_USER
+    {
+        Text [ en-US ] = "Unknown User" ;
+    };
+};

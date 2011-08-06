@@ -1,0 +1,228 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#include "miscdlgs.hrc"
+
+ModalDialog RID_SCDLG_AUTOFORMAT
+{
+    OutputSize = TRUE ;
+    HelpId = CMD_SID_AUTOFORMAT ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 312 , 121 ) ;
+    Text [ en-US ] = "AutoFormat" ;
+    Moveable = TRUE ;
+    Closeable = FALSE ;
+    ListBox LB_FORMAT
+    {
+        HelpID = "sc:ListBox:RID_SCDLG_AUTOFORMAT:LB_FORMAT";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 12 , 14 ) ;
+        Size = MAP_APPFONT ( 70 , 101 ) ;
+        TabStop = TRUE ;
+    };
+    FixedLine FL_FORMAT
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 244 , 8 ) ;
+        Text [ en-US ] = "F~ormat" ;
+    };
+    Window WND_PREVIEW
+    {
+        Pos = MAP_APPFONT ( 88 , 14 ) ;
+        Size = MAP_APPFONT ( 159 , 101 ) ;
+        Border = TRUE ;
+    };
+    CheckBox BTN_ADJUST
+    {
+        HelpID = "sc:CheckBox:RID_SCDLG_AUTOFORMAT:BTN_ADJUST";
+        Hide = TRUE ;
+        Pos = MAP_APPFONT ( 172 , 146 ) ;
+        Size = MAP_APPFONT ( 75 , 10 ) ;
+        Text [ en-US ] = "A~utoFit width and height" ;
+        TabStop = TRUE ;
+    };
+    CheckBox BTN_BORDER
+    {
+        HelpID = "sc:CheckBox:RID_SCDLG_AUTOFORMAT:BTN_BORDER";
+        Hide = TRUE ;
+        Pos = MAP_APPFONT ( 12 , 146 ) ;
+        Size = MAP_APPFONT ( 75 , 10 ) ;
+        Text [ en-US ] = "~Borders" ;
+        TabStop = TRUE ;
+    };
+    CheckBox BTN_FONT
+    {
+        HelpID = "sc:CheckBox:RID_SCDLG_AUTOFORMAT:BTN_FONT";
+        Hide = TRUE ;
+        Pos = MAP_APPFONT ( 93 , 132 ) ;
+        Size = MAP_APPFONT ( 73 , 10 ) ;
+        Text [ en-US ] = "F~ont" ;
+        TabStop = TRUE ;
+    };
+    CheckBox BTN_PATTERN
+    {
+        HelpID = "sc:CheckBox:RID_SCDLG_AUTOFORMAT:BTN_PATTERN";
+        Hide = TRUE ;
+        Pos = MAP_APPFONT ( 93 , 146 ) ;
+        Size = MAP_APPFONT ( 73 , 10 ) ;
+        Text [ en-US ] = "~Pattern" ;
+        TabStop = TRUE ;
+    };
+    CheckBox BTN_ALIGNMENT
+    {
+        HelpID = "sc:CheckBox:RID_SCDLG_AUTOFORMAT:BTN_ALIGNMENT";
+        Hide = TRUE ;
+        Pos = MAP_APPFONT ( 172 , 132 ) ;
+        Size = MAP_APPFONT ( 75 , 10 ) ;
+        Text [ en-US ] = "Alignmen~t" ;
+        TabStop = TRUE ;
+    };
+    CheckBox BTN_NUMFORMAT
+    {
+        HelpID = "sc:CheckBox:RID_SCDLG_AUTOFORMAT:BTN_NUMFORMAT";
+        Hide = TRUE ;
+        Pos = MAP_APPFONT ( 12 , 132 ) ;
+        Size = MAP_APPFONT ( 75 , 10 ) ;
+        Text [ en-US ] = "~Number format" ;
+        TabStop = TRUE ;
+    };
+    FixedLine FL_FORMATTING
+    {
+        Hide = TRUE ;
+        Pos = MAP_APPFONT ( 6 , 121 ) ;
+        Size = MAP_APPFONT ( 244 , 8 ) ;
+        Text [ en-US ] = "Formatting" ;
+    };
+    OKButton BTN_OK
+    {
+        Pos = MAP_APPFONT ( 256 , 6 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        DefButton = TRUE ;
+    };
+    CancelButton BTN_CANCEL
+    {
+        Pos = MAP_APPFONT ( 256 , 23 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    MoreButton BTN_MORE
+    {
+        HelpID = "sc:MoreButton:RID_SCDLG_AUTOFORMAT:BTN_MORE";
+        Pos = MAP_APPFONT ( 256 , 101 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        MapUnit = MAP_APPFONT ;
+        Delta = 48 ;
+    };
+    PushButton BTN_ADD
+    {
+        HelpID = "sc:PushButton:RID_SCDLG_AUTOFORMAT:BTN_ADD";
+        Pos = MAP_APPFONT ( 256 , 63 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Text [ en-US ] = "~Add..." ;
+        TabStop = TRUE ;
+    };
+    PushButton BTN_REMOVE
+    {
+        HelpID = "sc:PushButton:RID_SCDLG_AUTOFORMAT:BTN_REMOVE";
+        Pos = MAP_APPFONT ( 256 , 81 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Text [ en-US ] = "~Delete" ;
+        TabStop = TRUE ;
+    };
+
+    PushButton BTN_RENAME
+    {
+        Pos = MAP_APPFONT ( 256 , 123 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        HelpId=HID_SC_RENAME_AUTOFMT;
+        TabStop = TRUE ;
+        Text [ en-US ] = "~Rename" ;
+    };
+
+    HelpButton BTN_HELP
+    {
+        Pos = MAP_APPFONT ( 256 , 43 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    String STR_ADD_TITLE
+    {
+        Text [ en-US ] = "Add AutoFormat" ;
+    };
+
+    String STR_RENAME_TITLE
+    {
+        Text [ en-US ] = "Rename AutoFormat" ;
+    };
+
+    String STR_ADD_LABEL
+    {
+        Text [ en-US ] = "Name" ;
+    };
+    String STR_DEL_TITLE
+    {
+        Text [ en-US ] = "Delete AutoFormat" ;
+    };
+    String STR_DEL_MSG
+    {
+        Text [ en-US ] = "Do you really want to delete the # AutoFomat?" ;
+    };
+    String STR_BTN_CLOSE
+    {
+        Text [ en-US ] = "~Close" ;
+    };
+    String STR_JAN
+    {
+        Text [ en-US ] = "Jan" ;
+    };
+    String STR_FEB
+    {
+        Text [ en-US ] = "Feb" ;
+    };
+    String STR_MAR
+    {
+        Text [ en-US ] = "Mar" ;
+    };
+    String STR_NORTH
+    {
+        Text [ en-US ] = "North" ;
+    };
+    String STR_MID
+    {
+        Text [ en-US ] = "Mid" ;
+    };
+    String STR_SOUTH
+    {
+        Text [ en-US ] = "South" ;
+    };
+    String STR_SUM
+    {
+        Text [ en-US ] = "Total" ;
+    };
+};

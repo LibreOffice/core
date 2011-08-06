@@ -1,0 +1,693 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_chart2.hxx"
+#include "SelectionHelper.hxx"
+#include "ObjectIdentifier.hxx"
+//for C2U
+#include "macros.hxx"
+#include "DiagramHelper.hxx"
+#include "ChartModelHelper.hxx"
+
+// header for class SdrObjList
+#include <svx/svdpage.hxx>
+#include <svx/svditer.hxx>
+#include "svx/obj3d.hxx"
+// header for class SdrPathObj
+#include <svx/svdopath.hxx>
+#include <vcl/svapp.hxx>
+#include <osl/mutex.hxx>
+#include <basegfx/point/b2dpoint.hxx>
+#include <com/sun/star/beans/XPropertySet.hpp>
+
+//.............................................................................
+namespace chart
+{
+//.............................................................................
+using namespace ::com::sun::star;
+
+namespace
+{
+
+rtl::OUString lcl_getObjectName( SdrObject* pObj )
+{
+    if(pObj)
+       return pObj->GetName();
+    return rtl::OUString();
+}
+
+void impl_selectObject( SdrObject* pObjectToSelect, DrawViewWrapper& rDrawViewWrapper )
+{
+    SolarMutexGuard aSolarGuard;
+
+    if(pObjectToSelect)
+    {
+        SelectionHelper aSelectionHelper( pObjectToSelect );
+        SdrObject* pMarkObj = aSelectionHelper.getObjectToMark();
+        rDrawViewWrapper.setMarkHandleProvider(&aSelectionHelper);
+        rDrawViewWrapper.MarkObject(pMarkObj);
+        rDrawViewWrapper.setMarkHandleProvider(NULL);
+    }
+}
+
+}//anonymous namespace
+
+bool Selection::hasSelection()
+{
+    return m_aSelectedOID.isValid();
+}
+
+rtl::OUString Selection::getSelectedCID()
+{
+    return m_aSelectedOID.getObjectCID();
+}
+
+uno::Reference< drawing::XShape > Selection::getSelectedAdditionalShape()
+{
+    return m_aSelectedOID.getAdditionalShape();
+}
+
+ObjectIdentifier Selection::getSelectedOID() const
+{
+    return m_aSelectedOID;
+}
+
+bool Selection::setSelection( const ::rtl::OUString& rCID )
+{
+    if ( !rCID.equals( m_aSelectedOID.getObjectCID() ) )
+    {
+        m_aSelectedOID = ObjectIdentifier( rCID );
+        return true;
+    }
+    return false;
+}
+
+bool Selection::setSelection( const uno::Reference< drawing::XShape >& xShape )
+{
+    if ( !( xShape == m_aSelectedOID.getAdditionalShape() ) )
+    {
+        clearSelection();
+        m_aSelectedOID = ObjectIdentifier( xShape );
+        return true;
+    }
+    return false;
+}
+
+void Selection::clearSelection()
+{
+    m_aSelectedOID = ObjectIdentifier();
+    m_aSelectedOID_beforeMouseDown = ObjectIdentifier();
+    m_aSelectedOID_selectOnlyIfNoDoubleClickIsFollowing = ObjectIdentifier();
+}
+
+bool Selection::maybeSwitchSelectionAfterSingleClickWasEnsured()
+{
+    if ( m_aSelectedOID_selectOnlyIfNoDoubleClickIsFollowing.isValid()
+         && m_aSelectedOID_selectOnlyIfNoDoubleClickIsFollowing != m_aSelectedOID )
+    {
+        m_aSelectedOID = m_aSelectedOID_selectOnlyIfNoDoubleClickIsFollowing;
+        m_aSelectedOID_selectOnlyIfNoDoubleClickIsFollowing = ObjectIdentifier();
+        return true;
+    }
+    return false;
+}
+
+void Selection::resetPossibleSelectionAfterSingleClickWasEnsured()
+{
+    if ( m_aSelectedOID_selectOnlyIfNoDoubleClickIsFollowing.isValid() )
+    {
+        m_aSelectedOID_selectOnlyIfNoDoubleClickIsFollowing = ObjectIdentifier();
+    }
+}
+
+void Selection::remindSelectionBeforeMouseDown()
+{
+    m_aSelectedOID_beforeMouseDown = m_aSelectedOID;
+}
+
+bool Selection::isSelectionDifferentFromBeforeMouseDown() const
+{
+    return ( m_aSelectedOID != m_aSelectedOID_beforeMouseDown );
+}
+
+void Selection::applySelection( DrawViewWrapper* pDrawViewWrapper )
+{
+    if( pDrawViewWrapper )
+    {
+        {
+            SolarMutexGuard aSolarGuard;
+            pDrawViewWrapper->UnmarkAll();
+        }
+        SdrObject* pObjectToSelect = 0;
+        if ( m_aSelectedOID.isAutoGeneratedObject() )
+        {
+            pObjectToSelect = pDrawViewWrapper->getNamedSdrObject( m_aSelectedOID.getObjectCID() );
+        }
+        else if( m_aSelectedOID.isAdditionalShape() )
+        {
+            pObjectToSelect = DrawViewWrapper::getSdrObject( m_aSelectedOID.getAdditionalShape() );
+        }
+
+        impl_selectObject( pObjectToSelect, *pDrawViewWrapper );
+    }
+}
+
+void Selection::adaptSelectionToNewPos( const Point& rMousePos, DrawViewWrapper* pDrawViewWrapper
+                                       , bool bIsRightMouse, bool bWaitingForDoubleClick )
+{
+    if( pDrawViewWrapper )
+    {
+        //do not toggel multiclick selection if right clicked on the selected object or waiting for double click
+        bool bAllowMultiClickSelectionChange = !bIsRightMouse && !bWaitingForDoubleClick;
+
+        ObjectIdentifier aLastSelectedObject( m_aSelectedOID );
+
+        SolarMutexGuard aSolarGuard;
+
+        //bAllowMultiClickSelectionChange==true -> a second click on the same object can lead to a changed selection (e.g. series -> single data point)
+
+        //get object to select:
+        SdrObject* pNewObj = 0;
+        {
+            m_aSelectedOID_selectOnlyIfNoDoubleClickIsFollowing = ObjectIdentifier();
+
+            //the search for the object to select starts with the hit object deepest in the grouping hierarchy (a leaf in the tree)
+            //further we travel along the grouping hierarchy from child to parent
+            pNewObj = pDrawViewWrapper->getHitObject(rMousePos);
+            m_aSelectedOID = ObjectIdentifier( lcl_getObjectName( pNewObj ) );//name of pNewObj
+
+            //ignore handle only objects for hit test
+            while( pNewObj && m_aSelectedOID.getObjectCID().match( C2U( "HandlesOnly" ) ) )
+            {
+                pNewObj->SetMarkProtect(true);
+                pNewObj = pDrawViewWrapper->getHitObject(rMousePos);
+                m_aSelectedOID = ObjectIdentifier( lcl_getObjectName( pNewObj ) );
+            }
+
+            //accept only named objects while searching for the object to select
+            //this call may change m_aSelectedOID
+            if ( SelectionHelper::findNamedParent( pNewObj, m_aSelectedOID, true ) )
+            {
+                //if the so far found object is a multi click object further steps are necessary
+                while( ObjectIdentifier::isMultiClickObject( m_aSelectedOID.getObjectCID() ) )
+                {
+                    bool bSameObjectAsLastSelected = ( aLastSelectedObject == m_aSelectedOID );
+                    if( bSameObjectAsLastSelected )
+                    {
+                        //if the same child is clicked again don't go up further
+                        break;
+                    }
+                    if ( ObjectIdentifier::areSiblings( aLastSelectedObject.getObjectCID(), m_aSelectedOID.getObjectCID() ) )
+                    {
+                        //if a sibling of the last selected object is clicked don't go up further
+                        break;
+                    }
+                    SdrObject*    pLastChild     = pNewObj;
+                    ObjectIdentifier aLastChild = m_aSelectedOID;
+                    if ( !SelectionHelper::findNamedParent( pNewObj, m_aSelectedOID, false ) )
+                    {
+                        //take the one found so far
+                        break;
+                    }
+                    //if the last selected object is found don't go up further
+                    //but take the last child if selection change is allowed
+                    if ( aLastSelectedObject == m_aSelectedOID )
+                    {
+                        if( bAllowMultiClickSelectionChange )
+                        {
+                            pNewObj  = pLastChild;
+                            m_aSelectedOID = aLastChild;
+                        }
+                        else
+                            m_aSelectedOID_selectOnlyIfNoDoubleClickIsFollowing = aLastChild;
+
+                        break;
+                    }
+                }
+
+                OSL_ENSURE( pNewObj && m_aSelectedOID.isValid(), "somehow lost selected object" );
+            }
+            else
+            {
+                //maybe an additional shape was hit
+                if ( pNewObj )
+                {
+                    m_aSelectedOID = ObjectIdentifier( uno::Reference< drawing::XShape >( pNewObj->getUnoShape(), uno::UNO_QUERY ) );
+                }
+                else
+                {
+                    m_aSelectedOID = ObjectIdentifier();
+                }
+            }
+
+            if ( !m_aSelectedOID.isAdditionalShape() )
+            {
+                rtl::OUString aPageCID( ObjectIdentifier::createClassifiedIdentifier( OBJECTTYPE_PAGE, rtl::OUString() ) );//@todo read CID from model
+
+                if ( !m_aSelectedOID.isAutoGeneratedObject() )
+                {
+                    m_aSelectedOID = ObjectIdentifier( aPageCID );
+                }
+
+                //check wether the diagram was hit but not selected (e.g. because it has no filling):
+                rtl::OUString aDiagramCID = ObjectIdentifier::createClassifiedIdentifier( OBJECTTYPE_DIAGRAM, rtl::OUString::valueOf( sal_Int32(0) ) );
+                rtl::OUString aWallCID( ObjectIdentifier::createClassifiedIdentifier( OBJECTTYPE_DIAGRAM_WALL, rtl::OUString() ) );//@todo read CID from model
+                bool bBackGroundHit = m_aSelectedOID.getObjectCID().equals( aPageCID ) || m_aSelectedOID.getObjectCID().equals( aWallCID ) || !m_aSelectedOID.isAutoGeneratedObject();
+                if( bBackGroundHit )
+                {
+                    //todo: if more than one diagram is available in future do chack the list of all diagrams here
+                    SdrObject* pDiagram = pDrawViewWrapper->getNamedSdrObject( aDiagramCID );
+                    if( pDiagram )
+                    {
+                        if( pDrawViewWrapper->IsObjectHit( pDiagram, rMousePos ) )
+                        {
+                            m_aSelectedOID = ObjectIdentifier( aDiagramCID );
+                            pNewObj = pDiagram;
+                        }
+                    }
+                }
+                //check wether the legend was hit but not selected (e.g. because it has no filling):
+                if( bBackGroundHit || m_aSelectedOID.getObjectCID().equals( aDiagramCID ) )
+                {
+                    rtl::OUString aLegendCID( ObjectIdentifier::createClassifiedIdentifierForParticle( ObjectIdentifier::createParticleForLegend(0,0) ) );//@todo read CID from model
+                    SdrObject* pLegend = pDrawViewWrapper->getNamedSdrObject( aLegendCID );
+                    if( pLegend )
+                    {
+                        if( pDrawViewWrapper->IsObjectHit( pLegend, rMousePos ) )
+                        {
+                            m_aSelectedOID = ObjectIdentifier( aLegendCID );
+                            pNewObj = pLegend;
+                        }
+                    }
+                }
+            }
+        }
+
+        if ( bIsRightMouse && m_aSelectedOID_selectOnlyIfNoDoubleClickIsFollowing.isValid() )
+        {
+            m_aSelectedOID_selectOnlyIfNoDoubleClickIsFollowing = ObjectIdentifier();
+        }
+    }
+}
+
+bool Selection::isResizeableObjectSelected()
+{
+    ObjectType eObjectType = m_aSelectedOID.getObjectType();
+    switch( eObjectType )
+    {
+        case OBJECTTYPE_DIAGRAM:
+        case OBJECTTYPE_DIAGRAM_WALL:
+        case OBJECTTYPE_SHAPE:
+        case OBJECTTYPE_LEGEND:
+            return true;
+        default:
+            return false;
+    }
+    return false;
+}
+
+bool Selection::isRotateableObjectSelected( const uno::Reference< frame::XModel >& xChartModel )
+{
+    return SelectionHelper::isRotateableObject( m_aSelectedOID.getObjectCID(), xChartModel );
+}
+
+bool Selection::isDragableObjectSelected()
+{
+    return m_aSelectedOID.isDragableObject();
+}
+
+bool Selection::isAdditionalShapeSelected() const
+{
+    return m_aSelectedOID.isAdditionalShape();
+}
+
+//-----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
+bool SelectionHelper::findNamedParent( SdrObject*& pInOutObject
+                                      , rtl::OUString& rOutName
+                                      , bool bGivenObjectMayBeResult )
+{
+    SolarMutexGuard aSolarGuard;
+    //find the deepest named group
+    SdrObject* pObj = pInOutObject;
+    rtl::OUString aName;
+    if( bGivenObjectMayBeResult )
+        aName = lcl_getObjectName( pObj );
+
+    while( pObj && !ObjectIdentifier::isCID( aName  )  )
+    {
+        SdrObjList* pObjList = pObj->GetObjList();
+        if( !pObjList )
+            return false;;
+        SdrObject* pOwner = pObjList->GetOwnerObj();
+        if( !pOwner )
+            return false;
+        pObj = pOwner;
+        aName = lcl_getObjectName( pObj );
+    }
+
+    if(!pObj)
+        return false;
+    if(!aName.getLength())
+        return false;
+
+    pInOutObject = pObj;
+    rOutName = aName;
+    return true;
+}
+
+bool SelectionHelper::findNamedParent( SdrObject*& pInOutObject
+                                      , ObjectIdentifier& rOutObject
+                                      , bool bGivenObjectMayBeResult )
+{
+    rtl::OUString aName;
+    if ( findNamedParent( pInOutObject, aName, bGivenObjectMayBeResult ) )
+    {
+        rOutObject = ObjectIdentifier( aName );
+        return true;
+    }
+    return false;
+}
+
+bool SelectionHelper::isDragableObjectHitTwice( const Point& rMPos
+                    , const rtl::OUString& rNameOfSelectedObject
+                    , const DrawViewWrapper& rDrawViewWrapper )
+{
+    if(!rNameOfSelectedObject.getLength())
+        return false;
+    if( !ObjectIdentifier::isDragableObject(rNameOfSelectedObject) )
+        return false;
+    SolarMutexGuard aSolarGuard;
+    SdrObject* pObj = rDrawViewWrapper.getNamedSdrObject( rNameOfSelectedObject );
+    if( !rDrawViewWrapper.IsObjectHit( pObj, rMPos ) )
+        return false;
+    return true;
+}
+
+::rtl::OUString SelectionHelper::getHitObjectCID(
+    const Point& rMPos,
+    DrawViewWrapper& rDrawViewWrapper,
+    bool bGetDiagramInsteadOf_Wall )
+{
+    // //- solar mutex
+    SolarMutexGuard aSolarGuard;
+    rtl::OUString aRet;
+
+    SdrObject* pNewObj = rDrawViewWrapper.getHitObject(rMPos);
+    aRet = lcl_getObjectName( pNewObj );//name of pNewObj
+
+    //ignore handle only objects for hit test
+    while( pNewObj && aRet.match(C2U("HandlesOnly")) )
+    {
+        pNewObj->SetMarkProtect(true);
+        pNewObj = rDrawViewWrapper.getHitObject(rMPos);
+        aRet = lcl_getObjectName( pNewObj );
+    }
+
+    //accept only named objects while searching for the object to select
+    if( !findNamedParent( pNewObj, aRet, true ) )
+    {
+        aRet = ::rtl::OUString();
+    }
+
+    rtl::OUString aPageCID( ObjectIdentifier::createClassifiedIdentifier( OBJECTTYPE_PAGE, rtl::OUString() ) );//@todo read CID from model
+    //get page when nothing was hit
+    if( aRet.getLength() == 0  && !pNewObj )
+    {
+        aRet = aPageCID;
+    }
+
+    //get diagram instead wall or page if hit inside diagram
+    if( aRet.getLength() != 0  )
+    {
+        if( aRet.equals( aPageCID ) )
+        {
+            rtl::OUString aDiagramCID = ObjectIdentifier::createClassifiedIdentifier( OBJECTTYPE_DIAGRAM, rtl::OUString::valueOf( sal_Int32(0) ) );
+            //todo: if more than one diagram is available in future do chack the list of all diagrams here
+            SdrObject* pDiagram = rDrawViewWrapper.getNamedSdrObject( aDiagramCID );
+            if( pDiagram )
+            {
+                if( rDrawViewWrapper.IsObjectHit( pDiagram, rMPos ) )
+                {
+                    aRet = aDiagramCID;
+                }
+            }
+        }
+        else if( bGetDiagramInsteadOf_Wall )
+        {
+            rtl::OUString aWallCID( ObjectIdentifier::createClassifiedIdentifier( OBJECTTYPE_DIAGRAM_WALL, rtl::OUString() ) );//@todo read CID from model
+
+            if( aRet.equals( aWallCID ) )
+            {
+                rtl::OUString aDiagramCID = ObjectIdentifier::createClassifiedIdentifier( OBJECTTYPE_DIAGRAM, rtl::OUString::valueOf( sal_Int32(0) ) );
+                aRet = aDiagramCID;
+            }
+        }
+    }
+
+    return aRet;
+    // \\- solar mutex
+}
+
+bool SelectionHelper::isRotateableObject( const ::rtl::OUString& rCID
+                    , const uno::Reference< frame::XModel >& xChartModel )
+{
+    if( !ObjectIdentifier::isRotateableObject( rCID ) )
+        return false;
+
+    sal_Int32 nDimensionCount = DiagramHelper::getDimension( ChartModelHelper::findDiagram( xChartModel ) );
+
+    if( nDimensionCount == 3 )
+        return true;
+    return false;
+}
+
+SelectionHelper::SelectionHelper( SdrObject* pSelectedObj )
+                      : m_pSelectedObj( pSelectedObj ), m_pMarkObj(NULL)
+{
+
+}
+SelectionHelper::~SelectionHelper()
+{
+}
+
+bool SelectionHelper::getFrameDragSingles()
+{
+    bool bFrameDragSingles = true;//true == green == surrounding handles
+    if( m_pSelectedObj && m_pSelectedObj->ISA(E3dObject) )
+        bFrameDragSingles = false;
+    return bFrameDragSingles;
+}
+
+SdrObject* SelectionHelper::getMarkHandlesObject( SdrObject* pObj )
+{
+    if(!pObj)
+        return 0;
+    rtl::OUString aName( lcl_getObjectName( pObj ) );
+    if( aName.match(C2U("MarkHandles")) || aName.match(C2U("HandlesOnly")) )
+        return pObj;
+    if( aName.getLength() )//dont't get the markhandles of a different object
+        return 0;
+
+    //search for a child with name "MarkHandles" or "HandlesOnly"
+    SolarMutexGuard aSolarGuard;
+    SdrObjList* pSubList = pObj->GetSubList();
+    if(pSubList)
+    {
+        SdrObjListIter aIterator(*pSubList, IM_FLAT);
+        while (aIterator.IsMore())
+        {
+            SdrObject* pMarkHandles = SelectionHelper::getMarkHandlesObject( aIterator.Next() );
+            if( pMarkHandles )
+                return pMarkHandles;
+        }
+    }
+    return 0;
+}
+
+SdrObject* SelectionHelper::getObjectToMark()
+{
+    //return the selected object itself
+    //or a specific other object if that exsists
+    SdrObject* pObj = m_pSelectedObj;
+    m_pMarkObj = pObj;
+
+    //search for a child with name "MarkHandles" or "HandlesOnly"
+    if(pObj)
+    {
+        SolarMutexGuard aSolarGuard;
+        SdrObjList* pSubList = pObj->GetSubList();
+        if(pSubList)
+        {
+            SdrObjListIter aIterator(*pSubList, IM_FLAT);
+            while (aIterator.IsMore())
+            {
+                SdrObject* pMarkHandles = SelectionHelper::getMarkHandlesObject( aIterator.Next() );
+                if( pMarkHandles )
+                {
+                    m_pMarkObj = pMarkHandles;
+                    break;
+                }
+            }
+        }
+    }
+    return m_pMarkObj;
+}
+
+E3dScene* SelectionHelper::getSceneToRotate( SdrObject* pObj )
+{
+    //search wether the object or one of its children is a 3D object
+    //if so, return the accessory 3DScene
+
+    E3dObject* pRotateable = 0;
+
+    if(pObj)
+    {
+        pRotateable = dynamic_cast<E3dObject*>(pObj);
+        if( !pRotateable )
+        {
+            SolarMutexGuard aSolarGuard;
+            SdrObjList* pSubList = pObj->GetSubList();
+            if(pSubList)
+            {
+                SdrObjListIter aIterator(*pSubList, IM_DEEPWITHGROUPS);
+                while( aIterator.IsMore() && !pRotateable )
+                {
+                    SdrObject* pSubObj = aIterator.Next();
+                    pRotateable = dynamic_cast<E3dObject*>(pSubObj);
+                }
+            }
+        }
+    }
+
+    E3dScene* pScene = 0;
+    if(pRotateable)
+    {
+        SolarMutexGuard aSolarGuard;
+        pScene = pRotateable->GetScene();
+    }
+    return pScene;
+
+}
+
+bool SelectionHelper::getMarkHandles( SdrHdlList& rHdlList )
+{
+    SolarMutexGuard aSolarGuard;
+
+    //@todo -> more flexible handle creation
+    //2 scenarios possible:
+    //1. add an additional invisible shape as a child to the selected object
+    //this child needs to be named somehow and handles need to be generated therefrom ...
+    //or 2. offer a central service per view where renderer and so can register for handle creation for a special shape
+    //.. or 3. feature from drawinglayer to create handles for each shape ... (bad performance ... ?) ?
+
+    //scenario 1 is now used:
+    //if a child with name MarkHandles exsists
+    //this child is marked instead of the logical selected object
+
+/*
+    //if a special mark object was found
+    //that object should be used for marking only
+    if( m_pMarkObj != m_pSelectedObj)
+        return false;
+*/
+    //if a special mark object was found
+    //that object should be used to create handles from
+    if( m_pMarkObj && m_pMarkObj != m_pSelectedObj)
+    {
+        rHdlList.Clear();
+        if( m_pMarkObj->ISA(SdrPathObj) )
+        {
+            //if th object is a polygon
+            //from each point a handle is generated
+            const ::basegfx::B2DPolyPolygon& rPolyPolygon = ((SdrPathObj*)m_pMarkObj)->GetPathPoly();
+            for( sal_uInt32 nN = 0L; nN < rPolyPolygon.count(); nN++)
+            {
+                const ::basegfx::B2DPolygon aPolygon(rPolyPolygon.getB2DPolygon(nN));
+                for( sal_uInt32 nM = 0L; nM < aPolygon.count(); nM++)
+                {
+                    const ::basegfx::B2DPoint aPoint(aPolygon.getB2DPoint(nM));
+                    SdrHdl* pHdl = new SdrHdl(Point(basegfx::fround(aPoint.getX()), basegfx::fround(aPoint.getY())), HDL_POLY);
+                    rHdlList.AddHdl(pHdl);
+                }
+            }
+            return true;
+        }
+        else
+            return false; //use the special MarkObject for marking
+    }
+
+    //@todo:
+    //add and document good marking defaults ...
+
+    rHdlList.Clear();
+
+    SdrObject* pObj = m_pSelectedObj;
+    if(!pObj)
+        return false;
+    SdrObjList* pSubList = pObj->GetSubList();
+    if( !pSubList )//no group object !pObj->IsGroupObject()
+        return false;
+
+    rtl::OUString aName( lcl_getObjectName( pObj ) );
+    ObjectType eObjectType( ObjectIdentifier::getObjectType( aName ) );
+    if( OBJECTTYPE_DATA_POINT == eObjectType
+        || OBJECTTYPE_DATA_LABEL == eObjectType
+        || OBJECTTYPE_LEGEND_ENTRY == eObjectType
+        || OBJECTTYPE_AXIS_UNITLABEL == eObjectType )
+    {
+        return false;
+    }
+
+    SdrObjListIter aIterator(*pSubList, IM_FLAT);
+
+    while (aIterator.IsMore())
+    {
+        SdrObject* pSubObj = aIterator.Next();
+        if( OBJECTTYPE_DATA_SERIES == eObjectType )
+        {
+            rtl::OUString aSubName( lcl_getObjectName( pSubObj ) );
+            ObjectType eSubObjectType( ObjectIdentifier::getObjectType( aSubName ) );
+            if( eSubObjectType!=OBJECTTYPE_DATA_POINT  )
+                return false;
+        }
+
+        Point aPos = pSubObj->GetCurrentBoundRect().Center();
+        SdrHdl* pHdl = new SdrHdl(aPos,HDL_POLY);
+        rHdlList.AddHdl(pHdl);
+    }
+    return true;
+}
+
+//.............................................................................
+} //namespace chart
+//.............................................................................
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

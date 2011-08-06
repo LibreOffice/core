@@ -1,0 +1,538 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#include "pvfundlg.hrc"
+
+StringArray SCSTR_DPFUNCLISTBOX
+{
+    ItemList [ en-US ] =
+    {
+        < "Sum" ; Default ; > ;
+        < "Count" ; Default ; > ;
+        < "Average" ; Default ; > ;
+        < "Max" ; Default ; > ;
+        < "Min" ; Default ; > ;
+        < "Product" ; Default ; > ;
+        < "Count (Numbers only)" ; Default ; > ;
+        < "StDev (Sample)" ; Default ; > ;
+        < "StDevP (Population)" ; Default ; > ;
+        < "Var (Sample)" ; Default ; > ;
+        < "VarP (Population)" ; Default ; > ;
+    };
+};
+
+// ----------------------------------------------------------------------------
+
+ModalDialog RID_SCDLG_DPDATAFIELD
+{
+    OutputSize = TRUE ;
+    HelpId = HID_SC_DPDATAFIELD ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 220 , 99 ) ;
+    Moveable = TRUE ;
+    Closeable = FALSE ;
+    Hide = TRUE ;
+    FixedLine FL_FUNC
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 152 , 8 ) ;
+        Text [ en-US ] = "~Function" ;
+    };
+    MultiListBox LB_FUNC
+    {
+        HelpID = "sc:MultiListBox:RID_SCDLG_DPDATAFIELD:LB_FUNC";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 12 , 14 ) ;
+        Size = MAP_APPFONT ( 140 , 65 ) ;
+        TabStop = TRUE ;
+        AutoHScroll = TRUE ;
+        SimpleMode = TRUE ;
+    };
+    FixedText FT_NAMELABEL
+    {
+        Pos = MAP_APPFONT ( 6 , 85 ) ;
+        Size = MAP_APPFONT ( 25 , 8 ) ;
+        Text [ en-US ] = "Name:" ;
+    };
+    FixedText FT_NAME
+    {
+        Pos = MAP_APPFONT ( 32 , 85 ) ;
+        Size = MAP_APPFONT ( 126 , 8 ) ;
+    };
+    FixedLine FL_DISPLAY
+    {
+        Pos = MAP_APPFONT( 6, 99 );
+        Size = MAP_APPFONT( 152, 8 );
+        Text [ en-US ] = "Displayed value";
+    };
+    FixedText FT_TYPE
+    {
+        Pos = MAP_APPFONT( 12, 112 );
+        Size = MAP_APPFONT( 60, 8 );
+        Text [ en-US ] = "~Type";
+    };
+    ListBox LB_TYPE
+    {
+        HelpID = "sc:ListBox:RID_SCDLG_DPDATAFIELD:LB_TYPE";
+        Pos = MAP_APPFONT( 75, 110 );
+        Size = MAP_APPFONT( 77, 120 );
+        TabStop = TRUE;
+        Border = TRUE;
+        DropDown = TRUE;
+        StringList [ en-US ] =
+        {
+            < "Normal"; Default; >;
+            < "Difference from"; Default; >;
+            < "% of"; Default; >;
+            < "% difference from"; Default; >;
+            < "Running total in"; Default; >;
+            < "% of row"; Default; >;
+            < "% of column"; Default; >;
+            < "% of total"; Default; >;
+            < "Index"; Default; >;
+        };
+    };
+    FixedText FT_BASEFIELD
+    {
+        Pos = MAP_APPFONT( 12, 128 );
+        Size = MAP_APPFONT( 60, 8 );
+        Text [ en-US ] = "~Base field";
+    };
+    ListBox LB_BASEFIELD
+    {
+        HelpID = "sc:ListBox:RID_SCDLG_DPDATAFIELD:LB_BASEFIELD";
+        Pos = MAP_APPFONT( 75, 126 );
+        Size = MAP_APPFONT( 77, 120 );
+        TabStop = TRUE;
+        Border = TRUE;
+        DropDown = TRUE;
+    };
+    FixedText FT_BASEITEM
+    {
+        Pos = MAP_APPFONT( 12, 144 );
+        Size = MAP_APPFONT( 60, 8 );
+        Text [ en-US ] = "Ba~se item";
+    };
+    ListBox LB_BASEITEM
+    {
+        HelpID = "sc:ListBox:RID_SCDLG_DPDATAFIELD:LB_BASEITEM";
+        Pos = MAP_APPFONT( 75, 142 );
+        Size = MAP_APPFONT( 77, 120 );
+        TabStop = TRUE;
+        Border = TRUE;
+        DropDown = TRUE;
+        StringList [ en-US ] =
+        {
+            < "- previous item -"; Default; >;
+            < "- next item -"; Default; >;
+        };
+    };
+    OKButton BTN_OK
+    {
+        Pos = MAP_APPFONT ( 164 , 6 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        DefButton = TRUE ;
+    };
+    CancelButton BTN_CANCEL
+    {
+        Pos = MAP_APPFONT ( 164 , 23 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    HelpButton BTN_HELP
+    {
+        Pos = MAP_APPFONT ( 164 , 43 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    MoreButton BTN_MORE
+    {
+        HelpID = "sc:MoreButton:RID_SCDLG_DPDATAFIELD:BTN_MORE";
+        Pos = MAP_APPFONT ( 164 , 79 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        MapUnit = MAP_APPFONT ;
+        Delta = 61 ;
+    };
+    Text [ en-US ] = "Data Field" ;
+};
+
+// ----------------------------------------------------------------------------
+
+ModalDialog RID_SCDLG_PIVOTSUBT
+{
+    OutputSize = TRUE ;
+    HelpId = HID_SC_PIVOTSUBT ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 220 , 155 ) ;
+    Text [ en-US ] = "Data Field" ;
+    Moveable = TRUE ;
+    Closeable = FALSE ;
+    Hide = TRUE ;
+    RadioButton RB_NONE
+    {
+        HelpID = "sc:RadioButton:RID_SCDLG_PIVOTSUBT:RB_NONE";
+        Pos = MAP_APPFONT ( 12 , 14 ) ;
+        Size = MAP_APPFONT ( 140 , 10 ) ;
+        Text [ en-US ] = "~None" ;
+        TabStop = TRUE ;
+    };
+    RadioButton RB_AUTO
+    {
+        HelpID = "sc:RadioButton:RID_SCDLG_PIVOTSUBT:RB_AUTO";
+        Pos = MAP_APPFONT ( 12 , 28 ) ;
+        Size = MAP_APPFONT ( 140 , 10 ) ;
+        Text [ en-US ] = "~Automatic" ;
+        TabStop = TRUE ;
+    };
+    RadioButton RB_USER
+    {
+        HelpID = "sc:RadioButton:RID_SCDLG_PIVOTSUBT:RB_USER";
+        Pos = MAP_APPFONT ( 12 , 42 ) ;
+        Size = MAP_APPFONT ( 140 , 10 ) ;
+        Text [ en-US ] = "~User-defined" ;
+        TabStop = TRUE ;
+    };
+    MultiListBox LB_FUNC
+    {
+        HelpID = "sc:MultiListBox:RID_SCDLG_PIVOTSUBT:LB_FUNC";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 12 , 56 ) ;
+        Size = MAP_APPFONT ( 140 , 65 ) ;
+        TabStop = TRUE ;
+        AutoHScroll = TRUE ;
+        SimpleMode = TRUE ;
+    };
+    FixedLine FL_FUNC
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 152 , 8 ) ;
+        Text [ en-US ] = "Subtotals" ;
+    };
+    CheckBox CB_SHOWALL
+    {
+        HelpID = "sc:CheckBox:RID_SCDLG_PIVOTSUBT:CB_SHOWALL";
+        Pos = MAP_APPFONT ( 6 , 127 ) ;
+        Size = MAP_APPFONT ( 152 , 10 ) ;
+        Text [ en-US ] = "Show it~ems without data";
+        TabStop = TRUE ;
+    };
+    FixedText FT_NAMELABEL
+    {
+        Pos = MAP_APPFONT ( 6 , 141 ) ;
+        Size = MAP_APPFONT ( 25 , 8 ) ;
+        Text [ en-US ] = "Name:" ;
+    };
+    FixedText FT_NAME
+    {
+        Pos = MAP_APPFONT ( 32 , 141 ) ;
+        Size = MAP_APPFONT ( 126 , 8 ) ;
+    };
+    OKButton BTN_OK
+    {
+        Pos = MAP_APPFONT ( 164 , 6 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        DefButton = TRUE ;
+    };
+    CancelButton BTN_CANCEL
+    {
+        Pos = MAP_APPFONT ( 164 , 23 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    HelpButton BTN_HELP
+    {
+        Pos = MAP_APPFONT ( 164 , 43 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    PushButton BTN_OPTIONS
+    {
+        HelpID = "sc:PushButton:RID_SCDLG_PIVOTSUBT:BTN_OPTIONS";
+        Pos = MAP_APPFONT ( 164 , 135 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "~Options...";
+    };
+};
+
+// ----------------------------------------------------------------------------
+
+ModalDialog RID_SCDLG_DPSUBTOTAL_OPT
+{
+    OutputSize = TRUE;
+    HelpId = HID_SC_DPSUBT_OPT;
+    SVLook = TRUE;
+    Size = MAP_APPFONT( 266, 240 );
+    Moveable = TRUE;
+    Closeable = FALSE;
+    Hide = TRUE;
+    FixedLine FL_SORT_BY
+    {
+        Pos = MAP_APPFONT( 6, 3 );
+        Size = MAP_APPFONT( 198, 8 );
+        Text [ en-US ] = "Sort ~by";
+    };
+    ListBox LB_SORT_BY
+    {
+        HelpID = "sc:ListBox:RID_SCDLG_DPSUBTOTAL_OPT:LB_SORT_BY";
+        Pos = MAP_APPFONT( 12, 26 );
+        Size = MAP_APPFONT( 96, 120 );
+        TabStop = TRUE;
+        Border = TRUE;
+        DropDown = TRUE;
+    };
+    RadioButton RB_SORT_ASC
+    {
+        HelpID = "sc:RadioButton:RID_SCDLG_DPSUBTOTAL_OPT:RB_SORT_ASC";
+        Pos = MAP_APPFONT( 114, 14 );
+        Size = MAP_APPFONT( 84, 10 );
+        TabStop = TRUE;
+        Text [ en-US ] = "~Ascending";
+    };
+    RadioButton RB_SORT_DESC
+    {
+        HelpID = "sc:RadioButton:RID_SCDLG_DPSUBTOTAL_OPT:RB_SORT_DESC";
+        Pos = MAP_APPFONT( 114, 28 );
+        Size = MAP_APPFONT( 84, 10 );
+        TabStop = TRUE;
+        Text [ en-US ] = "~Descending";
+    };
+    RadioButton RB_SORT_MAN
+    {
+        HelpID = "sc:RadioButton:RID_SCDLG_DPSUBTOTAL_OPT:RB_SORT_MAN";
+        Pos = MAP_APPFONT( 114, 42 );
+        Size = MAP_APPFONT( 84, 10 );
+        TabStop = TRUE;
+        Text [ en-US ] = "~Manual";
+    };
+    FixedLine FL_LAYOUT
+    {
+        Pos = MAP_APPFONT( 6, 56 );
+        Size = MAP_APPFONT( 198, 8 );
+        Text [ en-US ] = "Display options";
+    };
+    FixedText FT_LAYOUT
+    {
+        Pos = MAP_APPFONT( 12, 69 );
+        Size = MAP_APPFONT( 70, 8 );
+        Text [ en-US ] = "~Layout";
+    };
+    ListBox LB_LAYOUT
+    {
+        HelpID = "sc:ListBox:RID_SCDLG_DPSUBTOTAL_OPT:LB_LAYOUT";
+        Pos = MAP_APPFONT( 84, 67 );
+        Size = MAP_APPFONT( 114, 120 );
+        TabStop = TRUE;
+        Border = TRUE;
+        DropDown = TRUE;
+        StringList [ en-US ] =
+        {
+            < "Tabular layout"; Default; >;
+            < "Outline layout with subtotals at the top"; Default; >;
+            < "Outline layout with subtotals at the bottom"; Default; >;
+        };
+    };
+    CheckBox CB_LAYOUT_EMPTY
+    {
+        HelpID = "sc:CheckBox:RID_SCDLG_DPSUBTOTAL_OPT:CB_LAYOUT_EMPTY";
+        Pos = MAP_APPFONT( 12, 85 );
+        Size = MAP_APPFONT( 186, 10 );
+        TabStop = TRUE;
+        Text [ en-US ] = "~Empty line after each item";
+    };
+    FixedLine FL_AUTOSHOW
+    {
+        Pos = MAP_APPFONT( 6, 99 );
+        Size = MAP_APPFONT( 198, 8 );
+        Text [ en-US ] = "Show automatically";
+    };
+    CheckBox CB_SHOW
+    {
+        HelpID = "sc:CheckBox:RID_SCDLG_DPSUBTOTAL_OPT:CB_SHOW";
+        Pos = MAP_APPFONT( 12, 112 );
+        Size = MAP_APPFONT( 70, 10 );
+        TabStop = TRUE;
+        Text[ en-US ] = "~Show";
+    };
+    NumericField NF_SHOW
+    {
+        HelpID = "sc:NumericField:RID_SCDLG_DPSUBTOTAL_OPT:NF_SHOW";
+        Pos = MAP_APPFONT( 84, 110 );
+        Size = MAP_APPFONT( 30, 12 );
+        TabStop = TRUE;
+        Border = TRUE;
+        Repeat = TRUE;
+        Spin = TRUE;
+        Minimum = 1;
+        Maximum = 999;
+        SpinSize = 1;
+        StrictFormat = TRUE;
+    };
+    FixedText FT_SHOW
+    {
+        Pos = MAP_APPFONT( 118, 112 );
+        Size = MAP_APPFONT( 80, 8 );
+        Text [ en-US ] = "items";
+    };
+    FixedText FT_SHOW_FROM
+    {
+        Pos = MAP_APPFONT( 22, 128 );
+        Size = MAP_APPFONT( 60, 8 );
+        Text [ en-US ] = "~From";
+    };
+    ListBox LB_SHOW_FROM
+    {
+        HelpID = "sc:ListBox:RID_SCDLG_DPSUBTOTAL_OPT:LB_SHOW_FROM";
+        Pos = MAP_APPFONT( 84, 126 );
+        Size = MAP_APPFONT( 114, 50 );
+        TabStop = TRUE;
+        Border = TRUE;
+        DropDown = TRUE;
+        StringList [ en-US ] =
+        {
+            < "Top"; Default; >;
+            < "Bottom"; Default; >;
+        };
+    };
+    FixedText FT_SHOW_USING
+    {
+        Pos = MAP_APPFONT( 22, 144 );
+        Size = MAP_APPFONT( 60, 8 );
+        Text [ en-US ] = "~Using field";
+    };
+    ListBox LB_SHOW_USING
+    {
+        HelpID = "sc:ListBox:RID_SCDLG_DPSUBTOTAL_OPT:LB_SHOW_USING";
+        Pos = MAP_APPFONT( 84, 142 );
+        Size = MAP_APPFONT( 114, 120 );
+        TabStop = TRUE;
+        Border = TRUE;
+        DropDown = TRUE;
+    };
+    FixedLine FL_HIDE
+    {
+        Pos = MAP_APPFONT( 6, 160 );
+        Size = MAP_APPFONT( 198, 8 );
+        Text [ en-US ] = "Hide i~tems";
+    };
+    Control CT_HIDE
+    {
+        Pos = MAP_APPFONT( 12, 171 );
+        Size = MAP_APPFONT( 186, 45 );
+        TabStop = TRUE;
+        Border = TRUE;
+    };
+    FixedText FT_HIERARCHY
+    {
+        Pos = MAP_APPFONT( 6, 224 );
+        Size = MAP_APPFONT( 76, 8 );
+        Text [ en-US ] = "Hierarch~y";
+    };
+    ListBox LB_HIERARCHY
+    {
+        HelpID = "sc:ListBox:RID_SCDLG_DPSUBTOTAL_OPT:LB_HIERARCHY";
+        Pos = MAP_APPFONT( 84, 222 );
+        Size = MAP_APPFONT( 114, 120 );
+        TabStop = TRUE;
+        Border = TRUE;
+        DropDown = TRUE;
+    };
+    OKButton BTN_OK
+    {
+        Pos = MAP_APPFONT( 210, 6 );
+        Size = MAP_APPFONT( 50, 14 );
+        TabStop = TRUE;
+        DefButton = TRUE;
+    };
+    CancelButton BTN_CANCEL
+    {
+        Pos = MAP_APPFONT( 210, 23 );
+        Size = MAP_APPFONT( 50, 14 );
+        TabStop = TRUE;
+    };
+    HelpButton BTN_HELP
+    {
+        Pos = MAP_APPFONT( 210, 43 );
+        Size = MAP_APPFONT( 50, 14 );
+        TabStop = TRUE;
+    };
+    Text [ en-US ] = "Data Field Options";
+};
+
+// ----------------------------------------------------------------------------
+
+ModalDialog RID_SCDLG_DPSHOWDETAIL
+{
+    OutputSize = TRUE;
+    HelpId = HID_SC_DPSHOWDETAIL;
+    SVLook = TRUE;
+    Size = MAP_APPFONT( 200, 116 );
+    Moveable = TRUE;
+    Closeable = FALSE;
+    FixedText FT_DIMS
+    {
+        Pos = MAP_APPFONT( 6, 3 );
+        Size = MAP_APPFONT( 132, 24 );
+        WordBreak = TRUE;
+        Text [ en-US ] = "~Choose the field containing the detail you want to show";
+    };
+    ListBox LB_DIMS
+    {
+        HelpID = "sc:ListBox:RID_SCDLG_DPSHOWDETAIL:LB_DIMS";
+        Pos = MAP_APPFONT( 6, 30 );
+        Size = MAP_APPFONT( 132, 80 );
+        TabStop = TRUE;
+        Border = TRUE;
+        DropDown = FALSE;
+    };
+    OKButton BTN_OK
+    {
+        Pos = MAP_APPFONT( 144, 6 );
+        Size = MAP_APPFONT( 50, 14 );
+        TabStop = TRUE;
+        DefButton = TRUE;
+    };
+    CancelButton BTN_CANCEL
+    {
+        Pos = MAP_APPFONT( 144, 23 );
+        Size = MAP_APPFONT( 50, 14 );
+        TabStop = TRUE;
+    };
+    HelpButton BTN_HELP
+    {
+        Pos = MAP_APPFONT( 144, 43 );
+        Size = MAP_APPFONT( 50, 14 );
+        TabStop = TRUE;
+    };
+    Text [ en-US ] = "Show Detail";
+};
+
+// ----------------------------------------------------------------------------
+
