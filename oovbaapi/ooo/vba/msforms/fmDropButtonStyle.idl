@@ -1,0 +1,8 @@
+module ooo { module vba { module msforms {
+    constants fmDropButtonStyle {
+        const long fmDropButtonStyleArrow = 1;
+        const long fmDropButtonStyleEllipsis = 2;
+        const long fmDropButtonStylePlain = 0;
+        const long fmDropButtonStyleReduce = 3;
+    };
+}; }; };

@@ -1,0 +1,34 @@
+sl    shell	:    TRANSLATIONS:translations offapi DESKTOP:rdbmaker tools sal EXPAT:expat LIBXSLT:libxslt NULL
+sl    shell\inc			                           nmake   -   all sl_inc NULL
+sl    shell\source\win32                           nmake   -   w   sl_win32 sl_inc NULL
+sl    shell\source\win32\simplemail                nmake   -   w   sl_win32_simplemail sl_inc NULL
+sl    shell\source\unix\exec                       nmake   -   u   sl_unix sl_inc NULL
+sl    shell\source\unix\exec                       nmake   -   p   sl_unix sl_inc NULL
+sl    shell\source\unix\misc                       nmake   -   u   sl_unix_misc sl_inc NULL
+sl    shell\source\unix\misc                       nmake   -   p   sl_unix_misc sl_inc NULL
+sl    shell\source\cmdmail                         nmake   -   u   sl_cmdmail sl_inc NULL
+sl    shell\source\cmdmail                         nmake   -   p   sl_cmdmail sl_inc NULL
+sl    shell\source\all                             nmake   -   all sl_all sl_inc NULL
+sl    shell\source\unix\sysshell                   nmake   -   u   sl_unix_sysshell sl_all sl_inc NULL
+sl    shell\source\tools\lngconvex                 nmake   -   all sl_win32_lngconv sl_inc NULL
+sl    shell\source\tools\regsvrex                  nmake   -   w   sl_win32_regsvrex  sl_inc NULL
+sl    shell\source\all\zipfile                     nmake   -   w   sl_all_zipfile  sl_inc NULL
+sl    shell\source\all\zipfile                     nmake   -   p   sl_all_zipfile  sl_inc NULL
+sl    shell\source\all\ooofilereader               nmake   -   w   sl_all_ooofilereader sl_all_zipfile.w sl_all sl_inc NULL
+sl    shell\source\all\ooofilereader               nmake   -   p   sl_all_ooofilereader sl_all_zipfile.w sl_all sl_inc NULL
+sl    shell\source\win32\shlxthandler\res          nmake   -   w   sl_win32_shlxthandler_res sl_win32_lngconv.w sl_inc NULL
+sl    shell\source\win32\shlxthandler\util         nmake   -   w   sl_win32_shlxthandler_util  sl_inc NULL
+sl    shell\source\win32\shlxthandler\propsheets   nmake   -   w   sl_win32_shlxthandler_propsheets  sl_inc NULL
+sl    shell\source\win32\shlxthandler\infotips     nmake   -   w   sl_win32_shlxthandler_infotips  sl_inc NULL
+sl    shell\source\win32\shlxthandler\columninfo   nmake   -   w   sl_win32_shlxthandler_columninfo  sl_inc NULL
+sl    shell\source\win32\shlxthandler\thumbviewer  nmake   -   w   sl_win32_shlxthandler_thumbviewer sl_inc NULL
+sl    shell\source\win32\shlxthandler\prophdl      nmake   -   w   sl_win32_shlxthandler_prophdl sl_win32_shlxthandler_ooofilt.w sl_inc NULL
+sl    shell\source\win32\shlxthandler              nmake   -   w   sl_win32_shlxthandler sl_win32_lngconv.w sl_win32_shlxthandler_res.w sl_win32_shlxthandler_util.w sl_all_zipfile.w sl_all_ooofilereader.w sl_win32_shlxthandler_propsheets.w sl_win32_shlxthandler_infotips.w sl_win32_shlxthandler_columninfo.w sl_win32_shlxthandler_thumbviewer.w sl_win32_shlxthandler_prophdl.w sl_inc sl_win32_shlxthandler_ooofilt.w NULL
+sl    shell\source\backends\localebe               nmake   -   all sl_backends_localebe sl_inc NULL
+sl    shell\source\backends\wininetbe              nmake   -   w   sl_backends_wininetbe sl_inc NULL
+sl    shell\source\backends\macbe                  nmake   -   u   sl_backends_macbe sl_inc NULL
+sl    shell\source\backends\gconfbe                nmake   -   u   sl_backends_gconfbe sl_inc NULL
+sl    shell\source\backends\kdebe                  nmake   -   u   sl_backends_kdebe sl_inc NULL
+sl    shell\source\backends\kde4be                 nmake   -   u   sl_backends_kde4be sl_inc NULL
+sl    shell\source\backends\desktopbe              nmake   -   u   sl_backends_desktopbe sl_inc NULL
+sl    shell\source\win32\shlxthandler\ooofilt      nmake   -   w   sl_win32_shlxthandler_ooofilt sl_all_zipfile.w sl_all_ooofilereader.w sl_win32_shlxthandler_util.w sl_all sl_inc NULL

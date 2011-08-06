@@ -1,0 +1,143 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#include <svx/dialogs.hrc>
+
+#define BTN_GEO                 2
+#define BTN_REPRESENTATION      3
+#define BTN_LIGHT               4
+#define BTN_TEXTURE             5
+#define BTN_MATERIAL            6
+#define BTN_UPDATE              7
+#define BTN_ASSIGN              8
+
+// Unterer Teil
+#define BTN_PERSPECTIVE         9
+#define BTN_CHANGE_TO_3D        10
+#define BTN_LATHE_OBJ           11
+#define CTL_PREVIEW             12
+#define CTL_LIGHT_PREVIEW       13
+
+// Geomerty
+#define FT_HORIZONTAL           24
+#define NUM_HORIZONTAL          25
+#define FT_VERTICAL             26
+#define NUM_VERTICAL            27
+#define FL_SEGMENTS             28
+#define FT_PERCENT_DIAGONAL     29
+#define MTR_PERCENT_DIAGONAL    30
+#define FT_BACKSCALE            31
+#define MTR_BACKSCALE           32
+#define FT_END_ANGLE            33
+#define MTR_END_ANGLE           34
+#define FT_DEPTH                35
+#define MTR_DEPTH               36
+#define FL_GEOMETRIE            37
+
+#define BTN_NORMALS_OBJ         38
+#define BTN_NORMALS_FLAT        39
+#define BTN_NORMALS_SPHERE      40
+#define BTN_TWO_SIDED_LIGHTING  41
+#define BTN_NORMALS_INVERT      42
+#define FL_NORMALS              43
+
+#define BTN_DOUBLE_SIDED        44
+
+// Depiction/Appearance
+#define FT_SHADEMODE            45
+#define LB_SHADEMODE            46
+#define BTN_SHADOW_3D           47
+#define FT_SLANT                48
+#define MTR_SLANT               49
+#define FL_SHADOW               50
+#define FT_DISTANCE             51
+#define MTR_DISTANCE            52
+#define FT_FOCAL_LENGTH         53
+#define MTR_FOCAL_LENGTH        54
+#define FL_CAMERA               55
+#define FL_REPRESENTATION       56
+
+// Lighting
+#define BTN_LIGHT_1             60
+#define BTN_LIGHT_2             61
+#define BTN_LIGHT_3             62
+#define BTN_LIGHT_4             63
+#define BTN_LIGHT_5             64
+#define BTN_LIGHT_6             65
+#define BTN_LIGHT_7             66
+#define BTN_LIGHT_8             67
+#define LB_LIGHT_1              68
+#define LB_LIGHT_2              69
+#define LB_LIGHT_3              70
+#define LB_LIGHT_4              71
+#define LB_LIGHT_5              72
+#define LB_LIGHT_6              73
+#define LB_LIGHT_7              74
+#define LB_LIGHT_8              75
+#define BTN_LIGHT_COLOR         76
+#define FT_LIGHTSOURCE          77
+#define LB_AMBIENTLIGHT         78
+#define BTN_AMBIENT_COLOR       79
+#define FT_AMBIENTLIGHT         80
+#define FL_LIGHT                81
+
+// Textures
+#define FT_TEX_KIND             90
+#define BTN_TEX_LUMINANCE       91
+#define BTN_TEX_COLOR           92
+#define FT_TEX_MODE             93
+#define BTN_TEX_REPLACE         94
+#define BTN_TEX_MODULATE        95
+#define BTN_TEX_BLEND           96
+#define FT_TEX_PROJECTION_X     97
+#define BTN_TEX_PARALLEL_X      98
+#define BTN_TEX_CIRCLE_X        99
+#define BTN_TEX_OBJECT_X        100
+#define FT_TEX_PROJECTION_Y     101
+#define BTN_TEX_PARALLEL_Y      102
+#define BTN_TEX_CIRCLE_Y        103
+#define BTN_TEX_OBJECT_Y        104
+#define FT_TEX_FILTER           105
+#define BTN_TEX_FILTER          106
+#define FL_TEXTURE              107
+
+// Material
+#define FL_MATERIAL             111
+
+#define FT_MAT_COLOR                112
+#define LB_MAT_COLOR                113
+#define BTN_MAT_COLOR               114
+#define FT_MAT_EMISSION             115
+#define LB_MAT_EMISSION             116
+#define BTN_EMISSION_COLOR          117
+#define FT_MAT_SPECULAR             118
+#define LB_MAT_SPECULAR             119
+#define BTN_SPECULAR_COLOR          120
+#define FT_MAT_SPECULAR_INTENSITY   121
+#define MTR_MAT_SPECULAR_INTENSITY  122
+#define FL_MAT_SPECULAR             123
+#define FT_MAT_FAVORITES            124
+#define LB_MAT_FAVORITES            125

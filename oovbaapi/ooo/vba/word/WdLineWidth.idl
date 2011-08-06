@@ -1,0 +1,13 @@
+module ooo { module vba { module word {
+    constants WdLineWidth {
+        const long wdLineWidth025pt = 2;
+        const long wdLineWidth050pt = 4;
+        const long wdLineWidth075pt = 6;
+        const long wdLineWidth100pt = 8;
+        const long wdLineWidth150pt = 12;
+        const long wdLineWidth225pt = 18;
+        const long wdLineWidth300pt = 24;
+        const long wdLineWidth450pt = 36;
+        const long wdLineWidth600pt = 48;
+    };
+}; }; };

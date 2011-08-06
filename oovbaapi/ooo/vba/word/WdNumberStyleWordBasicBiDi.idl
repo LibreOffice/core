@@ -1,0 +1,12 @@
+module ooo { module vba { module word {
+    constants WdNumberStyleWordBasicBiDi {
+        const long wdCaptionNumberStyleBidiLetter1 = 49;
+        const long wdCaptionNumberStyleBidiLetter2 = 50;
+        const long wdListNumberStyleBidi1 = 49;
+        const long wdListNumberStyleBidi2 = 50;
+        const long wdNoteNumberStyleBidiLetter1 = 49;
+        const long wdNoteNumberStyleBidiLetter2 = 50;
+        const long wdPageNumberStyleBidiLetter1 = 49;
+        const long wdPageNumberStyleBidiLetter2 = 50;
+    };
+}; }; };

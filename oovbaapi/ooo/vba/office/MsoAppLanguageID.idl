@@ -1,0 +1,9 @@
+module ooo { module vba { module office {
+    constants MsoAppLanguageID {
+        const long msoLanguageIDExeMode = 4;
+        const long msoLanguageIDHelp = 3;
+        const long msoLanguageIDInstall = 1;
+        const long msoLanguageIDUI = 2;
+        const long msoLanguageIDUIPrevious = 5;
+    };
+}; }; };

@@ -1,0 +1,6 @@
+module ooo { module vba { module word {
+    constants WdDateLanguage {
+        const long wdDateLanguageBidi = 10;
+        const long wdDateLanguageLatin = 1033;
+    };
+}; }; };

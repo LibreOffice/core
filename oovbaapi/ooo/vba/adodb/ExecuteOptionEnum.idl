@@ -1,0 +1,9 @@
+module ooo { module vba { module adodb {
+    constants ExecuteOptionEnum {
+        const long adAsyncExecute = 16;
+        const long adAsyncFetch = 32;
+        const long adAsyncFetchNonBlocking = 64;
+        const long adExecuteNoRecords = 128;
+        const long adOptionUnspecified = -1;
+    };
+}; }; };

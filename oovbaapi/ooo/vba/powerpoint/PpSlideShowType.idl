@@ -1,0 +1,7 @@
+module ooo { module vba { module powerpoint {
+    constants PpSlideShowType {
+        const long ppShowTypeKiosk = 3;
+        const long ppShowTypeSpeaker = 1;
+        const long ppShowTypeWindow = 2;
+    };
+}; }; };

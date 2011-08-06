@@ -1,0 +1,35 @@
+..\%__SRC%\slb\*.lib %_DEST%\lib\*.lib
+..\%__SRC%\slb\*.a %_DEST%\lib\*.a
+..\%__SRC%\lib\lib*.so %_DEST%\lib
+..\%__SRC%\lib\*.uno.so %_DEST%\lib\*.uno.so
+..\%__SRC%\bin\*.dll %_DEST%\bin\*.dll
+..\%__SRC%\bin\*.exe %_DEST%\bin\*.exe
+..\%__SRC%\bin\x64\shlxthdl.dll %_DEST%\bin\shlxthdl_x64.dll
+..\%__SRC%\bin\x64\ooofiltproxy.dll %_DEST%\bin\ooofiltproxy_x64.dll
+..\%__SRC%\bin\x64\ooofilt.dll %_DEST%\bin\ooofilt_x64.dll
+..\%__SRC%\bin\x64\propertyhdl.dll %_DEST%\bin\propertyhdl_x64.dll
+..\%__SRC%\lib\*.dylib %_DEST%\lib\*.dylib
+..\%__SRC%\lib\*.a %_DEST%\lib\*.a
+..\%__SRC%\misc\cmdmail.component %_DEST%\xml\cmdmail.component
+
+..\%__SRC%\bin\open-url %_DEST%\bin\open-url
+..\%__SRC%\bin\cde-open-url %_DEST%\bin\cde-open-url
+..\%__SRC%\bin\kde-open-url %_DEST%\bin\kde-open-url
+..\%__SRC%\bin\gnome-open-url %_DEST%\bin\gnome-open-url
+..\%__SRC%\bin\gnome-open-url.bin %_DEST%\bin\gnome-open-url.bin
+..\%__SRC%\bin\senddoc %_DEST%\bin\senddoc
+..\%__SRC%\bin\uri-encode %_DEST%\bin\uri-encode
+..\%__SRC%\bin\lngconvex %_DEST%\bin\lngconvex
+
+..\%__SRC%\misc\*.xml %_DEST%\xml\*.xml
+
+..\%__SRC%\misc\desktopbe1.component  %_DEST%\xml\desktopbe1.component
+..\%__SRC%\misc\gconfbe1.component  %_DEST%\xml\gconfbe1.component
+..\%__SRC%\misc\kde4be1.component  %_DEST%\xml\kde4be1.component
+..\%__SRC%\misc\kdebe1.component  %_DEST%\xml\kdebe1.component
+..\inc\kde_headers.h %_DEST%\inc\shell\kde_headers.h
+..\%__SRC%\misc\localebe1.component %_DEST%\xml\localebe1.component
+..\%__SRC%\misc\macbe1.component %_DEST%\xml\macbe1.component
+..\%__SRC%\misc\smplmail.component %_DEST%\xml\smplmail.component
+..\%__SRC%\misc\syssh.component %_DEST%\xml\syssh.component
+..\%__SRC%\misc\wininetbe1.component %_DEST%\xml\wininetbe1.component

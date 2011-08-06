@@ -1,0 +1,6 @@
+module ooo { module vba { module dao {
+    constants IdleEnum {
+        const long dbFreeLocks = 1;
+        const long dbRefreshCache = 8;
+    };
+}; }; };

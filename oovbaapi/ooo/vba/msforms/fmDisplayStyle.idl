@@ -1,0 +1,11 @@
+module ooo { module vba { module msforms {
+    constants fmDisplayStyle {
+        const long fmDisplayStyleCheckBox = 4;
+        const long fmDisplayStyleCombo = 3;
+        const long fmDisplayStyleDropList = 7;
+        const long fmDisplayStyleList = 2;
+        const long fmDisplayStyleOptionButton = 5;
+        const long fmDisplayStyleText = 1;
+        const long fmDisplayStyleToggle = 6;
+    };
+}; }; };

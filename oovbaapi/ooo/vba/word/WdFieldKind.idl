@@ -1,0 +1,8 @@
+module ooo { module vba { module word {
+    constants WdFieldKind {
+        const long wdFieldKindCold = 3;
+        const long wdFieldKindHot = 1;
+        const long wdFieldKindNone = 0;
+        const long wdFieldKindWarm = 2;
+    };
+}; }; };

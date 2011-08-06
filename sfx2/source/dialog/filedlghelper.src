@@ -1,0 +1,168 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#include "sfxlocal.hrc"
+#include "filedlghelper.hrc"
+
+
+String STR_SFX_FILEDLG_ACTUALVERSION
+{
+    Text [ en-US ] = "Current version";
+};
+
+String STR_SFX_EXPLORERFILE_EXPORT
+{
+    Text [ en-US ] = "Export";
+};
+
+String STR_SFX_EXPLORERFILE_INSERT
+{
+    Text [ en-US ] = "Insert" ;
+};
+
+String STR_SFX_EXPLORERFILE_BUTTONINSERT
+{
+    Text [ en-US ] = "~Insert" ;
+};
+
+String STR_SFX_IMPORT_ALL
+{
+    Text [ en-US ] = "<All formats>" ;
+};
+
+String STR_CB_AUTO_EXTENSION
+{
+    Text [ en-US ] = "~Automatic file name extension" ;
+};
+
+String STR_CB_SELECTION
+{
+    Text [ en-US ] = "~Selection" ;
+};
+
+String STR_CB_INSERT_AS_LINK
+{
+    Text [ en-US ] = "~Link" ;
+};
+
+String STR_CB_SHOW_PREVIEW
+{
+    Text [ en-US ] = "Pr~eview" ;
+};
+
+String STR_CB_READONLY
+{
+    Text [ en-US ] = "~Read-only" ;
+};
+
+String STR_CB_PASSWORD
+{
+    Text [ en-US ] = "Save with ~password" ;
+};
+
+String STR_CB_FILTER_OPTIONS
+{
+    Text [ en-US ] = "Edit ~filter settings";
+};
+
+String STR_PB_PLAY
+{
+    Text [ en-US ] = "~Play" ;
+};
+
+String STR_PB_STOP
+{
+    Text [ en-US ] = "Sto~p" ;
+};
+
+String STR_PB_OPEN
+{
+    Text [ en-US ] = "~Open" ;
+};
+
+String STR_PB_SAVE
+{
+    Text [ en-US ] = "~Save" ;
+};
+
+String STR_LB_IMAGE_TEMPLATE
+{
+    Text [ en-US ] = "Style:" ;
+};
+
+String STR_LB_TEMPLATES
+{
+    Text [ en-US ] = "~Templates:" ;
+};
+
+String STR_LB_VERSION
+{
+    Text [ en-US ] = "~Version:";
+};
+
+//******************************************************************** EOF
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

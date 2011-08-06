@@ -1,0 +1,14 @@
+module ooo { module vba { module excel {
+    constants XlPasteType {
+        const long xlPasteAll = -4104;
+        const long xlPasteAllExceptBorders = 7;
+        const long xlPasteColumnWidths = 8;
+        const long xlPasteComments = -4144;
+        const long xlPasteFormats = -4122;
+        const long xlPasteFormulas = -4123;
+        const long xlPasteFormulasAndNumberFormats = 11;
+        const long xlPasteValidation = 6;
+        const long xlPasteValues = -4163;
+        const long xlPasteValuesAndNumberFormats = 12;
+    };
+}; }; };

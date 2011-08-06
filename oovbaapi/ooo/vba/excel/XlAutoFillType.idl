@@ -1,0 +1,15 @@
+module ooo { module vba { module excel {
+    constants XlAutoFillType {
+        const long xlFillCopy = 1;
+        const long xlFillDays = 5;
+        const long xlFillDefault = 0;
+        const long xlFillFormats = 3;
+        const long xlFillMonths = 7;
+        const long xlFillSeries = 2;
+        const long xlFillValues = 4;
+        const long xlFillWeekdays = 6;
+        const long xlFillYears = 8;
+        const long xlGrowthTrend = 10;
+        const long xlLinearTrend = 9;
+    };
+}; }; };

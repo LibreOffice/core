@@ -1,0 +1,14 @@
+module ooo { module vba { module excel {
+    constants XlFormControl {
+        const long xlButtonControl = 0;
+        const long xlCheckBox = 1;
+        const long xlDropDown = 2;
+        const long xlEditBox = 3;
+        const long xlGroupBox = 4;
+        const long xlLabel = 5;
+        const long xlListBox = 6;
+        const long xlOptionButton = 7;
+        const long xlScrollBar = 8;
+        const long xlSpinner = 9;
+    };
+}; }; };

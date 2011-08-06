@@ -1,0 +1,443 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+// Resource-Id's for OFA
+
+#ifndef _OFF_APP_HRC
+#define _OFF_APP_HRC
+
+// include ---------------------------------------------------------------
+
+#include <svl/solar.hrc>
+#include <sfx2/sfxsids.hrc>
+
+// Ranges ----------------------------------------------------------------
+
+// PB: Vorsicht diesen Bereich hier im app.hrc nicht mehr benutzen!
+#define RID_OFA_LDAP_START              (RID_OFA_START + 300)
+#define RID_OFA_LDAP_END                (RID_OFA_START + 349)
+
+// defines ---------------------------------------------------------------
+
+#define RID_QRY_SELECTMAILADDR          (RID_OFA_START +  0)
+#define RID_QRY_NEWMAILADDR             (RID_OFA_START +  1)
+#define RID_QRY_SELECTBRWADDR           (RID_OFA_START +  2)
+#define RID_QRY_NEWBRWADDR              (RID_OFA_START +  3)
+#define RID_QRY_NO_URL                  (RID_OFA_START +  4)
+#define RID_QRY_NO_MAILADDR             (RID_OFA_START +  5)
+#define RID_QRY_NO_NAME                 (RID_OFA_START +  6)
+#define RID_QRY_INVALID_URL             (RID_OFA_START +  7)
+#define RID_QRY_DEL_MAIL                (RID_OFA_START +  8)
+#define RID_QRY_ADDRESSBOOK             (RID_OFA_START +  9)
+#define RID_QRY_NO_ADDR                 (RID_OFA_START + 10)
+
+                                        // String und ToolBox
+#define RID_MAILTOOLBOX                 (RID_OFA_START + 112)
+#define RID_QRY_SELECTADDR              (RID_OFA_START + 13)
+
+#define RID_ICO_MSGVIEW                 (RID_OFA_START + 20)
+#define RID_WIN_MAILHEADER              (RID_OFA_START + 21)
+#define RID_WIN_MAILATTACH              (RID_OFA_START + 22)
+#define RID_IMG_MAILTEXT                (RID_OFA_START + 23)
+#define RID_MSGDOC_MENU                 (RID_OFA_START + 24)
+#define RID_ATTACH_MENU                 (RID_OFA_START + 25)
+#define RID_HEADER_MENU                 (RID_OFA_START + 26)
+#define RID_CALENDAR_WIN                (RID_OFA_START + 27)
+#define RID_STA_NEWSWIN_TITEL           (RID_OFA_START + 28)
+#define RID_SEND_MENU                   (RID_OFA_START + 29)
+
+
+// Icons and Images ------------------------------------------------------
+
+#define RID_ICO_TABLES                  (RID_OFA_START + 30)
+#define RID_ICO_QUERIES                 (RID_OFA_START + 31)
+#define RID_ICO_FORMS                   (RID_OFA_START + 32)
+#define RID_ICO_REPORTS                 (RID_OFA_START + 33)
+#define RID_ICO_DATABASE                (RID_OFA_START + 34)
+#define RID_IMG_ALTFOLDER_CLOSE         (RID_OFA_START + 35)
+#define RID_IMG_ALTFOLDER_OPEN          (RID_OFA_START + 36)
+#define RID_IMG_ALTFOLDER_PLUS          (RID_OFA_START + 37)
+#define RID_IMG_ALTFOLDER_MINUS         (RID_OFA_START + 38)
+#define RID_IMGLIST_PGP                 (RID_OFA_START + 39)
+#define RID_IMGLIST_LARGE_PGP           (RID_OFA_START + 40)
+
+// Errors ----------------------------------------------------------------
+
+#define RID_ERR_OUTBOX                  (RID_OFA_START + 50)
+#define RID_ERR_DB_OPENPROPERTIES       (RID_OFA_START + 51)
+#define RID_ERR_NO_EMAILADDRESS         (RID_OFA_START + 52)
+#define RID_QBOX_NOSUBJECT              (RID_OFA_START + 53)
+#define RID_ERRBOX_NORECIPIENTS         (RID_OFA_START + 54)
+#define RID_ERRBOX_NOSETTINGS           (RID_OFA_START + 55)
+#define RID_QBOX_ADDADDRESS             (RID_OFA_START + 56)
+#define RID_ERR_NO_DD_FOR_ADDRESSBOOK   (RID_OFA_START + 57)
+#define RID_QBOX_NORCPTS                (RID_OFA_START + 58)
+#define RID_QBOX_FORMATS                (RID_OFA_START + 59)
+#define RID_ERRBOX_NOVALIDRCPTS         (RID_OFA_START + 60)
+#define RID_QBOX_SAVEMAIL               (RID_OFA_START + 61)
+#define RID_WARNBOX_LOCKEDFILE          (RID_OFA_START + 62)
+#define RID_QBOX_COMPRESS               (RID_OFA_START + 63)
+#define RID_ERRBOX_APPENDADDRESS        (RID_OFA_START + 64)
+#define RID_QBOX_DELETEATTACHMENT       (RID_OFA_START + 65)
+#define RID_ERRBOX_NO_OUTBOX            (RID_OFA_START + 66)
+#define RID_WARNDLG_ONLY_ASCII          (RID_OFA_START + 67)
+#define RID_ERR_TABLE_LOCKED            (RID_OFA_START + 68)
+#define RID_ERR_OBJECT_LOCKED           (RID_OFA_START + 69)
+#define RID_ERR_NAME_INVALID            (RID_OFA_START + 70)
+#define RID_INFO_TABLE_NO_SELECT        (RID_OFA_START + 71)
+#define RID_ERRBOX_MODULENOTINSTALLED   (RID_OFA_START + 72)
+
+// Dialoge ---------------------------------------------------------------
+
+#define RID_OFAPAGE_HTMLOPT             (RID_OFA_START + 100)
+#define RID_OFA_AUTOCORR_DLG            (RID_OFA_START + 101)
+#define RID_OFAPAGE_AUTOCORR_OPTIONS    (RID_OFA_START + 102)
+#define RID_OFAPAGE_AUTOCORR_REPLACE    (RID_OFA_START + 103)
+#define RID_OFAPAGE_AUTOCORR_EXCEPT     (RID_OFA_START + 104)
+#define RID_OFA_GENERAL_OPTIONS_DLG     (RID_OFA_START + 105)
+#define RID_OFADLG_INTERNET             (RID_OFA_START + 106)
+#define RID_OFA_TABNEW_DLG              (RID_OFA_START + 107)
+#define RID_OFADLG_BROWSER              (RID_OFA_START + 108)
+#define RID_OFAPAGE_AUTOCORR_QUOTE      (RID_OFA_START + 109)
+#define RID_OFAPAGE_AUTOFMT_APPLY       (RID_OFA_START + 110)
+#define RID_OFADLG_PRCNT_SET            (RID_OFA_START + 111)
+#define RID_OFA_FORMNEW_DLG             (RID_OFA_START + 112)
+#define RID_OFA_TABPROPERTIES           (RID_OFA_START + 113)
+#define RID_OFADLG_REGISTRATION         (RID_OFA_START + 114)
+#define RID_OFADLG_OPTIONS_TREE         (RID_OFA_START + 115)
+#define RID_OFADLG_OPTIONS_TREE_PAGES   (RID_OFA_START + 116)
+#define RID_OFADLG_AWCP_VALUES          (RID_OFA_START + 117)
+#define RID_OFAPAGE_AUTOCOMPLETE_OPTIONS (RID_OFA_START + 119)
+#define RID_OFAPAGE_MSFILTEROPT         (RID_OFA_START + 120)
+#define RID_OFAPAGE_MSFILTEROPT2        (RID_OFA_START + 121)
+#define RID_OFAPAGE_CONNPOOLOPTIONS     (RID_OFA_START + 122)
+
+// TabPages --------------------------------------------------------------
+
+#define OFA_TP_MISC                     (RID_OFA_START + 200)
+
+#define OFA_TP_VIEW                     (RID_OFA_START + 202)
+#define OFA_TP_APPEARANCE               (RID_OFA_START + 203)
+#define OFA_TP_TABPROPERTIES_GENERAL    (RID_OFA_START + 204)
+#define OFA_TP_LANGUAGES                (RID_OFA_START + 205)
+
+//die RID_??_TP_*  stehen nochmal im offids.hrc
+#define RID_SW_TP_CONTENT_OPT           (RID_OFA_START + 206)
+#define RID_SW_TP_LAYOUT_OPT            (RID_OFA_START + 207)
+#define RID_SW_TP_STD_FONT              (RID_OFA_START + 208)
+#define RID_SW_TP_OPTPRINT_PAGE         (RID_OFA_START + 209)
+#define RID_SW_TP_OPTTABLE_PAGE         (RID_OFA_START + 210)
+#define RID_SW_TP_OPTSHDWCRSR           (RID_OFA_START + 211)
+#define RID_SW_TP_REDLINE_OPT           (RID_OFA_START + 212)
+#define RID_SW_TP_OPTINSERT_PAGE        (RID_OFA_START + 213)
+#define RID_SW_TP_OPTLOAD_PAGE          (RID_OFA_START + 214)
+#define RID_SW_TP_OPTTEST_PAGE          (RID_OFA_START + 215)
+#define RID_SW_TP_OPTSRCVIEW            (RID_OFA_START + 216)
+#define RID_SW_TP_BACKGROUND            (RID_OFA_START + 217)
+#define SID_SC_TP_LAYOUT                (RID_OFA_START + 218)
+#define SID_SC_TP_CONTENT               (RID_OFA_START + 219)
+#define SID_SC_TP_INPUT                 (RID_OFA_START + 220)
+#define SID_SC_TP_GRID                  (RID_OFA_START + 221)
+#define SID_SC_TP_USERLISTS             (RID_OFA_START + 222)
+#define SID_SC_TP_CALC                  (RID_OFA_START + 223)
+#define SID_SC_TP_CHANGES               (RID_OFA_START + 224)
+#define SID_SD_TP_CONTENTS              (RID_OFA_START + 225)
+#define SID_SD_TP_LAYOUT                (RID_OFA_START + 226)
+#define SID_SD_TP_SNAP                  (RID_OFA_START + 227)
+#define SID_SD_TP_SCALE                 (RID_OFA_START + 228)
+#define SID_SD_TP_GRID                  (RID_OFA_START + 229)
+#define SID_SD_TP_PRINT                 (RID_OFA_START + 220)
+#define SID_SD_TP_MISC                  (RID_OFA_START + 231)
+#define SID_SI_TP_CONTENTS              (RID_OFA_START + 232)
+#define SID_SI_TP_LAYOUT                (RID_OFA_START + 233)
+#define SID_SI_TP_SNAP                  (RID_OFA_START + 234)
+#define SID_SI_TP_GRID                  (RID_OFA_START + 235)
+#define SID_SI_TP_PRINT                 (RID_OFA_START + 236)
+#define SID_SI_TP_MISC                  (RID_OFA_START + 237)
+#define RID_SW_TP_OPTINSERT_HTML_PAGE   (RID_OFA_START + 238)
+#define SID_SC_TP_MISC                  (RID_OFA_START + 239)
+#define RID_SW_TP_HTML_CONTENT_OPT      (RID_OFA_START + 240)
+#define RID_SW_TP_HTML_LAYOUT_OPT       (RID_OFA_START + 241)
+#define RID_SW_TP_HTML_OPTPRINT_PAGE    (RID_OFA_START + 242)
+#define RID_SW_TP_HTML_OPTTABLE_PAGE    (RID_OFA_START + 243)
+#define RID_SW_TP_HTML_OPTGRID_PAGE     (RID_OFA_START + 244)
+#define OFA_TP_TABPROPERTIES_TEXT       (RID_OFA_START + 245)
+#define RID_SW_TP_HTML_OPTSHDWCRSR      (RID_OFA_START + 246)
+#define RID_SW_TP_STD_FONT_CJK          (RID_OFA_START + 247)
+#define RID_SC_TP_PRINT                 (RID_OFA_START + 248)
+#define OFA_TP_HELPERPROG               (RID_OFA_START + 249)
+#define OFA_TP_MEMORY                   (RID_OFA_START + 250)
+#define RID_SW_TP_STD_FONT_CTL          (RID_OFA_START + 251)
+#define RID_OFA_TP_INTERNATIONAL        (RID_OFA_START + 252)       // 4 SC & ID 4 resource
+#define RID_OFA_TP_INTERNATIONAL_SD     (RID_OFA_START + 253)       // 4 SD
+#define RID_OFA_TP_INTERNATIONAL_IMPR   (RID_OFA_START + 254)       // 4 impress
+#define RID_SW_TP_OPTCOMPATIBILITY_PAGE (RID_OFA_START + 255)
+#define RID_SW_TP_OPTCAPTION_PAGE       (RID_OFA_START + 256)
+#define SID_SC_TP_FORMULA               (RID_OFA_START + 257)
+#define SID_SC_TP_COMPATIBILITY         (RID_OFA_START + 258)
+#define RID_SC_TP_DEFAULTS          (RID_OFA_START + 259)
+
+// Strings ------------------------------------------
+
+#define RID_STR_ROLE_TO                 (RID_OFA_START +  0)
+#define RID_STR_ROLE_CC                 (RID_OFA_START +  1)
+#define RID_STR_ROLE_BCC                (RID_OFA_START +  2)
+#define RID_STR_NEWMAIL                 (RID_OFA_START +  3)
+#define RID_STR_MAIL                    (RID_OFA_START +  4)
+#define RID_STR_DETACH                  (RID_OFA_START +  5)
+#define RID_STR_SUBJECT                 (RID_OFA_START +  6)
+#define RID_STR_AUTHOR                  (RID_OFA_START +  7)
+#define RID_STR_DATE                    (RID_OFA_START + 108)
+#define RID_DESKTOP                     (RID_OFA_START + 109)
+#define RID_STR_ROLE_VIM                (RID_OFA_START + 110)
+
+#define RID_RIDER_SLL_SITE              (RID_OFA_START + 100)
+#define RID_RIDER_SLL_PERSONAL          (RID_OFA_START + 101)
+
+// Bitmaps ---------------------------------------------------------------
+
+#define RID_BMP_DB_DATABASE_S           (RID_OFA_START + 150)
+#define RID_BMP_DB_DATABASE_L           (RID_OFA_START + 151)
+#define RID_BMP_DB_TABLEFOLDER_S        (RID_OFA_START + 152)
+#define RID_BMP_DB_TABLEFOLDER_L        (RID_OFA_START + 153)
+#define RID_BMP_DB_TABLE_S              (RID_OFA_START + 154)
+#define RID_BMP_DB_TABLE_L              (RID_OFA_START + 155)
+#define RID_BMP_DB_QUERYFOLDER_S        (RID_OFA_START + 156)
+#define RID_BMP_DB_QUERYFOLDER_L        (RID_OFA_START + 157)
+#define RID_BMP_DB_QUERY_S              (RID_OFA_START + 158)
+#define RID_BMP_DB_QUERY_L              (RID_OFA_START + 159)
+#define RID_BMP_DB_FORMFOLDER_S         (RID_OFA_START + 160)
+#define RID_BMP_DB_FORMFOLDER_L         (RID_OFA_START + 161)
+#define RID_BMP_DB_FORM_S               (RID_OFA_START + 162)
+#define RID_BMP_DB_FORM_L               (RID_OFA_START + 163)
+#define RID_BMP_DB_REPORTFOLDER_S       (RID_OFA_START + 164)
+#define RID_BMP_DB_REPORTFOLDER_L       (RID_OFA_START + 165)
+#define RID_BMP_DB_REPORT_S             (RID_OFA_START + 166)
+#define RID_BMP_DB_REPORT_L             (RID_OFA_START + 167)
+#define RID_BMP_DB_STATEMENT_S          (RID_OFA_START + 168)
+#define RID_BMP_DB_STATEMENT_L          (RID_OFA_START + 169)
+#define RID_BMP_DB_VIEW_S               (RID_OFA_START + 170)
+#define RID_BMP_DB_VIEW_L               (RID_OFA_START + 171)
+#define RID_BMP_DB_RELATIONS_S          (RID_OFA_START + 172)
+#define RID_BMP_DB_RELATIONS_L          (RID_OFA_START + 173)
+#define RID_IMGLIST_TREEOPT             (RID_OFA_START + 174)
+
+// don't use 12 and 13 !!!
+// ..._BEGIN can be used again. Just for iteration here
+#define RID_STR_PRIO_BEGIN              (RID_OFA_START + 17)
+#define RID_STR_PRIO_HIGHEST            (RID_OFA_START + 18)
+#define RID_STR_PRIO_HIGH               (RID_OFA_START + 19)
+#define RID_STR_PRIO_NORMAL             (RID_OFA_START + 20)
+#define RID_STR_PRIO_LOW                (RID_OFA_START + 21)
+#define RID_STR_PRIO_LOWEST             (RID_OFA_START + 22)
+
+// Datenbank / Explorer
+
+#define RID_STR_NAME_DATABASE           (RID_OFA_START + 23)
+#define RID_STR_NAME_TABLES             (RID_OFA_START + 24)
+#define RID_STR_NAME_TABLE              (RID_OFA_START + 25)
+#define RID_STR_NAME_QUERIES            (RID_OFA_START + 26)
+#define RID_STR_NAME_QUERIE             (RID_OFA_START + 27)
+#define RID_STR_NAME_ADDRESSBOOK        (RID_OFA_START + 28)
+#define RID_STR_QRY_DESIGNVIEW          (RID_OFA_START + 29)
+#define RID_STR_QRY_SQLVIEW             (RID_OFA_START + 30)
+#define RID_STR_NAME_DATABASECONTENT    (RID_OFA_START + 31)
+#define RID_STR_TBL_DESIGNVIEW          (RID_OFA_START + 32)
+#define RID_STR_NAME_FORMS              (RID_OFA_START + 33)
+#define RID_STR_NAME_FORM               (RID_OFA_START + 34)
+#define RID_STR_NAME_REPORTS            (RID_OFA_START + 35)
+#define RID_STR_NAME_REPORT             (RID_OFA_START + 36)
+#define RID_STR_RPT_DESIGNVIEW          (RID_OFA_START + 37)
+#define RID_STR_FRM_DESIGNVIEW          (RID_OFA_START + 38)
+#define RID_STR_TBL_COMPRESS            (RID_OFA_START + 39)
+#define RID_STR_NAME_VIEW               (RID_OFA_START + 40)
+#define RID_STR_NAME_RELATIONS          (RID_OFA_START + 41)
+#define RID_STR_NAME_MANUAL_SQL         (RID_OFA_START + 42)
+#define RID_STR_ACTUALIZE               (RID_OFA_START + 43)
+#define RID_STR_NEW                     (RID_OFA_START + 44)
+#define RID_STR_WIZARD                  (RID_OFA_START + 45)
+#define RID_STR_IMPORTVCARD             (RID_OFA_START + 46)
+#define RID_STR_EXPORTVCARD             (RID_OFA_START + 47)
+#define RID_STR_ASK_COPY_REMAINING      (RID_OFA_START + 48)
+#define RID_STR_ASK_MOVE_REMAINING      (RID_OFA_START + 49)
+#define RID_STR_FRM_NEW_TEXTDOC         (RID_OFA_START + 50)
+#define RID_STR_FRM_NEW_CALCDOC         (RID_OFA_START + 51)
+#define RID_STR_FRM_NEW_IMPRESSDOC      (RID_OFA_START + 52)
+#define RID_STR_FRM_NEW_AUTODOC         (RID_OFA_START + 53)
+#define RID_STR_DB_REORGANIZE           (RID_OFA_START + 54)
+#define RID_STR_FRM_NEW_TEMPLATE        (RID_OFA_START + 55)
+
+#define RID_STR_NEWSGROUP               (RID_OFA_START + 61)
+
+
+#define RID_STR_MESSAGE                 (RID_OFA_START + 64)
+#define RID_STR_PRINTMSG_DOC            (RID_OFA_START + 66)
+#define RID_STR_PRINTMSG_SUBJECT        (RID_OFA_START + 67)
+#define RID_STR_PRINTMSG_DATE           (RID_OFA_START + 68)
+#define RID_STR_PRINTMSG_FROM           (RID_OFA_START + 69)
+#define RID_STR_PRINTMSG_TO             (RID_OFA_START + 70)
+#define RID_ERR_OPENNEWSSERVER          (RID_OFA_START + 71)
+#define RID_ERR_SENDNEWS                (RID_OFA_START + 72)
+#define RID_ERR_SENDMAIL                (RID_OFA_START + 73)
+#define RID_ERR_NOPRINTDOC              (RID_OFA_START + 74)
+#define RID_STR_ROLE_REPLY_TO           (RID_OFA_START + 75)
+#define RID_STR_ROLE_FOLLOWUP_TO        (RID_OFA_START + 76)
+#define RID_STR_BUTTON_SEND             (RID_OFA_START + 77)
+#define RID_STR_BUTTON_SAVE             (RID_OFA_START + 78)
+#define RID_STR_BUTTON_REJECT           (RID_OFA_START + 79)
+#define RID_STR_CLOSE_MESSAGE           (RID_OFA_START + 80)
+#define RID_STR_BUTTON_BACKTOMSG        (RID_OFA_START + 81)
+#define RID_STR_CLOSE_TITLE             (RID_OFA_START + 82)
+#define RID_STR_ASCII_FORMAT            (RID_OFA_START + 83)
+
+// The following eight RIDs replace the message in RID_ERRBOX_NOSETTINGS:
+#define RID_ERRSTR_SMTP_NO_SERVER       (RID_OFA_START + 84)
+#define RID_ERRSTR_NNTP_NO_SERVER       (RID_OFA_START + 85)
+#define RID_ERRSTR_VIM_PRIV_NO_USER     (RID_OFA_START + 86)
+#define RID_ERRSTR_VIM_PRIV_NO_USER_PWD (RID_OFA_START + 87)
+#define RID_ERRSTR_VIM_PUB_NO_USER      (RID_OFA_START + 88)
+#define RID_ERRSTR_VIM_PUB_NO_USER_PWD  (RID_OFA_START + 89)
+#define RID_ERRSTR_CREATE_OUTBOX        (RID_OFA_START + 90)
+#define RID_ERRSTR_EDIT_OUTBOX          (RID_OFA_START + 91)
+#define RID_ERRSTR_EDIT_ACCOUNT_PRIV    (RID_OFA_START + 92)
+#define RID_ERRSTR_EDIT_ACCOUNT_PUB     (RID_OFA_START + 93)
+
+#define RID_STR_NAME_USER_SETTINGS      (RID_OFA_START + 94)
+#define RID_STR_FRMORREP_NAMETOLONG     (RID_OFA_START + 95)
+#define RID_STR_TBL_CREATE_BACKUP       (RID_OFA_START + 96)
+#define RID_STR_DB_SWITCH_FAVORITE      (RID_OFA_START + 97)
+#define RID_STR_DB_FAVORITE_TTILE       (RID_OFA_START + 98)
+
+
+// unnamed resources  ----------------------------------------------------
+#define OFA_RES_UNNAMED_START           (RID_OFA_START + 200)
+
+#define RID_RES_SBACHAOS_ERR_CONTEXTS   (OFA_RES_UNNAMED_START +  1)
+
+// HelpIds ---------------------------------------------------------------
+/*
+#define HID_AUTOCORR_DLG                (HID_OFA_START +  0)
+#define HID_OFAPAGE_AUTOCORR_OPTIONS    (HID_OFA_START +  1)
+#define HID_OFAPAGE_AUTOCORR_REPLACE    (HID_OFA_START +  2)
+#define HID_OFAPAGE_AUTOCORR_EXCEPT     (HID_OFA_START +  3)
+#define HID_OFACTL_AUTOCORR_REPLACE     (HID_OFA_START +  4)
+#define HID_OFAWIN_MAIL_HEADER          (HID_OFA_START +  5)
+#define HID_OFAWIN_MAIL_ATTACH          (HID_OFA_START +  6)
+#define HID_OFACTL_MAIL_ATTACH          (HID_OFA_START +  7)
+#define HID_OFA_TP_MISC                 (HID_OFA_START +  8)
+#define HID_OFA_HYPERLINK               (HID_OFA_START + 10)
+#define HID_OFA_DLGTABNEW               (HID_OFA_START + 11)
+#define HID_OFA_HYPERLINK_DLG           (HID_OFA_START + 12)
+#define HID_OFA_MAILHEAD_ROLE_LB        (HID_OFA_START + 13)
+#define HID_OFA_MAILHEAD_RCPT_ED        (HID_OFA_START + 14)
+#define HID_OFA_MAILHEAD_RCPT_LB        (HID_OFA_START + 15)
+#define HID_OFA_MAILHEAD_SUBJECT_ED     (HID_OFA_START + 16)
+#define HID_OFA_MAILHEAD_RECEIPT_CB     (HID_OFA_START + 17)
+#define HID_OFA_MAILHEAD_PRIORITY_LB    (HID_OFA_START + 18)
+#define HID_OFA_MAILHEAD_HEAD_WIN       (HID_OFA_START + 19)
+#define HID_OFA_MAILATTACH_ATTACH_LB    (HID_OFA_START + 20)
+#define HID_OFA_MAILATTACH_ASCII_CB     (HID_OFA_START + 21)
+#define HID_OFA_MAILATTACH_HTML_CB      (HID_OFA_START + 22)
+#define HID_OFA_MAILATTACH_RTF_CB       (HID_OFA_START + 23)
+#define HID_OFA_MAILATTACH_OFFICE_CB    (HID_OFA_START + 24)
+#define HID_OFA_HYPERLINK_TARGET        (HID_OFA_START + 25)
+#define HID_OFA_HYPERLINK_SEARCH        (HID_OFA_START + 26)
+#define HID_OFA_MAILTOOLBOX             (HID_OFA_START + 27)
+#define HID_OFAPAGE_AUTOCORR_QUOTE      (HID_OFA_START + 28)
+#define HID_OFA_TP_VIEW                 (HID_OFA_START + 29)
+#define HID_OFA_MAILMENU_OPEN           (HID_OFA_START + 30)
+#define HID_OFA_MAILMENU_DELETE         (HID_OFA_START + 31)
+#define HID_OFA_MAILMENU_RENAME         (HID_OFA_START + 32)
+#define HID_OFA_MAILMENU_SAVEAS         (HID_OFA_START + 33)
+#define HID_OFA_MAILMENU_ADDADDRESS     (HID_OFA_START + 34)
+#define HID_OFA_MAILMENU_COPYLINK       (HID_OFA_START + 35)
+#define HID_OFA_MAILMENU_SIG1           (HID_OFA_START + 36)
+#define HID_OFA_MAILMENU_SIG2           (HID_OFA_START + 37)
+#define HID_OFA_MAILMENU_SIG3           (HID_OFA_START + 38)
+#define HID_OFA_MAILMENU_SIG4           (HID_OFA_START + 39)
+#define HID_OFA_MAILHEAD_PROTOCOL_LB    (HID_OFA_START + 42)
+#define HID_OFA_MAILATTACH_RECEIPT_CB   (HID_OFA_START + 43)
+#define HID_OFA_MAILATTACH_PRIORITY_LB  (HID_OFA_START + 44)
+#define HID_OFA_MAILATTACH_TABBAR       (HID_OFA_START + 45)
+#define HID_OFAPAGE_AUTOCORR_CLB        (HID_OFA_START + 46)
+#define HID_OFAPAGE_AUTOFORMAT_CLB      (HID_OFA_START + 47)
+#define HID_OFAPAGE_AUTOFMT_OPTIONS     (HID_OFA_START + 48)
+#define HID_OFA_DLGFORMNEW              (HID_OFA_START + 49)
+#define HID_OFA_TP_APPEARANCE           (HID_OFA_START + 50)
+#define HID_OFA_HYPERLINK_NAME          (HID_OFA_START + 51)
+#define HID_OFA_HYPERLINK_URL_TXT       (HID_OFA_START + 52)
+#define HID_OFA_HYPERLINK_URL           (HID_OFA_START + 53)
+#define HID_OFA_MAILMENU_FILE           (HID_OFA_START + 54)
+#define HID_OFA_FONT_SUBSTITUTION       (HID_OFA_START + 55)
+#define HID_OFA_FONT_SUBST_CLB          (HID_OFA_START + 56)
+#define HID_OFA_SUBST_APPLY             (HID_OFA_START + 57)
+#define HID_OFA_SUBST_DELETE            (HID_OFA_START + 58)
+#define HID_OFADLG_REGISTRATION         (HID_OFA_START + 59)
+#define HID_OFA_TP_DESKTOP              (HID_OFA_START + 60)
+#define HID_REGISTRATION_REGISTER       (HID_OFA_START + 61)
+#define HID_REGISTRATION_ENABLE_KEY     (HID_OFA_START + 62)
+#define HID_AUTOCORR_LANGUAGE           (HID_OFA_START + 63)
+#define HID_OFA_MAILHEAD_RCPT_CB        (HID_OFA_START + 64)
+#define HID_OFA_SENDMENU_PLAIN          (HID_OFA_START + 65)
+#define HID_OFA_SENDMENU_ENCRYPT        (HID_OFA_START + 66)
+#define HID_OFA_SENDMENU_SIGN           (HID_OFA_START + 67)
+#define HID_OFA_SENDMENU_SIGNANDENCRYPT (HID_OFA_START + 68)
+#define HID_OFADLG_OPTIONS_TREE         (HID_OFA_START + 69)
+#define HID_OFADLG_TREELISTBOX          (HID_OFA_START + 70)
+#define HID_OFADLG_TREE_GENERAL         (HID_OFA_START + 71)
+#define HID_OFADLG_TREE_INTERNET        (HID_OFA_START + 72)
+#define HID_OFADLG_TREE_BROWSER         (HID_OFA_START + 73)
+#define HID_OFADLG_TREE_TEXT            (HID_OFA_START + 74)
+#define HID_OFADLG_TREE_HTML            (HID_OFA_START + 75)
+#define HID_OFADLG_TREE_CALC            (HID_OFA_START + 76)
+#define HID_OFADLG_TREE_PRESENTATION    (HID_OFA_START + 77)
+#define HID_OFADLG_TREE_DRAWING         (HID_OFA_START + 78)
+#define HID_OFADLG_TREE_IMAGE           (HID_OFA_START + 79)
+#define HID_OFADLG_TREE_FORMULA         (HID_OFA_START + 80)
+#define HID_OFAPAGE_AUTOCOMPLETE_OPTIONS    (HID_OFA_START + 113)
+#define HID_OFADLG_TREE_CHART               (HID_OFA_START + 115)
+#define HID_OFADLG_TREE_BASE                (HID_OFA_START + 116)
+#define HID_OFADLG_TREE_FILTER              (HID_OFA_START + 117)
+#define HID_OFAPAGE_MSFLTR2_CLB             (HID_OFA_START + 118)
+#define HID_OFA_TP_LANGUAGES                (HID_OFA_START + 119)
+#define HID_OFADLG_TREE_LANGUAGE            (HID_OFA_START + 120)
+#define HID_OFA_CONNPOOL_DRIVERLIST         (HID_OFA_START + 121)
+#define UID_OFA_CONNPOOL_DRIVERLIST_BACK    (HID_OFA_START + 122)
+#define HID_OFA_TP_HELPERPROG               (HID_OFA_START + 123)
+#define HID_OFA_TP_MEMORY                   (HID_OFA_START + 124)
+*/
+// "Uberlaufkontrolle der HID's
+#define ACT_HID_END     HID_OFA_TP_MEMORY
+#if ACT_HID_END > HID_OFA_END
+#error Resource-Ueberlauf bei den HIDs der OFA
+#endif
+
+#define STR_SD_STAROFFICE_XML_DRAW      (RID_OFA_START + 245)
+#define STR_SD_STAROFFICE_XML_IMPRESS   (RID_OFA_START + 246)
+
+#endif
+

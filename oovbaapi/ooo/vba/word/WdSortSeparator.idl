@@ -1,0 +1,7 @@
+module ooo { module vba { module word {
+    constants WdSortSeparator {
+        const long wdSortSeparateByCommas = 1;
+        const long wdSortSeparateByDefaultTableSeparator = 2;
+        const long wdSortSeparateByTabs = 0;
+    };
+}; }; };

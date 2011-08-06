@@ -1,0 +1,7 @@
+module ooo { module vba { module excel {
+    constants XlFindLookIn {
+        const long xlComments = -4144;
+        const long xlFormulas = -4123;
+        const long xlValues = -4163;
+    };
+}; }; };

@@ -1,0 +1,16 @@
+module ooo { module vba { module office {
+    constants MsoBalloonErrorType {
+        const long msoBalloonErrorBadCharacter = 8;
+        const long msoBalloonErrorBadPictureRef = 4;
+        const long msoBalloonErrorBadReference = 5;
+        const long msoBalloonErrorButtonlessModal = 6;
+        const long msoBalloonErrorButtonModeless = 7;
+        const long msoBalloonErrorCharNotTopmostForModal = 10;
+        const long msoBalloonErrorCOMFailure = 9;
+        const long msoBalloonErrorNone = 0;
+        const long msoBalloonErrorOther = 1;
+        const long msoBalloonErrorOutOfMemory = 3;
+        const long msoBalloonErrorTooBig = 2;
+        const long msoBalloonErrorTooManyControls = 11;
+    };
+}; }; };

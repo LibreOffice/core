@@ -1,0 +1,7 @@
+module ooo { module vba { module word {
+    constants WdListApplyTo {
+        const long wdListApplyToSelection = 2;
+        const long wdListApplyToThisPointForward = 1;
+        const long wdListApplyToWholeList = 0;
+    };
+}; }; };

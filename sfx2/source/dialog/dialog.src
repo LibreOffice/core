@@ -1,0 +1,132 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+ // include ---------------------------------------------------------------
+#include <sfx2/sfx.hrc>
+#include "dialog.hrc"
+#include "helpid.hrc"
+#include "sfxlocal.hrc"
+
+String STR_RESET
+{
+    Text [ en-US ] = "~Reset" ;
+};
+String STR_APPLY
+{
+    Text [ en-US ] = "Apply";
+};
+String STR_TABPAGE_MANAGESTYLES
+{
+    Text [ en-US ] = "Organizer" ;
+};
+InfoBox MSG_TABPAGE_INVALIDNAME
+{
+    BUTTONS = WB_OK ;
+    DEFBUTTON = WB_DEF_OK ;
+    Message [ en-US ] = "This name is already in use." ;
+};
+InfoBox MSG_TABPAGE_INVALIDSTYLE
+{
+    BUTTONS = WB_OK ;
+    DEFBUTTON = WB_DEF_OK ;
+    Message [ en-US ] = "This Style does not exist." ;
+};
+InfoBox MSG_TABPAGE_INVALIDPARENT
+{
+    BUTTONS = WB_OK ;
+    DEFBUTTON = WB_DEF_OK ;
+    Message [ en-US ] = "This Style cannot be used as a base Style,\nbecause it would result in a recursive reference." ;
+};
+InfoBox MSG_POOL_STYLE_NAME
+{
+    Message [ en-US ] = "Name already exists as a default Style.\nPlease choose another name." ;
+};
+String STR_DELETE_STYLE
+{
+    Text [ en-US ] = "Do you really want to delete Style $1?" ;
+};
+String STR_DELETE_STYLE_USED
+{
+    Text [ en-US ] = "You are deleting an applied Style!\n" ;
+};
+Menu MN_CONTEXT_TEMPLDLG
+{
+    ItemList =
+    {
+        MenuItem
+        {
+            Identifier = ID_NEW ;
+            Text [ en-US ] = "New..." ;
+            HelpId = HID_STYLIST_NEW ;
+        };
+        MenuItem
+        {
+            Identifier = ID_EDIT ;
+            Text [ en-US ] = "Modify..." ;
+            HelpId = HID_STYLIST_EDIT ;
+        };
+        MenuItem
+        {
+            Identifier = ID_DELETE ;
+            Text [ en-US ] = "Delete..." ;
+            HelpId = HID_STYLIST_DELETE ;
+        };
+    };
+};
+
+ //------------------------------------------------------------------------
+String SID_NAVIGATOR
+{
+    Text [ en-US ] = "Navigator";
+};
+String SID_TASKPANE
+{
+    Text [ en-US ] = "Task Pane";
+};
+
+ErrorBox MSG_ERROR_WRONG_CONFIRM
+{
+    BUTTONS = WB_OK ;
+    DEFBUTTON = WB_DEF_OK ;
+    Message [ en-US ] = "Faulty password confirmation";
+};
+
+String STR_PDF_EXPORT_SEND
+{
+  Text [ en-US ] = "Send" ;
+};
+
+Image IMG_INFO
+{
+    ImageBitmap = Bitmap
+    {
+        File = "info.png" ;
+    };
+};
+
+// ******************************************************************* EOF
+

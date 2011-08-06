@@ -1,0 +1,22 @@
+module ooo { module vba {
+    constants VbVarType {
+        const long vbArray = 8192;
+        const long vbBoolean = 11;
+        const long vbByte = 17;
+        const long vbCurrency = 6;
+        const long vbDataObject = 13;
+        const long vbDate = 7;
+        const long vbDecimal = 14;
+        const long vbDouble = 5;
+        const long vbEmpty = 0;
+        const long vbError = 10;
+        const long vbInteger = 2;
+        const long vbLong = 3;
+        const long vbNull = 1;
+        const long vbObject = 9;
+        const long vbSingle = 4;
+        const long vbString = 8;
+        const long vbUserDefinedType = 36;
+        const long vbVariant = 12;
+    };
+}; };

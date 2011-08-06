@@ -1,0 +1,29 @@
+module ooo { module vba { module office {
+    constants MsoPresetGradientType {
+        const long msoGradientBrass = 20;
+        const long msoGradientCalmWater = 8;
+        const long msoGradientChrome = 21;
+        const long msoGradientChromeII = 22;
+        const long msoGradientDaybreak = 4;
+        const long msoGradientDesert = 6;
+        const long msoGradientEarlySunset = 1;
+        const long msoGradientFire = 9;
+        const long msoGradientFog = 10;
+        const long msoGradientGold = 18;
+        const long msoGradientGoldII = 19;
+        const long msoGradientHorizon = 5;
+        const long msoGradientLateSunset = 2;
+        const long msoGradientMahogany = 15;
+        const long msoGradientMoss = 11;
+        const long msoGradientNightfall = 3;
+        const long msoGradientOcean = 7;
+        const long msoGradientParchment = 14;
+        const long msoGradientPeacock = 12;
+        const long msoGradientRainbow = 16;
+        const long msoGradientRainbowII = 17;
+        const long msoGradientSapphire = 24;
+        const long msoGradientSilver = 23;
+        const long msoGradientWheat = 13;
+        const long msoPresetGradientMixed = -2;
+    };
+}; }; };

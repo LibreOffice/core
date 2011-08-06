@@ -1,0 +1,8 @@
+module ooo { module vba { module powerpoint {
+    constants MsoAnimEffectAfter {
+        const long msoAnimEffectAfterFreeze = 1;
+        const long msoAnimEffectAfterHold = 3;
+        const long msoAnimEffectAfterRemove = 2;
+        const long msoAnimEffectAfterTransition = 4;
+    };
+}; }; };

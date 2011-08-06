@@ -1,0 +1,11 @@
+module ooo { module vba { module word {
+    constants WdMailMergeDataSource {
+        const long wdMergeInfoFromAccessDDE = 1;
+        const long wdMergeInfoFromExcelDDE = 2;
+        const long wdMergeInfoFromMSQueryDDE = 3;
+        const long wdMergeInfoFromODBC = 4;
+        const long wdMergeInfoFromODSO = 5;
+        const long wdMergeInfoFromWord = 0;
+        const long wdNoMergeInfo = -1;
+    };
+}; }; };

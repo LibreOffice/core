@@ -1,0 +1,8 @@
+module ooo { module vba { module access {
+    constants AcWindowMode {
+        const long acDialog = 3;
+        const long acHidden = 1;
+        const long acIcon = 2;
+        const long acWindowNormal = 0;
+    };
+}; }; };

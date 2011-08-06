@@ -1,0 +1,9 @@
+### i84435 ##
+lng.LngSvcMgr
+#uncommented in lng.sce
+
+### i88538 ###
+lng.DicList::com::sun::star::linguistic2::XSearchableDictionaryList
+
+### i96846 ###
+lng.LinguProps::com::sun::star::linguistic2::LinguProperties

@@ -1,0 +1,6 @@
+module ooo { module vba { module word {
+    constants WdVisualSelection {
+        const long wdVisualSelectionBlock = 0;
+        const long wdVisualSelectionContinuous = 1;
+    };
+}; }; };

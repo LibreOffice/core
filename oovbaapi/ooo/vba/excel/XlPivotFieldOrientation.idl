@@ -1,0 +1,9 @@
+module ooo { module vba { module excel {
+    constants XlPivotFieldOrientation {
+        const long xlColumnField = 2;
+        const long xlDataField = 4;
+        const long xlHidden = 0;
+        const long xlPageField = 3;
+        const long xlRowField = 1;
+    };
+}; }; };

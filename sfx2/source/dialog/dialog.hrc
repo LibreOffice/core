@@ -1,0 +1,81 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef _SFX_DIALOG_HRC
+#define _SFX_DIALOG_HRC
+
+#include <sfx2/sfx.hrc>
+
+// defines ---------------------------------------------------------------
+
+#define ID_NEW                          1
+#define ID_EDIT                         2
+#define ID_DELETE                       3
+
+#define RC_DIALOG_BEGIN                 RID_SFX_DIALOG_START
+
+#define RID_DLG_ALIEN_WARNING           ( RC_DIALOG_BEGIN + 0)
+#define STR_RESET                       ( RC_DIALOG_BEGIN + 0)
+
+#define DLG_PASSWD                      ( RC_DIALOG_BEGIN + 8)
+#define STR_TABPAGE_MANAGESTYLES        ( RC_DIALOG_BEGIN + 12)
+#define MSG_TABPAGE_INVALIDNAME         ( RC_DIALOG_BEGIN + 13)
+#define MSG_TABPAGE_INVALIDSTYLE        ( RC_DIALOG_BEGIN + 14)
+#define DLG_NEW_STYLE_BY_EXAMPLE        ( RC_DIALOG_BEGIN + 15)
+#define MSG_POOL_STYLE_NAME             ( RC_DIALOG_BEGIN + 16)
+#define MSG_TABPAGE_INVALIDPARENT       ( RC_DIALOG_BEGIN + 18)
+
+#define STR_DELETE_STYLE                ( RC_DIALOG_BEGIN + 18)
+#define STR_DELETE_STYLE_USED           ( RC_DIALOG_BEGIN + 20)
+
+#define MN_CONTEXT_TEMPLDLG             ( RC_DIALOG_BEGIN + 46)
+
+#define DLG_VERSIONS                    ( RC_DIALOG_BEGIN + 69 )
+#define DLG_COMMENTS                    ( RC_DIALOG_BEGIN + 70 )
+
+#define MSG_ERROR_WRONG_CONFIRM         ( RC_DIALOG_BEGIN + 76 )
+
+#define STR_APPLY                       ( RC_DIALOG_BEGIN + 87 )
+
+#define TP_COMMONPRINTOPTIONS           ( RC_DIALOG_BEGIN + 90 )
+
+#define RID_ERRBOX_MAIL_CONFIG          ( RC_DIALOG_BEGIN + 92 )
+
+// 100-106 in tbxcust.hrc
+#define STR_MACRO_LOSS                  ( RC_DIALOG_BEGIN + 107 )
+#define STR_CANCEL_RECORDING            ( RC_DIALOG_BEGIN + 108 )
+
+#define RID_DLG_SEARCH                  ( RC_DIALOG_BEGIN + 109 )
+
+#define STR_PDF_EXPORT_SEND             ( RC_DIALOG_BEGIN + 120 )
+#define IMG_INFO                        ( RC_DIALOG_BEGIN + 122 )
+#define RID_EDIT_DURATIONS              ( RC_DIALOG_BEGIN + 123 )
+#define SFX_PB_EDIT                     ( RC_DIALOG_BEGIN + 124 )
+
+#endif // #ifndef _SFX_DIALOG_HRC
+
+// eof ------------------------------------------------------------------------
+

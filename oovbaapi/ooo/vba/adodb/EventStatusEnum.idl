@@ -1,0 +1,9 @@
+module ooo { module vba { module adodb {
+    constants EventStatusEnum {
+        const long adStatusCancel = 4;
+        const long adStatusCantDeny = 3;
+        const long adStatusErrorsOccurred = 2;
+        const long adStatusOK = 1;
+        const long adStatusUnwantedEvent = 5;
+    };
+}; }; };

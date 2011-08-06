@@ -1,0 +1,11 @@
+module ooo { module vba { module office {
+    constants MsoSyncStatusType {
+        const long msoSyncStatusConflict = 4;
+        const long msoSyncStatusError = 6;
+        const long msoSyncStatusLatest = 1;
+        const long msoSyncStatusLocalChanges = 3;
+        const long msoSyncStatusNewerAvailable = 2;
+        const long msoSyncStatusNoSharedWorkspace = 0;
+        const long msoSyncStatusSuspended = 5;
+    };
+}; }; };

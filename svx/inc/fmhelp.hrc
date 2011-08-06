@@ -1,0 +1,113 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef _SVX_FMHELP_HRC
+#define _SVX_FMHELP_HRC
+
+// Help-Ids --------------------------------------------------------------
+#define HID_DLG_DBMSG                                         "SVX_HID_DLG_DBMSG"
+#define HID_FORM_NAVIGATOR                                    "SVX_HID_FORM_NAVIGATOR"
+#define HID_FORM_NAVIGATOR_WIN                                "SVX_HID_FORM_NAVIGATOR_WIN"
+#define HID_FIELD_SEL                                         "SVX_HID_FIELD_SEL"
+#define HID_FIELD_SEL_WIN                                     "SVX_HID_FIELD_SEL_WIN"
+#define HID_FILTER_NAVIGATOR                                  "SVX_HID_FILTER_NAVIGATOR"
+#define HID_FILTER_NAVIGATOR_WIN                              "SVX_HID_FILTER_NAVIGATOR_WIN"
+#define HID_FM_DLG_SEARCH                                     "SVX_HID_FM_DLG_SEARCH"
+#define HID_SEARCH_TEXT                                       "SVX_HID_SEARCH_TEXT"
+#define HID_SEARCH_ALLFIELDS                                  "SVX_HID_SEARCH_ALLFIELDS"
+#define HID_SEARCH_FIELDSELECTION                             "SVX_HID_SEARCH_FIELDSELECTION"
+#define HID_SEARCH_POSITION                                   "SVX_HID_SEARCH_POSITION"
+#define HID_SEARCH_FORMATTER                                  "SVX_HID_SEARCH_FORMATTER"
+#define HID_SEARCH_CASE                                       "SVX_HID_SEARCH_CASE"
+#define HID_SEARCH_BACKWARD                                   "SVX_HID_SEARCH_BACKWARD"
+#define HID_SEARCH_STARTOVER                                  "SVX_HID_SEARCH_STARTOVER"
+#define HID_SEARCH_WILDCARD                                   "SVX_HID_SEARCH_WILDCARD"
+#define HID_SEARCH_REGULAR                                    "SVX_HID_SEARCH_REGULAR"
+#define HID_SEARCH_APPROX                                     "SVX_HID_SEARCH_APPROX"
+#define HID_SEARCH_APPROXSETTINGS                             "SVX_HID_SEARCH_APPROXSETTINGS"
+#define HID_SEARCH_BTN_SEARCH                                 "SVX_HID_SEARCH_BTN_SEARCH"
+#define HID_SEARCH_BTN_CLOSE                                  "SVX_HID_SEARCH_BTN_CLOSE"
+#define HID_CONTROLS_DATE_N_TIME                              "SVX_HID_CONTROLS_DATE_N_TIME"
+#define HID_GRID_TRAVEL_FIRST                                 "SVX_HID_GRID_TRAVEL_FIRST"
+#define HID_GRID_TRAVEL_PREV                                  "SVX_HID_GRID_TRAVEL_PREV"
+#define HID_GRID_TRAVEL_NEXT                                  "SVX_HID_GRID_TRAVEL_NEXT"
+#define HID_GRID_TRAVEL_LAST                                  "SVX_HID_GRID_TRAVEL_LAST"
+#define HID_GRID_TRAVEL_NEW                                   "SVX_HID_GRID_TRAVEL_NEW"
+#define HID_GRID_TRAVEL_ABSOLUTE                              "SVX_HID_GRID_TRAVEL_ABSOLUTE"
+#define HID_GRID_NUMBEROFRECORDS                              "SVX_HID_GRID_NUMBEROFRECORDS"
+#define UID_SEARCH_RECORDSTATUS                               "SVX_UID_SEARCH_RECORDSTATUS"
+#define UID_FORMPROPBROWSER_FRAME                             "SVX_UID_FORMPROPBROWSER_FRAME"
+#define UID_ABSOLUTE_RECORD_WINDOW                            "SVX_UID_ABSOLUTE_RECORD_WINDOW"
+#define HID_DATA_NAVIGATOR_WIN                                "SVX_HID_DATA_NAVIGATOR_WIN"
+#define HID_XFORMS_ADDDATAITEM_DLG                            "SVX_HID_XFORMS_ADDDATAITEM_DLG"
+#define HID_XFORMS_ADDCONDITION_DLG                           "SVX_HID_XFORMS_ADDCONDITION_DLG"
+#define HID_XFORMS_NAMESPACEITEM_DLG                          "SVX_HID_XFORMS_NAMESPACEITEM_DLG"
+#define HID_XFORMS_NAMESPACEITEM_LIST                         "SVX_HID_XFORMS_NAMESPACEITEM_LIST"
+#define HID_XFORMS_MANAGENAMESPACE_DLG                        "SVX_HID_XFORMS_MANAGENAMESPACE_DLG"
+#define HID_MN_XFORMS_MODELS_ADD                              "SVX_HID_MN_XFORMS_MODELS_ADD"
+#define HID_MN_XFORMS_MODELS_EDIT                             "SVX_HID_MN_XFORMS_MODELS_EDIT"
+#define HID_MN_XFORMS_MODELS_REMOVE                           "SVX_HID_MN_XFORMS_MODELS_REMOVE"
+#define HID_MN_XFORMS_INSTANCES_ADD                           "SVX_HID_MN_XFORMS_INSTANCES_ADD"
+#define HID_MN_XFORMS_INSTANCES_EDIT                          "SVX_HID_MN_XFORMS_INSTANCES_EDIT"
+#define HID_MN_XFORMS_INSTANCES_REMOVE                        "SVX_HID_MN_XFORMS_INSTANCES_REMOVE"
+#define HID_MN_XFORMS_SHOW_DETAILS                            "SVX_HID_MN_XFORMS_SHOW_DETAILS"
+#define HID_XFORMS_TOOLBOX                                    "SVX_HID_XFORMS_TOOLBOX"
+#define HID_XFORMS_TOOLBOX_ITEM_ADD                           "SVX_HID_XFORMS_TOOLBOX_ITEM_ADD"
+#define HID_XFORMS_TOOLBOX_ITEM_ADD_ELEMENT                   "SVX_HID_XFORMS_TOOLBOX_ITEM_ADD_ELEMENT"
+#define HID_XFORMS_TOOLBOX_ITEM_ADD_ATTRIBUTE                 "SVX_HID_XFORMS_TOOLBOX_ITEM_ADD_ATTRIBUTE"
+#define HID_XFORMS_TOOLBOX_ITEM_EDIT                          "SVX_HID_XFORMS_TOOLBOX_ITEM_EDIT"
+#define HID_XFORMS_TOOLBOX_ITEM_REMOVE                        "SVX_HID_XFORMS_TOOLBOX_ITEM_REMOVE"
+#define HID_XFORMS_ITEMS_LIST                                 "SVX_HID_XFORMS_ITEMS_LIST"
+#define HID_XFORMS_MODELS_LIST                                "SVX_HID_XFORMS_MODELS_LIST"
+#define HID_XFORMS_MODELS_MENUBTN                             "SVX_HID_XFORMS_MODELS_MENUBTN"
+#define HID_XFORMS_INSTANCES_MENUBTN                          "SVX_HID_XFORMS_INSTANCES_MENUBTN"
+#define HID_XFORMS_ADDSUBMISSION_DLG                          "SVX_HID_XFORMS_ADDSUBMISSION_DLG"
+#define HID_XFORMS_ADDMODEL_DLG                               "SVX_HID_XFORMS_ADDMODEL_DLG"
+#define HID_XFORMS_ADDINSTANCE_DLG                            "SVX_HID_XFORMS_ADDINSTANCE_DLG"
+#define HID_XFORMS_MID_INSERT_CONTROL                         "SVX_HID_XFORMS_MID_INSERT_CONTROL"
+#define HID_XFORMS_TAB_CONTROL                                "SVX_HID_XFORMS_TAB_CONTROL"
+#define HID_FM_DELETEROWS                                     "SVX_HID_FM_DELETEROWS"
+#define HID_FM_INSERTCOL                                      "SVX_HID_FM_INSERTCOL"
+#define HID_FM_CHANGECOL                                      "SVX_HID_FM_CHANGECOL"
+#define HID_FM_DELETECOL                                      "SVX_HID_FM_DELETECOL"
+#define HID_FM_HIDECOL                                        "SVX_HID_FM_HIDECOL"
+#define HID_FM_SHOWCOLS                                       "SVX_HID_FM_SHOWCOLS"
+#define HID_FM_SHOWCOLS_MORE                                  "SVX_HID_FM_SHOWCOLS_MORE"
+#define HID_FM_SHOWALLCOLS                                    "SVX_HID_FM_SHOWALLCOLS"
+#define HID_FM_DELETE                                         "SVX_HID_FM_DELETE"
+#define HID_FM_FILTER_EDIT                                    "SVX_HID_FM_EDIT"
+#define HID_FM_FILTER_IS_NULL                                 "SVX_HID_FM_FILTER_IS_NULL"
+#define HID_FM_FILTER_IS_NOT_NULL                             "SVX_HID_FM_IS_NOT_NULL"
+#define HID_FM_NEW                                            "SVX_HID_FM_NEW"
+#define HID_FM_NEW_FORM                                       "SVX_HID_FM_NEW_FORM"
+#define HID_FM_NEW_HIDDEN                                     "SVX_HID_FM_NEW_HIDDEN"
+#define HID_FM_RENAME_OBJECT                                  "SVX_HID_FM_RENAME_OBJECT"
+#define HID_MENU_FM_TEXTATTRIBUTES_STYLE                      "SVX_HID_MENU_FM_TEXTATTRIBUTES_STYLE"
+#define HID_MENU_FM_TEXTATTRIBUTES_ALIGNMENT                  "SVX_HID_MENU_FM_TEXTATTRIBUTES_ALIGNMENT"
+#define HID_MENU_FM_TEXTATTRIBUTES_SPACING                    "SVX_HID_MENU_FM_TEXTATTRIBUTES_SPACING"
+
+#endif
+

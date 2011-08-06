@@ -1,0 +1,8 @@
+module ooo { module vba { module word {
+    constants WdSalutationType {
+        const long wdSalutationBusiness = 2;
+        const long wdSalutationFormal = 1;
+        const long wdSalutationInformal = 0;
+        const long wdSalutationOther = 3;
+    };
+}; }; };

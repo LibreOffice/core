@@ -1,0 +1,15 @@
+module ooo { module vba { module office {
+    constants MsoBlackWhiteMode {
+        const long msoBlackWhiteAutomatic = 1;
+        const long msoBlackWhiteBlack = 8;
+        const long msoBlackWhiteBlackTextAndLine = 6;
+        const long msoBlackWhiteDontShow = 10;
+        const long msoBlackWhiteGrayOutline = 5;
+        const long msoBlackWhiteGrayScale = 2;
+        const long msoBlackWhiteHighContrast = 7;
+        const long msoBlackWhiteInverseGrayScale = 4;
+        const long msoBlackWhiteLightGrayScale = 3;
+        const long msoBlackWhiteMixed = -2;
+        const long msoBlackWhiteWhite = 9;
+    };
+}; }; };

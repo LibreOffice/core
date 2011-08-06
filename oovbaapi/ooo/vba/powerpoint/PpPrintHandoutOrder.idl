@@ -1,0 +1,6 @@
+module ooo { module vba { module powerpoint {
+    constants PpPrintHandoutOrder {
+        const long ppPrintHandoutHorizontalFirst = 2;
+        const long ppPrintHandoutVerticalFirst = 1;
+    };
+}; }; };

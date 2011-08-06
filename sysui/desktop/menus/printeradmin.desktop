@@ -1,0 +1,9 @@
+[Desktop Entry]
+Version=1.0
+Terminal=false
+Icon=printeradmin
+Type=Application
+Categories=Office;X-Red-Hat-Base;X-SuSE-Core-Office;
+Exec=${UNIXBASISROOTNAME}-printeradmin
+Name=%PRODUCTNAME Printer Administration
+

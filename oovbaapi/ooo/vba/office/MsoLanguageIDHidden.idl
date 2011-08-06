@@ -1,0 +1,7 @@
+module ooo { module vba { module office {
+    constants MsoLanguageIDHidden {
+        const long msoLanguageIDChineseHongKong = 3076;
+        const long msoLanguageIDChineseMacao = 5124;
+        const long msoLanguageIDEnglishTrinidad = 11273;
+    };
+}; }; };

@@ -1,0 +1,12 @@
+module ooo { module vba { module excel {
+    constants XlHAlign {
+        const long xlHAlignCenter = -4108;
+        const long xlHAlignCenterAcrossSelection = 7;
+        const long xlHAlignDistributed = -4117;
+        const long xlHAlignFill = 5;
+        const long xlHAlignGeneral = 1;
+        const long xlHAlignJustify = -4130;
+        const long xlHAlignLeft = -4131;
+        const long xlHAlignRight = -4152;
+    };
+}; }; };

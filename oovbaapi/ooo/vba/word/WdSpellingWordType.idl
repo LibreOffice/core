@@ -1,0 +1,7 @@
+module ooo { module vba { module word {
+    constants WdSpellingWordType {
+        const long wdAnagram = 2;
+        const long wdSpellword = 0;
+        const long wdWildcard = 1;
+    };
+}; }; };

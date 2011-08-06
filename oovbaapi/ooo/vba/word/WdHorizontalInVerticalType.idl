@@ -1,0 +1,7 @@
+module ooo { module vba { module word {
+    constants WdHorizontalInVerticalType {
+        const long wdHorizontalInVerticalFitInLine = 1;
+        const long wdHorizontalInVerticalNone = 0;
+        const long wdHorizontalInVerticalResizeLine = 2;
+    };
+}; }; };

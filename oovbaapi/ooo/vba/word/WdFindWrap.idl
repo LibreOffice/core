@@ -1,0 +1,7 @@
+module ooo { module vba { module word {
+    constants WdFindWrap {
+        const long wdFindAsk = 2;
+        const long wdFindContinue = 1;
+        const long wdFindStop = 0;
+    };
+}; }; };

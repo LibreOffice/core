@@ -1,0 +1,904 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_xmloff.hxx"
+
+#include <xmloff/txtprmap.hxx>
+
+#include <tools/debug.hxx>
+
+#include <xmloff/xmlnmspe.hxx>
+#include <xmloff/xmltoken.hxx>
+#include "txtprhdl.hxx"
+
+using namespace ::com::sun::star;
+using namespace ::com::sun::star::uno;
+using namespace ::xmloff::token;
+
+#define _M_E( a, p, l, t, c ) \
+    { a, sizeof(a)-1, XML_NAMESPACE_##p, XML_##l, t, c, SvtSaveOptions::ODFVER_010 }
+
+#define _M_EV( a, p, l, t, c, v ) \
+    { a, sizeof(a)-1, XML_NAMESPACE_##p, XML_##l, t, c, v }
+
+#define _M_ED( a, p, l, t, c ) \
+    { a, sizeof(a)-1, XML_NAMESPACE_##p, XML_##l, (t) | MID_FLAG_DEFAULT_ITEM_EXPORT, c, SvtSaveOptions::ODFVER_010 }
+
+// text properties
+#define MT_E( a, p, l, t, c ) \
+    _M_E( a, p, l, (t|XML_TYPE_PROP_TEXT), c )
+#define MT_ED( a, p, l, t, c ) \
+    _M_ED( a, p, l, (t|XML_TYPE_PROP_TEXT), c )
+
+// paragraph properties
+#define MP_E( a, p, l, t, c ) \
+    _M_E( a, p, l, (t|XML_TYPE_PROP_PARAGRAPH), c )
+#define MP_ED( a, p, l, t, c ) \
+    _M_ED( a, p, l, (t|XML_TYPE_PROP_PARAGRAPH), c )
+
+// graphic properties
+#define MG_E( a, p, l, t, c ) \
+    _M_E( a, p, l, (t|XML_TYPE_PROP_GRAPHIC), c )
+#define MG_ED( a, p, l, t, c ) \
+    _M_ED( a, p, l, (t|XML_TYPE_PROP_GRAPHIC), c )
+#define MG_EV( a, p, l, t, c, v ) \
+    _M_EV( a, p, l, (t|XML_TYPE_PROP_GRAPHIC), c, v )
+
+// section properties
+#define MS_E( a, p, l, t, c ) \
+    _M_E( a, p, l, (t|XML_TYPE_PROP_SECTION), c )
+#define MS_ED( a, p, l, t, c ) \
+    _M_ED( a, p, l, (t|XML_TYPE_PROP_SECTION), c )
+
+// ruby properties
+#define MR_E( a, p, l, t, c ) \
+    _M_E( a, p, l, (t|XML_TYPE_PROP_RUBY), c )
+#define MR_ED( a, p, l, t, c ) \
+    _M_ED( a, p, l, (t|XML_TYPE_PROP_RUBY), c )
+
+#define M_END() \
+    { NULL, 0, 0, XML_TOKEN_INVALID, 0, 0, SvtSaveOptions::ODFVER_010 }
+
+
+XMLPropertyMapEntry aXMLParaPropMap[] =
+{
+    // RES_UNKNOWNATR_CONTAINER
+    MP_E( "ParaUserDefinedAttributes", TEXT, XMLNS, XML_TYPE_ATTRIBUTE_CONTAINER | MID_FLAG_SPECIAL_ITEM, 0 ),
+    // RES_LR_SPACE
+    // !!! DO NOT REORDER THE MARGINS !!!
+    MP_E( "ParaLeftMargin",         FO, MARGIN,     XML_TYPE_MEASURE|MID_FLAG_MULTI_PROPERTY, CTF_PARAMARGINALL ),
+    MP_E( "ParaLeftMarginRelative", FO, MARGIN,     XML_TYPE_PERCENT16, CTF_PARAMARGINALL_REL ),
+    MP_E( "ParaLeftMargin",         FO, MARGIN_LEFT,        XML_TYPE_MEASURE|MID_FLAG_MULTI_PROPERTY, CTF_PARALEFTMARGIN ),
+    MP_E( "ParaLeftMarginRelative", FO, MARGIN_LEFT,        XML_TYPE_PERCENT16, CTF_PARALEFTMARGIN_REL ),
+    MP_E( "ParaRightMargin",            FO, MARGIN_RIGHT,       XML_TYPE_MEASURE|MID_FLAG_MULTI_PROPERTY, CTF_PARARIGHTMARGIN ),
+    MP_E( "ParaRightMarginRelative",    FO, MARGIN_RIGHT,       XML_TYPE_PERCENT16, CTF_PARARIGHTMARGIN_REL ),
+    // RES_UL_SPACE
+    MP_E( "ParaTopMargin",          FO, MARGIN_TOP,         XML_TYPE_MEASURE|MID_FLAG_MULTI_PROPERTY, CTF_PARATOPMARGIN ),
+    MP_E( "ParaTopMarginRelative",  FO, MARGIN_TOP,         XML_TYPE_PERCENT16, CTF_PARATOPMARGIN_REL ),
+    MP_E( "ParaBottomMargin",       FO, MARGIN_BOTTOM,      XML_TYPE_MEASURE|MID_FLAG_MULTI_PROPERTY, CTF_PARABOTTOMMARGIN ),
+    MP_E( "ParaBottomMarginRelative",FO,    MARGIN_BOTTOM,      XML_TYPE_PERCENT16, CTF_PARABOTTOMMARGIN_REL ),
+    // RES_CHRATR_CASEMAP
+    MT_E( "CharCaseMap",        FO,     FONT_VARIANT,       XML_TYPE_TEXT_CASEMAP_VAR,  0 ),
+    MT_E( "CharCaseMap",        FO,     TEXT_TRANSFORM,     XML_TYPE_TEXT_CASEMAP,  0 ),
+    // RES_CHRATR_COLOR
+    MT_ED( "CharColor",     FO,     COLOR,              XML_TYPE_COLORAUTO|MID_FLAG_MERGE_PROPERTY, 0 ),
+    MT_ED( "CharColor",     STYLE,  USE_WINDOW_FONT_COLOR,  XML_TYPE_ISAUTOCOLOR|MID_FLAG_MERGE_PROPERTY,   0 ),
+    // RES_CHRATR_CONTOUR
+    MT_E( "CharContoured",  STYLE,  TEXT_OUTLINE,       XML_TYPE_BOOL,  0 ),
+    // RES_CHRATR_CROSSEDOUT
+    MT_E( "CharStrikeout",  STYLE,  TEXT_LINE_THROUGH_STYLE,    XML_TYPE_TEXT_CROSSEDOUT_STYLE|MID_FLAG_MERGE_PROPERTY, 0),
+    MT_E( "CharStrikeout",  STYLE,  TEXT_LINE_THROUGH_TYPE,     XML_TYPE_TEXT_CROSSEDOUT_TYPE|MID_FLAG_MERGE_PROPERTY,  0),
+    MT_E( "CharStrikeout",  STYLE,  TEXT_LINE_THROUGH_WIDTH,    XML_TYPE_TEXT_CROSSEDOUT_WIDTH|MID_FLAG_MERGE_PROPERTY, 0),
+    MT_E( "CharStrikeout",  STYLE,  TEXT_LINE_THROUGH_TEXT,     XML_TYPE_TEXT_CROSSEDOUT_TEXT|MID_FLAG_MERGE_PROPERTY,  0),
+    // RES_CHRATR_ESCAPEMENT
+    MT_E( "CharEscapement",      STYLE, TEXT_POSITION,  XML_TYPE_TEXT_ESCAPEMENT|MID_FLAG_MERGE_ATTRIBUTE|MID_FLAG_MULTI_PROPERTY, 0 ),
+    MT_E( "CharEscapementHeight", STYLE, TEXT_POSITION, XML_TYPE_TEXT_ESCAPEMENT_HEIGHT|MID_FLAG_MERGE_ATTRIBUTE|MID_FLAG_MULTI_PROPERTY, 0 ),
+    // RES_CHRATR_FONT
+    MT_ED( "CharFontName",  STYLE,  FONT_NAME,          XML_TYPE_STRING|MID_FLAG_SPECIAL_ITEM_IMPORT, CTF_FONTNAME ),
+    MT_ED( "CharFontName",  FO,     FONT_FAMILY,        XML_TYPE_TEXT_FONTFAMILYNAME|MID_FLAG_SPECIAL_ITEM_IMPORT, CTF_FONTFAMILYNAME ),
+    MT_ED( "CharFontStyleName",STYLE,   FONT_STYLE_NAME,    XML_TYPE_STRING, CTF_FONTSTYLENAME ),
+    MT_ED( "CharFontFamily",    STYLE,  FONT_FAMILY_GENERIC,XML_TYPE_TEXT_FONTFAMILY, CTF_FONTFAMILY ),
+    MT_ED( "CharFontPitch", STYLE,  FONT_PITCH,         XML_TYPE_TEXT_FONTPITCH, CTF_FONTPITCH ),
+    MT_ED( "CharFontCharSet",   STYLE,  FONT_CHARSET,       XML_TYPE_TEXT_FONTENCODING, CTF_FONTCHARSET ),
+    // RES_CHRATR_FONTSIZE
+    MT_ED( "CharHeight",          FO,   FONT_SIZE,          XML_TYPE_CHAR_HEIGHT|MID_FLAG_MULTI_PROPERTY, CTF_CHARHEIGHT ),
+    MT_ED( "CharPropHeight",FO, FONT_SIZE,          XML_TYPE_CHAR_HEIGHT_PROP|MID_FLAG_MULTI_PROPERTY, CTF_CHARHEIGHT_REL ),
+    MT_ED( "CharDiffHeight",STYLE,FONT_SIZE_REL,        XML_TYPE_CHAR_HEIGHT_DIFF, CTF_CHARHEIGHT_DIFF ),
+    // RES_CHRATR_KERNING
+    MT_E( "CharKerning",        FO,     LETTER_SPACING,     XML_TYPE_TEXT_KERNING, 0 ),
+    // RES_CHRATR_LANGUAGE
+    MT_ED( "CharLocale",        FO,     LANGUAGE,           XML_TYPE_CHAR_LANGUAGE|MID_FLAG_MERGE_PROPERTY, 0 ),
+    MT_ED( "CharLocale",        FO,     COUNTRY,            XML_TYPE_CHAR_COUNTRY|MID_FLAG_MERGE_PROPERTY, 0 ),
+    // RES_CHRATR_POSTURE
+    MT_E( "CharPosture",        FO,     FONT_STYLE,         XML_TYPE_TEXT_POSTURE, 0 ),
+    // RES_CHRATR_PROPORTIONALFONTSIZE
+    // TODO: not used?
+    // RES_CHRATR_SHADOWED
+    MT_E( "CharShadowed",   FO,     TEXT_SHADOW,        XML_TYPE_TEXT_SHADOWED, 0 ),
+    // RES_CHRATR_UNDERLINE
+    MT_E( "CharUnderline",  STYLE,  TEXT_UNDERLINE_STYLE,       XML_TYPE_TEXT_UNDERLINE_STYLE|MID_FLAG_MERGE_PROPERTY, CTF_UNDERLINE ),
+    MT_E( "CharUnderline",  STYLE,  TEXT_UNDERLINE_TYPE,        XML_TYPE_TEXT_UNDERLINE_TYPE|MID_FLAG_MERGE_PROPERTY, 0 ),
+    MT_E( "CharUnderline",  STYLE,  TEXT_UNDERLINE_WIDTH,       XML_TYPE_TEXT_UNDERLINE_WIDTH|MID_FLAG_MERGE_PROPERTY, 0 ),
+    MT_E( "CharUnderlineColor", STYLE,  TEXT_UNDERLINE_COLOR,       XML_TYPE_TEXT_UNDERLINE_COLOR|MID_FLAG_MULTI_PROPERTY, CTF_UNDERLINE_COLOR  ),
+    MT_E( "CharUnderlineHasColor",  STYLE,  TEXT_UNDERLINE_COLOR,       XML_TYPE_TEXT_UNDERLINE_HASCOLOR|MID_FLAG_MERGE_ATTRIBUTE, CTF_UNDERLINE_HASCOLOR   ),
+    // RES_CHRATR_WEIGHT
+    MT_E( "CharWeight",     FO,     FONT_WEIGHT,        XML_TYPE_TEXT_WEIGHT, 0 ),
+    // RES_CHRATR_WORDLINEMODE
+    MT_E( "CharWordMode",   STYLE,  TEXT_UNDERLINE_MODE,        XML_TYPE_TEXT_LINE_MODE|MID_FLAG_MERGE_PROPERTY, 0 ),
+    MT_E( "CharWordMode",   STYLE,  TEXT_OVERLINE_MODE,     XML_TYPE_TEXT_LINE_MODE|MID_FLAG_MERGE_PROPERTY, 0 ),
+    MT_E( "CharWordMode",   STYLE,  TEXT_LINE_THROUGH_MODE,     XML_TYPE_TEXT_LINE_MODE|MID_FLAG_MERGE_PROPERTY, 0 ),
+    // RES_CHRATR_AUTOKERN
+    MT_E( "CharAutoKerning",    STYLE,  LETTER_KERNING,     XML_TYPE_BOOL, 0 ),
+    // RES_CHRATR_BLINK
+    MT_E( "CharFlash",      STYLE,  TEXT_BLINKING,      XML_TYPE_BOOL, 0 ),
+    // RES_CHRATR_NOHYPHEN
+    // TODO: not used?
+    // RES_CHRATR_NOLINEBREAK
+    // TODO: not used?
+    // RES_CHRATR_BACKGROUND
+    MT_E( "CharBackColor",  FO, BACKGROUND_COLOR, XML_TYPE_COLORTRANSPARENT|MID_FLAG_MULTI_PROPERTY, 0 ),
+    MT_E( "CharBackTransparent",    FO, BACKGROUND_COLOR, XML_TYPE_ISTRANSPARENT|MID_FLAG_MERGE_ATTRIBUTE, 0 ),
+    MT_E( "CharBackColor",  FO, TEXT_BACKGROUND_COLOR, XML_TYPE_COLOR|MID_FLAG_SPECIAL_ITEM_EXPORT, CTF_OLDTEXTBACKGROUND ),
+    // RES_CHRATR_CJK_FONT
+    MT_ED( "CharFontNameAsian", STYLE,  FONT_NAME_ASIAN,            XML_TYPE_STRING|MID_FLAG_SPECIAL_ITEM_IMPORT, CTF_FONTNAME_CJK ),
+    MT_ED( "CharFontNameAsian", STYLE,      FONT_FAMILY_ASIAN,      XML_TYPE_TEXT_FONTFAMILYNAME|MID_FLAG_SPECIAL_ITEM_IMPORT, CTF_FONTFAMILYNAME_CJK ),
+    MT_ED( "CharFontStyleNameAsian",STYLE,  FONT_STYLE_NAME_ASIAN,  XML_TYPE_STRING, CTF_FONTSTYLENAME_CJK ),
+    MT_ED( "CharFontFamilyAsian",   STYLE,  FONT_FAMILY_GENERIC_ASIAN,XML_TYPE_TEXT_FONTFAMILY, CTF_FONTFAMILY_CJK ),
+    MT_ED( "CharFontPitchAsian",    STYLE,  FONT_PITCH_ASIAN,           XML_TYPE_TEXT_FONTPITCH, CTF_FONTPITCH_CJK ),
+    MT_ED( "CharFontCharSetAsian",  STYLE,  FONT_CHARSET_ASIAN,     XML_TYPE_TEXT_FONTENCODING, CTF_FONTCHARSET_CJK ),
+    // RES_CHRATR_CJK_FONTSIZE
+    MT_ED( "CharHeightAsian",         STYLE,    FONT_SIZE_ASIAN,            XML_TYPE_CHAR_HEIGHT|MID_FLAG_MULTI_PROPERTY, CTF_CHARHEIGHT_CJK ),
+    MT_ED( "CharPropHeightAsian",STYLE, FONT_SIZE_ASIAN,            XML_TYPE_CHAR_HEIGHT_PROP|MID_FLAG_MULTI_PROPERTY, CTF_CHARHEIGHT_REL_CJK ),
+    MT_ED( "CharDiffHeightAsian",STYLE,FONT_SIZE_REL_ASIAN,     XML_TYPE_CHAR_HEIGHT_DIFF, CTF_CHARHEIGHT_DIFF_CJK ),
+    // RES_CHRATR_CJK_LANGUAGE
+    MT_ED( "CharLocaleAsian",       STYLE,      LANGUAGE_ASIAN,             XML_TYPE_CHAR_LANGUAGE|MID_FLAG_MERGE_PROPERTY, 0 ),
+    MT_ED( "CharLocaleAsian",       STYLE,      COUNTRY_ASIAN,          XML_TYPE_CHAR_COUNTRY|MID_FLAG_MERGE_PROPERTY, 0 ),
+    // RES_CHRATR_CJK_POSTURE
+    MT_E( "CharPostureAsian",       STYLE,      FONT_STYLE_ASIAN,           XML_TYPE_TEXT_POSTURE, 0 ),
+    // RES_CHRATR_CJK_WEIGHT
+    MT_E( "CharWeightAsian",        STYLE,      FONT_WEIGHT_ASIAN,      XML_TYPE_TEXT_WEIGHT, 0 ),
+    // RES_CHRATR_CTL_FONT
+    MT_ED( "CharFontNameComplex",   STYLE,  FONT_NAME_COMPLEX,          XML_TYPE_STRING|MID_FLAG_SPECIAL_ITEM_IMPORT, CTF_FONTNAME_CTL ),
+    MT_ED( "CharFontNameComplex",   STYLE,      FONT_FAMILY_COMPLEX,        XML_TYPE_TEXT_FONTFAMILYNAME|MID_FLAG_SPECIAL_ITEM_IMPORT, CTF_FONTFAMILYNAME_CTL ),
+    MT_ED( "CharFontStyleNameComplex",STYLE,    FONT_STYLE_NAME_COMPLEX,    XML_TYPE_STRING, CTF_FONTSTYLENAME_CTL ),
+    MT_ED( "CharFontFamilyComplex", STYLE,  FONT_FAMILY_GENERIC_COMPLEX,XML_TYPE_TEXT_FONTFAMILY, CTF_FONTFAMILY_CTL ),
+    MT_ED( "CharFontPitchComplex",  STYLE,  FONT_PITCH_COMPLEX,         XML_TYPE_TEXT_FONTPITCH, CTF_FONTPITCH_CTL ),
+    MT_ED( "CharFontCharSetComplex",    STYLE,  FONT_CHARSET_COMPLEX,       XML_TYPE_TEXT_FONTENCODING, CTF_FONTCHARSET_CTL ),
+    // RES_CHRATR_CTL_FONTSIZE
+    MT_ED( "CharHeightComplex",       STYLE,    FONT_SIZE_COMPLEX,          XML_TYPE_CHAR_HEIGHT|MID_FLAG_MULTI_PROPERTY, CTF_CHARHEIGHT_CTL ),
+    MT_ED( "CharPropHeightComplex",STYLE,   FONT_SIZE_COMPLEX,          XML_TYPE_CHAR_HEIGHT_PROP|MID_FLAG_MULTI_PROPERTY, CTF_CHARHEIGHT_REL_CTL ),
+    MT_ED( "CharDiffHeightComplex",STYLE,FONT_SIZE_REL_COMPLEX,     XML_TYPE_CHAR_HEIGHT_DIFF, CTF_CHARHEIGHT_DIFF_CTL ),
+    // RES_CHRATR_CTL_LANGUAGE
+    MT_ED( "CharLocaleComplex",     STYLE,      LANGUAGE_COMPLEX,           XML_TYPE_CHAR_LANGUAGE|MID_FLAG_MERGE_PROPERTY, 0 ),
+    MT_ED( "CharLocaleComplex",     STYLE,      COUNTRY_COMPLEX,            XML_TYPE_CHAR_COUNTRY|MID_FLAG_MERGE_PROPERTY, 0 ),
+    // RES_CHRATR_CTL_POSTURE
+    MT_E( "CharPostureComplex",     STYLE,      FONT_STYLE_COMPLEX,         XML_TYPE_TEXT_POSTURE, 0 ),
+    // RES_CHRATR_CTL_WEIGHT
+    MT_E( "CharWeightComplex",      STYLE,      FONT_WEIGHT_COMPLEX,        XML_TYPE_TEXT_WEIGHT, 0 ),
+    // RES_CHRATR_ROTATE
+    MT_E( "CharRotation",           STYLE,      TEXT_ROTATION_ANGLE,        XML_TYPE_TEXT_ROTATION_ANGLE, 0 ),
+    MT_E( "CharRotationIsFitToLine",    STYLE,      TEXT_ROTATION_SCALE,        XML_TYPE_TEXT_ROTATION_SCALE, 0 ),
+    // RES_CHRATR_EMPHASIS_MARK
+    MT_E( "CharEmphasis",           STYLE,      TEXT_EMPHASIZE,             XML_TYPE_TEXT_EMPHASIZE, 0 ),
+    // RES_CHRATR_TWO_LINES
+    MT_E( "CharCombineIsOn",            STYLE,      TEXT_COMBINE,               XML_TYPE_TEXT_COMBINE, 0 ),
+    MT_E( "CharCombinePrefix",      STYLE,      TEXT_COMBINE_START_CHAR,    XML_TYPE_TEXT_COMBINECHAR, 0 ),
+    MT_E( "CharCombineSuffix",      STYLE,      TEXT_COMBINE_END_CHAR,      XML_TYPE_TEXT_COMBINECHAR, 0 ),
+    // RES_CHRATR_SCALEW
+    MT_E( "CharScaleWidth",         STYLE,      TEXT_SCALE,                 XML_TYPE_PERCENT16, 0 ),
+    //RES_CHRATR_RELIEF
+    MT_E( "CharRelief",             STYLE,      FONT_RELIEF,                XML_TYPE_TEXT_FONT_RELIEF, 0 ),
+    // RES_CHRATR_HIDDEN
+    MT_E( "CharHidden",              TEXT,       DISPLAY,                    XML_TYPE_TEXT_HIDDEN_AS_DISPLAY|MID_FLAG_SPECIAL_ITEM_IMPORT, CTF_TEXT_DISPLAY ),
+    // RES_CHRATR_OVERLINE
+    MT_E( "CharOverline",   STYLE,  TEXT_OVERLINE_STYLE,        XML_TYPE_TEXT_OVERLINE_STYLE|MID_FLAG_MERGE_PROPERTY, 0 ),
+    MT_E( "CharOverline",   STYLE,  TEXT_OVERLINE_TYPE,     XML_TYPE_TEXT_OVERLINE_TYPE|MID_FLAG_MERGE_PROPERTY, 0 ),
+    MT_E( "CharOverline",   STYLE,  TEXT_OVERLINE_WIDTH,        XML_TYPE_TEXT_OVERLINE_WIDTH|MID_FLAG_MERGE_PROPERTY, 0 ),
+    MT_E( "CharOverlineColor",  STYLE,  TEXT_OVERLINE_COLOR,        XML_TYPE_TEXT_OVERLINE_COLOR|MID_FLAG_MULTI_PROPERTY, 0 ),
+    MT_E( "CharOverlineHasColor",   STYLE,  TEXT_OVERLINE_COLOR,        XML_TYPE_TEXT_OVERLINE_HASCOLOR|MID_FLAG_MERGE_ATTRIBUTE, 0 ),
+
+    // RES_TXTATR_INETFMT
+    // TODO
+    // RES_TXTATR_REFMARK
+    // TODO
+    // RES_TXTATR_TOXMARK
+    // TODO
+    // RES_TXTATR_CHARFMT
+//  M_E_SI( TEXT,   style_name,         RES_TXTATR_CHARFMT, 0 ),
+    // RES_TXTATR_CJK_RUBY
+    // TODO
+    // RES_TXTATR_FIELD
+    // TODO
+    // RES_TXTATR_FLYCNT
+    // TODO
+    // RES_TXTATR_FTN
+    // TODO
+    // RES_TXTATR_SOFTHYPH
+    // TODO
+    // RES_TXTATR_HARDBLANK
+    // TODO
+
+    // RES_PARATR_LINESPACING
+    MP_E( "ParaLineSpacing",        FO,     LINE_HEIGHT,            XML_TYPE_LINE_SPACE_FIXED, 0 ),
+    MP_E( "ParaLineSpacing",        STYLE,  LINE_HEIGHT_AT_LEAST,   XML_TYPE_LINE_SPACE_MINIMUM, 0 ),
+    MP_E( "ParaLineSpacing",        STYLE,  LINE_SPACING,           XML_TYPE_LINE_SPACE_DISTANCE, 0 ),
+    // RES_PARATR_ADJUST
+    MP_E( "ParaAdjust",         FO,     TEXT_ALIGN,         XML_TYPE_TEXT_ADJUST, CTF_SD_SHAPE_PARA_ADJUST ),
+    MP_E( "ParaLastLineAdjust", FO,     TEXT_ALIGN_LAST,    XML_TYPE_TEXT_ADJUSTLAST, CTF_PARA_ADJUSTLAST ),
+    MP_E( "ParaExpandSingleWord",STYLE, JUSTIFY_SINGLE_WORD,XML_TYPE_BOOL, 0 ),
+    // RES_PARATR_SPLIT
+    MP_E( "ParaSplit",          FO,     KEEP_TOGETHER,      XML_TYPE_TEXT_SPLIT, 0 ),
+    // RES_PARATR_ORPHANS
+    MP_E( "ParaOrphans",            FO,     ORPHANS,            XML_TYPE_NUMBER8, 0 ),
+    // RES_PARATR_WIDOWS
+    MP_E( "ParaWidows",         FO,     WIDOWS,             XML_TYPE_NUMBER8, 0 ),
+    // RES_PARATR_TABSTOP
+    MP_ED( "ParaTabStops",      STYLE,  TAB_STOPS,          MID_FLAG_ELEMENT_ITEM|XML_TYPE_TEXT_TABSTOP, CTF_TABSTOP ), // this is not realy a string!
+    // RES_PARATR_HYPHENZONE
+    MT_E( "ParaIsHyphenation",  FO,     HYPHENATE,          XML_TYPE_BOOL, 0 ),
+    MT_E( "ParaHyphenationMaxLeadingChars", FO, HYPHENATION_REMAIN_CHAR_COUNT, XML_TYPE_NUMBER16, 0 ),
+    MT_E( "ParaHyphenationMaxTrailingChars",FO, HYPHENATION_PUSH_CHAR_COUNT, XML_TYPE_NUMBER16, 0 ),
+    MP_E( "ParaHyphenationMaxHyphens",  FO, HYPHENATION_LADDER_COUNT, XML_TYPE_NUMBER16_NONE, 0 ),
+    // RES_PARATR_DROP
+    MP_E( "DropCapWholeWord",   STYLE,  LENGTH,     MID_FLAG_SPECIAL_ITEM|XML_TYPE_BOOL, CTF_DROPCAPWHOLEWORD ),
+    MP_E( "DropCapCharStyleName",   STYLE,  STYLE_NAME, MID_FLAG_SPECIAL_ITEM|XML_TYPE_STRING, CTF_DROPCAPCHARSTYLE ),
+    MP_E( "DropCapFormat",      STYLE,  DROP_CAP,   MID_FLAG_ELEMENT_ITEM|XML_TYPE_TEXT_DROPCAP, CTF_DROPCAPFORMAT ),
+    // RES_PARATR_REGISTER
+    MP_E( "ParaRegisterModeActive", STYLE,  REGISTER_TRUE,  XML_TYPE_BOOL, 0 ),
+    // RES_PARATR_NUMRULE
+    MP_E( "NumberingStyleName", STYLE,  LIST_STYLE_NAME,    MID_FLAG_SPECIAL_ITEM|XML_TYPE_STYLENAME, CTF_NUMBERINGSTYLENAME ),
+    MP_E( "NumberingRules",     TEXT,   ENABLE_NUMBERING,   MID_FLAG_NO_PROPERTY|XML_TYPE_BOOL, CTF_ALIEN_ATTRIBUTE_IMPORT ),
+
+    // RES_FILL_ORDER
+    // not required
+    // RES_FRM_SIZE
+    // not required
+    // RES_PAPER_BIN
+    // not required
+    // RES_LR_SPACE
+
+    MP_E( "ParaFirstLineIndent",        FO, TEXT_INDENT,        XML_TYPE_MEASURE|MID_FLAG_MULTI_PROPERTY, CTF_PARAFIRSTLINE ),
+    MP_E( "ParaFirstLineIndentRelative",    FO, TEXT_INDENT,    XML_TYPE_PERCENT, CTF_PARAFIRSTLINE_REL ),
+    MP_E( "ParaIsAutoFirstLineIndent",  STYLE, AUTO_TEXT_INDENT,    XML_TYPE_BOOL, 0 ),
+    // RES_PAGEDESC
+    MP_E( "PageDescName",           STYLE,  MASTER_PAGE_NAME,           MID_FLAG_SPECIAL_ITEM|XML_TYPE_STYLENAME, CTF_PAGEDESCNAME ),
+    MP_E( "PageNumberOffset",       STYLE,  PAGE_NUMBER,            XML_TYPE_NUMBER16_AUTO, 0 ),
+    // RES_BREAK : TODO: does this work?
+    MP_E( "BreakType",      FO, BREAK_BEFORE,       XML_TYPE_TEXT_BREAKBEFORE|MID_FLAG_MULTI_PROPERTY, 0 ),
+    MP_E( "BreakType",      FO, BREAK_AFTER,        XML_TYPE_TEXT_BREAKAFTER, 0 ),
+    // RES_CNTNT
+    // not required
+    // RES_HEADER
+    // not required
+    // RES_FOOTER
+    // not required
+    // RES_PRINT
+    // not required
+    // RES_OPAQUE
+    // not required
+    // RES_PROTECT
+    // not required
+    // RES_SURROUND
+    // not required
+    // RES_VERT_ORIENT
+    // not required
+    // RES_HORI_ORIENT
+    // not required
+    // RES_ANCHOR
+    // not required
+    // RES_BACKGROUND
+    MP_E( "ParaBackColor",  FO, BACKGROUND_COLOR,       XML_TYPE_COLORTRANSPARENT|MID_FLAG_MULTI_PROPERTY, 0 ),
+    MP_E( "ParaBackTransparent",    FO, BACKGROUND_COLOR,       XML_TYPE_ISTRANSPARENT|MID_FLAG_MERGE_ATTRIBUTE, 0 ),
+    MP_E( "ParaBackGraphicLocation",    STYLE,  POSITION,   MID_FLAG_SPECIAL_ITEM|XML_TYPE_BUILDIN_CMP_ONLY, CTF_BACKGROUND_POS  ),
+    MP_E( "ParaBackGraphicFilter",STYLE,    FILTER_NAME,    MID_FLAG_SPECIAL_ITEM|XML_TYPE_STRING, CTF_BACKGROUND_FILTER ),
+    MP_E( "ParaBackGraphicURL", STYLE,  BACKGROUND_IMAGE,   MID_FLAG_ELEMENT_ITEM|XML_TYPE_STRING, CTF_BACKGROUND_URL ),
+    // RES_BOX
+    MP_E( "LeftBorder",         STYLE,  BORDER_LINE_WIDTH,        XML_TYPE_BORDER_WIDTH, CTF_ALLBORDERWIDTH ),
+    MP_E( "LeftBorder",         STYLE,  BORDER_LINE_WIDTH_LEFT,   XML_TYPE_BORDER_WIDTH, CTF_LEFTBORDERWIDTH ),
+    MP_E( "RightBorder",            STYLE,  BORDER_LINE_WIDTH_RIGHT,  XML_TYPE_BORDER_WIDTH, CTF_RIGHTBORDERWIDTH ),
+    MP_E( "TopBorder",          STYLE,  BORDER_LINE_WIDTH_TOP,    XML_TYPE_BORDER_WIDTH, CTF_TOPBORDERWIDTH ),
+    MP_E( "BottomBorder",       STYLE,  BORDER_LINE_WIDTH_BOTTOM, XML_TYPE_BORDER_WIDTH, CTF_BOTTOMBORDERWIDTH ),
+
+    MP_E( "LeftBorderDistance", FO,     PADDING,                  XML_TYPE_MEASURE|MID_FLAG_MULTI_PROPERTY, CTF_ALLBORDERDISTANCE ), // need special import filtering
+    MP_E( "LeftBorderDistance", FO,     PADDING_LEFT,             XML_TYPE_MEASURE|MID_FLAG_MULTI_PROPERTY, CTF_LEFTBORDERDISTANCE ),
+    MP_E( "RightBorderDistance",    FO,     PADDING_RIGHT,            XML_TYPE_MEASURE|MID_FLAG_MULTI_PROPERTY, CTF_RIGHTBORDERDISTANCE ),
+    MP_E( "TopBorderDistance",  FO,     PADDING_TOP,              XML_TYPE_MEASURE|MID_FLAG_MULTI_PROPERTY, CTF_TOPBORDERDISTANCE ),
+    MP_E( "BottomBorderDistance",FO,    PADDING_BOTTOM,           XML_TYPE_MEASURE|MID_FLAG_MULTI_PROPERTY, CTF_BOTTOMBORDERDISTANCE ),
+
+    MP_E( "LeftBorder",         FO,     BORDER,                   XML_TYPE_BORDER, CTF_ALLBORDER ),
+    MP_E( "LeftBorder",         FO,     BORDER_LEFT,              XML_TYPE_BORDER, CTF_LEFTBORDER ),
+    MP_E( "RightBorder",            FO,     BORDER_RIGHT,             XML_TYPE_BORDER, CTF_RIGHTBORDER ),
+    MP_E( "TopBorder",          FO,     BORDER_TOP,               XML_TYPE_BORDER, CTF_TOPBORDER ),
+    MP_E( "BottomBorder",       FO,     BORDER_BOTTOM,            XML_TYPE_BORDER, CTF_BOTTOMBORDER ),
+    // RES_SHADOW
+    MP_E( "ParaShadowFormat",   STYLE,  SHADOW,     XML_TYPE_TEXT_SHADOW, 0 ),
+    // RES_FRMMACRO
+    // not required
+    // RES_COL
+    // not required
+    // RES_KEEP
+    MP_E( "ParaKeepTogether",   FO, KEEP_WITH_NEXT,     XML_TYPE_TEXT_KEEP, 0 ),
+    // RES_URL
+    // not required
+    // RES_EDIT_IN_READONLY
+    // not required
+    // RES_LAYOUT_SPLIT
+    // not required
+    // RES_CHAIN
+    // not required
+
+    // RES_LINENUMBER
+    MP_E( "ParaLineNumberCount",    TEXT,   NUMBER_LINES,           XML_TYPE_BOOL, 0 ),
+    MP_E( "ParaLineNumberStartValue", TEXT, LINE_NUMBER,            XML_TYPE_NUMBER, 0 ),
+
+    // RES_FTN_AT_TXTEND
+    // not required
+    // RES_END_AT_TXTEND
+    // not required
+    MP_ED( "ParaIsCharacterDistance", STYLE, TEXT_AUTOSPACE, XML_TYPE_TEXT_AUTOSPACE, 0 ),
+    MP_ED( "ParaIsHangingPunctuation", STYLE, PUNCTUATION_WRAP, XML_TYPE_TEXT_PUNCTUATION_WRAP, 0 ),
+    MP_ED( "ParaIsForbiddenRules", STYLE, LINE_BREAK, XML_TYPE_TEXT_LINE_BREAK, 0 ),
+    MP_E( "TabStopDistance", STYLE, TAB_STOP_DISTANCE, XML_TYPE_MEASURE, 0 ),
+
+    // RES_PARATR_VERTALIGN
+    MP_E( "ParaVertAlignment", STYLE, VERTICAL_ALIGN,   XML_TYPE_TEXT_VERTICAL_ALIGN, 0 ),
+
+    // RES_PARATR_SNAPTOGRID
+    MP_E( "SnapToGrid", STYLE, SNAP_TO_LAYOUT_GRID, XML_TYPE_BOOL, 0 ),
+
+    MP_ED( "WritingMode",      STYLE, WRITING_MODE,       XML_TYPE_TEXT_WRITING_MODE_WITH_DEFAULT, CTF_TEXTWRITINGMODE ),
+
+    MP_E( "ParaIsConnectBorder", STYLE, JOIN_BORDER,  XML_TYPE_BOOL, 0 ),
+
+    MP_E( "DefaultOutlineLevel", STYLE, DEFAULT_OUTLINE_LEVEL, XML_TYPE_TEXT_NUMBER8_ONE_BASED|MID_FLAG_SPECIAL_ITEM_EXPORT|MID_FLAG_NO_PROPERTY_IMPORT, CTF_DEFAULT_OUTLINE_LEVEL ),
+
+    MP_ED( "FontIndependentLineSpacing", STYLE, FONT_INDEPENDENT_LINE_SPACING, XML_TYPE_BOOL, 0 ),
+
+    M_END()
+};
+
+
+XMLPropertyMapEntry aXMLAdditionalTextDefaultsMap[] =
+{
+    // RES_FOLLOW_TEXT_FLOW - DVO, OD 01.10.2003 #i18732#
+    MG_ED( "IsFollowingTextFlow", STYLE, FLOW_WITH_TEXT,      XML_TYPE_BOOL, 0 ),
+
+    // OD 2004-05-05 #i28701# - RES_WRAP_INFLUENCE_ON_OBJPOS
+    MG_ED( "WrapInfluenceOnPosition", DRAW, WRAP_INFLUENCE_ON_POSITION, XML_TYPE_WRAP_INFLUENCE_ON_POSITION, 0 ),
+
+    M_END()
+};
+
+XMLPropertyMapEntry aXMLTextPropMap[] =
+{
+    // RES_CHRATR_CASEMAP
+    MT_E( "CharCaseMap",        FO,     FONT_VARIANT,       XML_TYPE_TEXT_CASEMAP_VAR,  0 ),
+    MT_E( "CharCaseMap",        FO,     TEXT_TRANSFORM,     XML_TYPE_TEXT_CASEMAP,  0 ),
+    // RES_CHRATR_COLOR
+    MT_ED( "CharColor",     FO,     COLOR,              XML_TYPE_COLORAUTO|MID_FLAG_MERGE_PROPERTY, 0 ),
+    MT_ED( "CharColor",     STYLE,  USE_WINDOW_FONT_COLOR,  XML_TYPE_ISAUTOCOLOR|MID_FLAG_MERGE_PROPERTY,   0 ),
+    // RES_CHRATR_CONTOUR
+    MT_E( "CharContoured",  STYLE,  TEXT_OUTLINE,       XML_TYPE_BOOL,  0 ),
+    // RES_CHRATR_CROSSEDOUT
+    MT_E( "CharStrikeout",  STYLE,  TEXT_LINE_THROUGH_STYLE,    XML_TYPE_TEXT_CROSSEDOUT_STYLE|MID_FLAG_MERGE_PROPERTY, 0),
+    MT_E( "CharStrikeout",  STYLE,  TEXT_LINE_THROUGH_TYPE,     XML_TYPE_TEXT_CROSSEDOUT_TYPE|MID_FLAG_MERGE_PROPERTY,  0),
+    MT_E( "CharStrikeout",  STYLE,  TEXT_LINE_THROUGH_WIDTH,    XML_TYPE_TEXT_CROSSEDOUT_WIDTH|MID_FLAG_MERGE_PROPERTY, 0),
+    MT_E( "CharStrikeout",  STYLE,  TEXT_LINE_THROUGH_TEXT,     XML_TYPE_TEXT_CROSSEDOUT_TEXT|MID_FLAG_MERGE_PROPERTY,  0),
+    // RES_CHRATR_ESCAPEMENT
+    MT_E( "CharEscapement",      STYLE, TEXT_POSITION,  XML_TYPE_TEXT_ESCAPEMENT|MID_FLAG_MERGE_ATTRIBUTE|MID_FLAG_MULTI_PROPERTY, 0 ),
+    MT_E( "CharEscapementHeight", STYLE, TEXT_POSITION, XML_TYPE_TEXT_ESCAPEMENT_HEIGHT|MID_FLAG_MERGE_ATTRIBUTE|MID_FLAG_MULTI_PROPERTY, 0 ),
+    // RES_CHRATR_FONT
+    MT_ED( "CharFontName",  STYLE,  FONT_NAME,          XML_TYPE_STRING|MID_FLAG_SPECIAL_ITEM_IMPORT, CTF_FONTNAME ),
+    MT_ED( "CharFontName",  FO,     FONT_FAMILY,        XML_TYPE_TEXT_FONTFAMILYNAME|MID_FLAG_SPECIAL_ITEM_IMPORT, CTF_FONTFAMILYNAME ),
+    MT_ED( "CharFontStyleName",STYLE,   FONT_STYLE_NAME,    XML_TYPE_STRING, CTF_FONTSTYLENAME ),
+    MT_ED( "CharFontFamily",    STYLE,  FONT_FAMILY_GENERIC,XML_TYPE_TEXT_FONTFAMILY, CTF_FONTFAMILY ),
+    MT_ED( "CharFontPitch", STYLE,  FONT_PITCH,         XML_TYPE_TEXT_FONTPITCH, CTF_FONTPITCH ),
+    MT_ED( "CharFontCharSet",   STYLE,  FONT_CHARSET,       XML_TYPE_TEXT_FONTENCODING, CTF_FONTCHARSET ),
+    // RES_CHRATR_FONTSIZE
+    MT_ED( "CharHeight",          FO,   FONT_SIZE,          XML_TYPE_CHAR_HEIGHT|MID_FLAG_MULTI_PROPERTY, CTF_CHARHEIGHT ),
+    MT_ED( "CharPropHeight",FO, FONT_SIZE,          XML_TYPE_CHAR_HEIGHT_PROP|MID_FLAG_MULTI_PROPERTY, CTF_CHARHEIGHT_REL ),
+    MT_ED( "CharDiffHeight",STYLE,FONT_SIZE_REL,        XML_TYPE_CHAR_HEIGHT_DIFF, CTF_CHARHEIGHT_DIFF ),
+    // RES_CHRATR_KERNING
+    MT_E( "CharKerning",        FO,     LETTER_SPACING,     XML_TYPE_TEXT_KERNING, 0 ),
+    // RES_CHRATR_LANGUAGE
+    MT_ED( "CharLocale",        FO,     LANGUAGE,           XML_TYPE_CHAR_LANGUAGE|MID_FLAG_MERGE_PROPERTY, 0 ),
+    MT_ED( "CharLocale",        FO,     COUNTRY,            XML_TYPE_CHAR_COUNTRY|MID_FLAG_MERGE_PROPERTY, 0 ),
+    // RES_CHRATR_POSTURE
+    MT_E( "CharPosture",        FO,     FONT_STYLE,         XML_TYPE_TEXT_POSTURE, 0 ),
+    // RES_CHRATR_PROPORTIONALFONTSIZE
+    // TODO: not used?
+    // RES_CHRATR_SHADOWED
+    MT_E( "CharShadowed",   FO,     TEXT_SHADOW,        XML_TYPE_TEXT_SHADOWED, 0 ),
+    // BIS HIER GEPRUEFT!
+    // RES_CHRATR_UNDERLINE
+    MT_E( "CharUnderline",  STYLE,  TEXT_UNDERLINE_STYLE,       XML_TYPE_TEXT_UNDERLINE_STYLE|MID_FLAG_MERGE_PROPERTY, CTF_UNDERLINE ),
+    MT_E( "CharUnderline",  STYLE,  TEXT_UNDERLINE_TYPE,        XML_TYPE_TEXT_UNDERLINE_TYPE|MID_FLAG_MERGE_PROPERTY, 0 ),
+    MT_E( "CharUnderline",  STYLE,  TEXT_UNDERLINE_WIDTH,       XML_TYPE_TEXT_UNDERLINE_WIDTH|MID_FLAG_MERGE_PROPERTY, 0 ),
+    MT_E( "CharUnderlineColor", STYLE,  TEXT_UNDERLINE_COLOR,       XML_TYPE_TEXT_UNDERLINE_COLOR|MID_FLAG_MULTI_PROPERTY, CTF_UNDERLINE_COLOR  ),
+    MT_E( "CharUnderlineHasColor",  STYLE,  TEXT_UNDERLINE_COLOR,       XML_TYPE_TEXT_UNDERLINE_HASCOLOR|MID_FLAG_MERGE_ATTRIBUTE, CTF_UNDERLINE_HASCOLOR   ),
+    // RES_CHRATR_WEIGHT
+    MT_E( "CharWeight",     FO,     FONT_WEIGHT,        XML_TYPE_TEXT_WEIGHT, 0 ),
+    // RES_CHRATR_WORDLINEMODE
+    MT_E( "CharWordMode",   STYLE,  TEXT_UNDERLINE_MODE,        XML_TYPE_TEXT_LINE_MODE|MID_FLAG_MERGE_PROPERTY, 0 ),
+    MT_E( "CharWordMode",   STYLE,  TEXT_OVERLINE_MODE,     XML_TYPE_TEXT_LINE_MODE|MID_FLAG_MERGE_PROPERTY, 0 ),
+    MT_E( "CharWordMode",   STYLE,  TEXT_LINE_THROUGH_MODE,     XML_TYPE_TEXT_LINE_MODE|MID_FLAG_MERGE_PROPERTY, 0 ),
+    // RES_CHRATR_AUTOKERN
+    MT_E( "CharAutoKerning",    STYLE,  LETTER_KERNING,     XML_TYPE_BOOL, 0 ),
+    // RES_CHRATR_BLINK
+    MT_E( "CharFlash",      STYLE,  TEXT_BLINKING,      XML_TYPE_BOOL, 0 ),
+    // RES_CHRATR_NOHYPHEN
+    // TODO: not used?
+    // RES_CHRATR_NOLINEBREAK
+    // TODO: not used?
+    // RES_CHRATR_BACKGROUND
+    MT_E( "CharBackColor",  FO, BACKGROUND_COLOR, XML_TYPE_COLORTRANSPARENT|MID_FLAG_MULTI_PROPERTY, 0 ),
+    MT_E( "CharBackTransparent",    FO, BACKGROUND_COLOR, XML_TYPE_ISTRANSPARENT|MID_FLAG_MERGE_ATTRIBUTE, 0 ),
+    MT_E( "CharBackColor",  FO, TEXT_BACKGROUND_COLOR, XML_TYPE_COLOR|MID_FLAG_SPECIAL_ITEM_EXPORT, CTF_OLDTEXTBACKGROUND ),
+    // RES_CHRATR_CJK_FONT
+    MT_ED( "CharFontNameAsian", STYLE,  FONT_NAME_ASIAN,            XML_TYPE_STRING|MID_FLAG_SPECIAL_ITEM_IMPORT, CTF_FONTNAME_CJK ),
+    MT_ED( "CharFontNameAsian", STYLE,      FONT_FAMILY_ASIAN,      XML_TYPE_TEXT_FONTFAMILYNAME|MID_FLAG_SPECIAL_ITEM_IMPORT, CTF_FONTFAMILYNAME_CJK ),
+    MT_ED( "CharFontStyleNameAsian",STYLE,  FONT_STYLE_NAME_ASIAN,  XML_TYPE_STRING, CTF_FONTSTYLENAME_CJK ),
+    MT_ED( "CharFontFamilyAsian",   STYLE,  FONT_FAMILY_GENERIC_ASIAN,XML_TYPE_TEXT_FONTFAMILY, CTF_FONTFAMILY_CJK ),
+    MT_ED( "CharFontPitchAsian",    STYLE,  FONT_PITCH_ASIAN,           XML_TYPE_TEXT_FONTPITCH, CTF_FONTPITCH_CJK ),
+    MT_ED( "CharFontCharSetAsian",  STYLE,  FONT_CHARSET_ASIAN,     XML_TYPE_TEXT_FONTENCODING, CTF_FONTCHARSET_CJK ),
+    // RES_CHRATR_CJK_FONTSIZE
+    MT_ED( "CharHeightAsian",         STYLE,    FONT_SIZE_ASIAN,            XML_TYPE_CHAR_HEIGHT|MID_FLAG_MULTI_PROPERTY, CTF_CHARHEIGHT_CJK ),
+    MT_ED( "CharPropHeightAsian",STYLE, FONT_SIZE_ASIAN,            XML_TYPE_CHAR_HEIGHT_PROP|MID_FLAG_MULTI_PROPERTY, CTF_CHARHEIGHT_REL_CJK ),
+    MT_ED( "CharDiffHeightAsian",STYLE,FONT_SIZE_REL_ASIAN,     XML_TYPE_CHAR_HEIGHT_DIFF, CTF_CHARHEIGHT_DIFF_CJK ),
+    // RES_CHRATR_CJK_LANGUAGE
+    MT_ED( "CharLocaleAsian",       STYLE,      LANGUAGE_ASIAN,             XML_TYPE_CHAR_LANGUAGE|MID_FLAG_MERGE_PROPERTY, 0 ),
+    MT_ED( "CharLocaleAsian",       STYLE,      COUNTRY_ASIAN,          XML_TYPE_CHAR_COUNTRY|MID_FLAG_MERGE_PROPERTY, 0 ),
+    // RES_CHRATR_CJK_POSTURE
+    MT_E( "CharPostureAsian",       STYLE,      FONT_STYLE_ASIAN,           XML_TYPE_TEXT_POSTURE, 0 ),
+    // RES_CHRATR_CJK_WEIGHT
+    MT_E( "CharWeightAsian",        STYLE,      FONT_WEIGHT_ASIAN,      XML_TYPE_TEXT_WEIGHT, 0 ),
+    // RES_CHRATR_CTL_FONT
+    MT_ED( "CharFontNameComplex",   STYLE,  FONT_NAME_COMPLEX,          XML_TYPE_STRING|MID_FLAG_SPECIAL_ITEM_IMPORT, CTF_FONTNAME_CTL ),
+    MT_ED( "CharFontNameComplex",   STYLE,      FONT_FAMILY_COMPLEX,        XML_TYPE_TEXT_FONTFAMILYNAME|MID_FLAG_SPECIAL_ITEM_IMPORT, CTF_FONTFAMILYNAME_CTL ),
+    MT_ED( "CharFontStyleNameComplex",STYLE,    FONT_STYLE_NAME_COMPLEX,    XML_TYPE_STRING, CTF_FONTSTYLENAME_CTL ),
+    MT_ED( "CharFontFamilyComplex", STYLE,  FONT_FAMILY_GENERIC_COMPLEX,XML_TYPE_TEXT_FONTFAMILY, CTF_FONTFAMILY_CTL ),
+    MT_ED( "CharFontPitchComplex",  STYLE,  FONT_PITCH_COMPLEX,         XML_TYPE_TEXT_FONTPITCH, CTF_FONTPITCH_CTL ),
+    MT_ED( "CharFontCharSetComplex",    STYLE,  FONT_CHARSET_COMPLEX,       XML_TYPE_TEXT_FONTENCODING, CTF_FONTCHARSET_CTL ),
+    // RES_CHRATR_CTL_FONTSIZE
+    MT_ED( "CharHeightComplex",       STYLE,    FONT_SIZE_COMPLEX,          XML_TYPE_CHAR_HEIGHT|MID_FLAG_MULTI_PROPERTY, CTF_CHARHEIGHT_CTL ),
+    MT_ED( "CharPropHeightComplex",STYLE,   FONT_SIZE_COMPLEX,          XML_TYPE_CHAR_HEIGHT_PROP|MID_FLAG_MULTI_PROPERTY, CTF_CHARHEIGHT_REL_CTL ),
+    MT_ED( "CharDiffHeightComplex",STYLE,FONT_SIZE_REL_COMPLEX,     XML_TYPE_CHAR_HEIGHT_DIFF, CTF_CHARHEIGHT_DIFF_CTL ),
+    // RES_CHRATR_CTL_LANGUAGE
+    MT_ED( "CharLocaleComplex",     STYLE,      LANGUAGE_COMPLEX,           XML_TYPE_CHAR_LANGUAGE|MID_FLAG_MERGE_PROPERTY, 0 ),
+    MT_ED( "CharLocaleComplex",     STYLE,      COUNTRY_COMPLEX,            XML_TYPE_CHAR_COUNTRY|MID_FLAG_MERGE_PROPERTY, 0 ),
+    // RES_CHRATR_CTL_POSTURE
+    MT_E( "CharPostureComplex",     STYLE,      FONT_STYLE_COMPLEX,         XML_TYPE_TEXT_POSTURE, 0 ),
+    // RES_CHRATR_CTL_WEIGHT
+    MT_E( "CharWeightComplex",      STYLE,      FONT_WEIGHT_COMPLEX,        XML_TYPE_TEXT_WEIGHT, 0 ),
+    // RES_CHRATR_ROTATE
+    MT_E( "CharRotation",           STYLE,      TEXT_ROTATION_ANGLE,        XML_TYPE_TEXT_ROTATION_ANGLE, 0 ),
+    MT_E( "CharRotationIsFitToLine",    STYLE,      TEXT_ROTATION_SCALE,        XML_TYPE_TEXT_ROTATION_SCALE, 0 ),
+    // RES_CHRATR_EMPHASIS_MARK
+    MT_E( "CharEmphasis",           STYLE,      TEXT_EMPHASIZE,             XML_TYPE_TEXT_EMPHASIZE, 0 ),
+    // RES_CHRATR_TWO_LINES
+    MT_E( "CharCombineIsOn",            STYLE,      TEXT_COMBINE,               XML_TYPE_TEXT_COMBINE|MID_FLAG_MULTI_PROPERTY, 0 ),
+    MT_E( "CharCombinePrefix",      STYLE,      TEXT_COMBINE_START_CHAR,    XML_TYPE_TEXT_COMBINECHAR, 0 ),
+    MT_E( "CharCombineSuffix",      STYLE,      TEXT_COMBINE_END_CHAR,      XML_TYPE_TEXT_COMBINECHAR, 0 ),
+    // RES_CHRATR_SCALEW
+    MT_E( "CharScaleWidth",         STYLE,      TEXT_SCALE,                 XML_TYPE_PERCENT16, 0 ),
+    // combined characters field, does not correspond to a property
+    MT_E( "",                       STYLE,      TEXT_COMBINE,               XML_TYPE_TEXT_COMBINE_CHARACTERS|MID_FLAG_NO_PROPERTY, CTF_COMBINED_CHARACTERS_FIELD ),
+    //RES_CHRATR_RELIEF
+    MT_E( "CharRelief",             STYLE,      FONT_RELIEF,                XML_TYPE_TEXT_FONT_RELIEF, 0 ),
+    // RES_CHRATR_HIDDEN
+    MT_E( "CharHidden",              TEXT,       DISPLAY,                    XML_TYPE_TEXT_HIDDEN_AS_DISPLAY|MID_FLAG_SPECIAL_ITEM_IMPORT, CTF_TEXT_DISPLAY ),
+    // RES_CHRATR_OVERLINE
+    MT_E( "CharOverline",   STYLE,  TEXT_OVERLINE_STYLE,        XML_TYPE_TEXT_OVERLINE_STYLE|MID_FLAG_MERGE_PROPERTY, 0 ),
+    MT_E( "CharOverline",   STYLE,  TEXT_OVERLINE_TYPE,     XML_TYPE_TEXT_OVERLINE_TYPE|MID_FLAG_MERGE_PROPERTY, 0 ),
+    MT_E( "CharOverline",   STYLE,  TEXT_OVERLINE_WIDTH,        XML_TYPE_TEXT_OVERLINE_WIDTH|MID_FLAG_MERGE_PROPERTY, 0 ),
+    MT_E( "CharOverlineColor",  STYLE,  TEXT_OVERLINE_COLOR,        XML_TYPE_TEXT_OVERLINE_COLOR|MID_FLAG_MULTI_PROPERTY, 0 ),
+    MT_E( "CharOverlineHasColor",   STYLE,  TEXT_OVERLINE_COLOR,        XML_TYPE_TEXT_OVERLINE_HASCOLOR|MID_FLAG_MERGE_ATTRIBUTE, 0 ),
+
+    // RES_TXTATR_INETFMT
+    MT_E( "HyperLinkURL",           TEXT,       XMLNS,                      XML_TYPE_STRING|MID_FLAG_NO_PROPERTY_IMPORT,    CTF_HYPERLINK_URL ),
+    // RES_TXTATR_REFMARK
+    // TODO
+    // RES_TXTATR_TOXMARK
+    // TODO
+    // RES_TXTATR_CHARFMT
+    MT_E( "CharStyleName",          TEXT,       STYLE_NAME,                 XML_TYPE_STRING|MID_FLAG_NO_PROPERTY_IMPORT,    CTF_CHAR_STYLE_NAME ),
+    // RES_TXTATR_CJK_RUBY
+    // TODO
+    // RES_TXTATR_FIELD
+    // TODO
+    // RES_TXTATR_FLYCNT
+    // TODO
+    // RES_TXTATR_FTN
+    // TODO
+    // RES_TXTATR_SOFTHYPH
+    // TODO
+    // RES_TXTATR_HARDBLANK
+    // TODO
+    // RES_UNKNOWNATR_CONTAINER
+    MT_E( "TextUserDefinedAttributes", TEXT, XMLNS, XML_TYPE_ATTRIBUTE_CONTAINER | MID_FLAG_SPECIAL_ITEM, 0 ),
+    MT_ED( "ParaIsCharacterDistance", STYLE, TEXT_AUTOSPACE, XML_TYPE_TEXT_AUTOSPACE, 0 ),
+    MT_ED( "ParaIsHangingPunctuation", STYLE, PUNCTUATION_WRAP, XML_TYPE_TEXT_PUNCTUATION_WRAP, 0 ),
+    MT_ED( "ParaIsForbiddenRules", STYLE, LINE_BREAK, XML_TYPE_TEXT_LINE_BREAK, 0 ),
+    MT_E( "TabStopDistance", STYLE, TAB_STOP_DISTANCE, XML_TYPE_MEASURE, 0 ),
+
+    M_END()
+};
+
+XMLPropertyMapEntry aXMLFramePropMap[] =
+{
+    // RES_FILL_ORDER
+    // TODO: not required???
+    // RES_FRM_SIZE
+    MG_ED( "Width",         SVG, WIDTH,             XML_TYPE_MEASURE, CTF_FRAMEWIDTH_ABS ),
+    MG_ED( "Width",         FO,  MIN_WIDTH,         XML_TYPE_MEASURE|MID_FLAG_MULTI_PROPERTY, CTF_FRAMEWIDTH_MIN_ABS ),
+    MG_ED( "RelativeWidth", FO,  MIN_WIDTH,         XML_TYPE_TEXT_REL_WIDTH_HEIGHT, CTF_FRAMEWIDTH_MIN_REL ),
+    MG_ED( "RelativeWidth", STYLE, REL_WIDTH,       XML_TYPE_TEXT_REL_WIDTH_HEIGHT, CTF_FRAMEWIDTH_REL ),
+    MG_ED( "WidthType",     FO, TEXT_BOX,           XML_TYPE_NUMBER16|MID_FLAG_SPECIAL_ITEM_IMPORT, CTF_FRAMEWIDTH_TYPE ),
+//  M_ED( "RelativeWidth",  STYLE, REL_WIDTH,       XML_TYPE_TEXT_REL_WIDTH_HEIGHT|MID_FLAG_MULTI_PROPERTY, 0 ),
+//  M_ED( "IsSyncWidthToHeight",STYLE, REL_WIDTH,   XML_TYPE_TEXT_SYNC_WIDTH_HEIGHT|MID_FLAG_MULTI_PROPERTY, 0 ),
+
+    MG_ED( "Height",            SVG, HEIGHT,            XML_TYPE_MEASURE, CTF_FRAMEHEIGHT_ABS ),
+    MG_ED( "Height",            FO, MIN_HEIGHT,         XML_TYPE_MEASURE|MID_FLAG_MULTI_PROPERTY, CTF_FRAMEHEIGHT_MIN_ABS ),
+    MG_ED( "RelativeHeight",    FO, MIN_HEIGHT,         XML_TYPE_TEXT_REL_WIDTH_HEIGHT, CTF_FRAMEHEIGHT_MIN_REL ),
+    MG_ED( "RelativeHeight",    STYLE, REL_HEIGHT,      XML_TYPE_TEXT_REL_WIDTH_HEIGHT, CTF_FRAMEHEIGHT_REL ),
+//  M_ED( "RelativeHeight", STYLE, REL_HEIGHT,      XML_TYPE_TEXT_REL_WIDTH_HEIGHT|MID_FLAG_MULTI_PROPERTY, CTF_FRAMEHEIGHT_REL ),
+//  M_ED( "IsSyncHeightToWidth",STYLE, REL_HEIGHT,  XML_TYPE_TEXT_SYNC_WIDTH_HEIGHT|MID_FLAG_MULTI_PROPERTY, CTF_SYNCHEIGHT ),
+//  M_ED( "IsSyncHeightToWidth",STYLE, REL_HEIGHT,  XML_TYPE_TEXT_SYNC_WIDTH_HEIGHT_MIN, CTF_SYNCHEIGHT_MIN ),
+    MG_ED( "SizeType",      FO, TEXT_BOX,           XML_TYPE_NUMBER16|MID_FLAG_SPECIAL_ITEM_IMPORT, CTF_SIZETYPE ),
+    // RES_PAPER_BIN
+    // not required
+    // RES_ANCHOR
+    // moved to here because it is not used for automatic styles
+    MG_ED( "AnchorType",            TEXT,   ANCHOR_TYPE,            XML_TYPE_TEXT_ANCHOR_TYPE, CTF_ANCHORTYPE ),
+    // AnchorPage number is not required for styles!
+    MG_ED( "HoriOrientPosition",    SVG,    X,        XML_TYPE_MEASURE, 0 ),
+    MG_ED( "VertOrientPosition",    SVG,    Y,        XML_TYPE_MEASURE, 0 ),
+    // ***** The map for automatic styles starts here *****
+    // RES_LR_SPACE
+    MG_E( "LeftMargin",             FO, MARGIN,     XML_TYPE_MEASURE,  CTF_MARGINALL ),
+    MG_E( "LeftMargin",             FO, MARGIN_LEFT,        XML_TYPE_MEASURE,  CTF_MARGINLEFT ),
+    MG_E( "RightMargin",                FO, MARGIN_RIGHT,       XML_TYPE_MEASURE, CTF_MARGINRIGHT ),
+    // RES_UL_SPACE
+    MG_E( "TopMargin",              FO, MARGIN_TOP,         XML_TYPE_MEASURE, CTF_MARGINTOP ),
+    MG_E( "BottomMargin",           FO, MARGIN_BOTTOM,      XML_TYPE_MEASURE, CTF_MARGINBOTTOM ),
+    // RES_PAGEDESC
+    // not required
+    // RES_BREAK
+    // not required
+    // RES_CNTNT
+    // not required (accessed using API)
+    // RES_HEADER
+    // not required
+    // RES_FOOTER
+    // not required
+    // RES_PRINT
+    MG_E( "Print",                  STYLE,  PRINT_CONTENT,  XML_TYPE_BOOL, 0 ),
+    // RES_OPAQUE
+    MG_ED( "Opaque",                    STYLE,  RUN_THROUGH,    XML_TYPE_TEXT_OPAQUE, 0 ),
+    // RES_PROTECT
+    MG_E( "ContentProtected",       STYLE,  PROTECT,        XML_TYPE_TEXT_PROTECT_CONTENT|MID_FLAG_MERGE_ATTRIBUTE|MID_FLAG_MULTI_PROPERTY, 0 ),
+    MG_E( "SizeProtected",      STYLE,  PROTECT,        XML_TYPE_TEXT_PROTECT_SIZE|MID_FLAG_MERGE_ATTRIBUTE|MID_FLAG_MULTI_PROPERTY, 0 ),
+    MG_E( "PositionProtected",      STYLE,  PROTECT,        XML_TYPE_TEXT_PROTECT_POSITION|MID_FLAG_MERGE_ATTRIBUTE|MID_FLAG_MULTI_PROPERTY, 0 ),
+    // RES_SURROUND
+    MG_ED( "TextWrap",              STYLE,  WRAP,   XML_TYPE_TEXT_WRAP, CTF_WRAP ),
+    MG_ED( "SurroundAnchorOnly",        STYLE,  NUMBER_WRAPPED_PARAGRAPHS,  XML_TYPE_TEXT_PARAGRAPH_ONLY, CTF_WRAP_PARAGRAPH_ONLY ),
+    MG_E( "SurroundContour",            STYLE,  WRAP_CONTOUR,   XML_TYPE_BOOL, CTF_WRAP_CONTOUR ),
+    MG_E( "ContourOutside",         STYLE,  WRAP_CONTOUR_MODE,  XML_TYPE_TEXT_WRAP_OUTSIDE, CTF_WRAP_CONTOUR_MODE ),
+    // RES_VERT_ORIENT
+    MG_ED( "VertOrient",                STYLE,  VERTICAL_POS,         XML_TYPE_TEXT_VERTICAL_POS, CTF_VERTICALPOS ),
+    MG_ED( "VertOrient",                STYLE,  VERTICAL_POS,         XML_TYPE_TEXT_VERTICAL_POS_AT_CHAR, CTF_VERTICALPOS_ATCHAR ),
+    MG_ED( "VertOrient",                STYLE,  VERTICAL_REL,         XML_TYPE_TEXT_VERTICAL_REL_AS_CHAR|MID_FLAG_MULTI_PROPERTY, CTF_VERTICALREL_ASCHAR ),
+    MG_ED( "VertOrientRelation",        STYLE,  VERTICAL_REL,         XML_TYPE_TEXT_VERTICAL_REL, CTF_VERTICALREL ),
+    MG_ED( "VertOrientRelation",        STYLE,  VERTICAL_REL,         XML_TYPE_TEXT_VERTICAL_REL_PAGE|MID_FLAG_SPECIAL_ITEM_IMPORT, CTF_VERTICALREL_PAGE ),
+    MG_ED( "VertOrientRelation",        STYLE,  VERTICAL_REL,         XML_TYPE_TEXT_VERTICAL_REL_FRAME|MID_FLAG_SPECIAL_ITEM_IMPORT, CTF_VERTICALREL_FRAME ),
+    // RES_HORI_ORIENT
+    MG_ED( "HoriOrient",                STYLE,  HORIZONTAL_POS,       XML_TYPE_TEXT_HORIZONTAL_POS|MID_FLAG_MULTI_PROPERTY, CTF_HORIZONTALPOS ),
+    MG_ED( "PageToggle",        STYLE,  HORIZONTAL_POS,       XML_TYPE_TEXT_HORIZONTAL_MIRROR, CTF_HORIZONTALMIRROR ),
+    MG_ED( "HoriOrient",                STYLE,  HORIZONTAL_POS,       XML_TYPE_TEXT_HORIZONTAL_POS_MIRRORED|MID_FLAG_SPECIAL_ITEM_IMPORT, CTF_HORIZONTALPOS_MIRRORED ),
+    MG_ED( "HoriOrientRelation",        STYLE,  HORIZONTAL_REL,       XML_TYPE_TEXT_HORIZONTAL_REL, CTF_HORIZONTALREL ),
+    MG_ED( "HoriOrientRelation",        STYLE,  HORIZONTAL_REL,       XML_TYPE_TEXT_HORIZONTAL_REL_FRAME|MID_FLAG_SPECIAL_ITEM_IMPORT, CTF_HORIZONTALREL_FRAME ),
+    // RES_ANCHOR
+    // see above
+    // RES_BACKGROUND
+    MG_ED( "BackColorRGB",  FO, BACKGROUND_COLOR,       XML_TYPE_COLORTRANSPARENT|MID_FLAG_MULTI_PROPERTY, 0 ),
+    MG_ED( "BackTransparent",   FO, BACKGROUND_COLOR,       XML_TYPE_ISTRANSPARENT|MID_FLAG_MERGE_ATTRIBUTE|MID_FLAG_MULTI_PROPERTY, CTF_BACKGROUND_TRANSPARENT ),
+    MG_ED( "BackColorTransparency", STYLE, BACKGROUND_TRANSPARENCY, XML_TYPE_PERCENT8, CTF_BACKGROUND_TRANSPARENCY ),
+
+    MG_E( "BackGraphicTransparency", STYLE, BACKGROUND_IMAGE_TRANSPARENCY, MID_FLAG_SPECIAL_ITEM|XML_TYPE_PERCENT8, CTF_BACKGROUND_TRANSPARENCY ),
+    MG_E( "BackGraphicLocation",    STYLE,  POSITION,   MID_FLAG_SPECIAL_ITEM|XML_TYPE_BUILDIN_CMP_ONLY, CTF_BACKGROUND_POS  ),
+    MG_E( "BackGraphicFilter",STYLE,    FILTER_NAME,    MID_FLAG_SPECIAL_ITEM|XML_TYPE_STRING, CTF_BACKGROUND_FILTER ),
+    MG_E( "BackGraphicURL", STYLE,  BACKGROUND_IMAGE,   MID_FLAG_ELEMENT_ITEM|XML_TYPE_STRING, CTF_BACKGROUND_URL ),
+
+    // RES_BOX
+    MG_ED( "LeftBorder",            STYLE,  BORDER_LINE_WIDTH,        XML_TYPE_BORDER_WIDTH, CTF_ALLBORDERWIDTH ),
+    MG_ED( "LeftBorder",            STYLE,  BORDER_LINE_WIDTH_LEFT,   XML_TYPE_BORDER_WIDTH, CTF_LEFTBORDERWIDTH ),
+    MG_ED( "RightBorder",           STYLE,  BORDER_LINE_WIDTH_RIGHT,  XML_TYPE_BORDER_WIDTH, CTF_RIGHTBORDERWIDTH ),
+    MG_ED( "TopBorder",         STYLE,  BORDER_LINE_WIDTH_TOP,    XML_TYPE_BORDER_WIDTH, CTF_TOPBORDERWIDTH ),
+    MG_ED( "BottomBorder",      STYLE,  BORDER_LINE_WIDTH_BOTTOM, XML_TYPE_BORDER_WIDTH, CTF_BOTTOMBORDERWIDTH ),
+
+    MG_ED( "LeftBorderDistance",    FO,     PADDING,                  XML_TYPE_MEASURE, CTF_ALLBORDERDISTANCE ), // need special import filtering
+    MG_ED( "LeftBorderDistance",    FO,     PADDING_LEFT,             XML_TYPE_MEASURE, CTF_LEFTBORDERDISTANCE ),
+    MG_ED( "RightBorderDistance",   FO,     PADDING_RIGHT,            XML_TYPE_MEASURE, CTF_RIGHTBORDERDISTANCE ),
+    MG_ED( "TopBorderDistance", FO,     PADDING_TOP,              XML_TYPE_MEASURE, CTF_TOPBORDERDISTANCE ),
+    MG_ED( "BottomBorderDistance",FO,   PADDING_BOTTOM,           XML_TYPE_MEASURE, CTF_BOTTOMBORDERDISTANCE ),
+
+    // There is an additional property for controls!
+    MG_ED( "LeftBorder",            FO,     BORDER,                   XML_TYPE_BORDER|MID_FLAG_MULTI_PROPERTY, CTF_ALLBORDER ),
+    MG_ED( "LeftBorder",            FO,     BORDER_LEFT,              XML_TYPE_BORDER, CTF_LEFTBORDER ),
+    MG_ED( "RightBorder",           FO,     BORDER_RIGHT,             XML_TYPE_BORDER, CTF_RIGHTBORDER ),
+    MG_ED( "TopBorder",         FO,     BORDER_TOP,               XML_TYPE_BORDER, CTF_TOPBORDER ),
+    MG_ED( "BottomBorder",      FO,     BORDER_BOTTOM,            XML_TYPE_BORDER, CTF_BOTTOMBORDER ),
+    // RES_SHADOW
+    MG_E( "ShadowFormat",       STYLE,  SHADOW,                 XML_TYPE_TEXT_SHADOW, 0 ),
+    // RES_FRMMACRO
+    // TODO
+    // RES_COL
+    MG_E( "TextColumns",            STYLE,  COLUMNS,    MID_FLAG_ELEMENT_ITEM|XML_TYPE_TEXT_COLUMNS, CTF_TEXTCOLUMNS ),
+    // RES_KEEP
+    // not required
+    // RES_URL
+    // not required (exprted as draw:a element)
+    // RES_EDIT_IN_READONLY
+    MG_ED( "EditInReadonly",        STYLE,  EDITABLE,                   XML_TYPE_BOOL, 0 ),
+    // RES_LAYOUT_SPLIT
+    // not required
+    // RES_CHAIN
+    // not required (exported at text:text-box element)
+    // RES_LINENUMBER
+    // not required
+    // RES_FTN_AT_TXTEND
+    // not required
+    // RES_END_AT_TXTEND
+    // not required
+    // RES_COLUMNBALANCE
+    // TODO
+    // RES_UNKNOWNATR_CONTAINER
+//  M_E_SE( TEXT, xmlns, RES_UNKNOWNATR_CONTAINER, 0 ),
+    // RES_GRFATR_MIRRORGRF (vertical MUST be processed after horizontal!)
+    MG_E( "HoriMirroredOnEvenPages",        STYLE,  MIRROR,     XML_TYPE_TEXT_MIRROR_HORIZONTAL_LEFT|MID_FLAG_MERGE_ATTRIBUTE|MID_FLAG_MULTI_PROPERTY, 0 ),
+    MG_E( "HoriMirroredOnOddPages",     STYLE,  MIRROR,     XML_TYPE_TEXT_MIRROR_HORIZONTAL_RIGHT|MID_FLAG_MERGE_ATTRIBUTE|MID_FLAG_MULTI_PROPERTY, 0 ),
+    MG_E( "VertMirrored",       STYLE,  MIRROR,     XML_TYPE_TEXT_MIRROR_VERTICAL|MID_FLAG_MERGE_ATTRIBUTE|MID_FLAG_MULTI_PROPERTY, 0 ),
+    // RES_GRFATR_CROPGRF
+    MG_EV( "GraphicCrop",           FO,     CLIP,       XML_TYPE_TEXT_CLIP, CTF_TEXT_CLIP, SvtSaveOptions::ODFVER_012 ),
+    MG_E( "GraphicCrop",            FO,     CLIP,       XML_TYPE_TEXT_CLIP11, CTF_TEXT_CLIP11 ),
+    // RES_GRFATR_ROTATION
+    // not required (exported as svg:transform attribute)
+    // RES_GRFATR_LUMINANCE
+    MG_E( "AdjustLuminance",  DRAW, LUMINANCE,          XML_TYPE_PERCENT16, 0 ),        // signed?
+    // RES_GRFATR_CONTRAST
+    MG_E( "AdjustContrast", DRAW,   CONTRAST,           XML_TYPE_PERCENT16, 0 ),        // signed?
+    // RES_GRFATR_CHANNELR
+    MG_E( "AdjustRed",      DRAW, RED,                  XML_TYPE_PERCENT16, 0 ),        // signed?
+    // RES_GRFATR_CHANNELG
+    MG_E( "AdjustGreen",        DRAW, GREEN,                XML_TYPE_PERCENT16, 0 ),        // signed?
+    // RES_GRFATR_CHANNELB
+    MG_E( "AdjustBlue",     DRAW, BLUE,                 XML_TYPE_PERCENT16, 0 ),        // signed?
+    // RES_GRFATR_GAMMA
+    MG_E( "Gamma",          DRAW, GAMMA,                XML_TYPE_DOUBLE_PERCENT, 0 ),           // signed?
+    // RES_GRFATR_INVERT
+    MG_E( "GraphicIsInverted", DRAW, COLOR_INVERSION,       XML_TYPE_BOOL, 0 ),
+    // RES_GRFATR_TRANSPARENCY
+    MG_E( "Transparency",   DRAW, IMAGE_OPACITY,        XML_TYPE_NEG_PERCENT16|MID_FLAG_MULTI_PROPERTY, 0 ), // #i25616#
+    // RES_GRFATR_DRAWMODE
+    MG_E( "GraphicColorMode", DRAW, COLOR_MODE,         XML_TYPE_COLOR_MODE, 0 ),
+    MG_E( "WritingMode",      STYLE, WRITING_MODE,       XML_TYPE_TEXT_WRITING_MODE_WITH_DEFAULT, 0 ),
+    // RES_FOLLOW_TEXT_FLOW - DVO, OD 01.10.2003 #i18732#
+    MG_E( "IsFollowingTextFlow", DRAW, FLOW_WITH_TEXT,      XML_TYPE_BOOL|MID_FLAG_SPECIAL_ITEM_EXPORT, CTF_OLD_FLOW_WITH_TEXT ),
+    MG_E( "IsFollowingTextFlow", STYLE, FLOW_WITH_TEXT,     XML_TYPE_BOOL, 0 ),
+    // OD 2004-05-05 #i28701# - RES_WRAP_INFLUENCE_ON_OBJPOS
+    MG_E( "WrapInfluenceOnPosition", DRAW, WRAP_INFLUENCE_ON_POSITION, XML_TYPE_WRAP_INFLUENCE_ON_POSITION, 0 ),
+
+    // special entries for floating frames
+    MG_E( "",           DRAW,   FRAME_DISPLAY_SCROLLBAR,    XML_TYPE_BOOL|MID_FLAG_NO_PROPERTY|MID_FLAG_MULTI_PROPERTY, CTF_FRAME_DISPLAY_SCROLLBAR ),
+    MG_E( "",           DRAW,   FRAME_DISPLAY_BORDER,   XML_TYPE_BOOL|MID_FLAG_NO_PROPERTY|MID_FLAG_MULTI_PROPERTY, CTF_FRAME_DISPLAY_BORDER ),
+    MG_E( "",           DRAW,   FRAME_MARGIN_HORIZONTAL,    XML_TYPE_MEASURE_PX|MID_FLAG_NO_PROPERTY|MID_FLAG_MULTI_PROPERTY,   CTF_FRAME_MARGIN_HORI ),
+    MG_E( "",           DRAW,   FRAME_MARGIN_VERTICAL,  XML_TYPE_MEASURE_PX|MID_FLAG_NO_PROPERTY|MID_FLAG_MULTI_PROPERTY,   CTF_FRAME_MARGIN_VERT ),
+    MG_E( "",           DRAW,   VISIBLE_AREA_LEFT,      XML_TYPE_MEASURE|MID_FLAG_NO_PROPERTY|MID_FLAG_MULTI_PROPERTY,  CTF_OLE_VIS_AREA_LEFT ),
+    MG_E( "",           DRAW,   VISIBLE_AREA_TOP,       XML_TYPE_MEASURE|MID_FLAG_NO_PROPERTY|MID_FLAG_MULTI_PROPERTY,  CTF_OLE_VIS_AREA_TOP ),
+    MG_E( "",           DRAW,   VISIBLE_AREA_WIDTH,     XML_TYPE_MEASURE|MID_FLAG_NO_PROPERTY|MID_FLAG_MULTI_PROPERTY,  CTF_OLE_VIS_AREA_WIDTH ),
+    MG_E( "",           DRAW,   VISIBLE_AREA_HEIGHT,    XML_TYPE_MEASURE|MID_FLAG_NO_PROPERTY|MID_FLAG_MULTI_PROPERTY,  CTF_OLE_VIS_AREA_HEIGHT ),
+    MG_E( "",           DRAW,   DRAW_ASPECT,            XML_TYPE_TEXT_DRAW_ASPECT|MID_FLAG_NO_PROPERTY|MID_FLAG_MULTI_PROPERTY, CTF_OLE_DRAW_ASPECT ),
+    MG_E( "UserDefinedAttributes", TEXT, XMLNS, XML_TYPE_ATTRIBUTE_CONTAINER | MID_FLAG_SPECIAL_ITEM, 0 ),
+
+    M_END()
+};
+
+XMLPropertyMapEntry aXMLShapePropMap[] =
+{
+    // RES_LR_SPACE
+    MG_E( "LeftMargin",             FO, MARGIN_LEFT,        XML_TYPE_MEASURE,  0),
+    MG_E( "RightMargin",                FO, MARGIN_RIGHT,       XML_TYPE_MEASURE, 0 ),
+    // RES_UL_SPACE
+    MG_E( "TopMargin",              FO, MARGIN_TOP,         XML_TYPE_MEASURE, 0 ),
+    MG_E( "BottomMargin",           FO, MARGIN_BOTTOM,      XML_TYPE_MEASURE, 0 ),
+    // RES_OPAQUE
+    MG_ED( "Opaque",                    STYLE,  RUN_THROUGH,    XML_TYPE_TEXT_OPAQUE, 0 ),
+    // RES_SURROUND
+    MG_E( "TextWrap",               STYLE,  WRAP,   XML_TYPE_TEXT_WRAP, CTF_WRAP ),
+    MG_E( "SurroundAnchorOnly",     STYLE,  NUMBER_WRAPPED_PARAGRAPHS,  XML_TYPE_TEXT_PARAGRAPH_ONLY, CTF_WRAP_PARAGRAPH_ONLY ),
+    MG_E( "SurroundContour",            STYLE,  WRAP_CONTOUR,   XML_TYPE_BOOL, CTF_WRAP_CONTOUR ),
+    MG_E( "ContourOutside",         STYLE,  WRAP_CONTOUR_MODE,  XML_TYPE_TEXT_WRAP_OUTSIDE, CTF_WRAP_CONTOUR_MODE ),
+    // Use own CTF ids for positioning attributes (#i28749#)
+    // RES_VERT_ORIENT
+    MG_E( "VertOrient",         STYLE,  VERTICAL_POS,   XML_TYPE_TEXT_VERTICAL_POS, CTF_SHAPE_VERTICALPOS ),
+    // Add property for at-character anchored shapes (#i26791#)
+    MG_E( "VertOrient",         STYLE,  VERTICAL_POS,   XML_TYPE_TEXT_VERTICAL_POS_AT_CHAR, CTF_SHAPE_VERTICALPOS_ATCHAR ),
+    MG_E( "VertOrient",         STYLE,  VERTICAL_REL,   XML_TYPE_TEXT_VERTICAL_REL_AS_CHAR|MID_FLAG_MULTI_PROPERTY, CTF_VERTICALREL_ASCHAR ),
+    MG_E( "VertOrientRelation", STYLE,  VERTICAL_REL,   XML_TYPE_TEXT_VERTICAL_REL, CTF_SHAPE_VERTICALREL ),
+    MG_E( "VertOrientRelation", STYLE,  VERTICAL_REL,   XML_TYPE_TEXT_VERTICAL_REL_PAGE|MID_FLAG_SPECIAL_ITEM_IMPORT, CTF_SHAPE_VERTICALREL_PAGE ),
+    MG_E( "VertOrientRelation", STYLE,  VERTICAL_REL,   XML_TYPE_TEXT_VERTICAL_REL_FRAME|MID_FLAG_SPECIAL_ITEM_IMPORT, CTF_SHAPE_VERTICALREL_FRAME ),
+    // RES_HORI_ORIENT
+    MG_E( "HoriOrient",         STYLE,  HORIZONTAL_POS, XML_TYPE_TEXT_HORIZONTAL_POS|MID_FLAG_MULTI_PROPERTY, CTF_SHAPE_HORIZONTALPOS ),
+    MG_E( "PageToggle",         STYLE,  HORIZONTAL_POS, XML_TYPE_TEXT_HORIZONTAL_MIRROR, CTF_SHAPE_HORIZONTALMIRROR ),
+    MG_E( "HoriOrient",         STYLE,  HORIZONTAL_POS, XML_TYPE_TEXT_HORIZONTAL_POS_MIRRORED|MID_FLAG_SPECIAL_ITEM_IMPORT, CTF_SHAPE_HORIZONTALPOS_MIRRORED ),
+    MG_E( "HoriOrientRelation", STYLE,  HORIZONTAL_REL, XML_TYPE_TEXT_HORIZONTAL_REL, CTF_SHAPE_HORIZONTALREL ),
+    MG_E( "HoriOrientRelation", STYLE,  HORIZONTAL_REL, XML_TYPE_TEXT_HORIZONTAL_REL_FRAME|MID_FLAG_SPECIAL_ITEM_IMPORT, CTF_SHAPE_HORIZONTALREL_FRAME ),
+    // RES_WRAP_INFLUENCE_ON_OBJPOS (#i28701#)
+    MG_ED( "WrapInfluenceOnPosition", DRAW, WRAP_INFLUENCE_ON_POSITION, XML_TYPE_WRAP_INFLUENCE_ON_POSITION, 0 ),
+    // UserDefinedAttributes is already contained in the map this one is
+    // chained to.
+
+    // RES_FOLLOW_TEXT_FLOW (#i26791#)
+    MG_ED( "IsFollowingTextFlow", STYLE, FLOW_WITH_TEXT,      XML_TYPE_BOOL, 0 ),
+
+    M_END()
+};
+
+XMLPropertyMapEntry aXMLSectionPropMap[] =
+{
+    // RES_COL
+    MS_E( "TextColumns",            STYLE,  COLUMNS,    MID_FLAG_ELEMENT_ITEM|XML_TYPE_TEXT_COLUMNS, CTF_TEXTCOLUMNS ),
+
+    // RES_BACKGROUND
+    MS_E( "BackColor",  FO, BACKGROUND_COLOR,       XML_TYPE_COLORTRANSPARENT|MID_FLAG_MULTI_PROPERTY, 0 ),
+    MS_E( "BackTransparent",    FO, BACKGROUND_COLOR,       XML_TYPE_ISTRANSPARENT|MID_FLAG_MERGE_ATTRIBUTE, 0 ),
+    MS_E( "BackGraphicLocation",    STYLE,  POSITION,   MID_FLAG_SPECIAL_ITEM|XML_TYPE_BUILDIN_CMP_ONLY, CTF_BACKGROUND_POS  ),
+    MS_E( "BackGraphicFilter",STYLE,    FILTER_NAME,    MID_FLAG_SPECIAL_ITEM|XML_TYPE_STRING, CTF_BACKGROUND_FILTER ),
+    MS_E( "BackGraphicURL", STYLE,  BACKGROUND_IMAGE,   MID_FLAG_ELEMENT_ITEM|XML_TYPE_STRING, CTF_BACKGROUND_URL ),
+
+    // move protect-flag into section element
+//  M_E( "IsProtected",         STYLE,  PROTECT,    XML_TYPE_BOOL, 0 ),
+
+    MS_E( "DontBalanceTextColumns", TEXT, DONT_BALANCE_TEXT_COLUMNS, XML_TYPE_BOOL, 0 ),
+
+    MS_E( "WritingMode",      STYLE, WRITING_MODE,       XML_TYPE_TEXT_WRITING_MODE_WITH_DEFAULT, 0 ),
+
+    MS_E( "SectionLeftMargin",      FO, MARGIN_LEFT,        XML_TYPE_MEASURE,  0),
+    MS_E( "SectionRightMargin",     FO, MARGIN_RIGHT,       XML_TYPE_MEASURE,  0),
+
+    // section footnote settings
+    MS_E( "FootnoteIsOwnNumbering",     TEXT,   _EMPTY, MID_FLAG_SPECIAL_ITEM|XML_TYPE_BOOL,    CTF_SECTION_FOOTNOTE_NUM_OWN ),
+    MS_E( "FootnoteIsRestartNumbering", TEXT,   _EMPTY, MID_FLAG_SPECIAL_ITEM|XML_TYPE_BOOL,    CTF_SECTION_FOOTNOTE_NUM_RESTART ),
+    MS_E( "FootnoteRestartNumberingAt", TEXT,   _EMPTY, MID_FLAG_SPECIAL_ITEM|XML_TYPE_NUMBER16,CTF_SECTION_FOOTNOTE_NUM_RESTART_AT ),
+    MS_E( "FootnoteNumberingType",      TEXT,   _EMPTY, MID_FLAG_SPECIAL_ITEM|XML_TYPE_NUMBER16,CTF_SECTION_FOOTNOTE_NUM_TYPE ),
+    MS_E( "FootnoteNumberingPrefix",        TEXT,   _EMPTY, MID_FLAG_SPECIAL_ITEM|XML_TYPE_STRING,  CTF_SECTION_FOOTNOTE_NUM_PREFIX ),
+    MS_E( "FootnoteNumberingSuffix",        TEXT,   _EMPTY, MID_FLAG_SPECIAL_ITEM|XML_TYPE_STRING,  CTF_SECTION_FOOTNOTE_NUM_SUFFIX ),
+    MS_E( "FootnoteIsCollectAtTextEnd", TEXT,   NOTES_CONFIGURATION,    MID_FLAG_ELEMENT_ITEM|XML_TYPE_BOOL,    CTF_SECTION_FOOTNOTE_END ),
+
+    // section footnote settings
+    MS_E( "EndnoteIsOwnNumbering",      TEXT,   _EMPTY,     MID_FLAG_SPECIAL_ITEM|XML_TYPE_BOOL,    CTF_SECTION_ENDNOTE_NUM_OWN ),
+    MS_E( "EndnoteIsRestartNumbering",  TEXT,   _EMPTY,     MID_FLAG_SPECIAL_ITEM|XML_TYPE_BOOL,    CTF_SECTION_ENDNOTE_NUM_RESTART ),
+    MS_E( "EndnoteRestartNumberingAt",  TEXT,   _EMPTY,     MID_FLAG_SPECIAL_ITEM|XML_TYPE_NUMBER16,CTF_SECTION_ENDNOTE_NUM_RESTART_AT ),
+    MS_E( "EndnoteNumberingType",       TEXT,   _EMPTY,     MID_FLAG_SPECIAL_ITEM|XML_TYPE_NUMBER16,CTF_SECTION_ENDNOTE_NUM_TYPE ),
+    MS_E( "EndnoteNumberingPrefix",     TEXT,   _EMPTY,     MID_FLAG_SPECIAL_ITEM|XML_TYPE_STRING,  CTF_SECTION_ENDNOTE_NUM_PREFIX ),
+    MS_E( "EndnoteNumberingSuffix",     TEXT,   _EMPTY,     MID_FLAG_SPECIAL_ITEM|XML_TYPE_STRING,  CTF_SECTION_ENDNOTE_NUM_SUFFIX ),
+    MS_E( "EndnoteIsCollectAtTextEnd",  TEXT,   NOTES_CONFIGURATION,        MID_FLAG_ELEMENT_ITEM|XML_TYPE_BOOL,    CTF_SECTION_ENDNOTE_END ),
+    MS_E( "UserDefinedAttributes",      TEXT,   XMLNS,      XML_TYPE_ATTRIBUTE_CONTAINER | MID_FLAG_SPECIAL_ITEM, 0 ),
+    // RES_EDIT_IN_READONLY
+    MS_E( "EditInReadonly",             STYLE,  EDITABLE,  XML_TYPE_BOOL, 0 ),
+    M_END()
+};
+
+XMLPropertyMapEntry aXMLRubyPropMap[] =
+{
+    MR_E( "RubyAdjust", STYLE, RUBY_ALIGN, XML_TYPE_TEXT_RUBY_ADJUST, 0 ),
+    MR_E( "RubyIsAbove",    STYLE, RUBY_POSITION, XML_TYPE_TEXT_RUBY_POSITION, 0 ),
+    M_END()
+};
+
+
+XMLPropertyMapEntry aXMLTableDefaultsMap[] =
+{
+    // RES_COLLAPSING_BORDERS: only occurs in tables, but we need to
+    // read/write the default for this item
+    _M_ED( "CollapsingBorders", TABLE, BORDER_MODEL, XML_TYPE_PROP_TABLE | XML_TYPE_BORDER_MODEL | MID_FLAG_NO_PROPERTY_IMPORT, CTF_BORDER_MODEL ),
+
+    M_END()
+};
+
+XMLPropertyMapEntry aXMLTableRowDefaultsMap[] =
+{
+    // RES_ROW_SPLIT: only occurs in table rows, but we need to
+    // read/write the default for this item
+    _M_ED( "IsSplitAllowed", FO, KEEP_TOGETHER, XML_TYPE_PROP_TABLE_ROW | XML_TYPE_TEXT_NKEEP | MID_FLAG_NO_PROPERTY_IMPORT, CTF_KEEP_TOGETHER ),
+
+    M_END()
+};
+
+XMLPropertyMapEntry *lcl_txtprmap_getMap( sal_uInt16 nType )
+{
+    XMLPropertyMapEntry *pMap = 0;
+    switch( nType )
+    {
+    case TEXT_PROP_MAP_TEXT:
+        pMap = aXMLTextPropMap;
+        break;
+    case TEXT_PROP_MAP_SHAPE_PARA:
+        pMap = &(aXMLParaPropMap[1]);
+        OSL_ENSURE( pMap->meXMLName == XML_MARGIN, "shape para map changed" );
+        break;
+    case TEXT_PROP_MAP_PARA:
+        pMap = aXMLParaPropMap;
+        break;
+    case TEXT_PROP_MAP_FRAME:
+        pMap = aXMLFramePropMap;
+        break;
+    case TEXT_PROP_MAP_AUTO_FRAME:
+        pMap = &(aXMLFramePropMap[13]);
+        OSL_ENSURE( pMap->meXMLName == XML_MARGIN, "frame map changed" );
+        break;
+    case TEXT_PROP_MAP_SHAPE:
+        pMap = aXMLShapePropMap;
+        break;
+    case TEXT_PROP_MAP_SECTION:
+        pMap = aXMLSectionPropMap;
+        break;
+    case TEXT_PROP_MAP_RUBY:
+        pMap = aXMLRubyPropMap;
+        break;
+    case TEXT_PROP_MAP_TEXT_ADDITIONAL_DEFAULTS:
+        pMap = aXMLAdditionalTextDefaultsMap;
+        break;
+    case TEXT_PROP_MAP_TABLE_DEFAULTS:
+        pMap = aXMLTableDefaultsMap;
+        break;
+    case TEXT_PROP_MAP_TABLE_ROW_DEFAULTS:
+        pMap = aXMLTableRowDefaultsMap;
+        break;
+    }
+    DBG_ASSERT( pMap, "illegal map type" );
+    return pMap;
+}
+
+const XMLPropertyMapEntry* XMLTextPropertySetMapper::getPropertyMapForType( sal_uInt16 _nType )
+{
+    return lcl_txtprmap_getMap( _nType );
+}
+
+XMLTextPropertySetMapper::XMLTextPropertySetMapper( sal_uInt16 nType ) :
+    XMLPropertySetMapper( lcl_txtprmap_getMap( nType ),
+                          new XMLTextPropertyHandlerFactory )
+{
+}
+
+XMLTextPropertySetMapper::~XMLTextPropertySetMapper()
+{
+}
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,0 +1,12 @@
+module ooo { module vba { module office {
+    constants MsoBarProtection {
+        const long msoBarNoChangeDock = 16;
+        const long msoBarNoChangeVisible = 8;
+        const long msoBarNoCustomize = 1;
+        const long msoBarNoHorizontalDock = 64;
+        const long msoBarNoMove = 4;
+        const long msoBarNoProtection = 0;
+        const long msoBarNoResize = 2;
+        const long msoBarNoVerticalDock = 32;
+    };
+}; }; };

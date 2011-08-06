@@ -1,0 +1,18 @@
+module ooo { module vba { module excel {
+    constants XlSmartTagControlType {
+        const long xlSmartTagControlActiveX = 13;
+        const long xlSmartTagControlButton = 6;
+        const long xlSmartTagControlCheckbox = 9;
+        const long xlSmartTagControlCombo = 12;
+        const long xlSmartTagControlHelp = 3;
+        const long xlSmartTagControlHelpURL = 4;
+        const long xlSmartTagControlImage = 8;
+        const long xlSmartTagControlLabel = 7;
+        const long xlSmartTagControlLink = 2;
+        const long xlSmartTagControlListbox = 11;
+        const long xlSmartTagControlRadioGroup = 14;
+        const long xlSmartTagControlSeparator = 5;
+        const long xlSmartTagControlSmartTag = 1;
+        const long xlSmartTagControlTextbox = 10;
+    };
+}; }; };

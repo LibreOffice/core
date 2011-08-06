@@ -1,0 +1,7 @@
+module ooo { module vba { module excel {
+    constants XlPivotTableMissingItems {
+        const long xlMissingItemsDefault = -1;
+        const long xlMissingItemsMax = 32500;
+        const long xlMissingItemsNone = 0;
+    };
+}; }; };

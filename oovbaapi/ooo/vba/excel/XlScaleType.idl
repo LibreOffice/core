@@ -1,0 +1,6 @@
+module ooo { module vba { module excel {
+    constants XlScaleType {
+        const long xlScaleLinear = -4132;
+        const long xlScaleLogarithmic = -4133;
+    };
+}; }; };

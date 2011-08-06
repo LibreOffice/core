@@ -1,0 +1,8 @@
+module ooo { module vba { module excel {
+    constants XlXmlLoadOption {
+        const long xlXmlLoadImportToList = 2;
+        const long xlXmlLoadMapXml = 3;
+        const long xlXmlLoadOpenXml = 1;
+        const long xlXmlLoadPromptUser = 0;
+    };
+}; }; };

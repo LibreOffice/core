@@ -1,0 +1,924 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_connectivity.hxx"
+#include "hsqldb/HDriver.hxx"
+#include "hsqldb/HConnection.hxx"
+#include <osl/diagnose.h>
+#include "connectivity/dbexception.hxx"
+#include <com/sun/star/sdbc/XDriverAccess.hpp>
+#include <com/sun/star/sdbc/XResultSet.hpp>
+#include <com/sun/star/sdbc/XRow.hpp>
+#include <com/sun/star/embed/XTransactionBroadcaster.hpp>
+#include <com/sun/star/embed/ElementModes.hpp>
+#include "TConnection.hxx"
+#include "hsqldb/HStorageMap.hxx"
+#include <jvmfwk/framework.h>
+#include <com/sun/star/reflection/XProxyFactory.hpp>
+#include <com/sun/star/embed/XStorage.hpp>
+#include <com/sun/star/frame/XDesktop.hpp>
+#include <com/sun/star/lang/Locale.hpp>
+#include <com/sun/star/util/XFlushable.hpp>
+#include "HTerminateListener.hxx"
+#include "hsqldb/HCatalog.hxx"
+#include "diagnose_ex.h"
+#include <rtl/ustrbuf.hxx>
+#include <osl/file.h>
+#include <osl/process.h>
+#include <connectivity/dbexception.hxx>
+#include <comphelper/namedvaluecollection.hxx>
+#include <unotools/confignode.hxx>
+#include <unotools/ucbstreamhelper.hxx>
+#include "resource/hsqldb_res.hrc"
+#include "resource/sharedresources.hxx"
+
+#include <o3tl/compat_functional.hxx>
+
+//........................................................................
+namespace connectivity
+{
+//........................................................................
+    using namespace hsqldb;
+    using namespace ::com::sun::star::uno;
+    using namespace ::com::sun::star::sdbc;
+    using namespace ::com::sun::star::sdbcx;
+    using namespace ::com::sun::star::beans;
+    using namespace ::com::sun::star::frame;
+    using namespace ::com::sun::star::lang;
+    using namespace ::com::sun::star::embed;
+    using namespace ::com::sun::star::io;
+    using namespace ::com::sun::star::task;
+    using namespace ::com::sun::star::util;
+    using namespace ::com::sun::star::reflection;
+
+    namespace hsqldb
+    {
+        Reference< XInterface >  SAL_CALL ODriverDelegator_CreateInstance(const Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFac) throw( Exception )
+        {
+            return *(new ODriverDelegator(_rxFac));
+        }
+    }
+
+
+
+    //====================================================================
+    //= ODriverDelegator
+    //====================================================================
+    //--------------------------------------------------------------------
+    ODriverDelegator::ODriverDelegator(const Reference< XMultiServiceFactory >& _rxFactory)
+        : ODriverDelegator_BASE(m_aMutex)
+        ,m_xFactory(_rxFactory)
+        ,m_bInShutDownConnections(sal_False)
+    {
+    }
+
+    //--------------------------------------------------------------------
+    ODriverDelegator::~ODriverDelegator()
+    {
+        try
+        {
+            ::comphelper::disposeComponent(m_xDriver);
+        }
+        catch(const Exception&)
+        {
+        }
+    }
+
+    // --------------------------------------------------------------------------------
+    void SAL_CALL ODriverDelegator::disposing()
+    {
+        ::osl::MutexGuard aGuard(m_aMutex);
+
+        try
+        {
+            for (TWeakPairVector::iterator i = m_aConnections.begin(); m_aConnections.end() != i; ++i)
+            {
+                Reference<XInterface > xTemp = i->first.get();
+                ::comphelper::disposeComponent(xTemp);
+            }
+        }
+        catch(Exception&)
+        {
+            // not interested in
+        }
+        m_aConnections.clear();
+        TWeakPairVector().swap(m_aConnections);
+
+        cppu::WeakComponentImplHelperBase::disposing();
+    }
+    //--------------------------------------------------------------------
+    Reference< XDriver > ODriverDelegator::loadDriver( )
+    {
+        if ( !m_xDriver.is() )
+        {
+            ::rtl::OUString sURL(RTL_CONSTASCII_USTRINGPARAM("jdbc:hsqldb:db"));
+            Reference<XDriverAccess> xDriverAccess(m_xFactory->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdbc.DriverManager")) ),UNO_QUERY);
+            OSL_ENSURE(xDriverAccess.is(),"Could not load driver manager!");
+            if ( xDriverAccess.is() )
+                m_xDriver = xDriverAccess->getDriverByURL(sURL);
+        }
+
+        return m_xDriver;
+    }
+
+    //--------------------------------------------------------------------
+    namespace
+    {
+        ::rtl::OUString lcl_getPermittedJavaMethods_nothrow( const Reference< XMultiServiceFactory >& _rxORB )
+        {
+            ::rtl::OUStringBuffer aConfigPath;
+            aConfigPath.appendAscii( "/org.openoffice.Office.DataAccess/DriverSettings/" );
+            aConfigPath.append     ( ODriverDelegator::getImplementationName_Static() );
+            aConfigPath.appendAscii( "/PermittedJavaMethods" );
+            ::utl::OConfigurationTreeRoot aConfig( ::utl::OConfigurationTreeRoot::createWithServiceFactory(
+                _rxORB, aConfigPath.makeStringAndClear() ) );
+
+            ::rtl::OUStringBuffer aPermittedMethods;
+            Sequence< ::rtl::OUString > aNodeNames( aConfig.getNodeNames() );
+            for (   const ::rtl::OUString* pNodeNames = aNodeNames.getConstArray();
+                    pNodeNames != aNodeNames.getConstArray() + aNodeNames.getLength();
+                    ++pNodeNames
+                )
+            {
+                ::rtl::OUString sPermittedMethod;
+                OSL_VERIFY( aConfig.getNodeValue( *pNodeNames ) >>= sPermittedMethod );
+
+                if ( aPermittedMethods.getLength() )
+                    aPermittedMethods.append( (sal_Unicode)';' );
+                aPermittedMethods.append( sPermittedMethod );
+            }
+
+            return aPermittedMethods.makeStringAndClear();;
+        }
+    }
+
+    //--------------------------------------------------------------------
+    Reference< XConnection > SAL_CALL ODriverDelegator::connect( const ::rtl::OUString& url, const Sequence< PropertyValue >& info ) throw (SQLException, RuntimeException)
+    {
+        Reference< XConnection > xConnection;
+        if ( acceptsURL(url) )
+        {
+            Reference< XDriver > xDriver = loadDriver();
+            if ( xDriver.is() )
+            {
+                ::rtl::OUString sURL;
+                Reference<XStorage> xStorage;
+                const PropertyValue* pIter = info.getConstArray();
+                const PropertyValue* pEnd = pIter + info.getLength();
+
+                for (;pIter != pEnd; ++pIter)
+                {
+                    if ( pIter->Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Storage")) )
+                    {
+                        xStorage.set(pIter->Value,UNO_QUERY);
+                    }
+                    else if ( pIter->Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("URL")) )
+                    {
+                        pIter->Value >>= sURL;
+                    }
+                }
+
+                if ( !xStorage.is() || !sURL.getLength() )
+                {
+                    ::connectivity::SharedResources aResources;
+                    const ::rtl::OUString sMessage = aResources.getResourceString(STR_NO_STROAGE);
+                    ::dbtools::throwGenericSQLException(sMessage ,*this);
+                }
+
+                ::rtl::OUString sSystemPath;
+                osl_getSystemPathFromFileURL( sURL.pData, &sSystemPath.pData );
+                sal_Int32 nIndex = sSystemPath.lastIndexOf('.');
+                if ( !sURL.getLength() || !sSystemPath.getLength() )
+                {
+                    ::connectivity::SharedResources aResources;
+                    const ::rtl::OUString sMessage = aResources.getResourceString(STR_INVALID_FILE_URL);
+                    ::dbtools::throwGenericSQLException(sMessage ,*this);
+                }
+
+                bool bIsNewDatabase = !xStorage->hasElements();
+
+                ::comphelper::NamedValueCollection aProperties;
+
+                // properties for accessing the embedded storage
+                ::rtl::OUString sConnPartURL = sSystemPath.copy( 0, ::std::max< sal_Int32 >( nIndex, sSystemPath.getLength() ) );
+                ::rtl::OUString sKey = StorageContainer::registerStorage( xStorage, sConnPartURL );
+                aProperties.put( "storage_key", sKey );
+                aProperties.put( "storage_class_name",
+                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.sdbcx.comp.hsqldb.StorageAccess" ) ) );
+                aProperties.put( "fileaccess_class_name",
+                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.sdbcx.comp.hsqldb.StorageFileAccess" ) ) );
+
+                // JDBC driver and driver's classpath
+                aProperties.put( "JavaDriverClass",
+                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "org.hsqldb.jdbcDriver" ) ) );
+                aProperties.put( "JavaDriverClassPath",
+                    ::rtl::OUString(
+#ifdef SYSTEM_HSQLDB
+                        RTL_CONSTASCII_USTRINGPARAM(HSQLDB_JAR
+                        " vnd.sun.star.expand:$OOO_BASE_DIR/program/classes/sdbc_hsqldb.jar" )
+#else
+                        RTL_CONSTASCII_USTRINGPARAM("vnd.sun.star.expand:$OOO_BASE_DIR/program/classes/hsqldb.jar"
+                        " vnd.sun.star.expand:$OOO_BASE_DIR/program/classes/sdbc_hsqldb.jar" )
+#endif
+                        ) );
+
+                // auto increment handling
+                aProperties.put( "IsAutoRetrievingEnabled", true );
+                aProperties.put( "AutoRetrievingStatement",
+                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "CALL IDENTITY()" ) ) );
+                aProperties.put( "IgnoreDriverPrivileges", true );
+
+                // don't want to expose HSQLDB's schema capabilities which exist since 1.8.0RC10
+                aProperties.put( "default_schema",
+                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "true" ) ) );
+
+                // security: permitted Java classes
+                NamedValue aPermittedClasses(
+                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "hsqldb.method_class_names" ) ),
+                    makeAny( lcl_getPermittedJavaMethods_nothrow( m_xFactory ) )
+                );
+                aProperties.put( "SystemProperties", Sequence< NamedValue >( &aPermittedClasses, 1 ) );
+
+                const ::rtl::OUString sProperties( RTL_CONSTASCII_USTRINGPARAM( "properties" ) );
+                ::rtl::OUString sMessage;
+                try
+                {
+                    if ( !bIsNewDatabase && xStorage->isStreamElement(sProperties) )
+                    {
+                        Reference<XStream > xStream = xStorage->openStreamElement(sProperties,ElementModes::READ);
+                        if ( xStream.is() )
+                        {
+                            ::std::auto_ptr<SvStream> pStream( ::utl::UcbStreamHelper::CreateStream(xStream) );
+                            if ( pStream.get() )
+                            {
+                                ByteString sLine;
+                                ByteString sVersionString;
+                                while ( pStream->ReadLine(sLine) )
+                                {
+                                    if ( sLine.Len() == 0 )
+                                        continue;
+                                    const ByteString sIniKey = sLine.GetToken( 0, '=' );
+                                    const ByteString sValue = sLine.GetToken( 1, '=' );
+                                    if ( sIniKey.Equals( "hsqldb.compatible_version" ) )
+                                    {
+                                        sVersionString = sValue;
+                                    }
+                                    else
+                                    {
+                                        if  (   sIniKey.Equals( "version" )
+                                            &&  ( sVersionString.Len() == 0 )
+                                            )
+                                        {
+                                            sVersionString = sValue;
+                                        }
+                                    }
+                                }
+                                if ( sVersionString.Len() )
+                                {
+                                    const sal_Int32 nMajor = sVersionString.GetToken(0,'.').ToInt32();
+                                    const sal_Int32 nMinor = sVersionString.GetToken(1,'.').ToInt32();
+                                    const sal_Int32 nMicro = sVersionString.GetToken(2,'.').ToInt32();
+                                    if (     nMajor > 1
+                                        || ( nMajor == 1 && nMinor > 8 )
+                                        || ( nMajor == 1 && nMinor == 8 && nMicro > 0 ) )
+                                    {
+                                        ::connectivity::SharedResources aResources;
+                                        sMessage = aResources.getResourceString(STR_ERROR_NEW_VERSION);
+                                    }
+                                }
+                            }
+                        } // if ( xStream.is() )
+                        ::comphelper::disposeComponent(xStream);
+                    }
+                }
+                catch(Exception&)
+                {
+                }
+                if ( sMessage.getLength() )
+                {
+                    ::dbtools::throwGenericSQLException(sMessage ,*this);
+                }
+
+                // readonly?
+                Reference<XPropertySet> xProp(xStorage,UNO_QUERY);
+                if ( xProp.is() )
+                {
+                    sal_Int32 nMode = 0;
+                    xProp->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("OpenMode"))) >>= nMode;
+                    if ( (nMode & ElementModes::WRITE) != ElementModes::WRITE )
+                    {
+                        aProperties.put( "readonly", ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "true" ) ) );
+                    }
+                }
+
+                Sequence< PropertyValue > aConnectionArgs;
+                aProperties >>= aConnectionArgs;
+
+                ::rtl::OUString sConnectURL(RTL_CONSTASCII_USTRINGPARAM("jdbc:hsqldb:"));
+
+                sConnectURL += sConnPartURL;
+                Reference<XConnection> xOrig;
+                try
+                {
+                    xOrig = xDriver->connect( sConnectURL, aConnectionArgs );
+                }
+                catch(const Exception& e)
+                {
+                    StorageContainer::revokeStorage(sKey,NULL);
+                    (void)e;
+                    throw;
+                }
+
+                // if the storage is completely empty, then we just created a new HSQLDB
+                // In this case, do some initializations.
+                if ( bIsNewDatabase && xOrig.is() )
+                    onConnectedNewDatabase( xOrig );
+
+                if ( xOrig.is() )
+                {
+                    OMetaConnection* pMetaConnection = NULL;
+                    // now we have to set the URL to get the correct answer for metadata()->getURL()
+                    Reference< XUnoTunnel> xTunnel(xOrig,UNO_QUERY);
+                    if ( xTunnel.is() )
+                    {
+                        pMetaConnection = reinterpret_cast<OMetaConnection*>(xTunnel->getSomething( OMetaConnection::getUnoTunnelImplementationId() ));
+                        if ( pMetaConnection )
+                            pMetaConnection->setURL(url);
+                    }
+
+                    Reference<XComponent> xComp(xOrig,UNO_QUERY);
+                    if ( xComp.is() )
+                        xComp->addEventListener(this);
+
+                    // we want to close all connections when the office shuts down
+                    static Reference< XTerminateListener> s_xTerminateListener;
+                    if( !s_xTerminateListener.is() )
+                    {
+                        Reference< XDesktop > xDesktop( m_xFactory->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop")) ), UNO_QUERY );
+
+                        if( xDesktop.is() )
+                        {
+                            s_xTerminateListener = new OConnectionController(this);
+                            xDesktop->addTerminateListener(s_xTerminateListener);
+                        }
+                    }
+                    Reference< XComponent> xIfc = new OHsqlConnection( this, xOrig, m_xFactory );
+                    xConnection.set(xIfc,UNO_QUERY);
+                    m_aConnections.push_back(TWeakPair(WeakReferenceHelper(xOrig),TWeakConnectionPair(sKey,TWeakRefPair(WeakReferenceHelper(xConnection),WeakReferenceHelper()))));
+
+                    Reference<XTransactionBroadcaster> xBroad(xStorage,UNO_QUERY);
+                    if ( xBroad.is() )
+                    {
+                        Reference<XTransactionListener> xListener(*this,UNO_QUERY);
+                        xBroad->addTransactionListener(xListener);
+                    }
+                }
+            }
+        }
+        return xConnection;
+    }
+
+    //--------------------------------------------------------------------
+    sal_Bool SAL_CALL ODriverDelegator::acceptsURL( const ::rtl::OUString& url ) throw (SQLException, RuntimeException)
+    {
+        sal_Bool bEnabled = sal_False;
+        OSL_VERIFY_EQUALS( jfw_getEnabled( &bEnabled ), JFW_E_NONE, "error in jfw_getEnabled" );
+        return bEnabled  && url.compareToAscii("sdbc:embedded:hsqldb",sizeof("sdbc:embedded:hsqldb")) == 0;
+    }
+
+    //--------------------------------------------------------------------
+    Sequence< DriverPropertyInfo > SAL_CALL ODriverDelegator::getPropertyInfo( const ::rtl::OUString& url, const Sequence< PropertyValue >& /*info*/ ) throw (SQLException, RuntimeException)
+    {
+        if ( !acceptsURL(url) )
+            return Sequence< DriverPropertyInfo >();
+        ::std::vector< DriverPropertyInfo > aDriverInfo;
+        aDriverInfo.push_back(DriverPropertyInfo(
+                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Storage"))
+                ,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Defines the storage where the database will be stored."))
+                ,sal_True
+                ,::rtl::OUString()
+                ,Sequence< ::rtl::OUString >())
+                );
+        aDriverInfo.push_back(DriverPropertyInfo(
+                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("URL"))
+                ,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Defines the url of the data source."))
+                ,sal_True
+                ,::rtl::OUString()
+                ,Sequence< ::rtl::OUString >())
+                );
+        aDriverInfo.push_back(DriverPropertyInfo(
+                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AutoRetrievingStatement"))
+                ,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Defines the statement which will be executed to retrieve auto increment values."))
+                ,sal_False
+                ,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CALL IDENTITY()"))
+                ,Sequence< ::rtl::OUString >())
+                );
+        return Sequence< DriverPropertyInfo >(&aDriverInfo[0],aDriverInfo.size());
+    }
+
+    //--------------------------------------------------------------------
+    sal_Int32 SAL_CALL ODriverDelegator::getMajorVersion(  ) throw (RuntimeException)
+    {
+        return 1;
+    }
+
+    //--------------------------------------------------------------------
+    sal_Int32 SAL_CALL ODriverDelegator::getMinorVersion(  ) throw (RuntimeException)
+    {
+        return 0;
+    }
+
+    //--------------------------------------------------------------------
+    Reference< XTablesSupplier > SAL_CALL ODriverDelegator::getDataDefinitionByConnection( const Reference< XConnection >& connection ) throw (SQLException, RuntimeException)
+    {
+        ::osl::MutexGuard aGuard( m_aMutex );
+        checkDisposed(ODriverDelegator_BASE::rBHelper.bDisposed);
+
+        Reference< XTablesSupplier > xTab;
+
+        TWeakPairVector::iterator aEnd = m_aConnections.end();
+        for (TWeakPairVector::iterator i = m_aConnections.begin(); aEnd != i; ++i)
+        {
+            if ( i->second.second.first.get() == connection.get() )
+            {
+                xTab = Reference< XTablesSupplier >(i->second.second.second.get().get(),UNO_QUERY);
+                if ( !xTab.is() )
+                {
+                    xTab = new OHCatalog(connection);
+                    i->second.second.second = WeakReferenceHelper(xTab);
+                }
+                break;
+            }
+        }
+
+        return xTab;
+    }
+
+    //--------------------------------------------------------------------
+    Reference< XTablesSupplier > SAL_CALL ODriverDelegator::getDataDefinitionByURL( const ::rtl::OUString& url, const Sequence< PropertyValue >& info ) throw (SQLException, RuntimeException)
+    {
+        if ( ! acceptsURL(url) )
+        {
+            ::connectivity::SharedResources aResources;
+            const ::rtl::OUString sMessage = aResources.getResourceString(STR_URI_SYNTAX_ERROR);
+            ::dbtools::throwGenericSQLException(sMessage ,*this);
+        }
+
+        return getDataDefinitionByConnection(connect(url,info));
+    }
+
+    // XServiceInfo
+    // --------------------------------------------------------------------------------
+    //------------------------------------------------------------------------------
+    rtl::OUString ODriverDelegator::getImplementationName_Static(  ) throw(RuntimeException)
+    {
+        return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdbcx.comp.hsqldb.Driver"));
+    }
+    //------------------------------------------------------------------------------
+    Sequence< ::rtl::OUString > ODriverDelegator::getSupportedServiceNames_Static(  ) throw (RuntimeException)
+    {
+        Sequence< ::rtl::OUString > aSNS( 2 );
+        aSNS[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdbc.Driver"));
+        aSNS[1] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdbcx.Driver"));
+        return aSNS;
+    }
+    //------------------------------------------------------------------
+    ::rtl::OUString SAL_CALL ODriverDelegator::getImplementationName(  ) throw(RuntimeException)
+    {
+        return getImplementationName_Static();
+    }
+
+    //------------------------------------------------------------------
+    sal_Bool SAL_CALL ODriverDelegator::supportsService( const ::rtl::OUString& _rServiceName ) throw(RuntimeException)
+    {
+        Sequence< ::rtl::OUString > aSupported(getSupportedServiceNames());
+        const ::rtl::OUString* pSupported = aSupported.getConstArray();
+        const ::rtl::OUString* pEnd = pSupported + aSupported.getLength();
+        for (;pSupported != pEnd && !pSupported->equals(_rServiceName); ++pSupported)
+            ;
+
+        return pSupported != pEnd;
+    }
+    //------------------------------------------------------------------
+    Sequence< ::rtl::OUString > SAL_CALL ODriverDelegator::getSupportedServiceNames(  ) throw(RuntimeException)
+    {
+        return getSupportedServiceNames_Static();
+    }
+    //------------------------------------------------------------------
+    void SAL_CALL ODriverDelegator::createCatalog( const Sequence< PropertyValue >& /*info*/ ) throw (SQLException, ::com::sun::star::container::ElementExistException, RuntimeException)
+    {
+        ::dbtools::throwFeatureNotImplementedException( "XCreateCatalog::createCatalog", *this );
+    }
+    //------------------------------------------------------------------
+    void ODriverDelegator::shutdownConnection(const TWeakPairVector::iterator& _aIter )
+    {
+        OSL_ENSURE(m_aConnections.end() != _aIter,"Iterator equals .end()");
+        sal_Bool bLastOne = sal_True;
+        try
+        {
+            Reference<XConnection> _xConnection(_aIter->first.get(),UNO_QUERY);
+
+            if ( _xConnection.is() )
+            {
+                Reference<XStatement> xStmt = _xConnection->createStatement();
+                if ( xStmt.is() )
+                {
+                    Reference<XResultSet> xRes(xStmt->executeQuery(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SELECT COUNT(*) FROM INFORMATION_SCHEMA.SYSTEM_SESSIONS WHERE USER_NAME ='SA'"))),UNO_QUERY);
+                    Reference<XRow> xRow(xRes,UNO_QUERY);
+                    if ( xRow.is() && xRes->next() )
+                        bLastOne = xRow->getInt(1) == 1;
+                    if ( bLastOne )
+                        xStmt->execute(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SHUTDOWN")));
+                }
+            }
+        }
+        catch(Exception&)
+        {
+        }
+        if ( bLastOne )
+        {
+            // Reference<XTransactionListener> xListener(*this,UNO_QUERY);
+            // a shutdown should commit all changes to the db files
+            StorageContainer::revokeStorage(_aIter->second.first,NULL);
+        }
+        if ( !m_bInShutDownConnections )
+            m_aConnections.erase(_aIter);
+    }
+    //------------------------------------------------------------------
+    void SAL_CALL ODriverDelegator::disposing( const ::com::sun::star::lang::EventObject& Source ) throw(::com::sun::star::uno::RuntimeException)
+    {
+        ::osl::MutexGuard aGuard(m_aMutex);
+        Reference<XConnection> xCon(Source.Source,UNO_QUERY);
+        if ( xCon.is() )
+        {
+            TWeakPairVector::iterator i = m_aConnections.begin();
+            for (; m_aConnections.end() != i; ++i)
+            {
+                if ( i->first.get() == xCon.get() )
+                {
+                    shutdownConnection(i);
+                    break;
+                }
+            }
+        }
+        else
+        {
+            Reference< XStorage> xStorage(Source.Source,UNO_QUERY);
+            if ( xStorage.is() )
+            {
+                ::rtl::OUString sKey = StorageContainer::getRegisteredKey(xStorage);
+                TWeakPairVector::iterator i = ::std::find_if(m_aConnections.begin(),m_aConnections.end(),::o3tl::compose1(
+                                ::std::bind2nd(::std::equal_to< ::rtl::OUString >(),sKey)
+                                ,::o3tl::compose1(::o3tl::select1st<TWeakConnectionPair>(),::o3tl::select2nd< TWeakPair >())));
+                if ( i != m_aConnections.end() )
+                    shutdownConnection(i);
+            }
+        }
+    }
+    //------------------------------------------------------------------
+    void ODriverDelegator::shutdownConnections()
+    {
+        m_bInShutDownConnections = sal_True;
+        TWeakPairVector::iterator aEnd = m_aConnections.end();
+        for (TWeakPairVector::iterator i = m_aConnections.begin(); aEnd != i; ++i)
+        {
+            try
+            {
+                Reference<XConnection> xCon(i->first,UNO_QUERY);
+                ::comphelper::disposeComponent(xCon);
+            }
+            catch(Exception&)
+            {
+            }
+        }
+        m_aConnections.clear();
+        m_bInShutDownConnections = sal_True;
+    }
+    //------------------------------------------------------------------
+    void ODriverDelegator::flushConnections()
+    {
+        TWeakPairVector::iterator aEnd = m_aConnections.end();
+        for (TWeakPairVector::iterator i = m_aConnections.begin(); aEnd != i; ++i)
+        {
+            try
+            {
+                Reference<XFlushable> xCon(i->second.second.first.get(),UNO_QUERY);
+                xCon->flush();
+            }
+            catch(Exception&)
+            {
+            }
+        }
+    }
+    //------------------------------------------------------------------
+    void SAL_CALL ODriverDelegator::preCommit( const ::com::sun::star::lang::EventObject& aEvent ) throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException)
+    {
+        ::osl::MutexGuard aGuard(m_aMutex);
+
+        Reference< XStorage> xStorage(aEvent.Source,UNO_QUERY);
+        ::rtl::OUString sKey = StorageContainer::getRegisteredKey(xStorage);
+        if ( sKey.getLength() )
+        {
+            TWeakPairVector::iterator i = ::std::find_if(m_aConnections.begin(),m_aConnections.end(),::o3tl::compose1(
+                            ::std::bind2nd(::std::equal_to< ::rtl::OUString >(),sKey)
+                            ,::o3tl::compose1(::o3tl::select1st<TWeakConnectionPair>(),::o3tl::select2nd< TWeakPair >())));
+            OSL_ENSURE( i != m_aConnections.end(), "ODriverDelegator::preCommit: they're committing a storage which I do not know!" );
+            if ( i != m_aConnections.end() )
+            {
+                try
+                {
+                    Reference<XConnection> xConnection(i->first,UNO_QUERY);
+                    if ( xConnection.is() )
+                    {
+                        Reference< XStatement> xStmt = xConnection->createStatement();
+                        OSL_ENSURE( xStmt.is(), "ODriverDelegator::preCommit: no statement!" );
+                        if ( xStmt.is() )
+                            xStmt->execute( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "SET WRITE_DELAY 0" ) ) );
+
+                        sal_Bool bPreviousAutoCommit = xConnection->getAutoCommit();
+                        xConnection->setAutoCommit( sal_False );
+                        xConnection->commit();
+                        xConnection->setAutoCommit( bPreviousAutoCommit );
+
+                        if ( xStmt.is() )
+                            xStmt->execute( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "SET WRITE_DELAY 60" ) ) );
+                    }
+                }
+                catch(Exception&)
+                {
+                    OSL_FAIL( "ODriverDelegator::preCommit: caught an exception!" );
+                }
+            }
+        }
+    }
+    //------------------------------------------------------------------
+    void SAL_CALL ODriverDelegator::commited( const ::com::sun::star::lang::EventObject& /*aEvent*/ ) throw (::com::sun::star::uno::RuntimeException)
+    {
+    }
+    //------------------------------------------------------------------
+    void SAL_CALL ODriverDelegator::preRevert( const ::com::sun::star::lang::EventObject& /*aEvent*/ ) throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException)
+    {
+    }
+    //------------------------------------------------------------------
+    void SAL_CALL ODriverDelegator::reverted( const ::com::sun::star::lang::EventObject& /*aEvent*/ ) throw (::com::sun::star::uno::RuntimeException)
+    {
+    }
+    //------------------------------------------------------------------
+    namespace
+    {
+        //..............................................................
+        const sal_Char* lcl_getCollationForLocale( const ::rtl::OUString& _rLocaleString, bool _bAcceptCountryMismatch = false )
+        {
+            static const sal_Char* pTranslations[] =
+            {
+                "af-ZA", "Afrikaans",
+                "am-ET", "Amharic",
+                "ar", "Arabic",
+                "as-IN", "Assamese",
+                "az-AZ", "Azerbaijani_Latin",
+                "az-cyrillic", "Azerbaijani_Cyrillic",
+                "be-BY", "Belarusian",
+                "bg-BG", "Bulgarian",
+                "bn-IN", "Bengali",
+                "bo-CN", "Tibetan",
+                "bs-BA", "Bosnian",
+                "ca-ES", "Catalan",
+                "cs-CZ", "Czech",
+                "cy-GB", "Welsh",
+                "da-DK", "Danish",
+                "de-DE", "German",
+                "el-GR", "Greek",
+                "en-US", "Latin1_General",
+                "es-ES", "Spanish",
+                "et-EE", "Estonian",
+                "eu", "Basque",
+                "fi-FI", "Finnish",
+                "fr-FR", "French",
+                "gn-PY", "Guarani",
+                "gu-IN", "Gujarati",
+                "ha-NG", "Hausa",
+                "he-IL", "Hebrew",
+                "hi-IN", "Hindi",
+                "hr-HR", "Croatian",
+                "hu-HU", "Hungarian",
+                "hy-AM", "Armenian",
+                "id-ID", "Indonesian",
+                "ig-NG", "Igbo",
+                "is-IS", "Icelandic",
+                "it-IT", "Italian",
+                "iu-CA", "Inuktitut",
+                "ja-JP", "Japanese",
+                "ka-GE", "Georgian",
+                "kk-KZ", "Kazakh",
+                "km-KH", "Khmer",
+                "kn-IN", "Kannada",
+                "ko-KR", "Korean",
+                "kok-IN", "Konkani",
+                "ks", "Kashmiri",
+                "ky-KG", "Kirghiz",
+                "lo-LA", "Lao",
+                "lt-LT", "Lithuanian",
+                "lv-LV", "Latvian",
+                "mi-NZ", "Maori",
+                "mk-MK", "Macedonian",
+                "ml-IN", "Malayalam",
+                "mn-MN", "Mongolian",
+                "mni-IN", "Manipuri",
+                "mr-IN", "Marathi",
+                "ms-MY", "Malay",
+                "mt-MT", "Maltese",
+                "my-MM", "Burmese",
+                "nb-NO", "Danish_Norwegian",
+                "ne-NP", "Nepali",
+                "nl-NL", "Dutch",
+                "nn-NO", "Norwegian",
+                "or-IN", "Oriya",
+                "pa-IN", "Punjabi",
+                "pl-PL", "Polish",
+                "ps-AF", "Pashto",
+                "pt-PT", "Portuguese",
+                "ro-RO", "Romanian",
+                "ru-RU", "Russian",
+                "sa-IN", "Sanskrit",
+                "sd-IN", "Sindhi",
+                "sk-SK", "Slovak",
+                "sl-SI", "Slovenian",
+                "so-SO", "Somali",
+                "sq-AL", "Albanian",
+                "sr-YU", "Serbian_Cyrillic",
+                "sv-SE", "Swedish",
+                "sw-KE", "Swahili",
+                "ta-IN", "Tamil",
+                "te-IN", "Telugu",
+                "tg-TJ", "Tajik",
+                "th-TH", "Thai",
+                "tk-TM", "Turkmen",
+                "tn-BW", "Tswana",
+                "tr-TR", "Turkish",
+                "tt-RU", "Tatar",
+                "uk-UA", "Ukrainian",
+                "ur-PK", "Urdu",
+                "uz-UZ", "Uzbek_Latin",
+                "ven-ZA", "Venda",
+                "vi-VN", "Vietnamese",
+                "yo-NG", "Yoruba",
+                "zh-CN", "Chinese",
+                "zu-ZA", "Zulu",
+                NULL, NULL
+            };
+
+            ::rtl::OUString sLocaleString( _rLocaleString );
+            sal_Char nCompareTermination = 0;
+
+            if ( _bAcceptCountryMismatch )
+            {
+                // strip the country part from the compare string
+                sal_Int32 nCountrySep = sLocaleString.indexOf( '-' );
+                if ( nCountrySep > -1 )
+                    sLocaleString = sLocaleString.copy( 0, nCountrySep );
+
+                // the entries in the translation table are compared until the
+                // - character only, not until the terminating 0
+                nCompareTermination = '-';
+            }
+
+            const sal_Char** pLookup = pTranslations;
+            for ( ; *pLookup; pLookup +=2 )
+            {
+                sal_Int32 nCompareUntil = 0;
+                while ( (*pLookup)[ nCompareUntil ] != nCompareTermination && (*pLookup)[ nCompareUntil ] != 0 )
+                    ++nCompareUntil;
+
+                if ( sLocaleString.equalsAsciiL( *pLookup, nCompareUntil ) )
+                    return *( pLookup + 1 );
+            }
+
+            if ( !_bAcceptCountryMismatch )
+                // second round, this time without matching the country
+                return lcl_getCollationForLocale( _rLocaleString, true );
+
+            OSL_FAIL( "lcl_getCollationForLocale: unknown locale string, falling back to Latin1_General!" );
+            return "Latin1_General";
+        }
+
+        //..............................................................
+        ::rtl::OUString lcl_getSystemLocale( const Reference< XMultiServiceFactory >& _rxORB )
+        {
+            ::rtl::OUString sLocaleString = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "en-US" ) );
+            try
+            {
+                //.........................................................
+                Reference< XMultiServiceFactory > xConfigProvider(
+                    _rxORB->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.configuration.ConfigurationProvider")) ),
+                    UNO_QUERY
+                );
+                OSL_ENSURE( xConfigProvider.is(), "lcl_getSystemLocale: could not create the config provider!" );
+
+                if ( !xConfigProvider.is() )
+                    return sLocaleString;
+
+                //.........................................................
+                // arguments for creating the config access
+                Sequence< Any > aArguments(2);
+                // the path to the node to open
+                ::rtl::OUString sNodePath(RTL_CONSTASCII_USTRINGPARAM("/org.openoffice.Setup/L10N" ));
+                aArguments[0] <<= PropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("nodepath")), 0,
+                    makeAny( sNodePath ), PropertyState_DIRECT_VALUE
+                );
+                // the depth: -1 means unlimited
+                aArguments[1] <<= PropertyValue(
+                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("depth")), 0,
+                    makeAny( (sal_Int32)-1 ), PropertyState_DIRECT_VALUE
+                );
+
+                //.........................................................
+                // create the access
+                Reference< XPropertySet > xNode(
+                    xConfigProvider->createInstanceWithArguments(
+                        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.configuration.ConfigurationAccess")),
+                        aArguments ),
+                    UNO_QUERY );
+                OSL_ENSURE( xNode.is(), "lcl_getSystemLocale: invalid access returned (should throw an exception instead)!" );
+
+                //.........................................................
+                // ask for the system locale setting
+                if ( xNode.is() )
+                    xNode->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ooSetupSystemLocale" ) ) ) >>= sLocaleString;
+            }
+            catch( const Exception& )
+            {
+                OSL_FAIL( "lcl_getSystemLocale: caught an exception!" );
+            }
+            if ( !sLocaleString.getLength() )
+            {
+                rtl_Locale* pProcessLocale = NULL;
+                osl_getProcessLocale( &pProcessLocale );
+
+                ::rtl::OUStringBuffer aProcLocale;
+                aProcLocale.append( pProcessLocale->Language->buffer, pProcessLocale->Language->length );
+                if ( pProcessLocale->Country->length )
+                {
+                    aProcLocale.appendAscii( "-" );
+                    aProcLocale.append( pProcessLocale->Country->buffer, pProcessLocale->Country->length );
+                }
+                sLocaleString = aProcLocale.makeStringAndClear();
+            }
+            return sLocaleString;
+        }
+    }
+    //------------------------------------------------------------------
+    void ODriverDelegator::onConnectedNewDatabase( const Reference< XConnection >& _rxConnection )
+    {
+        try
+        {
+            Reference< XStatement > xStatement = _rxConnection->createStatement();
+            OSL_ENSURE( xStatement.is(), "ODriverDelegator::onConnectedNewDatabase: could not create a statement!" );
+            if ( xStatement.is() )
+            {
+                ::rtl::OUStringBuffer aStatement;
+                aStatement.appendAscii( "SET DATABASE COLLATION \"" );
+                aStatement.appendAscii( lcl_getCollationForLocale( lcl_getSystemLocale( m_xFactory ) ) );
+                aStatement.appendAscii( "\"" );
+
+                xStatement->execute( aStatement.makeStringAndClear() );
+            }
+        }
+        catch( const Exception& )
+        {
+            OSL_FAIL( "ODriverDelegator::onConnectedNewDatabase: caught an exception!" );
+        }
+    }
+
+    //------------------------------------------------------------------
+    //------------------------------------------------------------------
+//........................................................................
+}   // namespace connectivity
+//........................................................................
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

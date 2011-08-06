@@ -1,0 +1,8 @@
+module ooo { module vba { module excel {
+    constants XlHtmlType {
+        const long xlHtmlCalc = 1;
+        const long xlHtmlChart = 3;
+        const long xlHtmlList = 2;
+        const long xlHtmlStatic = 0;
+    };
+}; }; };

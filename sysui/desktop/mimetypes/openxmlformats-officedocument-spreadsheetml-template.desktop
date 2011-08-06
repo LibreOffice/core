@@ -1,0 +1,9 @@
+[Desktop Entry]
+Version=1.0
+Encoding=UTF-8
+Hidden=false
+Icon=
+Type=MimeType
+Patterns=*.xltx
+MimeType=application/vnd.openxmlformats-officedocument.spreadsheetml.template
+Comment=Microsoft Excel Worksheet Template

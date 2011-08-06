@@ -1,0 +1,8 @@
+module ooo { module vba { module dao {
+    constants LockTypeEnum {
+        const long dbOptimistic = 3;
+        const long dbOptimisticBatch = 5;
+        const long dbOptimisticValue = 1;
+        const long dbPessimistic = 2;
+    };
+}; }; };

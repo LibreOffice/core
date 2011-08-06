@@ -1,0 +1,7 @@
+module ooo { module vba { module office {
+    constants MsoBarType {
+        const long msoBarTypeMenuBar = 1;
+        const long msoBarTypeNormal = 0;
+        const long msoBarTypePopup = 2;
+    };
+}; }; };

@@ -1,0 +1,63 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#define RID_SVXDLG_BMPMASK              (RID_SVX_BMPMASK_START)
+#define RID_SVXDLG_BMPMASK_STR_TRANSP   (RID_SVX_BMPMASK_START + 1)
+#define RID_SVXDLG_BMPMASK_STR_SOURCECOLOR  (RID_SVX_BMPMASK_START + 2)
+/*IAccessibility2 Implementation 2009-----*/
+#define RID_SVXDLG_BMPMASK_STR_PALETTE (RID_SVX_BMPMASK_START + 3)
+#define RID_SVXDLG_BMPMASK_STR_TOLERANCE (RID_SVX_BMPMASK_START + 4)
+#define RID_SVXDLG_BMPMASK_STR_REPLACEWITH (RID_SVX_BMPMASK_START + 5)
+/*-----IAccessibility2 Implementation 2009*/
+#define GRP_Q 1
+#define CTR_PIPETTE 1
+#define CBX_1 1
+#define CBX_2 4
+#define CBX_3 3
+#define CBX_4 2
+#define CBX_TRANS 5
+#define QCOL_1 2
+#define QCOL_2 5
+#define QCOL_3 4
+#define QCOL_4 3
+#define SP_1 2
+#define SP_2 4
+#define SP_3 1
+#define SP_4 3
+#define GRP_D 2
+#define TBX_PIPETTE 1
+#define TBI_PIPETTE 1
+#define WND_PIPETTE 10
+#define BTN_EXEC 1
+#define LB_1 1
+#define LB_2 2
+#define LB_3 3
+#define LB_4 4
+#define LB_TRANS 5
+#define FT_1 1
+#define FT_2 2
+#define FT_3 3
+#define IMG_PIPETTE     11

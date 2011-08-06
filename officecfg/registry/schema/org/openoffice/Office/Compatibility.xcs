@@ -1,0 +1,113 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!--***********************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * 
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************ -->
+<!DOCTYPE oor:component-schema SYSTEM "../../../../component-schema.dtd">
+<oor:component-schema xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="Compatibility" oor:package="org.openoffice.Office" xml:lang="en-US"> <info>
+        <author>PB</author>
+        <desc>List of applications and their recommended formatting options</desc>
+    </info>
+    <templates>
+        <group oor:name="FormattingOptions">
+            <info><desc>Recommended formatting options for one application</desc></info>
+            <prop oor:name="Module" oor:type="xs:string">
+                <info><desc>Module of the application</desc></info>
+                <constraints>
+                    <enumeration oor:value="swriter">
+                        <info><desc>Writer module</desc></info>
+                    </enumeration>
+                </constraints>
+            </prop>
+            <prop oor:name="UsePrinterMetrics" oor:type="xs:boolean">
+                <info><desc>Use printer metrics for document formatting</desc></info>
+                <value>false</value>
+            </prop>
+            <prop oor:name="AddSpacing" oor:type="xs:boolean">
+                <info><desc>Add spacing between paragraphs and tables</desc></info>
+                <value>true</value>
+            </prop>
+            <prop oor:name="AddSpacingAtPages" oor:type="xs:boolean">
+                <info><desc>Add paragraph and table spacing at tops of pages</desc></info>
+                <value>true</value>
+            </prop>
+            <prop oor:name="UseOurTabStopFormat" oor:type="xs:boolean">
+                <info><desc>Use OpenOffice.org 1.1 tabstop formatting</desc></info>
+                <value>false</value>
+            </prop>
+            <prop oor:name="NoExternalLeading" oor:type="xs:boolean">
+                <info><desc>Do not add leading (extra space) between lines of text</desc></info>
+                <value>false</value>
+            </prop>
+            <prop oor:name="UseLineSpacing" oor:type="xs:boolean">
+                <info><desc>Use OpenOffice.org 1.1 line spacing</desc></info>
+                <value>false</value>
+            </prop>
+            <prop oor:name="AddTableSpacing" oor:type="xs:boolean">
+                <info><desc>???</desc></info>
+                <value>true</value>
+            </prop>
+            <prop oor:name="UseObjectPositioning" oor:type="xs:boolean">
+                <info><desc>Use OpenOffice.org 1.1 object positioning</desc></info>
+                <value>false</value>
+            </prop>
+            <prop oor:name="UseOurTextWrapping" oor:type="xs:boolean">
+                <info><desc>Use OpenOffice.org 1.1 text wrapping</desc></info>
+                <value>false</value>
+            </prop>
+            <prop oor:name="ConsiderWrappingStyle" oor:type="xs:boolean">
+                <info><desc>Consider wrapping style when positioning objects</desc></info>
+                <value>false</value>
+            </prop>
+            <prop oor:name="ExpandWordSpace" oor:type="xs:boolean">
+                <info><desc>Expand word space on lines with manual line breaks in justified paragraphs</desc></info>
+                <value>true</value>
+            </prop>
+        </group>
+    </templates>
+
+    <component>
+        <set oor:name="AllFileFormats" oor:node-type="FormattingOptions">
+            <info><desc>The List of the applications.</desc></info>
+        </set>
+		<group oor:name="WriterCompatibilityVersion">
+			<info>
+				<author>PB</author>
+				<desc>Used by the writer compatibility flag as the last OOo version.</desc>
+			</info>
+			<!--The default must be written by the setup.-->
+			<prop oor:name="OOo11" oor:type="xs:string">
+				<!-- UIHints: Tools - Options - OOo Writer - Compatibility -->
+				<!--The value should only be written by the setup.-->
+				<info>
+					<author>PB</author>
+					<desc>OOo version 1.1.</desc>
+                    <label>OOo version 1.1.</label>
+				</info>
+                <value/>
+			</prop>
+        </group>
+    </component>
+</oor:component-schema>

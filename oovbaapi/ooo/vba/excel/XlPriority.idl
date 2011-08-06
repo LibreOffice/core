@@ -1,0 +1,7 @@
+module ooo { module vba { module excel {
+    constants XlPriority {
+        const long xlPriorityHigh = -4127;
+        const long xlPriorityLow = -4134;
+        const long xlPriorityNormal = -4143;
+    };
+}; }; };

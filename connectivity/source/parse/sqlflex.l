@@ -1,0 +1,836 @@
+%{
+
+//--------------------------------------------------------------------------
+//
+// DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+// 
+// Copyright 2000, 2010 Oracle and/or its affiliates.
+//
+// OpenOffice.org - a multi-platform office productivity suite
+//
+// This file is part of OpenOffice.org.
+//
+// OpenOffice.org is free software: you can redistribute it and/or modify
+// it under the terms of the GNU Lesser General Public License version 3
+// only, as published by the Free Software Foundation.
+//
+// OpenOffice.org is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU Lesser General Public License version 3 for more details
+// (a copy is included in the LICENSE file that accompanied this code).
+//
+// You should have received a copy of the GNU Lesser General Public License
+// version 3 along with OpenOffice.org.  If not, see
+// <http://www.openoffice.org/license.html>
+// for a copy of the LGPLv3 License.
+//
+//--------------------------------------------------------------------------
+
+#define YY_EXIT 1				// YY_FATAL will not halt the application
+
+#ifndef _CSTDARG_
+#include <cstdarg>      // std::va_list
+#endif
+
+#ifndef _INC_STRING
+#include <string.h>
+#endif
+
+#include "internalnode.hxx"
+
+#ifndef _CONNECTIVITY_SQLYACC_HXX
+#define _CONNECTIVITY_SQLYACC_HXX
+
+#ifndef SQLYYDEBUG
+#define SQLYYDEBUG 1
+#endif
+
+#include "sqlbison.hxx"
+#endif
+#include "sqlscan.hxx"
+#include <osl/diagnose.h>
+#include <rtl/strbuf.hxx>
+#include <connectivity/sqlparse.hxx>
+
+#if defined __GNUC__
+    #pragma GCC system_header
+#elif defined __SUNPRO_CC
+#pragma disable_warn
+#elif defined _MSC_VER
+#pragma warning(push, 1)
+/**/
+#ifdef yywrap
+#undef  yywrap
+#define yywrap() 1
+#endif
+/**/
+#endif
+
+using namespace connectivity;
+
+//=============================================================================
+//
+// Erzeugung der Blaetter fuer die Token
+// Blaetter werden generell vom Lexer erzeugt
+
+static ::rtl::OUString aEmptyString;
+
+static sal_Int32	gatherString(sal_Int32 delim, sal_Int32 nTyp);
+static sal_Int32	gatherName(const sal_Char*);
+static sal_Int32	gatherNamePre(const sal_Char* );
+// has to be set before the parser starts
+OSQLScanner* xxx_pGLOBAL_SQLSCAN = NULL;
+
+#define SQL_NEW_NODE(text, token)	\
+		SQLyylval.pParseNode = new OSQLInternalNode(text, token);	    
+
+#define SQL_NEW_KEYWORD(token)						\
+		SQLyylval.pParseNode = new OSQLInternalNode(aEmptyString, SQL_NODE_KEYWORD, (token));		return token;
+
+#define SQL_NEW_INTNUM 		SQL_NEW_NODE(::rtl::OUString(SQLyytext,strlen(SQLyytext),RTL_TEXTENCODING_UTF8), SQL_NODE_INTNUM); return SQL_TOKEN_INTNUM;
+#define SQL_NEW_APPROXNUM 	SQL_NEW_NODE(::rtl::OUString(SQLyytext,strlen(SQLyytext),RTL_TEXTENCODING_UTF8), SQL_NODE_APPROXNUM); return SQL_TOKEN_APPROXNUM;
+#define SQL_NEW_DATE 		SQL_NEW_NODE(::rtl::OUString(SQLyytext,strlen(SQLyytext),RTL_TEXTENCODING_UTF8), SQL_NODE_ACCESS_DATE); return SQL_TOKEN_ACCESS_DATE;
+
+#define YY_INPUT(buf,result,max_size) 				\
+{													\
+	buf[0] = xxx_pGLOBAL_SQLSCAN->SQLyygetc();		\
+	result = buf[0] != -1;							\
+}
+
+#define YY_FATAL_ERROR(msg)							\
+{													\
+	xxx_pGLOBAL_SQLSCAN->SQLyyerror(msg);			\
+}													
+	
+//
+//=============================================================================
+
+%}
+
+%s SQL
+%s PREDICATE_ENG
+%s PREDICATE_GER
+%s DATE
+%s STRING
+
+%option noyywrap
+%option never-interactive
+%%
+
+ABS					{SQL_NEW_KEYWORD(SQL_TOKEN_ABS);  }
+ACOS				{SQL_NEW_KEYWORD(SQL_TOKEN_ACOS);  }
+AFTER				{SQL_NEW_KEYWORD(SQL_TOKEN_AFTER);  }
+ALL					{SQL_NEW_KEYWORD(SQL_TOKEN_ALL);  }
+ALTER				{SQL_NEW_KEYWORD(SQL_TOKEN_ALTER);  }
+AND					{SQL_NEW_KEYWORD(SQL_TOKEN_AND);  }
+ANY					{SQL_NEW_KEYWORD(SQL_TOKEN_ANY);  }
+ARRAY_AGG			{SQL_NEW_KEYWORD(SQL_TOKEN_ARRAY_AGG);  }
+AS					{SQL_NEW_KEYWORD(SQL_TOKEN_AS);  }
+ASC					{SQL_NEW_KEYWORD(SQL_TOKEN_ASC);  }
+ASCII				{SQL_NEW_KEYWORD(SQL_TOKEN_ASCII);  }
+ASIN				{SQL_NEW_KEYWORD(SQL_TOKEN_ASIN);  }
+AT					{SQL_NEW_KEYWORD(SQL_TOKEN_AT);  }
+ATAN				{SQL_NEW_KEYWORD(SQL_TOKEN_ATAN);  }
+ATAN2				{SQL_NEW_KEYWORD(SQL_TOKEN_ATAN2);  }
+ATOMIC				{SQL_NEW_KEYWORD(SQL_TOKEN_ATOMIC);  }
+AUTHORIZATION   	{SQL_NEW_KEYWORD(SQL_TOKEN_AUTHORIZATION);  }
+AVG					{SQL_NEW_KEYWORD(SQL_TOKEN_AVG);  }
+
+BEFORE				{SQL_NEW_KEYWORD(SQL_TOKEN_BEFORE);  }
+BEGIN				{SQL_NEW_KEYWORD(SQL_TOKEN_BEGIN);  }
+BETWEEN				{SQL_NEW_KEYWORD(SQL_TOKEN_BETWEEN);  }
+BIGINT				{SQL_NEW_KEYWORD(SQL_TOKEN_BIGINT);  }
+BINARY				{SQL_NEW_KEYWORD(SQL_TOKEN_BINARY);  }
+BIT					{SQL_NEW_KEYWORD(SQL_TOKEN_BIT);  }
+BIT_LENGTH          {SQL_NEW_KEYWORD(SQL_TOKEN_BIT_LENGTH);  }
+BLOB				{SQL_NEW_KEYWORD(SQL_TOKEN_BLOB);  }
+BOTH				{SQL_NEW_KEYWORD(SQL_TOKEN_BOTH);  }
+BY					{SQL_NEW_KEYWORD(SQL_TOKEN_BY);  }
+
+CALL				{SQL_NEW_KEYWORD(SQL_TOKEN_CALL);  }
+CASE				{SQL_NEW_KEYWORD(SQL_TOKEN_CASE);  }
+CAST				{SQL_NEW_KEYWORD(SQL_TOKEN_CAST);  }
+CEILING				{SQL_NEW_KEYWORD(SQL_TOKEN_CEILING);  }
+CHAR				{SQL_NEW_KEYWORD(SQL_TOKEN_CHAR);  }
+CHARACTER			{SQL_NEW_KEYWORD(SQL_TOKEN_CHARACTER);  }
+CHAR(ACTER)?_LENGTH {SQL_NEW_KEYWORD(SQL_TOKEN_CHAR_LENGTH);  }
+CHECK				{SQL_NEW_KEYWORD(SQL_TOKEN_CHECK);  }
+CLOB				{SQL_NEW_KEYWORD(SQL_TOKEN_CLOB);  }
+COALESCE			{SQL_NEW_KEYWORD(SQL_TOKEN_COALESCE);  }
+COLLATE				{SQL_NEW_KEYWORD(SQL_TOKEN_COLLATE);  }
+COLLECT             {SQL_NEW_KEYWORD(SQL_TOKEN_COLLECT);  }
+COMMIT				{SQL_NEW_KEYWORD(SQL_TOKEN_COMMIT);  }
+CONCAT				{SQL_NEW_KEYWORD(SQL_TOKEN_CONCAT);  }
+CONTINUE			{SQL_NEW_KEYWORD(SQL_TOKEN_CONTINUE);  }
+CONVERT				{SQL_NEW_KEYWORD(SQL_TOKEN_CONVERT);  }
+COS					{SQL_NEW_KEYWORD(SQL_TOKEN_COS);  }
+COT					{SQL_NEW_KEYWORD(SQL_TOKEN_COT);  }
+COUNT				{SQL_NEW_KEYWORD(SQL_TOKEN_COUNT);  }
+CREATE				{SQL_NEW_KEYWORD(SQL_TOKEN_CREATE);  }
+CROSS				{SQL_NEW_KEYWORD(SQL_TOKEN_CROSS);  }
+CUME_RANK			{SQL_NEW_KEYWORD(SQL_TOKEN_CUME_DIST);  }
+CURRENT				{SQL_NEW_KEYWORD(SQL_TOKEN_CURRENT);  }
+CURRENT_DATE		{SQL_NEW_KEYWORD(SQL_TOKEN_CURRENT_DATE);  }
+CURRENT_CATALOG					{SQL_NEW_KEYWORD(SQL_TOKEN_CURRENT_CATALOG);  }
+CURRENT_DEFAULT_TRANSFORM_GROUP	{SQL_NEW_KEYWORD(SQL_TOKEN_CURRENT_DEFAULT_TRANSFORM_GROUP);  }
+CURRENT_PATH					{SQL_NEW_KEYWORD(SQL_TOKEN_CURRENT_PATH);  }
+CURRENT_ROLE					{SQL_NEW_KEYWORD(SQL_TOKEN_CURRENT_ROLE);  }
+CURRENT_SCHEMA					{SQL_NEW_KEYWORD(SQL_TOKEN_CURRENT_SCHEMA);  }
+CURRENT_USER					{SQL_NEW_KEYWORD(SQL_TOKEN_CURRENT_USER);  }
+CURDATE				{SQL_NEW_KEYWORD(SQL_TOKEN_CURDATE);  }
+CURRENT_TIME		{SQL_NEW_KEYWORD(SQL_TOKEN_CURRENT_TIME);  }
+CURTIME				{SQL_NEW_KEYWORD(SQL_TOKEN_CURTIME);  }
+CURRENT_TIMESTAMP	{SQL_NEW_KEYWORD(SQL_TOKEN_CURRENT_TIMESTAMP);  }
+CURSOR				{SQL_NEW_KEYWORD(SQL_TOKEN_CURSOR);  }
+
+D					{SQL_NEW_KEYWORD(SQL_TOKEN_D);  }
+DATE				{SQL_NEW_KEYWORD(SQL_TOKEN_DATE);  }
+DATEDIFF			{SQL_NEW_KEYWORD(SQL_TOKEN_DATEDIFF);  }
+DATEVALUE			{SQL_NEW_KEYWORD(SQL_TOKEN_DATEVALUE);  }
+DAY					{SQL_NEW_KEYWORD(SQL_TOKEN_DAY);  }
+DAYNAME				{SQL_NEW_KEYWORD(SQL_TOKEN_DAYNAME);  }
+DAYOFMONTH			{SQL_NEW_KEYWORD(SQL_TOKEN_DAYOFMONTH);  }
+DAYOFWEEK			{SQL_NEW_KEYWORD(SQL_TOKEN_DAYOFWEEK);  }
+DAYOFYEAR			{SQL_NEW_KEYWORD(SQL_TOKEN_DAYOFYEAR);  }
+DEC					{SQL_NEW_KEYWORD(SQL_TOKEN_DEC);  }
+DECIMAL				{SQL_NEW_KEYWORD(SQL_TOKEN_DECIMAL);  }
+DECLARE				{SQL_NEW_KEYWORD(SQL_TOKEN_DECLARE);  }
+DEFAULT				{SQL_NEW_KEYWORD(SQL_TOKEN_DEFAULT);  }
+DEGREES				{SQL_NEW_KEYWORD(SQL_TOKEN_DEGREES);  }
+DELETE				{SQL_NEW_KEYWORD(SQL_TOKEN_DELETE);  }
+DENSE_RANK			{SQL_NEW_KEYWORD(SQL_TOKEN_DENSE_RANK);  }
+DESC				{SQL_NEW_KEYWORD(SQL_TOKEN_DESC);  }
+DIFFERENCE			{SQL_NEW_KEYWORD(SQL_TOKEN_DIFFERENCE);  }
+DISTINCT			{SQL_NEW_KEYWORD(SQL_TOKEN_DISTINCT);  }
+DOUBLE				{SQL_NEW_KEYWORD(SQL_TOKEN_DOUBLE);  }
+DROP				{SQL_NEW_KEYWORD(SQL_TOKEN_DROP);  }
+
+EACH				{SQL_NEW_KEYWORD(SQL_TOKEN_EACH);  }
+ELSE				{SQL_NEW_KEYWORD(SQL_TOKEN_ELSE);  }
+END					{SQL_NEW_KEYWORD(SQL_TOKEN_END);  }
+EVERY               {SQL_NEW_KEYWORD(SQL_TOKEN_EVERY);  }
+ESCAPE				{SQL_NEW_KEYWORD(SQL_TOKEN_ESCAPE);  }
+EXCEPT				{SQL_NEW_KEYWORD(SQL_TOKEN_EXCEPT);  }
+EXCLUDE				{SQL_NEW_KEYWORD(SQL_TOKEN_EXCLUDE);  }	
+EXISTS				{SQL_NEW_KEYWORD(SQL_TOKEN_EXISTS);  }
+EXP					{SQL_NEW_KEYWORD(SQL_TOKEN_EXP);  }
+EXTRACT				{SQL_NEW_KEYWORD(SQL_TOKEN_EXTRACT);  }
+
+FALSE				{SQL_NEW_KEYWORD(SQL_TOKEN_FALSE);  }
+FETCH				{SQL_NEW_KEYWORD(SQL_TOKEN_FETCH);  }
+FIRST				{SQL_NEW_KEYWORD(SQL_TOKEN_FIRST);  }
+FIRST_VALUE			{SQL_NEW_KEYWORD(SQL_TOKEN_FIRST_VALUE);  }
+FLOAT				{SQL_NEW_KEYWORD(SQL_TOKEN_FLOAT);  }
+FLOOR				{SQL_NEW_KEYWORD(SQL_TOKEN_FLOOR);  }
+FN					{SQL_NEW_KEYWORD(SQL_TOKEN_FN);  }
+FOLLOWING			{SQL_NEW_KEYWORD(SQL_TOKEN_FOLLOWING);  }
+FOR					{SQL_NEW_KEYWORD(SQL_TOKEN_FOR);  }
+FOREIGN				{SQL_NEW_KEYWORD(SQL_TOKEN_FOREIGN);  }
+FOUND				{SQL_NEW_KEYWORD(SQL_TOKEN_FOUND);  }
+FROM				{SQL_NEW_KEYWORD(SQL_TOKEN_FROM);  }
+FULL				{SQL_NEW_KEYWORD(SQL_TOKEN_FULL);  }
+FUSION              {SQL_NEW_KEYWORD(SQL_TOKEN_FUSION);  }
+
+GRANT				{SQL_NEW_KEYWORD(SQL_TOKEN_GRANT);  }
+GROUP				{SQL_NEW_KEYWORD(SQL_TOKEN_GROUP);  }
+
+HAVING				{SQL_NEW_KEYWORD(SQL_TOKEN_HAVING);  }
+HOUR				{SQL_NEW_KEYWORD(SQL_TOKEN_HOUR);  }
+
+IGNORE				{SQL_NEW_KEYWORD(SQL_TOKEN_IGNORE);  }
+IN					{SQL_NEW_KEYWORD(SQL_TOKEN_IN);  }
+INNER				{SQL_NEW_KEYWORD(SQL_TOKEN_INNER);  }
+INSERT				{SQL_NEW_KEYWORD(SQL_TOKEN_INSERT);  }
+INSTEAD				{SQL_NEW_KEYWORD(SQL_TOKEN_INSTEAD);  }
+INT(EGER)?			{SQL_NEW_KEYWORD(SQL_TOKEN_INTEGER);  }
+INTERSECT			{SQL_NEW_KEYWORD(SQL_TOKEN_INTERSECT);  }
+INTERVAL			{SQL_NEW_KEYWORD(SQL_TOKEN_INTERVAL);  }
+INTERSECTION		{SQL_NEW_KEYWORD(SQL_TOKEN_INTERSECTION);  }
+INTO				{SQL_NEW_KEYWORD(SQL_TOKEN_INTO);  }
+IS					{SQL_NEW_KEYWORD(SQL_TOKEN_IS);  }
+
+JOIN				{SQL_NEW_KEYWORD(SQL_TOKEN_JOIN);  }
+
+KEY					{SQL_NEW_KEYWORD(SQL_TOKEN_KEY);  }
+
+LAG					{SQL_NEW_KEYWORD(SQL_TOKEN_LAG);  }
+LARGE				{SQL_NEW_KEYWORD(SQL_TOKEN_LARGE);  }
+LAST				{SQL_NEW_KEYWORD(SQL_TOKEN_LAST);  }
+LAST_VALUE			{SQL_NEW_KEYWORD(SQL_TOKEN_LAST_VALUE);  }
+LCASE				{SQL_NEW_KEYWORD(SQL_TOKEN_LCASE);  }
+LEAD				{SQL_NEW_KEYWORD(SQL_TOKEN_LEAD);  }
+LEADING				{SQL_NEW_KEYWORD(SQL_TOKEN_LEADING);  }
+LEFT				{SQL_NEW_KEYWORD(SQL_TOKEN_LEFT);  }
+LENGTH				{SQL_NEW_KEYWORD(SQL_TOKEN_LENGTH);  }
+LIKE				{SQL_NEW_KEYWORD(SQL_TOKEN_LIKE);  }
+LIMIT				{SQL_NEW_KEYWORD(SQL_TOKEN_LIMIT);  }
+LN					{SQL_NEW_KEYWORD(SQL_TOKEN_LN);  }
+LOCAL				{SQL_NEW_KEYWORD(SQL_TOKEN_LOCAL);  }
+LOCATE				{SQL_NEW_KEYWORD(SQL_TOKEN_LOCATE);  }
+LOG					{SQL_NEW_KEYWORD(SQL_TOKEN_LOG);  }
+LOGF				{SQL_NEW_KEYWORD(SQL_TOKEN_LOGF);  }
+LOG10				{SQL_NEW_KEYWORD(SQL_TOKEN_LOG10);  }
+LOWER				{SQL_NEW_KEYWORD(SQL_TOKEN_LOWER);  }
+LTRIM				{SQL_NEW_KEYWORD(SQL_TOKEN_LTRIM);  }
+
+MAX					{SQL_NEW_KEYWORD(SQL_TOKEN_MAX);  }
+MIN					{SQL_NEW_KEYWORD(SQL_TOKEN_MIN);  }
+MINUTE				{SQL_NEW_KEYWORD(SQL_TOKEN_MINUTE);  }
+MOD					{SQL_NEW_KEYWORD(SQL_TOKEN_MOD);  }
+MONTH				{SQL_NEW_KEYWORD(SQL_TOKEN_MONTH);  }
+MONTHNAME			{SQL_NEW_KEYWORD(SQL_TOKEN_MONTHNAME);  }
+
+NATIONAL			{SQL_NEW_KEYWORD(SQL_TOKEN_NATIONAL);  }
+NATURAL				{SQL_NEW_KEYWORD(SQL_TOKEN_NATURAL);  }
+NCHAR				{SQL_NEW_KEYWORD(SQL_TOKEN_NCHAR);  }
+NCLOB				{SQL_NEW_KEYWORD(SQL_TOKEN_NCLOB);  }
+NEW					{SQL_NEW_KEYWORD(SQL_TOKEN_NEW);  }
+NEXT				{SQL_NEW_KEYWORD(SQL_TOKEN_NEXT);  }
+NO					{SQL_NEW_KEYWORD(SQL_TOKEN_NO);  }
+NOT					{SQL_NEW_KEYWORD(SQL_TOKEN_NOT);  }
+NOW					{SQL_NEW_KEYWORD(SQL_TOKEN_NOW);  }
+NTH_VALUE			{SQL_NEW_KEYWORD(SQL_TOKEN_NTH_VALUE);  }
+NTILE				{SQL_NEW_KEYWORD(SQL_TOKEN_NTILE);  }
+NULL				{SQL_NEW_KEYWORD(SQL_TOKEN_NULL);  }
+NULLIF				{SQL_NEW_KEYWORD(SQL_TOKEN_NULLIF);  }
+NULLS				{SQL_NEW_KEYWORD(SQL_TOKEN_NULLS);  }
+NUMERIC				{SQL_NEW_KEYWORD(SQL_TOKEN_NUMERIC);  }
+
+OBJECT				{SQL_NEW_KEYWORD(SQL_TOKEN_OBJECT);  }
+OCTET_LENGTH		{SQL_NEW_KEYWORD(SQL_TOKEN_OCTET_LENGTH);  }
+OF					{SQL_NEW_KEYWORD(SQL_TOKEN_OF);  }
+OFFSET				{SQL_NEW_KEYWORD(SQL_TOKEN_OFFSET);  }
+OJ					{SQL_NEW_KEYWORD(SQL_TOKEN_OJ);  }
+OLD					{SQL_NEW_KEYWORD(SQL_TOKEN_OLD);  }
+ON					{SQL_NEW_KEYWORD(SQL_TOKEN_ON);  }
+ONLY				{SQL_NEW_KEYWORD(SQL_TOKEN_ONLY);  }
+OPTION				{SQL_NEW_KEYWORD(SQL_TOKEN_OPTION);  }
+OR					{SQL_NEW_KEYWORD(SQL_TOKEN_OR);  }
+ORDER				{SQL_NEW_KEYWORD(SQL_TOKEN_ORDER);  }
+OTHERS				{SQL_NEW_KEYWORD(SQL_TOKEN_OTHERS);  }
+OUTER				{SQL_NEW_KEYWORD(SQL_TOKEN_OUTER);  }
+OVER				{SQL_NEW_KEYWORD(SQL_TOKEN_OVER);  }
+
+PARTITION			{SQL_NEW_KEYWORD(SQL_TOKEN_PARTITION);  }
+PERCENT_RANK		{SQL_NEW_KEYWORD(SQL_TOKEN_PERCENT_RANK);  }
+PERCENTILE_CONT		{SQL_NEW_KEYWORD(SQL_TOKEN_PERCENTILE_CONT);  }
+PERCENTILE_DISC		{SQL_NEW_KEYWORD(SQL_TOKEN_PERCENTILE_DISC);  }
+PI					{SQL_NEW_KEYWORD(SQL_TOKEN_PI);  }
+POSITION	        {SQL_NEW_KEYWORD(SQL_TOKEN_POSITION);  }
+POWER				{SQL_NEW_KEYWORD(SQL_TOKEN_POWER);  }
+PRECEDING           {SQL_NEW_KEYWORD(SQL_TOKEN_PRECEDING);  }
+PRECISION           {SQL_NEW_KEYWORD(SQL_TOKEN_PRECISION);  }
+PRIMARY				{SQL_NEW_KEYWORD(SQL_TOKEN_PRIMARY);  }
+PRIVILEGES			{SQL_NEW_KEYWORD(SQL_TOKEN_PRIVILEGES);  }
+PROCEDURE           {SQL_NEW_KEYWORD(SQL_TOKEN_PROCEDURE);  }
+PUBLIC				{SQL_NEW_KEYWORD(SQL_TOKEN_PUBLIC);  }
+
+QUARTER				{SQL_NEW_KEYWORD(SQL_TOKEN_QUARTER);  }
+
+RADIANS				{SQL_NEW_KEYWORD(SQL_TOKEN_RADIANS);  }
+RAND				{SQL_NEW_KEYWORD(SQL_TOKEN_RAND);  }
+RANGE				{SQL_NEW_KEYWORD(SQL_TOKEN_RANGE);  }
+RANK				{SQL_NEW_KEYWORD(SQL_TOKEN_RANK);  }
+REAL				{SQL_NEW_KEYWORD(SQL_TOKEN_REAL);  }
+REFERENCES			{SQL_NEW_KEYWORD(SQL_TOKEN_REFERENCES);  }
+REFERENCING			{SQL_NEW_KEYWORD(SQL_TOKEN_REFERENCING);  }
+REPEAT				{SQL_NEW_KEYWORD(SQL_TOKEN_REPEAT);  }
+REPLACE				{SQL_NEW_KEYWORD(SQL_TOKEN_REPLACE);  }
+RESPECT				{SQL_NEW_KEYWORD(SQL_TOKEN_RESPECT);  }
+ROLLBACK            {SQL_NEW_KEYWORD(SQL_TOKEN_ROLLBACK);  }
+ROUND			    {SQL_NEW_KEYWORD(SQL_TOKEN_ROUND);  }
+ROUNDMAGIC			{SQL_NEW_KEYWORD(SQL_TOKEN_ROUNDMAGIC);  }
+ROW					{SQL_NEW_KEYWORD(SQL_TOKEN_ROW);  }
+ROWS					{SQL_NEW_KEYWORD(SQL_TOKEN_ROWS);  }
+ROW_NUMBER			{SQL_NEW_KEYWORD(SQL_TOKEN_ROW_NUMBER);  }
+RIGHT				{SQL_NEW_KEYWORD(SQL_TOKEN_RIGHT);  }
+RTRIM				{SQL_NEW_KEYWORD(SQL_TOKEN_RTRIM);  }
+
+SCHEMA				{SQL_NEW_KEYWORD(SQL_TOKEN_SCHEMA);  }
+SECOND				{SQL_NEW_KEYWORD(SQL_TOKEN_SECOND);  }
+SELECT				{SQL_NEW_KEYWORD(SQL_TOKEN_SELECT);  }
+SET					{SQL_NEW_KEYWORD(SQL_TOKEN_SET);  }
+SIZE				{SQL_NEW_KEYWORD(SQL_TOKEN_SIZE);  }
+SIGN				{SQL_NEW_KEYWORD(SQL_TOKEN_SIGN);  }
+SIN					{SQL_NEW_KEYWORD(SQL_TOKEN_SIN);  }
+SMALLINT            {SQL_NEW_KEYWORD(SQL_TOKEN_SMALLINT);  }
+SOME				{SQL_NEW_KEYWORD(SQL_TOKEN_SOME);  }
+SOUNDEX				{SQL_NEW_KEYWORD(SQL_TOKEN_SOUNDEX);  }
+SPACE				{SQL_NEW_KEYWORD(SQL_TOKEN_SPACE);  }
+SQRT				{SQL_NEW_KEYWORD(SQL_TOKEN_SQRT);  }
+STDDEV_POP          {SQL_NEW_KEYWORD(SQL_TOKEN_STDDEV_POP);  }
+STDDEV_SAMP         {SQL_NEW_KEYWORD(SQL_TOKEN_STDDEV_SAMP); } 
+STATEMENT			{SQL_NEW_KEYWORD(SQL_TOKEN_STATEMENT);  }
+SUBSTRING			{SQL_NEW_KEYWORD(SQL_TOKEN_SUBSTRING);  }
+SUM					{SQL_NEW_KEYWORD(SQL_TOKEN_SUM);  }
+SESSION_USER		{SQL_NEW_KEYWORD(SQL_TOKEN_SESSION_USER);  }
+SYSTEM_USER			{SQL_NEW_KEYWORD(SQL_TOKEN_SYSTEM_USER);  }
+
+TABLE				{SQL_NEW_KEYWORD(SQL_TOKEN_TABLE);  }
+TAN					{SQL_NEW_KEYWORD(SQL_TOKEN_TAN);  }
+THEN				{SQL_NEW_KEYWORD(SQL_TOKEN_THEN);  }
+TIES				{SQL_NEW_KEYWORD(SQL_TOKEN_TIES);  }
+TIME				{SQL_NEW_KEYWORD(SQL_TOKEN_TIME);  }
+TIMESTAMP			{SQL_NEW_KEYWORD(SQL_TOKEN_TIMESTAMP);  }
+TIMESTAMPADD		{SQL_NEW_KEYWORD(SQL_TOKEN_TIMESTAMPADD);  }
+TIMESTAMPDIFF		{SQL_NEW_KEYWORD(SQL_TOKEN_TIMESTAMPDIFF);  }
+TIMEVALUE			{SQL_NEW_KEYWORD(SQL_TOKEN_TIMEVALUE);  }
+TIMEZONE_HOUR		{SQL_NEW_KEYWORD(SQL_TOKEN_TIMEZONE_HOUR);  }
+TIMEZONE_MINUTE		{SQL_NEW_KEYWORD(SQL_TOKEN_TIMEZONE_MINUTE);  }
+TO					{SQL_NEW_KEYWORD(SQL_TOKEN_TO);  }
+TRAILING			{SQL_NEW_KEYWORD(SQL_TOKEN_TRAILING);  }
+TRANSLATE			{SQL_NEW_KEYWORD(SQL_TOKEN_TRANSLATE);  }
+TRIGGER				{SQL_NEW_KEYWORD(SQL_TOKEN_TRIGGER);  }
+TRIM				{SQL_NEW_KEYWORD(SQL_TOKEN_TRIM);  }
+TRUE				{SQL_NEW_KEYWORD(SQL_TOKEN_TRUE);  }
+TRUNCATE			{SQL_NEW_KEYWORD(SQL_TOKEN_TRUNCATE);  }
+TS					{SQL_NEW_KEYWORD(SQL_TOKEN_TS);  }
+T					{SQL_NEW_KEYWORD(SQL_TOKEN_T);  }
+
+UCASE				{SQL_NEW_KEYWORD(SQL_TOKEN_UCASE);  }
+UNBOUNDED			{SQL_NEW_KEYWORD(SQL_TOKEN_UNBOUNDED);  }
+UNION				{SQL_NEW_KEYWORD(SQL_TOKEN_UNION);  }
+UNIQUE				{SQL_NEW_KEYWORD(SQL_TOKEN_UNIQUE);  }
+UNKNOWN				{SQL_NEW_KEYWORD(SQL_TOKEN_UNKNOWN);  }
+UPDATE				{SQL_NEW_KEYWORD(SQL_TOKEN_UPDATE);  }
+UPPER				{SQL_NEW_KEYWORD(SQL_TOKEN_UPPER);  }
+USAGE				{SQL_NEW_KEYWORD(SQL_TOKEN_USAGE);  }
+USER				{SQL_NEW_KEYWORD(SQL_TOKEN_USER);  }
+USING				{SQL_NEW_KEYWORD(SQL_TOKEN_USING);  }
+
+VARBINARY			{SQL_NEW_KEYWORD(SQL_TOKEN_VARBINARY);  }
+VARCHAR             {SQL_NEW_KEYWORD(SQL_TOKEN_VARCHAR);  }
+VARYING             {SQL_NEW_KEYWORD(SQL_TOKEN_VARYING);  }
+VAR_POP             {SQL_NEW_KEYWORD(SQL_TOKEN_VAR_POP);  }
+VAR_SAMP            {SQL_NEW_KEYWORD(SQL_TOKEN_VAR_SAMP);  }
+VALUE				{SQL_NEW_KEYWORD(SQL_TOKEN_VALUE);  }
+VALUES				{SQL_NEW_KEYWORD(SQL_TOKEN_VALUES);  }
+VIEW				{SQL_NEW_KEYWORD(SQL_TOKEN_VIEW);  }
+
+WEEK				{SQL_NEW_KEYWORD(SQL_TOKEN_WEEK);  }
+WHEN				{SQL_NEW_KEYWORD(SQL_TOKEN_WHEN);  }
+WHERE				{SQL_NEW_KEYWORD(SQL_TOKEN_WHERE);  }
+WITH				{SQL_NEW_KEYWORD(SQL_TOKEN_WITH);  }
+WITHIN				{SQL_NEW_KEYWORD(SQL_TOKEN_WITHIN);  }
+WITHOUT				{SQL_NEW_KEYWORD(SQL_TOKEN_WITHOUT);  }
+WORK				{SQL_NEW_KEYWORD(SQL_TOKEN_WORK);  }
+
+YEAR				{SQL_NEW_KEYWORD(SQL_TOKEN_YEAR);  }
+
+ZONE				{SQL_NEW_KEYWORD(SQL_TOKEN_ZONE);  }
+
+"<"					{ SQL_NEW_NODE(::rtl::OUString(SQLyytext,strlen(SQLyytext),RTL_TEXTENCODING_UTF8), SQL_NODE_LESS);return SQL_LESS;}
+">"					{ SQL_NEW_NODE(::rtl::OUString(SQLyytext,strlen(SQLyytext),RTL_TEXTENCODING_UTF8), SQL_NODE_GREAT);return SQL_GREAT;}
+"="					{ SQL_NEW_NODE(::rtl::OUString(SQLyytext,strlen(SQLyytext),RTL_TEXTENCODING_UTF8), SQL_NODE_EQUAL);return SQL_EQUAL;}
+"<="				{ SQL_NEW_NODE(::rtl::OUString(SQLyytext,strlen(SQLyytext),RTL_TEXTENCODING_UTF8), SQL_NODE_LESSEQ);return SQL_LESSEQ;}
+">="				{ SQL_NEW_NODE(::rtl::OUString(SQLyytext,strlen(SQLyytext),RTL_TEXTENCODING_UTF8), SQL_NODE_GREATEQ);return SQL_GREATEQ;}
+"<>"				{ SQL_NEW_NODE(::rtl::OUString(SQLyytext,strlen(SQLyytext),RTL_TEXTENCODING_UTF8), SQL_NODE_NOTEQUAL);return SQL_NOTEQUAL;}
+"!="				{ SQL_NEW_NODE(::rtl::OUString(SQLyytext,strlen(SQLyytext),RTL_TEXTENCODING_UTF8), SQL_NODE_NOTEQUAL);return SQL_NOTEQUAL;}
+"||"				{ SQL_NEW_NODE(::rtl::OUString(SQLyytext,strlen(SQLyytext),RTL_TEXTENCODING_UTF8), SQL_NODE_CONCAT);return SQL_CONCAT;}
+
+
+[-+*/:(),.;?{}]    { return SQLyytext[0]; }
+
+
+<SQL>[A-Za-z\200-\277\300-\337\340-\357\360-\367\370-\373\374-\375][A-Za-z\200-\277\300-\337\340-\357\360-\367\370-\373\374-\375_0-9]*		{return gatherName( SQLyytext);}
+
+<SQL>([0-9]+) | 
+<SQL>([0-9]+"."[0-9]*) | 
+<SQL>("."[0-9]*)					{SQL_NEW_INTNUM; }
+
+<SQL>[0-9]+[eE][+-]?[0-9]+   |
+<SQL>[0-9]+"."[0-9]*[eE][+-]?[0-9]+ |
+<SQL>"."[0-9]*[eE][+-]?[0-9]+		{SQL_NEW_APPROXNUM;  }
+
+<PREDICATE_GER,PREDICATE_ENG,DATE>[A-Za-z\200-\277\300-\337\340-\357\360-\367\370-\373\374-\375][A-Za-z0-9_%.,*?\200-\277\300-\337\340-\357\360-\367\370-\373\374-\375]* {return gatherNamePre(SQLyytext);}
+
+<PREDICATE_GER,PREDICATE_ENG>([0-9]+)		{SQL_NEW_INTNUM; }
+<PREDICATE_ENG>([0-9]{1,3}(","[0-9]{3})+) 	{SQL_NEW_INTNUM; }
+<PREDICATE_GER>([0-9]{1,3}("."[0-9]{3})+)	{SQL_NEW_INTNUM; }
+
+<PREDICATE_ENG>([0-9]+"."[0-9]+) |
+<PREDICATE_ENG>([0-9]{1,3}(","[0-9]{3})+"."[0-9]+) | 
+<PREDICATE_ENG>("."[0-9]+)					{SQL_NEW_APPROXNUM;  }
+<PREDICATE_ENG>[0-9]+[eE][+-]?[0-9]+   |
+<PREDICATE_ENG>[0-9]+"."[0-9]*[eE][+-]?[0-9]+ |
+<PREDICATE_ENG>"."[0-9]*[eE][+-]?[0-9]+		{SQL_NEW_APPROXNUM;  }
+
+<PREDICATE_GER>([0-9]+","[0-9]+) |
+<PREDICATE_GER>([0-9]{1,3}("."[0-9]{3})+","[0-9]+) | 
+<PREDICATE_GER>(","[0-9]+)					{SQL_NEW_APPROXNUM;  }
+<PREDICATE_GER>[0-9]+[eE][+-]?[0-9]+   |
+<PREDICATE_GER>[0-9]+","[0-9]*[eE][+-]?[0-9]+ |
+<PREDICATE_GER>","[0-9]*[eE][+-]?[0-9]+		{SQL_NEW_APPROXNUM;  }
+
+<PREDICATE_GER,PREDICATE_ENG>[0-9.,][A-Za-z0-9_.,%]* {return gatherNamePre(SQLyytext);}
+
+<SQL>\"	{ return gatherString('\"',0); }
+<SQL>`	{ return gatherString('`' ,0); }											 
+
+<PREDICATE_GER,PREDICATE_ENG,DATE,SQL>"["		{ return gatherString(']' ,0);}
+
+\'		{ return gatherString('\'',1); }
+
+<PREDICATE_GER,PREDICATE_ENG,DATE>#	{ return gatherString('#' ,2); }	
+
+<DATE>[0-9]{1,4}[^ ]*[0-9] |
+<DATE>[0-9]{1,4}[^ ]*[0-9][ ][0-9]{1,4}[^ ]*[0-9]		{ SQL_NEW_DATE; }
+
+<STRING>["-""+""*""/"":""("")"",""."";""?""{""}"]		{ return SQLyytext[0]; } /*  */
+<STRING>"["					{ return gatherString(']' ,0); }
+<STRING>[^ ':["?"]*			{ return gatherNamePre(SQLyytext); }
+
+\n              {}
+
+[ \t\r]+        {}
+
+"--".*$         {}
+
+.				{YY_FATAL_ERROR("Invalid symbol"); return SQL_TOKEN_INVALIDSYMBOL;}
+
+%%
+
+// Kludge around a bug (well, Posix incompatibility) in flex 2.5.x 
+// http://bugs.debian.org/cgi-bin/bugreport.cgi?archive=no&bug=189332 
+#if YY_FLEX_MAJOR_VERSION >= 2 && YY_FLEX_MINOR_VERSION >= 5 
+ 
+  #ifndef YY_FLUSH_BUFFER 
+    #define YY_FLUSH_BUFFER SQLyy_flush_buffer(YY_CURRENT_BUFFER ) 
+  #endif 
+ 
+  #ifndef yytext_ptr 
+    #define yytext_ptr SQLyytext 
+  #endif 
+ 
+#endif 
+
+// Versions of flex apparently differ in whether input() resp. yyinput() returns
+// zero or EOF upon end of file:
+inline bool checkeof(int c) { return c == 0 || c == EOF; }
+
+/*
+ * Read SQL string literal
+ * Valid strings:
+ *	''	'a string'	'quote '' within string'
+ *	""	"a string"	"quote "" within string"
+ * nTyp == 0 -> SQL_NODE_NAME
+ * nTyp == 1 -> SQL_NODE_STRING
+ * nTyp == 2 -> SQL_NODE_ACCESS_DATE
+ */
+sal_Int32 gatherString( sal_Int32 delim, sal_Int32 nTyp)
+{
+	sal_Char ch;
+	::rtl::OStringBuffer sBuffer(256);
+
+	while (!checkeof(ch = yyinput())) 
+	{
+		if (ch == delim) 
+		{
+			if ((ch = yyinput()) != delim) 
+			{
+				if (!checkeof(ch))
+					unput(ch);
+				
+				switch(nTyp)
+				{
+					case 0:
+						SQL_NEW_NODE(::rtl::OStringToOUString(sBuffer.makeStringAndClear(),RTL_TEXTENCODING_UTF8), SQL_NODE_NAME);
+						return SQL_TOKEN_NAME;
+					case 1:
+						SQL_NEW_NODE(::rtl::OStringToOUString(sBuffer.makeStringAndClear(),RTL_TEXTENCODING_UTF8), SQL_NODE_STRING);
+						return SQL_TOKEN_STRING;
+					case 2:
+						SQL_NEW_NODE(::rtl::OStringToOUString(sBuffer.makeStringAndClear(),RTL_TEXTENCODING_UTF8), SQL_NODE_ACCESS_DATE);
+						return SQL_TOKEN_ACCESS_DATE;
+				}				
+			} 
+			else
+			{
+			    sBuffer.append(ch);
+			}
+
+		} 
+		else if (nTyp != 1 && (ch == '\r' || ch == '\n') )
+			break;					
+		else
+		{
+		    sBuffer.append(ch);
+		}
+	}
+	YY_FATAL_ERROR("Unterminated name string"); 
+	return SQL_TOKEN_INVALIDSYMBOL;
+}
+
+sal_Int32 mapEnumToToken(IParseContext::InternationalKeyCode _eKeyCode )
+{
+	sal_Int32 nTokenID = 0;
+	switch( _eKeyCode )
+	{
+		case IParseContext::KEY_LIKE:		nTokenID = SQL_TOKEN_LIKE;		break;
+		case IParseContext::KEY_NOT:		nTokenID = SQL_TOKEN_NOT;		break;
+		case IParseContext::KEY_NULL:		nTokenID = SQL_TOKEN_NULL;		break;
+		case IParseContext::KEY_TRUE:		nTokenID = SQL_TOKEN_TRUE;		break;
+		case IParseContext::KEY_FALSE:		nTokenID = SQL_TOKEN_FALSE;		break;
+		case IParseContext::KEY_IS:			nTokenID = SQL_TOKEN_IS;		break;
+		case IParseContext::KEY_BETWEEN:	nTokenID = SQL_TOKEN_BETWEEN;	break;
+		case IParseContext::KEY_OR:			nTokenID = SQL_TOKEN_OR;		break;
+		case IParseContext::KEY_AND:		nTokenID = SQL_TOKEN_AND;		break;
+		case IParseContext::KEY_AVG:		nTokenID = SQL_TOKEN_AVG;		break;
+		case IParseContext::KEY_COUNT:		nTokenID = SQL_TOKEN_COUNT;		break;
+		case IParseContext::KEY_MAX:		nTokenID = SQL_TOKEN_MAX;		break;
+		case IParseContext::KEY_MIN:		nTokenID = SQL_TOKEN_MIN;		break;
+		case IParseContext::KEY_SUM:		nTokenID = SQL_TOKEN_SUM;		break;
+        case IParseContext::KEY_EVERY:      nTokenID = SQL_TOKEN_EVERY;     break;
+        case IParseContext::KEY_ANY:        nTokenID = SQL_TOKEN_ANY;       break;
+        case IParseContext::KEY_SOME:       nTokenID = SQL_TOKEN_SOME;      break;
+        case IParseContext::KEY_STDDEV_POP: nTokenID = SQL_TOKEN_STDDEV_POP; break;
+        case IParseContext::KEY_STDDEV_SAMP: nTokenID = SQL_TOKEN_STDDEV_SAMP; break;
+        case IParseContext::KEY_VAR_SAMP:   nTokenID = SQL_TOKEN_VAR_SAMP;  break;
+        case IParseContext::KEY_VAR_POP:    nTokenID = SQL_TOKEN_VAR_POP;   break;
+        case IParseContext::KEY_COLLECT:    nTokenID = SQL_TOKEN_COLLECT;   break;
+        case IParseContext::KEY_FUSION:     nTokenID = SQL_TOKEN_FUSION;    break;
+        case IParseContext::KEY_INTERSECTION: nTokenID = SQL_TOKEN_INTERSECTION; break;
+                default:
+            OSL_FAIL( "mapEnumToToken: unsupported key!" );
+	}
+	return nTokenID;
+}
+/*
+ * Read SQL Name literal
+ * Valid Names or internatioanl keywords:
+ *	As we have international keywords, we test first on them  
+ */
+sal_Int32 gatherName(const sal_Char* text)
+{
+	sal_Int32 nToken;
+	OSL_ENSURE(xxx_pGLOBAL_SQLSCAN,"You forgot to set the scanner!");
+	IParseContext::InternationalKeyCode eKeyCode = xxx_pGLOBAL_SQLSCAN->getInternationalTokenID(text);
+	switch (eKeyCode)
+	{
+		case IParseContext::KEY_LIKE:
+		case IParseContext::KEY_NOT:
+		case IParseContext::KEY_NULL:
+		case IParseContext::KEY_TRUE:
+		case IParseContext::KEY_FALSE:
+		case IParseContext::KEY_IS:
+		case IParseContext::KEY_BETWEEN:
+		case IParseContext::KEY_OR:
+		case IParseContext::KEY_AND:
+		case IParseContext::KEY_COUNT:
+		case IParseContext::KEY_AVG:
+		case IParseContext::KEY_MAX:
+		case IParseContext::KEY_MIN:
+		case IParseContext::KEY_SUM:
+        case IParseContext::KEY_EVERY:      
+        case IParseContext::KEY_ANY:        
+        case IParseContext::KEY_SOME:       
+        case IParseContext::KEY_STDDEV_POP: 
+        case IParseContext::KEY_STDDEV_SAMP:
+        case IParseContext::KEY_VAR_SAMP:   
+        case IParseContext::KEY_VAR_POP:    
+        case IParseContext::KEY_COLLECT:    
+        case IParseContext::KEY_FUSION:     
+        case IParseContext::KEY_INTERSECTION:    
+			nToken = mapEnumToToken(eKeyCode);
+			SQL_NEW_KEYWORD(nToken); 
+			break;
+		default:
+			SQL_NEW_NODE(::rtl::OUString(text,strlen(text),RTL_TEXTENCODING_UTF8), SQL_NODE_NAME); 
+			return SQL_TOKEN_NAME;
+	}
+}
+/**
+ Read SQL Name literal for predicate check
+ Valid Names or internatioanl keywords:
+ As we have international keywords, we test first on them  
+*/
+sal_Int32 gatherNamePre(const sal_Char* text)
+{ 
+	sal_Int32 nToken;
+	OSL_ENSURE(xxx_pGLOBAL_SQLSCAN,"You forgot to set the scanner!");
+	IParseContext::InternationalKeyCode eKeyCode = xxx_pGLOBAL_SQLSCAN->getInternationalTokenID(text);
+	switch (eKeyCode)
+	{
+		case IParseContext::KEY_LIKE:
+		case IParseContext::KEY_NOT:
+		case IParseContext::KEY_NULL:
+		case IParseContext::KEY_TRUE:
+		case IParseContext::KEY_FALSE:
+		case IParseContext::KEY_IS:
+		case IParseContext::KEY_BETWEEN:
+		case IParseContext::KEY_OR:
+		case IParseContext::KEY_AND:
+		case IParseContext::KEY_COUNT:
+		case IParseContext::KEY_AVG:
+		case IParseContext::KEY_MAX:
+		case IParseContext::KEY_MIN:
+		case IParseContext::KEY_SUM:
+        case IParseContext::KEY_EVERY:      
+        case IParseContext::KEY_ANY:        
+        case IParseContext::KEY_SOME:       
+        case IParseContext::KEY_STDDEV_POP: 
+        case IParseContext::KEY_STDDEV_SAMP:
+        case IParseContext::KEY_VAR_SAMP:   
+        case IParseContext::KEY_VAR_POP:    
+        case IParseContext::KEY_COLLECT:    
+        case IParseContext::KEY_FUSION:     
+        case IParseContext::KEY_INTERSECTION:
+			nToken = mapEnumToToken(eKeyCode);
+			SQL_NEW_KEYWORD(nToken);
+			break;
+		default:
+		// we need a special handling for parameter
+		{
+			::rtl::OString sStmt = xxx_pGLOBAL_SQLSCAN->getStatement();
+			sal_Int32 nLength = strlen(text);
+			sal_Int32 nPos = xxx_pGLOBAL_SQLSCAN->GetCurrentPos() - nLength - 2;
+			if (sStmt.getStr()[nPos] == ':')
+			{
+				SQL_NEW_NODE(::rtl::OUString(text,nLength,RTL_TEXTENCODING_UTF8), SQL_NODE_NAME); 
+				nToken = SQL_TOKEN_NAME; 				
+			}
+			else
+			{
+				SQL_NEW_NODE(::rtl::OUString(text,nLength,RTL_TEXTENCODING_UTF8), SQL_NODE_STRING);
+				nToken = SQL_TOKEN_STRING;			
+			}
+		}
+	}
+	return nToken;
+}
+
+using namespace connectivity;
+
+static sal_uInt32 Intl_TokenID[] =
+{
+	SQL_TOKEN_LIKE, SQL_TOKEN_NOT, SQL_TOKEN_NULL, SQL_TOKEN_TRUE,
+	SQL_TOKEN_FALSE, SQL_TOKEN_IS, SQL_TOKEN_BETWEEN, SQL_TOKEN_OR,
+	SQL_TOKEN_AND, SQL_TOKEN_AVG, SQL_TOKEN_COUNT, SQL_TOKEN_MAX,
+	SQL_TOKEN_MIN, SQL_TOKEN_SUM
+};
+static bool IN_SQLyyerror;
+//------------------------------------------------------------------------------
+OSQLScanner::OSQLScanner()
+			: m_nCurrentPos(0)
+		    , m_bInternational(sal_False)
+			, m_pContext(NULL)
+			, m_nRule(0) // 0 is INITIAL
+{
+	IN_SQLyyerror = false;
+}
+
+//------------------------------------------------------------------------------
+OSQLScanner::~OSQLScanner()
+{
+}
+//------------------------------------------------------------------------------
+void OSQLScanner::SQLyyerror(sal_Char *fmt)
+{
+
+	if(IN_SQLyyerror)
+		return;
+	IN_SQLyyerror = true;
+
+	OSL_ENSURE(m_pContext, "OSQLScanner::SQLyyerror: No Context set");	
+	m_sErrorMessage = ::rtl::OUString(fmt,strlen(fmt),RTL_TEXTENCODING_UTF8);
+	if (m_nCurrentPos < m_sStatement.getLength())
+	{
+		m_sErrorMessage += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(": "));
+		
+		::rtl::OUString aError;
+		static sal_Int32 BUFFERSIZE = 256;
+		static sal_Char* Buffer = 0;
+		if(!Buffer)
+			Buffer = new sal_Char[BUFFERSIZE];
+
+		sal_Char *s = Buffer;
+		sal_Int32 nPos = 1;
+		sal_Int32 ch = SQLyytext ? (SQLyytext[0] == 0 ? ' ' : SQLyytext[0]): ' ';
+		*s++ = ch;
+		while (!checkeof(ch = yyinput())) 
+		{
+			if (ch == ' ') 
+			{
+				if ((ch = yyinput()) != ' ') 
+				{
+					if (!checkeof(ch))
+						unput(ch);
+				}
+				*s = '\0';
+				aError = ::rtl::OUString(Buffer,nPos,RTL_TEXTENCODING_UTF8);
+				break;
+			}
+			else
+			{
+				*s++ = ch;
+				if (++nPos == BUFFERSIZE)
+				{
+					::rtl::OString aBuf(Buffer);
+					delete[] Buffer;
+					BUFFERSIZE *=2;
+					Buffer = new sal_Char[BUFFERSIZE];
+					for(sal_Int32 i=0;i<aBuf.getLength();++i,++Buffer)
+						*Buffer = aBuf.getStr()[i];
+					s = &Buffer[nPos];
+				}
+			}
+		}
+		m_sErrorMessage += aError;
+		delete[] Buffer;
+		Buffer = NULL;
+	}
+	IN_SQLyyerror = false;
+	YY_FLUSH_BUFFER;
+}
+
+//------------------------------------------------------------------------------
+void OSQLScanner::prepareScan(const ::rtl::OUString & rNewStatement, const IParseContext* pContext, sal_Bool bInternational)
+{
+	YY_FLUSH_BUFFER;
+	BEGIN(m_nRule);
+
+	m_sErrorMessage = ::rtl::OUString();	
+	m_sStatement	= ::rtl::OString(rNewStatement,rNewStatement.getLength(), RTL_TEXTENCODING_UTF8);
+	m_nCurrentPos	= 0;
+	m_bInternational = bInternational;
+	m_pContext		= pContext;
+}
+
+//------------------------------------------------------------------------------
+sal_Int32 OSQLScanner::SQLyygetc(void)
+{
+	sal_Int32 nPos = (m_nCurrentPos >= m_sStatement.getLength()) ? -1 : m_sStatement.getStr()[m_nCurrentPos];
+    m_nCurrentPos++;
+    return nPos;
+}
+
+//------------------------------------------------------------------------------
+IParseContext::InternationalKeyCode OSQLScanner::getInternationalTokenID(const sal_Char* sToken) const
+{		
+	OSL_ENSURE(m_pContext, "OSQLScanner::getInternationalTokenID: No Context set");			
+	return (m_bInternational) ? m_pContext->getIntlKeyCode(::rtl::OString(sToken) ) : IParseContext::KEY_NONE;	
+}
+// -------------------------------------------------------------------------
+sal_Int32	OSQLScanner::GetCurrentRule() const { return m_nRule; }
+sal_Int32	OSQLScanner::GetGERRule() const		{ return PREDICATE_GER; }
+sal_Int32	OSQLScanner::GetENGRule() const		{ return PREDICATE_ENG; }
+sal_Int32	OSQLScanner::GetSQLRule() const		{ return SQL; }
+sal_Int32	OSQLScanner::GetDATERule() const	{ return DATE; }
+sal_Int32	OSQLScanner::GetSTRINGRule() const	{ return STRING; }
+// -------------------------------------------------------------------------
+void OSQLScanner::setScanner(sal_Bool _bNull)
+{
+	xxx_pGLOBAL_SQLSCAN = _bNull ? NULL : this;
+}
+// -------------------------------------------------------------------------
+sal_Int32 OSQLScanner::SQLlex()
+{
+	return SQLyylex();
+}
+
+#if defined __SUNPRO_CC
+#pragma enable_warn
+#elif defined _MSC_VER
+#pragma warning(pop)
+#endif

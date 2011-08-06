@@ -1,0 +1,74 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#include "../inc/helpid.hrc"            // HID_XXX
+#include "../inc/fmhelp.hrc"
+
+/* #define HID_AUTOCORR_HELP_CHGNONBRKSPACE        HID_AUTOCORR_HELP_START+20 */
+/* hidspecial HID_AUTOCORR_HELP_CHGNONBRKSPACE     { HelpID =  HID_AUTOCORR_HELP_CHGNONBRKSPACE;}; */
+
+hidspecial HID_FIELD_SEL                    { HelpID =HID_FIELD_SEL             ;};
+hidspecial HID_FIELD_SEL_WIN                { HelpID =HID_FIELD_SEL_WIN         ;};
+hidspecial HID_FILL_ATTR_LISTBOX                { HelpID = HID_FILL_ATTR_LISTBOX ;};
+hidspecial HID_FILL_TYPE_LISTBOX                { HelpID = HID_FILL_TYPE_LISTBOX ;};
+hidspecial HID_FILTER_NAVIGATOR             { HelpID =HID_FILTER_NAVIGATOR      ;};
+hidspecial HID_FILTER_NAVIGATOR_WIN         { HelpID =HID_FILTER_NAVIGATOR_WIN  ;};
+hidspecial HID_FORM_NAVIGATOR               { HelpID =HID_FORM_NAVIGATOR        ;};
+hidspecial HID_FORM_NAVIGATOR_WIN           { HelpID =HID_FORM_NAVIGATOR_WIN    ;};
+hidspecial HID_GALLERY_ICONVIEW                 { HelpID = HID_GALLERY_ICONVIEW ;};
+hidspecial HID_GALLERY_LISTVIEW                 { HelpID = HID_GALLERY_LISTVIEW ;};
+hidspecial HID_GALLERY_NEWTHEME                 { HelpID = HID_GALLERY_NEWTHEME ;};
+hidspecial HID_GALLERY_PREVIEW              { HelpID = HID_GALLERY_PREVIEW; };
+hidspecial HID_GALLERY_THEMELIST                { HelpID = HID_GALLERY_THEMELIST ;};
+hidspecial HID_GALLERY_TITLE                { HelpID = HID_GALLERY_TITLE; };
+hidspecial HID_GALLERY_WINDOW               { HelpID = HID_GALLERY_WINDOW; };
+hidspecial HID_GRID_NUMBEROFRECORDS         { HelpID = HID_GRID_NUMBEROFRECORDS ;};
+hidspecial HID_GRID_TRAVEL_ABSOLUTE         { HelpID = HID_GRID_TRAVEL_ABSOLUTE ;};
+hidspecial HID_GRID_TRAVEL_FIRST            { HelpID = HID_GRID_TRAVEL_FIRST ;};
+hidspecial HID_GRID_TRAVEL_LAST             { HelpID = HID_GRID_TRAVEL_LAST ;};
+hidspecial HID_GRID_TRAVEL_NEW              { HelpID = HID_GRID_TRAVEL_NEW ;};
+hidspecial HID_GRID_TRAVEL_NEXT             { HelpID = HID_GRID_TRAVEL_NEXT ;};
+hidspecial HID_GRID_TRAVEL_PREV             { HelpID = HID_GRID_TRAVEL_PREV ;};
+hidspecial HID_POPUP_COLOR                  { HelpID = HID_POPUP_COLOR; };
+hidspecial HID_POPUP_COLOR_CTRL             { HelpID = HID_POPUP_COLOR_CTRL; };
+hidspecial HID_POPUP_FRAME                  { HelpID = HID_POPUP_FRAME; };
+hidspecial HID_POPUP_LINE                   { HelpID = HID_POPUP_LINE ; };
+hidspecial HID_POPUP_LINEEND                { HelpId = HID_POPUP_LINEEND            ;};
+hidspecial HID_POPUP_LINEEND_CTRL           { HelpId = HID_POPUP_LINEEND_CTRL       ;};
+hidspecial HID_REDLINING_FILTER_CB_ACTION   { HelpID = HID_REDLINING_FILTER_CB_ACTION; };
+hidspecial HID_REDLINING_TABCONTROL         { HelpID = HID_REDLINING_TABCONTROL; };
+hidspecial HID_REDLINING_VIEW_DG_VIEW_HEADER    { HelpID = HID_REDLINING_VIEW_DG_VIEW_HEADER; };
+hidspecial HID_REDLINING_VIEW_DG_VIEW_TABLE     { HelpID = HID_REDLINING_VIEW_DG_VIEW_TABLE ; };
+hidspecial HID_SVX_CHINESE_DICTIONARY_CB_REVERSE { HelpId = HID_SVX_CHINESE_DICTIONARY_CB_REVERSE; };
+hidspecial HID_SVX_CHINESE_DICTIONARY_LB_HEADER { HelpId = HID_SVX_CHINESE_DICTIONARY_LB_HEADER; };
+hidspecial HID_SVX_CHINESE_DICTIONARY_LB_TO_SIMPLIFIED { HelpId = HID_SVX_CHINESE_DICTIONARY_LB_TO_SIMPLIFIED; };
+hidspecial HID_SVX_CHINESE_DICTIONARY_LB_TO_TRADITIONAL { HelpId = HID_SVX_CHINESE_DICTIONARY_LB_TO_TRADITIONAL; };
+hidspecial HID_SVX_CHINESE_DICTIONARY_RB_CONVERSION_TO_SIMPLIFIED { HelpId = HID_SVX_CHINESE_DICTIONARY_RB_CONVERSION_TO_SIMPLIFIED; };
+hidspecial HID_SVX_CHINESE_DICTIONARY_RB_CONVERSION_TO_TRADITIONAL { HelpId = HID_SVX_CHINESE_DICTIONARY_RB_CONVERSION_TO_TRADITIONAL; };
+hidspecial HID_SVX_CHINESE_TRANSLATION_CB_USE_VARIANTS { HelpId = HID_SVX_CHINESE_TRANSLATION_CB_USE_VARIANTS; };
+hidspecial HID_SVX_CHINESE_TRANSLATION_RB_CONVERSION_TO_SIMPLIFIED { HelpId = HID_SVX_CHINESE_TRANSLATION_RB_CONVERSION_TO_SIMPLIFIED; };
+hidspecial HID_SVX_CHINESE_TRANSLATION_RB_CONVERSION_TO_TRADITIONAL { HelpId = HID_SVX_CHINESE_TRANSLATION_RB_CONVERSION_TO_TRADITIONAL; };
+hidspecial UID_FORMPROPBROWSER_FRAME            { HelpID =  UID_FORMPROPBROWSER_FRAME       ;};

@@ -1,0 +1,10 @@
+module ooo { module vba { module office {
+    constants MsoAlignCmd {
+        const long msoAlignBottoms = 5;
+        const long msoAlignCenters = 1;
+        const long msoAlignLefts = 0;
+        const long msoAlignMiddles = 4;
+        const long msoAlignRights = 2;
+        const long msoAlignTops = 3;
+    };
+}; }; };

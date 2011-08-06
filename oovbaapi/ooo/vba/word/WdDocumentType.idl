@@ -1,0 +1,7 @@
+module ooo { module vba { module word {
+    constants WdDocumentType {
+        const long wdTypeDocument = 0;
+        const long wdTypeFrameset = 2;
+        const long wdTypeTemplate = 1;
+    };
+}; }; };

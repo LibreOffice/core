@@ -1,0 +1,112 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * 
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ *************************************************************************/
+
+#define VER_FIRSTYEAR	2000
+
+#include <windows.h>
+#include "version.hrc"
+
+// -----------------------------------------------------------------------
+// 				version information
+// -----------------------------------------------------------------------
+
+VS_VERSION_INFO VERSIONINFO
+	FILEVERSION    VERSION, SUBVERSION, VERVARIANT, VER_COUNT
+	PRODUCTVERSION VERSION, SUBVERSION, VERVARIANT, VER_COUNT
+	FILEFLAGSMASK 0x3F
+	FILEFLAGS
+#if defined(DEBUG)
+	VS_FF_DEBUG |
+#endif
+#ifdef VER_PREL
+	VS_FF_PRERELEASE |
+#endif
+	0
+	FILEOS VOS_NT_WINDOWS32
+	FILETYPE VFT_APP
+	{
+		BLOCK "StringFileInfo"
+		{
+			BLOCK "040904E4"
+			{
+				// International StringTable
+                VALUE "CompanyName", 		"The Document Foundation\0"
+				VALUE "FileDescription",	"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\0"
+				VALUE "FileVersion",		PPS(VER_LEVEL) "\0"
+				VALUE "ProductVersion",		PPS(VER_LEVEL) "\0"
+				VALUE "OriginalFilename",	"SOFFICE.EXE\0"
+				VALUE "InternalName", 		"SOFFICE\0"
+				VALUE "LegalCopyright", 	S_CRIGHT " Oracle, Inc.\0"
+			}
+		}
+
+		BLOCK "VarFileInfo"
+		{
+			VALUE "Translation", 0x0409, 1252
+		}
+	}
+
+2 ICON "icons/oasis-text.ico"
+3 ICON "icons/oasis-text-template.ico"
+4 ICON "icons/oasis-spreadsheet.ico"
+5 ICON "icons/oasis-spreadsheet-template.ico"
+6 ICON "icons/oasis-drawing.ico"
+7 ICON "icons/oasis-drawing-template.ico"
+8 ICON "icons/oasis-presentation.ico"
+9 ICON "icons/oasis-presentation-template.ico"
+10 ICON "icons/oasis-presentation-template.ico"
+11 ICON "icons/oasis-master-document.ico"
+12 ICON "icons/oasis-web-template.ico"
+13 ICON "icons/oasis-empty-document.ico"
+14 ICON "icons/oasis-database.ico"
+15 ICON "icons/oasis-formula.ico"
+16 ICON "icons/oasis-web-template.ico"
+17 ICON "icons/empty-document.ico"
+18 ICON "icons/empty-document.ico"
+19 ICON "icons/ooo3_open.ico"
+20 ICON "icons/empty-document.ico"
+21 ICON "icons/ooo3_writer_app.ico"
+22 ICON "icons/ooo3_calc_app.ico"
+23 ICON "icons/ooo3_draw_app.ico"
+24 ICON "icons/ooo3_impress_app.ico"
+25 ICON "icons/ooo3_math_app.ico"
+26 ICON "icons/ooo3_base_app.ico"
+27 ICON "icons/oasis-empty-document.ico"
+28 ICON "icons/text.ico"
+29 ICON "icons/text-template.ico"
+30 ICON "icons/spreadsheet.ico"
+31 ICON "icons/spreadsheet-template.ico"
+32 ICON "icons/drawing.ico"
+33 ICON "icons/drawing-template.ico"
+34 ICON "icons/presentation.ico"
+35 ICON "icons/presentation-template.ico"
+36 ICON "icons/master-document.ico"
+37 ICON "icons/empty-document.ico"
+38 ICON "icons/database.ico"
+39 ICON "icons/formula.ico"
+40 ICON "icons/oxt-extension.ico"
+

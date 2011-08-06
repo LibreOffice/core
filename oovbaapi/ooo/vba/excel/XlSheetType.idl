@@ -1,0 +1,9 @@
+module ooo { module vba { module excel {
+    constants XlSheetType {
+        const long xlChart = -4109;
+        const long xlDialogSheet = -4116;
+        const long xlExcel4IntlMacroSheet = 4;
+        const long xlExcel4MacroSheet = 3;
+        const long xlWorksheet = -4167;
+    };
+}; }; };

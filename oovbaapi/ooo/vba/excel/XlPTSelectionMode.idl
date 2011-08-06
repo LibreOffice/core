@@ -1,0 +1,11 @@
+module ooo { module vba { module excel {
+    constants XlPTSelectionMode {
+        const long xlBlanks = 4;
+        const long xlButton = 15;
+        const long xlDataAndLabel = 0;
+        const long xlDataOnly = 2;
+        const long xlFirstRow = 256;
+        const long xlLabelOnly = 1;
+        const long xlOrigin = 3;
+    };
+}; }; };

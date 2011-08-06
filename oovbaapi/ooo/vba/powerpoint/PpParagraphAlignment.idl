@@ -1,0 +1,12 @@
+module ooo { module vba { module powerpoint {
+    constants PpParagraphAlignment {
+        const long ppAlignCenter = 2;
+        const long ppAlignDistribute = 5;
+        const long ppAlignJustify = 4;
+        const long ppAlignJustifyLow = 7;
+        const long ppAlignLeft = 1;
+        const long ppAlignmentMixed = -2;
+        const long ppAlignRight = 3;
+        const long ppAlignThaiDistribute = 6;
+    };
+}; }; };

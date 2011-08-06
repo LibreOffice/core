@@ -1,0 +1,78 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef __ooo_vba_excel_XSheetObject_idl__
+#define __ooo_vba_excel_XSheetObject_idl__
+
+#include <ooo/vba/XHelperInterface.idl>
+
+
+//=============================================================================
+
+module ooo {  module vba { module excel {
+
+//=============================================================================
+/** Base interface for graphic objects and drawing controls in a single sheet.
+
+    <p>The objects supporting this interface are now deprecated in VBA in
+    favour of the Shapes and OLEObjects collections, but are kept for
+    compatibility with old VBA scripts. All form control objects do NOT belong
+    to ActiveX form controls but to the old-style drawing controls.</p>
+ */
+interface XSheetObject : ooo::vba::XHelperInterface
+{
+    /** Left coordinate of the drawing object, in points. */
+    [attribute] double Left;
+
+    /** Top coordinate of the drawing object, in points. */
+    [attribute] double Top;
+
+    /** Width of the drawing object, in points. */
+    [attribute] double Width;
+
+    /** Height of the drawing object, in points. */
+    [attribute] double Height;
+
+    /** The name of the drawing object, used as collection key. */
+    [attribute] string Name;
+
+    /** Name of a macro that will be executed when the drawing object is clicked. */
+    [attribute] string OnAction;
+
+    /** Anchor mode of the object (fixed or variable position and size). Must
+        be a value from <type>ooo::vba::excel::XlPlacement</type>. */
+    [attribute] long Placement;
+
+    /** True = print object, false = skip object on printing. */
+    [attribute] boolean PrintObject;
+};
+
+//=============================================================================
+
+}; }; };
+
+#endif

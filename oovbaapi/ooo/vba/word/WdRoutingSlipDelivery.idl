@@ -1,0 +1,6 @@
+module ooo { module vba { module word {
+    constants WdRoutingSlipDelivery {
+        const long wdAllAtOnce = 1;
+        const long wdOneAfterAnother = 0;
+    };
+}; }; };

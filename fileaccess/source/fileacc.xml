@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE module-description PUBLIC "-//StarOffice//DTD ComponentDescription 1.0//EN" "module-description.dtd">
+<module-description xmlns:xlink="http://www.w3.org/1999/xlink">
+    <module-name>
+    fileacc
+    </module-name>
+
+    <component-description>
+        <author>
+            Andreas Bregas
+        </author>
+        <name>
+            com.sun.star.comp.ucb.SimpleFileAccess
+        </name>
+        <description>
+            This component provides a simple set of methods to access content that
+            is provided by the Universal Content Broker (i.e. file system contents).
+        </description>
+        <loader-name>
+            com.sun.star.loader.SharedLibrary
+        </loader-name>
+        <language>
+            c++
+        </language>
+        <status value="final"/>
+        <supported-service>
+            com.sun.star.ucb.SimpleFileAccess
+        </supported-service>
+
+        <type> com.sun.star.beans.Property                   </type>
+        <type> com.sun.star.io.XActiveDataSink               </type>
+        <type> com.sun.star.io.XActiveDataSource             </type>
+        <type> com.sun.star.io.XActiveDataStreamer           </type>
+        <type> com.sun.star.sdbc.XResultSet                  </type>
+        <type> com.sun.star.ucb.CommandFailedException       </type>
+        <type> com.sun.star.ucb.ContentInfo                  </type>
+        <type> com.sun.star.ucb.ContentInfoAttribute         </type>
+        <type> com.sun.star.ucb.InsertCommandArgument        </type>
+        <type> com.sun.star.ucb.InteractiveIOException       </type>
+        <type> com.sun.star.ucb.NameClash                    </type>
+        <type> com.sun.star.ucb.OpenCommandArgument2         </type>
+        <type> com.sun.star.ucb.OpenMode                     </type>
+        <type> com.sun.star.ucb.XCommandEnvironment          </type>
+        <type> com.sun.star.ucb.XContentAccess               </type>
+        <type> com.sun.star.ucb.XContentCreator              </type>
+        <type> com.sun.star.ucb.XSimpleFileAccess3           </type>
+    </component-description>
+
+    <project-build-dependency> cppuhelper       </project-build-dependency>
+    <project-build-dependency> ucbhelper        </project-build-dependency>
+    <project-build-dependency> tools            </project-build-dependency>
+    <project-build-dependency> cppu             </project-build-dependency>
+    <project-build-dependency> sal              </project-build-dependency>
+
+    <runtime-module-dependency> cppuhelper$(COM) </runtime-module-dependency>
+    <runtime-module-dependency> ucbhelper1MSC    </runtime-module-dependency>
+    <runtime-module-dependency> cppu3            </runtime-module-dependency>
+    <runtime-module-dependency> sal3             </runtime-module-dependency>
+    <runtime-module-dependency> tl               </runtime-module-dependency>
+</module-description>

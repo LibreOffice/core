@@ -1,0 +1,6 @@
+module ooo { module vba { module word {
+    constants WdDocumentDirection {
+        const long wdLeftToRight = 0;
+        const long wdRightToLeft = 1;
+    };
+}; }; };

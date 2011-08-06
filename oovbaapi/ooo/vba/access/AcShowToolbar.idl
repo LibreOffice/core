@@ -1,0 +1,7 @@
+module ooo { module vba { module access {
+    constants AcShowToolbar {
+        const long acToolbarNo = 2;
+        const long acToolbarWhereApprop = 1;
+        const long acToolbarYes = 0;
+    };
+}; }; };

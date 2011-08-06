@@ -1,0 +1,8 @@
+module ooo { module vba { module powerpoint {
+    constants PpFollowColors {
+        const long ppFollowColorsMixed = -2;
+        const long ppFollowColorsNone = 0;
+        const long ppFollowColorsScheme = 1;
+        const long ppFollowColorsTextAndBackground = 2;
+    };
+}; }; };

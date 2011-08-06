@@ -1,0 +1,80 @@
+.TH unopkg "1" "2008-03-18" "LibreOffice Extension Manager" "User Command"
+.SH "Name"
+unopkg \- LibreOffice Extension Manager
+.SH SYNOPSIS
+.B unopkg
+[\fBadd\fR] <\fIoptions\fR> \fIextension-path...\fR
+.br
+.B unopkg
+[\fBremove\fR] <\fIoptions\fR> \fIextension-identifier...\fR
+.br
+.B unopkg
+[\fBlist\fR] <\fIoptions\fR> \fIextension-identifier...\fR
+.br
+.B unopkg
+[\fBreinstall\fR] <\fIoptions\fR>
+.br
+.B unopkg
+[\fBgui\fR]
+.br
+.B unopkg
+[\fB--help\fR|\fB-h\fR]
+
+.SH DESCRIPTION
+LibreOffice is a fully featured office suite for the daily use with all
+features you would normally expect in an office suite.
+
+There exists many LibreOffice extensions all over the word. For example, see
+\fBhttp://extensions.services.openoffice.org/\fR
+
+This tool allows to manage the extensions from the command line.
+
+.SH SUB\-COMMANDS
+.TP
+\fBadd\fR
+add the given extensions
+.TP
+\fBremove\fR
+remove extensions by the given identifiers
+.TP
+\fBreinstall\fR
+reinstall all deployed extensions (only for experts)
+.TP
+\fBlist\fR
+list information about the deployed extensions
+.TP
+\fBgui\fR
+raise Extension Manager Graphical User Interface (GUI)
+
+.SH OPTIONS
+.TP
+\fB\-\-help\fR|\fB\-h\fR
+display help and exit
+.TP
+\fB\-\-version\fR|\fB\-V\fR
+output version information and exit
+.TP
+\fB--verbose\fR|\fB\-v\fR
+verbose output
+.TP
+\fB\-\-force\fR|\fB\-f\fR
+force overwriting existing extensions
+.TP
+\fB\-\-log\-file\fR <\fIfile\fR>
+custom log file; the default one is <cache-dir>/log.txt
+.TP
+\fB\-\-shared\fR|\fB\-f\fR
+operate on the system installation deployment context; use only when no
+concurrent Office process(es) are running! (only for experts)
+.TP
+\fB\-\-deployment\-context\fR <\fIcontext\fR>
+operate on explicit deployment context (only for experts)
+
+
+.SH TROUBLESHOOTING PROBLEMS
+See \fBhttp://wiki.documentfoundation.org/BugReport\fR for more details about how to report
+bugs in LibreOffice.
+.SH SEE ALSO
+.BR http://www.documentfoundation.org/
+.SH AUTHOR
+This manual page was created by Petr Mladek <pmladek@suse.cz>.

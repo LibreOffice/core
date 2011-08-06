@@ -1,0 +1,10 @@
+module ooo { module vba {
+    constants VbAppWinStyle {
+        const long vbHide = 0;
+        const long vbMaximizedFocus = 3;
+        const long vbMinimizedFocus = 2;
+        const long vbMinimizedNoFocus = 6;
+        const long vbNormalFocus = 1;
+        const long vbNormalNoFocus = 4;
+    };
+}; };

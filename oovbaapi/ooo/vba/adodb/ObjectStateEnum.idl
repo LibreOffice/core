@@ -1,0 +1,9 @@
+module ooo { module vba { module adodb {
+    constants ObjectStateEnum {
+        const long adStateClosed = 0;
+        const long adStateConnecting = 2;
+        const long adStateExecuting = 4;
+        const long adStateFetching = 8;
+        const long adStateOpen = 1;
+    };
+}; }; };

@@ -1,0 +1,7 @@
+module ooo { module vba { module word {
+    constants WdWindowState {
+        const long wdWindowStateMaximize = 1;
+        const long wdWindowStateMinimize = 2;
+        const long wdWindowStateNormal = 0;
+    };
+}; }; };

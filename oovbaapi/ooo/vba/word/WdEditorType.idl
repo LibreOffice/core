@@ -1,0 +1,8 @@
+module ooo { module vba { module word {
+    constants WdEditorType {
+        const long wdEditorCurrent = -6;
+        const long wdEditorEditors = -5;
+        const long wdEditorEveryone = -1;
+        const long wdEditorOwners = -4;
+    };
+}; }; };

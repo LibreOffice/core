@@ -1,0 +1,337 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#include "basic/svtmsg.hrc"
+
+
+// Here are included the messages of the folder /basic/source/app
+
+
+// Error messages which go to the result file.
+// *********************
+// ***  !!ATTENTION!!  ***
+// *********************
+// The numbers must NEVER(!) change,
+// because they are saved in the result files and a renewed display
+// would display new strings or no strings.
+String S_GPF_ABORT
+{
+    Text[ en-US ] = "Program aborted with GPF";
+};
+String S_APP_SHUTDOWN
+{
+    Text[ en-US ] = "Application has been shut down";
+};
+String S_SID_EXECUTE_FAILED_NO_DISPATCHER
+{
+    Text[ en-US ] = "Slot ID cannot be executed. No ActiveDispatcher";
+};
+String S_SID_EXECUTE_FAILED
+{
+    Text[ en-US ] = "Slot ID could not be executed";
+};
+String S_UNO_PROPERTY_NITIALIZE_FAILED
+{
+    Text[ en-US ] = "UnoSlot: Properties could not be initialized";
+};
+String S_RESETAPPLICATION_FAILED_COMPLEX
+{
+    Text[ en-US ] = "ResetApplication failed: too complex";
+};
+String S_RESETAPPLICATION_FAILED_UNKNOWN
+{
+    Text[ en-US ] = "ResetApplication failed: unknown window type";
+};
+String S_NO_ACTIVE_WINDOW
+{
+    Text[ en-US ] = "No active window found (GetNextCloseWindow)";
+};
+String S_NO_DIALOG_IN_GETACTIVE
+{
+    Text[ en-US ] = "GetActive does not return a dialog! Inform development";
+};
+String S_NO_POPUP
+{
+    Text[ en-US ] = "Pop-up menu not open";
+};
+String S_NO_SUBMENU
+{
+    Text[ en-US ] = "Submenu does not exist";
+};
+String S_CONTROLTYPE_NOT_SUPPORTED
+{
+    Text[ en-US ] = "ControlType ($Arg1) is not supported";
+};
+String S_SELECTION_BY_ATTRIBUTE_ONLY_DIRECTORIES
+{
+    Text[ en-US ] = "Selection by attributes only possible for directories";
+};
+String S_NO_MORE_FILES
+{
+    Text[ en-US ] = "No more files";
+};
+String S_UNKNOWN_METHOD
+{
+    Text[ en-US ] = "Unknown method '($Arg1)' on ($Arg2)";
+};
+String S_INVALID_PARAMETERS
+{
+    Text[ en-US ] = "Invalid Parameters";
+};
+String S_POINTER_OUTSIDE_APPWIN
+{
+    Text[ en-US ] = "Pointer not inside application window at '($Arg1)'";
+};
+String S_UNKNOWN_COMMAND
+{
+    Text[ en-US ] = "Unknown command '($Arg1)'";
+};
+String S_WIN_NOT_FOUND
+{
+    Text[ en-US ] = "($Arg1) could not be found";
+};
+String S_WIN_INVISIBLE
+{
+    Text[ en-US ] = "($Arg1) is not visible";
+};
+String S_WIN_DISABLED
+{
+    Text[ en-US ] = "($Arg1) could not be accessed. Disabled";
+};
+String S_NUMBER_TOO_BIG
+{
+    Text[ en-US ] = "Entry number ($Arg2) is too large in ($Arg1). Max. allowed is ($Arg3)";
+};
+String S_NUMBER_TOO_SMALL
+{
+    Text[ en-US ] = "The entry number ($Arg2) is too small in ($Arg1). Min allowed is ($Arg3)";
+};
+String S_WINDOW_DISAPPEARED
+{
+    Text[ en-US ] = "Window disappeared in the meantime at ($Arg1)";
+};
+String S_ERROR_SAVING_IMAGE
+{
+    Text[ en-US ] = "Error #($Arg1) when saving the image";
+};
+String S_INVALID_POSITION
+{
+    Text[ en-US ] = "Invalid position at ($Arg1)";
+};
+String S_SPLITWIN_NOT_FOUND
+{
+    Text[ en-US ] = "SplitWindow not found at ($Arg1)";
+};
+String S_INTERNAL_ERROR
+{
+    Text[ en-US ] = "Internal error at ($Arg1)";
+};
+String S_NO_STATUSBAR
+{
+    Text[ en-US ] = "No status bar at ($Arg1)";
+};
+String S_ITEMS_INVISIBLE
+{
+    Text[ en-US ] = "The items are hidden at ($Arg1)";
+};
+String S_TABPAGE_NOT_FOUND
+{
+    Text[ en-US ] = "Tab page not found at ($Arg1)";
+};
+String S_TRISTATE_NOT_ALLOWED
+{
+    Text[ en-US ] = "Tristate cannot be set at ($Arg1)";
+};
+String S_ERROR_IN_SET_TEXT
+{
+    Text[ en-US ] = "Set text did not function";
+};
+String S_ATTEMPT_TO_WRITE_READONLY
+{
+    Text[ en-US ] = "Attempt to write on read-only ($Arg1)";
+};
+String S_NO_SELECT_FALSE
+{
+    Text[ en-US ] = "Select FALSE not allowed. Use MultiSelect at ($Arg1)";
+};
+String S_ENTRY_NOT_FOUND
+{
+    Text[ en-US ] = "\"($Arg2)\" entry at ($Arg1) not found";
+};
+String S_METHOD_FAILED
+{
+    Text[ en-US ] = "($Arg1) of entry \"($Arg2)\" failed";
+};
+String S_HELPID_ON_TOOLBOX_NOT_FOUND
+{
+    Text[ en-US ] = "HelpID in ToolBox not found at ($Arg1)";
+};
+String S_BUTTON_DISABLED_ON_TOOLBOX
+{
+    Text[ en-US ] = "The button is disabled in ToolBox at ($Arg1)";
+};
+String S_BUTTON_HIDDEN_ON_TOOLBOX
+{
+    Text[ en-US ] = "The button is hidden in ToolBox at ($Arg1)";
+};
+String S_CANNOT_MAKE_BUTTON_VISIBLE_IN_TOOLBOX
+{
+    Text[ en-US ] = "Button cannot be made visible in ToolBox at ($Arg1)";
+};
+String S_TEAROFF_FAILED
+{
+    Text[ en-US ] = "TearOff failed in ToolBox at ($Arg1)";
+};
+
+// Has to stay in for old res files
+String S_NO_SELECTED_ENTRY_DEPRECATED
+{
+    Text[ en-US ] = "No entry is selected in TreeListBox at ($Arg1)";
+};
+String S_NO_SELECTED_ENTRY
+{
+    Text[ en-US ] = "No entry is selected in ($Arg2) at ($Arg1)";
+};
+String S_SELECT_DESELECT_VIA_STRING_NOT_IMPLEMENTED
+{
+    Text[ en-US ] = "Select/Deselect with string not implemented at ($Arg1)";
+};
+String S_ALLOWED_ONLY_IN_FLOATING_MODE
+{
+    Text[ en-US ] = "Method only allowed in floating mode at ($Arg1)";
+};
+String S_ALLOWED_ONLY_IN_DOCKING_MODE
+{
+    Text[ en-US ] = "Method only allowed in docking mode at ($Arg1)";
+};
+String S_SIZE_NOT_CHANGEABLE
+{
+    Text[ en-US ] = "Size cannot be altered at ($Arg1)";
+};
+String S_NO_OK_BUTTON
+{
+    Text[ en-US ] = "There is no OK button at ($Arg1)";
+};
+String S_NO_CANCEL_BUTTON
+{
+    Text[ en-US ] = "There is no Cancel button at ($Arg1)";
+};
+String S_NO_YES_BUTTON
+{
+    Text[ en-US ] = "There is no Yes button at ($Arg1)";
+};
+String S_NO_NO_BUTTON
+{
+    Text[ en-US ] = "There is no No button at ($Arg1)";
+};
+String S_NO_RETRY_BUTTON
+{
+    Text[ en-US ] = "There is no Repeat button at ($Arg1)";
+};
+String S_NO_HELP_BUTTON
+{
+    Text[ en-US ] = "There is no Help button at ($Arg1)";
+};
+String S_NO_DEFAULT_BUTTON
+{
+    Text[ en-US ] = "There is no Default button defined at ($Arg1)";
+};
+String S_BUTTON_ID_NOT_THERE
+{
+    Text[ en-US ] = "There is no button with ID ($Arg1) at ($Arg2)";
+};
+String S_BUTTONID_REQUIRED
+{
+    Text[ en-US ] = "A button ID needs to be given at ($Arg1)";
+};
+String S_UNKNOWN_TYPE
+{
+    Text[ en-US ] = "Unknown object type ($Arg1) from UId or method '($Arg2)' not supported";
+};
+String S_UNPACKING_STORAGE_FAILED
+{
+    Text[ en-US ] = "Unpacking storage \"($Arg1)\" to \"($Arg2)\" failed";
+};
+String S_NO_LIST_BOX_BUTTON
+{
+    Text[ en-US ] = "ListBoxButton does not exist in ($Arg1)";
+};
+String S_UNO_URL_EXECUTE_FAILED_NO_DISPATCHER
+{
+    Text[ en-US ] = "UNO URL \"($Arg1)\" could not be executed: No dispatcher was found.";
+};
+String S_UNO_URL_EXECUTE_FAILED_NO_FRAME
+{
+    Text[ en-US ] = "UNO URL \"($Arg1)\" could not be executed: No ActiveFrame on desktop.";
+};
+String S_NO_MENU
+{
+    Text[ en-US ] = "There is no menu at ($Arg1)";
+};
+String S_UNO_URL_EXECUTE_FAILED_DISABLED
+{
+    Text[ en-US ] = "UNO URL \"($Arg1)\" could not be run: Disabled";
+};
+String S_NO_SCROLLBAR
+{
+    Text[ en-US ] = "No scroll bar at ($Arg1)";
+};
+String S_NO_SAX_PARSER
+{
+    Text[ en-US ] = "No SAX Parser when using ($Arg1). Initialize with 'SAXReadFile' first.";
+};
+String S_CANNOT_CREATE_DIRECTORY
+{
+    Text[ en-US ] = "Cannot create Directory: \"($Arg1)\"";
+};
+String S_DIRECTORY_NOT_EMPTY
+{
+    Text[ en-US ] = "Directory has to be Empty to unpack to. Directory: \"($Arg1)\"";
+};
+String S_DEPRECATED
+{
+    Text[ en-US ] = "Deprecated! Please change the script.";
+};
+String S_SIZE_BELOW_MINIMUM
+{
+    Text[ en-US ] = "The Size is below the minimum. x=($Arg1) ,y=($Arg2)";
+};
+String S_CANNOT_FIND_FLOATING_WIN
+{
+    Text[ en-US ] = "Cannot find FloatingWindow for floating DockingWindow at ($Arg1).";
+};
+String S_NO_LIST_BOX_STRING
+{
+    Text[ en-US ] = "String does not exist in ($Arg1)";
+};
+String S_SLOT_IN_EXECUTE
+{
+    Text[ en-US ] = "Another Slot is being executed already.";
+};
+String S_MENU_NOT_CLOSING
+{
+    Text[ en-US ] = "Menu not closing.";
+};

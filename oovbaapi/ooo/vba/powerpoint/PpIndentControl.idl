@@ -1,0 +1,7 @@
+module ooo { module vba { module powerpoint {
+    constants PpIndentControl {
+        const long ppIndentControlMixed = -2;
+        const long ppIndentKeepAttr = 2;
+        const long ppIndentReplaceAttr = 1;
+    };
+}; }; };

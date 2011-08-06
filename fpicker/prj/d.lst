@@ -1,0 +1,13 @@
+mkdir: %COMMON_DEST%\bin\hid
+
+..\%COMMON_OUTDIR%\misc\*.hid %COMMON_DEST%\bin\hid\*.hid
+
+..\%__SRC%\bin\f*.res %_DEST%\bin\
+..\%__SRC%\bin\f*.dll %_DEST%\bin\
+..\%__SRC%\bin\kdefilepicker %_DEST%\bin\kdefilepicker
+..\%__SRC%\lib\f*.so %_DEST%\lib\
+..\%__SRC%\lib\*.dylib %_DEST%\lib\*.dylib
+
+..\source\win32\filepicker\*.xml %_DEST%\xml\*.xml
+..\source\win32\folderpicker\*.xml %_DEST%\xml\*.xml
+..\%__SRC%\misc\*.component %_DEST%\xml\*.component

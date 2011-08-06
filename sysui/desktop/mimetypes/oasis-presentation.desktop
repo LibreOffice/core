@@ -1,0 +1,9 @@
+[Desktop Entry]
+Version=1.0
+Encoding=UTF-8
+Hidden=false
+Icon=oasis-presentation
+Type=MimeType
+Patterns=*.odp
+MimeType=application/vnd.oasis.opendocument.presentation
+Comment=OpenDocument Presentation

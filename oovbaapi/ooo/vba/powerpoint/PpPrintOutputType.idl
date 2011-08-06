@@ -1,0 +1,14 @@
+module ooo { module vba { module powerpoint {
+    constants PpPrintOutputType {
+        const long ppPrintOutputBuildSlides = 7;
+        const long ppPrintOutputFourSlideHandouts = 8;
+        const long ppPrintOutputNineSlideHandouts = 9;
+        const long ppPrintOutputNotesPages = 5;
+        const long ppPrintOutputOneSlideHandouts = 10;
+        const long ppPrintOutputOutline = 6;
+        const long ppPrintOutputSixSlideHandouts = 4;
+        const long ppPrintOutputSlides = 1;
+        const long ppPrintOutputThreeSlideHandouts = 3;
+        const long ppPrintOutputTwoSlideHandouts = 2;
+    };
+}; }; };

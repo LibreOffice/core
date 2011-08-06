@@ -1,0 +1,108 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#include "../source/inc/helpid.hrc"         // HID_XXX
+
+hidspecial HID_APP_WIN                          { HelpID = HID_APP_WIN; };
+hidspecial HID_DESKTOP                          { HelpID = HID_DESKTOP; };
+hidspecial HID_DOCINFO_FRAME                    { HelpID = HID_DOCINFO_FRAME; };
+hidspecial HID_EXPLORER_FRAME                   { HelpID = HID_EXPLORER_FRAME; };
+hidspecial HID_PREVIEW_FRAME                    { HelpID = HID_PREVIEW_FRAME; };
+hidspecial HID_PRINT_OPTIONS                    { HelpID = HID_PRINT_OPTIONS; };
+hidspecial HID_TEMPLATE_FILTER                  { HelpID = HID_TEMPLATE_FILTER; };
+hidspecial HID_TEMPLATE_FMT                     { HelpID = HID_TEMPLATE_FMT; };
+hidspecial HID_SEARCH_DLG_TABLB                 { HelpID = HID_SEARCH_DLG_TABLB; };
+hidspecial HID_NAVIGATOR_WINDOW                 { HelpID = HID_NAVIGATOR_WINDOW; };
+hidspecial HID_HELPAGENT_TIP_BOX                { HelpId = HID_HELPAGENT_TIP_BOX; };
+hidspecial HID_TEMPLDLG_TOOLBOX_LEFT            { HelpId = HID_TEMPLDLG_TOOLBOX_LEFT;};
+hidspecial HID_EXPLORER_SRCH_COUNT              { HelpId = HID_EXPLORER_SRCH_COUNT;};
+hidspecial HID_TABDLG_RESET_BTN                 { HelpID = HID_TABDLG_RESET_BTN; };
+hidspecial HID_TABDLG_STANDARD_BTN              { HelpID = HID_TABDLG_STANDARD_BTN; };
+hidspecial HID_CONFIG_EVENT_OFFICE_BASED        { HelpID = HID_CONFIG_EVENT_OFFICE_BASED; };
+hidspecial HID_CONFIG_EVENT_DOCUMENT_BASED      { HelpID = HID_CONFIG_EVENT_DOCUMENT_BASED; };
+hidspecial HID_EXPLORER_SRCH_LATEST_COUNT       { HelpID = HID_EXPLORER_SRCH_LATEST_COUNT; };
+hidspecial HID_EXPLORERMENU_ARRANGEICONS        { HelpID = HID_EXPLORERMENU_ARRANGEICONS; };
+hidspecial HID_EXPLORERMENU_STDTEMPLATE         { HelpID = HID_EXPLORERMENU_STDTEMPLATE; };
+hidspecial HID_EXPLORER_DOCVIEW_ICON            { HelpID = HID_EXPLORER_DOCVIEW_ICON; };
+hidspecial HID_EXPLORER_DOCVIEW_DETAILS         { HelpID = HID_EXPLORER_DOCVIEW_DETAILS; };
+hidspecial HID_BRWBOX_HEADERBAR                 { HelpID = HID_BRWBOX_HEADERBAR; };
+hidspecial HID_TASKBAR                          { HelpID = HID_TASKBAR; };
+hidspecial HID_TASKBUTTONBAR                    { HelpID = HID_TASKBUTTONBAR; };
+hidspecial HID_TASKTOOLBAR                      { HelpID = HID_TASKTOOLBAR; };
+hidspecial HID_CNT_DLG_SEARCH_BT_SHOW           { HelpID = HID_CNT_DLG_SEARCH_BT_SHOW; };
+hidspecial HID_CNT_DLG_SEARCH_BT_UPDATE         { HelpID = HID_CNT_DLG_SEARCH_BT_UPDATE; };
+hidspecial HID_CNT_DLG_SEARCH_BT_SYNCHRONIZE    { HelpID = HID_CNT_DLG_SEARCH_BT_SYNCHRONIZE; };
+hidspecial HID_CNT_DLG_SEARCH_BT_STOP           { HelpID = HID_CNT_DLG_SEARCH_BT_STOP; };
+hidspecial HID_CNT_PAGE_HEADER                  { HelpID = HID_CNT_PAGE_HEADER; };
+hidspecial HID_CNT_PAGE_DESCRIPTION             { HelpID = HID_CNT_PAGE_DESCRIPTION; };
+hidspecial HID_CNT_LB_HEADER                    { HelpID = HID_CNT_LB_HEADER; };
+hidspecial HID_CNT_LB_DESCRIPTION               { HelpID = HID_CNT_LB_DESCRIPTION; };
+hidspecial HID_GROUPVIEW_CONTENT_BIG            { HelpID = HID_GROUPVIEW_CONTENT_BIG; };
+hidspecial HID_GROUPVIEW_CONTENT_SMALL          { HelpID = HID_GROUPVIEW_CONTENT_SMALL; };
+hidspecial HID_GROUPVIEW_CONTENT_TREE           { HelpID = HID_GROUPVIEW_CONTENT_TREE; };
+hidspecial HID_BROWSERCONTROL                   { HelpID = HID_BROWSERCONTROL; };
+hidspecial HID_TASKSTATUSBAR                    { HelpID = HID_TASKSTATUSBAR; };
+hidspecial HID_CNT_PAGE_HEADER_TABBAR           { HelpID = HID_CNT_PAGE_HEADER_TABBAR; };
+hidspecial HID_CNT_PAGE_SUBSCR_TABBAR           { HelpID = HID_CNT_PAGE_SUBSCR_TABBAR; };
+hidspecial HID_STATUSINDICATOR_TEXT             { HelpID = HID_STATUSINDICATOR_TEXT; };
+hidspecial HID_STATUSINDICATOR_PROGRESS         { HelpID = HID_STATUSINDICATOR_PROGRESS; };
+hidspecial HID_CNT_VALUE_ADDED_NONE             { HelpID = HID_CNT_VALUE_ADDED_NONE; };
+hidspecial HID_CNT_VALUE_ADDED_DOCINFO          { HelpID = HID_CNT_VALUE_ADDED_DOCINFO; };
+hidspecial HID_CNT_VALUE_ADDED_FULL             { HelpID = HID_CNT_VALUE_ADDED_FULL; };
+hidspecial HID_CNT_MESSAGE_STOREMODE_REMOTE     { HelpID = HID_CNT_MESSAGE_STOREMODE_REMOTE; };
+hidspecial HID_CNT_MESSAGE_STOREMODE_LOCAL      { HelpID = HID_CNT_MESSAGE_STOREMODE_LOCAL; };
+hidspecial HID_CNT_VIEW_ALL_ARTICLES            { HelpID = HID_CNT_VIEW_ALL_ARTICLES; };
+hidspecial HID_CNT_VIEW_UNREAD_ARTICLES         { HelpID = HID_CNT_VIEW_UNREAD_ARTICLES; };
+hidspecial HID_CNT_VIEW_READ_ARTICLES           { HelpID = HID_CNT_VIEW_READ_ARTICLES; };
+hidspecial HID_CNT_VIEW_MARKED_ARTICLES         { HelpID = HID_CNT_VIEW_MARKED_ARTICLES; };
+hidspecial HID_CNT_VIEW_MARKED_AND_UNREAD_ARTICLES  { HelpID = HID_CNT_VIEW_MARKED_AND_UNREAD_ARTICLES; };
+hidspecial HID_CNT_VIEW_ALL_FOLDERS             { HelpID = HID_CNT_VIEW_ALL_FOLDERS; };
+hidspecial HID_CNT_VIEW_SUBSCRIBED_FOLDERS      { HelpID = HID_CNT_VIEW_SUBSCRIBED_FOLDERS; };
+hidspecial HID_CNT_VIEW_ACTIVE_FOLDERS          { HelpID = HID_CNT_VIEW_ACTIVE_FOLDERS; };
+hidspecial HID_CNT_SENT_VIEW_ALL_ARTICLES       { HelpID = HID_CNT_SENT_VIEW_ALL_ARTICLES; };
+hidspecial HID_CNT_SENT_VIEW_SENT_ARTICLES      { HelpID = HID_CNT_SENT_VIEW_SENT_ARTICLES; };
+hidspecial HID_CNT_SENT_VIEW_UNSENT_ARTICLES    { HelpID = HID_CNT_SENT_VIEW_UNSENT_ARTICLES; };
+hidspecial HID_CNT_SENT_VIEW_MARKED_ARTICLES    { HelpID = HID_CNT_SENT_VIEW_MARKED_ARTICLES; };
+hidspecial HID_TABDLG_APPLY_BTN                 { HelpID = HID_TABDLG_APPLY_BTN; };
+hidspecial HID_HELP_WINDOW                      { HelpID = HID_HELP_WINDOW; };
+hidspecial HID_HELP_TOOLBOX                     { HelpID = HID_HELP_TOOLBOX; };
+hidspecial HID_HELP_TOOLBOXITEM_INDEX           { HelpID = HID_HELP_TOOLBOXITEM_INDEX; };
+hidspecial HID_HELP_TOOLBOXITEM_BACKWARD        { HelpID = HID_HELP_TOOLBOXITEM_BACKWARD; };
+hidspecial HID_HELP_TOOLBOXITEM_FORWARD         { HelpID = HID_HELP_TOOLBOXITEM_FORWARD; };
+hidspecial HID_HELP_TOOLBOXITEM_START           { HelpID = HID_HELP_TOOLBOXITEM_START; };
+hidspecial HID_HELP_TOOLBOXITEM_PRINT           { HelpID = HID_HELP_TOOLBOXITEM_PRINT; };
+hidspecial HID_HELP_TOOLBOXITEM_BOOKMARKS       { HelpID = HID_HELP_TOOLBOXITEM_BOOKMARKS; };
+hidspecial HID_HELP_TOOLBOXITEM_SEARCHDIALOG    { HelpID = HID_HELP_TOOLBOXITEM_SEARCHDIALOG; };
+hidspecial HID_TBXCONTROL_FILENEW               { HelpID = HID_TBXCONTROL_FILENEW; };
+hidspecial HID_CLOSE_WARNING                    { HelpID = HID_CLOSE_WARNING; };
+hidspecial HID_DID_SAVE_PACKED_XML              { HelpID = HID_DID_SAVE_PACKED_XML; };
+hidspecial HID_HELP_ONHELP                      { HelpID = HID_HELP_ONHELP; };
+hidspecial HID_HELP_TEXT_SELECTION_MODE         { HelpID = HID_HELP_TEXT_SELECTION_MODE; };
+hidspecial HID_DLG_CHECKFORONLINEUPDATE         { HelpID = HID_DLG_CHECKFORONLINEUPDATE; };
+hidspecial HID_DOCINFOSECURITY                  { HelpID = HID_DOCINFOSECURITY; };
+hidspecial HID_TASKPANE_VIEW_MENU               { HelpID = HID_TASKPANE_VIEW_MENU; };
+

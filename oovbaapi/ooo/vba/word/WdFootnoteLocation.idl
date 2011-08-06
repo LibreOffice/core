@@ -1,0 +1,6 @@
+module ooo { module vba { module word {
+    constants WdFootnoteLocation {
+        const long wdBeneathText = 1;
+        const long wdBottomOfPage = 0;
+    };
+}; }; };

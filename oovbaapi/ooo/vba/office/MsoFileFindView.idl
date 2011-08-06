@@ -1,0 +1,7 @@
+module ooo { module vba { module office {
+    constants MsoFileFindView {
+        const long msoViewFileInfo = 1;
+        const long msoViewPreview = 2;
+        const long msoViewSummaryInfo = 3;
+    };
+}; }; };

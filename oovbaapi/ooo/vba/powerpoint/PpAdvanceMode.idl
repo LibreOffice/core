@@ -1,0 +1,7 @@
+module ooo { module vba { module powerpoint {
+    constants PpAdvanceMode {
+        const long ppAdvanceModeMixed = -2;
+        const long ppAdvanceOnClick = 1;
+        const long ppAdvanceOnTime = 2;
+    };
+}; }; };

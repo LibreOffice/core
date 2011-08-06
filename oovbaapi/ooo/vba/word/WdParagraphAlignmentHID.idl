@@ -1,0 +1,5 @@
+module ooo { module vba { module word {
+    constants WdParagraphAlignmentHID {
+        const long emptyenum = 0;
+    };
+}; }; };

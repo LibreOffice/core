@@ -1,0 +1,7 @@
+module ooo { module vba { module office {
+    constants MsoHorizontalAnchor {
+        const long msoAnchorCenter = 2;
+        const long msoAnchorNone = 1;
+        const long msoHorizontalAnchorMixed = -2;
+    };
+}; }; };

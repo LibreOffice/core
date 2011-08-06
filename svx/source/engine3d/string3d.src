@@ -1,0 +1,110 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+ // include ------------------------------------------------------------------
+#include <svx/dialogs.hrc>
+ // pragma -------------------------------------------------------------------
+
+ // Strings for the Draw Dialog --------------------------------------------
+String RID_SVX_3D_CREATE_LATHE
+{
+    Text [ en-US ] = "Create 3D rotation object" ;
+};
+String RID_SVX_3D_UNDO_EXCHANGE_PASTE
+{
+    Text [ en-US ] = "Insert object(s)" ;
+};
+String RID_SVX_3D_UNDO_SEGMENTS
+{
+    Text [ en-US ] = "Number of segments" ;
+};
+String RID_SVX_3D_UNDO_DEEPTH
+{
+    Text [ en-US ] = "Object depth" ;
+};
+String RID_SVX_3D_UNDO_FOCAL
+{
+    Text [ en-US ] = "Focal length" ;
+};
+String RID_SVX_3D_UNDO_CAMPOS
+{
+    Text [ en-US ] = "Camera position" ;
+};
+String RID_SVX_3D_UNDO_ROTATE
+{
+    Text [ en-US ] = "Rotate 3D object" ;
+};
+String RID_SVX_3D_UNDO_EXTRUDE
+{
+    Text [ en-US ] = "Create extrusion object" ;
+};
+String RID_SVX_3D_UNDO_LATHE
+{
+    Text [ en-US ] = "Create rotation object" ;
+};
+String RID_SVX_3D_UNDO_BREAK_LATHE
+{
+    Text [ en-US ] = "Split 3D object" ;
+};
+String RID_SVX_3D_UNDO_ATTRIBUTES
+{
+    Text [ en-US ] = "3D Attributes" ;
+};
+ // ********************************************************************** EOF
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,7 @@
+module ooo { module vba { module word {
+    constants WdFrameSizeRule {
+        const long wdFrameAtLeast = 1;
+        const long wdFrameAuto = 0;
+        const long wdFrameExact = 2;
+    };
+}; }; };

@@ -1,0 +1,12 @@
+module ooo { module vba { module word {
+    constants WdEditionOption {
+        const long wdAutomaticUpdate = 3;
+        const long wdCancelPublisher = 0;
+        const long wdChangeAttributes = 5;
+        const long wdManualUpdate = 4;
+        const long wdOpenSource = 7;
+        const long wdSelectPublisher = 2;
+        const long wdSendPublisher = 1;
+        const long wdUpdateSubscriber = 6;
+    };
+}; }; };

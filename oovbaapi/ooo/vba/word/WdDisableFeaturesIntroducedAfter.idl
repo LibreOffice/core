@@ -1,0 +1,7 @@
+module ooo { module vba { module word {
+    constants WdDisableFeaturesIntroducedAfter {
+        const long wd70 = 0;
+        const long wd70FE = 1;
+        const long wd80 = 2;
+    };
+}; }; };

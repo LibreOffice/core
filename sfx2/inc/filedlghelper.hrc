@@ -1,0 +1,51 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef _SFX_FILEDLGHELPER_HRC
+#define _SFX_FILEDLGHELPER_HRC
+
+#include <sfx2/sfx.hrc>
+
+//#define STR_SFX_IMPORT_ALL          (RID_SFX_EXPLORER_START + 50)
+#define STR_CB_AUTO_EXTENSION       (RID_SFX_EXPLORER_START + 51)
+#define STR_CB_SELECTION            (RID_SFX_EXPLORER_START + 52)
+#define STR_CB_INSERT_AS_LINK       (RID_SFX_EXPLORER_START + 53)
+#define STR_CB_SHOW_PREVIEW         (RID_SFX_EXPLORER_START + 54)
+#define STR_CB_READONLY             (RID_SFX_EXPLORER_START + 55)
+#define STR_CB_PASSWORD             (RID_SFX_EXPLORER_START + 56)
+#define STR_CB_FILTER_OPTIONS       (RID_SFX_EXPLORER_START + 57)
+#define STR_PB_PLAY                 (RID_SFX_EXPLORER_START + 58)
+#define STR_PB_STOP                 (RID_SFX_EXPLORER_START + 59)
+#define STR_PB_OPEN                 (RID_SFX_EXPLORER_START + 60)
+#define STR_PB_SAVE                 (RID_SFX_EXPLORER_START + 61)
+#define STR_LB_IMAGE_TEMPLATE       (RID_SFX_EXPLORER_START + 62)
+#define STR_LB_TEMPLATES            (RID_SFX_EXPLORER_START + 63)
+#define STR_LB_VERSION              (RID_SFX_EXPLORER_START + 64)
+
+#endif
+
+

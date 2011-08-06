@@ -1,0 +1,7 @@
+module ooo { module vba { module excel {
+    constants XlListObjectSourceType {
+        const long xlSrcExternal = 0;
+        const long xlSrcRange = 1;
+        const long xlSrcXml = 2;
+    };
+}; }; };

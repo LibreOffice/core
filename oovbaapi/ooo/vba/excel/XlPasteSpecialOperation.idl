@@ -1,0 +1,9 @@
+module ooo { module vba { module excel {
+    constants XlPasteSpecialOperation {
+        const long xlPasteSpecialOperationAdd = 2;
+        const long xlPasteSpecialOperationDivide = 5;
+        const long xlPasteSpecialOperationMultiply = 4;
+        const long xlPasteSpecialOperationNone = -4142;
+        const long xlPasteSpecialOperationSubtract = 3;
+    };
+}; }; };

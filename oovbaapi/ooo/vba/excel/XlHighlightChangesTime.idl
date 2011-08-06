@@ -1,0 +1,7 @@
+module ooo { module vba { module excel {
+    constants XlHighlightChangesTime {
+        const long xlAllChanges = 2;
+        const long xlNotYetReviewed = 3;
+        const long xlSinceMyLastSave = 1;
+    };
+}; }; };

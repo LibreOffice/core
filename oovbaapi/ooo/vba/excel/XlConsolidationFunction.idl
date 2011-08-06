@@ -1,0 +1,16 @@
+module ooo { module vba { module excel {
+    constants XlConsolidationFunction {
+        const long xlAverage = -4106;
+        const long xlCount = -4112;
+        const long xlCountNums = -4113;
+        const long xlMax = -4136;
+        const long xlMin = -4139;
+        const long xlProduct = -4149;
+        const long xlStDev = -4155;
+        const long xlStDevP = -4156;
+        const long xlSum = -4157;
+        const long xlUnknown = 1000;
+        const long xlVar = -4164;
+        const long xlVarP = -4165;
+    };
+}; }; };

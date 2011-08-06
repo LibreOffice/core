@@ -1,0 +1,6 @@
+module ooo { module vba { module word {
+    constants WdEndnoteLocation {
+        const long wdEndOfDocument = 1;
+        const long wdEndOfSection = 0;
+    };
+}; }; };

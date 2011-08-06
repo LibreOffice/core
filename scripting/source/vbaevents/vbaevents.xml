@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE module-description PUBLIC "-//StarOffice//DTD ComponentDescription 1.0//EN" "module-description.dtd">
+<module-description xmlns:xlink="http://www.w3.org/1999/xlink">
+
+    <module-name>vbaevents</module-name>
+
+    <component-description>
+        <author>Noel Power </author>
+        <name>ooo.vba.EventListener</name>
+        <description>Event listener to handle ooo events and to translate them to calls to basic macros ala Button_Click etc.</description>
+        <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
+        <language>c++</language>
+        <status value="drafts"/>
+        <supported-service>ooo.vba.EventListener</supported-service>
+        <type>com.sun.star.uno.XComponentContext</type>
+    </component-description>
+
+    <project-build-dependency>cppuhelper</project-build-dependency>
+    <project-build-dependency>cppu</project-build-dependency>
+    <project-build-dependency>sal</project-build-dependency>
+
+    <runtime-module-dependency>cppuhelper3$(COM)</runtime-module-dependency>
+    <runtime-module-dependency>cppu3</runtime-module-dependency>
+    <runtime-module-dependency>sal3</runtime-module-dependency>
+
+</module-description>

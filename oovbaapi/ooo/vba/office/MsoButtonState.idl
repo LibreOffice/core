@@ -1,0 +1,7 @@
+module ooo { module vba { module office {
+    constants MsoButtonState {
+        const long msoButtonDown = -1;
+        const long msoButtonMixed = 2;
+        const long msoButtonUp = 0;
+    };
+}; }; };

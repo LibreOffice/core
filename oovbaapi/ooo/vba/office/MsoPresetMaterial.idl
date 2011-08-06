@@ -1,0 +1,9 @@
+module ooo { module vba { module office {
+    constants MsoPresetMaterial {
+        const long msoMaterialMatte = 1;
+        const long msoMaterialMetal = 3;
+        const long msoMaterialPlastic = 2;
+        const long msoMaterialWireFrame = 4;
+        const long msoPresetMaterialMixed = -2;
+    };
+}; }; };

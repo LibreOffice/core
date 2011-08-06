@@ -1,0 +1,9 @@
+module ooo { module vba { module office {
+    constants MsoOrgChartLayoutType {
+        const long msoOrgChartLayoutBothHanging = 2;
+        const long msoOrgChartLayoutLeftHanging = 3;
+        const long msoOrgChartLayoutMixed = -2;
+        const long msoOrgChartLayoutRightHanging = 4;
+        const long msoOrgChartLayoutStandard = 1;
+    };
+}; }; };

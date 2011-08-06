@@ -1,0 +1,9 @@
+module ooo { module vba { module access {
+    constants AcDefView {
+        const long acDefViewContinuous = 1;
+        const long acDefViewDatasheet = 2;
+        const long acDefViewPivotChart = 4;
+        const long acDefViewPivotTable = 3;
+        const long acDefViewSingle = 0;
+    };
+}; }; };

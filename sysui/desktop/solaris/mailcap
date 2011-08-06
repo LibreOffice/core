@@ -1,0 +1,84 @@
+if [ "$1" = install ]
+then
+# backing out existing entries to avoid duplicates
+sed '
+/^# OpenOffice.org/d
+/^application\/vnd\.oasis\.opendocument/d
+/^application\/vnd\.openofficeorg/d
+/^application\/vnd\.sun/d
+/^application\/vnd\.stardivision/d
+/^application\/vnd\.ms-word/d
+/^application\/vnd\.ms-excel/d
+/^application\/vnd\.ms-powerpoint/d
+/^application\/x-star/d
+/excel/d
+/ms[-]*word/d
+/powerpoint/d
+' ${PKG_INSTALL_ROOT}/etc/mailcap 2>/dev/null
+
+# now append our stuff to the temporary file
+cat << END
+# OpenOffice.org
+application/vnd.oasis.opendocument.text; %PREFIX -view %s
+application/vnd.oasis.opendocument.text-flat-xml; %PREFIX -view %s
+application/vnd.oasis.opendocument.text-template; %PREFIX -view %s
+application/vnd.oasis.opendocument.text-web; %PREFIX -view %s
+application/vnd.oasis.opendocument.text-master; %PREFIX -view %s
+application/vnd.sun.xml.writer; %PREFIX -view %s
+application/vnd.sun.xml.writer.template; %PREFIX -view %s
+application/vnd.sun.xml.writer.global; %PREFIX -view %s
+application/vnd.stardivision.writer; %PREFIX -view %s
+application/vnd.stardivision.writer-global; %PREFIX -view %s
+application/x-starwriter; %PREFIX -view %s
+application/vnd.oasis.opendocument.formula; %PREFIX -view %s
+application/vnd.sun.xml.math; %PREFIX -view %s
+application/vnd.stardivision.math; %PREFIX -view %s
+application/x-starmath; %PREFIX -view %s
+application/msword; %PREFIX -view %s
+application/vnd.oasis.opendocument.spreadsheet; %PREFIX -view %s
+application/vnd.oasis.opendocument.spreadsheet-flat-xml; %PREFIX -view %s
+application/vnd.oasis.opendocument.spreadsheet-template; %PREFIX -view %s
+application/vnd.sun.xml.calc; %PREFIX -view %s
+application/vnd.sun.xml.calc.template; %PREFIX -view %s
+application/vnd.stardivision.calc; %PREFIX -view %s
+application/x-starcalc; %PREFIX -view %s
+application/vnd.stardivision.chart; %PREFIX -view %s
+application/x-starchart; %PREFIX -view %s
+application/excel; %PREFIX -view %s
+application/msexcel; %PREFIX -view %s
+application/vnd.ms-excel; %PREFIX -view %s
+application/x-msexcel; %PREFIX -view %s
+application/vnd.oasis.opendocument.presentation; %PREFIX -view %s
+application/vnd.oasis.opendocument.presentation-flat-xml; %PREFIX -view %s
+application/vnd.oasis.opendocument.presentation-template; %PREFIX -view %s
+application/vnd.sun.xml.impress; %PREFIX -view %s
+application/vnd.sun.xml.impress.template; %PREFIX -view %s
+application/vnd.stardivision.impress; %PREFIX -view %s
+application/x-starimpress; %PREFIX -view %s
+application/powerpoint; %PREFIX -view %s
+application/mspowerpoint; %PREFIX -view %s
+application/vnd.ms-powerpoint; %PREFIX -view %s
+application/x-mspowerpoint; %PREFIX -view %s
+application/vnd.oasis.opendocument.graphics; %PREFIX -view %s
+application/vnd.oasis.opendocument.graphics-flat-xml; %PREFIX -view %s
+application/vnd.oasis.opendocument.graphics-template; %PREFIX -view %s
+application/vnd.sun.xml.draw; %PREFIX -view %s
+application/vnd.sun.xml.draw.template; %PREFIX -view %s
+application/vnd.stardivision.draw; %PREFIX -view %s
+application/x-stardraw; %PREFIX -view %s
+application/vnd.sun.xml.base; %PREFIX -view %s
+application/vnd.oasis.opendocument.database; %PREFIX -view %s
+application/vnd.writerperfect; %PREFIX -view %s
+application/wordperfect5.1; %PREFIX -view %s
+application/x-wordperfect; %PREFIX -view %s
+application/wordperfect; %PREFIX -view %s
+application/vnd.lotus-wordpro; %PREFIX -view %s
+application/wpwin; %PREFIX -view %s
+application/vnd.openofficeorg.extension; %PREFIX %s
+application/x-hwp; %PREFIX -view %s
+END
+else
+# backing all entries pointing to our binary
+sed '/%PREFIX/d' ${PKG_INSTALL_ROOT}/etc/mailcap 2>/dev/null
+fi
+

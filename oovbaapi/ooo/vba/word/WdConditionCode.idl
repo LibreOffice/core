@@ -1,0 +1,16 @@
+module ooo { module vba { module word {
+    constants WdConditionCode {
+        const long wdEvenColumnBanding = 7;
+        const long wdEvenRowBanding = 3;
+        const long wdFirstColumn = 4;
+        const long wdFirstRow = 0;
+        const long wdLastColumn = 5;
+        const long wdLastRow = 1;
+        const long wdNECell = 8;
+        const long wdNWCell = 9;
+        const long wdOddColumnBanding = 6;
+        const long wdOddRowBanding = 2;
+        const long wdSECell = 10;
+        const long wdSWCell = 11;
+    };
+}; }; };

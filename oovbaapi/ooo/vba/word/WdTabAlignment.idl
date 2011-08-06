@@ -1,0 +1,10 @@
+module ooo { module vba { module word {
+    constants WdTabAlignment {
+        const long wdAlignTabBar = 4;
+        const long wdAlignTabCenter = 1;
+        const long wdAlignTabDecimal = 3;
+        const long wdAlignTabLeft = 0;
+        const long wdAlignTabList = 6;
+        const long wdAlignTabRight = 2;
+    };
+}; }; };

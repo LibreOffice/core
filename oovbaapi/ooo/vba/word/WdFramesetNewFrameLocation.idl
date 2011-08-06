@@ -1,0 +1,8 @@
+module ooo { module vba { module word {
+    constants WdFramesetNewFrameLocation {
+        const long wdFramesetNewFrameAbove = 0;
+        const long wdFramesetNewFrameBelow = 1;
+        const long wdFramesetNewFrameLeft = 3;
+        const long wdFramesetNewFrameRight = 2;
+    };
+}; }; };

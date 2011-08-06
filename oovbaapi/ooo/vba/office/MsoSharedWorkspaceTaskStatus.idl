@@ -1,0 +1,9 @@
+module ooo { module vba { module office {
+    constants MsoSharedWorkspaceTaskStatus {
+        const long msoSharedWorkspaceTaskStatusCompleted = 3;
+        const long msoSharedWorkspaceTaskStatusDeferred = 4;
+        const long msoSharedWorkspaceTaskStatusInProgress = 2;
+        const long msoSharedWorkspaceTaskStatusNotStarted = 1;
+        const long msoSharedWorkspaceTaskStatusWaiting = 5;
+    };
+}; }; };

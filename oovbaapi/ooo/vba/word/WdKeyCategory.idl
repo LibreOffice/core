@@ -1,0 +1,13 @@
+module ooo { module vba { module word {
+    constants WdKeyCategory {
+        const long wdKeyCategoryAutoText = 4;
+        const long wdKeyCategoryCommand = 1;
+        const long wdKeyCategoryDisable = 0;
+        const long wdKeyCategoryFont = 3;
+        const long wdKeyCategoryMacro = 2;
+        const long wdKeyCategoryNil = -1;
+        const long wdKeyCategoryPrefix = 7;
+        const long wdKeyCategoryStyle = 5;
+        const long wdKeyCategorySymbol = 6;
+    };
+}; }; };

@@ -1,0 +1,1327 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef _SVX_SVXIDS_HRC
+#define _SVX_SVXIDS_HRC
+// include ------------------------------------------------------------------
+
+#include <svl/memberid.hrc>
+#include <svl/solar.hrc>
+#include <sfx2/sfx.hrc>
+#include <sfx2/sfxsids.hrc>
+#include <editeng/editids.hrc>
+#include <svx/unomid.hxx>
+
+// solange noch im sfxids.hrc definiert -------------------------------------
+
+#ifdef SID_INSERT_FRAME
+#undef SID_INSERT_FRAME
+#endif
+
+// --------------------------------------------------------------------------
+// Member-Id's
+// --------------------------------------------------------------------------
+
+#define MID_APPFLAG             0x20
+#define MID_AUTOBREAK           0x21
+#define MID_BREAKxxx            0x22
+#define MID_BRUSHSTYLE          0x23
+#define MID_CELLTYPE            0x24
+#define MID_CHARSET             0x25
+#define MID_COMMAND             0x26
+#define MID_CONTENT             0x27
+#define MID_DESCNAMExxx         0x28
+
+#define MID_ESCAPEMENT          0x2a
+#define MID_FAMILY              0x2b
+#define MID_FIRSTLINE_OFFSET    0x2d
+#define MID_FONTFAMILY          0x2f
+#define MID_FONTFAMILYNAME      0x30
+#define MID_FONTPITCH           0x31
+#define MID_FONTSTYLE           0x32
+#define MID_PERCENT             0x33
+#define MID_HYPHEN              0x34
+#define MID_INTER_LINESPACE     0x36
+#define MID_INTER_SPACE         0x37
+#define MID_LANDSCAPE           0x38
+
+#define MID_LEFT_MARGIN         0x3a
+#define MID_LOWER               0x3d
+#define MID_MAXHYPHENS          0x3e
+#define MID_MINLEAD             0x3f
+#define MID_MINTRAIL            0x40
+#define MID_NUMTYPExxx          0x41
+#define MID_PAGEEND             0x42
+#define MID_POS                 0x43
+#define MID_PROPORTIONAL        0x44
+#define MID_REPLACE_STRING      0x45
+#define MID_RIGHT               0x46
+#define MID_RIGHT_MARGIN        0x47
+#define MID_ROW_DIRECTION       0x48
+#define MID_SIZE                0x4a
+#define MID_TYPE                0x4c
+#define MID_UPPER               0x4d
+#define MID_USExxx              0x4e
+#define MID_VALUESET            0x4f
+
+#define MID_ADR_CITY            0x50
+#define MID_ADR_COMPANY         0x51
+#define MID_ADR_COUNTRY         0x52
+#define MID_ADR_EMAIL           0x53
+#define MID_ADR_FAX             0x54
+#define MID_ADR_FIRSTNAME       0x55
+#define MID_ADR_ID              0x56
+#define MID_ADR_LASTNAME        0x57
+#define MID_ADR_PHONE           0x58
+#define MID_ADR_PHONEPRIVATE    0x59
+#define MID_ADR_POSITION        0x5a
+#define MID_ADR_STREET          0x5b
+#define MID_ADR_TITLE           0x5c
+#define MID_ADR_ZIPCODE         0x5d
+#define MID_ADR_STATE           0x5e
+
+#define MID_FILENAME            0x6c
+#define MID_FILTERNAME          0x6d
+#define MID_POSITION            0x6e
+
+#define MID_HLINK_NAME          0x6f
+#define MID_HLINK_URL           0x70
+#define MID_HLINK_TARGET        0x71
+#define MID_HLINK_TYPE          0x72
+#define MID_HLINK_TEXT          0x73
+
+#define MID_COUNT               0x74
+#define MID_READONLY            0x76
+
+#define MID_VIEWLAYOUT_COLUMNS  0x77
+#define MID_VIEWLAYOUT_BOOKMODE 0x78
+
+#define MID_ZOOMSLIDER_CURRENTZOOM      0x79
+#define MID_ZOOMSLIDER_SNAPPINGPOINTS   0x7a
+#define MID_ZOOMSLIDER_MINZOOM          0x7b
+#define MID_ZOOMSLIDER_MAXZOOM          0x7c
+
+#define MID_ADR_FATHERSNAME     0x80
+#define MID_ADR_APARTMENT       0x81
+
+
+// --------------------------------------------------------------------------
+// Resource-Id's ? (obsolete??? at least the one beginning with SID???)
+// --------------------------------------------------------------------------
+/*
+#define RID_SW_TP_OPTCOMPATIBILITY_PAGE (RID_OFA_START + 255)
+#define RID_SW_TP_CONTENT_OPT           (RID_OFA_START + 206)
+#define RID_SW_TP_LAYOUT_OPT            (RID_OFA_START + 207)
+#define RID_SW_TP_STD_FONT              (RID_OFA_START + 208)
+#define RID_SW_TP_OPTPRINT_PAGE         (RID_OFA_START + 209)
+#define RID_SW_TP_OPTTABLE_PAGE         (RID_OFA_START + 210)
+#define RID_SW_TP_OPTSHDWCRSR           (RID_OFA_START + 211)
+#define RID_SW_TP_REDLINE_OPT           (RID_OFA_START + 212)
+#define RID_SW_TP_OPTINSERT_PAGE        (RID_OFA_START + 213)
+#define RID_SW_TP_OPTLOAD_PAGE          (RID_OFA_START + 214)
+#define RID_SW_TP_OPTTEST_PAGE          (RID_OFA_START + 215)
+#define RID_SW_TP_OPTSRCVIEW            (RID_OFA_START + 216)
+#define RID_SW_TP_BACKGROUND            (RID_OFA_START + 217)
+#define SID_SC_TP_LAYOUT                (RID_OFA_START + 218)
+#define SID_SC_TP_CONTENT               (RID_OFA_START + 219)
+#define SID_SC_TP_INPUT                 (RID_OFA_START + 220)
+#define SID_SC_TP_GRID                  (RID_OFA_START + 221)
+#define SID_SC_TP_USERLISTS             (RID_OFA_START + 222)
+#define SID_SC_TP_CALC                  (RID_OFA_START + 223)
+#define SID_SC_TP_CHANGES               (RID_OFA_START + 224)
+#define SID_SC_TP_CHANGES               (RID_OFA_START + 224)
+#define SID_SD_TP_CONTENTS              (RID_OFA_START + 225)
+#define SID_SD_TP_LAYOUT                (RID_OFA_START + 226)
+#define SID_SD_TP_SNAP                  (RID_OFA_START + 227)
+#define SID_SD_TP_SCALE                 (RID_OFA_START + 228)
+#define SID_SD_TP_GRID                  (RID_OFA_START + 229)
+#define SID_SD_TP_PRINT                 (RID_OFA_START + 220)
+#define SID_SD_TP_MISC                  (RID_OFA_START + 231)
+#define SID_SI_TP_CONTENTS              (RID_OFA_START + 232)
+#define SID_SI_TP_LAYOUT                (RID_OFA_START + 233)
+#define SID_SI_TP_SNAP                  (RID_OFA_START + 234)
+#define SID_SI_TP_GRID                  (RID_OFA_START + 235)
+#define SID_SI_TP_PRINT                 (RID_OFA_START + 236)
+#define SID_SI_TP_MISC                  (RID_OFA_START + 237)
+#define RID_SW_TP_OPTINSERT_HTML_PAGE   (RID_OFA_START + 238)
+#define SID_SC_TP_MISC                  (RID_OFA_START + 239)
+#define RID_SW_TP_HTML_CONTENT_OPT      (RID_OFA_START + 240)
+#define RID_SW_TP_HTML_LAYOUT_OPT       (RID_OFA_START + 241)
+#define RID_SW_TP_HTML_OPTPRINT_PAGE    (RID_OFA_START + 242)
+#define RID_SW_TP_HTML_OPTTABLE_PAGE    (RID_OFA_START + 243)
+#define RID_SW_TP_HTML_OPTGRID_PAGE     (RID_OFA_START + 244)
+#define RID_SW_TP_HTML_OPTSHDWCRSR      (RID_OFA_START + 246)
+#define RID_SW_TP_STD_FONT_CJK          (RID_OFA_START + 247)
+#define RID_SC_TP_PRINT                 (RID_OFA_START + 248)
+#define RID_SW_TP_STD_FONT_CTL          (RID_OFA_START + 251)
+#define RID_OFA_TP_INTERNATIONAL        (RID_OFA_START + 252)       // 4 SC & ID 4 resource
+#define RID_OFA_TP_INTERNATIONAL_SD     (RID_OFA_START + 253)       // 4 SD
+#define RID_OFA_TP_INTERNATIONAL_IMPR   (RID_OFA_START + 254)       // 4 impress
+*/
+
+#define SID_ATTR_PARENTWINDOW           (RID_OFA_START + 255)
+
+// --------------------------------------------------------------------------
+// Event-Id's Block 1
+// --------------------------------------------------------------------------
+
+#define SVX_EVENT_COLUM_WINDOW_EXECUTE      (EVENT_SVX_START)
+
+// --------------------------------------------------------------------------
+// Event-Id's Block 2
+// --------------------------------------------------------------------------
+
+#define SVX_EVENT_IMAGE_LOAD                (SID_LIB_START)
+#define SVX_EVENT_IMAGE_ABORT               (SID_LIB_START + 1)
+#define SVX_EVENT_IMAGE_ERROR               (SID_LIB_START + 2)
+
+// --------------------------------------------------------------------------
+// Function-Id's
+// --------------------------------------------------------------------------
+
+// Function-Id's
+#define FID_SVX_START                       (SID_LIB_START + 500)
+#define FID_SVX_END                         (SID_LIB_START + 509)
+
+#define FID_SEARCH_ON                       (FID_SVX_START + 0)
+#define FID_SEARCH_OFF                      (FID_SVX_START + 1)
+#define FID_SEARCH_NOW                      (FID_SVX_START + 2)
+
+#define SID_CHARMAP                         (FID_SVX_START + 3)
+
+#define FID_SEARCH_SEARCHSET                (FID_SVX_START + 4)
+#define FID_SEARCH_REPLACESET               (FID_SVX_START + 5)
+
+// --------------------------------------------------------------------------
+// SFX-Id's
+// --------------------------------------------------------------------------
+
+#define SID_POLY_MERGE                      (SID_SFX_START + 679)
+#define SID_POLY_SUBSTRACT                  (SID_SFX_START + 680)
+#define SID_POLY_INTERSECT                  (SID_SFX_START + 681)
+#define SID_POLY_FORMEN                     (SID_SFX_START + 682)
+#define SID_DISTRIBUTE_DLG                  (SID_SFX_START + 683)
+
+// --------------------------------------------------------------------------
+// Basic IDE-Id's
+// --------------------------------------------------------------------------
+
+#define SID_BASICIDE_TOGGLEBRKPNT           ( SID_BASICIDE_START +  0 )
+#define SID_BASICIDE_ADDWATCH               ( SID_BASICIDE_START +  1 )
+#define SID_BASICIDE_CHOOSEMACRO            ( SID_BASICIDE_START +  2 )
+#define SID_BASICIDE_EDITMACRO              ( SID_BASICIDE_START +  3 )
+#define SID_BASICIDE_CREATEMACRO            ( SID_BASICIDE_START +  4 )
+#define SID_BASICIDE_MODULEDLG              ( SID_BASICIDE_START +  5 )
+#define SID_BASICIDE_OBJCAT                 ( SID_BASICIDE_START +  6 )
+#define SID_BASICIDE_REMOVEWATCH            ( SID_BASICIDE_START +  7 )
+#define SID_BASICIDE_SHOWSBX                ( SID_BASICIDE_START +  9 )
+#define SID_BASICIDE_HIDECURPAGE            ( SID_BASICIDE_START + 10 )
+#define SID_BASICIDE_NAMECHANGEDONTAB       ( SID_BASICIDE_START + 11 )
+#define SID_BASICIDE_UPDATEMODULESOURCE     ( SID_BASICIDE_START + 12 )
+#define SID_BASICIDE_STOREMODULESOURCE      ( SID_BASICIDE_START + 13 )
+#define SID_BASICIDE_MATCHGROUP             ( SID_BASICIDE_START + 14 )
+#define SID_BASICIDE_APPEAR                 ( SID_BASICIDE_START + 15 )
+#define SID_BASICIDE_STOREALLMODULESOURCES  ( SID_BASICIDE_START + 16 )
+#define SID_BASICIDE_UPDATEALLMODULESOURCES ( SID_BASICIDE_START + 17 )
+#define SID_BASICIDE_LIBSELECTED            ( SID_BASICIDE_START + 18 )
+#define SID_BASICIDE_LIBSELECTOR            ( SID_BASICIDE_START + 19 )
+#define SID_BASICIDE_NEWDIALOG              ( SID_BASICIDE_START + 20 )
+#define SID_BASICIDE_NEWMODULE              ( SID_BASICIDE_START + 21 )
+#define SID_BASICIDE_DELETECURRENT          ( SID_BASICIDE_START + 22 )
+#define SID_BASICIDE_RENAMECURRENT          ( SID_BASICIDE_START + 23 )
+#define SID_BASICIDE_SBXDELETED             ( SID_BASICIDE_START + 24 )
+#define SID_BASICIDE_SBXINSERTED            ( SID_BASICIDE_START + 25 )
+#define SID_BASICIDE_SBXRENAMED             ( SID_BASICIDE_START + 26 )
+#define SID_BASICIDE_LIBLOADED              ( SID_BASICIDE_START + 27 )
+#define SID_BASICIDE_LIBREMOVED             ( SID_BASICIDE_START + 28 )
+#define SID_BASICIDE_ARG_TABID              ( SID_BASICIDE_START + 30 )
+#define SID_BASICIDE_ARG_SBX                ( SID_BASICIDE_START + 31 )
+#define SID_BASICIDE_ARG_MACROINFO          ( SID_BASICIDE_START + 32 )
+#define SID_BASICIDE_ARG_SEARCHOPTIONS      ( SID_BASICIDE_START + 33 )
+#define SID_BASICIDE_ARG_LIBNAME            ( SID_BASICIDE_START + 34 )
+#define SID_BASICIDE_ARG_MODULENAME         ( SID_BASICIDE_START + 35 )
+#define SID_BASICIDE_BRKPNTSCHANGED         ( SID_BASICIDE_START + 36 )
+#define SID_BASICIDE_STATUSBAR              ( SID_BASICIDE_START + 37 )
+#define SID_BASICIDE_STAT_POS               ( SID_BASICIDE_START + 38 )
+#define SID_BASICIDE_STAT_DATE              ( SID_BASICIDE_START + 39 )
+#define SID_BASICIDE_STAT_TITLE             ( SID_BASICIDE_START + 40 )
+#define SID_BASICIDE_NEWJAVAMODULE          ( SID_BASICIDE_START + 41 )
+#define SID_BASICIDE_IMAGESTART             ( SID_BASICIDE_START + 50 )
+#define SID_OPTIONS_TREEDIALOG              ( SID_BASICIDE_START + 862)
+
+// --------------------------------------------------------------------------
+// StarBase-Id's
+// --------------------------------------------------------------------------
+
+#define SID_SBA_BRW_UPDATE                  (SID_SBA_START+100) // Daten in Felder
+#define SID_SBA_BRW_INSERT                  (SID_SBA_START+101) // Daten in Text
+#define SID_SBA_BRW_MERGE                   (SID_SBA_START+102) // Serienbrief
+#define SID_SBA_CLEAR_QUERY                 (SID_SBA_START+130)
+#define SID_SBA_ADD_RELATION                (SID_SBA_START+131) // im Relationenentwurf neue Relation
+#define SID_SBA_QUERY_VIEW_FUNCTIONS        (SID_SBA_START+134)
+#define SID_SBA_QUERY_VIEW_TABLES           (SID_SBA_START+135)
+#define SID_SBA_QUERY_VIEW_ALIASES          (SID_SBA_START+136)
+#define SID_SBA_QUERY_DISTINCT_VALUES       (SID_SBA_START+137)
+#define SID_SBA_QRY_DESIGN                  (SID_SBA_START+120)
+
+// --------------------------------------------------------------------------
+// SD-Id's
+// --------------------------------------------------------------------------
+
+#define SID_RULER                           (SID_SD_START+40)
+#define SID_BEZIER_CONVERT                  (SID_SD_START+65)
+#define SID_BEZIER_ELIMINATE_POINTS         (SID_SD_START+30)
+#define SID_BEZIER_EDGE                     (SID_SD_START+66)
+#define SID_BEZIER_SYMMTR                   (SID_SD_START+67)
+#define SID_TEXTEDIT                        (SID_SD_START+76)
+#define SID_ENTER_GROUP                     (SID_SD_START+96)
+#define SID_LEAVE_GROUP                     (SID_SD_START+97)
+#define SID_SIZE_PAGE_WIDTH                 (SID_SD_START+98)
+#define SID_INSERT_IMAGE                    (SID_SD_START+105)
+#define SID_INSERT_MATH                     (SID_SD_START+106)
+#define SID_SIZE_VISAREA                    (SID_SD_START+114)
+#define SID_ATTR_SYMBOLTYPE                 (SID_SD_START+115)  //wird vom Chart und von SvxLineTabPage genutzt
+#define SID_ATTR_SYMBOLSIZE                 (SID_SD_START+116)
+#define SID_HELPLINES_MOVE                  (SID_SD_START+153)
+#define SID_GRID_USE                        (SID_SD_START+154)
+#define ID_VAL_MOUSESTART_X                 (SID_SD_START+200)
+#define ID_VAL_MOUSESTART_Y                 (SID_SD_START+201)
+#define ID_VAL_LENGTH_X                     (SID_SD_START+202)
+#define ID_VAL_LENGTH_Y                     (SID_SD_START+203)
+#define ID_VAL_MOUSEEND_X                   (SID_SD_START+204)
+#define ID_VAL_MOUSEEND_Y                   (SID_SD_START+205)
+#define ID_VAL_AXIS_X                       (SID_SD_START+206)
+#define ID_VAL_AXIS_Y                       (SID_SD_START+207)
+#define ID_VAL_ANGLESTART                   (SID_SD_START+208)
+#define ID_VAL_ANGLEEND                     (SID_SD_START+209)
+#define ID_VAL_CENTER_X                     (SID_SD_START+210)
+#define ID_VAL_CENTER_Y                     (SID_SD_START+211)
+#define ID_VAL_STYLE                        (SID_SD_START+240)
+#define ID_VAL_DOTS                         (SID_SD_START+241)
+#define ID_VAL_DOTLEN                       (SID_SD_START+242)
+#define ID_VAL_DASHES                       (SID_SD_START+243)
+#define ID_VAL_DASHLEN                      (SID_SD_START+244)
+#define ID_VAL_DISTANCE                     (SID_SD_START+245)
+#define ID_VAL_INDEX                        (SID_SD_START+246)
+#define SID_BEZIERTO                        (SID_SD_START+252)
+#define SID_DASH                            (SID_SD_START+267)
+#define SID_TEXT_FITTOSIZE_VERTICAL         (SID_SD_START+286)
+#define SID_GRID_VISIBLE                    (SID_SD_START+322)
+#define ID_VAL_USEFIRSTROWSTYLE             (SID_SD_START+323)
+#define ID_VAL_USELASTROWSTYLE              (SID_SD_START+324)
+#define ID_VAL_USEBANDINGROWSTYLE           (SID_SD_START+325)
+#define ID_VAL_USEFIRSTCOLUMNSTYLE          (SID_SD_START+326)
+#define ID_VAL_USELASTCOLUMNSTYLE           (SID_SD_START+327)
+#define ID_VAL_USEBANDINGCOLUMNSTYLE        (SID_SD_START+328)
+
+// --------------------------------------------------------------------------
+// Calc-Id's
+// --------------------------------------------------------------------------
+
+//! moved to sfx2, still in use:
+//#ifndef SC_FUNCTION_START
+//#define SC_FUNCTION_START       (SID_SC_START + 200)
+//#endif
+//#ifndef FILE_MENU_END
+//#define FILE_MENU_END           (SC_FUNCTION_START + 20)
+//#endif
+//#ifndef EDIT_MENU_START
+//#define EDIT_MENU_START         (FILE_MENU_END)
+//#endif
+//#ifndef SC_VIEW_START
+//#define SC_VIEW_START           (SID_SC_START)
+//#endif
+
+#define SID_OUTLINE_HIDE        (SID_SC_START + 329)
+#define SID_OUTLINE_SHOW        (SID_SC_START + 330)
+#define SID_OUTLINE_MAKE        (SID_SC_START + 331)
+#define SID_OUTLINE_REMOVE      (SID_SC_START + 332)
+#define SID_FRAME_UP            (SID_SC_START + 407)
+#define SID_FRAME_DOWN          (SID_SC_START + 408)
+#define SID_ENTER_STRING        (SID_SC_START + 476)
+#define SID_ATTR_SECIALCHAR     (SID_SC_START + 581)
+#define SID_ATTR_SPECIALCHAR    (SID_SC_START + 581)
+
+//! moved to sfx2, still in use:
+//#define FID_CHG_RECORD          (EDIT_MENU_START + 18)
+//#define SID_CHG_PROTECT         (SC_VIEW_START + 84)
+
+// --------------------------------------------------------------------------
+// Writer-Id's
+// --------------------------------------------------------------------------
+#define FN_EDIT                 (SID_SW_START +  100)
+#define FN_NUM_BULLET_OFF       (FN_EDIT + 37)  /* Numerierung aus */
+#define FN_NUM_BULLET_ON        (FN_EDIT + 38)  /* Numerierung mit Bullets an */
+#define FN_NUM_NUMBERING_ON     (FN_EDIT + 44)  /* Numerierung an */
+
+#define FN_INSERT               (SID_SW_START +  300)
+#define FN_DELETE_BOOKMARK      (FN_INSERT + 1)
+#define FN_INSERT_BREAK         (FN_INSERT + 3)
+#define FN_INSERT_SOFT_HYPHEN   (FN_INSERT + 43)    /* optional hyphen */
+#define FN_INSERT_HARD_SPACE    (FN_INSERT + 44)    /* hard space */
+#define FN_INSERT_HARDHYPHEN    (FN_INSERT + 85)   /* hyphen withou break*/
+
+//!! be aware to not overwrite something that is used in sw/inc/cmdid.h already !!
+#define FN_FORMAT               (SID_SW_START +  400)
+#define FN_SET_JUSTIFY_PARA     (FN_FORMAT + 21)
+#define FN_FORMAT_RESET         (FN_FORMAT + 69)
+
+#define FN_EXTRA                (SID_SW_START +  600)
+
+#define FN_SELECTION            (SID_SW_START +  900)
+#define FN_END_OF_DOCUMENT      (FN_SELECTION +  8)
+#define FN_START_DOC_DIRECT     (FN_SELECTION + 78)
+#define FN_END_DOC_DIRECT       (FN_SELECTION + 79)
+
+#define FN_PARAM                (SID_SW_START + 1100)
+#define FN_PARAM_FILTER         (FN_PARAM + 30)
+#define FN_PARAM_FIELD_CONTENT  (FN_PARAM + 55)
+
+#define FN_PGPREVIEW            (SID_SW_START + 1250)
+#define FN_SHOW_MULTIPLE_PAGES  (FN_PGPREVIEW + 2)
+
+//! moved to sfx2, still in use:
+//#define FN_EDIT2                (SID_SW_START + 1800)
+//#define FN_REDLINE_PROTECT      (FN_EDIT2 + 23)
+//#define FN_REDLINE_ON           (FN_EDIT2 + 25)
+
+// --------------------------------------------------------------------------
+// Svx-Id's
+// --------------------------------------------------------------------------
+
+#define SID_ATTR_ZOOM                                   ( SID_SVX_START + 0 )
+
+#define SID_ATTR_BORDER_INNER                           ( SID_SVX_START + 23 )
+
+
+#define SID_ATTR_POSTIT_AUTHOR                          ( SID_SVX_START + 44 )
+#define SID_ATTR_POSTIT_DATE                            ( SID_SVX_START + 45 )
+#define SID_ATTR_POSTIT_TEXT                            ( SID_SVX_START + 46 )
+#define SID_ATTR_SEARCH                                 ( SID_SVX_START + 47 )
+#define SID_ATTR_PAGE                                   ( SID_SVX_START + 50 )
+#define SID_ATTR_PAGE_SIZE                              ( SID_SVX_START + 51 )
+#define SID_ATTR_PAGE_MAXSIZE                           ( SID_SVX_START + 52 )
+#define SID_ATTR_PAGE_PAPERBIN                          ( SID_SVX_START + 54 )
+#define SID_ATTR_PAGE_APP                               ( SID_SVX_START + 55 )
+#define SID_ATTR_PAGE_EXT1                              ( SID_SVX_START + 56 )
+#define SID_ATTR_PAGE_EXT2                              ( SID_SVX_START + 57 )
+#define SID_ATTR_PAGE_HEADERSET                         ( SID_SVX_START + 58 )
+#define SID_ATTR_PAGE_FOOTERSET                         ( SID_SVX_START + 59 )
+#define SID_ATTR_PAGE_ON                                ( SID_SVX_START + 60 )
+#define SID_ATTR_PAGE_DYNAMIC                           ( SID_SVX_START + 61 )
+#define SID_ATTR_PAGE_SHARED                            ( SID_SVX_START + 62 )
+#define SID_ATTR_PAGE_BSP                               ( SID_SVX_START + 63 )
+#define SID_ATTR_DBSESS_SERVERTYPE                      ( SID_SVX_START + 70 )
+#define SID_ATTR_DBSESS_SERVEROPTS                      ( SID_SVX_START + 71 )
+#define SID_ATTR_DBSESS_USERNAME                        ( SID_SVX_START + 72 )
+#define SID_ATTR_DBSESS_PASSWORD                        ( SID_SVX_START + 73 )
+#define SID_ATTR_DBSESS_SAVESESS                        ( SID_SVX_START + 74 )
+#define SID_ATTR_DBSESS_SAVEUSER                        ( SID_SVX_START + 75 )
+#define SID_ATTR_DBSESS_SERVERNAME                      ( SID_SVX_START + 76 )
+#define SID_ATTR_DBSESS_ENABLETYPE                      ( SID_SVX_START + 77 )
+#define SID_ATTR_NUMBERFORMAT_VALUE                     ( SID_SVX_START + 85 )
+#define SID_ATTR_NUMBERFORMAT_INFO                      ( SID_SVX_START + 86 )
+#define SID_ATTR_TRANSFORM                              ( SID_SVX_START + 87 )
+#define SID_ATTR_TRANSFORM_POS_X                        ( SID_SVX_START + 88 )
+#define SID_ATTR_TRANSFORM_POS_Y                        ( SID_SVX_START + 89 )
+#define SID_ATTR_TRANSFORM_WIDTH                        ( SID_SVX_START + 90 )
+#define SID_ATTR_TRANSFORM_HEIGHT                       ( SID_SVX_START + 91 )
+#define SID_ATTR_TRANSFORM_SIZE_POINT                   ( SID_SVX_START + 92 )
+#define SID_ATTR_TRANSFORM_ROT_X                        ( SID_SVX_START + 93 )
+#define SID_ATTR_TRANSFORM_ROT_Y                        ( SID_SVX_START + 94 )
+#define SID_ATTR_TRANSFORM_ANGLE                        ( SID_SVX_START + 95 )
+#define SID_RULER_NULL_OFFSET                           ( SID_SVX_START + 79 )
+#define SID_RULER_BORDERS                               ( SID_SVX_START + 80 )
+#define SID_RULER_OBJECT                                ( SID_SVX_START + 81 )
+#define SID_RULER_PAGE_POS                              ( SID_SVX_START + 82 )
+#define SID_RULER_ACT_LINE_ONLY                         ( SID_SVX_START + 83 )
+#define SID_RULER_LR_MIN_MAX                            ( SID_SVX_START + 84 )
+//#define SID_ZOOM_TOOLBOX                                ( SID_SVX_START + 96 )    -> sfxsids.hrc
+//#define SID_ZOOM_OUT                                    ( SID_SVX_START + 97 )    -> sfxsids.hrc
+//#define SID_ZOOM_IN                                     ( SID_SVX_START + 98 )    -> sfxsids.hrc
+//#define SID_SIZE_REAL                                   ( SID_SVX_START + 99 )    -> sfxsids.hrc
+//#define SID_SIZE_PAGE                                   ( SID_SVX_START + 100 )   -> sfxsids.hrc
+#define SID_SIZE_ALL                                    ( SID_SVX_START + 101 )
+#define SID_DRAW_LINE                                   ( SID_SVX_START + 102 )
+#define SID_DRAW_XLINE                                  ( SID_SVX_START + 103 )
+#define SID_DRAW_RECT                                   ( SID_SVX_START + 104 )
+#define SID_DRAW_RECT_ROUND                             ( SID_SVX_START + 105 )
+#define SID_DRAW_RECT_MOREROUND                         ( SID_SVX_START + 106 )
+#define SID_DRAW_FULLRECT                               ( SID_SVX_START + 107 )
+#define SID_DRAW_FULLRECT_ROUND                         ( SID_SVX_START + 108 )
+#define SID_DRAW_FULLRECT_MOREROUND                     ( SID_SVX_START + 109 )
+#define SID_DRAW_ELLIPSE                                ( SID_SVX_START + 110 )
+#define SID_DRAW_FULLELLIPSE                            ( SID_SVX_START + 111 )
+#define SID_DRAW_PIE                                    ( SID_SVX_START + 112 )
+#define SID_DRAW_FULLPIE                                ( SID_SVX_START + 113 )
+#define SID_DRAW_ARC                                    ( SID_SVX_START + 114 )
+#define SID_DRAW_CIRCLECUT                              ( SID_SVX_START + 115 )
+#define SID_DRAW_FULLCIRCLECUT                          ( SID_SVX_START + 116 )
+#define SID_DRAW_POLYGON                                ( SID_SVX_START + 117 )
+#define SID_DRAW_BEZIER_FILL                            ( SID_SVX_START + 118 )
+#define SID_BEZIER_INSERT                               ( SID_SVX_START + 119 )
+#define SID_BEZIER_DELETE                               ( SID_SVX_START + 120 )
+#define SID_BEZIER_MOVE                                 ( SID_SVX_START + 121 )
+#define SID_BEZIER_CLOSE                                ( SID_SVX_START + 122 )
+#define SID_BEZIER_SMOOTH                               ( SID_SVX_START + 123 )
+#define SID_BEZIER_APPEND                               ( SID_SVX_START + 124 )
+#define SID_BEZIER_OPEN                                 ( SID_SVX_START + 125 )
+#define SID_BEZIER_EDIT                                 ( SID_SVX_START + 126 )
+#define SID_BEZIER_CUTLINE                              ( SID_SVX_START + 127 )
+#define SID_OBJECT_SELECT                               ( SID_SVX_START + 128 )
+#define SID_OBJECT_ROTATE                               ( SID_SVX_START + 129 )
+#define SID_OBJECT_ALIGN                                ( SID_SVX_START + 130 )
+#define SID_OBJECT_ALIGN_LEFT                           ( SID_SVX_START + 131 )
+#define SID_OBJECT_ALIGN_CENTER                         ( SID_SVX_START + 132 )
+#define SID_OBJECT_ALIGN_RIGHT                          ( SID_SVX_START + 133 )
+#define SID_OBJECT_ALIGN_UP                             ( SID_SVX_START + 134 )
+#define SID_OBJECT_ALIGN_MIDDLE                         ( SID_SVX_START + 135 )
+#define SID_OBJECT_ALIGN_DOWN                           ( SID_SVX_START + 136 )
+#define SID_COPY_FORMAT                                 ( SID_SVX_START + 137 )
+#define SID_PASTE_FORMAT                                ( SID_SVX_START + 138 )
+#define SID_INSERT_ORGANIGRAM                           ( SID_SVX_START + 139 )
+#define SID_INSERT_DIAGRAM                              ( SID_SVX_START + 140 )
+#define SID_DRAW_CHART                                      SID_INSERT_DIAGRAM
+#define SID_INSERT_TABLE                                ( SID_SVX_START + 141 )
+#define SID_ATTRIBUTES_AREA                             ( SID_SVX_START + 142 )
+#define SID_ATTRIBUTES_LINE                             ( SID_SVX_START + 143 )
+#define SID_CHOOSE_CONTROLS                             ( SID_SVX_START + 144 )
+#define SID_ACTIVATE_CONTROLS                           ( SID_SVX_START + 145 )
+#define SID_INSERT_PUSHBUTTON                           ( SID_SVX_START + 146 )
+#define SID_INSERT_RADIOBUTTON                          ( SID_SVX_START + 147 )
+#define SID_INSERT_CHECKBOX                             ( SID_SVX_START + 148 )
+#define SID_OUTLINE                                     ( SID_SVX_START + 149 )
+#define SID_OUTLINE_UP                                  ( SID_SVX_START + 150 )
+#define SID_OUTLINE_DOWN                                ( SID_SVX_START + 151 )
+#define SID_OUTLINE_LEFT                                ( SID_SVX_START + 152 )
+#define SID_OUTLINE_RIGHT                               ( SID_SVX_START + 153 )
+#define SID_OUTLINE_FORMAT                              ( SID_SVX_START + 154 )
+#define SID_OUTLINE_COLLAPSE_ALL                        ( SID_SVX_START + 155 )
+#define SID_OUTLINE_BULLET                              ( SID_SVX_START + 156 )
+#define SID_PRESENTATION                                ( SID_SVX_START + 157 )
+#define SID_TIMER                                       ( SID_SVX_START + 158 )
+#define SID_REHEARSE_TIMINGS                            ( SID_SVX_START + 159 )
+#define SID_DIA                                         ( SID_SVX_START + 160 )
+#define SID_HIDE_SLIDE                                  ( SID_SVX_START + 161 )
+#define SID_CHOOSE_POLYGON                              ( SID_SVX_START + 162 )
+//#define SID_SHOW_BROWSER                                ( SID_SVX_START + 163 )   -> sfxsids.hrc
+#define SID_ATTR_FILL_STYLE                             ( SID_SVX_START + 164 )
+#define SID_ATTR_FILL_COLOR                             ( SID_SVX_START + 165 )
+#define SID_ATTR_FILL_GRADIENT                          ( SID_SVX_START + 166 )
+#define SID_ATTR_FILL_HATCH                             ( SID_SVX_START + 167 )
+#define SID_ATTR_FILL_BITMAP                            ( SID_SVX_START + 168 )
+#define SID_ATTR_LINE_STYLE                             ( SID_SVX_START + 169 )
+#define SID_ATTR_LINE_DASH                              ( SID_SVX_START + 170 )
+#define SID_ATTR_LINE_WIDTH                             ( SID_SVX_START + 171 )
+#define SID_ATTR_LINE_COLOR                             ( SID_SVX_START + 172 )
+#define SID_ATTR_LINE_START                             ( SID_SVX_START + 173 )
+#define SID_ATTR_LINE_END                               ( SID_SVX_START + 174 )
+#define SID_ATTR_LINE_STARTWIDTH                        ( SID_SVX_START + 175 )
+#define SID_ATTR_LINE_ENDWIDTH                          ( SID_SVX_START + 176 )
+#define SID_ATTR_LINE_STARTCENTER                       ( SID_SVX_START + 177 )
+#define SID_ATTR_LINE_ENDCENTER                         ( SID_SVX_START + 178 )
+#define SID_COLOR_TABLE                                 ( SID_SVX_START + 179 )
+#define SID_GRADIENT_LIST                               ( SID_SVX_START + 180 )
+#define SID_HATCH_LIST                                  ( SID_SVX_START + 181 )
+#define SID_BITMAP_LIST                                 ( SID_SVX_START + 182 )
+#define SID_DASH_LIST                                   ( SID_SVX_START + 183 )
+#define SID_LINEEND_LIST                                ( SID_SVX_START + 184 )
+#define SID_BACKGROUND_COLOR                            ( SID_SVX_START + 185 )
+#define SID_BACKGROUND_PATTERN                          ( SID_SVX_START + 186 )
+#define SID_ATTR_BORDER                                 ( SID_SVX_START + 187 )
+#define SID_INSERT_FIXEDTEXT                            ( SID_SVX_START + 188 )
+#define SID_INSERT_GROUPBOX                             ( SID_SVX_START + 189 )
+#define SID_INSERT_EDIT                                 ( SID_SVX_START + 190 )
+#define SID_INSERT_LISTBOX                              ( SID_SVX_START + 191 )
+#define SID_INSERT_COMBOBOX                             ( SID_SVX_START + 192 )
+#define SID_INSERT_SPINBUTTON                           ( SID_SVX_START + 193 )
+#define SID_INSERT_HSCROLLBAR                           ( SID_SVX_START + 194 )
+#define SID_INSERT_VSCROLLBAR                           ( SID_SVX_START + 195 )
+#define SID_INSERT_PREVIEW                              ( SID_SVX_START + 196 )
+#define SID_INSERT_URLBUTTON                            ( SID_SVX_START + 197 )
+#define SID_INSERT_SELECT                               ( SID_SVX_START + 198 )
+#define SID_DIALOG_TESTMODE                             ( SID_SVX_START + 199 )
+#define SID_FRAME_LINESTYLE                             ( SID_SVX_START + 200 )
+#define SID_FRAME_LINECOLOR                             ( SID_SVX_START + 201 )
+#define SID_ATTR_GRID_USE                               ( SID_SVX_START + 202 )
+#define SID_ATTR_GRID_VISIBLE                           ( SID_SVX_START + 203 )
+#define SID_ATTR_GRID_DRAW_X                            ( SID_SVX_START + 204 )
+#define SID_ATTR_GRID_DRAW_Y                            ( SID_SVX_START + 205 )
+#define SID_ATTR_GRID_DIVISION_X                        ( SID_SVX_START + 206 )
+#define SID_ATTR_GRID_DIVISION_Y                        ( SID_SVX_START + 207 )
+#define SID_ATTR_GRID_SNAP_X                            ( SID_SVX_START + 208 )
+#define SID_ATTR_GRID_SNAP_Y                            ( SID_SVX_START + 209 )
+#define SID_ATTR_GRID_ORIGIN_X                          ( SID_SVX_START + 210 )
+#define SID_ATTR_GRID_ORIGIN_Y                          ( SID_SVX_START + 211 )
+#define SID_IMPORT_GRAPH_PREVIEW                        ( SID_SVX_START + 212 )
+#define SID_IMPORT_GRAPH_LASTPATH                       ( SID_SVX_START + 213 )
+#define SID_IMPORT_GRAPH_LASTFILTER                     ( SID_SVX_START + 214 )
+#define SID_SEARCHDLG_SEARCHSTRINGS                     ( SID_SVX_START + 215 )
+#define SID_SEARCHDLG_REPLACESTRINGS                    ( SID_SVX_START + 216 )
+#define SID_ATTR_TABLE                                  ( SID_SVX_START + 217 )
+#define SID_ATTR_TABLE_COLUMN                           ( SID_SVX_START + 218 )
+#define SID_ATTR_TABLE_ROW                              ( SID_SVX_START + 219 )
+#define SID_ATTR_COLUMNS                                ( SID_SVX_START + 220 )
+#define SID_ATTR_INSERT                                 ( SID_SVX_START + 221 )
+#define SID_ATTR_ZOOM_USER                              ( SID_SVX_START + 222 )
+#define SID_ATTR_POSITION                               ( SID_SVX_START + 223 )
+#define SID_ATTR_SIZE                                   ( SID_SVX_START + 224 )
+#define SID_TABLE_CELL                                  ( SID_SVX_START + 225 )
+//#define SID_ATTR_ALIGN_HOR_JUSTIFY                      ( SID_SVX_START + 226 )
+//#define SID_ATTR_ALIGN_VER_JUSTIFY                      ( SID_SVX_START + 227 )
+#define SID_ATTR_ALIGN_MARGIN                           ( SID_SVX_START + 228 )
+#define SID_ATTR_ALIGN_STACKED                          ( SID_SVX_START + 229 )
+#define SID_ATTR_ALIGN_LINEBREAK                        ( SID_SVX_START + 230 )
+#define SID_OUTLINE_COLLAPSE                            ( SID_SVX_START + 231 )
+#define SID_OUTLINE_EXPAND_ALL                          ( SID_SVX_START + 232 )
+#define SID_OUTLINE_EXPAND                              ( SID_SVX_START + 233 )
+#define SID_OUTLINE_DELETEALL                           ( SID_SVX_START + 234 )
+#define SID_ATTR_TRANSFORM_PROTECT_POS                  ( SID_SVX_START + 236 )
+#define SID_ATTR_TRANSFORM_PROTECT_SIZE                 ( SID_SVX_START + 237 )
+#define SID_ATTR_TRANSFORM_AUTOSIZE                     ( SID_SVX_START + 238 ) // !!!
+#define SID_ATTR_TRANSFORM_INTERN                       ( SID_SVX_START + 239 )
+#define SID_INSERT_FRAME                                ( SID_SVX_START + 240 )
+#define SID_INSERT_GRAPHIC                              ( SID_SVX_START + 241 )
+#define SID_AUTOFORMAT                                  ( SID_SVX_START + 242 )
+#define SID_SPELL_DIALOG                                 ( SID_SVX_START + 243 )
+#define SID_INSERT_DRAW                                 ( SID_SVX_START + 244 )
+#define SID_THESAURUS                                   ( SID_SVX_START + 245 )
+#define SID_AUTOCOMPLETEWORD                            ( SID_SVX_START + 251 )
+#define SID_DRAW_TEXT                                   ( SID_SVX_START + 253 )
+#define SID_DRAW_CAPTION                                ( SID_SVX_START + 254 )
+#define SID_INSERT_LEGEND                                   SID_DRAW_CAPTION
+#define SID_DRAW_SELECT                                 ( SID_SVX_START + 255 )
+#define SID_FONTWORK                                    ( SID_SVX_START + 256 )
+#define SID_FORMTEXT_STYLE                              ( SID_SVX_START + 257 )
+#define SID_FORMTEXT_ADJUST                             ( SID_SVX_START + 258 )
+#define SID_FORMTEXT_DISTANCE                           ( SID_SVX_START + 259 )
+#define SID_FORMTEXT_START                              ( SID_SVX_START + 260 )
+#define SID_FORMTEXT_MIRROR                             ( SID_SVX_START + 261 )
+#define SID_FORMTEXT_OUTLINE                            ( SID_SVX_START + 262 )
+#define SID_FORMTEXT_SHADOW                             ( SID_SVX_START + 263 )
+#define SID_FORMTEXT_SHDWCOLOR                          ( SID_SVX_START + 264 )
+#define SID_FORMTEXT_SHDWXVAL                           ( SID_SVX_START + 265 )
+#define SID_FORMTEXT_SHDWYVAL                           ( SID_SVX_START + 266 )
+#define SID_FORMTEXT_STDFORM                            ( SID_SVX_START + 267 )
+#define SID_FORMTEXT_HIDEFORM                           ( SID_SVX_START + 268 )
+#define SID_FORMTEXT_RESERVED1                          ( SID_SVX_START + 269 )
+#define SID_FORMTEXT_RESERVED2                          ( SID_SVX_START + 270 )
+#define SID_FORMTEXT_RESERVED3                          ( SID_SVX_START + 271 )
+#define SID_FORMTEXT_RESERVED4                          ( SID_SVX_START + 272 )
+#define SID_FORMTEXT_RESERVED5                          ( SID_SVX_START + 273 )
+#define SID_FORMTEXT_RESERVED_LAST                      ( SID_SVX_START + 274 )
+#define SID_GALLERY_ENABLE_ADDCOPY                      ( SID_SVX_START + 276 )
+#define SID_GALLERY_IMPORTTHEME                         ( SID_SVX_START + 277 )
+#define SID_GALLERY_BG_POS                              ( SID_SVX_START + 278 )
+//#define SID_GALLERY_BG_BRUSH                            ( SID_SVX_START + 279 )   -> sfxsids.hrc
+#define SID_GALLERY_FORMATS                             ( SID_SVX_START + 280 )
+//#define SID_SEARCH_OPTIONS                              ( SID_SVX_START + 281 )   -> sfxsids.hrc
+#define SID_OBJECT_HELL                                 ( SID_SVX_START + 282 )
+#define SID_OBJECT_HEAVEN                               ( SID_SVX_START + 283 )
+#define SID_ATTR_LONG_ULSPACE                           ( SID_SVX_START + 284 )
+#define SID_ATTR_LONG_LRSPACE                           ( SID_SVX_START + 285 )
+#define SID_FRAME_TO_TOP                                ( SID_SVX_START + 286 )
+#define SID_FRAME_TO_BOTTOM                             ( SID_SVX_START + 287 )
+#define SID_POSTIT                                      ( SID_SVX_START + 288 )
+//#define SID_ZOOM                                        ( SID_SVX_START + 289 )   -> sfxsids.hrc
+#define SID_GRID                                        ( SID_SVX_START + 290 )
+//#define SID_SEARCH_ITEM                                 ( SID_SVX_START + 291 )   -> sfxsids.hrc
+#define SID_SEARCH_SEARCHSET                            ( SID_SVX_START + 292 )
+#define SID_SEARCH_REPLACESET                           ( SID_SVX_START + 293 )
+#define SID_SET_SUPER_SCRIPT                            ( SID_SVX_START + 294 )
+#define SID_SET_SUB_SCRIPT                              ( SID_SVX_START + 295 )
+#define SID_CHAR_DLG                                    ( SID_SVX_START + 296 )
+#define SID_PARA_DLG                                    ( SID_SVX_START + 297 )
+#define SID_ATTR_GRID_OPTIONS                           ( SID_SVX_START + 298 )
+#define SID_ATTR_FILL_SHADOW                            ( SID_SVX_START + 299 )
+#define SID_ATTR_LINEEND_STYLE                          ( SID_SVX_START + 301 )
+#define SID_ATTR_TRANSFORM_SLANT                        ( SID_SVX_START + 302 ) // !!!
+#define SID_ATTR_TRANSFORM_SHEAR                        ( SID_SVX_START + 304 )
+#define SID_ATTR_TRANSFORM_SHEAR_X                      ( SID_SVX_START + 305 )
+#define SID_ATTR_TRANSFORM_SHEAR_Y                      ( SID_SVX_START + 306 )
+#define SID_ATTR_TRANSFORM_SHEAR_VERTICAL               ( SID_SVX_START + 307 )
+#define SID_ATTR_TRANSFORM_RESIZE_REF_X                 ( SID_SVX_START + 308 )
+#define SID_ATTR_TRANSFORM_RESIZE_REF_Y                 ( SID_SVX_START + 309 )
+#define SID_ATTR_TRANSFORM_AUTOWIDTH                    ( SID_SVX_START + 310 )
+#define SID_ATTR_TRANSFORM_AUTOHEIGHT                   ( SID_SVX_START + 311 )
+#define SID_ATTR_TRANSFORM_HORI_RELATION                ( SID_SVX_START + 312 )
+#define SID_ATTR_TRANSFORM_VERT_RELATION                ( SID_SVX_START + 313 )
+#define SID_ATTR_TRANSFORM_HORI_ORIENT                  ( SID_SVX_START + 314 )
+#define SID_ATTR_TRANSFORM_IN_VERTICAL_TEXT             ( SID_SVX_START + 315 )
+#define SID_ATTR_TRANSFORM_IN_RTL_TEXT                  ( SID_SVX_START + 316 )
+#define SID_ATTR_TRANSFORM_HORI_MIRROR                  ( SID_SVX_START + 317 )
+#define SID_ATTR_TRANSFORM_ANCHOR                       ( SID_SVX_START + 318 )
+#define SID_ATTR_TRANSFORM_VERT_ORIENT                  ( SID_SVX_START + 319 )
+#define SID_TAB_INSERT                                  ( SID_SVX_START + 320 )
+#define SID_TAB_COUNT                                   ( SID_SVX_START + 321 )
+#define SID_TAB_POSITION                                ( SID_SVX_START + 322 )
+#define SID_TAB_ADJUST                                  ( SID_SVX_START + 323 )
+#define SID_TAB_DECIMAL                                 ( SID_SVX_START + 324 )
+#define SID_TAB_FILLCHAR                                ( SID_SVX_START + 325 )
+#define SID_SCAN                                        ( SID_SVX_START + 330 )
+#define SID_TWAIN_SELECT                                ( SID_SVX_START + 331 )
+#define SID_TWAIN_TRANSFER                              ( SID_SVX_START + 332 )
+#define SID_CONTOUR_DLG                                 ( SID_SVX_START + 334 )
+#define SID_CONTOUR_EXEC                                ( SID_SVX_START + 335 )
+#define SID_BORDER_OBJECT                               ( SID_SVX_START + 340 )
+#define SID_BORDER_LEFTLINE                             ( SID_SVX_START + 341 )
+#define SID_BORDER_RIGHTLINE                            ( SID_SVX_START + 342 )
+#define SID_BORDER_TOPLINE                              ( SID_SVX_START + 343 )
+#define SID_BORDER_BOTTOMLINE                           ( SID_SVX_START + 344 )
+#define SID_BORDER_HORIZONTALLINE                       ( SID_SVX_START + 345 )
+#define SID_BORDER_VERTICALLINE                         ( SID_SVX_START + 346 )
+#define SID_BORDER_DISTANCE                             ( SID_SVX_START + 347 )
+#define SID_SB_CONNECTIONPOOLING                        ( SID_SVX_START + 348 )
+#define SID_SB_DBREGISTEROPTIONS                        ( SID_SVX_START + 349 )
+#define SID_BMPMASK                                     ( SID_SVX_START + 350 )
+#define SID_BMPMASK_PIPETTE                             ( SID_SVX_START + 351 )
+#define SID_BMPMASK_BMPSELECT                           ( SID_SVX_START + 352 )
+#define SID_BMPMASK_EXEC                                ( SID_SVX_START + 353 )
+//#define SID_HYPERLINK_GETLINK                           ( SID_SVX_START + 361 )   -> sfxsids.hrc
+//#define SID_HYPERLINK_SETLINK                           ( SID_SVX_START + 362 )   -> sfxsids.hrc
+#define SID_NO_GRAPHICS                                 ( SID_SVX_START + 364 )
+#define SID_IMPORT_GRAPH_LASTURL                        ( SID_SVX_START + 365 )
+//#define SID_NAVIGATOR                                   ( SID_SVX_START + 366 )   -> sfxsids.hrc
+#define SID_ATTR_TEXT_FITTOSIZE                         ( SID_SVX_START + 367 )
+#define SID_ATTR_BRUSH_ROW                              ( SID_SVX_START + 368 )
+#define SID_OPTFILTER_MSOFFICE                          ( SID_SVX_START + 369 )
+//#define SID_TASKPANE                                    ( SID_SVX_START + 370 )   -> sfxsids.hrc
+#define SID_IMAP                                        ( SID_SVX_START + 371 )
+#define SID_IMAP_DLG                                    ( SID_SVX_START + 372 )
+#define SID_IMAP_SELECT                                 ( SID_SVX_START + 373 )
+#define SID_IMAP_EXEC                                   ( SID_SVX_START + 374 )
+#define SID_SHOW_HIDDEN                                 ( SID_SVX_START + 375 )
+#define SID_SHOW_FORMS                                  ( SID_SVX_START + 376 )
+#define SID_DRAW_RECT_NOFILL                            ( SID_SVX_START + 378 )
+#define SID_DRAW_RECT_ROUND_NOFILL                      ( SID_SVX_START + 379 )
+#define SID_DRAW_SQUARE                                 ( SID_SVX_START + 380 )
+#define SID_DRAW_SQUARE_ROUND                           ( SID_SVX_START + 381 )
+#define SID_DRAW_SQUARE_NOFILL                          ( SID_SVX_START + 382 )
+#define SID_DRAW_SQUARE_ROUND_NOFILL                    ( SID_SVX_START + 383 )
+#define SID_DRAW_ELLIPSE_NOFILL                         ( SID_SVX_START + 384 )
+#define SID_DRAW_CIRCLE                                 ( SID_SVX_START + 385 )
+#define SID_DRAW_CIRCLE_NOFILL                          ( SID_SVX_START + 386 )
+#define SID_DRAW_PIE_NOFILL                             ( SID_SVX_START + 387 )
+#define SID_DRAW_CIRCLEPIE                              ( SID_SVX_START + 388 )
+#define SID_DRAW_CIRCLEPIE_NOFILL                       ( SID_SVX_START + 389 )
+#define SID_DRAW_CIRCLEARC                              ( SID_SVX_START + 390 )
+#define SID_DRAW_CIRCLECUT_NOFILL                       ( SID_SVX_START + 391 )
+#define SID_DRAW_ELLIPSECUT                             ( SID_SVX_START + 392 )
+#define SID_DRAW_ELLIPSECUT_NOFILL                      ( SID_SVX_START + 393 )
+#define SID_DRAW_XPOLYGON                               ( SID_SVX_START + 394 )
+#define SID_DRAW_POLYGON_NOFILL                         ( SID_SVX_START + 395 )
+#define SID_DRAW_XPOLYGON_NOFILL                        ( SID_SVX_START + 396 )
+#define SID_DRAW_BEZIER_NOFILL                          ( SID_SVX_START + 397 )
+#define SID_DRAWTBX_TEXT                                ( SID_SVX_START + 398 )
+#define SID_DRAWTBX_RECTANGLES                          ( SID_SVX_START + 399 )
+#define SID_DRAWTBX_ELLIPSES                            ( SID_SVX_START + 400 )
+#define SID_DRAWTBX_LINES                               ( SID_SVX_START + 401 )
+//#define SID_ZOOM_NEXT                                   ( SID_SVX_START + 402 )   -> sfxsids.hrc
+//#define SID_ZOOM_PREV                                   ( SID_SVX_START + 403 )   -> sfxsids.hrc
+#define SID_BACKGRND_DESTINATION                        ( SID_SVX_START + 404 )
+#define SID_ATTR_FLASH                                  ( SID_SVX_START + 406 )
+#define SID_ATTR_3D_LIGHT                               ( SID_SVX_START + 407 ) /* Slots mit --> koennen demnaechst entfallen */
+#define SID_ATTR_3D_START                                   SID_ATTR_3D_LIGHT
+#define SID_ATTR_3D_LIGHTINTENSITY                      ( SID_SVX_START + 408 ) /* Slots mit --> koennen demnaechst entfallen */
+#define SID_ATTR_3D_LIGHTCOLOR                          ( SID_SVX_START + 409 ) /* Slots mit --> koennen demnaechst entfallen */
+#define SID_ATTR_3D_AMBIENTINTENSITY                    ( SID_SVX_START + 410 ) /* Slots mit --> koennen demnaechst entfallen */
+#define SID_ATTR_3D_AMBIENTCOLOR                        ( SID_SVX_START + 411 )
+#define SID_IMPORT_GRAPH_LINK                           ( SID_SVX_START + 412 )
+
+//! moved to sfx2, still in use:
+//#define SID_HTML_MODE                                   ( SID_SVX_START + 414 )
+
+#define SID_RULER_PROTECT                               ( SID_SVX_START + 415 )
+//#define SID_INET_DLG                                    ( SID_SVX_START + 416 )   -> sfxsids.hrc
+#define SID_COLOR_CONTROL                               ( SID_SVX_START + 417 )
+#define SID_ATTR_3D_PERSPECTIVE                         ( SID_SVX_START + 418 )
+#define SID_ATTR_3D_DEPTH                               ( SID_SVX_START + 419 )
+#define SID_ATTR_3D_DISTANCE                            ( SID_SVX_START + 420 )
+#define SID_ATTR_3D_FOCAL_LENGTH                        ( SID_SVX_START + 421 )
+#define SID_ATTR_3D_INTERN                              ( SID_SVX_START + 422 )
+#define SID_PSZ_FUNCTION                                ( SID_SVX_START + 423 )
+//#define SID_AUTO_CORRECT_DLG                            ( SID_SVX_START + 424 )   -> sfxsids.hrc
+#define SID_OFASLOTS_START                              ( SID_SVX_START + 425 )
+//#define SID_SD_AUTOPILOT                                ( SID_SVX_START + 425 )   -> sfxsids.hrc
+#define SID_AUTOPILOT                                       SID_SD_AUTOPILOT
+
+#define SID_TABLE_INSERT_COL_DLG                        ( SID_SVX_START + 426 )
+#define SID_TABLE_INSERT_ROW_DLG                        ( SID_SVX_START + 427 )
+#define SID_TABLE_PARAM_INSERT_AFTER                    ( SID_SVX_START + 428 )
+
+#define SID_TABLEDESIGN                                 ( SID_SVX_START + 429 )
+#define SID_MN_AUTOPILOT                                ( SID_SVX_START + 430 )
+#define SID_GENERAL_OPTIONS                             ( SID_SVX_START + 432 )
+#define SID_SW_EDITOPTIONS                              ( SID_SVX_START + 433 )
+#define SID_SD_EDITOPTIONS                              ( SID_SVX_START + 434 )
+#define SID_SC_EDITOPTIONS                              ( SID_SVX_START + 435 )
+#define SID_SM_EDITOPTIONS                              ( SID_SVX_START + 436 )
+#define SID_SCH_EDITOPTIONS                             ( SID_SVX_START + 437 )
+#define SID_SIM_EDITOPTIONS                             ( SID_SVX_START + 438 )
+#define SID_SW_ONLINEOPTIONS                            ( SID_SVX_START + 439 )
+#define SID_MN_OPTIONS                                  ( SID_SVX_START + 440 )
+#define SID_GET_COLORTABLE                              ( SID_SVX_START + 441 )
+#define SID_MN_INSERT_OBJECT_DLGS                       ( SID_SVX_START + 442 )
+#define SID_OUTLINE_TO_IMPRESS                          ( SID_SVX_START + 443 )
+#define SID_SIM_TP_COLOR                                ( SID_SVX_START + 444 )
+#define SID_SIM_TP_EFFECTS                              ( SID_SVX_START + 445 )
+#define SID_SPELLCHECKER_CHANGED                        ( SID_SVX_START + 446 )
+#define SID_SD_GRAPHIC_OPTIONS                          ( SID_SVX_START + 447 )
+#define SID_SM_TP_PRINTOPTIONS                          ( SID_SVX_START + 448 )
+#define SID_OFASLOTS_END                                ( SID_SVX_START + 449 )
+#define SID_SB_STARBASEOPTIONS                          ( SID_SVX_START + 450 )
+#define SID_SWREGISTER_COLLECTION                       ( SID_SVX_START + 451 )
+#define SID_FILTER_DLG                                  ( SID_SVX_START + 452 )
+#define SID_ATTR_BRUSH_TABLE                            ( SID_SVX_START + 453 )
+#define SID_GROUP                                       ( SID_SVX_START + 454 )
+#define SID_UNGROUP                                     ( SID_SVX_START + 455 )
+#define SID_SET_DEFAULT                                 ( SID_SVX_START + 456 )
+#define SID_BEZIER                                      ( SID_SVX_START + 458 )
+#define SID_ATTR_3D_DOUBLE_SIDED                        ( SID_SVX_START + 459 )
+#define SID_ATTR_ALIGN_INDENT                           ( SID_SVX_START + 460 )
+#define SID_DEC_INDENT                                  ( SID_SVX_START + 461 )
+#define SID_INC_INDENT                                  ( SID_SVX_START + 462 )
+#define SID_DRAW_FREELINE                               ( SID_SVX_START + 463 )
+#define SID_DRAW_FREELINE_NOFILL                        ( SID_SVX_START + 464 )
+#define SID_DRAW_TEXT_MARQUEE                           ( SID_SVX_START + 465 )
+#define SID_SCH_TP_DEFCOLORS                            ( SID_SVX_START + 466 )
+#define SID_SWREGISTER_MODE                             ( SID_SVX_START + 467 )
+#define SID_OPTBASE_DATABASENAMES                       ( SID_SVX_START + 468 )
+#define SID_GRFFILTER                                   ( SID_SVX_START + 469 )
+#define SID_GRFFILTER_INVERT                            ( SID_SVX_START + 470 )
+#define SID_GRFFILTER_SMOOTH                            ( SID_SVX_START + 471 )
+#define SID_GRFFILTER_SHARPEN                           ( SID_SVX_START + 472 )
+#define SID_GRFFILTER_REMOVENOISE                       ( SID_SVX_START + 473 )
+#define SID_GRFFILTER_SOBEL                             ( SID_SVX_START + 474 )
+#define SID_GRFFILTER_MOSAIC                            ( SID_SVX_START + 475 )
+#define SID_GRFFILTER_EMBOSS                            ( SID_SVX_START + 476 )
+#define SID_GRFFILTER_POSTER                            ( SID_SVX_START + 477 )
+#define SID_GRFFILTER_POPART                            ( SID_SVX_START + 478 )
+#define SID_GRFFILTER_SEPIA                             ( SID_SVX_START + 479 )
+#define SID_GRFFILTER_SOLARIZE                          ( SID_SVX_START + 480 )
+#define SID_COLL_CLEAR                                  ( SID_SVX_START + 536 )
+#define SID_SHOW_ADDRESS                                ( SID_SVX_START + 538 )
+#define SID_APP_ENTERWAIT                               ( SID_SVX_START + 550 )
+#define SID_APP_LEAVEWAIT                               ( SID_SVX_START + 551 )
+#define SID_APP_ISWAIT                                  ( SID_SVX_START + 552 )
+#define SID_OFA_TBL_DESIGNVIEW                          ( SID_SVX_START + 554 )
+#define SID_OFA_TBL_ADRESSBOOK                          ( SID_SVX_START + 555 )
+#define SID_OFA_QRY_DESIGNVIEW                          ( SID_SVX_START + 556 )
+#define SID_OFA_QRY_SQLVIEW                             ( SID_SVX_START + 557 )
+#define SID_OFA_FRM_DESIGNVIEW                          ( SID_SVX_START + 558 )
+#define SID_OFA_RPT_DESIGNVIEW                          ( SID_SVX_START + 559 )
+#define SID_OFA_TBL_CREATE                              ( SID_SVX_START + 560 )
+#define SID_OFA_QRY_CREATE                              ( SID_SVX_START + 561 )
+#define SID_OFA_FRM_CREATE                              ( SID_SVX_START + 562 )
+#define SID_OFA_RPT_CREATE                              ( SID_SVX_START + 563 )
+#define SID_FIELD_GRABFOCUS                             ( SID_SVX_START + 567 )
+#define SID_ATTR_3D_HORZ_SEGS                           ( SID_SVX_START + 568 )
+#define SID_ATTR_3D_VERT_SEGS                           ( SID_SVX_START + 569 )
+#define SID_ATTR_3D_DUMMY_1                             ( SID_SVX_START + 570 )
+#define SID_ATTR_3D_DUMMY_2                             ( SID_SVX_START + 571 )
+#define SID_BROWSER_DLG                                 ( SID_SVX_START + 572 )
+#define SID_OFA_TBL_COMPRESS                            ( SID_SVX_START + 576 )
+#define SID_ATTR_ALIGN_DEGREES                          ( SID_SVX_START + 577 )
+#define SID_ATTR_ALIGN_LOCKPOS                          ( SID_SVX_START + 578 )
+#define SID_ATTR_LINEEND_WIDTH_DEFAULT                  ( SID_SVX_START + 579 )
+#define SID_ATTR_NUMBERFORMAT_ONE_AREA                  ( SID_SVX_START + 580 )
+#define SID_FUNCTION_CONTROL                            ( SID_SVX_START + 581 )
+#define SID_TAB_REMOVE                                  ( SID_SVX_START + 582 )
+#define SID_TAB_REMOVE_ALL                              ( SID_SVX_START + 583 )
+#define SID_TAB_REMOVE_BY_INDEX                         ( SID_SVX_START + 584 )
+#define SID_OFA_VW_CREATE                               ( SID_SVX_START + 585 )
+#define SID_OFA_REL_DESIGNVIEW                          ( SID_SVX_START + 588 )
+#define SID_OFA_MANUAL_SQL                              ( SID_SVX_START + 589 )
+#define SID_PARA_BACKGRND_DESTINATION                   ( SID_SVX_START + 590 )
+
+#define SID_FMSLOTS_START                               ( SID_SVX_START + 592 )
+#define SID_FM_CONFIG                                   ( SID_SVX_START + 593 )
+#define SID_FM_PUSHBUTTON                               ( SID_SVX_START + 594 )
+#define SID_FM_RADIOBUTTON                              ( SID_SVX_START + 595 )
+#define SID_FM_CHECKBOX                                 ( SID_SVX_START + 596 )
+#define SID_FM_FIXEDTEXT                                ( SID_SVX_START + 597 )
+#define SID_FM_GROUPBOX                                 ( SID_SVX_START + 598 )
+#define SID_FM_EDIT                                     ( SID_SVX_START + 599 )
+#define SID_FM_LISTBOX                                  ( SID_SVX_START + 600 )
+#define SID_FM_COMBOBOX                                 ( SID_SVX_START + 601 )
+#define SID_FM_DBGRID                                   ( SID_SVX_START + 603 )
+#define SID_FM_IMAGEBUTTON                              ( SID_SVX_START + 604 )
+#define SID_FM_FILECONTROL                              ( SID_SVX_START + 605 )
+#define SID_FM_CHANGECOL                                ( SID_SVX_START + 606 )
+#define SID_FM_NAVIGATIONBAR                            ( SID_SVX_START + 607 )
+#define SID_FM_NEW_HIDDEN                               ( SID_SVX_START + 608 )
+#define SID_FM_RENAME_OBJECT                            ( SID_SVX_START + 609 )
+#define SID_FM_DELETEROWS                               ( SID_SVX_START + 610 )
+#define SID_FM_INSERTCOL                                ( SID_SVX_START + 611 )
+#define SID_FM_DELETECOL                                ( SID_SVX_START + 612 )
+#define SID_FM_CTL_PROPERTIES                           ( SID_SVX_START + 613 )
+#define SID_FM_PROPERTIES                               ( SID_SVX_START + 614 )
+#define SID_FM_TAB_DIALOG                               ( SID_SVX_START + 615 )
+#define SID_FM_RECORD_FIRST                             ( SID_SVX_START + 616 )
+#define SID_FM_RECORD_NEXT                              ( SID_SVX_START + 617 )
+#define SID_FM_RECORD_PREV                              ( SID_SVX_START + 618 )
+#define SID_FM_RECORD_LAST                              ( SID_SVX_START + 619 )
+#define SID_FM_RECORD_NEW                               ( SID_SVX_START + 620 )
+#define SID_FM_RECORD_DELETE                            ( SID_SVX_START + 621 )
+#define SID_FM_RECORD_ABSOLUTE                          ( SID_SVX_START + 622 )
+#define SID_FM_ADD_FIELD                                ( SID_SVX_START + 623 )
+#define SID_FM_RECORD_TEXT                              ( SID_SVX_START + 624 )
+#define SID_FM_RECORD_FROM_TEXT                         ( SID_SVX_START + 625 )
+#define SID_FM_RECORD_TOTAL                             ( SID_SVX_START + 626 )
+#define SID_FM_RECORD_SAVE                              ( SID_SVX_START + 627 )
+#define SID_FM_CREATE_CONTROL                           ( SID_SVX_START + 628 )
+#define SID_FM_DESIGN_MODE                              ( SID_SVX_START + 629 )
+#define SID_FM_RECORD_UNDO                              ( SID_SVX_START + 630 )
+#define SID_FM_CONTROL_IDENTIFIER                       ( SID_SVX_START + 631 )
+#define SID_FM_CONTROL_INVENTOR                         ( SID_SVX_START + 632 )
+#define SID_FM_SHOW_FMEXPLORER                          ( SID_SVX_START + 633 )
+#define SID_FM_FIELDS_CONTROL                           ( SID_SVX_START + 634 )
+#define SID_FM_SHOW_PROPERTIES                          ( SID_SVX_START + 635 )
+#define SID_FM_PROPERTY_CONTROL                         ( SID_SVX_START + 636 )
+#define SID_FM_FMEXPLORER_CONTROL                       ( SID_SVX_START + 637 )
+#define SID_FM_NEW                                      ( SID_SVX_START + 638 )
+#define SID_FM_DELETE                                   ( SID_SVX_START + 639 )
+#define SID_FM_NEW_FORM                                 ( SID_SVX_START + 640 )
+#define SID_FMSLOTS_END                                 ( SID_SVX_START + 641 )
+#define SID_REDLIN_FILTER_PAGE                          ( SID_SVX_START + 642 )
+#define SID_REDLIN_VIEW_PAGE                            ( SID_SVX_START + 643 )
+#define SID_3D_WIN                                      ( SID_SVX_START + 644 )
+#define SID_3D_STATE                                    ( SID_SVX_START + 645 )
+#define SID_3D_INIT                                     ( SID_SVX_START + 646 )
+#define SID_3D_ASSIGN                                   ( SID_SVX_START + 647 )
+#define SID_CONVERT_TO_3D                               ( SID_SVX_START + 648 )
+#define SID_CONVERT_TO_3D_LATHE_FAST                    ( SID_SVX_START + 649 )
+#define SID_ATTR_3D_PERCENT_DIAGONAL                    ( SID_SVX_START + 650 )
+#define SID_ATTR_3D_BACKSCALE                           ( SID_SVX_START + 651 )
+#define SID_ATTR_3D_END_ANGLE                           ( SID_SVX_START + 652 )
+#define SID_ATTR_3D_NORMALS_KIND                        ( SID_SVX_START + 653 )
+#define SID_ATTR_3D_NORMALS_INVERT                      ( SID_SVX_START + 654 )
+#define SID_ATTR_3D_TWO_SIDED_LIGHTING                  ( SID_SVX_START + 655 )
+#define SID_ATTR_3D_TEXTURE_KIND                        ( SID_SVX_START + 656 )
+#define SID_ATTR_3D_TEXTURE_MODE                        ( SID_SVX_START + 657 )
+#define SID_ATTR_3D_TEXTURE_PROJ_X                      ( SID_SVX_START + 658 )
+#define SID_ATTR_3D_TEXTURE_PROJ_Y                      ( SID_SVX_START + 659 )
+#define SID_ATTR_3D_TEXTURE_FILTER                      ( SID_SVX_START + 660 )
+#define SID_ATTR_3D_MAT_COLOR                           ( SID_SVX_START + 661 )
+#define SID_ATTR_3D_MAT_EMISSION                        ( SID_SVX_START + 662 )
+#define SID_ATTR_3D_MAT_SPECULAR                        ( SID_SVX_START + 663 )
+#define SID_ATTR_3D_MAT_SPECULAR_INTENSITY              ( SID_SVX_START + 664 )
+#define SID_ATTR_3D_SHADE_MODE                          ( SID_SVX_START + 665 )
+#define SID_ATTR_3D_SHADOW_3D                           ( SID_SVX_START + 666 )
+#define SID_ATTR_3D_SHADOW_SLANT                        ( SID_SVX_START + 667 )
+#define SID_ATTR_3D_LIGHTCOLOR_1                        ( SID_SVX_START + 668 )
+#define SID_ATTR_3D_LIGHTCOLOR_2                        ( SID_SVX_START + 669 )
+#define SID_ATTR_3D_LIGHTCOLOR_3                        ( SID_SVX_START + 670 )
+#define SID_ATTR_3D_LIGHTCOLOR_4                        ( SID_SVX_START + 671 )
+#define SID_ATTR_3D_LIGHTCOLOR_5                        ( SID_SVX_START + 672 )
+#define SID_ATTR_3D_LIGHTCOLOR_6                        ( SID_SVX_START + 673 )
+#define SID_ATTR_3D_LIGHTCOLOR_7                        ( SID_SVX_START + 674 )
+#define SID_ATTR_3D_LIGHTCOLOR_8                        ( SID_SVX_START + 675 )
+#define SID_ATTR_3D_LIGHTON_1                           ( SID_SVX_START + 676 )
+#define SID_ATTR_3D_LIGHTON_2                           ( SID_SVX_START + 677 )
+#define SID_ATTR_3D_LIGHTON_3                           ( SID_SVX_START + 678 )
+#define SID_ATTR_3D_LIGHTON_4                           ( SID_SVX_START + 679 )
+#define SID_ATTR_3D_LIGHTON_5                           ( SID_SVX_START + 680 )
+#define SID_ATTR_3D_LIGHTON_6                           ( SID_SVX_START + 681 )
+#define SID_ATTR_3D_LIGHTON_7                           ( SID_SVX_START + 682 )
+#define SID_ATTR_3D_LIGHTON_8                           ( SID_SVX_START + 683 )
+#define SID_ATTR_3D_LIGHTDIRECTION_1                    ( SID_SVX_START + 684 )
+#define SID_ATTR_3D_LIGHTDIRECTION_2                    ( SID_SVX_START + 685 )
+#define SID_ATTR_3D_LIGHTDIRECTION_3                    ( SID_SVX_START + 686 )
+#define SID_ATTR_3D_LIGHTDIRECTION_4                    ( SID_SVX_START + 687 )
+#define SID_ATTR_3D_LIGHTDIRECTION_5                    ( SID_SVX_START + 688 )
+#define SID_ATTR_3D_LIGHTDIRECTION_6                    ( SID_SVX_START + 689 )
+#define SID_ATTR_3D_LIGHTDIRECTION_7                    ( SID_SVX_START + 690 )
+#define SID_ATTR_3D_LIGHTDIRECTION_8                    ( SID_SVX_START + 691 )
+#define SID_ATTR_3D_END                                     SID_ATTR_3D_LIGHTDIRECTION_8
+#define SID_ATTR_3D_DUMMY_3                             ( SID_SVX_START + 692 )
+#define SID_ATTR_3D_DUMMY_4                             ( SID_SVX_START + 693 )
+#define SID_ATTR_3D_DUMMY_5                             ( SID_SVX_START + 694 )
+#define SID_ATTR_3D_DUMMY_6                             ( SID_SVX_START + 695 )
+#define SID_ATTR_3D_DUMMY_7                             ( SID_SVX_START + 696 )
+#define SID_ATTR_3D_DUMMY_8                             ( SID_SVX_START + 697 )
+#define SID_ATTR_3D_DUMMY_9                             ( SID_SVX_START + 698 )
+#define SID_ATTR_3D_DUMMY_10                            ( SID_SVX_START + 699 )
+#define SID_ATTR_NUMBERFORMAT_NOLANGUAGE                ( SID_SVX_START + 700 )
+#define SID_MN_GROUP                                    ( SID_SVX_START + 701 )
+#define SID_FM_AUTO_ORDER                               ( SID_SVX_START + 702 )
+
+#define SID_MORE_FMSLOTS_START                          ( SID_SVX_START + 702 )
+#define SID_FM_SHOW_PROPERTY_BROWSER                    ( SID_SVX_START + 703 )
+#define SID_FM_DATEFIELD                                ( SID_SVX_START + 704 )
+#define SID_FM_TIMEFIELD                                ( SID_SVX_START + 705 )
+#define SID_FM_NUMERICFIELD                             ( SID_SVX_START + 706 )
+#define SID_FM_CURRENCYFIELD                            ( SID_SVX_START + 707 )
+#define SID_FM_PATTERNFIELD                             ( SID_SVX_START + 708 )
+#define SID_FM_OPEN_READONLY                            ( SID_SVX_START + 709 )
+#define SID_FM_IMAGECONTROL                             ( SID_SVX_START + 710 )
+#define SID_FM_REMOVE_FILTER_SORT                       ( SID_SVX_START + 711 )
+#define SID_FM_SORTUP                                   ( SID_SVX_START + 712 )
+#define SID_FM_SORTDOWN                                 ( SID_SVX_START + 713 )
+#define SID_FM_ORDERCRIT                                ( SID_SVX_START + 714 )
+#define SID_FM_FILTERCRIT                               ( SID_SVX_START + 715 )
+#define SID_FM_AUTOFILTER                               ( SID_SVX_START + 716 )
+#define SID_FM_COUNTALL                                 ( SID_SVX_START + 717 )
+#define SID_FM_NATIVESQL                                ( SID_SVX_START + 720 )
+#define SID_FM_EXECUTE                                  ( SID_SVX_START + 721 )
+#define SID_SBA_QRY_EXECUTE                                 SID_FM_EXECUTE
+#define SID_FM_ADDTABLE                                 ( SID_SVX_START + 722 )
+#define SID_FM_FORM_FILTERED                            ( SID_SVX_START + 723 )
+#define SID_FM_REFRESH                                  ( SID_SVX_START + 724 )
+#define SID_FM_SEARCH                                   ( SID_SVX_START + 725 )
+#define SID_FM_LEAVE_CREATE                             ( SID_SVX_START + 726 ) // Formcontroller-Button rauspoppen
+#define SID_FM_USE_WIZARDS                              ( SID_SVX_START + 727 )
+#define SID_FM_FORMATTEDFIELD                           ( SID_SVX_START + 728 )
+#define SID_FM_FILTER_START                             ( SID_SVX_START + 729 )
+#define SID_FM_FILTER_EXIT                              ( SID_SVX_START + 730 )
+#define SID_FM_FILTER_EXECUTE                           ( SID_SVX_START + 731 )
+#define SID_FM_FILTER_NAVIGATOR                         ( SID_SVX_START + 732 )
+#define SID_FM_CHANGECONTROLTYPE                        ( SID_SVX_START + 733 )
+#define SID_FM_CONVERTTO_EDIT                           ( SID_SVX_START + 734 )
+#define SID_FM_CONVERTTO_BUTTON                         ( SID_SVX_START + 735 )
+#define SID_FM_CONVERTTO_FIXEDTEXT                      ( SID_SVX_START + 736 )
+#define SID_FM_CONVERTTO_LISTBOX                        ( SID_SVX_START + 737 )
+#define SID_FM_CONVERTTO_CHECKBOX                       ( SID_SVX_START + 738 )
+#define SID_FM_CONVERTTO_RADIOBUTTON                    ( SID_SVX_START + 739 )
+#define SID_FM_CONVERTTO_GROUPBOX                       ( SID_SVX_START + 740 )
+#define SID_FM_CONVERTTO_COMBOBOX                       ( SID_SVX_START + 741 )
+#define SID_FM_CONVERTTO_IMAGEBUTTON                    ( SID_SVX_START + 743 )
+#define SID_FM_CONVERTTO_FILECONTROL                    ( SID_SVX_START + 744 )
+#define SID_FM_CONVERTTO_DATE                           ( SID_SVX_START + 745 )
+#define SID_FM_CONVERTTO_TIME                           ( SID_SVX_START + 746 )
+#define SID_FM_CONVERTTO_NUMERIC                        ( SID_SVX_START + 747 )
+#define SID_FM_CONVERTTO_CURRENCY                       ( SID_SVX_START + 748 )
+#define SID_FM_CONVERTTO_PATTERN                        ( SID_SVX_START + 749 )
+#define SID_FM_CONVERTTO_IMAGECONTROL                   ( SID_SVX_START + 750 )
+#define SID_FM_CONVERTTO_FORMATTED                      ( SID_SVX_START + 751 )
+#define SID_FM_FILTER_NAVIGATOR_CONTROL                 ( SID_SVX_START + 752 )
+#define SID_FM_HIDECOL                                  ( SID_SVX_START + 753 )
+#define SID_FM_SHOWCOLS                                 ( SID_SVX_START + 754 )
+#define SID_FM_SHOWCOLS_MORE                            ( SID_SVX_START + 755 )
+#define SID_FM_SHOWALLCOLS                              ( SID_SVX_START + 756 )
+#define SID_FM_TWOFIELDS_DATE_N_TIME                    ( SID_SVX_START + 757 )
+#define SID_FM_FILTER_EDIT                              ( SID_SVX_START + 758 )
+#define SID_FM_FILTER_IS_NULL                           ( SID_SVX_START + 759 )
+#define SID_FM_FILTER_IS_NOT_NULL                       ( SID_SVX_START + 760 )
+#define SID_FM_VIEW_AS_GRID                             ( SID_SVX_START + 761 )
+#define SID_FM_FILTER_REMOVE                            ( SID_SVX_START + 762 )
+#define SID_FM_AUTOCONTROLFOCUS                         ( SID_SVX_START + 763 )
+#define SID_DSBROWSER_EXPLORER                          ( SID_SVX_START + 764 )
+#define SID_FM_CREATE_FIELDCONTROL                      ( SID_SVX_START + 765 )
+#define SID_FM_DATACCESS_DESCRIPTOR                     ( SID_SVX_START + 766 )
+#define SID_FM_TOGGLECONTROLFOCUS                       ( SID_SVX_START + 767 )
+#define SID_FM_SCROLLBAR                                ( SID_SVX_START + 768 )
+#define SID_FM_SPINBUTTON                               ( SID_SVX_START + 769 )
+#define SID_FM_CONVERTTO_SCROLLBAR                      ( SID_SVX_START + 770 )
+#define SID_FM_CONVERTTO_SPINBUTTON                     ( SID_SVX_START + 771 )
+#define SID_FM_CONVERTTO_NAVIGATIONBAR                  ( SID_SVX_START + 772 )
+#define SID_FM_SHOW_DATANAVIGATOR                       ( SID_SVX_START + 773 )
+#define SID_FM_DATANAVIGATOR_CONTROL                    ( SID_SVX_START + 774 )
+#define SID_FM_REFRESH_FORM_CONTROL                     ( SID_SVX_START + 775 )
+#define SID_MORE_FMSLOTS_END                            ( SID_SVX_START + 850 )
+
+#define SID_HLINKBAR_LINK                               ( SID_SVX_START + 851 )
+#define SID_HLINKBAR_BOOKMARK                           ( SID_SVX_START + 852 )
+#define SID_HLINKBAR_SEARCH                             ( SID_SVX_START + 853 )
+#define SID_HLINKBAR_TARGET                             ( SID_SVX_START + 854 )
+#define SID_PARAM_NUM_PRESET                            ( SID_SVX_START + 856 )
+#define SID_PARAM_CUR_NUMBER                            ( SID_SVX_START + 857 )
+#define SID_PARAM_CHILD_LEVELS                          ( SID_SVX_START + 858 )
+#define SID_PARAM_CUR_NUM_LEVEL                         ( SID_SVX_START + 859 )
+#define SID_CREATE_SW_DRAWVIEW                          ( SID_SVX_START + 860 )
+#define SID_ATTR_GRAF_LUMINANCE                         ( SID_SVX_START + 863 )
+#define SID_ATTR_GRAF_CONTRAST                          ( SID_SVX_START + 864 )
+#define SID_ATTR_GRAF_RED                               ( SID_SVX_START + 865 )
+#define SID_ATTR_GRAF_GREEN                             ( SID_SVX_START + 866 )
+#define SID_ATTR_GRAF_BLUE                              ( SID_SVX_START + 867 )
+#define SID_ATTR_GRAF_GAMMA                             ( SID_SVX_START + 868 )
+#define SID_ATTR_GRAF_TRANSPARENCE                      ( SID_SVX_START + 869 )
+#define SID_ATTR_GRAF_INVERT                            ( SID_SVX_START + 870 )
+#define SID_ATTR_GRAF_MODE                              ( SID_SVX_START + 871 )
+#define SID_ATTR_GRAF_RESERVE2                          ( SID_SVX_START + 872 )
+#define SID_ATTR_GRAF_RESERVE3                          ( SID_SVX_START + 873 )
+#define SID_ATTR_GRAF_RESERVE4                          ( SID_SVX_START + 874 )
+#define SID_ATTR_GRAF_RESERVE5                          ( SID_SVX_START + 875 )
+//#define SID_COMP_BIBLIOGRAPHY                           ( SID_SVX_START + 880 )   -> sfxsids.hrc
+#define SID_ATTR_GRAF_KEEP_ZOOM                         ( SID_SVX_START + 882 )
+#define SID_ATTR_GRAF_CROP                              ( SID_SVX_START + 883 )
+#define SID_ATTR_GRAF_FRMSIZE                           ( SID_SVX_START + 884 )
+#define SID_ATTR_GRAF_FRMSIZE_PERCENT                   ( SID_SVX_START + 885 )
+#define SID_ATTR_GRAF_GRAPHIC                           ( SID_SVX_START + 886 )
+#define SID_ASIAN_DLG                                   ( SID_SVX_START + 904 )
+#define SID_DRAW_TEXT_VERTICAL                          SID_ATTR_CHAR_VERTICAL
+#define SID_DRAW_CAPTION_VERTICAL                       ( SID_SVX_START + 906 )
+#define SID_TEXTDIRECTION_LEFT_TO_RIGHT                 ( SID_SVX_START + 907 )
+#define SID_TEXTDIRECTION_TOP_TO_BOTTOM                 ( SID_SVX_START + 908 )
+#define SID_TRANSLITERATE_UPPER                         ( SID_SVX_START + 912 )
+#define SID_TRANSLITERATE_LOWER                         ( SID_SVX_START + 913 )
+#define SID_TRANSLITERATE_HALFWIDTH                     ( SID_SVX_START + 914 )
+#define SID_TRANSLITERATE_FULLWIDTH                     ( SID_SVX_START + 915 )
+#define SID_TRANSLITERATE_HIRAGANA                      ( SID_SVX_START + 916 )
+#define SID_TRANSLITERATE_KATAGANA                      ( SID_SVX_START + 917 )
+#define SID_MN_SUB_TRANSLITERATE                        ( SID_SVX_START + 918 )
+#define SID_LANGUAGE_OPTIONS                            ( SID_SVX_START + 921 )
+#define SID_GETUNDOSTRINGS                              ( SID_SVX_START + 923 )
+#define SID_GETREDOSTRINGS                              ( SID_SVX_START + 924 )
+
+#define SID_INSERT_IMAGECONTROL                         ( SID_SVX_START + 926 )
+#define SID_INSERT_PROGRESSBAR                          ( SID_SVX_START + 927 )
+#define SID_INSERT_HFIXEDLINE                           ( SID_SVX_START + 928 )
+#define SID_INSERT_VFIXEDLINE                           ( SID_SVX_START + 929 )
+#define SID_READONLY_MODE                               ( SID_SVX_START + 930 )
+#define SID_ATTR_ALIGN_HYPHENATION                      ( SID_SVX_START + 931 )
+#define SID_ATTR_NUMBERFORMAT_SOURCE                    ( SID_SVX_START + 932 )
+#define SID_ATTR_AUTO_COLOR_INVALID                     ( SID_SVX_START + 933 )
+//#define SID_ADDRESS_DATA_SOURCE                         ( SID_SVX_START + 934 )   -> sfxsids.hrc
+#define SID_RULER_BORDER_DISTANCE                       ( SID_SVX_START + 935 )
+#define SID_INSERT_DATEFIELD                            ( SID_SVX_START + 936 )
+#define SID_INSERT_TIMEFIELD                            ( SID_SVX_START + 937 )
+#define SID_INSERT_NUMERICFIELD                         ( SID_SVX_START + 938 )
+#define SID_INSERT_CURRENCYFIELD                        ( SID_SVX_START + 939 )
+#define SID_INSERT_FORMATTEDFIELD                       ( SID_SVX_START + 940 )
+#define SID_INSERT_PATTERNFIELD                         ( SID_SVX_START + 941 )
+#define SID_INSERT_FILECONTROL                          ( SID_SVX_START + 942 )
+#define SID_SHOW_PROPERTYBROWSER                        ( SID_SVX_START + 943 )
+#define SID_ATTR_TABSTOP_VERTICAL                       ( SID_SVX_START + 946 )
+#define SID_RULER_BORDERS_VERTICAL                      ( SID_SVX_START + 948 )
+#define SID_ATTR_ALIGN_ASIANVERTICAL                    ( SID_SVX_START + 949 )
+#define SID_RULER_TEXT_RIGHT_TO_LEFT                    ( SID_SVX_START + 952 )
+#define SID_ATTR_HDFT_DYNAMIC_SPACING                   ( SID_SVX_START + 953 )
+#define SID_ATTR_NUMBERFORMAT_ADD_AUTO                  ( SID_SVX_START + 954 )
+#define SID_OPEN_HYPERLINK                              ( SID_SVX_START + 955 )
+#define SID_CTLFONT_STATE                               ( SID_SVX_START + 956 )
+#define SID_VERTICALTEXT_STATE                          ( SID_SVX_START + 957 )
+#define SID_OPEN_XML_FILTERSETTINGS                     ( SID_SVX_START + 958 )
+#define SID_HANGUL_HANJA_CONVERSION                     ( SID_SVX_START + 959 )
+#define SID_EXTRUSION_TOOGLE                            ( SID_SVX_START + 960 )
+#define SID_EXTRUSION_TILT_DOWN                         ( SID_SVX_START + 961 )
+#define SID_EXTRUSION_TILT_UP                           ( SID_SVX_START + 962 )
+#define SID_EXTRUSION_TILT_LEFT                         ( SID_SVX_START + 963 )
+#define SID_EXTRUSION_TILT_RIGHT                        ( SID_SVX_START + 964 )
+#define SID_EXTRUSION_DEPTH_FLOATER                     ( SID_SVX_START + 965 )
+#define SID_EXTRUSION_DIRECTION_FLOATER                 ( SID_SVX_START + 966 )
+#define SID_EXTRUSION_LIGHTING_FLOATER                  ( SID_SVX_START + 967 )
+#define SID_EXTRUSION_SURFACE_FLOATER                   ( SID_SVX_START + 968 )
+#define SID_EXTRUSION_3D_COLOR                          ( SID_SVX_START + 969 )
+#define SID_EXTRUSION_DEPTH                             ( SID_SVX_START + 970 )
+#define SID_EXTRUSION_DIRECTION                         ( SID_SVX_START + 971 )
+#define SID_EXTRUSION_PROJECTION                        ( SID_SVX_START + 972 )
+#define SID_EXTRUSION_LIGHTING_DIRECTION                ( SID_SVX_START + 973 )
+#define SID_EXTRUSION_LIGHTING_INTENSITY                ( SID_SVX_START + 974 )
+#define SID_EXTRUSION_SURFACE                           ( SID_SVX_START + 975 )
+#define SID_EXTRUSION_DEPTH_DIALOG                      ( SID_SVX_START + 976 )
+#define SID_FONTWORK_GALLERY_FLOATER                    ( SID_SVX_START + 977 )
+// free                                                 ( SID_SVX_START + 978 )
+#define SID_FONTWORK_SHAPE_TYPE                         ( SID_SVX_START + 979 )
+#define SID_FONTWORK_SAME_LETTER_HEIGHTS                ( SID_SVX_START + 980 )
+#define SID_FONTWORK_ALIGNMENT_FLOATER                  ( SID_SVX_START + 981 )
+#define SID_FONTWORK_CHARACTER_SPACING_FLOATER          ( SID_SVX_START + 982 )
+#define SID_FONTWORK_SHAPE                              ( SID_SVX_START + 983 )
+#define SID_FONTWORK_ALIGNMENT                          ( SID_SVX_START + 984 )
+#define SID_FONTWORK_CHARACTER_SPACING                  ( SID_SVX_START + 985 )
+#define SID_FONTWORK_KERN_CHARACTER_PAIRS               ( SID_SVX_START + 986 )
+#define SID_DRAW_FONTWORK                               ( SID_SVX_START + 987 )
+#define SID_DRAW_FONTWORK_VERTICAL                      ( SID_SVX_START + 988 )
+#define SID_ATTR_BORDER_CONNECT                         ( SID_SVX_START + 990 )
+#define SID_SW_FOLLOW_TEXT_FLOW                         ( SID_SVX_START + 991 ) /* #i18732# - slot-id for new option IsFollowingTextFlow' */
+#define SID_RULER_ROWS                                  ( SID_SVX_START + 992 )
+#define SID_RULER_ROWS_VERTICAL                         ( SID_SVX_START + 993 )
+#define SID_ATTR_TRANSFORM_HORI_POSITION                ( SID_SVX_START + 999 )
+#define SID_ATTR_TRANSFORM_VERT_POSITION                ( SID_SVX_START + 1000 )
+#define SID_SHOW_ITEMBROWSER                            ( SID_SVX_START + 1001 )
+#define SID_ALIGN_ANY_LEFT                              ( SID_SVX_START + 1002 )
+#define SID_ALIGN_ANY_HCENTER                           ( SID_SVX_START + 1003 )
+#define SID_ALIGN_ANY_RIGHT                             ( SID_SVX_START + 1004 )
+#define SID_ALIGN_ANY_JUSTIFIED                         ( SID_SVX_START + 1005 )
+#define SID_ALIGN_ANY_TOP                               ( SID_SVX_START + 1006 )
+#define SID_ALIGN_ANY_VCENTER                           ( SID_SVX_START + 1007 )
+#define SID_ALIGN_ANY_BOTTOM                            ( SID_SVX_START + 1008 )
+#define SID_ALIGN_ANY_HDEFAULT                          ( SID_SVX_START + 1009 )
+#define SID_ALIGN_ANY_VDEFAULT                          ( SID_SVX_START + 1010 )
+#define SID_SW_COLLAPSING_BORDERS                       ( SID_SVX_START + 1011 )
+#define SID_SW_WRAP_INFLUENCE_ON_OBJPOS                 ( SID_SVX_START + 1012 ) /* #i28701# - slot-id for new attribute WrapInfluenceOnObjPos' */
+#define SID_ATTR_BORDER_DIAG_TLBR                       ( SID_SVX_START + 1013 )
+#define SID_ATTR_BORDER_DIAG_BLTR                       ( SID_SVX_START + 1014 )
+#define SID_ATTR_ALIGN_SHRINKTOFIT                      ( SID_SVX_START + 1015 )
+#define SID_CHINESE_CONVERSION                          ( SID_SVX_START + 1016 )
+#define SID_PAGE_TYPE                                   ( SID_SVX_START + 1017 )
+#define SID_DLG_TYPE                                    ( SID_SVX_START + 1018 )
+#define SID_TABPAGE_POS                                 ( SID_SVX_START + 1019 )
+#define SID_GRAPHIC                                     ( SID_SVX_START + 1020 )
+#define SID_OBJECT_LIST                                 ( SID_SVX_START + 1021 )
+#define SID_ATTR_SET                                    ( SID_SVX_START + 1022 )
+#define SID_CHAR_FMT_LIST_BOX                           ( SID_SVX_START + 1023 )
+#define SID_METRIC_ITEM                                 ( SID_SVX_START + 1024 )
+#define SID_NUM_CHAR_FMT                                ( SID_SVX_START + 1025 )
+#define SID_BULLET_CHAR_FMT                             ( SID_SVX_START + 1026 )
+#define SID_DISABLE_SVXEXTPARAGRAPHTABPAGE_PAGEBREAK    ( SID_SVX_START + 1027 )
+#define SID_SVXPARAALIGNTABPAGE_ENABLEJUSTIFYEXT        ( SID_SVX_START + 1028 )
+#define SID_SVXSTDPARAGRAPHTABPAGE_PAGEWIDTH            ( SID_SVX_START + 1029 )
+#define SID_SVXSTDPARAGRAPHTABPAGE_FLAGSET              ( SID_SVX_START + 1030 )
+#define SID_SVXSTDPARAGRAPHTABPAGE_ABSLINEDIST          ( SID_SVX_START + 1031 )
+#define SID_SVXTABULATORTABPAGE_CONTROLFLAGS            ( SID_SVX_START + 1032 )
+#define SID_SVXTEXTATTRPAGE_VIEW                        ( SID_SVX_START + 1033 )
+#define SID_FLAG_TYPE                                   ( SID_SVX_START + 1034 )
+#define SID_SWMODE_TYPE                                 ( SID_SVX_START + 1035 )
+#define SID_DISABLE_CTL                                 ( SID_SVX_START + 1036 )
+#define SID_LINK_TYPE                                   ( SID_SVX_START + 1037 )
+#define SID_ENUM_PAGE_MODE                              ( SID_SVX_START + 1038 )
+#define SID_PAPER_START                                 ( SID_SVX_START + 1039 )
+#define SID_PAPER_END                                   ( SID_SVX_START + 1040 )
+#define SID_COLLECT_LIST                                ( SID_SVX_START + 1041 )
+#define SID_GROW_FONT_SIZE                              ( SID_SVX_START + 1042 )
+#define SID_SHRINK_FONT_SIZE                            ( SID_SVX_START + 1043 )
+// color subtoolbar on graphictoolbar
+#define SID_COLOR_SETTINGS                              ( SID_SVX_START + 1044 )
+#define SID_FM_MORE_CONTROLS                            ( SID_SVX_START + 1045 )
+#define SID_FM_FORM_DESIGN_TOOLS                        ( SID_SVX_START + 1046 )
+#define SID_DRAWTBX_CS_BASIC                            ( SID_SVX_START + 1047 )
+#define SID_DRAWTBX_CS_SYMBOL                           ( SID_SVX_START + 1048 )
+#define SID_DRAWTBX_CS_ARROW                            ( SID_SVX_START + 1049 )
+#define SID_DRAWTBX_CS_FLOWCHART                        ( SID_SVX_START + 1050 )
+#define SID_DRAWTBX_CS_CALLOUT                          ( SID_SVX_START + 1051 )
+#define SID_DRAWTBX_CS_STAR                             ( SID_SVX_START + 1052 )
+#define SID_DRAW_CS_ID                                  ( SID_SVX_START + 1053 )
+#define SID_FONTWORK_CHARACTER_SPACING_DIALOG           ( SID_SVX_START + 1054 )
+#define SID_BORDER_REDUCED_MODE                         ( SID_SVX_START + 1055 )
+#define SID_INSERT_RLM                                  ( SID_SVX_START + 1056 )   /* insert RLM - right to left mark */
+#define SID_INSERT_LRM                                  ( SID_SVX_START + 1057 )   /* insert LRM - left to right mark */
+#define SID_INSERT_ZWSP                                 ( SID_SVX_START + 1058 )   /* insert ZWJ - invisible space, keep words together*/
+#define SID_INSERT_ZWNBSP                               ( SID_SVX_START + 1059 )   /* insert ZWNJ - invisible space, forces linebreak*/
+#define SID_OPTIONS_DATABASES                           ( SID_SVX_START + 1060 )
+#define SID_OPEN_SMARTTAGMENU                           ( SID_SVX_START + 1061 )
+#define SID_OPEN_SMARTTAGOPTIONS                        ( SID_SVX_START + 1062 )
+#define SID_INSERT_TREECONTROL                          ( SID_SVX_START + 1063 )
+#define SID_ATTR_VIEWLAYOUT                             ( SID_SVX_START + 1064 )
+#define SID_ATTR_ZOOMSLIDER                             ( SID_SVX_START + 1065 )
+#define SID_FONTNAMELIST                                ( SID_SVX_START + 1066 )
+#define SID_LANGUAGE_STATUS                             ( SID_SVX_START + 1067 )
+#define SID_CHAR_DLG_FOR_PARAGRAPH                      ( SID_SVX_START + 1068 )
+#define SID_SET_DOCUMENT_LANGUAGE                       ( SID_SVX_START + 1069 )
+
+#define SID_TABLE_MERGE_CELLS                           (SID_SVX_START+1070)
+#define SID_TABLE_SPLIT_CELLS                           (SID_SVX_START+1071)
+#define SID_OPTIMIZE_TABLE                              (SID_SVX_START+1072)
+#define SID_TABLE_VERT_BOTTOM                           (SID_SVX_START+1073)
+#define SID_TABLE_VERT_CENTER                           (SID_SVX_START+1074)
+#define SID_TABLE_VERT_NONE                             (SID_SVX_START+1075)
+#define SID_TABLE_INSERT_ROW                            (SID_SVX_START+1076)
+#define SID_TABLE_INSERT_COL                            (SID_SVX_START+1077)
+#define SID_TABLE_DELETE_ROW                            (SID_SVX_START+1078)
+#define SID_TABLE_DELETE_COL                            (SID_SVX_START+1079)
+#define SID_TABLE_SELECT_ALL                            (SID_SVX_START+1080)
+#define SID_TABLE_SELECT_COL                            (SID_SVX_START+1081)
+#define SID_TABLE_SELECT_ROW                            (SID_SVX_START+1082)
+#define SID_FORMAT_TABLE_DLG                            (SID_SVX_START+1083)
+#define SID_TABLE_SORT_DIALOG                           (SID_SVX_START+1084)
+#define SID_TABLE_AUTOSUM                               (SID_SVX_START+1085)
+#define SID_TABLE_DISTRIBUTE_COLUMNS                    (SID_SVX_START+1086)
+#define SID_TABLE_DISTRIBUTE_ROWS                       (SID_SVX_START+1087)
+#define SID_TABLE_STYLE                                 (SID_SVX_START+1088)
+#define SID_TABLE_STYLE_SETTINGS                        (SID_SVX_START+1089)
+#define SID_CHAR_DLG_PREVIEW_STRING                     (SID_SVX_START+1090)
+#define SID_RECHECK_DOCUMENT                            (SID_SVX_START+1091)
+
+#define SID_OBJECT_MIRROR                               (SID_SVX_START+1093)
+
+#define SID_DELETE_POSTIT                               (SID_SVX_START+1094)
+#define SID_NEXT_POSTIT                                 (SID_SVX_START+1095)
+#define SID_PREVIOUS_POSTIT                             (SID_SVX_START+1096)
+#define SID_DELETEALL_POSTIT                            (SID_SVX_START+1097)
+#define SID_SHOW_POSTIT                                 (SID_SVX_START+1098)
+#define SID_REPLYTO_POSTIT                              (SID_SVX_START+1099)
+#define SID_DELETEALLBYAUTHOR_POSTIT                    (SID_SVX_START+1100)
+#define SID_INSERT_POSTIT                               (SID_SVX_START+1101)
+
+#define SID_TRANSLITERATE_SENTENCE_CASE                 (SID_SVX_START+1102)
+#define SID_TRANSLITERATE_TITLE_CASE                    (SID_SVX_START+1103)
+#define SID_TRANSLITERATE_TOGGLE_CASE                   (SID_SVX_START+1104)
+#define SID_TRANSLITERATE_ROTATE_CASE                   (SID_SVX_START+1105)
+
+// IMPORTANT NOTE: adjust SID_SVX_FIRSTFREE, when adding new slot id
+#define SID_SVX_FIRSTFREE                               (SID_TRANSLITERATE_ROTATE_CASE + 1)
+
+// --------------------------------------------------------------------------
+// Overflow check for slot IDs
+// --------------------------------------------------------------------------
+
+#if SID_SVX_FIRSTFREE > SID_SVX_END
+#error Resource-Ueberlauf in #line, #file
+#endif
+
+// --------------------------------------------------------------------------
+// Ranges, um ItemSets fuer bestimmte 3D-Objekte erstellen zu koennen
+// --------------------------------------------------------------------------
+
+//
+// SceneObject:
+#define SID_ATTR_3D_RANGE_SCENE \
+SID_ATTR_3D_AMBIENTCOLOR, SID_ATTR_3D_PERSPECTIVE, \
+SID_ATTR_3D_DISTANCE, SID_ATTR_3D_FOCAL_LENGTH, \
+SID_ATTR_3D_TWO_SIDED_LIGHTING, SID_ATTR_3D_TWO_SIDED_LIGHTING, \
+SID_ATTR_3D_SHADE_MODE, SID_ATTR_3D_SHADE_MODE, \
+SID_ATTR_3D_SHADOW_SLANT, SID_ATTR_3D_LIGHTDIRECTION_8 \
+
+//
+// CompoundObject:
+#define SID_ATTR_3D_RANGE_COMPOUND \
+SID_ATTR_3D_DOUBLE_SIDED, SID_ATTR_3D_DOUBLE_SIDED, \
+SID_ATTR_3D_NORMALS_KIND, SID_ATTR_3D_NORMALS_INVERT, \
+SID_ATTR_3D_TEXTURE_KIND, SID_ATTR_3D_MAT_SPECULAR_INTENSITY, \
+SID_ATTR_3D_SHADOW_3D, SID_ATTR_3D_SHADOW_3D \
+
+//
+// ExtrudeObject:
+#define SID_ATTR_3D_RANGE_EXTRUDE \
+SID_ATTR_3D_RANGE_COMPOUND, \
+SID_ATTR_3D_DEPTH, SID_ATTR_3D_DEPTH, \
+SID_ATTR_3D_PERCENT_DIAGONAL, SID_ATTR_3D_BACKSCALE \
+
+//
+// LatheObject:
+#define SID_ATTR_3D_RANGE_LATHE \
+SID_ATTR_3D_RANGE_COMPOUND, \
+SID_ATTR_3D_HORZ_SEGS, SID_ATTR_3D_VERT_SEGS, \
+SID_ATTR_3D_PERCENT_DIAGONAL, SID_ATTR_3D_END_ANGLE \
+
+//
+// SphereObject:
+#define SID_ATTR_3D_RANGE_SPHERE \
+SID_ATTR_3D_RANGE_COMPOUND, \
+SID_ATTR_3D_HORZ_SEGS, SID_ATTR_3D_VERT_SEGS \
+
+//
+// Spezieller Range fuer alle 3D-Objekte
+#define SID_ATTR_3D_RANGE_OBJECT \
+SID_ATTR_3D_RANGE_COMPOUND, \
+SID_ATTR_3D_DEPTH, SID_ATTR_3D_DEPTH, \
+SID_ATTR_3D_HORZ_SEGS, SID_ATTR_3D_VERT_SEGS, \
+SID_ATTR_3D_PERCENT_DIAGONAL, SID_ATTR_3D_END_ANGLE \
+
+#endif // #ifndef _SVX_SVXIDS_HRC
+
+// ******************************************************************* EOF
+

@@ -1,0 +1,11 @@
+module ooo { module vba { module word {
+    constants WdViewType {
+        const long wdMasterView = 5;
+        const long wdNormalView = 1;
+        const long wdOutlineView = 2;
+        const long wdPrintPreview = 4;
+        const long wdPrintView = 3;
+        const long wdReadingView = 7;
+        const long wdWebView = 6;
+    };
+}; }; };

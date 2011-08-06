@@ -1,0 +1,8 @@
+module ooo { module vba { module office {
+    constants MsoRelativeNodePosition {
+        const long msoAfterLastSibling = 4;
+        const long msoAfterNode = 2;
+        const long msoBeforeFirstSibling = 3;
+        const long msoBeforeNode = 1;
+    };
+}; }; };

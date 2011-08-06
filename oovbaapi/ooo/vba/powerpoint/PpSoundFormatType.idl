@@ -1,0 +1,9 @@
+module ooo { module vba { module powerpoint {
+    constants PpSoundFormatType {
+        const long ppSoundFormatCDAudio = 3;
+        const long ppSoundFormatMIDI = 2;
+        const long ppSoundFormatMixed = -2;
+        const long ppSoundFormatNone = 0;
+        const long ppSoundFormatWAV = 1;
+    };
+}; }; };

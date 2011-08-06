@@ -1,0 +1,11 @@
+module ooo { module vba { module office {
+    constants MsoFillType {
+        const long msoFillBackground = 5;
+        const long msoFillGradient = 3;
+        const long msoFillMixed = -2;
+        const long msoFillPatterned = 2;
+        const long msoFillPicture = 6;
+        const long msoFillSolid = 1;
+        const long msoFillTextured = 4;
+    };
+}; }; };

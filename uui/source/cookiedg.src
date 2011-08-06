@@ -1,0 +1,171 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#define __RSC
+
+#ifndef UUI_COOKIEDG_HRC
+#include <cookiedg.hrc>
+#endif
+#ifndef UUI_IDS_HRC
+#include <ids.hrc>
+#endif
+
+ModalDialog DLG_COOKIES
+{
+    HelpId = HID_DLG_COOKIES ;
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 295 , 193 ) ;
+    Moveable = TRUE ;
+    FixedBitmap FB_COOKIES
+    {
+        Border = True ;
+        Hide = TRUE ;
+        Fixed = Bitmap
+        {
+            File = "cookie.bmp" ;
+        };
+    };
+    FixedText FT_COOKIES
+    {
+        SVLook = TRUE ;
+        WordBreak = True ;
+        Pos = MAP_APPFONT ( 65 , 6 ) ;
+        Size = MAP_APPFONT ( 224 , 145 ) ;
+    };
+    FixedLine FL_COOKIES
+    {
+        Pos = MAP_APPFONT ( 6 , 155 ) ;
+        Size = MAP_APPFONT ( 283 , 1 ) ;
+    };
+    RadioButton RB_INFUTURE_SEND
+    {
+        HelpID = "uui:RadioButton:DLG_COOKIES:RB_INFUTURE_SEND";
+        Pos = MAP_APPFONT ( 12 , 171 ) ;
+        Size = MAP_APPFONT ( 52 , 10 ) ;
+        Text [ en-US ] = "~Send" ;
+    };
+    RadioButton RB_INFUTURE_IGNORE
+    {
+        HelpID = "uui:RadioButton:DLG_COOKIES:RB_INFUTURE_IGNORE";
+        Pos = MAP_APPFONT ( 67 , 171 ) ;
+        Size = MAP_APPFONT ( 52 , 10 ) ;
+        Text [ en-US ] = "I~gnore" ;
+    };
+    RadioButton RB_INFUTURE_INTERACTIVE
+    {
+        HelpID = "uui:RadioButton:DLG_COOKIES:RB_INFUTURE_INTERACTIVE";
+        Pos = MAP_APPFONT ( 122 , 171 ) ;
+        Size = MAP_APPFONT ( 52 , 10 ) ;
+        Text [ en-US ] = "I~nteractive" ;
+    };
+    //TODO! If this dialog is ever used again (and it should definitely be
+    // redesigned then!), get rid of the following group box (see #88883#):
+    GroupBox GB_INFUTURE
+    {
+        Pos = MAP_APPFONT ( 6 , 160 ) ;
+        Size = MAP_APPFONT ( 174 , 27 ) ;
+        Text [ en-US ] = "Future Cookie Handling" ;
+    };
+    PushButton BTN_COOKIES_CANCEL
+    {
+        HelpID = "uui:PushButton:DLG_COOKIES:BTN_COOKIES_CANCEL";
+        Pos = MAP_APPFONT ( 186 , 173 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Text [ en-US ] = "~Ignore" ;
+    };
+    PushButton BTN_COOKIES_OK
+    {
+        HelpID = "uui:PushButton:DLG_COOKIES:BTN_COOKIES_OK";
+        Pos = MAP_APPFONT ( 239 , 173 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        DefButton = TRUE ;
+        Text [ en-US ] = "~Send" ;
+    };
+};
+
+String STR_COOKIES_RECV_START
+{
+    Text [ en-US ] = "The '${HOST}' server wishes to set one or more cookies.\nCookies contain information referring to certain URL classes. If %PRODUCTNAME later requests a document with a URL corresponding to the class of a previously set cookie, %PRODUCTNAME will send this information to the server. This allows a server to recognize the status of a WWW application, e.g., when shopping online.\n\nThe following Cookies should be set:\n\n" ;
+};
+
+String STR_COOKIES_RECV_COOKIES
+{
+    Text [ en-US ] = "Domain: ${DOMAIN}, Path: ${PATH}, Cookie: ${COOKIE}.\n" ;
+};
+
+String STR_COOKIES_RECV_TITLE
+{
+    Text [ en-US ] = "Cookie Reception" ;
+};
+
+String STR_COOKIES_SEND_START
+{
+    Text [ en-US ] = "%PRODUCTNAME has saved cookies for the server '${HOST}' which will be sent when requesting the document ${PATH}.\nCookies contain information which refers to certain URL classes. They are sent by some servers to %PRODUCTNAME where they are saved when certain documents are accessed. If %PRODUCTNAME loads a document that, according to the URL, corresponds to a class of one of the previously received Cookies, %PRODUCTNAME will send this information to that server. This enables a server to keep track of the status of a WWW application, e.g., when shopping online.\n\nThe following Cookies should be set:\n\n" ;
+};
+
+String STR_COOKIES_SEND_COOKIES
+{
+    Text [ en-US ] = "Domain: ${DOMAIN}, Path: ${PATH}, Cookie: ${COOKIE}.\n" ;
+};
+
+String STR_COOKIES_SEND_TITLE
+{
+    Text [ en-US ] = "Send Cookies" ;
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

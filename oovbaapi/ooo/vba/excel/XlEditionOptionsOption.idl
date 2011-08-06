@@ -1,0 +1,12 @@
+module ooo { module vba { module excel {
+    constants XlEditionOptionsOption {
+        const long xlAutomaticUpdate = 4;
+        const long xlCancel = 1;
+        const long xlChangeAttributes = 6;
+        const long xlManualUpdate = 5;
+        const long xlOpenSource = 3;
+        const long xlSelect = 3;
+        const long xlSendPublisher = 2;
+        const long xlUpdateSubscriber = 2;
+    };
+}; }; };

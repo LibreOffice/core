@@ -1,0 +1,7 @@
+module ooo { module vba {
+    constants VbCompareMethod {
+        const long vbBinaryCompare = 0;
+        const long vbDatabaseCompare = 2;
+        const long vbTextCompare = 1;
+    };
+}; };

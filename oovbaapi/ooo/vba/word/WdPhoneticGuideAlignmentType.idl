@@ -1,0 +1,10 @@
+module ooo { module vba { module word {
+    constants WdPhoneticGuideAlignmentType {
+        const long wdPhoneticGuideAlignmentCenter = 0;
+        const long wdPhoneticGuideAlignmentLeft = 3;
+        const long wdPhoneticGuideAlignmentOneTwoOne = 2;
+        const long wdPhoneticGuideAlignmentRight = 4;
+        const long wdPhoneticGuideAlignmentRightVertical = 5;
+        const long wdPhoneticGuideAlignmentZeroOneZero = 1;
+    };
+}; }; };

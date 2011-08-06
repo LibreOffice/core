@@ -1,0 +1,81 @@
+/*
+ * Version: MPL 1.1 / GPLv3+ / LGPLv3+
+ *
+ * The contents of this file are subject to the Mozilla Public License Version
+ * 1.1 (the "License"); you may not use this file except in compliance with
+ * the License. You may obtain a copy of the License at
+ * http://www.mozilla.org/MPL/
+ *
+ * Software distributed under the License is distributed on an "AS IS" basis,
+ * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+ * for the specific language governing rights and limitations under the
+ * License.
+ *
+ * The Initial Developer of the Original Code is
+ *       Péter Rabi <prabi@caesar.elte.hu>
+ * Portions created by the Initial Developer are Copyright (C) 2011 the
+ * Initial Developer. All Rights Reserved.
+ *
+ * Contributor(s):
+ *
+ * Alternatively, the contents of this file may be used under the terms of
+ * either the GNU General Public License Version 3 or later (the "GPLv3+"), or
+ * the GNU Lesser General Public License Version 3 or later (the "LGPLv3+"),
+ * in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
+ * instead of those above.
+ */
+
+#define NUM_TEMPLATE_NAMES      25
+#define TEMPL_LOC_OFFSET        2190
+
+#define STR_TEMPLATE_NAME1_DEF      (TEMPL_LOC_OFFSET + 1)
+#define STR_TEMPLATE_NAME2_DEF      (TEMPL_LOC_OFFSET + 2)
+#define STR_TEMPLATE_NAME3_DEF      (TEMPL_LOC_OFFSET + 3)
+#define STR_TEMPLATE_NAME4_DEF      (TEMPL_LOC_OFFSET + 4)
+#define STR_TEMPLATE_NAME5_DEF      (TEMPL_LOC_OFFSET + 5)
+#define STR_TEMPLATE_NAME6_DEF      (TEMPL_LOC_OFFSET + 6)
+#define STR_TEMPLATE_NAME7_DEF      (TEMPL_LOC_OFFSET + 7)
+#define STR_TEMPLATE_NAME8_DEF      (TEMPL_LOC_OFFSET + 8)
+#define STR_TEMPLATE_NAME9_DEF      (TEMPL_LOC_OFFSET + 9)
+#define STR_TEMPLATE_NAME10_DEF     (TEMPL_LOC_OFFSET + 10)
+#define STR_TEMPLATE_NAME11_DEF     (TEMPL_LOC_OFFSET + 11)
+#define STR_TEMPLATE_NAME12_DEF     (TEMPL_LOC_OFFSET + 12)
+#define STR_TEMPLATE_NAME13_DEF     (TEMPL_LOC_OFFSET + 13)
+#define STR_TEMPLATE_NAME14_DEF     (TEMPL_LOC_OFFSET + 14)
+#define STR_TEMPLATE_NAME15_DEF     (TEMPL_LOC_OFFSET + 15)
+#define STR_TEMPLATE_NAME16_DEF     (TEMPL_LOC_OFFSET + 16)
+#define STR_TEMPLATE_NAME17_DEF     (TEMPL_LOC_OFFSET + 17)
+#define STR_TEMPLATE_NAME18_DEF     (TEMPL_LOC_OFFSET + 18)
+#define STR_TEMPLATE_NAME19_DEF     (TEMPL_LOC_OFFSET + 19)
+#define STR_TEMPLATE_NAME20_DEF     (TEMPL_LOC_OFFSET + 20)
+#define STR_TEMPLATE_NAME21_DEF     (TEMPL_LOC_OFFSET + 21)
+#define STR_TEMPLATE_NAME22_DEF     (TEMPL_LOC_OFFSET + 22)
+#define STR_TEMPLATE_NAME23_DEF     (TEMPL_LOC_OFFSET + 23)
+#define STR_TEMPLATE_NAME24_DEF     (TEMPL_LOC_OFFSET + 24)
+#define STR_TEMPLATE_NAME25_DEF     (TEMPL_LOC_OFFSET + 25)
+
+#define STR_TEMPLATE_NAME1      (TEMPL_LOC_OFFSET + 51)
+#define STR_TEMPLATE_NAME2      (TEMPL_LOC_OFFSET + 52)
+#define STR_TEMPLATE_NAME3      (TEMPL_LOC_OFFSET + 53)
+#define STR_TEMPLATE_NAME4      (TEMPL_LOC_OFFSET + 54)
+#define STR_TEMPLATE_NAME5      (TEMPL_LOC_OFFSET + 55)
+#define STR_TEMPLATE_NAME6      (TEMPL_LOC_OFFSET + 56)
+#define STR_TEMPLATE_NAME7      (TEMPL_LOC_OFFSET + 57)
+#define STR_TEMPLATE_NAME8      (TEMPL_LOC_OFFSET + 58)
+#define STR_TEMPLATE_NAME9      (TEMPL_LOC_OFFSET + 59)
+#define STR_TEMPLATE_NAME10     (TEMPL_LOC_OFFSET + 60)
+#define STR_TEMPLATE_NAME11     (TEMPL_LOC_OFFSET + 61)
+#define STR_TEMPLATE_NAME12     (TEMPL_LOC_OFFSET + 62)
+#define STR_TEMPLATE_NAME13     (TEMPL_LOC_OFFSET + 63)
+#define STR_TEMPLATE_NAME14     (TEMPL_LOC_OFFSET + 64)
+#define STR_TEMPLATE_NAME15     (TEMPL_LOC_OFFSET + 65)
+#define STR_TEMPLATE_NAME16     (TEMPL_LOC_OFFSET + 66)
+#define STR_TEMPLATE_NAME17     (TEMPL_LOC_OFFSET + 67)
+#define STR_TEMPLATE_NAME18     (TEMPL_LOC_OFFSET + 68)
+#define STR_TEMPLATE_NAME19     (TEMPL_LOC_OFFSET + 69)
+#define STR_TEMPLATE_NAME20     (TEMPL_LOC_OFFSET + 70)
+#define STR_TEMPLATE_NAME21     (TEMPL_LOC_OFFSET + 71)
+#define STR_TEMPLATE_NAME22     (TEMPL_LOC_OFFSET + 72)
+#define STR_TEMPLATE_NAME23     (TEMPL_LOC_OFFSET + 73)
+#define STR_TEMPLATE_NAME24     (TEMPL_LOC_OFFSET + 74)
+#define STR_TEMPLATE_NAME25     (TEMPL_LOC_OFFSET + 75)

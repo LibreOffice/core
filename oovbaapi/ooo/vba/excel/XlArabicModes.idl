@@ -1,0 +1,8 @@
+module ooo { module vba { module excel {
+    constants XlArabicModes {
+        const long xlArabicBothStrict = 3;
+        const long xlArabicNone = 0;
+        const long xlArabicStrictAlefHamza = 1;
+        const long xlArabicStrictFinalYaa = 2;
+    };
+}; }; };

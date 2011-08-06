@@ -1,0 +1,6 @@
+module ooo { module vba { module excel {
+    constants XlSearchOrder {
+        const long xlByColumns = 2;
+        const long xlByRows = 1;
+    };
+}; }; };

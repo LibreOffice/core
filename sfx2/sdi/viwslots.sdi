@@ -1,0 +1,110 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+interface View
+[
+    Automation = FALSE ;
+]
+{
+     //---------------------------------------------------------------------
+    SID_MAIL_SENDDOC // ole(no) api(todo)
+    [
+        ExecMethod = ExecMisc_Impl ;
+        StateMethod = GetState_Impl ;
+    ]
+    SID_MAIL_SENDDOCASPDF // ole(no) api(todo)
+    [
+        ExecMethod = ExecMisc_Impl ;
+        StateMethod = GetState_Impl ;
+    ]
+    SID_WEBHTML // ole(no) api(todo)
+    [
+        ExecMethod = ExecMisc_Impl ;
+        StateMethod = GetState_Impl ;
+    ]
+    SID_MAIL_SENDDOCASFORMAT // ole(no) api(todo)
+    [
+        ExecMethod = ExecMisc_Impl ;
+        StateMethod = GetState_Impl ;
+    ]
+    SID_MAIL_SENDDOCASMS // ole(no) api(todo)
+    [
+        ExecMethod = ExecMisc_Impl ;
+        StateMethod = GetState_Impl ;
+    ]
+    SID_MAIL_SENDDOCASOOO // ole(no) api(todo)
+    [
+        ExecMethod = ExecMisc_Impl ;
+        StateMethod = GetState_Impl ;
+    ]
+     //---------------------------------------------------------------------
+    SID_PRINTDOC // ole(no) api(play/rec)
+    [
+        ExecMethod = ExecPrint_Impl ;
+        StateMethod = GetState_Impl ;
+    ]
+    SID_PRINTDOCDIRECT // ole(no) api(final/play/rec)
+    [
+        ExecMethod = ExecPrint_Impl ;
+        StateMethod = GetState_Impl ;
+    ]
+    SID_PRINTER_NAME // ole(no) api(play/rec)
+    [
+        ExecMethod = ExecPrint_Impl ;
+    ]
+    SID_SETUPPRINTER // ole(no) api(play/rec)
+    [
+        ExecMethod = ExecPrint_Impl ;
+        StateMethod = GetState_Impl ;
+    ]
+    SID_STYLE_CATALOG // ole(no) api(play/rec)
+    [
+        ExecMethod = ExecMisc_Impl ;
+        StateMethod = GetState_Impl ;
+    ]
+    SID_ACTIVATE_STYLE_APPLY
+    [
+        ExecMethod = ExecMisc_Impl ;
+    ]
+    SID_PLUGINS_ACTIVE // ole(no) api(play/rec)
+    [
+        ExecMethod = ExecMisc_Impl ;
+        StateMethod = GetState_Impl ;
+    ]
+    SID_STYLE_FAMILY
+    [
+        ExecMethod = ExecMisc_Impl ;
+        StateMethod = GetState_Impl ;
+    ]
+}
+
+ //=========================================================================
+
+shell SfxViewShell
+{
+    import View [Automation];
+}

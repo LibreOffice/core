@@ -1,0 +1,12 @@
+module ooo { module vba { module office {
+    constants MsoSyncEventType {
+        const long msoSyncEventDownloadFailed = 2;
+        const long msoSyncEventDownloadInitiated = 0;
+        const long msoSyncEventDownloadNoChange = 6;
+        const long msoSyncEventDownloadSucceeded = 1;
+        const long msoSyncEventOffline = 7;
+        const long msoSyncEventUploadFailed = 5;
+        const long msoSyncEventUploadInitiated = 3;
+        const long msoSyncEventUploadSucceeded = 4;
+    };
+}; }; };

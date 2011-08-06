@@ -1,0 +1,12 @@
+module ooo { module vba { module word {
+    constants WdSummaryLength {
+        const long wd100Words = -4;
+        const long wd10Percent = -6;
+        const long wd10Sentences = -2;
+        const long wd20Sentences = -3;
+        const long wd25Percent = -7;
+        const long wd500Words = -5;
+        const long wd50Percent = -8;
+        const long wd75Percent = -9;
+    };
+}; }; };

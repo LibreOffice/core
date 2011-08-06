@@ -1,0 +1,6 @@
+module ooo { module vba { module word {
+    constants WdWordDialogTabHID {
+        const long wdDialogFilePageSetupTabPaperSize = 150001;
+        const long wdDialogFilePageSetupTabPaperSource = 150002;
+    };
+}; }; };

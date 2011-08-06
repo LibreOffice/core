@@ -1,0 +1,9 @@
+module ooo { module vba { module access {
+    constants AcExportXMLOtherFlags {
+        const long acEmbedSchema = 1;
+        const long acExcludePrimaryKeyAndIndexes = 2;
+        const long acLiveReportSource = 8;
+        const long acPersistReportML = 16;
+        const long acRunFromServer = 4;
+    };
+}; }; };

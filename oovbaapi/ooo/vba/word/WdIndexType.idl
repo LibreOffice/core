@@ -1,0 +1,6 @@
+module ooo { module vba { module word {
+    constants WdIndexType {
+        const long wdIndexIndent = 0;
+        const long wdIndexRunin = 1;
+    };
+}; }; };

@@ -1,0 +1,7 @@
+module ooo { module vba { module word {
+    constants WdPreferredWidthType {
+        const long wdPreferredWidthAuto = 1;
+        const long wdPreferredWidthPercent = 2;
+        const long wdPreferredWidthPoints = 3;
+    };
+}; }; };

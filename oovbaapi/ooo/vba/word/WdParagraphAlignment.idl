@@ -1,0 +1,13 @@
+module ooo { module vba { module word {
+    constants WdParagraphAlignment {
+        const long wdAlignParagraphCenter = 1;
+        const long wdAlignParagraphDistribute = 4;
+        const long wdAlignParagraphJustify = 3;
+        const long wdAlignParagraphJustifyHi = 7;
+        const long wdAlignParagraphJustifyLow = 8;
+        const long wdAlignParagraphJustifyMed = 5;
+        const long wdAlignParagraphLeft = 0;
+        const long wdAlignParagraphRight = 2;
+        const long wdAlignParagraphThaiJustify = 9;
+    };
+}; }; };

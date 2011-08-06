@@ -1,0 +1,8 @@
+module ooo { module vba { module powerpoint {
+    constants PpHTMLVersion {
+        const long ppHTMLAutodetect = 4;
+        const long ppHTMLDual = 3;
+        const long ppHTMLv3 = 1;
+        const long ppHTMLv4 = 2;
+    };
+}; }; };

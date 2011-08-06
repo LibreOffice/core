@@ -1,0 +1,1240 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#include <svx/dialogs.hrc>
+#include "float3d.hrc"
+#include <svx/svxcommands.h>
+
+#define WIDTH               158
+#define HEIGHT              209
+#define BORDER              3
+#define BUTTON_WIDTH        13
+#define BUTTON_HEIGHT       13
+#define VT_BUTTON_WIDTH     18
+#define GROUP_Y             (BORDER + BUTTON_HEIGHT + 3)
+#define GROUP_HEIGHT        95
+#define GROUP_WIDTH         (WIDTH - 2 * BORDER)
+#define GROUP_PREV_X        60
+#define GROUP_PREV_Y        (GROUP_Y + GROUP_HEIGHT + 1)
+#define GROUP_PREV_WIDTH    (WIDTH - BORDER - GROUP_PREV_X)
+#define GROUP_PREV_HEIGHT   (HEIGHT - GROUP_PREV_Y - BORDER)
+#define IMG_BUTTON_HEIGHT   15
+#define IMG_BUTTON_NEXT     (IMG_BUTTON_HEIGHT + 2)
+#define IMG_BUTTON_SIZE     MAP_APPFONT( BUTTON_WIDTH, IMG_BUTTON_HEIGHT )
+#define FIXED_LINE_HEIGHT   8
+#define FIXED_LINE_SIZE     MAP_APPFONT( GROUP_WIDTH, FIXED_LINE_HEIGHT )
+#define TOP_FIXED_LINE_POS  MAP_APPFONT( BORDER, 2+BORDER + IMG_BUTTON_HEIGHT )
+#define FT_WIDTH_SHORT      56
+#define FT_WIDTH_LONG       89
+#define FT_HEIGHT           8
+#define FT_OFFSET_NEXT      (FT_HEIGHT + 6)
+#define FT_INDENT           (BORDER + 6)
+#define FIRST_FT_START_Y    (2+BORDER+IMG_BUTTON_HEIGHT + 13)
+#define SEGMENTS_START_Y    (FIRST_FT_START_Y + 3*FT_OFFSET_NEXT + 13)
+#define NORMALS_START_Y     (SEGMENTS_START_Y + 2*13)
+#define NORMALS_BT_START_Y  (SEGMENTS_START_Y + 2*13 +11)
+#define SHADOW_START_Y      (FIRST_FT_START_Y + 13)
+#define CAMERA_START_Y      (SHADOW_START_Y + FT_OFFSET_NEXT + 13)
+#define SPECULAR_START_Y    (FIRST_FT_START_Y + 2*FT_OFFSET_NEXT + 13)
+
+#define MASKCOLOR   MaskColor = Color { Red=0xFFFF; Green=0x0000; Blue=0xFFFF; };
+
+
+DockingWindow RID_SVXFLOAT_3D
+{
+    HelpID = CMD_SID_3D_WIN ;
+    Border = TRUE ;
+    Hide = TRUE ;
+    SVLook = TRUE ;
+    Sizeable = TRUE ;
+    Moveable = TRUE ;
+    Closeable = TRUE ;
+    Zoomable = TRUE ;
+    Dockable = TRUE ;
+    EnableResizing = TRUE ;
+    Size = MAP_APPFONT ( WIDTH , HEIGHT ) ;
+    Text [ en-US ] = "3D Effects" ;
+    Closeable = TRUE ;
+    Zoomable = TRUE ;
+
+    ImageButton BTN_GEO
+    {
+        HelpID = "svx:ImageButton:RID_SVXFLOAT_3D:BTN_GEO";
+        Pos = MAP_APPFONT ( 4 , BORDER ) ;
+        Size = MAP_APPFONT ( VT_BUTTON_WIDTH , IMG_BUTTON_HEIGHT ) ;
+        TabStop = TRUE ;
+        ButtonImage = Image
+        {
+            ImageBitmap = Bitmap { File = "3dgeo.bmp" ; };
+            MASKCOLOR
+        };
+        QuickHelpText [ en-US ] = "Geometry" ;
+    };
+    ImageButton BTN_REPRESENTATION
+    {
+        HelpID = "svx:ImageButton:RID_SVXFLOAT_3D:BTN_REPRESENTATION";
+        Pos = MAP_APPFONT ( 22 , BORDER ) ;
+        Size = MAP_APPFONT ( VT_BUTTON_WIDTH , IMG_BUTTON_HEIGHT ) ;
+        TabStop = TRUE ;
+        ButtonImage = Image
+        {
+            ImageBitmap = Bitmap { File = "3drepres.bmp" ; };
+            MASKCOLOR
+        };
+        QuickHelpText [ en-US ] = "Shading" ;
+    };
+    ImageButton BTN_LIGHT
+    {
+        HelpID = "svx:ImageButton:RID_SVXFLOAT_3D:BTN_LIGHT";
+        Pos = MAP_APPFONT ( 40 , BORDER ) ;
+        Size = MAP_APPFONT ( VT_BUTTON_WIDTH , IMG_BUTTON_HEIGHT ) ;
+        TabStop = TRUE ;
+        ButtonImage = Image
+        {
+            ImageBitmap = Bitmap { File = "3dlight.bmp" ; };
+            MASKCOLOR
+        };
+        QuickHelpText [ en-US ] = "Illumination" ;
+    };
+    ImageButton BTN_TEXTURE
+    {
+        HelpID = "svx:ImageButton:RID_SVXFLOAT_3D:BTN_TEXTURE";
+        Pos = MAP_APPFONT ( 58 , BORDER ) ;
+        Size = MAP_APPFONT ( VT_BUTTON_WIDTH , IMG_BUTTON_HEIGHT ) ;
+        ButtonImage = Image
+        {
+            ImageBitmap = Bitmap { File = "3dtextur.bmp" ; };
+            MASKCOLOR
+        };
+        TabStop = TRUE ;
+        QuickHelpText [ en-US ] = "Textures" ;
+    };
+    ImageButton BTN_MATERIAL
+    {
+        HelpID = "svx:ImageButton:RID_SVXFLOAT_3D:BTN_MATERIAL";
+        Pos = MAP_APPFONT ( 76 , BORDER ) ;
+        Size = MAP_APPFONT ( VT_BUTTON_WIDTH , IMG_BUTTON_HEIGHT ) ;
+        TabStop = TRUE ;
+        ButtonImage = Image
+        {
+            ImageBitmap = Bitmap { File = "material.bmp" ; };
+            MASKCOLOR
+        };
+        QuickHelpText [ en-US ] = "Material" ;
+    };
+
+    ImageButton BTN_UPDATE
+    {
+        HelpID = "svx:ImageButton:RID_SVXFLOAT_3D:BTN_UPDATE";
+        Pos = MAP_APPFONT ( WIDTH - BORDER - BUTTON_WIDTH * 2 , BORDER ) ;
+        Size = IMG_BUTTON_SIZE;
+        TabStop = TRUE ;
+        ButtonImage = Image
+        {
+            ImageBitmap = Bitmap { File = "sc10350.bmp" ; };
+            MASKCOLOR
+        };
+        QuickHelpText [ en-US ] = "Update" ;
+    };
+    ImageButton BTN_ASSIGN
+    {
+        HelpID = "svx:ImageButton:RID_SVXFLOAT_3D:BTN_ASSIGN";
+        Pos = MAP_APPFONT ( WIDTH - BORDER - BUTTON_WIDTH , BORDER ) ;
+        Size = IMG_BUTTON_SIZE;
+        TabStop = TRUE ;
+        ButtonImage = Image
+        {
+            ImageBitmap = Bitmap { File = "apply.bmp" ; };
+            MASKCOLOR
+        };
+        QuickHelpText [ en-US ] = "Assign" ;
+    };
+     // Lower part
+    ImageButton BTN_CHANGE_TO_3D
+    {
+        HelpID = "svx:ImageButton:RID_SVXFLOAT_3D:BTN_CHANGE_TO_3D";
+        Pos = MAP_APPFONT ( 9 , 200 - BUTTON_HEIGHT ) ;
+        Size = IMG_BUTTON_SIZE;
+        TabStop = TRUE ;
+        ButtonImage = Image
+        {
+            ImageBitmap = Bitmap { File = "convrt3d.bmp" ; };
+            MASKCOLOR
+        };
+        TabStop = TRUE ;
+        QuickHelpText [ en-US ] = "Convert to 3D" ;
+    };
+    ImageButton BTN_LATHE_OBJ
+    {
+        HelpID = "svx:ImageButton:RID_SVXFLOAT_3D:BTN_LATHE_OBJ";
+        Pos = MAP_APPFONT ( 9 + BUTTON_WIDTH + 1 , 200 - BUTTON_HEIGHT ) ;
+        Size = IMG_BUTTON_SIZE;
+        TabStop = TRUE ;
+        ButtonImage = Image
+        {
+            ImageBitmap = Bitmap { File = "rotate3d.bmp" ; };
+            MASKCOLOR
+        };
+        TabStop = TRUE ;
+        QuickHelpText [ en-US ] = "Convert to Lathe Object" ;
+    };
+    ImageButton BTN_PERSPECTIVE
+    {
+        HelpID = "svx:ImageButton:RID_SVXFLOAT_3D:BTN_PERSPECTIVE";
+        Pos = MAP_APPFONT ( 9 + ( BUTTON_WIDTH + 1 ) * 2 , 200 - BUTTON_HEIGHT ) ;
+        Size = IMG_BUTTON_SIZE;
+        TabStop = TRUE ;
+        ButtonImage = Image
+        {
+            ImageBitmap = Bitmap { File = "persp3d.bmp" ; };
+            MASKCOLOR
+        };
+        TabStop = TRUE ;
+        QuickHelpText [ en-US ] = "Perspective On/Off" ;
+    };
+    Control CTL_PREVIEW
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 66 , 124 ) ;
+        Size = MAP_APPFONT ( 83 , 76 ) ;
+        TabStop = TRUE ;
+    };
+    Control CTL_LIGHT_PREVIEW
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 66 , 124 ) ;
+        Size = MAP_APPFONT ( 83 , 76 ) ;
+        TabStop = TRUE ;
+    };
+    FixedLine FL_GEOMETRIE
+    {
+        Pos = TOP_FIXED_LINE_POS;
+        Size = FIXED_LINE_SIZE;
+        Text [ en-US ] = "Geometry" ;
+    };
+    FixedText FT_PERCENT_DIAGONAL
+    {
+        Pos = MAP_APPFONT ( FT_INDENT, FIRST_FT_START_Y );
+        Size = MAP_APPFONT ( FT_WIDTH_LONG , FT_HEIGHT ) ;
+        Text [ en-US ] = "R~ounded edges" ;
+    };
+    MetricField MTR_PERCENT_DIAGONAL
+    {
+        HelpID = "svx:MetricField:RID_SVXFLOAT_3D:MTR_PERCENT_DIAGONAL";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( FT_INDENT + FT_WIDTH_LONG + 1 , FIRST_FT_START_Y - 2 ) ;
+        Size = MAP_APPFONT ( 50 , 12 ) ;
+        TabStop = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        SpinSize = 5 ;
+        Maximum = 100 ;
+        Last = 100 ;
+        Unit = FUNIT_CUSTOM ;
+        CustomUnitText = "%" ;
+    };
+    FixedText FT_BACKSCALE
+    {
+        Pos = MAP_APPFONT ( FT_INDENT , FIRST_FT_START_Y + FT_OFFSET_NEXT ) ;
+        Size = MAP_APPFONT ( FT_WIDTH_LONG , FT_HEIGHT ) ;
+        Text [ en-US ] = "~Scaled depth" ;
+    };
+    MetricField MTR_BACKSCALE
+    {
+        HelpID = "svx:MetricField:RID_SVXFLOAT_3D:MTR_BACKSCALE";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( FT_INDENT + FT_WIDTH_LONG + 1,
+                            FIRST_FT_START_Y + FT_OFFSET_NEXT - 2 ) ;
+        Size = MAP_APPFONT ( 50 , 12 ) ;
+        TabStop = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        SpinSize = 5 ;
+        Maximum = 10000 ;
+        Unit = FUNIT_CUSTOM ;
+        CustomUnitText  = "%" ;
+        Last = 10000 ;
+    };
+    FixedText FT_END_ANGLE
+    {
+        Pos = MAP_APPFONT ( FT_INDENT , FIRST_FT_START_Y + 2*FT_OFFSET_NEXT ) ;
+        Size = MAP_APPFONT ( FT_WIDTH_LONG , FT_HEIGHT ) ;
+        Text [ en-US ] = "~Rotation angle" ;
+    };
+    MetricField MTR_END_ANGLE
+    {
+        HelpID = "svx:MetricField:RID_SVXFLOAT_3D:MTR_END_ANGLE";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( FT_INDENT + FT_WIDTH_LONG + 1,
+                            FIRST_FT_START_Y + 2*FT_OFFSET_NEXT - 2 ) ;
+        Size = MAP_APPFONT ( 50 , 12 ) ;
+        TabStop = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        SpinSize = 5 ;
+        Unit = FUNIT_CUSTOM ;
+        Maximum = 36000 ;
+        Last = 36000 ;
+        DecimalDigits = 1 ;
+        CustomUnitText [ en-US ] = " degree(s)";
+    };
+    FixedText FT_DEPTH
+    {
+        Pos = MAP_APPFONT ( FT_INDENT , FIRST_FT_START_Y + 3*FT_OFFSET_NEXT ) ;
+        Size = MAP_APPFONT ( FT_WIDTH_LONG , FT_HEIGHT ) ;
+        Text [ en-US ] = "~Depth" ;
+    };
+    MetricField MTR_DEPTH
+    {
+        HelpID = "svx:MetricField:RID_SVXFLOAT_3D:MTR_DEPTH";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( FT_INDENT + FT_WIDTH_LONG + 1,
+                            FIRST_FT_START_Y + 3*FT_OFFSET_NEXT - 2 ) ;
+        Size = MAP_APPFONT ( 50 , 12 ) ;
+        TabStop = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Unit = FUNIT_MM ;
+        StrictFormat = TRUE ;
+        Minimum = 0 ;
+        First = 0 ;
+        Maximum = 10000000 ;
+        Last = 10000000 ;
+        DecimalDigits = 2 ;
+        SpinSize = 100 ;
+    };
+    FixedLine FL_SEGMENTS
+    {
+        Pos = MAP_APPFONT ( BORDER , SEGMENTS_START_Y ) ;
+        Size = FIXED_LINE_SIZE;
+        Text [ en-US ] = "Segments" ;
+    };
+     // Geometry
+    FixedText FT_HORIZONTAL
+    {
+        Pos = MAP_APPFONT ( FT_INDENT , SEGMENTS_START_Y+13 ) ;
+        Size = MAP_APPFONT ( 40 , 8 ) ;
+        Text [ en-US ] = "~Horizontal" ;
+    };
+    NumericField NUM_HORIZONTAL
+    {
+        HelpID = "svx:NumericField:RID_SVXFLOAT_3D:NUM_HORIZONTAL";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( FT_INDENT + 42, SEGMENTS_START_Y+13-2 ) ;
+        Size = MAP_APPFONT ( 22 , 12 ) ;
+        TabStop = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Minimum = 2 ;
+        First = 2 ;
+        Maximum = 256 ;
+        Last = 256 ;
+    };
+    FixedText FT_VERTICAL
+    {
+        Pos = MAP_APPFONT ( FT_INDENT + 74 , SEGMENTS_START_Y+13 ) ;
+        Size = MAP_APPFONT ( 40 , 8 ) ;
+        Text [ en-US ] = "~Vertical" ;
+    };
+    NumericField NUM_VERTICAL
+    {
+        HelpID = "svx:NumericField:RID_SVXFLOAT_3D:NUM_VERTICAL";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( FT_INDENT + 114+2 , SEGMENTS_START_Y+13-2 ) ;
+        Size = MAP_APPFONT ( 22 , 12 ) ;
+        TabStop = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Minimum = 2 ;
+        First = 2 ;
+        Maximum = 256 ;
+        Last = 256 ;
+    };
+
+    FixedLine FL_NORMALS
+    {
+        Pos = MAP_APPFONT ( BORDER , NORMALS_START_Y ) ;
+        Size = MAP_APPFONT ( 54 , 8 ) ;
+        Text [ en-US ] = "Normals" ;
+    };
+    ImageButton BTN_NORMALS_OBJ
+    {
+        HelpID = "svx:ImageButton:RID_SVXFLOAT_3D:BTN_NORMALS_OBJ";
+        Pos = MAP_APPFONT ( FT_INDENT , NORMALS_BT_START_Y ) ;
+        Size = IMG_BUTTON_SIZE;
+        ButtonImage = Image
+        {
+            ImageBitmap = Bitmap { File = "normobjs.bmp" ; };
+            MASKCOLOR
+        };
+        TabStop = TRUE ;
+        QuickHelpText [ en-US ] = "Object-Specific" ;
+    };
+    ImageButton BTN_NORMALS_FLAT
+    {
+        HelpID = "svx:ImageButton:RID_SVXFLOAT_3D:BTN_NORMALS_FLAT";
+        Pos = MAP_APPFONT ( FT_INDENT + (1+BUTTON_WIDTH) , NORMALS_BT_START_Y ) ;
+        Size = IMG_BUTTON_SIZE;
+        ButtonImage = Image
+        {
+            ImageBitmap = Bitmap { File = "normflat.bmp" ; };
+            MASKCOLOR
+        };
+        TabStop = TRUE ;
+        QuickHelpText [ en-US ] = "Flat" ;
+    };
+    ImageButton BTN_NORMALS_SPHERE
+    {
+        HelpID = "svx:ImageButton:RID_SVXFLOAT_3D:BTN_NORMALS_SPHERE";
+        Pos = MAP_APPFONT ( FT_INDENT + (1+BUTTON_WIDTH) * 2 , NORMALS_BT_START_Y ) ;
+        Size = IMG_BUTTON_SIZE;
+        ButtonImage = Image
+        {
+            ImageBitmap = Bitmap { File = "normsphe.bmp" ; };
+            MASKCOLOR
+        };
+        TabStop = TRUE ;
+        QuickHelpText [ en-US ] = "Spherical" ;
+    };
+    ImageButton BTN_NORMALS_INVERT
+    {
+        HelpID = "svx:ImageButton:RID_SVXFLOAT_3D:BTN_NORMALS_INVERT";
+        Pos = MAP_APPFONT ( FT_INDENT , NORMALS_BT_START_Y + IMG_BUTTON_NEXT ) ;
+        Size = IMG_BUTTON_SIZE;
+        ButtonImage = Image
+        {
+            ImageBitmap = Bitmap { File = "invert3d.bmp" ; };
+            MASKCOLOR
+        };
+        TabStop = TRUE ;
+        QuickHelpText [ en-US ] = "Invert Normals" ;
+    };
+    ImageButton BTN_TWO_SIDED_LIGHTING
+    {
+        HelpID = "svx:ImageButton:RID_SVXFLOAT_3D:BTN_TWO_SIDED_LIGHTING";
+        Pos = MAP_APPFONT ( FT_INDENT + (1+BUTTON_WIDTH) * 2 ,
+                            NORMALS_BT_START_Y + IMG_BUTTON_NEXT ) ;
+        Size = IMG_BUTTON_SIZE;
+        ButtonImage = Image
+        {
+            ImageBitmap = Bitmap { File = "lght2sid.bmp" ; };
+            MASKCOLOR
+        };
+        TabStop = TRUE ;
+        QuickHelpText [ en-US ] = "Double-Sided Illumination" ;
+    };
+    ImageButton BTN_DOUBLE_SIDED
+    {
+        HelpID = "svx:ImageButton:RID_SVXFLOAT_3D:BTN_DOUBLE_SIDED";
+        Pos = MAP_APPFONT ( FT_INDENT , NORMALS_BT_START_Y + 2*IMG_BUTTON_NEXT ) ;
+        Size = IMG_BUTTON_SIZE;
+        ButtonImage = Image
+        {
+            ImageBitmap = Bitmap { File = "doublesi.bmp" ; };
+            MASKCOLOR
+        };
+        TabStop = TRUE ;
+        QuickHelpText [ en-US ] = "Double-Sided" ;
+    };
+
+    // Representation
+    FixedText FT_SHADEMODE
+    {
+        Pos = MAP_APPFONT ( FT_INDENT , FIRST_FT_START_Y ) ;
+        Size = MAP_APPFONT ( FT_WIDTH_SHORT , FT_HEIGHT ) ;
+        Text [ en-US ] = "~Mode" ;
+    };
+    ListBox LB_SHADEMODE
+    {
+        HelpID = "svx:ListBox:RID_SVXFLOAT_3D:LB_SHADEMODE";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 66 , 30 ) ;
+        Size = MAP_APPFONT ( 83 , 100 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+        StringList [ en-US ] =
+        {
+            < "Flat" ; > ;
+            < "Phong" ; > ;
+            < "Gouraud" ; > ;
+        };
+    };
+    FixedLine FL_SHADOW
+    {
+        Pos = MAP_APPFONT ( BORDER , SHADOW_START_Y ) ;
+        Size = FIXED_LINE_SIZE;
+        Text [ en-US ] = "Shadow" ;
+    };
+    ImageButton BTN_SHADOW_3D
+    {
+        HelpID = "svx:ImageButton:RID_SVXFLOAT_3D:BTN_SHADOW_3D";
+        Pos = MAP_APPFONT ( FT_INDENT , SHADOW_START_Y + 11 ) ;
+        Size = IMG_BUTTON_SIZE;
+        TabStop = TRUE ;
+        ButtonImage = Image
+        {
+            ImageBitmap = Bitmap { File = "shadow3d.bmp" ; };
+            MASKCOLOR
+        };
+        TabStop = TRUE ;
+        QuickHelpText [ en-US ] = "3D Shadowing On/Off" ;
+    };
+    FixedText FT_SLANT
+    {
+        Pos = MAP_APPFONT ( FT_INDENT + BUTTON_WIDTH + 3 , SHADOW_START_Y + 11 + 2 ) ;
+        Size = MAP_APPFONT ( 68 , FT_HEIGHT ) ;
+        Right = TRUE;
+        Text [ en-US ] = "S~urface angle" ;
+    };
+    MetricField MTR_SLANT
+    {
+        HelpID = "svx:MetricField:RID_SVXFLOAT_3D:MTR_SLANT";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 99 , SHADOW_START_Y + 11 ) ;
+        Size = MAP_APPFONT ( 50 , 12 ) ;
+        TabStop = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        SpinSize = 5 ;
+        Maximum = 90 ;
+        Unit = FUNIT_CUSTOM ;
+        Last = 90 ;
+        CustomUnitText [ en-US ] = " degree(s)";
+    };
+
+    FixedLine FL_CAMERA
+    {
+        Pos = MAP_APPFONT ( BORDER , CAMERA_START_Y ) ;
+        Size = FIXED_LINE_SIZE;
+        Text [ en-US ] = "Camera" ;
+    };
+    FixedText FT_DISTANCE
+    {
+        Pos = MAP_APPFONT ( FT_INDENT , CAMERA_START_Y + 11 ) ;
+        Size = MAP_APPFONT ( FT_WIDTH_LONG , FT_HEIGHT ) ;
+        Text [ en-US ] = "~Distance" ;
+    };
+    MetricField MTR_DISTANCE
+    {
+        HelpID = "svx:MetricField:RID_SVXFLOAT_3D:MTR_DISTANCE";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( FT_INDENT + FT_WIDTH_LONG + 1 ,
+                            CAMERA_START_Y + 11 - 2 ) ;
+        Size = MAP_APPFONT ( 50 , 12 ) ;
+        TabStop = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        StrictFormat = TRUE ;
+        Unit = FUNIT_MM ;
+        Minimum = 1 ;
+        First = 1 ;
+        Maximum = 1000000 ;
+        Last = 1000000 ;
+        DecimalDigits = 2 ;
+        SpinSize = 100 ;
+    };
+    FixedText FT_FOCAL_LENGTH
+    {
+        Pos = MAP_APPFONT ( FT_INDENT , CAMERA_START_Y + 11 + FT_OFFSET_NEXT ) ;
+        Size = MAP_APPFONT ( FT_WIDTH_LONG , FT_HEIGHT ) ;
+        Text [ en-US ] = "~Focal length" ;
+    };
+    MetricField MTR_FOCAL_LENGTH
+    {
+        HelpID = "svx:MetricField:RID_SVXFLOAT_3D:MTR_FOCAL_LENGTH";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( FT_INDENT + FT_WIDTH_LONG + 1 ,
+                            CAMERA_START_Y + 11 + FT_OFFSET_NEXT - 2 ) ;
+        Size = MAP_APPFONT ( 50 , 12 ) ;
+        TabStop = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        StrictFormat = TRUE ;
+        Unit = FUNIT_MM ;
+        Minimum = 1 ;
+        First = 1 ;
+        Maximum = 1000000 ;
+        Last = 1000000 ;
+        DecimalDigits = 2 ;
+        SpinSize = 100 ;
+    };
+    FixedLine FL_REPRESENTATION
+    {
+        Pos = TOP_FIXED_LINE_POS;
+        Size = FIXED_LINE_SIZE;
+        Text [ en-US ] = "Shading" ;
+    };
+     // Lighting
+    FixedText FT_LIGHTSOURCE
+    {
+        Pos = MAP_APPFONT ( FT_INDENT , FIRST_FT_START_Y ) ;
+        Size = MAP_APPFONT ( FT_WIDTH_LONG , FT_HEIGHT ) ;
+        Text [ en-US ] = "~Light source" ;
+    };
+    ImageButton BTN_LIGHT_1
+    {
+        HelpID = "svx:ImageButton:RID_SVXFLOAT_3D:BTN_LIGHT_1";
+        Pos = MAP_APPFONT ( FT_INDENT , FIRST_FT_START_Y + 11 ) ;
+        Size = MAP_APPFONT ( 12 , 14 ) ;
+        ButtonImage = Image
+        {
+            ImageBitmap = Bitmap { File = "light.bmp" ; };
+            MASKCOLOR
+        };
+        TabStop = TRUE ;
+        QuickHelpText [ en-US ] = "Light Source 1" ;
+    };
+    ImageButton BTN_LIGHT_2
+    {
+        HelpID = "svx:ImageButton:RID_SVXFLOAT_3D:BTN_LIGHT_2";
+        Pos = MAP_APPFONT ( FT_INDENT + 13 , FIRST_FT_START_Y + 11 ) ;
+        Size = MAP_APPFONT ( 12 , 14 ) ;
+        ButtonImage = Image
+        {
+            ImageBitmap = Bitmap { File = "light.bmp" ; };
+            MASKCOLOR
+        };
+        TabStop = TRUE ;
+        QuickHelpText [ en-US ] = "Light Source 2" ;
+    };
+    ImageButton BTN_LIGHT_3
+    {
+        HelpID = "svx:ImageButton:RID_SVXFLOAT_3D:BTN_LIGHT_3";
+        Pos = MAP_APPFONT ( FT_INDENT + 2*13 , FIRST_FT_START_Y + 11 ) ;
+        Size = MAP_APPFONT ( 12 , 14 ) ;
+        ButtonImage = Image
+        {
+            ImageBitmap = Bitmap { File = "light.bmp" ; };
+            MASKCOLOR
+        };
+        TabStop = TRUE ;
+        QuickHelpText [ en-US ] = "Light Source 3" ;
+    };
+    ImageButton BTN_LIGHT_4
+    {
+        HelpID = "svx:ImageButton:RID_SVXFLOAT_3D:BTN_LIGHT_4";
+        Pos = MAP_APPFONT ( FT_INDENT + 3*13 , FIRST_FT_START_Y + 11 ) ;
+        Size = MAP_APPFONT ( 12 , 14 ) ;
+        ButtonImage = Image
+        {
+            ImageBitmap = Bitmap { File = "light.bmp" ; };
+            MASKCOLOR
+        };
+        TabStop = TRUE ;
+        QuickHelpText [ en-US ] = "Light Source 4" ;
+    };
+    ImageButton BTN_LIGHT_5
+    {
+        HelpID = "svx:ImageButton:RID_SVXFLOAT_3D:BTN_LIGHT_5";
+        Pos = MAP_APPFONT ( FT_INDENT , FIRST_FT_START_Y + 26 ) ;
+        Size = MAP_APPFONT ( 12 , 14 ) ;
+        ButtonImage = Image
+        {
+            ImageBitmap = Bitmap { File = "light.bmp" ; };
+            MASKCOLOR
+        };
+        TabStop = TRUE ;
+        QuickHelpText [ en-US ] = "Light Source 5" ;
+    };
+    ImageButton BTN_LIGHT_6
+    {
+        HelpID = "svx:ImageButton:RID_SVXFLOAT_3D:BTN_LIGHT_6";
+        Pos = MAP_APPFONT ( FT_INDENT + 13, FIRST_FT_START_Y + 26 ) ;
+        Size = MAP_APPFONT ( 12 , 14 ) ;
+        ButtonImage = Image
+        {
+            ImageBitmap = Bitmap { File = "light.bmp" ; };
+            MASKCOLOR
+        };
+        TabStop = TRUE ;
+        QuickHelpText [ en-US ] = "Light Source 6" ;
+    };
+    ImageButton BTN_LIGHT_7
+    {
+        HelpID = "svx:ImageButton:RID_SVXFLOAT_3D:BTN_LIGHT_7";
+        Pos = MAP_APPFONT ( FT_INDENT + 2*13, FIRST_FT_START_Y + 26 ) ;
+        Size = MAP_APPFONT ( 12 , 14 ) ;
+        ButtonImage = Image
+        {
+            ImageBitmap = Bitmap { File = "light.bmp" ; };
+            MASKCOLOR
+        };
+        TabStop = TRUE ;
+        QuickHelpText [ en-US ] = "Light Source 7" ;
+    };
+    ImageButton BTN_LIGHT_8
+    {
+        HelpID = "svx:ImageButton:RID_SVXFLOAT_3D:BTN_LIGHT_8";
+        Pos = MAP_APPFONT ( FT_INDENT +3*13 , FIRST_FT_START_Y + 26 ) ;
+        Size = MAP_APPFONT ( 12 , 14 ) ;
+        ButtonImage = Image
+        {
+            ImageBitmap = Bitmap { File = "light.bmp" ; };
+            MASKCOLOR
+        };
+        TabStop = TRUE ;
+        QuickHelpText [ en-US ] = "Light Source 8" ;
+    };
+    ListBox LB_LIGHT_1
+    {
+        HelpID = "svx:ListBox:RID_SVXFLOAT_3D:LB_LIGHT_1";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 66 , FIRST_FT_START_Y + 11 ) ;
+        Size = MAP_APPFONT ( 68 , 100 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+    };
+    ListBox LB_LIGHT_2
+    {
+        HelpID = "svx:ListBox:RID_SVXFLOAT_3D:LB_LIGHT_2";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 66 , FIRST_FT_START_Y + 11 ) ;
+        Size = MAP_APPFONT ( 68 , 100 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+    };
+    ListBox LB_LIGHT_3
+    {
+        HelpID = "svx:ListBox:RID_SVXFLOAT_3D:LB_LIGHT_3";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 66 , FIRST_FT_START_Y + 11 ) ;
+        Size = MAP_APPFONT ( 68 , 100 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+    };
+    ListBox LB_LIGHT_4
+    {
+        HelpID = "svx:ListBox:RID_SVXFLOAT_3D:LB_LIGHT_4";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 66 , FIRST_FT_START_Y + 11 ) ;
+        Size = MAP_APPFONT ( 68 , 100 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+    };
+    ListBox LB_LIGHT_5
+    {
+        HelpID = "svx:ListBox:RID_SVXFLOAT_3D:LB_LIGHT_5";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 66 , FIRST_FT_START_Y + 11 ) ;
+        Size = MAP_APPFONT ( 68 , 100 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+    };
+    ListBox LB_LIGHT_6
+    {
+        HelpID = "svx:ListBox:RID_SVXFLOAT_3D:LB_LIGHT_6";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 66 , FIRST_FT_START_Y + 11 ) ;
+        Size = MAP_APPFONT ( 68 , 100 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+    };
+    ListBox LB_LIGHT_7
+    {
+        HelpID = "svx:ListBox:RID_SVXFLOAT_3D:LB_LIGHT_7";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 66 , FIRST_FT_START_Y + 11 ) ;
+        Size = MAP_APPFONT ( 68 , 100 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+    };
+    ListBox LB_LIGHT_8
+    {
+        HelpID = "svx:ListBox:RID_SVXFLOAT_3D:LB_LIGHT_8";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 66 , FIRST_FT_START_Y + 11 ) ;
+        Size = MAP_APPFONT ( 68 , 100 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+    };
+    ImageButton BTN_LIGHT_COLOR
+    {
+        HelpID = "svx:ImageButton:RID_SVXFLOAT_3D:BTN_LIGHT_COLOR";
+        Pos = MAP_APPFONT ( 137 , FIRST_FT_START_Y + 11 ) ;
+        Size = MAP_APPFONT ( 12 , 14 ) ;
+        ButtonImage = Image
+        {
+            ImageBitmap = Bitmap { File = "colordlg.bmp" ; };
+            MASKCOLOR
+        };
+        TabStop = TRUE ;
+        QuickHelpText [ en-US ] = "Colors Dialog" ;
+    };
+    FixedText FT_AMBIENTLIGHT
+    {
+        Pos = MAP_APPFONT ( FT_INDENT, FIRST_FT_START_Y + 53 ) ;
+        Size = MAP_APPFONT ( FT_WIDTH_SHORT , FT_HEIGHT ) ;
+        Text [ en-US ] = "~Ambient light" ;
+    };
+    ListBox LB_AMBIENTLIGHT
+    {
+        HelpID = "svx:ListBox:RID_SVXFLOAT_3D:LB_AMBIENTLIGHT";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( FT_INDENT + FT_WIDTH_SHORT + 1 , FIRST_FT_START_Y + 53 ) ;
+        Size = MAP_APPFONT ( 68 , 100 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+    };
+    ImageButton BTN_AMBIENT_COLOR
+    {
+        HelpID = "svx:ImageButton:RID_SVXFLOAT_3D:BTN_AMBIENT_COLOR";
+        Pos = MAP_APPFONT ( 137 , FIRST_FT_START_Y + 53 ) ;
+        Size = MAP_APPFONT ( 12 , 14 ) ;
+        ButtonImage = Image
+        {
+            ImageBitmap = Bitmap { File = "colordlg.bmp" ; };
+            MASKCOLOR
+        };
+        TabStop = TRUE ;
+        QuickHelpText [ en-US ] = "Colors Dialog" ;
+    };
+
+    FixedLine FL_LIGHT
+    {
+        Pos = TOP_FIXED_LINE_POS;
+        Size = FIXED_LINE_SIZE ;
+        Text [ en-US ] = "Illumination" ;
+    };
+     // Textures
+    FixedText FT_TEX_KIND
+    {
+        Pos = MAP_APPFONT ( FT_INDENT , FIRST_FT_START_Y ) ;
+        Size = MAP_APPFONT ( FT_WIDTH_SHORT , FT_HEIGHT ) ;
+        Text [ en-US ] = "~Type" ;
+    };
+    ImageButton BTN_TEX_LUMINANCE
+    {
+        HelpID = "svx:ImageButton:RID_SVXFLOAT_3D:BTN_TEX_LUMINANCE";
+        Pos = MAP_APPFONT ( FT_INDENT + FT_WIDTH_SHORT + 1,
+                            FIRST_FT_START_Y - 2 ) ;
+        Size = IMG_BUTTON_SIZE;
+        ButtonImage = Image
+        {
+            ImageBitmap = Bitmap { File = "luminanc.bmp" ; };
+            MASKCOLOR
+        };
+        TabStop = TRUE ;
+        QuickHelpText [ en-US ] = "Black & White" ;
+    };
+    ImageButton BTN_TEX_COLOR
+    {
+        HelpID = "svx:ImageButton:RID_SVXFLOAT_3D:BTN_TEX_COLOR";
+        Pos = MAP_APPFONT ( FT_INDENT + FT_WIDTH_SHORT + 1 + BUTTON_WIDTH,
+                            FIRST_FT_START_Y - 2 ) ;
+        Size = IMG_BUTTON_SIZE;
+        ButtonImage = Image
+        {
+            ImageBitmap = Bitmap { File = "color.bmp" ; };
+            MASKCOLOR
+        };
+        TabStop = TRUE ;
+        QuickHelpText [ en-US ] = "Color" ;
+    };
+    FixedText FT_TEX_MODE
+    {
+        Pos = MAP_APPFONT ( FT_INDENT , FIRST_FT_START_Y + IMG_BUTTON_NEXT ) ;
+        Size = MAP_APPFONT ( FT_WIDTH_SHORT , FT_HEIGHT ) ;
+        Text [ en-US ] = "~Mode" ;
+    };
+    ImageButton BTN_TEX_REPLACE
+    {
+        HelpID = "svx:ImageButton:RID_SVXFLOAT_3D:BTN_TEX_REPLACE";
+        Pos = MAP_APPFONT ( FT_INDENT + FT_WIDTH_SHORT + 1,
+                            FIRST_FT_START_Y + IMG_BUTTON_NEXT - 2 ) ;
+        Size = IMG_BUTTON_SIZE;
+        ButtonImage = Image
+        {
+            ImageBitmap = Bitmap { File = "replac3d.bmp" ; };
+            MASKCOLOR
+        };
+        TabStop = TRUE ;
+        QuickHelpText [ en-US ] = "Only Texture" ;
+    };
+    ImageButton BTN_TEX_MODULATE
+    {
+        HelpID = "svx:ImageButton:RID_SVXFLOAT_3D:BTN_TEX_MODULATE";
+        Pos = MAP_APPFONT ( FT_INDENT + FT_WIDTH_SHORT + 1 + BUTTON_WIDTH,
+                            FIRST_FT_START_Y + IMG_BUTTON_NEXT - 2 ) ;
+        Size = IMG_BUTTON_SIZE;
+        ButtonImage = Image
+        {
+            ImageBitmap = Bitmap { File = "modula3d.bmp" ; };
+            MASKCOLOR
+        };
+        TabStop = TRUE ;
+        QuickHelpText [ en-US ] = "Texture and Shading" ;
+    };
+    ImageButton BTN_TEX_BLEND
+    {
+        HelpID = "svx:ImageButton:RID_SVXFLOAT_3D:BTN_TEX_BLEND";
+        Pos = MAP_APPFONT ( FT_INDENT + FT_WIDTH_SHORT + 1 + 2*BUTTON_WIDTH,
+                            FIRST_FT_START_Y + IMG_BUTTON_NEXT - 2 ) ;
+        Size = IMG_BUTTON_SIZE;
+        ButtonImage = Image
+        {
+            ImageBitmap = Bitmap { File = "blend3d.bmp" ; };
+            MASKCOLOR
+        };
+        TabStop = TRUE ;
+        QuickHelpText [ en-US ] = "Texture, Shadow and Color" ;
+    };
+    FixedText FT_TEX_PROJECTION_X
+    {
+        Pos = MAP_APPFONT ( FT_INDENT , FIRST_FT_START_Y + 2*IMG_BUTTON_NEXT ) ;
+        Size = MAP_APPFONT ( FT_WIDTH_SHORT , FT_HEIGHT ) ;
+        Text [ en-US ] = "~Projection X" ;
+    };
+    ImageButton BTN_TEX_OBJECT_X
+    {
+        HelpID = "svx:ImageButton:RID_SVXFLOAT_3D:BTN_TEX_OBJECT_X";
+        Pos = MAP_APPFONT ( FT_INDENT + FT_WIDTH_SHORT + 1,
+                            FIRST_FT_START_Y + 2*IMG_BUTTON_NEXT - 2 ) ;
+        Size = IMG_BUTTON_SIZE;
+        ButtonImage = Image
+        {
+            ImageBitmap = Bitmap { File = "objspc3d.bmp" ; };
+            MASKCOLOR
+        };
+        TabStop = TRUE ;
+        QuickHelpText [ en-US ] = "Object-Specific" ;
+    };
+    ImageButton BTN_TEX_PARALLEL_X
+    {
+        HelpID = "svx:ImageButton:RID_SVXFLOAT_3D:BTN_TEX_PARALLEL_X";
+        Pos = MAP_APPFONT ( FT_INDENT + FT_WIDTH_SHORT + 1 + BUTTON_WIDTH,
+                            FIRST_FT_START_Y + 2*IMG_BUTTON_NEXT - 2 ) ;
+        Size = IMG_BUTTON_SIZE;
+        ButtonImage = Image
+        {
+            ImageBitmap = Bitmap { File = "parallel.bmp" ; };
+            MASKCOLOR
+        };
+        TabStop = TRUE ;
+        QuickHelpText [ en-US ] = "Parallel" ;
+    };
+    ImageButton BTN_TEX_CIRCLE_X
+    {
+        HelpID = "svx:ImageButton:RID_SVXFLOAT_3D:BTN_TEX_CIRCLE_X";
+        Pos = MAP_APPFONT ( FT_INDENT + FT_WIDTH_SHORT + 1 + 2*BUTTON_WIDTH,
+                            FIRST_FT_START_Y + 2*IMG_BUTTON_NEXT - 2 ) ;
+        Size = IMG_BUTTON_SIZE;
+        ButtonImage = Image
+        {
+            ImageBitmap = Bitmap { File = "sphere3d.bmp" ; };
+            MASKCOLOR
+        };
+        TabStop = TRUE ;
+        QuickHelpText [ en-US ] = "Circular" ;
+    };
+    FixedText FT_TEX_PROJECTION_Y
+    {
+        Pos = MAP_APPFONT ( FT_INDENT , FIRST_FT_START_Y + 3*IMG_BUTTON_NEXT ) ;
+        Size = MAP_APPFONT ( FT_WIDTH_SHORT , FT_HEIGHT ) ;
+        Text [ en-US ] = "P~rojection Y" ;
+    };
+    ImageButton BTN_TEX_OBJECT_Y
+    {
+        HelpID = "svx:ImageButton:RID_SVXFLOAT_3D:BTN_TEX_OBJECT_Y";
+        Pos = MAP_APPFONT ( FT_INDENT + FT_WIDTH_SHORT + 1,
+                            FIRST_FT_START_Y + 3*IMG_BUTTON_NEXT - 2 ) ;
+        Size = IMG_BUTTON_SIZE;
+        ButtonImage = Image
+        {
+            ImageBitmap = Bitmap { File = "objspc3d.bmp" ; };
+            MASKCOLOR
+        };
+        TabStop = TRUE ;
+        QuickHelpText [ en-US ] = "Object-Specific" ;
+    };
+    ImageButton BTN_TEX_PARALLEL_Y
+    {
+        HelpID = "svx:ImageButton:RID_SVXFLOAT_3D:BTN_TEX_PARALLEL_Y";
+        Pos = MAP_APPFONT ( FT_INDENT + FT_WIDTH_SHORT + 1 + BUTTON_WIDTH,
+                            FIRST_FT_START_Y + 3*IMG_BUTTON_NEXT - 2 ) ;
+        Size = IMG_BUTTON_SIZE;
+        ButtonImage = Image
+        {
+            ImageBitmap = Bitmap { File = "parallel.bmp" ; };
+            MASKCOLOR
+        };
+        TabStop = TRUE ;
+        QuickHelpText [ en-US ] = "Parallel" ;
+    };
+    ImageButton BTN_TEX_CIRCLE_Y
+    {
+        HelpID = "svx:ImageButton:RID_SVXFLOAT_3D:BTN_TEX_CIRCLE_Y";
+        Pos = MAP_APPFONT ( FT_INDENT + FT_WIDTH_SHORT + 1 + 2*BUTTON_WIDTH,
+                            FIRST_FT_START_Y + 3*IMG_BUTTON_NEXT - 2 ) ;
+        Size = IMG_BUTTON_SIZE;
+        ButtonImage = Image
+        {
+            ImageBitmap = Bitmap { File = "sphere3d.bmp" ; };
+            MASKCOLOR
+        };
+        TabStop = TRUE ;
+        QuickHelpText [ en-US ] = "Circular" ;
+    };
+    FixedText FT_TEX_FILTER
+    {
+        Pos = MAP_APPFONT ( FT_INDENT , FIRST_FT_START_Y + 4*IMG_BUTTON_NEXT ) ;
+        Size = MAP_APPFONT ( FT_WIDTH_SHORT , FT_HEIGHT ) ;
+        Text [ en-US ] = "~Filtering" ;
+    };
+    ImageButton BTN_TEX_FILTER
+    {
+        HelpID = "svx:ImageButton:RID_SVXFLOAT_3D:BTN_TEX_FILTER";
+        Pos = MAP_APPFONT ( FT_INDENT + FT_WIDTH_SHORT + 1,
+                            FIRST_FT_START_Y + 4*IMG_BUTTON_NEXT - 2 ) ;
+        Size = IMG_BUTTON_SIZE;
+        ButtonImage = Image
+        {
+            ImageBitmap = Bitmap { File = "filter3d.bmp" ; };
+            MASKCOLOR
+        };
+        TabStop = TRUE ;
+        QuickHelpText [ en-US ] = "Filtering On/Off" ;
+    };
+    FixedLine FL_TEXTURE
+    {
+        Pos = TOP_FIXED_LINE_POS;
+        Size = FIXED_LINE_SIZE;
+        Text [ en-US ] = "Textures" ;
+    };
+     // Material
+     // Materialeditor
+    FixedText FT_MAT_FAVORITES
+    {
+        Pos = MAP_APPFONT ( FT_INDENT , FIRST_FT_START_Y ) ;
+        Size = MAP_APPFONT ( FT_WIDTH_SHORT , FT_HEIGHT ) ;
+        Text [ en-US ] = "~Favorites" ;
+    };
+    ListBox LB_MAT_FAVORITES
+    {
+        HelpID = "svx:ListBox:RID_SVXFLOAT_3D:LB_MAT_FAVORITES";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( FT_INDENT + FT_WIDTH_SHORT + 1,
+                            FIRST_FT_START_Y - 2 ) ;
+        Size = MAP_APPFONT ( 83 , 100 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+        StringList [ en-US ] =
+        {
+            < "User-defined" ; > ;
+            < "Metal" ; > ;
+            < "Gold" ; > ;
+            < "Chrome" ; > ;
+            < "Plastic" ; > ;
+            < "Wood" ; > ;
+        };
+    };
+    FixedText FT_MAT_COLOR
+    {
+        Pos = MAP_APPFONT ( FT_INDENT , FIRST_FT_START_Y + FT_OFFSET_NEXT ) ;
+        Size = MAP_APPFONT ( FT_WIDTH_SHORT , FT_HEIGHT ) ;
+        Text [ en-US ] = "~Object color" ;
+    };
+    ListBox LB_MAT_COLOR
+    {
+        HelpID = "svx:ListBox:RID_SVXFLOAT_3D:LB_MAT_COLOR";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( FT_INDENT + FT_WIDTH_SHORT + 1 ,
+                            FIRST_FT_START_Y + FT_OFFSET_NEXT - 2 ) ;
+        Size = MAP_APPFONT ( 68 , 100 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+    };
+    ImageButton BTN_MAT_COLOR
+    {
+        HelpID = "svx:ImageButton:RID_SVXFLOAT_3D:BTN_MAT_COLOR";
+        Pos = MAP_APPFONT ( FT_INDENT + FT_WIDTH_SHORT + 72 ,
+                            FIRST_FT_START_Y + FT_OFFSET_NEXT - 2 ) ;
+        Size = MAP_APPFONT ( 12, 14 ) ;
+        ButtonImage = Image
+        {
+            ImageBitmap = Bitmap { File = "colordlg.bmp" ; };
+            MASKCOLOR
+        };
+        TabStop = TRUE ;
+        QuickHelpText [ en-US ] = "Colors Dialog" ;
+    };
+    FixedText FT_MAT_EMISSION
+    {
+        Pos = MAP_APPFONT ( FT_INDENT , FIRST_FT_START_Y + 2*FT_OFFSET_NEXT ) ;
+        Size = MAP_APPFONT ( FT_WIDTH_SHORT , FT_HEIGHT ) ;
+        Text [ en-US ] = "~Illumination color" ;
+    };
+    ListBox LB_MAT_EMISSION
+    {
+        HelpID = "svx:ListBox:RID_SVXFLOAT_3D:LB_MAT_EMISSION";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( FT_INDENT + FT_WIDTH_SHORT + 1 ,
+                            FIRST_FT_START_Y + 2*FT_OFFSET_NEXT - 2 ) ;
+        Size = MAP_APPFONT ( 68 , 100 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+    };
+    ImageButton BTN_EMISSION_COLOR
+    {
+        HelpID = "svx:ImageButton:RID_SVXFLOAT_3D:BTN_EMISSION_COLOR";
+        Pos = MAP_APPFONT ( FT_INDENT + FT_WIDTH_SHORT + 72 ,
+                            FIRST_FT_START_Y + 2*FT_OFFSET_NEXT - 2 ) ;
+        Size = MAP_APPFONT ( 12, 14 ) ;
+        ButtonImage = Image
+        {
+            ImageBitmap = Bitmap { File = "colordlg.bmp" ; };
+            MASKCOLOR
+        };
+        TabStop = TRUE ;
+        QuickHelpText [ en-US ] = "Colors Dialog" ;
+    };
+
+    FixedLine FL_MAT_SPECULAR
+    {
+        Pos = MAP_APPFONT ( BORDER , SPECULAR_START_Y ) ;
+        Size = FIXED_LINE_SIZE;
+        Text [ en-US ] = "Specular" ;
+    };
+    FixedText FT_MAT_SPECULAR
+    {
+        Pos = MAP_APPFONT ( FT_INDENT , SPECULAR_START_Y + 13 ) ;
+        Size = MAP_APPFONT ( FT_WIDTH_SHORT , FT_HEIGHT ) ;
+        Text [ en-US ] = "~Color" ;
+    };
+    ListBox LB_MAT_SPECULAR
+    {
+        HelpID = "svx:ListBox:RID_SVXFLOAT_3D:LB_MAT_SPECULAR";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( FT_INDENT + FT_WIDTH_SHORT + 1, SPECULAR_START_Y + 13 - 2 ) ;
+        Size = MAP_APPFONT ( 68 , 100 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+    };
+    ImageButton BTN_SPECULAR_COLOR
+    {
+        HelpID = "svx:ImageButton:RID_SVXFLOAT_3D:BTN_SPECULAR_COLOR";
+        Pos = MAP_APPFONT ( 137 , SPECULAR_START_Y + 13 - 2 ) ;
+        Size = MAP_APPFONT ( 12, 14 ) ;
+        ButtonImage = Image
+        {
+            ImageBitmap = Bitmap { File = "colordlg.bmp" ; };
+            MASKCOLOR
+        };
+        TabStop = TRUE ;
+        QuickHelpText [ en-US ] = "Colors Dialog" ;
+    };
+    FixedText FT_MAT_SPECULAR_INTENSITY
+    {
+        Pos = MAP_APPFONT ( FT_INDENT , SPECULAR_START_Y + 13 + FT_OFFSET_NEXT ) ;
+        Size = MAP_APPFONT ( FT_WIDTH_SHORT , FT_HEIGHT ) ;
+        Text [ en-US ] = "I~ntensity" ;
+    };
+    MetricField MTR_MAT_SPECULAR_INTENSITY
+    {
+        HelpID = "svx:MetricField:RID_SVXFLOAT_3D:MTR_MAT_SPECULAR_INTENSITY";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( FT_INDENT + FT_WIDTH_SHORT + 1 ,
+                            SPECULAR_START_Y + 13 + FT_OFFSET_NEXT ) ;
+        Size = MAP_APPFONT ( 68 , 12 ) ;
+        TabStop = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Unit = FUNIT_CUSTOM ;
+        CustomUnitText  = "%" ;
+        Minimum = 1 ;
+        First = 1 ;
+        Maximum = 100 ;
+        Last = 100 ;
+        SpinSize = 1 ;
+    };
+        HelpID = "svx:ImageButton:RID_SVXFLOAT_3D:BTN_MAT_FAVORITES";
+        HelpID = "svx:ImageButton:RID_SVXFLOAT_3D:BTN_MAT_EDITOR";
+    FixedLine FL_MATERIAL
+    {
+        Pos = TOP_FIXED_LINE_POS;
+        Size = FIXED_LINE_SIZE;
+        Text [ en-US ] = "Material" ;
+    };
+
+};
+
+Image RID_SVXIMAGE_LIGHT_ON
+{
+    ImageBitmap = Bitmap { File = "lighton.bmp" ; };
+    MASKCOLOR
+};
+
+Image RID_SVXIMAGE_LIGHT_OFF
+{
+    ImageBitmap = Bitmap { File = "light.bmp" ; };
+    MASKCOLOR
+};
+
+Image RID_SVXIMAGE_COLORDLG
+{
+    ImageBitmap = Bitmap { File = "colordlg.bmp" ; };
+    MASKCOLOR
+};
+
+String RID_SVXFLOAT3D_FAVORITE
+{
+    Text [ en-US ] = "Favorite";
+};
+
+String RID_SVXFLOAT3D_FIX_X
+{
+    Text [ en-US ] = "X";
+};
+
+String RID_SVXFLOAT3D_FIX_Y
+{
+    Text [ en-US ] = "Y";
+};
+
+String RID_SVXFLOAT3D_FIX_Z
+{
+    Text [ en-US ] = "Z";
+};
+
+String RID_SVXFLOAT3D_FIX_R
+{
+    Text [ en-US ] = "R:";
+};
+
+String RID_SVXFLOAT3D_FIX_G
+{
+    Text [ en-US ] = "G:";
+};
+
+String RID_SVXFLOAT3D_FIX_B
+{
+    Text [ en-US ] = "B:";
+};
+
+String RID_SVXFLOAT3D_COLOR_LIGHT_PRE
+{
+    Text [ en-US ] = "Color Light Preview";
+};

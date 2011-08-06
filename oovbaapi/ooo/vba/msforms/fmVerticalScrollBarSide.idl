@@ -1,0 +1,6 @@
+module ooo { module vba { module msforms {
+    constants fmVerticalScrollBarSide {
+        const long fmVerticalScrollBarSideLeft = 1;
+        const long fmVerticalScrollBarSideRight = 0;
+    };
+}; }; };

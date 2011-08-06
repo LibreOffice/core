@@ -1,0 +1,7 @@
+module ooo { module vba { module office {
+    constants MsoScaleFrom {
+        const long msoScaleFromBottomRight = 2;
+        const long msoScaleFromMiddle = 1;
+        const long msoScaleFromTopLeft = 0;
+    };
+}; }; };

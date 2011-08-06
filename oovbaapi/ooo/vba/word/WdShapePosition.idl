@@ -1,0 +1,11 @@
+module ooo { module vba { module word {
+    constants WdShapePosition {
+        const long wdShapeBottom = -999997;
+        const long wdShapeCenter = -999995;
+        const long wdShapeInside = -999994;
+        const long wdShapeLeft = -999998;
+        const long wdShapeOutside = -999993;
+        const long wdShapeRight = -999996;
+        const long wdShapeTop = -999999;
+    };
+}; }; };

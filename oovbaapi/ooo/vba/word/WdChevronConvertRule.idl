@@ -1,0 +1,8 @@
+module ooo { module vba { module word {
+    constants WdChevronConvertRule {
+        const long wdAlwaysConvert = 1;
+        const long wdAskToConvert = 3;
+        const long wdAskToNotConvert = 2;
+        const long wdNeverConvert = 0;
+    };
+}; }; };

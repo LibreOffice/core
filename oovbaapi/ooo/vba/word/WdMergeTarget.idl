@@ -1,0 +1,7 @@
+module ooo { module vba { module word {
+    constants WdMergeTarget {
+        const long wdMergeTargetCurrent = 1;
+        const long wdMergeTargetNew = 2;
+        const long wdMergeTargetSelected = 0;
+    };
+}; }; };

@@ -1,0 +1,5 @@
+module ooo { module vba { module word {
+    constants WdSortFieldTypeHID {
+        const long emptyenum = 0;
+    };
+}; }; };

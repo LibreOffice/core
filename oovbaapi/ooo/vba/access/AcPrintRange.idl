@@ -1,0 +1,7 @@
+module ooo { module vba { module access {
+    constants AcPrintRange {
+        const long acPages = 2;
+        const long acPrintAll = 0;
+        const long acSelection = 1;
+    };
+}; }; };

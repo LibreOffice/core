@@ -1,0 +1,8 @@
+module ooo { module vba { module word {
+    constants WdDeleteCells {
+        const long wdDeleteCellsEntireColumn = 3;
+        const long wdDeleteCellsEntireRow = 2;
+        const long wdDeleteCellsShiftLeft = 0;
+        const long wdDeleteCellsShiftUp = 1;
+    };
+}; }; };
