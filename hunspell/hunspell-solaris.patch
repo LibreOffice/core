@@ -1,0 +1,12 @@
+--- misc/hunspell-1.3.2.orig/src/tools/hunspell.cxx	2010-02-27 23:42:05.000000000 +0000
++++ misc/build/hunspell-1.3.2/src/tools/hunspell.cxx	2010-02-27 23:43:02.000000000 +0000
+@@ -10,6 +10,9 @@
+ #include "hunspell.hxx"
+ #include "csutil.hxx"
+ 
++// switch off iconv support for tests (fixing Solaris problems)
++#undef HAVE_ICONV
++
+ #ifndef HUNSPELL_EXTRA
+ #define suggest_auto suggest
+ #endif

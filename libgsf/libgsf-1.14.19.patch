@@ -1,0 +1,38 @@
+--- misc/libgsf-1.14.19/configure	2010-09-25 18:53:55.000000000 +0200
++++ misc/build/libgsf-1.14.19/configure	2011-03-03 12:42:21.000000000 +0100
+@@ -11475,7 +11475,7 @@
+ 
+ 
+ 
+-
++if false; then
+ case "$am__api_version" in
+     1.01234)
+ 	as_fn_error "Automake 1.5 or newer is required to use intltool" "$LINENO" 5
+@@ -11650,7 +11650,7 @@
+ 
+ 
+ 
+-
++fi
+ 
+ 
+ 
+@@ -11963,7 +11963,7 @@
+    { $as_echo "$as_me:${as_lineno-$LINENO}: result: $IT_PERL_VERSION" >&5
+ $as_echo "$IT_PERL_VERSION" >&6; }
+ fi
+-if test "x" != "xno-xml"; then
++if test "xno-xml" != "xno-xml"; then
+    { $as_echo "$as_me:${as_lineno-$LINENO}: checking for XML::Parser" >&5
+ $as_echo_n "checking for XML::Parser... " >&6; }
+    if `$INTLTOOL_PERL -e "require XML::Parser" 2>/dev/null`; then
+@@ -12846,7 +12846,7 @@
+ fi
+ 
+ fi
+-if test -n "$PKG_CONFIG"; then
++if test "$PKG_CONFIG" != "no" ; then
+ 	_pkg_min_version=0.9.0
+ 	{ $as_echo "$as_me:${as_lineno-$LINENO}: checking pkg-config is at least version $_pkg_min_version" >&5
+ $as_echo_n "checking pkg-config is at least version $_pkg_min_version... " >&6; }

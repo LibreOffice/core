@@ -1,0 +1,105 @@
+--- misc/curl-7.19.7/config.sub
++++ misc/build/curl-7.19.7/config.sub
+@@ -1272,7 +1272,7 @@
+ 	      | -ekkobsd* | -kfreebsd* | -freebsd* | -riscix* | -lynxos* \
+ 	      | -bosx* | -nextstep* | -cxux* | -aout* | -elf* | -oabi* \
+ 	      | -ptx* | -coff* | -ecoff* | -winnt* | -domain* | -vsta* \
+-	      | -udi* | -eabi* | -lites* | -ieee* | -go32* | -aux* \
++	      | -udi* | -androideabi* | -eabi* | -lites* | -ieee* | -go32* | -aux* \
+ 	      | -chorusos* | -chorusrdb* | -cegcc* \
+ 	      | -cygwin* | -pe* | -psos* | -moss* | -proelf* | -rtems* \
+ 	      | -mingw32* | -linux-gnu* | -linux-newlib* | -linux-uclibc* \
+--- misc/curl-7.19.7/configure	2009-11-04 13:26:02.000000000 +0100
++++ misc/build/curl-7.19.7/configure	2009-11-18 14:17:25.453125000 +0100
+@@ -2735,8 +2735,8 @@
+ 
+ ac_ext=c
+ ac_cpp='$CPP $CPPFLAGS'
+-ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
+-ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
++ac_compile='$CC -c $ADDCFLAGS $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
++ac_link='$CC -o conftest$ac_exeext $ADDCFLAGS $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+ ac_compiler_gnu=$ac_cv_c_compiler_gnu
+ 
+ 
+@@ -3783,8 +3783,8 @@
+   ac_save_CPPFLAGS="$CPPFLAGS"
+   ac_ext=c
+ ac_cpp='$CPP $CPPFLAGS'
+-ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
+-ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
++ac_compile='$CC -c $ADDCFLAGS $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
++ac_link='$CC -o conftest$ac_exeext $ADDCFLAGS $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+ ac_compiler_gnu=$ac_cv_c_compiler_gnu
+ if test -n "$ac_tool_prefix"; then
+   # Extract the first word of "${ac_tool_prefix}gcc", so it can be a program name with args.
+@@ -4434,15 +4434,15 @@
+   CFLAGS=$ac_save_CFLAGS
+ elif test $ac_cv_prog_cc_g = yes; then
+   if test "$GCC" = yes; then
+-    CFLAGS="-g -O2"
++    CFLAGS="$ADDCFLAGS -g -O2"
+   else
+-    CFLAGS="-g"
++    CFLAGS="$ADDCFLAGS -g"
+   fi
+ else
+   if test "$GCC" = yes; then
+-    CFLAGS="-O2"
++    CFLAGS="$ADDCFLAGS -O2"
+   else
+-    CFLAGS=
++    CFLAGS="$ADDCFLAGS"
+   fi
+ fi
+ { $as_echo "$as_me:${as_lineno-$LINENO}: checking for $CC option to accept ISO C89" >&5
+--- misc/curl-7.19.7/include/curl/curl.h
++++ misc/build/curl-7.19.7/include/curl/curl.h
+@@ -74,7 +74,7 @@
+    require it! */
+ #if defined(_AIX) || defined(__NOVELL_LIBC__) || defined(__NetBSD__) || \
+     defined(__minix) || defined(__SYMBIAN32__) || defined(__INTEGRITY) || \
+-    defined(ANDROID)
++    defined(__ANDROID__)
+ #include <sys/select.h>
+ #endif
+ 
+--- misc/curl-7.19.7/lib/setup.h	2009-10-28 21:21:58.000000000 +0100
++++ misc/build/curl-7.19.7/lib/setup.h	2009-11-18 13:30:42.375000000 +0100
+@@ -193,6 +193,7 @@
+ #    include <winsock2.h>
+ #    ifdef HAVE_WS2TCPIP_H
+ #       include <ws2tcpip.h>
++#		include <wspiapi.h>
+ #    endif
+ #  else
+ #    ifdef HAVE_WINSOCK_H
+--- misc/curl-7.19.7/ltmain.sh	2009-11-04 13:25:51.000000000 +0100
++++ misc/build/curl-7.19.7/ltmain.sh	2009-11-18 14:37:08.046875000 +0100
+@@ -6188,13 +6188,13 @@
+ 	  # which has an extra 1 added just for fun
+ 	  #
+ 	  case $version_type in
+-	  darwin|linux|osf|windows|none)
++	  darwin|linux|osf|windows|freebsd-aout|freebsd-elf|none)
+ 	    func_arith $number_major + $number_minor
+ 	    current=$func_arith_result
+ 	    age="$number_minor"
+ 	    revision="$number_revision"
+ 	    ;;
+-	  freebsd-aout|freebsd-elf|sunos)
++	  sunos)
+ 	    current="$number_major"
+ 	    revision="$number_minor"
+ 	    age="0"
+@@ -6271,8 +6271,8 @@
+ 	  ;;
+ 
+ 	freebsd-elf)
+-	  major=".$current"
+-	  versuffix=".$current"
++	  major=.`expr $current - $age`
++	  versuffix="$major"
+ 	  ;;
+ 
+ 	irix | nonstopux)

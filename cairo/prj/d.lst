@@ -1,0 +1,15 @@
+mkdir: %_DEST%\inc\cairo
+mkdir: %_DEST%\inc\external
+mkdir: %_DEST%\inc\external\cairo
+..\%__SRC%\inc\cairo*.h %_DEST%\inc\cairo\cairo*.h
+..\%__SRC%\inc\cairo*.h %_DEST%\inc\external\cairo\cairo*.h
+
+..\%__SRC%\lib\lib*.so %_DEST%\lib\lib*.so
+..\%__SRC%\lib\lib*.so.* %_DEST%\lib\lib*.so.*
+..\%__SRC%\lib\lib*.dylib %_DEST%\lib\lib*.dylib
+..\%__SRC%\lib\lib*.a %_DEST%\lib\lib*.a
+..\%__SRC%\lib\lib*.la %_DEST%\lib\lib*.la
+..\%__SRC%\lib\*.lib %_DEST%\lib\*.lib
+..\%__SRC%\bin\*.dll %_DEST%\bin\*.dll
+..\%__SRC%\lib\*.dll %_DEST%\bin\*.dll
+..\%__SRC%\bin\*.dll.a %_DEST%\lib\*.a

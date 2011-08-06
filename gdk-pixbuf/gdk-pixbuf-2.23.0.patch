@@ -1,0 +1,171 @@
+--- misc/gdk-pixbuf-2.23.0/configure	2010-12-23 15:18:11.000000000 +0100
++++ misc/build/gdk-pixbuf-2.23.0/configure	2011-06-14 15:20:05.000000000 +0200
+@@ -16839,7 +16839,7 @@
+ 
+ 
+ 
+-
++if false; then
+ 
+ if test "x$ac_cv_env_PKG_CONFIG_set" != "xset"; then
+ 	if test -n "$ac_tool_prefix"; then
+@@ -17158,14 +17158,18 @@
+ 
+ 
+   rm -f conf.glibtest
+-
++else
++  GLIB_MKENUMS=glib-mkenums
++  GLIB_GENMARSHAL=glib-genmarshal
++  GOBJECT_QUERY=gobject-query
++fi
+ 
+ # See if it's safe to turn G_DISABLE_DEPRECATED on.
+-GLIB_VERSION_MAJOR_MINOR=`$PKG_CONFIG --modversion glib-2.0 | sed "s/\.[^.]*\$//"`
+-GLIB_REQUIRED_VERSION_MAJOR_MINOR=`echo 2.25.15 | sed "s/\.[^.]*\$//"`
+-if test "x$GLIB_VERSION_MAJOR_MINOR" = "x$GLIB_REQUIRED_VERSION_MAJOR_MINOR"; then
++#GLIB_VERSION_MAJOR_MINOR=`$PKG_CONFIG --modversion glib-2.0 | sed "s/\.[^.]*\$//"`
++#GLIB_REQUIRED_VERSION_MAJOR_MINOR=`echo 2.25.15 | sed "s/\.[^.]*\$//"`
++#if test "x$GLIB_VERSION_MAJOR_MINOR" = "x$GLIB_REQUIRED_VERSION_MAJOR_MINOR"; then
+   CFLAGS="-DG_DISABLE_DEPRECATED $CFLAGS"
+-fi
++#fi
+ 
+ CFLAGS="-DGDK_PIXBUF_DISABLE_DEPRECATED $CFLAGS"
+ 
+@@ -17801,7 +17805,7 @@
+     for l in libpng libpng14 libpng12 libpng13 libpng10 ; do
+       { $as_echo "$as_me:${as_lineno-$LINENO}: checking for $l" >&5
+ $as_echo_n "checking for $l... " >&6; }
+-      if $PKG_CONFIG --exists $l ; then
++      if false ; then
+         { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+ $as_echo "yes" >&6; }
+         PNG='png'
+@@ -18206,8 +18210,8 @@
+ $as_echo_n "checking if gio can sniff png... " >&6; }
+   gtk_save_LIBS="$LIBS"
+   gtk_save_CFLAGS="$CFLAGS"
+-  LIBS="`$PKG_CONFIG --libs gio-2.0`"
+-  CFLAGS="`$PKG_CONFIG --cflags gio-2.0`"
++  #LIBS="`$PKG_CONFIG --libs gio-2.0`"
++  #CFLAGS="`$PKG_CONFIG --cflags gio-2.0`"
+   if test "$cross_compiling" = yes; then :
+   { { $as_echo "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
+ $as_echo "$as_me: error: in \`$ac_pwd':" >&2;}
+@@ -18622,8 +18626,8 @@
+ GDK_PIXBUF_PACKAGES="gmodule-no-export-2.0 gobject-2.0 gio-2.0"
+ GDK_PIXBUF_EXTRA_LIBS="$STATIC_LIB_DEPS $MATH_LIB $MEDIA_LIB"
+ GDK_PIXBUF_EXTRA_CFLAGS=
+-GDK_PIXBUF_DEP_LIBS="`$PKG_CONFIG --libs $GDK_PIXBUF_PACKAGES` $GDK_PIXBUF_EXTRA_LIBS"
+-GDK_PIXBUF_DEP_CFLAGS="`$PKG_CONFIG --cflags  gthread-2.0 $GDK_PIXBUF_PACKAGES $PNG_DEP_CFLAGS_PACKAGES` $GDK_PIXBUF_EXTRA_CFLAGS"
++GDK_PIXBUF_DEP_LIBS="$GDK_PIXBUF_EXTRA_LIBS"
++GDK_PIXBUF_DEP_CFLAGS="$GDK_PIXBUF_EXTRA_CFLAGS"
+ 
+ 
+ 
+@@ -18640,7 +18644,7 @@
+ GDK_PIXBUF_XLIB_EXTRA_CFLAGS=
+ GDK_PIXBUF_XLIB_EXTRA_LIBS=
+ 
+-if $PKG_CONFIG --exists x11; then
++if false; then
+    if true; then
+   USE_X11_TRUE=
+   USE_X11_FALSE='#'
+--- misc/gdk-pixbuf-2.23.0/gdk-pixbuf/gdk-pixbuf-util.c
++++ misc/build/gdk-pixbuf-2.23.0/gdk-pixbuf/gdk-pixbuf-util.c
+@@ -23,7 +23,9 @@
+ 
+ #include "config.h"
+ #include <string.h>
++#ifdef ENABLE_NLS
+ #include <libintl.h>
++#endif
+ 
+ #include "gdk-pixbuf-transform.h"
+ #include "gdk-pixbuf-private.h"
+@@ -336,15 +338,19 @@
+ const gchar *
+ gdk_pixbuf_gettext (const gchar *msgid)
+ {
++#ifdef ENABLE_NLS
+         static gsize gettext_initialized = FALSE;
+ 
+         if (G_UNLIKELY (g_once_init_enter (&gettext_initialized))) {
+                 bindtextdomain (GETTEXT_PACKAGE, GDK_PIXBUF_LOCALEDIR);
+ #ifdef HAVE_BIND_TEXTDOMAIN_CODESET
+                 bind_textdomain_codeset (GETTEXT_PACKAGE, "UTF-8");
+ #endif
+                 g_once_init_leave (&gettext_initialized, TRUE);
+         }
+ 
+         return g_dgettext (GETTEXT_PACKAGE, msgid);
++#else
++        return msgid;
++#endif
+ }
+From: Maarten Bosmans <mkbosmans@gmail.com>
+Date: Mon, 24 Jan 2011 10:39:22 +0000
+Subject: Use png_jmpbuf macro
+
+This makes the png loader compatible with libpng 1.5
+
+diff --git a/gdk-pixbuf/io-png.c b/gdk-pixbuf/io-png.c
+index 79c81fd..76f3304 100644
+--- misc/build/gdk-pixbuf-2.23.0/gdk-pixbuf/io-png.c
++++ misc/build/gdk-pixbuf-2.23.0/gdk-pixbuf/io-png.c
+@@ -183,7 +183,7 @@ png_simple_error_callback(png_structp png_save_ptr,
+                              error_msg);
+         }
+ 
+-        longjmp (png_save_ptr->jmpbuf, 1);
++        longjmp (png_jmpbuf (png_save_ptr), 1);
+ }
+ 
+ static void
+@@ -287,7 +287,7 @@ gdk_pixbuf__png_image_load (FILE *f, GError **error)
+ 		return NULL;
+ 	}
+ 
+-	if (setjmp (png_ptr->jmpbuf)) {
++	if (setjmp (png_jmpbuf (png_ptr))) {
+ 	    	g_free (rows);
+ 
+ 		if (pixbuf)
+@@ -459,7 +459,7 @@ gdk_pixbuf__png_image_begin_load (GdkPixbufModuleSizeFunc size_func,
+                 return NULL;
+         }
+         
+-	if (setjmp (lc->png_read_ptr->jmpbuf)) {
++	if (setjmp (png_jmpbuf (lc->png_read_ptr))) {
+ 		if (lc->png_info_ptr)
+ 			png_destroy_read_struct(&lc->png_read_ptr, NULL, NULL);
+                 g_free(lc);
+@@ -531,7 +531,7 @@ gdk_pixbuf__png_image_load_increment(gpointer context,
+         lc->error = error;
+         
+         /* Invokes our callbacks as needed */
+-	if (setjmp (lc->png_read_ptr->jmpbuf)) {
++	if (setjmp (png_jmpbuf (lc->png_read_ptr))) {
+                 lc->error = NULL;
+ 		return FALSE;
+ 	} else {
+@@ -769,7 +769,7 @@ png_error_callback(png_structp png_read_ptr,
+                              error_msg);
+         }
+ 
+-        longjmp (png_read_ptr->jmpbuf, 1);
++        longjmp (png_jmpbuf (png_read_ptr), 1);
+ }
+ 
+ static void
+@@ -978,7 +978,7 @@ static gboolean real_save_png (GdkPixbuf        *pixbuf,
+ 	       success = FALSE;
+ 	       goto cleanup;
+        }
+-       if (setjmp (png_ptr->jmpbuf)) {
++       if (setjmp (png_jmpbuf (png_ptr))) {
+ 	       success = FALSE;
+ 	       goto cleanup;
+        }

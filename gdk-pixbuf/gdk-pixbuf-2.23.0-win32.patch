@@ -1,0 +1,459 @@
+--- misc/gdk-pixbuf-2.23.0/config.h.win32	2011-03-24 04:59:07.000000000 +0100
++++ misc/build/gdk-pixbuf-2.23.0/config.h.win32	2011-03-22 01:58:24.296875000 +0100
+@@ -1 +1,126 @@
+-dummy
++/* config.h.in.  Generated from configure.ac by autoheader.  */
++
++/* Define to 1 if translation of program messages to the user's native
++   language is requested. */
++#undef ENABLE_NLS
++
++/* Define if gio can sniff image data */
++#undef GDK_PIXBUF_USE_GIO_MIME
++
++/* The prefix for our gettext translation domains. */
++#define GETTEXT_PACKAGE "intl.dll"
++
++/* Define to 1 if you have the `bind_textdomain_codeset' function. */
++#undef HAVE_BIND_TEXTDOMAIN_CODESET
++
++/* Define to 1 if you have the MacOS X function CFLocaleCopyCurrent in the
++   CoreFoundation framework. */
++#undef HAVE_CFLOCALECOPYCURRENT
++
++/* Define to 1 if you have the MacOS X function CFPreferencesCopyAppValue in
++   the CoreFoundation framework. */
++#undef HAVE_CFPREFERENCESCOPYAPPVALUE
++
++/* Define if the GNU dcgettext() function is already present or preinstalled.
++   */
++#undef HAVE_DCGETTEXT
++
++/* Define to 1 if you have the <dlfcn.h> header file. */
++#undef HAVE_DLFCN_H
++
++/* Define if the GNU gettext() function is already present or preinstalled. */
++#define HAVE_GETTEXT 1
++
++/* Define if you have the iconv() function and it works. */
++#define HAVE_ICONV 1
++
++/* Define to 1 if you have the <inttypes.h> header file. */
++#undef HAVE_INTTYPES_H
++
++/* Define to 1 if you have the <memory.h> header file. */
++#undef HAVE_MEMORY_H
++
++/* Define to 1 is libjpeg supports progressive JPEG */
++#define HAVE_PROGRESSIVE_JPEG 1
++
++/* Define to 1 if sigsetjmp is available */
++#undef HAVE_SIGSETJMP
++
++/* Define to 1 if you have the <stdint.h> header file. */
++#undef HAVE_STDINT_H
++
++/* Define to 1 if you have the <stdlib.h> header file. */
++#define HAVE_STDLIB_H 1
++
++/* Define to 1 if you have the <strings.h> header file. */
++#define HAVE_STRINGS_H 1
++
++/* Define to 1 if you have the <string.h> header file. */
++#undef HAVE_STRING_H
++
++/* Define to 1 if you have the <sys/stat.h> header file. */
++#undef HAVE_SYS_STAT_H
++
++/* Define to 1 if sys/sysinfo.h is available */
++#undef HAVE_SYS_SYSINFO_H
++
++/* Define to 1 if sys/systeminfo.h is available */
++#undef HAVE_SYS_SYSTEMINFO_H
++
++/* Define to 1 if you have the <sys/types.h> header file. */
++#undef HAVE_SYS_TYPES_H
++
++/* Define to 1 if you have the <unistd.h> header file. */
++#undef HAVE_UNISTD_H
++
++/* Define to the sub-directory in which libtool stores uninstalled libraries.
++   */
++#undef LT_OBJDIR
++
++/* Define to 1 if your C compiler doesn't accept -c and -o together. */
++#undef NO_MINUS_C_MINUS_O
++
++/* Define to the address where bug reports for this package should be sent. */
++#undef PACKAGE_BUGREPORT
++
++/* Define to the full name of this package. */
++#undef PACKAGE_NAME
++
++/* Define to the full name and version of this package. */
++#undef PACKAGE_STRING
++
++/* Define to the one symbol short name of this package. */
++#undef PACKAGE_TARNAME
++
++/* Define to the home page for this package. */
++#undef PACKAGE_URL
++
++/* Define to the version of this package. */
++#undef PACKAGE_VERSION
++
++/* Define to 1 if you have the ANSI C header files. */
++#undef STDC_HEADERS
++
++/* Define to 1 if gmodule works and should be used */
++#undef USE_GMODULE
++
++/* Whether to load modules via .la files rather than directly */
++#undef USE_LA_MODULES
++
++/* Define to 1 if medialib is available and should be used */
++#undef USE_MEDIALIB
++
++/* Define to 1 if medialib 2.5 is available */
++#undef USE_MEDIALIB25
++
++/* Define to 1 if XXM is available and should be used */
++#undef USE_MMX
++
++/* Number of bits in a file offset, on hosts where this is settable. */
++#undef _FILE_OFFSET_BITS
++
++/* Define for large files, on AIX-style hosts. */
++#undef _LARGE_FILES
++
++/* Define to empty if `const' does not conform to ANSI C. */
++#undef const    
+--- misc/gdk-pixbuf-2.23.0/gdk-pixbuf/io-png.c	2010-07-10 02:54:35.000000000 +0200
++++ misc/build/gdk-pixbuf-2.23.0/gdk-pixbuf/io-png.c	2011-03-22 02:18:55.515625000 +0100
+@@ -27,6 +27,7 @@
+ #include <stdio.h>
+ #include <stdlib.h>
+ #include <png.h>
++#include <pngstruct.h>
+ #include "gdk-pixbuf-private.h"
+ 
+ 
+@@ -183,7 +184,7 @@
+                              error_msg);
+         }
+ 
+-        longjmp (png_save_ptr->jmpbuf, 1);
++        longjmp (png_save_ptr->png_jmpbuf, 1);
+ }
+ 
+ static void
+@@ -287,7 +288,7 @@
+ 		return NULL;
+ 	}
+ 
+-	if (setjmp (png_ptr->jmpbuf)) {
++	if (setjmp (png_ptr->png_jmpbuf)) {
+ 	    	g_free (rows);
+ 
+ 		if (pixbuf)
+@@ -459,7 +460,7 @@
+                 return NULL;
+         }
+         
+-	if (setjmp (lc->png_read_ptr->jmpbuf)) {
++	if (setjmp (lc->png_read_ptr->png_jmpbuf)) {
+ 		if (lc->png_info_ptr)
+ 			png_destroy_read_struct(&lc->png_read_ptr, NULL, NULL);
+                 g_free(lc);
+@@ -531,7 +532,7 @@
+         lc->error = error;
+         
+         /* Invokes our callbacks as needed */
+-	if (setjmp (lc->png_read_ptr->jmpbuf)) {
++	if (setjmp (lc->png_read_ptr->png_jmpbuf)) {
+                 lc->error = NULL;
+ 		return FALSE;
+ 	} else {
+@@ -769,7 +770,7 @@
+                              error_msg);
+         }
+ 
+-        longjmp (png_read_ptr->jmpbuf, 1);
++        longjmp (png_read_ptr->png_jmpbuf, 1);
+ }
+ 
+ static void
+@@ -978,7 +979,7 @@
+ 	       success = FALSE;
+ 	       goto cleanup;
+        }
+-       if (setjmp (png_ptr->jmpbuf)) {
++       if (setjmp (png_ptr->png_jmpbuf)) {
+ 	       success = FALSE;
+ 	       goto cleanup;
+        }
+--- misc/gdk-pixbuf-2.23.0/gdk-pixbuf/makefile.msc	2010-06-25 23:40:10.000000000 +0200
++++ misc/build/gdk-pixbuf-2.23.0/gdk-pixbuf/makefile.msc	2011-03-24 06:13:30.515625000 +0100
+@@ -1,9 +1,19 @@
+-TOP = ..\..
+ PRJ_TOP = ..
++GLIB_TOP =
+ PACKAGE = gdk_pixbuf
+ PKG_VER = $(GDK_PIXBUF_VER)
++GLIB_INC = -I$(OUTDIR)\inc\external\glib-2.0
++LIBPNG_INC = -I$(OUTDIR)\inc\external\libpng
++LIBJPEG_INC = -I$(OUTDIR)\inc\external\libjpeg
++
++INTL_LIB = $(OUTDIR)\lib\intl.lib
++GLIB_LIB = $(OUTDIR)\lib\glib-2.0.lib $(OUTDIR)\lib\gobject-2.0.lib  $(OUTDIR)\lib\gmodule-2.0.lib  $(OUTDIR)\lib\gio-2.0.lib $(OUTDIR)\lib\gthread-2.0.lib	
++LIBJPEG_LIB = $(OUTDIR)\lib\jpeg.lib
++LIBPNG_LIB = $(OUTDIR)\lib\libpng.lib
++ZLIB_LIB = $(OUTDIR)\lib\zlib.lib
++GDIPLUS_LIB = gdiplus.lib
+ 
+-!INCLUDE $(TOP)/glib/build/win32/make.msc
++!INCLUDE $(OUTDIR)\inc\external\glib-2.0\make.msc
+ 
+ !IFNDEF PERL
+ PERL = perl
+@@ -13,22 +23,22 @@
+ 
+ # -DINCLUDE_gdiplus _replaces_ -DINCLUDE_bmp -DINCLUDE_gif -DINCLUDE_ico -DINCLUDE_jpeg  -DINCLUDE_tiff
+ # but not yet -DINCLUDE_png 
+-##USEGDIP=1
++USEGDIP=1
+ # to get _working_ include modules we need respective defines ...
+ #   
+ BUILT_IN_FORMATS = \
+ !IFDEF USEGDIP
+ 	-DINCLUDE_gdiplus \
+ !ELSE
+-	-DINCLUDE_bmp -DINCLUDE_gif -DINCLUDE_ico -DINCLUDE_jpeg -DINCLUDE_tiff \
++	-DINCLUDE_bmp -DINCLUDE_gif -DINCLUDE_ico -DINCLUDE_jpeg \
+ !ENDIF
+ 	-DINCLUDE_png \
+ 	-DINCLUDE_xpm -DINCLUDE_wbmp \
+ 	-DINCLUDE_pnm -DINCLUDE_ras
+ 
+-PKG_CFLAGS = -FImsvc_recommended_pragmas.h \
++PKG_CFLAGS = -FI$(PRJ_TOP)\msvc_recommended_pragmas.h \
+ !IFNDEF USEGDIP
+- 	$(JPEG_CFLAGS) $(TIFF_CFLAGS) \
++ 	$(JPEG_CFLAGS) \
+ !ENDIF
+ 	-I. -I.. $(GLIB_CFLAGS) \
+ 	$(BUILT_IN_FORMATS) \
+@@ -39,13 +49,14 @@
+ 	-UUSE_GMODULE # use built-in
+ #	-DUSE_GMODULE -DPIXBUF_LIBDIR=\".\"
+ 
+-PKG_LINK = $(GLIB_LIBS) \
+-!IFNDEF USEGDIP
+-	$(TIFF_LIBS) $(JPEG_LIBS) \
+-!ENDIF
+-	$(PNG_LIBS) $(INTL_LIBS) \
+-	pixops\pixops.lib \
+- 
++PKG_LINK = 	$(INTL_LIB)		\
++					$(GLIB_LIB)		\
++					$(LIBPNG_LIB)	\
++					$(LIBJPEG_LIB)	\
++					$(ZLIB_LIB)		\
++					$(GDIPLUS_LIB)	\
++					pixops\pixops.lib
++
+ OBJECTS_NON_NATIVE = \
+ 	io-bmp.obj \
+ 	io-gif.obj \
+@@ -95,13 +106,13 @@
+ 	gdk-pixbuf-transform.h
+ 
+ gdk-pixbuf-marshal.h: gdk-pixbuf-marshal.list
+-	..\..\glib\gobject\glib-genmarshal --prefix=_gdk_pixbuf_marshal gdk-pixbuf-marshal.list --header >gdk-pixbuf-marshal.h
++	$(OUTDIR)\bin\glib-genmarshal --prefix=_gdk_pixbuf_marshal gdk-pixbuf-marshal.list --header >gdk-pixbuf-marshal.h
+ 
+ gdk-pixbuf-marshal.c: gdk-pixbuf-marshal.h gdk-pixbuf-marshal.list
+-	..\..\glib\gobject\glib-genmarshal --prefix=_gdk_pixbuf_marshal gdk-pixbuf-marshal.list --body >gdk-pixbuf-marshal.c
++	$(OUTDIR)\bin\glib-genmarshal --prefix=_gdk_pixbuf_marshal gdk-pixbuf-marshal.list --body >gdk-pixbuf-marshal.c
+ 
+-gdk-pixbuf-alias.h: gdk-pixbuf.symbols
+-	perl makegdkpixbufalias.pl < gdk-pixbuf.symbols > gdk-pixbuf-alias.h
++#gdk-pixbuf-alias.h: gdk-pixbuf.symbols
++#	perl makegdkpixbufalias.pl < gdk-pixbuf.symbols > gdk-pixbuf-alias.h
+ 
+ gdk_pixbuf.def: gdk-pixbuf.symbols makefile.msc
+ 	echo EXPORTS > gdk_pixbuf.def
+@@ -109,14 +120,15 @@
+ 	-DG_GNUC_MALLOC= -DG_GNUC_CONST= -DG_GNUC_NULL_TERMINATED= -DG_GNUC_NORETURN= -DG_GNUC_PRINTF=;G_GNUC_PRINTF \
+ 	gdk-pixbuf.symbols >> gdk_pixbuf.def
+ 
+-gdk-pixbuf-aliasdef.c: gdk-pixbuf.symbols
+-	 perl makegdkpixbufalias.pl -def < gdk-pixbuf.symbols > gdk-pixbuf-aliasdef.c
++#gdk-pixbuf-aliasdef.c: gdk-pixbuf.symbols
++#	 perl makegdkpixbufalias.pl -def < gdk-pixbuf.symbols > gdk-pixbuf-aliasdef.c
+ 
+ ## common stuff
+ 
+ INSTALL = copy
+ 
+-CFLAGS = -I. -DHAVE_CONFIG_H
++CFLAGS = -I. $(SOLARINC) $(GLIB_INC) $(LIBPNG_INC) $(LIBJPEG_INC) \
++    -DHAVE_CONFIG_H -DGDK_PIXBUF_LOCALEDIR="\"locale_dummy\""   
+ 
+ sub-pixops :
+ 	cd pixops
+@@ -126,19 +138,19 @@
+ ## targets
+ all : \
+ 	$(PRJ_TOP)\config.h \
+-	gdk-pixbuf-alias.h \
+-	gdk-pixbuf-aliasdef.c \
++#	gdk-pixbuf-alias.h \
++#	gdk-pixbuf-aliasdef.c \
+ 	gdk-pixbuf-marshal.h \
+ 	gdk-pixbuf-marshal.c \
+ 	sub-pixops \
+ 	lib$(PACKAGE)-$(PKG_VER)-0.dll \
+-	$(PACKAGE)-$(PKG_VER)s.lib \
++	$(PACKAGE)-$(PKG_VER)s.lib 
+ #	make-inline-pixbuf.exe \
+-	gdk-pixbuf-csource.exe \
+-	test-gdk-pixbuf.exe
++#	gdk-pixbuf-csource.exe \
++#	test-gdk-pixbuf.exe
+ 
+ $(PACKAGE).res : $(PACKAGE).rc
+-	rc -DBUILDNUMBER=0 -r -fo $(PACKAGE).res $(PACKAGE).rc
++	rc -I $(SOLARINCLUDES) -DBUILDNUMBER=0 -r -fo $(PACKAGE).res $(PACKAGE).rc
+ 
+ $(PACKAGE)-$(PKG_VER)s.lib : $(OBJECTS)
+ 	lib /out:$(PACKAGE)-$(PKG_VER)s.lib $(OBJECTS) pixops\pixops.lib
+@@ -160,7 +172,7 @@
+ # gdk-pixbuf-enum-types.h
+ #
+ gdk-pixbuf-enum-types.h : $(gdk_pixbuf_headers) makefile.msc
+-	$(PERL) $(GLIB)\gobject\glib-mkenums \
++	perl $(OUTDIR)\bin\glib-mkenums \
+ 		--fhead "#ifndef __GDK_PIXBUF__ENUM_TYPES_H__\n#define __GDK_PIXBUF_ENUM_TYPES_H__\n" \
+ 		--fprod "/* enumerations from \"@filename@\" */\n" \
+ 		--vhead "GType @enum_name@_get_type (void);\n#define GDK_TYPE_@ENUMSHORT@ (@enum_name@_get_type())\n"         \
+@@ -171,8 +183,8 @@
+ # gdk-pixbuf-enum-types.c
+ #
+ gdk-pixbuf-enum-types.c: $(gdk_pixbuf_headers) makefile.msc
+-	$(PERL) $(GLIB)\gobject\glib-mkenums \
+-		--fhead "#include <gdk-pixbuf/gdk-pixbuf.h>" \
++	perl $(OUTDIR)\bin\glib-mkenums \
++		--fhead "#include <gdk-pixbuf.h>" \
+ 		--fprod "\n/* enumerations from \"@filename@\" */" \
+ 		--vhead "GType\n@enum_name@_get_type (void)\n{\n  static GType etype = 0;\n  if (etype == 0) {\n    static const G@Type@Value values[] = {"       \
+ 		--vprod "      { @VALUENAME@, \"@VALUENAME@\", \"@valuenick@\" }," \
+@@ -188,10 +200,10 @@
+ 	$(CC) $(CFLAGS) -GD -c $(PKG_CFLAGS) $<
+ 
+ clean::
+-	del config.h
+-	del gdk-pixbuf-marshal.h
+-	del gdk-pixbuf-marshal.c
+-	del gdk-pixbuf-alaias.h
++	rm config.h
++	rm gdk-pixbuf-marshal.h
++	rm gdk-pixbuf-marshal.c
++	rm gdk-pixbuf-alaias.h
+ 
+ 
+ 
+--- misc/gdk-pixbuf-2.23.0/gdk-pixbuf/pixops/makefile.msc	2010-06-25 23:40:10.000000000 +0200
++++ misc/build/gdk-pixbuf-2.23.0/gdk-pixbuf/pixops/makefile.msc	2011-03-24 06:03:59.062500000 +0100
+@@ -1,10 +1,11 @@
+-TOP = ../../..
+-PACKAGE = pixops
+ PRJ_TOP = ..\..
++PACKAGE = pixops
++GLIB_TOP =
++GLIB_INC = -I$(OUTDIR)\inc\external\glib-2.0
+ 
+-!INCLUDE $(TOP)/glib/build/win32/make.msc
++!INCLUDE $(OUTDIR)\inc\external\glib-2.0\make.msc
+ 
+-PKG_CFLAGS = -I.. $(GLIB_CFLAGS)
++PKG_CFLAGS = -I.. $(SOLARINC) $(GLIB_INC) $(GLIB_CFLAGS)
+ 
+ OBJECTS = \
+ 	pixops.obj \
+@@ -50,16 +51,16 @@
+ 	$(CC) $(CFLAGS) -GD -c $(PKG_CFLAGS) $<
+ 
+ clean::
+-	del config.h
+-	del *.exe
+-	del *.obj
+-	del *.dll
+-	del *.lib
+-	del *.err
+-	del *.map
+-	del *.sym
+-	del *.exp
+-	del *.lk1
+-	del *.mk1
+-	del *.pdb
+-	del *.ilk
++	rm config.h
++	rm *.exe
++	rm *.obj
++	rm *.dll
++	rm *.lib
++	rm *.err
++	rm *.map
++	rm *.sym
++	rm *.exp
++	rm *.lk1
++	rm *.mk1
++	rm *.pdb
++	rm *.ilk
+--- misc/gdk-pixbuf-2.23.0/gdk-pixbuf/pixops/pixops.c	2010-06-25 23:40:10.000000000 +0200
++++ misc/build/gdk-pixbuf-2.23.0/gdk-pixbuf/pixops/pixops.c	2011-03-22 01:58:24.281250000 +0100
+@@ -21,7 +21,7 @@
+  */
+ #include "config.h"
+ #include <math.h>
+-#include <glib.h>
++#include <glib-2.0\glib.h>
+ 
+ #include "pixops.h"
+ #include "pixops-internal.h"
+--- misc/gdk-pixbuf-2.23.0/msvc_recommended_pragmas.h	2011-03-24 04:59:07.625000000 +0100
++++ misc/build/gdk-pixbuf-2.23.0/msvc_recommended_pragmas.h	2011-03-22 01:58:24.359375000 +0100
+@@ -1 +1,31 @@
+-dummy
++#ifndef _MSC_VER
++#pragma error "This header is for Microsoft VC only."
++#endif /* _MSC_VER */
++
++/* Make MSVC more pedantic, this is a recommended pragma list
++ * from _Win32_Programming_ by Rector and Newcomer.
++ */
++#pragma warning(error:4002) /* too many actual parameters for macro */
++#pragma warning(error:4003) /* not enough actual parameters for macro */
++#pragma warning(1:4010)     /* single-line comment contains line-continuation character */
++#pragma warning(error:4013) /* 'function' undefined; assuming extern returning int */
++#pragma warning(1:4016)     /* no function return type; using int as default */
++#pragma warning(error:4020) /* too many actual parameters */
++#pragma warning(error:4021) /* too few actual parameters */
++#pragma warning(error:4027) /* function declared without formal parameter list */
++#pragma warning(error:4029) /* declared formal parameter list different from definition */
++#pragma warning(error:4033) /* 'function' must return a value */
++#pragma warning(error:4035) /* 'function' : no return value */
++#pragma warning(error:4045) /* array bounds overflow */
++#pragma warning(error:4047) /* different levels of indirection */
++#pragma warning(error:4049) /* terminating line number emission */
++#pragma warning(error:4053) /* An expression of type void was used as an operand */
++#pragma warning(error:4071) /* no function prototype given */
++#pragma warning(disable:4101) /* unreferenced local variable */
++#pragma warning(error:4150)
++
++#pragma warning(disable:4244)	/* No possible loss of data warnings */
++#pragma warning(disable:4305)   /* No truncation from int to char warnings */
++
++/* work around Microsoft's premature attempt to deprecate the C-Library */
++#pragma warning(disable:4996)   /* This function or variable may be unsafe. */

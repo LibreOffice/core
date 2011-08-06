@@ -1,0 +1,902 @@
+--- misc/boost_1_44_0/boost/ptr_container/detail/map_iterator.hpp	2008-06-24 22:37:35.000000000 +0200
++++ misc/build/boost_1_44_0/boost/ptr_container/detail/map_iterator.hpp	2011-02-04 16:39:19.000000000 +0100
+@@ -49,7 +49,7 @@
+             : first(rp->first), second(rp->second)
+             { }
+             
+-            const ref_pair* const operator->() const
++            const ref_pair* operator->() const
+             {
+                 return this;
+             }
+--- misc/boost_1_44_0/boost/ptr_container/ptr_map_adapter.hpp	2008-06-24 22:37:35.000000000 +0200
++++ misc/build/boost_1_44_0/boost/ptr_container/ptr_map_adapter.hpp	2011-02-04 16:39:19.000000000 +0100
+@@ -477,6 +477,7 @@
+         }
+                 
+         ptr_map_adapter( const ptr_map_adapter& r )
++          : base_type()
+         {
+             map_basic_clone_and_insert( r.begin(), r.end() );      
+         }
+--- misc/boost_1_44_0/boost/ptr_container/ptr_sequence_adapter.hpp	2009-11-01 12:07:12.000000000 +0100
++++ misc/build/boost_1_44_0/boost/ptr_container/ptr_sequence_adapter.hpp	2011-02-04 16:39:19.000000000 +0100
+@@ -476,19 +476,19 @@
+     public: // C-array support
+     
+         void transfer( iterator before, value_type* from, 
+-                       size_type size, bool delete_from = true ) // strong 
++                       size_type size_, bool delete_from = true ) // strong 
+         {
+             BOOST_ASSERT( from != 0 );
+             if( delete_from )
+             {
+                 BOOST_DEDUCED_TYPENAME base_type::scoped_deleter 
+-                    deleter( from, size );                                // nothrow
+-                this->base().insert( before.base(), from, from + size );  // strong
++                    deleter( from, size_ );                                // nothrow
++                this->base().insert( before.base(), from, from + size_ );  // strong
+                 deleter.release();                                        // nothrow
+             }
+             else
+             {
+-                this->base().insert( before.base(), from, from + size ); // strong
++                this->base().insert( before.base(), from, from + size_ ); // strong
+             }
+         }
+ 
+@@ -671,6 +671,7 @@
+         void range_check_impl( iterator first, iterator last,
+                                std::random_access_iterator_tag )
+         {
++            (void)first; (void)last;
+             BOOST_ASSERT( first <= last && "out of range unique()/erase_if()" );
+             BOOST_ASSERT( this->begin() <= first && "out of range unique()/erase_if()" );
+             BOOST_ASSERT( last <= this->end() && "out of range unique()/erase_if)(" );             
+--- misc/boost_1_44_0/boost/spirit/home/classic/error_handling/exceptions.hpp	2010-04-07 02:41:42.000000000 +0200
++++ misc/build/boost_1_44_0/boost/spirit/home/classic/error_handling/exceptions.hpp	2011-02-04 16:39:19.000000000 +0100
+@@ -222,9 +222,9 @@
+ 
+         error_status(
+             result_t result_ = fail,
+-            std::ptrdiff_t length = -1,
++            std::ptrdiff_t length_ = -1,
+             T const& value_ = T())
+-        : result(result_), length(length), value(value_) {}
++        : result(result_), length(length_), value(value_) {}
+ 
+         result_t        result;
+         std::ptrdiff_t  length;
+--- misc/boost_1_44_0/boost/spirit/home/classic/symbols/symbols.hpp	2008-06-22 17:05:38.000000000 +0200
++++ misc/build/boost_1_44_0/boost/spirit/home/classic/symbols/symbols.hpp	2011-02-04 16:39:19.000000000 +0100
+@@ -102,13 +102,13 @@
+     {
+         typedef typename ScannerT::iterator_t iterator_t;
+         iterator_t first = scan.first;
+-        typename SetT::search_info result = SetT::find(scan);
++        typename SetT::search_info result_ = SetT::find(scan);
+ 
+-        if (result.data)
++        if (result_.data)
+             return scan.
+                 create_match(
+-                    result.length,
+-                    symbol_ref_t(*result.data),
++                    result_.length,
++                    symbol_ref_t(*result_.data),
+                     first,
+                     scan.first);
+         else
+--- misc/boost_1_44_0/boost/spirit/home/classic/utility/functor_parser.hpp	2008-06-22 17:05:38.000000000 +0200
++++ misc/build/boost_1_44_0/boost/spirit/home/classic/utility/functor_parser.hpp	2011-02-04 16:39:19.000000000 +0100
+@@ -54,13 +54,13 @@
+             typedef typename ScannerT::iterator_t   iterator_t;
+ 
+             iterator_t const s(scan.first);
+-            functor_result_t result;
+-            std::ptrdiff_t len = functor(scan, result);
++            functor_result_t functor_result;
++            std::ptrdiff_t len = functor(scan, functor_result);
+ 
+             if (len < 0)
+                 return scan.no_match();
+             else
+-                return scan.create_match(std::size_t(len), result, s, scan.first);
++                return scan.create_match(std::size_t(len), functor_result, s, scan.first);
+         }
+     };
+ 
+--- misc/boost_1_44_0/boost/spirit/home/classic/utility/loops.hpp	2008-06-22 17:05:38.000000000 +0200
++++ misc/build/boost_1_44_0/boost/spirit/home/classic/utility/loops.hpp	2011-02-04 16:39:19.000000000 +0100
+@@ -47,8 +47,8 @@
+         typedef fixed_loop<ParserT, ExactT>     self_t;
+         typedef unary<ParserT, parser<self_t> >  base_t;
+ 
+-        fixed_loop (ParserT const & subject, ExactT const & exact)
+-        : base_t(subject), m_exact(exact) {}
++        fixed_loop (ParserT const & subject_, ExactT const & exact)
++        : base_t(subject_), m_exact(exact) {}
+ 
+         template <typename ScannerT>
+         typename parser_result <self_t, ScannerT>::type
+@@ -112,8 +112,8 @@
+         typedef finite_loop <ParserT, MinT, MaxT> self_t;
+         typedef unary<ParserT, parser<self_t> >   base_t;
+ 
+-        finite_loop (ParserT const & subject, MinT const & min, MaxT const & max)
+-        : base_t(subject), m_min(min), m_max(max) {}
++        finite_loop (ParserT const & subject_, MinT const & min, MaxT const & max)
++        : base_t(subject_), m_min(min), m_max(max) {}
+ 
+         template <typename ScannerT>
+         typename parser_result <self_t, ScannerT>::type
+@@ -196,11 +196,11 @@
+         typedef unary<ParserT, parser<self_t> > base_t;
+ 
+         infinite_loop (
+-            ParserT const& subject,
++            ParserT const& subject_,
+             MinT const& min,
+             more_t const&
+         )
+-        : base_t(subject), m_min(min) {}
++        : base_t(subject_), m_min(min) {}
+ 
+         template <typename ScannerT>
+         typename parser_result <self_t, ScannerT>::type
+@@ -253,9 +253,9 @@
+ 
+         template <typename ParserT>
+         fixed_loop <ParserT, ExactT>
+-        operator[](parser <ParserT> const & subject) const
++        operator[](parser <ParserT> const & subject_) const
+         {
+-            return fixed_loop <ParserT, ExactT> (subject.derived (), m_exact);
++            return fixed_loop <ParserT, ExactT> (subject_.derived (), m_exact);
+         }
+ 
+         ExactT m_exact;
+@@ -283,11 +283,11 @@
+ 
+        template <typename ParserT>
+        typename impl::loop_traits<ParserT, MinT, MaxT>::type
+-       operator[](parser <ParserT> const & subject) const
++       operator[](parser <ParserT> const & subject_) const
+        {
+            typedef typename impl::loop_traits<ParserT, MinT, MaxT>::type ret_t;
+            return ret_t(
+-                subject.derived(),
++                subject_.derived(),
+                 m_min,
+                 m_max);
+        }
+--- misc/boost_1_44_0/boost/unordered/detail/table.hpp	2011-02-04 16:55:26.000000000 +0100
++++ misc/build/boost_1_44_0/boost/unordered/detail/table.hpp	2011-02-05 03:34:26.000000000 +0100
+@@ -33,10 +33,10 @@
+     template <class T>
+     template <class Key, class Pred>
+     inline BOOST_DEDUCED_TYPENAME T::node_ptr
+-        hash_table<T>::find_iterator(bucket_ptr bucket, Key const& k,
++        hash_table<T>::find_iterator(bucket_ptr bucket_, Key const& k,
+             Pred const& eq) const
+     {
+-        node_ptr it = bucket->next_;
++        node_ptr it = bucket_->next_;
+         while (BOOST_UNORDERED_BORLAND_BOOL(it) &&
+             !eq(k, get_key(node::get_value(it))))
+         {
+@@ -50,9 +50,9 @@
+     template <class T>
+     inline BOOST_DEDUCED_TYPENAME T::node_ptr
+         hash_table<T>::find_iterator(
+-            bucket_ptr bucket, key_type const& k) const
++            bucket_ptr bucket_, key_type const& k) const
+     {
+-        node_ptr it = bucket->next_;
++        node_ptr it = bucket_->next_;
+         while (BOOST_UNORDERED_BORLAND_BOOL(it) &&
+             !equal(k, node::get_value(it)))
+         {
+@@ -75,9 +75,9 @@
+     template <class T>
+     inline BOOST_DEDUCED_TYPENAME T::node_ptr*
+         hash_table<T>::find_for_erase(
+-            bucket_ptr bucket, key_type const& k) const
++            bucket_ptr bucket_, key_type const& k) const
+     {
+-        node_ptr* it = &bucket->next_;
++        node_ptr* it = &bucket_->next_;
+         while(BOOST_UNORDERED_BORLAND_BOOL(*it) &&
+             !equal(k, node::get_value(*it)))
+         {
+@@ -475,7 +475,7 @@
+     {    
+         hasher const& hf = this->hash_function();
+         std::size_t size = this->size_;
+-        bucket_ptr end = this->get_bucket(this->bucket_count_);
++        bucket_ptr end_ = this->get_bucket(this->bucket_count_);
+ 
+         buckets dst(this->node_alloc(), num_buckets);
+         dst.create_buckets();
+@@ -484,10 +484,10 @@
+         src.swap(*this);
+         this->size_ = 0;
+ 
+-        for(bucket_ptr bucket = this->cached_begin_bucket_;
+-            bucket != end; ++bucket)
++        for(bucket_ptr bucket_ = this->cached_begin_bucket_;
++            bucket_ != end_; ++bucket_)
+         {
+-            node_ptr group = bucket->next_;
++            node_ptr group = bucket_->next_;
+             while(group) {
+                 // Move the first group of equivalent nodes in bucket to dst.
+ 
+@@ -496,10 +496,10 @@
+                     hf(get_key_from_ptr(group)));
+ 
+                 node_ptr& next_group = node::next_group(group);
+-                bucket->next_ = next_group;
++                bucket_->next_ = next_group;
+                 next_group = dst_bucket->next_;
+                 dst_bucket->next_ = group;
+-                group = bucket->next_;
++                group = bucket_->next_;
+             }
+         }
+ 
+@@ -525,13 +525,13 @@
+         BOOST_ASSERT(this->buckets_ && !dst.buckets_);
+ 
+         hasher const& hf = this->hash_function();
+-        bucket_ptr end = this->get_bucket(this->bucket_count_);
++        bucket_ptr end_ = this->get_bucket(this->bucket_count_);
+ 
+         node_constructor a(dst);
+         dst.create_buckets();
+ 
+         // no throw:
+-        for(bucket_ptr i = this->cached_begin_bucket_; i != end; ++i) {
++        for(bucket_ptr i = this->cached_begin_bucket_; i != end_; ++i) {
+             // no throw:
+             for(node_ptr it = i->next_; it;) {
+                 // hash function can throw.
+@@ -579,11 +579,11 @@
+     {
+         if(!this->size_) return this->end();
+ 
+-        bucket_ptr bucket = this->get_bucket(this->bucket_index(k));
+-        node_ptr it = find_iterator(bucket, k);
++        bucket_ptr bucket_ = this->get_bucket(this->bucket_index(k));
++        node_ptr it = find_iterator(bucket_, k);
+ 
+         if (BOOST_UNORDERED_BORLAND_BOOL(it))
+-            return iterator_base(bucket, it);
++            return iterator_base(bucket_, it);
+         else
+             return this->end();
+     }
+@@ -595,11 +595,11 @@
+     {
+         if(!this->size_) return this->end();
+ 
+-        bucket_ptr bucket = this->get_bucket(h(k) % this->bucket_count_);
+-        node_ptr it = find_iterator(bucket, k, eq);
++        bucket_ptr bucket_ = this->get_bucket(h(k) % this->bucket_count_);
++        node_ptr it = find_iterator(bucket_, k, eq);
+ 
+         if (BOOST_UNORDERED_BORLAND_BOOL(it))
+-            return iterator_base(bucket, it);
++            return iterator_base(bucket_, it);
+         else
+             return this->end();
+     }
+@@ -611,8 +611,8 @@
+         if(!this->size_)
+             boost::throw_exception(std::out_of_range("Unable to find key in unordered_map."));
+ 
+-        bucket_ptr bucket = this->get_bucket(this->bucket_index(k));
+-        node_ptr it = find_iterator(bucket, k);
++        bucket_ptr bucket_ = this->get_bucket(this->bucket_index(k));
++        node_ptr it = find_iterator(bucket_, k);
+ 
+         if (!it)
+             boost::throw_exception(std::out_of_range("Unable to find key in unordered_map."));
+@@ -630,10 +630,10 @@
+         if(!this->size_)
+             return iterator_pair(this->end(), this->end());
+ 
+-        bucket_ptr bucket = this->get_bucket(this->bucket_index(k));
+-        node_ptr it = find_iterator(bucket, k);
++        bucket_ptr bucket_ = this->get_bucket(this->bucket_index(k));
++        node_ptr it = find_iterator(bucket_, k);
+         if (BOOST_UNORDERED_BORLAND_BOOL(it)) {
+-            iterator_base first(iterator_base(bucket, it));
++            iterator_base first(iterator_base(bucket_, it));
+             iterator_base second(first);
+             second.increment_bucket(node::next_group(second.node_));
+             return iterator_pair(first, second);
+@@ -651,26 +651,26 @@
+     {
+         if(!this->size_) return;
+ 
+-        bucket_ptr end = this->get_bucket(this->bucket_count_);
+-        for(bucket_ptr begin = this->buckets_; begin != end; ++begin) {
+-            this->clear_bucket(begin);
++        bucket_ptr end_ = this->get_bucket(this->bucket_count_);
++        for(bucket_ptr begin_ = this->buckets_; begin_ != end_; ++begin_) {
++            this->clear_bucket(begin_);
+         }
+ 
+         this->size_ = 0;
+-        this->cached_begin_bucket_ = end;
++        this->cached_begin_bucket_ = end_;
+     }
+ 
+     template <class T>
+     inline std::size_t hash_table<T>::erase_group(
+-        node_ptr* it, bucket_ptr bucket)
++        node_ptr* it, bucket_ptr bucket_)
+     {
+         node_ptr pos = *it;
+-        node_ptr end = node::next_group(pos);
+-        *it = end;
+-        std::size_t count = this->delete_nodes(pos, end);
+-        this->size_ -= count;
+-        this->recompute_begin_bucket(bucket);
+-        return count;
++        node_ptr end_ = node::next_group(pos);
++        *it = end_;
++        std::size_t count_ = this->delete_nodes(pos, end_);
++        this->size_ -= count_;
++        this->recompute_begin_bucket(bucket_);
++        return count_;
+     }
+     
+     template <class T>
+@@ -679,11 +679,11 @@
+         if(!this->size_) return 0;
+     
+         // No side effects in initial section
+-        bucket_ptr bucket = this->get_bucket(this->bucket_index(k));
+-        node_ptr* it = this->find_for_erase(bucket, k);
++        bucket_ptr bucket_ = this->get_bucket(this->bucket_index(k));
++        node_ptr* it = this->find_for_erase(bucket_, k);
+ 
+         // No throw.
+-        return *it ? this->erase_group(it, bucket) : 0;
++        return *it ? this->erase_group(it, bucket_) : 0;
+     }
+ 
+     template <class T>
+@@ -766,12 +766,12 @@
+         std::size_t hash_value = this->hash_function()(k);
+         if(this->buckets_) this->reserve_for_insert(size);
+         else this->create_for_insert(size);
+-        bucket_ptr bucket = this->bucket_ptr_from_hash(hash_value);
++        bucket_ptr bucket_ = this->bucket_ptr_from_hash(hash_value);
+         node_ptr n = a.release();
+-        node::add_to_bucket(n, *bucket);
++        node::add_to_bucket(n, *bucket_);
+         ++this->size_;
+-        this->cached_begin_bucket_ = bucket;
+-        return iterator_base(bucket, n);
++        this->cached_begin_bucket_ = bucket_;
++        return iterator_base(bucket_, n);
+     }
+ }}
+ 
+--- misc/boost_1_44_0/boost/unordered/detail/unique.hpp	2011-02-05 03:28:39.000000000 +0100
++++ misc/build/boost_1_44_0/boost/unordered/detail/unique.hpp	2011-02-05 03:36:54.000000000 +0100
+@@ -57,7 +57,7 @@
+ 
+         bool equals(hash_unique_table const&) const;
+ 
+-        node_ptr add_node(node_constructor& a, bucket_ptr bucket);
++        node_ptr add_node(node_constructor& a, bucket_ptr bucket_);
+         
+ #if defined(BOOST_UNORDERED_STD_FORWARD)
+ 
+@@ -135,8 +135,8 @@
+         if(this->size_ != other.size_) return false;
+         if(!this->size_) return true;
+ 
+-        bucket_ptr end = this->get_bucket(this->bucket_count_);
+-        for(bucket_ptr i = this->cached_begin_bucket_; i != end; ++i)
++        bucket_ptr end_ = this->get_bucket(this->bucket_count_);
++        for(bucket_ptr i = this->cached_begin_bucket_; i != end_; ++i)
+         {
+             node_ptr it1 = i->next_;
+             while(BOOST_UNORDERED_BORLAND_BOOL(it1))
+@@ -159,13 +159,13 @@
+     template <class T>
+     inline BOOST_DEDUCED_TYPENAME hash_unique_table<T>::node_ptr
+         hash_unique_table<T>::add_node(node_constructor& a,
+-            bucket_ptr bucket)
++            bucket_ptr bucket_)
+     {
+         node_ptr n = a.release();
+-        node::add_to_bucket(n, *bucket);
++        node::add_to_bucket(n, *bucket_);
+         ++this->size_;
+-        if(bucket < this->cached_begin_bucket_)
+-            this->cached_begin_bucket_ = bucket;
++        if(bucket_ < this->cached_begin_bucket_)
++            this->cached_begin_bucket_ = bucket_;
+         return n;
+     }
+         
+@@ -181,7 +181,7 @@
+         typedef BOOST_DEDUCED_TYPENAME value_type::second_type mapped_type;
+ 
+         std::size_t hash_value = this->hash_function()(k);
+-        bucket_ptr bucket = this->bucket_ptr_from_hash(hash_value);
++        bucket_ptr bucket_ = this->bucket_ptr_from_hash(hash_value);
+         
+         if(!this->buckets_) {
+             node_constructor a(*this);
+@@ -189,7 +189,7 @@
+             return *this->emplace_empty_impl_with_node(a, 1);
+         }
+ 
+-        node_ptr pos = this->find_iterator(bucket, k);
++        node_ptr pos = this->find_iterator(bucket_, k);
+ 
+         if (BOOST_UNORDERED_BORLAND_BOOL(pos)) {
+             return node::get_value(pos);
+@@ -205,11 +205,11 @@
+             // reserve has basic exception safety if the hash function
+             // throws, strong otherwise.
+             if(this->reserve_for_insert(this->size_ + 1))
+-                bucket = this->bucket_ptr_from_hash(hash_value);
++                bucket_ = this->bucket_ptr_from_hash(hash_value);
+ 
+             // Nothing after this point can throw.
+ 
+-            return node::get_value(add_node(a, bucket));
++            return node::get_value(add_node(a, bucket_));
+         }
+     }
+ 
+@@ -220,22 +220,22 @@
+         // No side effects in this initial code
+         key_type const& k = this->get_key(a.value());
+         std::size_t hash_value = this->hash_function()(k);
+-        bucket_ptr bucket = this->bucket_ptr_from_hash(hash_value);
+-        node_ptr pos = this->find_iterator(bucket, k);
++        bucket_ptr bucket_ = this->bucket_ptr_from_hash(hash_value);
++        node_ptr pos = this->find_iterator(bucket_, k);
+         
+         if (BOOST_UNORDERED_BORLAND_BOOL(pos)) {
+             // Found an existing key, return it (no throw).
+-            return emplace_return(iterator_base(bucket, pos), false);
++            return emplace_return(iterator_base(bucket_, pos), false);
+         } else {
+             // reserve has basic exception safety if the hash function
+             // throws, strong otherwise.
+             if(this->reserve_for_insert(this->size_ + 1))
+-                bucket = this->bucket_ptr_from_hash(hash_value);
++                bucket_ = this->bucket_ptr_from_hash(hash_value);
+ 
+             // Nothing after this point can throw.
+ 
+             return emplace_return(
+-                iterator_base(bucket, add_node(a, bucket)),
++                iterator_base(bucket_, add_node(a, bucket_)),
+                 true);
+         }
+     }
+@@ -250,12 +250,12 @@
+     {
+         // No side effects in this initial code
+         std::size_t hash_value = this->hash_function()(k);
+-        bucket_ptr bucket = this->bucket_ptr_from_hash(hash_value);
+-        node_ptr pos = this->find_iterator(bucket, k);
++        bucket_ptr bucket_ = this->bucket_ptr_from_hash(hash_value);
++        node_ptr pos = this->find_iterator(bucket_, k);
+ 
+         if (BOOST_UNORDERED_BORLAND_BOOL(pos)) {
+             // Found an existing key, return it (no throw).
+-            return emplace_return(iterator_base(bucket, pos), false);
++            return emplace_return(iterator_base(bucket_, pos), false);
+ 
+         } else {
+             // Doesn't already exist, add to bucket.
+@@ -269,12 +269,12 @@
+             // reserve has basic exception safety if the hash function
+             // throws, strong otherwise.
+             if(this->reserve_for_insert(this->size_ + 1))
+-                bucket = this->bucket_ptr_from_hash(hash_value);
++                bucket_ = this->bucket_ptr_from_hash(hash_value);
+ 
+             // Nothing after this point can throw.
+ 
+             return emplace_return(
+-                iterator_base(bucket, add_node(a, bucket)),
++                iterator_base(bucket_, add_node(a, bucket_)),
+                 true);
+         }
+     }
+@@ -313,21 +313,21 @@
+                 BOOST_UNORDERED_FUNCTION_PARAMS(z, num_params))                \
+     {                                                                          \
+         std::size_t hash_value = this->hash_function()(k);                     \
+-        bucket_ptr bucket                                                      \
++        bucket_ptr bucket_                                                      \
+             = this->bucket_ptr_from_hash(hash_value);                          \
+-        node_ptr pos = this->find_iterator(bucket, k);                         \
++        node_ptr pos = this->find_iterator(bucket_, k);                         \
+                                                                                \
+         if (BOOST_UNORDERED_BORLAND_BOOL(pos)) {                               \
+-            return emplace_return(iterator_base(bucket, pos), false);          \
++            return emplace_return(iterator_base(bucket_, pos), false);          \
+         } else {                                                               \
+             node_constructor a(*this);                                         \
+             a.construct(BOOST_UNORDERED_CALL_PARAMS(z, num_params));           \
+                                                                                \
+             if(this->reserve_for_insert(this->size_ + 1))                      \
+-                bucket = this->bucket_ptr_from_hash(hash_value);               \
++                bucket_ = this->bucket_ptr_from_hash(hash_value);               \
+                                                                                \
+-            return emplace_return(iterator_base(bucket,                        \
+-                add_node(a, bucket)), true);                                   \
++            return emplace_return(iterator_base(bucket_,                        \
++                add_node(a, bucket_)), true);                                   \
+         }                                                                      \
+     }                                                                          \
+                                                                                \
+@@ -441,8 +441,8 @@
+             // different second_type.
+             key_type const& k = extractor::extract(*i);
+             std::size_t hash_value = this->hash_function()(k);
+-            bucket_ptr bucket = this->bucket_ptr_from_hash(hash_value);
+-            node_ptr pos = this->find_iterator(bucket, k);
++            bucket_ptr bucket_ = this->bucket_ptr_from_hash(hash_value);
++            node_ptr pos = this->find_iterator(bucket_, k);
+ 
+             if (!BOOST_UNORDERED_BORLAND_BOOL(pos)) {
+                 // Doesn't already exist, add to bucket.
+@@ -456,11 +456,11 @@
+                 // throws, strong otherwise.
+                 if(this->size_ + 1 >= this->max_load_) {
+                     this->reserve_for_insert(this->size_ + insert_size(i, j));
+-                    bucket = this->bucket_ptr_from_hash(hash_value);
++                    bucket_ = this->bucket_ptr_from_hash(hash_value);
+                 }
+ 
+                 // Nothing after this point can throw.
+-                add_node(a, bucket);
++                add_node(a, bucket_);
+             }
+         } while(++i != j);
+     }
+--- misc/boost_1_44_0/boost/unordered/detail/equivalent.hpp	2010-06-09 01:23:43.000000000 +0200
++++ misc/build/boost_1_44_0/boost/unordered/detail/equivalent.hpp	2011-02-05 04:15:47.000000000 +0100
+@@ -57,7 +57,7 @@
+         bool equals(hash_equivalent_table const&) const;
+ 
+         inline node_ptr add_node(node_constructor& a,
+-            bucket_ptr bucket, node_ptr pos);
++            bucket_ptr bucket_, node_ptr pos);
+ 
+ #if defined(BOOST_UNORDERED_STD_FORWARD)
+ 
+@@ -117,8 +117,8 @@
+         if(this->size_ != other.size_) return false;
+         if(!this->size_) return true;
+ 
+-        bucket_ptr end = this->get_bucket(this->bucket_count_);
+-        for(bucket_ptr i = this->cached_begin_bucket_; i != end; ++i)
++        bucket_ptr end_ = this->get_bucket(this->bucket_count_);
++        for(bucket_ptr i = this->cached_begin_bucket_; i != end_; ++i)
+         {
+             node_ptr it1 = i->next_;
+             while(BOOST_UNORDERED_BORLAND_BOOL(it1))
+@@ -149,16 +149,16 @@
+     template <class T>
+     inline BOOST_DEDUCED_TYPENAME hash_equivalent_table<T>::node_ptr
+         hash_equivalent_table<T>
+-            ::add_node(node_constructor& a, bucket_ptr bucket, node_ptr pos)
++            ::add_node(node_constructor& a, bucket_ptr bucket_, node_ptr pos)
+     {
+         node_ptr n = a.release();
+         if(BOOST_UNORDERED_BORLAND_BOOL(pos)) {
+             node::add_after_node(n, pos);                
+         }
+         else {
+-            node::add_to_bucket(n, *bucket);
+-            if(bucket < this->cached_begin_bucket_)
+-                this->cached_begin_bucket_ = bucket;
++            node::add_to_bucket(n, *bucket_);
++            if(bucket_ < this->cached_begin_bucket_)
++                this->cached_begin_bucket_ = bucket_;
+         }
+         ++this->size_;
+         return n;
+@@ -179,15 +179,15 @@
+             return this->emplace_empty_impl_with_node(a, 1);
+         }
+         else {
+-            bucket_ptr bucket = this->bucket_ptr_from_hash(hash_value);
+-            node_ptr position = this->find_iterator(bucket, k);
++            bucket_ptr bucket_ = this->bucket_ptr_from_hash(hash_value);
++            node_ptr position = this->find_iterator(bucket_, k);
+ 
+             // reserve has basic exception safety if the hash function
+             // throws, strong otherwise.
+             if(this->reserve_for_insert(this->size_ + 1))
+-                bucket = this->bucket_ptr_from_hash(hash_value);
++                bucket_ = this->bucket_ptr_from_hash(hash_value);
+ 
+-            return iterator_base(bucket, add_node(a, bucket, position));
++            return iterator_base(bucket_, add_node(a, bucket_, position));
+         }
+     }
+     
+@@ -196,8 +196,8 @@
+             ::emplace_impl_no_rehash(node_constructor& a)
+     {
+         key_type const& k = this->get_key(a.value());
+-        bucket_ptr bucket = this->get_bucket(this->bucket_index(k));
+-        add_node(a, bucket, this->find_iterator(bucket, k));
++        bucket_ptr bucket_ = this->get_bucket(this->bucket_index(k));
++        add_node(a, bucket_, this->find_iterator(bucket_, k));
+     }
+ 
+ #if defined(BOOST_UNORDERED_STD_FORWARD)
+--- misc/boost_1_44_0/boost/ptr_container/exception.hpp	2011-02-05 09:42:56.074932485 +0000
++++ misc/build/boost_1_44_0/boost/ptr_container/exception.hpp	2011-02-05 09:43:00.350931536 +0000
+@@ -24,7 +24,7 @@
+     {
+         const char* what_;
+     public:
+-        bad_ptr_container_operation( const char* what ) : what_( what )
++        bad_ptr_container_operation( const char* _what ) : what_( _what )
+         { }
+         
+         virtual const char* what() const throw()
+@@ -38,7 +38,7 @@
+     class bad_index : public bad_ptr_container_operation
+     {
+     public:
+-        bad_index( const char* what ) : bad_ptr_container_operation( what )
++        bad_index( const char* _what ) : bad_ptr_container_operation( _what )
+         { }
+     };
+ 
+--- misc/boost_1_44_0/boost/ptr_container/detail/reversible_ptr_container.hpp	2011-02-05 09:49:30.373931807 +0000
++++ misc/build/boost_1_44_0/boost/ptr_container/detail/reversible_ptr_container.hpp	2011-02-05 09:49:34.804931932 +0000
+@@ -278,9 +278,9 @@
+ 
+     private:
+         template< class ForwardIterator >
+-        ForwardIterator advance( ForwardIterator begin, size_type n ) 
++        ForwardIterator advance( ForwardIterator begin_, size_type n ) 
+         {
+-            ForwardIterator iter = begin;
++            ForwardIterator iter = begin_;
+             std::advance( iter, n );
+             return iter;
+         }        
+--- misc/boost_1_44_0/boost/ptr_container/detail/static_move_ptr.hpp	2011-02-05 09:55:44.846931338 +0000
++++ misc/build/boost_1_44_0/boost/ptr_container/detail/static_move_ptr.hpp	2011-02-05 09:56:42.760931701 +0000
+@@ -151,7 +151,7 @@
+     deleter_const_reference get_deleter() const { return impl_.second(); }
+ private:
+     template<typename TT, typename DD>
+-    void check(const static_move_ptr<TT, DD>& ptr)
++    void check(const static_move_ptr<TT, DD>&)
+         {
+             typedef move_ptrs::is_smart_ptr_convertible<TT, T> convertible;
+             BOOST_STATIC_ASSERT(convertible::value);
+--- misc/boost_1_44_0/boost/ptr_container/detail/move.hpp	2011-02-05 10:01:21.156931884 +0000
++++ misc/build/boost_1_44_0/boost/ptr_container/detail/move.hpp	2011-02-05 10:01:14.160931007 +0000
+@@ -20,7 +20,7 @@
+ template<typename Ptr>
+ class move_source {
+ public:
+-    move_source(Ptr& ptr) : ptr_(ptr) {}
++    move_source(Ptr& _ptr) : ptr_(_ptr) {}
+     Ptr& ptr() const { return ptr_; }
+ private:
+     Ptr& ptr_;
+--- misc/boost_1_44_0/boost/spirit/home/classic/core/non_terminal/subrule.hpp	2011-02-08 09:24:50.817320629 +0000
++++ misc/build/boost_1_44_0/boost/spirit/home/classic/core/non_terminal/subrule.hpp	2011-02-08 09:25:20.496639901 +0000
+@@ -210,7 +210,7 @@
+             subrule_list<
+                 subrule_parser<ID2, DefT2, ContextT2>,
+                 nil_t> >
+-        operator,(subrule_parser<ID2, DefT2, ContextT2> const& rhs) const
++        operator,(subrule_parser<ID2, DefT2, ContextT2> const& rhs_) const
+         {
+             return subrule_list<
+                 self_t,
+@@ -220,7 +220,7 @@
+                         *this,
+                         subrule_list<
+                             subrule_parser<ID2, DefT2, ContextT2>, nil_t>(
+-                                rhs, nil_t()));
++                                rhs_, nil_t()));
+         }
+ 
+         typename DefT::embed_t rhs;
+--- misc/boost_1_44_0/boost/ptr_container/ptr_sequence_adapter.hpp	2011-02-09 08:49:00.416529470 +0000
++++ misc/build/boost_1_44_0/boost/ptr_container/ptr_sequence_adapter.hpp	2011-02-09 08:50:44.607653864 +0000
+@@ -510,72 +510,72 @@
+ 
+     public: // resize
+ 
+-        void resize( size_type size ) // basic
++        void resize( size_type size_ ) // basic
+         {
+             size_type old_size = this->size();
+-            if( old_size > size )
++            if( old_size > size_ )
+             {
+-                this->erase( boost::next( this->begin(), size ), this->end() );  
++                this->erase( boost::next( this->begin(), size_ ), this->end() );  
+             }
+-            else if( size > old_size )
++            else if( size_ > old_size )
+             {
+-                for( ; old_size != size; ++old_size )
++                for( ; old_size != size_; ++old_size )
+                     this->push_back( new BOOST_DEDUCED_TYPENAME 
+                                      boost::remove_pointer<value_type>::type() ); 
+             }
+ 
+-            BOOST_ASSERT( this->size() == size );
++            BOOST_ASSERT( this->size() == size_ );
+         }
+ 
+-        void resize( size_type size, value_type to_clone ) // basic
++        void resize( size_type size_, value_type to_clone ) // basic
+         {
+             size_type old_size = this->size();
+-            if( old_size > size )
++            if( old_size > size_ )
+             {
+-                this->erase( boost::next( this->begin(), size ), this->end() );  
++                this->erase( boost::next( this->begin(), size_ ), this->end() );  
+             }
+-            else if( size > old_size )
++            else if( size_ > old_size )
+             {
+-                for( ; old_size != size; ++old_size )
++                for( ; old_size != size_; ++old_size )
+                     this->push_back( this->null_policy_allocate_clone( to_clone ) ); 
+             }
+ 
+-            BOOST_ASSERT( this->size() == size );        
++            BOOST_ASSERT( this->size() == size_ );        
+         }
+ 
+-        void rresize( size_type size ) // basic
++        void rresize( size_type size_ ) // basic
+         {
+             size_type old_size = this->size();
+-            if( old_size > size )
++            if( old_size > size_ )
+             {
+                 this->erase( this->begin(), 
+-                             boost::next( this->begin(), old_size - size ) );  
++                             boost::next( this->begin(), old_size - size_ ) );  
+             }
+-            else if( size > old_size )
++            else if( size_ > old_size )
+             {
+-                for( ; old_size != size; ++old_size )
++                for( ; old_size != size_; ++old_size )
+                     this->push_front( new BOOST_DEDUCED_TYPENAME 
+                                       boost::remove_pointer<value_type>::type() ); 
+             }
+ 
+-            BOOST_ASSERT( this->size() == size );
++            BOOST_ASSERT( this->size() == size_ );
+         }
+ 
+-        void rresize( size_type size, value_type to_clone ) // basic
++        void rresize( size_type size_, value_type to_clone ) // basic
+         {
+             size_type old_size = this->size();
+-            if( old_size > size )
++            if( old_size > size_ )
+             {
+                 this->erase( this->begin(), 
+-                             boost::next( this->begin(), old_size - size ) );  
++                             boost::next( this->begin(), old_size - size_ ) );  
+             }
+-            else if( size > old_size )
++            else if( size_ > old_size )
+             {
+-                for( ; old_size != size; ++old_size )
++                for( ; old_size != size_; ++old_size )
+                     this->push_front( this->null_policy_allocate_clone( to_clone ) ); 
+             }
+ 
+-            BOOST_ASSERT( this->size() == size );
++            BOOST_ASSERT( this->size() == size_ );
+         }           
+                 
+     public: // algorithms
+--- misc/boost_1_44_0/boost/unordered/detail/table.hpp	2011-02-10 15:04:57.999046223 +0000
++++ misc/build/boost_1_44_0/boost/unordered/detail/table.hpp	2011-02-10 15:05:44.260588237 +0000
+@@ -119,7 +119,7 @@
+ 
+         // From 6.3.1/13:
+         // Only resize when size >= mlf_ * count
+-        return double_to_size_t(ceil((double) mlf_ * this->bucket_count_));
++        return double_to_size_t(ceil((double)mlf_ * (double)this->bucket_count_));
+     }
+ 
+     template <class T>
+@@ -145,7 +145,7 @@
+         //
+         // Or from rehash post-condition:
+         // count > size / mlf_
+-        return next_prime(double_to_size_t(floor(size / (double) mlf_)) + 1);
++        return next_prime(double_to_size_t(floor((double)size / (double)mlf_)) + 1);
+     }
+ 
+     ////////////////////////////////////////////////////////////////////////////
+--- misc/boost_1_44_0/boost/functional/hash/detail/hash_float_generic.hpp	2011-02-10 14:50:52.173229648 +0000
++++ misc/build/boost_1_44_0/boost/functional/hash/detail/hash_float_generic.hpp	2011-02-10 14:52:36.824433976 +0000
+@@ -53,7 +53,7 @@
+ 
+             v = ldexp(v, limits<std::size_t>::digits);
+             std::size_t seed = static_cast<std::size_t>(v);
+-            v -= seed;
++            v -= static_cast<T>(seed);
+ 
+             // ceiling(digits(T) * log2(radix(T))/ digits(size_t)) - 1;
+             std::size_t const length
+@@ -66,7 +66,7 @@
+             {
+                 v = ldexp(v, limits<std::size_t>::digits);
+                 std::size_t part = static_cast<std::size_t>(v);
+-                v -= part;
++                v -= static_cast<T>(part);
+                 hash_float_combine(seed, part);
+             }
+ 
+--- misc/boost_1_44_0/boost/dynamic_bitset.hpp	2011-02-28 17:10:13.892131527 +0000
++++ misc/build/boost_1_44_0/boost/dynamic_bitset/dynamic_bitset.hpp	2011-02-28 17:11:05.868726195 +0000
+@@ -1108,10 +1108,10 @@
+   // beyond the "allowed" positions
+   typedef unsigned long result_type;
+ 
+-  const size_type max_size =
++  const size_type max_size_ =
+             (std::min)(m_num_bits, static_cast<size_type>(ulong_width));
+ 
+-  const size_type last_block = block_index( max_size - 1 );
++  const size_type last_block = block_index( max_size_ - 1 );
+ 
+   assert((last_block * bits_per_block) < static_cast<size_type>(ulong_width));
+ 
+--- misc/boost_1_44_0/boost/ptr_container/detail/reversible_ptr_container.hpp	2011-03-04 11:33:36.269274940 +0000
++++ misc/build/boost_1_44_0/boost/ptr_container/detail/reversible_ptr_container.hpp	2011-03-04 11:33:36.269274940 +0000
+@@ -259,6 +259,10 @@
+ 
+         static void enforce_null_policy( const Ty_* x, const char* msg )
+         {
++#ifdef BOOST_PTR_CONTAINER_NO_EXCEPTIONS
++            (void)x;
++            (void)msg;
++#endif
+             if( !allow_null )
+             {
+                 BOOST_PTR_CONTAINER_THROW_EXCEPTION( 0 == x && "null not allowed", 
+--- misc/boost_1_44_0/boost/pool/object_pool.hpp.orig	2011-07-14 16:08:31.672964851 +0100
++++ misc/build/boost_1_44_0/boost/pool/object_pool.hpp	2011-07-14 16:09:20.851594534 +0100
+@@ -53,8 +53,8 @@
+ 
+   public:
+     // This constructor parameter is an extension!
+-    explicit object_pool(const size_type next_size = 32)
+-    :pool<UserAllocator>(sizeof(T), next_size) { }
++    explicit object_pool(const size_type next_size_ = 32)
++    :pool<UserAllocator>(sizeof(T), next_size_) { }
+ 
+     ~object_pool();
+ 

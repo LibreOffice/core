@@ -1,0 +1,71 @@
+http://bugs.python.org/issue2422 - adaption of the patch there to honour our G_SLICE
+--- misc/Python-2.6.1/Objects/obmalloc.c	2011-07-26 13:10:12.668380720 +0100
++++ misc/build/Python-2.6.1/Objects/obmalloc.c	2011-07-26 13:17:41.951444953 +0100
+@@ -1,7 +1,18 @@
+ #include "Python.h"
++#include <stdlib.h>
+ 
+ #ifdef WITH_PYMALLOC
+ 
++static int running_with_system_allocator = -1;
++
++/* If we're using GCC, use __builtin_expect() to reduce overhead of
++   the allocator checks */
++#if defined(__GNUC__) && (__GNUC__ > 2) && defined(__OPTIMIZE__)
++#  define UNLIKELY(value) __builtin_expect((value), 0)
++#else
++#  define UNLIKELY(value) (value)
++#endif
++
+ /* An object allocator for Python.
+ 
+    Here is an introduction to the layers of the Python memory architecture,
+@@ -728,6 +739,11 @@
+ 	poolp next;
+ 	uint size;
+ 
++	if (UNLIKELY(running_with_system_allocator == -1))
++		running_with_system_allocator = (getenv("G_SLICE") != NULL);
++	if (UNLIKELY(running_with_system_allocator))
++		goto redirect;
++
+ 	/*
+ 	 * Limit ourselves to PY_SSIZE_T_MAX bytes to prevent security holes.
+ 	 * Most python internals blindly use a signed Py_ssize_t to track
+@@ -927,6 +943,9 @@
+ 	if (p == NULL)	/* free(NULL) has no effect */
+ 		return;
+ 
++	if (UNLIKELY(running_with_system_allocator > 0))
++		goto redirect;
++
+ 	pool = POOL_ADDR(p);
+ 	if (Py_ADDRESS_IN_RANGE(p, pool)) {
+ 		/* We allocated this address. */
+@@ -1121,6 +1140,7 @@
+ 		return;
+ 	}
+ 
++redirect:
+ 	/* We didn't allocate this address. */
+ 	free(p);
+ }
+@@ -1150,6 +1170,10 @@
+ 	if (nbytes > PY_SSIZE_T_MAX)
+ 		return NULL;
+ 
++	/* Treat running_with_system_allocator == -1 the same as 0 */
++	if (UNLIKELY(running_with_system_allocator > 0))
++		goto redirect;
++
+ 	pool = POOL_ADDR(p);
+ 	if (Py_ADDRESS_IN_RANGE(p, pool)) {
+ 		/* We're in charge of this block */
+@@ -1177,6 +1201,7 @@
+ 		}
+ 		return bp;
+ 	}
++redirect:
+ 	/* We're not managing this block.  If nbytes <=
+ 	 * SMALL_REQUEST_THRESHOLD, it's tempting to try to take over this
+ 	 * block.  However, if we do, we need to copy the valid data from

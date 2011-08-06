@@ -1,0 +1,12 @@
+mkdir: %_DEST%\inc\berkeleydb
+
+..\%__SRC%\inc\db.h %_DEST%\inc\berkeleydb\db.h
+
+..\%__SRC%\lib\libdb47.lib %_DEST%\lib\libdb47.lib
+..\%__SRC%\lib\libdb-4.7.a %_DEST%\lib\libdb-4.7.a
+..\%__SRC%\lib\libdb-4.7.so %_DEST%\lib\libdb-4.7.so
+..\%__SRC%\lib\libdb-4.7.dylib %_DEST%\lib\libdb-4.7.dylib
+..\%__SRC%\lib\libdb47.dll.a %_DEST%\lib\libdb-4.7.a
+..\%__SRC%\bin\libdb47.dll %_DEST%\bin\libdb47.dll
+
+
