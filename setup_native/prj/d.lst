@@ -1,0 +1,54 @@
+mkdir: %_DEST%\bin\osl
+..\%__SRC%\bin\*.dll %_DEST%\bin\*.dll
+..\%__SRC%\bin\*.exe %_DEST%\bin\*.exe
+..\%__SRC%\class\*.jar %_DEST%\bin\*.jar
+
+mkdir: %_DEST%\bin\userscripts
+..\%__SRC%\bin\install %_DEST%\bin\userscripts\install
+..\%__SRC%\bin\uninstall %_DEST%\bin\userscripts\uninstall
+..\%__SRC%\bin\noarch\fake-db-1.0-0.noarch.rpm %_DEST%\bin\openoffice.org-userland-1.0-0.noarch.rpm
+
+mkdir: %_DEST%\bin\osolsmf
+..\%__SRC%\bin\ulfconv %_DEST%\bin\ulfconv
+..\%__SRC%\bin\langpackscript.sh %_DEST%\bin\langpackscript.sh
+..\%__SRC%\bin\linuxpatchscript.sh %_DEST%\bin\linuxpatchscript.sh
+..\%__SRC%\bin\downloadscript.sh %_DEST%\bin\downloadscript.sh
+..\%__SRC%\bin\register_extensions %_DEST%\bin\register_extensions
+..\%__SRC%\bin\deregister_extensions %_DEST%\bin\deregister_extensions
+..\%__SRC%\bin\unpack_update.sh %_DEST%\bin\unpack_update
+..\%__SRC%\bin\update.sh %_DEST%\bin\update
+..\%__SRC%\bin\javaloader.sh %_DEST%\bin\javaloader.sh
+..\%__SRC%\misc\mac_ulffiles_dest\*.ulf %_DEST%\bin\*.ulf
+..\source\win32\msi-encodinglist.txt %_DEST%\bin\msi-encodinglist.txt
+..\source\win32\patchlist.txt %_DEST%\bin\patchlist.txt
+..\source\win32\desktophelper.txt %_DEST%\bin\desktophelper.txt
+..\source\win32\get_retval.bat %_DEST%\bin\get_retval.bat
+..\source\win32\nsis\downloadtemplate.nsi %_DEST%\bin\downloadtemplate.nsi
+..\source\win32\nsis\*.ico %_DEST%\bin\*.ico
+..\source\win32\nsis\*.bmp %_DEST%\bin\*.bmp
+..\source\linux\*.dat %_DEST%\bin\*.dat
+..\source\mac\*.icns %_DEST%\bin\*.icns
+..\source\mac\Info.plist.langpack %_DEST%\bin\Info.plist.langpack
+..\source\mac\ooo\osxdndinstall.png %_DEST%\bin\osl\osxdndinstall.png
+..\source\mac\ooo\osxdndinstall_nologo.png %_DEST%\bin\osl\osxdndinstall_nologo.png
+..\source\mac\ooo\DS_Store %_DEST%\bin\osl\DS_Store
+..\source\mac\ooo\DS_Store_Langpack %_DEST%\bin\osl\DS_Store_Langpack
+..\source\java\javaversion.dat %_DEST%\bin\javaversion.dat
+..\source\java\javaversion2.dat %_DEST%\bin\javaversion2.dat
+..\source\opensolaris\bundledextensions\installed %_DEST%\bin\osolsmf\installed
+..\source\opensolaris\bundledextensions\README %_DEST%\bin\osolsmf\README
+..\source\opensolaris\bundledextensions\ooo_bundled_extensions.xml %_DEST%\bin\osolsmf\ooo_bundled_extensions.xml
+..\source\opensolaris\bundledextensions\svc-ooo_bundled_extensions %_DEST%\bin\osolsmf\svc-ooo_bundled_extensions
+..\source\packinfo\solariscopyrightfile %_DEST%\bin\solariscopyrightfile
+..\source\packinfo\linuxcopyrightfile %_DEST%\bin\linuxcopyrightfile
+..\source\packinfo\*.txt %_DEST%\bin\*.txt
+..\source\packinfo\*.pcp %_DEST%\bin\*.pcp
+..\scripts\admin.pl %_DEST%\bin\admin.pl
+..\scripts\*.txt %_DEST%\bin\*.txt
+..\scripts\mac_install.script %_DEST%\bin\mac_install.script
+..\scripts\osx_install_languagepack.applescript %_DEST%\bin\osx_install_languagepack.applescript
+..\scripts\osx_install_patch.applescript %_DEST%\bin\osx_install_patch.applescript
+
+..\%__SRC%\lib\getuid.so %_DEST%\bin\getuid.so
+
+..\inc\setup_native\qswin32.h %_DEST%\inc\setup_native\qswin32.h

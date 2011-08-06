@@ -1,0 +1,476 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#define STEP_ZERO 1000
+#define STEP_CONVERTER 1100
+#define STEP_AUTOPILOT 1200
+#define STATUSLINE 1300
+#define MESSAGES 1400
+#define CURRENCIES 1500
+#define STEP_LASTPAGE 1600
+// --------------------------------------------------------------------
+String STEP_ZERO
+{
+Text [ en-US ] = "~Cancel";
+};
+
+String STEP_ZERO + 1
+{
+Text [ en-US ] = "~Help";
+};
+
+String STEP_ZERO + 2
+{
+Text [ en-US ] = "<<~Back";
+};
+
+String STEP_ZERO + 3
+{
+Text [ en-US ] = "~Convert";
+};
+
+String STEP_ZERO + 4
+{
+Text [ en-US ] = "Note: Currency amounts from external links and currency conversion factors in formulas cannot be converted.";
+};
+
+String STEP_ZERO + 5
+{
+Text [ en-US ] = "First, unprotect all sheets.";
+};
+
+String STEP_ZERO + 6
+{
+Text [ en-US ] = "Currencies:";
+};
+
+
+String STEP_ZERO + 7
+{
+Text [ en-US ] = "C~ontinue>>";
+};
+
+
+String STEP_ZERO + 8
+{
+Text [ en-US ] = "C~lose";
+};
+
+String STEP_CONVERTER
+{
+Text [ en-US ] = "~Entire document";
+};
+
+String STEP_CONVERTER + 1
+{
+Text [ en-US ] = "Selection";
+};
+
+String STEP_CONVERTER + 2
+{
+Text [ en-US ] = "Cell S~tyles";
+};
+
+String STEP_CONVERTER + 3
+{
+Text [ en-US ] = "Currency cells in the current ~sheet";
+};
+
+String STEP_CONVERTER + 4
+{
+Text [ en-US ] = "Currency cells in the entire ~document";
+};
+
+String STEP_CONVERTER + 5
+{
+Text [ en-US ] = "~Selected range";
+};
+
+String STEP_CONVERTER + 6
+{
+Text [ en-US ] = "Select Cell Styles";
+};
+
+String STEP_CONVERTER + 7
+{
+Text [ en-US ] = "Select currency cells";
+};
+
+String STEP_CONVERTER + 8
+{
+Text [ en-US ] = "Currency ranges:";
+};
+
+String STEP_CONVERTER + 9
+{
+Text [ en-US ] = "Templates:";
+};
+
+
+String STEP_AUTOPILOT
+{
+Text [ en-US ] = "Extent";
+};
+
+String STEP_AUTOPILOT + 1
+{
+Text [ en-US ] = "~Single %PRODUCTNAME Calc document";
+};
+
+String STEP_AUTOPILOT + 2
+{
+Text [ en-US ] = "Complete ~directory";
+};
+
+String STEP_AUTOPILOT + 3
+{
+Text [ en-US ] = "Source Document:";
+};
+
+String STEP_AUTOPILOT + 4
+{
+Text [ en-US ] = "Source directory:";
+};
+
+String STEP_AUTOPILOT + 5
+{
+Text [ en-US ] = "~Including subfolders";
+};
+
+String STEP_AUTOPILOT + 6
+{
+Text [ en-US ] = "Target directory:";
+};
+
+
+String STEP_AUTOPILOT + 7
+{
+Text [ en-US ] = "Temporarily unprotect sheet without query";
+};
+
+
+String STEP_AUTOPILOT + 10
+{
+Text [ en-US ] = "Also convert fields and tables in text documents";
+};
+
+
+String STATUSLINE
+{
+Text [ en-US ] = "Conversion status: ";
+};
+
+String STATUSLINE + 1
+{
+Text [ en-US ] = "Conversion status of the cell templates:";
+};
+
+String STATUSLINE + 2
+{
+Text [ en-US ] = "Registration of the relevant ranges: Sheet %1Number%1 of %2TotPageCount%2";
+};
+
+
+String STATUSLINE + 3
+{
+Text [ en-US ] = "Entry of the ranges to be converted...";
+};
+
+
+
+String STATUSLINE + 4
+{
+Text [ en-US ] = "Sheet protection for each sheet will be restored...";
+};
+
+
+String STATUSLINE + 5
+{
+Text [ en-US ] = "Conversion of the currency units in the cell templates...";
+};
+
+
+
+String MESSAGES
+{
+Text [ en-US ] = "~Finish";
+};
+
+String MESSAGES + 1
+{
+Text [ en-US ] = "Select directory";
+};
+
+String MESSAGES + 2
+{
+Text [ en-US ] = "Select file";
+};
+
+String MESSAGES + 3
+{
+Text [ en-US ] = "Select target directory";
+};
+
+String MESSAGES + 4
+{
+Text [ en-US ] = "non-existant";
+};
+
+
+String MESSAGES + 5
+{
+Text [ en-US ] = "Euro Converter";
+};
+
+
+
+String MESSAGES + 6
+{
+Text [ en-US ] = "Should protected spreadsheets be temporarily unprotected?";
+};
+
+
+String MESSAGES + 7
+{
+Text [ en-US ] = "Enter the password to unprotect the table %1TableName%1";
+};
+
+
+String MESSAGES + 8
+{
+Text [ en-US ] = "Wrong Password!";
+};
+
+
+String MESSAGES + 9
+{
+Text [ en-US ] = "Protected Sheet";
+};
+
+
+String MESSAGES + 10
+{
+Text [ en-US ] = "Warning!";
+};
+
+
+String MESSAGES + 11
+{
+Text [ en-US ] = "Protection for the sheets will not be removed.";
+};
+
+
+String MESSAGES + 12
+{
+Text [ en-US ] = "Sheet cannot be unprotected";
+};
+
+
+String MESSAGES + 13
+{
+Text [ en-US ] = "The Wizard cannot edit this document as cell formats cannot be modified in documents containing protected spreadsheets.";
+};
+
+
+
+String MESSAGES + 14
+{
+Text [ en-US ] = "Please note that the Euro Converter will, otherwise, not be able to edit this document!";
+};
+
+
+
+String MESSAGES + 15
+{
+Text [ en-US ] = "Please choose a currency to be converted first!";
+};
+
+String MESSAGES + 16
+{
+Text [ en-US ] = "Password:";
+};
+
+String MESSAGES + 17
+{
+Text [ en-US ] = "OK";
+};
+
+String MESSAGES + 18
+{
+Text [ en-US ] = "Cancel";
+};
+
+
+ String MESSAGES + 19
+{
+Text [ en-US ] = "Please select a %PRODUCTNAME Calc document for editing!";
+};
+
+
+String MESSAGES + 20
+{
+Text [ en-US ] = "'<1>' is not a directory!";
+};
+
+
+String MESSAGES + 21
+{
+Text [ en-US ] = "Document is read-only!";
+};
+
+
+String MESSAGES + 22
+{
+    Text [ en-US ] = "The '<1>' file already exists.<CR>Do you want to overwrite it?";
+};
+
+
+String MESSAGES + 23
+{
+    Text [ en-US ] = "Do you really want to terminate conversion at this point?";
+};
+
+String MESSAGES + 24
+{
+    Text [ en-US ] = "Cancel Wizard";
+};
+
+ String CURRENCIES
+{
+Text [ en-US ] = "Portuguese Escudo";
+};
+
+String CURRENCIES + 1
+{
+Text [ en-US ] = "Dutch Guilder";
+};
+
+String CURRENCIES + 2
+{
+Text [ en-US ] = "French Franc";
+};
+
+String CURRENCIES + 3
+{
+Text [ en-US ] = "Spanish Peseta";
+};
+
+String CURRENCIES + 4
+{
+Text [ en-US ] = "Italian Lira";
+};
+
+String CURRENCIES + 5
+{
+Text [ en-US ] = "German Mark";
+};
+
+String CURRENCIES + 6
+{
+Text [ en-US ] = "Belgian Franc";
+};
+
+String CURRENCIES + 7
+{
+Text [ en-US ] = "Irish Punt";
+};
+
+String CURRENCIES + 8
+{
+Text [ en-US ] = "Luxembourg Franc";
+};
+
+String CURRENCIES + 9
+{
+Text [ en-US ] = "Austrian Schilling";
+};
+
+String CURRENCIES + 10
+{
+Text [ en-US ] = "Finnish Mark";
+};
+
+String CURRENCIES + 11
+{
+Text [ en-US ] = "Greek Drachma";
+};
+
+String CURRENCIES + 12
+{
+Text [ en-US ] = "Slovenian Tolar";
+};
+
+String CURRENCIES + 13
+{
+Text [ en-US ] = "Cypriot Pound";
+};
+
+String CURRENCIES + 14
+{
+Text [ en-US ] = "Maltese Lira";
+};
+
+String CURRENCIES + 15
+{
+Text [ en-US ] = "Slovak Koruna";
+};
+
+String CURRENCIES + 16
+{
+Text [ en-US ] = "The currency set for the document is not a European currency!";
+};
+
+String CURRENCIES + 17
+{
+Text [ en-US ] = "The language set for your operating system is not a language of the European Monetary Union.";
+};
+
+String STEP_LASTPAGE
+{
+Text [ en-US ] = "Progress";
+};
+
+
+String STEP_LASTPAGE + 1
+{
+Text [ en-US ] = "Retrieving the relevant documents...";
+};
+
+String STEP_LASTPAGE + 2
+{
+Text [ en-US ] = "Converting the documents...";
+};
+
+String STEP_LASTPAGE + 3
+{
+Text [ en-US ] = "Settings:";
+};
+
+String STEP_LASTPAGE + 4
+{
+Text [ en-US ] = "Sheet is always unprotected";
+};

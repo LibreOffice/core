@@ -1,0 +1,427 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#include "helpid.hrc"
+#include <moduldlg.hrc>
+#include <basidesh.hrc>
+TabDialog RID_TD_ORGANIZE
+{
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Text[ en-US ] = "%PRODUCTNAME Basic Macro Organizer";
+    Moveable = TRUE ;
+    Closeable = TRUE ;
+     // Da Cancel-Button auf TabPage, nicht auf Dialog!
+    TabControl RID_TC_ORGANIZE
+    {
+         //     HelpID = HID_BASICIDE_ORG_TC;
+        OutputSize = TRUE ;
+        PageList =
+        {
+            PageItem
+            {
+                Identifier = RID_TP_MOD ;
+                Text [ en-US ] = "Modules" ;
+            };
+            PageItem
+            {
+                Identifier = RID_TP_DLG ;
+                Text [ en-US ] = "Dialogs" ;
+            };
+            PageItem
+            {
+                Identifier = RID_TP_LIB ;
+                Text [ en-US ] = "Libraries" ;
+            };
+        };
+    };
+};
+TabPage RID_TP_MODULS
+{
+    HelpId = "basctl:TabPage:RID_TP_MODULS" ;
+    Hide = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 210 , 140 ) ;
+    FixedText RID_STR_LIB
+    {
+        Pos = MAP_APPFONT ( 6 , 6 ) ;
+        Size = MAP_APPFONT ( 130 , 10 ) ;
+        Text [ en-US ] = "M~odule" ;
+    };
+    Control RID_TRLBOX
+    {
+        HelpId = HID_BASICIDE_MODULES_TREE ;
+        Pos = MAP_APPFONT ( 6 , 17 ) ;
+        Size = MAP_APPFONT ( 130 , 117 ) ;
+        TabStop = TRUE ;
+        Border = TRUE ;
+    };
+    PushButton RID_PB_EDIT
+    {
+        HelpID = "basctl:PushButton:RID_TP_MODULS:RID_PB_EDIT";
+        Text [ en-US ] = "~Edit";
+        Pos = MAP_APPFONT ( 144 , 6 ) ;
+        Size = MAP_APPFONT ( 60 , 14 ) ;
+        TabStop = TRUE ;
+        DefButton = TRUE ;
+    };
+    CancelButton RID_PB_CLOSE
+    {
+        Text [ en-US ] = "Close";
+        Pos = MAP_APPFONT ( 144 , 23 ) ;
+        Size = MAP_APPFONT ( 60 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    PushButton RID_PB_NEWMOD
+    {
+        HelpID = "basctl:PushButton:RID_TP_MODULS:RID_PB_NEWMOD";
+        Pos = MAP_APPFONT ( 144 , 103 ) ;
+        Size = MAP_APPFONT ( 60 , 14 ) ;
+        Text [ en-US ] = "~New..." ;
+        TabStop = TRUE ;
+    };
+    PushButton RID_PB_NEWDLG
+    {
+        HelpID = "basctl:PushButton:RID_TP_MODULS:RID_PB_NEWDLG";
+        Pos = MAP_APPFONT ( 144 , 103 ) ;
+        Size = MAP_APPFONT ( 60 , 14 ) ;
+        Text [ en-US ] = "~New..." ;
+        TabStop = TRUE ;
+    };
+    PushButton RID_PB_DELETE
+    {
+        HelpID = "basctl:PushButton:RID_TP_MODULS:RID_PB_DELETE";
+        Pos = MAP_APPFONT ( 144 , 120 ) ;
+        Size = MAP_APPFONT ( 60 , 14 ) ;
+        Text [ en-US ] = "~Delete" ;
+        TabStop = TRUE ;
+    };
+};
+TabPage RID_TP_DLGS
+{
+    HelpID = "basctl:TabPage:RID_TP_DLGS";
+    Hide = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 210 , 140 ) ;
+    FixedText RID_STR_LIB
+    {
+        Pos = MAP_APPFONT ( 6 , 6 ) ;
+        Size = MAP_APPFONT ( 130 , 10 ) ;
+        Text [ en-US ] = "Dialog" ;
+    };
+    Control RID_TRLBOX
+    {
+        HelpId = HID_BASICIDE_MODULES_TREE ;
+        Pos = MAP_APPFONT ( 6 , 17 ) ;
+        Size = MAP_APPFONT ( 130 , 117 ) ;
+        TabStop = TRUE ;
+        Border = TRUE ;
+    };
+    PushButton RID_PB_EDIT
+    {
+        HelpID = "basctl:PushButton:RID_TP_DLGS:RID_PB_EDIT";
+        Text [ en-US ] = "~Edit";
+        Pos = MAP_APPFONT ( 144 , 6 ) ;
+        Size = MAP_APPFONT ( 60 , 14 ) ;
+        TabStop = TRUE ;
+        DefButton = TRUE ;
+    };
+    CancelButton RID_PB_CLOSE
+    {
+        Text[ en-US ] = "Close";
+        Pos = MAP_APPFONT ( 144 , 23 ) ;
+        Size = MAP_APPFONT ( 60 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    PushButton RID_PB_NEWMOD
+    {
+        HelpID = "basctl:PushButton:RID_TP_DLGS:RID_PB_NEWMOD";
+        Pos = MAP_APPFONT ( 144 , 103 ) ;
+        Size = MAP_APPFONT ( 60 , 14 ) ;
+        Text [ en-US ] = "~New..." ;
+        TabStop = TRUE ;
+    };
+    PushButton RID_PB_NEWDLG
+    {
+        HelpID = "basctl:PushButton:RID_TP_DLGS:RID_PB_NEWDLG";
+        Pos = MAP_APPFONT ( 144 , 103 ) ;
+        Size = MAP_APPFONT ( 60 , 14 ) ;
+        Text [ en-US ] = "~New..." ;
+        TabStop = TRUE ;
+    };
+    PushButton RID_PB_DELETE
+    {
+        HelpID = "basctl:PushButton:RID_TP_DLGS:RID_PB_DELETE";
+        Pos = MAP_APPFONT ( 144 , 120 ) ;
+        Size = MAP_APPFONT ( 60 , 14 ) ;
+        Text [ en-US ] = "~Delete" ;
+        TabStop = TRUE ;
+    };
+};
+TabPage RID_TP_LIBS
+{
+    HelpId = "basctl:TabPage:RID_TP_LIBS" ;
+    Hide = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 210 , 140 ) ;
+    FixedText RID_STR_BASICS
+    {
+        Pos = MAP_APPFONT ( 6 , 6 ) ;
+        Size = MAP_APPFONT ( 130 , 10 ) ;
+        Text [ en-US ] = "L~ocation";
+    };
+    ListBox RID_LB_BASICS
+    {
+        HelpID = "basctl:ListBox:RID_TP_LIBS:RID_LB_BASICS";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 6 , 17 ) ;
+        Size = MAP_APPFONT ( 130 , 80 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+    };
+    FixedText RID_STR_LIB
+    {
+        Pos = MAP_APPFONT ( 6 , 36 ) ;
+        Size = MAP_APPFONT ( 130 , 10 ) ;
+        Text [ en-US ] = "~Library" ;
+    };
+    Control RID_TRLBOX
+    {
+        HelpID = HID_BASICIDE_LIBS_TREE ;
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 6 , 47 ) ;
+        Size = MAP_APPFONT ( 130 , 87 ) ;
+        TabStop = TRUE ;
+    };
+
+    PushButton RID_PB_EDIT
+    {
+        HelpID = "basctl:PushButton:RID_TP_LIBS:RID_PB_EDIT";
+        Text [ en-US ] = "~Edit";
+        Pos = MAP_APPFONT ( 144 , 6 ) ;
+        Size = MAP_APPFONT ( 60 , 14 ) ;
+        TabStop = TRUE ;
+        DefButton = TRUE ;
+    };
+    CancelButton RID_PB_CLOSE
+    {
+        Text [ en-US ] = "Close";
+        Pos = MAP_APPFONT ( 144 , 23 ) ;
+        Size = MAP_APPFONT ( 60 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    PushButton RID_PB_PASSWORD
+    {
+        HelpID = "basctl:PushButton:RID_TP_LIBS:RID_PB_PASSWORD";
+        Pos = MAP_APPFONT ( 144 , 43 ) ;
+        Size = MAP_APPFONT ( 60 , 14 ) ;
+        Text [ en-US ] = "~Password..." ;
+        TabStop = TRUE ;
+    };
+
+    PushButton RID_PB_NEWLIB
+    {
+        HelpID = "basctl:PushButton:RID_TP_LIBS:RID_PB_NEWLIB";
+        Pos = MAP_APPFONT ( 144 , 69 ) ;
+        Size = MAP_APPFONT ( 60 , 14 ) ;
+        Text [ en-US ] = "~New..." ;
+        TabStop = TRUE ;
+    };
+    PushButton RID_PB_APPEND
+    {
+        HelpID = "basctl:PushButton:RID_TP_LIBS:RID_PB_APPEND";
+        Pos = MAP_APPFONT ( 144 , 86 ) ;
+        Size = MAP_APPFONT ( 60 , 14 ) ;
+        Text [ en-US ] = "~Import..." ;
+    };
+    PushButton RID_PB_EXPORT
+    {
+        HelpID = "basctl:PushButton:RID_TP_LIBS:RID_PB_EXPORT";
+        Pos = MAP_APPFONT ( 144 , 103 ) ;
+        Size = MAP_APPFONT ( 60 , 14 ) ;
+        Text [ en-US ] = "E~xport..." ;
+        TabStop = TRUE ;
+    };
+    PushButton RID_PB_DELETE
+    {
+        HelpID = "basctl:PushButton:RID_TP_LIBS:RID_PB_DELETE";
+        Pos = MAP_APPFONT ( 144 , 120 ) ;
+        Size = MAP_APPFONT ( 60 , 14 ) ;
+        Text [ en-US ] = "~Delete" ;
+        TabStop = TRUE ;
+    };
+};
+ModalDialog RID_DLG_LIBS
+{
+    HelpId = "basctl:ModalDialog:RID_DLG_LIBS" ;
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 168 , 132 ) ;
+    Moveable = TRUE ;
+    Closeable = TRUE ;
+    OKButton RID_PB_OK
+    {
+        Pos = MAP_APPFONT ( 112 , 6 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        DefButton = TRUE ;
+    };
+    CancelButton RID_PB_CANCEL
+    {
+        Pos = MAP_APPFONT ( 112 , 23 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    FixedText RID_FT_STORAGENAME
+    {
+        Pos = MAP_APPFONT ( 6 , 6 ) ;
+        Size = MAP_APPFONT ( 100 , 10 ) ;
+    };
+    Control RID_CTRL_LIBS
+    {
+        HelpID = HID_BASICIDE_LIBSDLG_TREE ;
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 6 , 19 ) ;
+        Size = MAP_APPFONT ( 100 , 67 ) ;
+        TabStop = TRUE ;
+    };
+    FixedLine RID_FL_OPTIONS
+    {
+        Pos = MAP_APPFONT ( 6 , 89 ) ;
+        Size = MAP_APPFONT ( 156 , 8 ) ;
+        Text [ en-US ] = "Options" ;
+    };
+    CheckBox RID_CB_REF
+    {
+        HelpID = "basctl:CheckBox:RID_DLG_LIBS:RID_CB_REF";
+        Pos = MAP_APPFONT ( 12 , 100 ) ;
+        Size = MAP_APPFONT ( 146 , 10 ) ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "Insert as reference (read-only)" ;
+    };
+    CheckBox RID_CB_REPL
+    {
+        HelpID = "basctl:CheckBox:RID_DLG_LIBS:RID_CB_REPL";
+        Pos = MAP_APPFONT ( 12 , 113 ) ;
+        Size = MAP_APPFONT ( 146 , 10 ) ;
+        Text [ en-US ] = "Replace existing libraries" ;
+    };
+};
+ModalDialog RID_DLG_NEWLIB
+{
+    HelpID = "basctl:ModalDialog:RID_DLG_NEWLIB";
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 160 , 55 ) ;
+    Moveable = TRUE ;
+    Closeable = TRUE ;
+    OKButton RID_PB_OK
+    {
+        Pos = MAP_APPFONT ( 104 , 6 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        DefButton = TRUE ;
+    };
+    CancelButton RID_PB_CANCEL
+    {
+        Pos = MAP_APPFONT ( 104 , 23 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    FixedText RID_FT_NEWLIB
+    {
+        Pos = MAP_APPFONT ( 6 , 6 ) ;
+        Size = MAP_APPFONT ( 100 , 10 ) ;
+        Text [ en-US ] = "~Name:" ;
+    };
+    Edit RID_ED_LIBNAME
+    {
+        HelpID = "basctl:Edit:RID_DLG_NEWLIB:RID_ED_LIBNAME";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 6 , 19 ) ;
+        Size = MAP_APPFONT ( 92 , 12 ) ;
+        TabStop = TRUE ;
+    };
+};
+
+ModalDialog RID_DLG_EXPORT
+{
+    HelpID = "basctl:ModalDialog:RID_DLG_EXPORT";
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 115 , 55 ) ;
+    Moveable = TRUE ;
+    Closeable = TRUE ;
+    Text [ en-US ] = "Export Basic library";
+    OKButton RID_PB_OK
+    {
+        Pos = MAP_APPFONT ( 6 , 35 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        DefButton = TRUE ;
+    };
+    CancelButton RID_PB_CANCEL
+    {
+        Pos = MAP_APPFONT ( 59 , 35 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+
+    RadioButton RB_EXPORTASPACKAGE
+    {
+        HelpID = "basctl:RadioButton:RID_DLG_EXPORT:RB_EXPORTASPACKAGE";
+        Pos = MAP_APPFONT( 6, 6 );
+        Size = MAP_APPFONT( 103, 10 );
+        Group = TRUE;
+        Text [ en-US ] = "Export as ~extension";
+        TabStop = TRUE ;
+    };
+    RadioButton RB_EXPORTASBASIC
+    {
+        HelpID = "basctl:RadioButton:RID_DLG_EXPORT:RB_EXPORTASBASIC";
+        Pos = MAP_APPFONT( 6, 19 );
+        Size = MAP_APPFONT( 103, 10 );
+        //Group = TRUE;
+        Text [ en-US ] = "Export as BASIC library";
+    };
+};
+
+String RID_STR_EXPORTPACKAGE
+{
+    Text [ en-US ] = "Export library as extension";
+};
+
+String RID_STR_EXPORTBASIC
+{
+    Text [ en-US ] = "Export as BASIC library";
+};
+
+String RID_STR_PACKAGE_BUNDLE
+{
+    Text [ en-US ] = "Extension";
+};
+

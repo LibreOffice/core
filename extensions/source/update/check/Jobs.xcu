@@ -1,0 +1,42 @@
+<?xml version='1.0' encoding='UTF-8'?>
+
+<oor:component-data oor:name="Jobs" oor:package="org.openoffice.Office" xmlns:install="http://openoffice.org/2004/installation" xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <node oor:name="Jobs">
+        <node oor:name="UpdateCheck" oor:op="replace">
+            <prop oor:name="Service">
+                <value>com.sun.star.setup.UpdateCheck</value>
+            </prop>
+            <node oor:name="Arguments">
+                <prop oor:name="AutoCheckEnabled" oor:type="xs:boolean" oor:op="replace">
+                    <value>true</value>
+                </prop>
+                <prop oor:name="LastCheck" oor:type="xs:long" oor:op="replace">
+                    <value>0</value>
+                </prop>
+                <prop oor:name="CheckInterval" oor:type="xs:long" oor:op="replace">
+                    <value>604800</value>
+                </prop>
+                <prop oor:name="DownloadDestination" oor:type="xs:string" oor:op="replace">
+                    <value></value>
+                </prop>
+                <prop oor:name="AutoDownloadEnabled" oor:type="xs:boolean" oor:op="replace">
+                    <value>false</value>
+                </prop>
+                <prop oor:name="DownloadSupported" oor:type="xs:boolean" oor:op="replace">
+                    <value>true</value>
+                </prop>
+                <prop oor:name="DownloadPaused" oor:type="xs:boolean" oor:op="replace">
+                    <value>false</value>
+                </prop>
+            </node>
+        </node>
+    </node>
+    <node oor:name="Events">
+        <node oor:name="onFirstVisibleTask" oor:op="fuse">
+            <node oor:name="JobList">
+                <node oor:name="UpdateCheck" oor:op="replace"/>
+            </node>
+        </node>
+    </node>
+</oor:component-data>
+

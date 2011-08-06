@@ -1,0 +1,60 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef EXTENSIONS_PROPRESID_HRC
+#include "formresid.hrc"
+#endif
+#ifndef _EXTENSIONS_PROPCTRLR_FORMLOCALID_HRC_
+#include "formlocalid.hrc"
+#endif
+
+TabDialog RID_TABDLG_FONTDIALOG
+{
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Text [ en-US ] = "Character" ;
+    Moveable = TRUE ;
+    TabControl 1
+    {
+        OutputSize = TRUE ;
+        PageList =
+        {
+            PageItem
+            {
+                Identifier = TABPAGE_CHARACTERS ;
+                PageResID = TABPAGE_CHARACTERS ;
+                Text [ en-US ] = "Font" ;
+            };
+            PageItem
+            {
+                Identifier = TABPAGE_CHARACTERS_EXT ;
+                PageResID = TABPAGE_CHARACTERS_EXT ;
+                Text [ en-US ] = "Font Effects" ;
+            };
+        };
+    };
+};

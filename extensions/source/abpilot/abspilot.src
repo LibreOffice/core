@@ -1,0 +1,408 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef EXTENSIONS_ABPRESID_HRC
+#include "abpresid.hrc"
+#endif
+
+//........................................................................
+ModalDialog RID_DLG_ADDRESSBOOKSOURCEPILOT
+{
+    Text [ en-US ] = "Address Book Data Source Wizard" ;
+
+    HelpId = HID_ABSPILOT;
+
+    OutputSize      = TRUE ;
+    SVLook          = TRUE ;
+    Moveable        = TRUE ;
+    Closeable       = TRUE ;
+    Hide            = TRUE;
+
+    String STR_SELECT_ABTYPE
+    {
+        Text [ en-US ] = "Address book type";
+    };
+
+    String STR_INVOKE_ADMIN_DIALOG
+    {
+        Text [ en-US ] = "Connection Settings";
+    };
+
+    String STR_TABLE_SELECTION
+    {
+        Text [ en-US ] = "Table selection";
+    };
+
+    String STR_MANUAL_FIELD_MAPPING
+    {
+        Text [ en-US ] = "Field Assignment";
+    };
+
+    String STR_FINAL_CONFIRM
+    {
+        Text [ en-US ] = "Data Source Title";
+    };
+};
+
+//........................................................................
+TabPage RID_PAGE_SELECTABTYPE
+{
+    HelpID = "extensions:TabPage:RID_PAGE_SELECTABTYPE";
+    SVLook  = TRUE ;
+    Size    = MAP_APPFONT ( WINDOW_SIZE_X , WINDOW_SIZE_Y ) ;
+
+    FixedText FT_TYPE_HINTS
+    {
+        Pos     = MAP_APPFONT ( BORDER_X, 9 ) ;
+        Size    = MAP_APPFONT ( WINDOW_SIZE_X - 2 * BORDER_X, 40 ) ;
+        WordBreak = TRUE;
+
+        Text [ en-US ] = "%PRODUCTNAME lets you access address data already present in your system. To do this, a %PRODUCTNAME data source will be created in which your address data is available in tabular form.\n\nThis wizard helps you create the data source.";
+    };
+
+    FixedLine FL_TYPE
+    {
+        Pos     = MAP_APPFONT ( 7, 56 ) ;
+        Size    = MAP_APPFONT ( WINDOW_SIZE_X - 14, 8 ) ;
+
+        Text [ en-US ] = "Please select the type of your external address book:";
+    };
+
+    RadioButton RB_EVOLUTION
+     {
+        HelpID = "extensions:RadioButton:RID_PAGE_SELECTABTYPE:RB_EVOLUTION";
+         Size   = MAP_APPFONT ( WINDOW_SIZE_X - 30, 8 ) ;
+        Text [ en-US ] = "Evolution";
+    };
+    RadioButton RB_EVOLUTION_GROUPWISE
+     {
+        HelpID = "extensions:RadioButton:RID_PAGE_SELECTABTYPE:RB_EVOLUTION_GROUPWISE";
+         Size   = MAP_APPFONT ( WINDOW_SIZE_X - 30, 8 ) ;
+        Text [ en-US ] = "Groupwise";
+    };
+    RadioButton RB_EVOLUTION_LDAP
+     {
+        HelpID = "extensions:RadioButton:RID_PAGE_SELECTABTYPE:RB_EVOLUTION_LDAP";
+         Size   = MAP_APPFONT ( WINDOW_SIZE_X - 30, 8 ) ;
+        Text [ en-US ] = "Evolution LDAP";
+    };
+    RadioButton RB_MORK
+    {
+        HelpID = "extensions:RadioButton:RID_PAGE_SELECTABTYPE:RB_MORK";
+        Size    = MAP_APPFONT ( WINDOW_SIZE_X - 30, 8 ) ;
+        Text [ en-US ] = "Mozilla / Netscape";
+    };
+    RadioButton RB_THUNDERBIRD
+    {
+        HelpID = "extensions:RadioButton:RID_PAGE_SELECTABTYPE:RB_THUNDERBIRD";
+        Size    = MAP_APPFONT ( WINDOW_SIZE_X - 30, 8 ) ;
+        Text [ en-US ] = "Thunderbird";
+    };
+    RadioButton RB_KAB
+     {
+        HelpID = "extensions:RadioButton:RID_PAGE_SELECTABTYPE:RB_KAB";
+         Size   = MAP_APPFONT ( WINDOW_SIZE_X - 30, 8 ) ;
+        Text [ en-US ] = "KDE address book";
+    };
+    RadioButton RB_MACAB
+    {
+        HelpID = "extensions:RadioButton:RID_PAGE_SELECTABTYPE:RB_MACAB";
+        Size    = MAP_APPFONT ( WINDOW_SIZE_X - 30, 8 ) ;
+        Text [ en-US ] = "Mac OS X address book";
+    };
+    RadioButton RB_LDAP
+    {
+        HelpID = "extensions:RadioButton:RID_PAGE_SELECTABTYPE:RB_LDAP";
+        Size    = MAP_APPFONT ( WINDOW_SIZE_X - 30, 8 ) ;
+        Text [ en-US ] = "LDAP address data";
+    };
+    RadioButton RB_OUTLOOK
+    {
+        HelpID = "extensions:RadioButton:RID_PAGE_SELECTABTYPE:RB_OUTLOOK";
+        Size    = MAP_APPFONT ( WINDOW_SIZE_X - 30, 8 ) ;
+        Text [ en-US ] = "Outlook address book";
+    };
+    RadioButton RB_OUTLOOKEXPRESS
+    {
+        HelpID = "extensions:RadioButton:RID_PAGE_SELECTABTYPE:RB_OUTLOOKEXPRESS";
+        Size    = MAP_APPFONT ( WINDOW_SIZE_X - 30, 8 ) ;
+        Text [ en-US ] = "Windows system address book";
+    };
+    RadioButton RB_OTHER
+    {
+        HelpID = "extensions:RadioButton:RID_PAGE_SELECTABTYPE:RB_OTHER";
+        Size    = MAP_APPFONT ( WINDOW_SIZE_X - 30, 8 ) ;
+        Text [ en-US ] = "Other external data source";
+    };
+};
+
+//........................................................................
+TabPage RID_PAGE_ADMININVOKATION
+{
+    HelpID = "extensions:TabPage:RID_PAGE_ADMININVOKATION";
+    SVLook  = TRUE ;
+    Size    = MAP_APPFONT ( WINDOW_SIZE_X , WINDOW_SIZE_Y ) ;
+
+    FixedText FT_ADMINEXPLANATION
+    {
+        Pos     = MAP_APPFONT ( BORDER_X, 9 ) ;
+        Size    = MAP_APPFONT ( WINDOW_SIZE_X - 2 * BORDER_X, 48 ) ;
+        WordBreak = TRUE;
+
+        Text [ en-US ] = "To set up the new data source, additional information is required.\n\nClick the following button to open another dialog in which you then enter the necessary information.";
+    };
+
+    PushButton PB_INVOKE_ADMIN_DIALOG
+    {
+        HelpID = "extensions:PushButton:RID_PAGE_ADMININVOKATION:PB_INVOKE_ADMIN_DIALOG";
+        Pos     = MAP_APPFONT ( ( WINDOW_SIZE_X - BUTTON_SIZE_X ) / 2, 60 ) ;
+        Size    = MAP_APPFONT ( BUTTON_SIZE_X, BUTTON_SIZE_Y ) ;
+
+        Text [ en-US ] = "Settings";
+    };
+
+    FixedText FT_ERROR
+    {
+        Pos     = MAP_APPFONT ( BORDER_X, WINDOW_SIZE_Y - HEADER_SIZE_Y - 7 - 48 ) ;
+        Size    = MAP_APPFONT ( WINDOW_SIZE_X - 2 * BORDER_X, 48 ) ;
+        WordBreak = TRUE;
+        Hide = TRUE;
+
+        Text [ en-US ] = "The connection to the data source could not be established.\nBefore you proceed, please check the settings made, or (on the previous page) choose another address data source type.";
+    };
+};
+
+//........................................................................
+TabPage RID_PAGE_TABLESELECTION_AB
+{
+    HelpID = "extensions:TabPage:RID_PAGE_TABLESELECTION_AB";
+    SVLook  = TRUE ;
+    Size    = MAP_APPFONT ( WINDOW_SIZE_X , WINDOW_SIZE_Y ) ;
+
+    FixedText FL_TOOMUCHTABLES
+    {
+        Pos     = MAP_APPFONT ( BORDER_X, 9 ) ;
+        Size    = MAP_APPFONT ( WINDOW_SIZE_X - 2 * BORDER_X, 24 ) ;
+        WordBreak = TRUE;
+
+        Text [ en-US ] = "The external data source you have chosen contains more than one address book.\nPlease select the one you mainly want to work with:";
+    };
+
+    ListBox LB_TABLELIST
+    {
+        HelpID = "extensions:ListBox:RID_PAGE_TABLESELECTION_AB:LB_TABLELIST";
+        Pos     = MAP_APPFONT ( BORDER_X, 36 ) ;
+        Size    = MAP_APPFONT ( WINDOW_SIZE_X - 2 * BORDER_X, 50 ) ;
+        SVLook = TRUE;
+        Sort = TRUE;
+        DropDown = FALSE;
+        AutoHScroll = TRUE;
+        Border = TRUE;
+    };
+};
+
+//........................................................................
+TabPage RID_PAGE_FIELDMAPPING
+{
+    HelpID = "extensions:TabPage:RID_PAGE_FIELDMAPPING";
+    SVLook  = TRUE ;
+    Size    = MAP_APPFONT ( WINDOW_SIZE_X , WINDOW_SIZE_Y ) ;
+
+    FixedText FT_FIELDASSIGMENTEXPL
+    {
+        Pos     = MAP_APPFONT ( BORDER_X, 9 ) ;
+        Size    = MAP_APPFONT ( WINDOW_SIZE_X - 2 * BORDER_X, 72 ) ;
+        WordBreak = TRUE;
+
+        Text [ en-US ] = "To incorporate the address data in your templates, %PRODUCTNAME has to know which fields contain which data.\n\nFor instance, you could have stored the e-mail addresses in a field named \"email\", or \"E-mail\" or \"EM\" - or something completely different.\n\nClick the button below to open another dialog where you can enter the settings for your data source.";
+    };
+
+    PushButton PB_INVOKE_FIELDS_DIALOG
+    {
+        HelpID = "extensions:PushButton:RID_PAGE_FIELDMAPPING:PB_INVOKE_FIELDS_DIALOG";
+        Pos     = MAP_APPFONT ( ( WINDOW_SIZE_X - BUTTON_SIZE_X ) / 2, 84 ) ;
+        Size    = MAP_APPFONT ( BUTTON_SIZE_X, BUTTON_SIZE_Y ) ;
+
+        Text [ en-US ] = "Field Assignment";
+    };
+
+    FixedText FT_ASSIGNEDFIELDS
+    {
+        Pos     = MAP_APPFONT ( BORDER_X, WINDOW_SIZE_Y - HEADER_SIZE_Y - 7 - 32 ) ;
+        Size    = MAP_APPFONT ( WINDOW_SIZE_X - 2 * BORDER_X, 32 ) ;
+        WordBreak = TRUE;
+    };
+};
+
+//........................................................................
+TabPage RID_PAGE_FINAL
+{
+    HelpID = "extensions:TabPage:RID_PAGE_FINAL";
+    SVLook  = TRUE ;
+    Size    = MAP_APPFONT ( WINDOW_SIZE_X , WINDOW_SIZE_Y ) ;
+
+    FixedText FT_FINISH_EXPL
+    {
+        Pos     = MAP_APPFONT ( BORDER_X, 9 ) ;
+        Size    = MAP_APPFONT ( WINDOW_SIZE_X - 2 * BORDER_X, 40 ) ;
+        WordBreak = TRUE;
+
+        Text [ en-US ] = "That was all the information necessary to integrate your address data into %PRODUCTNAME.\n\nNow, just enter the name under which you want to register the data source in %PRODUCTNAME.";
+    };
+
+    FixedText FT_LOCATION
+    {
+        Pos     = MAP_APPFONT ( BORDER_X, 53 ) ;
+        Size    = MAP_APPFONT ( 50, 8 ) ;
+        Group = TRUE;
+
+        Text [ en-US ] = "Location";
+    };
+
+    ComboBox CBB_LOCATION
+    {
+        HelpID = "extensions:ComboBox:RID_PAGE_FINAL:CBB_LOCATION";
+        Pos     = MAP_APPFONT ( BORDER_X , 64 ) ;
+        Size    = MAP_APPFONT ( WINDOW_SIZE_X - 53 - BORDER_X - BORDER_X, 12) ;
+        SVLook = TRUE;
+        Border = TRUE;
+        DropDown = TRUE ;
+        AutoHScroll = TRUE ;
+    };
+
+    PushButton PB_BROWSE
+    {
+        HelpID = "extensions:PushButton:RID_PAGE_FINAL:PB_BROWSE";
+        Pos     = MAP_APPFONT ( WINDOW_SIZE_X - 50 - BORDER_X  , 63 ) ;
+        Size    = MAP_APPFONT ( 50, 14) ;
+        SVLook = TRUE;
+        Group = FALSE;
+
+        Text [ en-US ] = "Browse...";
+    };
+
+    CheckBox CB_REGISTER_DS
+    {
+        HelpID = "extensions:CheckBox:RID_PAGE_FINAL:CB_REGISTER_DS";
+        Pos     = MAP_APPFONT ( BORDER_X, 82 ) ;
+        Size    = MAP_APPFONT ( WINDOW_SIZE_X - BORDER_X - BORDER_X, 8) ;
+        SVLook = TRUE;
+        Group = TRUE;
+
+        Text [ en-US ] = "Make this address book available to all modules in %PRODUCTNAME.";
+    };
+    FixedText FT_NAME_EXPL
+    {
+        Pos     = MAP_APPFONT ( BORDER_X + 10, 93 ) ;
+        Size    = MAP_APPFONT ( WINDOW_SIZE_X - BORDER_X - BORDER_X - 10, 8 ) ;
+
+        Text [ en-US ] = "Address book name";
+    };
+
+    Edit ET_DATASOURCENAME
+    {
+        HelpID = "extensions:Edit:RID_PAGE_FINAL:ET_DATASOURCENAME";
+        Pos     = MAP_APPFONT ( BORDER_X + 10, 104 ) ;
+        Size    = MAP_APPFONT ( WINDOW_SIZE_X - 56 - BORDER_X - BORDER_X - 10, 12) ;
+        SVLook = TRUE;
+        Border = TRUE;
+    };
+
+    FixedText FT_DUPLICATENAME
+    {
+        Pos     = MAP_APPFONT ( BORDER_X + 10, WINDOW_SIZE_Y - HEADER_SIZE_Y - 7 - 24 ) ;
+        Size    = MAP_APPFONT ( WINDOW_SIZE_X - 2 * BORDER_X, 24) ;
+        WordBreak = TRUE;
+        Hide = TRUE;
+        Group = FALSE;
+
+        Text [ en-US ] = "Another data source already has this name. As data sources have to have globally unique names, you need to choose another one.";
+    };
+};
+
+//........................................................................
+ErrorBox RID_ERR_NEEDTYPESELECTION
+{
+    Buttons = WB_OK;
+
+    Message [ en-US ] = "Please select a type of address book.";
+};
+
+//........................................................................
+QueryBox RID_QRY_NOTABLES
+{
+    Buttons = WB_YES_NO;
+    DefButton = WB_DEF_NO;
+
+    Message [ en-US ] = "The data source does not contain any tables.\nDo you want to set it up as an address data source, anyway?";
+};
+
+//........................................................................
+QueryBox RID_QRY_NO_EVO_GW
+{
+    Buttons = WB_YES_NO;
+    DefButton = WB_DEF_NO;
+
+    Message [ en-US ] = "You don't seem to have any GroupWise account configured in Evolution.\nDo you want to set it up as an address data source, anyway?";
+};
+
+//........................................................................
+String RID_STR_DEFAULT_NAME
+{
+    Text [ en-US ] = "Addresses";
+};
+
+String RID_STR_ADMINDIALOGTITLE
+{
+    Text [ en-US ] = "Create Address Data Source";
+};
+
+String RID_STR_NOCONNECTION
+{
+    Text [ en-US ] = "The connection could not be established.";
+};
+
+String RID_STR_PLEASECHECKSETTINGS
+{
+    Text [ en-US ] = "Please check the settings made for the data source.";
+};
+
+String RID_STR_FIELDDIALOGTITLE
+{
+    Text [ en-US ] = "Address Data - Field Assignment";
+};
+
+String RID_STR_NOFIELDSASSIGNED
+{
+    Text [ en-US ] = "There are no fields assigned at this time.\nYou can either assign fields now or do so later by first choosing:\n\"File - Template - Address Book Source...\"";
+};
+
+//........................................................................
+Bitmap BMP_HEADERIMAGE
+{
+    file = "addresspilot.bmp";
+};

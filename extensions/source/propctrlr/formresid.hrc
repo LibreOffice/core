@@ -1,0 +1,388 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef _EXTENSIONS_FORMCTRLR_PROPRESID_HRC_
+#define _EXTENSIONS_FORMCTRLR_PROPRESID_HRC_
+
+#ifndef EXTENSIONS_PROPRESID_HRC
+#include "propresid.hrc"
+#endif
+
+// -----------------------------------------------------------------------
+// - Strings
+
+#define RID_STR_FORMS                       ( RID_FORMBROWSER_START +   1 )
+#define RID_STR_PROPTITLE_DBGRID            ( RID_FORMBROWSER_START +   2 )
+#define RID_STR_PROPTITLE_PATTERNFIELD      ( RID_FORMBROWSER_START +   3 )
+#define RID_STR_PROPTITLE_CURRENCYFIELD     ( RID_FORMBROWSER_START +   4 )
+#define RID_STR_PROPTITLE_NUMERICFIELD      ( RID_FORMBROWSER_START +   5 )
+#define RID_STR_PROPTITLE_TIMEFIELD         ( RID_FORMBROWSER_START +   6 )
+#define RID_STR_PROPTITLE_DATEFIELD         ( RID_FORMBROWSER_START +   7 )
+#define RID_STR_PROPTITLE_FILECONTROL       ( RID_FORMBROWSER_START +   8 )
+#define RID_STR_PROPTITLE_IMAGECONTROL      ( RID_FORMBROWSER_START +   9 )
+#define RID_STR_PROPTITLE_IMAGEBUTTON       ( RID_FORMBROWSER_START +  10 )
+#define RID_STR_PROPTITLE_COMBOBOX          ( RID_FORMBROWSER_START +  11 )
+#define RID_STR_PROPTITLE_LISTBOX           ( RID_FORMBROWSER_START +  12 )
+#define RID_STR_PROPTITLE_FORMATTED         ( RID_FORMBROWSER_START +  13 )
+#define RID_STR_PROPTITLE_EDIT              ( RID_FORMBROWSER_START +  14 )
+#define RID_STR_PROPTITLE_GROUPBOX          ( RID_FORMBROWSER_START +  15 )
+#define RID_STR_PROPTITLE_FIXEDTEXT         ( RID_FORMBROWSER_START +  16 )
+#define RID_STR_PROPTITLE_CHECKBOX          ( RID_FORMBROWSER_START +  17 )
+#define RID_STR_PROPTITLE_RADIOBUTTON       ( RID_FORMBROWSER_START +  18 )
+#define RID_STR_PROPTITLE_PUSHBUTTON        ( RID_FORMBROWSER_START +  19 )
+#define RID_STR_PROPTITLE_HIDDENCONTROL     ( RID_FORMBROWSER_START +  30 )
+#define RID_STR_PROPTITLE_UNKNOWNCONTROL    ( RID_FORMBROWSER_START +  31 )
+
+#define RID_STR_NAME                        ( RID_FORMBROWSER_START +  32 )
+#define RID_STR_LABEL                       ( RID_FORMBROWSER_START +  33 )
+#define RID_STR_LABELCONTROL                ( RID_FORMBROWSER_START +  34 )
+#define RID_STR_MAXTEXTLEN                  ( RID_FORMBROWSER_START +  35 )
+#define RID_STR_EDITMASK                    ( RID_FORMBROWSER_START +  36 )
+#define RID_STR_LITERALMASK                 ( RID_FORMBROWSER_START +  37 )
+#define RID_STR_STRICTFORMAT                ( RID_FORMBROWSER_START +  38 )
+#define RID_STR_ENABLED                     ( RID_FORMBROWSER_START +  39 )
+#define RID_STR_READONLY                    ( RID_FORMBROWSER_START +  40 )
+#define RID_STR_PRINTABLE                   ( RID_FORMBROWSER_START +  41 )
+#define RID_STR_CONTROLSOURCE               ( RID_FORMBROWSER_START +  42 )
+#define RID_STR_TABSTOP                     ( RID_FORMBROWSER_START +  43 )
+#define RID_STR_TABINDEX                    ( RID_FORMBROWSER_START +  44 )
+#define RID_STR_DATASOURCE                  ( RID_FORMBROWSER_START +  45 )
+#define RID_STR_CURSORSOURCE                ( RID_FORMBROWSER_START +  46 )
+#define RID_STR_CURSORSOURCETYPE            ( RID_FORMBROWSER_START +  47 )
+#define RID_STR_FILTER                      ( RID_FORMBROWSER_START +  48 )
+#define RID_STR_SORT_CRITERIA               ( RID_FORMBROWSER_START +  49 )
+#define RID_STR_ALLOW_ADDITIONS             ( RID_FORMBROWSER_START +  50 )
+#define RID_STR_ALLOW_EDITS                 ( RID_FORMBROWSER_START +  51 )
+#define RID_STR_ALLOW_DELETIONS             ( RID_FORMBROWSER_START +  52 )
+#define RID_STR_DATAENTRY                   ( RID_FORMBROWSER_START +  53 )
+#define RID_STR_CYCLE                       ( RID_FORMBROWSER_START +  54 )
+#define RID_STR_VALUE                       ( RID_FORMBROWSER_START +  55 )
+#define RID_STR_VALUESTEP                   ( RID_FORMBROWSER_START +  56 )
+#define RID_STR_DECIMAL_ACCURACY            ( RID_FORMBROWSER_START +  57 )
+#define RID_STR_SHOWTHOUSANDSEP             ( RID_FORMBROWSER_START +  58 )
+#define RID_STR_REFVALUE                    ( RID_FORMBROWSER_START +  59 )
+#define RID_STR_CURRENCYSYMBOL              ( RID_FORMBROWSER_START +  60 )
+#define RID_STR_CURRSYM_POSITION            ( RID_FORMBROWSER_START +  61 )
+#define RID_STR_DATEMIN                     ( RID_FORMBROWSER_START +  62 )
+#define RID_STR_DATEMAX                     ( RID_FORMBROWSER_START +  63 )
+#define RID_STR_DATEFORMAT                  ( RID_FORMBROWSER_START +  64 )
+#define RID_STR_SELECTEDITEMS               ( RID_FORMBROWSER_START +  65 )
+#define RID_STR_TIMEMIN                     ( RID_FORMBROWSER_START +  66 )
+#define RID_STR_TIMEMAX                     ( RID_FORMBROWSER_START +  67 )
+#define RID_STR_TIMEFORMAT                  ( RID_FORMBROWSER_START +  68 )
+#define RID_STR_VALUEMIN                    ( RID_FORMBROWSER_START +  69 )
+#define RID_STR_VALUEMAX                    ( RID_FORMBROWSER_START +  70 )
+#define RID_STR_FORMATKEY                   ( RID_FORMBROWSER_START +  71 )
+#define RID_STR_CLASSID                     ( RID_FORMBROWSER_START +  72 )
+#define RID_STR_HEIGHT                      ( RID_FORMBROWSER_START +  73 )
+#define RID_STR_WIDTH                       ( RID_FORMBROWSER_START +  74 )
+#define RID_STR_BOUNDCOLUMN                 ( RID_FORMBROWSER_START +  75 )
+#define RID_STR_LISTSOURCETYPE              ( RID_FORMBROWSER_START +  76 )
+#define RID_STR_LISTSOURCE                  ( RID_FORMBROWSER_START +  77 )
+#define RID_STR_LISTINDEX                   ( RID_FORMBROWSER_START +  78 )
+#define RID_STR_STRINGITEMLIST              ( RID_FORMBROWSER_START +  79 )
+#define RID_STR_DEFAULTVALUE                ( RID_FORMBROWSER_START +  80 )
+#define RID_STR_FONT                        ( RID_FORMBROWSER_START +  81 )
+#define RID_STR_ALIGN                       ( RID_FORMBROWSER_START +  82 )
+#define RID_STR_ROWHEIGHT                   ( RID_FORMBROWSER_START +  83 )
+#define RID_STR_BACKGROUNDCOLOR             ( RID_FORMBROWSER_START +  84 )
+#define RID_STR_FILLCOLOR                   ( RID_FORMBROWSER_START +  85 )
+#define RID_STR_LINECOLOR                   ( RID_FORMBROWSER_START +  86 )
+#define RID_STR_BORDER                      ( RID_FORMBROWSER_START +  87 )
+#define RID_STR_DROPDOWN                    ( RID_FORMBROWSER_START +  88 )
+#define RID_STR_AUTOCOMPLETE                ( RID_FORMBROWSER_START +  89 )
+#define RID_STR_LINECOUNT                   ( RID_FORMBROWSER_START +  90 )
+#define RID_STR_MULTILINE                   ( RID_FORMBROWSER_START +  91 )
+#define RID_STR_MULTISELECTION              ( RID_FORMBROWSER_START +  92 )
+#define RID_STR_BUTTONTYPE                  ( RID_FORMBROWSER_START +  93 )
+#define RID_STR_HSCROLL                     ( RID_FORMBROWSER_START +  94 )
+#define RID_STR_VSCROLL                     ( RID_FORMBROWSER_START +  95 )
+#define RID_STR_SPIN                        ( RID_FORMBROWSER_START +  96 )
+#define RID_STR_AUTOLINEBREAK               ( RID_FORMBROWSER_START +  97 )
+#define RID_STR_TARGET_URL                  ( RID_FORMBROWSER_START +  98 )
+#define RID_STR_TARGET_FRAME                ( RID_FORMBROWSER_START +  99 )
+#define RID_STR_SUBMIT_ACTION               ( RID_FORMBROWSER_START + 100 )
+#define RID_STR_SUBMIT_TARGET               ( RID_FORMBROWSER_START + 101 )
+#define RID_STR_SUBMIT_METHOD               ( RID_FORMBROWSER_START + 102 )
+#define RID_STR_SUBMIT_ENCODING             ( RID_FORMBROWSER_START + 103 )
+#define RID_STR_DEFAULT_STATE               ( RID_FORMBROWSER_START + 104 )
+#define RID_STR_DEFAULT_BUTTON              ( RID_FORMBROWSER_START + 105 )
+#define RID_STR_IMAGE_URL                   ( RID_FORMBROWSER_START + 106 )
+#define RID_STR_DEFAULT_SELECT_SEQ          ( RID_FORMBROWSER_START + 107 )
+#define RID_STR_ECHO_CHAR                   ( RID_FORMBROWSER_START + 108 )
+#define RID_STR_EMPTY_IS_NULL               ( RID_FORMBROWSER_START + 109 )
+#define RID_STR_TRISTATE                    ( RID_FORMBROWSER_START + 110 )
+#define RID_STR_MASTERFIELDS                ( RID_FORMBROWSER_START + 111 )
+#define RID_STR_SLAVEFIELDS                 ( RID_FORMBROWSER_START + 112 )
+#define RID_STR_NAVIGATION                  ( RID_FORMBROWSER_START + 113 )
+#define RID_STR_RECORDMARKER                ( RID_FORMBROWSER_START + 114 )
+#define RID_STR_FILTERPROPOSAL              ( RID_FORMBROWSER_START + 115 )
+#define RID_STR_TAG                         ( RID_FORMBROWSER_START + 116 )
+#define RID_STR_HELPTEXT                    ( RID_FORMBROWSER_START + 117 )
+#define RID_STR_HELPURL                     ( RID_FORMBROWSER_START + 118 )
+#define RID_STR_INPUT_REQUIRED              ( RID_FORMBROWSER_START + 119 )
+#define RID_STR_UNCHECKEDREFVALUE           ( RID_FORMBROWSER_START + 120 )
+#define RID_STR_CURSOR_TYPE                 ( RID_FORMBROWSER_START + 121 )
+#define RID_STR_ENABLE_VISIBLE              ( RID_FORMBROWSER_START + 122 )
+#define RID_STR_WHEEL_BEHAVIOR              ( RID_FORMBROWSER_START + 123 )
+#define RID_STR_GROUP_NAME                  ( RID_FORMBROWSER_START + 124 )
+    // FREE
+    // FREE
+    // FREE
+    // FREE
+    // FREE
+    // FREE
+    // FREE
+#define RID_STR_ENUM_NAVIGATION             ( RID_FORMBROWSER_START + 131 )
+#define RID_STR_EVT_APPROVEACTIONPERFORMED  ( RID_FORMBROWSER_START + 132 )
+#define RID_STR_EVT_ACTIONPERFORMED         ( RID_FORMBROWSER_START + 133 )
+#define RID_STR_EVT_CHANGED                 ( RID_FORMBROWSER_START + 134 )
+#define RID_STR_EVT_TEXTCHANGED             ( RID_FORMBROWSER_START + 135 )
+#define RID_STR_EVT_ITEMSTATECHANGED        ( RID_FORMBROWSER_START + 136 )
+#define RID_STR_EVT_FOCUSGAINED             ( RID_FORMBROWSER_START + 137 )
+#define RID_STR_EVT_FOCUSLOST               ( RID_FORMBROWSER_START + 138 )
+#define RID_STR_EVT_KEYTYPED                ( RID_FORMBROWSER_START + 139 )
+#define RID_STR_EVT_KEYUP                   ( RID_FORMBROWSER_START + 140 )
+#define RID_STR_EVT_MOUSEENTERED            ( RID_FORMBROWSER_START + 141 )
+#define RID_STR_EVT_MOUSEDRAGGED            ( RID_FORMBROWSER_START + 142 )
+#define RID_STR_EVT_MOUSEMOVED              ( RID_FORMBROWSER_START + 143 )
+#define RID_STR_EVT_MOUSEPRESSED            ( RID_FORMBROWSER_START + 144 )
+#define RID_STR_EVT_MOUSERELEASED           ( RID_FORMBROWSER_START + 145 )
+#define RID_STR_EVT_MOUSEEXITED             ( RID_FORMBROWSER_START + 146 )
+#define RID_STR_EVT_APPROVERESETTED         ( RID_FORMBROWSER_START + 147 )
+#define RID_STR_EVT_RESETTED                ( RID_FORMBROWSER_START + 148 )
+#define RID_STR_EVT_SUBMITTED               ( RID_FORMBROWSER_START + 149 )
+#define RID_STR_EVT_BEFOREUPDATE            ( RID_FORMBROWSER_START + 150 )
+#define RID_STR_EVT_AFTERUPDATE             ( RID_FORMBROWSER_START + 151 )
+#define RID_STR_EVT_LOADED                  ( RID_FORMBROWSER_START + 152 )
+#define RID_STR_EVT_RELOADING               ( RID_FORMBROWSER_START + 153 )
+#define RID_STR_EVT_RELOADED                ( RID_FORMBROWSER_START + 154 )
+#define RID_STR_EVT_UNLOADING               ( RID_FORMBROWSER_START + 155 )
+#define RID_STR_EVT_UNLOADED                ( RID_FORMBROWSER_START + 156 )
+#define RID_STR_EVT_CONFIRMDELETE           ( RID_FORMBROWSER_START + 157 )
+#define RID_STR_EVT_APPROVEROWCHANGE        ( RID_FORMBROWSER_START + 158 )
+#define RID_STR_EVT_ROWCHANGE               ( RID_FORMBROWSER_START + 159 )
+#define RID_STR_EVT_POSITIONING             ( RID_FORMBROWSER_START + 160 )
+#define RID_STR_EVT_POSITIONED              ( RID_FORMBROWSER_START + 161 )
+#define RID_STR_EVT_APPROVEPARAMETER        ( RID_FORMBROWSER_START + 162 )
+#define RID_STR_EVT_ERROROCCURRED           ( RID_FORMBROWSER_START + 163 )
+#define RID_STR_EVENTS                      ( RID_FORMBROWSER_START + 164 )
+#define RID_STR_ESCAPE_PROCESSING           ( RID_FORMBROWSER_START + 165 )
+    // FREE
+#define RID_STR_POSITIONX                   ( RID_FORMBROWSER_START + 167 )
+#define RID_STR_POSITIONY                   ( RID_FORMBROWSER_START + 168 )
+#define RID_STR_TITLE                       ( RID_FORMBROWSER_START + 169 )
+#define RID_STR_STEP                        ( RID_FORMBROWSER_START + 170 )
+#define RID_STR_PROGRESSVALUE               ( RID_FORMBROWSER_START + 171 )
+#define RID_STR_PROGRESSVALUE_MIN           ( RID_FORMBROWSER_START + 172 )
+#define RID_STR_PROGRESSVALUE_MAX           ( RID_FORMBROWSER_START + 173 )
+#define RID_STR_SCROLLVALUE                 ( RID_FORMBROWSER_START + 174 )
+#define RID_STR_SCROLLVALUE_MAX             ( RID_FORMBROWSER_START + 175 )
+#define RID_STR_LINEINCREMENT               ( RID_FORMBROWSER_START + 176 )
+#define RID_STR_BLOCKINCREMENT              ( RID_FORMBROWSER_START + 177 )
+#define RID_STR_VISIBLESIZE                 ( RID_FORMBROWSER_START + 178 )
+#define RID_STR_ORIENTATION                 ( RID_FORMBROWSER_START + 179 )
+    // FREE
+#define RID_STR_VERTICAL_ALIGN              ( RID_FORMBROWSER_START + 181 )
+#define RID_STR_EVT_ADJUSTMENTVALUECHANGED  ( RID_FORMBROWSER_START + 182 )
+#define RID_STR_DATE                        ( RID_FORMBROWSER_START + 183 )
+#define RID_STR_STATE                       ( RID_FORMBROWSER_START + 184 )
+#define RID_STR_TIME                        ( RID_FORMBROWSER_START + 185 )
+#define RID_STR_SCALEIMAGE                  ( RID_FORMBROWSER_START + 186 )
+#define RID_STR_PUSHBUTTONTYPE              ( RID_FORMBROWSER_START + 187 )
+#define RID_STR_ENUM_PUSHBUTTONTYPE         ( RID_FORMBROWSER_START + 188 )
+#define RID_STR_UNABLETOCONNECT             ( RID_FORMBROWSER_START + 189 )
+#define RID_STR_TEXT                        ( RID_FORMBROWSER_START + 190 )
+#define RID_STR_BOUND_CELL                  ( RID_FORMBROWSER_START + 191 )
+#define RID_STR_LIST_CELL_RANGE             ( RID_FORMBROWSER_START + 192 )
+#define RID_STR_CELL_EXCHANGE_TYPE          ( RID_FORMBROWSER_START + 193 )
+#define RID_STR_ANCHOR_TYPE                 ( RID_FORMBROWSER_START + 194 )
+#define RID_STR_SCROLLVALUE_MIN             ( RID_FORMBROWSER_START + 195 )
+#define RID_STR_DEFAULT_SCROLLVALUE         ( RID_FORMBROWSER_START + 196 )
+#define RID_STR_REPEAT_DELAY                ( RID_FORMBROWSER_START + 197 )
+#define RID_STR_SYMBOLCOLOR                 ( RID_FORMBROWSER_START + 198 )
+#define RID_STR_REPEAT                      ( RID_FORMBROWSER_START + 199 )
+#define RID_STR_IMAGEPOSITION               ( RID_FORMBROWSER_START + 200 )
+#define RID_STR_DEFAULTTEXT                 ( RID_FORMBROWSER_START + 201 )
+#define RID_STR_DEFAULTDATE                 ( RID_FORMBROWSER_START + 202 )
+#define RID_STR_DEFAULTTIME                 ( RID_FORMBROWSER_START + 203 )
+#define RID_STR_WORDBREAK                   ( RID_FORMBROWSER_START + 204 )
+#define RID_STR_SHOW_SCROLLBARS             ( RID_FORMBROWSER_START + 205 )
+#define RID_STR_QUERYDESIGN_TITLE           ( RID_FORMBROWSER_START + 206 )
+#define RID_STR_ICONSIZE                    ( RID_FORMBROWSER_START + 207 )
+#define RID_STR_WRITING_MODE                ( RID_FORMBROWSER_START + 208 )
+#define RID_STR_SHOW_POSITION               ( RID_FORMBROWSER_START + 209 )
+#define RID_STR_SHOW_NAVIGATION             ( RID_FORMBROWSER_START + 210 )
+#define RID_STR_SHOW_RECORDACTIONS          ( RID_FORMBROWSER_START + 211 )
+#define RID_STR_SHOW_FILTERSORT             ( RID_FORMBROWSER_START + 212 )
+#define RID_STR_TEXTTYPE                    ( RID_FORMBROWSER_START + 213 )
+#define RID_STR_LINEEND_FORMAT              ( RID_FORMBROWSER_START + 214 )
+#define RID_STR_TOGGLE                      ( RID_FORMBROWSER_START + 215 )
+#define RID_STR_FOCUSONCLICK                ( RID_FORMBROWSER_START + 216 )
+#define RID_STR_HIDEINACTIVESELECTION       ( RID_FORMBROWSER_START + 217 )
+#define RID_STR_VISUALEFFECT                ( RID_FORMBROWSER_START + 218 )
+#define RID_STR_BORDERCOLOR                 ( RID_FORMBROWSER_START + 219 )
+    // FREE
+#define RID_STR_XML_DATA_MODEL              ( RID_FORMBROWSER_START + 221 )
+#define RID_STR_BIND_EXPRESSION             ( RID_FORMBROWSER_START + 222 )
+#define RID_STR_XSD_REQUIRED                ( RID_FORMBROWSER_START + 223 )
+#define RID_STR_XSD_RELEVANT                ( RID_FORMBROWSER_START + 224 )
+#define RID_STR_XSD_READONLY                ( RID_FORMBROWSER_START + 225 )
+#define RID_STR_XSD_CONSTRAINT              ( RID_FORMBROWSER_START + 226 )
+#define RID_STR_XSD_CALCULATION             ( RID_FORMBROWSER_START + 227 )
+#define RID_STR_XSD_DATA_TYPE               ( RID_FORMBROWSER_START + 228 )
+#define RID_STR_XSD_WHITESPACES             ( RID_FORMBROWSER_START + 229 )
+#define RID_STR_XSD_PATTERN                 ( RID_FORMBROWSER_START + 230 )
+#define RID_STR_XSD_LENGTH                  ( RID_FORMBROWSER_START + 231 )
+#define RID_STR_XSD_MIN_LENGTH              ( RID_FORMBROWSER_START + 232 )
+#define RID_STR_XSD_MAX_LENGTH              ( RID_FORMBROWSER_START + 233 )
+#define RID_STR_XSD_TOTAL_DIGITS            ( RID_FORMBROWSER_START + 234 )
+#define RID_STR_XSD_FRACTION_DIGITS         ( RID_FORMBROWSER_START + 235 )
+#define RID_STR_XSD_MAX_INCLUSIVE           ( RID_FORMBROWSER_START + 236 )
+#define RID_STR_XSD_MAX_EXCLUSIVE           ( RID_FORMBROWSER_START + 237 )
+#define RID_STR_XSD_MIN_INCLUSIVE           ( RID_FORMBROWSER_START + 238 )
+#define RID_STR_XSD_MIN_EXCLUSIVE           ( RID_FORMBROWSER_START + 239 )
+#define RID_STR_SUBMISSION_ID               ( RID_FORMBROWSER_START + 240 )
+#define RID_STR_LIST_BINDING                ( RID_FORMBROWSER_START + 241 )
+#define RID_STR_BINDING_UI_NAME             ( RID_FORMBROWSER_START + 242 )
+#define RID_STR_BINDING_NAME                RID_STR_BINDING_UI_NAME
+#define RID_STR_DECORATION                  ( RID_FORMBROWSER_START + 243 )
+#define RID_STR_SELECTION_TYPE              ( RID_FORMBROWSER_START + 244 )
+#define RID_STR_ROOT_DISPLAYED              ( RID_FORMBROWSER_START + 245 )
+#define RID_STR_SHOWS_HANDLES               ( RID_FORMBROWSER_START + 246 )
+#define RID_STR_SHOWS_ROOT_HANDLES          ( RID_FORMBROWSER_START + 247 )
+#define RID_STR_EDITABLE                    ( RID_FORMBROWSER_START + 248 )
+#define RID_STR_INVOKES_STOP_NOT_EDITING    ( RID_FORMBROWSER_START + 249 )
+#define RID_STR_NOLABEL                     ( RID_FORMBROWSER_START + 250 )
+#define RID_STR_FONTSTYLE_REGULAR           ( RID_FORMBROWSER_START + 251 )
+#define RID_STR_FONTSTYLE_BOLD_ITALIC       ( RID_FORMBROWSER_START + 252 )
+#define RID_STR_FONTSTYLE_ITALIC            ( RID_FORMBROWSER_START + 253 )
+#define RID_STR_FONTSTYLE_BOLD              ( RID_FORMBROWSER_START + 254 )
+#define RID_STR_FONT_DEFAULT                ( RID_FORMBROWSER_START + 255 )
+
+
+// -----------------------------------------------------------------------
+// - message strings
+
+#define RID_STR_CONFIRM_DELETE_DATA_TYPE    ( RID_FORMBROWSER_START + 500 )
+
+// -----------------------------------------------------------------------
+// - dialogs
+
+#define RID_DLG_SELECTLABELCONTROL          ( RID_PROPCONTROLLER_START +  0 )
+#define RID_DLG_TABORDER                    ( RID_PROPCONTROLLER_START +  1 )
+#define RID_DLG_FORMLINKS                   ( RID_PROPCONTROLLER_START +  2 )
+#define RID_DLG_SELECTION                   ( RID_PROPCONTROLLER_START +  3 )
+#define RID_DLG_NEW_DATA_TYPE               ( RID_PROPCONTROLLER_START +  4 )
+
+// -----------------------------------------------------------------------
+// - tab dialogs
+
+#define RID_TABDLG_FONTDIALOG               ( RID_PROPCONTROLLER_START +  0 )
+
+// -----------------------------------------------------------------------
+// - ImageLists
+
+#define RID_IL_FORMEXPLORER                 ( RID_PROPCONTROLLER_START +  0 )
+
+// -----------------------------------------------------------------------
+// - untyped resources
+
+#define RID_RSC_ENUM_SCROLLBARS             ( RID_PROPCONTROLLER_START +  0 )
+#define RID_RSC_ENUM_COMMAND_TYPE           ( RID_PROPCONTROLLER_START +  1 )
+#define RID_RSC_ENUM_LINEEND_FORMAT         ( RID_PROPCONTROLLER_START +  2 )
+#define RID_RSC_ENUM_TEXTTYPE               ( RID_PROPCONTROLLER_START +  3 )
+#define RID_RSC_ENUM_VISUALEFFECT           ( RID_PROPCONTROLLER_START +  4 )
+#define RID_RSC_ENUM_IMAGE_POSITION         ( RID_PROPCONTROLLER_START +  5 )
+#define RID_RSC_BUTTON_IMAGES               ( RID_PROPCONTROLLER_START +  6 )
+#define RID_RSC_ENUM_WHITESPACE_HANDLING    ( RID_PROPCONTROLLER_START +  7 )
+#define RID_RSC_ENUM_VERTICAL_ALIGN         ( RID_PROPCONTROLLER_START +  8 )
+#define RID_RSC_ENUM_BORDER_TYPE            ( RID_PROPCONTROLLER_START +  9 )
+#define RID_RSC_ENUM_ICONSIZE_TYPE          ( RID_PROPCONTROLLER_START + 10 )
+#define RID_RSC_ENUM_LISTSOURCE_TYPE        ( RID_PROPCONTROLLER_START + 11 )
+#define RID_RSC_ENUM_ALIGNMENT              ( RID_PROPCONTROLLER_START + 12 )
+#define RID_RSC_ENUM_BUTTONTYPE             ( RID_PROPCONTROLLER_START + 13 )
+#define RID_RSC_ENUM_PUSHBUTTONTYPE         ( RID_PROPCONTROLLER_START + 14 )
+#define RID_RSC_ENUM_SUBMIT_METHOD          ( RID_PROPCONTROLLER_START + 15 )
+#define RID_RSC_ENUM_SUBMIT_ENCODING        ( RID_PROPCONTROLLER_START + 16 )
+#define RID_RSC_ENUM_DATEFORMAT_LIST        ( RID_PROPCONTROLLER_START + 17 )
+#define RID_RSC_ENUM_TIMEFORMAT_LIST        ( RID_PROPCONTROLLER_START + 18 )
+#define RID_RSC_ENUM_CHECKED                ( RID_PROPCONTROLLER_START + 19 )
+#define RID_RSC_ENUM_CYCLE                  ( RID_PROPCONTROLLER_START + 20 )
+#define RID_RSC_ENUM_NAVIGATION             ( RID_PROPCONTROLLER_START + 21 )
+#define RID_RSC_ENUM_ORIENTATION            ( RID_PROPCONTROLLER_START + 22 )
+#define RID_RSC_ENUM_CELL_EXCHANGE_TYPE     ( RID_PROPCONTROLLER_START + 23 )
+#define RID_RSC_ENUM_SUBMIT_TARGET          ( RID_PROPCONTROLLER_START + 24 )
+#define RID_RSC_ENUM_SELECTION_TYPE         ( RID_PROPCONTROLLER_START + 25 )
+#define RID_RSC_ENUM_SCALE_MODE             ( RID_PROPCONTROLLER_START + 26 )
+#define RID_RSC_ENUM_YESNO                  ( RID_PROPCONTROLLER_START + 27 )
+#define RID_RSC_ENUM_SHOWHIDE               ( RID_PROPCONTROLLER_START + 28 )
+#define RID_RSC_ENUM_WRITING_MODE           ( RID_PROPCONTROLLER_START + 29 )
+#define RID_RSC_ENUM_WHEEL_BEHAVIOR         ( RID_PROPCONTROLLER_START + 30 )
+#define RID_RSC_ENUM_TEXT_ANCHOR_TYPE       ( RID_PROPCONTROLLER_START + 31 )
+#define RID_RSC_ENUM_SHEET_ANCHOR_TYPE      ( RID_PROPCONTROLLER_START + 32 )
+
+// -----------------------------------------------------------------------
+// - ImageList - local ids
+// -----------------------------------------------------------------------
+// HACK HACK HACK
+// as long as we have no real property browser, but this outsourcing only,
+// we do not duplicate images. Instead we do some hard coding for the image ids
+
+
+#define RID_SVXIMG_CONTROL                          10144
+#define RID_SVXIMG_BUTTON                           10594
+#define RID_SVXIMG_RADIOBUTTON                      10595
+#define RID_SVXIMG_CHECKBOX                         10596
+#define RID_SVXIMG_FIXEDTEXT                        10597
+#define RID_SVXIMG_GROUPBOX                         10598
+#define RID_SVXIMG_EDIT                             10599
+#define RID_SVXIMG_LISTBOX                          10600
+#define RID_SVXIMG_COMBOBOX                         10601
+#define RID_SVXIMG_GRID                             10603
+#define RID_SVXIMG_IMAGEBUTTON                      10604
+#define RID_SVXIMG_FILECONTROL                      10605
+#define RID_SVXIMG_DATEFIELD                        10704
+#define RID_SVXIMG_TIMEFIELD                        10705
+#define RID_SVXIMG_NUMERICFIELD                     10706
+#define RID_SVXIMG_CURRENCYFIELD                    10707
+#define RID_SVXIMG_PATTERNFIELD                     10708
+#define RID_SVXIMG_IMAGECONTROL                     10710
+#define RID_SVXIMG_HIDDEN                           18022
+#define RID_SVXIMG_FORMATTEDFIELD                   10728
+#define RID_SVXIMG_FILTER                           10715
+#define RID_SVXIMG_FORMS                            18013
+#define RID_SVXIMG_FORM                             10593
+#define RID_SVXIMG_COLLAPSEDNODE                    18002
+#define RID_SVXIMG_EXPANDEDNODE                     18003
+#define RID_SVXIMG_SCROLLBAR                        10768
+#define RID_SVXIMG_SPINBUTTON                       10769
+#define RID_SVXIMG_NAVIGATIONBAR                    10607
+
+
+#endif // _EXTENSIONS_FORMCTRLR_PROPRESID_HRC_
+

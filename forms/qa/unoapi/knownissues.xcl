@@ -1,0 +1,131 @@
+### i45204 ###
+forms.OCurrencyModel::com::sun::star::form::XUpdateBroadcaster
+
+### i84235 ###
+forms.ODatabaseForm::com::sun::star::sdbc::XWarningsSupplier 	
+
+### i45204 ###
+forms.OCurrencyModel::com::sun::star::form::XUpdateBroadcaster 	
+
+### i79098 ###
+forms.OScrollBarModel::com::sun::star::awt::UnoControlScrollBarModel
+
+### i79100 ###
+forms.ORadioButtonModel::com::sun::star::awt::UnoControlRadioButtonModel
+
+### i79108 ###
+forms.OButtonControl::com::sun::star::form::submission::XSubmission
+
+### i79108 ###
+forms.OImageButtonControl::com::sun::star::form::submission::XSubmission
+
+### i79109 ###
+forms.OFixedTextModel::com::sun::star::awt::UnoControlFixedTextModel
+
+### i79110 ###
+forms.OCheckBoxModel::com::sun::star::awt::UnoControlCheckBoxModel
+
+### i79111 ###
+forms.OButtonModel::com::sun::star::awt::UnoControlButtonModel
+
+### i84283 ###
+forms.ODatabaseForm::com::sun::star::form::XDatabaseParameterBroadcaster
+
+### i84298 ###
+forms.ODatabaseForm::com::sun::star::sdbc::XParameters
+
+### i73994 ###
+forms.OEditModel::com::sun::star::style::ParagraphProperties
+
+### i84311 ###
+forms.OFixedTextModel::com::sun::star::beans::XMultiPropertySet
+
+### i84311 ###
+forms.OFixedTextModel::com::sun::star::beans::XFastPropertySet
+
+### i84314 ###
+forms.OImageButtonModel::com::sun::star::awt::UnoControlImageControlModel
+
+### i84315 ###
+forms.OImageControlModel::com::sun::star::awt::UnoControlImageControlModel
+
+### i84316 ###
+forms.ONumericModel::com::sun::star::form::XUpdateBroadcaster
+
+### i46489 ###
+forms.ORadioButtonControl::com::sun::star::awt::XWindow
+forms.OCheckBoxControl::com::sun::star::awt::XWindow
+forms.OGroupBoxControl::com::sun::star::awt::XWindow
+forms.OListBoxControl::com::sun::star::awt::XWindow
+forms.OComboBoxControl::com::sun::star::awt::XWindow
+forms.OEditControl::com::sun::star::awt::XWindow
+forms.ODateControl::com::sun::star::awt::XWindow
+forms.OTimeControl::com::sun::star::awt::XWindow
+forms.ONumericControl::com::sun::star::awt::XWindow
+forms.OCurrencyControl::com::sun::star::awt::XWindow
+forms.OPatternControl::com::sun::star::awt::XWindow
+forms.OFormattedControl::com::sun::star::awt::XWindow
+forms.OButtonControl::com::sun::star::awt::XWindow
+forms.OImageButtonControl::com::sun::star::awt::XWindow
+forms.OImageControlControl::com::sun::star::awt::XWindow
+forms.ONavigationBarControl::com::sun::star::awt::XWindow
+
+### i87212 ###
+forms.ONavigationBarControl::com::sun::star::lang::XComponent
+
+### i87213 ###
+forms.OGroupBoxControl::com::sun::star::awt::XView
+forms.OListBoxControl::com::sun::star::awt::XView
+forms.OEditControl::com::sun::star::awt::XView
+forms.ORadioButtonControl::com::sun::star::awt::XView
+forms.OButtonControl::com::sun::star::awt::XView
+forms.OPatternControl::com::sun::star::awt::XView
+forms.OCheckBoxControl::com::sun::star::awt::XView
+forms.OTimeControl::com::sun::star::awt::XView
+forms.OCurrencyControl::com::sun::star::awt::XView
+forms.OFormattedControl::com::sun::star::awt::XView
+forms.ONumericControl::com::sun::star::awt::XView
+forms.OImageButtonControl::com::sun::star::awt::XView
+forms.OComboBoxControl::com::sun::star::awt::XView
+forms.ODateControl::com::sun::star::awt::XView
+forms.OImageControlControl::com::sun::star::awt::XView
+forms.ONavigationBarControl::com::sun::star::awt::XView
+
+### i87214 ###
+forms.OEditControl::com::sun::star::form::XChangeBroadcaster
+
+### i87215 ###
+forms.OListBoxControl::com::sun::star::form::XChangeBroadcaster
+
+### i87861 ###
+forms.OEditModel::com::sun::star::form::XUpdateBroadcaster
+
+### i89421 ### 
+forms.OGroupBoxModel::com::sun::star::lang::XComponent
+
+### i89422 ###
+forms.OHiddenModel::com::sun::star::form::component::HiddenControl
+
+### i90352 ###
+forms.OListBoxControl::com::sun::star::lang::XComponent
+
+### i94950 ###
+forms.OTimeModel::com::sun::star::form::XUpdateBroadcaster
+forms.OPatternModel::com::sun::star::form::XUpdateBroadcaster
+forms.OListBoxModel::com::sun::star::form::XUpdateBroadcaster
+forms.OFormattedFieldWrapper::com::sun::star::form::XUpdateBroadcaster
+forms.ODateModel::com::sun::star::form::XUpdateBroadcaster
+forms.OComboBoxModel::com::sun::star::form::XUpdateBroadcaster
+
+### i111006 ###
+forms.OFileControlModel::com::sun::star::beans::XFastPropertySet
+forms.OFileControlModel::com::sun::star::form::FormControlModel
+
+### i113201 ###
+forms.OEditModel::com::sun::star::form::validation::XValidatableFormComponent
+
+### i114209 ###
+forms.OGridControlModel::com::sun::star::view::XSelectionSupplier
+
+### i111333 ###
+forms.OImageControlControl::com::sun::star::awt::XControl

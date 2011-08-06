@@ -1,0 +1,257 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+// AxTestComponents.idl : IDL source for AxTestComponents.dll
+//
+
+// This file will be processed by the MIDL tool to
+// produce the type library (AxTestComponents.tlb) and marshalling code.
+// next id 86
+import "oaidl.idl";
+import "ocidl.idl";
+    [
+        object,
+        uuid(BFE10EBD-8584-11D4-8335-005004526AB4),
+        dual,
+        helpstring("IBasic Interface"),
+        pointer_default(unique)
+    ]
+    interface IBasic : IDispatch
+    {
+        [id(82), helpstring("method inBool")] HRESULT inBool([in]VARIANT_BOOL val);
+        [id(1), helpstring("method inByte")] HRESULT inByte([in] unsigned char val);
+        [id(2), helpstring("method inShort")] HRESULT inShort([in] short val);
+        [id(3), helpstring("method inLong")] HRESULT inLong([in] long val);
+        [id(4), helpstring("method inString")] HRESULT inString([in] BSTR val);
+        [id(5), helpstring("method inFloat")] HRESULT inFloat([in] float val);
+        [id(6), helpstring("method inDouble")] HRESULT inDouble([in] double val);
+        [id(7), helpstring("method inVariant")] HRESULT inVariant([in] VARIANT val);
+        [id(8), helpstring("method inArray")] HRESULT inArray([in] SAFEARRAY(VARIANT) val);
+        [id(9), helpstring("method inObject")] HRESULT inObject([in] IDispatch* val);
+        [id(83), helpstring("method inoutBool")] HRESULT inoutBool([in,out]VARIANT_BOOL* val);
+        [id(12), helpstring("method inoutByte")] HRESULT inoutByte([in,out] unsigned char* val);
+        [id(13), helpstring("method inoutShort")] HRESULT inoutShort([in,out] short* val);
+        [id(14), helpstring("method inoutLong")] HRESULT inoutLong([in,out] long * val);
+        [id(15), helpstring("method inoutString")] HRESULT inoutString([in, out] BSTR* val);
+        [id(16), helpstring("method inoutFloat")] HRESULT inoutFloat([in,out] float * val);
+        [id(17), helpstring("method inoutDouble")] HRESULT inoutDouble([in,out] double * val);
+        [id(18), helpstring("method inoutVariant")] HRESULT inoutVariant([in,out] VARIANT * val);
+        [id(19), helpstring("method inoutArray")] HRESULT inoutArray([in,out] SAFEARRAY(VARIANT) * val);
+        [id(20), helpstring("method inoutObject")] HRESULT inoutObject([in,out] IDispatch** val);
+        [id(84), helpstring("method outBool")] HRESULT outBool([out] VARIANT_BOOL* val);
+        [id(23), helpstring("method outByte")] HRESULT outByte([out] unsigned char* val);
+        [id(24), helpstring("method outShort")] HRESULT outShort([out] short* val);
+        [id(25), helpstring("method outLong")] HRESULT outLong([out] long* val);
+        [id(26), helpstring("method outString")] HRESULT outString([out] BSTR* val);
+        [id(27), helpstring("method outFloat")] HRESULT outFloat([out] float* val);
+        [id(28), helpstring("method outDouble")] HRESULT outDouble([out] double* val);
+        [id(29), helpstring("method outVariant")] HRESULT outVariant([out] VARIANT* val);
+        [id(30), helpstring("method outArray")] HRESULT outArray([out] SAFEARRAY(VARIANT) * val);
+        [id(31), helpstring("method outObject")] HRESULT outObject([out] IDispatch** val);
+        [propget, id(85), helpstring("property prpBool")] HRESULT prpBool([out, retval] VARIANT_BOOL *pVal);
+        [propput, id(85), helpstring("property prpBool")] HRESULT prpBool([in] VARIANT_BOOL newVal);
+        [propget, id(34), helpstring("property prpByte")] HRESULT prpByte([out, retval] unsigned char *pVal);
+        [propput, id(34), helpstring("property prpByte")] HRESULT prpByte([in] unsigned char newVal);
+        [propget, id(35), helpstring("property prpShort")] HRESULT prpShort([out, retval] short *pVal);
+        [propput, id(35), helpstring("property prpShort")] HRESULT prpShort([in] short newVal);
+        [propget, id(36), helpstring("property prpLong")] HRESULT prpLong([out, retval] long *pVal);
+        [propput, id(36), helpstring("property prpLong")] HRESULT prpLong([in] long newVal);
+        [propget, id(37), helpstring("property prpString")] HRESULT prpString([out, retval] BSTR *pVal);
+        [propput, id(37), helpstring("property prpString")] HRESULT prpString([in] BSTR newVal);
+        [propget, id(38), helpstring("property prpFloat")] HRESULT prpFloat([out, retval] float *pVal);
+        [propput, id(38), helpstring("property prpFloat")] HRESULT prpFloat([in] float newVal);
+        [propget, id(39), helpstring("property prpDouble")] HRESULT prpDouble([out, retval] double *pVal);
+        [propput, id(39), helpstring("property prpDouble")] HRESULT prpDouble([in] double newVal);
+        [propget, id(40), helpstring("property prpVariant")] HRESULT prpVariant([out, retval] VARIANT *pVal);
+        [propput, id(40), helpstring("property prpVariant")] HRESULT prpVariant([in] VARIANT newVal);
+        [propget, id(41), helpstring("property prpArray")] HRESULT prpArray([out, retval]SAFEARRAY(VARIANT) *pVal);
+        [propput, id(41), helpstring("property prpArray")] HRESULT prpArray([in] SAFEARRAY(VARIANT) newVal);
+        [propget, id(42), helpstring("property prpObject")] HRESULT prpObject([out, retval] IDispatch* *pVal);
+        [propput, id(42), helpstring("property prpObject")] HRESULT prpObject([in] IDispatch* newVal);
+        [id(43), helpstring("method mixed1")] HRESULT mixed1(
+                                              [in, out] unsigned char* aChar,
+                                              [in, out] float *aFloat,
+                                              [in,out] VARIANT* inoutVar);
+        [id(44), helpstring("method inSequenceLong")] HRESULT inSequenceLong([in] SAFEARRAY(long)  ar);
+        [id(45), helpstring("method inSequenceByte")] HRESULT inSequenceByte([in] SAFEARRAY(byte) ar);
+        [id(46), helpstring("method inSequenceShort")] HRESULT inSequenceShort([in] SAFEARRAY(short) ar);
+        [id(47), helpstring("method inSequenceString")] HRESULT inSequenceString([in] SAFEARRAY( BSTR) ar);
+        [id(48), helpstring("method inSequenceFloat")] HRESULT inSequenceFloat([in] SAFEARRAY(float) ar);
+        [id(49), helpstring("method inSequenceDouble")] HRESULT inSequenceDouble([in] SAFEARRAY(double) ar);
+        [id(50), helpstring("method inSequenceObject")] HRESULT inSequenceObject([in] SAFEARRAY(IDispatch*) ar);
+        [id(51), helpstring("method outSequenceByte")] HRESULT outSequenceByte([out] SAFEARRAY(unsigned char)* val);
+        [id(52), helpstring("method outSequenceShort")] HRESULT outSequenceShort([out] SAFEARRAY(short)* val);
+        [id(53), helpstring("method outSequenceLong")] HRESULT outSequenceLong([out] SAFEARRAY(long )*val);
+        [id(54), helpstring("method outSequenceString")] HRESULT outSequenceString([out] SAFEARRAY(BSTR)* val);
+        [id(55), helpstring("method outSequenceFloat")] HRESULT outSequenceFloat([out] SAFEARRAY(float)* val);
+        [id(56), helpstring("method outSequenceDouble")] HRESULT outSequenceDouble([out] SAFEARRAY(double)* val);
+        [id(57), helpstring("method outSequenceObject")] HRESULT outSequenceObject([out] SAFEARRAY(IDispatch*)* val);
+        [id(58), helpstring("method inoutSequenceByte")] HRESULT inoutSequenceByte([in,out] SAFEARRAY(unsigned char)* val);
+        [id(59), helpstring("method inoutSequenceShort")] HRESULT inoutSequenceShort([in,out] SAFEARRAY(short)* val);
+        [id(60), helpstring("method inoutSequenceLong")] HRESULT inoutSequenceLong([in,out] SAFEARRAY( long)*val);
+        [id(61), helpstring("method inoutSequenceString")] HRESULT inoutSequenceString([in,out] SAFEARRAY(BSTR)* val);
+        [id(62), helpstring("method inoutSequenceFloat")] HRESULT inoutSequenceFloat([in,out] SAFEARRAY(float)* val);
+        [id(63), helpstring("method inoutSequenceDouble")] HRESULT inoutSequenceDouble([in,out] SAFEARRAY(double)* val);
+        [id(64), helpstring("method inoutSequenceObject")] HRESULT inoutSequenceObject([in,out] SAFEARRAY(IDispatch*)* val);
+        [id(65), helpstring("method inMulDimArrayLong")] HRESULT inMulDimArrayLong([in] SAFEARRAY(long) val );
+        [id(66), helpstring("method inMulDimArrayVariant")] HRESULT inMulDimArrayVariant([in] SAFEARRAY(VARIANT) val);
+        [id(67), helpstring("method inMulDimArrayLong2")] HRESULT inMulDimArrayLong2([in] SAFEARRAY(long) val);
+        [id(68), helpstring("method inMulDimArrayVariant2")] HRESULT inMulDimArrayVariant2([in] SAFEARRAY(VARIANT) val);
+        [id(69), helpstring("method inMulDimArrayByte")] HRESULT inMulDimArrayByte([in] SAFEARRAY(unsigned char) val);
+        [id(70), helpstring("method inMulDimArrayByte2")] HRESULT inMulDimArrayByte2([in] SAFEARRAY(unsigned char) val);
+        [id(71), helpstring("method outMore")] HRESULT outMore([out]long* val1, [out]long* val2);
+
+        [id(72), helpstring("method optional1")]
+        HRESULT optional1([in] long val1, [in, optional] VARIANT* val2);
+        [id(73), helpstring("method optional2")]
+        HRESULT optional2([out] long* val1, [out, optional] VARIANT* val2);
+        [id(74), helpstring("method optional3")]
+        HRESULT optional3([in, optional] VARIANT* val1, [in, optional] VARIANT* val2);
+        [id(75), helpstring("method optional4")]
+        HRESULT optional4([in, out, optional] VARIANT* val1, [in, out, optional] VARIANT* val2);
+        [id(76), helpstring("method optional5")]
+        HRESULT optional5([out, optional] VARIANT* val1, [out, optional] VARIANT* val2);
+        //midl creates for val4 a BSTR "4" as default value in the TLB. The midl complains
+        //but the error message seems to be not for this case.
+        //in defaultvalue2 val4 has an VT_I4 in the TLB. This must be a bug!
+        [id(77), helpstring("method defaultvalue1")]
+        HRESULT defaultvalue1([in, defaultvalue(1)] long val1,
+                              [in, defaultvalue(2)] double* val2,
+                             // [in, defaultvalue(3)] VARIANT val3, //ok
+                              [in, defaultvalue(4)] VARIANT* val4);
+
+        // bug im midl: when val3 and val4 are pointers then the generated header cretates
+        // for all params default values:
+        //HRESULT STDMETHODCALLTYPE defaultvalue2(
+        //            /* [defaultvalue][in] */ long *val1 = 10,
+        //    /* [defaultvalue][in] */ double *val2 = 3.14,
+        //    /* [defaultvalue][in] */ VARIANT *val3 = 10,
+        //    /* [defaultvalue][in] */ VARIANT *val4 = 100) = 0;
+        // And that does not compile.
+        //Therefore we must not include the midl generated header, instead use
+        // #import to create the interface header
+        [id(78), helpstring("method defaultvalue2")]
+        HRESULT defaultvalue2([in, out, defaultvalue(1)]long* val1,
+                              [in, out, defaultvalue(2)] double* val2,
+                             // [in, out, defaultvalue(3)] VARIANT *val3,
+                              [in, out, defaultvalue(4)] VARIANT *val4);
+
+        [id(79), helpstring("method varargfunc1"),vararg]
+        HRESULT varargfunc1([in] long val1, [in] SAFEARRAY(VARIANT) val2);
+        [id(80), helpstring("method varargfunc2")]
+        HRESULT varargfunc2([out] long* val1, [out] SAFEARRAY(VARIANT)* val2);
+
+
+        [id(86), helpstring("method inSequenceByteDim2")] HRESULT inSequenceByteDim2([in] SAFEARRAY(byte) val);
+        [id(87), helpstring("method inCurrency")] HRESULT inCurrency([in] CY val);
+        [id(88), helpstring("method outCurrency")] HRESULT outCurrency([out] CY* val);
+        [id(89), helpstring("method inoutCurrency")] HRESULT inoutCurrency([in,out] CY* val);
+        [id(90), helpstring("method inDate")] HRESULT inDate([in] DATE val);
+        [id(91), helpstring("method outDate")] HRESULT outDate([out] DATE* val);
+        [id(92), helpstring("method inoutDate")] HRESULT inoutDate([in,out] DATE* val);
+        [propget, id(93), helpstring("property prpCY")] HRESULT prpCurrency([out, retval] CY* pVal);
+        [propput, id(93), helpstring("property prpCY")] HRESULT prpCurrency([in] CY newVal);
+        [propget, id(94), helpstring("property prpDate")] HRESULT prpDate([out, retval] DATE* pVal);
+        [propput, id(94), helpstring("property prpDate")] HRESULT prpDate([in] DATE newVal);
+        [id(95), helpstring("method inDecimal")] HRESULT inDecimal([in] DECIMAL val);
+        [id(96), helpstring("method outDecimal")] HRESULT outDecimal([out] DECIMAL* val);
+        [id(97), helpstring("method inoutDecimal")] HRESULT inoutDecimal([in,out] DECIMAL* val);
+        [propget, id(98), helpstring("property prpDecimal")] HRESULT prpDecimal([out, retval] DECIMAL* pVal);
+        [propput, id(98), helpstring("property prpDecimal")] HRESULT prpDecimal([in] DECIMAL newVal);
+        [id(99), helpstring("method inSCode")] HRESULT inSCode([in] SCODE val);
+        [id(100), helpstring("method outScode")] HRESULT outScode([out] SCODE* val);
+        [id(101), helpstring("method inoutSCode")] HRESULT inoutSCode([in,out] SCODE* val);
+        [propget, id(102), helpstring("property prpSCode")] HRESULT prpSCode([out, retval] SCODE* pVal);
+        [propput, id(102), helpstring("property prpSCode")] HRESULT prpSCode([in] SCODE newVal);
+        [id(103), helpstring("method inrefLong")] HRESULT inrefLong([in] LONG* val);
+        [id(104), helpstring("method inrefVARIANT")] HRESULT inrefVariant([in] VARIANT* val);
+        [id(105), helpstring("method inrefDecimal")] HRESULT inrefDecimal(DECIMAL* val);
+        [propget, id(106), helpstring("property prpRefLong")] HRESULT prpRefLong([out, retval] long* pVal);
+        [propputref, id(106), helpstring("property prpRefLong")] HRESULT prpRefLong([in] long* newVal);
+        [propget, id(107), helpstring("property prprefVariant")] HRESULT prprefVariant([out, retval] VARIANT* pVal);
+        [propputref, id(107), helpstring("property prprefVariant")] HRESULT prprefVariant([in] VARIANT* newVal);
+        [propget, id(108), helpstring("property prprefDecimal")] HRESULT prprefDecimal([out, retval] DECIMAL* pVal);
+        [propputref, id(108), helpstring("property prprefDecimal")] HRESULT prprefDecimal([in] DECIMAL* newVal);
+        [id(109), helpstring("method optional6")] HRESULT optional6([in,optional] VARIANT* val1,
+            [in,optional] VARIANT * val2, [in,optional] VARIANT* val3, [in,optional] VARIANT* val4);
+        [id(110), helpstring("method optional7")] HRESULT optional7([out,optional] VARIANT* val1,
+            [out,optional] VARIANT * val2, [out,optional] VARIANT* val3, [out,optional] VARIANT* val4);
+
+        [propget, id(111), helpstring("property prpMultiArg1")] HRESULT prpMultiArg1([in,out,optional] VARIANT* val1, [in,out,optional] VARIANT* val2, [out, optional, retval] VARIANT* pVal);
+        [propput, id(111), helpstring("property prpMultiArg1")] HRESULT prpMultiArg1([in,out,optional] VARIANT* val1, [in,out,optional] VARIANT* val2, [in] VARIANT* newVal);
+        [propget, id(112), helpstring("property prpMultiArg2")] HRESULT prpMultiArg2([in] VARIANT val1, [out, retval] VARIANT* pVal);
+        [propput, id(112), helpstring("property prpMultiArg2")] HRESULT prpMultiArg2([in] VARIANT val1, [in] VARIANT newVal);
+        [id(113), helpstring("method prpMultiArg2GetValues")] HRESULT prpMultiArg2GetValues([out] VARIANT* val1, [out] VARIANT* valProperty);
+        [propget, id(114), helpstring("property prpMultiArg3")] HRESULT prpMultiArg3([in,out] LONG* val1, [out, retval] LONG* pVal);
+        [propput, id(114), helpstring("property prpMultiArg3")] HRESULT prpMultiArg3([in,out] LONG* val1, [in] LONG newVal);
+        [id(115), helpstring("method inUnknown")] HRESULT inUnknown([in] IUnknown* val);
+        [id(116), helpstring("method outUnknown")] HRESULT outUnknown([out] IUnknown** val);
+        [id(117), helpstring("method inoutUnknown")] HRESULT inoutUnknown([in,out] IUnknown** val);
+        [propget, id(118), helpstring("property prpUnknown")] HRESULT prpUnknown([out, retval] IUnknown** pVal);
+        [propput, id(118), helpstring("property prpUnknown")] HRESULT prpUnknown([in] IUnknown* newVal);
+};
+
+[
+    object,
+    uuid(96E6105A-A436-48b3-BFE7-C9302D927CCF),
+    dual,
+    helpstring("IFoo Interface"),
+    pointer_default(unique)
+]
+interface IFoo : IUnknown
+{
+    HRESULT Foo([in] IUnknown* val);
+};
+
+[
+    uuid(BFE10EB1-8584-11D4-8335-005004526AB4),
+    version(1.0),
+    helpstring("AxTestComponents 1.0 Type Library")
+]
+library AXTESTCOMPONENTSLib
+{
+    importlib("stdole32.tlb");
+    importlib("stdole2.tlb");
+
+    [
+        uuid(BFE10EBE-8584-11D4-8335-005004526AB4),
+        helpstring("Basic Class")
+    ]
+    coclass Basic
+    {
+        [default] interface IBasic;
+    };
+
+    [
+        uuid(14DE9D5D-EB9D-4091-8E1B-A1B1672D8C1D),
+        helpstring("Foo Class")
+    ]
+    coclass Foo
+    {
+        [default] interface IFoo;
+    };
+
+};

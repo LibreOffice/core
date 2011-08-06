@@ -1,0 +1,56 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef _CRETSTRM_HXX
+#define _CRETSTRM_HXX
+
+#include <tools/stream.hxx>
+#include <basic/sbxvar.hxx>
+
+#include "cmdbasestream.hxx"
+
+class CRetStream : public CmdBaseStream
+{
+    SvStream *pSammel;
+    sal_uInt16 nId;
+
+public:
+    CRetStream( SvStream *pIn );
+    ~CRetStream();
+
+    using CmdBaseStream::Read;
+    void Read ( comm_UINT16 &nNr ){CmdBaseStream::Read ( nNr );}
+    void Read ( comm_UINT32 &nNr ){CmdBaseStream::Read ( nNr );}
+    virtual void Read ( rtl::OString* &pId ){CmdBaseStream::Read ( pId );}
+    void Read ( comm_BOOL &bBool ){CmdBaseStream::Read ( bBool );}
+    void Read( String &aString );
+    void Read( SbxValue &aValue );
+};
+
+#endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

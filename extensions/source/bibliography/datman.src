@@ -1,0 +1,500 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#include "bib.hrc"
+#include "datman.hrc"
+ModalDialog RID_DLG_MAPPING
+{
+    HelpID = HID_DLG_MAPPING;
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 391 , 195 ) ;
+    Moveable = TRUE ;
+
+    OKButton BT_OK
+    {
+        Pos = MAP_APPFONT ( 338 , 3 ) ;
+        Size = MAP_APPFONT ( 50 , 12 ) ;
+    };
+    CancelButton BT_CANCEL
+    {
+        Pos = MAP_APPFONT ( 338 , 18 ) ;
+        Size = MAP_APPFONT ( 50 , 12 ) ;
+    };
+    HelpButton BT_HELP
+    {
+        Pos = MAP_APPFONT ( 338 , 36 ) ;
+        Size = MAP_APPFONT ( 50 , 12 ) ;
+    };
+    FixedLine    GB_MAPPING
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 329 , 8 ) ;
+        Text [ en-US ] = "Column names";
+    };
+    FixedText   FT_IDENTIFIER
+    {
+        Pos = MAP_APPFONT ( 12 , 14 ) ;
+        Size = MAP_APPFONT ( 50 , 10 ) ;
+    };
+    ListBox     LB_IDENTIFIER
+    {
+        HelpID = "extensions:ListBox:RID_DLG_MAPPING:LB_IDENTIFIER";
+        Pos = MAP_APPFONT ( 65 , 13 ) ;
+        Size = MAP_APPFONT ( 50 , 60 ) ;
+        DropDown = TRUE;
+    };
+    FixedText FT_AUTHORITYTYPE
+    {
+        Pos = MAP_APPFONT ( 118 , 14 ) ;
+        Size = MAP_APPFONT ( 50 , 10 ) ;
+    };
+    ListBox LB_AUTHORITYTYPE
+    {
+        HelpID = "extensions:ListBox:RID_DLG_MAPPING:LB_AUTHORITYTYPE";
+        Pos = MAP_APPFONT ( 171 , 13 ) ;
+        Size = MAP_APPFONT ( 50 , 60 ) ;
+        DropDown = TRUE;
+    };
+    FixedText FT_YEAR
+    {
+        Pos = MAP_APPFONT ( 229 , 14 ) ;
+        Size = MAP_APPFONT ( 50 , 10 ) ;
+    };
+    ListBox LB_YEAR
+    {
+        HelpID = "extensions:ListBox:RID_DLG_MAPPING:LB_YEAR";
+        Pos = MAP_APPFONT ( 282 , 13 ) ;
+        Size = MAP_APPFONT ( 50 , 60 ) ;
+        DropDown = TRUE;
+    };
+    FixedText FT_AUTHOR
+    {
+        Pos = MAP_APPFONT ( 12 , 29 ) ;
+        Size = MAP_APPFONT ( 50 , 10 ) ;
+    };
+    ListBox LB_AUTHOR
+    {
+        HelpID = "extensions:ListBox:RID_DLG_MAPPING:LB_AUTHOR";
+        Pos = MAP_APPFONT ( 65 , 28 ) ;
+        Size = MAP_APPFONT ( 50 , 60 ) ;
+        DropDown = TRUE;
+    };
+    FixedText FT_TITLE
+    {
+        Pos = MAP_APPFONT ( 118 , 29 ) ;
+        Size = MAP_APPFONT ( 50 , 10 ) ;
+    };
+    ListBox LB_TITLE
+    {
+        HelpID = "extensions:ListBox:RID_DLG_MAPPING:LB_TITLE";
+        Pos = MAP_APPFONT ( 171 , 28 ) ;
+        Size = MAP_APPFONT ( 50 , 60 ) ;
+        DropDown = TRUE;
+    };
+    FixedText FT_PUBLISHER
+    {
+        Pos = MAP_APPFONT ( 12 , 44 ) ;
+        Size = MAP_APPFONT ( 50 , 10 ) ;
+    };
+    ListBox LB_PUBLISHER
+    {
+        HelpID = "extensions:ListBox:RID_DLG_MAPPING:LB_PUBLISHER";
+        Pos = MAP_APPFONT ( 65 , 43 ) ;
+        Size = MAP_APPFONT ( 50 , 60 ) ;
+        DropDown = TRUE;
+    };
+    FixedText FT_ADDRESS
+    {
+        Pos = MAP_APPFONT ( 118 , 44 ) ;
+        Size = MAP_APPFONT ( 50 , 10 ) ;
+    };
+    ListBox LB_ADDRESS
+    {
+        HelpID = "extensions:ListBox:RID_DLG_MAPPING:LB_ADDRESS";
+        Pos = MAP_APPFONT ( 171, 43 ) ;
+        Size = MAP_APPFONT ( 50 , 60 ) ;
+        DropDown = TRUE;
+    };
+    FixedText FT_ISBN
+    {
+        Pos = MAP_APPFONT ( 229 , 44 ) ;
+        Size = MAP_APPFONT ( 50 , 10 ) ;
+    };
+    ListBox LB_ISBN
+    {
+        HelpID = "extensions:ListBox:RID_DLG_MAPPING:LB_ISBN";
+        Pos = MAP_APPFONT ( 282 , 43 ) ;
+        Size = MAP_APPFONT ( 50 , 60 ) ;
+        DropDown = TRUE;
+    };
+    FixedText FT_CHAPTER
+    {
+        Pos = MAP_APPFONT ( 12 , 59 ) ;
+        Size = MAP_APPFONT ( 50 , 10 ) ;
+    };
+    ListBox LB_CHAPTER
+    {
+        HelpID = "extensions:ListBox:RID_DLG_MAPPING:LB_CHAPTER";
+        Pos = MAP_APPFONT ( 65 , 58 ) ;
+        Size = MAP_APPFONT ( 50 , 60 ) ;
+        DropDown = TRUE;
+    };
+    FixedText FT_PAGES
+    {
+        Pos = MAP_APPFONT ( 118 , 59 ) ;
+        Size = MAP_APPFONT ( 50 , 10 ) ;
+    };
+    ListBox LB_PAGES
+    {
+        HelpID = "extensions:ListBox:RID_DLG_MAPPING:LB_PAGES";
+        Pos = MAP_APPFONT ( 171, 58) ;
+        Size = MAP_APPFONT ( 50 , 60 ) ;
+        DropDown = TRUE;
+    };
+    FixedText FT_EDITOR
+    {
+        Pos = MAP_APPFONT ( 12 , 74 ) ;
+        Size = MAP_APPFONT ( 50 , 10 ) ;
+    };
+    ListBox LB_EDITOR
+    {
+        HelpID = "extensions:ListBox:RID_DLG_MAPPING:LB_EDITOR";
+        Pos = MAP_APPFONT ( 65 , 73 ) ;
+        Size = MAP_APPFONT ( 50 , 60 ) ;
+        DropDown = TRUE;
+    };
+    FixedText FT_EDITION
+    {
+        Pos = MAP_APPFONT ( 118 , 74 ) ;
+        Size = MAP_APPFONT ( 50 , 10 ) ;
+    };
+    ListBox LB_EDITION
+    {
+        HelpID = "extensions:ListBox:RID_DLG_MAPPING:LB_EDITION";
+        Pos = MAP_APPFONT ( 171 , 73 ) ;
+        Size = MAP_APPFONT ( 50 , 60 ) ;
+        DropDown = TRUE;
+    };
+    FixedText FT_BOOKTITLE
+    {
+        Pos = MAP_APPFONT ( 12, 89 ) ;
+        Size = MAP_APPFONT ( 50 , 10 ) ;
+    };
+    ListBox LB_BOOKTITLE
+    {
+        HelpID = "extensions:ListBox:RID_DLG_MAPPING:LB_BOOKTITLE";
+        Pos = MAP_APPFONT ( 65, 88 ) ;
+        Size = MAP_APPFONT ( 50 , 60 ) ;
+        DropDown = TRUE;
+    };
+    FixedText FT_VOLUME
+    {
+        Pos = MAP_APPFONT ( 118 , 89 ) ;
+        Size = MAP_APPFONT ( 50 , 10 ) ;
+    };
+    ListBox LB_VOLUME
+    {
+        HelpID = "extensions:ListBox:RID_DLG_MAPPING:LB_VOLUME";
+        Pos = MAP_APPFONT ( 171 , 88 ) ;
+        Size = MAP_APPFONT ( 50 , 60 ) ;
+        DropDown = TRUE;
+    };
+    FixedText FT_HOWPUBLISHED
+    {
+        Pos = MAP_APPFONT ( 229 , 89 ) ;
+        Size = MAP_APPFONT ( 50 , 10 ) ;
+    };
+    ListBox LB_HOWPUBLISHED
+    {
+        HelpID = "extensions:ListBox:RID_DLG_MAPPING:LB_HOWPUBLISHED";
+        Pos = MAP_APPFONT ( 282, 88 ) ;
+        Size = MAP_APPFONT ( 50 , 60 ) ;
+        DropDown = TRUE;
+    };
+    FixedText FT_ORGANIZATIONS
+    {
+        Pos = MAP_APPFONT ( 12 , 104 ) ;
+        Size = MAP_APPFONT ( 50 , 10 ) ;
+    };
+    ListBox LB_ORGANIZATIONS
+    {
+        HelpID = "extensions:ListBox:RID_DLG_MAPPING:LB_ORGANIZATIONS";
+        Pos = MAP_APPFONT ( 65 , 103 ) ;
+        Size = MAP_APPFONT ( 50 , 60 ) ;
+        DropDown = TRUE;
+    };
+    FixedText FT_INSTITUTION
+    {
+        Pos = MAP_APPFONT ( 118 , 104 ) ;
+        Size = MAP_APPFONT ( 50 , 10 ) ;
+    };
+    ListBox LB_INSTITUTION
+    {
+        HelpID = "extensions:ListBox:RID_DLG_MAPPING:LB_INSTITUTION";
+        Pos = MAP_APPFONT ( 171 , 103) ;
+        Size = MAP_APPFONT ( 50 , 60 ) ;
+        DropDown = TRUE;
+    };
+    FixedText FT_SCHOOL
+    {
+        Pos = MAP_APPFONT ( 229 , 104 ) ;
+        Size = MAP_APPFONT ( 50 , 10 ) ;
+    };
+    ListBox LB_SCHOOL
+    {
+        HelpID = "extensions:ListBox:RID_DLG_MAPPING:LB_SCHOOL";
+        Pos = MAP_APPFONT ( 282 , 103 ) ;
+        Size = MAP_APPFONT ( 50 , 60 ) ;
+        DropDown = TRUE;
+    };
+    FixedText FT_REPORTTYPE
+    {
+        Pos = MAP_APPFONT ( 12 , 119 ) ;
+        Size = MAP_APPFONT ( 50 , 10 ) ;
+    };
+    ListBox LB_REPORTTYPE
+    {
+        HelpID = "extensions:ListBox:RID_DLG_MAPPING:LB_REPORTTYPE";
+        Pos = MAP_APPFONT ( 65 , 118 ) ;
+        Size = MAP_APPFONT ( 50 , 60 ) ;
+        DropDown = TRUE;
+    };
+    FixedText FT_MONTH
+    {
+        Pos = MAP_APPFONT ( 118 , 119 ) ;
+        Size = MAP_APPFONT ( 50 , 10 ) ;
+    };
+    ListBox LB_MONTH
+    {
+        HelpID = "extensions:ListBox:RID_DLG_MAPPING:LB_MONTH";
+        Pos = MAP_APPFONT ( 171 , 118) ;
+        Size = MAP_APPFONT ( 50 , 60 ) ;
+        DropDown = TRUE;
+    };
+    FixedText FT_JOURNAL
+    {
+        Pos = MAP_APPFONT ( 12 , 134 ) ;
+        Size = MAP_APPFONT ( 50 , 10 ) ;
+    };
+    ListBox LB_JOURNAL
+    {
+        HelpID = "extensions:ListBox:RID_DLG_MAPPING:LB_JOURNAL";
+        Pos = MAP_APPFONT ( 65 , 133) ;
+        Size = MAP_APPFONT ( 50 , 60 ) ;
+        DropDown = TRUE;
+    };
+    FixedText FT_NUMBER
+    {
+        Pos = MAP_APPFONT ( 118 , 134 ) ;
+        Size = MAP_APPFONT ( 50 , 10 ) ;
+    };
+    ListBox LB_NUMBER
+    {
+        HelpID = "extensions:ListBox:RID_DLG_MAPPING:LB_NUMBER";
+        Pos = MAP_APPFONT ( 171 , 133 ) ;
+        Size = MAP_APPFONT ( 50 , 60 ) ;
+        DropDown = TRUE;
+    };
+    FixedText FT_SERIES
+    {
+        Pos = MAP_APPFONT ( 229 , 134 ) ;
+        Size = MAP_APPFONT ( 50 , 10 ) ;
+    };
+    ListBox LB_SERIES
+    {
+        HelpID = "extensions:ListBox:RID_DLG_MAPPING:LB_SERIES";
+        Pos = MAP_APPFONT ( 282 , 133 ) ;
+        Size = MAP_APPFONT ( 50 , 60 ) ;
+        DropDown = TRUE;
+    };
+    FixedText FT_ANNOTE
+    {
+        Pos = MAP_APPFONT ( 12 , 149 ) ;
+        Size = MAP_APPFONT ( 50 , 10 ) ;
+    };
+    ListBox LB_ANNOTE
+    {
+        HelpID = "extensions:ListBox:RID_DLG_MAPPING:LB_ANNOTE";
+        Pos = MAP_APPFONT ( 65 , 148 ) ;
+        Size = MAP_APPFONT ( 50 , 60 ) ;
+        DropDown = TRUE;
+    };
+    FixedText FT_NOTE
+    {
+        Pos = MAP_APPFONT ( 118 , 149 ) ;
+        Size = MAP_APPFONT ( 50 , 10 ) ;
+    };
+    ListBox LB_NOTE
+    {
+        HelpID = "extensions:ListBox:RID_DLG_MAPPING:LB_NOTE";
+        Pos = MAP_APPFONT ( 171 , 148 ) ;
+        Size = MAP_APPFONT ( 50 , 60 ) ;
+        DropDown = TRUE;
+    };
+    FixedText FT_URL
+    {
+        Pos = MAP_APPFONT ( 229 , 149 ) ;
+        Size = MAP_APPFONT ( 50 , 10 ) ;
+    };
+    ListBox LB_URL
+    {
+        HelpID = "extensions:ListBox:RID_DLG_MAPPING:LB_URL";
+        Pos = MAP_APPFONT ( 282, 148 ) ;
+        Size = MAP_APPFONT ( 50 , 60 ) ;
+        DropDown = TRUE;
+    };
+    FixedText FT_CUSTOM1
+    {
+        Pos = MAP_APPFONT ( 12 , 164 ) ;
+        Size = MAP_APPFONT ( 50 , 10 ) ;
+    };
+    ListBox LB_CUSTOM1
+    {
+        HelpID = "extensions:ListBox:RID_DLG_MAPPING:LB_CUSTOM1";
+        Pos = MAP_APPFONT ( 65 , 163 ) ;
+        Size = MAP_APPFONT ( 50 , 60 ) ;
+        DropDown = TRUE;
+    };
+    FixedText FT_CUSTOM2
+    {
+        Pos = MAP_APPFONT ( 118 , 164 ) ;
+        Size = MAP_APPFONT ( 50 , 10 ) ;
+    };
+    ListBox LB_CUSTOM2
+    {
+        HelpID = "extensions:ListBox:RID_DLG_MAPPING:LB_CUSTOM2";
+        Pos = MAP_APPFONT ( 171 , 163 ) ;
+        Size = MAP_APPFONT ( 50 , 60 ) ;
+        DropDown = TRUE;
+    };
+    FixedText FT_CUSTOM3
+    {
+        Pos = MAP_APPFONT ( 229, 164 ) ;
+        Size = MAP_APPFONT ( 50 , 10 ) ;
+    };
+    ListBox LB_CUSTOM3
+    {
+        HelpID = "extensions:ListBox:RID_DLG_MAPPING:LB_CUSTOM3";
+        Pos = MAP_APPFONT ( 282 , 163 ) ;
+        Size = MAP_APPFONT ( 50 , 60 ) ;
+        DropDown = TRUE;
+    };
+    FixedText FT_CUSTOM4
+    {
+        Pos = MAP_APPFONT ( 12 , 178 ) ;
+        Size = MAP_APPFONT ( 50 , 10 ) ;
+    };
+    ListBox LB_CUSTOM4
+    {
+        HelpID = "extensions:ListBox:RID_DLG_MAPPING:LB_CUSTOM4";
+        Pos = MAP_APPFONT ( 65 , 177 ) ;
+        Size = MAP_APPFONT ( 50 , 60 ) ;
+        DropDown = TRUE;
+    };
+    FixedText FT_CUSTOM5
+    {
+        Pos = MAP_APPFONT ( 118 , 178 ) ;
+        Size = MAP_APPFONT ( 50 , 10 ) ;
+    };
+    ListBox LB_CUSTOM5
+    {
+        HelpID = "extensions:ListBox:RID_DLG_MAPPING:LB_CUSTOM5";
+        Pos = MAP_APPFONT ( 171 , 177 ) ;
+        Size = MAP_APPFONT ( 50 , 60 ) ;
+        DropDown = TRUE;
+    };
+    String ST_NONE
+    {
+        Text [ en-US ] = "<none>";
+    };
+    Text [ en-US ] = "Column Layout for Table %1";
+};
+ModalDialog RID_DLG_DBCHANGE
+{
+    HelpID = HID_DLG_DBCHANGE;
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 291 , 131 ) ;
+    Moveable = TRUE ;
+    Text [ en-US ] = "Choose Data Source";
+    OKButton BT_OK
+    {
+        Pos = MAP_APPFONT ( 238 , 3 ) ;
+        Size = MAP_APPFONT ( 50 , 12 ) ;
+    };
+    CancelButton BT_CANCEL
+    {
+        Pos = MAP_APPFONT ( 238 , 18 ) ;
+        Size = MAP_APPFONT ( 50 , 12 ) ;
+    };
+    HelpButton BT_HELP
+    {
+        Pos = MAP_APPFONT ( 238 , 36 ) ;
+        Size = MAP_APPFONT ( 50 , 12 ) ;
+    };
+    FixedLine    GB_SELECTION
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 229 , 8 ) ;
+    };
+    String ST_ENTRY
+    {
+        Text [ en-US ] = "Entry";
+    };
+    Control LB_SELECTION
+    {
+        Pos = MAP_APPFONT ( 9 , 24 ) ;
+        Size = MAP_APPFONT ( 223 , 100 ) ;
+        Border = TRUE;
+        TabStop = TRUE;
+        HelpId = HID_SELECTION_TLB;
+    };
+    Window HB_SELECTION
+    {
+        Pos = MAP_APPFONT ( 9 , 12 ) ;
+        Size = MAP_APPFONT ( 223 , 12 ) ;
+        Border = TRUE;
+    };
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

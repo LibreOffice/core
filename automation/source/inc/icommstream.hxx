@@ -1,0 +1,67 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+/*************************************************************************
+ *
+ *    ATTENTION
+ *    This file is intended to work inside and outside the StarOffice environment.
+ *    Only adaption of file commtypes.hxx should be necessary. Else it is a bug!
+ *
+ ************************************************************************/
+
+#ifndef _AUTOMATION_ICOMMSTREAM_HXX_
+#define _AUTOMATION_ICOMMSTREAM_HXX_
+
+#include <automation/commtypes.hxx>
+
+class ICommStream
+{
+public:
+
+    ICommStream(){}
+    virtual ~ICommStream(){}
+
+    virtual ICommStream&    operator>>( comm_UINT16& rUShort )=0;
+    virtual ICommStream&    operator>>( comm_UINT32& rULong )=0;
+    virtual ICommStream&    operator>>( comm_BOOL& rChar )=0;
+
+    virtual ICommStream&    operator<<( comm_UINT16 nUShort )=0;
+    virtual ICommStream&    operator<<( comm_UINT32 nULong )=0;
+    virtual ICommStream&    operator<<( comm_BOOL nChar )=0;
+
+    virtual comm_UINT32         Read( void* pData, comm_UINT32 nSize )=0;
+    virtual comm_UINT32         Write( const void* pData, comm_UINT32 nSize )=0;
+
+    virtual comm_BOOL       IsEof() const=0;
+    virtual comm_UINT32     SeekRel( long nPos )=0;
+
+};
+
+#endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

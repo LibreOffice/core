@@ -1,0 +1,18 @@
+ac  accessibility	:    TRANSLATIONS:translations tools jurt offapi unoil vcl javaunohelper jvmaccess cppu sal toolkit svtools LIBXSLT:libxslt NULL
+ac	accessibility                                         	usr1	-	all	ac_mkout NULL
+ac	accessibility\inc                                      	nmake	-	all	ac_inc NULL
+ac	accessibility\bridge\org\openoffice\java\accessibility	nmake	-	w	ac_ooja ac_inc NULL
+ac	accessibility\bridge\org\openoffice\accessibility   	nmake	-	w	ac_ooa ac_ooja.w ac_inc NULL
+ac	accessibility\bridge\source\java                      	nmake   -	w	ac_ooan ac_ooa.w ac_inc NULL
+ac  accessibility\inc                                       get     -   all ac_inc NULL
+ac  accessibility\source\helper                             nmake   -   all ac_helper ac_inc NULL
+ac  accessibility\source\standard                           nmake   -   all ac_standard ac_helper ac_inc NULL
+ac  accessibility\source\extended                           nmake   -   all ac_extended ac_inc NULL
+ac  accessibility\util                                      nmake   -   all ac_util ac_helper ac_standard ac_extended NULL
+ac accessibility\workben\org\openoffice\accessibility\awb           nmake   -   all ac_awb_main ac_awb_misc ac_awb_canvas ac_awb_view ac_awb_tree NULL
+ac accessibility\workben\org\openoffice\accessibility\misc          nmake   -   all ac_awb_misc NULL
+ac accessibility\workben\org\openoffice\accessibility\awb\canvas    nmake   -   all ac_awb_canvas ac_awb_tree NULL
+ac accessibility\workben\org\openoffice\accessibility\awb\tree      nmake   -   all ac_awb_tree ac_awb_misc NULL
+ac accessibility\workben\org\openoffice\accessibility\awb\view      nmake   -   all ac_awb_view ac_awb_view_text NULL
+# dependency on ac_awb_misc to avoid concurrent creation of java_ver.mk
+ac accessibility\workben\org\openoffice\accessibility\awb\view\text nmake   -   all ac_awb_view_text ac_awb_misc NULL

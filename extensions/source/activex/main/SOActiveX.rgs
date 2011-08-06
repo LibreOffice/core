@@ -1,0 +1,33 @@
+HKCR
+{
+	so_activex.SOActiveX.1 = s 'SOActiveX Class'
+	{
+		CLSID = s '{67F2A879-82D5-4A6D-8CC5-FFB3C114B69D}'
+	}
+	so_activex.SOActiveX = s 'SOActiveX Class'
+	{
+		CLSID = s '{67F2A879-82D5-4A6D-8CC5-FFB3C114B69D}'
+		CurVer = s 'so_activex.SOActiveX.1'
+	}
+	NoRemove CLSID
+	{
+		ForceRemove {67F2A879-82D5-4A6D-8CC5-FFB3C114B69D} = s 'SOActiveX Class'
+		{
+			ProgID = s 'so_activex.SOActiveX.1'
+			VersionIndependentProgID = s 'so_activex.SOActiveX'
+			ForceRemove 'Programmable'
+			InprocServer32 = s '%MODULE%'
+			{
+				val ThreadingModel = s 'Apartment'
+			}
+			ForceRemove 'Control'
+			ForceRemove 'ToolboxBitmap32' = s '%MODULE%, 101'
+			'MiscStatus' = s '0'
+			{
+			    '1' = s '131473'
+			}
+			'TypeLib' = s '{61FA3F13-8061-4796-B055-3697ED28CB38}'
+			'Version' = s '1.0'
+		}
+	}
+}
