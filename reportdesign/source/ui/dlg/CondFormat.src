@@ -1,0 +1,385 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#include "CondFormat.hrc"
+#include "RptResId.hrc"
+#include "helpids.hrc"
+#ifndef _GLOBLMN_HRC
+#include <svx/globlmn.hrc>
+#endif
+#include "rptui_slotid.hrc"
+
+Control WIN_CONDITION
+{
+    Size = MAP_APPFONT ( CONDITION_WIDTH , CONDITION_HEIGHT ) ;
+    HelpId = HID_RPT_COND_DLG;
+    DialogControl = TRUE;
+    Hide = TRUE;
+
+    FixedLine FL_CONDITION_HEADER
+    {
+        Pos = MAP_APPFONT ( RELATED_CONTROLS, ROW_0_POS ) ;
+        Size = MAP_APPFONT ( CONDITION_WIDTH - 2 * RELATED_CONTROLS, ROW_0_HEIGTH ) ;
+    };
+
+    ListBox LB_COND_TYPE
+    {
+        Pos = MAP_APPFONT ( UNRELATED_CONTROLS, ROW_1_POS ) ;
+        Size = MAP_APPFONT( COND_TYPE_WIDTH, 60 );
+        Border = TRUE;
+        DropDown = TRUE;
+        TabStop = TRUE;
+        Sort = FALSE;
+        StringList [ en-US ] =
+        {
+            < "Field Value Is" ; Default ; > ;
+            < "Expression Is" ; Default ; > ;
+        };
+    };
+
+    ListBox LB_OP
+    {
+        Pos = MAP_APPFONT ( UNRELATED_CONTROLS + COND_TYPE_WIDTH + UNRELATED_CONTROLS, ROW_1_POS ) ;
+        Size = MAP_APPFONT( COND_OP_WIDTH, 60 );
+        Border = TRUE;
+        DropDown = TRUE;
+        TabStop = TRUE;
+        Sort = FALSE;
+        StringList [ en-US ] =
+        {
+            < "between" ; 0; > ;
+            < "not between" ; 1; > ;
+            < "equal to" ; 2; > ;
+            < "not equal to" ; 3; > ;
+            < "greater than" ; 4; > ;
+            < "less than" ; 5; > ;
+            < "greater than or equal to" ; 6; > ;
+            < "less than or equal to" ; 7; > ;
+        };
+    };
+
+    Edit ED_CONDITION_LHS
+    {
+        Pos = MAP_APPFONT ( 3*UNRELATED_CONTROLS + COND_TYPE_WIDTH + COND_OP_WIDTH, ROW_1_POS ) ;
+        Size = MAP_APPFONT( EDIT_WIDTH, EDIT_HEIGHT );
+        Border = TRUE;
+        TabStop = TRUE;
+    };
+
+    FixedText FT_AND
+    {
+        Pos = MAP_APPFONT ( 4*UNRELATED_CONTROLS + COND_TYPE_WIDTH + COND_OP_WIDTH + EDIT_WIDTH,
+            ROW_1_POS + ( FIXEDTEXT_HEIGHT - EDIT_HEIGHT ) / 2 );
+        Size = MAP_APPFONT( OPERATOR_SEP_WIDTH , FIXEDTEXT_HEIGHT );
+        Text [ en-US ] = "and";
+    };
+
+    Edit ED_CONDITION_RHS
+    {
+        Pos = MAP_APPFONT ( 5*UNRELATED_CONTROLS + COND_TYPE_WIDTH + COND_OP_WIDTH + EDIT_WIDTH + OPERATOR_SEP_WIDTH,
+            ROW_1_POS );
+        Size = MAP_APPFONT( EDIT_WIDTH, EDIT_HEIGHT );
+        Border = TRUE;
+        TabStop = TRUE;
+    };
+
+    ImageButton BTN_MOVE_UP
+    {
+        Pos = MAP_APPFONT ( CONDITION_WIDTH - UNRELATED_CONTROLS - IMAGE_BUTTON_WIDTH, ROW_1_POS ) ;
+        Size = MAP_APPFONT ( IMAGE_BUTTON_WIDTH, IMAGE_BUTTON_HEIGHT ) ;
+        TabStop             = TRUE ;
+        Symbol = IMAGEBUTTON_ARROW_UP ;
+    };
+
+    ImageButton BTN_MOVE_DOWN
+    {
+        Pos = MAP_APPFONT ( CONDITION_WIDTH - UNRELATED_CONTROLS - IMAGE_BUTTON_WIDTH, ROW_1_POS + IMAGE_BUTTON_HEIGHT + RELATED_CONTROLS ) ;
+        Size = MAP_APPFONT ( IMAGE_BUTTON_WIDTH, IMAGE_BUTTON_HEIGHT ) ;
+        TabStop             = TRUE ;
+        Symbol = IMAGEBUTTON_ARROW_DOWN ;
+    };
+
+    ToolBox TB_FORMAT
+    {
+        Pos = MAP_APPFONT ( UNRELATED_CONTROLS + RELATED_CONTROLS, ROW_2_POS ) ;
+        ButtonType = BUTTON_SYMBOL;
+        Align = BOXALIGN_TOP;
+        HelpId = HID_RPT_CONDFORMAT_TB;
+        Customize = FALSE;
+        ItemList =
+        {
+            ToolBoxItem
+            {
+                ITEM_FORMAT_ATTR_CHAR_WEIGHT
+                Checkable = TRUE;
+            };
+            ToolBoxItem
+            {
+                ITEM_FORMAT_ATTR_CHAR_POSTURE
+                Checkable = TRUE;
+            };
+            ToolBoxItem
+            {
+                ITEM_FORMAT_ATTR_CHAR_UNDERLINE
+                Checkable = TRUE;
+            };
+            ToolBoxItem
+            {
+                Type = TOOLBOXITEM_SEPARATOR;
+            };
+            ToolBoxItem
+            {
+                ITEM_TOOLBAR_BACKGROUND_COLOR
+                DropDown = TRUE;
+            };
+            ToolBoxItem
+            {
+                ITEM_TOOLBAR_ATTR_CHAR_COLOR
+                Identifier = SID_ATTR_CHAR_COLOR2;
+                Command = ".uno:FontColor";
+            };
+            ToolBoxItem
+            {
+                ITEM_FORMAT_CHAR_DLG
+            };
+        };
+    };
+
+    Window CRTL_FORMAT_PREVIEW
+    {
+        Pos = MAP_APPFONT ( 2*UNRELATED_CONTROLS, ROW_2_POS ) ;
+        Size = MAP_APPFONT ( CONDITION_WIDTH - UNRELATED_CONTROLS, ROW_2_HEIGHT ) ;
+        Border = TRUE ;
+        HelpId = HID_RPT_CRTL_FORMAT_PREVIEW;
+        Text [ en-US ] = "Example";
+    };
+
+    PushButton BTN_ADD_CONDITION
+    {
+        Pos = MAP_APPFONT( CONDITION_WIDTH - 2*UNRELATED_CONTROLS - 2*IMAGE_BUTTON_WIDTH - RELATED_CONTROLS, ROW_3_POS );
+        Size = MAP_APPFONT( IMAGE_BUTTON_WIDTH, IMAGE_BUTTON_HEIGHT );
+        Text = "+";
+    };
+
+    PushButton BTN_REMOVE_CONDITION
+    {
+        Pos = MAP_APPFONT( CONDITION_WIDTH - 2*UNRELATED_CONTROLS - 2*IMAGE_BUTTON_WIDTH - RELATED_CONTROLS, ROW_3_POS );
+        Size = MAP_APPFONT( IMAGE_BUTTON_WIDTH, IMAGE_BUTTON_HEIGHT );
+        Text = "-";
+    };
+};
+
+ModalDialog RID_CONDFORMAT
+{
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( COND_DLG_WIDTH, COND_DLG_HEIGHT ) ;
+    Text [ en-US ] = "Conditional Formatting" ;
+    HelpId = HID_RPT_CONDFORMAT_DLG;
+    Moveable = TRUE ;
+    Closeable = TRUE ;
+
+    Window WND_COND_PLAYGROUND
+    {
+        Pos = MAP_APPFONT ( 0, 0 ) ;
+        Size = MAP_APPFONT ( CONDITION_WIDTH, CONDITION_HEIGHT ) ;
+        DialogControl = TRUE;
+        Hide = FALSE;
+    };
+
+    FixedLine FL_SEPARATOR1
+    {
+        Pos = MAP_APPFONT ( RELATED_CONTROLS, CONDITION_HEIGHT + RELATED_CONTROLS ) ;
+        Size = MAP_APPFONT ( CONDITION_WIDTH - 2*RELATED_CONTROLS , 1 ) ;
+    };
+
+    OKButton PB_OK
+    {
+        Pos = MAP_APPFONT ( CONDITION_WIDTH - 3*BUTTON_WIDTH - 2*UNRELATED_CONTROLS - RELATED_CONTROLS, CONDITION_HEIGHT + 2*RELATED_CONTROLS + 1) ;
+        Size = MAP_APPFONT ( BUTTON_WIDTH , BUTTON_HEIGHT ) ;
+        TabStop = TRUE ;
+        DefButton = TRUE ;
+    };
+
+    CancelButton PB_CANCEL
+    {
+        Pos = MAP_APPFONT ( CONDITION_WIDTH - 2*BUTTON_WIDTH - 2*UNRELATED_CONTROLS , CONDITION_HEIGHT + 2*RELATED_CONTROLS + 1) ;
+        Size = MAP_APPFONT ( BUTTON_WIDTH , BUTTON_HEIGHT ) ;
+        TabStop = TRUE ;
+    };
+
+    HelpButton PB_HELP
+    {
+        TabStop = TRUE ;
+        Pos = MAP_APPFONT ( CONDITION_WIDTH - BUTTON_WIDTH - UNRELATED_CONTROLS, CONDITION_HEIGHT + 2*RELATED_CONTROLS + 1) ;
+        Size = MAP_APPFONT ( BUTTON_WIDTH , BUTTON_HEIGHT ) ;
+        Text [ en-US ] = "~Help";
+    };
+
+    ScrollBar SB_ALL_CONDITIONS
+    {
+        Pos = MAP_APPFONT ( CONDITION_WIDTH, RELATED_CONTROLS ) ;
+        Size = MAP_APPFONT ( SCROLLBAR_WIDTH, CONDITION_HEIGHT + RELATED_CONTROLS ) ;
+    };
+};
+
+String STR_NUMBERED_CONDITION
+{
+    Text [ en-US ] = "Condition $number$";
+};
+
+String STR_COLOR_WHITE
+{
+    Text [ en-US ] = "White" ;
+};
+String STR_CHARCOLOR
+{
+    Text [ en-US ] = "Font color" ;
+};
+String STR_CHARBACKGROUND
+{
+    Text [ en-US ] = "Background";
+};
+String STR_TRANSPARENT
+{
+    Text [ en-US ] = "No Fill" ;
+};
+
+#define MASKCOLOR MaskColor = Color { Red = 0xFFFF; Green = 0x0000; Blue = 0xFFFF; }
+
+//-------------------------------------------------------------------------
+ImageList IMG_CONDFORMAT_DLG_SC
+{
+    MASKCOLOR;
+    FileList =
+    {
+        < "cmd/sc_bold.png" ;              SID_ATTR_CHAR_WEIGHT ; > ;
+        < "cmd/sc_italic.png" ;            SID_ATTR_CHAR_POSTURE ; > ;
+        < "cmd/sc_underline.png" ;         SID_ATTR_CHAR_UNDERLINE ; > ;
+        < "cmd/sc_backgroundcolor.png" ;   SID_BACKGROUND_COLOR ; > ;
+        < "cmd/sc_fontcolor.png" ;         SID_ATTR_CHAR_COLOR2 ; > ;
+        < "cmd/sc_fontdialog.png" ;        SID_CHAR_DLG ; > ;
+    };
+};
+
+ImageList IMG_CONDFORMAT_DLG_LC
+{
+    MASKCOLOR;
+    FileList =
+    {
+        < "cmd/lc_bold.png" ;              SID_ATTR_CHAR_WEIGHT ; > ;
+        < "cmd/lc_italic.png" ;            SID_ATTR_CHAR_POSTURE ; > ;
+        < "cmd/lc_underline.png" ;         SID_ATTR_CHAR_UNDERLINE ; > ;
+        < "cmd/lc_backgroundcolor.png" ;   SID_BACKGROUND_COLOR ; > ;
+        < "cmd/lc_fontcolor.png" ;         SID_ATTR_CHAR_COLOR2 ; > ;
+        < "cmd/lc_fontdialog.png" ;        SID_CHAR_DLG ; > ;
+    };
+};
+
+ImageList 31000
+{
+    MASKCOLOR;
+    prefix = "sc";
+    IdList = {05500;};
+    IdCount = 1;
+
+};
+
+ToolBox RID_TB_SORTING
+{
+    Pos = MAP_APPFONT ( 0,0 ) ;
+    ButtonType = BUTTON_SYMBOL;
+    Align = BOXALIGN_TOP;
+    Customize = FALSE;
+    ItemList =
+    {
+        ToolBoxItem
+        {
+            Identifier = SID_FM_SORTUP;
+            Text [ en-US ] = "Sort Ascending" ;
+            Checkable = TRUE;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_FM_SORTDOWN;
+            Text [ en-US ] = "Sort Descending" ;
+            Checkable = TRUE;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_FM_REMOVE_FILTER_SORT;
+            Text [ en-US ] = "Remove sorting" ;
+        };
+        ToolBoxItem
+        {
+            Type = TOOLBOXITEM_SEPARATOR;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_ADD_CONTROL_PAIR;
+            Text [ en-US ] = "Insert" ;
+        };
+    };
+};
+
+ImageList IMG_ADDFIELD_DLG_SC
+{
+    MASKCOLOR;
+    FileList =
+    {
+        < "cmd/sc_sortup.png" ;            SID_FM_SORTUP ; > ;
+        < "cmd/sc_sortdown.png" ;          SID_FM_SORTDOWN ; > ;
+        < "cmd/sc_removefiltersort.png" ;  SID_FM_REMOVE_FILTER_SORT ; > ;
+    };
+};
+
+ImageList IMG_ADDFIELD_DLG_LC
+{
+    MASKCOLOR;
+    FileList =
+    {
+        < "cmd/lc_sortup.png" ;            SID_FM_SORTUP ; > ;
+        < "cmd/lc_sortdown.png" ;          SID_FM_SORTDOWN ; > ;
+        < "cmd/lc_removefiltersort.png" ;  SID_FM_REMOVE_FILTER_SORT ; > ;
+    };
+};
+
+FixedLine ADDFIELD_FL_HELP_SEPARATOR
+{
+    SVLook = TRUE ;
+    Pos = MAP_APPFONT ( RELATED_CONTROLS , RELATED_CONTROLS ) ;
+    Size = MAP_APPFONT ( RELATED_CONTROLS , RELATED_CONTROLS ) ;
+    Text [ en-US ] = "Help";
+};
+
+FixedText ADDFIELD_HELP_FIELD
+{
+    SVLook = TRUE ;
+    Pos = MAP_APPFONT ( RELATED_CONTROLS , RELATED_CONTROLS ) ;
+    Size = MAP_APPFONT ( RELATED_CONTROLS , RELATED_CONTROLS ) ;
+    WordBreak = TRUE;
+    Text [ en-US ] = "Highlight the fields to insert into the selected section of the template, then click Insert or press Enter.";
+};

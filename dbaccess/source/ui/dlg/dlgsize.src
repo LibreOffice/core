@@ -1,0 +1,151 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef DBAUI_DLGSIZE_HRC
+#include "dlgsize.hrc"
+#endif
+#ifndef _DBA_DBACCESS_HELPID_HRC_
+#include "dbaccess_helpid.hrc"
+#endif
+#ifndef _DBU_DLG_HRC_
+#include "dbu_dlg.hrc"
+#endif
+
+ModalDialog DLG_ROWHEIGHT
+{
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    HelpId = HID_DLG_ROWHEIGHT ;
+    Size = MAP_APPFONT ( 159 , 59 ) ;
+    Moveable = TRUE ;
+    Closeable = TRUE ;
+    FixedText FT_VALUE
+    {
+        Pos = MAP_APPFONT ( 6 , 8 ) ;
+        Size = MAP_APPFONT ( 23 , 10 ) ;
+        Text [ en-US ] = "~Height" ;
+    };
+    MetricField MF_VALUE
+    {
+        HelpID = "dbaccess:MetricField:DLG_ROWHEIGHT:MF_VALUE";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 36 , 6 ) ;
+        Size = MAP_APPFONT ( 63 , 12 ) ;
+        TabStop = TRUE ;
+        Spin = TRUE ;
+        Minimum = 10 ;
+        Maximum = 1600 ;
+        DecimalDigits = 2 ;
+        Unit = FUNIT_CM ;
+        Repeat = TRUE ;
+    };
+    CheckBox CB_STANDARD
+    {
+        HelpID = "dbaccess:CheckBox:DLG_ROWHEIGHT:CB_STANDARD";
+        Pos = MAP_APPFONT ( 36 , 25 ) ;
+        Size = MAP_APPFONT ( 62 , 12 ) ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "~Automatic";
+    };
+    OKButton PB_OK
+    {
+        Pos = MAP_APPFONT ( 105 , 6 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        DefButton = TRUE ;
+    };
+    CancelButton PB_CANCEL
+    {
+        Pos = MAP_APPFONT ( 105 , 23 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    HelpButton PB_HELP
+    {
+        Pos = MAP_APPFONT ( 105 , 42 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    Text [ en-US ] = "Row Height" ;
+};
+ModalDialog DLG_COLWIDTH
+{
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    HelpId = HID_DLG_COLWIDTH ;
+    Size = MAP_APPFONT ( 159 , 59 ) ;
+    Moveable = TRUE ;
+    Closeable = TRUE ;
+    FixedText FT_VALUE
+    {
+        Pos = MAP_APPFONT ( 6 , 8 ) ;
+        Size = MAP_APPFONT ( 23 , 10 ) ;
+        Text [ en-US ] = "~Width" ;
+    };
+    MetricField MF_VALUE
+    {
+        HelpID = "dbaccess:MetricField:DLG_COLWIDTH:MF_VALUE";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 36 , 6 ) ;
+        Size = MAP_APPFONT ( 63 , 12 ) ;
+        TabStop = TRUE ;
+        Spin = TRUE ;
+        Minimum = 10 ;
+        Maximum = 20000 ;
+        DecimalDigits = 2 ;
+        Unit = FUNIT_CM ;
+        Repeat = TRUE ;
+    };
+    CheckBox CB_STANDARD
+    {
+        HelpID = "dbaccess:CheckBox:DLG_COLWIDTH:CB_STANDARD";
+        Pos = MAP_APPFONT ( 36 , 25 ) ;
+        Size = MAP_APPFONT ( 62 , 12 ) ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "~Automatic";
+    };
+    OKButton PB_OK
+    {
+        Pos = MAP_APPFONT ( 105 , 6 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        DefButton = TRUE ;
+    };
+    CancelButton PB_CANCEL
+    {
+        Pos = MAP_APPFONT ( 105 , 23 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    HelpButton PB_HELP
+    {
+        Pos = MAP_APPFONT ( 105 , 42 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    Text [ en-US ] = "Column Width" ;
+};

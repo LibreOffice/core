@@ -1,0 +1,418 @@
+﻿/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef _DBU_QRY_HRC_
+#include "dbu_qry.hrc"
+#endif
+#ifndef DBAUI_QUERY_HRC
+#include "Query.hrc"
+#endif
+#ifndef _GLOBLMN_HRC
+#include <svx/globlmn.hrc>
+#endif
+#ifndef _CNTIDS_HRC
+#include <sfx2/cntids.hrc>
+#endif
+#ifndef DBACCESS_UI_BROWSER_ID_HXX
+#include "browserids.hxx"
+#endif
+#ifndef _DBA_DBACCESS_HELPID_HRC_
+#include "dbaccess_helpid.hrc"
+#endif
+#ifndef DBAUI_TOOLBOX_HXX
+#include "toolbox.hrc"
+#endif
+
+#define MN_EDIT 20
+#define MN_VIEW 21
+#define MN_EXTRA 22
+#define MN_INSERT 23
+#define MN_WIN 30
+#define MN_HELP 31
+
+Menu RID_MENU_JOINVIEW_CONNECTION
+{
+    ItemList =
+    {
+        MenuItem
+        {
+            ITEM_EDIT_DELETE
+        };
+        MenuItem
+        {
+            MID_DBUI_QUERY_EDIT_JOINCONNECTION
+        };
+    };
+};
+
+Menu RID_MENU_JOINVIEW_TABLE
+{
+    ItemList =
+    {
+        MenuItem
+        {
+            ITEM_EDIT_DELETE
+        };
+     };
+};
+
+Menu RID_QUERYCOLPOPUPMENU
+{
+    ItemList =
+    {
+        MenuItem
+        {
+            MID_COLUMN_WIDTH
+        };
+        MenuItem
+        {
+            Separator = TRUE ;
+        };
+        MenuItem
+        {
+            ITEM_EDIT_DELETE
+        };
+    };
+};
+
+ImageList IMG_JOINS
+{
+    Prefix = "jo";
+    MaskColor   = Color { Red   = 0xffff; Green = 0x0000; Blue  = 0xffff; };
+    IdList = {
+        IMG_PRIMARY_KEY; IMG_FOREIGN_KEY;
+    };
+    IdCount = { 2; };
+};
+
+String STR_QUERY_UNDO_TABWINSHOW
+{
+    Text [ en-US ] = "Add Table Window" ;
+};
+
+String STR_QUERY_UNDO_MOVETABWIN
+{
+    Text [ en-US ] = "Move table window" ;
+};
+String STR_QUERY_UNDO_INSERTCONNECTION
+{
+    Text [ en-US ] = "Insert Join" ;
+};
+
+String STR_QUERY_UNDO_REMOVECONNECTION
+{
+    Text [ en-US ] = "Delete Join" ;
+};
+
+String STR_QUERY_UNDO_SIZETABWIN
+{
+    Text [ en-US ] = "Resize table window" ;
+};
+String STR_QUERY_UNDO_TABFIELDDELETE
+{
+    Text [ en-US ] = "Delete Column" ;
+};
+
+String STR_QUERY_UNDO_TABFIELDMOVED
+{
+    Text [ en-US ] = "Move column";
+};
+
+String STR_QUERY_UNDO_TABFIELDCREATE
+{
+    Text [ en-US ] = "Add Column" ;
+};
+
+String RID_STR_TABLE_DOESNT_EXIST
+{
+    Text [ en-US ] = "Invalid expression, table '$name$' does not exist.";
+};
+
+String RID_STR_FIELD_DOESNT_EXIST
+{
+    Text [ en-US ] = "Invalid expression, field name '$name$' does not exist.";
+};
+
+String RID_STR_TOMUCHTABLES
+{
+    Text [ en-US ] = "The query covers #num# tables. The selected database type, however, can only process a maximum of #maxnum# table(s) per statement.";
+};
+
+String STR_QUERY_UNDO_TABWINDELETE
+{
+    Text [ en-US ] = "Delete Table Window" ;
+};
+
+String STR_QUERY_UNDO_MODIFY_CELL
+{
+    Text [ en-US ] = "Edit Column Description";
+};
+
+String STR_QUERY_UNDO_SIZE_COLUMN
+{
+    Text [ en-US ] = "Adjust column width";
+};
+
+String STR_QUERY_SORTTEXT
+{
+    Text [ en-US ] = "(not sorted);ascending;descending" ;
+};
+
+String STR_QUERY_FUNCTIONS
+{
+    Text [ en-US ] = "(no function);Group";
+};
+
+String STR_QUERY_NOTABLE
+{
+    Text [ en-US ] = "(no table)";
+};
+
+String STR_QRY_ORDERBY_UNRELATED
+{
+    Text [ en-US ] = "The database only supports sorting for visible fields.";
+};
+
+Menu RID_QUERYFUNCTION_POPUPMENU
+{
+    ItemList =
+    {
+        MenuItem
+        {
+            Identifier = ID_QUERY_FUNCTION ;
+            HelpID = HID_QUERY_FUNCTION;
+            Text [ en-US ] = "Functions";
+        };
+        MenuItem
+        {
+            Separator = TRUE ;
+        };
+        MenuItem
+        {
+            Identifier = ID_QUERY_TABLENAME ;
+            HelpID = HID_QUERY_TABLENAME ;
+            Text [ en-US ] = "Table Name";
+        };
+        MenuItem
+        {
+            Identifier = ID_QUERY_ALIASNAME ;
+            HelpID = HID_QUERY_ALIASNAME ;
+            Text [ en-US ] = "Alias";
+        };
+        MenuItem
+        {
+            Separator = TRUE;
+        };
+        MenuItem
+        {
+            Identifier = ID_QUERY_DISTINCT ;
+            HelpID = HID_QUERY_DISTINCT ;
+            Text [ en-US ] = "Distinct Values";
+        };
+    };
+};
+
+String STR_QUERY_HANDLETEXT
+{
+    Text [ en-US ] = "Field;Alias;Table;Sort;Visible;Function;Criterion;Or;Or";
+};
+
+String STR_QRY_TOO_MANY_COLUMNS
+{
+    Text [ en-US ] = "There are too many columns.";
+};
+
+ErrorBox ERR_QRY_CRITERIA_ON_ASTERISK
+{
+    Message [ en-US ] = "A condition cannot be applied to field [*]" ;
+};
+
+String STR_QRY_TOO_LONG_STATEMENT
+{
+    Text [ en-US ] = "The SQL statement created is too long.";
+};
+
+String STR_QRY_TOOCOMPLEX
+{
+    Text [ en-US ] = "Query is too complex" ;
+};
+
+String STR_QRY_NOSELECT
+{
+    Text [ en-US ] = "Nothing has been selected." ;
+};
+
+String STR_QRY_TOOMANYCOND
+{
+    Text [ en-US ] = "Too many search criteria" ;
+};
+
+String STR_QRY_SYNTAX
+{
+    Text [ en-US ] = "SQL syntax error" ;
+};
+
+ErrorBox ERR_QRY_ORDERBY_ON_ASTERISK
+{
+    Message [ en-US ] = "[*] cannot be used as a sort criterion.";
+};
+
+
+
+String STR_QRY_TOO_MANY_TABLES
+{
+    Text [ en-US ] = "There are too many tables.";
+};
+
+String STR_QRY_NATIVE
+{
+    Text [ en-US ] = "The statement will not be applied when querying in the SQL dialect of the database." ;
+};
+
+ErrorBox ERR_QRY_AMB_FIELD
+{
+    Message [ en-US ] = "Field name not found or not unique" ;
+};
+
+String STR_QRY_ILLEGAL_JOIN
+{
+    Text [ en-US ] = "Join could not be processed" ;
+};
+
+String STR_SVT_SQL_SYNTAX_ERROR
+{
+    Text [ en-US ] = "Syntax error in SQL statement" ;
+};
+
+String STR_QUERYDESIGN_NO_VIEW_SUPPORT
+{
+    Text [ en-US ] = "This database does not support table views.";
+};
+
+String STR_NO_ALTER_VIEW_SUPPORT
+{
+    Text [ en-US ] = "This database does not support altering of existing table views.";
+};
+
+String STR_QUERYDESIGN_NO_VIEW_ASK
+{
+    Text [ en-US ] = "Do you want to create a query instead?";
+};
+
+ErrorBox ERR_QRY_NOSTATEMENT
+{
+    Message [ en-US ] = "No query could be created.";
+};
+
+ErrorBox ERR_QRY_NOCRITERIA
+{
+    Message [ en-US ] = "No query could be created because no fields were selected.";
+};
+
+/*
+  The menubar resource has become obsolete - you can now find the menubar definition at: <project>/uiconfig/dbquery/menubar/menubar.xml
+ */
+
+String STR_DATASOURCE_DELETED
+{
+    Text [ en-US ] = "The corresponding data source has been deleted. Therefore, data relevant to that data source cannot be saved.";
+};
+
+String STR_QRY_COLUMN_NOT_FOUND
+{
+    Text [ en-US ] = "The column '$name$' is unknown.";
+};
+
+String STR_QRY_JOIN_COLUMN_COMPARE
+{
+    Text [ en-US ] = "Columns can only be compared using '='.";
+};
+
+String STR_QRY_LIKE_LEFT_NO_COLUMN
+{
+    Text [ en-US ] = "You must use a column name before 'LIKE'.";
+};
+
+String STR_QRY_CHECK_CASESENSITIVE
+{
+    Text [ en-US ] = "The column could not be found. Please note that the database is case-sensitive.";
+};
+
+String STR_QUERYDESIGN
+{
+    Text [ en-US ] = " - %PRODUCTNAME Base: Query Design";
+};
+
+String STR_VIEWDESIGN
+{
+    Text [ en-US ] = " - %PRODUCTNAME Base: View Design";
+};
+
+String STR_QUERY_SAVEMODIFIED
+{
+    Text [ en-US ] = "$object$ has been changed.\nDo you want to save the changes?" ;
+    Text [ x-comment ] = "For $object$, one of the values of the RSC_QUERY_OBJECT_TYPE resource will be inserted.";
+};
+
+String STR_ERROR_PARSING_STATEMENT
+{
+    Text [ en-US ] = "$object$ is based on an SQL command which could not be parsed.";
+    Text [ x-comment ] = "For $object$, one of the values of the RSC_QUERY_OBJECT_TYPE resource "
+        "(except \"SQL command\", which doesn't make sense here) will be inserted.";
+};
+
+String STR_INFO_OPENING_IN_SQL_VIEW
+{
+    Text [ en-US ] = "$object$ will be opened in SQL view.";
+    Text [ x-comment ] = "For $object$, one of the values of the RSC_QUERY_OBJECT_TYPE resource "
+        "(except \"SQL command\", which doesn't make sense here) will be inserted.";
+};
+
+Resource RSC_QUERY_OBJECT_TYPE
+{
+    String 1
+    {
+        Text [ en-US ] = "The table view";
+    };
+    String 2
+    {
+        Text [ en-US ] = "The query";
+    };
+    String 3
+    {
+        Text [ en-US ] = "The SQL statement";
+    };
+};
+
+String STR_STATEMENT_WITHOUT_RESULT_SET
+{
+    Text [ en-US ] = "The query does not create a result set, and thus cannot be part of another query.";
+};
+
+String STR_NO_DATASOURCE_OR_CONNECTION
+{
+    Text [ en-US ] = "Both the ActiveConnection and the DataSourceName parameter are missing or wrong - cannot initialize the query designer.";
+};

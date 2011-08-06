@@ -1,0 +1,31 @@
+(still unfinished)
+
+OApplicationView
+|
++-OAppBorderWindow
+  |
+  +-OTitleWindow "Database"
+  | |
+  | +-OApplicationSwapWindow
+  |   |
+  |   +-OApplicationIconControl
+  |
+  +-OApplicationDetailView
+    |
+    +-OTitleWindow "Tasks"
+    | |
+    | +-OTasksWindow
+    |   |
+    |	+-OCreationList
+    |
+    +-OTitleWindow "Forms" "Tables" "Queries" "Reports"
+	   |
+	   +-OAppDetailPageHelper
+	      |
+	      +-SvTreeListBox*
+	      |
+	      +-FixedLine
+	      |
+	      +-Window (Border)
+	         |
+	         +-OPreviewWindow

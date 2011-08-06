@@ -1,0 +1,197 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef _DBAUI_DBF_INDEXES_HRC_
+#include "dbfindex.hrc"
+#endif
+#ifndef _DBU_DLG_HRC_
+#include "dbu_dlg.hrc"
+#endif
+
+#define WIN_X   264
+#define WIN_Y   149
+
+ModalDialog DLG_DBASE_INDEXES
+{
+    HelpID = "dbaccess:ModalDialog:DLG_DBASE_INDEXES";
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( WIN_X , WIN_Y ) ;
+    Text [ en-US ] = "Indexes" ;
+    Moveable = TRUE ;
+    Closeable = TRUE ;
+    OKButton PB_OK
+    {
+        Pos = MAP_APPFONT ( 208 , 5 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    CancelButton PB_CANCEL
+    {
+        Pos = MAP_APPFONT ( 208 , 23 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    HelpButton PB_HELP
+    {
+        Pos = MAP_APPFONT ( 208 , 43 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    FixedText FT_TABLES
+    {
+        Pos = MAP_APPFONT ( 8 , 7 ) ;
+        Size = MAP_APPFONT ( 50 , 8 ) ;
+        Text [ en-US ] = "~Table";
+    };
+    ComboBox CB_TABLES
+    {
+        HelpID = "dbaccess:ComboBox:DLG_DBASE_INDEXES:CB_TABLES";
+        Border = TRUE ;
+        SVLook = TRUE ;
+        Pos = MAP_APPFONT ( 62 , 5 ) ;
+        Size = MAP_APPFONT ( 134 , 12 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+    };
+    FixedLine FL_INDEXES
+    {
+        Pos = MAP_APPFONT ( 6 , 22 ) ;
+        Size = MAP_APPFONT ( 196 , 8 ) ;
+        Text [ en-US ] = "Assignment" ;
+    };
+    FixedText FT_TABLEINDEXES
+    {
+        Pos = MAP_APPFONT ( 12 , 33 ) ;
+        Size = MAP_APPFONT ( 83 , 8 ) ;
+        Text [ en-US ] = "T~able indexes";
+    };
+    ListBox LB_TABLEINDEXES
+    {
+        HelpID = "dbaccess:ListBox:DLG_DBASE_INDEXES:LB_TABLEINDEXES";
+        Border = TRUE ;
+        SVLook = TRUE ;
+        Pos = MAP_APPFONT ( 12 , 44 ) ;
+        Size = MAP_APPFONT ( 76 , 98 ) ;
+        TabStop = TRUE ;
+    };
+    FixedText FT_ALLINDEXES
+    {
+        Pos = MAP_APPFONT ( 120 , 33 ) ;
+        Size = MAP_APPFONT ( 73 , 8 ) ;
+        Text [ en-US ] = "~Free indexes";
+    };
+    ListBox LB_FREEINDEXES
+    {
+        HelpID = "dbaccess:ListBox:DLG_DBASE_INDEXES:LB_FREEINDEXES";
+        Border = TRUE ;
+        SVLook = TRUE ;
+        Pos = MAP_APPFONT ( 120 , 44 ) ;
+        Size = MAP_APPFONT ( 76 , 98 ) ;
+        TabStop = TRUE ;
+    };
+    ImageButton IB_ADD
+    {
+        HelpID = "dbaccess:ImageButton:DLG_DBASE_INDEXES:IB_ADD";
+        Pos = MAP_APPFONT ( 94 , 60 ) ;
+        Size = MAP_APPFONT ( 20 , 14 ) ;
+        TabStop             = TRUE ;
+        ButtonImage = Image
+        {
+            ImageBitmap = Bitmap
+            {
+                File = "one_left.png" ;
+            };
+            MaskColor = Color
+            {
+                Red = 0xFFFF ;
+                Green = 0x0000 ;
+                Blue = 0xFFFF ;
+            };
+        };
+    };
+    ImageButton IB_ADDALL
+    {
+        HelpID = "dbaccess:ImageButton:DLG_DBASE_INDEXES:IB_ADDALL";
+        Pos = MAP_APPFONT ( 94 , 77 ) ;
+        Size = MAP_APPFONT ( 20 , 14 ) ;
+        TabStop             = TRUE ;
+        ButtonImage = Image
+        {
+            ImageBitmap = Bitmap
+            {
+                File = "all_left.png" ;
+            };
+            MaskColor = Color
+            {
+                Red = 0xFFFF ;
+                Green = 0x0000 ;
+                Blue = 0xFFFF ;
+            };
+        };
+    };
+    ImageButton IB_REMOVE
+    {
+        HelpID = "dbaccess:ImageButton:DLG_DBASE_INDEXES:IB_REMOVE";
+        Pos = MAP_APPFONT ( 94 , 98 ) ;
+        Size = MAP_APPFONT ( 20 , 14 ) ;
+        TabStop             = TRUE ;
+        ButtonImage = Image
+        {
+            ImageBitmap = Bitmap
+            {
+                File = "one_right.png" ;
+            };
+            MaskColor = Color
+            {
+                Red = 0xFFFF ;
+                Green = 0x0000 ;
+                Blue = 0xFFFF ;
+            };
+        };
+    };
+    ImageButton IB_REMOVEALL
+    {
+        HelpID = "dbaccess:ImageButton:DLG_DBASE_INDEXES:IB_REMOVEALL";
+        Pos = MAP_APPFONT ( 94, 114 ) ;
+        Size = MAP_APPFONT ( 20 , 14 ) ;
+        TabStop             = TRUE ;
+        ButtonImage = Image
+        {
+            ImageBitmap = Bitmap
+            {
+                File = "all_right.png" ;
+            };
+            MaskColor = Color
+            {
+                Red = 0xFFFF ;
+                Green = 0x0000 ;
+                Blue = 0xFFFF ;
+            };
+        };
+    };
+};
