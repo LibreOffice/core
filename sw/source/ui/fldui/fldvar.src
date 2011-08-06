@@ -1,0 +1,245 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#include "globals.hrc"
+#include "fldtdlg.hrc"
+#include "helpid.h"
+#include "cmdid.h"
+TabPage TP_FLD_VAR
+{
+    HelpID = HID_FLD_VAR ;
+    SVLook = TRUE ;
+    Hide = TRUE ;
+    Size = MAP_APPFONT ( 260 , 185 ) ;
+    FixedText FT_VARTYPE
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 76 , 8 ) ;
+        Text [ en-US ] = "~Type" ;
+        Left = TRUE ;
+    };
+    ListBox LB_VARTYPE
+    {
+        HelpID = "sw:ListBox:TP_FLD_VAR:LB_VARTYPE";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 6 , 14 ) ;
+        Size = MAP_APPFONT ( 76 , 135 ) ;
+        TabStop = TRUE ;
+        Sort = FALSE ;
+        AutoHScroll = TRUE ;
+    };
+    FixedText FT_VARSELECTION
+    {
+        Pos = MAP_APPFONT ( 88 , 3 ) ;
+        Size = MAP_APPFONT ( 76 , 8 ) ;
+        Left = TRUE ;
+        Text [ en-US ] = "S~election" ;
+    };
+    ListBox LB_VARSELECTION
+    {
+        HelpID = "sw:ListBox:TP_FLD_VAR:LB_VARSELECTION";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 88 , 14 ) ;
+        Size = MAP_APPFONT ( 76 , 135 ) ;
+        TabStop = TRUE ;
+        Sort = TRUE ;
+    };
+    FixedText FT_VARFORMAT
+    {
+        Pos = MAP_APPFONT ( 170 , 3 ) ;
+        Size = MAP_APPFONT ( 84 , 8 ) ;
+        Left = TRUE ;
+        Text [ en-US ] = "Format" ;
+    };
+    ListBox LB_VARFORMAT
+    {
+        HelpID = "sw:ListBox:TP_FLD_VAR:LB_VARFORMAT";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 170 , 14 ) ;
+        Size = MAP_APPFONT ( 84 , 123 ) ;
+        TabStop = TRUE ;
+        DropDown = FALSE ;
+    };
+    ListBox LB_VARNUMFORMAT
+    {
+        HelpID = "sw:ListBox:TP_FLD_VAR:LB_VARNUMFORMAT";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 170 , 14 ) ;
+        Size = MAP_APPFONT ( 84 , 123 ) ;
+        TabStop = TRUE ;
+        DropDown = FALSE ;
+    };
+    CheckBox CB_VARINVISIBLE
+    {
+        HelpID = "sw:CheckBox:TP_FLD_VAR:CB_VARINVISIBLE";
+        Pos = MAP_APPFONT ( 170 , 141 ) ;
+        Size = MAP_APPFONT ( 84 , 10 ) ;
+        Text [ en-US ] = "Invisi~ble" ;
+        TabStop = TRUE ;
+    };
+    FixedText FT_VARCHAPTERHEADER
+    {
+        Pos = MAP_APPFONT ( 170 , 112 ) ;
+        Size = MAP_APPFONT ( 84 , 8 ) ;
+        Hide = TRUE ;
+        Text [ en-US ] = "Numbering by chapter" ;
+    };
+    FixedText FT_VARCHAPTERLEVEL
+    {
+        Pos = MAP_APPFONT ( 175 , 125 ) ;
+        Size = MAP_APPFONT ( 30 , 8 ) ;
+        Hide = TRUE ;
+        Text [ en-US ] = "~Level" ;
+    };
+    ListBox LB_VARCHAPTERLEVEL
+    {
+        HelpID = "sw:ListBox:TP_FLD_VAR:LB_VARCHAPTERLEVEL";
+        Border = TRUE ;
+        Hide = TRUE ;
+        Pos = MAP_APPFONT ( 208 , 123 ) ;
+        Size = MAP_APPFONT ( 46 , 76 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+        StringList [ en-US ] =
+        {
+            < "None" ; > ;
+        };
+    };
+    FixedText FT_VARSEPARATOR
+    {
+        Pos = MAP_APPFONT ( 175 , 140 ) ;
+        Size = MAP_APPFONT ( 30 , 10 ) ;
+        Hide = TRUE ;
+        Text [ en-US ] = "~Separator" ;
+    };
+    Edit ED_VARSEPARATOR
+    {
+        HelpID = "sw:Edit:TP_FLD_VAR:ED_VARSEPARATOR";
+        Pos = MAP_APPFONT ( 208 , 138 ) ;
+        Size = MAP_APPFONT ( 46 , 12 ) ;
+        Border = TRUE ;
+        Hide = TRUE ;
+        MaxTextLength = 1 ;
+        TEXT = "." ;
+    };
+    FixedText FT_VARNAME
+    {
+        Pos = MAP_APPFONT ( 6 , 155 ) ;
+        Size = MAP_APPFONT ( 76 , 8 ) ;
+        Left = TRUE ;
+        Text [ en-US ] = "Na~me" ;
+    };
+    Edit ED_VARNAME
+    {
+        HelpID = "sw:Edit:TP_FLD_VAR:ED_VARNAME";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 6 , 166 ) ;
+        Size = MAP_APPFONT ( 76 , 12 ) ;
+        TabStop = TRUE ;
+        Left = TRUE ;
+    };
+    FixedText FT_VARVALUE
+    {
+        Pos = MAP_APPFONT ( 88 , 155 ) ;
+        Size = MAP_APPFONT ( 76 , 8 ) ;
+        Text [ en-US ] = "~Value" ;
+        Left = TRUE ;
+    };
+    Edit ED_VARVALUE
+    {
+        HelpID = "sw:Edit:TP_FLD_VAR:ED_VARVALUE";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 88 , 166 ) ;
+        Size = MAP_APPFONT ( 76 , 12 ) ;
+        TabStop = TRUE ;
+        Left = TRUE ;
+    };
+    ToolBox TBX_VARNEWDEL
+    {
+        Pos = MAP_APPFONT ( 167 , 167 ) ;
+        SVLook = TRUE ;
+        Border = FALSE ;
+        ItemList =
+        {
+            ToolBoxItem
+            {
+                Identifier = BT_VARAPPLY ;
+                HelpID = HID_FLDVAR_APPLY ;
+                ItemImage = Image
+                {
+                    ImageBitmap = Bitmap{ File = "sc20558.bmp" ;};
+                    MaskColor = IMAGE_MASK_COLOR ;
+                };
+                Text [ en-US ] = "Apply" ;
+            };
+            ToolBoxItem
+            {
+                Identifier = BT_VARDELETE ;
+                HelpID = HID_FLDVAR_DELETE ;
+                ItemImage = Image
+                {
+                    ImageBitmap = Bitmap{ File = "sc20557.bmp" ;};
+                    MaskColor = IMAGE_MASK_COLOR ;
+                };
+                Text [ en-US ] = "Delete" ;
+            };
+        };
+    };
+    Text [ en-US ] = "Variables" ;
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

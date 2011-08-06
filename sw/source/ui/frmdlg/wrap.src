@@ -1,0 +1,263 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#include "frmui.hrc"
+#include "wrap.hrc"
+#include "globals.hrc"
+#include "helpid.h"
+TabPage TP_FRM_WRAP
+{
+    SVLook = TRUE ;
+    HelpID = HID_FRM_EXT ;
+    Pos = MAP_APPFONT ( 0 , 0 ) ;
+    Size = MAP_APPFONT ( 260 , 185 ) ;
+    Hide = TRUE;
+    FixedLine C_WRAP_FL
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
+        Text [ en-US ] = "Settings";
+    };
+    ImageRadioButton RB_NO_WRAP
+    {
+        HelpID = "sw:ImageRadioButton:TP_FRM_WRAP:RB_NO_WRAP";
+        Pos = MAP_APPFONT ( 6 , 14 ) ;
+        Size = MAP_APPFONT ( 40 , 37 ) ;
+        WordBreak = TRUE;
+        Text [ en-US ] = "~None" ;
+        TopImage = True ;
+    };
+    ImageRadioButton RB_WRAP_LEFT
+    {
+        HelpID = "sw:ImageRadioButton:TP_FRM_WRAP:RB_WRAP_LEFT";
+        Pos = MAP_APPFONT ( 65 , 14 ) ;
+        Size = MAP_APPFONT ( 40 , 37 ) ;
+        WordBreak = TRUE;
+        TopImage = True ;
+        Text [ en-US ] = "Before" ;
+    };
+    ImageRadioButton RB_WRAP_RIGHT
+    {
+        HelpID = "sw:ImageRadioButton:TP_FRM_WRAP:RB_WRAP_RIGHT";
+        Pos = MAP_APPFONT ( 121 , 14 ) ;
+        Size = MAP_APPFONT ( 40 , 37 ) ;
+        WordBreak = TRUE;
+        TopImage = True ;
+        Text [ en-US ] = "After" ;
+    };
+    ImageRadioButton RB_WRAP_PARALLEL
+    {
+        HelpID = "sw:ImageRadioButton:TP_FRM_WRAP:RB_WRAP_PARALLEL";
+        Pos = MAP_APPFONT ( 177 , 14 ) ;
+        Size = MAP_APPFONT ( 40 , 37 ) ;
+        WordBreak = TRUE;
+        Text [ en-US ] = "~Parallel" ;
+        TopImage = True ;
+    };
+    ImageRadioButton RB_WRAP_THROUGH
+    {
+        HelpID = "sw:ImageRadioButton:TP_FRM_WRAP:RB_WRAP_THROUGH";
+        Pos = MAP_APPFONT ( 6 , 57 ) ;
+        Size = MAP_APPFONT ( 40 , 37 ) ;
+        WordBreak = TRUE;
+        Text [ en-US ] = "Thro~ugh" ;
+        TopImage = True ;
+    };
+    ImageRadioButton RB_WRAP_IDEAL
+    {
+        HelpID = "sw:ImageRadioButton:TP_FRM_WRAP:RB_WRAP_IDEAL";
+        Pos = MAP_APPFONT ( 65 , 57 ) ;
+        Size = MAP_APPFONT ( 40 , 37 ) ;
+        WordBreak = TRUE;
+        TopImage = True ;
+        Text [ en-US ] = "~Optimal" ;
+    };
+
+    CheckBox CB_ANCHOR_ONLY
+    {
+        HelpID = "sw:CheckBox:TP_FRM_WRAP:CB_ANCHOR_ONLY";
+        Pos = MAP_APPFONT ( 139 , 111 ) ;
+        Size = MAP_APPFONT ( 109 , 10 ) ;
+        Text [ en-US ] = "~First paragraph" ;
+    };
+    CheckBox CB_TRANSPARENT
+    {
+        HelpID = "sw:CheckBox:TP_FRM_WRAP:CB_TRANSPARENT";
+        Pos = MAP_APPFONT ( 139 , 125 ) ;
+        Size = MAP_APPFONT ( 109 , 10 ) ;
+        Text [ en-US ] = "In bac~kground" ;
+    };
+    CheckBox CB_OUTLINE
+    {
+        HelpID = "sw:CheckBox:TP_FRM_WRAP:CB_OUTLINE";
+        Pos = MAP_APPFONT ( 139 , 139 ) ;
+        Size = MAP_APPFONT ( 109 , 10 ) ;
+        Hide = TRUE ;
+        Text [ en-US ] = "~Contour" ;
+    };
+    CheckBox CB_ONLYOUTSIDE
+    {
+        HelpID = "sw:CheckBox:TP_FRM_WRAP:CB_ONLYOUTSIDE";
+        Pos = MAP_APPFONT ( 139 , 153 ) ;
+        Size = MAP_APPFONT ( 109 , 10 ) ;
+        Hide = TRUE ;
+        Text [ en-US ] = "Outside only" ;
+    };
+    FixedLine FL_OPTION
+    {
+        Pos = MAP_APPFONT ( 133 , 100 ) ;
+        Size = MAP_APPFONT ( 121 , 8 ) ;
+        Text [ en-US ] = "Options" ;
+    };
+    FixedLine FL_OPTION_SEP
+    {
+        Pos = MAP_APPFONT ( 128 , 111 ) ;
+        Size = MAP_APPFONT ( 4 , 60 ) ;
+        Vert = TRUE;
+    };
+    FixedText FT_LEFT_MARGIN
+    {
+        Pos = MAP_APPFONT ( 12 , 113 ) ;
+        Size = MAP_APPFONT ( 60 , 8 ) ;
+        Text [ en-US ] = "L~eft" ;
+        Left = TRUE ;
+    };
+    MetricField ED_LEFT_MARGIN
+    {
+        HelpID = "sw:MetricField:TP_FRM_WRAP:ED_LEFT_MARGIN";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 81 , 111 ) ;
+        Size = MAP_APPFONT ( 40 , 12 ) ;
+        TabStop = TRUE ;
+        Left = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Maximum = 9999 ;
+        DecimalDigits = 2 ;
+        Unit = FUNIT_CM ;
+        Last = 9999 ;
+        SpinSize = 10 ;
+    };
+    FixedText FT_RIGHT_MARGIN
+    {
+        Pos = MAP_APPFONT ( 12 , 129 ) ;
+        Size = MAP_APPFONT ( 60 , 8 ) ;
+        Text [ en-US ] = "~Right" ;
+        Left = TRUE ;
+    };
+    MetricField ED_RIGHT_MARGIN
+    {
+        HelpID = "sw:MetricField:TP_FRM_WRAP:ED_RIGHT_MARGIN";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 81 , 127 ) ;
+        Size = MAP_APPFONT ( 40 , 12 ) ;
+        TabStop = TRUE ;
+        Left = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Maximum = 9999 ;
+        DecimalDigits = 2 ;
+        Unit = FUNIT_CM ;
+        Last = 9999 ;
+        SpinSize = 10 ;
+    };
+    FixedText FT_TOP_MARGIN
+    {
+        Pos = MAP_APPFONT ( 12 , 145 ) ;
+        Size = MAP_APPFONT ( 60 , 8 ) ;
+        Text [ en-US ] = "~Top" ;
+        Left = TRUE ;
+    };
+    MetricField ED_TOP_MARGIN
+    {
+        HelpID = "sw:MetricField:TP_FRM_WRAP:ED_TOP_MARGIN";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 81 , 143 ) ;
+        Size = MAP_APPFONT ( 40 , 12 ) ;
+        TabStop = TRUE ;
+        Left = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Maximum = 9999 ;
+        DecimalDigits = 2 ;
+        Unit = FUNIT_CM ;
+        Last = 9999 ;
+        SpinSize = 10 ;
+    };
+    FixedText FT_BOTTOM_MARGIN
+    {
+        Pos = MAP_APPFONT ( 12 , 161 ) ;
+        Size = MAP_APPFONT ( 60 , 8 ) ;
+        Text [ en-US ] = "~Bottom" ;
+        Left = TRUE ;
+    };
+    MetricField ED_BOTTOM_MARGIN
+    {
+        HelpID = "sw:MetricField:TP_FRM_WRAP:ED_BOTTOM_MARGIN";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 81 , 159 ) ;
+        Size = MAP_APPFONT ( 40 , 12 ) ;
+        TabStop = TRUE ;
+        Left = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Maximum = 9999 ;
+        DecimalDigits = 2 ;
+        Unit = FUNIT_CM ;
+        Last = 9999 ;
+        SpinSize = 10 ;
+    };
+    FixedLine FL_MARGIN
+    {
+        Pos = MAP_APPFONT ( 6 , 100 ) ;
+        Size = MAP_APPFONT ( 121 , 8 ) ;
+        Text [ en-US ] = "Spacing" ;
+    };
+#define WRAP_IDLIST \
+        IdList =            \
+        {                   \
+            IMG_NONE ;      \
+            IMG_LEFT ;      \
+            IMG_RIGHT ;     \
+            IMG_PARALLEL ;  \
+            IMG_THROUGH ;   \
+            IMG_IDEAL ;     \
+            IMG_KON_NONE ;  \
+            IMG_KON_LEFT ;  \
+            IMG_KON_RIGHT ; \
+            IMG_KON_PARALLEL ;\
+            IMG_KON_IDEAL ;\
+        };                 \
+        IdCount = { 11 ; };
+
+    ImageList IL_WRAP
+    {
+        Prefix = "wr";
+        MaskColor = IMAGE_MASK_COLOR ;
+        WRAP_IDLIST
+    };
+};

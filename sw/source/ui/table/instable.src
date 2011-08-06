@@ -1,0 +1,199 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#include "table.hrc"
+#include "instable.hrc"
+#include "cmdid.h"
+#include "helpid.h"
+ // #define DLG_INSERT_TABLE 256
+ModalDialog DLG_INSERT_TABLE
+{
+    HelpID = CMD_FN_INSERT_TABLE ;
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 280 , 166 ) ;
+    Text [ en-US ] = "Insert Table" ;
+    Moveable = TRUE ;
+    Edit ED_NAME
+    {
+        HelpID = "sw:Edit:DLG_INSERT_TABLE:ED_NAME";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 53 , 6 ) ;
+        Size = MAP_APPFONT ( 158, 12 ) ;
+        TabStop = TRUE ;
+    };
+    FixedText FT_NAME
+    {
+        Pos = MAP_APPFONT ( 6 , 8 ) ;
+        Size = MAP_APPFONT ( 45, 8 ) ;
+        Text [ en-US ] = "Name";
+    };
+    FixedText FT_COL
+    {
+        Pos = MAP_APPFONT ( 12 , 34 ) ;
+        Size = MAP_APPFONT ( 39 , 8 ) ;
+        Text [ en-US ] = "~Columns" ;
+        Left = TRUE ;
+    };
+    NumericField ED_COL
+    {
+        HelpID = "sw:NumericField:DLG_INSERT_TABLE:ED_COL";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 53 , 32 ) ;
+        Size = MAP_APPFONT ( 28 , 12 ) ;
+        TabStop = TRUE ;
+        Left = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Minimum = 1 ;
+        Maximum = 99 ;
+        Value = 2 ;
+        First = 1 ;
+        Last = 99 ;
+    };
+    FixedText FT_ROW
+    {
+        Pos = MAP_APPFONT ( 12 , 50 ) ;
+        Size = MAP_APPFONT ( 39 , 8 ) ;
+        Text [ en-US ] = "~Rows" ;
+        Left = TRUE ;
+    };
+    NumericField ED_ROW
+    {
+        HelpID = "sw:NumericField:DLG_INSERT_TABLE:ED_ROW";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 53 , 48 ) ;
+        Size = MAP_APPFONT ( 28 , 12 ) ;
+        TabStop = TRUE ;
+        Left = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Minimum = 1 ;
+        Maximum = 99 ;
+        Value = 2 ;
+        First = 1 ;
+        Last = 99 ;
+    };
+    FixedLine FL_TABLE
+    {
+        Pos = MAP_APPFONT ( 6 , 21 ) ;
+        Size = MAP_APPFONT ( 212 , 8 ) ;
+        Text [ en-US ] = "Size";
+    };
+    CheckBox CB_HEADER
+    {
+        HelpID = "sw:CheckBox:DLG_INSERT_TABLE:CB_HEADER";
+        Pos = MAP_APPFONT ( 12 , 74 ) ;
+        Size = MAP_APPFONT (113 , 10 ) ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "Heading";
+    };
+    CheckBox CB_REPEAT_HEADER
+    {
+        HelpID = "sw:CheckBox:DLG_INSERT_TABLE:CB_REPEAT_HEADER";
+        Pos = MAP_APPFONT ( 21 , 88 ) ;
+        Size = MAP_APPFONT ( 104 , 10 ) ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "Repeat heading";
+    };
+    FixedText FT_REPEAT_HEADER
+    {
+        Pos = MAP_APPFONT ( 30 , 105 ) ;
+        Size = MAP_APPFONT ( 95 , 10 ) ;
+        Text [ en-US ] = "The first %POSITION_OF_CONTROL rows" ;
+    };
+    NumericField NF_REPEAT_HEADER
+    {
+        HelpID = "sw:NumericField:DLG_INSERT_TABLE:NF_REPEAT_HEADER";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 130 , 104 ) ;
+        Size = MAP_APPFONT ( 28 , 12 ) ;
+        TabStop = TRUE ;
+        Left = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Minimum = 1 ;
+        Maximum = 1000 ;
+        First = 1 ;
+    };
+    Window WIN_REPEAT_HEADER
+    {
+        Pos = MAP_APPFONT ( 30 , 102 ) ;
+        Size = MAP_APPFONT ( 2 , 1 ) ;
+    };
+    CheckBox CB_DONT_SPLIT
+    {
+        HelpID = "sw:CheckBox:DLG_INSERT_TABLE:CB_DONT_SPLIT";
+        Pos = MAP_APPFONT ( 12 , 118 ) ;
+        Size = MAP_APPFONT ( 113 , 10 ) ;
+        Text [ en-US ] = "Don't split table";
+        TabStop = TRUE ;
+    };
+    CheckBox CB_BORDER
+    {
+        HelpID = "sw:CheckBox:DLG_INSERT_TABLE:CB_BORDER";
+        Pos = MAP_APPFONT ( 12 , 132 ) ;
+        Size = MAP_APPFONT ( 113 , 10 ) ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "Border";
+    };
+    PushButton BT_AUTOFORMAT
+    {
+        HelpID = "sw:PushButton:DLG_INSERT_TABLE:BT_AUTOFORMAT";
+        Pos = MAP_APPFONT ( 12 , 146 ) ;
+        Size = MAP_APPFONT ( 86 , 14 ) ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "Auto~Format..." ;
+    };
+    FixedLine FL_OPTIONS
+    {
+        Pos = MAP_APPFONT ( 6 , 63 ) ;
+        Size = MAP_APPFONT ( 212 , 8 ) ;
+        Text [ en-US ] = "Options";
+    };
+    OKButton BT_OK
+    {
+        Pos = MAP_APPFONT ( 224 , 6 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        DefButton = TRUE ;
+    };
+    CancelButton BT_CANCEL
+    {
+        Pos = MAP_APPFONT ( 224 , 23 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    HelpButton BT_HELP
+    {
+        Pos = MAP_APPFONT ( 224 , 43 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+};
+
+

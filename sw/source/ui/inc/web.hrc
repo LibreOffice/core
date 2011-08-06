@@ -1,0 +1,74 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef _WEB_HRC
+#define _WEB_HRC
+
+#include "rcid.hrc"
+
+#define RC_WEB_ICON                             (RC_WEB_BEGIN + 1)
+#define RID_WEBTOOLS_TOOLBOX                    (RC_WEB_BEGIN + 2)
+#define RID_WEBTEXT_TOOLBOX                     (RC_WEB_BEGIN + 3)
+#define STR_HUMAN_SWWEBDOC_NAME                 (RC_WEB_BEGIN + 4)
+#define STR_WRITER_WEBDOC_FULLTYPE_40           (RC_WEB_BEGIN + 5)
+#define STR_SHELLNAME_WEBTEXT                   (RC_WEB_BEGIN + 6)
+#define STR_SHELLNAME_WEBFRAME                  (RC_WEB_BEGIN + 7)
+#define RID_WEBFRAME_TOOLBOX                    (RC_WEB_BEGIN + 8)
+#define STR_WRITER_WEBDOC_FULLTYPE_50           (RC_WEB_BEGIN + 9)
+#define RID_WEBGRAPHIC_TOOLBOX                  (RC_WEB_BEGIN + 10)
+#define RID_WEBOLE_TOOLBOX                      (RC_WEB_BEGIN + 11)
+#define STR_WRITER_WEBDOC_FULLTYPE              (RC_WEB_BEGIN + 12)
+
+
+#define MN_WEBFILE                              (RC_WEB_BEGIN + 30)
+#define MN_WEBEDIT                              (RC_WEB_BEGIN + 31)
+#define MN_WEBVIEW                              (RC_WEB_BEGIN + 32)
+#define MN_WEBINS                               (RC_WEB_BEGIN + 33)
+#define MN_WEBFORMAT                            (RC_WEB_BEGIN + 34)
+#define MN_WEBEXTRA                             (RC_WEB_BEGIN + 35)
+#define MN_WEBWIN                               (RC_WEB_BEGIN + 36)
+
+#define MN_WEB_TEXT_POPUPMENU               (RC_WEB_BEGIN + 46)
+
+#define MN_WEBFILE_PORT                         (RC_WEB_BEGIN + 47)
+#define MN_WEBEDIT_PORT                         (RC_WEB_BEGIN + 48)
+#define MN_WEBVIEW_PORT                         (RC_WEB_BEGIN + 49)
+#define MN_WEBINS_PORT                          (RC_WEB_BEGIN + 50)
+#define MN_WEBFORMAT_PORT                       (RC_WEB_BEGIN + 51)
+#define MN_WEBEXTRA_PORT                        (RC_WEB_BEGIN + 52)
+#define MN_WEBWIN_PORT                          (RC_WEB_BEGIN + 53)
+
+// ------------------------------------------------------------------------
+
+#define WEB_ACT_END                                     MN_WEBWIN_PORT
+
+
+#if WEB_ACT_END > RC_WEB_END
+#error Resource-Id Ueberlauf in #file, #line
+#endif
+
+#endif

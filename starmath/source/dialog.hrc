@@ -1,0 +1,52 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef _DIALOG_HRC_
+#define _DIALOG_HRC_
+
+
+#define FL_PRINTOPTIONS         10
+#define CB_TITLEROW             11
+#define CB_EQUATION_TEXT        12
+#define CB_FRAME                13
+
+#define FL_PRINT_FORMAT         20
+#define RB_ORIGINAL_SIZE        21
+#define RB_FIT_TO_PAGE          22
+#define RB_ZOOM                 23
+#define MF_ZOOM                 24
+
+#define FL_MISC_OPTIONS         30
+#define CB_IGNORE_SPACING       31
+#define CB_SAVE_ONLY_USED_SYMBOLS       32
+
+#define FT_FONTS_SUBSET         110
+#define LB_FONTS_SUBSET         111
+
+
+#endif
+

@@ -1,0 +1,236 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+ // #pragma ******************************************************************
+
+#include "globals.hrc"
+#include "chrdlg.hrc"
+#include "numpara.hrc"
+#include "helpid.h"
+ // TabPage ******************************************************************
+TabPage TP_NUMPARA
+{
+    HelpID = HID_NUMPARA ;
+    Size = MAP_APPFONT ( 260 , 185 ) ;
+    Hide = TRUE ;
+    FixedLine FL_OUTLINE_START
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
+        Text [ en-US ] = "Outline" ;
+    };
+    FixedText FT_OUTLINE_LEVEL
+    {
+        Pos = MAP_APPFONT ( 12 , 16 ) ;
+        Size = MAP_APPFONT ( 112 , 8 ) ;
+        Text [ en-US ] = "Outline level" ;
+    };
+    ListBox LB_OUTLINE_LEVEL
+    {
+        HelpID = "sw:ListBox:TP_NUMPARA:LB_OUTLINE_LEVEL";
+        Pos = MAP_APPFONT ( 130 , 14 ) ;
+        Size = MAP_APPFONT ( 118 , 65 ) ;
+        DropDown = TRUE ;
+        Border = TRUE ;
+        StringList [ en-US ] =
+        {
+            < "Body text" ; > ;
+            < "Level 1" ; >;
+            < "Level 2" ; >;
+            < "Level 3" ; >;
+            < "Level 4" ; >;
+            < "Level 5" ; >;
+            < "Level 6" ; >;
+            < "Level 7" ; >;
+            < "Level 8" ; >;
+            < "Level 9" ; >;
+            < "Level 10" ; >;
+        };
+        StringList [ x-comment ] =
+        {
+            < "Level 0" ; > ;
+            < "Level 1" ; >;
+            < "Level 2" ; >;
+            < "Level 3" ; >;
+            < "Level 4" ; >;
+            < "Level 5" ; >;
+            < "Level 6" ; >;
+            < "Level 7" ; >;
+            < "Level 8" ; >;
+            < "Level 9" ; >;
+            < "Level 10" ; >;
+        };
+    };
+    FixedLine FL_NEW_START
+    {
+        Pos = MAP_APPFONT ( 6 , 32 ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
+        Text [ en-US ] = "Numbering" ;
+    };
+    FixedText FT_NUMBER_STYLE
+    {
+        Pos = MAP_APPFONT ( 12 , 43 ) ;
+        Size = MAP_APPFONT ( 112 , 8 ) ;
+        Text [ en-US ] = "Numbering Style" ;
+    };
+    ListBox LB_NUMBER_STYLE
+    {
+        HelpID = "sw:ListBox:TP_NUMPARA:LB_NUMBER_STYLE";
+        Pos = MAP_APPFONT ( 130 , 41 ) ;
+        Size = MAP_APPFONT ( 118 , 65 ) ;
+        DropDown = TRUE ;
+        Border = TRUE ;
+        StringList [ en-US ] =
+        {
+            < "None" ; > ;
+        };
+    };
+    TriStateBox CB_NEW_START
+    {
+        HelpID = "sw:TriStateBox:TP_NUMPARA:CB_NEW_START";
+        Pos = MAP_APPFONT ( 12 , 58 ) ;
+        Size = MAP_APPFONT ( 160 , 10 ) ;
+        Hide = TRUE ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "R~estart at this paragraph" ;
+    };
+    TriStateBox CB_NUMBER_NEW_START
+    {
+        HelpID = "sw:TriStateBox:TP_NUMPARA:CB_NUMBER_NEW_START";
+        Pos = MAP_APPFONT ( 21 , 73 ) ;
+        Size = MAP_APPFONT ( 103 , 10 ) ;
+        Hide = TRUE ;
+        Disable = TRUE ;
+        Text [ en-US ] = "S~tart with" ;
+    };
+    NumericField NF_NEW_START
+    {
+        HelpID = "sw:NumericField:TP_NUMPARA:NF_NEW_START";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 130 , 72 ) ;
+        Size = MAP_APPFONT ( 26 , 12 ) ;
+        TabStop = TRUE ;
+        Left = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Minimum = 0 ;
+        Maximum = 9999 ;
+        Value = 0 ;
+        First = 0 ;
+        Last = 9999 ;
+        Hide = TRUE ;
+        Disable = TRUE ;
+    };
+    FixedLine FL_COUNT_PARA
+    {
+        Pos = MAP_APPFONT ( 6 , 89 ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
+        Text [ en-US ] = "Line numbering" ;
+    };
+    TriStateBox CB_COUNT_PARA
+    {
+        HelpID = "sw:TriStateBox:TP_NUMPARA:CB_COUNT_PARA";
+        Pos = MAP_APPFONT ( 12 , 100 ) ;
+        Size = MAP_APPFONT ( 160 , 10 ) ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "~Include this paragraph in line numbering" ;
+    };
+    TriStateBox CB_RESTART_PARACOUNT
+    {
+        HelpID = "sw:TriStateBox:TP_NUMPARA:CB_RESTART_PARACOUNT";
+        Pos = MAP_APPFONT ( 12 , 116 ) ;
+        Size = MAP_APPFONT ( 160 , 10 ) ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "Rest~art at this paragraph" ;
+    };
+    FixedText FT_RESTART_NO
+    {
+        Pos = MAP_APPFONT ( 21 , 132 ) ;
+        Size = MAP_APPFONT ( 103 , 8 ) ;
+        Disable = TRUE ;
+        Text [ en-US ] = "~Start with" ;
+    };
+    NumericField NF_RESTART_PARA
+    {
+        HelpID = "sw:NumericField:TP_NUMPARA:NF_RESTART_PARA";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 130 , 130 ) ;
+        Size = MAP_APPFONT ( 26 , 12 ) ;
+        TabStop = TRUE ;
+        Left = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Minimum = 1 ;
+        Maximum = 65000 ;
+        Value = 1 ;
+        First = 1 ;
+        Last = 65000 ;
+        Disable = TRUE ;
+    };
+};
+ // ********************************************************************** EOF
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

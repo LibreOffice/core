@@ -1,0 +1,92 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef _ENVELP_HRC
+#define _ENVELP_HRC
+
+#include "rcid.hrc"
+
+// Dialoge --------------------------------------------------------------------
+
+#define DLG_ENV    (RC_ENVELP_BEGIN    )
+#define DLG_LAB    (RC_ENVELP_BEGIN + 1)
+
+#define TP_ENV_ENV (RC_ENVELP_BEGIN + 2)
+#define TP_ENV_FMT (RC_ENVELP_BEGIN + 3)
+#define TP_ENV_PRT (RC_ENVELP_BEGIN + 4)
+
+#define TP_LAB_LAB (RC_ENVELP_BEGIN + 5)
+#define TP_LAB_FMT (RC_ENVELP_BEGIN + 6)
+#define TP_LAB_PRT (RC_ENVELP_BEGIN + 7)
+
+#define DLG_MAILMERGE (RC_ENVELP_BEGIN + 8)
+
+#define DLG_SYNC_BTN  (RC_ENVELP_BEGIN + 9)
+#define DLG_SAVE_LABEL (RC_ENVELP_BEGIN + 10)
+
+// Bereiche -------------------------------------------------------------------
+
+#define RC_ENVLOP_BEGIN  (RC_ENVELP_BEGIN     )
+#define RC_ENVLOP_END    (RC_ENVELP_BEGIN +  9)
+
+#define RC_ENVFMT_BEGIN  (RC_ENVELP_BEGIN + 10)
+#define RC_ENVFMT_END    (RC_ENVELP_BEGIN + 19)
+
+#define RC_ENVPRT_BEGIN  (RC_ENVELP_BEGIN + 20)
+#define RC_ENVPRT_END    (RC_ENVELP_BEGIN + 39)
+
+#define RC_LABEL_BEGIN   (RC_ENVELP_BEGIN + 40)
+#define RC_LABEL_END     (RC_ENVELP_BEGIN + 49)
+
+#define RC_LABFMT_BEGIN  (RC_ENVELP_BEGIN + 50)
+#define RC_LABFMT_END    (RC_ENVELP_BEGIN + 59)
+
+#define RC_LABPRT_BEGIN  (RC_ENVELP_BEGIN + 60)
+#define RC_LABPRT_END    (RC_ENVELP_BEGIN + 69)
+
+// Strings --------------------------------------------------------------------
+
+#define STR_DATABASE_NOT_OPENED  (RC_ENVLOP_BEGIN + 60)
+#define STR_NO_DRIVERS           (RC_ENVLOP_BEGIN + 61)
+#define DLG_MERGE_CREATE         (RC_ENVLOP_BEGIN + 62)
+#define DLG_MERGE_FIELD_CONNECTIONS (RC_ENVLOP_BEGIN + 63)
+
+#define STR_BTN_NEW_DOC          (RC_ENVLOP_BEGIN + 64)
+#define STR_BTN_NEWDOC           (RC_ENVLOP_BEGIN + 65)
+#define STR_SENDER_TOKENS        (RC_ENVLOP_BEGIN + 66)
+
+// Ueberlaufpruefung ----------------------------------------------------------
+
+#define ENVELP_ACT_END  STR_SENDER_TOKENS
+
+#if ENVELP_ACT_END > STR_SENDER_TOKENS
+#error Resource-Ueberlauf in #file, #line
+#endif
+
+#endif
+
+

@@ -1,0 +1,409 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+interface BaseTextTable
+[
+    Automation = FALSE;
+]
+{
+
+    FN_FORMAT_TABLE_DLG   // status(final|play)
+    [
+        ExecMethod = Execute ;
+        StateMethod = NoState ;
+    ]
+    SID_ATTR_BRUSH
+    [
+        ExecMethod = Execute ;
+    ]
+    SID_ATTR_BRUSH_ROW
+    [
+        ExecMethod = Execute ;
+    ]
+    SID_ATTR_BRUSH_TABLE
+    [
+        ExecMethod = Execute ;
+    ]
+    FN_NUM_FORMAT_TABLE_DLG   // status(final|play)
+    [
+        ExecMethod = Execute ;
+        StateMethod = NoState ;
+    ]
+
+    FN_CALC_TABLE // status(final|play)
+    [
+        ExecMethod = Execute ;
+        StateMethod = NoState ;
+    ]
+
+    FN_TABLE_AUTOSUM // status()
+    [
+        ExecMethod = Execute ;
+        StateMethod = NoState ;
+    ]
+
+
+    FN_TABLE_VERT_NONE
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    FN_TABLE_VERT_CENTER
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    FN_TABLE_VERT_BOTTOM
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+    FN_TABLE_SET_COL_WIDTH // status( final|play )
+    [
+        ExecMethod = Execute ;
+        StateMethod = NoState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+    SID_ATTR_ULSPACE // status(final|play)
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_ATTR_LRSPACE // status(final|play)
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        GroupId = GID_TABLE;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    FN_TABLE_DELETE_COL  // status(final|play)
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    FN_TABLE_DELETE_ROW  // status(final|play)
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+    FN_TABLE_DELETE_TABLE
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+    FN_GOTO_NEXT_CELL // status(final|play)
+    [
+        ExecMethod = Execute ;
+        StateMethod = NoState ;
+    ]
+
+    FN_GOTO_PREV_CELL // status(final|play)
+    [
+        ExecMethod = Execute ;
+        StateMethod = NoState ;
+    ]
+    FN_END_TABLE  // status(final|play)
+    [
+        ExecMethod = Execute ;
+        StateMethod = NoState ;
+    ]
+
+    FN_START_TABLE  // status(final|play)
+    [
+        ExecMethod = Execute ;
+        StateMethod = NoState ;
+    ]
+
+    FN_TABLE_INSERT_COL // status(final|play)
+    [
+        ExecMethod = Execute ;
+        StateMethod = NoState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    FN_TABLE_INSERT_COL_DLG  // status(final|play)
+    [
+        Export = FALSE ;
+        ExecMethod = Execute ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    FN_TABLE_INSERT_ROW // status(final|play)
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    FN_TABLE_INSERT_ROW_DLG  // status(final|play)
+    [
+        Export = FALSE ;
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    FN_TABLE_MERGE_CELLS  // status(final|play)
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    FN_OPTIMIZE_TABLE
+    [
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        StateMethod = GetState ;
+    ]
+
+    FN_TABLE_ADJUST_CELLS  // status(final|play)
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    FN_TABLE_BALANCE_CELLS  // status()
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    FN_TABLE_BALANCE_ROWS  // status()
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    FN_TABLE_SELECT_ALL // status(final|play)
+    [
+        ExecMethod = Execute ;
+        StateMethod = NoState ;
+    ]
+
+    FN_TABLE_SELECT_COL   // status(final|play)
+    [
+        ExecMethod = Execute ;
+        StateMethod = NoState ;
+    ]
+
+    FN_TABLE_SELECT_ROW  // status(final|play)
+    [
+        ExecMethod = Execute ;
+        StateMethod = NoState ;
+    ]
+    FN_TABLE_SELECT_CELL
+    [
+        ExecMethod = Execute ;
+        StateMethod = NoState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+    FN_TABLE_SET_ROW_HEIGHT // status(final|play)
+    [
+        ExecMethod = Execute ;
+        StateMethod = NoState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+        FN_TABLE_ROW_SPLIT
+        [
+                ExecMethod = Execute ;
+                StateMethod = GetState ;
+                DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        ]
+        FN_TABLE_OPTIMAL_HEIGHT // status(final|play)
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    FN_TABLE_SPLIT_CELLS // status(final|play)
+    [
+        ExecMethod = Execute ;
+        StateMethod = NoState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    FN_TABLE_SPLIT_TABLE // status(final|play)
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    FN_TABLE_MERGE_TABLE // status(final|play)
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    FN_TABLE_UNSET_READ_ONLY_CELLS // status()
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+
+    SID_AUTOFORMAT // status(final|play)
+    [
+        ExecMethod = Execute ;
+        StateMethod = NoState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_ATTR_BORDER // status()
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetFrmBorderState ;
+        GroupId = GID_TABLE;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_FRAME_LINESTYLE // status()
+    [
+        ExecMethod = ExecTableStyle ;
+        StateMethod = GetLineStyleState ;
+        Export = FALSE; //#44439#
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_FRAME_LINECOLOR // status(play)
+    [
+        ExecMethod = ExecTableStyle ;
+        StateMethod = GetLineStyleState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    FN_TABLE_MODE_FIX
+    [
+        ExecMethod = Execute;
+        StateMethod = GetState;
+    ]
+
+    FN_TABLE_MODE_FIX_PROP
+    [
+        ExecMethod = Execute;
+        StateMethod = GetState;
+    ]
+
+    FN_TABLE_MODE_VARIABLE
+    [
+        ExecMethod = Execute;
+        StateMethod = GetState;
+    ]
+
+    FN_NUMBER_FORMAT
+    [
+        ExecMethod = ExecNumberFormat;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    FN_NUMBER_STANDARD
+    [
+        ExecMethod = ExecNumberFormat;
+        StateMethod = NoState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+    FN_NUMBER_TWODEC
+    [
+        ExecMethod = ExecNumberFormat;
+        StateMethod = NoState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+    FN_NUMBER_SCIENTIFIC
+    [
+        ExecMethod = ExecNumberFormat;
+        StateMethod = NoState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+    FN_NUMBER_DATE
+    [
+        ExecMethod = ExecNumberFormat;
+        StateMethod = NoState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+    FN_NUMBER_TIME
+    [
+        ExecMethod = ExecNumberFormat;
+        StateMethod = NoState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+    FN_NUMBER_CURRENCY
+    [
+        ExecMethod = ExecNumberFormat;
+        StateMethod = NoState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+    FN_NUMBER_PERCENT
+    [
+        ExecMethod = ExecNumberFormat;
+        StateMethod = NoState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+// Slots ohne Export
+
+    FN_INSERT_TABLE
+    [
+        Export = FALSE ;
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+    FN_TABLE_HEADLINE_REPEAT
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+    FN_TABLE_SELECT_CELL
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+    FN_TABLE_DELETE_TABLE
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+}
+

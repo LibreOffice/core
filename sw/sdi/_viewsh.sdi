@@ -1,0 +1,784 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+
+interface BaseTextEditView
+[
+    Automation = FALSE;
+]
+{
+    FN_REFRESH_VIEW // status(final|play)
+    [
+        ExecMethod = Execute ;
+    ]
+    FN_PAGEUP // status(final|play)
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    FN_PAGEUP_SEL // status()
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_UNDO // status(final|play)
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_FORMATPAINTBRUSH //
+    [
+        ExecMethod = ExecFormatPaintbrush ;
+        StateMethod = StateFormatPaintbrush ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+    SID_CLEARHISTORY // status(final|play)
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_CREATE_SW_DRAWVIEW
+    [
+        ExecMethod = Execute;
+    ]
+    FN_PAGEDOWN // status(final|play)
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    FN_PAGEDOWN_SEL // status()
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    FN_NAVIGATION_PI_GOTO_PAGE // status(final|play)
+    [
+        ExecMethod = Execute ;
+        StateMethod = NoState ;
+    ]
+    FN_SCROLL_NAVIGATION
+    [
+        ExecMethod = NoExec ;
+        StateMethod = NoState ;
+    ]
+    FN_SCROLL_NEXT_PREV
+    [
+        ExecMethod = Execute;
+    ]
+    FN_SET_PAGE_STYLE // status(final|play)
+    [
+        ExecMethod = ExecColl ;
+    ]
+    SID_OBJECT_SELECT
+    [
+        ExecMethod = ExecDraw ;
+        StateMethod = GetDrawState ;
+    ]
+    SID_BROWSER_MODE
+    [
+        ExecMethod = ExecViewOptions ;
+        StateMethod = StateViewOptions ;
+    ]
+    FN_PRINT_LAYOUT
+    [
+        ExecMethod = ExecViewOptions ;
+        StateMethod = StateViewOptions ;
+    ]
+    FN_REDLINE_PROTECT
+    [
+        ExecMethod = Execute;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_MAILBOX_EDITOR";
+    ]
+    FN_REDLINE_ON // status()
+    [
+        ExecMethod = Execute;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_MAILBOX_EDITOR";
+    ]
+    FN_REDLINE_SHOW // status()
+    [
+        ExecMethod = Execute;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_MAILBOX_EDITOR";
+    ]
+    FN_REDLINE_ACCEPT // status(play)
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_MAILBOX_EDITOR";
+    ]
+    FN_REDLINE_ACCEPT_DIRECT
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_MAILBOX_EDITOR";
+    ]
+    FN_REDLINE_REJECT_DIRECT
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_MAILBOX_EDITOR";
+    ]
+
+    SID_DOCUMENT_COMPARE // status(play)
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_MAILBOX_EDITOR";
+    ]
+    SID_DOCUMENT_MERGE // status(play)
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_MAILBOX_EDITOR";
+    ]
+    FN_ESCAPE // status(final|play|rec)
+    [
+        ExecMethod = Execute ;
+    ]
+    FN_FAX // status(final|play)
+    [
+        ExecMethod = ExecutePrint ;
+    ]
+    SID_PRINTDOC // status(final|play)
+    [
+        ExecMethod = ExecutePrint ;
+        StateMethod = GetState ;
+    ]
+    SID_PRINTDOCDIRECT // status(final|play)
+    [
+        ExecMethod = ExecutePrint ;
+        StateMethod = GetState ;
+    ]
+    SID_ATTR_LRSPACE
+    [
+        ExecMethod = ExecTabWin ;
+        StateMethod = StateTabWin ;
+        GroupId = GID_EDIT ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+    SID_ATTR_ULSPACE
+    [
+        ExecMethod = ExecTabWin ;
+        StateMethod = StateTabWin ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+    SID_ATTR_LONG_LRSPACE // status()
+    [
+        ExecMethod = ExecTabWin ;
+        StateMethod = StateTabWin ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+    SID_ATTR_LONG_ULSPACE // status()
+    [
+        ExecMethod = ExecTabWin ;
+        StateMethod = StateTabWin ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+    SID_ATTR_PARA_LRSPACE // status()
+    [
+        ExecMethod = ExecTabWin ;
+        StateMethod = StateTabWin ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+    SID_ATTR_PARA_LRSPACE_VERTICAL // status()
+    [
+        ExecMethod = ExecTabWin ;
+        StateMethod = StateTabWin ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+    SID_RULER_BORDERS // status()
+    [
+        ExecMethod = ExecTabWin ;
+        StateMethod = StateTabWin ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+    SID_RULER_BORDERS_VERTICAL // status()
+    [
+        ExecMethod = ExecTabWin ;
+        StateMethod = StateTabWin ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+    SID_RULER_BORDER_DISTANCE // status()
+    [
+        StateMethod = StateTabWin ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+    SID_RULER_PAGE_POS // status()
+    [
+        ExecMethod = NoExec ;
+        StateMethod = StateTabWin ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+    SID_RULER_TEXT_RIGHT_TO_LEFT
+    [
+        StateMethod = StateTabWin ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+    SID_RULER_LR_MIN_MAX // status()
+    [
+        StateMethod = StateTabWin ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+    SID_RULER_PROTECT // status()
+    [
+        StateMethod = StateTabWin ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+    SID_RULER_ROWS // status()
+    [
+        ExecMethod = ExecTabWin ;
+        StateMethod = StateTabWin ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+    SID_RULER_ROWS_VERTICAL // status()
+    [
+        ExecMethod = ExecTabWin ;
+        StateMethod = StateTabWin ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+    FN_EDIT_LINK_DLG // status(final|play)
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+    FN_SPELL_GRAMMAR_DIALOG
+    [
+        ExecMethod = Execute ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+    SID_RECHECK_DOCUMENT
+    [
+        ExecMethod = Execute ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+    FN_LINE_NUMBERING_DLG // status()
+    [
+        ExecMethod = Execute;
+    ]
+    FN_UPDATE_TOX // status()
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        MenuConfig , AccelConfig , ToolBoxConfig ;
+
+    ]
+    FN_UPDATE_CUR_TOX // status()
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    FN_EDIT_CURRENT_TOX // status()
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_TWAIN_SELECT
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_TWAIN_TRANSFER
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+     //---------------------------------------------------------------------
+     //Ab hier Statusleiste
+    FN_STAT_PAGE // status()
+    [
+        ExecMethod = ExecuteStatusLine ;
+        StateMethod = StateStatusLine ;
+    ]
+    FN_STAT_BOOKMARK // status()
+    [
+        ExecMethod = ExecuteStatusLine ;
+    ]
+    FN_STAT_TEMPLATE // status(final|play)
+    [
+        ExecMethod = ExecuteStatusLine ;
+        StateMethod = StateStatusLine ;
+    ]
+    FN_STAT_SELMODE // status(final|play)
+    [
+         //Aktueller Selektionsmode: 0 == Normal, 2 == Ergaenzen, 1 == Erweitern
+        ExecMethod = ExecuteStatusLine ;
+        StateMethod = StateStatusLine ;
+    ]
+    FN_SET_ADD_MODE // status()
+    [
+        ExecMethod = ExecuteStatusLine ;
+        StateMethod = NoState ;
+    ]
+    FN_SET_EXT_MODE // status()
+    [
+        ExecMethod = ExecuteStatusLine ;
+        StateMethod = NoState ;
+    ]
+    SID_ATTR_ZOOM // status(final|play)
+    [
+        ExecMethod = ExecuteStatusLine ;
+        StateMethod = StateStatusLine ;
+    ]
+        SID_ATTR_VIEWLAYOUT // status()
+        [
+                ExecMethod = ExecuteStatusLine ;
+                StateMethod = StateStatusLine ;
+        ]
+        SID_ATTR_ZOOMSLIDER // status()
+        [
+                ExecMethod = ExecuteStatusLine ;
+                StateMethod = StateStatusLine ;
+        ]
+        SID_ATTR_INSERT // status(final|play|rec)
+    [
+        ExecMethod = ExecuteStatusLine ;
+        StateMethod = StateStatusLine ;
+    ]
+    SID_ATTR_SIZE // status()
+    [
+        ExecMethod = ExecuteStatusLine ;
+        StateMethod = StateStatusLine ;
+    ]
+    SID_ATTR_POSITION // status()
+    [
+        StateMethod = StateStatusLine ;
+    ]
+    SID_TABLE_CELL // status()
+    [
+        StateMethod = StateStatusLine ;
+    ]
+     //----------------------------------------------
+     //End mit Statusleiste
+     //----------------------------------------------
+    SID_ATTR_BORDER_SHADOW // status()
+    [
+        ExecMethod = Execute ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+    /****************************************************/
+    /*                                                  */
+    /*       Properties Seitenformat                    */
+    /*                                                  */
+    /****************************************************/
+    SID_ATTR_PAGE // status()
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_ATTR_PAGE_SIZE // status(final|play)
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_ATTR_PAGE_MAXSIZE // status()
+    [
+        Export = FALSE ;
+        ExecMethod = Execute ;
+    ]
+    SID_ATTR_PAGE_PAPERBIN // status(final|play)
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_THESAURUS // status(final|play)
+    [
+        ExecMethod = ExecLingu ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+        SID_HANGUL_HANJA_CONVERSION // status(final|play)
+        [
+                ExecMethod = ExecLingu ;
+                StateMethod = GetState ;
+                DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        ]
+        SID_CHINESE_CONVERSION
+        [
+                ExecMethod = ExecLingu ;
+                StateMethod = GetState ;
+                DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        ]
+    /*
+    suchen und ersetzen
+*/
+
+
+    SID_SEARCH_ITEM // status()
+    [
+        ExecMethod = ExecSearch ;
+        StateMethod = StateSearch ;
+        Export = FALSE;
+    ]
+    FN_REPEAT_SEARCH // status(final|play)
+    [
+        ExecMethod = ExecSearch ;
+    ]
+    FID_SEARCH_NOW // status()
+    [
+        ExecMethod = ExecSearch ;
+    ]
+    SID_SEARCH_OPTIONS // status()
+    [
+        StateMethod = StateSearch ;
+    ]
+    FID_SEARCH_SEARCHSET // status()
+    [
+        ExecMethod = ExecSearch ;
+    ]
+    FID_SEARCH_REPLACESET // status()
+    [
+        ExecMethod = ExecSearch ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+    SID_ATTR_TABSTOP // status()
+    [
+        ExecMethod = ExecTabWin ;
+        StateMethod = StateTabWin ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+    SID_ATTR_TABSTOP_VERTICAL // status()
+    [
+        ExecMethod = ExecTabWin ;
+        StateMethod = StateTabWin ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+    // ab hier Export = FALSE;
+    FID_SEARCH_ON // status()
+    [
+        ExecMethod = ExecSearch ;
+        Export = FALSE;
+    ]
+    FID_SEARCH_OFF // status()
+    [
+        ExecMethod = ExecSearch ;
+        Export = FALSE;
+    ]
+    FN_INSERT_CTRL
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        Export = FALSE;
+   ]
+
+    SID_ATTR_DEFTABSTOP
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        Export = FALSE;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+    SID_ATTR_LANGUAGE
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        Export = FALSE;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+    SID_ATTR_CHAR_CJK_LANGUAGE
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        Export = FALSE;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+    SID_ATTR_CHAR_CTL_LANGUAGE
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        Export = FALSE;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+
+    SID_JUMPTOMARK
+    [
+        ExecMethod = Execute ;
+        StateMethod = NoState ;
+        FastCall , Cachable ;
+    ]
+
+    FN_SYNC_LABELS  // status(play)
+    [
+        ExecMethod = Execute ;
+    ]
+    FN_MAILMERGE_CHILDWINDOW
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState;
+    ]
+
+    FN_MAILMERGE_SENDMAIL_CHILDWINDOW
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState;
+    ]
+
+    SID_ATTR_BRUSH // status()
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+    SID_GALLERY
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_AVMEDIA_PLAYER
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_VIEW_DATA_SOURCE_BROWSER   // status()
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState;
+    ]
+    SID_READONLY_MODE // ole : no, status : no
+    [
+        StateMethod = GetState ;
+    ]
+    SID_IMAGE_ORIENTATION
+    [
+        StateMethod = GetState ;
+    ]
+    FN_INSERT_FIELD_DATA_ONLY // status(final|play)
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    FN_QRY_MERGE  // status()
+    [
+        ExecMethod = Execute ;
+        DisableFlags="SW_DISABLE_ON_MAILBOX_EDITOR";
+    ]
+    SID_ALIGN_ANY_LEFT
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_ALIGN_ANY_HCENTER
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_ALIGN_ANY_RIGHT
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_ALIGN_ANY_JUSTIFIED
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_ALIGN_ANY_TOP
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_ALIGN_ANY_VCENTER
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_ALIGN_ANY_BOTTOM
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_RESTORE_EDITING_VIEW
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+        SID_INSERT_GRAPHIC // status(final|play)
+        [
+                ExecMethod = Execute ;
+                StateMethod = NoState ;
+                DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        ]
+    SID_AUTOSPELL_CHECK
+    [
+        ExecMethod = ExecViewOptions ;
+        StateMethod = StateViewOptions ;
+    ]
+
+      //Extra/Optionen/Ansicht
+        //Wird zusammen zum Property ViewSettings
+    FN_VIEW_HIDDEN_PARA
+    [
+        ExecMethod = ExecViewOptions ;
+        StateMethod = StateViewOptions ;
+        Export = FALSE;
+    ]
+
+    FN_VIEW_NOTES
+    [
+        ExecMethod = ExecViewOptions ;
+        StateMethod = StateViewOptions ;
+        Export = FALSE;
+    ]
+     // alles ab hier kann weg (Export = FALSE;), wenn die vorangehenden funktionieren
+    FN_RULER // status()
+    [
+        ExecMethod = ExecViewOptions ;
+        StateMethod = StateViewOptions ;
+        Export = FALSE;
+        Cachable;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    FN_VIEW_BOUNDS // status()
+    [
+        ExecMethod = ExecViewOptions ;
+        StateMethod = StateViewOptions ;
+        Export = FALSE;
+        Cachable;
+    ]
+
+    FN_VIEW_GRAPHIC // status()
+    [
+        ExecMethod = ExecViewOptions ;
+        StateMethod = StateViewOptions ;
+        Export = FALSE ;
+    ]
+    FN_VIEW_FIELDS // status()
+    [
+        ExecMethod = ExecViewOptions ;
+        StateMethod = StateViewOptions ;
+        Export = FALSE;
+    ]
+
+    FN_VIEW_FIELDNAME // status()
+    [
+        ExecMethod = ExecViewOptions ;
+        StateMethod = StateViewOptions ;
+        Cachable ;
+        Export = FALSE;
+    ]
+
+    FN_VIEW_MARKS // status()
+    [
+        ExecMethod = ExecViewOptions ;
+        StateMethod = StateViewOptions ;
+        Cachable ;
+        Export = FALSE;
+    ]
+
+    FN_VIEW_META_CHARS // status()
+    [
+        ExecMethod = ExecViewOptions ;
+        StateMethod = StateViewOptions ;
+        Cachable ;
+        Export = FALSE;
+    ]
+
+    FN_VIEW_TABLEGRID // status()
+    [
+        ExecMethod = ExecViewOptions ;
+        StateMethod = StateViewOptions ;
+    ]
+
+    SID_GRID_VISIBLE
+    [
+        ExecMethod = ExecViewOptions;
+        StateMethod = StateViewOptions ;
+    ]
+    SID_GRID_USE
+    [
+        ExecMethod = ExecViewOptions;
+        StateMethod = StateViewOptions ;
+    ]
+    SID_HELPLINES_MOVE
+    [
+        ExecMethod = ExecViewOptions;
+        StateMethod = StateViewOptions ;
+    ]
+
+    FN_VLINEAL // status()
+    [
+        ExecMethod = ExecViewOptions ;
+        StateMethod = StateViewOptions ;
+        Export = FALSE;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    FN_HSCROLLBAR // status()
+    [
+        ExecMethod = ExecViewOptions ;
+        StateMethod = StateViewOptions ;
+        Export = FALSE;
+    ]
+
+    FN_VSCROLLBAR // status()
+    [
+        ExecMethod = ExecViewOptions ;
+        StateMethod = StateViewOptions ;
+        Export = FALSE;
+    ]
+
+    FN_SHADOWCURSOR // status(final|play)
+    [
+        ExecMethod = ExecViewOptions ;
+        StateMethod = StateViewOptions ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+}
+
+interface GlobalContents
+[   uuid = "1FD80520-F517-11d0-AC9B-008029E867C6"; ]
+{
+    UINT16  Type    FN_COLL_TYPE
+    (
+        UINT16  Position        FN_COLL_TYPE
+    )
+    [
+    ]
+
+    // Bereichsname, Index-Titel oder Leerstring
+    String  Title FN_COLL_TITLE
+    (
+        UINT16  Position        FN_COLL_TITLE
+    )
+    [
+    ]
+    // ohne FileName wird ein TextBereich an der Position eingefuegt
+    BOOL    InsertDocument  FN_COLL_ADD
+    (
+        UINT16  Position        FN_COLL_ADD,
+        UINT16  FileName        FN_PARAM_1
+    )
+    [
+    ]
+
+}
+

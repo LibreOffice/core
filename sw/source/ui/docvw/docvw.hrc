@@ -1,0 +1,93 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef _DOCVW_HRC
+#define _DOCVW_HRC
+
+#include "rcid.hrc"
+
+#define MN_READONLY_POPUP               (RC_DOCVW_BEGIN + 1)
+#define MN_READONLY_OPENURL             (RC_DOCVW_BEGIN + 2)
+#define MN_READONLY_OPENURLNEW          (RC_DOCVW_BEGIN + 3)
+#define MN_READONLY_EDITDOC             (RC_DOCVW_BEGIN + 4)
+    // FREE, formerly known as MN_READONLY_BROWSE_STOP
+#define MN_READONLY_BROWSE_BACKWARD     (RC_DOCVW_BEGIN + 6)
+#define MN_READONLY_BROWSE_FORWARD      (RC_DOCVW_BEGIN + 7)
+#define MN_READONLY_SELECTION_MODE      (RC_DOCVW_BEGIN + 8)
+#define MN_READONLY_SAVEGRAPHIC         (RC_DOCVW_BEGIN + 11)
+#define MN_READONLY_SAVEBACKGROUND      (RC_DOCVW_BEGIN + 12)
+#define MN_READONLY_COPYLINK            (RC_DOCVW_BEGIN + 13)
+#define MN_READONLY_COPYGRAPHIC         (RC_DOCVW_BEGIN + 14)
+#define MN_READONLY_LOADGRAPHIC         (RC_DOCVW_BEGIN + 15)
+#define MN_READONLY_GRAPHICOFF          (RC_DOCVW_BEGIN + 16)
+#define MN_READONLY_PLUGINOFF           (RC_DOCVW_BEGIN + 17)
+#define MN_READONLY_TOGALLERYLINK       (RC_DOCVW_BEGIN + 18)
+#define MN_READONLY_TOGALLERYCOPY       (RC_DOCVW_BEGIN + 19)
+#define MN_READONLY_SOURCEVIEW          (RC_DOCVW_BEGIN + 20)
+#define MN_READONLY_RELOAD_FRAME        (RC_DOCVW_BEGIN + 21)
+#define MN_READONLY_RELOAD              (RC_DOCVW_BEGIN + 22)
+#define MN_READONLY_COPY                (RC_DOCVW_BEGIN + 23)
+
+//For the following we need space for the gallery-themes
+#define MN_READONLY_GRAPHICTOGALLERY    (RC_DOCVW_BEGIN + 24)
+#define MN_READONLY_BACKGROUNDTOGALLERY (RC_DOCVW_BEGIN + 60)
+
+
+#define STR_EXPORT_GRAFIK_TITLE         (RC_DOCVW_BEGIN + 1)
+#define STR_CHAIN_OK                    (RC_DOCVW_BEGIN + 2)
+#define STR_CHAIN_NOT_EMPTY             (RC_DOCVW_BEGIN + 3)
+#define STR_CHAIN_IS_IN_CHAIN           (RC_DOCVW_BEGIN + 4)
+#define STR_CHAIN_WRONG_AREA            (RC_DOCVW_BEGIN + 5)
+#define STR_CHAIN_NOT_FOUND             (RC_DOCVW_BEGIN + 6)
+#define STR_CHAIN_SOURCE_CHAINED        (RC_DOCVW_BEGIN + 7)
+#define STR_CHAIN_SELF                  (RC_DOCVW_BEGIN + 8)
+#define STR_REDLINE_INSERT              (RC_DOCVW_BEGIN + 9)
+#define STR_REDLINE_DELETE              (RC_DOCVW_BEGIN + 10)
+#define STR_REDLINE_FORMAT              (RC_DOCVW_BEGIN + 11)
+#define STR_REDLINE_TABLE               (RC_DOCVW_BEGIN + 12)
+#define STR_REDLINE_FMTCOLL             (RC_DOCVW_BEGIN + 13)
+#define STR_ENDNOTE                     (RC_DOCVW_BEGIN + 14)
+#define STR_FTNNOTE                     (RC_DOCVW_BEGIN + 15)
+
+#define STR_TABLE_COL_ADJUST            (RC_DOCVW_BEGIN + 16)
+#define STR_TABLE_ROW_ADJUST            (RC_DOCVW_BEGIN + 17)
+#define STR_TABLE_SELECT_ALL            (RC_DOCVW_BEGIN + 18)
+#define STR_TABLE_SELECT_ROW            (RC_DOCVW_BEGIN + 19)
+#define STR_TABLE_SELECT_COL            (RC_DOCVW_BEGIN + 20)
+
+#define STR_SMARTTAG_CLICK              (RC_DOCVW_BEGIN + 21)
+
+#define MSG_READONLY_CONTENT            (RC_DOCVW_BEGIN + 1)
+
+#define DOCVW_ACT_END   STR_SMARTTAG_CLICK
+
+#if DOCVW_ACT_END > RC_DOCVW_END
+#error Resource-Id Ueberlauf in #file, #line
+#endif
+
+
+#endif

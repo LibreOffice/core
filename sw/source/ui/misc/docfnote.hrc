@@ -1,0 +1,60 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#define RB_POS_PAGE     1
+#define RB_POS_CHAPTER  2
+#define FT_POS          3
+#define FT_NUMTYPE      4
+#define FT_NUMCOUNT     5
+
+#define LB_NUMVIEW      10
+#define LB_NUMCOUNT     11
+#define FLD_OFFSET      12
+#define FT_OFFSET       13
+#define FL_NUM                  14
+
+#define LB_PARA_TEMPL   30
+#define LB_PAGE_TEMPL   31
+#define FT_PARA_TEMPL   32
+#define FT_PAGE_TEMPL   33
+#define FL_TEMPL                34
+
+#define FT_CONT         40
+#define ED_CONT         41
+#define FT_CONT_FROM    42
+#define ED_CONT_FROM    43
+#define FL_CONT                 44
+
+#define FT_PREFIX       45
+#define ED_PREFIX       46
+#define FT_SUFFIX       47
+#define ED_SUFFIX       48
+#define FT_TEXT_CHARFMT     49
+#define LB_TEXT_CHARFMT     50
+#define FT_ANCHR_CHARFMT    51
+#define FL_CHAR_TEMPL           52
+#define LB_ANCHR_CHARFMT    53
+

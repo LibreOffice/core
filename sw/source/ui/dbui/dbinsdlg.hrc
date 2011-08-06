@@ -1,0 +1,73 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef _DBINSDLG_HRC
+#define _DBINSDLG_HRC
+
+
+#define FT_INSERT_DATA          1
+#define RB_AS_TABLE             2
+#define RB_AS_FIELD             3
+#define RB_AS_TEXT              4
+#define BT_OK                   5
+#define BT_CANCEL               6
+#define BT_HELP                 7
+#define FL_HEAD                           8
+#define FT_DB_COLUMN            10
+#define FL_FORMAT                       11
+#define RB_DBFMT_FROM_DB        12
+#define RB_DBFMT_FROM_USR       13
+#define LB_DBFMT_FROM_USR       14
+
+/* ------------- Page Text/Field ------------------ */
+#define LB_TXT_DB_COLUMN        15
+
+#define IB_DBCOL_TOEDIT                 16
+#define ED_DB_TEXT                      17
+#define FT_DB_PARA_COLL         18
+#define LB_DB_PARA_COLL         19
+
+/* ------------- Page Table -------------------- */
+#define LB_TBL_DB_COLUMN        20
+
+#define IB_DBCOL_ALL_TO                 21
+#define IB_DBCOL_ONE_TO                 22
+#define IB_DBCOL_ONE_FROM               23
+#define IB_DBCOL_ALL_FROM               24
+#define FT_TABLE_COL            25
+#define LB_TABLE_COL            26
+#define FL_BOTTOM                       27
+#define CB_TABLE_HEADON         28
+#define RB_HEADL_COLNMS         29
+#define RB_HEADL_EMPTY          30
+#define PB_TBL_FORMAT           31
+#define PB_TBL_AUTOFMT          32
+
+#define STR_NOTEMPL             33
+
+
+#endif
