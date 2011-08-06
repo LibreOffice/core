@@ -3054,6 +3054,10 @@ void ScTable::SetRangeName(ScRangeName* pNew)
 {
     delete mpRangeName;
     mpRangeName = pNew;
+
+    //fdo#39792: mark stream as invalid, otherwise new ScRangeName will not be written to file
+    if (IsStreamValid())
+        SetStreamValid(false);
 }
 
 ScRangeName* ScTable::GetRangeName() const
