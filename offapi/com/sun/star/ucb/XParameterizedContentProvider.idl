@@ -1,0 +1,110 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_ucb_XParameterizedContentProvider_idl__
+#define __com_sun_star_ucb_XParameterizedContentProvider_idl__
+
+#include <com/sun/star/lang/IllegalArgumentException.idl>
+#include <com/sun/star/ucb/XContentProvider.idl>
+#include <com/sun/star/uno/XInterface.idl>
+
+
+//=============================================================================
+
+module com { module sun { module star { module ucb {
+
+//=============================================================================
+/** Register specially adjusted instances of content providers on URL
+    templates and supplementary arguments.
+
+    @version 1.0
+    @author Stephan Bergmann
+*/
+published interface XParameterizedContentProvider: com::sun::star::uno::XInterface
+{
+    //-------------------------------------------------------------------------
+    /** Register a content provider on a URL template and supplementary
+        arguments.
+
+        @param Template  A URL template.  If the input is malformed or too
+        complex, an <type scope="com::sun::star::lang">IllegalArgumentException</type> may be raised.
+
+        @param Arguments  Any supplementary arguments required by this
+        <type>XContentProvider</type>, represented as a single string.  If the
+        input is malformed, an
+        <type scope="com::sun::star::lang">IllegalArgumentException</type>
+        may be raised.
+
+        @param ReplaceExisting  If true, and if the given Template conflicts
+        with an already registered instance, the old registration is replaced
+        by the new one.  If false, and if the given Template conflicts with an
+        already registered instance, the new registration is not performed,
+        and null is returned.
+
+        @return  Either this <type>XContentProvider</type>, or another,
+        specially adjusted version of this <type>XContentProvider</type> (this
+        flexibility allows for different implementation strategies), or null
+        if the given Template conflicts with an already registered instance
+        and ReplaceExisting is false.  Note that the returned
+        <type>XContentProvider</type> must still be registered at the content
+        provider manager!
+    */
+    com::sun::star::ucb::XContentProvider
+    registerInstance([in] string Template,
+                     [in] string Arguments,
+                     [in] boolean ReplaceExisting)
+        raises (com::sun::star::lang::IllegalArgumentException);
+
+    //-------------------------------------------------------------------------
+    /** Deregisters a content provider.
+
+        @param Template  A URL template.  If the input is malformed or too
+        complex, an IllegalArgumentException may be raised.
+
+        @param Arguments  Any supplementary arguments required by this
+        <type>XContentProvider</type>, represented as a single string.  If the
+        input is malformed, an
+        <type scope="com::sun::star::lang">IllegalArgumentException</type>
+        may be raised.
+
+        @return  Either this <type>XContentProvider</type>, or another,
+        specially adjusted version of this <type>XContentProvider</type> (this
+        flexibility allows for different implementation strategies), or null
+        if no instance is registered for the given Template.  Note that the
+        returned <type>XContentProvider</type> must still be deregistered at
+        the content provider manager!
+    */
+    com::sun::star::ucb::XContentProvider
+    deregisterInstance([in] string Template,
+                       [in] string Arguments)
+        raises (com::sun::star::lang::IllegalArgumentException);
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

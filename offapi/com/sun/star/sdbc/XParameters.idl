@@ -1,0 +1,448 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_sdbc_XParameters_idl__
+#define __com_sun_star_sdbc_XParameters_idl__
+
+#include <com/sun/star/uno/XInterface.idl>
+
+#include <com/sun/star/util/Date.idl>
+
+#include <com/sun/star/util/DateTime.idl>
+
+#include <com/sun/star/util/Time.idl>
+
+ module com {  module sun {  module star {  module io {
+ published interface XInputStream;
+};};};};
+
+#include <com/sun/star/sdbc/SQLException.idl>
+
+ module com {  module sun {  module star {  module sdbc {
+
+ published interface XRef;
+ published interface XArray;
+ published interface XBlob;
+ published interface XClob;
+
+
+/** is used for parameter setting, commonly implemented in conjunction with
+    PreparedStatements.
+
+
+    <p>
+    <b>Note:</b> The setXXX methods for setting IN parameter values
+    must specify types that are compatible with the defined SQL type of
+    the input parameter. For instance, if the IN parameter has SQL type
+    Integer, then the method
+    <member scope="com::sun::star::sdbc">XParameters::setInt()</member>
+    should be used.
+
+    </p>
+    <p>
+    If arbitrary parameter type conversions are required, the method
+    <member scope="com::sun::star::sdbc">XParameters::setObject()</member>
+    should be used with a target SQL type.
+    <br/>
+    <br/>
+    Example of setting a parameter;
+    <code>con</code>
+    is an active connection.
+    </p>
+
+    @example <listing>pstmt = con.prepareStatement("UPDATE EMPLOYEES SET SALARY = ? WHERE ID = ?")
+    pstmt.setDouble(1, 153833.00)
+    pstmt.setLong(2, 110592)
+    </listing>@see com::sun::star::sdbc::XPreparedStatement
+ */
+published interface XParameters: com::sun::star::uno::XInterface
+{
+
+    /** sets the designated parameter to SQL NULL.
+     */
+    void setNull([in]long parameterIndex,
+                 [in]long sqlType) raises (SQLException);
+    //-------------------------------------------------------------------------
+
+    /** sets the designated parameter to SQL NULL.  This version of setNull should
+        be used for user-named types and REF type parameters.  Examples
+        of user-named types include: STRUCT, DISTINCT, OBJECT, and
+        named array types.
+
+
+        <p>
+        <b>Note:</b> To be portable, applications must give the
+        SQL type code and the fully-qualified SQL type name when specifying
+        a NULL user-defined or REF parameter. In the case of a user-named type
+        the name is the type name of the parameter itself.  For a REF
+        parameter the name is the type name of the referenced type.  If
+        a SDBC driver does not need the type code or type name information,
+        it may ignore it.
+        <br/>
+        Although it is intended for user-named and Ref parameters,
+        this method may be used to set a null parameter of any JDBC type.
+        If the parameter does not have a user-named or REF type, the given
+        typeName is ignored.
+        </p>
+        @param parameterIndex
+            the first parameter is 1, the second is 2, ...
+        @param sqlType
+            the type of the column to set to <NULL/>
+        @param typeName
+            the name of the type
+        @throws SQLException
+            if a database access error occurs.
+     */
+    void setObjectNull([in]long parameterIndex,
+                        [in]long sqlType,
+                        [in]string typeName) raises (SQLException);
+    //-------------------------------------------------------------------------
+
+    /** sets the designated parameter to a boolean value.  The driver converts this
+        to a SQL BIT value when it sends it to the database.
+        @param parameterIndex
+            the first parameter is 1, the second is 2, ...
+        @param x
+            the parameter value
+        @throws SQLException
+            if a database access error occurs.
+     */
+    void setBoolean([in]long parameterIndex, [in]boolean x)
+        raises (SQLException);
+    //-------------------------------------------------------------------------
+
+    /** sets the designated parameter to a byte value.  The driver converts this
+        to a SQL TINYINT value when it sends it to the database.
+        @param parameterIndex
+            the first parameter is 1, the second is 2, ...
+        @param x
+            the parameter value
+        @throws SQLException
+            if a database access error occurs.
+     */
+    void setByte([in]long parameterIndex, [in]byte x) raises (SQLException);
+    //-------------------------------------------------------------------------
+
+    /** sets the designated parameter to a short value.  The driver converts this
+        to a SQL SMALLINT value when it sends it to the database.
+        @param parameterIndex
+            the first parameter is 1, the second is 2, ...
+        @param x
+            the parameter value
+        @throws SQLException
+            if a database access error occurs.
+     */
+    void setShort([in]long parameterIndex, [in]short x) raises (SQLException);
+    //-------------------------------------------------------------------------
+
+    /** sets the designated parameter to a long value.  The driver converts this
+        to a SQL INTEGER value when it sends it to the database.
+        @param parameterIndex
+            the first parameter is 1, the second is 2, ...
+        @param x
+            the parameter value
+        @throws SQLException
+            if a database access error occurs.
+     */
+    void setInt([in]long parameterIndex, [in]long x) raises (SQLException);
+    //-------------------------------------------------------------------------
+
+    /** sets the designated parameter to a hyper value.  The driver converts this
+        to a SQL BIGINT value when it sends it to the database.
+        @param parameterIndex
+            the first parameter is 1, the second is 2, ...
+        @param x
+            the parameter value
+        @throws SQLException
+            if a database access error occurs.
+     */
+    void setLong([in]long parameterIndex, [in]hyper x) raises (SQLException);
+    //-------------------------------------------------------------------------
+
+    /** sets the designated parameter to a float value. The driver converts this
+        to a SQL FLOAT value when it sends it to the database.
+        @param parameterIndex
+            the first parameter is 1, the second is 2, ...
+        @param x
+            the parameter value
+        @throws SQLException
+            if a database access error occurs.
+     */
+    void setFloat([in]long parameterIndex, [in]float x) raises (SQLException);
+    //-------------------------------------------------------------------------
+
+    /** sets the designated parameter to a double value.  The driver converts this
+        to a SQL DOUBLE value when it sends it to the database.
+        @param parameterIndex
+            the first parameter is 1, the second is 2, ...
+        @param x
+            the parameter value
+        @throws SQLException
+            if a database access error occurs.
+     */
+    void setDouble([in]long parameterIndex, [in]double x) raises (SQLException);
+    //-------------------------------------------------------------------------
+
+    /** sets the designated parameter to a string value. The driver converts this
+        to a SQL VARCHAR or LONGVARCHAR value (depending on the argument's
+        size relative to the driver's limits on VARCHARs) when it sends
+        it to the database.
+        @param parameterIndex
+            the first parameter is 1, the second is 2, ...
+        @param x
+            the parameter value
+        @throws SQLException
+            if a database access error occurs.
+     */
+    void setString([in]long parameterIndex, [in]string x) raises (SQLException);
+    //-------------------------------------------------------------------------
+
+    /** sets the designated parameter to a sequence of bytes.  The driver converts
+        this to a SQL VARBINARY or LONGVARBINARY (depending on the
+        argument's size relative to the driver's limits on VARBINARYs)
+        when it sends it to the database.
+        @param parameterIndex
+            the first parameter is 1, the second is 2, ...
+        @param x
+            the parameter value
+        @throws SQLException
+            if a database access error occurs.
+     */
+    void setBytes([in]long parameterIndex, [in]sequence<byte> x)
+        raises (SQLException);
+    //-------------------------------------------------------------------------
+
+    /** sets the designated parameter to a date value. The driver converts this
+        to a SQL DATE value when it sends it to the database.
+        @param parameterIndex
+            the first parameter is 1, the second is 2, ...
+        @param x
+            the parameter value
+        @throws SQLException
+            if a database access error occurs.
+     */
+    void setDate([in]long parameterIndex, [in]com::sun::star::util::Date x)
+        raises (SQLException);
+    //-------------------------------------------------------------------------
+
+    /** sets the designated parameter to a time value. The driver converts this
+        to a SQL TIME value when it sends it to the database.
+        @param parameterIndex
+            the first parameter is 1, the second is 2, ...
+        @param x
+            the parameter value
+        @throws SQLException
+            if a database access error occurs.
+     */
+    void setTime([in]long parameterIndex, [in]com::sun::star::util::Time x)
+        raises (SQLException);
+    //-------------------------------------------------------------------------
+
+    /** sets the designated parameter to a datetime value.  The driver
+        converts this to a SQL TIMESTAMP value when it sends it to the
+        database.
+        @param parameterIndex
+            the first parameter is 1, the second is 2, ...
+        @param x
+            the parameter value
+        @throws SQLException
+            if a database access error occurs.
+     */
+    void setTimestamp([in]long parameterIndex,
+                      [in]com::sun::star::util::DateTime x) raises (SQLException);
+    //-------------------------------------------------------------------------
+
+    /** sets the designated parameter to the given input stream, which will have
+        the specified number of bytes.
+        When a very large binary value is input to a LONGVARBINARY or LONGVARCHAR
+        parameter, it may be more practical to send it via an
+        <type scope="com::sun::star::io">XInputStream</type>
+        . SDBC will read the data from the stream as needed, until it reaches end-of-file.
+        @param parameterIndex
+            the first parameter is 1, the second is 2, ...
+        @param x
+            the parameter value
+        @param length
+            the number of bytes in the stream
+        @throws SQLException
+            if a database access error occurs.
+     */
+    void setBinaryStream([in]long parameterIndex,
+                            [in]com::sun::star::io::XInputStream x,
+                             [in]long length) raises (SQLException);
+    //-------------------------------------------------------------------------
+
+    /** sets the designated parameter to the given input stream, which will have
+        the specified number of bytes.
+        When a very large binary value is input to a LONGVARCHAR
+        parameter, it may be more practical to send it via a
+        <type scope="com::sun::star::io">XInputStream</type>
+        . SDBC will read the data from the stream as needed, until it reaches end-of-file.
+        @param parameterIndex
+            the first parameter is 1, the second is 2, ...
+        @param x
+            the parameter value
+        @param length
+            the number of characters in the stream
+        @throws SQLException
+            if a database access error occurs.
+     */
+    void setCharacterStream([in]long parameterIndex,
+                             [in]com::sun::star::io::XInputStream x,
+                             [in]long length) raises (SQLException);
+    //-------------------------------------------------------------------------
+
+    /** sets the value of a parameter using an any.
+
+
+        <p>The given object will be converted to the targetSqlType
+        before being sent to the database.
+        If the object has a custom mapping (is of a class implementing SQLData),
+        the SDBC driver should call its method <code>writeSQL</code> to write it
+        to the SQL data stream.
+        If, on the other hand, the object is of a service implementing Ref, Blob,
+        Clob, Struct, or Array, the driver should pass it to the database as a
+        value of the corresponding SQL type.
+        </p>
+        <p>Note that this method may be used to pass database-specific
+        abstract data types.
+        </p>
+        @param parameterIndex
+            the first parameter is 1, the second is 2, ...
+        @param x
+            the parameter value
+        @throws SQLException
+            if a database access error occurs.
+     */
+    void setObject([in]long parameterIndex, [in]any x)
+            raises (SQLException);
+    //-------------------------------------------------------------------------
+
+    /** set a value from the Datatype ANY for a parameter.
+
+
+
+        <p>The given object will be converted to the targetSqlType
+        before being sent to the database.
+        If the object has a custom mapping (is of a class implementing SQLData),
+        the SDBC driver should call its method <code>writeSQL</code> to write it
+        to the SQL data stream.
+        If, on the other hand, the object is of a service implementing Ref, Blob,
+        Clob, Struct, or Array, the driver should pass it to the database as a
+        value of the corresponding SQL type.
+        </p>
+        <p>Note that this method may be used to pass database-specific
+        abstract data types.
+        </p>
+        @param parameterIndex
+            the first parameter is 1, the second is 2, ...
+        @param x
+            the parameter value
+        @param targetSqlType
+            the SQL type (as defined in
+            <type scope="com::sun::star::sdbc">DataType</type>
+            ) to be sent to the database. The scale argument may further qualify this type.
+        @param scale
+            for
+            <member scope="com::sun::star::sdbc">DataType::DECIMAL</member>
+             or
+             <member scope="com::sun::star::sdbc">DataType::NUMERIC</member>
+             types, this is the number of digits after the decimal point. For all other types, this value will be ignored.
+        @throws SQLException
+            if a database access error occurs.
+     */
+    void setObjectWithInfo([in]long parameterIndex,
+                              [in]any x, [in]long targetSqlType, [in]long scale)
+            raises (SQLException);
+    //-------------------------------------------------------------------------
+
+    /** sets a REF(&amp;lt;structured-type&amp;gt;) parameter.
+        @param parameterIndex
+            the first parameter is 1, the second is 2, ...
+        @param x
+            the parameter value
+        @throws SQLException
+            if a database access error occurs.
+     */
+    void setRef ([in]long parameterIndex, [in]XRef x) raises (SQLException);
+    //-------------------------------------------------------------------------
+
+    /** sets a BLOB parameter.
+        @param parameterIndex
+            the first parameter is 1, the second is 2, ...
+        @param x
+            the parameter value
+        @throws SQLException
+            if a database access error occurs.
+     */
+    void setBlob ([in]long parameterIndex, [in]XBlob x) raises (SQLException);
+    //-------------------------------------------------------------------------
+
+    /** sets a CLOB parameter.
+        @param parameterIndex
+            the first parameter is 1, the second is 2, ...
+        @param x
+            the parameter value
+        @throws SQLException
+            if a database access error occurs.
+     */
+    void setClob ([in]long parameterIndex, [in]XClob x) raises (SQLException);
+    //-------------------------------------------------------------------------
+
+    /** sets an Array parameter.
+        @param parameterIndex
+            the first parameter is 1, the second is 2, ...
+        @param x
+            the parameter value
+        @throws SQLException
+            if a database access error occurs.
+     */
+    void setArray ([in]long parameterIndex, [in]XArray x) raises (SQLException);
+
+    //-------------------------------------------------------------------------
+
+    /** clears the current parameter values immediately.
+
+
+        <p>In general, parameter values remain in force for repeated use of a
+        Statement. Setting a parameter value automatically clears its
+        previous value. However, in some cases it is useful to immediately
+        release the resources used by the current parameter values; this can
+        be done by calling clearParameters.
+        </p>
+        @throws SQLException
+            if a database access error occurs.
+     */
+    void clearParameters() raises (SQLException);
+};
+
+//=============================================================================
+
+}; }; }; };
+
+/*===========================================================================
+===========================================================================*/
+#endif

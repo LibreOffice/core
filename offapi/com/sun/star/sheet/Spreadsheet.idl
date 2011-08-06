@@ -1,0 +1,228 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_sheet_Spreadsheet_idl__
+#define __com_sun_star_sheet_Spreadsheet_idl__
+
+#include <com/sun/star/sheet/SheetCellRange.idl>
+#include <com/sun/star/sheet/XSpreadsheet.idl>
+#include <com/sun/star/container/XNamed.idl>
+#include <com/sun/star/util/XProtectable.idl>
+#include <com/sun/star/sheet/XDataPilotTablesSupplier.idl>
+#include <com/sun/star/sheet/XScenariosSupplier.idl>
+#include <com/sun/star/sheet/XSheetAnnotationsSupplier.idl>
+#include <com/sun/star/drawing/XDrawPageSupplier.idl>
+#include <com/sun/star/table/XTableChartsSupplier.idl>
+#include <com/sun/star/sheet/XCellRangeMovement.idl>
+#include <com/sun/star/sheet/XPrintAreas.idl>
+#include <com/sun/star/sheet/XSheetPageBreak.idl>
+#include <com/sun/star/sheet/XSheetOutline.idl>
+#include <com/sun/star/sheet/XSheetAuditing.idl>
+#include <com/sun/star/sheet/XSheetLinkable.idl>
+#include <com/sun/star/sheet/Scenario.idl>
+#include <com/sun/star/sheet/XExternalSheetName.idl>
+#include <com/sun/star/util/Color.idl>
+
+//=============================================================================
+
+module com {  module sun {  module star {  module sheet {
+
+//=============================================================================
+
+/** represents a complete spreadsheet in a spreadsheet document.
+
+    <p>This service extents the service SheetCellRange. A spreadsheet is
+    nothing else than a cell range with extended functionality.</p>
+
+    @see com::sun::star::sheet::SpreadsheetDocument
+ */
+service Spreadsheet
+{
+    //-------------------------------------------------------------------------
+
+    /** provides functionality for cell range handling.
+     */
+    service com::sun::star::sheet::SheetCellRange;
+
+    //=========================================================================
+
+    service com::sun::star::sheet::Scenario;
+
+    //=========================================================================
+
+    /** provides methods to create a cell cursor.
+     */
+    interface com::sun::star::sheet::XSpreadsheet;
+
+    //-------------------------------------------------------------------------
+
+    /** provides accessing the spreadsheet name.
+     */
+    interface com::sun::star::container::XNamed;
+
+    //-------------------------------------------------------------------------
+
+    /** provides methods to protect and unprotect the sheet contents.
+     */
+    interface com::sun::star::util::XProtectable;
+
+    //-------------------------------------------------------------------------
+
+    /** provides access to the collection of DataPilot tables.
+     */
+    interface com::sun::star::sheet::XDataPilotTablesSupplier;
+
+    //-------------------------------------------------------------------------
+
+    /** provides access to the collection of scenarios.
+     */
+    interface com::sun::star::sheet::XScenariosSupplier;
+
+        //-------------------------------------------------------------------------
+
+    /** provides access to the collection of annotations.
+     */
+    interface com::sun::star::sheet::XSheetAnnotationsSupplier;
+
+    //-------------------------------------------------------------------------
+
+    /** provides access to the draw page of this spreadsheet.
+     */
+    interface com::sun::star::drawing::XDrawPageSupplier;
+
+    //-------------------------------------------------------------------------
+
+    /** provides access to the collection of chart objects.
+     */
+    interface com::sun::star::table::XTableChartsSupplier;
+
+    //-------------------------------------------------------------------------
+
+    /** provides methods to move cell ranges inside the spreadsheet or to
+        other spreadsheets in this document.
+     */
+    interface com::sun::star::sheet::XCellRangeMovement;
+
+    //-------------------------------------------------------------------------
+
+    /** provides access to the print area settings of this sheet.
+     */
+    interface com::sun::star::sheet::XPrintAreas;
+
+    //-------------------------------------------------------------------------
+
+    /** provides access to the page breaks of this sheet.
+     */
+    interface com::sun::star::sheet::XSheetPageBreak;
+
+    //-------------------------------------------------------------------------
+
+    /** provides access to row and column outline settings.
+     */
+    interface com::sun::star::sheet::XSheetOutline;
+
+    //-------------------------------------------------------------------------
+
+    /** provides access to the auditing (detective) functionality.
+     */
+    interface com::sun::star::sheet::XSheetAuditing;
+
+    //-------------------------------------------------------------------------
+
+    /** provides methods for a linked sheet.
+     */
+    interface com::sun::star::sheet::XSheetLinkable;
+
+    //-------------------------------------------------------------------------
+
+    /** provides a method to set an external name at the sheet.
+
+        @since OOo 3.0
+     */
+    [optional] interface com::sun::star::sheet::XExternalSheetName;
+
+    //=========================================================================
+
+    /** specifies if the sheet is visible.
+     */
+    [property] boolean IsVisible;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies the page style of the sheet.
+     */
+    [property] string PageStyle;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies the direction of the columns in the spreadsheet.
+
+        <p>Possible values are com::sun::star::text::WritingMode2::LR_TB to
+        order the columns from left to right, and
+            com::sun::star::text::WritingMode2::RL_TB to order the columns from
+        right to left.</p>
+
+        @see com::sun::star::text::WritingMode2
+     */
+    [optional, property] short TableLayout;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies whether the sheet has an automatic print area.
+
+    <p> The automatic print area is used to print a sheet without
+        explicit print areas, also if other sheets have print areas.</p>
+
+    <p> If the property is true, and there are print areas on other sheets,
+        the used area of this sheet is also printed.</p>
+
+    <p> If the property is false, and there are print areas on other sheets,
+        only these specified print areas are printed.</p>
+
+    <p> If there are no print areas on the other sheets it does not matter
+        whether property is true or false.</p>
+
+    <p> This property can only be true, if there are no print areas given
+        on this sheet. If the property is set to true the print areas of
+        this sheet will be removed.</p>
+
+        @see XPrintAreas
+
+     */
+    [optional, property] boolean AutomaticPrintArea;
+
+    /** specifies the color of the sheet tab, if any.
+     */
+    [optional, property] com::sun::star::util::Color TabColor;
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif
+

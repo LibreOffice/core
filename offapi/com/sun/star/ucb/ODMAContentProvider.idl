@@ -1,0 +1,88 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_ucb_ODMAContentProvider_idl__
+#define __com_sun_star_ucb_ODMAContentProvider_idl__
+
+#include <com/sun/star/ucb/XContentProvider.idl>
+
+//=============================================================================
+
+module com { module sun { module star { module ucb {
+
+//=============================================================================
+/** The ODMA Content Provider (OCP) implements a <type>ContentProvider</type>
+    for the <type>UniversalContentBroker</type> (UCB).
+
+    <p>It provides access to a document structure stored on a Document Management System (DMS).</p>
+
+
+    @see com::sun::star::ucb::ContentProvider
+    @see com::sun::star::ucb::Content
+    @see com::sun::star::ucb::ODMAContent
+
+    @since OOo 1.1.2
+*/
+published service ODMAContentProvider
+{
+    //-------------------------------------------------------------------------
+    /** provides two types of content; the document and the Root Folder.
+
+        <p>
+
+        <ol>
+        <li><p>The document Content corresponds to a document stored on the
+            DMS.</p>
+        <li><p>The Root Folder exists at any time and is used to show all
+            documents available at that time. All other OCP contents are children
+            of this folder. The OCP Root Folder can only contain OCP Documents.
+            It has the URL &bdquo;<b>vnd.sun.star.odma:/</b>&ldquo;.</p>
+        </ol>
+
+
+
+        <p><b>URL Scheme for OCP Contents</b>
+        <p>Each OCP content has an identifier corresponding to the following
+        scheme:</p>
+        <p>vnd.sun.star.odma:/&lt;name&gt;</p>
+        <p>where &lt;name&gt; is the DocumentID given by the DMS.</p>
+        <p STYLE="font-weight: medium">Examples:</p>
+        <p><b>vnd.sun.star.odma:/ </b><span STYLE="font-weight: medium">( The
+        URL of the OCP Root Folder )</span></p>
+        <p STYLE="font-weight: medium"><b>vnd.sun.star.odma:/</b> a document
+        id given by the DMS</p>
+        <p><b>vnd.sun.star.odma:/</b>::ODMA\DMS_ID\DM_SPECIFIC_INFO</p>
+
+        </p>
+     */
+    interface com::sun::star::ucb::XContentProvider;
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

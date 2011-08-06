@@ -1,0 +1,136 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_drawing_AccessibleGraphicShape_idl__
+#define __com_sun_star_drawing_AccessibleGraphicShape_idl__
+
+#include <com/sun/star/accessibility/XAccessible.idl>
+#include <com/sun/star/accessibility/XAccessibleContext.idl>
+#include <com/sun/star/accessibility/XAccessibleComponent.idl>
+
+module com {  module sun {  module star {  module drawing {
+
+/** The <type>AccessibleDrawDocumentView</type> service is implemented by
+    views of Draw and Impress documents.
+
+    <p>An object that implements the <type>AccessibleDrawDocumentView</type>
+    service provides information about the view of a Draw or Impress
+    document in one of the various view modes.  With its children it gives
+    access to the current page and the shapes on that page.</p>
+
+    <p>This service gives a simplified view on the underlying document.  It
+    tries both to keep the structure of the accessibility representation
+    tree as simple as possible and provide as much relevant information as
+    possible.  This has the following consequences:
+    <ol>
+    <li>Only the current draw page and only the visible shapes are
+    accessible.  To switch to another page or to access shapes that lie
+    outside the currently visible area, the user has to issue these requests
+    manually or programmatically through the usual channels, e.g. pressing
+    keys or selecting menu entries.</li>
+    <li>The hierarchy exposed through the
+    <type scope="::com::sun::star::accessibility">XAccessibleContext</type>
+    interface does not necessarily correspond directly to the underlying
+    draw page structure.  Internal nodes in this hierarchy are introduced
+    by group shapes, 3D scenes, and OLE objects.</li>
+    <li>The view modes editing view, outline view, slides view, notes view,
+    handout view, and presentation view are not exposed explicitly.
+    However, if there happens to be a view mode change which results in a
+    rearrangement of the visible shapes, the user gets notified of this.</li>
+    </ol></p>
+
+     @since OOo 1.1.2
+*/
+published service AccessibleDrawDocumentView
+{
+    /** Base interface for being accessible.  It gives access to the
+        <type scope="::com::sun::star::accessibility">XAccessibleContext</type>
+        interface.
+    */
+    interface ::com::sun::star::accessibility::XAccessible;
+
+    /** Provide access to the view of a document.
+
+        <p>You can access the following information:
+        <ul>
+        <li>Role: The object's role is <const
+            scope="com::sun::star::accessibility"
+                >AccessibleRole::DOCUMENT</const>.</li>
+        <li>Name: Its name is "AccessibleDrawDocumentView",
+        "AccessibleOutlineView", or "slide window".</li>
+        <li>Description: The description is "Draw Document", "Accessible
+        Draw Document Outline", or "slide window".</li>
+        <li>Children: The shapes of the current draw page that are currently
+            visible are direct and indirect children of (an object
+            implementing)
+            this service.  Group shapes, 3D scenes, and OLE objects
+            introduce further levels into the hierarchy.  If the visibility
+            of shapes changes--due to
+            scrolling, switching the current draw page, or changing the view
+            mode--the appropriate listeners are called and the user gets
+            informed of this.</li>
+        <li>Parent: The parent will usually be the window that contains the
+            draw document view.  It has to be set via implementation dependent
+            ways.</li>
+        <li>Relations: Relations are set and modified from the outside.</li>
+        <li>States: <const scope="com::sun::star::accessibility"
+                >AccessibleStateType::DEFUNC</const> is set if a document view
+                becomes obsolete like when the window, which displays the view,
+                is closed.  Otherwise the states
+                <const scope="com::sun::star::accessibility"
+                    >AccessibleStateType::ENABLED</const>,
+                <const scope="com::sun::star::accessibility"
+                    >AccessibleStateType::SHOWING</const>,
+                <const scope="com::sun::star::accessibility"
+                    >AccessibleStateType::VISIBLE</const>,
+                <const scope="com::sun::star::accessibility"
+                    >AccessibleStateType::FOCUSABLE</const>, and
+                <const scope="com::sun::star::accessibility"
+                   >AccessibleStateType::SELECTABLE</const>
+            are always set.</li>
+        <li>Locale: Is obtained from the parent and returned unchanged.</li>
+        </ul></p>
+    */
+    interface ::com::sun::star::accessibility::XAccessibleContext;
+
+    /** Provide access to a draw document's graphical representation.
+
+        <p>The main purpose of this interface is to provide a bounding box
+        of the currently visible area and to let the user find children
+        (i.e. shapes) that cover a given test point.  The more interesting
+        part of the graphical representation of a draw page lies in its
+        children.  See the <type>AccessibleShape</type> service for more
+        information about shapes.</p>
+
+        @see AccessibleShape
+    */
+    interface ::com::sun::star::accessibility::XAccessibleComponent;
+};
+
+}; }; }; };
+
+#endif

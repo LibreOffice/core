@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<components cfg:package="uno"
+            xmlns:xsi="http://www.w3.org/1999/XMLSchema-instance"
+            xmlns:cfg="http://openoffice.org/2000/registry/instance">
+
+<service>
+ <available-implementations cfg:type="string" cfg:derivedBy="list"/>
+ <context-properties cfg:type="set" cfg:element-type="cfg:any"/>
+</service>
+
+<implementation>
+ <activator cfg:type="string"/>
+ <url cfg:type="string"/>
+ <supported-services cfg:type="string" cfg:derivedBy="list"/>
+ <context-properties cfg:type="set" cfg:element-type="cfg:any"/>
+</implementation>
+
+<singleton>
+ <used-service cfg:type="string"/>
+ <initial-arguments cfg:type="set" cfg:element-type="cfg:any"/>
+</singleton>
+
+</components>

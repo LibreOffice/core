@@ -1,0 +1,109 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_awt_FontWeight_idl__
+#define __com_sun_star_awt_FontWeight_idl__
+
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module awt {
+
+//=============================================================================
+
+/** These values are used to specify whether a font is thin or bold.
+
+    <p>They may be expanded in future versions.</p>
+ */
+published constants FontWeight
+{
+    //-------------------------------------------------------------------------
+
+    /** The font weight is not specified/known.
+     */
+    const float DONTKNOW = 0.000000;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies a 50% font weight.
+     */
+    const float THIN = 50.000000;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies a 60% font weight.
+     */
+    const float ULTRALIGHT = 60.000000;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies a 75% font weight.
+     */
+    const float LIGHT = 75.000000;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies a 90% font weight.
+     */
+    const float SEMILIGHT = 90.000000;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies a normal font weight.
+     */
+    const float NORMAL = 100.000000;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies a 110% font weight.
+     */
+    const float SEMIBOLD = 110.000000;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies a 150% font weight.
+     */
+    const float BOLD = 150.000000;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies a 175% font weight.
+     */
+    const float ULTRABOLD = 175.000000;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies a 200% font weight.
+     */
+    const float BLACK = 200.000000;
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

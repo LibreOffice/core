@@ -1,0 +1,287 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_rendering_XGraphicDevice_idl__
+#define __com_sun_star_rendering_XGraphicDevice_idl__
+
+#include <com/sun/star/uno/XInterface.idl>
+#include <com/sun/star/lang/IllegalArgumentException.idl>
+#include <com/sun/star/geometry/IntegerSize2D.idl>
+#include <com/sun/star/geometry/RealSize2D.idl>
+#include <com/sun/star/rendering/XLinePolyPolygon2D.idl>
+#include <com/sun/star/rendering/XBezierPolyPolygon2D.idl>
+#include <com/sun/star/rendering/XColorSpace.idl>
+#include <com/sun/star/lang/XMultiServiceFactory.idl>
+
+module com { module sun { module star { module rendering {
+
+published interface XBitmap;
+published interface XVolatileBitmap;
+published interface XBufferController;
+
+/* TODO: There's obviously a concept called window missing here, where
+   methods such as bufferController, fullscreen mode etc . belong
+   to. But see below
+ */
+
+/** This interface provides access to a graphic device, such as a
+    printer, or a screen device. Every canvas (@see XCanvas) has
+    exactly one associated graphic device, into which its output is
+    rendered.
+
+    For a typical windowing system, the graphic device is equivalent
+    to a distinct OS window, with it's own clipped output area,
+    fullscreen and double-buffering attributes. That is, even if one
+    can have multiple canvases per system window, they all share the
+    same graphic device and thus e.g. fullscreen state. If the OS
+    restrictions are in such a way that fullscreen or double-buffering
+    is screen-exclusive, i.e. that per screen, only one object can
+    have this state, it might even be that all windows on the screen
+    share a common graphic device.
+ */
+published interface XGraphicDevice : ::com::sun::star::uno::XInterface
+{
+    /** Query the controller for multi buffering functionality on this
+        graphic device.
+
+        If there is no such functionality available, the NULL
+        reference is returned.
+     */
+    XBufferController                           getBufferController();
+
+    //-------------------------------------------------------------------------
+
+    /** Query the color space interface for this graphic device.
+
+        This is to be used when interpreting or setting device color
+        values.
+     */
+    XColorSpace                                 getDeviceColorSpace();
+
+    //-------------------------------------------------------------------------
+
+    /** Query the physical resolution of the device in pixel per
+        millimeter.
+
+        A special floating point value of +infinity here indicates
+        "unknown", i.e. at the time of rendering undetermined or
+        possibly infinite resolution along the corresponding
+        direction.
+     */
+    ::com::sun::star::geometry::RealSize2D  getPhysicalResolution();
+
+    //-------------------------------------------------------------------------
+
+    /** Query the physical dimensions of the device in millimeter.
+
+        A special floating point value of +infinity here indicates
+        "unknown", i.e. at the time of rendering undetermined or
+        possibly infinite resolution along the corresponding
+        direction.
+
+        @see XBitmap::getSize()
+     */
+    ::com::sun::star::geometry::RealSize2D  getPhysicalSize();
+
+    //-------------------------------------------------------------------------
+
+    /** Create a line poly-polygon which can internally use
+        device-optimized representations already.
+
+        @param points
+        The points of the poly-polygon, in a separate array for every polygon.
+     */
+    XLinePolyPolygon2D                  createCompatibleLinePolyPolygon( [in] sequence< sequence< ::com::sun::star::geometry::RealPoint2D > > points );
+
+    //-------------------------------------------------------------------------
+
+    /** Create a Bezier poly-polygon which can internally use
+        device-optimized representations already.
+
+        @param points
+        The points of the poly-polygon, in a separate array for every polygon.
+     */
+    XBezierPolyPolygon2D            createCompatibleBezierPolyPolygon( [in] sequence< sequence< ::com::sun::star::geometry::RealBezierSegment2D > > points );
+
+    //-------------------------------------------------------------------------
+
+    /** Create a bitmap whose memory layout and sample model is
+        compatible to the graphic device.
+
+        @param size
+        Size of the requested bitmap in pixel. Both components of the
+        size must be greater than 0
+     */
+    XBitmap                         createCompatibleBitmap( [in] ::com::sun::star::geometry::IntegerSize2D size )
+        raises (com::sun::star::lang::IllegalArgumentException);
+
+    //-------------------------------------------------------------------------
+
+    /** Create a volatile bitmap that is usable with this graphic device.
+
+        A volatile bitmap's difference in comparison to a plain bitmap
+        (e.g. generated via createCompatibleBitmap()) is the fact that
+        its content might vanish at any point in time (making any
+        operation with them produce a
+        <type>VolatileContentDestroyedException</type>). The benefit,
+        on the other hand, is that they might be easy to
+        hardware-accelerate on certain platforms, without the need to
+        keep a safety copy of the content internally.
+
+        @param size
+        Size of the requested bitmap in pixel. Both components of the
+        size must be greater than 0
+     */
+    XVolatileBitmap                 createVolatileBitmap( [in] ::com::sun::star::geometry::IntegerSize2D size )
+        raises (com::sun::star::lang::IllegalArgumentException);
+
+    //-------------------------------------------------------------------------
+
+    /** Create a bitmap with alpha channel whose memory layout and
+        sample model is compatible to the graphic device.
+
+        @param size
+        Size of the requested bitmap in pixel. Both components of the
+        size must be greater than 0
+     */
+    XBitmap                         createCompatibleAlphaBitmap( [in] ::com::sun::star::geometry::IntegerSize2D size )
+        raises (com::sun::star::lang::IllegalArgumentException);
+
+    //-------------------------------------------------------------------------
+
+    /** Create a volatile bitmap with alpha channel that is usable
+        with this graphic device.
+
+        A volatile bitmap's difference in comparison to a plain bitmap
+        (e.g. generated via createCompatibleBitmap()) is the fact that
+        its content might vanish at any point in time (making any
+        operation with them produce a
+        <type>VolatileContentDestroyedException</type>). The benefit,
+        on the other hand, is that they might be easy to
+        hardware-accelerate on certain platforms, without the need to
+        keep a safety copy of the content internally.
+
+        @param size
+        Size of the requested bitmap in pixel. Both components of the
+        size must be greater than 0
+     */
+    XVolatileBitmap                 createVolatileAlphaBitmap( [in] ::com::sun::star::geometry::IntegerSize2D size )
+        raises (com::sun::star::lang::IllegalArgumentException);
+
+    //-------------------------------------------------------------------------
+
+    /** Get a reference to this device's parametric polygon factory.
+
+        @return a reference to this device's parametric polygon
+        factory. Although it is possible to use parametric polygons on
+        all canvases, regardless of the associated graphic device,
+        this is not advisable: each canvas implementation is free to
+        internally generate optimized parametric polygons, which can
+        be used more directly for e.g. texturing operations.
+
+        <pre>
+        Available services (all canvas implementations should provide
+        this minimal set, though are free to add more; just check the
+        getAvailableServiceNames() on the returned interface):
+
+        - Gradients - all gradients need to support two construction
+          parameters, "Colors" being a <type>sequence<Color></type>
+          and "Stops" being a <type>sequence<double></type>. Both must
+          have the same length, and at least two elements. See
+          http://www.w3.org/TR/SVG11/pservers.html#GradientStops for
+          the semantics of gradient stops and colors.
+          Required gradient services:
+
+          * "LinearGradient" - the gradient varies linearly between
+            the given colors. without coordinate system
+            transformation, the color interpolation happens in
+            increasing x direction, and is constant in y
+            direction. Equivalent to svg linear gradient
+            http://www.w3.org/TR/SVG11/pservers.html#LinearGradients
+
+          * "EllipticalGradient" - this gradient has zeroth color
+            index in the middle, and varies linearly between center
+            and final color. The services takes an additional
+            parameter named "AspectRatio" of <type>double</type>
+            (width divided by height), if this aspect ratio is 1, the
+            gradient is circular. If it's not 1, the gradient is
+            elliptical, with the special twist that the aspect ratio
+            is maintained also for the center color: the gradient will
+            not collapse into a single point, but become a line of
+            center color. If "AspectRatio" is missing, or equal to 1,
+            this gradient yields similar results as the svg radial
+            gradient
+            http://www.w3.org/TR/SVG11/pservers.html#RadialGradients
+
+          * "RectangularGradient" - this gradient has zeroth color
+            index in the middle, and varies linearly between center
+            and final color via rectangular boxes
+            around the center point. The services takes an additional
+            parameter named "AspectRatio" of <type>double</type>
+            (width divided by height), if this aspect ratio is 1, the
+            gradient is quadratic. If it's not 1, the gradient is
+            rectangular, with the special twist that the aspect ratio
+            is maintained also for the center color: the gradient will
+            not collapse into a single point, but become a line of
+            center color.
+
+        - Hatch patterns - Required hatch services:
+
+          * "VerticalLineHatch" - this hatching consists of vertical lines
+          * "OrthogonalLinesHatch" - this hatching consists of
+            crossing vertical and horizontal lines
+          * "ThreeCrossingLinesHatch" - this hatching consists of
+            vertical and horizontal lines plus diagonal lines from
+            left, top to bottom, right.
+          * "FourCrossingLinesHatch" - this hatching consists of
+            vertical and horizontal lines plus diagonal lines in both
+            directions.
+        </pre>
+     */
+    com::sun::star::lang::XMultiServiceFactory getParametricPolyPolygonFactory();
+
+    //-------------------------------------------------------------------------
+
+    /** Tells whether this graphic device has a full screen mode,
+        i.e. whether a window can cover the whole screen exclusively.
+     */
+    boolean                         hasFullScreenMode();
+
+    //-------------------------------------------------------------------------
+
+    /** Enter or leave the fullscreen mode, if possible. The return
+        value denotes the success of the operation.
+
+        @attention depending on the underlying operating system,
+        fullscreen mode can be left without a enterFullScreenMode(
+        false ) call.
+     */
+    boolean                         enterFullScreenMode( [in] boolean bEnter );
+};
+
+}; }; }; };
+
+#endif

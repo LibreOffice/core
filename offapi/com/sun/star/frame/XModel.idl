@@ -1,0 +1,222 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_frame_XModel_idl__
+#define __com_sun_star_frame_XModel_idl__
+
+#include <com/sun/star/lang/XComponent.idl>
+#include <com/sun/star/beans/PropertyValue.idl>
+#include <com/sun/star/frame/XController.idl>
+#include <com/sun/star/container/NoSuchElementException.idl>
+#include <com/sun/star/uno/XInterface.idl>
+
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module frame {
+
+//=============================================================================
+/** represents a component which is created from an URL and arguments.
+
+    <p>
+    It is a representation of a resource in the sense that it was
+    created/loaded from the resource. The arguments are passed to the loader
+    to modify its behavior. An example for such an argument is "AsTemplate",
+    which loads the resource as a template for a new document.
+    (see <type scope="com::sun::star::document">MediaDescriptor</type> for further details)
+    </p>
+
+    <p>
+    Models can be controlled by controller components, which are usually
+    views of the model.
+    (see <type>Controller</type> for further details)
+    </p>
+
+    <p>
+    If there is at least one controller, there is by definition a
+    current controller. And if that controller supports the interface
+    <type scope="com::sun::star::view">XSelectionSupplier</type>, it has a current selection too.
+    </p>
+
+    @see com::sun::star::document::MediaDescriptor
+    @see Controller
+    @see com::sun::star::view::XSelectionSupplier
+ */
+published interface XModel: com::sun::star::lang::XComponent
+{
+    //-------------------------------------------------------------------------
+    /** informs a model about its resource description.
+
+        @param URL
+            specifies the resource
+
+        @param Arguments
+            are optional arguments for that resource
+            (see <type scope="com::sun::star::document">MediaDescriptor</type>)
+
+        @return
+            <TRUE/> for success
+            <br>
+            <FALSE/> otherwise
+     */
+    boolean attachResource(
+        [in] string URL,
+        [in] sequence<com::sun::star::beans::PropertyValue> Arguments);
+
+    //-------------------------------------------------------------------------
+    /** provides information about the location of this model
+
+        @returns
+            the URL of the resource which is represented by this model.
+
+        @see XStorable::getLocation()
+     */
+    string getURL();
+
+    //-------------------------------------------------------------------------
+    /** provides read access on currently representation of the
+        <type scope="com::sun::star::document">MediaDescriptor</type>
+        of this model which describes the model and his state
+
+        @returns
+            the arguments with which the model was originally created or
+            stored the last time.
+     */
+    sequence< com::sun::star::beans::PropertyValue > getArgs();
+
+    //-------------------------------------------------------------------------
+    /** is called whenever a new controller is created for this model.
+
+        <p>
+        The <type scope="com::sun::star::lang">XComponent</type> interface
+        of the controller must be used to recognize when it is deleted.
+        </p>
+
+        @param Controller
+            a new controller for this model
+
+        @see XModel::disconnectController()
+     */
+    [oneway] void connectController( [in] XController Controller );
+
+    //-------------------------------------------------------------------------
+    /** is called whenever an existing controller should be deregistered at this model.
+
+        <p>
+        The <type scope="com::sun::star::lang">XComponent</type> interface
+        of the controller must be used to recognize when it is deleted.
+        </p>
+
+        @param Controller
+            the existing controller which should be deregistered
+
+        @see XModel::connectController()
+     */
+    [oneway] void disconnectController( [in] XController Controller );
+
+    //-------------------------------------------------------------------------
+    /** suspends some notifications to the controllers which are used
+        for display updates.
+
+        <p>
+        The calls to <member>XModel::lockControllers()</member> and
+        <member>XModel::unlockControllers()</member> may be
+        nested and even overlapping, but they must be in pairs. While
+        there is at least one lock remaining, some notifications
+        for display updates are not broadcasted.
+        </p>
+     */
+    [oneway] void lockControllers();
+
+    //-------------------------------------------------------------------------
+    /** resumes the notifications which were suspended by
+        <member>XModel::lockControllers()</member>.
+
+        <p>
+        The calls to <member>XModel::lockControllers()</member> and
+        <member>XModel::unlockControllers()</member> may be
+        nested and even overlapping, but they must be in pairs. While
+        there is at least one lock remaining, some notifications for
+        display updates are not broadcasted.
+        </p>
+    */
+    [oneway] void unlockControllers();
+
+    //-------------------------------------------------------------------------
+    /** determines if there is at least one lock remaining.
+
+        <p>
+        While there is at least one lock remaining, some notifications
+        for display updates are not broadcasted to the controllers.
+        </p>
+
+        @return
+            <TRUE/> if any lock exist
+            <br>
+            <FALSE/> otherwise
+     */
+    boolean hasControllersLocked();
+
+    //-------------------------------------------------------------------------
+    /** provides access to the controller which currently controls this model
+
+        @returns
+            If the controller which is active is a controller of this model,
+            it will be returned. If not, the controller which was the last
+            active of this model is returned. If no controller of this model
+            ever was active, the controller first registered is returned. If no
+            controller is registered for this model, <NULL/> is returned.
+     */
+    XController getCurrentController();
+
+    //-------------------------------------------------------------------------
+    /** sets a registered controller as the current controller.
+
+        @param Controller
+            reference to an already existing connected controller, which should be
+            the new active one
+
+        @throws com::sun::star::container::NoSuchElementException
+            if <var>xController</var> isn't an already connected controller on this model
+     */
+    void setCurrentController( [in] XController Controller )
+            raises( com::sun::star::container::NoSuchElementException );
+
+    //-------------------------------------------------------------------------
+    /** provides read access on current selection on controller
+
+        @returns
+            the current selection in the current controller.
+            If there is no current controller, it returns <NULL/>.
+     */
+    com::sun::star::uno::XInterface getCurrentSelection();
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

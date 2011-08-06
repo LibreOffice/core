@@ -1,0 +1,125 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_configuration_backend_DataImporter_idl__
+#define __com_sun_star_configuration_backend_DataImporter_idl__
+
+#include <com/sun/star/task/XJob.idl>
+
+//=============================================================================
+
+module com { module sun { module star { module configuration { module backend {
+
+//=============================================================================
+
+/**
+    allows importing data from one configuration repository into another. .
+
+    @since OOo 1.1.2
+*/
+published service DataImporter
+{
+    //-------------------------------------------------------------------------
+
+    /** allows running an import job
+
+        <p> The source and destination repositories are selected by arguments
+            passed to
+            <member scope="com::sun::star::task">XJob::execute()</member>.
+            The names and meanings of such arguments depend on
+            the implementation. Each implementation must document such arguments.
+        </p>
+
+        <p> Implementations may return a value from
+            <member scope="com::sun::star::task">XJob::execute()</member>
+            that indicates the status of job execution. The type and meaning of
+            such status indicators depend on the implementation.
+        </p>
+         <p>If <void/> or <TRUE/> is returned, this indicates successful
+            execution. If an
+            <type scope="com::sun::star::uno">Exception</type> is returned,
+            it represents an error condition encountered during execution.
+        </p>
+
+        <p> The following arguments to
+            <member scope="com::sun::star::task">XJob::execute()</member>
+            should be supported by implementations. Implementations must document
+            a failure to support any of these arguments:
+        <dl>
+            <dt><code>ImporterService</code> : <atom >string</atom></dt>
+            <dd>A service or implementation name used to instantiate the
+                <type>Importer</type> to use for importing. If this parameter
+                is missing, the implementation selects an appropriate importer.
+                By default, a <type>MergeImporter</type> should be used.
+            </dd>
+            <dt><code>OverwriteExisting</code> : <atom >boolean</atom></dt>
+            <dd>If <TRUE/>, specifies that no existing data should be
+                overwritten by the import. If the <type>Importer</type> used
+                does not support such protection, an error may be raised.
+                If some data is not imported, because there is existing
+                data, this is indicated by returning an appropriate exception.
+            </dd>
+            <dt><code>TruncateExisting</code> : <atom >boolean</atom></dt>
+            <dd>If <TRUE/>, specifies that existing data should be
+                discarded and replaced by the imported data.
+                If the <type>Importer</type> used does not support this
+                operation, an error may be raised.
+                By default, a <type>CopyImporter</type> is used to perform
+                truncating import.
+            </dd>
+            <dt><code>Entity</code> : <atom >string</atom></dt>
+            <dd>An identifier for the entity in the destination backend for
+                which the imported data should apply. The value will be passed
+                to <member>XLayerImporter::importLayerForEntity()</member>.
+                If this parameter is missing, the implementation uses
+                <member>XLayerImporter::importLayer()</member> instead.
+            </dd>
+            <dt><code>Component</code> : <atom >string</atom></dt>
+            <dd>Names the component for which to import data. If this
+                parameter is missing, the selection of data to import depends
+                on implementation-specific parameters.
+            </dd>
+            <dt><code>LayerFilter</code> : <type >LayerFilter</type></dt>
+            <dd>A filter to transform data during import. This parameter is
+                optional. If this parameter is missing, data will be imported
+                unaltered. <em>Support for this parameter is optional.</em>
+                If the implementation does not support a filter it will raise an
+                <type scope="com::sun::star::lang">IllegalArgumentException</type>.
+            </dd>
+        </dl>
+        </p>
+
+      */
+    interface com::sun::star::task::XJob ;
+
+    //-------------------------------------------------------------------------
+} ;
+
+//=============================================================================
+
+} ; } ; } ; } ; } ;
+
+#endif

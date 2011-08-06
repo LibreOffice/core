@@ -1,0 +1,248 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_ui_XUIConfigurationManager_idl__
+#define __com_sun_star_ui_XUIConfigurationManager_idl__
+
+#include <com/sun/star/container/XIndexContainer.idl>
+#include <com/sun/star/container/XIndexAccess.idl>
+#include <com/sun/star/beans/XPropertySet.idl>
+#include <com/sun/star/beans/PropertyValue.idl>
+#include <com/sun/star/ui/XUIConfigurationListener.idl>
+#include <com/sun/star/container/ElementExistException.idl>
+#include <com/sun/star/container/NoSuchElementException.idl>
+#include <com/sun/star/lang/IllegalArgumentException.idl>
+#include <com/sun/star/lang/IllegalAccessException.idl>
+
+module com { module sun { module star { module ui {
+
+/** specifies a user interface configuration manager interface which
+    controls the structure of all customizable user interface
+    elements.
+
+    @since OOo 2.0
+*/
+
+published interface XUIConfigurationManager : ::com::sun::star::uno::XInterface
+{
+    /** resets the configuration manager to the default user interface
+        configuration data.
+        <p>
+        This means that all user interface configuration data of the
+        instance will be removed. A module based user interface
+        configuration manager removes user defined elements, but set all
+        other elements back to default. It is not possible to remove
+        default elements from a module user interface configuration
+        manager.
+        </p>
+    */
+    void reset();
+
+    /** retrieves information about all user interface elements within
+        the user interface configuration manager.
+
+        @param ElementType
+            makes it possible to narrow the result set to only one type
+            of user interface elements. If all user interface element
+            types should be returned
+            <value scope=com::sun::star::ui>UIElementType::UNKNOWN</value>
+            must be provided.
+
+        @return
+            returns all user interface elements within the user interface
+            configuration manager that meet the given ElementType
+            specification. <p>The following
+            <type scope="com::sun::star::beans">PropertyValue</type> entries
+            are defined inside the sequence for every user interface element.
+            <ul>
+                <li><b>ResourceURL<b/>specifies the unique resource URL for
+                the user interface element.</li>
+                <li><b>UIName<b/>specifies the user interface name for the
+                user interface element. Not all user interface elements have
+                set UIName. At least menubars do not.</li>
+            </ul>
+            <p>
+
+        @see UIElementType
+    */
+    sequence< sequence< com::sun::star::beans::PropertyValue > > getUIElementsInfo( [in] short ElementType ) raises ( com::sun::star::lang::IllegalArgumentException );
+
+    /** creates an empty settings data container.
+
+        @return
+            an empty user interface element settings data container, which
+            implements <type>UIElementSettings</type>.
+    */
+    ::com::sun::star::container::XIndexContainer createSettings();
+
+    /** determines if the settings of a user interface element is part the
+        user interface configuration manager.
+
+        @param ResourceURL
+            a resource URL which identifies the user interface element. A
+            resource URL must meet the following syntax:
+            "private:resource/$type/$name. It is only allowed to use ASCII
+            characters for type and name.
+
+        @return
+            <TRUE/> if settings have been found, otherwise <FALSE/>.
+    */
+    boolean hasSettings( [in] string ResourceURL ) raises ( com::sun::star::lang::IllegalArgumentException );
+
+    /** retrieves the settings of a user interface element.
+
+        @param ResourceURL
+            a resource URL which identifies the user interface element. A
+            resource URL must meet the following syntax:
+            "private:resource/$type/$name. It is only allowed to use ASCII
+            characters for type and name.
+
+        @param bWriteable
+            must be <TRUE/> if the retrieved settings should be a writable.
+            Otherwise <FALSE/> should be provided to get a shareable reference
+            to the settings data.
+
+        @return
+            settings data of an existing user interface element, which
+            implements <type>UIElementSettings</type>. If the settings data
+            cannot be found a
+            <type scope="com::sun::star::container">NoSuchElementException</type>
+            is thrown.  If the <member>ResourceURL</member> is not valid or
+            describes an unknown type a
+            <type scope="com::sun::star::lang">IllegalArgumentException</type>
+            is thrown.
+    */
+    ::com::sun::star::container::XIndexAccess getSettings( [in] string ResourceURL, [in] boolean bWriteable ) raises ( com::sun::star::container::NoSuchElementException, com::sun::star::lang::IllegalArgumentException );
+
+    /** replaces the settings of a user interface element with new settings.
+
+        @param ResourceURL
+            a resource URL which identifies the user interface element to
+            be replaced. If no element with the given resource URL exists a
+            <type scope="com::sun::star::container">NoSuchElementException</type>
+            is thrown.
+
+        @param aNewData
+            the new settings data of an existing user interface element, which
+            implements <type>UIElementSettings</type>.
+
+        <p>
+        If the settings data cannot be found a
+        <type scope="com::sun::star::container">NoSuchElementException</type>
+        is thrown. If the <member>ResourceURL</member> is not valid or describes
+        an unknown type a
+        <type scope="com::sun::star::lang">IllegalArgumentException</type>
+        is thrown. If the configuration manager is read-only a
+        <type scope="com::sun::star::lang">IllegalAccessException</type> is
+        thrown.
+        </p>
+    */
+    void replaceSettings( [in] string ResourceURL, [in] ::com::sun::star::container::XIndexAccess aNewData ) raises ( com::sun::star::container::NoSuchElementException, com::sun::star::lang::IllegalArgumentException, com::sun::star::lang::IllegalAccessException );
+
+    /** removes the settings of an existing user interface element.
+
+        @param ResourceURL
+            a resource URL which identifies the user interface element settings
+            to be removed.
+
+        <p>
+        If the settings data cannot be found a
+        <type scope="com::sun::star::container">NoSuchElementException</type> is
+        thrown. If the <member>ResourceURL</member> is not valid or describes an
+        unknown type a <type scope="com::sun::star::lang">IllegalArgumentException</type>
+        is thrown. If the configuration manager is read-only a
+        <type scope="com::sun::star::lang">IllegalAccessException</type> is thrown.
+        </p>
+    */
+    void removeSettings( [in] string ResourceURL ) raises ( com::sun::star::container::NoSuchElementException, com::sun::star::lang::IllegalArgumentException, com::sun::star::lang::IllegalAccessException );
+
+    /** inserts the settings of a new user interface element.
+
+        @param ResourceURL
+            a resource URL which identifies the new user interface element.
+
+        @param aNewData
+            the settings data of the new user interface element, which implements
+            <type>UIElementSettings</type>.
+
+        <p>
+        If the settings data is already present a
+        <type scope="com::sun::star::container">ElementExistException</type>
+        is thrown. If the <member>ResourceURL</member> is not valid or describes
+        an unknown type a <type scope="com::sun::star::lang">IllegalArgumentException</type>
+        is thrown. If the configuration manager is read-only a
+        <type scope="com::sun::star::lang">IllegalAccessException</type> is thrown.
+        </p>
+    */
+    void insertSettings( [in] string NewResourceURL, [in] ::com::sun::star::container::XIndexAccess aNewData ) raises ( com::sun::star::container::ElementExistException, com::sun::star::lang::IllegalArgumentException, com::sun::star::lang::IllegalAccessException );
+
+    /** retrieves the image manager from the user interface configuration
+        manager.
+
+        <p>
+        Every user interface configuration manager has one image manager
+        instance which controls all images of a module or document.
+        </p>
+
+        @return
+            the image manager of the user interface configuration manager.
+    */
+    com::sun::star::uno::XInterface getImageManager();
+
+    /** retrieves the keyboard short cut manager from the user interface
+        configuration manager.
+
+        <p>
+        Every user interface configuration manager has one keyboard short cut
+        manager instance which controls all short cuts of a module or document.
+        </p>
+
+        @return
+            the short cut manager of the user interface configuration manager.
+    */
+    com::sun::star::uno::XInterface getShortCutManager();
+
+    /** retrieves the events manager from the user interface configuration manager.
+
+        <p>
+        Every user interface configuration manager has one events manager
+        instance which controls the mapping of events to script URLs of a module
+        or document.
+        </p>
+
+        @return
+            the events manager of the user interface configuration
+            manager, if one exists.
+    */
+    com::sun::star::uno::XInterface getEventsManager();
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

@@ -1,0 +1,158 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_rendering_CompositeOperation_idl__
+#define __com_sun_star_rendering_CompositeOperation_idl__
+
+module com { module sun { module star { module rendering {
+
+/** These constants determine how the primitive color is combined with
+    the background.<p>
+
+    When performing this calculations, it is assumed that all color
+    values are premultiplied with the corresponding alpha values (if
+    no alpha is specified, 1.0 is assumed). Then, the following
+    general compositing operation is performed:
+    <p>
+    C = Ca * Fa + Cb * Fb
+    <p>
+    where C is the result color, Ca and Cb are the input colors,
+    premultiplied with alpha, and Fa and Fb are described for the
+    different composite modes (wherein Aa and Ab denote source and
+    destination alpha, respectively).<p>
+
+    @since OOo 2.0
+ */
+constants CompositeOperation
+{
+    /** Clear the destination.<p>
+
+        Clear the destination area. The function values are: Fa = Fb =
+        0.<p>
+     */
+    const byte CLEAR = 0;
+
+    /** Copy source as-is to the destination.<p>
+
+        Copy source as-is to the destination. The function values are:
+        Fa = 1, Fb = 0.<p>
+     */
+    const byte SOURCE = 1;
+
+    /** Leave the destination as-is.<p>
+
+        Leave the destination as-is. The function values are: Fa = 0,
+        Fb = 1.<p>
+     */
+    const byte DESTINATION = 2;
+
+    /** Copy the source over the destination.<p>
+
+        Copy the source over the destination. The function values are:
+        Fa = 1, Fb = 1-Aa.<p>
+     */
+    const byte OVER = 3;
+
+    /** Copy the source under the destination.<p>
+
+        Copy the source under the destination. The function values
+        are: Fa = 1-Ab, Fb = 1.<p>
+     */
+    const byte UNDER = 4;
+
+    /** Copy the source to the destination.<p>
+
+        Copy the source to the destination, but limited to where the
+        destination is. The function values are: Fa = Ab, Fb = 0.<p>
+     */
+    const byte INSIDE = 5;
+
+    /** Leave the destination as is.<p>
+
+        Leave the destination as is, but only where the source
+        was. The function values are: Fa = 0, Fb = Aa.<p>
+     */
+    const byte INSIDE_REVERSE = 6;
+
+    /** Copy the source to the destination<p>
+
+        Copy the source to the destination, but limited to where the
+        destination is not. The function values are: Fa = 1-Ab, Fb =
+        0.<p>
+     */
+    const byte OUTSIDE = 7;
+
+    /** Leave the destination as is.<p>
+
+        Leave the destination as is, but only where the source has not
+        been. The function values are: Fa = 0, Fb = 1-Aa.<p>
+     */
+    const byte OUTSIDE_REVERSE = 8;
+
+    /** Copy the source over the destination<p>
+
+        Copy the source over the destination, but only where the
+        destination is. Keep the destination. The function values are:
+        Fa = Ab, Fb = 1-Aa.<p>
+     */
+    const byte ATOP = 9;
+
+    /** Copy the destination over the source.<p>
+
+        Copy the destination over the source, but only where the
+        source is. Keep the source. The function values are: Fa =
+        1-Ab, Fb = Aa.<p>
+     */
+    const byte ATOP_REVERSE = 10;
+
+    /** Combine source and destination by exclusive or.<p>
+
+        Take only the parts where either source or destination, but
+        not both visible. The function values are: Fa = 1-Ab, Fb =
+        1-Aa.<p>
+     */
+    const byte XOR = 11;
+
+    /** Add source and destination values.<p>
+
+        Simply add contributions of both source and destination. The
+        resulting color values are limited to the permissible color
+        range, and clipped to the maximal value, if exceeded. The
+        function values are: Fa = 1, Fb = 1.<p>
+    */
+    const byte ADD = 12;
+
+    /** Saturate source and destination.<p>
+
+        Saturate destination with source values. The function values
+        are: Fa = min(1,(1-Ab)/Aa), Fb = 1<p>
+     */
+    const byte SATURATE = 13;
+};
+
+}; }; }; };
+
+#endif

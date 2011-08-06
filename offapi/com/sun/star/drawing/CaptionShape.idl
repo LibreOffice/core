@@ -1,0 +1,141 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_drawing_CaptionShape_idl__
+#define __com_sun_star_drawing_CaptionShape_idl__
+
+#include <com/sun/star/drawing/Shape.idl>
+
+#include <com/sun/star/drawing/Text.idl>
+#include <com/sun/star/drawing/FillProperties.idl>
+#include <com/sun/star/drawing/LineProperties.idl>
+
+#include <com/sun/star/drawing/ShadowProperties.idl>
+
+#include <com/sun/star/drawing/RotationDescriptor.idl>
+#include <com/sun/star/awt/Point.idl>
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module drawing {
+
+//=============================================================================
+
+/** The <type>CaptionShape</type> represents a rectangular drawing shape
+    with an additional set of lines. It can be used as a description for
+    a fixed point inside a drawing.
+ */
+published service CaptionShape
+{
+    /** the position and size is only used for the
+        caption area
+    */
+    service com::sun::star::drawing::Shape;
+
+    service com::sun::star::drawing::FillProperties;
+
+    service com::sun::star::drawing::LineProperties;
+
+    service com::sun::star::drawing::ShadowProperties;
+
+    service com::sun::star::drawing::Text;
+
+    service com::sun::star::drawing::RotationDescriptor;
+
+    /** This is the radius of the caption area corners.
+     */
+    [property] long CornerRadius;
+
+    /** The caption point property specify the position of
+        the point that is captioned. A set of lines are
+        rendered from the caption area.
+    */
+    [property] com::sun::star::awt::Point CaptionPoint;
+
+    /** This property specifies the geometry of the line of a caption.
+
+        @see CaptionType
+    */
+    [property] short CaptionType;
+
+    /** This property specifies if the escape angle of
+        the line of a caption is fixed or free. If this
+        is set to <false/>, the application can choose
+        the best possible angle. If not, the value in
+        <code>CaptionAngle</code> is used.
+    */
+    [property] boolean CaptionIsFixedAngle;
+
+    /** This property specifies the escape angle of
+        the line of a caption.
+        It is only used if <code>CaptionIsFixedAngle</code>
+        is set to <true/>
+    */
+    [property] long CaptionAngle;
+
+    /** This property specifies the distance between the
+        text area of the caption and the start of the line.
+    */
+    [property] long CaptionGap;
+
+    /** This property specifies the escape direction for the
+        line of a caption.
+
+        @see CaptionEscapeDirection
+    */
+    [property] long CaptionEscapeDirection;
+
+    /** If this property is <true/>, the property <code>CaptionEscapeRelative</code>
+        is used, else the property <code>CaptionEscapeAbsolute</code> is used.
+    */
+    [property] boolean CaptionIsEscapeRelative;
+
+    /** This property specifies the relative escape distance for
+        the line of a caption.
+    */
+    [property] long CaptionEscapeRelative;
+
+    /** This property specifies the absolute escape distance for
+        the line of a caption.
+    */
+    [property] long CaptionEscapeAbsolute;
+
+    /** This property specifies the length of the caption line.
+    */
+    [property] long CaptionLineLength;
+
+    /** If this property is <true/>, the application determines
+        the best possible length for the caption line.
+    */
+    [property] boolean CaptionIsFitLineLength;
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif
+

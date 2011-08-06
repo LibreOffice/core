@@ -1,0 +1,31 @@
+#ifndef com_sun_star_chart_XFormattedString_idl
+#define com_sun_star_chart_XFormattedString_idl
+
+#include <com/sun/star/uno/XInterface.idl>
+
+module com
+{
+module sun
+{
+module star
+{
+module chart2
+{
+
+interface XFormattedString : ::com::sun::star::uno::XInterface
+{
+    /**
+     */
+    string getString();
+
+    /**
+     */
+    void setString( [in] string String );
+};
+
+} ; // chart2
+} ; // com
+} ; // sun
+} ; // star
+
+#endif

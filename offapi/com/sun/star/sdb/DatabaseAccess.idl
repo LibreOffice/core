@@ -1,0 +1,113 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_sdb_DatabaseAccess_idl__
+#define __com_sun_star_sdb_DatabaseAccess_idl__
+
+#include <com/sun/star/beans/XPropertySet.idl>
+
+#include <com/sun/star/beans/PropertyValue.idl>
+
+#include <com/sun/star/util/XNumberFormatsSupplier.idl>
+
+
+ module com {  module sun {  module star {  module sdb {
+
+ published interface XDatabaseAccess;
+ published interface XCompletedConnection;
+
+
+/** specifies a component, which controls DatabaseAccessConnections and acts like a
+    shared DataSource.
+
+    @deprecated
+ */
+published service DatabaseAccess
+{
+    // gives access to the properties.
+    interface com::sun::star::beans::XPropertySet;
+
+    /** controls the establishing of the connections.
+     */
+    interface XDatabaseAccess;
+
+    /** establishing a connection with user interaction, the implementation
+             is optional.
+     */
+    [optional] interface XCompletedConnection;
+
+    /** is the URL of the bean.
+     */
+    [readonly, property] string URL;
+
+    /** is the title of the bean.
+     */
+    [property] string Title;
+
+    /** indicates a database url of the form <br>
+        <code> jdbc:<em>subprotocol</em>:<em>subname</em></code> or
+        <code> sdbc:<em>subprotocol</em>:<em>subname</em></code>
+     */
+    [property] string ConnectURL;
+
+    /** is a list of arbitrary string tag/value pairs as
+             connection arguments; normally at least a "user" and
+             "password" property should be included.
+     */
+    [property] sequence<com::sun::star::beans::PropertyValue> ConnectInfo;
+
+    /** determines whether modifications on the data access bean are allowed
+        or not.
+     */
+    [readonly, property] boolean IsReadOnly;
+
+    /** provides an object for formatting numbers.
+     */
+    [property] com::sun::star::util::XNumberFormatsSupplier
+                        NumberFormatsSupplier;
+
+    /** indicates that a password is always necessary.
+     */
+    [optional, property] boolean IsPasswordRequired;
+
+    /** defines a list of tables, on which the bean should have it's focus.
+        If empty, all tables are rejected.
+    */
+    [optional, property] sequence<string> TableFilter;
+
+    /** defines a list of table types, on which the bean should have it's focus.
+         If empty, all tables types are rejected.
+     */
+    [optional, property] sequence<string> TableTypeFilter;
+};
+
+//=============================================================================
+
+}; }; }; };
+
+/*===========================================================================
+===========================================================================*/
+#endif

@@ -1,0 +1,184 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_rendering_XAnimatedSprite_idl__
+#define __com_sun_star_rendering_XAnimatedSprite_idl__
+
+#include <com/sun/star/uno/XInterface.idl>
+#include <com/sun/star/lang/IllegalArgumentException.idl>
+#include <com/sun/star/geometry/RealPoint2D.idl>
+#include <com/sun/star/rendering/ViewState.idl>
+#include <com/sun/star/rendering/RenderState.idl>
+#include <com/sun/star/rendering/XSprite.idl>
+
+
+module com { module sun { module star { module rendering {
+
+/** This interface can be used to control an animated sprite object.<p>
+
+    This interface can be used to control an animated sprite object on
+    an XSpriteCanvas. Sprites are moving, animated objects.<p>
+
+    @since OOo 2.0
+ */
+published interface XAnimatedSprite : XSprite
+{
+    /** Start animation sequence of this sprite.<p>
+
+        The speed of the animation is given in cycles per second
+        (where a cycle is defined as one full animation run, i.e. the
+        full [0,1] range of the <member>XAnimation::render</member>'s
+        t parameter, or a full sequence of sprite bitmaps drawn). Once
+        an animation is running, the associated
+        <type>XSpriteCanvas</type> handles screen updates
+        automatically. That means, changes to position or alpha are
+        reflected on screen automatically. Please note further that
+        sprite visibility and animation are unrelated, i.e. a hidden
+        sprite can have a running animation, which then displays in
+        the middle of the animation sequence, when a show() is called
+        later on.<p>
+
+        @param nSpeed
+        The speed of the animation in cycles per second (where a cycle
+        is defined as one full animation run, i.e. the full [0,1]
+        range of the <member>XAnimation::render</member>'s t
+        parameter, or a full sequence of sprite bitmaps drawn).
+     */
+    void startAnimation( [in] double nSpeed );
+
+    //-------------------------------------------------------------------------
+
+    /** Stop the animation sequence.<p>
+
+        A subsequent <member>XAnimatedSprite::startAnimation</member>
+        will commence the sequence at the point where it was stopped
+        with here. Once an animation is stopped, the associated
+        <type>XSpriteCanvas</type> does not update changed sprites
+        anymore.<p>
+    */
+    void stopAnimation();
+
+    //-------------------------------------------------------------------------
+
+    /** Reset the animation sequence to start with the first frame.<p>
+
+        If the animation is currently running, the next frame that is
+        drawn after this method has finished, will be the first
+        one. Please note that if an animation is not started, the
+        associated <type>XSpriteCanvas</type> does not update changed
+        sprites automatically.<p>
+     */
+    void resetAnimation();
+
+    //-------------------------------------------------------------------------
+
+    /** Issue an additional render call to this sprite's
+        animation.<p>
+
+        This method has no effect when called for a bitmap-sequence
+        sprite. Please note that if an animation is not started, the
+        associated <type>XSpriteCanvas</type> does not update changed
+        sprites automatically, but has to be told to do so via
+        <member>XSpriteCanvas::updateScreen()</member>.<p>
+     */
+    void updateAnimation();
+
+    //-------------------------------------------------------------------------
+
+    /** Changes the view state in place for this sprite's
+        animation.<p>
+
+        The state given here is used when calling the
+        <member>XAnimation::render()</member> method, or when drawing
+        the sprite's bitmaps, respectively. There's no need to call
+        <member>XSpriteCanvas::updateAnimation()</member> after this
+        method, as it automatically rerenders, if necessary. Please
+        note that if an animation is not started, the associated
+        <type>XSpriteCanvas</type> does not update changed sprites
+        automatically, but has to be told to do so via
+        <member>XSpriteCanvas::updateScreen()</member>.<p>
+
+        @param aViewState
+        The state given here is used when calling the
+        <member>XAnimation::render()</member> method, or when drawing
+        the sprite's bitmaps, respectively.
+
+        @throws <type>com::sun::star::lang::IllegalArgumentException</type>
+        if the view transformation matrix is singular.
+    */
+    void setViewState( [in] ViewState aViewState )
+        raises (com::sun::star::lang::IllegalArgumentException);
+
+    //-------------------------------------------------------------------------
+
+    /** Changes all of the sprite's attributes at one atomic
+        instance.<p>
+
+        This is useful at times where one does not want multiple
+        redraws for every state change.<p>
+
+        Please note that if an animation is not started, the
+        associated <type>XSpriteCanvas</type> does not update changed
+        sprites automatically, but has to be told to do so via
+        <member>XSpriteCanvas::updateScreen()</member>.<p>
+
+        @param aNewPos
+        New left,top output position of the sprite. This position gets
+        transformed by the view and render state.
+
+        @param aViewState
+        New view state of the sprite, and part of the transformation
+        that is applied to aNewPos. The view transformation matrix
+        must not be singular.
+
+        @param aRenderState
+        New render state of the sprite, and part of the transformation
+        that is applied to aNewPos. The render transformation matrix
+        must not be singular.
+
+        @param nAlpha
+        New alpha value of the sprite. This value must be within the
+        [0,1] range.
+
+        @param bUpdateAnimation
+        Whether this method should implicitly call
+        <member>XSpriteCanvas::updateAnimation</member> or not.
+
+        @throws <type>com::sun::star::lang::IllegalArgumentException</type>
+        if one of the passed parameters does not lie in the specified,
+        permissible range.
+     */
+    void setAll( [in] ::com::sun::star::geometry::RealPoint2D   aNewPos,
+                 [in] ViewState                                         aViewState,
+                 [in] RenderState                                       aRenderState,
+                 [in] double                                            nAlpha,
+                 [in] boolean                                           bUpdateAnimation )
+        raises (com::sun::star::lang::IllegalArgumentException);
+};
+
+}; }; }; };
+
+#endif

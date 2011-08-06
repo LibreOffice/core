@@ -1,0 +1,142 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_sdbc_XSQLData_idl__
+#define __com_sun_star_sdbc_XSQLData_idl__
+
+#include <com/sun/star/uno/XInterface.idl>
+
+#include <com/sun/star/sdbc/SQLException.idl>
+
+ module com {  module sun {  module star {  module sdbc {
+
+ published interface XSQLInput;
+ published interface XSQLOutput;
+
+
+/** is used for the custom mapping of SQL user-defined types.
+
+
+    <p>
+    This interface must be implemented by a service that is
+    registered in a type mapping.  It is expected that this interface
+    will normally be implemented by a tool. The methods in this interface
+    are called by the driver and are never called by a programmer
+    directly.
+    </p>
+ */
+published interface XSQLData: com::sun::star::uno::XInterface
+{
+
+    /** returns the fully-qualified name of the SQL user-defined type
+        that this object represents.
+
+
+        <p>
+        This method is called by the SDBC driver to get the name of the
+        UDT instance that is being mapped to this instance of SQLData.
+        </p>
+        @returns
+            the name of the SQL type.
+        @throws SQLException
+            if a database access error occurs.
+     */
+    string getSQLTypeName() raises (SQLException);
+
+     //-------------------------------------------------------------------------
+
+    /** populates this object with data read from the database.
+
+
+        <p>
+        The implementation of the method must follow this protocol:
+        <br/>
+        It must read each of the attributes or elements of the SQL
+        type from the given input stream. This is done
+        by calling a method of the input stream to read each
+        item, in the order that they appear in the SQL definition
+        of the type. The method
+        <code>readSQL</code>
+        then assigns the data to appropriate fields or elements (of this
+        or other objects).
+        <br/>
+        Specifically, it must call the appropriate
+        <code>XSQLInput.readXXX</code>
+        method(s) to do the following:
+        for a Distinct Type, read its single data element;
+        for a Structured Type, read a value for each attribute of the SQL type.
+        </p>
+        <p>
+        The SDBC driver initializes the input stream with a type map
+        before calling this method, which is used by the appropriate
+        <code>SQLInput.readXXX</code>
+        method on the stream.
+        </p>
+
+        @param stream
+            the input SQL data stream
+        @param typeName
+            the SQL type of the value on the data stream
+        @throws SQLException
+            if a database access error occurs.
+
+        @see com::sun::star::sdbc::XSQLInput
+     */
+    void readSQL([in]XSQLInput stream, [in]string typeName)
+        raises (SQLException);
+    //-------------------------------------------------------------------------
+
+    /** writes this object to the given SQL data stream.
+
+
+        <p>
+        The implementation of the method must follow this protocol:
+        <br/>
+        It must write each of the attributes of the SQL type to the given output
+        stream. This is done by calling a method of the output stream to write
+        each item, in the order that they appear in the SQL definition of the type.
+        Specifically, it must call the appropriate
+        <code>XSQLOutput.writeXXX</code>
+        method(s) to do the following:<br>
+        for a Distinct Type, write its single data element;
+        for a Structured Type, write a value for each attribute of the SQL type.
+        </p>
+        @param stream
+            the output SQL data stream
+        @throws SQLException
+            if a database access error occurs.
+        @see com::sun::star::sdbc::XSQLOutput
+     */
+    void writeSQL([in]XSQLOutput stream) raises (SQLException);
+};
+
+//=============================================================================
+
+}; }; }; };
+
+/*===========================================================================
+===========================================================================*/
+#endif

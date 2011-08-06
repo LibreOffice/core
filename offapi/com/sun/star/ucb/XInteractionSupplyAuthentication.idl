@@ -1,0 +1,172 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_ucb_XInteractionSupplyAuthentication_idl__
+#define __com_sun_star_ucb_XInteractionSupplyAuthentication_idl__
+
+#include <com/sun/star/task/XInteractionContinuation.idl>
+#include <com/sun/star/ucb/RememberAuthentication.idl>
+
+
+//=============================================================================
+
+module com { module sun { module star { module ucb {
+
+//=============================================================================
+/** An interaction continuation handing back some authentication data.
+
+    <p> This continuation is typically used in conjunction with
+    <type>AuthenticationRequest</type>. </p>
+*/
+published interface XInteractionSupplyAuthentication: com::sun::star::task::XInteractionContinuation
+{
+    //-------------------------------------------------------------------------
+    /** Specifies if a new "realm" value can be handed back.
+    */
+    boolean canSetRealm();
+
+    //-------------------------------------------------------------------------
+    /** Set a new "realm" value to hand back.
+
+        <p>This method should be called before
+        <member scope="com::sun::star::task">XInteractionContinuation::select</member>,
+        and should only be called if
+        <member>XInteractionSupplyAuthentication::canSetRealm</member> returned
+        <true/>.</p>
+    */
+    void setRealm( [in] string Realm );
+
+    //-------------------------------------------------------------------------
+    /** Specifies if a "user name" value can be handed back.
+    */
+    boolean canSetUserName();
+
+    //-------------------------------------------------------------------------
+    /** Set a new "user name" value to hand back.
+
+        <p>This method should be called before
+        <member scope="com::sun::star::task">XInteractionContinuation::select</member>,
+        and should only be called if
+        <member>XInteractionSupplyAuthentication::canSetUserName</member>
+        returned <true/>.</p>
+    */
+    void setUserName( [in] string UserName );
+
+    //-------------------------------------------------------------------------
+    /** Specifies if a "password" value can be handed back.
+    */
+    boolean canSetPassword();
+
+    //-------------------------------------------------------------------------
+    /** Set a new "password" value to hand back.
+
+        <p>This method should be called before
+        <member scope="com::sun::star::task">XInteractionContinuation::select</member>,
+        and should only be called if
+        <member>XInteractionSupplyAuthentication::canSetPassword</member>
+        returned <true/>.</p>
+    */
+    void setPassword( [in] string Password );
+
+    //-------------------------------------------------------------------------
+    /** Specifies the available modes of how long to remember the password.
+
+        @param Default
+        Returns the default mode (to be initially displayed to the user).
+
+        @returns
+        A sequence of available modes to hand back.  Each individual mode
+        should appear at most once in the sequence.  If the sequence is empty,
+        a new mode cannot be handed back.
+    */
+    sequence<com::sun::star::ucb::RememberAuthentication> getRememberPasswordModes( [out] com::sun::star::ucb::RememberAuthentication Default );
+
+    //-------------------------------------------------------------------------
+    /** Set a new mode of how long to remember the password.
+
+        <p>This method should be called before
+        <member scope="com::sun::star::task">XInteractionContinuation::select</member>,
+        and should only be called if
+        <member>XInteractionSupplyAuthentication::setPassword</member>
+        is also called.</p>
+
+        @param Remember
+        The mode to hand back, should be contained in the sequence returned by
+        <member>XInteractionSupplyAuthentication::getRememberPasswordModes</member>.
+    */
+    void setRememberPassword( [in] com::sun::star::ucb::RememberAuthentication Remember );
+
+    //-------------------------------------------------------------------------
+    /** Specifies if an "account" value can be handed back.
+    */
+    boolean canSetAccount();
+
+    //-------------------------------------------------------------------------
+    /** Set a new "account" value to hand back.
+
+        <p>This method should be called before
+        <member scope="com::sun::star::task">XInteractionContinuation::select</member>,
+        and should only be called if
+        <member>XInteractionSupplyAuthentication::canSetAccount</member>
+        returned <true/>.</p>
+
+    */
+    void setAccount( [in] string Account );
+
+    //-------------------------------------------------------------------------
+    /** Specifies the available modes of how long to remember the account.
+
+        @param Default  Returns the default mode (to be initially displayed to
+        the user).
+
+        @returns  A sequence of available modes to hand back.  Each individual
+        mode should appear at most once in the sequence.  If the sequence is
+        empty, a new mode cannot be handed back.
+     */
+    sequence<com::sun::star::ucb::RememberAuthentication> getRememberAccountModes( [out] com::sun::star::ucb::RememberAuthentication Default );
+
+    //-------------------------------------------------------------------------
+    /** Set a new mode of how long to remember the account.
+
+        <p>This method should be called before
+        <member scope="com::sun::star::task">XInteractionContinuation::select</member>,
+        and should only be called if
+        <member>XInteractionSupplyAuthentication::setAccount</member>
+        is also called.</p>
+
+        @param Remember  The mode to hand back, should be contained in the
+        sequence returned by
+        <member>XInteractionSupplyAuthentication::getRememberAccountModes</member>.
+    */
+    void setRememberAccount( [in] com::sun::star::ucb::RememberAuthentication Remember );
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

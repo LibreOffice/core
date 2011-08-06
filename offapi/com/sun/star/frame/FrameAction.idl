@@ -1,0 +1,151 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_frame_FrameAction_idl__
+#define __com_sun_star_frame_FrameAction_idl__
+
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module frame {
+
+//=============================================================================
+/** these are the events which can happen to the components in frames
+    of the desktop
+
+    <p>
+    Interest listener can get informations about loaded/reloaded or unloaded
+    components into a <type>Frame</type>.
+    </p>
+
+    @see XFrame
+    @see XFrameActionListener
+    @see FrameActionEvent
+ */
+published enum FrameAction
+{
+    //-------------------------------------------------------------------------
+    /** an event of this kind is broadcast whenever a component is
+        attached to a frame
+
+        <p>
+        This is almost the same as the instantiation of the component
+        within that frame. The component is attached to the frame
+        immediately before this event is broadcast.
+        </p>
+
+        @see XFrame::setComponent()
+     */
+    COMPONENT_ATTACHED,
+
+    //-------------------------------------------------------------------------
+    /** an event of this kind is broadcast whenever a component is
+        detaching from a frame
+
+        <p>
+        This is quite the same as the destruction of the component
+        which was in that frame. At the moment when the event is broadcast
+        the component is still attached to the frame but in the next
+        moment it won't.
+        </p>
+
+        @see XFrame::setComponent()
+     */
+    COMPONENT_DETACHING,
+
+    //-------------------------------------------------------------------------
+    /** an event of this kind is broadcast whenever a component is
+        attached to a new model.
+
+        <p>
+        In this case the component remains the same but operates
+        on a new model component.
+        </p>
+     */
+    COMPONENT_REATTACHED,
+
+    //-------------------------------------------------------------------------
+    /** an event of this kind is broadcast whenever a component gets
+        activated
+
+        <p>
+        Activations are broadcast from the top component which was
+        not active before, down to the inner most component.
+        </p>
+
+        @see XFrame::activate()
+     */
+    FRAME_ACTIVATED,
+
+    //-------------------------------------------------------------------------
+    /** an event of this kind is broadcasted immediately before the
+        component is deactivated
+
+        <p>
+        Deactivations are broadcast from the innermost component which
+        does not stay active up to the outer most component which does not
+        stay active.
+        </p>
+
+        @see XFrame::deactivate()
+     */
+    FRAME_DEACTIVATING,
+
+    //-------------------------------------------------------------------------
+    /** an event of this kind is broadcast whenever a component changes
+        its internal context (i.e., the selection).
+
+        <p>
+        If the activation status within a frame changes, this counts as
+        a context change too.
+        </p>
+
+        @see XFrame::contextChanged()
+     */
+    CONTEXT_CHANGED,
+
+    //-------------------------------------------------------------------------
+    /** an event of this kind is broadcast by an active frame when it
+        is getting UI control (tool control).
+
+        @see XFrame::activate()
+     */
+    FRAME_UI_ACTIVATED,
+
+    //-------------------------------------------------------------------------
+    /** an event of this kind is broadcast by an active frame when it
+        is losing UI control (tool control).
+
+        @see XFrame::deactivate()
+     */
+    FRAME_UI_DEACTIVATING
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

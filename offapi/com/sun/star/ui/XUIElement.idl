@@ -1,0 +1,89 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_ui_XUIElement_idl__
+#define __com_sun_star_ui_XUIElement_idl__
+
+#include <com/sun/star/uno/XInterface.idl>
+#include <com/sun/star/beans/XPropertySet.idl>
+#include <com/sun/star/frame/XFrame.idl>
+
+//=============================================================================
+
+module com { module sun { module star { module ui {
+
+//=============================================================================
+
+/** provides a function to retrieve a special purpose interface dependent
+    on the user interface element type.
+
+    <p>
+    The type of the interface depends on the real type of the user interface
+    element. A menubar user interface element provides access to its
+    <type scope="com::sun::star::awt">XSystemDependentMenuBarPeer</type>
+    which supports to retrieve the system dependent menu handle.
+    A floating window or a toolbar user interface element return a
+    <type scope=com::sun::star::awt>XWindow</type>
+    interface.
+    </p>
+*/
+
+published interface XUIElement : com::sun::star::uno::XInterface
+{
+    /** returns an interface to get access to user interface type specific functions.
+
+        @return
+            a special purpose interface which depends on the type of the user
+            interface element.
+    */
+    ::com::sun::star::uno::XInterface getRealInterface();
+
+    /** determines the document frame to which this element is bound to.
+
+        <p>The life time of a user interface element does not explicitly depend on the
+        frame itself but on the visible component attached to the frame. It is possible
+        to exchange the visible component of a frame and that will lead to the end of
+        life of all user interface elements.</p>
+    */
+    [readonly, attribute] ::com::sun::star::frame::XFrame Frame;
+
+    /** a resource URL which is a unique identifier of a user interface element.
+    */
+    [readonly, attribute] string ResourceURL;
+
+    /** determines the type of the user interface element.
+
+        @see UIElementType
+    */
+    [readonly, attribute] short  Type;
+};
+
+}; }; }; };
+
+//=============================================================================
+
+#endif

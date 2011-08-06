@@ -1,0 +1,199 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_inspection_LineDescriptor_idl__
+#define __com_sun_star_inspection_LineDescriptor_idl__
+
+#include <com/sun/star/graphic/XGraphic.idl>
+
+//=============================================================================
+module com {  module sun {  module star {  module inspection {
+
+published interface XPropertyControl;
+
+//-----------------------------------------------------------------------------
+/** describes the appearance of a line representing a single property in an <type>ObjectInspector</type>.
+
+    Such a line consists of
+    <ul><li>a label with a human-readable name for the property</li>
+        <li>a control which is used for user interaction - i.e. it displays the current property
+            value, and allows the user entering a new one.</li>
+        <li>(optional) one or two buttons which, when clicked, can start a more complex, interactive
+            property value input. For instance, if you have a property whose value is a path in the
+            file system, such a button could be used to let the user browse for a path with a
+            usual file picker.</li>
+    </ul>
+
+    @see XPropertyHandler::describePropertyLine
+    @see PropertyLineElement
+
+    @since OOo 2.0.3
+*/
+published struct LineDescriptor
+{
+    /** denotes the human-readable display name used to present a property to the user
+    */
+    string  DisplayName;
+
+    /** denotes the control which should be used to represent the property at the UI.
+
+        @see XPropertyControlFactory
+    */
+    XPropertyControl Control;
+
+    /** specifies the URL to the help topic to be associated with the property
+    */
+    string HelpURL;
+
+    /** determines whether a button exists which can be used for a more complex, interactive
+        property value input.
+
+        <p>If no image for the primary button is specified, but a primary button is present,
+        the three dots will be displayed on the button.</p>
+
+        @see XPropertyHandler::onInteractivePropertySelection
+        @see HasSecondaryButton
+        @see PrimaryButtonImageURL
+        @see PrimaryButtonImage
+    */
+    boolean HasPrimaryButton;
+
+    /** describes a unique id to associate with the primary button
+
+        <p>In OpenOffice.org, UI elements sometimes require a so-called UniqueID, which can be
+        used to uniquely (within the whole application) identify this UI element. For instance,
+        automating the OpenOffice.org UI via a dedicated separate application ("TestTool") requires
+        such IDs.</p>
+
+        <p>If a primary button exists for a property's UI representation (<member>HasPrimaryButton</member>),
+        it gets the ID specified herein.</p>
+    */
+    string PrimaryButtonId;
+
+    /** describes the URL of an image to display on the primary button, if any.
+
+        <p>This URL will be used to obtain an actual <type scope="com::sun::star::graphic">XGraphic</type>
+        object from an <type scope="com::sun::star::graphic">GraphicProvider</type>.</p>
+
+        <p>The property will be ignored if <member>HasPrimaryButton</member> is <FALSE/>.</p>
+
+        <p>If you need to specify a graphic which does not have an URL, but is available as
+        <type scope="com::sun::star::graphic">XGraphic</type> only, then you must leave
+        <code>PrimaryButtonImageURL</code> empty, and use the <member>PrimaryButtonImage</member> property.
+
+        @see PrimaryButtonImage
+    */
+    string  PrimaryButtonImageURL;
+
+    /** describes a graphics to display at the primary button, if any.
+
+        <p>The property will be ignored if <member>HasPrimaryButton</member> is <FALSE/>, or
+        if <member>PrimaryButtonImageURL</member> is a non-empty string.</p>
+
+        @see HasPrimaryButton
+        @see PrimaryButtonImageURL
+    */
+    com::sun::star::graphic::XGraphic PrimaryButtonImage;
+
+    /** determines whether a secondary button exists which can be used for a more complex, interactive
+        property value input.
+
+        <p>A secondary button subordinated to the primary button. If no primary button exists
+        (<member>HasPrimaryButton</member>), this member is ignored.</p>
+
+        @see XPropertyHandler::onInteractivePropertySelection
+        @see HasSecondaryButton
+    */
+    boolean HasSecondaryButton;
+
+    /** describes a unique id to associate with the primary button
+
+        <p>If a secondary button exists for a property's UI representation (<member>HasSecondaryButton</member>),
+        it gets the ID specified herein.</p>
+
+        @see PrimaryButtonId
+    */
+    string SecondaryButtonId;
+
+    /** describes the URL of an image to display on the secondary button, if any.
+
+        <p>This URL will be used to obtain an actual <type scope="com::sun::star::graphic">XGraphic</type>
+        object from an <type scope="com::sun::star::graphic">GraphicProvider</type>.</p>
+
+        <p>The property will be ignored if <member>HasSecondaryButton</member> is <FALSE/>.</p>
+
+        <p>If you need to specify a graphic which does not have an URL, but is available as
+        <type scope="com::sun::star::graphic">XGraphic</type> only, then you must leave
+        <code>SecondaryButtonImageURL</code> empty, and use the <member>SecondaryButtonImage</member> property.
+
+        @see SecondaryButtonImage
+    */
+    string  SecondaryButtonImageURL;
+
+    /** describes a graphics to display at the secondary button, if any.
+
+        <p>The property will be ignored if <member>HasSecondaryButton</member> is <FALSE/>, or
+        if <member>SecondaryButtonImageURL</member> is a non-empty string.</p>
+
+        @see HasSecondaryButton
+        @see SecondaryButtonImageURL
+    */
+    com::sun::star::graphic::XGraphic SecondaryButtonImage;
+
+    /** describes the indent level for the property
+
+        <p>If a given property semantically depends on another one, the indent level
+        can be used to visually represent this fact. For this, the dependent property's
+        indent level would be one larger than the indent level of the other property.</p>
+
+        <p>Normally, <type>XPropertyHandler</type>s will set this to <code>0</code> when describing
+        the UI for a normal property.
+    */
+    short IndentLevel;
+
+    /** describes the category into which the property should be sorted by the <type>ObjectInspector</type>.
+
+        <p>An <type>ObjectInspector</type> can visually group properties which semantically belong
+        together (for instance using tab pages). The decision which properties actually belong together
+        is made using this <member>Category</member> attribute.</p>
+
+        <p>For your implementation of <type>XPropertyHandler</type>, it's recommended that you document the programmatic
+        names used for property categories. This way, your handler might be re-used in
+        different contexts, where only the <type>XObjectInspectorModel</type> needs to provide consistent
+        UI names for the categories.</p>
+
+        @see XObjectInspectorModel::describeCategories
+    */
+    string Category;
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif
+

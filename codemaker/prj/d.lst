@@ -1,0 +1,14 @@
+..\%__SRC%\bin\cppumaker.exe %_DEST%\bin\cppumaker.exe
+..\%__SRC%\bin\cppumaker.pdb %_DEST%\bin\cppumaker.pdb
+..\%__SRC%\bin\javamaker.exe %_DEST%\bin\javamaker.exe
+..\%__SRC%\bin\javamaker.pdb %_DEST%\bin\javamaker.pdb
+
+..\inc\codemaker\*.h %_DEST%\inc\codemaker\*.h
+..\inc\codemaker\*.hxx %_DEST%\inc\codemaker\*.hxx
+
+..\%__SRC%\bin\cppumaker %_DEST%\bin\cppumaker
+..\%__SRC%\bin\javamaker %_DEST%\bin\javamaker
+
+..\%__SRC%\lib\*.lib %_DEST%\lib\*.lib
+..\%__SRC%\lib\i*.lib %_DEST%\lib\i*.lib
+..\%__SRC%\lib\*.a %_DEST%\lib\*.a

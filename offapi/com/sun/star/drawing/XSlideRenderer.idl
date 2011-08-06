@@ -1,0 +1,104 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_drawing_XSlideRenderer_idl__
+#define __com_sun_star_drawing_XSlideRenderer_idl__
+
+#include <com/sun/star/awt/XBitmap.idl>
+#include <com/sun/star/drawing/XDrawPage.idl>
+#include <com/sun/star/rendering/XBitmap.idl>
+#include <com/sun/star/rendering/XSpriteCanvas.idl>
+
+
+module com { module sun { module star { module drawing {
+
+/** Create preview bitmaps for single slides.
+*/
+interface XSlideRenderer
+{
+    /** Create a preview for the given slide that has the same aspect ratio
+        as the page and is as large as possible but not larger than the
+        specified size.
+
+        The reason for not using the given size directly as preview size and
+        thus possibly changing the aspect ratio is that
+        a) a different aspect ratio is not used often, and
+        b) leaving the adaption of the actual preview size (according to the
+        aspect ratio of the slide) to the slide renderer is more convenient
+        to the caller than having to this himself.
+
+        @param xSlide
+            The slide for which a preview will be created.
+        @param aMaximumPreviewPixelSize
+            The maximum size of the preview measured in pixels.  When the
+            aspect ratios of this size and of the given slide differ, then
+            resulting preview will either have the width or the height of
+            this size.
+        @param nSuperSampleFactor
+            When larger than the default 1 then internally a larger preview
+            is created which, before it is returned, is scaled down to the
+            requested size.  The intermediate size is nSuperSampleFactor
+            times the original size.  Values larger than 1 result in higher
+            memory consumption and longer runtime.
+            This value is an attempt to provide some antialiasing and so to
+            provide more readable slide previews.  May become obsolete in
+            the future when true antialiasing support will be integrated.
+    */
+    com::sun::star::awt::XBitmap createPreview (
+        [in] XDrawPage xSlide,
+        [in] com::sun::star::awt::Size aMaximumPreviewPixelSize,
+        [in] short nSuperSampleFactor);
+
+    /** Exactly the same functionality as <member>createPreview()</member>,
+        only a different return type:
+        <type>com::sun::star::rendering::XBitmap</type> instead
+        of <type>com::sun::star::awt::XBitmap</type>.
+        @see createPreview
+        @param xCanvas
+            This canvas is used create a canvas specific bitmap.
+    */
+    com::sun::star::rendering::XBitmap createPreviewForCanvas (
+        [in] XDrawPage xSlide,
+        [in] com::sun::star::awt::Size aMaximumPreviewPixelSize,
+        [in] short nSuperSampleFactor,
+        [in] com::sun::star::rendering::XCanvas xCanvas);
+
+    /** Return a size that has the given aspect ratio and shares either the
+        width or the height with the given maximum size.
+        @param nSlideAspectRatio
+            The aspect ratio must not be 0.
+        @param aMaximumPreviewPixelSize
+            The maximum size of the returned preview size.
+    */
+    com::sun::star::awt::Size calculatePreviewSize (
+        [in] double nSlideAspectRatio,
+        [in] com::sun::star::awt::Size aMaximumPreviewPixelSize);
+};
+
+}; }; }; }; // ::com::sun::star::drawing
+
+#endif

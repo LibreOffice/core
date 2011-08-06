@@ -1,0 +1,64 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+//i20156 - new file for xmlsecurity module
+
+/** -- idl definition -- **/
+
+#ifndef __com_sun_star_xml_crypto_sax_elementmarkpriority_idl_
+#define __com_sun_star_xml_crypto_sax_elementmarkpriority_idl_
+
+module com { module sun { module star { module xml { module crypto { module sax {
+
+/**
+ * Defines priority for the element mark's notification.
+ * <p>
+ * The PRI_MINIMUM priority is a value less than any practical
+ * priority value, it is used when compare between different
+ * priority values.
+ * <p>
+ * The PRI_AFTERMODIFY priority represents the notification will be
+ * sent after any internal modification has finished.
+ * <p>
+ * The PRI_BEFOREMODIFY proirity represents the notification will be
+ * sent before any internal modification happens.
+ * <p>
+ * So an element mark with PRI_BEFOREMODIFY will be handled first,
+ * and one with PRI_AFTERMODIFY will be handled at last.
+ */
+enum ElementMarkPriority
+{
+    MINIMUM = 1,
+    AFTERMODIFY,
+    BEFOREMODIFY
+};
+
+} ; } ; } ; } ; } ; } ;
+
+
+#endif
+

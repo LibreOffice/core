@@ -1,0 +1,88 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_sdb_TableDesign_idl__
+#define __com_sun_star_sdb_TableDesign_idl__
+
+#include <com/sun/star/frame/XController.idl>
+#include <com/sun/star/lang/XInitialization.idl>
+#include <com/sun/star/frame/XDispatchProvider.idl>
+#include <com/sun/star/form/FormController.idl>
+
+module com {  module sun {  module star {  module sdb {
+
+//=============================================================================
+/** implements a component which allows the creation of tables.
+
+    <p>This service implements a user interface for creating tables through a graphical design interface.</p>
+
+    <p>The design view of the TableDesign is divided into two parts. The first part contains the rows
+    where columns can be defined for the table. The second part contains the properties of the selected column.</p>
+
+    @see com::sun::star::sdb::ContentLoader
+    @see com::sun::star::frame::XDispatch
+    @see com::sun::star::frame::XDispatchProviderInterceptor
+
+    @since OOo 1.1.2
+*/
+
+published service TableDesign
+{
+    /** allows the component to be plugged into frames.
+    */
+    interface com::sun::star::frame::XController;
+
+    /** is used to initialize the TableDesign.
+
+        <p>Parameters (passed to the method
+        <member scope="com::sun::star::lang">XInitialization::initialize</member>)
+        have to be instances of <type scope="com::sun::star::beans">PropertyValue</type>, where the
+        <member scope="com::sun::star::beans">PropertyValue::Name</member> member specifies what the parameter controls,
+        with the <member scope="com::sun::star::beans">PropertyValue::Value</member> member containing the value
+        to be used.<br>
+        Recognized parameters are:
+        <ul>
+            <li><b>Frame</b><br>
+            has to be an <type scope="com::sun::star::frame">XFrame</type> interface specifying the frame to plug the
+            TableDesign component into.
+            </li>
+            <li><b>DataSourceName</b><br>
+            The name of the globally registered <type>DataSource</type> to be used for initial display. It is only
+            meaningful together with the other parameters specifying the object to display.
+            </li>
+            <li><b>CurrentTable</b><br>
+            This is a string giving the name of the object to display initially.
+            </li>
+        </ul>
+        </p>
+    */
+    interface com::sun::star::lang::XInitialization;
+};
+
+//=============================================================================
+}; }; }; };
+
+#endif

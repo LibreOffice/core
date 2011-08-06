@@ -1,0 +1,109 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_util_XSortable_idl__
+#define __com_sun_star_util_XSortable_idl__
+
+#include <com/sun/star/uno/XInterface.idl>
+
+#include <com/sun/star/beans/PropertyValue.idl>
+
+
+//=============================================================================
+
+module com {  module sun {  module star {  module util {
+
+//=============================================================================
+
+/** makes it possible to sort the contents of this object.
+
+    <p>The available properties describing the sort criteria are
+    defined in the sort descriptor implemented by the object that
+    implements this interface.</p>
+
+    <p>There are older deprecated sort descriptors:</p>
+    <ul>
+        <li>com::sun::star::util::SortDescriptor</li>
+        <li>com::sun::star::table::TableSortDescriptor</li>
+        <li>com::sun::star::text::TextSortDescriptor</li>
+    </ul>
+
+    <p>And a new set of sort descriptors:</p>
+    <ul>
+        <li>com::sun::star::util::SortDescriptor2</li>
+        <li>com::sun::star::table::TableSortDescriptor2</li>
+        <li>com::sun::star::text::TextSortDescriptor2</li>
+    </ul>
+
+    <p>Both types may be implemented by the same object.
+    When calling the sort method however properties from different
+    descriptors must not be mixed.</p>
+ */
+published interface XSortable: com::sun::star::uno::XInterface
+{
+    //-------------------------------------------------------------------------
+    /** @returns
+            a sequence of properties which allows to specify/modify the
+            sort criteria.
+
+            <p>The set of properties is specific to the type of object that
+            implements this interface. Therefore they can usually be used
+            only for objects of that same type.</p>
+
+        @see com::sun::star::util::SortDescriptor
+        @see com::sun::star::table::TableSortDescriptor
+        @see com::sun::star::text::TextSortDescriptor
+        @see com::sun::star::util::SortDescriptor2
+        @see com::sun::star::table::TableSortDescriptor2
+        @see com::sun::star::text::TextSortDescriptor2
+
+     */
+    sequence< com::sun::star::beans::PropertyValue > createSortDescriptor();
+
+    //-------------------------------------------------------------------------
+    /** sorts the contents of the object according to the specified
+        properties.
+
+        <p>The specified properties are usually the same or a subset of
+        those obtained by calling <member>createSortDescriptor</member>
+        on the same type of object.<p>
+
+        @see com::sun::star::util::SortDescriptor
+        @see com::sun::star::table::TableSortDescriptor
+        @see com::sun::star::text::TextSortDescriptor
+        @see com::sun::star::util::SortDescriptor2
+        @see com::sun::star::table::TableSortDescriptor2
+        @see com::sun::star::text::TextSortDescriptor2
+     */
+    void sort( [in] sequence< com::sun::star::beans::PropertyValue > xDescriptor );
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

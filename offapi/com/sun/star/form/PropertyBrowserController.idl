@@ -1,0 +1,136 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_form_PropertyBrowserController_idl__
+#define __com_sun_star_form_PropertyBrowserController_idl__
+
+#include <com/sun/star/frame/XController.idl>
+#include <com/sun/star/beans/XPropertySet.idl>
+#include <com/sun/star/beans/XFastPropertySet.idl>
+#include <com/sun/star/beans/XMultiPropertySet.idl>
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module form {
+
+//=============================================================================
+
+/** describes a controller which can be used to browse and modify properties of form controls.
+
+    <p>The controller can be plugged into an <type scope="com::sun::star::frame">XFrame</type>, and will
+    provide a visual component for inspecting control properties. This means it allows to interactively control
+    several aspects of a <type>FormControlModel</type> or <type>DataAwareControlModel</type>, such as it's
+    data binding, it's layout, and it's event binding</p>
+
+    <p>For using a PropertyBrowserController, you need to
+    <ul><li>instantiate it at a service factory of your choice</li>
+        <li>attach it to an empty frame of your choice</li>
+        <li>set the IntrospectedObject property to the control model which you wish to analyze</li>
+    </ul>
+    </p>
+
+    @example Java
+    <listing>
+        XFrame xFrame = getNewEmptyFrame();
+        XMultiServiceFactory xORB = getORB();
+        XPropertySet xControlModel = getMyControlModel();
+
+        // instantiate the controller
+        XController xController = (XController)UnoRuntime.queryInterface( XController.class,
+            xORB.createInstance( "com.sun.star.form.PropertyBrowserController" ) );
+
+        // marry the controller and the frame. This will cause the controller
+        // to create a visual component within the frame to inspect our object
+        xController.attachFrame( xFrame )
+
+        // tell the controller which object to inspect
+        XPropertySet xControllerProps = (XPropertySet)UnoRuntime.queryInterface(
+            XPropertySet.class, xController );
+
+        xControllerProps.setPropertyValue( "IntrospectedObject", xControlModel );
+    </listing>
+
+    @see com::sun::star::frame::XController
+
+    @deprecated
+        <p>Note that nowadays, this service is only a legacy wrapper using the
+        <type scope="com::sun::star::inspection">ObjectInspector</type> and the
+        <type scope="com::sun::star::form::inspection">DefaultFormComponentInspectorModel</type> services, and knitting them together.</p>
+
+*/
+published service PropertyBrowserController
+{
+    /** contains the object to inspect.
+
+        <p>Changing this property from outside causes the controller to update it's view
+        with the data of the new object</p>
+    */
+    [property] com::sun::star::beans::XPropertySet IntrospectedObject;
+
+    /** controls the actually visible page.
+
+        <p>The aspects of a <type>DataAwareControlModel</type> which can be browsed and modified
+        using this controller can be separated into 3 groups: common aspects, data-awareness
+        related aspects, and bound events.</br>
+        The appearance of the visual component created by the controller is that 3 tab pages, one for
+        each group, are displayed (of course if the control does not support any aspects of a given group,
+        the group is omitted).<br/>
+        With this property, it can be controller which page is currently active.</p>
+
+        <p>Valid values are (this list may be extended in the future):
+        <ul><li>Generic</li>
+            <li>Data</li>
+            <li>Events</li>
+        <ul></p>
+    */
+    [property] string CurrentPage;
+
+    /** ensures the basic functionality for a controller.
+
+        <p>With supporting this interface, the component is able to operate in (and provide content
+        for) an <type scope="com::sun::star::frame">XFrame</type>.</p>
+    */
+    interface com::sun::star::frame::XController;
+
+    /** allows to access the properties of the object
+    */
+    interface com::sun::star::beans::XPropertySet;
+
+    /** allows to access the properties via indices
+    */
+    interface com::sun::star::beans::XFastPropertySet;
+
+    /** allows to access more than one property of the object at the same time
+    */
+    interface com::sun::star::beans::XMultiPropertySet;
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

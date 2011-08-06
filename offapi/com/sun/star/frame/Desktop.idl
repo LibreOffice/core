@@ -1,0 +1,86 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_frame_Desktop_idl__
+#define __com_sun_star_frame_Desktop_idl__
+
+#include <com/sun/star/frame/Frame.idl>
+#include <com/sun/star/frame/XDesktop.idl>
+#include <com/sun/star/frame/XComponentLoader.idl>
+#include <com/sun/star/document/XEventBroadcaster.idl>
+#include <com/sun/star/beans/XPropertySet.idl>
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module frame {
+
+//=============================================================================
+/** is the environment for components which can instantiate within frames
+
+    <p>
+    A desktop environment contains tasks with one or more frames
+    in which components can be loaded. The term "task" or naming a frame as a
+    "task frame" is not in any way related to any additional implemented
+    interfaces, it's  just because these frames use task windows.
+    </p>
+ */
+published service Desktop
+{
+    //-------------------------------------------------------------------------
+    /** make it possible to be the global root of different separated frame trees
+
+        <p>
+        It's not a must for a frame (neither a frame tree) to be a part of this
+        global tree. But such outstanding frames won't be accessible by the normal
+        frame API.
+        </p>
+     */
+    service Frame;
+
+    //-------------------------------------------------------------------------
+    /** regulate life time of desktop environment and support high level
+        access to components of sub frame tree
+     */
+    interface XDesktop;
+
+    //-------------------------------------------------------------------------
+    /** supports simple API for loading components into the frame environment
+     */
+    interface XComponentLoader;
+
+    //-------------------------------------------------------------------------
+    /** @deprecated This interface is a documentation error. It was never thought to be supported
+                    by this service. Please use the service <type cope="com::sun::star::frame">GlobalEventBroadcaster</type>
+                    instead of this interface.
+     */
+    interface com::sun::star::document::XEventBroadcaster;
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

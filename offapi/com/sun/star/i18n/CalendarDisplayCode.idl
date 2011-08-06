@@ -1,0 +1,90 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_i18n_CalendarDisplayCode_idl__
+#define __com_sun_star_i18n_CalendarDisplayCode_idl__
+
+//=============================================================================
+
+module com { module sun { module star { module i18n {
+
+//=============================================================================
+
+
+/**
+    Constants to use with <member>XExtendedCalendar::getDisplayString()</member>.
+
+    <p> The examples given are for an English Gregorian calendar, note
+    that other calendars or locales may return completely different
+    strings, for example not a four digit year but a CJK name instead.
+    <p/>
+
+     @since OOo 1.1.2
+ */
+published constants CalendarDisplayCode
+{
+    /// Day of month, one or two digits, no leading zero.
+    const long SHORT_DAY            = 1;
+    /// Day of month, two digits, with leading zero.
+    const long LONG_DAY             = 2;
+    /// Day of week, abbreviated name.
+    const long SHORT_DAY_NAME       = 3;
+    /// Day of week, full name.
+    const long LONG_DAY_NAME        = 4;
+
+    /// Month of year, one or two digits, no leading zero.
+    const long SHORT_MONTH          = 5;
+    /// Month of year, with leading zero.
+    const long LONG_MONTH           = 6;
+    /// Full month name.
+    const long SHORT_MONTH_NAME     = 7;
+    /// Abbreviated month name.
+    const long LONG_MONTH_NAME      = 8;
+
+    /// Year, two digits.
+    const long SHORT_YEAR           = 9;
+    /// Year, four digits.
+    const long LONG_YEAR            = 10;
+    /// Full era name, for example, "Before Christ" or "Anno Dominus".
+    const long SHORT_ERA            = 11;
+    /// Abbreviated era name, for example, BC or AD.
+    const long LONG_ERA             = 12;
+    /// Combined short year and era, order depends on locale/calendar.
+    const long SHORT_YEAR_AND_ERA   = 13;
+    /// Combined full year and era, order depends on locale/calendar.
+    const long LONG_YEAR_AND_ERA    = 14;
+
+    /// Short quarter, for example, "Q1"
+    const long SHORT_QUARTER        = 15;
+    /// Long quarter, for example, "1st quarter"
+    const long LONG_QUARTER         = 16;
+};
+
+//=============================================================================
+}; }; }; };
+
+#endif

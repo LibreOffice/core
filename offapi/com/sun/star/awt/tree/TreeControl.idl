@@ -1,0 +1,95 @@
+/************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_awt_tree_TreeControl_idl__
+#define __com_sun_star_awt_tree_TreeControl_idl__
+
+#include <com/sun/star/awt/tree/XTreeControl.idl>
+
+//=============================================================================
+
+module com {  module sun {  module star {  module awt { module tree {
+
+//=============================================================================
+
+/** A control that displays a set of hierarchical data as an outline.
+
+    <p>
+    <h4>The Data Model</h4>
+    <p>A specific node in a tree is identified by a <type>XTreeNode</type>.
+    A leaf node is a node without any children and that returns <FALSE/> when calling <member>XTreeNode::hasChildrenOnDemand()</member>.
+    An expanded node is a non-leaf node that will displays its children when all its ancestors are expanded.
+    A collapsed node is one which hides them.
+    A node is visible when all parent nodes are expanded and the node itself is in the display area.
+    </p>
+
+    <p>The nodes are retrieved from a <type>XTreeDataModel</type>.
+    You can implement it yourself or use the <type>MutableTreeDataModel</type>
+    which uses <type>XMutableTreeNode</type> and <type>XMutableTreeDataModel</type>
+    for a simple and mutable data model.
+
+    <p>The data model must be set at the <member>TreeControlModel::TreeDataModel</member> property.</p>
+
+    <h4>Selection</h4>
+    <p>If you are interested in knowing when the selection changes implement a
+    <type scope="com::sun::star::view">XSelectionChangeListener</type> and add the instance with the method
+    <member scope="::com::sun::star::view">XSelectionSupplier::addSelectionChangeListener()</member>.
+    You than will be notified for any selection change.
+    </p>
+
+    <p>
+    If you are interested in detecting either double-click events or when a user clicks on a node,
+    regardless of whether or not it was selected, you can get the <type scope="com::sun::star::awt">XWindow</type>
+    and add yourself as a <type scope="com::sun::star::awt">XMouseClickHandler</type>. You can use the
+    method <member>XTreeControl::getNodeForLocation()</member> to retrieve the node that was under the
+    mouse at the time the event was fired.
+    </p>
+
+    <h4>Adding child nodes on demand</h4>
+    <p>If you want to add child nodes to your tree on demand you can do the following.
+    <ul>
+    <li>Make sure the parent node returns <TRUE/> for <member>XTreeNode::hasChildrenOnDemand()</member> either
+    by implementing <type>XTreeNode</type> yourself or if you use the <type>MutableTreeDataModel</type>,
+    use <member>XMutableTreeNode::setHasChildrenOnDemand()</member>.</li>
+    <li>Implement a <type>XTreeExpansionListener</type> and add the instance with the method
+    <member>XTreeControl::addTreeExpansionListener()</member>.</li>
+    </ul>
+    Now you get called when the node will become expanded or collapsed.
+    So on <member>XTreeExpansionListener::treeExpanding()</member> you can
+    check the <type>TreeExpansionEvent</type> if the parent node with children on demand is going to
+    be expanded and in that case add the missing child nodes. You can also veto the expansion or
+    collapsing of a parent node by using the <type>ExpandVetoException</type>.
+    </p>
+ */
+service TreeControl: XTreeControl
+{
+};
+
+//=============================================================================
+
+}; }; }; }; };
+
+#endif

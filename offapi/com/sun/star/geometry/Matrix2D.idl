@@ -1,0 +1,90 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_geometry_Matrix2D_idl__
+#define __com_sun_star_geometry_Matrix2D_idl__
+
+module com {  module sun {  module star {  module geometry {
+
+/** This structure defines a 2 by 2 matrix.<p>
+
+    This constitutes a linear mapping of a point in 2D to another
+    point in 2D.<p>
+
+    The matrix defined by this structure constitutes a linear
+    mapping of a point in 2D to another point in 2D. In contrast to
+    the <type>com.sun.star.geometry.AffineMatrix2D</type>, this
+    matrix does not include any translational components.<p>
+
+    A linear mapping, as performed by this matrix, can be written out
+    as follows, where <code>xs</code> and <code>ys</code> are the source, and
+    <code>xd</code> and <code>yd</code> the corresponding result coordinates:
+
+    <code>
+        xd = m00*xs + m01*ys;
+        yd = m10*xs + m11*ys;
+    </code><p>
+
+    Thus, in common matrix language, with M being the
+    <type>Matrix2D</type> and vs=[xs,ys]^T, vd=[xd,yd]^T two 2D
+    vectors, the linear mapping is written as
+    vd=M*vs. Concatenation of transformations amounts to
+    multiplication of matrices, i.e. a scaling, given by S,
+    followed by a rotation, given by R, is expressed as vd=R*(S*vs) in
+    the above notation. Since matrix multiplication is associative,
+    this can be shortened to vd=(R*S)*vs=M'*vs. Therefore, a set of
+    consecutive transformations can be accumulated into a single
+    Matrix2D, by multiplying the current transformation with the
+    additional transformation from the left.<p>
+
+    Due to this transformational approach, all geometry data types are
+    points in abstract integer or real coordinate spaces, without any
+    physical dimensions attached to them. This physical measurement
+    units are typically only added when using these data types to
+    render something onto a physical output device, like a screen or a
+    printer. Then, the total transformation matrix and the device
+    resolution determine the actual measurement unit.<p>
+
+    @since OOo 2.0
+ */
+published struct Matrix2D
+{
+    /// The top, left matrix entry.
+    double m00;
+
+    /// The top, right matrix entry.
+    double m01;
+
+    /// The bottom, left matrix entry.
+    double m10;
+
+    /// The bottom, right matrix entry.
+    double m11;
+};
+
+}; }; }; };
+
+#endif

@@ -1,0 +1,156 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_ucb_TransientDocumentsContentProvider_idl__
+#define __com_sun_star_ucb_TransientDocumentsContentProvider_idl__
+
+#include <com/sun/star/ucb/XContentProvider.idl>
+
+//=============================================================================
+
+module com { module sun { module star { module ucb {
+
+//=============================================================================
+/** The Transient Documents Content Provider (TDCP) implements a
+    <type>ContentProvider</type> for the <type>UniversalContentBroker</type>
+    (UCB).
+
+    <p>It provides access to the hierarchical structure of the documents that
+    are active in a running OpenOffice.org process. As long as a document was
+    not closed, the TDCP can access it. All documents that have been loaded -
+    regardless of their persistent document format (sxw, doc, sxc, xls, ...)
+    or that have been created  but not yet saved to any storage medium, are
+    supported. The TDCP is not able to load any documents itself. This is
+    exclusively done by the OpenOffice.org document handling framework. The
+    document contents provided by the TDCP represent live data, which may
+    differ from any persistent representation of the document, for instance,
+    because the user modified the document after loading, but did not yet save
+    it.
+
+    @see TransientDocumentsRootContent
+    @see TransientDocumentsDocumentContent
+    @see TransientDocumentsFolderContent
+    @see TransientDocumentsStreamContent
+
+    @since OOo 2.0
+*/
+service TransientDocumentsContentProvider
+{
+    //-------------------------------------------------------------------------
+    /** provides four different types of contents: Stream, Folder, Document and
+        Root.
+
+        <p>
+
+        <b>TDCP Contents</b>
+        <ol>
+        <li>
+        A TDCP Stream (<type>TransientDocumentsStreamContent</type>) is a
+        content which represents a data stream of an Office document. It is
+        contained in a TDCP Folder or TDCP Document. A TDCP Stream has no
+        children.
+        </li>
+        <li>
+        A TDCP Folder (<type>TransientDocumentsFolderContent</type>) is a
+        container for other TDCP Folders and TDCP Streams. It may be contained
+        in another TDCP Folder or in a TDCP Document.
+        </li>
+        <li>
+        A TDCP Document (<type>TransientDocumentsDocumentContent</type>)
+        represents the root folder of a transient document. It is a container
+        for other TDCP Folders and TDCP Streams. It is always a child of the
+        TDCP Root.
+        </li>
+        <li>
+        There is at most one instance of a TDCP Root
+        (<type>TransientDocumentsRootContent</type>) at a time. All other TDCP
+        contents are children of this folder. The TDCP Root Folder can contain
+        only TDCP Documents. It has the fixed URL "vnd.sun.star.tdoc:/".
+        </li>
+        </ol>
+
+        <p><b>URL Scheme for TDCP Contents</b>
+
+        <p>Each TDCP content has an identifier corresponding to the following
+        scheme:
+
+        <ul>
+        <li>
+        tdcp-URL   = "vnd.sun.star.tdoc:" abs-path
+        </li>
+        <li>
+        abs-path   = +( "/" segment )
+        </li>
+        <li>
+        segment    = *( pchar )
+        </li>
+        <li>
+        pchar      = unreserved | escaped | ":" | "@" | "&" | "=" | "+" | "$" | ","
+        </li>
+        <li>
+        unreserved = alphanum | mark
+        </li>
+        <li>
+        mark       = "-" | "_" | "." | "!" | "~" | "*" | "'" | "("  | ")"
+        </li>
+        <li>
+        escaped    = "%" hex hex
+        </li>
+        </ul>
+
+        <p>Examples:
+
+        <ul>
+        <li>
+        vnd.sun.star.tdoc:/
+        ( The TDCP Root  )
+        </li>
+        <li>
+        vnd.sun.star.tdoc:/22
+        ( The document with the id 22 )
+        </li>
+        <li>
+        vnd.sun.star.tdoc:/22/
+        ( The document with the id 22 )
+        </li>
+        <li>
+        vnd.sun.star.tdoc:/42/folder/subfolder
+        ( The folder/stream named subfolder contained in folder named folder,
+        which is contained in the document with the id 42 )
+        </li>
+        </ul>
+
+        </p>
+     */
+    interface com::sun::star::ucb::XContentProvider;
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

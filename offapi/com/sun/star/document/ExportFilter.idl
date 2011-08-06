@@ -1,0 +1,125 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_document_ExportFilter_idl__
+#define __com_sun_star_document_ExportFilter_idl__
+
+#include <com/sun/star/document/XExporter.idl>
+#include <com/sun/star/document/XFilter.idl>
+#include <com/sun/star/lang/XInitialization.idl>
+#include <com/sun/star/container/XNamed.idl>
+
+//=============================================================================
+
+module com { module sun { module star { module document {
+
+//=============================================================================
+/** filter for exports
+
+    <p>
+    Such filters can be used for exporting a content.
+    Of course it's possible to combine it with the service <type>ImportFilter</type>
+    if import functionality should be available at same implementation too.
+    </p>
+
+    @see ImportFilter
+ */
+published service ExportFilter
+{
+    //-------------------------------------------------------------------------
+    /** set source(!) document for this filter
+
+        <p>
+        The document must be used as the source for following filter operation.
+        Any content from there will be exported to another format.
+        </p>
+     */
+    interface XExporter;
+
+    //-------------------------------------------------------------------------
+    /** filter interface
+
+        <p>
+        It's used to filter a document at saving time.
+        The source document should be already set by using another interface
+        <type>XExporter</type> which is supported by this service too.
+        </p>
+
+        <p>
+        Tip:<br>
+        If same implementation provides the service <type>ImportFilter</type> too,
+        code must distinguish between filtering from a source document (for export) or
+        filtering to a target document (for import). This can be recognized by saving
+        state of used interfaces <type>XExporter</type> or <type>XImporter</type>!
+        Otherwise it's not clear which action is required here.
+         </p>
+     */
+    interface XFilter;
+
+    //-------------------------------------------------------------------------
+    /** support initialization of filter with its own configuration
+
+        <p>
+        A filter object must be created by global service <type>FilterFactory</type>.
+        If filter supports this optional interface, he will be initialized by the factory directly
+        after creation. The factory will pass follow informations to this new instance:
+            <ul>
+                <li>first item will be a set of configuration data of the filter</li>
+                <li>after that will follow may given optional parameters of call
+                    <member scope="com::sun::star::lang">XMultiServiceFactory::createInstanceWithArguments()</member>
+                    of service <type>FilterFactory</type>.
+                </li>
+            </ul>
+        See description of service <member>FilterFactory::XNameContainer</member> for a description of
+        possible configuration data.
+        </p>
+     */
+    [optional] interface com::sun::star::lang::XInitialization;
+
+    //-------------------------------------------------------------------------
+    /** provides access to the internal name of this filter
+
+        <p>
+        This internal filter name can be used on service <type>FilterFactory</type>
+        to get further informations about it (e.g. his registration for mime types or extensions etc.)
+        It's important that returned string is the "internal name" of the filter which must be
+        unambiguous against all other registered filters in current installation.
+        </p>
+        <p>
+        <strong>Attention!</strong><br>
+        Supported method setName() should be ignored or forwarded to the FilterFactory.
+        It's not allowed to set it directly to the configuration. Because it depends
+        from real implementation of the FilterFactory if it will be allowed or not!
+         </p>
+     */
+    [optional] interface com::sun::star::container::XNamed;
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

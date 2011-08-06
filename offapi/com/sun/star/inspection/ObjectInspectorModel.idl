@@ -1,0 +1,116 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_inspection_ObjectInspectorModel_idl__
+#define __com_sun_star_inspection_ObjectInspectorModel_idl__
+
+#include <com/sun/star/inspection/XObjectInspectorModel.idl>
+#include <com/sun/star/lang/IllegalArgumentException.idl>
+
+//=============================================================================
+module com {  module sun {  module star {  module inspection {
+
+//-----------------------------------------------------------------------------
+/** describes a default implementation of an ObjectInspectorModel
+
+    <p>This service simplifies usage of an <type>ObjectInspector</type>.</p>
+
+    <p>The <type>XObjectInspectorModel</type> implemented by this service will not provide any property
+    categories, nor apply any particular order to the properties provided by its handler(s).</p>
+
+    @see ObjectInspector
+    @see XObjectInspectorModel
+    @see XObjectInspectorModel::describeCategories
+    @see XObjectInspectorModel::getPropertyOrderIndex
+
+    @since OOo 2.0.3
+*/
+published service ObjectInspectorModel : XObjectInspectorModel
+{
+    /** creates a default ObjectInspectorModel, whose one and only handler factory
+        creates a <type>GenericPropertyHandler</type>.
+    */
+    createDefault();
+
+    /** creates a default ObjectInspectorModel, using an externally provided sequence of property handler
+        factories.
+
+        @param handlerFactories
+            a sequence of handler factories, as to be provided in the XObjectInspectorModel::HandlerFactories
+            method.
+        @throws ::com::sun::star::lang::IllegalArgumentException
+            if the given sequence is empty.
+
+        @see XObjectInspectorModel::HandlerFactories
+    */
+    createWithHandlerFactories( [in] sequence< any > handlerFactories )
+        raises ( ::com::sun::star::lang::IllegalArgumentException );
+
+    /** creates a default ObjectInspectorModel, using an externally provided sequence of property handler
+        factories, and describing an ObjectInspector which has a help section.
+
+        @param handlerFactories
+            a sequence of handler factories, as to be provided in the XObjectInspectorModel::HandlerFactories
+            method.
+
+        @param minHelpTextLines
+            denotes the minimum number of lines of text to be reserved for the help
+            section.
+
+        @param maxHelpTextLines
+            denotes the maximum number of lines of text to be reserved for the help
+            section.
+
+        @throws ::com::sun::star::lang::IllegalArgumentException
+            if <arg>handlerFactories</arg> is empty.
+
+        @throws ::com::sun::star::lang::IllegalArgumentException
+            if <arg>minHelpTextLines</arg> or <arg>maxHelpTextLines</arg> are negative,
+            or if <arg>minHelpTextLines</arg> is greater than <arg>maxHelpTextLines</arg>.
+
+        @see XObjectInspectorModel::HandlerFactories
+        @see XObjectInspectorModel::HasHelpSection
+        @see XObjectInspectorModel::MinHelpTextLines
+        @see XObjectInspectorModel::MaxHelpTextLines
+
+        @since OOo 2.2
+    */
+    createWithHandlerFactoriesAndHelpSection(
+        [in] sequence< any > handlerFactories,
+        [in] long minHelpTextLines,
+        [in] long maxHelpTextLines
+    )
+        raises ( ::com::sun::star::lang::IllegalArgumentException );
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif
+
+

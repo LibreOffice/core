@@ -1,0 +1,184 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_form_component_GridControl_idl__
+#define __com_sun_star_form_component_GridControl_idl__
+
+#include <com/sun/star/util/Color.idl>
+#include <com/sun/star/form/FormControlModel.idl>
+
+#include <com/sun/star/form/XGridColumnFactory.idl>
+
+#include <com/sun/star/form/FormComponents.idl>
+#include <com/sun/star/container/XContainer.idl>
+
+#include <com/sun/star/view/XSelectionSupplier.idl>
+
+#include <com/sun/star/container/XNameContainer.idl>
+
+#include <com/sun/star/container/XIndexContainer.idl>
+
+#include <com/sun/star/container/XEnumerationAccess.idl>
+
+#include <com/sun/star/script/XEventAttacherManager.idl>
+
+#include <com/sun/star/form/XReset.idl>
+
+#include <com/sun/star/awt/FontDescriptor.idl>
+
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module form {  module component {
+
+//=============================================================================
+
+/** specifies a model for a control which can display form data in a table-like way.
+
+    <p>In opposite to other form controls, grid controls do not only
+    display the single current value of a column they are bound to. Moreover, they do
+    display not only the current row of the form, but all rows (at least potentially, limited
+    by the control size, of course).</p>
+
+    <p>The table rows in a grid control correspond to the rows in the <type>DataForm</type>
+    the control belongs to, and the columns correspond to single columns of the form's row set.</p>
+
+    <p>Columns of a grid control are modeled by own objects, too. They are very similar to usual
+    <type scope="com::sun::star::form">DataAwareControlModel</type>s modeling other "single-value" controls, but they are not described
+    as own services. Instead, they need to be created using the <type scope="com::sun::star::form">XGridColumnFactory</type> interface.</p>
+ */
+published service GridControl
+{
+    service com::sun::star::form::FormControlModel;
+
+    /** provides basic functionality of a container of <type scope="com::sun::star::form">FormComponent</type>s.
+
+        <p>All the container-related methods of this service related to control models,
+        this is what are the container elements for a <type>GridControl</type>.</p>
+
+        <p>As the <type scope="com::sun::star::form">FormComponents</type> service also specifies
+        the <type scope"com::sun::star::script">XEventAttacherManager</type> service, grid control models
+        also provide a scripting environment for their columns.</p>
+    */
+    service com::sun::star::form::FormComponents;
+
+    /** allows to create column models to be inserted into the control model.
+
+        <p>Note that the object returned by the <member scope="com::sun::star::form">XGridColumnFactory::createColumn</member>
+        method is not part of the grid control, yet. It needs to be inserted using any of the
+        container interfaces.</p>
+
+        <p>You always need to use this interface for creating columns for the grid control.
+        Column models not created this way will not be accepted when inserted later on.</p>
+    */
+    interface com::sun::star::form::XGridColumnFactory;
+
+    /** gives access to the currently selection.
+
+        <p>In a grid control, single columns can be selected (at most one at a time).<br/>
+        For various unfortunate reasons, this selection is an aspect of the model, not of the
+        control as you would expect.</p>
+
+        <p>This interface is deprecated, new implementations should not use it anymore, as it is to
+        be superseded by a solution which is bound to the control, not the model.</p>
+
+        @deprecated
+    */
+    interface com::sun::star::view::XSelectionSupplier;
+
+    /** resets the control.
+
+        <p>The reset of the control is forwarded to all it's elements, means to all the column models.
+        As grid columns are very much like data-aware stand-alone controls, you can find a description
+        of the reset functionality in <member scope="com::sun::star::form">DataAwareControlModel::XReset</member>.
+    */
+    interface com::sun::star::form::XReset;
+
+    //-------------------------------------------------------------------------
+
+    /** returns the border style of the control.
+
+        <pre>
+        0: No border
+        1: 3D border
+        2: simple border
+        </pre>
+     */
+    [property] short Border;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies the color of the border, if present
+
+        <p>Not every border style (see <member>Border</member>) may support coloring.
+        For instance, usually a border with 3D effect will ignore the BorderColor setting.</p>
+
+        @since OOo 2.0
+     */
+    [optional, property] long BorderColor;
+
+    //-------------------------------------------------------------------------
+
+    /** determines whether the control is enabled or disabled.
+     */
+    [property] boolean Enabled;
+
+    //-------------------------------------------------------------------------
+
+    /** contains the font attributes of the text in the control.
+     */
+    [property] com::sun::star::awt::FontDescriptor FontDescriptor;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies the height of a row of the grid.
+
+        <p>If the value is set to <NULL/>, the height is determined automatically according
+        to the current font used.</p>
+
+        @see GridControl::FontDescriptor
+     */
+    [property] long RowHeight;
+
+    //-------------------------------------------------------------------------
+
+    /** determines whether the control can be reached by the tabulator key.
+     */
+    [property] boolean Tabstop;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies the text color (RGB) of the control.
+     */
+    [property] com::sun::star::util::Color TextColor;
+
+};
+
+//=============================================================================
+
+}; }; }; }; };
+
+#endif

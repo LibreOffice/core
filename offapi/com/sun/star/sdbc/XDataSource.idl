@@ -1,0 +1,102 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_sdbc_XDataSource_idl__
+#define __com_sun_star_sdbc_XDataSource_idl__
+
+#include <com/sun/star/uno/XInterface.idl>
+
+#include <com/sun/star/sdbc/SQLException.idl>
+
+ module com {  module sun {  module star {  module sdbc {
+
+ published interface XConnection;
+
+
+/** is used for establishing connections via a factory which is identified
+    by its name. A DataSource object is typically registered by a naming service
+    provider.
+ */
+published interface XDataSource: com::sun::star::uno::XInterface
+{
+    //-------------------------------------------------------------------------
+
+    /** attempts to establish a database connection.
+        @param user
+            the user name
+        @param password
+            the password
+        @returns
+            the connection object
+        @throws SQLException
+            if a database access error occurs.
+     */
+    XConnection getConnection([in]string user, [in]string password)
+        raises (SQLException);
+    //-------------------------------------------------------------------------
+
+    /** sets the maximum time in seconds that this data source will wait
+        while attempting to connect to a database.
+
+
+        <p>
+        A value of zero specifies that the timeout is the default system
+        timeout if there is one; otherwise, it specifies that there is no timeout.
+        When a DataSource object is created the login timeout is initially zero.
+        </p>
+        @param seconds
+            the login time limit in seconds
+        @throws SQLException
+            if a database access error occurs.
+     */
+    void setLoginTimeout([in]long seconds)
+         raises (SQLException);
+    //-------------------------------------------------------------------------
+
+    /** gets the maximum time in seconds that this data source can wait
+        while attempting to connect to a database.
+
+
+        <p>
+        A value of zero means that the timeout is the default system timeout
+        if there is one; otherwise, it means that there is no timeout. When a
+        DataSource object is created the login timeout is initially zero.
+        </p>
+        @returns
+            the login time limit in seconds
+        @throws SQLException
+            if a database access error occurs.
+     */
+    long getLoginTimeout() raises (SQLException);
+};
+
+//=============================================================================
+
+}; }; }; };
+
+/*===========================================================================
+===========================================================================*/
+#endif

@@ -1,0 +1,112 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_frame_LayoutManager_idl__
+#define __com_sun_star_frame_LayoutManager_idl__
+
+#include <com/sun/star/frame/XLayoutManager.idl>
+#include <com/sun/star/frame/XFrameActionListener.idl>
+#include <com/sun/star/ui/XUIConfigurationListener.idl>
+#include <com/sun/star/frame/XInplaceLayout.idl>
+#include <com/sun/star/beans/XPropertySet.idl>
+#include <com/sun/star/frame/XMenuBarMergingAcceptor.idl>
+#include <com/sun/star/frame/XLayoutManagerEventBroadcaster.idl>
+
+//=============================================================================
+
+ module com { module sun { module star { module frame {
+
+//=============================================================================
+/** controls the layout of user interface elements which are part of a frame.
+
+    <p>
+    Layout management is the process of determining the size and position of
+    user interface elements. By default, each <type>Frame</type> has a layout
+    manager -- it performs layout management for the user interface elements
+    within the frame. User interface elements can provide size and alignment
+    hints to layout managers, but layout managers have the final decision on
+    the size and position of those user interface elements.
+    </p>
+
+    @since OOo 2.0
+*/
+
+service LayoutManager
+{
+    /** central interface to query for, create, destroy and manipulate user
+        interface elements which are bound to a frame.
+
+        @see ::com::sun::star::frame::XLayoutManager;
+    */
+    interface ::com::sun::star::frame::XLayoutManager;
+
+    /** notification interface to receive status information about the state
+        of the connected frame.
+
+        <p>
+        E.g., you can receive events of instantiation/destruction and
+        activation/deactivation of a frame.
+        </p>
+
+        @see XFrame::addFrameActionListener()
+        @see XFrame::removeFrameActionListener()
+    */
+    interface ::com::sun::star::frame::XFrameActionListener;
+
+    /** notification interface to receive change messages of user interface
+        elements which are part of the layout manager.
+
+        <p>
+        E.g., you can receive events of insertion/replacing and
+        removing of settings data of user interface elements.
+        </p>
+
+        @see com::sun::star::ui::XUIConfiguration
+    */
+    interface ::com::sun::star::ui::XUIConfigurationListener;
+
+    /** provides functions to merge menus for inplace editing of components
+        inside OpenOffice.org.
+    */
+    interface ::com::sun::star::frame::XMenuBarMergingAcceptor;
+
+    /** registers listeners that want to receive layout manager
+        events.
+    */
+    [optional] interface ::com::sun::star::frame::XLayoutManagerEventBroadcaster;
+
+    /** interface to support settings a menu bar for inplace editing of
+        components inside OpenOffice.org.
+
+        @deprecated
+    */
+    [optional] interface ::com::sun::star::frame::XInplaceLayout;
+};
+
+}; }; }; };
+
+#endif

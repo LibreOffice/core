@@ -1,0 +1,93 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_accessibility_XAccessibleExtendedComponent_idl__
+#define __com_sun_star_accessibility_XAccessibleExtendedComponent_idl__
+
+#include <com/sun/star/uno/XInterface.idl>
+#include <com/sun/star/awt/XFocusListener.idl>
+#include <com/sun/star/awt/XFont.idl>
+#include <com/sun/star/awt/FontDescriptor.idl>
+#include <com/sun/star/awt/Point.idl>
+#include <com/sun/star/awt/Rectangle.idl>
+#include <com/sun/star/awt/Size.idl>
+#include <com/sun/star/accessibility/XAccessibleComponent.idl>
+
+module com { module sun { module star { module accessibility {
+
+/** The <type>XAccessibleExtendedComponent</type> interface contains
+    additional methods to those of the <type>XAccessibleComponent</type>
+    interface.  These methods provide information that is used not as often.  The
+    division into two interfaces allows classes to support the more
+    frequently used methods of the <type>XAccessibleComponent</type>
+    interface and only support the <type>XAccessibleExtendedComponent</type>
+    interface if that makes sense for the class.
+
+    <p>This interface provides extended access to retrieve information
+    concerning the graphical representation of an object.  This interface
+    combines methods from the Java interfaces
+    <code>javax.accessibility.AccessibleComponent</code> and
+    <code>javax.accessibility.AccessibleExtendedComponent</code>.</p>
+
+    @since OOo 1.1.2
+*/
+published interface XAccessibleExtendedComponent : XAccessibleComponent
+{
+    /** Returns the font of this object.
+
+        @return
+            The returned reference to a font object is empty if a font is not
+            supported by this object.
+    */
+    ::com::sun::star::awt::XFont getFont ();
+
+    /** Returns the titled border text.
+
+        <p>This method stems from the Java interface
+        <code>AccessibleExtendedComponent</code>.</p>
+
+        @return
+            The returned value is the titled border text of the object or
+            empty if that is not supported.
+    */
+    string getTitledBorderText ();
+
+    /** Returns the tool tip text of this object.
+
+        <p>This method stems from the Java interface
+        <code>AccessibleExtendedComponent</code>.</p>
+
+        @return
+            Returns the localized tool tip text of the object.  If tool tips
+            are not supported and empty string is returned.
+    */
+    string getToolTipText ();
+};
+
+}; }; }; };
+
+#endif

@@ -1,0 +1,267 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_form_runtime_XFormOperations_idl__
+#define __com_sun_star_form_runtime_XFormOperations_idl__
+
+#include <com/sun/star/form/runtime/FeatureState.idl>
+#include <com/sun/star/lang/XComponent.idl>
+#include <com/sun/star/sdbc/XRowSet.idl>
+#include <com/sun/star/sdbc/XResultSetUpdate.idl>
+#include <com/sun/star/form/runtime/XFormController.idl>
+#include <com/sun/star/lang/IllegalArgumentException.idl>
+#include <com/sun/star/lang/WrappedTargetException.idl>
+#include <com/sun/star/beans/NamedValue.idl>
+
+//=============================================================================
+
+module com { module sun { module star { module form { module runtime {
+
+interface XFeatureInvalidation;
+
+//=============================================================================
+
+/** encapsulates operations on a database form.
+
+    <p>This instance allows for operations on a user interface form, by saving its clients
+    from various tedious and error-prone operations.</p>
+
+    <p>As an example, imagine you have a database form, displayed in some user
+    interface, which you want to move to the next record.<br/>
+    It is as easy as calling <member scope="com:::sun::star::sdbc">XResultSet::next</member>
+    on this form, right? Wrong. First, you need to care for saving the current
+    record, so the user doesn't lose her input. So you need to call
+    <member scope="com::sun::star::sdbc">XResultSetUpdate::updateRow</member> or
+    <member scope="com::sun::star::sdbc">XResultSetUpdate::insertRow</member>, depending
+    on the form's <member scope="com::sun::star::sdb">RowSet::IsNew</member> property.<br/>
+    But then you're done, right? Wrong, again.<br/>
+    When the user just entered some data into one of the form fields, but did not yet
+    leave this field, then the data is not yet committed to the form, not to talk
+    about being committed to the underlying database. So, before everything else,
+    you would need to obtain the active control of the form, and commit it.<br/>
+    <em>Now</em> you're done ...</p>
+
+    <p>As another example, consider that you want to delete the current record from the
+    form. You have to take into account any <type scope="com::sun::star::form">XConfirmDeleteListener</type>s
+    registered at the <type scope="com::sun::star::form">FormController</type> or the
+    <type scope="com::sun::star::form::component">DataForm</type>.</p>
+
+    <p>If you agree that this is ugly to do and maintain, then <code>XFormOperations</code>
+    is for you. It provides a <member>execute</member> method, which will do all of the above
+    for you; plus some similar convenient wrappers for similar functionality.</p>
+
+    @see FormFeature
+
+    @since OOo 2.2
+ */
+interface XFormOperations : ::com::sun::star::lang::XComponent
+{
+    /** provides access to the cursor of the form the instance is operating on.
+    */
+    [attribute, readonly]   ::com::sun::star::sdbc::XRowSet             Cursor;
+
+    /** provides access to the update cursor of the form the instance is operating on.
+    */
+    [attribute, readonly]   ::com::sun::star::sdbc::XResultSetUpdate    UpdateCursor;
+
+    /** provides access to the form controller which the instance is operating on.
+
+        <p>Note that it is possible to operate on a user interface form without
+        actually having access to the form controller instance. However, in this
+        case some functionality will not be available. In particular, every feature
+        which relies on the active control of the controller might be of limited use.</p>
+    */
+    [attribute, readonly]   ::com::sun::star::form::runtime::XFormController    Controller;
+
+    /** retrieves the current state of the given feature
+
+        <p>You would usually use this to update some user interface to reflect this state.
+        For instance, you could imagine a toolbar button which is associated with a given feature.
+        This button would be enabled if and only if the respective feature is currently
+        available, and be checked if and only if the feature state is a <code>boolean</code>
+        evaluating to <TRUE/>.<p>
+
+        @param Feature
+            the feature whose state is to be determined. Must be one of the <type>FormFeature</type>
+            constants.<br/>
+            An invalid value here will be silently ignored, and simply return a <type>FeatureState</type>
+            indicating <em>disabled</em> with a <NULL/> state.</p>
+    */
+    FeatureState    getState(
+                        [in] short Feature
+                    );
+
+    /** determines whether a feature is currently enabled.
+
+        <p>Calling this is equivalent to calling <member>getState</member>, and evaluating the
+        <member>FeatureState::Enabled</member> member.</p>
+
+        @param Feature
+            the feature whose state is to be determined. Must be one of the <type>FormFeature</type>
+            constants.<br/>
+            An invalid value here will be silently ignored, and simply return <FALSE/>.
+    */
+    boolean         isEnabled(
+                        [in] short Feature
+                    );
+
+    /** executes the operation associated with the given feature
+
+        @param Feature
+            the feature which is to be executed. Must be one of the <type>FormFeature</type>
+            constants.
+
+        @throws ::com::sun::star::lang::IllegalArgumentException
+            if the given Feature is unknown, not executable, or strictly requires arguments
+            to be executed.
+
+        @throws ::com::sun::star::sdbc::SQLException
+            if a database access error occurs
+
+        @throws ::com::sun::star::lang::WrappedTargetException
+            if an exception is caught which is no <type scope="com::sun::star::uno">RuntimeException</type>
+            and no <type scope="com::sun::star::sdbc">SQLException</type>.
+
+        @see executeWithArguments
+    */
+    void            execute(
+                        [in] short Feature
+                    )
+                    raises  (   ::com::sun::star::lang::IllegalArgumentException
+                            ,   ::com::sun::star::sdbc::SQLException
+                            ,   ::com::sun::star::lang::WrappedTargetException
+                            );
+
+    /** executes the operation associated with the given feature, with passing arguments for execution
+
+        @param Feature
+            the feature which is to be executed. Must be one of the <type>FormFeature</type>
+            constants.
+
+        @param Arguments
+            the named arguments for the feature to execute. See the <type>FormFeature</type> list
+            for features which require arguments.
+
+        @throws ::com::sun::star::lang::IllegalArgumentException
+            if the given feature is unknown, or not executable
+
+        @throws ::com::sun::star::lang::IllegalArgumentException
+            if the given arguments are not sufficient to execute the feature
+
+        @throws ::com::sun::star::sdbc::SQLException
+            if a database access error occurs
+
+        @throws ::com::sun::star::lang::WrappedTargetException
+            if an exception is caught which is no <type scope="com::sun::star::uno">RuntimeException</type>
+            and no <type scope="com::sun::star::sdbc">SQLException</type>.
+    */
+    void            executeWithArguments(
+                        [in] short Feature,
+                        [in] sequence< ::com::sun::star::beans::NamedValue > Arguments
+                    )
+                    raises  (   ::com::sun::star::lang::IllegalArgumentException
+                            ,   ::com::sun::star::sdbc::SQLException
+                            ,   ::com::sun::star::lang::WrappedTargetException
+                            );
+
+    /** commits the current record of the form
+
+        @param RecordInserted
+            will be <TRUE/> if a record has been inserted, i.e. the form was positioned
+            on the insertion row.
+
+        @return
+            <TRUE/> if and only if the current record needed being committed. That's the
+            case if the record or the active control of the form were modified.
+
+        @throws ::com::sun::star::sdbc::SQLException
+            if a database access error occurs
+    */
+    boolean         commitCurrentRecord(
+                        [out] boolean RecordInserted
+                    )
+                    raises ( ::com::sun::star::sdbc::SQLException );
+
+    /** commits the current control of our controller
+
+        @throws ::com::sun::star::sdbc::SQLException
+            if a database access error occurs
+    */
+    boolean         commitCurrentControl(
+                    )
+                    raises ( ::com::sun::star::sdbc::SQLException );
+
+    /** determines whether the form is currently positioned on the insertion row
+
+        <p>This is a convenience method only. Calling it is equivalent to examining the
+        <member scope="com::sun::star::sdb">RowSet::IsNew</member> property of the form.</p>
+
+        @throws ::com::sun::star::lang::WrappedTargetException
+            if an error occurs obtaining the form property
+    */
+    boolean         isInsertionRow(
+                    )
+                    raises ( ::com::sun::star::lang::WrappedTargetException );
+
+    /** determines whether the current row of the form is modified
+
+        <p>This is a convenience method only. Calling it is equivalent to examining the
+        <member scope="com::sun::star::sdb">RowSet::IsModified</member> property of the form.</p>
+
+        @throws ::com::sun::star::lang::WrappedTargetException
+            if an error occurs obtaining the form property
+    */
+    boolean         isModifiedRow(
+                    )
+                    raises ( ::com::sun::star::lang::WrappedTargetException );
+
+    /** denotes the instance which should be notified about features whose state might have changed.
+
+        <p>If this attribute is not <NULL/>, the instance which it denotes will be notified
+        whenever the state of any supported feature might have changed.</p>
+
+        <p>For instance, imagine a form whose current row has just been moved to another
+        record, using the <member>execute</member> method. This means that potentially, the state
+        of all movement-related features might have changed.</p>
+
+        <p>Note that the instance does not actually notify changes in the feature states, but only
+        <em>potential</em> changes: It's up to the callee to react on this appropriately. This is
+        since OpenOffice.org's application framework features own mechanisms to cache and invalidate
+        feature states, so we do not burden this implementation here with such mechanisms.</p>
+
+        @see FormFeature
+    */
+    [attribute] XFeatureInvalidation    FeatureInvalidation;
+};
+
+//=============================================================================
+
+}; }; }; }; };
+
+//=============================================================================
+
+#endif

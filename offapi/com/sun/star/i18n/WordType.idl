@@ -1,0 +1,73 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_i18n_WordType_idl__
+#define __com_sun_star_i18n_WordType_idl__
+
+//=============================================================================
+
+module com {  module sun {  module star {  module i18n {
+
+//=============================================================================
+
+/** Constants to specify the type of words.
+
+    <p> Used with <member>XBreakIterator::nextWord()</member>,
+    <member>XBreakIterator::previousWord()</member>,
+    <member>XBreakIterator::getWordBoundary()</member>,
+    <member>XBreakIterator::getWordType()</member>,
+    <member>XBreakIterator::isBeginWord()</member>,
+    <member>XBreakIterator::isEndWord()</member> </p>
+*/
+published constants WordType
+{
+    /** Any "words" - words in the meaning of same character types,
+        collection of alphanumeric characters, or collection of
+        non-alphanumeric characters.
+    */
+    const short ANY_WORD                 = 0;
+
+    /** Any "words" - words in the meaning of same character types,
+        collection of alphanumeric characters, or collection of
+        non-alphanumeric characters except blanks.
+    */
+    const short ANYWORD_IGNOREWHITESPACES= 1;
+
+    /** "words" - in the meaning of a collection of alphanumeric
+        characters and some punctuations, like dot for abbreviation.
+    */
+    const short DICTIONARY_WORD          = 2;
+
+    /** The mode for counting words, it will combine punctuations and
+        spaces as word trail.
+     */
+    const short WORD_COUNT               = 3;
+};
+
+//=============================================================================
+}; }; }; };
+
+#endif

@@ -1,0 +1,81 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_awt_tree_XTreeEditListener_idl__
+#define __com_sun_star_awt_tree_XTreeEditListener_idl__
+
+#include <com/sun/star/awt/tree/XTreeNode.idl>
+#include <com/sun/star/lang/XEventListener.idl>
+#include <com/sun/star/util/VetoException.idl>
+
+//=============================================================================
+
+module com {  module sun {  module star {  module awt {  module tree {
+
+//=============================================================================
+
+/** You can implement this interface and register with <method scope="XTreeControl">addTreeEditListener</method>
+    to get notifications when editing of a node starts and ends.
+
+    <p>You have to set the <member>TreeControlModel::Editable</member> property to
+    <TRUE/> before a tree supports editing.</p>
+ */
+published interface XTreeEditListener : ::com::sun::star::lang::XEventListener
+{
+    /** This method is called from the <type>TreeControl</type> implementation when editing of
+        <var>Node</var> is requested by calling <member>XTreeControl::startEditingAtNode()</member>.
+
+        @param Node
+            the <type>XTreeNode</type> for that an edit request was fired by calling
+            <method scope="XTreeControl">startEditingAtNode</method>
+
+        @throws VetoException
+            if thrown the editing will not start.
+    */
+    void nodeEditing( [in] XTreeNode Node )
+        raises ( ::com::sun::star::util::VetoException );
+
+    /** This method is called from the <type>TreeControl</type> implementation when editing
+        of <var>Node</var> is finished and was not canceled.
+
+        <p>Implementations that register a <type>XTreeEditListener</type> must update the
+        display value at the Node.</p>
+
+        @param Node
+            the <type>XTreeNode</type> for that an edit request was fired by calling
+            <method scope="XTreeControl">startEditingAtNode</method>
+
+        @param NewText
+            the text that was entered by the user.
+    */
+    void nodeEdited( [in] XTreeNode Node, [in] string NewText );
+};
+
+//=============================================================================
+
+}; }; }; }; };
+
+#endif

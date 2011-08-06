@@ -1,0 +1,113 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_sheet_XDataPilotTable2_idl__
+#define __com_sun_star_sheet_XDataPilotTable2_idl__
+
+#include <com/sun/star/uno/XInterface.idl>
+#include <com/sun/star/table/CellAddress.idl>
+#include <com/sun/star/table/CellRangeAddress.idl>
+#include <com/sun/star/sheet/XDataPilotTable.idl>
+#include <com/sun/star/sheet/DataPilotOutputRangeType.idl>
+#include <com/sun/star/sheet/DataPilotFieldFilter.idl>
+#include <com/sun/star/sheet/DataPilotTablePositionData.idl>
+#include <com/sun/star/lang/IllegalArgumentException.idl>
+
+module com {  module sun {  module star {  module sheet {
+
+/** additional methods to extend <type scope="com::sun::star::sheet">XDataPilotTable</type>.
+
+   <type scope="com::sun::star::sheet">XDataPilotTable2</type> extends the old
+   <type scope="com::sun::star::sheet">XDataPilotTable</type> interface with
+   additional methods.
+
+   @see com::sun::star::sheet::XDataPilotTable
+
+   @since OOo 3.0
+ */
+interface XDataPilotTable2: com::sun::star::sheet::XDataPilotTable
+{
+    /** When the address of a cell within the result area is given,
+        <method>XDataPilotTable2::getDrillDownData</method> returns its drill-down
+        output table that includes only those rows that contribute to the value of
+        that cell.
+
+        @param aAddr cell address within the result area of a DataPilot table.
+
+        @returns drill-down output as 2-dimensional sequence, including the header row.
+
+        @see <method>XDataPilotTable2::insertDrillDownSheet</method>
+     */
+    sequence< sequence< any > > getDrillDownData( [in] com::sun::star::table::CellAddress aAddr );
+
+    /** Given a cell address, it returns the information about that cell.  The
+        type of information returned depends upon whether the cell is within
+        the result area or column/row header area.
+
+        @param aAddr address of the cell whose information is to be returned.
+
+        @returns <type>DataPilotTablePositionData</type> which contains the
+        position type and the information for that cell position.
+
+        @see com::sun::star::sheet::DataPilotTablePositionData
+        @see com::sun::star::sheet::DataPilotTableHeaderData
+        @see com::sun::star::sheet::DataPilotTableResultData
+     */
+    DataPilotTablePositionData getPositionData( [in] com::sun::star::table::CellAddress aAddr );
+
+    /** <p>This method inserts a new sheet to display the drill-down data for a
+        specified result cell.  A drill-down data for a result cell consists
+        of a subset of rows from the original data source that contribute to
+        the value displayed in that cell.</p>
+
+        <p>The new sheet is always inserted to the immediate left of the current
+        sheet where the DataPilot table is.  Note that when the drill-down data
+        is empty, no new sheet is inserted.</p>
+
+        @param aAddr address of a result cell
+
+        @returns <void/>
+     */
+    void insertDrillDownSheet( [in] com::sun::star::table::CellAddress aAddr );
+
+    /** <p>This method returns a different output range of a DataPilot table
+        per specified output range type.</p>
+
+        @returns <type scope="com::sun::star::table">CellRangeAddress</type> depicting
+        the range specified.  See <type>DataPilotOutputRangeType</type> for a set
+        of possible output range types.
+
+        @see com::sun::star::sheet::DataPilotOutputRangeType
+     */
+    com::sun::star::table::CellRangeAddress getOutputRangeByType( [in] long nType )
+        raises (com::sun::star::lang::IllegalArgumentException);
+};
+
+}; }; }; };
+
+#endif
+

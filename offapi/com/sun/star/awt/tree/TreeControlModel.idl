@@ -1,0 +1,106 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_awt_tree_TreeControlModel_idl__
+#define __com_sun_star_awt_tree_TreeControlModel_idl__
+
+#include <com/sun/star/awt/tree/XTreeDataModel.idl>
+#include <com/sun/star/awt/UnoControlModel.idl>
+#include <com/sun/star/view/SelectionType.idl>
+
+//=============================================================================
+
+module com {  module sun {  module star {  module awt { module tree {
+
+//=============================================================================
+
+/** specifies the standard model of a <type>TreeControl</type>.
+ */
+service TreeControlModel
+{
+    /** specifies the standard model of an <type scope="com::sun::star::awt">UnoControl</type>. */
+    service ::com::sun::star::awt::UnoControlModel;
+
+    /** Specifies the selection mode that is enabled for this tree.
+        <p>The default value is <member scope="com::sun::star::view">SelectionType::NONE</member></p>
+    */
+    [property] ::com::sun::star::view::SelectionType SelectionType;
+
+    /** Specifies the <type>XTreeDataModel</type> that is providing the hierarchical data.
+
+        <p>You can implement your own instance of <type>XTreeDataModel</type> or use
+        the <type>MutableTreeDataModel</type>.
+    */
+    [property] XTreeDataModel DataModel;
+
+    /** Specifies if the root node of the tree is displayed.
+        <p>If <var>RootDisplayed</var> is set to <FALSE/>, the root node of a model is no longer
+        a valid node for the <type>XTreeControl</type> and can't be used with any method of
+        <type>XTreeControl</type>.
+        <p>The default value is <TRUE/></p>
+    */
+    [property] boolean RootDisplayed;
+
+    /** Specifies whether the node handles should be displayed.
+        <p>The handles are doted lines that visualize the tree like hierarchy<p>
+        <p>The default value is <TRUE/></p>
+    */
+    [property] boolean ShowsHandles;
+
+    /** Specifies whether the node handles should also be displayed at root level.
+        <p>The default value is <TRUE/></p>
+    */
+    [property] boolean ShowsRootHandles;
+
+    /** Specifies the height of each row, in pixels.
+        <p>If the specified value is less than or equal to zero, the row height is the maximum height
+        of all rows.</p>
+        <p>The default value is 0</p>
+    */
+    [property] long RowHeight;
+
+    /** Specifies whether the nodes of the tree are editable.
+        <p>The default value is <FALSE/></p>
+
+        @see XTreeControl::startEditingAtNode()
+        @see XTreeEditListener
+    */
+    [property] boolean Editable;
+
+    /** Specifies what happens when editing is interrupted by selecting another node in the tree,
+        a change in the tree's data, or by some other means.
+        <p>Setting this property to <TRUE/> causes the changes to be automatically saved when editing
+        is interrupted. <FALSE/> means that editing is canceled and changes are lost
+        <p>The default value is <FALSE/></p>
+    */
+    [property] boolean InvokesStopNodeEditing;
+};
+
+//=============================================================================
+
+}; }; }; }; };
+
+#endif

@@ -1,0 +1,30 @@
+#ifndef com_sun_star_chart2_XScaling_idl
+#define com_sun_star_chart2_XScaling_idl
+
+#include <com/sun/star/uno/XInterface.idl>
+
+//=============================================================================
+
+module com {  module sun {  module star {  module chart2 {
+
+//=============================================================================
+
+interface XScaling : ::com::sun::star::uno::XInterface
+{
+    /** needs to keep relative ordering
+    */
+    double doScaling([in] double value);
+    com::sun::star::chart2::XScaling getInverseScaling();
+
+    //maybe provide correction for Min/Max
+    //double getMinimum(); ?adjust <-> min/max may not exist
+    //double getMaximum();
+
+    //... or better/additionally?: provide default values for Min&Max
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

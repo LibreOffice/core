@@ -1,0 +1,101 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef __offapi_com_sun_star_view_XFormLayerAccess_idl__
+#define __offapi_com_sun_star_view_XFormLayerAccess_idl__
+
+#include <com/sun/star/view/XControlAccess.idl>
+#include <com/sun/star/form/XForm.idl>
+#include <com/sun/star/form/runtime/XFormController.idl>
+#include <com/sun/star/lang/IllegalArgumentException.idl>
+
+//=============================================================================
+
+module com { module sun { module star { module view {
+
+//=============================================================================
+
+/** provides access to the form layer elements in a view
+
+    @since OOo 2.3
+ */
+interface XFormLayerAccess
+{
+    /// provides access to form controls contained in the view
+    interface XControlAccess;
+
+    /** returns the <type scope="com::sun::star::form">FormController</type>
+        instance which operates on a given form.
+
+        <p>A form controller is a component which controls the user interaction
+        with the form layer, as long as the form is not in design mode.</p>
+
+        @return
+            the requested form controller, or <NULL/> if the view's
+            form layer is currently in design mode. Note that the returned
+            instance becomes non-functional as soon as the form layer is switched
+            to design mode.
+
+        @see isDesignMode
+        @see setDesignMode
+        @see ::com::sun::star::form::runtime::FormController
+        @see ::com::sun::star::form::runtime::FormOperations
+    */
+    ::com::sun::star::form::runtime::XFormController
+        getFormController(
+            [in] ::com::sun::star::form::XForm Form
+        );
+
+    /** determines whether the view's form layer is currently in design
+        or alive mode
+
+        <p><em>Note</em>: This is a convenience method. In the user interface,
+        the design mode is coupled with the <code>.uno:SwitchControlDesignMode</code>
+        feature (see <type scope="com::sun::star::frame">XDispatchProvider</type>),
+        and asking for the current mode is the same as asking for the state of this
+        feature.</p>
+    */
+    boolean isFormDesignMode();
+
+    /** determines whether the view's form layer is currently in design
+        or alive mode
+
+        <p><em>Note</em>: This is a convenience method. In the user interface,
+        the design mode is coupled with the <code>.uno:SwitchControlDesignMode</code>
+        feature (see <type scope="com::sun::star::frame">XDispatchProvider</type>),
+        and changing the current mode is the same as dispatching this feature URL.</p>
+    */
+    void    setFormDesignMode( [in] boolean DesignMode );
+};
+
+//=============================================================================
+
+}; }; }; };
+
+//=============================================================================
+
+#endif

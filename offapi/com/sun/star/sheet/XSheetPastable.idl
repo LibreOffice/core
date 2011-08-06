@@ -1,0 +1,86 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_sheet_XSheetPastable_idl__
+#define __com_sun_star_sheet_XSheetPastable_idl__
+
+#include <com/sun/star/uno/XInterface.idl>
+#include <com/sun/star/table/CellAddress.idl>
+#include <com/sun/star/table/CellRangeAddress.idl>
+#include <com/sun/star/sheet/PasteOperation.idl>
+#include <com/sun/star/sheet/CellInsertMode.idl>
+
+//=============================================================================
+
+module com {  module sun {  module star {  module sheet {
+
+//=============================================================================
+
+/** represents a sheet into which contents of the clipboard can be pasted.
+
+    @deprecated
+ */
+published interface XSheetPastable: com::sun::star::uno::XInterface
+{
+    //-------------------------------------------------------------------------
+
+    /** pastes the contents of the clipboard at the specified
+        position on the sheet.
+     */
+    void paste( [in] com::sun::star::table::CellAddress aDestination );
+
+    //-------------------------------------------------------------------------
+
+    /** pastes the contents of the clipboard at the
+        specified position on the sheet, using the specified format.
+     */
+    void pasteFormat( [in] com::sun::star::table::CellAddress aDestination,
+             [in] string aFormat );
+
+    //-------------------------------------------------------------------------
+
+    /** pastes clipboard data from a cell range into
+        another cell range.
+
+        <p>The contents of the clipboard must be from a cell range.</p>
+     */
+    void pasteCellRange( [in] com::sun::star::table::CellRangeAddress aDestination,
+             [in] com::sun::star::sheet::PasteOperation nOperation,
+             [in] short nContents,
+             [in] boolean bSkipEmpty,
+             [in] boolean bTranspose,
+             [in] boolean bAsLink,
+             [in] com::sun::star::sheet::CellInsertMode nInsert );
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif
+

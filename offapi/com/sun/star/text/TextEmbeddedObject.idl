@@ -1,0 +1,78 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_text_TextEmbeddedObject_idl__
+#define __com_sun_star_text_TextEmbeddedObject_idl__
+
+#include <com/sun/star/document/XEmbeddedObjectSupplier.idl>
+#include <com/sun/star/text/BaseFrame.idl>
+#include <com/sun/star/frame/XModel.idl>
+
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module text {
+
+//=============================================================================
+
+// DocMerge from xml: service com::sun::star::text::TextEmbeddedObject
+/** provides access to the properties and methods of an embedded object.
+ */
+published service TextEmbeddedObject
+{
+    /** contains the definition of interfaces and properties that are supported by text frames,
+     graphic objects and embedded objects.
+     */
+    service BaseFrame;
+    // DocMerge: empty anyway
+    interface com::sun::star::document::XEmbeddedObjectSupplier;
+        /* If you get this property you get the CLSID of the OLE2 document stream
+                contained in this OLE2 shape. If you set it, an empty OLE2 document stream
+                with this CLSID is created within this OLE2 shape.
+            The property can only be set as long as the object is not inserted into the document.
+        */
+        [property] string CLSID;
+        //-------------------------------------------------------------------------
+
+        /** This is the model for the OLE2 object.
+            <p>This property if void if the OLE2 is not an
+            Office component.</p>
+
+        */
+        [readonly, maybevoid, property] com::sun::star::frame::XModel Model;
+        //-------------------------------------------------------------------------
+
+        /** This is the component for the OLE2 object.
+
+        */
+        [readonly, maybevoid, property] com::sun::star::lang::XComponent Component;
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

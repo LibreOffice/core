@@ -1,0 +1,87 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_report_XShape_idl__
+#define __com_sun_star_report_XShape_idl__
+
+#include <com/sun/star/report/XReportControlModel.idl>
+#include <com/sun/star/beans/PropertyValue.idl>
+#include <com/sun/star/drawing/XShape.idl>
+#include <com/sun/star/drawing/HomogenMatrix3.idl>
+//=============================================================================
+
+ module com {  module sun {  module star {  module report {
+
+//=============================================================================
+published interface XShape
+{
+    interface XReportControlModel;
+
+    /** is used to query or change the ZOrder of this <type>Shape</type>. */
+    [attribute,bound] long ZOrder;
+
+    /** this property lets you get and set the transformation matrix
+        for this shape.
+
+        The transformation is a 3x3 homogeneous matrix and can contain
+        translation, rotation, shearing and scaling.
+     */
+    [attribute,bound] com::sun::star::drawing::HomogenMatrix3 Transformation;
+
+    //-------------------------------------------------------------------------
+    /** This property contains the CustomShapeEngine service name that has to
+        be used for rendering.
+    */
+    [attribute] string CustomShapeEngine;
+
+    //-------------------------------------------------------------------------
+    /** This property can be used to store data that the CustomShapeEngine may
+        use for rendering
+    */
+    [attribute] string CustomShapeData;
+
+    /** This property describes the geometry of the CustomShape. The CustomShapeEngine
+        that is used should be able to get on with the content of this property.
+
+        If the CustomShapeEngine property is "com.sun.star.drawing.EnhancedCustomShapeEngine",
+        then this property is containing properties as they are specified in the service
+        com.sun.star.drawing.EnhancedCustomShapeGeometry
+    */
+    [attribute,bound] sequence<::com::sun::star::beans::PropertyValue> CustomShapeGeometry;
+
+    /** determines if the object is opaque or transparent for text.
+     */
+    [attribute,bound] boolean Opaque;
+};
+
+//=============================================================================
+
+}; }; }; };
+
+/*=============================================================================
+
+=============================================================================*/
+#endif

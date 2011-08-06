@@ -1,0 +1,45 @@
+#ifndef com_sun_star_chart2_CoordinateSystem_idl
+#define com_sun_star_chart2_CoordinateSystem_idl
+
+#include <com/sun/star/uno/XInterface.idl>
+#include <com/sun/star/chart2/XScale.idl>
+#include <com/sun/star/util/XCloneable.idl>
+#include <com/sun/star/lang/IndexOutOfBoundsException.idl>
+
+module com
+{
+module sun
+{
+module star
+{
+module chart2
+{
+
+/**
+ */
+service CoordinateSystem
+{
+    /**
+     */
+    interface XCoordinateSystem;
+
+    /** a coordinate system can contain several chart types, which than do contain the data series.
+    */
+    interface com::sun::star::chart2::XChartTypeContainer;
+
+    /** creates a new CoordinateSystem that contains the same
+        members like the original object.  Note that the contained
+        XScales are still the same objects, i.e. those are not cloned.
+     */
+    [optional] interface com::sun::star::util::XCloneable;
+
+    [optional, property] boolean    SwapXAndYAxis;
+};
+
+} ; // chart2
+} ; // star
+} ; // sun
+} ; // com
+
+
+#endif

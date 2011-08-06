@@ -1,0 +1,81 @@
+/*************************************************************************
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+************************************************************************/
+
+#ifndef __com_sun_star_frame_XController2_idl__
+#define __com_sun_star_frame_XController2_idl__
+
+#include <com/sun/star/frame/XController.idl>
+#include <com/sun/star/awt/XWindow.idl>
+#include <com/sun/star/beans/PropertyValue.idl>
+
+//=============================================================================
+
+module com {  module sun {  module star {  module frame {
+
+//=============================================================================
+
+/** extends the <type>XController</type> interface
+
+    @since OOo 3.0
+*/
+published interface XController2 : XController
+{
+    /** denotes the &quot;root window&quot; of the controller.
+
+        <p>If the controller is plugged into a frame, this window acts as the
+        frame's <code>ComponentWindow</code>.</p>
+
+        @see XFrame
+    */
+    [readonly, attribute] ::com::sun::star::awt::XWindow    ComponentWindow;
+
+    /** specifies the view name of the controller.
+
+        <p>A view name is a logical name, which can be used to create views of the same
+        type. The name is meaningful only in conjunction with <member>XModel2::createViewController</member>
+        - if it's passed there, a view/controller pair of the same type will be created.</p>
+    */
+    [readonly, attribute] string                            ViewControllerName;
+
+    /** denotes the arguments used to create the instance.
+
+        <p>Usually, controllers are created via <member>XModel2::createViewController</member>, where the
+        caller can pass not only a controller name, but also arguments parameterizing the to-be-created instance.
+        Those arguments used at creation time can subsequently be retrieved using the <code>CreationArguments</code>
+        member.</p>
+    */
+    [readonly, attribute] sequence< ::com::sun::star::beans::PropertyValue >
+                                                            CreationArguments;
+};
+
+//=============================================================================
+
+}; }; }; };
+
+//=============================================================================
+
+#endif
+

@@ -1,0 +1,112 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_chart_XChartData_idl__
+#define __com_sun_star_chart_XChartData_idl__
+
+#include <com/sun/star/uno/XInterface.idl>
+
+#include <com/sun/star/chart/XChartDataChangeEventListener.idl>
+
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module chart {
+
+//=============================================================================
+
+/** manages the data of the chart.
+
+    @see XChartDocument
+ */
+published interface XChartData: com::sun::star::uno::XInterface
+{
+    //-------------------------------------------------------------------------
+
+    /** allows a component supporting the
+        <type>XChartDataChangeEventListener</type> interface to
+        register as listener.  The component will be notified with a
+        <type>ChartDataChangeEvent</type> every time the chart's data
+        changes.</p>
+
+        @param aListener
+            the component that is to be added as listener
+
+        @see XChartDataChangeEventListener
+        @see ChartDataChangeEvent
+     */
+    void addChartDataChangeEventListener( [in] com::sun::star::chart::XChartDataChangeEventListener aListener );
+
+    //-------------------------------------------------------------------------
+
+    /** removes a previously registered listener.
+
+        @param aListener
+            the component that is to be removed
+     */
+    void removeChartDataChangeEventListener( [in] com::sun::star::chart::XChartDataChangeEventListener aListener );
+
+    //-------------------------------------------------------------------------
+
+    /** @returns
+            the value which is to be used as an indicator for a
+            missing value in the data.
+
+        <p>In IEEE arithmetic format it is one of the NaN values, so
+        there are no conflicts with existing numeric values.</p>
+     */
+    double getNotANumber();
+
+    //-------------------------------------------------------------------------
+
+    /** checks whether the value given is equal to the indicator value
+        for a missing value.
+
+        <p>In IEEE arithmetic format it is one of the NaN values, so
+        there are no conflicts with existing numeric values.</p>
+
+        <p>Always use this method to check, if a value is <em>not a
+        number</em>.  If you compare the value returned by
+        <member>XChartData::getNotANumber</member> to another double
+        value using the = operator, you may not get the desired
+        result!</p>
+
+        @returns
+            <TRUE/> if the number given is interpreted by the chart as
+            a missing value.
+
+        @param nNumber
+            the number that you want to check for validity.
+     */
+    boolean isNotANumber( [in] double nNumber );
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

@@ -1,0 +1,10 @@
+jh  javaunohelper : LIBXSLT:libxslt bridges cppuhelper jurt ridljar unoil NULL
+jh	javaunohelper								usr1	-	all	jh_mkout NULL
+jh	javaunohelper\inc							nmake	-	all	jh_inc NULL
+jh	javaunohelper\com\sun\star\comp\helper		nmake	-	all	jh_helper jh_inc NULL
+jh	javaunohelper\com\sun\star\comp\juhtest		nmake	-	all	jh_juhtest jh_helper jh_libhelp NULL
+jh	javaunohelper\com\sun\star\comp			    nmake	-	all	jh_comp jh_juhtest NULL
+jh	javaunohelper\com\sun\star\lib\uno\adapter	nmake	-	all	jh_adapter jh_libhelp jh_inc NULL
+jh	javaunohelper\com\sun\star\lib\uno\helper	nmake	-	all	jh_libhelp jh_inc NULL
+jh	javaunohelper\source						nmake	-	all	jh_source jh_inc NULL
+jh	javaunohelper\util							nmake	-	all	jh_util jh_helper jh_source jh_adapter jh_libhelp jh_comp NULL

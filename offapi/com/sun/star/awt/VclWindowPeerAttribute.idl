@@ -1,0 +1,156 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_awt_VclWindowPeerAttribute_idl__
+#define __com_sun_star_awt_VclWindowPeerAttribute_idl__
+
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module awt {
+
+//=============================================================================
+
+/** specifies attributes for the VCL window implementation.
+
+    <p><b>IMPORTANT:</b> These constants have to be disjunct with
+    constants in <type>WindowAttribute</type>.</p>
+
+    @deprecated
+ */
+published constants VclWindowPeerAttribute
+{
+    //-------------------------------------------------------------------------
+
+    const long HSCROLL = 256;
+
+    //-------------------------------------------------------------------------
+
+    const long VSCROLL = 512;
+
+    //-------------------------------------------------------------------------
+
+    const long LEFT = 1024;
+
+    //-------------------------------------------------------------------------
+
+    const long CENTER = 2048;
+
+    //-------------------------------------------------------------------------
+
+    const long RIGHT = 4096;
+
+    //-------------------------------------------------------------------------
+
+    const long SPIN = 8192;
+
+    //-------------------------------------------------------------------------
+
+    const long SORT = 16384;
+
+    //-------------------------------------------------------------------------
+
+    const long DROPDOWN = 32768;
+
+    //-------------------------------------------------------------------------
+
+    const long DEFBUTTON = 65536;
+
+    //-------------------------------------------------------------------------
+
+    const long READONLY = 262144;
+
+    //-------------------------------------------------------------------------
+
+    const long CLIPCHILDREN = 524288;
+
+    //-------------------------------------------------------------------------
+
+    const long NOBORDER = 1048576;
+
+    //-------------------------------------------------------------------------
+
+    const long GROUP = 2097152;
+
+    //-------------------------------------------------------------------------
+
+    const long OK = 4194304;
+
+    //-------------------------------------------------------------------------
+
+    const long OK_CANCEL = 8388608;
+
+    //-------------------------------------------------------------------------
+
+    const long YES_NO = 16777216;
+
+    //-------------------------------------------------------------------------
+
+    const long YES_NO_CANCEL = 33554432;
+
+    //-------------------------------------------------------------------------
+
+    const long RETRY_CANCEL = 67108864;
+
+    //-------------------------------------------------------------------------
+
+    const long DEF_OK = 134217728;
+
+    //-------------------------------------------------------------------------
+
+    const long DEF_CANCEL = 268435456;
+
+    //-------------------------------------------------------------------------
+
+    const long DEF_RETRY = 536870912;
+
+    //-------------------------------------------------------------------------
+
+    const long DEF_YES = 1073741824;
+
+    //-------------------------------------------------------------------------
+
+    const long DEF_NO = -2147483648;
+
+    //-------------------------------------------------------------------------
+
+    const long NOLABEL = 536870912; //added for issue79712
+
+    //-------------------------------------------------------------------------
+
+    const long AUTOHSCROLL = 1073741824;
+
+    //-------------------------------------------------------------------------
+
+    const long AUTOVSCROLL = -2147483648;
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

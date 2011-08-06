@@ -1,0 +1,96 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_embed_EmbeddedObjectDescriptor_idl__
+#define __com_sun_star_embed_EmbeddedObjectDescriptor_idl__
+
+#include <com/sun/star/io/XInputStream.idl>
+#include <com/sun/star/awt/Rectangle.idl>
+#include <com/sun/star/util/URL.idl>
+#include <com/sun/star/task/XInteractionHandler.idl>
+#include <com/sun/star/task/XStatusIndicator.idl>
+#include <com/sun/star/frame/XDispatchProviderInterceptor.idl>
+#include <com/sun/star/embed/XStorage.idl>
+
+//============================================================================
+
+module com { module sun { module star { module embed {
+
+//============================================================================
+/** describes properties of an embedded object
+
+    <p>
+    This service may be represented by a
+    <type scope="com::sun::star::beans" dim="[]">PropertyValue</type>.
+    Such descriptors will be passed to different functions, included into
+    possible load/save processes. Every member of such process can use
+    this descriptor and may change it to actualize the informations about
+    the object. So this descriptor should be used as an in/out parameter.
+    </p>
+
+    @see com::sun::star::beans::PropertyValue
+ */
+published service EmbeddedObjectDescriptor
+{
+    //------------------------------------------------------------------------
+    /** lets the graphical representation of embedded document be stored.
+
+        <p>
+        Setting of this property to true tells the embedded object that
+        controls the document to store or not to store the graphical
+        representation of the document in to the object persistence.
+        If this property is not set the object makes the decision itself.
+        </p>
+    */
+    [optional,property] boolean StoreVisualReplacement;
+
+    //------------------------------------------------------------------------
+    /** allows to provide a dispatch interceptor for outplace activation.
+    */
+    [optional,property] ::com::sun::star::frame::XDispatchProviderInterceptor
+                                                OutplaceDispatchInterceptor;
+
+    /** denotes the storage from which the embedded object is to be recovered.
+
+        <p>Upon activating the embedded object, it is normally loaded from a storage as denoted by
+        the parameters to the <type>XEmbedObjectCreator</type> method calls.</p>
+
+        <p>You can pass a non-<NULL/> <code>RecoveryStorage</code> in the object descriptor if you wish to load the
+        embedded object from an alternate storage.</p>
+
+        <p>The object will still be based on the storage denoted in the <code>XEmbedObjectCreator</code> method
+        call, i.e., subsequent save operations will still use that storage. <code>RecoveryStorage</code> is used
+        at loading time only, and then discarded.</p>
+    */
+    [optional, property] XStorage RecoveryStorage;
+};
+
+//============================================================================
+
+}; }; }; };
+
+#endif
+

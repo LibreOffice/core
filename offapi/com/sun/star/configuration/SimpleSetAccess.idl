@@ -1,0 +1,111 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_configuration_SimpleSetAccess_idl__
+#define __com_sun_star_configuration_SimpleSetAccess_idl__
+
+#include <com/sun/star/container/XNameAccess.idl>
+#include <com/sun/star/configuration/XTemplateContainer.idl>
+#include <com/sun/star/util/XStringEscape.idl>
+#include <com/sun/star/container/XContainer.idl>
+
+//=============================================================================
+
+module com { module sun { module star { module configuration {
+
+//=============================================================================
+/** provides access to a dynamic, homogeneous, nonhierarchical set of values
+ or objects.
+
+ <p>Also provides information about the template for elements.
+ Allows normalizing externally generated names.
+ </p>
+
+ <p><em>Sets</em> are dynamic containers.</p>
+
+ <p>The number and names of contained elements is not fixed in advance,
+ but all elements have to be of one predetermined type.
+ </p>
+*/
+published service SimpleSetAccess
+{
+/** is the basic service for accessing child and descendent nodes.
+
+ <p>External names from foreign namespaces should be normalized using
+ <member scope="com::sun::star::util">XStringEscape::escapeString()</member>,
+ if available, before using them as element names.
+ </p>
+*/
+    interface com::sun::star::container::XNameAccess;
+
+/** provides additional information about the element type. [optional]
+
+ <p>All set elements, if they are not just simple values, but whole trees,
+ must have a predetermined structure (their <em>type</em>)
+ that is described by and can be generated from a <em>template</em>.
+ The semantics of the information provided about the template depends on the
+ implementation.
+ </p>
+
+ <p>This interface may be missing, if the implementation can support only
+ one predefined type or if the elements are of a simple type and
+ no further information is available.  In the latter case,
+ <member scope="com::sun::star::container">XElementAccess::getElementType()</member>
+ provides all the information there is about the element's type.
+ </p>
+*/
+    [optional] interface com::sun::star::configuration::XTemplateContainer;
+
+/** allows normalizing and denormalizing external names. [optional]
+
+ <p>Elements of a <em>set</em> often correspond to external entities,
+ for example, files, web pages, and people whose names obey different rules and
+ restrictions than names that are valid in the hierarchical naming scheme.
+ </p>
+
+ <p>This interface may be missing if there are no naming restrictions,
+ if the implementation handles any such conversions internally,
+ or if clients must enforce such restrictions themselves. In the last case,
+ the naming scheme documentation must fully document any restrictions.
+ </p>
+*/
+    [optional] interface com::sun::star::util::XStringEscape;
+
+/** allows attaching listeners to this node to monitor changes to the set. [optional]
+
+ <p>This interface may be missing if the implementation does not support
+ notifications.
+ </p>
+*/
+    [optional] interface com::sun::star::container::XContainer;
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

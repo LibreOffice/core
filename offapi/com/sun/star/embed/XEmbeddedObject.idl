@@ -1,0 +1,265 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_embed_XEmbeddedObject_idl__
+#define __com_sun_star_embed_XEmbeddedObject_idl__
+
+#include <com/sun/star/lang/XComponent.idl>
+#include <com/sun/star/embed/XEmbeddedClient.idl>
+#include <com/sun/star/embed/XVisualObject.idl>
+#include <com/sun/star/embed/XClassifiedObject.idl>
+#include <com/sun/star/embed/XComponentSupplier.idl>
+#include <com/sun/star/embed/XStateChangeBroadcaster.idl>
+#include <com/sun/star/datatransfer/XTransferable.idl>
+#include <com/sun/star/document/XEventBroadcaster.idl>
+#include <com/sun/star/embed/VerbDescriptor.idl>
+#include <com/sun/star/embed/UnreachableStateException.idl>
+#include <com/sun/star/embed/WrongStateException.idl>
+#include <com/sun/star/embed/NeedsRunningStateException.idl>
+#include <com/sun/star/lang/IllegalArgumentException.idl>
+#include <com/sun/star/util/XCloseable.idl>
+
+
+
+//============================================================================
+
+ module com {  module sun {  module star {  module embed {
+
+//============================================================================
+/** represents common functionality for embedded objects.
+ */
+published interface XEmbeddedObject
+{
+    // INTERFACES
+    //
+    //------------------------------------------------------------------------
+    /** represents common visualization functionality for embedded objects.
+     */
+    interface XVisualObject;
+
+    //------------------------------------------------------------------------
+    /** allows to detect class ID of the object.
+     */
+    interface XClassifiedObject;
+
+    //------------------------------------------------------------------------
+    /** allows to get access to the component handled by the object.
+     */
+    interface XComponentSupplier;
+
+    //------------------------------------------------------------------------
+    /** allows to be notified when object changes the state.
+     */
+    interface XStateChangeBroadcaster;
+
+    //------------------------------------------------------------------------
+    /** allows to be notified about object related events.
+     */
+    interface ::com::sun::star::document::XEventBroadcaster;
+
+    //------------------------------------------------------------------------
+    /** allows to control lifetime of the object.
+     */
+    interface ::com::sun::star::util::XCloseable;
+
+    // METHODS
+    //
+    //------------------------------------------------------------------------
+    /** changes the state of the object to the requested one.
+
+        @param nNewState
+            specifies the new state, can take values from the constant set
+            <type scope="com::sun::star::embed">EmbedStates</type>
+
+        @throws com::sun::star::embed::UnreachableStateException
+            the specified state can not be reached
+
+        @throws com::sun::star::embed::WrongStateException
+            in case object is in invalid state
+
+        @throws com::sun::star::uno::Exception
+            in case of other problems
+     */
+    void changeState( [in] long nNewState )
+        raises( ::com::sun::star::embed::UnreachableStateException,
+                ::com::sun::star::embed::WrongStateException,
+                ::com::sun::star::uno::Exception );
+
+    //------------------------------------------------------------------------
+    /** returns supported states for the object.
+
+        @returns
+            the sequence of states the object can be set to
+
+        @throws com::sun::star::embed::NeedsRunnignStateException
+            means that the object is in loaded state now and can be switched
+            to running state, other possible states can be detected only when
+            the object is not in loaded state any more
+
+        @throws com::sun::star::embed::WrongStateException
+            in case object is in invalid state
+     */
+    sequence< long > getReachableStates()
+        raises( ::com::sun::star::embed::NeedsRunningStateException,
+                ::com::sun::star::embed::WrongStateException );
+
+    //------------------------------------------------------------------------
+    /** returns the current state of the object.
+
+        @returns
+            the current state of the object
+
+        @throws com::sun::star::embed::WrongStateException
+            in case object is in invalid state
+     */
+    long getCurrentState()
+        raises( ::com::sun::star::embed::WrongStateException );
+
+    //------------------------------------------------------------------------
+    /** lets object perform an action referenced by nVerbID.
+
+        @param nVerbID
+            specifies an action to perform, can take values from
+            <type>EmbedVerbs</type>
+
+        @throws ::com::sun::star::lang::IllegalArgumentException
+            the verb is not supported
+
+        @throws com::sun::star::embed::WrongStateException
+            the object is in wrong state to call the function
+
+        @throws com::sun::star::embed::UnreachableStateException
+            the state, required by the verb, can not be reached
+
+        @throws com::sun::star::uno::Exception
+            in case of other problems
+     */
+    void doVerb( [in] long nVerbID )
+        raises( ::com::sun::star::lang::IllegalArgumentException,
+                ::com::sun::star::embed::WrongStateException,
+                ::com::sun::star::embed::UnreachableStateException,
+                ::com::sun::star::uno::Exception );
+
+    //------------------------------------------------------------------------
+    /** returns supported verbs for the object.
+
+        @returns
+            the sequence of verbs the object supports
+
+        @throws com::sun::star::embed::NeedsRunnignStateException
+            means that the object is in loaded state now and can be switched
+            to running state, acceptable verbs can be detected only when the
+            object is not in loaded state any more
+
+        @throws com::sun::star::embed::WrongStateException
+            the object is in wrong state to call the function
+     */
+    sequence< VerbDescriptor > getSupportedVerbs()
+        raises( ::com::sun::star::embed::NeedsRunningStateException,
+                ::com::sun::star::embed::WrongStateException );
+
+    //------------------------------------------------------------------------
+    /** sets a connection to the container's client.
+
+        @param xClient
+            provides a reference to a client implementation
+
+        @throws com::sun::star::embed::WrongStateException
+            the object is in wrong state
+     */
+    void setClientSite( [in] XEmbeddedClient xClient )
+        raises( ::com::sun::star::embed::WrongStateException );
+
+    //------------------------------------------------------------------------
+    /** provides access to the internal link to the container client.
+
+        @returns
+            a reference to related container client if any is set
+
+        @throws com::sun::star::embed::WrongStateException
+            the object is in wrong state
+     */
+    XEmbeddedClient getClientSite()
+        raises( ::com::sun::star::embed::WrongStateException );
+
+    //------------------------------------------------------------------------
+    /** updates object's representations.
+
+        @throws com::sun::star::embed::WrongStateException
+            the object is in wrong state to call the function
+
+        @throws com::sun::star::uno::Exception
+            in case problems detected
+     */
+    void update()
+        raises( ::com::sun::star::embed::WrongStateException,
+                ::com::sun::star::uno::Exception );
+
+    //------------------------------------------------------------------------
+    /** specifies how often the object's representation should be updated.
+
+        @param nMode
+            the new update mode, can take values from
+            <type>EmbeddedUpdateModes</type>
+
+        @throws ::com::sun::star::embed::WrongStateException
+            the object is in wrong state
+     */
+    void setUpdateMode( [in] long nMode )
+        raises( ::com::sun::star::embed::WrongStateException );
+
+    //------------------------------------------------------------------------
+    /** retrieves the status of the object.
+
+        @param nAspect
+            the aspect specifying the form of object representation
+
+        @return
+            the value specifying the status of the object for specified aspect
+            can take values from <type>EmbedMisc</type> constant set
+
+        @throws com::sun::star::embed::WrongStateException
+            the object is in wrong state
+     */
+    hyper getStatus( [in] hyper nAspect )
+        raises( ::com::sun::star::embed::WrongStateException );
+
+    //-------------------------------------------------------------------------
+    /** provides object with the name of container document.
+
+        @param sName
+            name of the container document
+     */
+    void setContainerName( [in] string sName );
+
+};
+
+//============================================================================
+
+}; }; }; };
+
+#endif
+

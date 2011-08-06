@@ -1,0 +1,171 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_chart_ChartStatistics_idl__
+#define __com_sun_star_chart_ChartStatistics_idl__
+
+#include <com/sun/star/beans/XPropertySet.idl>
+#include <com/sun/star/chart/ChartErrorCategory.idl>
+#include <com/sun/star/chart/ChartErrorIndicatorType.idl>
+#include <com/sun/star/chart/ChartRegressionCurveType.idl>
+#include <com/sun/star/chart/ErrorBarStyle.idl>
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module chart {
+
+//=============================================================================
+
+/** offers statistical properties for the data in the chart. It is
+    available for a single data row and for the whole diagram.
+ */
+published service ChartStatistics
+{
+    interface com::sun::star::beans::XPropertySet;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies the lower limit of the error range of a
+        data row.
+
+        <p>this setting is effective if the
+        <member>ChartStatistics::ErrorCategory</member> is set to
+        <member>ChartErrorCategory::CONSTANT_VALUE</member>.</p>
+
+        @see ConstantErrorHigh
+        @see ErrorCategory
+     */
+    [property] double ConstantErrorLow;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies the upper limit of the error range of a
+        data row.
+
+        <p>this setting is effective if the
+        <member>ChartStatistics::ErrorCategory</member> is set to
+        <member>ChartErrorCategory::CONSTANT_VALUE</member>.</p>
+
+        @see ConstantErrorLow
+        @see ErrorCategory
+     */
+    [property] double ConstantErrorHigh;
+
+    //-------------------------------------------------------------------------
+
+    /** determines if the mean value for a data row is
+        displayed as a line.
+     */
+    [property] boolean MeanValue;
+
+    //-------------------------------------------------------------------------
+
+    /** determines the type of error to indicate.
+
+        @deprecated
+
+        @see ChartErrorCategory
+        @see PercentageError
+        @see ErrorMargin
+        @see ConstantErrorLow
+        @see ConstantErrorHigh
+        @see ErrorIndicator
+     */
+    [property] com::sun::star::chart::ChartErrorCategory ErrorCategory;
+
+    /** determines the style of the error bars. Use this instead of
+        ErrorCategory
+
+         @see ErrorBarStyle
+     */
+    [optional, property] long ErrorBarStyle;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies the percentage that is used to display error bars.
+
+        <p>The length of the error indicators is calculated for each
+        data point by taking the given percentage of its value.</p>
+
+        <p>this setting is effective if the
+        <member>ChartStatistics::ErrorCategory</member> is set to
+        <member>ChartErrorCategory::PERCENT</member>.</p>
+
+        @see ErrorCategory
+     */
+    [property] double PercentageError;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies the percentage for the margin of errors.
+
+        <p>The length of the error indicators is calculated by taking
+        the percentage given of the largest data point value.</p>
+
+        <p>this setting is effective if the
+        <member>ChartStatistics::ErrorCategory</member> is set to
+        <member>ChartErrorCategory::ERROR_MARGIN</member>.</p>
+
+        @see ErrorCategory
+     */
+    [property] double ErrorMargin;
+
+    //-------------------------------------------------------------------------
+
+    /** determines how the error is indicated.
+
+        <p>You can enable indicators pointing up, down or both.</p>
+
+        @see ErrorCategory
+     */
+    [property] com::sun::star::chart::ChartErrorIndicatorType ErrorIndicator;
+
+    //-------------------------------------------------------------------------
+
+    /** determines a type of regression for the data row values.
+
+        @see ChartRegressionCurveType
+     */
+    [property] com::sun::star::chart::ChartRegressionCurveType RegressionCurves;
+
+    /** contains a cell range string for positive error bars. This
+        property is used when the <type>ErrorBarCategory</type> is set
+        to <member>ErrorBarCategory::FROM_DATA</member>.
+     */
+    [optional, property] string ErrorBarRangePositive;
+
+    /** contains a cell range string for negative error bars. This
+        property is used when the <type>ErrorBarCategory</type> is set
+        to <member>ErrorBarCategory::FROM_DATA</member>.
+     */
+    [optional, property] string ErrorBarRangeNegative;
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

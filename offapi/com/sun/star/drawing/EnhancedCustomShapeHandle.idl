@@ -1,0 +1,119 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_drawing_EnhancedCustomShapeHandle_idl__
+#define __com_sun_star_drawing_EnhancedCustomShapeHandle_idl__
+
+#include <com/sun/star/drawing/EnhancedCustomShapeParameterPair.idl>
+
+//=============================================================================
+
+module com {  module sun {  module star {  module drawing {
+
+//=============================================================================
+
+/**
+  This service may be represented by a ::com::sun::star::beans::PropertyValue [].
+*/
+
+service EnhancedCustomShapeHandle
+{
+    /** Specifies if the x position of the handle is mirrored.
+    */
+    [optional, property] boolean MirroredX;
+
+    /** Specifies if the y position of the handle is mirrored.
+    */
+    [optional, property] boolean MirroredY;
+
+    /** Specifies if the handle directions are swapped if the shape is taller than wide.
+    */
+    [optional, property] boolean Switched;
+
+    /** If the property Polar is set, then the first value specifies the radius and the second
+        parameter the angle of the handle. Otherwise, if the handle is not polar, the first parameter
+        specifies the horizontal handle position, the vertical handle position is described by the
+        second parameter.
+    */
+    [optional, property] com::sun::star::drawing::EnhancedCustomShapeParameterPair Position;
+
+    /** If this attribute is set, the handle is a polar handle. The property specifies the center
+        position of the handle. If this attribute is set, the attributes RangeX and RangeY are ignored,
+        instead the attribute RadiusRange is used.
+    */
+    [optional, property] ::com::sun::star::drawing::EnhancedCustomShapeParameterPair Polar;
+
+    /** RefX, if this attribute is set, it specifies the index of the adjustment
+        value which is connected to the horizontal position of the handle
+    */
+    [optional, property] long RefX;
+
+    /** RefY, if this attribute is set, it specifies the index of the adjustment
+        value which is connected to the vertical position of the handle
+    */
+    [optional, property] long RefY;
+
+    /** RefAngle, if this attribute is set, it specifies the index of the adjustment
+        value which is connected to the angle of the handle
+    */
+    [optional, property] long RefAngle;
+
+    /** RefR, if this attribute is set, it specifies the index of the adjustment
+        value which is connected to the radius of the handle
+    */
+    [optional, property] long RefR;
+
+    /** If the attribute RangeXMinimum is set, it specifies the horizontal minimum range of the handle.
+    */
+    [optional, property] ::com::sun::star::drawing::EnhancedCustomShapeParameter RangeXMinimum;
+
+    /** If the attribute RangeXMaximum is set, it specifies the horizontal maximum range of the handle.
+    */
+    [optional, property] ::com::sun::star::drawing::EnhancedCustomShapeParameter RangeXMaximum;
+
+    /** If the attribute RangeYMinimum is set, it specifies the vertical minimum range of the handle.
+    */
+    [optional, property] ::com::sun::star::drawing::EnhancedCustomShapeParameter RangeYMinimum;
+
+    /** If the attribute RangeYMaximum is set, it specifies the vertical maximum range of the handle.
+    */
+    [optional, property] ::com::sun::star::drawing::EnhancedCustomShapeParameter RangeYMaximum;
+
+    /** If this attribute is set, it specifies the minimum radius range that can be used for a polar handle.
+    */
+    [optional, property] ::com::sun::star::drawing::EnhancedCustomShapeParameter RadiusRangeMinimum;
+
+    /** If this attribute is set, it specifies the maximum radius range that can be used for a polar handle.
+    */
+    [optional, property] ::com::sun::star::drawing::EnhancedCustomShapeParameter RadiusRangeMaximum;
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif
+

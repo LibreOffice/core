@@ -1,0 +1,27 @@
+mkdir: %_DEST%\bin\pyuno
+mkdir: %_DEST%\lib\pyuno
+
+..\%__SRC%\lib\libpyuno.so %_DEST%\lib\libpyuno.so
+..\%__SRC%\lib\libpyuno.dylib %_DEST%\lib\libpyuno.dylib
+..\%__SRC%\lib\pyuno.so %_DEST%\lib\pyuno.so
+..\%__SRC%\lib\pyuno.dylib %_DEST%\lib\pyuno.dylib
+..\%__SRC%\lib\pythonloader.uno.so %_DEST%\lib\pythonloader.uno.so
+..\%__SRC%\lib\pythonloader.uno.dylib %_DEST%\lib\pythonloader.uno.dylib
+..\%__SRC%\lib\unohelper.py %_DEST%\lib\pyuno\unohelper.py
+..\%__SRC%\lib\pythonloader.py %_DEST%\lib\pyuno\pythonloader.py
+..\%__SRC%\lib\uno.py %_DEST%\lib\pyuno\uno.py
+..\%__SRC%\misc\pythonloader.component %_DEST%\xml\pythonloader.component
+
+..\%__SRC%\bin\unohelper.py %_DEST%\bin\pyuno\unohelper.py
+..\%__SRC%\bin\pythonloader.py %_DEST%\bin\pyuno\pythonloader.py
+..\%__SRC%\bin\uno.py %_DEST%\bin\pyuno\uno.py
+..\%__SRC%\bin\pyuno.pyd %_DEST%\bin\pyuno.pyd
+..\%__SRC%\bin\pyuno.dll %_DEST%\bin\pyuno.dll
+..\%__SRC%\bin\pythonl*.dll %_DEST%\bin\pythonl*.dll
+
+..\%__SRC%\misc\pyunorc %_DEST%\lib\pyunorc
+..\%__SRC%\misc\pyuno.ini %_DEST%\bin\pyuno.ini
+..\%__SRC%\bin\python-core-*.zip %_DEST%\bin\python-core-*.zip
+..\%__SRC%\bin\python.bin %_DEST%\bin\python.bin
+..\%__SRC%\bin\python.sh %_DEST%\bin\pyuno\python
+..\%__SRC%\bin\python.exe %_DEST%\bin\pyuno\python.exe

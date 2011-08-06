@@ -1,0 +1,123 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_reflection_XIdlField2_idl__
+#define __com_sun_star_reflection_XIdlField2_idl__
+
+#include <com/sun/star/reflection/XIdlMember.idl>
+
+#include <com/sun/star/reflection/XIdlClass.idl>
+
+#include <com/sun/star/reflection/FieldAccessMode.idl>
+
+#include <com/sun/star/lang/IllegalArgumentException.idl>
+
+#include <com/sun/star/lang/IllegalAccessException.idl>
+
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module reflection {
+
+//=============================================================================
+
+/** Reflects an IDL interface attribute, enum or compound type
+    (i.e. struct/exception) member.
+*/
+published interface XIdlField2: com::sun::star::reflection::XIdlMember
+{
+    /** Returns the type of the field.
+
+        @return
+                type of the field
+    */
+    com::sun::star::reflection::XIdlClass getType();
+
+    /** Returns the access mode of the field, i.e. read-write, read-only or
+        write-only (access mode "const" is deprecated).
+
+        @return
+                access mode of the field
+    */
+    com::sun::star::reflection::FieldAccessMode getAccessMode();
+
+    /** Gets the value of the reflected field from the given object,
+        i.e. an interface, enum or compound type (struct/exception).
+        For enums, the given object is ignored; the returned value
+        reflects the constant enum 32-bit value.
+
+        <p>When setting an interface attribute raises a
+        non-<type scope="com::sun::star::uno">RuntimeException</type>, it is
+        wrapped in a <type
+        scope="com::sun::star::lang">WrappedTargetRuntimeException</type>.</p>
+
+        @param obj
+               object instance having member of reflected type
+        @return
+                value of field
+
+        @throws IllegalAccessException
+        An <type scope="com::sun::star::lang">IllegalAccessException</type>
+        is thrown if the given object is no interface, enum or compound type;
+        or the given object does not have the reflected field.
+    */
+    any get(
+        [in] any obj )
+        raises( com::sun::star::lang::IllegalArgumentException );
+
+    /** Sets the value of the reflected field of the given object,
+        i.e. an interface or compound type (struct/exception).
+
+        <p>When setting an interface attribute raises a
+        non-<type scope="com::sun::star::uno">RuntimeException</type>, it is
+        wrapped in a <type
+        scope="com::sun::star::lang">WrappedTargetRuntimeException</type>.</p>
+
+        @param obj
+               object instance having member of reflected type
+        @param value
+               value to be set
+
+        @throws IllegalAccessException
+        An <type scope="com::sun::star::lang">IllegalAccessException</type>
+        is thrown if the given object is no interface or compound type;
+        or the given object does not have the reflected field.
+    */
+    void set(
+        [inout] any obj,
+        [in] any value )
+        raises( com::sun::star::lang::IllegalArgumentException,
+                com::sun::star::lang::IllegalAccessException );
+};
+
+//=============================================================================
+
+}; }; }; };
+
+/*=============================================================================
+
+=============================================================================*/
+#endif

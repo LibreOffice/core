@@ -1,0 +1,94 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_presentation_PresentationDocument_idl__
+#define __com_sun_star_presentation_PresentationDocument_idl__
+
+#include <com/sun/star/drawing/GenericDrawingDocument.idl>
+#include <com/sun/star/presentation/XPresentationSupplier.idl>
+#include <com/sun/star/presentation/XCustomPresentationSupplier.idl>
+#include <com/sun/star/document/XLinkTargetSupplier.idl>
+
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module presentation {
+
+//=============================================================================
+
+/** This is the service provided by a presentation document.
+ */
+published service PresentationDocument
+{
+    /** This is a basic service for a drawing document.
+
+        <p>The following services are available at the
+        <type scope="com::sun::star::lang">XMultiServiceFactory</type>
+        only in a presentation application
+
+        <ul>
+            <li><type>TitleTextShape</type></li>
+            <li><type>OutlinerShape</type></li>
+            <li><type>SubtitleShape</type></li>
+            <li><type>GraphicObjectShape</type></li>
+            <li><type>PageShape</type></li>
+            <li><type>OLE2Shape</type></li>
+            <li><type>ChartShape</type></li>
+            <li><type>NotesShape</type></li>
+            <li><type>HandoutShape</type></li>
+            <li><type>HeaderShape</type></li>
+            <li><type>FooterShape</type></li>
+            <li><type>SlideNumberShape</type></li>
+            <li><type>DateTimeShape</type></li>
+            <li><type>DocumentSettings</type></li>
+            <li><type scope="textfield">Header</type></li>
+            <li><type scope="textfield">Footer</type></li>
+            <li><type scope="textfield">DateTime</type></li>
+        </ul>
+     */
+    service com::sun::star::drawing::GenericDrawingDocument;
+
+    /** lets you access the presentation of this document.
+     */
+    interface com::sun::star::presentation::XPresentationSupplier;
+
+    /** lets you access the custom presentations of this
+        document.
+     */
+    interface com::sun::star::presentation::XCustomPresentationSupplier;
+
+    /** gives you access to the first link hierarchy inside
+        a document, the pages.
+     */
+    interface com::sun::star::document::XLinkTargetSupplier;
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

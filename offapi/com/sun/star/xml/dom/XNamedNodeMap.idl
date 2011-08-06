@@ -1,0 +1,100 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_xml_dom_XNamedNodeMap_idl__
+#define __com_sun_star_xml_dom_XNamedNodeMap_idl__
+
+#include <com/sun/star/uno/XInterface.idl>
+#include <com/sun/star/xml/dom/DOMException.idl>
+
+module com { module sun { module star { module xml { module dom {
+
+interface XNode;
+
+interface XNamedNodeMap : com::sun::star::uno::XInterface
+{
+
+    /**
+    The number of nodes in this map.
+    */
+    long getLength();
+
+    /**
+    Retrieves a node specified by local name.
+    */
+    XNode getNamedItem([in] string name);
+
+    /**
+    Retrieves a node specified by local name and namespace URI.
+    */
+    XNode getNamedItemNS([in] string namespaceURI,[in]  string localName);
+
+    /**
+    Returns a node specified by index.
+    */
+    XNode item([in] long index);
+
+    /**
+    Removes a node specified by name.
+    Throws:
+    DOMException - NOT_FOUND_ERR: Raised if there is no node named name in this map.
+    NO_MODIFICATION_ALLOWED_ERR: Raised if this map is readonly.
+    */
+    XNode removeNamedItem([in] string name) raises (DOMException);
+
+    /**
+    Removes a node specified by local name and namespace URI.
+    Throws:
+    DOMException - NOT_FOUND_ERR: Raised if there is no node with the specified namespaceURI and localName in this map.
+    NO_MODIFICATION_ALLOWED_ERR: Raised if this map is readonly.
+    */
+    XNode removeNamedItemNS([in] string namespaceURI, [in] string localName) raises (DOMException);
+
+    /**
+    Adds a node using its nodeName attribute.
+    Throws:
+    DOMException - WRONG_DOCUMENT_ERR: Raised if arg was created from a different document than the one that created this map.
+    NO_MODIFICATION_ALLOWED_ERR: Raised if this map is readonly.
+    INUSE_ATTRIBUTE_ERR: Raised if arg is an Attr that is already an attribute of another Element object. The DOM user must explicitly clone Attr nodes to re-use them in other elements.
+    HIERARCHY_REQUEST_ERR: Raised if an attempt is made to add a node doesn't belong in this NamedNodeMap. Examples would include trying to insert something other than an Attr node into an Element's map of attributes, or a non-Entity node into the DocumentType's map of Entities.
+    */
+    XNode setNamedItem([in] XNode arg) raises (DOMException);
+
+    /**
+    Adds a node using its namespaceURI and localName.
+    Throws:
+    DOMException - WRONG_DOCUMENT_ERR: Raised if arg was created from a different document than the one that created this map.
+    NO_MODIFICATION_ALLOWED_ERR: Raised if this map is readonly.
+    INUSE_ATTRIBUTE_ERR: Raised if arg is an Attr that is already an attribute of another Element object. The DOM user must explicitly clone Attr nodes to re-use them in other elements.
+    HIERARCHY_REQUEST_ERR: Raised if an attempt is made to add a node doesn't belong in this NamedNodeMap. Examples would include trying to insert something other than an Attr node into an Element's map of attributes, or a non-Entity node into the DocumentType's map of Entities.
+    NOT_SUPPORTED_ERR: Always thrown if the current document does not support the "XML" feature, since namespaces were defined by XML.
+    */
+    XNode setNamedItemNS([in] XNode arg) raises (DOMException);
+};
+}; }; }; }; };
+
+#endif

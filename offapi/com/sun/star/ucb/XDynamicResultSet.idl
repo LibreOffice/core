@@ -1,0 +1,190 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_ucb_XDynamicResultSet_idl__
+#define __com_sun_star_ucb_XDynamicResultSet_idl__
+
+#include <com/sun/star/lang/XComponent.idl>
+#include <com/sun/star/ucb/XDynamicResultSetListener.idl>
+#include <com/sun/star/ucb/ListenerAlreadySetException.idl>
+#include <com/sun/star/sdbc/XResultSet.idl>
+#include <com/sun/star/ucb/AlreadyInitializedException.idl>
+#include <com/sun/star/ucb/ServiceNotFoundException.idl>
+
+//=============================================================================
+
+module com { module sun { module star { module ucb {
+
+//=============================================================================
+/** Provides read access to a <type>ContentResultSet</type>.
+
+    <p>
+    You can either get a simple static <type>ContentResultSet</type> or you can
+    listen to change-notifications and than swap from the old to a new
+    <type>ContentResultSet</type>.
+    </p>
+
+    <p>The following describes the dynamic use:</p>
+
+    <p>
+    <type>XDynamicResultSet</type> provides the possibility to get notifications
+    about changes on a <type>ContentResultSet</type> and have an
+    listener-controlled update from one version to the next version. Two
+    <type>ContentResultSet</type> implementations were given to the listener in
+    the first notification as interface
+    <type scope="com::sun::star::sdbc">XResultSet</type>.
+    </p>
+
+    <p>
+    To get notifications the listener has to be of type
+    <type>XDynamicResultSetListener</type>.
+    </p>
+
+    <p>
+    After registration you will get notifications for events of type
+    <type>ListEvent</type>.
+    </p>
+
+    <p>
+    The calling of <member>XDynamicResultSetListener::notify</member> has
+    to happen in an own thread, because it could take a longer time and any
+    actions ??? until the listener returns the call. So don't block the notify-causing
+    action.
+    </p>
+
+    <p>
+    While one notify-call is going on:
+    </p>
+
+    <ol>
+      <li> The listener is allowed to access both <type>ContentResultSet</type>s,
+         they must be both valid.</li>
+      <li> It is not allowed to start a second notify-call.</li>
+      <li> All additional things we want to send as notification are to be
+         queued.</li>
+      <li> Any other calls are to be accepted and treated.</li>
+    </ol>
+
+    <p>
+    After the listener has returned the notify-call:
+    </p>
+
+    <ol>
+    <li> The listener is allowed to access the new
+         <type>ContentResultSet</type>. The new one is first assigned in the
+         WELCOME-event and than the ResultSets are always swapped.</li>
+    <li> The listener is not allowed to access the old
+         <type>ContentResultSet</type>.</li>
+    </ol>
+*/
+
+published interface XDynamicResultSet: com::sun::star::lang::XComponent
+{
+    //-------------------------------------------------------------------------
+    /** Call this, if you don't care about any changes.
+
+        @returns
+        an <type scope="com::sun::star::sdbc">XResultSet</type> that is
+        implemented as <type>ContentResultSet</type>. Its content will never
+        change.
+
+        @trows ListenerAlreadySetException
+        if someone already has registered as listener via
+        <member>XDynamicResultSet::setListener</member> or if someone has
+        established a connection to a <type>CachedDynamicResultSet</type>
+        via <member>XDynamicResultSet::connectToCache</member>.
+    */
+    com::sun::star::sdbc::XResultSet getStaticResultSet()
+        raises( com::sun::star::ucb::ListenerAlreadySetException );
+
+    //-------------------------------------------------------------------------
+    /** Call this, if you want to get notifications about changes.
+
+        <p>The implementor has to call
+        <member scope="com::sun::star::lang">XComponent::addEventListener</member>
+        in this method, so that we can call
+        <member scope="com::sun::star::lang">XEventListener::disposing</member>
+        at the listener
+
+        @param Listener
+        a listener for result set notifications
+
+        @throws ListenerAlreadySetException
+        if this method is called more than once during the life of the
+        implementation object or if this method is called if someone already
+        has fetched the <type>ContentResultSet</type> via
+        <member>XDynamicResultSet::getStaticResultSet</member>.
+
+    */
+    void setListener( [in] XDynamicResultSetListener Listener )
+        raises( com::sun::star::ucb::ListenerAlreadySetException );
+
+    //-------------------------------------------------------------------------
+    /** Connects this to a <type>CachedDynamicResultSet</type> for optimized
+        remote data transport.
+
+        <p>This method creates a <type>CachedDynamicResultSetStub</type>
+        and sets it as Source to the given cache.
+
+        <p>After this method has returned you can and have to use the given
+        result set cache for further access.
+
+        @param Cache
+        has to be an implementation of the service
+        <type>CachedDynamicResultSet</type>. In particular it has to support
+        the interface <type>XSourceInitialization</type>.
+
+        @throws ListenerAlreadySetException
+        if if someone already has fetched the <type>ContentResultSet</type> via
+        <member>XDynamicResultSet::getStaticResultSet</member>.
+
+        @throws AlreadyInitializedException
+        if <var>Cache</var> was already initialized with another source.
+
+        @throws ServiceNotFoundException
+    */
+    void connectToCache( [in] XDynamicResultSet Cache )
+        raises( com::sun::star::ucb::ListenerAlreadySetException
+                , com::sun::star::ucb::AlreadyInitializedException
+                , com::sun::star::ucb::ServiceNotFoundException );
+
+    //-------------------------------------------------------------------------
+    /** Using this method you can get information, whether the offered
+        <type>ContentResultSet</type>s are sorted or filtered etc correctly as
+        demanded during the creation of the <type>XDynamicResultSet</type>.
+
+        @returns
+        zero or more constants of the <type>ContentResultSetCapability</type>
+        constants group.
+    */
+    short getCapabilities();
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

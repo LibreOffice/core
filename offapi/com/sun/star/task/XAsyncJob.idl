@@ -1,0 +1,84 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_task_XAsyncJob_idl__
+#define __com_sun_star_task_XAsyncJob_idl__
+
+#include <com/sun/star/uno/XInterface.idl>
+#include <com/sun/star/beans/NamedValue.idl>
+#include <com/sun/star/lang/IllegalArgumentException.idl>
+
+//=============================================================================
+
+module com {  module sun {  module star {  module task {
+
+ published interface XJobListener;
+
+//=============================================================================
+/** specifies a job which must be executed asynchronously
+
+    <p>
+    Instead of <type>XJob</type> the implementation of this interface
+    must be aware, that execution can be made real asynchronous (e.g. by using
+    threads). Because the environment wish to have creation and using of threads
+    under control, it's not allowed for a real job implementation to use such mechanism
+    by itself. The outside code decide, if it's possible and how it can be made
+    asynchronous. In some special cases it can be, that asynchronous jobs will be executed
+    synchronously.
+    </p>
+
+    @see XJob
+*/
+published interface XAsyncJob : com::sun::star::uno::XInterface
+{
+    //------------------------------------------------------------------------
+    /** executes the job asynchronously
+
+        @param Arguments
+            are arguments for executing the job. Their semantics is completely implementation dependent. Usually,
+            a concrete implementation of a job specifies in its service descriptions which parameters are allowed
+            (or expected). This values are persistent by the configuration of the <type>JobExecutor</type>
+            which use this asynchronous job. It's possible to write it back by called listener
+            function <member>XJobListener::jobFinished()</member>.
+
+        @param Listener
+            specifies a listener which should be notified on events. May be <NULL/>.
+
+        @throws com::sun::star::lang::IllegalArgumentException
+            if some of given arguments doesn't fill out the service specification or
+            was corrupt so the service couldn't work correctly
+    */
+   void executeAsync(
+        [in] sequence< com::sun::star::beans::NamedValue > Arguments,
+        [in] XJobListener Listener)
+            raises( com::sun::star::lang::IllegalArgumentException );
+};
+
+}; }; }; };
+
+#endif
+

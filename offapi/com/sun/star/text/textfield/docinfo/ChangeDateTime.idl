@@ -1,0 +1,83 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_text_textfield_ChangeDateTime_idl__
+#define __com_sun_star_text_textfield_ChangeDateTime_idl_
+
+#include <com/sun/star/text/TextField.idl>
+
+//=============================================================================
+
+module com { module sun { module star {
+    module text { module textfield { module docinfo {
+
+//=============================================================================
+/** specifies service of a text field that provides information about the date
+ and time the document was last changed.
+    @see com::sun::star::text::TextField
+*/
+published service ChangeDateTime
+{
+    service  com::sun::star::text::TextField;
+    /** contains the current content of the text field.
+        <p> This property is especially useful for import/export purposes. </p>
+     */
+    [property]string CurrentPresentation;
+    /** If this flag is set to false the author
+        will be overridden by the current author
+        each time the document is saved.
+     */
+    /** If this flag is set to <FALSE/> the date or time
+        is always displayed as the current date or time.
+
+        @since OOo 1.1.2
+     */
+    [optional, property] boolean IsFixed;
+    /** If this flag is set to <TRUE/> this field represents,
+        a date with an optional time. If it is set to <FALSE/>
+        only the time is used here.
+     */
+    [property]boolean IsDate;
+    /** contains the date and time as double value.
+     */
+    [property]double DateTimeValue;
+    /** this is the number format for this field.
+        @see com::sun::star::util::NumberFormatter
+    */
+    [property]long NumberFormat;
+    /** determines whether changes in language attributes at the position the text field
+        is located also change the number format as appropriate for this language.
+     */
+    [optional, property] boolean IsFixedLanguage;
+};
+
+//=============================================================================
+
+}; }; }; }; }; };
+
+#endif
+

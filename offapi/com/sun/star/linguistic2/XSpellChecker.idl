@@ -1,0 +1,122 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_linguistic2_XSpellChecker_idl__
+#define __com_sun_star_linguistic2_XSpellChecker_idl__
+
+#include <com/sun/star/linguistic2/XSupportedLocales.idl>
+#include <com/sun/star/lang/IllegalArgumentException.idl>
+#include <com/sun/star/linguistic2/XDictionaryList.idl>
+#include <com/sun/star/linguistic2/XSpellAlternatives.idl>
+#include <com/sun/star/beans/PropertyValues.idl>
+
+//=============================================================================
+
+module com { module sun { module star { module linguistic2 {
+
+//=============================================================================
+/** This interface allows for spell checking.
+
+    <P>It is possible to simply check if a word, in a specified language,
+    is correct or additionally, if it was misspelled, some proposals
+    how it might be correctly written.</P>
+
+    @see    <type scope="com::sun::star::linguistic2">XSupportedLocales</type>
+*/
+published interface XSpellChecker : com::sun::star::linguistic2::XSupportedLocales
+{
+    //-------------------------------------------------------------------------
+    /** checks if a word is spelled correctly in a given language.
+
+        @returns
+            <TRUE/> if the word is spelled correctly using
+             the specified language, <FALSE/> otherwise.
+
+        @param  aWord
+            the word to be checked.
+
+        @param aLocale
+            the Locale (language) to be used.
+            If the Locale is empty, the word is spelled correctly by
+            definition.
+
+            <P>If <var>aLocale</var> is not supported an
+            IllegalArgumentException exception is raised.</P>
+
+        @param aProperties
+            provides property values to be used for this function call only.
+            It is usually empty in order to use the default values supplied with
+            the property set.
+
+        @see    <type scope="com::sun::star::lang">Locale</type>
+    */
+    boolean isValid(
+            [in] string aWord,
+            [in] com::sun::star::lang::Locale aLocale,
+            [in] com::sun::star::beans::PropertyValues aProperties )
+        raises( com::sun::star::lang::IllegalArgumentException );
+
+    //-------------------------------------------------------------------------
+    /** This method checks if a word is spelled correctly in a given
+        language.
+
+        @returns
+            <NULL/> if <var>aWord</var> is spelled correctly using
+             <var>aLocale</var>. Otherwise, an XSpellAlternatives
+             object with information about the reason of failure and, if available,
+             proposals for spelling alternatives will be returned.
+
+        @param  aWord
+            the word to be checked.
+
+        @param aLocale
+            the language to be used.
+
+            <P>If the language is not supported an IllegalArgumentException exception is raised.
+
+        @param aProperties
+            provides property values to be used for this function call only.
+            It is usually empty in order to use the default values supplied with
+            the property set.
+        exception is raised.</P>
+
+        @see    <type scope="com::sun::star::linguistic2">XSpellAlternatives</type>
+        @see    <type scope="com::sun::star::lang">Locale</type>
+    */
+    com::sun::star::linguistic2::XSpellAlternatives spell(
+            [in] string aWord,
+            [in] com::sun::star::lang::Locale aLocale,
+            [in] com::sun::star::beans::PropertyValues aProperties )
+        raises( com::sun::star::lang::IllegalArgumentException );
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif
+

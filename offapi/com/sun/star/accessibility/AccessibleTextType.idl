@@ -1,0 +1,105 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_accessibility_AccessibleTextType_idl__
+#define __com_sun_star_accessibility_AccessibleTextType_idl__
+
+module com { module sun { module star { module accessibility {
+
+
+/** Collection of types of text portions.
+
+    <p>This collection describes the types of text portions that can be
+    accessed with the help of the methods of the
+    <type>XAccessibleText</type> interface.</p>
+
+    @since OOo 1.1.2
+*/
+published constants AccessibleTextType
+{
+    /** Single character.
+
+        <p>Indicates that single (multibyte) characters are used.</p>
+    */
+    const short CHARACTER = 1;
+
+    /** Single word.
+
+        <p>Indicates that single words are used.  The definition of what a
+        word is is implementation and language/locale dependent.  While in
+        English a word is ended by a space or a special character like a
+        comma or a period, this is not necessarily true in other
+        languages.</p>
+    */
+    const short WORD = 2;
+
+    /** Single sentence.
+
+        <p>Indicates that single sentences are used.  The definition of what
+        a sentence is is implementation and language/locale dependent.
+        While in English a sentence is ended by a period, this is not
+        necessarily true in other languages.</p>
+    */
+    const short SENTENCE = 3;
+
+    /** Single paragraph.
+
+        <p>Indicates that single paragraphs are used.  The definition of
+        what a paragraph is is implementation and language/locale
+        dependent.</p>
+    */
+    const short PARAGRAPH = 4;
+
+    /** Single line.
+
+        <p>Indicates that single lines, as displayed on the screen, are
+        used.  In contrast to the constants <const>CHARACTER</const>,
+        <const>WORD</const>, <const>SENTENCE</const>, and
+        <const>PARAGRAPH</const> which are content oriented this constant is
+        view oriented.  It can be used to retrieve hyphenation
+        information.</p>
+    */
+    const short LINE = 5;
+
+    /** Single glyph.
+
+        <p>Glyphs are runs of one or more (multibyte) characters which are
+        displayed as one symbol.</p>
+    */
+    const short GLYPH = 6;
+
+    /** Attribute run.
+
+        <p>Each attribute run is a character run of maximal length where all
+        characters have the same attributes set.</p>
+    */
+    const short ATTRIBUTE_RUN = 7;
+};
+
+}; }; }; };
+
+#endif

@@ -1,0 +1,161 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_text_TextPortion_idl__
+#define __com_sun_star_text_TextPortion_idl__
+
+
+#include <com/sun/star/beans/XTolerantMultiPropertySet.idl>
+#include <com/sun/star/container/XContentEnumerationAccess.idl>
+#include <com/sun/star/text/TextRange.idl>
+#include <com/sun/star/text/XTextContent.idl>
+#include <com/sun/star/text/XTextField.idl>
+#include <com/sun/star/text/XFootnote.idl>
+
+
+//=============================================================================
+
+module com { module sun { module star { module text {
+
+//=============================================================================
+/** A TextPortion is a piece of text within a paragraph that does not
+    contain changes of its attributes inside.
+
+    <p>
+    It is created by an enumeration implemented in a paragraph service.
+    It may be used to export the content of the paragraph to an external
+    document format.
+    </p>
+
+    @see com::sun::star::text::TextPortionEnumeration
+    @see com::sun::star::text::XTextPortionEnumeration
+*/
+published service TextPortion
+{
+    service ::com::sun::star::text::TextRange;
+
+    //-------------------------------------------------------------------------
+    /** contains text frames, graphic objects, embedded objects or
+        shapes that are anchored at or as character.
+        @see com.sun.star.text.TextFrame
+        @see com.sun.star.text.TextGraphicObject
+     */
+    [optional]
+    interface ::com::sun::star::container::XContentEnumerationAccess;
+
+    //-------------------------------------------------------------------------
+    /** gives access to a sequence of properties.
+        @since OOo 2.0
+     */
+    [optional]
+    interface ::com::sun::star::beans::XTolerantMultiPropertySet;
+
+    //-------------------------------------------------------------------------
+    /** contains the type of the text portion.
+
+    <p> Valid content type names are:</p>
+    <dl>
+        <dt>Text</dt><dd>string content</dd>
+        <dt>TextField</dt><dd>a text field</dd>
+        <dt>TextContent</dt><dd>text content - supplied via the
+            interface <type scope="com::sun::star::container">
+            XContentEnumerationAccess</type></dd>
+        <dt>ControlCharacter</dt><dd>a control character</dd>
+        <dt>Footnote</dt><dd>a footnote or an endnote</dd>
+        <dt>ReferenceMark</dt><dd>a reference mark</dd>
+        <dt>DocumentIndexMark</dt><dd>a document index mark</dd>
+        <dt>Bookmark</dt><dd>a bookmark</dd>
+        <dt>Redline</dt><dd>a redline portion which is a result
+            of the change tracking feature</dd>
+        <dt>Ruby</dt><dd>a ruby attribute which is used in Asian text</dd>
+        <dt>Frame</dt><dd>a frame</dd>
+        <dt>SoftPageBreak</dt><dd>a soft page break</dd>
+        <dt>InContentMetadata</dt><dd>a text range with attached metadata</dd>
+    </dl>
+    <p>For Reference marks, document index marks, etc., 2 text portions
+       will be generated, one for the start position and one for the
+       end position.</p>
+     */
+    [readonly, property] string TextPortionType;
+
+    //-------------------------------------------------------------------------
+    /** contains the control character of a text portion of type
+        ControlCharacter.
+        @deprecated type ControlCharacter no longer implemented
+     */
+    [readonly, property] short ControlCharacter;
+
+    //-------------------------------------------------------------------------
+    /** contains the bookmark of a text portion of type Bookmark. */
+    [optional, readonly, property]
+    ::com::sun::star::text::XTextContent Bookmark;
+
+    //-------------------------------------------------------------------------
+    /** contains the document index mark of a text portion of type
+        DocumentIndexMark. */
+    [optional, readonly, property]
+    ::com::sun::star::text::XTextContent DocumentIndexMark;
+
+    //-------------------------------------------------------------------------
+    /** contains the bookmark of a text portion of type ReferenceMark. */
+    [optional, readonly, property]
+    ::com::sun::star::text::XTextContent ReferenceMark;
+
+    //-------------------------------------------------------------------------
+    /** contains the footnote of a text portion of type Footnote. */
+    [optional, readonly, property]
+    ::com::sun::star::text::XFootnote Footnote;
+
+    //-------------------------------------------------------------------------
+    /** contains the text field of a text portion of type TextField. */
+    [optional, readonly, property]
+    ::com::sun::star::text::XTextField TextField;
+
+    //-------------------------------------------------------------------------
+    /** contains the text range of a text portion of type InContentMetadata.
+        @since OOo 3.2
+     */
+    [optional, readonly, property]
+    ::com::sun::star::text::XTextContent InContentMetadata;
+
+    //-------------------------------------------------------------------------
+    /** contains whether the portion is a point only. */
+    [optional, readonly, property] boolean IsCollapsed;
+
+    //-------------------------------------------------------------------------
+    /** contains whether the portion is the start of the portion.
+
+        <p>This is used for portions which are represented by
+        2 TextPortion objects (e.g., DocmentIndexMark).</p>
+     */
+    [optional, readonly, property] boolean IsStart;
+
+};
+
+//=============================================================================
+
+}; }; }; };
+#endif

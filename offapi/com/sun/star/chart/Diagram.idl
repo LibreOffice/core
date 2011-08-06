@@ -1,0 +1,139 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_chart_Diagram_idl__
+#define __com_sun_star_chart_Diagram_idl__
+
+#include <com/sun/star/chart/XDiagram.idl>
+#include <com/sun/star/chart/XAxisSupplier.idl>
+#include <com/sun/star/chart/XDiagramPositioning.idl>
+
+#include <com/sun/star/chart/XSecondAxisTitleSupplier.idl>
+#include <com/sun/star/beans/XPropertySet.idl>
+
+#include <com/sun/star/chart/ChartDataRowSource.idl>
+
+#include <com/sun/star/xml/UserDefinedAttributeSupplier.idl>
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module chart {
+
+//=============================================================================
+
+/** the base service for the diagram of the chart document.
+
+    <p>The diagram is the object that contains the actual plot.</p>
+
+    <p>Different Diagram Types, e.g., <type>PieDiagram</type> or
+    <type>LineDiagram</type>, can be instantiated by the
+    <type scope="com::sun::star::lang">XMultiServiceFactory</type> of
+    the <type>XChartDocument</type>.</p>
+
+ */
+published service Diagram
+{
+
+    interface com::sun::star::chart::XDiagram;
+
+    /** Provides easier access to the differnet axes and their sub elements.
+        @since OOo 3.4
+    */
+    [optional] interface com::sun::star::chart::XAxisSupplier;
+
+    /** Provides access to the titles of the secondary X axis and Y axis.
+        @since OOo 3.0
+     */
+    [optional] interface com::sun::star::chart::XSecondAxisTitleSupplier;
+
+    /**
+    @since OOo 3.3
+     */
+    [optional] interface com::sun::star::chart::XDiagramPositioning;
+
+    //-------------------------------------------------------------------------
+
+    /** If this property is <TRUE/> the position is calculated by the application automatically.
+        Setting this property to false will have no effect. Instead use the interface <type scope="com::sun::star::drawing">XShape</type>
+        to set a concrete position (note <type scope="com::sun::star::chart">XDiagram</type> is derived from <type scope="com::sun::star::drawing">XShape</type>).
+     */
+    [optional, property] boolean AutomaticPosition;
+
+    //-------------------------------------------------------------------------
+
+    /** If this property is <TRUE/> the size is calculated by the application automatically.
+        Setting this property to false will have no effect. Instead use the interface <type scope="com::sun::star::drawing">XShape</type>
+        to set a concrete size (note <type scope="com::sun::star::chart">XDiagram</type> is derived from <type scope="com::sun::star::drawing">XShape</type>).
+     */
+    [optional, property] boolean AutomaticSize;
+
+    //-------------------------------------------------------------------------
+
+    interface com::sun::star::beans::XPropertySet;
+
+    //-------------------------------------------------------------------------
+
+    /** If a <type>Diagram</type> may be stored as XML file, this
+        service should be supported in order to preserve unparsed XML
+        attributes.
+
+    @since OOo 1.1.2
+     */
+    [optional] service com::sun::star::xml::UserDefinedAttributeSupplier;
+
+    //-------------------------------------------------------------------------
+
+    /** determines if the data for a data row is contained in the
+        columns or in the rows of the data array.
+
+        @see ChartDataRowSource
+        @see ChartDataArray
+     */
+    [property] com::sun::star::chart::ChartDataRowSource DataRowSource;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies how the caption of data points is displayed.
+
+        @see ChartDataCaption
+     */
+    [property] long DataCaption;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies how empty or invalid cells in the provided data should be handled when displayed
+
+        @see MissingValueTreatment
+     */
+    [optional, property] long MissingValueTreatment;
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

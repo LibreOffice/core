@@ -1,0 +1,383 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_frame_XFrame_idl__
+#define __com_sun_star_frame_XFrame_idl__
+
+#include <com/sun/star/lang/XComponent.idl>
+#include <com/sun/star/awt/XWindow.idl>
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module frame {
+
+ published interface XFrameActionListener;
+ published interface XController;
+ published interface XFramesSupplier;
+
+//=============================================================================
+/** a frame object can be considered to be an "anchor" object where a component
+    can be attached to.
+
+    <p>
+    A frame can be (it's not a must!) a part of a frame tree. If not this frame won't be
+    accessible by using the API. This mode make sense for previews.
+    The root node of the tree can be a <type>Desktop</type> implementation.
+    </p>
+
+    @see Desktop
+ */
+published interface XFrame: com::sun::star::lang::XComponent
+{
+    //-------------------------------------------------------------------------
+    /** is called to initialize the frame within a window - the container window.
+
+        <p>
+        This window will be used as parent for the component window and to support
+        some UI relevant features of the frame service.
+        Note: Re-parenting mustn't supported by a real frame implementation!
+        It's designed for initializing - not for setting.
+        </p>
+
+        <p>This frame will take over ownership of the window referred from
+        <var>xWindow</var>.  Thus, the previous owner is not allowed to
+        dispose this window anymore. </p>
+
+        @param xWindow
+            the new container window
+
+        @see XFrame::getContainerWindow()
+     */
+    void initialize( [in] com::sun::star::awt::XWindow xWindow );
+
+    //-------------------------------------------------------------------------
+    /** provides access to the container window of the frame.
+
+        <p>
+        Normally this is used as the parent window of the
+        component window.
+        </p>
+
+        @return
+            the container window of this frame
+
+        @see XFrame::initialize()
+     */
+    com::sun::star::awt::XWindow getContainerWindow();
+
+    //-------------------------------------------------------------------------
+    /** sets the frame container that created this frame.
+
+        <p>
+        Only the creator is allowed to call this method.
+        But creator doesn't mean the implementation which creates this instance ...
+        it means the parent frame of the frame hierarchy.
+        Because; normally a frame should be created by using the API
+        and is necessary for searches inside the tree (e.g. <member>XFrame::findFrame()</member>)
+        </p>
+
+        @param Creator
+            the creator (parent) of this frame
+
+        @see XFrame::getCreator()
+     */
+    [oneway] void setCreator( [in] XFramesSupplier Creator );
+
+    //-------------------------------------------------------------------------
+    /** provides access to the creator (parent) of this frame
+
+        @returns
+            the frame container that created and contains this frame.
+
+        @see XFrame::setCreator()
+     */
+    XFramesSupplier getCreator();
+
+    //-------------------------------------------------------------------------
+    /** access to the name property of this frame
+
+        @returns
+            the programmatic name of this frame.
+
+        @see XFrame::setName()
+     */
+    string getName();
+
+    //-------------------------------------------------------------------------
+    /** sets the name of the frame.
+
+        <p>
+        Normally the name of the frame is set initially (e.g. by the creator).
+        The name of a frame will be used for identifying it if a frame search was started.
+        These searches can be forced by:
+        <ul>
+            <li><member>XFrame::findFrame()</member>
+            <li><member>XDispatchProvider::queryDispatch()</member>
+            <li><member>XComponentLoader::loadComponentFromURL()</member>
+        </ul>
+        Note: Special targets like "_blank", "_self" etc. are not allowed.
+        That's why frame names shouldn't start with a sign "_".
+        </p>
+
+        @param aName
+            the new programmatic name of this frame
+
+        @see XFrame::findFrame()
+        @see XFrame::getName()
+        @see XDispatchProvider
+        @see XComponentLoader
+     */
+    [oneway] void setName( [in] string aName );
+
+    //-------------------------------------------------------------------------
+    /** searches for a frame with the specified name.
+
+        <p>
+        Frames may contain other frames (e.g., a frameset) and may
+        be contained in other frames. This hierarchy is searched with
+        this method.
+        First some special names are taken into account, i.e. "",
+        "_self", "_top", "_blank" etc. <var>SearchFlags</var> is ignored when
+        comparing these names with <var>TargetFrameName</var>; further steps are
+        controlled by <var>SearchFlags</var>. If allowed, the name of the frame
+        itself is compared with the desired one, and then ( again if allowed )
+        the method is called for all children of the frame. Finally may be called
+        for the siblings and then for parent frame (if allowed).
+        </p>
+
+        <p>
+        List of special target names:
+        <table border=1>
+        <tr><td>""/"_self"</td><td>address the starting frame itself</td></tr>
+        <tr><td>"_parent"</td><td>address the direct parent frame only</td></tr>
+        <tr><td>"_top"</td><td>address the top frame of this subtree of the frametree</td></tr>
+        <tr><td>"_blank"</td><td>creates a new top frame</td></tr>
+        </table>
+        </p>
+
+        <p>
+        If no frame with the given name is found, a new top frame is
+        created; if this is allowed by a special flag <const>FrameSearchFlag::CREATE</const>.
+        The new frame also gets the desired name.
+        </p>
+
+        @param aTargetFrameName
+            identify
+            <ul><li>(a) a special target ("_blank","_self" ...) or</li>
+                <li>(b) any well known frame</li><ul>
+            to search it inside the current hierarchy
+
+        @param nSearchFlags
+            optional parameter to regulate search if no special target was used for <var>TargetFrameName</var>
+
+         @see FrameSearchFlag
+         */
+    XFrame findFrame(
+        [in] string aTargetFrameName,
+        [in] long nSearchFlags);
+
+    //-------------------------------------------------------------------------
+    /** determines if the frame is a top frame.
+
+        <p>
+        In general a top frame is the frame which is a direct child of
+        a task frame or which does not have a parent. Possible frame searches must
+        stop the search at such a frame unless the flag <const>FrameSearchFlag::TASKS</const>
+        is set.
+        </p>
+
+        @return
+            <TRUE/> if frame supports top frame specification
+            <br>
+            <FALSE/> otherwise
+     */
+    boolean isTop();
+
+    //-------------------------------------------------------------------------
+    /** activates this frame and thus the component within.
+
+        <p>
+        At first the frame sets itself as the active frame of its
+        creator by calling <member>XFramesSupplier::setActiveFrame()</member>,
+        then it broadcasts an <type>FrameActionEvent</type> with
+        <const>FrameAction::FRAME_ACTIVATED</const>. The component within
+        this frame may listen to this event to grab the focus on activation;
+        for simple components this can be done by the <type>FrameLoader</type>.
+        </p>
+
+        <p>
+        Finally, most frames may grab the focus to one of its windows
+        or forward the activation to a sub-frame.
+        </p>
+
+        @see XFrame::deactivate()
+        @see XFrame::isActive()
+    */
+    [oneway] void activate();
+
+    //-------------------------------------------------------------------------
+    /** is called by the creator frame when another sub-frame gets activated.
+
+        <p>
+        At first the frame deactivates its active sub-frame, if any.
+        Then broadcasts a <type>FrameActionEvent</type> with
+        <const>FrameAction::FRAME_DEACTIVATING</const>.
+        </p>
+
+        @see XFrame::activate()
+        @see XFrame::isActive()
+     */
+    [oneway] void deactivate();
+
+    //-------------------------------------------------------------------------
+    /** determines if the frame is active.
+
+        @return
+            <TRUE/> for active or UI active frames
+            <br>
+            <FALSE/> otherwise
+
+        @see XFrame::activate()
+        @see XFrame::deactivate()
+     */
+    boolean isActive();
+
+    //-------------------------------------------------------------------------
+    /** sets a new component into the frame or release an existing one from a frame.
+
+        @param xComponentWindow
+            the window of the new component or <NULL/> for release
+
+            <p>
+            A valid component window should be a child of the frame container window.
+            </p>
+
+        @param xController
+            the controller of the new component or <NULL/> for release
+
+            <p>
+            Simple components may implement a <type scope="com::sun::star::awt">XWindow</type> only.
+            In this case no controller must be given here.
+            </p>
+
+        @return
+            <TRUE/>if setting of new component or release of an existing one was successfully
+            <br>
+            <FALSE/> otherwise (especially, if an existing controller disagree within his
+            <member>XController::suspend()</member> call)
+
+        @see XFrame::getComponentWindow()
+        @see XFrame::getContainerWindow()
+        @see XFrame::getController()
+     */
+    boolean setComponent(
+        [in] com::sun::star::awt::XWindow xComponentWindow,
+        [in] XController xController);
+
+    //-------------------------------------------------------------------------
+    /** provides access to the component window
+
+        <p>
+        Note: Don't dispose this window - the frame is the owner of it.
+        </p>
+
+        @returns
+            the current visible component in this frame
+            <br>
+            or <NULL/> if no one currently exist
+
+        @see XFrame::setComponent()
+     */
+    com::sun::star::awt::XWindow getComponentWindow();
+
+    //-------------------------------------------------------------------------
+    /** provides access to the controller
+
+        <p>
+        Note: Don't dispose it - the frame is the owner of it.
+        Use <member>XController::getFrame()</member> to dispose
+        the frame after you the controller agreed with a
+        <member>XController::suspend()</member> call.
+        </p>
+
+        @returns
+            the current controller within this frame
+            <br>
+            or <NULL/> if no one currently exist
+
+        @see XFrame::setComponent()
+     */
+    XController getController();
+
+    //-------------------------------------------------------------------------
+    /** notifies the frame that the context of the controller within this
+        frame changed (i.e. the selection).
+
+        <p>
+        According to a call to this interface, the frame calls
+        <method>XFrameEventListener::frameAction</method> with
+        <const>FrameAction::CONTEXT_CHANGED</const> to all listeners which
+        are registered using <member>XFrame::addFrameActionListener</member>.
+        For external controllers this event can be used to requery dispatches.
+
+        @see XFrameEventListener
+        @see FrameAction
+        @see XFrame::addFrameActionListener()
+    */
+    void contextChanged();
+
+    //-------------------------------------------------------------------------
+    /** registers an event listener, which will be called when certain things
+        happen to the components within this frame or within sub-frames of this frame.
+
+        <p>
+        E.g., it is possible to determine instantiation/destruction and
+        activation/deactivation of components.
+        </p>
+
+        @param xListener
+            specifies the listener which will be informed
+
+        @see XFrame::removeFrameActionListener()
+     */
+    [oneway] void addFrameActionListener( [in]XFrameActionListener xListener );
+
+    //-------------------------------------------------------------------------
+    /** unregisters an event listener
+
+        @param xListener
+            specifies the listener which won't be informed any longer
+
+        @see XFrame::addFrameActionListener()
+     */
+    [oneway] void removeFrameActionListener( [in] XFrameActionListener xListener );
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

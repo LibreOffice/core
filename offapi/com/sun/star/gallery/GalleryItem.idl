@@ -1,0 +1,92 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_gallery_GalleryItem_idl__
+#define __com_sun_star_gallery_GalleryItem_idl__
+
+#include <com/sun/star/gallery/XGalleryItem.idl>
+#include <com/sun/star/beans/XPropertySet.idl>
+#include <com/sun/star/graphic/XGraphic.idl>
+#include <com/sun/star/lang/XComponent.idl>
+
+//=============================================================================
+
+module com {  module sun {  module star {  module gallery {
+
+//=============================================================================
+
+/** service to get access to the properties of a single Gallery item
+ */
+service GalleryItem
+{
+    interface ::com::sun::star::gallery::XGalleryItem;
+
+    interface ::com::sun::star::beans::XPropertySet;
+
+    /** The type of the Gallery item
+
+        @see GalleryItemType
+    */
+    [readonly, property] byte GalleryItemType;
+
+    /** the URL of the Gallery item
+
+        <p>The interpretation of the URL depends on the type
+        of the Gallery item. In case of graphic and media items,
+        the URL is a "real" URL, in case of drawings it is a private
+        URL</p>
+     */
+    [readonly, property] string URL;
+
+    /** the title of the Gallery item
+     */
+    [property] string Title;
+
+    /** the thumbnail of the Gallery item
+
+        <p>The thumbnail may be either a pixel or a vector graphic</p>
+     */
+    [readonly, property] com::sun::star::graphic::XGraphic Thumbnail;
+
+    /** the graphic content of the Gallery item
+
+        <p>This is an optional property and may not available for every item</p>
+     */
+    [optional, readonly, property ] ::com::sun::star::graphic::XGraphic Graphic;
+
+    /** the drawing content of the Gallery item
+
+        <p>This is an optional property and may not available for every item</p>
+     */
+    [optional, readonly, property ] ::com::sun::star::lang::XComponent Drawing;
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

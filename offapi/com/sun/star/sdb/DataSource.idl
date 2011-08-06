@@ -1,0 +1,245 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_sdb_DataSource_idl__
+#define __com_sun_star_sdb_DataSource_idl__
+
+#include <com/sun/star/io/XPersistObject.idl>
+
+#include <com/sun/star/beans/XPropertySet.idl>
+
+#include <com/sun/star/beans/PropertyValue.idl>
+
+#include <com/sun/star/util/XFlushable.idl>
+
+#include <com/sun/star/util/XNumberFormatsSupplier.idl>
+
+
+ module com {  module sun {  module star {  module sdbc {
+     published interface XIsolatedConnection;
+     published interface XDataSource;
+ };};};};
+
+
+ module com {  module sun {  module star {  module sdb {
+
+ published interface XCompletedConnection;
+ published interface XQueryDefinitionsSupplier;
+ published interface XBookmarksSupplier;
+
+
+/** is a factory to establish database connections. It should be registered at
+    a <type scope="com::sun::star::uno">NamingService</type>.
+    @see com::sun::star::sdb::DatabaseContext
+ */
+published service DataSource
+{
+    interface com::sun::star::beans::XPropertySet;
+
+
+    /** useful for establishing connections with the completion of connection parameters
+                provided during user interaction.
+     */
+    interface XCompletedConnection;
+
+    /** useful for establishing isolated connections which are not shared among others
+        as it is the case when using <type>XCompletedConnection</type> or <type scope="com::sun::star::sdbc">XDataSource</type>.
+        @see XCompletedConnection
+        @see com::sun::star::sdbc::XDataSource
+        @since OOo 1.1.2
+     */
+    interface com::sun::star::sdbc::XIsolatedConnection;
+
+
+    /** is provided to flush a DataSource within to a Database Context.
+     */
+    interface com::sun::star::util::XFlushable;
+
+
+    /** provides the access to DataSource related queries.
+        <p>
+        The object returned by the
+        <method scope="com::sun::star::sdb">XQueryDefinitionsSupplier::getQueryDefinitions()</method>
+        supports the
+        <type scope="com::sun::star::sdb">DefinitionContainer</type>
+        service.
+        </p>
+     */
+    interface XQueryDefinitionsSupplier;
+
+    /* useful for establishing connections and to get and set the login timeout.
+    */
+    interface com::sun::star::sdbc::XDataSource;
+
+    /** provides access to bookmarks to documents associated with the data source
+        <p>
+        The object returned by the
+        <method scope="com::sun::star::sdb">XBookmarksSupplier::getBookmarks()</method>
+        supports the
+        <type scope="com::sun::star::sdb">DefinitionContainer</type>
+        service.
+        </p>
+     */
+    [optional] interface XBookmarksSupplier;
+
+    /** is the name of the data source.
+
+        <p>If the data source is registered at the database context, then the <code>Name</code> property
+        denotes the registration name. Otherwise, the name property contains the URL of the file which the
+        database document associated with the data source is based on.</p>
+
+        <p>If the same data source is registered under different names, the value of the <code>Name</code>
+        property is not defined.</p>
+     */
+    [readonly, property] string Name;
+
+
+    /** indicates a database url of the form <br>
+        <code> jdbc:<em>subprotocol</em>:<em>subname</em></code>
+        or
+        <code>sdbc:<em>subprotocol</em>:<em>subname</em></code>
+     */
+    [property] string URL;
+
+
+    /** is a list of arbitrary string tag/value pairs as connection arguments
+
+        <p>The <type>DataSource</type> itself does not attempt to interpret any of those values.</p>
+
+        <p>Instead, the values in this property have two use cases:
+        <ul><li>Upon creating a connection, for every value in this sequence it's checked
+                whether the <type scope="com::sun::star::sdbc">XDriver</type> which is to provide
+                the connection supports a setting with the respective name, using its
+                <member scope="com::sun::star::sdbc">XDriver::getPropertyInfo<member> method.br/>
+                If so, the settings is passed to the driver's
+                <member scope="com::sun::star::sdbc">XDriver::connect<member> method. If not,
+                the setting is ignored.</li>
+            <li>External components may use the settings to carry arbitrary information with
+                the data source. Usually, this is used to control the behavior of components
+                working with the data source.</li>
+        </ul>
+    */
+    [property] sequence<com::sun::star::beans::PropertyValue> Info;
+
+    /** is a convenience wrapper around the <member>Info</member> property.
+
+        <p>Since fiddling around with a sequence of property values is somewhat uncomfortable
+        in all known UNO language bindings (especially for tasks like simply changing the value
+        of an existing value), the <member>Settings</member> property wraps the <member>Info</member>
+        property for easier single-value access.</p>
+
+        <p>You should use the <member>Setting</member> property if you need to access a few properties only,
+        and the <member>Info</member> property if you need access to all existent settings at once.</p>
+
+        <p>The object represented by this property supports the <type scope="com::sun::star::beans">PropertyBag</type>
+        service. That is, you can at runtime add arbitrary new properties to the bag.</p>
+
+        <p>Additionally, the property bag supports default values of properties, and thus the
+        <type scope="com::sun::star::beans">XPropertyState</type> interface. If you add an own property to
+        the bag using <member scope="com::sun::star::beans">XPropertyContainer::addProperty</member>, you need
+        to specify an initial value, which is also used as default value (exceptions see below).</p>
+
+        <p>Effectively, the property bag represented by <code>Settings</code> contains two classes of properties:
+        Pre-defined ones and user-defined ones.</p>
+
+        <p><em>Pre-defined</em> properties are properties which are potentially used by the data source, the
+        application UI for the data source, or a particular backend driver employed by the data source. There's
+        a large set of such properties, no all of them are effectively used for a concrete data source, nonetheless,
+        they're all present in the <code>Settings</code>.<br/>
+        Such properties are not removable from the bag, that is, their
+        <member scope="com::sun::star::beans">PropertyAttribute::REMOVEABLE</member> attribute is <em>not</em> set.<br/>
+        Usually, you'll find that all of this properties have the
+        <member scope="com::sun::star::beans::">PropertyState::PropertyState_DEFAULT_VALUE</member> state.</p>
+
+        <p><em>User-defined</em> properties are the ones which are added at runtime by any instance. They might or might
+        not be removable, this depends on whether or not the code adding them specifies the
+        <member scope="com::sun::star::beans">PropertyAttribute::REMOVEABLE</member> attribute. Also, they might
+        or might not have a default value, determined by the
+        <member scope="com::sun::star::beans">PropertyAttribute::MAYBEDEFAULT</member> attribute at the time they're added
+        to the bag.</p>
+
+        <p>When a data source is made persistent, then properties which are not removable (which are assumed to be the
+        pre-defined properties) are ignored when they are in <code>DEFAULT</code> state. All other properties are
+        always made persistent, except when an explicit
+        <member scope="com::sun::star::beans">PropertyAttribute::TRANSIENT</member> attribute prohibits this.</p>
+
+        <p>Similar, when you obtain the <member>Info</member> property of a <code>DataSource</code>, the
+        <code>Settings</code> bag is asked for all its property values, and the ones which are removable and
+        in state default are stripped, and <em>not</em> returned in the <code>Info</code> sequence.</p>
+    */
+    [property, readonly, optional] com::sun::star::beans::XPropertySet Settings;
+
+    /** determines a users login name.
+     */
+    [property] string User;
+
+
+    /** determines a users password. The password is not persistent.
+     */
+    [property] string Password;
+
+
+    /** indicates that a password is always necessary.
+     */
+    [property] boolean IsPasswordRequired;
+
+
+    /** indicates that components displaying data obtained from this
+        data source should suppress columns used for versioning.
+     */
+    [property] boolean SuppressVersionColumns;
+
+
+    /** determines whether modifications on the data source are allowed or not.
+     */
+    [readonly, property] boolean IsReadOnly;
+
+
+    /** provides an object for formatting numbers.
+     */
+    [readonly, property] com::sun::star::util::XNumberFormatsSupplier
+                        NumberFormatsSupplier;
+
+
+    /** defines a list of tables, on which the DataSource should have it's focus.
+        If empty, all tables are rejected.
+
+    */
+    [property] sequence<string> TableFilter;
+
+
+    /** defines a list of table types, on which the DataSource should have it's focus.
+             If empty, all table types are rejected.
+
+    */
+    [property] sequence<string> TableTypeFilter;
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

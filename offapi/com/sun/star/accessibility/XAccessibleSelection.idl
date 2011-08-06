@@ -1,0 +1,160 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_accessibility_XAccessibleSelection_idl__
+#define __com_sun_star_accessibility_XAccessibleSelection_idl__
+
+#include <com/sun/star/uno/XInterface.idl>
+#include <com/sun/star/lang/IndexOutOfBoundsException.idl>
+
+module com { module sun { module star { module accessibility {
+
+ published interface XAccessible;
+
+/** Implement this interface to represent a selection of accessible objects.
+
+    <p>This interface is the standard mechanism to obtain and modify the
+    currently selected children.  Every object that has children that can be
+    selected should support this interface.</p>
+
+    <p>The <type>XAccessibleSelection</type> interface has to be implemented
+    in conjunction with the <type>XAccessibleContext</type> interface that
+    provides the children on which the first operates.</p>
+
+    <p>It depends on the class implementing this interface, whether it
+    supports single or multi selection.</p>
+
+    @since OOo 1.1.2
+*/
+published interface XAccessibleSelection : ::com::sun::star::uno::XInterface
+{
+    /** Selects the specified <type>Accessible</type> child of the
+        object.
+
+        <p>Depending on the implementing class the child is added to the
+        current set a selected children (multi selection) or a previously
+        selected child is deselected first (single selection).</p>
+
+        @param nChildIndex
+            Index of the child which is to add to the selection.  This index
+            refers to all the children of this object.
+        @throws ::com::sun::star::lang::IndexOutOfBoundsException
+            if the given index does not lie in the valid range of 0 up to
+            the result of
+            <member>XAccessibleContext::getAccessibleChildCount()</member>-1.
+    */
+    void selectAccessibleChild ([in] long nChildIndex)
+        raises (::com::sun::star::lang::IndexOutOfBoundsException);
+
+    /** Determines if the specified child of this object is selected.
+
+        @param nChildIndex
+            Index of the child for which to detect whether it is selected.
+            This index refers to all the children of this object.
+
+        @return
+            Returns <TRUE/> if the specified child is selected and <FALSE/>
+            if it is not selected.
+        @throws ::com::sun::star::lang::IndexOutOfBoundsException
+            if the given index does not lie in the valid range of 0 up to
+            the result of
+            <member>XAccessibleContext::getAccessibleChildCount()</member>-1.
+    */
+    boolean isAccessibleChildSelected ([in] long nChildIndex)
+        raises (::com::sun::star::lang::IndexOutOfBoundsException);
+
+    /** Clears the selection, so that no children of the
+        object are selected.
+    */
+    [oneway] void clearAccessibleSelection ();
+
+    /** Select all children.
+
+        <p>Causes every child of the object to be selected if the object
+        supports multiple selections.  If multiple selection is not
+        supported then the first child, if it exists, is selected and all
+        other children are deselected.</p>
+    */
+    [oneway] void selectAllAccessibleChildren ();
+
+    /** Returns the number of Accessible children that are currently
+        selected.
+
+        <p>This number specifies the valid interval of indices that can be
+        used as arguments for the methods
+        <member>XAccessibleSelection::getSelectedChild</member> and
+        <member>XAccessibleSelection::deselectSelectedChild</member>.</p>
+
+        @return
+            Returns the number of selected children of this object or 0 if
+            no child is selected.
+    */
+    long getSelectedAccessibleChildCount ();
+
+    /** Returns the specified selected Accessible child.
+
+        @param nSelectedChildIndex
+            This index refers only to the selected children, not to all the
+            children of this object.  Even if all children are selected, the
+            indices enumerating the selected children need not be the same
+            as those enumerating all children.  If only single selection is
+            supported the only valid value is 0.
+
+        @return
+            If the index is valid, i.e. not negative and lower than the
+            number of selected children, then a valid reference to the
+            corresponding <type>XAccessible</type> child is returned.
+            Otherwise an exception is thrown.
+        @throws ::com::sun::star::lang::IndexOutOfBoundsException
+            if the given index does not lie in the valid range of 0 up to
+            the result of
+            <member>XAccessibleRelationSet::getAccessibleChildCount()</member>-1.
+    */
+    XAccessible getSelectedAccessibleChild ([in] long nSelectedChildIndex)
+        raises (::com::sun::star::lang::IndexOutOfBoundsException);
+
+    /** Removes the specified child from the set of this object's
+        selected children.  Note that not all applications support
+        deselection: calls to this method may be silently ignored.
+
+        @param nChildIndex
+            This index refers to all children not just the selected ones.
+            If the specified child is not selected or it can not be
+            deselected for any reason then the method call is silently
+            ignored.
+        @throws ::com::sun::star::lang::IndexOutOfBoundsException
+            if the given index does not lie in the valid range of 0 up to,
+            but not including, the result of
+            <member scope="XAccessibleContext">getAccessibleChildCount()</member>.
+    */
+    void deselectAccessibleChild ([in] long nChildIndex)
+        raises (::com::sun::star::lang::IndexOutOfBoundsException);
+};
+
+}; }; }; };
+
+#endif

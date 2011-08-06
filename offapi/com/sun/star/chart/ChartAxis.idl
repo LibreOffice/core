@@ -1,0 +1,311 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_chart_ChartAxis_idl__
+#define __com_sun_star_chart_ChartAxis_idl__
+
+#include <com/sun/star/drawing/LineProperties.idl>
+
+#include <com/sun/star/style/CharacterProperties.idl>
+
+#include <com/sun/star/beans/XPropertySet.idl>
+
+#include <com/sun/star/chart/ChartAxisArrangeOrderType.idl>
+#include <com/sun/star/chart/ChartAxisPosition.idl>
+#include <com/sun/star/chart/ChartAxisLabelPosition.idl>
+#include <com/sun/star/chart/ChartAxisMarkPosition.idl>
+#include <com/sun/star/chart/ChartAxisType.idl>
+#include <com/sun/star/chart/TimeIncrement.idl>
+#include <com/sun/star/chart/XAxis.idl>
+#include <com/sun/star/xml/UserDefinedAttributeSupplier.idl>
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module chart {
+
+//=============================================================================
+
+/** Specifies the axes in a diagram.
+
+    <p>Note: The text properties correlate to all axis description
+    elements, not to just a single text element.</p>
+ */
+published service ChartAxis
+{
+    /** set the properties for the entire axis line as well as for the
+        tick marks.
+     */
+    service com::sun::star::drawing::LineProperties;
+
+    /** set the properties for all text labels of the axis
+     */
+    service com::sun::star::style::CharacterProperties;
+
+    /** If a <type>ChartAxis</type> may be stored as XML element, this
+        service should be supported in order to preserve unparsed XML
+        attributes.
+
+        @since OOo 1.1.2
+     */
+    [optional] service com::sun::star::xml::UserDefinedAttributeSupplier;
+
+    /** Access to the sub elements of an axis like title and grids.
+        @since OOo 3.4
+     */
+    [optional] interface com::sun::star::chart::XAxis;
+
+    interface com::sun::star::beans::XPropertySet;
+
+    //-------------------------------------------------------------------------
+    /** Properties for scaling:
+    */
+
+    //-------------------------------------------------------------------------
+
+    /** Contains the maximum value for the axis scale.
+     */
+    [optional, property] double Max;
+
+    //-------------------------------------------------------------------------
+
+    /** Contains the minimum value for the axis scale.
+     */
+    [optional, property] double Min;
+
+    //-------------------------------------------------------------------------
+
+    /** Contains the distance between the main tick marks.
+     */
+    [optional, property] double StepMain;
+
+    //-------------------------------------------------------------------------
+
+    /**
+    Contains the number of help intervals within a main interval. E.g. a StepHelpCount of 5 divides
+    the main interval into 5 pieces and thus produces 4 help tick marks.
+    */
+    [optional, property] long StepHelpCount;
+
+    //-------------------------------------------------------------------------
+
+    /** @deprecated
+    User property StepHelpCount instead
+    Contains the distance between the help tick marks.
+    */
+    [optional, property] double StepHelp;
+
+    //-------------------------------------------------------------------------
+
+    /** The maximum value of the axis scale is calculated by the chart if
+        this property is <TRUE/>.
+     */
+    [optional, property] boolean AutoMax;
+
+    //-------------------------------------------------------------------------
+
+    /** The minimum value of the axis scale is calculated by the chart if
+        this property is <TRUE/>.
+     */
+    [optional, property] boolean AutoMin;
+
+    //-------------------------------------------------------------------------
+
+    /** The distance between the main tick marks is calculated by the chart
+        if this property is <TRUE/>.
+     */
+    [optional, property] boolean AutoStepMain;
+
+    //-------------------------------------------------------------------------
+
+    /** The number of help intervals within a main interval is calculated by the
+        chart if this property is <TRUE/>.
+    */
+    [optional, property] boolean AutoStepHelp;
+
+
+    //-------------------------------------------------------------------------
+
+    /** Determines if the axis is scaled logarithmically or
+        not (linear).
+     */
+    [optional, property] boolean Logarithmic;
+
+    //-------------------------------------------------------------------------
+
+    /** determines which type of axis this is, e.g. a date-axis or a category-axis @see ChartAxisType
+        @since OOo 3.4
+     */
+    [optional, property] long AxisType;
+
+    //-------------------------------------------------------------------------
+
+    /** if the current axis is a date-axis the intervals are choosen as given with TimeIncrement
+        @since OOo 3.4
+     */
+    [optional, maybevoid, property] TimeIncrement TimeIncrement;
+
+    //-------------------------------------------------------------------------
+
+    /** Determines if the axis orientation is mathematical or reversed.
+     */
+    [optional, property] boolean ReverseDirection;
+
+    //-------------------------------------------------------------------------
+
+    /** Determines where the axis crosses the other axis.
+     */
+    [optional, property] com::sun::star::chart::ChartAxisPosition CrossoverPosition;
+
+    //-------------------------------------------------------------------------
+
+    /** Determines the scale value on the other axis when CrossoverPosition is set to VALUE.
+     */
+    [optional, property] double CrossoverValue;
+
+    //-------------------------------------------------------------------------
+
+    /** Indicates the reference value where bars or areas have their grounding.
+        This property has only an effect when the used ODF file format does not allow for
+        further axis positioning or the axis is a secondary y-axis.
+     */
+    [optional, property] double Origin;
+
+    //-------------------------------------------------------------------------
+
+    /** The origin is calculated by the chart if this property is <TRUE/>.
+     */
+    [optional, property] boolean AutoOrigin;
+
+    //-------------------------------------------------------------------------
+    /** Properties for interval marks:
+    */
+
+    //-------------------------------------------------------------------------
+
+    /** Determines the type of the marks.@see ChartAxisMarks
+     */
+    [property] long Marks;
+
+    //-------------------------------------------------------------------------
+
+    /** Determines the type of the help marks.@see ChartAxisMarks
+     */
+    [property] long HelpMarks;
+    //-------------------------------------------------------------------------
+
+    /** Determines where the interval marks are placed.
+     */
+    [optional, property] com::sun::star::chart::ChartAxisMarkPosition MarkPosition;
+
+    //-------------------------------------------------------------------------
+    /** Properties for axes labels:
+    */
+
+    //-------------------------------------------------------------------------
+
+    /** Determines whether to display text at the axis or not.
+     */
+    [property] boolean DisplayLabels;
+
+    //-------------------------------------------------------------------------
+
+    /** Contains the type id for the number formatter of the axis.
+
+        @see com::sun::star::util::XNumberFormatter
+     */
+    [property] long NumberFormat;
+
+    //-------------------------------------------------------------------------
+
+    /** determines whether to use the number format given by the
+        container application, e.g.  a spreadsheet document, or from
+        the own property <member>NumberFormat</member>.
+     */
+    [optional, property] boolean LinkNumberFormatToSource;
+
+    //-------------------------------------------------------------------------
+
+    /** Determines where the axis labels are placed.
+     */
+    [optional, property] com::sun::star::chart::ChartAxisLabelPosition LabelPosition;
+
+    //-------------------------------------------------------------------------
+
+    /** Determines the rotation of the text elements
+        (axis description) in 100th degrees.
+     */
+    [property] long TextRotation;
+
+    //-------------------------------------------------------------------------
+
+    /** The axis description may be arranged in a special order for a
+        better placement.
+     */
+    [property] com::sun::star::chart::ChartAxisArrangeOrderType ArrangeOrder;
+
+    //-------------------------------------------------------------------------
+
+    /** Determines if long text is broken into multiple lines.
+     */
+    [property] boolean TextBreak;
+
+    //-------------------------------------------------------------------------
+
+    /** Determines if certain labels are hidden, if they would otherwise overlap.
+        In this case, the value of this property must be set to <FALSE/>.
+     */
+    [property] boolean TextCanOverlap;
+
+    //-------------------------------------------------------------------------
+    /** Properties related to bar charts:
+    */
+
+    //-------------------------------------------------------------------------
+
+    /** Determines the overlap of the bars in a bar-type chart.
+
+        <p>The value is given in percent of the width of the bars. The
+        valid range is -100% to +100%. +100% means full overlap, -100%
+        indicates a distance of one bar between 2 neighboring bars.</p>
+     */
+    [property] long Overlap;
+
+    //-------------------------------------------------------------------------
+
+    /** Specifies the width of the gaps between each set of data points
+        in a bar chart.
+
+        <p>The value is given in percent of the width of a bar; the
+        valid range is 0 to 600%.</p>
+     */
+    [property] long GapWidth;
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

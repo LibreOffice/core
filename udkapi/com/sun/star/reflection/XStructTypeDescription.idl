@@ -1,0 +1,93 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_reflection_XStructTypeDescription_idl__
+#define __com_sun_star_reflection_XStructTypeDescription_idl__
+
+#include "com/sun/star/reflection/XCompoundTypeDescription.idl"
+
+module com {  module sun {  module star {  module reflection {
+
+interface XTypeDescription;
+
+/**
+   Reflects a struct type, supporting polymorphic struct types.
+
+   <p>This type supersedes <type>XCompoundTypeDescription</type>, which only
+   supports plain struct types.</p>
+
+   <p>This type is used to reflect all of the following:</p>
+   <ul>
+       <li>Polymorphic struct type templates, like
+       <code>Struct&lt;T, U&gt;</code>.  For these,
+       <member scope="com::sun::star::reflection"><!--
+       -->XStructTypeDescription::getTypeParameters</member> returns a non-empty
+       sequence, while <member scope="com::sun::star::reflection"><!--
+       -->XStructTypeDescription::getTypeArguments</member> returns an empty
+       sequence.</li>
+
+       <li>Instantiated polymorphic struct types, like <code>Struct&lt;long,
+       hyper&gt;</code>.  For these,
+       <member scope="com::sun::star::reflection"><!--
+       -->XStructTypeDescription::getTypeParameters</member> returns an empty
+       sequence, while <member scope="com::sun::star::reflection"><!--
+       -->XStructTypeDescription::getTypeArguments</member> returns a non-empty
+       sequence.</li>
+
+       <li>Plain struct types.  For these, both
+       <member scope="com::sun::star::reflection"><!--
+       -->XStructTypeDescription::getTypeParameters</member> and
+       <member scope="com::sun::star::reflection"><!--
+       -->XStructTypeDescription::getTypeArguments</member> return an empty
+       sequence.</li>
+   </ul>
+
+   @since OOo 2.0
+ */
+interface XStructTypeDescription: XCompoundTypeDescription {
+    /**
+       Returns the type parameters of a polymorphic struct type template.
+
+       @return a sequence of the names of all type parameters, in the correct
+       order; for a plain struct type, or an instantiated polymorphic struct
+       type, an empty sequence is returned
+     */
+    sequence<string> getTypeParameters();
+
+    /**
+       Returns the type arguments of an instantiated polymorphic struct type.
+
+       @return a sequence of all type arguments, in the correct order; for a
+       plain struct type, or a polymorphic struct type template, an empty
+       sequence is returned
+     */
+    sequence<XTypeDescription> getTypeArguments();
+};
+
+}; }; }; };
+
+#endif

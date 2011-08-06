@@ -1,0 +1,63 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_i18n_KNumberFormatUsage_idl__
+#define __com_sun_star_i18n_KNumberFormatUsage_idl__
+
+//=============================================================================
+
+module com {  module sun {  module star {  module i18n {
+
+//=============================================================================
+
+/**
+    Category of number format code.
+ */
+
+published constants KNumberFormatUsage
+{
+    /// Date format, for example, "YYYY-MM-DD".
+    const short DATE              = 1;
+    /// Time format, for example, "HH:MM:SS".
+    const short TIME              = 2;
+    /// Mixed date/time format, for example, "YYYY-MM-DD HH:MM:SS".
+    const short DATE_TIME         = 3;
+    /// Numeric format, for example, "#,##0.00".
+    const short FIXED_NUMBER      = 4;
+    /// Fractional format, for example, "# ??/??".
+    const short FRACTION_NUMBER   = 5;
+    /// Percent format, for example, "0.00%".
+    const short PERCENT_NUMBER    = 6;
+    /// Scientific format, for example, "0.00E+00".
+    const short SCIENTIFIC_NUMBER = 7;
+    /// Currency format, for example, "#,##0.00 [$EUR]"
+    const short CURRENCY          = 8;
+};
+
+//=============================================================================
+}; }; }; };
+
+#endif

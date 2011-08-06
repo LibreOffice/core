@@ -1,0 +1,75 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_document_UpdateDocMode_idl__
+#define __com_sun_star_document_UpdateDocMode_idl__
+
+//=============================================================================
+
+module com { module sun { module star { module document {
+
+//=============================================================================
+/** Specify the way a document can be updated.
+
+    @since OOo 1.1.2
+*/
+published constants UpdateDocMode
+{
+    //-------------------------------------------------------------------------
+    /** Do not update document.
+    */
+
+    const short NO_UPDATE = 0;
+
+    //-------------------------------------------------------------------------
+    /** Update document if it does not require a dialog.
+        Otherwise do not update. For example a link to a database
+        can require a dialog to get password for an update.
+    */
+
+    const short QUIET_UPDATE = 1;
+
+    //-------------------------------------------------------------------------
+    /** Produce update according to configuration settings.
+        If there are no settings use dialog.
+    */
+
+    const short ACCORDING_TO_CONFIG = 2;
+
+    //-------------------------------------------------------------------------
+    /** Update document even if it does require a dialog.
+    */
+
+    const short FULL_UPDATE = 3;
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

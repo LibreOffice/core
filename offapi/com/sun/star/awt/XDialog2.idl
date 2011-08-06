@@ -1,0 +1,33 @@
+#ifndef __com_sun_star_awt_XDialog2_idl__
+#define __com_sun_star_awt_XDialog2_idl__
+
+#include <com/sun/star/awt/XDialog.idl>
+
+
+//=============================================================================
+
+module com {  module sun {  module star {  module awt {
+
+//=============================================================================
+
+/** Makes it possible to end a dialog and set a help id.
+
+    @since OOo 3.0
+ */
+published interface XDialog2: com::sun::star::awt::XDialog
+{
+    /** hides the dialog and then causes <member>XDialog::execute</member>
+        to return with the given result value.
+     */
+    void endDialog ( [in] long Result );
+    /** sets the help id so that the standard help button action will
+        show the appropriate help page.
+    */
+    void setHelpId ( [in] string Id );
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

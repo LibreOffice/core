@@ -1,0 +1,115 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_ui_dialogs_XFilePickerListener_idl__
+#define __com_sun_star_ui_dialogs_XFilePickerListener_idl__
+
+#include <com/sun/star/lang/XEventListener.idl>
+#include <com/sun/star/ui/dialogs/FilePickerEvent.idl>
+
+//=============================================================================
+
+module com { module sun { module star { module ui { module dialogs {
+
+//=============================================================================
+
+//=============================================================================
+/** Interface to be implemented by a FilePicker listener.
+
+    <p> The <type>XFilePickerListener</type> interface must be implemented by
+    the clients of the FilePicker service which need to be informed about
+    events while the FilePicker service is displayed.</p>
+*/
+
+published interface XFilePickerListener: com::sun::star::lang::XEventListener
+{
+    //-------------------------------------------------------------------------
+    /** A client receives this event if the file selection within the
+        FilePicker service dialog changes.
+
+        @param aEvent
+        of type <type>FilePickerEvent</type> that describes the event
+
+        @see com::sun::star::ui::dialogs::FilePickerEvent
+    */
+    void fileSelectionChanged( [in] FilePickerEvent aEvent );
+
+
+    //-------------------------------------------------------------------------
+    /** A client receives this event if the directory selection within the
+        FilePicker dialog changes.
+
+        @param aEvent
+        Of type <type>FilePickerEvent</type> that describes the event.
+
+        @see com::sun::star::ui::dialogs::FilePickerEvent
+    */
+    void directoryChanged( [in] FilePickerEvent aEvent );
+
+    //-------------------------------------------------------------------------
+    /** A client receives this event if the F1 key or the help button was
+        pressed.
+
+        @param aEvent
+        of type <type>FilePickerEvent</type> that describes the event
+
+        @returns
+        A help string which the FilePicker dialog should use to display
+        a help for a specific control. If the returned string is empty it is
+        undefined how the FilePicker implementation will behave.
+        It may show a message "no help available" or may show no
+        help at all.
+
+        @see com::sun::star::ui::dialogs::FilePickerEvent
+    */
+    string helpRequested( [in] FilePickerEvent aEvent );
+
+    //-------------------------------------------------------------------------
+    /** A client receives this event if the state of a control within the
+        FilePicker service dialog changes.
+
+        @param aEvent
+        of type <type>FilePickerEvent</type> that describes the event.
+
+        @see com::sun::star::ui::dialogs::FilePickerEvent
+    */
+    void controlStateChanged( [in] FilePickerEvent aEvent );
+
+    //-------------------------------------------------------------------------
+    /** A client receives this event if the size of the FilePicker dialog
+        has changed. If the FilePicker dialog contains a preview the client
+        may ask for the new dimension of the preview area.
+    */
+    void dialogSizeChanged( );
+};
+
+//=============================================================================
+
+}; }; }; }; };
+
+
+#endif

@@ -1,0 +1,117 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_form_FormComponent_idl__
+#define __com_sun_star_form_FormComponent_idl__
+
+#include <com/sun/star/form/XFormComponent.idl>
+#include <com/sun/star/lang/XComponent.idl>
+#include <com/sun/star/container/XNamed.idl>
+#include <com/sun/star/beans/XPropertySet.idl>
+#include <com/sun/star/io/XPersistObject.idl>
+#include <com/sun/star/beans/PropertyBag.idl>
+
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module form {
+
+//=============================================================================
+
+/** specifies a component which can be part of a form.
+
+    @see FormControlModel
+    @see com::sun::star::form::component::Form
+ */
+published service FormComponent
+{
+    /** identifies the component as a candidate for being part of a form.
+        <p>This interface also provides the access to the component's parent.</p>
+     */
+    interface com::sun::star::form::XFormComponent;
+
+
+    /** allows life-time control of form components.
+     */
+    interface com::sun::star::lang::XComponent;
+
+
+    /** Each FormComponent must supply a name for identification.
+     */
+    interface com::sun::star::container::XNamed;
+
+    /** gives access to the properties.
+    */
+    interface com::sun::star::beans::XPropertySet;
+
+
+    /** Each FormComponent must be able to be stored into and read from a stream.
+     */
+    interface com::sun::star::io::XPersistObject;
+
+    /** allows to associate arbitrary properties with the form component
+
+        <p>Every concrete form component - i.e. every service which includes
+        the <code>FormComponent</code> service - has a set of properties which
+        are available as long as the component lives - the so-called <em>static
+        properties</em>.</p>
+
+        <p>Additionally, you can add more properties to the component as needed,
+        using the <type scope="com::sun::star::beans">XPropertyContainer</type> interface.
+        Those properties are called <em>dynamic properties</em>.</p>
+
+        <p>Dynamic properties are not evaluated by the component itself,
+        nor by the form's runtime environment. They're only remembered and available for
+        use by other instances.</p>
+
+        <p>Note that dynamic properties added to a form component are, by definition,
+        removable. That is, the <member scope="com::sun::star::beans">PropertyAttribute::REMOVEABLE</member>
+        will always be set, even if you do not specify it in the
+        <member scope="com::sun::star::beans">XPropertyContainer::addProperty</member> call.</p>
+
+        @since OOo 2.3
+    */
+    [optional] service com::sun::star::beans::PropertyBag;
+
+    //-------------------------------------------------------------------------
+
+    /** the name of the component.
+
+        <p>Note that the name accessed here is the same as when using the
+        <type scope="com::sun::star::container">XNamed</type> interface.</p>
+     */
+    [property] string Name;
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+/*=============================================================================
+
+=============================================================================*/
+#endif

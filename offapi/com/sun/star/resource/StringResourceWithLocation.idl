@@ -1,0 +1,95 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_resource_StringResourceWithLocation_idl__
+#define __com_sun_star_resource_StringResourceWithLocation_idl__
+
+#include <com/sun/star/resource/XStringResourceWithLocation.idl>
+
+
+//=============================================================================
+
+module com { module sun { module star { module resource {
+
+//=============================================================================
+
+/** specifies a service providing access to a resource string table implementing the
+    <type scope="com::sun::star::resource">XStringResourceWithLocation</type> interface.
+ */
+published service StringResourceWithLocation : com::sun::star::resource::XStringResourceWithLocation
+{
+    /** is used to initialize the object on its creation.
+
+        @param URL
+            Specifies the location used to load and store - if
+            the ReadOnly state allows it - the string table data.
+
+        @param ReadOnly
+            Specifies if the resource should be read only,
+            see <code>XStringResourceManager::isReadOnly</code>
+
+        @param locale
+            Specifies if the locale first to be used as current locale. Internally
+            the <code>XStringResourceManager::setCurrentLocale</code> method is
+            called with FindClosestMatch=true.
+            see <code>XStringResourceManager::setCurrentLocale</code>
+
+        @param BaseName
+            Base string for the file names used to store the locale data.
+            The locale data is stored in Java properties files also following
+            the corresponding naming scheme. The files will be named like this:
+            "[BaseName]_[Language]_[Country].properties",
+            e.g. "MyBaseName_en_US.properties"
+            If an empty string is passed for BaseName, "strings" will be used
+            as BaseName.
+
+        @param Comment
+            Comment stored first in each properties file followed by a line
+            feed character. The line feed character is added automatically
+            and hasn't to be part of the comment string. The caller is
+            responsible that the passed string is a valid comment in a Java
+            properties file, e.g. "# My strings". The string may be empty.
+
+        @param Handler
+            a <type scope="com::sun::star::task">XInteractionHandler</type>
+            to be passed to ucb. This may be a null interface.
+
+        @throws <type scope="com::sun::star::lang">IllegalArgumentException</type>
+            if no string or an empty string is passed as URL
+     */
+    create( [in] string URL, [in] boolean ReadOnly,
+            [in] com::sun::star::lang::Locale locale,
+            [in] string BaseName, [in] string Comment,
+            [in] com::sun::star::task::XInteractionHandler Handler )
+        raises( ::com::sun::star::lang::IllegalArgumentException );
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

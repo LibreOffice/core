@@ -1,0 +1,185 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_form_DataAwareControlModel_idl__
+#define __com_sun_star_form_DataAwareControlModel_idl__
+
+#include <com/sun/star/form/FormControlModel.idl>
+
+#include <com/sun/star/form/XBoundComponent.idl>
+
+#include <com/sun/star/form/XLoadListener.idl>
+
+#include <com/sun/star/form/XReset.idl>
+
+#include <com/sun/star/beans/XPropertySet.idl>
+
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module form {
+
+//=============================================================================
+
+/** is an abstract service for specialized <type>FormControlModel</type>s
+    which are data aware and thus can be bound to a data source.
+
+    <p>The connection between a data-aware control model and a form whose data the
+    control should display is made by parentship relations. The parent of a data-aware
+    control model (see <type scope="com::sun::star::container">XChild</type>, inherited
+    via the <type>FormControlModel</type> and <type>FormComponent</type> services) has
+    always to be a <type scope="com::sun::star::form::component">DataForm</type>.</p>
+ */
+published service DataAwareControlModel
+{
+    service com::sun::star::form::FormControlModel;
+
+    /** makes it possible to transfer the data of the model to the connected data field.
+        <p>
+        This interface is optional, if a component doesn't support it, it has to forward
+        the changes of it's value to the field it is connected to immediately (means whenever a user
+        interaction changes it's content).
+        </p>
+     */
+    [optional] interface com::sun::star::form::XBoundComponent;
+
+
+    /** must be implemented in order to recognize when the containing form of the model connects
+        to its data source  (loads its data). After loading the form, the model may bind to its
+        related field source.<br/>
+        This interface will seldom be used directly from outside.
+     */
+    interface com::sun::star::form::XLoadListener;
+
+
+    /** Each <type>DataAwareControlModel</type> should be resettable for setting default values.
+
+        <p>In the context of a control model which is data-aware, the semantics of <em>default value</em>
+        (see <type>XReset</type>) is as follows:<br/>
+        If (and only if) the control is valid bound to a column of it's <type scope="com::sun::star::form::component">DataForm</type>, and the form
+        is not positioned on a new record (see <member scope="com::sun::star::sdb">RowSet::IsNew</member>), then
+        <member>XReset::reset</member> does not reset the model's value to it's default value, but uses the
+        underlying column value.<br/>
+        In all other cases, the model is reset to the default value as specified by the respective property.</p>
+
+        <p>For an example, have a look at the <type scope="com::sun::star::form::component">TextField</type>. It inherits
+        the <member scope="com::sun::star::awt">UnoControlEditModel::Text</member> property from the underlying
+        service, and additionally specifies the <member scope="com::sun::star::form::component">TextField::DefaultText</member>.
+        </p>
+
+        <p>In the context of a <type scope="com::sun::star::form::component">DataForm</type>, controls are
+        automatically reset when one of the following applies
+        <ul><li>The form is reset by invoking it's <type>XReset</type> interface.</li>
+            <li>The form moves to a new record.</li>
+            <li>The changes in the current record of the form are undone</li>
+        </ul>
+        </p>
+    */
+    interface com::sun::star::form::XReset;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies the name of the bound database field.
+
+        <p>This property makes sense in the <em>context</em> of the control model only. Normally, a control model
+        is a child of a <type scope="com::sun::star::form::component">DataForm</type>, which is bound
+        to a higher level object such as a table or query - more general, a result set.<br/>
+        This member here describes the column of this result set which the control should act for.</p>
+
+        <p>Not every control model can be bound to every database column. Usually, super services of the
+        <type>DataAwareControlModel</type> restrict the column types they can be used with.</p>
+
+        @see DataAwareControlModel::BoundField
+     */
+    [property] string DataField;
+
+    /** determines whether or not input into this field is required, when it is actually bound to a database field.
+
+        <p>If this property is set to <FALSE/>, then the form runtime will not check the control/model for
+        <NULL/> values before submitting data to the database. Usually, if a control model is bound to
+        a database field which cannot be <NULL/>, and the model itself does not have a value, then the database
+        update is prevented, showing an error message to the user. To disable this behavior on a per-control
+        basis, use the <code>InputRequired</code> property.</p>
+
+        @since OOo 3.1
+    */
+    [optional, property] boolean InputRequired;
+
+    //-------------------------------------------------------------------------
+
+    /** references to the cursor field to which the control is bound.
+        <p>Applies only if the form the control model belongs to is loaded and the control is valid bound.
+        The referenced field supports the <type scope="com::sun::star::sdb">Column</type> service.
+        </p>
+        @see DataAwareControlModel::DataField
+     */
+    [readonly, property] com::sun::star::beans::XPropertySet BoundField;
+
+    //-------------------------------------------------------------------------
+
+    /** references to a control model within the same document which should be used as a label.
+        <p>Any user interface action which needs to refer to the control is assumed to use this
+        property. <br/>
+        A very common design method for forms is to group a data aware control with a label control,
+        with the latter describing the content of the former. For instance, you may have a
+        <type scope="com::sun::star::form::component">TextField</type>, which is bound to the e-mail
+        column of your data source. Then you will probably add a
+        <type scope="com::sun::star::form::component">FixedText</type> whose label is "E-Mail",
+        and associate it with the TextField by setting it as <member>LabelControl</member>.<br/>
+        Now if you imagine a component offering data search in a form, this component will examine
+        the <member>LabelControl</member> property, find the <type scope="com::sun::star::form::component">FixedText</type>,
+        examine it's label, and use this label to refer to the <type scope="com::sun::star::form::component">TextField</type>.
+        </p>
+        <p>When setting the property, a number of constraints apply:
+        <ul>
+            <li>The object which is to be set has to support the following interfaces
+                <ul><li><type scope="com::sun::star::awt">XControlModel</type></li>
+                    <li><type scope="com::sun::star::lang">XServiceInfo</type></li>
+                    <li><type scope="com::sun::star::beans">XPropertySet</type></li>
+                    <li><type scope="com::sun::star::container">XChild</type></li>
+                </ul>
+            </il>
+            <li>It has to be a part of the same document as the model who's property is to be modified.</il>
+            <li>Additionally, the support of a special service, indicating that the model is of the right type,
+                is required. Which kind of service is in the request depends on the type of the control model.<br/>
+
+                For instance, text fields (<type scope="com::sun::star::form::component">TextField</type>) can be
+                labeled by label controls only (<type scope="com::sun::star::form::component">FixedText</type>),
+                and radio buttons (<type scope="com::sun::star::form::component">RadioButton</type>) can be labeled
+                by group boxes (<type scope="com::sun::star::form::component">GroupBox</type>) only.
+            </li>
+        </ul>
+        </p>
+     */
+    [property] com::sun::star::beans::XPropertySet LabelControl;
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

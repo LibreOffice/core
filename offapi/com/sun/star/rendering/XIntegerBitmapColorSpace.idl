@@ -1,0 +1,274 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_rendering_XIntegerBitmapColorSpace_idl__
+#define __com_sun_star_rendering_XIntegerBitmapColorSpace_idl__
+
+#include <com/sun/star/rendering/XColorSpace.idl>
+
+module com { module sun { module star { module rendering {
+
+/** A color space for integer bitmap formats<p>
+
+    This interface encapsulates all information specific to a certain
+    integer bitmap color space, like for example 1555 ARGB. Note that
+    the individual elements of the integer color representation
+    sequence need not correspond to the color space's components -
+    instead, the color components might be packed back-to-back into
+    those bytes, as they appear in the raw bitmap data.<p>
+ */
+interface XIntegerBitmapColorSpace : XColorSpace
+{
+    /** Query number of bits used per bitmap pixel.<p>
+
+        This method yields the total number of bits used for a color
+        value. At the associated <type>XIntegerBitmap</type>, the
+        <member>XIntegerBitmap::setPixel()</member> method will expect
+        a sequence of ceil(BitsPerPixel/8) bytes, and the
+        <member>XIntegerReadOnlyBitmap::getPixel()</member> will
+        return that number of bytes. Similarly, the color conversion
+        expect input data in multiples of ceil(BitsPerPixel/8), and
+        also return converted data in chunks of this.<p>
+     */
+    long                     getBitsPerPixel();
+
+    /** Query the number of bits used for each component.<p>
+
+        This method returns a sequence of integers, each denoting the
+        number of bits occupied by the respective component. The sum
+        of all component bits must be less or equal than the value
+        returned from <member>getBitsPerPixel()</member>. If the sum is
+        less, excess bits are always kept in the most significant bits
+        of a pixel. Color components will appear in the byte sequences
+        returned from the <type>XIntegerBitmap</type> methods in the
+        order defined here, with the first element starting from the
+        least significant bits of the pixel, etc.<p>
+
+        @example For the typical 32 bit RGBA color data, the four
+        values would all contain the value eight. For a 16 bit 1555
+        ARGB format, with mask values 0x8000 for alpha, 0x7C for red,
+        0x3E for green and 0x1F for blue, the values would be 5, 5, 5,
+        1, in that order.
+     */
+    sequence<long>           getComponentBitCounts();
+
+    /** Query whether color data bytes need to be swapped.<p>
+
+        @return <TRUE/>, This method returns the endianness of the color
+        data. The value is one of the <type>Endianness</type>
+        constants. If color data is represented using more than one
+        byte, the actual channel positions are specified using bit
+        positions. Therefore, depending on the architecture, the
+        actual color data bytes might need to get swapped, for the
+        bits to align properly.<p>
+
+        @example with a 16 bit 565 RGB format, written on a big endian
+        architecture, a destination machine using little endian CPU
+        will need to swap the bytes, in order to keep the green
+        channel bits together.
+     */
+    byte                     getEndianness();
+
+
+    /** Convert integer bitmap color to generic IEEE double device
+        color of another color space.<p>
+
+        Color values are properly rounded and clipped, to be valid in
+        the target color space.<p>
+
+        @param deviceColor Sequence of device color components. Is
+        permitted to contain more than one device color element,
+        therefore, batch conversion of multiple color values is
+        possible.<p>
+
+        @return the corresponding sequence of device colors in the
+        target color space
+
+        @throws a
+        <type>com::sun::star::lang::IllegalArgumentException</type>,
+        if the input sequence does not match the device color format.
+     */
+    sequence<ColorComponent> convertFromIntegerColorSpace( [in] sequence<byte> deviceColor, [in] XColorSpace targetColorSpace )
+        raises (com::sun::star::lang::IllegalArgumentException);
+
+    /** Convert integer bitmap color to integer bitmap color of
+        another integer bitmap color space.<p>
+
+        Color values are properly rounded and clipped, to be valid in
+        the target color space.<p>
+
+        @param deviceColor Sequence of device color components. Is
+        permitted to contain more than one device color element,
+        therefore, batch conversion of multiple color values is
+        possible.<p>
+
+        @return the corresponding sequence of device colors in the
+        target color space
+
+        @throws a
+        <type>com::sun::star::lang::IllegalArgumentException</type>,
+        if the input sequence does not match the device color format.
+     */
+    sequence<byte>           convertToIntegerColorSpace( [in] sequence<byte> deviceColor, [in] XIntegerBitmapColorSpace targetColorSpace )
+        raises (com::sun::star::lang::IllegalArgumentException);
+
+    /** Convert color value in this color space to sRGB color values.<p>
+
+        Any information not representable in the <type>RGBColor</type>
+        struct is discarded during the conversion. This includes alpha
+        information.  Color values are properly rounded and clipped,
+        to be valid in the target color space.<p>
+
+        @param deviceColor Sequence of device color components. Is
+        permitted to contain more than one device color element,
+        therefore, batch conversion of multiple color values is
+        possible.
+
+        @return the corresponding sequence of sRGB colors.
+
+        @see <member>XIntegerBitmapColorSpace::convertIntegerToARGB</member>
+
+        @throws a
+        <type>com::sun::star::lang::IllegalArgumentException</type>,
+        if the input sequence does not match the device color format.
+     */
+    sequence<RGBColor>       convertIntegerToRGB( [in] sequence<byte> deviceColor )
+        raises (com::sun::star::lang::IllegalArgumentException);
+
+    /** Convert color value in this color space to sRGB color values,
+        with linear alpha.<p>
+
+        If the given input color does not carry alpha information, an
+        alpha value of 1.0 (fully opaque) is assumed.  Color values
+        are properly rounded and clipped, to be valid in the target
+        color space.<p>
+
+        @param deviceColor Sequence of device color components. Is
+        permitted to contain more than one device color element,
+        therefore, batch conversion of multiple color values is
+        possible.
+
+        @return the corresponding sequence of sRGB colors.
+
+        @throws a
+        <type>com::sun::star::lang::IllegalArgumentException</type>,
+        if the input sequence does not match the device color format.
+     */
+    sequence<ARGBColor>      convertIntegerToARGB( [in] sequence<byte> deviceColor )
+        raises (com::sun::star::lang::IllegalArgumentException);
+
+    /** Convert color value in this color space to premultiplied sRGB
+        color values, with linear alpha.<p>
+
+        If the given input color does not carry alpha information, an
+        alpha value of 1.0 (fully opaque) is assumed.  Color values
+        are properly rounded and clipped, to be valid in the target
+        color space. The resulting individual RGB color values are
+        premultiplied by the alpha value (e.g. if alpha is 0.5, each
+        color value has only half of the original intensity).<p>
+
+        @param deviceColor Sequence of device color components. Is
+        permitted to contain more than one device color element,
+        therefore, batch conversion of multiple color values is
+        possible.
+
+        @return the corresponding sequence of sRGB colors.
+
+        @throws a
+        <type>com::sun::star::lang::IllegalArgumentException</type>,
+        if the input sequence does not match the device color format.
+     */
+    sequence<ARGBColor>      convertIntegerToPARGB( [in] sequence<byte> deviceColor )
+        raises (com::sun::star::lang::IllegalArgumentException);
+
+    /** Convert sRGB color to an integer representation in this color
+        space.<p>
+
+        If this color space conveys alpha information, it is assumed
+        be fully opaque for the given RGB color value.  Color values
+        are properly rounded and clipped, to be valid in the target
+        color space.<p>
+
+        @param deviceColor Sequence of sRGB color components. Is
+        permitted to contain more than one color element, therefore,
+        batch conversion of multiple color values is possible.
+
+        @return the corresponding sequence of device colors.
+
+        @throws a
+        <type>com::sun::star::lang::IllegalArgumentException</type>,
+        if the input sequence does not match the device color format.
+     */
+    sequence<byte>           convertIntegerFromRGB( [in] sequence<RGBColor> rgbColor )
+        raises (com::sun::star::lang::IllegalArgumentException);
+
+    /** Convert sRGB color with linear alpha into this color space.<p>
+
+        If this color space does not convey alpha information, the
+        specified alpha value is silently ignored.  Color values are
+        properly rounded and clipped, to be valid in the target color
+        space.<p>
+
+        @param deviceColor Sequence of sRGB color components. Is
+        permitted to contain more than one color element, therefore,
+        batch conversion of multiple color values is possible.
+
+        @return the corresponding sequence of device colors.
+
+        @throws a
+        <type>com::sun::star::lang::IllegalArgumentException</type>,
+        if the input sequence does not match the device color format.
+     */
+    sequence<byte>           convertIntegerFromARGB( [in] sequence<ARGBColor> rgbColor )
+        raises (com::sun::star::lang::IllegalArgumentException);
+
+    /** Convert premultiplied sRGB color with linear alpha into this
+       color space.<p>
+
+        If this color space does not convey alpha information, the
+        specified alpha value is silently ignored.  Color values are
+        properly rounded and clipped, to be valid in the target color
+        space.<p>
+
+        @param deviceColor Sequence of sRGB color components. Is
+        permitted to contain more than one color element, therefore,
+        batch conversion of multiple color values is possible. The
+        individual RGB color values are assumed to be premultiplied by
+        the alpha value already.
+
+        @return the corresponding sequence of device colors.
+
+        @throws a
+        <type>com::sun::star::lang::IllegalArgumentException</type>,
+        if the input sequence does not match the device color format.
+     */
+    sequence<byte>           convertIntegerFromPARGB( [in] sequence<ARGBColor> rgbColor )
+        raises (com::sun::star::lang::IllegalArgumentException);
+};
+
+}; }; }; };
+
+#endif

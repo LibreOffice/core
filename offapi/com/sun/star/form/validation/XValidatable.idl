@@ -1,0 +1,72 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_form_validation_XValidatable_idl__
+#define __com_sun_star_form_validation_XValidatable_idl__
+
+#include <com/sun/star/uno/XInterface.idl>
+#include <com/sun/star/util/VetoException.idl>
+
+//=============================================================================
+
+module com {  module sun {  module star {  module form { module validation {
+
+interface XValidator;
+
+//=============================================================================
+
+/** specifies support for validating a component
+
+    @see XValidator
+*/
+interface XValidatable : com::sun::star::uno::XInterface
+{
+    /** sets an external instance which is able to validate the component
+
+        <p>Any previously active validator will be revoked - there can be only one!</p>
+
+        @param Validator
+            the new validator which is to be used by the component. May be <NULL/>,
+            in this case only the current validator is revoked.
+
+        @throws <type scope="com::sun::star::util">VetoException</type>
+            if changing the validator is not allowed in the current component state
+     */
+    void    setValidator( [in] XValidator Validator )
+                raises ( com::sun::star::util::VetoException );
+
+    /** retrieves the external instance which is currently used to validate the component
+    */
+    XValidator
+            getValidator( );
+};
+
+//=============================================================================
+
+}; }; }; }; };
+
+#endif

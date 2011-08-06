@@ -1,0 +1,188 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_embed_EmbedMisc_idl__
+#define __com_sun_star_embed_EmbedMisc_idl__
+
+
+//============================================================================
+
+module com { module sun { module star { module embed {
+
+//============================================================================
+/** The constant set contains flags describing miscellaneous characteristics
+    of embedded objects.
+
+    <p>
+    The constant values can be combined with "or" operation.
+    The first 32 bits are reserved for MS values, they are added because
+    this API is going to be used to embed MS OLE objects into OOo documents,
+    so there should be a possibility to transfer all the possible MS flags
+    to container. In case own specific values should be added those bits can
+    not be used.
+    </p>
+
+    @see XEmbeddedObject
+*/
+published constants EmbedMisc
+{
+    // analog of the MS OLEMISC enum
+
+    // ----------------------------------------------------------------------
+    /** means that the object wish to regenerate view representation if it's
+        view in the container is resized.
+     */
+    const hyper MS_EMBED_RECOMPOSEONRESIZE = 1;
+
+    // ----------------------------------------------------------------------
+    /** The object has no view representation except icon.
+     */
+    const hyper MS_EMBED_ONLYICONIC = 2;
+
+    // ----------------------------------------------------------------------
+    /** If the object is generated from a selection, the selection should not
+        be removed, the object should be inserted beside the selection.
+     */
+    const hyper MS_EMBED_INSERTNOTREPLACE = 4;
+
+    // ----------------------------------------------------------------------
+    /** The object is a static object that contains only representation.
+     */
+    const hyper MS_EMBED_STATIC = 8;
+
+    // ----------------------------------------------------------------------
+    /**
+     */
+    const hyper MS_EMBED_CANTLINKINSIDE = 16;
+
+    // ----------------------------------------------------------------------
+    /**
+     */
+    const hyper MS_EMBED_CANLINKBYOLE1 = 32;
+
+    // ----------------------------------------------------------------------
+    /**
+     */
+    const hyper MS_EMBED_ISLINKOBJECT = 64;
+
+    // ----------------------------------------------------------------------
+    /**
+     */
+    const hyper MS_EMBED_INSIDEOUT = 128;
+
+    // ----------------------------------------------------------------------
+    /**
+     */
+    const hyper MS_EMBED_ACTIVATEWHENVISIBLE = 256;
+
+    // ----------------------------------------------------------------------
+    /**
+     */
+    const hyper MS_EMBED_RENDERINGISDEVICEINDEPENDENT = 512;
+
+    // ----------------------------------------------------------------------
+    /**
+     */
+    const hyper MS_EMBED_INVISIBLEATRUNTIME = 1024;
+
+    // ----------------------------------------------------------------------
+    /**
+     */
+    const hyper MS_EMBED_ALWAYSRUN = 2048;
+
+    // ----------------------------------------------------------------------
+    /**
+     */
+    const hyper MS_EMBED_ACTSLIKEBUTTON = 4096;
+
+    // ----------------------------------------------------------------------
+    /**
+     */
+    const hyper MS_EMBED_ACTSLIKELABEL = 8192;
+
+    // ----------------------------------------------------------------------
+    /**
+     */
+    const hyper MS_EMBED_NOUIACTIVATE = 16384;
+
+    // ----------------------------------------------------------------------
+    /**
+     */
+    const hyper MS_EMBED_ALIGNABLE = 32768;
+
+    // ----------------------------------------------------------------------
+    /**
+     */
+    const hyper MS_EMBED_SIMPLEFRAME = 65536;
+
+    // ----------------------------------------------------------------------
+    /**
+     */
+    const hyper MS_EMBED_SETCLIENTSITEFIRST = 131072;
+
+    // ----------------------------------------------------------------------
+    /**
+     */
+    const hyper MS_EMBED_IMEMODE = 262144;
+
+    // ----------------------------------------------------------------------
+    /**
+     */
+    const hyper MS_EMBED_IGNOREACTIVATEWHENVISIBLE = 524288;
+
+    // ----------------------------------------------------------------------
+    /**
+     */
+    const hyper MS_EMBED_WANTSTOMENUMERGE = 1048576;
+
+    // ----------------------------------------------------------------------
+    /**
+     */
+    const hyper MS_EMBED_SUPPORTSMULTILEVELUNDO = 2097152;
+
+    // ----------------------------------------------------------------------
+    /**
+     */
+    const hyper EMBED_ACTIVATEIMMEDIATELY = 0x100000000;
+
+    // ----------------------------------------------------------------------
+    /**
+     */
+    const hyper EMBED_NEVERRESIZE = 0x200000000;
+
+    // ----------------------------------------------------------------------
+    /** The object needs the size to be provided from the container after
+        it is loaded to function in optimal way.
+     */
+    const hyper EMBED_NEEDSSIZEONLOAD = 0x400000000;
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

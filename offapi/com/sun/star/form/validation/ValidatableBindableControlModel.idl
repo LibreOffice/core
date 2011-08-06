@@ -1,0 +1,74 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_form_validation_ValidatableBindableControlModel_idl__
+#define __com_sun_star_form_validation_ValidatableBindableControlModel_idl__
+
+#include <com/sun/star/form/validation/ValidatableControlModel.idl>
+#include <com/sun/star/form/binding/BindableControlModel.idl>
+//=============================================================================
+
+module com {  module sun {  module star {  module form { module validation {
+
+/** specifies a control model which supports both binding to an external value supplier,
+    and to an external validator.
+
+    <p>There are two methods how the value which is represented by a control model
+    can interact with other components (well, except the trivial ones accessible
+    by using <type scope="com::sun::star::beans">XPropertySet</type>):
+    <ul><li>binding the value to an external component via <type scope="com::sun::star::form::binding">XBindableValue</type></li>
+        <li>validating the current value by an external component, via <type>XValidatable</type> and <type>XValidator</type></li>
+    </ul></p>
+
+    <p>The <type>ValidatableBindableControlModel</type> services describes the interaction of these concepts
+    for control models which support both of them.</p>
+*/
+service ValidatableBindableControlModel
+{
+    /** specifies support for validating the current value of the control
+    */
+    service ValidatableControlModel;
+
+    /** specifies support for binding the control value to an external component
+
+        <p>If a value binding is established at the control model (by using
+        <member scope="com::sun::star::form::binding">XBindableValue::setValueBinding</member> with a non-<NULL/>
+        binding), this binding is analyzed for validation support. If it is present (read: if the
+        binding also supports the <type>XValidator</type> interface), the binding is also
+        established as validator, as if it has been passed to <member>XValidatable::setValidator</member>.<br/>
+        If, while this binding is active (in both its roles as value binding and validator),
+        an attempt is made to establish another validator, this is blocked with raising a
+        <type scope="com::sun::star::util">VetoException</type> upon calling <member>XValidatable::setValidator</member>.</p>
+    */
+    service com::sun::star::form::binding::BindableControlModel;
+};
+
+//=============================================================================
+
+}; }; }; }; };
+
+#endif

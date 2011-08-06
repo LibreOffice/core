@@ -1,0 +1,236 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_sheet_SpreadsheetDocumentSettings_idl__
+#define __com_sun_star_sheet_SpreadsheetDocumentSettings_idl__
+
+#include <com/sun/star/beans/XPropertySet.idl>
+#include <com/sun/star/util/Date.idl>
+#include <com/sun/star/i18n/XForbiddenCharacters.idl>
+#include <com/sun/star/lang/Locale.idl>
+#include <com/sun/star/awt/XDevice.idl>
+
+//=============================================================================
+
+module com {  module sun {  module star {  module sheet {
+
+//=============================================================================
+
+/** contributes properties to control the configuration which is global
+    for all views of a spreadsheet document.
+
+    @deprecated
+
+    @see com::sun::star::sheet::SpreadsheetDocument
+ */
+published service SpreadsheetDocumentSettings
+{
+    //-------------------------------------------------------------------------
+
+//!published service PropertySet
+    /** provides access to the properties.
+     */
+    interface com::sun::star::beans::XPropertySet;
+
+    //=========================================================================
+
+    /** enables iterated calculation of circular references.
+     */
+    [property] boolean IsIterationEnabled;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies how many iterations are carried out.
+
+        <p>This setting is only used, if iteration is enabled using
+        <member>SpreadsheetDocumentSettings::IsIterationEnabled</member>.</p>
+     */
+    [property] long IterationCount;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies the point at which a change in results will stop
+        the iteration.
+
+        <p>More exactly it specifies a difference in the change of the
+        result between two iterations. If the result difference
+        is less than or equal to this epsilon-value, the iteration
+        is stopped.</p>
+
+        <p>This setting is only used, if iteration is enabled using
+        <member>SpreadsheetDocumentSettings::IsIterationEnabled</member>.</p>
+     */
+    [property] double IterationEpsilon;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies the number of decimals in the default number format.
+     */
+    [property] short StandardDecimals;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies the date that is represented by the value zero.
+     */
+    [property] com::sun::star::util::Date NullDate;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies the width of default tabulators.
+     */
+    [property] short DefaultTabStop;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies whether upper and lower cases are treated as equal
+        when comparing cells.
+     */
+    [property] boolean IgnoreCase;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies whether calculations are performed with the rounded
+        values displayed in cells (set to <TRUE/>) instead of the
+        internal values (set to <FALSE/>).
+     */
+    [property] boolean CalcAsShown;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies whether filter criteria must match entire cell contents.
+     */
+    [property] boolean MatchWholeCell;
+
+    //-------------------------------------------------------------------------
+
+    /** enables online spell checking.
+     */
+    [property] boolean SpellOnline;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies whether column or row labels are looked up from
+        anywhere on the sheet.
+
+        <p>Explicitly defined label ranges are used even if this property
+        is set to <FALSE/>.</p>
+
+        @see com::sun::star::sheet::LabelRanges
+     */
+    [property] boolean LookUpLabels;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies whether regular expressions in formulas are enabled,
+        e.g., for functions which look up spreadsheet contents.
+     */
+    [property] boolean RegularExpressions;
+
+    //-------------------------------------------------------------------------
+
+    /** contains the interface XForbiddenCharacters.
+     */
+    [readonly, optional, property] com::sun::star::i18n::XForbiddenCharacters ForbiddenCharacters;
+
+    //-------------------------------------------------------------------------
+
+    /** If this property is set the document has DrawPages. Use this
+        property to find out, whether the document has DrawPages or not,
+        because the getDrawPage method on the XDrawPageSupplier and the
+        getDrawPages method on the XDrawPagesSupplier always creates the
+        DrawPages if there are none; and this is very slow and needs more
+        memory.
+     */
+    [readonly, optional, property] boolean HasDrawPages;
+
+    //-------------------------------------------------------------------------
+
+    /** contains the standard document language for Western text.
+     */
+    [optional, property] com::sun::star::lang::Locale CharLocale;
+
+    //-------------------------------------------------------------------------
+
+    /** contains the standard document language for Asian text.
+     */
+    [optional, property] com::sun::star::lang::Locale CharLocaleAsian;
+
+    //-------------------------------------------------------------------------
+
+    /** contains the standard document language for Complex text.
+     */
+    [optional, property] com::sun::star::lang::Locale CharLocaleComplex;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies whether the document data are already loaded.
+
+        @since OOo 3.0
+     */
+    [optional, property] boolean IsLoaded;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies whether the undo command is enabled.
+
+        @since OOo 3.0
+     */
+    [optional, property] boolean IsUndoEnabled;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies whether the automatic adjustment of the row height is
+        enabled.
+
+        @since OOo 3.0
+     */
+    [optional, property] boolean IsAdjustHeightEnabled;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies whether the automatic execution of links is enabled.
+
+        @since OOo 3.0
+     */
+    [optional, property] boolean IsExecuteLinkEnabled;
+
+    //-------------------------------------------------------------------------
+
+    /** contains the reference device used for formatting the document.
+
+        @since OOo 3.0
+     */
+    [readonly, optional, property] com::sun::star::awt::XDevice ReferenceDevice;
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif
+

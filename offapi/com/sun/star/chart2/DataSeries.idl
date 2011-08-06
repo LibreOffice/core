@@ -1,0 +1,196 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef com_sun_star_chart2_DataSeries_idl
+#define com_sun_star_chart2_DataSeries_idl
+
+#include <com/sun/star/beans/PropertySet.idl>
+#include <com/sun/star/container/XIndexContainer.idl>
+#include <com/sun/star/container/XContainer.idl>
+#include <com/sun/star/style/XStyle.idl>
+#include <com/sun/star/chart2/CoordinateSystemSupplier.idl>
+#include <com/sun/star/chart2/data/XDataSink.idl>
+#include <com/sun/star/chart2/data/XDataSource.idl>
+#include <com/sun/star/chart2/data/XDataSeries.idl>
+#include <com/sun/star/chart2/XRegressionCurveContainer.idl>
+
+module com
+{
+module sun
+{
+module star
+{
+module chart2
+{
+
+    // NOTES
+
+    // kombinierbarkeit - data series combiner (andere Komponente?)
+    //
+    // coordinatesystem-supplier
+    //
+    // chart-type ? property string rendererServiceName
+
+
+/** reflects the model data of the object that has all the information
+    for a <type>DataRenderer</type> to create a visible data series in
+    a chart.
+
+    <p>It combines one or more <type>DataSequence</type>s which are
+    interpreted by evaluating their role-string.</p>
+
+    @see DataSequenceRole
+  */
+service DataSeries
+{
+    /** allows to connect a CoordinateSystem to a DataSeries
+     */
+//     service CoordinateSystemSupplier;
+
+//    service ChartTypeSupplier;
+    /** the property interface by which the properties of all
+        supported services are exchanged
+    */
+    service ::com::sun::star::beans::PropertySet;
+
+    /** these properties serve as default for data points.
+
+        <p>So, an attribute for a data point comes from one point in
+        the following hierarchy:</p>
+
+        <ul>
+         <li>default value of data series</li>
+         <li>value from style of data series (if a style was set)</li>
+         <li>value from hard attribute of data series (set with setPropertyValue)</li>
+         <li>value from style of data point (if a style was set)</li>
+         <li>value from hard attribute of data point (set with setPropertyValue)</li>
+        </ul>
+     */
+    service DataPointProperties;
+
+    // ----------------------------------------------------------------------
+
+    /** allows setting a coordinate-system
+     */
+    interface XDataSeries;
+
+    /** allows attaching data sequences to a series.
+     */
+    interface data::XDataSink;
+
+    /** allows querying the data that was set.
+     */
+    interface data::XDataSource;
+
+    /** gives access to the data points contained in a data series.
+
+        <p>The objects returned by the
+        <type scope="com::sun::star::container">XIndexAccess</type>
+        are of type
+        <type scope="com::sun::star::beans">XPropertySet</type>
+        and support the service
+        <type>DataPoint</type>.
+    */
+//     interface ::com::sun::star::container::XIndexContainer;
+
+    /** establishes a broadcaster-listener mechanism for the
+        <type scope="com::sun::star::container">XIndexContainer</type>
+        to keep changes and the property
+        <member>DataSeries::AttributedDataPoints</member> in sync.
+     */
+//     interface ::com::sun::star::container::XContainer;
+
+    /** Holds regression curves (aka trend-lines) for a data series.
+     */
+    [optional] interface XRegressionCurveContainer;
+
+    // ----------------------------------------------------------------------
+
+    /** This service will be used to render this data series.
+
+        <p>This service name can be used to determine which DataSeries
+        are of the same type.</p>
+
+        <p>The result of the
+        <member>DataSeries::DataSequenceRoles</member> depends on the
+        renderer service set here.</p>
+     */
+    // stored at the DataSeriesGroup now
+//     [property] string                             DataRendererServiceName;
+
+    /** a sequence of indexes denoting which data points have set
+        properties that differ from the default.
+
+        <p>The default values are determined by the properties set at
+        the <member>DataPointProperties</member> of the data
+        series.</p>
+
+        <p>If the sequence is empty, that means that all data points
+        look alike.  They are formatted using the property values set
+        in the data series.</p>
+
+        <p>The indexes in this sequence match the indexes used by the
+        <type>XIndexContainer</type>.</p>
+
+        <p>This property is especially useful for large data series
+        with only some formatted data points, because you do not have
+        to iterate over all elements.</p>
+     */
+    [readonly, optional, property] sequence< long > AttributedDataPoints;
+
+    /** indicates whether this series should be stacked with respect to the previous series.
+    */
+    [property] StackingDirection StackingDirection;
+
+    /** If <TRUE/>, the data points of this series get different
+        colors by default, like in a pie chart.
+     */
+    [optional, property] boolean                    VaryColorsByPoint;
+
+    /** This property describes whether the series should be shown at
+        the main value axis or at the secondary value axis.  Having
+        this property not set or setting it to 0 means that this data
+        series will be scaled at the primary y-axis ( of the
+        coordinate system in which this series is hosted ).
+
+        <p>Setting this property to 1 means that this series should be
+        scaled at the secondary y-axis.  If there is no secondary axis
+        the main axis should be used for scaling instead.</p>
+
+        <p>If you want to scale a series at a different x or z axis
+        you need to create an additional coordinate system and host
+        this series there.</p>
+    */
+    [optional, property] long                       AttachedAxisIndex;
+};
+
+} ; // chart2
+} ; // com
+} ; // sun
+} ; // star
+
+
+#endif

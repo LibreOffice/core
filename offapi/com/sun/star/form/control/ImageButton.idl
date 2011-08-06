@@ -1,0 +1,83 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_form_control_ImageButton_idl__
+#define __com_sun_star_form_control_ImageButton_idl__
+
+#include <com/sun/star/awt/UnoControlImageControl.idl>
+#include <com/sun/star/form/XApproveActionBroadcaster.idl>
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module form {  module control {
+
+//=============================================================================
+
+/** describes a control which can be used for displaying images on a control acting like a button.
+
+    <p>The model of the control has to support the <type scope="com::sun::star::form::component">ImageButton</type>
+    service.</p>
+
+    <p>The control is clickable, the action taken upon clicking depends on the settings
+    of the model the control belongs to.</p>
+
+    @see com::sun::star::awt::UnoControl
+    @see com::sun::star::awt::UnoControlModel
+    @see com::sun::star::form::component::ImageButton::ButtonType
+*/
+published service ImageButton
+{
+    service com::sun::star::awt::UnoControlImageControl;
+
+    /** allows external instances to register as veto listener for the button's actions.
+
+        <p>An <type scope="com::sun::star::form">XApproveActionListener</type> returning false on
+        it's approve-method will prevent any action which would usually be triggered - this includes
+        not only submitting or resetting forms, but also calling the
+        <type scope="com::sun::star::awt">XActionListener</type>s of the super service<br/>
+        This may be interesting for e.g. forms which want to provide input validation before submitting
+        data.<br/>
+
+        @see com::sun::star::form::component::HTMLForm
+        @see com::sun::star::form::XSubmit
+        @see com::sun::star::form::XReset
+        @see com::sun::star::awt::XButton
+    */
+    interface com::sun::star::form::XApproveActionBroadcaster;
+};
+
+//=============================================================================
+
+}; }; }; }; };
+
+/*=============================================================================
+
+=============================================================================*/
+
+#endif
+
+

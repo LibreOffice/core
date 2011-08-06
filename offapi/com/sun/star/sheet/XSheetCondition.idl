@@ -1,0 +1,124 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_sheet_XSheetCondition_idl__
+#define __com_sun_star_sheet_XSheetCondition_idl__
+
+#include <com/sun/star/uno/XInterface.idl>
+#include <com/sun/star/sheet/ConditionOperator.idl>
+#include <com/sun/star/table/CellAddress.idl>
+
+//=============================================================================
+
+module com {  module sun {  module star {  module sheet {
+
+//=============================================================================
+
+/** provides methods to access the settings of a condition in a
+    conditional format or data validation.
+
+    @see com::sun::star::sheet::TableConditionalEntry
+    @see com::sun::star::sheet::TableValidation
+ */
+published interface XSheetCondition: com::sun::star::uno::XInterface
+{
+    //-------------------------------------------------------------------------
+
+    /** returns the operator in the condition.
+     */
+    com::sun::star::sheet::ConditionOperator getOperator();
+
+    //-------------------------------------------------------------------------
+
+    /** sets the operator in the condition.
+     */
+    void setOperator(
+            [in] com::sun::star::sheet::ConditionOperator nOperator );
+
+    //-------------------------------------------------------------------------
+
+    /** returns either the comparison value, which is used in the condition,
+        or the first value if two values are needed for the operator.
+
+        @returns
+            a formula, a numeric constant, or a string constant in quotes.
+     */
+    string getFormula1();
+
+    //-------------------------------------------------------------------------
+
+    /** sets either the comparison value, which is used in the condition,
+        or the first value if two values are needed for the operator.
+
+        @param aFormula1
+            a formula, a numeric constant, or a string constant in quotes.
+     */
+    void setFormula1( [in] string aFormula1 );
+
+    //-------------------------------------------------------------------------
+
+    /** if two values are needed for the operator, this method returns
+        the second one.
+
+        @returns
+            a formula, a numeric constant, or a string constant in quotes.
+     */
+    string getFormula2();
+
+    //-------------------------------------------------------------------------
+
+    /** if two values are needed for the operator, this method sets
+        the second one.
+
+        @param aFormula2
+            a formula, a numeric constant, or a string constant in quotes.
+     */
+    void setFormula2( [in] string aFormula2 );
+
+    //-------------------------------------------------------------------------
+
+    /** returns the position in the document which is used as a base for
+        relative references in the formulas.
+     */
+    com::sun::star::table::CellAddress getSourcePosition();
+
+    //-------------------------------------------------------------------------
+
+    /** sets the position in the document which is used as a base for
+        relative references in the formulas.
+     */
+    void setSourcePosition(
+            [in] com::sun::star::table::CellAddress aSourcePosition );
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif
+

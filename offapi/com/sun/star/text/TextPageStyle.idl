@@ -1,0 +1,181 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_text_TextPageStyle_idl__
+#define __com_sun_star_text_TextPageStyle_idl__
+
+#include <com/sun/star/util/Color.idl>
+#include <com/sun/star/table/ShadowFormat.idl>
+#include <com/sun/star/table/BorderLine.idl>
+#include <com/sun/star/style/PageStyleLayout.idl>
+#include <com/sun/star/style/GraphicLocation.idl>
+#include <com/sun/star/awt/Size.idl>
+#include <com/sun/star/text/XText.idl>
+#include <com/sun/star/text/XTextColumns.idl>
+#include <com/sun/star/container/XNameContainer.idl>
+
+//=============================================================================
+
+module com {  module sun {  module star {  module text {
+
+//=============================================================================
+
+/** represents a page style for a text document.
+
+    <p>This service extends the service
+    <type scope="com::sun::star::style">PageStyle</type> with specific
+    properties for text documents.</p>
+ */
+published service TextPageStyle
+{
+    //-------------------------------------------------------------------------
+
+    /** determines whether the register mode is active on that page.
+      */
+    [property] boolean RegisterModeActive;
+
+    //-------------------------------------------------------------------------
+
+    /** contains the name of the paragraph style that is used as
+        reference of the register mode.
+      */
+    [property] string RegisterParagraphStyle;
+
+    //-------------------------------------------------------------------------
+
+    /** contains the column settings of the page.
+      */
+    [property] com::sun::star::text::XTextColumns TextColumns;
+
+    //-------------------------------------------------------------------------
+
+    /** contains the interface to the text of the header.
+
+        @see com::sun::star::text::Text
+      */
+    [property] com::sun::star::text::XText HeaderText;
+
+    //-------------------------------------------------------------------------
+
+    /** contains the interface to the text of the header of left pages.
+
+        @see com::sun::star::text::Text
+      */
+    [property] com::sun::star::text::XText HeaderTextLeft;
+
+    //-------------------------------------------------------------------------
+
+    /** contains the interface to the text of the header of right pages.
+
+        @see com::sun::star::text::Text
+      */
+    [property] com::sun::star::text::XText HeaderTextRight;
+
+    //-------------------------------------------------------------------------
+
+    /** contains the interface to the text of the footer.
+
+        @see com::sun::star::text::Text
+      */
+    [property] com::sun::star::text::XText FooterText;
+
+    //-------------------------------------------------------------------------
+
+    /** contains the interface to the text of the footer of a left page.
+
+        @see com::sun::star::text::Text
+      */
+    [property] com::sun::star::text::XText FooterTextLeft;
+
+    //-------------------------------------------------------------------------
+
+    /** contains the interface to the text of the footer of a right page.
+
+        @see com::sun::star::text::Text
+      */
+    [property] com::sun::star::text::XText FooterTextRight;
+
+    //-------------------------------------------------------------------------
+
+    /** contains the maximum height of the footnote area (in 1/100 mm).
+
+        <p>If set to zero, the height of the current page is used as limit.</p>
+     */
+    [property] long FootnoteHeight;
+
+    //-------------------------------------------------------------------------
+
+    /** contains the weight of the separator line between the text and
+        the footnote area (in 1/100 mm).
+      */
+    [property] short FootnoteLineWeight;
+
+    //-------------------------------------------------------------------------
+
+    /** contains the color of the separator line between the text and
+        the footnote area.
+      */
+    [property] com::sun::star::util::Color FootnoteLineColor;
+
+    //-------------------------------------------------------------------------
+
+    /** contains the relative width of the separator line between the
+        text and the footnote area (in percent).
+      */
+    [property] byte FootnoteLineRelativeWidth;
+
+    //-------------------------------------------------------------------------
+
+    /** contains the adjustment of the separator line between the text
+        and the footnote area.
+
+        @see com::sun::star::text::HorizontalAdjust
+      */
+    [property] short FootnoteLineAdjust;
+
+    //-------------------------------------------------------------------------
+
+    /** contains the distance between the text and the separator line
+        between the text and the footnote area (in 1/100 mm).
+      */
+    [property] long FootnoteLineTextDistance;
+
+    //-------------------------------------------------------------------------
+
+    /** contains the distance between the footnote area and the separator
+        line between the text and the footnote area (in 1/100 mm).
+     */
+    [property] long FootnoteLineDistance;
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif
+

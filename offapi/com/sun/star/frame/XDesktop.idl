@@ -1,0 +1,151 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_frame_XDesktop_idl__
+#define __com_sun_star_frame_XDesktop_idl__
+
+#include <com/sun/star/uno/XInterface.idl>
+#include <com/sun/star/frame/XTerminateListener.idl>
+#include <com/sun/star/container/XEnumerationAccess.idl>
+#include <com/sun/star/lang/XComponent.idl>
+#include <com/sun/star/frame/XFrame.idl>
+
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module frame {
+
+//=============================================================================
+/** This is the main interface of a desktop service.
+
+    <p>
+    A desktop is an environment for components which can be viewed in
+    frames. Frames are like frames in HTML framesets. This does not imply
+    that a desktop can handle framesets; the frames may be top frames
+    only.
+    </p>
+
+    @see Desktop
+ */
+published interface XDesktop: com::sun::star::uno::XInterface
+{
+    //-------------------------------------------------------------------------
+    /** tries to terminate the desktop.
+
+        <p>
+        First, every terminate listener is called by his <member>XTerminateListener::queryTermination()</member> method.
+        Throwing of a <type>TerminationVetoException</type> can break the termination process and the listener how has
+        done that will be the new "controller" of the desktop lifetime. He should try to terminate it by himself after
+        his own processes will be finished.
+        If nobody disagree with the termination request, every listener will be called by his
+        <member>XTerminateListener::notifyTermination()</member> method.
+        </p>
+
+        @return
+            <TRUE/>if all listener agree with this request
+            <br>
+            <FALSE/>otherwise
+
+        @see XTerminateListener
+        @see TerminationVetoException
+     */
+    boolean terminate();
+
+    //-------------------------------------------------------------------------
+    /** registers an event listener to the desktop, which is called
+        when the desktop is queried to terminate, and when it really
+        terminates.
+
+        @param Listener
+            listener for termination events
+
+        @see XDesktop::removeTerminateListener()
+     */
+    [oneway] void addTerminateListener( [in] XTerminateListener Listener );
+
+    //-------------------------------------------------------------------------
+    /** unregisters an event listener for termination events.
+
+        @param Listener
+            listener which wish to be deregistered
+
+        @see XDesktop::addTerminateListener()
+     */
+    [oneway] void removeTerminateListener( [in] XTerminateListener Listener );
+
+    //-------------------------------------------------------------------------
+    /** provides read access to collection of all currently loaded components
+        inside the frame tree
+
+        <p>
+        The component is, by definition, the model of the control which
+        is loaded into a frame, or if no model exists, into the control
+        itself.
+        The service <type>Components</type> which is available from this
+        method is a collection of all components of the desktop which are open
+        within a frame of the desktop.
+        </p>
+
+        @returns
+            the collection of all components
+
+        @see Components
+     */
+    com::sun::star::container::XEnumerationAccess getComponents();
+
+    //-------------------------------------------------------------------------
+    /** provides read access to the component inside the tree which has the UI focus
+
+        <p>
+        Normally, the component is the model part of the
+        active component. If no model exists it is the active controller
+        (view) itself.
+        </p>
+
+        @returns
+            the component within the desktop environment which has the UI focus.
+
+        @see XDesktop::getCurrentFrame()
+     */
+    com::sun::star::lang::XComponent getCurrentComponent();
+
+    //-------------------------------------------------------------------------
+    /** provides read access to the frame which contains the current component
+
+        @returns
+            the frame of the component which has the
+            UI focus within this desktop environment
+
+        @see XDesktop::getCurrentComponent()
+     */
+    XFrame getCurrentFrame();
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

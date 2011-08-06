@@ -1,0 +1,195 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_xml_XPath_XXPathAPI_idl__
+#define __com_sun_star_xml_XPath_XXPathAPI_idl__
+
+#include <com/sun/star/uno/XInterface.idl>
+#include <com/sun/star/xml/dom/XNode.idl>
+#include <com/sun/star/xml/dom/XNodeList.idl>
+#include <com/sun/star/xml/xpath/XXPathObject.idl>
+#include <com/sun/star/xml/xpath/XXPathExtension.idl>
+#include <com/sun/star/xml/xpath/XPathException.idl>
+
+
+module com { module sun { module star { module xml { module xpath {
+
+
+interface XXPathAPI : com::sun::star::uno::XInterface
+{
+
+    void registerNS(
+            [in] string prefix,
+            [in] string url);
+
+    void unregisterNS(
+            [in] string prefix,
+            [in] string url);
+
+    void registerExtension( [in] string serviceName );
+    void registerExtensionInstance(
+            [in] com::sun::star::xml::xpath::XXPathExtension aExtension);
+
+    /** Evaluate XPath Expression.
+
+        @param contextNode
+            the context node (expression is relative to this node)
+
+        @param expr
+            the XPath expression
+
+        @throws XPathException
+            if the expression is malformed, or evaluation fails
+
+        @returns
+            an object representing the result of the XPath evaluation
+
+        @see XXPathObject
+     */
+    XXPathObject eval(
+            [in] com::sun::star::xml::dom::XNode contextNode,
+            [in] string expr)
+        raises( com::sun::star::xml::xpath::XPathException );
+
+    /** Evaluate XPath Expression.
+
+        @param contextNode
+            the context node (expression is relative to this node)
+
+        @param expr
+            the XPath expression
+
+        @param namespaceNode
+            all namespaces declared on this node will be registered
+
+        @throws XPathException
+            if the expression is malformed, or evaluation fails
+
+        @returns
+            an object representing the result of the XPath evaluation
+
+        @see XXPathObject
+     */
+    XXPathObject evalNS(
+            [in] com::sun::star::xml::dom::XNode contextNode,
+            [in] string expr,
+            [in] com::sun::star::xml::dom::XNode namespaceNode)
+        raises( com::sun::star::xml::xpath::XPathException );
+
+    /** Evaluate an XPath expression to select a list of nodes.
+
+        @param contextNode
+            the context node (expression is relative to this node)
+
+        @param expr
+            the XPath expression
+
+        @throws XPathException
+            if the expression is malformed, or evaluation fails
+
+        @returns
+            result of the XPath evaluation: a list of nodes
+
+        @see XNodeList
+     */
+    com::sun::star::xml::dom::XNodeList selectNodeList(
+            [in] com::sun::star::xml::dom::XNode contextNode,
+            [in] string expr)
+        raises( com::sun::star::xml::xpath::XPathException );
+
+    /** Evaluate an XPath expression to select a list of nodes.
+
+        @param contextNode
+            the context node (expression is relative to this node)
+
+        @param expr
+            the XPath expression
+
+        @param namespaceNode
+            all namespaces declared on this node will be registered
+
+        @throws XPathException
+            if the expression is malformed, or evaluation fails
+
+        @returns
+            result of the XPath evaluation: a list of nodes
+
+        @see XNodeList
+     */
+    com::sun::star::xml::dom::XNodeList selectNodeListNS(
+            [in] com::sun::star::xml::dom::XNode contextNode,
+            [in] string str,
+            [in] com::sun::star::xml::dom::XNode namespaceNode)
+        raises( com::sun::star::xml::xpath::XPathException );
+
+    /** Evaluate an XPath expression to select a single node.
+
+        @param contextNode
+            the context node (expression is relative to this node)
+
+        @param expr
+            the XPath expression
+
+        @throws XPathException
+            if the expression is malformed, or evaluation fails
+
+        @returns
+            result of the XPath evaluation: a single node
+    */
+    com::sun::star::xml::dom::XNode selectSingleNode(
+            [in] com::sun::star::xml::dom::XNode contextNode,
+            [in] string expr)
+        raises( com::sun::star::xml::xpath::XPathException );
+
+    /** Evaluate an XPath expression to select a single node.
+
+        @param contextNode
+            the context node (expression is relative to this node)
+
+        @param expr
+            the XPath expression
+
+        @param namespaceNode
+            all namespaces declared on this node will be registered
+
+        @throws XPathException
+            if the expression is malformed, or evaluation fails
+
+        @returns
+            result of the XPath evaluation: a single node
+    */
+    com::sun::star::xml::dom::XNode selectSingleNodeNS(
+            [in] com::sun::star::xml::dom::XNode contextNode,
+            [in] string str,
+            [in] com::sun::star::xml::dom::XNode namespaceNode)
+        raises( com::sun::star::xml::xpath::XPathException );
+
+};
+
+}; }; }; }; };
+
+#endif

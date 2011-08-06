@@ -1,0 +1,406 @@
+#*************************************************************************
+#
+# DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+# 
+# Copyright 2000, 2010 Oracle and/or its affiliates.
+#
+# OpenOffice.org - a multi-platform office productivity suite
+#
+# This file is part of OpenOffice.org.
+#
+# OpenOffice.org is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Lesser General Public License version 3
+# only, as published by the Free Software Foundation.
+#
+# OpenOffice.org is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Lesser General Public License version 3 for more details
+# (a copy is included in the LICENSE file that accompanied this code).
+#
+# You should have received a copy of the GNU Lesser General Public License
+# version 3 along with OpenOffice.org.  If not, see
+# <http://www.openoffice.org/license.html>
+# for a copy of the LGPLv3 License.
+#
+#*************************************************************************
+
+
+Overview of URE installation
+-----------------------------
+
+Linux x86, Solaris x86, and Solaris SPARC:
+
+/opt/openoffice.org/ure/LICENSE
+/opt/openoffice.org/ure/THIRDPARTYLICENSEREADME.html
+/opt/openoffice.org/ure/README
+/opt/openoffice.org/ure/bin/uno
+/opt/openoffice.org/ure/bin/regcomp
+/opt/openoffice.org/ure/bin/regmerge
+/opt/openoffice.org/ure/bin/regview
+/opt/openoffice.org/ure/bin/javaldx
+/opt/openoffice.org/ure/lib/libuno_cppu.so.3
+/opt/openoffice.org/ure/lib/libuno_cppuhelpergcc3.so.3  [Linux x86 only]
+/opt/openoffice.org/ure/lib/libuno_cppuhelperC52.so.3  [Solaris only]
+/opt/openoffice.org/ure/lib/libuno_purpenvhelpergcc3.so.3  [Linux x86 only]
+/opt/openoffice.org/ure/lib/libuno_purpenvhelperC52.so.3  [Solaris only]
+/opt/openoffice.org/ure/lib/libuno_sal.so.3
+/opt/openoffice.org/ure/lib/libuno_salhelpergcc3.so.3  [Linux x86 only]
+/opt/openoffice.org/ure/lib/libuno_salhelperC52.so.3  [Solaris only]
+/opt/openoffice.org/ure/lib/libstlport_gcc.so  [Linux x86 only]
+/opt/openoffice.org/ure/lib/libstlport_sunpro.so  [Solaris only]
+/opt/openoffice.org/ure/share/java/unoloader.jar
+/opt/openoffice.org/ure/share/java/juh.jar
+/opt/openoffice.org/ure/share/java/jurt.jar
+/opt/openoffice.org/ure/share/java/ridl.jar
+/opt/openoffice.org/ure/share/misc/types.rdb
+/opt/openoffice.org/ure/share/misc/services.rdb
+/opt/openoffice.org/ure/lib/libxml2.so.2  [external]
+/opt/openoffice.org/ure/lib/libgcc_s.so.1  [external; Linux x86 only]
+/opt/openoffice.org/ure/lib/libstdc++.so.6  [external; Linux x86 only]
+/opt/openoffice.org/ure/bin/startup.sh  [private]
+/opt/openoffice.org/ure/bin/uno.bin  [private]
+/opt/openoffice.org/ure/bin/regcomp.bin  [private]
+/opt/openoffice.org/ure/lib/unorc  [private]
+/opt/openoffice.org/ure/lib/libreg.so.3  [private]
+/opt/openoffice.org/ure/lib/libstore.so.3  [private]
+/opt/openoffice.org/ure/lib/libxmlreader.so  [private]
+/opt/openoffice.org/ure/lib/libjvmaccessgcc3.so.3  [private; Linux x86 only]
+/opt/openoffice.org/ure/lib/libjvmaccessC52.so.3  [private; Solaris only]
+/opt/openoffice.org/ure/lib/libjvmfwk.so.3  [private]
+/opt/openoffice.org/ure/lib/sunjavaplugin.so  [private]
+/opt/openoffice.org/ure/lib/JREProperties.class  [private]
+/opt/openoffice.org/ure/lib/jvmfwk3rc  [private]
+/opt/openoffice.org/ure/lib/libgcc3_uno.so  [private; Linux x86 only]
+/opt/openoffice.org/ure/lib/libsunpro5_uno.so  [private; Solaris only]
+/opt/openoffice.org/ure/lib/libjava_uno.so  [private]
+/opt/openoffice.org/ure/lib/libunsafe_uno_uno.so  [private]
+/opt/openoffice.org/ure/lib/libaffine_uno_uno.so  [private]
+/opt/openoffice.org/ure/lib/liblog_uno_uno.so  [private]
+/opt/openoffice.org/ure/lib/libjpipe.so  [private]
+/opt/openoffice.org/ure/lib/libjuh.so  [private]
+/opt/openoffice.org/ure/lib/libjuhx.so  [private]
+/opt/openoffice.org/ure/lib/acceptor.uno.so  [private]
+/opt/openoffice.org/ure/lib/binaryurp.uno.so  [private]
+/opt/openoffice.org/ure/lib/bootstrap.uno.so  [private]
+/opt/openoffice.org/ure/lib/connector.uno.so  [private]
+/opt/openoffice.org/ure/lib/introspection.uno.so  [private]
+/opt/openoffice.org/ure/lib/invocadapt.uno.so  [private]
+/opt/openoffice.org/ure/lib/invocation.uno.so  [private]
+/opt/openoffice.org/ure/lib/javaloader.uno.so  [private]
+/opt/openoffice.org/ure/lib/javavm.uno.so  [private]
+/opt/openoffice.org/ure/lib/namingservice.uno.so  [private]
+/opt/openoffice.org/ure/lib/proxyfac.uno.so  [private]
+/opt/openoffice.org/ure/lib/reflection.uno.so  [private]
+/opt/openoffice.org/ure/lib/streams.uno.so  [private]
+/opt/openoffice.org/ure/lib/textinstream.uno.so  [private]
+/opt/openoffice.org/ure/lib/textoutstream.uno.so  [private]
+/opt/openoffice.org/ure/lib/stocservices.uno.so  [private]
+/opt/openoffice.org/ure/lib/uuresolver.uno.so  [private]
+/opt/openoffice.org/ure/share/java/java_uno.jar  [private]
+/opt/openoffice.org/ure/share/misc/javavendors.xml  [private]
+
+Windows:
+
+Program Files\URE\LICENSE
+Program Files\URE\THIRDPARTYLICENSEREADME.html
+Program Files\URE\README
+Program Files\URE\bin\uno.exe
+Program Files\URE\bin\regcomp.exe
+Program Files\URE\bin\regmerge.exe
+Program Files\URE\bin\regview.exe
+Program Files\URE\bin\cppu3.dll
+Program Files\URE\bin\cppuhelper3MSC.dll
+Program Files\URE\bin\purpenvhelper3MSC.dll
+Program Files\URE\bin\sal3.dll
+Program Files\URE\bin\salhelper3MSC.dll
+Program Files\URE\bin\stlport_vc7145.dll
+Program Files\URE\java\unoloader.jar
+Program Files\URE\java\juh.jar
+Program Files\URE\java\jurt.jar
+Program Files\URE\java\ridl.jar
+Program Files\URE\misc\types.rdb
+Program Files\URE\misc\services.rdb
+Program Files\URE\bin\libxml2.dll  [external]
+Program Files\URE\bin\uno.ini  [private]
+Program Files\URE\bin\reg3.dll  [private]
+Program Files\URE\bin\store3.dll  [private]
+Program Files\URE\bin\xmlreader.dll  [private]
+Program Files\URE\bin\jvmaccess3MSC.dll  [private]
+Program Files\URE\bin\jvmfwk3.dll  [private]
+Program Files\URE\bin\sunjavaplugin.dll  [private]
+Program Files\URE\bin\JREProperties.class  [private]
+Program Files\URE\bin\jvmfwk3.ini  [private]
+Program Files\URE\bin\msci_uno.dll  [private]
+Program Files\URE\bin\java_uno.dll  [private]
+Program Files\URE\bin\cli_uno.dll [private]
+Program Files\URE\bin\unsafe_uno_uno.dll  [private]
+Program Files\URE\bin\affine_uno_uno.dll  [private]
+Program Files\URE\bin\log_uno_uno.dll  [private]
+Program Files\URE\bin\jpipe.dll  [private]
+Program Files\URE\bin\jpipx.dll  [private]
+Program Files\URE\bin\juh.dll  [private]
+Program Files\URE\bin\juhx.dll  [private]
+Program Files\URE\bin\acceptor.uno.dll  [private]
+Program Files\URE\bin\binaryurp.uno.dll  [private]
+Program Files\URE\bin\bootstrap.uno.dll  [private]
+Program Files\URE\bin\connector.uno.dll  [private]
+Program Files\URE\bin\introspection.uno.dll  [private]
+Program Files\URE\bin\invocadapt.uno.dll  [private]
+Program Files\URE\bin\invocation.uno.dll  [private]
+Program Files\URE\bin\javaloader.uno.dll  [private]
+Program Files\URE\bin\javavm.uno.dll  [private]
+Program Files\URE\bin\namingservice.uno.dll  [private]
+Program Files\URE\bin\proxyfac.uno.dll  [private]
+Program Files\URE\bin\reflection.uno.dll  [private]
+Program Files\URE\bin\streams.uno.dll  [private]
+Program Files\URE\bin\textinstream.uno.dll  [private]
+Program Files\URE\bin\textoutstream.uno.dll  [private]
+Program Files\URE\bin\stocservices.uno.dll  [private]
+Program Files\URE\bin\uuresolver.uno.dll  [private]
+Program Files\URE\bin\unicows.dll  [private]
+Program Files\URE\bin\uwinapi.dll  [private]
+Program Files\URE\java\java_uno.jar  [private]
+Program Files\URE\misc\javavendors.xml  [private]
+
+%windir%\assembly\cli_basetypes.dll [GAC]
+%windir%\assembly\cli_ure.dll [GAC]
+%windir%\assembly\cli_uretypes.dll [GAC]
+%windir%\assembly\cli_cppuhelper.dll [GAC]
+%windir%\assembly\policy.1.0.cli_basetypes.dll [GAC]
+%windir%\assembly\policy.1.0.cli_ure.dll [GAC]
+%windir%\assembly\policy.1.0.cli_uretypes.dll [GAC]
+%windir%\assembly\policy.1.0.cli_cppuhelper.dll [GAC]
+
+Files marked as [external] are included in the URE installation because the URE
+needs them and it cannot be guaranteed that they are available on a given
+system.  Applications using the URE may need those files too, so they are made
+available as non-private files of the URE installation.  However, in an ideal
+world, those files would not need to be included in the URE installation.
+
+Files marked as [private] are private to the URE installation.  To avoid
+stability issues, applications that use the URE should not access the
+functionality of these files.
+
+Files marked as [GAC] are installed in the Global Assembly Cache on Windows. The 
+file path reflects the path as seen in the Explorer with the Assembly 
+Cache Viewer Tool (Shfusion.dll) installed. The actual paths are different.
+
+
+Public Files in a URE Installation
+----------------------------------
+
+A URE installation contains the following public files:
+
+- uno is the executable file that runs UNO components.  For more details, see
+the SDK Developer's Guide.
+
+- regcomp, regmerge, and regview are tools that work with binary registries that
+contain UNO type or UNO service information.  For more details, see the SDK
+Developer's Guide.
+
+- javaldx is a helper program on Linux x86, Solaris x86, and Solaris SPARC that
+enables Java executables to use a Java VM, such as the Sun JDK/JRE.  Executables
+such as uno and regcomp run this helper automatically.
+
+- cppu, cppuhelper, purpenvhelper, sal, and salhelper are the public C++ UNO
+runtime dynamic libraries that client code can call.  For details on the
+functionality that these libraries offer, see the "C++ Reference" section of the
+SDK HTML documentation.  The corresponding C++ header files are not in the URE,
+but rather in the SDK.
+
+-  stlport is the dynamic library of STLport 4.5, which is used in the public
+interface of cppuhelper and salhelper, and thus also has to be part of the
+public interface of the URE.  The corresponding C++ header files are not in the
+URE, but rather in the SDK.
+
+- unoloader.jar, juh.jar, jurt.jar, and ridl.jar are the public Java UNO runtime
+Java[tm] Archives (JARs) that client code can call.  For details on the
+functionality that these files offer, see the "Java UNO Runtime Reference"
+section of the SDK HTML documentation.
+
+- types.rdb and services.rdb are preconfigured UNO type and service registries.
+For more details, see the "Deploying a URE" section of this README.
+
+
+Deploying a URE
+---------------
+
+By default, the URE is installed in /opt/openoffice.org/ure on Linux x86,
+Solaris x86, and Solaris SPARC, and in Program Files\URE on Windows. If you
+want, you can override this location when you install the URE, for example, with
+rpm --relocate on Linux.  The URE is designed so that multiple instances of the
+URE can coexist on a single system in different locations.
+
+On Windows, the path to the installed URE is stored in the registry under the
+path "HKEY_CLASSES_ROOT\Software\OpenOffice.org\URE" and key "Path".
+
+
+UNO Deployment Variables
+------------------------
+
+The URE installation is preconfigured with several UNO types and UNO services.
+The available types and services are listed in the types.rdb and services.rdb
+files respectively.  The location of these files is stored by two UNO deployment
+variables, namely UNO_TYPES and UNO_SERVICES.  These variables are set up by a
+unorc or uno.ini that is private to the URE installation.  This private file
+also contains the private deployment variables URE_INTERNAL_LIB_DIR,
+URE_INTERNAL_JAVA_DIR, and URE_INTERNAL_JAVA_CLASSPATH, which are required by
+the URE.
+
+The UNO_TYPES and UNO_SERVICES variables automatically search the following
+locations for types.rdb and services.rdb files:
+
+Linux x86, Solaris x86, and Solaris SPARC:
+
+- <URE installation>/share/misc/ types.rdb and services.rdb, respectively
+- /etc/opt/ure/ types.rdb and services.rdb, respectively
+- ~/.ure/ types.rdb and services.rdb, respectively
+- any URLs listed in the public deployment variables URE_MORE_TYPES and
+  URE_MORE_SERVICES, respectively
+
+Windows:
+
+- <URE installation>\misc\ types.rdb and services.rdb, respectively
+- Documents and Settings\<User Name>\Application Data\URE\ types.rdb and
+  services.rdb, respectively
+- any URLs listed in the public deployment variables URE_MORE_TYPES and
+  URE_MORE_SERVICES, respectively
+
+NOTE: The URE on Windows does not support a system-wide deployment of additional
+types.rdb and services.rdb files.  That is, you cannot store additional
+types.rdb and services.rdb files in a Documents and Settings\All
+Users\Application Data\URE directory.
+
+The Java UNO environment needs type information in the form of Java class files
+instead of rdb files.  Additional types are searched for in any URLs listed in
+the public deployment variable URE_MORE_JAVA_TYPES.
+
+For details on how to override the UNO deployment variables, see the SDK
+Developer's Guide or go to http://udk.openoffice.org/common/man/concept/
+micro_deployment.html.
+
+If you want to deploy additional UNO types and services, use regcomp.
+
+CAUTION: Do not deploy these types and services to the types.rdb and
+services.rdb in the URE installation.
+
+
+URE Java Framework
+------------------
+
+When a URE executable, such as uno, starts a Java VM, the URE Java Framework
+searches for a suitable JDK/JRE installation.  For more information on the URE
+Java Framework, go to http://udk.openoffice.org/common/man/spec/
+javavendorextension.sxw.  The private javavendors.xml file in a URE installation
+provides preconfigured support for various JDK/JRE versions.  The private
+jvmfwk3rc or jvmfwk3.ini file specifies the location of a suitable JDK/JRE
+installation.  When an executable tries to start a Java VM, the URE searches the
+relevant Java settings file for information on a suitable JDK/JRE version.
+
+NOTE: On any platform, you can delete the javasettings_${_OS}_${_ARCH}.xml file
+if the file contains problematic stale data.
+
+By default, the URE searches for a Java settings file in the following
+locations:
+
+Linux x86, Solaris x86, and Solaris SPARC:
+
+- /etc/opt/ure/javasettings_${_OS}_${_ARCH}.xml
+- ~/.ure/javasettings_${_OS}_${_ARCH}.xml
+
+NOTE: If these files do not contain information about a JDK/JRE, the URE
+searches for a suitable JDK/JRE installation and stores the relevant information
+in the ~/.ure/javasettings_${_OS}_${_ARCH}.xml file.  If you want all users to
+access the same JDK/JRE, log on as root and copy an existing
+~/.ure/javasettings_${_OS}_${_ARCH}.xml to
+/etc/opt/ure/javasettings_${_OS}_${_ARCH}.xml.
+
+Windows:
+
+- Documents and Settings\<User Name>\Application
+  Data\URE\javasettings_${_OS}_${_ARCH}.xml
+
+NOTE: If this file does not contain information about a JDK/JRE, the URE
+searches for a suitable JDK/JRE installation and stores the relevant information
+in the Documents and Settings\<User Name>\Application
+Data\URE\javasettings_${_OS}_${_ARCH}.xml file.  The URE on Windows does not
+by default support a system-wide deployment of the Java settings file.  That is,
+you cannot store the file in a Documents and Settings\All Users\Application
+Data\URE directory.
+
+You can override these paths by setting the URE_OVERRIDE_JAVA_JFW_SHARED_DATA
+and URE_OVERRIDE_JAVA_JFW_USER_DATA deployment variables.  You can also use the
+UNO_JAVA_JFW_JREHOME deployment variable to specify the location of a JDK/JRE
+installation.  For more information on this variable, see
+http://udk.openoffice.org/common/man/spec/javavendorextension.sxw.
+
+The URE allows clients to extend the content of UNO_JAVA_JFW_CLASSPATH_URLS (see
+http://udk.openoffice.org/common/man/spec/javavendorextension.sxw):  The content
+of the public deployment variable URE_MORE_JAVA_CLASSPATH_URLS, if set, is
+added to the end of the URE's UNO_JAVA_JFW_CLASSPATH_URLS list.
+
+You might experience problems in an SDK environment that uses different JDK/JRE
+versions for the SDK and the URE.  This problem arises when the OO_SDK_JAVA_HOME
+SDK environment variable specifies a different Java VM than the Java VM that is
+used in the URE Java Framework.  See the "Installation Guide" section of the SDK
+HTML documentation to find out how to set the  OO_SDK_JAVA_HOME environment
+variable.
+
+
+GNU Compiler Collection on Linux x86
+------------------------------------
+
+On Linux x86, the URE uses libgcc_s.so.1 to run binary UNO components that were
+compiled with the GNU Compiler Collection (GCC).  The libgcc_s.so.1 corresponds
+to GCC 3.4.1 as built on a glibc 2.2.4 system.  To avoid GCC compatibility
+issues, use the same GCC version (or later) when you compile the UNO binaries.
+Otherwise, use LD_PRELOAD to replace the libgcc_s.so.1 in URE with a matching
+version.
+
+
+C++ and Java UNO Components
+---------------------------
+
+C++ UNO components run from within the uno executable can depend on an
+environment in which the public C++ UNO runtime dynamic libraries (cppu,
+cppuhelper, purpenvhelper, sal, salhelper, stlport) and the external dynamic
+libraries (libxml2 etc.) are already available (that is, on Linux x86, Solaris
+x86, and Solaris SPARC, a component dynamic library need not make sure that the
+UNO runtime dynamic libraries it needs can be found on its RPATH).
+
+Similarly, Java UNO components can depend on an environment in which the public
+Java UNO runtime JARs are already available (that is, a component JAR need not
+list in its manifest Class-Path the UNO runtime JARs it needs).
+
+If a Java UNO component requires additional UNO types, use the UNO-Type-Path
+manifest entry to specify the location of the UNO types.  The UNO-Type-Path is
+similar to the Class-Path manifest entry and can contain URLs of JARs and
+directories that contain the Java classes that represent additional UNO types.
+The UnoClassLoader evaluates the UNO-Type-Path manifest entry to ensure that the
+additional UNO types are available to the Java UNO environment.
+
+The UNO-Type-Path can have the following entries:
+
+- UNO-Type-Path:
+Current JAR does not contain UNO types.
+
+- UNO-Type-Path: <>
+Current JAR contains UNO types.
+
+- UNO-Type-Path: any/other/jar.jar yet/another/jar.jar
+Current JAR brings other JARs that contain UNO types.
+
+- UNO-Type-Path: any/other/jar.jar <> yet/another/jar.jar
+Current JAR and other JARs that the current JARs uses contain UNO types.
+
+NOTE: If you do not include the UNO-Type-Path manifest entry, the URE assumes
+that the current JAR contains UNO types.
+
+If a Java application requires the Java UNO environment, the UnoClassLoader must
+be set up to load the relevant Java classes.  For example, Runner.java in the
+uretest bundle is packed as runner.jar, which the makefiles use to launch the
+javaclient.jar application.  For more information, see
+com.sun.star.lib.unoloader.UnoClassLoader and
+com.sun.star.lib.unoloader.UnoLoader in the "Java UNO Runtime Reference" section
+of the SDK HTML documentation.

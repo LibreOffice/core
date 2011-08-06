@@ -1,0 +1,290 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_sdbc_XSQLInput_idl__
+#define __com_sun_star_sdbc_XSQLInput_idl__
+
+#include <com/sun/star/uno/XInterface.idl>
+
+#include <com/sun/star/util/Date.idl>
+
+#include <com/sun/star/util/DateTime.idl>
+
+#include <com/sun/star/util/Time.idl>
+
+ module com {  module sun {  module star {  module io {
+ published interface XInputStream;
+};};};};
+
+#include <com/sun/star/sdbc/SQLException.idl>
+
+ module com {  module sun {  module star {  module sdbc {
+
+ published interface XRef;
+ published interface XArray;
+ published interface XBlob;
+ published interface XClob;
+
+
+/** represents an input stream that contains a stream of values representing an
+    instance of a SQL structured or distinct type.
+
+
+    <p>
+    This interface, used only for custom mapping, is used by the driver
+    behind the scenes, and a programmer never directly invokes
+    <code>SQLInput</code>
+    methods.
+    </p>
+    <p>
+    When the method
+    <code>getObject</code>
+    is called with an object of a service implementing the interface
+    <code>SQLData</code>
+    , the SDBC driver calls the method
+    <member scope="com::sun::star::sdbc">XSQLData::getSQLType()</member>
+    to determine the SQL type of the user-defined type (UDT) being custom mapped.
+    The driver creates an instance of
+    <type scope="com::sun::star::sdbc">XSQLInput</type>
+    ,
+    populating it with the attributes of the UDT. The driver then passes the input
+    stream to the method
+    <member scope="com::sun::star::sdbc">XSQLData::readSQL()</member>
+    , which in turn calls the
+    <code>XSQLInput.readXXX</code>
+    methods in its implementation for reading the attributes from the input stream.
+    </p>
+ */
+published interface XSQLInput: com::sun::star::uno::XInterface
+{
+
+    /** reads the next attribute in the stream as string.
+        @returns
+            the attribute; if the value is SQL NULL, return null.
+        @throws SQLException
+            if a database access error occurs.
+     */
+    string readString() raises (SQLException);
+    //-------------------------------------------------------------------------
+
+    /** reads the next attribute in the stream as boolean.
+        @returns
+            the attribute; if the value is SQL NULL, return null.
+        @throws SQLException
+            if a database access error occurs.
+     */
+    boolean readBoolean() raises (SQLException);
+    //-------------------------------------------------------------------------
+
+    /** reads the next attribute in the stream as byte.
+        @returns
+            the attribute; if the value is SQL NULL, return null.
+        @throws SQLException
+            if a database access error occurs.
+     */
+    byte readByte() raises (SQLException);
+    //-------------------------------------------------------------------------
+
+    /** reads the next attribute in the stream as short.
+        @returns
+            the attribute; if the value is SQL NULL, return null.
+        @throws SQLException
+            if a database access error occurs.
+     */
+    short readShort() raises (SQLException);
+    //-------------------------------------------------------------------------
+
+    /** reads the next attribute in the stream as long.
+        @returns
+            the attribute; if the value is SQL NULL, return null.
+        @throws SQLException
+            if a database access error occurs.
+     */
+    long readInt() raises (SQLException);
+    //-------------------------------------------------------------------------
+
+    /** reads the next attribute in the stream as hyper.
+        @returns
+            the attribute; if the value is SQL NULL, return null.
+        @throws SQLException
+            if a database access error occurs.
+     */
+    hyper readLong() raises (SQLException);
+    //-------------------------------------------------------------------------
+
+    /** reads the next attribute in the stream as float.
+        @returns
+            the attribute; if the value is SQL NULL, return null.
+        @throws SQLException
+            if a database access error occurs.
+     */
+    float readFloat() raises (SQLException);
+    //-------------------------------------------------------------------------
+
+    /** reads the next attribute in the stream as double.
+        @returns
+            the attribute; if the value is SQL NULL, return null.
+        @throws SQLException
+            if a database access error occurs.
+     */
+    double readDouble() raises (SQLException);
+    //-------------------------------------------------------------------------
+
+    /** reads the next attribute in the stream as sequence of bytes.
+                 @returns
+            the attribute; if the value is SQL NULL, return null.
+        @throws SQLException
+            if a database access error occurs.
+     */
+    sequence<byte> readBytes() raises (SQLException);
+    //-------------------------------------------------------------------------
+
+    /** reads the next attribute in the stream as date.
+        @returns
+            the attribute; if the value is SQL NULL, return null.
+        @throws SQLException
+            if a database access error occurs.
+     */
+    com::sun::star::util::Date readDate() raises (SQLException);
+    //-------------------------------------------------------------------------
+
+    /** reads the next attribute in the stream as time.
+        @returns
+            the attribute; if the value is SQL NULL, return null.
+        @throws SQLException
+            if a database access error occurs.
+     */
+    com::sun::star::util::Time readTime() raises (SQLException);
+    //-------------------------------------------------------------------------
+
+    /** reads the next attribute in the stream as datetime.
+        @returns
+            the attribute; if the value is SQL NULL, return null.
+        @throws SQLException
+            if a database access error occurs.
+     */
+    com::sun::star::util::DateTime readTimestamp() raises (SQLException);
+    //-------------------------------------------------------------------------
+
+    /** reads the next attribute in the stream as sequence of bytes.
+        @returns
+            the attribute; if the value is SQL NULL, return null.
+        @throws SQLException
+            if a database access error occurs.
+     */
+    com::sun::star::io::XInputStream readBinaryStream() raises (SQLException);
+    //-------------------------------------------------------------------------
+
+    /** reads the next attribute in the stream as a Unicode string.
+        @returns
+            the attribute; if the value is SQL NULL, return null.
+        @throws SQLException
+            if a database access error occurs.
+     */
+    com::sun::star::io::XInputStream readCharacterStream() raises (SQLException);
+       //-------------------------------------------------------------------------
+
+    /** returns the datum at the head of the stream as an any.
+
+
+        <p>
+        The actual type of the any returned is determined by the default
+        type mapping, and any customizations present in this stream's type map.
+
+        <br/>
+        A type map is registered with the stream by the SDBC driver before the
+        stream is passed to the application.
+
+        <br/>
+        When the datum at the head of the stream is a SQL NULL,
+        the method returns <void/>. If the datum is a SQL structured or distinct
+        type, it determines the SQL type of the datum at the head of the stream,
+        constructs an object of the appropriate service, and calls the method
+        <member scope="com::sun::star::sdbc">XSQLData::readSQL()</member>
+        on that object, which reads additional data
+        from the stream using the protocol described for that method.
+
+        </p>
+        @returns
+            the attribute; if the value is SQL NULL, return null.
+        @throws SQLException
+            if a database access error occurs.
+     */
+    any readObject() raises (SQLException);
+      //-------------------------------------------------------------------------
+
+    /** reads a REF(&amp;lt;structured-type&amp;gt;) from the stream.
+        @returns
+            the attribute; if the value is SQL NULL, return null.
+        @throws SQLException
+            if a database access error occurs.
+     */
+    XRef readRef() raises (SQLException);
+      //-------------------------------------------------------------------------
+
+    /** reads a BLOB from the stream.
+        @returns
+            the attribute; if the value is SQL NULL, return null.
+        @throws SQLException
+            if a database access error occurs.
+     */
+    XBlob readBlob() raises (SQLException);
+      //-------------------------------------------------------------------------
+
+    /** reads a CLOB from the stream.
+        @returns
+            the attribute; if the value is SQL NULL, return null.
+        @throws SQLException
+            if a database access error occurs.
+     */
+    XClob readClob() raises (SQLException);
+      //-------------------------------------------------------------------------
+
+    /** reads an array from the stream.
+        @returns
+            the attribute; if the value is SQL NULL, return null.
+        @throws SQLException
+            if a database access error occurs.
+     */
+    XArray readArray() raises (SQLException);
+      //-------------------------------------------------------------------------
+
+    /** determines whether the last value read was null.
+        @returns
+            <TRUE/> if the most recently gotten SQL value was null; otherwise, <FALSE/>
+        @throws SQLException
+            if a database access error occurs.
+     */
+    boolean wasNull() raises (SQLException);
+};
+
+//=============================================================================
+
+}; }; }; };
+
+/*===========================================================================
+===========================================================================*/
+#endif

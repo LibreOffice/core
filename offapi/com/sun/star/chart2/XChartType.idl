@@ -1,0 +1,69 @@
+#ifndef com_sun_star_chart2_XChartType_idl
+#define com_sun_star_chart2_XChartType_idl
+
+#include <com/sun/star/lang/IllegalArgumentException.idl>
+#include <com/sun/star/uno/XInterface.idl>
+#include <com/sun/star/chart2/XCoordinateSystem.idl>
+
+module com
+{
+module sun
+{
+module star
+{
+module chart2
+{
+
+/**
+ */
+interface XChartType : com::sun::star::uno::XInterface
+{
+    /** A string representation of the chart type.
+        This needs to be the service-name which can be used to create a chart type.
+     */
+    string getChartType();
+
+    /** Creates a coordinate systems that fits the chart-type with its
+        current settings and for the given dimension.
+
+        @throws IllegalArgumentException
+            This chart type cannot be displayed in the given dimension.
+     */
+    XCoordinateSystem createCoordinateSystem( [in] long DimensionCount )
+        raises( com::sun::star::lang::IllegalArgumentException );
+
+    /** Returns a sequence of roles that are understood by this chart
+        type.
+
+        <p>All roles must be listed in the order in which they are
+        usually parsed.  This ensures that gluing sequences together
+        and splitting them up apart again results in the same
+        structure as before.</p>
+
+        <p>Note, that this does not involve optional roles, like
+        error-bars.</p>
+     */
+    sequence< string >   getSupportedMandatoryRoles();
+
+    /** Returns a sequence of roles that are understood in addition to
+        the mandatory roles (see
+        <member>XChartType::getSupportedMandatoryRoles()</member>).
+
+        <p>An example for an optional role are error-bars.</p>
+     */
+    sequence< string >   getSupportedOptionalRoles();
+
+    /** Returns the role of the <type>XLabeledDataSequence</type> of
+        which the label will be taken to identify the
+        <type>DataSeries</type> in dialogs or the legend.
+     */
+    string getRoleOfSequenceForSeriesLabel();
+};
+
+} ; // chart2
+} ; // com
+} ; // sun
+} ; // star
+
+
+#endif

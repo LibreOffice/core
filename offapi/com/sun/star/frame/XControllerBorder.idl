@@ -1,0 +1,83 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_frame_XControllerBorder_idl__
+#define __com_sun_star_frame_XControllerBorder_idl__
+
+#include <com/sun/star/frame/BorderWidths.idl>
+#include <com/sun/star/frame/XBorderResizeListener.idl>
+#include <com/sun/star/awt/Rectangle.idl>
+
+
+//============================================================================
+
+ module com {  module sun {  module star {  module frame {
+
+//============================================================================
+/** allows to retrieve information about controller's border.
+ */
+interface XControllerBorder: com::sun::star::uno::XInterface
+{
+    //------------------------------------------------------------------------
+    /** allows to get current border sizes of the document.
+
+        @return
+            <type>BorderWidths</type> representing the sizes of border
+     */
+    BorderWidths getBorder();
+
+    //------------------------------------------------------------------------
+    /** adds the specified listener to receive events about controller's
+        border resizing.
+     */
+    void addBorderResizeListener( [in] XBorderResizeListener xListener );
+
+    //------------------------------------------------------------------------
+    /** removes the specified listener.
+     */
+    void removeBorderResizeListener( [in] XBorderResizeListener xListener );
+
+    //------------------------------------------------------------------------
+    /** allows to get suggestion for resizing of object area surrounded
+        by the border.
+
+        <p> If the view is going to be resized/moved this method can be
+        used to get suggested object area. Pixels are used as units.
+        </p>
+
+        @return
+            suggestion for the resizing
+     */
+    ::com::sun::star::awt::Rectangle queryBorderedArea(
+            [in] ::com::sun::star::awt::Rectangle aPreliminaryRectangle );
+};
+
+//============================================================================
+
+}; }; }; };
+
+#endif
+

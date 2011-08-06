@@ -1,0 +1,129 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_util_XStringSubstitution_idl__
+#define __com_sun_star_util_XStringSubstitution_idl__
+
+#include <com/sun/star/uno/XInterface.idl>
+#include <com/sun/star/container/NoSuchElementException.idl>
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module  util {
+
+//=============================================================================
+/** A common interface for substituting string variables with
+    other strings.
+
+    <p>
+    The substitution algorithm and the syntax for a string variable are
+    not part of this interface definition.  Please look at the documentation
+    of the implementation that must specify these parameters.
+    </p>
+
+    @since OOo 1.1.2
+*/
+published interface XStringSubstitution : com::sun::star::uno::XInterface
+{
+    //-------------------------------------------------------------------------
+    /** Exchanges variables inside a given text with a substitution text
+        defined for the variables.
+
+        <p>
+        The method iterates through it's internal variables list to match the
+        variables in the given string. A match replaces the variable with the
+        string defined for this variable. If no variable can be found in the string
+        it will be returned unchanged. The behavior if a variable is found in
+        the string but it is unknown for the implementation depends on the parameter
+        bSubstRequired.
+        </p>
+
+        @param aText
+            A string containing variables that should be substituted.
+
+        @param bSubstRequired
+            Specifies if a successful substitution is required. The
+            function throws a <type scope="com::sun::star::container">NoSuchElementException</type>
+            if it finds a variable that is unknown. In this case it is possible
+            that the returned string would not be what the caller expected!
+
+        @return
+            Returns a string based on <var>aText</var> where all variables were
+            exchanged with their value defined at calling time.
+    */
+    string substituteVariables( [in] string aText, [in] boolean bSubstRequired )
+        raises( com::sun::star::container::NoSuchElementException );
+
+    //-------------------------------------------------------------------------
+    /** Tries to replace parts of aText with variables that represents
+        these sub strings.
+
+        <p>
+        The method iterates through it's internal variable list and tries to match
+        parts of the given string Tries to replace parts of <var>aText</var> with
+        variables that represents these sub strings.If more than one variable
+        matches the one with the longest matching sub string will be chosen.
+        </p>
+
+        @param aText
+            A string where known substrings should be replaced by variables.
+
+        @return
+            Returns the resubstituted string with variables for all parts
+            that could be replaced. The unchanged argument will be returned
+            if nothing can be resubstituted.
+    */
+
+    string reSubstituteVariables( [in] string aText );
+
+    //-------------------------------------------------------------------------
+    /** Returns the current value of a variable.
+
+        <p>
+        The method iterates through it's internal variable list and tries to
+        find the given variable. If the variable is unknown a
+        <type scope="com::sun::star::container">NoSuchElementException</type>
+        is thrown.
+        </p>
+
+        @param variable
+            The name of a variable.
+
+        @return
+            Returns a string that represents the variable. If the
+            variable is unknown a <type scope="com::sun::star::container">NoSuchElementException</type>
+            is thrown.
+    */
+    string getSubstituteVariableValue( [in] string variable )
+        raises (::com::sun::star::container::NoSuchElementException );
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

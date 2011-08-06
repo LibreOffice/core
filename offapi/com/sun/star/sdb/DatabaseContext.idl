@@ -1,0 +1,100 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_sdb_DatabaseContext_idl__
+#define __com_sun_star_sdb_DatabaseContext_idl__
+
+#include <com/sun/star/container/XEnumerationAccess.idl>
+
+#include <com/sun/star/container/XContainer.idl>
+
+#include <com/sun/star/lang/XSingleServiceFactory.idl>
+
+#include <com/sun/star/container/XNameAccess.idl>
+
+#include <com/sun/star/uno/XNamingService.idl>
+
+ module com {  module sun {  module star {  module sdb {
+
+published interface XDatabaseRegistrations;
+
+/** is the context for accessing datasource.
+
+    <p>
+    A datasource contains information how to create a connection to a database, such as,
+    which database driver should be used, for which user should a connection be established, etc.
+    <br/>
+    The context stores datasources under a given name.
+
+    </p>
+    @see com::sun::star::sdb::DataSource
+ */
+published service DatabaseContext
+{
+    /** Enumeration on all registered data sources.
+     */
+    interface com::sun::star::container::XEnumerationAccess;
+
+    /** NameAccess on all registered data sources.
+        <p>One exception is the <method "com.sun.star.container.XNameAccess">getByName</method>, this method also allows to ask
+        for a <member "DataAccessDescriptor">DatabaseLocation</member>.
+        </p>
+     */
+    interface com::sun::star::container::XNameAccess;
+
+    /** Interface for registering new datasources.
+     */
+    interface com::sun::star::uno::XNamingService;
+
+    /** Interface for registering listener to get notified when new datasources are created or removed.
+    */
+    interface com::sun::star::container::XContainer;
+
+    /** Interface for creation of new datasources.
+    */
+    interface com::sun::star::lang::XSingleServiceFactory;
+
+    /** allows to access and modify the configuration data for registered data source.
+
+        <p>The main purpose of this interface is to allow you to register data sources which you know
+        by URL only, and have not yet loaded.</p>
+
+        <p>Also, it hides the details of the configuration data where the data source registrations
+        are maintained, so if possible at all, you should use this interface, instead of modifying or
+        querying the configuration data directly.</p>
+
+        @since OOo 3.3
+    */
+    [optional] interface XDatabaseRegistrations;
+};
+
+//=============================================================================
+
+}; }; }; };
+
+/*===========================================================================
+===========================================================================*/
+#endif

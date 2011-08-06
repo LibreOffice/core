@@ -1,0 +1,107 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_embed_InstanceLocker_idl__
+#define __com_sun_star_embed_InstanceLocker_idl__
+
+#include <com/sun/star/lang/XComponent.idl>
+#include <com/sun/star/uno/XInterface.idl>
+#include <com/sun/star/embed/XActionsApproval.idl>
+#include <com/sun/star/lang/IllegalArgumentException.idl>
+#include <com/sun/star/frame/DoubleInitializationException.idl>
+
+//=============================================================================
+module com {  module sun {  module star {  module embed {
+
+//-----------------------------------------------------------------------------
+/** The main task of this service is to prevent closing, terminating and/or
+    etc. of controlled object.
+
+    <p>
+    After creation the service adds a listener of requested type
+    ( close, terminate and/or etc. ) to the controlled object and let
+    the listener throw related veto exception until the service is disposed.
+    </p>
+*/
+published service InstanceLocker : com::sun::star::lang::XComponent
+{
+    /** is used to initialize the object on it's creation.
+
+        @param xInstance
+                the controlled object. Must implement the related to the
+                requested actions broadcaster interface.
+
+        @param nActions
+                specifies the actions that should be done ( prevent closing,
+                prevent termination and/or etc. ). It must not be empty and can
+                currently contain following values or their combination:
+                <type>Actions</type>::PREVENT_CLOSE and
+                <type>Actions</type>::PREVENT_TERMINATION.
+     */
+    InstanceLockerCtor1( [in] com::sun::star::uno::XInterface xInstance,
+                         [in] long nActions )
+        raises( ::com::sun::star::lang::IllegalArgumentException,
+                ::com::sun::star::frame::DoubleInitializationException,
+                ::com::sun::star::uno::Exception );
+
+    /** is used to initialize the object on it's creation.
+
+        @param xInstance
+                the controlled object. Must implement the related to the
+                requested actions broadcaster interface.
+
+        @param nActions
+                specifies the actions that should be done ( prevent closing,
+                prevent termination and/or etc. ). It must not be empty and can
+                currently contain following values or their combination:
+                <type>Actions</type>::PREVENT_CLOSE and
+                <type>Actions</type>::PREVENT_TERMINATION.
+
+        @param xApprove
+                The object implementing <type>XActionsApproval</type> interface.
+                If this parameter is an empty reference the object will proceed
+                with the specified in the first parameter action until it is
+                disposed ( just like in the case of the first constructor ).
+                If the instance is provided, it will be asked for approval each
+                time before proceeding with the action ( the action is
+                specified using <type>string</type> and can take following
+                values in this case: "PreventClose", "PreventTermination" ).
+     */
+    InstanceLockerCtor2( [in] com::sun::star::uno::XInterface xInstance,
+                         [in] long aActions,
+                         [in] XActionsApproval xApprove )
+        raises( ::com::sun::star::lang::IllegalArgumentException,
+                ::com::sun::star::frame::DoubleInitializationException,
+                ::com::sun::star::uno::Exception );
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif
+

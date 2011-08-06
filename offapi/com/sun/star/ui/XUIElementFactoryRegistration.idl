@@ -1,0 +1,168 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_frame_XUIElementFactoryRegistration_idl__
+#define __com_sun_star_frame_XUIElementFactoryRegistration_idl__
+
+#include <com/sun/star/uno/XInterface.idl>
+#include <com/sun/star/ui/XUIElementFactory.idl>
+#include <com/sun/star/container/ElementExistException.idl>
+#include <com/sun/star/container/NoSuchElementException.idl>
+#include <com/sun/star/beans/PropertyValue.idl>
+
+//=============================================================================
+
+module com { module sun { module star { module ui {
+
+//=============================================================================
+
+/** is used to query, register and deregister user interface element factories.
+
+    <p>
+    A user interface element factory is registered for a set of three properties.
+    <ul>
+        <li><b>Type</b>a string that identifies a type of a user interface element.</li>
+        <li><b>Name</b>a string that identifies a single user interface element within a type class.</li>
+        <li><b>Module</b>a string that identifies a single module of OpenOffice.</li>
+    <ul>
+    A combination of these three property values can uniquely identify every user interface
+    element within OpenOffice.
+
+    Currently the following user interface element types are defined:
+    <ul>
+        <li><b>menubar</b></li>
+        <li><b>popupmenu</b></li>
+        <li><b>toolbar</b></li>
+        <li><b>statusbar</b></li>
+        <li><b>floater</b></li>
+    </ul>
+    </p>
+
+    @since OOo 2.0
+ */
+
+interface XUIElementFactoryRegistration : com::sun::star::uno::XInterface
+{
+    /** function to retrieve a list of all registered user interface element factories
+
+        @returns
+            a sequence of sequence of property values which describe every registered
+            user interface element factory.<br/>
+
+            The following properties are defined:
+            <ul>
+                <li><b>Type</b>a string property that identifies the type of the user interface
+                element which this factory can create.</li>
+                <li><b>Name</b>an optional string property which identifies a single user interface
+                element within a type class which this factory can create. If this property is not
+                returned, the factory is a generic factory for all user interface elements of the
+                same type.</li>
+                <li><b>Module</b>an optional string property that specifies to which module this factory is
+                bound to. If this property is not returned, the factory is a generic factory.</li>
+            </ul>
+    */
+    sequence< sequence< com::sun::star::beans::PropertyValue > > getRegisteredFactories();
+
+    /** function to retrieve a previously registered user interface element factory.
+
+        @returns
+            a reference to a registered user interface element factory if a factory has been
+            found. An empty reference when no factory has been found.
+            <b>The defined search order of factories must be from special to generic ones.</b>
+
+        @param ResourceURL
+            a resource URL which identifies a user interface element. A resource URL uses the
+            following syntax: "private:resource/$type/$name". It is only allowed to use ASCII
+            characters for type and name.
+
+        @param ModuleName
+            an optional module identifier. This value can remain empty, if a generic factory is requested.
+            The module identifier can be retrieved from the <type scope="com::sun::star::frame">ModuleManager</type> service.
+    */
+    ::com::sun::star::ui::XUIElementFactory getFactory( [in] string ResourceURL, [in] string ModuleIdentifier );
+
+    /** function to register a user interface element factory.
+
+        @param aType
+            a string that identifies a type of a user interface element. Currently the following types
+            are supported:
+            <ul>
+                <li><b>menubar</b></li>
+                <li><b>toolbar</b></li>
+                <li><b>statusbar</b></li>
+            </ul>
+
+        @param aName
+            an optional name of a single user interface element. This name must be unique within a user
+            interface element type class. This value can remain empty if no special factory for a single
+            user interface element is needed.
+
+        @param aModuleIdentifier
+            an optional module identifier that can be used to register a factory only for a single module. This value
+            can remain empty if no special factory for a single module is needed. The module identifier can be retrieved
+            from the <type scope="com::sun::star::frame">ModuleManager</type> service.
+
+        @param aFactoryImplementationName
+            a UNO implementation name that can be used by an implementation to create a factory instance.
+    */
+    void registerFactory( [in] string aType, [in] string aName, [in] string aModuleIdentifier, [in] string aFactoryImplementationName ) raises (com::sun::star::container::ElementExistException);
+
+    /** function to remove a previously defined user interface element factory.
+
+        @param aType
+            a string that identifies a type of a user interface element. Currently the following types
+            are supported:
+            <ul>
+                <li><b>menubar</b></li>
+                <li><b>toolbar</b></li>
+                <li><b>statusbar</b></li>
+            </ul>
+
+        @param aName
+            an optional name of a single user interface element. This name must be unique within a user
+            interface element type class. This value can remain empty if no special factory for a single
+            user interface element should be deregistered.
+
+        @param aModuleName
+            an optional module name that can be used to deregister a factory only for a single module. This value
+            can remain empty if not a module based factory should be deregistered. The module identifier can be retrieved
+            from the <type scope="com::sun::star::frame">ModuleManager</type> service.
+
+        <p>
+        <b>Using this function can be very dangerous as other implementation with OpenOffice may not be able to  create their
+        user interface element anymore.
+        </b>
+        </p>
+    */
+    void deregisterFactory( [in] string aType, [in] string aName, [in] string aModuleIdentifier ) raises (com::sun::star::container::NoSuchElementException);
+};
+
+}; }; }; };
+
+//=============================================================================
+
+#endif

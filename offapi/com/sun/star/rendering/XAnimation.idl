@@ -1,0 +1,113 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_rendering_XAnimation_idl__
+#define __com_sun_star_rendering_XAnimation_idl__
+
+#include <com/sun/star/uno/XInterface.idl>
+#include <com/sun/star/lang/IllegalArgumentException.idl>
+#include <com/sun/star/rendering/ViewState.idl>
+#include <com/sun/star/rendering/AnimationAttributes.idl>
+#include <com/sun/star/rendering/XCanvas.idl>
+
+
+module com { module sun { module star { module rendering {
+
+/* TODO: Have a property set here, to easily extend attributes? Think
+   that's advisable, because animations change the most. Implement
+   that with multiple inheritance interface types, please, not with
+   service description.
+*/
+
+/** This interface defines an animation sequence.<p>
+
+    This interface must be implemented by every animation object. It
+    is used by the <type>XCanvas</type> interface to render generic
+    animations.<p>
+
+    @since OOo 2.0
+ */
+published interface XAnimation : ::com::sun::star::uno::XInterface
+{
+    /** Render the animation content at time t into the specified
+        canvas.<p>
+
+        Note that it is perfectly legal to e.g. map t in a nonlinear
+        fashion to internal frames, for example to achieve
+        acceleration or deceleration effects. It is required that the
+        render method has const semantics, i.e. when called with the
+        same parameter set, identical output must be generated. This
+        is because e.g. a Sprite might decide arbitrarily to render an
+        animation once and cache the result, or repaint it via
+        XAnimation::render everytime.<p>
+
+        The rendered content, although, must be exactly the same for
+        identical viewState, canvas and t values. Or, for that
+        matters, must call the same canvas methods in the same order
+        with the same parameter sets, for identical viewState and t
+        values. Furthermore, when viewState has the identity
+        transformation set, rendered output must be contained in a
+        rectangle with upper left corner at (0,0) and width and height
+        given by the AnimationAttributes' untransformedSize
+        member. Any content exceeding this box might get clipped off.<p>
+
+        @param canvas
+        The target canvas to render this animation to.
+
+        @param viewState
+        The view state to be used when rendering this animation to the
+        target canvas. The view transformation matrix must not be
+        singular.
+
+        @param t
+        Time instant for which animation content is requested. The
+        range must always be [0,1], where 0 denotes the very beginning, and
+        1 the end of the animation sequence.
+
+        @throws <type>com::sun::star::lang::IllegalArgumentException</type>
+        if one of the passed parameters does not lie in the specified,
+        permissible range.
+     */
+    void                    render( [in] XCanvas canvas, [in] ViewState viewState, [in] double t )
+        raises (com::sun::star::lang::IllegalArgumentException);
+
+    //-------------------------------------------------------------------------
+
+    /** Request the attribute information for this animation.<p>
+
+        This method returns the <type>AnimationAttributes</type>
+        structure, which defines more closely how to play this
+        animation.<p>
+
+        @returns the requested <type>AnimationAttributes</type>
+        structure.
+     */
+    AnimationAttributes     getAnimationAttributes();
+};
+
+}; }; }; };
+
+#endif

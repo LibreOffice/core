@@ -1,0 +1,70 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_frame_DispatchRecorder_idl__
+#define __com_sun_star_frame_DispatchRecorder_idl__
+
+#include <com/sun/star/frame/XDispatchRecorder.idl>
+#include <com/sun/star/container/XIndexReplace.idl>
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module frame {
+
+//=============================================================================
+/** provides functionality to record <member>XDispatch::dispatch()</member> requests
+
+    <p>
+    It records all necessary parameters of a call <member>XDispatch::dispatch()</member>
+    and generate code which can be executed at later time to run same operations
+    again. Which code will be generated depends from real implementation. So it's
+    possible to generate e.g. Java/Basic or may Perl code.
+    By using of a <type>DispatchRecorderSupplier</type>, which is available on
+    a property of a <member>Frame::DispatchRecorderSupplier</member>, it's possible to change such code generation
+    for further requests or disable it in general by setting this property to <NULL/>.
+    </p>
+
+    @see DispatchRecorderSupplier
+    @see Frame::RecorderSupplier
+
+    @since OOo 1.1.2
+ */
+published service DispatchRecorder
+{
+    //-------------------------------------------------------------------------
+    /** provides the record functionality and access on the generated code
+     */
+    interface com::sun::star::frame::XDispatchRecorder;
+    /** provides replacement capability of recorded statements
+    */
+    interface com::sun::star::container::XIndexReplace;
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

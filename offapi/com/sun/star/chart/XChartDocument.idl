@@ -1,0 +1,177 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_chart_XChartDocument_idl__
+#define __com_sun_star_chart_XChartDocument_idl__
+
+#include <com/sun/star/frame/XModel.idl>
+
+#include <com/sun/star/drawing/XShape.idl>
+
+#include <com/sun/star/beans/XPropertySet.idl>
+
+#include <com/sun/star/chart/XDiagram.idl>
+
+#include <com/sun/star/chart/XChartData.idl>
+
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module chart {
+
+//=============================================================================
+
+/** manages the chart document.
+
+    @see XDiagram
+    @see XChartData
+ */
+published interface XChartDocument: com::sun::star::frame::XModel
+{
+    //-------------------------------------------------------------------------
+
+    /** @returns
+            the shape of the main title of the chart document.
+
+        @see ChartTitle
+     */
+    com::sun::star::drawing::XShape getTitle();
+
+    //-------------------------------------------------------------------------
+
+    /** @returns
+            the shape of the subtitle of the chart document.
+
+       <p>Usually the subtitle is smaller than the main title by
+       default.  And it is most commonly placed below the main title
+       by default.</p>
+
+        @see ChartTitle
+     */
+    com::sun::star::drawing::XShape getSubTitle();
+
+    //-------------------------------------------------------------------------
+
+    /** @returns
+            the shape of the legend of the chart document.
+
+        @see ChartLegend
+     */
+    com::sun::star::drawing::XShape getLegend();
+
+    //-------------------------------------------------------------------------
+
+    /** @returns
+            the properties of the background area of the chart document.
+
+        <p>The area's extent is equal to the document size.  If you
+        want to access properties of the background area of the
+        diagram, in which the actual data is represented, you have to
+        change the chart wall which you get from the
+        <type>X3DDisplay</type>.</p>
+
+        @see ChartArea
+        @see X3DDisplay
+     */
+    com::sun::star::beans::XPropertySet getArea();
+
+    //-------------------------------------------------------------------------
+
+    /** @returns
+            the diagram of the chart document.
+
+        @see Diagram
+     */
+    com::sun::star::chart::XDiagram getDiagram();
+
+    //-------------------------------------------------------------------------
+
+    /** sets the diagram for the chart document.
+
+        <p>Setting a new diagram implicitly disposes the previous
+        diagram.</p>
+
+        @param xDiagram
+            the new diagram that should be set for the chart.  To
+            create such a diagram component, you can use the
+            <type scope="com::sun::star::lang">XMultiServiceFactory</type>,
+            which should be implemented by an
+            <type>XChartDocument</type>.
+     */
+    void setDiagram( [in] com::sun::star::chart::XDiagram xDiagram );
+
+    //-------------------------------------------------------------------------
+
+    /** @returns
+            the data of the chart.
+
+        <p>The returned object supports interface <type>XChartDataArray</type>
+        which can be used to access the concrete data.</p>
+
+        <p>Since OOo 3.3 the returned object also supports interface <type>XComplexDescriptionAccess</type>
+        which can be used to access complex hierarchical axis descriptions.</p>
+
+        <p>Since OOo 3.4 the returned object also supports interface <type>XDateCategories</type>.</p>
+
+        @see XChartData
+        @see XChartDataArray
+        @see XComplexDescriptionAccess
+        @see XDateCategories
+     */
+    com::sun::star::chart::XChartData getData();
+
+    //-------------------------------------------------------------------------
+
+    /** attaches data to the chart.
+
+        <p>The given object needs to support interface <type>XChartDataArray</type>.</p>
+
+        <p>Since OOo 3.3 if the given object might support interface <type>XComplexDescriptionAccess</type>
+        which allows to set complex hierarchical axis descriptions.</p>
+
+        <p>Since OOo 3.4 if the given object might support interface <type>XDateCategories</type>
+        which allows to set date values as x values for category charts.</p>
+
+        <p>The given data is copied before it is applied to the chart.
+        So changing xData after this call will have no effect on the chart.</p>
+
+        @see XChartData
+        @see XChartDataArray
+        @see XComplexDescriptionAccess
+        @see XDateCategories
+
+        @param xData
+            the object that provides the new data.
+     */
+    void attachData( [in] com::sun::star::chart::XChartData xData );
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

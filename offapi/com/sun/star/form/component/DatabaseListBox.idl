@@ -1,0 +1,153 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_form_component_DatabaseListBox_idl__
+#define __com_sun_star_form_component_DatabaseListBox_idl__
+
+#include <com/sun/star/form/component/ListBox.idl>
+
+#include <com/sun/star/form/DataAwareControlModel.idl>
+
+#include <com/sun/star/form/ListSourceType.idl>
+
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module form {  module component {
+
+//=============================================================================
+
+/** This service specifies a data-aware list box control model.
+
+    <p>The base service for list boxes (<type>ListBox</type>) offers only
+    one possibility to specify the list entries: the <member>ListBox::ListSource</member>
+    property, which contains all the strings to be displayed.</p>
+
+    <p>This service here extends this mimic. It allows to fill the list from a data source.
+    This means that a second result set is opened, which works on the same connection as the
+    form which the list box belongs to, but can be based on an arbitrary table or SQL statement.</p>
+
+    <p>For instance, you may have a form which is bound to a table <em>invoice</em>, and you use it
+    to enter invoices for your customers. Probably, you will have a second table (say <em>customer</em>),
+    which (among other data) contains a unique key for identifying customers. In your invoice table, you will
+    have a foreign key referring to these customers.<br/>
+    Now, besides the result set the form is based on (all your invoices), the list box can be caused
+    to open a second result set, this time for the <em>customer</em> table, and fill it's list with entries
+    from this result set.<br/>
+    Additionally, it allows to model the relation between the two tables: When the user selects a customer from
+    the list, this customer has the unique id we just talked about (which is not necessarily visible to the
+    user in any way). The list box then automatically transfers this id into the foreign key column of
+    <em>invoice</em>, thus allowing the user to transparently work with human-readable strings instead of
+    pure numbers.<br/>
+    Let's call this result set the list is filled from the <em>list result set</em> here ...</p>
+
+ */
+published service DatabaseListBox
+{
+    service com::sun::star::form::component::ListBox;
+
+    service com::sun::star::form::DataAwareControlModel;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies which column of the list result set should be used for data exchange.
+
+        <p>When you make a selection from a list box, the "BoundColumn"
+        property reflects which column value of a result set should
+        be used as the value of the component. If the control is bound
+        to a database field, the column value is stored in the
+        database field identified by the property
+        <member scope="com::sun::star::form">DataAwareControlModel::DataField</member>.
+
+        <dl>
+            <dt>0</dt>
+            <dd>The selected (displayed) list box string is stored in
+            the current database field.</dd>
+
+            <dt>1 or greater</dt>
+            <dd>The column value of the result set at the position is
+            stored in the current database field.</dd>
+        </dl></p>
+
+        <p>The bound column property is only used if a list source is defined
+        and the list source matches with the types
+        <member scope="com::sun::star::form">ListSourceType::TABLE</member>,
+        <member scope="com::sun::star::form">ListSourceType::QUERY</member>,
+        <member scope="com::sun::star::form">ListSourceType::SQL</member> or
+        <member scope="com::sun::star::form">ListSourceType::SQLPASSTHROUGH</member>.
+        Otherwise the property is ignored, as there is no result set from which to
+        get the column values.</p>
+    */
+    [property] short BoundColumn;
+
+    //-------------------------------------------------------------------------
+
+    /** describes the kind of list source used.
+
+        <p>Depending on the value of this property, the way the value of <member>ListBox::ListSource</member>
+        is evaluated varies.
+            <dl>
+                <dt><member scope="com::sun::star::form">ListSourceType::VALUELIST</member></dt>
+                <dd>The elements in the string sequence in <member>ListBox::ListSource</member>
+                build up the entry list.</dd>
+
+                <dt><member scope="com::sun::star::form">ListSourceType::TABLE</member></dt>
+                <dd>The first element of the string sequence in <member>ListBox::ListSource</member>
+                determines the table which the list result set should be based on.</dd>
+
+                <dt><member scope="com::sun::star::form">ListSourceType::QUERY</member></dt>
+                <dd>The first element of the string sequence in <member>ListBox::ListSource</member>
+                determines the query which the list result set should be based on.<br/>
+                For retrieving the query, the connection which the data form is working with
+                (<member scope="com::sun::star::sdb">RowSet::ActiveConnection</member>) is queried for
+                the <type scope="com::sun::star::sdb">XQueriesSupplier</type> interface.</dd>
+
+                <dt><member scope="com::sun::star::form">ListSourceType::SQL</member></dt>
+                <dd>The first element of the string sequence in <member>ListBox::ListSource</member>
+                contains the SQL statement which the list result set should be based on.</p>
+
+                <dt><member scope="com::sun::star::form">ListSourceType::SQLPASSTHROUGH</member></dt>
+                <dd>The first element of the string sequence in <member>ListBox::ListSource</member>
+                contains the SQL statement which the list result set should be based on.<br/>
+                The statement is not analyzed by the parser. This means that you can use database specific
+                SQL features here, but, on the other hand, loose features like parameter value substitution.</dd>
+
+                <dt><member scope="com::sun::star::form">ListSourceType::TABLEFIELDS</member></dt>
+                <dd>The first element of the string sequence in <member>ListBox::ListSource</member>
+                determines the table whose column names should fill the list.</dd>
+            </dl>
+        </p>
+
+     */
+    [property] com::sun::star::form::ListSourceType ListSourceType;
+
+};
+
+//=============================================================================
+
+}; }; }; }; };
+
+#endif

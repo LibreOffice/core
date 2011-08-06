@@ -1,0 +1,96 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_chart_XComplexDescriptionAccess_idl__
+#define __com_sun_star_chart_XComplexDescriptionAccess_idl__
+
+#include <com/sun/star/chart/XChartDataArray.idl>
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module chart {
+
+//=============================================================================
+
+/** Offers access to complex column and row descriptions.
+
+<p>Can be obtained from interface <type>XChartDocument</type> via method getData().</p>
+
+@since OOo 3.3
+*/
+
+published interface XComplexDescriptionAccess : XChartDataArray
+{
+    //-------------------------------------------------------------------------
+
+    /** retrieves the description texts for all rows.
+
+        @returns
+            a sequence of sequences of strings representing the descriptions
+            of all rows. The outer index represents different rows.
+            The inner index represents the different levels (usually there is only one).
+     */
+    sequence< sequence< string > > getComplexRowDescriptions();
+
+    //-------------------------------------------------------------------------
+
+    /** sets the description texts for all rows.
+
+        @param rRowDescriptions
+            a sequence of sequences of strings representing the descriptions of all
+            rows. The outer index represents different rows.
+            The inner index represents the different levels (usually there is only one).
+    */
+    void setComplexRowDescriptions( [in] sequence< sequence< string > > rRowDescriptions );
+
+    //-------------------------------------------------------------------------
+
+    /** retrieves the description texts for all columns.
+
+        @returns
+            a sequence of sequences of strings representing the descriptions
+            of all columns. The outer index represents different columns.
+            The inner index represents the different levels (usually there is only one).
+     */
+    sequence< sequence< string > > getComplexColumnDescriptions();
+
+    //-------------------------------------------------------------------------
+
+    /** sets the description texts for all columns.
+
+        @param rColumnDescriptions
+            a sequence of sequences of strings which represent the descriptions of
+            all columns. The outer index represents different columns.
+            The inner index represents the different levels (usually there is only one).
+     */
+    void setComplexColumnDescriptions( [in] sequence< sequence< string > > rColumnDescriptions );
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

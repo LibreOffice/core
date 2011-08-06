@@ -1,0 +1,23 @@
+mkdir: %_DEST%\inc\salhelper
+
+..\inc\salhelper\condition.hxx %_DEST%\inc\salhelper\condition.hxx
+..\inc\salhelper\dynload.hxx %_DEST%\inc\salhelper\dynload.hxx
+..\inc\salhelper\future.hxx %_DEST%\inc\salhelper\future.hxx
+..\inc\salhelper\futurequeue.hxx %_DEST%\inc\salhelper\futurequeue.hxx
+..\inc\salhelper\monitor.hxx %_DEST%\inc\salhelper\monitor.hxx
+..\inc\salhelper\queue.hxx %_DEST%\inc\salhelper\queue.hxx
+..\inc\salhelper\linkhelper.hxx %_DEST%\inc\salhelper\linkhelper.hxx
+..\inc\salhelper\refobj.hxx %_DEST%\inc\salhelper\refobj.hxx
+..\inc\salhelper\simplereferenceobject.hxx %_DEST%\inc\salhelper\simplereferenceobject.hxx
+..\inc\salhelper\singletonref.hxx %_DEST%\inc\salhelper\singletonref.hxx
+..\inc\salhelper\timer.hxx %_DEST%\inc\salhelper\timer.hxx
+
+..\%__SRC%\bin\salhelp*.dll %_DEST%\bin\salhelp*.dll
+..\%__SRC%\lib\*salhelper*.lib %_DEST%\lib\*
+
+..\%__SRC%\lib\libuno_salhelper*.* %_DEST%\lib\*
+
+..\%__SRC%\lib\libsalhelper*.a %_DEST%\lib\*
+..\%__SRC%\lib\salhelper*.lib %_DEST%\lib\*
+
+linklib: libuno_salhelper*.*.*

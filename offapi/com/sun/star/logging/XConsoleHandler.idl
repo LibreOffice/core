@@ -1,0 +1,65 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef __offapi_com_sun_star_logging_XConsoleHandler_idl__
+#define __offapi_com_sun_star_logging_XConsoleHandler_idl__
+
+#include <com/sun/star/logging/XLogHandler.idl>
+
+//=============================================================================
+
+module com { module sun { module star { module logging {
+
+//=============================================================================
+
+/** implemented by a log handler whose output channel is the processes console.
+
+    <p>Note that a console handler will ignore its formatter's head and tail, since
+    it cannot decided whether they should be emitted on <code>stdout</code> or <code>stderr</code>.</p>
+
+    @since OOo 2.3
+ */
+interface XConsoleHandler : XLogHandler
+{
+    /** denotes the <type>LogLevel</type> threshold used to determine to which
+        console the events should be logged.
+
+        <p>Events with a level greater or equal to <code>Threshold</code> will be
+        logged to <code>stderr</code>, all others to <code>stdout</code>.</p>
+
+        <p>The default value for this attribute is <member>LogLevel::SEVERE</member>.</p>
+    */
+    [attribute] long    Threshold;
+};
+
+//=============================================================================
+
+}; }; }; };
+
+//=============================================================================
+
+#endif

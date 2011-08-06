@@ -1,0 +1,106 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_form_component_ImageButton_idl__
+#define __com_sun_star_form_component_ImageButton_idl__
+
+#include <com/sun/star/awt/UnoControlImageControlModel.idl>
+
+#include <com/sun/star/form/FormControlModel.idl>
+
+#include <com/sun/star/form/XApproveActionBroadcaster.idl>
+
+#include <com/sun/star/form/XImageProducerSupplier.idl>
+
+#include <com/sun/star/form/FormButtonType.idl>
+
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module form {  module component {
+
+//=============================================================================
+
+/** This service specifies the control model for a clickable button which
+    is represented by an image.
+
+     <p>The image to be displayed is determined by <member scope="com::sun::star::awt">UnoControlImageControlModel::ImageURL</member>
+    property specifies the URL of an image to be displayed.</p>
+
+    @see CommandButton
+*/
+published service ImageButton
+{
+    service com::sun::star::awt::UnoControlImageControlModel;
+
+    service com::sun::star::form::FormControlModel;
+
+
+    /** supplies the caller with an <type scope="com::sun::star::awt">XImageProducer</type>.
+
+        <p>Other components can register as <type scope="com::sun::star::awt">XImageConsumer</type>
+        at this producer. Then they will be notified of any change in the image to be displayed.</p>
+
+        <p>Whenever the <member scope="com::sun::star::awt">UnoControlImageControlModel::ImageURL</member>
+        property is changed, the model loads the specified image, and sets it as image source
+        at its <type scope="com::sun::star::awt">XImageProducer</type>. Then, all
+        <type scope="com::sun::star::awt">XImageConsumer</type>s are notified and supplied with
+        the binary data of the image.<br/>
+        Usually, controls acting for an <type>ImageButton</type> model are consumers, and use the
+        data stream to display the image</p>
+     */
+    interface com::sun::star::form::XImageProducerSupplier;
+
+    //-------------------------------------------------------------------------
+    /** describes the action to be executed by the button when pressed.
+     */
+    [property] com::sun::star::form::FormButtonType ButtonType;
+
+    //-------------------------------------------------------------------------
+    /** describes the frame, where to open the document specified by the TargetURL.
+
+        <p>This property is evaluated if the button is of type URL.</p>
+
+        <p>As always, there is a number of target names which have a special meaning, and force
+        a special <type scope="com::sun::star::frame">Frame</type> to be used.</p>
+     */
+    [property] string TargetFrame;
+
+    //-------------------------------------------------------------------------
+    /** specifies the URL, which should be opened if the button was clicked.
+
+        <p>This property is evaluated if the button is of type URL.</p>
+
+        @see com::sun::star::form::FormButtonType
+     */
+    [property] string TargetURL;
+};
+
+//=============================================================================
+
+}; }; }; }; };
+
+#endif

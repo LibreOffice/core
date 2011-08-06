@@ -1,0 +1,151 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_ui_dialogs_FilePicker_idl__
+#define __com_sun_star_ui_dialogs_FilePicker_idl__
+
+#include <com/sun/star/lang/XComponent.idl>
+#include <com/sun/star/lang/XServiceInfo.idl>
+#include <com/sun/star/lang/XTypeProvider.idl>
+#include <com/sun/star/lang/XInitialization.idl>
+#include <com/sun/star/util/XCancellable.idl>
+
+//=============================================================================
+
+module com { module sun { module star { module ui { module dialogs {
+
+//=============================================================================
+
+//=============================================================================
+/** A FilePicker.
+
+    It is <strong>NOT</strong> recommended to cache a reference to a file
+    picker instance. Due to restrictions by the underlying system there can
+    be specific limitations possible. To overcome these problems it's
+    recommended to create a new instance on demand.
+
+    @see XFilePicker
+*/
+
+ published interface XFilePicker;
+ published interface XFilePickerNotifier;
+ published interface XFilePickerControlAccess;
+ published interface XFilterManager;
+ published interface XFilePreview;
+ published interface XFilterGroupManager;
+
+published service FilePicker
+{
+    //-------------------------------------------------------------------------
+    /** Allows to associate a help URL with the file picker instance.
+    */
+    [optional, property] string HelpURL;
+
+    //-------------------------------------------------------------------------
+    /** Provides access to the basic FilePicker functionality.
+    */
+    interface XFilePicker;
+
+    //-------------------------------------------------------------------------
+    /** Provides the ability to request notifications about changes.
+    */
+    interface XFilePickerNotifier;
+
+    //-------------------------------------------------------------------------
+    /** Provides the ability to add different filter, query for the current
+        filters and set a current filter
+    */
+    interface XFilterManager;
+
+    //-------------------------------------------------------------------------
+    /** Provides the ability to show a preview of a selected file
+    */
+    [optional] interface XFilePreview;
+
+    //-------------------------------------------------------------------------
+    /** Provides the ability manage additional controls (checkboxes, listboxes etc.)
+        offered by an extended FilePicker, these controls extend the subset of
+        common controls that a FilePicker usually supports.
+
+        @see com::sun::star::ui::dialogs::CommonFilePickerElementIds
+        @see com::sun::star::ui::dialogs::ExtendedFilePickerElementIds
+
+        @deprecated
+    */
+    [optional] interface XFilePickerControlAccess;
+
+    //-------------------------------------------------------------------------
+    /** An interface which allows manipulation of groups of filters
+    */
+    [optional] interface XFilterGroupManager;
+
+    //-------------------------------------------------------------------------
+    /** Provides the ability to choose between different custom templates that
+        do extend the subset of common controls a FilePicker usually supports.
+        Implementers may omit this interface if the FileOpen
+        dialog doesn't support custom templates. In this case a createInstance
+        will create an ordinary FileOpen dialog with only the common FilePicker
+        elements.
+        The client has to provide one of the specified constants in
+        TemplateDescription.
+        <br/><br/>
+        <p><strong>Notes for the implementation of a FileSave dialog:</strong>
+        The implementation of a FileSave dialog should automatically check
+        for existence of a file and issue a warning if a file with the same
+        name already exist.</p>
+
+        @see com::sun::star::ui::dialogs::TemplateDescription
+    */
+    [optional] interface com::sun::star::lang::XInitialization;
+
+    //-------------------------------------------------------------------------
+    /** For canceling a running dialog instance.
+        <p>This may be useful for automatic test tools for instance.</p>
+    */
+    [optional] interface com::sun::star::util::XCancellable;
+
+    //-------------------------------------------------------------------------
+    /** For shutdown and listener support.
+    */
+    interface com::sun::star::lang::XComponent;
+
+    //-------------------------------------------------------------------------
+    /** Service should always support this interface.
+    */
+    interface com::sun::star::lang::XServiceInfo;
+
+    //-------------------------------------------------------------------------
+    /** Service should always support this interface.
+    */
+    interface com::sun::star::lang::XTypeProvider;
+};
+
+//=============================================================================
+
+}; }; }; }; };
+
+#endif

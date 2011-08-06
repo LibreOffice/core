@@ -1,0 +1,71 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_task_XJobListener_idl__
+#define __com_sun_star_task_XJobListener_idl__
+
+#include <com/sun/star/lang/XEventListener.idl>
+
+//=============================================================================
+
+module com {  module sun {  module star {  module task {
+
+ published interface XAsyncJob;
+
+//=============================================================================
+/** listener on finish states of asynchronous job execution
+ */
+published interface XJobListener : com::sun::star::lang::XEventListener
+{
+    //------------------------------------------------------------------------
+    /** indicates that the job is done
+
+        @param Job
+            identifies the asynchronous job so the <type>JobExecutor</type>
+            can differ between more then ones.
+
+        @param Result
+            should be the same like for the synchronous mode on <member>XJob::execute()</member>.
+            It provides information about success or failure of job execution. It's possible too,
+            to use special protocol (which depends from real implementation) between
+            <type>JobExecutor</type> and a real job. So it can be possible to:
+
+            <ul>
+                <li>deregister the job</li>
+                <li>let him registered although execution was successfully(!)</li>
+                <li>make some job specific data persistent inside the job configuration which
+                    is provided by the executor.</li>
+            </ul>
+    */
+    void jobFinished(
+        [in] XAsyncJob Job,
+        [in] any Result);
+};
+
+}; }; }; };
+
+#endif

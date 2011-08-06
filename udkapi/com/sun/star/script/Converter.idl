@@ -1,0 +1,102 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_script_Converter_idl__
+#define __com_sun_star_script_Converter_idl__
+
+#include <com/sun/star/script/XTypeConverter.idl>
+
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module script {
+
+//=============================================================================
+
+/** This service provides a widening converter converting from one type to another,
+    if possible.
+
+    <p>What is possible?
+    <ul>
+    <li>byte: byte, (short *1), (long *1), (hyper *1), (float *1), (double *1), (enum *2), (any *3), boolean, (char *4), (string *5)</li>
+    <li>short: byte, short, (long *1), (hyper *1), (float *7), (double *7), (enum *2), (any *3), boolean, char, (string *5)</li>
+    <li>long: byte, short, long, (hyper *1), (float *7), (double *7), enum, (any *3), boolean, char, (string *5)</li>
+    <li>hyper: byte, short, long, hyper, (float *7), (double *7), enum, (any *3), boolean, char, (string *5)</li>
+    <li>float: byte, short, long, hyper, float, (double *7), (enum *8), (any *3), boolean, char, (string *5)</li>
+    <li>double: byte, short, long, hyper, float, double, enum, (any *3), boolean, char, (string *5)</li>
+    <li>enum: (byte *9), (short *9), (long *9), (hyper *9), (float *9), (double *9), (enum *10), (any *3), (string *11)</li>
+    <li>void: ok for all types</li>
+    <li>any: ok for all types</li>
+    <li>boolean: byte, short, long, hyper, float, double, (any *3), boolean, char, (string *12). 0 => false, != 0 => true</li>
+    <li>char: byte, short, (long *1), (hyper *1), (float *7), (double *7), enum, (any *3), boolean, char, (string *13)</li>
+    <li>string: byte, short, long, hyper, float, double, enum, (any *3), boolean, char, string</li>
+    <li>struct: (any *3), (struct *14)</li>
+    <li>interface: (any *3), (struct *14)</li>
+    <li>exception: (any *3), (exception *14)</li>
+    <li>union: (any *3), (union *14)</li>
+    <li>sequence: (any *3), (sequence *15)</li>
+    </ul>
+    rules:
+    <ul>
+    <li>1: only converts if the value is in the range of the target type.</li>
+    <li>2: only converts if the value, not the position, of the enum is in the range of the target type.</li>
+    <li>3: get value until it is not an any. Then convert it with the other rules.</li>
+    <li>4: only converts if the value of the character is between 0 - 255.</li>
+    <li>5: only converts if the value represents a decimal, hexadecimal (0x...) or a floating point number.
+    Examples: 10, 0x10, 10.045, 10,555, +10, +10.6e10, -10.6e-10, .16.</li>
+    <li>7: only converts if the value is in the range of the target type.
+    The value is rounded to an integer.</li>
+    <li>8: only converts if the float can be converted back to the same enum value.</li>
+    <li>9: only converts if the number is one of the enumeration type values. Normally you need
+    reflection information of the enum type.</li>
+    <li>10: only converts if it is the same enumeration type.</li>
+    <li>11: only converts if the string contains the name of an enumeration type value. Normally you need
+    core reflection information of the enum type.</li>
+    <li>12: only converts if the value of the string is "1", "true" or "0", "false". The comparision
+    is case insensitive.</li>
+    <li>13: only converts if the length of the string is 1 or 0.</li>
+    <li>14: only converts if the types are equal or the source type is derived from the destination
+    type.</li>
+    <li>15: only converts if each element of the source sequence can be converted to an element
+    of the destination sequence.</li>
+    </ul>
+*/
+published service Converter
+{
+    /** Conversion interface.
+    */
+    interface com::sun::star::script::XTypeConverter;
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+/*=============================================================================
+
+=============================================================================*/
+#endif

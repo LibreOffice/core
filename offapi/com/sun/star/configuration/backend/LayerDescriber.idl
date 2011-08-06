@@ -1,0 +1,36 @@
+#ifndef __com_sun_star_configuration_backend_LayerDescriber_idl__
+#define __com_sun_star_configuration_backend_LayerDescriber_idl__
+
+#include <com/sun/star/configuration/backend/XLayerContentDescriber.idl>
+#include <com/sun/star/uno/XInterface.idl>
+
+
+
+//=============================================================================
+
+module com { module sun { module star { module configuration { module backend {
+
+//=============================================================================
+
+/**
+   describe the contents of a layer to an XLayerHandler object. The contents of
+   the layer is contained in the sequence of PropertyInfo structures
+   @see PropertyInfo
+
+*/
+service LayerDescriber
+{
+
+    //-------------------------------------------------------------------------
+
+    /**
+      describes a set of configuration data to an XLayerHandler Object.
+    */
+    interface com::sun::star::configuration::backend::XLayerContentDescriber ;
+
+    //-------------------------------------------------------------------------
+
+//=============================================================================
+} ;
+} ; } ; } ; } ; } ;
+#endif

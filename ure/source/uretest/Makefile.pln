@@ -1,0 +1,315 @@
+#*************************************************************************
+#
+# DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+# 
+# Copyright 2000, 2010 Oracle and/or its affiliates.
+#
+# OpenOffice.org - a multi-platform office productivity suite
+#
+# This file is part of OpenOffice.org.
+#
+# OpenOffice.org is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Lesser General Public License version 3
+# only, as published by the Free Software Foundation.
+#
+# OpenOffice.org is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Lesser General Public License version 3 for more details
+# (a copy is included in the LICENSE file that accompanied this code).
+#
+# You should have received a copy of the GNU Lesser General Public License
+# version 3 along with OpenOffice.org.  If not, see
+# <http://www.openoffice.org/license.html>
+# for a copy of the LGPLv3 License.
+#
+#*************************************************************************
+
+# The following variable must be set (see README):
+#SDK_HOME := /opt/openoffice.org/basis3.1/sdk
+
+# The following variables can be set, if necessary (see README):
+#URE_HOME := /opt/openoffice.org/ure
+#GXX_INCLUDE_PATH := /usr/include/g++
+#GCCS_COMPAT := LD_PRELOAD=/lib/libgcc_s.so.1
+
+
+URE_HOME ?= /opt/openoffice.org/ure
+GXX_INCLUDE_PATH ?= /usr/include/g++
+
+.DELETE_ON_ERROR:
+
+
+.PHONY: check
+check: test-regview test-cpptest test-javatest test-javanative test-clientserver
+
+.PHONY: test-regview
+test-regview: out.pln/services.rdb
+	$(URE_HOME)/bin/regview $< > /dev/null
+
+.PHONY: test-cpptest
+test-cpptest: out.pln/cppmain.uno.so out.pln/types.rdb out.pln/services.rdb
+	$(GCCS_COMPAT) $(URE_HOME)/bin/uno \
+            -c test.cpp.cppmain.Component -l file://$(PWD)/$< \
+            -ro $(URE_HOME)/share/misc/types.rdb -ro out.pln/types.rdb \
+            -ro $(URE_HOME)/share/misc/services.rdb -ro out.pln/services.rdb
+
+.PHONY: test-javatest
+test-javatest: out.pln/javamain.uno.jar out.pln/types.rdb out.pln/services.rdb
+	$(GCCS_COMPAT) $(URE_HOME)/bin/uno \
+            -c test.java.javamain.Component -l file://$(PWD)/$< \
+            -ro $(URE_HOME)/share/misc/types.rdb -ro out.pln/types.rdb \
+            -ro $(URE_HOME)/share/misc/services.rdb -ro out.pln/services.rdb
+
+.PHONY: test-javanative
+test-javanative: out.pln/runner.jar out.pln/javanative.jar \
+            out.pln/javanative.rc out.pln/services.rdb out.pln/types.rdb
+	$(GCCS_COMPAT) LD_LIBRARY_PATH=$(URE_HOME)/lib java \
+            -jar out.pln/runner.jar file://$(URE_HOME)/share/java/ \
+            file://$(PWD)/out.pln/javanative.jar \
+            file://$(PWD)/out.pln/javanative.rc
+
+.PHONY: test-clientserver
+test-clientserver: out.pln/cppserver.uno.so out.pln/runner.jar \
+            out.pln/javaclient.jar
+	$(GCCS_COMPAT) $(URE_HOME)/bin/uno -c test.cpp.cppserver.Component \
+            -l file://$(PWD)/out.pln/cppserver.uno.so \
+            -ro $(URE_HOME)/share/misc/types.rdb -ro out.pln/types.rdb \
+            -ro $(URE_HOME)/share/misc/services.rdb \
+            -u 'uno:pipe,name=ure_test;urp;server' --singleaccept &
+	sleep 5 && \
+            java -jar out.pln/runner.jar file://$(URE_HOME)/share/java/ \
+            file://$(PWD)/out.pln/javaclient.jar \
+            'uno:pipe,name=ure_test;urp;server'
+
+
+.PHONY: clean
+clean:
+	rm -rf out.pln
+
+
+out.pln/cppmain.uno.so: out.pln/cppmain.o version.map | out.pln \
+            out.pln/lib/libuno_cppu.so out.pln/lib/libuno_cppuhelpergcc3.so \
+            out.pln/lib/libuno_sal.so out.pln/lib/libuno_salhelpergcc3.so \
+            out.pln/lib/libstlport_gcc.so
+	g++ -shared -o $@ -Wl,-z,defs -Wl,--fatal-warnings \
+            -Wl,--version-script=version.map $< -Lout.pln/lib -luno_cppu \
+            -luno_cppuhelpergcc3 -luno_sal -luno_salhelpergcc3 -lstlport_gcc
+
+out.pln/cppmain.o: cppmain.cc out.pln/cpputypes.cppumaker.flag \
+            out.pln/types.cppumaker.flag | out.pln
+	g++ -c -o $@ -fpic -Wall -Wno-ctor-dtor-privacy -I $(SDK_HOME)/include/stl \
+            -I $(SDK_HOME)/include -I out.pln/include/cpputypes \
+            -I out.pln/include/types -DCPPU_ENV=gcc3 \
+            -DGXX_INCLUDE_PATH=$(GXX_INCLUDE_PATH) -DLINUX -DUNX $<
+
+
+out.pln/cpptest.uno.so: out.pln/cpptest.o version.map | out.pln \
+            out.pln/lib/libuno_cppu.so out.pln/lib/libuno_cppuhelpergcc3.so \
+            out.pln/lib/libuno_sal.so
+	g++ -shared -o $@ -Wl,-z,defs -Wl,--fatal-warnings \
+            -Wl,--version-script=version.map $< -Lout.pln/lib -luno_cppu \
+            -luno_cppuhelpergcc3 -luno_sal
+
+out.pln/cpptest.o: cpptest.cc out.pln/cpputypes.cppumaker.flag \
+            out.pln/types.cppumaker.flag | out.pln
+	g++ -c -o $@ -fpic -Wall -Wno-ctor-dtor-privacy -I $(SDK_HOME)/include/stl \
+            -I $(SDK_HOME)/include -I out.pln/include/cpputypes \
+            -I out.pln/include/types -DCPPU_ENV=gcc3 \
+            -DGXX_INCLUDE_PATH=$(GXX_INCLUDE_PATH) -DLINUX -DUNX $<
+
+
+out.pln/cppserver.uno.so: out.pln/cppserver.o version.map | out.pln \
+            out.pln/lib/libuno_cppu.so out.pln/lib/libuno_cppuhelpergcc3.so \
+            out.pln/lib/libuno_sal.so
+	g++ -shared -o $@ -Wl,-z,defs -Wl,--fatal-warnings \
+            -Wl,--version-script=version.map $< -Lout.pln/lib -luno_cppu \
+            -luno_cppuhelpergcc3 -luno_sal
+
+out.pln/cppserver.o: cppserver.cc out.pln/cpputypes.cppumaker.flag \
+            out.pln/types.cppumaker.flag | out.pln
+	g++ -c -o $@ -fpic -Wall -Wno-ctor-dtor-privacy -I $(SDK_HOME)/include/stl \
+            -I $(SDK_HOME)/include -I out.pln/include/cpputypes \
+            -I out.pln/include/types -DCPPU_ENV=gcc3 \
+            -DGXX_INCLUDE_PATH=$(GXX_INCLUDE_PATH) -DLINUX -DUNX $<
+
+
+out.pln/cpputypes.cppumaker.flag: | out.pln
+	LD_LIBRARY_PATH=$(URE_HOME)/lib $(SDK_HOME)/bin/cppumaker \
+            -O./out.pln/include/cpputypes \
+            '-Tcom.sun.star.lang.DisposedException;com.sun.star.lang.EventObject;com.sun.star.lang.XMain;com.sun.star.lang.XMultiComponentFactory;com.sun.star.lang.XMultiServiceFactory;com.sun.star.lang.XSingleComponentFactory;com.sun.star.lang.XSingleServiceFactory;com.sun.star.lang.XTypeProvider;com.sun.star.registry.XRegistryKey;com.sun.star.uno.DeploymentException;com.sun.star.uno.Exception;com.sun.star.uno.RuntimeException;com.sun.star.uno.XAggregation;com.sun.star.uno.XComponentContext;com.sun.star.uno.XCurrentContext;com.sun.star.uno.XInterface;com.sun.star.uno.XWeak' \
+            -B/UCR $(URE_HOME)/share/misc/types.rdb
+	touch $@
+
+out.pln/types.cppumaker.flag: out.pln/types.rdb | out.pln
+	LD_LIBRARY_PATH=$(URE_HOME)/lib $(SDK_HOME)/bin/cppumaker \
+            -O./out.pln/include/types -B/UCR $< \
+            -X$(URE_HOME)/share/misc/types.rdb
+	touch $@
+
+
+out.pln/javamain.uno.jar: \
+            out.pln/class/javamain/test/java/javamain/JavaMain.class \
+            out.pln/javamain.mf | out.pln
+	jar cfm $@ out.pln/javamain.mf -C out.pln/class/javamain test
+
+out.pln/javamain.mf: javamain.mf.template | out.pln
+	sed -e 's~^Class-Path:$$~& tester.jar~' \
+            -e 's~^UNO-Type-Path:$$~& types.jar~' $< > $@
+
+out.pln/class/javamain/test/java/javamain/JavaMain.class: JavaMain.java \
+            out.pln/tester.jar | out.pln/class
+	rm -rf out.pln/class/javamain
+	mkdir out.pln/class/javamain
+	javac -classpath \
+            $(URE_HOME)/share/java/jurt.jar:$(URE_HOME)/share/java/ridl.jar:out.pln/tester.jar \
+            -sourcepath . -d out.pln/class/javamain $<
+
+
+out.pln/runner.jar: out.pln/class/runner/test/java/runner/Runner.class \
+            out.pln/runner.mf | out.pln
+	jar cfm $@ out.pln/runner.mf -C out.pln/class/runner test
+
+out.pln/runner.mf: runner.mf.template | out.pln
+	sed -e \
+            's~^Class-Path:$$~& file://$(URE_HOME)/share/java/unoloader.jar~' \
+            -e 's~^UNO-Type-Path:$$~& ~' $< > $@
+
+out.pln/class/runner/test/java/runner/Runner.class: Runner.java | out.pln/class
+	rm -rf out.pln/class/runner
+	mkdir out.pln/class/runner
+	javac -classpath $(URE_HOME)/share/java/unoloader.jar -sourcepath . \
+            -d out.pln/class/runner $<
+
+
+out.pln/tester.jar: out.pln/class/tester/test/java/tester/Tester.class \
+            out.pln/tester.mf | out.pln
+	jar cfm $@ out.pln/tester.mf -C out.pln/class/tester test
+
+out.pln/tester.mf: tester.mf.template | out.pln
+	sed -e 's~^Class-Path:$$~& types.jar~' \
+            -e 's~^UNO-Type-Path:$$~& types.jar~' $< > $@
+
+out.pln/class/tester/test/java/tester/Tester.class: Tester.java \
+            out.pln/types.jar | out.pln/class
+	rm -rf out.pln/class/tester
+	mkdir out.pln/class/tester
+	javac -classpath $(URE_HOME)/share/java/ridl.jar:out.pln/types.jar \
+            -sourcepath . -d out.pln/class/tester $<
+
+
+out.pln/javatest.uno.jar: \
+            out.pln/class/javatest/test/java/javatest/JavaTest.class \
+            out.pln/javatest.mf | out.pln
+	jar cfm $@ out.pln/javatest.mf -C out.pln/class/javatest test
+
+out.pln/javatest.mf: javatest.mf.template | out.pln
+	sed -e 's~^Class-Path:$$~& types.jar~' \
+            -e 's~^UNO-Type-Path:$$~& types.jar~' $< > $@
+
+out.pln/class/javatest/test/java/javatest/JavaTest.class: JavaTest.java \
+            out.pln/types.jar | out.pln/class
+	rm -rf out.pln/class/javatest
+	mkdir out.pln/class/javatest
+	javac -classpath \
+            $(URE_HOME)/share/java/jurt.jar:$(URE_HOME)/share/java/ridl.jar:out.pln/types.jar \
+            -sourcepath . -d out.pln/class/javatest $<
+
+
+out.pln/javanative.jar: \
+            out.pln/class/javanative/test/java/javanative/JavaNative.class \
+            out.pln/javanative.mf | out.pln
+	jar cfm $@ out.pln/javanative.mf -C out.pln/class/javanative test
+
+out.pln/javanative.mf: javanative.mf.template | out.pln
+	sed -e 's~^Class-Path:$$~& tester.jar~' \
+            -e 's~^UNO-Type-Path:$$~& types.jar~' $< > $@
+
+out.pln/class/javanative/test/java/javanative/JavaNative.class: \
+            JavaNative.java out.pln/tester.jar | out.pln/class
+	rm -rf out.pln/class/javanative
+	mkdir out.pln/class/javanative
+	javac -classpath \
+            $(URE_HOME)/share/java/juh.jar:$(URE_HOME)/share/java/ridl.jar:out.pln/tester.jar \
+            -sourcepath . -d out.pln/class/javanative $<
+
+out.pln/javanative.rc: | out.pln
+	echo 'URE_INTERNAL_LIB_DIR=$${file\u003A//$(URE_HOME)/lib/unorc:URE_INTERNAL_LIB_DIR}' > $@
+	echo 'URE_INTERNAL_JAVA_DIR=$${file\u003A//$(URE_HOME)/lib/unorc:URE_INTERNAL_JAVA_DIR}' >> $@
+	echo 'UNO_TYPES=$${file\u003A//$(URE_HOME)/lib/unorc:UNO_TYPES} file://$(PWD)/out.pln/types.rdb' >> $@
+	echo 'UNO_SERVICES=$${file\u003A//$(URE_HOME)/lib/unorc:UNO_SERVICES} file://$(PWD)/out.pln/services.rdb' >> $@
+
+
+out.pln/javaclient.jar: \
+            out.pln/class/javaclient/test/java/javaclient/JavaClient.class \
+            out.pln/javaclient.mf | out.pln
+	jar cfm $@ out.pln/javaclient.mf -C out.pln/class/javaclient test
+
+out.pln/javaclient.mf: javaclient.mf.template | out.pln
+	sed -e 's~^Class-Path:$$~& types.jar~' \
+            -e 's~^UNO-Type-Path:$$~& types.jar~' $< > $@
+
+out.pln/class/javaclient/test/java/javaclient/JavaClient.class: \
+            JavaClient.java out.pln/types.jar | out.pln/class
+	rm -rf out.pln/class/javaclient
+	mkdir out.pln/class/javaclient
+	javac -classpath \
+            $(URE_HOME)/share/java/juh.jar:$(URE_HOME)/share/java/ridl.jar:out.pln/types.jar \
+            -sourcepath . -d out.pln/class/javaclient $<
+
+
+out.pln/types.jar: out.pln/types.javamaker.flag out.pln/types.mf | out.pln
+	jar cfm $@ out.pln/types.mf -C out.pln/class/types test
+
+out.pln/types.mf: types.mf.template | out.pln
+	sed -e 's~^Class-Path:$$~& ~' -e 's~^UNO-Type-Path:$$~& \<\>~' $< > $@
+
+out.pln/types.javamaker.flag: out.pln/types.rdb | out.pln out.pln/class
+	rm -rf out.pln/class/types
+	LD_LIBRARY_PATH=$(URE_HOME)/lib $(SDK_HOME)/bin/javamaker \
+            -O./out.pln/class/types -B/UCR $< -X$(URE_HOME)/share/misc/types.rdb
+	touch $@
+
+
+out.pln/types.rdb: out.pln/types.urd | out.pln
+	$(URE_HOME)/bin/regmerge $@ /UCR $<
+
+out.pln/types.urd: types.idl | out.pln
+	LD_LIBRARY_PATH=$(URE_HOME)/lib $(SDK_HOME)/bin/idlc -O$(@D) \
+            -I$(SDK_HOME)/idl -cid -we $<
+
+
+out.pln/services.rdb: out.pln/cpptest.uno.so out.pln/javatest.uno.jar | out.pln
+	rm -f $@
+	$(URE_HOME)/bin/regcomp -register -r $@ \
+            -c file://$(PWD)/out.pln/cpptest.uno.so
+	$(URE_HOME)/bin/regcomp -register \
+            -br $(URE_HOME)/share/misc/types.rdb \
+            -br $(URE_HOME)/share/misc/services.rdb -r $@ \
+            -c file://$(PWD)/out.pln/javatest.uno.jar
+
+
+out.pln/lib/libuno_cppu.so: | out.pln/lib
+	ln -fs $(URE_HOME)/lib/libuno_cppu.so.3 $@
+
+out.pln/lib/libuno_cppuhelpergcc3.so: | out.pln/lib
+	ln -fs $(URE_HOME)/lib/libuno_cppuhelpergcc3.so.3 $@
+
+out.pln/lib/libuno_sal.so: | out.pln/lib
+	ln -fs $(URE_HOME)/lib/libuno_sal.so.3 $@
+
+out.pln/lib/libuno_salhelpergcc3.so: | out.pln/lib
+	ln -fs $(URE_HOME)/lib/libuno_salhelpergcc3.so.3 $@
+
+out.pln/lib/libstlport_gcc.so: | out.pln/lib
+	ln -fs $(URE_HOME)/lib/libstlport_gcc.so $@
+
+
+out.pln:
+	mkdir $@
+
+out.pln/class: | out.pln
+	mkdir $@
+
+out.pln/lib: | out.pln
+	mkdir $@

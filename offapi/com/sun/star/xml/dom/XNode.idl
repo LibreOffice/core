@@ -1,0 +1,274 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_xml_dom_XNode_idl__
+#define __com_sun_star_xml_dom_XNode_idl__
+
+#include <com/sun/star/uno/XInterface.idl>
+#include <com/sun/star/xml/dom/NodeType.idl>
+#include <com/sun/star/xml/dom/XNodeList.idl>
+#include <com/sun/star/xml/dom/XNamedNodeMap.idl>
+
+
+module com { module sun { module star { module xml { module dom {
+
+interface XDocument;
+
+/** The primary dom datatype
+
+<p>The Node interface is the primary datatype for the entire Document Object Model.
+It represents a single node in the document tree. While all objects implementing
+the Node interface expose methods for dealing with children, not all objects
+#implementing the Node interface may have children. For example, Text nodes may not
+have children, and adding children to such nodes results in a DOMException being raised.</p>
+
+<p>The attributes nodeName, nodeValue and attributes are included as a mechanism to get at
+node information without casting down to the specific derived interface. In cases where
+there is no obvious mapping of these attributes for a specific nodeType (e.g., nodeValue
+for an Element or attributes for a Comment ), this returns null. Note that the specialized
+interfaces may contain additional and more convenient mechanisms to get and set the relevant
+information.</p>
+
+<p>The values of nodeName, nodeValue, and attributes vary according to the node type as follows:
+<table align=left border=1>
+<tr><th>Interface </th><th>nodeName </th><th>nodeValue </th><th>attributes</th></tr>
+<tr><th>Attr                    </th><td>name of attribute  </td><td>value of attribute                 </td><td>null</td></tr>
+<tr><th>CDATASection            </th><td>"#cdata-section"   </td><td>content of the CDATA Section   </td><td>null</td></tr>
+<tr><th>Comment                 </th><td>"#comment"             </td><td>content of the comment          </td><td>null</td></tr>
+<tr><th>Document                </th><td>"#document"        </td><td>null   </td><td>null</td></tr>
+<tr><th>DocumentFragment        </th><td>"#document-fragment"</td><td>null  </td><td>null</td></tr>
+<tr><th>DocumentType            </th><td>document type name     </td><td>null   </td><td>null</td></tr>
+<tr><th>Element                 </th><td>tag name           </td><td>null   </td><td>NamedNodeMap</td></tr>
+<tr><th>Entity                  </th><td>entity name        </td><td>null   </td><td>null</td></tr>
+<tr><th>EntityReference         </th><td>name of entity referenced      </td><td>null   </td><td>null</td></tr>
+<tr><th>Notation                </th><td>notation name      </td><td>null   </td><td>null</td></tr>
+<tr><th>ProcessingInstruction   </th><td>target                 </td><td>entire content excluding the target    </td><td>null</td></tr>
+<tr><th>Text                    </th><td>"#text"            </td><td>content of the text node   </td><td>null</td></tr>
+</table></p>
+
+@see <a href="http://www.w3.org/TR/2000/REC-DOM-Level-2-Core-20001113">Document Object Model (DOM) Level 2 Core Specification</a> </p>
+@since OOo 2.0
+*/
+interface XNode : com::sun::star::uno::XInterface
+{
+
+    /**
+    Adds the node newChild to the end of the list of children of this node.
+    @param newChild
+    the new child node
+    @throws com::sun::star::xml::dom::DOMException
+        <p>HIERARCHY_REQUEST_ERR: Raised if this node is of a type that does
+           not allow children of the type of the newChild node, or if the
+           node to append is one of this node's ancestors or this node itself.</p>
+        <p>WRONG_DOCUMENT_ERR: Raised if newChild was created from a different
+           document than the one that created this node.</p>
+        <p>NO_MODIFICATION_ALLOWED_ERR: Raised if this node is readonly or if
+           the previous parent of the node being inserted is readonly.</p>
+    */
+    XNode appendChild([in] XNode newChild) raises (DOMException);
+
+    /**
+    Returns a duplicate of this node, i.e., serves as a generic copy
+    constructor for nodes.
+    <p></p>
+    @param deep
+    <true/>: clone node together with any children<br>
+    <false/>: clone without children
+    @returns
+    the cloned node
+    */
+    XNode cloneNode([in] boolean deep);
+
+    /**
+    A NamedNodeMap containing the attributes of this node (if it is an Element)
+    or null otherwise.
+    */
+    XNamedNodeMap getAttributes();
+
+    /**
+    A NodeList that contains all children of this node.
+    */
+    XNodeList getChildNodes();
+
+    /**
+    The first child of this node.
+    */
+    XNode getFirstChild();
+
+    /**
+    The last child of this node.
+    */
+    XNode getLastChild();
+
+    /**
+    Returns the local part of the qualified name of this node.
+    */
+    string getLocalName();
+
+    /**
+    The namespace URI of this node, or null if it is unspecified.
+    */
+    string getNamespaceURI();
+
+    /**
+    The node immediately following this node.
+    */
+    XNode getNextSibling();
+
+    /**
+    The name of this node, depending on its type; see the table above.
+    */
+    string getNodeName();
+
+    /**
+    A code representing the type of the underlying object, as defined above.
+    */
+    NodeType getNodeType();
+
+    /**
+    The value of this node, depending on its type; see the table above.
+
+    @throws com::sun::star::xml::dom::DOMException
+    <p>DOMSTRING_SIZE_ERR: Raised when it would return more characters
+    than fit in a DOMString variable on the implementation platform.</p>
+    */
+    string getNodeValue() raises (DOMException);
+
+    /**
+    The Document object associated with this node.
+    */
+    XDocument getOwnerDocument();
+
+    /**
+    The parent of this node.
+    */
+    XNode getParentNode();
+
+    /**
+    The namespace prefix of this node, or null if it is unspecified.
+    */
+    string getPrefix();
+
+    /**
+    The node immediately preceding this node.
+    */
+    XNode getPreviousSibling();
+
+    /**
+    Returns whether this node (if it is an element) has any attributes.
+    */
+    boolean hasAttributes();
+
+    /**
+    Returns whether this node has any children.
+    */
+    boolean hasChildNodes();
+
+    /**
+    Inserts the node newChild before the existing child node refChild.
+    @throws DOMException
+    <p>HIERARCHY_REQUEST_ERR: Raised if this node is of a type that does
+                      not allow children of the type of the newChild node, or if the
+                      node to insert is one of this node's ancestors or this node itself.
+                   <p>WRONG_DOCUMENT_ERR: Raised if newChild was created from a different
+                      document than the one that created this node.
+                   <p>NO_MODIFICATION_ALLOWED_ERR: Raised if this node is readonly or if the
+                      parent of the node being inserted is readonly.
+                   <p>NOT_FOUND_ERR: Raised if refChild is not a child of this node.
+    */
+    XNode insertBefore([in] XNode newChild, [in] XNode refChild) raises (DOMException);
+
+    /**
+    Tests whether the DOM implementation implements a specific feature and
+    that feature is supported by this node.
+    */
+    boolean isSupported([in] string feature, [in] string ver);
+
+    /**
+    Puts all Text nodes in the full depth of the sub-tree underneath this
+    Node, including attribute nodes, into a "normal" form where only structure
+    (e.g., elements, comments, processing instructions, CDATA sections, and
+    entity references) separates Text nodes, i.e., there are neither adjacent
+    Text nodes nor empty Text nodes.
+    */
+    void normalize();
+
+    /**
+    Removes the child node indicated by oldChild from the list of children,
+    and returns it.
+    @throws DOMException
+    <p>NO_MODIFICATION_ALLOWED_ERR: Raised if this node is readonly.
+    <p>NOT_FOUND_ERR: Raised if oldChild is not a child of this node.
+    */
+    XNode removeChild([in] XNode oldChild) raises (DOMException);
+
+    /**
+    Replaces the child node oldChild with newChild in the list of children,
+    and returns the oldChild node.
+    @throws DOMException
+                   <p>HIERARCHY_REQUEST_ERR: Raised if this node is of a type that
+                      does not allow children of the type of the newChild node, or
+                      if the node to put in is one of this node's ancestors or this
+                      node itself.
+                   <p>WRONG_DOCUMENT_ERR: Raised if newChild was created from a different
+                      document than the one that created this node.
+                   <p>NO_MODIFICATION_ALLOWED_ERR: Raised if this node or the parent of the
+                      new node is readonly.
+                   <p>NOT_FOUND_ERR: Raised if oldChild is not a child of this node.
+    */
+    XNode replaceChild([in] XNode newChild, [in] XNode oldChild) raises (DOMException);
+
+    /**
+    The value of this node, depending on its type; see the table above.
+    @throws DOMException
+        <p>NO_MODIFICATION_ALLOWED_ERR: Raised when the node is readonly.
+        <p>DOMSTRING_SIZE_ERR: Raised when it would return more characters
+                      than fit in a DOMString variable on the implementation platform.
+    */
+    void setNodeValue([in] string nodeValue) raises (DOMException);
+
+    /**
+    The namespace prefix of this node, or null if it is unspecified.
+    @throws DOMException
+        <p>INVALID_CHARACTER_ERR: Raised if the specified prefix contains an illegal character,
+                      per the XML 1.0 specification .
+                   <p>NO_MODIFICATION_ALLOWED_ERR: Raised if this node is readonly.
+                   <p>NAMESPACE_ERR: Raised if the specified prefix is malformed per the Namespaces
+                      in XML specification, if the namespaceURI of this node is null, if the specified
+                      prefix is "xml" and the namespaceURI of this node is different from
+                      "http://www.w3.org/XML/1998/namespace", if this node is an attribute and the
+                      specified prefix is "xmlns" and the namespaceURI of this node is different from
+                      " http://www.w3.org/2000/xmlns/", or if this node is an attribute and the qualifiedName
+                      of this node is "xmlns" .
+    */
+    void setPrefix([in] string prefix) raises (DOMException);
+
+};
+
+}; }; }; }; };
+
+#endif

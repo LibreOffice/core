@@ -1,0 +1,180 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_sdb_ErrorCondition_idl__
+#define __com_sun_star_sdb_ErrorCondition_idl__
+
+//=============================================================================
+
+module com { module sun { module star { module sdb {
+
+//=============================================================================
+
+/** defines error conditions for OpenOffice.org Base core components
+
+    <p>Core components of OpenOffice.org will use those error conditions
+    as error codes (<member scope="com::sun::star::sdbc">SQLException::ErrorCode</member>)
+    wherever possible.<br/>
+    That is, if an <code>SQLException</code> is raised by
+    such a component, caused by an error condition which is included in the
+    <type>ErrorCondition</type> group, then the respective <em>negative</em> value
+    will be used as <code>ErrorCode</code>.</p>
+
+    <p>This allows to determine specific error conditions in your client code, and
+    to handle it appropriately.</p>
+
+    <p>Note that before you examine the <code>ErrorCode</code> member of a caught
+    <code>SQLException</code>, you need to make sure that the exception
+    is really thrown by an OpenOffice.org Base core component. To do so, check
+    whether the error message (<code>Exception::Message</code>) starts with the
+    vendor string <code>[OOoBase]</code>.</p>
+
+    <p>The list of defined error conditions, by nature, is expected to permanently grow,
+    so never assume it being finalized.</p>
+
+    @example Java
+    <listing>
+    catch ( SQLException e )
+    {
+    &nbsp;&nbsp;if ( e.Message.startsWith( "[OOoBase]" ) )
+    &nbsp;&nbsp;&nbsp;&nbsp;if ( e.ErrorCode + ErrorCondition.SOME_ERROR_CONDITION == 0 )
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;handleSomeErrorCondition();
+    }
+    </listing>
+ */
+constants ErrorCondition
+{
+    // ========================================================================
+    // = section ROW_SET - css.sdb.RowSet related error conditions
+
+    /** is used by and <type>RowSet</type> to indicate that an operation has been vetoed
+        by one of its approval listeners
+
+        <p>This error condition results in raising a <type>RowSetVetoException</type>.</p>
+        @see RowSet
+        @see XRowSetApproveBroadcaster
+        @see XRowSetApproveListener
+    */
+    const long ROW_SET_OPERATION_VETOED = 100;
+
+    // ========================================================================
+    // = section PARSER - parsing related error conditions
+
+    /** indicates that while parsing an SQL statement, cyclic sub queries have been detected.
+
+        <p>Imagine you have a client-side query <code>SELECT * FROM table</code>, which is
+        saved as &quot;query1&quot;. Additionally, there is a query &quot;query2&quot; defined
+        as <code>SELECT * FROM query1</code>. Now if you try to change the statement of
+        <type>query1</type> to <code>SELECT * FROM query2</code>, this is prohibited, because
+        it would lead to a cyclic sub query.
+    */
+    const long PARSER_CYCLIC_SUB_QUERIES = 200;
+
+    // ========================================================================
+    // = section DB - application-level error conditions
+    // =
+    // = next section should start with 500
+
+    /** indicates that the name of a client side database object - a query, a form,
+        or a report - contains one or more slashes, which is forbidden.
+    */
+    const long DB_OBJECT_NAME_WITH_SLASHES = 300;
+
+    /** indicates that an identifier is not SQL conform.
+    */
+    const long DB_INVALID_SQL_NAME = 301;
+
+    /** indicates that the name of a query contains quote characters.
+
+        <p>This error condition is met when the user attempts to save a query
+        with a name which contains one of the possible database quote characters.
+        This is an error since query names can potentially be used in
+        <code>SELECT</code> statements, where quote identifiers would render the statement invalid.</p>
+
+        @see com::sun::star::sdb::tools::XDataSourceMetaData::supportsQueriesInFrom
+    */
+    const long DB_QUERY_NAME_WITH_QUOTES = 302;
+
+    /** indicates that an attempt was made to save a database object under a name
+        which is already used in the database.
+
+        <p>In databases which support query names to appear in <code>SELECT</code>
+        statements, this could mean that a table was attempted to be saved with the
+        name of an existing query, or vice versa.</p>
+
+        <p>Otherwise, it means an object was attempted to be saved with the
+        name of an already existing object of the same type.</p>
+
+        @see com::sun::star::sdb::application::DatabaseObject
+        @see com::sun::star::sdb::tools::XDataSourceMetaData::supportsQueriesInFrom
+    */
+    const long DB_OBJECT_NAME_IS_USED = 303;
+
+    /** indicates an operation was attempted which needs a connection to the
+        database, which did not exist at that time.
+    */
+    const long DB_NOT_CONNECTED = 304;
+
+    // ========================================================================
+    // = section AB - address book access related error conditions
+    // =
+    // = next section should start with 550
+
+    /** used by the component implementing address book access to indicate that a requested address book could
+        not be accessed.
+
+        <p>For instance, this error code is used when you try to access the address book
+        in a Thunderbird profile named <q>MyProfile</q>,  but there does not exist a profile
+        with this name.</p>
+    */
+    const long AB_ADDRESSBOOK_NOT_FOUND = 500;
+
+    // ========================================================================
+    // = section DATA - data retrieval related error conditions
+    // =
+    // = next section should start with 600
+
+    /** used to indicate that a <code>SELECT</code> operation on a table needs a filter.
+
+        <p>Some database drivers are not able to <code>SELECT</code> from a table if the
+        statement does not contain a <code>WHERE</code> clause. In this case, a statement
+        like <code>SELECT * FROM "table"</cdeo> with fail with the error code
+        <code>DATA_CANNOT_SELECT_UNFILTERED</code>.</p>
+
+        <p>It is also legitimate for the driver to report this error condition as warning, and provide
+        an empty result set, instead of ungraceful failing.</p>
+    */
+    const long DATA_CANNOT_SELECT_UNFILTERED = 550;
+};
+
+//=============================================================================
+
+}; }; }; };
+
+//=============================================================================
+
+#endif

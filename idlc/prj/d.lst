@@ -1,0 +1,7 @@
+..\%__SRC%\bin\idlc.exe %_DEST%\bin\idlc.exe
+..\%__SRC%\bin\idlc.pdb %_DEST%\bin\idlc.pdb
+..\%__SRC%\bin\idlcpp.exe %_DEST%\bin\idlcpp.exe
+..\%__SRC%\bin\idlcpp.pdb %_DEST%\bin\idlcpp.pdb
+
+..\%__SRC%\bin\idlc %_DEST%\bin\idlc
+..\%__SRC%\bin\idlcpp %_DEST%\bin\idlcpp

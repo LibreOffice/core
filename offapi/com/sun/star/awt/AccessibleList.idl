@@ -1,0 +1,136 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_awt_AccessibleList_idl__
+#define __com_sun_star_awt_AccessibleList_idl__
+
+#include <com/sun/star/accessibility/AccessibleContext.idl>
+
+module com { module sun { module star { module accessibility {
+
+ published interface XAccessible;
+ published interface XAccessibleExtendedComponent;
+ published interface XAccessibleComponent;
+ published interface XAccessibleSelection;
+
+}; }; }; };
+
+module com { module sun { module star { module awt {
+
+
+
+/** Accessible lists are used by combo boxes as container for
+    the list items.
+
+    @see com::sun::star::accessibility::AccessibleContext
+
+    @see com::sun::star::accessibility::XAccessibleComponent
+    @see com::sun::star::accessibility::XAccessibleExtendedComponent
+    @see ::com::sun::star::accessibility::XAccessibleSelection
+
+    @since OOo 1.1.2
+*/
+published service AccessibleList
+{
+    /** This interface gives access to the structural information of a list:
+
+       <ul>
+       <li>Role: The role of a list is <const
+           scope="::com::sun::star::accessibility"
+           >AccessibleRole::LIST</const>.</li>
+       <li>Name: The name of a list is its localized label.</li>
+       <li>Description: The description of a list is its localized
+           help text.</li>
+       <li>Children: There exists children.
+            Each child is of type <type scope="com::sun::star::awt">AccessibleListItem</type>. </li>
+       <li>Parent: The parent can be of type
+            <ul>
+            <li>
+                <type scope="com::sun::star::awt">AccessibleComboBox</type>
+                <type scope="com::sun::star::awt">AccessibleListBox</type>
+                <type scope="com::sun::star::awt">AccessibleDropDownListBox</type>
+                <type scope="com::sun::star::awt">AccessibleDropDownComboBox</type>
+            </li>
+            .
+       </li>
+       <li>Relations: There are no relations.</li>
+       <li>States: The states supported by this service are
+           <ul>
+           <li><const scope="com::sun::star::accessibility"
+               >AccessibleStateType::DEFUNC</const>
+               is set if the object has already been disposed
+               and subsequent calls to this object result in
+               <type scope="com::sun::star::lang">DisposedException</type>
+               exceptions.</li>
+           <li><const scope="com::sun::star::accessibility"
+               >AccessibleStateType::ENABLED</const> is set
+               if the object is enabled.</li>
+           <li><const scope="com::sun::star::accessibility"
+               >AccessibleStateType::FOCUSABLE</const> is always set.</li>
+           <li><const scope="com::sun::star::accessibility"
+               >AccessibleStateType::FOCUSED</const> is set
+               if the object currently has the keyboard focus.</li>
+           <li><const scope="com::sun::star::accessibility"
+               >AccessibleStateType::ACTIVE</const> is set
+               if a child has currently the focus.</li>
+           <li><const scope="com::sun::star::accessibility"
+               >AccessibleStateType::RESIZABLE</const> is set
+               if the object can be resized.</li>
+           <li><const scope="com::sun::star::accessibility"
+               >AccessibleStateType::SHOWING</const> is set
+               if the object is displayed on the screen.</li>
+           <li><const scope="com::sun::star::accessibility"
+               >AccessibleStateType::VISIBLE</const> is always set.</li>
+           <li><const scope="com::sun::star::accessibility"
+               >AccessibleStateType::MULTI_SELECTABLE</const> is set
+               if the list supports multi selection.</li>
+           <li><const scope="com::sun::star::accessibility"
+               >AccessibleStateType::MANAGES_DESCENDANTS</const> is always set.
+               The children are transient.</li>
+           </ul>
+           </li>
+       </ul>
+    */
+    service   com::sun::star::accessibility::AccessibleContext;
+
+    interface com::sun::star::accessibility::XAccessibleComponent;
+    interface com::sun::star::accessibility::XAccessibleExtendedComponent;
+
+    /** Support of the <type scope="com::sun::star::accessibility">XAccessible</type> interface may be
+        discontinued in the future.
+    */
+    interface com::sun::star::accessibility::XAccessible;
+
+    /** This interface gives access to the selectable children of a
+        list.
+     */
+    interface com::sun::star::accessibility::XAccessibleSelection;
+};
+
+}; }; }; };
+
+#endif

@@ -1,0 +1,146 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_awt_XScrollBar_idl__
+#define __com_sun_star_awt_XScrollBar_idl__
+
+#include <com/sun/star/uno/XInterface.idl>
+
+#include <com/sun/star/awt/XAdjustmentListener.idl>
+
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module awt {
+
+//=============================================================================
+
+/** gives access to the value and settings of a scroll bar and makes it possible
+    to register adjustment event listeners.
+ */
+published interface XScrollBar: com::sun::star::uno::XInterface
+{
+    //-------------------------------------------------------------------------
+
+    /** registers an adjustment event listener.
+     */
+    [oneway] void addAdjustmentListener( [in] com::sun::star::awt::XAdjustmentListener l );
+
+    //-------------------------------------------------------------------------
+
+    /** unregisters an adjustment event listener.
+     */
+    [oneway] void removeAdjustmentListener( [in] com::sun::star::awt::XAdjustmentListener l );
+
+    //-------------------------------------------------------------------------
+
+    /** sets the scroll value of the scroll bar.
+     */
+    [oneway] void setValue( [in] long n );
+
+    //-------------------------------------------------------------------------
+
+    /** sets the scroll value, visible area and maximum scroll value
+        of the scroll bar.
+     */
+    [oneway] void setValues( [in] long nValue,
+             [in] long nVisible,
+             [in] long nMax );
+
+    //-------------------------------------------------------------------------
+
+    /** returns the current scroll value of the scroll bar.
+     */
+    long getValue();
+
+    //-------------------------------------------------------------------------
+
+    /** sets the maximum scroll value of the scroll bar.
+     */
+    [oneway] void setMaximum( [in] long n );
+
+    //-------------------------------------------------------------------------
+
+    /** returns the currently set maximum scroll value of the scroll bar.
+     */
+    long getMaximum();
+
+    //-------------------------------------------------------------------------
+
+    /** sets the increment for a single line move.
+     */
+    [oneway] void setLineIncrement( [in] long n );
+
+    //-------------------------------------------------------------------------
+
+    /** returns the currently set increment for a single line move.
+     */
+    long getLineIncrement();
+
+    //-------------------------------------------------------------------------
+
+    /** sets the increment for a block move.
+     */
+    [oneway] void setBlockIncrement( [in] long n );
+
+    //-------------------------------------------------------------------------
+
+    /** returns the currently set increment for a block move.
+     */
+    long getBlockIncrement();
+
+    //-------------------------------------------------------------------------
+
+    /** sets the visible size of the scroll bar.
+     */
+    [oneway] void setVisibleSize( [in] long n );
+
+    //-------------------------------------------------------------------------
+
+    /** returns the currently visible size of the scroll bar.
+     */
+    long getVisibleSize();
+
+    //-------------------------------------------------------------------------
+
+    /** sets the <type>ScrollBarOrientation</type> of the scroll bar.
+     */
+    [oneway] void setOrientation( [in] long n );
+
+    //-------------------------------------------------------------------------
+
+    /** returns the currently set <type>ScrollBarOrientation</type> of the
+        scroll bar.
+     */
+    long getOrientation();
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

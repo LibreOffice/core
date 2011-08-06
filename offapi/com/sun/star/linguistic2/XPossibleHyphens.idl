@@ -1,0 +1,97 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_linguistic2_XPossibleHyphens_idl__
+#define __com_sun_star_linguistic2_XPossibleHyphens_idl__
+
+#include <com/sun/star/uno/XInterface.idl>
+#include <com/sun/star/lang/Locale.idl>
+
+
+//=============================================================================
+
+module com { module sun { module star { module linguistic2 {
+
+//=============================================================================
+/** Gives information about a word's possible hyphenation points.
+
+     <P>Example: In German pre-spelling-reform you may have the following:
+     getWord:                   Dampfschiffahrt
+     getPossibleHyphens:            Dampf=schiff=fahrt
+     getOrigHyphensPositions:   4, 9
+     That is "Dampfschiffahrt" can be hyphenated after the "pf" (4) and
+     between the double "ff" (9). And if you are going to hyphenate it at
+     position 9 you will get an additional "f" before the hyphen
+     character.</P>
+
+    @see    <type scope="com::sun::star::linguistic2">XHyphenator</type>
+*/
+published interface XPossibleHyphens : com::sun::star::uno::XInterface
+{
+    //-------------------------------------------------------------------------
+    /**
+         @returns
+             the word for which the information of possible hyphenation
+             points was obtained.
+    */
+    string getWord();
+
+    //-------------------------------------------------------------------------
+    /** @returns
+            the language of the hyphenated word.
+
+        @see    <type scope="com::sun::star::lang">Locale</type>
+    */
+    com::sun::star::lang::Locale getLocale();
+
+    //-------------------------------------------------------------------------
+    /**
+         @returns
+             a string depicting the word with all hyphen positions
+             which are represented by "=" characters.
+             If there are any alternative spellings, the word will be altered
+             accordingly.
+    */
+    string getPossibleHyphens();
+
+    //-------------------------------------------------------------------------
+    /**
+         @returns
+             an ascending sequence of numbers where each number is an offset
+             within the original word which denotes a hyphenation
+             position corresponding to one of the hyphens in the
+            string returned by
+            <member scope="com::sun::star::linguistic2">XPossibleHyphens::getPossibleHyphens</member>.
+    */
+    sequence<short> getHyphenationPositions();
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

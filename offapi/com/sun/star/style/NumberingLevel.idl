@@ -1,0 +1,121 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_style_NumberingLevel_idl__
+#define __com_sun_star_style_NumberingLevel_idl__
+
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module style {
+
+//=============================================================================
+
+// DocMerge from xml: service com::sun::star::style::NumberingLevel
+/** These properties describe the numbering of a paragraph.
+
+
+
+    <p>NumberType determines the type of the numbering symbol.
+    Depending on this setting, some of the following values will be
+    ignored.</p>
+ */
+published service NumberingLevel
+{
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::style::NumberingLevel::NumberingType
+    /** specifies the type of numbering.@see NumberingType
+     */
+    [property] short NumberingType;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::style::NumberingLevel::ParentNumbering
+    /** specifies the number of higher numbering levels that
+        are included in the representation of the current number.
+     */
+    [property] short ParentNumbering;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::style::NumberingLevel::Prefix
+    /** This prefix is inserted in front of the numbering symbol(s).
+     */
+    [property] string Prefix;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::style::NumberingLevel::Suffix
+    /** This suffix is inserted after the numbering symbol(s).
+     */
+    [property] string Suffix;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::style::NumberingLevel::CharStyleName
+    /** This is the name of the character style that is used for the symbol(s).
+     */
+    [property] string CharStyleName;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::style::NumberingLevel::BulletId
+    /** The bullet symbol with this code in the assigned font is used.
+     */
+    [property] short BulletId;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::style::NumberingLevel::BulletFontName
+    /** This is the name of the font that is used for the bullet.
+     */
+    [property] string BulletFontName;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::style::NumberingLevel::GraphicURL
+    /** This is the URL of a graphic file to use as a symbol.
+     */
+    [property] string GraphicURL;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::style::NumberingLevel::StartWith
+    /** This specifies the start value for the numbering.
+     */
+    [property] short StartWith;
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+/*=============================================================================
+
+=============================================================================*/
+#endif

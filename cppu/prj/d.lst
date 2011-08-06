@@ -1,0 +1,74 @@
+mkdir: %_DEST%\inc\cppu
+mkdir: %_DEST%\inc\cppu\helper\purpenv
+mkdir: %_DEST%\inc\com
+mkdir: %_DEST%\inc\com\sun
+mkdir: %_DEST%\inc\com\sun\star
+mkdir: %_DEST%\inc\com\sun\star\uno
+mkdir: %_DEST%\inc\typelib
+mkdir: %_DEST%\inc\uno
+
+..\inc\cppu\macros.hxx %_DEST%\inc\cppu\macros.hxx
+..\inc\cppu\unotype.hxx %_DEST%\inc\cppu\unotype.hxx
+
+..\inc\com\sun\star\uno\Reference.h %_DEST%\inc\com\sun\star\uno\Reference.h
+..\inc\com\sun\star\uno\Reference.hxx %_DEST%\inc\com\sun\star\uno\Reference.hxx
+..\inc\com\sun\star\uno\Type.h %_DEST%\inc\com\sun\star\uno\Type.h
+..\inc\com\sun\star\uno\Type.hxx %_DEST%\inc\com\sun\star\uno\Type.hxx
+..\inc\com\sun\star\uno\Any.h %_DEST%\inc\com\sun\star\uno\Any.h
+..\inc\com\sun\star\uno\Any.hxx %_DEST%\inc\com\sun\star\uno\Any.hxx
+..\inc\com\sun\star\uno\Sequence.h %_DEST%\inc\com\sun\star\uno\Sequence.h
+..\inc\com\sun\star\uno\Sequence.hxx %_DEST%\inc\com\sun\star\uno\Sequence.hxx
+..\inc\com\sun\star\uno\genfunc.h %_DEST%\inc\com\sun\star\uno\genfunc.h
+..\inc\com\sun\star\uno\genfunc.hxx %_DEST%\inc\com\sun\star\uno\genfunc.hxx
+
+..\inc\typelib\typeclass.h %_DEST%\inc\typelib\typeclass.h
+..\inc\typelib\typedescription.h %_DEST%\inc\typelib\typedescription.h
+..\inc\typelib\typedescription.hxx %_DEST%\inc\typelib\typedescription.hxx
+..\inc\typelib\uik.h %_DEST%\inc\typelib\uik.h
+
+..\inc\uno\dispatcher.h %_DEST%\inc\uno\dispatcher.h
+..\inc\uno\dispatcher.hxx %_DEST%\inc\uno\dispatcher.hxx
+..\inc\uno\any2.h %_DEST%\inc\uno\any2.h
+..\inc\uno\sequence2.h %_DEST%\inc\uno\sequence2.h
+..\inc\uno\data.h %_DEST%\inc\uno\data.h
+..\inc\uno\lbnames.h %_DEST%\inc\uno\lbnames.h
+..\inc\uno\environment.h %_DEST%\inc\uno\environment.h
+..\inc\uno\environment.hxx %_DEST%\inc\uno\environment.hxx
+..\inc\uno\mapping.h %_DEST%\inc\uno\mapping.h
+..\inc\uno\mapping.hxx %_DEST%\inc\uno\mapping.hxx
+..\inc\uno\threadpool.h %_DEST%\inc\uno\threadpool.h
+..\inc\uno\current_context.h %_DEST%\inc\uno\current_context.h
+..\inc\uno\current_context.hxx %_DEST%\inc\uno\current_context.hxx
+..\inc\uno\cuno.h %_DEST%\inc\uno\cuno.h
+..\inc\uno\EnvDcp.h              %_DEST%\inc\uno\EnvDcp.h
+..\inc\uno\Enterable.h           %_DEST%\inc\uno\Enterable.h
+
+..\inc\cppu\EnvDcp.hxx           %_DEST%\inc\cppu\EnvDcp.hxx
+..\inc\cppu\Enterable.hxx        %_DEST%\inc\cppu\Enterable.hxx
+..\inc\cppu\EnvGuards.hxx        %_DEST%\inc\cppu\EnvGuards.hxx
+..\inc\cppu\FreeReference.hxx    %_DEST%\inc\cppu\FreeReference.hxx
+..\inc\cppu\Map.hxx              %_DEST%\inc\cppu\Map.hxx
+..\inc\cppu\Shield.hxx           %_DEST%\inc\cppu\Shield.hxx
+
+..\inc\cppu\helper\purpenv\Environment.hxx  %_DEST%\inc\cppu\helper\purpenv\Environment.hxx
+..\inc\cppu\helper\purpenv\Mapping.hxx      %_DEST%\inc\cppu\helper\purpenv\Mapping.hxx
+
+..\%__SRC%\lib\icppu.lib %_DEST%\lib\icppu.lib
+..\%__SRC%\bin\cppu* %_DEST%\bin\*
+..\%__SRC%\lib\libuno_cppu.* %_DEST%\lib\*
+
+..\%__SRC%\lib\ipurpenvhelper*        %_DEST%\lib\*
+..\%__SRC%\bin\purpe*.dll     %_DEST%\bin\*
+..\%__SRC%\lib\libuno_purpenvhelper*.*.* %_DEST%\lib\*
+
+..\%__SRC%\bin\unsafe_u*.dll    %_DEST%\bin\*
+..\%__SRC%\lib\libunsafe_uno_uno.*    %_DEST%\lib\*
+
+..\%__SRC%\bin\affine_u*.dll   %_DEST%\bin\*
+..\%__SRC%\lib\libaffine_uno_uno.*   %_DEST%\lib\*
+
+..\%__SRC%\bin\log_u*.dll   %_DEST%\bin\*
+..\%__SRC%\lib\liblog_uno_uno.*   %_DEST%\lib\*
+
+linklib: libuno_cppu.*.*
+linklib: libuno_purpenvhelper*.*.*

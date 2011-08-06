@@ -1,0 +1,111 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_sheet_SheetSortDescriptor2_idl__
+#define __com_sun_star_sheet_SheetSortDescriptor2_idl__
+
+#include <com/sun/star/table/TableSortDescriptor2.idl>
+#include <com/sun/star/table/CellAddress.idl>
+
+//=============================================================================
+
+module com {  module sun {  module star {  module sheet {
+
+//=============================================================================
+
+/** a description of how a cell range is to be sorted.
+
+    <p>This service extends the <type scope="com::sun::star::table">TableSortDescriptor2</type>
+    service with spreadsheet specific properties.</p>
+
+    @since OOo 1.1.2
+ */
+published service SheetSortDescriptor2
+{
+    //-------------------------------------------------------------------------
+
+    /** provides common sorting properties.
+
+    The fields in the SortFields property are not fully supported at the moment.
+    IsCaseSensitive, CollatorLocale and CollatorAlgorithm are only supported once and if
+    every field contains different of this it gives undefined results.
+
+     */
+    service com::sun::star::table::TableSortDescriptor2;
+
+    //=========================================================================
+
+    /** specifies if cell formats are moved with the contents
+        they belong to.
+     */
+    [property] boolean BindFormatsToContent;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies if a user defined sorting list is used.
+     */
+    [property] boolean IsUserListEnabled;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies which user defined sorting list is used.
+
+        <p>This property is only used, if
+        <member>SheetSortDescriptor::IsUserListEnabled</member> is <TRUE/>.</p>
+     */
+    [property] long UserListIndex;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies if the sorted data should be copied to another
+        position in the document.
+     */
+    [property] boolean CopyOutputData;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies the position where sorted data are to be copied.
+
+        <p>This property is only used, if
+        <member>SheetSortDescriptor::CopyOutputData</member> is <TRUE/>.</p>
+     */
+    [property] com::sun::star::table::CellAddress OutputPosition;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies whether the first row or column (depending on
+        <member scope="com::sun::star::table">TableSortDescriptor::Orientation</member>) is a header which
+        should not be sorted.
+     */
+    [property] boolean ContainsHeader;
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif
+

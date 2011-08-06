@@ -1,0 +1,100 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_text_XTextConvert_idl__
+#define __com_sun_star_text_XTextConvert_idl__
+
+#include <com/sun/star/uno/XInterface.idl>
+#include <com/sun/star/beans/PropertyValues.idl>
+#include <com/sun/star/lang/IllegalArgumentException.idl>
+
+#include <com/sun/star/beans/UnknownPropertyException.idl>
+#include <com/sun/star/text/XTextRange.idl>
+#include <com/sun/star/text/XTextContent.idl>
+#include <com/sun/star/text/XTextTable.idl>
+
+
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module text {
+
+//=============================================================================
+
+/** .
+ */
+interface XTextConvert : com::sun::star::uno::XInterface
+{
+    //-------------------------------------------------------------------------
+
+        /** moves the paragraphs from Start to End into a text frame.
+
+                <p>FrameProperties contains the properties of the to-be-created text frame.</p>
+
+        @param
+            .
+
+        @param
+            .
+        @return
+
+     */
+    ::com::sun::star::text::XTextContent convertToTextFrame(
+                        [in] com::sun::star::text::XTextRange Start,
+                        [in] com::sun::star::text::XTextRange End,
+                        [in] com::sun::star::beans::PropertyValues FrameProperties )
+                        raises( com::sun::star::lang::IllegalArgumentException,
+                                       com::sun::star::beans::UnknownPropertyException );
+
+        /** .
+
+
+        @param TableRanges contains the TextRange interfaces of the paragraphs, cells and rows of the table.
+            <p>The inner sequence contains the start and end paragraphs of each table cell.
+            The next sequence groups the cells to a row and the outer sequence groups the rows of the table.</p>
+
+        @param CellProperties contains the properties of each cell.
+        @param RowProperties contains the properties of each table row.
+        @param TableProperties contains the properties of the table.
+        @return the created table.
+
+     */
+    ::com::sun::star::text::XTextTable convertToTable(
+                     [in] sequence< sequence< sequence< com::sun::star::text::XTextRange > > > TableRanges,
+                     [in] sequence< sequence< com::sun::star::beans::PropertyValues > > CellProperties,
+                     [in] sequence< com::sun::star::beans::PropertyValues > RowProperties,
+                     [in] com::sun::star::beans::PropertyValues TableProperties )
+                        raises( com::sun::star::lang::IllegalArgumentException,
+                                       com::sun::star::beans::UnknownPropertyException );
+
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

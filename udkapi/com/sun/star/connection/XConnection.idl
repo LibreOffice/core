@@ -1,0 +1,98 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef _COM_SUN_STAR_CONNECTION_XCONNECTION_IDL_
+#define _COM_SUN_STAR_CONNECTION_XCONNECTION_IDL_
+
+#include <com/sun/star/io/IOException.idl>
+
+
+module com {  module sun {  module star {  module connection {
+
+/** A bidirectional bytestream.
+
+    <p> You should additionally implement XConnection2.
+
+    @see XConnection2
+ */
+published interface XConnection: com::sun::star::uno::XInterface
+{
+
+    /** reads a requested number of bytes from the connection.
+        <p> This method is blocking, meaning that it always returns a bytesequence
+        with the requested number of bytes, unless it has reached end of file (which
+        often means, that close() has been called).
+
+        <p> please see also the readSomeBytes() method of XConnection2.
+
+        @return The read number of bytes.
+                The return value and the length of the
+                returned sequence must be identical.
+        @param nBytesToRead
+                The number of bytes to be read from the stream.
+
+        @throws com::sun::star::io::IOException
+               in case an error occurred during reading from the stream.
+     */
+    long read( [out] sequence < byte > aReadBytes , [in] long nBytesToRead )
+            raises( com::sun::star::io::IOException );
+
+
+    // DocMerge from xml: method com::sun::star::connection::XConnection::write
+    /** writes the given bytesequence to the stream.
+        <p>The method blocks until the whole sequence is written.
+
+        @throws com::sun::star::io::IOException
+               in case an error occurred during writing to the stream.
+     */
+    void write( [in] sequence < byte > aData )
+        raises( com::sun::star::io::IOException );
+
+
+    /** Empties all internal buffers.
+     */
+    void flush( )
+            raises( com::sun::star::io::IOException );
+
+    /** Immediately terminates any ongoing read or write calls.
+        All subsequent read or write calls()
+     */
+    void close( )
+            raises( com::sun::star::io::IOException );
+
+
+    /** A unique string describing the connection.
+
+        <p>This string is different from the arguments to <member>XConnection::accept</member>
+        and <member>XConnector::connect</member>. In general, the string contains an additional
+        handle value.  For example, "socket,host=localhost,port=2002,uniqueValue=2324". </p>
+     */
+    string getDescription();
+};
+
+};};};};
+
+#endif

@@ -1,0 +1,73 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef com_sun_star_chart2_DataPoint_idl
+#define com_sun_star_chart2_DataPoint_idl
+
+#include <com/sun/star/style/CharacterProperties.idl>
+#include <com/sun/star/style/XStyle.idl>
+
+module com
+{
+module sun
+{
+module star
+{
+module chart2
+{
+
+service DataPoint
+{
+    service DataPointProperties;
+
+    service ::com::sun::star::style::CharacterProperties;
+    [optional] service ::com::sun::star::style::CharacterPropertiesAsian;
+    [optional] service ::com::sun::star::style::CharacterPropertiesComplex;
+
+    // ----------------------------------------------------------------------
+
+    /** this property handles the style.  This property must support
+        the service <type scope="com::sun::star::style">Style</type>.
+
+        <p>It should provide templates for all properties in this
+        service, thus it must also support <type>DataPoint</type>.</p>
+     */
+//  [property]  ::com::sun::star::style::XStyle     Style;
+
+    /** Gives the offset of the data point.  For PieDiagrams this
+        would be the percentage by which pies are dragged out of the
+        cake.
+     */
+    [optional, property] double                   Offset;
+};
+
+} ; // chart2
+} ; // com
+} ; // sun
+} ; // star
+
+
+#endif

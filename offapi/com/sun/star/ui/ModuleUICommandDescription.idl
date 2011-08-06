@@ -1,0 +1,82 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_ui_ModuleUICommandDescription_idl__
+#define __com_sun_star_ui_ModuleUICommandDescription_idl__
+
+#include <com/sun/star/container/XNameAccess.idl>
+
+//=============================================================================
+
+module com { module sun { module star { module ui {
+
+//=============================================================================
+
+/** a service which provides information about the user interface commands of
+    a single module.
+
+    <p>
+    Every OpenOffice.org module has an amount of commands that can be used by
+    user interface elements. This service provides access to the user interface commands
+    that are part of a single OpenOffice.org module, like Writer or Calc.
+    </p>
+
+    @since OOo 2.0
+*/
+
+service ModuleUICommandDescription
+{
+    /** provides access to user interface commands of an installed module.
+
+        <p>
+        An implementation must provide a <type scope="com::sun::star::uno">Sequence</type> which
+        has <type scope="com::sun::star::beans">PropertyValue</type> as entries. The following
+        entries a defined:
+        <ul>
+            <li><b>Label</b><br>a string which specifies the short name of the user interface command with
+            mnemonic and optional subsequent ... if the command needs additional user input. This string
+            can directly be used to set the text of a menu item.</li>
+            <li><b>Name</b><br>a string which specifies the short name of the user interface command without
+            any additional information. It can be used for the bubble help.</li>
+            <li><b>Popup</b><br>a boolean which specifies if the user interface command is a unique
+            identifier for a pop-up menu. A pop-up menu has a label, but is not bound to a command.</li>
+        </ul>
+        The key to a user interface command description is the user interface command itself which has
+        the following syntax ".uno:$Command". For example ".uno:Open" shows the file open dialog.
+        A complete list of user interface commands can be found inside the latest OpenOffice Developers Guide
+        or online at http://framework.openoffice.org.
+        </p>
+
+        @see com::sun::star::frame::ModuleManager
+    */
+
+    interface com::sun::star::container::XNameAccess;
+};
+
+}; }; }; };
+
+#endif

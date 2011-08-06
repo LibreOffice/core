@@ -1,0 +1,4 @@
+..\%__SRC%\bin\uuresolver.uno.dll %_DEST%\bin\uuresolver.uno.dll
+..\%__SRC%\lib\uuresolver.uno.dylib %_DEST%\lib\uuresolver.uno.dylib
+..\%__SRC%\lib\uuresolver.uno.so %_DEST%\lib\uuresolver.uno.so
+..\%__SRC%\misc\uuresolver.component %_DEST%\xml\uuresolver.component

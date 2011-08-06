@@ -1,0 +1,187 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_document_TypeDetection_idl__
+#define __com_sun_star_document_TypeDetection_idl__
+
+#include <com/sun/star/document/XTypeDetection.idl>
+#include <com/sun/star/container/XNameContainer.idl>
+#include <com/sun/star/container/XContainerQuery.idl>
+#include <com/sun/star/util/XFlushable.idl>
+
+//=============================================================================
+
+module com { module sun { module star { module document {
+
+//=============================================================================
+/** encapsulate a type detection service and provide read/write access on it's configuration data.
+
+    <p>
+    It's possible to make a "flat" detection which may use internal configuration
+    data only - or a "deep" detection which use special <type>ExtendedTypeDetection</type>
+    services to look into the document stream. Last mode can be suppressed to perform the operation.
+    Of course the results can't be guaranteed then. (e.g. in case the extension was changed)
+    </p>
+ */
+published service TypeDetection
+{
+    //-------------------------------------------------------------------------
+    /** can be used to make a flat or deep type detection.
+
+        <p>
+        Use this interface to get information about the type of the given resource.
+        Return value will be always an internal name of a registered document type.
+        It can be used may on other services (e.g. <type scope="com::sun::star::frame">FrameLoaderFactory</type>)
+        to do further things, which base on it (e.g. to load it into a frame).
+        </p>
+     */
+    interface XTypeDetection;
+
+    //-------------------------------------------------------------------------
+    /** provides read access to the complete set of type configuration data.
+
+        <p>
+        Every container item is specified as a set of properties and will be
+        represented by a sequence< <type scope="com::sun::star::beans">PropertyValue</type> > structure.
+        Follow properties are supported:
+        (But note: not all of them must be present every time!)
+
+        <table border=1>
+            <tr>
+                <td><strong>Property Name</strong></td>
+                <td><strong>Value Type</strong></td>
+                <td><strong>Description</strong></td>
+            </tr>
+            <tr>
+                <td><em>Name</em></td>
+                <td>[string]</td>
+                <td>The internal name is the only value, which makes a container item unique.</td>
+            </tr>
+            <tr>
+                <td><em>UIName</em></td>
+                <td>[string]</td>
+                <td>It contains the localized name for this type for the current locale.</td>
+            </tr>
+            <tr>
+                <td><em>UINames</em></td>
+                <td>[sequence< string >]</td>
+                <td>It contains all available localized names for this type. The are organized
+                    in pairs and represented as a structure of sequence< <type scope="com::sun::star::beans">PropertyValue</type> >.
+                    The name of such property must be interpreted as locale; it's value as the localized
+                    type name corresponding to this locale.</td>
+            </tr>
+            <tr>
+                <td><em>MediaType</em></td>
+                <td>[string]</td>
+                <td>It contains the MIME or content type descriptor. The differences between a MIME type and
+                    an internal type name was made, to resolve existing ambiguities.</td>
+            </tr>
+            <tr>
+                <td><em>ClipboardFormat</em><strong>deprecated!</strong></td>
+                <td>[string]</td>
+                <td>It was interpreted as an identifier inside clipboard.
+                    Please use new property ContentFormat instead of this now.</td>
+            </tr>
+            <tr>
+                <td><em>ContentFormat</em></td>
+                <td>[string]</td>
+                <td>It's and identifier, which is used for a deep format detection.
+                    An <type>ExtendedTypeDetection</type> use this value to match
+                    a given content to this type. e.g. It's interpreted as the doc type
+                    of an XML stream or as an identifier inside a file header.
+                </td>
+            </tr>
+            <tr>
+                <td><em>URLPattern</em></td>
+                <td>[sequence< string >]</td>
+                <td>This list contains different URL patterns, which identify this type.
+                    E.g. data base contents can be described by an new defined protocol like "sql://select*".
+                    In combination with a suitable <type scope="com::sun::star::frame">FrameLoader</type> or
+                    <type>ImportFilter</type>/<type>ExportFilter</type> it would be possible then, to
+                    layout a SQL query output into an office frame.</td>
+            </tr>
+            <tr>
+                <td><em>Extensions</em></td>
+                <td>[sequence< string >]</td>
+                <td>It contains a list of file extensions, which match this type.
+                    They must be specified as pure extension, without any special signs.
+                    E.g.: "doc", "html" ... but not ".doc".
+                    Using wild cards is allowed but not very useful. They may result in
+                    ambiguities with other type registrations can't be resolved anytime.</td>
+            </tr>
+            <tr>
+                <td><em>DocumentIconID</em></td>
+                <td>[integer]</td>
+                <td>It's an ID, which present the number of a corresponding icon.</td>
+            </tr>
+        </table>
+        </p>
+
+        <p>
+        Note:<br>
+        All elements of this container will be addressed by his internal name,
+        and it must be an unambiguous value.
+        </p>
+     */
+    interface com::sun::star::container::XNameAccess;
+
+    //-------------------------------------------------------------------------
+    /** provides a write access to the configuration data.
+     */
+    [optional] interface com::sun::star::container::XNameContainer;
+
+    //-------------------------------------------------------------------------
+    /** provides search on the configuration data set.
+
+        <p>
+        Against simple property search it provides some complex algorithms too.
+        For further informations please read the SDK documentation.
+        </p>
+     */
+    [optional] interface com::sun::star::container::XContainerQuery;
+
+    //-------------------------------------------------------------------------
+    /** can be used to perform container changes.
+
+        <p>
+        Because the complexness of such configuration set can be very high,
+        it seams not very useful to update the underlying configuration layer
+        on every container change request immediately. Another strategy can be to
+        make all changes (adding/changing/removing of items) and call flush at the end.
+        That will validate the whole container and reject inconsistent data sets.
+        Only in case all made changes was correct, they will be written back to the
+        configuration. Further this interface provides the possibility, that interested
+        changes listener can be registered too.
+        </p>
+     */
+    [optional] interface com::sun::star::util::XFlushable;
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

@@ -1,0 +1,111 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_sheet_XSheetCellCursor_idl__
+#define __com_sun_star_sheet_XSheetCellCursor_idl__
+
+#include <com/sun/star/sheet/XSheetCellRange.idl>
+
+//=============================================================================
+
+module com {  module sun {  module star {  module sheet {
+
+//=============================================================================
+
+/** provides advanced methods to control the position of a cursor in a
+    spreadsheet.
+
+    @see com::sun::star::sheet::SheetCellCursor
+ */
+published interface XSheetCellCursor: com::sun::star::sheet::XSheetCellRange
+{
+    //-------------------------------------------------------------------------
+
+    /** expands the cursor into the region containing the cells to which
+        it currently points.
+
+        <p>A region is a cell range bounded by empty cells.</p>
+     */
+    void collapseToCurrentRegion();
+
+    //-------------------------------------------------------------------------
+
+    /** collapses the cursor into the range of the array formula to which
+        it is currently pointing.
+
+        <p>To get the correct result, the top left cell of the original
+        cursor must point to any cell containing an array formula.
+        If not, the cursor is left unchanged.</p>
+     */
+    void collapseToCurrentArray();
+
+    //-------------------------------------------------------------------------
+
+    /** expands the cursor to merged cell ranges.
+
+        <p>Expands the current cursor range in a way so that all merged
+        cell ranges intersecting the current range will fit completely.
+        If the cursor does not point to any range with merged cells, it
+        is left unchanged.</p>
+     */
+    void collapseToMergedArea();
+
+    //-------------------------------------------------------------------------
+
+    /** expands the cursor to include the entire columns of the cells
+        to which it is currently pointing.
+     */
+    void expandToEntireColumns();
+
+    //-------------------------------------------------------------------------
+
+    /** expands the cursor to include the entire rows of the cells to
+        which it is currently pointing.
+     */
+    void expandToEntireRows();
+
+    //-------------------------------------------------------------------------
+
+    /** changes the size of a cursor range.
+
+        <p>The top left cell of the cursor keeps unmodified. </p>
+
+        @param nColumns
+            the number of columns of the new cursor range.
+        @param nRows
+            the number of rows of the new cursor range.
+     */
+    void collapseToSize( [in] long nColumns, [in] long nRows );
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif
+

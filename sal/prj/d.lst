@@ -1,0 +1,42 @@
+mkdir: %_DEST%\bin\cppunit
+mkdir: %_DEST%\inc\cppunittester
+mkdir: %_DEST%\inc\sal
+mkdir: %_DEST%\inc\osl
+mkdir: %_DEST%\inc\rtl
+mkdir: %_DEST%\inc\systools
+mkdir: %_DEST%\inc\systools\win32
+
+..\inc\cppunittester\protectorfactory.hxx %_DEST%\inc\protectorfactory.hxx
+..\%__SRC%\inc\rtlbootstrap.mk %_DEST%\inc\rtlbootstrap.mk
+..\inc\sal\*.h %_DEST%\inc\sal\*.h
+..\%__SRC%\inc\sal\typesizes.h %_DEST%\inc\sal\typesizes.h
+..\inc\osl\*.h %_DEST%\inc\osl\*.h
+..\inc\osl\*.hxx %_DEST%\inc\osl\*.hxx
+..\inc\rtl\*.h %_DEST%\inc\rtl\*.h
+..\inc\rtl\*.hxx %_DEST%\inc\rtl\*.hxx
+..\inc\systools\win32\*.h %_DEST%\inc\systools\win32\*.h
+..\inc\systools\win32\*.hxx %_DEST%\inc\systools\win32\*.hxx
+
+..\%__SRC%\lib\libuno_sal.so.3 %_DEST%\lib\libuno_sal.so.3
+symlink: %_DEST%\lib\libuno_sal.so.3 %_DEST%\lib\libuno_sal.so
+..\%__SRC%\lib\libuno_sal.dylib.3 %_DEST%\lib\libuno_sal.dylib.3
+symlink: %_DEST%\lib\libuno_sal.dylib.3 %_DEST%\lib\libuno_sal.dylib
+..\%__SRC%\lib\libsal_textenc.so.3 %_DEST%\lib\libsal_textenc.so.3
+symlink: %_DEST%\lib\libsal_textenc.so.3 %_DEST%\lib\libsal_textenc.so
+..\%__SRC%\lib\libsal_textenc.dylib.3 %_DEST%\lib\libsal_textenc.dylib.3
+symlink: %_DEST%\lib\libsal_textenc.dylib.3 %_DEST%\lib\libsal_textenc.dylib
+..\%__SRC%\lib\*.sl %_DEST%\lib\*.sl
+..\%__SRC%\lib\*.a %_DEST%\lib\*.a
+
+..\%__SRC%\slb\sal.lib %_DEST%\lib\xsal.lib
+
+..\%__SRC%\bin\*.dll %_DEST%\bin\*.dll
+..\%__SRC%\lib\*.lib %_DEST%\lib\*.lib
+..\%__SRC%\bin\*.bin %_DEST%\bin\*.bin
+..\%__SRC%\misc\*.hid %_DEST%\bin\*.hid
+..\%__SRC%\bin\*.res %_DEST%\bin\*.res
+
+..\%__SRC%\inc\udkversion.h %_DEST%\inc\sal\udkversion.h
+
+..\%__SRC%\bin\cppunittester.exe %_DEST%\bin\cppunit\cppunittester.exe
+..\%__SRC%\bin\cppunittester %_DEST%\bin\cppunit\cppunittester

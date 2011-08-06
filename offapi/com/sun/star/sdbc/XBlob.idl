@@ -1,0 +1,247 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_sdbc_XBlob_idl__
+#define __com_sun_star_sdbc_XBlob_idl__
+
+#include <com/sun/star/uno/XInterface.idl>
+
+ module com {  module sun {  module star {  module io {
+ published interface XInputStream;
+};};};};
+
+#include <com/sun/star/sdbc/SQLException.idl>
+
+ module com {  module sun {  module star {  module sdbc {
+
+
+/** is the representation (mapping) of an SQL
+    <i>
+    BLOB
+    </i>
+    .
+
+    <p>
+    A SQL
+    <i>
+    BLOB
+    </i>
+    is a built-in type that stores a
+    Binary Large Object as a column value in a row of a database table.
+    The driver implements
+    <i>
+    BLOB
+    </i>
+    using a
+    SQL
+    <code>locator(BLOB)</code>
+    , which means that a
+    <code>Blob</code>
+    object contains a logical pointer to the SQL
+    <i>
+    BLOB
+    </i>
+    data rather than the data itself.
+    <br/>
+    A
+    <code>Blob</code>
+    object is valid for the duration of the transaction in which is was created.
+
+    </p>
+    <p>
+    Methods in the interfaces
+    <type scope="com::sun::star::sdbc">XResultSet</type>
+    ,
+    and
+    <type scope="com::sun::star::sdbc">XPreparedStatement</type>
+    , such as
+    <code>getBlob</code>
+    and
+    <code>setBlob</code>
+    allow a programmer to access the SQL
+    <i>
+    BLOB
+    </i>
+    .
+    <br/>
+    The
+    <code>Blob</code>
+    interface provides methods for getting the length of a SQL
+    <i>
+    BLOB
+    </i>
+    (Binary Large Object) value, for materializing a
+    <i>
+    BLOB
+    </i>
+    value on the client and for determining the position of a pattern of bytes within a
+    <i>
+    BLOB
+    </i>
+    value.
+    </p>
+ */
+published interface XBlob: com::sun::star::uno::XInterface
+{
+    //-------------------------------------------------------------------------
+
+    /** returns the number of bytes in the
+        <i>
+        BLOB
+        </i>
+        value
+        designated by this
+        <code>Blob</code>
+        object.
+        @returns
+            the length
+        @throws SQLException
+            if a database access error occurs.
+     */
+    hyper length() raises (SQLException);
+
+      //-------------------------------------------------------------------------
+
+    /** returns as an array of bytes part or all of the
+            <i>
+            BLOB
+            </i>
+             value that this
+             <code>Blob</code>
+             object designates.  The byte
+             array contains up to
+             <code>length</code>
+             consecutive bytes
+             starting at position
+             <code>pos</code>.
+             @param pos
+                is the ordinal position of the first byte in the
+                    <i>
+                BLOB
+                </i>
+                value to be extracted; the first byte is at
+                    position 1.
+             @param length
+                is the number of consecutive bytes to be copied.
+             @returns
+                a byte array containing up to
+                <code>length</code>
+                    consecutive bytes from the
+                <i>
+                BLOB
+                </i>
+                value designated
+                 by this
+                <code>Blob</code>
+                object, starting with the byte at position
+                <code>pos</code>
+                .
+             @throws SQLException
+                if there is an error accessing the
+                <i>
+                BLOB
+                </i>
+                .
+     */
+    sequence<byte> getBytes([in]hyper pos, [in]long length)
+        raises (SQLException);
+
+      //-------------------------------------------------------------------------
+
+    /** retrieves the
+        <i>
+        BLOB
+        </i>
+        designated by this
+        <code>Blob</code>
+        instance as a stream.
+        @returns
+            the stream
+        @throws SQLException
+            if a database access error occurs.
+     */
+    com::sun::star::io::XInputStream getBinaryStream()
+        raises (SQLException);
+      //-------------------------------------------------------------------------
+
+    /** determines the byte position at which the specified byte
+        <code>pattern</code>
+        begins within the
+        <i>
+        BLOB
+        </i>
+        value that this
+        <code>Blob</code>
+        object represents.  The
+        search for
+        <code>pattern</code>
+        begins at position
+        <code>start</code>
+        .
+        @param pattern
+            the pattern to search
+        @returns
+            the position
+        @throws SQLException
+            if a database access error occurs.
+     */
+    hyper position([in]sequence<byte> pattern, [in]hyper start)
+        raises (SQLException);
+
+      //-------------------------------------------------------------------------
+
+    /** determines the byte position in the
+        <i>
+        BLOB
+        </i>
+        value
+        designated by this
+        <code>Blob</code>
+        object at which
+        <code>pattern</code>
+        begins. The search begins at position
+        <code>start</code>
+        .
+        @param pattern
+            the pattern to search
+        @param start
+            position to start
+        @returns
+            the position
+        @throws SQLException
+            if a database access error occurs.
+     */
+    hyper positionOfBlob([in]XBlob pattern,[in] hyper start)
+         raises (SQLException);
+};
+
+//=============================================================================
+
+}; }; }; };
+
+/*===========================================================================
+===========================================================================*/
+#endif

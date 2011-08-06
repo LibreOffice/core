@@ -1,0 +1,195 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_lang_XConnectionPoint_idl__
+#define __com_sun_star_lang_XConnectionPoint_idl__
+
+#include <com/sun/star/uno/XInterface.idl>
+#include <com/sun/star/lang/XConnectionPointContainer.idl>
+
+#include <com/sun/star/lang/ListenerExistException.idl>
+
+#include <com/sun/star/lang/InvalidListenerException.idl>
+
+
+//=============================================================================
+
+module com {  module sun {  module star {  module lang {
+
+//=============================================================================
+
+// DocMerge from idl: interface com::sun::star::lang::XConnectionPoint
+/** supports connection points for connectable objects.
+
+    <p>Connectable objects support the following features: </p>
+
+    <ul>
+        <li>outgoing interfaces, such as event sets; </li>
+        <li>the ability to enumerate the types of the outgoing interfaces;
+        <li>the ability to connect and disconnect sinks to the object
+            for those outgoing types; </li>
+        <li>the ability to enumerate the connections that exist to a
+            particular outgoing interface.  </li>
+    </ul>
+
+    <h4>When to Implement?<h4>
+
+    <p>To create a connectable object, you need to implement objects
+    that provide two related interfaces: </p>
+
+    <ul>
+        <li><type>XConnectionPointContainer</type> </li>
+        <li><type>XConnectionPoint</type> </li>
+    </ul>
+
+    <p>The <type>XConnectionPointContainer</type> interface is implemented
+    on the connectable object to indicate the existence of the outgoing
+    interfaces. It provides a sequence of sub-objects.  It also provides
+    access to all the connection point sub-objects, each of which
+    implements the <type>XConnectionPoint</type> interface. The
+    <type>XConnectionPoint</type> interface provides a sequence of
+    sub-objects.  </p>
+
+    <p>Each connection point is a separate sub-object to avoid circular
+    reference counting problems.  A connection point controls how many
+    connections (one or more) it will allow in its implementation of
+    <member>XConnectionPoint::advise()</member>.  </p>
+
+    <h4>When to use?</h4>
+
+    <p>A client can use the <type>XConnectionPointContainer</type> interface: </p>
+
+    <UL>
+
+        <LI>to get a sequence of connection points for each outgoing type. </LI>
+
+        <LI>to obtain access to connection point sub-objects with the
+            <type>XConnectionPoint</type> interface for each
+            outgoing type. Through the XConnectionPoint interface,
+            a client starts or terminates an advisory loop with the
+            connectable object and the client's own sink.  The
+            client can also use the <type>XConnectionPoint</type>
+            interface to get a sequence of the connections that it
+            knows about. </LI>
+    </UL>
+
+    @see        XConnectionPointContainer
+ */
+published interface XConnectionPoint: com::sun::star::uno::XInterface
+{
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: method com::sun::star::lang::XConnectionPoint::getConnectionType
+    /** @returns
+                the type of the outgoing interface managed by this
+                connection point.
+
+        <p>Using the <member>XConnectionPointContainer::getConnectionPoints</member>
+        method, a client can obtain an <type>XConnectionPoint</type>
+        interface.  Using that interface and this method, the client
+        can determine the type of each connection point enumerated. The
+        type returned from this method must enable the caller to access
+        this same connection point through
+        <member>XConnectionPointContainer::findConnectionPoint</member>.
+
+        @see XConnectionPointContainer::findConnectionPoint
+     */
+    type getConnectionType();
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: method com::sun::star::lang::XConnectionPoint::getConnectionPointContainer
+    /** @returns
+            the <type>XConnectionPointContainer</type> interface on
+            the parent connectable object.
+
+        @see XConnectionPointContainer
+     */
+    com::sun::star::lang::XConnectionPointContainer getConnectionPointContainer();
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: method com::sun::star::lang::XConnectionPoint::advise
+    /** creates a connection between a connection point and a
+        client's sink, where the sink implements the outgoing interface
+        supported by this connection point.
+
+        <p>A few <code>add...Listener</code> methods need additional parameters
+        to add listeners or throw exceptions. One of these methods is
+        <member scope="com::sun::star::beans">XPropertySet::addPropertyChangeListener</member>.
+        We ignore the problem in this interface. A solution must be provided
+        in an additional <type>XConnectionPoint</type> interface.  </p>
+
+        @param xListener
+            specifies the listener interface on the client's advise sink.
+            The client's sink receives outgoing calls from the
+            connection point container.
+
+        @throws ListenerExistException
+            if it is a unicast broadcaster and a listener is already set.
+
+        @throws InvalidListenerException
+            if the listener does not supply the needed interfaces.
+
+        @see com::sun::star::beans::XPropertySet::addPropertyChangeListener
+     */
+    void advise( [in] com::sun::star::uno::XInterface xListener )
+            raises( com::sun::star::lang::ListenerExistException,
+                    com::sun::star::lang::InvalidListenerException );
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: method com::sun::star::lang::XConnectionPoint::unadvise
+    /** terminates a notification previously set up with advise.
+
+        <p>A few <code>remove...Listener</code> methods need additional
+        parameters to add listeners or throw exceptions. One of these methods
+        is <member scope="com::sun::star::beans">XPropertySet::removePropertyChangeListener</member>.
+        We ignore the problem in this interface. A solution must be
+        provided in an additional <type>XConnectionPoint</type> interface.  </p>
+
+        @param listener
+            specifies the listener interface on the client's advise sink.
+
+        @see com::sun::star::beans::XPropertySet::removePropertyChangeListener
+     */
+    void unadvise( [in] com::sun::star::uno::XInterface xListener );
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: method com::sun::star::lang::XConnectionPoint::getConnections
+    /** @returns
+                a sequence of all currently advised connections.
+     */
+    sequence<com::sun::star::uno::XInterface> getConnections();
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

@@ -1,0 +1,110 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_frame_Controller_idl__
+#define __com_sun_star_frame_Controller_idl__
+
+#include <com/sun/star/frame/XController.idl>
+#include <com/sun/star/frame/XDispatchProvider.idl>
+#include <com/sun/star/awt/XWindow.idl>
+#include <com/sun/star/ui/XContextMenuInterception.idl>
+#include <com/sun/star/awt/XUserInputInterception.idl>
+#include <com/sun/star/view/XSelectionSupplier.idl>
+#include <com/sun/star/datatransfer/XTransferableSupplier.idl>
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module frame {
+
+//=============================================================================
+/** is an abstract service for a component which offers a deeper integration of
+    desktop components than a <type scope="com::sun::star::awt">XWindow</type>
+    can offer
+
+    <p>
+    Such components can be loaded into a <type>Frame</type> inside a <type>Desktop</type>
+    environment. A controller is a richer component then a pure window, but full featured
+    components need a <type>XModel</type> interface too.
+    <br>
+    (see service <type scope="com::sun::star::document">OfficeDocument</type> for further information)
+    <p>
+
+    @see com::sun::star::document::OfficeDocument
+ */
+published service Controller
+{
+    //-------------------------------------------------------------------------
+    /** with this interface, components viewed in a <type>Frame</type> can serve
+        events (by supplying dispatches)
+     */
+    interface XController;
+
+    //-------------------------------------------------------------------------
+    /** for certain functions which are useful at the UI
+
+        <p>
+        Mostly used by the <type>Frame</type> service, which contains this
+        controller object. There will be an interception mechanism for dispatches
+        available too.
+        </p>
+
+        @see XDispatch
+        @see XDispatchProviderInterception
+     */
+    interface XDispatchProvider;
+
+    //-------------------------------------------------------------------------
+    /** this interface enables the controller to get interceptors registered that
+        change context menus or prevent them from being executed
+
+        <p>
+        Don't mix it with <type>XDispatchProviderInterception</type> which
+        intercept calls of <member>XDispatch::dispatch()</member>.
+        </p>
+     */
+    [optional] interface com::sun::star::ui::XContextMenuInterception;
+
+    //-------------------------------------------------------------------------
+    /** makes it possible to intercept keyboard and mouse input.
+     */
+    [optional] interface com::sun::star::awt::XUserInputInterception;
+
+    //-------------------------------------------------------------------------
+    /** makes it possible to access and change the selection in a view
+     */
+    [optional] interface com::sun::star::view::XSelectionSupplier;
+
+    //-------------------------------------------------------------------------
+    /** makes it possible to work with clipboard data
+     */
+    [optional] interface com::sun::star::datatransfer::XTransferableSupplier;
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

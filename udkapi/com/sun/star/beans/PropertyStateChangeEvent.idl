@@ -1,0 +1,91 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_beans_PropertyStateChangeEvent_idl__
+#define __com_sun_star_beans_PropertyStateChangeEvent_idl__
+
+#include <com/sun/star/lang/EventObject.idl>
+
+#include <com/sun/star/beans/PropertyState.idl>
+
+
+//=============================================================================
+
+module com {  module sun {  module star {  module beans {
+
+//=============================================================================
+
+/** is delivered whenever the state of a "bound" property is changed.
+
+    <p>It is sent as an argument to the method of
+    <type>XPropertyStateChangeListener</type>.  </p>
+
+    <p>Normally these events are accompanied by the name, and the old
+    and new values of the changed property.  </p>
+
+    <p>Void values may be provided for the old and new values if their
+    true values are not known. </p>
+ */
+published struct PropertyStateChangeEvent: com::sun::star::lang::EventObject
+{
+    //-------------------------------------------------------------------------
+
+    /** specifies the name of the property which changes its value.
+
+        <p>This name identifies the property uniquely within an
+        <type>XPropertySet</type>. Upper and lower case are distinguished.</p>
+     */
+    string PropertyName;
+
+    //-------------------------------------------------------------------------
+
+    /** contains the implementation handle for the property.
+
+        <p>It may be -1 if the implementation has no handle. You can use this
+        handle to get values from the <type>XFastPropertySet</type>
+        interface.</p>
+     */
+    long PropertyHandle;
+
+    //-------------------------------------------------------------------------
+
+    /** contains the old value of the property.
+     */
+    com::sun::star::beans::PropertyState OldValue;
+
+    //-------------------------------------------------------------------------
+
+    /** contains the new value of the property.
+     */
+    com::sun::star::beans::PropertyState NewValue;
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

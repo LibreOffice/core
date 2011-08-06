@@ -1,0 +1,115 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_style_StyleFamilies_idl__
+#define __com_sun_star_style_StyleFamilies_idl__
+
+#include <com/sun/star/container/XNameAccess.idl>
+
+#include <com/sun/star/container/XIndexAccess.idl>
+
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module style {
+
+//=============================================================================
+
+// DocMerge from xml: service com::sun::star::style::StyleFamilies
+/** This service contains the collection of style families within the
+    container document.
+
+    <p>Examples of style families may be:
+    <dl>
+    <dt>CharacterStyles
+    </dt>
+    <dd>the container of style sheets for sequences of characters
+    within a text
+
+    </dd>
+    <dt>ParagraphStyles
+    </dt>
+    <dd>the container of style sheets for text paragraphs
+
+    </dd>
+    <dt>FrameStyles
+    </dt>
+    <dd>the container of style sheets for text frames
+
+    </dd>
+    <dt>PageStyles
+    </dt>
+    <dd>the container of style sheets for pages
+
+    </dd>
+    <dt>NumberingStyles
+    </dt>
+    <dd>the container for style sheets for numbering
+
+    </dd>
+    <dt>CellStyles
+    </dt>
+    <dd>the container for style sheets for cells
+
+    </dd>
+    <dt>ShapeStyles
+    </dt>
+    <dd>the container for style sheets for shapes
+    </dd>
+    </dl>
+    </p>
+ */
+published service StyleFamilies
+{
+
+
+    // DocMerge from xml: service com::sun::star::style::StyleFamilies: interface com::sun::star::container::XNameAccess
+    /** This mandatory interface makes it possible to get access to the
+                style families by their names.
+
+                <p>The elements within this collection are <type>StyleFamily</type> instances.
+     */
+    interface com::sun::star::container::XNameAccess;
+
+
+    // DocMerge from xml: service com::sun::star::style::StyleFamilies: interface com::sun::star::container::XIndexAccess
+    /** This optional interface makes it possible to get access to the
+                style families by index.
+
+                <p>The elements within this collection are <type>StyleFamily</type> instances.
+     */
+    [optional] interface com::sun::star::container::XIndexAccess;
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+/*=============================================================================
+
+=============================================================================*/
+#endif

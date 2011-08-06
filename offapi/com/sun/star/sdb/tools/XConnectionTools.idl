@@ -1,0 +1,142 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_sdb_tools_XConnectionTools_idl__
+#define __com_sun_star_sdb_tools_XConnectionTools_idl__
+
+#include <com/sun/star/uno/XInterface.idl>
+#include <com/sun/star/sdbc/SQLException.idl>
+
+module com {  module sun {  module star {
+    module container {
+        published interface XNameAccess;
+    };
+    module lang {
+        published interface XComponent;
+    };
+};};};
+//=============================================================================
+module com {  module sun {  module star {  module sdb {
+    published interface XSingleSelectQueryComposer;
+    module tools {
+//=============================================================================
+
+published interface XTableName;
+published interface XObjectNames;
+published interface XDataSourceMetaData;
+
+//-----------------------------------------------------------------------------
+/** encapsulates various useful functionality around a
+    <type scope="com::sun::star::sdb">Connection</type>
+
+    <p>Most of the functionality provided here is meaningful only relative to
+    a given database connection. For instance, for quoting table names, you need
+    the meta data instance of the connection. Thus, the entry point for obtaining
+    a <type>XConnectionTools</type> instance is the
+    <type scope="com::sun::star::sdb">Connection</type> service.</p>
+
+    <p>Note that nearly all functionality provided by this interface is also
+    available by other means, it's only provided here for convenience purposes.</p>
+
+    @since OOo 2.0.4
+*/
+published interface XConnectionTools
+{
+    /** creates an instance supporting the <type>XTableName</type> interface,
+        which can be used to manipulate table names for various purposes.
+
+        <p>The returned object is guaranteed to not be <NULL/>.</p>
+    */
+    XTableName      createTableName();
+
+    /** returns an instance supporting the <type>XObjectNames</type> interface,
+        which provides access to functionality around table and query names.
+
+        <p>The returned object is guaranteed to not be <NULL/>.</p>
+    */
+    XObjectNames    getObjectNames();
+
+    /** provides access to the application-level data source meta data
+    */
+    XDataSourceMetaData
+                    getDataSourceMetaData();
+
+    /** get fields for a result set given by a "command descriptor"
+
+        <p>A command descriptor here means:
+        <ul><li>a SDB-level connection (<type scope="com.sun.star.sdb">Connection</type></li>
+            <li>a string specifying the name of an object relative to the connection</li>
+            <li>a <type scope="com.sun.star.sdb">CommandType</type> value specifying the type
+                of the object</type></li>
+        </ul>
+        </p>
+
+        @param commandType
+            the type of the object
+
+        @param command
+            the object. This may be a table name, a query name, or an SQL statement, depending on the value
+            of <arg>_nCommandType</arg>
+
+        @param _rxCollectionOner
+            If (and only if) <arg>CommandType</arg> is CommandType.COMMAND, the fields collection which is returned
+            by this function here is a temporary object. It is kept alive by another object, which is to be
+            created temporarily, too. To ensure that the fields you get are valid as long as you need them,
+            the owner which controls their life time is transfered to this parameter upon return.<br/>
+
+            Your fields live as long as this component lives.<br/>
+
+            Additionally, you are encouraged to dispose this component as soon as you don't need the fields anymore.
+            It depends on the connection's implementation if this is necessary, but the is no guarantee, so to
+            be on the safe side with respect to resource leaks, you should dispose the component.
+
+        @return
+            the container of the columns (aka fields) of the object
+    */
+    ::com::sun::star::container::XNameAccess getFieldsByCommandDescriptor(  [in] long commandType,
+                                                                            [in] string command,
+                                                                            [out] ::com::sun::star::lang::XComponent  keepFieldsAlive
+                                                                            ) raises( com::sun::star::sdbc::SQLException );
+
+    /** get the composer initialized with a command and command type.
+        @param commandType
+            the type of the object
+
+        @param command
+            the object. This may be a table name, a query name, or an SQL statement, depending on the value
+            of <arg>_nCommandType</arg>
+        @return
+            the composer filled with command and command type.
+    */
+    ::com::sun::star::sdb::XSingleSelectQueryComposer getComposer([in] long commandType,[in] string command);
+};
+
+//=============================================================================
+}; }; }; }; };
+//=============================================================================
+
+#endif

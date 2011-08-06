@@ -1,0 +1,210 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_sheet_FormulaMapGroupSpecialOffset_idl__
+#define __com_sun_star_sheet_FormulaMapGroupSpecialOffset_idl__
+
+// ===========================================================================
+
+module com {  module sun {  module star {  module sheet {
+
+// ===========================================================================
+
+/** Constants designating the offsets within the sequence returned by
+    <member>XFormulaOpCodeMapper::getAvailableMappings</member> when
+    called for group <const>FormulaMapGroup::SPECIAL</const>.
+
+    <p>The number of constants may grow in future versions!</p>
+ */
+constants FormulaMapGroupSpecialOffset
+{
+    // -----------------------------------------------------------------------
+
+    /** Formula tokens containing the op-code obtained from this offset
+        describe a formula operand token that will be pushed onto the formula
+        stack while the formula is interpreted.
+
+        <p>The <member>FormulaToken::Data</member> member shall contain one of
+        the following values:</p>
+
+        <ul>
+        <li>A value of type <atom>double</atom> for literal floating-point
+        constants.</li>
+        <li>A <atom>string</atom> for literal text.</li>
+        <li>A <atom dim="[][]">any</atom> for a literal array. The contained
+        values shall be of type <atom>double</atom> or <atom>string</atom>.
+        Floating-point values and strings may occur together in an array.</li>
+        <li>A struct of type <type>SingleReference</type> for a reference to a
+        single cell in the own document.</li>
+        <li>A struct of type <type>ComplexReference</type> for a reference to
+        a range of cells in the own document.</li>
+        <li>A struct of type <type>ExternalReference</type> for a reference to
+        a cell, a range of cells, or a defined name in an external document.</li>
+        </ul>
+     */
+    const long PUSH = 0;
+
+    // -----------------------------------------------------------------------
+
+    const long CALL = 1;
+
+    // -----------------------------------------------------------------------
+
+    /** Formula tokens containing the op-code obtained from this offset
+        instruct the formula interpreter to immediately stop interpreting the
+        formula.
+
+        <p>The <member>FormulaToken::Data</member> member is not used
+        and should be empty.</p>
+     */
+    const long STOP = 2;
+
+    // -----------------------------------------------------------------------
+
+    /** Formula tokens containing the op-code obtained from this offset
+        describe the reference to an external function (e.g. add-in function)
+        used in formulas.
+
+        <p>The <member>FormulaToken::Data</member> member shall contain a
+        <atom>string</atom> with the programmatic name of the function, e.g.
+        "com.sun.star.sheet.addin.Analysis.getEomonth" for the EOMONTH
+        function from the Analysis add-in.</p>
+     */
+    const long EXTERNAL = 3;
+
+    // -----------------------------------------------------------------------
+
+    /** Formula tokens containing the op-code obtained from this offset
+        describe the reference to a defined name (also known as named range)
+        used in formulas.
+
+        <p>The <member>FormulaToken::Data</member> member shall contain an
+        integer value of type <atom>long</atom> specifying the index of the
+        defined name. This index can be obtained from the defined name using
+        its <member>NamedRange::TokenIndex</member> property.</p>
+
+        @see  NamedRange
+     */
+    const long NAME = 4;
+
+    // -----------------------------------------------------------------------
+
+    /** Formula tokens containing the op-code obtained from this offset
+        describe an invalid name that resolves to the #NAME? error in formulas.
+
+        <p>The <member>FormulaToken::Data</member> member is not used
+        and should be empty.</p>
+     */
+    const long NO_NAME = 5;
+
+    // -----------------------------------------------------------------------
+
+    /** Formula tokens containing the op-code obtained from this offset
+        describe an empty function parameter.
+
+        <p>Example: In the formula <code>=SUM(1;;2)</code> the second
+        parameter is empty and represented by a formula token containing the
+        "missing" op-code.</p>
+
+        <p>The <member>FormulaToken::Data</member> member is not used
+        and should be empty.</p>
+     */
+    const long MISSING = 6;
+
+    // -----------------------------------------------------------------------
+
+    /** Formula tokens containing the op-code obtained from this offset
+        describe "bad" data in a formula, e.g. data the formula parser was not
+        able to parse.
+
+        <p>The <member>FormulaToken::Data</member> member shall contain a
+        <atom>string</atom> with the bad data. This string will be displayed
+        literally in the formula.</p>
+     */
+    const long BAD = 7;
+
+    // -----------------------------------------------------------------------
+
+    /** Formula tokens containing the op-code obtained from this offset
+        describe whitespace characters within the string representation of a
+        formula.
+
+        <p>Whitespace characters in formulas are used for readability and do
+        not affect the result of the formula.</p>
+
+        <p>The <member>FormulaToken::Data</member> member shall contain a
+        positive integer value of type <atom>long</atom> specifying the number
+        of space characters.</p>
+
+        <p>Attention: This may change in next versions to support other
+        characters than simple space characters (e.g. line feeds, horizontal
+        tabulators, non-breakable spaces).</p>
+     */
+    const long SPACES = 8;
+
+    // -----------------------------------------------------------------------
+
+    const long MAT_REF = 9;
+
+    // -----------------------------------------------------------------------
+
+    /** Formula tokens containing the op-code obtained from this offset
+        describe the reference to a database range used in formulas.
+
+        <p>The <member>FormulaToken::Data</member> member shall contain an
+        integer value of type <atom>long</atom> specifying the index of the
+        database range. This index can be obtained from the database range
+        using its <member>DatabaseRange::TokenIndex</member> property.</p>
+
+        @see  DatabaseRange
+     */
+    const long DB_AREA            = 10;
+
+    // -----------------------------------------------------------------------
+
+    /** Formula tokens containing the op-code obtained from this offset
+        describe the reference to a macro function called in a formula.
+
+        <p>The <member>FormulaToken::Data</member> member shall contain a
+        <atom>string</atom> specifying the name of the macro function.</p>
+     */
+    const long MACRO              = 11;
+
+    // -----------------------------------------------------------------------
+
+    const long COL_ROW_NAME       = 12;
+
+    // -----------------------------------------------------------------------
+
+};
+
+// ===========================================================================
+
+}; }; }; };
+
+#endif
+

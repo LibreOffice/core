@@ -1,0 +1,104 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_script_XStarBasicLibraryInfo_idl__
+#define __com_sun_star_script_XStarBasicLibraryInfo_idl__
+
+#include <com/sun/star/container/XNameContainer.idl>
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module script {
+
+//=============================================================================
+
+/** Interface representing a library and provides access to its modules
+
+    @deprecated
+ */
+published interface XStarBasicLibraryInfo: com::sun::star::uno::XInterface
+{
+    //-------------------------------------------------------------------------
+    /** returns the library's name
+     */
+    string getName();
+
+    //-------------------------------------------------------------------------
+    /** returns
+        the module container giving access to the modules stored in the library.
+        The container has to be returned in any case, no matter if the library is
+        stored embedded, external, or linked.
+
+        @see getExternalSourceURL
+        @see getLinkTargetURL
+     */
+    com::sun::star::container::XNameContainer getModuleContainer();
+
+    //-------------------------------------------------------------------------
+    /** returns
+        the dialog container giving access to the dialogs stored in the library.
+        The container has to be returned in any case, no matter if the library is
+        stored embedded, external, or linked.
+
+        @see getExternalSourceURL
+        @see getLinkTargetURL
+     */
+    com::sun::star::container::XNameContainer getDialogContainer();
+
+    //-------------------------------------------------------------------------
+    /** returns
+        the password, if the library is protected with one,
+        an empty string otherwise.
+     */
+    string getPassword();
+
+    //-------------------------------------------------------------------------
+    /** returns an
+        URL describing the location where the library is stored if the library
+        is stored seperately (for example not in the main XML file but in a
+        special library format file), an empty string otherwise.
+        This information can be useful to optimize the access to the library,
+        e.g., for loading on demand.
+     */
+    string getExternalSourceURL();
+
+    //-------------------------------------------------------------------------
+    /** returns an
+        URL describing the location of the library linked to.
+
+        <p>HINT: This method can be removed when there is a generic interface
+        for linking. Then the implementation will simply support this
+        "XLinked" interface and it can be checked by queryInterface().</p>
+     */
+    string getLinkTargetURL();
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

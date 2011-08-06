@@ -1,0 +1,153 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_frame_XDispatch_idl__
+#define __com_sun_star_frame_XDispatch_idl__
+
+#include <com/sun/star/uno/XInterface.idl>
+#include <com/sun/star/util/URL.idl>
+#include <com/sun/star/beans/PropertyValue.idl>
+#include <com/sun/star/frame/XStatusListener.idl>
+
+
+//=============================================================================
+
+module com {  module sun {  module star {  module frame {
+
+//=============================================================================
+/** serves state information of objects which can be connected to
+        controls (e.g. toolbox controls).
+
+    <p>
+    Each state change is to be broadcasted to all registered
+    status listeners. The first notification should be performed
+    synchronously from <member>XDispatch::addStatusListener()</member>;
+        if not, controls may flicker. State listener must be aware of this
+    synchronous notification.
+    </p>
+
+    <p>
+    The state consists of enabled/disabled and a short descriptive text
+    of the function (e.g. "undo insert character"). It is to be broadcasted
+        whenever this state changes or the control should re-get the value
+    for the URL it is connected to. Additionally, a context-switch-event
+    is to be broadcasted whenever the object may be out of scope,
+    to force the state listener to requery the <type>XDispatch</type>.
+    </p>
+
+    @see Frame
+    @see FeatureStateEvent
+ */
+published interface XDispatch: com::sun::star::uno::XInterface
+{
+    //-------------------------------------------------------------------------
+    /** dispatches (executes) an URL asynchronously.
+
+        <p>
+        It is only allowed to dispatch URLs for which this <type>XDispatch</type>
+        was explicitly queried. Additional arguments ("'#..." or "?...") are allowed.
+        </p>
+
+        @param URL
+            fully parsed URL describing the feature which should be dispatched (=executed)
+
+        @param Arguments
+            optional arguments for this request.
+            They depend on the real implementation of the dispatch object.
+
+        @example
+            <listing>
+            <i><font COLOR="#949494">// some code for a click-handler (Java)</font></i>
+            void <strong>myOnClick</strong>(<em>String</em> sURL,<em>String</em> sTargetFrame,<em>com.sun.star.beans.PropertyValue[]</em> lArguments)
+            {
+            &nbsp;&nbsp;com.sun.star.util.URL[] aURL = new com.sun.star.util.URL[1];
+            &nbsp;&nbsp;aURL[0] = new com.sun.star.util.URL();
+            &nbsp;&nbsp;aURL[0].Complete = sURL;
+
+            &nbsp;&nbsp;com.sun.star.util.XURLTransformer xParser = (com.sun.star.util.XURLTransformer)UnoRuntime.queryInterface(
+            &nbsp;&nbsp;&nbsp;&nbsp;com.sun.star.util.XURLTransformer.class,
+            &nbsp;&nbsp;&nbsp;&nbsp;mxServiceManager.createInstance("com.sun.star.util.URLTransformer"));
+
+            &nbsp;&nbsp;xParser.parseStrict(aURL);
+
+            &nbsp;&nbsp;com.sun.star.frame.XDispatch xDispatcher = mxFrame.queryDispatch(aURL[0], sTargetFrame, com.sun.star.frame.FrameSearchFlag.GLOBAL);
+
+            &nbsp;&nbsp;if(xDispatcher!=null)
+            &nbsp;&nbsp;&nbsp;&nbsp;xDispatcher.dispatch(aURL[0], lArguments);
+            }
+            </listing>
+     */
+    [oneway] void dispatch(
+        [in] com::sun::star::util::URL URL,
+        [in] sequence<com::sun::star::beans::PropertyValue> Arguments);
+
+    //-------------------------------------------------------------------------
+        /** registers a listener of a control for a specific URL
+        at this object to receive status events.
+
+        <p>
+        It is only allowed to register URLs for which this <type>XDispatch</type>
+        was explicitly queried. Additional arguments ("#..." or "?...") will be ignored.
+        </p>
+        Note: Notifications can't be guaranteed! This will be a part of interface <type>XNotifyingDispatch</type>.
+
+        @param Control
+            listener that wishes to be informed
+
+        @param URL
+            the URL (without additional arguments) the listener wishes to be registered for.
+            A listener can be registered for more than one URL at the same time.
+
+        @see XStatusListener
+        @see XDispatch::removeStatusListener()
+     */
+    [oneway] void addStatusListener(
+        [in] XStatusListener Control,
+        [in] com::sun::star::util::URL URL);
+
+    //-------------------------------------------------------------------------
+        /** unregisters a listener from a control.
+
+        @param Control
+            listener that wishes to be unregistered
+
+        @param URL
+            URL the listener was registered for.
+            Additional arguments ("#..." or "?...") will be ignored.
+
+        @see XStatusListener
+        @see XDispatch::addStatusListener()
+     */
+    [oneway] void removeStatusListener(
+        [in] XStatusListener Control,
+        [in] com::sun::star::util::URL URL);
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

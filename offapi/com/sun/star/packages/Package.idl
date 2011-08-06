@@ -1,0 +1,115 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_packages_Package_idl__
+#define __com_sun_star_packages_Package_idl__
+
+#include <com/sun/star/lang/XInitialization.idl>
+#include <com/sun/star/container/XHierarchicalNameAccess.idl>
+#include <com/sun/star/lang/XSingleServiceFactory.idl>
+#include <com/sun/star/util/XChangesBatch.idl>
+
+
+//=============================================================================
+
+module com {  module sun {  module star {  module packages {
+
+//=============================================================================
+/** The <type>Package</type> is a service that provides access to a set of
+    files and folders contained within a Package. One instance of the
+    Package service exists for each Package file to be manipulated.
+
+    Each instance is created with an argument which specifies the URL of
+    the Package file to which the user requires access. If the instance is
+    created without arguments, it must be initialized with the
+    <type scope="com::sun::star::lang">XInitialization</type> service methods
+    before it is a valid instance of the service.
+*/
+published service Package
+{
+    /**
+    A Package can be initialized with one of the following:
+
+    1. A file URL referring to a package.
+    2. An XInputStream referring to a package (it must also
+       support an XSeekable interface).
+    3. An XStream referring to a package. The XInputStream must support
+       an XSeekable interface, and the XOutputStream must support an
+       XTruncate interface.
+
+    It will throw a css::uno::Exception if initialized with bad data or
+    if the package has an invalid format (for example, a corrupt central
+    directory record if the file is a ZIP file).
+    */
+    interface com::sun::star::lang::XInitialization;
+    /**
+    This interface is used to get access to any entry within the package
+    For example:
+        getByHierarchicalName ("folder/subfolder/file1.txt");
+    This will return a PackageStream which refers to the specified stream.
+    This is also used to get access to a particular folder within the
+    Package. For example:
+        getByHierarchicalName ("folder/subfolder/");
+    This will return a PackageFolder which describes the contents of the specified
+    folder.
+
+    Calls to methods of XHierarchicalNameAccess must NOT have a leading slash.
+    */
+    interface com::sun::star::container::XHierarchicalNameAccess;
+    /**
+    This interface is used to create new PackageStream or PackageFolder
+    implementation objects for addition to the Package.
+
+    createInstance - creates a new stream implementation object (when first
+    created, the new object is not part of the Package). It must be added
+    to the PackageFolder in which it will reside using the methods in the
+    PackageFolder service.
+
+    createInstanceWithArguments - This accepts one boolean value as an
+    argument. If it set to true, a PackageFolder implementation is created,
+    if it is set to false, a PackageStream implementation is created.
+
+    Creating and inserting a new stream would be done as follows:
+
+        1. xNewStream = package->createInstanceWithArguments( false );
+        2. xDataStream = new MyStreamImpl(). (wherever the data comes from)
+        3. xNewStream->setInputStream( xDataStream );
+        4. parentFolder->insertByName( "image.png", xNewStream );
+
+    Replacing an existing stream would be very similar, except that the
+    call ->insertByName would be replaced by ->replaceByName.
+    */
+    interface com::sun::star::lang::XSingleServiceFactory;
+    /**
+    This interface is used to commit any changes to the Package. A new
+    Package file will be written with any new or changed streams/folders and
+    omitting any PackageStream or PackageFolder that has been removed.
+    */
+    interface com::sun::star::util::XChangesBatch;
+};
+}; }; }; };
+
+#endif

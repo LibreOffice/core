@@ -1,0 +1,173 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_configuration_SimpleSetUpdate_idl__
+#define __com_sun_star_configuration_SimpleSetUpdate_idl__
+
+#include <com/sun/star/configuration/SimpleSetAccess.idl>
+#include <com/sun/star/container/XNameContainer.idl>
+#include <com/sun/star/lang/XSingleServiceFactory.idl>
+#include <com/sun/star/lang/XMultiServiceFactory.idl>
+
+//=============================================================================
+
+module com { module sun { module star { module configuration {
+
+//=============================================================================
+/** provides write access to a dynamic, homogeneous, non-hierarchical set of
+ values or objects.
+
+ <p>Allows adding and removing elements.
+ Helps create new elements to be added.
+ </p>
+
+ <p>This service extends <type>SimpleSetAccess</type> to support
+ modifying the container. Any child objects shall in turn support
+ modifying access.
+ </p>
+*/
+published service SimpleSetUpdate
+{
+/** is the basic service providing read access to a (not necessarily
+ hierarchical) <em>set</em>.
+*/
+    service SimpleSetAccess;
+
+/** allows inserting, removing, and replacing elements.
+
+ <p>This interface extends the interface
+ <type scope="com::sun::star::container">XNameAccess</type> supported
+ by service <type>SimpleSetAccess</type> to allow modifying the container.
+ </p>
+
+ <p>If available, changes can be observed by registering a listener with interface
+ <type scope="com::sun::star::container">XContainer</type>.
+ </p>
+
+ <p>If the elements of this set are of simple type (the type returned by
+ <member scope="com::sun::star::container">XElementAccess::getElementType()</member>
+ is not an interface type), then values of that type can directly be passed to
+ <member scope="com::sun::star::container">XNameContainer::insertByName()</member>
+ and
+ <member scope="com::sun::star::container">XNameContainer::replaceByName()</member>.
+ </p>
+
+ <p>Otherwise new elements have to be constructed to match the type
+ prescribed by the element template of this set. Such elements can be created
+ using interfaces <type scope="com::sun::star::lang">XSingleServiceFactory</type>
+ and, if supported, <type scope="com::sun::star::lang">XMultiServiceFactory</type>.
+ </p>
+
+ <p>Objects to be inserted must not be contained in any set at the time of
+ insertion. <member scope="com::sun::star::container">XChild::getParent()</member>
+ must return <NULL/>. If a name had been assigned to the object prior to insertion
+ (using <member scope="com::sun::star::container">XNamed::setName()</member>
+ or by other means), this name is ignored and will be lost.
+ After insertion the name of the object is the name that was used as argument
+ to <member scope="com::sun::star::container">XNameContainer::insertByName()</member>
+ or <member scope="com::sun::star::container">XNameContainer::replaceByName()</member>.
+</p>
+
+
+ <p>Objects that are removed using
+ <member scope="com::sun::star::container">XNameContainer::removeByName()</member>
+ or replaced using
+ <member scope="com::sun::star::container">XNameContainer::replaceByName()</member>
+ remain valid and can be reinserted into a set supporting the same template and
+ even under a different name.
+ </p>
+
+ <p>An implementation need not support insertion of objects that were not
+ obtained in one of the ways described above. If it does, the implementation
+ must reject elements that do not have the correct structure as described
+ by the template.
+ </p>
+*/
+    interface com::sun::star::container::XNameContainer;
+
+/** allows creating an object that can be inserted into this set. [conditional]
+
+ <p>This interface shall be implemented by an implementation,
+ if and only if the element type of the set, as returned by
+ <member scope="com::sun::star::container">XElementAccess::getElementType()</member>,
+ is an object type, such as an interface.
+ </p>
+
+ <p>Using <member scope="com::sun::star::lang">XSingleServiceFactory::createInstance()</member>
+ an instance of the element template of this set is created. If the set
+ supports multiple templates or variations of the basic template, a default
+ variant of the basic template is instantiated. If an implementation supports
+ variations, they may be specified by passing arguments to
+ <member scope="com::sun::star::lang">XSingleServiceFactory::createInstanceWithArguments()</member>.
+ There are no predefined arguments for all versions of this service.
+ </p>
+
+ <p>The object created is not contained in the set and does not have a name yet.
+ It may subsequently be inserted into the set and named using
+ <member scope="com::sun::star::container">XNameContainer::insertByName()</member>
+ or
+ <member scope="com::sun::star::container">XNameContainer::replaceByName()</member>.
+ </p>
+*/
+    [optional] interface com::sun::star::lang::XSingleServiceFactory;
+
+/** allows creating various objects that can be inserted into this set. [optional]
+
+ <p>This interface may be implemented by an implementation of
+ service SetUpdate to support creating elements from other than
+ the basic element template. An example of this would be an
+ implementation that supports inheritance, allowing the use of
+ templates derived from the basic template by extension.
+ </p>
+
+ <p>This interface may only be implemented if the element type of the set
+ (as returned by
+ <member scope="com::sun::star::container">XElementAccess::getElementType()</member>)
+ is an object type, such as an interface. An implementation should also implement
+ interface <type>XTemplateContainer</type> which is optional in this service.
+ </p>
+
+ <p>The service identifier argument passed
+ to <member scope="com::sun::star::lang">XMultiServiceFactory::createInstance()</member>
+ or <member scope="com::sun::star::lang">XMultiServiceFactory::createInstanceWithArguments()</member>
+ names the template to be instantiated or otherwise identifies the structure
+ to be built. The implementation must at least support using the template
+ name obtained from <member>XTemplateContainer::getElementTemplateName()</member>
+ as a service identifier, in which case the result shall be the same as if
+ the corresponding member of <type scope="com::sun::star::lang">XSingleServiceFactory</type>
+ had been called.
+ </p>
+
+*/
+    [optional] interface com::sun::star::lang::XMultiServiceFactory;
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

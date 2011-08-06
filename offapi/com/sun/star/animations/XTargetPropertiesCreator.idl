@@ -1,0 +1,72 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_animations_XTargetPropertiesCreator_idl__
+#define __com_sun_star_animations_XTargetPropertiesCreator_idl__
+
+#include <com/sun/star/animations/TargetProperties.idl>
+#include <com/sun/star/animations/XAnimationNode.idl>
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module animations {
+
+//=============================================================================
+
+/** Factory interface to generate properties for all animated targets.<p>
+
+    Depending on mode and content of a SMIL animation tree, animation
+    targets can have global properties different from the target's
+    default. The most prominent example for such a difference is shape
+    visibility: when a shape is to become visible in the course of a
+    SMIL animation, it naturally has to be initially invisible for
+    that effect to have any visible impact.<p>
+
+    This factory interface is able to generate sequences of global
+    properties for all targets referenced in a given SMIL animation
+    tree.
+ */
+interface XTargetPropertiesCreator : ::com::sun::star::uno::XInterface
+{
+    /** Determine a sequence of global target properties.<p>
+
+        This method generates a sequence of TargetProperties in effect
+        before the given SMIL animations start. These properties
+        should be applied to the given animation targets, to achieve
+        correct playback of the SMIL animations.<p>
+
+        @param rootNode
+        Root node of the SMIL animation tree.
+     */
+    sequence< TargetProperties > createInitialTargetProperties( [in] XAnimationNode rootNode );
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

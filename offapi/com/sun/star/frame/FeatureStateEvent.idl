@@ -1,0 +1,90 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_frame_FeatureStateEvent_idl__
+#define __com_sun_star_frame_FeatureStateEvent_idl__
+
+#include <com/sun/star/lang/EventObject.idl>
+#include <com/sun/star/util/URL.idl>
+
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module frame {
+
+//=============================================================================
+/** This event is broadcast by a <type>Controller</type> whenever the state of
+    the feature changes
+
+    @see XController
+    @see XStatusListener
+ */
+published struct FeatureStateEvent: com::sun::star::lang::EventObject
+{
+    //-------------------------------------------------------------------------
+    /** contains the URL of the feature.
+     */
+    com::sun::star::util::URL FeatureURL;
+
+    //-------------------------------------------------------------------------
+    /** contains a descriptor of the feature for the user interface.
+     */
+    string FeatureDescriptor;
+
+    //-------------------------------------------------------------------------
+    /** specifies whether the feature is currently enabled or disabled.
+     */
+    boolean IsEnabled;
+
+    //-------------------------------------------------------------------------
+    /** specifies whether the <type>XDispatch</type> has to be requeried.
+
+        <p>
+        Interest code should listen for <type>FrameActionEvent</type>
+        too, to update own feature states and dispatch listener on
+        <const>FrameAction::CONTEXT_CHANGED</const>.
+        </p>
+     */
+    boolean Requery;
+
+    //-------------------------------------------------------------------------
+    /** contains the state of the feature in this dispatch.
+
+        <p>
+        This can be, for example, simply <TRUE/> for a boolean feature like
+        underline on/off. Some simple types like <code>string</code> or
+        <atom>boolean</atom> are useful here for generic UI elements, like
+        a checkmark in a menu.
+        </p>
+     */
+    any State;
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

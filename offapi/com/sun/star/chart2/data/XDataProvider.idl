@@ -1,0 +1,161 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef com_sun_star_chart2_data_XDataProvider_idl
+#define com_sun_star_chart2_data_XDataProvider_idl
+
+#include <com/sun/star/uno/XInterface.idl>
+#include <com/sun/star/lang/IllegalArgumentException.idl>
+#include <com/sun/star/chart2/data/XDataSource.idl>
+#include <com/sun/star/beans/PropertyValue.idl>
+#include <com/sun/star/sheet/XRangeSelection.idl>
+
+module com
+{
+module sun
+{
+module star
+{
+module chart2
+{
+module data
+{
+
+/** An application that provides data for a chart must implement this
+    interface.
+ */
+interface XDataProvider  : ::com::sun::star::uno::XInterface
+{
+    /** If <TRUE/> is returned, a call to createDataSource with the
+        same arguments must return a valid XDataSequence object.  If
+        <FALSE/> is returned, createDataSource throws an exception.
+     */
+    boolean createDataSourcePossible( [in] sequence< com::sun::star::beans::PropertyValue > aArguments );
+
+    /** Creates a data source object that matches the given range
+        representation string.
+
+        <p>This can be used for creating the necessary data for a new
+        chart out of a previously selected range of cells in a
+        spreadsheet.</p>
+
+        @param aArguments
+            Arguments that tell the data provider how to slice the
+            given range.  The properties should be defined in a
+            separate service.
+
+            <p>For spreadsheets and text document tables there exists a
+            service <type>TabularDataProviderArguments</type>
+            describing valid values for this list.</p>
+
+        @return
+            a data source containing <type>DataSequence</type>s that
+            span the entire region given in <code>aArguments</code>.
+
+        @throws ::com::sun::star::lang::IllegalArgumentException
+            may be raised by the <type>XDataProvider</type> if it is
+            unable to interpret the arguments passed in
+             <code>aArguments</code> appropriately.
+     */
+    XDataSource createDataSource(
+        [in] sequence< com::sun::star::beans::PropertyValue > aArguments )
+        raises( com::sun::star::lang::IllegalArgumentException );
+
+    /** Tries to find out with what parameters the passed
+        <type>DataSource</type> most probably was created.
+
+        <p>if xDataSource is a data source that was created with
+        <member>createDataSource</member>, the arguments returned here
+         should be the same than the ones passed to the function.
+         Of course, this cannot be guaranteed.  However, if detection
+         is ambiguous, the returned arguments should be empty. </p>
+
+        <p>This method may merge representation strings together if
+        adjacent ranges appear successively in the range identifiers.
+        E.g., if the first range refers to "$Sheet1.$A$1:$A$8" and the
+        second range refers to "$Sheet1.$B$1:$B$8", those should be
+        merged together to "$Sheet1.$A$1:$B$8".</p>
+
+        @param xDataSource
+            A data source containing all data used in a chart.
+
+        @return
+            Arguments that when being passed to
+            <member>createDataSource</member> should in an ideal case
+            return the same data source as <code>xDataSource</code>.
+     */
+    sequence< com::sun::star::beans::PropertyValue > detectArguments(
+        [in] XDataSource xDataSource );
+
+    /** If <TRUE/> is returned, a call to
+        createDataSequenceByRangeRepresentation with the same argument must
+        return a valid XDataSequence object.  If <FALSE/> is returned,
+        createDataSequenceByRangeRepresentation throws an exception.
+     */
+    boolean createDataSequenceByRangeRepresentationPossible( [in] string aRangeRepresentation );
+
+    /** creates a single data sequence for the given data range.
+
+        @param aRangeRepresentation
+            is a string that can be interpreted by the component that
+             implements this interface.  The representation string is
+             of a form that may be used in the user interface.
+
+        @see createDataSource
+
+        @throws com::sun::star::lang::IllegalArgumentException
+            if the given range does not contain a valid range
+            representation for a one-dimensional range of data.
+     */
+    XDataSequence createDataSequenceByRangeRepresentation(
+        [in] string aRangeRepresentation )
+        raises( com::sun::star::lang::IllegalArgumentException );
+
+    /** Returns a component that is able to change a given range
+        representation to another one.  This usually is a
+        controller-component that uses the GUI to allow a user to
+        select a new range.
+
+        <p>This method may return nothing, if it does not support
+        range selection or if there is no current controller available
+        that offers the functionality.</p>
+
+        @return
+            The component for selecting a new range.  It must support
+            <type>XComponent</type>, in order to inform the receiver
+            about its lifetime.</p>
+     */
+    com::sun::star::sheet::XRangeSelection getRangeSelection();
+};
+
+} ; // data
+} ; // chart2
+} ; // com
+} ; // sun
+} ; // star
+
+
+#endif

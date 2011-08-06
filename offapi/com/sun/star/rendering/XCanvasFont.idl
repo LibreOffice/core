@@ -1,0 +1,121 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_rendering_XCanvasFont_idl__
+#define __com_sun_star_rendering_XCanvasFont_idl__
+
+#include <com/sun/star/uno/XInterface.idl>
+#include <com/sun/star/lang/IllegalArgumentException.idl>
+#include <com/sun/star/geometry/RealRectangle2D.idl>
+#include <com/sun/star/rendering/FontRequest.idl>
+#include <com/sun/star/rendering/FontMetrics.idl>
+#include <com/sun/star/rendering/RenderState.idl>
+#include <com/sun/star/rendering/ViewState.idl>
+#include <com/sun/star/rendering/StringContext.idl>
+#include <com/sun/star/beans/PropertyValue.idl>
+
+
+module com { module sun { module star { module rendering {
+
+published interface XCanvas;
+published interface XTextLayout;
+published interface XPolyPolygon2D;
+
+/** This interface provides access to a specific, XCanvas-dependent
+    font incarnation. This font is not universally usable, but belongs
+    to the XCanvas it was queried from.
+ */
+published interface XCanvasFont : ::com::sun::star::uno::XInterface
+{
+    /** Create a text layout interface.<p>
+
+        Create a text layout interface for the given string, using
+        this font to generate the glyphs from.<p>
+
+        @param aText
+        The text to layout.
+
+        @param nDirection
+        Main text direction for the string specified. The main text
+        direction is e.g. important for characters that are not
+        strong, i.e. that change affinity according to the current
+        writing direction. Make sure that across text portions and
+        lines, the direction is set consistently.
+
+        @param nRandomSeed
+        Optional random seed for OpenType glyph variations.
+     */
+    XTextLayout                                         createTextLayout( [in] StringContext aText, [in] byte nDirection, [in] hyper nRandomSeed );
+
+    //-------------------------------------------------------------------------
+
+    /** Query the FontRequest that was used to generate this object.
+     */
+    FontRequest                                         getFontRequest();
+
+    //-------------------------------------------------------------------------
+
+    /** Query metric information about the font, that is generic to
+        all its glyphs.<p>
+
+        Note that the metric values in the returned result are in the
+        font coordinate system, i.e. relative to the corresponding
+        size of this font. That is, when this font was created with a
+        cell size of 20 units, the metrics returned are calculated
+        relative to this size.
+     */
+    FontMetrics                                         getFontMetrics();
+
+    //-------------------------------------------------------------------------
+
+    /** Query the list of available font sizes.<p>
+
+        This method queries the list of available font sizes (in
+        device units) for this font. For scalable fonts that are not
+        restricted to discrete sizes, this list is <em>empty</em>,
+        meaning that every size is possible. Fonts that <em>do</em>
+        restrict the device size to certain discrete values, setting
+        an overall transformation that scales the
+        <member>FontRequest::CellSize</member> to something not
+        contained in the list returned by this method can lead to
+        visible disturbances.<p>
+     */
+    sequence< double >                                      getAvailableSizes();
+
+    //-------------------------------------------------------------------------
+
+    /** Query the list of additional font properties.<p>
+     */
+    sequence< ::com::sun::star::beans::PropertyValue >  getExtraFontProperties();
+
+    //-------------------------------------------------------------------------
+
+};
+
+}; }; }; };
+
+#endif
+

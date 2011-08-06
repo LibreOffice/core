@@ -1,0 +1,93 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_chart_ChartTitle_idl__
+#define __com_sun_star_chart_ChartTitle_idl__
+
+#include <com/sun/star/drawing/Shape.idl>
+#include <com/sun/star/xml/UserDefinedAttributeSupplier.idl>
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module chart {
+
+//=============================================================================
+
+/** specifies titles in a chart.
+
+    <p>In a chart there may be the following titles: the main title,
+    the sub title, and axis titles of the x- and y-axis.</p>
+ */
+published service ChartTitle
+{
+    service com::sun::star::drawing::Shape;
+
+    //-------------------------------------------------------------------------
+
+    /** If this property is <TRUE/> the position is calculated by the application automatically.
+        Setting this property to false will have no effect. Instead use the interface <type scope="com::sun::star::drawing">XShape</type>
+        to set a concrete position.
+     */
+    [optional, property] boolean AutomaticPosition;
+
+    //-------------------------------------------------------------------------
+
+    /** If a <type>ChartTitle</type> may be stored as XML element,
+        this service should be supported in order to preserve unparsed
+        XML attributes.
+
+    @since OOo 1.1.2
+     */
+    [optional] service com::sun::star::xml::UserDefinedAttributeSupplier;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies the rotation of the shape in 100th of degrees.
+
+        <p>Especially in three-dimensional charts, this property comes
+        in handy if you want to align the axis titles with the axis,
+        which are usually not vertical or horizontal in the
+        two-dimensional projection.</p>
+     */
+    [property] long TextRotation;
+
+    //-------------------------------------------------------------------------
+
+    /** contains the text of the title.
+
+        <p>Note that you cannot change attributes of parts of a
+        title, e.g., put one word in bold characters.  All formatting
+        affects the entire string.</p>
+     */
+    [property] string String;
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

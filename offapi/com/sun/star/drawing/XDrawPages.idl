@@ -1,0 +1,86 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_drawing_XDrawPages_idl__
+#define __com_sun_star_drawing_XDrawPages_idl__
+
+#include <com/sun/star/container/XIndexAccess.idl>
+
+#include <com/sun/star/drawing/XDrawPage.idl>
+
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module drawing {
+
+//=============================================================================
+
+/** gives access to a container of <type>DrawPage</type>s or <type>MasterPage</type>s.
+
+    <p>The pages are stored in an index container. The order is determined by
+    the index.
+
+    You usually get this interface if you use the
+    <type>XDrawPagesSupplier</type> or the <type>XMasterPagesSupplier</type>
+    at a model that contains <type>DrawPage</type>s or <type>MasterPage</type>s
+*/
+published interface XDrawPages: com::sun::star::container::XIndexAccess
+{
+    //-------------------------------------------------------------------------
+
+    /** creates and inserts a new <type>DrawPage</type> or <type>MasterPage</type>
+        into this container
+
+        @param nIndex
+            the index at which the newly created <type>DrawPage</type> or
+            <type>MasterPage</type> will be inserted.
+
+        @return
+            the newly created and already inserted <type>DrawPage</type> or
+            <type>MasterPage</type>.
+    */
+    com::sun::star::drawing::XDrawPage insertNewByIndex( [in] long nIndex );
+
+    //-------------------------------------------------------------------------
+
+    /** removes a <type>DrawPage</type> or <type>MasterPage</type> from this
+        container.
+
+        @param xPage
+            this <type>DrawPage</type> or <type>MasterPage</type> must be
+            contained and will be removed from this container. It will
+            also be disposed and shouldn't be used any further.
+    */
+    void remove( [in] com::sun::star::drawing::XDrawPage xPage );
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif
+

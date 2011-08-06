@@ -1,0 +1,91 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_text_TextColumns_idl__
+#define __com_sun_star_text_TextColumns_idl__
+
+#include <com/sun/star/text/XTextColumns.idl>
+#include <com/sun/star/style/VerticalAlignment.idl>
+#include <com/sun/star/util/Color.idl>
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module text {
+
+//=============================================================================
+
+// DocMerge from xml: service com::sun::star::text::TextColumns
+/** provides access to columns in text (e.g., in TextFrames ).
+ */
+published service TextColumns
+{
+    // DocMerge: empty anyway
+    interface com::sun::star::text::XTextColumns;
+
+    //------------------------------------------------------------------------
+    /** determines whether the columns all have equal width. This flag is set if XTextColumns::setColumnCount() is called
+     and it is reset if XTextColumns::setColumns() is called.
+     */
+    [readonly, property]  boolean IsAutomatic;
+    //------------------------------------------------------------------------
+    /** contains the distance between the columns. It is valid if the property IsAutomatic is set.
+ <!-- The h -->Half of this distance is set to the left and right margins of all columns,
+    except for the left margin of the first column, and the right margin of the last column.*/
+    [property]  long AutomaticDistance;
+    //------------------------------------------------------------------------
+    /** determines the width of the separator lines between the columns.
+     */
+    [property]  long SeparatorLineWidth;
+    //------------------------------------------------------------------------
+    /** determines the color of the separator lines between the columns.
+     */
+    [property]  com::sun::star::util::Color SeparatorLineColor;
+    //------------------------------------------------------------------------
+    /** determines the relative height of the separator lines between the columns.
+     */
+    [property]  long SeparatorLineRelativeHeight;
+    //------------------------------------------------------------------------
+    /** determines the vertical alignment of the separator lines between the columns.
+     */
+    [property]  com::sun::star::style::VerticalAlignment SeparatorLineVerticalAlignment;
+    //------------------------------------------------------------------------
+    /** determines whether separator lines are on.
+     */
+    [property]  boolean SeparatorLineIsOn;
+    //------------------------------------------------------------------------
+    /** determines the style of the separator lines between the columns.
+        @see com::sun::star::text:ColumnSeparatorStyle
+            for the possible values.
+     */
+    [property, optional]  short SeparatorLineStyle;
+    //------------------------------------------------------------------------
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

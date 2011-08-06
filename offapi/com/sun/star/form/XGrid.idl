@@ -1,0 +1,77 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_form_XGrid_idl__
+#define __com_sun_star_form_XGrid_idl__
+
+#include <com/sun/star/uno/XInterface.idl>
+
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module form {
+
+//=============================================================================
+
+/** provides the possibility of setting and retrieving the position
+    of the current cell in a grid control.
+
+    <p>Note that a grid control does not allow free control over the current row:
+    In such a control, every line represents a row of data of the underlying
+    <type scope="com::sun::star::form::component">DataForm</type>. Thus, the <em>current
+    row</em> of the grid control always equals the current row of the
+    <type scope="com::sun::star::form::component">DataForm</type>, and can be affected only
+    by changing the latter.<br/>
+    The current column of a grid control, whoever, can be freely controlled.</p>
+
+    @see com::sun::star::form::component::GridControl
+    @see com::sun::star::form::control::GridControl
+    @deprecated
+ */
+published interface XGrid: com::sun::star::uno::XInterface
+{
+    //-------------------------------------------------------------------------
+
+    /** retrieves the current column position.
+     */
+    short getCurrentColumnPosition();
+
+    //-------------------------------------------------------------------------
+
+    /** sets the current column position.
+     */
+    [oneway] void setCurrentColumnPosition( [in] short nPos );
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+/*=============================================================================
+
+=============================================================================*/
+#endif

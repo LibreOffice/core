@@ -1,0 +1,4 @@
+..\%__SRC%\bin\ridl_src.zip %COMMON_DEST%\bin\ridl_src.zip
+..\%__SRC%\class\ridl.jar %_DEST%\bin\ridl.jar
+..\%__SRC%\class\unoloader\unoloader.jar %_DEST%\bin\unoloader.jar
+..\%__SRC%\bin\unoloader_src.zip %COMMON_DEST%\bin\unoloader_src.zip

@@ -1,0 +1,99 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_awt_MouseEvent_idl__
+#define __com_sun_star_awt_MouseEvent_idl__
+
+#include <com/sun/star/awt/InputEvent.idl>
+
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module awt {
+
+//=============================================================================
+
+/** specifies an event from the mouse.
+
+    <p>This event is also used for pop-up menu requests on objects.
+    See <member>PopupTrigger</member> for details.</p>
+
+    @see XMouseListener
+    @see XMouseMotionListener
+    @see InputEvent
+ */
+published struct MouseEvent: com::sun::star::awt::InputEvent
+{
+    //-------------------------------------------------------------------------
+
+    /** contains the pressed mouse buttons.
+
+        <p>Zero ore more constants from the
+        <type scope="com::sun::star::awt">MouseButton</type> group.</p>
+     */
+    short Buttons;
+
+    //-------------------------------------------------------------------------
+
+    /** contains the x coordinate location of the mouse.
+     */
+    long X;
+
+    //-------------------------------------------------------------------------
+
+    /** contains the y coordinate location of the mouse.
+     */
+    long Y;
+
+    //-------------------------------------------------------------------------
+
+    /** contains the number of mouse clicks associated with event.
+     */
+    long ClickCount;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies if this event is a pop-up menu trigger event.
+
+        <p>If this member is <TRUE/>, the event describes a request for a pop-up menu,
+        also known as context menu, on an object.</p>
+
+        <p>In this case, <member>X</member> and <member>Y</member> describe the position
+        where the request was issued. If those members are <code>-1</code>, then the
+        request was issued using the keyboard, by pressing the operating-system dependent
+        key combination for this purpose.</p>
+
+        @see XMouseListener::mousePressed
+    */
+    boolean PopupTrigger;
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

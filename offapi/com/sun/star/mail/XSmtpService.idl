@@ -1,0 +1,87 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_mail_XSmtpService_idl__
+#define __com_sun_star_mail_XSmtpService_idl__
+
+#include <com/sun/star/mail/XMailService.idl>
+#include <com/sun/star/mail/XMailMessage.idl>
+#include <com/sun/star/io/NotConnectedException.idl>
+#include <com/sun/star/io/ConnectException.idl>
+#include <com/sun/star/mail/MailException.idl>
+#include <com/sun/star/mail/SendMailMessageFailedException.idl>
+#include <com/sun/star/datatransfer/UnsupportedFlavorException.idl>
+
+module com { module sun { module star { module mail {
+
+/**
+   Represents a SMTP service abstraction.
+
+   @see com::sun::star::mail::XMailService
+   @see com::sun::star::mail::XMailMessage
+
+   @since OOo 2.0
+ */
+interface XSmtpService: ::com::sun::star::mail::XMailService {
+
+    /**
+        Send a mail message to its recipients.
+
+        @param xMailMessage
+        [in] the mail message to be sent.
+
+        @throws com::sun::star::io::NotConnectedException
+        if no user is currently connected to the mail server.
+
+        @throws com::sun::star::mail::SendMailMessageFailedException
+        if the message could not be sent because of invalid recipient
+        addresses. The e-mail addresses of recipients have to conform to
+        <a href="http://www.ietf.org/rfc/rfc822.txt">RFC&nbsp;822</a>.
+
+        @throws com::sun::star::mail::MailException
+        is thrown on other errors that may happen during sending.
+        A possible reason may be for instance that a file attachment
+        specified in a mail message could not be found or accessed.
+
+        @throws com::sun::star::datatransfer::UnsupportedFlavorException
+        is thrown when the body of the mail message is provided in an
+        unsupported mime content type or may be thrown if one of the file
+        attachments specifies an unsupported mime content type.
+
+        @see com::sun::star::mail::XMailMessage
+        @see com::sun::star::io::NotConnectedException
+        @see com::sun::star::mail::SendMailMessageFailedException
+        @see com::sun::star::mail::MailException
+        @see com::sun::star::datatransfer::UnsupportedFlavorException
+    */
+    void sendMailMessage([in] XMailMessage xMailMessage)
+        raises(com::sun::star::io::NotConnectedException, com::sun::star::mail::SendMailMessageFailedException, com::sun::star::mail::MailException, com::sun::star::datatransfer::UnsupportedFlavorException);
+};
+
+}; }; }; };
+
+#endif

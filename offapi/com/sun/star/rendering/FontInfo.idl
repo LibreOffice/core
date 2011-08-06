@@ -1,0 +1,121 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_rendering_FontInfo_idl__
+#define __com_sun_star_rendering_FontInfo_idl__
+
+#include <com/sun/star/util/TriState.idl>
+#include <com/sun/star/rendering/Panose.idl>
+
+
+module com { module sun { module star { module rendering {
+
+/** This structure provides information about a specific font.<p>
+
+    @since OOo 2.0
+ */
+published struct FontInfo
+{
+    /** The PANOSE font classification.<p>
+
+        TODO: Document semantics in Panose.idl
+     */
+    Panose                              FontDescription;
+
+    //-------------------------------------------------------------------------
+
+    /** The name of the font family.<p>
+
+        The family name is the one normally associated to a font, such
+        as Times New Roman, Thorndale, Andale or Arial.<p>
+
+        Note: outlined fonts are now specified with "outline" as part
+        of the family name.<p>
+     */
+    string                              FamilyName;
+
+    //-------------------------------------------------------------------------
+
+    /** The name of the specific font style within its family.<p>
+
+        For example, oblique, italic, or narrow.<p>
+     */
+    string                              StyleName;
+
+    //-------------------------------------------------------------------------
+
+    /** This value specifies which Unicode ranges are supported by
+        this font.<p>
+
+        This is to be interpreted as a split-up 128-bit value, see <a
+        href=http://partners.adobe.com/asn/tech/type/opentype/os2.jsp#ur>Adobe's
+        OpenType specification</a> for the specific meaning of each
+        bit. UnicodeRanges0 contains the least significant bits,
+        UnicodeRanges3 the most significant ones.<p>
+
+        const int128       UNICODE_RANGE_BASIC_LATIN = 1;
+        const int128       UNICODE_RANGE_LATIN_SUPPLEMENT = 2;
+        const int128       UNICODE_RANGE_LATIN_EXTENDED_A = 4;
+        const int128       UNICODE_RANGE_LATIN_EXTENDED_B = 4;
+        ...
+        const int128       UNICODE_RANGE_MASK_LATIN = 1;
+        const int128       UNICODE_RANGE_MASK_CJK   = (31<<48) + (3<<55) +
+        (1<<59);
+        const int128       UNICODE_RANGE_MASK_CTL   = (1<<11) + (1<<13) +
+        (0x3FFF<<15) + (0x0FFF<<70);
+
+     */
+    long                                UnicodeRanges0;
+    long                                UnicodeRanges1;
+    long                                UnicodeRanges2;
+    long                                UnicodeRanges3;
+
+    //-------------------------------------------------------------------------
+
+    /** Specifies whether the font is a symbol font.<p>
+
+        If yes, text written in this symbol font does not have a
+        specified meaning.<p>
+     */
+    ::com::sun::star::util::TriState    IsSymbolFont;
+
+    //-------------------------------------------------------------------------
+
+    /** Set to true, if the font is usable for vertical text
+        output.<p>
+
+        Vertical fonts have subtle differences to horizontal ones,
+        e.g. rotated or differently shaped glyphs, or special rotated
+        versions of normally upright glyphs (e.g. brackets).<p>
+     */
+    ::com::sun::star::util::TriState    IsVertical;
+
+
+};
+
+}; }; }; };
+
+#endif

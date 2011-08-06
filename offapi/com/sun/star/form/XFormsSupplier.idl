@@ -1,0 +1,101 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_form_XFormsSupplier_idl__
+#define __com_sun_star_form_XFormsSupplier_idl__
+
+#include <com/sun/star/uno/XInterface.idl>
+
+#include <com/sun/star/container/XNameContainer.idl>
+
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module form {
+
+//=============================================================================
+
+/** provides the access to a collection of forms.
+ */
+published interface XFormsSupplier: com::sun::star::uno::XInterface
+{
+    //-------------------------------------------------------------------------
+
+    /** accesses the forms.
+
+        @example StarBASIC
+        <listing>
+        REM  *****  BASIC  *****
+
+        Sub createColorSelectionBox
+            ' create a new shape
+            xShape = thisComponent.createInstance( "com.sun.star.drawing.ControlShape" )
+            Dim aPos as new com.sun.star.awt.Point
+            aPos.X = 200
+            aPos.Y = 100
+            xShape.Position = aPos
+            Erase aPos
+            Dim aSize as new com.sun.star.awt.Size
+            aSize.Width = 2500
+            aSize.Height = 5000
+            xShape.Size = aSize
+            Erase aSize
+
+            ' create a combo box model
+            xControlModel = thisComponent.createInstance( "com.sun.star.form.component.ComboBox" )
+            xControlModel.Name = "ColorSelection"
+            xControlModel.Text = "red"
+
+            ' marry the shape and the model
+            xShape.Control = xControlModel
+
+            if ( 0 = thisComponent.DrawPage.Forms.getCount() ) Then
+                xForm = thisComponent.createInstance( "com.sun.star.form.component.DataForm" )
+                xForm.Name = "SampleForm"
+                thisComponent.DrawPage.Forms.insertByIndex( 0, xForm )
+            End If
+            ' insert the control model into the first form of the forms collection of the
+            ' draw page of the document
+            thisComponent.DrawPage.Forms.getByIndex(0).insertByIndex( 0, xControlModel )
+            thisComponent.DrawPage.add( xShape )
+        End Sub
+        </listing>
+
+        @returns
+            the container of all the top-level forms belonging to the component.
+     */
+    com::sun::star::container::XNameContainer getForms();
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+/*=============================================================================
+
+=============================================================================*/
+#endif

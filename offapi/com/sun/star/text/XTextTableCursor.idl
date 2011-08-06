@@ -1,0 +1,177 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_text_XTextTableCursor_idl__
+#define __com_sun_star_text_XTextTableCursor_idl__
+
+#include <com/sun/star/uno/XInterface.idl>
+
+
+//=============================================================================
+
+module com {  module sun {  module star {  module text {
+
+//=============================================================================
+
+/** The TextTableCursor provide methods to navigate through the table structure, to merge and split cells
+
+    @see com::sun::star::text::TextTable
+    @see com::sun::star::text::TextTableCursor
+    @see com::sun::star::text::Cell
+    @see com::sun::star::text::XTextTable
+ */
+published interface XTextTableCursor: com::sun::star::uno::XInterface
+{
+    //-------------------------------------------------------------------------
+
+    /** @returns
+                the name of the cell range that is selected by this cursor.
+                <p>The name is the cell name of the top left table cell of the range
+                 concatenated by ":" with the table cell name of the bottom left table cell of the cell range.
+                If the range consists of one table cell only then the name of that table cell is returned.
+             </p>
+        @see com::sun:star::text::CellRange
+     */
+    string getRangeName();
+
+    //-------------------------------------------------------------------------
+
+    /** moves the cursor to the cell with the specified name.
+
+        @param aCellName
+            specifies the name of the cell to go to.
+
+        @param bExpand
+            determines whether the selection is to be expanded.
+
+        @see com::sun::star::text::Cell
+     */
+    boolean gotoCellByName( [in] string aCellName,
+             [in] boolean bExpand );
+
+    //-------------------------------------------------------------------------
+
+    /** moves the cursor to the left neighbor.
+
+        @param nCount
+            the number of cells to move.
+
+        @param bExpand
+            determines whether the selection is to be expanded.
+     */
+    boolean goLeft( [in] short nCount,
+             [in] boolean bExpand );
+
+    //-------------------------------------------------------------------------
+
+    /** moves the cursor to the right neighbor.
+
+        @param nCount
+            the number of cells to move.
+
+        @param bExpand
+            determines whether the selection is to be expanded.
+     */
+    boolean goRight( [in] short nCount,
+             [in] boolean bExpand );
+
+    //-------------------------------------------------------------------------
+
+    /** moves the cursor to the top neighbor.
+
+        @param nCount
+            the number of cells to move.
+
+        @param bExpand
+            determines whether the selection is to be expanded.
+     */
+    boolean goUp( [in] short nCount,
+             [in] boolean bExpand );
+
+    //-------------------------------------------------------------------------
+
+    /** moves the cursor to the bottom neighbor cell.
+
+        @param nCount
+            the number of cells to move.
+
+        @param bExpand
+            determines whether the selection is to be expanded.
+     */
+    boolean goDown( [in] short nCount,
+             [in] boolean bExpand );
+
+    //-------------------------------------------------------------------------
+
+    /** moves the cursor to the top left cell of the table.
+
+        @param bExpand
+            determines whether the selection is to be expanded.
+     */
+    void gotoStart( [in] boolean bExpand );
+
+    //-------------------------------------------------------------------------
+
+    /** moves the cursor to the bottom right cell of the table.
+
+        @param bExpand
+            determines whether the selection is to be expanded.
+     */
+    void gotoEnd( [in] boolean bExpand );
+
+    //-------------------------------------------------------------------------
+
+    /** merges the selected range of cells.
+
+        @see com:sun::star::CellRange
+     */
+    boolean mergeRange();
+
+    //-------------------------------------------------------------------------
+
+    /** splits the range of cells.
+
+        @param nCount
+            specifies the number of new cells that will be created
+            for each cell contained in the range.
+
+        @param bHorizontal
+            <true/> if the range should be split vertically.
+            Otherwise it will be split horizontally.
+
+        @see com:sun::star::Cell
+        @see com:sun::star::CellRange
+     */
+    boolean splitRange( [in] short nCount,
+             [in] boolean bHorizontal );
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

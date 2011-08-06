@@ -1,0 +1,108 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_xml_sax_XParser_idl__
+#define __com_sun_star_xml_sax_XParser_idl__
+
+#include <com/sun/star/uno/XInterface.idl>
+
+#include <com/sun/star/xml/sax/InputSource.idl>
+
+#include <com/sun/star/xml/sax/SAXException.idl>
+
+#include <com/sun/star/io/IOException.idl>
+
+#include <com/sun/star/xml/sax/XDocumentHandler.idl>
+
+#include <com/sun/star/xml/sax/XErrorHandler.idl>
+
+#include <com/sun/star/xml/sax/XDTDHandler.idl>
+
+#include <com/sun/star/xml/sax/XEntityResolver.idl>
+
+#include <com/sun/star/lang/Locale.idl>
+
+
+//=============================================================================
+
+module com {  module sun {  module star {  module xml {  module sax {
+
+//=============================================================================
+
+/** specifies a SAX parser.
+
+    <p>This interface is an IDL version of the Java interface
+    <em>org.xml.sax.Parser</em> with some minor adaptations.</p>
+ */
+published interface XParser: com::sun::star::uno::XInterface
+{
+    //-------------------------------------------------------------------------
+    /** parses an XML document from a stream.
+
+        <p>Set the desired handlers before calling this method.</p>
+     */
+    void parseStream( [in] com::sun::star::xml::sax::InputSource aInputSource )
+            raises( com::sun::star::xml::sax::SAXException,
+                    com::sun::star::io::IOException );
+
+    //-------------------------------------------------------------------------
+    /** allows an application to register a document event handler.
+     */
+    void setDocumentHandler( [in] com::sun::star::xml::sax::XDocumentHandler xHandler );
+
+    //-------------------------------------------------------------------------
+    /** allows an application to register an error event handler.
+
+        <p>Note that the error handler can throw an exception when an error or
+        warning occurs.  Note that an exception is thrown by the parser when
+        an unrecoverable (fatal) error occurs.</p>
+     */
+    void setErrorHandler( [in] com::sun::star::xml::sax::XErrorHandler xHandler );
+
+    //-------------------------------------------------------------------------
+    /** allows an application to register a DTD-Handler.
+     */
+    void setDTDHandler( [in] com::sun::star::xml::sax::XDTDHandler xHandler );
+
+    //-------------------------------------------------------------------------
+    /** allows an application to register a DTD-Handler.
+     */
+    void setEntityResolver( [in] com::sun::star::xml::sax::XEntityResolver xResolver );
+
+    //-------------------------------------------------------------------------
+    /** sets a locale specified for localization of warnings and error messages.
+
+        <p>Set the language of the error messages. Useful when the parsing
+        errors will be presented to the user.</p>
+     */
+    void setLocale( [in] com::sun::star::lang::Locale locale );
+};
+
+//=============================================================================
+
+}; }; }; }; };
+
+#endif

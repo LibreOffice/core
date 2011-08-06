@@ -1,0 +1,119 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_accessibility_XAccessibleAction_idl__
+#define __com_sun_star_accessibility_XAccessibleAction_idl__
+
+#include <com/sun/star/uno/XInterface.idl>
+#include <com/sun/star/lang/IndexOutOfBoundsException.idl>
+
+module com { module sun { module star { module accessibility {
+
+ published interface XAccessibleKeyBinding;
+
+/** Implement this interface to give access to actions that can be executed
+    for accessible objects.
+
+    <p>Every accessible object that can be manipulated beyond its methods
+    exported over the accessibility API should support this interface to
+    expose all actions that it can perform.  Each action can be performed or
+    be queried for a description or associated key bindings.</p>
+
+    @since OOo 1.1.2
+*/
+published interface XAccessibleAction : ::com::sun::star::uno::XInterface
+{
+    /** Returns the number of accessible actions available in this object.
+
+        <p>If there are more than one, the first one is considered the
+        "default" action of the object.</p>
+
+        @return
+            The returned value of the number of actions is zero if there are
+            no actions.
+    */
+    long getAccessibleActionCount ();
+
+    /** Perform the specified Action on the object.
+
+        @param nIndex
+            This index specifies the action to perform.  If it lies outside
+            the valid range <FALSE/> is returned and no action is performed.
+        @return
+            Returns <TRUE/> if the action was successfully performed.  If
+            the action could not be performed successfully <FALSE/> is
+            returned.
+
+        @throws IndexOutOfBoundsException
+            If no action with the given index exists then an
+            <type scope="::com::sun::star::lang">IndexOutOfBoundsException</type>
+            exception is thrown.
+    */
+    boolean doAccessibleAction ([in] long nIndex)
+        raises (::com::sun::star::lang::IndexOutOfBoundsException);
+
+    /** Returns a description of the specified action of the object.
+
+        @param nIndex
+            This index specifies the action of which to return a
+            description.  If it lies outside the valid range an empty string
+            is returned.
+
+        @return
+            The returned value is a localized string of the specified action.
+
+        @throws IndexOutOfBoundsException
+            If the given index lies not in the valid range then an
+            <type scope="::com::sun::star::lang">IndexOutOfBoundsException</type>
+            exception is thrown.
+    */
+    string getAccessibleActionDescription ([in] long nIndex)
+        raises (::com::sun::star::lang::IndexOutOfBoundsException);
+
+    /** Returns a key binding object, if there is one, associated with the
+        specified action.  Note that there can be several alternative key
+        bindings for an action.  See <type>XAccessibleKeyBinding</type> for
+        more information about how key bindings are represented.
+
+        @param nIndex
+            This index specifies the action of which to return the key
+            binding.
+
+        @return
+            The returned object describes a set of key bindings associated
+            with the specified action.
+
+        @throws IndexOutOfBoundsException
+            if the given index is not valid.
+    */
+    XAccessibleKeyBinding getAccessibleActionKeyBinding ([in] long nIndex)
+        raises (::com::sun::star::lang::IndexOutOfBoundsException);
+};
+
+}; }; }; };
+
+#endif

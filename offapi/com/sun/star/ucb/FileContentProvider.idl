@@ -1,0 +1,107 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_ucb_FileContentProvider_idl__
+#define __com_sun_star_ucb_FileContentProvider_idl__
+
+#include <com/sun/star/ucb/XContentProvider.idl>
+#include <com/sun/star/ucb/XFileIdentifierConverter.idl>
+#include <com/sun/star/ucb/XContentIdentifierFactory.idl>
+#include <com/sun/star/beans/XPropertySet.idl>
+
+//=============================================================================
+
+module com { module sun { module star { module ucb {
+
+//=============================================================================
+/** The File Content Provider (FCP) implements a <type>ContentProvider</type>
+    for the <Type>UniversalContentBroker</type> (UCB).
+
+    <p>The served contents enable access to the local file system.
+
+    <p>The FCP is able to restrict access to the local file system to a number
+    of directories shown to the client under configurable alias names.
+
+    @see com::sun::star::ucb::Content
+*/
+published service FileContentProvider
+{
+    //-------------------------------------------------------------------------
+    /** provides an object representing either a directory or a file in the
+        local file system.
+
+        @see com::sun::star::ucb::FileContent
+     */
+
+    interface com::sun::star::ucb::XContentProvider;
+
+    //-------------------------------------------------------------------------
+    /** This interface is implemented according to the specification of
+        service <type>ContentProvider</type>.
+    */
+
+    interface com::sun::star::ucb::XContentIdentifierFactory;
+
+    //-------------------------------------------------------------------------
+    /** provides access to properties supported by the UCP.
+
+        <p> The supported properties give two kinds of meta-information about
+        the environment of the FCP, namely property <b>HostName</b> containing
+        the name of the computer, and property <b>FileSystemNotation</b>
+        determining which system dependent notation the file system identifier
+        follow.
+
+           <p>
+
+           <b>Supported Properties</b>
+           <ul>
+           <li>
+           string HostName ( read-only )
+           </li>
+           <li>
+           long FileSystemNotation ( read-only, the value is one of the
+        <type>FileSystemNotation</type> constants )
+           </li>
+           </ul>
+
+           </p>
+    */
+
+    interface com::sun::star::beans::XPropertySet;
+
+    //-------------------------------------------------------------------------
+    /** specifies methods to convert between (file) URLs and file paths in
+        system dependent notation
+    */
+
+    interface com::sun::star::ucb::XFileIdentifierConverter;
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

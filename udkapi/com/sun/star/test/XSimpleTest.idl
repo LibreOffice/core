@@ -1,0 +1,116 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_test_XSimpleTest_idl__
+#define __com_sun_star_test_XSimpleTest_idl__
+
+#include <com/sun/star/uno/XInterface.idl>
+#include <com/sun/star/lang/IllegalArgumentException.idl>
+
+
+//=============================================================================
+
+module com { module sun { module star { module test {
+
+//=============================================================================
+/**
+    A simple interface to test a service or interface implementation.
+*/
+published interface XSimpleTest: com::sun::star::uno::XInterface
+{
+    //-------------------------------------------------------------------------
+    /**
+        Test the object TestObject against the test specified with TestName. This test
+        does not change the semantic state of the object, so it can be called on a existing
+        component that will used further on.
+        Note : This can be a strong test limitation. There are some components, that cannot
+        perform their full test scenario.
+        @param TestName     the name of the test. Must be an interface, service or implementation name.
+        Note : The name is only used by the test component to distinguish
+        between test scenarios.
+        @param  TestObject  The instance to be tested.
+
+        @throws IllegalArgumentException
+            if the test does not support TestName or TestObject is null.
+    */
+    void testInvariant( [in] string TestName,
+             [in] com::sun::star::uno::XInterface TestObject )
+            raises( com::sun::star::lang::IllegalArgumentException );
+
+    //-------------------------------------------------------------------------
+    /**
+        Test the object TestObject against the test specified with TestName. This test
+        changes the state of the object. The object may be useless afterwards.
+        (e.g. a closed XOutputStream). The method in general may be called multipe times with a new
+        test object instance.
+        Note : These tests should include the testInvariant test.
+        Note : Each test scenario should be independent of each other, so even if a scenario
+        didn't pass the test, the other test can still be performed. The error messages
+        are cumulative.
+
+        @param TestName     The name of the test. Must be an interface, service or implementation name.
+        Note : The name is only used by the test component to distinguish
+        between test scenarios.
+        @param  TestObject  The instance to be tested.
+        @param   hTestHandle Internal test handle. Handle for first test is always 0.
+        Handle of next test is  returned by the method.
+        @return  Handle of the next test. -1 if this was the last test.
+
+        @throws IllegalArgumentException
+            if the test does not support TestName or
+        TestObject is null.
+    */
+    long test( [in] string TestName,
+             [in] com::sun::star::uno::XInterface TestObject,
+             [in] long hTestHandle )
+            raises( com::sun::star::lang::IllegalArgumentException );
+
+    //-------------------------------------------------------------------------
+    /**States if one of the last test has failed. This is cumulative.
+        @return true if all test have been passed succesfully. false if an error has occurred.
+
+    */
+    boolean testPassed();
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION MISSING FOR XSimpleTest::getErrors
+    sequence<string> getErrors();
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION MISSING FOR XSimpleTest::getErrorExceptions
+    sequence<any> getErrorExceptions();
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION MISSING FOR XSimpleTest::getWarnings
+    sequence<string> getWarnings();
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

@@ -1,0 +1,191 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_drawing_Shape_idl__
+#define __com_sun_star_drawing_Shape_idl__
+
+#include <com/sun/star/document/LinkTarget.idl>
+#include <com/sun/star/drawing/XShape.idl>
+#include <com/sun/star/lang/XComponent.idl>
+#include <com/sun/star/style/XStyle.idl>
+#include <com/sun/star/drawing/HomogenMatrix3.idl>
+#include <com/sun/star/drawing/XGluePointsSupplier.idl>
+#include <com/sun/star/container/XNameContainer.idl>
+#include <com/sun/star/beans/XTolerantMultiPropertySet.idl>
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module drawing {
+
+//=============================================================================
+
+/** This abstract service specifies the general characteristics of all
+    <type>Shape</type>s.
+
+    @see XShape
+    @see com::sun::star::lang::XComponent
+    @see com::sun::star::text::XText
+    @see ShapeDescriptor
+ */
+published service Shape
+{
+    //-------------------------------------------------------------------------
+
+    /** handles all the properties of this instance.
+     */
+    interface com::sun::star::beans::XPropertySet;
+
+    //-------------------------------------------------------------------------
+
+    /** This gives you the size and position of this <type>Shape</type>
+                and lets you change it. You can use <member>getShapeType</member>
+                to determine what kind of shape this is.
+     */
+    interface com::sun::star::drawing::XShape;
+
+    //-------------------------------------------------------------------------
+
+    /** is used for lifetime control of this <type>Shape</type>.
+     */
+    interface com::sun::star::lang::XComponent;
+
+    //-------------------------------------------------------------------------
+
+    /** The <type>XShapeDescriptor</type> tells you what kind of
+                <type>Shape</type> this instance is.
+     */
+    interface com::sun::star::drawing::XShapeDescriptor;
+
+    //-------------------------------------------------------------------------
+
+    /** This interfaces gives access to an optional container of glue points.
+        To have unique ids you should query the returned interface for
+        <type scope="com::sun::star::container">XIdentifierContainer</type>.
+    */
+    [optional] interface com::sun::star::drawing::XGluePointsSupplier;
+
+    //-------------------------------------------------------------------------
+
+        [optional] interface com::sun::star::beans::XTolerantMultiPropertySet;
+
+    //-------------------------------------------------------------------------
+
+    /** is used to query or change the ZOrder of this <type>Shape</type>. */
+    [optional, property] long ZOrder;
+
+    //-------------------------------------------------------------------------
+
+    /** This is the ID of the <type>Layer</type> to which this
+        <type>Shape</type> is attached.
+     */
+    [optional, property] short LayerID;
+
+    //-------------------------------------------------------------------------
+
+    /** This is the name of the <type>Layer</type> to which this
+        <type>Shape</type> is attached.
+     */
+    [optional, property] string LayerName;
+
+    //-------------------------------------------------------------------------
+
+    /** If this is <FALSE/>, the <type>Shape</type> is not visible
+        on screen outputs. Please note that the <type>Shape</type> may still
+        be visible when printed, see <member>Printable</member>.
+     */
+    [optional, property] boolean Visible;
+
+    //-------------------------------------------------------------------------
+
+    /** If this is <FALSE/>, the <type>Shape</type> is not visible
+        on printer outputs.
+     */
+    [optional, property] boolean Printable;
+
+    //-------------------------------------------------------------------------
+
+    /** With this set to <TRUE/>, this <type>Shape</type>
+        cannot be moved interactively in the user interface.
+     */
+    [optional, property] boolean MoveProtect;
+
+    //-------------------------------------------------------------------------
+
+    /** This is the name of this <type>Shape</type>.
+     */
+    [optional, property] string Name;
+
+    //-------------------------------------------------------------------------
+
+    /** With this set to <TRUE/>, this <type>Shape</type> may not be
+        sized interactively in the user interface.
+     */
+    [optional, property] boolean SizeProtect;
+
+    //-------------------------------------------------------------------------
+
+    /** this property lets you get and set a style for this shape.
+     */
+    [optional, property] com::sun::star::style::XStyle Style;
+
+    //-------------------------------------------------------------------------
+
+    /** this property lets you get and set the transformation matrix
+        for this shape.
+
+        The transformation is a 3x3 homogeneous matrix and can contain
+        translation, rotation, shearing and scaling.
+     */
+    [optional, property] com::sun::star::drawing::HomogenMatrix3 Transformation;
+
+    //-------------------------------------------------------------------------
+
+    /** this property stores xml attributes.
+        They will be saved to and restored from automatic styles inside xml files.
+
+        @see com::sun::star::xml::AttributeContainer
+    */
+    [optional, property] com::sun::star::container::XNameContainer ShapeUserDefinedAttributes;
+
+    //-------------------------------------------------------------------------
+
+    /** this property stores the navigation order of this shape. If this value
+        is negative, the navigation order for this shapes page is equal to
+        the z-order.
+    */
+    [optional, property] long NavigationOrder;
+
+    /** this property lets you get and set a hyperlink for this shape.
+     */
+    [optional, property] string Hyperlink;
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif
+

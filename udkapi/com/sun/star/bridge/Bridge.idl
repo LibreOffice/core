@@ -1,0 +1,86 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_bridge_Bridge_idl__
+#define __com_sun_star_bridge_Bridge_idl__
+
+#include <com/sun/star/lang/XInitialization.idl>
+#include <com/sun/star/lang/XComponent.idl>
+#include <com/sun/star/bridge/XBridge.idl>
+
+//=============================================================================
+
+module com {  module sun {  module star {  module bridge {
+
+//=============================================================================
+
+/** This meta service allows the bridgefactory service to instantiate an
+    interprocess bridge using a certain transfer protocol.
+
+    <p> Components, that support a certain protocol, must have at least two
+    service names: </p>
+
+    <ul>
+        <li> com.sun.star.bridge.Bridge </li>
+        <li> arbitrary-module-path.ProtocolnameBridge </li>
+    </ul>
+
+    <p>The protocol name should be written as common servicenames, first letter is a
+    capital letter, the rest in small letters postfixed by Bridge (e.g.:
+    <code>com.sun.star.bridge.UrpBridge</code> would be correct servicename for the
+    "urp" protocol).  However, the protocol names are compared case insensitive.
+    If there exist two services supporting the same protocol, it is arbitrary
+    which one is chosen, so this should be omitted. </p>
+ */
+published service Bridge
+{
+    /** allows to initialize the bridge service with the necessary
+         arguments. The sequence&lt;any&gt; must have 4 members.
+
+         <ol>
+             <li> String: The unique name of the bridge or an empty string</li>
+             <li> String: The protocol, that shall be instantiated</li>
+             <li> XConnection: The bidirectional connection, the bridge should work on</li>
+             <li> XInstanceProvider:
+                The instance provider, that shall be called to access the initial object.</li>
+         </ol>
+     */
+    interface com::sun::star::lang::XInitialization;
+
+    /** The main interface of the service
+     */
+    interface com::sun::star::bridge::XBridge;
+
+    /** This interface allows to terminate the interprocess bridge.
+     */
+    interface com::sun::star::lang::XComponent;
+
+};
+
+//=============================================================================
+
+}; }; }; };
+#endif

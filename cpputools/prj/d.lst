@@ -1,0 +1,10 @@
+..\%__SRC%\bin\regcomp.exe %_DEST%\bin\regcomp.exe
+..\%__SRC%\bin\regcomp %_DEST%\bin\regcomp
+..\%__SRC%\bin\regcomp %_DEST%\bin\regcomp.bin
+..\%__SRC%\bin\uno.exe %_DEST%\bin\uno.exe
+..\%__SRC%\bin\uno %_DEST%\bin\uno
+..\%__SRC%\bin\uno %_DEST%\bin\uno.bin
+..\%__SRC%\bin\regsingleton.exe %_DEST%\bin\regsingleton.exe
+..\%__SRC%\bin\regsingleton %_DEST%\bin\regsingleton
+..\%__SRC%\bin\sp2bv.exe %_DEST%\bin\sp2bv.exe
+..\%__SRC%\bin\sp2bv %_DEST%\bin\sp2bv

@@ -1,0 +1,150 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_awt_XDateField_idl__
+#define __com_sun_star_awt_XDateField_idl__
+
+#include <com/sun/star/uno/XInterface.idl>
+
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module awt {
+
+//=============================================================================
+
+/** gives access to the value and settings of a date field.
+ */
+published interface XDateField: com::sun::star::uno::XInterface
+{
+    //-------------------------------------------------------------------------
+
+    /** sets the date value which is displayed in the date field.
+
+        <p>The date value must be specified in the format
+        YYYYMMDD.</p>
+     */
+    [oneway] void setDate( [in] long Date );
+
+    //-------------------------------------------------------------------------
+
+    /** returns the date value which is currently displayed in the date field.
+     */
+    long getDate();
+
+    //-------------------------------------------------------------------------
+
+    /** sets the minimum date value that can be entered by the user.
+     */
+    [oneway] void setMin( [in] long Date );
+
+    //-------------------------------------------------------------------------
+
+    /** returns the currently set minimum date value that can be entered by
+        the user.
+     */
+    long getMin();
+
+    //-------------------------------------------------------------------------
+
+    /** sets the maximum date value that can be entered by the user.
+     */
+    [oneway] void setMax( [in] long Date );
+
+    //-------------------------------------------------------------------------
+
+    /** returns the currently set maximum date value that can be entered by
+        the user.
+     */
+    long getMax();
+
+    //-------------------------------------------------------------------------
+
+    /** sets the first value to be set on POS1 key.
+     */
+    [oneway] void setFirst( [in] long Date );
+
+    //-------------------------------------------------------------------------
+
+    /** returns the currently set first value which is set on POS1 key.
+     */
+    long getFirst();
+
+    //-------------------------------------------------------------------------
+
+    /** sets the last value to be set on END key.
+     */
+    [oneway] void setLast( [in] long Date );
+
+    //-------------------------------------------------------------------------
+
+    /** returns the currently set last value which is set on END key.
+     */
+    long getLast();
+
+    //-------------------------------------------------------------------------
+
+    /** determines if the long date format is to be used.
+     */
+    [oneway] void setLongFormat( [in] boolean bLong );
+
+    //-------------------------------------------------------------------------
+
+    /** determines if the long date format is currently used.
+     */
+    boolean isLongFormat();
+
+    //-------------------------------------------------------------------------
+
+    /** sets an empty value for the date.
+     */
+    void setEmpty();
+
+    //-------------------------------------------------------------------------
+
+    /** returns whether currently an empty value is set for the date.
+     */
+    boolean isEmpty();
+
+    //-------------------------------------------------------------------------
+
+    /** determines if the format is checked during user input.
+     */
+    [oneway] void setStrictFormat( [in] boolean bStrict );
+
+    //-------------------------------------------------------------------------
+
+    /** returns whether the format is currently checked during user input.
+     */
+    boolean isStrictFormat();
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

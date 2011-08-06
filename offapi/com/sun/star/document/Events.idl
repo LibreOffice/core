@@ -1,0 +1,103 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_document_Events_idl__
+#define __com_sun_star_document_Events_idl__
+
+#include <com/sun/star/container/XNameReplace.idl>
+
+//=============================================================================
+
+module com {   module sun {   module star {   module document {
+
+//=============================================================================
+/** is a collection of all events supported by a document or content of a
+    document
+
+    <p>
+    Such Events will be broadcasted by a <type>XEventBroadcaster</type>
+    to any <type>XEventListener</type> packed as <type>EventObject</type>s.
+    </p>
+ */
+published service Events
+{
+    //-------------------------------------------------------------------------
+    /** offers access to the list of <type>EventDescriptor</type>s
+
+        <p>
+        The following events are usually available:
+        <dl>
+            <dt>OnAlphaCharInput</dt>
+            <dt>OnClick</dt>
+            <dt>OnCloseApp</dt>
+            <dt>OnCopyTo</dt>
+            <dt>OnCopyToDone</dt>
+            <dt>OnError</dt>
+            <dt>OnFocus</dt>
+            <dt>OnInsertDone</dt>
+            <dt>OnInsertStart</dt>
+            <dt>OnLoad</dt>
+            <dt>OnLoadCancel</dt>
+            <dt>OnLoadDone</dt>
+            <dt>OnLoadError</dt>
+            <dt>OnLoadFinished</dt>
+            <dt>OnMailMerge</dt>
+            <dt>OnMailMergeFinished</dt>
+            <dt>OnModifyChanged</dt>
+            <dt>OnMouseOut</dt>
+            <dt>OnMouseOver</dt>
+            <dt>OnMove</dt>
+            <dt>OnNew</dt>
+            <dt>OnNewMail</dt>
+            <dt>OnNonAlphaCharInput</dt>
+            <dt>OnPageCountChange</dt>
+            <dt>OnPrepareUnload</dt>
+            <dt>OnPrepareViewClosing</dt>
+            <dt>OnPrint</dt>
+            <dt>OnResize</dt>
+            <dt>OnSave</dt>
+            <dt>OnSaveAs</dt>
+            <dt>OnSaveAsDone</dt>
+            <dt>OnSaveDone</dt>
+            <dt>OnSaveFinished</dt>
+            <dt>OnSelect</dt>
+            <dt>OnStartApp</dt>
+            <dt>OnToggleFullscreen</dt>
+            <dt>OnUnfocus</dt>
+            <dt>OnUnload</dt>
+            <dt>OnViewCreated</dt>
+            <dt>OnViewClosed</dt>
+        </dl>
+        </p>
+        */
+    interface com::sun::star::container::XNameReplace;
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

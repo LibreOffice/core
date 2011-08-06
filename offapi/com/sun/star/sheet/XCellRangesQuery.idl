@@ -1,0 +1,161 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_sheet_XCellRangesQuery_idl__
+#define __com_sun_star_sheet_XCellRangesQuery_idl__
+
+#include <com/sun/star/uno/XInterface.idl>
+#include <com/sun/star/sheet/XSheetCellRanges.idl>
+#include <com/sun/star/table/CellAddress.idl>
+#include <com/sun/star/table/CellRangeAddress.idl>
+
+//=============================================================================
+
+module com {  module sun {  module star {  module sheet {
+
+//=============================================================================
+
+/** provides methods to query for cell ranges with specific contents.
+
+    <p>All methods return a collection of cell ranges.</p>
+
+    @see com::sun::star::sheet::SheetRangesQuery
+    @see com::sun::star::sheet::SheetCellRanges
+ */
+published interface XCellRangesQuery: com::sun::star::uno::XInterface
+{
+    //-------------------------------------------------------------------------
+
+    /** queries all visible cells.
+
+        @returns
+            the visible (not hidden) cells of the current cell range(s).
+     */
+    com::sun::star::sheet::XSheetCellRanges queryVisibleCells();
+
+    //-------------------------------------------------------------------------
+
+    /** queries all empty cells.
+
+        @returns
+            the empty cells of the current cell range(s).
+     */
+    com::sun::star::sheet::XSheetCellRanges queryEmptyCells();
+
+    //-------------------------------------------------------------------------
+
+    /** queries all cells with the specified content type(s).
+
+        @param nContentFlags
+            a combination of <type>CellFlags</type> flags.
+
+            <p>Attention: Despite the <type>CellFlags</type> flags are
+            <atom>long</atom> values, this method expects a <atom>short</atom>
+            parameter.
+
+        @returns
+            all cells of the current cell range(s) with the specified
+            content type(s).
+     */
+    com::sun::star::sheet::XSheetCellRanges queryContentCells(
+            [in] short nContentFlags );
+
+    //-------------------------------------------------------------------------
+
+    /** queries all formula cells with the specified result type.
+
+        @param nResultFlags
+            a combination of <type>FormulaResult</type> flags.
+
+        @returns
+            all formula cells of the current cell range(s) with the
+            specified result type(s).
+     */
+    com::sun::star::sheet::XSheetCellRanges queryFormulaCells(
+            [in] long nResultFlags );
+
+    //-------------------------------------------------------------------------
+
+    /** queries all cells with different values in a specified row.
+
+        <p>This method takes each column of the current cell range(s) and
+        compares all cells with the cell in the specified row. All cells
+        which are different to this comparison cell will be returned.</p>
+
+        @param aCompare
+            contains a cell address with the row index used for comparison.
+            Only this row index is of interest.
+
+        @returns
+            all cells of the current cell range(s) which are different
+            to the comparison cell of each column.
+     */
+    com::sun::star::sheet::XSheetCellRanges queryColumnDifferences(
+            [in] com::sun::star::table::CellAddress aCompare );
+
+    //-------------------------------------------------------------------------
+
+    /** queries all cells with different values in a specified column.
+
+        <p>This method takes each row of the current cell range(s) and
+        compares all cells with the cell in the specified column. All cells
+        which are different to this comparison cell will be returned.</p>
+
+        @param aCompare
+            contains a cell address with the column index used for
+            comparison. Only this column index is of interest.
+
+        @returns
+            all cells of the current cell range(s) which are different
+            to the comparison cell of each row.
+     */
+    com::sun::star::sheet::XSheetCellRanges queryRowDifferences(
+            [in] com::sun::star::table::CellAddress aCompare );
+
+    //-------------------------------------------------------------------------
+
+    /** intersects the current cell range(s) with the specified cell range.
+
+        @param aRange
+            contains the cell range for intersection.
+
+        @return
+            all cells of the current cell range(s) which are contained
+            in the passed cell range.
+
+     */
+    com::sun::star::sheet::XSheetCellRanges queryIntersection(
+            [in] com::sun::star::table::CellRangeAddress aRange );
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif
+

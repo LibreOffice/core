@@ -1,0 +1,206 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_text_AccessibleEndnoteView_idl__
+#define __com_sun_star_text_AccessibleEndnoteView_idl__
+
+#include <com/sun/star/accessibility/XAccessibleContext.idl>
+#include <com/sun/star/accessibility/XAccessibleComponent.idl>
+#include <com/sun/star/accessibility/XAccessibleEventBroadcaster.idl>
+
+
+//=============================================================================
+
+module com {  module sun {  module star {  module text {
+
+//=============================================================================
+
+/** The accessible view of pages.
+
+
+     @since OOo 1.1.2
+ */
+published service AccessiblePageView
+{
+    /** This interface gives access to any page that is visible in the
+          page preview of a text document.
+
+        <ul>
+            <li>The parent returned by
+                <method scope="::com::sun::star::accessibility"
+                >XAccessibleContext::getAccessibleParent</method> is the
+                accessible page preview of a text document.  That is, the
+                object returned by
+                <method scope="::com::sun::star::accessibility"
+                >XAccessible::getAccessibleContext</method> supports
+                <type scope="::com::sun::star::text"
+                >AccessibleTextDocumentPageView</type>.
+            <li>The children returned by
+                <method scope="::com::sun::star::accessibility"
+                >XAccessibleContext::getAccessibleChild</method> all
+                support the interface XAccessible. Calling
+                <method scope="::com::sun::star::accessibility"
+                >XAccessible::getAccessibleContext</method> for these
+                children returns an object that supports one of the
+                following services.
+                <ul>
+                    <li><type scope="::com::sun::star::text"
+                        >AccessibleHeaderFooterView</type>:
+                        A child of this kind is returned for every header
+                        and footer that is contained in the page.
+                    <li><type scope="::com::sun::star::text"
+                        >AccessibleFootnoteView</type>:
+                        A child of this kind is returned for every footnote
+                        that is contained in the page.
+                    <li><type scope="::com::sun::star::text"
+                        >AccessibleEndnoteView</type>:
+                        A child of this kind is returned for every endnote
+                        that is contained in the page.
+                    <li><type scope="::com::sun::star::text"
+                        >AccessibleParagraphView</type>:
+                        A child of this kind is returned for every paragraph
+                        fragment that is contained in the page.
+                        A paragraph fragment is the part of a paragraph that
+                        is displayed on a certain page.
+                    <li><type scope="::com::sun::star::table"
+                        >AccessibleTableView</type>:
+                        A child of this kind is returned for every table
+                        fragment that is contained in the page.
+                        A table fragment is the part of a table that is
+                        displayed on a certain page.
+                    <li><type scope="::com::sun::star::text"
+                        >AccessibleTextFrameView</type>:
+                        A child of this kind is returned for every text
+                        frame that is contained in the page. These objects
+                        are children of the <type>AccessiblePageView</type>
+                        regardless whether they are bound to the page, a
+                        paragraph, a frame, or a character. The only
+                        exception are text frames that are bound as
+                        character.  They are children of the paragraph they
+                        are contained in.
+                    <li><type scope="::com::sun::star::text"
+                        >AccessibleTextGraphicObject</type>:
+                        A child of this kind is returned for every graphic that
+                        is contained in the page. These objects are
+                        children of the <type>AccessiblePageView</type>
+                        regardless whether they are bound to a page, paragraph,
+                        a frame or a character. The only exception
+                        are text frames that are bound as character. They are
+                        children of the paragraph they are contained in.
+                    <li><type scope="::com::sun::star::text"
+                        >AccessibleTextEmbeddedObject</type>:
+                        A child of this kind is returned for every embedded
+                        object that is contained in the page.
+                        These objects are children of the
+                        <type>AccessibleTextDocumentView</type> regardless
+                        whether they are bound to a page, a paragraph, a frame,
+                        or a character.  They are children of the paragraph they
+                        are contained in.
+                    <li><type scope="::com::sun::star::drawing"
+                        >AccessibleShape</type>:
+                        A child of this kind (or one of its derived
+                        interfaces) is returned for every shape that is
+                        contained in the page. These objects are children of
+                        the <type>AccessibleTextDocumentView</type>
+                        regardless whether they are bound to a page, a
+                        paragraph, a frame or a character.
+                </ul>
+                <p>The following rules apply to the children order:
+                <ul>
+                    <li>The logical order of paragraph and table fragments is
+                        never changed.
+                    <li>Headers appear immediately before the first paragraph or
+                        table fragment of the header's page.
+                    <li>Footnotes appear immediately after the last paragraph or
+                        table fragment of the footnote's page. The logical order
+                        of footnotes isn't changed.
+                    <li>Endnotes appear immediately after the last footnote of
+                        the endnote's page or after the last paragraph or
+                        table fragment of this page if there are no footnotes.
+                        The logical order of endnotes isn't changed.
+                    <li>Footers appear immediately after the last endnote,
+                        footnote, paragraph or table fragment of the footer's
+                        page.
+                    <li>Text frames, graphics, embedded objects and shapes that
+                        are painted in the background appear before any other
+                        children. Their order reflects the z order.
+                    <li>Text frames, graphics, embedded objects and shapes
+                        that are painted in the foreground appear behind any
+                           other children. Their order reflects the z order,
+                        with the exception of controls that appear really last,
+                        but also keep the z order.
+                </ul>
+            <li>The role is <const scope="::com::sun::star::accessibility"
+                >AccessibleRole::PANEL</const>
+            <li>The name is "page" (or the equivalent term
+                in application's language) with a number appended.
+            <li>The description is "page" (or the equivalent term
+                in application's language) with the page number or
+                character appended in the format that is specified in the
+                page style.
+            <li>There are no relations.</li>
+            <li>The following states might be contained in the state set
+                returned by <method scope="::com::sun::star::accessibility"
+                >XAccessibleContext::getAccessibleStateSet</method>:
+                <ul>
+                    <li><const scope="::com::sun::star::accessibility"
+                        >AccessibleStateType::DEFUNC</const> (indicates that
+                        the document window has been closed or the endnote
+                        is not existing any longer)</li>
+                    <li><const scope="::com::sun::star::accessibility"
+                        >AccessibleStateType::ENABLED</const> (always
+                        contained)</li>
+                    <li><const scope="::com::sun::star::accessibility"
+                        >AccessibleStateType::OPAQUE</const>
+                    <li><const scope="::com::sun::star::accessibility"
+                        >AccessibleStateType::FOCUSABLE</const>
+                    <li><const scope="::com::sun::star::accessibility"
+                        >AccessibleStateType::FOCUSED</const>
+                    <li><const scope="::com::sun::star::accessibility"
+                        >AccessibleStateType::SHOWING</const>
+                    <li><const scope="::com::sun::star::accessibility"
+                        >AccessibleStateType::VISIBLE</const>
+                </ul>
+            <li>The locale is the application's locale.
+        </ul>
+
+     */
+    interface ::com::sun::star::accessibility::XAccessibleContext;
+
+    /** This interface describes the graphical representation of a
+          endnote.
+     */
+    interface ::com::sun::star::accessibility::XAccessibleComponent;
+
+    /** This is the interface for listeners */
+    interface ::com::sun::star::accessibility::XAccessibleEventBroadcaster;
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

@@ -1,0 +1,100 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_ui_ItemDescriptor_idl__
+#define __com_sun_star_ui_ItemDescriptor_idl__
+
+#include <com/sun/star/container/XIndexAccess.idl>
+
+//=============================================================================
+
+module com {  module sun {  module star {  module ui {
+
+/**
+    describes a user interface item that is part of a user interface
+    element.
+    <p>Common examples for such elements are:
+        <ul>
+            <li>menus</li>
+            <li>tool bars</li>
+            <li>status bars</li>
+        </ul>
+       No assumption is made about any graphical representation:
+       You could have a menu or a toolbox working with the same item descriptor.
+    </p>
+
+    @since OOo 2.0
+*/
+service ItemDescriptor
+{
+    /** specifies which type this item descriptor belongs to.<p>See constant definition
+        <type>ItemType</type>.</p>
+    */
+    [property] short Type;
+
+    /** the text of the user interface item.
+    */
+    [property] string Label;
+
+    /** contains the command URL which specifies which action should be accomplished.
+     */
+    [property] string CommandURL;
+
+    /** contains the a URL that points to a help text.
+     */
+    [property] string HelpURL;
+
+    /** different styles which influence the appearance of the item and its behavior.
+        <p>This property is only valid if the item describes a toolbar or statusbar
+        item. See <type>ItemStyle</type> for more information about possible styles.</p>
+    */
+    [optional, property] short Style;
+
+    /** specifies the pixel distance by which the text of the item is shifted on the x-axis.
+        <p>This property is only valid if the item describes a statusbar item.</p>
+    */
+    [optional, property] short Offset;
+
+    /** specifies an optional sub container.
+        <p>This property is valid for menus only. It can be used to define sub menus.</p>
+    */
+    [optional, property] com::sun::star::container::XIndexAccess ItemDescriptorContainer;
+
+    /** specifies if this item is visible or not.
+        <p>This property is only valid if the item describes a toolbar or statusbar item.</p>
+    */
+    [optional, property] boolean IsVisible;
+
+    /** specifies a pixel width for this item inside the user interface element.
+        <p>This property is only valid if the item describes a toolbar or statusbar item.</p>
+    */
+    [optional, property] short Width;
+};
+
+}; }; }; };
+
+#endif

@@ -1,0 +1,96 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_script_XStarBasicAccess_idl__
+#define __com_sun_star_script_XStarBasicAccess_idl__
+
+#include <com/sun/star/container/XNameContainer.idl>
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module script {
+
+//=============================================================================
+
+/** Interface representing a library and provides access to its modules
+
+    @deprecated
+ */
+published interface XStarBasicAccess: com::sun::star::uno::XInterface
+{
+    //-------------------------------------------------------------------------
+    /** returns
+        the library container giving access to the libraries stored in a document
+        or basic library file.
+     */
+    com::sun::star::container::XNameContainer getLibraryContainer();
+
+    //-------------------------------------------------------------------------
+    /**
+        Creates an empty library. This method can be called alternatively to
+        accessing directly the NameContainer returned by getLibraryContainer.
+        By using this method together with addModule and addStarBasicDialog
+        the caller does not have to implement XStarBasicLibraryInfo, XModuleInfo,
+        and XStarBasicDialogInfo
+     */
+    void createLibrary( [in] string LibName, [in] string Password,
+                        [in] string ExternalSourceURL, [in] string LinkTargetURL )
+        raises( com::sun::star::container::ElementExistException );
+
+    //-------------------------------------------------------------------------
+    /**
+        Adds a module to an existing (e.g., created by createLibrary) library.
+        By using this method together with createLibrary the caller does not have
+        to implement XStarBasicLibraryInfo and XModuleInfo.
+
+        @throws  NoSuchElementException
+        if the library doesn't exist.
+     */
+    void addModule( [in] string LibraryName, [in] string ModuleName,
+                    [in] string Language, [in] string Source )
+        raises( com::sun::star::container::NoSuchElementException );
+
+    //-------------------------------------------------------------------------
+    /**
+        Adds an old style basic dialog (SI controls) to an existing (e.g., created
+        by createLibrary) library.
+        By using this method together with createLibrary the caller does not have
+        to implement XStarBasicLibraryInfo and XStarBasicDialogInfo
+
+        @throws  NoSuchElementException
+        if the library doesn't exist.
+     */
+    void addDialog( [in] string LibraryName, [in] string DialogName,
+                    [in] sequence< byte > Data )
+        raises( com::sun::star::container::NoSuchElementException );
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

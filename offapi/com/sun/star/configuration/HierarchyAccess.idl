@@ -1,0 +1,167 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_configuration_HierarchyAccess_idl__
+#define __com_sun_star_configuration_HierarchyAccess_idl__
+
+#include <com/sun/star/container/XNameAccess.idl>
+#include <com/sun/star/container/XHierarchicalNameAccess.idl>
+#include <com/sun/star/container/XContainer.idl>
+#include <com/sun/star/beans/XExactName.idl>
+#include <com/sun/star/beans/XPropertySetInfo.idl>
+#include <com/sun/star/beans/XPropertyState.idl>
+#include <com/sun/star/beans/XMultiPropertyStates.idl>
+
+//=============================================================================
+
+module com { module sun { module star { module configuration {
+
+//=============================================================================
+/** provides access to a hierarchy of descendant elements.
+
+ <p>Subnodes are accessed by their name. Values that are direct or indirect
+ descendants of this tree node can be retrieved. Non-value subnodes can be
+ navigated using container interfaces.
+ Other interfaces provide access to information about this node.
+ Changes to values in the subtree can be monitored by event listeners.
+ </p>
+
+ <p>Elements of this container that are not simple values
+ are similar containers themselves, thus (recursively) forming a
+ hierarchical tree.
+ </p>
+
+ <p>Implementations of this service usually also implement
+ service <type>HierarchyElement</type>, which concerns the complementary role
+ of being accessible as an element of the hierarchy.
+ </p>
+*/
+published service HierarchyAccess
+{
+/** allows access to immediate children of this node.
+
+ <p><member scope="com::sun::star::container">XNameAccess::getByName()</member>
+ returns an <atom>any</atom> holding either a simple value or an interface
+ on another HierarchyAccess if the child is not a simple value.
+ </p>
+*/
+    interface com::sun::star::container::XNameAccess;
+
+/** allows access to all descendants of this node
+
+ <p><member scope="com::sun::star::container">XHierarchicalNameAccess::getByHierarchicalName()</member>
+ returns an <atom>any</atom> holding either a simple value or an interface
+ on another HierarchyAccess if the descendant is not a simple value.
+ </p>
+*/
+    interface com::sun::star::container::XHierarchicalNameAccess;
+
+/** allows attaching listeners to this node to monitor changes to immediate child nodes.
+*/
+    interface com::sun::star::container::XContainer;
+
+/** provides support for inexact names.
+ <p>Exact names can be obtained for simple or hierarchical names for use in
+ <type scope="com::sun::star::container">XNameAccess</type>,
+ <type scope="com::sun::star::container">XHierarchicalNameAccess</type>,
+ <type scope="com::sun::star::beans">XPropertySet</type> or
+ any other interfaces that allow access to or manipulation of subnodes
+ selected by name or hierarchical name.
+ </p>
+ <p>If an inexact name could be matched to either a simple or a hierarchical
+ name, the simple (immediate child) name is preferred.
+ </p>
+*/
+    interface com::sun::star::beans::XExactName;
+
+/** provides information about immediate children of this node. [optional]
+
+ <p>This interface may be missing, if the hierarchy supports no traits that are
+ described by <type scope="com::sun::star::beans">PropertyAttribute</type>
+ values or if the same information is available by other means,
+ e.g. if the implementation supports
+ <member scope="com::sun::star::beans">XPropertySet::getPropertySetInfo()</member>.
+ </p>
+
+ <p>If a child of this node is an object that implements
+ <type scope="com::sun::star::beans">XProperty</type>, then this implementation
+ returns the same <type scope="com::sun::star::beans">Property</type> for that
+ child as the child itself.
+ </p>
+*/
+    [optional] interface com::sun::star::beans::XPropertySetInfo;
+
+/** provides access to the state of child elements of an implementation. [optional]
+
+ <p>This interface may be missing if the hierarchy (or a hierarchy fragment
+ that contains this implementation as element) does not support default values or
+ if the node does not support accessing the default state of individual children.
+ </p>
+
+ <p>If elements that are not simple values, but objects themselves, support
+ a default state (as indicated by
+ <const scope="com::sun::star::beans">PropertyAttribute::MAYBEDEFAULT</const>),
+ they should implement
+ <type scope="com::sun::star::beans">XPropertyWithState</type>, in which case
+ the <type scope="com::sun::star::beans">PropertyState</type> applies to all
+ their children and recursively to all descendants.
+ </p>
+
+ <p>If an implementation is part of a <em>read-only</em> view of the hierarchy,
+ attempts to change property states will fail.
+ </p>
+*/
+    [optional] interface com::sun::star::beans::XPropertyState;
+
+/** provides access to the states of multiple child elements of
+ an implementation. [optional]
+
+ <p>This interface may be missing if the hierarchy (or a hierarchy fragment
+ that contains this implementation as element) does not support default values
+ if the node does not support accessing the default state of individual children.
+ </p>
+
+ <p>If elements that are not simple values, but objects themselves, support
+ a default state (as indicated by
+ <const scope="com::sun::star::beans">PropertyAttribute::MAYBEDEFAULT</const>),
+ they should implement
+ <type scope="com::sun::star::beans">XPropertyWithState</type>, in which case
+ the <type scope="com::sun::star::beans">PropertyState</type> applies to all
+ their children and recursively to all descendants.
+ </p>
+
+ <p>If an implementation is part of a <em>read-only</em> view of the hierarchy,
+ attempts to change property states will fail.
+ </p>
+*/
+    [optional] interface com::sun::star::beans::XMultiPropertyStates;
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

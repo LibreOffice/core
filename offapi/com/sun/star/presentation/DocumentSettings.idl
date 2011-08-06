@@ -1,0 +1,115 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_presentation_DocumentSettings_idl__
+#define __com_sun_star_presentation_DocumentSettings_idl__
+
+#include <com/sun/star/document/HeaderFooterSettings.idl>
+#include <com/sun/star/document/Settings.idl>
+
+//=============================================================================
+
+module com {  module sun {  module star {  module presentation {
+
+//=============================================================================
+
+/** describes properties that apply to the whole presentation document.
+ */
+published service DocumentSettings
+{
+    /** This service documents the common properties of an office document
+     */
+    service com::sun::star::document::Settings;
+
+    //-------------------------------------------------------------------------
+
+    /** This service configures the header and footer settings during print
+     */
+    [optional] service com::sun::star::document::HeaderFooterSettings;
+
+    //-------------------------------------------------------------------------
+
+    /** provides access to the properties.
+     */
+    interface com::sun::star::beans::XPropertySet;
+
+    //-------------------------------------------------------------------------
+
+    /** enables or disables the printing of the drawing pages
+     */
+    [optional, property] boolean IsPrintDrawing;
+
+    /** enables or disables the printing of the notes pages
+     */
+    [optional, property] boolean IsPrintNotes;
+
+    /** enables or disables the printing of the handout pages
+     */
+    [optional, property] boolean IsPrintHandout;
+
+    /** enables or disables the printing of the outline pages
+     */
+    [optional, property] boolean IsPrintOutline;
+
+    /** enables or disables the printing of draw pages that
+        are marked hidden
+     */
+    [optional, property] boolean IsPrintHiddenPages;
+
+    // Note: the following properties exist also in
+    // css::drawing::DocumentSettings
+
+    // ------------------------------------------------------------
+
+    /** enables or disables the fitting of the page to the printable
+        area during print
+     */
+    [optional, property] boolean IsPrintFitPage;
+
+    /** if this is true and the paper size for printing is larger than
+        the paper size of the printer than the content is tiled over
+        multiple pages.
+     */
+    [optional, property] boolean IsPrintTilePage;
+
+    /** is the number format used for page number fields
+     */
+    [optional, property] long PageNumberFormat;
+
+    /** If this is true, the distance between two paragraphs is
+        the sum of ParaTopMargin of the previous and ParaBottomMargin of
+        the next paragraph. If false, only the greater of the two is
+        chosen.
+     */
+    [optional, property] boolean ParagraphSummation;
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

@@ -1,0 +1,141 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_util_XURLTransformer_idl__
+#define __com_sun_star_util_XURLTransformer_idl__
+
+#include <com/sun/star/uno/XInterface.idl>
+#include <com/sun/star/util/URL.idl>
+
+
+//=============================================================================
+
+module com {  module sun {  module star {  module util {
+
+//=============================================================================
+
+/** supports parsing and assembling of URLs
+
+    @see URL
+    @see URLTransformer
+ */
+published interface XURLTransformer: com::sun::star::uno::XInterface
+{
+    //-------------------------------------------------------------------------
+    /** parses the string in <member>URL::Complete</member> which should contain
+        a syntactically complete URL.
+
+        <p>
+        The implementation is allowed to correct minor failures in <member>URL::Complete</member>
+        if the meaning of the URL remain unchanged. Parts of the URL are stored in the other
+        fields of <var>aURL</var>.
+        </p>
+
+        @param aURL
+                the URL which include the complete string notation and will contain
+                all parsed parts of it after finishing this call. <member>URL::Complete</member>
+                can be overwritten if the implementation corrected minor failures.
+
+        @returns
+            <TRUE/> if parsing was successfully (means if given URL was syntactically correct)
+            or <FALSE/> otherwise.
+     */
+    boolean parseStrict( [inout] com::sun::star::util::URL aURL );
+
+    //-------------------------------------------------------------------------
+    /** parses the string in <member>URL::Complete</member>, which may contain
+        a syntactically complete URL or is specified by the provided protocol
+
+        <p>
+        The implementation can use smart functions to correct or interpret
+        <member>URL::Complete</member> if it is not a syntactically complete URL.
+        The parts of the URL are stored in the other fields of <var>aURL</var>.
+        </p>
+
+        @param aURL
+                the URL which include the string notation and will contain
+                all parsed parts of it after finishing this call. This includes
+                <member>URL::Complete</member>.
+
+        @param sSmartProtocol
+                optional information which protocol specification should be used to parse
+                member<member>URL::Complete</member>. If empty the implementation can use a
+                protocol which fit best.
+
+        @returns
+                <TRUE/> if parsing was successful (means if <member>URL::Complete</member> could
+                be syntactically correct) or <FALSE/> otherwise.
+     */
+    boolean parseSmart(
+        [inout] com::sun::star::util::URL aURL,
+        [in] string sSmartProtocol );
+
+    //-------------------------------------------------------------------------
+    /** assembles the parts of the URL specified by <var>aURL</var> and
+        stores it into <member>URL::Complete</member>
+
+        @param aURL
+                the URL which contains alls necessary information in a structured form. The
+                member <member>URL::Complete</member> contains the URL in string notation after
+                the operation finished successfully. Otherwise the content of <member>URL::complete</member>
+                is not defined.
+
+        @returns
+            <TRUE/> if assembling was successfully or <FALSE/> otherwise.
+     */
+    boolean assemble( [inout] com::sun::star::util::URL aURL );
+
+    //-------------------------------------------------------------------------
+    /** returns a representation of the URL for UI purposes only
+
+        <p>
+        Sometimes it can be useful to show an URL on an user interface
+        in a more "human readable" form. Such URL can't be used on any API
+        call, but make it easier for the user to understand it.
+        </p>
+
+        @param aURL
+                URL in structured form which should be shown at the UI
+
+        @param bWithPassword
+                specifies whether the password will be included in the encoding
+                or not. Usually passwords should never be shown at the user
+                interface.
+
+        @returns
+                a string representing the <var>aURL</var> if it is syntactically correct. A empty string if <var>aURL</var>
+                is not syntactically correct.
+     */
+    string getPresentation(
+        [in] com::sun::star::util::URL aURL,
+        [in] boolean bWithPassword );
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

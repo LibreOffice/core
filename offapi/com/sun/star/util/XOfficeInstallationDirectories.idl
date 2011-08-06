@@ -1,0 +1,113 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_util_XOfficeInstallationDirectories_idl__
+#define __com_sun_star_util_XOfficeInstallationDirectories_idl__
+
+#include <com/sun/star/uno/XInterface.idl>
+
+module com { module sun { module star { module util {
+
+//============================================================================
+/** encapsulates access to the current office installation directory and
+    office user data directory, provides functionality to create URLs
+    containing relocatable (not absolute) references to the current office
+    installation directory and user data directory and vice versa.
+
+    <p>This functionality is useful when data containing references to the
+    current office installation directory must be made persistent and re-read
+    later. In many cases, storing the reference directly would destroy the
+    relocatability of an office installation.
+
+    @since OOo 2.0
+ */
+published interface XOfficeInstallationDirectories : com::sun::star::uno::XInterface
+{
+    //------------------------------------------------------------------------
+    /** returns the absolute URL containing the directory of the current office
+        installation (e.g. "file:///opt/OpenOffice.org".)
+
+        @returns
+        the absolute URL containing the directory of the current office
+        installation.
+     */
+    string getOfficeInstallationDirectoryURL();
+
+    //------------------------------------------------------------------------
+    /** returns the absolute URL containing the directory where the current
+        office installation expects its user data (e.g.
+        "file:///home/kso/.openoffice.org".)
+
+        @returns
+        the absolute URL containing the directory of the current office
+        user data.
+     */
+    string getOfficeUserDataDirectoryURL();
+
+    //------------------------------------------------------------------------
+    /** calculates a relocatable URL from the given URL.
+
+        <p>If the given URL contains an absolute reference to the current office
+        installation directory or office user data directory, this method will
+        replace the absolute reference by an opaque placeholder string.
+        <code>makeRelocatableURL</code> must be used in order to re-replace the
+        placeholder by an absolute reference.
+
+        @param URL
+        The URL for that a relocatable URL is requested. In case the URL does
+        not contain a reference to the current office installation or to the office
+        user data directory, the input URL will be returned unchanged.
+
+        @returns
+        The relocatable URL.
+     */
+    string makeRelocatableURL( [in] string URL );
+
+    //------------------------------------------------------------------------
+    /** the counterpart of <code>makeRelocatableURL</code>.
+
+        <p>If the given URL contains a placeholder for an absolute reference to
+        the current office installation directory or for the office user data
+        directory, that was created using <code>makeRelocatableURL</code>, the
+        respective placeholder will be replaced by an absolute reference to the
+        current office installation directory or office user data directory.
+
+        @param URL
+        The URL for that an absolute URL is requested. In case the URL does
+        not contain the opaque relocation placeholder used by
+        <code>makeRelocatableURL</code>, the input URL will be returned
+        unchanged.
+
+        @returns
+        The absolute URL.
+     */
+    string makeAbsoluteURL( [in] string URL );
+};
+
+}; }; }; };
+
+#endif

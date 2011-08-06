@@ -1,0 +1,120 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_ucb_XFetchProviderForContentAccess_idl__
+#define __com_sun_star_ucb_XFetchProviderForContentAccess_idl__
+
+#include <com/sun/star/uno/XInterface.idl>
+#include <com/sun/star/ucb/FetchResult.idl>
+
+//=============================================================================
+
+module com { module sun { module star { module ucb {
+
+//=============================================================================
+/** provides the possibility to load information offered by a
+    <type>XContentAccess</type> for several rows of a
+    <type>ContentResultSet</type> with a single function call.
+*/
+published interface XFetchProviderForContentAccess: com::sun::star::uno::XInterface
+{
+    //-------------------------------------------------------------------------
+    /** returns the content identifier strings of the columns of the indicated
+        rows
+
+        @returns
+        <member>FetchResult::Rows</member> contains a sequence of anys. Each
+        of these anys contains a string.
+
+        @param nRowStartPosition
+        the starting row of the result set
+
+        @param nRowCount
+        the count of rows
+
+        @param bDirection
+        <TRUE/>, if you want the rows to be read in the same order, as they
+        are contained in the result set ( <TRUE/> &lt;-&gt; forward step;
+        <FALSE/> &lt;-&gt; backward step )
+    */
+    com::sun::star::ucb::FetchResult
+         fetchContentIdentifierStrings( [in] long nRowStartPosition
+                                      , [in] long nRowCount
+                                      , [in] boolean bDirection );
+
+    //-------------------------------------------------------------------------
+    /** returns the <type>XContentIdentifier</type>s of the columns of the
+        indicated rows
+
+        @returns
+        <member>FetchResult::Rows</member> contains a sequence of anys. Each
+        of these anys contains an <type>XContentIdentifier</type>.
+
+        @param nRowStartPosition
+        the starting row of the result set
+
+        @param nRowCount
+        the count of rows
+
+        @param bDirection
+        <TRUE/>, if you want the rows to be read in the same order, as they
+        are contained in the result set ( <TRUE/> &lt;-&gt; forward step;
+        <FALSE/> &lt;-&gt; backward step )
+    */
+    com::sun::star::ucb::FetchResult
+         fetchContentIdentifiers( [in] long nRowStartPosition
+                                , [in] long nRowCount
+                                , [in] boolean bDirection );
+
+    //-------------------------------------------------------------------------
+    /** returns the <type>XContent</types>s of the columns of the indicated rows
+
+        @returns
+        <member>FetchResult::Rows</member> contains a sequence of anys. Each
+        of these anys contains an <type>XContent</type>.
+
+        @param nRowStartPosition
+        the starting row of the result set
+
+        @param nRowCount
+        the count of rows
+
+        @param bDirection
+        <TRUE/>, if you want the rows to be read in the same order, as they
+        are contained in the result set ( <TRUE/> &lt;-&gt; forward step;
+        <FALSE/> &lt;-&gt; backward step )
+    */
+    com::sun::star::ucb::FetchResult
+         fetchContents( [in] long nRowStartPosition
+                      , [in] long nRowCount
+                      , [in] boolean bDirection );
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

@@ -1,0 +1,132 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_embed_XLinkageSupport_idl__
+#define __com_sun_star_embed_XLinkageSupport_idl__
+
+#include <com/sun/star/uno/XInterface.idl>
+#include <com/sun/star/embed/XStorage.idl>
+#include <com/sun/star/embed/XCommonEmbedPersist.idl>
+#include <com/sun/star/beans/PropertyValue.idl>
+#include <com/sun/star/embed/WrongStateException.idl>
+
+//============================================================================
+
+ module com {  module sun {  module star {  module embed {
+
+//============================================================================
+/** specifies an additional implementation for linked embedded object support.
+ */
+published interface XLinkageSupport: XCommonEmbedPersist
+{
+    //------------------------------------------------------------------------
+    /** breaks the link and provides the object with a parent storage and a
+        name for object's entry
+
+        <p>
+        This method can be used only for links implementations that implement
+        the whole set of embedded object interfaces. Usually the sets of
+        interfaces are the same for links and objects. An example of exception
+        from this are OOo links that do not implement
+        <type>XEmbedPersist</type> interface. For such cases the method will
+        throw an exception.
+        </p>
+
+        <p>
+        The link will be broken and the linked object will become a normal
+        embedded object.
+        </p>
+
+        <p>
+        An entry with the specified name should be created\opened inside
+        provided storage. This entry will be used for the object persistence.
+        If the entry exists already all it's contents will be ignored.
+        </p>
+
+        @param xStorage
+            a parent storage the entry should be created\opened in
+
+        @param sEntryName
+            a name for the entry
+
+        @throws ::com::sun::star::lang::IllegalArgumentException
+            one of arguments is illegal
+
+        @throws com::sun::star::embed::WrongStateException
+            the object is in wrong state or not a linked object
+
+        @throws com::sun::star::io::IOException
+            in case object has not persistence or other io problems
+
+        @throws com::sun::star::uno::Exception
+            in case of other problems
+
+        @see also XEmbedPersist::setPersistentEntry
+     */
+    void breakLink( [in] ::com::sun::star::embed::XStorage xStorage,
+                    [in] string sEntryName )
+        raises( ::com::sun::star::lang::IllegalArgumentException,
+                ::com::sun::star::embed::WrongStateException,
+                ::com::sun::star::io::IOException,
+                ::com::sun::star::uno::Exception );
+
+
+    //------------------------------------------------------------------------
+    /** allows to detect whether the object is a linked one.
+        <p>
+            Most of embedded objects will not support this interface, but some
+        of them can do it, to allow conversion from link to object. After
+        the conversion the object does not change, so interface set stays the
+        same, but the object is not a link any more.
+        </p>
+
+        @return
+            <TRUE/> - the object is a linked one.
+            <FALSE/> - otherwise
+
+        @throws com::sun::star::embed::WrongStateException
+            the object is in wrong state
+     */
+    boolean isLink()
+        raises( ::com::sun::star::embed::WrongStateException );
+
+    //------------------------------------------------------------------------
+    /** returns the URL of the link object.
+
+        @throws com::sun::star::embed::WrongStateException
+            the object is in wrong state or is not a link
+     */
+    string getLinkURL()
+        raises( ::com::sun::star::embed::WrongStateException,
+                ::com::sun::star::uno::Exception );
+};
+
+//============================================================================
+
+}; }; }; };
+
+#endif
+

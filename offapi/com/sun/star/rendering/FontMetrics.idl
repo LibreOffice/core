@@ -1,0 +1,107 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_rendering_FontMetrics_idl__
+#define __com_sun_star_rendering_FontMetrics_idl__
+
+module com { module sun { module star { module rendering {
+
+/** Metrics global to the font, i.e. not specific to single
+    glyphs. The font height is defined as
+    ascent+descent+internalLeading, and therefore not explicitly
+    included here.<p>
+
+    Please note that when querying FontMetrics from an XCanvasFont
+    interface, all values here are given relative to the font cell
+    size. That means, the referenceCharWidth and/or
+    ascent+descent+internalLeading will approximately (rounded to
+    integer device resolution, or exactly, if fractional font
+    rendering is enabled) match the referenceAdvancement/cellSize
+    members of the FontRequest for which the XCanvasFont was
+    queried. Please be aware that the values returned in this
+    structure only map one-to-one to device pixel, if the combined
+    rendering transformation for text output equals the identity
+    transformation. Otherwise, the text output (and thus the resulting
+    metrics) will be subject to that transformation. Depending on the
+    underlying font technology, actual device output might be off by
+    up to one device pixel from the transformed metrics.
+
+    @since OOo 2.0
+ */
+published struct FontMetrics
+{
+    /// Ascent (above the baseline) part of the font.
+    double      Ascent;
+
+    //-------------------------------------------------------------------------
+
+    /// Descent (below the baseline) part of the font.
+    double      Descent;
+
+    //-------------------------------------------------------------------------
+
+    /// Extra space above ascent
+    double      InternalLeading;
+
+    //-------------------------------------------------------------------------
+
+    /** Extra space outside the font cells.<p>
+
+        It should not contain ink marks and is typically used
+        by the font designer to modify the line distance.<p>
+     */
+    double      ExternalLeading;
+
+    //-------------------------------------------------------------------------
+
+    /** This value specifies the reference character width of the
+        font.<p>
+
+        It's roughly equivalent to the average width of all
+        characters, and if one needs a font with double character
+        width, the referenceCharSize should be doubled.<p>
+     */
+    double          ReferenceCharSize;
+
+    //-------------------------------------------------------------------------
+
+    /** Specifies the offset to be added to the baseline when drawing
+        underlined text.
+     */
+    double          UnderlineOffset;
+
+    //-------------------------------------------------------------------------
+
+    /** Specifies the offset to be added to the baseline when striking
+        through the text.
+     */
+    double      StrikeThroughOffset;
+
+};
+
+}; }; }; };
+
+#endif

@@ -1,0 +1,270 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_awt_UnoControlCurrencyFieldModel_idl__
+#define __com_sun_star_awt_UnoControlCurrencyFieldModel_idl__
+
+#include <com/sun/star/awt/FontDescriptor.idl>
+#include <com/sun/star/awt/UnoControlModel.idl>
+
+#include <com/sun/star/util/Color.idl>
+
+#include <com/sun/star/style/VerticalAlignment.idl>
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module awt {
+
+//=============================================================================
+
+/** specifies the standard model of an <type>UnoControlCurrencyField</type>.
+ */
+published service UnoControlCurrencyFieldModel
+{
+    service com::sun::star::awt::UnoControlModel;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies the background color (RGB) of the control.
+     */
+    [property] com::sun::star::util::Color BackgroundColor;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies the border style of the control.
+
+        <pre>
+        0: No border
+        1: 3D border
+        2: simple border
+        </pre>
+     */
+    [property] short Border;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies the color of the border, if present
+
+        <p>Not every border style (see <member>Border</member>) may support coloring.
+        For instance, usually a border with 3D effect will ignore the BorderColor setting.</p>
+
+        @since OOo 2.0
+     */
+    [optional, property] long BorderColor;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies the currency symbol.
+     */
+    [property] string CurrencySymbol;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies the decimal accuracy.
+     */
+    [property] short DecimalAccuracy;
+
+    //-------------------------------------------------------------------------
+
+    /** determines whether the control is enabled or disabled.
+     */
+    [property] boolean Enabled;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies the font attributes of the text in the control.
+     */
+    [property] com::sun::star::awt::FontDescriptor FontDescriptor;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies the <type scope="com::sun::star::text">FontEmphasis</type>
+        value of the text in the control.
+     */
+    [property] short FontEmphasisMark;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies the <type scope="com::sun::star::text">FontRelief</type>
+        value of the text in the control.
+     */
+    [property] short FontRelief;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies the help text of the control.
+     */
+    [property] string HelpText;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies the help URL of the control.
+     */
+    [property] string HelpURL;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies whether the selection in the control should be hidden when
+        the control is not active (focused).
+
+        @since OOo 2.0
+     */
+    [optional, property] boolean HideInactiveSelection;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies whether the currency symbol is to be prepended.
+     */
+
+    [property] boolean PrependCurrencySymbol;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies that the control will be printed with the document.
+     */
+    [property] boolean Printable;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies that the content of the control cannot be modified by the user.
+     */
+    [property] boolean ReadOnly;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies whether the mouse should show repeating behavior, i.e.
+        repeatedly trigger an action when keeping pressed.
+
+        @since OOo 2.0
+     */
+    [optional, property] boolean Repeat;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies the mouse repeat delay, in milliseconds.
+
+        <p>When the user presses a mouse in a control area where this triggers
+        an action (such as spinning the value), then usual control implementations
+        allow to repeatedly trigger this action, without the need to release the
+        mouse button and to press it again. The delay between two such triggers
+        is specified with this property.</p>
+
+        @since OOo 2.0
+     */
+    [optional, property] long RepeatDelay;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies whether the thousands separator is to be displayed.
+     */
+    [property] boolean ShowThousandsSeparator;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies that the control has a spin button.
+     */
+    [property] boolean Spin;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies that the value is checked during the user input.
+     */
+    [property] boolean StrictFormat;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies that the control can be reached with the TAB key.
+     */
+    [property] boolean Tabstop;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies the text color (RGB) of the control.
+     */
+    [property] com::sun::star::util::Color TextColor;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies the text line color (RGB) of the control.
+     */
+    [property] com::sun::star::util::Color TextLineColor;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies the value displayed in the control.
+     */
+    [property] double Value;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies the maximum value that can be entered.
+     */
+    [property] double ValueMax;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies the minimum value that can be entered.
+     */
+    [property] double ValueMin;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies the value step when using the spin button.
+     */
+    [property] double ValueStep;
+
+    /** denotes the writing mode used in the control, as specified in the
+        <type scope="com::sun::star::text">WritingMode2</type> constants group.
+
+        <p>Only <member scope="com::sun::star::text">WritingMode2::LR_TB</member> and
+        <member scope="com::sun::star::text">WritingMode2::RL_TB</member> are supported at the moment.</p>
+
+        @since OOo 3.1
+    */
+    [optional, property] short WritingMode;
+
+    /** defines how the mouse wheel can be used to scroll through the control's content.
+
+        <p>Usually, the mouse wheel spins the numeric value displayed in the control. Using this property,
+        and one of the <type>MouseWheelBehavior</type> constants, you can control under which circumstances
+        this is possible.</p>
+    */
+    [optional, property] short MouseWheelBehavior;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies the vertical alignment of the text in the control.
+
+        @since OOo 3.3
+     */
+    [optional, property] com::sun::star::style::VerticalAlignment VerticalAlign;
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

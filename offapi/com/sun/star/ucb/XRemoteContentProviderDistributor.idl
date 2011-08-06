@@ -1,0 +1,95 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_ucb_XRemoteContentProviderDistributor_idl__
+#define __com_sun_star_ucb_XRemoteContentProviderDistributor_idl__
+
+#include <com/sun/star/connection/ConnectionSetupException.idl>
+#include <com/sun/star/connection/NoConnectException.idl>
+#include <com/sun/star/lang/IllegalArgumentException.idl>
+#include <com/sun/star/uno/XInterface.idl>
+
+
+//=============================================================================
+
+module com { module sun { module star { module ucb {
+
+//=============================================================================
+/** Distribute a content broker to various
+    <type>XRemoteContentProviderAcceptor</type>s.
+
+    @version 1.0
+    @author Stephan Bergmann
+    @see XRemoteContentProviderAcceptor
+*/
+published interface XRemoteContentProviderDistributor: com::sun::star::uno::XInterface
+{
+    //-------------------------------------------------------------------------
+    /** Offer the local content broker to a remote content provider acceptor.
+
+        <p> The Uno Url is handed to the
+        <type scope="com::sun::star::bridge">UnoUrlResolver</type> service,
+        which is responsible for raising any of the advertised exceptions. </p>
+
+        @param Url  A Uno Url to address the
+        <type>XRemoteContentProviderAcceptor</type>.
+
+        @param Identifier  An identifier handed to the
+        <type>XRemoteContentProviderAcceptor</type>.
+
+        @returns success indicator.  Especially, if there's already a
+        connection to the given Url, the call will fail, no matter whether
+        that connection uses the same identifier as the given one or not.
+    */
+    boolean connectToRemoteAcceptor([in] string Url,
+                                    [in] string Identifier)
+        raises (com::sun::star::connection::NoConnectException,
+                com::sun::star::connection::ConnectionSetupException,
+                com::sun::star::lang::IllegalArgumentException);
+
+    //-------------------------------------------------------------------------
+    /** Undo the offering of the local content broker to a specific remote
+        content provider acceptor.
+
+        @param Url  A Uno Url to address the
+        <type>XRemoteContentProviderAcceptor</type>.
+
+        @returns success indicator.
+    */
+    boolean disconnectFromRemoteAcceptor([in] string Url);
+
+    //-------------------------------------------------------------------------
+    /** Undo the offering of the local content broker to all remote content
+        provider acceptors.
+    */
+    void disconnectFromAll();
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

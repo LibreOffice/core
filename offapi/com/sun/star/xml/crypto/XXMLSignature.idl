@@ -1,0 +1,87 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+//i20156 - new file for XML security module
+
+/** -- idl definition -- **/
+
+#ifndef __com_sun_star_xml_crypto_xxmlsignature_idl_
+#define __com_sun_star_xml_crypto_xxmlsignature_idl_
+
+#include <com/sun/star/uno/XInterface.idl>
+#include <com/sun/star/uno/SecurityException.idl>
+#include <com/sun/star/xml/crypto/XXMLSignatureTemplate.idl>
+#include <com/sun/star/xml/crypto/XXMLSecurityContext.idl>
+#include <com/sun/star/xml/crypto/XMLSignatureException.idl>
+
+module com { module sun { module star { module xml { module crypto {
+
+/**
+ * Interface of XML signature
+ *
+ * <p>This interface represents a XML signer or verifier.</p>
+ *
+ * <p>The signer or verifier concrete a key by retrieve signature context and
+ * signature template.</p>
+ *
+ * <p>In some cases, the signer or verifier can determine and locate the
+ * contents to be signed from the signature template by dereference the URI.</p>
+ *
+ * <p>In some cases, the contents to be signed need to be clearly pointed out by
+ * the signature template.</p>
+ */
+interface XXMLSignature : com::sun::star::uno::XInterface
+{
+    /**
+     * Perform signature in the environment of signature template and context.
+     */
+    com::sun::star::xml::crypto::XXMLSignatureTemplate generate(
+        [in] com::sun::star::xml::crypto::XXMLSignatureTemplate aTemplate ,
+        [in] com::sun::star::xml::crypto::XSecurityEnvironment aEnvironment
+    ) raises( com::sun::star::xml::crypto::XMLSignatureException ,
+        com::sun::star::uno::SecurityException ) ;
+
+    /**
+     * Perform validation in the environment of signature template and context.
+     */
+    com::sun::star::xml::crypto::XXMLSignatureTemplate validate(
+        [in] com::sun::star::xml::crypto::XXMLSignatureTemplate aTemplate ,
+        [in] com::sun::star::xml::crypto::XXMLSecurityContext aContext
+    ) raises( com::sun::star::xml::crypto::XMLSignatureException ,
+        com::sun::star::uno::SecurityException ) ;
+
+    /**
+     * get the time used by the engine, JSR105,
+     * this method is used for evaluation.
+     */
+     /*
+    hyper getEngineTime([in] long id);
+    */
+};
+
+} ; } ; } ; } ; } ;
+#endif

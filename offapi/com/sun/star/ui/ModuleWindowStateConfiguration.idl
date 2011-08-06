@@ -1,0 +1,96 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_ui_ModuleUICommandDescription_idl__
+#define __com_sun_star_ui_ModuleUICommandDescription_idl__
+
+#include <com/sun/star/container/XNameContainer.idl>
+
+//=============================================================================
+
+module com { module sun { module star { module ui {
+
+//=============================================================================
+
+/** a service which provides window based information about user interface
+    elements of a single application module.
+
+    <p>
+    Every OpenOffice.org module has an amount of user interface elements that can
+    be positioned, resized, closed and their style can be changed. This service
+    provides access to the window based information of available user interface
+    elements which are part of a single OpenOffice.org module, like Writer or
+    Calc.
+    </p>
+
+    @since OOo 2.0
+*/
+
+service ModuleWindowStateConfiguration
+{
+    /** provides read/write access to window based information of user interface
+        elements which are part of single installed module.
+
+        <p>
+        An implementation must provide a <type scope="com::sun::star::uno">Sequence</type> which
+        has <type scope="com::sun::star::beans">PropertyValue</type> as entries. The following
+        entries a defined:
+        <ul>
+            <li><b>Docked</b><br>a boolean which specifies if the window is docked or not.</li>
+            <li><b>DockingArea</b><br>a <type scope="com::sun::star::ui">DockingArea</type>
+            which specifies the docking area where the window is docked.</li>
+            <li><b>DockPos</b><br>a <type scope="com::sun::star::awt">Point</type> which specifies the
+            docked position of a window. The X and Y values are interpreted as a row/column number and
+            a pixel position for top/bottom docked windows. For left/right docked windows this is</li>
+            <li><b>DockSize</b><br>a <type scope="com::sun::star::awt">Size</type> which specifies
+            the docked size of the window. This property is currently not used by the layout manager
+            implementation. For future use.</li>
+            <li><b>Locked</b><br>a boolean which specifies if the window is locked or not. This property
+            is only valid for docked windows</li>
+            <li><b>Pos</b><br>a <type scope="com::sun::star::awt">Point</type> which specifies the
+            floating position in pixel of the window.</li>
+            <li><b>Size</b><br>a <type scope="com::sun::star::awt">Size</type> which specifies the
+            floating size in pixel of the window.</li>
+            <li><b>Style</b><br>a long which specifies the style of the window. A toolbar support the
+            following values: 0 = icons, 1 = text, 2 = text+icons.</li>
+            <li><b>UIName</br><br>a localized string which specifies the default window title.</li>
+        </ul>
+        The key to a user interface element is the resource URL which has
+        the following syntax "private:resource/$type/$name". For example "private:resource/toolbar/standardbar"
+        addresses the standard bar of a module.
+        A complete list of all user interface elements is available in the Developers Guide.
+        </p>
+
+        @see com::sun::star::frame::ModuleManager
+    */
+
+    interface com::sun::star::container::XNameContainer;
+};
+
+}; }; }; };
+
+#endif

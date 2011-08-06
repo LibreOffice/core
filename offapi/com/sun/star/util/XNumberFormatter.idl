@@ -1,0 +1,138 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_util_XNumberFormatter_idl__
+#define __com_sun_star_util_XNumberFormatter_idl__
+
+#include <com/sun/star/uno/XInterface.idl>
+
+#include <com/sun/star/util/Color.idl>
+#include <com/sun/star/util/XNumberFormatsSupplier.idl>
+
+#include <com/sun/star/util/NotNumericException.idl>
+
+#include <com/sun/star/util/Color.idl>
+
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module util {
+
+//=============================================================================
+
+/** represents a number formatter.
+ */
+published interface XNumberFormatter: com::sun::star::uno::XInterface
+{
+    //-------------------------------------------------------------------------
+
+    /** attaches an <type>XNumberFormatsSupplier</type> to this
+        <type>NumberFormatter</type>.
+
+        <p>This <type>NumberFormatter</type> will only use the <type>NumberFormats</type>
+        specified in the attached <type>XNumberFormatsSupplier</type>. Without an attached
+        <type>XNumberFormatsSupplier</type>, no formatting is possible.</p>
+     */
+    void attachNumberFormatsSupplier( [in] com::sun::star::util::XNumberFormatsSupplier xSupplier );
+
+    //-------------------------------------------------------------------------
+
+    /** @returns
+                the attached <type>XNumberFormatsSupplier</type>.
+     */
+    com::sun::star::util::XNumberFormatsSupplier getNumberFormatsSupplier();
+
+    //-------------------------------------------------------------------------
+
+    /** detects the number format in a string which contains a formatted number.
+     */
+    long detectNumberFormat( [in] long nKey,
+             [in] string aString )
+            raises( com::sun::star::util::NotNumericException );
+
+    //-------------------------------------------------------------------------
+
+    /** converts a string which contains a formatted number into a number.
+
+        <p>If this is a text format, the string will not be converted.</p>
+     */
+    double convertStringToNumber( [in] long nKey,
+             [in] string aString )
+            raises( com::sun::star::util::NotNumericException );
+
+    //-------------------------------------------------------------------------
+
+    /** converts a number into a string.
+     */
+    string convertNumberToString( [in] long nKey,
+             [in] double fValue );
+
+    //-------------------------------------------------------------------------
+
+    /** @returns
+                the color which is specified for the given value in the number format,
+                which is otherwise the value of <var>aDefaultColor</var>.
+     */
+    com::sun::star::util::Color queryColorForNumber( [in] long nKey,
+             [in] double fValue,
+             [in] com::sun::star::util::Color aDefaultColor );
+
+    //-------------------------------------------------------------------------
+
+    /** converts a string into another string.
+     */
+    string formatString( [in] long nKey,
+             [in] string aString );
+
+    //-------------------------------------------------------------------------
+
+    /** @returns
+                the color which is specified for the given string in the number format,
+                which is otherwise the value of <var>aDefaultColor</var>.
+     */
+    com::sun::star::util::Color queryColorForString( [in] long nKey,
+             [in] string aString,
+             [in] com::sun::star::util::Color aDefaultColor );
+
+    //-------------------------------------------------------------------------
+
+    /** converts a number into a string with the specified format.
+
+        <p>This string can always be converted back to a number using the same
+        format.
+        </p>
+     */
+    string getInputString( [in] long nKey,
+             [in] double fValue );
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif
+

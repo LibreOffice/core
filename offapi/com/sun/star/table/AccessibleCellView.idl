@@ -1,0 +1,140 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_sheet_AccessibleSpreadsheetDocumentView_idl__
+#define __com_sun_star_sheet_AccessibleSpreadsheetDocumentView_idl__
+
+#include <com/sun/star/accessibility/XAccessibleContext.idl>
+#include <com/sun/star/accessibility/XAccessibleComponent.idl>
+#include <com/sun/star/accessibility/XAccessibleValue.idl>
+#include <com/sun/star/accessibility/XAccessibleText.idl>
+#include <com/sun/star/accessibility/XAccessibleSelection.idl>
+#include <com/sun/star/accessibility/XAccessibleEventBroadcaster.idl>
+
+
+//=============================================================================
+
+module com {  module sun {  module star {  module table {
+
+//=============================================================================
+
+/** The accessible view of a cell in a text document or in the page preview
+      of a spreadsheet document. See
+    <type scope="::com::sun::star::sheet">AccessibleCell</type> for cells in
+    the edit view of a spreadsheet.
+    @since OOo 1.1.2
+*/
+published service AccessibleCellView
+{
+    /** This interface gives access to the visible content of a cell in a
+        accessible spreadsheet page preview or accessible text document view.
+    <ul>
+        <li>The parent returned by <method scope="::com::sun::star::accessibility"
+            >XAccessibleContext::getAccessibleParent</method>
+            is the accessible table view.</li>
+        <li>The children returned by
+            <method scope="::com::sun::star::accessibility"
+            >XAccessibleContext::getAccessibleChild</method> all
+            support the interface XAccessible. Calling
+            <method scope="::com::sun::star::accessibility"
+            >XAccessibleContext::getAccessibleContext</method> for these
+            children returns an object that supports the service
+            <type scope="::com::sun::star::text"
+            >AccessibleParagraphView</type>:
+            A child of this kind is returned for every paragraph
+            fragment that is contained in the cell and
+            is at least partially visible. A paragraph fragment is
+            the part of a paragraph that is displayed on a
+            certain page.
+        <li>The name is something like A10 or B23 or so on.</li>
+        <li>The description is the name or the content of the given note.</li>
+        <li>The role is <const scope="::com::sun::star::accessibility"
+            >AccessibleRole::TABLE_CELL</const></li>
+        <li>For spreadsheets, there are relations between the cell and the
+            shapes with an anchor on this cell.</li>
+        <li>The following states are supported:
+            <ul>
+                <li><const scope="::com::sun::star::accessibility"
+                    >AccessibleStateType::DEFUNC</const> is always false if the
+                    cell is showed, otherwise it is true.</li>
+                <li><const scope="::com::sun::star::accessibility"
+                    >AccessibleStateType::EDITABLE</const> is false if the cell
+                    is showed in a page preview or the cell or the table is
+                    protected, otherwise it is true.</li>
+                <li><const scope="::com::sun::star::accessibility"
+                    >AccessibleStateType::ENABLED</const> is always true.</li>
+                <li><const scope="::com::sun::star::accessibility"
+                    >AccessibleStateType::MULTI_LINE</const> is always true in
+                    spreadsheets and false otherwise.</li>
+                <li><const scope="::com::sun::star::accessibility"
+                    >AccessibleStateType::OPAQUE</const> is false if the cell
+                    has no background color or graphic, otherwise it is true.</li>
+                <li><const scope="::com::sun::star::accessibility"
+                    >AccessibleStateType::SELECTABLE</const> is true if the
+                    cell is not showed in a page preview, otherwise is it
+                    false.</li>
+                <li><const scope="::com::sun::star::accessibility"
+                    >AccessibleStateType::SELECTED</const> is true, if the cell
+                    is selected. This is not possible in the page preview.</li>
+                <li><const scope="::com::sun::star::accessibility"
+                    >AccessibleStateType::SHOWING</const>Is true if the
+                    Bounding Box lies in the Bounding Box of the parent.
+                    Otherwise it is false.</li>
+                <li><const scope="::com::sun::star::accessibility"
+                    >AccessibleStateType::TRANSIENT</const>Is true if the cell
+                    is showed in a spreadsheet page preview. Otherwise it is
+                    false.</li>
+                <li><const scope="::com::sun::star::accessibility"
+                    >AccessibleStateType::VISIBLE</const>Is always true.</li>
+            </ul>
+        </li>
+    </ul>
+     */
+    interface ::com::sun::star::accessibility::XAccessibleContext;
+
+    /** This interface gives access to the visibility of the cell.
+    */
+    interface ::com::sun::star::accessibility::XAccessibleComponent;
+
+    /** This interface gives access to the value of the cell.
+        Only a readonly access is possible.
+     */
+    interface ::com::sun::star::accessibility::XAccessibleValue;
+
+    /** This interface is for selecting the text, value or parts of this in the
+        cell. This interface is optional.
+     */
+    [optional] interface ::com::sun::star::accessibility::XAccessibleSelection;
+
+    /** This is the interface for listeners */
+    [optional] interface ::com::sun::star::accessibility::XAccessibleEventBroadcaster;
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

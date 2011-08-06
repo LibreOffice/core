@@ -1,0 +1,128 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_util_XNumberFormats_idl__
+#define __com_sun_star_util_XNumberFormats_idl__
+
+#include <com/sun/star/uno/XInterface.idl>
+
+#include <com/sun/star/beans/XPropertySet.idl>
+
+#include <com/sun/star/lang/Locale.idl>
+
+#include <com/sun/star/util/MalformedNumberFormatException.idl>
+
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module util {
+
+//=============================================================================
+
+/** provides access to multiple <type>NumberFormat</type>s.
+ */
+published interface XNumberFormats: com::sun::star::uno::XInterface
+{
+    //-------------------------------------------------------------------------
+
+    /** @returns
+                    a readonly <type>NumberFormatProperties</type>.
+     */
+    com::sun::star::beans::XPropertySet getByKey( [in] long nKey );
+
+    //-------------------------------------------------------------------------
+
+    /** @returns
+                    a sequence of the keys of all number formats with the specified type and language.
+
+                @param  nType
+                        the type of number formats to return. Must be one of the
+                        <type>NumberFormat</type> constants.
+
+                @param  nLanguage
+                        the language of number formats to return.
+
+                @param  bCreate
+                        <TRUE/>: create new entries if no formats for the selected language exist<BR>
+                        <FALSE/>: return an empty list if no formats for the selected language exist
+     */
+    sequence<long> queryKeys( [in] short nType,
+             [in] com::sun::star::lang::Locale nLocale,
+             [in] boolean bCreate );
+
+    //-------------------------------------------------------------------------
+
+    /** finds a number format by its format string and returns its key.
+     */
+    long queryKey( [in] string aFormat,
+             [in] com::sun::star::lang::Locale nLocale,
+             [in] boolean bScan );
+
+    //-------------------------------------------------------------------------
+
+    /** adds a new number format to the list, using a format string.
+     */
+    long addNew( [in] string aFormat,
+             [in] com::sun::star::lang::Locale nLocale )
+            raises( com::sun::star::util::MalformedNumberFormatException );
+
+    //-------------------------------------------------------------------------
+
+    /** adds a new number format to the list, using a format
+        string in a different locale than the desired locale of the
+        resulting number format.
+     */
+    long addNewConverted( [in] string aFormat,
+             [in] com::sun::star::lang::Locale nLocale,
+             [in] com::sun::star::lang::Locale nNewLocale )
+            raises( com::sun::star::util::MalformedNumberFormatException );
+
+    //-------------------------------------------------------------------------
+
+    /** removes a number format from the list.
+     */
+    void removeByKey( [in] long nKey );
+
+    //-------------------------------------------------------------------------
+
+    /** generates a format string from several parameters without
+        creating an actual number format.
+     */
+    string generateFormat( [in] long nBaseKey,
+             [in] com::sun::star::lang::Locale nLocale,
+             [in] boolean bThousands,
+             [in] boolean bRed,
+             [in] short nDecimals,
+             [in] short nLeading );
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif
+

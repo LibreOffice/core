@@ -1,0 +1,160 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_sheet_DataPilotFieldGroupInfo_idl__
+#define __com_sun_star_sheet_DataPilotFieldGroupInfo_idl__
+
+#include <com/sun/star/sheet/XDataPilotField.idl>
+#include <com/sun/star/container/XNameAccess.idl>
+
+//=============================================================================
+
+module com {  module sun {  module star {  module sheet {
+
+//=============================================================================
+
+/** contains the grouping information of a <type>DataPilotField</type>.
+ */
+published struct DataPilotFieldGroupInfo
+{
+    //-------------------------------------------------------------------------
+
+    /** specifies whether the start value for the grouping is taken
+        automatically from the minimum of the item values.
+
+        <p><ul>
+        <li>If <FALSE/> is set, the value from <member>Start</member> will be
+        used as start value for the grouping.</li>
+        <li>If <TRUE/> is set, the start value for the grouping will be
+        calculated automatically from the minimum of all member values of the
+        DataPilot field.</li>
+        </ul></p>
+     */
+    boolean HasAutoStart;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies whether the end value for the grouping is taken
+        automatically from the maximum of the item values.
+
+        <p><ul>
+        <li>If <FALSE/> is set, the value from <member>End</member> will be
+        used as end value for the grouping.</li>
+        <li>If <TRUE/> is set, the end value for the grouping will be
+        calculated automatically from the maximum of all member values of the
+        DataPilot field.</li>
+        </ul></p>
+     */
+    boolean HasAutoEnd;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies whether date values are grouped by ranges of days.
+
+        <p><ul>
+        <li>If <FALSE/> is set, and <member>GroupBy</member> contains zero,
+        grouping is performed inplace on the item values.</li>
+        <li>If <FALSE/> is set, and <member>GroupBy</member> contains one or
+        more flags from <type>DataPilotFieldGroupBy</type>, grouping is
+        performed on date or time.</li>
+        <li>If <TRUE/> is set, <member>Step</member> contains a value greater
+        than or equal to 1, and <member>GroupBy</member> set to <const>
+        DataPilotFieldGroupBy::DAYS</const>, grouping is performed on ranges
+        of days (see descriptions for <member>
+        XDataPilotFieldGrouping::createDateGroup</member> for more details
+        about day grouping).</li>
+        </ul></p>
+     */
+    boolean HasDateValues;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies the start value for the grouping if <member>HasAutoStart
+        </member> is set to <FALSE/>.
+     */
+    double Start;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies the end value for the grouping if <member>HasAutoEnd
+        </member> is set to <FALSE/>.
+     */
+    double End;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies the size of the ranges for numeric or day grouping.
+
+        <p>Example: With <member>HasAutoStart</member> set to <FALSE/>,
+        <member>Start</member> set to 2, and <member>Step</member> set to 3,
+        the first group will contain all values greater than or equal to 2 and
+        less than 5. The second group will contain all values greater than or
+        equal to 5 and less then 8, and so on.</p>
+     */
+    double Step;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies the grouping of the date values.
+
+        @see DataPilotFieldGroupBy
+     */
+    long GroupBy;
+
+    //-------------------------------------------------------------------------
+
+    /** contains the source DataPilot field grouping is based on. Will be
+        <NULL/> if this field is not grouped or contains numeric grouping.
+
+        @see DataPilotField
+     */
+    XDataPilotField SourceField;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies the named groups in this field if there are some.
+
+        <p>The returned object is an instance of <type>DataPilotFieldGroups
+        </type>. The collection of groups can be modified by inserting,
+        removing, replacing, or renaming single groups or item names in the
+        groups. When writing back this struct containing such a changed
+        collection of groups to the <member>DataPilotField::GroupInfo</member>
+        property, the modified grouping settings are applied at the DataPilot
+        field.</p>
+
+        @see DataPilotField
+        @see DataPilotFieldGroups
+     */
+    com::sun::star::container::XNameAccess Groups;
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif
+

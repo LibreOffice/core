@@ -1,0 +1,126 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_util_XNumberFormatPreviewer_idl__
+#define __com_sun_star_util_XNumberFormatPreviewer_idl__
+
+#include <com/sun/star/uno/XInterface.idl>
+
+#include <com/sun/star/util/Color.idl>
+#include <com/sun/star/lang/Locale.idl>
+
+#include <com/sun/star/util/MalformedNumberFormatException.idl>
+
+#include <com/sun/star/util/Color.idl>
+
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module util {
+
+//=============================================================================
+
+/** represents a number formatter which can preview number
+    formats without inserting them.
+
+    @see NumberFormatter
+ */
+published interface XNumberFormatPreviewer: com::sun::star::uno::XInterface
+{
+    //-------------------------------------------------------------------------
+
+    /** formats a value using a format string, without inserting a
+        number format into the list.
+
+        @param aFormat
+            is the format string that is used for formatting.
+
+        @param fValue
+            is the value that is formatted.
+
+        @param nLocale
+            is the locale that is used to interpret the format string.
+
+        @param bAllowEnglish
+            specifies if English language number format strings are accepted
+            in addition to those from the selected locale.
+
+        @returns
+            the formatted string.
+
+        @throws com::sun::star::util::MalformedNumberFormatException
+            if the format string is invalid.
+
+     */
+    string convertNumberToPreviewString( [in] string aFormat,
+             [in] double fValue,
+             [in] com::sun::star::lang::Locale nLocale,
+             [in] boolean bAllowEnglish )
+            raises( com::sun::star::util::MalformedNumberFormatException );
+
+    //-------------------------------------------------------------------------
+
+    /** returns the color which is to be used for a number.
+
+        @param aFormat
+            is the format string that is used for formatting.
+
+        @param fValue
+            is the value that is formatted.
+
+        @param nLocale
+            is the locale that is used to interpret the format string.
+
+        @param bAllowEnglish
+            specifies if English language number format strings are accepted
+            in addition to those from the selected locale.
+
+        @param aDefaultColor
+            is the color that should be returned if no color is set by
+            the number format.
+
+        @returns
+            the color that should used to output the formatted string.
+
+        @throws com::sun::star::util::MalformedNumberFormatException
+            if the format string is invalid.
+
+     */
+    com::sun::star::util::Color queryPreviewColorForNumber( [in] string aFormat,
+             [in] double fValue,
+             [in] com::sun::star::lang::Locale nLocale,
+             [in] boolean bAllowEnglish,
+             [in] com::sun::star::util::Color aDefaultColor )
+            raises( com::sun::star::util::MalformedNumberFormatException );
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif
+

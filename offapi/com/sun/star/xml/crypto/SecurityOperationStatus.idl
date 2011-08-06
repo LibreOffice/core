@@ -1,0 +1,150 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+//i20156 - new file for XML security module
+
+/** -- idl definition -- **/
+
+#ifndef __com_sun_star_xml_crypto_securityoperationstatus_idl_
+#define __com_sun_star_xml_crypto_securityoperationstatus_idl_
+
+module com { module sun { module star { module xml { module crypto {
+
+/**
+ * Defines results for security operation.
+ */
+enum SecurityOperationStatus
+{
+    UNKNOWN,
+    OPERATION_SUCCEEDED,
+    RUNTIMEERROR_FAILED,
+/**
+ * The following constants are derived from XMLSec error definitions, as following:
+ *
+ * XMLSEC_ERRORS_R_XMLSEC_FAILED
+ * XMLSEC_ERRORS_R_MALLOC_FAILED
+ * XMLSEC_ERRORS_R_STRDUP_FAILED
+ * XMLSEC_ERRORS_R_CRYPTO_FAILED
+ * XMLSEC_ERRORS_R_XML_FAILED
+ * XMLSEC_ERRORS_R_XSLT_FAILED
+ * XMLSEC_ERRORS_R_IO_FAILED
+ * XMLSEC_ERRORS_R_DISABLED
+ * XMLSEC_ERRORS_R_NOT_IMPLEMENTED
+ * XMLSEC_ERRORS_R_INVALID_SIZE
+ * XMLSEC_ERRORS_R_INVALID_DATA
+ * XMLSEC_ERRORS_R_INVALID_RESULT
+ * XMLSEC_ERRORS_R_INVALID_TYPE
+ * XMLSEC_ERRORS_R_INVALID_OPERATION
+ * XMLSEC_ERRORS_R_INVALID_STATUS
+ * XMLSEC_ERRORS_R_INVALID_FORMAT
+ * XMLSEC_ERRORS_R_DATA_NOT_MATCH
+ * XMLSEC_ERRORS_R_INVALID_NODE
+ * XMLSEC_ERRORS_R_INVALID_NODE_CONTENT
+ * XMLSEC_ERRORS_R_INVALID_NODE_ATTRIBUTE
+ * XMLSEC_ERRORS_R_MISSING_NODE_ATTRIBUTE
+ * XMLSEC_ERRORS_R_NODE_ALREADY_PRESENT
+ * XMLSEC_ERRORS_R_UNEXPECTED_NODE
+ * XMLSEC_ERRORS_R_NODE_NOT_FOUND
+ * XMLSEC_ERRORS_R_INVALID_TRANSFORM
+ * XMLSEC_ERRORS_R_INVALID_TRANSFORM_KEY
+ * XMLSEC_ERRORS_R_INVALID_URI_TYPE
+ * XMLSEC_ERRORS_R_TRANSFORM_SAME_DOCUMENT_REQUIRED
+ * XMLSEC_ERRORS_R_TRANSFORM_DISABLED
+ * XMLSEC_ERRORS_R_INVALID_KEY_DATA
+ * XMLSEC_ERRORS_R_KEY_DATA_NOT_FOUND
+ * XMLSEC_ERRORS_R_KEY_DATA_ALREADY_EXIST
+ * XMLSEC_ERRORS_R_INVALID_KEY_DATA_SIZE
+ * XMLSEC_ERRORS_R_KEY_NOT_FOUND
+ * XMLSEC_ERRORS_R_KEYDATA_DISABLED
+ * XMLSEC_ERRORS_R_MAX_RETRIEVALS_LEVEL
+ * XMLSEC_ERRORS_R_MAX_RETRIEVAL_TYPE_MISMATCH
+ * XMLSEC_ERRORS_R_MAX_ENCKEY_LEVEL
+ * XMLSEC_ERRORS_R_CERT_VERIFY_FAILED
+ * XMLSEC_ERRORS_R_CERT_NOT_FOUND
+ * XMLSEC_ERRORS_R_CERT_REVOKED
+ * XMLSEC_ERRORS_R_CERT_ISSUER_FAILED
+ * XMLSEC_ERRORS_R_CERT_NOT_YET_VALID
+ * XMLSEC_ERRORS_R_CERT_HAS_EXPIRED
+ * XMLSEC_ERRORS_R_DSIG_NO_REFERENCES
+ * XMLSEC_ERRORS_R_DSIG_INVALID_REFERENCE
+ * XMLSEC_ERRORS_R_ASSERTION
+ * XMLSEC_ERRORS_MAX_NUMBER
+ */
+    ENGINE_FAILED,
+    MALLOC_FAILED,
+    STRDUP_FAILED,
+    CRYPTO_FAILED,
+    XML_FAILED,
+    XSLT_FAILED,
+    IO_FAILED,
+    DISABLED,
+    NOT_IMPLEMENTED,
+    INVALID_SIZE,
+    INVALID_DATA,
+    INVALID_RESULT,
+    INVALID_TYPE,
+    INVALID_OPERATION,
+    INVALID_STATUS,
+    INVALID_FORMAT,
+    DATA_NOT_MATCH,
+    INVALID_NODE,
+    INVALID_NODE_CONTENT,
+    INVALID_NODE_ATTRIBUTE,
+    MISSING_NODE_ATTRIBUTE,
+    NODE_ALREADY_PRESENT,
+    UNEXPECTED_NODE,
+    NODE_NOT_FOUND,
+    INVALID_TRANSFORM,
+    INVALID_TRANSFORM_KEY,
+    INVALID_URI_TYPE,
+    TRANSFORM_SAME_DOCUMENT_REQUIRED,
+    TRANSFORM_DISABLED,
+    INVALID_KEY_DATA,
+    KEY_DATA_NOT_FOUND,
+    KEY_DATA_ALREADY_EXIST,
+    INVALID_KEY_DATA_SIZE,
+    KEY_NOT_FOUND,
+    KEYDATA_DISABLED,
+    MAX_RETRIEVALS_LEVEL,
+    MAX_RETRIEVAL_TYPE_MISMATCH,
+    MAX_ENCKEY_LEVEL,
+    CERT_VERIFY_FAILED,
+    CERT_NOT_FOUND,
+    CERT_REVOKED,
+    CERT_ISSUER_FAILED,
+    CERT_NOT_YET_VALID,
+    CERT_HAS_EXPIRED,
+    DSIG_NO_REFERENCES,
+    DSIG_INVALID_REFERENCE,
+    ASSERTION
+};
+
+} ; } ; } ; } ; } ;
+
+
+#endif
+

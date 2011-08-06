@@ -1,0 +1,178 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_report_XSection_idl__
+#define __com_sun_star_report_XSection_idl__
+
+#include <com/sun/star/container/XChild.idl>
+#include <com/sun/star/drawing/XShapes.idl>
+#include <com/sun/star/container/XEnumerationAccess.idl>
+#include <com/sun/star/container/XContainer.idl>
+#include <com/sun/star/util/Color.idl>
+#include <com/sun/star/beans/XPropertySet.idl>
+#include <com/sun/star/report/XReportDefinition.idl>
+#include <com/sun/star/report/XReportComponent.idl>
+//=============================================================================
+
+ module com {  module sun {  module star {  module report {
+ published interface XGroup;
+//=============================================================================
+
+/** identifies a <type>XSection</type> inside a report.
+
+    <p>A section acts like a container of report components. This generic
+    construction allows the definition of hierarchies of reports and their
+    dependent subreports.</p>
+
+    @see XReportDefinition
+    @see XGroup
+ */
+published interface XSection
+{
+    /** allows to navigate to group or report definition.
+    */
+    interface com::sun::star::container::XChild;
+    /** allows to register listeners to be notified of changes in the container.
+    */
+    interface com::sun::star::container::XContainer;
+
+    /** gives access to the elements by index.
+    */
+    interface com::sun::star::drawing::XShapes;
+
+    /** creates an enumeration of the elements.
+    */
+    interface com::sun::star::container::XEnumerationAccess;
+
+    /** provides generic access to the instance properties
+    */
+    interface com::sun::star::beans::XPropertySet;
+
+    /** allows life-time control of sections.
+     */
+    interface com::sun::star::lang::XComponent;
+
+    //-------------------------------------------------------------------------
+
+    /** Defines if the section should be visible in report.
+    */
+    [attribute,bound] boolean Visible;
+
+    /** Defines the name of the section.
+    */
+    [attribute,bound] string Name;
+
+    /** Defines the height of the section.
+    */
+    [attribute,bound] unsigned long Height;
+
+    /** Defines the back ground color of the section.
+    */
+    [attribute,bound] com::sun::star::util::Color BackColor;
+
+    /** determines if the back ground color is set to transparent.
+     */
+    [attribute,bound] boolean BackTransparent;
+
+    /** Defines the expression which is executed before printing the section.
+        If the return value of the expression is <TRUE/> then the section will be printed.
+    */
+    [attribute,bound] string ConditionalPrintExpression;
+
+    /** Specifies whether the section is printed on a separate page.
+        <p>Not valid for page header or page footer.</p>
+        @see ForceNewPage
+    */
+    [attribute,bound] short ForceNewPage
+    {
+        set raises ( com::sun::star::lang::IllegalArgumentException,com::sun::star::beans::UnknownPropertyException );
+        get raises ( com::sun::star::beans::UnknownPropertyException );
+    };
+
+    /** Specifies whether the section is printed in a new row or column within a multi column report.
+        <p>Not valid for page header or page footer.</p>
+        @see ForceNewPage
+    */
+    [attribute,bound] short NewRowOrCol
+    {
+        set raises ( com::sun::star::lang::IllegalArgumentException,com::sun::star::beans::UnknownPropertyException );
+        get raises ( com::sun::star::beans::UnknownPropertyException );
+    };
+
+    /** Specifies that the section is printed on one page.
+    <p>Not valid for page header or page footer.</p>
+    */
+    [attribute,bound] boolean KeepTogether
+    {
+        set raises ( com::sun::star::lang::IllegalArgumentException,com::sun::star::beans::UnknownPropertyException );
+        get raises ( com::sun::star::beans::UnknownPropertyException );
+    };
+
+    /** Specifies that elements with dynamic state will be expanded vertically when then content of the element is larger than it's container.
+        If this property is disabled the content will be truncated when it's size is larger than the container.
+    */
+    [attribute,bound] boolean CanGrow
+    {
+        set raises ( com::sun::star::lang::IllegalArgumentException,com::sun::star::beans::UnknownPropertyException );
+        get raises ( com::sun::star::beans::UnknownPropertyException );
+    };
+
+/**
+  <p>Represents ...</p>
+
+ */
+    [attribute,bound] boolean CanShrink
+    {
+        set raises ( com::sun::star::lang::IllegalArgumentException,com::sun::star::beans::UnknownPropertyException );
+        get raises ( com::sun::star::beans::UnknownPropertyException );
+    };
+
+    /** Defines that the group header should be repeated on the next page when a group spans more than one page.
+        It only applies to group headers.
+    */
+    [attribute,bound] boolean RepeatSection
+    {
+        set raises ( com::sun::star::lang::IllegalArgumentException,com::sun::star::beans::UnknownPropertyException );
+        get raises ( com::sun::star::beans::UnknownPropertyException );
+    };
+
+    /** Specifies the parent of the section if it is a group header or group footer.
+    */
+    [attribute,readonly] com::sun::star::report::XGroup Group;
+
+    /** Specifies the parent of the section if it is a page header or page footer.
+    */
+    [attribute,readonly] com::sun::star::report::XReportDefinition ReportDefinition;
+};
+
+//=============================================================================
+
+}; }; }; };
+
+/*=============================================================================
+
+=============================================================================*/
+#endif

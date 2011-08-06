@@ -1,0 +1,89 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_configuration_backend_MalformedDataException_idl__
+#define __com_sun_star_configuration_backend_MalformedDataException_idl__
+
+#include <com/sun/star/uno/Exception.idl>
+
+//=============================================================================
+
+module com { module sun { module star { module configuration { module backend {
+
+//=============================================================================
+
+/** is raised when the data of a component schema, layer or update
+    is not well-formed, violates the schema or is otherwise invalid.
+
+    @since OOo 1.1.2
+ */
+published exception MalformedDataException: ::com::sun::star::uno::Exception
+{
+    /**
+        data that provides more detailed information about the
+        reason and location of the error.
+
+        <p> Typically this member should contain an exception characterizing
+            the error in detail.
+        </p>
+        <p> For example the following exceptions may be used:
+        <dl>
+            <dt><type scope="com::sun::star::container">ElementExistException</type></dt>
+            <dd>for duplicate nodes.</dd>
+
+            <dt><type scope="com::sun::star::container">NoSuchElementException</type></dt>
+            <dd>for nodes that are not in the schema.</dd>
+
+            <dt><type scope="com::sun::star::beans">IllegalTypeException</type></dt>
+            <dd>for properties having the wrong or an invalid type.</dd>
+
+            <dt><type scope="com::sun::star::beans">PropertyExistException</type></dt>
+            <dd>for duplicate properties.</dd>
+
+            <dt><type scope="com::sun::star::beans">UnknownPropertyException</type></dt>
+            <dd>for properties that are not in the schema.</dd>
+
+            <dt><type scope="com::sun::star::lang">IllegalArgumentException</type></dt>
+            <dd>for data values (names,attributes,etc.) that are invalid.</dd>
+
+            <dt><type scope="com::sun::star::lang">IllegalAccessException</type></dt>
+            <dd>for changes that violate access restrictions.</dd>
+
+            <dt><type scope="com::sun::star::lang">NoSupportException</type></dt>
+            <dd>for features that are not supported by the current implementation.</dd>
+        </dl>
+        </p>
+        <p> If no more detail information is available, this may be left <void/>.
+        </p>
+    */
+    any ErrorDetails;
+};
+
+//=============================================================================
+
+}; }; }; }; };
+
+#endif

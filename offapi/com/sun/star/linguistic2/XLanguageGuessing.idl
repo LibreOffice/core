@@ -1,0 +1,199 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_linguistic2_XLanguageGuessing_idl__
+#define __com_sun_star_linguistic2_XLanguageGuessing_idl__
+
+#include <com/sun/star/uno/XInterface.idl>
+#include <com/sun/star/lang/Locale.idl>
+#include <com/sun/star/lang/IllegalArgumentException.idl>
+
+module com { module sun { module star { module linguistic2 {
+
+/** This interface allows to guess the language of a text
+
+    <p> The current set of supported languages is:
+    <ul>
+        <li>af : Afrikaans</li>
+        <li>am : Amharic</li>
+        <li>ar : Arabic</li>
+        <li>be : Belarus</li>
+        <li>br : Breton</li>
+        <li>bs : Bosnian</li>
+        <li>ca : Catalan</li>
+        <li>cs : Czech</li>
+        <li>cy : Welsh</li>
+        <li>da : Danish</li>
+        <li>de : German</li>
+        <li>drt : Drents</li>
+        <li>el : Greek</li>
+        <li>en : English</li>
+        <li>eo : Esperanto</li>
+        <li>es : Spanish</li>
+        <li>et : Estonian</li>
+        <li>eu : Basque</li>
+        <li>fa : Farsi</li>
+        <li>fi : Finnish</li>
+        <li>fr : French</li>
+        <li>fy : Frisian</li>
+        <li>ga : Irish Gaelic</li>
+        <li>gd : Scots Gaelic</li>
+        <li>gv : Manx Gaelic</li>
+        <li>he : Hebrew</li>
+        <li>hi : Hindi</li>
+        <li>hr : Croatian</li>
+        <li>hu : Hungarian</li>
+        <li>hy : Armenian</li>
+        <li>id : Indonesian</li>
+        <li>is : Icelandic</li>
+        <li>it : Italian</li>
+        <li>ja : Japanese</li>
+        <li>ka : Georgian</li>
+        <li>ko : Korean</li>
+        <li>la : Latin</li>
+        <li>lb : Luxembourgish (added with OOo 3.3)</li>
+        <li>lt : Lithuanian</li>
+        <li>lv : Latvian</li>
+        <li>mr : Marathi</li>
+        <li>ms : Malay</li>
+        <li>ne : Nepali</li>
+        <li>nl : Dutch</li>
+        <li>nb : Norwegian (Bokmal)</li>
+        <li>pl : Polish</li>
+        <li>pt-PT : Portuguese (Portugal)</li>
+        <li>qu : Quechua</li>
+        <li>rm : Romansh</li>
+        <li>ro : Romanian</li>
+        <li>ru : Russian</li>
+        <li>sa : Sanskrit</li>
+        <li>sco : Scots</li>
+        <li>sh : Serbian (written with latin characters)</li>
+        <li>sk-SK : Slovak (written with Latin characters)</li>
+        <li>sl : Slovenian</li>
+        <li>sq : Albanian</li>
+        <li>sr : Serbian (written with cyrillic characters) (added with OOo 3.4)</li>
+        <li>sv : Swedish</li>
+        <li>sw : Swahili</li>
+        <li>ta : Tamil</li>
+        <li>th : Thai</li>
+        <li>tl : Tagalog</li>
+        <li>tr : Turkish</li>
+        <li>uk : Ukrainian</li>
+        <li>vi : Vietnamese</li>
+        <li>yi : Yiddish</li>
+        <li>zh-CN : Chinese (simplified)</li>
+        <li>zh-TW : Chinese (traditional)</li>
+    </ul>
+
+    </p>
+
+    @since OOo 2.2
+ */
+interface XLanguageGuessing
+{
+    //-------------------------------------------------------------------------
+    /** determines the single most probable language of a sub-string.
+
+        <p>Please note that because statistical analysis is part
+        of the algorithm the the likelihood to get the correct
+        result increases with the length of the sub-string.
+        A word is much less likely guessed correctly compared to
+        a sentence or even a whole paragraph.</p>
+
+        <p>Also note that some languages are that "close" to each other
+        that it will be quite unlikely to find a difference in them,
+        e.g. English (UK), English (IE) and English (AUS) and
+        most likely English (US) as well. And thus the result may
+        be arbitrary.</p>
+
+        @returns
+            the locale for the language identified.
+            If no language could be identified the locale will be empty.
+
+        @param  aText
+            all the text including the part that should checked.
+
+        @param nStartPos
+            specifies the starting index of the sub-string to be checked
+            The value must met 0 <= nStartPos < (length of text - 1).
+
+        @param nLen
+            specifies the length of the sub-string to be checked.
+            The value must met 0 <= nLen <= (length of text).
+
+        @see    <type scope="com::sun::star::lang">Locale</type>
+     */
+    com::sun::star::lang::Locale    guessPrimaryLanguage(
+            [in] string  aText,
+            [in] long    nStartPos,
+            [in] long    nLen )
+        raises( com::sun::star::lang::IllegalArgumentException );
+
+    //-------------------------------------------------------------------------
+    /** allows to explicitly discard some languages from the set of
+        languages possibly returned.
+
+        <p>By default all languages are enabled.</p>
+    */
+    void disableLanguages(
+            [in] sequence< com::sun::star::lang::Locale > aLanguages )
+        raises( com::sun::star::lang::IllegalArgumentException );
+
+    //-------------------------------------------------------------------------
+    /** allows to explicitly re-enable some languages that got previously
+        disabled.
+
+        <p>By default all languages are enabled.</p>
+    */
+    void enableLanguages(
+            [in] sequence< com::sun::star::lang::Locale > aLanguages )
+        raises( com::sun::star::lang::IllegalArgumentException );
+
+    //-------------------------------------------------------------------------
+    /** returns a list of all supported languages.
+
+        <p>This should be the same as the mathematical union of
+        all enabled and disabled languages.</p>
+    */
+    sequence< com::sun::star::lang::Locale > getAvailableLanguages();
+
+    //-------------------------------------------------------------------------
+    /** returns the list of all enabled languages
+    */
+    sequence< com::sun::star::lang::Locale > getEnabledLanguages();
+
+    //-------------------------------------------------------------------------
+    /** returns the list of all disabled languages
+    */
+    sequence< com::sun::star::lang::Locale > getDisabledLanguages();
+
+};
+
+}; }; }; };
+
+#endif
+

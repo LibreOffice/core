@@ -1,0 +1,141 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_text_TextSortDescriptor_idl__
+#define __com_sun_star_text_TextSortDescriptor_idl__
+
+#include <com/sun/star/util/SortDescriptor.idl>
+
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module text {
+
+//=============================================================================
+
+// DocMerge from xml: service com::sun::star::text::TextSortDescriptor
+/** describes sort criteria for sorting text.
+
+    @deprecated
+ */
+published service TextSortDescriptor
+{
+    // DocMerge: empty anyway
+    service com::sun::star::util::SortDescriptor;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::text::TextSortDescriptor::Delimiter
+    /** contains the character that marks the separation of columns.
+     */
+    [property] char Delimiter;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::text::TextSortDescriptor::IsSortInTable
+    /** determines if the content of a table is to be sorted.
+     */
+    [property] boolean IsSortInTable;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::text::TextSortDescriptor::SortRowOrColumnNo0
+    /** contains the row or column index used in the first search key.
+     */
+    [property] long SortRowOrColumnNo0;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::text::TextSortDescriptor::IsSortNumeric0
+    /** determines if the sorting in the first search key is done
+        numeric or alphanumeric order.
+     */
+    [property] boolean IsSortNumeric0;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::text::TextSortDescriptor::IsSortAscending0
+    /** determines if the sorting in the first search key is done
+        in ascending or descending order.
+     */
+    [property] boolean IsSortAscending0;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::text::TextSortDescriptor::SortRowOrColumnNo1
+    /** contains the row or column index used in the second search key.
+     */
+    [property] long SortRowOrColumnNo1;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::text::TextSortDescriptor::IsSortNumeric1
+    /** determines if the sorting in the second search key is done
+        in numeric or alphanumeric order.
+     */
+    [property] boolean IsSortNumeric1;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::text::TextSortDescriptor::IsSortAscending1
+    /** determines if the sorting in the second search key is done
+        in ascending or descending order.
+     */
+    [property] boolean IsSortAscending1;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::text::TextSortDescriptor::SortRowOrColumnNo2
+    /** contains the row or column index used in the third search key.
+     */
+    [property] long SortRowOrColumnNo2;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::text::TextSortDescriptor::IsSortNumeric2
+    /** determines if the sorting in the third search key is done
+        in numeric or alphanumeric order.
+     */
+    [property] boolean IsSortNumeric2;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::text::TextSortDescriptor::IsSortAscending2
+    /** determines if the sorting in the third search key is done
+        in ascending or descending order.
+     */
+    [property] boolean IsSortAscending2;
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+/*=============================================================================
+
+=============================================================================*/
+#endif

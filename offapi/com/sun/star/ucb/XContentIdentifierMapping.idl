@@ -1,0 +1,123 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_ucb_XContentIdentifierMapping_idl__
+#define __com_sun_star_ucb_XContentIdentifierMapping_idl__
+
+#include <com/sun/star/uno/XInterface.idl>
+
+//=============================================================================
+
+module com { module sun { module star { module ucb {
+
+ published interface XContent;
+ published interface XContentIdentifier;
+
+//=============================================================================
+/** A mapping from a (source) set of <type>XContentIdentifier</type>s to
+    another (target) set of XContentIdentifiers.
+
+    <p>For convenience and performance, mapping between the string
+    representations of source/target XContentIdentifiers, as well as mapping
+    between <type>XContent</type>s identified by source/target
+    XContentIdentifiers is also supported.
+
+    <p>This interface can be useful in cases where the identifiers (and
+    associated contents) returned by the various methods of an
+    <type>XContentAccess</type> need to be mapped to some other space of
+    identifiers (and associated contents).
+
+    @see XContent
+    @see XContentAccess
+    @see XContentIdentifier
+*/
+
+published interface XContentIdentifierMapping: com::sun::star::uno::XInterface
+{
+    //-------------------------------------------------------------------------
+    /** Map the string representation of an <type>XContentIdentifier</type>.
+
+        @param Source  The string representation of an XContentIdentifier
+        from the source set.
+
+        @returns  The string representation of the target set's
+        XContentIdentifier corresponding to the source identifier.  The
+        returned string may be empty if either Source was empty already, or if
+        there's no applicable target to map to.
+    */
+    string mapContentIdentifierString([in] string Source);
+
+    //-------------------------------------------------------------------------
+    /** Map an <type>XContentIdentifier</type>.
+
+        @param Source  An XContentIdentifier from the source set.
+
+        @returns  The target set's XContentIdentifier corresponding to the
+        source identifier.  The returned XContentIdentifier may be null if
+        either Source was null already, or if there's no applicable target to
+        map to.
+    */
+    XContentIdentifier mapContentIdentifier([in] XContentIdentifier Source);
+
+    //-------------------------------------------------------------------------
+    /** Map the <type>XContent</type> identified by an
+        <type>XContentIdentifier</type>.
+
+        @param Source  The XContent identified by an XContentIdentifier from
+        the source set.
+
+        @returns  The XContent identified by the target set's
+        XContentIdentifier corresponding to the source identifier.  The
+        returned XContent may be null if either Source was null already, or if
+        there's no applicable target to map to.
+    */
+    XContent mapContent([in] XContent Source);
+
+    //-------------------------------------------------------------------------
+    /** Map the content identifiers (or related data) contained in the columns
+        of a <type scope="com::sun::star::sdbc">XRow</type>.
+
+        @param Value  On input, a sequence of anys corresponding to the columns
+        of the XRow (the first column goes into the zeroth position of the
+        sequence, and so on).  On output, the same sequence, but with the
+        entries mapped as necessary.  This is an inout parameter rather than a
+        combination of in parameter and return value for    performance reasons
+        (assuming that in most cases most elements in the input sequence will
+        be returned unmodified).
+
+        @returns  <TRUE/> if any of the columns contain data that (potentially)
+        needs mapping (though maybe no mapping occurred for the concrete input
+        data of this call).  This information can be useful to decide whether,
+        for another row, a call to this function is at all necessary.
+    */
+    boolean mapRow([inout] sequence< any > Value);
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

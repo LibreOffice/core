@@ -1,0 +1,115 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_embed_FileSystemStorage_idl__
+#define __com_sun_star_embed_FileSystemStorage_idl__
+
+#include <com/sun/star/embed/BaseStorage.idl>
+
+//============================================================================
+
+ module com {  module sun {  module star {  module embed {
+
+//============================================================================
+/** This is a service that allows to get access to a file system folder using
+    storage hierarchy.
+ */
+published service FileSystemStorage
+{
+    // -----------------------------------------------------------------------
+    /** This service describes the base functionality of storages.
+
+        <p>
+        Please see below the description of additional requirements for the
+        file system storage implementation.
+        </p>
+
+        <dl>
+            <dt>interface <type scope="com::sun::star::lang">XComponent</type>
+            </dt>
+            <dd>
+                <p>
+                A file system storage is created either by
+                <type>StorageFactory</type> or by <type>XStorage</type>
+                interface and is controlled by refcounting. In case
+                refcounting is decreased to zero the storage will be
+                disposed automatically.
+                </p>
+
+                <p>
+                In case a storage object is disposed the elements
+                ( substorages and substreams ) are not affected.
+                </p>
+            </dd>
+            <dt>interface <type>XStorage</type></dt>
+            <dd>
+                <dl>
+                    <dt><method>XStorage::openStorageElement</method></dt>
+                    <dd>
+                        This method returns <type>FileSystemStorage</type>
+                        service implementation.
+                    </dd>
+
+                    <dt><method>XStorage::copyLastCommitTo</method></dt>
+                    <dd>
+                        Since this service implementation supports no transaction
+                        this method just creates a copy of the storage in it's
+                        current state.
+                    </dd>
+
+                    <dt><method>XStorage::copyStorageElementLastCommitTo</method></dt>
+                    <dd>
+                        Since this service implementation supports no transaction
+                        this method just creates a copy of the storage in it's
+                        current state.
+                    </dd>
+
+                    <dt><method>XStorage::removeStorageElement</method></dt>
+                    <dd>
+                        If the element is opened and it is a stream element
+                        the removing will fail. If the element is opened and
+                        it is a storage element, all the contents that can be
+                        removed will be removed.
+                    </dd>
+                </dl>
+            </dd>
+            <dt>property URL</dt>
+            <dd>
+                This property is not optional for this service.
+            </dd>
+        </dl>
+
+     */
+    service BaseStorage;
+};
+
+//============================================================================
+
+}; }; }; };
+
+#endif
+

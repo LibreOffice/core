@@ -1,0 +1,63 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_rendering_FillRule_idl__
+#define __com_sun_star_rendering_FillRule_idl__
+
+module com { module sun { module star { module rendering {
+
+/** Determines which algorithm to use when determining inside and
+    outside of filled poly-polygons.
+
+    @since OOo 2.0
+ */
+published enum FillRule
+{
+    /** Fill every area, where, when traveling along a line, the
+        summed winding number (that is, -1 for a
+        counter-clockwise-oriented polygon, and +1 for a
+        clockwise-oriented) is non-zero.<p>
+
+        For example, a poly-polygon consisting of two concentric
+        circles with similar orientation is filled the same way as if
+        only the outer circle would exist. If both have opposite
+        orientation, then the filled representation looks the same as
+        if filled with the EVEN_ODD fill rule.<p>
+     */
+    NON_ZERO,
+
+    //-------------------------------------------------------------------------
+
+    /** Fill every area, where, when traveling along a line, an
+        uneven number of intersections with polygon edges have
+        happened.<p>
+     */
+    EVEN_ODD
+};
+
+}; }; }; };
+
+#endif

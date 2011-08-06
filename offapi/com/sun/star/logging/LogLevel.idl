@@ -1,0 +1,87 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_logging_LogLevel_idl__
+#define __com_sun_star_logging_LogLevel_idl__
+
+//=============================================================================
+
+module com { module sun { module star { module logging {
+
+//=============================================================================
+
+/** specifies levels to distinguish between severities of logged events
+
+    @see XLogger
+
+    @since OOo 2.3
+ */
+constants LogLevel
+{
+    /** specifies that no messages are to be logged at all
+
+        <p>This level can be set at an <type>XLogger</type> to completely prevent
+        logging. You will usually not use it with a concrete log event.</p>
+    */
+    const long  OFF       = 0x7FFFFFFF;
+
+    /// denotes a serious failure to be logged
+    const long  SEVERE    =       1000;
+
+    /// denotes a potential problem to be logged
+    const long  WARNING   =        900;
+
+    /// denotes an informational message to be logged
+    const long  INFO      =        800;
+
+    /// denotes a static configuration message to be logged
+    const long  CONFIG    =        700;
+
+    /// denotes basic tracing information to be logged
+    const long  FINE      =        500;
+
+    /// denotes more fine-grained tracing information to be logged
+    const long  FINER     =        400;
+
+    /// denotes highly detailed tracing information to be logged
+    const long  FINEST    =        300;
+
+    /** specifies that all messages should be logged
+
+        <p>This level can be set at an <type>XLogger</type> to enable logging
+        of absolutely all events. You will usually not use it with a concrete log event.</p>
+    */
+    const long  ALL       = -0x80000000;
+};
+
+//=============================================================================
+
+}; }; }; };
+
+//=============================================================================
+
+#endif

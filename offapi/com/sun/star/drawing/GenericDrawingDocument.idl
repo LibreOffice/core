@@ -1,0 +1,208 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_drawing_GenericDrawingDocument_idl__
+#define __com_sun_star_drawing_GenericDrawingDocument_idl__
+
+#include <com/sun/star/drawing/XDrawPageDuplicator.idl>
+#include <com/sun/star/drawing/XDrawPagesSupplier.idl>
+#include <com/sun/star/drawing/XMasterPagesSupplier.idl>
+#include <com/sun/star/drawing/XLayerSupplier.idl>
+#include <com/sun/star/lang/XMultiServiceFactory.idl>
+#include <com/sun/star/beans/XPropertySet.idl>
+#include <com/sun/star/style/XStyleFamiliesSupplier.idl>
+#include <com/sun/star/lang/Locale.idl>
+#include <com/sun/star/awt/Rectangle.idl>
+#include <com/sun/star/i18n/XForbiddenCharacters.idl>
+#include <com/sun/star/document/OfficeDocument.idl>
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module drawing {
+
+//=============================================================================
+
+/** specifies a document which consists of multiple pages
+    with drawings.
+
+    <p>Because its function is needed more then once, its defined as generic one.</p>
+ */
+published service GenericDrawingDocument
+{
+    /** this base service describes storing and printing */
+    service com::sun::star::document::OfficeDocument;
+
+    /** this factory lets you create various services that are
+        used inside a drawing document
+
+        <p>The following services are <type>Shape</type>s.
+        They are created by the documents factory and must
+        be inserted into a <type>DrawPage</type> or <type>MasterPage</type>
+        of this document.
+
+        <ul>
+            <li><type>RectangleShape</type></li>
+            <li><type>EllipseShape</type></li>
+            <li><type>ControlShape</type></li>
+            <li><type>ConnectorShape</type></li>
+            <li><type>MeasureShape</type></li>
+            <li><type>LineShape</type></li>
+            <li><type>PolyPolygonShape</type></li>
+            <li><type>PolyLineShape</type></li>
+            <li><type>OpenBezierShape</type></li>
+            <li><type>ClosedBezierShape</type></li>
+            <li><type>GraphicObjectShape</type></li>
+            <li><type>GroupShape</type></li>
+            <li><type>TextShape</type></li>
+            <li><type>OLE2Shape</type></li>
+            <li><type>PageShape</type></li>
+            <li><type>CaptionShape</type></li>
+            <li><type>PluginShape</type></li>
+            <li><type>AppletShape</type></li>
+        </ul>
+
+        <p>The following services are all <type scope="com::sun::star::text">TextField</type>
+        and can be inserted into text as <type scope="com::sun::star::text">TextContent</type>.
+
+        <ul>
+            <li><member scope="com::sun::star::text">TextField::DateTime</member></li>
+            <li><member scope="com::sun::star::text">TextField::URL</member></li>
+            <li><member scope="com::sun::star::text">TextField::PageNumber</member></li>
+            <li><member scope="com::sun::star::text">TextField::PageCount</member></li>
+            <li><member scope="com::sun::star::text">TextField::SheetName</member></li>
+            <li><member scope="com::sun::star::text">TextField::FileName</member></li>
+            <li><member scope="com::sun::star::text">TextField::DocInfo.Title</member></li>
+            <li><member scope="com::sun::star::text">TextField::Author</member></li>
+            <li><member scope="com::sun::star::text">TextField::Measure</member></li>
+        </ul>
+
+        <p>The following services gives access to resources used inside the document
+        and let you add new resources.
+
+        <ul>
+            <li><type scope="com::sun::star::drawing">DashTable</type></li>
+            <li><type scope="com::sun::star::drawing">GradientTable</type></li>
+            <li><type scope="com::sun::star::drawing">HatchTable</type></li>
+            <li><type scope="com::sun::star::drawing">BitmapTable</type></li>
+            <li><type scope="com::sun::star::drawing">TransparencyGradientTable</type></li>
+            <li><type scope="com::sun::star::drawing">MarkerTable</type></li>
+        </ul>
+
+        <p>The following service can be set at the <code>Numbering</code> property
+        inside a <type scope="com::sun::star::style">ParagraphProperties</type>
+
+        <ul>
+            <li><type scope="com::sun::star::text">NumberingRules</type></li>
+        </ul>
+
+        <p>The following services can be used for a <type scope="com::sun::star::image">ImageMap</type>
+        inside the document.
+
+        <br>A <type scope="com::sun::star::image">ImageMap</type> can be obtained from a
+        <type>GraphicObjectShape</type>
+
+        <ul>
+            <li><type scope="com::sun::star::image">ImageMapRectangleObject</type></li>
+            <li><type scope="com::sun::star::image">ImageMapCircleObject</type></li>
+            <li><type scope="com::sun::star::image">ImageMapPolygonObject</type></li>
+        </ul>
+
+        <p>The following services lets you access the drawing property defaults
+        of a document.
+
+        <ul>
+            <li><type scope="com::sun::star::drawing">Defaults</type></li>
+        </ul>
+    */
+    interface com::sun::star::lang::XMultiServiceFactory;
+
+    /** lets you access the properties of this service.
+     */
+    interface com::sun::star::beans::XPropertySet;
+
+    /** lets you duplicate pages inside this document.
+     */
+    interface com::sun::star::drawing::XDrawPageDuplicator;
+
+
+    /** provides an object that is implementing the service
+                <type>DrawPage</type>s. With this service you have access to the
+                <type>DrawPage</type>s inside a document.
+     */
+    interface com::sun::star::drawing::XDrawPagesSupplier;
+
+
+    /** returns an object that is implementing the service
+                <type>MasterPages</type>. With this service you have access to the
+                <type>MasterPage</type>s inside a document.
+     */
+    interface com::sun::star::drawing::XMasterPagesSupplier;
+
+
+    /** returns an object that is implementing the service
+                <type>LayerManager</type>. This service lets you manipulate the
+                <type>Layer</type>s of this document.
+     */
+    interface com::sun::star::drawing::XLayerSupplier;
+
+    /** This interface lets you access the styles contained in this document
+     */
+    interface com::sun::star::style::XStyleFamiliesSupplier;
+
+    //-------------------------------------------------------------------------
+
+    /** This property specifies the length between the default tab stops
+        inside text in this document in 1/100th mm.
+     */
+    [property] long TabStop;
+
+    //-------------------------------------------------------------------------
+
+    /** contains the identifier of the default locale of the document.
+     */
+    [property] com::sun::star::lang::Locale CharLocale;
+
+    //-------------------------------------------------------------------------
+
+    /** if this document is an OLE client, this is the current visible area
+        in 100th mm
+    */
+    [property] com::sun::star::awt::Rectangle VisibleArea;
+
+    //-------------------------------------------------------------------------
+
+    /** This property gives the XForbiddenCharacters.
+     */
+    [readonly, property] com::sun::star::i18n::XForbiddenCharacters ForbiddenCharacters;
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif
+

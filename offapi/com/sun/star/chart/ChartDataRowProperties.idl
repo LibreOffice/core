@@ -1,0 +1,119 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_chart_ChartDataRowProperties_idl__
+#define __com_sun_star_chart_ChartDataRowProperties_idl__
+
+#include <com/sun/star/chart/ChartDataPointProperties.idl>
+
+#include <com/sun/star/chart/ChartStatistics.idl>
+
+#include <com/sun/star/beans/XPropertySet.idl>
+
+#include <com/sun/star/xml/UserDefinedAttributeSupplier.idl>
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module chart {
+
+//=============================================================================
+
+/** specifies the properties for a group of graphic elements which
+    belong to a data row (also known as data series).
+
+    <p>For this service, the properties supported by
+    <type>ChartDataPointProperties</type> are applied to all data
+    point elements contained in this group.  They serve as a template;
+    thus, when changing a data point property afterwards</p>
+
+    @see ChartDataPointProperties
+ */
+published service ChartDataRowProperties
+{
+    service com::sun::star::chart::ChartDataPointProperties;
+    /** Statistical properties are not available for all types of
+        diagrams.
+    */
+    [optional] service com::sun::star::chart::ChartStatistics;
+
+    /** If <type>ChartDataRowProperties</type> may be stored as XML
+        file, this service should be supported in order to preserve
+        unparsed XML attributes.
+
+    @since OOo 1.1.2
+     */
+    [optional] service com::sun::star::xml::UserDefinedAttributeSupplier;
+
+    interface com::sun::star::beans::XPropertySet;
+
+    //-------------------------------------------------------------------------
+
+    /** determines to which axis the data row is assigned.
+
+        <p>The axis must be a primary or secondary y-axis</p>
+
+        @see ChartAxisAssign
+        @see ChartAxisYSupplier
+        @see ChartTwoAxisYSupplier
+     */
+    [property] long Axis;
+
+    //-------------------------------------------------------------------------
+
+    /** holds the properties of the regression line, if such one is
+        enabled.
+
+        @see ChartLine
+        @see ChartStatistics
+     */
+    [optional, readonly, property] com::sun::star::beans::XPropertySet DataRegressionProperties;
+
+    //-------------------------------------------------------------------------
+
+    /** holds the properties of the error markers, if those are
+        enabled.
+
+        @see ChartLine
+        @see ChartStatistics
+     */
+    [optional, readonly, property] com::sun::star::beans::XPropertySet DataErrorProperties;
+
+    //-------------------------------------------------------------------------
+
+    /** holds the properties of the average line, if such one is
+        enabled.
+
+        @see ChartLine
+        @see ChartStatistics
+     */
+    [optional, readonly, property] com::sun::star::beans::XPropertySet DataMeanValueProperties;
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

@@ -1,0 +1,79 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_frame_XPopupMenuController_idl__
+#define __com_sun_star_frame_XPopupMenuController_idl__
+
+#include <com/sun/star/awt/XPopupMenu.idl>
+
+//=============================================================================
+
+module com { module sun { module star { module frame {
+
+//=============================================================================
+
+/** provides data to a pop-up menu controller implementation to
+    fill and update a pop-up menu dynamically.
+
+    <p>
+    A pop-up menu controller gets a <type scope="com::sun::star::awt">XPopupMenu</type>
+    from its parent menu implementation. The controller has to fill this pop-up
+    menu with a set of menu items and/or sub menus. The parent menu implementation
+    briefs the controller whenever the pop-up menu gets activated by a user.
+    </p>
+
+    @since OOo 2.0
+*/
+interface XPopupMenuController : com::sun::star::uno::XInterface
+{
+    /** provides a <type scope="com::sun::star::awt">XPopupMenu</type> to a
+        pop-up menu controller implementation. The controller must fill this
+        pop-up menu with its functions.
+
+        @param PopupMenu
+            An empty pop-up menu that must be filled by the pop-up menu controller.
+    */
+    void setPopupMenu( [in] com::sun::star::awt::XPopupMenu PopupMenu );
+
+    /** briefs the pop-up menu controller to update the contents of the provided
+        pop-up menu to reflect the current state.
+
+        <p>A controller should <b>never</b> update the pop-up menu structure on its
+        own to prevent performance problems. A better way would be that a controller
+        registers itself as status listener to for a command URL and immediately
+        deregister after that. Therefor status updates will not be send regularly
+        for a non visible pop-up menu.
+        </p>
+    */
+    void updatePopupMenu();
+};
+
+}; }; }; };
+
+//=============================================================================
+
+#endif

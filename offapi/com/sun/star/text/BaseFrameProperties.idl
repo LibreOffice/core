@@ -1,0 +1,364 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_text_BaseFrameProperties_idl__
+#define __com_sun_star_text_BaseFrameProperties_idl__
+
+#include <com/sun/star/style/GraphicLocation.idl>
+#include <com/sun/star/table/BorderLine.idl>
+#include <com/sun/star/table/ShadowFormat.idl>
+#include <com/sun/star/text/XTextFrame.idl>
+#include <com/sun/star/text/WrapTextMode.idl>
+#include <com/sun/star/awt/Size.idl>
+#include <com/sun/star/util/Color.idl>
+#include <com/sun/star/xml/UserDefinedAttributesSupplier.idl>
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module text {
+
+//=============================================================================
+
+/** specifies the properties that are provided by all text frames, graphic objects, embedded objects
+ and frame styles.
+ */
+published service BaseFrameProperties
+{
+    /** gives access to the UserDefinedAttributes property.
+        @since  OOo 2.1
+     */
+    [optional] service com::sun::star::xml::UserDefinedAttributesSupplier;
+
+    //-------------------------------------------------------------------------
+    /** contains the number of the page where the objects are anchored.
+        <p> The value is valid only if the
+        AnchorType is
+        <const>TextContentAnchorType::AT_PAGE</const>.</p>
+     */
+    [property] short AnchorPageNo;
+    //-------------------------------------------------------------------------
+    /** contains the text frame the current frame is anchored to.
+        <p> The value is valid only if the
+        AnchorType is <const>TextContentAnchorType::AT_FRAME</const>.</p>
+     */
+    [property] com::sun::star::text::XTextFrame AnchorFrame;
+    //-------------------------------------------------------------------------
+    /** contains the color of the background of the object.
+     */
+    [property] com::sun::star::util::Color BackColor;
+    //-------------------------------------------------------------------------
+    /** contains the URL for the background graphic.
+     */
+    [property] string BackGraphicURL;
+
+    //-------------------------------------------------------------------------
+    /** contains the name of the file filter for the background graphic.
+     */
+    [property] string BackGraphicFilter;
+
+    //-------------------------------------------------------------------------
+    /** determines the position of the background graphic.
+     */
+    [property] com::sun::star::style::GraphicLocation BackGraphicLocation;
+
+    //-------------------------------------------------------------------------
+    /** contains the left border of the object.
+
+        @see BaseFrame::com::sun::star::table::BorderLine
+     */
+    [property] com::sun::star::table::BorderLine LeftBorder;
+
+    //-------------------------------------------------------------------------
+    /** contains the right border of the object.
+
+        @see BaseFrame::com::sun::star::table::BorderLine
+     */
+    [property] com::sun::star::table::BorderLine RightBorder;
+
+    //-------------------------------------------------------------------------
+    /** contains the top border of the object.
+
+        @see BaseFrame::com::sun::star::table::BorderLine
+     */
+    [property] com::sun::star::table::BorderLine TopBorder;
+
+    //-------------------------------------------------------------------------
+    /** contains the bottom border of the object.
+
+        @see BaseFrame::com::sun::star::table::BorderLine
+     */
+    [property] com::sun::star::table::BorderLine BottomBorder;
+
+    //-------------------------------------------------------------------------
+    /** contains the distance from the border to the object.
+     */
+    [property] long BorderDistance;
+
+    //-------------------------------------------------------------------------
+    /** contains the distance from the left border to the object.
+     */
+    [property] long LeftBorderDistance;
+
+    //-------------------------------------------------------------------------
+    /** contains the distance from the right border to the object.
+     */
+    [property] long RightBorderDistance;
+
+    //-------------------------------------------------------------------------
+    /** contains the distance from the top border to the object.
+     */
+    [property] long TopBorderDistance;
+
+    //-------------------------------------------------------------------------
+    /** contains the distance from the bottom border to the object.
+     */
+    [property] long BottomBorderDistance;
+
+    //-------------------------------------------------------------------------
+    /** If TRUE, the "BackColor" is ignored.
+     */
+    [property] boolean BackTransparent;
+
+    //-------------------------------------------------------------------------
+
+    /** determines if the content is protected.
+     */
+    [property] boolean ContentProtected;
+    //-------------------------------------------------------------------------
+    /** contains the left margin of the object.
+     */
+    [property] long LeftMargin;
+
+    //-------------------------------------------------------------------------
+    /** contains the right margin of the object.
+     */
+    [property] long RightMargin;
+
+    //-------------------------------------------------------------------------
+
+    /** contains the top margin of the object.
+     */
+    [property] long TopMargin;
+
+    //-------------------------------------------------------------------------
+    /** contains the bottom margin of the object.
+     */
+    [property] long BottomMargin;
+
+    //-------------------------------------------------------------------------
+    /** contains the height of the object (1/100 mm).
+        <p>It is only valid if <member>TextEmbeddedObject::RelativeHeight</member> is zero.</p>
+     */
+    [property] long Height;
+
+    //-------------------------------------------------------------------------
+    /** contains the width of the object (1/100 mm).
+        <p>It is only valid if <member>TextEmbeddedObject::RelativeWidth</member> is zero.</p>
+     */
+    [property] long Width;
+    //-------------------------------------------------------------------------
+    /** contains the relative height of the object.
+        <p> It is only valid if it is greater than zero.</p>
+     */
+    [property] short RelativeHeight;
+
+    //-------------------------------------------------------------------------
+    /** contains the relative width of the object.
+        <p> It is only valid if it is greater than zero. </p>
+     */
+    [property] short RelativeWidth;
+    //-------------------------------------------------------------------------
+    /** determines whether the width follows the height.
+     */
+    [property] boolean IsSyncWidthToHeight;
+    //-------------------------------------------------------------------------
+    /** determines whether the height follows the width.
+     */
+    [property] boolean IsSyncHeightToWidth;
+    //-------------------------------------------------------------------------
+    /** determines the horizontal orientation of the object.
+
+        @see BaseFrame::HoriOrientation
+     */
+    [property] short HoriOrient;
+    //-------------------------------------------------------------------------
+    /** contains the horizontal position of the object (1/100 mm).
+        <p> It is only valid if "HoriOrient" is HoriOrientation_NONE.</p>
+     */
+    [property] long HoriOrientPosition;
+
+    //-------------------------------------------------------------------------
+    /** determines the environment of the object to which the orientation
+        is related.
+
+        @see BaseFrame::RelOrientation
+     */
+    [property] short HoriOrientRelation;
+
+    //-------------------------------------------------------------------------
+    /** determines the vertical orientation of the object.
+
+        @see BaseFrame::VertOrientation
+     */
+    [property] short VertOrient;
+
+    //-------------------------------------------------------------------------
+    /** contains the vertical position of the object (1/100 mm).
+
+        It is only valid if <member>TextEmbeddedObject::VertOrient</member> is
+        <const>VertOrientation::NONE</const>.
+     */
+    [property] long VertOrientPosition;
+
+    //-------------------------------------------------------------------------
+
+    /** determines the environment of the object to which the orientation is related.
+
+        @see BaseFrame::RelOrientation
+     */
+    [property] short VertOrientRelation;
+
+    //-------------------------------------------------------------------------
+    /** contains the URL of a hyperlink that is set at the object.
+     */
+    [property] string HyperLinkURL;
+
+    //-------------------------------------------------------------------------
+    /** contains the name of the target for a hyperlink that is set at the object.
+     */
+    [property] string HyperLinkTarget;
+
+    //-------------------------------------------------------------------------
+    /** contains the name of the hyperlink that is set at the object.
+     */
+    [property] string HyperLinkName;
+
+    //-------------------------------------------------------------------------
+    /** determines if the object is opaque or transparent for text.
+     */
+    [property] boolean Opaque;
+
+    //-------------------------------------------------------------------------
+    /** determines if the object is mirrored on even pages.
+     */
+    [property] boolean PageToggle;
+
+    //-------------------------------------------------------------------------
+    /** determines if the position is protected.
+     */
+    [property] boolean PositionProtected;
+
+    //-------------------------------------------------------------------------
+    /** determines if the object is included in printing.
+     */
+    [property] boolean Print;
+
+    //-------------------------------------------------------------------------
+    /** contains the type of the shadow of the object.
+     */
+    [property] com::sun::star::table::ShadowFormat ShadowFormat;
+
+    //-------------------------------------------------------------------------
+    /** determines if the object gets an image map from a server.
+     */
+    [property] boolean ServerMap;
+
+    //-------------------------------------------------------------------------
+    /** contains the size of the object.
+
+        @see BaseFrame::Height
+        @see BaseFrame::Width
+     */
+    [property] com::sun::star::awt::Size Size;
+
+    //-------------------------------------------------------------------------
+    /** determines if the size is protected.
+     */
+    [property] boolean SizeProtected;
+    //-------------------------------------------------------------------------
+    /** determines the type of the surrounding text.
+
+        @deprecated
+     */
+        [property] com::sun::star::text::WrapTextMode Surround;
+
+    //-------------------------------------------------------------------------
+    /** determines if the text of the paragraph in which the object
+        is anchored, wraps around the object.
+     */
+    [property] boolean SurroundAnchorOnly;
+
+    //-------------------------------------------------------------------------
+    /** determines the influence of the text wrap on the positioning of the
+        shape
+
+        <p>The value of this property is only evaluated for the positioning
+        of the shape, if the text document setting ConsiderTextWrapOnObjPos
+        is <TRUE/>. Valid values are given by <member>WrapInfluenceOnPosition</member></p>
+
+        @since OOo 2.0
+     */
+    [optional, property] short WrapInfluenceOnPosition;
+
+    //-------------------------------------------------------------------------
+    /** returns the actual size of the object.
+
+        <p>Since to obtain the correct actual size of the object not only
+        the  layouting for the frame needs to be finished but the whole
+        document needs to be formatted as well. Thus if that was not done
+        previously it may take some while to retrieve this value.</p>
+
+        @since OOo 2.0.4
+     */
+    [optional, property, maybevoid] com::sun::star::awt::Size LayoutSize;
+
+    //-------------------------------------------------------------------------
+        /** contains short title for the object
+
+            <p>This short title is visible as an alternative tag in HTML format.
+            Accessibility tools can read this text.</p>
+
+            @since OOo 3.2
+        */
+        [optional, property] string Title;
+
+    //-------------------------------------------------------------------------
+        /** contains description for the object
+
+            <p>The long description text can be entered to describe a object in
+            more detail to users with screen reader software. The description is
+            visible as an alternative tag for accessibility tools.</p>
+
+            @since OOo 3.2
+        */
+        [optional, property] string Description;
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

@@ -1,0 +1,188 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_inspection_XObjectInspectorModel_idl__
+#define __com_sun_star_inspection_XObjectInspectorModel_idl__
+
+#include <com/sun/star/uno/XInterface.idl>
+#include <com/sun/star/inspection/PropertyCategoryDescriptor.idl>
+
+//=============================================================================
+module com {  module sun {  module star {  module inspection {
+
+interface XPropertyHandler;
+
+//-----------------------------------------------------------------------------
+/** describes the model of an <type>ObjectInspector</type>
+
+    @see ObjectInspector
+
+    @since OOo 2.0.3
+*/
+published interface XObjectInspectorModel
+{
+    /** describes a set of factories for creating <type>XPropertyHandler</type>s
+
+        <p>Every element of the sequence must contain information to create a
+        <type>XPropertyHandler</type> instance. Two ways are currently supported:
+        <ul>
+            <li>A service name:</br>
+                If a sequence element contains a string, this string is interpreted
+                as service name, and an <type scope="com::sun::star::lang">XMultiComponentFactory</type>
+                is asked to create an instance of this service.</li>
+            <li>A factory:<br/>
+                If a sequence element contains an instance implementing the
+                <type scope="com::sun::star::lang">XSingleComponentFactory</type> interface, this factory
+                is used to create a property handler.</li>
+        </ul></p>
+
+        <p>This attribute is usually only evaluated by the <type>ObjectInspector</type> instance
+        which the model is currently bound to.</p>
+
+        <p>The order of factories is important: If two property handlers declare themselves responsible
+        for the same property, the one whose factory is listed <strong>last</strong> wins. Also,
+        if a handler <code>B</code> wants to supersede a property of another handler <code>A</code>,
+        <code>A</code>'s factory must precede the factory of <code>B</code>.</p>
+
+        @see XPropertyHandler::getSupportedProperties
+        @see XPropertyHandler::getSupersededProperties
+    */
+    [attribute, readonly] sequence< any > HandlerFactories;
+
+    /** describes the property categories used by the property handlers.
+
+        <p>Properties can be sorted into different categories, described by the <member>LineDescriptor::Category</member>
+        attribute, which is filled in <member>XPropertyHandler::describePropertyLine</member>
+        method of your property handler.<br/>
+        Those names provided by the handlers are programmatic names. All other information
+        about categories is part of the <type>PropertyCategoryDescriptor</type>, and
+        <member>describeCategories</member> assembles information about all categories which
+        all property handlers provided by the model use.</p>
+
+        @return
+            a sequence of category descriptors. Their relative ordering also describes
+            the relative ordering of the categories in the <type>ObjectInspector</type>'s
+            user interface.<br/>
+            The sequence must not contain two entries with the same programmatic name.<br/>
+            <br/>
+            The model implementation might return an empty sequence here, in this case, the ObjectInspector
+            automatically builds its category information from the categories provided by the
+            property handlers.
+        @see PropertyCategoryDescriptor
+        @see LineDescriptor::Category
+    */
+    sequence< PropertyCategoryDescriptor > describeCategories();
+
+    /** retrieves an index in a global property ordering, for a given property name
+
+        <p>In the user interface of an ObjectInspector, single properties are represented by
+        single lines, and those lines are displayed successively. To determine an order of
+        the property lines, the inspector model can associate an "order index" with each property.
+        The <type>ObjectInspector</type> will then sort the property lines in a way that they
+        have the same relative ordering as the "order indexes" of their properties.</p>
+
+        <p>Note that the concrete value the model returns for a given property does not
+        matter. All what matters is that if you want a certain property <code>Foo</code>
+        to be displayed after another property <code>Bar</code>, then the order index
+        of <code>Foo</code> should be greater than the order index of <code>Bar</code>.
+
+        <p>If for two different properties the same order index is returned, the
+        <type>ObjectInspector</type> will assume the order in which those properties
+        were provided by the respective property handler
+        (<member>XPropertyHandler::getSupportedProperties</member>).<br/>
+        If two such properties originate from different handlers, they will be ordered according
+        to the order of the handlers, as provided in the <member>HandlerFactories</member> attribute.</p>
+
+        @param PropertyName
+            the property whose global order index should be retrieved
+        @return
+            the global order index of <arg>PropertyName</arg>.
+    */
+    long    getPropertyOrderIndex( [in] string PropertyName );
+
+    /** indicates that the object inspector should have a help section.
+
+        <p>The object inspector displays lines of property/values, optionally grouped
+        into categories, as described by the property handlers.<br/>
+        Additionally, the inspector can optionally display a section dedicated to help
+        texts. Clients could use this section to display context-sensitive help, for
+        instance short texts explaining the currently selected property.</p>
+
+        @since OOo 2.2
+    */
+    [attribute, readonly] boolean HasHelpSection;
+
+    /** denotes the minimum number of lines of text to be reserved for the help
+        section.
+
+        <p>This property is ignored by the <type>ObjectInspector</type> if
+        <member>HasHelpSection</member> is <FALSE/>.</p>
+
+        <p>The layout of the <type>ObjectInspector</type> is undefined if
+        <member>MinHelpTextLines</member> is larger than
+        <member>MaxHelpTextLines</member>.</p>
+
+        @since OOo 2.2
+    */
+    [attribute, readonly] long MinHelpTextLines;
+
+    /** denotes the maximum number of lines of text to be reserved for the help
+        section.
+
+        <p>This property is ignored by the <type>ObjectInspector</type> if
+        <member>HasHelpSection</member> is <FALSE/>.</p>
+
+        <p>The layout of the <type>ObjectInspector</type> is undefined if
+        <member>MaxHelpTextLines</member> is smaller than
+        <member>MinHelpTextLines</member>.</p>
+
+        @since OOo 2.2
+    */
+    [attribute, readonly] long MaxHelpTextLines;
+
+    /** determines whether the object inspector's UI should be read-only.
+
+        <p>In this case, the user is able to browse through all properties, but cannot
+        change any of them.</p>
+
+        <p>In a read-only object inspector, the property controls are readonly or
+        disabled themselves, and the primary and secondary buttons of a property line
+        are both disabled.</p>
+
+        @see XPropertyControl
+        @see LineDescriptor
+    */
+    [attribute, bound] boolean IsReadOnly;
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif
+
+

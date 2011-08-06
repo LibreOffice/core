@@ -1,0 +1,92 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_text_XTextContent_idl__
+#define __com_sun_star_text_XTextContent_idl__
+
+#include <com/sun/star/lang/XComponent.idl>
+#include <com/sun/star/text/XTextRange.idl>
+#include <com/sun/star/lang/IllegalArgumentException.idl>
+
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module text {
+
+//=============================================================================
+
+/** enables objects to be inserted into a text and to provide their
+    location in a text once they are inserted into it.
+ */
+published interface XTextContent: com::sun::star::lang::XComponent
+{
+    //-------------------------------------------------------------------------
+
+    /** is called when this object gets embedded in a text.
+
+
+
+        <p>This acts like a multi-phase construction, thus the object may be
+        invalid until it is attached to a text position. In general, this method
+        is called from within
+
+
+
+
+        .
+
+        </p>
+        <p>Both text objects and text content objects may only be connected
+        to each other if they are created by the same component. When
+        implementing new components, this behavior is deprecated.</p>
+     */
+    void attach( [in] com::sun::star::text::XTextRange xTextRange )
+            raises( com::sun::star::lang::IllegalArgumentException );
+
+    //-------------------------------------------------------------------------
+
+    /** @returns
+                the text range to which the content is attached.
+
+        <p>Note: The anchor of the actual implementation for text tables
+        does not have a position in the text. Thus that anchor can not be
+        used for some operation like <member>attach</member> for example or
+        <member scope="com::sun::star::text">insertTextContent</member>
+        or other function that require the object to have a position in the text.</p>
+
+        <p>The reason why a text table still needs an anchor is that for example
+        tables should be insertable via <member scope="com::sun::star::text">insertTextContent</member>
+        and that interface uses a parameter of that type.</p>
+     */
+    com::sun::star::text::XTextRange getAnchor();
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

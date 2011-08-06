@@ -1,0 +1,487 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_frame_XLayoutManager_idl__
+#define __com_sun_star_frame_XLayoutManager_idl__
+
+#include <com/sun/star/uno/XInterface.idl>
+#include <com/sun/star/frame/XFrame.idl>
+#include <com/sun/star/awt/Point.idl>
+#include <com/sun/star/awt/Size.idl>
+#include <com/sun/star/awt/XWindow.idl>
+#include <com/sun/star/ui/XUIElement.idl>
+#include <com/sun/star/ui/DockingArea.idl>
+#include <com/sun/star/ui/XDockingAreaAcceptor.idl>
+
+//=============================================================================
+
+module com { module sun { module star { module frame {
+
+//=============================================================================
+
+/** central interface to query for, create, destroy and manipulate user
+    interface elements which are bound to a layout manager.
+
+    <p>
+    Every user interface element which is controlled by a layout manager has
+    a unique identifier called resource URL.
+
+    A resource URL must meet the following syntax:
+    "private:resource/$type/$name". It is only allowed to use ASCII characters
+    for type and name.
+
+    Currently the following user interface element types are defined:
+    <ul>
+        <li><b>menubar</b> A configurable user interface element representing
+        a menu bar.</li>
+        <li><b>popupmenu</b> A configurable user interface element representing
+        a pop-up menu.</li>
+        <li><b>toolbar</b> A configurable user interface element a tool
+        bar.</li>
+        <li><b>statusbar</b> A configurable user interface element representing
+        a status bar.</li>
+        <li><b>floater</b> A basic user interface element representing a
+        floating window.</li>
+    </ul>
+
+    @see com::sun::star::ui::UIElementTypes
+    @see com::sun::star::frame::XFrame
+    </p>
+
+    @since OOo 2.0
+*/
+
+published interface XLayoutManager : com::sun::star::uno::XInterface
+{
+    /** attaches a <type scope="com::sun::star::frame">XFrame</type> to a layout manager.
+
+        @param Frame
+            specifies the frame that should be attached to the layout manager
+
+        <p>
+        A layout manager needs a <type scope="com::sun::star::frame">XFrame</type> to be
+        able to work. Without a it no user interface elements can be created.
+        </p>
+    */
+    void attachFrame( [in] com::sun::star::frame::XFrame Frame );
+
+    /** resets the layout manager and remove all of its internal user interface
+        elements.
+
+        <p>
+        This call should be handled with care as all user interface elements will
+        be destroyed and the layout manager is reseted to a state after a
+        <member>attachFrame</member> has been made. That means an attached frame
+        which has been set by <member>attachFrame</member> is not released.
+        The layout manager itself calls reset after a component has been attached
+        or reattached to a frame.
+        </p>
+    */
+    void reset();
+
+    /** provides the current docking area size of the layout manager.
+
+        @return
+            The <type scope="com::sun::star::awt">Rectangle</type> contains pixel values. The
+            members of <type scope="com::sun::star::awt">Rectangle</type> are filled as following:
+            <ul>
+                <li>X      = docking area on left side (in pixel)</li>
+                <li>Y      = docking area on top side (in pixel)</li>
+                <li>Width  = docking area on right side (in pixel)</li>
+                <li>Height = docking area on bottom side (in pixel)</li>
+            </ul>
+    */
+    com::sun::star::awt::Rectangle getCurrentDockingArea();
+
+    /** retrieves the current docking area acceptor that controls the border space of the frame's
+        container window.
+
+        @return
+            current docking area acceptor which controls the border space of frame's container window.
+
+        <p>
+        A docking area acceptor retrieved by this method is owned by the layout manager. It is not
+        allowed to dispose this object, it will be destroyed on reference count!
+        </p>
+    */
+    com::sun::star::ui::XDockingAreaAcceptor getDockingAreaAcceptor();
+
+    /** sets a docking area acceptor that controls the border space of the frame's container window.
+
+        @param xDockingAreaAcceptor
+            a docking area acceptor which controls the border space of frame's container window.
+
+        <p>
+        A docking area acceptor decides if the layout manager can use requested border space for
+        docking windows. If the acceptor denies the requested space the layout manager automatically
+        set all docked windows into floating state and will not use this space for docking.<br/>
+        After setting a docking area acceptor the object is owned by the layout manager. It is not
+        allowed to dispose this object, it will be destroyed on reference count!
+        </p>
+    */
+    void setDockingAreaAcceptor( [in] com::sun::star::ui::XDockingAreaAcceptor xDockingAreaAcceptor );
+
+    /** creates a new user interface element.
+
+        @param ResourceURL
+            specifies which user interface element should be created. A resource URL must meet the following
+            syntax: "private:resource/$type/$name". It is only allowed to use ASCII characters for type and
+            name.
+    */
+    void createElement( [in] string ResourceURL );
+
+    /** destroys a user interface element.
+
+        @param ResourceURL
+            specifies which user interface element should be destroyed. A resource URL must meet
+            the following syntax: "private:resource/$type/$name". It is only allowed to use ASCII
+            characters for type and name.
+    */
+    void destroyElement( [in] string ResourceURL );
+
+    /** request to make a user interface element visible if it is not in hidden state.
+
+        @param ResourceURL
+            specifies which user interface element should be made visible. A resource URL must
+            meet the following syntax: "private:resource/$type/$name". It is only allowed to use
+            ASCII characters for type and
+            name.
+
+        @return
+            returns <TRUE/> if the user interface element could be made visible, otherwise
+            <FALSE/> will be returned.
+
+        <p>
+        If a user interface element should forced to the visible state
+        <member>XLayoutManager::showElement</member> should be used. This function can be
+        used for context dependent elements which should respect a the current visibility
+        state.
+        </p>
+    */
+    boolean requestElement( [in] string ResourceURL );
+
+    /** retrieves a user interface element which has been created before.
+
+        @param ResourceURL
+            specifies which user interface element should be retrieved. A resource URL must meet the following
+            syntax: "private:resource/$type/$name". It is only allowed to use ASCII characters for type and
+            name.
+
+        <p>
+        The layout manager instance is owner of the returned user interface element. That means that the life time of
+        the user interface element is controlled by the layout manager. It can be disposed at every time!
+        </p>
+    */
+    com::sun::star::ui::XUIElement getElement( [in] string ResourceURL );
+
+    /** retrieves all user interface elements which are currently instantiated.
+
+        @return
+            a sequence of user interface elements providing <type scope="com::sun::star::ui">XUIElement</type>
+            interface.
+
+        <p>
+        The layout manager instance is owner of the returned user interface elements. That means that the life time of
+        the user interface elements is controlled by the layout manager. They can be disposed at every time!
+        </p>
+    */
+    sequence< com::sun::star::ui::XUIElement > getElements();
+
+    /** shows a user interface element.
+
+        @param ResourceURL
+            specifies which user interface element should be shown. A resource URL must meet the following
+            syntax: "private:resource/$type/$name". It is only allowed to use ASCII characters for type and
+            name.
+
+        @return
+            returns <TRUE/> if the user interface element has been shown, otherwise <FALSE/> will be returned.
+    */
+    boolean showElement( [in] string ResourceURL );
+
+    /** hides a user interface element.
+
+        @param ResourceURL
+            specifies which user interface element should be hidden. A resource URL must meet the following
+            syntax: "private:resource/$type/$name". It is only allowed to use ASCII characters for type and
+            name.
+
+        @return
+            returns <TRUE/> if the user interface element has been hidden, otherwise <FALSE/> will be returned.
+    */
+    boolean hideElement( [in] string ResourceURL );
+
+    /** docks a window based user interface element to a specified docking area.
+
+        @param ResourceURL
+            specifies which user interface element should be docked. A resource URL must meet the following
+            syntax: "private:resource/$type/$name". It is only allowed to use ASCII characters for type and
+            name.
+
+        @param DockingArea
+            specifies on which docking area the window based user interface element should docked.
+
+        @param Pos
+            specifies the position inside the docking area.
+
+        @return
+            returns <TRUE/> if the user interface element has been docked, otherwise <FALSE/> will be returned.
+
+        @see com::sun::star::ui::DockingArea
+    */
+    boolean dockWindow( [in] string ResourceURL, [in] com::sun::star::ui::DockingArea DockingArea, [in] com::sun::star::awt::Point Pos );
+
+    /** docks all windows which are member of the provided user interface element type.
+
+        @param nElementType
+            specifies which user interface element type should be docked.
+
+        @return
+            returns <TRUE/> if all user interface elements of the requested type could be
+            docked, otherwise <FALSE/> will be returned.
+
+        @see com::sun::star::ui::UIElementType
+    */
+    boolean dockAllWindows( [in] short nElementType );
+
+    /** forces a window based user interface element to float.
+
+        @param ResourceURL
+            specifies which user interface element should be float. A resource URL must meet the following
+            syntax: "private:resource/$type/$name". It is only allowed to use ASCII characters for type and
+            name.
+
+        @return
+            returns <TRUE/> if the user interface element has been docked, otherwise <FALSE/> will be returned.
+    */
+    boolean floatWindow( [in] string ResourceURL );
+
+    /** locks a window based user interface element if it's in a docked state.
+
+        @param ResourceURL
+            specifies which user interface element should be locked. A resource URL must meet the following
+            syntax: "private:resource/$type/$name". It is only allowed to use ASCII characters for type and
+            name.
+
+        @return
+            returns <TRUE/> if the user interface element has been locked, otherwise <FALSE/> will be returned.
+    */
+    boolean lockWindow( [in] string ResourceURL );
+
+    /** unlocks a window based user interface element if it's in a docked state.
+
+        @param ResourceURL
+            specifies which user interface element should be unlocked. A resource URL must
+            meet the following syntax: "private:resource/$type/$name". It is only allowed
+            to use ASCII characters for type and name.
+
+        @return
+            returns <TRUE/> if the user interface element has been unlocked, otherwise
+            <FALSE/> will be returned.
+    */
+    boolean unlockWindow( [in] string ResourceURL );
+
+    /** sets a new size for a window based user interface element.
+
+        @param ResourceURL
+            specifies which user interface element should be resized. A resource URL must meet the following
+            syntax: "private:resource/$type/$name". It is only allowed to use ASCII characters for type and
+            name.
+
+        @param Size
+            specifies the new size in pixel.
+
+        <p>
+        It is up to the layout manager to decide if the user interface element can be resized. The new size can be retrieved
+        by calling <member>getElementSize</member>.
+        </p>
+    */
+    void setElementSize( [in] string ResourceURL, [in] com::sun::star::awt::Size Size );
+
+    /** sets a new position for a window based user interface element.
+
+        @param ResourceURL
+            specifies which user interface element should be moved. A resource URL must meet the following
+            syntax: "private:resource/$type/$name". It is only allowed to use ASCII characters for type and
+            name.
+
+        @param Pos
+            specifies the new position in pixel.
+
+        <p>
+        It is up to the layout manager to decide if the user interface element can be moved. The new position can be retrieved
+        by calling <member>getElementPos</member>.
+        </p>
+    */
+    void setElementPos( [in] string ResourceURL, [in] com::sun::star::awt::Point Pos );
+
+    /** sets a new position and size for a window based user interface element.
+
+        @param ResourceURL
+            specifies which user interface element should be moved and resized. A resource URL must meet the following
+            syntax: "private:resource/$type/$name". It is only allowed to use ASCII characters for type and
+            name.
+
+        @param Pos
+            specifies the new position in pixel.
+
+        @param Size
+            specifies the new position in pixel.
+
+        <p>
+        It is up to the layout manager to decide if the user interface element can be moved and resized. The new position and size can
+        be retrieved by calling <member>getElementPos</member> and <member>getElementSize</member>.
+        </p>
+    */
+    void setElementPosSize( [in] string ResourceURL, [in] com::sun::star::awt::Point Pos, [in] com::sun::star::awt::Size Size );
+
+    /** retrieves the current visibility state of a window based user interface element.
+
+        @param ResourceURL
+            specifies for which user interface element the visibility state should be retrieved. A resource URL must meet
+            the following syntax: "private:resource/$type/$name". It is only allowed to use ASCII characters for type and
+            name.
+
+        @return
+            <TRUE/> if the user interface element is visible, otherwise <FALSE/>.
+    */
+    boolean isElementVisible( [in] string ResourceURL );
+
+    /** retrieves the current floating state of a window based user interface element.
+
+        @param ResourceURL
+            specifies for which user interface element the floating state should be retrieved. A resource URL must meet
+            the following syntax: "private:resource/$type/$name". It is only allowed to use ASCII characters for type and
+            name.
+
+        @return
+            <TRUE/> if the user interface element is floating, otherwise <FALSE/>.
+    */
+    boolean isElementFloating( [in] string ResourceURL );
+
+    /** retrieves the current docking state of a window based user interface element.
+
+        @param ResourceURL
+            specifies for which user interface element the docking state should be retrieved. A resource URL must meet
+            the following syntax: "private:resource/$type/$name". It is only allowed to use ASCII characters for type and
+            name.
+
+        @return
+            <TRUE/> if the user interface element is docked, otherwise <FALSE/>.
+    */
+    boolean isElementDocked( [in] string ResourceURL );
+
+    /** retrieves the current lock state of a window based user interface element.
+
+        @param ResourceURL
+            specifies for which user interface element the lock state should be retrieved. A resource URL must meet
+            the following syntax: "private:resource/$type/$name". It is only allowed to use ASCII characters for type and
+            name.
+
+        @return
+            <TRUE/> if the user interface element is locked, otherwise <FALSE/>.
+    */
+    boolean isElementLocked( [in] string ResourceURL  );
+
+    /** retrieves the current size of a window based user interface element.
+
+        @param ResourceURL
+            specifies for which user interface element the current size should be retrieved. A resource URL must meet
+            the following syntax: "private:resource/$type/$name". It is only allowed to use ASCII characters for type and
+            name.
+
+        @return
+            the size in pixel of the user interface element. A non-window based user interface element provides a zero size.
+    */
+    com::sun::star::awt::Size getElementSize( [in] string ResourceURL );
+
+    /** retrieves the current pixel position of a window based user interface element.
+
+        @param ResourceURL
+            specifies for which user interface element the current position should be retrieved. A resource URL must meet
+            the following syntax: "private:resource/$type/$name". It is only allowed to use ASCII characters for type and
+            name.
+
+        @return
+            the size in pixel of the user interface element. A non-window based user interface element provides a zero size.
+    */
+    com::sun::star::awt::Point getElementPos( [in] string ResourceURL );
+
+    /** prohibit all layout updates until unlock is called again.
+
+        <p>
+        This call can be used to speed up the creation process of several user interface elements. Otherwise the layout manager
+        would calculate the layout for every creation.
+        </p>
+    */
+    void lock();
+
+    /** permit layout updates again.
+
+        <p>
+        This function should be called to permit layout updates. The layout manager starts to calculate the new layout after
+        this call.
+        </p>
+    */
+    void unlock();
+
+    /** forces a complete new layouting of all user interface elements.
+    */
+    void doLayout();
+
+    /** sets the layout manager to invisible state and hides all user interface elements.
+
+        <p>
+        A layout manager can be set to invisible state to force it to hide all of its
+        user interface elements. If another component wants to use the window for its
+        own user interface elements it can use this function. This function is normally
+        used to implement inplace editing.
+        </p>
+
+        @param Visible
+            provide <FALSE/> to make layout manager invisible otherwise this must be
+            set to <TRUE/>.
+    */
+    void setVisible( [in] boolean Visible );
+
+    /** retrieves the visibility state of a layout manager.
+
+        <p>
+        A layout manager can be set to invisible state to force it to hide all of its
+        user interface elements. If another component wants to use the window for its
+        own user interface elements it can use this function. This function is normally
+        used to implement inplace editing.
+        </p>
+
+    */
+    boolean isVisible();
+
+};
+
+}; }; }; };
+
+#endif

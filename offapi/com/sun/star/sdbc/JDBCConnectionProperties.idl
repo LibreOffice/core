@@ -1,0 +1,115 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_sdbc_JDBCConnectionProperties_idl__
+#define __com_sun_star_sdbc_JDBCConnectionProperties_idl__
+
+#include <com/sun/star/sdbc/ConnectionProperties.idl>
+#include <com/sun/star/beans/NamedValue.idl>
+
+module com {  module sun {  module star {  module sdbc {
+
+/** represents the properties for a JDBC connection (session) with a specific
+    database. These properties can be used when calling the method
+    <member scope="com::sun::star::sdbc">XDriver::connect()</member> or
+    <member scope="com::sun::star::sdbc">XDriverManager::getConnectionWithInfo()</member>.
+
+    <p>
+    The properties for a connection contain additional information about how to connect to a database and
+    how to control the behavior of the resulting connection should be.
+
+    </p>
+    @see com::sun::star::sdbc::XDriver
+    @see com::sun::star::sdbc::XDriverManager
+    @see com::sun::star::sdbc::ConnectionProperties
+ */
+service JDBCConnectionProperties
+{
+    service com::sun::star::sdbc::ConnectionProperties;
+
+    /** which JDBC driver class should be loaded to create the connection.
+
+        @see com::sun::star::sdbc::JDBCConnectionProperties::JavaDriverClassPath
+    */
+    [optional, property] string JavaDriverClass;
+
+    /** an optional class path to locate the <member
+        scope="com::sun::star::sdbc">JDBCConnectionProperties::JavaDriverClass
+        </member>.
+
+        <p>The class path is a list of zero or more internal (see the
+        <type scope="com::sun::star::uri">ExternalUriReferenceTranslator</type>
+        service) URI references, where any space characters
+        (<code>U+0020</code>) are ignored (and, in particular, separate adjacent
+        URI references).  Any &ldquo;vnd.sun.star.expand&rdquo; URL references
+        in the list are expanded using the
+        <type scope="com::sun::star::util">theMacroExpander</type>
+        singleton.</p>
+
+        @since OOo 2.3
+    */
+    [optional, property] string JavaDriverClassPath;
+
+    /** specifies a set of properties to pass to <code>java.lang.System.setProperty</code> before
+        loading the system's JDBC driver.
+    */
+    [optional, property] sequence< ::com::sun::star::beans::NamedValue > SystemProperties;
+
+    /** specifies if retrieving of auto generated values should be enabled or not.
+        If <TRUE/> than the statement will support the XGeneratedResultSet (future concept) interface, otherwise not.
+    */
+    [optional, property] boolean IsAutoRetrievingEnabled;
+
+    /** specifies the statement which should be executed
+        when asking an "INSERT" statement for the XGeneratedResultSet (future concept) interface.
+    */
+    [optional, property] string AutoRetrievingStatement;
+
+    /** specifies how the type info returned by <member scope="com::sun::star::sdbc">XDatabaseMetaData::getTypeInfo()</member> will be modified.
+        <p>The sequence contains an even amount of string values. Each pair describes
+        <li>what should be searched for and </li>
+        <li>what should be replaced if found.</li>
+        <br>
+        The syntax is:
+        <p>
+            <li>COLUMN(2) = -5</li>
+            <li>COLUMN(6) = PRECISION</li>
+        </p>
+        COLUMN(X) defines the column which will be compared and the column which will be replaced. In the example above column 2 will be compared
+        with the value -5. If this is true than column 6 will now return the value PRECISION.
+        </p>
+    */
+    [optional, property] sequence< any > TypeInfoSettings;
+};
+
+//=============================================================================
+
+}; }; }; };
+
+/*===========================================================================
+
+===========================================================================*/
+#endif

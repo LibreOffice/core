@@ -1,0 +1,94 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_sheet_DataPilotSourceMember_idl__
+#define __com_sun_star_sheet_DataPilotSourceMember_idl__
+
+#include <com/sun/star/container/XNamed.idl>
+#include <com/sun/star/beans/XPropertySet.idl>
+
+//=============================================================================
+
+module com {  module sun {  module star {  module sheet {
+
+//=============================================================================
+
+/** represents a member in a data pilot source level.
+
+    <p>Members are the data items that will appear in a data pilot table
+    as row headers and column headers of the data range (if used in
+    row or column dimensions), or to calculate the values of the
+    data range (if used in data dimensions).</p>
+
+    @see com::sun::star::sheet::DataPilotSourceLevel
+    @see com::sun::star::sheet::DataPilotSource
+ */
+published service DataPilotSourceMember
+{
+    //-------------------------------------------------------------------------
+
+    /** provides access to the name of the member.
+
+        <p>This may be the textual representation of a numerical value.</p>
+     */
+    interface com::sun::star::container::XNamed;
+
+    //-------------------------------------------------------------------------
+
+//!published service PropertySet
+    /** provides access to the properties.
+     */
+    interface com::sun::star::beans::XPropertySet;
+
+    //=========================================================================
+
+    /** specifies whether the member is visible.
+     */
+    [property] boolean IsVisible;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies whether details for the member are shown.
+     */
+    [property] boolean ShowDetails;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies the member's position in its hierarchy level if sorting
+        is manual.
+
+        @since OOo 2.4
+     */
+    [optional, property] boolean Position;
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif
+

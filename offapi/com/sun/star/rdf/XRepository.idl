@@ -1,0 +1,415 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_rdf_XRepository_idl__
+#define __com_sun_star_rdf_XRepository_idl__
+
+#include <com/sun/star/lang/IllegalArgumentException.idl>
+#include <com/sun/star/container/ElementExistException.idl>
+#include <com/sun/star/container/NoSuchElementException.idl>
+#include <com/sun/star/container/XEnumeration.idl>
+#include <com/sun/star/io/IOException.idl>
+#include <com/sun/star/io/XInputStream.idl>
+#include <com/sun/star/io/XOutputStream.idl>
+#include <com/sun/star/datatransfer/UnsupportedFlavorException.idl>
+#include <com/sun/star/rdf/FileFormat.idl>
+#include <com/sun/star/rdf/ParseException.idl>
+#include <com/sun/star/rdf/QueryException.idl>
+#include <com/sun/star/rdf/RepositoryException.idl>
+#include <com/sun/star/rdf/XBlankNode.idl>
+#include <com/sun/star/rdf/XURI.idl>
+#include <com/sun/star/rdf/Statement.idl>
+#include <com/sun/star/rdf/XQuerySelectResult.idl>
+#include <com/sun/star/rdf/XNamedGraph.idl>
+
+
+//=============================================================================
+
+module com {   module sun {   module star {   module rdf {
+
+//=============================================================================
+/** provides access to a set of named RDF graphs.
+
+    <p>
+    A repository for storing information according to the data model of the
+    <a href="http://www.w3.org/RDF/">Resource Description Framework</a>.
+    This interface may be used e.g. for repositories that correspond to a
+    loaded ODF document, or for repositories that are backed by some kind of
+    database.
+    </p>
+    <p>
+    The RDF triples are stored as a set of named RDF graphs.
+    Importing and exporting files in the
+    <a href="http://www.w3.org/TR/rdf-syntax-grammar/">RDF/XML</a>
+    format is supported.
+    Support for other file formats is optional.
+    Support for querying the repository with the
+    <a href="http://www.w3.org/TR/rdf-sparql-query/">SPARQL</a>
+    query language is provided.
+    </p>
+
+
+    @since OOo 3.2
+
+    @see XRepositorySupplier
+    @see XDocumentRepository
+ */
+interface XRepository
+{
+
+    //-------------------------------------------------------------------------
+    /** creates a fresh unique blank node.
+
+        @returns
+            a newly generated blank node which is unique in this repository
+     */
+    XBlankNode createBlankNode();
+
+
+    //-------------------------------------------------------------------------
+    /** imports a named graph into the repository.
+
+        <p>
+        Implementations must support RDF/XML format.
+        Support for other RDF formats is optional.
+        If the format is not supported by the implementation, an
+        <type scope="com::sun::star::datatransfer">UnsupportedFlavorException
+        </type> is raised.
+        If the format requires use of a BaseURI, but none is given, an
+        <type scope="com::sun::star::lang">IllegalArgumentException</type>
+        is raised.
+        </p>
+
+        @param Format
+            the format of the input file
+
+        @param InStream
+            the input stream, containing an RDF file in the specified format
+
+        @param GraphName
+            the name of the graph that is imported
+
+        @param BaseURI
+            a base URI to resolve relative URI references
+
+        @returns
+            the imported graph
+
+        @throws com::sun::star::lang::IllegalArgumentException
+            if the given stream or the GraphName is <NULL/>,
+            or BaseURI is <NULL/> and the format requires use of a base URI
+
+        @throws com::sun::star::datatransfer::UnsupportedFlavorException
+            if the format requested is unknown or not supported
+
+        @throws com::sun::star::container::ElementExistException
+            if a graph with the given GraphName already exists in the
+            repository
+
+        @throws ParseException
+            if the input does not conform to the specified file format.
+
+        @throws RepositoryException
+            if an error occurs when accessing the repository.
+
+        @throws com::sun::star::io::IOException
+            if an I/O error occurs.
+
+        @see FileFormat
+     */
+    XNamedGraph importGraph([in] /*FileFormat*/ short Format,
+                [in] com::sun::star::io::XInputStream InStream,
+                [in] XURI GraphName, [in] XURI BaseURI)
+        raises( com::sun::star::lang::IllegalArgumentException,
+                com::sun::star::datatransfer::UnsupportedFlavorException,
+                com::sun::star::container::ElementExistException,
+                ParseException,
+                RepositoryException,
+                com::sun::star::io::IOException );
+
+    //-------------------------------------------------------------------------
+    /** exports a named graph from the repository.
+
+        <p>
+        Implementations must support RDF/XML format.
+        Support for other RDF formats is optional.
+        If the format is not supported by the implementation, an
+        <type scope="com::sun::star::datatransfer">UnsupportedFlavorException
+        </type> is raised.
+        </p>
+
+        @param Format
+            the format of the output file
+
+        @param OutStream
+            the target output stream
+
+        @param GraphName
+            the name of the graph that is to be exported
+
+        @param BaseURI
+            a base URI to resolve relative URI references
+
+        @throws com::sun::star::lang::IllegalArgumentException
+            if the given stream or the GraphName is <NULL/>,
+            or BaseURI is <NULL/> and the format requires use of a base URI
+
+        @throws com::sun::star::datatransfer::UnsupportedFlavorException
+            if the format requested is unknown or not supported
+
+        @throws com::sun::star::container::NoSuchElementException
+            if a graph with the given GraphName does not exist
+
+        @throws RepositoryException
+            if an error occurs when accessing the repository.
+
+        @throws com::sun::star::io::IOException
+            if an I/O error occurs.
+
+        @see FileFormat
+     */
+    void exportGraph([in] /*FileFormat*/ short Format,
+                [in] com::sun::star::io::XOutputStream OutStream,
+                [in] XURI GraphName, [in] XURI BaseURI)
+        raises( com::sun::star::lang::IllegalArgumentException,
+                com::sun::star::datatransfer::UnsupportedFlavorException,
+                com::sun::star::container::NoSuchElementException,
+                RepositoryException,
+                com::sun::star::io::IOException );
+
+    //-------------------------------------------------------------------------
+    /** gets the names of all the graphs in the repository.
+
+        @returns
+            a list containing the names of the graphs in the repository
+
+        @throws RepositoryException
+            if an error occurs when accessing the repository.
+     */
+    sequence<XURI> getGraphNames()
+        raises( RepositoryException );
+
+    //-------------------------------------------------------------------------
+    /** gets a graph by its name.
+
+        @param GraphName
+            the name of the graph that is to be returned
+
+        @returns
+            the graph with the given name if it exists, else <NULL/>
+
+        @throws com::sun::star::lang::IllegalArgumentException
+            if the given GraphName is invalid
+
+        @throws RepositoryException
+            if an error occurs when accessing the repository.
+     */
+    XNamedGraph getGraph([in] XURI GraphName)
+        raises( com::sun::star::lang::IllegalArgumentException,
+                RepositoryException );
+
+    //-------------------------------------------------------------------------
+    /** creates a graph with the given name.
+
+        <p>
+        The name must be unique within the repository.
+        </p>
+
+        @param GraphName
+            the name of the graph that is to be created
+
+        @returns
+            the graph with the given name
+
+        @throws com::sun::star::lang::IllegalArgumentException
+            if the given GraphName is invalid
+
+        @throws com::sun::star::container::ElementExistException
+            if a graph with the given GraphName already exists
+
+        @throws RepositoryException
+            if an error occurs when accessing the repository.
+     */
+    XNamedGraph createGraph([in] XURI GraphName)
+        raises( com::sun::star::lang::IllegalArgumentException,
+                com::sun::star::container::ElementExistException,
+                RepositoryException );
+
+    //-------------------------------------------------------------------------
+    /** destroys the graph with the given name, and removes it from the
+        repository.
+
+        <p>
+        This invalidates any instances of <type>XNamedGraph</type>
+        for the argument.
+        </p>
+
+        @param GraphName
+            the name of the graph that is to be destroyed
+
+        @throws com::sun::star::lang::IllegalArgumentException
+            if the given GraphName is invalid
+
+        @throws com::sun::star::container::NoSuchElementException
+            if a graph with the given GraphName does not exist
+
+        @throws RepositoryException
+            if an error occurs when accessing the repository.
+     */
+    void destroyGraph([in] XURI GraphName)
+        raises( com::sun::star::lang::IllegalArgumentException,
+                com::sun::star::container::NoSuchElementException,
+                RepositoryException );
+
+    //-------------------------------------------------------------------------
+    /** gets matching RDF statements from the repository.
+
+        <p>
+        Any parameter may be <NULL/>, which acts as a wildcard.
+        For example, to get all statements about myURI:
+        <code>getStatements(myURI, null, null)</code>
+        </p>
+
+        @param Subject
+            the subject of the RDF triple.
+
+        @param Predicate
+            the predicate of the RDF triple.
+
+        @param Object
+            the object of the RDF triple.
+
+        @returns
+            an iterator over all RDF statements in the repository that match
+            the parameters, represented as an
+            enumeration of <type>Statement</type>
+
+        @throws RepositoryException
+            if an error occurs when accessing the repository.
+
+        @see Statement
+        @see XNamedGraph::getStatements
+     */
+    com::sun::star::container::XEnumeration/*<Statement>*/ getStatements(
+            [in] XResource Subject,
+            [in] XURI Predicate,
+            [in] XNode Object)
+        raises( RepositoryException );
+
+
+    //-------------------------------------------------------------------------
+    /** executes a SPARQL "SELECT" query.
+
+        <p>
+        This method runs a SPARQL query that returns a list of variable
+        bindings, i.e., a query beginning with "SELECT".
+        The result is basically a (rectangular) table with labeled columns,
+        where individual cells may be <NULL/>.
+        </p>
+
+        @param Query
+            the SPARQL query <atom>string</atom>
+
+        @returns
+            an enumeration, containing
+            <ol>
+            <li>a list of query variable names (column labels)</li>
+            <li>the query results (rows),
+                each being a list of bindings for the above variables</li>
+            </ol>
+
+        @throws QueryException
+            if the query is malformed, or evaluation fails
+
+        @throws RepositoryException
+            if an error occurs when accessing the repository.
+
+        @see XQuerySelectResult
+     */
+    XQuerySelectResult querySelect([in] string Query)
+        raises( QueryException,
+                RepositoryException );
+
+    //-------------------------------------------------------------------------
+    /** executes a SPARQL "CONSTRUCT" query.
+
+        <p>
+        This method runs a SPARQL query that constructs a result graph,
+        i.e., a query beginning with "CONSTRUCT".
+        </p>
+
+        @param Query
+            the SPARQL query <atom>string</atom>
+
+        @returns
+            an iterator over the query result graph, represented as an
+            enumeration of <type>Statement</type>
+
+        @throws QueryException
+            if the query is malformed, or evaluation fails
+
+        @throws RepositoryException
+            if an error occurs when accessing the repository.
+
+        @see Statement
+     */
+    com::sun::star::container::XEnumeration/*<Statement>*/ queryConstruct(
+            [in] string Query)
+        raises( QueryException,
+                RepositoryException );
+
+    //-------------------------------------------------------------------------
+    /** executes a SPARQL "ASK" query.
+
+        <p>
+        This method runs a SPARQL query that computes a boolean,
+        i.e., a query beginning with "ASK".
+        </p>
+
+        @param Query
+            the SPARQL query <atom>string</atom>
+
+        @returns
+            the boolean query result
+
+        @throws QueryException
+            if the query is malformed, or evaluation fails
+
+        @throws RepositoryException
+            if an error occurs when accessing the repository.
+     */
+    boolean queryAsk([in] string Query)
+        raises( QueryException,
+                RepositoryException );
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

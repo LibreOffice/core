@@ -1,0 +1,236 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_table_CellProperties_idl__
+#define __com_sun_star_table_CellProperties_idl__
+
+#include <com/sun/star/util/Color.idl>
+#include <com/sun/star/beans/XPropertySet.idl>
+#include <com/sun/star/table/ShadowFormat.idl>
+#include <com/sun/star/table/CellHoriJustify.idl>
+#include <com/sun/star/table/CellVertJustify.idl>
+#include <com/sun/star/table/CellOrientation.idl>
+#include <com/sun/star/util/CellProtection.idl>
+#include <com/sun/star/table/TableBorder.idl>
+#include <com/sun/star/table/BorderLine.idl>
+#include <com/sun/star/container/XNameContainer.idl>
+
+//=============================================================================
+
+module com {  module sun {  module star {  module table {
+
+//=============================================================================
+
+/** contains the properties of a table cell.
+
+    @see com::sun::star::table::Cell
+    @see com::sun::star::table::CellRange
+ */
+published service CellProperties
+{
+    //-------------------------------------------------------------------------
+
+//!published service PropertySet
+    /** provides access to the properties.
+     */
+    interface com::sun::star::beans::XPropertySet;
+
+    //=========================================================================
+
+    /** contains the name of the style of the cell.
+     */
+    [optional, property] string CellStyle;
+
+    //-------------------------------------------------------------------------
+
+    /** contains the cell background color.
+     */
+    [property] com::sun::star::util::Color CellBackColor;
+
+    //-------------------------------------------------------------------------
+
+    /** is <TRUE/>, if the cell background is transparent.
+
+        <p>In this case the <member>CellProperties::CellBackColor</member>
+        value is not used.</p>
+     */
+    [property] boolean IsCellBackgroundTransparent;
+
+    //-------------------------------------------------------------------------
+
+    /** contains the horizontal alignment of the cell contents.
+     */
+    [property] com::sun::star::table::CellHoriJustify HoriJustify;
+
+    //-------------------------------------------------------------------------
+
+    /** contains the vertical alignment of the cell contents.
+     */
+    [property] com::sun::star::table::CellVertJustify VertJustify;
+
+    //-------------------------------------------------------------------------
+
+    /** is <TRUE/>, if text in the cells will be wrapped automatically
+        at the right border.
+     */
+    [property] boolean IsTextWrapped;
+
+    //-------------------------------------------------------------------------
+
+    /** defines the indentation of the cell contents (in 1/100 mm).
+     */
+    [property] short ParaIndent;
+
+    //-------------------------------------------------------------------------
+
+    /** contains the orientation of the cell contents.
+
+        <p>If the <member>CellProperties::RotateAngle</member> property
+        is non-zero, this value is not used.</p>
+     */
+    [property] com::sun::star::table::CellOrientation Orientation;
+
+    //-------------------------------------------------------------------------
+
+    /** defines how much the content of cells is rotated (in 1/100 degrees).
+     */
+    [property] long RotateAngle;
+
+    //-------------------------------------------------------------------------
+
+    /** defines at which edge rotated cells are aligned.
+     */
+    [property] com::sun::star::table::CellVertJustify RotateReference;
+
+    //-------------------------------------------------------------------------
+
+    /** selects Asian character orientation in vertical orientation.
+
+        <p>If the <member>CellProperties::Orientation</member> property is
+        <const>CellOrientation::STACKED</const>, in Asian mode only Asian
+        characters are printed in horizontal orientation instead of all
+        characters.
+        For other values of <member>CellProperties::Orientation</member>,
+        this value is not used.</p>
+     */
+    [optional, property] boolean AsianVerticalMode;
+
+    //-------------------------------------------------------------------------
+
+    /** contains a description of the cell or cell range border.
+
+        <p>If used with a cell range, the top, left, right, and bottom
+        lines are at the edges of the entire range, not at the edges of
+        the individual cell.</p>
+     */
+    [property] com::sun::star::table::TableBorder TableBorder;
+
+    //-------------------------------------------------------------------------
+
+    /** contains a description of the top border line of each cell.
+     */
+    [property] com::sun::star::table::BorderLine TopBorder;
+
+    //-------------------------------------------------------------------------
+
+    /** contains a description of the bottom border line of each cell.
+    */
+    [property] com::sun::star::table::BorderLine BottomBorder;
+
+    //-------------------------------------------------------------------------
+
+    /** contains a description of the left border line of each cell.
+     */
+    [property] com::sun::star::table::BorderLine LeftBorder;
+
+    //-------------------------------------------------------------------------
+
+    /** contains a description of the right border line of each cell.
+     */
+    [property] com::sun::star::table::BorderLine RightBorder;
+
+    //-------------------------------------------------------------------------
+
+    /** contains the index of the number format that is used in the cells.
+
+        <p>The proper value can be determined by using the
+        <type scope="com::sun::star::util">NumberFormatter</type>
+        interface of the document.</p>
+     */
+    [property] long NumberFormat;
+
+    //-------------------------------------------------------------------------
+
+    /** contains a description of the shadow.
+     */
+    [property] com::sun::star::table::ShadowFormat ShadowFormat;
+
+    //-------------------------------------------------------------------------
+
+    /** contains a description of the cell protection.
+
+        <p>Cell protection is active only if the sheet is protected.</p>
+     */
+    [property] com::sun::star::util::CellProtection CellProtection;
+
+    //-------------------------------------------------------------------------
+
+    /** stores additional attributes.
+
+        <p>This property is used i.e. by the XML filters to load and
+        restore unknown attributes.</p>
+        */
+    [optional, property] com::sun::star::container::XNameContainer
+        UserDefinedAttributes;
+
+    //-------------------------------------------------------------------------
+
+    /** contains a description of the top left to bottom right diagonal line of each cell.
+     */
+    [optional, property] com::sun::star::table::BorderLine DiagonalTLBR;
+
+    //-------------------------------------------------------------------------
+
+    /** contains a description of the bottom left to top right diagonal line of each cell.
+     */
+    [optional, property] com::sun::star::table::BorderLine DiagonalBLTR;
+
+    //-------------------------------------------------------------------------
+
+    /** is <TRUE/>, if the cell content will be shrunk to fit in the cell.
+     */
+    [optional, property] boolean ShrinkToFit;
+
+    //-------------------------------------------------------------------------
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif
+

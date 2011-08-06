@@ -1,0 +1,98 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_ucb_XFileIdentifierConverter_idl__
+#define __com_sun_star_ucb_XFileIdentifierConverter_idl__
+
+#include <com/sun/star/uno/XInterface.idl>
+
+//=============================================================================
+
+module com { module sun { module star { module ucb {
+
+//=============================================================================
+/** specifies methods to convert between (file) URLs and file paths in system
+    dependent notation.
+
+    @version    1.0
+    @author     Andreas Bille
+*/
+published interface XFileIdentifierConverter : com::sun::star::uno::XInterface
+{
+    //-------------------------------------------------------------------------
+    /** Get information about the "locality" of a file content provider.
+
+        <p>The returned information can be used to chose the "best" among a
+        number of file content providers implementing this interface.
+
+        @param BaseURL
+        the base (file) URL used to specify a file content provider.
+
+        @returns
+        an appropriate value representing the "locality" of the specified file
+        content provider.   Generally, higher (non-negative) numbers denote
+        file content providers that are more "local", and negative numbers
+        denote content providers that are not file content providers at all.
+        As a convention (and to keep this useful), values should be restricted
+        to the range from -1 to +10, inclusive.
+     */
+    long getFileProviderLocality( [in] string BaseURL );
+
+    //-------------------------------------------------------------------------
+    /** converts a file path in system dependent notation to a (file) URL.
+
+        @param BaseURL
+        the base (file) URL relative to which the file path shall be
+        interpreted.
+
+        @param SystemPath
+        a file path in system dependent notation.
+
+        @returns
+        the URL corresponding to the file path, or an empty string if the file
+        path cannot be converted into a URL.
+    */
+    string getFileURLFromSystemPath( [in] string BaseURL,
+                                     [in] string SystemPath );
+
+    //-------------------------------------------------------------------------
+    /** converts a (file) URL to a file path in system dependent notation.
+
+        @param URL
+        a (file) URL.
+
+        @returns
+        the file path corresponding to the URL, or an empty string if the URL
+        cannot be converted into a file path.
+    */
+    string getSystemPathFromFileURL( [in] string URL );
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

@@ -1,0 +1,116 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_rendering_FontRequest_idl__
+#define __com_sun_star_rendering_FontRequest_idl__
+
+#include <com/sun/star/rendering/FontInfo.idl>
+#include <com/sun/star/lang/Locale.idl>
+
+module com { module sun { module star { module rendering {
+
+/** This structure contains all information necessary to describe a
+    font to be queried from XCanvas.<p>
+
+    Note: Outline fonts are to be requested as a special family, set
+    <member>FontInfo::FamilyName</member> appropriately. Emboss/relief
+    must be emulated by upper layers.<p>
+
+    Leave the <member>FontInfo::FamilyName</member> and
+    <member>FontInfo::StyleName</member> empty, if font selection
+    should only happen via the PANOSE description.
+
+    @since OOo 2.0
+ */
+published struct FontRequest
+{
+    /** The description of the font.<p>
+
+        This member contains the description of the font as returned
+        by the font listing methods.<p>
+     */
+    FontInfo                        FontDescription;
+
+    //-------------------------------------------------------------------------
+
+    /** The size of the font in <em>device</em> coordinate space.<p>
+
+        This value corresponds to the font height in Western scripts,
+        but is independent of the writing direction (see
+        <member>FontRequest::IsVertical</member> below). That
+        means, the value specified here is always measured orthogonal
+        to the text advancement (height for horizontal writing, and
+        width for vertical writing).<p>
+
+        When this value is negative, its absolute value is taken as
+        the character size of the font. If this value is positive,
+        it's taken as the cell size of the font.<p>
+
+        This member and the referenceAdvancement member are mutually
+        exclusive, one of them has to be set to 0 (which means don't
+        care).<p>
+
+        For distorted fonts, the render transformation must be
+        used. That is, the size specified here corresponds to device
+        pixel only if the combined render transformation during text
+        output equals the identity transform. This also applies to all
+        query methods, for both <type>XCanvasFont</type> and
+        <type>XTextLayout</type>.<p>
+    */
+    double                              CellSize;
+
+    //-------------------------------------------------------------------------
+
+    /** This value specifies the size of the font in the writing
+        direction (i.e. width for horizontal writing, and height for
+        vertical writing).<p>
+
+        It is equivalent to the referenceCharSize of the FontMetrics
+        structure.<p>
+
+        This member and the cellSize member are mutually exclusive,
+        one of them has to be set to 0 (which means don't care). For
+        distorted fonts, the font matrix must be used.<p>
+     */
+    double                          ReferenceAdvancement;
+
+    //-------------------------------------------------------------------------
+
+    /** The locale this font should be able to render.<p>
+
+        This member supplements the
+        <member>FontInfo::UnicodeRange0</member> entry with a specific
+        locale; this is e.g. important when selecting between
+        traditional and simplified Chinese is necessary (since the
+        letters have the same Unicode ranges and character values).<p>
+     */
+    ::com::sun::star::lang::Locale  Locale;
+
+};
+
+}; }; }; };
+
+#endif

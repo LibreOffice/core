@@ -1,0 +1,82 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_ucb_CachedContentResultSet_idl__
+#define __com_sun_star_ucb_CachedContentResultSet_idl__
+
+#include <com/sun/star/ucb/ContentResultSet.idl>
+
+//=============================================================================
+
+module com { module sun { module star { module ucb {
+
+//=============================================================================
+/** is used on client side to access a <type>ContentResultSet</type>
+    remote optimized.
+
+    <p>The <type>CachedContentResultSet</type> will not load every single
+    property or even row just in that moment you ask for it, but load the data
+    for some rows beforehand.
+
+    <p>Every time when a new package of data is loaded, the so far loaded data
+    will be released, so the cash will not grow and grow and grow.
+*/
+
+published service CachedContentResultSet
+{
+    service com::sun::star::ucb::ContentResultSet;
+
+    //-------------------------------------------------------------------------
+    /** contains the number of result set rows that should be fetched from
+    an underlying database.
+
+    <p>The default fetch size is implementation specific.
+
+    <p>Every negative value for parameter <member>FetchSize</member> will
+    force an implementation specific value to be set.
+    */
+    [property] long FetchSize;
+
+     //-------------------------------------------------------------------------
+    /** contains the direction for fetching rows from an underlying database.
+
+    <p>The value can be one of the
+    <type scope="com::sun::star::sdbc">FetchDirection</type> constants group.
+
+    <p>The default value is implementation specific.
+
+    <p>If you set the value to
+    <member scope="com::sun::star::sdbc">FetchDirection::UNKNOWN</member> an
+    implementation specific direction will be used.
+    */
+    [property] long FetchDirection;
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

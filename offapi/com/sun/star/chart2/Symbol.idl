@@ -1,0 +1,118 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef com_sun_star_chart2_Symbol_idl
+#define com_sun_star_chart2_Symbol_idl
+
+#include <com/sun/star/drawing/PolyPolygonBezierCoords.idl>
+#include <com/sun/star/awt/Size.idl>
+#include <com/sun/star/graphic/XGraphic.idl>
+#include <com/sun/star/chart2/SymbolStyle.idl>
+
+//=============================================================================
+
+module com {  module sun {  module star {  module chart2 {
+
+//=============================================================================
+
+/** properties that are used for DataSeries that display symbols.
+ */
+struct Symbol
+{
+    /** determines which of the following members determines the
+        appearance of the symbol.
+     */
+    SymbolStyle                                         Style;
+
+    /** The given polygon is used as symbol.
+     */
+    com::sun::star::drawing::PolyPolygonBezierCoords    PolygonCoords;
+
+    /** Use the nth standard symbol, if <member>Style</member> is set
+        to <member>SymbolStlye::STANDARD</member>.
+
+        <p>If n is the number of standard symbols available in an
+        implementation, the symbol number is
+        <member>StandardSymbol</member> modulo n.</p>
+
+        <p>The default implementation for example currently uses 8 different
+        standard symbols that are matched to the numbers 0 to 7.
+
+        <table border=1 rules="groups">
+        <thead>
+        <tr><th>&nbsp;value StandardSymbol&nbsp;</th><th>&nbsp;visible Symbol&nbsp;</th></tr>
+        </thead>
+        <tbody>
+        <tr><td><code>0</code></td><td>square</td></tr>
+        <tr><td><code>1</code></td><td>diamond</td></tr>
+        <tr><td><code>2</code></td><td>down arrow</td></tr>
+        <tr><td><code>3</code></td><td>up arrow</td></tr>
+        <tr><td><code>4</code></td><td>right arrow</td></tr>
+        <tr><td><code>5</code></td><td>left arrow</td></tr>
+        <tr><td><code>6</code></td><td>bowtie</td></tr>
+        <tr><td><code>7</code></td><td>sandglass</td></tr>
+        </tbody>
+        </table>
+
+        </p>
+     */
+    long                                                StandardSymbol;
+
+    /** use this graphic as symbol
+     */
+    com::sun::star::graphic::XGraphic                   Graphic;
+
+    /** The size of the symbol in 100th of a mm.
+
+        @todo use a structure using doubles instead of longs
+     */
+    com::sun::star::awt::Size                           Size;
+
+    /** The color used for drawing the border of symbols.
+
+        <p>Only effective if <member>Style</member> is
+        <member>SymbolStyle::AUTO</member>,
+        <member>SymbolStyle::STANDARD</member> or
+        <member>SymbolStyle::POLYGON</member>.</p>
+     */
+    long                                                BorderColor;
+
+    /** The color used for filling symbols that contain closed polygons.
+
+        <p>Only effective if <member>Style</member> is
+        <member>SymbolStyle::AUTO</member>,
+        <member>SymbolStyle::STANDARD</member> or
+        <member>SymbolStyle::POLYGON</member>.</p>
+     */
+    long                                                FillColor;
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif
+

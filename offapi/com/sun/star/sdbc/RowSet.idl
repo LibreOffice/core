@@ -1,0 +1,184 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_sdbc_RowSet_idl__
+#define __com_sun_star_sdbc_RowSet_idl__
+
+#include <com/sun/star/sdbc/ResultSet.idl>
+#include <com/sun/star/sdbc/XColumnLocate.idl>
+
+ module com {  module sun {  module star {  module container {
+ published interface XNameAccess;
+};};};};
+
+ module com {  module sun {  module star {  module sdbc {
+
+ published interface XRowSet;
+ published interface XParameters;
+
+
+/** is a client side ResultSet, which combines the characteristics of a
+    <type scope="com::sun::star::sdbc">Statement</type>
+    and a
+    <type scope="com::sun::star::sdbc">ResultSet</type>.
+
+
+    <p>
+    It acts like a typical bean. Before you use the RowSet, you have to specify a
+    set of properties like a DataSource and a Command and other properties known of
+    Statement.
+    <br/>
+    Afterwards, you can populate the RowSet by its execute method to fill the set
+    with data.
+    </p>
+    <p>
+    On the one hand, a RowSet can be used as a short cut to retrieve the data of a DataSource.
+    You don't have to establish a connection, create a Statement, and then create
+    a ResultSet. On the other hand, a row set can be used to implement capabilities for
+    a result set, which are not supported by a driver result set, like caching
+    strategies or update capabilities.
+    </p>
+ */
+published service RowSet
+{
+    service com::sun::star::sdbc::ResultSet;
+
+    /** used to execute and to add/remove listeners.
+
+        <p>To refresh the content of a <type>RowSet</type>, use this interface's <member>XRowSet::execute</member>
+        method.</p>
+    */
+    interface XRowSet;
+
+    // used to set parameters.
+    interface XParameters;
+
+    /** allows locating columns whose name is known only.
+    */
+    interface XColumnLocate;
+
+    /** is the name of a named datasource to use.@see com::sun::star::sdbc:XDataSource
+     */
+    [property] string DataSourceName;
+
+
+    /** is the connection URL. Could be used instead of the DataSourceName.
+     */
+    [property] string URL;
+
+
+    /** is the command which should be executed.
+     */
+    [property] string Command;
+
+
+    /** indicates the transaction isolation level, which should be used for the
+        connection.@see com::sun::star::sdbc::TransactionIsolation
+     */
+    [property] long TransactionIsolation;
+
+
+    /** is the type map that will be used for the custom mapping of SQL structured types
+        and distinct types.
+     */
+    [property] com::sun::star::container::XNameAccess TypeMap;
+
+
+    /** returns if escape processing is on or off.
+        If escape scanning is on (the default), the driver will do
+        escape substitution before sending the SQL to the database.
+        This is only evaluated, if the CommandType is COMMAND.
+     */
+    [property] boolean EscapeProcessing;
+
+
+    /** retrieves the number of seconds the driver will wait for a Statement
+        to execute. If the limit is exceeded, a
+        <type scope="com::sun::star::sdbc">SQLException</type>
+        is thrown.
+        There is no limitation, if set to zero.
+     */
+    [property] long QueryTimeOut;
+
+
+    /** returns the maximum number of bytes allowed for any column value.
+
+        <p>
+        This limit is the maximum number of bytes that can be returned
+        for any column value. The limit applies only to
+        <member scope= "com::sun::star::sdbc">DataType::BINARY</member>
+              ,
+              <member scope= "com::sun::star::sdbc">DataType::VARBINARY</member>
+              ,
+              <member scope= "com::sun::star::sdbc">DataType::LONGVARBINARY</member>
+              ,
+              <member scope= "com::sun::star::sdbc">DataType::CHAR</member>
+              ,
+              <member scope= "com::sun::star::sdbc">DataType::VARCHAR</member>
+              ,
+              and
+              <member scope= "com::sun::star::sdbc">DataType::LONGVARCHAR</member>
+              columns.
+        If the limit is exceeded, the excess data is silently discarded.
+        <br/>
+        There is no limitation, if set to zero.
+        </p>
+     */
+    [property] long MaxFieldSize;
+
+
+    /** retrieves the maximum number of rows that a ResultSet can contain.
+        If the limit is exceeded, the excess rows are silently dropped.
+        <br/>
+        There is no limitation, if set to zero.
+     */
+    [property] long MaxRows;
+
+
+    /** determines the user for whom to open the connection.
+     */
+    [property] string User;
+
+
+    /** determines the user for whom to open the connection.
+     */
+    [property] string Password;
+
+
+    /** determine the result set type.
+
+        @see com::sun::star::sdbc::ResultSetType
+     */
+    [property] long ResultSetType;
+};
+
+//=============================================================================
+
+}; }; }; };
+
+/*===========================================================================
+===========================================================================*/
+#endif
