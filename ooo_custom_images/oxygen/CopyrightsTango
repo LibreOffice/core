@@ -1,0 +1,93 @@
+All of the icons in this icon package are Copyright 2005-2007 Novell, Inc., with exception of the following:
+
+Copyright 2006 Jakub Steiner. Available under the terms of the GPL. (source: http://tango.freedesktop.org/ArtLibreSet)
+/cmd/lc_toggleobjectrotatemode.png
+/cmd/sc_toggleobjectrotatemode.png
+/cmd/lc_advancedmode.png
+/cmd/sc_advancedmode.png
+/cmd/lc_bmpmask.png
+
+Copyright 2005 by Lapo Calamandrei, Jakub Steiner. Modified 2007 by Gabriel Hurley Available under the terms of the Creative Commons Attribution-ShareAlike 2.0 License
+/cmd/lc_firstpage 
+/cmd/lc_firstrecord 2005
+
+Copyright 2005 by Jakub Steiner. Available under the terms of the Creative Commons Attribution-ShareAlike 2.0 License (source: Ubuntu's tango-icon-theme package)
+/cmd/lc_zoomtoolbox.png
+/cmd/sc_zoomtoolbox.png
+
+Copyright 2006 Jakub Steiner & Andreas Nilsson Available under the terms of the GPL
+/cmd/lc_basicstop.png  
+/cmd/sc_basicstop.png 
+
+
+2006-2007 by Gabriel Hurley. Available under the terms of the LGPL
+/cmd/lc_removebullets.png
+/cmd/lc_insertreferencefield
+/cmd/lc_helplinesuse.png
+/cmd/lc_splitcell.png
+/cmd/lc_insertsection.png
+/cmd/lc_insertobjectfloatingframe.png
+
+Copyright 2005-2006 by Jakub Steiner and Novell Inc., Modifications Copyright 2006-2007 by Gabriel Hurley. Available under the terms of the LGPL (Original Source: http://jimmac.musichall.cz/i.php?i=Tango-OOo)
+/cmd/sc_convertinto3dlathefast.png
+/cmd/lc_choosepolygon.png
+/cmd/lc_showmultiplepages.png
+/cmd/lc_dbnewquery.png
+/cmd/lc_dbreportedit.png
+/cmd/lc_dbnewform.png
+/cmd/lc_dbtableedit.png
+/cmd/lc_dbqueryedit.png
+/cmd/lc_showbookview.png
+/cmd/lc_showtwopages.png
+/cmd/lc_showfmexplorer.png
+/cmd/lc_snapborder.png
+/cmd/lc_dbtableedit.png
+/cmd/lc_dbtabledelete.png
+
+Copyright 2002-2004 by Novell Inc., Modifications Copyright 2006-2007 by Gabriel Hurley. Available under the terms of the LGPL
+/cmd/lc_dbformedit.png
+/cmd/lc_definename.png
+/cmd/lc_deletecolumns.png
+/cmd/lc_deleterows.png
+/cmd/lc_dbformrename.png
+/cmd/lc_dbtableedit.png
+/cmd/lc_dbtablerename.png
+/cmd/lc_dbtabledelete.png
+/cmd/lc_dsbinsertcolumns.png
+/cmd/lc_entirecolumn.png
+/cmd/lc_entirerow.png
+/cmd/lc_sbabrwinsert.png
+/cmd/lc_paraspaceincrease.png
+/cmd/lc_paraspacedecrease.png
+/cmd/lc_bulletsandnumberingdialog.png
+/cmd/lc_numberingstart.png
+/cmd/lc_beforeobject.png
+/cmd/lc_insertfootnote.png
+/cmd/lc_insertfield.png
+/cmd/lc_insertcolumns.png
+/cmd/lc_insertneutralparagraph.png
+/cmd/lc_insertobjectstarmath.png
+/cmd/lc_insertmath.png
+/cmd/lc_insertcolumns.png
+/cmd/lc_setobjecttoforeground.png
+/cmd/lc_setobjecttobackground.png
+/cmd/lc_reverseorder.png
+
+Copyright 2002-2004 by Novell Inc., Modifications Copyright 2008 by Gabriel Hurley. Available under the terms of the LGPL
+/cmd/lc_flowchartshapes.flowchart-alternate-process.png
+/cmd/lc_flowchartshapes.flowchart-collate.png
+/cmd/lc_flowchartshapes.flowchart-connector.png
+/cmd/lc_flowchartshapes.flowchart-data.png
+/cmd/lc_flowchartshapes.flowchart-decision.png
+/cmd/lc_flowchartshapes.flowchart-delay.png
+/cmd/lc_flowchartshapes.flowchart-direct-access-storage.png
+/cmd/lc_flowchartshapes.flowchart-document.png
+/cmd/lc_flowchartshapes.flowchart-extract.png
+/cmd/lc_flowchartshapes.flowchart-internal-storage.png
+/cmd/lc_flowchartshapes.flowchart-predefined-process.png
+/cmd/lc_flowchartshapes.flowchart-process.png
+/cmd/lc_flowchartshapes.flowchart-sort.png
+/cmd/lc_flowchartshapes.png
+
+All icons under the /cmd/ directory, with filenames beginning with "lc_arrowshapes", "lc_calloutshapes", or "lc_basicshapes" are:
+Copyright 2002-2004 by Novell Inc., Modifications Copyright 2006-2007 by Gabriel Hurley. Available under the terms of the LGPL
