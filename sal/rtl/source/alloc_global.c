@@ -34,12 +34,9 @@
 #include <string.h>
 #include <stdio.h>
 
+AllocMode alloc_mode = AMode_UNSET;
+
 #if !defined(FORCE_SYSALLOC)
-
-typedef enum { AMode_CUSTOM, AMode_SYSTEM, AMode_UNSET } AllocMode;
-
-static AllocMode alloc_mode = AMode_UNSET;
-
 static void determine_alloc_mode(void)
 {
    /* This shouldn't happen, but still ... */

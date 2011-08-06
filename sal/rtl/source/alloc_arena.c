@@ -37,6 +37,8 @@
 #include <string.h>
 #include <stdio.h>
 
+extern AllocMode alloc_mode;
+
 /* ================================================================= *
  *
  * arena internals.
@@ -999,6 +1001,9 @@ SAL_CALL rtl_arena_alloc (
 
     if ((arena != 0) && (pSize != 0))
     {
+        if (alloc_mode == AMode_SYSTEM)
+            return rtl_allocateMemory(*pSize);
+
         sal_Size size = RTL_MEMORY_ALIGN((*pSize), arena->m_quantum);
         if (size > arena->m_qcache_max)
         {
@@ -1072,6 +1077,12 @@ SAL_CALL rtl_arena_free (
 {
     if (arena != 0)
     {
+        if (alloc_mode == AMode_SYSTEM)
+        {
+            rtl_freeMemory(addr);
+            return;
+        }
+
         size = RTL_MEMORY_ALIGN(size, arena->m_quantum);
         if (size > arena->m_qcache_max)
         {

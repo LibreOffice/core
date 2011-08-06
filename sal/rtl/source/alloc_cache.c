@@ -41,6 +41,8 @@
 #include <stdio.h>
 #endif
 
+extern AllocMode alloc_mode;
+
 /* ================================================================= *
  *
  * cache internals.
@@ -498,6 +500,7 @@ rtl_cache_slab_alloc (
             addr = bufctl;
 
         /* DEBUG ONLY: mark allocated, undefined */
+        /* OSL_DEBUG_ONLY() */ VALGRIND_MAKE_MEM_UNDEFINED(addr, cache->m_type_size);
         OSL_DEBUG_ONLY(memset(addr, 0x77777777, cache->m_type_size));
         VALGRIND_MEMPOOL_ALLOC(cache, addr, cache->m_type_size);
     }
@@ -1203,6 +1206,20 @@ SAL_CALL rtl_cache_alloc (
     if (cache == 0)
         return (0);
 
+    if (alloc_mode == AMode_SYSTEM)
+    {
+        obj = rtl_allocateMemory(cache->m_type_size);
+        if ((obj != 0) && (cache->m_constructor != 0))
+        {
+            if (!((cache->m_constructor)(obj, cache->m_userarg)))
+            {
+                /* construction failure */
+                rtl_freeMemory(obj), obj = 0;
+            }
+        }
+        return obj;
+    }
+
     RTL_MEMORY_LOCK_ACQUIRE(&(cache->m_depot_lock));
     if (cache->m_cpu_curr != 0)
     {
@@ -1278,6 +1295,17 @@ SAL_CALL rtl_cache_free (
 {
     if ((obj != 0) && (cache != 0))
     {
+        if (alloc_mode == AMode_SYSTEM)
+        {
+            if (cache->m_destructor != 0)
+            {
+                /* destruct object */
+                (cache->m_destructor)(obj, cache->m_userarg);
+            }
+            rtl_freeMemory(obj);
+            return;
+        }
+
         RTL_MEMORY_LOCK_ACQUIRE(&(cache->m_depot_lock));
 
         for (;;)

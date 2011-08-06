@@ -260,10 +260,11 @@ typedef CRITICAL_SECTION rtl_memory_lock_type;
 #define VALGRIND_MEMPOOL_FREE(pool, addr)
 #elif defined(HAVE_MEMCHECK_H)
 #include <memcheck.h>
-#if !defined(FORCE_SYSALLOC)
-#define FORCE_SYSALLOC 1
-#endif /* !FORCE_SYSALLOC */
 #endif /* NVALGRIND || HAVE_MEMCHECK_H */
+
+typedef enum { AMode_CUSTOM, AMode_SYSTEM, AMode_UNSET } AllocMode;
+
+extern AllocMode alloc_mode;
 
 #ifdef __cplusplus
 }
