@@ -546,7 +546,6 @@ install_info MigrationImpl::findInstallation(const strings_v& rVersions)
 
     install_info aInfo;
     strings_v::const_iterator i_ver = rVersions.begin();
-    uno::Reference < util::XStringSubstitution > xSubst( ::comphelper::getProcessServiceFactory()->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.util.PathSubstitution"))), uno::UNO_QUERY );
     while (i_ver != rVersions.end())
     {
         ::rtl::OUString aVersion, aProfileName;
