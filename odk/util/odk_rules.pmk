@@ -1,0 +1,188 @@
+#*************************************************************************
+#
+# DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+# 
+# Copyright 2000, 2010 Oracle and/or its affiliates.
+#
+# OpenOffice.org - a multi-platform office productivity suite
+#
+# This file is part of OpenOffice.org.
+#
+# OpenOffice.org is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Lesser General Public License version 3
+# only, as published by the Free Software Foundation.
+#
+# OpenOffice.org is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Lesser General Public License version 3 for more details
+# (a copy is included in the LICENSE file that accompanied this code).
+#
+# You should have received a copy of the GNU Lesser General Public License
+# version 3 along with OpenOffice.org.  If not, see
+# <http://www.openoffice.org/license.html>
+# for a copy of the LGPLv3 License.
+#
+#*************************************************************************
+
+
+$(DESTDIRDOCU)/%.html : $(PRJ)/docs/%.html
+    @@-rm -f $@
+    tr -d "\015" < $< |  sed -e 's/%PRODUCT_RELEASE%/$(PRODUCT_RELEASE)/g' > $@
+
+$(DESTDIREXAMPLES)/%.html : $(PRJ)/examples/%.html
+    @@-rm -f $@
+    tr -d "\015" < $< |  sed -e 's/%PRODUCT_RELEASE%/$(PRODUCT_RELEASE)/g' > $@
+
+$(DESTDIR)/index.html : $(PRJ)/index.html
+    @@-rm -f $@
+    tr -d "\015" < $< |  sed -e 's/%PRODUCT_RELEASE%/$(PRODUCT_RELEASE)/g' > $@
+
+$(DESTDIRDOCU)/%.css : $(PRJ)/docs/%.css
+    @@-rm -f $@
+    $(MY_TEXTCOPY) $< $@
+
+$(DESTDIRDOCUIMAGES)/% : $(PRJ)/docs/images/%
+    @@-rm -f $@
+    $(MY_COPY) $< $@
+
+$(DESTDIR)/configure : $(PRJ)/configure
+    @@-rm -f $@
+    $(MY_TEXTCOPY) $(PRJ)/configure $@
+
+$(DESTDIR)/configure.pl : $(PRJ)/configure.pl
+    @@-rm -f $@
+    $(MY_TEXTCOPY) $(PRJ)/configure.pl $@
+
+$(DESTDIR)/config.guess : $(SRC_ROOT)/config.guess
+    @@-rm -f $@
+    $(MY_TEXTCOPY) $(SRC_ROOT)/config.guess $@
+
+$(DESTDIR)/config.sub : $(SRC_ROOT)/config.sub
+    @@-rm -f $@
+    $(MY_TEXTCOPY) $(SRC_ROOT)/config.sub $@
+
+$(DESTDIR)/setsdkenv_unix : $(PRJ)/setsdkenv_unix
+    @@-rm -f $@
+    $(MY_TEXTCOPY) $< $@
+
+$(DESTDIR)/setsdkenv_unix.%.in : $(PRJ)/setsdkenv_unix.%.in
+    @@-rm -f $@
+    $(MY_TEXTCOPY) $< $@
+
+$(DESTDIR)/setsdkenv_windows.bat : $(PRJ)/setsdkenv_windows.bat
+    @@-rm -f $@
+    $(TYPE) $< | $(SED) 's#__SDKNAME__#$(SDKDIRNAME)#' > $@
+
+$(DESTDIR)/%.bat : $(PRJ)/%.bat
+    @@-rm -f $@
+    $(MY_TEXTCOPY) $< $@
+
+$(DESTDIR)/setsdkenv_windows.template : $(PRJ)/setsdkenv_windows.template
+    @@-rm -f $@
+    $(MY_TEXTCOPY) $< $@
+
+$(DESTDIR)/cfgWin.js : $(PRJ)/cfgWin.js
+    @@-rm -f $@
+    $(MY_TEXTCOPY) $(PRJ)/cfgWin.js $@
+
+$(DESTDIRSETTINGS)/%.mk : $(PRJ)/settings/%.mk
+    @@-rm -f $@
+    $(MY_TEXTCOPY) $< $@
+
+$(DESTDIRXML)/module-description.dtd : $(XMLOUT)/module-description.dtd
+    @@-rm -f $@
+    $(MY_TEXTCOPY) $(XMLOUT)/module-description.dtd $@
+$(DESTDIRXML)/%.xml : $(XMLOUT)/%.xml
+    @@-rm -f $@
+    $(MY_TEXTCOPY) $< $@
+
+$(DESTDIRBIN)/%$(EXEPOSTFIX) : $(BINOUT)/%$(EXEPOSTFIX)
+    @@-rm -f $@
+    $(GNUCOPY) $(BINOUT)/$(@:f) $@
+
+$(DESTDIRBIN)/%.bin : $(BINOUT)/%.bin
+    @@-rm -f $@
+    $(GNUCOPY) $(BINOUT)/$(@:f) $@
+
+$(DESTDIRBIN)/regcomp : $(BINOUT)/regcomp
+    @@-rm -f $@
+    $(MY_TEXTCOPY) $< $@
+
+$(DESTDIRBIN)/unoapploader$(EXEPOSTFIX) : $(BIN)/unoapploader$(EXEPOSTFIX)
+    @@-rm -f $@
+    $(GNUCOPY) $(BIN)/$(@:f) $@
+
+# special rule for special Java UNO native library
+# (used for all platforms but built only under windows;
+# otherwise provided in external)
+$(DESTDIRJAR)/win/unowinreg.dll : $(BIN)/unowinreg.dll
+    @@-rm -f $@
+    $(GNUCOPY) $< $@
+
+$(DESTDIRCLI)/%.dll : $(BINOUT)/%.dll
+    @@-rm -f $@
+    $(GNUCOPY) $< $@
+
+$(DESTDIRDLL)/%$(MY_DLLPOSTFIX) : $(DLLOUT)/%$(MY_DLLPOSTFIX)
+    @@-rm -f $@
+    $(GNUCOPY) $(DLLOUT)/$(@:f) $@
+
+$(DESTDIRJAR)/com/sun/star/lib/loader/%.class : $(CLASSDIR)/com/sun/star/lib/loader/%.class
+    @@-$(RM) $(@:db).class
+    $(COPY) $(<:db).class $(@:d)
+# deal with subclasses
+    @@-$(RM) $(@:db)$(EMQ)$$*.class
+    -$(COPY) $(<:db)$(EMQ)$$*.class $(@:d)
+
+$(DESTDIRIDL)/% : $(IDLOUT)/%
+    $(MY_TEXTCOPY) $< $@
+
+$(DESTDIRINC)/udkversion.mk :
+    @@-rm -f $@
+    @echo #UDK version number > $@
+    @echo #major >> $@
+    @echo UDK_MAJOR=$(UDK_MAJOR) >> $@
+    @echo #minor >> $@
+    @echo UDK_MINOR=$(UDK_MINOR) >> $@
+    @echo #micro >> $@
+    @echo UDK_MICRO=$(UDK_MICRO) >> $@
+
+$(DESTDIRINC)/% : $(INCOUT)/%
+    $(MY_TEXTCOPY) $< $@
+
+$(DESTDIRLIB)/%.lib : $(LIBOUT)/%.lib
+    @@-rm -f $@
+    $(GNUCOPY) $(LIBOUT)/$(@:f) $@
+
+$(DESTDIRLIB)/%.a : $(LIBOUT)/%.a
+    @@-rm -f $@
+    $(GNUCOPY) $(LIBOUT)/$(@:f) $@
+
+$(DIR_CREATE_FLAG) :
+    $(TYPE) $(mktmp $(DIR_DIRECTORY_LIST)) | xargs -n 20 $(MKDIRHIER) && echo "dirs created" > $@ && touch $@
+    $(DELAY) 2
+
+$(DESTDIRSETTINGS)/component.uno.def : $(PRJ)/settings/component.uno.def
+    @@-rm -f $@
+    $(MY_TEXTCOPY) $< $@
+
+$(DESTDIRSETTINGS)/component.uno.map : $(SOLARENV)/bin/addsym.awk $(SOLARENV)/src/component.map
+    @@-$(RM) -f $@
+.IF "$(COMID)"=="gcc3"
+    tr -d "\015" < $(SOLARENV)/src/component.map | $(AWK) -f $(SOLARENV)/bin/addsym.awk > $@
+.IF "$(OS)"=="MACOSX"
+    tr -d "\015" < $(SOLARENV)/src/component.map | tail -n +3 | head -3 | sed -e 's/.*component/_component/g' -e 's/;[ ]*//' > $@
+.ENDIF
+.ELSE           # "$(COMID)"=="gcc3"
+    tr -d "\015" < $(SOLARENV)/src/component.map > $@
+.ENDIF          # "$(COMID)"=="gcc3"
+    @chmod 664 $@
+
+$(DIR_FILE_LIST) : $(DIR_CREATE_FLAG)
+
+$(DIR_FILE_FLAG) : $(DIR_FILE_LIST)
+    @echo "must be zipped" > $@
+
+
+
