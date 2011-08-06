@@ -846,3 +846,9 @@ en-US = "Tigrinya"
 
 [STR_DESC_MODULE_LANGPACK_TI]
 en-US = "Installs the Tigrinya user interface"
+
+[STR_NAME_MODULE_LANGPACK_LB]
+en-US = "Luxembourgish"
+
+[STR_DESC_MODULE_LANGPACK_LB]
+en-US = "Installs the Luxembourgish user interface"
