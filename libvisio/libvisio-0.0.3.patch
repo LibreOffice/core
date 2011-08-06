@@ -1,0 +1,20 @@
+--- misc/libvisio-0.0.3/src/lib/libvisio_utils.h
++++ misc/build/libvisio-0.0.3/src/lib/libvisio_utils.h
+@@ -31,17 +31,8 @@
+ 
+ #else
+ 
+-#ifdef HAVE_CONFIG_H
+-#include <config.h>
+-#endif
+-
+-#ifdef HAVE_STDINT_H
+ #include <stdint.h>
+-#endif
+-
+-#ifdef HAVE_INTTYPES_H
+ #include <inttypes.h>
+-#endif
+ 
+ #endif
+ 

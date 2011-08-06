@@ -1,0 +1,9 @@
+mkdir: %_DEST%\inc\external\xmlsec
+mkdir: %_DEST%\inc\external\xmlsec\nss
+mkdir: %_DEST%\inc\external\xmlsec\mscrypto
+..\%__SRC%\inc\xmlsec\*.h %_DEST%\inc\external\xmlsec\*.h
+..\%__SRC%\inc\xmlsec\nss\*.h %_DEST%\inc\external\xmlsec\nss\*.h
+..\%__SRC%\inc\xmlsec\mscrypto\*.h %_DEST%\inc\external\xmlsec\mscrypto\*.h
+..\%__SRC%\lib\lib*.a %_DEST%\lib
+..\%__SRC%\lib\*.lib %_DEST%\lib
+..\%__SRC%\bin\*.dll %_DEST%\bin

@@ -1,0 +1,15 @@
+# mirror the dir structure a make install would create
+mkdir: %_DEST%\inc\mysqlcppconn
+mkdir: %_DEST%\inc\mysqlcppconn\cppconn
+
+..\%__SRC%\inc\*.h %_DEST%\inc\mysqlcppconn\*.h
+..\%__SRC%\inc\cppconn\*.h %_DEST%\inc\mysqlcppconn\cppconn\*.h
+
+..\%__SRC%\bin\*.dll %_DEST%\bin\*.dll
+
+ ..\%__SRC%\lib\lib*.so* %_DEST%\lib
+..\%__SRC%\lib\*.sl %_DEST%\lib\*.sl
+..\%__SRC%\lib\*.dylib %_DEST%\lib\*.dylib
+..\%__SRC%\lib\*.dylib.* %_DEST%\lib\*.dylib.*
+..\%__SRC%\lib\*.a %_DEST%\lib\*.a
+..\%__SRC%\lib\i*.lib %_DEST%\lib

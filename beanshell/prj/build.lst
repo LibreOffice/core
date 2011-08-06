@@ -1,0 +1,3 @@
+be	beanshell	:	solenv NULL
+be	beanshell							usr1		-	all	be_mkout				NULL
+be	beanshell							nmake		-	all	be_beanshell		NULL

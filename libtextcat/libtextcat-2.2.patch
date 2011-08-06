@@ -1,0 +1,4098 @@
+--- misc/build/libtextcat-2.2/configure
++++ misc/build/libtextcat-2.2/configure
+@@ -3451,7 +3451,7 @@
+   ;;
+ 
+ # This must be Linux ELF.
+-linux-gnu*)
++linux-gnu*|k*bsd*-gnu*)
+   case $host_cpu in
+   alpha* | hppa* | i*86 | mips | mipsel | powerpc* | sparc* | ia64*)
+     lt_cv_deplibs_check_method=pass_all ;;
+@@ -5391,7 +5391,8 @@
+ allow_undefined_flag=
+ no_undefined_flag=
+ need_lib_prefix=unknown
+-need_version=unknown
++#need_version=unknown
++need_version=no
+ # when you set need_version to no, make sure it does not cause -set_version
+ # flags to be left without arguments
+ archive_cmds=
+@@ -5785,7 +5786,7 @@
+     #        cross-compilation, but unfortunately the echo tests do not
+     #        yet detect zsh echo's removal of \ escapes.  Also zsh mangles
+     #	     `"' quotes if we put them in here... so don't!
+-    archive_cmds='$CC -r -keep_private_externs -nostdlib -o ${lib}-master.o $libobjs && $CC $(test .$module = .yes && echo -bundle || echo -dynamiclib) $allow_undefined_flag -o $lib ${lib}-master.o $deplibs$linker_flags $(test .$module != .yes && echo -install_name $rpath/$soname $verstring)'
++    archive_cmds='$CC -r -keep_private_externs -nostdlib -o ${lib}-master.o $libobjs && $CC $(test .$module = .yes && echo -bundle || echo -dynamiclib) $allow_undefined_flag -o $lib ${lib}-master.o $deplibs$compiler_flags $(test .$module != .yes && echo -install_name $rpath/$soname $verstring)'
+     # We need to add '_' to the symbols in $export_symbols first
+     #archive_expsym_cmds="$archive_cmds"' && strip -s $export_symbols'
+     hardcode_direct=yes
+@@ -6280,7 +6281,7 @@
+   ;;
+ 
+ freebsd*)
+-  objformat=`test -x /usr/bin/objformat && /usr/bin/objformat || echo aout`
++  objformat=`test -x /usr/bin/objformat && /usr/bin/objformat || echo elf`
+   version_type=freebsd-$objformat
+   case $version_type in
+     freebsd-elf*)
+@@ -6365,7 +6365,7 @@
+   ;;
+ 
+ # This must be Linux ELF.
+-linux-gnu*)
++linux-gnu*|k*bsd*-gnu*)
+   version_type=linux
+   need_lib_prefix=no
+   need_version=no
+--- misc/libtextcat-2.2/src/Makefile.in	Thu May 22 13:39:52 2003
++++ misc/build/libtextcat-2.2/src/Makefile.in	Mon Mar 31 11:29:14 2008
+@@ -124,20 +124,20 @@
+ target_vendor = @target_vendor@
+ AUTOMAKE_OPTIONS = 1.4 foreign
+ 
+-WARNS = -W -Wall -Wshadow -Wpointer-arith 
+-IFLAGS = 
+-FLAGS = -g -O3 -funroll-loops -D_THREAD_SAFE -D_GNU_SOURCE
++#WARNS = -W -Wall -Wshadow -Wpointer-arith
++IFLAGS =
++#FLAGS = -g -O3 -funroll-loops -D_THREAD_SAFE -D_GNU_SOURCE
+ VERBOSE = -DVERBOSE
+ AM_CFLAGS = $(IFLAGS) $(VERBOSE) $(WARNS) $(FLAGS)
+ AM_LDFLAGS = -g
+ 
+ noinst_HEADERS = \
+-	common.h constants.h fingerprint.h textcat.h wg_mempool.h
++        common.h constants.h fingerprint.h textcat.h wg_mempool.h utf8misc.h
+ 
+ 
+ lib_LTLIBRARIES = libtextcat.la
+ libtextcat_la_SOURCES = \
+-	common.c fingerprint.c textcat.c wg_mempool.c
++        common.c fingerprint.c textcat.c wg_mempool.c utf8misc.c
+ 
+ 
+ bin_PROGRAMS = createfp
+@@ -156,7 +156,7 @@
+ libtextcat_la_LDFLAGS =
+ libtextcat_la_LIBADD =
+ am_libtextcat_la_OBJECTS = common.lo fingerprint.lo textcat.lo \
+-	wg_mempool.lo
++        wg_mempool.lo utf8misc.lo
+ libtextcat_la_OBJECTS = $(am_libtextcat_la_OBJECTS)
+ bin_PROGRAMS = createfp$(EXEEXT)
+ noinst_PROGRAMS = testtextcat$(EXEEXT)
+@@ -177,7 +177,8 @@
+ @AMDEP_TRUE@DEP_FILES = ./$(DEPDIR)/common.Plo ./$(DEPDIR)/createfp.Po \
+ @AMDEP_TRUE@	./$(DEPDIR)/fingerprint.Plo \
+ @AMDEP_TRUE@	./$(DEPDIR)/testtextcat.Po ./$(DEPDIR)/textcat.Plo \
+-@AMDEP_TRUE@	./$(DEPDIR)/wg_mempool.Plo
++@AMDEP_TRUE@    ./$(DEPDIR)/wg_mempool.Plo \
++@AMDEP_TRUE@    ./$(DEPDIR)/utf8misc.Plo
+ COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
+ 	$(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
+ LTCOMPILE = $(LIBTOOL) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) \
+@@ -213,7 +214,7 @@
+ 	@rm -f stamp-h1
+ 	cd $(top_builddir) && $(SHELL) ./config.status src/config.h
+ 
+-$(srcdir)/config.h.in:  $(top_srcdir)/configure.ac $(ACLOCAL_M4) 
++$(srcdir)/config.h.in:  $(top_srcdir)/configure.ac $(ACLOCAL_M4)
+ 	cd $(top_srcdir) && $(AUTOHEADER)
+ 	touch $(srcdir)/config.h.in
+ 
+@@ -247,8 +248,8 @@
+ 	  echo "rm -f \"$${dir}/so_locations\""; \
+ 	  rm -f "$${dir}/so_locations"; \
+ 	done
+-libtextcat.la: $(libtextcat_la_OBJECTS) $(libtextcat_la_DEPENDENCIES) 
+-	$(LINK) -rpath $(libdir) $(libtextcat_la_LDFLAGS) $(libtextcat_la_OBJECTS) $(libtextcat_la_LIBADD) $(LIBS)
++libtextcat.la: $(libtextcat_la_OBJECTS) $(libtextcat_la_DEPENDENCIES)
++	$(LINK) -avoid-version -rpath $(libdir) $(libtextcat_la_LDFLAGS) $(libtextcat_la_OBJECTS) $(libtextcat_la_LIBADD) $(LIBS)
+ binPROGRAMS_INSTALL = $(INSTALL_PROGRAM)
+ install-binPROGRAMS: $(bin_PROGRAMS)
+ 	@$(NORMAL_INSTALL)
+@@ -285,10 +286,10 @@
+ 	  echo " rm -f $$p $$f"; \
+ 	  rm -f $$p $$f ; \
+ 	done
+-createfp$(EXEEXT): $(createfp_OBJECTS) $(createfp_DEPENDENCIES) 
++createfp$(EXEEXT): $(createfp_OBJECTS) $(createfp_DEPENDENCIES)
+ 	@rm -f createfp$(EXEEXT)
+ 	$(LINK) $(createfp_LDFLAGS) $(createfp_OBJECTS) $(createfp_LDADD) $(LIBS)
+-testtextcat$(EXEEXT): $(testtextcat_OBJECTS) $(testtextcat_DEPENDENCIES) 
++testtextcat$(EXEEXT): $(testtextcat_OBJECTS) $(testtextcat_DEPENDENCIES)
+ 	@rm -f testtextcat$(EXEEXT)
+ 	$(LINK) $(testtextcat_LDFLAGS) $(testtextcat_OBJECTS) $(testtextcat_LDADD) $(LIBS)
+ 
+@@ -304,6 +305,7 @@
+ @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/testtextcat.Po@am__quote@
+ @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/textcat.Plo@am__quote@
+ @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/wg_mempool.Plo@am__quote@
++@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/utf8misc.Plo@am__quote@
+ 
+ distclean-depend:
+ 	-rm -rf ./$(DEPDIR)
+--- misc/libtextcat-2.2/src/common.c	Thu May 22 13:32:43 2003
++++ misc/build/libtextcat-2.2/src/common.c	Mon Mar 31 11:29:14 2008
+@@ -3,23 +3,23 @@
+  *
+  * Copyright (c) 2003, WiseGuys Internet B.V.
+  * All rights reserved.
+- * 
++ *
+  * Redistribution and use in source and binary forms, with or without
+  * modification, are permitted provided that the following conditions
+  * are met:
+- * 
++ *
+  * - Redistributions of source code must retain the above copyright
+  * notice, this list of conditions and the following disclaimer.
+- * 
++ *
+  * - Redistributions in binary form must reproduce the above copyright
+  * notice, this list of conditions and the following disclaimer in the
+  * documentation and/or other materials provided with the
+  * distribution.
+- * 
++ *
+  * - Neither the name of the WiseGuys Internet B.V. nor the names of
+  * its contributors may be used to endorse or promote products derived
+  * from this software without specific prior written permission.
+- * 
++ *
+  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+  * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+@@ -114,11 +114,11 @@
+ 		wgmem_error( "Error while strduping %u bytes.\n", strlen(s) );
+ 	}
+ 
+-	return( result ); 
++	return( result );
+ }
+ 
+-extern void* wg_realloc( void *ptr, size_t size ) 
+-{ 
++extern void* wg_realloc( void *ptr, size_t size )
++{
+ 	void *result;
+ 
+ 	if (!size) {
+@@ -131,7 +131,7 @@
+ 		wgmem_error( "Error while reallocing %u bytes.\n", size );
+ 	}
+ 
+-	return( result ); 
++	return( result );
+ }
+ 
+ extern void wg_free( void *mem )
+@@ -148,12 +148,12 @@
+         if ( fgets(line, size, fp) == NULL ) {
+ 		return NULL;
+ 	}
+-        
++
+         /** kill term null **/
+         if ( (p = strpbrk( line, "\n\r" )) ) {
+                 *p = '\0';
+-        }           
+-  
++        }
++
+         return line;
+ }
+ 
+@@ -164,39 +164,39 @@
+  *
+  * ARGUMENTS:
+  * - result:
+- * 
++ *
+  *  After the split, this array contains pointers to the start of each
+  *  detected segment. Must be preallocated and at least as large as
+  *  maxsegments. The pointers point into the dest buffer.
+- * 
+- * - dest: 
+- * 
++ *
++ * - dest:
++ *
+  *  String into which result points as an index. Must be preallocated, and
+  *  at least as big as src. You can use src as dest, but in that case src
+  *  is overwritten!
+- * 
+- * - src:  
+- * 
++ *
++ * - src:
++ *
+  *  The string to split. Sequences of whitespace are treated as separators, unless
+  *  escaped. There are two ways to escape: by using single quotes (anything
+  *  between single quotes is treated as one segment), or by using a backslash
+  *  to escape the next character. The backslash escape works inside quotation
+  *  as well.
+- * 
++ *
+  *  Example:
+- *  
++ *
+  *  "It\'s   very\ easy   'to  use WiseGuys\' wg_split()' function" is split into:
+- *  
++ *
+  *  "It's"
+  *  "very easy"
+  *  "to  use WiseGuys' wg_split()"
+  *  "function"
+- *  
+- * - maxsegments: 
+- * 
++ *
++ * - maxsegments:
++ *
+  *  The maximum number of segments. If the splitter runs out of segments,
+  *  the remainder of the string is stored in the last segment.
+- *  
++ *
+  * RETURN VALUE:
+  * The number of segments found.
+  */
+@@ -218,12 +218,12 @@
+ 		switch (state) {
+ 		case 0:
+ 			/*** Skip spaces ***/
+-			while ( isspace((int) *p) ) {
++			while ( isspace((unsigned char) *p) ) {
+ 				p++;
+ 			}
+ 			state = 1;
+ 
+-		case 1: 
++		case 1:
+ 			/*** Start segment ***/
+ 			result[cnt] = w;
+ 			cnt++;
+@@ -232,12 +232,12 @@
+ 		case 2:
+ 			/*** Unquoted segment ***/
+ 			while (*p) {
+-				if ( isspace((int) *p) ) {
++				if ( isspace((unsigned char) *p) ) {
+ 					*w++ = '\0';
+ 					p++;
+ 					state = 0;
+ 					break;
+-				}				
++				}
+ 				else if ( *p == '\'' ) {
+ 					/*** Start quotation ***/
+ 					p++;
+@@ -292,17 +292,17 @@
+ }
+ 
+ 
++#ifdef HAVE_GETTIMEOFDAY    /* TL : no struct timeval under Win32 */
+ extern void wg_timerstart(wgtimer_t *t)
+ {
+-#ifdef HAVE_GETTIMEOFDAY
+         gettimeofday( &(t->start), NULL );
+-#endif
+ }
++#endif  /* TL : no struct timeval under Win32 */
+ 
+ 
++#ifdef HAVE_GETTIMEOFDAY    /* TL : no struct timeval under Win32 */
+ extern uint4 wg_timerstop(wgtimer_t *t)
+ {
+-#ifdef HAVE_GETTIMEOFDAY
+ 	uint4 result;
+         gettimeofday( &(t->stop), NULL );
+         result = (t->stop.tv_sec - t->start.tv_sec) * 1000000 +
+@@ -312,25 +312,23 @@
+ 	t->start.tv_usec = t->stop.tv_usec;
+ 
+ 	return result;
+-#else
+-	return 0;
+-#endif
+ }
++#endif  /* TL : no struct timeval under Win32 */
+ 
+ 
+ /**
+  * wg_strgmov -- a guarded strcpy() variation
+- * 
++ *
+  * copies src to dest (including terminating zero), and returns
+  * pointer to position of terminating zero in dest. The function is
+  * guaranteed not to write past destlimit. If the copy couldn't be
+- * finished, the function returns NULL after restoring the first 
+- * character in dest for your convenience (since this is usually a zero).  
++ * finished, the function returns NULL after restoring the first
++ * character in dest for your convenience (since this is usually a zero).
+  */
+ char *wg_strgmov( char *dest, const char *src, const char *destlimit )
+ {
+ 	char tmp, *w;
+-	
++
+ 	if ( !dest || dest >= destlimit ) {
+ 		return NULL;
+ 	}
+@@ -355,7 +353,7 @@
+ }
+ 
+ /*
+- * wg_trim() -- remove whitespace surrounding a string. 
++ * wg_trim() -- remove whitespace surrounding a string.
+  *
+  * Example: "   bla   bla   bla   " becomes "bla   bla   bla" after trimming.
+  *
+@@ -373,12 +371,12 @@
+ 	char *lastnonspace = &dest[-1];
+ 	const char *p = src;
+ 	char *w = dest;
+-	
+-	while ( isspace((int)*p) ) {
++
++	while ( isspace((unsigned char)*p) ) {
+ 		p++;
+ 	}
+ 	while (*p) {
+-		if ( !isspace((int)*p) ) {
++		if ( !isspace((unsigned char)*p) ) {
+ 			lastnonspace = w;
+ 		}
+ 		*w++ = *p++;
+@@ -386,3 +386,18 @@
+ 	return dest;
+ }
+ 
++void *
++rpl_malloc (size_t n)
++{
++  if (n == 0)
++    n = 1;
++  return malloc (n);
++}
++
++void *
++rpl_realloc (void *ptr, size_t n)
++{
++  if (n == 0)
++    n = 1;
++  return realloc (ptr, n);
++}
+--- misc/libtextcat-2.2/src/common.h	Thu May 22 15:02:29 2003
++++ misc/build/libtextcat-2.2/src/common.h	Mon Mar 31 11:29:14 2008
+@@ -1,28 +1,28 @@
+ #ifndef _COMMON_H_
+ #define _COMMON_H_
+ /**
+- * common.h -- a mixed bag of helper functions 
++ * common.h -- a mixed bag of helper functions
+  *
+  * Copyright (C) 2003 WiseGuys Internet B.V.
+  *
+  * THE BSD LICENSE
+- * 
++ *
+  * Redistribution and use in source and binary forms, with or without
+  * modification, are permitted provided that the following conditions
+  * are met:
+- * 
++ *
+  * - Redistributions of source code must retain the above copyright
+  * notice, this list of conditions and the following disclaimer.
+- * 
++ *
+  * - Redistributions in binary form must reproduce the above copyright
+  * notice, this list of conditions and the following disclaimer in the
+  * documentation and/or other materials provided with the
+  * distribution.
+- * 
++ *
+  * - Neither the name of the WiseGuys Internet B.V. nor the names of
+  * its contributors may be used to endorse or promote products derived
+  * from this software without specific prior written permission.
+- * 
++ *
+  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+  * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+@@ -86,10 +86,12 @@
+ typedef char		boole;
+ #endif
+ 
++#ifdef HAVE_GETTIMEOFDAY    /* TL : no struct timeval under Win32 */
+ typedef struct wgtimer_s {
+         struct timeval start;
+         struct timeval stop;
+ } wgtimer_t;
++#endif  /* TL : no struct timeval under Win32 */
+ 
+ 
+ extern void *wg_malloc( size_t size );
+@@ -101,13 +103,15 @@
+ 
+ extern char *wg_getline( char *line, int size, FILE *fp );
+ 
++#ifdef HAVE_GETTIMEOFDAY    /* TL : no struct timeval under Win32 */
+ extern void wg_timerstart(wgtimer_t *t);
+ extern uint4 wg_timerstop(wgtimer_t *t);
++#endif  /* TL : no struct timeval under Win32 */
+ 
+ extern unsigned int wg_split( char **result, char *dest, char *src, int maxsegments );
+ extern char *wg_strgmov( char *dest, const char *src, const char *destlimit );
+ extern char *wg_trim( char *dest, const char *src );
+ 
+-      
++
+ #endif
+ 
+--- misc/libtextcat-2.2/src/constants.h	Thu May 22 13:32:43 2003
++++ misc/build/libtextcat-2.2/src/constants.h	Mon Mar 31 11:29:14 2008
+@@ -39,6 +39,8 @@
+  */
+ #include <limits.h>
+ 
++#define _UTF8_
++
+ #define DESCRIPTION "out of place"
+ 
+ /* Reported matches are those fingerprints with a score less than best
+@@ -59,14 +61,21 @@
+ /* Maximum number of n-grams in a fingerprint */
+ #define MAXNGRAMS  400
+ 
+-/* Maximum size of an n-gram? */
+-#define MAXNGRAMSIZE 5
++/* Maximum number of character of an n-gram? */
++#define MAXNGRAMSYMBOL 5
++
++/* Maximum size of the string representing an n-gram (must be greater than number of symbol) */
++#ifdef _UTF8_
++#define MAXNGRAMSIZE 20
++#else
++#define MAXNGRAMSIZE MAXNGRAMSYMBOL
++#endif
+ 
+ /* Which characters are not acceptable in n-grams? */
+-#define INVALID(c) (isspace((int)c) || isdigit((int)c)) 
++#define INVALID(c) (isspace((unsigned char)c) || isdigit((unsigned char)c)) 
+ 
+ /* Minimum size (in characters) for accepting a document */
+-#define MINDOCSIZE  25
++#define MINDOCSIZE  6
+ 
+ /* Maximum penalty for missing an n-gram in fingerprint */
+ #define MAXOUTOFPLACE 400
+@@ -75,5 +84,8 @@
+ #define TABLEPOW  13
+ 
+ #define MAXSCORE  INT_MAX
++
++/* where the fingerprints files are stored */
++#define DEFAULT_FINGERPRINTS_PATH ""
+ 
+ #endif
+--- misc/libtextcat-2.2/src/fingerprint.c	Thu May 22 13:32:43 2003
++++ misc/build/libtextcat-2.2/src/fingerprint.c	Mon Mar 31 11:29:14 2008
+@@ -6,23 +6,23 @@
+  * All rights reserved.
+  *
+  * THE BSD LICENSE
+- * 
++ *
+  * Redistribution and use in source and binary forms, with or without
+  * modification, are permitted provided that the following conditions
+  * are met:
+- * 
++ *
+  * - Redistributions of source code must retain the above copyright
+  * notice, this list of conditions and the following disclaimer.
+- * 
++ *
+  * - Redistributions in binary form must reproduce the above copyright
+  * notice, this list of conditions and the following disclaimer in the
+  * documentation and/or other materials provided with the
+  * distribution.
+- * 
++ *
+  * - Neither the name of the WiseGuys Internet B.V. nor the names of
+  * its contributors may be used to endorse or promote products derived
+  * from this software without specific prior written permission.
+- * 
++ *
+  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+  * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+@@ -51,7 +51,7 @@
+  * The reason why we go through the trouble of doing a partial
+  * (heap)sort is that a full quicksort behaves horribly on the data:
+  * most n-grams have a very low count, resulting in a data set in
+- * nearly-sorted order. This causes quicksort to behave very badly. 
++ * nearly-sorted order. This causes quicksort to behave very badly.
+  * Heapsort, on the other hand, behaves handsomely: worst case is
+  * Mlog(N) for M n-grams filtered through a N-sized heap.
+  *
+@@ -63,6 +63,10 @@
+  * - put table/heap datastructure in a separate file.
+  */
+ 
++#ifndef _UTF8_
++#define _UTF8_
++#endif
++
+ #include "config.h"
+ #include <stdio.h>
+ #ifdef HAVE_STDLIB_H
+@@ -80,10 +84,12 @@
+ #include "wg_mempool.h"
+ #include "constants.h"
+ 
++#include "utf8misc.h"
+ 
+ #define TABLESIZE  (1<<TABLEPOW)
+ #define TABLEMASK  ((TABLESIZE)-1)
+ 
++
+ typedef struct {
+ 
+ 	sint2 rank;
+@@ -96,7 +102,7 @@
+ 	const char *name;
+ 	ngram_t *fprint;
+ 	uint4 size;
+-	
++
+ } fp_t;
+ 
+ typedef struct entry_s {
+@@ -105,13 +111,13 @@
+ 	struct entry_s *next;
+ } entry_t;
+ 
+-typedef struct table_s {	
++typedef struct table_s {
+ 	void *pool;
+ 	entry_t **table;
+ 	entry_t *heap;
+ 
+ 	struct table_s *next;
+-	
++
+ 	uint4 heapsize;
+ 	uint4 size;
+ } table_t;
+@@ -122,7 +128,7 @@
+  * fast and furious little hash function
+  *
+  * (Note that we could use some kind of rolling checksum, and update it
+- * during n-gram construction) 
++ * during n-gram construction)
+  */
+ static uint4 simplehash( const char *p, int len )
+ {
+@@ -134,29 +140,14 @@
+ }
+ 
+ 
+-/* checks if n-gram lex is a prefix of key and of length len */
+-inline int issame( char *lex, char *key, int len )
+-{
+-	int i;
+-	for (i=0; i<len; i++) {
+-		if ( key[i] != lex[i] ) {
+-			return 0;
+-		}
+-	}
+-	if ( lex[i] != 0 ) {
+-		return 0;
+-	}
+-	return 1;
+-}
+-
+ 
+ /* increases frequency of ngram(p,len) */
+-static inline int increasefreq( table_t *t, char *p, int len ) 
+-{	
+-	uint4 hash = simplehash( p, len ) & TABLEMASK;				
++static int increasefreq( table_t *t, char *p, int len )
++{
++	uint4 hash = simplehash( p, len ) & TABLEMASK;
+ 	entry_t *entry = t->table[ hash ];
+-	
+-	while ( entry ) {				
++
++	while ( entry ) {
+ 		if ( issame( entry->str, p, len ) ) {
+ 			/*** Found it! ***/
+ 			entry->cnt++;
+@@ -168,7 +159,7 @@
+ 	}
+ 
+ 	/*** Not found, so create ***/
+-	entry = wgmempool_alloc( t->pool, sizeof(entry_t) );
++        entry = (entry_t*)(wgmempool_alloc( t->pool, sizeof(entry_t) ));
+ 	strcpy( entry->str, p );
+ 	entry->cnt = 1;
+ 
+@@ -181,12 +172,12 @@
+ #if 0
+ 
+ /* looks up ngram(p,len) */
+-static entry_t *findfreq( table_t *t, char *p, int len ) 
+-{	
+-	uint4 hash = simplehash( p, len ) & TABLEMASK;				
++static entry_t *findfreq( table_t *t, char *p, int len )
++{
++	uint4 hash = simplehash( p, len ) & TABLEMASK;
+ 	entry_t *entry = t->table[ hash ];
+-	
+-	while ( entry ) {				
++
++	while ( entry ) {
+ 		if ( issame( entry->str, p, len ) ) {
+ 			return entry;
+ 		}
+@@ -219,7 +210,7 @@
+ #define GREATER(x,y) ((x).cnt > (y).cnt)
+ #define LESS(x,y)    ((x).cnt < (y).cnt)
+ 
+-inline static void siftup( table_t *t, unsigned int child )
++static void siftup( table_t *t, unsigned int child )
+ {
+ 	entry_t *heap = t->heap;
+ 	unsigned int parent = (child-1) >> 1;
+@@ -241,7 +232,7 @@
+ }
+ 
+ 
+-inline static void siftdown( table_t *t, unsigned int heapsize, uint4 parent )
++static void siftdown( table_t *t, unsigned int heapsize, uint4 parent )
+ {
+ 	entry_t *heap = t->heap;
+ 	unsigned int child = parent*2 + 1;
+@@ -273,7 +264,7 @@
+ 	if (t->size < t->heapsize) {
+ 		memcpy( &(heap[t->size]), item, sizeof(entry_t));
+ 		siftup( t, t->size );
+-		t->size++;		
++		t->size++;
+ 		return 0;
+ 	}
+ 
+@@ -316,18 +307,18 @@
+ 
+ 	/*** Fill result heap ***/
+ 	for (i=0; i<TABLESIZE; i++) {
+-		entry_t *p = t->table[i];	       
++		entry_t *p = t->table[i];
+ 		while (p) {
+ 			heapinsert(t, p);
+ 			p = p->next;
+ 		}
+-	}     
++	}
+ 	return 1;
+ }
+ 
+ 
+ static table_t *inittable(uint4 maxngrams)
+-{	
++{
+ 	table_t *result = (table_t *)wg_zalloc( sizeof(table_t) );
+ 	result->table = (entry_t **)wg_zalloc( sizeof(entry_t*) * TABLESIZE );
+ 	result->pool = wgmempool_Init( 10000, 10 );
+@@ -347,14 +338,14 @@
+ 	wgmempool_Done(t->pool);
+ 	wg_free(t->table);
+ 	wg_free(t->heap);
+-	wg_free(t);	
++	wg_free(t);
+ }
+ 
+ 
+ extern void *fp_Init(const char *name)
+ {
+ 	fp_t *h = (fp_t *)wg_zalloc( sizeof(fp_t) );
+-	
++
+ 	if ( name ) {
+ 		h->name = wg_strdup(name);
+ 	}
+@@ -458,21 +449,27 @@
+ 	return dest;
+ }
+ 
+-
++/**
++* this function extract all n-gram from past buffer and put them into the table "t"
++* [modified] by Jocelyn Merand to accept utf-8 multi-character symbols to be used in OpenOffice
++*/
+ static void createngramtable( table_t *t, const char *buf )
+ {
+ 	char n[MAXNGRAMSIZE+1];
+ 	const char *p = buf;
+ 	int i;
++        int pointer = 0;
+ 
+ 	/*** Get all n-grams where 1<=n<=MAXNGRAMSIZE. Allow underscores only at borders. ***/
+-	for (;;p++) {
++	while(1) {
+ 
+-		const char *q = p;
++     const char *q = &p[pointer];   /*[modified] previously p++ above (for(;;p++)) now, it's pointer wich is increased so we have to get the new pointer on the buffer*/
+ 		char *m = n;
+ 
+ 		/*** First char may be an underscore ***/
+-		*m++ = *q++;
++                int decay = charcopy(q, m); /*[modified] previously *q++ = *m++*/
++                q = &(p[pointer+decay]);    /*[modified] the old copying method do not manage multi-character symbols*/
++                m += decay; /*[modified]*/
+ 		*m = '\0';
+ 
+ 		increasefreq( t, n, 1 );
+@@ -482,19 +479,22 @@
+ 		}
+ 
+ 		/*** Let the compiler unroll this ***/
+-		for ( i=2; i<=MAXNGRAMSIZE; i++) {
++		for ( i=2; i<=MAXNGRAMSYMBOL; i++) {
+ 
+-			*m++ = *q;
++                        decay = charcopy(q, m); /*[modified] like above*/
++                        m += decay;
+ 			*m = '\0';
+ 
+ 			increasefreq( t, n, i );
+ 
+ 			if ( *q == '_' ) break;
+-			q++;
++                        q += decay;
+ 			if ( *q == '\0' ) {
+ 				return;
+ 			}
+ 		}
++
++  pointer = nextcharstart(p,pointer);   /*[modified] p[pointer] must point on the next start of symbol, but whith utf next start is not surely next char*/
+ 	}
+ 	return;
+ }
+@@ -514,7 +514,7 @@
+ {
+ 	ngram_t *x = (ngram_t *)a;
+ 	ngram_t *y = (ngram_t *)b;
+-	
++
+ 	return mystrcmp( x->str, y->str );
+ }
+ 
+@@ -522,12 +522,12 @@
+ {
+ 	ngram_t *x = (ngram_t *)a;
+ 	ngram_t *y = (ngram_t *)b;
+-	
++
+ 	return x->rank - y->rank;
+ }
+ 
+ /**
+- * Create a fingerprint: 
++ * Create a fingerprint:
+  * - record the frequency of each unique n-gram in a hash table
+  * - take the most frequent n-grams
+  * - sort them alphabetically, recording their relative rank
+@@ -544,20 +544,21 @@
+ 	}
+ 
+ 	/*** Throw out all invalid chars ***/
+-	tmp = prepbuffer( buffer, bufsize ); 	
++	tmp = prepbuffer( buffer, bufsize );
++    /*printf("Cleaned buffer : %s\n",tmp);*/
+ 	if ( tmp == NULL ) {
+ 		return 0;
+ 	}
+-
+ 	h = (fp_t*)handle;
+ 	t = inittable(maxngrams);
++    /*printf("Table initialized\n");*/
+ 
+ 	/*** Create a hash table containing n-gram counts ***/
+ 	createngramtable(t, tmp);
+-
++    /*printf("Table created\n");*/
+ 	/*** Take the top N n-grams and add them to the profile ***/
+-	table2heap(t);	
+-	maxngrams = WGMIN( maxngrams, t->size );       
++	table2heap(t);
++	maxngrams = WGMIN( maxngrams, t->size );
+ 
+ 	h->fprint = (ngram_t *)wg_malloc( sizeof(ngram_t) * maxngrams );
+ 	h->size = maxngrams;
+@@ -568,7 +569,7 @@
+ 		entry_t tmp2;
+ 
+ 		heapextract(t, &tmp2);
+-		
++
+ 		/*** the string and its rank is all we need ***/
+ 		strcpy( h->fprint[i].str, tmp2.str );
+ 		h->fprint[i].rank = i;
+@@ -578,7 +579,7 @@
+ 	wg_free(tmp);
+ 
+ 	/*** Sort n-grams alphabetically, for easy comparison ***/
+-	qsort( h->fprint, h->size, sizeof(ngram_t), ngramcmp_str ); 
++	qsort( h->fprint, h->size, sizeof(ngram_t), ngramcmp_str );
+ 	return 1;
+ }
+ 
+@@ -608,7 +609,7 @@
+ #endif
+ 		return 0;
+ 	}
+-	
++
+ 	h->fprint = (ngram_t *)wg_malloc(maxngrams * sizeof(ngram_t));
+ 
+ 	while (cnt < maxngrams && wg_getline(line,1024,fp)) {
+@@ -635,7 +636,7 @@
+ 	h->size = cnt;
+ 
+ 	/*** Sort n-grams, for easy comparison later on ***/
+-	qsort( h->fprint, h->size, sizeof(ngram_t), ngramcmp_str ); 
++	qsort( h->fprint, h->size, sizeof(ngram_t), ngramcmp_str );
+ 
+ 	fclose(fp);
+ 
+@@ -648,14 +649,15 @@
+ {
+ 	uint4 i;
+ 	fp_t *h = (fp_t *)handle;
+-	ngram_t *tmp = wg_malloc( sizeof(ngram_t) * h->size );
+-	
++        ngram_t *tmp = (ngram_t*)wg_malloc( sizeof(ngram_t) * h->size );
++
+ 	/*** Make a temporary and sort it on rank ***/
+ 	memcpy( tmp, h->fprint, h->size * sizeof(ngram_t) );
+-	qsort( tmp, h->size, sizeof(ngram_t), ngramcmp_rank ); 
++	qsort( tmp, h->size, sizeof(ngram_t), ngramcmp_rank );
+ 
+ 	for (i=0; i<h->size; i++) {
+-		fprintf( fp, "%s\n", tmp[i].str );
++        /*fprintf( fp, "%s\t%i\n", tmp[i].str, tmp[i].rank );*/
++                fprintf( fp, "%s\n", tmp[i].str);
+ 	}
+ 	wg_free( tmp );
+ }
+@@ -669,7 +671,7 @@
+ 	uint4 i = 0;
+ 	uint4 j = 0;
+ 	sint4 sum = 0;
+-	
++
+ 	/*** Compare the profiles in mergesort fashion ***/
+ 	while ( i < c->size && j < u->size ) {
+ 
+@@ -705,7 +707,7 @@
+ 	}
+ 
+ 	return sum;
+-	       	
++
+ }
+ 
+ 
+--- misc/libtextcat-2.2/src/fingerprint.h	Mon May 19 14:16:31 2003
++++ misc/build/libtextcat-2.2/src/fingerprint.h	Mon Mar 31 11:29:14 2008
+@@ -41,7 +41,13 @@
+ extern int fp_Read( void *handle, const char *fname, int maxngrams );
+ extern sint4 fp_Compare( void *cat, void *unknown, int cutoff );
+ extern void fp_Show( void *handle );
++#ifdef __cplusplus
++extern "C" {
++#endif
+ extern const char *fp_Name( void *handle );
++#ifdef __cplusplus
++}
++#endif
+ extern void fp_Print( void *handle, FILE *fp );
+ 
+ #endif
+--- misc/libtextcat-2.2/src/libtextcat.map	Mon Mar 31 11:30:06 2008
++++ misc/build/libtextcat-2.2/src/libtextcat.map	Mon Mar 31 11:29:14 2008
+@@ -1 +1,40 @@
+-dummy
++{
++	global: 
++		charcopy
++		issame
++		nextcharstart
++		utfstrlen
++		wgmempool_Done
++		wgmempool_Init
++		wgmempool_Reset
++		wgmempool_alloc
++		wgmempool_getline
++		wgmempool_strdup
++		special_textcat_Init
++		textcat_Classify
++		textcat_Done
++		textcat_Init
++		textcat_Version
++		fp_Compare
++		fp_Create
++		fp_Debug
++		fp_Done
++		fp_Init
++		fp_Name
++		fp_Print
++		fp_Read
++		heapextract
++		wg_calloc
++		wg_free
++		wg_getline
++		wg_malloc
++		wg_split
++		wg_strdup
++		wg_strgmov
++		wg_trim
++		wg_zalloc
++		wgmem_error
++		
++	local:
++		*;
++}
+--- misc/libtextcat-2.2/src/makefile.mk	Mon Mar 31 11:30:06 2008
++++ misc/build/libtextcat-2.2/src/makefile.mk	Mon Mar 31 11:29:42 2008
+@@ -1 +1,87 @@
+-dummy
++#*************************************************************************
++#
++# DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
++# 
++# Copyright 2000, 2010 Oracle and/or its affiliates.
++#
++# OpenOffice.org - a multi-platform office productivity suite
++#
++# This file is part of OpenOffice.org.
++#
++# OpenOffice.org is free software: you can redistribute it and/or modify
++# it under the terms of the GNU Lesser General Public License version 3
++# only, as published by the Free Software Foundation.
++#
++# OpenOffice.org is distributed in the hope that it will be useful,
++# but WITHOUT ANY WARRANTY; without even the implied warranty of
++# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++# GNU Lesser General Public License version 3 for more details
++# (a copy is included in the LICENSE file that accompanied this code).
++#
++# You should have received a copy of the GNU Lesser General Public License
++# version 3 along with OpenOffice.org.  If not, see
++# <http://www.openoffice.org/license.html>
++# for a copy of the LGPLv3 License.
++#
++#*************************************************************************
++
++PRJ = ..$/..$/..$/..$/..
++
++PRJNAME = libtextcat
++TARGET  = libtextcat
++CFLAGSCALL=gsd
++
++USE_DEFFILE=TRUE
++EXTERNAL_WARNINGS_NOT_ERRORS := TRUE
++UWINAPILIB=
++
++.INCLUDE : settings.mk
++
++# --- Files --------------------------------------------------------
++
++# !! not to be compiled because those belong to a stand alone programs: !!
++#        $(SLO)$/createfp.obj\
++#        $(SLO)$/testtextcat.obj
++
++SLOFILES=   \
++        $(SLO)$/common.obj\
++        $(SLO)$/fingerprint.obj\
++        $(SLO)$/textcat.obj\
++        $(SLO)$/wg_mempool.obj\
++        $(SLO)$/utf8misc.obj
++
++#SHL1TARGET= $(TARGET)$(UPD)$(DLLPOSTFIX)
++SHL1TARGET= $(TARGET)
++
++SHL1STDLIBS=
++
++# build DLL
++SHL1LIBS=       $(SLB)$/$(TARGET).lib
++SHL1IMPLIB=     i$(TARGET)
++SHL1DEPN=       $(SHL1LIBS)
++SHL1DEF=        $(MISC)$/$(SHL1TARGET).def
++
++# build DEF file
++DEF1NAME=       $(SHL1TARGET)
++DEF1DEPN=$(MISC)$/$(SHL1TARGET).flt
++
++SHL1VERSIONMAP= libtextcat.map
++
++# --- Targets ------------------------------------------------------
++
++.INCLUDE : target.mk
++
++# copy hand supplied configuration file for Win32 builds to the file
++# which is included in the source code
++$(SLOFILES) : config.h
++config.h :
++    $(GNUCOPY) $(OUT)$/misc$/build$/libtextcat-2.2$/src$/win32_config.h   $(OUT)$/misc$/build$/libtextcat-2.2$/src$/config.h
++
++
++$(MISC)$/$(SHL1TARGET).flt:  makefile.mk
++    @echo ------------------------------
++    @echo Making: $@
++    @echo Imp>$@
++    @echo __CT>>$@
++    @echo _real>>$@
++    @echo unnamed>>$@
+--- misc/libtextcat-2.2/src/textcat.c	Thu May 22 13:32:43 2003
++++ misc/build/libtextcat-2.2/src/textcat.c	Mon Mar 31 11:29:14 2008
+@@ -4,23 +4,23 @@
+  * Copyright (C) 2003 WiseGuys Internet B.V.
+  *
+  * THE BSD LICENSE
+- * 
++ *
+  * Redistribution and use in source and binary forms, with or without
+  * modification, are permitted provided that the following conditions
+  * are met:
+- * 
++ *
+  * - Redistributions of source code must retain the above copyright
+  * notice, this list of conditions and the following disclaimer.
+- * 
++ *
+  * - Redistributions in binary form must reproduce the above copyright
+  * notice, this list of conditions and the following disclaimer in the
+  * documentation and/or other materials provided with the
+  * distribution.
+- * 
++ *
+  * - Neither the name of the WiseGuys Internet B.V. nor the names of
+  * its contributors may be used to endorse or promote products derived
+  * from this software without specific prior written permission.
+- * 
++ *
+  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+  * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+@@ -74,6 +74,7 @@
+ typedef struct {
+ 
+ 	void **fprint;
++        char *fprint_disable;
+ 	uint4 size;
+ 	uint4 maxsize;
+ 
+@@ -112,11 +113,21 @@
+ 		fp_Done( h->fprint[i] );
+ 	}
+ 	wg_free( h->fprint );
++        wg_free( h->fprint_disable );
+ 	wg_free( h );
+ 
+ }
+ 
+-extern void *textcat_Init( const char *conffile )
++/** Replaces older function */
++extern void *textcat_Init( const char *conffile ){
++    return special_textcat_Init( conffile, DEFAULT_FINGERPRINTS_PATH );
++}
++
++/**
++ * Originaly this function had only one parameter (conffile) it has been modified since OOo use
++ * Basicaly prefix is the directory path where fingerprints are stored
++ */
++extern void *special_textcat_Init( const char *conffile, const char *prefix )
+ {
+ 	textcat_t *h;
+ 	char line[1024];
+@@ -134,11 +145,13 @@
+ 	h->size = 0;
+ 	h->maxsize = 16;
+ 	h->fprint = (void **)wg_malloc( sizeof(void*) * h->maxsize );
++ h->fprint_disable = (char *)wg_malloc( sizeof(char*) * h->maxsize );   /*added to store the state of languages*/
+ 
+ 	while ( wg_getline( line, 1024, fp ) ) {
+ 		char *p;
+ 		char *segment[4];
+-		int res;
++                char finger_print_file_name[512];
++                int res;
+ 
+ 		/*** Skip comments ***/
+ #ifdef HAVE_STRCHR
+@@ -156,17 +169,23 @@
+ 		/*** Ensure enough space ***/
+ 		if ( h->size == h->maxsize ) {
+ 			h->maxsize *= 2;
+-			h->fprint = (void *)wg_realloc( h->fprint, sizeof(void*) * h->maxsize );
++			h->fprint = (void **)wg_realloc( h->fprint, sizeof(void*) * h->maxsize );
++                        h->fprint_disable = (char *)wg_realloc( h->fprint_disable, sizeof(char*) * h->maxsize );
+ 		}
+ 
+ 		/*** Load data ***/
+ 		if ((h->fprint[ h->size ] = fp_Init( segment[1] ))==NULL) {
+ 			goto ERROR;
+ 		}
+-		if ( fp_Read( h->fprint[h->size], segment[0], 400 ) == 0 ) {
++                finger_print_file_name[0] = '\0';
++                strcat(finger_print_file_name, prefix);
++                strcat(finger_print_file_name, segment[0]);
++
++                if ( fp_Read( h->fprint[h->size], finger_print_file_name, 400 ) == 0 ) {
+ 			textcat_Done(h);
+ 			goto ERROR;
+-		}		
++		}
++                h->fprint_disable[h->size] = 0xF0;  /*0xF0 is the code for enabled languages, 0x0F is for disabled*/
+ 		h->size++;
+ 	}
+ 
+@@ -203,11 +222,18 @@
+ 		result = _TEXTCAT_RESULT_SHORT;
+ 		goto READY;
+ 	}
+-	
++
+ 	/*** Calculate the score for each category. ***/
+ 	for (i=0; i<h->size; i++) {
+-		int score = fp_Compare( h->fprint[i], unknown, threshold );
+-		candidates[i].score = score;
++                int score;
++                if(h->fprint_disable[i] & 0x0F){    /*if this language is disabled*/
++                    score = MAXSCORE;
++                }
++                else{
++                    score = fp_Compare( h->fprint[i], unknown, threshold );
++                    /*printf("Score for %s : %i\n", fp_Name(h->fprint[i]), score);*/
++                }
++                candidates[i].score = score;
+ 		candidates[i].name = fp_Name( h->fprint[i] );
+ 		if ( score < minscore ) {
+ 			minscore = score;
+@@ -218,7 +244,6 @@
+ 	/*** Find the best performers ***/
+ 	for (i=0; i<h->size; i++) {
+ 		if ( candidates[i].score < threshold ) {
+-
+ 			if ( ++cnt == MAXCANDIDATES+1 ) {
+ 				break;
+ 			}
+@@ -235,7 +260,7 @@
+ 	else {
+ 		char *p = result;
+ 		char *plimit = result+MAXOUTPUTSIZE;
+-		
++
+ 		qsort( candidates, cnt, sizeof(candidate_t), cmpcandidates );
+ 
+ 		*p = '\0';
+@@ -247,7 +272,7 @@
+ 	}
+  READY:
+ 	fp_Done(unknown);
+-#ifdef SHOULD_FREE 
++#ifdef SHOULD_FREE
+ 	free(candidates);
+ #undef SHOULD_FREE
+ #endif
+--- misc/libtextcat-2.2/src/textcat.h	Mon May 19 14:16:31 2003
++++ misc/build/libtextcat-2.2/src/textcat.h	Mon Mar 31 11:29:14 2008
+@@ -40,6 +40,9 @@
+ #define _TEXTCAT_RESULT_UNKOWN        "UNKNOWN"
+ #define _TEXTCAT_RESULT_SHORT         "SHORT"
+ 
++#ifdef __cplusplus
++extern "C" {
++#endif
+ 
+ /**
+  * textcat_Init() - Initialize the text classifier. The textfile
+@@ -51,10 +54,19 @@
+  * Returns: handle on success, NULL on error. (At the moment, the
+  * only way errors can occur, is when the library cannot read the
+  * conffile, or one of the fingerprint files listed in it.)
++ *
++ * Replace older function (and has exacly the same behaviour)
++ * see below
+  */
+ extern void *textcat_Init( const char *conffile );
+ 
+ /**
++ * Originaly this function had only one parameter (conffile) it has been modified since OOo must be able to load alternativ DB
++ * Basicaly prefix is the directory path where fingerprints are stored
++ */
++extern void *special_textcat_Init( const char *conffile, const char *prefix );
++
++/**
+  * textcat_Done() - Free up resources for handle
+  */
+ extern void textcat_Done( void *handle );
+@@ -77,4 +89,8 @@
+  * textcat_Version() - Returns a string describing the version of this classifier.
+  */
+ extern char *textcat_Version();
++
++#ifdef __cplusplus
++}
++#endif
+ #endif
+--- misc/libtextcat-2.2/src/utf8misc.c	Mon Mar 31 11:30:06 2008
++++ misc/build/libtextcat-2.2/src/utf8misc.c	Mon Mar 31 11:29:14 2008
+@@ -1 +1,132 @@
+-dummy
++/***************************************************************************
++ *   Copyright (C) 2006 by Jocelyn Merand                                  *
++ *   joc.mer@gmail.com                                                     *
++ *                                                                         *
++ * THE BSD LICENSE
++ *
++ * Redistribution and use in source and binary forms, with or without
++ * modification, are permitted provided that the following conditions
++ * are met:
++ *
++ * - Redistributions of source code must retain the above copyright
++ * notice, this list of conditions and the following disclaimer.
++ *
++ * - Redistributions in binary form must reproduce the above copyright
++ * notice, this list of conditions and the following disclaimer in the
++ * documentation and/or other materials provided with the
++ * distribution.
++ *
++ * - Neither the name of the WiseGuys Internet B.V. nor the names of
++ * its contributors may be used to endorse or promote products derived
++ * from this software without specific prior written permission.
++ *
++ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
++ * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
++ * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
++ * A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
++ * OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
++ * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
++ * LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
++ * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
++ * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
++ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
++ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
++ ***************************************************************************/
++
++#ifndef _UTF8_MISC_H_
++#include "utf8misc.h"
++#endif
++
++
++int nextcharstart(const char *str, int position){
++    int pointer = position;
++
++    if(str[pointer] & ESCAPE_MASK){ /*if the first bit of the current char is 1*/
++
++        /*then str[pointer] is an escape character*/
++
++    char escape_char = ((str[pointer] & WEIGHT_MASK) << 1); /*and we use it to count (by bit translation) following characters (only the weightest part)*/
++
++    while(escape_char & ESCAPE_MASK && str[pointer]){/*every step, we move the byte of 1 bit left, when first bit is 0, it's finished*/
++        escape_char = escape_char <<1;
++        ++pointer;
++    }
++    }
++    if(str[pointer]){   /*finaly, if we are not on the \0 character, we jump to the next character*/
++        ++pointer;
++    }
++    return pointer;
++}
++
++
++int charcopy(const char *str, char *dest){
++
++    int pointer = 0;
++    if(str[pointer] & ESCAPE_MASK){ /*if the first bit of the current char is 1*/
++
++        /*then str[pointer] is an escape character*/
++
++        char escape_char = ((str[pointer] & WEIGHT_MASK) << 1); /*and we use it to count following characters (only the weightest part)*/
++
++        while(escape_char & ESCAPE_MASK && str[pointer]){   /*every step, we move the byte of 1 bit left, when first bit is 0, it's finished*/
++            dest[pointer] = str[pointer];
++            escape_char = escape_char <<1;
++            ++pointer;
++        }
++    }
++    if(str[pointer]){
++        dest[pointer] = str[pointer];
++        ++pointer;
++    }
++
++    return pointer;
++}
++
++
++int issame( char *lex, char *key, int len )
++{
++    /*printf("[%s] prefix of [%s] with length %i", lex, key, len);*/
++    int char_counter = 0;
++    int pointer = 0;
++    while(char_counter < len) {
++
++        if(key[pointer] & ESCAPE_MASK){ /*if the first bit of the current char is 1*/
++
++            /*then key[pointer] is an escap character*/
++
++            char escape_char = ((key[pointer] & WEIGHT_MASK) << 1);     /*and we use it to count (only the weightest part)*/
++
++            while(escape_char & ESCAPE_MASK && key[pointer] == lex[pointer] ){
++                escape_char = escape_char <<1;
++                ++pointer;
++            }
++        }
++        ++char_counter; /*and we are on a new utf8 character*/
++        if ( key[pointer] != lex[pointer] ) {
++            return 0;
++            /*printf(" NO\n", lex, key, len);*/
++        }
++        ++pointer;
++    }
++    if ( lex[pointer] != '\0' ) {
++        return 0;
++        /*printf(" NO\n");*/
++    }
++
++    /*printf(" YES\n");*/
++
++    return 1;
++}
++
++
++extern int utfstrlen(const char* str){
++    int char_counter = 0;
++    int pointer = 0;
++    while(str[pointer]) {
++        pointer = nextcharstart(str, pointer);
++
++        ++char_counter; /*and we are on a new utf8 character*/
++    }
++    return char_counter;
++}
++
+--- misc/libtextcat-2.2/src/utf8misc.h	Mon Mar 31 11:30:06 2008
++++ misc/build/libtextcat-2.2/src/utf8misc.h	Mon Mar 31 11:29:14 2008
+@@ -1 +1,88 @@
+-dummy
++/***************************************************************************
++ *   Copyright (C) 2006 by Jocelyn Merand                                  *
++ *   joc.mer@gmail.com                                                     *
++ *                                                                         *
++ * THE BSD LICENSE
++ *
++ * Redistribution and use in source and binary forms, with or without
++ * modification, are permitted provided that the following conditions
++ * are met:
++ *
++ * - Redistributions of source code must retain the above copyright
++ * notice, this list of conditions and the following disclaimer.
++ *
++ * - Redistributions in binary form must reproduce the above copyright
++ * notice, this list of conditions and the following disclaimer in the
++ * documentation and/or other materials provided with the
++ * distribution.
++ *
++ * - Neither the name of the WiseGuys Internet B.V. nor the names of
++ * its contributors may be used to endorse or promote products derived
++ * from this software without specific prior written permission.
++ *
++ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
++ * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
++ * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
++ * A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
++ * OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
++ * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
++ * LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
++ * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
++ * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
++ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
++ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
++ ***************************************************************************/
++
++#ifndef _UTF8_MISC_H_
++#define _UTF8_MISC_H_
++
++/**
++ * These variables are used in character processing functions
++ * These have been added to manage utf-8 symbols, particularly escape chars
++ */
++#ifdef _UTF8_
++#define ESCAPE_MASK 0x80
++#define WEIGHT_MASK 0xF0
++#else
++#define ESCAPE_MASK 0xFF
++#define WEIGHT_MASK 0x00
++#endif
++
++
++/*
++ * Is used to jump to the next start of char
++ * of course it's only usefull when encoding is utf-8
++ * This function have been added by Jocelyn Merand to use libtextcat in OOo
++ */
++int nextcharstart(const char *str, int position);
++
++
++/*Copy the char in str to dest
++ * of course it's only usefull when encoding is utf8 and the symbol is encoded with more than 1 char
++ * return the number of char jumped
++ * This function have been added by Jocelyn Merand to use libtextcat in OOo
++ */
++int charcopy(const char *str, char *dest);
++
++
++/* checks if n-gram lex is a prefix of key and of length len
++* if _UTF8_ is defined, it uses escap characters and len is not realy the length of lex
++* in this case, len is the number of utf-8 char strlen("€") == 3 but len == 1
++*/
++int issame( char *lex, char *key, int len );
++
++
++/* Counts the number of characters
++* if _UTF8_ is defined, it uses escap characters and the result is not realy the length of str
++* in this case, the result is the number of utf-8 char strlen("€") == 3 but utfstrlen("€") == 1
++*/
++#ifdef __cplusplus
++extern "C" {
++#endif
++extern int utfstrlen(const char* str);
++#ifdef __cplusplus
++}
++#endif
++
++#endif
++
+--- misc/libtextcat-2.2/src/win32_config.h	Mon Mar 31 11:30:06 2008
++++ misc/build/libtextcat-2.2/src/win32_config.h	Mon Mar 31 11:29:14 2008
+@@ -1 +1,136 @@
+-dummy
++/* src/config.h.  Generated by configure.  */
++/* src/config.h.in.  Generated from configure.ac by autoheader.  */
++
++/* Define to one of `_getb67', `GETB67', `getb67' for Cray-2 and Cray-YMP
++   systems. This function is required for `alloca.c' support on those systems.
++   */
++/* #undef CRAY_STACKSEG_END */
++
++/* Define to 1 if using `alloca.c'. */
++/* #undef C_ALLOCA */
++
++/* Define to 1 if you have `alloca', as a function or macro. */
++/* #undef HAVE_ALLOCA */
++
++/* Define to 1 if you have <alloca.h> and it should be used (not on Ultrix).
++   */
++/* #undef HAVE_ALLOCA_H */
++
++/* Define to 1 if you have the <dlfcn.h> header file. */
++#define HAVE_DLFCN_H 1
++
++/* Define to 1 if you don't have `vprintf' but do have `_doprnt.' */
++/* #undef HAVE_DOPRNT */
++
++/* Define to 1 if you have the `gettimeofday' function. */
++/* #undef  HAVE_GETTIMEOFDAY */
++
++/* Define to 1 if you have the <inttypes.h> header file. */
++/* #undef  HAVE_INTTYPES_H */
++
++/* Define to 1 if you have the <limits.h> header file. */
++#define HAVE_LIMITS_H 1
++
++/* Define to 1 if your system has a GNU libc compatible `malloc' function, and
++   to 0 otherwise. */
++#define HAVE_MALLOC 1
++
++/* Define to 1 if you have the <memory.h> header file. */
++#define HAVE_MEMORY_H 1
++
++/* Define to 1 if you have the `memset' function. */
++#define HAVE_MEMSET 1
++
++/* Define to 1 if your system has a GNU libc compatible `realloc' function,
++   and to 0 otherwise. */
++#define HAVE_REALLOC 1
++
++/* Define to 1 if you have the <stdint.h> header file. */
++/* #undef  HAVE_STDINT_H */
++
++/* Define to 1 if you have the <stdlib.h> header file. */
++#define HAVE_STDLIB_H 1
++
++/* Define to 1 if you have the `strchr' function. */
++#define HAVE_STRCHR 1
++
++/* Define to 1 if you have the `strdup' function. */
++#define HAVE_STRDUP 1
++
++/* Define to 1 if you have the <strings.h> header file. */
++/* #undef HAVE_STRINGS_H */
++
++/* Define to 1 if you have the <string.h> header file. */
++#define HAVE_STRING_H 1
++
++/* Define to 1 if you have the `strpbrk' function. */
++#define HAVE_STRPBRK 1
++
++/* Define to 1 if you have the <sys/stat.h> header file. */
++#define HAVE_SYS_STAT_H 1
++
++/* Define to 1 if you have the <sys/time.h> header file. */
++/* #undef  HAVE_SYS_TIME_H */
++
++/* Define to 1 if you have the <sys/types.h> header file. */
++#define HAVE_SYS_TYPES_H 1
++
++/* Define to 1 if you have the <unistd.h> header file. */
++#define HAVE_UNISTD_H 1
++
++/* Define to 1 if you have the `vprintf' function. */
++#define HAVE_VPRINTF 1
++
++/* Name of package */
++#define PACKAGE "libtextcat"
++
++/* Define to the address where bug reports for this package should be sent. */
++#define PACKAGE_BUGREPORT ""
++
++/* Define to the full name of this package. */
++#define PACKAGE_NAME "libtextcat"
++
++/* Define to the full name and version of this package. */
++#define PACKAGE_STRING "libtextcat 2.2"
++
++/* Define to the one symbol short name of this package. */
++#define PACKAGE_TARNAME "libtextcat"
++
++/* Define to the version of this package. */
++#define PACKAGE_VERSION "2.2"
++
++/* If using the C implementation of alloca, define if you know the
++   direction of stack growth for your system; otherwise it will be
++   automatically deduced at run-time.
++        STACK_DIRECTION > 0 => grows toward higher addresses
++        STACK_DIRECTION < 0 => grows toward lower addresses
++        STACK_DIRECTION = 0 => direction of growth unknown */
++/* #undef STACK_DIRECTION */
++
++/* Define to 1 if you have the ANSI C header files. */
++#define STDC_HEADERS 1
++
++/* Define to 1 if you can safely include both <sys/time.h> and <time.h>. */
++#define TIME_WITH_SYS_TIME 1
++
++/* Define to 1 if your <sys/time.h> declares `struct tm'. */
++/* #undef TM_IN_SYS_TIME */
++
++/* Version number of package */
++#define VERSION "2.2"
++
++/* Define to empty if `const' does not conform to ANSI C. */
++/* #undef const */
++
++/* Define as `__inline' if that's what the C compiler calls it, or to nothing
++   if it is not supported. */
++/* #undef inline */
++
++/* Define to rpl_malloc if the replacement function should be used. */
++/* #undef malloc */
++
++/* Define to rpl_realloc if the replacement function should be used. */
++/* #undef realloc */
++
++/* Define to `unsigned' if <sys/types.h> does not define. */
++/* #undef size_t */
+--- misc/libtextcat-2.2/config.guess	2010-04-15 09:20:04.000000000 +0000
++++ misc/build/libtextcat-2.2/config.guess	2010-04-15 09:20:41.000000000 +0000
+@@ -1,9 +1,10 @@
+ #! /bin/sh
+ # Attempt to guess a canonical system name.
+ #   Copyright (C) 1992, 1993, 1994, 1995, 1996, 1997, 1998, 1999,
+-#   2000, 2001, 2002 Free Software Foundation, Inc.
++#   2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010
++#   Free Software Foundation, Inc.
+ 
+-timestamp='2002-10-21'
++timestamp='2009-12-30'
+ 
+ # This file is free software; you can redistribute it and/or modify it
+ # under the terms of the GNU General Public License as published by
+@@ -17,23 +18,25 @@
+ #
+ # You should have received a copy of the GNU General Public License
+ # along with this program; if not, write to the Free Software
+-# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
++# Foundation, Inc., 51 Franklin Street - Fifth Floor, Boston, MA
++# 02110-1301, USA.
+ #
+ # As a special exception to the GNU General Public License, if you
+ # distribute this file as part of a program that contains a
+ # configuration script generated by Autoconf, you may include it under
+ # the same distribution terms that you use for the rest of that program.
+ 
+-# Originally written by Per Bothner <per@bothner.com>.
+-# Please send patches to <config-patches@gnu.org>.  Submit a context
+-# diff and a properly formatted ChangeLog entry.
++
++# Originally written by Per Bothner.  Please send patches (context
++# diff format) to <config-patches@gnu.org> and include a ChangeLog
++# entry.
+ #
+ # This script attempts to guess a canonical system name similar to
+ # config.sub.  If it succeeds, it prints the system name on stdout, and
+ # exits with 0.  Otherwise, it exits with 1.
+ #
+-# The plan is that this can be called by configure scripts if you
+-# don't specify an explicit build system type.
++# You can get the latest version of this script from:
++# http://git.savannah.gnu.org/gitweb/?p=config.git;a=blob_plain;f=config.guess;hb=HEAD
+ 
+ me=`echo "$0" | sed -e 's,.*/,,'`
+ 
+@@ -53,8 +56,9 @@
+ GNU config.guess ($timestamp)
+ 
+ Originally written by Per Bothner.
+-Copyright (C) 1992, 1993, 1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001
+-Free Software Foundation, Inc.
++Copyright (C) 1992, 1993, 1994, 1995, 1996, 1997, 1998, 1999, 2000,
++2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free
++Software Foundation, Inc.
+ 
+ This is free software; see the source for copying conditions.  There is NO
+ warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE."
+@@ -66,11 +70,11 @@
+ while test $# -gt 0 ; do
+   case $1 in
+     --time-stamp | --time* | -t )
+-       echo "$timestamp" ; exit 0 ;;
++       echo "$timestamp" ; exit ;;
+     --version | -v )
+-       echo "$version" ; exit 0 ;;
++       echo "$version" ; exit ;;
+     --help | --h* | -h )
+-       echo "$usage"; exit 0 ;;
++       echo "$usage"; exit ;;
+     -- )     # Stop option processing
+        shift; break ;;
+     - )	# Use stdin as input.
+@@ -98,14 +102,18 @@
+ # Historically, `CC_FOR_BUILD' used to be named `HOST_CC'. We still
+ # use `HOST_CC' if defined, but it is deprecated.
+ 
+-# This shell variable is my proudest work .. or something. --bje
++# Portable tmp directory creation inspired by the Autoconf team.
+ 
+-set_cc_for_build='tmpdir=${TMPDIR-/tmp}/config-guess-$$ ;
+-(old=`umask` && umask 077 && mkdir $tmpdir && umask $old && unset old)
+-   || (echo "$me: cannot create $tmpdir" >&2 && exit 1) ;
+-dummy=$tmpdir/dummy ;
+-files="$dummy.c $dummy.o $dummy.rel $dummy" ;
+-trap '"'"'rm -f $files; rmdir $tmpdir; exit 1'"'"' 1 2 15 ;
++set_cc_for_build='
++trap "exitcode=\$?; (rm -f \$tmpfiles 2>/dev/null; rmdir \$tmp 2>/dev/null) && exit \$exitcode" 0 ;
++trap "rm -f \$tmpfiles 2>/dev/null; rmdir \$tmp 2>/dev/null; exit 1" 1 2 13 15 ;
++: ${TMPDIR=/tmp} ;
++ { tmp=`(umask 077 && mktemp -d "$TMPDIR/cgXXXXXX") 2>/dev/null` && test -n "$tmp" && test -d "$tmp" ; } ||
++ { test -n "$RANDOM" && tmp=$TMPDIR/cg$$-$RANDOM && (umask 077 && mkdir $tmp) ; } ||
++ { tmp=$TMPDIR/cg-$$ && (umask 077 && mkdir $tmp) && echo "Warning: creating insecure temp directory" >&2 ; } ||
++ { echo "$me: cannot create a temporary directory in $TMPDIR" >&2 ; exit 1 ; } ;
++dummy=$tmp/dummy ;
++tmpfiles="$dummy.c $dummy.o $dummy.rel $dummy" ;
+ case $CC_FOR_BUILD,$HOST_CC,$CC in
+  ,,)    echo "int x;" > $dummy.c ;
+ 	for c in cc gcc c89 c99 ; do
+@@ -113,15 +121,13 @@
+ 	     CC_FOR_BUILD="$c"; break ;
+ 	  fi ;
+ 	done ;
+-	rm -f $files ;
+ 	if test x"$CC_FOR_BUILD" = x ; then
+ 	  CC_FOR_BUILD=no_compiler_found ;
+ 	fi
+ 	;;
+  ,,*)   CC_FOR_BUILD=$CC ;;
+  ,*,*)  CC_FOR_BUILD=$HOST_CC ;;
+-esac ;
+-unset files'
++esac ; set_cc_for_build= ;'
+ 
+ # This is needed to find uname on a Pyramid OSx when run in the BSD universe.
+ # (ghazi@noc.rutgers.edu 1994-08-24)
+@@ -156,6 +162,7 @@
+ 	    arm*) machine=arm-unknown ;;
+ 	    sh3el) machine=shl-unknown ;;
+ 	    sh3eb) machine=sh-unknown ;;
++	    sh5el) machine=sh5le-unknown ;;
+ 	    *) machine=${UNAME_MACHINE_ARCH}-unknown ;;
+ 	esac
+ 	# The Operating System including object format, if it has switched
+@@ -164,7 +171,7 @@
+ 	    arm*|i386|m68k|ns32k|sh3*|sparc|vax)
+ 		eval $set_cc_for_build
+ 		if echo __ELF__ | $CC_FOR_BUILD -E - 2>/dev/null \
+-			| grep __ELF__ >/dev/null
++			| grep -q __ELF__
+ 		then
+ 		    # Once all utilities can be ECOFF (netbsdecoff) or a.out (netbsdaout).
+ 		    # Return netbsd for either.  FIX?
+@@ -178,144 +185,128 @@
+ 		;;
+ 	esac
+ 	# The OS release
+-	release=`echo ${UNAME_RELEASE}|sed -e 's/[-_].*/\./'`
++	# Debian GNU/NetBSD machines have a different userland, and
++	# thus, need a distinct triplet. However, they do not need
++	# kernel version information, so it can be replaced with a
++	# suitable tag, in the style of linux-gnu.
++	case "${UNAME_VERSION}" in
++	    Debian*)
++		release='-gnu'
++		;;
++	    *)
++		release=`echo ${UNAME_RELEASE}|sed -e 's/[-_].*/\./'`
++		;;
++	esac
+ 	# Since CPU_TYPE-MANUFACTURER-KERNEL-OPERATING_SYSTEM:
+ 	# contains redundant information, the shorter form:
+ 	# CPU_TYPE-MANUFACTURER-OPERATING_SYSTEM is used.
+ 	echo "${machine}-${os}${release}"
+-	exit 0 ;;
+-    amiga:OpenBSD:*:*)
+-	echo m68k-unknown-openbsd${UNAME_RELEASE}
+-	exit 0 ;;
+-    arc:OpenBSD:*:*)
+-	echo mipsel-unknown-openbsd${UNAME_RELEASE}
+-	exit 0 ;;
+-    hp300:OpenBSD:*:*)
+-	echo m68k-unknown-openbsd${UNAME_RELEASE}
+-	exit 0 ;;
+-    mac68k:OpenBSD:*:*)
+-	echo m68k-unknown-openbsd${UNAME_RELEASE}
+-	exit 0 ;;
+-    macppc:OpenBSD:*:*)
+-	echo powerpc-unknown-openbsd${UNAME_RELEASE}
+-	exit 0 ;;
+-    mvme68k:OpenBSD:*:*)
+-	echo m68k-unknown-openbsd${UNAME_RELEASE}
+-	exit 0 ;;
+-    mvme88k:OpenBSD:*:*)
+-	echo m88k-unknown-openbsd${UNAME_RELEASE}
+-	exit 0 ;;
+-    mvmeppc:OpenBSD:*:*)
+-	echo powerpc-unknown-openbsd${UNAME_RELEASE}
+-	exit 0 ;;
+-    pmax:OpenBSD:*:*)
+-	echo mipsel-unknown-openbsd${UNAME_RELEASE}
+-	exit 0 ;;
+-    sgi:OpenBSD:*:*)
+-	echo mipseb-unknown-openbsd${UNAME_RELEASE}
+-	exit 0 ;;
+-    sun3:OpenBSD:*:*)
+-	echo m68k-unknown-openbsd${UNAME_RELEASE}
+-	exit 0 ;;
+-    wgrisc:OpenBSD:*:*)
+-	echo mipsel-unknown-openbsd${UNAME_RELEASE}
+-	exit 0 ;;
++	exit ;;
+     *:OpenBSD:*:*)
+-	echo ${UNAME_MACHINE}-unknown-openbsd${UNAME_RELEASE}
+-	exit 0 ;;
++	UNAME_MACHINE_ARCH=`arch | sed 's/OpenBSD.//'`
++	echo ${UNAME_MACHINE_ARCH}-unknown-openbsd${UNAME_RELEASE}
++	exit ;;
++    *:ekkoBSD:*:*)
++	echo ${UNAME_MACHINE}-unknown-ekkobsd${UNAME_RELEASE}
++	exit ;;
++    *:SolidBSD:*:*)
++	echo ${UNAME_MACHINE}-unknown-solidbsd${UNAME_RELEASE}
++	exit ;;
++    macppc:MirBSD:*:*)
++	echo powerpc-unknown-mirbsd${UNAME_RELEASE}
++	exit ;;
++    *:MirBSD:*:*)
++	echo ${UNAME_MACHINE}-unknown-mirbsd${UNAME_RELEASE}
++	exit ;;
+     alpha:OSF1:*:*)
+-	if test $UNAME_RELEASE = "V4.0"; then
++	case $UNAME_RELEASE in
++	*4.0)
+ 		UNAME_RELEASE=`/usr/sbin/sizer -v | awk '{print $3}'`
+-	fi
++		;;
++	*5.*)
++	        UNAME_RELEASE=`/usr/sbin/sizer -v | awk '{print $4}'`
++		;;
++	esac
++	# According to Compaq, /usr/sbin/psrinfo has been available on
++	# OSF/1 and Tru64 systems produced since 1995.  I hope that
++	# covers most systems running today.  This code pipes the CPU
++	# types through head -n 1, so we only detect the type of CPU 0.
++	ALPHA_CPU_TYPE=`/usr/sbin/psrinfo -v | sed -n -e 's/^  The alpha \(.*\) processor.*$/\1/p' | head -n 1`
++	case "$ALPHA_CPU_TYPE" in
++	    "EV4 (21064)")
++		UNAME_MACHINE="alpha" ;;
++	    "EV4.5 (21064)")
++		UNAME_MACHINE="alpha" ;;
++	    "LCA4 (21066/21068)")
++		UNAME_MACHINE="alpha" ;;
++	    "EV5 (21164)")
++		UNAME_MACHINE="alphaev5" ;;
++	    "EV5.6 (21164A)")
++		UNAME_MACHINE="alphaev56" ;;
++	    "EV5.6 (21164PC)")
++		UNAME_MACHINE="alphapca56" ;;
++	    "EV5.7 (21164PC)")
++		UNAME_MACHINE="alphapca57" ;;
++	    "EV6 (21264)")
++		UNAME_MACHINE="alphaev6" ;;
++	    "EV6.7 (21264A)")
++		UNAME_MACHINE="alphaev67" ;;
++	    "EV6.8CB (21264C)")
++		UNAME_MACHINE="alphaev68" ;;
++	    "EV6.8AL (21264B)")
++		UNAME_MACHINE="alphaev68" ;;
++	    "EV6.8CX (21264D)")
++		UNAME_MACHINE="alphaev68" ;;
++	    "EV6.9A (21264/EV69A)")
++		UNAME_MACHINE="alphaev69" ;;
++	    "EV7 (21364)")
++		UNAME_MACHINE="alphaev7" ;;
++	    "EV7.9 (21364A)")
++		UNAME_MACHINE="alphaev79" ;;
++	esac
++	# A Pn.n version is a patched version.
+ 	# A Vn.n version is a released version.
+ 	# A Tn.n version is a released field test version.
+ 	# A Xn.n version is an unreleased experimental baselevel.
+ 	# 1.2 uses "1.2" for uname -r.
+-	eval $set_cc_for_build
+-	cat <<EOF >$dummy.s
+-	.data
+-\$Lformat:
+-	.byte 37,100,45,37,120,10,0	# "%d-%x\n"
+-
+-	.text
+-	.globl main
+-	.align 4
+-	.ent main
+-main:
+-	.frame \$30,16,\$26,0
+-	ldgp \$29,0(\$27)
+-	.prologue 1
+-	.long 0x47e03d80 # implver \$0
+-	lda \$2,-1
+-	.long 0x47e20c21 # amask \$2,\$1
+-	lda \$16,\$Lformat
+-	mov \$0,\$17
+-	not \$1,\$18
+-	jsr \$26,printf
+-	ldgp \$29,0(\$26)
+-	mov 0,\$16
+-	jsr \$26,exit
+-	.end main
+-EOF
+-	$CC_FOR_BUILD -o $dummy $dummy.s 2>/dev/null
+-	if test "$?" = 0 ; then
+-		case `$dummy` in
+-			0-0)
+-				UNAME_MACHINE="alpha"
+-				;;
+-			1-0)
+-				UNAME_MACHINE="alphaev5"
+-				;;
+-			1-1)
+-				UNAME_MACHINE="alphaev56"
+-				;;
+-			1-101)
+-				UNAME_MACHINE="alphapca56"
+-				;;
+-			2-303)
+-				UNAME_MACHINE="alphaev6"
+-				;;
+-			2-307)
+-				UNAME_MACHINE="alphaev67"
+-				;;
+-			2-1307)
+-				UNAME_MACHINE="alphaev68"
+-				;;
+-			3-1307)
+-				UNAME_MACHINE="alphaev7"
+-				;;
+-		esac
+-	fi
+-	rm -f $dummy.s $dummy && rmdir $tmpdir
+-	echo ${UNAME_MACHINE}-dec-osf`echo ${UNAME_RELEASE} | sed -e 's/^[VTX]//' | tr 'ABCDEFGHIJKLMNOPQRSTUVWXYZ' 'abcdefghijklmnopqrstuvwxyz'`
+-	exit 0 ;;
++	echo ${UNAME_MACHINE}-dec-osf`echo ${UNAME_RELEASE} | sed -e 's/^[PVTX]//' | tr 'ABCDEFGHIJKLMNOPQRSTUVWXYZ' 'abcdefghijklmnopqrstuvwxyz'`
++	exit ;;
+     Alpha\ *:Windows_NT*:*)
+ 	# How do we know it's Interix rather than the generic POSIX subsystem?
+ 	# Should we change UNAME_MACHINE based on the output of uname instead
+ 	# of the specific Alpha model?
+ 	echo alpha-pc-interix
+-	exit 0 ;;
++	exit ;;
+     21064:Windows_NT:50:3)
+ 	echo alpha-dec-winnt3.5
+-	exit 0 ;;
++	exit ;;
+     Amiga*:UNIX_System_V:4.0:*)
+ 	echo m68k-unknown-sysv4
+-	exit 0;;
++	exit ;;
+     *:[Aa]miga[Oo][Ss]:*:*)
+ 	echo ${UNAME_MACHINE}-unknown-amigaos
+-	exit 0 ;;
++	exit ;;
+     *:[Mm]orph[Oo][Ss]:*:*)
+ 	echo ${UNAME_MACHINE}-unknown-morphos
+-	exit 0 ;;
++	exit ;;
+     *:OS/390:*:*)
+ 	echo i370-ibm-openedition
+-	exit 0 ;;
++	exit ;;
++    *:z/VM:*:*)
++	echo s390-ibm-zvmoe
++	exit ;;
++    *:OS400:*:*)
++        echo powerpc-ibm-os400
++	exit ;;
+     arm:RISC*:1.[012]*:*|arm:riscix:1.[012]*:*)
+ 	echo arm-acorn-riscix${UNAME_RELEASE}
+-	exit 0;;
++	exit ;;
++    arm:riscos:*:*|arm:RISCOS:*:*)
++	echo arm-unknown-riscos
++	exit ;;
+     SR2?01:HI-UX/MPP:*:* | SR8000:HI-UX/MPP:*:*)
+ 	echo hppa1.1-hitachi-hiuxmpp
+-	exit 0;;
++	exit ;;
+     Pyramid*:OSx*:*:* | MIS*:OSx*:*:* | MIS*:SMP_DC-OSx*:*:*)
+ 	# akee@wpdis03.wpafb.af.mil (Earle F. Ake) contributed MIS and NILE.
+ 	if test "`(/bin/universe) 2>/dev/null`" = att ; then
+@@ -323,29 +314,51 @@
+ 	else
+ 		echo pyramid-pyramid-bsd
+ 	fi
+-	exit 0 ;;
++	exit ;;
+     NILE*:*:*:dcosx)
+ 	echo pyramid-pyramid-svr4
+-	exit 0 ;;
+-    DRS?6000:UNIX_SV:4.2*:7*)
++	exit ;;
++    DRS?6000:unix:4.0:6*)
++	echo sparc-icl-nx6
++	exit ;;
++    DRS?6000:UNIX_SV:4.2*:7* | DRS?6000:isis:4.2*:7*)
+ 	case `/usr/bin/uname -p` in
+-	    sparc) echo sparc-icl-nx7 && exit 0 ;;
++	    sparc) echo sparc-icl-nx7; exit ;;
+ 	esac ;;
++    s390x:SunOS:*:*)
++	echo ${UNAME_MACHINE}-ibm-solaris2`echo ${UNAME_RELEASE}|sed -e 's/[^.]*//'`
++	exit ;;
+     sun4H:SunOS:5.*:*)
+ 	echo sparc-hal-solaris2`echo ${UNAME_RELEASE}|sed -e 's/[^.]*//'`
+-	exit 0 ;;
++	exit ;;
+     sun4*:SunOS:5.*:* | tadpole*:SunOS:5.*:*)
+ 	echo sparc-sun-solaris2`echo ${UNAME_RELEASE}|sed -e 's/[^.]*//'`
+-	exit 0 ;;
+-    i86pc:SunOS:5.*:*)
+-	echo i386-pc-solaris2`echo ${UNAME_RELEASE}|sed -e 's/[^.]*//'`
+-	exit 0 ;;
++	exit ;;
++    i86pc:AuroraUX:5.*:* | i86xen:AuroraUX:5.*:*)
++	echo i386-pc-auroraux${UNAME_RELEASE}
++	exit ;;
++    i86pc:SunOS:5.*:* | i86xen:SunOS:5.*:*)
++	eval $set_cc_for_build
++	SUN_ARCH="i386"
++	# If there is a compiler, see if it is configured for 64-bit objects.
++	# Note that the Sun cc does not turn __LP64__ into 1 like gcc does.
++	# This test works for both compilers.
++	if [ "$CC_FOR_BUILD" != 'no_compiler_found' ]; then
++	    if (echo '#ifdef __amd64'; echo IS_64BIT_ARCH; echo '#endif') | \
++		(CCOPTS= $CC_FOR_BUILD -E - 2>/dev/null) | \
++		grep IS_64BIT_ARCH >/dev/null
++	    then
++		SUN_ARCH="x86_64"
++	    fi
++	fi
++	echo ${SUN_ARCH}-pc-solaris2`echo ${UNAME_RELEASE}|sed -e 's/[^.]*//'`
++	exit ;;
+     sun4*:SunOS:6*:*)
+ 	# According to config.sub, this is the proper way to canonicalize
+ 	# SunOS6.  Hard to guess exactly what SunOS6 will be like, but
+ 	# it's likely to be more like Solaris than SunOS4.
+ 	echo sparc-sun-solaris3`echo ${UNAME_RELEASE}|sed -e 's/[^.]*//'`
+-	exit 0 ;;
++	exit ;;
+     sun4*:SunOS:*:*)
+ 	case "`/usr/bin/arch -k`" in
+ 	    Series*|S4*)
+@@ -354,10 +367,10 @@
+ 	esac
+ 	# Japanese Language versions have a version number like `4.1.3-JL'.
+ 	echo sparc-sun-sunos`echo ${UNAME_RELEASE}|sed -e 's/-/_/'`
+-	exit 0 ;;
++	exit ;;
+     sun3*:SunOS:*:*)
+ 	echo m68k-sun-sunos${UNAME_RELEASE}
+-	exit 0 ;;
++	exit ;;
+     sun*:*:4.2BSD:*)
+ 	UNAME_RELEASE=`(sed 1q /etc/motd | awk '{print substr($5,1,3)}') 2>/dev/null`
+ 	test "x${UNAME_RELEASE}" = "x" && UNAME_RELEASE=3
+@@ -369,10 +382,10 @@
+ 		echo sparc-sun-sunos${UNAME_RELEASE}
+ 		;;
+ 	esac
+-	exit 0 ;;
++	exit ;;
+     aushp:SunOS:*:*)
+ 	echo sparc-auspex-sunos${UNAME_RELEASE}
+-	exit 0 ;;
++	exit ;;
+     # The situation for MiNT is a little confusing.  The machine name
+     # can be virtually everything (everything which is not
+     # "atarist" or "atariste" at least should have a processor
+@@ -383,37 +396,40 @@
+     # be no problem.
+     atarist[e]:*MiNT:*:* | atarist[e]:*mint:*:* | atarist[e]:*TOS:*:*)
+         echo m68k-atari-mint${UNAME_RELEASE}
+-	exit 0 ;;
++	exit ;;
+     atari*:*MiNT:*:* | atari*:*mint:*:* | atarist[e]:*TOS:*:*)
+ 	echo m68k-atari-mint${UNAME_RELEASE}
+-        exit 0 ;;
++        exit ;;
+     *falcon*:*MiNT:*:* | *falcon*:*mint:*:* | *falcon*:*TOS:*:*)
+         echo m68k-atari-mint${UNAME_RELEASE}
+-	exit 0 ;;
++	exit ;;
+     milan*:*MiNT:*:* | milan*:*mint:*:* | *milan*:*TOS:*:*)
+         echo m68k-milan-mint${UNAME_RELEASE}
+-        exit 0 ;;
++        exit ;;
+     hades*:*MiNT:*:* | hades*:*mint:*:* | *hades*:*TOS:*:*)
+         echo m68k-hades-mint${UNAME_RELEASE}
+-        exit 0 ;;
++        exit ;;
+     *:*MiNT:*:* | *:*mint:*:* | *:*TOS:*:*)
+         echo m68k-unknown-mint${UNAME_RELEASE}
+-        exit 0 ;;
++        exit ;;
++    m68k:machten:*:*)
++	echo m68k-apple-machten${UNAME_RELEASE}
++	exit ;;
+     powerpc:machten:*:*)
+ 	echo powerpc-apple-machten${UNAME_RELEASE}
+-	exit 0 ;;
++	exit ;;
+     RISC*:Mach:*:*)
+ 	echo mips-dec-mach_bsd4.3
+-	exit 0 ;;
++	exit ;;
+     RISC*:ULTRIX:*:*)
+ 	echo mips-dec-ultrix${UNAME_RELEASE}
+-	exit 0 ;;
++	exit ;;
+     VAX*:ULTRIX*:*:*)
+ 	echo vax-dec-ultrix${UNAME_RELEASE}
+-	exit 0 ;;
++	exit ;;
+     2020:CLIX:*:* | 2430:CLIX:*:*)
+ 	echo clipper-intergraph-clix${UNAME_RELEASE}
+-	exit 0 ;;
++	exit ;;
+     mips:*:*:UMIPS | mips:*:*:RISCos)
+ 	eval $set_cc_for_build
+ 	sed 's/^	//' << EOF >$dummy.c
+@@ -437,33 +453,33 @@
+ 	  exit (-1);
+ 	}
+ EOF
+-	$CC_FOR_BUILD -o $dummy $dummy.c \
+-	  && $dummy `echo "${UNAME_RELEASE}" | sed -n 's/\([0-9]*\).*/\1/p'` \
+-	  && rm -f $dummy.c $dummy && rmdir $tmpdir && exit 0
+-	rm -f $dummy.c $dummy && rmdir $tmpdir
++	$CC_FOR_BUILD -o $dummy $dummy.c &&
++	  dummyarg=`echo "${UNAME_RELEASE}" | sed -n 's/\([0-9]*\).*/\1/p'` &&
++	  SYSTEM_NAME=`$dummy $dummyarg` &&
++	    { echo "$SYSTEM_NAME"; exit; }
+ 	echo mips-mips-riscos${UNAME_RELEASE}
+-	exit 0 ;;
++	exit ;;
+     Motorola:PowerMAX_OS:*:*)
+ 	echo powerpc-motorola-powermax
+-	exit 0 ;;
++	exit ;;
+     Motorola:*:4.3:PL8-*)
+ 	echo powerpc-harris-powermax
+-	exit 0 ;;
+-    Night_Hawk:*:*:PowerMAX_OS)
++	exit ;;
++    Night_Hawk:*:*:PowerMAX_OS | Synergy:PowerMAX_OS:*:*)
+ 	echo powerpc-harris-powermax
+-	exit 0 ;;
++	exit ;;
+     Night_Hawk:Power_UNIX:*:*)
+ 	echo powerpc-harris-powerunix
+-	exit 0 ;;
++	exit ;;
+     m88k:CX/UX:7*:*)
+ 	echo m88k-harris-cxux7
+-	exit 0 ;;
++	exit ;;
+     m88k:*:4*:R4*)
+ 	echo m88k-motorola-sysv4
+-	exit 0 ;;
++	exit ;;
+     m88k:*:3*:R3*)
+ 	echo m88k-motorola-sysv3
+-	exit 0 ;;
++	exit ;;
+     AViiON:dgux:*:*)
+         # DG/UX returns AViiON for all architectures
+         UNAME_PROCESSOR=`/usr/bin/uname -p`
+@@ -479,29 +495,29 @@
+ 	else
+ 	    echo i586-dg-dgux${UNAME_RELEASE}
+ 	fi
+- 	exit 0 ;;
++ 	exit ;;
+     M88*:DolphinOS:*:*)	# DolphinOS (SVR3)
+ 	echo m88k-dolphin-sysv3
+-	exit 0 ;;
++	exit ;;
+     M88*:*:R3*:*)
+ 	# Delta 88k system running SVR3
+ 	echo m88k-motorola-sysv3
+-	exit 0 ;;
++	exit ;;
+     XD88*:*:*:*) # Tektronix XD88 system running UTekV (SVR3)
+ 	echo m88k-tektronix-sysv3
+-	exit 0 ;;
++	exit ;;
+     Tek43[0-9][0-9]:UTek:*:*) # Tektronix 4300 system running UTek (BSD)
+ 	echo m68k-tektronix-bsd
+-	exit 0 ;;
++	exit ;;
+     *:IRIX*:*:*)
+ 	echo mips-sgi-irix`echo ${UNAME_RELEASE}|sed -e 's/-/_/g'`
+-	exit 0 ;;
++	exit ;;
+     ????????:AIX?:[12].1:2)   # AIX 2.2.1 or AIX 2.1.1 is RT/PC AIX.
+-	echo romp-ibm-aix      # uname -m gives an 8 hex-code CPU id
+-	exit 0 ;;              # Note that: echo "'`uname -s`'" gives 'AIX '
++	echo romp-ibm-aix     # uname -m gives an 8 hex-code CPU id
++	exit ;;               # Note that: echo "'`uname -s`'" gives 'AIX '
+     i*86:AIX:*:*)
+ 	echo i386-ibm-aix
+-	exit 0 ;;
++	exit ;;
+     ia64:AIX:*:*)
+ 	if [ -x /usr/bin/oslevel ] ; then
+ 		IBM_REV=`/usr/bin/oslevel`
+@@ -509,7 +525,7 @@
+ 		IBM_REV=${UNAME_VERSION}.${UNAME_RELEASE}
+ 	fi
+ 	echo ${UNAME_MACHINE}-ibm-aix${IBM_REV}
+-	exit 0 ;;
++	exit ;;
+     *:AIX:2:3)
+ 	if grep bos325 /usr/include/stdio.h >/dev/null 2>&1; then
+ 		eval $set_cc_for_build
+@@ -524,16 +540,19 @@
+ 			exit(0);
+ 			}
+ EOF
+-		$CC_FOR_BUILD -o $dummy $dummy.c && $dummy && rm -f $dummy.c $dummy && rmdir $tmpdir && exit 0
+-		rm -f $dummy.c $dummy && rmdir $tmpdir
+-		echo rs6000-ibm-aix3.2.5
++		if $CC_FOR_BUILD -o $dummy $dummy.c && SYSTEM_NAME=`$dummy`
++		then
++			echo "$SYSTEM_NAME"
++		else
++			echo rs6000-ibm-aix3.2.5
++		fi
+ 	elif grep bos324 /usr/include/stdio.h >/dev/null 2>&1; then
+ 		echo rs6000-ibm-aix3.2.4
+ 	else
+ 		echo rs6000-ibm-aix3.2
+ 	fi
+-	exit 0 ;;
+-    *:AIX:*:[45])
++	exit ;;
++    *:AIX:*:[456])
+ 	IBM_CPU_ID=`/usr/sbin/lsdev -C -c processor -S available | sed 1q | awk '{ print $1 }'`
+ 	if /usr/sbin/lsattr -El ${IBM_CPU_ID} | grep ' POWER' >/dev/null 2>&1; then
+ 		IBM_ARCH=rs6000
+@@ -546,28 +565,28 @@
+ 		IBM_REV=${UNAME_VERSION}.${UNAME_RELEASE}
+ 	fi
+ 	echo ${IBM_ARCH}-ibm-aix${IBM_REV}
+-	exit 0 ;;
++	exit ;;
+     *:AIX:*:*)
+ 	echo rs6000-ibm-aix
+-	exit 0 ;;
++	exit ;;
+     ibmrt:4.4BSD:*|romp-ibm:BSD:*)
+ 	echo romp-ibm-bsd4.4
+-	exit 0 ;;
++	exit ;;
+     ibmrt:*BSD:*|romp-ibm:BSD:*)            # covers RT/PC BSD and
+ 	echo romp-ibm-bsd${UNAME_RELEASE}   # 4.3 with uname added to
+-	exit 0 ;;                           # report: romp-ibm BSD 4.3
++	exit ;;                             # report: romp-ibm BSD 4.3
+     *:BOSX:*:*)
+ 	echo rs6000-bull-bosx
+-	exit 0 ;;
++	exit ;;
+     DPX/2?00:B.O.S.:*:*)
+ 	echo m68k-bull-sysv3
+-	exit 0 ;;
++	exit ;;
+     9000/[34]??:4.3bsd:1.*:*)
+ 	echo m68k-hp-bsd
+-	exit 0 ;;
++	exit ;;
+     hp300:4.4BSD:*:* | 9000/[34]??:4.3bsd:2.*:*)
+ 	echo m68k-hp-bsd4.4
+-	exit 0 ;;
++	exit ;;
+     9000/[34678]??:HP-UX:*:*)
+ 	HPUX_REV=`echo ${UNAME_RELEASE}|sed -e 's/[^.]*.[0B]*//'`
+ 	case "${UNAME_MACHINE}" in
+@@ -624,16 +643,36 @@
+               }
+ EOF
+ 		    (CCOPTS= $CC_FOR_BUILD -o $dummy $dummy.c 2>/dev/null) && HP_ARCH=`$dummy`
+-		    if test -z "$HP_ARCH"; then HP_ARCH=hppa; fi
+-		    rm -f $dummy.c $dummy && rmdir $tmpdir
++		    test -z "$HP_ARCH" && HP_ARCH=hppa
+ 		fi ;;
+ 	esac
++	if [ ${HP_ARCH} = "hppa2.0w" ]
++	then
++	    eval $set_cc_for_build
++
++	    # hppa2.0w-hp-hpux* has a 64-bit kernel and a compiler generating
++	    # 32-bit code.  hppa64-hp-hpux* has the same kernel and a compiler
++	    # generating 64-bit code.  GNU and HP use different nomenclature:
++	    #
++	    # $ CC_FOR_BUILD=cc ./config.guess
++	    # => hppa2.0w-hp-hpux11.23
++	    # $ CC_FOR_BUILD="cc +DA2.0w" ./config.guess
++	    # => hppa64-hp-hpux11.23
++
++	    if echo __LP64__ | (CCOPTS= $CC_FOR_BUILD -E - 2>/dev/null) |
++		grep -q __LP64__
++	    then
++		HP_ARCH="hppa2.0w"
++	    else
++		HP_ARCH="hppa64"
++	    fi
++	fi
+ 	echo ${HP_ARCH}-hp-hpux${HPUX_REV}
+-	exit 0 ;;
++	exit ;;
+     ia64:HP-UX:*:*)
+ 	HPUX_REV=`echo ${UNAME_RELEASE}|sed -e 's/[^.]*.[0B]*//'`
+ 	echo ia64-hp-hpux${HPUX_REV}
+-	exit 0 ;;
++	exit ;;
+     3050*:HI-UX:*:*)
+ 	eval $set_cc_for_build
+ 	sed 's/^	//' << EOF >$dummy.c
+@@ -661,186 +700,248 @@
+ 	  exit (0);
+ 	}
+ EOF
+-	$CC_FOR_BUILD -o $dummy $dummy.c && $dummy && rm -f $dummy.c $dummy && rmdir $tmpdir && exit 0
+-	rm -f $dummy.c $dummy && rmdir $tmpdir
++	$CC_FOR_BUILD -o $dummy $dummy.c && SYSTEM_NAME=`$dummy` &&
++		{ echo "$SYSTEM_NAME"; exit; }
+ 	echo unknown-hitachi-hiuxwe2
+-	exit 0 ;;
++	exit ;;
+     9000/7??:4.3bsd:*:* | 9000/8?[79]:4.3bsd:*:* )
+ 	echo hppa1.1-hp-bsd
+-	exit 0 ;;
++	exit ;;
+     9000/8??:4.3bsd:*:*)
+ 	echo hppa1.0-hp-bsd
+-	exit 0 ;;
++	exit ;;
+     *9??*:MPE/iX:*:* | *3000*:MPE/iX:*:*)
+ 	echo hppa1.0-hp-mpeix
+-	exit 0 ;;
++	exit ;;
+     hp7??:OSF1:*:* | hp8?[79]:OSF1:*:* )
+ 	echo hppa1.1-hp-osf
+-	exit 0 ;;
++	exit ;;
+     hp8??:OSF1:*:*)
+ 	echo hppa1.0-hp-osf
+-	exit 0 ;;
++	exit ;;
+     i*86:OSF1:*:*)
+ 	if [ -x /usr/sbin/sysversion ] ; then
+ 	    echo ${UNAME_MACHINE}-unknown-osf1mk
+ 	else
+ 	    echo ${UNAME_MACHINE}-unknown-osf1
+ 	fi
+-	exit 0 ;;
++	exit ;;
+     parisc*:Lites*:*:*)
+ 	echo hppa1.1-hp-lites
+-	exit 0 ;;
++	exit ;;
+     C1*:ConvexOS:*:* | convex:ConvexOS:C1*:*)
+ 	echo c1-convex-bsd
+-        exit 0 ;;
++        exit ;;
+     C2*:ConvexOS:*:* | convex:ConvexOS:C2*:*)
+ 	if getsysinfo -f scalar_acc
+ 	then echo c32-convex-bsd
+ 	else echo c2-convex-bsd
+ 	fi
+-        exit 0 ;;
++        exit ;;
+     C34*:ConvexOS:*:* | convex:ConvexOS:C34*:*)
+ 	echo c34-convex-bsd
+-        exit 0 ;;
++        exit ;;
+     C38*:ConvexOS:*:* | convex:ConvexOS:C38*:*)
+ 	echo c38-convex-bsd
+-        exit 0 ;;
++        exit ;;
+     C4*:ConvexOS:*:* | convex:ConvexOS:C4*:*)
+ 	echo c4-convex-bsd
+-        exit 0 ;;
++        exit ;;
+     CRAY*Y-MP:*:*:*)
+ 	echo ymp-cray-unicos${UNAME_RELEASE} | sed -e 's/\.[^.]*$/.X/'
+-	exit 0 ;;
++	exit ;;
+     CRAY*[A-Z]90:*:*:*)
+ 	echo ${UNAME_MACHINE}-cray-unicos${UNAME_RELEASE} \
+ 	| sed -e 's/CRAY.*\([A-Z]90\)/\1/' \
+ 	      -e y/ABCDEFGHIJKLMNOPQRSTUVWXYZ/abcdefghijklmnopqrstuvwxyz/ \
+ 	      -e 's/\.[^.]*$/.X/'
+-	exit 0 ;;
++	exit ;;
+     CRAY*TS:*:*:*)
+ 	echo t90-cray-unicos${UNAME_RELEASE} | sed -e 's/\.[^.]*$/.X/'
+-	exit 0 ;;
+-    CRAY*T3D:*:*:*)
+-	echo alpha-cray-unicosmk${UNAME_RELEASE} | sed -e 's/\.[^.]*$/.X/'
+-	exit 0 ;;
++	exit ;;
+     CRAY*T3E:*:*:*)
+ 	echo alphaev5-cray-unicosmk${UNAME_RELEASE} | sed -e 's/\.[^.]*$/.X/'
+-	exit 0 ;;
++	exit ;;
+     CRAY*SV1:*:*:*)
+ 	echo sv1-cray-unicos${UNAME_RELEASE} | sed -e 's/\.[^.]*$/.X/'
+-	exit 0 ;;
++	exit ;;
++    *:UNICOS/mp:*:*)
++	echo craynv-cray-unicosmp${UNAME_RELEASE} | sed -e 's/\.[^.]*$/.X/'
++	exit ;;
+     F30[01]:UNIX_System_V:*:* | F700:UNIX_System_V:*:*)
+ 	FUJITSU_PROC=`uname -m | tr 'ABCDEFGHIJKLMNOPQRSTUVWXYZ' 'abcdefghijklmnopqrstuvwxyz'`
+         FUJITSU_SYS=`uname -p | tr 'ABCDEFGHIJKLMNOPQRSTUVWXYZ' 'abcdefghijklmnopqrstuvwxyz' | sed -e 's/\///'`
+         FUJITSU_REL=`echo ${UNAME_RELEASE} | sed -e 's/ /_/'`
+         echo "${FUJITSU_PROC}-fujitsu-${FUJITSU_SYS}${FUJITSU_REL}"
+-        exit 0 ;;
++        exit ;;
++    5000:UNIX_System_V:4.*:*)
++        FUJITSU_SYS=`uname -p | tr 'ABCDEFGHIJKLMNOPQRSTUVWXYZ' 'abcdefghijklmnopqrstuvwxyz' | sed -e 's/\///'`
++        FUJITSU_REL=`echo ${UNAME_RELEASE} | tr 'ABCDEFGHIJKLMNOPQRSTUVWXYZ' 'abcdefghijklmnopqrstuvwxyz' | sed -e 's/ /_/'`
++        echo "sparc-fujitsu-${FUJITSU_SYS}${FUJITSU_REL}"
++	exit ;;
+     i*86:BSD/386:*:* | i*86:BSD/OS:*:* | *:Ascend\ Embedded/OS:*:*)
+ 	echo ${UNAME_MACHINE}-pc-bsdi${UNAME_RELEASE}
+-	exit 0 ;;
++	exit ;;
+     sparc*:BSD/OS:*:*)
+ 	echo sparc-unknown-bsdi${UNAME_RELEASE}
+-	exit 0 ;;
++	exit ;;
+     *:BSD/OS:*:*)
+ 	echo ${UNAME_MACHINE}-unknown-bsdi${UNAME_RELEASE}
+-	exit 0 ;;
++	exit ;;
+     *:FreeBSD:*:*)
+-	# Determine whether the default compiler uses glibc.
+-	eval $set_cc_for_build
+-	sed 's/^	//' << EOF >$dummy.c
+-	#include <features.h>
+-	#if __GLIBC__ >= 2
+-	LIBC=gnu
+-	#else
+-	LIBC=
+-	#endif
+-EOF
+-	eval `$CC_FOR_BUILD -E $dummy.c 2>/dev/null | grep ^LIBC=`
+-	rm -f $dummy.c && rmdir $tmpdir
+-	echo ${UNAME_MACHINE}-unknown-freebsd`echo ${UNAME_RELEASE}|sed -e 's/[-(].*//'`${LIBC:+-$LIBC}
+-	exit 0 ;;
++	case ${UNAME_MACHINE} in
++	    pc98)
++		echo i386-unknown-freebsd`echo ${UNAME_RELEASE}|sed -e 's/[-(].*//'` ;;
++	    amd64)
++		echo x86_64-unknown-freebsd`echo ${UNAME_RELEASE}|sed -e 's/[-(].*//'` ;;
++	    *)
++		echo ${UNAME_MACHINE}-unknown-freebsd`echo ${UNAME_RELEASE}|sed -e 's/[-(].*//'` ;;
++	esac
++	exit ;;
+     i*:CYGWIN*:*)
+ 	echo ${UNAME_MACHINE}-pc-cygwin
+-	exit 0 ;;
+-    i*:MINGW*:*)
++	exit ;;
++    *:MINGW*:*)
+ 	echo ${UNAME_MACHINE}-pc-mingw32
+-	exit 0 ;;
++	exit ;;
++    i*:windows32*:*)
++    	# uname -m includes "-pc" on this system.
++    	echo ${UNAME_MACHINE}-mingw32
++	exit ;;
+     i*:PW*:*)
+ 	echo ${UNAME_MACHINE}-pc-pw32
+-	exit 0 ;;
+-    x86:Interix*:3*)
+-	echo i386-pc-interix3
+-	exit 0 ;;
++	exit ;;
++    *:Interix*:*)
++    	case ${UNAME_MACHINE} in
++	    x86)
++		echo i586-pc-interix${UNAME_RELEASE}
++		exit ;;
++	    authenticamd | genuineintel | EM64T)
++		echo x86_64-unknown-interix${UNAME_RELEASE}
++		exit ;;
++	    IA64)
++		echo ia64-unknown-interix${UNAME_RELEASE}
++		exit ;;
++	esac ;;
++    [345]86:Windows_95:* | [345]86:Windows_98:* | [345]86:Windows_NT:*)
++	echo i${UNAME_MACHINE}-pc-mks
++	exit ;;
++    8664:Windows_NT:*)
++	echo x86_64-pc-mks
++	exit ;;
+     i*:Windows_NT*:* | Pentium*:Windows_NT*:*)
+ 	# How do we know it's Interix rather than the generic POSIX subsystem?
+ 	# It also conflicts with pre-2.0 versions of AT&T UWIN. Should we
+ 	# UNAME_MACHINE based on the output of uname instead of i386?
+-	echo i386-pc-interix
+-	exit 0 ;;
++	echo i586-pc-interix
++	exit ;;
+     i*:UWIN*:*)
+ 	echo ${UNAME_MACHINE}-pc-uwin
+-	exit 0 ;;
++	exit ;;
++    amd64:CYGWIN*:*:* | x86_64:CYGWIN*:*:*)
++	echo x86_64-unknown-cygwin
++	exit ;;
+     p*:CYGWIN*:*)
+ 	echo powerpcle-unknown-cygwin
+-	exit 0 ;;
++	exit ;;
+     prep*:SunOS:5.*:*)
+ 	echo powerpcle-unknown-solaris2`echo ${UNAME_RELEASE}|sed -e 's/[^.]*//'`
+-	exit 0 ;;
++	exit ;;
+     *:GNU:*:*)
++	# the GNU system
+ 	echo `echo ${UNAME_MACHINE}|sed -e 's,[-/].*$,,'`-unknown-gnu`echo ${UNAME_RELEASE}|sed -e 's,/.*$,,'`
+-	exit 0 ;;
++	exit ;;
++    *:GNU/*:*:*)
++	# other systems with GNU libc and userland
++	echo ${UNAME_MACHINE}-unknown-`echo ${UNAME_SYSTEM} | sed 's,^[^/]*/,,' | tr '[A-Z]' '[a-z]'``echo ${UNAME_RELEASE}|sed -e 's/[-(].*//'`-gnu
++	exit ;;
+     i*86:Minix:*:*)
+ 	echo ${UNAME_MACHINE}-pc-minix
+-	exit 0 ;;
++	exit ;;
++    alpha:Linux:*:*)
++	case `sed -n '/^cpu model/s/^.*: \(.*\)/\1/p' < /proc/cpuinfo` in
++	  EV5)   UNAME_MACHINE=alphaev5 ;;
++	  EV56)  UNAME_MACHINE=alphaev56 ;;
++	  PCA56) UNAME_MACHINE=alphapca56 ;;
++	  PCA57) UNAME_MACHINE=alphapca56 ;;
++	  EV6)   UNAME_MACHINE=alphaev6 ;;
++	  EV67)  UNAME_MACHINE=alphaev67 ;;
++	  EV68*) UNAME_MACHINE=alphaev68 ;;
++        esac
++	objdump --private-headers /bin/sh | grep -q ld.so.1
++	if test "$?" = 0 ; then LIBC="libc1" ; else LIBC="" ; fi
++	echo ${UNAME_MACHINE}-unknown-linux-gnu${LIBC}
++	exit ;;
+     arm*:Linux:*:*)
++	eval $set_cc_for_build
++	if echo __ARM_EABI__ | $CC_FOR_BUILD -E - 2>/dev/null \
++	    | grep -q __ARM_EABI__
++	then
++	    echo ${UNAME_MACHINE}-unknown-linux-gnu
++	else
++	    echo ${UNAME_MACHINE}-unknown-linux-gnueabi
++	fi
++	exit ;;
++    avr32*:Linux:*:*)
+ 	echo ${UNAME_MACHINE}-unknown-linux-gnu
+-	exit 0 ;;
++	exit ;;
++    cris:Linux:*:*)
++	echo cris-axis-linux-gnu
++	exit ;;
++    crisv32:Linux:*:*)
++	echo crisv32-axis-linux-gnu
++	exit ;;
++    frv:Linux:*:*)
++    	echo frv-unknown-linux-gnu
++	exit ;;
++    i*86:Linux:*:*)
++	LIBC=gnu
++	eval $set_cc_for_build
++	sed 's/^	//' << EOF >$dummy.c
++	#ifdef __dietlibc__
++	LIBC=dietlibc
++	#endif
++EOF
++	eval `$CC_FOR_BUILD -E $dummy.c 2>/dev/null | grep '^LIBC'`
++	echo "${UNAME_MACHINE}-pc-linux-${LIBC}"
++	exit ;;
+     ia64:Linux:*:*)
+ 	echo ${UNAME_MACHINE}-unknown-linux-gnu
+-	exit 0 ;;
++	exit ;;
++    m32r*:Linux:*:*)
++	echo ${UNAME_MACHINE}-unknown-linux-gnu
++	exit ;;
+     m68*:Linux:*:*)
+ 	echo ${UNAME_MACHINE}-unknown-linux-gnu
+-	exit 0 ;;
+-    mips:Linux:*:*)
++	exit ;;
++    mips:Linux:*:* | mips64:Linux:*:*)
+ 	eval $set_cc_for_build
+ 	sed 's/^	//' << EOF >$dummy.c
+ 	#undef CPU
+-	#undef mips
+-	#undef mipsel
++	#undef ${UNAME_MACHINE}
++	#undef ${UNAME_MACHINE}el
+ 	#if defined(__MIPSEL__) || defined(__MIPSEL) || defined(_MIPSEL) || defined(MIPSEL)
+-	CPU=mipsel
++	CPU=${UNAME_MACHINE}el
+ 	#else
+ 	#if defined(__MIPSEB__) || defined(__MIPSEB) || defined(_MIPSEB) || defined(MIPSEB)
+-	CPU=mips
++	CPU=${UNAME_MACHINE}
+ 	#else
+ 	CPU=
+ 	#endif
+ 	#endif
+ EOF
+-	eval `$CC_FOR_BUILD -E $dummy.c 2>/dev/null | grep ^CPU=`
+-	rm -f $dummy.c && rmdir $tmpdir
+-	test x"${CPU}" != x && echo "${CPU}-pc-linux-gnu" && exit 0
++	eval `$CC_FOR_BUILD -E $dummy.c 2>/dev/null | grep '^CPU'`
++	test x"${CPU}" != x && { echo "${CPU}-unknown-linux-gnu"; exit; }
+ 	;;
+-    ppc:Linux:*:*)
+-	echo powerpc-unknown-linux-gnu
+-	exit 0 ;;
+-    ppc64:Linux:*:*)
+-	echo powerpc64-unknown-linux-gnu
+-	exit 0 ;;
+-    alpha:Linux:*:*)
+-	case `sed -n '/^cpu model/s/^.*: \(.*\)/\1/p' < /proc/cpuinfo` in
+-	  EV5)   UNAME_MACHINE=alphaev5 ;;
+-	  EV56)  UNAME_MACHINE=alphaev56 ;;
+-	  PCA56) UNAME_MACHINE=alphapca56 ;;
+-	  PCA57) UNAME_MACHINE=alphapca56 ;;
+-	  EV6)   UNAME_MACHINE=alphaev6 ;;
+-	  EV67)  UNAME_MACHINE=alphaev67 ;;
+-	  EV68*) UNAME_MACHINE=alphaev68 ;;
+-        esac
+-	objdump --private-headers /bin/sh | grep ld.so.1 >/dev/null
+-	if test "$?" = 0 ; then LIBC="libc1" ; else LIBC="" ; fi
+-	echo ${UNAME_MACHINE}-unknown-linux-gnu${LIBC}
+-	exit 0 ;;
++    or32:Linux:*:*)
++	echo or32-unknown-linux-gnu
++	exit ;;
++    padre:Linux:*:*)
++	echo sparc-unknown-linux-gnu
++	exit ;;
++    parisc64:Linux:*:* | hppa64:Linux:*:*)
++	echo hppa64-unknown-linux-gnu
++	exit ;;
+     parisc:Linux:*:* | hppa:Linux:*:*)
+ 	# Look for CPU level
+ 	case `grep '^cpu[^a-z]*:' /proc/cpuinfo 2>/dev/null | cut -d' ' -f2` in
+@@ -848,82 +949,40 @@
+ 	  PA8*) echo hppa2.0-unknown-linux-gnu ;;
+ 	  *)    echo hppa-unknown-linux-gnu ;;
+ 	esac
+-	exit 0 ;;
+-    parisc64:Linux:*:* | hppa64:Linux:*:*)
+-	echo hppa64-unknown-linux-gnu
+-	exit 0 ;;
++	exit ;;
++    ppc64:Linux:*:*)
++	echo powerpc64-unknown-linux-gnu
++	exit ;;
++    ppc:Linux:*:*)
++	echo powerpc-unknown-linux-gnu
++	exit ;;
+     s390:Linux:*:* | s390x:Linux:*:*)
+ 	echo ${UNAME_MACHINE}-ibm-linux
+-	exit 0 ;;
++	exit ;;
++    sh64*:Linux:*:*)
++    	echo ${UNAME_MACHINE}-unknown-linux-gnu
++	exit ;;
+     sh*:Linux:*:*)
+ 	echo ${UNAME_MACHINE}-unknown-linux-gnu
+-	exit 0 ;;
++	exit ;;
+     sparc:Linux:*:* | sparc64:Linux:*:*)
+ 	echo ${UNAME_MACHINE}-unknown-linux-gnu
+-	exit 0 ;;
++	exit ;;
++    vax:Linux:*:*)
++	echo ${UNAME_MACHINE}-dec-linux-gnu
++	exit ;;
+     x86_64:Linux:*:*)
+ 	echo x86_64-unknown-linux-gnu
+-	exit 0 ;;
+-    i*86:Linux:*:*)
+-	# The BFD linker knows what the default object file format is, so
+-	# first see if it will tell us. cd to the root directory to prevent
+-	# problems with other programs or directories called `ld' in the path.
+-	# Set LC_ALL=C to ensure ld outputs messages in English.
+-	ld_supported_targets=`cd /; LC_ALL=C ld --help 2>&1 \
+-			 | sed -ne '/supported targets:/!d
+-				    s/[ 	][ 	]*/ /g
+-				    s/.*supported targets: *//
+-				    s/ .*//
+-				    p'`
+-        case "$ld_supported_targets" in
+-	  elf32-i386)
+-		TENTATIVE="${UNAME_MACHINE}-pc-linux-gnu"
+-		;;
+-	  a.out-i386-linux)
+-		echo "${UNAME_MACHINE}-pc-linux-gnuaout"
+-		exit 0 ;;
+-	  coff-i386)
+-		echo "${UNAME_MACHINE}-pc-linux-gnucoff"
+-		exit 0 ;;
+-	  "")
+-		# Either a pre-BFD a.out linker (linux-gnuoldld) or
+-		# one that does not give us useful --help.
+-		echo "${UNAME_MACHINE}-pc-linux-gnuoldld"
+-		exit 0 ;;
+-	esac
+-	# Determine whether the default compiler is a.out or elf
+-	eval $set_cc_for_build
+-	sed 's/^	//' << EOF >$dummy.c
+-	#include <features.h>
+-	#ifdef __ELF__
+-	# ifdef __GLIBC__
+-	#  if __GLIBC__ >= 2
+-	LIBC=gnu
+-	#  else
+-	LIBC=gnulibc1
+-	#  endif
+-	# else
+-	LIBC=gnulibc1
+-	# endif
+-	#else
+-	#ifdef __INTEL_COMPILER
+-	LIBC=gnu
+-	#else
+-	LIBC=gnuaout
+-	#endif
+-	#endif
+-EOF
+-	eval `$CC_FOR_BUILD -E $dummy.c 2>/dev/null | grep ^LIBC=`
+-	rm -f $dummy.c && rmdir $tmpdir
+-	test x"${LIBC}" != x && echo "${UNAME_MACHINE}-pc-linux-${LIBC}" && exit 0
+-	test x"${TENTATIVE}" != x && echo "${TENTATIVE}" && exit 0
+-	;;
++	exit ;;
++    xtensa*:Linux:*:*)
++    	echo ${UNAME_MACHINE}-unknown-linux-gnu
++	exit ;;
+     i*86:DYNIX/ptx:4*:*)
+ 	# ptx 4.0 does uname -s correctly, with DYNIX/ptx in there.
+ 	# earlier versions are messed up and put the nodename in both
+ 	# sysname and nodename.
+ 	echo i386-sequent-sysv4
+-	exit 0 ;;
++	exit ;;
+     i*86:UNIX_SV:4.2MP:2.*)
+         # Unixware is an offshoot of SVR4, but it has its own version
+         # number series starting with 2...
+@@ -931,7 +990,27 @@
+ 	# I just have to hope.  -- rms.
+         # Use sysv4.2uw... so that sysv4* matches it.
+ 	echo ${UNAME_MACHINE}-pc-sysv4.2uw${UNAME_VERSION}
+-	exit 0 ;;
++	exit ;;
++    i*86:OS/2:*:*)
++	# If we were able to find `uname', then EMX Unix compatibility
++	# is probably installed.
++	echo ${UNAME_MACHINE}-pc-os2-emx
++	exit ;;
++    i*86:XTS-300:*:STOP)
++	echo ${UNAME_MACHINE}-unknown-stop
++	exit ;;
++    i*86:atheos:*:*)
++	echo ${UNAME_MACHINE}-unknown-atheos
++	exit ;;
++    i*86:syllable:*:*)
++	echo ${UNAME_MACHINE}-pc-syllable
++	exit ;;
++    i*86:LynxOS:2.*:* | i*86:LynxOS:3.[01]*:* | i*86:LynxOS:4.[02]*:*)
++	echo i386-unknown-lynxos${UNAME_RELEASE}
++	exit ;;
++    i*86:*DOS:*:*)
++	echo ${UNAME_MACHINE}-pc-msdosdjgpp
++	exit ;;
+     i*86:*:4.*:* | i*86:SYSTEM_V:4.*:*)
+ 	UNAME_REL=`echo ${UNAME_RELEASE} | sed 's/\/MP$//'`
+ 	if grep Novell /usr/include/link.h >/dev/null 2>/dev/null; then
+@@ -939,15 +1018,16 @@
+ 	else
+ 		echo ${UNAME_MACHINE}-pc-sysv${UNAME_REL}
+ 	fi
+-	exit 0 ;;
+-    i*86:*:5:[78]*)
++	exit ;;
++    i*86:*:5:[678]*)
++    	# UnixWare 7.x, OpenUNIX and OpenServer 6.
+ 	case `/bin/uname -X | grep "^Machine"` in
+ 	    *486*)	     UNAME_MACHINE=i486 ;;
+ 	    *Pentium)	     UNAME_MACHINE=i586 ;;
+ 	    *Pent*|*Celeron) UNAME_MACHINE=i686 ;;
+ 	esac
+ 	echo ${UNAME_MACHINE}-unknown-sysv${UNAME_RELEASE}${UNAME_SYSTEM}${UNAME_VERSION}
+-	exit 0 ;;
++	exit ;;
+     i*86:*:3.2:*)
+ 	if test -f /usr/options/cb.name; then
+ 		UNAME_REL=`sed -n 's/.*Version //p' </usr/options/cb.name`
+@@ -965,76 +1045,86 @@
+ 	else
+ 		echo ${UNAME_MACHINE}-pc-sysv32
+ 	fi
+-	exit 0 ;;
+-    i*86:*DOS:*:*)
+-	echo ${UNAME_MACHINE}-pc-msdosdjgpp
+-	exit 0 ;;
++	exit ;;
+     pc:*:*:*)
+ 	# Left here for compatibility:
+         # uname -m prints for DJGPP always 'pc', but it prints nothing about
+-        # the processor, so we play safe by assuming i386.
+-	echo i386-pc-msdosdjgpp
+-        exit 0 ;;
++        # the processor, so we play safe by assuming i586.
++	# Note: whatever this is, it MUST be the same as what config.sub
++	# prints for the "djgpp" host, or else GDB configury will decide that
++	# this is a cross-build.
++	echo i586-pc-msdosdjgpp
++        exit ;;
+     Intel:Mach:3*:*)
+ 	echo i386-pc-mach3
+-	exit 0 ;;
++	exit ;;
+     paragon:*:*:*)
+ 	echo i860-intel-osf1
+-	exit 0 ;;
++	exit ;;
+     i860:*:4.*:*) # i860-SVR4
+ 	if grep Stardent /usr/include/sys/uadmin.h >/dev/null 2>&1 ; then
+ 	  echo i860-stardent-sysv${UNAME_RELEASE} # Stardent Vistra i860-SVR4
+ 	else # Add other i860-SVR4 vendors below as they are discovered.
+ 	  echo i860-unknown-sysv${UNAME_RELEASE}  # Unknown i860-SVR4
+ 	fi
+-	exit 0 ;;
++	exit ;;
+     mini*:CTIX:SYS*5:*)
+ 	# "miniframe"
+ 	echo m68010-convergent-sysv
+-	exit 0 ;;
++	exit ;;
+     mc68k:UNIX:SYSTEM5:3.51m)
+ 	echo m68k-convergent-sysv
+-	exit 0 ;;
+-    M68*:*:R3V[567]*:*)
+-	test -r /sysV68 && echo 'm68k-motorola-sysv' && exit 0 ;;
+-    3[34]??:*:4.0:3.0 | 3[34]??A:*:4.0:3.0 | 3[34]??,*:*:4.0:3.0 | 3[34]??/*:*:4.0:3.0 | 4400:*:4.0:3.0 | 4850:*:4.0:3.0 | SKA40:*:4.0:3.0)
++	exit ;;
++    M680?0:D-NIX:5.3:*)
++	echo m68k-diab-dnix
++	exit ;;
++    M68*:*:R3V[5678]*:*)
++	test -r /sysV68 && { echo 'm68k-motorola-sysv'; exit; } ;;
++    3[345]??:*:4.0:3.0 | 3[34]??A:*:4.0:3.0 | 3[34]??,*:*:4.0:3.0 | 3[34]??/*:*:4.0:3.0 | 4400:*:4.0:3.0 | 4850:*:4.0:3.0 | SKA40:*:4.0:3.0 | SDS2:*:4.0:3.0 | SHG2:*:4.0:3.0 | S7501*:*:4.0:3.0)
+ 	OS_REL=''
+ 	test -r /etc/.relid \
+ 	&& OS_REL=.`sed -n 's/[^ ]* [^ ]* \([0-9][0-9]\).*/\1/p' < /etc/.relid`
+ 	/bin/uname -p 2>/dev/null | grep 86 >/dev/null \
+-	  && echo i486-ncr-sysv4.3${OS_REL} && exit 0
++	  && { echo i486-ncr-sysv4.3${OS_REL}; exit; }
+ 	/bin/uname -p 2>/dev/null | /bin/grep entium >/dev/null \
+-	  && echo i586-ncr-sysv4.3${OS_REL} && exit 0 ;;
++	  && { echo i586-ncr-sysv4.3${OS_REL}; exit; } ;;
+     3[34]??:*:4.0:* | 3[34]??,*:*:4.0:*)
+         /bin/uname -p 2>/dev/null | grep 86 >/dev/null \
+-          && echo i486-ncr-sysv4 && exit 0 ;;
++          && { echo i486-ncr-sysv4; exit; } ;;
++    NCR*:*:4.2:* | MPRAS*:*:4.2:*)
++	OS_REL='.3'
++	test -r /etc/.relid \
++	    && OS_REL=.`sed -n 's/[^ ]* [^ ]* \([0-9][0-9]\).*/\1/p' < /etc/.relid`
++	/bin/uname -p 2>/dev/null | grep 86 >/dev/null \
++	    && { echo i486-ncr-sysv4.3${OS_REL}; exit; }
++	/bin/uname -p 2>/dev/null | /bin/grep entium >/dev/null \
++	    && { echo i586-ncr-sysv4.3${OS_REL}; exit; }
++	/bin/uname -p 2>/dev/null | /bin/grep pteron >/dev/null \
++	    && { echo i586-ncr-sysv4.3${OS_REL}; exit; } ;;
+     m68*:LynxOS:2.*:* | m68*:LynxOS:3.0*:*)
+ 	echo m68k-unknown-lynxos${UNAME_RELEASE}
+-	exit 0 ;;
++	exit ;;
+     mc68030:UNIX_System_V:4.*:*)
+ 	echo m68k-atari-sysv4
+-	exit 0 ;;
+-    i*86:LynxOS:2.*:* | i*86:LynxOS:3.[01]*:* | i*86:LynxOS:4.0*:*)
+-	echo i386-unknown-lynxos${UNAME_RELEASE}
+-	exit 0 ;;
++	exit ;;
+     TSUNAMI:LynxOS:2.*:*)
+ 	echo sparc-unknown-lynxos${UNAME_RELEASE}
+-	exit 0 ;;
++	exit ;;
+     rs6000:LynxOS:2.*:*)
+ 	echo rs6000-unknown-lynxos${UNAME_RELEASE}
+-	exit 0 ;;
+-    PowerPC:LynxOS:2.*:* | PowerPC:LynxOS:3.[01]*:* | PowerPC:LynxOS:4.0*:*)
++	exit ;;
++    PowerPC:LynxOS:2.*:* | PowerPC:LynxOS:3.[01]*:* | PowerPC:LynxOS:4.[02]*:*)
+ 	echo powerpc-unknown-lynxos${UNAME_RELEASE}
+-	exit 0 ;;
++	exit ;;
+     SM[BE]S:UNIX_SV:*:*)
+ 	echo mips-dde-sysv${UNAME_RELEASE}
+-	exit 0 ;;
++	exit ;;
+     RM*:ReliantUNIX-*:*:*)
+ 	echo mips-sni-sysv4
+-	exit 0 ;;
++	exit ;;
+     RM*:SINIX-*:*:*)
+ 	echo mips-sni-sysv4
+-	exit 0 ;;
++	exit ;;
+     *:SINIX-*:*:*)
+ 	if uname -p 2>/dev/null >/dev/null ; then
+ 		UNAME_MACHINE=`(uname -p) 2>/dev/null`
+@@ -1042,64 +1132,94 @@
+ 	else
+ 		echo ns32k-sni-sysv
+ 	fi
+-	exit 0 ;;
++	exit ;;
+     PENTIUM:*:4.0*:*) # Unisys `ClearPath HMP IX 4000' SVR4/MP effort
+                       # says <Richard.M.Bartel@ccMail.Census.GOV>
+         echo i586-unisys-sysv4
+-        exit 0 ;;
++        exit ;;
+     *:UNIX_System_V:4*:FTX*)
+ 	# From Gerald Hewes <hewes@openmarket.com>.
+ 	# How about differentiating between stratus architectures? -djm
+ 	echo hppa1.1-stratus-sysv4
+-	exit 0 ;;
++	exit ;;
+     *:*:*:FTX*)
+ 	# From seanf@swdc.stratus.com.
+ 	echo i860-stratus-sysv4
+-	exit 0 ;;
++	exit ;;
++    i*86:VOS:*:*)
++	# From Paul.Green@stratus.com.
++	echo ${UNAME_MACHINE}-stratus-vos
++	exit ;;
+     *:VOS:*:*)
+ 	# From Paul.Green@stratus.com.
+ 	echo hppa1.1-stratus-vos
+-	exit 0 ;;
++	exit ;;
+     mc68*:A/UX:*:*)
+ 	echo m68k-apple-aux${UNAME_RELEASE}
+-	exit 0 ;;
++	exit ;;
+     news*:NEWS-OS:6*:*)
+ 	echo mips-sony-newsos6
+-	exit 0 ;;
++	exit ;;
+     R[34]000:*System_V*:*:* | R4000:UNIX_SYSV:*:* | R*000:UNIX_SV:*:*)
+ 	if [ -d /usr/nec ]; then
+ 	        echo mips-nec-sysv${UNAME_RELEASE}
+ 	else
+ 	        echo mips-unknown-sysv${UNAME_RELEASE}
+ 	fi
+-        exit 0 ;;
++        exit ;;
+     BeBox:BeOS:*:*)	# BeOS running on hardware made by Be, PPC only.
+ 	echo powerpc-be-beos
+-	exit 0 ;;
++	exit ;;
+     BeMac:BeOS:*:*)	# BeOS running on Mac or Mac clone, PPC only.
+ 	echo powerpc-apple-beos
+-	exit 0 ;;
++	exit ;;
+     BePC:BeOS:*:*)	# BeOS running on Intel PC compatible.
+ 	echo i586-pc-beos
+-	exit 0 ;;
++	exit ;;
++    BePC:Haiku:*:*)	# Haiku running on Intel PC compatible.
++	echo i586-pc-haiku
++	exit ;;
+     SX-4:SUPER-UX:*:*)
+ 	echo sx4-nec-superux${UNAME_RELEASE}
+-	exit 0 ;;
++	exit ;;
+     SX-5:SUPER-UX:*:*)
+ 	echo sx5-nec-superux${UNAME_RELEASE}
+-	exit 0 ;;
++	exit ;;
+     SX-6:SUPER-UX:*:*)
+ 	echo sx6-nec-superux${UNAME_RELEASE}
+-	exit 0 ;;
++	exit ;;
++    SX-7:SUPER-UX:*:*)
++	echo sx7-nec-superux${UNAME_RELEASE}
++	exit ;;
++    SX-8:SUPER-UX:*:*)
++	echo sx8-nec-superux${UNAME_RELEASE}
++	exit ;;
++    SX-8R:SUPER-UX:*:*)
++	echo sx8r-nec-superux${UNAME_RELEASE}
++	exit ;;
+     Power*:Rhapsody:*:*)
+ 	echo powerpc-apple-rhapsody${UNAME_RELEASE}
+-	exit 0 ;;
++	exit ;;
+     *:Rhapsody:*:*)
+ 	echo ${UNAME_MACHINE}-apple-rhapsody${UNAME_RELEASE}
+-	exit 0 ;;
++	exit ;;
+     *:Darwin:*:*)
+-	echo `uname -p`-apple-darwin${UNAME_RELEASE}
+-	exit 0 ;;
++	UNAME_PROCESSOR=`uname -p` || UNAME_PROCESSOR=unknown
++	case $UNAME_PROCESSOR in
++	    i386)
++		eval $set_cc_for_build
++		if [ "$CC_FOR_BUILD" != 'no_compiler_found' ]; then
++		  if (echo '#ifdef __LP64__'; echo IS_64BIT_ARCH; echo '#endif') | \
++		      (CCOPTS= $CC_FOR_BUILD -E - 2>/dev/null) | \
++		      grep IS_64BIT_ARCH >/dev/null
++		  then
++		      UNAME_PROCESSOR="x86_64"
++		  fi
++		fi ;;
++	    unknown) UNAME_PROCESSOR=powerpc ;;
++	esac
++	echo ${UNAME_PROCESSOR}-apple-darwin${UNAME_RELEASE}
++	exit ;;
+     *:procnto*:*:* | *:QNX:[0123456789]*:*)
+ 	UNAME_PROCESSOR=`uname -p`
+ 	if test "$UNAME_PROCESSOR" = "x86"; then
+@@ -1107,22 +1227,25 @@
+ 		UNAME_MACHINE=pc
+ 	fi
+ 	echo ${UNAME_PROCESSOR}-${UNAME_MACHINE}-nto-qnx${UNAME_RELEASE}
+-	exit 0 ;;
++	exit ;;
+     *:QNX:*:4*)
+ 	echo i386-pc-qnx
+-	exit 0 ;;
+-    NSR-[DGKLNPTVW]:NONSTOP_KERNEL:*:*)
++	exit ;;
++    NSE-?:NONSTOP_KERNEL:*:*)
++	echo nse-tandem-nsk${UNAME_RELEASE}
++	exit ;;
++    NSR-?:NONSTOP_KERNEL:*:*)
+ 	echo nsr-tandem-nsk${UNAME_RELEASE}
+-	exit 0 ;;
++	exit ;;
+     *:NonStop-UX:*:*)
+ 	echo mips-compaq-nonstopux
+-	exit 0 ;;
++	exit ;;
+     BS2000:POSIX*:*:*)
+ 	echo bs2000-siemens-sysv
+-	exit 0 ;;
++	exit ;;
+     DS/*:UNIX_System_V:*:*)
+ 	echo ${UNAME_MACHINE}-${UNAME_SYSTEM}-${UNAME_RELEASE}
+-	exit 0 ;;
++	exit ;;
+     *:Plan9:*:*)
+ 	# "uname -m" is not consistent, so use $cputype instead. 386
+ 	# is converted to i386 for consistency with other x86
+@@ -1133,36 +1256,50 @@
+ 	    UNAME_MACHINE="$cputype"
+ 	fi
+ 	echo ${UNAME_MACHINE}-unknown-plan9
+-	exit 0 ;;
+-    i*86:OS/2:*:*)
+-	# If we were able to find `uname', then EMX Unix compatibility
+-	# is probably installed.
+-	echo ${UNAME_MACHINE}-pc-os2-emx
+-	exit 0 ;;
++	exit ;;
+     *:TOPS-10:*:*)
+ 	echo pdp10-unknown-tops10
+-	exit 0 ;;
++	exit ;;
+     *:TENEX:*:*)
+ 	echo pdp10-unknown-tenex
+-	exit 0 ;;
++	exit ;;
+     KS10:TOPS-20:*:* | KL10:TOPS-20:*:* | TYPE4:TOPS-20:*:*)
+ 	echo pdp10-dec-tops20
+-	exit 0 ;;
++	exit ;;
+     XKL-1:TOPS-20:*:* | TYPE5:TOPS-20:*:*)
+ 	echo pdp10-xkl-tops20
+-	exit 0 ;;
++	exit ;;
+     *:TOPS-20:*:*)
+ 	echo pdp10-unknown-tops20
+-	exit 0 ;;
++	exit ;;
+     *:ITS:*:*)
+ 	echo pdp10-unknown-its
+-	exit 0 ;;
+-    i*86:XTS-300:*:STOP)
+-	echo ${UNAME_MACHINE}-unknown-stop
+-	exit 0 ;;
+-    i*86:atheos:*:*)
+-	echo ${UNAME_MACHINE}-unknown-atheos
+-	exit 0 ;;
++	exit ;;
++    SEI:*:*:SEIUX)
++        echo mips-sei-seiux${UNAME_RELEASE}
++	exit ;;
++    *:DragonFly:*:*)
++	echo ${UNAME_MACHINE}-unknown-dragonfly`echo ${UNAME_RELEASE}|sed -e 's/[-(].*//'`
++	exit ;;
++    *:*VMS:*:*)
++    	UNAME_MACHINE=`(uname -p) 2>/dev/null`
++	case "${UNAME_MACHINE}" in
++	    A*) echo alpha-dec-vms ; exit ;;
++	    I*) echo ia64-dec-vms ; exit ;;
++	    V*) echo vax-dec-vms ; exit ;;
++	esac ;;
++    *:XENIX:*:SysV)
++	echo i386-pc-xenix
++	exit ;;
++    i*86:skyos:*:*)
++	echo ${UNAME_MACHINE}-pc-skyos`echo ${UNAME_RELEASE}` | sed -e 's/ .*$//'
++	exit ;;
++    i*86:rdos:*:*)
++	echo ${UNAME_MACHINE}-pc-rdos
++	exit ;;
++    i*86:AROS:*:*)
++	echo ${UNAME_MACHINE}-pc-aros
++	exit ;;
+ esac
+ 
+ #echo '(No uname command or uname output not recognized.)' 1>&2
+@@ -1194,7 +1331,7 @@
+ #endif
+ 
+ #if defined (__arm) && defined (__acorn) && defined (__unix)
+-  printf ("arm-acorn-riscix"); exit (0);
++  printf ("arm-acorn-riscix\n"); exit (0);
+ #endif
+ 
+ #if defined (hp300) && !defined (hpux)
+@@ -1283,12 +1420,12 @@
+ }
+ EOF
+ 
+-$CC_FOR_BUILD -o $dummy $dummy.c 2>/dev/null && $dummy && rm -f $dummy.c $dummy && rmdir $tmpdir && exit 0
+-rm -f $dummy.c $dummy && rmdir $tmpdir
++$CC_FOR_BUILD -o $dummy $dummy.c 2>/dev/null && SYSTEM_NAME=`$dummy` &&
++	{ echo "$SYSTEM_NAME"; exit; }
+ 
+ # Apollos put the system type in the environment.
+ 
+-test -d /usr/apollo && { echo ${ISP}-apollo-${SYSTYPE}; exit 0; }
++test -d /usr/apollo && { echo ${ISP}-apollo-${SYSTYPE}; exit; }
+ 
+ # Convex versions that predate uname can use getsysinfo(1)
+ 
+@@ -1297,22 +1434,22 @@
+     case `getsysinfo -f cpu_type` in
+     c1*)
+ 	echo c1-convex-bsd
+-	exit 0 ;;
++	exit ;;
+     c2*)
+ 	if getsysinfo -f scalar_acc
+ 	then echo c32-convex-bsd
+ 	else echo c2-convex-bsd
+ 	fi
+-	exit 0 ;;
++	exit ;;
+     c34*)
+ 	echo c34-convex-bsd
+-	exit 0 ;;
++	exit ;;
+     c38*)
+ 	echo c38-convex-bsd
+-	exit 0 ;;
++	exit ;;
+     c4*)
+ 	echo c4-convex-bsd
+-	exit 0 ;;
++	exit ;;
+     esac
+ fi
+ 
+@@ -1323,7 +1460,9 @@
+ the operating system you are using. It is advised that you
+ download the most up to date version of the config scripts from
+ 
+-    ftp://ftp.gnu.org/pub/gnu/config/
++  http://git.savannah.gnu.org/gitweb/?p=config.git;a=blob_plain;f=config.guess;hb=HEAD
++and
++  http://git.savannah.gnu.org/gitweb/?p=config.git;a=blob_plain;f=config.sub;hb=HEAD
+ 
+ If the version you run ($0) is already up to date, please
+ send the following data and any information you think might be
+--- misc/libtextcat-2.2/config.sub	2010-04-15 09:20:04.000000000 +0000
++++ misc/build/libtextcat-2.2/config.sub	2010-04-15 09:20:41.000000000 +0000
+@@ -1,9 +1,10 @@
+ #! /bin/sh
+ # Configuration validation subroutine script.
+ #   Copyright (C) 1992, 1993, 1994, 1995, 1996, 1997, 1998, 1999,
+-#   2000, 2001, 2002 Free Software Foundation, Inc.
++#   2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010
++#   Free Software Foundation, Inc.
+ 
+-timestamp='2002-09-05'
++timestamp='2010-01-22'
+ 
+ # This file is (in principle) common to ALL GNU software.
+ # The presence of a machine in this file suggests that SOME GNU software
+@@ -21,22 +22,26 @@
+ #
+ # You should have received a copy of the GNU General Public License
+ # along with this program; if not, write to the Free Software
+-# Foundation, Inc., 59 Temple Place - Suite 330,
+-# Boston, MA 02111-1307, USA.
+-
++# Foundation, Inc., 51 Franklin Street - Fifth Floor, Boston, MA
++# 02110-1301, USA.
++#
+ # As a special exception to the GNU General Public License, if you
+ # distribute this file as part of a program that contains a
+ # configuration script generated by Autoconf, you may include it under
+ # the same distribution terms that you use for the rest of that program.
+ 
++
+ # Please send patches to <config-patches@gnu.org>.  Submit a context
+-# diff and a properly formatted ChangeLog entry.
++# diff and a properly formatted GNU ChangeLog entry.
+ #
+ # Configuration subroutine to validate and canonicalize a configuration type.
+ # Supply the specified configuration type as an argument.
+ # If it is invalid, we print an error message on stderr and exit with code 1.
+ # Otherwise, we print the canonical config type on stdout and succeed.
+ 
++# You can get the latest version of this script from:
++# http://git.savannah.gnu.org/gitweb/?p=config.git;a=blob_plain;f=config.sub;hb=HEAD
++
+ # This file is supposed to be the same for all GNU packages
+ # and recognize all the CPU types, system types and aliases
+ # that are meaningful with *any* GNU software.
+@@ -70,8 +75,9 @@
+ version="\
+ GNU config.sub ($timestamp)
+ 
+-Copyright (C) 1992, 1993, 1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001
+-Free Software Foundation, Inc.
++Copyright (C) 1992, 1993, 1994, 1995, 1996, 1997, 1998, 1999, 2000,
++2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010 Free
++Software Foundation, Inc.
+ 
+ This is free software; see the source for copying conditions.  There is NO
+ warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE."
+@@ -83,11 +89,11 @@
+ while test $# -gt 0 ; do
+   case $1 in
+     --time-stamp | --time* | -t )
+-       echo "$timestamp" ; exit 0 ;;
++       echo "$timestamp" ; exit ;;
+     --version | -v )
+-       echo "$version" ; exit 0 ;;
++       echo "$version" ; exit ;;
+     --help | --h* | -h )
+-       echo "$usage"; exit 0 ;;
++       echo "$usage"; exit ;;
+     -- )     # Stop option processing
+        shift; break ;;
+     - )	# Use stdin as input.
+@@ -99,7 +105,7 @@
+     *local*)
+        # First pass through any local machine types.
+        echo $1
+-       exit 0;;
++       exit ;;
+ 
+     * )
+        break ;;
+@@ -118,7 +124,10 @@
+ # Here we must recognize all the valid KERNEL-OS combinations.
+ maybe_os=`echo $1 | sed 's/^\(.*\)-\([^-]*-[^-]*\)$/\2/'`
+ case $maybe_os in
+-  nto-qnx* | linux-gnu* | freebsd*-gnu* | storm-chaos* | os2-emx* | windows32-* | rtmk-nova*)
++  nto-qnx* | linux-gnu* | linux-dietlibc | linux-newlib* | linux-uclibc* | \
++  uclinux-uclibc* | uclinux-gnu* | kfreebsd*-gnu* | knetbsd*-gnu* | netbsd*-gnu* | \
++  kopensolaris*-gnu* | \
++  storm-chaos* | os2-emx* | rtmk-nova*)
+     os=-$maybe_os
+     basic_machine=`echo $1 | sed 's/^\(.*\)-\([^-]*-[^-]*\)$/\1/'`
+     ;;
+@@ -144,10 +153,13 @@
+ 	-convergent* | -ncr* | -news | -32* | -3600* | -3100* | -hitachi* |\
+ 	-c[123]* | -convex* | -sun | -crds | -omron* | -dg | -ultra | -tti* | \
+ 	-harris | -dolphin | -highlevel | -gould | -cbm | -ns | -masscomp | \
+-	-apple | -axis)
++	-apple | -axis | -knuth | -cray | -microblaze)
+ 		os=
+ 		basic_machine=$1
+ 		;;
++        -bluegene*)
++	        os=-cnk
++		;;
+ 	-sim | -cisco | -oki | -wec | -winbond)
+ 		os=
+ 		basic_machine=$1
+@@ -169,6 +181,10 @@
+ 	-hiux*)
+ 		os=-hiuxwe2
+ 		;;
++	-sco6)
++		os=-sco5v6
++		basic_machine=`echo $1 | sed -e 's/86-.*/86-pc/'`
++		;;
+ 	-sco5)
+ 		os=-sco3.2v5
+ 		basic_machine=`echo $1 | sed -e 's/86-.*/86-pc/'`
+@@ -185,6 +201,10 @@
+ 		# Don't forget version if it is 3.2v4 or newer.
+ 		basic_machine=`echo $1 | sed -e 's/86-.*/86-pc/'`
+ 		;;
++	-sco5v6*)
++		# Don't forget version if it is 3.2v4 or newer.
++		basic_machine=`echo $1 | sed -e 's/86-.*/86-pc/'`
++		;;
+ 	-sco*)
+ 		os=-sco3.2v2
+ 		basic_machine=`echo $1 | sed -e 's/86-.*/86-pc/'`
+@@ -228,51 +248,71 @@
+ 	| a29k \
+ 	| alpha | alphaev[4-8] | alphaev56 | alphaev6[78] | alphapca5[67] \
+ 	| alpha64 | alpha64ev[4-8] | alpha64ev56 | alpha64ev6[78] | alpha64pca5[67] \
+-	| arc | arm | arm[bl]e | arme[lb] | armv[2345] | armv[345][lb] | avr \
+-	| clipper \
++	| am33_2.0 \
++	| arc | arm | arm[bl]e | arme[lb] | armv[2345] | armv[345][lb] | avr | avr32 \
++	| bfin \
++	| c4x | clipper \
+ 	| d10v | d30v | dlx | dsp16xx \
+-	| fr30 | frv \
++	| fido | fr30 | frv \
+ 	| h8300 | h8500 | hppa | hppa1.[01] | hppa2.0 | hppa2.0[nw] | hppa64 \
+ 	| i370 | i860 | i960 | ia64 \
+-	| ip2k \
+-	| m32r | m68000 | m68k | m88k | mcore \
++	| ip2k | iq2000 \
++	| lm32 \
++	| m32c | m32r | m32rle | m68000 | m68k | m88k \
++	| maxq | mb | microblaze | mcore | mep | metag \
+ 	| mips | mipsbe | mipseb | mipsel | mipsle \
+ 	| mips16 \
+ 	| mips64 | mips64el \
+-	| mips64vr | mips64vrel \
++	| mips64octeon | mips64octeonel \
+ 	| mips64orion | mips64orionel \
++	| mips64r5900 | mips64r5900el \
++	| mips64vr | mips64vrel \
+ 	| mips64vr4100 | mips64vr4100el \
+ 	| mips64vr4300 | mips64vr4300el \
+ 	| mips64vr5000 | mips64vr5000el \
++	| mips64vr5900 | mips64vr5900el \
+ 	| mipsisa32 | mipsisa32el \
++	| mipsisa32r2 | mipsisa32r2el \
+ 	| mipsisa64 | mipsisa64el \
++	| mipsisa64r2 | mipsisa64r2el \
+ 	| mipsisa64sb1 | mipsisa64sb1el \
+ 	| mipsisa64sr71k | mipsisa64sr71kel \
+ 	| mipstx39 | mipstx39el \
+ 	| mn10200 | mn10300 \
++	| moxie \
++	| mt \
++	| msp430 \
++	| nios | nios2 \
+ 	| ns16k | ns32k \
+-	| openrisc | or32 \
++	| or32 \
+ 	| pdp10 | pdp11 | pj | pjl \
+ 	| powerpc | powerpc64 | powerpc64le | powerpcle | ppcbe \
+ 	| pyramid \
+-	| sh | sh[1234] | sh3e | sh[34]eb | shbe | shle | sh[1234]le | sh3ele \
++	| rx \
++	| score \
++	| sh | sh[1234] | sh[24]a | sh[24]aeb | sh[23]e | sh[34]eb | sheb | shbe | shle | sh[1234]le | sh3ele \
+ 	| sh64 | sh64le \
+-	| sparc | sparc64 | sparc86x | sparclet | sparclite | sparcv9 | sparcv9b \
+-	| strongarm \
+-	| tahoe | thumb | tic80 | tron \
++	| sparc | sparc64 | sparc64b | sparc64v | sparc86x | sparclet | sparclite \
++	| sparcv8 | sparcv9 | sparcv9b | sparcv9v \
++	| spu | strongarm \
++	| tahoe | thumb | tic4x | tic80 | tron \
++	| ubicom32 \
+ 	| v850 | v850e \
+ 	| we32k \
+-	| x86 | xscale | xstormy16 | xtensa \
+-	| z8k)
++	| x86 | xc16x | xscale | xscalee[bl] | xstormy16 | xtensa \
++	| z8k | z80)
+ 		basic_machine=$basic_machine-unknown
+ 		;;
+-	m6811 | m68hc11 | m6812 | m68hc12)
++	m6811 | m68hc11 | m6812 | m68hc12 | picochip)
+ 		# Motorola 68HC11/12.
+ 		basic_machine=$basic_machine-unknown
+ 		os=-none
+ 		;;
+ 	m88110 | m680[12346]0 | m683?2 | m68360 | m5200 | v70 | w65 | z8k)
+ 		;;
++	ms1)
++		basic_machine=mt-unknown
++		;;
+ 
+ 	# We use `pc' rather than `unknown'
+ 	# because (1) that's what they normally are, and
+@@ -292,50 +332,69 @@
+ 	| alpha64-* | alpha64ev[4-8]-* | alpha64ev56-* | alpha64ev6[78]-* \
+ 	| alphapca5[67]-* | alpha64pca5[67]-* | arc-* \
+ 	| arm-*  | armbe-* | armle-* | armeb-* | armv*-* \
+-	| avr-* \
+-	| bs2000-* \
+-	| c[123]* | c30-* | [cjt]90-* | c4x-* | c54x-* \
+-	| clipper-* | cydra-* \
++	| avr-* | avr32-* \
++	| bfin-* | bs2000-* \
++	| c[123]* | c30-* | [cjt]90-* | c4x-* | c54x-* | c55x-* | c6x-* \
++	| clipper-* | craynv-* | cydra-* \
+ 	| d10v-* | d30v-* | dlx-* \
+ 	| elxsi-* \
+-	| f30[01]-* | f700-* | fr30-* | frv-* | fx80-* \
++	| f30[01]-* | f700-* | fido-* | fr30-* | frv-* | fx80-* \
+ 	| h8300-* | h8500-* \
+ 	| hppa-* | hppa1.[01]-* | hppa2.0-* | hppa2.0[nw]-* | hppa64-* \
+ 	| i*86-* | i860-* | i960-* | ia64-* \
+-	| ip2k-* \
+-	| m32r-* \
++	| ip2k-* | iq2000-* \
++	| lm32-* \
++	| m32c-* | m32r-* | m32rle-* \
+ 	| m68000-* | m680[012346]0-* | m68360-* | m683?2-* | m68k-* \
+-	| m88110-* | m88k-* | mcore-* \
++	| m88110-* | m88k-* | maxq-* | mcore-* | metag-* | microblaze-* \
+ 	| mips-* | mipsbe-* | mipseb-* | mipsel-* | mipsle-* \
+ 	| mips16-* \
+ 	| mips64-* | mips64el-* \
+-	| mips64vr-* | mips64vrel-* \
++	| mips64octeon-* | mips64octeonel-* \
+ 	| mips64orion-* | mips64orionel-* \
++	| mips64r5900-* | mips64r5900el-* \
++	| mips64vr-* | mips64vrel-* \
+ 	| mips64vr4100-* | mips64vr4100el-* \
+ 	| mips64vr4300-* | mips64vr4300el-* \
+ 	| mips64vr5000-* | mips64vr5000el-* \
++	| mips64vr5900-* | mips64vr5900el-* \
+ 	| mipsisa32-* | mipsisa32el-* \
++	| mipsisa32r2-* | mipsisa32r2el-* \
+ 	| mipsisa64-* | mipsisa64el-* \
++	| mipsisa64r2-* | mipsisa64r2el-* \
+ 	| mipsisa64sb1-* | mipsisa64sb1el-* \
+ 	| mipsisa64sr71k-* | mipsisa64sr71kel-* \
+-	| mipstx39 | mipstx39el \
++	| mipstx39-* | mipstx39el-* \
++	| mmix-* \
++	| mt-* \
++	| msp430-* \
++	| nios-* | nios2-* \
+ 	| none-* | np1-* | ns16k-* | ns32k-* \
+ 	| orion-* \
+ 	| pdp10-* | pdp11-* | pj-* | pjl-* | pn-* | power-* \
+ 	| powerpc-* | powerpc64-* | powerpc64le-* | powerpcle-* | ppcbe-* \
+ 	| pyramid-* \
+-	| romp-* | rs6000-* \
+-	| sh-* | sh[1234]-* | sh3e-* | sh[34]eb-* | shbe-* \
++	| romp-* | rs6000-* | rx-* \
++	| sh-* | sh[1234]-* | sh[24]a-* | sh[24]aeb-* | sh[23]e-* | sh[34]eb-* | sheb-* | shbe-* \
+ 	| shle-* | sh[1234]le-* | sh3ele-* | sh64-* | sh64le-* \
+-	| sparc-* | sparc64-* | sparc86x-* | sparclet-* | sparclite-* \
+-	| sparcv9-* | sparcv9b-* | strongarm-* | sv1-* | sx?-* \
+-	| tahoe-* | thumb-* | tic30-* | tic4x-* | tic54x-* | tic80-* | tron-* \
++	| sparc-* | sparc64-* | sparc64b-* | sparc64v-* | sparc86x-* | sparclet-* \
++	| sparclite-* \
++	| sparcv8-* | sparcv9-* | sparcv9b-* | sparcv9v-* | strongarm-* | sv1-* | sx?-* \
++	| tahoe-* | thumb-* \
++	| tic30-* | tic4x-* | tic54x-* | tic55x-* | tic6x-* | tic80-* \
++	| tile-* | tilegx-* \
++	| tron-* \
++	| ubicom32-* \
+ 	| v850-* | v850e-* | vax-* \
+ 	| we32k-* \
+-	| x86-* | x86_64-* | xps100-* | xscale-* | xstormy16-* \
+-	| xtensa-* \
++	| x86-* | x86_64-* | xc16x-* | xps100-* | xscale-* | xscalee[bl]-* \
++	| xstormy16-* | xtensa*-* \
+ 	| ymp-* \
+-	| z8k-*)
++	| z8k-* | z80-*)
++		;;
++	# Recognize the basic CPU types without company name, with glob match.
++	xtensa*)
++		basic_machine=$basic_machine-unknown
+ 		;;
+ 	# Recognize the various machine names and aliases which stand
+ 	# for a CPU type and a company and sometimes even an OS.
+@@ -353,6 +412,9 @@
+ 		basic_machine=a29k-amd
+ 		os=-udi
+ 		;;
++    	abacus)
++		basic_machine=abacus-unknown
++		;;
+ 	adobe68k)
+ 		basic_machine=m68010-adobe
+ 		os=-scout
+@@ -367,6 +429,12 @@
+ 		basic_machine=a29k-none
+ 		os=-bsd
+ 		;;
++	amd64)
++		basic_machine=x86_64-pc
++		;;
++	amd64-*)
++		basic_machine=x86_64-`echo $basic_machine | sed 's/^[^-]*-//'`
++		;;
+ 	amdahl)
+ 		basic_machine=580-amdahl
+ 		os=-sysv
+@@ -390,6 +458,10 @@
+ 		basic_machine=m68k-apollo
+ 		os=-bsd
+ 		;;
++	aros)
++		basic_machine=i386-pc
++		os=-aros
++		;;
+ 	aux)
+ 		basic_machine=m68k-apple
+ 		os=-aux
+@@ -398,10 +470,26 @@
+ 		basic_machine=ns32k-sequent
+ 		os=-dynix
+ 		;;
++	blackfin)
++		basic_machine=bfin-unknown
++		os=-linux
++		;;
++	blackfin-*)
++		basic_machine=bfin-`echo $basic_machine | sed 's/^[^-]*-//'`
++		os=-linux
++		;;
++	bluegene*)
++		basic_machine=powerpc-ibm
++		os=-cnk
++		;;
+ 	c90)
+ 		basic_machine=c90-cray
+ 		os=-unicos
+ 		;;
++        cegcc)
++		basic_machine=arm-unknown
++		os=-cegcc
++		;;
+ 	convex-c1)
+ 		basic_machine=c1-convex
+ 		os=-bsd
+@@ -426,12 +514,27 @@
+ 		basic_machine=j90-cray
+ 		os=-unicos
+ 		;;
++	craynv)
++		basic_machine=craynv-cray
++		os=-unicosmp
++		;;
++	cr16)
++		basic_machine=cr16-unknown
++		os=-elf
++		;;
+ 	crds | unos)
+ 		basic_machine=m68k-crds
+ 		;;
++	crisv32 | crisv32-* | etraxfs*)
++		basic_machine=crisv32-axis
++		;;
+ 	cris | cris-* | etrax*)
+ 		basic_machine=cris-axis
+ 		;;
++	crx)
++		basic_machine=crx-unknown
++		os=-elf
++		;;
+ 	da30 | da30-*)
+ 		basic_machine=m68k-da30
+ 		;;
+@@ -454,6 +557,14 @@
+ 		basic_machine=m88k-motorola
+ 		os=-sysv3
+ 		;;
++	dicos)
++		basic_machine=i686-pc
++		os=-dicos
++		;;
++	djgpp)
++		basic_machine=i586-pc
++		os=-msdosdjgpp
++		;;
+ 	dpx20 | dpx20-*)
+ 		basic_machine=rs6000-bull
+ 		os=-bosx
+@@ -604,6 +715,14 @@
+ 		basic_machine=m68k-isi
+ 		os=-sysv
+ 		;;
++	m68knommu)
++		basic_machine=m68k-unknown
++		os=-linux
++		;;
++	m68knommu-*)
++		basic_machine=m68k-`echo $basic_machine | sed 's/^[^-]*-//'`
++		os=-linux
++		;;
+ 	m88k-omron*)
+ 		basic_machine=m88k-omron
+ 		;;
+@@ -615,10 +734,17 @@
+ 		basic_machine=ns32k-utek
+ 		os=-sysv
+ 		;;
++        microblaze)
++		basic_machine=microblaze-xilinx
++		;;
+ 	mingw32)
+ 		basic_machine=i386-pc
+ 		os=-mingw32
+ 		;;
++	mingw32ce)
++		basic_machine=arm-unknown
++		os=-mingw32ce
++		;;
+ 	miniframe)
+ 		basic_machine=m68000-convergent
+ 		;;
+@@ -632,10 +758,6 @@
+ 	mips3*)
+ 		basic_machine=`echo $basic_machine | sed -e 's/mips3/mips64/'`-unknown
+ 		;;
+-	mmix*)
+-		basic_machine=mmix-knuth
+-		os=-mmixware
+-		;;
+ 	monitor)
+ 		basic_machine=m68k-rom68k
+ 		os=-coff
+@@ -648,6 +770,9 @@
+ 		basic_machine=i386-pc
+ 		os=-msdos
+ 		;;
++	ms1-*)
++		basic_machine=`echo $basic_machine | sed -e 's/ms1-/mt-/'`
++		;;
+ 	mvs)
+ 		basic_machine=i370-ibm
+ 		os=-mvs
+@@ -723,9 +848,12 @@
+ 		basic_machine=hppa1.1-oki
+ 		os=-proelf
+ 		;;
+-	or32 | or32-*)
++	openrisc | openrisc-*)
+ 		basic_machine=or32-unknown
+-		os=-coff
++		;;
++	os400)
++		basic_machine=powerpc-ibm
++		os=-os400
+ 		;;
+ 	OSE68000 | ose68000)
+ 		basic_machine=m68000-ericsson
+@@ -743,6 +871,14 @@
+ 		basic_machine=i860-intel
+ 		os=-osf
+ 		;;
++	parisc)
++		basic_machine=hppa-unknown
++		os=-linux
++		;;
++	parisc-*)
++		basic_machine=hppa-`echo $basic_machine | sed 's/^[^-]*-//'`
++		os=-linux
++		;;
+ 	pbd)
+ 		basic_machine=sparc-tti
+ 		;;
+@@ -752,24 +888,36 @@
+ 	pc532 | pc532-*)
+ 		basic_machine=ns32k-pc532
+ 		;;
++	pc98)
++		basic_machine=i386-pc
++		;;
++	pc98-*)
++		basic_machine=i386-`echo $basic_machine | sed 's/^[^-]*-//'`
++		;;
+ 	pentium | p5 | k5 | k6 | nexgen | viac3)
+ 		basic_machine=i586-pc
+ 		;;
+ 	pentiumpro | p6 | 6x86 | athlon | athlon_*)
+ 		basic_machine=i686-pc
+ 		;;
+-	pentiumii | pentium2)
++	pentiumii | pentium2 | pentiumiii | pentium3)
+ 		basic_machine=i686-pc
+ 		;;
++	pentium4)
++		basic_machine=i786-pc
++		;;
+ 	pentium-* | p5-* | k5-* | k6-* | nexgen-* | viac3-*)
+ 		basic_machine=i586-`echo $basic_machine | sed 's/^[^-]*-//'`
+ 		;;
+ 	pentiumpro-* | p6-* | 6x86-* | athlon-*)
+ 		basic_machine=i686-`echo $basic_machine | sed 's/^[^-]*-//'`
+ 		;;
+-	pentiumii-* | pentium2-*)
++	pentiumii-* | pentium2-* | pentiumiii-* | pentium3-*)
+ 		basic_machine=i686-`echo $basic_machine | sed 's/^[^-]*-//'`
+ 		;;
++	pentium4-*)
++		basic_machine=i786-`echo $basic_machine | sed 's/^[^-]*-//'`
++		;;
+ 	pn)
+ 		basic_machine=pn-gould
+ 		;;
+@@ -802,6 +950,10 @@
+ 		basic_machine=i586-unknown
+ 		os=-pw32
+ 		;;
++	rdos)
++		basic_machine=i386-pc
++		os=-rdos
++		;;
+ 	rom68k)
+ 		basic_machine=m68k-rom68k
+ 		os=-coff
+@@ -828,6 +980,14 @@
+ 	sb1el)
+ 		basic_machine=mipsisa64sb1el-unknown
+ 		;;
++	sde)
++		basic_machine=mipsisa32-sde
++		os=-elf
++		;;
++	sei)
++		basic_machine=mips-sei
++		os=-seiux
++		;;
+ 	sequent)
+ 		basic_machine=i386-sequent
+ 		;;
+@@ -835,6 +995,12 @@
+ 		basic_machine=sh-hitachi
+ 		os=-hms
+ 		;;
++	sh5el)
++		basic_machine=sh5le-unknown
++		;;
++	sh64)
++		basic_machine=sh64-unknown
++		;;
+ 	sparclite-wrs | simso-wrs)
+ 		basic_machine=sparclite-wrs
+ 		os=-vxworks
+@@ -901,10 +1067,6 @@
+ 		basic_machine=i386-sequent
+ 		os=-dynix
+ 		;;
+-	t3d)
+-		basic_machine=alpha-cray
+-		os=-unicos
+-		;;
+ 	t3e)
+ 		basic_machine=alphaev5-cray
+ 		os=-unicos
+@@ -913,14 +1075,27 @@
+ 		basic_machine=t90-cray
+ 		os=-unicos
+ 		;;
+-        tic4x | c4x*)
+-		basic_machine=tic4x-unknown
+-		os=-coff
+-		;;
+ 	tic54x | c54x*)
+ 		basic_machine=tic54x-unknown
+ 		os=-coff
+ 		;;
++	tic55x | c55x*)
++		basic_machine=tic55x-unknown
++		os=-coff
++		;;
++	tic6x | c6x*)
++		basic_machine=tic6x-unknown
++		os=-coff
++		;;
++        # This must be matched before tile*.
++        tilegx*)
++		basic_machine=tilegx-unknown
++		os=-linux-gnu
++		;;
++	tile*)
++		basic_machine=tile-unknown
++		os=-linux-gnu
++		;;
+ 	tx39)
+ 		basic_machine=mipstx39-unknown
+ 		;;
+@@ -934,6 +1109,10 @@
+ 	tower | tower-32)
+ 		basic_machine=m68k-ncr
+ 		;;
++	tpf)
++		basic_machine=s390x-ibm
++		os=-tpf
++		;;
+ 	udi29k)
+ 		basic_machine=a29k-amd
+ 		os=-udi
+@@ -977,9 +1156,9 @@
+ 		basic_machine=hppa1.1-winbond
+ 		os=-proelf
+ 		;;
+-	windows32)
+-		basic_machine=i386-pc
+-		os=-windows32-msvcrt
++	xbox)
++		basic_machine=i686-pc
++		os=-mingw32
+ 		;;
+ 	xps | xps100)
+ 		basic_machine=xps100-honeywell
+@@ -992,6 +1171,10 @@
+ 		basic_machine=z8k-unknown
+ 		os=-sim
+ 		;;
++	z80-*-coff)
++		basic_machine=z80-unknown
++		os=-sim
++		;;
+ 	none)
+ 		basic_machine=none-none
+ 		os=-none
+@@ -1011,6 +1194,9 @@
+ 	romp)
+ 		basic_machine=romp-ibm
+ 		;;
++	mmix)
++		basic_machine=mmix-knuth
++		;;
+ 	rs6000)
+ 		basic_machine=rs6000-ibm
+ 		;;
+@@ -1027,13 +1213,10 @@
+ 	we32k)
+ 		basic_machine=we32k-att
+ 		;;
+-	sh3 | sh4 | sh3eb | sh4eb | sh[1234]le | sh3ele)
++	sh[1234] | sh[24]a | sh[24]aeb | sh[34]eb | sh[1234]le | sh[23]ele)
+ 		basic_machine=sh-unknown
+ 		;;
+-	sh64)
+-		basic_machine=sh64-unknown
+-		;;
+-	sparc | sparcv9 | sparcv9b)
++	sparc | sparcv8 | sparcv9 | sparcv9b | sparcv9v)
+ 		basic_machine=sparc-sun
+ 		;;
+ 	cydra)
+@@ -1080,6 +1263,9 @@
+         # First match some system type aliases
+         # that might get confused with valid system types.
+ 	# -solaris* is a basic system type, with this one exception.
++        -auroraux)
++	        os=-auroraux
++		;;
+ 	-solaris1 | -solaris1.*)
+ 		os=`echo $os | sed -e 's|solaris1|sunos4|'`
+ 		;;
+@@ -1100,24 +1286,31 @@
+ 	# Each alternative MUST END IN A *, to match a version number.
+ 	# -sysv* is not here because it comes later, after sysvr4.
+ 	-gnu* | -bsd* | -mach* | -minix* | -genix* | -ultrix* | -irix* \
+-	      | -*vms* | -sco* | -esix* | -isc* | -aix* | -sunos | -sunos[34]*\
+-	      | -hpux* | -unos* | -osf* | -luna* | -dgux* | -solaris* | -sym* \
++	      | -*vms* | -sco* | -esix* | -isc* | -aix* | -cnk* | -sunos | -sunos[34]*\
++	      | -hpux* | -unos* | -osf* | -luna* | -dgux* | -auroraux* | -solaris* \
++	      | -sym* | -kopensolaris* \
+ 	      | -amigaos* | -amigados* | -msdos* | -newsos* | -unicos* | -aof* \
+-	      | -aos* \
++	      | -aos* | -aros* \
+ 	      | -nindy* | -vxsim* | -vxworks* | -ebmon* | -hms* | -mvs* \
+ 	      | -clix* | -riscos* | -uniplus* | -iris* | -rtu* | -xenix* \
+-	      | -hiux* | -386bsd* | -netbsd* | -openbsd* | -freebsd* | -riscix* \
+-	      | -lynxos* | -bosx* | -nextstep* | -cxux* | -aout* | -elf* | -oabi* \
++	      | -hiux* | -386bsd* | -knetbsd* | -mirbsd* | -netbsd* \
++	      | -openbsd* | -solidbsd* \
++	      | -ekkobsd* | -kfreebsd* | -freebsd* | -riscix* | -lynxos* \
++	      | -bosx* | -nextstep* | -cxux* | -aout* | -elf* | -oabi* \
+ 	      | -ptx* | -coff* | -ecoff* | -winnt* | -domain* | -vsta* \
+ 	      | -udi* | -eabi* | -lites* | -ieee* | -go32* | -aux* \
+-	      | -chorusos* | -chorusrdb* \
++	      | -androideabi* \
++	      | -chorusos* | -chorusrdb* | -cegcc* \
+ 	      | -cygwin* | -pe* | -psos* | -moss* | -proelf* | -rtems* \
+-	      | -mingw32* | -linux-gnu* | -uxpv* | -beos* | -mpeix* | -udk* \
+-	      | -interix* | -uwin* | -rhapsody* | -darwin* | -opened* \
++	      | -mingw32* | -linux-gnu* | -linux-newlib* | -linux-uclibc* \
++	      | -uxpv* | -beos* | -mpeix* | -udk* \
++	      | -interix* | -uwin* | -mks* | -rhapsody* | -darwin* | -opened* \
+ 	      | -openstep* | -oskit* | -conix* | -pw32* | -nonstopux* \
+ 	      | -storm-chaos* | -tops10* | -tenex* | -tops20* | -its* \
+ 	      | -os2* | -vos* | -palmos* | -uclinux* | -nucleus* \
+-	      | -morphos* | -superux* | -rtmk* | -rtmk-nova* | -windiss* | -powermax*)
++	      | -morphos* | -superux* | -rtmk* | -rtmk-nova* | -windiss* \
++	      | -powermax* | -dnix* | -nx6 | -nx7 | -sei* | -dragonfly* \
++	      | -skyos* | -haiku* | -rdos* | -toppers* | -drops* | -es*)
+ 	# Remember, each alternative MUST END IN *, to match a version number.
+ 		;;
+ 	-qnx*)
+@@ -1129,16 +1321,21 @@
+ 			;;
+ 		esac
+ 		;;
++	-nto-qnx*)
++		;;
+ 	-nto*)
+-		os=-nto-qnx
++		os=`echo $os | sed -e 's|nto|nto-qnx|'`
+ 		;;
+ 	-sim | -es1800* | -hms* | -xray | -os68k* | -none* | -v88r* \
+-	      | -windows* | -osx | -abug | -netware* | -os9* | -beos* \
++	      | -windows* | -osx | -abug | -netware* | -os9* | -beos* | -haiku* \
+ 	      | -macos* | -mpw* | -magic* | -mmixware* | -mon960* | -lnews*)
+ 		;;
+ 	-mac*)
+ 		os=`echo $os | sed -e 's|mac|macos|'`
+ 		;;
++	-linux-dietlibc)
++		os=-linux-dietlibc
++		;;
+ 	-linux*)
+ 		os=`echo $os | sed -e 's|linux|linux-gnu|'`
+ 		;;
+@@ -1151,6 +1348,9 @@
+ 	-opened*)
+ 		os=-openedition
+ 		;;
++        -os400*)
++		os=-os400
++		;;
+ 	-wince*)
+ 		os=-wince
+ 		;;
+@@ -1172,6 +1372,9 @@
+ 	-atheos*)
+ 		os=-atheos
+ 		;;
++	-syllable*)
++		os=-syllable
++		;;
+ 	-386bsd)
+ 		os=-bsd
+ 		;;
+@@ -1194,6 +1397,9 @@
+ 	-sinix*)
+ 		os=-sysv4
+ 		;;
++        -tpf*)
++		os=-tpf
++		;;
+ 	-triton*)
+ 		os=-sysv3
+ 		;;
+@@ -1224,6 +1430,20 @@
+ 	-*mint | -mint[0-9]* | -*MiNT | -MiNT[0-9]*)
+ 		os=-mint
+ 		;;
++	-aros*)
++		os=-aros
++		;;
++	-kaos*)
++		os=-kaos
++		;;
++	-zvmoe)
++		os=-zvmoe
++		;;
++	-dicos*)
++		os=-dicos
++		;;
++        -nacl*)
++	        ;;
+ 	-none)
+ 		;;
+ 	*)
+@@ -1246,6 +1466,12 @@
+ # system, and we'll never get to this point.
+ 
+ case $basic_machine in
++        score-*)
++		os=-elf
++		;;
++        spu-*)
++		os=-elf
++		;;
+ 	*-acorn)
+ 		os=-riscix1.2
+ 		;;
+@@ -1255,6 +1481,9 @@
+ 	arm*-semi)
+ 		os=-aout
+ 		;;
++        c4x-* | tic4x-*)
++        	os=-coff
++		;;
+ 	# This must come before the *-dec entry.
+ 	pdp10-*)
+ 		os=-tops20
+@@ -1280,6 +1509,9 @@
+ 	m68*-cisco)
+ 		os=-aout
+ 		;;
++        mep-*)
++		os=-elf
++		;;
+ 	mips*-cisco)
+ 		os=-elf
+ 		;;
+@@ -1298,9 +1530,15 @@
+ 	*-be)
+ 		os=-beos
+ 		;;
++	*-haiku)
++		os=-haiku
++		;;
+ 	*-ibm)
+ 		os=-aix
+ 		;;
++    	*-knuth)
++		os=-mmixware
++		;;
+ 	*-wec)
+ 		os=-proelf
+ 		;;
+@@ -1403,7 +1641,7 @@
+ 			-sunos*)
+ 				vendor=sun
+ 				;;
+-			-aix*)
++			-cnk*|-aix*)
+ 				vendor=ibm
+ 				;;
+ 			-beos*)
+@@ -1433,9 +1671,15 @@
+ 			-mvs* | -opened*)
+ 				vendor=ibm
+ 				;;
++			-os400*)
++				vendor=ibm
++				;;
+ 			-ptx*)
+ 				vendor=sequent
+ 				;;
++			-tpf*)
++				vendor=ibm
++				;;
+ 			-vxsim* | -vxworks* | -windiss*)
+ 				vendor=wrs
+ 				;;
+@@ -1460,7 +1704,7 @@
+ esac
+ 
+ echo $basic_machine$os
+-exit 0
++exit
+ 
+ # Local variables:
+ # eval: (add-hook 'write-file-hooks 'time-stamp)

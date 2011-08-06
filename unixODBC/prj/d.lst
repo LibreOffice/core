@@ -1,0 +1,3 @@
+mkdir: %_DEST%\inc\external
+mkdir: %_DEST%\inc\external\odbc
+..\inc\*.h %_DEST%\inc\external\odbc\*.h

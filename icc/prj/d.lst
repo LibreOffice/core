@@ -1,0 +1,5 @@
+mkdir: %_DEST%\inc\icc
+mkdir: %_DEST%\inc\external\icc
+
+..\%__SRC%\misc\build\SampleICC*\Contrib\CmdLine\create_sRGB_profile\sRGB*.hxx %_DEST%\inc\icc\sRGB*.hxx
+
