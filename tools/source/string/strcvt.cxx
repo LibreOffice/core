@@ -416,14 +416,6 @@ char ByteString::Convert( char c,
         return '\0';
 }
 
-// =======================================================================
-
-sal_Unicode ByteString::ConvertToUnicode( char c, rtl_TextEncoding eTextEncoding )
-{
-    sal_Size nLen = 1;
-    return ConvertToUnicode( &c, &nLen, eTextEncoding );
-}
-
 // -----------------------------------------------------------------------
 
 char ByteString::ConvertFromUnicode( sal_Unicode c, rtl_TextEncoding eTextEncoding, sal_Bool bReplace )
@@ -435,42 +427,6 @@ char ByteString::ConvertFromUnicode( sal_Unicode c, rtl_TextEncoding eTextEncodi
         return aBuf[0];
     else
         return 0;
-}
-
-// -----------------------------------------------------------------------
-
-sal_Unicode ByteString::ConvertToUnicode( const char* pChar, sal_Size* pLen, rtl_TextEncoding eTextEncoding )
-{
-    // TextEncoding Dontknow wird nicht konvertiert
-    if ( eTextEncoding == RTL_TEXTENCODING_DONTKNOW )
-        return 0;
-
-    rtl_TextToUnicodeConverter  hConverter;
-    sal_uInt32                  nInfo;
-    sal_Size                    nSrcBytes;
-    sal_Size                    nDestChars;
-    sal_Unicode                 nConvChar;
-    hConverter = rtl_createTextToUnicodeConverter( eTextEncoding );
-    nDestChars = rtl_convertTextToUnicode( hConverter, 0,
-                                           (const sal_Char*)pChar, *pLen,
-                                           &nConvChar, 1,
-                                           RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_DEFAULT |
-                                           RTL_TEXTTOUNICODE_FLAGS_MBUNDEFINED_DEFAULT |
-                                           RTL_TEXTTOUNICODE_FLAGS_INVALID_DEFAULT |
-                                           RTL_TEXTTOUNICODE_FLAGS_FLUSH,
-                                           &nInfo, &nSrcBytes );
-    rtl_destroyTextToUnicodeConverter( hConverter );
-
-    if ( nDestChars == 1 )
-    {
-        *pLen = nSrcBytes;
-        return nConvChar;
-    }
-    else
-    {
-        *pLen = 0;
-        return 0;
-    }
 }
 
 // -----------------------------------------------------------------------

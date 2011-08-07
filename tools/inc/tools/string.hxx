@@ -164,9 +164,6 @@ private:
     TOOLS_DLLPRIVATE void ImplStringConvert(
         rtl_TextEncoding, rtl_TextEncoding, sal_Bool);
 
-    TOOLS_DLLPRIVATE static sal_Unicode ConvertToUnicode(
-        const sal_Char* pChar, sal_Size* pLen, rtl_TextEncoding eTextEncoding);
-
                         ByteString( const int* pDummy ); // not implemented: to prevent ByteString( NULL )
                         ByteString(int); // not implemented; to detect misuses
                                          // of ByteString(sal_Char);
@@ -261,8 +258,6 @@ public:
     static sal_Char     Convert( sal_Char c, rtl_TextEncoding eSource,
                                  rtl_TextEncoding eTarget,
                                  sal_Bool bReplace = sal_True );
-    static sal_Unicode  ConvertToUnicode( sal_Char c,
-                                          rtl_TextEncoding eTextEncoding );
     static sal_Char     ConvertFromUnicode( sal_Unicode c,
                                             rtl_TextEncoding eTextEncoding,
                                             sal_Bool bReplace = sal_True );
