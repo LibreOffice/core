@@ -387,8 +387,7 @@ ByteString& ByteString::Convert( rtl_TextEncoding eSource, rtl_TextEncoding eTar
 // =======================================================================
 
 char ByteString::Convert( char c,
-                          rtl_TextEncoding eSource, rtl_TextEncoding eTarget,
-                          sal_Bool bReplace )
+                          rtl_TextEncoding eSource, rtl_TextEncoding eTarget )
 {
     // TextEncoding Dontknow kann nicht konvertiert werden
     if ( (eSource == RTL_TEXTENCODING_DONTKNOW) || (eTarget == RTL_TEXTENCODING_DONTKNOW) )
@@ -409,7 +408,7 @@ char ByteString::Convert( char c,
          (eSource != RTL_TEXTENCODING_UTF8) )
         return '\0';
 
-    sal_uChar* pConvertTab = ImplGet1ByteConvertTab( eSource, eTarget, bReplace );
+    sal_uChar* pConvertTab = ImplGet1ByteConvertTab( eSource, eTarget, true );
     if ( pConvertTab )
         return (char)pConvertTab[(sal_uChar)c];
     else
