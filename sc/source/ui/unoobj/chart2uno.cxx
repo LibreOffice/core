@@ -629,7 +629,7 @@ void Chart2Positioner::glueState()
             i = nCol*nR + nRow;
             if (aCellStates[i] == nOccu)
             {
-                if (nRow > 0 && nRow > 0)
+                if (nCol > 0 && nRow > 0)
                     bGlue = false;
                 else
                     nRow = nR;
