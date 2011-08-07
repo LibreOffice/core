@@ -114,6 +114,7 @@ File gid_File_Oxt_LightProof
     Dir = gid_Brand_Dir_Share_Extensions_LightProof;
     Name (en-US) = "lightproof-en-US.oxt";
     Name (hu) = "lightproof-hu.oxt";
+    Name (ru) = "lightproof-ru.oxt";
 End
 
 #endif

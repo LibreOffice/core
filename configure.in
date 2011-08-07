@@ -7603,7 +7603,7 @@ if test "z$enable_ext_lightproof" = "z" -o "z$enable_ext_lightproof" = "zno" ; t
     AC_MSG_RESULT([no integration])
 else
     SCPDEFS="$SCPDEFS -DWITH_EXTENSION_LIGHTPROOF"
-    lightproof_supported_langs="en-US hu"
+    lightproof_supported_langs="en-US hu ru"
     if test "z$enable_ext_lightproof" = "zyes" ; then
         wanted_lightproof="$lightproof_supported_langs"
     else
@@ -7617,6 +7617,7 @@ else
     fi
     LIGHTPROOF_LANG=
     LIGHTPROOF_HU_PACK=
+    LIGHTPROOF_RU_PACK=
     LIGHTPROOF_EN_US_PACK=
     # check whether the langs are requested at all
     for lang in $wanted_lightproof ; do
@@ -7624,6 +7625,7 @@ else
             LIGHTPROOF_LANG="$LIGHTPROOF_LANG $lang"
             case $lang in
             "hu") LIGHTPROOF_HU_PACK="76345f925e34fef2d29bade4f29108e9-lightproof-hu_1.3.oxt";;
+            "ru") LIGHTPROOF_RU_PACK="673860e8649cff2ebdc68bd46f2f7f1a-lightproof-ru_0.1.oxt";;
             "en-US") LIGHTPROOF_EN_US_PACK="0ab55ac8e88f04258f1d3e79e984382f-lightproof-en-US_0.1.oxt";;
             esac
         fi
@@ -7632,6 +7634,7 @@ else
 fi
 AC_SUBST(LIGHTPROOF_LANG)
 AC_SUBST(LIGHTPROOF_HU_PACK)
+AC_SUBST(LIGHTPROOF_RU_PACK)
 AC_SUBST(LIGHTPROOF_EN_US_PACK)
 
 dnl ===================================================================

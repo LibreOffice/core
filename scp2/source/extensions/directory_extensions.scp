@@ -100,8 +100,9 @@ End
 
 Directory gid_Brand_Dir_Share_Extensions_LightProof
     ParentID = gid_Brand_Dir_Share_Extensions;
-    DosName (en-US) = "lightproof-en-US-0.1";
-    DosName (hu) = "lightproof-hu-1.2";
+    DosName (en-US) = "lightproof-en-US";
+    DosName (hu) = "lightproof-hu";
+    DosName (ru) = "lightproof-ru";
     DosName = "lightproof";
 End
 
