@@ -112,20 +112,6 @@ namespace utl {
         virtual ::com::sun::star::uno::Sequence< ::com::sun::star::util::AtomDescription > SAL_CALL getRecentAtoms( sal_Int32 atomClass, sal_Int32 atom ) throw();
         virtual sal_Int32 SAL_CALL getAtom( sal_Int32 atomClass, const ::rtl::OUString& description, sal_Bool create ) throw();
     };
-
-    class AtomClient
-    {
-    private:
-        ::com::sun::star::uno::Reference< ::com::sun::star::util::XAtomServer >     m_xServer;
-        MultiAtomProvider m_aProvider;
-    public:
-        AtomClient( const ::com::sun::star::uno::Reference< ::com::sun::star::util::XAtomServer >& );
-        ~AtomClient();
-
-        void updateAtomClasses( const ::com::sun::star::uno::Sequence< sal_Int32 >& atomClasses );
-        int getAtom( int atomClass, const ::rtl::OUString& description, sal_Bool bCreate );
-        const ::rtl::OUString& getString( int atomClass, int atom );
-    };
 }
 
 #endif

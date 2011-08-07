@@ -396,14 +396,8 @@ public:
     FSysError           ExecuteExact( FSysAction nActions = FSYS_ACTION_STANDARD,
                                                                  FSysExact  eExact = FSYS_NOTEXACT);
 
-    const DirEntry*     GetErrorSource() const;
-    const DirEntry*     GetErrorTarget() const;
-    ErrCode             GetError() const;
-
     void                SetProgressHdl( const Link& rLink ) { aProgressLink = rLink; }
     const Link&         GetProgressHdl() const { return aProgressLink; }
-    void                SetErrorHdl( const Link& rLink );
-    const Link&         GetErrorHdl() const;
 };
 
 // -------

@@ -149,41 +149,6 @@ ErrCode FileCopier::Error( ErrCode eErr, const DirEntry* pSource, const DirEntry
     return eRet;
 }
 
-//---------------------------------------------------------------------------
-
-const DirEntry* FileCopier::GetErrorSource() const
-{
-    return pImp->pErrSource;
-}
-
-//---------------------------------------------------------------------------
-
-const DirEntry* FileCopier::GetErrorTarget() const
-{
-    return pImp->pErrTarget;
-}
-
-//---------------------------------------------------------------------------
-
-ErrCode FileCopier::GetError() const
-{
-    return pImp->eErr;
-}
-
-//---------------------------------------------------------------------------
-
-void FileCopier::SetErrorHdl( const Link &rLink )
-{
-    pImp->aErrorLink = rLink;
-}
-
-//---------------------------------------------------------------------------
-
-const Link& FileCopier::GetErrorHdl() const
-{
-    return pImp->aErrorLink ;
-}
-
 /*************************************************************************
 |*
 |*    FileCopier::Execute()

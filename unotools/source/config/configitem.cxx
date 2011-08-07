@@ -237,15 +237,6 @@ ConfigItem::ConfigItem(const OUString &rSubTree, sal_Int16 nSetMode ) :
     pImpl->nMode &= ~CONFIG_MODE_PROPAGATE_ERRORS;
 }
 
-ConfigItem::ConfigItem(utl::ConfigManager&  rManager, const rtl::OUString rSubTree) :
-    sSubTree(rSubTree),
-    pImpl(new ConfigItem_Impl)
-{
-    pImpl->pManager = &rManager;
-    pImpl->nMode = CONFIG_MODE_IMMEDIATE_UPDATE; // does not allow exceptions
-    m_xHierarchyAccess = pImpl->pManager->AddConfigItem(*this);
-}
-
 sal_Bool ConfigItem::IsValidConfigMgr() const
 {
     return ( pImpl->pManager && pImpl->pManager->GetConfigurationProvider().is() );
@@ -1326,19 +1317,5 @@ Reference< XHierarchicalNameAccess> ConfigItem::GetTree()
         xRet = m_xHierarchyAccess;
     return xRet;
 }
-
-void ConfigItem::LockTree()
-{
-    OSL_ENSURE(0 != (pImpl->nMode&CONFIG_MODE_RELEASE_TREE), "call LockTree in CONFIG_MODE_RELEASE_TREE mode, only");
-    m_xHierarchyAccess = GetTree();
-}
-
-void ConfigItem::UnlockTree()
-{
-    OSL_ENSURE(0 != (pImpl->nMode&CONFIG_MODE_RELEASE_TREE), "call UnlockTree in CONFIG_MODE_RELEASE_TREE mode, only");
-    if(0 != (pImpl->nMode&CONFIG_MODE_RELEASE_TREE))
-        m_xHierarchyAccess = 0;
-}
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

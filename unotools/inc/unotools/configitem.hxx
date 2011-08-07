@@ -117,7 +117,6 @@ namespace utl
         protected:
             ConfigItem(const rtl::OUString &rSubTree,
                         sal_Int16 nMode = CONFIG_MODE_DELAYED_UPDATE);
-            ConfigItem(utl::ConfigManager&  rManager, const rtl::OUString rSubTree);
 
             void                    SetModified  (); // mark item as modified
             void                    ClearModified(); // reset state after commit!
@@ -188,11 +187,6 @@ namespace utl
 
             /** is called from the ConfigManager if it is destroyed before the ConfigItem. */
             void                    ReleaseConfigMgr();
-
-            /** enable locking of the XHierarchicalNameAccess if CONFIG_MODE_RELEASE_TREE is set to
-             prevent multiple calls ConfigManager::AcquireTree() from a single Commit() operation*/
-            void                    LockTree();
-            void                    UnlockTree();
 
             const rtl::OUString&    GetSubTreeName() const {return sSubTree;}
 

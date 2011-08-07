@@ -276,9 +276,6 @@ public:
     void                        SetSearchMask(SfxStyleFamily eFam, sal_uInt16 n=0xFFFF );
     sal_uInt16                      GetSearchMask() const;
     SfxStyleFamily              GetSearchFamily() const  { return nSearchFamily; }
-
-    sal_Bool                        Load( SvStream& );
-    sal_Bool                        Store( SvStream&, sal_Bool bUsed = sal_True );
 };
 
 //=========================================================================
