@@ -81,8 +81,6 @@ public:
     void    StartEntry();
     void    EndEntry();
     sal_uLong   BytesLeft() const;
-
-    static void Skip( SvStream& );      // komplett ueberspringen
 };
 
 class ImpSvNumMultipleWriteHeader

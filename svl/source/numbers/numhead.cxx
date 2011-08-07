@@ -143,24 +143,6 @@ ImpSvNumMultipleReadHeader::~ImpSvNumMultipleReadHeader()
     rStream.Seek(nEndPos);
 }
 
-//! mit ctor synchron
-// static
-void ImpSvNumMultipleReadHeader::Skip( SvStream& rStream )
-{
-    sal_uInt32 nDataSize;
-    rStream >> nDataSize;
-    rStream.SeekRel( nDataSize );
-    sal_uInt16 nID;
-    rStream >> nID;
-    if ( nID != SV_NUMID_SIZES )
-    {
-        OSL_FAIL("SV_NUMID_SIZES nicht gefunden");
-    }
-    sal_uInt32 nSizeTableLen;
-    rStream >> nSizeTableLen;
-    rStream.SeekRel( nSizeTableLen );
-}
-
 //#pragma SEG_FUNCDEF(numhead_08)
 
 void ImpSvNumMultipleReadHeader::EndEntry()
