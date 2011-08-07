@@ -495,17 +495,22 @@ int HTMLParser::ScanText( const sal_Unicode cBreak )
                         if( RTL_TEXTENCODING_DONTKNOW != eSrcEnc &&
                             RTL_TEXTENCODING_UCS2 != eSrcEnc &&
                             RTL_TEXTENCODING_UTF8 != eSrcEnc &&
-                             cChar < 256 )
+                            cChar < 256 )
                         {
-                             sal_Unicode cOrig = cChar;
-                            cChar = ByteString::ConvertToUnicode(
-                                            (sal_Char)cChar, eSrcEnc );
+                            const sal_uInt32 convertFlags =
+                                RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_DEFAULT |
+                                RTL_TEXTTOUNICODE_FLAGS_MBUNDEFINED_DEFAULT |
+                                RTL_TEXTTOUNICODE_FLAGS_INVALID_DEFAULT |
+                                RTL_TEXTTOUNICODE_FLAGS_FLUSH;
+
+                            sal_Char cEncodedChar = static_cast<sal_Char>(cChar);
+                            cChar = rtl::OUString(&cEncodedChar, 1, eSrcEnc, convertFlags).toChar();
                             if( 0U == cChar )
                             {
                                 // If the character could not be
                                 // converted, because a conversion is not
                                 // available, do no conversion at all.
-                                cChar = cOrig;
+                                cChar = cEncodedChar;
                             }
                         }
                     }
