@@ -138,10 +138,6 @@ ComboBox::IsDDAutoWidthEnabled() const
 ComboBox::IsUserDrawEnabled() const
 ComboBox::ShowProminentEntry(unsigned short)
 CommandExtTextInputData::CommandExtTextInputData()
-CommandLine::get_arg(unsigned long) const
-CommandLine::get_arg_count() const
-CommandLine::get_arg_names() const
-CommandLine::set_arg_prefix(std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&)
 CommunicationLinkList::DeleteAndDestroy(unsigned short, unsigned short)
 CommunicationLinkList::Insert(CommunicationLink const*&, unsigned short&)
 CommunicationLinkList::Insert(CommunicationLink const**, unsigned short)

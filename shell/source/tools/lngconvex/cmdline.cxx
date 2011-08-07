@@ -40,67 +40,15 @@
 // Creation
 
 
-CommandLine::CommandLine(size_t argc, char* argv[], const std::string& ArgPrefix) :
+CommandLine::CommandLine(size_t argc, char* argv[]) :
     m_argc(argc),
-    m_argv(argv),
-    m_argprefix(ArgPrefix)
+    m_argv(argv)
 {
 }
 
 
 // Query
 
-
-/** Return the argument count
-*/
-size_t CommandLine::get_arg_count() const
-{
-    return m_argc;
-}
-
-/** Return an argument by index
-    This method doesn't skip argument
-    names if any, so if the second
-    argument is an argument name the
-    function nevertheless returns it.
-
-    @precond    0 <= Index < GetArgumentCount
-
-    @throws std::out_of_range exception
-    if the given index is to high
-*/
-std::string CommandLine::get_arg(size_t Index) const
-{
-    OSL_PRECOND(Index < m_argc, "Index out of range");
-
-    if (Index > (m_argc - 1))
-        throw std::out_of_range("Invalid index");
-
-    return m_argv[Index];
-}
-
-
-/** Returns all argument name found in the
-    command line. An argument will be identified
-    by a specified prefix. The standard prefix
-    is '-'.
-    If the are no argument names the returned
-    container is empty.
-*/
-StringListPtr_t CommandLine::get_arg_names() const
-{
-    StringListPtr_t arg_cont(new StringList_t());
-
-    for (size_t i = 0; i < m_argc; i++)
-    {
-        std::string argn = m_argv[i];
-
-        if (is_arg_name(argn))
-            arg_cont->push_back(argn);
-    }
-
-    return arg_cont;
-}
 
 /** Returns an argument by name. If there are
     duplicate argument names in the command line,
@@ -143,30 +91,11 @@ std::string CommandLine::get_arg(const std::string& ArgumentName) const
 // Command
 
 
-/** Set the prefix used to identify arguments in
-    the command line.
-
-    @precond    prefix is not empty
-
-    @throws std::invalid_argument exception if
-    the prefix is empty
-*/
-void CommandLine::set_arg_prefix(const std::string& Prefix)
-{
-    OSL_PRECOND(Prefix.length(), "Empty argument prefix!");
-
-    if (0 == Prefix.length())
-        throw std::invalid_argument("Empty argument prefix not allowed");
-
-    m_argprefix = Prefix;
-}
-
-
 /** Returns whether a given argument is an argument name
 */
 bool CommandLine::is_arg_name(const std::string& Argument) const
 {
-    return (0 == Argument.compare(0, m_argprefix.length(), m_argprefix));
+    return (Argument.length() > 0 && Argument[0] == '-');
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
