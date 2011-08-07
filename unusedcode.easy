@@ -136,7 +136,6 @@ ComboBox::GetSeparatorPos() const
 ComboBox::GetUserItemSize() const
 ComboBox::IsDDAutoWidthEnabled() const
 ComboBox::IsUserDrawEnabled() const
-ComboBox::SetSeparatorPos()
 ComboBox::ShowProminentEntry(unsigned short)
 CommandExtTextInputData::CommandExtTextInputData()
 CommandLine::get_arg(unsigned long) const

@@ -156,8 +156,7 @@ public:
     void            DrawEntry( const UserDrawEvent& rEvt, sal_Bool bDrawImage, sal_Bool bDrawText, sal_Bool bDrawTextAtImagePos = sal_False );
     void            SetBorderStyle( sal_uInt16 nBorderStyle );
 
-    void            SetSeparatorPos( sal_uInt16 n );
-    void            SetSeparatorPos();
+    void            SetSeparatorPos( sal_uInt16 n = LISTBOX_ENTRY_NOTFOUND );
     sal_uInt16          GetSeparatorPos() const;
 
     void            EnableAutocomplete( sal_Bool bEnable, sal_Bool bMatchCase = sal_False );

@@ -29,6 +29,8 @@
 #ifndef _SV_COMBOBOX_H
 #define _SV_COMBOBOX_H
 
+#include <vcl/lstbox.h>
+
 #define COMBOBOX_APPEND             ((sal_uInt16)0xFFFF)
 #define COMBOBOX_ENTRY_NOTFOUND     ((sal_uInt16)0xFFFF)
 #define COMBOBOX_ERROR              ((sal_uInt16)0xFFFF)

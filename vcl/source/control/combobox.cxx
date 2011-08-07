@@ -1374,13 +1374,6 @@ void ComboBox::SetSeparatorPos( sal_uInt16 n )
 
 // -----------------------------------------------------------------------
 
-void ComboBox::SetSeparatorPos()
-{
-    mpImplLB->SetSeparatorPos( LISTBOX_ENTRY_NOTFOUND );
-}
-
-// -----------------------------------------------------------------------
-
 sal_uInt16 ComboBox::GetSeparatorPos() const
 {
     return mpImplLB->GetSeparatorPos();
