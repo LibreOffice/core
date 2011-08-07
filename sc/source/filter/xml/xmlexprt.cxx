@@ -1524,16 +1524,19 @@ void ScXMLExport::SetBodyAttributes()
         if (aBuffer.getLength())
         {
             AddAttribute(XML_NAMESPACE_TABLE, XML_PROTECTION_KEY, aBuffer.makeStringAndClear());
-            if (eHashUsed == PASSHASH_XL)
+            if ( getDefaultVersion() >= SvtSaveOptions::ODFVER_012 )
             {
-                AddAttribute(XML_NAMESPACE_TABLE, XML_PROTECTION_KEY_DIGEST_ALGORITHM,
-                             ScPassHashHelper::getHashURI(PASSHASH_XL));
-                AddAttribute(XML_NAMESPACE_TABLE, XML_PROTECTION_KEY_DIGEST_ALGORITHM_2,
-                             ScPassHashHelper::getHashURI(PASSHASH_SHA1));
+                if (eHashUsed == PASSHASH_XL)
+                {
+                    AddAttribute(XML_NAMESPACE_TABLE, XML_PROTECTION_KEY_DIGEST_ALGORITHM,
+                                 ScPassHashHelper::getHashURI(PASSHASH_XL));
+                    AddAttribute(XML_NAMESPACE_TABLE, XML_PROTECTION_KEY_DIGEST_ALGORITHM_2,
+                                 ScPassHashHelper::getHashURI(PASSHASH_SHA1));
+                }
+                else if (eHashUsed == PASSHASH_SHA1)
+                    AddAttribute(XML_NAMESPACE_TABLE, XML_PROTECTION_KEY_DIGEST_ALGORITHM,
+                                 ScPassHashHelper::getHashURI(PASSHASH_SHA1));
             }
-            else if (eHashUsed == PASSHASH_SHA1)
-                AddAttribute(XML_NAMESPACE_TABLE, XML_PROTECTION_KEY_DIGEST_ALGORITHM,
-                             ScPassHashHelper::getHashURI(PASSHASH_SHA1));
         }
     }
 }
@@ -2694,16 +2697,19 @@ void ScXMLExport::WriteTable(sal_Int32 nTable, const Reference<sheet::XSpreadshe
                 if (aBuffer.getLength())
                 {
                     AddAttribute(XML_NAMESPACE_TABLE, XML_PROTECTION_KEY, aBuffer.makeStringAndClear());
-                    if (eHashUsed == PASSHASH_XL)
+                    if ( getDefaultVersion() >= SvtSaveOptions::ODFVER_012 )
                     {
-                        AddAttribute(XML_NAMESPACE_TABLE, XML_PROTECTION_KEY_DIGEST_ALGORITHM,
-                                     ScPassHashHelper::getHashURI(PASSHASH_XL));
-                        AddAttribute(XML_NAMESPACE_TABLE, XML_PROTECTION_KEY_DIGEST_ALGORITHM_2,
-                                     ScPassHashHelper::getHashURI(PASSHASH_SHA1));
+                        if (eHashUsed == PASSHASH_XL)
+                        {
+                            AddAttribute(XML_NAMESPACE_TABLE, XML_PROTECTION_KEY_DIGEST_ALGORITHM,
+                                         ScPassHashHelper::getHashURI(PASSHASH_XL));
+                            AddAttribute(XML_NAMESPACE_TABLE, XML_PROTECTION_KEY_DIGEST_ALGORITHM_2,
+                                         ScPassHashHelper::getHashURI(PASSHASH_SHA1));
+                        }
+                        else if (eHashUsed == PASSHASH_SHA1)
+                            AddAttribute(XML_NAMESPACE_TABLE, XML_PROTECTION_KEY_DIGEST_ALGORITHM,
+                                         ScPassHashHelper::getHashURI(PASSHASH_SHA1));
                     }
-                    else if (eHashUsed == PASSHASH_SHA1)
-                        AddAttribute(XML_NAMESPACE_TABLE, XML_PROTECTION_KEY_DIGEST_ALGORITHM,
-                                     ScPassHashHelper::getHashURI(PASSHASH_SHA1));
                 }
             }
         }
