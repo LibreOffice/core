@@ -159,15 +159,9 @@ SvxNumberFormatShell::~SvxNumberFormatShell()
         // Hinzugefuegte Formate sind nicht gueltig:
         // => wieder entfernen:
 
-        for ( sal_uInt16 i = 0; i < aAddList.Count(); ++i )
-            pFormatter->DeleteEntry( aAddList[i] );
+        for ( std::vector<sal_uInt32>::const_iterator it(aAddList.begin()); it != aAddList.end(); ++it )
+            pFormatter->DeleteEntry( *it );
     }
-
-    //--------------------------------
-    // Add-/Remove-Listen leerraeumen:
-    //--------------------------------
-    aAddList.Remove( 0, aAddList.Count() );
-    aDelList.Remove( 0, aAddList.Count() );
 
     if(aCurrencyFormatList.Count()>0)
         aCurrencyFormatList.DeleteAndDestroy(0,aCurrencyFormatList.Count());
@@ -175,22 +169,22 @@ SvxNumberFormatShell::~SvxNumberFormatShell()
 
 // -----------------------------------------------------------------------
 
-sal_uInt32 SvxNumberFormatShell::GetUpdateDataCount() const
+size_t SvxNumberFormatShell::GetUpdateDataCount() const
 {
-    return aDelList.Count();
+    return aDelList.size();
 }
 
 // -----------------------------------------------------------------------
 
 void SvxNumberFormatShell::GetUpdateData( sal_uInt32* pDelArray, const sal_uInt32 nSize )
 {
-    const sal_uInt32 nCount = aDelList.Count();
+    const size_t nListSize = aDelList.size();
 
-    DBG_ASSERT( pDelArray && ( nSize == nCount ), "Array nicht initialisiert!" );
+    DBG_ASSERT( pDelArray && ( nSize == nListSize ), "Array nicht initialisiert!" );
 
-    if ( pDelArray && ( nSize == nCount ) )
-        for ( sal_uInt16 i = 0; i < aDelList.Count(); ++i )
-            *pDelArray++ = aDelList[i];
+    if ( pDelArray && ( nSize == nListSize ) )
+        for (std::vector<sal_uInt32>::const_iterator it(aDelList.begin()); it != aDelList.end(); ++it )
+            *pDelArray++ = *it;
 }
 
 // -----------------------------------------------------------------------
@@ -229,21 +223,18 @@ void SvxNumberFormatShell::FormatChanged( sal_uInt16  nFmtLbPos,
                                           String& rPreviewStr,
                                           Color*& rpFontColor )
 {
-    //nCurFormatKey = pCurFmtTable->GetKey( pCurFmtTable->GetObject( nFmtLbPos ) );
-
-    if(nFmtLbPos<aCurEntryList.Count())
+    if( static_cast<size_t>(nFmtLbPos) < aCurEntryList.size() )
     {
-        nCurFormatKey=aCurEntryList[nFmtLbPos];
+        nCurFormatKey = aCurEntryList[nFmtLbPos];
 
-        if(nCurFormatKey!=NUMBERFORMAT_ENTRY_NOT_FOUND)
+        if( nCurFormatKey != NUMBERFORMAT_ENTRY_NOT_FOUND )
         {
             GetPreviewString_Impl( rPreviewStr, rpFontColor );
         }
-        else if(nCurCategory==NUMBERFORMAT_CURRENCY)
+        else if( nCurCategory == NUMBERFORMAT_CURRENCY )
         {
             if(nFmtLbPos<aCurrencyFormatList.Count())
             {
-                //nCurFormatKey=nFmtLbPos;
                 MakePrevStringFromVal(*aCurrencyFormatList[nFmtLbPos],
                                     rPreviewStr,rpFontColor,nValNum);
             }
@@ -263,20 +254,19 @@ sal_Bool SvxNumberFormatShell::AddFormat( String& rFormat,  xub_StrLen& rErrPos,
     {
         if ( IsRemoved_Impl( nAddKey ) )
         {
-            // Key suchen und loeschen
             sal_Bool    bFound  = sal_False;
-            sal_uInt16  nAt     = 0;
+            std::vector<sal_uInt32>::iterator nAt = aDelList.begin();
 
-            for ( sal_uInt16 i = 0; !bFound && i < aDelList.Count(); ++i )
+            for (std::vector<sal_uInt32>::iterator it(aDelList.begin()); !bFound && it != aDelList.end(); ++it )
             {
-                if ( aDelList[i] == nAddKey )
+                if ( *it == nAddKey )
                 {
                     bFound  = sal_True;
-                    nAt     = i;
+                    nAt = it;
                 }
             }
             DBG_ASSERT( bFound, "Key not found" );
-            aDelList.Remove( nAt );
+            aDelList.erase( nAt );
             bInserted = sal_True;
         }
         else
@@ -309,7 +299,7 @@ sal_Bool SvxNumberFormatShell::AddFormat( String& rFormat,  xub_StrLen& rErrPos,
     {
         nCurFormatKey = nAddKey;
         DBG_ASSERT( !IsAdded_Impl( nCurFormatKey ), "Doppeltes Format!" );
-        aAddList.Insert( nCurFormatKey, aAddList.Count() );
+        aAddList.push_back( nCurFormatKey );
 
         // aktuelle Tabelle holen
         pCurFmtTable = &(pFormatter->GetEntryTable( nCurCategory,
@@ -345,27 +335,27 @@ sal_Bool SvxNumberFormatShell::RemoveFormat( const String&  rFormat,
 
     if ( (nDelKey != NUMBERFORMAT_ENTRY_NOT_FOUND) && !IsRemoved_Impl( nDelKey ) )
     {
-        aDelList.Insert( nDelKey, aDelList.Count() );
+        aDelList.push_back( nDelKey );
 
         if ( IsAdded_Impl( nDelKey ) )
         {
-            // Key suchen und loeschen
-            sal_Bool    bFound  = sal_False;
-            sal_uInt16  nAt     = 0;
+            bool bFound = false;
+            std::vector<sal_uInt32>::iterator nAt = aAddList.begin();
 
-            for ( sal_uInt16 i = 0; !bFound && i < aAddList.Count(); ++i )
+            for ( std::vector<sal_uInt32>::iterator it(aAddList.begin()); !bFound && it != aAddList.end(); ++it )
             {
-                if ( aAddList[i] == nDelKey )
+                if ( *it == nDelKey )
                 {
-                    bFound  = sal_True;
-                    nAt     = i;
+                    bFound = true;
+                    nAt = it;
                 }
             }
             DBG_ASSERT( bFound, "Key not found" );
-            aAddList.Remove( nAt );
+            if( bFound )
+                aAddList.erase( nAt );
         }
 
-        nCurCategory=pFormatter->GetType(nDelKey); //@@ 01.10.97
+        nCurCategory=pFormatter->GetType(nDelKey);
         pCurFmtTable = &(pFormatter->GetEntryTable( nCurCategory,
                                                     nCurFormatKey,
                                                     eCurLanguage ));
@@ -375,7 +365,6 @@ sal_Bool SvxNumberFormatShell::RemoveFormat( const String&  rFormat,
 
         CategoryToPos_Impl( nCurCategory, rCatLbSelPos );
         rFmtSelPos = FillEntryList_Impl( rFmtEntries );
-        //rFmtSelPos = (short) nCurFormatKey; //@@ 01.10.97
     }
     return sal_True;
 }
@@ -601,9 +590,10 @@ short SvxNumberFormatShell::FillEntryList_Impl( SvStrings& rList )
      * so wird SELPOS_NONE geliefert.
      */
     short nSelPos=0;
-    aCurEntryList.Remove(nSelPos,aCurEntryList.Count());
-    sal_uInt16          nPrivCat = CAT_CURRENCY;
+    sal_uInt16 nPrivCat = CAT_CURRENCY;
     nSelPos=SELPOS_NONE;
+
+    aCurEntryList.clear();
 
     if(nCurCategory==NUMBERFORMAT_ALL)
     {
@@ -706,7 +696,6 @@ short SvxNumberFormatShell::FillEListWithFormats_Impl( SvStrings& rList,short nS
     DBG_ASSERT( pCurFmtTable != NULL, "Unbekanntes Zahlenformat!" );
 
     const SvNumberformat*   pNumEntry   = pCurFmtTable->First();
-//  sal_uInt16          nCount      = 0;
     sal_uInt32          nNFEntry;
     String          aStrComment;
     String          aNewFormNInfo;
@@ -714,7 +703,6 @@ short SvxNumberFormatShell::FillEListWithFormats_Impl( SvStrings& rList,short nS
     String          a2PrevString;
 
     short           nMyCat      = SELPOS_NONE;
-//  short           nIq=0;
 
     long nIndex;
 
@@ -735,11 +723,11 @@ short SvxNumberFormatShell::FillEListWithFormats_Impl( SvStrings& rList,short nS
 
         if ( nNFEntry == nCurFormatKey )
         {
-            nSelPos = ( !IsRemoved_Impl( nNFEntry ) ) ? aCurEntryList.Count() : SELPOS_NONE;
+            nSelPos = ( !IsRemoved_Impl( nNFEntry ) ) ? aCurEntryList.size() : SELPOS_NONE;
         }
 
         rList.Insert( pStr,rList.Count());
-        aCurEntryList.Insert( nNFEntry, aCurEntryList.Count() );
+        aCurEntryList.push_back( nNFEntry );
     }
 
     return nSelPos;
@@ -752,7 +740,6 @@ short SvxNumberFormatShell::FillEListWithDateTime_Impl( SvStrings& rList,short n
     DBG_ASSERT( pCurFmtTable != NULL, "Unbekanntes Zahlenformat!" );
 
     const SvNumberformat*   pNumEntry   = pCurFmtTable->First();
-//  sal_uInt16          nCount      = 0;
     sal_uInt32          nNFEntry;
     String          aStrComment;
     String          aNewFormNInfo;
@@ -760,7 +747,6 @@ short SvxNumberFormatShell::FillEListWithDateTime_Impl( SvStrings& rList,short n
     String          a2PrevString;
 
     short           nMyCat      = SELPOS_NONE;
-//  short           nIq=0;
 
     long nIndex;
 
@@ -780,11 +766,11 @@ short SvxNumberFormatShell::FillEListWithDateTime_Impl( SvStrings& rList,short n
 
             if ( nNFEntry == nCurFormatKey )
             {
-                nSelPos = ( !IsRemoved_Impl( nNFEntry ) ) ? aCurEntryList.Count() : SELPOS_NONE;
+                nSelPos = ( !IsRemoved_Impl( nNFEntry ) ) ? aCurEntryList.size() : SELPOS_NONE;
             }
 
             rList.Insert( pStr,rList.Count());
-            aCurEntryList.Insert( nNFEntry, aCurEntryList.Count() );
+            aCurEntryList.push_back( nNFEntry );
         }
     }
 
@@ -836,7 +822,6 @@ short SvxNumberFormatShell::FillEListWithSysCurrencys( SvStrings& rList,short nS
     DBG_ASSERT( pCurFmtTable != NULL, "Unbekanntes Zahlenformat!" );
 
     const SvNumberformat*   pNumEntry   = pCurFmtTable->First();
-    sal_uInt16          nCount      = 0;
     sal_uInt32          nNFEntry;
     String          aStrComment;
     String          aNewFormNInfo;
@@ -846,7 +831,6 @@ short SvxNumberFormatShell::FillEListWithSysCurrencys( SvStrings& rList,short nS
     nCurCurrencyEntryPos=0;
 
     short           nMyCat      = SELPOS_NONE;
-//  short           nIq=0;
 
     NfIndexTableOffset eOffsetStart=NF_CURRENCY_START;
     NfIndexTableOffset eOffsetEnd=NF_CURRENCY_END;;
@@ -869,22 +853,19 @@ short SvxNumberFormatShell::FillEListWithSysCurrencys( SvStrings& rList,short nS
 
         if ( nNFEntry == nCurFormatKey )
         {
-            nSelPos = ( !IsRemoved_Impl( nNFEntry ) ) ? aCurEntryList.Count() : SELPOS_NONE;
+            nSelPos = ( !IsRemoved_Impl( nNFEntry ) ) ? aCurEntryList.size() : SELPOS_NONE;
         }
 
         rList.Insert( pStr,rList.Count());
-        aCurEntryList.Insert( nNFEntry, aCurEntryList.Count() );
+        aCurEntryList.push_back( nNFEntry );
     }
 
     if(nCurCategory!=NUMBERFORMAT_ALL)
     {
         pNumEntry   = pCurFmtTable->First();
-        nCount      = 0;
         while ( pNumEntry )
         {
             sal_uInt32 nKey = pCurFmtTable->GetCurKey();
-
-            nCount++;
 
             if ( !IsRemoved_Impl( nKey ))
             {
@@ -910,9 +891,9 @@ short SvxNumberFormatShell::FillEListWithSysCurrencys( SvStrings& rList,short nS
 
                     const StringPtr pStr = new String(aNewFormNInfo);
 
-                    if ( nKey == nCurFormatKey ) nSelPos =aCurEntryList.Count();
+                    if ( nKey == nCurFormatKey ) nSelPos =aCurEntryList.size();
                     rList.Insert( pStr,rList.Count());
-                    aCurEntryList.Insert( nKey, aCurEntryList.Count() );
+                    aCurEntryList.push_back( nKey );
                 }
             }
             pNumEntry = pCurFmtTable->Next();
@@ -932,13 +913,11 @@ short SvxNumberFormatShell::FillEListWithUserCurrencys( SvStrings& rList,short n
 
     DBG_ASSERT( pCurFmtTable != NULL, "Unbekanntes Zahlenformat!" );
 
-    sal_uInt16          nCount      = 0;
     String          aStrComment;
     String          aNewFormNInfo;
     String          aPrevString;
     String          a2PrevString;
     short           nMyCat = SELPOS_NONE;
-//  short           nIq=0;
 
     const NfCurrencyEntry* pTmpCurrencyEntry;
     sal_Bool        bTmpBanking, bAdaptSelPos;
@@ -946,7 +925,7 @@ short SvxNumberFormatShell::FillEListWithUserCurrencys( SvStrings& rList,short n
     XubString       rBankSymbol;
 
     SvStrings       aList;
-    SvULongs        aKeyList;
+    std::vector<sal_uInt32> aKeyList;
 
     /*sal_Bool bFlag=*/pFormatter->GetNewCurrencySymbolString(nCurFormatKey,rSymbol,
                 &pTmpCurrencyEntry,&bTmpBanking);
@@ -989,8 +968,6 @@ short SvxNumberFormatShell::FillEListWithUserCurrencys( SvStrings& rList,short n
     {
         sal_uInt32 nKey = pCurFmtTable->GetCurKey();
 
-        nCount++;
-
         if ( !IsRemoved_Impl( nKey ) )
         {
             if( pNumEntry->GetType() & NUMBERFORMAT_DEFINED ||
@@ -1001,13 +978,15 @@ short SvxNumberFormatShell::FillEListWithUserCurrencys( SvStrings& rList,short n
                 CategoryToPos_Impl(nMyCat,nMyType);
                 aNewFormNInfo=  pNumEntry->GetFormatstring();
 
-                sal_Bool bInsFlag=sal_False;
+                bool bInsFlag = false;
                 if ( pNumEntry->HasNewCurrency() )
-                    bInsFlag = sal_True;    // merge locale formats into currency selection
+                {
+                    bInsFlag = true;	// merge locale formats into currency selection
+                }
                 else if( (!bTmpBanking && aNewFormNInfo.Search(rSymbol)!=STRING_NOTFOUND) ||
                    (bTmpBanking && aNewFormNInfo.Search(rBankSymbol)!=STRING_NOTFOUND) )
                 {
-                    bInsFlag=sal_True;
+                    bInsFlag = true;
                 }
                 else if(aNewFormNInfo.Search(rShortSymbol)!=STRING_NOTFOUND)
                 {
@@ -1015,12 +994,12 @@ short SvxNumberFormatShell::FillEListWithUserCurrencys( SvStrings& rList,short n
                     const NfCurrencyEntry* pTstCurrencyEntry;
                     sal_Bool bTstBanking;
 
-                    /*sal_Bool bTstFlag=*/pFormatter->GetNewCurrencySymbolString(nKey,rTstSymbol,
+                    pFormatter->GetNewCurrencySymbolString(nKey,rTstSymbol,
                                 &pTstCurrencyEntry,&bTstBanking);
 
                     if(pTmpCurrencyEntry==pTstCurrencyEntry && bTstBanking==bTmpBanking)
                     {
-                        bInsFlag=sal_True;
+                        bInsFlag = true;
                     }
 
                 }
@@ -1030,7 +1009,7 @@ short SvxNumberFormatShell::FillEListWithUserCurrencys( SvStrings& rList,short n
                     const StringPtr pStr = new String(aNewFormNInfo);
 
                     aList.Insert( pStr,aList.Count());
-                    aKeyList.Insert( nKey, aKeyList.Count() );
+                    aKeyList.push_back( nKey );
                 }
             }
         }
@@ -1065,47 +1044,47 @@ short SvxNumberFormatShell::FillEListWithUserCurrencys( SvStrings& rList,short n
         }
     }
 
-    sal_uInt16 i,nPos;
-    sal_uInt16 nOldListCount = rList.Count();
-    for( i=0, nPos=nOldListCount; i<aWSStringsDtor.Count(); i++)
+    size_t i,nPos;
+    size_t nOldListCount = rList.Count();
+    for( i = 0, nPos = nOldListCount; i < aWSStringsDtor.Count(); ++i)
     {
-        sal_Bool bFlag=sal_True;
+        bool bFlag = true;
         String aInsStr(*aWSStringsDtor[i]);
-        sal_uInt16 j;
-        for(j=0;j<aList.Count();j++)
+        size_t j;
+        for( j=0; j < aList.Count(); ++j )
         {
             const StringPtr pTestStr=aList[j];
 
             if(*pTestStr==aInsStr)
             {
-                bFlag=sal_False;
+                bFlag = false;
                 break;
             }
         }
         if(bFlag)
         {
             rList.Insert(new String(aInsStr),nPos);
-            aCurEntryList.Insert( NUMBERFORMAT_ENTRY_NOT_FOUND, nPos++);
+            aCurEntryList.insert( aCurEntryList.begin() + (nPos++), NUMBERFORMAT_ENTRY_NOT_FOUND);
         }
         else
         {
             rList.Insert(aList[j],nPos);
             aList.Remove(j);
-            aCurEntryList.Insert( aKeyList[j],nPos++);
-            aKeyList.Remove(j);
+            aCurEntryList.insert( aCurEntryList.begin() + (nPos++), aKeyList[j]);
+            aKeyList.erase( aKeyList.begin()+j );
         }
     }
 
-    for(i=0;i<aKeyList.Count();i++)
+    for( i = 0; i < aKeyList.size(); ++i )
     {
-        if(aKeyList[i]!=NUMBERFORMAT_ENTRY_NOT_FOUND)
+        if( aKeyList[i] != NUMBERFORMAT_ENTRY_NOT_FOUND )
         {
             rList.Insert(aList[i],rList.Count());
-            aCurEntryList.Insert( aKeyList[i],aCurEntryList.Count());
+            aCurEntryList.push_back( aKeyList[i] );
         }
     }
 
-    for(i=nOldListCount;i<rList.Count();i++)
+    for( i = nOldListCount; i < rList.Count(); ++i )
     {
         aCurrencyFormatList.Insert(new String(*rList[i]),aCurrencyFormatList.Count());
 
@@ -1132,22 +1111,18 @@ short SvxNumberFormatShell::FillEListWithUsD_Impl( SvStrings& rList, sal_uInt16 
     DBG_ASSERT( pCurFmtTable != NULL, "Unbekanntes Zahlenformat!" );
 
     const SvNumberformat*   pNumEntry   = pCurFmtTable->First();
-    sal_uInt16          nCount      = 0;
     String          aStrComment;
     String          aNewFormNInfo;
     String          aPrevString;
     String          a2PrevString;
 
     short           nMyCat      = SELPOS_NONE;
-//  short           nIq=0;
     sal_Bool        bAdditional = (nPrivCat != CAT_USERDEFINED &&
                                     nCurCategory != NUMBERFORMAT_ALL);
 
     while ( pNumEntry )
     {
         sal_uInt32 nKey = pCurFmtTable->GetCurKey();
-
-        nCount++;
 
         if ( !IsRemoved_Impl( nKey ) )
         {
@@ -1170,9 +1145,9 @@ short SvxNumberFormatShell::FillEListWithUsD_Impl( SvStrings& rList, sal_uInt16 
                 {
                     const StringPtr pStr = new String(aNewFormNInfo);
 
-                    if ( nKey == nCurFormatKey ) nSelPos =aCurEntryList.Count();
+                    if ( nKey == nCurFormatKey ) nSelPos = aCurEntryList.size();
                     rList.Insert( pStr,rList.Count());
-                    aCurEntryList.Insert( nKey, aCurEntryList.Count() );
+                    aCurEntryList.push_back( nKey );
                 }
             }
         }
@@ -1203,8 +1178,8 @@ void SvxNumberFormatShell::GetPreviewString_Impl( String& rString, Color*& rpCol
 sal_Bool SvxNumberFormatShell::IsRemoved_Impl( sal_uInt32 nKey )
 {
     sal_Bool bFound = sal_False;
-    for ( sal_uInt16 i = 0; !bFound && i < aDelList.Count(); ++i )
-        if ( aDelList[i] == nKey )
+    for (std::vector<sal_uInt32>::const_iterator it(aDelList.begin()); !bFound && it != aDelList.end(); ++it )
+        if ( *it == nKey )
             bFound = sal_True;
     return bFound;
 }
@@ -1214,8 +1189,8 @@ sal_Bool SvxNumberFormatShell::IsRemoved_Impl( sal_uInt32 nKey )
 sal_Bool SvxNumberFormatShell::IsAdded_Impl( sal_uInt32 nKey )
 {
     sal_Bool bFound = sal_False;
-    for ( sal_uInt16 i = 0; !bFound && i < aAddList.Count(); ++i )
-        if ( aAddList[i] == nKey )
+    for ( std::vector<sal_uInt32>::const_iterator it(aAddList.begin()); !bFound && it != aAddList.end(); ++it )
+        if ( *it == nKey )
             bFound = sal_True;
     return bFound;
 }
@@ -1339,7 +1314,7 @@ String SvxNumberFormatShell::GetComment4Entry(short nEntry)
     if(nEntry < 0)
         return String();
 
-    if(nEntry<aCurEntryList.Count())
+    if( static_cast<size_t>(nEntry) < aCurEntryList.size())
     {
         sal_uInt32  nMyNfEntry=aCurEntryList[nEntry];
         pNumEntry = pFormatter->GetEntry(nMyNfEntry);
@@ -1370,7 +1345,7 @@ short SvxNumberFormatShell::GetCategory4Entry(short nEntry)
     const SvNumberformat *pNumEntry;
     if(nEntry<0) return 0;
 
-    if(nEntry<aCurEntryList.Count())
+    if( static_cast<size_t>(nEntry) < aCurEntryList.size() )
     {
         sal_uInt32  nMyNfEntry=aCurEntryList[nEntry];
 
@@ -1415,7 +1390,8 @@ sal_Bool SvxNumberFormatShell::GetUserDefined4Entry(short nEntry)
 {
     const SvNumberformat *pNumEntry;
     if(nEntry<0) return 0;
-    if(nEntry<aCurEntryList.Count())
+
+    if( static_cast<size_t>(nEntry) < aCurEntryList.size())
     {
         sal_uInt32  nMyNfEntry=aCurEntryList[nEntry];
         pNumEntry = pFormatter->GetEntry(nMyNfEntry);
@@ -1488,9 +1464,11 @@ String SvxNumberFormatShell::GetFormat4Entry(short nEntry)
 short SvxNumberFormatShell::GetListPos4Entry(sal_uInt32 nIdx)
 {
     short nSelP=SELPOS_NONE;
-    if( aCurEntryList.Count() <= 0x7fff )
+
+    // Check list size against return type limit.
+    if( aCurEntryList.Count() <= ::std::numeric_limits< short >::max() )
     {
-        for(short i=0;i<aCurEntryList.Count();i++)
+        for(size_t i=0; i < aCurEntryList.size(); ++i)
         {
             if(aCurEntryList[i]==nIdx)
             {
@@ -1501,7 +1479,7 @@ short SvxNumberFormatShell::GetListPos4Entry(sal_uInt32 nIdx)
     }
     else
     {
-        OSL_FAIL("svx::SvxNumberFormatShell::GetListPos4Entry(), list got to large!" );
+        OSL_FAIL("svx::SvxNumberFormatShell::GetListPos4Entry(), list got too large!" );
     }
     return nSelP;
 }

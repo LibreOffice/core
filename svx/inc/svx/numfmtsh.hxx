@@ -46,6 +46,8 @@
 
 #include <svl/svstdarr.hxx>
 
+#include <vector>
+
 // forward ---------------------------------------------------------------
 
 class Color;
@@ -183,7 +185,7 @@ public:
     sal_Bool                FindEntry( const String& rFmtString, sal_uInt32* pAt = NULL );
 
     void                ValidateNewEntries( sal_Bool bValidate = sal_True ) { bUndoAddList = !bValidate; }
-    sal_uInt32          GetUpdateDataCount() const;
+    size_t              GetUpdateDataCount() const;
     void                GetUpdateData( sal_uInt32* pDelArray, const sal_uInt32 nSize );
 
     void                SetCurNumFmtKey( sal_uInt32 nNew )  { nCurFormatKey = nNew; }
@@ -228,9 +230,9 @@ private:
     String                  aValStr;
     double                  nValNum;
     sal_Bool                    bUndoAddList;
-    SvULongs                aAddList;
-    SvULongs                aDelList;
-    SvULongs                aCurEntryList;
+    std::vector<sal_uInt32> aAddList;
+    std::vector<sal_uInt32> aDelList;
+    std::vector<sal_uInt32> aCurEntryList;
     sal_uInt32              nInitFormatKey;
     sal_uInt32              nCurFormatKey;
     short                   nCurCategory;

@@ -782,7 +782,7 @@ sal_Bool SvxNumberFormatTabPage::FillItemSet( SfxItemSet& rCoreAttrs )
         // --------------------------------------------------------------
         // List of changed user defined formats:
         // -------------------------------------
-        const sal_uInt32 nDelCount = pNumFmtShell->GetUpdateDataCount();
+        const size_t nDelCount = pNumFmtShell->GetUpdateDataCount();
 
         if ( nDelCount > 0 )
         {
