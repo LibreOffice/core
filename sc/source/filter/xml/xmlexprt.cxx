@@ -2740,7 +2740,7 @@ void ScXMLExport::WriteTable(sal_Int32 nTable, const Reference<sheet::XSpreadshe
     CheckAttrList();
 
     if ( pDoc && pDoc->GetSheetEvents( static_cast<SCTAB>(nTable) ) &&
-         getDefaultVersion() == SvtSaveOptions::ODFVER_LATEST )
+         getDefaultVersion() >= SvtSaveOptions::ODFVER_012 )
     {
         // store sheet events
         uno::Reference<document::XEventsSupplier> xSupplier(xTable, uno::UNO_QUERY);
@@ -4305,7 +4305,7 @@ sal_uInt32 ScXMLExport::exportDoc( enum XMLTokenEnum eClass )
 
             // sheet events use officeooo namespace
             if( (getExportFlags() & EXPORT_CONTENT) != 0 &&
-                getDefaultVersion() == SvtSaveOptions::ODFVER_LATEST )
+                getDefaultVersion() >= SvtSaveOptions::ODFVER_012 )
             {
                 bool bAnySheetEvents = false;
                 SCTAB nTabCount = pDoc->GetTableCount();
