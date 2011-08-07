@@ -1286,7 +1286,10 @@ void BinTextObject::CreateData( SvStream& rIStream )
             {
                 if ( pItem->Which() == EE_FEATURE_NOTCONV )
                 {
-                    pC->GetText().SetChar( nStart, ByteString::ConvertToUnicode( aByteString.GetChar( nStart ), ((SvxCharSetColorItem*)pItem)->GetCharSet() ) );
+                    sal_Char cEncodedChar = aByteString.GetChar(nStart);
+                    sal_Unicode cChar = rtl::OUString(&cEncodedChar, 1,
+                        ((SvxCharSetColorItem*)pItem)->GetCharSet()).toChar();
+                    pC->GetText().SetChar(nStart, cChar);
                 }
                 else
                 {
