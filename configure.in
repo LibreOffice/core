@@ -1928,7 +1928,7 @@ if test \( "$_os" != "WINNT" -o "$WITH_MINGW" = "yes" \) -a "$GCC" = "yes"; then
                 export CC="$CCACHE $GCC_HOME/bin/gcc-4.0"
             fi
             dnl  export CC to have it available in set_soenv -> config.guess
-            GCCVER2=`"$CC" -dumpversion | $AWK -F. '{ print \$1*10000+\$2*100+\$3 }'`
+            GCCVER2=`$CC -dumpversion | $AWK -F. '{ print \$1*10000+\$2*100+\$3 }'`
             if test "$GCCVER2" -ge "040000" -a "$GCCVER2" -lt "040100" ; then
                 GCCVER=$GCCVER2
             fi
@@ -2905,7 +2905,7 @@ if test "$GXX" = "yes"; then
             else
                 export CXX="$CCACHE $GCC_HOME/bin/g++-4.0"
             fi
-            _gpp_majmin_2=`"$CXX" -dumpversion | $AWK -F. '{ print \$1*100+\$2 }'`
+            _gpp_majmin_2=`$CXX -dumpversion | $AWK -F. '{ print \$1*100+\$2 }'`
             if test "$_gpp_majmin_2" -ge "400" -a "$_gpp_majmin_2" -lt "401" ; then
                 _gpp_majmin=$_gpp_majmin_2
             fi
