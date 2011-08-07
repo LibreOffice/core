@@ -64,14 +64,6 @@ CntContentTypeItem::CntContentTypeItem( sal_uInt16 which, const XubString& rType
 }
 
 //----------------------------------------------------------------------------
-CntContentTypeItem::CntContentTypeItem( sal_uInt16 which,
-                                        const INetContentType eType )
-: CntUnencodedStringItem( which, INetContentTypes::GetContentType( eType ) ),
-  _eType( eType )
-{
-}
-
-//----------------------------------------------------------------------------
 CntContentTypeItem::CntContentTypeItem( const CntContentTypeItem& rOrig )
 : CntUnencodedStringItem( rOrig ),
   _eType( rOrig._eType ),
@@ -149,12 +141,6 @@ void CntContentTypeItem::SetValue( const XubString& rNewVal )
     _aPresentation.Erase();
 
     CntUnencodedStringItem::SetValue( rNewVal );
-}
-
-//----------------------------------------------------------------------------
-void CntContentTypeItem::SetPresentation( const XubString& rNewVal )
-{
-    _aPresentation = rNewVal;
 }
 
 //----------------------------------------------------------------------------

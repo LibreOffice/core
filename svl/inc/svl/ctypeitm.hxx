@@ -44,7 +44,6 @@ public:
 
     CntContentTypeItem();
     CntContentTypeItem( sal_uInt16 nWhich, const XubString& rType );
-    CntContentTypeItem( sal_uInt16 nWhich, const INetContentType eType );
     CntContentTypeItem( const CntContentTypeItem& rOrig );
 
     virtual SfxPoolItem* Create( SvStream& rStream,
@@ -58,7 +57,6 @@ public:
     virtual SfxPoolItem* Clone( SfxItemPool *pPool = NULL ) const;
 
     void SetValue( const XubString& rNewVal );
-    void SetPresentation( const XubString& rNewVal );
 
     using SfxPoolItem::Compare;
     virtual int Compare( const SfxPoolItem &rWith, const IntlWrapper& rIntlWrapper ) const;
