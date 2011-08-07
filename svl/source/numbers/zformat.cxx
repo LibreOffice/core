@@ -1779,9 +1779,9 @@ void SvNumberformat::LoadString( SvStream& rStream, String& rStr )
             if ( *p == cStream )
                 *pUni = cTarget;
             else
-                *pUni = ByteString::ConvertToUnicode( *p, eStream );
-            p++;
-            pUni++;
+                *pUni = rtl::OUString(p, 1, eStream).toChar();
+            ++p;
+            ++pUni;
         }
         *pUni = 0;
     }
