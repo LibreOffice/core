@@ -500,8 +500,7 @@ int HTMLParser::ScanText( const sal_Unicode cBreak )
                             const sal_uInt32 convertFlags =
                                 RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_DEFAULT |
                                 RTL_TEXTTOUNICODE_FLAGS_MBUNDEFINED_DEFAULT |
-                                RTL_TEXTTOUNICODE_FLAGS_INVALID_DEFAULT |
-                                RTL_TEXTTOUNICODE_FLAGS_FLUSH;
+                                RTL_TEXTTOUNICODE_FLAGS_INVALID_DEFAULT;
 
                             sal_Char cEncodedChar = static_cast<sal_Char>(cChar);
                             cChar = rtl::OUString(&cEncodedChar, 1, eSrcEnc, convertFlags).toChar();
