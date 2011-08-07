@@ -7623,8 +7623,8 @@ else
         if test "$with_lang" = "ALL" -o -n "`echo $with_lang | grep "$lang"`" ; then
             LIGHTPROOF_LANG="$LIGHTPROOF_LANG $lang"
             case $lang in
-            "hu") LIGHTPROOF_HU_PACK="324ddcb9ef45c3bc055fcc002bc4e556-lightproof-hu_1.2.oxt";;
-            "en-US") LIGHTPROOF_EN_US_PACK="942541da5f5498214518c8b459ae4524-lightproof-en-US_0.1.oxt";;
+            "hu") LIGHTPROOF_HU_PACK="76345f925e34fef2d29bade4f29108e9-lightproof-hu_1.3.oxt";;
+            "en-US") LIGHTPROOF_EN_US_PACK="0ab55ac8e88f04258f1d3e79e984382f-lightproof-en-US_0.1.oxt";;
             esac
         fi
     done
