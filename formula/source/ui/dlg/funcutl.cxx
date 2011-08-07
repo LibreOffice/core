@@ -929,7 +929,7 @@ void EditBox::UpdateOldSel()
 
 RefEdit::RefEdit( Window* _pParent,IControlReferenceHandler* pParent, const ResId& rResId ) :
     Edit( _pParent, rResId ),
-    pAnyRefDlg( pParent ),
+    pAnyRefDlg( pParent )
 {
     aTimer.SetTimeoutHdl( LINK( this, RefEdit, UpdateHdl ) );
     aTimer.SetTimeout( SC_ENABLE_TIME );
@@ -937,7 +937,7 @@ RefEdit::RefEdit( Window* _pParent,IControlReferenceHandler* pParent, const ResI
 
 RefEdit::RefEdit( Window* pParent, const ResId& rResId ) :
     Edit( pParent, rResId ),
-    pAnyRefDlg( NULL ),
+    pAnyRefDlg( NULL )
 {
 }
 
