@@ -19,7 +19,7 @@ AC_ARG_ENABLE(ext-barcode,
 
 AC_ARG_ENABLE(ext-diagram,
     AS_HELP_STRING([--enable-ext-diagram],
-        [Enables the Diagram extension.]),
+        [Enables the SmART Gallery (Diagram) extension.]),
 ,)
 
 AC_ARG_ENABLE(ext-google-docs,
@@ -7649,16 +7649,16 @@ fi
 AC_SUBST(WATCH_WINDOW_EXTENSION_PACK)
 
 dnl ===================================================================
-dnl Test whether to include Diagram extension
+dnl Test whether to include SmART Gallery (Diagram) extension
 dnl ===================================================================
-AC_MSG_CHECKING([for Diagram extension integration])
+AC_MSG_CHECKING([for SmART Gallery (Diagram) extension integration])
 if test "z$enable_ext_diagram" = "z" -o "z$enable_ext_diagram" = "zno" ; then
     AC_MSG_RESULT([no])
     DIAGRAM_EXTENSION_PACK=""
 else
     AC_MSG_RESULT([yes])
     SCPDEFS="$SCPDEFS -DWITH_EXTENSION_DIAGRAM"
-    DIAGRAM_EXTENSION_PACK="41c9b65ad60af4b3255bbecdfef11736-Diagram_1.1.0.0.oxt"
+    DIAGRAM_EXTENSION_PACK="4a433efb6d385264ebc1d5513782d51c-SmART_0.9.4.oxt"
 fi
 AC_SUBST(DIAGRAM_EXTENSION_PACK)
 
