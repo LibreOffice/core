@@ -2795,9 +2795,15 @@ void ScInterpreter::ScChar()
         PushIllegalArgument();
     else
     {
-        String aStr( '0' );
-        aStr.SetChar( 0, ByteString::ConvertToUnicode( (sal_Char) fVal, gsl_getSystemTextEncoding() ) );
-        PushString( aStr );
+        //"classic" ByteString conversion flags
+        const sal_uInt32 convertFlags =
+            RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_DEFAULT |
+            RTL_TEXTTOUNICODE_FLAGS_MBUNDEFINED_DEFAULT |
+            RTL_TEXTTOUNICODE_FLAGS_INVALID_DEFAULT;
+
+        sal_Char cEncodedChar = static_cast<sal_Char>(fVal);
+        rtl::OUString aStr(&cEncodedChar, 1,  gsl_getSystemTextEncoding(), convertFlags);
+        PushString(aStr);
     }
 }
 
