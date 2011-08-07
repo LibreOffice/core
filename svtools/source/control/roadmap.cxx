@@ -334,12 +334,6 @@ namespace svt
     }
 
     //---------------------------------------------------------------------
-    const BitmapEx& ORoadmap::GetRoadmapBitmap( ) const
-    {
-        return m_pImpl->getPicture( );
-    }
-
-    //---------------------------------------------------------------------
     void ORoadmap::SetRoadmapInteractive( sal_Bool _bInteractive )
     {
         m_pImpl->setInteractive( _bInteractive );

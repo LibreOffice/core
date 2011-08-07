@@ -70,7 +70,6 @@ namespace svt
         ~ORoadmap( );
 
         void            SetRoadmapBitmap( const BitmapEx& maBitmap, sal_Bool _bInvalidate = sal_True );
-        const BitmapEx& GetRoadmapBitmap( ) const;
 
         void            EnableRoadmapItem( ItemId _nItemId, sal_Bool _bEnable, ItemIndex _nStartIndex = 0  );
         sal_Bool        IsRoadmapItemEnabled( ItemId _nItemId, ItemIndex _nStartIndex = 0 ) const;
