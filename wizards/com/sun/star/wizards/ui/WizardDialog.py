@@ -47,9 +47,6 @@ class WizardDialog(UnoDialog2):
             UIConsts.RID_DB_COMMON + 33)
         self.oRoadmap = None
 
-    def getResource(self):
-        return self.__oWizardResource
-
     def itemStateChanged(self, itemEvent):
         try:
             self.nNewStep = itemEvent.ItemId
@@ -445,7 +442,7 @@ class WizardDialog(UnoDialog2):
 
     def cancelWizard(self):
         #can be overwritten by extending class
-        xDialog.endExecute()
+        self.xUnoDialog.endExecute()
 
     def removeTerminateListener(self):
         if self.__bTerminateListenermustberemoved:

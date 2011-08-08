@@ -128,25 +128,6 @@ class UnoDialog(object):
             xListBox.selectItemPos(iSelIndex, True)
 
     '''
-    The problem with setting the visibility of controls
-    is that changing the current step of a dialog will automatically
-    make all controls visible. The PropertyNames.PROPERTY_STEP property
-    always wins against the property "visible". Therfor a control meant
-    to be invisible is placed on a step far far away.
-    @param the name of the control
-    @param iStep  change the step if you want to make the control invisible
-    '''
-
-    def setControlVisible(self, controlname, iStep):
-        try:
-            iCurStep = int(getControlProperty(
-                controlname, PropertyNames.PROPERTY_STEP))
-            setControlProperty(
-                controlname, PropertyNames.PROPERTY_STEP, iStep)
-        except com.sun.star.uno.Exception, exception:
-            traceback.print_exc()
-
-    '''
     The problem with setting the visibility of controls is that
     changing the current step of a dialog will automatically make
     all controls visible. The PropertyNames.PROPERTY_STEP property
@@ -297,11 +278,6 @@ class UnoDialog(object):
 
         return self.executeDialog( Rectangle (0, 0, 640, 400))
 
-    def setAutoMnemonic(self, ControlName, bValue):
-        self.xUnoDialog = self.xUnoDialog.getControl(ControlName)
-        xVclWindowPedsfer = self.xUnoDialog.getPeer()
-        self.xContainerWindow.setProperty("AutoMnemonics", bValue)
-
     def modifyFontWeight(self, ControlName, FontWeight):
         oFontDesc = FontDescriptor.FontDescriptor()
         oFontDesc.Weight = FontWeight
@@ -338,11 +314,6 @@ class UnoDialog(object):
             if SelPos > 0:
                 setControlProperty(ListBoxName, "SelectedItems", [SelPos])
                 xListBox.selectItemPos((short)(SelPos - 1), True)
-
-    def setPeerProperty(self, ControlName, PropertyName, PropertyValue):
-        xControl = self.xUnoDialog.getControl(ControlName)
-        xVclWindowPeer = self.xControl.getPeer()
-        self.xContainerWindow.setProperty(PropertyName, PropertyValue)
 
     @classmethod
     def setEnabled(self, control, enabled):

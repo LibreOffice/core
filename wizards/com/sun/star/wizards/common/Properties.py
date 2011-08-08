@@ -27,13 +27,10 @@ class Properties(dict):
         return False
 
     @classmethod
-    def getProperties(self, _map=None):
-        if _map is None:
-            _map = self
-        pv = PropertyValue[_map.size()]
-        it = _map.keySet().iterator()
-        while i in pv:
-            i = createProperty(it.next(), _map)
+    def getProperties(self, _map):
+        pv = []
+        for k,v in _map.items():
+            pv.append(self.createProperty(k, v))
         return pv
 
     @classmethod

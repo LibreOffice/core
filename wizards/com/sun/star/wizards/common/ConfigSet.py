@@ -24,17 +24,73 @@ class ConfigSet(ConfigNode):
             i = name
             self.childrenList.insert(i, o)
         else:
-            i = o.cp_Index
-            oldSize = self.getSize()
-            if oldSize <= i:
-                newSize = i - oldSize
-                self.childrenList += [None] * newSize
-                self.noNulls = True
-            else:
-                self.noNulls = False
-            self.childrenList.insert(i, o);
-            if oldSize > i:
-                oldSize = i
+            try:
+                i = o.cp_Index
+                oldSize = self.getSize()
+                if oldSize <= i:
+                    newSize = i - oldSize
+                    self.childrenList += [None] * newSize
+                    self.noNulls = True
+                else:
+                    self.noNulls = False
+                self.childrenList.insert(i, o);
+                if oldSize > i:
+                    oldSize = i
+            except Exception:
+                self.childrenList.append(o)
+
+    def writeConfiguration(self, configView, param):
+        names = self.childrenMap.keys()
+        if isinstance(self.childClass, ConfigNode):
+            #first I remove all the children from the configuration.
+            children = configView.ElementNames
+            if children:
+                for i in children:
+                    try:
+                        Configuration.removeNode(configView, i)
+                    except Exception:
+                        traceback.print_exc()
+
+                # and add them new.
+            for i in names:
+                try:
+                    child = self.getElement(i)
+                    childView = configView.getByName(i)
+                    child.writeConfiguration(childView, param)
+                except Exception:
+                    traceback.print_exc()
+        else:
+            raise AttributeError (
+            "Unable to write primitive sets to configuration (not implemented)")
+
+    def readConfiguration(self, configurationView, param):
+        names = configurationView.ElementNames
+        if isinstance(self.childClass, ConfigNode):
+            if names:
+                for i in names:
+                    try:
+                        child = type(self.childClass)()
+                        child.readConfiguration(
+                            configurationView.getByName(i), param)
+                        self.add(i, child)
+                    except Exception, ex:
+                         traceback.print_exc()
+            #remove any nulls from the list
+            if self.noNulls:
+                i = 0
+                while i < len(self.childrenList):
+                    if self.childrenList[i] is None:
+                        del self.childrenList[i]
+                        i -= 1
+                    i += 1
+
+        else:
+            for i in names:
+                try:
+                    child = configurationView.getByName(i)
+                    self.add(i, child)
+                except Exception, ex:
+                    traceback.print_exc()
 
     def remove(self, obj):
         key = getKey(obj)
@@ -62,9 +118,6 @@ class ConfigSet(ConfigNode):
             i += 1
         return parent
 
-    def items(self):
-        return self.childrenList.toArray()
-
     def getKey(self, object):
         i = self.childrenMap.entrySet().iterator()
         while i.hasNext():
@@ -85,9 +138,6 @@ class ConfigSet(ConfigNode):
             return None
         else:
             return getKey(getElementAt(c - 1))
-
-    def setRoot(self, newRoot):
-        self.root = newRoot
 
     def getElementAt(self, i):
         return self.childrenList[i]
@@ -147,4 +197,4 @@ class ConfigSet(ConfigNode):
             i += 1
 
     def sort(self, comparator):
-        Collections.sort(self.childrenList, comparator)
+        self.childrenList.sort(comparator)

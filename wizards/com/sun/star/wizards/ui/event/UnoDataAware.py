@@ -14,12 +14,19 @@ For those controls, static convenience methods are offered, to simplify use.
 
 class UnoDataAware(DataAware):
 
+    disableObjects = []
+
     def __init__(self, dataObject, field, unoObject_, unoPropName_, isShort=False):
         super(UnoDataAware,self).__init__(dataObject, field)
         self.unoControl = unoObject_
         self.unoModel = self.unoControl.Model
         self.unoPropName = unoPropName_
         self.isShort = isShort
+
+    def enableControls(self, value):
+        for i in self.disableObjects:
+            Helper.setUnoPropertyValue(
+                i.Model, PropertyNames.PROPERTY_ENABLED, value)
 
     def setToUI(self, value):
         if self.isShort:

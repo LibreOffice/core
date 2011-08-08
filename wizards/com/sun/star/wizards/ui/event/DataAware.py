@@ -32,6 +32,9 @@ class DataAware(object):
         self._dataObject = dataObject_
         self._field = field_
 
+    def enableControls(self, value):
+        pass
+
     '''
     sets the given value to the UI control
     @param newValue the value to set to the ui control.
@@ -63,6 +66,7 @@ class DataAware(object):
             except Exception, ex:
                 traceback.print_exc()
                 #TODO tell user...
+        self.enableControls(data)
 
     '''
     updates the DataObject according to
@@ -78,5 +82,6 @@ class DataAware(object):
                     #Selected Element listbox
                     ui = ui[0]
                 setattr(self._dataObject, self._field, ui)
+            self.enableControls(ui)
         except Exception:
             traceback.print_exc()

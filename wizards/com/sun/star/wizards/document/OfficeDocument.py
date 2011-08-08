@@ -66,6 +66,7 @@ class OfficeDocument(object):
     (implements XComponent) object ( XTextDocument, or XSpreadsheedDocument )
     '''
 
+    @classmethod
     def createNewDocument(self, frame, sDocumentType, preview, readonly):
         loadValues = range(2)
         loadValues[0] = uno.createUnoStruct(
@@ -83,13 +84,13 @@ class OfficeDocument(object):
             loadValues[1].Value = True
         else:
             loadValues[1].Value = False
-
         sURL = "private:factory/" + sDocumentType
+        xComponent = None
         try:
             xComponent = frame.loadComponentFromURL(
-                sURL, "_self", 0, loadValues)
+                sURL, "_self", 0, tuple(loadValues))
 
-        except Exception, exception:
+        except Exception:
             traceback.print_exc()
 
         return xComponent
@@ -255,6 +256,7 @@ class OfficeDocument(object):
         else:
             return typeDetect.getByName(type)
 
+    @classmethod
     def getTypeMediaDescriptor(self, xmsf, type):
         typeDetect = xmsf.createInstance(
             "com.sun.star.document.TypeDetection")

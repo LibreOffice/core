@@ -88,7 +88,7 @@ class Helper(object):
                     self.setUnoPropertyValue(
                         xMultiPSetLst, PropertyNames[index], workwith)
 
-        except Exception, e:
+        except Exception:
             traceback.print_exc()
 
     '''

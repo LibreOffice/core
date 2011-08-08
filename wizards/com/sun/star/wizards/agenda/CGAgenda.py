@@ -1,4 +1,4 @@
-from common.ConfigGroup import *
+from common.ConfigGroup import ConfigGroup
 from common.ConfigSet import ConfigSet
 from CGTopic import CGTopic
 

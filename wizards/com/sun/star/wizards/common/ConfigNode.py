@@ -9,7 +9,3 @@ class ConfigNode(object):
     @abstractmethod
     def writeConfiguration(self, configurationView, param):
         pass
-
-    @abstractmethod
-    def setRoot(self, root):
-        pass

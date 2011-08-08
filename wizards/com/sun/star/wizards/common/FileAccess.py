@@ -287,86 +287,9 @@ class FileAccess(object):
                     return True
 
             return False
-        except CommandAbortedException, exception:
+        except Exception:
             sMsgNoDir = JavaTools.replaceSubString(sNoDirCreation, Path, "%1")
             SystemDialog.showMessageBox(xMSF, "ErrorBox", OK, sMsgNoDir)
-            return False
-        except com.sun.star.uno.Exception, Exception:
-            sMsgNoDir = JavaTools.replaceSubString(sNoDirCreation, Path, "%1")
-            SystemDialog.showMessageBox(xMSF, "ErrorBox", OK, sMsgNoDir)
-            return False
-
-    '''
-    checks if the root of a path exists. if the parameter
-    xWindowPeer is not null then also the directory is
-    created when it does not exists and the user
-    '''
-
-    @classmethod
-    def PathisValid(self, xMSF, Path, sMsgFilePathInvalid,
-        baskbeforeOverwrite):
-        try:
-            SubDirPath = ""
-            bSubDirexists = True
-            NewPath = Path
-            xInterface = xMSF.createInstance(
-                "com.sun.star.ucb.SimpleFileAccess")
-            if baskbeforeOverwrite:
-                if xInterface.exists(Path):
-                    oResource = Resource.Resource_unknown(xMSF,
-                        "ImportWizard", "imp")
-                    sFileexists = oResource.getResText(1053)
-                    NewString = JavaTools.convertfromURLNotation(Path)
-                    sFileexists = JavaTools.replaceSubString(sFileexists,
-                        NewString, "<1>")
-                    sFileexists = JavaTools.replaceSubString(sFileexists,
-                        str(13), "<CR>")
-                    iLeave = SystemDialog.showMessageBox(xMSF, "QueryBox",
-                        YES_NO, sFileexists)
-                    if iLeave == 3:
-                        return False
-
-            DirArray = JavaTools.ArrayoutofString(Path, "/")
-            MaxIndex = DirArray.length - 1
-            if MaxIndex > 0:
-                i = MaxIndex
-                while i >= 0:
-                    SubDir = DirArray[i]
-                    SubLen = SubDir.length()
-                    NewLen = NewPath.length()
-                    RestLen = NewLen - SubLen
-                    if RestLen > 0:
-                        NewPath = NewPath.substring(0, NewLen - SubLen - 1)
-                        if i == MaxIndex:
-                            SubDirPath = NewPath
-
-                        bexists = xSimpleFileAccess.exists(NewPath)
-                        if bexists:
-                            LowerCasePath = NewPath.toLowerCase()
-                            bexists = (((LowerCasePath.equals("file:#/")) or
-                                (LowerCasePath.equals("file:#")) or
-                                (LowerCasePath.equals("file:/")) or
-                                (LowerCasePath.equals("file:"))) == False)
-
-                        if bexists:
-                            if bSubDirexists == False:
-                                bSubDiriscreated = createSubDirectory(xMSF,
-                                    xSimpleFileAccess, SubDirPath)
-                                return bSubDiriscreated
-
-                            return True
-                        else:
-                            bSubDirexists = False
-
-                    i -= 1
-
-            SystemDialog.showMessageBox(xMSF, "ErrorBox", OK,
-                sMsgFilePathInvalid)
-            return False
-        except com.sun.star.uno.Exception, exception:
-            traceback.print_exc()
-            SystemDialog.showMessageBox(xMSF, "ErrorBox", OK,
-                sMsgFilePathInvalid)
             return False
 
     @classmethod
@@ -453,7 +376,7 @@ class FileAccess(object):
                     sFoundFile = sPath
 
                 i += 1
-        except com.sun.star.uno.Exception, e:
+        except Exception, e:
             pass
 
         return sFoundFile
@@ -482,11 +405,7 @@ class FileAccess(object):
 
     def getURL(self, path, childPath=None):
         try:
-            if childPath is not None:
-                path = self.filenameConverter.getSystemPathFromFileURL(path)
-                f = open(path,childPath, 'w')
-            else:
-                f = open(path, 'w')
+            f = open(path, 'w')
 
             r = self.filenameConverter.getFileURLFromSystemPath(path,
                  osPath.abspath(path))
@@ -530,9 +449,7 @@ class FileAccess(object):
         try:
             self.fileAccess.createFolder(s)
             return True
-        except CommandAbortedException, cax:
-            traceback.print_exc()
-        except com.sun.star.uno.Exception, ex:
+        except Exception:
             traceback.print_exc()
 
         return False
@@ -548,12 +465,10 @@ class FileAccess(object):
     def exists(self, filename, defe):
         try:
             return self.fileAccess.exists(filename)
-        except CommandAbortedException, cax:
-            pass
         except Exception:
-            pass
+            traceback.print_exc()
 
-        return defe
+        #return defe
 
     '''
     @author rpiterman
@@ -564,10 +479,8 @@ class FileAccess(object):
     def isDirectory(self, filename):
         try:
             return self.fileAccess.isFolder(filename)
-        except CommandAbortedException, cax:
-            pass
-        except com.sun.star.uno.Exception, ex:
-            pass
+        except Exception:
+            traceback.print_exc()
 
         return False
 
@@ -582,10 +495,8 @@ class FileAccess(object):
     def listFiles(self, dir, includeFolders):
         try:
             return self.fileAccess.getFolderContents(dir, includeFolders)
-        except CommandAbortedException, cax:
-            pass
-        except com.sun.star.uno.Exception, ex:
-            pass
+        except Exception:
+            traceback.print_exc()
 
         return range(0)
 
@@ -599,9 +510,7 @@ class FileAccess(object):
         try:
             self.fileAccess.kill(file)
             return True
-        except CommandAbortedException, cax:
-            traceback.print_exc()
-        except com.sun.star.uno.Exception, ex:
+        except Exception:
             traceback.print_exc()
 
         return False
@@ -647,20 +556,16 @@ class FileAccess(object):
         try:
             self.fileAccess.copy(source, target)
             return True
-        except CommandAbortedException, cax:
-            pass
-        except com.sun.star.uno.Exception, ex:
-            pass
+        except Exception:
+            traceback.print_exc()
 
         return False
 
     def getLastModified(self, url):
         try:
             return self.fileAccess.getDateTimeModified(url)
-        except CommandAbortedException, cax:
-            pass
-        except com.sun.star.uno.Exception, ex:
-            pass
+        except Exception:
+            traceback.print_exc()
 
         return None
 
@@ -677,32 +582,32 @@ class FileAccess(object):
         return url[:url.rfind("/")]
 
     def createNewDir(self, parentDir, name):
-        s = getNewFile(parentDir, name, "")
-        if mkdir(s):
+        s = self.getNewFile(parentDir, name, "")
+        if self.mkdir(s):
             return s
         else:
             return None
 
     def getNewFile(self, parentDir, name, extension):
         i = 0
-        tmp_do_var2 = True
-        while tmp_do_var2:
-            filename = filename(name, extension, (i + 1))
-            u = getURL(parentDir, filename)
-            url = u
-            tmp_do_var2 = exists(url, True)
+        temp = True
+        while temp:
+            filename = self.filename(name, extension, i)
+            url = parentDir + "/" + filename
+            temp = self.exists(url, True)
+            i += 1
         return url
 
     @classmethod
     def filename(self, name, ext, i):
         stringI = ""
         stringExt = ""
-        if i is not 0:
+        if i != 0:
             stringI = str(i)
-        if ext is not "":
+        if ext !=  "":
             stringExt = "." + ext
 
-        return name + stringI + StringExt
+        return name + stringI + stringExt
 
     def getSize(self, url):
         try:
