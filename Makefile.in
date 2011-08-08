@@ -189,7 +189,7 @@ findunusedcode:
 	   source <(sed -e s,$$INPATH,callcatcher,g ./Env.Host.sh) && \
 	   . ./solenv/bin/callcatchEnv.Set.sh && \
 	   cd instsetoo_native && \
-	   build.pl $(GBUILD_OPT) -P@BUILD_NCPUS@ --all -- -P@BUILD_MAX_JOBS@ \
+	   build.pl $(GBUILD_OPT) -P@BUILD_NCPUS@ --all -- -P@BUILD_MAX_JOBS@
 	@. ./Env.Host.sh && \
 	   source <(sed -e s,$$INPATH,callcatcher,g ./Env.Host.sh) && \
 	   callanalyse \
