@@ -64,3 +64,21 @@
  }
 +
 +#endif /* 0 */
+--- misc/build/cairo-1.8.0.org/configure
++++ misc/build/cairo-1.8.0/configure
+@@ -29309,6 +29309,7 @@
+ quartz_NONPKGCONFIG_LIBS="$ac_env_quartz_NONPKGCONFIG_LIBS_value"
+ 
+ 
++if false; then
+     if test "${ac_cv_header_ApplicationServices_ApplicationServices_h+set}" = set; then
+   { echo "$as_me:$LINENO: checking for ApplicationServices/ApplicationServices.h" >&5
+ echo $ECHO_N "checking for ApplicationServices/ApplicationServices.h... $ECHO_C" >&6; }
+@@ -29444,6 +29444,7 @@
+ else
+   use_quartz="no (requires ApplicationServices framework)"
+ fi
++fi
+ 
+   if test "x$use_quartz" != "xyes" ; then
+         if test "${ac_cv_header_CoreGraphics_CoreGraphics_h+set}" = set; then
