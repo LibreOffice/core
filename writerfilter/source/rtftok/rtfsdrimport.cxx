@@ -111,7 +111,8 @@ void RTFSdrImport::resolve(RTFShape& rShape)
 
             // Defaults
             aAny <<= (sal_uInt32)0xffffff; // White in Word, kind of blue in Writer.
-            xPropertySet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("FillColor")), aAny);
+            if (xPropertySet.is())
+                xPropertySet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("FillColor")), aAny);
         }
         else if (i->first.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("wzName")))
         {
@@ -128,21 +129,21 @@ void RTFSdrImport::resolve(RTFShape& rShape)
             m_rImport.setDestinationText(i->second);
             bPib = true;
         }
-        else if (i->first.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("fillColor")))
+        else if (i->first.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("fillColor")) && xPropertySet.is())
         {
             aAny <<= lcl_BGRToRGB(i->second.toInt32());
             xPropertySet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("FillColor")), aAny);
         }
         else if (i->first.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("fillBackColor")))
             ; // Ignore: complementer of fillColor
-        else if (i->first.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("lineColor")))
+        else if (i->first.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("lineColor")) && xPropertySet.is())
         {
             aAny <<= lcl_BGRToRGB(i->second.toInt32());
             xPropertySet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("LineColor")), aAny);
         }
         else if (i->first.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("lineBackColor")))
             ; // Ignore: complementer of lineColor
-        else if (i->first.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("txflTextFlow")))
+        else if (i->first.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("txflTextFlow")) && xPropertySet.is())
         {
             if (i->second.toInt32() == 1)
             {
@@ -150,7 +151,7 @@ void RTFSdrImport::resolve(RTFShape& rShape)
                 xPropertySet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("TextWritingMode")), aAny);
             }
         }
-        else if (i->first.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("fLine")))
+        else if (i->first.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("fLine")) && xPropertySet.is())
         {
             if (i->second.toInt32() == 0)
             {
@@ -282,7 +283,7 @@ void RTFSdrImport::resolve(RTFShape& rShape)
 
     if (m_xDrawPage.is())
         m_xDrawPage->add(xShape);
-    if (bCustom)
+    if (bCustom && xShape.is())
     {
         uno::Reference<drawing::XEnhancedCustomShapeDefaulter> xDefaulter(xShape, uno::UNO_QUERY);
         xDefaulter->createCustomShapeDefaults(OUString::valueOf(sal_Int32(nType)));
@@ -312,7 +313,7 @@ void RTFSdrImport::resolve(RTFShape& rShape)
     beans::PropertyValue* pGeomValues = aGeomPropSeq.getArray();
     for (std::vector<beans::PropertyValue>::iterator i = aGeomPropVec.begin(); i != aGeomPropVec.end(); ++i)
         *pGeomValues++ = *i;
-    if (aGeomPropSeq.getLength())
+    if (aGeomPropSeq.getLength() && xPropertySet.is())
         xPropertySet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("CustomShapeGeometry")), uno::Any(aGeomPropSeq));
 
     // Set position and size

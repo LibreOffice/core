@@ -527,10 +527,9 @@ int RTFDocumentImpl::resolvePict(bool bInline)
     // Wrap it in an XShape.
     uno::Reference<drawing::XShape> xShape;
     OUString aService(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.GraphicObjectShape"));
-    xShape.set(m_xModelFactory->createInstance(aService), uno::UNO_QUERY);
-    OSL_ASSERT(xShape.is());
+    if (m_xModelFactory.is())
+        xShape.set(m_xModelFactory->createInstance(aService), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xPropertySet(xShape, uno::UNO_QUERY);
-    OSL_ASSERT(xPropertySet.is());
     if (m_bObject)
     {
         // Set bitmap
@@ -558,7 +557,8 @@ int RTFDocumentImpl::resolvePict(bool bInline)
         m_aObjectAttributes->push_back(make_pair(NS_ooxml::LN_shape, pShapeValue));
         return 0;
     }
-    xPropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("GraphicURL")), uno::Any(aGraphicUrl));
+    if (xPropertySet.is())
+        xPropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("GraphicURL")), uno::Any(aGraphicUrl));
 
     // Send it to the dmapper.
     RTFSprms aSprms;
