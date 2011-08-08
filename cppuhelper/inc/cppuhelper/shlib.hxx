@@ -37,6 +37,13 @@
 namespace cppu
 {
 
+// Note the pointless redundancy
+// "::com::sun::star::lang::XSingleComponentFactory or
+// ::com::sun::star::lang::XSingleComponentFactory" in the doc
+// comments below. Whether the documentation is supposed to mean only
+// XSingleComponentFactory, or whether the other one should be
+// something else, I don't know.
+
 /** Loads a shared library component and gets the factory out of it.  You can give either a
     fully qualified libname or single lib name.  The libname need not be pre/postfixed
     (e.g. xxx.dll).  You can give parameter rPath to force lookup of the library in a specific
