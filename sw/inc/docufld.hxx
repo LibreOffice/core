@@ -532,6 +532,7 @@ public:
     virtual String          Expand() const;
     virtual SwField*        Copy() const;
 
+    inline const DateTime   GetDateTime() const             { return aDateTime; }
     inline const Date       GetDate() const                 { return aDateTime.GetDate(); }
     inline const Time       GetTime() const                 { return aDateTime.GetTime(); }
 
