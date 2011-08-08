@@ -1821,6 +1821,8 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
             {
                 m_nCurrentStyleIndex = nParam;
                 m_aStates.top().aTableAttributes->push_back(make_pair(NS_rtf::LN_ISTD, pIntValue));
+                RTFValue::Pointer_t pValue(new RTFValue(1));
+                m_aStates.top().aTableAttributes->push_back(make_pair(NS_rtf::LN_SGC, pValue)); // paragraph style
             }
             else
                 m_aStates.top().aParagraphAttributes->push_back(make_pair(NS_rtf::LN_ISTD, pIntValue));
