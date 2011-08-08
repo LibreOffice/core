@@ -72,13 +72,13 @@ inline void lcl_CFG_DBG_EXCEPTION(const sal_Char* cText, const Exception& rEx)
     OSL_FAIL(sMsg.getStr());
 }
 #define CATCH_INFO(a) \
-catch(Exception& rEx)   \
+catch(const Exception& rEx)   \
 {                       \
     lcl_CFG_DBG_EXCEPTION(a, rEx);\
 }
 #else
     #define lcl_CFG_DBG_EXCEPTION( a, b)
-    #define CATCH_INFO(a) catch(Exception& ){}
+    #define CATCH_INFO(a) catch(const Exception&){}
 #endif
 
 /*
@@ -526,7 +526,9 @@ Sequence< sal_Bool > ConfigItem::GetReadOnlyStates(const com::sun::star::uno::Se
             Property aProp = xInfo->getPropertyByName(sProperty);
             lStates[i] = ((aProp.Attributes & PropertyAttribute::READONLY) == PropertyAttribute::READONLY);
         }
-        catch(Exception&){}
+        catch (const Exception&)
+        {
+        }
     }
 
     return lStates;
@@ -554,7 +556,7 @@ Sequence< Any > ConfigItem::GetProperties(const Sequence< OUString >& rNames)
                 else
                     pRet[i] = xHierarchyAccess->getByHierarchicalName(pNames[i]);
             }
-            catch(Exception& rEx)
+            catch (const Exception& rEx)
             {
 #if OSL_DEBUG_LEVEL > 0
                 OString sMsg("XHierarchicalNameAccess: ");
@@ -701,7 +703,7 @@ sal_Bool    ConfigItem::EnableNotification(const Sequence< OUString >& rNames,
         xChangeLstnr = new ConfigChangeListener_Impl(*this, rNames);
         xChgNot->addChangesListener( xChangeLstnr );
     }
-    catch(RuntimeException& )
+    catch (const RuntimeException&)
     {
         bRet = sal_False;
     }
@@ -718,7 +720,7 @@ void ConfigItem::RemoveChangesListener()
             xChgNot->removeChangesListener( xChangeLstnr );
             xChangeLstnr = 0;
         }
-        catch(Exception & )
+        catch (const Exception&)
         {
         }
     }
@@ -1031,11 +1033,11 @@ sal_Bool ConfigItem::SetSetProperties(
             }
         }
 #ifdef DBG_UTIL
-        catch(Exception& rEx)
+        catch (const Exception& rEx)
         {
             lcl_CFG_DBG_EXCEPTION("Exception from SetSetProperties: ", rEx);
 #else
-        catch(Exception&)
+        catch (const Exception&)
         {
 #endif
             bRet = sal_False;
@@ -1095,7 +1097,7 @@ sal_Bool ConfigItem::ReplaceSetProperties(
                     {
                         xCont->removeByName(pContainerSubNodes[nContSub]);
                     }
-                    catch (Exception & )
+                    catch (const Exception&)
                     {
                         if (isSimpleValueSet)
                         try
@@ -1168,11 +1170,11 @@ sal_Bool ConfigItem::ReplaceSetProperties(
             }
         }
 #ifdef DBG_UTIL
-        catch(Exception& rEx)
+        catch (const Exception& rEx)
         {
             lcl_CFG_DBG_EXCEPTION("Exception from ReplaceSetProperties: ", rEx);
 #else
-        catch(Exception&)
+        catch (const Exception&)
         {
 #endif
             bRet = sal_False;
@@ -1270,11 +1272,11 @@ sal_Bool ConfigItem::AddNode(const rtl::OUString& rNode, const rtl::OUString& rN
             xBatch->commitChanges();
         }
 #ifdef DBG_UTIL
-        catch(Exception& rEx)
+        catch (const Exception& rEx)
         {
             lcl_CFG_DBG_EXCEPTION("Exception from AddNode(): ", rEx);
 #else
-        catch(Exception&)
+        catch (const Exception&)
         {
 #endif
             bRet = sal_False;
