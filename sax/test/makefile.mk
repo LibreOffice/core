@@ -39,7 +39,10 @@ ENABLE_EXCEPTIONS=TRUE
 .INCLUDE :  settings.mk
 # --- Files --------------------------------------------------------
 
-
+.IF "$(BUILD_TYPE)" == "$(BUILD_TYPE:s/DESKTOP//)"
+ALL:
+    @echo Nothing done for non-desktop OSes
+.ENDIF
 
 #
 # std testcomponent
