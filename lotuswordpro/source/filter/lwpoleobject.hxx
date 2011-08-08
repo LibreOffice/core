@@ -182,8 +182,6 @@ public:
     void    SetAdviseFlags( sal_uLong nAdv ) { nAdvFlags = nAdv; }
     void    SetSize( const Size & rSize ) { aSize = rSize; }
     Size GetSize() const { return aSize; }
-    /// return FALSE => unknown format
-    sal_Bool    Read( SvStream & rStm );
 };
 
 

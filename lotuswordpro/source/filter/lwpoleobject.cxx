@@ -275,12 +275,4 @@ void LwpOleObject::RegisterStyle()
 {
 }
 
-/**
-* @descr:   Read OLE object picture information
-*/
-sal_Bool LwpOlePres::Read( SvStream & /*rStm*/ )
-{
-    return sal_True;
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

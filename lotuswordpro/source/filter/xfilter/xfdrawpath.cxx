@@ -125,20 +125,6 @@ void    XFDrawPath::CurveTo(XFPoint dest, XFPoint ctrl1, XFPoint ctrl2, sal_Bool
     m_aPaths.push_back(entry);
 }
 
-void    XFDrawPath::SmoothCurveTo(XFPoint dest, XFPoint ctrl, sal_Bool absPosition)
-{
-    XFSvgPathEntry  entry;
-
-    if( absPosition )
-        entry.SetCommand(A2OUSTR("C"));
-    else
-        entry.SetCommand(A2OUSTR("c"));
-    entry.AddPoint(ctrl);
-    entry.AddPoint(dest);
-
-    m_aPaths.push_back(entry);
-}
-
 void    XFDrawPath::ClosePath(sal_Bool absPosition)
 {
     XFSvgPathEntry  entry;

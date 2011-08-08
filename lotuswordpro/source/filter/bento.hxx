@@ -296,7 +296,6 @@ public: // Internal methods
     LtcUtBenValueStream * FindNextValueStreamWithPropertyName(const char * sPropertyName, LtcUtBenValueStream * pCurrentValueStream);
     LtcUtBenValueStream * FindValueStreamWithPropertyName(const char * sPropertyName);
     LtcUtBenValueStream * FindObjectValueStreamWithObjectIDAndProperty(BenObjectID ObjectID, const char * sPropertyName);
-    BenError CreateGraphicStreams(std::vector<SvStream *> * pStreamVector)  ;
     BenError CreateGraphicStream(SvStream * &pStream,  const char *pObjectName);
 
     void ReadAswEntry(SvStream * pStream, AswEntry& rEntry);

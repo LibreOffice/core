@@ -119,11 +119,6 @@ public:
     void    CurveTo(XFPoint dest, XFPoint ctrl1, XFPoint ctrl2, sal_Bool absPosition = sal_True);
 
     /**
-     * @descr   Smooth curve command.
-     */
-    void    SmoothCurveTo(XFPoint dest, XFPoint ctrl, sal_Bool absPosition = sal_True);
-
-    /**
      * @descr   Close path command.
      */
     void    ClosePath(sal_Bool absPosition = sal_True);
