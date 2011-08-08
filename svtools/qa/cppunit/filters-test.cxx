@@ -141,6 +141,10 @@ void FiltersTest::testCVEs()
     recursiveScan(m_aSrcRoot + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/svtools/qa/cppunit/data/emf/pass")), true);
     recursiveScan(m_aSrcRoot + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/svtools/qa/cppunit/data/emf/fail")), false);
     recursiveScan(m_aSrcRoot + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/svtools/qa/cppunit/data/emf/indeterminate")), 2);
+
+    recursiveScan(m_aSrcRoot + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/svtools/qa/cppunit/data/sgv/pass")), true);
+    recursiveScan(m_aSrcRoot + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/svtools/qa/cppunit/data/sgv/fail")), false);
+    recursiveScan(m_aSrcRoot + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/svtools/qa/cppunit/data/sgv/indeterminate")), 2);
 }
 
 FiltersTest::FiltersTest()
