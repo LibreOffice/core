@@ -184,16 +184,6 @@ void CmdBaseStream::GenReturn( comm_UINT16 nRet, rtl::OString *pUId, comm_UINT16
     Write(bBool);
 }
 
-void CmdBaseStream::GenReturn( comm_UINT16 nRet, rtl::OString *pUId, comm_UINT16 nMethod, comm_BOOL bBool )
-{
-    Write(comm_UINT16(SIReturn));
-    Write(nRet);
-    Write(pUId);
-    Write(comm_UINT16(PARAM_UINT16_1|PARAM_BOOL_1));        // Typ der folgenden Parameter
-    Write(nMethod);
-    Write(bBool);
-}
-
 void CmdBaseStream::GenReturn( comm_UINT16 nRet, rtl::OString *pUId, comm_UINT16 nMethod, comm_UINT32 nNr )
 {
     Write(comm_UINT16(SIReturn));

@@ -66,7 +66,6 @@ public:
     void GenReturn( comm_UINT16 nRet, rtl::OString *pUId, comm_UINT16 nMethod ); // also used outside MacroRecorder
     void GenReturn( comm_UINT16 nRet, rtl::OString *pUId, comm_UINT16 nMethod, comm_String *pString );
     void GenReturn( comm_UINT16 nRet, rtl::OString *pUId, comm_UINT16 nMethod, comm_String *pString, comm_BOOL bBool );
-    void GenReturn( comm_UINT16 nRet, rtl::OString *pUId, comm_UINT16 nMethod, comm_BOOL bBool );
     void GenReturn( comm_UINT16 nRet, rtl::OString *pUId, comm_UINT16 nMethod, comm_UINT32 nNr );
 
     void Read ( comm_UINT16 &nNr );
