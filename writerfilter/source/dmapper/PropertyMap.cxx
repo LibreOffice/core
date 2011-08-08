@@ -506,7 +506,8 @@ void SectionPropertyMap::ApplyBorderToPageStyles(
         if( m_pBorderLines[nBorder] )
         {
             const ::rtl::OUString sBorderName = rPropNameSupplier.GetName( aBorderIds[nBorder] );
-            xFirst->setPropertyValue( sBorderName, uno::makeAny( *m_pBorderLines[nBorder] ));
+            if (xFirst.is())
+                xFirst->setPropertyValue( sBorderName, uno::makeAny( *m_pBorderLines[nBorder] ));
             if(xSecond.is())
                 xSecond->setPropertyValue( sBorderName, uno::makeAny( *m_pBorderLines[nBorder] ));
         }
@@ -541,7 +542,8 @@ void SectionPropertyMap::SetBorderDistance( uno::Reference< beans::XPropertySet 
         nDist = nMargin - nDistance;
     }
     const ::rtl::OUString sBorderDistanceName = rPropNameSupplier.GetName( eDistId );
-    xStyle->setPropertyValue( sBorderDistanceName, uno::makeAny( nDist ));
+    if (xStyle.is())
+        xStyle->setPropertyValue( sBorderDistanceName, uno::makeAny( nDist ));
 }
 
 
@@ -554,7 +556,8 @@ uno::Reference< text::XTextColumns > SectionPropertyMap::ApplyColumnProperties(
     {
         PropertyNameSupplier& rPropNameSupplier = PropertyNameSupplier::GetPropertyNameSupplier();
         const ::rtl::OUString sTextColumns = rPropNameSupplier.GetName( PROP_TEXT_COLUMNS );
-        xColumnContainer->getPropertyValue(sTextColumns) >>= xColumns;
+        if (xColumnContainer.is())
+            xColumnContainer->getPropertyValue(sTextColumns) >>= xColumns;
         uno::Reference< beans::XPropertySet > xColumnPropSet( xColumns, uno::UNO_QUERY_THROW );
         if( !m_bEvenlySpaced &&
                 (sal_Int32(m_aColWidth.size()) == (m_nColumnCount + 1 )) &&
@@ -673,8 +676,10 @@ void SectionPropertyMap::CopyLastHeaderFooter( bool bFirstPage, DomainMapper_Imp
             bool bHasHeader = false;
 
             rtl::OUString sHeaderIsOn = rPropNameSupplier.GetName( PROP_HEADER_IS_ON );
-            xPrevStyle->getPropertyValue( sHeaderIsOn ) >>= bHasPrevHeader;
-            xStyle->getPropertyValue( sHeaderIsOn ) >>= bHasHeader;
+            if (xPrevStyle.is())
+                xPrevStyle->getPropertyValue( sHeaderIsOn ) >>= bHasPrevHeader;
+            if (xStyle.is())
+                xStyle->getPropertyValue( sHeaderIsOn ) >>= bHasHeader;
             bool bCopyHeader = bHasPrevHeader && !bHasHeader;
 
             if ( bCopyHeader )
@@ -684,11 +689,13 @@ void SectionPropertyMap::CopyLastHeaderFooter( bool bFirstPage, DomainMapper_Imp
             bool bHasFooter = false;
 
             rtl::OUString sFooterIsOn = rPropNameSupplier.GetName( PROP_FOOTER_IS_ON );
-            xPrevStyle->getPropertyValue( sFooterIsOn ) >>= bHasPrevFooter;
-            xStyle->getPropertyValue( sFooterIsOn ) >>= bHasFooter;
+            if (xPrevStyle.is())
+                xPrevStyle->getPropertyValue( sFooterIsOn ) >>= bHasPrevFooter;
+            if (xStyle.is())
+                xStyle->getPropertyValue( sFooterIsOn ) >>= bHasFooter;
             bool bCopyFooter = bHasPrevFooter && !bHasFooter;
 
-            if ( bCopyFooter )
+            if ( bCopyFooter && xStyle.is() )
                 xStyle->setPropertyValue( sFooterIsOn, uno::makeAny( sal_True ) );
 
             // Copying the text properties
@@ -705,11 +712,13 @@ void SectionPropertyMap::CopyLastHeaderFooter( bool bFirstPage, DomainMapper_Imp
                     clog << rtl::OUStringToOString( sName, RTL_TEXTENCODING_UTF8 ).getStr( ) << endl;
 #endif
                     // TODO has to be copied
-                    uno::Reference< text::XTextCopy > xTxt(
-                            xStyle->getPropertyValue( sName ), uno::UNO_QUERY_THROW );
+                    uno::Reference< text::XTextCopy > xTxt;
+                    if (xStyle.is())
+                        xTxt.set(xStyle->getPropertyValue( sName ), uno::UNO_QUERY_THROW );
 
-                    uno::Reference< text::XTextCopy > xPrevTxt(
-                            xPrevStyle->getPropertyValue( sName ), uno::UNO_QUERY_THROW );
+                    uno::Reference< text::XTextCopy > xPrevTxt;
+                    if (xPrevStyle.is())
+                        xPrevTxt.set(xPrevStyle->getPropertyValue( sName ), uno::UNO_QUERY_THROW );
 
                     xTxt->copyText( xPrevTxt );
                 }
