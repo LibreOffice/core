@@ -46,6 +46,9 @@
 #include <comphelper/processfactory.hxx>
 
 #include <svx/numfmtsh.hxx>
+
+#include <limits>
+
 // class SvxNumberFormatShell --------------------------------------------
 
 const double SvxNumberFormatShell::DEFAULT_NUMVALUE = 1234.56789;
