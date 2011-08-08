@@ -255,8 +255,6 @@ public:
     ByteString&         Convert( rtl_TextEncoding eSource,
                                  rtl_TextEncoding eTarget,
                                  sal_Bool bReplace = sal_True );
-    static sal_Char     Convert( sal_Char c, rtl_TextEncoding eSource,
-                                 rtl_TextEncoding eTarget );
     static sal_Char     ConvertFromUnicode( sal_Unicode c,
                                             rtl_TextEncoding eTextEncoding,
                                             sal_Bool bReplace = sal_True );

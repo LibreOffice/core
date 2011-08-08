@@ -384,37 +384,6 @@ ByteString& ByteString::Convert( rtl_TextEncoding eSource, rtl_TextEncoding eTar
     return *this;
 }
 
-// =======================================================================
-
-char ByteString::Convert( char c,
-                          rtl_TextEncoding eSource, rtl_TextEncoding eTarget )
-{
-    // TextEncoding Dontknow kann nicht konvertiert werden
-    if ( (eSource == RTL_TEXTENCODING_DONTKNOW) || (eTarget == RTL_TEXTENCODING_DONTKNOW) )
-        return '\0';
-
-    // Wenn Source und Target gleich sind, muss nicht konvertiert werden
-    if ( eSource == eTarget )
-        return c;
-
-    // TextEncoding Symbol nur nach Unicode oder von Unicode wandeln, ansonsten
-    // wollen wir die Zeichencodes beibehalten
-    if ( (eSource == RTL_TEXTENCODING_SYMBOL) &&
-         (eTarget != RTL_TEXTENCODING_UTF7) &&
-         (eTarget != RTL_TEXTENCODING_UTF8) )
-        return '\0';
-    if ( (eTarget == RTL_TEXTENCODING_SYMBOL) &&
-         (eSource != RTL_TEXTENCODING_UTF7) &&
-         (eSource != RTL_TEXTENCODING_UTF8) )
-        return '\0';
-
-    sal_uChar* pConvertTab = ImplGet1ByteConvertTab( eSource, eTarget, true );
-    if ( pConvertTab )
-        return (char)pConvertTab[(sal_uChar)c];
-    else
-        return '\0';
-}
-
 // -----------------------------------------------------------------------
 
 char ByteString::ConvertFromUnicode( sal_Unicode c, rtl_TextEncoding eTextEncoding, sal_Bool bReplace )
