@@ -53,6 +53,7 @@
 #include <rtfvalue.hxx>
 #include <rtfsprm.hxx>
 #include <rtfreferenceproperties.hxx>
+#include <rtfskipdestination.hxx>
 
 #define TWIP_TO_MM100(TWIP)     ((TWIP) >= 0 ? (((TWIP)*127L+36L)/72L) : (((TWIP)*127L-36L)/72L))
 
@@ -875,7 +876,7 @@ void RTFDocumentImpl::replayBuffer(RTFBuffer_t& rBuffer)
 
 int RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
 {
-    bool bParsed = true;
+    RTFSkipDestination aSkip(*this);
     switch (nKeyword)
     {
         case RTF_RTF:
@@ -1146,17 +1147,16 @@ int RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
 #endif
             // Make sure we skip destinations (even without \*) till we don't handle them
             m_aStates.top().nDestinationState = DESTINATION_SKIP;
-            bParsed = false;
+            aSkip.setParsed(false);
             break;
     }
 
-    skipDestination(bParsed);
     return 0;
 }
 
 int RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
 {
-    bool bParsed = true;
+    RTFSkipDestination aSkip(*this);
     sal_uInt8 cCh = 0;
 
     // Trivial symbols
@@ -1180,7 +1180,6 @@ int RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
     {
         OUString aStr(OStringToOUString(OString(cCh), RTL_TEXTENCODING_MS_1252));
         text(aStr);
-        skipDestination(bParsed);
         return 0;
     }
 
@@ -1188,7 +1187,8 @@ int RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
     {
         case RTF_IGNORE:
             m_bSkipUnknown = true;
-            return 0; // don't reset m_bSkipUnknown after this keyword
+            aSkip.setReset(false);
+            return 0;
             break;
         case RTF_PAR:
             {
@@ -1316,16 +1316,15 @@ int RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
 #if OSL_DEBUG_LEVEL > 1
             OSL_TRACE("%s: TODO handle symbol '%s'", OSL_THIS_FUNC, lcl_RtfToString(nKeyword));
 #endif
-            bParsed = false;
+            aSkip.setParsed(false);
             break;
     }
-    skipDestination(bParsed);
     return 0;
 }
 
 int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
 {
-    bool bParsed = true;
+    RTFSkipDestination aSkip(*this);
     int nParam = -1;
 
     // Indentation
@@ -1342,7 +1341,6 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
     {
         RTFValue::Pointer_t pValue(new RTFValue(nParam));
         m_aStates.top().aParagraphSprms->push_back(make_pair(NS_sprm::LN_PJc, pValue));
-        skipDestination(bParsed);
         return 0;
     }
 
@@ -1361,7 +1359,6 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
     {
         RTFValue::Pointer_t pValue(new RTFValue(nParam));
         m_aStates.top().aParagraphSprms->push_back(make_pair(NS_sprm::LN_PWAlignFont, pValue));
-        skipDestination(bParsed);
         return 0;
     }
 
@@ -1377,7 +1374,6 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
     {
         RTFValue::Pointer_t pValue(new RTFValue(nParam));
         m_aStates.top().aTabAttributes->push_back(make_pair(NS_ooxml::LN_CT_TabStop_val, pValue));
-        skipDestination(bParsed);
         return 0;
     }
 
@@ -1396,7 +1392,6 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
     {
         RTFValue::Pointer_t pValue(new RTFValue(nParam));
         m_aStates.top().aTabAttributes->push_back(make_pair(NS_ooxml::LN_CT_TabStop_leader, pValue));
-        skipDestination(bParsed);
         return 0;
     }
 
@@ -1426,7 +1421,6 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
     {
         RTFValue::Pointer_t pValue(new RTFValue(nParam));
         lcl_putBorderProperty(m_aStates, NS_rtf::LN_BRCTYPE, pValue);
-        skipDestination(bParsed);
         return 0;
     }
 
@@ -1444,7 +1438,6 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
     {
         RTFValue::Pointer_t pValue(new RTFValue(nParam));
         m_aStates.top().aSectionSprms->push_back(make_pair(NS_sprm::LN_SBkc, pValue));
-        skipDestination(bParsed);
         return 0;
     }
 
@@ -1462,7 +1455,6 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
         RTFValue::Pointer_t pValue(new RTFValue(1));
         m_aStates.top().aParagraphSprms.erase(NS_sprm::LN_PFInTable);
         m_aStates.top().aParagraphSprms->push_back(make_pair(nParam, pValue));
-        skipDestination(bParsed);
         return 0;
     }
 
@@ -1680,16 +1672,15 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
 #if OSL_DEBUG_LEVEL > 1
             OSL_TRACE("%s: TODO handle flag '%s'", OSL_THIS_FUNC, lcl_RtfToString(nKeyword));
 #endif
-            bParsed = false;
+            aSkip.setParsed(false);
             break;
     }
-    skipDestination(bParsed);
     return 0;
 }
 
 int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
 {
-    bool bParsed = true;
+    RTFSkipDestination aSkip(*this);
     int nSprm = 0;
     RTFValue::Pointer_t pIntValue(new RTFValue(nParam));
     // Trivial table sprms.
@@ -1704,7 +1695,6 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
     if (nSprm > 0)
     {
         m_aStates.top().aTableSprms->push_back(make_pair(nSprm, pIntValue));
-        skipDestination(bParsed);
         return 0;
     }
     // Trivial character sprms.
@@ -1724,7 +1714,6 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
     if (nSprm > 0)
     {
         m_aStates.top().aCharacterSprms->push_back(make_pair(nSprm, pIntValue));
-        skipDestination(bParsed);
         return 0;
     }
     // Trivial paragraph sprms.
@@ -1743,7 +1732,6 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
     if (nSprm > 0)
     {
         m_aStates.top().aParagraphSprms->push_back(make_pair(nSprm, pIntValue));
-        skipDestination(bParsed);
         return 0;
     }
 
@@ -1757,7 +1745,6 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
     if (nSprm > 0)
     {
         m_aStates.top().aTableAttributes->push_back(make_pair(nSprm, pIntValue));
-        skipDestination(bParsed);
         return 0;
     }
 
@@ -1772,7 +1759,6 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
     {
         RTFValue::Pointer_t pValue(new RTFValue(nParam));
         m_aStates.top().aCharacterAttributes->push_back(make_pair(nSprm, pValue));
-        skipDestination(bParsed);
         return 0;
     }
 
@@ -1787,10 +1773,7 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
         default: break;
     }
     if (nSprm > 0)
-    {
-        skipDestination(bParsed);
         return 0;
-    }
 
     // Then check for the more complex ones.
     switch (nKeyword)
@@ -2246,16 +2229,15 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
 #if OSL_DEBUG_LEVEL > 1
             OSL_TRACE("%s: TODO handle value '%s'", OSL_THIS_FUNC, lcl_RtfToString(nKeyword));
 #endif
-            bParsed = false;
+            aSkip.setParsed(false);
             break;
     }
-    skipDestination(bParsed);
     return 0;
 }
 
 int RTFDocumentImpl::dispatchToggle(RTFKeyword nKeyword, bool bParam, int nParam)
 {
-    bool bParsed = true;
+    RTFSkipDestination aSkip(*this);
     int nSprm = -1;
     RTFValue::Pointer_t pBoolValue(new RTFValue(!bParam || nParam != 0));
 
@@ -2285,7 +2267,6 @@ int RTFDocumentImpl::dispatchToggle(RTFKeyword nKeyword, bool bParam, int nParam
     {
         RTFValue::Pointer_t pValue(new RTFValue((!bParam || nParam != 0) ? nSprm : 0));
         m_aStates.top().aCharacterSprms->push_back(make_pair(NS_sprm::LN_CKul, pValue));
-        skipDestination(bParsed);
         return 0;
     }
 
@@ -2303,7 +2284,6 @@ int RTFDocumentImpl::dispatchToggle(RTFKeyword nKeyword, bool bParam, int nParam
     {
         RTFValue::Pointer_t pValue(new RTFValue((!bParam || nParam != 0) ? nSprm : 0));
         m_aStates.top().aCharacterSprms->push_back(make_pair(NS_sprm::LN_CKcd, pValue));
-        skipDestination(bParsed);
         return 0;
     }
 
@@ -2327,7 +2307,6 @@ int RTFDocumentImpl::dispatchToggle(RTFKeyword nKeyword, bool bParam, int nParam
     if (nSprm >= 0)
     {
         m_aStates.top().aCharacterSprms->push_back(make_pair(nSprm, pBoolValue));
-        skipDestination(bParsed);
         return 0;
     }
 
@@ -2348,24 +2327,10 @@ int RTFDocumentImpl::dispatchToggle(RTFKeyword nKeyword, bool bParam, int nParam
 #if OSL_DEBUG_LEVEL > 1
             OSL_TRACE("%s: TODO handle toggle '%s'", OSL_THIS_FUNC, lcl_RtfToString(nKeyword));
 #endif
-            bParsed = false;
+            aSkip.setParsed(false);
             break;
     }
-    skipDestination(bParsed);
     return 0;
-}
-
-void RTFDocumentImpl::skipDestination(bool bParsed)
-{
-    if (m_bSkipUnknown)
-    {
-        if (!bParsed)
-        {
-            OSL_TRACE("%s: skipping destination", OSL_THIS_FUNC);
-            m_aStates.top().nDestinationState = DESTINATION_SKIP;
-        }
-        m_bSkipUnknown = false;
-    }
 }
 
 int RTFDocumentImpl::pushState()

@@ -277,7 +277,6 @@ namespace writerfilter {
                 bool isEmpty();
                 int getGroup();
                 void setDestinationText(rtl::OUString& rString);
-                void skipDestination(bool bParsed);
                 /// Resolve a picture: If not inline, then anchored.
                 int resolvePict(bool bInline);
                 void runBreak();
