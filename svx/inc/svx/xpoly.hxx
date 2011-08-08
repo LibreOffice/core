@@ -122,7 +122,6 @@ public:
 
     // Transformationen
     void Translate(const Point& rTrans);
-    void Rotate(const Point& rCenter, double fSin, double fCos);
     void Scale(double fSx, double fSy);
     void Distort(const Rectangle& rRefRect, const XPolygon& rDistortedRect);
 

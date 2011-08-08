@@ -198,34 +198,6 @@ SdrTextObj::SdrTextObj(SdrObjKind eNewTextKind, const Rectangle& rNewRect)
     mbSupportTextIndentingOnLineWidthChange = sal_True;
 }
 
-SdrTextObj::SdrTextObj(SdrObjKind eNewTextKind, const Rectangle& rNewRect, SvStream& rInput, const String& rBaseURL, sal_uInt16 eFormat)
-:   SdrAttrObj(),
-    aRect(rNewRect),
-    mpText(NULL),
-    pEdtOutl(NULL),
-    pFormTextBoundRect(NULL),
-    eTextKind(eNewTextKind)
-{
-    bTextSizeDirty=sal_False;
-    bTextFrame=sal_True;
-    bNoShear=sal_True;
-    bNoRotate=sal_False;
-    bNoMirror=sal_True;
-    bDisableAutoWidthOnDragging=sal_False;
-    ImpJustifyRect(aRect);
-
-    NbcSetText(rInput, rBaseURL, eFormat);
-
-    mbInEditMode = sal_False;
-    mbTextHidden = sal_False;
-    mbTextAnimationAllowed = sal_True;
-    mbInDownScale = sal_False;
-    maTextEditOffset = Point(0, 0);
-
-    // #i25616#
-    mbSupportTextIndentingOnLineWidthChange = sal_True;
-}
-
 SdrTextObj::~SdrTextObj()
 {
     if( pModel )

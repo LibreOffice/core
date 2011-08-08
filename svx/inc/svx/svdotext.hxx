@@ -315,8 +315,6 @@ protected:
     SdrTextObj(SdrObjKind eNewTextKind);
     SdrTextObj(SdrObjKind eNewTextKind, const Rectangle& rNewRect);
 
-    // der sal_uInt16 eFormat nimmt Werte des enum EETextFormat entgegen
-    SdrTextObj(SdrObjKind eNewTextKind, const Rectangle& rNewRect, SvStream& rInput, const String& rBaseURL, sal_uInt16 eFormat);
     virtual ~SdrTextObj();
 
 public:

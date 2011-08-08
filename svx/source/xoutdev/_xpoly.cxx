@@ -1004,55 +1004,6 @@ void XPolygon::PointsToBezier(sal_uInt16 nFirst)
 
 /*************************************************************************
 |*
-|*    XPolygon::Rotate()
-|*
-|*    Alle Punkte um den Punkt rCenter drehen, Sinus und Cosinus
-|*    muessen uebergeben werden
-|*
-*************************************************************************/
-
-void XPolygon::Rotate(const Point& rCenter, double fSin, double fCos)
-{
-    pImpXPolygon->CheckPointDelete();
-    CheckReference();
-
-    long nX;
-    long nY;
-    long nNewX;
-    long nNewY;
-    long nCenterX = rCenter.X();
-    long nCenterY = rCenter.Y();
-
-    sal_uInt16 nPntCnt = pImpXPolygon->nPoints;
-
-    for (sal_uInt16 i = 0; i < nPntCnt; i++)
-    {
-        Point *pPt = &(pImpXPolygon->pPointAry[i]);
-        nX = pPt->X()-nCenterX;
-        nY = pPt->Y()-nCenterY;
-        nNewX =  (long)floor(fCos * nX + fSin * nY + 0.5);
-        nNewY = -(long)floor(fSin * nX - fCos * nY + 0.5);
-        pPt->X() = nNewX + nCenterX;
-        pPt->Y() = nNewY + nCenterY;
-
-    /* und so stand das in einem anderen File auf T:
-       dass ich am 29-11-1995 gegettet habe. Joe M.
-    sal_uInt16 nPntCnt = pImpXPolygon->nPoints;
-
-    for (sal_uInt16 i = 0; i < nPntCnt; i++)
-    {
-        Point P = pImpXPolygon->pPointAry[i] - rCenter;
-        long X = P.X();
-        long Y = P.Y();
-        P.X() =  (long)floor(fCos * X + fSin * Y + 0.5);
-        P.Y() = -(long)floor(fSin * X - fCos * Y + 0.5);
-        pImpXPolygon->pPointAry[i] = P + rCenter;
-    */
-    }
-}
-
-/*************************************************************************
-|*
 |*    XPolygon::Scale()
 |*
 |*    XPolygon in X- und/oder Y-Richtung skalieren
