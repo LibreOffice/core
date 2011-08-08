@@ -1469,7 +1469,7 @@ short SvxNumberFormatShell::GetListPos4Entry(sal_uInt32 nIdx)
     short nSelP=SELPOS_NONE;
 
     // Check list size against return type limit.
-    if( aCurEntryList.Count() <= ::std::numeric_limits< short >::max() )
+    if( aCurEntryList.size() <= static_cast<size_t>(::std::numeric_limits< short >::max()) )
     {
         for(size_t i=0; i < aCurEntryList.size(); ++i)
         {
