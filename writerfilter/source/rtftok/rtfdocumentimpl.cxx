@@ -1346,6 +1346,25 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
         return 0;
     }
 
+    // Font Alignment
+    switch (nKeyword)
+    {
+        case RTF_FAFIXED:
+        case RTF_FAAUTO: nParam = NS_ooxml::LN_Value_wordprocessingml_ST_TextAlignment_auto; break;
+        case RTF_FAHANG: nParam = NS_ooxml::LN_Value_wordprocessingml_ST_TextAlignment_top; break;
+        case RTF_FACENTER: nParam = NS_ooxml::LN_Value_wordprocessingml_ST_TextAlignment_center; break;
+        case RTF_FAROMAN: nParam = NS_ooxml::LN_Value_wordprocessingml_ST_TextAlignment_baseline; break;
+        case RTF_FAVAR: nParam = NS_ooxml::LN_Value_wordprocessingml_ST_TextAlignment_bottom; break;
+        default: break;
+    }
+    if (nParam >= 0)
+    {
+        RTFValue::Pointer_t pValue(new RTFValue(nParam));
+        m_aStates.top().aParagraphSprms->push_back(make_pair(NS_sprm::LN_PWAlignFont, pValue));
+        skipDestination(bParsed);
+        return 0;
+    }
+
     // Tab kind.
     switch (nKeyword)
     {
