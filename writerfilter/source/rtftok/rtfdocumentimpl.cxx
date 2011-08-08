@@ -283,7 +283,6 @@ RTFDocumentImpl::RTFDocumentImpl(uno::Reference<uno::XComponentContext> const& x
     m_pInStream = utl::UcbStreamHelper::CreateStream(xInputStream, sal_True);
 
     m_xModelFactory.set(m_xDstDoc, uno::UNO_QUERY);
-    OSL_ASSERT(m_xModelFactory.is());
 
     uno::Reference<document::XDocumentPropertiesSupplier> xDocumentPropertiesSupplier(m_xDstDoc, uno::UNO_QUERY);
     if (xDocumentPropertiesSupplier.is())
