@@ -3619,12 +3619,12 @@ void DocxAttributeOutput::ParaAdjust( const SvxAdjustItem& rAdjust )
     const SfxItemSet* pItems = GetExport().GetCurItemSet();
     const SvxFrameDirectionItem* rFrameDir = static_cast< const SvxFrameDirectionItem* >( pItems->GetItem( RES_FRAMEDIR ) );
 
-    bool bRtl = false;
-    short nDir = rFrameDir->GetValue();
-    bRtl = ( nDir == FRMDIR_HORI_RIGHT_TOP );
-
+    short nDir = FRMDIR_ENVIRONMENT;
+    if( rFrameDir != NULL )
+        nDir = rFrameDir->GetValue();
     if ( nDir == FRMDIR_ENVIRONMENT )
         nDir = GetExport( ).GetDefaultFrameDirection( );
+    bool bRtl = ( nDir == FRMDIR_HORI_RIGHT_TOP );
 
     switch ( rAdjust.GetAdjust() )
     {
