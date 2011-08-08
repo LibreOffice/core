@@ -47,6 +47,7 @@
 #include "com/sun/star/uno/DeploymentException.hpp"
 #include "com/sun/star/uno/XComponentContext.hpp"
 #include "com/sun/star/lang/XInitialization.hpp"
+#include <com/sun/star/lang/XServiceInfo.hpp>
 #include "com/sun/star/lang/XSingleServiceFactory.hpp"
 #include "com/sun/star/lang/XSingleComponentFactory.hpp"
 #include "com/sun/star/beans/XPropertySet.hpp"
