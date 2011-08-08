@@ -20,7 +20,7 @@
       <Time100SecSeparator>.</Time100SecSeparator>
       <ListSeparator>;</ListSeparator>
       <LongDateDayOfWeekSeparator>, </LongDateDayOfWeekSeparator>
-      <LongDateDaySeparator>.</LongDateDaySeparator>
+      <LongDateDaySeparator>. </LongDateDaySeparator>
       <LongDateMonthSeparator> </LongDateMonthSeparator>
       <LongDateYearSeparator> </LongDateYearSeparator>
     </Separators>
@@ -81,7 +81,7 @@
       <FormatCode>#'##0.00 CCC</FormatCode>
     </FormatElement>
     <FormatElement msgid="CurrencyFormatskey6" default="false" type="medium" usage="CURRENCY" formatindex="17">
-      <FormatCode>[$SFr.-1407] #'##0,--;[ROT][$SFr.-1407]-#'##0,--</FormatCode>
+      <FormatCode>[$SFr.-1407] #'##0.--;[ROT][$SFr.-1407]-#'##0.--</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey1" default="true" type="short" usage="DATE" formatindex="18">
       <FormatCode>TT.MM.JJ</FormatCode>
