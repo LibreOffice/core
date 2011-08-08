@@ -282,6 +282,8 @@ namespace writerfilter {
                 int resolvePict(bool bInline);
                 void runBreak();
                 void replayShapetext();
+                bool getSkipUnknown();
+                void setSkipUnknown(bool bSkipUnknown);
 
                 // These callbacks are invoked by the tokenizer.
                 int resolveChars(char ch);

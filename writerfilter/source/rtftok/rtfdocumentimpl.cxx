@@ -2867,6 +2867,16 @@ void RTFDocumentImpl::replayShapetext()
     replayBuffer(m_aShapetextBuffer);
 }
 
+bool RTFDocumentImpl::getSkipUnknown()
+{
+    return m_bSkipUnknown;
+}
+
+void RTFDocumentImpl::setSkipUnknown(bool bSkipUnknown)
+{
+    m_bSkipUnknown = bSkipUnknown;
+}
+
 RTFParserState::RTFParserState()
     : nInternalState(INTERNAL_NORMAL),
     nDestinationState(DESTINATION_NORMAL),
