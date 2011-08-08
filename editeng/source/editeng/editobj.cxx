@@ -68,15 +68,6 @@ XEditAttribute* MakeXEditAttribute( SfxItemPool& rPool, const SfxPoolItem& rItem
     return pNew;
 }
 
-
-XEditAttribute::XEditAttribute( const SfxPoolItem& rAttr )
-{
-    DBG_CTOR( XEditAttribute, 0 );
-    pItem = &rAttr;
-    nStart = 0;
-    nEnd = 0;
-}
-
 XEditAttribute::XEditAttribute( const SfxPoolItem& rAttr, sal_uInt16 nS, sal_uInt16 nE )
 {
     DBG_CTOR( XEditAttribute, 0 );

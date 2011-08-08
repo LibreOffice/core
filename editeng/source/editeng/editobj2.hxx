@@ -53,7 +53,6 @@ private:
                         ~XEditAttribute();
 
 public:
-                        XEditAttribute( const SfxPoolItem& rAttr );
                         XEditAttribute( const SfxPoolItem& rAttr, sal_uInt16 nStart, sal_uInt16 nEnd );
 
     const SfxPoolItem*  GetItem() const             { return pItem; }
