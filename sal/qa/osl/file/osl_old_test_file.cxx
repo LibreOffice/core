@@ -65,13 +65,6 @@ namespace osl_test_file
 class oldtestfile : public CppUnit::TestFixture
 {
 public:
-    oldtestfile()
-    {
-        //SAL_ALLOW_LINKOO_SYMLINKS for the make dev-install hack breaks this test
-        rtl::OUString envVar(RTL_CONSTASCII_USTRINGPARAM("SAL_ALLOW_LINKOO_SYMLINKS"));
-        osl_clearEnvironment(envVar.pData);
-    }
-
     void test_file_001();
     void test_file_002();
     void test_file_003();
