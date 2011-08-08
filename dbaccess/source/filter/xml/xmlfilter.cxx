@@ -76,6 +76,7 @@
 #include <connectivity/CommonTools.hxx>
 #include <connectivity/DriversConfig.hxx>
 #include "dsntypes.hxx"
+#include <rtl/strbuf.hxx>
 
 using namespace ::com::sun::star;
 
@@ -269,7 +270,7 @@ sal_Int32 ReadThroughComponent(
     catch (const SAXParseException& r)
     {
 #if OSL_DEBUG_LEVEL > 1
-        rtl::OStringBuffer aError(RTL_CONSTASCII_STRINGPARAM(
+        ::rtl::OStringBuffer aError(RTL_CONSTASCII_STRINGPARAM(
             "SAX parse exception catched while importing:\n"));
         aError.append(rtl::OUStringToOString(r.Message,
             RTL_TEXTENCODING_ASCII_US));
