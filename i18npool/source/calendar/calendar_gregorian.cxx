@@ -61,6 +61,7 @@ static void debug_cal_msg(const char *pat, ...)
     va_list ap;
     va_start(ap, pat);
     vfprintf(stderr, pat, ap);
+    va_end(ap);
 }
 
 #if erDUMP_ICU_CALENDAR

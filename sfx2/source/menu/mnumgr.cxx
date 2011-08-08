@@ -442,8 +442,10 @@ sal_uInt16 SfxPopupMenuManager::Execute( const Point& rPoint, Window* pWindow, c
 
     va_list pArgs;
     va_start(pArgs, pArg1);
+    sal_uInt16 nRet = Execute( rPoint, pWindow, pArgs, pArg1 );
+    va_end(pArgs);
 
-    return (Execute( rPoint, pWindow, pArgs, pArg1 ));
+    return (nRet);
 }
 
 //-------------------------------------------------------------------------
