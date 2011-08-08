@@ -1703,7 +1703,6 @@ if test "$enable_ccache" = "yes" ; then
                     CCACHE_NUMVER=`echo $CCACHE_VERSION | $AWK -F. '{ print \$1*10000+\$2*100+\$3 }'`
                     if test "$CCACHE_VERSION" = "2.4_OOo" -o "$CCACHE_NUMVER" -ge "030100"; then
                         AC_MSG_RESULT([yes])
-                        AC_SUBST([USE_CCACHE], [YES])
                     else
                         AC_MSG_RESULT([no])
                         AC_MSG_NOTICE([ccache version $CCACHE_VERSION not accepted. ccache will not be used.])
@@ -1755,25 +1754,6 @@ fi
 dnl The following checks for gcc, cc and then cl (if it weren't guarded for win32)
 if test "$_os" != "WINNT" -o "$WITH_MINGW" = "yes"; then
     AC_PROG_CC
-    if test "$CCACHE" != "" ; then
-        AC_MSG_CHECKING([whether $CC is already ccached])
-
-
-        AC_LANG_PUSH([C])
-        save_CFLAGS=$CFLAGS
-        CFLAGS="$CFLAGS --ccache-skip -O2"
-        dnl an empty program will do, we're checking the compiler flags
-        AC_COMPILE_IFELSE([AC_LANG_PROGRAM([],[])],
-                          [use_ccache=yes], [use_ccache=no])
-        if test $use_ccache = yes ; then
-            AC_MSG_RESULT([yes])
-        else
-            CC="$CCACHE $CC"
-            AC_MSG_RESULT([no])
-        fi
-        CFLAGS=$save_CFLAGS
-        AC_LANG_POP([C])
-    fi
 fi
 
 COMPATH=`dirname "$CC"`
@@ -1922,12 +1902,8 @@ if test \( "$_os" != "WINNT" -o "$WITH_MINGW" = "yes" \) -a "$GCC" = "yes"; then
 
     if test "$_os" = "Darwin" -a "$with_macosx_sdk" = "10.4" -a "$GCCVER" -ge "040100" ; then
         if test -z "$save_CC" -a -x "$GCC_HOME/bin/gcc-4.0" ; then
-            if test -z "$CCACHE" ; then
-                export CC="$GCC_HOME/bin/gcc-4.0"
-            else
-                export CC="$CCACHE $GCC_HOME/bin/gcc-4.0"
-            fi
-            dnl  export CC to have it available in set_soenv -> config.guess
+            export CC="$GCC_HOME/bin/gcc-4.0"
+            #  export CC to have it available in set_soenv -> config.guess
             GCCVER2=`$CC -dumpversion | $AWK -F. '{ print \$1*10000+\$2*100+\$3 }'`
             if test "$GCCVER2" -ge "040000" -a "$GCCVER2" -lt "040100" ; then
                 GCCVER=$GCCVER2
@@ -1941,6 +1917,33 @@ if test \( "$_os" != "WINNT" -o "$WITH_MINGW" = "yes" \) -a "$GCC" = "yes"; then
     else
         AC_MSG_RESULT([checked (gcc $_gcc_version)])
     fi
+fi
+
+
+#
+# prefix C with ccache if needed
+#
+if test "$_os" != "WINNT" -o "$WITH_MINGW" = "yes" ; then
+    if test "$CCACHE" != "" ; then
+        AC_MSG_CHECKING([whether $CC is already ccached])
+
+
+        AC_LANG_PUSH([C])
+        save_CFLAGS=$CFLAGS
+        CFLAGS="$CFLAGS --ccache-skip -O2"
+        dnl an empty program will do, we're checking the compiler flags
+        AC_COMPILE_IFELSE([AC_LANG_PROGRAM([],[])],
+                          [use_ccache=yes], [use_ccache=no])
+        if test $use_ccache = yes ; then
+            AC_MSG_RESULT([yes])
+        else
+            CC="$CCACHE $CC"
+            AC_MSG_RESULT([no])
+        fi
+        CFLAGS=$save_CFLAGS
+        AC_LANG_POP([C])
+    fi
+
 fi
 
 HAVE_LD_BSYMBOLIC_FUNCTIONS=
@@ -2865,26 +2868,8 @@ dnl ===================================================================
 dnl Testing for C++ compiler and version...
 dnl ===================================================================
 
-dnl Autoconf 2.53 can do this test for cl.exe, 2.13 can't!
 if test "$_os" != "WINNT" -o "$WITH_MINGW" = "yes"; then
     AC_PROG_CXX
-    if test "$CCACHE" != "" ; then
-        AC_MSG_CHECKING([whether $CXX is already ccached])
-        AC_LANG_PUSH([C++])
-        save_CXXFLAGS=$CXXFLAGS
-        CXXFLAGS="$CXXFLAGS --ccache-skip -O2"
-        dnl an empty program will do, we're checking the compiler flags
-        AC_COMPILE_IFELSE([AC_LANG_PROGRAM([],[])],
-                          [use_ccache=yes], [use_ccache=no])
-        if test $use_ccache = yes ; then
-            AC_MSG_RESULT([yes])
-        else
-            CXX="$CCACHE $CXX"
-            AC_MSG_RESULT([no])
-        fi
-        CXXFLAGS=$save_CXXFLAGS
-        AC_LANG_POP([C++])
-    fi
 else
     if test -n "$CC" -a -z "$CXX"; then
         CXX="$CC"
@@ -2900,11 +2885,7 @@ if test "$GXX" = "yes"; then
 
     if test "$_os" = "Darwin" -a "$with_macosx_sdk" = "10.4" -a "$_gpp_majmin" -ge "401" ; then
         if test -z "$save_CXX" -a -x "$GCC_HOME/bin/g++-4.0" ; then
-            if test -z "$CCACHE" ; then
-                export CXX="$GCC_HOME/bin/g++-4.0"
-            else
-                export CXX="$CCACHE $GCC_HOME/bin/g++-4.0"
-            fi
+            export CXX="$GCC_HOME/bin/g++-4.0"
             _gpp_majmin_2=`$CXX -dumpversion | $AWK -F. '{ print \$1*100+\$2 }'`
             if test "$_gpp_majmin_2" -ge "400" -a "$_gpp_majmin_2" -lt "401" ; then
                 _gpp_majmin=$_gpp_majmin_2
@@ -2942,6 +2923,29 @@ if test "$GXX" = "yes"; then
             }
             ],
             [AC_MSG_ERROR([your version of the GNU C++ compile has a bug which prevents LibreOffice from being compiled correctly - please check http://gcc.gnu.org/ml/gcc-patches/2004-07/msg00968.html for details.])], [AC_MSG_RESULT([no])])
+    fi
+fi
+
+#
+# prefx CXX with ccache if needed
+#
+if test "$_os" != "WINNT" -o "$WITH_MINGW" = "yes"; then
+    if test "$CCACHE" != "" ; then
+        AC_MSG_CHECKING([whether $CXX is already ccached])
+        AC_LANG_PUSH([C++])
+        save_CXXFLAGS=$CXXFLAGS
+        CXXFLAGS="$CXXFLAGS --ccache-skip -O2"
+        dnl an empty program will do, we're checking the compiler flags
+        AC_COMPILE_IFELSE([AC_LANG_PROGRAM([],[])],
+                          [use_ccache=yes], [use_ccache=no])
+        if test $use_ccache = yes ; then
+            AC_MSG_RESULT([yes])
+        else
+            CXX="$CCACHE $CXX"
+            AC_MSG_RESULT([no])
+        fi
+        CXXFLAGS=$save_CXXFLAGS
+        AC_LANG_POP([C++])
     fi
 fi
 

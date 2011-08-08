@@ -99,10 +99,8 @@ CFLAGSCC=-pipe -fsigned-char -malign-natural $(ARCH_FLAGS)
 # Normal Objective C compilation flags
 #OBJCFLAGS=-no-precomp
 OBJCFLAGS=-fobjc-exceptions
-# -x options generally ignored by ccache, tell it that it can cache
-# the result nevertheless
-CCACHE_SKIP:=$(eq,$(USE_CCACHE),YES --ccache-skip $(NULL))
-OBJCXXFLAGS:=$(CCACHE_SKIP) -x $(CCACHE_SKIP) objective-c++ -fobjc-exceptions
+
+OBJCXXFLAGS=-fobjc-exceptions
 
 # Comp Flags for files that need exceptions enabled (C and C++)
 CFLAGSEXCEPTIONS=-fexceptions -fno-enforce-eh-specs

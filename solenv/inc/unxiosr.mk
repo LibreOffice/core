@@ -53,10 +53,8 @@ CFLAGSCC=-pipe -fsigned-char $(ARCH_FLAGS)
 
 # Normal Objective C compilation flags
 OBJCFLAGS=-fexceptions -fobjc-abi-version=2 -fobjc-legacy-dispatch -D__IPHONE_OS_VERSION_MIN_REQUIRED=40300
-# -x options generally ignored by ccache, tell it that it can cache
-# the result nevertheless
-CCACHE_SKIP:=$(eq,$(USE_CCACHE),YES --ccache-skip $(NULL))
-OBJCXXFLAGS:=$(CCACHE_SKIP) -x $(CCACHE_SKIP) objective-c++ $(OBJCFLAGS)
+
+OBJCXXFLAGS:=$(OBJCFLAGS)
 
 # Comp Flags for files that need exceptions enabled (C and C++)
 CFLAGSEXCEPTIONS=-fexceptions -fno-enforce-eh-specs

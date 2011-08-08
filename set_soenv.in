@@ -1836,7 +1836,6 @@ ToFile( "HAVE_LD_BSYMBOLIC_FUNCTIONS",
 		"@HAVE_LD_BSYMBOLIC_FUNCTIONS@","e" );
 ToFile( "HAVE_CXX0X",        "@HAVE_CXX0X@",     "e" );
 ToFile( "CXX",               $CXX,               "e" );
-ToFile( "USE_CCACHE",        "@USE_CCACHE@",     "e" );
 ToFile( "MINGWCXX",          "@MINGWCXX@",       "e" );
 ToFile( "MINGWSTRIP",        "@MINGWSTRIP@",     "e" );
 ToFile( "WITH_STLPORT",      "@WITH_STLPORT@", "e" );
