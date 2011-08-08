@@ -345,7 +345,6 @@ Sequence<OUString> ScViewCfg::GetLayoutPropertyNames()
     static const char* aPropNames[] =
     {
         "Line/GridLine",            // SCLAYOUTOPT_GRIDLINES
-        "Line/GridOnColoredCells",  // SCLAYOUTOPT_GRID_ONCOLOR
         "Line/GridLineColor",       // SCLAYOUTOPT_GRIDCOLOR
         "Line/PageBreak",           // SCLAYOUTOPT_PAGEBREAK
         "Line/Guide",               // SCLAYOUTOPT_GUIDE
@@ -356,6 +355,7 @@ Sequence<OUString> ScViewCfg::GetLayoutPropertyNames()
         "Window/VerticalScroll",    // SCLAYOUTOPT_VERTSCROLL
         "Window/SheetTab",          // SCLAYOUTOPT_SHEETTAB
         "Window/OutlineSymbol"      // SCLAYOUTOPT_OUTLINE
+        "Line/GridOnColoredCells",  // SCLAYOUTOPT_GRID_ONCOLOR
     };
     Sequence<OUString> aNames(SCLAYOUTOPT_COUNT);
     OUString* pNames = aNames.getArray();
