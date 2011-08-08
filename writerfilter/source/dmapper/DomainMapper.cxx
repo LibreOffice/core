@@ -1768,6 +1768,28 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
     case NS_sprm::LN_PFAutoSpaceDN:
         break;  // sprmPFAutoSpaceDN
     case NS_sprm::LN_PWAlignFont:
+        {
+            sal_Int16 nAlignment = 0;
+            switch (nIntValue)
+            {
+                case NS_ooxml::LN_Value_wordprocessingml_ST_TextAlignment_top:
+                    nAlignment = 2;
+                    break;
+                case NS_ooxml::LN_Value_wordprocessingml_ST_TextAlignment_center:
+                    nAlignment = 3;
+                    break;
+                case NS_ooxml::LN_Value_wordprocessingml_ST_TextAlignment_baseline:
+                    nAlignment = 1;
+                    break;
+                case NS_ooxml::LN_Value_wordprocessingml_ST_TextAlignment_bottom:
+                    nAlignment = 4;
+                    break;
+                case NS_ooxml::LN_Value_wordprocessingml_ST_TextAlignment_auto:
+                default:
+                    break;
+            }
+            rContext->Insert( PROP_PARA_VERT_ALIGNMENT, true, uno::makeAny( nAlignment) );
+        }
         break;  // sprmPWAlignFont
     case NS_sprm::LN_PFrameTextFlow:
         break;  // sprmPFrameTextFlow
