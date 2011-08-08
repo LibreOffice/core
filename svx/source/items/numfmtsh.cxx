@@ -255,20 +255,9 @@ bool SvxNumberFormatShell::AddFormat( String& rFormat,  xub_StrLen& rErrPos,
 
     if ( nAddKey != NUMBERFORMAT_ENTRY_NOT_FOUND ) // bereits vorhanden?
     {
-        if ( IsRemoved_Impl( nAddKey ) )
+        ::std::vector<sal_uInt32>::iterator nAt = GetRemoved_Impl( nAddKey );
+        if ( nAt != aDelList.end() )
         {
-            bool    bFound  = false;
-            std::vector<sal_uInt32>::iterator nAt = aDelList.begin();
-
-            for (std::vector<sal_uInt32>::iterator it(aDelList.begin()); !bFound && it != aDelList.end(); ++it )
-            {
-                if ( *it == nAddKey )
-                {
-                    bFound  = true;
-                    nAt = it;
-                }
-            }
-            DBG_ASSERT( bFound, "Key not found" );
             aDelList.erase( nAt );
             bInserted = true;
         }
@@ -340,22 +329,10 @@ bool SvxNumberFormatShell::RemoveFormat( const String&  rFormat,
     {
         aDelList.push_back( nDelKey );
 
-        if ( IsAdded_Impl( nDelKey ) )
+        ::std::vector<sal_uInt32>::iterator nAt = GetAdded_Impl( nDelKey );
+        if( nAt != aAddList.end() )
         {
-            bool bFound = false;
-            std::vector<sal_uInt32>::iterator nAt = aAddList.begin();
-
-            for ( std::vector<sal_uInt32>::iterator it(aAddList.begin()); !bFound && it != aAddList.end(); ++it )
-            {
-                if ( *it == nDelKey )
-                {
-                    bFound = true;
-                    nAt = it;
-                }
-            }
-            DBG_ASSERT( bFound, "Key not found" );
-            if( bFound )
-                aAddList.erase( nAt );
+            aAddList.erase( nAt );
         }
 
         nCurCategory=pFormatter->GetType(nDelKey);
@@ -1178,24 +1155,30 @@ void SvxNumberFormatShell::GetPreviewString_Impl( String& rString, Color*& rpCol
 
 // -----------------------------------------------------------------------
 
-bool SvxNumberFormatShell::IsRemoved_Impl( sal_uInt32 nKey )
+::std::vector<sal_uInt32>::iterator SvxNumberFormatShell::GetRemoved_Impl( size_t nKey )
 {
-    bool bFound = false;
-    for (std::vector<sal_uInt32>::const_iterator it(aDelList.begin()); !bFound && it != aDelList.end(); ++it )
-        if ( *it == nKey )
-            bFound = true;
-    return bFound;
+    return ::std::find(aDelList.begin(), aDelList.end(), nKey);
 }
 
 // -----------------------------------------------------------------------
 
-bool SvxNumberFormatShell::IsAdded_Impl( sal_uInt32 nKey )
+bool SvxNumberFormatShell::IsRemoved_Impl( size_t nKey )
 {
-    bool bFound = false;
-    for ( std::vector<sal_uInt32>::const_iterator it(aAddList.begin()); !bFound && it != aAddList.end(); ++it )
-        if ( *it == nKey )
-            bFound = true;
-    return bFound;
+    return GetRemoved_Impl( nKey ) != aDelList.end();
+}
+
+// -----------------------------------------------------------------------
+
+::std::vector<sal_uInt32>::iterator SvxNumberFormatShell::GetAdded_Impl( size_t nKey )
+{
+    return ::std::find(aAddList.begin(), aAddList.end(), nKey);
+}
+
+//------------------------------------------------------------------------
+
+bool SvxNumberFormatShell::IsAdded_Impl( size_t nKey )
+{
+    return GetAdded_Impl( nKey ) != aAddList.end();
 }
 
 // -----------------------------------------------------------------------
