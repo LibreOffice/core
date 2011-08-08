@@ -354,8 +354,8 @@ Sequence<OUString> ScViewCfg::GetLayoutPropertyNames()
         "Window/HorizontalScroll",  // SCLAYOUTOPT_HORISCROLL
         "Window/VerticalScroll",    // SCLAYOUTOPT_VERTSCROLL
         "Window/SheetTab",          // SCLAYOUTOPT_SHEETTAB
-        "Window/OutlineSymbol"      // SCLAYOUTOPT_OUTLINE
-        "Line/GridOnColoredCells",  // SCLAYOUTOPT_GRID_ONCOLOR
+        "Window/OutlineSymbol",     // SCLAYOUTOPT_OUTLINE
+        "Line/GridOnColoredCells"   // SCLAYOUTOPT_GRID_ONCOLOR
     };
     Sequence<OUString> aNames(SCLAYOUTOPT_COUNT);
     OUString* pNames = aNames.getArray();
