@@ -693,27 +693,28 @@ UCHAR Upcase(UCHAR c)
 
 sal_uInt16 GetCharWidth(OutputDevice& rOut, UCHAR c)
 {
-    UCHAR  c1;
     sal_uInt16 ChrWidth;
 
-    c1 = ByteString::Convert((char)c,RTL_TEXTENCODING_IBM_437, gsl_getSystemTextEncoding() );
     if (c==' ')
     {
         ChrWidth=(sal_uInt16)rOut.GetTextWidth( String('A') );
         if (rOut.GetFont().GetPitch()!=PITCH_FIXED) {
             ChrWidth=MulDiv(ChrWidth,DefaultSpace,100);
         }
-    } else {
+    }
+    else
+    {
          // with MaxChar == 255 c cannot be greater than MaxChar
          // assert if MaxChar is ever changed
         OSL_ENSURE( MaxChar == 255, "MaxChar not 255" );
+        OSL_ENSURE(sizeof(UCHAR) == 1, "should be 1");
         if (c>=MinChar /*&& c<=MaxChar*/)
         {
-            ChrWidth=(sal_uInt16)rOut.GetTextWidth(String((char)c1));
+            ChrWidth=(sal_uInt16)rOut.GetTextWidth(rtl::OUString(reinterpret_cast<sal_Char*>(&c), 1, RTL_TEXTENCODING_IBM_437));
         }
         else
         {
-            ChrWidth=(sal_uInt16)rOut.GetTextWidth(String('A'));
+            ChrWidth=(sal_uInt16)rOut.GetTextWidth(rtl::OUString(static_cast<sal_Unicode>('A')));
         }
     }
     return ChrWidth;
