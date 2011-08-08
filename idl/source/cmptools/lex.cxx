@@ -33,7 +33,6 @@
 #include <ctype.h>
 #include <stdio.h>
 
-#include <char.hxx>
 #include <hash.hxx>
 #include <lex.hxx>
 #include <globals.hxx>
@@ -99,7 +98,6 @@ SvToken & SvToken::operator = ( const SvToken & rObj )
 
 void SvTokenStream::InitCtor()
 {
-    SetCharSet( gsl_getSystemTextEncoding() );
     aStrTrue    = "TRUE";
     aStrFalse   = "FALSE";
     nLine       = nColumn = 0;
@@ -161,12 +159,6 @@ void SvTokenStream::FillTokenList()
     }
     while( !pToken->IsEof() );
     pCurToken = aTokList.begin();
-}
-
-void SvTokenStream::SetCharSet( CharSet nSet )
-{
-    nCharSet = nSet;
-    pCharTab = SvChar::GetTable( nSet, gsl_getSystemTextEncoding() );
 }
 
 int SvTokenStream::GetNextChar()
@@ -332,12 +324,6 @@ sal_Bool SvTokenStream::MakeToken( SvToken & rToken )
         }
         if( IsEof() || ( SVSTREAM_OK != rInStream.GetError() ) )
             return sal_False;
-        char * pStr = (char *)aStr.GetBuffer();
-        while( *pStr )
-        {
-            *pStr = pCharTab[ (unsigned char)*pStr ];
-            pStr++;
-        };
         rToken.nType   = SVTOKEN_STRING;
         rToken.aString = aStr;
     }

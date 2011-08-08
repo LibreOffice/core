@@ -51,7 +51,6 @@ $(eval $(call gb_Executable_add_linked_libs,svidl,\
 ))
 
 $(eval $(call gb_Executable_add_exception_objects,svidl,\
-	idl/source/cmptools/char \
 	idl/source/cmptools/hash \
 	idl/source/cmptools/lex \
 	idl/source/objects/basobj \

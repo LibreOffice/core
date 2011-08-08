@@ -133,8 +133,6 @@ class SvTokenStream
     sal_uLong       nLine, nColumn;
     int         nBufPos;
     int         c;          // next character
-    CharSet     nCharSet;
-    char *      pCharTab;   // pointer to conversion table
     sal_uInt16      nTabSize;   // length of tabulator
     ByteString      aStrTrue;
     ByteString      aStrFalse;
@@ -183,9 +181,6 @@ public:
 
     const String &  GetFileName() const { return aFileName; }
     SvStream &      GetStream() { return rInStream; }
-
-    void            SetCharSet( CharSet nSet );
-    CharSet         GetCharSet() const { return nCharSet; }
 
     void            SetTabSize( sal_uInt16 nTabSizeP )
                     { nTabSize = nTabSizeP; }
