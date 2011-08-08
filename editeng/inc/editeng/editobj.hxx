@@ -82,7 +82,6 @@ public:
     sal_Bool                    Store( SvStream& rOStream ) const;
     static EditTextObject*  Create( SvStream& rIStream,
                                 SfxItemPool* pGlobalTextObjectPool = 0 );
-    void                    Skip( SvStream& rIStream );
 
     virtual sal_uInt16      GetParagraphCount() const;
 

@@ -36,15 +36,6 @@ static pfunc_setMenuExtensionSupplier pMenuExtensionSupplierFunc = NULL;
 namespace framework
 {
 
-pfunc_setMenuExtensionSupplier SAL_CALL SetMenuExtensionSupplier( pfunc_setMenuExtensionSupplier pMenuExtensionSupplierFuncArg )
-{
-    ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-
-    pfunc_setMenuExtensionSupplier pOldMenuExtensionSupplierFunc = pMenuExtensionSupplierFunc;
-    pMenuExtensionSupplierFunc = pMenuExtensionSupplierFuncArg;
-    return pOldMenuExtensionSupplierFunc;
-}
-
 MenuExtensionItem SAL_CALL GetMenuExtension()
 {
     MenuExtensionItem aItem;

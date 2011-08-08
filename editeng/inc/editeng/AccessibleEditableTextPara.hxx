@@ -339,9 +339,6 @@ namespace accessibility
 
         int getNotifierClientId() const;
 
-        // retrieve text interface for given paragraph index
-        ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleText > GetParaInterface( sal_Int32 nIndex );
-
         /// Do we have children? This is the case for image bullets
         sal_Bool HaveChildren();
 

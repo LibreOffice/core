@@ -4477,12 +4477,6 @@ static Locale& impl_getLocaleInstance( )
 }
 
 //------------------------------------------------------------------------------
-void OParseContext::setDefaultLocale( const ::com::sun::star::lang::Locale& _rLocale )
-{
-	impl_getLocaleInstance() = _rLocale;
-}
-
-//------------------------------------------------------------------------------
 Locale OParseContext::getPreferredLocale( ) const
 {
 	return getDefaultLocale();

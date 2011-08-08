@@ -185,7 +185,6 @@ class FWE_DLLPUBLIC TitleHelper : private ::cppu::BaseMutex
         void impl_appendDebugVersion (::rtl::OUStringBuffer& sTitle);
 
         void impl_setSubTitle (const css::uno::Reference< css::frame::XTitle >& xSubTitle);
-        ::rtl::OUString impl_getSubTitle ();
 
         ::rtl::OUString impl_convertURL2Title(const ::rtl::OUString& sURL);
 

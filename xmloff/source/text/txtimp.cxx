@@ -748,12 +748,6 @@ XMLTextImportHelper::GetTextImportPropertySetMapper() const
 }
 
 UniReference< SvXMLImportPropertyMapper > const&
-XMLTextImportHelper::GetFrameImportPropertySetMapper() const
-{
-    return m_pImpl->m_xFrameImpPrMap;
-}
-
-UniReference< SvXMLImportPropertyMapper > const&
 XMLTextImportHelper::GetSectionImportPropertySetMapper() const
 {
     return m_pImpl->m_xSectionImpPrMap;
@@ -1076,15 +1070,6 @@ SvXMLImportPropertyMapper *XMLTextImportHelper::CreateShapeExtPropMapper(SvXMLIm
         new XMLTextPropertySetMapper( TEXT_PROP_MAP_FRAME );
     return new XMLTextImportPropertyMapper( pPropMapper, rImport,
                    const_cast<XMLFontStylesContext*>(rImport.GetFontDecls()) );
-}
-
-SvXMLImportPropertyMapper *XMLTextImportHelper::CreateCharExtPropMapper(SvXMLImport& rImport, XMLFontStylesContext *pFontDecls)
-{
-    XMLPropertySetMapper *pPropMapper =
-        new XMLTextPropertySetMapper( TEXT_PROP_MAP_TEXT );
-    if (!pFontDecls)
-        pFontDecls = const_cast<XMLFontStylesContext*>(rImport.GetFontDecls());
-    return new XMLTextImportPropertyMapper( pPropMapper, rImport, pFontDecls );
 }
 
 SvXMLImportPropertyMapper *XMLTextImportHelper::CreateParaExtPropMapper(SvXMLImport& rImport, XMLFontStylesContext *pFontDecls)

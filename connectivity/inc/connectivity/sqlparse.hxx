@@ -97,14 +97,6 @@ namespace connectivity
         // determines the default international setting
         static const ::com::sun::star::lang::Locale& getDefaultLocale();
 
-        /** set's the default locale which should be used when analyzing strings
-            <p>If no locale is set, and any method which needs a locale is called, a default
-            (en-US) is used.</p>
-            <p>If, while parsing, the locale can be obtained from other sources (such as the number format
-            set for a table column), the preferred locale is ignored.</p>
-        */
-        static void setDefaultLocale( const ::com::sun::star::lang::Locale& _rLocale );
-
         /** get's a locale instance which should be used when parsing in the context specified by this instance
             <p>if this is not overridden by derived classes, it returns the static default locale.</p>
         */

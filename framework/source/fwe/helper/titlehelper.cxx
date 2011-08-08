@@ -680,23 +680,6 @@ void TitleHelper::impl_setSubTitle (const css::uno::Reference< css::frame::XTitl
 }
 
 //-----------------------------------------------
-::rtl::OUString TitleHelper::impl_getSubTitle ()
-{
-    // SYNCHRONIZED ->
-    ::osl::ResettableMutexGuard aLock(m_aMutex);
-
-        css::uno::Reference< css::frame::XTitle > xSubTitle(m_xSubTitle.get (), css::uno::UNO_QUERY);
-
-    aLock.clear ();
-    // <- SYNCHRONIZED
-
-    if (xSubTitle.is ())
-        return xSubTitle->getTitle ();
-
-    return ::rtl::OUString ();
-}
-
-//-----------------------------------------------
 ::rtl::OUString TitleHelper::impl_convertURL2Title(const ::rtl::OUString& sURL)
 {
     INetURLObject   aURL (sURL);

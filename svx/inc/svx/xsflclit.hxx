@@ -39,7 +39,6 @@ class SVX_DLLPUBLIC XSecondaryFillColorItem : public XColorItem
 public:
             TYPEINFO();
             SVX_DLLPRIVATE XSecondaryFillColorItem() {}
-            SVX_DLLPRIVATE XSecondaryFillColorItem(sal_Int32 nIndex, const Color& rTheColor);
             XSecondaryFillColorItem(const String& rName, const Color& rTheColor);
             SVX_DLLPRIVATE XSecondaryFillColorItem(SvStream& rIn);
 

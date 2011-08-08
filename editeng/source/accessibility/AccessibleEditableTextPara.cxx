@@ -530,27 +530,6 @@ namespace accessibility
         return mpEditSource ? sal_True : sal_False ;
     }
 
-    uno::Reference< XAccessibleText > AccessibleEditableTextPara::GetParaInterface( sal_Int32 nIndex )
-    {
-        DBG_CHKTHIS( AccessibleEditableTextPara, NULL );
-
-        uno::Reference< XAccessible > xParent = getAccessibleParent();
-        if( xParent.is() )
-        {
-            uno::Reference< XAccessibleContext > xParentContext = xParent->getAccessibleContext();
-            if( xParentContext.is() )
-            {
-                uno::Reference< XAccessible > xPara = xParentContext->getAccessibleChild( nIndex );
-                if( xPara.is() )
-                {
-                    return uno::Reference< XAccessibleText > ( xPara, uno::UNO_QUERY );
-                }
-            }
-        }
-
-        return uno::Reference< XAccessibleText >();
-    }
-
     SvxEditSourceAdapter& AccessibleEditableTextPara::GetEditSource() const SAL_THROW((uno::RuntimeException))
     {
         DBG_CHKTHIS( AccessibleEditableTextPara, NULL );

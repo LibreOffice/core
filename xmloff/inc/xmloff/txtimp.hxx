@@ -560,14 +560,11 @@ public:
     UniReference< SvXMLImportPropertyMapper > const&
         GetTextImportPropertySetMapper() const;
     UniReference< SvXMLImportPropertyMapper > const&
-        GetFrameImportPropertySetMapper() const;
-    UniReference< SvXMLImportPropertyMapper > const&
         GetSectionImportPropertySetMapper() const;
     UniReference< SvXMLImportPropertyMapper > const&
         GetRubyImportPropertySetMapper() const;
 
     static SvXMLImportPropertyMapper *CreateShapeExtPropMapper(SvXMLImport&);
-    static SvXMLImportPropertyMapper *CreateCharExtPropMapper(SvXMLImport&, XMLFontStylesContext *pFontDecls = NULL);
     static SvXMLImportPropertyMapper *CreateParaExtPropMapper(SvXMLImport&, XMLFontStylesContext *pFontDecls = NULL);
     static SvXMLImportPropertyMapper* CreateParaDefaultExtPropMapper(SvXMLImport&, XMLFontStylesContext* pFontDecls = NULL);
     static SvXMLImportPropertyMapper* CreateTableDefaultExtPropMapper(SvXMLImport&, XMLFontStylesContext* pFontDecls = NULL);

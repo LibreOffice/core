@@ -930,7 +930,6 @@ void EditBox::UpdateOldSel()
 RefEdit::RefEdit( Window* _pParent,IControlReferenceHandler* pParent, const ResId& rResId ) :
     Edit( _pParent, rResId ),
     pAnyRefDlg( pParent ),
-    bSilentFocus( sal_False )
 {
     aTimer.SetTimeoutHdl( LINK( this, RefEdit, UpdateHdl ) );
     aTimer.SetTimeout( SC_ENABLE_TIME );
@@ -939,7 +938,6 @@ RefEdit::RefEdit( Window* _pParent,IControlReferenceHandler* pParent, const ResI
 RefEdit::RefEdit( Window* pParent, const ResId& rResId ) :
     Edit( pParent, rResId ),
     pAnyRefDlg( NULL ),
-    bSilentFocus( sal_False )
 {
 }
 
@@ -979,13 +977,6 @@ void RefEdit::StartUpdateData()
     aTimer.Start();
 }
 
-void RefEdit::SilentGrabFocus()
-{
-    bSilentFocus = sal_True;
-    GrabFocus();
-    bSilentFocus = sal_False;
-}
-
 void RefEdit::SetRefDialog( IControlReferenceHandler* pDlg )
 {
     pAnyRefDlg = pDlg;
@@ -1021,8 +1012,7 @@ void RefEdit::KeyInput( const KeyEvent& rKEvt )
 void RefEdit::GetFocus()
 {
     Edit::GetFocus();
-    if( !bSilentFocus )
-        StartUpdateData();
+    StartUpdateData();
 }
 
 void RefEdit::LoseFocus()

@@ -43,8 +43,6 @@ typedef MenuExtensionItem ( *pfunc_setMenuExtensionSupplier)();
 namespace framework
 {
 
-FWE_DLLPUBLIC pfunc_setMenuExtensionSupplier SAL_CALL SetMenuExtensionSupplier( pfunc_setMenuExtensionSupplier pSetMenuExtensionSupplier );
-
 FWE_DLLPUBLIC MenuExtensionItem SAL_CALL GetMenuExtension();
 
 }

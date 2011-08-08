@@ -420,20 +420,6 @@ EditTextObject* EditTextObject::Create( SvStream& rIStream, SfxItemPool* pGlobal
     return pTxtObj;
 }
 
-void EditTextObject::Skip( SvStream& rIStream )
-{
-    sal_Size nStartPos = rIStream.Tell();
-
-    sal_uInt16 _nWhich;
-    rIStream >> _nWhich;
-
-    sal_uInt32 nStructSz;
-    rIStream >> nStructSz;
-
-    sal_Size nFullSz = sizeof( _nWhich ) + sizeof( nStructSz ) + nStructSz;
-    rIStream.Seek( nStartPos + nFullSz );
-}
-
 void EditTextObject::StoreData( SvStream& ) const
 {
     OSL_FAIL( "StoreData: Base class!" );

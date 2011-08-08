@@ -3069,11 +3069,6 @@ bool XFillColorItem::PutValue( const ::com::sun::star::uno::Any& rVal, sal_uInt8
 // -----------------------------
 TYPEINIT1_AUTOFACTORY(XSecondaryFillColorItem, XColorItem);
 
-XSecondaryFillColorItem::XSecondaryFillColorItem(sal_Int32 nIndex, const Color& rTheColor) :
-    XColorItem(XATTR_SECONDARYFILLCOLOR, nIndex, rTheColor)
-{
-}
-
 XSecondaryFillColorItem::XSecondaryFillColorItem(const XubString& rName, const Color& rTheColor) :
     XColorItem(XATTR_SECONDARYFILLCOLOR, rName, rTheColor)
 {

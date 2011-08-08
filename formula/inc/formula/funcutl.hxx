@@ -43,7 +43,6 @@ class FORMULA_DLLPUBLIC RefEdit : public Edit
 private:
     Timer               aTimer;
     IControlReferenceHandler*      pAnyRefDlg;         // parent dialog
-    sal_Bool                bSilentFocus;       // for SilentGrabFocus()
 
     DECL_LINK( UpdateHdl, Timer* );
 
@@ -70,8 +69,6 @@ public:
     virtual void        Modify();
 
     void                StartUpdateData();
-
-    void                SilentGrabFocus();  // does not update any references
 
     void                SetRefDialog( IControlReferenceHandler* pDlg );
     inline IControlReferenceHandler* GetRefDialog() { return pAnyRefDlg; }
