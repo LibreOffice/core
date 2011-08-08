@@ -68,7 +68,7 @@ public:
     virtual bool            HasMetrics() const;
     virtual bool            ScaleMetrics(long nMul, long nDiv);
 
-    const XDash&            GetDashValue(const XDashTable* pTable = 0) const; // GetValue -> GetDashValue
+    const XDash&			GetDashValue() const;
     void                    SetDashValue(const XDash& rNew)   { aDash = rNew; Detach(); } // SetValue -> SetDashValue
 
     static sal_Bool CompareValueFunc( const NameOrIndex* p1, const NameOrIndex* p2 );

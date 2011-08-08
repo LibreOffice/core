@@ -29,7 +29,6 @@
 #define _XATTR_HXX
 
 class XColorTable;
-class XDashTable;
 class XLineEndTable;
 class XHatchTable;
 class XBitmapTable;

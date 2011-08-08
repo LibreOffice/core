@@ -388,35 +388,6 @@ public:
     virtual Bitmap* CreateBitmapForUI(long nIndex, sal_Bool bDelete = sal_True);
 };
 
-// --------------------
-// class XDashTable
-// --------------------
-
-class XDashTable : public XPropertyTable
-{
-public:
-    explicit        XDashTable(
-                        const String& rPath,
-                        XOutdevItemPool* pXPool = NULL,
-                        sal_uInt16 nInitSize = 16,
-                        sal_uInt16 nReSize = 16
-                    );
-    virtual         ~XDashTable();
-
-    using XPropertyTable::Replace;
-    XDashEntry*     Replace(long nIndex, XDashEntry* pEntry );
-    using XPropertyTable::Remove;
-    XDashEntry*     Remove(long nIndex);
-    using XPropertyTable::Get;
-    XDashEntry*     GetDash(long nIndex) const;
-
-    virtual sal_Bool    Load();
-    virtual sal_Bool    Save();
-    virtual sal_Bool    Create();
-    virtual sal_Bool    CreateBitmapsForUI();
-    virtual Bitmap* CreateBitmapForUI( long nIndex, sal_Bool bDelete = sal_True );
-};
-
 // -------------------
 // class XDashList
 // -------------------

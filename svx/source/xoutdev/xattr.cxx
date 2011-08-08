@@ -960,16 +960,13 @@ SvStream& XLineDashItem::Store( SvStream& rOut, sal_uInt16 nItemVersion ) const
 
 /*************************************************************************
 |*
-|*    const XDash& XLineDashItem::GetValue(const XDashTable* pTable) const
+|*	  const XDash& XLineDashItem::GetValue() const
 |*
 *************************************************************************/
 
-const XDash& XLineDashItem::GetDashValue(const XDashTable* pTable) const // GetValue -> GetDashValue
+const XDash& XLineDashItem::GetDashValue() const
 {
-    if (!IsIndex())
-        return aDash;
-    else
-        return pTable->GetDash(GetIndex())->GetDash();
+    return aDash;
 }
 
 //------------------------------------------------------------------------

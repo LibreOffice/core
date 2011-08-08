@@ -37,7 +37,6 @@
 #include <svl/eitem.hxx>
 
 class XDash;
-class XDashTable;
 class SvStream;
 
 #include <svx/xdash.hxx>
