@@ -69,7 +69,6 @@ cross-build-toolset:
 	  i18npool \
 	  unodevtools \
 	  gettext \
-	  dictionaries \
 	  o3tl \
 	  basegfx \
 	  tools \
