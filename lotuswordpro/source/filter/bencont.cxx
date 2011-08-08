@@ -541,49 +541,6 @@ BenError LtcBenContainer::CreateGraphicStream(SvStream * &pStream, const char *p
 
 #include <tools/globname.hxx>
 
-/**
-*   Find ole object storage stream data according to object name
-*   @date   10/24/2005
-*   @param
-*   @return the value ole storage stream data pointers
-*/
-LtcUtBenValueStream* LtcBenContainer::FindOLEStorageStreamWithObjectName(const char * sObjectName, AswEntry& rEntry)
-{
-    if (!sObjectName)
-        return NULL;
-
-    //Find OleRootStorage stream
-    std::string aRootStroageName("OleRootStorage");
-    std::string aOleStroageName("OleStorage");
-    LtcUtBenValueStream* pRootStream = NULL;
-    pRootStream = FindValueStreamWithPropertyName(aRootStroageName.c_str());
-    if(!pRootStream)
-        return NULL;
-    //Read root storage data and find the ole storage object id according to the object name
-    sal_uInt32 nDLen = 0;
-    nDLen = GetSvStreamSize(pRootStream);
-    for(sal_uInt32 nIndex = 0; nIndex < nDLen / ASWENTRY_SIZE; nIndex ++)
-    {
-        //Get entry
-        ReadAswEntry(pRootStream, rEntry);
-        String sObjName;
-        rEntry.GetName(sObjName);
-        if(sObjName.EqualsAscii(sObjectName))
-        {
-            //Find it
-            delete pRootStream;
-            return FindObjectValueStreamWithObjectIDAndProperty(rEntry.GetObjectID(),  aOleStroageName.c_str());
-        }
-    }
-
-    // Not find
-    if(pRootStream)
-    {
-        delete pRootStream;
-    }
-
-    return NULL;
-}
 void LtcBenContainer::ReadAswEntry(SvStream * pStream, AswEntry & rEntry)
 {
     char* pBuf = new char[ASWENTRY_SIZE];
