@@ -6,8 +6,7 @@ mkdir: %_DEST%\inc\store
 
 ..\%__SRC%\lib\istore.lib %_DEST%\lib\istore.lib
 ..\%__SRC%\lib\libstore.*.* %_DEST%\lib\*
+..\%__SRC%\lib\libstore.a %_DEST%\lib\libstore.a
 ..\%__SRC%\bin\sto*.dll %_DEST%\bin\sto*.dll
-
-
 
 linklib: libstore.*.*
