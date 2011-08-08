@@ -100,7 +100,7 @@ CFLAGSCC=-pipe -fsigned-char -malign-natural $(ARCH_FLAGS)
 #OBJCFLAGS=-no-precomp
 OBJCFLAGS=-fobjc-exceptions
 
-OBJCXXFLAGS=-fobjc-exceptions
+OBJCXXFLAGS=-x objective-c++ -fobjc-exceptions
 
 # Comp Flags for files that need exceptions enabled (C and C++)
 CFLAGSEXCEPTIONS=-fexceptions -fno-enforce-eh-specs
