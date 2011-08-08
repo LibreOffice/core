@@ -74,7 +74,7 @@ LayoutXMLFile::HandleElement( XMLElement* element )
 {
     std::vector<XMLAttribute*> interesting = interestingAttributes( element->GetAttributeList() );
 
-    if ( interesting.size() )
+    if ( !interesting.empty() )
     {
         std::vector<XMLAttribute*>::iterator i = interesting.begin();
 

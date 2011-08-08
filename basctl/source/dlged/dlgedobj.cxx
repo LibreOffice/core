@@ -1531,7 +1531,7 @@ void DlgEdForm::PositionAndSizeChange( const beans::PropertyChangeEvent& evt )
                 nPageHeightIn = aPageSize.Height();
                 if ( TransformSdrToControlCoordinates( nPageXIn, nPageYIn, nPageWidthIn, nPageHeightIn, nPageX, nPageY, nPageWidth, nPageHeight ) )
                 {
-                    for ( aIter = aChildList.begin(); aIter != aChildList.end(); aIter++ )
+                    for ( aIter = aChildList.begin(); aIter != aChildList.end(); ++aIter )
                     {
                         Reference< beans::XPropertySet > xPSet( (*aIter)->GetUnoControlModel(), UNO_QUERY );
                         if ( xPSet.is() )
@@ -1578,7 +1578,7 @@ void DlgEdForm::PositionAndSizeChange( const beans::PropertyChangeEvent& evt )
                 }
             }
 
-            for ( aIter = aChildList.begin(); aIter != aChildList.end(); aIter++ )
+            for ( aIter = aChildList.begin(); aIter != aChildList.end(); ++aIter )
             {
                 (*aIter)->SetRectFromProps();
             }
@@ -1780,7 +1780,7 @@ void DlgEdForm::NbcMove( const Size& rSize )
 
     // set geometry properties of all childs
     ::std::vector<DlgEdObj*>::iterator aIter;
-    for ( aIter = pChilds.begin() ; aIter != pChilds.end() ; aIter++ )
+    for ( aIter = pChilds.begin() ; aIter != pChilds.end() ; ++aIter )
     {
         (*aIter)->EndListening(sal_False);
         (*aIter)->SetPropsFromRect();
@@ -1804,7 +1804,7 @@ void DlgEdForm::NbcResize(const Point& rRef, const Fraction& xFract, const Fract
 
     // set geometry properties of all childs
     ::std::vector<DlgEdObj*>::iterator aIter;
-    for ( aIter = pChilds.begin() ; aIter != pChilds.end() ; aIter++ )
+    for ( aIter = pChilds.begin() ; aIter != pChilds.end() ; ++aIter )
     {
         (*aIter)->EndListening(sal_False);
         (*aIter)->SetPropsFromRect();

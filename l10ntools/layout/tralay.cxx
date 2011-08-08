@@ -156,7 +156,7 @@ void TranslateLayout::ParseCommandLine()
         else
             mFiles.push_back( ConvertSystemPath( aParam ) );
     }
-    if ( !mFiles.size() )
+    if ( mFiles.empty() )
     {
         fprintf( stderr, "error: No XML-FILE found\n" );
         usage();
@@ -325,7 +325,7 @@ void TranslateLayout::MergeLanguage( ByteString const& language )
 
 void TranslateLayout::Merge()
 {
-    if ( mLanguages.size() )
+    if (!mLanguages.empty() )
         for ( std::vector<ByteString>::iterator i = mLanguages.begin();
               i != mLanguages.end(); ++i)
             MergeLanguage( *i );
@@ -351,7 +351,7 @@ void TranslateLayout::CreateSDF()
 void TranslateLayout::ExceptionalMain()
 {
     ParseCommandLine();
-    if ( mLanguages.size() )
+    if ( !mLanguages.empty() )
         mLanguage = mLanguages.front();
     if ( mMergeMode )
         Merge();

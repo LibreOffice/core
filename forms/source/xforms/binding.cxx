@@ -661,7 +661,7 @@ void Binding::bind( bool bForceRebind )
     ::std::vector<EvaluationContext> aMIPContexts = _getMIPEvaluationContexts();
     for( ::std::vector<EvaluationContext>::iterator aIter = aMIPContexts.begin();
          aIter != aMIPContexts.end();
-         aIter++ )
+         ++aIter )
     {
         EvaluationContext& rContext = *aIter;
 
