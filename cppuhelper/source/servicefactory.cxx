@@ -33,6 +33,7 @@
 
 #include "rtl/string.hxx"
 #include "rtl/bootstrap.hxx"
+#include "rtl/strbuf.hxx"
 #include "osl/diagnose.h"
 #include "osl/file.h"
 #include "osl/module.h"
@@ -66,14 +67,6 @@ namespace css = com::sun::star;
 
 namespace cppu
 {
-
-// private forward decl
-void addFactories(
-    char const * const * ppNames /* lib, implname, ..., 0 */,
-    OUString const & bootstrapPath,
-    Reference< lang::XMultiComponentFactory > const & xMgr,
-    Reference< registry::XRegistryKey > const & xKey )
-    SAL_THROW( (Exception) );
 
 Reference< security::XAccessController >
 createDefaultAccessController() SAL_THROW( () );
@@ -320,6 +313,68 @@ static void add_access_control_entries(
     entry.value <<= ac_service;
     context_values.push_back( entry );
 }
+
+namespace {
+void addFactories(
+    char const * const * ppNames /* lib, implname, ..., 0 */,
+    OUString const & bootstrapPath,
+    Reference< lang::XMultiComponentFactory > const & xMgr,
+    Reference< registry::XRegistryKey > const & xKey )
+    SAL_THROW( (Exception) )
+{
+    Reference< container::XSet > xSet( xMgr, UNO_QUERY );
+    OSL_ASSERT( xSet.is() );
+    Reference< lang::XMultiServiceFactory > xSF( xMgr, UNO_QUERY );
+
+    while (*ppNames)
+    {
+        OUString lib( OUString::createFromAscii( *ppNames++ ) );
+        OUString implName( OUString::createFromAscii( *ppNames++ ) );
+
+        Any aFac( makeAny( loadSharedLibComponentFactory(
+                               lib, bootstrapPath, implName, xSF, xKey ) ) );
+        xSet->insert( aFac );
+#if OSL_DEBUG_LEVEL > 1
+        if (xSet->has( aFac ))
+        {
+            Reference< lang::XServiceInfo > xInfo;
+            if (aFac >>= xInfo)
+            {
+                ::fprintf(
+                    stderr, "> implementation %s supports: ", ppNames[ -1 ] );
+                Sequence< OUString > supported(
+                    xInfo->getSupportedServiceNames() );
+                for ( sal_Int32 nPos = supported.getLength(); nPos--; )
+                {
+                    OString str( OUStringToOString(
+                        supported[ nPos ], RTL_TEXTENCODING_ASCII_US ) );
+                    ::fprintf( stderr, nPos ? "%s, " : "%s\n", str.getStr() );
+                }
+            }
+            else
+            {
+                ::fprintf(
+                    stderr,
+                    "> implementation %s provides NO lang::XServiceInfo!!!\n",
+                    ppNames[ -1 ] );
+            }
+        }
+#endif
+#if OSL_DEBUG_LEVEL > 0
+        if (! xSet->has( aFac ))
+        {
+            OStringBuffer buf( 64 );
+            buf.append( "### failed inserting shared lib \"" );
+            buf.append( ppNames[ -2 ] );
+            buf.append( "\"!!!" );
+            OString str( buf.makeStringAndClear() );
+            OSL_FAIL( str.getStr() );
+        }
+#endif
+    }
+}
+
+} // namespace
 
 Reference< lang::XMultiComponentFactory > bootstrapInitialSF(
     OUString const & rBootstrapPath )
