@@ -5766,8 +5766,8 @@ dnl ===================================================================
 dnl Check for system sane
 dnl ===================================================================
 AC_MSG_CHECKING([which sane header to use])
-if test -n "$with_system_sane_header" -o -n "$with_system_headers" && \
-        test "$with_system_sane_header" != "no"; then
+if test -n "$with_system_sane" -o -n "$with_system_headers" && \
+        test "$with_system_sane" != "no"; then
     AC_MSG_RESULT([external])
     SYSTEM_SANE_HEADER=YES
     AC_CHECK_HEADER(sane/sane.h, [],
