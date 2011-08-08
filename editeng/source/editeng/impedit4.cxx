@@ -1484,12 +1484,12 @@ sal_Bool ImpEditEngine::HasConvertibleTextPortion( LanguageType nSrcLang )
     sal_uInt16 nParas = pEditEngine->GetParagraphCount();
     for (sal_uInt16 k = 0;  k < nParas;  ++k)
     {
-        SvUShorts aPortions;
+        std::vector<sal_uInt16> aPortions;
         pEditEngine->GetPortions( k, aPortions );
-        for ( sal_uInt16 nPos = 0; nPos < aPortions.Count(); ++nPos )
+        for ( size_t nPos = 0; nPos < aPortions.size(); ++nPos )
         {
-            sal_uInt16 nEnd   = aPortions.GetObject( nPos );
-            sal_uInt16 nStart = nPos > 0 ? aPortions.GetObject( nPos - 1 ) : 0;
+            sal_uInt16 nEnd   = aPortions[ nPos ];
+            sal_uInt16 nStart = nPos > 0 ? aPortions[ nPos - 1 ] : 0;
 
             // if the paragraph is not empty we need to increase the index
             // by one since the attribute of the character left to the
@@ -1675,12 +1675,12 @@ void ImpEditEngine::ImpConvert( rtl::OUString &rConvTxt, LanguageType &rConvTxtL
         sal_uInt16 nAttribEnd   = USHRT_MAX;
         sal_uInt16 nCurPos      = USHRT_MAX;
         EPaM aCurStart = CreateEPaM( aCurSel.Min() );
-        SvUShorts aPortions;
+        std::vector<sal_uInt16> aPortions;
         pEditEngine->GetPortions( (sal_uInt16)aCurStart.nPara, aPortions );
-        for ( sal_uInt16 nPos = 0; nPos < aPortions.Count(); ++nPos )
+        for ( size_t nPos = 0; nPos < aPortions.size(); ++nPos )
         {
-            sal_uInt16 nEnd   = aPortions.GetObject( nPos );
-            sal_uInt16 nStart = nPos > 0 ? aPortions.GetObject( nPos - 1 ) : 0;
+            sal_uInt16 nEnd   = aPortions[ nPos ];
+            sal_uInt16 nStart = nPos > 0 ? aPortions[ nPos - 1 ] : 0;
 
             // the language attribute is obtained from the left character
             // (like usually all other attributes)

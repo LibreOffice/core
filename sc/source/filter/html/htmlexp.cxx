@@ -36,7 +36,6 @@
 #include "scitems.hxx"
 #include <editeng/eeitem.hxx>
 
-#define _SVSTDARR_STRINGSSORTDTOR
 #include <rtl/tencinfo.h>
 
 #include <vcl/svapp.hxx>
@@ -58,8 +57,8 @@
 #include <sfx2/objsh.hxx>
 #include <svl/stritem.hxx>
 #include <svl/urihelper.hxx>
-#ifndef _SVSTDARR_USHORTS
-#define _SVSTDARR_USHORTS
+#ifndef _SVSTDARR_STRINGSSORTDTOR
+#define _SVSTDARR_STRINGSSORTDTOR
 #endif
 #include <svl/svstdarr.hxx>
 #include <svl/zforlist.hxx>
@@ -1262,13 +1261,12 @@ sal_Bool ScHTMLExport::WriteFieldText( const ScEditCell* pCell )
         {
             if ( nPar > 0 )
                 TAG_ON( OOO_STRING_SVTOOLS_HTML_linebreak );
-            SvUShorts aPortions;
+            std::vector<sal_uInt16> aPortions;
             rEngine.GetPortions( nPar, aPortions );
-            sal_uInt16 nCnt = aPortions.Count();
             sal_uInt16 nStart = 0;
-            for ( sal_uInt16 nPos = 0; nPos < nCnt; nPos++ )
+            for ( std::vector<sal_uInt16>::const_iterator it(aPortions.begin()); it != aPortions.end(); ++it )
             {
-                sal_uInt16 nEnd = aPortions.GetObject( nPos );
+                sal_uInt16 nEnd = *it;
                 ESelection aSel( nPar, nStart, nPar, nEnd );
                 sal_Bool bUrl = false;
                 // fields are single characters

@@ -46,8 +46,6 @@
 #include <editeng/escpitem.hxx>
 #include <editeng/svxfont.hxx>
 
-#define _SVSTDARR_USHORTS
-#include <svl/svstdarr.hxx>
 #include "document.hxx"
 #include "docpool.hxx"
 #include "cell.hxx"
@@ -456,14 +454,13 @@ XclExpStringRef lclCreateFormattedString(
         ESelection aSel( nPara, 0 );
         String aParaText( rEE.GetText( nPara ) );
 
-        SvUShorts aPosList;
+        std::vector<sal_uInt16> aPosList;
         rEE.GetPortions( nPara, aPosList );
 
         // process all portions in the paragraph
-        sal_uInt16 nPosCount = aPosList.Count();
-        for( sal_uInt16 nPos = 0; nPos < nPosCount; ++nPos )
+        for( std::vector<sal_uInt16>::const_iterator it(aPosList.begin()); it != aPosList.end(); ++it )
         {
-            aSel.nEndPos = static_cast< xub_StrLen >( aPosList.GetObject( nPos ) );
+            aSel.nEndPos = static_cast< xub_StrLen >( *it );
             String aXclPortionText( aParaText, aSel.nStartPos, aSel.nEndPos - aSel.nStartPos );
 
             aItemSet.ClearItem();
@@ -738,13 +735,12 @@ void XclExpHFConverter::AppendPortion( const EditTextObject* pTextObj, sal_Unico
         ESelection aSel( nPara, 0 );
         String aParaText;
         sal_Int32 nParaHeight = 0;
-        SvUShorts aPosList;
+        std::vector<sal_uInt16> aPosList;
         mrEE.GetPortions( nPara, aPosList );
 
-        sal_uInt16 nPosCount = aPosList.Count();
-        for( sal_uInt16 nPos = 0; nPos < nPosCount; ++nPos )
+        for( std::vector<sal_uInt16>::const_iterator it( aPosList.begin() ); it != aPosList.end(); ++it )
         {
-            aSel.nEndPos = static_cast< xub_StrLen >( aPosList.GetObject( nPos ) );
+            aSel.nEndPos = static_cast< xub_StrLen >( *it );
             if( aSel.nStartPos < aSel.nEndPos )
             {
 

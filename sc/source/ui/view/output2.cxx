@@ -61,11 +61,6 @@
 #include <vcl/outdev.hxx>
 #include <vcl/pdfextoutdevdata.hxx>
 
-#ifndef _SVSTDARR_USHORTS
-#define _SVSTDARR_USHORTS
-#include <svl/svstdarr.hxx>
-#endif
-
 #include "output.hxx"
 #include "document.hxx"
 #include "cell.hxx"
@@ -1975,14 +1970,13 @@ void lcl_ScaleFonts( EditEngine& rEngine, long nPercent )
     sal_uInt16 nParCount = rEngine.GetParagraphCount();
     for (sal_uInt16 nPar=0; nPar<nParCount; nPar++)
     {
-        SvUShorts aPortions;
+        std::vector<sal_uInt16> aPortions;
         rEngine.GetPortions( nPar, aPortions );
 
-        sal_uInt16 nPCount = aPortions.Count();
         sal_uInt16 nStart = 0;
-        for ( sal_uInt16 nPos=0; nPos<nPCount; nPos++ )
+        for ( std::vector<sal_uInt16>::const_iterator it(aPortions.begin()); it != aPortions.end(); ++it )
         {
-            sal_uInt16 nEnd = aPortions.GetObject( nPos );
+            sal_uInt16 nEnd = *it;
             ESelection aSel( nPar, nStart, nPar, nEnd );
             SfxItemSet aAttribs = rEngine.GetAttribs( aSel );
 

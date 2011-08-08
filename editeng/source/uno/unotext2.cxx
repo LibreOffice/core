@@ -32,9 +32,6 @@
 #include <osl/mutex.hxx>
 #include <rtl/instance.hxx>
 
-#define _SVSTDARR_sal_uIt16S
-#include <svl/svstdarr.hxx>
-
 #include <editeng/eeitem.hxx>
 #include <editeng/flditem.hxx>
 #include <editeng/unofield.hxx>
@@ -321,9 +318,9 @@ sal_Bool SAL_CALL SvxUnoTextContent::hasElements()
     SvxTextForwarder* pForwarder = GetEditSource() ? GetEditSource()->GetTextForwarder() : NULL;
     if( pForwarder )
     {
-        SvUShorts aPortions;
+        std::vector<sal_uInt16> aPortions;
         pForwarder->GetPortions( mnParagraph, aPortions );
-        return aPortions.Count() > 0;
+        return !aPortions.empty();
     }
     else
     {
@@ -426,7 +423,7 @@ SvxUnoTextRangeEnumeration::SvxUnoTextRangeEnumeration( const SvxUnoTextBase& rT
 
     if( mpEditSource && mpEditSource->GetTextForwarder() )
     {
-        mpPortions = new SvUShorts;
+        mpPortions = new std::vector<sal_uInt16>;
         mpEditSource->GetTextForwarder()->GetPortions( nPara, *mpPortions );
     }
     else
@@ -448,7 +445,7 @@ sal_Bool SAL_CALL SvxUnoTextRangeEnumeration::hasMoreElements()
 {
     SolarMutexGuard aGuard;
 
-    return mpPortions && mnNextPortion < mpPortions->Count();
+    return mpPortions && mnNextPortion < mpPortions->size();
 }
 
 uno::Any SAL_CALL SvxUnoTextRangeEnumeration::nextElement()
@@ -456,13 +453,13 @@ uno::Any SAL_CALL SvxUnoTextRangeEnumeration::nextElement()
 {
     SolarMutexGuard aGuard;
 
-    if( mpPortions == NULL || mnNextPortion >= mpPortions->Count() )
+    if( mpPortions == NULL || mnNextPortion >= mpPortions->size() )
         throw container::NoSuchElementException();
 
     sal_uInt16 nStartPos = 0;
     if (mnNextPortion > 0)
-        nStartPos = mpPortions->GetObject(mnNextPortion-1);
-    sal_uInt16 nEndPos = mpPortions->GetObject(mnNextPortion);
+        nStartPos = mpPortions->at(mnNextPortion-1);
+    sal_uInt16 nEndPos = mpPortions->at(mnNextPortion);
     ESelection aSel( mnParagraph, nStartPos, mnParagraph, nEndPos );
 
     uno::Reference< text::XTextRange > xRange;

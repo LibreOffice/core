@@ -72,8 +72,6 @@
 #include <sfx2/dispatch.hxx>
 #include <sfx2/fcontnr.hxx>
 #include <svl/style.hxx>
-#define _SVSTDARR_USHORTS
-#include <svl/svstdarr.hxx>
 #include <editeng/frmdiritem.hxx>
 #include <svx/svdoutl.hxx>
 #include <tools/urlobj.hxx>               // INetURLObject
@@ -1365,14 +1363,13 @@ String HtmlExport::ParagraphToHTMLString( SdrOutliner* pOutliner, sal_uLong nPar
         return aStr;
 
     HtmlState aState( (mbUserAttr || mbDocColors)  ? maTextColor : Color(COL_BLACK) );
-    SvUShorts aPortionList;
+    std::vector<sal_uInt16> aPortionList;
     rEditEngine.GetPortions( (sal_uInt16) nPara, aPortionList );
-    sal_uInt16 nPortionCount = aPortionList.Count();
 
     sal_uInt16 nPos1 = 0;
-    for( sal_uInt16 nPortion = 0; nPortion < nPortionCount; nPortion++ )
+    for( std::vector<sal_uInt16>::const_iterator it( aPortionList.begin() ); it != aPortionList.end(); ++it )
     {
-        sal_uInt16 nPos2 = aPortionList.GetObject(nPortion);
+        sal_uInt16 nPos2 = *it;
 
         ESelection aSelection( (sal_uInt16) nPara, nPos1, (sal_uInt16) nPara, nPos2);
 

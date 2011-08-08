@@ -36,8 +36,6 @@
 
 #define USE_SVXFONT
 
-#define _SVSTDARR_sal_uInt16S
-#include <svl/svstdarr.hxx>
 #include <svl/ctloptions.hxx>
 #include <svtools/ctrltool.hxx>
 
@@ -1694,7 +1692,7 @@ void EditEngine::StripPortions()
     pImpEditEngine->Paint( &aTmpDev, aBigRec, Point(), sal_True );
 }
 
-void EditEngine::GetPortions( sal_uInt16 nPara, SvUShorts& rList )
+void EditEngine::GetPortions( sal_uInt16 nPara, std::vector<sal_uInt16>& rList )
 {
     if ( !pImpEditEngine->IsFormatted() )
         pImpEditEngine->FormatFullDoc();
@@ -1707,7 +1705,7 @@ void EditEngine::GetPortions( sal_uInt16 nPara, SvUShorts& rList )
         for ( sal_uInt16 n = 0; n < nTextPortions; n++ )
         {
             nEnd = nEnd + pParaPortion->GetTextPortions()[n]->GetLen();
-            rList.Insert( nEnd, rList.Count() );
+            rList.push_back( nEnd );
         }
     }
 }

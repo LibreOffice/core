@@ -46,9 +46,6 @@
 
 #include <svl/srchitem.hxx>
 
-#define _SVSTDARR_sal_uIt16S
-#include <svl/svstdarr.hxx>
-
 #include <impedit.hxx>
 #include <editeng/editeng.hxx>
 #include <editeng/editview.hxx>
@@ -1455,19 +1452,19 @@ void EditView::ChangeFontSize( bool bGrow, const FontList* pFontList )
     {
         for( sal_uInt16 nPara = aSel.nStartPara; nPara <= aSel.nEndPara; nPara++ )
         {
-            SvUShorts aPortions;
+            std::vector<sal_uInt16> aPortions;
             rEditEngine.GetPortions( nPara, aPortions );
 
-            if( aPortions.Count() == 0 )
-                aPortions.Insert( rEditEngine.GetTextLen(nPara), 0 );
+            if( aPortions.empty() )
+                aPortions.push_back( rEditEngine.GetTextLen(nPara) );
 
             const sal_uInt16 nBeginPos = (nPara == aSel.nStartPara) ? aSel.nStartPos : 0;
             const sal_uInt16 nEndPos = (nPara == aSel.nEndPara) ? aSel.nEndPos : 0xffff;
 
-            for ( sal_uInt16 nPos = 0; nPos < aPortions.Count(); ++nPos )
+            for ( size_t nPos = 0; nPos < aPortions.size(); ++nPos )
             {
-                sal_uInt16 nPortionEnd   = aPortions.GetObject( nPos );
-                sal_uInt16 nPortionStart = nPos > 0 ? aPortions.GetObject( nPos - 1 ) : 0;
+                sal_uInt16 nPortionEnd   = aPortions[ nPos ];
+                sal_uInt16 nPortionStart = nPos > 0 ? aPortions[ nPos - 1 ] : 0;
 
                 if( (nPortionEnd < nBeginPos) || (nPortionStart > nEndPos) )
                     continue;

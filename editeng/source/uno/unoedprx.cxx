@@ -591,7 +591,7 @@ void SvxAccessibleTextAdapter::RemoveAttribs( const ESelection& , sal_Bool , sal
     DBG_ASSERT(mrTextForwarder, "SvxAccessibleTextAdapter: no forwarder");
 }
 
-void SvxAccessibleTextAdapter::GetPortions( sal_uInt16 nPara, SvUShorts& rList ) const
+void SvxAccessibleTextAdapter::GetPortions( sal_uInt16 nPara, std::vector<sal_uInt16>& rList ) const
 {
     DBG_ASSERT(mrTextForwarder, "SvxAccessibleTextAdapter: no forwarder");
 

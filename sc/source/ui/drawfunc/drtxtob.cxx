@@ -625,15 +625,15 @@ void lcl_RemoveFields( OutlinerView& rOutView )
     for (sal_uLong nPar=0; nPar<nParCount; nPar++)
         if ( nPar >= aSel.nStartPara && nPar <= aSel.nEndPara )
         {
-            SvUShorts aPortions;
+            std::vector<sal_uInt16> aPortions;
             rEditEng.GetPortions( (sal_uInt16)nPar, aPortions );
             //! GetPortions should use xub_StrLen instead of USHORT
 
-            for ( sal_uInt16 nPos = aPortions.Count(); nPos; )
+            for ( size_t nPos = aPortions.size(); nPos; )
             {
                 --nPos;
-                sal_uInt16 nEnd = aPortions.GetObject( nPos );
-                sal_uInt16 nStart = nPos ? aPortions.GetObject( nPos - 1 ) : 0;
+                sal_uInt16 nEnd = aPortions[ nPos ];
+                sal_uInt16 nStart = nPos ? aPortions[ nPos - 1 ] : 0;
                 // fields are single characters
                 if ( nEnd == nStart+1 &&
                      ( nPar > aSel.nStartPara || nStart >= aSel.nStartPos ) &&

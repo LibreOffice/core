@@ -196,7 +196,7 @@ public:
     virtual SfxItemSet      GetParaAttribs( sal_uInt16 nPara ) const;
     virtual void            SetParaAttribs( sal_uInt16 nPara, const SfxItemSet& rSet );
     virtual void            RemoveAttribs( const ESelection& rSelection, sal_Bool bRemoveParaAttribs, sal_uInt16 nWhich );
-    virtual void            GetPortions( sal_uInt16 nPara, SvUShorts& rList ) const;
+    virtual void            GetPortions( sal_uInt16 nPara, std::vector<sal_uInt16>& rList ) const;
 
     sal_uInt16              GetItemState( const ESelection& rSel, sal_uInt16 nWhich ) const;
     sal_uInt16              GetItemState( sal_uInt16 nPara, sal_uInt16 nWhich ) const;
@@ -600,10 +600,10 @@ class SvxUnoTextRangeEnumeration : public ::cppu::WeakAggImplHelper1< ::com::sun
 private:
     SvxEditSource*      mpEditSource;
     ::com::sun::star::uno::Reference< ::com::sun::star::text::XText > mxParentText;
-    const SvxUnoTextBase&   mrParentText;
-    sal_uInt16          mnParagraph;
-    SvUShorts*          mpPortions;
-    sal_uInt16          mnNextPortion;
+    const SvxUnoTextBase&    mrParentText;
+    sal_uInt16               mnParagraph;
+    std::vector<sal_uInt16>* mpPortions;
+    sal_uInt16               mnNextPortion;
 
 public:
     SvxUnoTextRangeEnumeration( const SvxUnoTextBase& rText, sal_uInt16 nPara ) throw();

@@ -48,8 +48,6 @@
 #include <vcl/msgbox.hxx>
 #include <vcl/svapp.hxx>
 #include <unotools/useroptions.hxx>
-#define _SVSTDARR_USHORTS
-#include <svl/svstdarr.hxx>
 
 #include "editutil.hxx"
 #include "global.hxx"
@@ -554,9 +552,9 @@ bool ScHFEditPage::IsPageEntry(EditEngine*pEngine, EditTextObject* pTextObj)
 
     if(!pTextObj->IsFieldObject())
     {
-        SvUShorts aPosList;
+        std::vector<sal_uInt16> aPosList;
         pEngine->GetPortions(0,aPosList);
-        if(aPosList.Count() == 2)
+        if(aPosList.size() == 2)
         {
             String aPageEntry(ScGlobal::GetRscString( STR_PAGE ) );
             aPageEntry += ' ';

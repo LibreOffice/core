@@ -50,10 +50,6 @@
 #include <vcl/outdev.hxx>
 #include <svl/inethist.hxx>
 #include <unotools/syslocale.hxx>
-#ifndef _SVSTDARR_USHORTS
-#define _SVSTDARR_USHORTS
-#include <svl/svstdarr.hxx>
-#endif
 
 #include "editutil.hxx"
 #include "global.hxx"
@@ -495,17 +491,16 @@ void ScEditEngineDefaulter::RemoveParaAttribs()
 
         if ( pCharItems )
         {
-            SvUShorts aPortions;
+            std::vector<sal_uInt16> aPortions;
             GetPortions( nPar, aPortions );
 
             //  loop through the portions of the paragraph, and set only those items
             //  that are not overridden by existing character attributes
 
-            sal_uInt16 nPCount = aPortions.Count();
             sal_uInt16 nStart = 0;
-            for ( sal_uInt16 nPos=0; nPos<nPCount; nPos++ )
+            for ( std::vector<sal_uInt16>::const_iterator it(aPortions.begin()); it != aPortions.end(); ++it )
             {
-                sal_uInt16 nEnd = aPortions.GetObject( nPos );
+                sal_uInt16 nEnd = *it;
                 ESelection aSel( nPar, nStart, nPar, nEnd );
                 SfxItemSet aOldCharAttrs = GetAttribs( aSel );
                 SfxItemSet aNewCharAttrs = *pCharItems;

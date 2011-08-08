@@ -54,7 +54,6 @@ class SvStream;
 class Link;
 class OutputDevice;
 class Window;
-class SvUShorts;
 class SfxPoolItem;
 class SvxNumBulletItem;
 class SvxBulletItem;
@@ -293,7 +292,7 @@ public:
     void            StopSelectionMode();
 
     void            StripPortions();
-    void            GetPortions( sal_uInt16 nPara, SvUShorts& rList );
+    void            GetPortions( sal_uInt16 nPara, std::vector<sal_uInt16>& rList );
 
     long            GetFirstLineStartX( sal_uInt16 nParagraph );
     Point           GetDocPosTopLeft( sal_uInt16 nParagraph );

@@ -1086,7 +1086,7 @@ void SmTextForwarder::RemoveAttribs( const ESelection& rSelection, sal_Bool bRem
         pEditEngine->RemoveAttribs( rSelection, bRemoveParaAttribs, nWhich );
 }
 
-void SmTextForwarder::GetPortions( sal_uInt16 nPara, SvUShorts& rList ) const
+void SmTextForwarder::GetPortions( sal_uInt16 nPara, std::vector<sal_uInt16>& rList ) const
 {
     EditEngine *pEditEngine = rEditAcc.GetEditEngine();
     if (pEditEngine)
