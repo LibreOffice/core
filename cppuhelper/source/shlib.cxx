@@ -345,6 +345,102 @@ Reference< XInterface > SAL_CALL loadSharedLibComponentFactory(
     return loadSharedLibComponentFactory( rLibName, rPath, rImplName, xMgr, xKey, rtl::OUString() );
 }
 
+namespace
+{
+
+Reference< XInterface > invokeComponentFactory(
+    oslGenericFunction pGetter,
+    oslModule lib,
+    OUString const & rModulePath,
+    OUString const & rImplName,
+    Reference< ::com::sun::star::lang::XMultiServiceFactory > const & xMgr,
+    Reference< ::com::sun::star::registry::XRegistryKey > const & xKey,
+    OUString const & rPrefix,
+    OUString &rExcMsg )
+{
+    Reference< XInterface > xRet;
+    uno::Environment currentEnv(Environment::getCurrent());
+    uno::Environment env;
+    OUString aEnvTypeName;
+
+    getLibEnv(lib, &env, &aEnvTypeName, currentEnv, rImplName, rPrefix);
+
+    OString aImplName(
+        OUStringToOString( rImplName, RTL_TEXTENCODING_ASCII_US ) );
+
+    if (!env.is())
+        env = uno::Environment(aEnvTypeName);
+
+    if (env.is() && currentEnv.is())
+    {
+#if OSL_DEBUG_LEVEL > 1
+        {
+            rtl::OString modPath(rtl::OUStringToOString(rModulePath, RTL_TEXTENCODING_ASCII_US));
+            rtl::OString implName(rtl::OUStringToOString(rImplName, RTL_TEXTENCODING_ASCII_US));
+            rtl::OString envDcp(rtl::OUStringToOString(env.getTypeName(), RTL_TEXTENCODING_ASCII_US));
+
+            fprintf(stderr, "loadSharedLibComponentFactory envDcp: %-12.12s  implName: %30.30s  modPath: %-15.15s\n", envDcp.getStr(), implName.getStr() + (implName.getLength() > 30 ? implName.getLength() - 30 : 0), modPath.getStr());
+        }
+#endif
+
+        Mapping aCurrent2Env( currentEnv, env );
+        Mapping aEnv2Current( env, currentEnv );
+
+        if (aCurrent2Env.is() && aEnv2Current.is())
+        {
+            void * pSMgr = aCurrent2Env.mapInterface(
+                xMgr.get(), ::getCppuType( &xMgr ) );
+            void * pKey = aCurrent2Env.mapInterface(
+                xKey.get(), ::getCppuType( &xKey ) );
+
+            void * pSSF = NULL;
+
+            env.invoke(s_getFactory, pGetter, &aImplName, pSMgr, pKey, &pSSF);
+
+            if (pKey)
+            {
+                (env.get()->pExtEnv->releaseInterface)(
+                    env.get()->pExtEnv, pKey );
+            }
+            if (pSMgr)
+            {
+                (*env.get()->pExtEnv->releaseInterface)(
+                    env.get()->pExtEnv, pSMgr );
+            }
+
+            if (pSSF)
+            {
+                aEnv2Current.mapInterface(
+                    reinterpret_cast< void ** >( &xRet ),
+                    pSSF, ::getCppuType( &xRet ) );
+                (env.get()->pExtEnv->releaseInterface)(
+                    env.get()->pExtEnv, pSSF );
+            }
+            else
+            {
+                rExcMsg = rModulePath;
+                rExcMsg += OUSTR(": cannot get factory of "
+                                 "demanded implementation: ");
+                rExcMsg += OStringToOUString(
+                        aImplName, RTL_TEXTENCODING_ASCII_US );
+            }
+        }
+        else
+        {
+            rExcMsg =
+                OUSTR("cannot get uno mappings: C++ <=> UNO!");
+        }
+    }
+    else
+    {
+        rExcMsg = OUSTR("cannot get uno environments!");
+    }
+
+    return xRet;
+}
+
+} // namespace
+
 Reference< XInterface > SAL_CALL loadSharedLibComponentFactory(
     OUString const & rLibName, OUString const & rPath,
     OUString const & rImplName,
@@ -384,89 +480,13 @@ Reference< XInterface > SAL_CALL loadSharedLibComponentFactory(
 
     Reference< XInterface > xRet;
 
-    uno::Environment currentEnv(Environment::getCurrent());
-    uno::Environment env;
-
-    OUString aEnvTypeName;
-
     OUString aExcMsg;
-
-    getLibEnv(lib, &env, &aEnvTypeName, currentEnv, rImplName, rPrefix);
 
     OUString aGetFactoryName = rPrefix + OUSTR(COMPONENT_GETFACTORY);
     oslGenericFunction pSym = osl_getFunctionSymbol( lib, aGetFactoryName.pData );
     if (pSym != 0)
     {
-        OString aImplName(
-            OUStringToOString( rImplName, RTL_TEXTENCODING_ASCII_US ) );
-
-        if (!env.is())
-            env = uno::Environment(aEnvTypeName);
-
-        if (env.is() && currentEnv.is())
-        {
-#if OSL_DEBUG_LEVEL > 1
-            {
-                rtl::OString libName(rtl::OUStringToOString(rLibName, RTL_TEXTENCODING_ASCII_US));
-                rtl::OString implName(rtl::OUStringToOString(rImplName, RTL_TEXTENCODING_ASCII_US));
-                rtl::OString envDcp(rtl::OUStringToOString(env.getTypeName(), RTL_TEXTENCODING_ASCII_US));
-
-                fprintf(stderr, "loadSharedLibComponentFactory envDcp: %-12.12s  implName: %30.30s  libName: %-15.15s\n", envDcp.getStr(), implName.getStr() + (implName.getLength() > 30 ? implName.getLength() - 30 : 0), libName.getStr());
-            }
-#endif
-
-            Mapping aCurrent2Env( currentEnv, env );
-            Mapping aEnv2Current( env, currentEnv );
-
-            if (aCurrent2Env.is() && aEnv2Current.is())
-            {
-                void * pSMgr = aCurrent2Env.mapInterface(
-                    xMgr.get(), ::getCppuType( &xMgr ) );
-                void * pKey = aCurrent2Env.mapInterface(
-                    xKey.get(), ::getCppuType( &xKey ) );
-
-                void * pSSF = NULL;
-
-                env.invoke(s_getFactory, pSym, &aImplName, pSMgr, pKey, &pSSF);
-
-                if (pKey)
-                {
-                    (env.get()->pExtEnv->releaseInterface)(
-                        env.get()->pExtEnv, pKey );
-                }
-                if (pSMgr)
-                {
-                    (*env.get()->pExtEnv->releaseInterface)(
-                        env.get()->pExtEnv, pSMgr );
-                }
-
-                if (pSSF)
-                {
-                    aEnv2Current.mapInterface(
-                        reinterpret_cast< void ** >( &xRet ),
-                        pSSF, ::getCppuType( &xRet ) );
-                    (env.get()->pExtEnv->releaseInterface)(
-                        env.get()->pExtEnv, pSSF );
-                }
-                else
-                {
-                    aExcMsg = aModulePath;
-                    aExcMsg += OUSTR(": cannot get factory of "
-                                     "demanded implementation: ");
-                    aExcMsg += OStringToOUString(
-                            aImplName, RTL_TEXTENCODING_ASCII_US );
-                }
-            }
-            else
-            {
-                aExcMsg =
-                    OUSTR("cannot get uno mappings: C++ <=> UNO!");
-            }
-        }
-        else
-        {
-            aExcMsg = OUSTR("cannot get uno environments!");
-        }
+        xRet = invokeComponentFactory( pSym, lib, aModulePath, rImplName, xMgr, xKey, rPrefix, aExcMsg );
     }
     else
     {
@@ -489,6 +509,37 @@ Reference< XInterface > SAL_CALL loadSharedLibComponentFactory(
     }
 
     rtl_registerModuleForUnloading( lib);
+    return xRet;
+}
+
+Reference< XInterface > SAL_CALL invokeStaticComponentFactory(
+    oslGenericFunction pGetter,
+    OUString const & rImplName,
+    Reference< ::com::sun::star::lang::XMultiServiceFactory > const & xMgr,
+    Reference< ::com::sun::star::registry::XRegistryKey > const & xKey,
+    OUString const & rPrefix )
+    SAL_THROW( (::com::sun::star::loader::CannotActivateFactoryException) )
+{
+    Reference< XInterface > xRet;
+    oslModule pExe;
+    OUString aExePath(OUSTR("MAIN"));
+    osl_getModuleHandle( NULL, &pExe );
+    OUString aExcMsg;
+
+    xRet = invokeComponentFactory( pGetter, pExe, aExePath, rImplName, xMgr, xKey, rPrefix, aExcMsg );
+
+    if (! xRet.is())
+    {
+#if OSL_DEBUG_LEVEL > 1
+        out( "### cannot activate factory: " );
+        out( aExcMsg );
+        out( "\n" );
+#endif
+        throw loader::CannotActivateFactoryException(
+            aExcMsg,
+            Reference< XInterface >() );
+    }
+
     return xRet;
 }
 

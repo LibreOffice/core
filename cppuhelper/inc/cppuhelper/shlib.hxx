@@ -28,6 +28,7 @@
 #ifndef _CPPUHELPER_SHLIB_HXX_
 #define _CPPUHELPER_SHLIB_HXX_
 
+#include <osl/module.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/registry/XRegistryKey.hpp>
 #include <com/sun/star/loader/CannotActivateFactoryException.hpp>
@@ -87,6 +88,26 @@ SAL_CALL loadSharedLibComponentFactory(
 ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
 SAL_CALL loadSharedLibComponentFactory(
     ::rtl::OUString const & rLibName, ::rtl::OUString const & rPath,
+    ::rtl::OUString const & rImplName,
+    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > const & xMgr,
+    ::com::sun::star::uno::Reference< ::com::sun::star::registry::XRegistryKey > const & xKey,
+    ::rtl::OUString const & rPrefix )
+    SAL_THROW( (::com::sun::star::loader::CannotActivateFactoryException) );
+
+/** Gets the factory out of an already loaded (for instance statically linked) component.
+
+    @param pGetter the component's component_getFactory function
+    @param rImplName implementation to be retrieved from the library
+    @param xMgr service manager to be provided to the component
+    @param xKey registry key to be provided to the component
+    @param rPrefix optional component prefix
+    @return
+    factory instance (::com::sun::star::lang::XSingleComponentFactory or
+    ::com::sun::star::lang::XSingleComponentFactory)
+*/
+::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
+SAL_CALL invokeStaticComponentFactory(
+    oslGenericFunction pGetter,
     ::rtl::OUString const & rImplName,
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > const & xMgr,
     ::com::sun::star::uno::Reference< ::com::sun::star::registry::XRegistryKey > const & xKey,
