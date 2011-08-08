@@ -193,7 +193,7 @@ class SwPrintUIOptions : public vcl::PrinterOptionsHelper
     const SwPrintData & m_rDefaultPrintData;
 
 public:
-    SwPrintUIOptions( bool bWeb, bool bSwSrcView, bool bHasSelection, bool bHasPostIts, const SwPrintData &rDefaultPrintData );
+    SwPrintUIOptions( sal_uInt16 nCurrentPage, bool bWeb, bool bSwSrcView, bool bHasSelection, bool bHasPostIts, const SwPrintData &rDefaultPrintData );
     virtual ~SwPrintUIOptions();
 
     bool processPropertiesAndCheckFormat( const com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >& i_rNewProp );

@@ -185,6 +185,7 @@ void SwRenderData::MakeSwPrtOptions(
 //////////////////////////////////////////////////////////////////////
 
 SwPrintUIOptions::SwPrintUIOptions(
+    sal_uInt16 nCurrentPage,
     bool bWeb,
     bool bSwSrcView,
     bool bHasSelection,
@@ -335,7 +336,7 @@ SwPrintUIOptions::SwPrintUIOptions(
     m_aUIProperties[nIdx++].Value = getEditControlOpt( rtl::OUString(),
                                                        rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".HelpID:vcl:PrintDialog:PageRange:Edit" ) ),
                                                        rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PageRange" ) ),
-                                                       rtl::OUString(),
+                                                       rtl::OUString::valueOf( sal_Int32( nCurrentPage ) ) /* set text box to current page number */,
                                                        aPageRangeOpt
                                                        );
     // print content selection

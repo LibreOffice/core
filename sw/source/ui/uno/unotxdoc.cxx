@@ -187,7 +187,12 @@ SwPrintUIOptions * lcl_GetPrintUIOptions(
     // get default values to use in dialog from documents SwPrintData
     const SwPrintData &rPrintData = pDocShell->GetDoc()->getPrintData();
 
-    return new SwPrintUIOptions( bWebDoc, bSwSrcView, bHasSelection, bHasPostIts, rPrintData );
+    // Get current page number
+    SwWrtShell* pSh = pDocShell->GetWrtShell();
+    SwPaM* pShellCrsr = pSh->GetCrsr();
+    sal_uInt16 nCurrentPage = pShellCrsr->GetPageNum(sal_True, 0);
+
+    return new SwPrintUIOptions( nCurrentPage, bWebDoc, bSwSrcView, bHasSelection, bHasPostIts, rPrintData );
 }
 
 SwTxtFmtColl *lcl_GetParaStyle(const String& rCollName, SwDoc* pDoc)
