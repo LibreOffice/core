@@ -241,8 +241,6 @@ void Directory::readDirectory( const rtl::OUString& sFullpath )
         {
             case S_IFREG:
                         {
-                            rtl::OString sFile = sFullpathext;
-                            sFile += sEntryName ;
                             transex::File aFile( rtl::OStringToOUString( sEntity , RTL_TEXTENCODING_UTF8 , sEntity.getLength() ) ,
                                                  rtl::OStringToOUString( sEntryName , RTL_TEXTENCODING_UTF8 , sEntryName.getLength() )
                                                );
@@ -256,9 +254,6 @@ void Directory::readDirectory( const rtl::OUString& sFullpath )
                         }
             case S_IFDIR:
                         {
-                            rtl::OString sDir = sFullpathext;
-                            sDir += sEntryName ;
-
                             transex::Directory aDir(
                                                      rtl::OStringToOUString( sEntity , RTL_TEXTENCODING_UTF8 , sEntity.getLength() ) ,
                                                      rtl::OStringToOUString( sEntryName , RTL_TEXTENCODING_UTF8 , sEntryName.getLength() )
