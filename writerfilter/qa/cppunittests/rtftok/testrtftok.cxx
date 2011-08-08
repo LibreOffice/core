@@ -43,6 +43,8 @@
 
 using namespace ::com::sun::star;
 
+const int indeterminate = 2;
+
 class RtfTest : public CppUnit::TestFixture
 {
 public:
@@ -52,7 +54,7 @@ public:
     virtual void setUp();
     virtual void tearDown();
 
-    void recursiveScan(const rtl::OUString &rURL, bool bExpected);
+    void recursiveScan(const rtl::OUString &rURL, int nExpected);
     bool load(const rtl::OUString &rURL);
     void test();
 
@@ -129,7 +131,7 @@ bool RtfTest::load(const rtl::OUString &rURL)
     return m_xFilter->filter(aDescriptor);
 }
 
-void RtfTest::recursiveScan(const rtl::OUString &rURL, bool bExpected)
+void RtfTest::recursiveScan(const rtl::OUString &rURL, int nExpected)
 {
     osl::Directory aDir(rURL);
 
@@ -141,7 +143,7 @@ void RtfTest::recursiveScan(const rtl::OUString &rURL, bool bExpected)
         aItem.getFileStatus(aFileStatus);
         rtl::OUString sURL = aFileStatus.getFileURL();
         if (aFileStatus.getFileType() == osl::FileStatus::Directory)
-            recursiveScan(sURL, bExpected);
+            recursiveScan(sURL, nExpected);
         else
         {
             //ignore .files
@@ -150,9 +152,18 @@ void RtfTest::recursiveScan(const rtl::OUString &rURL, bool bExpected)
                     (sURL.getStr()[nLastSlash+1] == '.'))
                 continue;
 
-            bool bRes = load(sURL);
             rtl::OString aRes(rtl::OUStringToOString(sURL, osl_getThreadTextEncoding()));
-            CPPUNIT_ASSERT_MESSAGE(aRes.getStr(), bRes == bExpected);
+            if (nExpected == indeterminate)
+                printf("loading %s\n", aRes.getStr());
+            sal_uInt32 nStartTime = osl_getGlobalTimer();
+            bool bRes = load(sURL);
+            sal_uInt32 nEndTime = osl_getGlobalTimer();
+            if (nExpected == indeterminate)
+            {
+                printf("pass/fail was %d (%"SAL_PRIuUINT32" ms)\n", bRes, nEndTime-nStartTime);
+                continue;
+            }
+            CPPUNIT_ASSERT_MESSAGE(aRes.getStr(), bRes == nExpected);
         }
     }
     CPPUNIT_ASSERT_MESSAGE("failed to close directory", osl::FileBase::E_None == aDir.close());
@@ -162,6 +173,7 @@ void RtfTest::test()
 {
     recursiveScan(m_aSrcRoot + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/writerfilter/qa/cppunittests/rtftok/data/pass")), true);
     recursiveScan(m_aSrcRoot + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/writerfilter/qa/cppunittests/rtftok/data/fail")), false);
+    recursiveScan(m_aSrcRoot + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/writerfilter/qa/cppunittests/rtftok/data/indeterminate")), indeterminate);
 
     printf("Rtf: tested %d files\n", m_nLoadedDocs);
 }
