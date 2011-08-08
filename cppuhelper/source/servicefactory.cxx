@@ -316,7 +316,7 @@ static void add_access_control_entries(
 
 namespace {
 void addFactories(
-    char const * const * ppNames /* lib, implname, ..., 0 */,
+    char const * const * ppNames /* implname, ..., 0 */,
     OUString const & bootstrapPath,
     Reference< lang::XMultiComponentFactory > const & xMgr,
     Reference< registry::XRegistryKey > const & xKey )
@@ -328,11 +328,11 @@ void addFactories(
 
     while (*ppNames)
     {
-        OUString lib( OUString::createFromAscii( *ppNames++ ) );
         OUString implName( OUString::createFromAscii( *ppNames++ ) );
 
         Any aFac( makeAny( loadSharedLibComponentFactory(
-                               lib, bootstrapPath, implName, xSF, xKey ) ) );
+                               OUSTR("bootstrap.uno" SAL_DLLEXTENSION),
+                               bootstrapPath, implName, xSF, xKey ) ) );
         xSet->insert( aFac );
 #if OSL_DEBUG_LEVEL > 1
         if (xSet->has( aFac ))
@@ -365,7 +365,7 @@ void addFactories(
         {
             OStringBuffer buf( 64 );
             buf.append( "### failed inserting shared lib \"" );
-            buf.append( ppNames[ -2 ] );
+            buf.append( "bootstrap.uno" SAL_DLLEXTENSION );
             buf.append( "\"!!!" );
             OString str( buf.makeStringAndClear() );
             OSL_FAIL( str.getStr() );
@@ -394,21 +394,13 @@ Reference< lang::XMultiComponentFactory > bootstrapInitialSF(
 
     // add initial bootstrap services
     static char const * ar[] = {
-        "bootstrap.uno" SAL_DLLEXTENSION,
         "com.sun.star.comp.stoc.OServiceManagerWrapper",
-        "bootstrap.uno" SAL_DLLEXTENSION,
         "com.sun.star.comp.stoc.DLLComponentLoader",
-        "bootstrap.uno" SAL_DLLEXTENSION,
         "com.sun.star.comp.stoc.SimpleRegistry",
-        "bootstrap.uno" SAL_DLLEXTENSION,
         "com.sun.star.comp.stoc.NestedRegistry",
-        "bootstrap.uno" SAL_DLLEXTENSION,
         "com.sun.star.comp.stoc.TypeDescriptionManager",
-        "bootstrap.uno" SAL_DLLEXTENSION,
         "com.sun.star.comp.stoc.ImplementationRegistration",
-        "bootstrap.uno" SAL_DLLEXTENSION,
         "com.sun.star.security.comp.stoc.AccessController",
-        "bootstrap.uno" SAL_DLLEXTENSION,
         "com.sun.star.security.comp.stoc.FilePolicy",
         0
     };
