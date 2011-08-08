@@ -219,17 +219,15 @@ void SvxRTFParser::NextToken( int nToken )
     case RTF_TAB:           cCh = '\t'; goto INSINGLECHAR;
     case RTF_SUBENTRYINDEX: cCh = ':';  goto INSINGLECHAR;
 
-    case RTF_EMDASH:        cCh = 151;  goto INSINGLECHAR;
-    case RTF_ENDASH:        cCh = 150;  goto INSINGLECHAR;
-    case RTF_BULLET:        cCh = 149;  goto INSINGLECHAR;
-    case RTF_LQUOTE:        cCh = 145;  goto INSINGLECHAR;
-    case RTF_RQUOTE:        cCh = 146;  goto INSINGLECHAR;
-    case RTF_LDBLQUOTE:     cCh = 147;  goto INSINGLECHAR;
-    case RTF_RDBLQUOTE:     cCh = 148;  goto INSINGLECHAR;
+    case RTF_EMDASH:		cCh = 0x2014;	goto INSINGLECHAR;
+    case RTF_ENDASH:		cCh = 0x2013;	goto INSINGLECHAR;
+    case RTF_BULLET:		cCh = 0x2022;	goto INSINGLECHAR;
+    case RTF_LQUOTE:		cCh = 0x2018;	goto INSINGLECHAR;
+    case RTF_RQUOTE:		cCh = 0x2019;	goto INSINGLECHAR;
+    case RTF_LDBLQUOTE:		cCh = 0x201C;	goto INSINGLECHAR;
+    case RTF_RDBLQUOTE:		cCh = 0x201D;	goto INSINGLECHAR;
 INSINGLECHAR:
-        aToken = ByteString::ConvertToUnicode( (sal_Char)cCh,
-                                            RTL_TEXTENCODING_MS_1252 );
-
+        aToken = rtl::OUString(cCh);
         // no Break, aToken is set as Text
     case RTF_TEXTTOKEN:
         {
