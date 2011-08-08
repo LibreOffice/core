@@ -223,9 +223,6 @@ class LoadEnv : private ThreadHelpBase
          */
         ActionLockGuard m_aTargetLock;
 
-        /** TODO document me ... */
-        void* m_pCheck;
-
         QuietInteraction*   m_pQuietInteraction;
 
     //___________________________________________

@@ -117,17 +117,16 @@ class LoadEnvListener : private ThreadHelpBase
 {
     private:
 
-        void**   m_ppCheck ;
+        bool m_bWaitingResult;
         LoadEnv* m_pLoadEnv;
 
     public:
 
         //_______________________________________
-        LoadEnvListener(void*    pCheck  ,
-                        LoadEnv* pLoadEnv)
+        LoadEnvListener(LoadEnv* pLoadEnv)
+            : m_bWaitingResult(true)
+            , m_pLoadEnv(pLoadEnv)
         {
-            m_ppCheck  = &pCheck ;
-            m_pLoadEnv = pLoadEnv;
         }
 
         //_______________________________________
@@ -154,7 +153,6 @@ LoadEnv::LoadEnv(const css::uno::Reference< css::lang::XMultiServiceFactory >& x
     throw(LoadEnvException, css::uno::RuntimeException)
     : ThreadHelpBase(     )
     , m_xSMGR       (xSMGR)
-    , m_pCheck      (this )
     , m_pQuietInteraction( 0 )
 {
 }
@@ -162,7 +160,6 @@ LoadEnv::LoadEnv(const css::uno::Reference< css::lang::XMultiServiceFactory >& x
 
 LoadEnv::~LoadEnv()
 {
-    m_pCheck = 0;
 }
 
 
@@ -537,9 +534,9 @@ void SAL_CALL LoadEnvListener::loadFinished(const css::uno::Reference< css::fram
     // SAFE -> ----------------------------------
     WriteGuard aWriteLock(m_aLock);
 
-    if (m_ppCheck && *m_ppCheck)
+    if (m_bWaitingResult)
         m_pLoadEnv->impl_setResult(sal_True);
-    m_ppCheck = NULL;
+    m_bWaitingResult = false;
 
     aWriteLock.unlock();
     // <- SAFE ----------------------------------
@@ -552,9 +549,9 @@ void SAL_CALL LoadEnvListener::loadCancelled(const css::uno::Reference< css::fra
     // SAFE -> ----------------------------------
     WriteGuard aWriteLock(m_aLock);
 
-    if (m_ppCheck && *m_ppCheck)
+    if (m_bWaitingResult)
         m_pLoadEnv->impl_setResult(sal_False);
-    m_ppCheck = NULL;
+    m_bWaitingResult = false;
 
     aWriteLock.unlock();
     // <- SAFE ----------------------------------
@@ -567,7 +564,7 @@ void SAL_CALL LoadEnvListener::dispatchFinished(const css::frame::DispatchResult
     // SAFE -> ----------------------------------
     WriteGuard aWriteLock(m_aLock);
 
-    if (!m_ppCheck || !*m_ppCheck)
+    if (!m_bWaitingResult)
         return;
 
     switch(aEvent.State)
@@ -584,7 +581,7 @@ void SAL_CALL LoadEnvListener::dispatchFinished(const css::frame::DispatchResult
             m_pLoadEnv->impl_setResult(sal_False);
             break;
     }
-    m_ppCheck = NULL;
+    m_bWaitingResult = false;
 
     aWriteLock.unlock();
     // <- SAFE ----------------------------------
@@ -597,9 +594,9 @@ void SAL_CALL LoadEnvListener::disposing(const css::lang::EventObject&)
     // SAFE -> ----------------------------------
     WriteGuard aWriteLock(m_aLock);
 
-    if (m_ppCheck && *m_ppCheck)
+    if (m_bWaitingResult)
         m_pLoadEnv->impl_setResult(sal_False);
-    m_ppCheck = NULL;
+    m_bWaitingResult = false;
 
     aWriteLock.unlock();
     // <- SAFE ----------------------------------
@@ -928,8 +925,7 @@ sal_Bool LoadEnv::impl_handleContent()
         // SAFE -> -----------------------------------
         WriteGuard aWriteLock(m_aLock);
         m_xAsynchronousJob = xHandler;
-        m_pCheck           = this;
-        LoadEnvListener* pListener = new LoadEnvListener(m_pCheck, this);
+        LoadEnvListener* pListener = new LoadEnvListener(this);
         aWriteLock.unlock();
         // <- SAFE -----------------------------------
 
@@ -1136,8 +1132,7 @@ sal_Bool LoadEnv::impl_loadContent()
         // SAFE -> -----------------------------------
         aWriteLock.lock();
         m_xAsynchronousJob = xAsyncLoader;
-        m_pCheck           = this;
-        LoadEnvListener* pListener = new LoadEnvListener(m_pCheck, this);
+        LoadEnvListener* pListener = new LoadEnvListener(this);
         aWriteLock.unlock();
         // <- SAFE -----------------------------------
 
