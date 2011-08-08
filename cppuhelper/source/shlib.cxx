@@ -379,7 +379,7 @@ Reference< XInterface > invokeComponentFactory(
             rtl::OString implName(rtl::OUStringToOString(rImplName, RTL_TEXTENCODING_ASCII_US));
             rtl::OString envDcp(rtl::OUStringToOString(env.getTypeName(), RTL_TEXTENCODING_ASCII_US));
 
-            fprintf(stderr, "loadSharedLibComponentFactory envDcp: %-12.12s  implName: %30.30s  modPath: %-15.15s\n", envDcp.getStr(), implName.getStr() + (implName.getLength() > 30 ? implName.getLength() - 30 : 0), modPath.getStr());
+            fprintf(stderr, "invokeComponentFactory envDcp:%s implName:%s modPath:%s\n", envDcp.getStr(), implName.getStr(), modPath.getStr());
         }
 #endif
 
