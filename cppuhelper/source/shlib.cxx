@@ -441,6 +441,20 @@ Reference< XInterface > invokeComponentFactory(
 
 } // namespace
 
+#ifdef IOS
+extern "C"
+{
+    // In stoc/source/bootstrap/services.cxx.
+
+    // Sure, some public header would be a better place for this. But
+    // it can't be in some stoc header as that hasn't been built and
+    // delivered yet when cppuhelper is built.
+
+    extern void * bootstrap_component_getFactory(
+        const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey );
+}
+#endif
+
 Reference< XInterface > SAL_CALL loadSharedLibComponentFactory(
     OUString const & rLibName, OUString const & rPath,
     OUString const & rImplName,
@@ -483,7 +497,17 @@ Reference< XInterface > SAL_CALL loadSharedLibComponentFactory(
     OUString aExcMsg;
 
     OUString aGetFactoryName = rPrefix + OUSTR(COMPONENT_GETFACTORY);
-    oslGenericFunction pSym = osl_getFunctionSymbol( lib, aGetFactoryName.pData );
+
+    oslGenericFunction pSym = NULL;
+
+#ifdef IOS
+    if ( rLibName.equals( OUSTR("bootstrap.uno" SAL_DLLEXTENSION)) )
+         pSym = (oslGenericFunction) bootstrap_component_getFactory;
+#endif
+
+    if ( pSym == NULL )
+        pSym = osl_getFunctionSymbol( lib, aGetFactoryName.pData );
+
     if (pSym != 0)
     {
         xRet = invokeComponentFactory( pSym, lib, aModulePath, rImplName, xMgr, xKey, rPrefix, aExcMsg );
