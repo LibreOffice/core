@@ -3,6 +3,7 @@ mkdir: %_DEST%\inc\stoc
 ..\%__SRC%\bin\*.dll %_DEST%\bin\*
 ..\%__SRC%\lib\*.so %_DEST%\lib\*
 ..\%__SRC%\lib\*.dylib %_DEST%\lib\*.dylib
+..\%__SRC%\lib\*.uno.a %_DEST%\lib\*.uno.a
 ..\%__SRC%\bin\*.rdb %_DEST%\rdb\*
 ..\%__SRC%\misc\bootstrap.component %_DEST%\xml\bootstrap.component
 ..\%__SRC%\misc\introspection.component %_DEST%\xml\introspection.component
