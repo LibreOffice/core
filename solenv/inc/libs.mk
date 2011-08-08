@@ -318,7 +318,14 @@ XMLREADERLIB=-lxmlreader
 # dependencies, recursively. Start from the bottom of the dependency
 # stack. This is experimental and obviously incomplete.
 
+REGLIB+=$(STORELIB)
+
+BOOTSTRAPUNOLIB=$(SOLARLIBDIR)/bootstrap.uno.a
+BOOTSTRAPUNOLIB+=$(SALHELPERLIB) $(REGLIB) $(XMLREADERLIB)
+
 SALLIB+=-lsal_textenc
+
+CPPUHELPERLIB+=$(BOOTSTRAPUNOLIB)
 
 UCBHELPERLIB+=$(SALHELPERLIB)
 
