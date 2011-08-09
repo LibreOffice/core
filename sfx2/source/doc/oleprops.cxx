@@ -927,10 +927,15 @@ void SfxOleSection::SetFileTimeValue( sal_Int32 nPropId, const util::DateTime& r
 
 void SfxOleSection::SetDateValue( sal_Int32 nPropId, const util::Date& rValue )
 {
+    //Annoyingly MS2010 considers VT_DATE apparently as an invalid possibility, so here we use VT_FILETIME
+    //instead :-(
     if ( rValue.Year == 0 || rValue.Month == 0 || rValue.Day == 0 )
-        SetProperty( SfxOlePropertyRef( new SfxOleDateProperty( nPropId, TIMESTAMP_INVALID_UTILDATE ) ) );
+        SetProperty( SfxOlePropertyRef( new SfxOleFileTimeProperty( nPropId, TIMESTAMP_INVALID_UTILDATETIME ) ) );
     else
-        SetProperty( SfxOlePropertyRef( new SfxOleDateProperty( nPropId, rValue ) ) );
+    {
+        const util::DateTime aValue(0, 0, 0, 0, rValue.Day, rValue.Month, rValue.Year );
+        SetProperty( SfxOlePropertyRef( new SfxOleFileTimeProperty( nPropId, aValue ) ) );
+    }
 }
 
 void SfxOleSection::SetThumbnailValue( sal_Int32 nPropId,
