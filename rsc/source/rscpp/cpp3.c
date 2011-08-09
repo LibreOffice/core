@@ -86,7 +86,7 @@ void addfile(FILE* fp, char* filename)
  */
 {
         register FILEINFO       *file;
-        extern FILEINFO         *getfile( int bufsize, char *filename );
+        extern FILEINFO         *getfile( int, char * );
         file = getfile(NBUFF, filename);
         file->fp = fp;                  /* Better remember FILE *       */
         file->buffer[0] = EOS;          /* Initialize for first read    */
