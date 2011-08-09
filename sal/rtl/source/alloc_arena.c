@@ -1001,10 +1001,12 @@ SAL_CALL rtl_arena_alloc (
 
     if ((arena != 0) && (pSize != 0))
     {
+        sal_Size size;
+
         if (alloc_mode == AMode_SYSTEM)
             return rtl_allocateMemory(*pSize);
 
-        sal_Size size = RTL_MEMORY_ALIGN((*pSize), arena->m_quantum);
+        size = RTL_MEMORY_ALIGN((*pSize), arena->m_quantum);
         if (size > arena->m_qcache_max)
         {
             /* allocate from segment list */
