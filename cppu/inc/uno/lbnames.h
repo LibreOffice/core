@@ -28,6 +28,8 @@
 #ifndef _UNO_LBNAMES_H_
 #define _UNO_LBNAMES_H_
 
+/* I assume "LB" means "Language Binding" */
+
 #ifdef __cplusplus
 
 #ifdef CPPU_ENV
