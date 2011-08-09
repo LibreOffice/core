@@ -1,7 +1,8 @@
+# -*- Mode: makefile-gmake; tab-width: 4; indent-tabs-mode: t -*-
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
+#
 # Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
@@ -25,48 +26,14 @@
 #
 #*************************************************************************
 
-PRJ = ..
-PRJNAME = uui
-TARGET = uui
-RESTARGET = $(TARGET)
+ifeq ($(strip $(SOLARENV)),)
+$(error No environment set!)
+endif
 
-GEN_HID = true
-NO_BSYMBOLIC = true
+gb_PARTIALBUILD := T
+GBUILDDIR := $(SOLARENV)/gbuild
+include $(GBUILDDIR)/gbuild.mk
 
-.INCLUDE: settings.mk
+$(eval $(call gb_Module_make_global_targets,$(shell ls $(dir $(realpath $(firstword $(MAKEFILE_LIST))))/Module*.mk)))
 
-SHL1TARGET = $(TARGET)$(DLLPOSTFIX)
-SHL1IMPLIB = i$(TARGET)
-
-SHL1VERSIONMAP = $(SOLARENV)/src/component.map
-SHL1DEF = $(MISC)$/$(SHL1TARGET).def
-DEF1NAME = $(SHL1TARGET)
-
-SHL1LIBS = \
-    $(SLB)$/source.lib
-
-SHL1STDLIBS = \
-    $(SVTOOLLIB) \
-    $(SVLLIB) \
-    $(TKLIB) \
-    $(VCLLIB) \
-    $(UNOTOOLSLIB) \
-    $(TOOLSLIB) \
-    $(COMPHELPERLIB) \
-    $(CPPUHELPERLIB) \
-    $(CPPULIB) \
-    $(SALLIB)
-
-RESLIB1NAME = $(RESTARGET)
-RESLIB1SRSFILES = \
-    $(SRS)$/source.srs
-
-.INCLUDE: target.mk
-
-ALLTAR : $(MISC)/uui.component
-
-$(MISC)/uui.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
-        uui.component
-    $(XSLTPROC) --nonet --stringparam uri \
-        '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL1TARGETN:f)' -o $@ \
-        $(SOLARENV)/bin/createcomponent.xslt uui.component
+# vim: set noet sw=4 ts=4:

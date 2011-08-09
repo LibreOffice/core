@@ -111,6 +111,7 @@ my_components = \
     component/unotools/util/utl \
     component/unoxml/source/rdf/unordf \
     component/unoxml/source/service/unoxml \
+    component/uui/util/uui \
     component/vbahelper/util/msforms \
     component/writerfilter/util/writerfilter \
     component/writerperfect/util/msworksfilter \
@@ -179,7 +180,6 @@ my_components = \
     updatefeed \
     updchk \
     updchk.uno \
-    uui \
     vbaevents \
     xmlfa \
     xmlfd \

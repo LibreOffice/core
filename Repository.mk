@@ -127,6 +127,7 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     unordf \
     unoxml \
     utl \
+	uui \
     vbahelper \
     vcl \
     vclplug_gen \
