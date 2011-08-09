@@ -9026,6 +9026,18 @@ fi
 AC_MSG_RESULT([$BUILD_MAX_JOBS])
 AC_SUBST(BUILD_MAX_JOBS)
 
+# =====================================================================
+# determine the parallelism for tail_build
+# =====================================================================
+AC_MSG_CHECKING([for maximum parallelism for gmake])
+if test $BUILD_MAX_JOBS -gt $BUILD_NCPUS ; then
+    GMAKE_PARALLELISM="$BUILD_MAX_JOBS"
+else
+    GMAKE_PARALLELISM="$BUILD_NCPUS"
+fi
+AC_MSG_RESULT([$GMAKE_PARALLELISM])
+AC_SUBST(GMAKE_PARALLELISM)
+
 dnl ===================================================================
 dnl Setting up the environment.
 dnl ===================================================================
