@@ -733,7 +733,7 @@ MAKENUMSTR:
                 aCurData.GetBoxFmt( (sal_uInt8)nNum ).GetValueFormat( sFmt, eLng, eSys );
 
                 short nType;
-                sal_Bool bNew;
+                bool bNew;
                 xub_StrLen nCheckPos;
                 sal_uInt32 nKey = pNumFmt->GetIndexPuttingAndConverting( sFmt, eLng,
                         eSys, nType, bNew, nCheckPos);

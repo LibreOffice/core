@@ -753,7 +753,7 @@ void SwTableAutoFmt::UpdateToSet( sal_uInt8 nPos, SfxItemSet& rSet,
             if( sFmt.Len() )
             {
                 short nType;
-                sal_Bool bNew;
+                bool bNew;
                 xub_StrLen nCheckPos;
                 sal_uInt32 nKey = pNFmtr->GetIndexPuttingAndConverting( sFmt, eLng,
                         eSys, nType, bNew, nCheckPos);

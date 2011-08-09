@@ -73,7 +73,7 @@ public:
                 InitKeywords();
             return sKeyword;
         }
-    // Keywords used in output like sal_True and sal_False
+    // Keywords used in output like true and false
     const String& GetSpecialKeyword( NfKeywordIndex eIdx ) const
         {
             if ( !sKeyword[eIdx].Len() )
@@ -124,18 +124,18 @@ public:
         }
 
     void SetConvertMode(LanguageType eTmpLge, LanguageType eNewLge,
-            sal_Bool bSystemToSystem = sal_False )
+            bool bSystemToSystem = false )
     {
-        bConvertMode = sal_True;
+        bConvertMode = true;
         eNewLnge = eNewLge;
         eTmpLnge = eTmpLge;
         bConvertSystemToSystem = bSystemToSystem;
     }
-    void SetConvertMode(sal_Bool bMode) { bConvertMode = bMode; }
+    void SetConvertMode(bool bMode) { bConvertMode = bMode; }
                                                 // Veraendert nur die Bool-Variable
                                                 // (zum temporaeren Unterbrechen des
                                                 // Convert-Modus)
-    sal_Bool GetConvertMode() const     { return bConvertMode; }
+    bool GetConvertMode() const     { return bConvertMode; }
     LanguageType GetNewLnge() const { return eNewLnge; }
                                                 // Lesezugriff auf ConvertMode
                                                 // und Konvertierungsland/Spr.
@@ -158,49 +158,49 @@ private:                            // ---- privater Teil
     Color StandardColor[NF_MAX_DEFAULT_COLORS];
                                                 // Array der Standardfarben
     Date* pNullDate;                            // 30Dec1899
-    String sNameStandardFormat;             // "Standard"
+    String sNameStandardFormat;                 // "Standard"
     sal_uInt16 nStandardPrec;                   // default Precision for Standardformat
     SvNumberFormatter* pFormatter;              // Pointer auf die Formatliste
 
     String sStrArray[NF_MAX_FORMAT_SYMBOLS];    // Array der Symbole
     short nTypeArray[NF_MAX_FORMAT_SYMBOLS];    // Array der Infos
                                                 // externe Infos:
-    sal_uInt16 nAnzResStrings;                      // Anzahl der Ergebnissymbole
+    sal_uInt16 nAnzResStrings;                  // Anzahl der Ergebnissymbole
 #if !(defined SOLARIS && defined X86)
     short eScannedType;                         // Typ gemaess Scan
 #else
     int eScannedType;                           // wg. Optimierung
 #endif
-    sal_Bool bThousand;                             // Mit Tausenderpunkt
-    sal_uInt16 nThousand;                           // Zaehlt ....-Folgen
-    sal_uInt16 nCntPre;                             // Zaehlt Vorkommastellen
-    sal_uInt16 nCntPost;                            // Zaehlt Nachkommastellen
-    sal_uInt16 nCntExp;                             // Zaehlt Exp.Stellen, AM/PM
+    bool bThousand;                             // Mit Tausenderpunkt
+    sal_uInt16 nThousand;                       // Zaehlt ....-Folgen
+    sal_uInt16 nCntPre;                         // Zaehlt Vorkommastellen
+    sal_uInt16 nCntPost;                        // Zaehlt Nachkommastellen
+    sal_uInt16 nCntExp;                         // Zaehlt Exp.Stellen, AM/PM
                                                 // interne Infos:
-    sal_uInt16 nAnzStrings;                         // Anzahl der Symbole
-    sal_uInt16 nRepPos;                             // Position eines '*'
-    sal_uInt16 nExpPos;                             // interne Position des E
-    sal_uInt16 nBlankPos;                           // interne Position des Blank
+    sal_uInt16 nAnzStrings;                     // Anzahl der Symbole
+    sal_uInt16 nRepPos;                         // Position eines '*'
+    sal_uInt16 nExpPos;                         // interne Position des E
+    sal_uInt16 nBlankPos;                       // interne Position des Blank
     short nDecPos;                              // interne Pos. des ,
-    sal_Bool bExp;                                  // wird bei Lesen des E gesetzt
-    sal_Bool bFrac;                                 // wird bei Lesen des / gesetzt
-    sal_Bool bBlank;                                // wird bei ' '(Fraction) ges.
-    sal_Bool bDecSep;                               // Wird beim ersten , gesetzt
-    mutable sal_Bool bKeywordsNeedInit;             // Locale dependent keywords need to be initialized
-    mutable sal_Bool bCompatCurNeedInit;            // Locale dependent compatibility currency need to be initialized
+    bool bExp;                                  // wird bei Lesen des E gesetzt
+    bool bFrac;                                 // wird bei Lesen des / gesetzt
+    bool bBlank;                                // wird bei ' '(Fraction) ges.
+    bool bDecSep;                               // Wird beim ersten , gesetzt
+    mutable bool bKeywordsNeedInit;             // Locale dependent keywords need to be initialized
+    mutable bool bCompatCurNeedInit;            // Locale dependent compatibility currency need to be initialized
     String sCurSymbol;                          // Currency symbol for compatibility format codes
     String sCurString;                          // Currency symbol in upper case
     String sCurAbbrev;                          // Currency abbreviation
     String sErrStr;                             // String fuer Fehlerausgaben
 
-    sal_Bool bConvertMode;                          // Wird im Convert-Mode gesetzt
+    bool bConvertMode;                          // Wird im Convert-Mode gesetzt
                                                 // Land/Sprache, in die der
     LanguageType eNewLnge;                      // gescannte String konvertiert
                                                 // wird (fuer Excel Filter)
                                                 // Land/Sprache, aus der der
     LanguageType eTmpLnge;                      // gescannte String konvertiert
                                                 // wird (fuer Excel Filter)
-    sal_Bool bConvertSystemToSystem;                // Whether the conversion is
+    bool bConvertSystemToSystem;                // Whether the conversion is
                                                 // from one system locale to
                                                 // another system locale (in
                                                 // this case the automatic
@@ -219,31 +219,31 @@ private:                            // ---- privater Teil
     void SetDependentKeywords();
                                                 // Setzt die Sprachabh. Keyw.
     void SkipStrings(sal_uInt16& i,xub_StrLen& nPos);// Ueberspringt StringSymbole
-    sal_uInt16 PreviousKeyword(sal_uInt16 i);           // Gibt Index des vorangeh.
+    sal_uInt16 PreviousKeyword(sal_uInt16 i);   // Gibt Index des vorangeh.
                                                 // Schluesselworts oder 0
-    sal_uInt16 NextKeyword(sal_uInt16 i);               // Gibt Index des naechsten
+    sal_uInt16 NextKeyword(sal_uInt16 i);       // Gibt Index des naechsten
                                                 // Schluesselworts oder 0
-    sal_Unicode PreviousChar(sal_uInt16 i);             // Gibt letzten Buchstaben
+    sal_Unicode PreviousChar(sal_uInt16 i);     // Gibt letzten Buchstaben
                                                 // vor der Position,
                                                 // skipt EMPTY, STRING, STAR, BLANK
-    sal_Unicode NextChar(sal_uInt16 i);                 // Gibt ersten Buchst. danach
-    short PreviousType( sal_uInt16 i );             // Gibt Typ vor Position,
+    sal_Unicode NextChar(sal_uInt16 i);         // Gibt ersten Buchst. danach
+    short PreviousType( sal_uInt16 i );         // Gibt Typ vor Position,
                                                 // skipt EMPTY
-    sal_Bool IsLastBlankBeforeFrac(sal_uInt16 i);       // True <=> es kommt kein ' '
+    bool IsLastBlankBeforeFrac(sal_uInt16 i);   // True <=> es kommt kein ' '
                                                 // mehr bis zum '/'
     void Reset();                               // Reset aller Variablen
                                                 // vor Analysestart
     short GetKeyWord( const String& sSymbol,    // determine keyword at nPos
         xub_StrLen nPos );                      // return 0 <=> not found
 
-    inline sal_Bool IsAmbiguousE( short nKey )      // whether nKey is ambiguous E of NF_KEY_E/NF_KEY_EC
+    inline bool IsAmbiguousE( short nKey )      // whether nKey is ambiguous E of NF_KEY_E/NF_KEY_EC
         {
             return (nKey == NF_KEY_EC || nKey == NF_KEY_E) &&
                 (GetKeywords()[NF_KEY_EC] == GetKeywords()[NF_KEY_E]);
         }
 
     // if 0 at strArray[i] is of S,00 or SS,00 or SS"any"00 in ScanType() or FinalScan()
-    sal_Bool Is100SecZero( sal_uInt16 i, sal_Bool bHadDecSep );
+    bool Is100SecZero( sal_uInt16 i, bool bHadDecSep );
 
     short Next_Symbol(const String& rStr,
                         xub_StrLen& nPos,
@@ -260,7 +260,7 @@ private:                            // ---- privater Teil
         reused instead of shifting all one up and nPos is decremented! */
     bool InsertSymbol( sal_uInt16 & nPos, svt::NfSymbolType eType, const String& rStr );
 
-    static inline sal_Bool StringEqualsChar( const String& rStr, sal_Unicode ch )
+    static inline bool StringEqualsChar( const String& rStr, sal_Unicode ch )
         { return rStr.GetChar(0) == ch && rStr.Len() == 1; }
         // Yes, for efficiency get the character first and then compare length
         // because in most places where this is used the string is one char.

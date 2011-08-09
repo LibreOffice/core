@@ -2778,7 +2778,7 @@ void ScViewFunc::ChangeNumFmtDecimals( sal_Bool bIncrement )
     sal_Bool bError = false;
 
     LanguageType eLanguage = pOldEntry->GetLanguage();
-    sal_Bool bThousand, bNegRed;
+    bool bThousand, bNegRed;
     sal_uInt16 nPrecision, nLeading;
     pOldEntry->GetFormatSpecialInfo( bThousand, bNegRed, nPrecision, nLeading );
 

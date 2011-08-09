@@ -960,8 +960,8 @@ void SvxNumberFormatTabPage::UpdateOptions_Impl( sal_Bool bCheckCatChange /*= sa
     sal_uInt16  nCategory           = nCurCategory;
     sal_uInt16  nDecimals           = 0;
     sal_uInt16  nZeroes             = 0;
-    sal_Bool    bNegRed             = sal_False;
-    sal_Bool    bThousand           = sal_False;
+    bool        bNegRed             = false;
+    bool        bThousand           = false;
     sal_uInt16  nCurrencyPos        =aLbCurrency.GetSelectEntryPos();
 
     if(bOneAreaFlag)

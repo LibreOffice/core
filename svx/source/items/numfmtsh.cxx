@@ -87,11 +87,11 @@ SvxNumberFormatShell::SvxNumberFormatShell( SvNumberFormatter*  pNumFormatter,
     pFormatter      ( pNumFormatter ),
     pCurFmtTable    ( NULL ),
     eValType        ( eNumValType ),
-    bUndoAddList    ( sal_True ),
+    bUndoAddList    ( true ),
     nInitFormatKey  ( nFormatKey ),
     nCurFormatKey   ( nFormatKey ),
     pCurCurrencyEntry(NULL),
-    bBankingSymbol  (sal_False),
+    bBankingSymbol  (false),
     nCurCurrencyEntryPos((sal_uInt16) SELPOS_NONE)
 {
     nValNum = DEFAULT_NUMVALUE;
@@ -118,11 +118,11 @@ SvxNumberFormatShell::SvxNumberFormatShell( SvNumberFormatter*  pNumFormatter,
     pFormatter      ( pNumFormatter ),
     pCurFmtTable    ( NULL ),
     eValType        ( eNumValType ),
-    bUndoAddList    ( sal_True ),
+    bUndoAddList    ( true ),
     nInitFormatKey  ( nFormatKey ),
     nCurFormatKey   ( nFormatKey ),
     pCurCurrencyEntry(NULL),
-    bBankingSymbol  (sal_False),
+    bBankingSymbol  (false),
     nCurCurrencyEntryPos((sal_uInt16) SELPOS_NONE)
 {
     //  #50441# When used in Writer, the SvxNumberInfoItem contains the
@@ -246,31 +246,31 @@ void SvxNumberFormatShell::FormatChanged( sal_uInt16  nFmtLbPos,
 }
 // -----------------------------------------------------------------------
 
-sal_Bool SvxNumberFormatShell::AddFormat( String& rFormat,  xub_StrLen& rErrPos,
+bool SvxNumberFormatShell::AddFormat( String& rFormat,  xub_StrLen& rErrPos,
                                       sal_uInt16& rCatLbSelPos, short& rFmtSelPos,
                                       SvStrings& rFmtEntries )
 {
-    sal_Bool    bInserted   = sal_False;
+    bool        bInserted   = false;
     sal_uInt32  nAddKey     = pFormatter->GetEntryKey( rFormat, eCurLanguage );
 
     if ( nAddKey != NUMBERFORMAT_ENTRY_NOT_FOUND ) // bereits vorhanden?
     {
         if ( IsRemoved_Impl( nAddKey ) )
         {
-            sal_Bool    bFound  = sal_False;
+            bool    bFound  = false;
             std::vector<sal_uInt32>::iterator nAt = aDelList.begin();
 
             for (std::vector<sal_uInt32>::iterator it(aDelList.begin()); !bFound && it != aDelList.end(); ++it )
             {
                 if ( *it == nAddKey )
                 {
-                    bFound  = sal_True;
+                    bFound  = true;
                     nAt = it;
                 }
             }
             DBG_ASSERT( bFound, "Key not found" );
             aDelList.erase( nAt );
-            bInserted = sal_True;
+            bInserted = true;
         }
         else
         {
@@ -326,7 +326,7 @@ sal_Bool SvxNumberFormatShell::AddFormat( String& rFormat,  xub_StrLen& rErrPos,
 
 // -----------------------------------------------------------------------
 
-sal_Bool SvxNumberFormatShell::RemoveFormat( const String&  rFormat,
+bool SvxNumberFormatShell::RemoveFormat( const String&  rFormat,
                                          sal_uInt16&        rCatLbSelPos,
                                          short&         rFmtSelPos,
                                          SvStrings&     rFmtEntries )
@@ -369,13 +369,13 @@ sal_Bool SvxNumberFormatShell::RemoveFormat( const String&  rFormat,
         CategoryToPos_Impl( nCurCategory, rCatLbSelPos );
         rFmtSelPos = FillEntryList_Impl( rFmtEntries );
     }
-    return sal_True;
+    return true;
 }
 
 // -----------------------------------------------------------------------
 
 void SvxNumberFormatShell::MakeFormat( String& rFormat,
-                                       sal_Bool bThousand, sal_Bool bNegRed,
+                                       bool bThousand, bool bNegRed,
                                        sal_uInt16 nPrecision, sal_uInt16 nLeadingZeroes,
                                        sal_uInt16 nCurrencyPos)
 {
@@ -415,11 +415,11 @@ void SvxNumberFormatShell::MakeFormat( String& rFormat,
 // -----------------------------------------------------------------------
 
 void SvxNumberFormatShell::GetOptions( const String&    rFormat,
-                                       sal_Bool&            rThousand,
-                                       sal_Bool&            rNegRed,
-                                       sal_uInt16&          rPrecision,
-                                       sal_uInt16&          rLeadingZeroes,
-                                       sal_uInt16&          rCatLbPos )
+                                       bool&            rThousand,
+                                       bool&            rNegRed,
+                                       sal_uInt16&      rPrecision,
+                                       sal_uInt16&      rLeadingZeroes,
+                                       sal_uInt16&      rCatLbPos )
 {
 
     sal_uInt32 nFmtKey = pFormatter->GetEntryKey( rFormat, eCurLanguage );
@@ -439,7 +439,7 @@ void SvxNumberFormatShell::GetOptions( const String&    rFormat,
     }
     else
     {
-        sal_Bool bTestBanking=sal_False;
+        bool bTestBanking = false;
         sal_uInt16 nPos=FindCurrencyTableEntry(rFormat, bTestBanking );
 
         if(IsInTable(nPos,bTestBanking,rFormat) &&
@@ -475,7 +475,7 @@ void SvxNumberFormatShell::MakePreviewString( const String& rFormatStr,
         //  format exists
 
         //  #50441# if a string was set in addition to the value, use it for text formats
-        sal_Bool bUseText = ( eValType == SVX_VALUE_TYPE_STRING ||
+        bool bUseText = ( eValType == SVX_VALUE_TYPE_STRING ||
                             ( aValStr.Len() && ( pFormatter->GetType(nExistingFormat) & NUMBERFORMAT_TEXT ) ) );
         if ( bUseText )
             pFormatter->GetOutputString( aValStr, nExistingFormat,
@@ -488,11 +488,11 @@ void SvxNumberFormatShell::MakePreviewString( const String& rFormatStr,
 
 // -----------------------------------------------------------------------
 
-sal_Bool SvxNumberFormatShell::IsUserDefined( const String& rFmtString )
+bool SvxNumberFormatShell::IsUserDefined( const String& rFmtString )
 {
     sal_uInt32 nFound = pFormatter->GetEntryKey( rFmtString, eCurLanguage );
 
-    sal_Bool bFlag=sal_False;
+    bool bFlag=false;
     if ( nFound != NUMBERFORMAT_ENTRY_NOT_FOUND )
     {
         bFlag=pFormatter->IsUserDefined( rFmtString, eCurLanguage );
@@ -503,7 +503,7 @@ sal_Bool SvxNumberFormatShell::IsUserDefined( const String& rFmtString )
 
             if(pNumEntry!=NULL && pNumEntry->HasNewCurrency())
             {
-                sal_Bool bTestBanking;
+                bool bTestBanking;
                 sal_uInt16 nPos=FindCurrencyTableEntry(rFmtString,bTestBanking);
                 bFlag=!IsInTable(nPos,bTestBanking,rFmtString);
             }
@@ -514,20 +514,20 @@ sal_Bool SvxNumberFormatShell::IsUserDefined( const String& rFmtString )
 
 // -----------------------------------------------------------------------
 
-sal_Bool SvxNumberFormatShell::FindEntry( const String& rFmtString, sal_uInt32* pAt /* = NULL */ )
+bool SvxNumberFormatShell::FindEntry( const String& rFmtString, sal_uInt32* pAt /* = NULL */ )
 {
-    sal_Bool bRes=sal_False;
+    bool bRes=false;
     sal_uInt32 nFound = pFormatter->TestNewString( rFmtString, eCurLanguage );
 
     if ( nFound == NUMBERFORMAT_ENTRY_NOT_FOUND )
     {
-        sal_Bool bTestBanking=sal_False;
+        bool bTestBanking=false;
         sal_uInt16 nPos=FindCurrencyTableEntry(rFmtString, bTestBanking );
 
         if(IsInTable(nPos,bTestBanking,rFmtString))
         {
             nFound=NUMBERFORMAT_ENTRY_NEW_CURRENCY;
-            bRes=sal_True;
+            bRes=true;
         }
     }
     else
@@ -790,10 +790,10 @@ short SvxNumberFormatShell::FillEListWithCurrency_Impl( SvStrings& rList,short n
     DBG_ASSERT( pCurFmtTable != NULL, "Unbekanntes Zahlenformat!" );
 
     const NfCurrencyEntry* pTmpCurrencyEntry;
-    sal_Bool             bTmpBanking;
+    bool             bTmpBanking;
     XubString        rSymbol;
 
-    sal_Bool bFlag=pFormatter->GetNewCurrencySymbolString(nCurFormatKey,rSymbol,
+    bool bFlag=pFormatter->GetNewCurrencySymbolString(nCurFormatKey,rSymbol,
                 &pTmpCurrencyEntry,&bTmpBanking);
 
     if((!bFlag && pCurCurrencyEntry==NULL)  ||
@@ -872,11 +872,11 @@ short SvxNumberFormatShell::FillEListWithSysCurrencys( SvStrings& rList,short nS
 
             if ( !IsRemoved_Impl( nKey ))
             {
-                sal_Bool bUserNewCurrency=sal_False;
+                bool bUserNewCurrency=false;
                 if(pNumEntry->HasNewCurrency())
                 {
                     const NfCurrencyEntry* pTmpCurrencyEntry;
-                    sal_Bool            bTmpBanking;
+                    bool            bTmpBanking;
                     XubString       rSymbol;
 
                     pFormatter->GetNewCurrencySymbolString(nKey,rSymbol,
@@ -923,14 +923,14 @@ short SvxNumberFormatShell::FillEListWithUserCurrencys( SvStrings& rList,short n
     short           nMyCat = SELPOS_NONE;
 
     const NfCurrencyEntry* pTmpCurrencyEntry;
-    sal_Bool        bTmpBanking, bAdaptSelPos;
+    bool            bTmpBanking, bAdaptSelPos;
     XubString       rSymbol;
     XubString       rBankSymbol;
 
     SvStrings       aList;
     std::vector<sal_uInt32> aKeyList;
 
-    /*sal_Bool bFlag=*/pFormatter->GetNewCurrencySymbolString(nCurFormatKey,rSymbol,
+    pFormatter->GetNewCurrencySymbolString(nCurFormatKey,rSymbol,
                 &pTmpCurrencyEntry,&bTmpBanking);
 
     XubString rShortSymbol;
@@ -941,7 +941,7 @@ short SvxNumberFormatShell::FillEListWithUserCurrencys( SvStrings& rList,short n
         // about to add another currency), try to select the initial currency
         // format (nCurFormatKey) that was set in FormatChanged() after
         // matching the format string entered in the dialog.
-        bAdaptSelPos = sal_True;
+        bAdaptSelPos = true;
         pCurCurrencyEntry=(NfCurrencyEntry*)pTmpCurrencyEntry;
         bBankingSymbol=bTmpBanking;
         nCurCurrencyEntryPos=FindCurrencyFormat(pTmpCurrencyEntry,bTmpBanking);
@@ -949,10 +949,10 @@ short SvxNumberFormatShell::FillEListWithUserCurrencys( SvStrings& rList,short n
     else
     {
         if (pTmpCurrencyEntry == pCurCurrencyEntry)
-            bAdaptSelPos = sal_True;
+            bAdaptSelPos = true;
         else
         {
-            bAdaptSelPos = sal_False;
+            bAdaptSelPos = false;
             pTmpCurrencyEntry = pCurCurrencyEntry;
         }
         bTmpBanking=bBankingSymbol;
@@ -960,9 +960,9 @@ short SvxNumberFormatShell::FillEListWithUserCurrencys( SvStrings& rList,short n
 
     if(pTmpCurrencyEntry!=NULL)
     {
-        pTmpCurrencyEntry->BuildSymbolString(rSymbol,sal_False);
-        pTmpCurrencyEntry->BuildSymbolString(rBankSymbol,sal_True);
-        pTmpCurrencyEntry->BuildSymbolString(rShortSymbol,bTmpBanking,sal_True);
+        pTmpCurrencyEntry->BuildSymbolString(rSymbol,false);
+        pTmpCurrencyEntry->BuildSymbolString(rBankSymbol,true);
+        pTmpCurrencyEntry->BuildSymbolString(rShortSymbol,bTmpBanking,true);
     }
 
     const SvNumberformat*   pNumEntry   = pCurFmtTable->First();
@@ -995,7 +995,7 @@ short SvxNumberFormatShell::FillEListWithUserCurrencys( SvStrings& rList,short n
                 {
                     XubString rTstSymbol;
                     const NfCurrencyEntry* pTstCurrencyEntry;
-                    sal_Bool bTstBanking;
+                    bool bTstBanking;
 
                     pFormatter->GetNewCurrencySymbolString(nKey,rTstSymbol,
                                 &pTstCurrencyEntry,&bTstBanking);
@@ -1027,7 +1027,7 @@ short SvxNumberFormatShell::FillEListWithUserCurrencys( SvStrings& rList,short n
             aWSStringsDtor, *pTmpCurrencyEntry, bTmpBanking );
         if ( !bTmpBanking )
             pFormatter->GetCurrencyFormatStrings(
-                aWSStringsDtor, *pTmpCurrencyEntry, sal_True );
+                aWSStringsDtor, *pTmpCurrencyEntry, true );
     }
     else
         nDefault = 0;
@@ -1041,8 +1041,8 @@ short SvxNumberFormatShell::FillEListWithUserCurrencys( SvStrings& rList,short n
             const NfCurrencyEntry* pCurr = rCurrencyTable[i];
             if ( pCurr->GetLanguage() == eLang && pTmpCurrencyEntry != pCurr )
             {
-                pFormatter->GetCurrencyFormatStrings( aWSStringsDtor, *pCurr, sal_False );
-                pFormatter->GetCurrencyFormatStrings( aWSStringsDtor, *pCurr, sal_True );
+                pFormatter->GetCurrencyFormatStrings( aWSStringsDtor, *pCurr, false );
+                pFormatter->GetCurrencyFormatStrings( aWSStringsDtor, *pCurr, true );
             }
         }
     }
@@ -1120,7 +1120,7 @@ short SvxNumberFormatShell::FillEListWithUsD_Impl( SvStrings& rList, sal_uInt16 
     String          a2PrevString;
 
     short           nMyCat      = SELPOS_NONE;
-    sal_Bool        bAdditional = (nPrivCat != CAT_USERDEFINED &&
+    bool            bAdditional = (nPrivCat != CAT_USERDEFINED &&
                                     nCurCategory != NUMBERFORMAT_ALL);
 
     while ( pNumEntry )
@@ -1137,10 +1137,10 @@ short SvxNumberFormatShell::FillEListWithUsD_Impl( SvStrings& rList, sal_uInt16 
                 CategoryToPos_Impl(nMyCat,nMyType);
                 aNewFormNInfo=  pNumEntry->GetFormatstring();
 
-                sal_Bool bFlag=sal_True;
+                bool bFlag=true;
                 if(pNumEntry->HasNewCurrency())
                 {
-                    sal_Bool bTestBanking;
+                    bool bTestBanking;
                     sal_uInt16 nPos=FindCurrencyTableEntry(aNewFormNInfo,bTestBanking);
                     bFlag=!IsInTable(nPos,bTestBanking,aNewFormNInfo);
                 }
@@ -1167,7 +1167,7 @@ void SvxNumberFormatShell::GetPreviewString_Impl( String& rString, Color*& rpCol
     rpColor = NULL;
 
     //  #50441# if a string was set in addition to the value, use it for text formats
-    sal_Bool bUseText = ( eValType == SVX_VALUE_TYPE_STRING ||
+    bool bUseText = ( eValType == SVX_VALUE_TYPE_STRING ||
                         ( aValStr.Len() && ( pFormatter->GetType(nCurFormatKey) & NUMBERFORMAT_TEXT ) ) );
 
     if ( bUseText )
@@ -1178,23 +1178,23 @@ void SvxNumberFormatShell::GetPreviewString_Impl( String& rString, Color*& rpCol
 
 // -----------------------------------------------------------------------
 
-sal_Bool SvxNumberFormatShell::IsRemoved_Impl( sal_uInt32 nKey )
+bool SvxNumberFormatShell::IsRemoved_Impl( sal_uInt32 nKey )
 {
-    sal_Bool bFound = sal_False;
+    bool bFound = false;
     for (std::vector<sal_uInt32>::const_iterator it(aDelList.begin()); !bFound && it != aDelList.end(); ++it )
         if ( *it == nKey )
-            bFound = sal_True;
+            bFound = true;
     return bFound;
 }
 
 // -----------------------------------------------------------------------
 
-sal_Bool SvxNumberFormatShell::IsAdded_Impl( sal_uInt32 nKey )
+bool SvxNumberFormatShell::IsAdded_Impl( sal_uInt32 nKey )
 {
-    sal_Bool bFound = sal_False;
+    bool bFound = false;
     for ( std::vector<sal_uInt32>::const_iterator it(aAddList.begin()); !bFound && it != aAddList.end(); ++it )
         if ( *it == nKey )
-            bFound = sal_True;
+            bFound = true;
     return bFound;
 }
 
@@ -1389,7 +1389,7 @@ short SvxNumberFormatShell::GetCategory4Entry(short nEntry)
 #*
 #************************************************************************/
 
-sal_Bool SvxNumberFormatShell::GetUserDefined4Entry(short nEntry)
+bool SvxNumberFormatShell::GetUserDefined4Entry(short nEntry)
 {
     const SvNumberformat *pNumEntry;
     if(nEntry<0) return 0;
@@ -1403,11 +1403,11 @@ sal_Bool SvxNumberFormatShell::GetUserDefined4Entry(short nEntry)
         {
             if((pNumEntry->GetType() & NUMBERFORMAT_DEFINED)>0)
             {
-                return sal_True;
+                return true;
             }
         }
     }
-    return sal_False;
+    return false;
 }
 
 
@@ -1525,7 +1525,7 @@ void SvxNumberFormatShell::GetCurrencySymbols( SvStringsDtor& rList, sal_uInt16*
 
     const NfCurrencyEntry* pTmpCurrencyEntry=SvNumberFormatter::MatchSystemCurrency();
 
-    sal_Bool bFlag=(pTmpCurrencyEntry==NULL);
+    bool bFlag=(pTmpCurrencyEntry==NULL);
 
     GetCurrencySymbols( rList, bFlag);
 
@@ -1560,7 +1560,7 @@ void SvxNumberFormatShell::GetCurrencySymbols( SvStringsDtor& rList, sal_uInt16*
 
 }
 
-void SvxNumberFormatShell::GetCurrencySymbols( SvStringsDtor& rList, sal_Bool bFlag )
+void SvxNumberFormatShell::GetCurrencySymbols( SvStringsDtor& rList, bool bFlag )
 {
     aCurCurrencyList.Remove(0,aCurCurrencyList.Count());
 
@@ -1658,7 +1658,7 @@ void SvxNumberFormatShell::GetCurrencyFormats(SvStrings& aListDtor)
     }
 }
 
-sal_Bool SvxNumberFormatShell::IsBankingSymbol(sal_uInt16 nPos)
+bool SvxNumberFormatShell::IsBankingSymbol(sal_uInt16 nPos)
 {
     const NfCurrencyTable& rCurrencyTable=SvNumberFormatter::GetTheCurrencyTable();
     sal_uInt16 nCount=rCurrencyTable.Count();
@@ -1706,16 +1706,16 @@ void SvxNumberFormatShell::SetCurCurrencyEntry(NfCurrencyEntry* pCEntry)
     pCurCurrencyEntry=pCEntry;
 }
 
-sal_Bool SvxNumberFormatShell::IsTmpCurrencyFormat( const String& rFmtString )
+bool SvxNumberFormatShell::IsTmpCurrencyFormat( const String& rFmtString )
 {
     sal_uInt32 nFound;
-    /*sal_Bool bRes=*/FindEntry(rFmtString, &nFound);
+    FindEntry(rFmtString, &nFound);
 
     if(nFound==NUMBERFORMAT_ENTRY_NEW_CURRENCY)
     {
-        return sal_True;
+        return true;
     }
-    return sal_False;
+    return false;
 }
 
 sal_uInt16 SvxNumberFormatShell::FindCurrencyFormat( const String& rFmtString )
@@ -1723,7 +1723,7 @@ sal_uInt16 SvxNumberFormatShell::FindCurrencyFormat( const String& rFmtString )
     const NfCurrencyTable& rCurrencyTable=SvNumberFormatter::GetTheCurrencyTable();
     sal_uInt16 nCount=rCurrencyTable.Count();
 
-    sal_Bool bTestBanking=sal_False;
+    bool bTestBanking=false;
 
     sal_uInt16 nPos=FindCurrencyTableEntry(rFmtString, bTestBanking);
 
@@ -1742,7 +1742,7 @@ sal_uInt16 SvxNumberFormatShell::FindCurrencyFormat( const String& rFmtString )
     return (sal_uInt16) -1;
 }
 
-sal_uInt16 SvxNumberFormatShell::FindCurrencyTableEntry( const String& rFmtString, sal_Bool &bTestBanking )
+sal_uInt16 SvxNumberFormatShell::FindCurrencyTableEntry( const String& rFmtString, bool &bTestBanking )
 {
     sal_uInt16 nPos=(sal_uInt16) -1;
 
@@ -1777,18 +1777,18 @@ sal_uInt16 SvxNumberFormatShell::FindCurrencyTableEntry( const String& rFmtStrin
         {
             const NfCurrencyEntry* pTmpCurrencyEntry=rCurrencyTable[i];
             XubString _aSymbol, aBankSymbol;
-            pTmpCurrencyEntry->BuildSymbolString(_aSymbol,sal_False);
-            pTmpCurrencyEntry->BuildSymbolString(aBankSymbol,sal_True);
+            pTmpCurrencyEntry->BuildSymbolString(_aSymbol,false);
+            pTmpCurrencyEntry->BuildSymbolString(aBankSymbol,true);
 
             if(rFmtString.Search(_aSymbol)!=STRING_NOTFOUND)
             {
-                bTestBanking=sal_False;
+                bTestBanking=false;
                 nPos=i;
                 break;
             }
             else if(rFmtString.Search(aBankSymbol)!=STRING_NOTFOUND)
             {
-                bTestBanking=sal_True;
+                bTestBanking=true;
                 nPos=i;
                 break;
             }
@@ -1798,12 +1798,11 @@ sal_uInt16 SvxNumberFormatShell::FindCurrencyTableEntry( const String& rFmtStrin
     return nPos;
 }
 
-sal_uInt16 SvxNumberFormatShell::FindCurrencyFormat(const NfCurrencyEntry* pTmpCurrencyEntry,sal_Bool bTmpBanking)
+sal_uInt16 SvxNumberFormatShell::FindCurrencyFormat(const NfCurrencyEntry* pTmpCurrencyEntry,bool bTmpBanking)
 {
     const NfCurrencyTable& rCurrencyTable=SvNumberFormatter::GetTheCurrencyTable();
     sal_uInt16 nCount=rCurrencyTable.Count();
 
-//  sal_Bool bTestBanking=sal_False;
     sal_uInt16 nPos=0;
     for(sal_uInt16 i=0;i<nCount;i++)
     {
@@ -1826,9 +1825,9 @@ sal_uInt16 SvxNumberFormatShell::FindCurrencyFormat(const NfCurrencyEntry* pTmpC
     return (sal_uInt16) -1;
 }
 
-sal_Bool SvxNumberFormatShell::IsInTable(sal_uInt16 nPos,sal_Bool bTmpBanking,const String &rFmtString)
+bool SvxNumberFormatShell::IsInTable(sal_uInt16 nPos,bool bTmpBanking,const String &rFmtString)
 {
-    sal_Bool bFlag=sal_False;
+    bool bFlag=false;
 
     if(nPos!=(sal_uInt16)-1)
     {
@@ -1850,7 +1849,7 @@ sal_Bool SvxNumberFormatShell::IsInTable(sal_uInt16 nPos,sal_Bool bTmpBanking,co
                 {
                     if(*aWSStringsDtor[i]==rFmtString)
                     {
-                        bFlag=sal_True;
+                        bFlag=true;
                         break;
                     }
                 }

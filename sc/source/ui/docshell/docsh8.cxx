@@ -273,7 +273,7 @@ static void lcl_setScalesToColumns(ScDocument& rDoc, const vector<long>& rScales
             continue;
 
         LanguageType eLang = pOldEntry->GetLanguage();
-        sal_Bool bThousand, bNegRed;
+        bool bThousand, bNegRed;
         sal_uInt16 nPrecision, nLeading;
         pOldEntry->GetFormatSpecialInfo(bThousand, bNegRed, nPrecision, nLeading);
 

@@ -723,7 +723,7 @@ sal_Bool FormattedField::GetThousandsSep() const
     DBG_ASSERT(!ImplGetFormatter()->IsTextFormat(m_nFormatKey),
         "FormattedField::GetThousandsSep : your'e sure what your'e doing when setting the precision of a text format ?");
 
-    sal_Bool bThousand, IsRed;
+    bool bThousand, IsRed;
     sal_uInt16 nPrecision, nAnzLeading;
     ImplGetFormatter()->GetFormatSpecialInfo(m_nFormatKey, bThousand, IsRed, nPrecision, nAnzLeading);
 
@@ -737,7 +737,7 @@ void FormattedField::SetThousandsSep(sal_Bool _bUseSeparator)
         "FormattedField::SetThousandsSep : your'e sure what your'e doing when setting the precision of a text format ?");
 
     // get the current settings
-    sal_Bool bThousand, IsRed;
+    bool bThousand, IsRed;
     sal_uInt16 nPrecision, nAnzLeading;
     ImplGetFormatter()->GetFormatSpecialInfo(m_nFormatKey, bThousand, IsRed, nPrecision, nAnzLeading);
     if (bThousand == _bUseSeparator)
@@ -767,7 +767,7 @@ sal_uInt16 FormattedField::GetDecimalDigits() const
     DBG_ASSERT(!ImplGetFormatter()->IsTextFormat(m_nFormatKey),
         "FormattedField::GetDecimalDigits : your'e sure what your'e doing when setting the precision of a text format ?");
 
-    sal_Bool bThousand, IsRed;
+    bool bThousand, IsRed;
     sal_uInt16 nPrecision, nAnzLeading;
     ImplGetFormatter()->GetFormatSpecialInfo(m_nFormatKey, bThousand, IsRed, nPrecision, nAnzLeading);
 
@@ -781,7 +781,7 @@ void FormattedField::SetDecimalDigits(sal_uInt16 _nPrecision)
         "FormattedField::SetDecimalDigits : your'e sure what your'e doing when setting the precision of a text format ?");
 
     // get the current settings
-    sal_Bool bThousand, IsRed;
+    bool bThousand, IsRed;
     sal_uInt16 nPrecision, nAnzLeading;
     ImplGetFormatter()->GetFormatSpecialInfo(m_nFormatKey, bThousand, IsRed, nPrecision, nAnzLeading);
     if (nPrecision == _nPrecision)

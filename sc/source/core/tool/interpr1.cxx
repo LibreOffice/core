@@ -2038,9 +2038,9 @@ void ScInterpreter::ScCell()
             else if( aInfoType.EqualsAscii( "FORMAT" ) )
             {   // specific format code for standard formats
                 sal_uLong   nFormat = pDok->GetNumberFormat( aCellPos );
-                sal_Bool    bAppendPrec = sal_True;
+                bool        bAppendPrec = true;
                 sal_uInt16  nPrec, nLeading;
-                sal_Bool    bThousand, bIsRed;
+                bool        bThousand, bIsRed;
                 pFormatter->GetFormatSpecialInfo( nFormat, bThousand, bIsRed, nPrec, nLeading );
 
                 switch( pFormatter->GetType( nFormat ) )

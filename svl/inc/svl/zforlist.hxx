@@ -235,9 +235,9 @@ class SVL_DLLPUBLIC NfCurrencyEntry
     String          aSymbol;            /// currency symbol
     String          aBankSymbol;        /// currency abbreviation
     LanguageType    eLanguage;          /// language/country value
-    sal_uInt16          nPositiveFormat;    /// position of symbol
-    sal_uInt16          nNegativeFormat;    /// position of symbol and type and position of negative sign
-    sal_uInt16          nDigits;            /// count of decimal digits
+    sal_uInt16      nPositiveFormat;    /// position of symbol
+    sal_uInt16      nNegativeFormat;    /// position of symbol and type and position of negative sign
+    sal_uInt16      nDigits;            /// count of decimal digits
     sal_Unicode     cZeroChar;          /// which character is used for zeros as last decimal digits
 
                         /// not implemented, prevent usage
@@ -264,11 +264,11 @@ public:
                         ~NfCurrencyEntry() {}
 
                         /// Symbols and language identical
-    sal_Bool                operator==( const NfCurrencyEntry& r ) const;
+    bool                operator==( const NfCurrencyEntry& r ) const;
 
                         /// Set this format to be the EURo entry, overwrite other settings
     void                SetEuro();
-    sal_Bool                IsEuro() const;
+    bool                IsEuro() const;
 
                         /** Apply format information (nPositiveFormat,
                              nNegativeFormat, nDigits, cZeroChar) of another format. */
@@ -277,29 +277,29 @@ public:
     const String&       GetSymbol() const           { return aSymbol; }
     const String&       GetBankSymbol() const       { return aBankSymbol; }
     LanguageType        GetLanguage() const         { return eLanguage; }
-    sal_uInt16              GetPositiveFormat() const   { return nPositiveFormat; }
-    sal_uInt16              GetNegativeFormat() const   { return nNegativeFormat; }
-    sal_uInt16              GetDigits() const           { return nDigits; }
+    sal_uInt16          GetPositiveFormat() const   { return nPositiveFormat; }
+    sal_uInt16          GetNegativeFormat() const   { return nNegativeFormat; }
+    sal_uInt16          GetDigits() const           { return nDigits; }
     sal_Unicode         GetZeroChar() const         { return cZeroChar; }
 
-                        /** [$DM-407] (bBank==sal_False) or [$DEM] (bBank==sal_True)
-                            is assigned to rStr, if bBank==sal_False and
-                            bWithoutExtension==sal_True only [$DM] */
-    void                BuildSymbolString( String& rStr, sal_Bool bBank,
-                            sal_Bool bWithoutExtension = sal_False ) const;
+                        /** [$DM-407] (bBank==false) or [$DEM] (bBank==true)
+                            is assigned to rStr, if bBank==false and
+                            bWithoutExtension==true only [$DM] */
+    void                BuildSymbolString( String& rStr, bool bBank,
+                            bool bWithoutExtension = false ) const;
 
                         /** #,##0.00 [$DM-407] is assigned to rStr, separators
                               from rLoc,    incl. minus sign but without [RED] */
-    void                BuildPositiveFormatString( String& rStr, sal_Bool bBank,
+    void                BuildPositiveFormatString( String& rStr, bool bBank,
                             const LocaleDataWrapper&, sal_uInt16 nDecimalFormat = 1 ) const;
-    void                BuildNegativeFormatString( String& rStr, sal_Bool bBank,
+    void                BuildNegativeFormatString( String& rStr, bool bBank,
                             const LocaleDataWrapper&, sal_uInt16 nDecimalFormat = 1 ) const;
 
-                        /** [$DM-407] (or [$DEM] if bBank==sal_True)
+                        /** [$DM-407] (or [$DEM] if bBank==true)
                             is appended/prepended to rStr, incl. minus sign */
-    void                CompletePositiveFormatString( String& rStr, sal_Bool bBank,
+    void                CompletePositiveFormatString( String& rStr, bool bBank,
                             sal_uInt16 nPosiFormat ) const;
-    void                CompleteNegativeFormatString( String& rStr, sal_Bool bBank,
+    void                CompleteNegativeFormatString( String& rStr, bool bBank,
                             sal_uInt16 nNegaFormat ) const;
 
                         /// rSymStr is appended/prepended to rStr, incl. minus sign
@@ -310,10 +310,10 @@ public:
 
                         /** Representation of a currency (symbol position and
                              negative sign) in other language settings */
-    static  sal_uInt16      GetEffectivePositiveFormat( sal_uInt16 nIntlFormat,
-                            sal_uInt16 nCurrFormat, sal_Bool bBank );
-    static  sal_uInt16      GetEffectiveNegativeFormat( sal_uInt16 nIntlFormat,
-                            sal_uInt16 nCurrFormat, sal_Bool bBank );
+    static  sal_uInt16  GetEffectivePositiveFormat( sal_uInt16 nIntlFormat,
+                            sal_uInt16 nCurrFormat, bool bBank );
+    static  sal_uInt16  GetEffectiveNegativeFormat( sal_uInt16 nIntlFormat,
+                            sal_uInt16 nCurrFormat, bool bBank );
 
                         /// General Unicode Euro symbol
     static inline sal_Unicode   GetEuroSymbol() { return sal_Unicode(0x20AC); }
@@ -371,14 +371,14 @@ public:
     /// Change standard precision
     void ChangeStandardPrec(short nPrec);
     /// Set zero value suppression
-    void SetNoZero(sal_Bool bNZ) { bNoZero = bNZ; }
+    void SetNoZero(bool bNZ) { bNoZero = bNZ; }
 
     /** The language with which the formatter was initialized (system setting),
         NOT the current language after a ChangeIntl() */
     LanguageType GetLanguage() const { return IniLnge; }
 
     // Determine whether two format types are input compatible or not
-    sal_Bool IsCompatible(short eOldType, short eNewType);
+    bool IsCompatible(short eOldType, short eNewType);
 
     /** Get table of formats of a specific type of a locale. A format FIndex is
         tested whether it has the type and locale requested, if it doesn't
@@ -417,7 +417,7 @@ public:
             nType contains the type of the format.
             nKey contains the index key of the format.
      */
-    sal_Bool PutEntry( String& rString, xub_StrLen& nCheckPos, short& nType, sal_uInt32& nKey,
+    bool PutEntry( String& rString, xub_StrLen& nCheckPos, short& nType, sal_uInt32& nKey,
                   LanguageType eLnge = LANGUAGE_DONTKNOW );
 
     bool PutEntry( rtl::OUString& rString, xub_StrLen& nCheckPos, short& nType, sal_uInt32& nKey,
@@ -472,19 +472,19 @@ public:
             was empty, could not be converted or has errors, the eLnge locale's
             standard number format is chosen instead. The index key is
             guaranteed to represent some valid number format. If
-            rNewInserted==sal_False and rCheckPos>0 the format code has errors
+            rNewInserted==false and rCheckPos>0 the format code has errors
             and/or could not be converted.
      */
     sal_uInt32 GetIndexPuttingAndConverting( String & rString, LanguageType eLnge,
                                         LanguageType eSysLnge, short & rType,
-                                        sal_Bool & rNewInserted,
+                                        bool & rNewInserted,
                                         xub_StrLen & rCheckPos );
 
     /** Create a format code string using format nIndex as a template and
         applying other settings (passed from the dialog) */
     void GenerateFormat( String& sString, sal_uInt32 nIndex,
                         LanguageType eLnge = LANGUAGE_DONTKNOW,
-                        sal_Bool bThousand = sal_False, sal_Bool IsRed = sal_False,
+                        bool bThousand = false, bool IsRed = false,
                         sal_uInt16 nPrecision = 0, sal_uInt16 nAnzLeading = 1 );
 
     /** Analyze an input string
@@ -494,7 +494,7 @@ public:
                 returned in fOutNumber
             <FALSE/> if input is not a number
      */
-    sal_Bool IsNumberFormat( const String& sString, sal_uInt32& F_Index, double& fOutNumber );
+    bool IsNumberFormat( const String& sString, sal_uInt32& F_Index, double& fOutNumber );
 
     /// Format a number according to a format index, return string and color
     void GetOutputString( const double& fOutNumber, sal_uInt32 nFIndex,
@@ -516,13 +516,13 @@ public:
             <FALSE/> if format code contains an error
             <TRUE/> else, in which case the string and color are returned.
      */
-    sal_Bool GetPreviewString( const String& sFormatString, double fPreviewNumber,
+    bool GetPreviewString( const String& sFormatString, double fPreviewNumber,
                           String& sOutString, Color** ppColor,
                           LanguageType eLnge = LANGUAGE_DONTKNOW );
 
     /** Same as <method>GetPreviewString</method> but the format code string
         may be either language/country eLnge or en_US english US */
-    sal_Bool GetPreviewStringGuess( const String& sFormatString, double fPreviewNumber,
+    bool GetPreviewStringGuess( const String& sFormatString, double fPreviewNumber,
                           String& sOutString, Color** ppColor,
                           LanguageType eLnge = LANGUAGE_DONTKNOW );
 
@@ -531,7 +531,7 @@ public:
             <FALSE/> if format code contains an error
             <TRUE/> else, in which case the string and color are returned.
      */
-    sal_Bool GetPreviewString( const String& sFormatString, const String& sPreviewString,
+    bool GetPreviewString( const String& sFormatString, const String& sPreviewString,
                           String& sOutString, Color** ppColor,
                           LanguageType eLnge = LANGUAGE_DONTKNOW );
 
@@ -543,14 +543,14 @@ public:
                         LanguageType eLnge = LANGUAGE_DONTKNOW );
 
     /// Whether format index nFIndex is of type text or not
-    sal_Bool IsTextFormat(sal_uInt32 nFIndex) const;
+    bool IsTextFormat(sal_uInt32 nFIndex) const;
     /// Whether the 4th string subcode of format index nFIndex is present
-    sal_Bool HasTextFormat(sal_uInt32 nFIndex) const;
+    bool HasTextFormat(sal_uInt32 nFIndex) const;
 
     /// Load all formats from a stream
-    sal_Bool Load( SvStream& rStream );
+    bool Load( SvStream& rStream );
     /// Save all formats to a stream
-    sal_Bool Save( SvStream& rStream ) const;
+    bool Save( SvStream& rStream ) const;
     /// Reset of "Used" flags
     void PrepareSave();
 
@@ -558,7 +558,7 @@ public:
     void SetFormatUsed(sal_uInt32 nFIndex);
 
     /// Get additional info of a format index, e.g. for dialog box
-    void GetFormatSpecialInfo(sal_uInt32 nFormat, sal_Bool& bThousand, sal_Bool& IsRed,
+    void GetFormatSpecialInfo(sal_uInt32 nFormat, bool& bThousand, bool& IsRed,
                               sal_uInt16& nPrecision, sal_uInt16& nAnzLeading);
 
     /// Count of decimals
@@ -571,12 +571,12 @@ public:
             0 if format code string parsed without errors, otherwise error
             position (like nCheckPos on <method>PutEntry</method>)
      */
-    sal_uInt32 GetFormatSpecialInfo( const String&, sal_Bool& bThousand, sal_Bool& IsRed,
+    sal_uInt32 GetFormatSpecialInfo( const String&, bool& bThousand, bool& IsRed,
                               sal_uInt16& nPrecision, sal_uInt16& nAnzLeading,
                               LanguageType eLnge = LANGUAGE_DONTKNOW );
 
     /// Check if format code string may be deleted by user
-    sal_Bool IsUserDefined( const String& sStr, LanguageType eLnge = LANGUAGE_DONTKNOW );
+    bool IsUserDefined( const String& sStr, LanguageType eLnge = LANGUAGE_DONTKNOW );
 
     /** Return the format index of the format code string for language/country,
         or NUMBERFORMAT_ENTRY_NOT_FOUND */
@@ -604,14 +604,14 @@ public:
                             LanguageType eLnge );
 
     /// Whether nFIndex is a special builtin format
-    sal_Bool IsSpecialStandardFormat( sal_uInt32 nFIndex, LanguageType eLnge );
+    bool IsSpecialStandardFormat( sal_uInt32 nFIndex, LanguageType eLnge );
 
     /// Return the reference date
     Date* GetNullDate();
     /// Return the standard decimal precision
     sal_uInt16 GetStandardPrec();
     /// Return whether zero suppression is switched on
-    sal_Bool GetNoZero() { return bNoZero; }
+    bool GetNoZero() { return bNoZero; }
     /** Get the type of a format (or NUMBERFORMAT_UNDEFINED if no entry),
          but with NUMBERFORMAT_DEFINED masked out */
     short GetType(sal_uInt32 nFIndex);
@@ -622,7 +622,7 @@ public:
     SvNumberFormatterIndexTable* MergeFormatter(SvNumberFormatter& rNewTable);
 
     /// Whether a merge table is present or not
-    inline sal_Bool HasMergeFmtTbl() const;
+    inline bool HasMergeFmtTbl() const;
     /// Return the new format index for an old format index, if a merge table exists
     inline sal_uInt32 GetMergeFmtIndex( sal_uInt32 nOldFmt ) const;
 
@@ -736,15 +736,15 @@ public:
             position of default format
      */
     sal_uInt16  GetCurrencyFormatStrings( NfWSStringsDtor&, const NfCurrencyEntry&,
-                sal_Bool bBank ) const;
+                bool bBank ) const;
 
     /** Whether nFormat is of type NUMBERFORMAT_CURRENCY and the format code
         contains a new SYMBOLTYPE_CURRENCY and if so which one [$xxx-nnn].
         If ppEntry is not NULL and exactly one entry is found, a [$xxx-nnn] is
         returned, even if the format code only contains [$xxx] !
      */
-    sal_Bool    GetNewCurrencySymbolString( sal_uInt32 nFormat, String& rSymbol,
-                const NfCurrencyEntry** ppEntry = NULL, sal_Bool* pBank = NULL ) const;
+    bool    GetNewCurrencySymbolString( sal_uInt32 nFormat, String& rSymbol,
+                const NfCurrencyEntry** ppEntry = NULL, bool* pBank = NULL ) const;
 
     /** Look up the corresponding <type>NfCurrencyEntry</type> matching
         rSymbol (may be CurrencySymbol or CurrencyAbbreviation) and possibly
@@ -782,9 +782,9 @@ public:
             The matching entry if unique (in which case bFoundBank is set),
              else <NULL/>.
      */
-    static const NfCurrencyEntry* GetCurrencyEntry( sal_Bool & bFoundBank,
+    static const NfCurrencyEntry* GetCurrencyEntry( bool & bFoundBank,
                 const String& rSymbol, const String& rExtension,
-                LanguageType eFormatLanguage, sal_Bool bOnlyStringLanguage = sal_False );
+                LanguageType eFormatLanguage, bool bOnlyStringLanguage = false );
 
     /// Get compatibility ("automatic" old style) currency from I18N locale data
     void GetCompatibilityCurrency( String& rSymbol, String& rAbbrev ) const;
@@ -834,7 +834,7 @@ private:
     LanguageType IniLnge;                   // Initialized setting language/country
     LanguageType ActLnge;                   // Current setting language/country
     NfEvalDateFormat eEvalDateFormat;       // DateFormat evaluation
-    sal_Bool bNoZero;                           // Zero value suppression
+    bool bNoZero;                           // Zero value suppression
 
     // cached locale data items needed almost any time
     String aDecimalSep;
@@ -843,7 +843,7 @@ private:
 
 #ifdef _ZFORLIST_CXX                // ----- private Methoden -----
 
-    SVL_DLLPRIVATE static sal_Bool          bCurrencyTableInitialized;
+    SVL_DLLPRIVATE static bool          bCurrencyTableInitialized;
     SVL_DLLPRIVATE static sal_uInt16            nSystemCurrencyPosition;
     SVL_DLLPRIVATE static SvNumberFormatterRegistry_Impl* pFormatterRegistry;
 
@@ -855,29 +855,29 @@ private:
 
     // Changes initialized language/country, clears the entries and generates
     // new ones, may ONLY be called by the binary file format load
-    SVL_DLLPRIVATE void ImpChangeSysCL( LanguageType eLnge, sal_Bool bLoadingSO5 );
+    SVL_DLLPRIVATE void ImpChangeSysCL( LanguageType eLnge, bool bLoadingSO5 );
 
     // Generate builtin formats provided by i18n behind CLOffset,
-    // if bLoadingSO5==sal_False also generate additional i18n formats.
-    SVL_DLLPRIVATE void ImpGenerateFormats( sal_uInt32 CLOffset, sal_Bool bLoadingSO5 );
+    // if bLoadingSO5==false also generate additional i18n formats.
+    SVL_DLLPRIVATE void ImpGenerateFormats( sal_uInt32 CLOffset, bool bLoadingSO5 );
 
     // Generate additional formats provided by i18n
     SVL_DLLPRIVATE void ImpGenerateAdditionalFormats(
                 sal_uInt32 CLOffset,
                 NumberFormatCodeWrapper& rNumberFormatCode,
-                sal_Bool bAfterLoadingSO5 );
+                bool bAfterLoadingSO5 );
 
     SVL_DLLPRIVATE SvNumberformat* ImpInsertFormat(
                 const ::com::sun::star::i18n::NumberFormatCode& rCode,
                 sal_uInt32 nPos,
-                sal_Bool bAfterLoadingSO5 = sal_False,
+                bool bAfterLoadingSO5 = false,
                 sal_Int16 nOrgIndex = 0 );
     // ImpInsertNewStandardFormat for new (since version ...) builtin formats
     SVL_DLLPRIVATE SvNumberformat* ImpInsertNewStandardFormat(
                 const ::com::sun::star::i18n::NumberFormatCode& rCode,
                 sal_uInt32 nPos,
                 sal_uInt16 nVersion,
-                sal_Bool bAfterLoadingSO5 = sal_False,
+                bool bAfterLoadingSO5 = false,
                 sal_Int16 nOrgIndex = 0 );
 
     // Return CLOffset or (MaxCLOffset + SV_COUNTRY_LANGUAGE_OFFSET) if new language/country
@@ -890,7 +890,7 @@ private:
                         LanguageType eLnge );
 
     // Create builtin formats for language/country if necessary, return CLOffset
-    SVL_DLLPRIVATE sal_uInt32 ImpGenerateCL( LanguageType eLnge, sal_Bool bLoadingSO5 = sal_False );
+    SVL_DLLPRIVATE sal_uInt32 ImpGenerateCL( LanguageType eLnge, bool bLoadingSO5 = false );
 
     // Build negative currency format, old compatibility style
     SVL_DLLPRIVATE void ImpGetNegCurrFormat( String& sNegStr, const String& rCurrSymbol );
@@ -927,15 +927,15 @@ private:
     // FormatElement group.
     SVL_DLLPRIVATE sal_Int32 ImpAdjustFormatCodeDefault(
         ::com::sun::star::i18n::NumberFormatCode * pFormatArr,
-        sal_Int32 nCount, sal_Bool bCheckCorrectness = sal_True
+        sal_Int32 nCount, bool bCheckCorrectness = true
         );
 
     // used as a loop body inside of GetNewCurrencySymbolString() and GetCurrencyEntry()
 #ifndef DBG_UTIL
     inline
 #endif
-        static sal_Bool ImpLookupCurrencyEntryLoopBody(
-            const NfCurrencyEntry*& pFoundEntry, sal_Bool& bFoundBank,
+        static bool ImpLookupCurrencyEntryLoopBody(
+            const NfCurrencyEntry*& pFoundEntry, bool& bFoundBank,
             const NfCurrencyEntry* pData, sal_uInt16 nPos, const String& rSymbol );
 
     // link to be set at <method>SvtSysLocaleOptions::SetCurrencyChangeLink()</method>
@@ -1019,7 +1019,7 @@ inline sal_uInt32 SvNumberFormatter::GetMergeFmtIndex( sal_uInt32 nOldFmt ) cons
     return pU ? *pU : nOldFmt;
 }
 
-inline sal_Bool SvNumberFormatter::HasMergeFmtTbl() const
+inline bool SvNumberFormatter::HasMergeFmtTbl() const
 {
     return pMergeTable && (0 != pMergeTable->Count());
 }

@@ -99,7 +99,7 @@ void ScNumFormatAbbrev::PutFormatIndex(sal_uLong nFormat,
 sal_uLong ScNumFormatAbbrev::GetFormatIndex( SvNumberFormatter& rFormatter)
 {
     short nType;
-    sal_Bool bNewInserted;
+    bool bNewInserted;
     xub_StrLen nCheckPos;
     return rFormatter.GetIndexPuttingAndConverting( sFormatstring, eLnge,
             eSysLnge, nType, bNewInserted, nCheckPos);

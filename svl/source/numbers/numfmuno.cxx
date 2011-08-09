@@ -341,7 +341,7 @@ rtl::OUString SAL_CALL SvNumberFormatterServiceObj::convertNumberToPreviewString
         LanguageType eLang = lcl_GetLanguage( nLocale );
         Color* pColor = NULL;
 
-        sal_Bool bOk;
+        bool bOk;
         if ( bAllowEnglish )
             bOk = pFormatter->GetPreviewStringGuess(
                                 aFormString, fValue, aOutString, &pColor, eLang );
@@ -377,7 +377,7 @@ util::Color SAL_CALL SvNumberFormatterServiceObj::queryPreviewColorForNumber(
         LanguageType eLang = lcl_GetLanguage( nLocale );
         Color* pColor = NULL;
 
-        sal_Bool bOk;
+        bool bOk;
         if ( bAllowEnglish )
             bOk = pFormatter->GetPreviewStringGuess(
                                 aFormString, fValue, aOutString, &pColor, eLang );
@@ -517,7 +517,7 @@ sal_Int32 SAL_CALL SvNumberFormatsObj::addNew( const rtl::OUString& aFormat,
         sal_uInt32 nKey = 0;
         xub_StrLen nCheckPos = 0;
         short nType = 0;
-        sal_Bool bOk = pFormatter->PutEntry( aFormStr, nCheckPos, nType, nKey, eLang );
+        bool bOk = pFormatter->PutEntry( aFormStr, nCheckPos, nType, nKey, eLang );
         if (bOk)
             nRet = nKey;
         else if (nCheckPos)
@@ -549,7 +549,7 @@ sal_Int32 SAL_CALL SvNumberFormatsObj::addNewConverted( const rtl::OUString& aFo
         sal_uInt32 nKey = 0;
         xub_StrLen nCheckPos = 0;
         short nType = 0;
-        sal_Bool bOk = pFormatter->PutandConvertEntry( aFormStr, nCheckPos, nType, nKey, eLang, eNewLang );
+        bool bOk = pFormatter->PutandConvertEntry( aFormStr, nCheckPos, nType, nKey, eLang, eNewLang );
         if (bOk || nKey > 0)
             nRet = nKey;
         else if (nCheckPos)
@@ -758,7 +758,7 @@ uno::Any SAL_CALL SvNumberFormatObj::getPropertyValue( const rtl::OUString& aPro
     const SvNumberformat* pFormat = pFormatter ? pFormatter->GetEntry(nKey) : NULL;
     if (pFormat)
     {
-        sal_Bool bThousand, bRed;
+        bool bThousand, bRed;
         sal_uInt16 nDecimals, nLeading;
 
         String aString = aPropertyName;
@@ -826,7 +826,7 @@ uno::Any SAL_CALL SvNumberFormatObj::getPropertyValue( const rtl::OUString& aPro
         else if (aString.EqualsAscii( PROPERTYNAME_CURRABB ))
         {
             String aSymbol, aExt;
-            sal_Bool bBank = sal_False;
+            bool bBank = false;
             pFormat->GetNewCurrencySymbol( aSymbol, aExt );
             const NfCurrencyEntry* pCurr = pFormatter->GetCurrencyEntry( bBank,
                 aSymbol, aExt, pFormat->GetLanguage() );
@@ -888,7 +888,7 @@ uno::Sequence<beans::PropertyValue> SAL_CALL SvNumberFormatObj::getPropertyValue
     if (pFormat)
     {
         String aSymbol, aExt, aAbb;
-        sal_Bool bBank = sal_False;
+        bool bBank = false;
         pFormat->GetNewCurrencySymbol( aSymbol, aExt );
         const NfCurrencyEntry* pCurr = pFormatter->GetCurrencyEntry( bBank,
             aSymbol, aExt, pFormat->GetLanguage() );
@@ -900,7 +900,7 @@ uno::Sequence<beans::PropertyValue> SAL_CALL SvNumberFormatObj::getPropertyValue
         sal_Bool bStandard = ( ( nKey % SV_COUNTRY_LANGUAGE_OFFSET ) == 0 );
         //! SvNumberformat Member bStandard rausreichen?
         sal_Bool bUserDef = ( ( pFormat->GetType() & NUMBERFORMAT_DEFINED ) != 0 );
-        sal_Bool bThousand, bRed;
+        bool bThousand, bRed;
         sal_uInt16 nDecimals, nLeading;
         pFormat->GetFormatSpecialInfo( bThousand, bRed, nDecimals, nLeading );
         lang::Locale aLocale( MsLangId::convertLanguageToLocale(

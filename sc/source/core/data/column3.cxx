@@ -2026,7 +2026,7 @@ xub_StrLen ScColumn::GetMaxNumberStringLen(
                         sal_uInt16 nPrec;
                         if (pEntry)
                         {
-                            sal_Bool bThousand, bNegRed;
+                            bool bThousand, bNegRed;
                             sal_uInt16 nLeading;
                             pEntry->GetFormatSpecialInfo(bThousand, bNegRed, nPrec, nLeading);
                         }
