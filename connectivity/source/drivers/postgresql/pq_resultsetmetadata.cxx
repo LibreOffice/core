@@ -215,7 +215,7 @@ void ResultSetMetaData::checkForTypes()
         Reference< XRow > xRow( rs, UNO_QUERY );
         while( rs->next() )
         {
-            sal_Int32 oid = xRow->getInt( 1 );
+            Oid oid = xRow->getInt( 1 );
             OUString typeName = xRow->getString( 2 );
             OUString typType = xRow->getString( 3 );
 
