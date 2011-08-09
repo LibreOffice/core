@@ -283,10 +283,12 @@ my_components += \
     component/xmlsecurity/util/xmlsecurity \
     component/xmlsecurity/util/xsec_fw \
     pl
+.IF "$(SYSTEM_MOZILLA)" == "YES" || "$(ENABLE_NSS_MODULE)" == "YES"
 .IF "$(OS)" == "WNT"
 my_components += component/xmlsecurity/util/xsec_xmlsec.windows
 .ELSE
 my_components += component/xmlsecurity/util/xsec_xmlsec
+.END
 .END
 .END
 
