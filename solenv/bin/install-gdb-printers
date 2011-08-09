@@ -1,0 +1,68 @@
+#!/bin/bash
+
+GDBDIR="${SOLARENV}/gdb"
+
+die() {
+    echo "$1" >&2
+    exit 1
+}
+
+make_autoload() {
+    local dir="${DESTDIR}${autoloaddir}/$2"
+    local gdbfile="${dir}/$3-gdb.py"
+
+    if ${create}; then
+        mkdir -p "${dir}" || die "cannot create dir '${dir}'"
+    elif ${follow}; then
+        gdbfile="$(readlink -f "${dir}/$3")-gdb.py"
+    fi
+    sed -e "s!%PYTHONDIR%!${pythondir}!" -e "s!%MODULE%!libreoffice.$1!" \
+        "${GDBDIR}/autoload.template" > "${gdbfile}"
+}
+
+# dir where the autoloaders will be placed
+autoloaddir=
+# dir where the pretty printers will be placed
+pythondir="${GDBDIR}"
+# Create autoload dir if it does not exist. This only makes sense when
+# installing into system gdb dir, so $autoloaddir must be absolute path.
+create=false
+# Follow links when looking up the path for the autoload file. This only
+# makes sense for dev-install.
+follow=false
+
+#  b defghijklmno qrstuvwxyzABCDEFGHIJK MNOPQRSTUVWXYZ0123456789
+while getopts :a:cp:L opt; do
+    case ${opt} in
+        a) autoloaddir="${OPTARG}" ;;
+        c) create=true ;;
+        p) pythondir="${OPTARG}" ;;
+        L) follow=true ;;
+        *) die "unknown option ${OPTARG}" ;;
+    esac
+done
+
+${create} && ${follow} && die "-c and -L cannot be used together"
+if [[ -n ${DESTDIR} ]]; then
+    [[ ${autoloaddir:0:1} = / ]] || die 'the arg to -a must be an absolute path'
+    [[ ${pythondir:0:1} = / ]] || die 'the arg to -p must be an absolute path'
+fi
+if ${create}; then
+    [[ ${autoloaddir:0:1} = / ]] || die 'the arg to -a must be an absolute path'
+else
+    [[ ! -d ${DESTDIR}${autoloaddir} ]] && die "directory '${DESTDIR}${autoloaddir}' does not exist"
+fi
+[[ ! -d ${GDBDIR} ]] && die "directory '${GDBDIR}' does not exist"
+
+if [[ ${DESTDIR}${pythondir} != ${GDBDIR} ]]; then
+    mkdir -p "${DESTDIR}${pythondir}" || die "cannot create dir '${DESTDIR}${pythondir}'"
+    cp -r "${GDBDIR}/libreoffice" "${DESTDIR}${pythondir}"
+fi
+
+make_autoload cppu basis-link/ure-link/lib libuno_cppu.so.3
+make_autoload sal basis-link/ure-link/lib libuno_sal.so.3
+make_autoload svl basis-link/program libsvllo.so
+make_autoload sw basis-link/program libswlo.so
+make_autoload tl basis-link/program libtllo.so
+
+# vim:set shiftwidth=4 softtabstop=4 expandtab:

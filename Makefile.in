@@ -30,7 +30,8 @@ install:
 	ooinstall "@INSTALLDIR@" && \
 	echo "" && \
 	echo "Installation finished, you can now execute:" && \
-	echo "@INSTALLDIR@/program/soffice"
+	echo "@INSTALLDIR@/program/soffice" && \
+	install-gdb-printers -a "@INSTALLDIR@"
 
 distro-pack-install: install
 	./bin/distro-install-clean-up
@@ -46,6 +47,7 @@ dev-install:
 		cd @abs_builddir@ && ln -s $$SOLARVER/$$INPATH/installation/opt/ install && \
 		echo "" && \
 	$$SOLARENV/bin/linkoo $$SRC_ROOT/install $$SRC_ROOT && \
+	install-gdb-printers -a "$$SOLARVER/$$INPATH/installation/opt" -L && \
 	echo && echo "Developer installation finished, you can now execute:" && echo && \
 	if test `uname -s` = Darwin; then \
 		echo open install/LibreOffice.app; \
