@@ -99,7 +99,6 @@ class Window;
 
 #include <editeng/eedata.hxx>
 
-class SvUShorts;
 class SvxNumberFormat;
 
 
@@ -592,7 +591,7 @@ private:
 
     sal_Bool                ImplHasText() const;
 
-    void                ImpFindKashidas( ContentNode* pNode, sal_uInt16 nStart, sal_uInt16 nEnd, SvUShorts& rArray );
+    void                ImpFindKashidas( ContentNode* pNode, sal_uInt16 nStart, sal_uInt16 nEnd, std::vector<sal_uInt16>& rArray );
 
     void                InsertContent( ContentNode* pNode, sal_uInt16 nPos );
     EditPaM             SplitContent( sal_uInt16 nNode, sal_uInt16 nSepPos );

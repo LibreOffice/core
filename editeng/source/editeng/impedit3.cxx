@@ -1969,7 +1969,7 @@ void ImpEditEngine::ImpAdjustBlocks( ParaPortion* pParaPortion, EditLine* pLine,
     DBG_ASSERT( nLastChar < pNode->Len(), "AdjustBlocks: Out of range!" );
 
     // Search blanks or Kashidas...
-    SvUShorts aPositions;
+    std::vector<sal_uInt16> aPositions;
     sal_uInt16 nLastScript = i18n::ScriptType::LATIN;
     for ( sal_uInt16 nChar = nFirstChar; nChar <= nLastChar; nChar++ )
     {
@@ -1983,7 +1983,7 @@ void ImpEditEngine::ImpAdjustBlocks( ParaPortion* pParaPortion, EditLine* pLine,
         if ( pNode->GetChar(nChar) == ' ' )
         {
             // Normal latin script.
-            aPositions.Insert( nChar, aPositions.Count() );
+            aPositions.push_back( nChar );
         }
         else if (nChar > nFirstChar)
         {
@@ -1991,12 +1991,12 @@ void ImpEditEngine::ImpAdjustBlocks( ParaPortion* pParaPortion, EditLine* pLine,
             {
                 // Set break position between this and the last character if
                 // the last character is asian script.
-                aPositions.Insert( nChar-1, aPositions.Count() );
+                aPositions.push_back( nChar-1 );
             }
             else if (nScript == i18n::ScriptType::ASIAN)
             {
                 // Set break position between a latin script and asian script.
-                aPositions.Insert( nChar-1, aPositions.Count() );
+                aPositions.push_back( nChar-1 );
             }
         }
 
@@ -2006,15 +2006,16 @@ void ImpEditEngine::ImpAdjustBlocks( ParaPortion* pParaPortion, EditLine* pLine,
     // Kashidas ?
     ImpFindKashidas( pNode, nFirstChar, nLastChar, aPositions );
 
-    if ( !aPositions.Count() )
+    if ( aPositions.empty() )
         return;
 
     // If the last character is a blank, it is rejected!
     // The width must be distributed to the blockers in front...
     // But not if it is the only one.
-    if ( ( pNode->GetChar( nLastChar ) == ' ' ) && ( aPositions.Count() > 1 ) && ( MsLangId::getPrimaryLanguage( GetLanguage( EditPaM( pNode, nLastChar ) ) ) != LANGUAGE_ARABIC_PRIMARY_ONLY ) )
+    if ( ( pNode->GetChar( nLastChar ) == ' ' ) && ( aPositions.size() > 1 ) &&
+         ( MsLangId::getPrimaryLanguage( GetLanguage( EditPaM( pNode, nLastChar ) ) ) != LANGUAGE_ARABIC_PRIMARY_ONLY ) )
     {
-        aPositions.Remove( aPositions.Count()-1, 1 );
+        aPositions.pop_back();
         sal_uInt16 nPortionStart, nPortion;
         nPortion = pParaPortion->GetTextPortions().FindPortion( nLastChar+1, nPortionStart );
         TextPortion* pLastPortion = pParaPortion->GetTextPortions()[ nPortion ];
@@ -2034,7 +2035,7 @@ void ImpEditEngine::ImpAdjustBlocks( ParaPortion* pParaPortion, EditLine* pLine,
         pLine->GetCharPosArray()[nLastChar-nFirstChar] -= nBlankWidth;
     }
 
-    sal_uInt16 nGaps = aPositions.Count();
+    size_t nGaps = aPositions.size();
     const long nMore4Everyone = nRemainingSpace / nGaps;
     long nSomeExtraSpace = nRemainingSpace - nMore4Everyone*nGaps;
 
@@ -2043,9 +2044,9 @@ void ImpEditEngine::ImpAdjustBlocks( ParaPortion* pParaPortion, EditLine* pLine,
 
     // Correct the positions in the Array and the portion widths:
     // Last character won't be considered ...
-    for ( sal_uInt16 n = 0; n < aPositions.Count(); n++ )
+    for ( std::vector<sal_uInt16>::const_iterator it(aPositions.begin()); it != aPositions.end(); ++it )
     {
-        sal_uInt16 nChar = aPositions[n];
+        sal_uInt16 nChar = *it;
         if ( nChar < nLastChar )
         {
             sal_uInt16 nPortionStart, nPortion;
@@ -2076,7 +2077,7 @@ void ImpEditEngine::ImpAdjustBlocks( ParaPortion* pParaPortion, EditLine* pLine,
     pLine->SetTextWidth( pLine->GetTextWidth() + nRemainingSpace );
 }
 
-void ImpEditEngine::ImpFindKashidas( ContentNode* pNode, sal_uInt16 nStart, sal_uInt16 nEnd, SvUShorts& rArray )
+void ImpEditEngine::ImpFindKashidas( ContentNode* pNode, sal_uInt16 nStart, sal_uInt16 nEnd, std::vector<sal_uInt16>& rArray )
 {
     // the search has to be performed on a per word base
 
@@ -2186,7 +2187,7 @@ void ImpEditEngine::ImpFindKashidas( ContentNode* pNode, sal_uInt16 nStart, sal_
         } // end of current word
 
         if ( STRING_LEN != nKashidaPos )
-            rArray.Insert( nKashidaPos, rArray.Count() );
+            rArray.push_back( nKashidaPos );
 
         aWordSel = WordRight( aWordSel.Max(), ::com::sun::star::i18n::WordType::DICTIONARY_WORD );
         aWordSel = SelectWord( aWordSel, ::com::sun::star::i18n::WordType::DICTIONARY_WORD );

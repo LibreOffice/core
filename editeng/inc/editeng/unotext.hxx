@@ -518,7 +518,6 @@ public:
 // ====================================================================
 #include <com/sun/star/text/XTextContent.hpp>
 
-class SvUShorts;
 class SvxUnoTextContent : public SvxUnoTextRangeBase,
                           public ::com::sun::star::text::XTextContent,
                           public ::com::sun::star::container::XEnumerationAccess,
