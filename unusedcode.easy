@@ -1099,9 +1099,6 @@ SfxModule::IsActive() const
 SfxModule::RegisterChildWindowContext(unsigned short, SfxChildWinContextFactory*)
 SfxModuleArr_Impl::DeleteAndDestroy(unsigned short, unsigned short)
 SfxNavigatorWrapper::GetChildWindowId()
-SfxNewFileDialog::GetTemplateName() const
-SfxNewFileDialog::GetTemplateRegion() const
-SfxNewFileDialog_Impl::LinkStubTemplateSelect(void*, void*)
 SfxObjectList::GetFileName(unsigned short) const
 SfxObjectShell::Count()
 SfxObjectShell::CreateAndLoadObject(SfxItemSet const&, SfxFrame*)
@@ -1113,6 +1110,7 @@ SfxObjectShell::SetFlags(unsigned int)
 SfxObjectShell::SetTemplate(unsigned char)
 SfxObjectVerbsControl::RegisterControl(unsigned short, SfxModule*)
 SfxOfficeDispatch::IsMasterUnoCommand() const
+SfxOleDateProperty::SfxOleDateProperty(int, com::sun::star::util::Date const&)
 SfxOleString16Property::SfxOleString16Property(int, String const&)
 SfxOrganizeDlg_Impl::OkHdl(Button*)
 SfxPartChildWnd_Impl::GetChildWindowId()
@@ -2634,22 +2632,8 @@ binfilter::Sw3Bytes::Insert(binfilter::Sw3Bytes const*, unsigned short, unsigned
 binfilter::Sw3Bytes::Replace(unsigned char const&, unsigned short)
 binfilter::Sw3Bytes::Replace(unsigned char const*, unsigned short, unsigned short)
 binfilter::Sw3Bytes::_ForEach(unsigned short, unsigned short, unsigned char (*)(unsigned char const&, void*), void*)
-binfilter::Sw3IoImp::CloseValuePos16(unsigned short)
-binfilter::Sw3IoImp::CloseValuePos32(unsigned int)
-binfilter::Sw3IoImp::ExportNodeDrawFrmFmts(binfilter::SwTxtNode const&, unsigned short, unsigned short, unsigned short)
 binfilter::Sw3IoImp::ExportTxtAttrs(binfilter::Sw3ExportTxtAttrs const*, unsigned short, unsigned short)
 binfilter::Sw3IoImp::ExportTxtNode(binfilter::SwTxtNode const&, unsigned short, unsigned short, unsigned short, binfilter::SwInsHardBlankSoftHyph&)
-binfilter::Sw3IoImp::GetTblLineBoxFmtId(binfilter::SwFrmFmt*)
-binfilter::Sw3IoImp::IsSw40Export() const
-binfilter::Sw3IoImp::OpenValuePos16(unsigned short)
-binfilter::Sw3IoImp::OpenValuePos32(unsigned int)
-binfilter::Sw3IoImp::OutEmptyTxtNode(unsigned long, unsigned char)
-binfilter::Sw3IoImp::OutGrfNode(binfilter::SwNoTxtNode const&)
-binfilter::Sw3IoImp::OutNodeFlyFrames(unsigned long)
-binfilter::Sw3IoImp::OutNodeNum(binfilter::SwNodeNum const&)
-binfilter::Sw3IoImp::OutOLENode(binfilter::SwNoTxtNode const&)
-binfilter::Sw3IoImp::OutRepTxtNode(unsigned long)
-binfilter::Sw3IoImp::OutTxtAttrs(binfilter::SwTxtNode const&, unsigned short, unsigned short)
 binfilter::Sw3Marks::GetPos(binfilter::Sw3Mark const*) const
 binfilter::Sw3Marks::Insert(binfilter::Sw3Mark*)
 binfilter::Sw3Marks::Remove(binfilter::Sw3Mark*)
@@ -2669,7 +2653,6 @@ binfilter::Sw3ULongs::Insert(binfilter::Sw3ULongs const*, unsigned short, unsign
 binfilter::Sw3ULongs::Replace(unsigned int const&, unsigned short)
 binfilter::Sw3ULongs::Replace(unsigned int const*, unsigned short, unsigned short)
 binfilter::Sw3ULongs::_ForEach(unsigned short, unsigned short, unsigned char (*)(unsigned int const&, void*), void*)
-binfilter::SwAuthorityField::GetHandlePosition() const
 binfilter::SwBookmarks::Insert(binfilter::SwBookmark* const&, unsigned short&)
 binfilter::SwBookmarks::Insert(binfilter::SwBookmark* const*, unsigned short)
 binfilter::SwBookmarks::Insert(binfilter::SwBookmarks const*, unsigned short, unsigned short)
@@ -2707,10 +2690,6 @@ binfilter::SwPosFlyFrms::Remove(unsigned short, unsigned short)
 binfilter::SwRects::Replace(binfilter::SwRect const&, unsigned short)
 binfilter::SwRects::Replace(binfilter::SwRect const*, unsigned short, unsigned short)
 binfilter::SwRects::_ForEach(unsigned short, unsigned short, unsigned char (*)(binfilter::SwRect const&, void*), void*)
-binfilter::SwRedline::GetComment(unsigned short) const
-binfilter::SwRedline::GetRealType(unsigned short) const
-binfilter::SwRedline::GetStackCount() const
-binfilter::SwRedline::GetTimeStamp(unsigned short) const
 binfilter::SwRubyList::DeleteAndDestroy(unsigned short, unsigned short)
 binfilter::SwSelBoxes::Insert(binfilter::SwTableBox* const&, unsigned short&)
 binfilter::SwSelBoxes::Remove(binfilter::SwTableBox* const&, unsigned short)
@@ -2798,7 +2777,6 @@ binfilter::XMLTextListAutoStylePoolNames_Impl::GetPos(rtl::OUString const*) cons
 binfilter::XMLTextListAutoStylePoolNames_Impl::Remove(rtl::OUString*)
 binfilter::XMLTextListAutoStylePool_Impl::GetPos(binfilter::XMLTextListAutoStylePoolEntry_Impl const*) const
 binfilter::XMLTextListAutoStylePool_Impl::Remove(binfilter::XMLTextListAutoStylePoolEntry_Impl*)
-binfilter::XTextAttrSetItem::XTextAttrSetItem(binfilter::SfxItemPool*)
 binfilter::_MapTblFrmFmts::Insert(binfilter::_MapTblFrmFmts const*, unsigned short, unsigned short, unsigned short)
 binfilter::_MapTblFrmFmts::Remove(unsigned short, unsigned short)
 binfilter::_MapTblFrmFmts::Replace(binfilter::_MapTblFrmFmt const&, unsigned short)
@@ -2838,13 +2816,7 @@ binfilter::_ZSortFlys_SAR::Replace(binfilter::_ZSortFly const*, unsigned short, 
 binfilter::_ZSortFlys_SAR::_ForEach(unsigned short, unsigned short, unsigned char (*)(binfilter::_ZSortFly const&, void*), void*)
 binfilter::bf_OfficeWrapper::impl_createInstance(com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory> const&)
 binfilter::frm::OErrorBroadcaster::onError(com::sun::star::sdbc::SQLException const&, rtl::OUString const&)
-binfilter::lcl_sw3io_IsBoxFmtShared(binfilter::SwFrmFmt&, binfilter::SwTableBox const&)
-binfilter::lcl_sw3io_IsLineFmtShared(binfilter::SwFrmFmt&, binfilter::SwTableLine const&)
 binfilter::lcl_sw3io__ConvertNumTabStop(binfilter::SwCntntNode const&, long, binfilter::SfxItemSet&)
-binfilter::lcl_sw3io__IsInclUpperLevel(unsigned char)
-binfilter::lcl_sw3io_isTOXHeaderSection(binfilter::SwStartNode const&)
-binfilter::lcl_sw3sectn_NodeHasFlyOrMark(binfilter::Sw3IoImp&, unsigned long)
-binfilter::sw3io_countwords(String const&, String const&, unsigned long&, unsigned long&)
 cairocanvas::CanvasHelper::flush() const
 cairocanvas::CanvasHelper::getPalette()
 cairocanvas::SpriteDeviceHelper::getSurface()
@@ -3874,7 +3846,6 @@ svx::SearchToolbarControllersManager::~SearchToolbarControllersManager()
 svx::SvxShowCharSetItem::~SvxShowCharSetItem()
 svx::ToolboxButtonColorUpdater::DrawChar(VirtualDevice&, Color const&)
 svx::WrapField::WrapField(Window*, long)
-svx::frame::(anonymous namespace)::lclCreatePolygon(Point const&, Point const&, Point const&, Point const&)
 svx::frame::Array::Array(unsigned long, unsigned long)
 svx::frame::Array::Clear()
 svx::frame::Array::DrawCell(OutputDevice&, unsigned long, unsigned long, Color const*) const
@@ -3904,9 +3875,6 @@ svxform::FmFilterNavigatorWinMgr::GetChildWindowId()
 svxform::FmSearchParams::setIgnoreWidthCJK(unsigned char)
 svxform::NavigatorFrameManager::GetChildWindowId()
 svxform::NavigatorTree::IsDeleteAllowed()
-svxform::NavigatorTreeModel::CheckEntry(FmEntryData*)
-svxform::NavigatorTreeModel::GetSdrObj(FmControlData*)
-svxform::NavigatorTreeModel::IsNameAlreadyDefined(rtl::OUString const&, FmFormData*)
 svxform::OStaticDataAccessTools::canDelete(com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet> const&) const
 svxform::OStaticDataAccessTools::getFieldNamesByCommandDescriptor(com::sun::star::uno::Reference<com::sun::star::sdbc::XConnection> const&, int, rtl::OUString const&, dbtools::SQLExceptionInfo*)
 svxform::OStaticDataAccessTools::prependContextInfo(com::sun::star::sdbc::SQLException&, com::sun::star::uno::Reference<com::sun::star::uno::XInterface> const&, rtl::OUString const&, rtl::OUString const&) const

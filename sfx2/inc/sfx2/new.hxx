@@ -85,8 +85,6 @@ public:
     // Returns sal_False, when '- No -' is set as Template
     // Template names can only be obtained when IsTemplate() returns sal_True.
     sal_Bool IsTemplate() const;
-    String GetTemplateRegion() const;
-    String GetTemplateName() const;
     String GetTemplateFileName() const;
 
     // load template methods

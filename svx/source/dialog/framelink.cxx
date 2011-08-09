@@ -741,18 +741,6 @@ inline Polygon lclCreatePolygon( const PointVec& rPoints )
     return Polygon( static_cast< sal_uInt16 >( rPoints.size() ), &rPoints[ 0 ] );
 }
 
-/** Returns a polygon constructed from the four passed points. */
-Polygon lclCreatePolygon( const Point& rP1, const Point& rP2, const Point& rP3, const Point& rP4 )
-{
-    PointVec aPoints;
-    aPoints.reserve( 2 );
-    aPoints.push_back( rP1 );
-    aPoints.push_back( rP2 );
-    aPoints.push_back( rP3 );
-    aPoints.push_back( rP4 );
-    return lclCreatePolygon( aPoints );
-}
-
 /** Returns a polygon constructed from the five passed points. */
 Polygon lclCreatePolygon( const Point& rP1, const Point& rP2, const Point& rP3, const Point& rP4, const Point& rP5 )
 {

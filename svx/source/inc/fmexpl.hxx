@@ -402,9 +402,8 @@ namespace svxform
         void Remove( FmEntryData* pEntryData, sal_Bool bAlterModel = sal_False );
 
         sal_Bool Rename( FmEntryData* pEntryData, const ::rtl::OUString& rNewText );
-        sal_Bool IsNameAlreadyDefined( const ::rtl::OUString& rName, FmFormData* pParentData );
+
         void Clear();
-        sal_Bool CheckEntry( FmEntryData* pEntryData );
         void SetModified( sal_Bool bMod=sal_True );
 
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >    GetForms() const;
@@ -414,7 +413,6 @@ namespace svxform
         FmEntryData*        FindData( const ::rtl::OUString& rText, FmFormData* pParentData, sal_Bool bRecurs=sal_True );
         FmEntryDataList*    GetRootList() const { return m_pRootList; }
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer >   GetFormComponents( FmFormData* pParentFormData );
-        SdrObject*          GetSdrObj( FmControlData* pControlData );
         SdrObject*          Search(SdrObjListIter& rIter, const ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormComponent >& xComp);
 
         virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint );

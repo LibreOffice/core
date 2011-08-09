@@ -682,16 +682,6 @@ sal_Bool SfxNewFileDialog::IsTemplate() const
     return pImpl->IsTemplate();
 }
 //-------------------------------------------------------------------------
-String SfxNewFileDialog::GetTemplateRegion() const
-{
-    return pImpl->GetTemplateRegion();
-}
-//-------------------------------------------------------------------------
-String SfxNewFileDialog::GetTemplateName() const
-{
-    return pImpl->GetTemplateName();
-}
-//-------------------------------------------------------------------------
 String SfxNewFileDialog::GetTemplateFileName() const
 {
     return pImpl->GetTemplateFileName();

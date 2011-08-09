@@ -960,53 +960,6 @@ namespace svxform
     }
 
     //------------------------------------------------------------------------
-    sal_Bool NavigatorTreeModel::CheckEntry( FmEntryData* pEntryData )
-    {
-        RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "NavigatorTreeModel::CheckEntry" );
-        //////////////////////////////////////////////////////////////////////
-        // Nur Forms duerfen auf Doppeldeutigkeit untersucht werden
-        if( !pEntryData->ISA(FmFormData) ) return sal_True;
-
-        //////////////////////////////////////////////////////////////////////
-        // ChildListe des Parents holen
-        FmFormData* pParentData = (FmFormData*)pEntryData->GetParent();
-        FmEntryDataList* pChildList;
-        if( !pParentData )
-            pChildList = GetRootList();
-        else
-            pChildList = pParentData->GetChildList();
-
-        //////////////////////////////////////////////////////////////////////
-        // In ChildListe nach doppelten Namen suchen
-        ::rtl::OUString aChildText;
-        FmEntryData* pChildData;
-
-        for( size_t i = 0; i < pChildList->size(); i++ )
-        {
-            pChildData = pChildList->at( i );
-            aChildText = pChildData->GetText();
-
-            //////////////////////////////////////////////////////////////////////
-            // Gleichen Eintrag gefunden
-            if  (   (aChildText == pEntryData->GetText())
-                &&  (pEntryData!=pChildData)
-                )
-            {
-
-
-                SQLContext aError;
-                aError.Message = String(SVX_RES(RID_ERR_CONTEXT_ADDFORM));
-                aError.Details = String(SVX_RES(RID_ERR_DUPLICATE_NAME));
-                displayException(aError);
-
-                return sal_False;
-            }
-        }
-
-        return sal_True;
-    }
-
-    //------------------------------------------------------------------------
     sal_Bool NavigatorTreeModel::Rename( FmEntryData* pEntryData, const ::rtl::OUString& rNewText )
     {
         RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "NavigatorTreeModel::Rename" );
@@ -1040,51 +993,6 @@ namespace svxform
         xSet->setPropertyValue( FM_PROP_NAME, makeAny(rNewText) );
 
         return sal_True;
-    }
-
-    //------------------------------------------------------------------------
-    sal_Bool NavigatorTreeModel::IsNameAlreadyDefined( const ::rtl::OUString& rName, FmFormData* pParentData )
-    {
-        RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "NavigatorTreeModel::IsNameAlreadyDefined" );
-        //////////////////////////////////////////////////////////////////////
-        // Form in der Root
-        if( !pParentData )
-        {
-            if (GetForms()->hasByName(rName))
-                return sal_True;
-        }
-
-        //////////////////////////////////////////////////////////////////////
-        // Restliche Components
-        else
-        {
-            Reference< XNameContainer >  xFormComponents(GetFormComponents(pParentData), UNO_QUERY);
-            if (xFormComponents.is() && xFormComponents->hasByName(rName))
-                return sal_True;
-        }
-
-        return sal_False;
-    }
-
-    //------------------------------------------------------------------------
-    SdrObject* NavigatorTreeModel::GetSdrObj( FmControlData* pControlData )
-    {
-        RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "NavigatorTreeModel::GetSdrObj" );
-        if (!pControlData || !m_pFormShell)
-            return NULL;
-
-        //////////////////////////////////////////////////////////////////////
-        // In der Page das entsprechende SdrObj finden und selektieren
-        Reference< XFormComponent >  xFormComponent( pControlData->GetFormComponent());
-        if (!xFormComponent.is())
-            return NULL;
-
-        FmFormView*     pFormView       = m_pFormShell->GetFormView();
-        SdrPageView*    pPageView       = pFormView->GetSdrPageView();
-        SdrPage*        pPage           = pPageView->GetPage();
-
-        SdrObjListIter  aIter( *pPage );
-        return Search(aIter, xFormComponent);
     }
 
     //------------------------------------------------------------------
