@@ -250,15 +250,15 @@ void ScRangeData::UpdateReference(  UpdateRefMode eUpdateRefMode,
                                     const ScRange& r,
                                     SCsCOL nDx, SCsROW nDy, SCsTAB nDz )
 {
-    sal_Bool bChanged = false;
+    bool bChanged = false;
 
     pCode->Reset();
     if( pCode->GetNextReference() )
     {
-        sal_Bool bSharedFormula = ((eType & RT_SHARED) == RT_SHARED);
+        bool bSharedFormula = ((eType & RT_SHARED) == RT_SHARED);
         ScCompiler aComp( pDoc, aPos, *pCode );
         aComp.SetGrammar(pDoc->GetGrammar());
-        const sal_Bool bRelRef = aComp.UpdateNameReference( eUpdateRefMode, r,
+        const bool bRelRef = aComp.UpdateNameReference( eUpdateRefMode, r,
                                                     nDx, nDy, nDz,
                                                     bChanged, bSharedFormula);
         if (bSharedFormula)
@@ -276,7 +276,7 @@ void ScRangeData::UpdateReference(  UpdateRefMode eUpdateRefMode,
 
 void ScRangeData::UpdateTranspose( const ScRange& rSource, const ScAddress& rDest )
 {
-    sal_Bool bChanged = false;
+    bool bChanged = false;
 
     ScToken* t;
     pCode->Reset();
@@ -294,7 +294,7 @@ void ScRangeData::UpdateTranspose( const ScRange& rSource, const ScAddress& rDes
                     (!rRef.Ref2.IsFlag3D() || !rRef.Ref2.IsTabRel()))))
             {
                 if ( ScRefUpdate::UpdateTranspose( pDoc, rSource, rDest, rRef ) != UR_NOTHING )
-                    bChanged = sal_True;
+                    bChanged = true;
             }
         }
     }
@@ -304,7 +304,7 @@ void ScRangeData::UpdateTranspose( const ScRange& rSource, const ScAddress& rDes
 
 void ScRangeData::UpdateGrow( const ScRange& rArea, SCCOL nGrowX, SCROW nGrowY )
 {
-    sal_Bool bChanged = false;
+    bool bChanged = false;
 
     ScToken* t;
     pCode->Reset();
@@ -322,7 +322,7 @@ void ScRangeData::UpdateGrow( const ScRange& rArea, SCCOL nGrowX, SCROW nGrowY )
                     (!rRef.Ref2.IsFlag3D() || !rRef.Ref2.IsTabRel()))))
             {
                 if ( ScRefUpdate::UpdateGrow( rArea,nGrowX,nGrowY, rRef ) != UR_NOTHING )
-                    bChanged = sal_True;
+                    bChanged = true;
             }
         }
     }
@@ -330,7 +330,7 @@ void ScRangeData::UpdateGrow( const ScRange& rArea, SCCOL nGrowX, SCROW nGrowY )
     bModified = bChanged;           // muss direkt hinterher ausgewertet werden
 }
 
-sal_Bool ScRangeData::operator== (const ScRangeData& rData) const       // fuer Undo
+bool ScRangeData::operator== (const ScRangeData& rData) const       // fuer Undo
 {
     if ( nIndex != rData.nIndex ||
          aName  != rData.aName  ||
@@ -347,20 +347,20 @@ sal_Bool ScRangeData::operator== (const ScRangeData& rData) const       // fuer 
         if ( ppThis[i] != ppOther[i] && !(*ppThis[i] == *ppOther[i]) )
             return false;
 
-    return sal_True;
+    return true;
 }
 
 
-sal_Bool ScRangeData::IsRangeAtBlock( const ScRange& rBlock ) const
+bool ScRangeData::IsRangeAtBlock( const ScRange& rBlock ) const
 {
-    sal_Bool bRet = false;
+    bool bRet = false;
     ScRange aRange;
     if ( IsReference(aRange) )
         bRet = ( rBlock == aRange );
     return bRet;
 }
 
-sal_Bool ScRangeData::IsReference( ScRange& rRange ) const
+bool ScRangeData::IsReference( ScRange& rRange ) const
 {
     if ( (eType & ( RT_ABSAREA | RT_REFAREA | RT_ABSPOS )) && pCode )
         return pCode->IsReference( rRange );
@@ -368,7 +368,7 @@ sal_Bool ScRangeData::IsReference( ScRange& rRange ) const
     return false;
 }
 
-sal_Bool ScRangeData::IsReference( ScRange& rRange, const ScAddress& rPos ) const
+bool ScRangeData::IsReference( ScRange& rRange, const ScAddress& rPos ) const
 {
     if ( (eType & ( RT_ABSAREA | RT_REFAREA | RT_ABSPOS ) ) && pCode )
     {
@@ -382,7 +382,7 @@ sal_Bool ScRangeData::IsReference( ScRange& rRange, const ScAddress& rPos ) cons
     return false;
 }
 
-sal_Bool ScRangeData::IsValidReference( ScRange& rRange ) const
+bool ScRangeData::IsValidReference( ScRange& rRange ) const
 {
     if ( (eType & ( RT_ABSAREA | RT_REFAREA | RT_ABSPOS ) ) && pCode )
         return pCode->IsValidReference( rRange );
@@ -396,20 +396,20 @@ void ScRangeData::UpdateTabRef(SCTAB nOldTable, sal_uInt16 nFlag, SCTAB nNewTabl
     if( pCode->GetNextReference() )
     {
         ScRangeData* pRangeData = NULL;     // must not be dereferenced
-        sal_Bool bChanged;
+        bool bChanged;
         ScCompiler aComp( pDoc, aPos, *pCode);
         aComp.SetGrammar(pDoc->GetGrammar());
         switch (nFlag)
         {
             case 1:                                     // einfache InsertTab (doc.cxx)
-                pRangeData = aComp.UpdateInsertTab(nOldTable, sal_True, nNewSheets );   // und CopyTab (doc2.cxx)
+                pRangeData = aComp.UpdateInsertTab(nOldTable, true, nNewSheets );   // und CopyTab (doc2.cxx)
                 break;
             case 2:                                     // einfaches delete (doc.cxx)
-                pRangeData = aComp.UpdateDeleteTab(nOldTable, false, sal_True, bChanged);
+                pRangeData = aComp.UpdateDeleteTab(nOldTable, false, true, bChanged);
                 break;
             case 3:                                     // move (doc2.cxx)
             {
-                pRangeData = aComp.UpdateMoveTab(nOldTable, nNewTable, sal_True );
+                pRangeData = aComp.UpdateMoveTab(nOldTable, nNewTable, true );
             }
                 break;
             default:
@@ -471,7 +471,7 @@ void ScRangeData::MakeValidName( String& rName )
     }
 }
 
-sal_Bool ScRangeData::IsNameValid( const String& rName, ScDocument* pDoc )
+bool ScRangeData::IsNameValid( const String& rName, ScDocument* pDoc )
 {
     /* XXX If changed, sc/source/filter/ftools/ftools.cxx
      * ScfTools::ConvertToScDefinedName needs to be changed too. */
@@ -497,7 +497,7 @@ sal_Bool ScRangeData::IsNameValid( const String& rName, ScDocument* pDoc )
         if (aRange.Parse( rName, pDoc, details) || aAddr.Parse( rName, pDoc, details))
             return false;
     }
-    return sal_True;
+    return true;
 }
 
 void ScRangeData::SetMaxRow(SCROW nRow)
@@ -526,10 +526,10 @@ sal_uInt16 ScRangeData::GetErrCode() const
     return pCode ? pCode->GetCodeError() : 0;
 }
 
-sal_Bool ScRangeData::HasReferences() const
+bool ScRangeData::HasReferences() const
 {
     pCode->Reset();
-    return sal_Bool( pCode->GetNextReference() != NULL );
+    return pCode->GetNextReference() != NULL;
 }
 
 // bei TransferTab von einem in ein anderes Dokument anpassen,

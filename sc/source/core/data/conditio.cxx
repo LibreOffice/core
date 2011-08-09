@@ -474,7 +474,7 @@ void ScConditionEntry::SetFormula2( const ScTokenArray& rArray )
     }
 }
 
-void lcl_CondUpdateInsertTab( ScTokenArray& rCode, SCTAB nInsTab, SCTAB nPosTab, sal_Bool& rChanged )
+void lcl_CondUpdateInsertTab( ScTokenArray& rCode, SCTAB nInsTab, SCTAB nPosTab, bool& rChanged )
 {
     //  Insert table: only update absolute table references.
     //  (Similar to ScCompiler::UpdateInsertTab with bIsName=sal_True, result is the same as for named ranges)
@@ -508,11 +508,11 @@ void lcl_CondUpdateInsertTab( ScTokenArray& rCode, SCTAB nInsTab, SCTAB nPosTab,
 void ScConditionEntry::UpdateReference( UpdateRefMode eUpdateRefMode,
                                 const ScRange& rRange, SCsCOL nDx, SCsROW nDy, SCsTAB nDz )
 {
-    sal_Bool bInsertTab = ( eUpdateRefMode == URM_INSDEL && nDz == 1 );
-    sal_Bool bDeleteTab = ( eUpdateRefMode == URM_INSDEL && nDz == -1 );
+    bool bInsertTab = ( eUpdateRefMode == URM_INSDEL && nDz == 1 );
+    bool bDeleteTab = ( eUpdateRefMode == URM_INSDEL && nDz == -1 );
 
-    sal_Bool bChanged1 = false;
-    sal_Bool bChanged2 = false;
+    bool bChanged1 = false;
+    bool bChanged2 = false;
 
     if (pFormula1)
     {
@@ -523,7 +523,7 @@ void ScConditionEntry::UpdateReference( UpdateRefMode eUpdateRefMode,
             ScCompiler aComp( pDoc, aSrcPos, *pFormula1 );
             aComp.SetGrammar(pDoc->GetGrammar());
             if ( bDeleteTab )
-                aComp.UpdateDeleteTab( rRange.aStart.Tab(), false, sal_True, bChanged1 );
+                aComp.UpdateDeleteTab( rRange.aStart.Tab(), false, true, bChanged1 );
             else
                 aComp.UpdateNameReference( eUpdateRefMode, rRange, nDx, nDy, nDz, bChanged1 );
         }
@@ -540,7 +540,7 @@ void ScConditionEntry::UpdateReference( UpdateRefMode eUpdateRefMode,
             ScCompiler aComp( pDoc, aSrcPos, *pFormula2);
             aComp.SetGrammar(pDoc->GetGrammar());
             if ( bDeleteTab )
-                aComp.UpdateDeleteTab( rRange.aStart.Tab(), false, sal_True, bChanged2 );
+                aComp.UpdateDeleteTab( rRange.aStart.Tab(), false, true, bChanged2 );
             else
                 aComp.UpdateNameReference( eUpdateRefMode, rRange, nDx, nDy, nDz, bChanged2 );
         }
@@ -563,7 +563,7 @@ void ScConditionEntry::UpdateMoveTab( SCTAB nOldPos, SCTAB nNewPos )
     {
         ScCompiler aComp( pDoc, aSrcPos, *pFormula2);
         aComp.SetGrammar(pDoc->GetGrammar());
-        aComp.UpdateMoveTab(nOldPos, nNewPos, sal_True );
+        aComp.UpdateMoveTab(nOldPos, nNewPos, true );
         DELETEZ(pFCell2);
     }
 }

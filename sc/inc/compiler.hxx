@@ -344,11 +344,11 @@ private:
     sal_Bool IsPredetectedReference( const String& );
     sal_Bool IsDoubleReference( const String& );
     sal_Bool IsMacro( const String& );
-    sal_Bool IsNamedRange( const String& );
+    bool IsNamedRange( const String& );
     bool IsExternalNamedRange( const String& rSymbol );
     bool IsDBRange( const String& );
     sal_Bool IsColRowName( const String& );
-    sal_Bool IsBoolean( const String& );
+    bool IsBoolean( const String& );
     void AutoCorrectParsedSymbol();
 
     void SetRelNameReference();
@@ -428,10 +428,10 @@ public:
     static void MoveRelWrap( ScTokenArray& rArr, ScDocument* pDoc, const ScAddress& rPos,
                              SCCOL nMaxCol, SCROW nMaxRow );
 
-    sal_Bool UpdateNameReference( UpdateRefMode eUpdateRefMode,
+    bool UpdateNameReference( UpdateRefMode eUpdateRefMode,
                               const ScRange&,
                               SCsCOL nDx, SCsROW nDy, SCsTAB nDz,
-                              sal_Bool& rChanged, sal_Bool bSharedFormula = false);
+                              bool& rChanged, bool bSharedFormula = false);
 
     ScRangeData* UpdateReference( UpdateRefMode eUpdateRefMode,
                                   const ScAddress& rOldPos, const ScRange&,
@@ -444,15 +444,15 @@ public:
                                   const ScAddress& rOldPos, const ScRange&,
                                   SCsCOL nDx, SCsROW nDy, SCsTAB nDz );
 
-    ScRangeData* UpdateInsertTab(SCTAB nTable, sal_Bool bIsName, SCTAB nNewSheets = 1 );
-    ScRangeData* UpdateDeleteTab(SCTAB nTable, sal_Bool bIsMove, sal_Bool bIsName, sal_Bool& bCompile, SCTAB nSheets = 1);
-    ScRangeData* UpdateMoveTab(SCTAB nOldPos, SCTAB nNewPos, sal_Bool bIsName );
+    ScRangeData* UpdateInsertTab(SCTAB nTable, bool bIsName, SCTAB nNewSheets = 1 );
+    ScRangeData* UpdateDeleteTab(SCTAB nTable, bool bIsMove, bool bIsName, bool& bCompile, SCTAB nSheets = 1);
+    ScRangeData* UpdateMoveTab(SCTAB nOldPos, SCTAB nNewPos, bool bIsName );
 
     bool HasModifiedRange();
 
     /** If the character is allowed as first character in sheet names or
         references, includes '$' and '?'. */
-    static inline sal_Bool IsCharWordChar( String const & rStr,
+    static inline bool IsCharWordChar( String const & rStr,
                                        xub_StrLen nPos,
                                        const formula::FormulaGrammar::AddressConvention eConv = formula::FormulaGrammar::CONV_OOO )
         {
@@ -460,8 +460,7 @@ public:
             sal_Unicode cLast = nPos > 0 ? rStr.GetChar(nPos-1) : 0;
             if (c < 128)
             {
-                return pConventions[eConv] ? static_cast<sal_Bool>(
-                        (pConventions[eConv]->getCharTableFlags(c, cLast) & SC_COMPILER_C_CHAR_WORD) == SC_COMPILER_C_CHAR_WORD) :
+                return pConventions[eConv] ? (pConventions[eConv]->getCharTableFlags(c, cLast) & SC_COMPILER_C_CHAR_WORD) == SC_COMPILER_C_CHAR_WORD :
                     false;   // no convention => assume invalid
             }
             else
@@ -470,7 +469,7 @@ public:
 
     /** If the character is allowed in sheet names, thus may be part of a
         reference, includes '$' and '?' and such. */
-    static inline sal_Bool IsWordChar( String const & rStr,
+    static inline bool IsWordChar( String const & rStr,
                                    xub_StrLen nPos,
                                    const formula::FormulaGrammar::AddressConvention eConv = formula::FormulaGrammar::CONV_OOO )
         {
@@ -478,8 +477,7 @@ public:
             sal_Unicode cLast = nPos > 0 ? rStr.GetChar(nPos-1) : 0;
             if (c < 128)
             {
-                return pConventions[eConv] ? static_cast<sal_Bool>(
-                        (pConventions[eConv]->getCharTableFlags(c, cLast) & SC_COMPILER_C_WORD) == SC_COMPILER_C_WORD) :
+                return pConventions[eConv] ? (pConventions[eConv]->getCharTableFlags(c, cLast) & SC_COMPILER_C_WORD) == SC_COMPILER_C_WORD :
                     false;   // convention not known => assume invalid
             }
             else

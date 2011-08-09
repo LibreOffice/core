@@ -1146,7 +1146,7 @@ void ScFormulaCell::UpdateInsertTab(SCTAB nTable, SCTAB nNewSheets)
         pRangeData = aComp.UpdateInsertTab( nTable, false, nNewSheets );
         if (pRangeData)                     // Shared Formula gegen echte Formel
         {                                   // austauschen
-            sal_Bool bRefChanged;
+            bool bRefChanged;
             pDocument->RemoveFromFormulaTree( this );   // update formula count
             delete pCode;
             pCode = new ScTokenArray( *pRangeData->GetCode() );
@@ -1156,7 +1156,7 @@ void ScFormulaCell::UpdateInsertTab(SCTAB nTable, SCTAB nNewSheets)
             aComp2.UpdateInsertTab( nTable, false, nNewSheets );
             // If the shared formula contained a named range/formula containing
             // an absolute reference to a sheet, those have to be readjusted.
-            aComp2.UpdateDeleteTab( nTable, false, sal_True, bRefChanged, nNewSheets );
+            aComp2.UpdateDeleteTab( nTable, false, true, bRefChanged, nNewSheets );
             bCompile = sal_True;
         }
         // kein StartListeningTo weil pTab[nTab] noch nicht existiert!
@@ -1167,7 +1167,7 @@ void ScFormulaCell::UpdateInsertTab(SCTAB nTable, SCTAB nNewSheets)
 
 sal_Bool ScFormulaCell::UpdateDeleteTab(SCTAB nTable, sal_Bool bIsMove, SCTAB nSheets)
 {
-    sal_Bool bRefChanged = false;
+    bool bRefChanged = false;
     sal_Bool bPosChanged = ( aPos.Tab() > nTable + nSheets ? sal_True : false );
     pCode->Reset();
     if( pCode->GetNextReferenceRPN() && !pDocument->IsClipOrUndo() )
@@ -1192,7 +1192,7 @@ sal_Bool ScFormulaCell::UpdateDeleteTab(SCTAB nTable, sal_Bool bIsMove, SCTAB nS
             aComp2.UpdateDeleteTab( nTable, false, false, bRefChanged, nSheets );
             // If the shared formula contained a named range/formula containing
             // an absolute reference to a sheet, those have to be readjusted.
-            aComp2.UpdateInsertTab( nTable,sal_True, nSheets );
+            aComp2.UpdateInsertTab( nTable,true, nSheets );
             // bRefChanged kann beim letzten UpdateDeleteTab zurueckgesetzt worden sein
             bRefChanged = sal_True;
             bCompile = sal_True;
@@ -1226,7 +1226,7 @@ void ScFormulaCell::UpdateMoveTab( SCTAB nOldPos, SCTAB nNewPos, SCTAB nTabNo )
             aComp2.SetGrammar(pDocument->GetGrammar());
             aComp2.CompileTokenArray();
             aComp2.MoveRelWrap(pRangeData->GetMaxCol(), pRangeData->GetMaxRow());
-            aComp2.UpdateMoveTab( nOldPos, nNewPos, sal_True );
+            aComp2.UpdateMoveTab( nOldPos, nNewPos, true );
             bCompile = sal_True;
         }
         // kein StartListeningTo weil pTab[nTab] noch nicht korrekt!
