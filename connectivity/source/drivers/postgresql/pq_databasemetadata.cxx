@@ -1995,12 +1995,9 @@ static void addPrivilegesToVector(
 //             makeAny( resolveColumnNames(foreignMap, xRow->getString(8) ) ) );
 
 //     }
-    // fake the getImportedKey() function call in
-    // dbaccess/source/ui/relationdesign/RelationController.cxx
-    // it seems to be the only place in the office, where this function is needed
-    // LEM TODO: Well, used elsewhere now and breaks things. Fix it.
+    // LEM TODO: full "real" implementation
     return new SequenceResultSet(
-        m_refMutex, *this, Sequence< OUString >(), Sequence< Sequence< Any > > (1), m_pSettings->tc );
+        m_refMutex, *this, Sequence< OUString >(), Sequence< Sequence< Any > > (), m_pSettings->tc );
 }
 
 ::com::sun::star::uno::Reference< XResultSet > DatabaseMetaData::getExportedKeys(
