@@ -54,6 +54,7 @@ using namespace ::com::sun::star;
 
 #define TIMESTAMP_INVALID_DATETIME      ( DateTime ( Date ( 1, 1, 1601 ), Time ( 0, 0, 0 ) ) )  /// Invalid value for date and time to create invalid instance of TimeStamp.
 #define TIMESTAMP_INVALID_UTILDATETIME  ( util::DateTime ( 0, 0, 0, 0, 1, 1, 1601 ) )   /// Invalid value for date and time to create invalid instance of TimeStamp.
+#define TIMESTAMP_INVALID_UTILDATE  ( util::Date ( 1, 1, 1601 ) )   /// Invalid value for date to create invalid instance of TimeStamp.
 
 static
 bool operator==(const util::DateTime &i_rLeft, const util::DateTime &i_rRight)
@@ -65,6 +66,14 @@ bool operator==(const util::DateTime &i_rLeft, const util::DateTime &i_rRight)
         && i_rLeft.Minutes          == i_rRight.Minutes
         && i_rLeft.Seconds          == i_rRight.Seconds
         && i_rLeft.HundredthSeconds == i_rRight.HundredthSeconds;
+}
+
+static
+bool operator==(const util::Date &i_rLeft, const util::Date &i_rRight)
+{
+    return i_rLeft.Year             == i_rRight.Year
+        && i_rLeft.Month            == i_rRight.Month
+        && i_rLeft.Day              == i_rRight.Day;
 }
 
 // ============================================================================
@@ -202,6 +211,27 @@ private:
 
 private:
     util::DateTime      maDateTime;
+};
+
+/** Property representing a filetime value as defined by the Windows API. */
+class SfxOleDateProperty : public SfxOlePropertyBase
+{
+public:
+    explicit            SfxOleDateProperty( sal_Int32 nPropId );
+    /** @param rDate  Date as LOCAL time. */
+    explicit            SfxOleDateProperty( sal_Int32 nPropId, const util::Date& rDate );
+
+    /** Returns the date value as LOCAL time. */
+    inline const util::Date& GetValue() const { return maDate; }
+    /** @param rDate  Date as LOCAL time. */
+    inline void         SetValue( const util::Date& rDate ) { maDate = rDate; }
+
+private:
+    virtual void        ImplLoad( SvStream& rStrm );
+    virtual void        ImplSave( SvStream& rStrm );
+
+private:
+    util::Date      maDate;
 };
 
 // ============================================================================
@@ -615,6 +645,39 @@ void SfxOleFileTimeProperty::ImplSave( SvStream& rStrm )
     rStrm << nLower << nUpper;
 }
 
+SfxOleDateProperty::SfxOleDateProperty( sal_Int32 nPropId ) :
+    SfxOlePropertyBase( nPropId, PROPTYPE_DATE )
+{
+}
+
+SfxOleDateProperty::SfxOleDateProperty( sal_Int32 nPropId, const util::Date& rDate ) :
+    SfxOlePropertyBase( nPropId, PROPTYPE_DATE ),
+    maDate( rDate )
+{
+}
+
+void SfxOleDateProperty::ImplLoad( SvStream& rStrm )
+{
+    double fValue(0.0);
+    rStrm >> fValue;
+    //stored as number of days (not seconds) since December 31, 1899
+    ::Date aDate(31, 12, 1899);
+    long nDays = fValue;
+    aDate += nDays;
+    maDate.Day = aDate.GetDay();
+    maDate.Month = aDate.GetMonth();
+    maDate.Year = aDate.GetYear();
+}
+
+void SfxOleDateProperty::ImplSave( SvStream& rStrm )
+{
+    long nDays = ::Date::DateToDays(maDate.Day, maDate.Month, maDate.Year);
+    //number of days (not seconds) since December 31, 1899
+    long nStartDays = ::Date::DateToDays(31, 12, 1899);
+    double fValue = nDays-nStartDays;
+    rStrm << fValue;
+}
+
 // ----------------------------------------------------------------------------
 
 SfxOleThumbnailProperty::SfxOleThumbnailProperty(
@@ -810,6 +873,21 @@ bool SfxOleSection::GetFileTimeValue( util::DateTime& rValue, sal_Int32 nPropId 
     return pProp != 0;
 }
 
+bool SfxOleSection::GetDateValue( util::Date& rValue, sal_Int32 nPropId ) const
+{
+    SfxOlePropertyRef xProp = GetProperty( nPropId );
+    const SfxOleDateProperty* pProp =
+        dynamic_cast< const SfxOleDateProperty* >( xProp.get() );
+    if( pProp )
+    {
+        if ( pProp->GetValue() == TIMESTAMP_INVALID_UTILDATE )
+            rValue = util::Date();
+        else
+            rValue = pProp->GetValue();
+    }
+    return pProp != 0;
+}
+
 void SfxOleSection::SetProperty( SfxOlePropertyRef xProp )
 {
     if( xProp.get() )
@@ -847,6 +925,14 @@ void SfxOleSection::SetFileTimeValue( sal_Int32 nPropId, const util::DateTime& r
         SetProperty( SfxOlePropertyRef( new SfxOleFileTimeProperty( nPropId, rValue ) ) );
 }
 
+void SfxOleSection::SetDateValue( sal_Int32 nPropId, const util::Date& rValue )
+{
+    if ( rValue.Year == 0 || rValue.Month == 0 || rValue.Day == 0 )
+        SetProperty( SfxOlePropertyRef( new SfxOleDateProperty( nPropId, TIMESTAMP_INVALID_UTILDATE ) ) );
+    else
+        SetProperty( SfxOlePropertyRef( new SfxOleDateProperty( nPropId, rValue ) ) );
+}
+
 void SfxOleSection::SetThumbnailValue( sal_Int32 nPropId,
     const uno::Sequence<sal_uInt8> & i_rData)
 {
@@ -874,6 +960,7 @@ Any SfxOleSection::GetAnyValue( sal_Int32 nPropId ) const
     bool bBool = false;
     String aString;
     ::com::sun::star::util::DateTime aApiDateTime;
+    ::com::sun::star::util::Date aApiDate;
 
     if( GetInt32Value( nInt32, nPropId ) )
         aValue <<= nInt32;
@@ -887,6 +974,10 @@ Any SfxOleSection::GetAnyValue( sal_Int32 nPropId ) const
     {
         aValue <<= aApiDateTime;
     }
+    else if( GetDateValue( aApiDate, nPropId ) )
+    {
+        aValue <<= aApiDate;
+    }
     return aValue;
 }
 
@@ -897,6 +988,7 @@ bool SfxOleSection::SetAnyValue( sal_Int32 nPropId, const Any& rValue )
     double fDouble = 0.0;
     OUString aString;
     ::com::sun::star::util::DateTime aApiDateTime;
+    ::com::sun::star::util::Date aApiDate;
 
     if( rValue.getValueType() == ::getBooleanCppuType() )
         SetBoolValue( nPropId, ::comphelper::getBOOL( rValue ) == sal_True );
@@ -907,9 +999,9 @@ bool SfxOleSection::SetAnyValue( sal_Int32 nPropId, const Any& rValue )
     else if( rValue >>= aString )
         bInserted = SetStringValue( nPropId, aString );
     else if( rValue >>= aApiDateTime )
-    {
         SetFileTimeValue( nPropId, aApiDateTime );
-    }
+    else if( rValue >>= aApiDate )
+        SetDateValue( nPropId, aApiDate );
     else
         bInserted = false;
     return bInserted;
@@ -1058,6 +1150,9 @@ void SfxOleSection::LoadProperty( SvStream& rStrm, sal_Int32 nPropId )
         break;
         case PROPTYPE_FILETIME:
             xProp.reset( new SfxOleFileTimeProperty( nPropId ) );
+        break;
+        case PROPTYPE_DATE:
+            xProp.reset( new SfxOleDateProperty( nPropId ) );
         break;
     }
     // load property contents

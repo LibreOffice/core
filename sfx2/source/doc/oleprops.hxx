@@ -32,6 +32,7 @@
 #include <vcl/bitmapex.hxx>
 
 #include <com/sun/star/util/DateTime.hpp>
+#include <com/sun/star/util/Date.hpp>
 
 
 // ============================================================================
@@ -299,12 +300,15 @@ public:
     /** Returns the value of a time stamp property with the passed ID in rValue.
         @return  true = Property found, rValue is valid; false = Property not found. */
     bool                GetFileTimeValue( ::com::sun::star::util::DateTime& rValue, sal_Int32 nPropId ) const;
+    /** Returns the value of a date property with the passed ID in rValue.
+        @return  true = Property found, rValue is valid; false = Property not found. */
+    bool                GetDateValue( ::com::sun::star::util::Date& rValue, sal_Int32 nPropId ) const;
 
     /** Adds the passed property to the property set. Drops an existing old property. */
     void                SetProperty( SfxOlePropertyRef xProp );
     /** Inserts a signed int32 property with the passed value. */
     void                SetInt32Value( sal_Int32 nPropId, sal_Int32 nValue );
-    /** Inserts a foating-point property with the passed value. */
+    /** Inserts a floating-point property with the passed value. */
     void                SetDoubleValue( sal_Int32 nPropId, double fValue );
     /** Inserts a boolean property with the passed value. */
     void                SetBoolValue( sal_Int32 nPropId, bool bValue );
@@ -313,6 +317,8 @@ public:
     bool                SetStringValue( sal_Int32 nPropId, const String& rValue, bool bSkipEmpty = true );
     /** Inserts a time stamp property with the passed value. */
     void                SetFileTimeValue( sal_Int32 nPropId, const ::com::sun::star::util::DateTime& rValue );
+    /** Inserts a date property with the passed value. */
+    void                SetDateValue( sal_Int32 nPropId, const ::com::sun::star::util::Date& rValue );
     /** Inserts a thumbnail property from the passed meta file. */
     void                SetThumbnailValue( sal_Int32 nPropId,
                             const ::com::sun::star::uno::Sequence<sal_uInt8> & i_rData);
