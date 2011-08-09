@@ -386,11 +386,11 @@ ByteString& ByteString::Convert( rtl_TextEncoding eSource, rtl_TextEncoding eTar
 
 // -----------------------------------------------------------------------
 
-char ByteString::ConvertFromUnicode( sal_Unicode c, rtl_TextEncoding eTextEncoding, sal_Bool bReplace )
+char ByteString::ConvertFromUnicode(sal_Unicode c, rtl_TextEncoding eTextEncoding)
 {
     sal_Size    nLen;
     char        aBuf[30];
-    nLen = ConvertFromUnicode( c, aBuf, sizeof( aBuf ), eTextEncoding, bReplace );
+    nLen = ConvertFromUnicode(c, aBuf, sizeof( aBuf ), eTextEncoding);
     if ( nLen == 1 )
         return aBuf[0];
     else
@@ -399,8 +399,7 @@ char ByteString::ConvertFromUnicode( sal_Unicode c, rtl_TextEncoding eTextEncodi
 
 // -----------------------------------------------------------------------
 
-sal_Size ByteString::ConvertFromUnicode( sal_Unicode c, char* pBuf, sal_Size nBufLen, rtl_TextEncoding eTextEncoding,
-                                         sal_Bool bReplace )
+sal_Size ByteString::ConvertFromUnicode( sal_Unicode c, char* pBuf, sal_Size nBufLen, rtl_TextEncoding eTextEncoding )
 {
     // TextEncoding Dontknow wird nicht konvertiert
     if ( eTextEncoding == RTL_TEXTENCODING_DONTKNOW )
@@ -414,19 +413,12 @@ sal_Size ByteString::ConvertFromUnicode( sal_Unicode c, char* pBuf, sal_Size nBu
     sal_uInt32                  nFlags = RTL_UNICODETOTEXT_FLAGS_NONSPACING_IGNORE |
                                          RTL_UNICODETOTEXT_FLAGS_CONTROL_IGNORE |
                                          RTL_UNICODETOTEXT_FLAGS_FLUSH;
-    if ( bReplace )
-    {
-        nFlags |= RTL_UNICODETOTEXT_FLAGS_UNDEFINED_DEFAULT |
-                  RTL_UNICODETOTEXT_FLAGS_INVALID_DEFAULT;
-        nFlags |= RTL_UNICODETOTEXT_FLAGS_UNDEFINED_REPLACE;
-        if ( nBufLen > 1 )
-            nFlags |= RTL_UNICODETOTEXT_FLAGS_UNDEFINED_REPLACESTR;
-    }
-    else
-    {
-        nFlags |= RTL_UNICODETOTEXT_FLAGS_UNDEFINED_0 |
-                  RTL_UNICODETOTEXT_FLAGS_INVALID_0;
-    }
+
+    nFlags |= RTL_UNICODETOTEXT_FLAGS_UNDEFINED_DEFAULT |
+              RTL_UNICODETOTEXT_FLAGS_INVALID_DEFAULT;
+    nFlags |= RTL_UNICODETOTEXT_FLAGS_UNDEFINED_REPLACE;
+    if ( nBufLen > 1 )
+        nFlags |= RTL_UNICODETOTEXT_FLAGS_UNDEFINED_REPLACESTR;
 
     hConverter = rtl_createUnicodeToTextConverter( eTextEncoding );
     nDestBytes = rtl_convertUnicodeToText( hConverter, 0,
