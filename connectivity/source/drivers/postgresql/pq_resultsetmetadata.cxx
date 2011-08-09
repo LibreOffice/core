@@ -419,6 +419,7 @@ sal_Int32 ResultSetMetaData::getScale( sal_Int32 column )
 ::rtl::OUString ResultSetMetaData::getTableName( sal_Int32 column )
     throw (SQLException, RuntimeException)
 {
+// LEM TODO This is very fishy.. Should probably return the table to which that column belongs!
     rtl::OUString ret;
     if( m_tableName.getLength() )
     {
