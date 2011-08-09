@@ -55,7 +55,7 @@ public:
      */
     static void compileRangeRepresentation(
         ::std::vector<ScTokenRef>& rRefTokens, const ::rtl::OUString& rRangeStr, ScDocument* pDoc,
-        ::formula::FormulaGrammar::Grammar eGrammar = ::formula::FormulaGrammar::GRAM_ENGLISH);
+        const sal_Unicode cSep, ::formula::FormulaGrammar::Grammar eGrammar);
 
     static bool getRangeFromToken(ScRange& rRange, const ScTokenRef& pToken, bool bExternal = false);
 

@@ -35,7 +35,9 @@
 #include "chartlis.hxx"
 #include "XMLConverter.hxx"
 #include "rangeutl.hxx"
+#include "compiler.hxx"
 #include "reftokenhelper.hxx"
+
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/table/XColumnRowRange.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -93,7 +95,9 @@ void ScMyOLEFixer::CreateChartListener(ScDocument* pDoc,
         return;
 
     auto_ptr< vector<ScTokenRef> > pRefTokens(new vector<ScTokenRef>);
-    ScRefTokenHelper::compileRangeRepresentation(*pRefTokens, aRangeStr, pDoc);
+    const sal_Unicode cSep = ScCompiler::GetNativeSymbol(ocSep).GetChar(0);
+    ScRefTokenHelper::compileRangeRepresentation(
+        *pRefTokens, aRangeStr, pDoc, cSep, formula::FormulaGrammar::GRAM_ENGLISH);
     if (!pRefTokens->empty())
     {
         ScChartListener* pCL(new ScChartListener(rName, pDoc, pRefTokens.release()));

@@ -1030,7 +1030,9 @@ void ScChart2DataProvider::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint
     }
 
     vector<ScTokenRef> aTokens;
-    ScRefTokenHelper::compileRangeRepresentation(aTokens, aRangeRepresentation, m_pDocument, m_pDocument->GetGrammar());
+    const sal_Unicode cSep = ScCompiler::GetNativeSymbol(ocSep).GetChar(0);
+    ScRefTokenHelper::compileRangeRepresentation(
+        aTokens, aRangeRepresentation, m_pDocument, cSep, m_pDocument->GetGrammar());
     return !aTokens.empty();
 }
 
@@ -1406,7 +1408,9 @@ ScChart2DataProvider::createDataSource(
     }
 
     vector<ScTokenRef> aRefTokens;
-    ScRefTokenHelper::compileRangeRepresentation(aRefTokens, aRangeRepresentation, m_pDocument, m_pDocument->GetGrammar());
+    const sal_Unicode cSep = ScCompiler::GetNativeSymbol(ocSep).GetChar(0);
+    ScRefTokenHelper::compileRangeRepresentation(
+        aRefTokens, aRangeRepresentation, m_pDocument, cSep, m_pDocument->GetGrammar());
     if (aRefTokens.empty())
         // Invalid range representation.  Bail out.
         throw lang::IllegalArgumentException();
@@ -1730,7 +1734,9 @@ uno::Sequence< beans::PropertyValue > SAL_CALL ScChart2DataProvider::detectArgum
                 {
                     bFirstCellAsLabel = true;
                     vector<ScTokenRef> aTokens;
-                    ScRefTokenHelper::compileRangeRepresentation( aTokens, xLabel->getSourceRangeRepresentation(), m_pDocument, m_pDocument->GetGrammar() );
+                    const sal_Unicode cSep = ScCompiler::GetNativeSymbol(ocSep).GetChar(0);
+                    ScRefTokenHelper::compileRangeRepresentation(
+                        aTokens, xLabel->getSourceRangeRepresentation(), m_pDocument, cSep, m_pDocument->GetGrammar());
                     aLabel.initRangeAnalyzer(aTokens);
                     vector<ScTokenRef>::const_iterator itr = aTokens.begin(), itrEnd = aTokens.end();
                     for (; itr != itrEnd; ++itr)
@@ -1747,7 +1753,9 @@ uno::Sequence< beans::PropertyValue > SAL_CALL ScChart2DataProvider::detectArgum
                 if( xValues.is())
                 {
                     vector<ScTokenRef> aTokens;
-                    ScRefTokenHelper::compileRangeRepresentation( aTokens, xValues->getSourceRangeRepresentation(), m_pDocument, m_pDocument->GetGrammar() );
+                    const sal_Unicode cSep = ScCompiler::GetNativeSymbol(ocSep).GetChar(0);
+                    ScRefTokenHelper::compileRangeRepresentation(
+                        aTokens, xValues->getSourceRangeRepresentation(), m_pDocument, cSep, m_pDocument->GetGrammar());
                     aValues.initRangeAnalyzer(aTokens);
                     vector<ScTokenRef>::const_iterator itr = aTokens.begin(), itrEnd = aTokens.end();
                     for (; itr != itrEnd; ++itr)
@@ -1954,7 +1962,9 @@ uno::Sequence< beans::PropertyValue > SAL_CALL ScChart2DataProvider::detectArgum
         return false;
 
     vector<ScTokenRef> aTokens;
-    ScRefTokenHelper::compileRangeRepresentation(aTokens, aRangeRepresentation, m_pDocument, m_pDocument->GetGrammar());
+    const sal_Unicode cSep = ScCompiler::GetNativeSymbol(ocSep).GetChar(0);
+    ScRefTokenHelper::compileRangeRepresentation(
+        aTokens, aRangeRepresentation, m_pDocument, cSep, m_pDocument->GetGrammar());
     return !aTokens.empty();
 }
 
@@ -1971,14 +1981,16 @@ uno::Reference< chart2::data::XDataSequence > SAL_CALL
     if(!m_pDocument || (aRangeRepresentation.getLength() == 0))
         return xResult;
 
-    // Note: the range representation must be in Calc A1 format.  The import
-    // filters use this method to pass data ranges, and they have no idea what
-    // the current formula syntax is.  In the future we should add another
-    // method to allow the client code to directly pass tokens representing
-    // ranges.
+    // Note: the range representation must be in Calc A1 format, with English
+    // function names and ';' as the union operator in case of multiple
+    // ranges. The import filters use this method to pass data ranges, and
+    // they have no idea what the current formula syntax is. In the future we
+    // should add another method to allow the client code to directly pass
+    // tokens representing ranges.
 
     vector<ScTokenRef> aRefTokens;
-    ScRefTokenHelper::compileRangeRepresentation(aRefTokens, aRangeRepresentation, m_pDocument);
+    ScRefTokenHelper::compileRangeRepresentation(
+        aRefTokens, aRangeRepresentation, m_pDocument, ';', FormulaGrammar::GRAM_ENGLISH);
     if (aRefTokens.empty())
         return xResult;
 
@@ -2016,7 +2028,9 @@ rtl::OUString SAL_CALL ScChart2DataProvider::convertRangeToXML( const rtl::OUStr
         return aRet;
 
     vector<ScTokenRef> aRefTokens;
-    ScRefTokenHelper::compileRangeRepresentation(aRefTokens, sRangeRepresentation, m_pDocument, m_pDocument->GetGrammar());
+    const sal_Unicode cSep = ScCompiler::GetNativeSymbol(ocSep).GetChar(0);
+    ScRefTokenHelper::compileRangeRepresentation(
+        aRefTokens, sRangeRepresentation, m_pDocument, cSep, m_pDocument->GetGrammar());
     if (aRefTokens.empty())
         throw lang::IllegalArgumentException();
 

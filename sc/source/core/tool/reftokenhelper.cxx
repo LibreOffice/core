@@ -47,9 +47,9 @@ using ::std::auto_ptr;
 using ::rtl::OUString;
 
 void ScRefTokenHelper::compileRangeRepresentation(
-    vector<ScTokenRef>& rRefTokens, const OUString& rRangeStr, ScDocument* pDoc, FormulaGrammar::Grammar eGrammar)
+    vector<ScTokenRef>& rRefTokens, const OUString& rRangeStr, ScDocument* pDoc,
+    const sal_Unicode cSep, FormulaGrammar::Grammar eGrammar)
 {
-    const sal_Unicode cSep = ScCompiler::GetNativeSymbol(ocSep).GetChar(0);
     const sal_Unicode cQuote = '\'';
 
     // #i107275# ignore parentheses
