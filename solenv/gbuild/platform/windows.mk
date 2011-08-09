@@ -272,7 +272,7 @@ endef
 define gb_CObject__command
 $(call gb_Output_announce,$(2),$(true),C  ,3)
 $(call gb_Helper_abbreviate_dirs_native,\
-	mkdir -p $(dir $(1)) && \
+	mkdir -p $(dir $(1)) $(dir $(4)) && \
 	unset INCLUDE && \
 	$(gb_CC) \
 		$(DEFS) \
@@ -283,7 +283,7 @@ $(call gb_Helper_abbreviate_dirs_native,\
 		-I$(realpath $(dir $(3))) \
 		$(INCLUDE) \
 		-c $(realpath $(3)) \
-		-Fo$(1)) $(call gb_create_deps,$(1),$(call gb_CObject_get_dep_target,$(2)),$(realpath $(3)))
+		-Fo$(1)) $(call gb_create_deps,$(1),$(4),$(realpath $(3)))
 $(call gb_Object__command_deponcompile,$(1),$(4),$(3),$(DEFS),$(T_CFLAGS),$(INCLUDE))
 endef
 
@@ -293,7 +293,7 @@ endef
 define gb_CxxObject__command
 $(call gb_Output_announce,$(2),$(true),CXX,3)
 $(call gb_Helper_abbreviate_dirs_native,\
-	mkdir -p $(dir $(1)) && \
+	mkdir -p $(dir $(1)) $(dir $(4)) && \
 	unset INCLUDE && \
 	$(gb_CXX) \
 		$(DEFS) \
@@ -304,7 +304,7 @@ $(call gb_Helper_abbreviate_dirs_native,\
 		-I$(realpath $(dir $(3))) \
 		$(INCLUDE_STL) $(INCLUDE) \
 		-c $(realpath $(3)) \
-		-Fo$(1))  $(call gb_create_deps,$(1),$(4),$(realpath $(3)))
+		-Fo$(1)) $(call gb_create_deps,$(1),$(4),$(realpath $(3)))
 $(call gb_Object__command_deponcompile,$(1),$(4),$(3),$(DEFS),$(T_CXXFLAGS),$(INCLUDE))
 endef
 
