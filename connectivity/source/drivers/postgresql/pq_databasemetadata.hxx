@@ -78,9 +78,13 @@ class DatabaseMetaData :
     ::rtl::Reference< RefCountedMutex > m_refMutex;
     ConnectionSettings *m_pSettings;
     ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection > m_origin;
+    ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XPreparedStatement > m_getIntSetting_stmt;
 
-    void checkClosed()
-        throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+    void checkClosed() throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+    sal_Int32 getIntSetting(::rtl::OUString settingName) throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+    sal_Int32 getMaxIndexKeys()  throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+    sal_Int32 getMaxNameLength() throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+
 public:
     DatabaseMetaData(
         const ::rtl::Reference< RefCountedMutex > & reMutex,

@@ -103,6 +103,7 @@ using com::sun::star::uno::Sequence;
 using com::sun::star::uno::Any;
 using com::sun::star::uno::makeAny;
 using com::sun::star::uno::UNO_QUERY;
+using com::sun::star::uno::UNO_QUERY_THROW;
 
 namespace pq_sdbc_driver
 {
@@ -115,19 +116,6 @@ std::vector
 
 
 #define ASCII_STR(x) OUString( RTL_CONSTASCII_USTRINGPARAM( x ) )
-
-static const int MAX_COLUMNS_IN_GROUPBY = 16;
-static const int MAX_COLUMNS_IN_INDEX = 32;
-static const int MAX_COLUMNS_IN_ORDER_BY = 16;
-static const int MAX_COLUMNS_IN_SELECT = 1024;
-static const int MAX_IDENTIFIER_LENGTH = 63;
-static const int MAX_COLUMNS_IN_TABLE = 1024;
-static const int MAX_CONNECTIONS = 0xffff;
-static const int MAX_STATEMENTS = 0xffff;
-static const int MAX_STATEMENT_LENGTH = -1;
-static const int MAX_TABLES_IN_SELECT = 0xffff;
-static const int MAX_USER_NAME_LENGTH = MAX_IDENTIFIER_LENGTH;
-
 
 // alphabetically ordered !
 static const int PRIVILEGE_CREATE     = 0x1;
@@ -154,7 +142,8 @@ DatabaseMetaData::DatabaseMetaData(
     ConnectionSettings *pSettings )
   : m_refMutex( refMutex ),
     m_pSettings( pSettings ),
-    m_origin( origin )
+    m_origin( origin ),
+    m_getIntSetting_stmt ( m_origin->prepareStatement(ASCII_STR( "SELECT setting FROM pg_catalog.pg_settings WHERE name=?")) )
 {
 }
 
@@ -172,6 +161,7 @@ sal_Bool DatabaseMetaData::allTablesAreSelectable(  ) throw (SQLException, Runti
 OUString DatabaseMetaData::getURL(  ) throw (SQLException, RuntimeException)
 {
     // TODO
+    // LEM TODO: implement
     return OUString();
 }
 
@@ -188,7 +178,10 @@ sal_Bool DatabaseMetaData::isReadOnly(  ) throw (SQLException, RuntimeException)
 
 sal_Bool DatabaseMetaData::nullsAreSortedHigh(  ) throw (SQLException, RuntimeException)
 {
-    return sal_False;
+    // Whether NULL values are considered, for sorting purposes, LARGER than any other value.
+    // Specification: http://download.oracle.com/javase/6/docs/api/java/sql/DatabaseMetaData.html#nullsAreSortedHigh()
+    // PostgreSQL behaviour: http://www.postgresql.org/docs/9.1/static/queries-order.htlm
+    return sal_True;
 }
 
 sal_Bool DatabaseMetaData::nullsAreSortedLow(  ) throw (SQLException, RuntimeException)
@@ -198,22 +191,22 @@ sal_Bool DatabaseMetaData::nullsAreSortedLow(  ) throw (SQLException, RuntimeExc
 
 sal_Bool DatabaseMetaData::nullsAreSortedAtStart(  ) throw (SQLException, RuntimeException)
 {
-    return ! nullsAreSortedHigh();
+    return sal_False;
 }
 
 sal_Bool DatabaseMetaData::nullsAreSortedAtEnd(  ) throw (SQLException, RuntimeException)
 {
-    return nullsAreSortedHigh();
+    return sal_False;
 }
 
 OUString DatabaseMetaData::getDatabaseProductName(  ) throw (SQLException, RuntimeException)
 {
-    return ASCII_STR( "postgresql");
+    return ASCII_STR("PostgreSQL");
 }
 
 OUString DatabaseMetaData::getDatabaseProductVersion(  ) throw (SQLException, RuntimeException)
 {
-    return ASCII_STR( POSTGRESQL_VERSION );
+    return rtl::OUString::createFromAscii( PQparameterStatus( m_pSettings->pConnection, "server_version" ) );
 }
 OUString DatabaseMetaData::getDriverName(  ) throw (SQLException, RuntimeException)
 {
@@ -237,12 +230,12 @@ sal_Int32 DatabaseMetaData::getDriverMinorVersion(  ) throw (RuntimeException)
 
 sal_Bool DatabaseMetaData::usesLocalFiles(  ) throw (SQLException, RuntimeException)
 {
-    return sal_True;
+    return sal_False;
 }
 
 sal_Bool DatabaseMetaData::usesLocalFilePerTable(  ) throw (SQLException, RuntimeException)
 {
-    return sal_True;
+    return sal_False;
 }
 
 sal_Bool DatabaseMetaData::supportsMixedCaseIdentifiers(  ) throw (SQLException, RuntimeException)
@@ -257,7 +250,7 @@ sal_Bool DatabaseMetaData::storesUpperCaseIdentifiers(  ) throw (SQLException, R
 
 sal_Bool DatabaseMetaData::storesLowerCaseIdentifiers(  ) throw (SQLException, RuntimeException)
 {
-    return sal_False;
+    return sal_True;
 }
 
 
@@ -269,7 +262,7 @@ sal_Bool DatabaseMetaData::storesMixedCaseIdentifiers(  ) throw (SQLException, R
 
 sal_Bool DatabaseMetaData::supportsMixedCaseQuotedIdentifiers(  ) throw (SQLException, RuntimeException)
 {
-    return sal_False;
+    return sal_True;
 }
 
 sal_Bool DatabaseMetaData::storesUpperCaseQuotedIdentifiers(  ) throw (SQLException, RuntimeException)
@@ -297,38 +290,285 @@ OUString DatabaseMetaData::getIdentifierQuoteString(  ) throw (SQLException, Run
 
 OUString DatabaseMetaData::getSQLKeywords(  ) throw (SQLException, RuntimeException)
 {
+    // In Java 6, this is all keywords that are not SQL:2003
+    // In Java 2 v1.4 and as per LibreOffice SDK doc, this is all keywords that are not SQL92
+    // I understand this to mean "reserved keywords" only.
+    // See http://www.postgresql.org/docs/current/static/sql-keywords-appendix.html
     return ASCII_STR(
-        "ANALYZE,"
         "ANALYSE,"
+        "ANALYZE,"
+        "ARRAY," //SQL:1999
+        "ASYMMETRIC," //SQL:2003
+        "BINARY," //SQL:1999
+        "CONCURRENTLY,"
+        "CURRENT_CATALOG," //SQL:2008
+        "CURRENT_ROLE," //SQL:1999
+        "CURRENT_SCHEMA," //SQL:2008
         "DO,"
+        "FREEZE,"
         "ILIKE,"
-        "LIMIT,"
-        "NEW,"
-        "OFFSET,"
-        "OLD,"
-        "PLACING" );
+        "ISNULL,"
+        "LIMIT," //SQL:1999; non-reserved in SQL:2003
+        "LOCALTIME," //SQL:1999
+        "LOCALTIMESTAMP," //SQL:1999
+        "NOTNULL,"
+        "OFFSET," //SQL:2008
+        "OVER," //SQL:2003
+        "PLACING," //non-reserved in SQL:2003
+        "RETURNING," //non-reserved in SQL:2008
+        "SIMILAR," //SQL:2003
+        "VARIADIC,"
+        "VERBOSE,"
+        "WINDOW" //SQL:2003
+ );
 }
 OUString DatabaseMetaData::getNumericFunctions(  ) throw (SQLException, RuntimeException)
 {
-    // TODO
-    return OUString();
+    // See http://www.postgresql.org/docs/9.1/static/functions-math.html
+    return ASCII_STR(
+        "abs,"
+        "cbrt,"
+        "ceil,"
+        "ceiling,"
+        "degrees,"
+        "div,"
+        "exp,"
+        "floor,"
+        "ln,"
+        "log,"
+        "mod,"
+        "pi,"
+        "power,"
+        "radians,"
+        "random,"
+        "round,"
+        "setseed,"
+        "sign,"
+        "sqrt,"
+        "trunc,"
+        "width_bucket,"
+        "acos,"
+        "asin,"
+        "atan,"
+        "atan2,"
+        "cos,"
+        "cot,"
+        "sin,"
+        "tan"
+ );
 }
 
 OUString DatabaseMetaData::getStringFunctions(  ) throw (SQLException, RuntimeException)
 {
-    // TODO
-    return OUString();
+    // See http://www.postgresql.org/docs/9.1/static/functions-string.html
+    return ASCII_STR(
+        "bit_length,"
+        "char_length,"
+        "character_length,"
+        "lower,"
+        "octet_length,"
+        "overlay,"
+        "position,"
+        "substring,"
+        "trim,"
+        "upper,"
+        "ascii,"
+        "btrim,"
+        "chr,"
+        "concat,"
+        "concat_ws,"
+        "convert,"
+        "convert_from,"
+        "convert_to,"
+        "decode,"
+        "encode,"
+        "foramt,"
+        "initcap,"
+        "left,"
+        "length,"
+        "lpad,"
+        "ltrim,"
+        "md5,"
+        "pg_client_encoding,"
+        "quote_ident,"
+        "quote_literal,"
+        "quote_nullable,"
+        "regexp_matches,"
+        "regexp_replace,"
+        "regexp_split_to_array,"
+        "regexp_split_to_table,"
+        "repeat,"
+        "replace,"
+        "reverse,"
+        "right,"
+        "rpad,"
+        "rtrim,"
+        "split_part,"
+        "strpos,"
+        "substr,"
+        "to_ascii,"
+        "to_hex,"
+        "translate"
+ );
 }
 
 OUString DatabaseMetaData::getSystemFunctions(  ) throw (SQLException, RuntimeException)
 {
-    // TODO
-    return OUString();
+    // See http://www.postgresql.org/docs/9.1/static/functions-info.html
+    // and http://www.postgresql.org/docs/9.1/static/functions-admin.html
+    return ASCII_STR(
+        "current_catalog,"
+        "current_database,"
+        "current_query,"
+        "current_schema,"
+        "current_schemas,"
+        "current_user,"
+        "inet_client_addr,"
+        "inet_client_port,"
+        "inet_server_addr,"
+        "inet_server_port,"
+        "pg_backend_pid,"
+        "pg_conf_load_time,"
+        "pg_is_other_temp_schema,"
+        "pg_listening_channels,"
+        "pg_my_temp_schema,"
+        "pg_postmaster_start_time,"
+        "session_user,"
+        "user,"
+        "version,"
+        "has_any_column_privilege,"
+        "has_any_column_privilege,"
+        "has_any_column_privilege,"
+        "has_column_privilege,"
+        "has_database_privilege,"
+        "has_foreign_data_wrapper_privilege,"
+        "has_function_privilege,"
+        "has_language_privilege,"
+        "has_schema_privilege,"
+        "has_sequence_privilege,"
+        "has_server_privilege,"
+        "has_table_privilege,"
+        "has_tablespace_privilege,"
+        "pg_has_role,"
+        "pg_collation_is_visible,"
+        "pg_conversion_is_visible,"
+        "pg_function_is_visible,"
+        "pg_opclass_is_visible,"
+        "pg_operator_is_visible,"
+        "pg_table_is_visible,"
+        "pg_ts_config_is_visible,"
+        "pg_ts_dict_is_visible,"
+        "pg_ts_parser_is_visible,"
+        "pg_ts_template_is_visible,"
+        "pg_type_is_visible,"
+        "format_type,"
+        "pg_describe_object,"
+        "pg_get_constraintdef,"
+        "pg_get_expr,"
+        "pg_get_functiondef,"
+        "pg_get_function_arguments,"
+        "pg_get_function_identity_arguments,"
+        "pg_get_function_result,"
+        "pg_get_indexdef,"
+        "pg_get_keywords,"
+        "pg_get_ruledef,"
+        "pg_get_serial_sequence,"
+        "pg_get_triggerdef,"
+        "pg_get_userbyid,"
+        "pg_get_viewdef,"
+        "pg_options_to_table,"
+        "pg_tablespace_databases,"
+        "pg_typeof,"
+        "col_description,"
+        "obj_description,"
+        "shobj_description,"
+        "txid_current,"
+        "txid_current_snapshot,"
+        "txid_snapshot_xip,"
+        "txid_snapshot_xmax,"
+        "txid_snapshot_xmin,"
+        "txid_visible_in_snapshot,"
+        "xmin,"
+        "xmax,"
+        "xip_list,"
+        "current_setting,"
+        "set_config,"
+        "pg_cancel_backend,"
+        "pg_reload_conf,"
+        "pg_rotate_logfile,"
+        "pg_terminate_backend,"
+        "pg_create_restore_point,"
+        "pg_current_xlog_insert_location,"
+        "pg_current_xlog_location,"
+        "pg_start_backup,"
+        "pg_stop_backup,"
+        "pg_switch_xlog,"
+        "pg_xlogfile_name,"
+        "pg_xlogfile_name_offset,"
+        "pg_is_in_recovery,"
+        "pg_last_xlog_receive_location,"
+        "pg_last_xlog_replay_location,"
+        "pg_last_xact_replay_timestamp,"
+        "pg_is_xlog_replay_paused,"
+        "pg_xlog_replay_pause,"
+        "pg_xlog_replay_resume,"
+        "pg_column_size,"
+        "pg_database_size,"
+        "pg_indexes_size,"
+        "pg_relation_size,"
+        "pg_size_pretty,"
+        "pg_table_size,"
+        "pg_tablespace_size,"
+        "pg_tablespace_size,"
+        "pg_total_relation_size,"
+        "pg_relation_filenode,"
+        "pg_relation_filepath,"
+        "pg_ls_dir,"
+        "pg_read_file,"
+        "pg_read_binary_file,"
+        "pg_stat_file,"
+        "pg_advisory_lock,"
+        "pg_advisory_lock_shared,"
+        "pg_advisory_unlock,"
+        "pg_advisory_unlock_all,"
+        "pg_advisory_unlock_shared,"
+        "pg_advisory_xact_lock,"
+        "pg_advisory_xact_lock_shared,"
+        "pg_try_advisory_lock,"
+        "pg_try_advisory_lock_shared,"
+        "pg_try_advisory_xact_lock,"
+        "pg_try_advisory_xact_lock_shared,"
+        "pg_sleep"
+ );
 }
 OUString DatabaseMetaData::getTimeDateFunctions(  ) throw (SQLException, RuntimeException)
 {
     // TODO
-    return OUString();
+    return ASCII_STR(
+        "age,"
+        "age,"
+        "clock_timestamp,"
+        "current_date,"
+        "current_time,"
+        "current_timestamp,"
+        "date_part,"
+        "date_part,"
+        "date_trunc,"
+        "extract,"
+        "extract,"
+        "isfinite,"
+        "isfinite,"
+        "isfinite,"
+        "justify_days,"
+        "justify_hours,"
+        "justify_interval,"
+        "localtime,"
+        "localtimestamp,"
+        "now,"
+        "statement_timestamp,"
+        "timeofday,"
+        "transaction_timestamp,"
+ );
 }
 OUString DatabaseMetaData::getSearchStringEscape(  ) throw (SQLException, RuntimeException)
 {
@@ -336,8 +576,7 @@ OUString DatabaseMetaData::getSearchStringEscape(  ) throw (SQLException, Runtim
 }
 OUString DatabaseMetaData::getExtraNameCharacters(  ) throw (SQLException, RuntimeException)
 {
-    // TODO
-    return OUString();
+    return ASCII_STR( "$" );
 }
 
 sal_Bool DatabaseMetaData::supportsAlterTableWithAddColumn(  ) throw (SQLException, RuntimeException)
@@ -360,26 +599,28 @@ sal_Bool DatabaseMetaData::nullPlusNonNullIsNull(  ) throw (SQLException, Runtim
     return sal_True;
 }
 
-sal_Bool DatabaseMetaData::supportsTypeConversion(  ) throw (SQLException, RuntimeException)     // TODO, DON'T KNOW
+sal_Bool DatabaseMetaData::supportsTypeConversion(  ) throw (SQLException, RuntimeException)
+{
+    // LEM: this is specifically whether the "CONVERT" function is supported
+    //      It seems that in PostgreSQL, that function is only for string encoding, so no.
+    return sal_False;
+}
+
+sal_Bool DatabaseMetaData::supportsConvert( sal_Int32 fromType, sal_Int32 toType ) throw (SQLException, RuntimeException)
 {
     return sal_False;
 }
 
-sal_Bool DatabaseMetaData::supportsConvert( sal_Int32 fromType, sal_Int32 toType ) throw (SQLException, RuntimeException)  // TODO
+sal_Bool DatabaseMetaData::supportsTableCorrelationNames(  ) throw (SQLException, RuntimeException)
+{
+    // LEM: A correlation name is "bar" in "SELECT foo FROM qux [AS] bar WHERE ..."
+    return sal_True;
+}
+
+
+sal_Bool DatabaseMetaData::supportsDifferentTableCorrelationNames(  ) throw (SQLException, RuntimeException)
 {
     return sal_False;
-}
-
-sal_Bool DatabaseMetaData::supportsTableCorrelationNames(  ) throw (SQLException, RuntimeException)     // TODO, don't know
-{
-    return sal_True;
-}
-
-
-sal_Bool DatabaseMetaData::supportsDifferentTableCorrelationNames(  ) throw (SQLException, RuntimeException) // TODO, don't know
-{
-
-    return sal_True;
 }
 sal_Bool DatabaseMetaData::supportsExpressionsInOrderBy(  ) throw (SQLException, RuntimeException)
 {
@@ -396,15 +637,13 @@ sal_Bool DatabaseMetaData::supportsGroupBy(  ) throw (SQLException, RuntimeExcep
     return sal_True;
 }
 
-sal_Bool DatabaseMetaData::supportsGroupByUnrelated(  ) throw (SQLException, RuntimeException) // TODO, DONT know
+sal_Bool DatabaseMetaData::supportsGroupByUnrelated(  ) throw (SQLException, RuntimeException)
 {
-
     return sal_True;
 }
 
-sal_Bool DatabaseMetaData::supportsGroupByBeyondSelect(  ) throw (SQLException, RuntimeException) // TODO, DON'T know
+sal_Bool DatabaseMetaData::supportsGroupByBeyondSelect(  ) throw (SQLException, RuntimeException)
 {
-
     return sal_True;
 }
 
@@ -420,7 +659,8 @@ sal_Bool DatabaseMetaData::supportsMultipleResultSets(  ) throw (SQLException, R
 
 sal_Bool DatabaseMetaData::supportsMultipleTransactions(  ) throw (SQLException, RuntimeException)
 {
-    return sal_False;
+    // Allows multiple transactions open at once (on different connections!)
+    return sal_True;
 }
 
 sal_Bool DatabaseMetaData::supportsNonNullableColumns(  ) throw (SQLException, RuntimeException)
@@ -436,12 +676,13 @@ sal_Bool DatabaseMetaData::supportsMinimumSQLGrammar(  ) throw (SQLException, Ru
 
 sal_Bool DatabaseMetaData::supportsCoreSQLGrammar(  ) throw (SQLException, RuntimeException)
 {
-    return sal_True;
+    // LEM: jdbc driver says not, although the comments in it seem old
+    return sal_False;
 }
 
 sal_Bool DatabaseMetaData::supportsExtendedSQLGrammar(  ) throw (SQLException, RuntimeException)
 {
-    return sal_True;
+    return sal_False;
 }
 
 sal_Bool DatabaseMetaData::supportsANSI92EntryLevelSQL(  ) throw (SQLException, RuntimeException)
@@ -451,17 +692,19 @@ sal_Bool DatabaseMetaData::supportsANSI92EntryLevelSQL(  ) throw (SQLException, 
 
 sal_Bool DatabaseMetaData::supportsANSI92IntermediateSQL(  ) throw (SQLException, RuntimeException)
 {
-    return sal_True;
+    // LEM: jdbc driver says not, although the comments in it seem old
+    return sal_False;
 }
 
 sal_Bool DatabaseMetaData::supportsANSI92FullSQL(  ) throw (SQLException, RuntimeException)
 {
-    return sal_True;
+    // LEM: jdbc driver says not, although the comments in it seem old
+    return sal_False;
 }
 
 sal_Bool DatabaseMetaData::supportsIntegrityEnhancementFacility(  ) throw (SQLException, RuntimeException)
 {
-    // TODO
+    // LEM: jdbc driver says yes, although comment says they are not sure what this means...
     return sal_True;
 }
 
@@ -488,17 +731,15 @@ OUString DatabaseMetaData::getSchemaTerm(  ) throw (SQLException, RuntimeExcepti
 
 OUString DatabaseMetaData::getProcedureTerm(  ) throw (SQLException, RuntimeException)
 {
-    // don't know
-    return OUString();
+    return ASCII_STR( "function" );
 }
 
 OUString DatabaseMetaData::getCatalogTerm(  ) throw (SQLException, RuntimeException)
 {
-    // TODO is this correct ?
     return ASCII_STR( "DATABASE" );
 }
 
-sal_Bool DatabaseMetaData::isCatalogAtStart(  ) throw (SQLException, RuntimeException)     // TODO don't know
+sal_Bool DatabaseMetaData::isCatalogAtStart(  ) throw (SQLException, RuntimeException)
 {
 
     return sal_True;
@@ -506,7 +747,6 @@ sal_Bool DatabaseMetaData::isCatalogAtStart(  ) throw (SQLException, RuntimeExce
 
 OUString DatabaseMetaData::getCatalogSeparator(  ) throw (SQLException, RuntimeException)
 {
-    // TODO don't know
     return ASCII_STR( "." );
 }
 
@@ -565,58 +805,52 @@ sal_Bool DatabaseMetaData::supportsCatalogsInPrivilegeDefinitions(  ) throw (SQL
 
 sal_Bool DatabaseMetaData::supportsPositionedDelete(  ) throw (SQLException, RuntimeException)
 {
-    // TODO
-    return sal_True;
+    // LEM: jdbc driver says not, although the comments in it seem old
+    return sal_False;
 }
 
 sal_Bool DatabaseMetaData::supportsPositionedUpdate(  ) throw (SQLException, RuntimeException)
 {
-    // TODO
-    return sal_True;
+    // LEM: jdbc driver says not, although the comments in it seem old
+    return sal_False;
 }
 
 
 sal_Bool DatabaseMetaData::supportsSelectForUpdate(  ) throw (SQLException, RuntimeException)
 {
-    // TODO
-    return sal_False;
+    return sal_True;
 }
 
 
 sal_Bool DatabaseMetaData::supportsStoredProcedures(  ) throw (SQLException, RuntimeException)
 {
-    // TODO
-    return sal_False;
+    return sal_True;
 }
 
 
 sal_Bool DatabaseMetaData::supportsSubqueriesInComparisons(  ) throw (SQLException, RuntimeException)
 {
-    // TODO , don't know
     return sal_True;
 }
 
 sal_Bool DatabaseMetaData::supportsSubqueriesInExists(  ) throw (SQLException, RuntimeException)
 {
-    // TODO , don't know
     return sal_True;
 }
 
 sal_Bool DatabaseMetaData::supportsSubqueriesInIns(  ) throw (SQLException, RuntimeException)
 {
-    // TODO , don't know
     return sal_True;
 }
 
 sal_Bool DatabaseMetaData::supportsSubqueriesInQuantifieds(  ) throw (SQLException, RuntimeException)
 {
-    // TODO , don't know
+    // LEM: jdbc driver says yes, although comment says they don't know what this means...
     return sal_True;
 }
 
 sal_Bool DatabaseMetaData::supportsCorrelatedSubqueries(  ) throw (SQLException, RuntimeException)
 {
-    // TODO , don't know
     return sal_True;
 }
 sal_Bool DatabaseMetaData::supportsUnion(  ) throw (SQLException, RuntimeException)
@@ -631,131 +865,167 @@ sal_Bool DatabaseMetaData::supportsUnionAll(  ) throw (SQLException, RuntimeExce
 
 sal_Bool DatabaseMetaData::supportsOpenCursorsAcrossCommit(  ) throw (SQLException, RuntimeException)
 {
-    // TODO, don't know
     return sal_False;
 }
 
 sal_Bool DatabaseMetaData::supportsOpenCursorsAcrossRollback(  ) throw (SQLException, RuntimeException)
 {
-    // TODO, don't know
     return sal_False;
 }
 
 sal_Bool DatabaseMetaData::supportsOpenStatementsAcrossCommit(  ) throw (SQLException, RuntimeException)
 {
-    // TODO, don't know
-    return sal_False;
+    return sal_True;
 }
 sal_Bool DatabaseMetaData::supportsOpenStatementsAcrossRollback(  ) throw (SQLException, RuntimeException)
 {
-    // TODO, don't know
-    return sal_False;
+    return sal_True;
 }
 
 sal_Int32 DatabaseMetaData::getMaxBinaryLiteralLength(  ) throw (SQLException, RuntimeException)
 {
-    // TODO, don't know
-    return -1;
+    return 0;
 }
 
 sal_Int32 DatabaseMetaData::getMaxCharLiteralLength(  ) throw (SQLException, RuntimeException)
 {
-    return -1;
+    return 0;
 }
 
-sal_Int32 DatabaseMetaData::getMaxColumnNameLength(  ) throw (SQLException, RuntimeException) //TODO, don't know
+// Copied / adapted / simplified from JDBC driver
+sal_Int32 DatabaseMetaData::getIntSetting(OUString settingName)
+    throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
-    return MAX_IDENTIFIER_LENGTH;
+    MutexGuard guard( m_refMutex->mutex );
+
+    Reference< XParameters > params(m_getIntSetting_stmt, UNO_QUERY_THROW );
+    params->setString(1, settingName );
+    Reference< XResultSet > rs = m_getIntSetting_stmt->executeQuery();
+    Reference< XRow > xRow( rs , UNO_QUERY );
+    return xRow->getInt(1);
 }
 
-sal_Int32 DatabaseMetaData::getMaxColumnsInGroupBy(  ) throw (SQLException, RuntimeException) //TODO, don't know
+sal_Int32 DatabaseMetaData::getMaxNameLength()
+    throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
-    return MAX_COLUMNS_IN_GROUPBY;
+    if ( m_pSettings->maxNameLen == 0)
+        m_pSettings->maxNameLen = getIntSetting( ASCII_STR("max_identifier_length") );
+    OSL_ENSURE(m_pSettings->maxNameLen, "postgresql-sdbc: maxNameLen is zero");
+    return m_pSettings->maxNameLen;
 }
 
-sal_Int32 DatabaseMetaData::getMaxColumnsInIndex(  ) throw (SQLException, RuntimeException) //TODO, don't know
+sal_Int32 DatabaseMetaData::getMaxIndexKeys()
+    throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
-    return MAX_COLUMNS_IN_INDEX;
+    if ( m_pSettings->maxIndexKeys == 0)
+        m_pSettings->maxIndexKeys = getIntSetting(ASCII_STR("max_index_keys"));
+    OSL_ENSURE(m_pSettings->maxIndexKeys, "postgresql-sdbc: maxIndexKeys is zero");
+    return m_pSettings->maxIndexKeys;
 }
 
-sal_Int32 DatabaseMetaData::getMaxColumnsInOrderBy(  ) throw (SQLException, RuntimeException) //TODO, don't know
+sal_Int32 DatabaseMetaData::getMaxColumnNameLength(  ) throw (SQLException, RuntimeException)
 {
-    return MAX_COLUMNS_IN_ORDER_BY;
+    return getMaxNameLength();
 }
 
-sal_Int32 DatabaseMetaData::getMaxColumnsInSelect(  ) throw (SQLException, RuntimeException) //TODO, don't know
+sal_Int32 DatabaseMetaData::getMaxColumnsInGroupBy(  ) throw (SQLException, RuntimeException)
 {
-    return MAX_COLUMNS_IN_SELECT;
+    return 0;
 }
 
-sal_Int32 DatabaseMetaData::getMaxColumnsInTable(  ) throw (SQLException, RuntimeException) //TODO, don't know
+sal_Int32 DatabaseMetaData::getMaxColumnsInIndex(  ) throw (SQLException, RuntimeException)
 {
-    return MAX_COLUMNS_IN_TABLE;
+    return getMaxIndexKeys();
 }
 
-sal_Int32 DatabaseMetaData::getMaxConnections(  ) throw (SQLException, RuntimeException) //TODO, don't know
+sal_Int32 DatabaseMetaData::getMaxColumnsInOrderBy(  ) throw (SQLException, RuntimeException)
 {
-    return MAX_CONNECTIONS;
+    return 0;
+}
+
+sal_Int32 DatabaseMetaData::getMaxColumnsInSelect(  ) throw (SQLException, RuntimeException)
+{
+    return 0;
+}
+
+sal_Int32 DatabaseMetaData::getMaxColumnsInTable(  ) throw (SQLException, RuntimeException)
+{
+    return 1600;
+}
+
+sal_Int32 DatabaseMetaData::getMaxConnections(  ) throw (SQLException, RuntimeException)
+{
+    // LEM: The JDBC driver returns an arbitrary 8192; truth is as much as OS / hardware supports
+    return 0;
 }
 
 sal_Int32 DatabaseMetaData::getMaxCursorNameLength(  ) throw (SQLException, RuntimeException) //TODO, don't know
 {
-    return MAX_IDENTIFIER_LENGTH;
+    return getMaxNameLength();
 }
 
 sal_Int32 DatabaseMetaData::getMaxIndexLength(  ) throw (SQLException, RuntimeException) //TODO, don't know
 {
-    return MAX_IDENTIFIER_LENGTH;
+    // LEM: that's the index itself, not its name
+    return 0;
 }
 
 sal_Int32 DatabaseMetaData::getMaxSchemaNameLength(  ) throw (SQLException, RuntimeException)
 {
-    return MAX_IDENTIFIER_LENGTH;
+    return getMaxNameLength();
 }
 
 sal_Int32 DatabaseMetaData::getMaxProcedureNameLength(  ) throw (SQLException, RuntimeException)
 {
-    return MAX_IDENTIFIER_LENGTH;
+    return getMaxNameLength();
 }
 
 sal_Int32 DatabaseMetaData::getMaxCatalogNameLength(  ) throw (SQLException, RuntimeException)
 {
-    return MAX_IDENTIFIER_LENGTH;
+    return getMaxNameLength();
 }
 
 sal_Int32 DatabaseMetaData::getMaxRowSize(  ) throw (SQLException, RuntimeException)
 {
-    return -1;
+    // jdbc driver seays 1GB, but http://www.postgresql.org/about/ says 1.6TB
+    // and that 1GB is the maximum _field_ size
+    // The row limit does not fit into a sal_Int32
+    return 0;
 }
 
 sal_Bool DatabaseMetaData::doesMaxRowSizeIncludeBlobs(  ) throw (SQLException, RuntimeException)
 {
-    return sal_False;
+    // LEM: Err... PostgreSQL basically does not do BLOBs well
+    //      In any case, BLOBs do not change the maximal row length AFAIK
+    return sal_True;
 }
 
-sal_Int32 DatabaseMetaData::getMaxStatementLength(  ) throw (SQLException, RuntimeException) //TODO, don't know
+sal_Int32 DatabaseMetaData::getMaxStatementLength(  ) throw (SQLException, RuntimeException)
 {
-    return MAX_STATEMENT_LENGTH;
+    // LEM: actually, that would be 2^sizeof(size_t)-1
+    //      on the server? on the client (because of libpq)? minimum of the two? not sure
+    //      Anyway, big, so say unlimited.
+    return 0;
 }
 
 sal_Int32 DatabaseMetaData::getMaxStatements(  ) throw (SQLException, RuntimeException) //TODO, don't know
 {
-    return MAX_STATEMENTS;
+    return 0;
 }
 
 sal_Int32 DatabaseMetaData::getMaxTableNameLength(  ) throw (SQLException, RuntimeException)
 {
-    return MAX_IDENTIFIER_LENGTH;
+    return getMaxNameLength();
 }
 
 sal_Int32 DatabaseMetaData::getMaxTablesInSelect(  ) throw (SQLException, RuntimeException)
 {
-    return MAX_TABLES_IN_SELECT;
+    return 0;
 }
 
 sal_Int32 DatabaseMetaData::getMaxUserNameLength(  ) throw (SQLException, RuntimeException)
 {
-    return MAX_USER_NAME_LENGTH;
+    return getMaxNameLength();
 }
 
 sal_Int32 DatabaseMetaData::getDefaultTransactionIsolation(  ) throw (SQLException, RuntimeException)
@@ -765,12 +1035,18 @@ sal_Int32 DatabaseMetaData::getDefaultTransactionIsolation(  ) throw (SQLExcepti
 
 sal_Bool DatabaseMetaData::supportsTransactions(  ) throw (SQLException, RuntimeException)
 {
-    return sal_False;
+    return sal_True;
 }
 
 sal_Bool DatabaseMetaData::supportsTransactionIsolationLevel( sal_Int32 level ) throw (SQLException, RuntimeException)
 {
-    return sal_False;
+    if ( level == com::sun::star::sdbc::TransactionIsolation::READ_COMMITTED
+         || level == com::sun::star::sdbc::TransactionIsolation::SERIALIZABLE
+         || level == com::sun::star::sdbc::TransactionIsolation::READ_UNCOMMITTED
+         || level == com::sun::star::sdbc::TransactionIsolation::REPEATABLE_READ)
+        return sal_True;
+    else
+        return sal_False;
 }
 
 sal_Bool DatabaseMetaData::supportsDataDefinitionAndDataManipulationTransactions(  )
@@ -786,13 +1062,12 @@ sal_Bool DatabaseMetaData::supportsDataManipulationTransactionsOnly(  ) throw (S
 
 sal_Bool DatabaseMetaData::dataDefinitionCausesTransactionCommit(  ) throw (SQLException, RuntimeException)
 {
-    // don't know
-    return sal_True;
+    return sal_False;
 }
 
 sal_Bool DatabaseMetaData::dataDefinitionIgnoredInTransactions(  ) throw (SQLException, RuntimeException)
 {
-    return sal_True;
+    return sal_False;
 }
 
 ::com::sun::star::uno::Reference< XResultSet > DatabaseMetaData::getProcedures(
@@ -812,6 +1087,8 @@ sal_Bool DatabaseMetaData::dataDefinitionIgnoredInTransactions(  ) throw (SQLExc
 //               * NO - Does not return a result
 //               * RETURN - Returns a result
 
+// LEM TODO: implement
+// LEM TODO: at least fake the columns, even if no row.
     MutexGuard guard( m_refMutex->mutex );
     checkClosed();
     return new SequenceResultSet(
@@ -826,6 +1103,8 @@ sal_Bool DatabaseMetaData::dataDefinitionIgnoredInTransactions(  ) throw (SQLExc
 {
     MutexGuard guard( m_refMutex->mutex );
     checkClosed();
+// LEM TODO: implement
+// LEM TODO: at least fake the columns, even if no row.
     return new SequenceResultSet(
         m_refMutex, *this, Sequence< OUString >(), Sequence< Sequence< Any > > (), m_pSettings->tc );
 }
@@ -853,6 +1132,9 @@ sal_Bool DatabaseMetaData::dataDefinitionIgnoredInTransactions(  ) throw (SQLExc
     }
     // ignore catalog, as a single pq connection does not support multiple catalogs
 
+    // LEM TODO: this does not give the right column names, not the right number of columns, etc.
+    // Take "inspiration" from JDBC driver
+    // Ah, this is used to create a XResultSet manually... Try to do it directly in SQL
     Reference< XPreparedStatement > statement = m_origin->prepareStatement(
         ASCII_STR(
             "SELECT "
@@ -943,8 +1225,7 @@ struct SortInternalSchemasLastAndPublicFirst
         }
         else if( valueB.matchAsciiL( RTL_CONSTASCII_STRINGPARAM( "pg_" ) ) )
         {
-            ret = true; // sorts dorst !
-
+            ret = true; // sorts first !
         }
         else
         {
@@ -968,6 +1249,8 @@ struct SortInternalSchemasLastAndPublicFirst
     Reference< XStatement > statement = m_origin->createStatement();
     Reference< XResultSet > rs = statement->executeQuery(
         ASCII_STR("SELECT nspname from pg_namespace") );
+    // LEM TODO: look at JDBC driver and consider doing the same
+    //           in particular, excluding temporary schemas, but maybe better through pg_is_other_temp_schema(oid) OR  == pg_my_temp_schema()
 
     Reference< XRow > xRow( rs, UNO_QUERY );
     SequenceAnyVector vec;
@@ -992,6 +1275,8 @@ struct SortInternalSchemasLastAndPublicFirst
 ::com::sun::star::uno::Reference< XResultSet > DatabaseMetaData::getCatalogs(  )
     throw (SQLException, RuntimeException)
 {
+    // LEM TODO: return the current catalog like JDBC driver?
+    //           at least fake the columns, even if no content
     MutexGuard guard( m_refMutex->mutex );
     checkClosed();
     return new SequenceResultSet(
@@ -1001,6 +1286,7 @@ struct SortInternalSchemasLastAndPublicFirst
 ::com::sun::star::uno::Reference< XResultSet > DatabaseMetaData::getTableTypes(  )
     throw (SQLException, RuntimeException)
 {
+    // LEM TODO: this can be made dynamic, see JDBC driver
     MutexGuard guard( m_refMutex->mutex );
     checkClosed();
     return new SequenceResultSet(
@@ -1163,6 +1449,7 @@ static void columnMetaData2DatabaseTypeDescription(
     const OUString& tableNamePattern,
     const OUString& columnNamePattern ) throw (SQLException, RuntimeException)
 {
+    // LEM TODO: review in comparison with JDBC driver
     Statics &statics = getStatics();
 
     // continue !
@@ -1334,6 +1621,7 @@ static void columnMetaData2DatabaseTypeDescription(
     const OUString& table,
     const OUString& columnNamePattern ) throw (SQLException, RuntimeException)
 {
+    //LEM TODO: implement! See JDBC driver
     MutexGuard guard( m_refMutex->mutex );
     checkClosed();
     return new SequenceResultSet(
@@ -1395,6 +1683,7 @@ static void addPrivilegesToVector(
     const OUString& schemaPattern,
     const OUString& tableNamePattern ) throw (SQLException, RuntimeException)
 {
+    // LEM TODO: review
     MutexGuard guard( m_refMutex->mutex );
     checkClosed();
 
@@ -1479,6 +1768,7 @@ static void addPrivilegesToVector(
     sal_Int32 scope,
     sal_Bool nullable ) throw (SQLException, RuntimeException)
 {
+    //LEM TODO: implement! See JDBC driver
     MutexGuard guard( m_refMutex->mutex );
     checkClosed();
     return new SequenceResultSet(
@@ -1490,6 +1780,7 @@ static void addPrivilegesToVector(
     const OUString& schema,
     const OUString& table ) throw (SQLException, RuntimeException)
 {
+    //LEM TODO: implement! See JDBC driver
     MutexGuard guard( m_refMutex->mutex );
     checkClosed();
     return new SequenceResultSet(
@@ -1501,6 +1792,7 @@ static void addPrivilegesToVector(
     const OUString& schema,
     const OUString& table ) throw (SQLException, RuntimeException)
 {
+    //LEM TODO: review
     MutexGuard guard( m_refMutex->mutex );
     checkClosed();
 
@@ -1704,8 +1996,9 @@ static void addPrivilegesToVector(
 
 //     }
     // fake the getImportedKey() function call in
-    // dbaccess/source/ui/relationdesigin/RelationController.cxx
+    // dbaccess/source/ui/relationdesign/RelationController.cxx
     // it seems to be the only place in the office, where this function is needed
+    // LEM TODO: Well, used elsewhere now and breaks things. Fix it.
     return new SequenceResultSet(
         m_refMutex, *this, Sequence< OUString >(), Sequence< Sequence< Any > > (1), m_pSettings->tc );
 }
@@ -1715,6 +2008,7 @@ static void addPrivilegesToVector(
     const OUString& schema,
     const OUString& table ) throw (SQLException, RuntimeException)
 {
+    //LEM TODO: implement! See JDBC driver
     throw ::com::sun::star::sdbc::SQLException(
         ASCII_STR( "pq_databasemetadata: imported keys from tables not supported " ),
         *this,
@@ -1729,6 +2023,7 @@ static void addPrivilegesToVector(
     const OUString& foreignSchema,
     const OUString& foreignTable ) throw (SQLException, RuntimeException)
 {
+    //LEM TODO: implement! See JDBC driver
     MutexGuard guard( m_refMutex->mutex );
     checkClosed();
     return new SequenceResultSet(
@@ -1788,6 +2083,7 @@ static sal_Int32 calcSearchable( sal_Int32 dataType )
 
 static sal_Int32 getMaxScale( sal_Int32 dataType )
 {
+    // LEM TODO: review, see where used, see JDBC, ...
     sal_Int32 ret = 0;
     if( dataType == com::sun::star::sdbc::DataType::NUMERIC )
         ret = 1000; // see pg-docs DataType/numeric
@@ -1970,6 +2266,7 @@ static sal_Int32 seqContains( const Sequence< sal_Int32 > &seq, sal_Int32 value 
     sal_Bool unique,
     sal_Bool approximate ) throw (SQLException, RuntimeException)
 {
+    //LEM TODO: review
     MutexGuard guard( m_refMutex->mutex );
     checkClosed();
 
@@ -2093,32 +2390,34 @@ static sal_Int32 seqContains( const Sequence< sal_Int32 > &seq, sal_Int32 value 
 sal_Bool DatabaseMetaData::supportsResultSetType( sal_Int32 setType )
     throw (SQLException, RuntimeException)
 {
-    return
-        setType == com::sun::star::sdbc::ResultSetType::SCROLL_INSENSITIVE ||
-        setType == com::sun::star::sdbc::ResultSetType::FORWARD_ONLY;
+    if ( setType == com::sun::star::sdbc::ResultSetType::SCROLL_SENSITIVE )
+        return sal_False;
+    else
+        return sal_True;
 }
 
 sal_Bool DatabaseMetaData::supportsResultSetConcurrency(
     sal_Int32 setType, sal_Int32 concurrency ) throw (SQLException, RuntimeException)
 {
-    return supportsResultSetType( setType ) &&
-        (concurrency == com::sun::star::sdbc::TransactionIsolation::READ_COMMITTED ||
-         concurrency == com::sun::star::sdbc::TransactionIsolation::SERIALIZABLE );
+    if ( ! supportsResultSetType( setType ) )
+        return sal_False;
+    else
+        return sal_True;
 }
 
 sal_Bool DatabaseMetaData::ownUpdatesAreVisible( sal_Int32 setType ) throw (SQLException, RuntimeException)
 {
-    return sal_False;
+    return sal_True;
 }
 
 sal_Bool DatabaseMetaData::ownDeletesAreVisible( sal_Int32 setType ) throw (SQLException, RuntimeException)
 {
-    return sal_False;
+    return sal_True;
 }
 
 sal_Bool DatabaseMetaData::ownInsertsAreVisible( sal_Int32 setType ) throw (SQLException, RuntimeException)
 {
-    return sal_False;
+    return sal_True;
 }
 
 sal_Bool DatabaseMetaData::othersUpdatesAreVisible( sal_Int32 setType ) throw (SQLException, RuntimeException)
@@ -2152,11 +2451,12 @@ sal_Bool DatabaseMetaData::insertsAreDetected( sal_Int32 setType ) throw (SQLExc
 
 sal_Bool DatabaseMetaData::supportsBatchUpdates(  ) throw (SQLException, RuntimeException)
 {
-    return sal_False;
+    return sal_True;
 }
 
 ::com::sun::star::uno::Reference< XResultSet > DatabaseMetaData::getUDTs( const ::com::sun::star::uno::Any& catalog, const OUString& schemaPattern, const OUString& typeNamePattern, const ::com::sun::star::uno::Sequence< sal_Int32 >& types ) throw (SQLException, RuntimeException)
 {
+    //LEM TODO: implement! See JDBC driver
     MutexGuard guard( m_refMutex->mutex );
     checkClosed();
     return new SequenceResultSet(

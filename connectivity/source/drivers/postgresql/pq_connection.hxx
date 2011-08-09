@@ -135,12 +135,16 @@ struct ConnectionSettings
     ConnectionSettings() :
         encoding( RTL_TEXTENCODING_UTF8),
         pConnection(0),
+        maxNameLen(0),
+        maxIndexKeys(0),
         showSystemColumns( sal_False ),
         logFile( 0 ),
         loglevel( LogLevel::INFO )
     {}
     rtl_TextEncoding encoding;
     PGconn *pConnection;
+    sal_Int32 maxNameLen;
+    sal_Int32 maxIndexKeys;
     ::com::sun::star::uno::Reference< com::sun::star::script::XTypeConverter > tc;
     ::com::sun::star::uno::Reference< com::sun::star::container::XNameAccess > tables;
     ::com::sun::star::uno::Reference< com::sun::star::container::XNameAccess > users;
