@@ -54,7 +54,7 @@ ResultSet::ResultSet( const ::rtl::Reference< RefCountedMutex > & refMutex,
       m_table( table ),
       m_ppSettings( ppSettings )
 {
-    sal_Bool b = sal_True;
+//    sal_Bool b = sal_True;
 //     m_props[RESULTSET_IS_BOOKMARKABLE] = Any( &b, getBooleanCppuType() );
     m_props[ BASERESULTSET_RESULT_SET_TYPE] = makeAny(
         com::sun::star::sdbc::ResultSetType::SCROLL_INSENSITIVE );
