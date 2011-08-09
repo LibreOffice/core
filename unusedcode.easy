@@ -2643,7 +2643,6 @@ binfilter::Sw3Bytes::Insert(binfilter::Sw3Bytes const*, unsigned short, unsigned
 binfilter::Sw3Bytes::Replace(unsigned char const&, unsigned short)
 binfilter::Sw3Bytes::Replace(unsigned char const*, unsigned short, unsigned short)
 binfilter::Sw3Bytes::_ForEach(unsigned short, unsigned short, unsigned char (*)(unsigned char const&, void*), void*)
-binfilter::Sw3IoImp::OutRedline(binfilter::SwRedline const&)
 binfilter::Sw3Marks::GetPos(binfilter::Sw3Mark const*) const
 binfilter::Sw3Marks::Insert(binfilter::Sw3Mark*)
 binfilter::Sw3Marks::Remove(binfilter::Sw3Mark*)
@@ -2681,7 +2680,6 @@ binfilter::SwDestroyList::Insert(binfilter::SwSectionFrm* const&, unsigned short
 binfilter::SwDestroyList::Insert(binfilter::SwSectionFrm* const*, unsigned short)
 binfilter::SwDestroyList::Remove(binfilter::SwSectionFrm* const&, unsigned short)
 binfilter::SwDoc::Replace(binfilter::SwPaM&, String const&, unsigned char)
-binfilter::SwGrfNode::SaveCompleted(unsigned char)
 binfilter::SwOLELRUCache::Remove(binfilter::SwOLEObj&)
 binfilter::SwOutlineNodes::Insert(binfilter::SwNode* const&, unsigned short&)
 binfilter::SwOutlineNodes::Insert(binfilter::SwNode* const*, unsigned short)
