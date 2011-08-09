@@ -1512,13 +1512,13 @@
 			</xsl:if>
 			<xsl:attribute name="alt">
 				<xsl:choose>
-					<xsl:when test="../svg:desc">
-						<xsl:value-of select="../svg:desc"/>
+					<xsl:when test="../svg:title">
+						<xsl:value-of select="../svg:title"/>
 					</xsl:when>
 					<xsl:otherwise>
 						<xsl:message>
 	Accessibility Warning:
-		 No alternate text ('svg:desc' element) set for
+		 No alternate text ('svg:title' element) set for
 		 image '
 							<xsl:value-of select="@xlink:href"/>'!
 						</xsl:message>
