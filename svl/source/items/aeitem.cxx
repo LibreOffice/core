@@ -31,8 +31,6 @@
 
 #include <tools/string.hxx>
 
-#define _SVSTDARR_USHORTS
-#include <svl/svstdarr.hxx>
 #include <svl/svarray.hxx>
 #include <svl/aeitem.hxx>
 
@@ -129,12 +127,7 @@ SfxAllEnumItem::SfxAllEnumItem(const SfxAllEnumItem &rCopy):
 
     if( rCopy.pDisabledValues )
     {
-        pDisabledValues = new SvUShorts;
-        for ( sal_uInt16 nPos = 0; nPos < rCopy.pDisabledValues->Count(); ++nPos )
-        {
-            pDisabledValues->Insert( rCopy.pDisabledValues->GetObject(nPos),
-                                     nPos );
-        }
+        pDisabledValues = new std::vector<sal_uInt16>( *(rCopy.pDisabledValues) );
     }
 }
 
@@ -272,16 +265,16 @@ void SfxAllEnumItem::DisableValue( sal_uInt16 nValue )
 {
     DBG_CHKTHIS(SfxAllEnumItem, 0);
     if ( !pDisabledValues )
-        pDisabledValues = new SvUShorts;
+        pDisabledValues = new std::vector<sal_uInt16>;
 
-    pDisabledValues->Insert( nValue, pDisabledValues->Count() );
+    pDisabledValues->push_back( nValue );
 }
 
 sal_Bool SfxAllEnumItem::IsEnabled( sal_uInt16 nValue ) const
 {
     if ( pDisabledValues )
     {
-        for ( sal_uInt16 i=0; i<pDisabledValues->Count(); i++ )
+        for ( size_t i=0; i<pDisabledValues->size(); i++ )
             if ( (*pDisabledValues)[i] == nValue )
                 return sal_False;
     }

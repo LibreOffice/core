@@ -31,14 +31,14 @@
 #include "svl/svldllapi.h"
 #include <svl/poolitem.hxx>
 #include <svl/eitem.hxx>
+#include <vector>
 
 class SfxAllEnumValueArr;
-class SvUShorts;
 
 class SVL_DLLPUBLIC SfxAllEnumItem: public SfxEnumItem
 {
-    SfxAllEnumValueArr*     pValues;
-    SvUShorts*              pDisabledValues;
+    SfxAllEnumValueArr*      pValues;
+    std::vector<sal_uInt16>* pDisabledValues;
 
 protected:
     sal_uInt16                  _GetPosByValue( sal_uInt16 nValue ) const;
