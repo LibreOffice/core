@@ -1696,12 +1696,11 @@ void SvXMLNumFmtExport::Export( sal_Bool bIsAutoStyle )
     }
     if (!bIsAutoStyle)
     {
-        SvUShorts aLanguages;
+        std::vector<sal_uInt16> aLanguages;
         pFormatter->GetUsedLanguages( aLanguages );
-        sal_uInt16 nLangCount = aLanguages.Count();
-        for (sal_uInt16 nLangPos=0; nLangPos<nLangCount; nLangPos++)
+        for (std::vector<sal_uInt16>::const_iterator it(aLanguages.begin()); it != aLanguages.end(); ++it)
         {
-            LanguageType nLang = aLanguages[nLangPos];
+            LanguageType nLang = *it;
 
             sal_uInt32 nDefaultIndex = 0;
             SvNumberFormatTable& rTable = pFormatter->GetEntryTable(
