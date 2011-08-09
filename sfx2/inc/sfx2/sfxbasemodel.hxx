@@ -1503,6 +1503,8 @@ public:
     /** returns true if someone added a XEventListener to this XEventBroadcaster */
     sal_Bool hasEventListeners() const;
 
+    void impl_setDocumentProperties( const ::com::sun::star::uno::Reference< ::com::sun::star::document::XDocumentProperties >& );
+
 protected:
 
     /* returns a unique id for the model that is valid as long as the document

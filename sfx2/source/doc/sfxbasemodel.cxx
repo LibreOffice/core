@@ -894,6 +894,15 @@ uno::Reference< document::XDocumentInfo > SAL_CALL SfxBaseModel::getDocumentInfo
 
     return m_pData->m_xDocumentInfo;
 }
+
+void
+SfxBaseModel::impl_setDocumentProperties( const uno::Reference< document::XDocumentProperties >& rxNewDocProps )
+{
+    m_pData->m_xDocumentProperties.set(rxNewDocProps, uno::UNO_QUERY_THROW);
+    uno::Reference<util::XModifyBroadcaster> xMB(m_pData->m_xDocumentProperties, uno::UNO_QUERY_THROW);
+    xMB->addModifyListener(new SfxDocInfoListener_Impl(*m_pData->m_pObjectShell));
+}
+
 void
 SfxBaseModel::setDocumentProperties( const uno::Reference< document::XDocumentProperties >& rxNewDocProps )
 {
@@ -901,8 +910,9 @@ SfxBaseModel::setDocumentProperties( const uno::Reference< document::XDocumentPr
     ::SolarMutexGuard aGuard;
     if ( impl_isDisposed() )
         throw lang::DisposedException();
-    m_pData->m_xDocumentProperties.set(rxNewDocProps, uno::UNO_QUERY_THROW);
+    impl_setDocumentProperties(rxNewDocProps);
 }
+
 // document::XDocumentPropertiesSupplier:
 uno::Reference< document::XDocumentProperties > SAL_CALL
 SfxBaseModel::getDocumentProperties()
@@ -911,13 +921,11 @@ SfxBaseModel::getDocumentProperties()
     SfxModelGuard aGuard( *this, SfxModelGuard::E_INITIALIZING );
     if ( !m_pData->m_xDocumentProperties.is() )
     {
-        uno::Reference< lang::XInitialization > xDocProps(
+        uno::Reference< document::XDocumentProperties > xDocProps(
             ::comphelper::getProcessServiceFactory()->createInstance(
                 DEFINE_CONST_UNICODE("com.sun.star.document.DocumentProperties") ),
             uno::UNO_QUERY_THROW);
-        m_pData->m_xDocumentProperties.set(xDocProps, uno::UNO_QUERY_THROW);
-        uno::Reference<util::XModifyBroadcaster> xMB(m_pData->m_xDocumentProperties, uno::UNO_QUERY_THROW);
-        xMB->addModifyListener(new SfxDocInfoListener_Impl(*m_pData->m_pObjectShell));
+        impl_setDocumentProperties(xDocProps);
     }
 
     return m_pData->m_xDocumentProperties;
