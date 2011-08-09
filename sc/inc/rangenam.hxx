@@ -119,7 +119,7 @@ public:
     sal_uInt16    GetIndex() const                { return nIndex; }
     ScTokenArray*   GetCode()                       { return pCode; }
     const ScTokenArray* GetCode() const             { return pCode; }
-    sal_uInt16          GetErrCode();
+    sal_uInt16          GetErrCode() const;
     sal_Bool            HasReferences() const;
     void            SetDocument( ScDocument* pDocument){ pDoc = pDocument; }
     ScDocument*     GetDocument() const             { return pDoc; }

@@ -2856,7 +2856,15 @@ void ScXMLExport::WriteTable(sal_Int32 nTable, const Reference<sheet::XSpreadshe
                 AddAttribute(XML_NAMESPACE_TABLE, XML_BASE_CELL_ADDRESS, aStr);
 
                 // expression
-                itr->GetSymbol(aStr, pDoc->GetStorageGrammar());
+                ScRange aRan;
+                if (itr->GetErrCode() || itr->IsValidReference(aRan))
+                {
+                    aStr = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("[#REF!]"));
+                }
+                else
+                {
+                    itr->GetSymbol(aStr, pDoc->GetStorageGrammar());
+                }
                 AddAttribute(XML_NAMESPACE_TABLE, XML_EXPRESSION, aStr);
 
                 SvXMLElementExport aElemNR(*this, XML_NAMESPACE_TABLE, XML_NAMED_EXPRESSION, sal_True, sal_True);
@@ -3808,7 +3816,17 @@ void ScXMLExport::WriteNamedExpressions(const com::sun::star::uno::Reference <co
         }
         else
         {
-            AddAttribute(XML_NAMESPACE_TABLE, XML_EXPRESSION, sOUTempContent);
+            ScRange aRange;
+            rtl::OUString aStr;
+            if (pNamedRange->GetErrCode() || !pNamedRange->IsValidReference(aRange))
+            {
+                aStr = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("[#REF!]"));
+            }
+            else
+            {
+                pNamedRange->GetSymbol(aStr, pDoc->GetStorageGrammar());
+            }
+            AddAttribute(XML_NAMESPACE_TABLE, XML_EXPRESSION, aStr);
             SvXMLElementExport aElemNE(*this, XML_NAMESPACE_TABLE, XML_NAMED_EXPRESSION, sal_True, sal_True);
         }
     }

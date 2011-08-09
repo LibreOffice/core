@@ -521,7 +521,7 @@ SCCOL ScRangeData::GetMaxCol() const
 }
 
 
-sal_uInt16 ScRangeData::GetErrCode()
+sal_uInt16 ScRangeData::GetErrCode() const
 {
     return pCode ? pCode->GetCodeError() : 0;
 }
