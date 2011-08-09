@@ -886,12 +886,11 @@ sal_Bool SvNumberFormatter::Load( SvStream& rStream )
     // generate additional i18n standard formats for all used locales
     LanguageType eOldLanguage = ActLnge;
     NumberFormatCodeWrapper aNumberFormatCode( xServiceManager, GetLocale() );
-    SvUShorts aList;
+    std::vector<sal_uInt16> aList;
     GetUsedLanguages( aList );
-    sal_uInt16 nCount = aList.Count();
-    for ( sal_uInt16 j=0; j<nCount; j++ )
+    for ( std::vector<sal_uInt16>::const_iterator it(aList.begin()); it != aList.end(); ++it )
     {
-        LanguageType eLang = aList[j];
+        LanguageType eLang = *it;
         ChangeIntl( eLang );
         sal_uInt32 CLOffset = ImpGetCLOffset( eLang );
         ImpGenerateAdditionalFormats( CLOffset, aNumberFormatCode, sal_True );
@@ -941,16 +940,16 @@ sal_Bool SvNumberFormatter::Save( SvStream& rStream ) const
         return sal_True;
 }
 
-void SvNumberFormatter::GetUsedLanguages( SvUShorts& rList )
+void SvNumberFormatter::GetUsedLanguages( std::vector<sal_uInt16>& rList )
 {
-    rList.Remove( 0, rList.Count() );
+    rList.clear();
 
     sal_uInt32 nOffset = 0;
     while (nOffset <= MaxCLOffset)
     {
         SvNumberformat* pFormat = (SvNumberformat*) aFTable.Get(nOffset);
         if (pFormat)
-            rList.Insert( pFormat->GetLanguage(), rList.Count() );
+            rList.push_back( pFormat->GetLanguage() );
         nOffset += SV_COUNTRY_LANGUAGE_OFFSET;
     }
 }

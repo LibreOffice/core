@@ -47,7 +47,6 @@
 class Date;
 class SvStream;
 class Color;
-class SvUShorts;
 class CharClass;
 class CalendarWrapper;
 
@@ -791,7 +790,7 @@ public:
     void GetCompatibilityCurrency( String& rSymbol, String& rAbbrev ) const;
 
     /// Fill rList with the language/country codes that have been allocated
-    void    GetUsedLanguages( SvUShorts& rList );
+    void    GetUsedLanguages( std::vector<sal_uInt16>& rList );
 
     /// Fill a <type>NfKeywordIndex</type> table with keywords of a language/country
     void    FillKeywordTable( NfKeywordTable& rKeywords, LanguageType eLang );
