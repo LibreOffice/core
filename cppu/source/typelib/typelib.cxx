@@ -323,7 +323,7 @@ TypeDescriptor_Init_Impl::~TypeDescriptor_Init_Impl() SAL_THROW( () )
             typelib_TypeDescriptionReference * pTDR = (*aIt).second;
             if (pTDR)
             {
-                OString aTypeName( OUStringToOString( pTDR->pTypeName, RTL_TEXTENCODING_ASCII_US ) );
+                OString aTypeName( rtl::OUStringToOString( pTDR->pTypeName, RTL_TEXTENCODING_ASCII_US ) );
                 OSL_TRACE(
                     "### remaining type: %s; ref count = %d", aTypeName.getStr(), pTDR->nRefCount );
             }
@@ -339,18 +339,18 @@ TypeDescriptor_Init_Impl::~TypeDescriptor_Init_Impl() SAL_THROW( () )
         pWeakMap = 0;
     }
 #if OSL_DEBUG_LEVEL > 1
-    OSL_ENSURE( !nTypeDescriptionCount );
-    OSL_ENSURE( !nCompoundTypeDescriptionCount );
-    OSL_ENSURE( !nUnionTypeDescriptionCount );
-    OSL_ENSURE( !nIndirectTypeDescriptionCount );
-    OSL_ENSURE( !nArrayTypeDescriptionCount );
-    OSL_ENSURE( !nEnumTypeDescriptionCount );
-    OSL_ENSURE( !nInterfaceMethodTypeDescriptionCount );
-    OSL_ENSURE( !nInterfaceAttributeTypeDescriptionCount );
-    OSL_ENSURE( !nInterfaceTypeDescriptionCount );
-    OSL_ENSURE( !nTypeDescriptionReferenceCount );
+    OSL_ENSURE( !nTypeDescriptionCount, "### nTypeDescriptionCount is not zero" );
+    OSL_ENSURE( !nCompoundTypeDescriptionCount, "### nCompoundTypeDescriptionCount is not zero" );
+    OSL_ENSURE( !nUnionTypeDescriptionCount, "### nUnionTypeDescriptionCount is not zero" );
+    OSL_ENSURE( !nIndirectTypeDescriptionCount, "### nIndirectTypeDescriptionCount is not zero" );
+    OSL_ENSURE( !nArrayTypeDescriptionCount, "### nArrayTypeDescriptionCount is not zero" );
+    OSL_ENSURE( !nEnumTypeDescriptionCount, "### nEnumTypeDescriptionCount is not zero" );
+    OSL_ENSURE( !nInterfaceMethodTypeDescriptionCount, "### nInterfaceMethodTypeDescriptionCount is not zero" );
+    OSL_ENSURE( !nInterfaceAttributeTypeDescriptionCount, "### nInterfaceAttributeTypeDescriptionCount is not zero" );
+    OSL_ENSURE( !nInterfaceTypeDescriptionCount, "### nInterfaceTypeDescriptionCount is not zero" );
+    OSL_ENSURE( !nTypeDescriptionReferenceCount, "### nTypeDescriptionReferenceCount is not zero" );
 
-    OSL_ENSURE( !pCallbacks || pCallbacks->empty() );
+    OSL_ENSURE( !pCallbacks || pCallbacks->empty(), "### pCallbacks is not NULL or empty" );
 #endif
 
     delete pCallbacks;
@@ -433,7 +433,7 @@ static inline void typelib_typedescription_initTables(
 #if OSL_DEBUG_LEVEL > 1
             else
             {
-                OString aStr( OUStringToOString( pITD->ppAllMembers[i]->pTypeName, RTL_TEXTENCODING_ASCII_US ) );
+                OString aStr( rtl::OUStringToOString( pITD->ppAllMembers[i]->pTypeName, RTL_TEXTENCODING_ASCII_US ) );
                 OSL_TRACE( "\n### cannot get attribute type description: %s", aStr.getStr() );
             }
 #endif
@@ -571,7 +571,7 @@ bool complete(typelib_TypeDescription ** ppTypeDescr, bool initTables) {
         {
 #if OSL_DEBUG_LEVEL > 1
             OString aStr(
-                OUStringToOString( (*ppTypeDescr)->pTypeName, RTL_TEXTENCODING_ASCII_US ) );
+                rtl::OUStringToOString( (*ppTypeDescr)->pTypeName, RTL_TEXTENCODING_ASCII_US ) );
             OSL_TRACE( "\n### type cannot be completed: %s", aStr.getStr() );
 #endif
             return false;
@@ -2337,7 +2337,7 @@ extern "C" void SAL_CALL typelib_typedescriptionreference_new(
         else if (*ppTDR)
         {
 #if OSL_DEBUG_LEVEL > 1
-            OString aStr( OUStringToOString( pTypeName, RTL_TEXTENCODING_ASCII_US ) );
+            OString aStr( rtl::OUStringToOString( pTypeName, RTL_TEXTENCODING_ASCII_US ) );
             OSL_ENSURE( !"### typedef not found: ", aStr.getStr() );
 #endif
             typelib_typedescriptionreference_release( *ppTDR );
