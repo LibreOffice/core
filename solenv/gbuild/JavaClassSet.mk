@@ -28,11 +28,17 @@
 
 gb_JavaClassSet_REPOSITORYNAMES := $(gb_Helper_REPOSITORYNAMES)
 gb_JavaClassSet_JAVACCOMMAND := $(JAVACOMPILER)
+gb_JavaClassSet_JAVACDEBUG :=
+
+ifneq ($(gb_DEBUGLEVEL),0),-g)
+gb_JavaClassSet_JAVACDEBUG := -g
+endif
 
 define gb_JavaClassSet__command
 $(call gb_Helper_abbreviate_dirs_native,\
 	mkdir -p $(dir $(1)) && \
 	$(if $(3),$(gb_JavaClassSet_JAVACCOMMAND) \
+		$(gb_JavaClassSet_JAVACDEBUG) \
 		-cp "$(CLASSPATH)" \
 		-d $(call gb_JavaClassSet_get_classdir,$(2)) \
 		$(if $(filter-out $(JARDEPS),$(3)),\
