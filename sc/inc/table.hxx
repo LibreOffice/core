@@ -562,8 +562,8 @@ public:
                                     const ::editeng::SvxBorderLine* pLine, sal_Bool bColorOnly );
 
     const ScStyleSheet* GetStyle( SCCOL nCol, SCROW nRow ) const;
-    const ScStyleSheet* GetSelectionStyle( const ScMarkData& rMark, sal_Bool& rFound ) const;
-    const ScStyleSheet* GetAreaStyle( sal_Bool& rFound, SCCOL nCol1, SCROW nRow1,
+    const ScStyleSheet* GetSelectionStyle( const ScMarkData& rMark, bool& rFound ) const;
+    const ScStyleSheet* GetAreaStyle( bool& rFound, SCCOL nCol1, SCROW nRow1,
                                                     SCCOL nCol2, SCROW nRow2 ) const;
 
     void        StyleSheetChanged( const SfxStyleSheetBase* pStyleSheet, sal_Bool bRemoved,

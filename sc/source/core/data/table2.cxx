@@ -1947,11 +1947,11 @@ const ScStyleSheet* ScTable::GetStyle( SCCOL nCol, SCROW nRow ) const
 }
 
 
-const ScStyleSheet* ScTable::GetSelectionStyle( const ScMarkData& rMark, sal_Bool& rFound ) const
+const ScStyleSheet* ScTable::GetSelectionStyle( const ScMarkData& rMark, bool& rFound ) const
 {
     rFound = false;
 
-    sal_Bool    bEqual = true;
+    bool    bEqual = true;
     bool    bColFound;
 
     const ScStyleSheet* pStyle = NULL;
@@ -1963,7 +1963,7 @@ const ScStyleSheet* ScTable::GetSelectionStyle( const ScMarkData& rMark, sal_Boo
             pNewStyle = aCol[i].GetSelectionStyle( rMark, bColFound );
             if (bColFound)
             {
-                rFound = sal_True;
+                rFound = true;
                 if ( !pNewStyle || ( pStyle && pNewStyle != pStyle ) )
                     bEqual = false;                                             // unterschiedliche
                 pStyle = pNewStyle;
@@ -1974,12 +1974,12 @@ const ScStyleSheet* ScTable::GetSelectionStyle( const ScMarkData& rMark, sal_Boo
 }
 
 
-const ScStyleSheet* ScTable::GetAreaStyle( sal_Bool& rFound, SCCOL nCol1, SCROW nRow1,
-                                                    SCCOL nCol2, SCROW nRow2 ) const
+const ScStyleSheet* ScTable::GetAreaStyle( bool& rFound, SCCOL nCol1, SCROW nRow1,
+                                           SCCOL nCol2, SCROW nRow2 ) const
 {
     rFound = false;
 
-    sal_Bool    bEqual = true;
+    bool    bEqual = true;
     bool    bColFound;
 
     const ScStyleSheet* pStyle = NULL;
@@ -1990,7 +1990,7 @@ const ScStyleSheet* ScTable::GetAreaStyle( sal_Bool& rFound, SCCOL nCol1, SCROW 
         pNewStyle = aCol[i].GetAreaStyle(bColFound, nRow1, nRow2);
         if (bColFound)
         {
-            rFound = sal_True;
+            rFound = true;
             if ( !pNewStyle || ( pStyle && pNewStyle != pStyle ) )
                 bEqual = false;                                             // unterschiedliche
             pStyle = pNewStyle;
