@@ -591,7 +591,7 @@ sal_uInt32 ActivityImpl::ImpRegisterAgainScrollTextMixerState(sal_uInt32 nTime)
     sal_uInt32 nRetval(0L);
     ImpForceScrollTextAnimNodes();
 
-    if(maVector.size())
+    if(!maVector.empty())
     {
         sal_uInt32 nRelativeTime;
         ScrollTextAnimNode* pNode = ImpGetScrollTextAnimNode(nTime, nRelativeTime);

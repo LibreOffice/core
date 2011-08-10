@@ -702,7 +702,7 @@ Any Invocation_Impl::invoke( const OUString& FunctionName, const Sequence<Any>& 
             catch( CannotConvertException& rExc )
             {
                 rExc.ArgumentIndex = nPos;  // optionalen Parameter Index hinzufuegen
-                throw rExc;
+                throw;
             }
         }
 

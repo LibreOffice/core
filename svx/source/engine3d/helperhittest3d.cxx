@@ -237,7 +237,7 @@ SVX_DLLPUBLIC void getAllHit3DObjectsSortedFrontToBack(
                 // copy SdrObject pointers to return result set
                 ::std::vector< ImplPairDephAndObject >::iterator aIterator2(aDepthAndObjectResults.begin());
 
-                for(;aIterator2 != aDepthAndObjectResults.end(); aIterator2++)
+                for(;aIterator2 != aDepthAndObjectResults.end(); ++aIterator2)
                 {
                     o_rResult.push_back(aIterator2->getObject());
                 }

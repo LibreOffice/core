@@ -387,7 +387,7 @@ long BorderWidthImpl::GuessWidth( long nLine1, long nLine2, long nGap )
         bInvalid = true;
 
     double nWidth = 0.0;
-    if ( !bInvalid && aToCompare.size() > 0 )
+    if ( (!bInvalid) && (!aToCompare.empty()) )
     {
         nWidth = *aToCompare.begin();
         std::vector< double >::iterator pIt = aToCompare.begin();
