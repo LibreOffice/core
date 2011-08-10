@@ -94,9 +94,6 @@ class ScTokenArray;
 class XclImpChRoot : public XclImpRoot
 {
 public:
-    typedef ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartDocument > XChartDocRef;
-
-public:
     explicit            XclImpChRoot( const XclImpRoot& rRoot, XclImpChChart& rChartData );
     virtual             ~XclImpChRoot();
 
@@ -119,7 +116,10 @@ public:
     Color               GetSeriesFillAutoColor( sal_uInt16 nFormatIdx ) const;
 
     /** Starts the API chart document conversion. Must be called once before all API conversion. */
-    void                InitConversion( XChartDocRef xChartDoc, const Rectangle& rChartRect ) const;
+    void                InitConversion(
+        const ::com::sun::star::uno::Reference<
+            com::sun::star::chart2::XChartDocument>& xChartDoc, const Rectangle& rChartRect ) const;
+
     /** Finishes the API chart document conversion. Must be called once after all API conversion. */
     void                FinishConversion( XclImpDffConverter& rDffConv ) const;
 
@@ -1373,10 +1373,6 @@ typedef boost::shared_ptr< XclImpChAxesSet > XclImpChAxesSetRef;
 class XclImpChChart : public XclImpChGroupBase, protected XclImpChRoot
 {
 public:
-    typedef ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartDocument >    XChartDocRef;
-    typedef ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XDiagram >          XDiagramRef;
-
-public:
     explicit            XclImpChChart( const XclImpRoot& rRoot );
     virtual             ~XclImpChChart();
 
@@ -1402,10 +1398,12 @@ public:
     inline sal_Size     GetProgressSize() const { return 2 * EXC_CHART_PROGRESS_SIZE; }
 
     /** Converts and writes all properties to the passed chart. */
-    void                Convert( XChartDocRef xChartDoc,
-                            XclImpDffConverter& rDffConv,
-                            const ::rtl::OUString& rObjName,
-                            const Rectangle& rChartRect ) const;
+    void                Convert(
+        const ::com::sun::star::uno::Reference<
+            com::sun::star::chart2::XChartDocument>& xChartDoc,
+        XclImpDffConverter& rDffConv,
+        const ::rtl::OUString& rObjName,
+        const Rectangle& rChartRect ) const;
 
 private:
     /** Reads a CHSERIES group (data series source and formatting). */
@@ -1427,7 +1425,8 @@ private:
     void                FinalizeTitle();
 
     /** Creates and returns a new diagram object and converts global chart settings. */
-    XDiagramRef         CreateDiagram() const;
+    com::sun::star::uno::Reference<com::sun::star::chart2::XDiagram>
+        CreateDiagram() const;
 
 private:
     typedef ::std::vector< XclImpChSeriesRef >                   XclImpChSeriesVec;

@@ -276,7 +276,7 @@ Color XclImpChRoot::GetSeriesFillAutoColor( sal_uInt16 nFormatIdx ) const
     return ScfTools::GetMixedColor( aColor, rPal.GetColor( EXC_COLOR_CHWINDOWBACK ), nTrans );
 }
 
-void XclImpChRoot::InitConversion( Reference< XChartDocument > xChartDoc, const Rectangle& rChartRect ) const
+void XclImpChRoot::InitConversion( const Reference<XChartDocument>& xChartDoc, const Rectangle& rChartRect ) const
 {
     // create formatting object tables
     mxChData->InitConversion( GetRoot(), xChartDoc, rChartRect );
@@ -3879,7 +3879,7 @@ bool XclImpChChart::IsManualPlotArea() const
     return (GetBiff() <= EXC_BIFF5) || ::get_flag( maProps.mnFlags, EXC_CHPROPS_USEMANPLOTAREA );
 }
 
-void XclImpChChart::Convert( Reference< XChartDocument > xChartDoc,
+void XclImpChChart::Convert( const Reference<XChartDocument>& xChartDoc,
         XclImpDffConverter& rDffConv, const OUString& rObjName, const Rectangle& rChartRect ) const
 {
     // initialize conversion (locks the model to suppress any internal updates)

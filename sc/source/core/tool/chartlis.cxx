@@ -375,13 +375,13 @@ void ScChartListener::EndListeningTo()
 
 
 void ScChartListener::ChangeListening( const ScRangeListRef& rRangeListRef,
-            sal_Bool bDirtyP  )
+                                       bool bDirtyP )
 {
     EndListeningTo();
     SetRangeList( rRangeListRef );
     StartListeningTo();
     if ( bDirtyP )
-        SetDirty( sal_True );
+        SetDirty( true );
 }
 
 
@@ -429,7 +429,7 @@ void ScChartListener::SetUpdateQueue()
     pDoc->GetChartListenerCollection()->StartTimer();
 }
 
-sal_Bool ScChartListener::operator==( const ScChartListener& r )
+bool ScChartListener::operator==( const ScChartListener& r )
 {
     bool b1 = (mpTokens.get() && !mpTokens->empty());
     bool b2 = (r.mpTokens.get() && !r.mpTokens->empty());
@@ -503,7 +503,7 @@ void ScChartListenerCollection::StartAllListeners()
 }
 
 void ScChartListenerCollection::ChangeListening( const String& rName,
-        const ScRangeListRef& rRangeListRef, sal_Bool bDirty )
+        const ScRangeListRef& rRangeListRef, bool bDirty )
 {
     ScChartListener aCLSearcher( rName, pDoc, rRangeListRef );
     ScChartListener* pCL;
@@ -521,7 +521,7 @@ void ScChartListenerCollection::ChangeListening( const String& rName,
     }
     pCL->StartListeningTo();
     if ( bDirty )
-        pCL->SetDirty( sal_True );
+        pCL->SetDirty( true );
 }
 
 void ScChartListenerCollection::FreeUnused()
@@ -594,21 +594,21 @@ void ScChartListenerCollection::SetDirty()
     for ( sal_uInt16 nIndex = 0; nIndex < nCount; nIndex++ )
     {
         ScChartListener* pCL = (ScChartListener*) pItems[ nIndex ];
-        pCL->SetDirty( sal_True );
+        pCL->SetDirty( true );
     }
     StartTimer();
 }
 
 
 void ScChartListenerCollection::SetDiffDirty(
-            const ScChartListenerCollection& rCmp, sal_Bool bSetChartRangeLists )
+            const ScChartListenerCollection& rCmp, bool bSetChartRangeLists )
 {
-    sal_Bool bDirty = false;
+    bool bDirty = false;
     for ( sal_uInt16 nIndex = 0; nIndex < nCount; nIndex++ )
     {
         ScChartListener* pCL = (ScChartListener*) pItems[ nIndex ];
         sal_uInt16 nFound;
-        sal_Bool bFound = rCmp.Search( pCL, nFound );
+        bool bFound = rCmp.Search( pCL, nFound );
         if ( !bFound || (*pCL != *((const ScChartListener*) rCmp.pItems[ nFound ])) )
         {
             if ( bSetChartRangeLists )
@@ -618,16 +618,16 @@ void ScChartListenerCollection::SetDiffDirty(
                     const ScRangeListRef& rList1 = pCL->GetRangeList();
                     const ScRangeListRef& rList2 =
                         ((const ScChartListener*) rCmp.pItems[ nFound ])->GetRangeList();
-                    sal_Bool b1 = rList1.Is();
-                    sal_Bool b2 = rList2.Is();
+                    bool b1 = rList1.Is();
+                    bool b2 = rList2.Is();
                     if ( b1 != b2 || (b1 && b2 && (*rList1 != *rList2)) )
                         pDoc->SetChartRangeList( pCL->GetString(), rList1 );
                 }
                 else
                     pDoc->SetChartRangeList( pCL->GetString(), pCL->GetRangeList() );
             }
-            bDirty = sal_True;
-            pCL->SetDirty( sal_True );
+            bDirty = true;
+            pCL->SetDirty( true );
         }
     }
     if ( bDirty )
@@ -637,15 +637,15 @@ void ScChartListenerCollection::SetDiffDirty(
 
 void ScChartListenerCollection::SetRangeDirty( const ScRange& rRange )
 {
-    sal_Bool bDirty = false;
+    bool bDirty = false;
     for ( sal_uInt16 nIndex = 0; nIndex < nCount; nIndex++ )
     {
         ScChartListener* pCL = (ScChartListener*) pItems[ nIndex ];
         const ScRangeListRef& rList = pCL->GetRangeList();
         if ( rList.Is() && rList->Intersects( rRange ) )
         {
-            bDirty = sal_True;
-            pCL->SetDirty( sal_True );
+            bDirty = true;
+            pCL->SetDirty( true );
         }
     }
     if ( bDirty )
@@ -682,7 +682,7 @@ void ScChartListenerCollection::UpdateChartsContainingTab( SCTAB nTab )
 }
 
 
-sal_Bool ScChartListenerCollection::operator==( const ScChartListenerCollection& r )
+bool ScChartListenerCollection::operator==( const ScChartListenerCollection& r )
 {
     // hier nicht ScStrCollection::operator==() verwenden, der umstaendlich via
     // IsEqual und Compare laeuft, stattdessen ScChartListener::operator==()
@@ -694,7 +694,7 @@ sal_Bool ScChartListenerCollection::operator==( const ScChartListenerCollection&
                 *((ScChartListener*) r.pItems[ nIndex ]) )
             return false;
     }
-    return sal_True;
+    return true;
 }
 
 void ScChartListenerCollection::StartListeningHiddenRange( const ScRange& rRange, ScChartHiddenRangeListener* pListener )
