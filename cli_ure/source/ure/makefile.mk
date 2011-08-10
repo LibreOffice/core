@@ -99,7 +99,7 @@ $(POLICY_ASSEMBLY_FILE) : $(BIN)$/cli_ure.config
     $(WRAPCMD) $(AL) -out:$@ \
             -version:$(CLI_URE_POLICY_VERSION) \
             -keyfile:$(BIN)$/cliuno.snk \
-            -link:cli_ure.config,$(BIN)$/cli_ure.config
+            -link:$(CLI_URE_CONFIG)
 
 #Create the config file that is used with the policy assembly
 $(BIN)$/cli_ure.config: cli_ure_config $(BIN)$/cliureversion.mk 

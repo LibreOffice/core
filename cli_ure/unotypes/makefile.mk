@@ -43,7 +43,8 @@ TARGET = unotypes
 WRAPCMD=MONO_PATH=$(OUT)/bin:$(MONO_PATH) LD_LIBRARY_PATH=$(SOLARLIBDIR):$(OUT)/lib
 CLIMAKER=$(BIN)$/climaker
 .ELSE
-CLIMAKER=climaker.exe
+WRAPCMD=$(AUGMENT_LIBRARY_PATH)
+CLIMAKER=$(BIN)$/climaker.exe
 .ENDIF
 
 .INCLUDE : $(BIN)$/cliureversion.mk
@@ -75,7 +76,7 @@ $(POLICY_ASSEMBLY_FILE) : $(BIN)$/cli_uretypes.config $(OUT)$/bin$/cli_uretypes.
     $(WRAPCMD) $(AL) -out:$@ \
             -version:$(CLI_URETYPES_POLICY_VERSION) \
             -keyfile:$(BIN)$/cliuno.snk \
-            -link:cli_uretypes.config,$(BIN)$/cli_uretypes.config
+            -link:$(CLI_URETYPES_CONFIG)
 
 #Create the config file that is used with the policy assembly
 $(BIN)$/cli_uretypes.config: cli_uretypes_config $(BIN)$/cliureversion.mk 

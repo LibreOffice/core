@@ -91,7 +91,7 @@ $(POLICY_ASSEMBLY_FILE) : $(BIN)$/cli_basetypes.config
     $(WRAPCMD) $(AL) -out:$@ \
             -version:$(CLI_BASETYPES_POLICY_VERSION) \
             -keyfile:$(BIN)$/cliuno.snk \
-            -link:cli_basetypes.config,$(BIN)$/cli_basetypes.config
+            -link:$(CLI_BASETYPES_CONFIG)
 
 
 #Create the config file that is used with the policy assembly

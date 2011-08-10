@@ -4211,7 +4211,8 @@ if test "$build_os" = "cygwin" ; then
 
     PathFormat "$CSC_PATH"
     CSC_PATH="$formatted_path"
-
+	
+	x_Mono=[\#]
 fi
 
 if test "$_os" = "Linux"; then
@@ -4244,6 +4245,7 @@ if test "$_os" = "Linux"; then
                         "`echo $MCS_VERSION | cut -d"." -f3`" -ge "8"; then
                 ENABLE_MONO=YES
                 CSC=$MCS
+				x_Mono=
                 AC_PATH_PROG(GMCS, gmcs, no)
                 AC_PATH_PROG(MKBUNDLE2, mkbundle2, no)
                 AC_PATH_PROG(MKBUNDLE, mkbundle, no)
@@ -4283,6 +4285,7 @@ if test "$_os" = "Linux"; then
         MONO_GAC_ROOT=$with_mono_gac_root
     fi
 fi
+AC_SUBST(x_Mono)
 AC_SUBST(CSC_PATH)
 AC_SUBST(CSC)
 AC_SUBST(AL)
