@@ -31,6 +31,7 @@ $(eval $(call gb_Module_Module,xmlsecurity))
 ifeq ($(WITH_MOZILLA),YES)
 
 $(eval $(call gb_Module_add_targets,xmlsecurity,\
+	AllLangResTarget_xsec \
 	Library_xmlsecurity \
 	Library_xsec_fw \
 ))
