@@ -70,6 +70,7 @@
 #include <com/sun/star/table/BorderLine2.hpp>
 #include <com/sun/star/text/TextGridMode.hpp>
 #include <com/sun/star/text/XDocumentIndexesSupplier.hpp>
+#include <com/sun/star/text/XTextFieldsSupplier.hpp>
 #include <com/sun/star/text/WritingMode.hpp>
 #include <com/sun/star/text/WritingMode2.hpp>
 #include <com/sun/star/text/XFootnote.hpp>
@@ -165,6 +166,17 @@ DomainMapper::~DomainMapper()
         {
             uno::Reference< container::XIndexAccess > xIndexes = xIndexesSupplier->getDocumentIndexes();
             nIndexes = xIndexes->getCount();
+        }
+        // If we have page references, those need updating as well, similar to the indexes.
+        uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(m_pImpl->GetTextDocument(), uno::UNO_QUERY);
+        if(xTextFieldsSupplier.is())
+        {
+            uno::Reference<container::XEnumeration> xEnumeration = xTextFieldsSupplier->getTextFields()->createEnumeration();
+            while(xEnumeration->hasMoreElements())
+            {
+                ++nIndexes;
+                xEnumeration->nextElement();
+            }
         }
         if( nIndexes )
         {

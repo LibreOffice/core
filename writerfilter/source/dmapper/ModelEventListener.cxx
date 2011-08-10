@@ -26,9 +26,15 @@
  *
  ************************************************************************/
 #include <ModelEventListener.hxx>
+#include <PropertyIds.hxx>
 #include <com/sun/star/document/XEventBroadcaster.hpp>
 #include <com/sun/star/text/XDocumentIndex.hpp>
 #include <com/sun/star/text/XDocumentIndexesSupplier.hpp>
+#include <com/sun/star/text/XTextFieldsSupplier.hpp>
+#include <com/sun/star/util/XRefreshable.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/text/ReferenceFieldPart.hpp>
+#include <com/sun/star/text/ReferenceFieldSource.hpp>
 
 namespace writerfilter {
 namespace dmapper {
@@ -54,6 +60,8 @@ void ModelEventListener::notifyEvent( const document::EventObject& rEvent ) thro
     {
         try
         {
+            PropertyNameSupplier& rPropNameSupplier = PropertyNameSupplier::GetPropertyNameSupplier();
+
             uno::Reference< text::XDocumentIndexesSupplier> xIndexesSupplier( rEvent.Source, uno::UNO_QUERY );
             //remove listener
             uno::Reference<document::XEventBroadcaster>(rEvent.Source, uno::UNO_QUERY )->removeEventListener(
@@ -66,6 +74,26 @@ void ModelEventListener::notifyEvent( const document::EventObject& rEvent ) thro
             {
                 uno::Reference< text::XDocumentIndex> xIndex( xIndexes->getByIndex( nIndex ), uno::UNO_QUERY );
                 xIndex->update();
+            }
+
+            // If we have PAGEREF fields, update fields as well.
+            uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(rEvent.Source, uno::UNO_QUERY);
+            uno::Reference<container::XEnumeration> xEnumeration(xTextFieldsSupplier->getTextFields()->createEnumeration(), uno::UNO_QUERY);
+            sal_Int32 nIndex = 0;
+            while(xEnumeration->hasMoreElements())
+            {
+                uno::Reference<beans::XPropertySet> xPropertySet(xEnumeration->nextElement(), uno::UNO_QUERY);
+                sal_Int16 nSource;
+                xPropertySet->getPropertyValue(rPropNameSupplier.GetName(PROP_REFERENCE_FIELD_SOURCE)) >>= nSource;
+                sal_Int16 nPart;
+                xPropertySet->getPropertyValue(rPropNameSupplier.GetName(PROP_REFERENCE_FIELD_PART)) >>= nPart;
+                if (nSource == text::ReferenceFieldSource::BOOKMARK && nPart == text::ReferenceFieldPart::PAGE)
+                    ++nIndex;
+            }
+            if (nIndex)
+            {
+                uno::Reference<util::XRefreshable> xRefreshable(xTextFieldsSupplier->getTextFields(), uno::UNO_QUERY);
+                xRefreshable->refresh();
             }
         }
         catch( const uno::Exception& rEx )

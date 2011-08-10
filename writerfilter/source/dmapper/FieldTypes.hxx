@@ -171,6 +171,7 @@ enum FieldId
      see lcl_ParseNumberingType
      */
     ,FIELD_PAGE
+    ,FIELD_PAGEREF
     /* REF targetbkm \f \* MERGEFORMAT ->
         imports a ShowVariable (bookmarkname)?
         \h hyerlink to paragraph

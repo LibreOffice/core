@@ -1900,6 +1900,7 @@ if(!bFilled)
             {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("NEXT")),          "DatabaseNextSet",          "", FIELD_NEXT         },
             {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("NEXTIF")),        "DatabaseNextSet",          "", FIELD_NEXTIF       },
             {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PAGE")),          "PageNumber",               "", FIELD_PAGE         },
+            {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PAGEREF")),       "GetReference",             "", FIELD_PAGEREF      },
             {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("REF")),           "GetReference",             "", FIELD_REF          },
             {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("REVNUM")),        "DocInfo.Revision",         "", FIELD_REVNUM       },
             {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SAVEDATE")),      "DocInfo.Change",           "", FIELD_SAVEDATE     },
@@ -2706,16 +2707,19 @@ void DomainMapper_Impl::CloseFieldCommand()
                         }
 
                     break;
+                    case FIELD_PAGEREF:
                     case FIELD_REF:
                     {
-                        ::rtl::OUString sBookmark = lcl_ExtractParameter(pContext->GetCommand(), sizeof(" REF") );
+                        bool bPageRef = aIt->second.eFieldId == FIELD_PAGEREF;
+                        ::rtl::OUString sBookmark = lcl_ExtractParameter(pContext->GetCommand(),
+                                (bPageRef ? sizeof(" PAGEREF") : sizeof(" REF")));
                         xFieldProperties->setPropertyValue(
                             rPropNameSupplier.GetName(PROP_REFERENCE_FIELD_SOURCE),
                             uno::makeAny( sal_Int16(text::ReferenceFieldSource::BOOKMARK)) );
                         xFieldProperties->setPropertyValue(
                             rPropNameSupplier.GetName(PROP_SOURCE_NAME),
                             uno::makeAny( sBookmark) );
-                        sal_Int16 nFieldPart = text::ReferenceFieldPart::TEXT;
+                        sal_Int16 nFieldPart = (bPageRef ? text::ReferenceFieldPart::PAGE : text::ReferenceFieldPart::TEXT);
                         ::rtl::OUString sValue;
                         if( lcl_FindInCommand( pContext->GetCommand(), 'p', sValue ))
                         {
