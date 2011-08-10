@@ -1095,7 +1095,7 @@ void BinTextObject::StoreData( SvStream& rOStream ) const
                     for ( sal_uInt16 nChar = pAttr->GetStart(); nChar < pAttr->GetEnd(); nChar++ )
                     {
                         sal_Unicode cOld = pC->GetText().GetChar( nChar );
-                        char cConv = ByteString::ConvertFromUnicode( ConvertFontToSubsFontChar( hConv, cOld ), RTL_TEXTENCODING_SYMBOL );
+                        char cConv = rtl::OUStringToOString(rtl::OUString(ConvertFontToSubsFontChar(hConv, cOld)), RTL_TEXTENCODING_SYMBOL).toChar();
                         if ( cConv )
                             aText.SetChar( nChar, cConv );
                     }
@@ -1120,7 +1120,7 @@ void BinTextObject::StoreData( SvStream& rOStream ) const
                 if ( !pC->GetAttribs().FindAttrib( EE_CHAR_FONTINFO, nChar ) )
                 {
                     sal_Unicode cOld = pC->GetText().GetChar( nChar );
-                    char cConv = ByteString::ConvertFromUnicode( ConvertFontToSubsFontChar( hConv, cOld ), RTL_TEXTENCODING_SYMBOL );
+                    char cConv = rtl::OUStringToOString(rtl::OUString(ConvertFontToSubsFontChar(hConv, cOld)), RTL_TEXTENCODING_SYMBOL).toChar();
                     if ( cConv )
                         aText.SetChar( nChar, cConv );
                 }

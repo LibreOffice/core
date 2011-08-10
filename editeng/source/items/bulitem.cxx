@@ -414,7 +414,7 @@ SvStream& SvxBulletItem::Store( SvStream& rStrm, sal_uInt16 /*nItemVersion*/ ) c
     rStrm << nWidth;
     rStrm << nStart;
     rStrm << nJustify;
-    rStrm << (char)ByteString::ConvertFromUnicode( cSymbol, aFont.GetCharSet() );
+    rStrm << rtl::OUStringToOString(rtl::OUString(cSymbol), aFont.GetCharSet()).toChar();
     rStrm << nScale;
 
     // UNICODE: rStrm << aPrevText;
