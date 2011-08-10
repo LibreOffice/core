@@ -30,7 +30,7 @@ gb_JavaClassSet_REPOSITORYNAMES := $(gb_Helper_REPOSITORYNAMES)
 gb_JavaClassSet_JAVACCOMMAND := $(JAVACOMPILER)
 gb_JavaClassSet_JAVACDEBUG :=
 
-ifneq ($(gb_DEBUGLEVEL),0),-g)
+ifneq ($(gb_DEBUGLEVEL),0)
 gb_JavaClassSet_JAVACDEBUG := -g
 endif
 
