@@ -2242,7 +2242,6 @@ TransferableDataHelper TransferableDataHelper::CreateFromSystemClipboard( Window
     if( pWindow )
         xClipboard = pWindow->GetClipboard();
 
-#if 0
     if( xClipboard.is() )
     {
         try
@@ -2260,7 +2259,7 @@ TransferableDataHelper TransferableDataHelper::CreateFromSystemClipboard( Window
         {
         }
     }
-#endif
+
     return aRet;
 }
 
