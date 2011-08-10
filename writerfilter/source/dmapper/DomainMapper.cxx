@@ -3069,15 +3069,16 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
             else
             {
                 uno::Reference< text::XEndnotesSupplier> xEndnotesSupplier( m_pImpl->GetTextDocument(), uno::UNO_QUERY );
-                xFtnEdnSettings = xEndnotesSupplier->getEndnoteSettings();
+                if (xEndnotesSupplier.is())
+                    xFtnEdnSettings = xEndnotesSupplier->getEndnoteSettings();
             }
-            if( NS_ooxml::LN_EG_FtnEdnNumProps_numStart == nSprmId )
+            if( NS_ooxml::LN_EG_FtnEdnNumProps_numStart == nSprmId && xFtnEdnSettings.is())
             {
                 xFtnEdnSettings->setPropertyValue(
                     PropertyNameSupplier::GetPropertyNameSupplier().GetName( PROP_START_AT),
                                                                     uno::makeAny( sal_Int16( nIntValue - 1 )));
             }
-            else
+            else if (xFtnEdnSettings.is())
             {
                 sal_Int16 nNumType = ConversionHelper::ConvertNumberingType( nIntValue );
                 xFtnEdnSettings->setPropertyValue(

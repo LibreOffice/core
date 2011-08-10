@@ -1442,6 +1442,25 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
         return 0;
     }
 
+    // Endnote numbering
+    switch (nKeyword)
+    {
+        case RTF_AFTNNAR: nParam = NS_ooxml::LN_Value_ST_NumberFormat_decimal; break;
+        case RTF_AFTNNALC: nParam = NS_ooxml::LN_Value_ST_NumberFormat_lowerLetter; break;
+        case RTF_AFTNNAUC: nParam = NS_ooxml::LN_Value_ST_NumberFormat_upperLetter; break;
+        case RTF_AFTNNRLC: nParam = NS_ooxml::LN_Value_ST_NumberFormat_lowerRoman; break;
+        case RTF_AFTNNRUC: nParam = NS_ooxml::LN_Value_ST_NumberFormat_upperRoman; break;
+        case RTF_AFTNNCHI: nParam = NS_ooxml::LN_Value_ST_NumberFormat_chicago; break;
+        default: break;
+    }
+    if (nParam >= 0)
+    {
+        RTFValue::Pointer_t pValue(new RTFValue(nParam));
+        lcl_putNestedSprm(m_aSettingsTableSprms, NS_ooxml::LN_CT_Settings_endnotePr, NS_ooxml::LN_CT_EdnProps_numFmt, pValue);
+        lcl_putNestedSprm(m_aDefaultState.aParagraphSprms, NS_ooxml::LN_EG_SectPrContents_endnotePr, NS_ooxml::LN_CT_EdnProps_numFmt, pValue);
+        return 0;
+    }
+
     // Trivial paragraph flags
     switch (nKeyword)
     {
