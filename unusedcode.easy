@@ -1762,6 +1762,7 @@ SwRedlineDataParentSortArr::DeleteAndDestroy(unsigned short, unsigned short)
 SwRedlineDataParentSortArr::Insert(SwRedlineDataParent* const&)
 SwRedlineDataParentSortArr::Insert(SwRedlineDataParent* const*, unsigned short)
 SwRedlineDataParentSortArr::Insert(SwRedlineDataParentSortArr const*, unsigned short, unsigned short)
+SwRenderData::NeedNewViewOptionAdjust(ViewShell const&) const
 SwSections::DeleteAndDestroy(unsigned short, unsigned short)
 SwSelBoxes::Insert(SwTableBox* const&, unsigned short&)
 SwSelBoxes::Remove(SwTableBox* const&, unsigned short)
@@ -2634,6 +2635,7 @@ binfilter::Sw3Bytes::Replace(unsigned char const*, unsigned short, unsigned shor
 binfilter::Sw3Bytes::_ForEach(unsigned short, unsigned short, unsigned char (*)(unsigned char const&, void*), void*)
 binfilter::Sw3IoImp::ExportTxtAttrs(binfilter::Sw3ExportTxtAttrs const*, unsigned short, unsigned short)
 binfilter::Sw3IoImp::ExportTxtNode(binfilter::SwTxtNode const&, unsigned short, unsigned short, unsigned short, binfilter::SwInsHardBlankSoftHyph&)
+binfilter::Sw3IoImp::FindFlyFrm(unsigned long)
 binfilter::Sw3Marks::GetPos(binfilter::Sw3Mark const*) const
 binfilter::Sw3Marks::Insert(binfilter::Sw3Mark*)
 binfilter::Sw3Marks::Remove(binfilter::Sw3Mark*)
