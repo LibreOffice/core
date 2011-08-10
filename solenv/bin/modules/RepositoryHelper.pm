@@ -1,3 +1,4 @@
+# -*- Mode: Perl; tab-width: 4; indent-tabs-mode: nil; -*-
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -27,7 +28,7 @@
 
 #*************************************************************************
 #
-# RepositoryHelper - Perl for working with repositories and underlying SCM
+# RepositoryHelper - Perl for working with repositories
 #
 # usage: see below
 #
@@ -67,9 +68,10 @@ sub new {
     my $self = {};
     $self->{INITIAL_DIRECTORY} = $initial_directory;
     $self->{REPOSITORY_ROOT} = undef;
-    $self->{REPOSITORY_NAME} = undef;
-    $self->{SCM_NAME} = undef;
-    detect_repository($self);
+    if (! search_via_build_lst($self))
+    {
+        croak('Cannot determine source directory/repository for ' . $self->{INITIAL_DIRECTORY});
+    }
     bless($self, $class);
     return $self;
 }
@@ -86,35 +88,6 @@ sub get_initial_directory
     my $self        = shift;
     return $self->{INITIAL_DIRECTORY};
 }
-
-sub get_scm_name
-{
-    my $self        = shift;
-    return$self->{SCM_NAME};
-}
-
-##### private methods #####
-sub search_for_hg {
-    my $self        = shift;
-    my $hg_root;
-    my $scm_name = 'hg';
-    if (open(COMMAND, "$scm_name root 2>&1 |")) {
-        foreach (<COMMAND>) {
-            next if (/^Not trusting file/);
-            chomp;
-            $hg_root = $_;
-            last;
-        };
-        close COMMAND;
-        chomp $hg_root;
-        if ($hg_root !~ /There is no Mercurial repository here/) {
-            $self->{REPOSITORY_ROOT} = $hg_root;
-            $self->{SCM_NAME} = $scm_name;
-            return 1;
-        };
-    };
-    return 0;
-};
 
 sub search_via_build_lst {
     my $self = shift;
@@ -141,14 +114,6 @@ sub search_via_build_lst {
     while (chdir "$rep_root_candidate");
 };
 
-sub detect_repository {
-    my $self        = shift;
-    return if (search_via_build_lst($self));
-    chdir $self->{INITIAL_DIRECTORY};
-    return if (search_for_hg($self));
-    croak('Cannot determine source directory/repository for ' . $self->{INITIAL_DIRECTORY});
-};
-
 ##### finish #####
 
 1; # needed by use or require
@@ -157,7 +122,7 @@ __END__
 
 =head1 NAME
 
-RepositoryHelper - Perl module for working with repositories and underlying SCM
+RepositoryHelper - Perl module for working with repositories
 
 =head1 SYNOPSIS
 
@@ -174,7 +139,7 @@ RepositoryHelper - Perl module for working with repositories and underlying SCM
 
 =head1 DESCRIPTION
 
-RepositoryHelper is a perlPerl module for working with repositories and underlying SCM
+RepositoryHelper is a perlPerl module for working with repositories
 in the database.
 
 Methods:
@@ -185,7 +150,7 @@ Creates a new instance of RepositoryHelper. Can be initialized by: some path whi
 
 RepositoryHelper::get_repository_root()
 
-Returns the repository root, retrieved by SCM methods or on educated guess...
+Returns the repository root, retrieved by educated guess...
 
 RepositoryHelper::get_initial_directory()
 
@@ -195,7 +160,6 @@ Returns full path to the initialistion directory.
 
 RepositoryHelper::new()
 RepositoryHelper::get_repository_root()
-RepositoryHelper::get_scm_name()
 RepositoryHelper::get_initial_directory()
 
 =head1 AUTHOR

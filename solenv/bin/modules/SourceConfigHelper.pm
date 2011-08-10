@@ -230,12 +230,7 @@ sub is_repository {
     my $repositoryHash_ref = shift;
     $repositoryHash_ref->{INITIAL_DIRECTORY} = $directory;
     $repositoryHash_ref->{REPOSITORY_ROOT} = undef;
-    $repositoryHash_ref->{REPOSITORY_NAME} = undef;
     my $result = RepositoryHelper::search_via_build_lst($repositoryHash_ref);
-    chdir $repositoryHash_ref->{INITIAL_DIRECTORY};
-    if (!$result) {
-        $result = RepositoryHelper::search_for_hg($repositoryHash_ref);
-    }
     return $result;
 }
 

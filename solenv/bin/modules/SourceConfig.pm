@@ -1,3 +1,4 @@
+# -*- Mode: Perl; tab-width: 4; indent-tabs-mode: nil; -*-
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
