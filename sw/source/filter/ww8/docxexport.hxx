@@ -152,6 +152,8 @@ public:
     /// Returns the relationd id
     rtl::OString OutputChart( com::sun::star::uno::Reference< com::sun::star::frame::XModel >& xModel, sal_Int32 nCount );
 
+    void WriteOutliner(const OutlinerParaObject& rOutliner, sal_uInt8 nTyp);
+
 protected:
     /// Format-dependant part of the actual export.
     virtual void ExportDocument_Impl();

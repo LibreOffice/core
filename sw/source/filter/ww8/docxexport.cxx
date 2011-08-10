@@ -54,6 +54,9 @@
 #include <section.hxx>
 #include <ftninfo.hxx>
 
+#include <editeng/editobj.hxx>
+#include <editeng/outlobj.hxx>
+
 #include <docary.hxx>
 #include <numrule.hxx>
 #include <charfmt.hxx>
@@ -743,6 +746,55 @@ bool DocxExport::ignoreAttributeForStyles( sal_uInt16 nWhich ) const
     if( nWhich == RES_TEXTGRID )
         return true; // w:docGrid is written only to document.xml, not to styles.xml
     return MSWordExportBase::ignoreAttributeForStyles( nWhich );
+}
+
+void DocxExport::WriteOutliner(const OutlinerParaObject& rParaObj, sal_uInt8 nTyp)
+{
+    const EditTextObject& rEditObj = rParaObj.GetTextObject();
+    MSWord_SdrAttrIter aAttrIter( *this, rEditObj, nTyp );
+
+    sal_uInt16 nPara = rEditObj.GetParagraphCount();
+    for( sal_uInt16 n = 0; n < nPara; ++n )
+    {
+        if( n )
+            aAttrIter.NextPara( n );
+
+        AttrOutput().StartParagraph( ww8::WW8TableNodeInfo::Pointer_t());
+        rtl_TextEncoding eChrSet = aAttrIter.GetNodeCharSet();
+        String aStr( rEditObj.GetText( n ));
+        xub_StrLen nAktPos = 0;
+        xub_StrLen nEnd = aStr.Len();
+        do {
+            AttrOutput().StartRun( NULL );
+            xub_StrLen nNextAttr = aAttrIter.WhereNext();
+            rtl_TextEncoding eNextChrSet = aAttrIter.GetNextCharSet();
+
+            if( nNextAttr > nEnd )
+                nNextAttr = nEnd;
+
+            bool bTxtAtr = aAttrIter.IsTxtAttr( nAktPos );
+            if( !bTxtAtr )
+            {
+                if( nAktPos == 0 && nNextAttr - nAktPos == aStr.Len())
+                    AttrOutput().RunText( aStr, eChrSet );
+                else
+                {
+                    String tmp( aStr.Copy( nAktPos, nNextAttr - nAktPos ));
+                    AttrOutput().RunText( tmp, eChrSet );
+                }
+            }
+            AttrOutput().StartRunProperties();
+            aAttrIter.OutAttr( nAktPos );
+            AttrOutput().EndRunProperties( NULL );
+
+            nAktPos = nNextAttr;
+            eChrSet = eNextChrSet;
+            aAttrIter.NextPos();
+            AttrOutput().EndRun();
+        } while( nAktPos < nEnd );
+//        aAttrIter.OutParaAttr(false);
+        AttrOutput().EndParagraph( ww8::WW8TableNodeInfoInner::Pointer_t());
+    }
 }
 
 DocxExport::DocxExport( DocxExportFilter *pFilter, SwDoc *pDocument, SwPaM *pCurrentPam, SwPaM *pOriginalPam )

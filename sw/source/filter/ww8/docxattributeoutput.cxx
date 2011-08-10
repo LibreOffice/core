@@ -3329,9 +3329,11 @@ void DocxAttributeOutput::WritePostitFields()
          ++i )
     {
         OString idstr = OString::valueOf( sal_Int32( i ));
-// TODO        const SwPostItField* f = m_postitFields[ i ];
+        const SwPostItField* f = m_postitFields[ i ];
         m_pSerializer->startElementNS( XML_w, XML_comment, FSNS( XML_w, XML_id ), idstr.getStr(),
-            /*TODO*/ FSEND );
+            FSNS( XML_w, XML_author ), rtl::OUStringToOString( f->GetPar1(), RTL_TEXTENCODING_UTF8 ).getStr(),
+            FSNS( XML_w, XML_date ), impl_DateTimeToOString(f->GetDateTime()).getStr(), FSEND );
+        GetExport().WriteOutliner( *f->GetTextObject(), TXT_ATN );
         m_pSerializer->endElementNS( XML_w, XML_comment );
     }
 }
