@@ -28,16 +28,18 @@
 
 $(eval $(call gb_AllLangResTarget_AllLangResTarget,xmlsec))
 
+$(eval $(call gb_AllLangResTarget_set_reslocation,xmlsec,xmlsecurity))
+
 $(eval $(call gb_AllLangResTarget_add_srs,xmlsec,\
-	xmlsec/res
+	xmlsec/res \
 ))
 
 $(eval $(call gb_SrsTarget_SrsTarget,xmlsec/res))
 
 $(eval $(call gb_SrsTarget_set_include,xmlsec/res,\
 	$$(INCLUDE) \
-	-I$(realpath $(SRCDIR)/xmlsec/inc/xmlsecurity) \
-	-I$(realpath $(SRCDIR)/xmlsec/source/dialogs) \
+	-I$(realpath $(SRCDIR)/xmlsecurity/inc) \
+	-I$(realpath $(SRCDIR)/xmlsecurity/source/dialogs) \
 ))
 
 $(eval $(call gb_SrsTarget_add_files,xmlsec/res,\
