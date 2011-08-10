@@ -1669,6 +1669,12 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
                         NS_ooxml::LN_EG_SectPrContents_lnNumType, NS_ooxml::LN_CT_LineNumber_restart, pValue);
             }
             break;
+        case RTF_AENDDOC:
+            // Noop, this is the default in Writer.
+            break;
+        case RTF_AENDNOTES:
+            // Noop, Writer does not support having endnotes at the end of section.
+            break;
         default:
 #if OSL_DEBUG_LEVEL > 1
             OSL_TRACE("%s: TODO handle flag '%s'", OSL_THIS_FUNC, lcl_RtfToString(nKeyword));
