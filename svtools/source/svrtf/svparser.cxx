@@ -416,8 +416,7 @@ sal_Unicode SvParser::GetNextChar()
 
 #ifdef DBG_UTIL
     if( pImplData->aOut.IsOpen() )
-        pImplData->aOut << ByteString::ConvertFromUnicode( c,
-                                                RTL_TEXTENCODING_MS_1251 );
+        pImplData->aOut << rtl::OUStringToOString(rtl::OUString(c), RTL_TEXTENCODING_MS_1251).getStr();
 #endif
 
     if( c == '\n' )
