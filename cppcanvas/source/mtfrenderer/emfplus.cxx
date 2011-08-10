@@ -1417,20 +1417,24 @@ namespace cppcanvas
                                 aBmp.Crop( aCropRect );
 
 
-                                ActionSharedPtr pBmpAction (
-                                    internal::BitmapActionFactory::createBitmapAction (
-                                        aBmp,
-                                        rState.mapModeTransform * Map (x1, y1),
-                                        rState.mapModeTransform * MapSize(x2 - x1, y3 - y1),
-                                        rCanvas,
-                                        rState));
+                                Size aSize( aBmp.GetSizePixel() );
+                                if( aSize.Width() > 0 && aSize.Height() > 0 ) {
+                                    ActionSharedPtr pBmpAction (
+                                        internal::BitmapActionFactory::createBitmapAction (
+                                            aBmp,
+                                            rState.mapModeTransform * Map (x1, y1),
+                                            rState.mapModeTransform * MapSize(x2 - x1, y3 - y1),
+                                            rCanvas,
+                                            rState));
 
-                                if( pBmpAction ) {
-                                    maActions.push_back( MtfAction( pBmpAction,
-                                                                    rFactoryParms.mrCurrActionIndex ) );
+                                    if( pBmpAction ) {
+                                        maActions.push_back( MtfAction( pBmpAction,
+                                                                        rFactoryParms.mrCurrActionIndex ) );
 
-                                    rFactoryParms.mrCurrActionIndex += pBmpAction->getActionCount()-1;
-                                }
+                                        rFactoryParms.mrCurrActionIndex += pBmpAction->getActionCount()-1;
+                                    }
+                                } else
+                                    EMFP_DEBUG (printf ("EMF+ warning: empty bitmap\n"));
                             } else {
                                 EMFP_DEBUG (printf ("EMF+ DrawImagePoints TODO (fixme)\n"));
                 }
