@@ -34,6 +34,11 @@ $(eval $(call gb_AllLangResTarget_add_srs,uui,\
 
 $(eval $(call gb_SrsTarget_SrsTarget,uui/res))
 
+$(eval $(call gb_SrsTarget_set_include,uui/res,\
+	-I$(realpath $(SRCDIR)/uui/source) \
+	$$(INCLUDE) \
+))
+
 $(eval $(call gb_SrsTarget_add_files,uui/res,\
 	uui/source/alreadyopen.src \
 	uui/source/cookiedg.src \
