@@ -321,8 +321,8 @@ namespace writerfilter {
                 com::sun::star::uno::Reference<com::sun::star::document::XDocumentProperties> m_xDocumentProperties;
                 SvStream* m_pInStream;
                 Stream* m_pMapperStream;
-                RTFSdrImport* m_pSdrImport;
-                RTFTokenizer* m_pTokenizer;
+                boost::shared_ptr<RTFSdrImport> m_pSdrImport;
+                boost::shared_ptr<RTFTokenizer> m_pTokenizer;
                 /// Same as m_aStates.size(), except that this can be negative for invalid input.
                 int m_nGroup;
                 std::stack<RTFParserState> m_aStates;
@@ -379,8 +379,8 @@ namespace writerfilter {
                 RTFSprms m_aObjectAttributes;
                 /// If we are in an object group.
                 bool m_bObject;
-                /// Contents of the objdata group, stored here so we can delete it when we leave the object group.
-                SvStream* m_pObjectData;
+                /// Contents of the objdata group.
+                boost::shared_ptr<SvStream> m_pObjectData;
 
                 RTFReferenceTable::Entries_t m_aFontTableEntries;
                 int m_nCurrentFontIndex;

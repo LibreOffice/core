@@ -273,7 +273,6 @@ RTFDocumentImpl::RTFDocumentImpl(uno::Reference<uno::XComponentContext> const& x
     m_aObjectSprms(),
     m_aObjectAttributes(),
     m_bObject(false),
-    m_pObjectData(0),
     m_aFontTableEntries(),
     m_nCurrentFontIndex(0),
     m_aStyleTableEntries(),
@@ -291,14 +290,12 @@ RTFDocumentImpl::RTFDocumentImpl(uno::Reference<uno::XComponentContext> const& x
 
     m_pGraphicHelper = new oox::GraphicHelper(m_xContext, xFrame, m_xStorage);
 
-    m_pTokenizer = new RTFTokenizer(*this, m_pInStream);
-    m_pSdrImport = new RTFSdrImport(*this, m_xDstDoc);
+    m_pTokenizer.reset(new RTFTokenizer(*this, m_pInStream));
+    m_pSdrImport.reset(new RTFSdrImport(*this, m_xDstDoc));
 }
 
 RTFDocumentImpl::~RTFDocumentImpl()
 {
-    delete m_pTokenizer;
-    delete m_pSdrImport;
 }
 
 SvStream& RTFDocumentImpl::Strm()
@@ -2646,7 +2643,7 @@ int RTFDocumentImpl::popState()
     }
     else if (m_aStates.top().nDestinationState == DESTINATION_OBJDATA)
     {
-        m_pObjectData = new SvMemoryStream();
+        m_pObjectData.reset(new SvMemoryStream());
         int b = 0, count = 2;
 
         // Feed the destination text to a stream.
@@ -2689,7 +2686,7 @@ int RTFDocumentImpl::popState()
             *m_pObjectData >> nData; // NativeDataSize
         }
 
-        uno::Reference<io::XInputStream> xInputStream(new utl::OInputStreamWrapper(m_pObjectData));
+        uno::Reference<io::XInputStream> xInputStream(new utl::OInputStreamWrapper(m_pObjectData.get()));
         RTFValue::Pointer_t pStreamValue(new RTFValue(xInputStream));
 
         RTFSprms aOLEAttributes;
@@ -2714,11 +2711,6 @@ int RTFDocumentImpl::popState()
         Mapper().endShape();
         m_aObjectAttributes->clear();
         m_aObjectSprms->clear();
-        if (m_pObjectData)
-        {
-            delete m_pObjectData;
-            m_pObjectData = 0;
-        }
         m_bObject = false;
     }
     else if (m_aStates.top().nDestinationState == DESTINATION_ANNOTATIONDATE)
