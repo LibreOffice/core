@@ -901,7 +901,7 @@ sal_Int32 DatabaseMetaData::getIntSetting(OUString settingName)
     Reference< XParameters > params(m_getIntSetting_stmt, UNO_QUERY_THROW );
     params->setString(1, settingName );
     Reference< XResultSet > rs = m_getIntSetting_stmt->executeQuery();
-    Reference< XRow > xRow( rs , UNO_QUERY );
+    Reference< XRow > xRow( rs , UNO_QUERY_THROW );
     return xRow->getInt(1);
 }
 
@@ -1148,12 +1148,12 @@ sal_Bool DatabaseMetaData::dataDefinitionIgnoredInTransactions(  ) throw (SQLExc
 //            "ORDER BY pg_namespace.nspname || relname"
             ) );
 
-    Reference< XParameters > parameters( statement, UNO_QUERY );
+    Reference< XParameters > parameters( statement, UNO_QUERY_THROW );
     parameters->setString( 1 , schemaPattern );
     parameters->setString( 2 , tableNamePattern );
 
     Reference< XResultSet > rs = statement->executeQuery();
-    Reference< XRow > xRow( rs, UNO_QUERY );
+    Reference< XRow > xRow( rs, UNO_QUERY_THROW );
     SequenceAnyVector vec;
 
     while( rs->next() )
@@ -1252,7 +1252,7 @@ struct SortInternalSchemasLastAndPublicFirst
     // LEM TODO: look at JDBC driver and consider doing the same
     //           in particular, excluding temporary schemas, but maybe better through pg_is_other_temp_schema(oid) OR  == pg_my_temp_schema()
 
-    Reference< XRow > xRow( rs, UNO_QUERY );
+    Reference< XRow > xRow( rs, UNO_QUERY_THROW );
     SequenceAnyVector vec;
     while( rs->next() )
     {
@@ -1410,7 +1410,7 @@ static void columnMetaData2DatabaseTypeDescription(
     const Reference< XResultSet > &rs,
     const Reference< XStatement > &stmt )
 {
-    Reference< XRow > row( rs, UNO_QUERY );
+    Reference< XRow > row( rs, UNO_QUERY_THROW );
     int domains = 0;
     rtl::OUStringBuffer queryBuf(128);
     queryBuf.appendAscii( RTL_CONSTASCII_STRINGPARAM( "SELECT oid,typtype,typname FROM pg_TYPE WHERE " ) );
@@ -1431,7 +1431,7 @@ static void columnMetaData2DatabaseTypeDescription(
     if( domains )
     {
         Reference< XResultSet > rsDomain = stmt->executeQuery( queryBuf.makeStringAndClear() );
-        row = Reference< XRow >( rsDomain, UNO_QUERY );
+        row = Reference< XRow >( rsDomain, UNO_QUERY_THROW );
         while( rsDomain->next() )
         {
             oidMap[row->getInt(1)] = DatabaseTypeDescription(row->getString(3), row->getString(2) );
@@ -1548,13 +1548,13 @@ static void columnMetaData2DatabaseTypeDescription(
             "ORDER BY pg_namespace.nspname || pg_class.relname || pg_attribute.attnum"
             ) );
 
-    Reference< XParameters > parameters( statement, UNO_QUERY );
+    Reference< XParameters > parameters( statement, UNO_QUERY_THROW );
     parameters->setString( 1 , schemaPattern );
     parameters->setString( 2 , tableNamePattern );
     parameters->setString( 3 , columnNamePattern );
 
     Reference< XResultSet > rs = statement->executeQuery();
-    Reference< XRow > xRow( rs, UNO_QUERY );
+    Reference< XRow > xRow( rs, UNO_QUERY_THROW );
     SequenceAnyVector vec;
 
     Oid2DatabaseTypeDescriptionMap domainMap;
@@ -1729,12 +1729,12 @@ static void addPrivilegesToVector(
             "ORDER BY pg_namespace.nspname || pg_class.relname "
             ) );
 
-    Reference< XParameters > parameters( statement, UNO_QUERY );
+    Reference< XParameters > parameters( statement, UNO_QUERY_THROW );
     parameters->setString( 1 , schemaPattern );
     parameters->setString( 2 , tableNamePattern );
 
     Reference< XResultSet > rs = statement->executeQuery();
-    Reference< XRow > xRow( rs, UNO_QUERY );
+    Reference< XRow > xRow( rs, UNO_QUERY_THROW );
     SequenceAnyVector vec;
     while( rs->next() )
     {
@@ -1824,12 +1824,12 @@ static void addPrivilegesToVector(
             "WHERE con.connamespace = nmsp.oid AND con.conrelid = cl.oid AND con.contype = 'p' "
                 "AND nmsp.nspname LIKE ? AND cl.relname LIKE ?" ) );
 
-    Reference< XParameters > parameters( statement, UNO_QUERY );
+    Reference< XParameters > parameters( statement, UNO_QUERY_THROW );
     parameters->setString( 1 , schema );
     parameters->setString( 2 , table );
 
     Reference< XResultSet > rs = statement->executeQuery();
-    Reference< XRow > xRow( rs, UNO_QUERY );
+    Reference< XRow > xRow( rs, UNO_QUERY_THROW );
     SequenceAnyVector vec;
 
     while( rs->next() )
@@ -1886,12 +1886,12 @@ static void addPrivilegesToVector(
                 "pg_attribute AS att, pg_class AS cl WHERE "
                 "att.attrelid = ? AND att.attnum = ?" ));
 
-        parameters = Reference< XParameters >( statement, UNO_QUERY );
+        parameters = Reference< XParameters >( statement, UNO_QUERY_THROW );
         parameters->setString( 1 , tableOid );
         parameters->setString( 2 , attnum );
 
         rs = statement->executeQuery();
-        xRow = Reference< XRow >( rs, UNO_QUERY );
+        xRow = Reference< XRow >( rs, UNO_QUERY_THROW );
         if( rs->next() )
         {
             // column name
@@ -1944,7 +1944,7 @@ static void addPrivilegesToVector(
 //                   "AND contype = 'f'"));
 
 //     Reference< XResultSet > rs = stmt->executeQuery();
-//     Reference< XRow > row( rs, UNO_QUERY );
+//     Reference< XRow > row( rs, UNO_QUERY_THROW );
 //     while( rs->next() )
 //     {
 
@@ -2141,7 +2141,7 @@ static void pgTypeInfo2ResultSet(
         15, SQL_DATA_TYPE long ==> unused
         16. SQL_DATETIME_SUB long ==> unused
      */
-    Reference< XRow > xRow( rs, UNO_QUERY );
+    Reference< XRow > xRow( rs, UNO_QUERY_THROW );
     while( rs->next() )
     {
         Sequence< Any > row(18);
@@ -2327,11 +2327,11 @@ static sal_Int32 seqContains( const Sequence< sal_Int32 > &seq, sal_Int32 value 
                           "INNER JOIN pg_class as class2 ON pg_index.indexrelid = class2.oid "
             "WHERE nspname = ? AND pg_class.relname = ?" ) );
 
-    Reference< XParameters > param ( stmt, UNO_QUERY );
+    Reference< XParameters > param ( stmt, UNO_QUERY_THROW );
     param->setString( 1, schema );
     param->setString( 2, table );
     Reference< XResultSet > rs = stmt->executeQuery();
-    Reference< XRow > xRow ( rs, UNO_QUERY );
+    Reference< XRow > xRow ( rs, UNO_QUERY_THROW );
 
     SequenceAnyVector vec;
     while( rs->next() )
@@ -2344,7 +2344,7 @@ static sal_Int32 seqContains( const Sequence< sal_Int32 > &seq, sal_Int32 value 
                 "     INNER JOIN pg_class ON attrelid = pg_class.oid "
                 "     INNER JOIN pg_namespace ON pg_class.relnamespace=pg_namespace.oid "
                 "     WHERE pg_namespace.nspname=?  AND pg_class.relname=?" ) );
-        Reference< XParameters > paramColumn ( columnsStmt, UNO_QUERY );
+        Reference< XParameters > paramColumn ( columnsStmt, UNO_QUERY_THROW );
         OUString currentSchema = xRow->getString( C_SCHEMA );
         OUString currentTable = xRow->getString( C_TABLENAME );
         OUString currentIndexName = xRow->getString( C_INDEXNAME );
@@ -2358,7 +2358,7 @@ static sal_Int32 seqContains( const Sequence< sal_Int32 > &seq, sal_Int32 value 
         paramColumn->setString( C_TABLENAME, currentTable );
 
         Reference< XResultSet > rsColumn = columnsStmt->executeQuery();
-        Reference< XRow > rowColumn( rsColumn, UNO_QUERY );
+        Reference< XRow > rowColumn( rsColumn, UNO_QUERY_THROW );
         while( rsColumn->next() )
         {
             sal_Int32 pos = seqContains( columns, rowColumn->getInt( 1 ) );
