@@ -118,7 +118,6 @@
     my $child = 0;
     my %processes_hash = ();
     my %module_announced = ();
-    my $prepare = ''; # prepare for following incompatible build
     my $ignore = '';
     my $html = '';
     my @ignored_errors = ();
@@ -178,15 +177,10 @@
     my %reversed_dependencies = ();
     my %module_paths = (); # hash with absolute module paths
     my %active_modules = ();
-    my $generate_config = 0;
-    my %add_to_config = ();
-    my %remove_from_config = ();
-    my $clear_config = 0;
     my $finished_children = 0;
     my $debug = 0;
     my %module_deps_hash_pids = ();
     my @argv = @ARGV;
-    my $source_config_file;
     my $zenity_pid = 0;
     my $zenity_in = '';
     my $zenity_out = '';
@@ -214,16 +208,6 @@
 
     get_build_modes();
     my %deliver_env = ();
-    if ($prepare) {
-        get_platforms(\%platforms);
-
-        $deliver_env{'COMMON_OUTDIR'}++;
-        $deliver_env{'GUI'}++;
-        $deliver_env{'INPATH'}++;
-        $deliver_env{'OFFENV_PATH'}++;
-        $deliver_env{'OUTPATH'}++;
-        $deliver_env{'L10N_framework'}++;
-    };
     my $workspace_path = get_workspace_path();   # This also sets $initial_module
     my $build_error_log = Cwd::realpath(correct_path($workspace_path)) ."/build_error.log";
     my $source_config = SourceConfig -> new($workspace_path);
@@ -243,10 +227,6 @@
         };
     };
 
-    if ($generate_config && ($clear_config || (scalar keys %remove_from_config)||(scalar keys %add_to_config))) {
-        generate_config_file();
-        exit 0;
-    }
     get_module_and_buildlist_paths();
 
     $deliver_command .= ' -verbose' if ($html || $verbose);
@@ -342,12 +322,6 @@ sub rename_file {
     } elsif ($throw_error) {
         print_error("No such file $old_file_name");
     };
-};
-
-sub generate_config_file {
-    $source_config->add_active_modules([keys %add_to_config], 1) if (scalar %add_to_config);
-    $source_config->remove_activated_modules([keys %remove_from_config], 1) if (scalar %remove_from_config);
-    $source_config->remove_all_activated_modules() if ($clear_config);
 };
 
 
@@ -649,7 +623,6 @@ sub build_all {
             $active_modules{$initial_module}++;
             $modules_types{$initial_module} = 'mod';
         };
-        modules_classify(keys %global_deps_hash);
         expand_dependencies (\%global_deps_hash);
         prepare_incompatible_build(\%global_deps_hash) if ($incompatible && (!$build_from_with_branches));
         if ($build_from_with_branches) {
@@ -662,17 +635,10 @@ sub build_all {
             prepare_build_all_cont(\%global_deps_hash);
             %weights_hash = ();
         };
-        if ($generate_config) {
-            %add_to_config = %global_deps_hash;
-            generate_config_file();
-            exit 0;
-        } elsif ($incompatible) {
+        if ($incompatible) {
             my @missing_modules = ();
             foreach (sort keys %global_deps_hash) {
                 push(@missing_modules, $_) if (!defined $active_modules{$_});
-            };
-            if (scalar @missing_modules) {
-                push(@warnings, "The modules: \"@missing_modules\" should be have been built, but they are not activated and have been skipped. Be aware, that can cause compatibility problems. Maybe you should verify your $source_config_file.\n");
             };
         };
         foreach my $module (keys %dead_parents, keys %skip_modules) {
@@ -933,18 +899,13 @@ sub get_deps_hash {
     my %dead_dependencies = ();
     $module_to_build = shift;
     my $dependencies_hash = shift;
-    if ($custom_job) {
-        if ($modules_types{$module_to_build} ne 'lnk') {
-            add_prerequisite_job($dependencies_hash, $module_to_build, $pre_custom_job);
-            add_prerequisite_job($dependencies_hash, $module_to_build, $pre_job);
-            add_dependent_job($dependencies_hash, $module_to_build, $custom_job);
-            add_dependent_job($dependencies_hash, $module_to_build, $post_job);
-            add_dependent_job($dependencies_hash, $module_to_build, $post_custom_job);
-        };
-        return;
-    };
-    if ( defined $modules_types{$module_to_build} && $modules_types{$module_to_build} ne 'mod') {
+    if ($custom_job)
+    {
+        add_prerequisite_job($dependencies_hash, $module_to_build, $pre_custom_job);
         add_prerequisite_job($dependencies_hash, $module_to_build, $pre_job);
+        add_dependent_job($dependencies_hash, $module_to_build, $custom_job);
+        add_dependent_job($dependencies_hash, $module_to_build, $post_job);
+        add_dependent_job($dependencies_hash, $module_to_build, $post_custom_job);
         return;
     };
 
@@ -1016,13 +977,11 @@ sub get_deps_hash {
         };
     };
     resolve_aliases($dependencies_hash, \%path_hash);
-    if (!$prepare) {
-        add_prerequisite_job($dependencies_hash, $module_to_build, $pre_custom_job);
-        add_prerequisite_job($dependencies_hash, $module_to_build, $pre_job);
-        add_dependent_job($dependencies_hash, $module_to_build, $custom_job);
-        add_dependent_job($dependencies_hash, $module_to_build, $post_job) if ($module_to_build ne $initial_module);
-        add_dependent_job($dependencies_hash, $module_to_build, $post_custom_job);
-    };
+    add_prerequisite_job($dependencies_hash, $module_to_build, $pre_custom_job);
+    add_prerequisite_job($dependencies_hash, $module_to_build, $pre_job);
+    add_dependent_job($dependencies_hash, $module_to_build, $custom_job);
+    add_dependent_job($dependencies_hash, $module_to_build, $post_job) if ($module_to_build ne $initial_module);
+    add_dependent_job($dependencies_hash, $module_to_build, $post_custom_job);
     store_weights($dependencies_hash);
 };
 
@@ -1402,7 +1361,7 @@ sub print_error {
 
 sub usage {
     print STDERR "\nbuild\n";
-    print STDERR "Syntax:    build    [--all|-a[:prj_name]]|[--from|-f prj_name1[:prj_name2] [prj_name3 [...]]]|[--since|-c prj_name] [--with_branches prj_name1[:prj_name2] [--skip prj_name1[:prj_name2] [prj_name3 [...]] [prj_name3 [...]|-b]|[--prepare|-p][:platform] [--deliver|-d [--dlv_switch deliver_switch]]] [-P processes|--server [--setenvstring \"string\"] [--client_timeout MIN] [--port port1[:port2:...:portN]]] [--show|-s] [--help|-h] [--file|-F] [--ignore|-i] [--version|-V] [--mode|-m OOo[,SO[,EXT]] [--html [--html_path html_file_path] [--dontgraboutput]] [--pre_job=pre_job_sring] [--job=job_string|-j] [--post_job=post_job_sring] [--stoponerror] [--genconf [--removeall|--clear|--remove|--add [module1,module2[,...,moduleN]]]] [--exclude_branch_from prj_name1[:prj_name2] [prj_name3 [...]]] [--interactive] [--verbose]\n";
+    print STDERR "Syntax:    build    [--all|-a[:prj_name]]|[--from|-f prj_name1[:prj_name2] [prj_name3 [...]]]|[--since|-c prj_name] [--with_branches prj_name1[:prj_name2] [--skip prj_name1[:prj_name2] [prj_name3 [...]] [prj_name3 [...]|-b] [--deliver|-d [--dlv_switch deliver_switch]]] [-P processes|--server [--setenvstring \"string\"] [--client_timeout MIN] [--port port1[:port2:...:portN]]] [--show|-s] [--help|-h] [--file|-F] [--ignore|-i] [--version|-V] [--mode|-m OOo[,SO[,EXT]] [--html [--html_path html_file_path] [--dontgraboutput]] [--pre_job=pre_job_sring] [--job=job_string|-j] [--post_job=post_job_sring] [--stoponerror] [--exclude_branch_from prj_name1[:prj_name2] [prj_name3 [...]]] [--interactive] [--verbose]\n";
     print STDERR "Example1:    build --from sfx2\n";
     print STDERR "                     - build all projects dependent from sfx2, starting with sfx2, finishing with the current module\n";
     print STDERR "Example2:    build --all:sfx2\n";
@@ -1417,7 +1376,6 @@ sub usage {
     print STDERR "        --from       - build all projects dependent from the specified (including it) till current one\n";
     print STDERR "        --exclude_branch_from    - exclude module(s) and its branch from the build\n";
     print STDERR "        --mode OOo   - build only projects needed for OpenOffice.org\n";
-    print STDERR "        --prepare    - clear all projects for incompatible build from prj_name till current one [for platform] (cws version)\n";
     print STDERR "        --with_branches- the same as \"--from\" but with build all projects in neighbour branches\n";
     print STDERR "        --skip       - do not build certain module(s)\n";
     print STDERR "        --since      - build all projects beginning from the specified till current one (the same as \"--all:prj_name\", but skipping prj_name)\n";
@@ -1438,11 +1396,6 @@ sub usage {
     print STDERR "                       file named $ENV{INPATH}.build.html will be generated in $ENV{SOLARSRC}\n";
     print STDERR "          --html_path      - set html page path\n";
     print STDERR "          --dontgraboutput - do not grab console output when generating html page\n";
-    print STDERR "        --genconf    - generate/modify workspace configuration file\n";
-    print STDERR "          --add            - add active module(s) to configuration file\n";
-    print STDERR "          --remove         - removeactive  modules(s) from configuration file\n";
-    print STDERR "          --removeall|--clear          - remove all active modules(s) from configuration file\n";
-
     print STDERR "        --stoponerror      - stop build when error occurs (for mp builds)\n";
     print STDERR "        --interactive      - start interactive build process (process can be managed via html page)\n";
     print STDERR "        --verbose          - generates a detailed output of the build process\n";
@@ -1478,12 +1431,6 @@ sub get_options {
         $arg =~ /^-F$/        and $cmd_file = shift @ARGV             and next;
         $arg =~ /^--skip$/    and get_modules_passed(\%skip_modules)      and next;
 
-        if ($arg =~ /^--with_branches$/ || $arg =~ /^-b$/) {
-                                    $build_from_with_branches = 1;
-                                    $build_all_parents = 1;
-                                    get_modules_passed(\%incompatibles);
-                                    next;
-        };
         $arg =~ /^--all:(\S+)$/ and $build_all_parents = 1
                                 and $build_all_cont = $1            and next;
         $arg =~ /^-a:(\S+)$/ and $build_all_parents = 1
@@ -1493,14 +1440,6 @@ sub get_options {
                                     get_modules_passed(\%incompatibles);
                                     next;
         };
-        if ($arg =~ /^--exclude_branch_from$/) {
-                                    get_modules_passed(\%exclude_branches);
-                                    next;
-        };
-        $arg =~ /^--prepare$/    and $prepare = 1 and next;
-        $arg =~ /^-p$/            and $prepare = 1 and next;
-        $arg =~ /^--prepare:/    and $prepare = 1 and $only_platform = $' and next;
-        $arg =~ /^-p:/            and $prepare = 1 and $only_platform = $' and next;
         $arg =~ /^--since$/        and $build_all_parents = 1
                                 and $build_since = shift @ARGV         and next;
         $arg =~ /^-c$/        and $build_all_parents = 1
@@ -1510,19 +1449,6 @@ sub get_options {
         $arg =~ /^--help$/        and usage()                            and do_exit(0);
         $arg =~ /^-h$/        and usage()                            and do_exit(0);
         $arg =~ /^--ignore$/        and $ignore = 1                            and next;
-        $arg =~ /^--genconf$/        and $generate_config = 1                  and next;
-        if ($arg =~ /^--add$/)      {
-                                        get_list_of_modules(\%add_to_config);
-                                        next;
-        };
-        if ($arg =~ /^--remove$/)   {
-                                        get_list_of_modules(\%remove_from_config);
-                                        if (!scalar %remove_from_config) {
-                                            print_error('No module list supplied!!');
-                                        };
-                                        next;
-        };
-        ($arg =~ /^--clear$/ || $arg =~ /^--removeall$/)  and $clear_config = 1 and next;
         $arg =~ /^--html$/        and $html = 1                            and next;
         $arg =~ /^--dontgraboutput$/        and $dont_grab_output = 1      and next;
         $arg =~ /^--html_path$/ and $html_path = shift @ARGV  and next;
@@ -1563,9 +1489,6 @@ sub get_options {
     $custom_job = 'deliver' if $deliver;
     $post_job = 'deliver' if (!$custom_job);
     $incompatible = scalar keys %incompatibles;
-    if ($prepare) {
-        print_error("--prepare is for use with --from switch only!\n") if (!$incompatible);
-    };
     if ($processes_to_run) {
         if ($ignore && !$html) {
             print_error("Cannot ignore errors in multiprocessing build");
@@ -1588,16 +1511,6 @@ sub get_options {
         print_error("--client_timeout switch is for server mode only!!") if ($client_timeout);
     };
 
-    if (!$generate_config) {
-        my $error_message = ' switch(es) should be used only with "--genconf"';
-        print_error('"--removeall" ("--clear")' . $error_message) if ($clear_config);
-        if ((scalar %add_to_config) || (scalar %remove_from_config)) {
-            print_error('"--add" or/and "--remove"' . $error_message);
-        };
-    } elsif ((!scalar %add_to_config) && !$clear_config && (!scalar %remove_from_config) && !$build_all_parents){
-        print_error('Please supply necessary switch for "--genconf" (--add|--remove|--removeall). --add can be used with --from and such');
-    };
-
     if ($only_platform) {
         $only_common = 'common';
         $only_common .= '.pro' if ($only_platform =~ /\.pro$/);
@@ -1617,7 +1530,6 @@ sub get_options {
 
 sub get_module_and_buildlist_paths {
     if ($build_all_parents || $checkparents) {
-        $source_config_file = $source_config->get_config_file_path();
         $active_modules{$_}++ foreach ($source_config->get_active_modules());
         my %active_modules_copy = %active_modules;
         foreach my $module ($source_config->get_all_modules()) {
@@ -2080,22 +1992,13 @@ sub announce_module {
 sub print_announce {
     my $prj = shift;
     return if (defined $module_announced{$prj});
-    my $prj_type = '';
-    $prj_type = $modules_types{$prj} if (defined $modules_types{$prj});
     my $text;
-    if ($prj_type eq 'lnk') {
-        if (!defined $active_modules{$prj}) {
-            $text = "Skipping module $prj\n";
-        } else {
-            $text = "Skipping link to $prj\n";
-        };
-        $build_is_finished{$prj}++;
-    } elsif ($prj_type eq 'img') {
-        $text = "Skipping incomplete $prj\n";
-        $build_is_finished{$prj}++;
-    } elsif ($custom_job) {
+    if ($custom_job)
+    {
         $text = "Running custom job \"$custom_job\" in module $prj\n";
-    } else {
+    }
+    else
+    {
         $text = "Building module $prj\n";
     };
     my $announce_string = $new_line;
@@ -2165,48 +2068,6 @@ sub are_all_dependent {
     return '1';
 };
 
-
-#
-# Procedure defines if the local directory is a
-# complete module, an image or a link
-# return values: lnk link
-#                img incomplete (image)
-#                mod complete (module)
-#
-sub modules_classify {
-    my @modules = @_;
-    foreach my $module (sort @modules) {
-        if (!defined $module_paths{$module}) {
-            $modules_types{$module} = 'img';
-            next;
-        };
-        if (( $module_paths{$module} =~ /\.lnk$/) || ($module_paths{$module} =~ /\.link$/)
-                || (!defined $active_modules{$module})) {
-            $modules_types{$module} = 'lnk';
-            next;
-        };
-        $modules_types{$module} = 'mod';
-    };
-};
-
-#
-# Procedure clears up module for incompatible build
-#
-sub ensure_clear_module {
-    my $module = shift;
-    if ($modules_types{$module} eq 'mod') {
-         clear_module($module);
-         return;
-    };
-    if ($modules_types{$module} eq 'lnk' && (File::Basename::basename($module_paths{$module}) ne $module)) {
-        if(rename($module_paths{$module}, File::Basename::dirname($module_paths{$module}) ."/$module")) {
-            $module_paths{$module} = File::Basename::dirname($module_paths{$module}) ."/$module";
-            clear_module($module);
-        } else {
-            print_error("Cannot rename link to $module. Please rename it manually");
-        };
-    };
-};
 
 #
 # Procedure removes output tree from the module (without common trees)
@@ -2340,26 +2201,21 @@ sub prepare_incompatible_build {
         delete $$deps_hash{$build_all_cont};
     };
     @modules_built = keys %$deps_hash;
-    %add_to_config = %$deps_hash;
-    if ($prepare) {
-        if (!(defined $ENV{UPDATER})) {
-            $source_config->add_active_modules([keys %add_to_config], 0);
-        }
-        clear_delivered();
-    }
+
     my $old_output_tree = '';
-    foreach $prj (sort keys %$deps_hash) {
-        if ($prepare) {
-            ensure_clear_module($prj);
-        } else {
-            next if ($show);
-            if ($modules_types{$prj} ne 'mod') {
-                push(@missing_modules, $prj);
-            } elsif (-d $module_paths{$prj}. '/'. $ENV{INPATH}) {
-                $old_output_tree++;
-            };
+    foreach $prj (sort keys %$deps_hash)
+    {
+        next if ($show);
+        if ($modules_types{$prj} ne 'mod')
+        {
+            push(@missing_modules, $prj);
+        }
+        elsif (-d $module_paths{$prj}. '/'. $ENV{INPATH})
+        {
+            $old_output_tree++;
         };
     };
+
     if (scalar @missing_modules) {
         my $warning_string = 'Following modules are inconsistent/missing: ' . "@missing_modules";
         push(@warnings, $warning_string);
@@ -2371,19 +2227,13 @@ sub prepare_incompatible_build {
     if ($old_output_tree) {
         push(@warnings, 'Some module(s) contain old output tree(s)!');
     };
-    if (!$generate_config && scalar @warnings) {
+    if (scalar @warnings)
+    {
         print "WARNING(S):\n";
         print STDERR "$_\n" foreach (@warnings);
-        print "\nATTENTION: If you are performing an incompatible build, please break the build with Ctrl+C and prepare the workspace with \"--prepare\" switch!\n\n" if (!$prepare);
+        print "\nATTENTION: If you are performing an incompatible build, please break the build with Ctrl+C and prepare the workspace with \"--prepare\" switch!\n\n";
         sleep(5);
     };
-    if ($prepare) {
-    print "\nPreparation finished";
-        if (scalar @warnings) {
-            print " with WARNINGS!!\n\n";
-        } else {print " successfully\n\n";}
-    }
-    do_exit(0) if ($prepare);
 };
 
 #
