@@ -2941,7 +2941,7 @@ void DomainMapper_Impl::PopFieldContext()
         //insert the field, TC or TOC
         uno::Reference< text::XTextAppend >  xTextAppend;
         if (!m_aTextAppendStack.empty())
-            m_aTextAppendStack.top().xTextAppend;
+            xTextAppend = m_aTextAppendStack.top().xTextAppend;
         if(xTextAppend.is())
         {
             try
