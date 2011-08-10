@@ -101,7 +101,6 @@ public:
 
     // Alle merkierten Klebepunkte entfernen
     void DeleteMarkedGluePoints();
-    sal_Bool IsDeleteMarkedGluePointsPossible() const;
 
     void MoveMarkedGluePoints  (const Size& rSiz, bool bCopy=false);
     void ResizeMarkedGluePoints(const Point& rRef, const Fraction& xFact, const Fraction& yFact, bool bCopy=false);

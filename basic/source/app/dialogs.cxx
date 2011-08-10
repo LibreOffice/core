@@ -747,9 +747,9 @@ void FontOptions::UpdatePreview()
 void FontOptions::Save( Config &aConfig )
 {
     aConfig.SetGroup("Misc");
-    aConfig.WriteKey( "ScriptFontName", aFontName.GetText(), RTL_TEXTENCODING_UTF8 );
-    aConfig.WriteKey( "ScriptFontStyle", aFontStyle.GetText(), RTL_TEXTENCODING_UTF8 );
-    aConfig.WriteKey( "ScriptFontSize", aFontSize.GetText(), RTL_TEXTENCODING_UTF8 );
+    aConfig.WriteKey( "ScriptFontName", ByteString(aFontName.GetText(), RTL_TEXTENCODING_UTF8) );
+    aConfig.WriteKey( "ScriptFontStyle", ByteString(aFontStyle.GetText(), RTL_TEXTENCODING_UTF8) );
+    aConfig.WriteKey( "ScriptFontSize", ByteString(aFontSize.GetText(), RTL_TEXTENCODING_UTF8) );
 }
 
 

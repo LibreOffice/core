@@ -455,13 +455,6 @@ BenError LtcBenContainer::CreateGraphicStream(SvStream * &pStream, const char *p
 
 #include <tools/globname.hxx>
 
-void LtcBenContainer::ReadAswEntry(SvStream * pStream, AswEntry & rEntry)
-{
-    char* pBuf = new char[ASWENTRY_SIZE];
-    pStream->Read(pBuf, ASWENTRY_SIZE);
-    rEntry.Load(pBuf);
-    delete[] pBuf;
-}
 ////////////////////////////////////////////////////////////////////
 //classs AswEntry
 AswEntry::AswEntry()

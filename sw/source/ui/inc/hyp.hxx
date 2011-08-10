@@ -48,7 +48,6 @@ private:
     sal_Bool            bShowError : 1; // report non existing language
     sal_Bool            bAutomatic : 1; // insert seperators without further inquiry
     sal_Bool            bInfoBox : 1;   // display info-box when ending
-    DECL_LINK( SpellError, LanguageType * );
 
 protected:
     virtual void SpellStart( SvxSpellArea eSpell );

@@ -232,13 +232,6 @@ void SdrGlueEditView::SetMarkedGluePointsAlign(sal_Bool bVert, sal_uInt16 nAlign
     EndUndo();
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
-
-sal_Bool SdrGlueEditView::IsDeleteMarkedGluePointsPossible() const
-{
-    return HasMarkedGluePoints();
-}
-
 void SdrGlueEditView::DeleteMarkedGluePoints()
 {
     BrkAction();

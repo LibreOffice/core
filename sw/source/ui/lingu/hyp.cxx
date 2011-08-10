@@ -132,17 +132,6 @@ void SwHyphWrapper::SpellEnd()
     SvxSpellWrapper::SpellEnd();
 }
 
-IMPL_LINK( SwHyphWrapper, SpellError, LanguageType *, pLang )
-{
-    if (pLang &&  *pLang != nLangError )
-    {
-        nLangError = *pLang;
-        bShowError = sal_True;
-    }
-    return 0;
-}
-
-
 // -----------------------------------------------------------------------
 sal_Bool SwHyphWrapper::SpellMore()
 {

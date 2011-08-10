@@ -298,8 +298,6 @@ public: // Internal methods
     LtcUtBenValueStream * FindObjectValueStreamWithObjectIDAndProperty(BenObjectID ObjectID, const char * sPropertyName);
     BenError CreateGraphicStream(SvStream * &pStream,  const char *pObjectName);
 
-    void ReadAswEntry(SvStream * pStream, AswEntry& rEntry);
-
     BenError GetSize(sal_uLong * pLength);
     LwpSvStream * GetStream()
     {

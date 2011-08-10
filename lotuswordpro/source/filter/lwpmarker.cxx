@@ -165,8 +165,6 @@ void LwpCHBlkMarker::ConvertCHBlock(XFContentContainer* pXFPara, sal_uInt8 nType
     case CLICKHERE_CHBEHAVIORDATETIME:
         ProcessOtherCHB(pXFPara,nType);
         break;
-//      ProcessPageNumber(pXFPara,nType);
-//      break;
     case CLICKHERE_CHBEHAVIORSTRINGLIST:
         ProcessKeylist(pXFPara,nType);
         break;
@@ -217,30 +215,6 @@ void LwpCHBlkMarker::ProcessPlaceHolder(XFContentContainer* pXFPara,sal_uInt16 n
 }
 
 void LwpCHBlkMarker::ProcessOtherCHB(XFContentContainer* pXFPara,sal_uInt8 nType)
-{
-    sal_Bool bFillFlag = IsHasFilled();
-    sal_Bool bHelpFlag = IsBubbleHelp();
-
-    if ( bFillFlag )
-        return;
-    if (nType == MARKER_START)
-    {
-        XFHolderStart* pHolder= new XFHolderStart;
-        pHolder->SetType(A2OUSTR("text"));
-        if (bHelpFlag)
-            pHolder->SetDesc(m_Help.str());
-        pHolder->SetPrompt(GetPromptText());
-        pXFPara->Add(pHolder);
-    }
-    else if (nType == MARKER_END)
-    {
-        XFHolderEnd* pHolder = new XFHolderEnd;
-        pXFPara->Add(pHolder);
-    }
-
-}
-
-void LwpCHBlkMarker::ProcessPageNumber(XFContentContainer* pXFPara,sal_uInt8 nType)
 {
     sal_Bool bFillFlag = IsHasFilled();
     sal_Bool bHelpFlag = IsBubbleHelp();

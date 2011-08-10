@@ -144,7 +144,6 @@ public:
 private:
     void ProcessPlaceHolder(XFContentContainer* pXFPara,sal_uInt16 nAction,sal_uInt8 nType);
     void ProcessOtherCHB(XFContentContainer* pXFPara,sal_uInt8 nType);
-    void ProcessPageNumber(XFContentContainer* pXFPara,sal_uInt8 nType);
     void ProcessKeylist(XFContentContainer* pXFPara,sal_uInt8 nType);
     sal_Bool IsHasFilled();
     sal_Bool IsBubbleHelp();

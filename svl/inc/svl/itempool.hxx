@@ -149,8 +149,6 @@ public:
     void                            FillItemIdRanges_Impl( sal_uInt16*& pWhichRanges ) const;
     const sal_uInt16*                   GetFrozenIdRanges() const
                                     { return _pPoolRanges; }
-    bool                            IsVer2_Impl() const;
-
 #endif
     //---------------------------------------------------------------------
 

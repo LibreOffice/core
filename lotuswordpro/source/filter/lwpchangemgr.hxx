@@ -90,7 +90,6 @@ private:
     std::map<LwpFrib*,OUString> m_HeadFootFribMap;
     std::vector<XFChangeRegion*> m_ChangeList;
     sal_uInt32 m_nCounter;
-    void ConvertFribContent(XFContentContainer* pCont, LwpFrib* pFrib);
 };
 
 #endif

@@ -492,7 +492,6 @@ public:
 
     void            SetRelStorageName( const String& rN )   { aRelStorageName = rN; }
     const String&   GetRelStorageName() const               { return aRelStorageName; }
-    void            CalcRelStorageName( const String& rMgrStorageName );
 
     StarBASICRef    GetLib() const
     {
@@ -691,19 +690,6 @@ BasicLibInfo* BasicLibInfo::Create( SotStorageStream& rSStream )
     return pInfo;
 }
 
-void BasicLibInfo::CalcRelStorageName( const String& rMgrStorageName )
-{
-    if ( rMgrStorageName.Len() )
-    {
-        INetURLObject aAbsURLObj( rMgrStorageName );
-        aAbsURLObj.removeSegment();
-        String aPath = aAbsURLObj.GetMainURL( INetURLObject::NO_DECODE );
-        UniString aRelURL = INetURLObject::GetRelURL( aPath, GetStorageName() );
-        SetRelStorageName( aRelURL );
-    }
-    else
-        SetRelStorageName( String() );
-}
 BasicManager::BasicManager( SotStorage& rStorage, const String& rBaseURL, StarBASIC* pParentFromStdLib, String* pLibPath, sal_Bool bDocMgr ) : mbDocMgr( bDocMgr )
 {
     DBG_CTOR( BasicManager, 0 );

@@ -162,9 +162,6 @@ protected:
     // zurueckgesetzt.
     void ImpCheckToTopBtmPossible();
 
-    // fuer den Writer werden virtuelle Objekte buendig zusammengehalten (Z-Order)
-    void ImpBundleVirtObjOfMarkList();
-
     // fuer CombineMarkedObjects und DismantleMarkedObjects
     void ImpCopyAttributes(const SdrObject* pSource, SdrObject* pDest) const;
 

@@ -1454,13 +1454,6 @@ bool SfxItemPool::IsCurrentVersionLoading() const
            ( !pSecondary || pSecondary->IsCurrentVersionLoading() );
 }
 
-// -----------------------------------------------------------------------
-
-bool SfxItemPool::IsVer2_Impl() const
-{
-    return pMaster->pImp->nMajorVer >= 2;
-}
-
 //-------------------------------------------------------------------------
 
 
