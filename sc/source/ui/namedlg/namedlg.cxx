@@ -388,7 +388,9 @@ bool ScNameDlg::AddPushed()
                 //    in ein Token-Array uebersetzt werden?)
                 if ( 0 == pNewEntry->GetErrCode() )
                 {
-                    ScRangeData* pData = mpCurRangeName->findByName(aNewEntry);
+                    rtl::OUString aUpper = aNewEntry;
+                    aUpper.toAsciiUpperCase();
+                    ScRangeData* pData = mpCurRangeName->findByUpperName(aUpper);
                     if (pData)
                     {
                         pNewEntry->SetIndex(pData->GetIndex());
