@@ -158,20 +158,12 @@
     my $stop_build_on_error = 0; # for multiprocessing mode: do not build further module if there is an error
     my $interactive = 0; # for interactive mode... (for testing purpose enabled by default)
     my $parent_process = 1;
-    my $server_mode = 0;
-    my $setenv_string = ''; # string for configuration of the client environment
-    my $ports_string = ''; # string with possible ports for server
     my @server_ports = ();
     my $html_port = 0;
-    my $server_socket_obj = undef; # socket object for server
     my $html_socket_obj = undef; # socket object for server
-    my %clients_jobs = ();
-    my %clients_times = ();
     my $client_timeout = 0; # time for client to build (in sec)...
                             # The longest time period after that
                             # the server considered as an error/client crash
-    my %lost_client_jobs = (); # hash containing lost jobs
-    my %job_jobdir = (); # hash containing job-dir pairs
     my $reschedule_queue = 0;
     my %module_build_queue = ();
     my %reversed_dependencies = ();
@@ -654,9 +646,6 @@ sub build_all {
             build_multiprocessing();
             return;
         };
-        if ($server_mode) {
-            run_server();
-        };
         while ($prj = pick_prj_to_build(\%global_deps_hash)) {
             if (!defined $dead_parents{$prj}) {
                 if (scalar keys %broken_build) {
@@ -685,11 +674,7 @@ sub build_all {
         my $info_hash = $html_info{$initial_module};
         $$info_hash{DIRS} = check_deps_hash(\%local_deps_hash, $initial_module);
         $module_by_hash{\%local_deps_hash} = $initial_module;
-        if ($server_mode) {
-            run_server();
-        } else {
-            build_dependent(\%local_deps_hash);
-        };
+        build_dependent(\%local_deps_hash);
     };
 };
 
@@ -1242,7 +1227,7 @@ sub find_indep_prj {
     $all_dependent = 1;
     handle_dead_children(0) if ($processes_to_run);
     my $children = children_number();
-    return '' if (!$server_mode && $children && ($children >= $processes_to_run));
+    return '' if ($children && ($children >= $processes_to_run));
     $dependencies = shift;
     if (scalar keys %$dependencies) {
         foreach my $job (keys %$dependencies) {
@@ -1361,14 +1346,12 @@ sub print_error {
 
 sub usage {
     print STDERR "\nbuild\n";
-    print STDERR "Syntax:    build    [--all|-a[:prj_name]]|[--from|-f prj_name1[:prj_name2] [prj_name3 [...]]]|[--since|-c prj_name] [--with_branches prj_name1[:prj_name2] [--skip prj_name1[:prj_name2] [prj_name3 [...]] [prj_name3 [...]|-b] [--deliver|-d [--dlv_switch deliver_switch]]] [-P processes|--server [--setenvstring \"string\"] [--client_timeout MIN] [--port port1[:port2:...:portN]]] [--show|-s] [--help|-h] [--file|-F] [--ignore|-i] [--version|-V] [--mode|-m OOo[,SO[,EXT]] [--html [--html_path html_file_path] [--dontgraboutput]] [--pre_job=pre_job_sring] [--job=job_string|-j] [--post_job=post_job_sring] [--stoponerror] [--exclude_branch_from prj_name1[:prj_name2] [prj_name3 [...]]] [--interactive] [--verbose]\n";
+    print STDERR "Syntax:    build    [--all|-a[:prj_name]]|[--from|-f prj_name1[:prj_name2] [prj_name3 [...]]]|[--since|-c prj_name] [--with_branches prj_name1[:prj_name2] [--skip prj_name1[:prj_name2] [prj_name3 [...]] [prj_name3 [...]|-b] [--deliver|-d [--dlv_switch deliver_switch]]] [-P processes] [--show|-s] [--help|-h] [--file|-F] [--ignore|-i] [--version|-V] [--mode|-m OOo[,SO[,EXT]] [--html [--html_path html_file_path] [--dontgraboutput]] [--pre_job=pre_job_sring] [--job=job_string|-j] [--post_job=post_job_sring] [--stoponerror] [--exclude_branch_from prj_name1[:prj_name2] [prj_name3 [...]]] [--interactive] [--verbose]\n";
     print STDERR "Example1:    build --from sfx2\n";
     print STDERR "                     - build all projects dependent from sfx2, starting with sfx2, finishing with the current module\n";
     print STDERR "Example2:    build --all:sfx2\n";
     print STDERR "                     - the same as --all, but skip all projects that have been already built when using \"--all\" switch before sfx2\n";
-    print STDERR "Example3:    build --all --server\n";
-    print STDERR "                     - build all projects in server mode, use first available port from default range 7890-7894 (running clients required!!)\n";
-    print STDERR "Example4(for unixes):\n";
+    print STDERR "Example3(for unixes):\n";
     print STDERR "             build --all --pre_job=echo\\ Starting\\ job\\ in\\ \\\$PWD --job=some_script.sh --post_job=echo\\ Job\\ in\\ \\\$PWD\\ is\\ made\n";
     print STDERR "                     - go through all projects, echo \"Starting job in \$PWD\" in each module, execute script some_script.sh, and finally echo \"Job in \$PWD is made\"\n";
     print STDERR "\nSwitches:\n";
@@ -1384,11 +1367,6 @@ sub usage {
     print STDERR "        --file       - generate command file file_name\n";
     print STDERR "        --deliver    - only deliver, no build (usable for \'-all\' and \'-from\' keys)\n";
     print STDERR "        -P           - start multiprocessing build, with number of processes passed\n";
-    print STDERR "        --server     - start build in server mode (clients required)\n";
-    print STDERR "          --setenvstring  - string for configuration of the client environment\n";
-    print STDERR "          --port          - set server port, default is 7890. You may pass several ports, the server will be started on the first available\n";
-    print STDERR "                            otherwise the server will be started on first available port from the default range 7890-7894\n";
-    print STDERR "          --client_timeout  - time frame after which the client/job is considered to be lost. Default is 120 min\n";
     print STDERR "        --dlv_switch - use deliver with the switch specified\n";
     print STDERR "        --help       - print help info\n";
     print STDERR "        --ignore     - force tool to ignore errors\n";
@@ -1453,10 +1431,6 @@ sub get_options {
         $arg =~ /^--dontgraboutput$/        and $dont_grab_output = 1      and next;
         $arg =~ /^--html_path$/ and $html_path = shift @ARGV  and next;
         $arg =~ /^-i$/        and $ignore = 1                            and next;
-        $arg =~ /^--server$/        and $server_mode = 1                      and next;
-        $arg =~ /^--client_timeout$/ and $client_timeout = (shift @ARGV)*60  and next;
-        $arg =~ /^--setenvstring$/            and $setenv_string =  shift @ARGV         and next;
-        $arg =~ /^--port$/            and $ports_string =  shift @ARGV         and next;
         $arg =~ /^--version$/   and do_exit(0);
         $arg =~ /^-V$/          and do_exit(0);
         $arg =~ /^-m$/            and get_modes()         and next;
@@ -1496,19 +1470,8 @@ sub get_options {
         if (!$enable_multiprocessing) {
             print_error("Cannot load Win32::Process module for multiprocessing build");
         };
-        if ($server_mode) {
-            print_error("Switches -P and --server collision");
-        };
     } elsif ($stop_build_on_error) {
         print_error("Switch --stoponerror is only for multiprocessing builds");
-    };
-    if ($server_mode) {
-        $html++;
-        $client_timeout = 60 * 60 * 2 if (!$client_timeout);
-    } else {
-        print_error("--ports switch is for server mode only!!") if ($ports_string);
-        print_error("--setenvstring switch is for server mode only!!") if ($setenv_string);
-        print_error("--client_timeout switch is for server mode only!!") if ($client_timeout);
     };
 
     if ($only_platform) {
@@ -2785,7 +2748,6 @@ sub generate_html_file {
     print HTML '        top.innerFrame.frames[1].document.write("        <td width=* align=center><strong style=color:blue>Job</strong></td>");' . "\n";
     print HTML '        top.innerFrame.frames[1].document.write("        <td width=* align=center><strong style=color:blue>Start Time</strong></td>");' . "\n";
     print HTML '        top.innerFrame.frames[1].document.write("        <td width=* align=center><strong style=color:blue>Finish Time</strong></td>");' . "\n";
-    print HTML '        top.innerFrame.frames[1].document.write("        <td width=* align=center><strong style=color:blue>Client</strong></td>");' . "\n" if ($server_mode);
     print HTML '        top.innerFrame.frames[1].document.write("    </tr>");' . "\n";
     print HTML '        var dir_info_strings = Message2.split("<br><br>");' . "\n";
     print HTML '        for (i = 0; i < dir_info_strings.length; i++) {' . "\n";
@@ -2801,7 +2763,6 @@ sub generate_html_file {
     print HTML '            };' . "\n";
     print HTML '            top.innerFrame.frames[1].document.write("        <td align=center>" + dir_info_array[2] + "</td>");' . "\n";
     print HTML '            top.innerFrame.frames[1].document.write("        <td align=center>" + dir_info_array[3] + "</td>");' . "\n";
-    print HTML '            top.innerFrame.frames[1].document.write("        <td align=center>" + dir_info_array[5] + "</td>");' . "\n" if ($server_mode);
     print HTML '            top.innerFrame.frames[1].document.write("    </tr>");' . "\n";
     print HTML '        };' . "\n";
     print HTML '        top.innerFrame.frames[1].document.write("</table>");' . "\n";
@@ -2819,7 +2780,6 @@ sub generate_html_file {
     print HTML '                };' . "\n";
     print HTML '                DirectoryInfos[2].innerHTML = dir_info_array[2];' . "\n";
     print HTML '                DirectoryInfos[3].innerHTML = dir_info_array[3];' . "\n";
-    print HTML '                DirectoryInfos[4].innerHTML = dir_info_array[5];' . "\n" if ($server_mode);
     print HTML '            };' . "\n";
     print HTML '        };' . "\n";
     print HTML '    };' . "\n";
@@ -2969,7 +2929,6 @@ sub get_dirs_info_line {
         $dirs_info_line .= $log_path_string;
     };
     $dirs_info_line .= '<br>';
-    $dirs_info_line .= $jobs_hash{$job}->{CLIENT} . '<br>' if ($server_mode);
     return $dirs_info_line;
 };
 
@@ -3097,249 +3056,10 @@ sub accept_html_connection {
     return $new_socket_obj;
 };
 
-sub accept_connection {
-    my $new_socket_obj = undef;
-    do {
-        $new_socket_obj = $server_socket_obj->accept();
-        if (!$new_socket_obj) {
-            print "Timeout on incoming connection\n";
-            check_client_jobs();
-        };
-    } while (!$new_socket_obj);
-    return $new_socket_obj;
-};
-
-sub check_client_jobs {
-    foreach (keys %clients_times) {
-        if (time - $clients_times{$_} > $client_timeout) {
-            print "Client's $_ Job: \"$clients_jobs{$_}\" apparently got lost...\n";
-            print "Scheduling for rebuild...\n";
-            print "You might need to check the $_\n";
-            $lost_client_jobs{$clients_jobs{$_}}++;
-            delete $processes_hash{$_};
-            delete $clients_jobs{$_};
-            delete $clients_times{$_};
-        };
-    };
-};
-
 sub get_server_ports {
     # use port 7890 as default
     my $default_port = 7890;
-    if ($ports_string) {
-        @server_ports = split( /:/, $ports_string);
-    } else {
-        @server_ports = ($default_port .. $default_port + 4);
-    };
-};
-
-sub run_server {
-    my @build_queue = ();        # array, containing queue of projects
-                                # to build
-    my $error = 0;
-    if (scalar @server_ports) {
-        foreach (@server_ports) {
-            $error = start_server_on_port($_, \$server_socket_obj);
-            if ($error) {
-                print STDERR "port $_: $error\n";
-            } else {
-                last;
-            };
-        };
-        print_error('Unable to start server on port(s): ' . "@server_ports\n") if ($error);
-    } else {
-        print_error('No ports for server to start');
-    };
-
-    my $client_addr;
-    my $job_string_base = get_job_string_base();
-    my $new_socket_obj;
-     while ($new_socket_obj = accept_connection()) {
-        check_client_jobs();
-        # find out who connected
-        my $client_ipnum = $new_socket_obj->peerhost();
-        my $client_host = gethostbyaddr(inet_aton($client_ipnum), AF_INET);
-        # print who is connected
-        # send them a message, close connection
-        my $client_message = <$new_socket_obj>;
-        chomp $client_message;
-        my @client_data = split(/ /, $client_message);
-        my %client_hash = ();
-        foreach (@client_data) {
-            /(=)/;
-            $client_hash{$`} = $'; #'
-        }
-        my $pid = $client_hash{pid} . '@' . $client_host;
-        if (defined $client_hash{platform}) {
-            if ($client_hash{platform} ne $ENV{OUTPATH} || (defined $client_hash{osname} && ($^O ne $client_hash{osname}))) {
-                print $new_socket_obj "Wrong platform";
-                close($new_socket_obj);
-                next;
-            };
-        } else {
-            if ($client_hash{result} eq "0") {
-            } else {
-                print "Error $client_hash{result}\n";
-                if (store_error($pid, $client_hash{result})) {
-                    print $new_socket_obj $job_string_base . $clients_jobs{$pid};
-                    close($new_socket_obj);
-                    $clients_times{$pid} = time;
-                    next;
-                };
-            };
-            delete $clients_times{$pid};
-            clear_from_child($pid);
-            delete $clients_jobs{$pid};
-            $verbose_mode && print 'Running processes: ', children_number(), "\n";
-            # Actually, next 3 strings are only for even distribution
-            # of clients if there are more than one build server running
-            print $new_socket_obj 'No job';
-            close($new_socket_obj);
-            next;
-        };
-        my $job_string;
-        my @lost_jobs = keys %lost_client_jobs;
-        if (scalar @lost_jobs) {
-            $job_string = $lost_jobs[0];
-            delete $lost_client_jobs{$lost_jobs[0]};
-        } else {
-            $job_string = get_job_string(\@build_queue);
-        };
-        if ($job_string) {
-            my $job_dir = $job_jobdir{$job_string};
-            $processes_hash{$pid} = $job_dir;
-            $jobs_hash{$job_dir}->{CLIENT} = $pid;
-            print "$pid got $job_dir\n";
-            print $new_socket_obj $job_string_base . $job_string;
-            $clients_jobs{$pid} = $job_string;
-            $clients_times{$pid} = time;
-            my $children_running = children_number();
-            $verbose_mode && print 'Running processes: ', $children_running, "\n";
-            $maximal_processes = $children_running if ($children_running > $maximal_processes);
-        } else {
-            print $new_socket_obj 'No job';
-        };
-        close($new_socket_obj);
-    };
-};
-
-#
-# Procedure returns the part of the job string that is similar for all clients
-#
-sub get_job_string_base {
-    if ($setenv_string) {
-        return "setenv_string=$setenv_string ";
-    };
-    my $job_string_base = "server_pid=$$ setsolar_cmd=$ENV{SETSOLAR_CMD} ";
-    $job_string_base .= "source_root=$ENV{SOURCE_ROOT} " if (defined $ENV{SOURCE_ROOT});
-    $job_string_base .= "updater=$ENV{UPDATER} " if (defined $ENV{UPDATER});
-    return $job_string_base;
-};
-
-sub get_job_string {
-    my $build_queue = shift;
-    my $job = $dmake;
-    my ($job_dir, $dependencies_hash);
-    if ($build_all_parents) {
-        fill_modules_queue($build_queue);
-        do {
-            ($job_dir, $dependencies_hash) = pick_jobdir($build_queue);
-            return '' if (!$job_dir);
-            $jobs_hash{$job_dir}->{START_TIME} = time();
-            $jobs_hash{$job_dir}->{STATUS} = 'building';
-            if ($job_dir =~ /(\s)$pre_job/o) {
-                do_custom_job($job_dir, $dependencies_hash);
-                $job_dir = '';
-            };
-        } while (!$job_dir);
-    } else {
-        $dependencies_hash = \%local_deps_hash;
-        do {
-            $job_dir = pick_prj_to_build(\%local_deps_hash);
-            if (!$job_dir && !children_number()) {
-                cancel_build() if (scalar keys %broken_build);
-                mp_success_exit();
-            };
-            return '' if (!$job_dir);
-            $jobs_hash{$job_dir}->{START_TIME} = time();
-            $jobs_hash{$job_dir}->{STATUS} = 'building';
-            if ($job_dir =~ /(\s)$pre_job/o) {
-                do_custom_job($job_dir, $dependencies_hash);
-                $job_dir = '';
-            };
-        } while (!$job_dir);
-    };
-    $running_children{$dependencies_hash}++;
-    $folders_hashes{$job_dir} = $dependencies_hash;
-    my $log_file = $jobs_hash{$job_dir}->{LONG_LOG_PATH};
-    my $full_job_dir = $job_dir;
-    if ($job_dir =~ /(\s)/o) {
-        $job = $'; #'
-        print $echo . "determine if we need to deliver $job_dir\n";
-        if ($job eq $post_job) {
-            if( $is_gbuild{$job_dir} ) {
-                print "Skip deliver for gmake-built module $job_dir\n";
-                return'';
-            };
-            $job = $deliver_command
-        };
-        $full_job_dir = $module_paths{$`};
-    }
-    my $log_dir = File::Basename::dirname($log_file);
-    if (!-d $log_dir) {
-        chdir $full_job_dir;
-        getcwd();
-        system("$perl $mkout");
-    };
-    my $job_string = "job_dir=$full_job_dir job=$job log=$log_file";
-    $job_jobdir{$job_string} = $job_dir;
-    return $job_string;
-};
-
-sub pick_jobdir {
-    my $build_queue = shift;
-    my $i = 0;
-    foreach (@$build_queue) {
-        my $prj = $$build_queue[$i];
-        my $prj_deps_hash = $projects_deps_hash{$prj};
-        if (defined $modules_with_errors{$prj_deps_hash} && !$ignore) {
-            push (@broken_modules_names, $prj);
-            splice (@$build_queue, $i, 1);
-            next;
-        };
-        $running_children{$prj_deps_hash} = 0 if (!defined $running_children{$prj_deps_hash});
-        my $child_nick = pick_prj_to_build($prj_deps_hash);
-        if ($child_nick) {
-            return ($child_nick, $prj_deps_hash);
-        }
-        if ((!scalar keys %$prj_deps_hash) && !$running_children{$prj_deps_hash}) {
-            if (!defined $modules_with_errors{$prj_deps_hash} || $ignore)
-            {
-                remove_from_dependencies($prj, \%global_deps_hash);
-                $build_is_finished{$prj}++;
-                splice (@$build_queue, $i, 1);
-                next;
-            };
-        };
-        $i++;
-    };
-};
-
-sub fill_modules_queue {
-    my $build_queue = shift;
-    my $prj;
-    while ($prj = pick_prj_to_build(\%global_deps_hash)) {
-        push @$build_queue, $prj;
-        $projects_deps_hash{$prj} = {};
-        get_module_dep_hash($prj, $projects_deps_hash{$prj});
-        my $info_hash = $html_info{$prj};
-        $$info_hash{DIRS} = check_deps_hash($projects_deps_hash{$prj}, $prj);
-        $module_by_hash{$projects_deps_hash{$prj}} = $prj;
-    };
-    if (!$prj && !children_number() && (!scalar @$build_queue)) {
-        cancel_build() if (scalar keys %broken_build);
-        mp_success_exit();
-    };
+    @server_ports = ($default_port .. $default_port + 4);
 };
 
 sub is_gnumake_module {

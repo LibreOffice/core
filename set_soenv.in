@@ -89,7 +89,7 @@ my ( $oldPATH, $SRC_ROOT, $SO_HOME, $JAVA_HOME, $JDK, $JAVAFLAGS, $OOO_SHELL,
 # IId. Declaring the aliases.
 #-------------------------------------------
 #
-my ( $dmake, $build, $build_client, $mkout, $deliver, $zipdep );
+my ( $dmake, $build, $mkout, $deliver, $zipdep );
 #
 
 #-------------------------------------------------------------
@@ -1455,7 +1455,6 @@ else
 	$mkout           = '"perl $SOLARENV/bin/mkout.pl"';
 	$deliver         = '"perl $SOLARENV/bin/deliver.pl"';
 	$build           = '"perl $SOLARENV/bin/build.pl"';
-	$build_client    = '"perl $SOLARENV/bin/build_client.pl"';
 	$zipdep          = '"perl $SOLARENV/bin/zipdep.pl"';
 
 #
@@ -2107,7 +2106,6 @@ ToFile( "Don't set aliases when bootstrapping", $empty, "c" );
 ToFile( "alias mkout",       $mkout,             "a" );
 ToFile( "alias deliver",     $deliver,           "a" );
 ToFile( "alias build",       $build,             "a" );
-ToFile( "alias build_client",$build_client,      "a" );
 ToFile( "alias zipdep",      $zipdep,            "a" );
 
 # on Solaris, MacOSX and FreeBSD, set GNUCOPY and GNUPATCH
