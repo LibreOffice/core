@@ -246,6 +246,9 @@ namespace writerfilter {
                 int nDay;
                 int nHour;
                 int nMinute;
+
+                /// Text from special destinations.
+                rtl::OUStringBuffer aDestinationText;
         };
 
         class RTFTokenizer;
@@ -368,8 +371,6 @@ namespace writerfilter {
                 std::map<int, rtl::OUString> m_aAuthors;
                 /// Annotation author of the next annotation.
                 rtl::OUString m_aAuthor;
-                /// Text from special destinations.
-                rtl::OUStringBuffer m_aDestinationText;
 
                 RTFSprms m_aFormfieldSprms;
                 RTFSprms m_aFormfieldAttributes;

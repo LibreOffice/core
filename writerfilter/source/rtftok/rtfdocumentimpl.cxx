@@ -495,7 +495,7 @@ int RTFDocumentImpl::resolvePict(bool bInline)
     int b = 0, count = 2;
 
     // Feed the destination text to a stream.
-    OString aStr = OUStringToOString(m_aDestinationText.makeStringAndClear(), RTL_TEXTENCODING_ASCII_US);
+    OString aStr = OUStringToOString(m_aStates.top().aDestinationText.makeStringAndClear(), RTL_TEXTENCODING_ASCII_US);
     const char *str = aStr.getStr();
     for (int i = 0; i < aStr.getLength(); ++i)
     {
@@ -692,7 +692,7 @@ void RTFDocumentImpl::text(OUString& rString)
                     rString = rString.copy(0, rString.getLength() - 1);
                     bEnd = true;
                 }
-                m_aDestinationText.append(rString);
+                m_aStates.top().aDestinationText.append(rString);
                 if (bEnd)
                 {
                     switch (m_aStates.top().nDestinationState)
@@ -700,7 +700,7 @@ void RTFDocumentImpl::text(OUString& rString)
                         case DESTINATION_FONTTABLE:
                         case DESTINATION_FONTENTRY:
                             {
-                                RTFValue::Pointer_t pValue(new RTFValue(m_aDestinationText.makeStringAndClear()));
+                                RTFValue::Pointer_t pValue(new RTFValue(m_aStates.top().aDestinationText.makeStringAndClear()));
                                 m_aStates.top().aTableAttributes->push_back(make_pair(NS_rtf::LN_XSZFFN, pValue));
 
                                 writerfilter::Reference<Properties>::Pointer_t const pProp(
@@ -712,7 +712,7 @@ void RTFDocumentImpl::text(OUString& rString)
                         case DESTINATION_STYLESHEET:
                         case DESTINATION_STYLEENTRY:
                             {
-                                RTFValue::Pointer_t pValue(new RTFValue(m_aDestinationText.makeStringAndClear()));
+                                RTFValue::Pointer_t pValue(new RTFValue(m_aStates.top().aDestinationText.makeStringAndClear()));
                                 m_aStates.top().aTableAttributes->push_back(make_pair(NS_rtf::LN_XSTZNAME1, pValue));
 
                                 writerfilter::Reference<Properties>::Pointer_t const pProp(
@@ -723,7 +723,7 @@ void RTFDocumentImpl::text(OUString& rString)
                             break;
                         case DESTINATION_REVISIONTABLE:
                         case DESTINATION_REVISIONENTRY:
-                            m_aAuthors[m_aAuthors.size()] = m_aDestinationText.makeStringAndClear();
+                            m_aAuthors[m_aAuthors.size()] = m_aStates.top().aDestinationText.makeStringAndClear();
                             break;
                         default: break;
                     }
@@ -748,7 +748,7 @@ void RTFDocumentImpl::text(OUString& rString)
         case DESTINATION_OBJDATA:
         case DESTINATION_ANNOTATIONDATE:
         case DESTINATION_ANNOTATIONAUTHOR:
-            m_aDestinationText.append(rString);
+            m_aStates.top().aDestinationText.append(rString);
             break;
         case DESTINATION_EQINSTRUCTION:
             if (rString.copy(0, 2).equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("do"))
@@ -786,7 +786,7 @@ void RTFDocumentImpl::text(OUString& rString)
     // Don't return earlier, a bookmark start has to be in a paragraph group.
     if (m_aStates.top().nDestinationState == DESTINATION_BOOKMARKSTART)
     {
-        m_aDestinationText.append(rString);
+        m_aStates.top().aDestinationText.append(rString);
         return;
     }
 
@@ -2496,7 +2496,7 @@ int RTFDocumentImpl::popState()
     }
     else if (m_aStates.top().nDestinationState == DESTINATION_LEVELTEXT)
     {
-        OUString aStr = m_aDestinationText.makeStringAndClear();
+        OUString aStr = m_aStates.top().aDestinationText.makeStringAndClear();
 
         // The first character is the length of the string (the rest should be ignored).
         sal_Int32 nLength(aStr.toChar());
@@ -2536,9 +2536,9 @@ int RTFDocumentImpl::popState()
         aShape = m_aStates.top().aShape;
         aAttributes = m_aStates.top().aCharacterAttributes;
         if (m_aStates.top().nDestinationState == DESTINATION_SHAPEPROPERTYNAME)
-            aShape.aProperties.push_back(make_pair(m_aDestinationText.makeStringAndClear(), OUString()));
+            aShape.aProperties.push_back(make_pair(m_aStates.top().aDestinationText.makeStringAndClear(), OUString()));
         else if (m_aStates.top().nDestinationState == DESTINATION_SHAPEPROPERTYVALUE && aShape.aProperties.size())
-            aShape.aProperties.back().second = m_aDestinationText.makeStringAndClear();
+            aShape.aProperties.back().second = m_aStates.top().aDestinationText.makeStringAndClear();
         bPopShapeProperties = true;
     }
     else if (m_aStates.top().nDestinationState == DESTINATION_PICPROP
@@ -2549,13 +2549,13 @@ int RTFDocumentImpl::popState()
     }
     else if (m_aStates.top().nDestinationState == DESTINATION_BOOKMARKSTART)
     {
-        OUString aStr = m_aDestinationText.makeStringAndClear();
+        OUString aStr = m_aStates.top().aDestinationText.makeStringAndClear();
         int nPos = m_aBookmarks.size();
         m_aBookmarks[aStr] = nPos;
         Mapper().props(lcl_getBookmarkProperties(nPos, aStr));
     }
     else if (m_aStates.top().nDestinationState == DESTINATION_BOOKMARKEND)
-        Mapper().props(lcl_getBookmarkProperties(m_aBookmarks[m_aDestinationText.makeStringAndClear()]));
+        Mapper().props(lcl_getBookmarkProperties(m_aBookmarks[m_aStates.top().aDestinationText.makeStringAndClear()]));
     else if (m_aStates.top().nDestinationState == DESTINATION_PICT)
         resolvePict(true);
     else if (m_aStates.top().nDestinationState == DESTINATION_SHAPEPROPERTYVALUEPICT)
@@ -2567,17 +2567,17 @@ int RTFDocumentImpl::popState()
         m_pCurrentBuffer = 0; // Just disable buffering, don't empty it yet.
     else if (m_aStates.top().nDestinationState == DESTINATION_FORMFIELDNAME)
     {
-        RTFValue::Pointer_t pValue(new RTFValue(m_aDestinationText.makeStringAndClear()));
+        RTFValue::Pointer_t pValue(new RTFValue(m_aStates.top().aDestinationText.makeStringAndClear()));
         m_aFormfieldSprms->push_back(make_pair(NS_ooxml::LN_CT_FFData_name, pValue));
     }
     else if (m_aStates.top().nDestinationState == DESTINATION_FORMFIELDLIST)
     {
-        RTFValue::Pointer_t pValue(new RTFValue(m_aDestinationText.makeStringAndClear()));
+        RTFValue::Pointer_t pValue(new RTFValue(m_aStates.top().aDestinationText.makeStringAndClear()));
         m_aFormfieldSprms->push_back(make_pair(NS_ooxml::LN_CT_FFDDList_listEntry, pValue));
     }
     else if (m_aStates.top().nDestinationState == DESTINATION_DATAFIELD)
     {
-        OString aStr = OUStringToOString(m_aDestinationText.makeStringAndClear(), m_aStates.top().nCurrentEncoding);
+        OString aStr = OUStringToOString(m_aStates.top().aDestinationText.makeStringAndClear(), m_aStates.top().nCurrentEncoding);
         // decode hex dump
         OStringBuffer aBuf;
         const char *str = aStr.getStr();
@@ -2626,9 +2626,9 @@ int RTFDocumentImpl::popState()
     else if (m_aStates.top().nDestinationState == DESTINATION_PRINTTIME && m_xDocumentProperties.is())
         m_xDocumentProperties->setPrintDate(lcl_getDateTime(m_aStates));
     else if (m_aStates.top().nDestinationState == DESTINATION_AUTHOR && m_xDocumentProperties.is())
-        m_xDocumentProperties->setAuthor(m_aDestinationText.makeStringAndClear());
+        m_xDocumentProperties->setAuthor(m_aStates.top().aDestinationText.makeStringAndClear());
     else if (m_aStates.top().nDestinationState == DESTINATION_COMMENT && m_xDocumentProperties.is())
-        m_xDocumentProperties->setGenerator(m_aDestinationText.makeStringAndClear());
+        m_xDocumentProperties->setGenerator(m_aStates.top().aDestinationText.makeStringAndClear());
     else if (m_aStates.top().nDestinationState == DESTINATION_OPERATOR
             || m_aStates.top().nDestinationState == DESTINATION_COMPANY)
     {
@@ -2638,7 +2638,7 @@ int RTFDocumentImpl::popState()
         {
             uno::Reference<beans::XPropertyContainer> xUserDefinedProperties = m_xDocumentProperties->getUserDefinedProperties();
             xUserDefinedProperties->addProperty(aName, beans::PropertyAttribute::REMOVEABLE,
-                    uno::makeAny(m_aDestinationText.makeStringAndClear()));
+                    uno::makeAny(m_aStates.top().aDestinationText.makeStringAndClear()));
         }
     }
     else if (m_aStates.top().nDestinationState == DESTINATION_OBJDATA)
@@ -2647,7 +2647,7 @@ int RTFDocumentImpl::popState()
         int b = 0, count = 2;
 
         // Feed the destination text to a stream.
-        OString aStr = OUStringToOString(m_aDestinationText.makeStringAndClear(), RTL_TEXTENCODING_ASCII_US);
+        OString aStr = OUStringToOString(m_aStates.top().aDestinationText.makeStringAndClear(), RTL_TEXTENCODING_ASCII_US);
         const char *str = aStr.getStr();
         for (int i = 0; i < aStr.getLength(); ++i)
         {
@@ -2715,7 +2715,7 @@ int RTFDocumentImpl::popState()
     }
     else if (m_aStates.top().nDestinationState == DESTINATION_ANNOTATIONDATE)
     {
-        OUString aStr(OStringToOUString(lcl_DTTM22OString(m_aDestinationText.makeStringAndClear().toInt32()),
+        OUString aStr(OStringToOUString(lcl_DTTM22OString(m_aStates.top().aDestinationText.makeStringAndClear().toInt32()),
                     m_aStates.top().nCurrentEncoding));
         RTFValue::Pointer_t pValue(new RTFValue(aStr));
         RTFSprms aAnnAttributes;
@@ -2724,7 +2724,7 @@ int RTFDocumentImpl::popState()
         Mapper().props(pProperties);
     }
     else if (m_aStates.top().nDestinationState == DESTINATION_ANNOTATIONAUTHOR)
-        m_aAuthor = m_aDestinationText.makeStringAndClear();
+        m_aAuthor = m_aStates.top().aDestinationText.makeStringAndClear();
 
     // See if we need to end a track change
     RTFValue::Pointer_t pTrackchange = m_aStates.top().aCharacterSprms.find(NS_ooxml::LN_trackchange);
@@ -2815,8 +2815,8 @@ bool RTFDocumentImpl::isEmpty()
 
 void RTFDocumentImpl::setDestinationText(OUString& rString)
 {
-    m_aDestinationText.setLength(0);
-    m_aDestinationText.append(rString);
+    m_aStates.top().aDestinationText.setLength(0);
+    m_aStates.top().aDestinationText.append(rString);
 }
 
 void RTFDocumentImpl::replayShapetext()
