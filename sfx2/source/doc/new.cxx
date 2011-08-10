@@ -260,8 +260,6 @@ public:
         // Template name can only be obtained if IsTemplate() is TRUE
         // erfragt werden
     sal_Bool IsTemplate() const;
-    String GetTemplateRegion() const;
-    String GetTemplateName() const;
     String GetTemplateFileName() const;
 
     sal_uInt16  GetTemplateFlags()const;
@@ -481,24 +479,6 @@ String SfxNewFileDialog_Impl::GetTemplateFileName() const
         return String();
     return aTemplates.GetPath(aRegionLb.GetSelectEntryPos(),
                               GetSelectedTemplatePos()-1);
-}
-
-//-------------------------------------------------------------------------
-
-String SfxNewFileDialog_Impl::GetTemplateRegion() const
-{
-    if(!IsTemplate() || !aTemplates.GetRegionCount())
-        return String();
-    return aRegionLb.GetSelectEntry();
-}
-
-//-------------------------------------------------------------------------
-
-String SfxNewFileDialog_Impl::GetTemplateName() const
-{
-    if(!IsTemplate() || !aTemplates.GetRegionCount())
-        return String();
-    return aTemplateLb.GetSelectEntry();
 }
 
 //-------------------------------------------------------------------------
