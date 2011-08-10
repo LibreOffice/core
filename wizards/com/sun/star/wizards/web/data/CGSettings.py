@@ -35,6 +35,7 @@ class CGSettings(ConfigGroup):
     savedSessions = ConfigSet(CGSessionName())
     cp_DefaultSession = CGSession()
     cp_LastSavedSession = str()
+    fileAccess = None
 
     def __init__(self, xmsf_, resources_, document):
         self.xmsf = xmsf_
@@ -43,7 +44,7 @@ class CGSettings(ConfigGroup):
                 self.xmsf, "Config", "", "")
             self.soGalleryDir = FileAccess.getOfficePath2(
                 self.xmsf, "Gallery", "share", "")
-            root = self
+            ConfigGroup.root = self
             self.formatter = self.Formatter(self.xmsf, document)
             self.resources = resources_
             self.workPath = None
@@ -54,23 +55,23 @@ class CGSettings(ConfigGroup):
     def getExporters(self, mime):
         exps = self.exportersMap.get(mime)
         if exps is None:
-            self.exportersMap.put(mime, exps = createExporters(mime))
+            exps = self.createExporters(mime)
+            self.exportersMap[mime] = exps
 
         return exps
 
     def createExporters(self, mime):
-        exporters = self.cp_Exporters.items()
-        v = Vector.Vector()
-        i = 0
-        while i < exporters.length:
-            if (exporters[i]).supports(mime):
-                try:
-                    v.add(exporters[i])
-                except Exception, ex:
-                    ex.printStackTrace()
+        exporters = self.cp_Exporters.childrenList
+        v = []
+        for i in exporters:
+            if i is not None:
+                if i.supports(mime):
+                    try:
+                        v.append(i)
+                    except Exception, ex:
+                        traceback.print_exc()
 
-            i += 1
-        return v.toArray(self.__class__.EMPTY_ARRAY_1)
+        return v
 
     '''
     call after read.
@@ -100,10 +101,10 @@ class CGSettings(ConfigGroup):
     def getFileAccess(self, xmsf = None):
         if xmsf is None:
             xmsf = self.xmsf
-        if self.fileAccess is None:
-            self.fileAccess = FileAccess.FileAccess_unknown(xmsf)
+        if CGSettings.fileAccess is None:
+            CGSettings.fileAccess = FileAccess(xmsf)
 
-        return self.fileAccess
+        return CGSettings.fileAccess
 
     class Formatter(object):
         def __init__(self, xmsf, document):

@@ -242,19 +242,20 @@ class OfficeDocument(object):
         except Exception, e:
             traceback.print_exc()
 
+    @classmethod
     def getFileMediaDecriptor(self, xmsf, url):
         typeDetect = xmsf.createInstance(
             "com.sun.star.document.TypeDetection")
         mediaDescr = range(1)
-        mediaDescr[0][0] = uno.createUnoStruct(
+        mediaDescr[0] = uno.createUnoStruct(
             'com.sun.star.beans.PropertyValue')
-        mediaDescr[0][0].Name = "URL"
-        mediaDescr[0][0].Value = url
-        Type = typeDetect.queryTypeByDescriptor(mediaDescr, True)
-        if Type.equals(""):
+        mediaDescr[0].Name = "URL"
+        mediaDescr[0].Value = url
+        Type = typeDetect.queryTypeByDescriptor(tuple(mediaDescr), True)[0]
+        if Type == "":
             return None
         else:
-            return typeDetect.getByName(type)
+            return typeDetect.getByName(Type)
 
     @classmethod
     def getTypeMediaDescriptor(self, xmsf, type):

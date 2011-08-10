@@ -70,6 +70,7 @@ class ConfigSet(ConfigNode):
                 for i in names:
                     try:
                         child = type(self.childClass)()
+                        child.root = self.root
                         child.readConfiguration(
                             configurationView.getByName(i), param)
                         self.add(i, child)
@@ -118,26 +119,12 @@ class ConfigSet(ConfigNode):
             i += 1
         return parent
 
-    def getKey(self, object):
-        i = self.childrenMap.entrySet().iterator()
-        while i.hasNext():
-            me = i.next()
-            if me.getValue() == object:
-                return me.getKey()
+    def getKey(self, _object):
+        for k,v in self.childrenMap.items():
+            if v == _object:
+                return k
 
         return None
-
-    def getKey(self, i):
-        c = 0
-        while i > -1:
-            if getElementAt(c) != None:
-                i -= 1
-
-            c += 1
-        if c == 0:
-            return None
-        else:
-            return getKey(getElementAt(c - 1))
 
     def getElementAt(self, i):
         return self.childrenList[i]
@@ -147,9 +134,6 @@ class ConfigSet(ConfigNode):
 
     def getSize(self):
         return len(self.childrenList)
-
-    def keys(self):
-        return self.childrenMap.keySet()
 
     def getIndexOf(self, item):
         return self.childrenList.index(item)

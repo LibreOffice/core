@@ -289,10 +289,14 @@ class WizardDialog(UnoDialog2):
         for index, item in enumerate(items):
             self.insertRoadmapItem(index, enabled[index], item, index + 1)
 
-    def setStepEnabled(self, _nStep, bEnabled, enableNextButton):
-        setStepEnabled(_nStep, bEnabled)
-        if self.getNextAvailableStep() > 0:
-            self.enableNextButton(bEnabled)
+    def setStepEnabled(self, _nStep, bEnabled, enableNextButton=None):
+        xRoadmapItem = self.getRoadmapItemByID(_nStep)
+        if xRoadmapItem is not None:
+            Helper.setUnoPropertyValue(xRoadmapItem,
+                PropertyNames.PROPERTY_ENABLED, bEnabled)
+        if enableNextButton is not None:
+            if self.getNextAvailableStep() > 0:
+                self.enableNextButton(bEnabled)
 
     def enableNavigationButtons(
             self, _bEnableBack, _bEnableNext, _bEnableFinish):
@@ -312,18 +316,10 @@ class WizardDialog(UnoDialog2):
         self.setControlProperty("btnWizardFinish",
                 PropertyNames.PROPERTY_ENABLED, enabled)
 
-    def setStepEnabled(self, _nStep, bEnabled):
-        xRoadmapItem = getRoadmapItemByID(_nStep)
-        if xRoadmapItem != None:
-            Helper.setUnoPropertyValue(xRoadmapItem,
-                PropertyNames.PROPERTY_ENABLED, bEnabled)
-
     def enablefromStep(self, _iStep, _bDoEnable):
         if _iStep <= self.nMaxStep:
-            i = _iStep
-            while i <= self.nMaxStep:
-                setStepEnabled(i, _bDoEnable)
-                i += 1
+            for i in xrange(_iStep, self.nMaxStep):
+                self.setStepEnabled(i, _bDoEnable)
             enableFinishButton(_bDoEnable)
             if not _bDoEnable:
                 enableNextButton(_iStep > getCurrentStep() + 1)
@@ -334,7 +330,7 @@ class WizardDialog(UnoDialog2):
         try:
             xRoadmapItem = self.getRoadmapItemByID(_nStep)
             # Todo: In this case an exception should be thrown
-            if (xRoadmapItem == None):
+            if xRoadmapItem is None:
                 return False
             bIsEnabled = bool(Helper.getUnoPropertyValue(xRoadmapItem,
                 PropertyNames.PROPERTY_ENABLED))

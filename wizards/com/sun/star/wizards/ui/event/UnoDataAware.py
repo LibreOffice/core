@@ -26,7 +26,7 @@ class UnoDataAware(DataAware):
     def enableControls(self, value):
         for i in self.disableObjects:
             Helper.setUnoPropertyValue(
-                i.Model, PropertyNames.PROPERTY_ENABLED, value)
+                i.Model, PropertyNames.PROPERTY_ENABLED, bool(value))
 
     def setToUI(self, value):
         if self.isShort:

@@ -19,5 +19,5 @@ class CGExporter(ConfigGroup):
     cp_Arguments = ConfigSet(CGArgument())
 
     def supports(self, mime):
-        return cp_SupportedMimeTypes == "" or \
-            cp_SupportedMimeTypes.index(mime) > -1
+        return CGExporter.cp_SupportedMimeTypes == "" or \
+            CGExporter.cp_SupportedMimeTypes.index(mime) > -1

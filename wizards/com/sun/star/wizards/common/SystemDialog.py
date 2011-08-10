@@ -25,8 +25,6 @@ class SystemDialog(object):
             self.xMSF = xMSF
             self.systemDialog = xMSF.createInstance(ServiceName)
             self.xStringSubstitution = self.createStringSubstitution(xMSF)
-            if self.systemDialog != None:
-                self.systemDialog.initialize(Type)
 
         except Exception, exception:
             traceback.print_exc()
@@ -105,7 +103,7 @@ class SystemDialog(object):
     def callOpenDialog(self, multiSelect, displayDirectory):
         try:
             self.systemDialog.setMultiSelectionMode(multiSelect)
-            self.systemDialog.setDisplayDirectory(subst(displayDirectory))
+            self.systemDialog.setDisplayDirectory(self.subst(displayDirectory))
             if self.execute(self.systemDialog):
                 return self.systemDialog.getFiles()
 

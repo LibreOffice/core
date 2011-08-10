@@ -1,5 +1,6 @@
 from WebWizardDialog import *
 from common.SystemDialog import SystemDialog
+from ui.event.ListModelBinder import ListModelBinder
 
 '''
 @author rpiterman
@@ -9,9 +10,7 @@ This class implements general methods, used by different sub-classes
 
 class WWD_General(WebWizardDialog):
 
-    '''
-    @param xmsf
-    '''
+    settings = None
 
     def __init__(self, xmsf):
         super(WWD_General, self).__init__(xmsf)
@@ -20,13 +19,13 @@ class WWD_General(WebWizardDialog):
     def getStatusDialog(self):
         statusDialog = StatusDialog(
             self.xMSF, StatusDialog.STANDARD_WIDTH,
-            resources.resLoadingSession, False,
-            [resources.prodName, "", "", "", "", ""],
+            self.resources.resLoadingSession, False,
+            [self.resources.prodName, "", "", "", "", ""],
             HelpIds.getHelpIdString(HID0_STATUS_DIALOG))
         try:
             statusDialog.createWindowPeer(xControl.Peer)
-        except Exception, e:
-            e.printStackTrace()
+        except Exception:
+            traceback.print_exc()
 
         return statusDialog
 
@@ -35,20 +34,19 @@ class WWD_General(WebWizardDialog):
     '''
 
     def getDocAddDialog(self):
-        self.docAddDialog = SystemDialog.createOpenDialog(xMSF)
-        i = 0
-        while i < self.settings.cp_Filters.getSize():
-            f = (self.settings.cp_Filters.getElementAt(i))
-            self.docAddDialog.addFilter(
-                f.cp_Name.replace("%PRODNAME", resources.prodName),
-                f.cp_Filter, i == 0)
-            i += 1
+        self.docAddDialog = SystemDialog.createOpenDialog(self.xMSF)
+        for i in xrange(WWD_General.settings.cp_Filters.getSize()):
+            f = WWD_General.settings.cp_Filters.getElementAt(i)
+            if f is not None:
+                self.docAddDialog.addFilter(
+                    f.cp_Name.replace("%PRODNAME", self.resources.prodName),
+                    f.cp_Filter, i == 0)
         return self.docAddDialog
 
     def getZipDialog(self):
         if self.zipDialog is None:
             self.zipDialog = SystemDialog.createStoreDialog(xMSF)
-            self.zipDialog.addFilter(resources.resZipFiles, "*.zip", True)
+            self.zipDialog.addFilter(self.resources.resZipFiles, "*.zip", True)
 
         return self.zipDialog
 
@@ -57,8 +55,8 @@ class WWD_General(WebWizardDialog):
             try:
                 self.ftpDialog = FTPDialog.FTPDialog_unknown(xMSF, pub)
                 self.ftpDialog.createWindowPeer(xControl.getPeer())
-            except Exception, ex:
-                ex.printStackTrace()
+            except Exception:
+                traceback.print_exc()
 
         return self.ftpDialog
 
@@ -68,15 +66,6 @@ class WWD_General(WebWizardDialog):
 
         return self.folderDialog.callFolderDialog(title, description, dir)
 
-    def getFileAccess(self):
-        if self.fileAccess is None:
-            try:
-                self.fileAccess = FileAccess(xMSF)
-            except Exception, ex:
-                ex.printStackTrace()
-
-        return self.fileAccess
-
     '''
     returns the document specified
     by the given short array.
@@ -84,21 +73,24 @@ class WWD_General(WebWizardDialog):
     @return
     '''
 
+    @classmethod
     def getDoc(self, s):
-        if s.length == 0:
+        if len(s) == 0:
             return None
-        elif self.settings.cp_DefaultSession.cp_Content.cp_Documents.getSize() <= s[0]:
+        elif WWD_General.settings.cp_DefaultSession.cp_Content.cp_Documents.getSize() <= s[0]:
             return None
         else:
-            return self.settings.cp_DefaultSession.cp_Content.cp_Documents.getElementAt(s[0])
+            return \
+                WWD_General.settings.cp_DefaultSession.cp_Content.cp_Documents.getElementAt(s[0])
 
     '''
     how many documents are in the list?
     @return the number of documents in the docs list.
     '''
 
+    @classmethod
     def getDocsCount(self):
-        return self.settings.cp_DefaultSession.cp_Content.cp_Documents.getSize()
+        return WWD_General.settings.cp_DefaultSession.cp_Content.cp_Documents.getSize()
 
     '''
     fills the export listbox.
@@ -106,7 +98,7 @@ class WWD_General(WebWizardDialog):
     '''
 
     def fillExportList(self, listContent):
-        ListModelBinder.fillList(lstDocTargetType, listContent, None)
+        ListModelBinder.fillList(self.lstDocTargetType, listContent, None)
 
     '''
     returns a publisher object for the given name
@@ -115,7 +107,7 @@ class WWD_General(WebWizardDialog):
     '''
 
     def getPublisher(self, name):
-        return self.settings.cp_DefaultSession.cp_Publishing.getElement(name)
+        return WWD_General.settings.cp_DefaultSession.cp_Publishing.getElement(name)
 
     '''
     @return true if the checkbox "save session" is checked.
@@ -175,7 +167,7 @@ class WWD_General(WebWizardDialog):
     '''
 
     def checkDocList(self):
-        if self.settings.cp_DefaultSession.cp_Content.cp_Documents.getSize() \
+        if WWD_General.settings.cp_DefaultSession.cp_Content.cp_Documents.getSize() \
                 == 0:
             self.enableSteps(False)
             return False
@@ -250,7 +242,7 @@ class WWD_General(WebWizardDialog):
         ex.printStackTrace()
         peer = xControl.getPeer()
         AbstractErrorHandler.showMessage(
-            self.xMSF, peer, resources.resErrUnexpected,
+            self.xMSF, peer, self.resources.resErrUnexpected,
             ErrorHandler.ERROR_PROCESS_FATAL)
 
     '''

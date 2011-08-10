@@ -1,6 +1,6 @@
 import traceback
 from common.Desktop import Desktop
-from WWD_Startup import WWD_Startup
+from WWD_Startup import *
 
 '''
 This class implements the ui-events of the
@@ -13,8 +13,6 @@ session methods.
 '''
 
 class WWD_Events(WWD_Startup):
-    EMPTY_SHORT_ARRAY = range(0)
-    EMPTY_STRING_ARRAY = range(0)
 
     '''
     He - my constructor !
@@ -50,12 +48,12 @@ class WWD_Events(WWD_Startup):
     def enterStep(self, old, newStep):
         if (old == 1):
             sessionToLoad = ""
-            s = Helper.getUnoPropertyValue(lstLoadSettings.Model, "SelectedItems")
+            s = Helper.getUnoPropertyValue(lstLoadWWD_Startup.settings.Model, "SelectedItems")
             if s.length == 0 or s[0] == 0:
                 sessionToLoad = ""
             else:
                 sessionToLoad = \
-                    settings.cp_SavedSessions.getElementAt(s[0]).cp_Name
+                    WWD_Startup.settings.cp_SavedSessions.getElementAt(s[0]).cp_Name
 
             if not sessionToLoad.equals(self.currentSession):
                 loadSession(sessionToLoad)
@@ -81,10 +79,10 @@ class WWD_Events(WWD_Startup):
     def loadSession(self, sessionToLoad):
         try:
             sd = self.getStatusDialog()
-            task = Task("LoadDocs", "", 10)
+            #task = Task("LoadDocs", "", 10)
             sd.execute(this, task, resources.resLoadingSession)
-            task.start()
-            setSelectedDoc(WWD_Events.EMPTY_SHORT_ARRAY)
+            #task.start()
+            self.setSelectedDoc(WWD_Events.EMPTY_SHORT_ARRAY)
             Helper.setUnoPropertyValue(
                 lstDocuments.Model, "SelectedItems", WWD_Events.EMPTY_SHORT_ARRAY)
             Helper.setUnoPropertyValue(
@@ -97,20 +95,20 @@ class WWD_Events(WWD_Startup):
                     xMSF, CONFIG_PATH + "/SavedSessions", False)
                 view = Configuration.getNode(sessionToLoad, view)
 
-            session = CGSession.CGSession()
-            session.setRoot(settings)
+            session = CGSession()
+            session.root = settings
             session.readConfiguration(view, CONFIG_READ_PARAM)
-            task.setMax(session.cp_Content.cp_Documents.getSize() * 5 + 7)
-            task.advance(True)
-            if sessionToLoad.equals(""):
+            #task.setMax(session.cp_Content.cp_Documents.getSize() * 5 + 7)
+            #task.advance(True)
+            if sessionToLoad == "":
                 setSaveSessionName(session)
 
             mount(session, task, False, sd.xControl)
             checkSteps()
             self.currentSession = sessionToLoad
-            while task.getStatus() <= task.getMax():
+            '''while task.getStatus() <= task.getMax():
                 task.advance(False)
-            task.removeTaskListener(sd)
+            task.removeTaskListener(sd)'''
         except Exception, ex:
             unexpectedError(ex)
 
@@ -127,7 +125,7 @@ class WWD_Events(WWD_Startup):
 
     def delSession(self):
         selected = Helper.getUnoPropertyValue(
-            lstLoadSettings.Model, "SelectedItems")
+            lstLoadWWD_Startup.settings.Model, "SelectedItems")
         if selected.length == 0:
             return
 
@@ -139,16 +137,16 @@ class WWD_Events(WWD_Startup):
             ErrorHandler.ERROR_QUESTION_NO)
         if confirm:
             try:
-                name = settings.cp_SavedSessions.getKey(selected[0])
+                name = WWD_Startup.settings.cp_SavedSessions.getKey(selected[0])
                 # first delete the session from the registry/configuration.
                 Configuration.removeNode(
                     self.xMSF, CONFIG_PATH + "/SavedSessions", name)
-                # then delete settings.cp_SavedSessions
-                settings.cp_SavedSessions.remove(selected[0])
-                settings.savedSessions.remove(selected[0] - 1)
+                # then delete WWD_Startup.settings.cp_SavedSessions
+                WWD_Startup.settings.cp_SavedSessions.remove(selected[0])
+                WWD_Startup.settings.savedSessions.remove(selected[0] - 1)
                 nextSelected = [0]
                 # We try to select the same item index again, if possible
-                if settings.cp_SavedSessions.getSize() > selected[0]:
+                if WWD_Startup.settings.cp_SavedSessions.getSize() > selected[0]:
                     nextSelected[0] = selected[0]
                 else:
                     # this will always be available because
@@ -163,7 +161,7 @@ class WWD_Events(WWD_Startup):
                         # select...
 
                     Helper.setUnoPropertyValue(
-                        lstLoadSettings.Model, "SelectedItems", nextSelected)
+                        lstLoadWWD_Startup.settings.Model, "SelectedItems", nextSelected)
 
             except Exception, ex:
                 ex.printStackTrace()
@@ -184,20 +182,18 @@ class WWD_Events(WWD_Startup):
     '''
 
     def setSelectedDoc(self, s):
-        oldDoc = getDoc(selectedDoc)
-        doc = getDoc(s)
-        if doc == None:
-            fillExportList(WWD_Events.EMPTY_STRING_ARRAY)
+        oldDoc = self.getDoc([WWD_Startup.selectedDoc])
+        doc = self.getDoc(s)
+        if doc is None:
+            self.fillExportList([])
             #I try to avoid refreshing the export list if
             #the same type of document is chosen.
-        elif oldDoc == None or (not oldDoc.appType.equals(doc.appType)):
-            fillExportList(settings.getExporters(doc.appType))
-        else:
-
-            # do nothing
-            selectedDoc = s
-            mount(doc, docAware)
-            disableDocUpDown()
+        elif oldDoc is None or oldDoc.appType != doc.appType:
+            self.fillExportList(WWD_Startup.settings.getExporters(doc.appType))
+        # do nothing
+        WWD_Startup.selectedDoc = s
+        self.mountList(doc, self.docAware)
+        self.disableDocUpDown()
 
     '''
     The user clicks the "Add" button.
@@ -207,49 +203,51 @@ class WWD_Events(WWD_Startup):
     '''
 
     def addDocument(self):
-        files = getDocAddDialog().callOpenDialog(
-            True, settings.cp_DefaultSession.cp_InDirectory)
-        if files is None:
-            return
+        try:
+            files = self.getDocAddDialog().callOpenDialog(
+                True, WWD_Startup.settings.cp_DefaultSession.cp_InDirectory)
+            if files is None:
+                return
 
-        task = Task.Task_unknown("", "", files.length * 5)
-        '''
-        If more than a certain number
-        of documents have been added,
-        open the status dialog.
-        '''
-        if (files.length > MIN_ADD_FILES_FOR_DIALOG):
-            sd = getStatusDialog()
-            sd.setLabel(resources.resValidatingDocuments)
-            sd.execute(this, task, resources.prodName)
-            # new LoadDocs( sd.xControl, files, task )
-            oLoadDocs = LoadDocs.LoadDocs_unknown(self.xControl, files, task)
-            oLoadDocs.loadDocuments()
-            task.removeTaskListener(sd)
-        else:
+            task = None #Task("", "", len(files) * 5)
             '''
-            When adding a single document, do not use a
-            status dialog...
+            If more than a certain number
+            of documents have been added,
+            open the status dialog.
             '''
-            oLoadDocs = LoadDocs.LoadDocs_unknown(self.xControl, files, task)
-            oLoadDocs.loadDocuments()
+            if (len(files) > MIN_ADD_FILES_FOR_DIALOG):
+                sd = self.getStatusDialog()
+                sd.setLabel(resources.resValidatingDocuments)
+                sd.execute(this, task, resources.prodName)
+                oLoadDocs = self.LoadDocs(self.xMSF, self.xUnoDialog, files, self)
+                oLoadDocs.loadDocuments()
+                #task.removeTaskListener(sd)
+            else:
+                '''
+                When adding a single document, do not use a
+                status dialog...
+                '''
+                oLoadDocs = self.LoadDocs(self.xMSF, self.xUnoDialog, files, self)
+                oLoadDocs.loadDocuments()
+        except Exception:
+            traceback.print_exc()
 
     '''
     The user clicked delete.
     '''
 
     def removeDocument(self):
-        if selectedDoc.length == 0:
+        if WWD_Startup.selectedDoc.length == 0:
             return
 
-        settings.cp_DefaultSession.cp_Content.cp_Documents.remove(
-            selectedDoc[0])
+        WWD_Startup.settings.cp_DefaultSession.cp_Content.cp_Documents.remove(
+            WWD_Startup.selectedDoc[0])
         # update the selected document
-        while selectedDoc[0] >= getDocsCount():
-            selectedDoc[0] -= 1
+        while WWD_Startup.selectedDoc[0] >= getDocsCount():
+            WWD_Startup.selectedDoc[0] -= 1
             # if there are no documents...
-        if selectedDoc[0] == -1:
-            selectedDoc = WWD_Events.EMPTY_SHORT_ARRAY
+        if WWD_Startup.selectedDoc[0] == -1:
+            WWD_Startup.selectedDoc = WWD_Events.EMPTY_SHORT_ARRAY
             # update the list to show the right selection.
 
         docListDA.updateUI()
@@ -262,28 +260,28 @@ class WWD_Events(WWD_Startup):
     '''
 
     def docUp(self):
-        doc = settings.cp_DefaultSession.cp_Content.cp_Documents.getElementAt(
-            selectedDoc[0])
-        settings.cp_DefaultSession.cp_Content.cp_Documents.remove(
-            selectedDoc[0])
-        settings.cp_DefaultSession.cp_Content.cp_Documents.add(
-            selectedDoc[0] - 1, doc)
+        doc = WWD_Startup.settings.cp_DefaultSession.cp_Content.cp_Documents.getElementAt(
+            WWD_Startup.selectedDoc[0])
+        WWD_Startup.settings.cp_DefaultSession.cp_Content.cp_Documents.remove(
+            WWD_Startup.selectedDoc[0])
+        WWD_Startup.settings.cp_DefaultSession.cp_Content.cp_Documents.add(
+            WWD_Startup.selectedDoc[0] - 1, doc)
         docListDA.updateUI()
-        disableDocUpDown()
+        self.disableDocUpDown()
 
     '''
     doc down
     '''
 
     def docDown(self):
-        doc = settings.cp_DefaultSession.cp_Content.cp_Documents.getElementAt(
-            selectedDoc[0])
-        settings.cp_DefaultSession.cp_Content.cp_Documents.remove(
-            selectedDoc[0])
-        settings.cp_DefaultSession.cp_Content.cp_Documents.add(
-            (selectedDoc[0] + 1), doc)
+        doc = WWD_Startup.settings.cp_DefaultSession.cp_Content.cp_Documents.getElementAt(
+            WWD_Startup.selectedDoc[0])
+        WWD_Startup.settings.cp_DefaultSession.cp_Content.cp_Documents.remove(
+            WWD_Startup.selectedDoc[0])
+        WWD_Startup.settings.cp_DefaultSession.cp_Content.cp_Documents.add(
+            (WWD_Startup.selectedDoc[0] + 1), doc)
         docListDA.updateUI()
-        disableDocUpDown()
+        self.disableDocUpDown()
 
     '''
     **************
@@ -300,11 +298,11 @@ class WWD_Events(WWD_Startup):
             setEnabled(btnBackgrounds, False)
             if self.bgDialog == None:
                 self.bgDialog = BackgroundsDialog(
-                    self.xMSF, settings.cp_BackgroundImages, resources)
+                    self.xMSF, WWD_Startup.settings.cp_BackgroundImages, resources)
                 self.bgDialog.createWindowPeer(xControl.Peer)
 
             self.bgDialog.setSelected(
-                settings.cp_DefaultSession.cp_Design.cp_BackgroundImage)
+                WWD_Startup.settings.cp_DefaultSession.cp_Design.cp_BackgroundImage)
             i = self.bgDialog.executeDialog(WWD_Events.this)
             if i == 1:
                 #ok
@@ -322,7 +320,7 @@ class WWD_Events(WWD_Startup):
         if background == None:
             background = ""
 
-        settings.cp_DefaultSession.cp_Design.cp_BackgroundImage = background
+        WWD_Startup.settings.cp_DefaultSession.cp_Design.cp_BackgroundImage = background
         refreshStylePreview()
 
     '''
@@ -334,11 +332,11 @@ class WWD_Events(WWD_Startup):
             setEnabled(btnIconSets, False)
             if self.iconsDialog == None:
                 self.iconsDialog = IconsDialog(
-                    self.xMSF, settings.cp_IconSets, resources)
+                    self.xMSF, WWD_Startup.settings.cp_IconSets, resources)
                 self.iconsDialog.createWindowPeer(xControl.Peer)
 
             self.iconsDialog.setIconset(
-                settings.cp_DefaultSession.cp_Design.cp_IconSet)
+                WWD_Startup.settings.cp_DefaultSession.cp_Design.cp_IconSet)
             i = self.iconsDialog.executeDialog(WWD_Events.this)
             if i == 1:
                 #ok
@@ -353,7 +351,7 @@ class WWD_Events(WWD_Startup):
     '''
 
     def setIconset(self, icon):
-        settings.cp_DefaultSession.cp_Design.cp_IconSet = icon
+        WWD_Startup.settings.cp_DefaultSession.cp_Design.cp_IconSet = icon
         updateIconsetText()
 
     '''
@@ -395,7 +393,7 @@ class WWD_Events(WWD_Startup):
     def setPublishLocalDir(self):
         dir = showFolderDialog(
             "Local destination directory", "",
-            settings.cp_DefaultSession.cp_OutDirectory)
+            WWD_Startup.settings.cp_DefaultSession.cp_OutDirectory)
         #if ok was pressed...
         setPublishUrl(LOCAL_PUBLISHER, dir, 0)
 
@@ -430,7 +428,7 @@ class WWD_Events(WWD_Startup):
     def setZipFilename(self):
         sd = getZipDialog()
         zipFile = sd.callStoreDialog(
-            settings.cp_DefaultSession.cp_OutDirectory,
+            WWD_Startup.settings.cp_DefaultSession.cp_OutDirectory,
             resources.resDefaultArchiveFilename)
         setPublishUrl(ZIP_PUBLISHER, zipFile, 4)
         getPublisher
@@ -620,7 +618,7 @@ class WWD_Events(WWD_Startup):
             node = None
             name = getSessionSaveName()
             #set documents index field.
-            docs = settings.cp_DefaultSession.cp_Content.cp_Documents
+            docs = WWD_Startup.settings.cp_DefaultSession.cp_Content.cp_Documents
             i = 0
             while i < docs.getSize():
                 (docs.getElementAt(i)).cp_Index = i
@@ -642,32 +640,32 @@ class WWD_Events(WWD_Startup):
             except NoSuchElementException, nsex:
                 traceb
 
-            settings.cp_DefaultSession.cp_Index = 0;
+            WWD_Startup.settings.cp_DefaultSession.cp_Index = 0;
             node = Configuration.addConfigNode(conf, name)
-            settings.cp_DefaultSession.cp_Name = name;
-            settings.cp_DefaultSession.writeConfiguration(
+            WWD_Startup.settings.cp_DefaultSession.cp_Name = name;
+            WWD_Startup.settings.cp_DefaultSession.writeConfiguration(
                 node, CONFIG_READ_PARAM)
-            settings.cp_SavedSessions.reindexSet(conf, name, "Index")
+            WWD_Startup.settings.cp_SavedSessions.reindexSet(conf, name, "Index")
             Configuration.commit(conf)
             # now I reload the sessions to actualize the list/combo
             # boxes load/save sessions.
-            settings.cp_SavedSessions.clear()
+            WWD_Startup.settings.cp_SavedSessions.clear()
             confView = Configuration.getConfigurationRoot(
                 self.xMSF, CONFIG_PATH + "/SavedSessions", False)
-            settings.cp_SavedSessions.readConfiguration(
+            WWD_Startup.settings.cp_SavedSessions.readConfiguration(
                 confView, CONFIG_READ_PARAM)
-            settings.cp_LastSavedSession = name;
+            WWD_Startup.settings.cp_LastSavedSession = name;
             self.currentSession = name
             # now save the name of the last saved session...
-            settings.cp_LastSavedSession = name;
+            WWD_Startup.settings.cp_LastSavedSession = name;
             # TODO add the <none> session...
             prepareSessionLists()
             ListModelBinder.fillList(
-                lstLoadSettings, settings.cp_SavedSessions.items(), None)
+                lstLoadSettings, WWD_Startup.settings.cp_SavedSessions.items(), None)
             ListModelBinder.fillComboBox(
-                cbSaveSettings, settings.savedSessions.items(), None)
+                cbSaveSettings, WWD_Startup.settings.savedSessions.items(), None)
             selectSession()
-            self.currentSession = settings.cp_LastSavedSession
+            self.currentSession = WWD_Startup.settings.cp_LastSavedSession
             return True
         except Exception, ex:
             ex.printStackTrace()
@@ -787,12 +785,12 @@ class WWD_Events(WWD_Startup):
                 return
 
         else:
-            settings.cp_LastSavedSession = ""
+            WWD_Startup.settings.cp_LastSavedSession = ""
 
         try:
             conf = Configuration.getConfigurationRoot(xMSF, CONFIG_PATH, True)
             Configuration.set(
-                settings.cp_LastSavedSession, "LastSavedSession", conf)
+                WWD_Startup.settings.cp_LastSavedSession, "LastSavedSession", conf)
             Configuration.commit(conf)
         except Exception, ex:
             ex.printStackTrace()
@@ -852,3 +850,78 @@ class WWD_Events(WWD_Startup):
 
         except Exception, ex:
             traceback.print_exc()
+
+    class LoadDocs(object):
+
+        def __init__(self,xmsf, xC_, files_, parent_):
+            self.xMSF = xmsf
+            self.xC = xC_
+            self.files = files_
+            self.parent = parent_
+
+        def loadDocuments(self):
+            if len(WWD_Startup.selectedDoc) > 0:
+                offset = WWD_Startup.selectedDoc[0] + 1
+            else:
+                offset = WWD_General.getDocsCount()
+
+            '''
+            if the user chose one file, the list starts at 0,
+            if he chose more than one, the first entry is a directory name,
+            all the others are filenames.
+            '''
+            if len(self.files) > 1:
+                start = 1
+            else:
+                start = 0
+
+            #Number of documents failed to validate.
+            failed = 0
+
+            # store the directory
+            if start == 1:
+                WWD_General.settings.cp_DefaultSession.cp_InDirectory = files[0]
+            else:
+                WWD_General.settings.cp_DefaultSession.cp_InDirectory = \
+                    FileAccess.getParentDir(self.files[0])
+
+            '''
+            Here i go through each file, and validate it.
+            If its ok, I add it to the ListModel/ConfigSet
+            '''
+
+            for i in xrange(start, len(self.files)):
+                doc = CGDocument()
+
+                if start == 0:
+                    doc.cp_URL = self.files[i]
+                else:
+                    doc.cp_URL = FileAccess.connectURLs(files[0], files[i])
+
+                '''
+                so - i check each document and if it is ok I add it.
+                The failed variable is used only to calculate the place to add -
+                Error reporting to the user is (or should (-:  )done in the checkDocument(...) method
+                '''
+                if WWD_Startup.checkDocument(self.xMSF, doc, None, self.xC):
+                    WWD_General.settings.cp_DefaultSession.cp_Content.cp_Documents.add(offset + i - failed - start, doc)
+                else:
+                    failed += 1
+
+            # if any documents where added,
+            # set the first one to be the current-selected document.
+            if len(self.files) > start + failed:
+                self.parent.setSelectedDoc([offset])
+
+            # update the ui...
+            self.parent.docListDA.updateUI();
+            # this enables/disables the next steps.
+            # when no documents in the list, all next steps are disabled
+            self.parent.checkSteps()
+            '''
+            a small insurance that the status dialog will
+            really close...
+            '''
+
+            #while (self.task.getStatus() < self.task.getMax()):
+            #    self.task.advance(false)

@@ -468,7 +468,7 @@ class FileAccess(object):
         except Exception:
             traceback.print_exc()
 
-        #return defe
+        return defe
 
     '''
     @author rpiterman
