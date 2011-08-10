@@ -269,7 +269,7 @@ public:
 
     bool IsViewOptionAdjust() const  { return m_pViewOptionAdjust != 0; }
     bool NeedNewViewOptionAdjust( const ViewShell& ) const;
-    void ViewOptionAdjustStart( ViewShell &rSh, const SwViewOption &rViewOptions );
+    void ViewOptionAdjustStart( ViewShell &rSh, const SwViewOption &rViewOptions, bool bIsTmpSelection );
     void ViewOptionAdjust( SwPrintData const* const pPrtOptions );
     void ViewOptionAdjustStop();
 

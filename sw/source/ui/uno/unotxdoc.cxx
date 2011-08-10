@@ -2551,7 +2551,7 @@ sal_Int32 SAL_CALL SwXTextDocument::getRendererCount(
                 if (m_pRenderData && m_pRenderData->NeedNewViewOptionAdjust( *pViewShell ) )
                     m_pRenderData->ViewOptionAdjustStop();
                 if (m_pRenderData && !m_pRenderData->IsViewOptionAdjust())
-                    m_pRenderData->ViewOptionAdjustStart( *pViewShell, *pViewShell->GetViewOptions() );
+                    m_pRenderData->ViewOptionAdjustStart( *pViewShell, *pViewShell->GetViewOptions(), rSelection.hasValue() );
             }
 
             m_pRenderData->SetSwPrtOptions( new SwPrintData );
@@ -3833,15 +3833,21 @@ void SwXDocumentPropertyHelper::onChange()
        m_pDoc->SetModified();
 }
 
-SwViewOptionAdjust_Impl::SwViewOptionAdjust_Impl( ViewShell& rSh, const SwViewOption &rViewOptions ) :
+SwViewOptionAdjust_Impl::SwViewOptionAdjust_Impl( ViewShell& rSh, const SwViewOption &rViewOptions, bool bIsTmpSelection ) :
     m_rShell( rSh ),
-    m_aOldViewOptions( rViewOptions )
+    m_aOldViewOptions( rViewOptions ),
+    m_bIsTmpSelection( bIsTmpSelection )
 {
 }
 
 SwViewOptionAdjust_Impl::~SwViewOptionAdjust_Impl()
 {
-    m_rShell.ApplyViewOptions( m_aOldViewOptions );
+    //fdo#39159 don't restore original view options on a temporary document
+    //selection, it triggers throwing away the current view. Presumably we can
+    //forget about it in the temporary document case as unimportant to restore
+    //the original view settings
+    if (!m_bIsTmpSelection)
+        m_rShell.ApplyViewOptions( m_aOldViewOptions );
 }
 
 void

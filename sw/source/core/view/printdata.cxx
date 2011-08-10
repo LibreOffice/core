@@ -113,13 +113,13 @@ bool SwRenderData::NeedNewViewOptionAdjust( const ViewShell& rCompare ) const
 }
 
 
-void SwRenderData::ViewOptionAdjustStart( ViewShell &rSh, const SwViewOption &rViewOptions )
+void SwRenderData::ViewOptionAdjustStart( ViewShell &rSh, const SwViewOption &rViewOptions, bool bIsTmpSelection )
 {
     if (m_pViewOptionAdjust)
     {
         OSL_FAIL("error: there should be no ViewOptionAdjust active when calling this function" );
     }
-    m_pViewOptionAdjust = new SwViewOptionAdjust_Impl( rSh, rViewOptions );
+    m_pViewOptionAdjust = new SwViewOptionAdjust_Impl( rSh, rViewOptions, bIsTmpSelection );
 }
 
 

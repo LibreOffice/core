@@ -588,9 +588,10 @@ class SwViewOptionAdjust_Impl
 {
     ViewShell &    m_rShell;
     SwViewOption    m_aOldViewOptions;
+    bool m_bIsTmpSelection;
 
 public:
-    SwViewOptionAdjust_Impl( ViewShell& rSh, const SwViewOption &rViewOptions );
+    SwViewOptionAdjust_Impl( ViewShell& rSh, const SwViewOption &rViewOptions, bool bIsTmpSelection );
     ~SwViewOptionAdjust_Impl();
     void AdjustViewOptions( SwPrintData const* const pPrtOptions );
     bool checkShell( const ViewShell& rCompare ) const
