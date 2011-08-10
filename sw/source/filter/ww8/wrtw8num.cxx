@@ -672,7 +672,7 @@ void WW8Export::BuildAnlvBulletBase(WW8_ANLV& rAnlv, sal_uInt8*& rpCh,
                 *rpCh = static_cast< sal_uInt8 >(cChar - 0xF000);
             }
             else
-                *rpCh =  ByteString::ConvertFromUnicode(cChar, eChrSet);
+                *rpCh = rtl::OUStringToOString(rtl::OUString(cChar), eChrSet).toChar();
         }
         rpCh++;
         rCharLen--;
