@@ -29,32 +29,21 @@
 #ifndef _XMLOFF_XMLCNIMP_HXX
 #define _XMLOFF_XMLCNIMP_HXX
 
-#include "sal/config.h"
-#include "xmloff/dllapi.h"
-#include "sal/types.h"
-#include <com/sun/star/container/XNameAccess.hpp>
-#include <svl/svarray.hxx>
-#include <xmloff/nmspmap.hxx>
-
-#define _SVSTDARR_USHORTS
-#include <svl/svstdarr.hxx>
+#include "xmloff/dllapi.h"     //XMLOFF_DLLPUBLIC
+#include <sal/types.h>         //sal_uInt16 and sal_Bool
+#include <boost/scoped_ptr.hpp>
 
 namespace rtl { class OUString; }
-
-class SvXMLAttrContainerData_Impl;
+class SvXMLAttrCollection; //Forward declaration only.
 
 class XMLOFF_DLLPUBLIC SvXMLAttrContainerData
 {
-    SvXMLNamespaceMap   aNamespaceMap;
-    SvUShorts           aPrefixPoss;
-    SvXMLAttrContainerData_Impl *pLNames;
-    SvXMLAttrContainerData_Impl *pValues;
+private:
+    boost::scoped_ptr<SvXMLAttrCollection> pimpl;
 
-    SAL_DLLPRIVATE inline sal_uInt16 GetPrefixPos( sal_uInt16 i ) const;
 public:
-
-    SvXMLAttrContainerData( const SvXMLAttrContainerData& rImpl );
     SvXMLAttrContainerData();
+    SvXMLAttrContainerData(const SvXMLAttrContainerData &rCopy);
     ~SvXMLAttrContainerData();
 
     int  operator ==( const SvXMLAttrContainerData& rCmp ) const;
@@ -66,65 +55,29 @@ public:
                   const ::rtl::OUString& rLName,
                   const ::rtl::OUString& rValue );
 
-    sal_uInt16 GetAttrCount() const;
-    inline ::rtl::OUString GetAttrNamespace( sal_uInt16 i ) const;
-    inline ::rtl::OUString GetAttrPrefix( sal_uInt16 i ) const;
-    const ::rtl::OUString& GetAttrLName( sal_uInt16 i ) const;
-    const ::rtl::OUString& GetAttrValue( sal_uInt16 i ) const;
+    size_t GetAttrCount() const;
+    const rtl::OUString GetAttrNamespace( size_t i ) const;
+    const rtl::OUString GetAttrPrefix( size_t i ) const;
+    const rtl::OUString& GetAttrLName( size_t i ) const;
+    const rtl::OUString& GetAttrValue( size_t i ) const;
 
-    sal_uInt16 GetFirstNamespaceIndex() const { return aNamespaceMap.GetFirstIndex(); }
-    sal_uInt16 GetNextNamespaceIndex( sal_uInt16 nIdx ) const { return aNamespaceMap.GetNextIndex( nIdx ); }
-    inline const ::rtl::OUString& GetNamespace( sal_uInt16 i ) const;
-    inline const ::rtl::OUString& GetPrefix( sal_uInt16 i ) const;
+    sal_uInt16 GetFirstNamespaceIndex() const;
+    sal_uInt16 GetNextNamespaceIndex( sal_uInt16 nIdx ) const;
+    const ::rtl::OUString& GetNamespace( sal_uInt16 i ) const;
+    const ::rtl::OUString& GetPrefix( sal_uInt16 i ) const;
 
-    sal_Bool SetAt( sal_uInt16 i,
+    sal_Bool SetAt( size_t i,
                 const ::rtl::OUString& rLName, const rtl::OUString& rValue );
-    sal_Bool SetAt( sal_uInt16 i,
+    sal_Bool SetAt( size_t i,
                 const ::rtl::OUString& rPrefix, const rtl::OUString& rNamespace,
                 const ::rtl::OUString& rLName, const rtl::OUString& rValue );
-    sal_Bool SetAt( sal_uInt16 i,
+    sal_Bool SetAt( size_t i,
                 const ::rtl::OUString& rPrefix,
                 const ::rtl::OUString& rLName,
                 const ::rtl::OUString& rValue );
 
-    void Remove( sal_uInt16 i );
+    void Remove( size_t i );
 };
-
-inline sal_uInt16 SvXMLAttrContainerData::GetPrefixPos( sal_uInt16 i ) const
-{
-//  DBG_ASSERT( i >= 0 && i < aPrefixPoss.Count(),
-//              "SvXMLAttrContainerData::GetPrefixPos: illegal index" );
-    return aPrefixPoss[i];
-}
-
-inline ::rtl::OUString SvXMLAttrContainerData::GetAttrNamespace( sal_uInt16 i ) const
-{
-    ::rtl::OUString sRet;
-    sal_uInt16 nPos = GetPrefixPos( i );
-    if( USHRT_MAX != nPos )
-        sRet = aNamespaceMap.GetNameByIndex( nPos );
-    return sRet;
-}
-
-inline ::rtl::OUString SvXMLAttrContainerData::GetAttrPrefix( sal_uInt16 i ) const
-{
-    ::rtl::OUString sRet;
-    sal_uInt16 nPos = GetPrefixPos( i );
-    if( USHRT_MAX != nPos )
-        sRet = aNamespaceMap.GetPrefixByIndex( nPos );
-    return sRet;
-}
-
-inline const ::rtl::OUString& SvXMLAttrContainerData::GetNamespace(
-                                                            sal_uInt16 i ) const
-{
-    return aNamespaceMap.GetNameByIndex( i );
-}
-
-inline const ::rtl::OUString& SvXMLAttrContainerData::GetPrefix( sal_uInt16 i ) const
-{
-    return aNamespaceMap.GetPrefixByIndex( i );
-}
 
 #endif
 

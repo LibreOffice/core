@@ -33,6 +33,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <rtl/memory.h>
 #include <comphelper/servicehelper.hxx>
+#include <limits.h>
 
 #include <xmloff/xmlcnimp.hxx>
 

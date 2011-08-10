@@ -100,6 +100,8 @@ $(eval $(call gb_Library_add_exception_objects,xo,\
     xmloff/source/core/RDFaExportHelper \
     xmloff/source/core/RDFaImportHelper \
     xmloff/source/core/SettingsExportHelper \
+    xmloff/source/core/SvXMLAttr \
+    xmloff/source/core/SvXMLAttrCollection \
     xmloff/source/core/XMLBase64Export \
     xmloff/source/core/XMLBase64ImportContext \
     xmloff/source/core/XMLBasicExportFilter \
@@ -111,7 +113,7 @@ $(eval $(call gb_Library_add_exception_objects,xo,\
     xmloff/source/core/nmspmap \
     xmloff/source/core/unoatrcn \
     xmloff/source/core/unointerfacetouniqueidentifiermapper \
-    xmloff/source/core/xmlcnitm \
+    xmloff/source/core/xmlcnimp \
     xmloff/source/core/xmlehelp \
     xmloff/source/core/xmlerror \
     xmloff/source/core/xmlexp \
