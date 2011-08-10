@@ -2270,17 +2270,17 @@ void ScDocument::CopyBlockFromClip( SCCOL nCol1, SCROW nRow1,
                                     SCsCOL nDx, SCsROW nDy,
                                     const ScCopyBlockFromClipParams* pCBFCP )
 {
-    TableContainer& ppClipTab = pCBFCP->pClipDoc->maTabs;
+    TableContainer& rClipTabs = pCBFCP->pClipDoc->maTabs;
     SCTAB nTabEnd = pCBFCP->nTabEnd;
     SCTAB nClipTab = 0;
     for (SCTAB i = pCBFCP->nTabStart; i <= nTabEnd && i < static_cast<SCTAB>(maTabs.size()); i++)
     {
         if (maTabs[i] && rMark.GetTableSelect(i) )
         {
-            while (!ppClipTab[nClipTab]) nClipTab = (nClipTab+1) % (static_cast<SCTAB>(ppClipTab.size()));
+            while (!rClipTabs[nClipTab]) nClipTab = (nClipTab+1) % (static_cast<SCTAB>(rClipTabs.size()));
 
             maTabs[i]->CopyFromClip( nCol1, nRow1, nCol2, nRow2, nDx, nDy,
-                pCBFCP->nInsFlag, pCBFCP->bAsLink, pCBFCP->bSkipAttrForEmpty, ppClipTab[nClipTab] );
+                pCBFCP->nInsFlag, pCBFCP->bAsLink, pCBFCP->bSkipAttrForEmpty, rClipTabs[nClipTab] );
 
             if ( pCBFCP->pClipDoc->pDrawLayer && ( pCBFCP->nInsFlag & IDF_OBJECTS ) )
             {
@@ -2303,7 +2303,7 @@ void ScDocument::CopyBlockFromClip( SCCOL nCol1, SCROW nRow1,
                 }
             }
 
-            nClipTab = (nClipTab+1) % (static_cast<SCTAB>(ppClipTab.size()));
+            nClipTab = (nClipTab+1) % (static_cast<SCTAB>(rClipTabs.size()));
         }
     }
     if ( pCBFCP->nInsFlag & IDF_CONTENTS )
@@ -2313,7 +2313,7 @@ void ScDocument::CopyBlockFromClip( SCCOL nCol1, SCROW nRow1,
         {
             if (maTabs[i] && rMark.GetTableSelect(i) )
             {
-                while (!ppClipTab[nClipTab]) nClipTab = (nClipTab+1) % (static_cast<SCTAB>(ppClipTab.size()));
+                while (!rClipTabs[nClipTab]) nClipTab = (nClipTab+1) % (static_cast<SCTAB>(rClipTabs.size()));
                 SCsTAB nDz = ((SCsTAB)i) - nClipTab;
 
                 //  ranges of consecutive selected tables (in clipboard and dest. doc)
@@ -2322,7 +2322,7 @@ void ScDocument::CopyBlockFromClip( SCCOL nCol1, SCROW nRow1,
                 while ( i + nFollow < nTabEnd
                         && rMark.GetTableSelect( i + nFollow + 1 )
                         && nClipTab + nFollow < MAXTAB
-                        && ppClipTab[nClipTab + nFollow + 1] )
+                        && rClipTabs[nClipTab + nFollow + 1] )
                     ++nFollow;
 
                 if ( pCBFCP->pClipDoc->GetClipParam().mbCutMode )
@@ -2339,7 +2339,7 @@ void ScDocument::CopyBlockFromClip( SCCOL nCol1, SCROW nRow1,
                         nCol1, nRow1, i, nCol2, nRow2, i+nFollow,
                         nDx, nDy, nDz, pCBFCP->pRefUndoDoc, false );
 
-                nClipTab = (nClipTab+nFollow+1) % (static_cast<SCTAB>(ppClipTab.size()));
+                nClipTab = (nClipTab+nFollow+1) % (static_cast<SCTAB>(rClipTabs.size()));
                 i = sal::static_int_cast<SCTAB>( i + nFollow );
             }
         }
@@ -2359,8 +2359,8 @@ void ScDocument::CopyNonFilteredFromClip( SCCOL nCol1, SCROW nRow1,
 
     //  filtered state is taken from first used table in clipboard (as in GetClipArea)
     SCTAB nFlagTab = 0;
-    TableContainer& ppClipTab = pCBFCP->pClipDoc->maTabs;
-    while ( nFlagTab < static_cast<SCTAB>(ppClipTab.size()) && !ppClipTab[nFlagTab] )
+    TableContainer& rClipTabs = pCBFCP->pClipDoc->maTabs;
+    while ( nFlagTab < static_cast<SCTAB>(rClipTabs.size()) && !rClipTabs[nFlagTab] )
         ++nFlagTab;
 
     SCROW nSourceRow = rClipStartRow;
