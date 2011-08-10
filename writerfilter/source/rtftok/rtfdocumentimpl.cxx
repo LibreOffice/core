@@ -748,6 +748,7 @@ void RTFDocumentImpl::text(OUString& rString)
         case DESTINATION_OBJDATA:
         case DESTINATION_ANNOTATIONDATE:
         case DESTINATION_ANNOTATIONAUTHOR:
+        case DESTINATION_FALT:
             m_aStates.top().aDestinationText.append(rString);
             break;
         case DESTINATION_EQINSTRUCTION:
@@ -1131,6 +1132,9 @@ int RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
             break;
         case RTF_ATNAUTHOR:
             m_aStates.top().nDestinationState = DESTINATION_ANNOTATIONAUTHOR;
+            break;
+        case RTF_FALT:
+            m_aStates.top().nDestinationState = DESTINATION_FALT;
             break;
         case RTF_LISTTEXT:
             // Should be ignored by any reader that understands Word 97 through Word 2007 numbering.
@@ -2341,6 +2345,7 @@ int RTFDocumentImpl::pushState()
     else
         aState = m_aStates.top();
     m_aStates.push(aState);
+    m_aStates.top().aDestinationText.setLength(0);
 
     m_nGroup++;
 
@@ -2420,6 +2425,7 @@ int RTFDocumentImpl::popState()
     RTFShape aShape;
     bool bPopShapeProperties = false;
     bool bPopPictureProperties = false;
+    bool bFaltEnd = false;
 
     if (m_aStates.top().nDestinationState == DESTINATION_FONTTABLE)
     {
@@ -2725,6 +2731,14 @@ int RTFDocumentImpl::popState()
     }
     else if (m_aStates.top().nDestinationState == DESTINATION_ANNOTATIONAUTHOR)
         m_aAuthor = m_aStates.top().aDestinationText.makeStringAndClear();
+    else if (m_aStates.top().nDestinationState == DESTINATION_FALT)
+    {
+        OUString aStr(m_aStates.top().aDestinationText.makeStringAndClear());
+        RTFValue::Pointer_t pValue(new RTFValue(aStr));
+        m_aStates.top().aTableSprms->push_back(make_pair(NS_ooxml::LN_CT_Font_altName, pValue));
+        aSprms = m_aStates.top().aTableSprms;
+        bFaltEnd = true;
+    }
 
     // See if we need to end a track change
     RTFValue::Pointer_t pTrackchange = m_aStates.top().aCharacterSprms.find(NS_ooxml::LN_trackchange);
@@ -2775,6 +2789,8 @@ int RTFDocumentImpl::popState()
         m_aStates.top().aShape = aShape;
         m_aStates.top().aCharacterAttributes = aAttributes;
     }
+    else if (bFaltEnd)
+        m_aStates.top().aTableSprms = aSprms;
     if (bPopPictureProperties)
         m_aStates.top().aCharacterAttributes = aAttributes;
     if (m_pCurrentBuffer == &m_aSuperBuffer)

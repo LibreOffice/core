@@ -111,7 +111,8 @@ namespace writerfilter {
             DESTINATION_OBJDATA,
             DESTINATION_RESULT,
             DESTINATION_ANNOTATIONDATE,
-            DESTINATION_ANNOTATIONAUTHOR
+            DESTINATION_ANNOTATIONAUTHOR,
+            DESTINATION_FALT
         };
 
         enum RTFBorderState
