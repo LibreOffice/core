@@ -29,4 +29,8 @@
 $(eval $(call gb_Package_Package,rsc_yacc,$(WORKDIR)/rsc/source/parser))
 $(eval $(call gb_Package_add_customtarget,rsc_yacc,rsc/source/parser,SRCDIR))
 
+$(eval $(call gb_CustomTarget_add_dependencies,rsc/source/parser,\
+	rsc/source/parser/rscyacc.y \
+))
+
 # vim: set noet sw=4 ts=4:
