@@ -81,7 +81,7 @@ class WWD_General(WebWizardDialog):
             return None
         else:
             return \
-                WWD_General.settings.cp_DefaultSession.cp_Content.cp_Documents.getElementAt(s[0])
+                WWD_General.settings.cp_DefaultSession.cp_Content.cp_Documents.childrenList[s[0]]
 
     '''
     how many documents are in the list?

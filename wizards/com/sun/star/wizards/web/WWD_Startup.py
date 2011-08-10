@@ -110,13 +110,13 @@ class WWD_Startup(WWD_General):
         self.ilLayouts.listModel = WWD_General.settings.cp_Layouts
         self.ilLayouts.create(self)
         #COMMENTED
-        #self.checkContent(WWD_General.settings.cp_DefaultSession.cp_Content, Task("", "", 99999), self.xUnoDialog)
+        self.checkContent(WWD_General.settings.cp_DefaultSession.cp_Content, None, self.xUnoDialog)
         #saved sessions, styles, combobox save session.
         # also set the chosen saved session...
         self.fillLists()
         self.makeDataAware()
 
-        #self.updateUI()
+        self.updateUI()
 
         # fill the documents listbox.
         self.fillDocumentList(self.settings.cp_DefaultSession.cp_Content)
@@ -194,7 +194,7 @@ class WWD_Startup(WWD_General):
         DataAware.updateUIs(self.genAware)
         DataAware.updateUIs(self.pubAware)
         self.sessionNameDA.updateUI()
-        checkPublish()
+        self.checkPublish()
 
     '''
     create the peer, add roadmap,
@@ -226,8 +226,7 @@ class WWD_Startup(WWD_General):
             self.stylePreview = StylePreview(
                 self.xMSF, WWD_General.settings.workPath)
             self.stylePreview.refresh(
-                WWD_General.settings.cp_DefaultSession.getStyle(
-                    WWD_General.settings.cp_Styles),
+                WWD_General.settings.cp_DefaultSession.getStyle(),
                 WWD_General.settings.cp_DefaultSession.cp_Design.cp_BackgroundImage)
             self.dpStylePreview.setDocument(
                 self.stylePreview.htmlFilename, DocumentPreview.PREVIEW_MODE)
@@ -391,7 +390,7 @@ class WWD_Startup(WWD_General):
         '''
         self.designAware.append(UnoDataAware.attachListBox(
             WWD_General.settings.cp_DefaultSession.cp_Design,
-            "Style", self.lstStyles, False))
+            "cp_Style", self.lstStyles, False))
         #page 6 : site general props
         self.genAware.append(UnoDataAware.attachEditControl(
             WWD_General.settings.cp_DefaultSession.cp_GeneralInfo,
@@ -401,10 +400,10 @@ class WWD_Startup(WWD_General):
             "cp_Description", self.txtSiteDesc, True))
         self.genAware.append(UnoDataAware.attachDateControl(
             WWD_General.settings.cp_DefaultSession.cp_GeneralInfo,
-            "CreationDate", self.dateSiteCreated, False))
+            "cp_CreationDate", self.dateSiteCreated, False))
         self.genAware.append(UnoDataAware.attachDateControl(
             WWD_General.settings.cp_DefaultSession.cp_GeneralInfo,
-            "UpdateDate", self.dateSiteUpdate, False))
+            "cp_UpdateDate", self.dateSiteUpdate, False))
         self.genAware.append(UnoDataAware.attachEditControl(
             WWD_General.settings.cp_DefaultSession.cp_GeneralInfo,
             "cp_Email", self.txtEmail, True))
@@ -412,12 +411,12 @@ class WWD_Startup(WWD_General):
             WWD_General.settings.cp_DefaultSession.cp_GeneralInfo,
             "cp_Copyright", self.txtCopyright, True))
         #page 7 : publishing
-        self.pubAware.append(self.pubAware_(
-            LOCAL_PUBLISHER, self.chkLocalDir, self.txtLocalDir, False))
-        self.pubAware.append(self.pubAware_(
-            FTP_PUBLISHER, self.chkFTP, self.lblFTP, True))
-        self.pubAware.append(self.pubAware_(
-            ZIP_PUBLISHER, self.chkZip, self.txtZip, False))
+        self.pubAware_(
+            LOCAL_PUBLISHER, self.chkLocalDir, self.txtLocalDir, False)
+        self.pubAware_(
+            FTP_PUBLISHER, self.chkFTP, self.lblFTP, True)
+        self.pubAware_(
+            ZIP_PUBLISHER, self.chkZip, self.txtZip, False)
         self.sessionNameDA = UnoDataAware.attachEditControl(
             WWD_General.settings.cp_DefaultSession, "cp_Name",
             self.cbSaveSettings, True)
@@ -435,11 +434,12 @@ class WWD_Startup(WWD_General):
         uda = UnoDataAware.attachCheckBox(p, "cp_Publish", checkbox, True)
         uda.Inverse = True
         uda.disableObjects = [textbox]
-        #COMMENTED
-        '''if isLabel:
-            aux = UnoDataAware.attachLabel(p, "URL", textbox, False)
+        self.pubAware.append(uda)
+        if isLabel:
+            aux = UnoDataAware.attachLabel(p, "cp_URL", textbox, False)
         else:
-            aux = UnoDataAware.attachEditControl(p, "URL", textbox, False)'''
+            aux = UnoDataAware.attachEditControl(p, "cp_URL", textbox, False)
+        self.pubAware.append(aux)
 
     '''
     Session load methods
@@ -620,17 +620,17 @@ class WWD_Startup(WWD_General):
     def updateBackgroundText(self):
         bg = \
             WWD_General.settings.cp_DefaultSession.cp_Design.cp_BackgroundImage
-        if bg is None or bg.equals(""):
+        if bg is None or bg == "":
             bg = self.resources.resBackgroundNone
         else:
             bg = FileAccess.getPathFilename(getFileAccess().getPath(bg, None))
 
         Helper.setUnoPropertyValue(
-            txtBackground.Model, PropertyNames.PROPERTY_LABEL, bg)
+            self.txtBackground.Model, PropertyNames.PROPERTY_LABEL, bg)
 
     def updateIconsetText(self):
         iconset = WWD_General.settings.cp_DefaultSession.cp_Design.cp_IconSet
-        if iconset is None or iconset.equals(""):
+        if iconset is None or iconset == "":
             iconsetName = self.resources.resIconsetNone
         else:
             IconSet = WWD_General.settings.cp_IconSets.getElement(iconset)
@@ -651,8 +651,11 @@ class WWD_Startup(WWD_General):
 
     def refreshStylePreview(self):
         try:
-            updateBackgroundText()
-            self.stylePreview.refresh(settings.cp_DefaultSession.getStyle(), WWD_General.settings.cp_DefaultSession.cp_Design.cp_BackgroundImage)
-            self.dpStylePreview.reload(xMSF)
+            WWD_General.settings.cp_DefaultSession.cp_Design.cp_Style = \
+                "style" + \
+                str(WWD_General.settings.cp_DefaultSession.cp_Design.cp_Style)
+            self.updateBackgroundText()
+            self.stylePreview.refresh(WWD_General.settings.cp_DefaultSession.getStyle(), WWD_General.settings.cp_DefaultSession.cp_Design.cp_BackgroundImage)
+            self.dpStylePreview.reload(self.xMSF)
         except Exception:
             traceback.print_exc()

@@ -408,7 +408,7 @@ class WebWizardDialog(WizardDialog):
         self.insertLabel("lblBackground", WebWizardDialog.PROPNAMES_LBL,
             (8, self.resources.reslblBackground, "lblBackground",
                 97, 46, 5, 51, 70))
-        self.insertLabel("txtBackground",
+        self.txtBackground = self.insertLabel("txtBackground",
             ("Border",
                 PropertyNames.PROPERTY_HEIGHT,
                 PropertyNames.PROPERTY_LABEL,

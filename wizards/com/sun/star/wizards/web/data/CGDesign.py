@@ -20,19 +20,3 @@ class CGDesign(ConfigGroup):
 
     def createDOM(self, parent):
         return XMLHelper.addElement(parent, "design", (0,), (0,))
-
-    def getStyle(self):
-        style = root.cp_Styles.getElement(self.cp_Style)
-        return [root.cp_Styles.getIndexOf(style)]
-
-    def setStyle(self, newStyle):
-        o = root.cp_Styles.getElementAt(newStyle[0])
-        self.cp_Style = root.cp_Styles.getKey(o)
-
-    def getLayout(self):
-        layout = root.cp_Layouts.getElement(self.cp_Layout)
-        return layout.cp_Index
-
-    def setLayout(self, layoutIndex):
-        layout = root.cp_Layouts.getElementAt(layoutIndex)
-        self.cp_Layout = root.cp_Layouts.getKey(layout)

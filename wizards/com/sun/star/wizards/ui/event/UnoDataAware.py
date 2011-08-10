@@ -72,6 +72,7 @@ class UnoDataAware(DataAware):
         checkBox.addItemListener(ItemListenerProcAdapter(method))
         return uda
 
+    @classmethod
     def attachLabel(self, data, prop, label, field):
         return UnoDataAware(data, prop, label, PropertyNames.PROPERTY_LABEL)
 

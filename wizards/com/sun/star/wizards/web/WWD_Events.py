@@ -1,6 +1,8 @@
 import traceback
 from common.Desktop import Desktop
 from WWD_Startup import *
+from BackgroundsDialog import BackgroundsDialog
+from IconsDialog import IconsDialog
 
 '''
 This class implements the ui-events of the
@@ -13,6 +15,9 @@ session methods.
 '''
 
 class WWD_Events(WWD_Startup):
+
+    iconsDialog = None
+    bgDialog = None
 
     '''
     He - my constructor !
@@ -46,7 +51,7 @@ class WWD_Events(WWD_Startup):
         pass
 
     def enterStep(self, old, newStep):
-        if (old == 1):
+        if old == 1:
             sessionToLoad = ""
             s = Helper.getUnoPropertyValue(lstLoadWWD_Startup.settings.Model, "SelectedItems")
             if s.length == 0 or s[0] == 0:
@@ -103,7 +108,7 @@ class WWD_Events(WWD_Startup):
             if sessionToLoad == "":
                 setSaveSessionName(session)
 
-            mount(session, task, False, sd.xControl)
+            mount(session, task, False, sd.self.xUnoDialog)
             checkSteps()
             self.currentSession = sessionToLoad
             '''while task.getStatus() <= task.getMax():
@@ -133,7 +138,7 @@ class WWD_Events(WWD_Startup):
             return
 
         confirm = AbstractErrorHandler.showMessage(
-            self.xMSF, xControl.Peer, resources.resDelSessionConfirm,
+            self.xMSF, self.xUnoDialog.Peer, resources.resDelSessionConfirm,
             ErrorHandler.ERROR_QUESTION_NO)
         if confirm:
             try:
@@ -190,7 +195,7 @@ class WWD_Events(WWD_Startup):
             #the same type of document is chosen.
         elif oldDoc is None or oldDoc.appType != doc.appType:
             self.fillExportList(WWD_Startup.settings.getExporters(doc.appType))
-        # do nothing
+
         WWD_Startup.selectedDoc = s
         self.mountList(doc, self.docAware)
         self.disableDocUpDown()
@@ -295,22 +300,23 @@ class WWD_Events(WWD_Startup):
 
     def chooseBackground(self):
         try:
-            setEnabled(btnBackgrounds, False)
-            if self.bgDialog == None:
-                self.bgDialog = BackgroundsDialog(
-                    self.xMSF, WWD_Startup.settings.cp_BackgroundImages, resources)
-                self.bgDialog.createWindowPeer(xControl.Peer)
+            self.setEnabled(self.btnBackgrounds, False)
+            if WWD_Events.bgDialog is None:
+                WWD_Events.bgDialog = BackgroundsDialog(
+                    self.xMSF, WWD_Startup.settings.cp_BackgroundImages,
+                    self.resources)
+                WWD_Events.bgDialog.createWindowPeer(self.xUnoDialog.Peer)
 
-            self.bgDialog.setSelected(
+            WWD_Events.bgDialog.setSelected(
                 WWD_Startup.settings.cp_DefaultSession.cp_Design.cp_BackgroundImage)
-            i = self.bgDialog.executeDialog(WWD_Events.this)
+            i = WWD_Events.bgDialog.executeDialogFromParent(self)
             if i == 1:
                 #ok
-                setBackground(self.bgDialog.getSelected())
-        except Exception, ex:
-            ex.printStackTrace()
+                setBackground(WWD_Events.bgDialog.getSelected())
+        except Exception:
+            traceback.print_exc()
         finally:
-            setEnabled(btnBackgrounds, True)
+            self.setEnabled(btnBackgrounds, True)
 
     '''
     invoked when the BackgorundsDialog is "OKed".
@@ -320,7 +326,8 @@ class WWD_Events(WWD_Startup):
         if background == None:
             background = ""
 
-        WWD_Startup.settings.cp_DefaultSession.cp_Design.cp_BackgroundImage = background
+        WWD_Startup.settings.cp_DefaultSession.cp_Design.cp_BackgroundImage \
+            = background
         refreshStylePreview()
 
     '''
@@ -329,22 +336,23 @@ class WWD_Events(WWD_Startup):
 
     def chooseIconset(self):
         try:
-            setEnabled(btnIconSets, False)
-            if self.iconsDialog == None:
-                self.iconsDialog = IconsDialog(
-                    self.xMSF, WWD_Startup.settings.cp_IconSets, resources)
-                self.iconsDialog.createWindowPeer(xControl.Peer)
+            self.setEnabled(self.btnIconSets, False)
+            if WWD_Events.iconsDialog is None:
+                WWD_Events.iconsDialog = IconsDialog(
+                    self.xMSF, WWD_Startup.settings.cp_IconSets,
+                    self.resources)
+                WWD_Events.iconsDialog.createWindowPeer(self.xUnoDialog.Peer)
 
-            self.iconsDialog.setIconset(
+            WWD_Events.iconsDialog.setIconset(
                 WWD_Startup.settings.cp_DefaultSession.cp_Design.cp_IconSet)
-            i = self.iconsDialog.executeDialog(WWD_Events.this)
+            i = WWD_Events.iconsDialog.executeDialogFromParent(self)
             if i == 1:
                 #ok
-                setIconset(self.iconsDialog.getIconset())
-        except Exception, ex:
-            ex.printStackTrace()
+                self.setIconset(WWD_Events.iconsDialog.getIconset())
+        except Exception:
+            traceback.print_exc()
         finally:
-            setEnabled(btnIconSets, True)
+            self.setEnabled(btnIconSets, True)
 
     '''
     invoked when the Iconsets Dialog is OKed.
@@ -485,7 +493,7 @@ class WWD_Events(WWD_Startup):
                         message = resources.resLocalTragetNotEmpty.replace(
                             "%FILENAME", path)
                         result = AbstractErrorHandler.showMessage(
-                            self.xMSF, xControl.Peer, message,
+                            self.xMSF, self.xUnoDialog.Peer, message,
                             ErrorHandler.MESSAGE_WARNING,
                             ErrorHandler.BUTTONS_YES_NO, ErrorHandler.DEF_NO,
                             ErrorHandler.RESULT_YES)
@@ -497,7 +505,7 @@ class WWD_Events(WWD_Startup):
                     message = resources.resLocalTargetExistsAsfile.replace(
                         "%FILENAME", path)
                     AbstractErrorHandler.showMessage(
-                        self.xMSF, xControl.Peer, message,
+                        self.xMSF, self.xUnoDialog.Peer, message,
                         ErrorHandler.ERROR_PROCESS_FATAL)
                     return False
 
@@ -508,7 +516,7 @@ class WWD_Events(WWD_Startup):
                     "%FILENAME", path)
                 try:
                     result = AbstractErrorHandler.showMessage(
-                        self.xMSF, xControl.Peer, message,
+                        self.xMSF, self.xUnoDialog.Peer, message,
                         ErrorHandler.ERROR_QUESTION_YES)
                 except Exception, ex:
                     ex.printStackTrace()
@@ -523,7 +531,7 @@ class WWD_Events(WWD_Startup):
                     message = resources.resLocalTargetCouldNotCreate.replace(
                         "%FILENAME", path)
                     AbstractErrorHandler.showMessage(
-                        self.xMSF, xControl.Peer, message,
+                        self.xMSF, self.xUnoDialog.Peer, message,
                         ErrorHandler.ERROR_PROCESS_FATAL)
                     return False
 
@@ -537,7 +545,7 @@ class WWD_Events(WWD_Startup):
                     message = resources.resZipTargetIsDir.replace(
                         "%FILENAME", path)
                     AbstractErrorHandler.showMessage(
-                        self.xMSF, xControl.Peer, message,
+                        self.xMSF, self.xUnoDialog.Peer, message,
                         ErrorHandler.ERROR_PROCESS_FATAL)
                     return False
                 else:
@@ -546,7 +554,7 @@ class WWD_Events(WWD_Startup):
                         message = resources.resZipTargetExists.replace(
                             "%FILENAME", path)
                         result = AbstractErrorHandler.showMessage(
-                            self.xMSF, xControl.Peer, message,
+                            self.xMSF, self.xUnoDialog.Peer, message,
                             ErrorHandler.ERROR_QUESTION_YES)
                         if not result:
                             return False
@@ -571,7 +579,7 @@ class WWD_Events(WWD_Startup):
                         message = resources.resFTPTargetNotEmpty.replace(
                             "%FILENAME", path)
                         result = AbstractErrorHandler.showMessage(
-                            self.xMSF, xControl.Peer, message,
+                            self.xMSF, self.xUnoDialog.Peer, message,
                             ErrorHandler.ERROR_QUESTION_CANCEL)
                         if not result:
                             return result
@@ -581,7 +589,7 @@ class WWD_Events(WWD_Startup):
                     message = resources.resFTPTargetExistsAsfile.replace(
                         "%FILENAME", path)
                     AbstractErrorHandler.showMessage(
-                        self.xMSF, xControl.Peer, message,
+                        self.xMSF, self.xUnoDialog.Peer, message,
                         ErrorHandler.ERROR_PROCESS_FATAL)
                     return False
 
@@ -591,7 +599,7 @@ class WWD_Events(WWD_Startup):
                 message = resources.resFTPTargetCreate.replace(
                     "%FILENAME", path)
                 result = AbstractErrorHandler.showMessage(
-                    self.xMSF, xControl.Peer, message,
+                    self.xMSF, self.xUnoDialog.Peer, message,
                     ErrorHandler.ERROR_QUESTION_YES)
                 if not result:
                     return result
@@ -603,7 +611,7 @@ class WWD_Events(WWD_Startup):
                     message = resources.resFTPTargetCouldNotCreate.replace(
                         "%FILENAME", path)
                     AbstractErrorHandler.showMessage(
-                        self.xMSF, xControl.Peer, message,
+                        self.xMSF, self.xUnoDialog.Peer, message,
                         ErrorHandler.ERROR_PROCESS_FATAL)
                     return False
 
@@ -630,7 +638,7 @@ class WWD_Events(WWD_Startup):
                 node = Configuration.getNode(name, conf)
                 if node != None:
                     if not AbstractErrorHandler.showMessage(
-                            self.xMSF, xControl.Peer,
+                            self.xMSF, self.xUnoDialog.Peer,
                             resources.resSessionExists.replace("${NAME}", name),
                             ErrorHandler.ERROR_NORMAL_IGNORE):
                         return False
@@ -693,13 +701,13 @@ class WWD_Events(WWD_Startup):
             message = resources.resFinishedSuccess.replace(
                 "%FILENAME", targets)
             AbstractErrorHandler.showMessage(
-                self.xMSF, xControl.Peer, message, ErrorHandler.ERROR_MESSAGE)
+                self.xMSF, self.xUnoDialog.Peer, message, ErrorHandler.ERROR_MESSAGE)
             if self.exitOnCreate:
                 self.xDialog.endExecute()
 
         else:
             AbstractErrorHandler.showMessage(
-                self.xMSF, xControl.Peer, resources.resFinishedNoSuccess,
+                self.xMSF, self.xUnoDialog.Peer, resources.resFinishedNoSuccess,
                 ErrorHandler.ERROR_WARNING)
 
     def cancel(self):
@@ -812,7 +820,7 @@ class WWD_Events(WWD_Startup):
             getFileAccess().delete(p.cp_URL)
 
         try:
-            eh = ProcessErrorHandler(xMSF, xControl.Peer, resources)
+            eh = ProcessErrorHandler(xMSF, self.xUnoDialog.Peer, resources)
             self.process = Process(settings, xMSF, eh)
             pd = getStatusDialog()
             pd.setRenderer(ProcessStatusRenderer (resources))
@@ -834,11 +842,11 @@ class WWD_Events(WWD_Startup):
             self.dpStylePreview.dispose()
             self.stylePreview.cleanup()
 
-            if self.bgDialog is not None:
-                self.bgDialog.xComponent.dispose()
+            if WWD_Events.bgDialog is not None:
+                WWD_Events.bgDialog.xComponent.dispose()
 
-            if self.iconsDialog is not None:
-                self.iconsDialog.xComponent.dispose()
+            if WWD_Events.iconsDialog is not None:
+                WWD_Events.iconsDialog.xComponent.dispose()
 
             if ftpDialog is not None:
                 ftpDialog.xComponent.dispose()
@@ -901,10 +909,12 @@ class WWD_Events(WWD_Startup):
                 '''
                 so - i check each document and if it is ok I add it.
                 The failed variable is used only to calculate the place to add -
-                Error reporting to the user is (or should (-:  )done in the checkDocument(...) method
+                Error reporting to the user is (or should (-:  )
+                done in the checkDocument(...) method
                 '''
                 if WWD_Startup.checkDocument(self.xMSF, doc, None, self.xC):
-                    WWD_General.settings.cp_DefaultSession.cp_Content.cp_Documents.add(offset + i - failed - start, doc)
+                    WWD_General.settings.cp_DefaultSession.cp_Content.cp_Documents.add(
+                        offset + i - failed - start, doc)
                 else:
                     failed += 1
 

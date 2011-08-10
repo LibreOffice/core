@@ -23,9 +23,21 @@ class ImageList(object):
     HIDE_PAGE = 99
     TRANSPARENT = -1
     LINE_HEIGHT = 8
-    IMAGE_PROPS = ("Border", "BackgroundColor", PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, "ScaleImage", PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, "Tabstop", PropertyNames.PROPERTY_WIDTH)
-    MOVE_SELECTION = (PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP)
+    IMAGE_PROPS = ("Border", "BackgroundColor",
+        PropertyNames.PROPERTY_HEIGHT,
+        PropertyNames.PROPERTY_HELPURL,
+        PropertyNames.PROPERTY_POSITION_X,
+        PropertyNames.PROPERTY_POSITION_Y, "ScaleImage",
+        PropertyNames.PROPERTY_STEP,
+        PropertyNames.PROPERTY_TABINDEX, "Tabstop",
+        PropertyNames.PROPERTY_WIDTH)
+    MOVE_SELECTION = (PropertyNames.PROPERTY_POSITION_X,
+        PropertyNames.PROPERTY_POSITION_Y,
+        PropertyNames.PROPERTY_STEP)
     lock = RLock()
+    listModel = []
+    btnNext = None
+    btnBack = None
 
     def __init__(self):
         self.benabled = True
@@ -52,29 +64,88 @@ class ImageList(object):
         imageTextHeight = self.imageTextLines * ImageList.LINE_HEIGHT
         opeerConfig = PeerConfig(dialog)
         self.MOVE_SELECTION_VALS[2] = self.step
-        imgContainer = dialog.insertImage(self.name + "lblContainer",("BackgroundColor", "Border", PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_WIDTH), (ImageList.BACKGROUND_COLOR, 1, (self.imageSize.Height + self.gap.Height) * self.rows + self.gap.Height + imageTextHeight + 1,self.pos.Width,self.pos.Height, self.step, (self.imageSize.Width + self.gap.Width) * self.cols + self.gap.Width))
+        imgContainer = dialog.insertImage(
+            self.name + "lblContainer",
+            ("BackgroundColor", "Border",
+                PropertyNames.PROPERTY_HEIGHT,
+                PropertyNames.PROPERTY_POSITION_X,
+                PropertyNames.PROPERTY_POSITION_Y,
+                PropertyNames.PROPERTY_STEP,
+                PropertyNames.PROPERTY_WIDTH),
+            (ImageList.BACKGROUND_COLOR, 1,
+                (self.imageSize.Height + self.gap.Height) \
+                    * self.rows + self.gap.Height + imageTextHeight + 1,
+                self.pos.Width,self.pos.Height, self.step,
+                (self.imageSize.Width + self.gap.Width) \
+                    * self.cols + self.gap.Width))
         opeerConfig.setPeerProperties(imgContainer,"MouseTransparent", True)
 
         if self.rowSelect:
-            selectionWidth = (self.imageSize.Width + self.gap.Width) * self.cols - self.gap.Width + (self.selectionGap.Width * 2)
+            selectionWidth = (self.imageSize.Width + self.gap.Width) \
+                * self.cols - self.gap.Width + (self.selectionGap.Width * 2)
         else:
             selectionWidth = self.imageSize.Width + (self.selectionGap.Width * 2)
 
-        self.grbxSelectedImage = dialog.insertLabel(self.name + "_grbxSelected", ("BackgroundColor", "Border", PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, "Tabstop", PropertyNames.PROPERTY_WIDTH), (ImageList.TRANSPARENT, 1, self.imageSize.Height + (self.selectionGap.Height * 2), #height
-        0, #posx
-        0, #posy
-        self.step, True, selectionWidth))
+        self.grbxSelectedImage = dialog.insertLabel(
+            self.name + "_grbxSelected",
+            ("BackgroundColor", "Border",
+                PropertyNames.PROPERTY_HEIGHT,
+                PropertyNames.PROPERTY_POSITION_X,
+                PropertyNames.PROPERTY_POSITION_Y,
+                PropertyNames.PROPERTY_STEP, "Tabstop",
+                PropertyNames.PROPERTY_WIDTH),
+            (ImageList.TRANSPARENT, 1,
+                self.imageSize.Height + (self.selectionGap.Height * 2),
+                0, #height
+                0, #posx
+                0, #posy
+                self.step, True, selectionWidth))
         xWindow = self.grbxSelectedImage
         xWindow.addMouseListener(None)
-        pNames1 = (PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, "Tabstop", PropertyNames.PROPERTY_WIDTH)
-        self.lblImageText = dialog.insertLabel(self.name + "_imageText", pNames1, (imageTextHeight, "", self.pos.Width + 1, self.pos.Height + (self.imageSize.Height + self.gap.Height) * self.rows + self.gap.Height, self.step, 0, False, self.cols * (self.imageSize.Width + self.gap.Width) + self.gap.Width - 2))
+        pNames1 = (PropertyNames.PROPERTY_HEIGHT,
+                PropertyNames.PROPERTY_HELPURL,
+                PropertyNames.PROPERTY_POSITION_X,
+                PropertyNames.PROPERTY_POSITION_Y,
+                PropertyNames.PROPERTY_STEP,
+                PropertyNames.PROPERTY_TABINDEX, "Tabstop",
+                PropertyNames.PROPERTY_WIDTH)
+        self.lblImageText = dialog.insertLabel(
+            self.name + "_imageText", pNames1,
+            (imageTextHeight, "", self.pos.Width + 1,
+                self.pos.Height + (self.imageSize.Height + self.gap.Height) \
+                    * self.rows + self.gap.Height, self.step, 0, False,
+                self.cols * (self.imageSize.Width + self.gap.Width) \
+                    + self.gap.Width - 2))
         if self.showButtons:
-            self.btnBack = dialog.insertButton(self.name + "_btnBack", "prevPage", this, pNames1, (14, HelpIds.getHelpIdString((self.helpURL + 1)), self.pos.Width, self.pos.Height + (self.imageSize.Height + self.gap.Height) * self.rows + self.gap.Height + imageTextHeight + 1, self.step, self.tabIndex + 1, True, 14))
-            self.btnNext = dialog.insertButton(self.name + "_btnNext", "nextPage", this, pNames1, (14, HelpIds.getHelpIdString((self.helpURL + 1)), self.pos.Width + (self.imageSize.Width + self.gap.Width) * self.cols + self.gap.Width - 14 + 1, self.pos.Height + (self.imageSize.Height + self.gap.Height) * self.rows + self.gap.Height + imageTextHeight + 1, self.step, self.tabIndex + 2, True, 14))
-            self.lblCounter = dialog.insertLabel(self.name + "_lblCounter", pNames1, (ImageList.LINE_HEIGHT, "", self.pos.Width + 14 + 1, self.pos.Height + (self.imageSize.Height + self.gap.Height) * self.rows + self.gap.Height + imageTextHeight + ((14 - ImageList.LINE_HEIGHT) / 2), self.step, 0, False, self.cols * (self.imageSize.Width + self.gap.Width) + self.gap.Width - 2 * 14 - 1))
+            ImageList.btnBack = dialog.insertButton(
+                self.name + "_btnBack", "prevPage", pNames1,
+                (14, HelpIds.getHelpIdString((self.helpURL + 1)),
+                self.pos.Width, self.pos.Height + \
+                    (self.imageSize.Height + self.gap.Height) * \
+                    self.rows + self.gap.Height + imageTextHeight + 1,
+                self.step, self.tabIndex + 1, True, 14), self)
+            ImageList.btnNext = dialog.insertButton(
+                self.name + "_btnNext", "nextPage", pNames1,
+                (14, HelpIds.getHelpIdString((self.helpURL + 1)),
+                self.pos.Width + (self.imageSize.Width + self.gap.Width) * \
+                    self.cols + self.gap.Width - 14 + 1,
+                self.pos.Height + (self.imageSize.Height + self.gap.Height) \
+                    * self.rows + self.gap.Height + imageTextHeight + 1,
+                self.step, self.tabIndex + 2, True, 14), self)
+            self.lblCounter = dialog.insertLabel(
+                self.name + "_lblCounter", pNames1,
+                (ImageList.LINE_HEIGHT, "", self.pos.Width + 14 + 1,
+                    self.pos.Height + (self.imageSize.Height + self.gap.Height) \
+                        * self.rows + self.gap.Height + imageTextHeight + \
+                        ((14 - ImageList.LINE_HEIGHT) / 2),
+                    self.step, 0, False, self.cols * \
+                        (self.imageSize.Width + self.gap.Width) + \
+                        self.gap.Width - 2 * 14 - 1))
             Helper.setUnoPropertyValue(self.lblCounter.Model, "Align", 1)
-            Helper.setUnoPropertyValue(self.btnBack.Model, PropertyNames.PROPERTY_LABEL, "<")
-            Helper.setUnoPropertyValue(self.btnNext.Model, PropertyNames.PROPERTY_LABEL, ">")
+            Helper.setUnoPropertyValue(ImageList.btnBack.Model,
+                PropertyNames.PROPERTY_LABEL, "<")
+            Helper.setUnoPropertyValue(ImageList.btnNext.Model,
+                PropertyNames.PROPERTY_LABEL, ">")
 
         self.m_aImages = [None] * (self.rows * self.cols)
 
@@ -84,23 +155,32 @@ class ImageList(object):
 
         self.refreshImages()
         #COMMENTED
-        #self.listModel.addListDataListener(None)
+        #ImageList.listModel.addListDataListener(None)
 
     #used for optimization
 
     def createImage(self, dialog, _row, _col):
         imageName = self.name + "_image" + str(_row * self.cols + _col)
-        image = dialog.insertImage(imageName, ImageList.IMAGE_PROPS, (ImageList.NO_BORDER, ImageList.BACKGROUND_COLOR, self.imageSize.Height, HelpIds.getHelpIdString(self.helpURL + 1), self.getImagePosX(_col), self.getImagePosY(_row), self.scaleImages, self.step, self.tabIndex, False, self.imageSize.Width))
+        image = dialog.insertImage(
+            imageName, ImageList.IMAGE_PROPS,
+            (ImageList.NO_BORDER, ImageList.BACKGROUND_COLOR,
+                self.imageSize.Height,
+                HelpIds.getHelpIdString(self.helpURL + 1),
+                self.getImagePosX(_col), self.getImagePosY(_row),
+                self.scaleImages, self.step, self.tabIndex,
+                False, self.imageSize.Width))
         #COMMENTED
         image.addMouseListener(None)
         image.addKeyListener(None)
         return image
 
     def getImagePosX(self, col):
-        return self.pos.Width + col * (self.imageSize.Width + self.gap.Width) + self.gap.Width
+        return self.pos.Width + col * \
+            (self.imageSize.Width + self.gap.Width) + self.gap.Width
 
     def getImagePosY(self, row):
-        return self.pos.Height + row * (self.imageSize.Height + self.gap.Height) + self.gap.Height
+        return self.pos.Height + row * \
+            (self.imageSize.Height + self.gap.Height) + self.gap.Height
 
     def refreshImages(self):
         if self.showButtons:
@@ -114,14 +194,18 @@ class ImageList(object):
 
         focusable = True
         for index, item in enumerate(self.m_aImages):
-            oResources = self.renderer.getImageUrls(self.getObjectFor(index))
+            #COMMENTED
+            oResources = None #self.renderer.getImageUrls(self.getObjectFor(index))
             if oResources is not None:
                 if len(oResources) == 1:
-                    Helper.setUnoPropertyValue(item.Model, PropertyNames.PROPERTY_IMAGEURL, oResources[0])
+                    Helper.setUnoPropertyValue(item.Model,
+                PropertyNames.PROPERTY_IMAGEURL, oResources[0])
                 elif len(oResources) == 2:
-                    self.oUnoDialog.getPeerConfiguration().setImageUrl(item.Model, oResources[0], oResources[1])
+                    self.oUnoDialog.getPeerConfiguration().setImageUrl(
+                        item.Model, oResources[0], oResources[1])
 
-                Helper.setUnoPropertyValue(item.Model, "Tabstop", bool(focusable))
+                Helper.setUnoPropertyValue(
+                    item.Model, "Tabstop", bool(focusable))
                 if self.refreshOverNull:
                     item.Visible =  True
 
@@ -130,23 +214,29 @@ class ImageList(object):
         self.refreshSelection()
 
     def refreshCounterText(self):
-        Helper.setUnoPropertyValue(self.lblCounter.Model, PropertyNames.PROPERTY_LABEL, self.counterRenderer.render(Counter (self.pageStart + 1, pageEnd(), self.listModel.getSize())))
+        Helper.setUnoPropertyValue(
+                self.lblCounter.Model, PropertyNames.PROPERTY_LABEL,
+                self.counterRenderer.render(
+                    self.Counter (self.pageStart + 1,
+                        self.pageEnd, len(ImageList.listModel))))
 
     def pageEnd(self):
         i = self.pageStart + self.cols * self.rows
-        if i > self.listModel.getSize() - 1:
-            return self.listModel.getSize()
+        if i > ImageList.listModel.getSize() - 1:
+            return ImageList.listModel.getSize()
         else:
             return i
 
     def refreshSelection(self):
-        if self.selected < self.pageStart or self.selected >= (self.pageStart + self.rows * self.cols):
+        if self.selected < self.pageStart or \
+                self.selected >= (self.pageStart + self.rows * self.cols):
             self.hideSelection()
         else:
             self.moveSelection(self.getImageIndexFor(self.selected))
 
     def hideSelection(self):
-        Helper.setUnoPropertyValue(self.grbxSelectedImage.Model, PropertyNames.PROPERTY_STEP, ImageList.HIDE_PAGE)
+        Helper.setUnoPropertyValue(self.grbxSelectedImage.Model,
+                PropertyNames.PROPERTY_STEP, ImageList.HIDE_PAGE)
         self.grbxSelectedImage.Visible = False
 
     '''
@@ -161,30 +251,36 @@ class ImageList(object):
         else:
             col = image - (row * self.cols)
 
-        self.MOVE_SELECTION_VALS[0] = Integer.Integer_unknown(getImagePosX(col) - self.selectionGap.Width)
-        self.MOVE_SELECTION_VALS[1] = Integer.Integer_unknown(getImagePosY(row) - self.selectionGap.Height)
-        Helper.setUnoPropertyValues(self.grbxSelectedImage.Model, ImageList.MOVE_SELECTION, self.MOVE_SELECTION_VALS)
-        if (Helper.getUnoPropertyValue(self.dialogModel, PropertyNames.PROPERTY_STEP)).shortValue() == self.step.shortValue():
+        self.MOVE_SELECTION_VALS[0] = \
+            (self.getImagePosX(col) - self.selectionGap.Width)
+        self.MOVE_SELECTION_VALS[1] = \
+            (self.getImagePosY(row) - self.selectionGap.Height)
+        Helper.setUnoPropertyValues(
+            self.grbxSelectedImage.Model, ImageList.MOVE_SELECTION,
+            self.MOVE_SELECTION_VALS)
+        if (Helper.getUnoPropertyValue(self.dialogModel,
+                PropertyNames.PROPERTY_STEP)) == self.step:
             self.grbxSelectedImage.Visible = True
             #now focus...
 
-        for i in enumerate(self.m_aImages):
-            if i != image:
-                self.defocus(i)
+        for index,item in enumerate(self.m_aImages):
+            if index != image:
+                self.defocus(index)
             else:
-                Helper.setUnoPropertyValue(self.m_aImages[image].Model, "Tabstop", True)
+                Helper.setUnoPropertyValue(
+                    self.m_aImages[image].Model, "Tabstop", True)
 
     '''
     @param i
-    @return the Object in the list model corresponding to the given image index.
+    @return the Object in the list model corresponding to the given image index
     '''
 
     def getObjectFor(self, i):
         ii = self.getIndexFor(i)
-        if self.listModel.getSize() <= ii:
+        if ImageList.listModel.getSize() <= ii:
             return None
         else:
-            return self.listModel.getElementAt(ii)
+            return ImageList.listModel.getElementAt(ii)
 
     '''
     @param i
@@ -202,7 +298,8 @@ class ImageList(object):
             if event.getIndex1() <= self.selected:
                 self.selected += event.getIndex1() - event.getIndex0() + 1
 
-        if event.getIndex0() < self.pageStart or event.getIndex1() < (self.pageStart + getRows() + getCols()):
+        if event.getIndex0() < self.pageStart or \
+                event.getIndex1() < (self.pageStart + getRows() + getCols()):
             refreshImages()
 
     '''
@@ -233,8 +330,8 @@ class ImageList(object):
     '''
 
     def fireItemSelected(self):
-        with AgendaTemplate.lock:
-            if self.itemListenerList == None:
+        with ImageList.lock:
+            if self.itemListenerList is None:
                 return
 
             auxlist = self.itemListenerList.clone()
@@ -242,43 +339,41 @@ class ImageList(object):
         for i in auxlist:
             i.itemStateChanged(None)
 
-    def setSelected(self, i):
-        if self.rowSelect and (i >= 0):
-            i = (i / self.cols) * self.cols
+    def setSelected(self, _object):
+        if not isinstance(_object, int):
+            _object = -1
+            if _object is not None:
+                for index, item in enumerate(ImageList.listModel):
+                    if item == _object:
+                        _object = index
+                        return
 
-        if self.selected == i:
+        if self.rowSelect and (_object >= 0):
+            _object = (_object / self.cols) * self.cols
+
+        if self.selected == _object:
             return
 
-        self.selected = i
-        refreshImageText()
-        refreshSelection()
-        fireItemSelected()
-
-    def setSelected(self, object):
-        if object == None:
-            setSelected(-1)
-        else:
-            i = 0
-            while i < getListModel().getSize():
-                if getListModel().getElementAt(i).equals(object):
-                    setSelected(i)
-                    return
-
-                i += 1
-
-        setSelected(-1)
+        self.selected = _object
+        self.refreshImageText()
+        self.refreshSelection()
+        #COMMENTED
+        #self.fireItemSelected()
 
     def refreshImageText(self):
         if self.selected >= 0:
-            item = getListModel().getElementAt(self.selected)
+            #COMMENTED
+            item = None #ImageList.listModel.getElementAt(self.selected)
         else:
             item = None
 
-        Helper.setUnoPropertyValue(self.lblImageText.Model, PropertyNames.PROPERTY_LABEL, " " + self.renderer.render(item))
+        Helper.setUnoPropertyValue(
+                self.lblImageText.Model, PropertyNames.PROPERTY_LABEL,
+                " " + self.renderer.render(item))
 
 
     def nextPage(self):
-        if self.pageStart < getListModel().getSize() - self.rows * self.cols:
+        if self.pageStart < listModel().getSize() - self.rows * self.cols:
             setPageStart(self.pageStart + self.rows * self.cols)
 
     def prevPage(self):
@@ -292,55 +387,62 @@ class ImageList(object):
         setPageStart(i)
 
     def enableButtons(self):
-        enable(self.btnNext, bool(self.pageStart + self.rows * self.cols < self.listModel.getSize()))
-        enable(self.btnBack, bool(self.pageStart > 0))
+        self.enable(
+            ImageList.btnNext,
+            bool(self.pageStart + self.rows * self.cols < len(ImageList.listModel)))
+        self.enable(ImageList.btnBack, bool(self.pageStart > 0))
 
     def enable(self, control, enable):
-        Helper.setUnoPropertyValue(control.Model, PropertyNames.PROPERTY_ENABLED, enable)
+        Helper.setUnoPropertyValue(control.Model,
+                PropertyNames.PROPERTY_ENABLED, enable)
 
     def setBorder(self, control, border):
         Helper.setUnoPropertyValue(control.Model, "Border", border)
 
     def getImageFromEvent(self, event):
         image = (event).Source
-        controlName = Helper.getUnoPropertyValue(image.Model, PropertyNames.PROPERTY_NAME)
+        controlName = Helper.getUnoPropertyValue(image.Model,
+                PropertyNames.PROPERTY_NAME)
         return Integer.valueOf(controlName.substring(6 + self.name.length()))
 
     def mousePressed(self, event):
         image = getImageFromEvent(event)
         index = getIndexFor(image)
-        if index < self.listModel.getSize():
+        if index < ImageList.listModel.getSize():
             focus(image)
             setSelected(index)
 
     def getSelectedObjects(self):
-        return[getListModel().getElementAt(self.selected)]
+        return[listModel().getElementAt(self.selected)]
 
     class SimpleCounterRenderer:
 
         def render(self, counter):
-            return "" + (counter).start + ".." + (counter).end + "/" + (counter).max
+            return \
+                "" + (counter).start + ".." + (counter).end + "/" + (counter).max
 
-    '''class Counter:
+    class Counter(object):
 
-        def __init__self, start_, end_, max_):
+        def __init__(self, start_, end_, max_):
             self.start = start_
             self.end = end_
-            self.max = max_'''
+            self.max = max_
 
     def getSelectedObject(self):
         if self.selected >= 0:
-            return getListModel().getElementAt(self.selected)
+            return listModel().getElementAt(self.selected)
         return None
 
     def showSelected(self):
         oldPageStart = self.pageStart
         if self.selected != -1:
-            self.pageStart = (self.selected / self.m_aImages.length) * self.m_aImages.length
+            self.pageStart = \
+                (self.selected / len(self.m_aImages)) * len(self.m_aImages)
 
         if oldPageStart != self.pageStart:
-            enableButtons()
-            refreshImages()
+            #COMMENTED
+            #self.enableButtons()
+            self.refreshImages()
 
     def keyPressed(self, ke):
         image = getImageFromEvent(ke)
@@ -355,54 +457,25 @@ class ImageList(object):
             changeFocus(image, newImage)
 
     def isFocusable(self, image):
-        return (image >= 0) and (getIndexFor(image) < self.listModel.getSize())
+        return (image >= 0) and \
+            (getIndexFor(image) < ImageList.listModel.getSize())
 
     def changeFocus(self, oldFocusImage, newFocusImage):
         focus(newFocusImage)
         defocus(oldFocusImage)
 
-    def getKeyMove(self, ke, row, col):
-        '''switch (ke.KeyCode)
-            {
-                case Key.UP:
-                    if (row > 0)
-                    {
-                        return 0 - getCols();
-                    }
-                    break;
-                case Key.DOWN:
-                    if (row < getRows() - 1)
-                    {
-                        return getCols();
-                    }
-                    break;
-                case Key.LEFT:
-                    if (col > 0)
-                    {
-                        return -1;
-                    }
-                    break;
-                case Key.RIGHT:
-                    if (col < getCols() - 1)
-                    {
-                        return 1;
-                    }
-                    break;
-                case Key.SPACE:
-                    select(ke);
-            }
-            return 0;'''
-
     def select(self, ke):
         setSelected(getIndexFor(getImageFromEvent(ke)))
 
     def focus(self, image):
-        Helper.setUnoPropertyValue(self.m_aImages[image].Model, "Tabstop", True)
+        Helper.setUnoPropertyValue(
+            self.m_aImages[image].Model, "Tabstop", True)
         xWindow = self.m_aImages[image]
         xWindow.setFocus()
 
     def defocus(self, image):
-        Helper.setUnoPropertyValue(self.m_aImages[image].Model, "Tabstop", False)
+        Helper.setUnoPropertyValue(
+            self.m_aImages[image].Model, "Tabstop", False)
 
     '''jump to the given item (display the screen
     that contains the given item).
@@ -411,7 +484,7 @@ class ImageList(object):
 
     def display(self, i):
         isAux = (getCols() * getRows())
-        ps = (self.listModel.getSize() / isAux) * isAux
+        ps = (ImageList.listModel.getSize() / isAux) * isAux
         setPageStart(ps)
 
     def setenabled(self, b):
@@ -422,8 +495,8 @@ class ImageList(object):
         UnoDialog2.setEnabled(self.grbxSelectedImage, b)
         UnoDialog2.setEnabled(self.lblImageText, b)
         if self.showButtons:
-            UnoDialog2.setEnabled(self.btnBack, b)
-            UnoDialog2.setEnabled(self.btnNext, b)
+            UnoDialog2.setEnabled(ImageList.btnBack, b)
+            UnoDialog2.setEnabled(ImageList.btnNext, b)
             UnoDialog2.setEnabled(self.lblCounter, b)
 
         self.benabled = b

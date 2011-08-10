@@ -36,11 +36,11 @@ class CGSession(ConfigGroup):
         else:
             return "800"
 
-    def getLayout(self, layouts):
-        return layouts.getElement(self.cp_Design.cp_Layout)
+    def getLayout(self):
+        return self. root.cp_Layouts.getElement(self.cp_Design.cp_Layout)
 
-    def getStyle(self, styles):
-        return styles.getElement(self.cp_Design.cp_Style)
+    def getStyle(self):
+        return self.root.cp_Styles.getElement(self.cp_Design.cp_Style)
 
     def createDOM(self):
         factory = DocumentBuilderFactory.newInstance()

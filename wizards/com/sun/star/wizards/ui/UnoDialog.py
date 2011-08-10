@@ -262,7 +262,7 @@ class UnoDialog(object):
     '''
 
     def executeDialogFromParent(self, parent):
-        return self.executeDialog(parent.xWindow.PosSize)
+        return self.executeDialog(parent.xUnoDialog.PosSize)
 
     '''
     @param XComponent
