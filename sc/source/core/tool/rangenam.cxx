@@ -36,6 +36,7 @@
 #include <memory>
 #include <unotools/collatorwrapper.hxx>
 #include <unotools/transliterationwrapper.hxx>
+#include <com/sun/star/sheet/NamedRangeFlag.hpp>
 
 #include "token.hxx"
 #include "tokenarray.hxx"
@@ -530,6 +531,16 @@ bool ScRangeData::HasReferences() const
 {
     pCode->Reset();
     return pCode->GetNextReference() != NULL;
+}
+
+sal_uInt32 ScRangeData::GetUnoType() const
+{
+    sal_uInt32 nUnoType = 0;
+    if ( HasType(RT_CRITERIA) )  nUnoType |= com::sun::star::sheet::NamedRangeFlag::FILTER_CRITERIA;
+    if ( HasType(RT_PRINTAREA) ) nUnoType |= com::sun::star::sheet::NamedRangeFlag::PRINT_AREA;
+    if ( HasType(RT_COLHEADER) ) nUnoType |= com::sun::star::sheet::NamedRangeFlag::COLUMN_HEADER;
+    if ( HasType(RT_ROWHEADER) ) nUnoType |= com::sun::star::sheet::NamedRangeFlag::ROW_HEADER;
+    return nUnoType;
 }
 
 // bei TransferTab von einem in ein anderes Dokument anpassen,

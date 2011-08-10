@@ -66,6 +66,7 @@ class SfxItemPool;
 class ScAddress;
 class ScBaseCell;
 class ScXMLCachedRowAttrAccess;
+class ScRangeName;
 
 typedef std::vector< com::sun::star::uno::Reference < com::sun::star::drawing::XShapes > > ScMyXShapesVec;
 
@@ -202,9 +203,11 @@ class ScXMLExport : public SvXMLExport
     void WriteScenario();   // core implementation
     void WriteTheLabelRanges(const com::sun::star::uno::Reference< com::sun::star::sheet::XSpreadsheetDocument >& xSpreadDoc);
     void WriteLabelRanges( const com::sun::star::uno::Reference< com::sun::star::container::XIndexAccess >& xRangesIAccess, sal_Bool bColumn );
-    void WriteNamedExpressions(const com::sun::star::uno::Reference <com::sun::star::sheet::XSpreadsheetDocument>& xSpreadDoc);
+    void WriteNamedExpressions();
+    void WriteNamedRange(ScRangeName* pRangeName);
     void WriteExternalRefCaches();
     void WriteConsolidation();  // core implementation
+
 
     void CollectUserDefinedNamespaces(const SfxItemPool* pPool, sal_uInt16 nAttrib);
 

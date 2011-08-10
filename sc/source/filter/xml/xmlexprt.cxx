@@ -1730,7 +1730,7 @@ void ScXMLExport::_ExportContent()
         }
     }
     WriteExternalRefCaches();
-    WriteNamedExpressions(xSpreadDoc);
+    WriteNamedExpressions();
     aExportDatabaseRanges.WriteDatabaseRanges();
     ScXMLExportDataPilot aExportDataPilot(*this);
     aExportDataPilot.WriteDataPilots(xSpreadDoc);
@@ -2837,31 +2837,12 @@ void ScXMLExport::WriteTable(sal_Int32 nTable, const Reference<sheet::XSpreadshe
     if (pDoc)
     {
         // Export sheet-local named ranges.
-        ScRangeName* pRN = pDoc->GetRangeName(nTable);
-        if (pRN && !pRN->empty())
+        ScRangeName* pRangeName = pDoc->GetRangeName(nTable);
+        if (pRangeName && !pRangeName->empty())
         {
-            SvXMLElementExport aElemNEs(*this, XML_NAMESPACE_TABLE, XML_NAMED_EXPRESSIONS, sal_True, sal_True);
-            ScRangeName::const_iterator itr = pRN->begin(), itrEnd = pRN->end();
-            for (; itr != itrEnd; ++itr)
-            {
-                CheckAttrList();
-
-                // name
-                OUString aStr = itr->GetName();
-                AddAttribute(XML_NAMESPACE_TABLE, XML_NAME, aStr);
-
-                // base cell
-                ScAddress aPos = itr->GetPos();
-                aPos.Format(aStr, SCA_ABS_3D, pDoc, FormulaGrammar::CONV_OOO);
-                AddAttribute(XML_NAMESPACE_TABLE, XML_BASE_CELL_ADDRESS, aStr);
-
-                // expression
-                itr->GetSymbol(aStr, pDoc->GetStorageGrammar());
-                AddAttribute(XML_NAMESPACE_TABLE, XML_EXPRESSION, aStr);
-
-                SvXMLElementExport aElemNR(*this, XML_NAMESPACE_TABLE, XML_NAMED_EXPRESSION, sal_True, sal_True);
-            }
+            WriteNamedRange(pRangeName);
         }
+
     }
 }
 
@@ -3728,58 +3709,38 @@ void ScXMLExport::WriteLabelRanges( const uno::Reference< container::XIndexAcces
     }
 }
 
-void ScXMLExport::WriteNamedExpressions(const com::sun::star::uno::Reference <com::sun::star::sheet::XSpreadsheetDocument>& xSpreadDoc)
+void ScXMLExport::WriteNamedExpressions()
 {
-    uno::Reference <beans::XPropertySet> xPropertySet (xSpreadDoc, uno::UNO_QUERY);
-    if (!xPropertySet.is())
-        return;
-
-    uno::Reference <sheet::XNamedRanges> xNamedRanges(xPropertySet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_NAMEDRANGES))), uno::UNO_QUERY);
-    CheckAttrList();
-    if (!xNamedRanges.is())
-        return;
-
-    uno::Sequence <rtl::OUString> aRangesNames(xNamedRanges->getElementNames());
-    sal_Int32 nNamedRangesCount = aRangesNames.getLength();
-    if (nNamedRangesCount <= 0)
-        return;
-
     if (!pDoc)
         return;
-
     ScRangeName* pNamedRanges = pDoc->GetRangeName();
+    WriteNamedRange(pNamedRanges);
+}
+
+void ScXMLExport::WriteNamedRange(ScRangeName* pRangeName)
+{
+    //write a global or local ScRangeName
     SvXMLElementExport aElemNEs(*this, XML_NAMESPACE_TABLE, XML_NAMED_EXPRESSIONS, sal_True, sal_True);
-    for (sal_Int32 i = 0; i < nNamedRangesCount; ++i)
+    for (ScRangeName::iterator it = pRangeName->begin(); it != pRangeName->end(); ++it)
     {
-        CheckAttrList();
-        rtl::OUString sNamedRange(aRangesNames[i]);
-        uno::Reference <sheet::XNamedRange> xNamedRange(xNamedRanges->getByName(sNamedRange), uno::UNO_QUERY);
-        if (!xNamedRange.is())
-            continue;
+        AddAttribute(sAttrName, it->GetName());
 
-        uno::Reference <container::XNamed> xNamed (xNamedRange, uno::UNO_QUERY);
-        uno::Reference <sheet::XCellRangeReferrer> xCellRangeReferrer (xNamedRange, uno::UNO_QUERY);
-        if (!xNamed.is() || !xCellRangeReferrer.is())
-            continue;
+        rtl::OUString sBaseCellAddress;
+        ScRangeStringConverter::GetStringFromAddress( sBaseCellAddress, it->GetPos(), pDoc,
+                            FormulaGrammar::CONV_OOO, ' ', false, SCA_ABS_3D);
+        AddAttribute(XML_NAMESPACE_TABLE, XML_BASE_CELL_ADDRESS, sBaseCellAddress);
 
-        rtl::OUString sOUName(xNamed->getName());
-        AddAttribute(sAttrName, sOUName);
-
-        OUString sOUBaseCellAddress;
-        ScRangeStringConverter::GetStringFromAddress( sOUBaseCellAddress,
-            xNamedRange->getReferencePosition(), pDoc, FormulaGrammar::CONV_OOO, ' ', sal_False, SCA_ABS_3D );
-        AddAttribute(XML_NAMESPACE_TABLE, XML_BASE_CELL_ADDRESS, sOUBaseCellAddress);
-
-        const ScRangeData* pNamedRange = pNamedRanges->findByName(sOUName);
-        String sContent;
-        pNamedRange->GetSymbol(sContent, pDoc->GetStorageGrammar());
-        rtl::OUString sOUTempContent(sContent);
-        uno::Reference <table::XCellRange> xCellRange(xCellRangeReferrer->getReferredCells());
-        if(xCellRange.is())
+        String sSymbol;
+        it->GetSymbol(sSymbol, pDoc->GetStorageGrammar());
+        rtl::OUString sTempSymbol(sSymbol);
+        ScRange aRange;
+        if (it->IsReference(aRange))
         {
-            rtl::OUString sOUContent(sOUTempContent.copy(1, sOUTempContent.getLength() - 2));
-            AddAttribute(XML_NAMESPACE_TABLE, XML_CELL_RANGE_ADDRESS, sOUContent);
-            sal_Int32 nRangeType(xNamedRange->getType());
+
+            rtl::OUString sContent(sTempSymbol.copy(1, sTempSymbol.getLength() -2 ));
+            AddAttribute(XML_NAMESPACE_TABLE, XML_CELL_RANGE_ADDRESS, sContent);
+
+            sal_Int32 nRangeType = it->GetUnoType();
             rtl::OUStringBuffer sBufferRangeType;
             if ((nRangeType & sheet::NamedRangeFlag::COLUMN_HEADER) == sheet::NamedRangeFlag::COLUMN_HEADER)
                 sBufferRangeType.append(GetXMLToken(XML_REPEAT_COLUMN));
@@ -3805,10 +3766,11 @@ void ScXMLExport::WriteNamedExpressions(const com::sun::star::uno::Reference <co
             if (sRangeType.getLength())
                 AddAttribute(XML_NAMESPACE_TABLE, XML_RANGE_USABLE_AS, sRangeType);
             SvXMLElementExport aElemNR(*this, XML_NAMESPACE_TABLE, XML_NAMED_RANGE, sal_True, sal_True);
+
         }
         else
         {
-            AddAttribute(XML_NAMESPACE_TABLE, XML_EXPRESSION, sOUTempContent);
+            AddAttribute(XML_NAMESPACE_TABLE, XML_EXPRESSION, sTempSymbol);
             SvXMLElementExport aElemNE(*this, XML_NAMESPACE_TABLE, XML_NAMED_EXPRESSION, sal_True, sal_True);
         }
     }
