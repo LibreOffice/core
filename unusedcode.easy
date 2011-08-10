@@ -136,7 +136,6 @@ CommunicationLinkList::Insert(CommunicationLink const*&, unsigned short&)
 CommunicationLinkList::Insert(CommunicationLink const**, unsigned short)
 CommunicationLinkList::Insert(CommunicationLinkList const*, unsigned short, unsigned short)
 CommunicationLinkList::Remove(CommunicationLink const*&, unsigned short)
-Config::WriteKey(ByteString const&, String const&, unsigned short)
 Container::GetObjectPtr(unsigned long)
 Container::GetPos(void const*, unsigned long, unsigned char) const
 Container::Insert(void*, void*)

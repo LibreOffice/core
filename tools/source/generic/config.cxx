@@ -1079,15 +1079,6 @@ void Config::WriteKey( const ByteString& rKey, const ByteString& rStr )
 
 // -----------------------------------------------------------------------
 
-void Config::WriteKey( const ByteString& rKey, const UniString& rValue, rtl_TextEncoding eEncoding )
-{
-    if ( mpData->mbIsUTF8BOM  )
-        eEncoding = RTL_TEXTENCODING_UTF8;
-    WriteKey( rKey, ByteString( rValue, eEncoding ) );
-}
-
-// -----------------------------------------------------------------------
-
 void Config::DeleteKey( const ByteString& rKey )
 {
     // Config-Daten evt. updaten

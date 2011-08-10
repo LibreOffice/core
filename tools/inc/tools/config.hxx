@@ -74,7 +74,6 @@ public:
     UniString           ReadKey( const ByteString& rKey, rtl_TextEncoding eEncoding ) const;
     ByteString          ReadKey( const ByteString& rKey, const ByteString& rDefault ) const;
     void                WriteKey( const ByteString& rKey, const ByteString& rValue );
-    void                WriteKey( const ByteString& rKey, const UniString& rValue, rtl_TextEncoding eEncoding );
     void                DeleteKey( const ByteString& rKey );
     ByteString          GetKeyName( sal_uInt16 nKey ) const;
     ByteString          ReadKey( sal_uInt16 nKey ) const;
