@@ -162,7 +162,7 @@ using namespace ::com::sun::star;
 #define SUBCOL_FLY      0x10    //Helplines inside fly frames
 #define SUBCOL_SECT     0x20    //Helplines inside sections
 
-//----- Klassen zum Sammeln von Umrandungen und Hilfslinien ---
+// Classes collecting the border lines and help lines
 class SwLineRect : public SwRect
 {
     Color aColor;
@@ -204,7 +204,6 @@ public:
     void PaintLines  ( OutputDevice *pOut );
     void LockLines( sal_Bool bLock );
 
-    /// OD 13.08.2002 - correct type of function
     sal_uInt16 Free() const { return nFree; }
 };
 
@@ -217,13 +216,9 @@ public:
     inline void Ins( const SwRect &rRect, const sal_uInt8 nSCol );
 };
 
-//----------------- End Klassen Umrandungen ----------------------
+//----------------- End of classes for border lines ----------------------
 
 static ViewShell *pGlobalShell = 0;
-
-//Wenn durchsichtige FlyInCnts im PaintBackground gepainted werden so soll der
-//Hintergrund nicht mehr retouchiert werden.
-//static sal_Bool bLockFlyBackground = sal_False;
 
 //Wenn vom Fly ein Metafile abgezogen wird, so soll nur der FlyInhalt und vor
 //nur hintergrund vom FlyInhalt gepaintet werden.
@@ -236,28 +231,27 @@ static OutputDevice *pFlyMetafileOut = 0;
 static SwFlyFrm *pRetoucheFly  = 0;
 static SwFlyFrm *pRetoucheFly2 = 0;
 
-//Groesse eines Pixel und die Haelfte davon. Wird jeweils bei Eintritt in
-//SwRootFrm::Paint neu gesetzt.
+// Sizes of a pixel and the corresponding halves. Will be reset when
+// entering SwRootFrm::Paint
 static long nPixelSzW = 0, nPixelSzH = 0;
 static long nHalfPixelSzW = 0, nHalfPixelSzH = 0;
 static long nMinDistPixelW = 0, nMinDistPixelH = 0;
 
-//Aktueller Zoomfaktor
+// Current zoom factor
 static double aScaleX = 1.0;
 static double aScaleY = 1.0;
 static double aMinDistScale = 0.73;
 static double aEdgeScale = 0.5;
 
-//In pLines werden Umrandungen waehrend des Paint gesammelt und soweit
-//moeglich zusammengefasst.
-//In pSubsLines werden Hilfslinien gesammelt und zusammengefasst. Diese
-//werden vor der Ausgabe mit pLines abgeglichen, so dass moeglichst keine
-//Umrandungen von den Hilfslinen verdeckt werden.
-//bTablines ist waerend des Paints einer Tabelle sal_True.
+// The borders will be collected in pLines during the Paint and later
+// possibly merge them.
+// The help lines will be collected and merged in pSubsLines. These will
+// be compared with pLines before the work in order to avoid help lines
+// to hide borders.
+// bTablines is sal_True during the Paint of a table.
 static SwLineRects *pLines = 0;
 static SwSubsRects *pSubsLines = 0;
-// OD 18.11.2002 #99672# - global variable for sub-lines of body, header, footer,
-// section and footnote frames.
+// global variable for sub-lines of body, header, footer, section and footnote frames.
 static SwSubsRects *pSpecSubsLines = 0;
 
 static SfxProgress *pProgress = 0;
@@ -270,13 +264,13 @@ static sal_Bool bTableHack = sal_False;
 //Um das teure Ermitteln der RetoucheColor zu optimieren
 Color aGlobalRetoucheColor;
 
-//Statics fuer Umrandungsalignment setzen.
-// OD 05.05.2003 #107169# - adjustment for 'small' twip-to-pixel relations:
+// Set borders alignment statics.
+// adjustment for 'small' twip-to-pixel relations:
 // For 'small' twip-to-pixel relations (less then 2:1)
 // values of <nHalfPixelSzW> and <nHalfPixelSzH> are set to ZERO.
 void SwCalcPixStatics( OutputDevice *pOut )
 {
-    // OD 30.04.2003 #107169# - determine 'small' twip-to-pixel relation
+    // determine 'small' twip-to-pixel relation
     sal_Bool bSmallTwipToPxRelW = sal_False;
     sal_Bool bSmallTwipToPxRelH = sal_False;
     {
@@ -300,7 +294,7 @@ void SwCalcPixStatics( OutputDevice *pOut )
     if( !nPixelSzH )
         nPixelSzH = 1;
 
-    // OD 06.05.2003 #107169# - consider 'small' twip-to-pixel relations
+    // consider 'small' twip-to-pixel relations
     if ( !bSmallTwipToPxRelW )
     {
         nHalfPixelSzW = nPixelSzW / 2 + 1;
@@ -309,7 +303,7 @@ void SwCalcPixStatics( OutputDevice *pOut )
     {
         nHalfPixelSzW = 0;
     }
-    // OD 06.05.2003 #107169# - consider 'small' twip-to-pixel relations
+    // consider 'small' twip-to-pixel relations
     if ( !bSmallTwipToPxRelH )
     {
         nHalfPixelSzH = nPixelSzH / 2 + 1;
@@ -339,7 +333,6 @@ class SwSavePaintStatics
                        *pSFlyOnlyDraw;
     SwLineRects        *pSLines;
     SwSubsRects        *pSSubsLines;
-    // #123196#
     SwSubsRects*        pSSpecSubsLines;
     SfxProgress        *pSProgress;
     long                nSPixelSzW,
@@ -365,7 +358,6 @@ SwSavePaintStatics::SwSavePaintStatics() :
     pSFlyOnlyDraw       ( pFlyOnlyDraw      ),
     pSLines             ( pLines            ),
     pSSubsLines         ( pSubsLines        ),
-    // #123196#
     pSSpecSubsLines     ( pSpecSubsLines    ),
     pSProgress          ( pProgress         ),
     nSPixelSzW          ( nPixelSzW         ),
@@ -390,7 +382,6 @@ SwSavePaintStatics::SwSavePaintStatics() :
     aEdgeScale = 0.5;
     pLines = 0;
     pSubsLines = 0;
-    // #123196#
     pSpecSubsLines = 0L;
     pProgress = 0;
 }
@@ -405,7 +396,6 @@ SwSavePaintStatics::~SwSavePaintStatics()
     pFlyOnlyDraw       = pSFlyOnlyDraw;
     pLines             = pSLines;
     pSubsLines         = pSSubsLines;
-    // #123196#
     pSpecSubsLines     = pSSpecSubsLines;
     pProgress          = pSProgress;
     nPixelSzW          = nSPixelSzW;
@@ -419,7 +409,7 @@ SwSavePaintStatics::~SwSavePaintStatics()
     aScaleY            = aSScaleY;
 }
 
-//----------------- Implementierungen fuer Tabellenumrandung --------------
+//----------------- Implementation for the table borders --------------
 
 SV_IMPL_VARARR( SwLRects, SwLineRect );
 
@@ -438,13 +428,13 @@ SwLineRect::SwLineRect( const SwRect &rRect, const Color *pCol, const SvxBorderS
 
 sal_Bool SwLineRect::MakeUnion( const SwRect &rRect )
 {
-    //Es wurde bereits ausserhalb geprueft, ob die Rechtecke die gleiche
-    //Ausrichtung (horizontal bzw. vertikal), Farbe usw. besitzen.
-    if ( Height() > Width() ) //Vertikale Linie
+    // It has already been tested outside, whether the rectangles have
+    // the same orientation (horizontal or vertical), color, etc.
+    if ( Height() > Width() ) //Vertical line
     {
         if ( Left()  == rRect.Left() && Width() == rRect.Width() )
         {
-            //Zusammenfassen wenn kein Luecke zwischen den Linien ist.
+            // Merge when there is no gap between the lines
             const long nAdd = nPixelSzW + nHalfPixelSzW;
             if ( Bottom() + nAdd >= rRect.Top() &&
                  Top()    - nAdd <= rRect.Bottom()  )
@@ -459,7 +449,7 @@ sal_Bool SwLineRect::MakeUnion( const SwRect &rRect )
     {
         if ( Top()  == rRect.Top() && Height() == rRect.Height() )
         {
-            //Zusammenfassen wenn kein Luecke zwischen den Linien ist.
+            // Merge when there is no gap between the lines
             const long nAdd = nPixelSzW + nHalfPixelSzW;
             if ( Right() + nAdd >= rRect.Left() &&
                  Left()  - nAdd <= rRect.Right() )
@@ -481,7 +471,7 @@ void SwLineRects::AddLineRect( const SwRect &rRect, const Color *pCol, const Svx
     for ( sal_uInt16 i = Count(); i ; )
     {
         SwLineRect &rLRect = operator[](--i);
-        //Pruefen von Ausrichtung, Farbe, Tabelle.
+        // Test for the orientation, color, table
         if ( rLRect.GetTab() == pTab &&
              !rLRect.IsPainted() && rLRect.GetSubColor() == nSCol &&
              (rLRect.Height() > rLRect.Width()) == (rRect.Height() > rRect.Width()) &&
@@ -499,7 +489,7 @@ void SwLineRects::ConnectEdges( OutputDevice *pOut )
 {
     if ( pOut->GetOutDevType() != OUTDEV_PRINTER )
     {
-        //Fuer einen zu kleinen Zoom arbeite ich nicht.
+        // I'm not doing anything for a too small zoom
         if ( aScaleX < aEdgeScale || aScaleY < aEdgeScale )
             return;
     }
@@ -530,7 +520,7 @@ void SwLineRects::ConnectEdges( OutputDevice *pOut )
             nL1c = rL1.Bottom(); nL1d = rL1.Right();
         }
 
-        //Alle moeglicherweise mit i1 zu verbindenden Linien einsammeln.
+        // Collect all lines to possibly link with i1
         for ( sal_uInt16 i2 = 0; i2 < Count(); ++i2 )
         {
             SwLineRect &rL2 = operator[](i2);
@@ -566,7 +556,7 @@ void SwLineRects::ConnectEdges( OutputDevice *pOut )
 
         sal_Bool bRemove = sal_False;
 
-        //Fuer jede Linie jede alle folgenden checken.
+        // For each line test all following ones.
         for ( sal_uInt16 k = 0; !bRemove && k < aCheck.Count(); ++k )
         {
             SwLineRect &rR1 = (SwLineRect&)*(SwLineRect*)aCheck[k];
@@ -586,13 +576,13 @@ void SwLineRects::ConnectEdges( OutputDevice *pOut )
                     {
                         pLA = &rR2; pLB = &rR1;
                     }
-                    //beschreiben k1 und k2 eine Doppellinie?
+                    // are k1 and k2 describing a double line?
                     if ( pLA && pLA->Bottom() + 60 > pLB->Top() )
                     {
                         if ( rL1.Top() < pLA->Top() )
                         {
                             if ( rL1.Bottom() == pLA->Bottom() )
-                                continue;   //kleiner Irrtum (woher?)
+                                continue;    //Small mistake (where?)
 
                             SwRect aIns( rL1 );
                             aIns.Bottom( pLA->Bottom() );
@@ -610,9 +600,9 @@ void SwLineRects::ConnectEdges( OutputDevice *pOut )
                         }
 
                         if ( rL1.Bottom() > pLB->Bottom() )
-                            rL1.Top( pLB->Top() );  //i1 nach oben verlaengern
+                            rL1.Top( pLB->Top() );  // extend i1 on the top
                         else
-                            bRemove = sal_True;         //abbrechen, i1 entfernen
+                            bRemove = sal_True;     //stopping, remove i1
                     }
                 }
                 else
@@ -627,13 +617,13 @@ void SwLineRects::ConnectEdges( OutputDevice *pOut )
                     {
                         pLA = &rR2; pLB = &rR1;
                     }
-                    //Liegt eine 'doppellinie' vor?
+                    // Is it double line?
                     if ( pLA && pLA->Right() + 60 > pLB->Left() )
                     {
                         if ( rL1.Left() < pLA->Left() )
                         {
                             if ( rL1.Right() == pLA->Right() )
-                                continue;   //kleiner irrtum
+                                continue;    //small error
 
                             SwRect aIns( rL1 );
                             aIns.Right( pLA->Right() );
@@ -660,31 +650,29 @@ void SwLineRects::ConnectEdges( OutputDevice *pOut )
         if ( bRemove )
         {
             Remove( static_cast<sal_uInt16>(i), 1 );
-            --i;            //keinen auslassen!
+            --i;            //Leave none!
         }
     }
 }
 
 inline void SwSubsRects::Ins( const SwRect &rRect, const sal_uInt8 nSCol )
 {
-    //Linien die kuerzer als die breiteste Linienbreite sind werden
-    //nicht aufgenommen.
+    // Lines that are shorted than the largest line width won't be inserted
     if ( rRect.Height() > DEF_LINE_WIDTH_4 || rRect.Width() > DEF_LINE_WIDTH_4 )
         Insert( SwLineRect( rRect, 0, SOLID, 0, nSCol ), Count());
 }
 
 void SwSubsRects::RemoveSuperfluousSubsidiaryLines( const SwLineRects &rRects )
 {
-    //Alle Hilfslinien, die sich mit irgendwelchen Umrandungen decken werden
-    //entfernt bzw. zerstueckelt..
+    // All help lines that are covered by any border will be removed or split
     for ( sal_uInt16 i = 0; i < Count(); ++i )
     {
-        // OD 18.11.2002 #99672# - get a copy instead of a reference, because
-        // an <insert> may destroy the object due to a necessary array resize.
+        // get a copy instead of a reference, because an <insert> may destroy
+        // the object due to a necessary array resize.
         const SwLineRect aSubsLineRect = SwLineRect( operator[](i) );
 
-        // OD 19.12.2002 #106318# - add condition <aSubsLineRect.IsLocked()>
-        // in order to consider only border lines, which are *not* locked.
+        // add condition <aSubsLineRect.IsLocked()> in order to consider only
+        // border lines, which are *not* locked.
         if ( aSubsLineRect.IsPainted() ||
              aSubsLineRect.IsLocked() )
             continue;
@@ -705,9 +693,8 @@ void SwSubsRects::RemoveSuperfluousSubsidiaryLines( const SwLineRects &rRects )
         {
             SwLineRect &rLine = rRects[k];
 
-            // OD 20.12.2002 #106318# - do *not* consider painted or locked
-            // border lines.
-            // OD 20.01.2003 #i1837# - locked border lines have to be considered.
+            // do *not* consider painted or locked border lines.
+            // #i1837# - locked border lines have to be considered.
             if ( rLine.IsLocked () )
                 continue;
 
@@ -819,15 +806,13 @@ void lcl_DrawDashedRect( OutputDevice * pOut, SwLineRect & rLRect )
 
 void SwLineRects::PaintLines( OutputDevice *pOut )
 {
-    //Painten der Umrandungen. Leider muessen wir zweimal durch.
-    //Einmal fuer die innenliegenden und einmal fuer die Aussenkanten
-    //der Tabellen.
+    // Paint the borders. Sadly two passes are needed.
+    // Once for the inside and once for the outside edges of tables
     if ( Count() != nLastCount )
     {
         // #i16816# tagged pdf support
         SwTaggedPDFHelper aTaggedPDFHelper( 0, 0, 0, *pOut );
 
-        // OD 2004-04-23 #116347#
         pOut->Push( PUSH_FILLCOLOR|PUSH_LINECOLOR );
         pOut->SetFillColor();
         pOut->SetLineColor();
@@ -851,13 +836,13 @@ void SwLineRects::PaintLines( OutputDevice *pOut )
                 continue;
             }
 
-            //Jetzt malen oder erst in der zweiten Runde?
+            // Paint it now or in the second pass?
             sal_Bool bPaint = sal_True;
             if ( rLRect.GetTab() )
             {
                 if ( rLRect.Height() > rLRect.Width() )
                 {
-                    //Senkrechte Kante, ueberlappt sie mit der TabellenKante?
+                    // Vertical edge, overlapping with the table edge?
                     SwTwips nLLeft  = rLRect.Left()  - 30,
                             nLRight = rLRect.Right() + 30,
                             nTLeft  = rLRect.GetTab()->Frm().Left() + rLRect.GetTab()->Prt().Left(),
@@ -867,7 +852,8 @@ void SwLineRects::PaintLines( OutputDevice *pOut )
                         bPaint = sal_False;
                 }
                 else
-                {   //Waagerechte Kante, ueberlappt sie mit der Tabellenkante?
+                {
+                    // Horizontal edge, overlapping with the table edge?
                     SwTwips nLTop    = rLRect.Top()    - 30,
                             nLBottom = rLRect.Bottom() + 30,
                             nTTop    = rLRect.GetTab()->Frm().Top()  + rLRect.GetTab()->Prt().Top(),
@@ -944,7 +930,7 @@ void SwSubsRects::PaintSubsidiary( OutputDevice *pOut,
         // #i16816# tagged pdf support
         SwTaggedPDFHelper aTaggedPDFHelper( 0, 0, 0, *pOut );
 
-        //Alle Hilfslinien, die sich fast decken entfernen (Tabellen)
+        // Remove all help line that are almost covered (tables)
         for ( sal_uInt16 i = 0; i < Count(); ++i )
         {
             SwLineRect &rLi = operator[](i);
@@ -966,8 +952,8 @@ void SwSubsRects::PaintSubsidiary( OutputDevice *pOut,
                                   (nLk < rLi.Left() && nLk+21 > rLi.Left())))
                             {
                                 Remove( k, 1 );
-                                //Nicht mit der inneren Schleife weiter, weil
-                                //das Array schrumpfen koennte!
+                                // don't continue with inner loop any more:
+                                // the array may shrink!
                                 --i; k = Count();
                             }
                         }
@@ -993,13 +979,11 @@ void SwSubsRects::PaintSubsidiary( OutputDevice *pOut,
 
         if ( Count() )
         {
-            // OD 2004-04-23 #116347#
             pOut->Push( PUSH_FILLCOLOR|PUSH_LINECOLOR );
             pOut->SetLineColor();
 
-            // OD 14.01.2003 #106660# - reset draw mode in high contrast
-            // mode in order to get fill color set at output device.
-            // Recover draw mode after draw of lines.
+            // Reset draw mode in high contrast mode in order to get fill color
+            // set at output device. Recover draw mode after draw of lines.
             // Necessary for the subsidiary lines painted by the fly frames.
             sal_uLong nOldDrawMode = pOut->GetDrawMode();
             if( pGlobalShell->GetWin() &&
@@ -1011,8 +995,7 @@ void SwSubsRects::PaintSubsidiary( OutputDevice *pOut,
             for ( sal_uInt16 i = 0; i < Count(); ++i )
             {
                 SwLineRect &rLRect = operator[](i);
-                // OD 19.12.2002 #106318# - add condition <!rLRect.IsLocked()>
-                // to prevent paint of locked subsidiary lines.
+                // Add condition <!rLRect.IsLocked()> to prevent paint of locked subsidiary lines.
                 if ( !rLRect.IsPainted() &&
                      !rLRect.IsLocked() )
                 {
@@ -1034,7 +1017,6 @@ void SwSubsRects::PaintSubsidiary( OutputDevice *pOut,
                 }
             }
 
-            // OD 14.01.2003 #106660# - recovering draw mode
             pOut->SetDrawMode( nOldDrawMode );
 
             pOut->Pop();
@@ -1045,8 +1027,8 @@ void SwSubsRects::PaintSubsidiary( OutputDevice *pOut,
 //-------------------------------------------------------------------------
 //Diverse Functions die in diesem File so verwendet werden.
 
-// OD 20.02.2003 - Note: function <SwAlignRect(..)> also used outside this file.
-// OD 29.04.2003 #107169# - correction: adjust rectangle on pixel level in order
+// Note: function <SwAlignRect(..)> also used outside this file.
+// Correction: adjust rectangle on pixel level in order
 //          to assure, that the border 'leaves its original pixel', if it has to.
 //          No prior adjustments for odd relation between pixel and twip.
 void MA_FASTCALL SwAlignRect( SwRect &rRect, const ViewShell *pSh )
@@ -1054,7 +1036,6 @@ void MA_FASTCALL SwAlignRect( SwRect &rRect, const ViewShell *pSh )
     if( !rRect.HasArea() )
         return;
 
-    // OD 03.09.2002 #102450#
     // Assure that view shell (parameter <pSh>) exists, if the output device
     // is taken from this view shell --> no output device, no alignment.
     // Output device taken from view shell <pSh>, if <bFlyMetafile> not set.
@@ -1066,12 +1047,12 @@ void MA_FASTCALL SwAlignRect( SwRect &rRect, const ViewShell *pSh )
     const OutputDevice *pOut = bFlyMetafile ?
                         pFlyMetafileOut : pSh->GetOut();
 
-    // OD 28.04.2003 #107169# - hold original rectangle in pixel
+    // Hold original rectangle in pixel
     const Rectangle aOrgPxRect = pOut->LogicToPixel( rRect.SVRect() );
-    // OD 29.04.2003 #107169# - determine pixel-center rectangle in twip
+    // Determine pixel-center rectangle in twip
     const SwRect aPxCenterRect( pOut->PixelToLogic( aOrgPxRect ) );
 
-    // OD 06.05.2003 #107169# - perform adjustments on pixel level.
+    // Perform adjustments on pixel level.
     SwRect aAlignedPxRect( aOrgPxRect );
     if ( rRect.Top() > aPxCenterRect.Top() )
     {
@@ -1097,8 +1078,7 @@ void MA_FASTCALL SwAlignRect( SwRect &rRect, const ViewShell *pSh )
         aAlignedPxRect.Right( aAlignedPxRect.Right() - 1 );
     }
 
-    // OD 11.10.2002 #103636# - consider negative width/height
-    // check, if aligned SwRect has negative width/height.
+    // Consider negative width/height check, if aligned SwRect has negative width/height.
     // If Yes, adjust it to width/height = 0 twip.
     // NOTE: A SwRect with negative width/height can occur, if the width/height
     //     of the given SwRect in twip was less than a pixel in twip and that
@@ -1112,10 +1092,9 @@ void MA_FASTCALL SwAlignRect( SwRect &rRect, const ViewShell *pSh )
     {
         aAlignedPxRect.Height(0);
     }
-    // OD 30.04.2003 #107169# - consider zero width/height
-    // For converting a rectangle from pixel to logic it needs a width/height.
-    // Thus, set width/height to one, if it's zero and correct this on the twip
-    // level after the conversion.
+    // Consider zero width/height for converting a rectangle from
+    // pixel to logic it needs a width/height. Thus, set width/height
+    // to one, if it's zero and correct this on the twip level after the conversion.
     sal_Bool bZeroWidth = sal_False;
     if ( aAlignedPxRect.Width() == 0 )
     {
@@ -1131,10 +1110,8 @@ void MA_FASTCALL SwAlignRect( SwRect &rRect, const ViewShell *pSh )
 
     rRect = pOut->PixelToLogic( aAlignedPxRect.SVRect() );
 
-    // OD 30.04.2003 #107169# - consider zero width/height and adjust calculated
-    // aligned twip rectangle.
-    // OD 19.05.2003 #109667# - reset width/height to zero; previous negative
-    // width/height haven't to be considered.
+    // Consider zero width/height and adjust calculated aligned twip rectangle.
+    // Reset width/height to zero; previous negative width/height haven't to be considered.
     if ( bZeroWidth )
     {
         rRect.Width(0);
@@ -1145,7 +1122,7 @@ void MA_FASTCALL SwAlignRect( SwRect &rRect, const ViewShell *pSh )
     }
 }
 
-/** OD 19.05.2003 #109667# - helper method for twip adjustments on pixel base
+/** Helper method for twip adjustments on pixel base
 
     method compares the x- or y-pixel position of two twip-point. If the x-/y-pixel
     positions are the same, the x-/y-pixel position of the second twip point is
@@ -1182,7 +1159,7 @@ void lcl_CompPxPosAndAdjustPos( const OutputDevice&  _rOut,
     }
 }
 
-/** OD 25.09.2002 #99739# - method to pixel-align rectangle for drawing graphic object
+/** Method to pixel-align rectangle for drawing graphic object
 
     Because for drawing a graphic left-top-corner and size coordinations are
     used, these coordinations have to be determined on pixel level.
@@ -1246,7 +1223,7 @@ void MA_FASTCALL lcl_CalcBorderRect( SwRect &rRect, const SwFrm *pFrm,
                                         const SwBorderAttrs &rAttrs,
                                         const sal_Bool bShadow )
 {
-    // OD 23.01.2003 #106386# - special handling for cell frames.
+    // Special handling for cell frames.
     // The printing area of a cell frame is completely enclosed in the frame area
     // and a cell frame has no shadow. Thus, for cell frames the calculated
     // area equals the frame area.
@@ -1278,8 +1255,7 @@ void MA_FASTCALL lcl_CalcBorderRect( SwRect &rRect, const SwFrm *pFrm,
                 SwTwips nDiff = rBox.GetTop() ?
                     rBox.CalcLineSpace( BOX_LINE_TOP ) :
                     ( rAttrs.IsBorderDist() ?
-                      // OD 23.01.2003 #106386# - increase of distance by
-                      // one twip is incorrect.
+                      // Increase of distance by one twip is incorrect.
                       rBox.GetDistance( BOX_LINE_TOP ) : 0 );
                 if( nDiff )
                     (rRect.*fnRect->fnSubTop)( nDiff );
@@ -1297,14 +1273,12 @@ void MA_FASTCALL lcl_CalcBorderRect( SwRect &rRect, const SwFrm *pFrm,
                     // the height of the last line
                     nDiff = ((SwTabFrm*)pFrm)->GetBottomLineSize();
                 }
-                // <-- collapsing
                 else
                 {
                     nDiff = rBox.GetBottom() ?
                     rBox.CalcLineSpace( BOX_LINE_BOTTOM ) :
                     ( rAttrs.IsBorderDist() ?
-                      // OD 23.01.2003 #106386# - increase of distance by
-                      // one twip is incorrect.
+                      // Increase of distance by one twip is incorrect.
                       rBox.GetDistance( BOX_LINE_BOTTOM ) : 0 );
                 }
                 if( nDiff )
@@ -1314,13 +1288,13 @@ void MA_FASTCALL lcl_CalcBorderRect( SwRect &rRect, const SwFrm *pFrm,
             if ( rBox.GetLeft() )
                 (rRect.*fnRect->fnSubLeft)( rBox.CalcLineSpace( BOX_LINE_LEFT ) );
             else if ( rAttrs.IsBorderDist() )
-                 // OD 23.01.2003 #106386# - increase of distance by one twip is incorrect.
+                 // Increase of distance by one twip is incorrect.
                 (rRect.*fnRect->fnSubLeft)( rBox.GetDistance( BOX_LINE_LEFT ) );
 
             if ( rBox.GetRight() )
                 (rRect.*fnRect->fnAddRight)( rBox.CalcLineSpace( BOX_LINE_RIGHT ) );
             else if ( rAttrs.IsBorderDist() )
-                 // OD 23.01.2003 #106386# - increase of distance by one twip is incorrect.
+                 // Increase of distance by one twip is incorrect.
                 (rRect.*fnRect->fnAddRight)( rBox.GetDistance( BOX_LINE_RIGHT ) );
 
             if ( bShadow && rAttrs.GetShadow().GetLocation() != SVX_SHADOW_NONE )
@@ -1345,9 +1319,8 @@ void MA_FASTCALL lcl_ExtendLeftAndRight( SwRect&                _rRect,
                                          const SwBorderAttrs&   _rAttrs,
                                          const SwRectFn&        _rRectFn )
 {
-    // OD 21.05.2003 #108789# - extend left/right border/shadow rectangle to
-    // bottom of previous frame/to top of next frame, if border/shadow is joined
-    // with previous/next frame.
+    // Extend left/right border/shadow rectangle to bottom of previous frame/to
+    // top of next frame, if border/shadow is joined with previous/next frame.
     if ( _rAttrs.JoinedWithPrev( _rFrm ) )
     {
         const SwFrm* pPrevFrm = _rFrm.GetPrev();
@@ -1373,7 +1346,7 @@ void MA_FASTCALL lcl_SubtractFlys( const SwFrm *pFrm, const SwPageFrm *pPage,
         const SwAnchoredObject* pAnchoredObj = rObjs[j];
         const SdrObject* pSdrObj = pAnchoredObj->GetDrawObj();
 
-        // OD 2004-01-15 #110582# - do not consider invisible objects
+        // Do not consider invisible objects
         if ( !pPage->GetFmt()->GetDoc()->IsVisibleLayerId( pSdrObj->GetLayer() ) )
             continue;
 
@@ -1395,12 +1368,12 @@ void MA_FASTCALL lcl_SubtractFlys( const SwFrm *pFrm, const SwPageFrm *pPage,
 
         //Bei zeichengebundenem Fly nur diejenigen betrachten, in denen er
         //nicht selbst verankert ist.
-        //#33429# Warum nur bei zeichengebundenen? Es macht doch nie Sinn
+        //Warum nur bei zeichengebundenen? Es macht doch nie Sinn
         //Rahmen abzuziehen in denen er selbst verankert ist oder?
         if ( pSelfFly && pSelfFly->IsLowerOf( pFly ) )
             continue;
 
-        //#57194# Und warum gilt das nicht analog fuer den RetoucheFly?
+        //Und warum gilt das nicht analog fuer den RetoucheFly?
         if ( pRetoucheFly && pRetoucheFly->IsLowerOf( pFly ) )
             continue;
 
@@ -1454,11 +1427,11 @@ void MA_FASTCALL lcl_SubtractFlys( const SwFrm *pFrm, const SwPageFrm *pPage,
         }
 
         //Wenn der Inhalt des Fly Transparent ist, wird er nicht abgezogen, es sei denn
-        //er steht im Hell-Layer (#31941#)
+        //er steht im Hell-Layer
         const IDocumentDrawModelAccess* pIDDMA = pFly->GetFmt()->getIDocumentDrawModelAccess();
         sal_Bool bHell = pSdrObj->GetLayer() == pIDDMA->GetHellId();
         if ( (bStopOnHell && bHell) ||
-             /// OD 05.08.2002 - change internal order of condition
+             /// Change internal order of condition
              ///    first check "!bHell", then "..->Lower()" and "..->IsNoTxtFrm()"
              ///    have not to be performed, if frame is in "Hell"
              ( !bHell && pFly->Lower() && pFly->Lower()->IsNoTxtFrm() &&
@@ -1470,9 +1443,8 @@ void MA_FASTCALL lcl_SubtractFlys( const SwFrm *pFrm, const SwPageFrm *pPage,
            )
             continue;
 
-        // OD 08.10.2002 #103898#
         // Own if-statements for transparent background/shadow of fly frames
-        // (#99657#) in order to handle special conditions.
+        // in order to handle special conditions.
         if ( pFly->IsBackgroundTransparent() )
         {
             // Background <pFly> is transparent drawn. Thus normally, its region
@@ -1533,7 +1505,6 @@ void MA_FASTCALL lcl_SubtractFlys( const SwFrm *pFrm, const SwPageFrm *pPage,
 
 /** lcl_DrawGraphicBackgrd - local help method to draw a background for a graphic
 
-    OD 17.10.2002 #103876#
     Under certain circumstances we have to draw a background for a graphic.
     This method takes care of the conditions and draws the background with the
     corresponding color.
@@ -1634,30 +1605,29 @@ inline void lcl_DrawGraphicBackgrd( const SvxBrushItem& _rBackgrdBrush,
     }
 }
 
-/// OD 06.08.2002 #99657# - Note: the transparency of the background graphic
+/// Note: the transparency of the background graphic
 ///     is saved in SvxBrushItem.GetGraphicObject(<shell>).GetAttr().Set/GetTransparency()
 ///     and is considered in the drawing of the graphic.
 ///     Thus, to provide transparent background graphic for text frames nothing
 ///     has to be coded.
-/// OD 25.09.2002 #99739# - use align rectangle for drawing graphic
-/// OD 25.09.2002 #99739# - pixel-align coordinations for drawing graphic.
-/// OD 17.10.2002 #103876# - outsource code for drawing background of the graphic
+/// Use align rectangle for drawing graphic
+/// Pixel-align coordinations for drawing graphic.
+/// Outsource code for drawing background of the graphic
 ///     with a background color in method <lcl_DrawGraphicBackgrd>
 ///     Also, change type of <bGrfNum> and <bClip> from <sal_Bool> to <bool>.
 void lcl_DrawGraphic( const SvxBrushItem& rBrush, OutputDevice *pOut,
                       ViewShell &rSh, const SwRect &rGrf, const SwRect &rOut,
                       bool bClip, bool bGrfNum,
                       bool bBackgrdAlreadyDrawn = false )
-                      /// OD 02.09.2002 #99657#
                       /// add parameter <bBackgrdAlreadyDrawn> to indicate
                       /// that the background is already drawn.
 {
-    /// OD 25.09.2002 #99739# - calculate align rectangle from parameter <rGrf>
-    ///     and use aligned rectangle <aAlignedGrfRect> in the following code
+    /// Calculate align rectangle from parameter <rGrf> and use aligned
+    /// rectangle <aAlignedGrfRect> in the following code
     SwRect aAlignedGrfRect = rGrf;
     ::SwAlignRect( aAlignedGrfRect, &rSh );
 
-    /// OD 17.10.2002 #103876# - change type from <sal_Bool> to <bool>.
+    /// Change type from <sal_Bool> to <bool>.
     const bool bNotInside = bClip && !rOut.IsInside( aAlignedGrfRect );
     if ( bNotInside )
     {
@@ -1669,10 +1639,9 @@ void lcl_DrawGraphic( const SvxBrushItem& rBrush, OutputDevice *pOut,
     ((SvxBrushItem&)rBrush).SetDoneLink( Link() );
     GraphicObject *pGrf = (GraphicObject*)rBrush.GetGraphicObject();
 
-    /// OD 17.10.2002 #103876# - outsourcing drawing of background with a background color.
+    /// Outsourcing drawing of background with a background color.
     ::lcl_DrawGraphicBackgrd( rBrush, pOut, aAlignedGrfRect, *pGrf, bGrfNum, bBackgrdAlreadyDrawn );
 
-    /// OD 25.09.2002 #99739# -
     /// Because for drawing a graphic left-top-corner and size coordinations are
     /// used, these coordinations have to be determined on pixel level.
     ::SwAlignGrfRect( &aAlignedGrfRect, *pOut );
@@ -1688,11 +1657,10 @@ void MA_FASTCALL DrawGraphic( const SvxBrushItem *pBrush,
                               const SwRect &rOut,
                               const sal_uInt8 nGrfNum,
                               const sal_Bool bConsiderBackgroundTransparency )
-    /// OD 05.08.2002 #99657# - add 6th parameter to indicate that method should
+    /// Add 6th parameter to indicate that method should
     ///   consider background transparency, saved in the color of the brush item
 {
     ViewShell &rSh = *pGlobalShell;
-    /// OD 17.10.2002 #103876# - change type from <sal_Bool> to <bool>
     bool bReplaceGrfNum = GRFNUM_REPLACE == nGrfNum;
     bool bGrfNum = GRFNUM_NO != nGrfNum;
     Size aGrfSize;
@@ -1701,7 +1669,7 @@ void MA_FASTCALL DrawGraphic( const SvxBrushItem *pBrush,
     {
         if( rSh.GetViewOptions()->IsGraphic() )
         {
-            //#125488#: load graphic directly in PDF import
+            // load graphic directly in PDF import
             // #i68953# - also during print load graphic directly.
             if ( (rSh).GetViewOptions()->IsPDFExport() ||
                  rSh.GetOut()->GetOutDevType() == OUTDEV_PRINTER )
@@ -1778,7 +1746,6 @@ void MA_FASTCALL DrawGraphic( const SvxBrushItem *pBrush,
 
     case GPOS_AREA:
         aGrf = rOrg;
-        /// OD 05.09.2002 #102912#
         /// In spite the fact that the background graphic have to fill the complete
         /// area, it has been checked, if the graphic will completely fill out
         /// the region to be painted <rOut> and thus, nothing has to be retouched.
@@ -1790,14 +1757,13 @@ void MA_FASTCALL DrawGraphic( const SvxBrushItem *pBrush,
 
     case GPOS_TILED:
         {
-            // OD 17.10.2002 #103876# - draw background of tiled graphic
-            // before drawing tiled graphic in loop
+            // draw background of tiled graphic before drawing tiled graphic in loop
             // determine graphic object
             GraphicObject* pGraphicObj = const_cast< GraphicObject* >(pBrush->GetGraphicObject());
             // calculate aligned paint rectangle
             SwRect aAlignedPaintRect = rOut;
             ::SwAlignRect( aAlignedPaintRect, &rSh );
-            // OD 25.10.2002 #103876# - draw background color for aligned paint rectangle
+            // draw background color for aligned paint rectangle
             lcl_DrawGraphicBackgrd( *pBrush, pOutDev, aAlignedPaintRect, *pGraphicObj, bGrfNum );
 
             // set left-top-corner of background graphic to left-top-corner of the
@@ -1806,13 +1772,12 @@ void MA_FASTCALL DrawGraphic( const SvxBrushItem *pBrush,
             // setup clipping at output device
             pOutDev->Push( PUSH_CLIPREGION );
             pOutDev->IntersectClipRegion( rOut.SVRect() );
-            // OD 28.10.2002 #103876# - use new method <GraphicObject::DrawTiled(::)>
+            // use new method <GraphicObject::DrawTiled(::)>
             {
                 // calculate paint offset
                 Point aPaintOffset( aAlignedPaintRect.Pos() - aGrf.Pos() );
                 // draw background graphic tiled for aligned paint rectangle
-                // #i42643# - apply fix #104004# for Calc
-                // also for Writer - see /sc/source/view/printfun.cxx
+                // #i42643#
                 // For PDF export, every draw operation for bitmaps takes a
                 // noticeable amount of place (~50 characters). Thus, optimize
                 // between tile bitmap size and number of drawing operations here.
@@ -1858,17 +1823,14 @@ void MA_FASTCALL DrawGraphic( const SvxBrushItem *pBrush,
     default: OSL_ENSURE( !pOutDev, "new Graphic position?" );
     }
 
-    /// OD 02.09.2002 #99657#
     /// init variable <bGrfBackgrdAlreadDrawn> to indicate, if background of
     /// graphic is already drawn or not.
     bool bGrfBackgrdAlreadyDrawn = false;
     if ( bRetouche )
     {
-        // OD 2004-04-23 #116347#
         pOutDev->Push( PUSH_FILLCOLOR|PUSH_LINECOLOR );
         pOutDev->SetLineColor();
 
-        // OD 07.08.2002 #99657# #GetTransChg#
         //     check, if a existing background graphic (not filling the complete
         //     background) is transparent drawn and the background color is
         //     "no fill" respectively "auto fill", if background transparency
@@ -1900,16 +1862,15 @@ void MA_FASTCALL DrawGraphic( const SvxBrushItem *pBrush,
             }
         }
 
-        /// OD 06.08.2002 #99657# #GetTransChg# - to get color of brush,
-        ///     check background color against COL_TRANSPARENT ("no fill"/"auto fill")
-        ///     instead of checking, if transparency is not set.
+        /// to get color of brush, check background color against COL_TRANSPARENT ("no fill"/"auto fill")
+        /// instead of checking, if transparency is not set.
         const Color aColor( pBrush &&
                             ( !(pBrush->GetColor() == COL_TRANSPARENT) ||
                               bFlyMetafile )
                     ? pBrush->GetColor()
                     : aGlobalRetoucheColor );
 
-        /// OD 08.08.2002 #99657# - determine, if background region have to be
+        /// determine, if background region have to be
         ///     drawn transparent.
         ///     background region has to be drawn transparent, if
         ///         background transparency have to be considered
@@ -1921,8 +1882,7 @@ void MA_FASTCALL DrawGraphic( const SvxBrushItem *pBrush,
                                 ( ( aColor.GetTransparency() != 0) ||
                                     bTransparentGrfWithNoFillBackgrd );
 
-        // #i75614#
-        // reset draw mode in high contrast mode in order to get fill color set
+        // #i75614# reset draw mode in high contrast mode in order to get fill color set
         const sal_uLong nOldDrawMode = pOutDev->GetDrawMode();
         if ( pGlobalShell->GetWin() &&
              Application::GetSettings().GetStyleSettings().GetHighContrastMode() )
