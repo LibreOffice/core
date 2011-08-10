@@ -295,7 +295,8 @@ void FontCache::read()
             xub_StrLen nTEnd = aLine.Search( ':', nSearchIndex );
             if( nTEnd != STRING_NOTFOUND )
             {
-                nTimestamp = aLine.Copy( nSearchIndex, nTEnd - nSearchIndex ).ToInt64();
+                rtl::OString aTimeStamp = aLine.Copy( nSearchIndex, nTEnd - nSearchIndex );
+                nTimestamp = aTimeStamp.toInt64();
                 aDir = aLine.Copy( nTEnd+1 );
             }
             else
