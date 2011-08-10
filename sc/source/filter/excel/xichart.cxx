@@ -714,7 +714,7 @@ namespace {
 
 /** Creates a labeled data sequence object, adds link for series title if present. */
 Reference< XLabeledDataSequence > lclCreateLabeledDataSequence(
-        XclImpChSourceLinkRef xValueLink, const OUString& rValueRole,
+        const XclImpChSourceLinkRef& xValueLink, const OUString& rValueRole,
         const XclImpChSourceLink* pTitleLink = 0 )
 {
     // create data sequence for values and title
