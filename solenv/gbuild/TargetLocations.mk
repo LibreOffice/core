@@ -60,6 +60,7 @@ endef
 gb_AllLangResTarget_get_target = $(WORKDIR)/AllLangRes/$(1)
 gb_AsmObject_get_target = $(WORKDIR)/AsmObject/$(1).o
 gb_CObject_get_target = $(WORKDIR)/CObject/$(1).o
+gb_GenCObject_get_target = $(WORKDIR)/GenCObject/$(1).o
 gb_ComponentTarget_get_target = $(WORKDIR)/ComponentTarget/$(1).component
 gb_ComponentTarget_get_inbuild_target = $(WORKDIR)/ComponentTarget/$(1).inbuild.component
 gb_CppunitTest_get_target = $(WORKDIR)/CppunitTest/$(1).test
@@ -163,6 +164,7 @@ $(eval $(call gb_Helper_make_dep_targets,\
 	ObjCObject \
 	ObjCxxObject \
 	AsmObject \
+	GenCObject \
 	GenCxxObject \
 	LinkTarget \
 	SrsPartTarget \
