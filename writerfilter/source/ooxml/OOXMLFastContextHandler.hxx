@@ -426,7 +426,7 @@ protected:
     void addCurrentChild();
 };
 
-class OOXMLFastContextHandlerXNote : public OOXMLFastContextHandler
+class OOXMLFastContextHandlerXNote : public OOXMLFastContextHandlerProperties
 {
 public:
     OOXMLFastContextHandlerXNote(OOXMLFastContextHandler * pContext);

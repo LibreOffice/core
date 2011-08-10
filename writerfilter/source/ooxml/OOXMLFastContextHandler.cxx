@@ -1666,7 +1666,7 @@ void OOXMLFastContextHandlerTable::newPropertySet
 
 OOXMLFastContextHandlerXNote::OOXMLFastContextHandlerXNote
 (OOXMLFastContextHandler * pContext)
-: OOXMLFastContextHandler(pContext), mbForwardEventsSaved(false)
+: OOXMLFastContextHandlerProperties(pContext), mbForwardEventsSaved(false)
 {
 }
 
@@ -1694,6 +1694,8 @@ void OOXMLFastContextHandlerXNote::lcl_endFastElement
     throw (uno::RuntimeException, xml::sax::SAXException)
 {
     endAction(Element);
+
+    OOXMLFastContextHandlerProperties::lcl_endFastElement(Element);
 
     setForwardEvents(mbForwardEventsSaved);
 }
