@@ -2782,7 +2782,15 @@ void ScInterpreter::ScCode()
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScCode" );
 //2do: make it full range unicode?
     const String& rStr = GetString();
-    PushInt( (sal_uChar) ByteString::ConvertFromUnicode( rStr.GetChar(0), gsl_getSystemTextEncoding() ) );
+    //"classic" ByteString conversion flags
+    const sal_uInt32 convertFlags =
+        RTL_UNICODETOTEXT_FLAGS_NONSPACING_IGNORE |
+        RTL_UNICODETOTEXT_FLAGS_CONTROL_IGNORE |
+        RTL_UNICODETOTEXT_FLAGS_FLUSH |
+        RTL_UNICODETOTEXT_FLAGS_UNDEFINED_DEFAULT |
+        RTL_UNICODETOTEXT_FLAGS_INVALID_DEFAULT |
+        RTL_UNICODETOTEXT_FLAGS_UNDEFINED_REPLACE;
+    PushInt( (sal_uChar) rtl::OUStringToOString(rtl::OUString(rStr.GetChar(0)), gsl_getSystemTextEncoding(), convertFlags).toChar() );
 }
 
 

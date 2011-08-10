@@ -384,52 +384,6 @@ ByteString& ByteString::Convert( rtl_TextEncoding eSource, rtl_TextEncoding eTar
     return *this;
 }
 
-// -----------------------------------------------------------------------
-
-char ByteString::ConvertFromUnicode(sal_Unicode c, rtl_TextEncoding eTextEncoding)
-{
-    sal_Size    nLen;
-    char        aBuf[30];
-    nLen = ConvertFromUnicode(c, aBuf, sizeof( aBuf ), eTextEncoding);
-    if ( nLen == 1 )
-        return aBuf[0];
-    else
-        return 0;
-}
-
-// -----------------------------------------------------------------------
-
-sal_Size ByteString::ConvertFromUnicode( sal_Unicode c, char* pBuf, sal_Size nBufLen, rtl_TextEncoding eTextEncoding )
-{
-    // TextEncoding Dontknow wird nicht konvertiert
-    if ( eTextEncoding == RTL_TEXTENCODING_DONTKNOW )
-        return '\0';
-
-    rtl_UnicodeToTextConverter  hConverter;
-    sal_uInt32                  nInfo;
-    sal_Size                    nSrcChars;
-    sal_Size                    nDestBytes;
-    sal_Unicode                 cUni = c;
-    sal_uInt32                  nFlags = RTL_UNICODETOTEXT_FLAGS_NONSPACING_IGNORE |
-                                         RTL_UNICODETOTEXT_FLAGS_CONTROL_IGNORE |
-                                         RTL_UNICODETOTEXT_FLAGS_FLUSH;
-
-    nFlags |= RTL_UNICODETOTEXT_FLAGS_UNDEFINED_DEFAULT |
-              RTL_UNICODETOTEXT_FLAGS_INVALID_DEFAULT;
-    nFlags |= RTL_UNICODETOTEXT_FLAGS_UNDEFINED_REPLACE;
-    if ( nBufLen > 1 )
-        nFlags |= RTL_UNICODETOTEXT_FLAGS_UNDEFINED_REPLACESTR;
-
-    hConverter = rtl_createUnicodeToTextConverter( eTextEncoding );
-    nDestBytes = rtl_convertUnicodeToText( hConverter, 0,
-                                           &cUni, 1,
-                                           (sal_Char*)pBuf, nBufLen,
-                                           nFlags,
-                                           &nInfo, &nSrcChars );
-    rtl_destroyUnicodeToTextConverter( hConverter );
-    return nDestBytes;
-}
-
 // =======================================================================
 
 ByteString::ByteString( const rtl::OString& rStr )

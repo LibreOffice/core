@@ -175,9 +175,6 @@ private:
                                      // Append(char)
     void                operator +=(int); // not implemented; to detect misuses
                                           // of operator +=(sal_Char)
-
-    static sal_Size     ConvertFromUnicode( sal_Unicode c, sal_Char* pBuf, sal_Size nBufLen,
-                                            rtl_TextEncoding eTextEncoding );
 public:
                         ByteString();
                         ByteString( const ByteString& rStr );
@@ -257,8 +254,7 @@ public:
     ByteString&         Convert( rtl_TextEncoding eSource,
                                  rtl_TextEncoding eTarget,
                                  sal_Bool bReplace = sal_True );
-    static sal_Char     ConvertFromUnicode(sal_Unicode c,
-                                            rtl_TextEncoding eTextEncoding);
+
     ByteString&         ConvertLineEnd( LineEnd eLineEnd );
     ByteString&         ConvertLineEnd()
                             { return ConvertLineEnd( GetSystemLineEnd() ); }
