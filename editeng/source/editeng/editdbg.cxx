@@ -413,7 +413,7 @@ void EditDbg::ShowEditEngineData( EditEngine* pEE, sal_Bool bInfoBox )
         {
             EditLine* pLine = pPPortion->GetLines().GetObject( nLine );
 
-            ByteString aLine( *(pPPortion->GetNode()), pLine->GetStart(), pLine->GetEnd() - pLine->GetStart(), RTL_TEXTENCODING_ASCII_US );
+            ByteString aLine( pPPortion->GetNode()->Copy(pLine->GetStart(), pLine->GetEnd() - pLine->GetStart()), RTL_TEXTENCODING_ASCII_US );
             fprintf( fp, "\nLine %i\t>%s<", nLine, aLine.GetBuffer() );
         }
         // then the internal data ...

@@ -905,7 +905,7 @@ void ParagraphObj::ImplGetNumberingLevel( PPTExBulletProvider& rBuProv, sal_Int1
                             nIndex++;
                             if ( aGraphicURL.Len() > nIndex  )
                             {
-                                ByteString aUniqueId( aGraphicURL, nIndex, aGraphicURL.Len() - nIndex, RTL_TEXTENCODING_UTF8 );
+                                ByteString aUniqueId( aGraphicURL.Copy(nIndex, aGraphicURL.Len() - nIndex), RTL_TEXTENCODING_UTF8 );
                                 if ( aUniqueId.Len() )
                                 {
                                     nBulletId = rBuProv.GetId( aUniqueId, aBuGraSize );

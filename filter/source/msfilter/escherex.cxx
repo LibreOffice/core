@@ -1199,7 +1199,7 @@ sal_Bool EscherPropertyContainer::CreateEmbeddedBitmapProperties(
         nIndex = nIndex + aVndUrl.Len();
         if( aBmpUrl.Len() > nIndex )
         {
-            ByteString aUniqueId( aBmpUrl, nIndex, aBmpUrl.Len() - nIndex, RTL_TEXTENCODING_UTF8 );
+            ByteString aUniqueId( aBmpUrl.Copy(nIndex, aBmpUrl.Len() - nIndex), RTL_TEXTENCODING_UTF8 );
             bRetValue = ImplCreateEmbeddedBmp( aUniqueId );
             if( bRetValue )
             {
@@ -1368,7 +1368,7 @@ sal_Bool EscherPropertyContainer::CreateGraphicProperties(
             {
                 nIndex = nIndex + aVndUrl.Len();
                 if ( aGraphicUrl.Len() > nIndex  )
-                    aUniqueId = ByteString( aGraphicUrl, nIndex, aGraphicUrl.Len() - nIndex, RTL_TEXTENCODING_UTF8 );
+                    aUniqueId = ByteString( aGraphicUrl.Copy(nIndex, aGraphicUrl.Len() - nIndex), RTL_TEXTENCODING_UTF8 );
             }
             else
             {

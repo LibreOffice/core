@@ -186,9 +186,6 @@ public:
                         ByteString( const UniString& rUniStr,
                                     rtl_TextEncoding eTextEncoding,
                                     sal_uInt32 nCvtFlags = UNISTRING_TO_BYTESTRING_CVTFLAGS );
-                        ByteString( const UniString& rUniStr, xub_StrLen nPos, xub_StrLen nLen,
-                                    rtl_TextEncoding eTextEncoding,
-                                    sal_uInt32 nCvtFlags = UNISTRING_TO_BYTESTRING_CVTFLAGS );
                         ByteString( const sal_Unicode* pUniStr, xub_StrLen nLen,
                                     rtl_TextEncoding eTextEncoding,
                                     sal_uInt32 nCvtFlags = UNISTRING_TO_BYTESTRING_CVTFLAGS );
