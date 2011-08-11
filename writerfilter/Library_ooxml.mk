@@ -31,8 +31,6 @@ include $(realpath $(SRCDIR)/writerfilter/source/generated.mk)
 
 $(eval $(call gb_Library_Library,ooxml))
 
-$(eval $(call gb_Library_add_package_headers,ooxml,writerfilter_generated))
-
 $(eval $(call gb_Library_set_include,ooxml,\
     $$(INCLUDE) \
     -I$(realpath $(SRCDIR)/writerfilter/inc) \
