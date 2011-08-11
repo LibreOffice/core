@@ -215,22 +215,6 @@ public:
     sal_Bool    IsPaintBuffer_Writer() const;
     sal_Bool    IsPaintBuffer_DrawImpress() const;
 
-    void        SetOverlayBuffer( sal_Bool bState );
-    void        SetPaintBuffer( sal_Bool bState );
-    void        SetStripeColorA( Color aColor );
-    void        SetStripeColorB( Color aColor );
-    void        SetStripeLength( sal_uInt16 nLength );
-
-    // #i73602#
-    void        SetOverlayBuffer_Calc( sal_Bool bState );
-    void        SetOverlayBuffer_Writer( sal_Bool bState );
-    void        SetOverlayBuffer_DrawImpress( sal_Bool bState );
-
-    // #i74769#, #i75172#
-    void        SetPaintBuffer_Calc( sal_Bool bState );
-    void        SetPaintBuffer_Writer( sal_Bool bState );
-    void        SetPaintBuffer_DrawImpress( sal_Bool bState );
-
     // #i4219#
     sal_uInt32 GetMaximumPaperWidth() const;
     sal_uInt32 GetMaximumPaperHeight() const;
@@ -238,13 +222,6 @@ public:
     sal_uInt32 GetMaximumPaperRightMargin() const;
     sal_uInt32 GetMaximumPaperTopMargin() const;
     sal_uInt32 GetMaximumPaperBottomMargin() const;
-
-    void SetMaximumPaperWidth(sal_uInt32 nNew);
-    void SetMaximumPaperHeight(sal_uInt32 nNew);
-    void SetMaximumPaperLeftMargin(sal_uInt32 nNew);
-    void SetMaximumPaperRightMargin(sal_uInt32 nNew);
-    void SetMaximumPaperTopMargin(sal_uInt32 nNew);
-    void SetMaximumPaperBottomMargin(sal_uInt32 nNew);
 
     // helper
     sal_Bool IsAAPossibleOnThisSystem() const;
@@ -259,12 +236,6 @@ public:
     sal_uInt32  GetQuadraticFormControlRenderLimit() const;
 
     void        SetAntiAliasing( sal_Bool bState );
-    void        SetSnapHorVerLinesToDiscrete( sal_Bool bState );
-    void        SetSolidDragCreate( sal_Bool bState );
-    void        SetRenderDecoratedTextDirect( sal_Bool bState );
-    void        SetRenderSimpleTextDirect( sal_Bool bState );
-    void        SetQuadratic3DRenderLimit(sal_uInt32 nNew);
-    void        SetQuadraticFormControlRenderLimit(sal_uInt32 nNew);
 
     // #i97672# selection settings
     sal_Bool    IsTransparentSelection() const;
@@ -273,7 +244,6 @@ public:
 
     void        SetTransparentSelection( sal_Bool bState );
     void        SetTransparentSelectionPercent( sal_uInt16 nPercent );
-    void        SetSelectionMaximumLuminancePercent( sal_uInt16 nPercent );
 
 //-------------------------------------------------------------------------------------------------------------
 //  private methods
@@ -844,177 +814,6 @@ sal_uInt32 SvtOptionsDrawinglayer_Impl::GetMaximumPaperBottomMargin() const
     return m_nMaximumPaperBottomMargin;
 }
 
-//*****************************************************************************************************************
-//  public method
-//*****************************************************************************************************************
-void SvtOptionsDrawinglayer_Impl::SetOverlayBuffer( sal_Bool bState )
-{
-    if(m_bOverlayBuffer != bState)
-    {
-        m_bOverlayBuffer = bState;
-        SetModified();
-    }
-}
-
-//*****************************************************************************************************************
-//  public method
-//*****************************************************************************************************************
-void SvtOptionsDrawinglayer_Impl::SetPaintBuffer( sal_Bool bState )
-{
-    if(m_bPaintBuffer != bState)
-    {
-        m_bPaintBuffer = bState;
-        SetModified();
-    }
-}
-
-//*****************************************************************************************************************
-//  public method
-//*****************************************************************************************************************
-void SvtOptionsDrawinglayer_Impl::SetStripeColorA( Color aColor )
-{
-    if(m_bStripeColorA != aColor)
-    {
-        m_bStripeColorA = aColor;
-        SetModified();
-    }
-}
-
-//*****************************************************************************************************************
-//  public method
-//*****************************************************************************************************************
-void SvtOptionsDrawinglayer_Impl::SetStripeColorB( Color aColor )
-{
-    if(m_bStripeColorB != aColor)
-    {
-        m_bStripeColorB = aColor;
-        SetModified();
-    }
-}
-
-//*****************************************************************************************************************
-//  public method
-//*****************************************************************************************************************
-void SvtOptionsDrawinglayer_Impl::SetStripeLength( sal_uInt16 nLength )
-{
-    if(m_nStripeLength != nLength)
-    {
-        m_nStripeLength = nLength;
-        SetModified();
-    }
-}
-
-// #i73602#
-void SvtOptionsDrawinglayer_Impl::SetOverlayBuffer_Calc( sal_Bool bState )
-{
-    if(m_bOverlayBuffer_Calc != bState)
-    {
-        m_bOverlayBuffer_Calc = bState;
-        SetModified();
-    }
-}
-
-void SvtOptionsDrawinglayer_Impl::SetOverlayBuffer_Writer( sal_Bool bState )
-{
-    if(m_bOverlayBuffer_Writer != bState)
-    {
-        m_bOverlayBuffer_Writer = bState;
-        SetModified();
-    }
-}
-
-void SvtOptionsDrawinglayer_Impl::SetOverlayBuffer_DrawImpress( sal_Bool bState )
-{
-    if(m_bOverlayBuffer_DrawImpress != bState)
-    {
-        m_bOverlayBuffer_DrawImpress = bState;
-        SetModified();
-    }
-}
-
-// #i74769#, #i75172#
-void SvtOptionsDrawinglayer_Impl::SetPaintBuffer_Calc( sal_Bool bState )
-{
-    if(m_bPaintBuffer_Calc != bState)
-    {
-        m_bPaintBuffer_Calc = bState;
-        SetModified();
-    }
-}
-
-void SvtOptionsDrawinglayer_Impl::SetPaintBuffer_Writer( sal_Bool bState )
-{
-    if(m_bPaintBuffer_Writer != bState)
-    {
-        m_bPaintBuffer_Writer = bState;
-        SetModified();
-    }
-}
-
-void SvtOptionsDrawinglayer_Impl::SetPaintBuffer_DrawImpress( sal_Bool bState )
-{
-    if(m_bPaintBuffer_DrawImpress != bState)
-    {
-        m_bPaintBuffer_DrawImpress = bState;
-        SetModified();
-    }
-}
-
-// #i4219#
-void SvtOptionsDrawinglayer_Impl::SetMaximumPaperWidth( sal_uInt32 nNew )
-{
-    if(m_nMaximumPaperWidth != nNew)
-    {
-        m_nMaximumPaperWidth = nNew;
-        SetModified();
-    }
-}
-
-void SvtOptionsDrawinglayer_Impl::SetMaximumPaperHeight( sal_uInt32 nNew )
-{
-    if(m_nMaximumPaperHeight != nNew)
-    {
-        m_nMaximumPaperHeight = nNew;
-        SetModified();
-    }
-}
-
-void SvtOptionsDrawinglayer_Impl::SetMaximumPaperLeftMargin( sal_uInt32 nNew )
-{
-    if(m_nMaximumPaperLeftMargin != nNew)
-    {
-        m_nMaximumPaperLeftMargin = nNew;
-        SetModified();
-    }
-}
-
-void SvtOptionsDrawinglayer_Impl::SetMaximumPaperRightMargin( sal_uInt32 nNew )
-{
-    if(m_nMaximumPaperRightMargin != nNew)
-    {
-        m_nMaximumPaperRightMargin = nNew;
-        SetModified();
-    }
-}
-
-void SvtOptionsDrawinglayer_Impl::SetMaximumPaperTopMargin( sal_uInt32 nNew )
-{
-    if(m_nMaximumPaperTopMargin != nNew)
-    {
-        m_nMaximumPaperTopMargin = nNew;
-        SetModified();
-    }
-}
-
-void SvtOptionsDrawinglayer_Impl::SetMaximumPaperBottomMargin( sal_uInt32 nNew )
-{
-    if(m_nMaximumPaperBottomMargin != nNew)
-    {
-        m_nMaximumPaperBottomMargin = nNew;
-        SetModified();
-    }
-}
-
 // helper
 sal_Bool SvtOptionsDrawinglayer_Impl::IsAAPossibleOnThisSystem() const
 {
@@ -1085,60 +884,6 @@ void SvtOptionsDrawinglayer_Impl::SetAntiAliasing( sal_Bool bState )
     }
 }
 
-void SvtOptionsDrawinglayer_Impl::SetSnapHorVerLinesToDiscrete( sal_Bool bState )
-{
-    if(m_bSnapHorVerLinesToDiscrete != bState)
-    {
-        m_bSnapHorVerLinesToDiscrete = bState;
-        SetModified();
-    }
-}
-
-void SvtOptionsDrawinglayer_Impl::SetSolidDragCreate( sal_Bool bState )
-{
-    if(m_bSolidDragCreate != bState)
-    {
-        m_bSolidDragCreate = bState;
-        SetModified();
-    }
-}
-
-void SvtOptionsDrawinglayer_Impl::SetRenderDecoratedTextDirect( sal_Bool bState )
-{
-    if(m_bRenderDecoratedTextDirect != bState)
-    {
-        m_bRenderDecoratedTextDirect = bState;
-        SetModified();
-    }
-}
-
-void SvtOptionsDrawinglayer_Impl::SetRenderSimpleTextDirect( sal_Bool bState )
-{
-    if(m_bRenderSimpleTextDirect != bState)
-    {
-        m_bRenderSimpleTextDirect = bState;
-        SetModified();
-    }
-}
-
-void SvtOptionsDrawinglayer_Impl::SetQuadratic3DRenderLimit(sal_uInt32 nNew)
-{
-    if(m_nQuadratic3DRenderLimit != nNew)
-    {
-        m_nQuadratic3DRenderLimit = nNew;
-        SetModified();
-    }
-}
-
-void SvtOptionsDrawinglayer_Impl::SetQuadraticFormControlRenderLimit(sal_uInt32 nNew)
-{
-    if(m_nQuadraticFormControlRenderLimit != nNew)
-    {
-        m_nQuadraticFormControlRenderLimit = nNew;
-        SetModified();
-    }
-}
-
 // #i97672# selection settings
 sal_Bool SvtOptionsDrawinglayer_Impl::IsTransparentSelection() const
 {
@@ -1166,15 +911,6 @@ void SvtOptionsDrawinglayer_Impl::SetTransparentSelectionPercent( sal_uInt16 nPe
 sal_uInt16 SvtOptionsDrawinglayer_Impl::GetTransparentSelectionPercent() const
 {
     return m_nTransparentSelectionPercent;
-}
-
-void SvtOptionsDrawinglayer_Impl::SetSelectionMaximumLuminancePercent( sal_uInt16 nPercent )
-{
-    if(m_nSelectionMaximumLuminancePercent != nPercent)
-    {
-        m_nSelectionMaximumLuminancePercent = nPercent;
-        SetModified();
-    }
 }
 
 sal_uInt16 SvtOptionsDrawinglayer_Impl::GetSelectionMaximumLuminancePercent() const
