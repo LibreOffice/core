@@ -30,9 +30,9 @@
 #define COSV_STRING_HXX
 
 // USED SERVICES
+#include <string.h>
 #include <cosv/stringdata.hxx>
 #include <cosv/str_types.hxx>
-#include <string.h>
 #include <cosv/csv_ostream.hxx>
 #include <vector>
 
