@@ -52,20 +52,20 @@ ModalDialog RID_DLG_ALIEN_WARNING
         NoLabel = TRUE;
         Wordbreak = TRUE;
         Text [ en-US-old ] = "This document may contain formatting or content that cannot be saved in the %FORMATNAME file format. Do you want to save the document in this format anyway?\n\n- Click 'Yes' to save in %FORMATNAME file format.\n- Click 'No' to use the latest OpenDocument file format and be sure all formatting and content is saved correctly.";
-        Text [ en-US ] = "This document may contain formatting or content that cannot be saved in the %FORMATNAME file format. Do you want to save the document in this format anyway?\n\nUse the latest ODF file format and be sure all formatting and content is saved correctly.";
+        Text [ en-US ] = "This document may contain formatting or content that cannot be saved in the currently selected file format \"%FORMATNAME\".\n\nUse the default ODF file format to be sure that the document is saved correctly.";
     };
     OKButton PB_NO
     {
         Pos = MAP_APPFONT( AW_COL_2, AW_ROW_2 );
         Size = MAP_APPFONT( RSC_CD_PUSHBUTTON_WIDTH, RSC_CD_PUSHBUTTON_HEIGHT );
         DefButton = TRUE ;
-        Text [ en-US ] = "~Keep Current Format";
+        Text [ en-US ] = "~Use %FORMATNAME Format";
     };
     CancelButton PB_YES
     {
         Pos = MAP_APPFONT( AW_COL_3, AW_ROW_2 );
         Size = MAP_APPFONT( RSC_CD_PUSHBUTTON_WIDTH, RSC_CD_PUSHBUTTON_HEIGHT );
-        Text [ en-US ] = "~Save in ODF Format";
+        Text [ en-US ] = "Use Default ~ODF Format";
     };
     HelpButton PB_MOREINFO
     {

@@ -59,10 +59,15 @@ SfxAlienWarningDialog::SfxAlienWarningDialog( Window* pParent, const String& _rF
     // set questionmark image
     m_aQueryImage.SetImage( QueryBox::GetStandardImage() );
 
-    // replace formatname
+    // replace formatname (text)
     String sInfoText = m_aInfoText.GetText();
     sInfoText.SearchAndReplaceAll( DEFINE_CONST_UNICODE("%FORMATNAME"), _rFormatName );
     m_aInfoText.SetText( sInfoText );
+
+    // replace formatname (button)
+    sInfoText = m_aKeepCurrentBtn.GetText();
+    sInfoText.SearchAndReplaceAll( DEFINE_CONST_UNICODE("%FORMATNAME"), _rFormatName );
+    m_aKeepCurrentBtn.SetText( sInfoText );
 
     // load value of "warning on" checkbox from save options
     m_aWarningOnBox.Check( SvtSaveOptions().IsWarnAlienFormat() == sal_True );
