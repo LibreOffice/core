@@ -674,12 +674,6 @@ PluginProgress::~PluginProgress()
 }
 
 //===============================================
-Window* PluginProgress::getPlugWindow()
-{
-    return m_pPlugProgressWindow;
-}
-
-//===============================================
 void SAL_CALL PluginProgress::dispose()
     throw(css::uno::RuntimeException)
 {
@@ -1414,11 +1408,6 @@ IMPL_LINK( RecoveryDialog, CancelButtonHdl, void*, EMPTYARG )
     m_bUserDecideNext = sal_False;
     m_bWaitForUser    = sal_False;
     return 0;
-}
-
-//===============================================
-void RecoveryDialog::impl_refreshDocList()
-{
 }
 
 //===============================================

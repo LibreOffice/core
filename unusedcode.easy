@@ -3815,12 +3815,9 @@ svx::DialControl::DialControl(Window*, Size const&, long)
 svx::DialControl::GetLinkedField() const
 svx::DialControl::GetModifyHdl() const
 svx::DialControl::SetModifyHdl(Link const&)
-svx::DocRecovery::PluginProgress::getPlugWindow()
-svx::DocRecovery::RecoveryDialog::impl_refreshDocList()
 svx::FontWorkGalleryDialog::changeText(SdrTextObj*)
 svx::FormControllerHelper::moveLeft() const
 svx::FormControllerHelper::moveRight() const
-svx::FrameBorder::MergeClickAreaToPolyPolygon(PolyPolygon&) const
 svx::FrameDirectionListBox::FrameDirectionListBox(Window*, long)
 svx::NamespaceMap_createInstance(unsigned short*, SfxItemPool*, SfxItemPool*)
 svx::OComponentTransferable::extractComponentDescriptor(TransferableDataHelper const&, unsigned char, rtl::OUString&, com::sun::star::uno::Reference<com::sun::star::ucb::XContent>&)

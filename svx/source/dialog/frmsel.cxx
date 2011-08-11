@@ -199,11 +199,6 @@ bool FrameBorder::ContainsClickPoint( const Point& rPos ) const
     return Region( maClickArea ).IsInside( rPos );
 }
 
-void FrameBorder::MergeClickAreaToPolyPolygon( PolyPolygon& rPPoly ) const
-{
-    lclPolyPolyUnion( rPPoly, maClickArea );
-}
-
 Rectangle FrameBorder::GetClickBoundRect() const
 {
     return maClickArea.GetBoundRect();

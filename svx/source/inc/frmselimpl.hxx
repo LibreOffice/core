@@ -72,7 +72,6 @@ public:
     inline void         ClearClickArea() { maClickArea.Clear(); }
     void                AddClickRect( const Rectangle& rRect );
     bool                ContainsClickPoint( const Point& rPos ) const;
-    void                MergeClickAreaToPolyPolygon( PolyPolygon& rPPoly ) const;
     Rectangle           GetClickBoundRect() const;
 
     void                SetKeyboardNeighbors(

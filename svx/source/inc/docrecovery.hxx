@@ -369,10 +369,6 @@ class PluginProgress : public ::cppu::WeakImplHelper2< css::task::XStatusIndicat
         /** @short  TODO */
         virtual ~PluginProgress();
 
-        //---------------------------------------
-        /** @short  TODO */
-        Window* getPlugWindow();
-
     //-------------------------------------------
     // uno interface
     public:
@@ -715,10 +711,6 @@ class RecoveryDialog : public IExtendedTabPage
         /** @short TODO */
         DECL_LINK(NextButtonHdl, void*);
         DECL_LINK(CancelButtonHdl, void*);
-
-        //---------------------------------------
-        /** @short TODO */
-        void impl_refreshDocList();
 
         //---------------------------------------
         /** @short TODO */
