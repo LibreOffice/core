@@ -1045,10 +1045,10 @@ int Export::Execute( int nToken, const char * pToken )
             sMapping.EraseAllChars( ' ' );
             sMapping.EraseAllChars( '\t' );
             if ( sKey.ToUpperAscii() == "SIZE" ) {
-                pResData->nWidth = ( sal_uInt16 ) sMapping.GetToken( 0, ',' ).ToInt64();
+                pResData->nWidth = ( sal_uInt16 ) sMapping.GetToken( 0, ',' ).ToInt32();
             }
             else if ( sKey == "POSSIZE" ) {
-                pResData->nWidth = ( sal_uInt16 ) sMapping.GetToken( 2, ',' ).ToInt64();
+                pResData->nWidth = ( sal_uInt16 ) sMapping.GetToken( 2, ',' ).ToInt32();
             }
         }
         break;
