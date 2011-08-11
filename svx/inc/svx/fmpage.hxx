@@ -37,7 +37,11 @@ class StarBASIC;
 class FmFormModel;
 class FmFormPageImpl;   // contains a list of all forms
 
-FORWARD_DECLARE_INTERFACE(container,XNameContainer)
+namespace com { namespace sun { namespace star {
+    namespace container {
+        class XNameContainer;
+    }
+}}}
 
 class SdrView;
 class SfxJSArray;

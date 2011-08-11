@@ -49,10 +49,15 @@ class FmFormObj;
 class FmFormPage;
 class SdrObject;
 
-//FORWARD_DECLARE_INTERFACE(uno,Reference)
-FORWARD_DECLARE_INTERFACE(io,XObjectOutputStream)
-FORWARD_DECLARE_INTERFACE(io,XObjectInputStream)
-FORWARD_DECLARE_INTERFACE(container,XIndexContainer)
+namespace com { namespace sun { namespace star {
+    namespace container {
+        class XIndexContainer;
+    }
+    namespace io {
+        class XObjectOutputStream;
+        class XObjectInputStream;
+    }
+}}}
 
 class SdrObjList;
 

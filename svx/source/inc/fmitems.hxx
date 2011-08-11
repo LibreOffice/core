@@ -31,9 +31,12 @@
 
 #include <svl/poolitem.hxx>
 #include <comphelper/uno3.hxx>
-//  FORWARD_DECLARE_INTERFACE(awt,XControlContainer)
-FORWARD_DECLARE_INTERFACE(uno,Any)
-//  class ::com::sun::star::uno::Any;
+
+namespace com { namespace sun { namespace star {
+    namespace uno {
+        class Any;
+    }
+}}}
 
 //==================================================================
 class FmInterfaceItem : public SfxPoolItem

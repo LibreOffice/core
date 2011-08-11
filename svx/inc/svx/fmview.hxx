@@ -33,8 +33,14 @@
 #include <comphelper/uno3.hxx>
 #include "svx/svxdllapi.h"
 
-FORWARD_DECLARE_INTERFACE(util,XNumberFormats)
-FORWARD_DECLARE_INTERFACE(beans,XPropertySet)
+namespace com { namespace sun { namespace star {
+    namespace beans {
+        class XPropertySet;
+    }
+    namespace util {
+        class XNumberFormats;
+    }
+}}}
 
 class OutputDevice;
 class FmFormModel;

@@ -49,7 +49,11 @@
 #include <tools/string.hxx>
 #include "svx/svxdllapi.h"
 
-FORWARD_DECLARE_INTERFACE(util,XNumberFormatsSupplier)
+namespace com { namespace sun { namespace star {
+    namespace util {
+        class XNumberFormatsSupplier;
+    }
+}}}
 
 // ===================================================================================================
 // Hilfsmethoden

@@ -57,9 +57,12 @@ class FmFormObj;
 class SdrObject;
 class FmXFormView;
 
-FORWARD_DECLARE_INTERFACE(awt,XControl)
-FORWARD_DECLARE_INTERFACE(awt,XControlContainer)
-//FORWARD_DECLARE_INTERFACE(uno,Reference)
+namespace com { namespace sun { namespace star {
+    namespace awt {
+        class XControl;
+        class XControlContainer;;
+    }
+}}}
 
 //==================================================================
 // FmUndoPropertyAction
