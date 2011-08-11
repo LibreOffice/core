@@ -116,11 +116,11 @@ GraphicID::GraphicID( const GraphicObject& rObj )
 
         case( GRAPHIC_GDIMETAFILE ):
         {
-            const GDIMetaFile aMtf( rGraphic.GetGDIMetaFile() );
+            const GDIMetaFile& rMtf = rGraphic.GetGDIMetaFile();
 
-            mnID1 |= ( aMtf.GetActionSize() & 0x0fffffff );
-            mnID2 = aMtf.GetPrefSize().Width();
-            mnID3 = aMtf.GetPrefSize().Height();
+            mnID1 |= ( rMtf.GetActionSize() & 0x0fffffff );
+            mnID2 = rMtf.GetPrefSize().Width();
+            mnID3 = rMtf.GetPrefSize().Height();
             mnID4 = rGraphic.GetChecksum();
         }
         break;
