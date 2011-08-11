@@ -669,20 +669,22 @@ $(call gb_LinkTarget_set_include,$(1),\
 $(call gb_LinkTarget_add_libs,$(1),\
     $(MOZ_NSS_LIBS) \
 )
+
 endef
 
 else
 
-define gb_LinkTarget__use_plc4
 $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO,\
     nspr4 \
     nss3 \
     plc4 \
 ))
 
+define gb_LinkTarget__use_plc4
 $(call gb_LinkTarget_add_linked_libs,$(1),\
     plc4 \
 )
+
 endef
 
 endif
