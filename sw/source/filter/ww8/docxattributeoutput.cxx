@@ -1265,7 +1265,9 @@ to find it, unfortunately :-(
 static OString impl_DateTimeToOString( const DateTime& rDateTime )
 {
     DateTime aInUTC( rDateTime );
-    aInUTC.ConvertToUTC();
+// HACK: this is correct according to the spec, but MSOffice believes everybody lives
+// in UTC+0 when reading it back
+//    aInUTC.ConvertToUTC();
 
     OStringBuffer aBuffer( 25 );
     aBuffer.append( sal_Int32( aInUTC.GetYear() ) );
