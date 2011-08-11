@@ -654,70 +654,70 @@ Reference<XEventListener> EventAttacherImpl::attachListenerForTarget(
         // Is it the correct method?
         OUString aMethName = rxMethod->getName();
 
-        if( aAddListenerName == aMethName )
+        if (aAddListenerName != aMethName)
+            continue;
+
+        Sequence< Reference< XIdlClass > > params = rxMethod->getParameterTypes();
+        sal_uInt32 nParamCount = params.getLength();
+
+        Reference< XIdlClass > xListenerType;
+        if( nParamCount == 1 )
+            xListenerType = params.getConstArray()[0];
+        else if( nParamCount == 2 )
+            xListenerType = params.getConstArray()[1];
+
+        // Request Adapter for the actual Listener type
+        Reference< XInterface > xAdapter = createAllListenerAdapter(
+            xInvocationAdapterFactory, xListenerType, xAllListener, aHelper );
+
+        if( !xAdapter.is() )
+            throw CannotCreateAdapterException();
+        xRet = Reference< XEventListener >( xAdapter, UNO_QUERY );
+
+        // Just the Listener as parameter?
+        if( nParamCount == 1 )
         {
-            Sequence< Reference< XIdlClass > > params = rxMethod->getParameterTypes();
-            sal_uInt32 nParamCount = params.getLength();
-
-            Reference< XIdlClass > xListenerType;
-            if( nParamCount == 1 )
-                xListenerType = params.getConstArray()[0];
-            else if( nParamCount == 2 )
-                xListenerType = params.getConstArray()[1];
-
-            // Request Adapter for the actual Listener type
-            Reference< XInterface > xAdapter = createAllListenerAdapter(
-                xInvocationAdapterFactory, xListenerType, xAllListener, aHelper );
-
-            if( !xAdapter.is() )
-                throw CannotCreateAdapterException();
-            xRet = Reference< XEventListener >( xAdapter, UNO_QUERY );
-
-            // Just the Listener as parameter?
-            if( nParamCount == 1 )
+            Sequence< Any > args( 1 );
+            args.getArray()[0] <<= xAdapter;
+            try
             {
-                Sequence< Any > args( 1 );
-                args.getArray()[0] <<= xAdapter;
-                try
-                {
-                    rxMethod->invoke( aObject, args );
-                }
-                catch( InvocationTargetException& )
-                {
-                    throw IntrospectionException();
-                }
+                rxMethod->invoke( aObject, args );
             }
-            // Else, pass the other parameter now
-            else if( nParamCount == 2 )
+            catch( InvocationTargetException& )
             {
-                Sequence< Any > args( 2 );
-                Any* pAnys = args.getArray();
-
-                // Check the type of the 1st parameter
-                Reference< XIdlClass > xParamClass = params.getConstArray()[0];
-                if( xParamClass->getTypeClass() == TypeClass_STRING )
-                {
-                    pAnys[0] <<= aAddListenerParam;
-                }
-
-                // 2nd Parameter == Listener? TODO: Test!
-                pAnys[1] <<= xAdapter;
-
-                // TODO: Convert String -> ?
-                // else
-                try
-                {
-                    rxMethod->invoke( aObject, args );
-                }
-                catch( InvocationTargetException& )
-                {
-                    throw IntrospectionException();
-                }
+                throw IntrospectionException();
             }
-            break;
-            // else...
-            // Anything else is not supported
         }
+        // Else, pass the other parameter now
+        else if( nParamCount == 2 )
+        {
+            Sequence< Any > args( 2 );
+            Any* pAnys = args.getArray();
+
+            // Check the type of the 1st parameter
+            Reference< XIdlClass > xParamClass = params.getConstArray()[0];
+            if( xParamClass->getTypeClass() == TypeClass_STRING )
+            {
+                pAnys[0] <<= aAddListenerParam;
+            }
+
+            // 2nd Parameter == Listener? TODO: Test!
+            pAnys[1] <<= xAdapter;
+
+            // TODO: Convert String -> ?
+            // else
+            try
+            {
+                rxMethod->invoke( aObject, args );
+            }
+            catch( InvocationTargetException& )
+            {
+                throw IntrospectionException();
+            }
+        }
+        break;
+        // else...
+        // Anything else is not supported
     }
 
     return xRet;
