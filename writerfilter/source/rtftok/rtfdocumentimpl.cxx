@@ -1754,6 +1754,9 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
         case RTF_NOLINE:
             lcl_eraseNestedAttribute(m_aStates.top().aSectionSprms, NS_ooxml::LN_EG_SectPrContents_lnNumType, NS_ooxml::LN_CT_LineNumber_distance);
             break;
+        case RTF_FORMSHADE:
+            // Noop, this is the default in Writer.
+            break;
         default:
 #if OSL_DEBUG_LEVEL > 1
             OSL_TRACE("%s: TODO handle flag '%s'", OSL_THIS_FUNC, lcl_RtfToString(nKeyword));
