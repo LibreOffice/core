@@ -119,6 +119,16 @@ static void lcl_putNestedSprm(RTFSprms& rSprms, Id nParent, Id nId, RTFValue::Po
     lcl_putNestedAttribute(rSprms, nParent, nId, pValue, bOverwrite, false);
 }
 
+static bool lcl_eraseNestedAttribute(RTFSprms& rSprms, Id nParent, Id nId)
+{
+    RTFValue::Pointer_t pParent = rSprms.find(nParent);
+    if (!pParent.get())
+        // It doesn't even have a parent, we're done!
+        return false;
+    RTFSprms& rAttributes = pParent->getAttributes();
+    return rAttributes.erase(nId);
+}
+
 static RTFSprms& lcl_getLastAttributes(RTFSprms& rSprms, Id nId)
 {
     RTFValue::Pointer_t p = rSprms.find(nId);
@@ -1740,6 +1750,9 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
                 RTFValue::Pointer_t pValue(new RTFValue(NS_ooxml::LN_Value_ST_RestartNumber_eachSect));
                 lcl_putNestedSprm(m_aDefaultState.aParagraphSprms, NS_ooxml::LN_EG_SectPrContents_footnotePr, NS_ooxml::LN_EG_FtnEdnNumProps_numRestart, pValue);
             }
+            break;
+        case RTF_NOLINE:
+            lcl_eraseNestedAttribute(m_aStates.top().aSectionSprms, NS_ooxml::LN_EG_SectPrContents_lnNumType, NS_ooxml::LN_CT_LineNumber_distance);
             break;
         default:
 #if OSL_DEBUG_LEVEL > 1
