@@ -1732,6 +1732,15 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
         case RTF_AFTNRESTART:
             // Noop, Writer does not support restarting endnotes at each section.
             break;
+        case RTF_FTNBJ:
+            // Noop, this is the default in Writer.
+            break;
+        case RTF_ENDDOC:
+            {
+                RTFValue::Pointer_t pValue(new RTFValue(NS_ooxml::LN_Value_ST_RestartNumber_eachSect));
+                lcl_putNestedSprm(m_aDefaultState.aParagraphSprms, NS_ooxml::LN_EG_SectPrContents_footnotePr, NS_ooxml::LN_EG_FtnEdnNumProps_numRestart, pValue);
+            }
+            break;
         default:
 #if OSL_DEBUG_LEVEL > 1
             OSL_TRACE("%s: TODO handle flag '%s'", OSL_THIS_FUNC, lcl_RtfToString(nKeyword));
