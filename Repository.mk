@@ -153,9 +153,6 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
 	fileacc \
 	mcnttype \
 	neon \
-	nspr4 \
-	nss3 \
-	plc4 \
 	test \
 	xmlsecurity \
 	xsec_fw \

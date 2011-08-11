@@ -124,7 +124,7 @@ $(eval $(call gb_Library_add_linked_static_libs,xsec_xmlsec,\
 	xmlsec1-nss \
 ))
 
-$(eval $(call gb_Library_add_linked_libs,xsec_xmlsec,\
+$(eval $(call gb_Library_use_externals,xsec_xmlsec,\
 	plc4 \
 ))
 
