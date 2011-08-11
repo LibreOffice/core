@@ -79,11 +79,17 @@ class DatabaseMetaData :
     ConnectionSettings *m_pSettings;
     ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection > m_origin;
     ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XPreparedStatement > m_getIntSetting_stmt;
+    ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XPreparedStatement > m_getReferences_stmt[16];
 
     void checkClosed() throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
     sal_Int32 getIntSetting(::rtl::OUString settingName) throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
     sal_Int32 getMaxIndexKeys()  throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
     sal_Int32 getMaxNameLength() throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+    ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet > getImportedExportedKeys(
+        const ::com::sun::star::uno::Any& primaryCatalog, const ::rtl::OUString& primarySchema, const ::rtl::OUString& primaryTable,
+        const ::com::sun::star::uno::Any& foreignCatalog, const ::rtl::OUString& foreignSchema, const ::rtl::OUString& foreignTable )
+        throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+    void init_getReferences_stmt ();
 
 public:
     DatabaseMetaData(

@@ -62,6 +62,36 @@
  *  * august 2011: switch to unordered_map instead of deprecated hash_map
  *  * august 2011: calcSearchable: actually set return value, not fresh variable.
  *
+ * Portions adapted from JDBC PostgreSQL driver:
+ *
+ *  Copyright (c) 2004-2008, PostgreSQL Global Development Group
+ *
+ * Licence of original JDBC driver code:
+ *
+ *  Redistribution and use in source and binary forms, with or without
+ *  modification, are permitted provided that the following conditions are met:
+ *
+ *  1. Redistributions of source code must retain the above copyright notice,
+ *     this list of conditions and the following disclaimer.
+ *  2. Redistributions in binary form must reproduce the above copyright notice,
+ *     this list of conditions and the following disclaimer in the documentation
+ *     and/or other materials provided with the distribution.
+ *  3. Neither the name of the PostgreSQL Global Development Group nor the names
+ *     of its contributors may be used to endorse or promote products derived
+ *     from this software without specific prior written permission.
+ *
+ *  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ *  AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ *  IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ *  ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+ *  LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ *  CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ *  SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ *  INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ *  CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ *  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ *  POSSIBILITY OF SUCH DAMAGE.
+ *
  ************************************************************************/
 #include <algorithm>
 #include "pq_databasemetadata.hxx"
@@ -80,20 +110,14 @@
 #include<com/sun/star/sdbc/IndexType.hpp>
 #include<com/sun/star/sdbc/ColumnValue.hpp>
 #include<com/sun/star/sdbc/ColumnSearch.hpp>
+#include<com/sun/star/sdbc/KeyRule.hpp>
+#include<com/sun/star/sdbc/Deferrability.hpp>
 
 using ::osl::MutexGuard;
 
 using ::rtl::OUString;
 
-using com::sun::star::sdbc::SQLException;
-using com::sun::star::sdbc::XStatement;
-using com::sun::star::sdbc::XResultSet;
-using com::sun::star::sdbc::XRow;
-using com::sun::star::sdbc::XCloseable;
-using com::sun::star::sdbc::XParameters;
-using com::sun::star::sdbc::XPreparedStatement;
-//  using com::sun::star::sdbc::IndexType;
-//  using com::sun::star::sdbc::DataType;
+using namespace com::sun::star::sdbc;
 
 using com::sun::star::uno::RuntimeException;
 using com::sun::star::uno::Sequence;
@@ -116,6 +140,24 @@ std::vector
 
 
 #define ASCII_STR(x) OUString( RTL_CONSTASCII_USTRINGPARAM( x ) )
+
+#define QUOTEME(X)  #X
+#define STRINGIFY(X) QUOTEME(X)
+
+// These are pre-processor versions of KeyRule.idl declarations
+// These are inherited from JDBC, and thus won't change anytime soon.
+// Having them as pre-processor definitions allows to include them
+// into compile-time strings (through STRINGIFY), which can be passed to ASCII_STR.
+// That is without resorting to horrendeous hacks in template meta-programming.
+#define KEYRULE_CASCADE      0
+#define KEYRULE_RESTRICT     1
+#define KEYRULE_SET_NULL     2
+#define KEYRULE_NO_ACTION    4
+#define KEYRULE_SET_DEFAULT  4
+// Ditto for Deferrability.idl
+#define DEFERRABILITY_INITIALLY_DEFERRED  5
+#define DEFERRABILITY_INITIALLY_IMMEDIATE 6
+#define DEFERRABILITY_NONE                7
 
 // alphabetically ordered !
 static const int PRIVILEGE_CREATE     = 0x1;
@@ -143,8 +185,9 @@ DatabaseMetaData::DatabaseMetaData(
   : m_refMutex( refMutex ),
     m_pSettings( pSettings ),
     m_origin( origin ),
-    m_getIntSetting_stmt ( m_origin->prepareStatement(ASCII_STR( "SELECT setting FROM pg_catalog.pg_settings WHERE name=?")) )
+    m_getIntSetting_stmt ( m_origin->prepareStatement(ASCII_STR( "SELECT setting FROM pg_catalog.pg_settings WHERE name=?" )) )
 {
+    init_getReferences_stmt();
 }
 
 sal_Bool DatabaseMetaData::allProceduresAreCallable(  ) throw (SQLException, RuntimeException)
@@ -1849,6 +1892,9 @@ static void addPrivilegesToVector(
         // this expensive and somewhat ugly way
         // annotation: postgresql shouldn't have choosen an array here, instead they
         //             should have multiple rows per table
+        // LEM: to transform an array into several rows, see unnest;
+        //      it is as simple as "SELECT foo, bar, unnest(qux) FROM ..."
+        //      where qux is the column that contains an array.
         while( array[i] && '}' != array[i] )
         {
             i++;
@@ -1914,90 +1960,205 @@ static void addPrivilegesToVector(
         m_refMutex, *this, getStatics().primaryKeyNames, ret , m_pSettings->tc );
 }
 
+// Copied / adapted / simplified from JDBC driver
+#define SQL_CASE_KEYRULE "  WHEN 'c' THEN " STRINGIFY(KEYRULE_CASCADE) \
+                         "  WHEN 'n' THEN " STRINGIFY(KEYRULE_SET_NULL) \
+                         "  WHEN 'd' THEN " STRINGIFY(KEYRULE_SET_DEFAULT) \
+                         "  WHEN 'r' THEN " STRINGIFY(KEYRULE_RESTRICT) \
+                         "  WHEN 'a' THEN " STRINGIFY(KEYRULE_NO_ACTION) \
+                         "  ELSE NULL "
+
+#define SQL_GET_REFERENCES \
+    "WITH con AS (SELECT oid, conname, contype, condeferrable, condeferred, conrelid, confrelid,  confupdtype, confdeltype, generate_subscripts(conkey,1) AS conkeyseq, unnest(conkey) AS conkey , unnest(confkey) AS confkey FROM pg_catalog.pg_constraint) " \
+    "SELECT NULL::text AS PKTABLE_CAT, pkn.nspname AS PKTABLE_SCHEM, pkc.relname AS PKTABLE_NAME, pka.attname AS PKCOLUMN_NAME, " \
+    " NULL::text AS FKTABLE_CAT, fkn.nspname AS FKTABLE_SCHEM, fkc.relname AS FKTABLE_NAME, fka.attname AS FKCOLUMN_NAME, " \
+    " con.conkeyseq AS KEY_SEQ, " \
+    " CASE con.confupdtype " \
+    SQL_CASE_KEYRULE \
+    " END AS UPDATE_RULE, " \
+    " CASE con.confdeltype " \
+    SQL_CASE_KEYRULE \
+    " END AS DELETE_RULE, " \
+    " con.conname AS FK_NAME, pkic.relname AS PK_NAME, " \
+    " CASE " \
+    "  WHEN con.condeferrable AND con.condeferred THEN " STRINGIFY(DEFERRABILITY_INITIALLY_DEFERRED) \
+    "  WHEN con.condeferrable THEN " STRINGIFY(DEFERRABILITY_INITIALLY_IMMEDIATE) \
+    "  ELSE " STRINGIFY(DEFERRABILITY_NONE) \
+    " END AS DEFERRABILITY " \
+    "FROM " \
+    " pg_catalog.pg_namespace pkn, pg_catalog.pg_class pkc, pg_catalog.pg_attribute pka, " \
+    " pg_catalog.pg_namespace fkn, pg_catalog.pg_class fkc, pg_catalog.pg_attribute fka, " \
+    " con, pg_catalog.pg_depend dep, pg_catalog.pg_class pkic " \
+    "WHERE pkn.oid = pkc.relnamespace AND pkc.oid = pka.attrelid AND pka.attnum = con.confkey AND con.confrelid = pkc.oid " \
+    " AND  fkn.oid = fkc.relnamespace AND fkc.oid = fka.attrelid AND fka.attnum = con.conkey  AND con.conrelid  = fkc.oid " \
+    " AND con.contype = 'f' AND con.oid = dep.objid AND pkic.oid = dep.refobjid AND pkic.relkind = 'i' AND dep.classid = 'pg_constraint'::regclass::oid AND dep.refclassid = 'pg_class'::regclass::oid "
+
+#define SQL_GET_REFERENCES_PSCHEMA " AND pkn.nspname = ? "
+#define SQL_GET_REFERENCES_PTABLE  " AND pkc.relname = ? "
+#define SQL_GET_REFERENCES_FSCHEMA " AND fkn.nspname = ? "
+#define SQL_GET_REFERENCES_FTABLE  " AND fkc.relname = ? "
+#define SQL_GET_REFERENCES_ORDER_SOME_PTABLE "ORDER BY fkn.nspname, fkc.relname, conkeyseq"
+#define SQL_GET_REFERENCES_ORDER_NO_PTABLE   "ORDER BY pkn.nspname, pkc.relname, conkeyseq"
+
+#define SQL_GET_REFERENCES_NONE_NONE_NONE_NONE \
+    SQL_GET_REFERENCES \
+    SQL_GET_REFERENCES_ORDER_NO_PTABLE
+
+#define SQL_GET_REFERENCES_SOME_NONE_NONE_NONE \
+    SQL_GET_REFERENCES \
+    SQL_GET_REFERENCES_PSCHEMA \
+    SQL_GET_REFERENCES_ORDER_NO_PTABLE
+
+#define SQL_GET_REFERENCES_NONE_SOME_NONE_NONE \
+    SQL_GET_REFERENCES \
+    SQL_GET_REFERENCES_PTABLE \
+    SQL_GET_REFERENCES_ORDER_SOME_PTABLE
+
+#define SQL_GET_REFERENCES_SOME_SOME_NONE_NONE \
+    SQL_GET_REFERENCES \
+    SQL_GET_REFERENCES_PSCHEMA \
+    SQL_GET_REFERENCES_PTABLE \
+    SQL_GET_REFERENCES_ORDER_SOME_PTABLE
+
+#define SQL_GET_REFERENCES_NONE_NONE_SOME_NONE \
+    SQL_GET_REFERENCES \
+    SQL_GET_REFERENCES_FSCHEMA \
+    SQL_GET_REFERENCES_ORDER_NO_PTABLE
+
+#define SQL_GET_REFERENCES_NONE_NONE_NONE_SOME \
+    SQL_GET_REFERENCES \
+    SQL_GET_REFERENCES_FTABLE \
+    SQL_GET_REFERENCES_ORDER_NO_PTABLE
+
+#define SQL_GET_REFERENCES_NONE_NONE_SOME_SOME \
+    SQL_GET_REFERENCES \
+    SQL_GET_REFERENCES_FSCHEMA \
+    SQL_GET_REFERENCES_FTABLE \
+    SQL_GET_REFERENCES_ORDER_NO_PTABLE
+
+#define SQL_GET_REFERENCES_SOME_NONE_SOME_NONE \
+    SQL_GET_REFERENCES \
+    SQL_GET_REFERENCES_PSCHEMA \
+    SQL_GET_REFERENCES_FSCHEMA \
+    SQL_GET_REFERENCES_ORDER_NO_PTABLE
+
+#define SQL_GET_REFERENCES_SOME_NONE_NONE_SOME \
+    SQL_GET_REFERENCES \
+    SQL_GET_REFERENCES_PSCHEMA \
+    SQL_GET_REFERENCES_FTABLE \
+    SQL_GET_REFERENCES_ORDER_NO_PTABLE
+
+#define SQL_GET_REFERENCES_SOME_NONE_SOME_SOME \
+    SQL_GET_REFERENCES \
+    SQL_GET_REFERENCES_PSCHEMA \
+    SQL_GET_REFERENCES_FSCHEMA \
+    SQL_GET_REFERENCES_FTABLE \
+    SQL_GET_REFERENCES_ORDER_NO_PTABLE
+
+#define SQL_GET_REFERENCES_NONE_SOME_SOME_NONE \
+    SQL_GET_REFERENCES \
+    SQL_GET_REFERENCES_PTABLE \
+    SQL_GET_REFERENCES_FSCHEMA \
+    SQL_GET_REFERENCES_ORDER_SOME_PTABLE
+
+#define SQL_GET_REFERENCES_NONE_SOME_NONE_SOME \
+    SQL_GET_REFERENCES \
+    SQL_GET_REFERENCES_PTABLE \
+    SQL_GET_REFERENCES_FTABLE \
+    SQL_GET_REFERENCES_ORDER_SOME_PTABLE
+
+#define SQL_GET_REFERENCES_NONE_SOME_SOME_SOME \
+    SQL_GET_REFERENCES \
+    SQL_GET_REFERENCES_PTABLE \
+    SQL_GET_REFERENCES_FSCHEMA \
+    SQL_GET_REFERENCES_FTABLE \
+    SQL_GET_REFERENCES_ORDER_SOME_PTABLE
+
+#define SQL_GET_REFERENCES_SOME_SOME_SOME_NONE \
+    SQL_GET_REFERENCES \
+    SQL_GET_REFERENCES_PSCHEMA \
+    SQL_GET_REFERENCES_PTABLE \
+    SQL_GET_REFERENCES_FSCHEMA \
+    SQL_GET_REFERENCES_ORDER_SOME_PTABLE
+
+#define SQL_GET_REFERENCES_SOME_SOME_NONE_SOME \
+    SQL_GET_REFERENCES \
+    SQL_GET_REFERENCES_PSCHEMA \
+    SQL_GET_REFERENCES_PTABLE \
+    SQL_GET_REFERENCES_FTABLE \
+    SQL_GET_REFERENCES_ORDER_SOME_PTABLE
+
+#define SQL_GET_REFERENCES_SOME_SOME_SOME_SOME \
+    SQL_GET_REFERENCES \
+    SQL_GET_REFERENCES_PSCHEMA \
+    SQL_GET_REFERENCES_PTABLE \
+    SQL_GET_REFERENCES_FSCHEMA \
+    SQL_GET_REFERENCES_FTABLE \
+    SQL_GET_REFERENCES_ORDER_SOME_PTABLE
+
+void DatabaseMetaData::init_getReferences_stmt ()
+{
+    m_getReferences_stmt[0]  = m_origin->prepareStatement(ASCII_STR( SQL_GET_REFERENCES_NONE_NONE_NONE_NONE ));
+    m_getReferences_stmt[1]  = m_origin->prepareStatement(ASCII_STR( SQL_GET_REFERENCES_SOME_NONE_NONE_NONE ));
+    m_getReferences_stmt[2]  = m_origin->prepareStatement(ASCII_STR( SQL_GET_REFERENCES_NONE_SOME_NONE_NONE ));
+    m_getReferences_stmt[3]  = m_origin->prepareStatement(ASCII_STR( SQL_GET_REFERENCES_SOME_SOME_NONE_NONE ));
+    m_getReferences_stmt[4]  = m_origin->prepareStatement(ASCII_STR( SQL_GET_REFERENCES_NONE_NONE_SOME_NONE ));
+    m_getReferences_stmt[5]  = m_origin->prepareStatement(ASCII_STR( SQL_GET_REFERENCES_SOME_NONE_SOME_NONE ));
+    m_getReferences_stmt[6]  = m_origin->prepareStatement(ASCII_STR( SQL_GET_REFERENCES_NONE_SOME_SOME_NONE ));
+    m_getReferences_stmt[7]  = m_origin->prepareStatement(ASCII_STR( SQL_GET_REFERENCES_SOME_SOME_SOME_NONE ));
+    m_getReferences_stmt[8]  = m_origin->prepareStatement(ASCII_STR( SQL_GET_REFERENCES_NONE_NONE_NONE_SOME ));
+    m_getReferences_stmt[9]  = m_origin->prepareStatement(ASCII_STR( SQL_GET_REFERENCES_SOME_NONE_NONE_SOME ));
+    m_getReferences_stmt[10] = m_origin->prepareStatement(ASCII_STR( SQL_GET_REFERENCES_NONE_SOME_NONE_SOME ));
+    m_getReferences_stmt[11] = m_origin->prepareStatement(ASCII_STR( SQL_GET_REFERENCES_SOME_SOME_NONE_SOME ));
+    m_getReferences_stmt[12] = m_origin->prepareStatement(ASCII_STR( SQL_GET_REFERENCES_NONE_NONE_SOME_SOME ));
+    m_getReferences_stmt[13] = m_origin->prepareStatement(ASCII_STR( SQL_GET_REFERENCES_SOME_NONE_SOME_SOME ));
+    m_getReferences_stmt[14] = m_origin->prepareStatement(ASCII_STR( SQL_GET_REFERENCES_NONE_SOME_SOME_SOME ));
+    m_getReferences_stmt[15] = m_origin->prepareStatement(ASCII_STR( SQL_GET_REFERENCES_SOME_SOME_SOME_SOME ));
+}
+
+::com::sun::star::uno::Reference< XResultSet > DatabaseMetaData::getImportedExportedKeys(
+    const Any& primaryCatalog,
+    const OUString& primarySchema,
+    const OUString& primaryTable,
+    const Any& foreignCatalog,
+    const OUString& foreignSchema,
+    const OUString& foreignTable ) throw (SQLException, RuntimeException)
+{
+    unsigned int i = 0;
+    if ( ! primarySchema.isEmpty() )
+        i |=  0x01;
+    if ( ! primaryTable.isEmpty() )
+        i |=  0x02;
+    if ( ! foreignSchema.isEmpty() )
+        i |=  0x04;
+    if ( ! foreignTable.isEmpty() )
+        i |=  0x08;
+
+    Reference< XPreparedStatement > stmt = m_getReferences_stmt[i];
+    Reference< XParameters > param ( stmt, UNO_QUERY_THROW );
+
+    unsigned int j = 1;
+    if ( i & 0x01 )
+        param->setString( j++, primarySchema );
+    if ( i & 0x02 )
+        param->setString( j++, primaryTable  );
+    if ( i & 0x04 )
+        param->setString( j++, foreignSchema );
+    if ( i & 0x08 )
+        param->setString( j++, foreignTable  );
+
+    Reference< XResultSet > rs = stmt->executeQuery();
+
+    return rs;
+}
+
+
 ::com::sun::star::uno::Reference< XResultSet > DatabaseMetaData::getImportedKeys(
     const ::com::sun::star::uno::Any& catalog,
     const OUString& schema,
     const OUString& table ) throw (SQLException, RuntimeException)
 {
-//     MutexGuard guard( m_refMutex->mutex );
-//     checkClosed();
-
-//     Statics &st = getStatics();
-//     Int2StringMap mainMap;
-//     fillAttnum2attnameMap( mainMap, m_origin, m_schemaName, m_tableName );
-
-//     Reference< XPreparedStatement > stmt = m_origin->prepareStatement(
-//         ASCII_STR(
-//             "SELECT  conname, "            // 1
-//                     "confupdtype, "        // 2
-//                     "confdeltype, "        // 3
-//                     "class2.relname, "     // 4
-//                     "nmsp2.nspname, "      // 5
-//                     "conkey,"              // 6
-//                     "confkey "             // 7
-//             "FROM pg_constraint INNER JOIN pg_class ON conrelid = pg_class.oid "
-//                  "INNER JOIN pg_namespace ON pg_class.relnamespace = pg_namespace.oid "
-//                  "LEFT JOIN pg_class AS class2 ON confrelid = class2.oid "
-//                  "LEFT JOIN pg_namespace AS nmsp2 ON class2.relnamespace=nmsp2.oid "
-//             "WHERE pg_class.relname = ? AND "
-//                   "pg_namespace.nspname = ? "
-//                   "AND contype = 'f'"));
-
-//     Reference< XResultSet > rs = stmt->executeQuery();
-//     Reference< XRow > row( rs, UNO_QUERY_THROW );
-//     while( rs->next() )
-//     {
-
-//         static const PKTABLE_CAT = 0;
-//         static const PKTABLE_SCHEM = 1;
-//         static const PKTABLE_NAME = 2;
-//         static const PKCOLUMN_NAME = 3;
-//         static const FKTABLE_CAT = 4;
-//         static const FKTABLE_SCHEM = 5;
-//         static const FKTABLE_NAME = 6;
-//         static const FKCOLUMN_NAME = 7;
-//         static const KEY_SEQ = 8;
-//         static const UPDATE_RULE = 9;
-//         static const DELETE_RULE = 10;
-//         static const FK_NAME = 11;
-//         static const PK_NAME = 12;
-//         static const DEFERRABILITY = 13;
-
-//         OUString pkSchema =  xRow->getString(6);
-//         OUString pkTable = xRow->getString(5);
-
-//         Int2StringMap foreignMap;
-//         fillAttnum2attnameMap( foreignMap, m_origin,pkSchema, pkTable);
-
-//         Sequence< rtl::OUString > pkColNames =
-//             convertMappedIntArray2StringArray(
-//                 foreignMap, string2intarray( row->getString( 7 ) ) );
-//         Sequence< rtl::OUString > fkColNames =
-//             convertMappedIntArray2StringArray(
-//                 mainMap, string2intarray( row->getString( 6 ) ) );
-
-//         for( sal_Int32 i = 0 ; i < pkColNames.getLength() ; i ++ )
-//         {
-//             Sequence< Any > theRow( 14 );
-
-//             theRow[PKTABLE_SCHEM] = makeAny( pkSchema );
-//             theRow[PKTABLE_NAME] = makeAny( pkTable );
-//             theRow[PKCOLUMN_NAME] = makeAny( pkColNames[i] );
-//             theRow[FKTABLE_SCHEM] = makeAny( schema );
-//             theRow[FKTABLE_NAME] = makeAny( table );
-//             theRow[FKCOLUMN_NAME] = makeAny( fkColNames[i] );
-//             theRow[KEY_SEQ] = makeAny( OUString::valueOf( i ) );
-//             theRow[
-
-
-//         pKey->setPropertyValue_NoBroadcast_public(
-//             st.PRIVATE_FOREIGN_COLUMNS,
-//             makeAny( resolveColumnNames(foreignMap, xRow->getString(8) ) ) );
-
-//     }
-    // LEM TODO: full "real" implementation
-    return new SequenceResultSet(
-        m_refMutex, *this, Sequence< OUString >(), Sequence< Sequence< Any > > (), m_pSettings->tc );
+    return getImportedExportedKeys(Any(), OUString(), OUString(), catalog, schema, table);
 }
 
 ::com::sun::star::uno::Reference< XResultSet > DatabaseMetaData::getExportedKeys(
@@ -2005,11 +2166,7 @@ static void addPrivilegesToVector(
     const OUString& schema,
     const OUString& table ) throw (SQLException, RuntimeException)
 {
-    //LEM TODO: implement! See JDBC driver
-    throw ::com::sun::star::sdbc::SQLException(
-        ASCII_STR( "pq_databasemetadata: imported keys from tables not supported " ),
-        *this,
-        OUString(), 1, Any() );
+    return getImportedExportedKeys(catalog, schema, table, Any(), OUString(), OUString());
 }
 
 ::com::sun::star::uno::Reference< XResultSet > DatabaseMetaData::getCrossReference(
@@ -2020,11 +2177,7 @@ static void addPrivilegesToVector(
     const OUString& foreignSchema,
     const OUString& foreignTable ) throw (SQLException, RuntimeException)
 {
-    //LEM TODO: implement! See JDBC driver
-    MutexGuard guard( m_refMutex->mutex );
-    checkClosed();
-    return new SequenceResultSet(
-        m_refMutex, *this, Sequence< OUString >(), Sequence< Sequence< Any > > (), m_pSettings->tc );
+    return getImportedExportedKeys( primaryCatalog, primarySchema, primaryTable, foreignCatalog, foreignSchema, foreignTable );
 }
 
 
