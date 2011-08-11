@@ -1433,8 +1433,9 @@ namespace cppcanvas
 
                                         rFactoryParms.mrCurrActionIndex += pBmpAction->getActionCount()-1;
                                     }
-                                } else
+                                } else {
                                     EMFP_DEBUG (printf ("EMF+ warning: empty bitmap\n"));
+                                }
                             } else {
                                 EMFP_DEBUG (printf ("EMF+ DrawImagePoints TODO (fixme)\n"));
                 }
