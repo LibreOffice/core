@@ -8,13 +8,13 @@ if test -z "${SOLARENV}"; then
 fi
 
 # remove aliases set by Env.Host.sh
-unalias mkout
-unalias deliver
-unalias build
-unalias zipdep
+unalias mkout    2> /dev/null
+unalias deliver  2> /dev/null
+unalias build    2> /dev/null
+unalias zipdep   2> /dev/null
 
 # executables are *.exe for WNT. This variable is necessary since Cygwin 1.5.x
-# Use spawn instead of fork when building dmake on cygwin. 
+# Use spawn instead of fork when building dmake on cygwin.
 if test "$GUI_FOR_BUILD" = "WNT"; then
     EXEEXT=".exe"
     DMAKE_CONF="--enable-spawn"
@@ -67,7 +67,7 @@ if test "$BUILD_DMAKE" != "NO"; then
     echo "dmake copied to $SOLARENV/$OUTPATH_FOR_BUILD/bin/dmake$EXEEXT"
 fi
 
-#make sure build.pl is executable 
+#make sure build.pl is executable
 
 chmod +x "$SRC_ROOT/solenv/bin/build.pl"
 chmod +x "$SRC_ROOT/solenv/bin/zipdep.pl"
