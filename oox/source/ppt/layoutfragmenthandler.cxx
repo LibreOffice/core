@@ -65,8 +65,15 @@ ContextHandlerRef LayoutFragmentHandler::onCreateContext( sal_Int32 aElementToke
     switch( aElementToken )
     {
         case PPT_TOKEN( sldLayout ):        // CT_SlideLayout
+        {
             mpSlidePersistPtr->setLayoutValueToken( rAttribs.getToken( XML_type, 0 ) ); // CT_SlideLayoutType
+
+            OptValue< bool > aShowMasterShapes = rAttribs.getBool( XML_showMasterSp );
+            if( aShowMasterShapes.has() && !aShowMasterShapes.get() ) {
+                mpSlidePersistPtr->dropShapes();
+            }
         break;
+        }
         case PPT_TOKEN( hf ):               // CT_HeaderFooter
             return new HeaderFooterContext( *this, rAttribs, mpSlidePersistPtr->getHeaderFooter() );
         break;

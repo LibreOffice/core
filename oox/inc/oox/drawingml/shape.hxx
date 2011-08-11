@@ -147,6 +147,8 @@ public:
                             const ::com::sun::star::awt::Rectangle* pShapeRect = 0,
                             ShapeIdMap* pShapeMap = 0 );
 
+    void                dropChildren() { maChildren.clear(); }
+
     void                setXShape( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& rXShape )
                             { mxShape = rXShape; };
     const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > &

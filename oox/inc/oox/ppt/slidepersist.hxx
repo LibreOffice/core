@@ -111,6 +111,7 @@ public:
     oox::drawingml::TextListStylePtr getOtherTextStyle() const { return maOtherTextStylePtr; }
 
     oox::drawingml::ShapePtr getShapes() { return maShapesPtr; }
+    void dropShapes() { maShapesPtr->dropChildren(); }
     ::std::list< boost::shared_ptr< TimeNode > >& getTimeNodeList() { return maTimeNodeList; }
     oox::ppt::HeaderFooter& getHeaderFooter(){ return maHeaderFooter; };
 
