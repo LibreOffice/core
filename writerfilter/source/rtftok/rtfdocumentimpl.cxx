@@ -1460,6 +1460,21 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
         return 0;
     }
 
+    // Footnote restart type
+    switch (nKeyword)
+    {
+        case RTF_FTNRSTPG: nParam = NS_ooxml::LN_Value_ST_RestartNumber_eachPage; break;
+        case RTF_FTNRESTART: nParam = NS_ooxml::LN_Value_ST_RestartNumber_eachSect; break;
+        case RTF_FTNRSTCONT: nParam = NS_ooxml::LN_Value_ST_RestartNumber_continuous; break;
+        default: break;
+    }
+    if (nParam >= 0)
+    {
+        RTFValue::Pointer_t pValue(new RTFValue(nParam));
+        lcl_putNestedSprm(m_aDefaultState.aParagraphSprms, NS_ooxml::LN_EG_SectPrContents_footnotePr, NS_ooxml::LN_EG_FtnEdnNumProps_numRestart, pValue);
+        return 0;
+    }
+
     // Endnote numbering
     switch (nKeyword)
     {
