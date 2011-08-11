@@ -86,53 +86,39 @@ void moveCursorByProtRule(
 
     if (nMovX > 0)
     {
-        if (rCol < MAXCOL)
+        for (SCCOL i = 0; i < nMovX && rCol < MAXCOL; ++i)
         {
-            for (SCCOL i = 0; i < nMovX; ++i)
-            {
-                if (!isCellQualified(pDoc, rCol+1, rRow, nTab, bSelectLocked, bSelectUnlocked))
-                    break;
-                ++rCol;
-            }
+            if (!isCellQualified(pDoc, rCol+1, rRow, nTab, bSelectLocked, bSelectUnlocked))
+                break;
+            ++rCol;
         }
     }
     else if (nMovX < 0)
     {
-        if (rCol > 0)
+        for (SCCOL i = 0; i > nMovX && rCol > 0; --i)
         {
-            nMovX = -nMovX;
-            for (SCCOL i = 0; i < nMovX; ++i)
-            {
-                if (!isCellQualified(pDoc, rCol-1, rRow, nTab, bSelectLocked, bSelectUnlocked))
-                    break;
-                --rCol;
-            }
+            if (!isCellQualified(pDoc, rCol-1, rRow, nTab, bSelectLocked, bSelectUnlocked))
+                break;
+            --rCol;
         }
     }
 
     if (nMovY > 0)
     {
-        if (rRow < MAXROW)
+        for (SCROW i = 0; i < nMovY && rRow < MAXROW; ++i)
         {
-            for (SCROW i = 0; i < nMovY; ++i)
-            {
-                if (!isCellQualified(pDoc, rCol, rRow+1, nTab, bSelectLocked, bSelectUnlocked))
-                    break;
-                ++rRow;
-            }
+            if (!isCellQualified(pDoc, rCol, rRow+1, nTab, bSelectLocked, bSelectUnlocked))
+                break;
+            ++rRow;
         }
     }
     else if (nMovY < 0)
     {
-        if (rRow > 0)
+        for (SCROW i = 0; i > nMovY && rRow > 0; --i)
         {
-            nMovY = -nMovY;
-            for (SCROW i = 0; i < nMovY; ++i)
-            {
-                if (!isCellQualified(pDoc, rCol, rRow-1, nTab, bSelectLocked, bSelectUnlocked))
-                    break;
-                --rRow;
-            }
+            if (!isCellQualified(pDoc, rCol, rRow-1, nTab, bSelectLocked, bSelectUnlocked))
+                break;
+            --rRow;
         }
     }
 }
