@@ -216,7 +216,7 @@ void Writer::endSprite()
         mpSprite->write( *mpMovieStream );
         delete mpSprite;
 
-        if (mvSpriteStack.size() > 0)
+        if (!mvSpriteStack.empty())
         {
             mpSprite = mvSpriteStack.top();
             mvSpriteStack.pop();

@@ -374,7 +374,7 @@ sal_Bool ManagerImpl::hasElements()
     throw(::com::sun::star::uno::RuntimeException)
 {
     MutexGuard aGuard( _aComponentMutex );
-    return (_aProviders.size() > 0);
+    return (!_aProviders.empty());
 }
 
 // XEnumerationAccess

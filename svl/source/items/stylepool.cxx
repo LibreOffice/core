@@ -117,7 +117,7 @@ namespace {
     {
         bool bHasItemSet = false;
 
-        if ( maItemSet.size() > 0 )
+        if ( !maItemSet.empty())
         {
             if ( bCheckUsage )
             {

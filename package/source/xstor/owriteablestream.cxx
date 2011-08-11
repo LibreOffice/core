@@ -73,7 +73,7 @@ bool PackageEncryptionDatasEqual( const ::comphelper::SequenceAsHashMap& aHash1,
     bool bResult = ( aHash1.size() && aHash1.size() == aHash2.size() );
     for ( ::comphelper::SequenceAsHashMap::const_iterator aIter = aHash1.begin();
           bResult && aIter != aHash1.end();
-          aIter++ )
+          ++aIter )
     {
         uno::Sequence< sal_Int8 > aKey1;
         bResult = ( ( aIter->second >>= aKey1 ) && aKey1.getLength() );
@@ -540,7 +540,7 @@ void OWriteStream_Impl::DisposeWrappers()
     if ( !m_aInputStreamsList.empty() )
     {
         for ( InputStreamsList_Impl::iterator pStreamIter = m_aInputStreamsList.begin();
-              pStreamIter != m_aInputStreamsList.end(); pStreamIter++ )
+              pStreamIter != m_aInputStreamsList.end(); ++pStreamIter )
         {
             if ( (*pStreamIter) )
             {

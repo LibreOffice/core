@@ -2390,7 +2390,7 @@ void HTMLTable::CloseTable()
         HTMLTableRow *pPrevRow = (*pRows)[nCurRow-1];
         HTMLTableCell *pCell;
         for( i=0; i<nCols; i++ )
-            if( ( pCell=pPrevRow->GetCell(i), pCell->GetRowSpan() > 1 ) )
+            if( ( (pCell=(pPrevRow->GetCell(i))), (pCell->GetRowSpan()) > 1 ) )
             {
                 FixRowSpan( nCurRow-1, i, pCell->GetContents() );
                 ProtectRowSpan( nCurRow, i, (*pRows)[nCurRow]->GetCell(i)->GetRowSpan() );
