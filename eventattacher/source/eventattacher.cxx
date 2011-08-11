@@ -33,7 +33,7 @@
 #include <com/sun/star/registry/XRegistryKey.hpp>
 #include <com/sun/star/beans/XIntrospection.hpp>
 #include <com/sun/star/beans/MethodConcept.hpp>
-#include <com/sun/star/script/XEventAttacher.hpp>
+#include <com/sun/star/script/XEventAttacher2.hpp>
 #include <com/sun/star/script/XTypeConverter.hpp>
 #include <com/sun/star/script/XAllListener.hpp>
 #include <com/sun/star/script/XInvocationAdapterFactory.hpp>
@@ -214,7 +214,7 @@ sal_Bool SAL_CALL InvocationToAllListenerMapper::hasProperty(const OUString& Nam
 //  class EventAttacherImpl
 //  represents an implementation of the EventAttacher service
 //*************************************************************************
-class EventAttacherImpl : public WeakImplHelper3 < XEventAttacher, XInitialization, XServiceInfo >
+class EventAttacherImpl : public WeakImplHelper3 < XEventAttacher2, XInitialization, XServiceInfo >
 {
 public:
     EventAttacherImpl( const Reference< XMultiServiceFactory >& );
@@ -246,10 +246,22 @@ public:
             const Reference< XEventListener >& aToRemoveListener)
         throw( IllegalArgumentException, IntrospectionException, RuntimeException );
 
+    // XEventAttacher2
+    virtual Sequence< Reference<XEventListener> > SAL_CALL attachMultipleEventListeners(
+        const Reference<XInterface>& xObject, const Sequence<com::sun::star::script::EventListener>& aListeners )
+            throw( IllegalArgumentException, ServiceNotRegisteredException, CannotCreateAdapterException, IntrospectionException, RuntimeException );
+
     // used by FilterAllListener_Impl
     Reference< XTypeConverter > getConverter() throw( Exception );
 
     friend class FilterAllListenerImpl;
+
+private:
+    Sequence< Reference<XEventListener> > attachListeners(
+        const Reference<XInterface>& xObject,
+        const Sequence< Reference<XAllListener> >& AllListeners,
+        const Sequence<com::sun::star::script::EventListener>& aListeners );
+
 private:
     Mutex                               m_aMutex;
     Reference< XMultiServiceFactory >   m_xSMgr;
@@ -694,6 +706,152 @@ Reference< XEventListener > EventAttacherImpl::attachListener
     return xRet;
 }
 
+Sequence< Reference<XEventListener> > EventAttacherImpl::attachListeners(
+    const Reference<XInterface>& xObject,
+    const Sequence< Reference<XAllListener> >& AllListeners,
+    const Sequence<com::sun::star::script::EventListener>& aListeners )
+{
+    sal_Int32 nCount = aListeners.getLength();
+    if (nCount != AllListeners.getLength())
+        // This is a prerequisite!
+        throw RuntimeException();
+
+    if (!xObject.is())
+        throw IllegalArgumentException();
+
+    Reference< XInvocationAdapterFactory > xInvocationAdapterFactory = getInvocationAdapterService();
+    if( !xInvocationAdapterFactory.is() )
+        throw ServiceNotRegisteredException();
+
+    Reference< XIdlReflection > xReflection = getReflection();
+    if( !xReflection.is() )
+        throw ServiceNotRegisteredException();
+
+    // Sign in, Call the fitting addListener method
+    // First Introspection, as the Methods can be analyzed in the same way
+    // For better perfomance it is implemented here again or make the Impl-Method
+    // of the Introspection configurable for this purpose.
+    Reference< XIntrospection > xIntrospection = getIntrospection();
+    if( !xIntrospection.is() )
+        return Sequence< Reference<XEventListener> >();
+
+    // Inspect Introspection
+    Any aObjAny( &xObject, ::getCppuType(static_cast<const Reference<XInterface>*>(0)) );
+
+    Reference<XIntrospectionAccess> xAccess = xIntrospection->inspect(aObjAny);
+    if (!xAccess.is())
+        return Sequence< Reference<XEventListener> >();
+
+    Sequence< Reference<XEventListener> > aRet(nCount);
+
+    for (sal_Int32 i = 0; i < nCount; ++i)
+    {
+        Reference<XEventListener> xRet = NULL;
+
+        const Reference<XAllListener>& AllListener = aListeners[i].AllListener;
+        const Any& Helper = aListeners[i].Helper;
+        const OUString& ListenerType = aListeners[i].ListenerType;
+        const OUString& AddListenerParam = aListeners[i].AddListenerParam;
+
+        // Construct the name of the addListener-Method.
+        OUString aAddListenerName;
+        OUString aListenerName( ListenerType );
+        sal_Int32 nIndex = aListenerName.lastIndexOf( '.' );
+        // set index to the interface name without package name
+        if( nIndex == -1 )
+            // not found
+            nIndex = 0;
+        else
+            nIndex++;
+        if( aListenerName[nIndex] == 'X' )
+            // erase X from the interface name
+            aListenerName = aListenerName.copy( nIndex +1 );
+        aAddListenerName = OUString( RTL_CONSTASCII_USTRINGPARAM( "add" ) ) + aListenerName;
+
+        // Send Methods to the correct addListener-Method
+        Sequence< Reference< XIdlMethod > > aMethodSeq = xAccess->getMethods( MethodConcept::LISTENER );
+        sal_uInt32 j, nLen = aMethodSeq.getLength();
+        const Reference< XIdlMethod >* pMethods = aMethodSeq.getConstArray();
+
+        for( j = 0 ; j < nLen ; j++ )
+        {
+            const Reference< XIdlMethod >& rxMethod = pMethods[j];
+
+            // Is it the correct method?
+            OUString aMethName = rxMethod->getName();
+
+            if( aAddListenerName == aMethName )
+            {
+                Sequence< Reference< XIdlClass > > params = rxMethod->getParameterTypes();
+                sal_uInt32 nParamCount = params.getLength();
+
+                Reference< XIdlClass > xListenerType;
+                if( nParamCount == 1 )
+                    xListenerType = params.getConstArray()[0];
+                else if( nParamCount == 2 )
+                    xListenerType = params.getConstArray()[1];
+
+                // Request Adapter for the actual Listener type
+                Reference< XInterface > xAdapter = createAllListenerAdapter
+                    ( xInvocationAdapterFactory, xListenerType, AllListener, Helper );
+
+                if( !xAdapter.is() )
+                    throw CannotCreateAdapterException();
+                xRet = Reference< XEventListener >( xAdapter, UNO_QUERY );
+
+
+                // Just the Listener as parameter?
+                if( nParamCount == 1 )
+                {
+                    Sequence< Any > args( 1 );
+                    args.getArray()[0] <<= xAdapter;
+                    try
+                    {
+                        rxMethod->invoke( aObjAny, args );
+                    }
+                    catch( InvocationTargetException& )
+                    {
+                        throw IntrospectionException();
+                    }
+                }
+                // Else, pass the other parameter now
+                else if( nParamCount == 2 )
+                {
+                    Sequence< Any > args( 2 );
+                    Any* pAnys = args.getArray();
+
+                    // Check the type of the 1st parameter
+                    Reference< XIdlClass > xParamClass = params.getConstArray()[0];
+                    if( xParamClass->getTypeClass() == TypeClass_STRING )
+                    {
+                        pAnys[0] <<= AddListenerParam;
+                    }
+
+                    // 2nd Parameter == Listener? TODO: Test!
+                    pAnys[1] <<= xAdapter;
+
+                    // TODO: Convert String -> ?
+                    // else
+                    try
+                    {
+                        rxMethod->invoke( aObjAny, args );
+                    }
+                    catch( InvocationTargetException& )
+                    {
+                        throw IntrospectionException();
+                    }
+                }
+                break;
+                // else...
+                // Anything else is not supported
+            }
+        }
+        aRet[nCount] = xRet;
+    }
+
+    return aRet;
+}
+
 // XEventAttacher
 Reference< XEventListener > EventAttacherImpl::attachSingleEventListener
 (
@@ -815,6 +973,21 @@ void EventAttacherImpl::removeListener
             break;
         }
     }
+}
+
+Sequence< Reference<XEventListener> > EventAttacherImpl::attachMultipleEventListeners(
+    const Reference<XInterface>& xObject, const Sequence<com::sun::star::script::EventListener>& aListeners )
+        throw( IllegalArgumentException, ServiceNotRegisteredException, CannotCreateAdapterException, IntrospectionException, RuntimeException )
+{
+    sal_Int32 nCount = aListeners.getLength();
+    Sequence< Reference<XAllListener> > aFilterListeners(nCount);
+    for (sal_Int32 i = 0; i < nCount; ++i)
+    {
+        aFilterListeners[i] = (XAllListener*)
+            new FilterAllListenerImpl(this, aListeners[i].EventMethod, aListeners[i].AllListener);
+    }
+
+    return attachListeners(xObject, aFilterListeners, aListeners);
 }
 
 }

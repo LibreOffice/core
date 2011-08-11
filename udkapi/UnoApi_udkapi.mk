@@ -380,6 +380,7 @@ $(eval $(call gb_UnoApiTarget_add_idlfiles,udkapi,\
 	udkapi/com/sun/star/script/CannotConvertException \
 	udkapi/com/sun/star/script/CannotCreateAdapterException \
 	udkapi/com/sun/star/script/ContextInformation \
+	udkapi/com/sun/star/script/EventListener \
 	udkapi/com/sun/star/script/FailReason \
 	udkapi/com/sun/star/script/FinishEngineEvent \
 	udkapi/com/sun/star/script/FinishReason \
@@ -400,6 +401,7 @@ $(eval $(call gb_UnoApiTarget_add_idlfiles,udkapi,\
 	udkapi/com/sun/star/script/XEngineListener \
 	udkapi/com/sun/star/script/XErrorQuery \
 	udkapi/com/sun/star/script/XEventAttacher \
+	udkapi/com/sun/star/script/XEventAttacher2 \
 	udkapi/com/sun/star/script/XEventAttacherManager \
 	udkapi/com/sun/star/script/XInvocation \
 	udkapi/com/sun/star/script/XInvocation2 \

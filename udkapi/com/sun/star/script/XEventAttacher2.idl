@@ -1,0 +1,24 @@
+#ifndef __com_sun_star_script_XEventAttacher2_idl__
+#define __com_sun_star_script_XEventAttacher2_idl__
+
+#include <com/sun/star/script/XEventAttacher.idl>
+#include <com/sun/star/lang/XEventListener.idl>
+#include <com/sun/star/script/EventListener.idl>
+
+module com {  module sun {  module star {  module script {
+
+interface XEventAttacher2: com::sun::star::script::XEventAttacher
+{
+    sequence<com::sun::star::lang::XEventListener>
+        attachMultipleEventListeners(
+            [in] com::sun::star::uno::XInterface xTarget,
+            [in] sequence<com::sun::star::script::EventListener> aListeners )
+           raises( com::sun::star::lang::IllegalArgumentException,
+                   com::sun::star::beans::IntrospectionException,
+                   com::sun::star::script::CannotCreateAdapterException,
+                   com::sun::star::lang::ServiceNotRegisteredException );
+};
+
+}; }; }; };
+
+#endif

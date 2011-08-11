@@ -1,0 +1,20 @@
+
+#ifndef __com_sun_star_script_EventListener_idl__
+#define __com_sun_star_script_EventListener_idl__
+
+#include <com/sun/star/script/XAllListener.idl>
+
+module com {  module sun {  module star {  module script {
+
+struct EventListener
+{
+    com::sun::star::script::XAllListener AllListener;
+    any Helper;
+    string ListenerType;
+    string AddListenerParam;
+    string EventMethod;
+};
+
+}; }; }; };
+
+#endif

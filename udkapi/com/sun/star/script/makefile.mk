@@ -46,6 +46,7 @@ IDLFILES=\
     ContextInformation.idl\
     Converter.idl\
     Engine.idl\
+    EventListener.idl\
     FailReason.idl\
     FinishEngineEvent.idl\
     FinishReason.idl\
@@ -64,6 +65,7 @@ IDLFILES=\
     XEngine.idl\
     XEngineListener.idl\
     XEventAttacher.idl\
+    XEventAttacher2.idl\
     XEventAttacherManager.idl\
     XInvocationAdapterFactory.idl\
     XInvocationAdapterFactory2.idl\
