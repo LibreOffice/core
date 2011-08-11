@@ -907,23 +907,6 @@ void LwpPara::AddBreakAfter(XFContentContainer* pCont)
     }
 }
 
-LwpVirtualLayout* LwpPara::GetLayoutWithMyStory()
-{
-    LwpStory* pMyStory = NULL;
-    if (!m_Story.IsNull())
-    {
-        pMyStory = dynamic_cast<LwpStory*>(m_Story.obj(VO_STORY));
-        if (!pMyStory)
-        {
-            return NULL;
-        }
-
-        return pMyStory->GetLayout(NULL);
-    }
-
-    return NULL;
-}
-
 LwpBulletStyleMgr* LwpPara::GetBulletStyleMgr()
 {
     if (m_pFoundry)

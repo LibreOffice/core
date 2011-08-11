@@ -286,7 +286,6 @@ private:
 public:
     inline LwpStyleManager* GetStyleManager() { return m_pStyleMgr;}
     LwpBookMark* GetBookMark(LwpObjectID objMarker);
-    sal_Bool FindBookMarkByName(OUString sName);
     LwpDropcapMgr* GetDropcapMgr(){return m_pDropcapMgr;}
     LwpContent* EnumContents(LwpContent* pContent);
     LwpSection* EnumSections(LwpSection* pSection);

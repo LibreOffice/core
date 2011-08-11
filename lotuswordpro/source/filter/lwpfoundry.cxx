@@ -253,30 +253,6 @@ LwpBookMark* LwpFoundry::GetBookMark(LwpObjectID objMarker)
     return NULL;
 }
 
-sal_Bool LwpFoundry::FindBookMarkByName(OUString sName)
-{
-    LwpDLVListHeadHolder* pHeadHolder= static_cast
-                    <LwpDLVListHeadHolder*>(m_BookMarkHead.obj());
-    LwpObjectID* pObjID = pHeadHolder->GetHeadID();
-    LwpBookMark* pBookMark;
-    if (pObjID)
-        pBookMark = static_cast<LwpBookMark*>(pObjID->obj());
-    else
-        return sal_False;
-
-    while (pBookMark)
-    {
-        if (pBookMark->IsRightName(sName))
-            return sal_True;
-        pObjID = pBookMark->GetNext();
-        if (pObjID)
-            pBookMark = static_cast<LwpBookMark*>(pObjID->obj());
-        else
-            return sal_False;
-    }
-    return sal_False;
-}
-
 /**
 * @descr:   Get next content
 *

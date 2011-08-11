@@ -78,7 +78,6 @@ public:
     ~LwpVerDocument(){}
     void Read();
     virtual void RegisterStyle();
-    sal_uInt32 GetTabSpacing();
 private:
     sal_uInt32 m_nTabSpacing;
 };

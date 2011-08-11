@@ -201,16 +201,11 @@ public:
     void FindLayouts();// for register pagelayout, add by , 02/20/2005
     void RegisterTabStyle(XFParaStyle* pXFParaStyle);
 
-    // add by  04/13/2005
-    LwpVirtualLayout* GetLayoutWithMyStory();
     LwpBulletStyleMgr* GetBulletStyleMgr();
     sal_uInt32 GetOrdinal(){ return m_nOrdinal;}
     sal_Bool operator <(LwpPara& Other);
     sal_Bool ComparePagePosition(LwpVirtualLayout* pPreLayout, LwpVirtualLayout* pNextLayout);
-//  rtl::OUString RegisterBulletStyle();
-    // end add
 
-    sal_Bool IsNumberRight();
     sal_Bool IsInCell();
 
     void SetAllText(OUString sText);

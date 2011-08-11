@@ -142,7 +142,6 @@ public:
     sal_uInt16 GetType(){ return m_nType;}
 private:
     LwpCellLayout* GetCellLayout();
-    LwpEnSuperTableLayout* GetEnSuperTableLayout();
     LwpDocument* GetFootnoteTableDivision();
     LwpDocument* GetEndnoteDivision(LwpDocument* pPossible);
     LwpEnSuperTableLayout* FindFootnoteTableLayout();

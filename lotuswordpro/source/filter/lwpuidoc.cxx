@@ -64,11 +64,6 @@
 
 #include "lwpuidoc.hxx"
 
-LwpUIDocument::LwpUIDocument()
-    : m_nFlags(DOC_LOCKED)
-{}
-
-
 LwpUIDocument::LwpUIDocument(LwpObjectStream *pStrm)
     : m_nFlags(DOC_LOCKED)
 {

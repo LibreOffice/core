@@ -153,52 +153,6 @@ protected:
 
 /**
  * @brief
- *
- */
-class LwpTableHint : public LwpObject
-{
-public:
-    LwpTableHint(LwpObjectHeader &objHdr, LwpSvStream* pStrm);
-    virtual ~LwpTableHint();
-
-    virtual void Parse(IXFStream* pOutputStream);
-protected:
-    void Read();
-    sal_uInt16  cRow;
-    LwpContentHintHead cCellHint;
-    sal_Bool cRowContinued;
-    LwpObjectID cTable;
-    //CCellNumberHintHead cCellNumberHint;
-
-    LwpObjectID cListNext;
-
-    LwpFribPtr cStart;
-    LwpObjectID cLayout;        // if the layout is complex then we
-                                    // store the parent not the left or
-                                    // right
-    LwpObjectID cContent;
-    sal_uInt8 cFlags;
-    LwpObjectID cParent;
-    //CNumberHintHead cNumberHint;
-    sal_uInt32 cLineNumber;
-    LwpObjectID cPageHint;              // the page hint we belong to
-
-    // cFlags
-    enum
-    {
-        HF_INVALID      = 0x01,     // hint should not be used to start flowing
-        HF_LASTPAGE     = 0x02,     // content ends with this hint
-        HF_REGISTERED   = 0x04,     // the hint has been registered with a
-                                    // paragraph
-        HF_DIDBULLET    = 0x08,     // We flowed bullet text right before
-                                    // the end of this stream
-        HF_PROBLEMPARA  = 0x10      // This hint's paragraph changed from disk
-    };
-
-
-};
-/**
- * @brief
  * VO_TABLEHEADING object
  */
 class LwpTableHeading : public LwpTable

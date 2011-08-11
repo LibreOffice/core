@@ -127,7 +127,6 @@ public:
 class LwpUIDocument
 {
 public:
-    LwpUIDocument();
     LwpUIDocument(LwpObjectStream *pStrm);
     ~LwpUIDocument();
 private:

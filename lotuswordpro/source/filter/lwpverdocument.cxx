@@ -104,9 +104,4 @@ void LwpVerDocument::RegisterStyle()
     pXFStyleManager->AddStyle(pDefault);
 }
 
-sal_uInt32 LwpVerDocument::GetTabSpacing()
-{
-    return m_nTabSpacing;
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

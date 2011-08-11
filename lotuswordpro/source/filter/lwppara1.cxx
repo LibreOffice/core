@@ -644,19 +644,6 @@ sal_Bool LwpPara::ComparePagePosition(LwpVirtualLayout * pPreLayout, LwpVirtualL
 }
 
 /**
- * @short   check paragraph alignment
- */
-sal_Bool LwpPara::IsNumberRight()
-{
-    LwpParaStyle* pStyle = dynamic_cast<LwpParaStyle*>(m_ParaStyle.obj());
-    if (pStyle)
-    {
-        return pStyle->IsNumberRight();
-    }
-    else
-        return sal_False;
-}
-/**
  * @short   check paragraph in cell or not
  */
 sal_Bool LwpPara::IsInCell()

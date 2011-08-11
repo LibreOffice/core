@@ -159,54 +159,6 @@ void  LwpTableHeading::Parse(IXFStream* /*pOutputStream*/)
 }
 
  /*****************************************************************************/
- LwpTableHint::LwpTableHint(LwpObjectHeader &objHdr, LwpSvStream* pStrm):LwpObject(objHdr, pStrm)
-{}
-
-LwpTableHint::~LwpTableHint()
-{}
-
-void LwpTableHint::Read()
-{
-    cListNext.ReadIndexed(m_pObjStrm);
-    if (LwpFileHeader::m_nFileRevision < 0x0006)
-        m_pObjStrm->SkipExtra();
-
-    // not implemented yet
-    //lbool Problem;
-    // ?Problem = cStart.QuickReadNonEmbedded(m_pObjStrm);
-
-    cLayout.ReadIndexed(m_pObjStrm);
-    cContent.ReadIndexed(m_pObjStrm);
-    cFlags = m_pObjStrm->QuickReaduInt8();
-    cParent.ReadIndexed(m_pObjStrm);
-    //cNumberHint.QuickRead (m_pObjStrm);
-    cLineNumber = m_pObjStrm->QuickReaduInt32();
-    cPageHint.ReadIndexed (m_pObjStrm);
-
-    m_pObjStrm->SkipExtra ();
-
-    //CContentHint(pFile, pLoader);
-
-    cRow = m_pObjStrm->QuickReaduInt16();
-    cCellHint.Read (m_pObjStrm);
-    cRowContinued = (sal_Bool)m_pObjStrm->QuickReaduInt16();
-
-    cTable.ReadIndexed(m_pObjStrm);
-    //if (!cTable.PointerTest())
-    //  cTable = NullObjPtr;
-
-    //cCellNumberHint.QuickRead (m_pObjStrm);
-    LwpObjectID cList;
-    cList.ReadIndexed(m_pObjStrm);
-
-    m_pObjStrm->SkipExtra();
-}
-
-void  LwpTableHint::Parse(IXFStream* /*pOutputStream*/)
-{
-}
-
- /*****************************************************************************/
 LwpParallelColumns::LwpParallelColumns(LwpObjectHeader &objHdr, LwpSvStream* pStrm):LwpTable(objHdr, pStrm)
 {
 }

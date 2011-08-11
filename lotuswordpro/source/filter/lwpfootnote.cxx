@@ -217,16 +217,6 @@ LwpCellLayout* LwpFootnote::GetCellLayout()
     }
     return NULL;
 }
-/**
- * @descr  Get endnote supertable layout which contains current endnote content, not used now
- */
-LwpEnSuperTableLayout* LwpFootnote::GetEnSuperTableLayout()
-{
-    LwpDocument* pDivision = GetFootnoteTableDivision();
-    if(pDivision)
-        return static_cast<LwpEnSuperTableLayout*>(pDivision->GetEnSuperTableLayout());
-    return NULL;
-}
 
 /**
  * @descr  Get division which footnote table contains current footnote content, copy from lwp source code

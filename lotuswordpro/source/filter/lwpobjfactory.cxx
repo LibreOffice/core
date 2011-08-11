@@ -494,15 +494,6 @@ LwpObject* LwpObjectFactory::CreateObject(sal_uInt32 type, LwpObjectHeader &objH
             newObj = new LwpTableHeading(objHdr, m_pSvStream);
             break;
         }
-        /* some member variables can't be read until now
-        case VO_TABLEHINT:
-        {
-            newObj = new LwpTableHint(objHdr, m_pSvStream);
-            break;
-        }
-        */
-        // end table
-        //add by
         case VO_CHBLKMARKER:
         {
             newObj = new LwpCHBlkMarker(objHdr, m_pSvStream);
