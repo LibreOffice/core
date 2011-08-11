@@ -3333,7 +3333,11 @@ void DocxAttributeOutput::WritePostitFields()
         m_pSerializer->startElementNS( XML_w, XML_comment, FSNS( XML_w, XML_id ), idstr.getStr(),
             FSNS( XML_w, XML_author ), rtl::OUStringToOString( f->GetPar1(), RTL_TEXTENCODING_UTF8 ).getStr(),
             FSNS( XML_w, XML_date ), impl_DateTimeToOString(f->GetDateTime()).getStr(), FSEND );
-        GetExport().WriteOutliner( *f->GetTextObject(), TXT_ATN );
+        // Check for the text object existing, it seems that it can be NULL when saving a newly created
+        // comment without giving focus back to the main document. As GetTxt() is empty in that case as well,
+        // that is probably a bug in the Writer core.
+        if( f->GetTextObject() != NULL )
+            GetExport().WriteOutliner( *f->GetTextObject(), TXT_ATN );
         m_pSerializer->endElementNS( XML_w, XML_comment );
     }
 }
