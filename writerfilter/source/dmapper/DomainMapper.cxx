@@ -68,6 +68,7 @@
 #include <com/sun/star/style/LineSpacing.hpp>
 #include <com/sun/star/style/LineSpacingMode.hpp>
 #include <com/sun/star/table/BorderLine2.hpp>
+#include <com/sun/star/text/FootnoteNumbering.hpp>
 #include <com/sun/star/text/TextGridMode.hpp>
 #include <com/sun/star/text/XDocumentIndexesSupplier.hpp>
 #include <com/sun/star/text/XTextFieldsSupplier.hpp>
@@ -3055,6 +3056,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
     // -> so this property can be ignored
     break;
     case NS_ooxml::LN_EG_FtnEdnNumProps_numStart:
+    case NS_ooxml::LN_EG_FtnEdnNumProps_numRestart:
     case NS_ooxml::LN_CT_FtnProps_numFmt:
     case NS_ooxml::LN_CT_EdnProps_numFmt:
     {
@@ -3078,6 +3080,20 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
                 xFtnEdnSettings->setPropertyValue(
                     PropertyNameSupplier::GetPropertyNameSupplier().GetName( PROP_START_AT),
                                                                     uno::makeAny( sal_Int16( nIntValue - 1 )));
+            }
+            else if( NS_ooxml::LN_EG_FtnEdnNumProps_numRestart == nSprmId && xFtnEdnSettings.is())
+            {
+                sal_Int16 nFootnoteCounting = 0;
+                switch (nIntValue)
+                {
+                    case NS_ooxml::LN_Value_ST_RestartNumber_continuous: nFootnoteCounting = text::FootnoteNumbering::PER_DOCUMENT; break;
+                    case NS_ooxml::LN_Value_ST_RestartNumber_eachPage: nFootnoteCounting = text::FootnoteNumbering::PER_PAGE; break;
+                    case NS_ooxml::LN_Value_ST_RestartNumber_eachSect: // Writer supports chapters only
+                    default: break;
+                }
+                xFtnEdnSettings->setPropertyValue(
+                        PropertyNameSupplier::GetPropertyNameSupplier().GetName( PROP_FOOTNOTE_COUNTING ),
+                        uno::makeAny( nFootnoteCounting ));
             }
             else if (xFtnEdnSettings.is())
             {

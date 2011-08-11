@@ -143,6 +143,7 @@ enum PropertyIds
         ,PROP_FOOTER_IS_SHARED
         ,PROP_FOOTER_TEXT
         ,PROP_FOOTER_TEXT_LEFT
+        ,PROP_FOOTNOTE_COUNTING
         ,PROP_FORMAT
         ,PROP_FULL_NAME
         ,PROP_GAMMA

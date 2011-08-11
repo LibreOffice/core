@@ -205,6 +205,7 @@ const rtl::OUString& PropertyNameSupplier::GetName( PropertyIds eId ) const
             case PROP_FOOTER_TEXT          :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FooterText")); break;
             case PROP_FOOTER_IS_SHARED     :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FooterIsShared")); break;
             case PROP_FOOTER_IS_ON         :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FooterIsOn")); break;
+            case PROP_FOOTNOTE_COUNTING    :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FootnoteCounting")); break;
             case PROP_WIDTH                :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Width")); break;
             case PROP_HEIGHT               :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Height")); break;
             case PROP_SEPARATOR_LINE_IS_ON :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SeparatorLineIsOn")); break;
