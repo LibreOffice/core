@@ -47,7 +47,7 @@
 #include <com/sun/star/reflection/XIdlMethod.hpp>
 #include <com/sun/star/script/XTypeConverter.hpp>
 #include <com/sun/star/script/XEngineListener.hpp>
-#include <com/sun/star/script/XEventAttacher.hpp>
+#include <com/sun/star/script/XEventAttacher2.hpp>
 #include <com/sun/star/script/XEventAttacherManager.hpp>
 #include <com/sun/star/script/XScriptListener.hpp>
 #include <cppuhelper/weak.hxx>
@@ -103,7 +103,7 @@ class ImplEventAttacherManager
     // Container fuer die ScriptListener
     OInterfaceContainerHelper           aScriptListeners;
     // EventAttacher-Instanz
-    Reference< XEventAttacher >         xAttacher;
+    Reference< XEventAttacher2 >        xAttacher;
     Reference< XMultiServiceFactory >   mxSMgr;
     Reference< XIdlReflection >         mxCoreReflection;
     Reference< XIntrospection >         mxIntrospection;
@@ -403,7 +403,7 @@ ImplEventAttacherManager::ImplEventAttacherManager( const Reference< XIntrospect
         Reference< XInterface > xIFace( rSMgr->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.script.EventAttacher" )) ) );
         if ( xIFace.is() )
         {
-            xAttacher = Reference< XEventAttacher >::query( xIFace );
+            xAttacher = Reference< XEventAttacher2 >::query( xIFace );
         }
         xIFace = rSMgr->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.script.Converter" )) );
         if ( xIFace.is() )
@@ -692,28 +692,33 @@ void SAL_CALL ImplEventAttacherManager::attach(sal_Int32 nIndex, const Reference
     //::std::deque< AttachedObject_Impl >::iterator aObjIt = (*aIt).aObjList.back();
     AttachedObject_Impl & rCurObj = aCurrentPosition->aObjList.back();
     rCurObj.aAttachedListenerSeq = Sequence< Reference< XEventListener > >( aCurrentPosition->aEventList.size() );
-    Reference< XEventListener > * pArray = rCurObj.aAttachedListenerSeq.getArray();
 
-    ::std::deque< ScriptEventDescriptor >::iterator aEvtIt =    aCurrentPosition->aEventList.begin();
-    ::std::deque< ScriptEventDescriptor >::iterator aEvtEnd =   aCurrentPosition->aEventList.end();
-    sal_Int32 i = 0;
-    while( aEvtIt != aEvtEnd )
+    if (!aCurrentPosition->aEventList.empty())
     {
-        Reference< XAllListener > xAll =
-            new AttacherAllListener_Impl( this, (*aEvtIt).ScriptType, (*aEvtIt).ScriptCode );
-        Reference< XEventListener > xAdapter;
-           try
+        Sequence<com::sun::star::script::EventListener> aEvents(aCurrentPosition->aEventList.size());
+        std::deque<ScriptEventDescriptor>::iterator itr = aCurrentPosition->aEventList.begin();
+        std::deque<ScriptEventDescriptor>::iterator itrEnd = aCurrentPosition->aEventList.end();
+        ::com::sun::star::script::EventListener* p = aEvents.getArray();
+        size_t i = 0;
+        for (; itr != itrEnd; ++itr)
         {
-        xAdapter = xAttacher->attachSingleEventListener( rCurObj.xTarget, xAll,
-                        rCurObj.aHelper, (*aEvtIt).ListenerType,
-                        (*aEvtIt).AddListenerParam, (*aEvtIt).EventMethod );
-        }
-        catch( Exception& )
-        {
+            com::sun::star::script::EventListener aListener;
+            aListener.AllListener =
+                new AttacherAllListener_Impl(this, itr->ScriptType, itr->ScriptCode);
+            aListener.Helper = rCurObj.aHelper;
+            aListener.ListenerType = itr->ListenerType;
+            aListener.EventMethod = itr->EventMethod;
+            aListener.AddListenerParam = itr->AddListenerParam;
+            p[i++] = aListener;
         }
 
-        pArray[i++] = xAdapter;
-        ++aEvtIt;
+        try
+        {
+            rCurObj.aAttachedListenerSeq = xAttacher->attachMultipleEventListeners(rCurObj.xTarget, aEvents);
+        }
+        catch (const Exception&)
+        {
+        }
     }
 }
 

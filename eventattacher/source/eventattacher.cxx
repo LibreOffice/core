@@ -743,6 +743,7 @@ Sequence< Reference<XEventListener> > EventAttacherImpl::attachListeners(
         return Sequence< Reference<XEventListener> >();
 
     Sequence< Reference<XEventListener> > aRet(nCount);
+    Reference<XEventListener>* pArray = aRet.getArray();
 
     for (sal_Int32 i = 0; i < nCount; ++i)
     {
@@ -846,7 +847,7 @@ Sequence< Reference<XEventListener> > EventAttacherImpl::attachListeners(
                 // Anything else is not supported
             }
         }
-        aRet[nCount] = xRet;
+        pArray[i] = xRet;
     }
 
     return aRet;
