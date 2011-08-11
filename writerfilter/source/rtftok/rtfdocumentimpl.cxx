@@ -1442,6 +1442,24 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
         return 0;
     }
 
+    // Footnote numbering
+    switch (nKeyword)
+    {
+        case RTF_FTNNAR: nParam = NS_ooxml::LN_Value_ST_NumberFormat_decimal; break;
+        case RTF_FTNNALC: nParam = NS_ooxml::LN_Value_ST_NumberFormat_lowerLetter; break;
+        case RTF_FTNNAUC: nParam = NS_ooxml::LN_Value_ST_NumberFormat_upperLetter; break;
+        case RTF_FTNNRLC: nParam = NS_ooxml::LN_Value_ST_NumberFormat_lowerRoman; break;
+        case RTF_FTNNRUC: nParam = NS_ooxml::LN_Value_ST_NumberFormat_upperRoman; break;
+        case RTF_FTNNCHI: nParam = NS_ooxml::LN_Value_ST_NumberFormat_chicago; break;
+        default: break;
+    }
+    if (nParam >= 0)
+    {
+        RTFValue::Pointer_t pValue(new RTFValue(nParam));
+        lcl_putNestedSprm(m_aDefaultState.aParagraphSprms, NS_ooxml::LN_EG_SectPrContents_footnotePr, NS_ooxml::LN_CT_FtnProps_numFmt, pValue);
+        return 0;
+    }
+
     // Endnote numbering
     switch (nKeyword)
     {
