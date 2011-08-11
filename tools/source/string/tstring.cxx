@@ -99,15 +99,6 @@ sal_Int32 ByteString::ToInt32() const
 
 // -----------------------------------------------------------------------
 
-sal_Int64 ByteString::ToInt64() const
-{
-    DBG_CHKTHIS( ByteString, DbgCheckByteString );
-
-    return atoi( mpData->maStr );
-}
-
-// -----------------------------------------------------------------------
-
 sal_Bool ByteString::IsLowerAscii() const
 {
     DBG_CHKTHIS( ByteString, DbgCheckByteString );

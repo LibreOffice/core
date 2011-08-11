@@ -203,7 +203,6 @@ public:
     }
 
     sal_Int32           ToInt32() const;
-    sal_Int64           ToInt64() const;
 
     ByteString&         Assign( const ByteString& rStr );
     ByteString&         Assign( const rtl::OString& rStr );
