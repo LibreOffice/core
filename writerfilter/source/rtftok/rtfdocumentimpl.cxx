@@ -2918,7 +2918,7 @@ int RTFDocumentImpl::popState()
     return "RTFDocumentImpl";
 }
 
-com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory> RTFDocumentImpl::getModelFactory()
+uno::Reference<lang::XMultiServiceFactory> RTFDocumentImpl::getModelFactory()
 {
     return m_xModelFactory;
 }

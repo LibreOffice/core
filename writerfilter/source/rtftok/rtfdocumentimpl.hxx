@@ -261,10 +261,10 @@ namespace writerfilter {
         {
             public:
                 typedef ::boost::shared_ptr<RTFDocumentImpl> Pointer_t;
-                RTFDocumentImpl(com::sun::star::uno::Reference<com::sun::star::uno::XComponentContext> const& xContext,
-                                com::sun::star::uno::Reference<com::sun::star::io::XInputStream> const& xInputStream,
-                                com::sun::star::uno::Reference<com::sun::star::lang::XComponent> const& xDstDoc,
-                                com::sun::star::uno::Reference<com::sun::star::frame::XFrame> const& xFrame);
+                RTFDocumentImpl(uno::Reference<uno::XComponentContext> const& xContext,
+                                uno::Reference<io::XInputStream> const& xInputStream,
+                                uno::Reference<lang::XComponent> const& xDstDoc,
+                                uno::Reference<frame::XFrame> const& xFrame);
                 virtual ~RTFDocumentImpl();
                 virtual void resolve(Stream & rHandler);
                 virtual std::string getType() const;
@@ -276,7 +276,7 @@ namespace writerfilter {
                 void finishSubstream();
                 void setIgnoreFirst(rtl::OUString& rIgnoreFirst);
                 void seek(sal_uInt32 nPos);
-                com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory> getModelFactory();
+                uno::Reference<lang::XMultiServiceFactory> getModelFactory();
                 RTFParserState& getState();
                 /// If the stack of states is empty.
                 bool isEmpty();
@@ -318,12 +318,12 @@ namespace writerfilter {
                 void sectBreak(bool bFinal);
                 void replayBuffer(RTFBuffer_t& rBuffer);
 
-                com::sun::star::uno::Reference<com::sun::star::uno::XComponentContext> const& m_xContext;
-                com::sun::star::uno::Reference<com::sun::star::io::XInputStream> const& m_xInputStream;
-                com::sun::star::uno::Reference<com::sun::star::lang::XComponent> const& m_xDstDoc;
-                com::sun::star::uno::Reference<com::sun::star::frame::XFrame> const& m_xFrame;
-                com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory> m_xModelFactory;
-                com::sun::star::uno::Reference<com::sun::star::document::XDocumentProperties> m_xDocumentProperties;
+                uno::Reference<uno::XComponentContext> const& m_xContext;
+                uno::Reference<io::XInputStream> const& m_xInputStream;
+                uno::Reference<lang::XComponent> const& m_xDstDoc;
+                uno::Reference<frame::XFrame> const& m_xFrame;
+                uno::Reference<lang::XMultiServiceFactory> m_xModelFactory;
+                uno::Reference<document::XDocumentProperties> m_xDocumentProperties;
                 SvStream* m_pInStream;
                 Stream* m_pMapperStream;
                 boost::shared_ptr<RTFSdrImport> m_pSdrImport;

@@ -38,18 +38,15 @@ namespace writerfilter {
         class RTFSdrImport
         {
             public:
-                RTFSdrImport(RTFDocumentImpl& rImport,
-                        com::sun::star::uno::Reference<com::sun::star::lang::XComponent> const& xDstDoc);
+                RTFSdrImport(RTFDocumentImpl& rImport, uno::Reference<lang::XComponent> const& xDstDoc);
                 virtual ~RTFSdrImport();
 
                 void resolve(RTFShape& rShape);
             private:
-                void createShape(rtl::OUString aService,
-                        com::sun::star::uno::Reference<drawing::XShape>& xShape,
-                        com::sun::star::uno::Reference<beans::XPropertySet>& xPropertySet);
+                void createShape(rtl::OUString aService, uno::Reference<drawing::XShape>& xShape, uno::Reference<beans::XPropertySet>& xPropertySet);
 
                 RTFDocumentImpl& m_rImport;
-                com::sun::star::uno::Reference<com::sun::star::drawing::XDrawPage> m_xDrawPage;
+                uno::Reference<drawing::XDrawPage> m_xDrawPage;
         };
     } // namespace rtftok
 } // namespace writerfilter
