@@ -349,17 +349,15 @@ SwMSDffManager::SwMSDffManager( SwWW8ImplReader& rRdr )
 sal_uInt32 SwMSDffManager::GetFilterFlags()
 {
     sal_uInt32 nFlags(0);
-    if (const SvtFilterOptions* pOpt = SvtFilterOptions::Get())
-    {
-        if (pOpt->IsMathType2Math())
-            nFlags |= OLE_MATHTYPE_2_STARMATH;
-        if (pOpt->IsExcel2Calc())
-            nFlags |= OLE_EXCEL_2_STARCALC;
-        if (pOpt->IsPowerPoint2Impress())
-            nFlags |= OLE_POWERPOINT_2_STARIMPRESS;
-        if (pOpt->IsWinWord2Writer())
-            nFlags |= OLE_WINWORD_2_STARWRITER;
-    }
+    const SvtFilterOptions& rOpt = SvtFilterOptions::Get();
+    if (rOpt.IsMathType2Math())
+        nFlags |= OLE_MATHTYPE_2_STARMATH;
+    if (rOpt.IsExcel2Calc())
+        nFlags |= OLE_EXCEL_2_STARCALC;
+    if (rOpt.IsPowerPoint2Impress())
+        nFlags |= OLE_POWERPOINT_2_STARIMPRESS;
+    if (rOpt.IsWinWord2Writer())
+        nFlags |= OLE_WINWORD_2_STARWRITER;
     return nFlags;
 }
 
@@ -1643,11 +1641,9 @@ void SwWW8ImplReader::ImportDop()
 
     mpDocShell->SetModifyPasswordHash(pWDop->lKeyProtDoc);
 
-    const SvtFilterOptions* pOpt = SvtFilterOptions::Get();
-    sal_Bool bUseEnhFields=(pOpt && pOpt->IsUseEnhancedFields());
-    if (bUseEnhFields) {
-    rDoc.set(IDocumentSettingAccess::PROTECT_FORM, pWDop->fProtEnabled );
-    }
+    const SvtFilterOptions& rOpt = SvtFilterOptions::Get();
+    if (rOpt.IsUseEnhancedFields())
+        rDoc.set(IDocumentSettingAccess::PROTECT_FORM, pWDop->fProtEnabled );
 
     maTracer.LeaveEnvironment(sw::log::eDocumentProperties);
 }
@@ -3897,8 +3893,8 @@ bool wwSectionManager::IsNewDoc() const
 
 void wwSectionManager::InsertSegments()
 {
-    const SvtFilterOptions* pOpt = SvtFilterOptions::Get();
-    sal_Bool bUseEnhFields=(pOpt && pOpt->IsUseEnhancedFields());
+    const SvtFilterOptions& rOpt = SvtFilterOptions::Get();
+    sal_Bool bUseEnhFields = rOpt.IsUseEnhancedFields();
     mySegIter aEnd = maSegments.end();
     mySegIter aStart = maSegments.begin();
     for (mySegIter aIter = aStart; aIter != aEnd; ++aIter)

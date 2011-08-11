@@ -65,8 +65,6 @@ using ::rtl::OUString;
 #define FILTERCFG_USE_ENHANCED_FIELDS   0x100000
 #define FILTERCFG_WORD_WBCTBL           0x200000
 
-static SvtFilterOptions* pOptions=0;
-
 class SvtAppFilterOptions_Impl : public utl::ConfigItem
 {
     sal_Bool                bLoadVBA;
@@ -321,6 +319,7 @@ SvtFilterOptions::SvtFilterOptions() :
     EnableNotification(GetPropertyNames());
     Load();
 }
+
 // -----------------------------------------------------------------------
 SvtFilterOptions::~SvtFilterOptions()
 {
@@ -621,11 +620,17 @@ void SvtFilterOptions::SetImpress2PowerPoint( sal_Bool bFlag )
     SetModified();
 }
 
-SvtFilterOptions* SvtFilterOptions::Get()
+namespace
 {
-    if ( !pOptions )
-        pOptions = new SvtFilterOptions;
-    return pOptions;
+    class theFilterOptions
+         : public rtl::Static<SvtFilterOptions, theFilterOptions>
+    {
+    };
+}
+
+SvtFilterOptions& SvtFilterOptions::Get()
+{
+    return theFilterOptions::get();
 }
 
 // -----------------------------------------------------------------------

@@ -677,8 +677,8 @@ sal_uInt16 SwWW8ImplReader::End_Field()
     if (!pF || !pF->EndPosIsFieldEnd())
         return nRet;
 
-    const SvtFilterOptions* pOpt = SvtFilterOptions::Get();
-    sal_Bool bUseEnhFields=(pOpt && pOpt->IsUseEnhancedFields());
+    const SvtFilterOptions &rOpt = SvtFilterOptions::Get();
+    sal_Bool bUseEnhFields = rOpt.IsUseEnhancedFields();
 
     OSL_ENSURE(!maFieldStack.empty(), "Empty field stack\n");
     if (!maFieldStack.empty())

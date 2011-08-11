@@ -133,8 +133,8 @@ eF_ResT SwWW8ImplReader::Read_F_FormTextBox( WW8FieldDesc* pF, String& rStr )
     text.
     */
 
-    const SvtFilterOptions* pOpt = SvtFilterOptions::Get();
-    sal_Bool bUseEnhFields=(pOpt && pOpt->IsUseEnhancedFields());
+    const SvtFilterOptions& rOpt = SvtFilterOptions::Get();
+    sal_Bool bUseEnhFields = rOpt.IsUseEnhancedFields();
 
     if (!bUseEnhFields) {
     aFormula.sDefault = GetFieldResult(pF);
@@ -188,8 +188,8 @@ eF_ResT SwWW8ImplReader::Read_F_FormCheckBox( WW8FieldDesc* pF, String& rStr )
 
     if (0x01 == rStr.GetChar(writer_cast<xub_StrLen>(pF->nLCode-1)))
         ImportFormulaControl(aFormula,pF->nSCode+pF->nLCode-1, WW8_CT_CHECKBOX);
-    const SvtFilterOptions* pOpt = SvtFilterOptions::Get();
-    sal_Bool bUseEnhFields=(pOpt && pOpt->IsUseEnhancedFields());
+    const SvtFilterOptions& rOpt = SvtFilterOptions::Get();
+    sal_Bool bUseEnhFields = rOpt.IsUseEnhancedFields();
 
     if (!bUseEnhFields) {
     pFormImpl->InsertFormula(aFormula);
@@ -245,8 +245,8 @@ eF_ResT SwWW8ImplReader::Read_F_FormListBox( WW8FieldDesc* pF, String& rStr)
     if (0x01 == rStr.GetChar(writer_cast<xub_StrLen>(pF->nLCode-1)))
         ImportFormulaControl(aFormula,pF->nSCode+pF->nLCode-1, WW8_CT_DROPDOWN);
 
-    const SvtFilterOptions* pOpt = SvtFilterOptions::Get();
-    sal_Bool bUseEnhFields=(pOpt && pOpt->IsUseEnhancedFields());
+    const SvtFilterOptions& rOpt = SvtFilterOptions::Get();
+    sal_Bool bUseEnhFields = rOpt.IsUseEnhancedFields();
 
     if (!bUseEnhFields)
     {

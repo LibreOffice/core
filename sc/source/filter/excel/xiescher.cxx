@@ -3161,15 +3161,13 @@ XclImpDffConverter::XclImpDffConverter( const XclImpRoot& rRoot, SvStream& rDffS
     maFormCtrlHelper( GetMedium().GetInputStream(),  lcl_getUnoCtx(), GetDocShell()->GetModel() ),
     mnOleImpFlags( 0 )
 {
-    if( SvtFilterOptions* pFilterOpt = SvtFilterOptions::Get() )
-    {
-        if( pFilterOpt->IsMathType2Math() )
-            mnOleImpFlags |= OLE_MATHTYPE_2_STARMATH;
-        if( pFilterOpt->IsWinWord2Writer() )
-            mnOleImpFlags |= OLE_WINWORD_2_STARWRITER;
-        if( pFilterOpt->IsPowerPoint2Impress() )
-            mnOleImpFlags |= OLE_POWERPOINT_2_STARIMPRESS;
-    }
+    const SvtFilterOptions& rFilterOpt = SvtFilterOptions::Get();
+    if( rFilterOpt.IsMathType2Math() )
+        mnOleImpFlags |= OLE_MATHTYPE_2_STARMATH;
+    if( rFilterOpt.IsWinWord2Writer() )
+        mnOleImpFlags |= OLE_WINWORD_2_STARWRITER;
+    if( rFilterOpt.IsPowerPoint2Impress() )
+        mnOleImpFlags |= OLE_POWERPOINT_2_STARIMPRESS;
 
     // try to open the 'Ctls' storage stream containing OCX control properties
     mxCtlsStrm = OpenStream( EXC_STREAM_CTLS );

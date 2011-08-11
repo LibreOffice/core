@@ -149,20 +149,17 @@ sal_Bool SdPPTFilter::Export()
             if( PPTExport && xStorRef.Is() )
             {
                 sal_uInt32          nCnvrtFlags = 0;
-                SvtFilterOptions* pFilterOptions = SvtFilterOptions::Get();
-                if ( pFilterOptions )
-                {
-                    if ( pFilterOptions->IsMath2MathType() )
-                        nCnvrtFlags |= OLE_STARMATH_2_MATHTYPE;
-                    if ( pFilterOptions->IsWriter2WinWord() )
-                        nCnvrtFlags |= OLE_STARWRITER_2_WINWORD;
-                    if ( pFilterOptions->IsCalc2Excel() )
-                        nCnvrtFlags |= OLE_STARCALC_2_EXCEL;
-                    if ( pFilterOptions->IsImpress2PowerPoint() )
-                        nCnvrtFlags |= OLE_STARIMPRESS_2_POWERPOINT;
-                    if ( pFilterOptions->IsEnablePPTPreview() )
-                        nCnvrtFlags |= 0x8000;
-                }
+                const SvtFilterOptions& rFilterOptions = SvtFilterOptions::Get();
+                if ( rFilterOptions.IsMath2MathType() )
+                    nCnvrtFlags |= OLE_STARMATH_2_MATHTYPE;
+                if ( rFilterOptions.IsWriter2WinWord() )
+                    nCnvrtFlags |= OLE_STARWRITER_2_WINWORD;
+                if ( rFilterOptions.IsCalc2Excel() )
+                    nCnvrtFlags |= OLE_STARCALC_2_EXCEL;
+                if ( rFilterOptions.IsImpress2PowerPoint() )
+                    nCnvrtFlags |= OLE_STARIMPRESS_2_POWERPOINT;
+                if ( rFilterOptions.IsEnablePPTPreview() )
+                    nCnvrtFlags |= 0x8000;
 
                 mrDocument.SetSwapGraphicsMode( SDR_SWAPGRAPHICSMODE_TEMP );
 
@@ -180,8 +177,8 @@ sal_Bool SdPPTFilter::Export()
 
 void SdPPTFilter::PreSaveBasic()
 {
-    SvtFilterOptions* pFilterOptions = SvtFilterOptions::Get();
-    if( pFilterOptions && pFilterOptions->IsLoadPPointBasicStorage() )
+    const SvtFilterOptions& rFilterOptions = SvtFilterOptions::Get();
+    if( rFilterOptions.IsLoadPPointBasicStorage() )
     {
         ::osl::Module* pLibrary = OpenLibrary( mrMedium.GetFilter()->GetUserData() );
         if( pLibrary )

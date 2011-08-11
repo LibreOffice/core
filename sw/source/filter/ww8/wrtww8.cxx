@@ -2907,14 +2907,14 @@ void MSWordExportBase::ExportDocument( bool bWriteAll )
     if ( !pOLEExp )
     {
         sal_uInt32 nSvxMSDffOLEConvFlags = 0;
-        const SvtFilterOptions* pOpt = SvtFilterOptions::Get();
-        if ( pOpt->IsMath2MathType() )
+        const SvtFilterOptions& rOpt = SvtFilterOptions::Get();
+        if ( rOpt.IsMath2MathType() )
             nSvxMSDffOLEConvFlags |= OLE_STARMATH_2_MATHTYPE;
-        if ( pOpt->IsWriter2WinWord() )
+        if ( rOpt.IsWriter2WinWord() )
             nSvxMSDffOLEConvFlags |= OLE_STARWRITER_2_WINWORD;
-        if ( pOpt->IsCalc2Excel() )
+        if ( rOpt.IsCalc2Excel() )
             nSvxMSDffOLEConvFlags |= OLE_STARCALC_2_EXCEL;
-        if ( pOpt->IsImpress2PowerPoint() )
+        if ( rOpt.IsImpress2PowerPoint() )
             nSvxMSDffOLEConvFlags |= OLE_STARIMPRESS_2_POWERPOINT;
 
         pOLEExp = new SvxMSExportOLEObjects( nSvxMSDffOLEConvFlags );
@@ -3276,7 +3276,7 @@ void WW8Export::PrepareStorage()
 
         if (xDocProps.is())
         {
-            if ( SvtFilterOptions::Get()->IsEnableWordPreview() )
+            if ( SvtFilterOptions::Get().IsEnableWordPreview() )
             {
                 ::boost::shared_ptr<GDIMetaFile> pMetaFile =
                     pDocShell->GetPreviewMetaFile (sal_False);

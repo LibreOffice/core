@@ -853,21 +853,18 @@ void XclObjOle::WriteSubRecs( XclExpStream& rStrm )
             // set version to "old" version, because it must be
             // saved in MS notation.
             sal_uInt32                  nFl = 0;
-            SvtFilterOptions*       pFltOpts = SvtFilterOptions::Get();
-            if( pFltOpts )
-            {
-                if( pFltOpts->IsMath2MathType() )
-                    nFl |= OLE_STARMATH_2_MATHTYPE;
+            const SvtFilterOptions& rFltOpts = SvtFilterOptions::Get();
+            if( rFltOpts.IsMath2MathType() )
+                nFl |= OLE_STARMATH_2_MATHTYPE;
 
-                if( pFltOpts->IsWriter2WinWord() )
-                    nFl |= OLE_STARWRITER_2_WINWORD;
+            if( rFltOpts.IsWriter2WinWord() )
+                nFl |= OLE_STARWRITER_2_WINWORD;
 
-                if( pFltOpts->IsCalc2Excel() )
-                    nFl |= OLE_STARCALC_2_EXCEL;
+            if( rFltOpts.IsCalc2Excel() )
+                nFl |= OLE_STARCALC_2_EXCEL;
 
-                if( pFltOpts->IsImpress2PowerPoint() )
-                    nFl |= OLE_STARIMPRESS_2_POWERPOINT;
-            }
+            if( rFltOpts.IsImpress2PowerPoint() )
+                nFl |= OLE_STARIMPRESS_2_POWERPOINT;
 
             SvxMSExportOLEObjects   aOLEExpFilt( nFl );
             aOLEExpFilt.ExportOLEObject( xObj, *xOleStg );

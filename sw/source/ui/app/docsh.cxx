@@ -345,7 +345,7 @@ sal_Bool SwDocShell::Save()
             {
                 if( pDoc->ContainsMSVBasic() )
                 {
-                    if( SvtFilterOptions::Get()->IsLoadWordBasicStorage() )
+                    if( SvtFilterOptions::Get().IsLoadWordBasicStorage() )
                         nVBWarning = GetSaveWarningOfMSVBAStorage( (SfxObjectShell&) (*this) );
                     pDoc->SetContainsMSVBasic( sal_False );
                 }
@@ -465,7 +465,7 @@ sal_Bool SwDocShell::SaveAs( SfxMedium& rMedium )
 
         if( pDoc->ContainsMSVBasic() )
         {
-            if( SvtFilterOptions::Get()->IsLoadWordBasicStorage() )
+            if( SvtFilterOptions::Get().IsLoadWordBasicStorage() )
                 nVBWarning = GetSaveWarningOfMSVBAStorage( (SfxObjectShell&) *this );
             pDoc->SetContainsMSVBasic( sal_False );
         }
@@ -559,7 +559,7 @@ sal_Bool SwDocShell::ConvertTo( SfxMedium& rMedium )
     if( pDoc->ContainsMSVBasic() )
     {
         sal_Bool bSave = pFlt->GetUserData().EqualsAscii( "CWW8" )
-             && SvtFilterOptions::Get()->IsLoadWordBasicStorage();
+             && SvtFilterOptions::Get().IsLoadWordBasicStorage();
 
         if ( bSave )
         {

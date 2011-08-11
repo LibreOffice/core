@@ -88,11 +88,9 @@ FltError ExportBiff5::Write()
     bool bWriteBasicStrg = false;
     if( GetBiff() == EXC_BIFF8 )
     {
-        if( SvtFilterOptions* pFilterOpt = SvtFilterOptions::Get() )
-        {
-            bWriteBasicCode = pFilterOpt->IsLoadExcelBasicCode();
-            bWriteBasicStrg = pFilterOpt->IsLoadExcelBasicStorage();
-        }
+        const SvtFilterOptions& rFilterOpt = SvtFilterOptions::Get();
+        bWriteBasicCode = rFilterOpt.IsLoadExcelBasicCode();
+        bWriteBasicStrg = rFilterOpt.IsLoadExcelBasicStorage();
     }
 
     if( pDocShell && xRootStrg.Is() && bWriteBasicStrg )
@@ -116,7 +114,7 @@ FltError ExportBiff5::Write()
                 pDocShell->GetModel(), uno::UNO_QUERY_THROW);
         uno::Reference<document::XDocumentProperties> xDocProps
                 = xDPS->getDocumentProperties();
-        if ( SvtFilterOptions::Get()->IsEnableCalcPreview() )
+        if ( SvtFilterOptions::Get().IsEnableCalcPreview() )
         {
             ::boost::shared_ptr<GDIMetaFile> pMetaFile =
                 pDocShell->GetPreviewMetaFile (false);

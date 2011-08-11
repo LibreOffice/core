@@ -217,20 +217,17 @@ ImplSdPPTImport::ImplSdPPTImport( SdDrawDocument* pDocument, SvStorage& rStorage
         }
         sal_uInt32 nSvxMSDffOLEConvFlags2 = 0;
 
-        SvtFilterOptions* pBasOpt = SvtFilterOptions::Get();
-        if ( pBasOpt )
-        {
-            if ( pBasOpt->IsLoadPPointBasicCode() )
-                mnFilterOptions |= 1;
-            if ( pBasOpt->IsMathType2Math() )
-                nSvxMSDffOLEConvFlags2 |= OLE_MATHTYPE_2_STARMATH;
-            if ( pBasOpt->IsWinWord2Writer() )
-                nSvxMSDffOLEConvFlags2 |= OLE_WINWORD_2_STARWRITER;
-            if ( pBasOpt->IsExcel2Calc() )
-                nSvxMSDffOLEConvFlags2 |= OLE_EXCEL_2_STARCALC;
-            if ( pBasOpt->IsPowerPoint2Impress() )
-                nSvxMSDffOLEConvFlags2 |= OLE_POWERPOINT_2_STARIMPRESS;
-        }
+        const SvtFilterOptions& rBasOpt = SvtFilterOptions::Get();
+        if ( rBasOpt.IsLoadPPointBasicCode() )
+            mnFilterOptions |= 1;
+        if ( rBasOpt.IsMathType2Math() )
+            nSvxMSDffOLEConvFlags2 |= OLE_MATHTYPE_2_STARMATH;
+        if ( rBasOpt.IsWinWord2Writer() )
+            nSvxMSDffOLEConvFlags2 |= OLE_WINWORD_2_STARWRITER;
+        if ( rBasOpt.IsExcel2Calc() )
+            nSvxMSDffOLEConvFlags2 |= OLE_EXCEL_2_STARCALC;
+        if ( rBasOpt.IsPowerPoint2Impress() )
+            nSvxMSDffOLEConvFlags2 |= OLE_POWERPOINT_2_STARIMPRESS;
 
         InitSvxMSDffManager( nDggContainerOfs, pStData, nSvxMSDffOLEConvFlags2 );
         SetSvxMSDffSettings( SVXMSDFF_SETTINGS_CROP_BITMAPS

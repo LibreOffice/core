@@ -92,56 +92,55 @@ SfxTabPage* OfaMSFilterTabPage::Create( Window* pParent,
 
 sal_Bool OfaMSFilterTabPage::FillItemSet( SfxItemSet& )
 {
-    SvtFilterOptions* pOpt = SvtFilterOptions::Get();
+    SvtFilterOptions& rOpt = SvtFilterOptions::Get();
 
     sal_Bool bFlag;
     if( aWBasicCodeCB.GetSavedValue() != (bFlag = aWBasicCodeCB.IsChecked()))
-        pOpt->SetLoadWordBasicCode( bFlag );
+        rOpt.SetLoadWordBasicCode( bFlag );
     if( aWBasicWbctblCB.GetSavedValue() != (bFlag = aWBasicWbctblCB.IsChecked()))
-        pOpt->SetLoadWordBasicExecutable( bFlag );
+        rOpt.SetLoadWordBasicExecutable( bFlag );
     if( aWBasicStgCB.GetSavedValue() != (bFlag = aWBasicStgCB.IsChecked()))
-        pOpt->SetLoadWordBasicStorage( bFlag );
+        rOpt.SetLoadWordBasicStorage( bFlag );
 
     if( aEBasicCodeCB.GetSavedValue() != (bFlag = aEBasicCodeCB.IsChecked()))
-        pOpt->SetLoadExcelBasicCode( bFlag );
+        rOpt.SetLoadExcelBasicCode( bFlag );
     if( aEBasicExectblCB.GetSavedValue() != (bFlag = aEBasicExectblCB.IsChecked()))
-        pOpt->SetLoadExcelBasicExecutable( bFlag );
+        rOpt.SetLoadExcelBasicExecutable( bFlag );
     if( aEBasicStgCB.GetSavedValue() != (bFlag = aEBasicStgCB.IsChecked()))
-        pOpt->SetLoadExcelBasicStorage( bFlag );
+        rOpt.SetLoadExcelBasicStorage( bFlag );
 
     if( aPBasicCodeCB.GetSavedValue() != (bFlag = aPBasicCodeCB.IsChecked()))
-        pOpt->SetLoadPPointBasicCode( bFlag );
+        rOpt.SetLoadPPointBasicCode( bFlag );
     if( aPBasicStgCB.GetSavedValue() != (bFlag = aPBasicStgCB.IsChecked()))
-        pOpt->SetLoadPPointBasicStorage( bFlag );
+        rOpt.SetLoadPPointBasicStorage( bFlag );
 
     return sal_False;
 }
 
 void OfaMSFilterTabPage::Reset( const SfxItemSet& )
 {
-    SvtFilterOptions* pOpt = SvtFilterOptions::Get();
+    const SvtFilterOptions& rOpt = SvtFilterOptions::Get();
 
-    aWBasicCodeCB.Check( pOpt->IsLoadWordBasicCode() );
+    aWBasicCodeCB.Check( rOpt.IsLoadWordBasicCode() );
     aWBasicCodeCB.SaveValue();
-    aWBasicWbctblCB.Check( pOpt->IsLoadWordBasicExecutable() );
+    aWBasicWbctblCB.Check( rOpt.IsLoadWordBasicExecutable() );
     aWBasicWbctblCB.SaveValue();
-    aWBasicStgCB.Check( pOpt->IsLoadWordBasicStorage() );
+    aWBasicStgCB.Check( rOpt.IsLoadWordBasicStorage() );
     aWBasicStgCB.SaveValue();
     LoadWordBasicCheckHdl_Impl( &aWBasicCodeCB );
 
-    aEBasicCodeCB.Check( pOpt->IsLoadExcelBasicCode() );
+    aEBasicCodeCB.Check( rOpt.IsLoadExcelBasicCode() );
     aEBasicCodeCB.SaveValue();
-    aEBasicExectblCB.Check( pOpt->IsLoadExcelBasicExecutable() );
+    aEBasicExectblCB.Check( rOpt.IsLoadExcelBasicExecutable() );
     aEBasicExectblCB.SaveValue();
-    aEBasicStgCB.Check( pOpt->IsLoadExcelBasicStorage() );
+    aEBasicStgCB.Check( rOpt.IsLoadExcelBasicStorage() );
     aEBasicStgCB.SaveValue();
     LoadExcelBasicCheckHdl_Impl( &aEBasicCodeCB );
 
-    aPBasicCodeCB.Check( pOpt->IsLoadPPointBasicCode() );
+    aPBasicCodeCB.Check( rOpt.IsLoadPPointBasicCode() );
     aPBasicCodeCB.SaveValue();
-    aPBasicStgCB.Check( pOpt->IsLoadPPointBasicStorage() );
+    aPBasicStgCB.Check( rOpt.IsLoadPPointBasicStorage() );
     aPBasicStgCB.SaveValue();
-
 }
 
 OfaMSFilterTabPage2::OfaMSFilterTabPage2( Window* pParent,
@@ -186,7 +185,7 @@ SfxTabPage* OfaMSFilterTabPage2::Create( Window* pParent,
 
 sal_Bool OfaMSFilterTabPage2::FillItemSet( SfxItemSet& )
 {
-    SvtFilterOptions* pOpt = SvtFilterOptions::Get();
+    SvtFilterOptions& rOpt = SvtFilterOptions::Get();
 
     static struct ChkCBoxEntries{
         MSFltrPg2_CheckBoxEntries eType;
@@ -227,8 +226,8 @@ sal_Bool OfaMSFilterTabPage2::FillItemSet( SfxItemSet& )
                 bCheck = SV_BUTTON_CHECKED ==
                         pCheckButtonData->ConvertToButtonState( nButtonFlags );
 
-                if( bCheck != (pOpt->*pArr->FnIs)() )
-                    (pOpt->*pArr->FnSet)( bCheck );
+                if( bCheck != (rOpt.*pArr->FnIs)() )
+                    (rOpt.*pArr->FnSet)( bCheck );
             }
         }
     }
@@ -238,7 +237,7 @@ sal_Bool OfaMSFilterTabPage2::FillItemSet( SfxItemSet& )
 
 void OfaMSFilterTabPage2::Reset( const SfxItemSet& )
 {
-    SvtFilterOptions* pOpt = SvtFilterOptions::Get();
+    SvtFilterOptions& rOpt = SvtFilterOptions::Get();
 
     aCheckLB.SetUpdateMode(sal_False);
     aCheckLB.Clear();
@@ -281,7 +280,7 @@ void OfaMSFilterTabPage2::Reset( const SfxItemSet& )
             SvLBoxButton* pItem = (SvLBoxButton*)(pEntry->GetItem( nCol ));
             if( pItem && ((SvLBoxItem*)pItem)->IsA() == SV_ITEM_ID_LBOXBUTTON )
             {
-                if( (pOpt->*pArr->FnIs)() )
+                if( (rOpt.*pArr->FnIs)() )
                     pItem->SetStateChecked();
                 else
                     pItem->SetStateUnchecked();

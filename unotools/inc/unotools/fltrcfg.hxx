@@ -93,12 +93,9 @@ public:
     sal_Bool IsEnableCalcPreview() const;
     sal_Bool IsEnableWordPreview() const;
 
-    static SvtFilterOptions* Get();
+    static SvtFilterOptions& Get();
 };
 
 #endif
-
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

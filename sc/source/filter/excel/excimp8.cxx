@@ -328,12 +328,12 @@ void ImportExcel8::ReadBasic( void )
 {
     SfxObjectShell* pShell = GetDocShell();
     SotStorageRef xRootStrg = GetRootStorage();
-    SvtFilterOptions* pFilterOpt = SvtFilterOptions::Get();
+    const SvtFilterOptions& rFilterOpt = SvtFilterOptions::Get();
     if( pShell && xRootStrg.Is() ) try
     {
-        bool bLoadCode = pFilterOpt->IsLoadExcelBasicCode();
-        bool bLoadExecutable = pFilterOpt->IsLoadExcelBasicExecutable();
-        bool bLoadStrg = pFilterOpt->IsLoadExcelBasicStorage();
+        bool bLoadCode = rFilterOpt.IsLoadExcelBasicCode();
+        bool bLoadExecutable = rFilterOpt.IsLoadExcelBasicExecutable();
+        bool bLoadStrg = rFilterOpt.IsLoadExcelBasicStorage();
         // #FIXME need to get rid of this, we can also do this from within oox
         // via the "ooo.vba.VBAGlobals" service
         if( bLoadCode || bLoadStrg )
