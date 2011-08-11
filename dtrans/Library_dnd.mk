@@ -51,6 +51,7 @@ $(eval $(call gb_Library_add_linked_libs,dnd,\
 	oleaut32 \
 	sal \
 	shell32 \
+	user32 \
 	uuid \
 	uwinapi \
 	$(gb_STDLIBS) \
@@ -69,6 +70,7 @@ $(eval $(call gb_Library_add_exception_objects,dnd,\
 	dtrans/source/win32/dnd/target \
 	dtrans/source/win32/dnd/targetdragcontext \
 	dtrans/source/win32/dnd/targetdropcontext \
+	dtrans/source/win32/misc/ImplHelper \
 ))
 
 # vim: set noet sw=4 ts=4:
