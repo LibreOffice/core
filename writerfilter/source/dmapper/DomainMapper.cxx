@@ -3064,7 +3064,8 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
             if( m_pImpl->IsInFootnoteProperties() )
             {
                 uno::Reference< text::XFootnotesSupplier> xFootnotesSupplier( m_pImpl->GetTextDocument(), uno::UNO_QUERY );
-                xFtnEdnSettings = xFootnotesSupplier->getFootnoteSettings();
+                if (xFootnotesSupplier.is())
+                    xFtnEdnSettings = xFootnotesSupplier->getFootnoteSettings();
             }
             else
             {

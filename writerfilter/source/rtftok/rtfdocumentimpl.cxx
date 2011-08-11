@@ -2250,6 +2250,9 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
         case RTF_VERN:
             // Ignore this for now, later the RTF writer version could be used to add hacks for older buggy writers.
             break;
+        case RTF_FTNSTART:
+            lcl_putNestedSprm(m_aDefaultState.aParagraphSprms, NS_ooxml::LN_EG_SectPrContents_footnotePr, NS_ooxml::LN_EG_FtnEdnNumProps_numStart, pIntValue);
+            break;
         case RTF_AFTNSTART:
             lcl_putNestedSprm(m_aDefaultState.aParagraphSprms, NS_ooxml::LN_EG_SectPrContents_endnotePr, NS_ooxml::LN_EG_FtnEdnNumProps_numStart, pIntValue);
             break;
