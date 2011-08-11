@@ -38,6 +38,7 @@ $(eval $(call gb_Module_add_targets,dtrans,\
 	Library_dtrans \
 	Library_ftransl \
 	Library_sysdtrans \
+	StaticLibrary_dtobj \
 ))
 endif
 

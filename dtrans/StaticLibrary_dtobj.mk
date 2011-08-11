@@ -28,6 +28,16 @@
 
 $(eval $(call gb_StaticLibrary_StaticLibrary,dtobj))
 
+$(eval $(call gb_StaticLibrary_set_include,dtobj,\
+	$$(INCLUDE) \
+	-I$(realpath $(SRCDIR)/dtrans/inc/pch) \
+))
+
+$(eval $(call gb_StaticLibrary_add_api,dtobj,\
+	udkapi \
+	offapi \
+))
+
 $(eval $(call gb_StaticLibrary_add_exception_objects,dtobj,\
 	dtrans/source/win32/dtobj/APNDataObject \
 	dtrans/source/win32/dtobj/DataFmtTransl \
@@ -44,7 +54,7 @@ $(eval $(call gb_StaticLibrary_add_exception_objects,dtobj,\
 
 ifneq ($(COM),GCC)
 $(eval $(call gb_StaticLibrary_add_exception_objects,dtobj,\
-	source/win32/dtobj/XNotifyingDataObject \
+	dtrans/source/win32/dtobj/XNotifyingDataObject \
 ))
 endif
 
