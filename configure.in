@@ -1019,6 +1019,12 @@ AC_ARG_WITH(gxx_include_path,
     ],
 ,)
 
+AC_ARG_WITH(help,
+    AS_HELP_STRING([--with-help],
+        [Enable the build of help.
+
+         To build without help, use --without-help.]))
+
 AC_ARG_WITH(java,
     AS_HELP_STRING([--with-java],
         [Specify the name of the Java interpreter command. Typically "java"
@@ -1368,7 +1374,7 @@ AC_ARG_WITH(macosx-version-max-allowed,
 
 BUILD_TYPE="LibO"
 SCPDEFS=""
-GIT_REPO_NAMES="help"
+GIT_REPO_NAMES=""
 
 echo "********************************************************************"
 echo "*"
@@ -2282,6 +2288,16 @@ else
     AC_MSG_RESULT([yes])
 fi
 AC_SUBST(WITH_BINFILTER)
+
+AC_MSG_CHECKING([whether to build help])
+if test "$with_help" != "no" -a $_os != iOS -a $_os != Android; then
+    AC_MSG_RESULT([yes])
+    BUILD_TYPE="$BUILD_TYPE HELP"
+    SCPDEFS="$SCPDEFS -DWITH_HELP"
+    GIT_REPO_NAMES="$GIT_REPO_NAMES help"
+else
+    AC_MSG_RESULT([no])
+fi
 
 dnl Enable ugly pieces of code we're better off without
 dnl ===================================================================

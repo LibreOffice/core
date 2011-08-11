@@ -34,12 +34,14 @@ File gid_File_Share_Registry_Draw_Xcd
     Name = "draw.xcd";
 End
 
+#if defined WITH_HELP
 File gid_File_Help_Sdraw_Zip
     Dir = gid_Dir_Help_Isolanguage;
     ARCHIVE_TXT_FILE_BODY_HELPPACK;
     EXTRA_ALL_GOOD_HELP_LOCALIZATIONS_LANG(sdraw);
     Patchfiles = (); 
 End
+#endif
 
 File gid_File_Exe_Sdraw
     BIN_FILE_BODY;

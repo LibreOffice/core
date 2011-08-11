@@ -351,6 +351,7 @@ STD_FILTER_FILE( gid_File_Filter_Iti, iti)
 
 STD_RES_FILE( gid_File_Res_Eps, eps )
 
+#if defined WITH_HELP
 File gid_File_Help_Common_Zip
     Dir = gid_Dir_Help_Isolanguage;
     ARCHIVE_TXT_FILE_BODY_HELPPACK;
@@ -376,6 +377,7 @@ File gid_File_Help_Schart_Zip
     ARCHIVE_TXT_FILE_BODY_HELPPACK;
     EXTRA_ALL_GOOD_HELP_LOCALIZATIONS_LANG(schart);
 End
+#endif
 
 #if defined WNT
 
