@@ -1438,7 +1438,7 @@ namespace cppcanvas
                                 }
                             } else {
                                 EMFP_DEBUG (printf ("EMF+ DrawImagePoints TODO (fixme)\n"));
-                }
+                            }
                         }
                         break;
                     }
