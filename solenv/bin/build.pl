@@ -59,7 +59,6 @@
     if (defined $ENV{verbose} || defined $ENV{VERBOSE}) {
         $verbose_mode = ($ENV{verbose} =~ /^t\S*$/i);
     }
-    my $enable_multiprocessing = 1;
 
     ### for XML file format
     eval { require XMLBuildListParser; import XMLBuildListParser; };
@@ -358,35 +357,6 @@ sub start_html_listener {
             sleep(10);
         };
     } while(1);
-};
-
-sub start_html_message_trigger {
-    my $child_id=fork(); ### VG: for windows there is a "simulation of the "fork"", no new procs... One can use Win32::Process::Create
-
-    if ($child_id) {
-        # parent
-    } else {
-        my $buffer_size = 1024;
-        my $buffer;
-        my $rv;
-        my $full_buffer = '';
-        my %modules_to_rebuild = ();
-        my $paddr;
-        while ($rv = sysread(HTML_PIPE, $buffer, $buffer_size)) {
-            $full_buffer .= $buffer;
-        };
-        if (length $full_buffer) {
-            print "**********Got message $full_buffer\n";
-            socket(SOCKET, PF_INET, SOCK_STREAM, getprotobyname('tcp')) or die "socket: $!";
-            if (connect(SOCKET, $paddr)) {
-                $full_buffer .= "\n";
-                syswrite SOCKET, $full_buffer, length $full_buffer;
-            } else {
-                die "Child connect: $!";
-            };
-        }
-        _exit(0);
-    };
 };
 
 sub get_html_orders {
@@ -1312,18 +1282,6 @@ sub get_dependency_array {
     return @dependencies;
 };
 
-
-#
-# Getting current directory list
-#
-sub get_directory_list {
-    my $path = shift;
-    opendir(CurrentDirList, $path);
-    my @directory_list = readdir(CurrentDirList);
-    closedir(CurrentDirList);
-    return @directory_list;
-};
-
 sub print_error {
     my $message = shift;
     my $force = shift;
@@ -1467,9 +1425,6 @@ sub get_options {
         if ($ignore && !$html) {
             print_error("Cannot ignore errors in multiprocessing build");
         };
-        if (!$enable_multiprocessing) {
-            print_error("Cannot load Win32::Process module for multiprocessing build");
-        };
     } elsif ($stop_build_on_error) {
         print_error("Switch --stoponerror is only for multiprocessing builds");
     };
@@ -1515,25 +1470,6 @@ sub get_dmake_args {
         push (@job_args, $arg);
     };
     return @job_args;
-};
-
-#
-# get all options without '-'
-#
-sub get_switch_options {
-    my $string = '';
-    my $option = '';
-    while ($option = shift @ARGV) {
-        if (!($option =~ /^-+/)) {
-            $string .= '-' . $option;
-            $string .= ' ';
-        } else {
-            unshift(@ARGV, $option);
-            last;
-        };
-    };
-    $string =~ s/\s$//;
-    return $string;
 };
 
 #
@@ -2018,20 +1954,6 @@ sub zenity_message {
     };
 };
 
-sub are_all_dependent {
-    my $build_queue = shift;
-    my $folder = '';
-    my $first_candidate = undef;
-    foreach my $prj (keys %$build_queue) {
-        $folder = find_indep_prj($projects_deps_hash{$prj});
-        $first_candidate = $folder if (!defined $first_candidate);
-    };
-    $folder = $first_candidate;
-    return '' if ($first_candidate);
-    return '1';
-};
-
-
 #
 # Procedure removes output tree from the module (without common trees)
 #
@@ -2117,12 +2039,6 @@ sub retrieve_build_list {
     print(" failed\n");
     print_error("incomplete dependencies!\n");
     return undef;
-};
-
-sub fix_permissions {
-     my $file = $File::Find::name;
-     return unless -f $file;
-     chmod '0664', $file;
 };
 
 sub prepare_build_from_with_branches {
@@ -2395,43 +2311,6 @@ sub get_solar_vars {
     close SOLARTABLE;
     unlink $file;
 }
-
-#
-# Procedure renames <module>.lnk (.link) into <module>
-#
-sub get_current_module {
-    my $module_name = shift;
-    my $link_name = $module_name . '.lnk';
-    $link_name .= '.link' if (-e $workspace_path.$module_name . '.link');
-    chdir $workspace_path;
-    getcwd();
-    print "\nBreaking link to module $module_name";
-    my $result = rename $link_name, $module_name;
-    if ( ! $result ) {
-        print_error("Cannot rename $module_name: $!\n");
-    }
-    if ( $initial_module eq $link_name) {
-        $initial_module = $module_name;
-    }
-    chdir $module_name;
-    getcwd();
-};
-
-sub check_dir {
-    my $start_dir = getcwd();
-    my @dir_entries = split(/[\\\/]/, $ENV{PWD});
-    my $current_module = $dir_entries[$#dir_entries];
-    if (($current_module =~ /(\.lnk)$/) || ($current_module =~ /(\.link)$/)) {
-        $current_module = $`;
-        # we're dealing with a link => fallback to SOLARSRC under UNIX
-        $workspace_path = $ENV{SOLARSRC}.'/';
-        get_current_module($current_module);
-        return;
-    } else {
-        chdir $start_dir;
-        getcwd();
-    };
-};
 
 #
 # Store all available build modi in %build_modes
