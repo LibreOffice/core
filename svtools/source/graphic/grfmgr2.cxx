@@ -137,13 +137,6 @@ void GraphicManager::SetMaxCacheSize( sal_uLong nNewCacheSize )
 
 // -----------------------------------------------------------------------------
 
-sal_uLong GraphicManager::GetMaxCacheSize() const
-{
-    return mpCache->GetMaxDisplayCacheSize();
-}
-
-// -----------------------------------------------------------------------------
-
 void GraphicManager::SetMaxObjCacheSize( sal_uLong nNewMaxObjSize, sal_Bool bDestroyGreaterCached )
 {
     mpCache->SetMaxObjDisplayCacheSize( nNewMaxObjSize, bDestroyGreaterCached );
@@ -151,44 +144,9 @@ void GraphicManager::SetMaxObjCacheSize( sal_uLong nNewMaxObjSize, sal_Bool bDes
 
 // -----------------------------------------------------------------------------
 
-sal_uLong GraphicManager::GetMaxObjCacheSize() const
-{
-    return mpCache->GetMaxObjDisplayCacheSize();
-}
-
-// -----------------------------------------------------------------------------
-
-sal_uLong GraphicManager::GetUsedCacheSize() const
-{
-    return mpCache->GetUsedDisplayCacheSize();
-}
-
-// -----------------------------------------------------------------------------
-
-sal_uLong GraphicManager::GetFreeCacheSize() const
-{
-    return mpCache->GetFreeDisplayCacheSize();
-}
-
-// -----------------------------------------------------------------------------
-
 void GraphicManager::SetCacheTimeout( sal_uLong nTimeoutSeconds )
 {
     mpCache->SetCacheTimeout( nTimeoutSeconds );
-}
-
-// -----------------------------------------------------------------------------
-
-sal_uLong GraphicManager::GetCacheTimeout() const
-{
-    return mpCache->GetCacheTimeout();
-}
-
-// -----------------------------------------------------------------------------
-
-void GraphicManager::ClearCache()
-{
-    mpCache->ClearDisplayCache();
 }
 
 // -----------------------------------------------------------------------------

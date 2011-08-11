@@ -672,21 +672,13 @@ public:
                         ~GraphicManager();
 
     void                SetMaxCacheSize( sal_uLong nNewCacheSize );
-    sal_uLong           GetMaxCacheSize() const;
 
     void                SetMaxObjCacheSize(
                             sal_uLong nNewMaxObjSize,
                             sal_Bool bDestroyGreaterCached = sal_False
                         );
-    sal_uLong           GetMaxObjCacheSize() const;
-
-    sal_uLong           GetUsedCacheSize() const;
-    sal_uLong           GetFreeCacheSize() const;
 
     void                SetCacheTimeout( sal_uLong nTimeoutSeconds );
-    sal_uLong           GetCacheTimeout() const;
-
-    void                ClearCache();
 
     void                ReleaseFromCache( const GraphicObject& rObj );
 
