@@ -340,16 +340,13 @@ MetaAction* GDIMetaFile::NextAction()
 
 MetaAction* GDIMetaFile::ReplaceAction( MetaAction* pAction, size_t nAction )
 {
-    if ( nAction < aList.size() )
-    {
-        ::std::vector< MetaAction* >::iterator it = aList.begin();
-        ::std::advance( it, nAction );
-        (*it)->Delete();
-        *it = pAction;
-    }
+    if ( nAction >= aList.size() )
+        return NULL;
+    //fdo#39995 This does't increment the incoming action ref-count nor does it
+    //decrement the outgoing action ref-count
+    std::swap(pAction, aList[nAction]);
     return pAction;
 }
-
 
 // ------------------------------------------------------------------------
 
