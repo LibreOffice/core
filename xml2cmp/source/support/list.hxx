@@ -226,7 +226,7 @@ DynamicList<XY>::insert(unsigned pos, XY * const & elem_)
     if ( pos > this->len )
       return;
 
-    checkSize(this->len+2);
+    this->checkSize(this->len+2);
     memmove(this->inhalt[pos+1], this->inhalt[pos], (this->len-pos) * sizeof(XY*) );
     this->inhalt[pos] = elem_;
     this->len++;

@@ -147,7 +147,7 @@ class SequenceAsVector : public ::std::vector< TElementType >
             const TElementType* pSource = lSource.getConstArray();
 
             for (sal_Int32 i=0; i<c; ++i)
-                push_back(pSource[i]);
+                this->push_back(pSource[i]);
         }
 
         //---------------------------------------
