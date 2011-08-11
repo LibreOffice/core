@@ -4681,22 +4681,6 @@ bool INetURLObject::removeFinalSlash()
 }
 
 //============================================================================
-// static
-rtl::OUString INetURLObject::createFragment(rtl::OUString const & rText)
-{
-    rtl::OUString aFragment(rText);
-    for (sal_Int32 i = 0; i < aFragment.getLength();)
-    {
-        sal_Unicode c = aFragment.getStr()[i];
-        if (mustEncode(c, PART_CREATEFRAGMENT))
-            aFragment = aFragment.replaceAt(i, 1, rtl::OUString());
-        else
-            ++i;
-    }
-    return aFragment;
-}
-
-//============================================================================
 bool INetURLObject::setFSysPath(rtl::OUString const & rFSysPath,
     FSysStyle eStyle)
 {

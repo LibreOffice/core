@@ -111,7 +111,6 @@ public:
     void    Init();                     // initialize the data
     void SetName( const String& );  // store a name (ASCII, up to 32 chars)
     void    GetName( String& rName ) const;
-    void    Load( const void* );
     void Store( void* );
     sal_uInt32 GetType() const      { return  nType;    }
     void    SetType( sal_uInt32 t ) { nType = t;}

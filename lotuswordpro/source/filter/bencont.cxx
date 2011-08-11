@@ -497,26 +497,6 @@ void AswEntry::Store( void* pTo )
       << nReserved[ 0 ]                     // 74 starting block (either direct or translated)
       << nReserved[ 1 ];                        // 78 file size
 }
-void AswEntry::Load( const void* pFrom )
-{
-    SvMemoryStream r( (sal_Char *)pFrom, ASWENTRY_SIZE, STREAM_WRITE );
-    for( short i = 0; i < 68; i++ )
-        r >> nName[ i ];            // 00 name as WCHAR
-     r>> nMtime[ 0 ]                        // 42 entry type
-      >> nMtime[ 1 ]                        // 43 0 or 1 (tree balance?)
-      >> nCtime[ 0 ]                        // 44 left node entry
-      >> nCtime[ 1 ]                        // 48 right node entry
-      >> nAtime[ 0 ]                        // 44 left node entry
-      >> nAtime[ 1 ];                       // 48 right node entry
-      r.Read(&aClsId,16);                       // 50 class ID (optional)
-      r>> nStatebits                        // 60 state flags(?)
-      >> nType
-      >> nObjectIDRef               // 64 modification time
-      >> nMversion              // 6C creation and access time
-      >> nLversion              // 6C creation and access time
-      >> nReserved[ 0 ]                     // 74 starting block (either direct or translated)
-      >> nReserved[ 1 ];                        // 78 file size
-}
 void AswEntry::SetClassId( const ClsId& r )
 {
     memcpy( &aClsId, &r, sizeof( ClsId ) );

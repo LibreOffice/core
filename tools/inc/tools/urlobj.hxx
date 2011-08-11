@@ -963,8 +963,6 @@ public:
                         EncodeMechanism eMechanism = WAS_ENCODED,
                         rtl_TextEncoding eCharset = RTL_TEXTENCODING_UTF8);
 
-    static rtl::OUString createFragment(rtl::OUString const & rText);
-
     //========================================================================
     // File URLs:
 
