@@ -633,26 +633,21 @@ Reference<XEventListener> EventAttacherImpl::attachListenerForTarget(
     Reference< XEventListener > xRet = NULL;
 
     // Construct the name of the addListener-Method.
-    OUString aAddListenerName;
-    OUString aListenerName( aListenerType );
-    sal_Int32 nIndex = aListenerName.lastIndexOf( '.' );
+    sal_Int32 nIndex = aListenerType.lastIndexOf('.');
     // set index to the interface name without package name
     if( nIndex == -1 )
         // not found
         nIndex = 0;
     else
         nIndex++;
-    if( aListenerName[nIndex] == 'X' )
-        // erase X from the interface name
-        aListenerName = aListenerName.copy( nIndex +1 );
-    aAddListenerName = OUString( RTL_CONSTASCII_USTRINGPARAM( "add" ) ) + aListenerName;
+
+    OUString aListenerName = (aListenerType[nIndex] == 'X') ? aListenerType.copy(nIndex+1) : aListenerType;
+    OUString aAddListenerName = OUString(RTL_CONSTASCII_USTRINGPARAM("add")) + aListenerName;
 
     // Send Methods to the correct addListener-Method
     Sequence< Reference< XIdlMethod > > aMethodSeq = xAccess->getMethods( MethodConcept::LISTENER );
-    sal_uInt32 i, nLen = aMethodSeq.getLength();
     const Reference< XIdlMethod >* pMethods = aMethodSeq.getConstArray();
-
-    for( i = 0 ; i < nLen ; i++ )
+    for (sal_Int32 i = 0, n = aMethodSeq.getLength(); i < n ; ++i)
     {
         const Reference< XIdlMethod >& rxMethod = pMethods[i];
 
@@ -677,7 +672,6 @@ Reference<XEventListener> EventAttacherImpl::attachListenerForTarget(
             if( !xAdapter.is() )
                 throw CannotCreateAdapterException();
             xRet = Reference< XEventListener >( xAdapter, UNO_QUERY );
-
 
             // Just the Listener as parameter?
             if( nParamCount == 1 )
