@@ -264,6 +264,7 @@ RTFDocumentImpl::RTFDocumentImpl(uno::Reference<uno::XComponentContext> const& x
     m_bFirstRun(true),
     m_bFirstRow(true),
     m_bNeedPap(false),
+    m_bNeedCr(false),
     m_aListTableSprms(),
     m_aSettingsTableSprms(),
     m_xStorage(),
@@ -333,6 +334,18 @@ bool RTFDocumentImpl::isSubstream()
     return m_bIsSubstream;
 }
 
+void RTFDocumentImpl::finishSubstream()
+{
+    // At the end of a footnote stream, we need to emit a run break when importing from Word.
+    // We can't do so unconditionally, as Writer already writes a \par at the end of the footnote.
+    if (m_bNeedCr)
+    {
+        Mapper().startCharacterGroup();
+        runBreak();
+        Mapper().endCharacterGroup();
+    }
+}
+
 void RTFDocumentImpl::setIgnoreFirst(OUString& rIgnoreFirst)
 {
     m_aIgnoreFirst = rIgnoreFirst;
@@ -390,6 +403,7 @@ void RTFDocumentImpl::runBreak()
 {
     sal_uInt8 sBreak[] = { 0xd };
     Mapper().text(sBreak, 1);
+    m_bNeedCr = false;
 }
 
 void RTFDocumentImpl::tableBreak()
@@ -832,6 +846,7 @@ void RTFDocumentImpl::text(OUString& rString)
         RTFValue::Pointer_t pValue(new RTFValue(rString));
         m_pCurrentBuffer->push_back(make_pair(BUFFER_UTEXT, pValue));
     }
+    m_bNeedCr = true;
     if (!m_pCurrentBuffer && m_aStates.top().nDestinationState != DESTINATION_FOOTNOTE)
         Mapper().endCharacterGroup();
     else if(m_pCurrentBuffer)

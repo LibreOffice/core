@@ -83,7 +83,10 @@ int RTFTokenizer::resolveParse()
                     if ((ret = m_rImport.popState()))
                         return ret;
                     if (m_rImport.isSubstream() && m_rImport.getGroup() == 0)
+                    {
+                        m_rImport.finishSubstream();
                         return 0;
+                    }
                     break;
                 case '\\':
                     if ((ret = resolveKeyword()))

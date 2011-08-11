@@ -273,6 +273,7 @@ namespace writerfilter {
                 void setSubstream(bool bIsSubtream);
                 void setAuthor(rtl::OUString& rAuthor);
                 bool isSubstream();
+                void finishSubstream();
                 void setIgnoreFirst(rtl::OUString& rIgnoreFirst);
                 void seek(sal_uInt32 nPos);
                 com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory> getModelFactory();
@@ -342,6 +343,8 @@ namespace writerfilter {
                 bool m_bFirstRow;
                 /// If paragraph properties should be emitted on next run.
                 bool m_bNeedPap;
+                /// If we need to emit a CR at the end of substream.
+                bool m_bNeedCr;
                 /// The list table and list override table combined.
                 RTFSprms m_aListTableSprms;
                 /// The settings table.
