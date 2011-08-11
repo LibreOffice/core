@@ -456,6 +456,7 @@ AssistentDlgImpl::AssistentDlgImpl( ::Window* pWindow, const Link& rFinishLink, 
     mpPage1RegionLB->SetSelectHdl(LINK(this,AssistentDlgImpl,SelectRegionHdl));
     mpPage1RegionLB->SetDropDownLineCount( 6 );
     mpPage1TemplateLB->SetSelectHdl(LINK(this,AssistentDlgImpl,SelectTemplateHdl));
+    mpPage1TemplateLB->SetStyle(mpPage1TemplateLB->GetStyle() | WB_SORT);
     mpPage1TemplateLB->InsertEntry(String(SdResId(STR_ISLOADING)));
 
     mpPage1EmptyRB->SetClickHdl(LINK(this,AssistentDlgImpl,StartTypeHdl));
@@ -494,6 +495,7 @@ AssistentDlgImpl::AssistentDlgImpl( ::Window* pWindow, const Link& rFinishLink, 
     mpPage2RegionLB->SetSelectHdl(LINK(this,AssistentDlgImpl,SelectRegionHdl));
     mpPage2RegionLB->SetDropDownLineCount( 6 );
     mpPage2LayoutLB->SetSelectHdl(LINK(this,AssistentDlgImpl,SelectLayoutHdl));
+    mpPage2LayoutLB->SetStyle(mpPage2LayoutLB->GetStyle() | WB_SORT);
     mpPage2LayoutLB->InsertEntry(String(SdResId(STR_ISLOADING)));
 
     // Seite 3

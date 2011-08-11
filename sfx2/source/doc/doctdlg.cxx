@@ -75,6 +75,8 @@ SfxDocumentTemplateDlg::SfxDocumentTemplateDlg( Window * pParent, SfxDocumentTem
     aNameEd.SetModifyHdl(LINK(this, SfxDocumentTemplateDlg, NameModify));
     aOkBt.SetClickHdl(LINK(this, SfxDocumentTemplateDlg, OkHdl));
     aEditBt.SetClickHdl(LINK(this, SfxDocumentTemplateDlg, EditHdl));
+    aRegionLb.SetStyle(aRegionLb.GetStyle() | WB_SORT);
+    aTemplateLb.SetStyle(aTemplateLb.GetStyle() | WB_SORT);
     Init();
 }
 
