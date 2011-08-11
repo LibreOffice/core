@@ -43,8 +43,14 @@
 #include <comphelper/IdPropArrayHelper.hxx>
 #include <comphelper/stl_types.hxx>
 
-FORWARD_DECLARE_INTERFACE( lang, XMultiServiceFactory )
-FORWARD_DECLARE_INTERFACE( script, XNameContainer )
+namespace com { namespace sun { namespace star {
+    namespace lang {
+        class XMultiServiceFactory;
+    }
+    namespace script {
+        class XNameContainer;
+    }
+}}}
 
 //........................................................................
 // namespace toolkit

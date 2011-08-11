@@ -37,11 +37,18 @@
 #include <svx/fmglob.hxx>
 #include <boost/shared_ptr.hpp>
 
-
-FORWARD_DECLARE_INTERFACE(report,XReportComponent)
-FORWARD_DECLARE_INTERFACE(report,XReportDefinition)
-FORWARD_DECLARE_INTERFACE(style,XStyle)
-FORWARD_DECLARE_INTERFACE(beans,XPropertySet)
+namespace com { namespace sun { namespace star {
+    namespace report {
+        class XReportComponent;
+        class XReportDefinition;
+    }
+    namespace style {
+        class XStyle;
+    }
+    namespace beans {
+        class XPropertySet;
+    }
+}}}
 
 namespace rptui
 {

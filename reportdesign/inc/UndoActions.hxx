@@ -60,8 +60,13 @@
 #include <memory>
 #include <boost/shared_ptr.hpp>
 
-FORWARD_DECLARE_INTERFACE(awt,XControl)
-FORWARD_DECLARE_INTERFACE(awt,XControlContainer)
+namespace com { namespace sun { namespace star {
+    namespace awt {
+        class XControl;
+        class XControlContainer;
+    }
+}}}
+
 namespace dbaui
 {
     class IController;

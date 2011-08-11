@@ -31,9 +31,16 @@
 #include "UndoActions.hxx"
 #include <functional>
 
-FORWARD_DECLARE_INTERFACE(awt,XControl)
-FORWARD_DECLARE_INTERFACE(awt,XControlContainer)
-FORWARD_DECLARE_INTERFACE(drawing,XShape)
+namespace com { namespace sun { namespace star {
+    namespace awt {
+        class XControl;
+        class XControlContainer;
+    }
+    namespace drawing {
+        class XShape;
+    }
+}}}
+
 namespace dbaui
 {
     class IController;

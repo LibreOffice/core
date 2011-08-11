@@ -274,21 +274,6 @@ namespace comphelper
         }
         return sal_False;
     }
-    #define FORWARD_DECLARE_INTERFACE(NAME,XFACE) \
-        namespace com \
-        {   \
-            namespace sun \
-            {\
-                namespace star \
-                {\
-                    namespace NAME \
-                    {\
-                        class XFACE; \
-                    }\
-                }\
-            }\
-        }\
-
 
 //.........................................................................
 }   // namespace comphelper
