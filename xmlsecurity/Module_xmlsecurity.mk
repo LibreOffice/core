@@ -34,13 +34,8 @@ $(eval $(call gb_Module_add_targets,xmlsecurity,\
 	AllLangResTarget_xsec \
 	Library_xmlsecurity \
 	Library_xsec_fw \
+	$(if $(filter YES,$(ENABLE_NSS_MODULE) $(SYSTEM_MOZILLA)),Library_xsec_xmlsec) \
 ))
-
-ifeq ($(or $(ENABLE_NSS_MODULE),$(SYSTEM_MOZILLA)),YES)
-$(eval $(call gb_Module_add_targets,xmlsecurity,\
-	Library_xsec_xmlsec \
-))
-endif
 
 # failing
 #$(eval $(call gb_Module_add_check_targets,xmlsecurity,\
