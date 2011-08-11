@@ -82,20 +82,6 @@ ByteString::ByteString( const UniString& rUniStr, xub_StrLen nPos, xub_StrLen nL
 
 // -----------------------------------------------------------------------
 
-ByteString::ByteString( const sal_Unicode* pUniStr,
-                        rtl_TextEncoding eTextEncoding, sal_uInt32 nCvtFlags )
-{
-    DBG_CTOR( ByteString, DbgCheckByteString );
-    DBG_ASSERT( pUniStr, "ByteString::ByteString() - pUniStr is NULL" );
-
-    mpData = NULL;
-    rtl_uString2String( (rtl_String **)(&mpData),
-                        pUniStr, ImplStringLen( pUniStr ),
-                        eTextEncoding, nCvtFlags );
-}
-
-// -----------------------------------------------------------------------
-
 ByteString::ByteString( const sal_Unicode* pUniStr, xub_StrLen nLen,
                         rtl_TextEncoding eTextEncoding, sal_uInt32 nCvtFlags )
 {
