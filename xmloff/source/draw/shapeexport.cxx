@@ -683,7 +683,7 @@ void XMLShapeExport::exportShape(const uno::Reference< drawing::XShape >& xShape
                 mrExport.AddAttribute(XML_NAMESPACE_DRAW, XML_LAYER, aLayerName );
 
             }
-            catch(const uno::Exception& e)
+            catch(const uno::Exception&)
             {
                 OSL_FAIL( "could not export layer name for shape!" );
             }
