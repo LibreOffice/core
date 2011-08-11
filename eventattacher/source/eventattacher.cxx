@@ -257,6 +257,15 @@ public:
     friend class FilterAllListenerImpl;
 
 private:
+    Reference<XEventListener> attachListenerForTarget(
+        const Reference<XIntrospectionAccess>& xAccess,
+        const Reference<XInvocationAdapterFactory>& xInvocationAdapterFactory,
+        const Reference<XAllListener>& xAllListener,
+        const Any& aObject,
+        const Any& aHelper,
+        const OUString& aListenerType,
+        const OUString& aAddListenerParam );
+
     Sequence< Reference<XEventListener> > attachListeners(
         const Reference<XInterface>& xObject,
         const Sequence< Reference<XAllListener> >& AllListeners,
@@ -584,8 +593,6 @@ Reference< XEventListener > EventAttacherImpl::attachListener
     if( !xObject.is() || !AllListener.is() )
         throw IllegalArgumentException();
 
-    Reference< XEventListener > xRet = NULL;
-
     Reference< XInvocationAdapterFactory > xInvocationAdapterFactory = getInvocationAdapterService();
     if( !xInvocationAdapterFactory.is() )
         throw ServiceNotRegisteredException();
@@ -600,18 +607,34 @@ Reference< XEventListener > EventAttacherImpl::attachListener
     // of the Introspection configurable for this purpose.
     Reference< XIntrospection > xIntrospection = getIntrospection();
     if( !xIntrospection.is() )
-        return xRet;
+        return Reference<XEventListener>();
 
     // Inspect Introspection
     Any aObjAny( &xObject, ::getCppuType( (const Reference< XInterface > *)0) );
 
     Reference< XIntrospectionAccess > xAccess = xIntrospection->inspect( aObjAny );
     if( !xAccess.is() )
-        return xRet;
+        return Reference<XEventListener>();
+
+    return attachListenerForTarget(
+        xAccess, xInvocationAdapterFactory, AllListener, aObjAny, Helper,
+        ListenerType, AddListenerParam);
+}
+
+Reference<XEventListener> EventAttacherImpl::attachListenerForTarget(
+    const Reference<XIntrospectionAccess>& xAccess,
+    const Reference<XInvocationAdapterFactory>& xInvocationAdapterFactory,
+    const Reference<XAllListener>& xAllListener,
+    const Any& aObject,
+    const Any& aHelper,
+    const OUString& aListenerType,
+    const OUString& aAddListenerParam)
+{
+    Reference< XEventListener > xRet = NULL;
 
     // Construct the name of the addListener-Method.
     OUString aAddListenerName;
-    OUString aListenerName( ListenerType );
+    OUString aListenerName( aListenerType );
     sal_Int32 nIndex = aListenerName.lastIndexOf( '.' );
     // set index to the interface name without package name
     if( nIndex == -1 )
@@ -648,8 +671,8 @@ Reference< XEventListener > EventAttacherImpl::attachListener
                 xListenerType = params.getConstArray()[1];
 
             // Request Adapter for the actual Listener type
-            Reference< XInterface > xAdapter = createAllListenerAdapter
-                ( xInvocationAdapterFactory, xListenerType, AllListener, Helper );
+            Reference< XInterface > xAdapter = createAllListenerAdapter(
+                xInvocationAdapterFactory, xListenerType, xAllListener, aHelper );
 
             if( !xAdapter.is() )
                 throw CannotCreateAdapterException();
@@ -663,7 +686,7 @@ Reference< XEventListener > EventAttacherImpl::attachListener
                 args.getArray()[0] <<= xAdapter;
                 try
                 {
-                    rxMethod->invoke( aObjAny, args );
+                    rxMethod->invoke( aObject, args );
                 }
                 catch( InvocationTargetException& )
                 {
@@ -680,7 +703,7 @@ Reference< XEventListener > EventAttacherImpl::attachListener
                 Reference< XIdlClass > xParamClass = params.getConstArray()[0];
                 if( xParamClass->getTypeClass() == TypeClass_STRING )
                 {
-                    pAnys[0] <<= AddListenerParam;
+                    pAnys[0] <<= aAddListenerParam;
                 }
 
                 // 2nd Parameter == Listener? TODO: Test!
@@ -690,7 +713,7 @@ Reference< XEventListener > EventAttacherImpl::attachListener
                 // else
                 try
                 {
-                    rxMethod->invoke( aObjAny, args );
+                    rxMethod->invoke( aObject, args );
                 }
                 catch( InvocationTargetException& )
                 {
