@@ -1490,6 +1490,7 @@ ToFile( "ANT_LIB",           PathFormat("@ANT_LIB@"), "e" );
 ToFile( "ANT",               PathFormat("@ANT@"), "e" );
 ToFile( "JDKLIB",            $JAVA_LIB,          "e" );
 ToFile( "ASM_PATH",          $ASM_PATH,          "e" );
+ToFile( "ML_EXE",            "@ML_EXE@",         "e" );
 ToFile( "FRAMEWORKSHOME",    $FRAMEWORKSHOME,    "e" );
 ToFile( "Empty",             $empty,             "n" );
 

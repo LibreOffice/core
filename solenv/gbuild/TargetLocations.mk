@@ -58,6 +58,7 @@ endef
 # workdir target patterns
 
 gb_AllLangResTarget_get_target = $(WORKDIR)/AllLangRes/$(1)
+gb_AsmObject_get_target = $(WORKDIR)/AsmObject/$(1).o
 gb_CObject_get_target = $(WORKDIR)/CObject/$(1).o
 gb_ComponentTarget_get_target = $(WORKDIR)/ComponentTarget/$(1).component
 gb_ComponentTarget_get_inbuild_target = $(WORKDIR)/ComponentTarget/$(1).inbuild.component
@@ -161,6 +162,7 @@ $(eval $(call gb_Helper_make_dep_targets,\
 	CxxObject \
 	ObjCObject \
 	ObjCxxObject \
+	AsmObject \
 	GenCxxObject \
 	LinkTarget \
 	SrsPartTarget \

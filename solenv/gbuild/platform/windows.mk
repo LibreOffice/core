@@ -76,6 +76,10 @@ gb_RCDEFS := \
 gb_RCFLAGS := \
 	 -V
 
+# FIXME: When porting to Windows64, we should use only:
+# /c /Cp
+gb_AFLAGS := /c /Cp /coff /safeseh
+
 gb_CFLAGS := \
 	-Gd \
 	-GR \
@@ -347,6 +351,20 @@ $(call gb_Helper_abbreviate_dirs_native,\
 		-Yc$(notdir $(patsubst %.cxx,%.hxx,$(3))) -Fp$(1) -Fo$(1).obj) $(call gb_create_deps,$(1),$(call gb_NoexPrecompiledHeader,$(2)),$(realpath $(3)))
 endef
 
+# AsmObject class
+
+gb_AsmObject_get_source = $(1)/$(2).asm
+
+define gb_AsmObject__command
+$(call gb_Output_announce,$(2),$(true),ASM,3)
+$(call gb_Helper_abbreviate_dirs_native,\
+	mkdir -p $(dir $(1)) $(dir $(4)) && \
+	$(ML_EXE) $(gb_AFLAGS) -D$(COM) /Fo$(1) $(3)) && \
+	echo "$(1) : $(realpath $(3))" > $(4)
+$(call gb_Object__command_deponcompile,$(1),$(4),$(3),,,)
+endef
+
+
 # LinkTarget class
 
 gb_LinkTarget_CFLAGS := $(gb_CFLAGS) $(gb_CFLAGS_WERROR)
@@ -369,6 +387,7 @@ $(call gb_Helper_abbreviate_dirs_native,\
 		$(call gb_Helper_convert_native,$(foreach object,$(CXXOBJECTS),$(call gb_CxxObject_get_target,$(object))) \
 		$(foreach object,$(GENCXXOBJECTS),$(call gb_GenCxxObject_get_target,$(object))) \
 		$(foreach object,$(COBJECTS),$(call gb_CObject_get_target,$(object))) \
+		$(foreach object,$(ASMOBJECTS),$(call gb_AsmObject_get_target,$(object))) \
 		$(foreach extraobjectlist,$(EXTRAOBJECTLISTS),$(shell cat $(extraobjectlist))) \
 		$(PCHOBJS) $(NATIVERES))) && \
 	$(gb_LINK) \

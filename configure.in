@@ -6538,6 +6538,7 @@ AC_SUBST(GNUCP)
 dnl ***************************************
 dnl testing assembler path
 dnl ***************************************
+ML_EXE=""
 if test "$_os" = "WINNT" -a "$WITH_MINGW" != "yes"; then
     if test "$CL_X64" = ""; then
         assembler=ml.exe
@@ -6552,6 +6553,7 @@ if test "$_os" = "WINNT" -a "$WITH_MINGW" != "yes"; then
     if test -x "$with_asm_home/$assembler"; then
         AC_MSG_CHECKING([$assembler assembler path])
         AC_MSG_RESULT([$with_asm_home/$assembler])
+        ML_EXE="$with_asm_home/$assembler"
     else
         AC_PATH_PROG(ML_EXE, $assembler)
         if test -z "$ML_EXE"; then
@@ -6559,11 +6561,13 @@ if test "$_os" = "WINNT" -a "$WITH_MINGW" != "yes"; then
             if test -x "$with_cl_home/$assembler_bin/$assembler"; then
                 with_asm_home=$with_cl_home/$assembler_bin
                 AC_MSG_RESULT([found])
+                ML_EXE="$with_cl_home/$assembler_bin/$assembler"
             else
                 AC_MSG_ERROR([Configure did not find $assembler assembler.])
             fi
         else
             with_asm_home="ASM_IN_PATH"
+            ML_EXE="$assembler"
         fi
     fi
 else
@@ -6571,6 +6575,7 @@ else
 fi
 ASM_HOME="$with_asm_home"
 AC_SUBST(ASM_HOME)
+AC_SUBST(ML_EXE)
 
 dnl ===================================================================
 dnl We need zip and unzip

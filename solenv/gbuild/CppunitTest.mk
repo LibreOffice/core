@@ -168,6 +168,8 @@ $(eval $(foreach method,\
 	add_objcobjects \
 	add_objcxxobject \
 	add_objcxxobjects \
+	add_asmobject \
+	add_asmobjects \
 	add_package_headers \
 	add_precompiled_header \
 	add_sdi_headers \

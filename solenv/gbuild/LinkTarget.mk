@@ -47,9 +47,9 @@ endif
 # Overview of dependencies and tasks of LinkTarget
 #
 # target                      task                         depends on
-# LinkTarget                  linking                      CObject CxxObject GenCxxObject ObjCObject ObjCxxObject
+# LinkTarget                  linking                      AsmObject CObject CxxObject GenCxxObject ObjCObject ObjCxxObject
 #                                                          LinkTarget/headers
-# LinkTarget/dep              joined dep file              CObject/dep CxxObject/dep GenCxxObject/dep ObjCObject/dep ObjCxxObject/dep
+# LinkTarget/dep              joined dep file              AsmObject/dep CObject/dep CxxObject/dep GenCxxObject/dep ObjCObject/dep ObjCxxObject/dep
 #                                                          | LinkTarget/headers
 # LinkTarget/headers          all headers available        LinkTarget/external_headers PCH
 #                              including own generated     own generated headers
@@ -63,11 +63,14 @@ endif
 # ObjCObject                  objective c compile          | LinkTarget/headers
 # ObjCxxObject                objective c++ compile        | LinkTarget/headers
 #
+# AsmObject                   asm compile                  | LinkTarget
+#
 # CObject/dep                 dependencies                 these targets generate empty dep files
 # CxxObject/dep               dependencies                 that are populated upon compile
 # GenCxxObject/dep            dependencies
 # ObjCObject/dep            dependencies
 # ObjCxxObject/dep            dependencies
+# AsmObject/dep               dependencies
 
 # LinkTarget/headers means gb_LinkTarget_get_headers_target etc.
 # dependencies prefixed with | are build-order only dependencies
@@ -271,6 +274,34 @@ gb_ObjCObject_ObjCObject =
 
 
 
+# AsmObject class
+
+gb_AsmObject_REPOS := $(gb_REPOS)
+
+# defined by platform
+#  gb_AsmObject_get_source (.asm on Windows, .s elsewhere)
+#  gb_AsmObject__command
+
+define gb_AsmObject__rules
+$$(call gb_AsmObject_get_target,%) : $$(call gb_AsmObject_get_source,$(1),%)
+	$$(call gb_AsmObject__command,$$@,$$*,$$<,$$(call gb_AsmObject_get_dep_target,$$*))
+
+ifeq ($(gb_FULLDEPS),$(true))
+$$(call gb_AsmObject_get_dep_target,%) : $$(call gb_AsmObject_get_target,%)
+	$$(if $$(wildcard $$@),touch $$@,\
+	  $$(call gb_Object__command_dep,$$@,$$(call gb_AsmObject_get_target,$$*)))
+endif
+
+endef
+
+$(foreach repo,$(gb_AsmObject_REPOS),$(eval $(call gb_AsmObject__rules,$(repo))))
+
+$(call gb_AsmObject_get_dep_target,%) :
+	$(eval $(call gb_Output_error,Unable to find asm file $(call gb_AsmObject_get_source,,$*) in the repositories: $(gb_AsmObject_REPOS)))
+
+gb_AsmObject_AsmObject =
+
+
 # LinkTarget class
 
 gb_LinkTarget_DEFAULTDEFS := $(gb_GLOBALDEFS)
@@ -295,6 +326,8 @@ $(call gb_LinkTarget_get_clean_target,%) :
 		$(foreach object,$(OBJCOBJECTS),$(call gb_ObjCObject_get_dep_target,$(object))) \
 		$(foreach object,$(OBJCXXOBJECTS),$(call gb_ObjCxxObject_get_target,$(object))) \
 		$(foreach object,$(OBJCXXOBJECTS),$(call gb_ObjCxxObject_get_dep_target,$(object))) \
+		$(foreach object,$(ASMOBJECTS),$(call gb_AsmObject_get_target,$(object))) \
+		$(foreach object,$(ASMOBJECTS),$(call gb_AsmObject_get_dep_target,$(object))) \
 		$(foreach object,$(GENCXXOBJECTS),$(call gb_GenCxxObject_get_target,$(object))) \
 		$(foreach object,$(GENCXXOBJECTS),$(call gb_GenCxxObject_get_dep_target,$(object))) \
 		$(call gb_LinkTarget_get_target,$*) \
@@ -318,7 +351,8 @@ $(call gb_Helper_abbreviate_dirs,\
 		$(foreach object,$(4),$(call gb_CxxObject_get_dep_target,$(object))) \
 		$(foreach object,$(5),$(call gb_ObjCObject_get_dep_target,$(object)))\
 		$(foreach object,$(6),$(call gb_ObjCxxObject_get_dep_target,$(object)))\
-		 $(foreach object,$(7),$(call gb_GenCxxObject_get_dep_target,$(object)))\
+		$(foreach object,$(7),$(call gb_AsmObject_get_dep_target,$(object)))\
+		$(foreach object,$(8),$(call gb_GenCxxObject_get_dep_target,$(object)))\
 		) && \
 	cat $${RESPONSEFILE} /dev/null | xargs -n 200 cat > $(1)) && \
 	rm -f $${RESPONSEFILE}
@@ -331,6 +365,7 @@ TEMPFILE=$(call var2file,$(shell $(gb_MKTEMP)),200,\
 	$(foreach object,$(CXXOBJECTS),$(call gb_CxxObject_get_target,$(object))) \
 	$(foreach object,$(OBJCOBJECTS),$(call gb_ObjCObject_get_target,$(object))) \
 	$(foreach object,$(OBJCXXOBJECTS),$(call gb_ObjCxxObject_get_target,$(object))) \
+	$(foreach object,$(ASMOBJECTS),$(call gb_AsmObject_get_target,$(object))) \
 	$(foreach object,$(GENCXXOBJECTS),$(call gb_GenCxxObject_get_target,$(object)))) && \
 $(if $(EXTRAOBJECTLISTS),cat $(EXTRAOBJECTLISTS) >> $${TEMPFILE} && ) \
 mv $${TEMPFILE} $(call gb_LinkTarget_get_objects_list,$(2)) 
@@ -344,7 +379,7 @@ $(call gb_LinkTarget_get_target,%) : $(call gb_LinkTarget_get_headers_target,%) 
 ifeq ($(gb_FULLDEPS),$(true))
 $(call gb_LinkTarget_get_target,%) : $(call gb_LinkTarget_get_dep_target,%)
 $(call gb_LinkTarget_get_dep_target,%) : | $(call gb_LinkTarget_get_headers_target,%)
-	$(call gb_LinkTarget__command_dep,$@,$*,$(COBJECTS),$(CXXOBJECTS),$(OBJCOBJECTS),$(OBJCXXOBJECTS),$(GENCXXOBJECTS))
+	$(call gb_LinkTarget__command_dep,$@,$*,$(COBJECTS),$(CXXOBJECTS),$(OBJCOBJECTS),$(OBJCXXOBJECTS),$(ASMOBJECTS),$(GENCXXOBJECTS))
 endif
 
 # Ok, this is some dark voodoo: When declaring a linktarget with
@@ -422,6 +457,8 @@ $(call gb_LinkTarget_get_target,$(1)) : OBJCOBJECTS :=
 $(call gb_LinkTarget_get_clean_target,$(1)) \
 $(call gb_LinkTarget_get_target,$(1)) : OBJCXXOBJECTS :=
 $(call gb_LinkTarget_get_clean_target,$(1)) \
+$(call gb_LinkTarget_get_target,$(1)) : ASMOBJECTS :=
+$(call gb_LinkTarget_get_clean_target,$(1)) \
 $(call gb_LinkTarget_get_target,$(1)) : GENCXXOBJECTS :=
 $(call gb_LinkTarget_get_headers_target,$(1)) \
 $(call gb_LinkTarget_get_target,$(1)) : T_CFLAGS := $$(gb_LinkTarget_CFLAGS) $(CFLAGS)
@@ -458,6 +495,7 @@ $(call gb_LinkTarget_get_dep_target,$(1)) : COBJECTS :=
 $(call gb_LinkTarget_get_dep_target,$(1)) : CXXOBJECTS := 
 $(call gb_LinkTarget_get_dep_target,$(1)) : OBJCOBJECTS :=
 $(call gb_LinkTarget_get_dep_target,$(1)) : OBJCXXOBJECTS :=
+$(call gb_LinkTarget_get_dep_target,$(1)) : ASMOBJECTS :=
 $(call gb_LinkTarget_get_dep_target,$(1)) : GENCXXOBJECTS :=
 $(call gb_LinkTarget_get_dep_target,$(1)) : T_CFLAGS := $$(gb_LinkTarget_CFLAGS) $(CFLAGS)
 $(call gb_LinkTarget_get_dep_target,$(1)) : T_CXXFLAGS := $$(gb_LinkTarget_CXXFLAGS)
@@ -731,6 +769,25 @@ endif
 
 endef
 
+define gb_LinkTarget_add_asmobject
+$(call gb_LinkTarget_get_target,$(1)) : ASMOBJECTS += $(2)
+$(call gb_LinkTarget_get_clean_target,$(1)) : ASMOBJECTS += $(2)
+
+$(call gb_LinkTarget_get_target,$(1)) : $(call gb_AsmObject_get_target,$(2))
+$(call gb_AsmObject_get_target,$(2)) : | $(call gb_LinkTarget_get_headers_target,$(1))
+
+ifeq ($(gb_FULLDEPS),$(true))
+$(call gb_LinkTarget_get_dep_target,$(1)) : ASMOBJECTS += $(2)
+$(call gb_LinkTarget_get_dep_target,$(1)) : $(call gb_AsmObject_get_dep_target,$(2))
+endif
+
+ifeq ($(gb_CHECKOBJECTOWNER),$(true))
+gb_LinkTarget_OBJECTOWNER += $(call gb_AsmObject_get_target,$(2)):$(1)
+gb_LinkTarget_OBJECTS +=  $(call gb_AsmObject_get_target,$(2))
+endif
+
+endef
+
 define gb_LinkTarget_add_generated_cxx_object
 $(call gb_LinkTarget_get_target,$(1)) : GENCXXOBJECTS += $(2)
 $(call gb_LinkTarget_get_clean_target,$(1)) : GENCXXOBJECTS += $(2)
@@ -793,6 +850,10 @@ endef
 
 define gb_LinkTarget_add_objcxxobjects
 $(foreach obj,$(2),$(call gb_LinkTarget_add_objcxxobject,$(1),$(obj),$(3)))
+endef
+
+define gb_LinkTarget_add_asmobjects
+$(foreach obj,$(2),$(call gb_LinkTarget_add_asmobject,$(1),$(obj),$(3)))
 endef
 
 define gb_LinkTarget_add_noexception_objects

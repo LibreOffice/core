@@ -113,6 +113,8 @@ $(eval $(foreach method,\
 	add_objcobjects \
 	add_objcxxobject \
 	add_objcxxobjects \
+	add_asmobject \
+	add_asmobjects \
 	add_exception_objects \
 	add_noexception_objects \
 	add_generated_cxxobjects \

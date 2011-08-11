@@ -224,6 +224,28 @@ $(call gb_Helper_abbreviate_dirs,\
 endef
 
 
+# AsmObject class
+
+gb_AsmObject_get_source = $(1)/$(2).s
+
+# $(call gb_AsmObject__command,object,relative-source,source,dep-file)
+define gb_AsmObject__command
+$(call gb_Output_announce,$(2),$(true),ASM,3)
+$(call gb_Helper_abbreviate_dirs,\
+	mkdir -p $(dir $(1)) $(dir $(4)) && \
+	echo "FIXME: Building assembler with gcc not yet implemented." && exit 1
+	#$(gb_CC) \
+	#	$(DEFS) \
+	#	$(T_CFLAGS) \
+	#	-c $(3) \
+	#	-o $(1) \
+	#	-MMD -MT $(1) \
+	#	-MF $(4) \
+	#	-I$(dir $(3)) \
+	#	$(INCLUDE))
+endef
+
+
 # LinkTarget class
 
 define gb_LinkTarget__get_rpath_for_layer
@@ -260,6 +282,7 @@ $(call gb_Helper_abbreviate_dirs,\
 		$(T_LDFLAGS) \
 		$(foreach object,$(COBJECTS),$(call gb_CObject_get_target,$(object))) \
 		$(foreach object,$(CXXOBJECTS),$(call gb_CxxObject_get_target,$(object))) \
+		$(foreach object,$(ASMOBJECTS),$(call gb_AsmObject_get_target,$(object))) \
 		$(foreach object,$(GENCXXOBJECTS),$(call gb_GenCxxObject_get_target,$(object))) \
 		$(foreach extraobjectlist,$(EXTRAOBJECTLISTS),`cat $(extraobjectlist)`) \
 		-Wl$(COMMA)--start-group $(foreach lib,$(LINKED_STATIC_LIBS),$(call gb_StaticLibrary_get_target,$(lib))) -Wl$(COMMA)--end-group \
@@ -274,6 +297,7 @@ $(call gb_Helper_abbreviate_dirs,\
 	$(gb_AR) -rsu $(1) \
 		$(foreach object,$(COBJECTS),$(call gb_CObject_get_target,$(object))) \
 		$(foreach object,$(CXXOBJECTS),$(call gb_CxxObject_get_target,$(object))) \
+		$(foreach object,$(ASMOBJECTS),$(call gb_AsmObject_get_target,$(object))) \
 		$(foreach object,$(GENCXXOBJECTS),$(call gb_GenCxxObject_get_target,$(object))) \
 		$(foreach extraobjectlist,$(EXTRAOBJECTLISTS),@$(extraobjectlist)) \
 		$(if $(findstring s,$(MAKEFLAGS)),2> /dev/null))

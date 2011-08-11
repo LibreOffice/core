@@ -168,7 +168,7 @@ $(eval $(call gb_Library_add_exception_objects,sb,\
 endif
 endif
 ifeq ($(GUI)$(COM)$(CPU),WNTMSCI)
-$(eval $(call gb_Library_add_exception_objects,sb,\
+$(eval $(call gb_Library_add_asmobjects,sb,\
 	basic/source/runtime/wnt-x86 \
 ))
 endif
