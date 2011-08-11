@@ -194,11 +194,11 @@ static ::com::sun::star::uno::Reference< ::com::sun::star::frame::XLayoutManager
         {
             xPropSet->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "LayoutManager" ))) >>= xLayoutManager;
         }
-        catch ( RuntimeException& )
+        catch (const RuntimeException&)
         {
             throw;
         }
-        catch ( Exception& )
+        catch (const Exception&)
         {
         }
     }
@@ -499,7 +499,7 @@ void ToolBarManager::UpdateControllers()
                 if ( xUpdatable.is() )
                     xUpdatable->update();
             }
-            catch ( Exception& )
+            catch (const Exception&)
             {
             }
             ++pIter;
@@ -523,7 +523,7 @@ void ToolBarManager::UpdateController( ::com::sun::star::uno::Reference< ::com::
                     xUpdatable->update();
             }
          }
-         catch ( Exception& )
+         catch (const Exception&)
          {
          }
 
@@ -578,7 +578,7 @@ void SAL_CALL ToolBarManager::disposing( const EventObject& Source ) throw ( Run
                     Reference< XUIConfigurationListener >(
                         static_cast< OWeakObject* >( this ), UNO_QUERY ));
             }
-            catch ( Exception& )
+            catch (const Exception&)
             {
             }
         }
@@ -591,7 +591,7 @@ void SAL_CALL ToolBarManager::disposing( const EventObject& Source ) throw ( Run
                     Reference< XUIConfigurationListener >(
                         static_cast< OWeakObject* >( this ), UNO_QUERY ));
             }
-            catch ( Exception& )
+            catch (const Exception&)
             {
             }
         }
@@ -638,7 +638,7 @@ void SAL_CALL ToolBarManager::dispose() throw( RuntimeException )
                     Reference< XUIConfigurationListener >(
                         static_cast< OWeakObject* >( this ), UNO_QUERY ));
             }
-            catch ( Exception& )
+            catch (const Exception&)
             {
             }
         }
@@ -651,7 +651,7 @@ void SAL_CALL ToolBarManager::dispose() throw( RuntimeException )
                     Reference< XUIConfigurationListener >(
                         static_cast< OWeakObject* >( this ), UNO_QUERY ));
             }
-            catch ( Exception& )
+            catch (const Exception&)
             {
             }
         }
@@ -669,7 +669,7 @@ void SAL_CALL ToolBarManager::dispose() throw( RuntimeException )
                 m_xFrame->removeFrameActionListener( Reference< XFrameActionListener >(
                                                         static_cast< ::cppu::OWeakObject *>( this ), UNO_QUERY ));
             }
-            catch ( Exception& )
+            catch (const Exception&)
             {
             }
         }
@@ -817,7 +817,7 @@ void ToolBarManager::RemoveControllers()
                 {
                     xComponent->dispose();
                 }
-                catch ( Exception& )
+                catch (const Exception&)
                 {
                 }
             }
@@ -856,7 +856,7 @@ uno::Sequence< beans::PropertyValue > ToolBarManager::GetPropsForCommand( const 
                 m_xUICommandLabels->getByName( rCmdURL ) >>= aPropSeq;
         }
     }
-    catch ( Exception& )
+    catch (const Exception&)
     {
     }
 
@@ -1133,11 +1133,11 @@ void ToolBarManager::CreateControllers()
                     UpdateController(xTbxController);
                 }
             }
-            catch ( RuntimeException& )
+            catch (const RuntimeException&)
             {
                 throw;
             }
-            catch ( Exception& )
+            catch (const Exception&)
             {
             }
         }
@@ -1238,7 +1238,7 @@ void ToolBarManager::FillToolbar( const Reference< XIndexAccess >& rItemContaine
         if ( xModuleManager.is() )
             m_aModuleIdentifier = xModuleManager->identify( Reference< XInterface >( m_xFrame, UNO_QUERY ) );
     }
-    catch( Exception& )
+    catch (const Exception&)
     {
     }
 
@@ -1312,7 +1312,7 @@ void ToolBarManager::FillToolbar( const Reference< XIndexAccess >& rItemContaine
                                     }
                                 }
                             }
-                            catch( Exception& )
+                            catch (const Exception&)
                             {
                             }
                         }
@@ -1405,7 +1405,7 @@ void ToolBarManager::FillToolbar( const Reference< XIndexAccess >& rItemContaine
                 }
             }
         }
-        catch ( ::com::sun::star::lang::IndexOutOfBoundsException& )
+        catch (const ::com::sun::star::lang::IndexOutOfBoundsException&)
         {
             break;
         }
@@ -1496,7 +1496,7 @@ void ToolBarManager::FillToolbar( const Reference< XIndexAccess >& rItemContaine
             if ( aUIName.getLength() > 0 )
                 m_pToolBar->SetText( aUIName );
         }
-        catch ( Exception& )
+        catch (const Exception&)
         {
         }
     }
@@ -1581,11 +1581,11 @@ void ToolBarManager::notifyRegisteredControllers( const rtl::OUString& aUIElemen
                         if ( xController.is() )
                             xController->functionSelected( aCommand );
                     }
-                    catch ( RuntimeException& e )
+                    catch (const RuntimeException&)
                     {
                         throw;
                     }
-                    catch ( Exception& )
+                    catch (const Exception&)
                     {
                     }
                 }
@@ -2032,7 +2032,7 @@ IMPL_LINK( ToolBarManager, MenuSelect, Menu*, pMenu )
                                                     xUICfgMgr->store();
                                             }
                                         }
-                                        catch ( Exception& )
+                                        catch (const Exception&)
                                         {
                                         }
 
@@ -2193,7 +2193,7 @@ IMPL_STATIC_LINK_NOINSTANCE( ToolBarManager, ExecuteHdl_Impl, ExecuteInfo*, pExe
             pExecuteInfo->xLayoutManager->dockAllWindows( UIElementType::TOOLBAR );
         }
     }
-    catch ( Exception& )
+    catch (const Exception&)
     {
     }
 
@@ -2231,7 +2231,7 @@ bool ToolBarManager::impl_RetrieveShortcutsFromConfiguration(
                 }
             }
         }
-        catch ( IllegalArgumentException& )
+        catch (const IllegalArgumentException&)
         {
         }
     }
@@ -2289,11 +2289,11 @@ bool ToolBarManager::RetrieveShortcut( const rtl::OUString& rCommandURL, rtl::OU
                         m_xModuleAcceleratorManager = xModuleAccelCfg;
                     }
                 }
-                catch ( RuntimeException& )
+                catch (const RuntimeException&)
                 {
                     throw;
                 }
-                catch ( Exception& )
+                catch (const Exception&)
                 {
                 }
             }
