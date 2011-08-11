@@ -85,7 +85,8 @@ private:
 WaitCondition::~WaitCondition() {
     std::cout << "waiting for condition\n";
     if (m_condition.wait() != osl::Condition::result_ok) {
-        throw "osl::Condition::wait failed";
+       std::cerr << "osl::Condition::wait failed\n";
+       std::abort()
     }
 }
 
