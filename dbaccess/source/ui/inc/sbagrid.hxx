@@ -44,6 +44,12 @@
 
 class SvNumberFormatter;
 
+namespace com { namespace sun { namespace star {
+    namespace lang {
+        class XMultiServiceFactory;
+    }
+}}}
+
 namespace dbaui
 {
     //------------------------------------------------------------------
@@ -59,9 +65,6 @@ namespace dbaui
     //==================================================================
     // SbaXGridControl
     //==================================================================
-
-    //  class ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > ;
-    FORWARD_DECLARE_INTERFACE(lang,XMultiServiceFactory)
 
     class SbaXStatusMultiplexer;
     class SbaXGridControl

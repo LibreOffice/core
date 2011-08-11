@@ -65,9 +65,15 @@ class TransferableHelper;
 class TransferableClipboardListener;
 class SfxFilter;
 
-FORWARD_DECLARE_INTERFACE(container,XNameContainer)
-FORWARD_DECLARE_INTERFACE(container,XContainer)
-FORWARD_DECLARE_INTERFACE(ucb,XContent)
+namespace com { namespace sun { namespace star {
+    namespace container {
+        class XNameContainer;
+        class XContainer;
+    }
+    namespace ucb {
+        class XContent;
+    }
+}}}
 
 //........................................................................
 namespace dbaui

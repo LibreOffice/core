@@ -33,10 +33,18 @@
 #include <comphelper/uno3.hxx>
 #include "dsntypes.hxx"
 
-FORWARD_DECLARE_INTERFACE(beans,XPropertySet)
-FORWARD_DECLARE_INTERFACE(sdbc,XConnection)
-FORWARD_DECLARE_INTERFACE(sdbc,XDriver)
-FORWARD_DECLARE_INTERFACE(lang,XMultiServiceFactory)
+namespace com { namespace sun { namespace star {
+    namespace beans {
+        class XPropertySet;
+    }
+    namespace sdbc {
+        class XConnection;
+        class XDriver;
+    }
+    namespace lang {
+        class XMultiServiceFactory;
+    }
+}}}
 
 class SfxItemSet;
 namespace dbaui

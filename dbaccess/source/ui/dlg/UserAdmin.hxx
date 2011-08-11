@@ -38,9 +38,17 @@
 #include "adminpages.hxx"
 #include <comphelper/uno3.hxx>
 
-FORWARD_DECLARE_INTERFACE(beans,XPropertySet)
-FORWARD_DECLARE_INTERFACE(sdbc,XConnection)
-FORWARD_DECLARE_INTERFACE(lang,XMultiServiceFactory)
+namespace com { namespace sun { namespace star {
+    namespace beans {
+        class XPropertySet;
+    }
+    namespace sdbc {
+        class XConnection;
+    }
+    namespace lang {
+        class XMultiServiceFactory;
+    }
+}}}
 
 namespace dbaui
 {
