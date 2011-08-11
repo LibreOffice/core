@@ -40,9 +40,6 @@
 #include "zforscan.hxx"
 #endif
 
-// If comment field is also in format code string, was used for SUPD versions 371-372
-#define NF_COMMENT_IN_FORMATSTRING 0
-
 namespace utl {
     class DigitGroupingIterator;
 }
@@ -387,19 +384,8 @@ public:
                 sal_Unicode cEscIn = '\0', sal_Unicode cEscOut = '\\' );
 
     void SetComment( const String& rStr )
-#if NF_COMMENT_IN_FORMATSTRING
-        { SetComment( rStr, sFormatstring, sComment ); }
-#else
         { sComment = rStr; }
-#endif
     const String& GetComment() const { return sComment; }
-
-    // Erase "{ "..." }" from format subcode string to get the pure comment (old version)
-    static void EraseCommentBraces( String& rStr );
-    // Set comment rStr in format string rFormat and in rComment (old version)
-    static void SetComment( const String& rStr, String& rFormat, String& rComment );
-    // Erase comment at end of rStr to get pure format code string (old version)
-    static void EraseComment( String& rStr );
 
     /** Insert the number of blanks into the string that is needed to simulate
         the width of character c for underscore formats */

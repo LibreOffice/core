@@ -588,7 +588,6 @@ short ImpSvNumberformatScan::GetKeyWord( const String& sSymbol, xub_StrLen nPos 
 //               | @ # 0 ? / . , % [ | Symbol = Zeichen;     |
 //               | ] ' Blank         | Typ = Steuerzeichen   | SsStop
 //               | $ - + ( ) :       | Typ    = String;      |
-//               | |                 | Typ    = Comment      | SsStop
 //               | Sonst             | Symbol = Zeichen      | SsStop
 //---------------|-------------------+-----------------------+---------------
 // SsGetChar     | Sonst             | Symbol=Zeichen        | SsStop
@@ -697,14 +696,6 @@ short ImpSvNumberformatScan::Next_Symbol( const String& rStr,
                         eState = SsGetBlank;
                     }
                     break;
-#if NF_COMMENT_IN_FORMATSTRING
-                    case '{':
-                        eType = NF_SYMBOLTYPE_COMMENT;
-                        eState = SsStop;
-                        sSymbol.Append( rStr.GetBuffer() + (nPos-1), rStr.Len() - (nPos-1) );
-                        nPos = rStr.Len();
-                    break;
-#endif
                     case '"':
                         eType = NF_SYMBOLTYPE_STRING;
                         eState = SsGetString;
@@ -1463,7 +1454,7 @@ int ImpSvNumberformatScan::FinalScanGetCalendar( xub_StrLen& nPos, sal_uInt16& i
     return 0;
 }
 
-xub_StrLen ImpSvNumberformatScan::FinalScan( String& rString, String& rComment )
+xub_StrLen ImpSvNumberformatScan::FinalScan( String& rString )
 {
     const LocaleDataWrapper* pLoc = pFormatter->GetLocaleData();
 
@@ -1515,16 +1506,6 @@ xub_StrLen ImpSvNumberformatScan::FinalScan( String& rString, String& rComment )
                 {
                     case NF_SYMBOLTYPE_BLANK:
                     case NF_SYMBOLTYPE_STAR:
-                    break;
-                    case NF_SYMBOLTYPE_COMMENT:
-                    {
-                        String& rStr = sStrArray[i];
-                        nPos = nPos + rStr.Len();
-                        SvNumberformat::EraseCommentBraces( rStr );
-                        rComment += rStr;
-                        nTypeArray[i] = NF_SYMBOLTYPE_EMPTY;
-                        nAnzResStrings--;
-                    }
                     break;
                     case NF_KEY_GENERAL :   // #77026# "General" is the same as "@"
                     break;
@@ -2031,16 +2012,6 @@ xub_StrLen ImpSvNumberformatScan::FinalScan( String& rString, String& rComment )
                         break;
                     }                               // of switch (Del)
                 }                                   // of else Del
-                else if ( nTypeArray[i] == NF_SYMBOLTYPE_COMMENT )
-                {
-                    String& rStr = sStrArray[i];
-                    nPos = nPos + rStr.Len();
-                    SvNumberformat::EraseCommentBraces( rStr );
-                    rComment += rStr;
-                    nTypeArray[i] = NF_SYMBOLTYPE_EMPTY;
-                    nAnzResStrings--;
-                    i++;
-                }
                 else
                 {
                     DBG_ERRORFILE( "unknown NF_SYMBOLTYPE_..." );
@@ -2146,17 +2117,6 @@ xub_StrLen ImpSvNumberformatScan::FinalScan( String& rString, String& rComment )
                     case NF_SYMBOLTYPE_STRING:
                         nPos = nPos + sStrArray[i].Len();
                         i++;
-                    break;
-                    case NF_SYMBOLTYPE_COMMENT:
-                    {
-                        String& rStr = sStrArray[i];
-                        nPos = nPos + rStr.Len();
-                        SvNumberformat::EraseCommentBraces( rStr );
-                        rComment += rStr;
-                        nTypeArray[i] = NF_SYMBOLTYPE_EMPTY;
-                        nAnzResStrings--;
-                        i++;
-                    }
                     break;
                     case NF_SYMBOLTYPE_DEL:
                     {
@@ -2325,17 +2285,6 @@ xub_StrLen ImpSvNumberformatScan::FinalScan( String& rString, String& rComment )
                         i++;
                     }
                     break;
-                    case NF_SYMBOLTYPE_COMMENT:
-                    {
-                        String& rStr = sStrArray[i];
-                        nPos = nPos + rStr.Len();
-                        SvNumberformat::EraseCommentBraces( rStr );
-                        rComment += rStr;
-                        nTypeArray[i] = NF_SYMBOLTYPE_EMPTY;
-                        nAnzResStrings--;
-                        i++;
-                    }
-                    break;
                     case NF_KEY_AMPM:                       // AM/PM
                     case NF_KEY_AP:                         // A/P
                     {
@@ -2386,17 +2335,6 @@ xub_StrLen ImpSvNumberformatScan::FinalScan( String& rString, String& rComment )
                     case NF_SYMBOLTYPE_STRING:
                         nPos = nPos + sStrArray[i].Len();
                         i++;
-                    break;
-                    case NF_SYMBOLTYPE_COMMENT:
-                    {
-                        String& rStr = sStrArray[i];
-                        nPos = nPos + rStr.Len();
-                        SvNumberformat::EraseCommentBraces( rStr );
-                        rComment += rStr;
-                        nTypeArray[i] = NF_SYMBOLTYPE_EMPTY;
-                        nAnzResStrings--;
-                        i++;
-                    }
                     break;
                     case NF_SYMBOLTYPE_DEL:
                     {
@@ -2776,13 +2714,13 @@ xub_StrLen ImpSvNumberformatScan::RemoveQuotes( String& rStr )
     return 0;
 }
 
-xub_StrLen ImpSvNumberformatScan::ScanFormat( String& rString, String& rComment )
+xub_StrLen ImpSvNumberformatScan::ScanFormat( String& rString )
 {
     xub_StrLen res = Symbol_Division(rString);  //lexikalische Analyse
     if (!res)
         res = ScanType(rString);            // Erkennung des Formattyps
     if (!res)
-        res = FinalScan( rString, rComment );   // Typabhaengige Endanalyse
+        res = FinalScan( rString );         // Typabhaengige Endanalyse
     return res;                             // res = Kontrollposition
                                             // res = 0 => Format ok
 }

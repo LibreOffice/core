@@ -246,6 +246,11 @@ sal_uInt8 SvNumberNatNum::MapDBNumToNatNum( sal_uInt8 nDBNum, LanguageType eLang
     return nNatNum;
 }
 
+
+/* XXX NOTE: even though the MapNatNumToDBNum method is currently unused please 
+ * don't remove it in case we'd have to use it for some obscure exports to 
+ * Excel. */
+
 // static
 sal_uInt8 SvNumberNatNum::MapNatNumToDBNum( sal_uInt8 nNatNum, LanguageType eLang, bool bDate )
 {
@@ -682,7 +687,6 @@ SvNumberformat::SvNumberformat(String& rString,
     xub_StrLen nPos = 0;
     xub_StrLen nPosOld;
     nCheckPos = 0;
-    String aComment;
 
     // Split into 4 sub formats
     sal_uInt16 nIndex;
@@ -940,7 +944,7 @@ SvNumberformat::SvNumberformat(String& rString,
                     if (sInsertCalendar.Len())
                         sStr.Insert( sInsertCalendar, 0);
 
-                    xub_StrLen nStrPos = pSc->ScanFormat( sStr, aComment );
+                    xub_StrLen nStrPos = pSc->ScanFormat( sStr );
                     sal_uInt16 nAnz = pSc->GetAnzResStrings();
                     if (nAnz == 0)              // error
                         nStrPos = 1;
@@ -1050,8 +1054,7 @@ SvNumberformat::SvNumberformat(String& rString,
                 rString.GetChar(rString.Len()-1) != ';' )
         {   // No format code => GENERAL   but not if specified empty
             String aAdd( pSc->GetStandardName() );
-            String aTmp;
-            if ( !pSc->ScanFormat( aAdd, aTmp ) )
+            if ( !pSc->ScanFormat( aAdd ) )
             {
                 sal_uInt16 nAnz = pSc->GetAnzResStrings();
                 if ( nAnz )
@@ -1069,8 +1072,7 @@ SvNumberformat::SvNumberformat(String& rString,
         {   // No trailing second subformat => GENERAL   but not if specified empty
             // and not if first subformat is GENERAL
             String aAdd( pSc->GetStandardName() );
-            String aTmp;
-            if ( !pSc->ScanFormat( aAdd, aTmp ) )
+            if ( !pSc->ScanFormat( aAdd ) )
             {
                 sal_uInt16 nAnz = pSc->GetAnzResStrings();
                 if ( nAnz )
@@ -1087,8 +1089,7 @@ SvNumberformat::SvNumberformat(String& rString,
                 eOp2 != NUMBERFORMAT_OP_NO )
         {   // No trailing third subformat => GENERAL   but not if specified empty
             String aAdd( pSc->GetStandardName() );
-            String aTmp;
-            if ( !pSc->ScanFormat( aAdd, aTmp ) )
+            if ( !pSc->ScanFormat( aAdd ) )
             {
                 sal_uInt16 nAnz = pSc->GetAnzResStrings();
                 if ( nAnz )
@@ -1102,11 +1103,7 @@ SvNumberformat::SvNumberformat(String& rString,
         }
     }
     sFormatstring = rString;
-    if ( aComment.Len() )
-    {
-        SetComment( aComment );     // setzt sComment und sFormatstring
-        rString = sFormatstring;    // geaenderten sFormatstring uebernehmen
-    }
+
     if (NumFor[2].GetCount() == 0 &&                 // kein 3. Teilstring
         eOp1 == NUMBERFORMAT_OP_GT && eOp2 == NUMBERFORMAT_OP_NO &&
         fLimit1 == 0.0 && fLimit2 == 0.0)
@@ -1801,12 +1798,6 @@ void SvNumberformat::Save( SvStream& rStream, ImpSvNumMultipleWriteHeader& rHdr 
 {
     String aFormatstring( sFormatstring );
     String aComment( sComment );
-#if NF_COMMENT_IN_FORMATSTRING
-    // der Kommentar im Formatstring wird nicht gespeichert, um in alten Versionen
-    // nicht ins schleudern zu kommen und spaeter getrennte Verarbeitung
-    // (z.B. im Dialog) zu ermoeglichen
-    SetComment( "", aFormatstring, aComment );
-#endif
 
     bool bNewCurrency = HasNewCurrency();
     if ( bNewCurrency )
@@ -3039,6 +3030,12 @@ bool SvNumberformat::ImpFallBackToGregorianCalendar( String& rOrgCalendar, doubl
     }
     return false;
 }
+
+
+/* XXX NOTE: even if the ImpSwitchToSpecifiedCalendar method is currently 
+ * unused please don't remove it, it would be needed by 
+ * SwitchToSpecifiedCalendar(), see comment in 
+ * ImpSvNumberInputScan::GetDateRef() */
 
 bool SvNumberformat::ImpSwitchToSpecifiedCalendar( String& rOrgCalendar,
         double& fOrgDateTime, const ImpSvNumFor& rNumFor ) const
@@ -4625,93 +4622,6 @@ bool SvNumberformat::HasStringNegativeSign( const String& rStr )
             return true;
     } while ( *p == ' ' && pBeg < --p );
     return false;
-}
-
-// static
-void SvNumberformat::SetComment( const String& rStr, String& rFormat,
-        String& rComment )
-{
-    if ( rComment.Len() )
-    {   // alten Kommentar aus Formatstring loeschen
-        //! nicht per EraseComment, der Kommentar muss matchen
-        String aTmp( '{' );
-        aTmp += ' ';
-        aTmp += rComment;
-        aTmp += ' ';
-        aTmp += '}';
-        xub_StrLen nCom = 0;
-        do
-        {
-            nCom = rFormat.Search( aTmp, nCom );
-        } while ( (nCom != STRING_NOTFOUND) && (nCom + aTmp.Len() != rFormat.Len()) );
-        if ( nCom != STRING_NOTFOUND )
-            rFormat.Erase( nCom );
-    }
-    if ( rStr.Len() )
-    {   // neuen Kommentar setzen
-        rFormat += '{';
-        rFormat += ' ';
-        rFormat += rStr;
-        rFormat += ' ';
-        rFormat += '}';
-        rComment = rStr;
-    }
-}
-
-// static
-void SvNumberformat::EraseCommentBraces( String& rStr )
-{
-    xub_StrLen nLen = rStr.Len();
-    if ( nLen && rStr.GetChar(0) == '{' )
-    {
-        rStr.Erase( 0, 1 );
-        --nLen;
-    }
-    if ( nLen && rStr.GetChar(0) == ' ' )
-    {
-        rStr.Erase( 0, 1 );
-        --nLen;
-    }
-    if ( nLen && rStr.GetChar( nLen-1 ) == '}' )
-        rStr.Erase( --nLen, 1 );
-    if ( nLen && rStr.GetChar( nLen-1 ) == ' ' )
-        rStr.Erase( --nLen, 1 );
-}
-
-// static
-void SvNumberformat::EraseComment( String& rStr )
-{
-    register const sal_Unicode* p = rStr.GetBuffer();
-    bool bInString = false;
-    bool bEscaped = false;
-    bool bFound = false;
-    xub_StrLen nPos = 0;
-    while ( !bFound && *p )
-    {
-        switch ( *p )
-        {
-            case '\\' :
-                bEscaped = !bEscaped;
-            break;
-            case '\"' :
-                if ( !bEscaped )
-                    bInString = !bInString;
-            break;
-            case '{' :
-                if ( !bEscaped && !bInString )
-                {
-                    bFound = true;
-                    nPos = sal::static_int_cast< xub_StrLen >(
-                        p - rStr.GetBuffer());
-                }
-            break;
-        }
-        if ( bEscaped && *p != '\\' )
-            bEscaped = false;
-        ++p;
-    }
-    if ( bFound )
-        rStr.Erase( nPos );
 }
 
 // static

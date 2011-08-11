@@ -207,12 +207,6 @@ SvNumberFormatter::SvNumberFormatter(
 }
 
 
-SvNumberFormatter::SvNumberFormatter( LanguageType eLang )
-{
-    ImpConstruct( eLang );
-}
-
-
 SvNumberFormatter::~SvNumberFormatter()
 {
     {
@@ -484,15 +478,6 @@ bool SvNumberFormatter::IsTextFormat(sal_uInt32 F_Index) const
         return pFormat->IsTextFormat();
 }
 
-bool SvNumberFormatter::HasTextFormat(sal_uInt32 F_Index) const
-{
-    SvNumberformat* pFormat = (SvNumberformat*) aFTable.Get(F_Index);
-    if (!pFormat)
-        return false;
-    else
-        return pFormat->HasTextFormat();
-}
-
 bool SvNumberFormatter::PutEntry(String& rString,
                                  xub_StrLen& nCheckPos,
                                  short& nType,
@@ -679,23 +664,6 @@ void SvNumberFormatter::DeleteEntry(sal_uInt32 nKey)
 {
     SvNumberformat* pEntry = aFTable.Remove(nKey);
     delete pEntry;
-}
-
-void SvNumberFormatter::PrepareSave()
-{
-     SvNumberformat* pFormat = aFTable.First();
-     while (pFormat)
-     {
-        pFormat->SetUsed(false);
-        pFormat = aFTable.Next();
-     }
-}
-
-void SvNumberFormatter::SetFormatUsed(sal_uInt32 nFIndex)
-{
-    SvNumberformat* pFormat = (SvNumberformat*) aFTable.Get(nFIndex);
-    if (pFormat)
-        pFormat->SetUsed(true);
 }
 
 bool SvNumberFormatter::Load( SvStream& rStream )
@@ -1004,42 +972,16 @@ sal_uInt32 SvNumberFormatter::ImpIsEntry(const String& rString,
                                        sal_uInt32 nCLOffset,
                                        LanguageType eLnge)
 {
-#ifndef NF_COMMENT_IN_FORMATSTRING
-#error NF_COMMENT_IN_FORMATSTRING not defined (zformat.hxx)
-#endif
-#if NF_COMMENT_IN_FORMATSTRING
-    String aStr( rString );
-    SvNumberformat::EraseComment( aStr );
-#endif
     sal_uInt32 res = NUMBERFORMAT_ENTRY_NOT_FOUND;
     SvNumberformat* pEntry;
     pEntry = (SvNumberformat*) aFTable.Seek(nCLOffset);
     while ( res == NUMBERFORMAT_ENTRY_NOT_FOUND &&
             pEntry && pEntry->GetLanguage() == eLnge )
     {
-#if NF_COMMENT_IN_FORMATSTRING
-        if ( pEntry->GetComment().Len() )
-        {
-            String aFormat( pEntry->GetFormatstring() );
-            SvNumberformat::EraseComment( aFormat );
-            if ( aStr == aFormat )
-                res = aFTable.GetCurKey();
-            else
-                pEntry = (SvNumberformat*) aFTable.Next();
-        }
-        else
-        {
-            if ( aStr == pEntry->GetFormatstring() )
-                res = aFTable.GetCurKey();
-            else
-                pEntry = (SvNumberformat*) aFTable.Next();
-        }
-#else
         if ( rString == pEntry->GetFormatstring() )
             res = aFTable.GetCurKey();
         else
             pEntry = (SvNumberformat*) aFTable.Next();
-#endif
     }
     return res;
 }

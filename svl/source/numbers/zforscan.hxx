@@ -57,7 +57,7 @@ public:
                                                 // tauscht Referenzdatum aus
     void ChangeStandardPrec(sal_uInt16 nPrec);  // tauscht Standardprecision aus
 
-    xub_StrLen ScanFormat( String& rString, String& rComment ); // Aufruf der Scan-Analyse
+    xub_StrLen ScanFormat( String& rString );   // Aufruf der Scan-Analyse
 
     void CopyInfo(ImpSvNumberformatInfo* pInfo,
                      sal_uInt16 nAnz);              // Kopiert die FormatInfo
@@ -250,8 +250,8 @@ private:                            // ---- privater Teil
                       String& sSymbol);       // Naechstes Symbol
     xub_StrLen Symbol_Division(const String& rString);// lexikalische Voranalyse
     xub_StrLen ScanType(const String& rString); // Analyse des Formattyps
-    xub_StrLen FinalScan( String& rString, String& rComment );  // Endanalyse mit Vorgabe
-                                                // des Typs
+    xub_StrLen FinalScan( String& rString );  // Endanalyse mit Vorgabe des Typs
+
     // -1:= error, return nPos in FinalScan; 0:= no calendar, 1:= calendar found
     int FinalScanGetCalendar( xub_StrLen& nPos, sal_uInt16& i, sal_uInt16& nAnzResStrings );
 

@@ -53,17 +53,16 @@ enum NfSymbolType
     NF_SYMBOLTYPE_FRAC          = -9,   // fraction /
     NF_SYMBOLTYPE_EMPTY         = -10,  // deleted symbols
     NF_SYMBOLTYPE_FRACBLANK     = -11,  // delimiter between integer and fraction
-    NF_SYMBOLTYPE_COMMENT       = -12,  // comment is following
-    NF_SYMBOLTYPE_CURRENCY      = -13,  // currency symbol
-    NF_SYMBOLTYPE_CURRDEL       = -14,  // currency symbol delimiter [$]
-    NF_SYMBOLTYPE_CURREXT       = -15,  // currency symbol extension -xxx
-    NF_SYMBOLTYPE_CALENDAR      = -16,  // calendar ID
-    NF_SYMBOLTYPE_CALDEL        = -17,  // calendar delimiter [~]
-    NF_SYMBOLTYPE_DATESEP       = -18,  // date separator
-    NF_SYMBOLTYPE_TIMESEP       = -19,  // time separator
-    NF_SYMBOLTYPE_TIME100SECSEP = -20,  // time 100th seconds separator
-    NF_SYMBOLTYPE_PERCENT       = -21,  // percent %
-    NF_SYMBOLTYPE_FRAC_FDIV     = -22   // forced divisors
+    NF_SYMBOLTYPE_CURRENCY      = -12,  // currency symbol
+    NF_SYMBOLTYPE_CURRDEL       = -13,  // currency symbol delimiter [$]
+    NF_SYMBOLTYPE_CURREXT       = -14,  // currency symbol extension -xxx
+    NF_SYMBOLTYPE_CALENDAR      = -15,  // calendar ID
+    NF_SYMBOLTYPE_CALDEL        = -16,  // calendar delimiter [~]
+    NF_SYMBOLTYPE_DATESEP       = -17,  // date separator
+    NF_SYMBOLTYPE_TIMESEP       = -18,  // time separator
+    NF_SYMBOLTYPE_TIME100SECSEP = -19,  // time 100th seconds separator
+    NF_SYMBOLTYPE_PERCENT       = -20,  // percent %
+    NF_SYMBOLTYPE_FRAC_FDIV     = -21   // forced divisors
 };
 
 }   // namespace svt
