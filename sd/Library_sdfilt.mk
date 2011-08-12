@@ -80,6 +80,7 @@ $(eval $(call gb_Library_set_componentfile,sdfilt,sd/util/sdfilt))
 
 $(eval $(call gb_Library_add_exception_objects,sdfilt,\
     sd/source/filter/eppt/eppt \
+    sd/source/filter/eppt/epptso \
     sd/source/filter/eppt/escherex \
     sd/source/filter/eppt/pptexanimations \
     sd/source/filter/eppt/pptexsoundcollection \
@@ -94,16 +95,5 @@ $(eval $(call gb_Library_add_exception_objects,sdfilt,\
     sd/source/filter/ppt/pptinanimations \
     sd/source/filter/ppt/propread \
 ))
-
-ifeq ($(strip $(COM)),GCC)
-$(eval $(call gb_Library_add_cxxobjects,sdfilt,\
-    sd/source/filter/eppt/epptso \
-    , $(gb_COMPILERNOOPTFLAGS) $(gb_LinkTarget_EXCEPTIONFLAGS) \
-))
-else
-$(eval $(call gb_Library_add_exception_objects,sdfilt,\
-    sd/source/filter/eppt/epptso \
-))
-endif
 
 # vim: set noet sw=4 ts=4:
