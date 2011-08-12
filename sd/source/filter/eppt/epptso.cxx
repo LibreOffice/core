@@ -1231,7 +1231,7 @@ void PPTWriter::ImplWriteTextStyleAtom( SvStream& rOut, int nTextInstance, sal_u
                                     aPageUrl.Append( String::CreateFromInt32( nPageIndex + 1 ) );
                                 }
                             }
-                            sal_uInt32 nHyperId;
+                            sal_uInt32 nHyperId(0);
                             if ( aPageUrl.Len() )
                                 nHyperId = ImplInsertBookmarkURL( aPageUrl, 1 | ( nPageIndex << 8 ) | ( 1 << 31 ), pFieldEntry->aRepresentation, aEmpty, aEmpty, aPageUrl );
                             else
