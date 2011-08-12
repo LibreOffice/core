@@ -63,7 +63,7 @@ RTFSdrImport::RTFSdrImport(RTFDocumentImpl& rDocument,
     : m_rImport(rDocument)
 {
     uno::Reference<drawing::XDrawPageSupplier> xDrawings(xDstDoc, uno::UNO_QUERY);
-    if (m_xDrawPage.is() && xDrawings.is())
+    if (xDrawings.is())
         m_xDrawPage.set(xDrawings->getDrawPage(), uno::UNO_QUERY);
 }
 
