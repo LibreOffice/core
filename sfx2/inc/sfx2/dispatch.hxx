@@ -237,7 +237,6 @@ public:
     SAL_DLLPRIVATE void Update_Impl( sal_Bool bForce = sal_False ); // ObjectBars etc.
     SAL_DLLPRIVATE sal_Bool IsUpdated_Impl() const;
     SAL_DLLPRIVATE void DebugOutput_Impl() const;
-    SAL_DLLPRIVATE void ResetObjectBars_Impl();
     SAL_DLLPRIVATE int GetShellAndSlot_Impl( sal_uInt16 nSlot, SfxShell **ppShell, const SfxSlot **ppSlot,
                                               sal_Bool bOwnShellsOnly, sal_Bool bModal, sal_Bool bRealSlot=sal_True );
     SAL_DLLPRIVATE void LockUI_Impl( sal_Bool bLock = sal_True );

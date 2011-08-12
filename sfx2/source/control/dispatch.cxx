@@ -2609,21 +2609,6 @@ sal_uInt32 SfxDispatcher::GetObjectBarId( sal_uInt16 nPos ) const
 }
 
 //--------------------------------------------------------------------
-void SfxDispatcher::ResetObjectBars_Impl()
-
-/*  [Description]
-
-    With this method all Objectbar requirements which this Dispatcher
-    imposes on the AppWindow are eliminated.
-*/
-{
-    for (sal_uInt16 n=0; n<SFX_OBJECTBAR_MAX; n++)
-        pImp->aObjBars[n].nResId = 0;
-    pImp->aChildWins.Remove(0, pImp->aChildWins.Count());
-}
-
-
-//--------------------------------------------------------------------
 void SfxDispatcher::DebugOutput_Impl() const
 {
 #ifdef DBG_UTIL
