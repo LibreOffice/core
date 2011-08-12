@@ -612,7 +612,6 @@ private:
     SW_DLLPRIVATE long  Ignore(const Point *, sal_Bool bProp=sal_False );
 
     SW_DLLPRIVATE void  LeaveExtSel() { bSelWrd = bSelLn = sal_False;}
-    SW_DLLPRIVATE sal_Bool  _CanInsert();
 
     SW_DLLPRIVATE sal_Bool  GoStart(sal_Bool KeepArea = sal_False, sal_Bool * = 0,
             sal_Bool bSelect = sal_False, sal_Bool bDontMoveRegion = sal_False);

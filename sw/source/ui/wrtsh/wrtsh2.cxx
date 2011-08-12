@@ -77,7 +77,7 @@
 void SwWrtShell::Insert(SwField &rFld)
 {
     ResetCursorStack();
-    if(!_CanInsert())
+    if(!CanInsert())
         return;
     StartAllAction();
 
@@ -196,7 +196,7 @@ sal_Bool SwWrtShell::StartDropDownFldDlg(SwField* pFld, sal_Bool bNextButton, By
 
 void SwWrtShell::InsertTableOf(const SwTOXBase& rTOX, const SfxItemSet* pSet)
 {
-    if(!_CanInsert())
+    if(!CanInsert())
         return;
 
     if(HasSelection())
@@ -214,7 +214,7 @@ sal_Bool SwWrtShell::UpdateTableOf(const SwTOXBase& rTOX, const SfxItemSet* pSet
 {
     sal_Bool bResult = sal_False;
 
-    if(_CanInsert())
+    if(CanInsert())
     {
         bResult = SwEditShell::UpdateTableOf(rTOX, pSet);
 

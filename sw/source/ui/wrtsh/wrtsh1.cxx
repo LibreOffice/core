@@ -183,21 +183,6 @@ sal_Bool SwWrtShell::IsEndWrd()
 
 
 /*------------------------------------------------------------------------
- Beschreibung:  Abfrage, ob Einfuegen moeglich ist; gfs. Beep
-------------------------------------------------------------------------*/
-
-
-
-sal_Bool SwWrtShell::_CanInsert()
-{
-    if(!CanInsert())
-    {
-        Sound::Beep();
-        return sal_False;
-    }
-    return sal_True;
-}
-/*------------------------------------------------------------------------
  Beschreibung:  String einfuegen
 ------------------------------------------------------------------------*/
 
@@ -225,7 +210,7 @@ void SwWrtShell::InsertByWord( const String & rStr)
 void SwWrtShell::Insert( const String &rStr )
 {
     ResetCursorStack();
-    if( !_CanInsert() )
+    if( !CanInsert() )
         return;
 
     sal_Bool bStarted = sal_False, bHasSel = HasSelection(),
@@ -278,7 +263,7 @@ void SwWrtShell::Insert( const String &rPath, const String &rFilter,
                          sal_Bool bRule )
 {
     ResetCursorStack();
-    if ( !_CanInsert() )
+    if ( !CanInsert() )
         return;
 
     StartAllAction();
@@ -378,7 +363,7 @@ void SwWrtShell::InsertObject( const svt::EmbeddedObjectRef& xRef, SvGlobalName 
                             sal_Bool bActivate, sal_uInt16 nSlotId )
 {
     ResetCursorStack();
-    if( !_CanInsert() )
+    if( !CanInsert() )
         return;
 
     if( !xRef.is() )
@@ -906,7 +891,7 @@ void SwWrtShell::ConnectObj( svt::EmbeddedObjectRef& xObj, const SwRect &rPrt,
 void SwWrtShell::InsertPageBreak(const String *pPageDesc, sal_uInt16 nPgNum )
 {
     ResetCursorStack();
-    if( _CanInsert() )
+    if( CanInsert() )
     {
         ACT_KONTEXT(this);
         StartUndo(UNDO_UI_INSERT_PAGE_BREAK);
@@ -942,7 +927,7 @@ void SwWrtShell::InsertPageBreak(const String *pPageDesc, sal_uInt16 nPgNum )
 void SwWrtShell::InsertLineBreak()
 {
     ResetCursorStack();
-    if( _CanInsert() )
+    if( CanInsert() )
     {
         if(HasSelection())
             DelRight();
@@ -965,7 +950,7 @@ void SwWrtShell::InsertColumnBreak()
 {
     ACT_KONTEXT(this);
     ResetCursorStack();
-    if( _CanInsert() )
+    if( CanInsert() )
     {
         StartUndo(UNDO_UI_INSERT_COLUMN_BREAK);
 
@@ -990,7 +975,7 @@ void SwWrtShell::InsertColumnBreak()
 void SwWrtShell::InsertFootnote(const String &rStr, sal_Bool bEndNote, sal_Bool bEdit )
 {
     ResetCursorStack();
-    if( _CanInsert() )
+    if( CanInsert() )
     {
         if(HasSelection())
         {
@@ -1025,7 +1010,7 @@ void SwWrtShell::InsertFootnote(const String &rStr, sal_Bool bEndNote, sal_Bool 
 void SwWrtShell::SplitNode( sal_Bool bAutoFmt, sal_Bool bCheckTableStart )
 {
     ResetCursorStack();
-    if( _CanInsert() )
+    if( CanInsert() )
     {
         ACT_KONTEXT(this);
 
@@ -1675,7 +1660,7 @@ void SwWrtShell::AutoUpdateFrame( SwFrmFmt* pFmt, const SfxItemSet& rStyleSet )
 void SwWrtShell::AutoCorrect( SvxAutoCorrect& rACorr, sal_Unicode cChar )
 {
     ResetCursorStack();
-    if(_CanInsert())
+    if(CanInsert())
     {
         sal_Bool bStarted = sal_False;
         if(HasSelection())
