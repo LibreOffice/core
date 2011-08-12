@@ -205,7 +205,7 @@ public class SQLQueryComposer
                 {
                     sOrder += ", ";
                 }
-                sOrder += CurDBMetaData.AggregateFieldNames[iAggregate][1] + "(" + CurDBMetaData.AggregateFieldNames[iAggregate][0] + ")";
+                sOrder += CurDBMetaData.AggregateFieldNames[iAggregate][1] + "(" + getComposedAliasFieldName(CurDBMetaData.AggregateFieldNames[iAggregate][0]) + ")";
                 sOrder += " " + CurDBMetaData.getSortFieldNames()[i][1];
                 m_queryComposer.setOrder(sOrder);
             }
