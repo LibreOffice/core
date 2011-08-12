@@ -154,8 +154,6 @@ void OInterfaceContainer::impl_addVbEvents_nolck_nothrow(  const sal_Int32 i_nIn
                 sal_Int32 nPageIndex = xNameQuery->getPageIndexForObject(xThis);
                 if (nPageIndex >= 0)
                     sCodeName = xNameQuery->getCodeNameByIndex(nPageIndex);
-                else
-                    sCodeName = xNameQuery->getCodeNameForObject(xElement);
             }
 
             Reference< XPropertySet > xProps( xElement, UNO_QUERY_THROW );
