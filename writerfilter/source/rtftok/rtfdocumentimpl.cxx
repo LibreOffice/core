@@ -644,6 +644,7 @@ int RTFDocumentImpl::resolvePict(bool bInline)
         aSprms->push_back(make_pair(NS_ooxml::LN_anchor_anchor, pValue));
     }
     writerfilter::Reference<Properties>::Pointer_t const pProperties(new RTFReferenceProperties(aAttributes, aSprms));
+    checkFirstRun();
     Mapper().props(pProperties);
 
     return 0;
