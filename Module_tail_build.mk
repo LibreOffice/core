@@ -47,6 +47,7 @@ $(eval $(call gb_Module_add_moduledirs,tail_end,\
     uui \
     wizards \
     writerfilter \
+    writerperfect \
 ))
 
 # vim: set noet sw=4 ts=4:
