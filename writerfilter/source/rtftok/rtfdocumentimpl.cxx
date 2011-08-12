@@ -2527,6 +2527,7 @@ int RTFDocumentImpl::popState()
 
     RTFSprms aSprms;
     RTFSprms aAttributes;
+    OUStringBuffer aDestinationText;
     bool bListEntryEnd = false;
     bool bListLevelEnd = false;
     bool bListOverrideEntryEnd = false;
@@ -2677,6 +2678,7 @@ int RTFDocumentImpl::popState()
     {
         bPopPictureProperties = true;
         aAttributes = m_aStates.top().aCharacterAttributes;
+        aDestinationText = m_aStates.top().aDestinationText;
     }
     else if (m_aStates.top().nDestinationState == DESTINATION_SHAPETEXT)
         m_pCurrentBuffer = 0; // Just disable buffering, don't empty it yet.
@@ -2901,7 +2903,10 @@ int RTFDocumentImpl::popState()
     else if (bFaltEnd)
         m_aStates.top().aTableSprms = aSprms;
     if (bPopPictureProperties)
+    {
         m_aStates.top().aCharacterAttributes = aAttributes;
+        m_aStates.top().aDestinationText = aDestinationText;
+    }
     if (m_pCurrentBuffer == &m_aSuperBuffer)
     {
         if (!m_bHasFootnote)
