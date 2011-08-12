@@ -59,6 +59,7 @@ $(eval $(call gb_Library_set_defs,sd,\
 endif
 
 $(eval $(call gb_Library_add_api,sd,\
+    animations \
     offapi \
     udkapi \
 ))

@@ -49,6 +49,7 @@ $(eval $(call gb_Library_add_defs,slideshow,\
 endif
 
 $(eval $(call gb_Library_add_api,slideshow,\
+    animations \
     offapi \
     udkapi \
 ))
