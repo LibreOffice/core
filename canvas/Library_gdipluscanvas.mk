@@ -32,8 +32,8 @@ $(eval $(call gb_Library_set_componentfile,gdipluscanvas,canvas/source/directx/g
 
 $(eval $(call gb_Library_set_include,gdipluscanvas,\
 	$$(INCLUDE) \
-	-I$(realpath $(SRCDIR)/canvas/inc) \
-	-I$(realpath $(SRCDIR)/canvas/inc/pch) \
+	-I$(SRCDIR)/canvas/inc \
+	-I$(SRCDIR)/canvas/inc/pch \
 ))
 
 $(eval $(call gb_Library_add_api,gdipluscanvas,\
@@ -57,7 +57,6 @@ $(eval $(call gb_Library_add_linked_libs,gdipluscanvas,\
 	sal \
 	comphelper \
 	cppuhelper \
-	stl \
 	basegfx \
 	canvastools \
 	vcl \

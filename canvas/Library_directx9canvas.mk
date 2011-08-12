@@ -32,8 +32,13 @@ $(eval $(call gb_Library_set_componentfile,directx9canvas,canvas/source/directx/
 
 $(eval $(call gb_Library_set_include,directx9canvas,\
 	$$(INCLUDE) \
-	-I$(realpath $(SRCDIR)/canvas/inc) \
-	-I$(realpath $(SRCDIR)/canvas/inc/pch) \
+	-I$(SRCDIR)/canvas/inc \
+	-I$(SRCDIR)/canvas/inc/pch \
+))
+
+$(eval $(call gb_Library_add_api,directx9canvas,\
+    offapi \
+    udkapi \
 ))
 
 $(eval $(call gb_Library_add_defs,directx9canvas,\
@@ -46,7 +51,6 @@ $(eval $(call gb_Library_add_linked_libs,directx9canvas,\
 	sal \
 	comphelper \
 	cppuhelper \
-	stl \
 	basegfx \
 	canvastools \
 	vcl \

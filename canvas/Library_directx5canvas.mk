@@ -32,9 +32,9 @@ $(eval $(call gb_Library_set_componentfile,directx5canvas,canvas/source/directx/
 
 $(eval $(call gb_Library_set_include,directx5canvas,\
 	$$(INCLUDE) \
-	-I$(realpath $(SRCDIR)/canvas/inc) \
-	-I$(realpath $(SRCDIR)/canvas/inc/pch) \
-	-I$(realpath $(SRCDIR)/canvas/source/directx) \
+	-I$(SRCDIR)/canvas/inc \
+	-I$(SRCDIR)/canvas/inc/pch \
+	-I$(SRCDIR)/canvas/source/directx \
 ))
 
 $(eval $(call gb_Library_add_api,directx5canvas,\
@@ -51,7 +51,6 @@ $(eval $(call gb_Library_add_linked_libs,directx5canvas,\
 	sal \
 	comphelper \
 	cppuhelper \
-	stl \
 	basegfx \
 	canvastools \
 	vcl \
