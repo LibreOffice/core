@@ -1541,12 +1541,13 @@ void SwView::ExecuteStatusLine(SfxRequest &rReq)
                     {
                         pDlg = pFact->CreateSvxZoomDialog(&GetViewFrame()->GetWindow(), aCoreSet);
                         OSL_ENSURE(pDlg, "Dialogdiet fail!");
+                        if (pDlg)
+                        {
+                            pDlg->SetLimits( MINZOOM, MAXZOOM );
+                            if( pDlg->Execute() != RET_CANCEL )
+                                pSet = pDlg->GetOutputItemSet();
+                        }
                     }
-
-                    pDlg->SetLimits( MINZOOM, MAXZOOM );
-
-                    if( pDlg->Execute() != RET_CANCEL )
-                        pSet = pDlg->GetOutputItemSet();
                 }
 
                 // PAGES01
