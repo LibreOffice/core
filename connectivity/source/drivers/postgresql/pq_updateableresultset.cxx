@@ -102,21 +102,6 @@ com::sun::star::uno::Reference< com::sun::star::sdbc::XCloseable > UpdateableRes
     return ret;
 }
 
-static void bufferQuoteAnyConstant( rtl::OUStringBuffer & buf, const Any &val )
-{
-    if( val.hasValue() )
-    {
-        OUString str;
-        val >>= str;
-        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( "'" ) );
-        buf.append( str );
-        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( "'" ) );
-    }
-    else
-        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( "NULL" ) );
-}
-
-
 com::sun::star::uno::Any  UpdateableResultSet::queryInterface(
     const com::sun::star::uno::Type & reqType )
     throw (com::sun::star::uno::RuntimeException)
@@ -179,9 +164,9 @@ OUString UpdateableResultSet::buildWhereClause()
             if( i > 0 )
                 buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( " AND " ) );
             sal_Int32 index = findColumn( m_primaryKey[i] );
-            bufferQuoteIdentifier( buf, m_primaryKey[i] );
+            bufferQuoteIdentifier( buf, m_primaryKey[i], *m_ppSettings );
             buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( " = " ) );
-            bufferQuoteConstant( buf, getString( index ), (*m_ppSettings)->encoding );
+            bufferQuoteConstant( buf, getString( index ), *m_ppSettings );
         }
         ret = buf.makeStringAndClear();
     }
@@ -203,7 +188,7 @@ void UpdateableResultSet::insertRow(  ) throw (SQLException, RuntimeException)
 
     OUStringBuffer buf( 128 );
     buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( "INSERT INTO " ) );
-    bufferQuoteQualifiedIdentifier( buf, m_schema, m_table );
+    bufferQuoteQualifiedIdentifier( buf, m_schema, m_table, *m_ppSettings );
     buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( " ( " ) );
 
     int columns = 0;
@@ -214,7 +199,7 @@ void UpdateableResultSet::insertRow(  ) throw (SQLException, RuntimeException)
             if( columns > 0 )
                 buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( ", " ) );
             columns ++;
-            bufferQuoteIdentifier( buf, m_columnNames[i]);
+            bufferQuoteIdentifier( buf, m_columnNames[i], *m_ppSettings);
         }
     }
     buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( " ) VALUES ( " ) );
@@ -227,7 +212,7 @@ void UpdateableResultSet::insertRow(  ) throw (SQLException, RuntimeException)
             if( columns > 0 )
                 buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( " , " ) );
             columns ++;
-            bufferQuoteAnyConstant( buf, m_updateableField[i].value );
+            bufferQuoteAnyConstant( buf, m_updateableField[i].value, *m_ppSettings );
 
 //             OUString val;
 //             m_updateableField[i].value >>= val;
@@ -297,7 +282,7 @@ void UpdateableResultSet::updateRow(  ) throw (SQLException, RuntimeException)
 
     OUStringBuffer buf( 128 );
     buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( "UPDATE " ) );
-    bufferQuoteQualifiedIdentifier( buf, m_schema, m_table );
+    bufferQuoteQualifiedIdentifier( buf, m_schema, m_table, *m_ppSettings );
     buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( "SET " ) );
 
     int columns = 0;
@@ -311,7 +296,7 @@ void UpdateableResultSet::updateRow(  ) throw (SQLException, RuntimeException)
 
             buf.append( m_columnNames[i] );
             buf.appendAscii( RTL_CONSTASCII_STRINGPARAM(" = " ) );
-            bufferQuoteAnyConstant( buf, m_updateableField[i].value );
+            bufferQuoteAnyConstant( buf, m_updateableField[i].value, *m_ppSettings );
 //             OUString val;
 //             m_updateableField[i].value >>= val;
 //             bufferQuoteConstant( buf, val ):
@@ -357,7 +342,7 @@ void UpdateableResultSet::deleteRow(  ) throw (SQLException, RuntimeException)
     DisposeGuard dispGuard( stmt );
     OUStringBuffer buf( 128 );
     buf.appendAscii( "DELETE FROM " );
-    bufferQuoteQualifiedIdentifier( buf, m_schema, m_table );
+    bufferQuoteQualifiedIdentifier( buf, m_schema, m_table, *m_ppSettings );
     buf.appendAscii( " " );
     buf.append( buildWhereClause() );
 

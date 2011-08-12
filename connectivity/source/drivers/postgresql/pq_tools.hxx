@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  *  $RCSfile: pq_tools.hxx,v $
@@ -90,27 +91,32 @@ com::sun::star::util::DateTime string2DateTime( const rtl::OUString & dateTime )
 
 rtl::OUString concatQualified( const rtl::OUString & a, const rtl::OUString &b);
 
-void bufferQuoteConstant( rtl::OUStringBuffer & buf, const rtl::OUString & str,  sal_Int32 encoding );
+rtl::OString OUStringToOString( rtl::OUString str, ConnectionSettings *settings);
 
-void bufferEscapeConstant( rtl::OUStringBuffer & buf, const rtl::OUString & str,  sal_Int32 encoding );
+void bufferQuoteConstant( rtl::OUStringBuffer & buf, const rtl::OUString & str, ConnectionSettings *settings );
+    void bufferQuoteAnyConstant( rtl::OUStringBuffer & buf, const com::sun::star::uno::Any &val, ConnectionSettings *settings );
+
+void bufferEscapeConstant( rtl::OUStringBuffer & buf, const rtl::OUString & str, ConnectionSettings *settings );
 
 ::rtl::OUString sqltype2string(
     const com::sun::star::uno::Reference< com::sun::star::beans::XPropertySet > & column );
 
 
 void bufferQuoteQualifiedIdentifier(
-    rtl::OUStringBuffer & buf, const rtl::OUString &schema, const rtl::OUString &name);
+    rtl::OUStringBuffer & buf, const rtl::OUString &schema, const rtl::OUString &name, ConnectionSettings *settings );
 
 void bufferQuoteQualifiedIdentifier(
     rtl::OUStringBuffer & buf,
     const rtl::OUString &schema,
     const rtl::OUString &name,
-    const rtl::OUString &col);
+    const rtl::OUString &col,
+    ConnectionSettings *settings );
 
-void bufferQuoteIdentifier( rtl::OUStringBuffer & buf, const rtl::OUString &toQuote );
+void bufferQuoteIdentifier( rtl::OUStringBuffer & buf, const rtl::OUString &toQuote, ConnectionSettings *settings );
 void bufferKey2TableConstraint(
     rtl::OUStringBuffer &buf,
-    const com::sun::star::uno::Reference< com::sun::star::beans::XPropertySet > &key );
+    const com::sun::star::uno::Reference< com::sun::star::beans::XPropertySet > &key,
+    ConnectionSettings *settings  );
 
 rtl::OUString extractStringProperty(
     const com::sun::star::uno::Reference< com::sun::star::beans::XPropertySet > & descriptor,

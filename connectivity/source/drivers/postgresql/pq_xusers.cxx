@@ -170,9 +170,9 @@ void Users::appendByDescriptor(
 
     OUStringBuffer update( 128 );
     update.appendAscii( RTL_CONSTASCII_STRINGPARAM( "CREATE USER " ) );
-    bufferQuoteIdentifier( update, extractStringProperty( descriptor, getStatics().NAME ) );
+    bufferQuoteIdentifier( update, extractStringProperty( descriptor, getStatics().NAME ), m_pSettings );
     update.appendAscii( RTL_CONSTASCII_STRINGPARAM( " PASSWORD " ) );
-    bufferQuoteConstant( update, extractStringProperty( descriptor, getStatics().PASSWORD ), m_pSettings->encoding );
+    bufferQuoteConstant( update, extractStringProperty( descriptor, getStatics().PASSWORD ), m_pSettings );
 
     Reference< XStatement > stmt = m_origin->createStatement( );
     DisposeGuard disposeGuard( stmt );
@@ -223,7 +223,7 @@ void Users::dropByIndex( sal_Int32 index )
 
     OUStringBuffer update( 128 );
     update.appendAscii( "DROP USER " );
-    bufferQuoteIdentifier( update, name );
+    bufferQuoteIdentifier( update, name, m_pSettings );
 
     Reference< XStatement > stmt = m_origin->createStatement( );
     DisposeGuard disposeGuard( stmt );

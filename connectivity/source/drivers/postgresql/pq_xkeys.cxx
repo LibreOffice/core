@@ -300,9 +300,9 @@ void Keys::appendByDescriptor(
 
     OUStringBuffer buf( 128 );
     buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( "ALTER TABLE " ) );
-    bufferQuoteQualifiedIdentifier( buf, m_schemaName, m_tableName );
+    bufferQuoteQualifiedIdentifier( buf, m_schemaName, m_tableName, m_pSettings );
     buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( " ADD " ) );
-    bufferKey2TableConstraint( buf, descriptor );
+    bufferKey2TableConstraint( buf, descriptor, m_pSettings );
 
     Reference< XStatement > stmt =
         m_origin->createStatement();
@@ -334,9 +334,9 @@ void Keys::dropByIndex( sal_Int32 index )
 
     OUStringBuffer buf( 128 );
     buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( "ALTER TABLE " ) );
-    bufferQuoteQualifiedIdentifier( buf, m_schemaName, m_tableName );
+    bufferQuoteQualifiedIdentifier( buf, m_schemaName, m_tableName, m_pSettings );
     buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( " DROP CONSTRAINT " ) );
-    bufferQuoteIdentifier( buf, extractStringProperty( set , getStatics().NAME ) );
+    bufferQuoteIdentifier( buf, extractStringProperty( set , getStatics().NAME ), m_pSettings );
     m_origin->createStatement()->executeUpdate( buf.makeStringAndClear() );
 
 

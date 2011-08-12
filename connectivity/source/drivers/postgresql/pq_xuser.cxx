@@ -177,9 +177,9 @@ void User::changePassword(
 {
     rtl::OUStringBuffer buf(128);
     buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( "ALTER USER " ) );
-    bufferQuoteIdentifier( buf, extractStringProperty( this, getStatics().NAME ) );
+    bufferQuoteIdentifier( buf, extractStringProperty( this, getStatics().NAME ), m_pSettings );
     buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( " PASSWORD " ) );
-    bufferQuoteConstant( buf, newPassword, m_pSettings->encoding );
+    bufferQuoteConstant( buf, newPassword, m_pSettings );
     Reference< XStatement > stmt = m_conn->createStatement();
     DisposeGuard guard( stmt );
     stmt->executeUpdate( buf.makeStringAndClear() );

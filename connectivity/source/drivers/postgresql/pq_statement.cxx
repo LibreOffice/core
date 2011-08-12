@@ -784,9 +784,9 @@ Reference< XResultSet > getGeneratedValuesFromLastInsert(
         OUStringBuffer buf( 128 );
         buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( "SELECT * FROM " ) );
         if( schemaName.getLength() )
-            bufferQuoteQualifiedIdentifier(buf, schemaName,tableName );
+            bufferQuoteQualifiedIdentifier(buf, schemaName, tableName, pConnectionSettings );
         else
-            bufferQuoteIdentifier( buf, lastTableInserted );
+            bufferQuoteIdentifier( buf, lastTableInserted, pConnectionSettings );
         buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( " WHERE oid = " ) );
         buf.append( nLastOid , 10 );
         query = buf.makeStringAndClear();
@@ -820,7 +820,7 @@ Reference< XResultSet > getGeneratedValuesFromLastInsert(
         {
             OUStringBuffer buf( 128 );
             buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( "SELECT * FROM " ) );
-            bufferQuoteQualifiedIdentifier(buf, schemaName,tableName );
+            bufferQuoteQualifiedIdentifier(buf, schemaName, tableName, pConnectionSettings );
             buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( " WHERE " ) );
             bool additionalCondition = false;
             String2StringMap autoValues;
@@ -880,7 +880,7 @@ Reference< XResultSet > getGeneratedValuesFromLastInsert(
 
                 if( additionalCondition )
                     buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( " AND " ) );
-                bufferQuoteIdentifier( buf, keyColumnNames[i] );
+                bufferQuoteIdentifier( buf, keyColumnNames[i], pConnectionSettings );
                 buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( " = " ) );
                 buf.append( value );
                 additionalCondition = true;
@@ -904,7 +904,7 @@ sal_Bool Statement::execute( const OUString& sql )
 {
     osl::MutexGuard guard( m_refMutex->mutex );
     checkClosed();
-    OString cmd = rtl::OUStringToOString( sql, m_pSettings->encoding );
+    OString cmd = OUStringToOString( sql, m_pSettings );
 
     m_lastResultset.clear();
     m_lastTableInserted  = rtl::OUString();

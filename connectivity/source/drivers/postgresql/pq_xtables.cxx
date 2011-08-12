@@ -52,6 +52,7 @@
  *  The Initial Developer of the Original Code is: Joerg Budischewski
  *
  *   Copyright: 2000 by Sun Microsystems, Inc.
+ *              2011 by Lionel Elie Mamane <lionel@mamane.lu>
  *
  *   All Rights Reserved.
  *
@@ -194,7 +195,7 @@ void Tables::refresh()
 
 
 static void appendColumnList(
-    OUStringBuffer &buf, const Reference< XColumnsSupplier > & columnSupplier, sal_Int32 encoding )
+    OUStringBuffer &buf, const Reference< XColumnsSupplier > & columnSupplier, ConnectionSettings *settings )
 {
     if( columnSupplier.is() )
     {
@@ -221,7 +222,7 @@ static void appendColumnList(
                 sal_Bool isNullable = extractBoolProperty( column, st.IS_NULLABLE );
                 sal_Bool isAutoIncrement = extractBoolProperty( column, st.IS_AUTO_INCREMENT );
 
-                bufferQuoteIdentifier( buf, name );
+                bufferQuoteIdentifier( buf, name, settings );
 
                 OUString type = sqltype2string( column );
                 if( isAutoIncrement )
@@ -247,7 +248,7 @@ static void appendColumnList(
                 }
                 if( defaultValue.getLength() )
                 {
-                    bufferQuoteConstant( buf, defaultValue, encoding  );
+                    bufferQuoteConstant( buf, defaultValue, settings );
                 }
 
                 if( ! isNullable )
@@ -261,7 +262,7 @@ static void appendColumnList(
 }
 
 static void appendKeyList(
-    OUStringBuffer & buf, const Reference< XKeysSupplier > &keySupplier )
+    OUStringBuffer & buf, const Reference< XKeysSupplier > &keySupplier, ConnectionSettings *settings )
 {
     if( keySupplier.is() )
     {
@@ -273,7 +274,7 @@ static void appendKeyList(
             {
                 buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( ", " ) );
                 Reference< XPropertySet > key( xEnum->nextElement(), UNO_QUERY );
-                bufferKey2TableConstraint( buf, key );
+                bufferKey2TableConstraint( buf, key, settings );
             }
         }
     }
@@ -298,14 +299,14 @@ void Tables::appendByDescriptor(
 
     OUStringBuffer buf( 128 );
     buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("CREATE TABLE" ) );
-    bufferQuoteQualifiedIdentifier( buf, schema, name );
+    bufferQuoteQualifiedIdentifier( buf, schema, name , m_pSettings);
     buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( "(" ) );
 
     // columns
     Reference< XColumnsSupplier > supplier( descriptor, UNO_QUERY );
-    appendColumnList( buf, supplier, m_pSettings->encoding );
+    appendColumnList( buf, supplier, m_pSettings );
 
-    appendKeyList( buf, Reference< XKeysSupplier >( descriptor, UNO_QUERY ) );
+    appendKeyList( buf, Reference< XKeysSupplier >( descriptor, UNO_QUERY ), m_pSettings );
 
     buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( ") " ) );
     // execute the creation !
@@ -317,9 +318,9 @@ void Tables::appendByDescriptor(
     {
         buf = OUStringBuffer( 128 );
         buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( "COMMENT ON TABLE" ) );
-        bufferQuoteQualifiedIdentifier( buf, schema, name );
+        bufferQuoteQualifiedIdentifier( buf, schema, name, m_pSettings );
         buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( "IS " ) );
-        bufferQuoteConstant( buf, description, m_pSettings->encoding );
+        bufferQuoteConstant( buf, description, m_pSettings);
 
         transaction.executeUpdate( buf.makeStringAndClear() );
     }
@@ -342,10 +343,9 @@ void Tables::appendByDescriptor(
                     buf = OUStringBuffer( 128 );
                     buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( "COMMENT ON COLUMN " ) );
                     bufferQuoteQualifiedIdentifier(
-                        buf, schema, name, extractStringProperty( column, st.NAME ) );
+                        buf, schema, name, extractStringProperty( column, st.NAME ), m_pSettings );
                     buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( "IS " ) );
-                    bufferQuoteConstant(
-                        buf, description,m_pSettings->encoding );
+                    bufferQuoteConstant( buf, description, m_pSettings );
                     transaction.executeUpdate( buf.makeStringAndClear() );
                 }
             }
@@ -427,7 +427,7 @@ void Tables::dropByIndex( sal_Int32 index )
             update.appendAscii( RTL_CONSTASCII_STRINGPARAM( "VIEW " ) );
         else
             update.appendAscii( RTL_CONSTASCII_STRINGPARAM( "TABLE " ) );
-        bufferQuoteQualifiedIdentifier( update, schema, name );
+        bufferQuoteQualifiedIdentifier( update, schema, name, m_pSettings );
         Reference< XStatement > stmt = m_origin->createStatement( );
         DisposeGuard dispGuard( stmt );
         stmt->executeUpdate( update.makeStringAndClear() );

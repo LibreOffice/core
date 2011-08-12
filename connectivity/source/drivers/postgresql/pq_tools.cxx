@@ -37,7 +37,9 @@ using com::sun::star::sdbc::XRow;
 
 using com::sun::star::sdbcx::XColumnsSupplier;
 
+using com::sun::star::uno::RuntimeException;
 using com::sun::star::uno::UNO_QUERY;
+using com::sun::star::uno::UNO_QUERY_THROW;
 using com::sun::star::uno::Reference;
 using com::sun::star::uno::Sequence;
 using com::sun::star::uno::XInterface;
@@ -157,53 +159,98 @@ rtl::OUString concatQualified( const rtl::OUString & a, const rtl::OUString &b)
     return buf.makeStringAndClear();
 }
 
-void bufferEscapeConstant( rtl::OUStringBuffer & buf, const rtl::OUString & value, sal_Int32 encoding )
-{
-    rtl::OString y = rtl::OUStringToOString( value, encoding );
-    rtl::OStringBuffer strbuf( y.getLength() * 2 + 2 );
-    int len = PQescapeString( ((char*)strbuf.getStr()), y.getStr() , y.getLength() );
-    strbuf.setLength( len );
-    buf.append( rtl::OStringToOUString( strbuf.makeStringAndClear(), RTL_TEXTENCODING_ASCII_US ) );
+inline rtl::OString OUStringToOString( const rtl::OUString str, ConnectionSettings *settings) {
+    OSL_ENSURE(settings, "pgsql-sdbc: OUStringToOString got NULL settings");
+    return rtl::OUStringToOString( str, settings->encoding );
 }
 
-void bufferQuoteConstant( rtl::OUStringBuffer & buf, const rtl::OUString & value,  sal_Int32 encoding )
+void bufferEscapeConstant( rtl::OUStringBuffer & buf, const rtl::OUString & value, ConnectionSettings *settings )
 {
-    buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( " '" ) );
-    bufferEscapeConstant( buf, value, encoding );
-    buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( "' " ) );
+
+    rtl::OString y = OUStringToOString( value, settings );
+    rtl::OStringBuffer strbuf( y.getLength() * 2 + 2 );
+    int error;
+    int len = PQescapeStringConn(settings->pConnection, ((char*)strbuf.getStr()), y.getStr() , y.getLength(), &error );
+    if ( error )
+    {
+        char *errstr = PQerrorMessage(settings->pConnection);
+        // As of PostgreSQL 9.1, the only possible errors "involve invalid multibyte encoding"
+        // According to https://www2.opengroup.org/ogsys/jsp/publications/PublicationDetails.jsp?publicationid=11216
+        // (X/Open SQL CLI, March 1995, ISBN: 1-85912-081-4, X/Open Document Number: C451)
+        // 22018 is for "Invalid character value" and seems to be the best match.
+        // We have no good XInterface Reference to pass here, so just give NULL
+        throw SQLException(OUString(errstr, strlen(errstr), settings->encoding),
+                           NULL,
+                           OUString(RTL_CONSTASCII_USTRINGPARAM("22018")),
+                           -1,
+                           Any());
+    }
+    strbuf.setLength( len );
+    // Previously here RTL_TEXTENCODING_ASCII_US; as we set the PostgreSQL client_encoding to UTF8,
+    // we get UTF8 here, too. I'm not sure why it worked well before...
+    buf.append( rtl::OStringToOUString( strbuf.makeStringAndClear(), RTL_TEXTENCODING_UTF8 ) );
+}
+
+inline void bufferQuoteConstant( rtl::OUStringBuffer & buf, const rtl::OUString & value, ConnectionSettings *settings )
+{
+    buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( "'" ) );
+    bufferEscapeConstant( buf, value, settings );
+    buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( "'" ) );
+}
+
+void bufferQuoteAnyConstant( rtl::OUStringBuffer & buf, const Any &val, ConnectionSettings *settings )
+{
+    if( val.hasValue() )
+    {
+        OUString str;
+        val >>= str;
+        bufferQuoteConstant( buf, str, settings );
+    }
+    else
+        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( "NULL" ) );
 }
 
 void bufferQuoteQualifiedIdentifier(
-    rtl::OUStringBuffer & buf, const rtl::OUString &schema, const rtl::OUString &name)
+    rtl::OUStringBuffer & buf, const rtl::OUString &schema, const rtl::OUString &table, ConnectionSettings *settings )
 {
-    buf.appendAscii( RTL_CONSTASCII_STRINGPARAM(" \"" ) );
-    buf.append(schema);
-    buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("\".\"" ) );
-    buf.append( name );
-    buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( "\" " ) );
+    bufferQuoteIdentifier(buf, schema, settings);
+    buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( "." ) );
+    bufferQuoteIdentifier(buf, table, settings);
 }
 
 void bufferQuoteQualifiedIdentifier(
     rtl::OUStringBuffer & buf,
     const rtl::OUString &schema,
-    const rtl::OUString &name,
-    const rtl::OUString &col)
+    const rtl::OUString &table,
+    const rtl::OUString &col,
+    ConnectionSettings *settings)
 {
-    buf.appendAscii( RTL_CONSTASCII_STRINGPARAM(" \"" ) );
-    buf.append(schema);
-    buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("\".\"" ) );
-    buf.append( name );
-    buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("\".\"" ) );
-    buf.append( col );
-    buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( "\" " ) );
+    bufferQuoteIdentifier(buf, schema, settings);
+    buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( "." ) );
+    bufferQuoteIdentifier(buf, table, settings);
+    buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( "." ) );
+    bufferQuoteIdentifier(buf, col, settings);
 }
 
 
-void bufferQuoteIdentifier( rtl::OUStringBuffer & buf, const rtl::OUString &toQuote )
+inline void bufferQuoteIdentifier( rtl::OUStringBuffer & buf, const rtl::OUString &toQuote, ConnectionSettings *settings )
 {
-    buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( " \"") );
-    buf.append( toQuote );
-    buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( "\" " ) );
+    OSL_ENSURE(settings, "pgsql-sdbc: bufferQuoteIdentifier got NULL settings");
+
+    rtl::OString y = OUStringToOString( toQuote, settings );
+    char *cstr = PQescapeIdentifier(settings->pConnection, y.getStr(), y.getLength());
+    if ( cstr == NULL )
+    {
+        char *errstr = PQerrorMessage(settings->pConnection);
+        // Implementation-defined SQLACCESS error
+        throw SQLException(OUString(errstr, strlen(errstr), settings->encoding),
+                           NULL,
+                           OUString(RTL_CONSTASCII_USTRINGPARAM("22018")),
+                           -1,
+                           Any());
+    }
+    buf.append( rtl::OStringToOUString( cstr, RTL_TEXTENCODING_UTF8 ) );
+    PQfreemem( cstr );
 }
 
 
@@ -747,12 +794,12 @@ void fillAttnum2attnameMap(
                          "INNER JOIN pg_namespace ON pg_class.relnamespace = pg_namespace.oid "
                    "WHERE relname=? AND nspname=?" ) );
 
-    Reference< XParameters > paras( prep, UNO_QUERY );
+    Reference< XParameters > paras( prep, UNO_QUERY_THROW );
     paras->setString( 1 , table );
     paras->setString( 2 , schema );
     Reference< XResultSet > rs = prep->executeQuery();
 
-    Reference< XRow > xRow( rs , UNO_QUERY );
+    Reference< XRow > xRow( rs , UNO_QUERY_THROW );
     while( rs->next() )
     {
         map[ xRow->getInt(2) ] = xRow->getString(1);
@@ -966,7 +1013,7 @@ static void keyType2String( OUStringBuffer & buf, sal_Int32 keyType )
 }
 
 void bufferKey2TableConstraint(
-    OUStringBuffer &buf, const Reference< XPropertySet > &key )
+    OUStringBuffer &buf, const Reference< XPropertySet > &key, ConnectionSettings *settings )
 {
     Statics &st = getStatics();
     sal_Int32 type = extractIntProperty( key, st.TYPE );
@@ -1006,8 +1053,8 @@ void bufferKey2TableConstraint(
                 {
                     buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( ", " ) );
                 }
-                Reference< XPropertySet > keyColumn( colEnum->nextElement(), UNO_QUERY );
-                bufferQuoteIdentifier(buf, extractStringProperty( keyColumn, st.NAME ) );
+                Reference< XPropertySet > keyColumn( colEnum->nextElement(), UNO_QUERY_THROW );
+                bufferQuoteIdentifier(buf, extractStringProperty( keyColumn, st.NAME ), settings );
             }
         }
     }
@@ -1019,7 +1066,7 @@ void bufferKey2TableConstraint(
         OUString schema;
         OUString tableName;
         splitConcatenatedIdentifier( referencedTable, &schema, &tableName );
-        bufferQuoteQualifiedIdentifier(buf , schema, tableName);
+        bufferQuoteQualifiedIdentifier(buf , schema, tableName, settings );
         if(columns.is() )
         {
             Reference< XEnumerationAccess > colEnumAccess( columns->getColumns(), UNO_QUERY);
@@ -1038,9 +1085,9 @@ void bufferKey2TableConstraint(
                     {
                         buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( ", " ) );
                     }
-                    Reference< XPropertySet > keyColumn( colEnum->nextElement(), UNO_QUERY );
+                    Reference< XPropertySet > keyColumn( colEnum->nextElement(), UNO_QUERY_THROW );
                     bufferQuoteIdentifier(
-                        buf, extractStringProperty( keyColumn, st.RELATED_COLUMN ) );
+                                          buf, extractStringProperty( keyColumn, st.RELATED_COLUMN ), settings );
                 }
                 buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( ") " ) );
             }

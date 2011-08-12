@@ -172,9 +172,9 @@ void View::rename( const ::rtl::OUString& newName )
         {
             OUStringBuffer buf(128);
             buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( "ALTER TABLE" ) );
-            bufferQuoteQualifiedIdentifier(buf, schema, oldName );
+            bufferQuoteQualifiedIdentifier(buf, schema, oldName, m_pSettings );
             buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("SET SCHEMA" ) );
-            bufferQuoteIdentifier( buf, newSchemaName );
+            bufferQuoteIdentifier( buf, newSchemaName, m_pSettings );
             Reference< XStatement > statement = m_conn->createStatement();
             statement->executeUpdate( buf.makeStringAndClear() );
             setPropertyValue_NoBroadcast_public( st.SCHEMA_NAME, makeAny(newSchemaName) );
@@ -194,9 +194,9 @@ void View::rename( const ::rtl::OUString& newName )
     {
         OUStringBuffer buf(128);
         buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( "ALTER TABLE" ) );
-        bufferQuoteQualifiedIdentifier( buf, schema, oldName );
+        bufferQuoteQualifiedIdentifier( buf, schema, oldName, m_pSettings );
         buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("RENAME TO" ) );
-        bufferQuoteIdentifier( buf, newTableName );
+        bufferQuoteIdentifier( buf, newTableName, m_pSettings );
         Reference< XStatement > statement = m_conn->createStatement();
         statement->executeUpdate( buf.makeStringAndClear() );
         setPropertyValue_NoBroadcast_public( st.NAME, makeAny(newTableName) );

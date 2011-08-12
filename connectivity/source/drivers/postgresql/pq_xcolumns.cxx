@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  *  $RCSfile: pq_xcolumns.cxx,v $
@@ -381,7 +382,7 @@ void Columns::refresh()
 void alterColumnByDescriptor(
     const OUString & schemaName,
     const OUString & tableName,
-    rtl_TextEncoding encoding,
+    ConnectionSettings *settings,
     const Reference< XStatement > &stmt,
     const com::sun::star::uno::Reference< com::sun::star::beans::XPropertySet > & past,
     const com::sun::star::uno::Reference< com::sun::star::beans::XPropertySet > & future)
@@ -415,9 +416,9 @@ void alterColumnByDescriptor(
     {
         // create a new column
         buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( "ALTER TABLE" ) );
-        bufferQuoteQualifiedIdentifier( buf, schemaName, tableName );
+        bufferQuoteQualifiedIdentifier( buf, schemaName, tableName, settings );
         buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( "ADD COLUMN" ) );
-        bufferQuoteIdentifier( buf, futureColumnName );
+        bufferQuoteIdentifier( buf, futureColumnName, settings );
         buf.append( futureTypeName );
         transaction.executeUpdate( buf.makeStringAndClear() );
     }
@@ -433,11 +434,11 @@ void alterColumnByDescriptor(
         if( pastColumnName != futureColumnName )
         {
             buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( "ALTER TABLE" ) );
-            bufferQuoteQualifiedIdentifier( buf, schemaName, tableName );
+            bufferQuoteQualifiedIdentifier( buf, schemaName, tableName, settings );
             buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( "RENAME COLUMN" ) );
-            bufferQuoteIdentifier( buf, pastColumnName );
+            bufferQuoteIdentifier( buf, pastColumnName, settings );
             buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( "TO" ) );
-            bufferQuoteIdentifier( buf, futureColumnName );
+            bufferQuoteIdentifier( buf, futureColumnName, settings );
             transaction.executeUpdate( buf.makeStringAndClear() );
         }
     }
@@ -448,10 +449,11 @@ void alterColumnByDescriptor(
     {
         buf = OUStringBuffer( 128 );
         buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( "ALTER TABLE" ) );
-        bufferQuoteQualifiedIdentifier( buf, schemaName, tableName );
+        bufferQuoteQualifiedIdentifier( buf, schemaName, tableName, settings );
         buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( "ALTER COLUMN" ) );
-        bufferQuoteIdentifier( buf, futureColumnName );
+        bufferQuoteIdentifier( buf, futureColumnName, settings );
         buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( "SET DEFAULT " ) );
+        // LEM TODO: check out
         // default value is not quoted, caller needs to quote himself (otherwise
         // how to pass e.g. nextval('something' ) ????
         buf.append( futureDefaultValue );
@@ -465,9 +467,9 @@ void alterColumnByDescriptor(
     {
         buf = OUStringBuffer( 128 );
         buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( "ALTER TABLE" ) );
-        bufferQuoteQualifiedIdentifier( buf, schemaName, tableName );
+        bufferQuoteQualifiedIdentifier( buf, schemaName, tableName, settings );
         buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( "ALTER COLUMN" ) );
-        bufferQuoteIdentifier( buf, futureColumnName );
+        bufferQuoteIdentifier( buf, futureColumnName, settings );
         if( futureNullable == com::sun::star::sdbc::ColumnValue::NO_NULLS )
         {
             buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( "SET" ) );
@@ -492,9 +494,9 @@ void alterColumnByDescriptor(
     {
         buf = OUStringBuffer( 128 );
         buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( "COMMENT ON COLUMN" ) );
-        bufferQuoteQualifiedIdentifier( buf, schemaName, tableName , futureColumnName );
+        bufferQuoteQualifiedIdentifier( buf, schemaName, tableName , futureColumnName, settings );
         buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( "IS " ) );
-        bufferQuoteConstant( buf, futureComment,encoding);
+        bufferQuoteConstant( buf, futureComment, settings );
         transaction.executeUpdate( buf.makeStringAndClear() );
     }
     transaction.commit();
@@ -511,7 +513,7 @@ void Columns::appendByDescriptor(
     Reference< XPropertySet > past = createDataDescriptor();
     past->setPropertyValue( st.IS_NULLABLE, makeAny( com::sun::star::sdbc::ColumnValue::NULLABLE ) );
     alterColumnByDescriptor(
-        m_schemaName, m_tableName, m_pSettings->encoding, m_origin->createStatement() , past, future  );
+        m_schemaName, m_tableName, m_pSettings, m_origin->createStatement() , past, future  );
 
     refresh();
 }
@@ -564,9 +566,9 @@ void Columns::dropByIndex( sal_Int32 index )
 
     OUStringBuffer update( 128 );
     update.appendAscii( "ALTER TABLE ONLY");
-    bufferQuoteQualifiedIdentifier( update, m_schemaName, m_tableName );
+    bufferQuoteQualifiedIdentifier( update, m_schemaName, m_tableName, m_pSettings );
     update.appendAscii( "DROP COLUMN" );
-    bufferQuoteIdentifier( update, name );
+    bufferQuoteIdentifier( update, name, m_pSettings );
     Reference< XStatement > stmt = m_origin->createStatement( );
     DisposeGuard disposeIt( stmt );
     stmt->executeUpdate( update.makeStringAndClear() );

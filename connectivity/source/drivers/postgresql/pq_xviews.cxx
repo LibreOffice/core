@@ -194,7 +194,7 @@ void Views::appendByDescriptor(
     OUStringBuffer buf( 128 );
 
     buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( "CREATE VIEW " ) );
-    bufferQuoteQualifiedIdentifier( buf, schema, name );
+    bufferQuoteQualifiedIdentifier( buf, schema, name, m_pSettings );
     buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( " AS " ) );
     buf.append( command );
 

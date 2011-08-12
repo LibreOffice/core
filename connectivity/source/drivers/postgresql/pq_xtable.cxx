@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  *  $RCSfile: pq_xtable.cxx,v $
@@ -234,9 +235,9 @@ void Table::rename( const ::rtl::OUString& newName )
             {
                 OUStringBuffer buf(128);
                 buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( "ALTER TABLE" ) );
-                bufferQuoteQualifiedIdentifier(buf, schema, oldName );
+                bufferQuoteQualifiedIdentifier(buf, schema, oldName, m_pSettings );
                 buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("SET SCHEMA" ) );
-                bufferQuoteIdentifier( buf, newSchemaName );
+                bufferQuoteIdentifier( buf, newSchemaName, m_pSettings );
                 Reference< XStatement > statement = m_conn->createStatement();
                 statement->executeUpdate( buf.makeStringAndClear() );
                 setPropertyValue_NoBroadcast_public( st.SCHEMA_NAME, makeAny(newSchemaName) );
@@ -256,9 +257,9 @@ void Table::rename( const ::rtl::OUString& newName )
         {
             OUStringBuffer buf(128);
             buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( "ALTER TABLE" ) );
-            bufferQuoteQualifiedIdentifier(buf, schema, oldName );
+            bufferQuoteQualifiedIdentifier(buf, schema, oldName, m_pSettings );
             buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("RENAME TO" ) );
-            bufferQuoteIdentifier( buf, newTableName );
+            bufferQuoteIdentifier( buf, newTableName, m_pSettings );
             Reference< XStatement > statement = m_conn->createStatement();
             statement->executeUpdate( buf.makeStringAndClear() );
             disposeNoThrow( statement );
@@ -284,7 +285,7 @@ void Table::alterColumnByName(
     ::pq_sdbc_driver::alterColumnByDescriptor(
         extractStringProperty( this, getStatics().SCHEMA_NAME ),
         extractStringProperty( this, getStatics().NAME ),
-        m_pSettings->encoding,
+        m_pSettings,
         m_conn->createStatement(),
         Reference< com::sun::star::beans::XPropertySet>( colums->getByName( colName ), UNO_QUERY) ,
         descriptor );
@@ -309,7 +310,7 @@ void Table::alterColumnByIndex(
     ::pq_sdbc_driver::alterColumnByDescriptor(
         extractStringProperty( this, getStatics().SCHEMA_NAME ),
         extractStringProperty( this, getStatics().NAME ),
-        m_pSettings->encoding,
+        m_pSettings,
         m_conn->createStatement(),
         column,
         descriptor );

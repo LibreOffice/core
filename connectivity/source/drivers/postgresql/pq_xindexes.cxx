@@ -242,9 +242,9 @@ void Indexes::appendByDescriptor(
     if( isUnique )
         buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( "UNIQUE " ) );
     buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( "INDEX " ) );
-    bufferQuoteIdentifier( buf, name );
+    bufferQuoteIdentifier( buf, name, m_pSettings );
     buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( " ON " ) );
-    bufferQuoteQualifiedIdentifier( buf, m_schemaName, m_tableName  );
+    bufferQuoteQualifiedIdentifier( buf, m_schemaName, m_tableName, m_pSettings );
 
     buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( " ( " ) );
 
@@ -303,7 +303,7 @@ void Indexes::dropByIndex( sal_Int32 index )
 
     OUStringBuffer buf( 128 );
     buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( "DROP INDEX " ) );
-    bufferQuoteIdentifier( buf, extractStringProperty( set, st.NAME ) );
+    bufferQuoteIdentifier( buf, extractStringProperty( set, st.NAME ), m_pSettings );
     m_origin->createStatement()->executeUpdate( buf.makeStringAndClear() );
 
     Container::dropByIndex( index );

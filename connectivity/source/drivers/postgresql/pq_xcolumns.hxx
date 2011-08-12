@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  *  $RCSfile: pq_xcolumns.hxx,v $
@@ -51,6 +52,7 @@
  *  The Initial Developer of the Original Code is: Joerg Budischewski
  *
  *   Copyright: 2000 by Sun Microsystems, Inc.
+ *              2011 by Lionel Elie Mamane <lionel@mamane.lu>
  *
  *   All Rights Reserved.
  *
@@ -71,7 +73,7 @@ namespace pq_sdbc_driver
 void alterColumnByDescriptor(
     const rtl::OUString & schemaName,
     const rtl::OUString & tableName,
-    rtl_TextEncoding encoding,
+    ConnectionSettings *settings,
     const com::sun::star::uno::Reference< com::sun::star::sdbc::XStatement > &stmt,
     const com::sun::star::uno::Reference< com::sun::star::beans::XPropertySet > & past,
     const com::sun::star::uno::Reference< com::sun::star::beans::XPropertySet > & future);
