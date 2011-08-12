@@ -1,4 +1,4 @@
-http://download.go-oo.org/src
+http://dev-www.libreoffice.org/src
 48a9f787f43a09c0a9b7b00cd1fddbbf-hyphen-2.7.1.tar.gz
 63ddc5116488985e820075e65fbe6aa4-openssl-0.9.8o.tar.gz
 09357cc74975b01714e00c5899ea1881-pixman-0.12.0.tar.gz
@@ -89,11 +89,10 @@ f02578f5218f217a9f20e9c30e119c6a-boost_1_44_0.tar.bz2
 3121aaf3e13e5d88dfff13fb4a5f1ab8-hunspell-1.3.2.tar.gz
 0625a7d661f899a8ce263fc8a9879108-graphite2-0.9.2.tgz
 90882496f9ff4cd6d75d61dac2f62f66-libvisio-0.0.3.tar.bz2
-http://download.go-oo.org/extern
+881af2b7dca9b8259abbca00bbbc004d-LinLibertineG-20110101.zip
+http://dev-www.libreoffice.org/extern
 185d60944ea767075d27247c3162b3bc-unowinreg.dll
 b4cae0700aa1c2aef7eb7f345365e6f1-translate-toolkit-1.8.1.tar.bz2
-http://www.numbertext.org/linux
-881af2b7dca9b8259abbca00bbbc004d-LinLibertineG-20110101.zip
 http://ooo.itc.hu/oxygenoffice/download/libreoffice/
 @OOOP_GALLERY_PACK@
 @OOOP_TEMPLATES_PACK@
