@@ -32,7 +32,7 @@
         <value>org.openoffice.comp.connectivity.pq.Driver</value>
       </prop>
       <prop oor:name="DriverTypeDisplayName" oor:type="xs:string">
-        <value xml:lang="en-US">postgresql</value>
+        <value xml:lang="en-US">PostgreSQL</value>
       </prop>
       <node oor:name="Properties">
       </node>

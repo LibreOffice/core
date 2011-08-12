@@ -80,8 +80,9 @@ NO_DEFAULT_STL=TRUE
 DLLPRE=
 
 PQ_SDBC_MAJOR=0
-PQ_SDBC_MINOR=7
-PQ_SDBC_MICRO=7
+PQ_SDBC_MINOR=8
+PQ_SDBC_MICRO=0
+PQ_SDBC_VERSION=$(PQ_SDBC_MAJOR).$(PQ_SDBC_MINOR).$(PQ_SDBC_MICRO)
 .IF "$(SYSTEM_POSTGRESQL)" == "YES"
 POSTGRESQL_MAJOR=`pg_config --version | awk '{ print $$2 }' | cut -d. -f1`
 POSTGRESQL_MINOR=`pg_config --version | awk '{ print $$2 }' | cut -d. -f2`
@@ -176,7 +177,7 @@ SHL2VERSIONMAP=$(SOLARENV)$/src$/reg-component.map
 SLOFILES=       $(LIB1OBJFILES) $(LIB2OBJFILES)
 
 
-DRIVERNAME=postgresql-sdbc-$(PQ_SDBC_MAJOR).$(PQ_SDBC_MINOR).$(PQ_SDBC_MICRO).oxt
+DRIVERNAME=postgresql-sdbc-$(PQ_SDBC_VERSION).oxt
 ALLTAR : $(DLLDEST)$/$(DRIVERNAME)
 
 # --- Targets ------------------------------------------------------
@@ -194,6 +195,7 @@ $(DLLDEST)$/$(SHL1TARGET)$(INI_EXT): $(SHL1TARGET)
 $(DLLDEST)$/$(DRIVERNAME): \
         $(DLLDEST)$/META-INF$/manifest.xml \
         $(DLLDEST)$/description.xml \
+        $(DLLDEST)$/description/description_en-US.txt \
         $(DLLDEST)$/postgresql.xcu \
         $(DLLDEST)$/$(SHL1TARGET)$(DLLPOST) \
         $(DLLDEST)$/$(SHL2TARGET)$(DLLPOST) \
@@ -205,17 +207,22 @@ $(DLLDEST)$/$(DRIVERNAME): \
             $(SHL2TARGET)$(DLLPOST) \
             $(SHL1TARGET)$(INI_EXT) \
             description.xml \
+            description/description_en-US.txt \
             postgresql.xcu
 
+$(DLLDEST)$/description/% : description/%
+    mkdir -p $(DLLDEST)$/description
+    +cp $? $@
+
 $(DLLDEST)$/META-INF$/manifest.xml : manifest.xml
-    -mkdir -p $(DLLDEST)$/META-INF
+    mkdir -p $(DLLDEST)$/META-INF
     +cp $? $@
 
 $(DLLDEST)$/description.xml : description.xml
-    +cp $? $@
+    +sed -s -e 's/@EXTENSION_VERSION@/$(PQ_SDBC_VERSION)/' < $? > $@
 
 $(DLLDEST)$/postgresql.xcu : postgresql.xcu
-    -rm -f $@
+    rm -f $@
     cat postgresql.xcu > $@
 
 strip :
