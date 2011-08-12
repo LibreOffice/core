@@ -188,7 +188,6 @@ void GlyphCache::AnnounceFonts( ImplDevFontList* pList ) const
 {
     if( mpFtManager )
         mpFtManager->AnnounceFonts( pList );
-    // VirtDevServerFont::AnnounceFonts( pList );
 }
 
 // -----------------------------------------------------------------------
@@ -219,7 +218,6 @@ ServerFont* GlyphCache::CacheFont( const ImplFontSelectData& rFontSelData )
     ServerFont* pNew = NULL;
     if( mpFtManager )
         pNew = mpFtManager->CreateFont( aFontSelData );
-    // TODO: pNew = VirtDevServerFont::CreateFont( aFontSelData );
 
     if( pNew )
     {
