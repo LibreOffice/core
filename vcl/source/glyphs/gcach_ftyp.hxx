@@ -187,7 +187,7 @@ public:
     virtual                     ~FreetypeServerFont();
 
     virtual const ::rtl::OString* GetFontFileName() const { return mpFontInfo->GetFontFileName(); }
-    virtual int                 GetFontFaceNum() const { return mpFontInfo->GetFaceNum(); }
+    virtual int                 GetFontFaceNumber() const { return mpFontInfo->GetFaceNum(); }
     virtual bool                TestFont() const;
     virtual void*               GetFtFace() const;
     virtual void                SetFontOptions( boost::shared_ptr<ImplFontOptions> );
