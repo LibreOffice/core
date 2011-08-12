@@ -39,6 +39,10 @@ interface XCodeNameQuery
 {
     //-------------------------------------------------------------------------
     string getCodeNameForObject( [in] com::sun::star::uno::XInterface aObj );
+
+    string getCodeNameByIndex( [in] long nIndex );
+
+    long getPageIndexForObject( [in] com::sun::star::uno::XInterface aObj );
 };
 
 //=============================================================================

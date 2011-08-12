@@ -148,7 +148,15 @@ void OInterfaceContainer::impl_addVbEvents_nolck_nothrow(  const sal_Int32 i_nIn
             if ( xElementAsForm.is() )
                 break;
 
-            ::rtl::OUString sCodeName( xNameQuery->getCodeNameForObject( xElement ) );
+            rtl::OUString sCodeName;
+            {
+                Reference<XInterface> xThis = static_cast<XContainer*>(this);
+                sal_Int32 nPageIndex = xNameQuery->getPageIndexForObject(xThis);
+                if (nPageIndex >= 0)
+                    sCodeName = xNameQuery->getCodeNameByIndex(nPageIndex);
+                else
+                    sCodeName = xNameQuery->getCodeNameForObject(xElement);
+            }
 
             Reference< XPropertySet > xProps( xElement, UNO_QUERY_THROW );
             ::rtl::OUString sServiceName;

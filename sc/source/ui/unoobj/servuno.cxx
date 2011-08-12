@@ -239,6 +239,40 @@ public:
          return sCodeName;
     }
 
+    rtl::OUString SAL_CALL getCodeNameByIndex( sal_Int32 nIndex ) throw (uno::RuntimeException)
+    {
+        if (!mpDocShell)
+            return rtl::OUString();
+
+        String aName;
+        if (!mpDocShell->GetDocument()->GetCodeName(static_cast<SCTAB>(nIndex), aName))
+            return rtl::OUString();
+        return aName;
+    }
+
+    sal_Int32 SAL_CALL getPageIndexForObject( const uno::Reference<uno::XInterface>& xIf ) throw(uno::RuntimeException)
+    {
+        if (!mpDocShell)
+            return -1;
+
+        uno::Reference<drawing::XDrawPagesSupplier> xSupplier(mpDocShell->GetModel(), uno::UNO_QUERY_THROW);
+        uno::Reference<container::XIndexAccess> xIndex(xSupplier->getDrawPages(), uno::UNO_QUERY_THROW);
+
+        for (sal_Int32 i = 0, n = xIndex->getCount(); i < n; ++i)
+        {
+            try
+            {
+                uno::Reference<form::XFormsSupplier>  xFormSupplier(xIndex->getByIndex(i), uno::UNO_QUERY_THROW);
+                uno::Reference<container::XIndexAccess> xFormIndex(xFormSupplier->getForms(), uno::UNO_QUERY_THROW);
+                // get the www-standard container
+                uno::Reference<container::XIndexAccess> xFormControls(xFormIndex->getByIndex(0), uno::UNO_QUERY_THROW);
+                if (xFormControls == xIf)
+                    return i;
+            }
+            catch( uno::Exception& ) {}
+        }
+        return -1;
+    }
 };
 
 //------------------------------------------------------------------------
