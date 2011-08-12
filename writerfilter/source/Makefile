@@ -89,8 +89,8 @@ wf_GEN_ooxml_GperfFastToken_hxx=gperffasttoken.hxx
 wf_GEN_ooxml_Model_processed=model_preprocessed.xml
 wf_GEN_ooxml_Model_analyzed=ooxml/model_analyzed.xml
 
-$(wf_GEN_ooxml_token_tmp) : $(OUTDIR)/inc$(UPDMINOREXT)/oox/token/tokens.txt
-	cat $(OUTDIR)/inc$(UPDMINOREXT)/oox/token/tokens.txt \
+$(wf_GEN_ooxml_token_tmp) : $(OUTDIR)/inc/oox/tokens.txt
+	cat $(OUTDIR)/inc/oox/tokens.txt \
 	| sed "s#\(.*\)#<fasttoken>\1</fasttoken>#" > $@
 
 $(wf_GEN_ooxml_token_xml) : $(WFDIR)ooxml/tokenxmlheader $(wf_GEN_ooxml_token_tmp) $(WFDIR)ooxml/tokenxmlfooter

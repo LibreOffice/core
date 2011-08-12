@@ -34,6 +34,7 @@ $(eval $(call gb_Library_set_include,scfilt,\
         -I$(realpath $(SRCDIR)/sc/inc/pch) \
         -I$(WORKDIR)/Misc/sc/ \
         $$(INCLUDE) \
+        -I$(WORKDIR)/oox/inc/ \
         -I$(OUTDIR)/inc \
 ))
 

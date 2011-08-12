@@ -39,6 +39,7 @@ $(eval $(call gb_Library_set_include,msword,\
     -I$(WORKDIR)/inc/sw/sdi \
     -I$(WORKDIR)/Misc/sw/ \
     $$(INCLUDE) \
+    -I$(WORKDIR)/oox/inc/ \
     -I$(OUTDIR)/inc/sw \
 ))
 

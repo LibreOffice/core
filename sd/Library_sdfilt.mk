@@ -35,6 +35,7 @@ $(eval $(call gb_Library_set_include,sdfilt,\
     -I$(realpath $(SRCDIR)/sd/inc) \
     -I$(realpath $(SRCDIR)/sd/inc/pch) \
     -I$(OUTDIR)/inc \
+    -I$(WORKDIR)/oox/inc/ \
 ))
 
 $(eval $(call gb_Library_add_defs,sdfilt,\
