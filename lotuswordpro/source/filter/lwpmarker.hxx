@@ -184,7 +184,6 @@ protected:
 public:
     sal_Bool IsRightMarker(LwpObjectID objMarker);
     OUString GetName();
-    sal_Bool IsRightName(OUString sName);
 private:
     enum {  BKMK_NOTESFX = 0x0001,
         BKMK_OLDNOTESFX = 0x0002

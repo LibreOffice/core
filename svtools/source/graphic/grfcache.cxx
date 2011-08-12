@@ -820,17 +820,6 @@ void GraphicCache::SetCacheTimeout( sal_uLong nTimeoutSeconds )
 
 // -----------------------------------------------------------------------------
 
-void GraphicCache::ClearDisplayCache()
-{
-    for( void* pObj = maDisplayCache.First(); pObj; pObj = maDisplayCache.Next() )
-        delete (GraphicDisplayCacheEntry*) pObj;
-
-    maDisplayCache.Clear();
-    mnUsedDisplaySize = 0UL;
-}
-
-// -----------------------------------------------------------------------------
-
 sal_Bool GraphicCache::IsDisplayCacheable( OutputDevice* pOut, const Point& rPt, const Size& rSz,
                                        const GraphicObject& rObj, const GraphicAttr& rAttr ) const
 {

@@ -292,12 +292,6 @@ GraphicConverter::ImplConvert(unsigned long, void*, unsigned long, void**, unsig
 GraphicHelper::convertAppFontToHmm(com::sun::star::awt::Point const&) const
 GraphicHelper::convertAppFontToHmm(com::sun::star::awt::Size const&) const
 GraphicHelper::getDeviceInfo() const
-GraphicManager::ClearCache()
-GraphicManager::GetCacheTimeout() const
-GraphicManager::GetFreeCacheSize() const
-GraphicManager::GetMaxCacheSize() const
-GraphicManager::GetMaxObjCacheSize() const
-GraphicManager::GetUsedCacheSize() const
 GraphicObject::GetChecksum() const
 GraphicObject::GetSwapStreamHdl() const
 GraphicObject::GraphicObject(Graphic const&, String const&, GraphicManager const*)
@@ -1466,30 +1460,6 @@ SvtModuleOptions::GetFactoryWindowAttributes(SvtModuleOptions::EFactory) const
 SvtModuleOptions::GetFeatures() const
 SvtModuleOptions::GetModuleName(SvtModuleOptions::EFactory) const
 SvtModuleOptions::SetFactoryWindowAttributes(SvtModuleOptions::EFactory, rtl::OUString const&)
-SvtOptionsDrawinglayer_Impl::SetMaximumPaperBottomMargin(unsigned int)
-SvtOptionsDrawinglayer_Impl::SetMaximumPaperHeight(unsigned int)
-SvtOptionsDrawinglayer_Impl::SetMaximumPaperLeftMargin(unsigned int)
-SvtOptionsDrawinglayer_Impl::SetMaximumPaperRightMargin(unsigned int)
-SvtOptionsDrawinglayer_Impl::SetMaximumPaperTopMargin(unsigned int)
-SvtOptionsDrawinglayer_Impl::SetMaximumPaperWidth(unsigned int)
-SvtOptionsDrawinglayer_Impl::SetOverlayBuffer(unsigned char)
-SvtOptionsDrawinglayer_Impl::SetOverlayBuffer_Calc(unsigned char)
-SvtOptionsDrawinglayer_Impl::SetOverlayBuffer_DrawImpress(unsigned char)
-SvtOptionsDrawinglayer_Impl::SetOverlayBuffer_Writer(unsigned char)
-SvtOptionsDrawinglayer_Impl::SetPaintBuffer(unsigned char)
-SvtOptionsDrawinglayer_Impl::SetPaintBuffer_Calc(unsigned char)
-SvtOptionsDrawinglayer_Impl::SetPaintBuffer_DrawImpress(unsigned char)
-SvtOptionsDrawinglayer_Impl::SetPaintBuffer_Writer(unsigned char)
-SvtOptionsDrawinglayer_Impl::SetQuadratic3DRenderLimit(unsigned int)
-SvtOptionsDrawinglayer_Impl::SetQuadraticFormControlRenderLimit(unsigned int)
-SvtOptionsDrawinglayer_Impl::SetRenderDecoratedTextDirect(unsigned char)
-SvtOptionsDrawinglayer_Impl::SetRenderSimpleTextDirect(unsigned char)
-SvtOptionsDrawinglayer_Impl::SetSelectionMaximumLuminancePercent(unsigned short)
-SvtOptionsDrawinglayer_Impl::SetSnapHorVerLinesToDiscrete(unsigned char)
-SvtOptionsDrawinglayer_Impl::SetSolidDragCreate(unsigned char)
-SvtOptionsDrawinglayer_Impl::SetStripeColorA(Color)
-SvtOptionsDrawinglayer_Impl::SetStripeColorB(Color)
-SvtOptionsDrawinglayer_Impl::SetStripeLength(unsigned short)
 SvtPathOptions::GetPath(SvtPathOptions::Pathes) const
 SvtPathOptions::IsPathReadonly(SvtPathOptions::Pathes) const
 SvtPathOptions::SetPath(SvtPathOptions::Pathes, String const&)
@@ -2465,6 +2435,7 @@ binfilter::SdrUnoControlAccessArr::Insert(binfilter::SdrUnoControlAccess* const&
 binfilter::SdrUnoControlAccessArr::Insert(binfilter::SdrUnoControlAccess* const*, unsigned short)
 binfilter::SdrUnoControlAccessArr::Insert(binfilter::SdrUnoControlAccessArr const*, unsigned short, unsigned short)
 binfilter::SdrUnoControlAccessArr::Remove(binfilter::SdrUnoControlAccess* const&, unsigned short)
+binfilter::SfxConfigManagerImExport_Impl::Export(SotStorage*, SotStorage*)
 binfilter::SfxDocumentInfo::SavePropertySet(binfilter::SvStorage*) const
 binfilter::SfxHintPoster::LinkStubDoEvent_Impl(void*, void*)
 binfilter::SfxItemModifyArr_Impl::Insert(binfilter::SfxItemModifyArr_Impl const*, unsigned short, unsigned short, unsigned short)
@@ -2520,7 +2491,6 @@ binfilter::SvBytes::Replace(unsigned char const*, unsigned short, unsigned short
 binfilter::SvBytes::_ForEach(unsigned short, unsigned short, unsigned char (*)(unsigned char const&, void*), void*)
 binfilter::SvDataPipe_Impl::addMark(unsigned int)
 binfilter::SvDataPipe_Impl::removeMark(unsigned int)
-binfilter::SvFactory::GetSvClass(int, SvGlobalName const&)
 binfilter::SvI18NMap_Impl::Insert(binfilter::SvI18NMapEntry_Impl* const&, unsigned short&)
 binfilter::SvI18NMap_Impl::Insert(binfilter::SvI18NMapEntry_Impl* const*, unsigned short)
 binfilter::SvI18NMap_Impl::Insert(binfilter::SvI18NMap_Impl const*, unsigned short, unsigned short)
@@ -2602,7 +2572,6 @@ binfilter::Sw3Bytes::Replace(unsigned char const*, unsigned short, unsigned shor
 binfilter::Sw3Bytes::_ForEach(unsigned short, unsigned short, unsigned char (*)(unsigned char const&, void*), void*)
 binfilter::Sw3IoImp::ExportTxtAttrs(binfilter::Sw3ExportTxtAttrs const*, unsigned short, unsigned short)
 binfilter::Sw3IoImp::ExportTxtNode(binfilter::SwTxtNode const&, unsigned short, unsigned short, unsigned short, binfilter::SwInsHardBlankSoftHyph&)
-binfilter::Sw3IoImp::FindFlyFrm(unsigned long)
 binfilter::Sw3Marks::GetPos(binfilter::Sw3Mark const*) const
 binfilter::Sw3Marks::Insert(binfilter::Sw3Mark*)
 binfilter::Sw3Marks::Remove(binfilter::Sw3Mark*)
@@ -2644,16 +2613,10 @@ binfilter::SwOLELRUCache::Remove(binfilter::SwOLEObj&)
 binfilter::SwOutlineNodes::Insert(binfilter::SwNode* const&, unsigned short&)
 binfilter::SwOutlineNodes::Insert(binfilter::SwNode* const*, unsigned short)
 binfilter::SwOutlineNodes::Insert(binfilter::SwOutlineNodes const*, unsigned short, unsigned short)
-binfilter::SwPosFlyFrm::SwPosFlyFrm(binfilter::SwNodeIndex const&, binfilter::SwFrmFmt const*, unsigned short)
-binfilter::SwPosFlyFrms::Insert(binfilter::SwPosFlyFrm* const&)
-binfilter::SwPosFlyFrms::Insert(binfilter::SwPosFlyFrm* const&, unsigned short&)
-binfilter::SwPosFlyFrms::Insert(binfilter::SwPosFlyFrm* const*, unsigned short)
-binfilter::SwPosFlyFrms::Insert(binfilter::SwPosFlyFrms const*, unsigned short, unsigned short)
-binfilter::SwPosFlyFrms::Remove(binfilter::SwPosFlyFrm* const&, unsigned short)
-binfilter::SwPosFlyFrms::Remove(unsigned short, unsigned short)
 binfilter::SwRects::Replace(binfilter::SwRect const&, unsigned short)
 binfilter::SwRects::Replace(binfilter::SwRect const*, unsigned short, unsigned short)
 binfilter::SwRects::_ForEach(unsigned short, unsigned short, unsigned char (*)(binfilter::SwRect const&, void*), void*)
+binfilter::SwRootFrm::SwRootFrm(binfilter::SwFrmFmt*, binfilter::ViewShell*)
 binfilter::SwRubyList::DeleteAndDestroy(unsigned short, unsigned short)
 binfilter::SwSelBoxes::Insert(binfilter::SwTableBox* const&, unsigned short&)
 binfilter::SwSelBoxes::Remove(binfilter::SwTableBox* const&, unsigned short)

@@ -347,11 +347,6 @@ OUString LwpBookMark::GetName()
         return OUString(A2OUSTR(""));
 }
 
-sal_Bool LwpBookMark::IsRightName(OUString sName)
-{
-    return sName.equals(GetName());
-}
-
 LwpFieldMark::LwpFieldMark(LwpObjectHeader &objHdr, LwpSvStream *pStrm)
     : LwpStoryMarker(objHdr,pStrm)
     , m_nExtra(0)

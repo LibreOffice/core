@@ -91,7 +91,6 @@ public:
     void                        SetCacheTimeout( sal_uLong nTimeoutSeconds );
     sal_uLong                       GetCacheTimeout() const { return mnReleaseTimeoutSeconds; }
 
-    void                        ClearDisplayCache();
     sal_Bool                        IsDisplayCacheable( OutputDevice* pOut, const Point& rPt, const Size& rSz,
                                                     const GraphicObject& rObj, const GraphicAttr& rAttr ) const;
     sal_Bool                        IsInDisplayCache( OutputDevice* pOut, const Point& rPt, const Size& rSz,
