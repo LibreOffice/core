@@ -55,23 +55,6 @@ ByteString::ByteString( const UniString& rUniStr, rtl_TextEncoding eTextEncoding
                         eTextEncoding, nCvtFlags );
 }
 
-// -----------------------------------------------------------------------
-
-ByteString::ByteString( const sal_Unicode* pUniStr, xub_StrLen nLen,
-                        rtl_TextEncoding eTextEncoding, sal_uInt32 nCvtFlags )
-{
-    DBG_CTOR( ByteString, DbgCheckByteString );
-    DBG_ASSERT( pUniStr, "ByteString::ByteString() - pUniStr is NULL" );
-
-    if ( nLen == STRING_LEN )
-        nLen = ImplStringLen( pUniStr );
-
-    mpData = NULL;
-    rtl_uString2String( (rtl_String **)(&mpData),
-                        pUniStr, nLen,
-                        eTextEncoding, nCvtFlags );
-}
-
 // =======================================================================
 
 static sal_uChar aImplByteTab[256] =

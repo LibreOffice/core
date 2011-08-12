@@ -445,8 +445,8 @@ void TestToolObj::LoadIniFile()             // Laden der IniEinstellungen, die d
         if (i >= 0)
         {
             sPath = sPath.copy(0, i);
-            ByteString bsPath( sPath.getStr(), sPath.getLength(),
-                               RTL_TEXTENCODING_UTF8 );
+            ByteString bsPath( rtl::OUStringToOString(sPath,
+                               RTL_TEXTENCODING_UTF8) );
 
             aConf.SetGroup( "OOoProgramDir" );
             String aOPD;

@@ -177,8 +177,8 @@ void XclExpString::AppendByte( sal_Unicode cChar, rtl_TextEncoding eTextEnc )
     }
     else
     {
-        ByteString aByteStr( &cChar, 1, eTextEnc );     // length may be >1
-        BuildAppend( aByteStr.GetBuffer(), aByteStr.Len() );
+        rtl::OString aByteStr( &cChar, 1, eTextEnc );     // length may be >1
+        BuildAppend( aByteStr.getStr(), aByteStr.getLength() );
     }
 }
 

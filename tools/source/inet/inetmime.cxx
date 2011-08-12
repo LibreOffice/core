@@ -1118,8 +1118,8 @@ sal_Unicode const * INetMIME::scanParameters(sal_Unicode const * pBegin,
         }
         if (p == pAttributeBegin)
             break;
-        ByteString aAttribute = ByteString(
-            pAttributeBegin, static_cast< xub_StrLen >(p - pAttributeBegin),
+        ByteString aAttribute = rtl::OString(
+            pAttributeBegin, p - pAttributeBegin,
             RTL_TEXTENCODING_ASCII_US);
         if (bDowncaseAttribute)
             aAttribute.ToLowerAscii();
@@ -1170,9 +1170,9 @@ sal_Unicode const * INetMIME::scanParameters(sal_Unicode const * pBegin,
                     break;
                 if (pParameters)
                 {
-                    aCharset = ByteString(
+                    aCharset = rtl::OString(
                         pCharsetBegin,
-                        static_cast< xub_StrLen >(p - pCharsetBegin),
+                        p - pCharsetBegin,
                         RTL_TEXTENCODING_ASCII_US);
                     if (bDowncaseCharset)
                         aCharset.ToLowerAscii();
@@ -1205,9 +1205,9 @@ sal_Unicode const * INetMIME::scanParameters(sal_Unicode const * pBegin,
                     break;
                 if (pParameters)
                 {
-                    aLanguage = ByteString(
+                    aLanguage = rtl::OString(
                         pLanguageBegin,
-                        static_cast< xub_StrLen >(p - pLanguageBegin),
+                        p - pLanguageBegin,
                         RTL_TEXTENCODING_ASCII_US);
                     if (bDowncaseLanguage)
                         aLanguage.ToLowerAscii();
@@ -1301,8 +1301,8 @@ sal_Unicode const * INetMIME::scanParameters(sal_Unicode const * pBegin,
             if (p == pTokenBegin)
                 break;
             if (pParameters)
-                aValue = ByteString(
-                    pTokenBegin, static_cast< xub_StrLen >(p - pTokenBegin),
+                aValue = rtl::OString(
+                    pTokenBegin, p - pTokenBegin,
                     RTL_TEXTENCODING_UTF8);
         }
 

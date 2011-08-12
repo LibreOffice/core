@@ -40,6 +40,7 @@
 #include "dbustrings.hrc"
 #include "dbu_reghelper.hxx"
 #include <tools/diagnose_ex.h>
+#include <rtl/strbuf.hxx>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::sdb;
@@ -211,11 +212,9 @@ void SAL_CALL SbaExternalSourceBrowser::dispatch(const ::com::sun::star::util::U
                     if (xNewColProperties->hasPropertyByName(pControlProps->Name))
                         xNewCol->setPropertyValue(pControlProps->Name, pControlProps->Value);
                 }
-                catch(Exception&)
+                catch (const Exception&)
                 {
-                    OSL_FAIL((  ByteString("SbaExternalSourceBrowser::dispatch : could not set a column property (")
-                        +=  ByteString(pControlProps->Name.getStr(), (sal_uInt16)pControlProps->Name.getLength(), RTL_TEXTENCODING_ASCII_US)
-                        +=  ByteString(")!")).GetBuffer());
+                    OSL_FAIL(rtl::OStringBuffer(RTL_CONSTASCII_STRINGPARAM("SbaExternalSourceBrowser::dispatch : could not set a column property (")).append(rtl::OUStringToOString(pControlProps->Name, RTL_TEXTENCODING_ASCII_US)).append(RTL_CONSTASCII_STRINGPARAM(")!")).getStr());
                 }
             }
         }

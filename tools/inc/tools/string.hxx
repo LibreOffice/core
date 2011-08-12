@@ -167,6 +167,12 @@ private:
                         ByteString( const int* pDummy ); // not implemented: to prevent ByteString( NULL )
                         ByteString(int); // not implemented; to detect misuses
                                          // of ByteString(sal_Char);
+                        ByteString( const UniString& rUniStr, xub_StrLen nPos, xub_StrLen nLen,
+                                    rtl_TextEncoding eTextEncoding,
+                                    sal_uInt32 nCvtFlags = UNISTRING_TO_BYTESTRING_CVTFLAGS );
+                        ByteString( const sal_Unicode* pUniStr, xub_StrLen nLen,
+                                    rtl_TextEncoding eTextEncoding,
+                                    sal_uInt32 nCvtFlags = UNISTRING_TO_BYTESTRING_CVTFLAGS );
     void                Assign(int); // not implemented; to detect misuses of
                                      // Assign(sal_Char)
     void                operator =(int); // not implemented; to detect misuses
@@ -184,9 +190,6 @@ public:
                         ByteString( const sal_Char* pCharStr, xub_StrLen nLen );
                         ByteString( sal_Char c );
                         ByteString( const UniString& rUniStr,
-                                    rtl_TextEncoding eTextEncoding,
-                                    sal_uInt32 nCvtFlags = UNISTRING_TO_BYTESTRING_CVTFLAGS );
-                        ByteString( const sal_Unicode* pUniStr, xub_StrLen nLen,
                                     rtl_TextEncoding eTextEncoding,
                                     sal_uInt32 nCvtFlags = UNISTRING_TO_BYTESTRING_CVTFLAGS );
                         ~ByteString();
