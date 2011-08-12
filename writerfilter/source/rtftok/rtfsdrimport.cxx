@@ -274,7 +274,7 @@ void RTFSdrImport::resolve(RTFShape& rShape)
                     OUStringToOString( i->second, RTL_TEXTENCODING_UTF8 ).getStr());
     }
 
-    if (nType == 75) // picture frame
+    if (nType == 75 || nType == 202) // picture frame or text box
     {
         if (bPib)
             m_rImport.resolvePict(false);
