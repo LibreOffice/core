@@ -253,9 +253,9 @@ void BasMgrContainerListenerImpl::addLibraryModulesImpl( BasicManager* pMgr,
             else
         pLib->MakeModule32( aModuleName, aMod );
         }
-    }
 
-    pLib->SetModified( sal_False );
+        pLib->SetModified( sal_False );
+    }
 }
 
 
