@@ -69,3 +69,18 @@
 +.INCLUDE :  target.mk
 +.INCLUDE :  tg_wntx64.mk
 +
+--- misc/zlib-1.2.5/zconf.h	2010-04-18 19:58:06.000000000 +0200
++++ misc/build/zlib-1.2.5/zconf.h	2011-08-12 09:44:59.524936228 +0200
+@@ -14,6 +14,12 @@
+  * Even better than compiling with -DZ_PREFIX would be to use configure to set
+  * this permanently in zconf.h using "./configure --zprefix".
+  */
++/*
++ * we need the prefix to get the same names as in 1.1.3
++*/
++
++#define Z_PREFIX
++
+ #ifdef Z_PREFIX     /* may be set to #if 1 by ./configure */
+ 
+ /* all linked symbols */
