@@ -945,6 +945,9 @@ sal_Int32 DatabaseMetaData::getIntSetting(OUString settingName)
     params->setString(1, settingName );
     Reference< XResultSet > rs = m_getIntSetting_stmt->executeQuery();
     Reference< XRow > xRow( rs , UNO_QUERY_THROW );
+    OSL_VERIFY(rs->next());
+    OSL_ENSURE(rs->isFirst(), "postgresql-sdbc DatabaseMetaData getIntSetting not on first row");
+    OSL_ENSURE(rs->isLast(),  "postgresql-sdbc DatabaseMetaData getIntSetting not on last row");
     return xRow->getInt(1);
 }
 
