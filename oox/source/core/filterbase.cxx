@@ -33,6 +33,7 @@
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/task/XStatusIndicator.hpp>
 #include <com/sun/star/task/XInteractionHandler.hpp>
+#include <com/sun/star/drawing/XShape.hpp>
 #include <comphelper/docpasswordhelper.hxx>
 #include <comphelper/mediadescriptor.hxx>
 #include <osl/mutex.hxx>
@@ -53,6 +54,7 @@ namespace core {
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::graphic;
+using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::task;
@@ -159,6 +161,7 @@ struct FilterBaseImpl
     Reference< XStream >                mxOutStream;
     Reference< XStatusIndicator >       mxStatusIndicator;
     Reference< XInteractionHandler >    mxInteractionHandler;
+    Reference< XShape >                 mxParentShape;
 
     explicit            FilterBaseImpl( const Reference< XComponentContext >& rxContext ) throw( RuntimeException );
 
@@ -279,6 +282,11 @@ const Reference< XMultiServiceFactory >& FilterBase::getModelFactory() const
 const Reference< XFrame >& FilterBase::getTargetFrame() const
 {
     return mxImpl->mxTargetFrame;
+}
+
+const Reference< XShape >& FilterBase::getParentShape() const
+{
+    return mxImpl->mxParentShape;
 }
 
 const Reference< XStatusIndicator >& FilterBase::getStatusIndicator() const
@@ -578,6 +586,7 @@ void FilterBase::setMediaDescriptor( const Sequence< PropertyValue >& rMediaDesc
     mxImpl->mxTargetFrame = mxImpl->maMediaDesc.getUnpackedValueOrDefault( MediaDescriptor::PROP_FRAME(), Reference< XFrame >() );
     mxImpl->mxStatusIndicator = mxImpl->maMediaDesc.getUnpackedValueOrDefault( MediaDescriptor::PROP_STATUSINDICATOR(), Reference< XStatusIndicator >() );
     mxImpl->mxInteractionHandler = mxImpl->maMediaDesc.getUnpackedValueOrDefault( MediaDescriptor::PROP_INTERACTIONHANDLER(), Reference< XInteractionHandler >() );
+    mxImpl->mxParentShape = mxImpl->maMediaDesc.getUnpackedValueOrDefault( CREATE_OUSTRING( "ParentShape" ), mxImpl->mxParentShape );
 
     // Check for ISO OOXML
     OUString sFilterName = mxImpl->maMediaDesc.getUnpackedValueOrDefault( CREATE_OUSTRING( "FilterName" ), OUString() );

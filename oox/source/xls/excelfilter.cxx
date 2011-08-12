@@ -158,7 +158,7 @@ const TableStyleListPtr ExcelFilter::getTableStyles()
     return TableStyleListPtr();
 }
 
-::oox::drawingml::chart::ChartConverter& ExcelFilter::getChartConverter()
+::oox::drawingml::chart::ChartConverter* ExcelFilter::getChartConverter()
 {
     return WorkbookHelper( getWorkbookGlobals() ).getChartConverter();
 }

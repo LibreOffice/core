@@ -27,9 +27,8 @@
  ************************************************************************/
 
 #include "diagramdefinitioncontext.hxx"
-#include "oox/helper/helper.hxx"
 #include "layoutnodecontext.hxx"
-#include "oox/drawingml/diagram/datamodelcontext.hxx"
+#include "datamodelcontext.hxx"
 
 using namespace ::oox::core;
 using namespace ::com::sun::star::uno;
@@ -86,9 +85,15 @@ DiagramDefinitionContext::createFastChildContext( ::sal_Int32 aElement,
         mpLayout->setDesc( xAttribs->getOptionalValue( XML_val ) );
         break;
     case DGM_TOKEN( layoutNode ):
-        mpLayout->getNode().reset( new LayoutNode() );
-        xRet.set( new LayoutNodeContext( *this, xAttribs, mpLayout->getNode() ) );
+    {
+        LayoutNodePtr pNode( new LayoutNode() );
+        mpLayout->getNode() = pNode;
+        pNode->setChildOrder( xAttribs->getOptionalValueToken( XML_chOrder, XML_b ) );
+        pNode->setMoveWith( xAttribs->getOptionalValue( XML_moveWith ) );
+        pNode->setStyleLabel( xAttribs->getOptionalValue( XML_styleLbl ) );
+        xRet.set( new LayoutNodeContext( *this, xAttribs, pNode ) );
         break;
+    }
      case DGM_TOKEN( clrData ):
         // TODO, does not matter for the UI. skip.
         return xRet;

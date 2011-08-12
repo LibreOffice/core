@@ -82,7 +82,7 @@ protected:
     /** Returns the filter object of the imported/exported document. */
     ::oox::core::XmlFilterBase& getFilter() const;
     /** Returns the chart converter. */
-    ChartConverter&     getChartConverter() const;
+    ChartConverter*     getChartConverter() const;
     /** Returns the API chart document model. */
     ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartDocument >
                         getChartDocument() const;

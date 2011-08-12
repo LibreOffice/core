@@ -81,8 +81,11 @@ FastParser::FastParser( const Reference< XComponentContext >& rxContext ) throw(
     Reference< XMultiComponentFactory > xFactory( rxContext->getServiceManager(), UNO_SET_THROW );
     mxParser.set( xFactory->createInstanceWithContext( CREATE_OUSTRING( "com.sun.star.xml.sax.FastParser" ), rxContext ), UNO_QUERY_THROW );
 
+    // create the fast tokenhandler
+    mxTokenHandler.set( new FastTokenHandler );
+
     // create the fast token handler based on the OOXML token list
-    mxParser->setTokenHandler( new FastTokenHandler );
+    mxParser->setTokenHandler( mxTokenHandler );
 }
 
 FastParser::~FastParser()

@@ -84,9 +84,14 @@ public:
 
      sal_Int32 getNamespaceId( const ::rtl::OUString& aUrl );
 
+    ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastTokenHandler >
+               getTokenHandler() const { return mxTokenHandler; }
+
 private:
     ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastParser >
                         mxParser;
+    ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastTokenHandler >
+                        mxTokenHandler;
     const NamespaceMap& mrNamespaceMap;
 };
 

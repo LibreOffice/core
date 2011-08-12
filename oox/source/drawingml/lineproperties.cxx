@@ -141,6 +141,7 @@ void lclConvertCustomDash( LineDash& orLineDash, const LineProperties::DashStopV
 
 DashStyle lclGetDashStyle( sal_Int32 nToken )
 {
+    OSL_ASSERT((nToken & sal_Int32(0xFFFF0000))==0);
     switch( nToken )
     {
         case XML_rnd:   return DashStyle_ROUNDRELATIVE;
@@ -152,6 +153,7 @@ DashStyle lclGetDashStyle( sal_Int32 nToken )
 
 LineJoint lclGetLineJoint( sal_Int32 nToken )
 {
+    OSL_ASSERT((nToken & sal_Int32(0xFFFF0000))==0);
     switch( nToken )
     {
         case XML_round: return LineJoint_ROUND;
@@ -167,6 +169,7 @@ const sal_Int32 OOX_ARROWSIZE_LARGE     = 2;
 
 sal_Int32 lclGetArrowSize( sal_Int32 nToken )
 {
+    OSL_ASSERT((nToken & sal_Int32(0xFFFF0000))==0);
     switch( nToken )
     {
         case XML_sm:    return OOX_ARROWSIZE_SMALL;
@@ -189,6 +192,7 @@ void lclPushMarkerProperties( ShapePropertyMap& rPropMap,
     sal_Int32 nMarkerWidth = 0;
     bool bMarkerCenter = false;
     sal_Int32 nArrowType = rArrowProps.moArrowType.get( XML_none );
+    OSL_ASSERT((nArrowType & sal_Int32(0xFFFF0000))==0);
     switch( nArrowType )
     {
         case XML_triangle:
@@ -248,6 +252,7 @@ void lclPushMarkerProperties( ShapePropertyMap& rPropMap,
 #define OOX_ARROW_POINT( x, y ) Point( static_cast< sal_Int32 >( fArrowWidth * x ), static_cast< sal_Int32 >( fArrowLength * y ) )
 
             ::std::vector< Point > aPoints;
+            OSL_ASSERT((rArrowProps.moArrowType.get() & sal_Int32(0xFFFF0000))==0);
             switch( rArrowProps.moArrowType.get() )
             {
                 case XML_triangle:

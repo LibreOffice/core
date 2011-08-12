@@ -26,56 +26,31 @@
  *
  ************************************************************************/
 
-#include "ShapeFilterBase.hxx"
-#include "oox/drawingml/chart/chartconverter.hxx"
-#include "oox/ole/vbaproject.hxx"
+#ifndef OOX_DRAWINGML_SHAPECONTEXT_HXX
+#define OOX_DRAWINGML_SHAPECONTEXT_HXX
 
-namespace oox {
-namespace shape {
+#include <com/sun/star/drawing/XShapes.hpp>
 
-using namespace ::com::sun::star;
+#include "oox/core/contexthandler.hxx"
+#include "diagram.hxx"
 
-ShapeFilterBase::ShapeFilterBase( const uno::Reference< uno::XComponentContext >& rxContext ) throw( uno::RuntimeException ) :
-    XmlFilterBase( rxContext ),
-    mxChartConv( new ::oox::drawingml::chart::ChartConverter )
+namespace oox { namespace drawingml {
+
+// CT_DataModel
+class DataModelContext : public ::oox::core::ContextHandler
 {
-}
+public:
+    DataModelContext( ::oox::core::ContextHandler& rParent, const DiagramDataPtr & pDataModelPtr );
+    virtual ~DataModelContext();
 
-ShapeFilterBase::~ShapeFilterBase()
-{
-}
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext( ::sal_Int32 Element, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& Attribs ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
 
-const ::oox::drawingml::Theme* ShapeFilterBase::getCurrentTheme() const
-{
-    return 0;
-}
+protected:
+    DiagramDataPtr mpDataModel;
+};
 
-::oox::vml::Drawing* ShapeFilterBase::getVmlDrawing()
-{
-    return 0;
-}
+} }
 
-const ::oox::drawingml::table::TableStyleListPtr ShapeFilterBase::getTableStyles()
-{
-    return ::oox::drawingml::table::TableStyleListPtr();
-}
-
-::oox::drawingml::chart::ChartConverter* ShapeFilterBase::getChartConverter()
-{
-    return mxChartConv.get();
-}
-
-::oox::ole::VbaProject* ShapeFilterBase::implCreateVbaProject() const
-{
-    return new ::oox::ole::VbaProject( getComponentContext(), getModel(), CREATE_OUSTRING( "Writer" ) );
-}
-
-::rtl::OUString ShapeFilterBase::implGetImplementationName() const
-{
-    return ::rtl::OUString();
-}
-
-}
-}
+#endif  //  OOX_DRAWINGML_SHAPEGROUPCONTEXT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

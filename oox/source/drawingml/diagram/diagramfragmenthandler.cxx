@@ -28,9 +28,10 @@
 
 #include <osl/diagnose.h>
 
-#include "oox/drawingml/diagram/diagramfragmenthandler.hxx"
-#include "oox/drawingml/diagram/datamodelcontext.hxx"
 #include "diagramdefinitioncontext.hxx"
+#include "diagramfragmenthandler.hxx"
+#include "datamodelcontext.hxx"
+#include "oox/drawingml/colorchoicecontext.hxx"
 
 using namespace ::oox::core;
 using namespace ::com::sun::star::xml::sax;
@@ -130,94 +131,146 @@ DiagramLayoutFragmentHandler::createFastChildContext( ::sal_Int32 aElement,
 ///////////////////////
 
 DiagramQStylesFragmentHandler::DiagramQStylesFragmentHandler( XmlFilterBase& rFilter,
-                                                        const OUString& rFragmentPath,
-                                                        const DiagramQStylesPtr pDataPtr )
-    throw( )
-    : FragmentHandler( rFilter, rFragmentPath )
-    , mpDataPtr( pDataPtr )
+                                                              const OUString& rFragmentPath,
+                                                              DiagramQStyleMap& rStylesMap ) :
+    FragmentHandler2( rFilter, rFragmentPath ),
+    maStyleName(),
+    maStyleEntry(),
+    mrStylesMap( rStylesMap )
+{}
+
+::oox::core::ContextHandlerRef DiagramQStylesFragmentHandler::createStyleMatrixContext(
+    sal_Int32 nElement,
+    const AttributeList& rAttribs,
+    ShapeStyleRef& o_rStyle )
 {
+    o_rStyle.mnThemedIdx = (nElement == DGM_TOKEN(fontRef)) ?
+        rAttribs.getToken( XML_idx, XML_none ) : rAttribs.getInteger( XML_idx, 0 );
+    return new ColorContext( *this, o_rStyle.maPhClr );
 }
 
-DiagramQStylesFragmentHandler::~DiagramQStylesFragmentHandler( ) throw ()
+::oox::core::ContextHandlerRef DiagramQStylesFragmentHandler::onCreateContext( sal_Int32 nElement,
+                                                                               const AttributeList& rAttribs )
 {
-
-}
-
-void SAL_CALL DiagramQStylesFragmentHandler::endDocument()
-    throw (SAXException, RuntimeException)
-{
-
-}
-
-
-Reference< XFastContextHandler > SAL_CALL
-DiagramQStylesFragmentHandler::createFastChildContext( ::sal_Int32 aElement,
-                                                    const Reference< XFastAttributeList >& )
-    throw ( SAXException, RuntimeException)
-{
-    Reference< XFastContextHandler > xRet;
-
-    switch( aElement )
+    // state-table like way of navigating the color fragment. we
+    // currently ignore everything except styleLbl in the colorsDef
+    // element
+    switch( getCurrentElement() )
     {
-    case DGM_TOKEN( styleDef ):
-        // TODO
-        break;
-    default:
-        break;
+        case XML_ROOT_CONTEXT:
+            return nElement == DGM_TOKEN(styleDef) ? this : NULL;
+        case DGM_TOKEN(styleDef):
+            return nElement == DGM_TOKEN(styleLbl) ? this : NULL;
+        case DGM_TOKEN(styleLbl):
+            return nElement == DGM_TOKEN(style) ? this : NULL;
+        case DGM_TOKEN(style):
+        {
+            switch( nElement )
+            {
+                case DGM_TOKEN(lnRef) :     // CT_StyleMatrixReference
+                    return createStyleMatrixContext(nElement,rAttribs,
+                                                    maStyleEntry.maLineStyle);
+                case DGM_TOKEN(fillRef) :   // CT_StyleMatrixReference
+                    return createStyleMatrixContext(nElement,rAttribs,
+                                                    maStyleEntry.maFillStyle);
+                case DGM_TOKEN(effectRef) : // CT_StyleMatrixReference
+                    return createStyleMatrixContext(nElement,rAttribs,
+                                                    maStyleEntry.maEffectStyle);
+                case DGM_TOKEN(fontRef) :   // CT_FontRe    ference
+                    return createStyleMatrixContext(nElement,rAttribs,
+                                                    maStyleEntry.maTextStyle);
+            }
+            return 0;
+        }
     }
 
-    if( !xRet.is() )
-        xRet = getFastContextHandler();
+    return 0;
+}
 
-    return xRet;
+
+void DiagramQStylesFragmentHandler::onStartElement( const AttributeList& rAttribs )
+{
+    if( getCurrentElement() == DGM_TOKEN( styleDef ) )
+    {
+        maStyleName = rAttribs.getString( XML_name, OUString() );
+        maStyleEntry = mrStylesMap[maStyleName];
+    }
 }
 
 /////////////////////
 
-DiagramColorsFragmentHandler::DiagramColorsFragmentHandler( XmlFilterBase& rFilter,
-                                                        const OUString& rFragmentPath,
-                                                        const DiagramColorsPtr pDataPtr )
-    throw( )
-    : FragmentHandler( rFilter, rFragmentPath )
-    , mpDataPtr( pDataPtr )
+void DiagramQStylesFragmentHandler::onEndElement( )
 {
+    if( getCurrentElement() == DGM_TOKEN(styleLbl) )
+        mrStylesMap[maStyleName] = maStyleEntry;
 }
 
-DiagramColorsFragmentHandler::~DiagramColorsFragmentHandler( ) throw ()
+ColorFragmentHandler::ColorFragmentHandler( ::oox::core::XmlFilterBase& rFilter,
+                                            const ::rtl::OUString& rFragmentPath,
+                                            DiagramColorMap& rColorsMap ) :
+    FragmentHandler2(rFilter,rFragmentPath),
+    maColorName(),
+    maColorEntry(),
+    mrColorsMap(rColorsMap)
+{}
+
+::oox::core::ContextHandlerRef ColorFragmentHandler::onCreateContext( sal_Int32 nElement,
+                                                                      const AttributeList& /*rAttribs*/ )
 {
-
-}
-
-void SAL_CALL DiagramColorsFragmentHandler::endDocument()
-    throw (SAXException, RuntimeException)
-{
-
-}
-
-
-Reference< XFastContextHandler > SAL_CALL
-DiagramColorsFragmentHandler::createFastChildContext( ::sal_Int32 aElement,
-                                                    const Reference< XFastAttributeList >& )
-    throw ( SAXException, RuntimeException)
-{
-    Reference< XFastContextHandler > xRet;
-
-    switch( aElement )
+    // state-table like way of navigating the color fragment. we
+    // currently ignore everything except styleLbl in the colorsDef
+    // element
+    switch( getCurrentElement() )
     {
-    case DGM_TOKEN( colorsDef ):
-        // TODO
-        break;
-    default:
-        break;
+        case XML_ROOT_CONTEXT:
+            return nElement == DGM_TOKEN(colorsDef) ? this : NULL;;
+        case DGM_TOKEN(colorsDef):
+            return nElement == DGM_TOKEN(styleLbl) ? this : NULL;;
+        case DGM_TOKEN(styleLbl):
+            return ((nElement == DGM_TOKEN(fillClrLst)) ||
+                    (nElement == DGM_TOKEN(linClrLst)) ||
+                    (nElement == DGM_TOKEN(effectClrLst)) ||
+                    (nElement == DGM_TOKEN(txLinClrLst)) ||
+                    (nElement == DGM_TOKEN(txFillClrLst)) ||
+                    (nElement == DGM_TOKEN(txEffectClrLst))) ? this : NULL;;
+
+        // the actual colors - defer to color fragment handlers.
+
+        // TODO(F1): well, actually, there might be *several* color
+        // definitions in it, after all it's called list. but
+        // apparently colorChoiceContext doesn't handle that anyway...
+        case DGM_TOKEN(fillClrLst):
+            return new ColorContext( *this, maColorEntry.maFillColor );
+        case DGM_TOKEN(linClrLst):
+            return new ColorContext( *this, maColorEntry.maLineColor );
+        case DGM_TOKEN(effectClrLst):
+            return new ColorContext( *this, maColorEntry.maEffectColor );
+        case DGM_TOKEN(txFillClrLst):
+            return new ColorContext( *this, maColorEntry.maTextFillColor );
+        case DGM_TOKEN(txLinClrLst):
+            return new ColorContext( *this, maColorEntry.maTextLineColor );
+        case DGM_TOKEN(txEffectClrLst):
+            return new ColorContext( *this, maColorEntry.maTextEffectColor );
     }
 
-    if( !xRet.is() )
-        xRet = getFastContextHandler();
-
-    return xRet;
+    return 0;
 }
 
 
+void ColorFragmentHandler::onStartElement( const AttributeList& rAttribs )
+{
+    if( getCurrentElement() == DGM_TOKEN(styleLbl) )
+    {
+        maColorName = rAttribs.getString( XML_name, OUString() );
+        maColorEntry = mrColorsMap[maColorName];
+    }
+}
+
+void ColorFragmentHandler::onEndElement( )
+{
+    if( getCurrentElement() == DGM_TOKEN(styleLbl) )
+        mrColorsMap[maColorName] = maColorEntry;
+}
 
 
 } }

@@ -125,6 +125,7 @@ $(eval $(call gb_Library_add_exception_objects,oox,\
     oox/source/drawingml/connectorshapecontext \
     oox/source/drawingml/customshapegeometry \
     oox/source/drawingml/customshapeproperties \
+    oox/source/drawingml/diagram/constraintlistcontext \
     oox/source/drawingml/diagram/datamodelcontext \
     oox/source/drawingml/diagram/diagram \
     oox/source/drawingml/diagram/diagramdefinitioncontext \
@@ -143,6 +144,7 @@ $(eval $(call gb_Library_add_exception_objects,oox,\
     oox/source/drawingml/objectdefaultcontext \
     oox/source/drawingml/shapecontext \
     oox/source/drawingml/shape \
+    oox/source/drawingml/shape3dproperties \
     oox/source/drawingml/shapegroupcontext \
     oox/source/drawingml/shapepropertiescontext \
     oox/source/drawingml/shapepropertymap \
@@ -230,6 +232,8 @@ $(eval $(call gb_Library_add_exception_objects,oox,\
     oox/source/ppt/commontimenodecontext \
     oox/source/ppt/conditioncontext \
     oox/source/ppt/customshowlistcontext \
+    oox/source/ppt/dgmimport \
+    oox/source/ppt/dgmlayout \
     oox/source/ppt/headerfootercontext \
     oox/source/ppt/layoutfragmenthandler \
     oox/source/ppt/pptfilterhelpers \

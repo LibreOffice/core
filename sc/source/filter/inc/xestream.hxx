@@ -340,7 +340,7 @@ public:
     virtual oox::vml::Drawing* getVmlDrawing();
     virtual const oox::drawingml::Theme* getCurrentTheme() const;
     virtual const oox::drawingml::table::TableStyleListPtr getTableStyles();
-    virtual oox::drawingml::chart::ChartConverter& getChartConverter();
+    virtual oox::drawingml::chart::ChartConverter* getChartConverter();
 
 private:
     virtual ::oox::ole::VbaProject* implCreateVbaProject() const;

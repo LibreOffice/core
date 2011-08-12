@@ -183,9 +183,9 @@ const oox::drawingml::table::TableStyleListPtr PowerPointImport::getTableStyles(
     return mpTableStyleList;;
 }
 
-::oox::drawingml::chart::ChartConverter& PowerPointImport::getChartConverter()
+::oox::drawingml::chart::ChartConverter* PowerPointImport::getChartConverter()
 {
-    return *mxChartConv;
+    return mxChartConv.get();
 }
 
 namespace {

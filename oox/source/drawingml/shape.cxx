@@ -47,8 +47,10 @@
 #include <tools/solar.h>        // for the F_PI180 define
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/container/XNamed.hpp>
+#include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/xml/AttributeData.hpp>
 #include <com/sun/star/drawing/HomogenMatrix3.hpp>
 #include <com/sun/star/drawing/TextVerticalAdjust.hpp>
 #include <com/sun/star/text/XText.hpp>
@@ -93,6 +95,35 @@ Shape::Shape( const sal_Char* pServiceName )
         msServiceName = OUString::createFromAscii( pServiceName );
     setDefaults();
 }
+
+Shape::Shape( const ShapePtr& pSourceShape )
+: maChildren()
+, mbIsChild( pSourceShape->mbIsChild )
+, mpTextBody(pSourceShape->mpTextBody)
+, mpLinePropertiesPtr( pSourceShape->mpLinePropertiesPtr )
+, mpFillPropertiesPtr( pSourceShape->mpFillPropertiesPtr )
+, mpGraphicPropertiesPtr( pSourceShape->mpGraphicPropertiesPtr )
+, mpCustomShapePropertiesPtr( pSourceShape->mpCustomShapePropertiesPtr )
+, mpTablePropertiesPtr( pSourceShape->mpTablePropertiesPtr )
+, mp3DPropertiesPtr( pSourceShape->mp3DPropertiesPtr )
+, maShapeProperties( pSourceShape->maShapeProperties )
+, mpMasterTextListStyle( pSourceShape->mpMasterTextListStyle )
+, mxShape()
+, msServiceName( pSourceShape->msServiceName )
+, msName( pSourceShape->msName )
+, msId( pSourceShape->msId )
+, mnSubType( pSourceShape->mnSubType )
+, mnSubTypeIndex( pSourceShape->mnSubTypeIndex )
+, maShapeStyleRefs( pSourceShape->maShapeStyleRefs )
+, maSize( pSourceShape->maSize )
+, maPosition( pSourceShape->maPosition )
+, meFrameType( pSourceShape->meFrameType )
+, mnRotation( pSourceShape->mnRotation )
+, mbFlipH( pSourceShape->mbFlipH )
+, mbFlipV( pSourceShape->mbFlipV )
+, mbHidden( pSourceShape->mbHidden )
+{}
+
 
 Shape::~Shape()
 {
@@ -218,6 +249,20 @@ void Shape::applyShapeReference( const Shape& rReferencedShape )
     mbFlipH = rReferencedShape.mbFlipH;
     mbFlipV = rReferencedShape.mbFlipV;
     mbHidden = rReferencedShape.mbHidden;
+}
+
+void Shape::addChildren( ::oox::core::XmlFilterBase& rFilterBase,
+                         const Theme* pTheme,
+                         const Reference< XShapes >& rxShapes,
+                         basegfx::B2DHomMatrix& aTransformation,
+                         const awt::Rectangle* pShapeRect,
+                         ShapeIdMap* pShapeMap )
+{
+    addChildren(rFilterBase, *this, pTheme, rxShapes,
+                pShapeRect ?
+                 *pShapeRect :
+                 awt::Rectangle( maPosition.X, maPosition.Y, maSize.Width, maSize.Height ),
+                pShapeMap, aTransformation);
 }
 
 // for group shapes, the following method is also adding each child
@@ -593,7 +638,8 @@ void Shape::finalizeXShape( XmlFilterBase& rFilter, const Reference< XShapes >& 
                 Reference< drawing::XShapes > xExternalPage;
                 if( !mxChartShapeInfo->mbEmbedShapes )
                     xExternalPage = rxShapes;
-                rFilter.getChartConverter().convertFromModel( rFilter, aModel, xChartDoc, xExternalPage, mxShape->getPosition(), mxShape->getSize() );
+                if( rFilter.getChartConverter() )
+                    rFilter.getChartConverter()->convertFromModel( rFilter, aModel, xChartDoc, xExternalPage, mxShape->getPosition(), mxShape->getSize() );
             }
             catch( Exception& )
             {

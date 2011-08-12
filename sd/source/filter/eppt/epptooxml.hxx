@@ -88,7 +88,7 @@ public:
     virtual oox::vml::Drawing* getVmlDrawing() { return NULL; }
     virtual const oox::drawingml::Theme* getCurrentTheme() const { return NULL; }
     virtual const oox::drawingml::table::TableStyleListPtr getTableStyles() { return oox::drawingml::table::TableStyleListPtr(); }
-    virtual oox::drawingml::chart::ChartConverter& getChartConverter() { static oox::drawingml::chart::ChartConverter aConverter; return aConverter; }
+    virtual oox::drawingml::chart::ChartConverter* getChartConverter() { return NULL; }
 
     static const char* GetSideDirection( sal_uInt8 nDirection );
     static const char* GetCornerDirection( sal_uInt8 nDirection );

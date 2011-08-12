@@ -26,32 +26,29 @@
  *
  ************************************************************************/
 
-
-#ifndef OOX_DRAWINGML_SHAPECONTEXT_HXX
-#define OOX_DRAWINGML_SHAPECONTEXT_HXX
-
-#include <com/sun/star/drawing/XShapes.hpp>
+#ifndef OOX_DRAWINGML_CONSTRAINTLISTCONTEXT_HXX
+#define OOX_DRAWINGML_CONSTRAINTLISTCONTEXT_HXX
 
 #include "oox/core/contexthandler.hxx"
-#include "oox/drawingml/diagram/diagram.hxx"
+#include "diagramlayoutatoms.hxx"
+#include "diagram.hxx"
 
 namespace oox { namespace drawingml {
 
-// CT_DataModel
-class DataModelContext : public ::oox::core::ContextHandler
+class ConstraintListContext : public ::oox::core::ContextHandler
 {
 public:
-    DataModelContext( ::oox::core::ContextHandler& rParent, const DiagramDataPtr & pDataModelPtr );
-    virtual ~DataModelContext();
+    ConstraintListContext( ContextHandler& rParent, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& xAttributes, const LayoutAtomPtr &pNode );
+    virtual ~ConstraintListContext();
 
+    virtual void SAL_CALL endFastElement( ::sal_Int32 Element ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext( ::sal_Int32 Element, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& Attribs ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
-
-protected:
-    DiagramDataPtr mpDataModel;
+private:
+    LayoutAtomPtr mpNode;
 };
 
 } }
 
-#endif  //  OOX_DRAWINGML_SHAPEGROUPCONTEXT_HXX
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

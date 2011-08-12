@@ -1,11 +1,13 @@
-/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2000, 2010 Oracle and/or its affiliates.
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
  * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * $RCSfile: fillpropertiesgroupcontext.hxx,v $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -26,31 +28,29 @@
  *
  ************************************************************************/
 
-#ifndef OOX_DRAWINGML_LAYOUTNODECONTEXT_HXX
-#define OOX_DRAWINGML_LAYOUTNODECONTEXT_HXX
+#ifndef OOX_DRAWINGML_SCENE3DPROPERTIESCONTEXT_HPP
+#define OOX_DRAWINGML_SCENE3DPROPERTIESCONTEXT_HPP
 
 #include "oox/core/contexthandler.hxx"
-#include "diagramlayoutatoms.hxx"
-#include "diagram.hxx"
 
 namespace oox { namespace drawingml {
 
-class LayoutNodeContext : public ::oox::core::ContextHandler
+struct Shape3DProperties;
+
+// ---------------------------------------------------------------------
+
+class Scene3DPropertiesContext : public ::oox::core::ContextHandler
 {
 public:
-    LayoutNodeContext( ContextHandler& rParent, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& xAttributes, const LayoutAtomPtr &pNode );
-    virtual ~LayoutNodeContext();
+    Scene3DPropertiesContext( ::oox::core::ContextHandler& rParent, Shape3DProperties& r3DProperties ) throw();
 
-    virtual void SAL_CALL endFastElement( ::sal_Int32 Element ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext( ::sal_Int32 Element, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& Attribs ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
+    ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext( ::sal_Int32 Element, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& Attribs )
+            throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException );
 
-    static ::sal_Int32 tagToVarIdx( ::sal_Int32 aTag );
 private:
-    LayoutAtomPtr mpNode;
+    Shape3DProperties& mr3DProperties;
 };
 
 } }
 
-#endif
-
-/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
+#endif // OOX_DRAWINGML_SCENE3DPROPERTIESCONTEXT_HPP

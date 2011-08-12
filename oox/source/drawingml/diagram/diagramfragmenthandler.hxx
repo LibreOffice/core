@@ -26,11 +26,11 @@
  *
  ************************************************************************/
 
-
 #ifndef OOX_DRAWINGML_DIAGRAMFRAGMENTHANDLER
 #define OOX_DRAWINGML_DIAGRAMFRAGMENTHANDLER
 
 #include "oox/core/fragmenthandler.hxx"
+#include "oox/core/fragmenthandler2.hxx"
 #include "oox/drawingml/diagram/diagram.hxx"
 
 namespace oox { namespace drawingml {
@@ -47,7 +47,7 @@ public:
 
 private:
 
-    DiagramDataPtr  mpDataPtr;
+    DiagramDataPtr	mpDataPtr;
 };
 
 
@@ -63,40 +63,52 @@ public:
 
 private:
 
-    DiagramLayoutPtr    mpDataPtr;
+    DiagramLayoutPtr	mpDataPtr;
 };
 
-class DiagramQStylesFragmentHandler : public ::oox::core::FragmentHandler
+class DiagramQStylesFragmentHandler : public ::oox::core::FragmentHandler2
 {
 public:
-    DiagramQStylesFragmentHandler( oox::core::XmlFilterBase& rFilter, const ::rtl::OUString& rFragmentPath, const DiagramQStylesPtr pDataPtr ) throw();
-    virtual ~DiagramQStylesFragmentHandler() throw();
+    DiagramQStylesFragmentHandler(
+        oox::core::XmlFilterBase& rFilter,
+        const ::rtl::OUString& rFragmentPath,
+        DiagramQStyleMap& rStylesMap );
 
-    virtual void SAL_CALL endDocument() throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext( ::sal_Int32 Element, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& Attribs ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
+    virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
+
+    virtual void onStartElement( const AttributeList& rAttribs );
+    virtual void onEndElement();
 
 private:
+    ::oox::core::ContextHandlerRef createStyleMatrixContext(sal_Int32 nElement,
+                                                            const AttributeList& rAttribs,
+                                                            ShapeStyleRef& o_rStyle);
 
-    DiagramQStylesPtr   mpDataPtr;
+    ::rtl::OUString   maStyleName;
+    DiagramStyle      maStyleEntry;
+    DiagramQStyleMap& mrStylesMap;
 };
 
-
-class DiagramColorsFragmentHandler : public ::oox::core::FragmentHandler
+class ColorFragmentHandler : public ::oox::core::FragmentHandler2
 {
 public:
-    DiagramColorsFragmentHandler( ::oox::core::XmlFilterBase& rFilter, const ::rtl::OUString& rFragmentPath, const DiagramColorsPtr pDataPtr ) throw();
-    virtual ~DiagramColorsFragmentHandler() throw();
+    ColorFragmentHandler(
+        ::oox::core::XmlFilterBase& rFilter,
+        const ::rtl::OUString& rFragmentPath,
+        DiagramColorMap& rColorMap );
 
-    virtual void SAL_CALL endDocument() throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext( ::sal_Int32 Element, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& Attribs ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException);
+    virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
+
+    virtual void onStartElement( const AttributeList& rAttribs );
+    virtual void onEndElement();
 
 private:
-
-    DiagramColorsPtr    mpDataPtr;
+    ::rtl::OUString   maColorName;
+    DiagramColor      maColorEntry;
+    DiagramColorMap&  mrColorsMap;
 };
 
 } }
-
 
 #endif
 

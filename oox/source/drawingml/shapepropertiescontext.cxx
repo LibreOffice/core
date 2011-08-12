@@ -34,6 +34,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/container/XNamed.hpp>
 
+#include "oox/drawingml/scene3dcontext.hxx"
 #include "oox/drawingml/linepropertiescontext.hxx"
 #include "oox/drawingml/fillpropertiesgroupcontext.hxx"
 #include "oox/drawingml/transform2dcontext.hxx"
@@ -106,6 +107,10 @@ Reference< XFastContextHandler > ShapePropertiesContext::createFastChildContext(
 
     // todo
     case A_TOKEN( scene3d ):    // CT_Scene3D
+//      xRet.set( new Scene3DContext( *this, xAttribs, *(mrShape.get3DShapeProperties()) ) );
+        break;
+
+    // todo
     case A_TOKEN( sp3d ):       // CT_Shape3D
         break;
     }
