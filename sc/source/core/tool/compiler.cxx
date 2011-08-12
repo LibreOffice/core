@@ -107,6 +107,8 @@ const char* dbg_sc_dump( const sal_Unicode c )
 }
 #endif
 
+
+
 CharClass*                          ScCompiler::pCharClassEnglish = NULL;
 const ScCompiler::Convention*       ScCompiler::pConventions[ ]   = { NULL, NULL, NULL, NULL, NULL, NULL };
 
@@ -120,6 +122,7 @@ enum ScanState
     ssGetIdent,
     ssGetReference,
     ssSkipReference,
+    ssGetErrorConstant,
     ssStop
 };
 
@@ -354,7 +357,7 @@ ScCompiler::Convention::Convention( FormulaGrammar::AddressConvention eConv )
     if (FormulaGrammar::CONV_ODF == meConv)
 /* ! */     t[33] |= SC_COMPILER_C_ODF_LABEL_OP;
 /* " */     t[34] = SC_COMPILER_C_CHAR_STRING | SC_COMPILER_C_STRING_SEP;
-/* # */     t[35] = SC_COMPILER_C_WORD_SEP;
+/* # */     t[35] = SC_COMPILER_C_WORD_SEP | SC_COMPILER_C_CHAR_ERRCONST;
 /* $ */     t[36] = SC_COMPILER_C_CHAR_WORD | SC_COMPILER_C_WORD | SC_COMPILER_C_CHAR_IDENT | SC_COMPILER_C_IDENT;
     if (FormulaGrammar::CONV_ODF == meConv)
 /* $ */     t[36] |= SC_COMPILER_C_ODF_NAME_MARKER;
@@ -804,6 +807,49 @@ struct ConventionOOO_A1 : public Convention_A1
         return aString;
     }
 
+
+    void MakeOneRefStrImpl( rtl::OUStringBuffer&    rBuffer,
+                            const ScCompiler&       rComp,
+                            const ScSingleRefData&  rRef,
+                            bool                    bForceTab,
+                            bool                    bODF ) const
+    {
+        if( rRef.IsFlag3D() || bForceTab )
+        {
+            if (rRef.IsTabDeleted())
+            {
+                if (!rRef.IsTabRel())
+                    rBuffer.append(sal_Unicode('$'));
+                rBuffer.append( rComp.GetCurrentOpCodeMap()->getSymbol( ocErrRef));
+                rBuffer.append(sal_Unicode('.'));
+            }
+            else
+            {
+                String aDoc;
+                String aRefStr( MakeTabStr( rComp, rRef.nTab, aDoc ) );
+                rBuffer.append(aDoc);
+                if (!rRef.IsTabRel())
+                    rBuffer.append(sal_Unicode('$'));
+                rBuffer.append(aRefStr);
+            }
+        }
+        else if (bODF)
+            rBuffer.append(sal_Unicode('.'));
+        if (!rRef.IsColRel())
+            rBuffer.append(sal_Unicode('$'));
+        if ( rRef.IsColDeleted() )
+            rBuffer.append( rComp.GetCurrentOpCodeMap()->getSymbol( ocErrRef));
+        else
+            MakeColStr(rBuffer, rRef.nCol );
+        if (!rRef.IsRowRel())
+            rBuffer.append(sal_Unicode('$'));
+        if ( rRef.IsRowDeleted() )
+            rBuffer.append( rComp.GetCurrentOpCodeMap()->getSymbol( ocErrRef));
+        else
+            MakeRowStr( rBuffer, rRef.nRow );
+    }
+
+
     void MakeRefStrImpl( rtl::OUStringBuffer&   rBuffer,
                          const ScCompiler&      rComp,
                          const ScComplexRefData&    rRef,
@@ -818,73 +864,21 @@ struct ConventionOOO_A1 : public Convention_A1
         aRef.Ref1.CalcAbsIfRel( rComp.GetPos() );
         if( !bSingleRef )
             aRef.Ref2.CalcAbsIfRel( rComp.GetPos() );
-        if( aRef.Ref1.IsFlag3D() )
-        {
-            if (aRef.Ref1.IsTabDeleted())
-            {
-                if (!aRef.Ref1.IsTabRel())
-                    rBuffer.append(sal_Unicode('$'));
-                rBuffer.append(ScGlobal::GetRscString(STR_NO_REF_TABLE));
-                rBuffer.append(sal_Unicode('.'));
-            }
-            else
-            {
-                String aDoc;
-                String aRefStr( MakeTabStr( rComp, aRef.Ref1.nTab, aDoc ) );
-                rBuffer.append(aDoc);
-                if (!aRef.Ref1.IsTabRel()) rBuffer.append(sal_Unicode('$'));
-                rBuffer.append(aRefStr);
-            }
-        }
-        else if (bODF)
-            rBuffer.append(sal_Unicode('.'));
-        if (!aRef.Ref1.IsColRel())
-            rBuffer.append(sal_Unicode('$'));
-        if ( aRef.Ref1.IsColDeleted() )
-            rBuffer.append(ScGlobal::GetRscString(STR_NO_REF_TABLE));
+        if (bODF && FormulaGrammar::isODFF( rComp.GetGrammar()) &&
+                (aRef.Ref1.IsColDeleted() || aRef.Ref1.IsRowDeleted() || aRef.Ref1.IsTabDeleted() ||
+                 aRef.Ref2.IsColDeleted() || aRef.Ref2.IsRowDeleted() || aRef.Ref2.IsTabDeleted()))
+            rBuffer.append( rComp.GetCurrentOpCodeMap()->getSymbol( ocErrRef));
+            // For ODFF write [#REF!], but not for PODF so apps reading ODF 
+            // 1.0/1.1 may have a better chance if they implemented the old 
+            // form.
         else
-            MakeColStr(rBuffer, aRef.Ref1.nCol );
-        if (!aRef.Ref1.IsRowRel())
-            rBuffer.append(sal_Unicode('$'));
-        if ( aRef.Ref1.IsRowDeleted() )
-            rBuffer.append(ScGlobal::GetRscString(STR_NO_REF_TABLE));
-        else
-            MakeRowStr( rBuffer, aRef.Ref1.nRow );
-        if (!bSingleRef)
         {
-            rBuffer.append(sal_Unicode(':'));
-            if (aRef.Ref2.IsFlag3D() || aRef.Ref2.nTab != aRef.Ref1.nTab)
+            MakeOneRefStrImpl( rBuffer, rComp, aRef.Ref1, false, bODF);
+            if (!bSingleRef)
             {
-                if (aRef.Ref2.IsTabDeleted())
-                {
-                    if (!aRef.Ref2.IsTabRel())
-                        rBuffer.append(sal_Unicode('$'));
-                    rBuffer.append(ScGlobal::GetRscString(STR_NO_REF_TABLE));
-                    rBuffer.append(sal_Unicode('.'));
-                }
-                else
-                {
-                    String aDoc;
-                    String aRefStr( MakeTabStr( rComp, aRef.Ref2.nTab, aDoc ) );
-                    rBuffer.append(aDoc);
-                    if (!aRef.Ref2.IsTabRel()) rBuffer.append(sal_Unicode('$'));
-                    rBuffer.append(aRefStr);
-                }
+                rBuffer.append(sal_Unicode(':'));
+                MakeOneRefStrImpl( rBuffer, rComp, aRef.Ref2, (aRef.Ref2.nTab != aRef.Ref1.nTab), bODF);
             }
-            else if (bODF)
-                rBuffer.append(sal_Unicode('.'));
-            if (!aRef.Ref2.IsColRel())
-                rBuffer.append(sal_Unicode('$'));
-            if ( aRef.Ref2.IsColDeleted() )
-                rBuffer.append(ScGlobal::GetRscString(STR_NO_REF_TABLE));
-            else
-                MakeColStr( rBuffer, aRef.Ref2.nCol );
-            if (!aRef.Ref2.IsRowRel())
-                rBuffer.append(sal_Unicode('$'));
-            if ( aRef.Ref2.IsRowDeleted() )
-                rBuffer.append(ScGlobal::GetRscString(STR_NO_REF_TABLE));
-            else
-                MakeRowStr( rBuffer, aRef.Ref2.nRow );
         }
         if (bODF)
             rBuffer.append(sal_Unicode(']'));
@@ -1911,6 +1905,7 @@ xub_StrLen ScCompiler::NextSymbol(bool bInArray)
     int nDecSeps = 0;
     bool bAutoIntersection = false;
     int nRefInName = 0;
+    bool bErrorConstantHadSlash = false;
     mnPredetectedReference = 0;
     // try to parse simple tokens before calling i18n parser
     while ((c != 0) && (eState != ssStop) )
@@ -2014,6 +2009,11 @@ Label_MaskStateMachine:
                 {
                     *pSym++ = c;
                     eState = ssGetString;
+                }
+                else if( nMask & SC_COMPILER_C_CHAR_ERRCONST )
+                {
+                    *pSym++ = c;
+                    eState = ssGetErrorConstant;
                 }
                 else if( nMask & SC_COMPILER_C_CHAR_DONTCARE )
                 {
@@ -2172,6 +2172,50 @@ Label_MaskStateMachine:
                 if( nMask & SC_COMPILER_C_STRING_SEP )
                     eState = ssStop;
                 break;
+            case ssGetErrorConstant:
+                {
+                    // ODFF Error ::= '#' [A-Z0-9]+ ([!?] | ('/' ([A-Z] | ([0-9] [!?]))))
+                    // BUT, in UI these may have been translated! So don't 
+                    // check for ASCII alnum. Note that this construct can't be
+                    // parsed with i18n.
+                    /* TODO: be strict when reading ODFF, check for ASCII alnum 
+                     * and proper continuation after '/'. However, even with 
+                     * the lax parsing only the error constants we have defined 
+                     * as opcode symbols will be recognized and others result 
+                     * in ocBad, so the result is actually conformant. */
+                    bool bAdd = true;
+                    if ('!' == c || '?' == c)
+                        eState = ssStop;
+                    else if ('/' == c)
+                    {
+                        if (!bErrorConstantHadSlash)
+                            bErrorConstantHadSlash = true;
+                        else
+                        {
+                            bAdd = false;
+                            eState = ssStop;
+                        }
+                    }
+                    else if ((nMask & SC_COMPILER_C_WORD_SEP) ||
+                            (c < 128 && !CharClass::isAsciiAlphaNumeric( c)))
+                    {
+                        bAdd = false;
+                        eState = ssStop;
+                    }
+                    if (!bAdd)
+                        --pSrc;
+                    else
+                    {
+                        if (pSym == &cSymbol[ MAXSTRLEN-1 ])
+                        {
+                            SetError( errStringOverflow);
+                            eState = ssStop;
+                        }
+                        else
+                            *pSym++ = c;
+                    }
+                }
+                break;
             case ssGetReference:
                 if( pSym == &cSymbol[ MAXSTRLEN-1 ] )
                 {
@@ -2183,7 +2227,7 @@ Label_MaskStateMachine:
                 // ODF reference: ['External'#$'Sheet'.A1:.B2] with dots being
                 // mandatory also if no sheet name. 'External'# is optional,
                 // sheet name is optional, quotes around sheet name are
-                // optional if no quote contained.
+                // optional if no quote contained. [#REF!] is valid.
                 // 2nd usage: ['Sheet'.$$'DefinedName']
                 // 3rd usage: ['External'#$$'DefinedName']
                 // 4th usage: ['External'#$'Sheet'.$$'DefinedName']
@@ -2220,11 +2264,13 @@ Label_MaskStateMachine:
                     static const int kMarkAhead = (1 << 8);
                     // In marked defined name.
                     static const int kDefName   = (1 << 9);
+                    // Encountered # of #REF!
+                    static const int kRefErr    = (1 << 10);
 
                     bool bAddToSymbol = true;
                     if ((nMask & SC_COMPILER_C_ODF_RBRACKET) && !(nRefInName & kOpen))
                     {
-                        OSL_ENSURE( nRefInName & (kPast | kDefName),
+                        OSL_ENSURE( nRefInName & (kPast | kDefName | kRefErr),
                                 "ScCompiler::NextSymbol: reference: "
                                 "closing bracket ']' without prior sheet name separator '.' violates ODF spec");
                         // eaten, not added to pSym
@@ -2310,6 +2356,8 @@ Label_MaskStateMachine:
                                 bAddToSymbol = !(nRefInName & kDefName);
                             }
                         }
+                        else if ('#' == c && nRefInName == 0)
+                            nRefInName |= kRefErr;
                         else if (cSheetSep == c && !(nRefInName & kOpen))
                         {
                             // unquoted sheet name separator
@@ -2631,7 +2679,13 @@ sal_Bool ScCompiler::IsPredetectedReference( const String& rName )
          * occurrences of insane "valid" sheet names like
          * 'haha.#REF!1fooledyou' and will generate an error on such. */
         if (nPos == 0)
+        {
+            // Per ODFF the correct string for a reference error is just #REF!, 
+            // so pass it on.
+            if (rName.Len() == 5)
+                return IsErrorConstant( rName);
             return false;           // #REF!.AB42 or #REF!42 or #REF!#REF!
+        }
         sal_Unicode c = rName.GetChar(nPos-1);      // before #REF!
         if ('$' == c)
         {
@@ -3269,6 +3323,21 @@ bool ScCompiler::IsBoolean( const String& rName )
         return false;
 }
 
+
+bool ScCompiler::IsErrorConstant( const String& rName )
+{
+    sal_uInt16 nError = GetErrorConstant( rName);
+    if (nError)
+    {
+        ScRawToken aToken;
+        aToken.SetErrorConstant( nError);
+        pRawToken = aToken.Clone();
+        return true;
+    }
+    else
+        return false;
+}
+
 //---------------------------------------------------------------------------
 
 void ScCompiler::AutoCorrectParsedSymbol()
@@ -3511,7 +3580,8 @@ sal_Bool ScCompiler::NextNewToken( bool bInArray )
              * would need an ocBad token with additional error value.
              * FormulaErrorToken wouldn't do because we want to preserve the
              * original string containing partial valid address
-             * information. */
+             * information if not ODFF (in that case it was already handled). 
+             * */
             ScRawToken aToken;
             aToken.SetString( aStr.GetBuffer() );
             aToken.NewOpCode( ocBad );
@@ -3569,8 +3639,19 @@ sal_Bool ScCompiler::NextNewToken( bool bInArray )
         mbRewind = false;
         const String aOrg( cSymbol );
 
-        if (bAsciiNonAlnum && IsOpCode( aOrg, bInArray ))
-            return true;
+        if (bAsciiNonAlnum)
+        {
+            if (cSymbol[0] == '#')
+            {
+                // This can be only an error constant, if any.
+                lcl_UpperAsciiOrI18n( aUpper, aOrg, meGrammar);
+                if (IsErrorConstant( aUpper))
+                    return true;
+                break;  // do; create ocBad token or set error.
+            }
+            if (IsOpCode( aOrg, bInArray ))
+                return true;
+        }
 
         aUpper.Erase();
         bool bAsciiUpper = false;

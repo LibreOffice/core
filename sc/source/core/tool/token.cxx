@@ -224,6 +224,14 @@ void ScRawToken::SetDouble(double rVal)
     nRefCnt = 0;
 }
 
+void ScRawToken::SetErrorConstant( sal_uInt16 nErr )
+{
+    eOp   = ocPush;
+    eType = svError;
+    nError = nErr;
+    nRefCnt = 0;
+}
+
 void ScRawToken::SetName(bool bGlobal, sal_uInt16 nIndex)
 {
     eOp = ocName;
@@ -320,6 +328,7 @@ ScRawToken* ScRawToken::Clone() const
             case svSep:         break;
             case svByte:        n += sizeof(ScRawToken::sbyte); break;
             case svDouble:      n += sizeof(double); break;
+            case svError:       n += sizeof(nError); break;
             case svString:      n = sal::static_int_cast<sal_uInt16>( n + GetStrLenBytes( cStr ) + GetStrLenBytes( 1 ) ); break;
             case svSingleRef:
             case svDoubleRef:   n += sizeof(aRef); break;
@@ -406,6 +415,8 @@ FormulaToken* ScRawToken::CreateToken() const
             return new FormulaMissingToken;
         case svSep :
             return new FormulaToken( svSep,eOp );
+        case svError :
+            return new FormulaErrorToken( nError );
         case svUnknown :
             return new FormulaUnknownToken( eOp );
         default:

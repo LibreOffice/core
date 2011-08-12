@@ -211,6 +211,9 @@ public:
             const ::com::sun::star::sheet::FormulaOpCodeMapEntry > & rMapping,
             bool bEnglish );
 
+    /** Get current OpCodeMap in effect. */
+    inline OpCodeMapPtr GetCurrentOpCodeMap() const { return mxSymbols; }
+
     /** Get OpCode for English symbol.
         Used in XFunctionAccess to create token array.
         @param rName
@@ -271,6 +274,9 @@ protected:
     virtual void CreateStringFromIndex(rtl::OUStringBuffer& rBuffer,FormulaToken* pTokenP);
     virtual void LocalizeString( String& rName );   // modify rName - input: exact name
     virtual sal_Bool IsImportingXML() const;
+
+    sal_uInt16 GetErrorConstant( const String& rName );
+    void AppendErrorConstant( rtl::OUStringBuffer& rBuffer, sal_uInt16 nError );
 
     sal_Bool   GetToken();
     OpCode NextToken();

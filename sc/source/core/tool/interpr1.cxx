@@ -3527,7 +3527,7 @@ double ScInterpreter::IterateParameters( ScIterFunc eFunc, sal_Bool bTextAsZero 
             break;
             case svError:
             {
-                Pop();
+                PopError();
                 if ( eFunc == ifCOUNT )
                 {
                     nGlobalError = 0;

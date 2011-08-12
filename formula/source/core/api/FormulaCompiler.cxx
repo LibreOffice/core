@@ -825,6 +825,78 @@ void FormulaCompiler::OpCodeMap::copyFrom( const OpCodeMap& r )
     // TODO: maybe copy the external maps too?
 }
 // -----------------------------------------------------------------------------
+
+sal_uInt16 FormulaCompiler::GetErrorConstant( const String& rName )
+{
+    sal_uInt16 nError = 0;
+    OpCodeHashMap::const_iterator iLook( mxSymbols->getHashMap()->find( rName));
+    if (iLook != mxSymbols->getHashMap()->end())
+    {
+        switch ((*iLook).second)
+        {
+            // Not all may make sense in a formula, but these we know as 
+            // opcodes.
+            case ocErrNull:
+                nError = errNoCode;
+                break;
+            case ocErrDivZero:
+                nError = errDivisionByZero;
+                break;
+            case ocErrValue:
+                nError = errNoValue;
+                break;
+            case ocErrRef:
+                nError = errNoRef;
+                break;
+            case ocErrName:
+                nError = errNoName;
+                break;
+            case ocErrNum:
+                nError = errIllegalFPOperation;
+                break;
+            case ocErrNA:
+                nError = NOTAVAILABLE;
+                break;
+            default:
+                ;   // nothing
+        }
+    }
+    return nError;
+}
+
+
+void FormulaCompiler::AppendErrorConstant( rtl::OUStringBuffer& rBuffer, sal_uInt16 nError )
+{
+    OpCode eOp;
+    switch (nError)
+    {
+        default:
+        case errNoCode:
+            eOp = ocErrNull;
+            break;
+        case errDivisionByZero:
+            eOp = ocErrDivZero;
+            break;
+        case errNoValue:
+            eOp = ocErrValue;
+            break;
+        case errNoRef:
+            eOp = ocErrRef;
+            break;
+        case errNoName:
+            eOp = ocErrName;
+            break;
+        case errIllegalFPOperation:
+            eOp = ocErrNum;
+            break;
+        case NOTAVAILABLE:
+            eOp = ocErrNA;
+            break;
+    }
+    rBuffer.append( mxSymbols->getSymbol( eOp));
+}
+
+// -----------------------------------------------------------------------------
 sal_Int32 FormulaCompiler::OpCodeMap::getOpCodeUnknown()
 {
     static const sal_Int32 kOpCodeUnknown = -1;
@@ -1645,6 +1717,9 @@ FormulaToken* FormulaCompiler::CreateStringFromToken( rtl::OUStringBuffer& rBuff
                         LocalizeString( aAddIn );
                     rBuffer.append(aAddIn);
                 }
+            break;
+            case svError:
+                AppendErrorConstant( rBuffer, t->GetError());
             break;
             case svByte:
             case svJump:

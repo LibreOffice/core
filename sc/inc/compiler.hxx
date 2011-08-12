@@ -87,6 +87,7 @@
 #define SC_COMPILER_C_ODF_NAME_MARKER 0x00200000  // ODF '$$' marker that starts a defined (range) name
 #define SC_COMPILER_C_CHAR_NAME       0x00400000  // start character of a defined name
 #define SC_COMPILER_C_NAME            0x00800000  // continuation character of a defined name
+#define SC_COMPILER_C_CHAR_ERRCONST   0x01000000  // start character of an error constant ('#')
 
 #define SC_COMPILER_FILE_TAB_SEP      '#'         // 'Doc'#Tab
 
@@ -159,6 +160,7 @@ public:
             sal_uInt16  nIndex;
         } name;
         ScMatrix*    pMat;
+        sal_uInt16   nError;
         sal_Unicode  cStr[ MAXSTRLEN+1 ];   // string (up to 255 characters + 0)
         short        nJump[MAXJUMPCOUNT+1]; // If/Chose token
     };
@@ -184,6 +186,7 @@ public:
     void SetSingleReference( const ScSingleRefData& rRef );
     void SetDoubleReference( const ScComplexRefData& rRef );
     void SetDouble( double fVal );
+    void SetErrorConstant( sal_uInt16 nErr );
 
     // These methods are ok to use, reference count not cleared.
     void SetName(bool bGlobal, sal_uInt16 nIndex);
@@ -349,6 +352,7 @@ private:
     bool IsDBRange( const String& );
     sal_Bool IsColRowName( const String& );
     bool IsBoolean( const String& );
+    bool IsErrorConstant( const String& );
     void AutoCorrectParsedSymbol();
 
     void SetRelNameReference();
