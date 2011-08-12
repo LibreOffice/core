@@ -116,6 +116,7 @@ const rtl::OUString& PropertyNameSupplier::GetName( PropertyIds eId ) const
 
             case PROP_PARA_STYLE_NAME:      sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ParaStyleName")); break;
             case PROP_PARA_ADJUST:     sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ParaAdjust")); break;
+            case PROP_PARA_VERT_ALIGNMENT: sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ParaVertAlignment")); break;
             case PROP_PARA_LAST_LINE_ADJUST:     sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ParaLastLineAdjust")); break;
             case PROP_PARA_RIGHT_MARGIN     :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ParaRightMargin")); break;
             case PROP_PARA_LEFT_MARGIN      :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ParaLeftMargin")); break;
@@ -204,6 +205,7 @@ const rtl::OUString& PropertyNameSupplier::GetName( PropertyIds eId ) const
             case PROP_FOOTER_TEXT          :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FooterText")); break;
             case PROP_FOOTER_IS_SHARED     :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FooterIsShared")); break;
             case PROP_FOOTER_IS_ON         :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FooterIsOn")); break;
+            case PROP_FOOTNOTE_COUNTING    :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FootnoteCounting")); break;
             case PROP_WIDTH                :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Width")); break;
             case PROP_HEIGHT               :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Height")); break;
             case PROP_SEPARATOR_LINE_IS_ON :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SeparatorLineIsOn")); break;

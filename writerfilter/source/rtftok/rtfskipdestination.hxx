@@ -25,32 +25,32 @@
  * instead of those above.
  */
 
-#ifndef _RTFSDRIMPORT_HXX_
-#define _RTFSDRIMPORT_HXX_
-
-#include <com/sun/star/drawing/XDrawPage.hpp>
+#ifndef _RTFSKIPDESTINATION_HXX_
+#define _RTFSKIPDESTINATION_HXX_
 
 #include <rtfdocumentimpl.hxx>
 
+class SvStream;
+
 namespace writerfilter {
     namespace rtftok {
-        /// Handles the import of drawings using RTF markup.
-        class RTFSdrImport
+        /// Skips a destination after a not parsed control word if it was prefixed with \*
+        class RTFSkipDestination
         {
             public:
-                RTFSdrImport(RTFDocumentImpl& rImport, uno::Reference<lang::XComponent> const& xDstDoc);
-                virtual ~RTFSdrImport();
-
-                void resolve(RTFShape& rShape);
+                RTFSkipDestination(RTFDocumentImpl& rImport);
+                virtual ~RTFSkipDestination();
+                void setParsed(bool bParsed);
+                void setReset(bool bReset);
             private:
-                void createShape(rtl::OUString aService, uno::Reference<drawing::XShape>& xShape, uno::Reference<beans::XPropertySet>& xPropertySet);
-
                 RTFDocumentImpl& m_rImport;
-                uno::Reference<drawing::XDrawPage> m_xDrawPage;
+                bool m_bParsed;
+                /// If false, the destructor is a noop, required by the \* symbol itself.
+                bool m_bReset;
         };
     } // namespace rtftok
 } // namespace writerfilter
 
-#endif // _RTFSDRIPORT_HXX_
+#endif // _RTFSKIPDESTINATION_HXX_
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

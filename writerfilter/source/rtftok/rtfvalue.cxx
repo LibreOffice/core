@@ -45,8 +45,8 @@ RTFValue::RTFValue(int nValue, rtl::OUString sValue, RTFSprms rAttributes,
     m_rStream(rStream),
     m_bForceString(false)
 {
-    m_pAttributes = new RTFSprms(rAttributes);
-    m_pSprms = new RTFSprms(rSprms);
+    m_pAttributes.reset(new RTFSprms(rAttributes));
+    m_pSprms.reset(new RTFSprms(rSprms));
 }
 
 RTFValue::RTFValue(int nValue)
@@ -56,8 +56,8 @@ RTFValue::RTFValue(int nValue)
     m_rStream(),
     m_bForceString(false)
 {
-    m_pAttributes = new RTFSprms();
-    m_pSprms = new RTFSprms();
+    m_pAttributes.reset(new RTFSprms());
+    m_pSprms.reset(new RTFSprms());
 }
 
 RTFValue::RTFValue(OUString sValue, bool bForce)
@@ -67,8 +67,8 @@ RTFValue::RTFValue(OUString sValue, bool bForce)
     m_rStream(),
     m_bForceString(bForce)
 {
-    m_pAttributes = new RTFSprms();
-    m_pSprms = new RTFSprms();
+    m_pAttributes.reset(new RTFSprms());
+    m_pSprms.reset(new RTFSprms());
 }
 
 RTFValue::RTFValue(RTFSprms rAttributes)
@@ -78,8 +78,8 @@ RTFValue::RTFValue(RTFSprms rAttributes)
     m_rStream(),
     m_bForceString(false)
 {
-    m_pAttributes = new RTFSprms(rAttributes);
-    m_pSprms = new RTFSprms();
+    m_pAttributes.reset(new RTFSprms(rAttributes));
+    m_pSprms.reset(new RTFSprms());
 }
 
 RTFValue::RTFValue(RTFSprms rAttributes, RTFSprms rSprms)
@@ -89,8 +89,8 @@ RTFValue::RTFValue(RTFSprms rAttributes, RTFSprms rSprms)
     m_rStream(),
     m_bForceString(false)
 {
-    m_pAttributes = new RTFSprms(rAttributes);
-    m_pSprms = new RTFSprms(rSprms);
+    m_pAttributes.reset(new RTFSprms(rAttributes));
+    m_pSprms.reset(new RTFSprms(rSprms));
 }
 
 RTFValue::RTFValue(uno::Reference<drawing::XShape> rShape)
@@ -100,8 +100,8 @@ RTFValue::RTFValue(uno::Reference<drawing::XShape> rShape)
     m_rStream(),
     m_bForceString(false)
 {
-    m_pAttributes = new RTFSprms();
-    m_pSprms = new RTFSprms();
+    m_pAttributes.reset(new RTFSprms());
+    m_pSprms.reset(new RTFSprms());
 }
 
 RTFValue::RTFValue(uno::Reference<io::XInputStream> rStream)
@@ -111,14 +111,12 @@ RTFValue::RTFValue(uno::Reference<io::XInputStream> rStream)
     m_rStream(rStream),
     m_bForceString(false)
 {
-    m_pAttributes = new RTFSprms();
-    m_pSprms = new RTFSprms();
+    m_pAttributes.reset(new RTFSprms());
+    m_pSprms.reset(new RTFSprms());
 }
 
 RTFValue::~RTFValue()
 {
-    delete m_pAttributes;
-    delete m_pSprms;
 }
 
 int RTFValue::getInt() const

@@ -111,7 +111,8 @@ namespace writerfilter {
             DESTINATION_OBJDATA,
             DESTINATION_RESULT,
             DESTINATION_ANNOTATIONDATE,
-            DESTINATION_ANNOTATIONAUTHOR
+            DESTINATION_ANNOTATIONAUTHOR,
+            DESTINATION_FALT
         };
 
         enum RTFBorderState
@@ -246,6 +247,9 @@ namespace writerfilter {
                 int nDay;
                 int nHour;
                 int nMinute;
+
+                /// Text from special destinations.
+                rtl::OUStringBuffer aDestinationText;
         };
 
         class RTFTokenizer;
@@ -257,10 +261,10 @@ namespace writerfilter {
         {
             public:
                 typedef ::boost::shared_ptr<RTFDocumentImpl> Pointer_t;
-                RTFDocumentImpl(com::sun::star::uno::Reference<com::sun::star::uno::XComponentContext> const& xContext,
-                                com::sun::star::uno::Reference<com::sun::star::io::XInputStream> const& xInputStream,
-                                com::sun::star::uno::Reference<com::sun::star::lang::XComponent> const& xDstDoc,
-                                com::sun::star::uno::Reference<com::sun::star::frame::XFrame> const& xFrame);
+                RTFDocumentImpl(uno::Reference<uno::XComponentContext> const& xContext,
+                                uno::Reference<io::XInputStream> const& xInputStream,
+                                uno::Reference<lang::XComponent> const& xDstDoc,
+                                uno::Reference<frame::XFrame> const& xFrame);
                 virtual ~RTFDocumentImpl();
                 virtual void resolve(Stream & rHandler);
                 virtual std::string getType() const;
@@ -269,19 +273,21 @@ namespace writerfilter {
                 void setSubstream(bool bIsSubtream);
                 void setAuthor(rtl::OUString& rAuthor);
                 bool isSubstream();
+                void finishSubstream();
                 void setIgnoreFirst(rtl::OUString& rIgnoreFirst);
                 void seek(sal_uInt32 nPos);
-                com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory> getModelFactory();
+                uno::Reference<lang::XMultiServiceFactory> getModelFactory();
                 RTFParserState& getState();
                 /// If the stack of states is empty.
                 bool isEmpty();
                 int getGroup();
                 void setDestinationText(rtl::OUString& rString);
-                void skipDestination(bool bParsed);
                 /// Resolve a picture: If not inline, then anchored.
                 int resolvePict(bool bInline);
                 void runBreak();
                 void replayShapetext();
+                bool getSkipUnknown();
+                void setSkipUnknown(bool bSkipUnknown);
 
                 // These callbacks are invoked by the tokenizer.
                 int resolveChars(char ch);
@@ -312,16 +318,16 @@ namespace writerfilter {
                 void sectBreak(bool bFinal);
                 void replayBuffer(RTFBuffer_t& rBuffer);
 
-                com::sun::star::uno::Reference<com::sun::star::uno::XComponentContext> const& m_xContext;
-                com::sun::star::uno::Reference<com::sun::star::io::XInputStream> const& m_xInputStream;
-                com::sun::star::uno::Reference<com::sun::star::lang::XComponent> const& m_xDstDoc;
-                com::sun::star::uno::Reference<com::sun::star::frame::XFrame> const& m_xFrame;
-                com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory> m_xModelFactory;
-                com::sun::star::uno::Reference<com::sun::star::document::XDocumentProperties> m_xDocumentProperties;
+                uno::Reference<uno::XComponentContext> const& m_xContext;
+                uno::Reference<io::XInputStream> const& m_xInputStream;
+                uno::Reference<lang::XComponent> const& m_xDstDoc;
+                uno::Reference<frame::XFrame> const& m_xFrame;
+                uno::Reference<lang::XMultiServiceFactory> m_xModelFactory;
+                uno::Reference<document::XDocumentProperties> m_xDocumentProperties;
                 SvStream* m_pInStream;
                 Stream* m_pMapperStream;
-                RTFSdrImport* m_pSdrImport;
-                RTFTokenizer* m_pTokenizer;
+                boost::shared_ptr<RTFSdrImport> m_pSdrImport;
+                boost::shared_ptr<RTFTokenizer> m_pTokenizer;
                 /// Same as m_aStates.size(), except that this can be negative for invalid input.
                 int m_nGroup;
                 std::stack<RTFParserState> m_aStates;
@@ -337,6 +343,8 @@ namespace writerfilter {
                 bool m_bFirstRow;
                 /// If paragraph properties should be emitted on next run.
                 bool m_bNeedPap;
+                /// If we need to emit a CR at the end of substream.
+                bool m_bNeedCr;
                 /// The list table and list override table combined.
                 RTFSprms m_aListTableSprms;
                 /// The settings table.
@@ -367,8 +375,6 @@ namespace writerfilter {
                 std::map<int, rtl::OUString> m_aAuthors;
                 /// Annotation author of the next annotation.
                 rtl::OUString m_aAuthor;
-                /// Text from special destinations.
-                rtl::OUStringBuffer m_aDestinationText;
 
                 RTFSprms m_aFormfieldSprms;
                 RTFSprms m_aFormfieldAttributes;
@@ -378,8 +384,8 @@ namespace writerfilter {
                 RTFSprms m_aObjectAttributes;
                 /// If we are in an object group.
                 bool m_bObject;
-                /// Contents of the objdata group, stored here so we can delete it when we leave the object group.
-                SvStream* m_pObjectData;
+                /// Contents of the objdata group.
+                boost::shared_ptr<SvStream> m_pObjectData;
 
                 RTFReferenceTable::Entries_t m_aFontTableEntries;
                 int m_nCurrentFontIndex;

@@ -28,6 +28,7 @@
 #include <tools/stream.hxx>
 
 #include <rtftokenizer.hxx>
+#include <rtfskipdestination.hxx>
 
 using rtl::OString;
 using rtl::OStringBuffer;
@@ -82,7 +83,10 @@ int RTFTokenizer::resolveParse()
                     if ((ret = m_rImport.popState()))
                         return ret;
                     if (m_rImport.isSubstream() && m_rImport.getGroup() == 0)
+                    {
+                        m_rImport.finishSubstream();
                         return 0;
+                    }
                     break;
                 case '\\':
                     if ((ret = resolveKeyword()))
@@ -227,7 +231,8 @@ int RTFTokenizer::dispatchKeyword(OString& rKeyword, bool bParam, int nParam)
     if (i == nRTFControlWords)
     {
         OSL_TRACE("%s: unknown keyword '\\%s'", OSL_THIS_FUNC, rKeyword.getStr());
-        m_rImport.skipDestination(false);
+        RTFSkipDestination aSkip(m_rImport);
+        aSkip.setParsed(false);
         return 0;
     }
 

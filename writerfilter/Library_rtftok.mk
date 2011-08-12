@@ -65,6 +65,7 @@ $(eval $(call gb_Library_add_exception_objects,rtftok,\
 	writerfilter/source/rtftok/rtfdocumentimpl \
 	writerfilter/source/rtftok/rtfsdrimport \
 	writerfilter/source/rtftok/rtftokenizer \
+	writerfilter/source/rtftok/rtfskipdestination \
 	writerfilter/source/rtftok/rtfcontrolwords \
 	writerfilter/source/rtftok/rtfcharsets \
 	writerfilter/source/rtftok/rtfreferenceproperties \

@@ -25,32 +25,42 @@
  * instead of those above.
  */
 
-#ifndef _RTFSDRIMPORT_HXX_
-#define _RTFSDRIMPORT_HXX_
-
-#include <com/sun/star/drawing/XDrawPage.hpp>
-
-#include <rtfdocumentimpl.hxx>
+#include <rtfskipdestination.hxx>
 
 namespace writerfilter {
-    namespace rtftok {
-        /// Handles the import of drawings using RTF markup.
-        class RTFSdrImport
+namespace rtftok {
+
+RTFSkipDestination::RTFSkipDestination(RTFDocumentImpl& rImport)
+    : m_rImport(rImport),
+    m_bParsed(true),
+    m_bReset(true)
+{
+}
+
+RTFSkipDestination::~RTFSkipDestination()
+{
+    if (m_rImport.getSkipUnknown() && m_bReset)
+    {
+        if (!m_bParsed)
         {
-            public:
-                RTFSdrImport(RTFDocumentImpl& rImport, uno::Reference<lang::XComponent> const& xDstDoc);
-                virtual ~RTFSdrImport();
+            OSL_TRACE("%s: skipping destination", OSL_THIS_FUNC);
+            m_rImport.getState().nDestinationState = DESTINATION_SKIP;
+        }
+        m_rImport.setSkipUnknown(false);
+    }
+}
 
-                void resolve(RTFShape& rShape);
-            private:
-                void createShape(rtl::OUString aService, uno::Reference<drawing::XShape>& xShape, uno::Reference<beans::XPropertySet>& xPropertySet);
+void RTFSkipDestination::setParsed(bool bParsed)
+{
+    m_bParsed = bParsed;
+}
 
-                RTFDocumentImpl& m_rImport;
-                uno::Reference<drawing::XDrawPage> m_xDrawPage;
-        };
-    } // namespace rtftok
+void RTFSkipDestination::setReset(bool bReset)
+{
+    m_bReset = bReset;
+}
+
+} // namespace rtftok
 } // namespace writerfilter
-
-#endif // _RTFSDRIPORT_HXX_
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

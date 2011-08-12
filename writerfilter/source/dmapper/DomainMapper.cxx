@@ -68,8 +68,10 @@
 #include <com/sun/star/style/LineSpacing.hpp>
 #include <com/sun/star/style/LineSpacingMode.hpp>
 #include <com/sun/star/table/BorderLine2.hpp>
+#include <com/sun/star/text/FootnoteNumbering.hpp>
 #include <com/sun/star/text/TextGridMode.hpp>
 #include <com/sun/star/text/XDocumentIndexesSupplier.hpp>
+#include <com/sun/star/text/XTextFieldsSupplier.hpp>
 #include <com/sun/star/text/WritingMode.hpp>
 #include <com/sun/star/text/WritingMode2.hpp>
 #include <com/sun/star/text/XFootnote.hpp>
@@ -165,6 +167,17 @@ DomainMapper::~DomainMapper()
         {
             uno::Reference< container::XIndexAccess > xIndexes = xIndexesSupplier->getDocumentIndexes();
             nIndexes = xIndexes->getCount();
+        }
+        // If we have page references, those need updating as well, similar to the indexes.
+        uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(m_pImpl->GetTextDocument(), uno::UNO_QUERY);
+        if(xTextFieldsSupplier.is())
+        {
+            uno::Reference<container::XEnumeration> xEnumeration = xTextFieldsSupplier->getTextFields()->createEnumeration();
+            while(xEnumeration->hasMoreElements())
+            {
+                ++nIndexes;
+                xEnumeration->nextElement();
+            }
         }
         if( nIndexes )
         {
@@ -1768,6 +1781,28 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
     case NS_sprm::LN_PFAutoSpaceDN:
         break;  // sprmPFAutoSpaceDN
     case NS_sprm::LN_PWAlignFont:
+        {
+            sal_Int16 nAlignment = 0;
+            switch (nIntValue)
+            {
+                case NS_ooxml::LN_Value_wordprocessingml_ST_TextAlignment_top:
+                    nAlignment = 2;
+                    break;
+                case NS_ooxml::LN_Value_wordprocessingml_ST_TextAlignment_center:
+                    nAlignment = 3;
+                    break;
+                case NS_ooxml::LN_Value_wordprocessingml_ST_TextAlignment_baseline:
+                    nAlignment = 1;
+                    break;
+                case NS_ooxml::LN_Value_wordprocessingml_ST_TextAlignment_bottom:
+                    nAlignment = 4;
+                    break;
+                case NS_ooxml::LN_Value_wordprocessingml_ST_TextAlignment_auto:
+                default:
+                    break;
+            }
+            rContext->Insert( PROP_PARA_VERT_ALIGNMENT, true, uno::makeAny( nAlignment) );
+        }
         break;  // sprmPWAlignFont
     case NS_sprm::LN_PFrameTextFlow:
         break;  // sprmPFrameTextFlow
@@ -3021,6 +3056,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
     // -> so this property can be ignored
     break;
     case NS_ooxml::LN_EG_FtnEdnNumProps_numStart:
+    case NS_ooxml::LN_EG_FtnEdnNumProps_numRestart:
     case NS_ooxml::LN_CT_FtnProps_numFmt:
     case NS_ooxml::LN_CT_EdnProps_numFmt:
     {
@@ -3030,20 +3066,36 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
             if( m_pImpl->IsInFootnoteProperties() )
             {
                 uno::Reference< text::XFootnotesSupplier> xFootnotesSupplier( m_pImpl->GetTextDocument(), uno::UNO_QUERY );
-                xFtnEdnSettings = xFootnotesSupplier->getFootnoteSettings();
+                if (xFootnotesSupplier.is())
+                    xFtnEdnSettings = xFootnotesSupplier->getFootnoteSettings();
             }
             else
             {
                 uno::Reference< text::XEndnotesSupplier> xEndnotesSupplier( m_pImpl->GetTextDocument(), uno::UNO_QUERY );
-                xFtnEdnSettings = xEndnotesSupplier->getEndnoteSettings();
+                if (xEndnotesSupplier.is())
+                    xFtnEdnSettings = xEndnotesSupplier->getEndnoteSettings();
             }
-            if( NS_ooxml::LN_EG_FtnEdnNumProps_numStart == nSprmId )
+            if( NS_ooxml::LN_EG_FtnEdnNumProps_numStart == nSprmId && xFtnEdnSettings.is())
             {
                 xFtnEdnSettings->setPropertyValue(
                     PropertyNameSupplier::GetPropertyNameSupplier().GetName( PROP_START_AT),
                                                                     uno::makeAny( sal_Int16( nIntValue - 1 )));
             }
-            else
+            else if( NS_ooxml::LN_EG_FtnEdnNumProps_numRestart == nSprmId && xFtnEdnSettings.is())
+            {
+                sal_Int16 nFootnoteCounting = 0;
+                switch (nIntValue)
+                {
+                    case NS_ooxml::LN_Value_ST_RestartNumber_continuous: nFootnoteCounting = text::FootnoteNumbering::PER_DOCUMENT; break;
+                    case NS_ooxml::LN_Value_ST_RestartNumber_eachPage: nFootnoteCounting = text::FootnoteNumbering::PER_PAGE; break;
+                    case NS_ooxml::LN_Value_ST_RestartNumber_eachSect: nFootnoteCounting = text::FootnoteNumbering::PER_CHAPTER; break;
+                    default: break;
+                }
+                xFtnEdnSettings->setPropertyValue(
+                        PropertyNameSupplier::GetPropertyNameSupplier().GetName( PROP_FOOTNOTE_COUNTING ),
+                        uno::makeAny( nFootnoteCounting ));
+            }
+            else if (xFtnEdnSettings.is())
             {
                 sal_Int16 nNumType = ConversionHelper::ConvertNumberingType( nIntValue );
                 xFtnEdnSettings->setPropertyValue(
