@@ -454,9 +454,9 @@ void X11SalGraphics::DrawCairoAAFontString( const ServerFontLayout& rLayout )
                     &text_extents);
 
                 xdiff = -text_extents.x_advance/nHeight;
-                //deliberate bug here for temp render-like-X11-impl,
-                //nWidth should be nHeight below
-                xdiff += font_extents.descent/nWidth;
+                //to restore an apparent bug in the original X11 impl, replace
+                //nHeight with nWidth below
+                xdiff += font_extents.descent/nHeight;
             }
             cairo_matrix_translate(&m, xdiff, ydiff);
         }
@@ -834,9 +834,7 @@ void X11SalGraphics::DrawServerFontLayout( const ServerFontLayout& rLayout )
 {
     // draw complex text
     ServerFont& rFont = rLayout.GetServerFont();
-    const bool bVertical = rFont.GetFontSelData().mbVertical;
-
-    if( !bVertical && isCairoRenderable(rFont) )
+    if( isCairoRenderable(rFont) )
         DrawCairoAAFontString( rLayout );
     else
     {
