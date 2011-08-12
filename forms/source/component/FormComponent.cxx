@@ -597,6 +597,7 @@ OControlModel::OControlModel(
     ,m_nTabIndex(FRM_DEFAULT_TABINDEX)
     ,m_nClassId(FormComponentType::CONTROL)
     ,m_bNativeLook( sal_False )
+    ,m_bGenerateVbEvents( sal_False )
         // form controls are usually embedded into documents, not dialogs, and in documents
         // the native look is ugly ....
         // #i37342#
@@ -630,6 +631,7 @@ OControlModel::OControlModel(
         // Refcount wieder bei NULL
         decrement(m_refCount);
     }
+
 }
 
 //------------------------------------------------------------------
@@ -651,6 +653,7 @@ OControlModel::OControlModel( const OControlModel* _pOriginal, const Reference< 
     m_nTabIndex = _pOriginal->m_nTabIndex;
     m_nClassId = _pOriginal->m_nClassId;
     m_bNativeLook = _pOriginal->m_bNativeLook;
+    m_bGenerateVbEvents = _pOriginal->m_bGenerateVbEvents;
 
     if ( _bCloneAggregate )
     {
@@ -672,6 +675,7 @@ OControlModel::OControlModel( const OControlModel* _pOriginal, const Reference< 
         // decrement ref count
         decrement( m_refCount );
     }
+
 }
 
 //------------------------------------------------------------------
@@ -988,6 +992,11 @@ Any OControlModel::getPropertyDefaultByHandle( sal_Int32 _nHandle ) const
             aReturn <<= (sal_Bool)sal_True;
             break;
 
+        case PROPERTY_ID_GENERATEVBAEVENTS:
+            aReturn <<= (sal_Bool)sal_False;
+            break;
+
+
         default:
             if ( m_aPropertyBagHelper.hasDynamicPropertyByHandle( _nHandle ) )
                 m_aPropertyBagHelper.getDynamicPropertyDefaultByHandle( _nHandle, aReturn );
@@ -1017,6 +1026,8 @@ void OControlModel::getFastPropertyValue( Any& _rValue, sal_Int32 _nHandle ) con
         case PROPERTY_ID_NATIVE_LOOK:
             _rValue <<= (sal_Bool)m_bNativeLook;
             break;
+        case PROPERTY_ID_GENERATEVBAEVENTS:
+            _rValue <<= (sal_Bool)m_bGenerateVbEvents;
         default:
             if ( m_aPropertyBagHelper.hasDynamicPropertyByHandle( _nHandle ) )
                 m_aPropertyBagHelper.getDynamicFastPropertyValue( _nHandle, _rValue );
@@ -1045,6 +1056,9 @@ sal_Bool OControlModel::convertFastPropertyValue(
             break;
         case PROPERTY_ID_NATIVE_LOOK:
             bModified = tryPropertyValue(_rConvertedValue, _rOldValue, _rValue, m_bNativeLook);
+            break;
+        case PROPERTY_ID_GENERATEVBAEVENTS:
+            bModified = tryPropertyValue(_rConvertedValue, _rOldValue, _rValue, m_bGenerateVbEvents);
             break;
         default:
             if ( m_aPropertyBagHelper.hasDynamicPropertyByHandle( _nHandle ) )
@@ -1080,6 +1094,9 @@ void OControlModel::setFastPropertyValue_NoBroadcast(sal_Int32 _nHandle, const A
         case PROPERTY_ID_NATIVE_LOOK:
             OSL_VERIFY( _rValue >>= m_bNativeLook );
             break;
+        case PROPERTY_ID_GENERATEVBAEVENTS:
+            OSL_VERIFY( _rValue >>= m_bGenerateVbEvents );
+            break;
         default:
             if ( m_aPropertyBagHelper.hasDynamicPropertyByHandle( _nHandle ) )
                 m_aPropertyBagHelper.setDynamicFastPropertyValue( _nHandle, _rValue );
@@ -1092,11 +1109,12 @@ void OControlModel::setFastPropertyValue_NoBroadcast(sal_Int32 _nHandle, const A
 //------------------------------------------------------------------------------
 void OControlModel::describeFixedProperties( Sequence< Property >& _rProps ) const
 {
-    BEGIN_DESCRIBE_BASE_PROPERTIES( 4 )
+    BEGIN_DESCRIBE_BASE_PROPERTIES( 5 )
         DECL_PROP2      (CLASSID,     sal_Int16,        READONLY, TRANSIENT);
         DECL_PROP1      (NAME,        ::rtl::OUString,  BOUND);
         DECL_BOOL_PROP2 (NATIVE_LOOK,                   BOUND, TRANSIENT);
         DECL_PROP1      (TAG,         ::rtl::OUString,  BOUND);
+        DECL_PROP1      (GENERATEVBAEVENTS,         sal_Bool,  TRANSIENT);
     END_DESCRIBE_PROPERTIES()
 }
 

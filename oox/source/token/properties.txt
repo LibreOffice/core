@@ -179,6 +179,7 @@ FormulaConvention
 Function
 GapwidthSequence
 Geometry3D
+GenerateVbaEvents
 GradientName
 Graphic
 GraphicColorMode

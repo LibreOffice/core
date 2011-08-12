@@ -828,6 +828,14 @@ void OInterfaceContainer::implInsert(sal_Int32 _nIndex, const Reference< XProper
     sal_Bool _bEvents, ElementDescription* _pApprovalResult, sal_Bool _bFire ) throw( IllegalArgumentException )
 {
     const bool bHandleEvents = _bEvents && m_xEventAttacher.is();
+    bool bHandleVbaEvents = false;
+    try
+    {
+        _rxElement->getPropertyValue(rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("GenerateVbaEvents") ) ) >>= bHandleVbaEvents;
+    }
+    catch( const Exception& )
+    {
+    }
 
     // SYNCHRONIZED ----->
     ::osl::ClearableMutexGuard aGuard( m_rMutex );
@@ -883,7 +891,7 @@ void OInterfaceContainer::implInsert(sal_Int32 _nIndex, const Reference< XProper
     // <----- SYNCHRONIZED
 
     // insert faked VBA events?
-    if ( bHandleEvents )
+    if ( bHandleVbaEvents )
     {
         Reference< XEventAttacherManager > xMgr ( pElementMetaData->xInterface, UNO_QUERY );
         if ( xMgr.is() )

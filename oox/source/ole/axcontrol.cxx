@@ -1892,6 +1892,13 @@ bool EmbeddedControl::convertProperties( const Reference< XControlModel >& rxCtr
     {
         PropertyMap aPropMap;
         aPropMap.setProperty( PROP_Name, maName );
+        try
+        {
+            aPropMap.setProperty( PROP_GenerateVbaEvents, true);
+        }
+        catch( Exception& )
+        {
+        }
         mxModel->convertProperties( aPropMap, rConv );
         PropertySet aPropSet( rxCtrlModel );
         aPropSet.setProperties( aPropMap );

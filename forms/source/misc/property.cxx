@@ -241,6 +241,7 @@ void PropertyInfoService::initialize()
     ADD_PROP_ASSIGNMENT(DEFAULT_SPIN_VALUE);
     ADD_PROP_ASSIGNMENT( WRITING_MODE );
     ADD_PROP_ASSIGNMENT( CONTEXT_WRITING_MODE );
+    ADD_PROP_ASSIGNMENT( GENERATEVBAEVENTS );
 
     // now sort the array by name
 
