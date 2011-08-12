@@ -301,7 +301,9 @@ private:
 
     /// Output graphic fly frames.
     void FlyFrameGraphic( const SwGrfNode& rGrfNode, const Size& rSize );
-    void WriteOLE2Obj( const SdrObject* pSdrObj, const Size& rSize );
+    void WriteOLE2Obj( const SdrObject* pSdrObj, const SwOLENode& rNode, const Size& rSize );
+    bool WriteOLEChart( const SdrObject* pSdrObj, const Size& rSize );
+    bool WriteOLEMath( const SdrObject* pSdrObj, const SwOLENode& rNode, const Size& rSize );
 
     void InitTableHelper( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner );
     void StartTable( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner );

@@ -113,6 +113,7 @@
 #include <htmltbl.hxx>
 #include <lineinfo.hxx>
 #include <ndgrf.hxx>
+#include <ndole.hxx>
 #include <ndtxt.hxx>
 #include <node.hxx>
 #include <pagedesc.hxx>
@@ -2207,7 +2208,15 @@ void DocxAttributeOutput::FlyFrameGraphic( const SwGrfNode& rGrfNode, const Size
     m_pSerializer->endElementNS( XML_w, XML_drawing );
 }
 
-void DocxAttributeOutput::WriteOLE2Obj( const SdrObject* pSdrObj, const Size& rSize )
+void DocxAttributeOutput::WriteOLE2Obj( const SdrObject* pSdrObj, const SwOLENode& rOLENode, const Size& rSize )
+{
+    if( WriteOLEChart( pSdrObj, rSize ))
+        return;
+    if( WriteOLEMath( pSdrObj, rOLENode, rSize ))
+        return;
+}
+
+bool DocxAttributeOutput::WriteOLEChart( const SdrObject* pSdrObj, const Size& rSize )
 {
     uno::Reference< chart2::XChartDocument > xChartDoc;
     uno::Reference< drawing::XShape > xShape( ((SdrObject*)pSdrObj)->getUnoShape(), uno::UNO_QUERY );
@@ -2277,7 +2286,23 @@ void DocxAttributeOutput::WriteOLE2Obj( const SdrObject* pSdrObj, const Size& rS
         m_pSerializer->endElementNS( XML_a, XML_graphic );
         m_pSerializer->endElementNS( XML_wp, XML_inline );
         m_pSerializer->endElementNS( XML_w, XML_drawing );
+
+        return true;
     }
+    return false;
+}
+
+bool DocxAttributeOutput::WriteOLEMath( const SdrObject*, const SwOLENode& rOLENode, const Size& )
+{
+    uno::Reference < embed::XEmbeddedObject > xObj(const_cast<SwOLENode&>(rOLENode).GetOLEObj().GetOleRef());
+    sal_Int64 nAspect = rOLENode.GetAspect();
+    svt::EmbeddedObjectRef aObjRef( xObj, nAspect );
+    SvGlobalName aObjName(aObjRef->getClassID());
+
+    if( !SotExchange::IsMath(aObjName) )
+        return false;
+    // TODO
+    return true;
 }
 
 void DocxAttributeOutput::OutputFlyFrame_Impl( const sw::Frame &rFrame, const Point& /*rNdTopLeft*/ )
@@ -2339,9 +2364,14 @@ void DocxAttributeOutput::OutputFlyFrame_Impl( const sw::Frame &rFrame, const Po
             break;
         case sw::Frame::eOle:
             {
-                const SdrObject* pSdrObj = rFrame.GetFrmFmt().FindRealSdrObject();
+                const SwFrmFmt &rFrmFmt = rFrame.GetFrmFmt();
+                const SdrObject *pSdrObj = rFrmFmt.FindRealSdrObject();
                 if ( pSdrObj )
-                    WriteOLE2Obj( pSdrObj, rFrame.GetLayoutSize() );
+                {
+                    SwNodeIndex aIdx(*rFrmFmt.GetCntnt().GetCntntIdx(), 1);
+                    SwOLENode& rOLENd = *aIdx.GetNode().GetOLENode();
+                    WriteOLE2Obj( pSdrObj, rOLENd, rFrame.GetLayoutSize() );
+                }
             }
             break;
         default:
