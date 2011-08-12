@@ -42,7 +42,7 @@
 // --------- general metrics ---------
 
 #define SYMBOL_EDGE         20
-#define DIALOG_WIDTH        270
+#define DIALOG_WIDTH        250
 #define INFO_TEXT_LINES     11
 
 #define AW_COL_1            (RSC_SP_DLG_INNERBORDER_LEFT)

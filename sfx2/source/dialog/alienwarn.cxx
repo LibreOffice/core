@@ -165,21 +165,13 @@ void SfxAlienWarningDialog::InitSize()
     // recalculate the size and position of the buttons
     m_aMoreInfoBtn.Hide();
     nTxtW = m_aKeepCurrentBtn.GetCtrlTextWidth( m_aKeepCurrentBtn.GetText() );
-    long nTemp = m_aSaveODFBtn.GetCtrlTextWidth( m_aSaveODFBtn.GetText() );
-    if ( nTemp > nTxtW )
-        nTxtW = nTemp;
     nTxtW += IMPL_EXTRA_BUTTON_WIDTH;
-    Size a3Size = LogicToPixel( Size( 3, 3 ), MAP_APPFONT );
-    Point aPos = m_aKeepCurrentBtn.GetPosPixel();
-    aPos.X() = ( aNewSize.Width() - (2*nTxtW) - a3Size.Width() ) / 2;
-    long nDefX = m_aWarningOnBox.GetPosPixel().X();
-    if ( nDefX < aPos.X() )
-        aPos.X() = nDefX;
     aNewSize = m_aKeepCurrentBtn.GetSizePixel();
     aNewSize.Width() = nTxtW;
-    m_aKeepCurrentBtn.SetPosSizePixel( aPos, aNewSize );
-    aPos.X() += nTxtW + a3Size.Width();
-    m_aSaveODFBtn.SetPosSizePixel( aPos, aNewSize );
+    m_aKeepCurrentBtn.SetSizePixel( aNewSize );
+    Point aPos = m_aSaveODFBtn.GetPosPixel();
+    aPos.X() = AW_COL_3 + nTxtW;
+    m_aSaveODFBtn.SetPosPixel( aPos );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -38,7 +38,7 @@ ModalDialog RID_DLG_ALIEN_WARNING
     Moveable = TRUE;
     SVLook = TRUE;
 
-    Text = "%PRODUCTNAME %PRODUCTVERSION %PRODUCTEXTENSION";
+    Text = "Save";
 
     FixedImage FI_QUERY
     {
@@ -65,7 +65,7 @@ ModalDialog RID_DLG_ALIEN_WARNING
     {
         Pos = MAP_APPFONT( AW_COL_3, AW_ROW_2 );
         Size = MAP_APPFONT( RSC_CD_PUSHBUTTON_WIDTH, RSC_CD_PUSHBUTTON_HEIGHT );
-        Text [ en-US ] = "Use Default ~ODF Format";
+        Text [ en-US ] = "Use ~ODF Format";
     };
     HelpButton PB_MOREINFO
     {
