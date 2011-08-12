@@ -104,7 +104,6 @@ struct ArrayImpl
     size_t              GetMergedLastRow( size_t nCol, size_t nRow ) const;
 
     const Cell&         GetMergedOriginCell( size_t nCol, size_t nRow ) const;
-    Cell&               GetMergedOriginCellAcc( size_t nCol, size_t nRow );
 
     bool                IsMergedOverlappedLeft( size_t nCol, size_t nRow ) const;
     bool                IsMergedOverlappedRight( size_t nCol, size_t nRow ) const;
@@ -161,9 +160,6 @@ public:
     /** Constructs an empty array. */
     explicit            Array();
 
-    /** Constructs an array with the specified width and height. */
-    explicit            Array( size_t nWidth, size_t nHeight );
-
     /** Destructs the array. */
                         ~Array();
 
@@ -171,9 +167,6 @@ public:
 
     /** Reinitializes the array with the specified size. Clears all styles. */
     void                Initialize( size_t nWidth, size_t nHeight );
-
-    /** Clears all line styles, column widths, row heights, merge data, and the clip range. */
-    void                Clear();
 
     /** Returns the number of columns in the array. */
     size_t              GetColCount() const;
@@ -183,12 +176,6 @@ public:
 
     /** Returns the number of cells in the array. */
     size_t              GetCellCount() const;
-
-    /** Returns the column index of the specified cell index. */
-    size_t              GetColFromIndex( size_t nCellIndex ) const;
-
-    /** Returns the row index of the specified cell index. */
-    size_t              GetRowFromIndex( size_t nCellIndex ) const;
 
     /** Returns the cell index from the cell address (nCol,nRow). */
     size_t              GetCellIndex( size_t nCol, size_t nRow, bool bRTL = false) const;
@@ -318,9 +305,6 @@ public:
         @precond  The range must not intersect other merged ranges. */
     void                SetMergedRange( size_t nFirstCol, size_t nFirstRow, size_t nLastCol, size_t nLastRow );
 
-    /** Removes the merged cell range that contains (nCol,nRow). */
-    void                RemoveMergedRange( size_t nCol, size_t nRow );
-
     /** Sets an additional left width for the merged range that contains (nCol,nRow).
         @descr  Useful to handle merged ranges that are not completely part of the array.
         @precond  The merged range must be at the left border of the array. */
@@ -344,29 +328,14 @@ public:
     /** Returns true, if the cell (nCol,nRow) is part of a merged range. */
     bool                IsMerged( size_t nCol, size_t nRow ) const;
 
-    /** Returns true, if the cell (nCol,nRow) is the top-left corner of a merged range. */
-    bool                IsMergedOrigin( size_t nCol, size_t nRow ) const;
-
-    /** Returns true, if the cell (nCol,nRow) is overlapped by a merged range. */
-    bool                IsMergedOverlapped( size_t nCol, size_t nRow ) const;
-
     /** Returns true, if the left border of the cell (nCol,nRow) is overlapped by a merged range. */
     bool                IsMergedOverlappedLeft( size_t nCol, size_t nRow ) const;
 
     /** Returns true, if the right border of the cell (nCol,nRow) is overlapped by a merged range. */
     bool                IsMergedOverlappedRight( size_t nCol, size_t nRow ) const;
 
-    /** Returns true, if the top border of the cell (nCol,nRow) is overlapped by a merged range. */
-    bool                IsMergedOverlappedTop( size_t nCol, size_t nRow ) const;
-
-    /** Returns true, if the bottom border of the cell (nCol,nRow) is overlapped by a merged range. */
-    bool                IsMergedOverlappedBottom( size_t nCol, size_t nRow ) const;
-
     /** Returns the address of the top-left cell of the merged range that contains (nCol,nRow). */
     void                GetMergedOrigin( size_t& rnFirstCol, size_t& rnFirstRow, size_t nCol, size_t nRow ) const;
-
-    /** Returns the range size of the merged range thst contains (nCol,nRow). */
-    void                GetMergedSize( size_t& rnWidth, size_t& rnHeight, size_t nCol, size_t nRow ) const;
 
     /** Returns the top-left and bottom-right address of the merged range that contains (nCol,nRow). */
     void                GetMergedRange( size_t& rnFirstCol, size_t& rnFirstRow,
@@ -384,12 +353,6 @@ public:
             Partly visible diagonal frame borders in merged ranges are correctly
             clipped too. This array can handle only one clip range at a time. */
     void                SetClipRange( size_t nFirstCol, size_t nFirstRow, size_t nLastCol, size_t nLastRow );
-
-    /** Removes the clipping range set with the SetClipRange() function. */
-    void                RemoveClipRange();
-
-    /** Returns true, if the cell (bCol,nRow) is inside the current clip range. */
-    bool                IsInClipRange( size_t nCol, size_t nRow ) const;
 
     /** Returns the rectangle (output coordinates) of the current clipping range. */
     Rectangle           GetClipRangeRectangle() const;
@@ -424,14 +387,8 @@ public:
                 of the bottom array border. */
     long                GetRowPosition( size_t nRow ) const;
 
-    /** Returns the output width of the specified column. */
-    long                GetColWidth( size_t nCol ) const;
-
     /** Returns the output width of the specified range of columns. */
     long                GetColWidth( size_t nFirstCol, size_t nLastCol ) const;
-
-    /** Returns the output height of the specified row. */
-    long                GetRowHeight( size_t nRow ) const;
 
     /** Returns the output height of the specified range of rows. */
     long                GetRowHeight( size_t nFirstRow, size_t nLastRow ) const;
@@ -482,9 +439,6 @@ public:
             Border tab page). Default after construction is OFF. */
     void                SetUseDiagDoubleClipping( bool bSet );
 
-    /** Returns true, if polygon clipping is used to draw diagonal frame borders. */
-    bool                GetUseDiagDoubleClipping() const;
-
     // mirroring --------------------------------------------------------------
 
     /** Mirrors the entire array horizontally.
@@ -494,20 +448,8 @@ public:
             true = Swap top-left to bottom-right and bottom-left to top-right frame borders. */
     void                MirrorSelfX( bool bMirrorStyles, bool bSwapDiag );
 
-    /** Mirrors the entire array vertically.
-        @param bMirrorStyles
-            true = Swap primary and secondary line of all horizontal double frame borders.
-        @param bSwapDiag
-            true = Swap top-left to bottom-right and bottom-left to top-right frame borders. */
-    void                MirrorSelfY( bool bMirrorStyles, bool bSwapDiag );
-
     // drawing ----------------------------------------------------------------
 
-    /** Draws the cell (nCol,nRow), if it is inside the clipping range.
-        @param pForceColor
-            If not NULL, only this color will be used to draw all frame borders. */
-    void                DrawCell( OutputDevice& rDev, size_t nCol, size_t nRow,
-                            const Color* pForceColor = 0 ) const;
     /** Draws the part of the specified range, that is inside the clipping range.
         @param pForceColor
             If not NULL, only this color will be used to draw all frame borders. */

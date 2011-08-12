@@ -186,11 +186,6 @@ const Cell& ArrayImpl::GetMergedOriginCell( size_t nCol, size_t nRow ) const
     return GetCell( GetMergedFirstCol( nCol, nRow ), GetMergedFirstRow( nCol, nRow ) );
 }
 
-Cell& ArrayImpl::GetMergedOriginCellAcc( size_t nCol, size_t nRow )
-{
-    return GetCellAcc( GetMergedFirstCol( nCol, nRow ), GetMergedFirstRow( nCol, nRow ) );
-}
-
 bool ArrayImpl::IsMergedOverlappedLeft( size_t nCol, size_t nRow ) const
 {
     const Cell& rCell = GetCell( nCol, nRow );
@@ -346,18 +341,12 @@ MergedCellIterator& MergedCellIterator::operator++()
 #define CELL( col, row )        mxImpl->GetCell( col, row )
 #define CELLACC( col, row )     mxImpl->GetCellAcc( col, row )
 #define ORIGCELL( col, row )    mxImpl->GetMergedOriginCell( col, row )
-#define ORIGCELLACC( col, row ) mxImpl->GetMergedOriginCellAcc( col, row )
 
 // ----------------------------------------------------------------------------
 
 Array::Array()
 {
     Initialize( 0, 0 );
-}
-
-Array::Array( size_t nWidth, size_t nHeight )
-{
-    Initialize( nWidth, nHeight );
 }
 
 Array::~Array()
@@ -370,11 +359,6 @@ void Array::Initialize( size_t nWidth, size_t nHeight )
 {
     bool bDiagDblClip = mxImpl.get() ? mxImpl->mbDiagDblClip : DIAG_DBL_CLIP_DEFAULT;
     mxImpl.reset( new ArrayImpl( nWidth, nHeight, bDiagDblClip ) );
-}
-
-void Array::Clear()
-{
-    Initialize( mxImpl->mnWidth, mxImpl->mnHeight );
 }
 
 size_t Array::GetColCount() const
@@ -390,18 +374,6 @@ size_t Array::GetRowCount() const
 size_t Array::GetCellCount() const
 {
     return mxImpl->maCells.size();
-}
-
-size_t Array::GetColFromIndex( size_t nCellIndex ) const
-{
-    DBG_FRAME_CHECK_INDEX( nCellIndex, "GetColFromIndex" );
-    return mxImpl->mnWidth ? (nCellIndex % mxImpl->mnWidth) : 0;
-}
-
-size_t Array::GetRowFromIndex( size_t nCellIndex ) const
-{
-    DBG_FRAME_CHECK_INDEX( nCellIndex, "GetRowFromIndex" );
-    return mxImpl->mnWidth ? (nCellIndex / mxImpl->mnWidth) : 0;
 }
 
 size_t Array::GetCellIndex( size_t nCol, size_t nRow, bool bRTL ) const
@@ -649,17 +621,6 @@ void Array::SetMergedRange( size_t nFirstCol, size_t nFirstRow, size_t nLastCol,
         lclSetMergedRange( mxImpl->maCells, mxImpl->mnWidth, nFirstCol, nFirstRow, nLastCol, nLastRow );
 }
 
-void Array::RemoveMergedRange( size_t nCol, size_t nRow )
-{
-    DBG_FRAME_CHECK_COLROW( nCol, nRow, "RemoveMergedRange" );
-    for( MergedCellIterator aIt( *this, nCol, nRow ); aIt.Is(); ++aIt )
-    {
-        Cell& rCell = CELLACC( aIt.Col(), aIt.Row() );
-        rCell.mbMergeOrig = rCell.mbOverlapX = rCell.mbOverlapY = false;
-        rCell.mnAddLeft = rCell.mnAddRight = rCell.mnAddTop = rCell.mnAddBottom = 0;
-    }
-}
-
 void Array::SetAddMergedLeftSize( size_t nCol, size_t nRow, long nAddSize )
 {
     DBG_FRAME_CHECK_COLROW( nCol, nRow, "SetAddMergedLeftSize" );
@@ -698,18 +659,6 @@ bool Array::IsMerged( size_t nCol, size_t nRow ) const
     return CELL( nCol, nRow ).IsMerged();
 }
 
-bool Array::IsMergedOrigin( size_t nCol, size_t nRow ) const
-{
-    DBG_FRAME_CHECK_COLROW( nCol, nRow, "IsMergedOrigin" );
-    return CELL( nCol, nRow ).mbMergeOrig;
-}
-
-bool Array::IsMergedOverlapped( size_t nCol, size_t nRow ) const
-{
-    DBG_FRAME_CHECK_COLROW( nCol, nRow, "IsMergedOverlapped" );
-    return CELL( nCol, nRow ).IsOverlapped();
-}
-
 bool Array::IsMergedOverlappedLeft( size_t nCol, size_t nRow ) const
 {
     DBG_FRAME_CHECK_COLROW( nCol, nRow, "IsMergedOverlappedLeft" );
@@ -722,31 +671,11 @@ bool Array::IsMergedOverlappedRight( size_t nCol, size_t nRow ) const
     return mxImpl->IsMergedOverlappedRight( nCol, nRow );
 }
 
-bool Array::IsMergedOverlappedTop( size_t nCol, size_t nRow ) const
-{
-    DBG_FRAME_CHECK_COLROW( nCol, nRow, "IsMergedOverlappedTop" );
-    return mxImpl->IsMergedOverlappedTop( nCol, nRow );
-}
-
-bool Array::IsMergedOverlappedBottom( size_t nCol, size_t nRow ) const
-{
-    DBG_FRAME_CHECK_COLROW( nCol, nRow, "IsMergedOverlappedBottom" );
-    return mxImpl->IsMergedOverlappedBottom( nCol, nRow );
-}
-
 void Array::GetMergedOrigin( size_t& rnFirstCol, size_t& rnFirstRow, size_t nCol, size_t nRow ) const
 {
     DBG_FRAME_CHECK_COLROW( nCol, nRow, "GetMergedOrigin" );
     rnFirstCol = mxImpl->GetMergedFirstCol( nCol, nRow );
     rnFirstRow = mxImpl->GetMergedFirstRow( nCol, nRow );
-}
-
-void Array::GetMergedSize( size_t& rnWidth, size_t& rnHeight, size_t nCol, size_t nRow ) const
-{
-    size_t nFirstCol, nFirstRow, nLastCol, nLastRow;
-    GetMergedRange( nFirstCol, nFirstRow, nLastCol, nLastRow, nCol, nRow );
-    rnWidth = nLastCol - nFirstCol + 1;
-    rnHeight = nLastRow - nFirstRow + 1;
 }
 
 void Array::GetMergedRange( size_t& rnFirstCol, size_t& rnFirstRow,
@@ -767,18 +696,6 @@ void Array::SetClipRange( size_t nFirstCol, size_t nFirstRow, size_t nLastCol, s
     mxImpl->mnFirstClipRow = nFirstRow;
     mxImpl->mnLastClipCol = nLastCol;
     mxImpl->mnLastClipRow = nLastRow;
-}
-
-void Array::RemoveClipRange()
-{
-    if( !mxImpl->maCells.empty() )
-        SetClipRange( 0, 0, mxImpl->mnWidth - 1, mxImpl->mnHeight - 1 );
-}
-
-bool Array::IsInClipRange( size_t nCol, size_t nRow ) const
-{
-    DBG_FRAME_CHECK_COLROW( nCol, nRow, "IsInClipRange" );
-    return mxImpl->IsInClipRange( nCol, nRow );
 }
 
 Rectangle Array::GetClipRangeRectangle() const
@@ -842,23 +759,11 @@ long Array::GetRowPosition( size_t nRow ) const
     return mxImpl->GetRowPosition( nRow );
 }
 
-long Array::GetColWidth( size_t nCol ) const
-{
-    DBG_FRAME_CHECK_COL( nCol, "GetColWidth" );
-    return mxImpl->maWidths[ nCol ];
-}
-
 long Array::GetColWidth( size_t nFirstCol, size_t nLastCol ) const
 {
     DBG_FRAME_CHECK_COL( nFirstCol, "GetColWidth" );
     DBG_FRAME_CHECK_COL( nLastCol, "GetColWidth" );
     return GetColPosition( nLastCol + 1 ) - GetColPosition( nFirstCol );
-}
-
-long Array::GetRowHeight( size_t nRow ) const
-{
-    DBG_FRAME_CHECK_ROW( nRow, "GetRowHeight" );
-    return mxImpl->maHeights[ nRow ];
 }
 
 long Array::GetRowHeight( size_t nFirstRow, size_t nLastRow ) const
@@ -929,11 +834,6 @@ void Array::SetUseDiagDoubleClipping( bool bSet )
     mxImpl->mbDiagDblClip = bSet;
 }
 
-bool Array::GetUseDiagDoubleClipping() const
-{
-    return mxImpl->mbDiagDblClip;
-}
-
 // mirroring ------------------------------------------------------------------
 
 void Array::MirrorSelfX( bool bMirrorStyles, bool bSwapDiag )
@@ -970,46 +870,7 @@ void Array::MirrorSelfX( bool bMirrorStyles, bool bSwapDiag )
     mxImpl->mbXCoordsDirty = true;
 }
 
-void Array::MirrorSelfY( bool bMirrorStyles, bool bSwapDiag )
-{
-    CellVec aNewCells;
-    aNewCells.reserve( GetCellCount() );
-
-    size_t nCol, nRow;
-    for( nRow = 0; nRow < mxImpl->mnHeight; ++nRow )
-    {
-        for( nCol = 0; nCol < mxImpl->mnWidth; ++nCol )
-        {
-            aNewCells.push_back( CELL( nCol, mxImpl->GetMirrorRow( nRow ) ) );
-            aNewCells.back().MirrorSelfY( bMirrorStyles, bSwapDiag );
-        }
-    }
-    for( nRow = 0; nRow < mxImpl->mnHeight; ++nRow )
-    {
-        for( nCol = 0; nCol < mxImpl->mnWidth; ++nCol )
-        {
-            if( CELL( nCol, nRow ).mbMergeOrig )
-            {
-                size_t nLastCol = mxImpl->GetMergedLastCol( nCol, nRow );
-                size_t nLastRow = mxImpl->GetMergedLastRow( nCol, nRow );
-                lclSetMergedRange( aNewCells, mxImpl->mnWidth,
-                    nCol, mxImpl->GetMirrorRow( nLastRow ),
-                    nLastCol, mxImpl->GetMirrorRow( nRow ) );
-            }
-        }
-    }
-    mxImpl->maCells.swap( aNewCells );
-
-    std::reverse( mxImpl->maHeights.begin(), mxImpl->maHeights.end() );
-    mxImpl->mbYCoordsDirty = true;
-}
-
 // drawing --------------------------------------------------------------------
-
-void Array::DrawCell( OutputDevice& rDev, size_t nCol, size_t nRow, const Color* pForceColor ) const
-{
-    DrawRange( rDev, nCol, nRow, nCol, nRow, pForceColor );
-}
 
 void Array::DrawRange( drawinglayer::processor2d::BaseProcessor2D* pProcessor,
         size_t nFirstCol, size_t nFirstRow, size_t nLastCol, size_t nLastRow,
@@ -1427,7 +1288,6 @@ void Array::DrawArray( OutputDevice& rDev, const Color* pForceColor ) const
 
 // ----------------------------------------------------------------------------
 
-#undef ORIGCELLACC
 #undef ORIGCELL
 #undef CELLACC
 #undef CELL
