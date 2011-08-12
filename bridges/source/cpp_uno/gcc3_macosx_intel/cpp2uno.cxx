@@ -438,6 +438,18 @@ unsigned char * codeSnippet(
         = ((unsigned char *) exec) - p - sizeof (sal_Int32);
     p += sizeof (sal_Int32);
     OSL_ASSERT(p - code <= codeSnippetSize);
+#if OSL_DEBUG_LEVEL > 1
+    fprintf(stderr,
+            "==> codeSnippet to %s, functionIndex=%d%s, vtableOffset=%d\n",
+            (exec == privateSnippetExecutorGeneral ? "General" :
+             (exec == privateSnippetExecutorVoid ? "Void" :
+              (exec == privateSnippetExecutorHyper ? "Hyper" :
+               (exec == privateSnippetExecutorFloat ? "Float" :
+                (exec == privateSnippetExecutorDouble ? "Double" :
+                 (exec == privateSnippetExecutorClass ? "Class" :
+                  "???")))))),
+            (functionIndex & ~0x80000000), (functionIndex & 0x80000000) ? "|0x80000000":"", vtableOffset);
+#endif
     return code + codeSnippetSize;
 }
 
