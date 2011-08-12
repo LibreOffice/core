@@ -1926,7 +1926,7 @@ void PPTWriter::ImplWriteObjectEffect( SvStream& rSt,
         nBuildType = 2;
     if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "SoundOn" ) ) ) )
     {
-        sal_Bool bBool;
+        sal_Bool bBool(sal_False);
         mAny >>= bBool;
         if ( bBool )
         {
