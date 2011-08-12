@@ -48,14 +48,9 @@ $(eval $(call gb_StaticLibrary_add_exception_objects,dtobj,\
 	dtrans/source/win32/dtobj/FetcList \
 	dtrans/source/win32/dtobj/FmtFilter \
 	dtrans/source/win32/dtobj/TxtCnvtHlp \
+	dtrans/source/win32/dtobj/XNotifyingDataObject \
 	dtrans/source/win32/dtobj/XTDataObject \
 	dtrans/source/win32/misc/ImplHelper \
 ))
-
-ifneq ($(COM),GCC)
-$(eval $(call gb_StaticLibrary_add_exception_objects,dtobj,\
-	dtrans/source/win32/dtobj/XNotifyingDataObject \
-))
-endif
 
 # vim: set noet sw=4 ts=4:

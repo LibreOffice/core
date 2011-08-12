@@ -74,10 +74,4 @@ $(eval $(call gb_Library_add_exception_objects,sysdtrans,\
 	dtrans/source/win32/mtaole/MtaOleClipb \
 ))
 
-ifeq ($(COM),GCC)
-$(eval $(call gb_Library_add_exception_objects,sysdtrans,\
-	source/win32/dtobj/XNotifyingDataObject \
-))
-endif
-
 # vim: set noet sw=4 ts=4:
