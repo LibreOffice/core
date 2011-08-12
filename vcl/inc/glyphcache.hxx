@@ -178,24 +178,23 @@ private:
 class VCL_PLUGIN_PUBLIC ServerFont
 {
 public:
-    virtual const ::rtl::OString*   GetFontFileName() const { return NULL; }
-    virtual int                 GetFontFaceNumber() const   { return 0; }
-    virtual bool                TestFont() const            { return true; }
-    virtual void*               GetFtFace() const { return 0; }
-    virtual int                 GetLoadFlags() const { return 0; }
-    virtual void                SetFontOptions( boost::shared_ptr<ImplFontOptions> ) {}
-    virtual boost::shared_ptr<ImplFontOptions> GetFontOptions() const
-        { return boost::shared_ptr<ImplFontOptions>(); }
-    virtual bool                NeedsArtificialBold() const { return false; }
-    virtual bool                NeedsArtificialItalic() const { return false; }
+    virtual const ::rtl::OString*   GetFontFileName() const = 0;
+    virtual int                 GetFontFaceNumber() const = 0;
+    virtual bool                TestFont() const = 0;
+    virtual void*               GetFtFace() const = 0;
+    virtual int                 GetLoadFlags() const  = 0;
+    virtual void                SetFontOptions( boost::shared_ptr<ImplFontOptions> ) = 0;
+    virtual boost::shared_ptr<ImplFontOptions> GetFontOptions() const = 0;
+    virtual bool                NeedsArtificialBold() const = 0;
+    virtual bool                NeedsArtificialItalic() const = 0;
 
     const ImplFontSelectData&   GetFontSelData() const      { return maFontSelData; }
 
     virtual void                FetchFontMetric( ImplFontMetricData&, long& rFactor ) const = 0;
-    virtual sal_uLong               GetKernPairs( ImplKernPairData** ) const      { return 0; }
-    virtual int                 GetGlyphKernValue( int, int ) const           { return 0; }
+    virtual sal_uLong               GetKernPairs( ImplKernPairData** ) const = 0;
+    virtual int                 GetGlyphKernValue( int, int ) const = 0;
     virtual const ImplFontCharMap* GetImplFontCharMap() const = 0;
-    virtual bool                GetFontCapabilities(vcl::FontCapabilities &) const { return false; }
+    virtual bool                GetFontCapabilities(vcl::FontCapabilities &) const = 0;
     Point                       TransformPoint( const Point& ) const;
 
     GlyphData&                  GetGlyphData( int nGlyphIndex );
@@ -228,7 +227,7 @@ protected:
     virtual void                GarbageCollect( long );
     void                        ReleaseFromGarbageCollect();
 
-    virtual ServerFontLayoutEngine* GetLayoutEngine() { return NULL; }
+    virtual ServerFontLayoutEngine* GetLayoutEngine() = 0;
 
 private:
     typedef ::boost::unordered_map<int,GlyphData> GlyphList;
