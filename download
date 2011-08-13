@@ -55,7 +55,7 @@ if [ -d .git ] ; then
         for i in $GIT_REPO_NAMES ; do
             bin/git-new-workdir $GIT_LINK_SRC/$i clone/$i
             for i in clone/$i/* ; do
-                ln -sf $i $(basename $i)
+                ln -sfn $i $(basename $i)
             done
         done
     fi
