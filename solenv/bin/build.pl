@@ -153,7 +153,6 @@
     my %had_error = (); # hack for mysterious windows problems - try run dmake 2 times if first time there was an error
     my $mkout = correct_path("$ENV{SOLARENV}/bin/mkout.pl");
     my %weights_hash = (); # hash contains info about how many modules are dependent from one module
-    my $grab_output = 1;
     my $stop_build_on_error = 0; # for multiprocessing mode: do not build further module if there is an error
     my $interactive = 0; # for interactive mode... (for testing purpose enabled by default)
     my $parent_process = 1;
@@ -1304,7 +1303,7 @@ sub print_error {
 
 sub usage {
     print STDERR "\nbuild\n";
-    print STDERR "Syntax:    build    [--all|-a[:prj_name]]|[--from|-f prj_name1[:prj_name2] [prj_name3 [...]]]|[--since|-c prj_name] [--with_branches prj_name1[:prj_name2] [--skip prj_name1[:prj_name2] [prj_name3 [...]] [prj_name3 [...]|-b] [--deliver|-d [--dlv_switch deliver_switch]]] [-P processes] [--show|-s] [--help|-h] [--file|-F] [--ignore|-i] [--version|-V] [--mode|-m OOo[,SO[,EXT]] [--html [--html_path html_file_path] [--dontgraboutput]] [--pre_job=pre_job_sring] [--job=job_string|-j] [--post_job=post_job_sring] [--stoponerror] [--exclude_branch_from prj_name1[:prj_name2] [prj_name3 [...]]] [--interactive] [--verbose]\n";
+    print STDERR "Syntax:    build    [--all|-a[:prj_name]]|[--from|-f prj_name1[:prj_name2] [prj_name3 [...]]]|[--since|-c prj_name] [--with_branches prj_name1[:prj_name2] [--skip prj_name1[:prj_name2] [prj_name3 [...]] [prj_name3 [...]|-b] [--deliver|-d [--dlv_switch deliver_switch]]] [-P processes] [--show|-s] [--help|-h] [--file|-F] [--ignore|-i] [--version|-V] [--mode|-m OOo[,SO[,EXT]] [--html [--html_path html_file_path]] [--pre_job=pre_job_sring] [--job=job_string|-j] [--post_job=post_job_sring] [--stoponerror] [--exclude_branch_from prj_name1[:prj_name2] [prj_name3 [...]]] [--interactive] [--verbose]\n";
     print STDERR "Example1:    build --from sfx2\n";
     print STDERR "                     - build all projects dependent from sfx2, starting with sfx2, finishing with the current module\n";
     print STDERR "Example2:    build --all:sfx2\n";
@@ -1331,7 +1330,6 @@ sub usage {
     print STDERR "        --html       - generate html page with build status\n";
     print STDERR "                       file named $ENV{INPATH}.build.html will be generated in $ENV{SOLARSRC}\n";
     print STDERR "          --html_path      - set html page path\n";
-    print STDERR "          --dontgraboutput - do not grab console output when generating html page\n";
     print STDERR "        --stoponerror      - stop build when error occurs (for mp builds)\n";
     print STDERR "        --interactive      - start interactive build process (process can be managed via html page)\n";
     print STDERR "        --verbose          - generates a detailed output of the build process\n";
@@ -1347,7 +1345,7 @@ sub usage {
 # Get all options passed
 #
 sub get_options {
-    my ($arg, $dont_grab_output);
+    my $arg;
     while ($arg = shift @ARGV) {
         $arg =~ /^-P$/            and $processes_to_run = shift @ARGV     and next;
         $arg =~ /^-P(\d+)$/            and $processes_to_run = $1 and next;
@@ -1386,7 +1384,6 @@ sub get_options {
         $arg =~ /^-h$/        and usage()                            and do_exit(0);
         $arg =~ /^--ignore$/        and $ignore = 1                            and next;
         $arg =~ /^--html$/        and $html = 1                            and next;
-        $arg =~ /^--dontgraboutput$/        and $dont_grab_output = 1      and next;
         $arg =~ /^--html_path$/ and $html_path = shift @ARGV  and next;
         $arg =~ /^-i$/        and $ignore = 1                            and next;
         $arg =~ /^--version$/   and do_exit(0);
@@ -1404,12 +1401,10 @@ sub get_options {
     };
     if (!$html) {
         print_error("\"--html_path\" switch is used only with \"--html\"") if ($html_path);
-        print_error("\"--dontgraboutput\" switch is used only with \"--html\"") if ($dont_grab_output);
     };
     if ((scalar keys %exclude_branches) && !$build_all_parents) {
         print_error("\"--exclude_branch_from\" is not applicable for one module builds!!");
     };
-    $grab_output = 0 if ($dont_grab_output);
     print_error('Switches --with_branches and --all collision') if ($build_from_with_branches && $build_all_cont);
     print_error('Switch --skip is for building multiple modules only!!') if ((scalar keys %skip_modules) && (!$build_all_parents));
     print_error('Switches --with_branches and --since collision') if ($build_from_with_branches && $build_since);
