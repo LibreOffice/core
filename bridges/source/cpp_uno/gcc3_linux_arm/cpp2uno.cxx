@@ -450,7 +450,10 @@ namespace
 
         unsigned long * p = (unsigned long *)code;
 
+        // ARM (not thumb) mode instructions
+        // mov ip, pc
         *p++ = 0xE1A0C00F;
+        // ldr pc, [pc, #4]
         *p++ = 0xE59FF004;
         *p++ = (unsigned long)functionIndex;
         *p++ = (unsigned long)vtableOffset;
