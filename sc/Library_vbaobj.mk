@@ -148,6 +148,8 @@ $(eval $(call gb_Library_add_cxxobjects,vbaobj,\
 else
 $(eval $(call gb_Library_add_exception_objects,vbaobj,\
     sc/source/ui/vba/vbasheetobjects \
+))
+endif
 ifeq ($(OS),WNT)
 $(eval $(call gb_Library_add_linked_libs,vbaobj,\
 	advapi32 \
