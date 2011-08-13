@@ -93,11 +93,6 @@ SV_DECL_PTRARR_VISIBILITY( SvByteStrings, ByteStringPtr, 1, 1, SVL_DLLPUBLIC )
 #define _SVSTDARR_BYTESTRINGS_DECL
 #endif
 
-#ifndef _SVSTDARR_BYTESTRINGSSORTDTOR_DECL
-SV_DECL_PTRARR_SORT_DEL_VISIBILITY( SvByteStringsSortDtor, ByteStringPtr, 1, 1, SVL_DLLPUBLIC )
-#define _SVSTDARR_BYTESTRINGSSORTDTOR_DECL
-#endif
-
 typedef std::deque< xub_StrLen > SvXub_StrLens;
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
