@@ -32,8 +32,8 @@
 #include "fupoor.hxx"
 
 #include <math.h>
+#include <vector>
 
-class List;
 namespace basegfx {
     class B2DPolyPolygon;
     class B2DPolygon;
@@ -52,6 +52,8 @@ public:
     virtual void DoExecute( SfxRequest& rReq );
 
 private:
+    typedef ::std::vector< ::basegfx::B2DPolyPolygon* > B2DPolyPolygonList_impl;
+
     FuMorph (
         ViewShell* pViewSh,
         ::sd::Window* pWin,
@@ -59,18 +61,40 @@ private:
         SdDrawDocument* pDoc,
         SfxRequest& rReq);
 
-    void ImpInsertPolygons(List& rPolyPolyList3D, sal_Bool bAttributeFade,
-        const SdrObject* pObj1, const SdrObject* pObj2);
+    void ImpInsertPolygons(
+        B2DPolyPolygonList_impl& rPolyPolyList3D,
+        sal_Bool bAttributeFade,
+        const SdrObject* pObj1,
+        const SdrObject* pObj2
+    );
+
     ::basegfx::B2DPolyPolygon* ImpCreateMorphedPolygon(
         const ::basegfx::B2DPolyPolygon& rPolyPolyStart,
         const ::basegfx::B2DPolyPolygon& rPolyPolyEnd,
-        double fMorphingFactor);
+        double fMorphingFactor
+    );
+
     sal_Bool ImpMorphPolygons(
-        const ::basegfx::B2DPolyPolygon& rPolyPoly1, const ::basegfx::B2DPolyPolygon& rPolyPoly2,
-        const sal_uInt16 nSteps, List& rPolyPolyList3D);
-    void ImpAddPolys(::basegfx::B2DPolyPolygon& rSmaller, const ::basegfx::B2DPolyPolygon& rBigger);
-    void ImpEqualizePolyPointCount(::basegfx::B2DPolygon& rSmall, const ::basegfx::B2DPolygon& rBig);
-    sal_uInt32 ImpGetNearestIndex(const ::basegfx::B2DPolygon& rPoly, const ::basegfx::B2DPoint& rPos);
+        const ::basegfx::B2DPolyPolygon& rPolyPoly1,
+        const ::basegfx::B2DPolyPolygon& rPolyPoly2,
+        const sal_uInt16 nSteps,
+        B2DPolyPolygonList_impl& rPolyPolyList3D
+    );
+
+    void ImpAddPolys(
+        ::basegfx::B2DPolyPolygon& rSmaller,
+        const ::basegfx::B2DPolyPolygon& rBigger
+    );
+
+    void ImpEqualizePolyPointCount(
+        ::basegfx::B2DPolygon& rSmall,
+        const ::basegfx::B2DPolygon& rBig
+    );
+
+    sal_uInt32 ImpGetNearestIndex(
+        const ::basegfx::B2DPolygon& rPoly,
+        const ::basegfx::B2DPoint& rPos
+    );
 };
 
 } // end of namespace sd

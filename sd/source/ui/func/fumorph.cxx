@@ -76,7 +76,13 @@ FuMorph::FuMorph (
 {
 }
 
-FunctionReference FuMorph::Create( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq )
+FunctionReference FuMorph::Create(
+    ViewShell* pViewSh,
+    ::sd::Window* pWin,
+    ::sd::View* pView,
+    SdDrawDocument* pDoc,
+    SfxRequest& rReq
+)
 {
     FunctionReference xFunc( new FuMorph( pViewSh, pWin, pView, pDoc, rReq ) );
     xFunc->DoExecute(rReq);
@@ -106,10 +112,9 @@ void FuMorph::DoExecute( SfxRequest& )
         AbstractMorphDlg* pDlg = pFact ? pFact->CreateMorphDlg( static_cast< ::Window*>(mpWindow), pObj1, pObj2 ) : 0;
         if(pPolyObj1 && pPolyObj2 && pDlg && (pDlg->Execute() == RET_OK))
         {
-            List aPolyPolyList;
+            B2DPolyPolygonList_impl aPolyPolyList;
             ::basegfx::B2DPolyPolygon aPolyPoly1;
             ::basegfx::B2DPolyPolygon aPolyPoly2;
-            ::basegfx::B2DPolyPolygon* pPolyPoly;
 
             pDlg->SaveSettings();
 
@@ -184,10 +189,8 @@ void FuMorph::DoExecute( SfxRequest& )
                     mpView->EndUndo();
                 }
 
-                // erzeugte Polygone wieder loeschen
-                for(pPolyPoly = (::basegfx::B2DPolyPolygon*)aPolyPolyList.First(); pPolyPoly; pPolyPoly = (::basegfx::B2DPolyPolygon *)aPolyPolyList.Next())
-                {
-                    delete pPolyPoly;
+                for( size_t i = 0, n = aPolyPolyList.size(); i < n; ++i ) {
+                    delete aPolyPolyList[ i ];
                 }
             }
         }
@@ -200,7 +203,10 @@ void FuMorph::DoExecute( SfxRequest& )
     }
 }
 
-::basegfx::B2DPolygon ImpGetExpandedPolygon(const ::basegfx::B2DPolygon& rCandidate, sal_uInt32 nNum)
+::basegfx::B2DPolygon ImpGetExpandedPolygon(
+    const ::basegfx::B2DPolygon& rCandidate,
+    sal_uInt32 nNum
+)
 {
     if(rCandidate.count() && nNum && rCandidate.count() != nNum)
     {
@@ -251,7 +257,10 @@ void FuMorph::DoExecute( SfxRequest& )
 //////////////////////////////////////////////////////////////////////////////
 // make the point count of the polygons equal in adding points
 //
-void FuMorph::ImpEqualizePolyPointCount(::basegfx::B2DPolygon& rSmall, const ::basegfx::B2DPolygon& rBig)
+void FuMorph::ImpEqualizePolyPointCount(
+    ::basegfx::B2DPolygon& rSmall,
+    const ::basegfx::B2DPolygon& rBig
+)
 {
     // create poly with equal point count
     const sal_uInt32 nCnt(rBig.count());
@@ -283,7 +292,10 @@ void FuMorph::ImpEqualizePolyPointCount(::basegfx::B2DPolygon& rSmall, const ::b
 
 //////////////////////////////////////////////////////////////////////////////
 //
-sal_uInt32 FuMorph::ImpGetNearestIndex(const ::basegfx::B2DPolygon& rPoly, const ::basegfx::B2DPoint& rPos)
+sal_uInt32 FuMorph::ImpGetNearestIndex(
+    const ::basegfx::B2DPolygon& rPoly,
+    const ::basegfx::B2DPoint& rPos
+)
 {
     double fMinDist = 0.0;
     sal_uInt32 nActInd = 0;
@@ -305,7 +317,10 @@ sal_uInt32 FuMorph::ImpGetNearestIndex(const ::basegfx::B2DPolygon& rPoly, const
 //////////////////////////////////////////////////////////////////////////////
 // add to a point reduced polys until count is same
 //
-void FuMorph::ImpAddPolys(::basegfx::B2DPolyPolygon& rSmaller, const ::basegfx::B2DPolyPolygon& rBigger)
+void FuMorph::ImpAddPolys(
+    ::basegfx::B2DPolyPolygon& rSmaller,
+    const ::basegfx::B2DPolyPolygon& rBigger
+)
 {
     while(rSmaller.count() < rBigger.count())
     {
@@ -332,8 +347,12 @@ void FuMorph::ImpAddPolys(::basegfx::B2DPolyPolygon& rSmaller, const ::basegfx::
 //////////////////////////////////////////////////////////////////////////////
 // create group object with morphed polygons
 //
-void FuMorph::ImpInsertPolygons(List& rPolyPolyList3D, sal_Bool bAttributeFade,
-    const SdrObject* pObj1, const SdrObject* pObj2)
+void FuMorph::ImpInsertPolygons(
+    B2DPolyPolygonList_impl& rPolyPolyList3D,
+    sal_Bool bAttributeFade,
+    const SdrObject* pObj1,
+    const SdrObject* pObj2
+)
 {
     Color               aStartFillCol;
     Color               aEndFillCol;
@@ -345,11 +364,11 @@ void FuMorph::ImpInsertPolygons(List& rPolyPolyList3D, sal_Bool bAttributeFade,
     SfxItemPool*        pPool = pObj1->GetObjectItemPool();
     SfxItemSet          aSet1( *pPool,SDRATTR_START,SDRATTR_NOTPERSIST_FIRST-1,EE_ITEMS_START,EE_ITEMS_END,0 );
     SfxItemSet          aSet2( aSet1 );
-    sal_Bool                bLineColor = sal_False;
-    sal_Bool                bFillColor = sal_False;
-    sal_Bool                bLineWidth = sal_False;
-    sal_Bool                bIgnoreLine = sal_False;
-    sal_Bool                bIgnoreFill = sal_False;
+    sal_Bool            bLineColor = sal_False;
+    sal_Bool            bFillColor = sal_False;
+    sal_Bool            bLineWidth = sal_False;
+    sal_Bool            bIgnoreLine = sal_False;
+    sal_Bool            bIgnoreFill = sal_False;
 
     aSet1.Put(pObj1->GetMergedItemSet());
     aSet2.Put(pObj2->GetMergedItemSet());
@@ -393,7 +412,7 @@ void FuMorph::ImpInsertPolygons(List& rPolyPolyList3D, sal_Bool bAttributeFade,
         SfxItemSet      aSet( aSet1 );
         SdrObjGroup*    pObjGroup = new SdrObjGroup;
         SdrObjList*     pObjList = pObjGroup->GetSubList();
-        const sal_uLong     nCount = rPolyPolyList3D.Count();
+        const size_t    nCount = rPolyPolyList3D.size();
         const double    fStep = 1. / ( nCount + 1 );
         const double    fDelta = nEndLineWidth - nStartLineWidth;
         double          fFactor = fStep;
@@ -401,9 +420,9 @@ void FuMorph::ImpInsertPolygons(List& rPolyPolyList3D, sal_Bool bAttributeFade,
         aSet.Put( XLineStyleItem( XLINE_SOLID ) );
         aSet.Put( XFillStyleItem( XFILL_SOLID ) );
 
-        for ( sal_uLong i = 0; i < nCount; i++, fFactor += fStep )
+        for ( size_t i = 0; i < nCount; i++, fFactor += fStep )
         {
-            const ::basegfx::B2DPolyPolygon& rPolyPoly3D = *(::basegfx::B2DPolyPolygon*)rPolyPolyList3D.GetObject(i);
+            const ::basegfx::B2DPolyPolygon& rPolyPoly3D = *rPolyPolyList3D[ i ];
             SdrPathObj* pNewObj = new SdrPathObj(OBJ_POLY, rPolyPoly3D);
 
             // Linienfarbe
@@ -449,7 +468,8 @@ void FuMorph::ImpInsertPolygons(List& rPolyPolyList3D, sal_Bool bAttributeFade,
 ::basegfx::B2DPolyPolygon* FuMorph::ImpCreateMorphedPolygon(
     const ::basegfx::B2DPolyPolygon& rPolyPolyStart,
     const ::basegfx::B2DPolyPolygon& rPolyPolyEnd,
-    double fMorphingFactor)
+    double fMorphingFactor
+)
 {
     ::basegfx::B2DPolyPolygon* pNewPolyPolygon = new ::basegfx::B2DPolyPolygon();
     const double fFactor = 1.0 - fMorphingFactor;
@@ -481,7 +501,9 @@ void FuMorph::ImpInsertPolygons(List& rPolyPolyList3D, sal_Bool bAttributeFade,
 sal_Bool FuMorph::ImpMorphPolygons(
     const ::basegfx::B2DPolyPolygon& rPolyPoly1,
     const ::basegfx::B2DPolyPolygon& rPolyPoly2,
-    const sal_uInt16 nSteps, List& rPolyPolyList3D)
+    const sal_uInt16 nSteps,
+    B2DPolyPolygonList_impl& rPolyPolyList3D
+)
 {
     if(nSteps)
     {
@@ -504,12 +526,11 @@ sal_Bool FuMorph::ImpMorphPolygons(
             const ::basegfx::B2DPoint aDiff(aRealS - aNewS);
 
             pNewPolyPoly2D->transform(basegfx::tools::createTranslateB2DHomMatrix(aDiff));
-            rPolyPolyList3D.Insert(pNewPolyPoly2D, LIST_APPEND);
+            rPolyPolyList3D.push_back( pNewPolyPoly2D );
         }
     }
     return sal_True;
 }
-
 
 } // end of namespace sd
 
