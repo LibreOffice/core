@@ -344,20 +344,6 @@ ImpSvtData::~ImpSvtData()
 ImplBorderWindow::ImplBorderWindow(Window*, long, unsigned short, com::sun::star::uno::Any const&)
 ImplBorderWindow::SetHelpButton(unsigned char)
 ImplDevFontList::ImplFindByLocale(com::sun::star::lang::Locale&) const
-ImplDockingWindowWrapper::GetFloatingPos() const
-ImplDockingWindowWrapper::GetMaxOutputSizePixel() const
-ImplDockingWindowWrapper::GetMinOutputSizePixel() const
-ImplDockingWindowWrapper::GetOutputSizePixel() const
-ImplDockingWindowWrapper::GetRollUpOutputSizePixel() const
-ImplDockingWindowWrapper::IsPined() const
-ImplDockingWindowWrapper::IsRollUp() const
-ImplDockingWindowWrapper::IsTitleButtonVisible(unsigned short) const
-ImplDockingWindowWrapper::RollDown()
-ImplDockingWindowWrapper::RollUp()
-ImplDockingWindowWrapper::SetFloatingPos(Point const&)
-ImplDockingWindowWrapper::SetOutputSizePixel(Size const&)
-ImplDockingWindowWrapper::SetPin(unsigned char)
-ImplDockingWindowWrapper::SetRollUpOutputSizePixel(Size const&)
 ImplEntryList::IsEntrySelected(String const&) const
 ImplFontSelectData::ImplFontSelectData(ImplFontData const&, Size const&, float, int, bool)
 ImplImageList::GetImageCount() const

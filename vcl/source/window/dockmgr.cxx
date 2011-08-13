@@ -1026,14 +1026,8 @@ void ImplDockingWindowWrapper::Tracking( const TrackingEvent& rTEvt )
                 nTrackStyle = SHOWTRACK_BIG;
             Rectangle aShowTrackRect = aTrackRect;
             aShowTrackRect.SetPos( GetWindow()->ImplFrameToOutput( aShowTrackRect.TopLeft() ) );
-            //if( bFloatMode )
-                GetWindow()->ShowTracking( aShowTrackRect, nTrackStyle );
-            /*else
-            {
-                GetWindow()->HideTracking();
-                Point aPt( GetWindow()->GetParent()->ScreenToOutputPixel( aTrackRect.TopLeft() ) );
-                GetWindow()->SetPosPixel( aPt );
-            }*/
+
+            GetWindow()->ShowTracking( aShowTrackRect, nTrackStyle );
 
             // Maus-Offset neu berechnen, da Rechteck veraendert werden
             // konnte
@@ -1125,19 +1119,6 @@ sal_Bool ImplDockingWindowWrapper::PrepareToggleFloatingMode()
 sal_Bool ImplDockingWindowWrapper::Close()
 {
     // TODO: send event
-/*
-    ImplDelData aDelData;
-    ImplAddDel( &aDelData );
-    GetWindow()->ImplCallEventListeners( VCLEVENT_WINDOW_CLOSE );
-    if ( aDelData.IsDelete() )
-        return sal_False;
-    ImplRemoveDel( &aDelData );
-
-    if ( mpWindowImpl->mxWindowPeer.is() && IsCreatedWithToolkit() )
-        return sal_False;
-
-    GetWindow()->Show( sal_False, SHOW_NOFOCUSCHANGE );
-    */
     return sal_True;
 }
 
@@ -1219,21 +1200,6 @@ void ImplDockingWindowWrapper::ShowTitleButton( sal_uInt16 nButton, sal_Bool bVi
             mbDockBtn = bVisible;
         else // if ( nButton == TITLE_BUTTON_HIDE )
             mbHideBtn = bVisible;
-    }
-}
-
-// -----------------------------------------------------------------------
-
-sal_Bool ImplDockingWindowWrapper::IsTitleButtonVisible( sal_uInt16 nButton ) const
-{
-    if ( mpFloatWin )
-        return mpFloatWin->IsTitleButtonVisible( nButton );
-    else
-    {
-        if ( nButton == TITLE_BUTTON_DOCKING )
-            return mbDockBtn;
-        else // if ( nButton == TITLE_BUTTON_HIDE )
-            return mbHideBtn;
     }
 }
 
@@ -1377,17 +1343,6 @@ void ImplDockingWindowWrapper::SetFloatingMode( sal_Bool bFloatMode )
                                           : mnFloatBits,
                                          this );
 
-                // reduce the border width for seamless NWF painting
-                // (especially for the toolbar gradient on Windows XP)
-                /*AllSettings aSettings( pWin->GetSettings() );
-                StyleSettings aStyleSettings( aSettings.GetStyleSettings() );
-                aStyleSettings.SetBorderSize( 0 );
-                aSettings.SetStyleSettings( aStyleSettings );
-                pWin->SetSettings( aSettings );*/
-
-//                mpFloatWin      = pWin;
-
-
                 GetWindow()->mpWindowImpl->mpBorderWindow  = NULL;
                 GetWindow()->mpWindowImpl->mnLeftBorder    = 0;
                 GetWindow()->mpWindowImpl->mnTopBorder     = 0;
@@ -1516,93 +1471,8 @@ Size ImplDockingWindowWrapper::GetSizePixel() const
 }
 
 // -----------------------------------------------------------------------
-
-void ImplDockingWindowWrapper::SetOutputSizePixel( const Size& rNewSize )
-{
-    if ( mpFloatWin )
-        mpFloatWin->SetOutputSizePixel( rNewSize );
-    else
-        GetWindow()->SetOutputSizePixel( rNewSize );
-}
-
-// -----------------------------------------------------------------------
-
-Size ImplDockingWindowWrapper::GetOutputSizePixel() const
-{
-    if ( mpFloatWin )
-        return mpFloatWin->GetOutputSizePixel();
-    else
-        return mpDockingWindow->GetOutputSizePixel();
-}
-
-Point ImplDockingWindowWrapper::GetFloatingPos() const
-{
-    if ( mpFloatWin )
-    {
-        //Rectangle aRect = mpFloatWin->GetWindow( WINDOW_CLIENT)->GetWindowExtentsRelative( mpFloatWin->GetParent() );
-        WindowStateData aData;
-        aData.SetMask( WINDOWSTATE_MASK_POS );
-        mpFloatWin->GetWindowStateData( aData );
-        Point aPos( aData.GetX(), aData.GetY() );
-        aPos = mpFloatWin->GetParent()->ImplGetFrameWindow()->AbsoluteScreenToOutputPixel( aPos );
-        return aPos;
-    }
-    else
-        return maFloatPos;
-}
-
-// -----------------------------------------------------------------------
 // old inlines from DockingWindow
 // -----------------------------------------------------------------------
-
-void ImplDockingWindowWrapper::SetPin( sal_Bool bPin )
-{
-    if ( mpFloatWin )
-        mpFloatWin->SetPin( bPin );
-    mbPined = bPin;
-}
-
-sal_Bool ImplDockingWindowWrapper::IsPined() const
-{
-    if ( mpFloatWin )
-        return mpFloatWin->IsPined();
-    return mbPined;
-}
-
-void ImplDockingWindowWrapper::RollUp()
-{
-    if ( mpFloatWin )
-        mpFloatWin->RollUp();
-    mbRollUp = sal_True;
-}
-
-void ImplDockingWindowWrapper::RollDown()
-{
-    if ( mpFloatWin )
-        mpFloatWin->RollDown();
-    mbRollUp = sal_False;
-}
-
-sal_Bool ImplDockingWindowWrapper::IsRollUp() const
-{
-    if ( mpFloatWin )
-        return mpFloatWin->IsRollUp();
-    return mbRollUp;
-}
-
-void ImplDockingWindowWrapper::SetRollUpOutputSizePixel( const Size& rSize )
-{
-    if ( mpFloatWin )
-        mpFloatWin->SetRollUpOutputSizePixel( rSize );
-    maRollUpOutSize = rSize;
-}
-
-Size ImplDockingWindowWrapper::GetRollUpOutputSizePixel() const
-{
-    if ( mpFloatWin )
-        return mpFloatWin->GetRollUpOutputSizePixel();
-    return maRollUpOutSize;
-}
 
 void ImplDockingWindowWrapper::SetMinOutputSizePixel( const Size& rSize )
 {
@@ -1616,28 +1486,6 @@ void ImplDockingWindowWrapper::SetMaxOutputSizePixel( const Size& rSize )
     if ( mpFloatWin )
         mpFloatWin->SetMaxOutputSizePixel( rSize );
     maMaxOutSize = rSize;
-}
-
-const Size& ImplDockingWindowWrapper::GetMinOutputSizePixel() const
-{
-    if ( mpFloatWin )
-        return mpFloatWin->GetMinOutputSizePixel();
-    return maMinOutSize;
-}
-
-const Size& ImplDockingWindowWrapper::GetMaxOutputSizePixel() const
-{
-    if ( mpFloatWin )
-        return mpFloatWin->GetMaxOutputSizePixel();
-    return maMaxOutSize;
-}
-
-void ImplDockingWindowWrapper::SetFloatingPos( const Point& rNewPos )
-{
-    if ( mpFloatWin )
-        mpFloatWin->SetPosPixel( rNewPos );
-    else
-        maFloatPos = rNewPos;
 }
 
 sal_Bool ImplDockingWindowWrapper::IsFloatingMode() const

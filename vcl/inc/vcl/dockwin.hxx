@@ -166,23 +166,10 @@ public:
     long            Notify( NotifyEvent& rNEvt );
 
     void            ShowTitleButton( sal_uInt16 nButton, sal_Bool bVisible = sal_True );
-    sal_Bool            IsTitleButtonVisible( sal_uInt16 nButton ) const;
-
-    void            SetPin( sal_Bool bPin );
-    sal_Bool            IsPined() const;
-
-    void            RollUp();
-    void            RollDown();
-    sal_Bool            IsRollUp() const;
-
-    void            SetRollUpOutputSizePixel( const Size& rSize );
-    Size            GetRollUpOutputSizePixel() const;
 
     void            SetMinOutputSizePixel( const Size& rSize );
-    const Size&     GetMinOutputSizePixel() const;
 
     void            SetMaxOutputSizePixel( const Size& rSize );
-    const Size&     GetMaxOutputSizePixel() const;
 
     sal_Bool            IsDocking() const { return mbDocking; }
     sal_Bool            IsDockable() const { return mbDockable; }
@@ -192,9 +179,6 @@ public:
     void            SetFloatingMode( sal_Bool bFloatMode = sal_False );
     sal_Bool            IsFloatingMode() const;
     FloatingWindow* GetFloatingWindow() const { return mpFloatWin; }
-
-    void            SetFloatingPos( const Point& rNewPos );
-    Point           GetFloatingPos() const;
 
     void            SetFloatStyle( WinBits nWinStyle );
     WinBits         GetFloatStyle() const;
@@ -207,8 +191,6 @@ public:
                         { mpDockingWindow->SetPosSizePixel( rNewPos, rNewSize ); }
     Point           GetPosPixel() const;
     Size            GetSizePixel() const;
-    void            SetOutputSizePixel( const Size& rNewSize );
-    Size            GetOutputSizePixel() const;
 };
 
 class VCL_DLLPUBLIC DockingManager
