@@ -119,6 +119,8 @@ extern "C" CppUnitTestPlugIn
 
 
 SAL_IMPLEMENT_MAIN() {
+    putenv("UNO_SERVICES=services.rdb");
+    putenv("UNO_TYPES=types.rdb udkapi.rdb");
     TestPlugInSignature plugs[] = {
         cppunitTest_i18npool_breakiterator,
         NULL
