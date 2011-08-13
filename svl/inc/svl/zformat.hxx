@@ -101,14 +101,18 @@ class SvNumberNatNum
 public:
 
     static  sal_uInt8    MapDBNumToNatNum( sal_uInt8 nDBNum, LanguageType eLang, bool bDate );
+#ifdef THE_FUTURE
     static  sal_uInt8    MapNatNumToDBNum( sal_uInt8 nNatNum, LanguageType eLang, bool bDate );
+#endif
 
                     SvNumberNatNum() : eLang( LANGUAGE_DONTKNOW ), nNum(0),
                                         bDBNum(0), bDate(0), bSet(0) {}
     bool            IsComplete() const  { return bSet && eLang != LANGUAGE_DONTKNOW; }
     sal_uInt8            GetRawNum() const   { return nNum; }
     sal_uInt8            GetNatNum() const   { return bDBNum ? MapDBNumToNatNum( nNum, eLang, bDate ) : nNum; }
+#ifdef THE_FUTURE
     sal_uInt8            GetDBNum() const    { return bDBNum ? nNum : MapNatNumToDBNum( nNum, eLang, bDate ); }
+#endif
     LanguageType    GetLang() const     { return eLang; }
     void            SetLang( LanguageType e ) { eLang = e; }
     void            SetNum( sal_uInt8 nNumber, bool bDBNumber )
@@ -434,6 +438,7 @@ public:
         calling this method. */
     void SwitchToGregorianCalendar( const String& rOrgCalendar, double fOrgDateTime ) const;
 
+#ifdef THE_FUTURE
     /** Switches to the first specified calendar, if any, in subformat nNumFor
         (0..3). Original calendar name and date/time returned, but only if
         calendar switched and rOrgCalendar was empty.
@@ -450,7 +455,7 @@ public:
                         fOrgDateTime, NumFor[nNumFor] );
             return false;
         }
-
+#endif
 private:
     ImpSvNumFor NumFor[4];          // Array for the 4 subformats
     String sFormatstring;           // The format code string
@@ -471,8 +476,10 @@ private:
 
     SVL_DLLPRIVATE bool ImpIsOtherCalendar( const ImpSvNumFor& rNumFor ) const;
 
+#ifdef THE_FUTURE
     SVL_DLLPRIVATE bool ImpSwitchToSpecifiedCalendar( String& rOrgCalendar,
             double& fOrgDateTime, const ImpSvNumFor& rNumFor ) const;
+#endif
 
 #ifdef _ZFORMAT_CXX     // ----- private implementation methods -----
 

@@ -2386,16 +2386,13 @@ binfilter::ScMultipleWriteHeader::~ScMultipleWriteHeader()
 binfilter::ScMyContentAction::~ScMyContentAction()
 binfilter::ScMyDelAction::~ScMyDelAction()
 binfilter::ScMyMoveAction::~ScMyMoveAction()
-binfilter::ScRangeData::IsBeyond(unsigned short) const
 binfilter::ScRangeFindList::~ScRangeFindList()
-binfilter::ScValidationDataList::ResetUsed()
 binfilter::ScValidationEntries_Impl::Insert(binfilter::ScValidationData* const&, unsigned short&)
 binfilter::ScValidationEntries_Impl::Insert(binfilter::ScValidationData* const*, unsigned short)
 binfilter::ScValidationEntries_Impl::Insert(binfilter::ScValidationEntries_Impl const*, unsigned short, unsigned short)
 binfilter::ScValidationEntries_Impl::Remove(binfilter::ScValidationData* const&, unsigned short)
 binfilter::ScValidationEntries_Impl::Remove(unsigned short, unsigned short)
 binfilter::ScViewData::ReadUserDataSequence(com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue> const&)
-binfilter::ScViewData::WriteUserData(String&)
 binfilter::ScXMLImportWrapper::Export(unsigned char)
 binfilter::ScXMLImportWrapper::Import(unsigned char)
 binfilter::ScXMLImportWrapper::ScXMLImportWrapper(binfilter::ScDocument&, binfilter::SfxMedium*, binfilter::SvStorage*)
@@ -2405,15 +2402,11 @@ binfilter::ScriptTypePosInfos::Replace(binfilter::ScriptTypePosInfo const&, unsi
 binfilter::ScriptTypePosInfos::Replace(binfilter::ScriptTypePosInfo const*, unsigned short, unsigned short)
 binfilter::ScriptTypePosInfos::_ForEach(unsigned short, unsigned short, unsigned char (*)(binfilter::ScriptTypePosInfo const&, void*), void*)
 binfilter::SdXMLFilter::SdXMLFilter(binfilter::SfxMedium&, binfilter::SdDrawDocShell&, unsigned char, binfilter::SdXMLFilterMode)
-binfilter::SdrObjSurrogate::SdrObjSurrogate(binfilter::SdrObject*, binfilter::SdrObject const*)
-binfilter::SdrPageView::IsLayer(String const&, binfilter::SetOfByte const&) const
 binfilter::SdrUnoControlAccessArr::DeleteAndDestroy(unsigned short, unsigned short)
 binfilter::SdrUnoControlAccessArr::Insert(binfilter::SdrUnoControlAccess* const&, unsigned short&)
 binfilter::SdrUnoControlAccessArr::Insert(binfilter::SdrUnoControlAccess* const*, unsigned short)
 binfilter::SdrUnoControlAccessArr::Insert(binfilter::SdrUnoControlAccessArr const*, unsigned short, unsigned short)
 binfilter::SdrUnoControlAccessArr::Remove(binfilter::SdrUnoControlAccess* const&, unsigned short)
-binfilter::SfxConfigManagerImExport_Impl::Export(SotStorage*, SotStorage*)
-binfilter::SfxDocumentInfo::SavePropertySet(binfilter::SvStorage*) const
 binfilter::SfxHintPoster::LinkStubDoEvent_Impl(void*, void*)
 binfilter::SfxItemModifyArr_Impl::Insert(binfilter::SfxItemModifyArr_Impl const*, unsigned short, unsigned short, unsigned short)
 binfilter::SfxItemModifyArr_Impl::Remove(unsigned short, unsigned short)
@@ -2422,9 +2415,6 @@ binfilter::SfxItemModifyArr_Impl::Replace(binfilter::SfxItemModifyImpl const*, u
 binfilter::SfxItemModifyArr_Impl::_ForEach(unsigned short, unsigned short, unsigned char (*)(binfilter::SfxItemModifyImpl const&, void*), void*)
 binfilter::SfxMacroConfig::LinkStubCallbackHdl_Impl(void*, void*)
 binfilter::SfxMacroConfig::LinkStubEventHdl_Impl(void*, void*)
-binfilter::SfxMultiMixRecordWriter::NewContent(unsigned short, unsigned char)
-binfilter::SfxMultiVarRecordWriter::NewContent()
-binfilter::SfxMultiVarRecordWriter::SfxMultiVarRecordWriter(SvStream*, unsigned short, unsigned char)
 binfilter::SfxMultiVarRecordWriter::SfxMultiVarRecordWriter(unsigned char, SvStream*, unsigned short, unsigned char)
 binfilter::SfxObjectShell::GetBaseURL() const
 binfilter::SfxPtrArr::Insert(unsigned short, void*)
@@ -2547,8 +2537,6 @@ binfilter::Sw3Bytes::Insert(binfilter::Sw3Bytes const*, unsigned short, unsigned
 binfilter::Sw3Bytes::Replace(unsigned char const&, unsigned short)
 binfilter::Sw3Bytes::Replace(unsigned char const*, unsigned short, unsigned short)
 binfilter::Sw3Bytes::_ForEach(unsigned short, unsigned short, unsigned char (*)(unsigned char const&, void*), void*)
-binfilter::Sw3IoImp::ExportTxtAttrs(binfilter::Sw3ExportTxtAttrs const*, unsigned short, unsigned short)
-binfilter::Sw3IoImp::ExportTxtNode(binfilter::SwTxtNode const&, unsigned short, unsigned short, unsigned short, binfilter::SwInsHardBlankSoftHyph&)
 binfilter::Sw3Marks::GetPos(binfilter::Sw3Mark const*) const
 binfilter::Sw3Marks::Insert(binfilter::Sw3Mark*)
 binfilter::Sw3Marks::Remove(binfilter::Sw3Mark*)
@@ -2573,18 +2561,20 @@ binfilter::SwBookmarks::Insert(binfilter::SwBookmarks const*, unsigned short, un
 binfilter::SwBookmarks::Remove(binfilter::SwBookmark* const&, unsigned short)
 binfilter::SwChartBoxes::DeleteAndDestroy(unsigned short, unsigned short)
 binfilter::SwCurrShells::DeleteAndDestroy(unsigned short, unsigned short)
+binfilter::SwCurrShells::Insert(binfilter::CurrShell* const&)
 binfilter::SwCurrShells::Insert(binfilter::CurrShell* const&, unsigned short&)
 binfilter::SwCurrShells::Insert(binfilter::CurrShell* const*, unsigned short)
 binfilter::SwCurrShells::Insert(binfilter::SwCurrShells const*, unsigned short, unsigned short)
+binfilter::SwCurrShells::Remove(binfilter::CurrShell* const&, unsigned short)
 binfilter::SwCurrShells::Remove(unsigned short, unsigned short)
 binfilter::SwDependentFields::DeleteAndDestroy(unsigned short, unsigned short)
 binfilter::SwDestroyList::DeleteAndDestroy(unsigned short, unsigned short)
 binfilter::SwDestroyList::Insert(binfilter::SwDestroyList const*, unsigned short, unsigned short)
+binfilter::SwDestroyList::Insert(binfilter::SwSectionFrm* const&)
 binfilter::SwDestroyList::Insert(binfilter::SwSectionFrm* const&, unsigned short&)
 binfilter::SwDestroyList::Insert(binfilter::SwSectionFrm* const*, unsigned short)
 binfilter::SwDestroyList::Remove(binfilter::SwSectionFrm* const&, unsigned short)
-binfilter::SwDoc::Replace(binfilter::SwPaM&, String const&, unsigned char)
-binfilter::SwInsHardBlankSoftHyph::OutAttr(binfilter::Sw3IoImp&, unsigned short, unsigned short)
+binfilter::SwDestroyList::Remove(unsigned short, unsigned short)
 binfilter::SwInsHardBlankSoftHyph::~SwInsHardBlankSoftHyph()
 binfilter::SwOLELRUCache::Remove(binfilter::SwOLEObj&)
 binfilter::SwOutlineNodes::Insert(binfilter::SwNode* const&, unsigned short&)
@@ -2593,7 +2583,6 @@ binfilter::SwOutlineNodes::Insert(binfilter::SwOutlineNodes const*, unsigned sho
 binfilter::SwRects::Replace(binfilter::SwRect const&, unsigned short)
 binfilter::SwRects::Replace(binfilter::SwRect const*, unsigned short, unsigned short)
 binfilter::SwRects::_ForEach(unsigned short, unsigned short, unsigned char (*)(binfilter::SwRect const&, void*), void*)
-binfilter::SwRootFrm::SwRootFrm(binfilter::SwFrmFmt*, binfilter::ViewShell*)
 binfilter::SwRubyList::DeleteAndDestroy(unsigned short, unsigned short)
 binfilter::SwSelBoxes::Insert(binfilter::SwTableBox* const&, unsigned short&)
 binfilter::SwSelBoxes::Remove(binfilter::SwTableBox* const&, unsigned short)
@@ -2612,7 +2601,6 @@ binfilter::SwTableSortBoxes::DeleteAndDestroy(unsigned short, unsigned short)
 binfilter::SwTableSortBoxes::Insert(binfilter::SwTableBox* const&, unsigned short&)
 binfilter::SwTableSortBoxes::Insert(binfilter::SwTableBox* const*, unsigned short)
 binfilter::SwTableSortBoxes::Insert(binfilter::SwTableSortBoxes const*, unsigned short, unsigned short)
-binfilter::SwTblBoxFormula::GetTableBox()
 binfilter::SwXBookmarkPortionArr::DeleteAndDestroy(unsigned short, unsigned short)
 binfilter::SwXBookmarkPortionArr::Insert(binfilter::SwXBookmarkPortionArr const*, unsigned short, unsigned short)
 binfilter::SwXBookmarkPortionArr::Insert(binfilter::SwXBookmarkPortion_Impl* const&, unsigned short&)
@@ -3280,6 +3268,7 @@ oox::core::FilterBase::getInteractionHandler() const
 oox::core::PowerPointExport::WriteAnimationNodeCommonPropsEnd(boost::shared_ptr<sax_fastparser::FastSerializerHelper>)
 oox::core::PowerPointExport::WriteTextStyles(boost::shared_ptr<sax_fastparser::FastSerializerHelper>)
 oox::core::Relations::getExternalTargetFromFirstType(rtl::OUString const&) const
+oox::core::XmlFilterBase::getChartConverter()
 oox::drawingml::ChartExport::GetXmlNamespace() const
 oox::drawingml::ChartExport::SetXmlNamespace(int)
 oox::drawingml::ChartExport::exportDataSeq(com::sun::star::uno::Reference<com::sun::star::chart2::data::XDataSequence> const&, int)
@@ -3290,6 +3279,7 @@ oox::drawingml::ColorPropertySet::setColor(int)
 oox::drawingml::CustomShapeProperties::apply(boost::shared_ptr<oox::drawingml::CustomShapeProperties> const&)
 oox::drawingml::CustomShapeProperties::getValue(std::vector<oox::drawingml::CustomShapeGuide, std::allocator<oox::drawingml::CustomShapeGuide> > const&, unsigned int) const
 oox::drawingml::Diagram::getLayoutId() const
+oox::drawingml::DiagramLayout::layout(std::vector<oox::drawingml::dgm::Point, std::allocator<oox::drawingml::dgm::Point> > const&, com::sun::star::awt::Point const&)
 oox::drawingml::GetPoint2D(com::sun::star::uno::Reference<com::sun::star::xml::sax::XFastAttributeList> const&)
 oox::drawingml::GetTextMargin(rtl::OUString const&)
 oox::drawingml::GetTextVerticalAdjust(int)
@@ -3743,24 +3733,7 @@ svx::SearchToolbarControllersManager::~SearchToolbarControllersManager()
 svx::SvxShowCharSetItem::~SvxShowCharSetItem()
 svx::ToolboxButtonColorUpdater::DrawChar(VirtualDevice&, Color const&)
 svx::WrapField::WrapField(Window*, long)
-svx::frame::Array::Array(unsigned long, unsigned long)
-svx::frame::Array::Clear()
-svx::frame::Array::DrawCell(OutputDevice&, unsigned long, unsigned long, Color const*) const
-svx::frame::Array::GetColFromIndex(unsigned long) const
-svx::frame::Array::GetColWidth(unsigned long) const
-svx::frame::Array::GetMergedSize(unsigned long&, unsigned long&, unsigned long, unsigned long) const
-svx::frame::Array::GetRowFromIndex(unsigned long) const
-svx::frame::Array::GetRowHeight(unsigned long) const
-svx::frame::Array::GetUseDiagDoubleClipping() const
-svx::frame::Array::IsInClipRange(unsigned long, unsigned long) const
-svx::frame::Array::IsMergedOrigin(unsigned long, unsigned long) const
-svx::frame::Array::IsMergedOverlapped(unsigned long, unsigned long) const
-svx::frame::Array::IsMergedOverlappedBottom(unsigned long, unsigned long) const
-svx::frame::Array::IsMergedOverlappedTop(unsigned long, unsigned long) const
-svx::frame::Array::MirrorSelfY(bool, bool)
-svx::frame::Array::RemoveClipRange()
-svx::frame::Array::RemoveMergedRange(unsigned long, unsigned long)
-svx::frame::ArrayImpl::GetMergedOriginCellAcc(unsigned long, unsigned long)
+svx::frame::Cell::MirrorSelfY(bool, bool)
 svx::frame::DrawHorFrameBorder(OutputDevice&, Point const&, Point const&, svx::frame::Style const&, Color const*)
 svx::frame::DrawHorFrameBorder(OutputDevice&, Point const&, Point const&, svx::frame::Style const&, svx::frame::Style const&, svx::frame::Style const&, svx::frame::Style const&, svx::frame::Style const&, svx::frame::Style const&, svx::frame::Style const&, Color const*)
 svx::frame::DrawVerFrameBorder(OutputDevice&, Point const&, Point const&, svx::frame::Style const&, Color const*)

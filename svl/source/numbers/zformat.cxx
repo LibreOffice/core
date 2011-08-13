@@ -246,7 +246,7 @@ sal_uInt8 SvNumberNatNum::MapDBNumToNatNum( sal_uInt8 nDBNum, LanguageType eLang
     return nNatNum;
 }
 
-
+#ifdef THE_FUTURE
 /* XXX NOTE: even though the MapNatNumToDBNum method is currently unused please 
  * don't remove it in case we'd have to use it for some obscure exports to 
  * Excel. */
@@ -329,6 +329,7 @@ sal_uInt8 SvNumberNatNum::MapNatNumToDBNum( sal_uInt8 nNatNum, LanguageType eLan
     }
     return nDBNum;
 }
+#endif
 
 /***********************Funktionen SvNumFor******************************/
 
@@ -3032,6 +3033,7 @@ bool SvNumberformat::ImpFallBackToGregorianCalendar( String& rOrgCalendar, doubl
 }
 
 
+#ifdef THE_FUTURE
 /* XXX NOTE: even if the ImpSwitchToSpecifiedCalendar method is currently 
  * unused please don't remove it, it would be needed by 
  * SwitchToSpecifiedCalendar(), see comment in 
@@ -3059,6 +3061,7 @@ bool SvNumberformat::ImpSwitchToSpecifiedCalendar( String& rOrgCalendar,
     }
     return false;
 }
+#endif
 
 // static
 void SvNumberformat::ImpAppendEraG( String& OutString,

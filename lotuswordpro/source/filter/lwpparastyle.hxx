@@ -105,8 +105,6 @@ public:
     LwpTabOverride* GetTabOverride() const;
     LwpBulletOverride* GetBulletOverride() const;
     LwpNumberingOverride* GetNumberingOverride() const;
-
-    sal_Bool IsNumberRight();
 public:
     static void ApplySubBorder(LwpBorderStuff* pBorderStuff, LwpBorderStuff::BorderType eType, XFBorders* pXFBorders);
     //end

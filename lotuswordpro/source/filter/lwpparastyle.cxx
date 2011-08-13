@@ -795,16 +795,4 @@ LwpTabOverride* LwpParaStyle::GetTabOverride() const
     return NULL;
 }
 
-sal_Bool LwpParaStyle::IsNumberRight()
-{
-    LwpAlignmentOverride* pAlign = GetAlignment();
-    if (pAlign)
-    {
-        LwpAlignmentOverride::AlignType type;
-        type = pAlign->GetAlignType();
-        if (type == LwpAlignmentOverride::ALIGN_NUMERICRIGHT)
-            return sal_True;
-    }
-    return sal_False;
-}
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

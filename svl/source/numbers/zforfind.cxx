@@ -1028,7 +1028,6 @@ bool ImpSvNumberInputScan::GetDateRef( double& fDays, sal_uInt16& nCounter,
         }
         if ( bFormatTurn )
         {
-#if 0
 /* TODO:
 We are currently not able to fully support a switch to another calendar during
 input for the following reasons:
@@ -1055,6 +1054,7 @@ input for the following reasons:
    calendar would have to be implemented. No problem.
 
 */
+#ifdef THE_FUTURE
             if ( pFormat->IsOtherCalendar( nStringScanNumFor ) )
                 pFormat->SwitchToOtherCalendar( aOrgCalendar, fOrgDateTime );
             else
