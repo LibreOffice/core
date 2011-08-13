@@ -465,6 +465,19 @@ gb_Library_COMPONENTPREFIXES := \
 	URELIB:vnd.sun.star.expand:\dURE_INTERNAL_LIB_DIR/ \
     NONE:vnd.sun.star.expand:\dOOO_INBUILD_SHAREDLIB_DIR/ \
 
+# UnoApiTarget
+
+gb_UnoApiTarget_IDLCTARGET := $(OUTDIR)/bin/idlc
+gb_UnoApiTarget_IDLCCOMMAND := LD_LIBRARY_PATH=$(OUTDIR)/lib SOLARBINDIR=$(OUTDIR)/bin $(gb_UnoApiTarget_IDLCTARGET)
+gb_UnoApiTarget_REGMERGETARGET := $(OUTDIR)/bin/regmerge
+gb_UnoApiTarget_REGMERGECOMMAND := LD_LIBRARY_PATH=$(OUTDIR)/lib SOLARBINDIR=$(OUTDIR)/bin $(gb_UnoApiTarget_REGMERGETARGET)
+gb_UnoApiTarget_REGCOMPARETARGET := $(OUTDIR)/bin/regcompare
+gb_UnoApiTarget_REGCOMPARECOMMAND := LD_LIBRARY_PATH=$(OUTDIR)/lib SOLARBINDIR=$(OUTDIR)/bin $(gb_UnoApiTarget_REGCOMPARETARGET)
+gb_UnoApiTarget_CPPUMAKERTARGET := $(OUTDIR)/bin/cppumaker
+gb_UnoApiTarget_CPPUMAKERCOMMAND := LD_LIBRARY_PATH=$(OUTDIR)/lib SOLARBINDIR=$(OUTDIR)/bin $(gb_UnoApiTarget_CPPUMAKERTARGET)
+gb_UnoApiTarget_REGVIEWTARGET := $(OUTDIR)/bin/regview
+gb_UnoApiTarget_REGVIEWCOMMAND := LD_LIBRARY_PATH=$(OUTDIR)/lib SOLARBINDIR=$(OUTDIR)/bin $(gb_UnoApiTarget_REGVIEWTARGET)
+
 # Configuration
 gb_CFGEXPRECOMMAND := LD_LIBRARY_PATH=$(OUTDIR)/lib
 
