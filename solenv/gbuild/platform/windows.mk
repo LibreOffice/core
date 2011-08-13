@@ -260,18 +260,6 @@ $(patsubst $(SRCDIR)%,$(gb_Helper_SRCDIR_NATIVE)%, \
 $(1)))))
 endef
 
-# convert parameters filesystem root to native notation
-# does some real work only on windows, make sure not to
-# break the dummy implementations on unx*
-define gb_Helper_convert_native
-$(patsubst -I$(OUTDIR)%,-I$(gb_Helper_OUTDIR_NATIVE)%, \
-$(patsubst $(OUTDIR)%,$(gb_Helper_OUTDIR_NATIVE)%, \
-$(patsubst $(WORKDIR)%,$(gb_Helper_WORKDIR_NATIVE)%, \
-$(patsubst $(SRCDIR)%,$(gb_Helper_SRCDIR_NATIVE)%, \
-$(1)))))
-endef
-
-
 # CObject class
 
 define gb_CObject__command
