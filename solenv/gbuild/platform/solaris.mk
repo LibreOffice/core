@@ -404,6 +404,7 @@ gb_Library_COMPONENTPREFIXES := \
 	OOO:vnd.sun.star.expand:\dOOO_BASE_DIR/program/ \
 	URELIB:vnd.sun.star.expand:\dURE_INTERNAL_LIB_DIR/ \
     NONE:vnd.sun.star.expand:\dOOO_INBUILD_SHAREDLIB_DIR/ \
+
 # UnoApiTarget
 
 gb_UnoApiTarget_IDLCTARGET := $(OUTDIR)/bin/idlc
@@ -416,5 +417,8 @@ gb_UnoApiTarget_CPPUMAKERTARGET := $(OUTDIR)/bin/cppumaker
 gb_UnoApiTarget_CPPUMAKERCOMMAND := LD_LIBRARY_PATH=$(OUTDIR)/lib SOLARBINDIR=$(OUTDIR)/bin $(gb_UnoApiTarget_CPPUMAKERTARGET)
 gb_UnoApiTarget_REGVIEWTARGET := $(OUTDIR)/bin/regview
 gb_UnoApiTarget_REGVIEWCOMMAND := LD_LIBRARY_PATH=$(OUTDIR)/lib SOLARBINDIR=$(OUTDIR)/bin $(gb_UnoApiTarget_REGVIEWTARGET)
+
+# Configuration
+gb_CFGEXPRECOMMAND := LD_LIBRARY_PATH=$(OUTDIR)/lib
 
 # vim: set noet sw=4:

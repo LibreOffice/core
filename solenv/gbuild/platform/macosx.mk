@@ -504,4 +504,7 @@ gb_UnoApiTarget_CPPUMAKERCOMMAND := DYLD_LIBRARY_PATH=$(OUTDIR)/lib SOLARBINDIR=
 gb_UnoApiTarget_REGVIEWTARGET := $(OUTDIR)/bin/regview
 gb_UnoApiTarget_REGVIEWCOMMAND := DYLD_LIBRARY_PATH=$(OUTDIR)/lib SOLARBINDIR=$(OUTDIR)/bin $(gb_UnoApiTarget_REGVIEWTARGET)
 
+# Configuration
+gb_CFGEXPRECOMMAND := DYLD_LIBRARY_PATH=$(OUTDIR)/lib
+
 # vim: set noet sw=4:

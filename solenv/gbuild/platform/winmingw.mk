@@ -715,4 +715,7 @@ gb_UnoApiTarget_CPPUMAKERCOMMAND := $(gb_Helper_set_ld_path) SOLARBINDIR=$(OUTDI
 gb_UnoApiTarget_REGVIEWTARGET := $(OUTDIR_FOR_BUILD)/bin/regview
 gb_UnoApiTarget_REGVIEWCOMMAND := $(gb_Helper_set_ld_path) SOLARBINDIR=$(OUTDIR_FOR_BUILD)/bin $(gb_UnoApiTarget_REGVIEWTARGET)
 
+# Configuration
+gb_CFGEXPRECOMMAND :=  PATH="$${PATH}:$(OUTDIR)/bin"
+
 # vim: set noet sw=4:
