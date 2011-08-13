@@ -64,8 +64,8 @@ using ::rtl::OString;
 #define UNISTRING(s) rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(s))
 
 //-----------------------------------------------------------------------------
-const char* pConfigBaseURL = "/org.openoffice.";
-const char* pAccessSrvc = "com.sun.star.configuration.ConfigurationUpdateAccess";
+const char aConfigBaseURL[] = "/org.openoffice.";
+const char aAccessSrvc[] = "com.sun.star.configuration.ConfigurationUpdateAccess";
 
 namespace
 {
@@ -252,7 +252,7 @@ Reference< XHierarchicalNameAccess> ConfigManager::AcquireTree(utl::ConfigItem& 
     }
     OSL_ENSURE(bFound, "AcquireTree: ConfigItem unknown!");
 #endif
-    OUString sPath(OUString::createFromAscii(pConfigBaseURL));
+    OUString sPath(RTL_CONSTASCII_USTRINGPARAM(aConfigBaseURL));
     sPath += rCfgItem.GetSubTreeName();
     Sequence< Any > aArgs(2);
     Any* pArgs = aArgs.getArray();
@@ -287,7 +287,7 @@ Reference< XHierarchicalNameAccess> ConfigManager::AcquireTree(utl::ConfigItem& 
         try
         {
             xIFace = xCfgProvider->createInstanceWithArguments(
-                    OUString::createFromAscii(pAccessSrvc),
+                    OUString(RTL_CONSTASCII_USTRINGPARAM(aAccessSrvc)),
                     aArgs);
         }
         catch (const Exception& rEx)
@@ -357,7 +357,7 @@ ConfigManager& ConfigManager::GetConfigManager()
 
 rtl::OUString ConfigManager::GetConfigBaseURL()
 {
-    return OUString::createFromAscii(pConfigBaseURL);
+    return OUString(RTL_CONSTASCII_USTRINGPARAM(aConfigBaseURL));
 }
 
 Any ConfigManager::GetDirectConfigProperty(ConfigProperty eProp)
@@ -463,7 +463,7 @@ Any ConfigManager::GetDirectConfigProperty(ConfigProperty eProp)
         }
     }
 
-    OUString sPath = OUString::createFromAscii(pConfigBaseURL);
+    OUString sPath(RTL_CONSTASCII_USTRINGPARAM(aConfigBaseURL));
     switch(eProp)
     {
         case LOCALE:                        sPath += UNISTRING("Setup/L10N"); break;
@@ -493,7 +493,7 @@ Any ConfigManager::GetDirectConfigProperty(ConfigProperty eProp)
     try
     {
         xIFace = xCfgProvider->createInstanceWithArguments(
-                OUString::createFromAscii(pAccessSrvc),
+                OUString(RTL_CONSTASCII_USTRINGPARAM(aAccessSrvc)),
                 aArgs);
 
     }
@@ -625,7 +625,7 @@ Reference< XHierarchicalNameAccess> ConfigManager::GetHierarchyAccess(const OUSt
         try
         {
             xIFace = xCfgProvider->createInstanceWithArguments(
-                    OUString::createFromAscii(pAccessSrvc),
+                    OUString(RTL_CONSTASCII_USTRINGPARAM(aAccessSrvc)),
                     aArgs);
         }
 #if OSL_DEBUG_LEVEL > 1
@@ -648,7 +648,7 @@ Reference< XHierarchicalNameAccess> ConfigManager::GetHierarchyAccess(const OUSt
 
 Any ConfigManager::GetLocalProperty(const OUString& rProperty)
 {
-    OUString sPath(OUString::createFromAscii(pConfigBaseURL));
+    OUString sPath(RTL_CONSTASCII_USTRINGPARAM(aConfigBaseURL));
     sPath += rProperty;
 
     OUString sNode, sProperty;
@@ -680,7 +680,7 @@ Any ConfigManager::GetLocalProperty(const OUString& rProperty)
 
 void ConfigManager::PutLocalProperty(const OUString& rProperty, const Any& rValue)
 {
-    OUString sPath(OUString::createFromAscii(pConfigBaseURL));
+    OUString sPath(RTL_CONSTASCII_USTRINGPARAM(aConfigBaseURL));
     sPath += rProperty;
 
     OUString sNode, sProperty;
