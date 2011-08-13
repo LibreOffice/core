@@ -2812,7 +2812,7 @@ sal_Bool WinSalGraphics::CreateFontSubset( const rtl::OUString& rToFile,
     if( osl_File_E_None != osl_getSystemPathFromFileURL( rToFile.pData, &aSysPath.pData ) )
         return FALSE;
     const rtl_TextEncoding aThreadEncoding = osl_getThreadTextEncoding();
-    const ByteString aToFile( rtl::OUStringToOString( aSysPath, aThreadEncoding ) );
+    const rtl::OString aToFile(rtl::OUStringToOString(aSysPath, aThreadEncoding));
 
     // check if the font has a CFF-table
     const DWORD nCffTag = CalcTag( "CFF " );
@@ -2840,7 +2840,7 @@ sal_Bool WinSalGraphics::CreateFontSubset( const rtl::OUString& rToFile,
         pCharMap->DeReference(); // TODO: and and use a RAII object
 
         // provide a font subset from the CFF-table
-        FILE* pOutFile = fopen( aToFile.GetBuffer(), "wb" );
+        FILE* pOutFile = fopen( aToFile.getStr(), "wb" );
         rInfo.LoadFont( FontSubsetInfo::CFF_FONT, aRawCffData.get(), aRawCffData.size() );
         bool bRC = rInfo.CreateFontSubset( FontSubsetInfo::TYPE1_PFB, pOutFile, NULL,
                 nRealGlyphIds, pEncoding, nGlyphCount, pGlyphWidths );
@@ -2929,7 +2929,7 @@ sal_Bool WinSalGraphics::CreateFontSubset( const rtl::OUString& rToFile,
     free( pMetrics );
 
     // write subset into destination file
-    nRC = ::CreateTTFromTTGlyphs( aSftTTF.get(), aToFile.GetBuffer(), aShortIDs,
+    nRC = ::CreateTTFromTTGlyphs( aSftTTF.get(), aToFile.getStr(), aShortIDs,
             aTempEncs, nGlyphCount, 0, NULL, 0 );
     return (nRC == SF_OK);
 }
