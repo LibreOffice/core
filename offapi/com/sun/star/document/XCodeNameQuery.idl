@@ -38,7 +38,9 @@ module com {   module sun {   module star {   module document {
 interface XCodeNameQuery
 {
     //-------------------------------------------------------------------------
-    string getCodeNameForObject( [in] com::sun::star::uno::XInterface aContainer, [in] com::sun::star::uno::XInterface aObj );
+    string getCodeNameForObject( [in] com::sun::star::uno::XInterface aObj );
+
+    string getCodeNameForContainer( [in] com::sun::star::uno::XInterface aObj );
 };
 
 //=============================================================================

@@ -196,8 +196,47 @@ class ScVbaCodeNameProvider : public ::cppu::WeakImplHelper1< document::XCodeNam
 public:
     ScVbaCodeNameProvider( ScDocShell& rDocShell ) : mrDocShell(rDocShell) {}
     // XCodeNameQuery
-    rtl::OUString SAL_CALL getCodeNameForObject(
-        const uno::Reference<uno::XInterface>& xContainer, const uno::Reference<uno::XInterface>& /*xIf*/ )
+    rtl::OUString SAL_CALL getCodeNameForObject( const uno::Reference< uno::XInterface >& xIf ) throw( uno::RuntimeException )
+    {
+        SolarMutexGuard aGuard;
+        rtl::OUString sCodeName;
+
+        // need to find the page ( and index )  for this control
+        uno::Reference< drawing::XDrawPagesSupplier > xSupplier( mrDocShell.GetModel(), uno::UNO_QUERY_THROW );
+        uno::Reference< container::XIndexAccess > xIndex( xSupplier->getDrawPages(), uno::UNO_QUERY_THROW );
+        sal_Int32 nLen = xIndex->getCount();
+        bool bMatched = false;
+        uno::Sequence< script::ScriptEventDescriptor > aFakeEvents;
+        for ( sal_Int32 index = 0; index < nLen; ++index )
+        {
+            try
+            {
+                uno::Reference< form::XFormsSupplier >  xFormSupplier( xIndex->getByIndex( index ), uno::UNO_QUERY_THROW );
+                uno::Reference< container::XIndexAccess > xFormIndex( xFormSupplier->getForms(), uno::UNO_QUERY_THROW );
+                // get the www-standard container
+                uno::Reference< container::XIndexAccess > xFormControls( xFormIndex->getByIndex(0), uno::UNO_QUERY_THROW );
+                sal_Int32 nCntrls = xFormControls->getCount();
+                for( sal_Int32 cIndex = 0; cIndex < nCntrls; ++cIndex )
+                {
+                    uno::Reference< uno::XInterface > xControl( xFormControls->getByIndex( cIndex ), uno::UNO_QUERY_THROW );
+                    bMatched = ( xControl == xIf );
+                    if ( bMatched )
+                    {
+                        String sName;
+                        mrDocShell.GetDocument()->GetCodeName( static_cast<SCTAB>( index ), sName );
+                        sCodeName = sName;
+                    }
+                }
+            }
+            catch( uno::Exception& ) {}
+            if ( bMatched )
+                break;
+        }
+        // Probably should throw here ( if !bMatched )
+         return sCodeName;
+    }
+
+    rtl::OUString SAL_CALL getCodeNameForContainer( const uno::Reference<uno::XInterface>& xContainer )
             throw( uno::RuntimeException )
     {
         SolarMutexGuard aGuard;

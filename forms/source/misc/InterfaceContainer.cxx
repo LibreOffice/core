@@ -148,9 +148,12 @@ void OInterfaceContainer::impl_addVbEvents_nolck_nothrow(  const sal_Int32 i_nIn
             if ( xElementAsForm.is() )
                 break;
 
-            rtl::OUString sCodeName;
+            // Try getting the code name from the container first (faster),
+            // then from the element if that fails (slower).
             Reference<XInterface> xThis = static_cast<XContainer*>(this);
-            sCodeName = xNameQuery->getCodeNameForObject(xThis, xElement);
+            rtl::OUString sCodeName = xNameQuery->getCodeNameForContainer(xThis);
+            if (sCodeName.isEmpty())
+                sCodeName = xNameQuery->getCodeNameForObject(xElement);
 
             Reference< XPropertySet > xProps( xElement, UNO_QUERY_THROW );
             ::rtl::OUString sServiceName;

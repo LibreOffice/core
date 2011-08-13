@@ -449,7 +449,7 @@ void ScVbaControl::fireEvent( script::ScriptEvent& evt )
             uno::Reference< lang::XMultiServiceFactory > xDocFac(  m_xModel, uno::UNO_QUERY_THROW );
             uno::Reference< document::XCodeNameQuery > xNameQuery(  xDocFac->createInstance( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ooo.vba.VBACodeNameProvider")) ), uno::UNO_QUERY_THROW );
             uno::Reference< uno::XInterface > xIf( xControlShape->getControl(), uno::UNO_QUERY_THROW );
-            evt.ScriptCode = xNameQuery->getCodeNameForObject( xIf, xIf ); // TODO : FIX THIS!!!
+            evt.ScriptCode = xNameQuery->getCodeNameForObject( xIf );
             evt.Arguments[ 0 ] = uno::makeAny( aEvt );
             xScriptListener->firing( evt );
         }
