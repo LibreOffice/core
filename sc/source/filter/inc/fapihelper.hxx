@@ -152,6 +152,8 @@ public:
     template< typename InterfaceType >
     inline explicit     ScfPropertySet( ::com::sun::star::uno::Reference< InterfaceType > xInterface ) { Set( xInterface ); }
 
+                        ~ScfPropertySet();
+
     /** Sets the passed UNO property set and releases the old UNO property set. */
     void                Set( XPropertySetRef xPropSet );
     /** Queries the passed interface for an XPropertySet and releases the old UNO property set. */

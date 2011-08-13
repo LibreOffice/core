@@ -402,13 +402,13 @@ void XclImpDrawObjBase::SetDffData( const DffObjData& rDffObjData, const String&
     mbAutoMargin = bAutoMargin;
 }
 
-String XclImpDrawObjBase::GetObjName() const
+OUString XclImpDrawObjBase::GetObjName() const
 {
     /*  #i51348# Always return a non-empty name. Create English
         default names depending on the object type. This is not implemented as
         virtual functions in derived classes, as class type and object type may
         not match. */
-    return (maObjName.Len() > 0) ? maObjName : GetObjectManager().GetDefaultObjName( *this );
+    return maObjName.isEmpty() ? GetObjectManager().GetDefaultObjName(*this) : maObjName;
 }
 
 const XclObjAnchor* XclImpDrawObjBase::GetAnchor() const
@@ -507,7 +507,7 @@ void XclImpDrawObjBase::PostProcessSdrObject( XclImpDffConverter& rDffConv, SdrO
 
 void XclImpDrawObjBase::ReadName5( XclImpStream& rStrm, sal_uInt16 nNameLen )
 {
-    maObjName.Erase();
+    maObjName = rtl::OUString();
     if( nNameLen > 0 )
     {
         // name length field is repeated before the name
@@ -1855,7 +1855,6 @@ void XclImpControlHelper::ProcessControl( const XclImpDrawObjBase& rDrawObj ) co
     aPropSet.SetBoolProperty( CREATE_OUSTRING( "EnableVisible" ), rDrawObj.IsVisible() );
     aPropSet.SetBoolProperty( CREATE_OUSTRING( "Printable" ), rDrawObj.IsPrintable() );
 
-
     // virtual call for type specific processing
     DoProcessControl( aPropSet );
 }
@@ -2829,7 +2828,7 @@ void XclImpPictureObj::DoReadObj5( XclImpStream& rStrm, sal_uInt16 nNameLen, sal
     if( (rStrm.GetNextRecId() == EXC_ID3_IMGDATA) && rStrm.StartNextRecord() )
     {
         // page background is stored as hidden picture with name "__BkgndObj"
-        if( IsHidden() && (GetObjName() == CREATE_STRING( "__BkgndObj" )) )
+        if (IsHidden() && (GetObjName().equalsAscii("__BkgndObj")))
             GetPageSettings().ReadImgData( rStrm );
         else
             maGraphic = XclImpDrawing::ReadImgData( GetRoot(), rStrm );
@@ -2880,12 +2879,12 @@ SdrObject* XclImpPictureObj::DoCreateSdrObj( XclImpDffConverter& rDffConv, const
     return xSdrObj.release();
 }
 
-String XclImpPictureObj::GetObjName() const
+OUString XclImpPictureObj::GetObjName() const
 {
     if( IsOcxControl() )
     {
-        String sName( GetObjectManager().GetOleNameOverride( GetTab(), GetObjId() ) );
-        if ( sName.Len() > 0 )
+        OUString sName( GetObjectManager().GetOleNameOverride( GetTab(), GetObjId() ) );
+        if (!sName.isEmpty())
             return sName;
     }
     return XclImpDrawObjBase::GetObjName();
@@ -4167,7 +4166,7 @@ void XclImpObjectManager::ConvertObjects()
     // instead use InterpretDirtyCells in ScDocument::CalcAfterLoad.
 }
 
-String XclImpObjectManager::GetDefaultObjName( const XclImpDrawObjBase& rDrawObj ) const
+OUString XclImpObjectManager::GetDefaultObjName( const XclImpDrawObjBase& rDrawObj ) const
 {
     String aDefName;
     DefObjNameMap::const_iterator aIt = maDefObjNames.find( rDrawObj.GetObjType() );

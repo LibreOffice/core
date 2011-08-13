@@ -1,0 +1,18 @@
+
+#ifndef __com_sun_star_beans_XPropertySet2_idl__
+#define __com_sun_star_beans_XPropertySet2_idl__
+
+#include <com/sun/star/beans/XPropertySet.idl>
+
+module com {  module sun {  module star {  module beans {
+
+interface XPropertySet2: com::sun::star::beans::XPropertySet
+{
+    void enableChangeListenerNotification( [in] boolean bEnable );
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

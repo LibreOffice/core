@@ -33,7 +33,7 @@
 
 #include <cppuhelper/interfacecontainer.hxx>
 
-#include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/beans/XPropertySet2.hpp>
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
 #include <com/sun/star/beans/XFastPropertySet.hpp>
 
@@ -350,7 +350,7 @@ public:
  */
 class OPropertySetHelper : public ::com::sun::star::beans::XMultiPropertySet,
                            public ::com::sun::star::beans::XFastPropertySet,
-                           public ::com::sun::star::beans::XPropertySet
+                           public ::com::sun::star::beans::XPropertySet2
 {
 public:
     /**
@@ -503,6 +503,11 @@ public:
         const ::com::sun::star::uno::Sequence< ::rtl::OUString >& PropertyNames,
         const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertiesChangeListener > & Listener )
         throw(::com::sun::star::uno::RuntimeException);
+
+    // XPropertySet2
+    virtual void SAL_CALL enableChangeListenerNotification( sal_Bool bEnable )
+        throw(::com::sun::star::uno::RuntimeException);
+
     /**
        The property sequence is created in the call. The interface isn't used after the call.
      */
@@ -629,6 +634,8 @@ protected:
        Container for the XPropertyVetoableListener. The listeners are inserted by handle.
      */
     OMultiTypeInterfaceContainerHelperInt32 aVetoableLC;
+
+    bool m_bFireEvent;
 
     class Impl;
 

@@ -173,6 +173,7 @@ OPropertySetHelper::OPropertySetHelper(
     : rBHelper( rBHelper_ ),
       aBoundLC( rBHelper_.rMutex ),
       aVetoableLC( rBHelper_.rMutex ),
+      m_bFireEvent(true),
       m_pReserved( new Impl(false, 0) )
 {
 }
@@ -182,6 +183,7 @@ OPropertySetHelper::OPropertySetHelper(
     : rBHelper( rBHelper_ ),
       aBoundLC( rBHelper_.rMutex ),
       aVetoableLC( rBHelper_.rMutex ),
+      m_bFireEvent(true),
       m_pReserved( new Impl( bIgnoreRuntimeExceptionsWhileFiring, 0 ) )
 {
 }
@@ -192,6 +194,7 @@ OPropertySetHelper::OPropertySetHelper(
     : rBHelper( rBHelper_ ),
       aBoundLC( rBHelper_.rMutex ),
       aVetoableLC( rBHelper_.rMutex ),
+      m_bFireEvent(true),
       m_pReserved(
         new Impl( bIgnoreRuntimeExceptionsWhileFiring, i_pFireEvents) )
 {
@@ -215,6 +218,7 @@ Any OPropertySetHelper::queryInterface( const ::com::sun::star::uno::Type & rTyp
     return ::cppu::queryInterface(
         rType,
         static_cast< XPropertySet * >( this ),
+        static_cast< XPropertySet2 * >( this ),
         static_cast< XMultiPropertySet * >( this ),
         static_cast< XFastPropertySet * >( this ) );
 }
@@ -626,6 +630,9 @@ void OPropertySetHelper::fire
     sal_Bool bVetoable
 )
 {
+    if (!m_bFireEvent)
+        return;
+
     OSL_ENSURE( m_pReserved.get(), "No OPropertySetHelper::Impl" );
     if (m_pReserved->m_pFireEvents) {
         m_pReserved->m_pFireEvents->fireEvents(
@@ -1027,6 +1034,12 @@ void OPropertySetHelper::firePropertiesChangeEvent(
         rListener->propertiesChange( aChanges );
 
     delete [] pHandles;
+}
+
+void OPropertySetHelper::enableChangeListenerNotification( sal_Bool bEnable )
+    throw(::com::sun::star::uno::RuntimeException)
+{
+    m_bFireEvent = bEnable;
 }
 
 #ifdef xdvnsdfln

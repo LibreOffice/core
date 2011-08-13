@@ -390,3 +390,8 @@ UDK_3.7 { # OOo 3.4
         _ZN4cppu18OPropertySetHelper29setDependentFastPropertyValueE?RKN3com3sun4star3uno3AnyE;
 } UDK_3.6;
 
+UDK_3.8 { # LibO 3.5
+global:
+        _ZN4cppu18OPropertySetHelper32enableChangeListenerNotificationEh;
+        _ZThn*_N4cppu18OPropertySetHelper32enableChangeListenerNotificationEh;
+} UDK_3.7;

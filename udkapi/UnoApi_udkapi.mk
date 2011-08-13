@@ -2,7 +2,7 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
+#
 # Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
@@ -159,6 +159,7 @@ $(eval $(call gb_UnoApiTarget_add_idlfiles,udkapi,\
 	udkapi/com/sun/star/beans/XPropertyChangeListener \
 	udkapi/com/sun/star/beans/XPropertyContainer \
 	udkapi/com/sun/star/beans/XPropertySet \
+	udkapi/com/sun/star/beans/XPropertySet2 \
 	udkapi/com/sun/star/beans/XPropertySetInfo \
 	udkapi/com/sun/star/beans/XPropertySetInfoChangeListener \
 	udkapi/com/sun/star/beans/XPropertySetInfoChangeNotifier \

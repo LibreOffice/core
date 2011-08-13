@@ -94,7 +94,7 @@ public:
     /** Returns the Excel object type from OBJ record. */
     inline sal_uInt16   GetObjType() const { return mnObjType; }
     /** Returns the name of this object, may generate a default name. */
-    virtual String              GetObjName() const;
+    virtual rtl::OUString GetObjName() const;
     /** Returns associated macro name, if set, otherwise zero length string. */
     inline const String& GetMacroName() const { return maMacroName; }
 
@@ -192,7 +192,7 @@ private:
     sal_uInt16          mnObjType;      /// The Excel object type from OBJ record.
     sal_uInt32          mnDffShapeId;   /// Shape ID from DFF stream.
     sal_uInt32          mnDffFlags;     /// Shape flags from DFF stream.
-    String              maObjName;      /// Name of the object.
+    rtl::OUString       maObjName;      /// Name of the object.
     String              maMacroName;    /// Name of an attached macro.
     String              maHyperlink;    /// On-click hyperlink URL.
     bool                mbHasAnchor;    /// true = maAnchor is initialized.
@@ -868,7 +868,7 @@ class XclImpPictureObj : public XclImpRectObj, public XclImpControlHelper
 public:
     explicit            XclImpPictureObj( const XclImpRoot& rRoot );
     /** Returns the ObjectName - can use non-obvious lookup for override in the associated vba document module stream**/
-    virtual String              GetObjName() const;
+    virtual rtl::OUString GetObjName() const;
     /** Returns the graphic imported from the IMGDATA record. */
     inline const Graphic& GetGraphic() const { return maGraphic; }
 
@@ -1224,7 +1224,7 @@ public:
     void                ConvertObjects();
 
     /** Returns the default name for the passed object. */
-    String              GetDefaultObjName( const XclImpDrawObjBase& rDrawObj ) const;
+    rtl::OUString       GetDefaultObjName( const XclImpDrawObjBase& rDrawObj ) const;
     /** Returns the used area in the sheet with the passed index. */
     ScRange             GetUsedArea( SCTAB nScTab ) const;
     /** Sets the container to receive overridden shape/ctrl names from
