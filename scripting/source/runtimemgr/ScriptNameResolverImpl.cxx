@@ -222,7 +222,7 @@ throw ( lang::IllegalArgumentException, script::CannotConvertException, RuntimeE
         Reference< XInterface > xInterface(
             m_xMultiComFac->createInstanceWithContext(
                 ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                    "com.sun.star.ucb.SimpleFileAccess" ),
+                    "com.sun.star.ucb.SimpleFileAccess" )),
                 m_xContext
             ),
             UNO_SET_THROW
