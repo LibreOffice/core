@@ -98,6 +98,7 @@ private:
      */
     void operator =(SimpleReferenceComponent);
 
+#ifndef WNT
     /** not implemented (see general class documentation)
         @internal
      */
@@ -107,7 +108,7 @@ private:
         @internal
      */
     static void operator delete[](void * pPtr);
-
+#endif
     bool mbDisposed;
 };
 
