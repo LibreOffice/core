@@ -725,7 +725,7 @@ Type SAL_CALL SvUnoImageMap::getElementType(  ) throw(RuntimeException)
 
 sal_Bool SAL_CALL SvUnoImageMap::hasElements(  ) throw(RuntimeException)
 {
-    return maObjectList.size() != 0;
+    return (!maObjectList.empty());
 }
 
 // XSerivceInfo

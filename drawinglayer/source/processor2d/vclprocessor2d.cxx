@@ -231,7 +231,7 @@ namespace drawinglayer
                         const double fPixelVectorFactor(aPixelVector.getLength());
 
                         for(::std::vector< double >::const_iterator aStart(rTextCandidate.getDXArray().begin());
-                            aStart != rTextCandidate.getDXArray().end(); aStart++)
+                            aStart != rTextCandidate.getDXArray().end(); ++aStart)
                         {
                             aTransformedDXArray.push_back(basegfx::fround((*aStart) * fPixelVectorFactor));
                         }

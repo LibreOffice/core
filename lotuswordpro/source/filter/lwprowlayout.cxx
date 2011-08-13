@@ -300,7 +300,7 @@ void LwpRowLayout::RegisterCurRowStyle(XFRow* pXFRow,sal_uInt16 nRowMark)
  */
 sal_Int32 LwpRowLayout::FindMarkConnCell(sal_uInt8 nStartCol,sal_uInt8 nEndCol)
 {
-    if (m_ConnCellList.size() == 0)
+    if (m_ConnCellList.empty())
         return -1;
 
     sal_uInt16 nSpannRows = 1;
@@ -458,7 +458,7 @@ void LwpRowLayout::SetCellSplit(sal_uInt16 nEffectRows)
  */
 sal_Bool LwpRowLayout::GetMergeCellFlag()
 {
-    if (m_ConnCellList.size() == 0)
+    if (m_ConnCellList.empty())
         return sal_False;
     else
         return sal_True;

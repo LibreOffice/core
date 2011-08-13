@@ -2013,7 +2013,7 @@ SdrObject* EnhancedCustomShape2d::CreatePathObj( sal_Bool bLineGeometryNeededOnl
     SdrObject* pRet = NULL;
     sal_uInt32 i;
 
-    if ( vObjectList.size() )
+    if ( !vObjectList.empty() )
     {
         const SfxItemSet& rCustomShapeSet = pCustomShapeObj->GetMergedItemSet();
         Color           aFillColor;
@@ -2021,7 +2021,7 @@ SdrObject* EnhancedCustomShape2d::CreatePathObj( sal_Bool bLineGeometryNeededOnl
         sal_uInt32      nColorIndex = 0;
 
         // #i37011# remove invisible objects
-        if(vObjectList.size())
+        if(!vObjectList.empty())
         {
             std::vector< SdrPathObj* > vTempList;
 

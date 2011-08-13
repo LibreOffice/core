@@ -1477,7 +1477,7 @@ namespace svt { namespace table
         if(m_pSelEngine->GetSelectionMode() == SINGLE_SELECTION)
         {
             //if other rows already selected, deselect them
-            if(m_aSelectedRows.size()>0)
+            if(!m_aSelectedRows.empty())
             {
                 for(std::vector<RowPos>::iterator it=m_aSelectedRows.begin();
                         it!=m_aSelectedRows.end();++it)
@@ -1508,7 +1508,7 @@ namespace svt { namespace table
         case cursorUp:
         if(m_pSelEngine->GetSelectionMode() == SINGLE_SELECTION)
         {
-            if(m_aSelectedRows.size()>0)
+            if(!m_aSelectedRows.empty())
             {
                 for(std::vector<RowPos>::iterator it=m_aSelectedRows.begin();
                     it!=m_aSelectedRows.end();++it)
@@ -1625,7 +1625,7 @@ namespace svt { namespace table
             else
             {
                 //there are other selected rows
-                if(m_aSelectedRows.size()>0)
+                if(!m_aSelectedRows.empty())
                 {
                     //the anchor wasn't set -> a region is not selected, that's why clear all selection
                     //and select the current row
@@ -1712,7 +1712,7 @@ namespace svt { namespace table
             }
             else
             {
-                if(m_aSelectedRows.size()>0)
+                if(!m_aSelectedRows.empty())
                 {
                     //the anchor wasn't set -> a region is not selected, that's why clear all selection
                     //and select the current row

@@ -1551,7 +1551,7 @@ void JavaVirtualMachine::setINetSettingsInVM(bool set_reset)
                 const ::std::vector< rtl::OUString> & Props = jvm.getProperties();
                 typedef ::std::vector< rtl::OUString >::const_iterator C_IT;
 
-                for( C_IT i= Props.begin(); i != Props.end(); i++)
+                for( C_IT i= Props.begin(); i != Props.end(); ++i)
                 {
                     rtl::OUString prop= *i;
                     sal_Int32 index= prop.indexOf( (sal_Unicode)'=');

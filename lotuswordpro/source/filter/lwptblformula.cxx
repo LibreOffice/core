@@ -635,7 +635,7 @@ String LwpFormulaFunc::ToString(LwpTableLayout* pCellsMap)
     }
 
     //erase the last "|"
-    if (m_aArgs.size()>0)
+    if (!m_aArgs.empty())
     {
         aFormula.Erase(aFormula.Len()-1,1);
     }

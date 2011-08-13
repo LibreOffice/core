@@ -391,7 +391,7 @@ void SAL_CALL ValueSetAcc::addEventListener( const uno::Reference< accessibility
             if( *aIter == rxListener )
                 bFound = sal_True;
             else
-                aIter++;
+                ++aIter;
         }
 
         if (!bFound)
@@ -420,7 +420,7 @@ void SAL_CALL ValueSetAcc::removeEventListener( const uno::Reference< accessibil
                 bFound = sal_True;
             }
             else
-                aIter++;
+                ++aIter;
         }
     }
 }
@@ -1066,7 +1066,7 @@ void SAL_CALL ValueItemAcc::addEventListener( const uno::Reference< accessibilit
             if( *aIter == rxListener )
                 bFound = sal_True;
             else
-                aIter++;
+                ++aIter;
         }
 
         if (!bFound)
@@ -1094,7 +1094,7 @@ void SAL_CALL ValueItemAcc::removeEventListener( const uno::Reference< accessibi
                 bFound = sal_True;
             }
             else
-                aIter++;
+                ++aIter;
         }
     }
 }

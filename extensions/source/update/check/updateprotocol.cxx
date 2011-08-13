@@ -231,13 +231,8 @@ checkForUpdates(
                         o_rUpdateInfo.ReleaseNotes.push_back(aRelNote);
                     }
                 }
-/*
-                o_rUpdateInfo.ReleaseNotes.push_back(
-                    ReleaseNote(1, UNISTRING("http://qa.openoffice.org/tests/online_update_test.html"))
-                );
-*/
 
-                if( o_rUpdateInfo.Sources.size() > 0 )
+                if( !o_rUpdateInfo.Sources.empty() )
                     return true;
             }
         }

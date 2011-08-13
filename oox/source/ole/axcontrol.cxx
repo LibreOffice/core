@@ -1801,14 +1801,14 @@ HtmlSelectModel::importBinaryModel( BinaryInputStream& rInStrm )
             }
         }
     }
-    if ( listValues.size() )
+    if ( !listValues.empty() )
     {
         msListData.realloc( listValues.size() );
         sal_Int32 index = 0;
         for( std::vector< rtl::OUString >::iterator it = listValues.begin(); it != listValues.end(); ++it, ++index )
              msListData[ index ] = *it;
     }
-    if ( selectedIndices.size() )
+    if ( !selectedIndices.empty() )
     {
         msIndices.realloc( selectedIndices.size() );
         sal_Int32 index = 0;

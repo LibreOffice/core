@@ -206,10 +206,9 @@ namespace
                 ::sw::mark::IFieldmark::parameter_map_t* pNewParams = pNewFieldmark->GetParameters();
                 const ::sw::mark::IFieldmark::parameter_map_t* pOldParams = pOldFieldmark->GetParameters();
                 ::sw::mark::IFieldmark::parameter_map_t::const_iterator pIt = pOldParams->begin();
-                while ( pIt != pOldParams->end() )
+                for (; pIt != pOldParams->end(); ++pIt )
                 {
                     pNewParams->insert( *pIt );
-                    pIt++;
                 }
             }
 
