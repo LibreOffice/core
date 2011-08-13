@@ -76,17 +76,15 @@ $(call gb_Output_announce,$(2),$(true),XCS,1)
 $(call gb_Helper_abbreviate_dirs_native,\
 	mkdir -p $(dir $(1)) && \
 	$(gb_XSLTPROC) --nonet \
-		-o $(1).val \
+		--noout \
 		--stringparam componentName $(subst /,.,$(basename $(XCSFILE))) \
 		--stringparam root $(subst $(XCSFILE),,$(3)) \
 		$(gb_XcsTarget_XSLT_SchemaVal) \
-		$(3) \
-	&& rm $(1).val && \
+		$(3) && \
 	$(gb_XSLTPROC) --nonet \
-		-o $(1).sanity \
+		--noout \
 		$(gb_XcsTarget_XSLT_Sanity) \
-		$(3) \
-	&& rm $(1).sanity && \
+		$(3) && \
 	$(gb_XSLTPROC) --nonet \
 		-o $(1) \
 		$(gb_XcsTarget_XSLT_SchemaTrim) \
@@ -120,13 +118,12 @@ $(call gb_Output_announce,$(2),$(true),XCU,2)
 $(call gb_Helper_abbreviate_dirs_native,\
 	mkdir -p $(dir $(1)) && \
 	$(gb_XSLTPROC) --nonet \
-		-o $(1).val \
+		--noout \
 		--stringparam xcs $(call gb_XcsTarget_for_XcuTarget,$(XCUFILE)) \
 		--stringparam schemaRoot $(call gb_XcsTarget_get_outdir_target,) \
 		--path $(gb_Configuration_registry) \
 		$(gb_XcuDataTarget_XSLT_DataVal) \
-		$(3) \
-	&& rm -f $(1).val && \
+		$(3) && \
 	$(gb_XSLTPROC) --nonet \
 		-o $(1) \
 		--stringparam xcs $(call gb_XcsTarget_for_XcuTarget,$(XCUFILE)) \
