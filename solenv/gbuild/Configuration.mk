@@ -190,10 +190,12 @@ $(call gb_XcuModuleTarget_get_outdir_target,%) :
 
 # XcuLangpackTarget class
 
+gb_XcuLangpackTarget__get_name_with_lang = $(basename $(1))-$(2)$(suffix $(1))
+
 gb_XcuLangpackTarget__get_outdir_target_with_lang = \
- $(call gb_XcuLangpackTarget_get_outdir_target,$(basename $(1))-$(2)$(suffix $(1)))
+ $(call gb_XcuLangpackTarget_get_outdir_target,$(call gb_XcuLangpackTarget__get_name_with_lang,$(1),$(2)))
 gb_XcuLangpackTarget__get_target_with_lang = \
- $(call gb_XcuLangpackTarget_get_target,$(basename $(1))-$(2)$(suffix $(1)))
+ $(call gb_XcuLangpackTarget_get_target,$(call gb_XcuLangpackTarget__get_name_with_lang,$(1),$(2)))
 
 gb_XcuLangpackTarget_SED_delcomment := $(OUTDIR)/xml/processing/delcomment.sed
 
@@ -343,7 +345,7 @@ $(call gb_XcsTarget_get_clean_target,$(2)/$(3)) : XCSFILE := $(3)
 $(call gb_XcsTarget_get_outdir_target,$(3)) : \
 	$(call gb_XcsTarget_get_target,$(2)/$(3))
 $(call gb_Deliver_add_deliverable,$(call gb_XcsTarget_get_outdir_target,$(3)),\
-	$(call gb_XcsTarget_get_target,$(2)/$(3)))
+	$(call gb_XcsTarget_get_target,$(2)/$(3)),$(2)/$(3))
 endef
 
 #$(call gb_Configuration_add_schemas,zipfile,prefix,xcsfiles)
@@ -366,7 +368,8 @@ $(call gb_XcuDataTarget_get_outdir_target,$(3)) : \
 	$(call gb_XcuDataTarget_get_target,$(2)/$(3))
 $(call gb_Deliver_add_deliverable,\
 	$(call gb_XcuDataTarget_get_outdir_target,$(3)),\
-	$(call gb_XcuDataTarget_get_target,$(2)/$(3)))
+	$(call gb_XcuDataTarget_get_target,$(2)/$(3)),\
+	$(2)/$(3))
 endef
 
 #$(call gb_Configuration_add_schemas,zipfile,prefix,xcufiles)
@@ -388,7 +391,8 @@ $(call gb_XcuModuleTarget_get_outdir_target,$(3)) : \
 	$(call gb_XcuModuleTarget_get_target,$(2)/$(3))
 $(call gb_Deliver_add_deliverable,\
 	$(call gb_XcuModuleTarget_get_outdir_target,$(3)),\
-	$(call gb_XcuModuleTarget_get_target,$(2)/$(3)))
+	$(call gb_XcuModuleTarget_get_target,$(2)/$(3)),\
+	$(2)/$(3))
 endef
 
 # $(call gb_Configuration_add_spool_modules,zipfile,prefix,xcufiles)
@@ -410,7 +414,8 @@ $(call gb_XcuLangpackTarget__get_outdir_target_with_lang,$(3),$(4)) : \
 	$(call gb_XcuLangpackTarget__get_target_with_lang,$(2)/$(3),$(4))
 $(call gb_Deliver_add_deliverable,\
 	$(call gb_XcuLangpackTarget__get_outdir_target_with_lang,$(3),$(4)),\
-	$(call gb_XcuLangpackTarget__get_target_with_lang,$(2)/$(3),$(4)))
+	$(call gb_XcuLangpackTarget__get_target_with_lang,$(2)/$(3),$(4)),\
+	$(call gb_XcuLangpackTarget__get_name_with_lang,$(2)/$(3),$(4)))
 endef
 
 # $(call gb_Configuration_add_spool_langpack,zipfile,prefix,xcufile)
