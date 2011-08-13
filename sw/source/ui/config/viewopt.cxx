@@ -338,7 +338,7 @@ sal_uInt16      GetHtmlMode(const SwDocShell* pShell)
         SvxHtmlOptions& rHtmlOpt = SvxHtmlOptions::Get();
         switch ( rHtmlOpt.GetExportMode() )
         {
-            case HTML_CFG_MSIE_40:
+            case HTML_CFG_MSIE:
                 nRet |= HTMLMODE_SMALL_CAPS|
                         HTMLMODE_FULL_STYLES|HTMLMODE_GRAPH_POS|
                         HTMLMODE_FULL_ABS_POS|HTMLMODE_SOME_ABS_POS;

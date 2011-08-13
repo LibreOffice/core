@@ -41,7 +41,7 @@
 const sal_uInt16 aPosToExportArr[] =
 {
     HTML_CFG_HTML32,
-    HTML_CFG_MSIE_40,
+    HTML_CFG_MSIE,
     HTML_CFG_NS40,
     HTML_CFG_WRITER
 };
@@ -225,7 +225,7 @@ IMPL_LINK(OfaHtmlTabPage, ExportHdl_Impl, ListBox*, pBox)
     sal_uInt16 nExport = aPosToExportArr[ pBox->GetSelectEntryPos() ];
     switch( nExport )
     {
-        case HTML_CFG_MSIE_40:
+        case HTML_CFG_MSIE:
         case HTML_CFG_NS40  :
         case HTML_CFG_WRITER :
             aPrintExtensionCB.Enable(sal_True);

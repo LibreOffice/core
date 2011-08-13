@@ -163,7 +163,7 @@ void SvxHtmlOptions::Load( const Sequence< OUString >& aNames )
                             switch( nExpMode )
                             {
                                 case 0:     nExpMode = HTML_CFG_HTML32;     break;
-                                case 1:     nExpMode = HTML_CFG_MSIE_40;    break;
+                                case 1:     nExpMode = HTML_CFG_MSIE;    break;
                                 case 3:     nExpMode = HTML_CFG_WRITER;     break;
                                 case 4:     nExpMode = HTML_CFG_NS40;       break;
                                 case 5:     nExpMode = HTML_CFG_MSIE_40_OLD;break;
@@ -233,7 +233,7 @@ void    SvxHtmlOptions::Commit()
                     switch( nExpMode )
                     {
                         case HTML_CFG_HTML32:       nExpMode = 0;   break;
-                        case HTML_CFG_MSIE_40:      nExpMode = 1;   break;
+                        case HTML_CFG_MSIE:      nExpMode = 1;   break;
                         case HTML_CFG_WRITER:       nExpMode = 3;   break;
                         case HTML_CFG_NS40:         nExpMode = 4;   break;
                         case HTML_CFG_MSIE_40_OLD:  nExpMode = 5;   break;
@@ -388,7 +388,7 @@ sal_Bool    SvxHtmlOptions::IsPrintLayoutExtension() const
     sal_Bool bRet = 0 != (pImp->nFlags & HTMLCFG_PRINT_LAYOUT_EXTENSION);
     switch( pImp->nExportMode )
     {
-        case HTML_CFG_MSIE_40:
+        case HTML_CFG_MSIE:
         case HTML_CFG_NS40  :
         case HTML_CFG_WRITER :
         break;
