@@ -2193,7 +2193,7 @@ Reference< XNameAccess > SAL_CALL SfxLibraryContainer::createLibraryLink
     SfxLibrary* pNewLib = implCreateLibraryLink( Name, aLibInfoFileURL, aLibDirURL, ReadOnly );
     pNewLib->maLibElementFileExtension = maLibElementFileExtension;
     pNewLib->maUnexpandedStorageURL = aUnexpandedStorageURL;
-    pNewLib->maOrignialStorageURL = StorageURL;
+    pNewLib->maOriginalStorageURL = StorageURL;
 
     OUString aInitFileName;
     uno::Reference< embed::XStorage > xDummyStor;
@@ -2827,7 +2827,7 @@ OUString SAL_CALL SfxLibraryContainer::getOriginalLibraryLinkURL( const OUString
     sal_Bool bLink = pImplLib->mbLink;
     if( !bLink )
         throw IllegalArgumentException();
-    OUString aRetStr = pImplLib->maOrignialStorageURL;
+    OUString aRetStr = pImplLib->maOriginalStorageURL;
     return aRetStr;
 }
 

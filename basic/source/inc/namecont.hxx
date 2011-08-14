@@ -605,7 +605,7 @@ private:
     ::rtl::OUString maLibInfoFileURL;
     ::rtl::OUString maStorageURL;
     ::rtl::OUString maUnexpandedStorageURL;
-    ::rtl::OUString maOrignialStorageURL;
+    ::rtl::OUString maOriginalStorageURL;
 
     sal_Bool mbLink;
     sal_Bool mbReadOnly;
