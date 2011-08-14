@@ -174,17 +174,17 @@ public class StateSetView
             }
 
             // Draw string of set states.
-            String sStates = new String ();
+            StringBuffer sStates = new StringBuffer ();
             for (int i=0; i<aStates.length; i++)
             {
                 if (i > 0)
-                    sStates = sStates + ", ";
-                sStates = sStates + NameProvider.getStateName(aStates[i]);
+                    sStates.append(", ");
+                sStates.append(NameProvider.getStateName(aStates[i]));
             }
             g.setTransform (aTransform);
             g.translate (10,aWidgetArea.y+aWidgetArea.height-3);
             g.scale (0.9,0.9);
-            g.drawString (sStates,0,0);
+            g.drawString (sStates.toString(),0,0);
         }
     }
 

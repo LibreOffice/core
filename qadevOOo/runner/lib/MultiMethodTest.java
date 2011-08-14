@@ -161,7 +161,7 @@ public class MultiMethodTest
 
         // Some fake code for a self test.
         // For normal test we must not be a "ifc.qadevooo._SelfTest"
-        if (! entry.entryName.equals("ifc.qadevooo._SelfTest"))
+        if (! ("ifc.qadevooo._SelfTest").equals(entry.entryName))
         {
             String ifcName = getInterfaceName();
             // System.out.println("checking : " + ifcName);
@@ -276,8 +276,8 @@ public class MultiMethodTest
     {
         String clsName = this.getClass().getName();
 
-        int firstDot = clsName.indexOf(".");
-        int lastDot = clsName.lastIndexOf(".");
+        int firstDot = clsName.indexOf('.');
+        int lastDot = clsName.lastIndexOf('.');
 
         String append = "com.sun.star.";
 
