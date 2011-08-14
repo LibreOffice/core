@@ -345,7 +345,7 @@ void ScInterpreter::ScGetDiffDate360()
     sal_uInt8 nParamCount = GetByte();
     if ( MustHaveParamCount( nParamCount, 2, 3 ) )
     {
-        sal_Bool bFlag;
+        bool bFlag;
         if (nParamCount == 3)
             bFlag = GetBool();
         else
@@ -501,7 +501,7 @@ void ScInterpreter::ScCeil()
     sal_uInt8 nParamCount = GetByte();
     if ( MustHaveParamCount( nParamCount, 2, 3 ) )
     {
-        sal_Bool bAbs = ( nParamCount == 3 ? GetBool() : false );
+        bool bAbs = ( nParamCount == 3 ? GetBool() : false );
         double fDec = GetDouble();
         double fVal = GetDouble();
         if ( fDec == 0.0 )
@@ -524,7 +524,7 @@ void ScInterpreter::ScFloor()
     sal_uInt8 nParamCount = GetByte();
     if ( MustHaveParamCount( nParamCount, 2, 3 ) )
     {
-        sal_Bool bAbs = ( nParamCount == 3 ? GetBool() : false );
+        bool bAbs = ( nParamCount == 3 ? GetBool() : false );
         double fDec = GetDouble();
         double fVal = GetDouble();
         if ( fDec == 0.0 )
@@ -775,7 +775,7 @@ void ScInterpreter::ScMIRR()
             sal_uLong nCount = 0;
             sal_uInt16 nIterError = 0;
 
-            sal_Bool bLoop = aValIter.GetFirst( fCellValue, nIterError );
+            bool bLoop = aValIter.GetFirst( fCellValue, nIterError );
             while( bLoop )
             {
                 if( fCellValue > 0.0 )          // reinvestments
@@ -979,7 +979,7 @@ double ScInterpreter::ScInterVDB(double fWert,double fRest,double fDauer,
 
     double fTerm, fLia;
     double fRestwert = fWert - fRest;
-    sal_Bool bNowLia = false;
+    bool bNowLia = false;
 
     double fGda;
     sal_uLong i;
@@ -994,7 +994,7 @@ double ScInterpreter::ScInterVDB(double fWert,double fRest,double fDauer,
             if (fLia > fGda)
             {
                 fTerm = fLia;
-                bNowLia = sal_True;
+                bNowLia = true;
             }
             else
             {
@@ -1029,7 +1029,7 @@ void ScInterpreter::ScVDB()
     if ( MustHaveParamCount( nParamCount, 5, 7 ) )
     {
         double fWert, fRest, fDauer, fAnfang, fEnde, fFaktor, fVdb = 0.0;
-        sal_Bool bFlag;
+        bool bFlag;
         if (nParamCount == 7)
             bFlag = GetBool();
         else
@@ -1598,7 +1598,7 @@ void ScInterpreter::ScBackSolver()
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScBackSolver" );
     if ( MustHaveParamCount( GetByte(), 3 ) )
     {
-        sal_Bool bDoneIteration = false;
+        bool bDoneIteration = false;
         ScAddress aValueAdr, aFormulaAdr;
         double fTargetVal = GetDouble();
         PopSingleRef( aFormulaAdr );
@@ -1608,7 +1608,7 @@ void ScInterpreter::ScBackSolver()
         {
             ScBaseCell* pVCell = GetCell( aValueAdr );
             // CELLTYPE_NOTE: kein Value aber von Formel referiert
-            sal_Bool bTempCell = (!pVCell || pVCell->GetCellType() == CELLTYPE_NOTE);
+            bool bTempCell = (!pVCell || pVCell->GetCellType() == CELLTYPE_NOTE);
             ScBaseCell* pFCell = GetCell( aFormulaAdr );
 
             if ( ((pVCell && pVCell->GetCellType() == CELLTYPE_VALUE) || bTempCell)
@@ -1640,14 +1640,14 @@ void ScInterpreter::ScBackSolver()
                 ScValueCell* pValue = (ScValueCell*) pVCell;
 
                 pFormula->Interpret();
-                sal_Bool bError = ( pFormula->GetErrCode() != 0 );
+                bool bError = ( pFormula->GetErrCode() != 0 );
                 // bError always corresponds with fF
 
                 fFPrev = pFormula->GetValue() - fTargetVal;
 
                 fBestF = fabs( fFPrev );
                 if ( fBestF < fDelta )
-                    bDoneIteration = sal_True;
+                    bDoneIteration = true;
 
                 double fX = fXPrev + fEps;
                 double fF = fFPrev;
@@ -1655,7 +1655,7 @@ void ScInterpreter::ScBackSolver()
 
                 sal_uInt16 nIter = 0;
 
-                sal_Bool bHorMoveError = false;
+                bool bHorMoveError = false;
                                                 // Nach der Regula Falsi Methode
                 while ( !bDoneIteration && ( nIter++ < nMaxIter ) )
                 {
@@ -1677,7 +1677,7 @@ void ScInterpreter::ScBackSolver()
                         const double fHorStepAngle = 5.0;
                         const double fHorMaxAngle = 80.0;
                         int nHorMaxIter = static_cast<int>( fHorMaxAngle / fHorStepAngle );
-                        sal_Bool bDoneHorMove = false;
+                        bool bDoneHorMove = false;
 
                         while ( !bDoneHorMove && !bHorMoveError && nHorIter++ < nHorMaxIter )
                         {
@@ -1704,12 +1704,12 @@ void ScInterpreter::ScBackSolver()
                                 if ( fF != fFPrev )
                                 {
                                     fX = fHorX;
-                                    bDoneHorMove = sal_True;
+                                    bDoneHorMove = true;
                                 }
                             }
                         }
                         if ( !bDoneHorMove )
-                            bHorMoveError = sal_True;
+                            bHorMoveError = true;
                     }
 
                     if ( bError )
@@ -1726,7 +1726,7 @@ void ScInterpreter::ScBackSolver()
                     {
                         // converged to root
                         fBestX = fX;
-                        bDoneIteration = sal_True;
+                        bDoneIteration = true;
                     }
                     else
                     {
@@ -2152,8 +2152,8 @@ void ScInterpreter::ScDde()
             //  solange der Link nicht ausgewertet ist, Idle abklemmen
             //  (um zirkulaere Referenzen zu vermeiden)
 
-        sal_Bool bOldDis = pDok->IsIdleDisabled();
-        pDok->DisableIdle( sal_True );
+        bool bOldDis = pDok->IsIdleDisabled();
+        pDok->DisableIdle( true );
 
             //  Link-Objekt holen / anlegen
 
@@ -2162,7 +2162,7 @@ void ScInterpreter::ScDde()
         //! Dde-Links (zusaetzlich) effizienter am Dokument speichern !!!!!
         //      ScDdeLink* pLink = pDok->GetDdeLink( aAppl, aTopic, aItem );
 
-        sal_Bool bWasError = ( pMyFormulaCell->GetRawError() != 0 );
+        bool bWasError = ( pMyFormulaCell->GetRawError() != 0 );
 
         if (!pLink)
         {
@@ -2275,7 +2275,7 @@ void ScInterpreter::ScBase()
             }
             else
             {
-                sal_Bool bDirt = false;
+                bool bDirt = false;
                 while ( fVal && p > pBuf )
                 {
 //! mit fmod Rundungsfehler ab 2**48
@@ -2305,7 +2305,7 @@ void ScInterpreter::ScBase()
                     size_t nDig;
                     if ( fVal < fMult )
                     {   // da ist was gekippt
-                        bDirt = sal_True;
+                        bDirt = true;
                         nDig = 0;
                     }
                     else
@@ -2482,21 +2482,21 @@ void ScInterpreter::ScRoman()
 }
 
 
-sal_Bool lcl_GetArabicValue( sal_Unicode cChar, sal_uInt16& rnValue, sal_Bool& rbIsDec )
+bool lcl_GetArabicValue( sal_Unicode cChar, sal_uInt16& rnValue, bool& rbIsDec )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScBase" );
     switch( cChar )
     {
-        case 'M':   rnValue = 1000; rbIsDec = sal_True;     break;
+        case 'M':   rnValue = 1000; rbIsDec = true;     break;
         case 'D':   rnValue = 500;  rbIsDec = false;    break;
-        case 'C':   rnValue = 100;  rbIsDec = sal_True;     break;
+        case 'C':   rnValue = 100;  rbIsDec = true;     break;
         case 'L':   rnValue = 50;   rbIsDec = false;    break;
-        case 'X':   rnValue = 10;   rbIsDec = sal_True;     break;
+        case 'X':   rnValue = 10;   rbIsDec = true;     break;
         case 'V':   rnValue = 5;    rbIsDec = false;    break;
-        case 'I':   rnValue = 1;    rbIsDec = sal_True;     break;
+        case 'I':   rnValue = 1;    rbIsDec = true;     break;
         default:    return false;
     }
-    return sal_True;
+    return true;
 }
 
 
@@ -2514,14 +2514,14 @@ void ScInterpreter::ScArabic()
         sal_uInt16 nValidRest = 3999;
         sal_uInt16 nCharIndex = 0;
         sal_uInt16 nCharCount = aRoman.Len();
-        sal_Bool bValid = sal_True;
+        bool bValid = true;
 
         while( bValid && (nCharIndex < nCharCount) )
         {
             sal_uInt16 nDigit1 = 0;
             sal_uInt16 nDigit2 = 0;
-            sal_Bool bIsDec1 = false;
-            sal_Bool bIsDec2 = false;
+            bool bIsDec1 = false;
+            bool bIsDec2 = false;
             bValid = lcl_GetArabicValue( aRoman.GetChar( nCharIndex ), nDigit1, bIsDec1 );
             if( bValid && (nCharIndex + 1 < nCharCount) )
                 bValid = lcl_GetArabicValue( aRoman.GetChar( nCharIndex + 1 ), nDigit2, bIsDec2 );
@@ -2642,7 +2642,7 @@ void ScInterpreter::ScHyperLink()
 }
 
 
-sal_Bool lclConvertMoney( const String& aSearchUnit, double& rfRate, int& rnDec )
+bool lclConvertMoney( const String& aSearchUnit, double& rfRate, int& rnDec )
 {
     struct ConvertInfo
     {
@@ -2676,7 +2676,7 @@ sal_Bool lclConvertMoney( const String& aSearchUnit, double& rfRate, int& rnDec 
         {
             rfRate = aConvertTable[i].fRate;
             rnDec  = aConvertTable[i].nDec;
-            return sal_True;
+            return true;
         }
     return false;
 }
@@ -2696,7 +2696,7 @@ void ScInterpreter::ScEuroConvert()
                 return;
             }
         }
-        sal_Bool bFullPrecision = false;
+        bool bFullPrecision = false;
         if ( nParamCount >= 4 )
             bFullPrecision = GetBool();
         String aToUnit( GetString() );
@@ -2970,7 +2970,7 @@ void ScInterpreter::ScGetPivotData()
             while( i-- > 0 )
             {
                 //! should allow numeric constraint values
-                aFilters[i].mbValIsStr = sal_True;
+                aFilters[i].mbValIsStr = true;
                 aFilters[i].maValStr = GetString();
 
                 aFilters[i].maFieldName = GetString();

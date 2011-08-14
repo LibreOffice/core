@@ -145,7 +145,7 @@ void ScInterpreter::ReplaceCell( SCCOL& rCol, SCROW& rRow, SCTAB& rTab )
 }
 
 
-sal_Bool ScInterpreter::IsTableOpInRange( const ScRange& rRange )
+bool ScInterpreter::IsTableOpInRange( const ScRange& rRange )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::IsTableOpInRange" );
     if ( rRange.aStart == rRange.aEnd )
@@ -157,7 +157,7 @@ sal_Bool ScInterpreter::IsTableOpInRange( const ScRange& rRange )
     {
         ScInterpreterTableOpParams* pTOp = &pDok->aTableOpList[ i ];
         if ( rRange.In( pTOp->aOld1 ) )
-            return sal_True;
+            return true;
         if ( rRange.In( pTOp->aOld2 ) )
             return true;
     }
@@ -561,7 +561,7 @@ void ScInterpreter::GetCellString( String& rStr, const ScBaseCell* pCell )
 }
 
 
-sal_Bool ScInterpreter::CreateDoubleArr(SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
+bool ScInterpreter::CreateDoubleArr(SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
                             SCCOL nCol2, SCROW nRow2, SCTAB nTab2, sal_uInt8* pCellArr)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::CreateDoubleArr" );
@@ -602,7 +602,7 @@ sal_Bool ScInterpreter::CreateDoubleArr(SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
                 {
                     sal_uInt16  nErr = 0;
                     double  nVal = 0.0;
-                    sal_Bool    bOk = sal_True;
+                    bool    bOk = true;
                     switch ( pCell->GetCellType() )
                     {
                         case CELLTYPE_VALUE :
@@ -642,11 +642,11 @@ sal_Bool ScInterpreter::CreateDoubleArr(SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
         nTab++;
     }
     *pCount = nCount;
-    return sal_True;
+    return true;
 }
 
 
-sal_Bool ScInterpreter::CreateStringArr(SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
+bool ScInterpreter::CreateStringArr(SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
                                     SCCOL nCol2, SCROW nRow2, SCTAB nTab2,
                                     sal_uInt8* pCellArr)
 {
@@ -685,7 +685,7 @@ sal_Bool ScInterpreter::CreateStringArr(SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
                 {
                     String  aStr;
                     sal_uInt16  nErr = 0;
-                    sal_Bool    bOk = sal_True;
+                    bool    bOk = true;
                     switch ( pCell->GetCellType() )
                     {
                         case CELLTYPE_STRING :
@@ -742,11 +742,11 @@ sal_Bool ScInterpreter::CreateStringArr(SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
         nTab++;
     }
     *pCount = nCount;
-    return sal_True;
+    return true;
 }
 
 
-sal_Bool ScInterpreter::CreateCellArr(SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
+bool ScInterpreter::CreateCellArr(SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
                                   SCCOL nCol2, SCROW nRow2, SCTAB nTab2,
                                   sal_uInt8* pCellArr)
 {
@@ -790,7 +790,7 @@ sal_Bool ScInterpreter::CreateCellArr(SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
                     sal_uInt16  nType = 0; // 0 = Zahl; 1 = String
                     double  nVal = 0.0;
                     String  aStr;
-                    sal_Bool    bOk = sal_True;
+                    bool    bOk = true;
                     switch ( pCell->GetCellType() )
                     {
                         case CELLTYPE_STRING :
@@ -863,7 +863,7 @@ sal_Bool ScInterpreter::CreateCellArr(SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
         nTab++;
     }
     *pCount = nCount;
-    return sal_True;
+    return true;
 }
 
 
@@ -1241,7 +1241,7 @@ void ScInterpreter::PopSingleRef( ScAddress& rAdr )
 void ScInterpreter::DoubleRefToVars( const ScToken* p,
         SCCOL& rCol1, SCROW &rRow1, SCTAB& rTab1,
         SCCOL& rCol2, SCROW &rRow2, SCTAB& rTab2,
-        sal_Bool bDontCheckForTableOp )
+        bool bDontCheckForTableOp )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::DoubleRefToVars" );
     const ScComplexRefData& rCRef = p->GetDoubleRef();
@@ -1296,7 +1296,7 @@ ScDBRangeBase* ScInterpreter::PopDBDoubleRef()
 
 void ScInterpreter::PopDoubleRef(SCCOL& rCol1, SCROW &rRow1, SCTAB& rTab1,
                                  SCCOL& rCol2, SCROW &rRow2, SCTAB& rTab2,
-                                 sal_Bool bDontCheckForTableOp )
+                                 bool bDontCheckForTableOp )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::PopDoubleRef" );
     if( sp )
@@ -1322,7 +1322,7 @@ void ScInterpreter::PopDoubleRef(SCCOL& rCol1, SCROW &rRow1, SCTAB& rTab1,
 
 
 void ScInterpreter::DoubleRefToRange( const ScComplexRefData & rCRef,
-        ScRange & rRange, sal_Bool bDontCheckForTableOp )
+        ScRange & rRange, bool bDontCheckForTableOp )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::DoubleRefToRange" );
     SCCOL nCol;
@@ -1387,7 +1387,7 @@ void ScInterpreter::PopDoubleRef( ScRange & rRange, short & rParam, size_t & rRe
 }
 
 
-void ScInterpreter::PopDoubleRef( ScRange& rRange, sal_Bool bDontCheckForTableOp )
+void ScInterpreter::PopDoubleRef( ScRange& rRange, bool bDontCheckForTableOp )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::PopDoubleRef" );
     if( sp )
@@ -1585,7 +1585,7 @@ void ScInterpreter::GetExternalDoubleRef(
     rArray = pArray;
 }
 
-sal_Bool ScInterpreter::PopDoubleRefOrSingleRef( ScAddress& rAdr )
+bool ScInterpreter::PopDoubleRefOrSingleRef( ScAddress& rAdr )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::PopDoubleRefOrSingleRef" );
     switch ( GetStackType() )
@@ -1593,13 +1593,13 @@ sal_Bool ScInterpreter::PopDoubleRefOrSingleRef( ScAddress& rAdr )
         case svDoubleRef :
         {
             ScRange aRange;
-            PopDoubleRef( aRange, sal_True );
+            PopDoubleRef( aRange, true );
             return DoubleRefToPosSingleRef( aRange, rAdr );
         }
         case svSingleRef :
         {
             PopSingleRef( rAdr );
-            return sal_True;
+            return true;
         }
         default:
             PopError();
@@ -2024,7 +2024,7 @@ void ScInterpreter::PushNoValue()
 }
 
 
-sal_Bool ScInterpreter::IsMissing()
+bool ScInterpreter::IsMissing()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::IsMissing" );
     return sp && pStack[sp - 1]->GetType() == svMissing;
@@ -2083,17 +2083,17 @@ StackVar ScInterpreter::GetStackType( sal_uInt8 nParam )
 }
 
 
-sal_Bool ScInterpreter::DoubleRefToPosSingleRef( const ScRange& rRange, ScAddress& rAdr )
+bool ScInterpreter::DoubleRefToPosSingleRef( const ScRange& rRange, ScAddress& rAdr )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::DoubleRefToPosSingleRef" );
     // Check for a singleton first - no implicit intersection for them.
     if( rRange.aStart == rRange.aEnd )
     {
         rAdr = rRange.aStart;
-        return sal_True;
+        return true;
     }
 
-    sal_Bool bOk = false;
+    bool bOk = false;
 
     if ( pJumpMatrix )
     {
@@ -2128,13 +2128,13 @@ sal_Bool ScInterpreter::DoubleRefToPosSingleRef( const ScRange& rRange, ScAddres
         nRow = rRange.aStart.Row();
         if ( nRow == rRange.aEnd.Row() )
         {
-            bOk = sal_True;
+            bOk = true;
             nCol = nMyCol;
         }
         else if ( nTab != nMyTab && nTab == rRange.aEnd.Tab()
                 && rRange.aStart.Row() <= nMyRow && nMyRow <= rRange.aEnd.Row() )
         {
-            bOk = sal_True;
+            bOk = true;
             nCol = nMyCol;
             nRow = nMyRow;
         }
@@ -2144,13 +2144,13 @@ sal_Bool ScInterpreter::DoubleRefToPosSingleRef( const ScRange& rRange, ScAddres
         nCol = rRange.aStart.Col();
         if ( nCol == rRange.aEnd.Col() )
         {
-            bOk = sal_True;
+            bOk = true;
             nRow = nMyRow;
         }
         else if ( nTab != nMyTab && nTab == rRange.aEnd.Tab()
                 && rRange.aStart.Col() <= nMyCol && nMyCol <= rRange.aEnd.Col() )
         {
-            bOk = sal_True;
+            bOk = true;
             nCol = nMyCol;
             nRow = nMyRow;
         }
@@ -2441,7 +2441,7 @@ ScMatValType ScInterpreter::GetDoubleOrStringFromMatrix( double& rDouble,
 void ScInterpreter::ScDBGet()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScDBGet" );
-    sal_Bool bMissingField = false;
+    bool bMissingField = false;
     auto_ptr<ScDBQueryParamBase> pQueryParam( GetDBParams(bMissingField) );
     if (!pQueryParam.get())
     {
@@ -2675,7 +2675,8 @@ void ScInterpreter::ScExternal()
     }
     else if ( ( aUnoName = ScGlobal::GetAddInCollection()->FindFunction(aFuncName, false) ).Len()  )
     {
-        //  bLocalFirst=sal_False in FindFunction, cFunc should be the stored internal name
+        //  bLocalFirst=false in FindFunction, cFunc should be the stored 
+        //  internal name
 
         ScUnoAddInCall aCall( *ScGlobal::GetAddInCollection(), aUnoName, nParamCount );
 
@@ -3137,7 +3138,7 @@ void ScInterpreter::ScMacro()
     //  Parameter-Array zusammenbauen
 
     SbxArrayRef refPar = new SbxArray;
-    sal_Bool bOk = sal_True;
+    bool bOk = true;
     for( short i = nParamCount; i && bOk ; i-- )
     {
         SbxVariable* pPar = refPar->Get( (sal_uInt16) i );
@@ -3334,10 +3335,10 @@ void ScInterpreter::ScMacro()
 }
 
 
-sal_Bool ScInterpreter::SetSbxVariable( SbxVariable* pVar, const ScAddress& rPos )
+bool ScInterpreter::SetSbxVariable( SbxVariable* pVar, const ScAddress& rPos )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::SetSbxVariable" );
-    sal_Bool bOk = sal_True;
+    bool bOk = true;
     ScBaseCell* pCell = pDok->GetCell( rPos );
     if (pCell)
     {
@@ -3429,11 +3430,11 @@ void ScInterpreter::ScTableOp()
     pDok->aTableOpList.push_back( pTableOp );
     pDok->IncInterpreterTableOpLevel();
 
-    sal_Bool bReuseLastParams = (pDok->aLastTableOpParams == *pTableOp);
+    bool bReuseLastParams = (pDok->aLastTableOpParams == *pTableOp);
     if ( bReuseLastParams )
     {
         pTableOp->aNotifiedFormulaPos = pDok->aLastTableOpParams.aNotifiedFormulaPos;
-        pTableOp->bRefresh = sal_True;
+        pTableOp->bRefresh = true;
         for ( ::std::vector< ScAddress >::const_iterator iBroadcast(
                     pTableOp->aNotifiedFormulaPos.begin() );
                 iBroadcast != pTableOp->aNotifiedFormulaPos.end();
@@ -3547,7 +3548,7 @@ void ScInterpreter::ScColRowNameAuto()
                             (SCROW&) aRefData.Ref1.nRow,
                             (SCCOL&) aRefData.Ref2.nCol,
                             (SCROW&) aRefData.Ref2.nRow,
-                            sal_True, false );
+                            true, false );
         // DataArea im Ursprung begrenzen
         aRefData.Ref1.nCol = nStartCol;
         aRefData.Ref1.nRow = nStartRow;
@@ -3642,7 +3643,7 @@ ScInterpreter::ScInterpreter( ScFormulaCell* pCell, ScDocument* pDoc,
     bMatrixFormula = ( cMatFlag == MM_FORMULA || cMatFlag == MM_FAKE );
     if (!bGlobalStackInUse)
     {
-        bGlobalStackInUse = sal_True;
+        bGlobalStackInUse = true;
         if (!pGlobalStack)
             pGlobalStack = new ScTokenStack;
         pStackObj = pGlobalStack;
@@ -3881,9 +3882,9 @@ StackVar ScInterpreter::Interpret()
                 case ocGetDiffDate      : ScGetDiffDate();              break;
                 case ocGetDiffDate360   : ScGetDiffDate360();           break;
                 case ocMin              : ScMin( false );               break;
-                case ocMinA             : ScMin( sal_True );                break;
+                case ocMinA             : ScMin( true );                break;
                 case ocMax              : ScMax( false );               break;
-                case ocMaxA             : ScMax( sal_True );                break;
+                case ocMaxA             : ScMax( true );                break;
                 case ocSum              : ScSum();                      break;
                 case ocProduct          : ScProduct();                  break;
                 case ocNPV              : ScNPV();                      break;
@@ -3891,17 +3892,17 @@ StackVar ScInterpreter::Interpret()
                 case ocMIRR             : ScMIRR();                     break;
                 case ocISPMT            : ScISPMT();                    break;
                 case ocAverage          : ScAverage( false );           break;
-                case ocAverageA         : ScAverage( sal_True );            break;
+                case ocAverageA         : ScAverage( true );            break;
                 case ocCount            : ScCount();                    break;
                 case ocCount2           : ScCount2();                   break;
                 case ocVar              : ScVar( false );               break;
-                case ocVarA             : ScVar( sal_True );                break;
+                case ocVarA             : ScVar( true );                break;
                 case ocVarP             : ScVarP( false );              break;
-                case ocVarPA            : ScVarP( sal_True );               break;
+                case ocVarPA            : ScVarP( true );               break;
                 case ocStDev            : ScStDev( false );             break;
-                case ocStDevA           : ScStDev( sal_True );              break;
+                case ocStDevA           : ScStDev( true );              break;
                 case ocStDevP           : ScStDevP( false );            break;
-                case ocStDevPA          : ScStDevP( sal_True );             break;
+                case ocStDevPA          : ScStDevP( true );             break;
                 case ocBW               : ScBW();                       break;
                 case ocDIA              : ScDIA();                      break;
                 case ocGDA              : ScGDA();                      break;

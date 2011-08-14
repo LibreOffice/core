@@ -2344,7 +2344,7 @@ void ScInterpreter::ScZTest()
             PushDouble(0.5 - gauss((mue-x)*sqrt(rValCount)/sigma));
     }
 }
-bool ScInterpreter::CalculateTest(sal_Bool _bTemplin
+bool ScInterpreter::CalculateTest(bool _bTemplin
                                   ,const SCSIZE nC1, const SCSIZE nC2,const SCSIZE nR1,const SCSIZE nR2
                                   ,const ScMatrixRef& pMat1,const ScMatrixRef& pMat2
                                   ,double& fT,double& fF)
@@ -2478,7 +2478,7 @@ void ScInterpreter::ScTTest()
     }
     else if (fTyp == 3.0)
     {
-        CalculateTest(sal_True,nC1, nC2,nR1, nR2,pMat1,pMat2,fT,fF);
+        CalculateTest(true,nC1, nC2,nR1, nR2,pMat1,pMat2,fT,fF);
     }
 
     else
@@ -3207,7 +3207,7 @@ void ScInterpreter::ScModalValue()
     }
 }
 
-void ScInterpreter::CalculateSmallLarge(sal_Bool bSmall)
+void ScInterpreter::CalculateSmallLarge(bool bSmall)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::CalculateSmallLarge" );
     if ( !MustHaveParamCount( GetByte(), 2 )  )
@@ -3246,7 +3246,7 @@ void ScInterpreter::ScLarge()
 void ScInterpreter::ScSmall()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScSmall" );
-    CalculateSmallLarge(sal_True);
+    CalculateSmallLarge(true);
 }
 
 void ScInterpreter::ScPercentrank()
@@ -3521,13 +3521,13 @@ void ScInterpreter::ScRank()
     sal_uInt8 nParamCount = GetByte();
     if ( !MustHaveParamCount( nParamCount, 2, 3 ) )
         return;
-    sal_Bool bDescending;
+    bool bDescending;
     if (nParamCount == 3)
         bDescending = GetBool();
     else
         bDescending = false;
     double fCount = 1.0;
-    sal_Bool bValid = false;
+    bool bValid = false;
     switch (GetStackType())
     {
         case formula::svDouble    :
@@ -3535,7 +3535,7 @@ void ScInterpreter::ScRank()
             double x = GetDouble();
             double fVal = GetDouble();
             if (x == fVal)
-                bValid = sal_True;
+                bValid = true;
             break;
         }
         case svSingleRef :
@@ -3548,7 +3548,7 @@ void ScInterpreter::ScRank()
             {
                 double x = GetCellValue( aAdr, pCell );
                 if (x == fVal)
-                    bValid = sal_True;
+                    bValid = true;
             }
             break;
         }
@@ -3574,7 +3574,7 @@ void ScInterpreter::ScRank()
                 if (aValIter.GetFirst(nCellVal, nErr))
                 {
                     if (nCellVal == fVal)
-                        bValid = sal_True;
+                        bValid = true;
                     else if ((!bDescending && nCellVal > fVal) ||
                             (bDescending && nCellVal < fVal) )
                         fCount++;
@@ -3582,7 +3582,7 @@ void ScInterpreter::ScRank()
                     while ((nErr == 0) && aValIter.GetNext(nCellVal, nErr))
                     {
                         if (nCellVal == fVal)
-                            bValid = sal_True;
+                            bValid = true;
                         else if ((!bDescending && nCellVal > fVal) ||
                                 (bDescending && nCellVal < fVal) )
                             fCount++;
@@ -3607,7 +3607,7 @@ void ScInterpreter::ScRank()
                     {
                         double x = pMat->GetDouble(i);
                         if (x == fVal)
-                            bValid = sal_True;
+                            bValid = true;
                         else if ((!bDescending && x > fVal) ||
                                     (bDescending && x < fVal) )
                             fCount++;
@@ -3620,7 +3620,7 @@ void ScInterpreter::ScRank()
                         {
                             double x = pMat->GetDouble(i);
                             if (x == fVal)
-                                bValid = sal_True;
+                                bValid = true;
                             else if ((!bDescending && x > fVal) ||
                                         (bDescending && x < fVal) )
                                 fCount++;
@@ -3840,7 +3840,7 @@ void ScInterpreter::ScProbability()
         {
             double fSum = 0.0;
             double fRes = 0.0;
-            sal_Bool bStop = false;
+            bool bStop = false;
             double fP, fW;
             for ( SCSIZE i = 0; i < nC1 && !bStop; i++ )
             {
@@ -3887,9 +3887,9 @@ void ScInterpreter::ScCovar()
 void ScInterpreter::ScPearson()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScPearson" );
-    CalculatePearsonCovar(sal_True,false);
+    CalculatePearsonCovar(true,false);
 }
-void ScInterpreter::CalculatePearsonCovar(sal_Bool _bPearson,sal_Bool _bStexy)
+void ScInterpreter::CalculatePearsonCovar(bool _bPearson,bool _bStexy)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::CalculatePearsonCovar" );
     if ( !MustHaveParamCount( GetByte(), 2 ) )
@@ -4002,7 +4002,7 @@ void ScInterpreter::ScSTEXY()
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScSTEXY" );
     CalculatePearsonCovar(true,true);
 }
-void ScInterpreter::CalculateSlopeIntercept(sal_Bool bSlope)
+void ScInterpreter::CalculateSlopeIntercept(bool bSlope)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::CalculateSlopeIntercept" );
     if ( !MustHaveParamCount( GetByte(), 2 ) )
@@ -4077,7 +4077,7 @@ void ScInterpreter::CalculateSlopeIntercept(sal_Bool bSlope)
 void ScInterpreter::ScSlope()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScSlope" );
-    CalculateSlopeIntercept(sal_True);
+    CalculateSlopeIntercept(true);
 }
 
 void ScInterpreter::ScIntercept()

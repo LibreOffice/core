@@ -1209,7 +1209,7 @@ void ScInterpreter::ScAdd()
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScAdd" );
     CalculateAddSub(false);
 }
-void ScInterpreter::CalculateAddSub(sal_Bool _bSub)
+void ScInterpreter::CalculateAddSub(bool _bSub)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::CalculateAddSub" );
     ScMatrixRef pMat1 = NULL;
@@ -1284,13 +1284,13 @@ void ScInterpreter::CalculateAddSub(sal_Bool _bSub)
     else if (pMat1 || pMat2)
     {
         double fVal;
-        sal_Bool bFlag;
+        bool bFlag;
         ScMatrixRef pMat = pMat1;
         if (!pMat)
         {
             fVal = fVal1;
             pMat = pMat2;
-            bFlag = sal_True;           // double - Matrix
+            bFlag = true;           // double - Matrix
         }
         else
         {
@@ -1369,13 +1369,13 @@ void ScInterpreter::ScAmpersand()
     else if (pMat1 || pMat2)
     {
         String sStr;
-        sal_Bool bFlag;
+        bool bFlag;
         ScMatrixRef pMat = pMat1;
         if (!pMat)
         {
             sStr = sStr1;
             pMat = pMat2;
-            bFlag = sal_True;           // double - Matrix
+            bFlag = true;           // double - Matrix
         }
         else
         {
@@ -1441,7 +1441,7 @@ void ScInterpreter::ScAmpersand()
 void ScInterpreter::ScSub()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScSub" );
-    CalculateAddSub(sal_True);
+    CalculateAddSub(true);
 }
 
 void ScInterpreter::ScMul()
@@ -1565,13 +1565,13 @@ void ScInterpreter::ScDiv()
     else if (pMat1 || pMat2)
     {
         double fVal;
-        sal_Bool bFlag;
+        bool bFlag;
         ScMatrixRef pMat = pMat1;
         if (!pMat)
         {
             fVal = fVal1;
             pMat = pMat2;
-            bFlag = sal_True;           // double - Matrix
+            bFlag = true;           // double - Matrix
         }
         else
         {
@@ -1647,13 +1647,13 @@ void ScInterpreter::ScPow()
     else if (pMat1 || pMat2)
     {
         double fVal;
-        sal_Bool bFlag;
+        bool bFlag;
         ScMatrixRef pMat = pMat1;
         if (!pMat)
         {
             fVal = fVal1;
             pMat = pMat2;
-            bFlag = sal_True;           // double - Matrix
+            bFlag = true;           // double - Matrix
         }
         else
         {
@@ -1748,7 +1748,7 @@ void ScInterpreter::ScSumX2MY2()
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScSumX2MY2" );
     CalculateSumX2MY2SumX2DY2(false);
 }
-void ScInterpreter::CalculateSumX2MY2SumX2DY2(sal_Bool _bSumX2DY2)
+void ScInterpreter::CalculateSumX2MY2SumX2DY2(bool _bSumX2DY2)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::CalculateSumX2MY2SumX2DY2" );
     if ( !MustHaveParamCount( GetByte(), 2 ) )
@@ -1792,7 +1792,7 @@ void ScInterpreter::CalculateSumX2MY2SumX2DY2(sal_Bool _bSumX2DY2)
 void ScInterpreter::ScSumX2DY2()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScSumX2DY2" );
-    CalculateSumX2MY2SumX2DY2(sal_True);
+    CalculateSumX2MY2SumX2DY2(true);
 }
 
 void ScInterpreter::ScSumXMY2()
@@ -3244,7 +3244,7 @@ void ScInterpreter::ScMatRef()
                 if (ScMatrix::IsNonValueType( nMatValType))
                 {
                     if (ScMatrix::IsEmptyPathType( nMatValType))
-                    {   // result of empty sal_False jump path
+                    {   // result of empty false jump path
                         nFuncFmtType = NUMBERFORMAT_LOGICAL;
                         PushInt(0);
                     }
