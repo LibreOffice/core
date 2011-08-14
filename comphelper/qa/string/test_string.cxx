@@ -27,20 +27,14 @@
  ************************************************************************/
 
 #include "precompiled_comphelper.hxx"
-#include "sal/config.h"
+#include "sal/cppunit.h"
 
-#include "comphelper/string.hxx"
+#include <comphelper/string.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <com/sun/star/i18n/CharType.hpp>
 
-#include <cppunit/TestFixture.h>
-#include <cppunit/extensions/HelperMacros.h>
-#include <cppunit/plugin/TestPlugIn.h>
-
-#include "rtl/string.h"
-#include "rtl/ustring.h"
+#include "rtl/string.hxx"
 #include "rtl/ustring.hxx"
-#include "sal/types.h"
 
 namespace {
 
@@ -297,5 +291,7 @@ void TestString::testNatural()
 CPPUNIT_TEST_SUITE_REGISTRATION(TestString);
 
 }
+
+CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
