@@ -169,10 +169,10 @@ private:
                                          // of ByteString(sal_Char);
                         ByteString( const UniString& rUniStr, xub_StrLen nPos, xub_StrLen nLen,
                                     rtl_TextEncoding eTextEncoding,
-                                    sal_uInt32 nCvtFlags = UNISTRING_TO_BYTESTRING_CVTFLAGS );
+                                    sal_uInt32 nCvtFlags = UNISTRING_TO_BYTESTRING_CVTFLAGS ); //not implemented, to detect use of removed methods without compiler making something to fit
                         ByteString( const sal_Unicode* pUniStr, xub_StrLen nLen,
                                     rtl_TextEncoding eTextEncoding,
-                                    sal_uInt32 nCvtFlags = UNISTRING_TO_BYTESTRING_CVTFLAGS );
+                                    sal_uInt32 nCvtFlags = UNISTRING_TO_BYTESTRING_CVTFLAGS ); //not implemented, to detect use of removed methods without compiler making somethiing to fit
     void                Assign(int); // not implemented; to detect misuses of
                                      // Assign(sal_Char)
     void                operator =(int); // not implemented; to detect misuses

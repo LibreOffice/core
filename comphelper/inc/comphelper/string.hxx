@@ -110,6 +110,30 @@ COMPHELPER_DLLPUBLIC ::rtl::OUString&
                             ::rtl::OUString const & replace, sal_Int32 beginAt = 0,
                             sal_Int32 * replacedAt = NULL );
 
+/** Replaces each substring of this OString that matches the search OString
+    with the specified replacement OString
+
+    @param rIn      The input OString
+    @param rSearch  The substring to be replaced
+    @param rReplace The replacement substring
+
+    @return         The resulting OString
+ */
+COMPHELPER_DLLPUBLIC rtl::OString replace(const rtl::OString &rIn,
+    const rtl::OString &rSearch, const rtl::OString &rReplace);
+
+/** Replaces each substring of this OUString that matches the search OUString
+    with the specified replacement OUString
+
+    @param rIn      The input OUString
+    @param rSearch  The substring to be replaced
+    @param rReplace The replacement substring
+
+    @return         The resulting OUString
+ */
+COMPHELPER_DLLPUBLIC rtl::OUString replace(const rtl::OUString &rIn,
+    const rtl::OUString &rSearch, const rtl::OUString &rReplace);
+
 /** Convert a sequence of strings to a single comma separated string.
 
     Note that no escaping of commas or anything fancy is done.
@@ -212,7 +236,6 @@ COMPHELPER_DLLPUBLIC bool isAsciiDecimalString(const rtl::OString &rString);
                     true otherwise, including for empty string
  */
 COMPHELPER_DLLPUBLIC bool isAsciiDecimalString(const rtl::OUString &rString);
-
 
 } }
 

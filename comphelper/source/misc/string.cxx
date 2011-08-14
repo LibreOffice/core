@@ -36,6 +36,8 @@
 
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <rtl/string.hxx>
+#include <rtl/strbuf.hxx>
 #include <sal/types.h>
 
 #include <comphelper/string.hxx>
@@ -92,6 +94,48 @@ rtl::OUString searchAndReplaceAsciiL(
         _source = _source.replaceAt( n, fromLength, _replace );
 
     return _source;
+}
+
+namespace
+{
+    template <typename T, typename O> T tmpl_replace(const T &rIn,
+        const T &rSearch, const T &rReplace)
+    {
+        if (rIn.isEmpty() || rSearch.isEmpty())
+            return rIn;
+
+        O aRet;
+
+        sal_Int32 nFromIndex = 0;
+        while (nFromIndex < rIn.getLength())
+        {
+            sal_Int32 nIndex = rIn.indexOf(rSearch, nFromIndex);
+            if (nIndex == -1)
+            {
+                aRet.append(rIn.copy(nFromIndex));
+                break;
+            }
+            aRet.append(rIn.copy(nFromIndex, nIndex-nFromIndex));
+            aRet.append(rReplace);
+            nFromIndex = nIndex+rSearch.getLength();
+        }
+
+        return aRet.makeStringAndClear();
+    }
+}
+
+rtl::OString replace(const rtl::OString &rIn, const rtl::OString &rSearch,
+    const rtl::OString &rReplace)
+{
+    return tmpl_replace<rtl::OString, rtl::OStringBuffer>(rIn, rSearch,
+        rReplace);
+}
+
+rtl::OUString replace(const rtl::OUString &rIn, const rtl::OUString &rSearch,
+    const rtl::OUString &rReplace)
+{
+    return tmpl_replace<rtl::OUString, rtl::OUStringBuffer>(rIn, rSearch,
+        rReplace);
 }
 
 sal_uInt32 decimalStringToNumber(

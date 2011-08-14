@@ -77,6 +77,7 @@
 #include "cppuhelper/exc_hlp.hxx"
 #include "cppuhelper/implbase3.hxx"
 #include "comphelper/anytostring.hxx"
+#include "comphelper/string.hxx"
 #include "vcl/msgbox.hxx"
 #include "toolkit/helper/vclunohelper.hxx"
 #include "comphelper/processfactory.hxx"
@@ -250,9 +251,6 @@ public:
     void stop();
     bool isBusy();
 
-    static OUString searchAndReplaceAll( const OUString &rSource,
-                                         const OUString &rWhat,
-                                         const OUString &rWith );
 private:
     Thread( Thread & ); // not defined
     void operator =( Thread & ); // not defined
@@ -902,7 +900,7 @@ void ExtensionCmdQueue::Thread::_addExtension( ::rtl::Reference< ProgressCmdEnv 
     rCmdEnv->setWarnUser( bWarnUser );
     uno::Reference< deployment::XExtensionManager > xExtMgr = m_pManager->getExtensionManager();
     uno::Reference< task::XAbortChannel > xAbortChannel( xExtMgr->createAbortChannel() );
-    OUString sTitle = searchAndReplaceAll( m_sAddingPackages, OUSTR("%EXTENSION_NAME"), sName );
+    OUString sTitle = comphelper::string::replace(m_sAddingPackages, OUSTR("%EXTENSION_NAME"), sName);
     rCmdEnv->progressSection( sTitle, xAbortChannel );
 
     try
@@ -929,7 +927,7 @@ void ExtensionCmdQueue::Thread::_removeExtension( ::rtl::Reference< ProgressCmdE
 {
     uno::Reference< deployment::XExtensionManager > xExtMgr = m_pManager->getExtensionManager();
     uno::Reference< task::XAbortChannel > xAbortChannel( xExtMgr->createAbortChannel() );
-    OUString sTitle = searchAndReplaceAll( m_sRemovingPackages, OUSTR("%EXTENSION_NAME"), xPackage->getDisplayName() );
+    OUString sTitle = comphelper::string::replace(m_sRemovingPackages, OUSTR("%EXTENSION_NAME"), xPackage->getDisplayName());
     rCmdEnv->progressSection( sTitle, xAbortChannel );
 
     OUString id( dp_misc::getIdentifier( xPackage ) );
@@ -1012,7 +1010,7 @@ void ExtensionCmdQueue::Thread::_enableExtension( ::rtl::Reference< ProgressCmdE
 
     uno::Reference< deployment::XExtensionManager > xExtMgr = m_pManager->getExtensionManager();
     uno::Reference< task::XAbortChannel > xAbortChannel( xExtMgr->createAbortChannel() );
-    OUString sTitle = searchAndReplaceAll( m_sEnablingPackages, OUSTR("%EXTENSION_NAME"), xPackage->getDisplayName() );
+    OUString sTitle = comphelper::string::replace(m_sEnablingPackages, OUSTR("%EXTENSION_NAME"), xPackage->getDisplayName());
     rCmdEnv->progressSection( sTitle, xAbortChannel );
 
     try
@@ -1034,7 +1032,7 @@ void ExtensionCmdQueue::Thread::_disableExtension( ::rtl::Reference< ProgressCmd
 
     uno::Reference< deployment::XExtensionManager > xExtMgr = m_pManager->getExtensionManager();
     uno::Reference< task::XAbortChannel > xAbortChannel( xExtMgr->createAbortChannel() );
-    OUString sTitle = searchAndReplaceAll( m_sDisablingPackages, OUSTR("%EXTENSION_NAME"), xPackage->getDisplayName() );
+    OUString sTitle = comphelper::string::replace(m_sDisablingPackages, OUSTR("%EXTENSION_NAME"), xPackage->getDisplayName());
     rCmdEnv->progressSection( sTitle, xAbortChannel );
 
     try
@@ -1056,7 +1054,7 @@ void ExtensionCmdQueue::Thread::_acceptLicense( ::rtl::Reference< ProgressCmdEnv
 
     uno::Reference< deployment::XExtensionManager > xExtMgr = m_pManager->getExtensionManager();
     uno::Reference< task::XAbortChannel > xAbortChannel( xExtMgr->createAbortChannel() );
-    OUString sTitle = searchAndReplaceAll( m_sAcceptLicense, OUSTR("%EXTENSION_NAME"), xPackage->getDisplayName() );
+    OUString sTitle = comphelper::string::replace(m_sAcceptLicense, OUSTR("%EXTENSION_NAME"), xPackage->getDisplayName());
     rCmdEnv->progressSection( sTitle, xAbortChannel );
 
     try
@@ -1088,27 +1086,6 @@ void ExtensionCmdQueue::Thread::_insert(const TExtensionCmd& rExtCmd)
     m_eInput = START;
     m_wakeup.set();
 }
-
-//------------------------------------------------------------------------------
-OUString ExtensionCmdQueue::Thread::searchAndReplaceAll( const OUString &rSource,
-                                                         const OUString &rWhat,
-                                                         const OUString &rWith )
-{
-    OUString aRet( rSource );
-    sal_Int32 nLen = rWhat.getLength();
-
-    if ( !nLen )
-        return aRet;
-
-    sal_Int32 nIndex = rSource.indexOf( rWhat );
-    while ( nIndex != -1 )
-    {
-        aRet = aRet.replaceAt( nIndex, nLen, rWith );
-        nIndex = aRet.indexOf( rWhat, nIndex + rWith.getLength() );
-    }
-    return aRet;
-}
-
 
 //------------------------------------------------------------------------------
 ExtensionCmdQueue::ExtensionCmdQueue( DialogHelper * pDialogHelper,

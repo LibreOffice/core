@@ -43,11 +43,13 @@ class TestString: public CppUnit::TestFixture
 public:
     void test();
     void testNatural();
+    void testReplace();
     void testDecimalStringToNumber();
 
     CPPUNIT_TEST_SUITE(TestString);
     CPPUNIT_TEST(test);
     CPPUNIT_TEST(testNatural);
+    CPPUNIT_TEST(testReplace);
     CPPUNIT_TEST(testDecimalStringToNumber);
     CPPUNIT_TEST_SUITE_END();
 };
@@ -286,6 +288,34 @@ void TestString::testNatural()
     CPPUNIT_ASSERT(
         compareNatural(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(("apple10apple"))), rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(("apple10apple"))), xCollator, xBI, lang::Locale()) == 0
     );
+}
+
+void TestString::testReplace()
+{
+    ::rtl::OString aIn(RTL_CONSTASCII_STRINGPARAM("aaa"));
+    ::rtl::OString aOut;
+
+    aOut = ::comphelper::string::replace(aIn,
+        rtl::OString(RTL_CONSTASCII_STRINGPARAM("aa")),
+        rtl::OString(RTL_CONSTASCII_STRINGPARAM("b")));
+    CPPUNIT_ASSERT(aOut.equalsL(RTL_CONSTASCII_STRINGPARAM("ba")));
+
+    aOut = ::comphelper::string::replace(aIn,
+        rtl::OString(),
+        rtl::OString(RTL_CONSTASCII_STRINGPARAM("whatever")));
+    CPPUNIT_ASSERT(aOut.equalsL(RTL_CONSTASCII_STRINGPARAM("aaa")));
+
+    aOut = ::comphelper::string::replace(aIn,
+        rtl::OString(RTL_CONSTASCII_STRINGPARAM("aaa")),
+        rtl::OString());
+    CPPUNIT_ASSERT(aOut.isEmpty());
+
+    aIn = rtl::OString(RTL_CONSTASCII_STRINGPARAM("aaa foo aaa foo bbb"));
+    aOut = ::comphelper::string::replace(aIn,
+        rtl::OString(RTL_CONSTASCII_STRINGPARAM("foo")),
+        rtl::OString(RTL_CONSTASCII_STRINGPARAM("bar")));
+    CPPUNIT_ASSERT(aOut.equalsL(
+        RTL_CONSTASCII_STRINGPARAM("aaa bar aaa bar bbb")));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(TestString);
