@@ -61,6 +61,7 @@
 #include <ucbhelper/configurationkeys.hxx>
 #include <comphelper/regpathhelper.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/string.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <cppuhelper/bootstrap.hxx>
@@ -374,11 +375,11 @@ IMPL_LINK( BasicApp, LateInit, void *, pDummy )
         {
             if ( (i+1) < Application::GetCommandLineParamCount() )
             {
-                if ( ByteString( Application::GetCommandLineParam( i+1 ), osl_getThreadTextEncoding() ).IsNumericAscii() )
+                if ( comphelper::string::isAsciiDecimalString(Application::GetCommandLineParam(i+1)) )
                 {
                     MsgEdit::SetMaxLogLen( sal::static_int_cast< sal_uInt16 >( Application::GetCommandLineParam( i+1 ).ToInt32() ) );
                 }
-                i++;
+                ++i;
             }
         }
     }

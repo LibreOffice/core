@@ -76,6 +76,7 @@
 #include "AccessibleEditObject.hxx"
 #include "AccessibleText.hxx"
 #include <svtools/miscopt.hxx>
+#include <comphelper/string.hxx>
 
 #define TEXT_STARTPOS       3
 #define TEXT_MULTI_STARTPOS 5
@@ -1789,7 +1790,7 @@ ScNameInputType lcl_GetInputType( const String& rText )
             eRet = SC_NAME_INPUT_NAMEDRANGE;
         else if ( aRangeUtil.MakeRangeFromName( rText, pDoc, nTab, aRange, RUTL_DBASE, eConv ) )
             eRet = SC_NAME_INPUT_DATABASE;
-        else if ( ByteString( rText, RTL_TEXTENCODING_ASCII_US ).IsNumericAscii() &&
+        else if ( comphelper::string::isAsciiDecimalString( rText ) &&
                   ( nNumeric = rText.ToInt32() ) > 0 && nNumeric <= MAXROW+1 )
             eRet = SC_NAME_INPUT_ROW;
         else if ( pDoc->GetTable( rText, nNameTab ) )

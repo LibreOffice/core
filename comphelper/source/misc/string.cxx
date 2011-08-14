@@ -308,6 +308,29 @@ NaturalStringSorter::NaturalStringSorter(
             uno::UNO_QUERY_THROW);
 }
 
+namespace
+{
+    template <typename T> bool tmpl_isAsciiDecimalString(const T &rString)
+    {
+        for (sal_Int32 i = 0; i < rString.getLength(); ++i)
+        {
+            if ((rString[i] < '0') || (rString[i] > '9'))
+                return false;
+        }
+        return true;
+    }
+}
+
+bool isAsciiDecimalString(const rtl::OString &rString)
+{
+    return tmpl_isAsciiDecimalString(rString);
+}
+
+bool isAsciiDecimalString(const rtl::OUString &rString)
+{
+    return tmpl_isAsciiDecimalString(rString);
+}
+
 } }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

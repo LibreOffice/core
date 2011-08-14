@@ -98,6 +98,7 @@ APP3STDLIBS+= \
 APP5TARGET= gsicheck
 APP5OBJS=   $(OBJ)$/gsicheck.obj $(OBJ)$/tagtest.obj
 APP5STDLIBS+= \
+            $(COMPHELPERLIB) \
             $(TOOLSLIB) \
             $(SALLIB)
 

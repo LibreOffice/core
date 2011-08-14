@@ -65,6 +65,7 @@
 #include <rtl/strbuf.hxx>
 #include <rtl/tencinfo.h>
 #include <rtl/textenc.h>
+#include <comphelper/string.hxx>
 
 #include <vector>
 #include <algorithm>
@@ -1197,7 +1198,7 @@ void RscCompiler::PreprocessSrsFile( const RscCmdLine::OutputFile& rOutputFile,
                         aLine.EraseLeadingChars( '\t' );
                         aLine.EraseAllChars( ';' );
 
-                        if( aLine.IsNumericAscii() )
+                        if (comphelper::string::isAsciiDecimalString(aLine))
                         {
                             ByteString  aBaseFileName( aPrefix );
                             sal_Int32   nNumber = atoi( aLine.GetBuffer() );

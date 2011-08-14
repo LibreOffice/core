@@ -48,6 +48,7 @@ $(eval $(call gb_Executable_add_defs,rsc,\
 
 $(eval $(call gb_Executable_add_linked_libs,rsc,\
 	i18nisolang1 \
+	comphelper \
 	sal \
 	tl \
 	$(gb_STDLIBS) \

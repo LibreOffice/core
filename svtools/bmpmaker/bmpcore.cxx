@@ -29,6 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svtools.hxx"
 
+#include <comphelper/string.hxx>
 #include <tools/color.hxx>
 #include <vcl/bmpacc.hxx>
 #include <vcl/bitmapex.hxx>
@@ -133,7 +134,7 @@ void BmpCreator::ImplCreate( const ::std::vector< DirEntry >& rInDirs,
             aLine.EraseLeadingChars( '\t' );
             aLine.EraseAllChars( ';' );
 
-            if( aLine.IsNumericAscii() )
+            if (comphelper::string::isAsciiDecimalString(aLine))
             {
                 aString = aPrefix;
 

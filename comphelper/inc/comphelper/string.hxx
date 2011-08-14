@@ -193,6 +193,27 @@ public:
     const ::com::sun::star::lang::Locale& getLocale() const { return m_aLocale; }
 };
 
+/** Determine if an OString contains solely ascii numeric digits
+
+    @param rString  An OString
+
+    @return         false if string contains any characters outside
+                    the ascii '0'-'9' range
+                    true otherwise, including for empty string
+ */
+COMPHELPER_DLLPUBLIC bool isAsciiDecimalString(const rtl::OString &rString);
+
+/** Determine if an OUString contains solely ascii numeric digits
+
+    @param rString  An OUString
+
+    @return         false if string contains any characters outside
+                    the ascii '0'-'9' range
+                    true otherwise, including for empty string
+ */
+COMPHELPER_DLLPUBLIC bool isAsciiDecimalString(const rtl::OUString &rString);
+
+
 } }
 
 #endif

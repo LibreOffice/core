@@ -40,6 +40,7 @@
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/string.hxx>
 #include <com/sun/star/uno/Exception.hpp>
 #include <sfx2/module.hxx>
 #include <sfx2/app.hxx>
@@ -758,27 +759,24 @@ sal_Bool SdTpOptionsMisc::SetScale( const String& aScale, sal_Int32& rX, sal_Int
     if( aScale.GetTokenCount( TOKEN ) != 2 )
         return( sal_False );
 
-    ByteString aTmp( aScale.GetToken( 0, TOKEN ), RTL_TEXTENCODING_ASCII_US );
-    if( !aTmp.IsNumericAscii() )
-        return( sal_False );
+    rtl::OUString aTmp(aScale.GetToken( 0, TOKEN ));
+    if (!comphelper::string::isAsciiDecimalString(aTmp))
+        return sal_False;
 
-    rX = (long) aTmp.ToInt32();
+    rX = (long) aTmp.toInt32();
     if( rX == 0 )
         return( sal_False );
 
-    aTmp = ByteString( aScale.GetToken( 1, TOKEN ), RTL_TEXTENCODING_ASCII_US );
-    if( !aTmp.IsNumericAscii() )
-        return( sal_False );
+    aTmp = aScale.GetToken( 1, TOKEN );
+    if (!comphelper::string::isAsciiDecimalString(aTmp))
+        return sal_False;
 
-    rY = (long) aTmp.ToInt32();
+    rY = (long) aTmp.toInt32();
     if( rY == 0 )
-        return( sal_False );
+        return sal_False;
 
-    return( sal_True );
+    return sal_True;
 }
-
-
-
 
 void SdTpOptionsMisc::UpdateCompatibilityControls (void)
 {

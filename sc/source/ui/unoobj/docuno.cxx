@@ -67,6 +67,7 @@
 #include <com/sun/star/reflection/XIdlClassProvider.hpp>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/servicehelper.hxx>
+#include <comphelper/string.hxx>
 
 #include "docuno.hxx"
 #include "cellsuno.hxx"
@@ -701,7 +702,7 @@ bool lcl_ParseTarget( const String& rTarget, ScRange& rTargetRange, Rectangle& r
     {
         bRangeValid = true;             // named range or database range
     }
-    else if ( ByteString( rTarget, RTL_TEXTENCODING_ASCII_US ).IsNumericAscii() &&
+    else if ( comphelper::string::isAsciiDecimalString(rTarget) &&
               ( nNumeric = rTarget.ToInt32() ) > 0 && nNumeric <= MAXROW+1 )
     {
         // row number is always mapped to cell A(row) on the same sheet

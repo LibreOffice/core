@@ -163,27 +163,6 @@ sal_Bool ByteString::IsAlphaAscii() const
 
 // -----------------------------------------------------------------------
 
-sal_Bool ByteString::IsNumericAscii() const
-{
-    DBG_CHKTHIS( ByteString, DbgCheckByteString );
-
-    sal_Int32 nIndex = 0;
-    sal_Int32 nLen = mpData->mnLen;
-    const sal_Char* pStr = mpData->maStr;
-    while ( nIndex < nLen )
-    {
-        if ( !((*pStr >= 48) && (*pStr <= 57)) )
-            return sal_False;
-
-        ++pStr,
-        ++nIndex;
-    }
-
-    return sal_True;
-}
-
-// -----------------------------------------------------------------------
-
 sal_Bool ByteString::IsAlphaNumericAscii() const
 {
     DBG_CHKTHIS( ByteString, DbgCheckByteString );

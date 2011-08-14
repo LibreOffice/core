@@ -78,6 +78,7 @@
 #include <svx/zoomslideritem.hxx>
 #include <svx/svxdlg.hxx>
 #include <svx/dialogs.hrc>
+#include <comphelper/string.hxx>
 #include "scabstdlg.hxx"
 
 #include <memory>
@@ -327,8 +328,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                     }
                 }
 
-                if ( !(nResult & SCA_VALID) &&
-                        ByteString(aAddress, RTL_TEXTENCODING_ASCII_US).IsNumericAscii() )
+                if ( !(nResult & SCA_VALID) && comphelper::string::isAsciiDecimalString(aAddress) )
                 {
                     sal_Int32 nNumeric = aAddress.ToInt32();
                     if ( nNumeric > 0 && nNumeric <= MAXROW+1 )

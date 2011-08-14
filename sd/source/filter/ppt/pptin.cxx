@@ -102,6 +102,7 @@
 
 #include <comphelper/processfactory.hxx>
 #include <comphelper/componentcontext.hxx>
+#include <comphelper/string.hxx>
 
 using namespace ::com::sun::star;
 
@@ -445,7 +446,7 @@ sal_Bool ImplSdPPTImport::Import()
                                             // first pass, searching for a SlideId
                                             for( nToken = 0; nToken < nTokenCount; nToken++ )
                                             {
-                                                if ( aStringAry[ nToken ].IsNumericAscii() )
+                                                if (comphelper::string::isAsciiDecimalString(aStringAry[nToken]))
                                                 {
                                                     sal_Int32 nNumber = aStringAry[ nToken ].ToInt32();
                                                     if ( nNumber & ~0xff )
@@ -483,7 +484,7 @@ sal_Bool ImplSdPPTImport::Import()
                                             {   // third pass, searching for a slide number
                                                 for ( nToken = 0; nToken < nTokenCount; nToken++ )
                                                 {
-                                                    if ( aStringAry[ nToken ].IsNumericAscii() )
+                                                    if (comphelper::string::isAsciiDecimalString(aStringAry[nToken]))
                                                     {
                                                         sal_Int32 nNumber = aStringAry[ nToken ].ToInt32();
                                                         if ( ( nNumber & ~0xff ) == 0 )

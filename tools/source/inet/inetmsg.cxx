@@ -35,7 +35,7 @@
 #include <tools/inetstrm.hxx>
 #include <rtl/instance.hxx>
 #include <rtl/strbuf.hxx>
-
+#include <comphelper/string.hxx>
 #include <stdio.h>
 
 //=======================================================================
@@ -310,10 +310,10 @@ static sal_uInt16 ParseNumber (const ByteString& rStr, sal_uInt16& nIndex)
     sal_uInt16 n = nIndex;
     while ((n < rStr.Len()) && ascii_isDigit(rStr.GetChar(n))) n++;
 
-    ByteString aNum (rStr.Copy (nIndex, (n - nIndex)));
+    rtl::OString aNum (rStr.Copy (nIndex, (n - nIndex)));
     nIndex = n;
 
-    return (sal_uInt16)(aNum.ToInt32());
+    return (sal_uInt16)(aNum.toInt32());
 }
 
 static sal_uInt16 ParseMonth (const ByteString& rStr, sal_uInt16& nIndex)
@@ -333,69 +333,71 @@ static sal_uInt16 ParseMonth (const ByteString& rStr, sal_uInt16& nIndex)
 sal_Bool INetRFC822Message::ParseDateField (
     const UniString& rDateFieldW, DateTime& rDateTime)
 {
-    ByteString rDateField (rDateFieldW, RTL_TEXTENCODING_ASCII_US);
-    if (rDateField.Len() == 0) return sal_False;
+    rtl::OString aDateField(rtl::OUStringToOString(rDateFieldW,
+        RTL_TEXTENCODING_ASCII_US));
 
-    if (rDateField.Search (':') != STRING_NOTFOUND)
+    if (aDateField.isEmpty()) return sal_False;
+
+    if (aDateField.indexOf(':') != -1)
     {
         // Some DateTime format.
         sal_uInt16 nIndex = 0;
 
         // Skip over <Wkd> or <Weekday>, leading and trailing space.
-        while ((nIndex < rDateField.Len()) &&
-               (rDateField.GetChar(nIndex) == ' '))
+        while ((nIndex < aDateField.getLength()) &&
+               (aDateField[nIndex] == ' '))
             nIndex++;
 
         while (
-            (nIndex < rDateField.Len()) &&
-            (ascii_isLetter (rDateField.GetChar(nIndex)) ||
-             (rDateField.GetChar(nIndex) == ',')     ))
+            (nIndex < aDateField.getLength()) &&
+            (ascii_isLetter (aDateField[nIndex]) ||
+             (aDateField[nIndex] == ',')     ))
             nIndex++;
 
-        while ((nIndex < rDateField.Len()) &&
-               (rDateField.GetChar(nIndex) == ' '))
+        while ((nIndex < aDateField.getLength()) &&
+               (aDateField[nIndex] == ' '))
             nIndex++;
 
-        if (ascii_isLetter (rDateField.GetChar(nIndex)))
+        if (ascii_isLetter (aDateField[nIndex]))
         {
             // Format: ctime().
-            if ((rDateField.Len() - nIndex) < 20) return sal_False;
+            if ((aDateField.getLength() - nIndex) < 20) return sal_False;
 
-            rDateTime.SetMonth  (ParseMonth  (rDateField, nIndex)); nIndex++;
-            rDateTime.SetDay    (ParseNumber (rDateField, nIndex)); nIndex++;
+            rDateTime.SetMonth  (ParseMonth  (aDateField, nIndex)); nIndex++;
+            rDateTime.SetDay    (ParseNumber (aDateField, nIndex)); nIndex++;
 
-            rDateTime.SetHour   (ParseNumber (rDateField, nIndex)); nIndex++;
-            rDateTime.SetMin    (ParseNumber (rDateField, nIndex)); nIndex++;
-            rDateTime.SetSec    (ParseNumber (rDateField, nIndex)); nIndex++;
+            rDateTime.SetHour   (ParseNumber (aDateField, nIndex)); nIndex++;
+            rDateTime.SetMin    (ParseNumber (aDateField, nIndex)); nIndex++;
+            rDateTime.SetSec    (ParseNumber (aDateField, nIndex)); nIndex++;
             rDateTime.Set100Sec (0);
 
-            sal_uInt16 nYear = ParseNumber (rDateField, nIndex);
+            sal_uInt16 nYear = ParseNumber (aDateField, nIndex);
             if (nYear < 100) nYear += 1900;
             rDateTime.SetYear   (nYear);
         }
         else
         {
             // Format: RFC1036 or RFC1123.
-            if ((rDateField.Len() - nIndex) < 17) return sal_False;
+            if ((aDateField.getLength() - nIndex) < 17) return sal_False;
 
-            rDateTime.SetDay    (ParseNumber (rDateField, nIndex)); nIndex++;
-            rDateTime.SetMonth  (ParseMonth  (rDateField, nIndex)); nIndex++;
+            rDateTime.SetDay    (ParseNumber (aDateField, nIndex)); nIndex++;
+            rDateTime.SetMonth  (ParseMonth  (aDateField, nIndex)); nIndex++;
 
-            sal_uInt16 nYear  = ParseNumber (rDateField, nIndex);  nIndex++;
+            sal_uInt16 nYear  = ParseNumber (aDateField, nIndex);  nIndex++;
             if (nYear < 100) nYear += 1900;
             rDateTime.SetYear   (nYear);
 
-            rDateTime.SetHour   (ParseNumber (rDateField, nIndex)); nIndex++;
-            rDateTime.SetMin    (ParseNumber (rDateField, nIndex)); nIndex++;
-            rDateTime.SetSec    (ParseNumber (rDateField, nIndex)); nIndex++;
+            rDateTime.SetHour   (ParseNumber (aDateField, nIndex)); nIndex++;
+            rDateTime.SetMin    (ParseNumber (aDateField, nIndex)); nIndex++;
+            rDateTime.SetSec    (ParseNumber (aDateField, nIndex)); nIndex++;
             rDateTime.Set100Sec (0);
 
-            if ((rDateField.GetChar(nIndex) == '+') ||
-                (rDateField.GetChar(nIndex) == '-')    )
+            if ((aDateField[nIndex] == '+') ||
+                (aDateField[nIndex] == '-')    )
             {
                 // Offset from GMT: "(+|-)HHMM".
-                sal_Bool   bEast   = (rDateField.GetChar(nIndex++) == '+');
-                sal_uInt16 nOffset = ParseNumber (rDateField, nIndex);
+                sal_Bool   bEast   = (aDateField[nIndex++] == '+');
+                sal_uInt16 nOffset = ParseNumber (aDateField, nIndex);
                 if (nOffset > 0)
                 {
                     Time aDiff;
@@ -412,11 +414,11 @@ sal_Bool INetRFC822Message::ParseDateField (
             }
         }
     }
-    else if (rDateField.IsNumericAscii())
+    else if (comphelper::string::isAsciiDecimalString(aDateField))
     {
         // Format: delta seconds.
         Time aDelta (0);
-        aDelta.SetTime (rDateField.ToInt32() * 100);
+        aDelta.SetTime (aDateField.toInt32() * 100);
 
         DateTime aNow;
         aNow += aDelta;

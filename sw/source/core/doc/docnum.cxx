@@ -63,6 +63,7 @@
 #include <list.hxx>
 #include <listfunc.hxx>
 #include <switerator.hxx>
+#include <comphelper/string.hxx>
 
 #include <map>
 
@@ -641,7 +642,7 @@ sal_uInt16 lcl_FindOutlineNum( const SwNodes& rNds, String& rName )
         nPos = 0;
         sNum = sName.GetToken( 0, '.', nPos );
         // #i4533# without this check all parts delimited by a dot are treated as outline numbers
-        if(!ByteString(sNum, gsl_getSystemTextEncoding()).IsNumericAscii())
+        if(!comphelper::string::isAsciiDecimalString(sNum))
             nPos = STRING_NOTFOUND;
     }
     rName = sName;      // das ist der nachfolgende Text.
@@ -727,7 +728,7 @@ sal_Bool SwDoc::GotoOutline( SwPosition& rPos, const String& rName ) const
             String sTempNum;
             while(sExpandedText.Len() && (sTempNum = sExpandedText.GetToken(0, '.', nPos)).Len() &&
                     STRING_NOTFOUND != nPos &&
-                    ByteString(sTempNum, gsl_getSystemTextEncoding()).IsNumericAscii())
+                    comphelper::string::isAsciiDecimalString(sTempNum))
             {
                 sExpandedText.Erase(0, nPos);
                 nPos = 0;
