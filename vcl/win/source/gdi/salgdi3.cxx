@@ -2812,7 +2812,7 @@ sal_Bool WinSalGraphics::CreateFontSubset( const rtl::OUString& rToFile,
     if( osl_File_E_None != osl_getSystemPathFromFileURL( rToFile.pData, &aSysPath.pData ) )
         return FALSE;
     const rtl_TextEncoding aThreadEncoding = osl_getThreadTextEncoding();
-    const ByteString aToFile( rtl::OUStringToOString(aSysPath, RTL_TEXTENCODING_UTF8));
+    const ByteString aToFile( rtl::OUStringToOString( aSysPath, aThreadEncoding ) );
 
     // check if the font has a CFF-table
     const DWORD nCffTag = CalcTag( "CFF " );
