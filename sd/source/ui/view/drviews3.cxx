@@ -709,8 +709,18 @@ void  DrawViewShell::ExecRuler(SfxRequest& rReq)
                     const SvxNumberFormat& rFormat = rNumBulletItem.GetNumRule()->GetLevel(nOutlineLevel);
                     SvxNumberFormat aFormat(rFormat);
 
-                    // left margin always controls LRSpace item
-                    aLRSpaceItem.SetTxtLeft(rItem.GetTxtLeft() - aFormat.GetAbsLSpace());
+                    // left margin gets distributed onto LRSpace item
+                    // and number format AbsLSpace - this fixes
+                    // n#707779 (previously, LRSpace left indent could
+                    // become negative - EditEngine really does not
+                    // like that.
+                    const short nAbsLSpace=aFormat.GetAbsLSpace();
+                    const long  nTxtLeft=rItem.GetTxtLeft();
+                    const long  nLeftIndent=std::max(0L,nTxtLeft - nAbsLSpace);
+                    aLRSpaceItem.SetTxtLeft(nLeftIndent);
+                    // control for clipped left indent - remainder
+                    // reduces number format first line indent
+                    aFormat.SetAbsLSpace(nTxtLeft - nLeftIndent);
 
                     // negative first line indent goes to the number
                     // format, positive to the lrSpace item
