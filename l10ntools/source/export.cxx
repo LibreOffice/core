@@ -36,6 +36,7 @@
 #include <iostream>
 #include <vector>
 #include <rtl/strbuf.hxx>
+#include <comphelper/string.hxx>
 
 extern "C" { int yyerror( const char * ); }
 extern "C" { int YYWarning( const char * ); }
@@ -1032,23 +1033,29 @@ int Export::Execute( int nToken, const char * pToken )
             bDontWriteOutput = sal_True;
         }
         break;
-        case APPFONTMAPPING: {
+        case APPFONTMAPPING:
+        {
+            using comphelper::string::replace;
+            using comphelper::string::getToken;
+
             bDontWriteOutput = sal_False;
             // this is a AppfontMapping, so look if its a definition
             // of field size
             ByteString sKey = sToken.GetToken( 0, '=' );
             sKey.EraseAllChars( ' ' );
             sKey.EraseAllChars( '\t' );
-            ByteString sMapping = sToken.GetToken( 1, '=' );
-            sMapping = sMapping.GetToken( 1, '(' );
-            sMapping = sMapping.GetToken( 0, ')' );
-            sMapping.EraseAllChars( ' ' );
-            sMapping.EraseAllChars( '\t' );
-            if ( sKey.ToUpperAscii() == "SIZE" ) {
-                pResData->nWidth = ( sal_uInt16 ) sMapping.GetToken( 0, ',' ).ToInt32();
+            rtl::OString sMapping = sToken.GetToken( 1, '=' );
+            sMapping = getToken(sMapping, 1, '(');
+            sMapping = getToken(sMapping, 0, ')');
+            sMapping = replace(sMapping, rtl::OString(' '), rtl::OString());
+            sMapping = replace(sMapping, rtl::OString('\t'), rtl::OString());
+            if ( sKey.ToUpperAscii() == "SIZE" )
+            {
+                pResData->nWidth = ( sal_uInt16 ) getToken(sMapping, 0, ',').toInt32();
             }
-            else if ( sKey == "POSSIZE" ) {
-                pResData->nWidth = ( sal_uInt16 ) sMapping.GetToken( 2, ',' ).ToInt32();
+            else if ( sKey == "POSSIZE" )
+            {
+                pResData->nWidth = ( sal_uInt16 ) getToken(sMapping, 2, ',').toInt32();
             }
         }
         break;

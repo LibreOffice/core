@@ -134,6 +134,34 @@ COMPHELPER_DLLPUBLIC rtl::OString replace(const rtl::OString &rIn,
 COMPHELPER_DLLPUBLIC rtl::OUString replace(const rtl::OUString &rIn,
     const rtl::OUString &rSearch, const rtl::OUString &rReplace);
 
+/** Returns a token in the OString
+
+  @param    token       the number of the token to return
+  @param    cTok        the character which seperate the tokens.
+  @return   the token   if token is negative or doesn't exist an empty token
+                        is returned
+*/
+COMPHELPER_DLLPUBLIC inline rtl::OString getToken(const rtl::OString &rIn,
+    sal_Int32 nToken, sal_Char cTok) SAL_THROW(())
+{
+    sal_Int32 nIndex = 0;
+    return rIn.getToken(nToken, cTok, nIndex);
+}
+
+/** Returns a token in the OUString
+
+  @param    token       the number of the token to return
+  @param    cTok        the character which seperate the tokens.
+  @return   the token   if token is negative or doesn't exist an empty token
+                        is returned
+*/
+COMPHELPER_DLLPUBLIC inline rtl::OUString getToken(const rtl::OUString &rIn,
+    sal_Int32 nToken, sal_Unicode cTok) SAL_THROW(())
+{
+    sal_Int32 nIndex = 0;
+    return rIn.getToken(nToken, cTok, nIndex);
+}
+
 /** Convert a sequence of strings to a single comma separated string.
 
     Note that no escaping of commas or anything fancy is done.

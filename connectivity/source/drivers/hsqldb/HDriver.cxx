@@ -53,6 +53,7 @@
 #include <osl/process.h>
 #include <connectivity/dbexception.hxx>
 #include <comphelper/namedvaluecollection.hxx>
+#include <comphelper/string.hxx>
 #include <unotools/confignode.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include "resource/hsqldb_res.hrc"
@@ -278,7 +279,7 @@ namespace connectivity
                             if ( pStream.get() )
                             {
                                 ByteString sLine;
-                                ByteString sVersionString;
+                                rtl::OString sVersionString;
                                 while ( pStream->ReadLine(sLine) )
                                 {
                                     if ( sLine.Len() == 0 )
@@ -292,18 +293,19 @@ namespace connectivity
                                     else
                                     {
                                         if  (   sIniKey.Equals( "version" )
-                                            &&  ( sVersionString.Len() == 0 )
+                                            &&  ( sVersionString.isEmpty() )
                                             )
                                         {
                                             sVersionString = sValue;
                                         }
                                     }
                                 }
-                                if ( sVersionString.Len() )
+                                if (!sVersionString.isEmpty())
                                 {
-                                    const sal_Int32 nMajor = sVersionString.GetToken(0,'.').ToInt32();
-                                    const sal_Int32 nMinor = sVersionString.GetToken(1,'.').ToInt32();
-                                    const sal_Int32 nMicro = sVersionString.GetToken(2,'.').ToInt32();
+                                    using comphelper::string::getToken;
+                                    const sal_Int32 nMajor = getToken(sVersionString, 0, '.').toInt32();
+                                    const sal_Int32 nMinor = getToken(sVersionString, 1, '.').toInt32();
+                                    const sal_Int32 nMicro = getToken(sVersionString, 2, '.').toInt32();
                                     if (     nMajor > 1
                                         || ( nMajor == 1 && nMinor > 8 )
                                         || ( nMajor == 1 && nMinor == 8 && nMicro > 0 ) )

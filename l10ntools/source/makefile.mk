@@ -77,6 +77,7 @@ APP1TARGET=  transex3
 APP1OBJS=   $(OBJ)$/src_yy_wrapper.obj
 APP1STDLIBS+= \
             $(TOOLSLIB) \
+            $(COMPHELPERLIB) \
             $(SALLIB)
 APP1LIBS+=	$(LB)$/$(TARGET).lib
 APP1DEPN=   $(OBJ)$/src_yy_wrapper.obj $(LB)$/$(TARGET).lib

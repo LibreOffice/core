@@ -44,12 +44,14 @@ public:
     void test();
     void testNatural();
     void testReplace();
+    void testToken();
     void testDecimalStringToNumber();
 
     CPPUNIT_TEST_SUITE(TestString);
     CPPUNIT_TEST(test);
     CPPUNIT_TEST(testNatural);
     CPPUNIT_TEST(testReplace);
+    CPPUNIT_TEST(testToken);
     CPPUNIT_TEST(testDecimalStringToNumber);
     CPPUNIT_TEST_SUITE_END();
 };
@@ -311,11 +313,39 @@ void TestString::testReplace()
     CPPUNIT_ASSERT(aOut.isEmpty());
 
     aIn = rtl::OString(RTL_CONSTASCII_STRINGPARAM("aaa foo aaa foo bbb"));
+
     aOut = ::comphelper::string::replace(aIn,
         rtl::OString(RTL_CONSTASCII_STRINGPARAM("foo")),
         rtl::OString(RTL_CONSTASCII_STRINGPARAM("bar")));
     CPPUNIT_ASSERT(aOut.equalsL(
         RTL_CONSTASCII_STRINGPARAM("aaa bar aaa bar bbb")));
+
+    aOut = ::comphelper::string::replace(aIn,
+        rtl::OString(' '),
+        rtl::OString());
+    CPPUNIT_ASSERT(aOut.equalsL(
+        RTL_CONSTASCII_STRINGPARAM("aaafooaaafoobbb")));
+}
+
+void TestString::testToken()
+{
+    ::rtl::OString aIn(RTL_CONSTASCII_STRINGPARAM("10.11.12"));
+    ::rtl::OString aOut;
+
+    aOut = ::comphelper::string::getToken(aIn, -1, '.');
+    CPPUNIT_ASSERT(aOut.isEmpty());
+
+    aOut = ::comphelper::string::getToken(aIn, 0, '.');
+    CPPUNIT_ASSERT(aOut.equalsL(RTL_CONSTASCII_STRINGPARAM("10")));
+
+    aOut = ::comphelper::string::getToken(aIn, 1, '.');
+    CPPUNIT_ASSERT(aOut.equalsL(RTL_CONSTASCII_STRINGPARAM("11")));
+
+    aOut = ::comphelper::string::getToken(aIn, 2, '.');
+    CPPUNIT_ASSERT(aOut.equalsL(RTL_CONSTASCII_STRINGPARAM("12")));
+
+    aOut = ::comphelper::string::getToken(aIn, 3, '.');
+    CPPUNIT_ASSERT(aOut.isEmpty());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(TestString);
