@@ -65,7 +65,7 @@ struct FormulaArrayStack
 {
     FormulaArrayStack*  pNext;
     FormulaTokenArray*  pArr;
-    sal_Bool bTemp;
+    bool bTemp;
 };
 
 
@@ -221,26 +221,26 @@ public:
      */
     OpCode GetEnglishOpCode( const String& rName ) const;
 
-    void            SetCompileForFAP( sal_Bool bVal )
+    void            SetCompileForFAP( bool bVal )
                         { bCompileForFAP = bVal; bIgnoreErrors = bVal; }
 
     static bool IsOpCodeVolatile( OpCode eOp );
 
-    static sal_Bool DeQuote( String& rStr );
+    static bool DeQuote( String& rStr );
 
 
     static const String&    GetNativeSymbol( OpCode eOp );
-    static  sal_Bool            IsMatrixFunction(OpCode _eOpCode);   // if a function _always_ returns a Matrix
+    static  bool            IsMatrixFunction(OpCode _eOpCode);   // if a function _always_ returns a Matrix
 
     short GetNumFormatType() const { return nNumFmt; }
-    sal_Bool  CompileTokenArray();
+    bool  CompileTokenArray();
 
     void CreateStringFromTokenArray( String& rFormula );
     void CreateStringFromTokenArray( rtl::OUStringBuffer& rBuffer );
     FormulaToken* CreateStringFromToken( String& rFormula, FormulaToken* pToken,
-                                    sal_Bool bAllowArrAdvance = sal_False );
+                                    bool bAllowArrAdvance = false );
     FormulaToken* CreateStringFromToken( rtl::OUStringBuffer& rBuffer, FormulaToken* pToken,
-                                    sal_Bool bAllowArrAdvance = sal_False );
+                                    bool bAllowArrAdvance = false );
 
     void AppendBoolean( rtl::OUStringBuffer& rBuffer, bool bVal );
     void AppendDouble( rtl::OUStringBuffer& rBuffer, double fVal );
@@ -254,7 +254,7 @@ public:
     static void ResetNativeSymbols();
     static void SetNativeSymbols( const OpCodeMapPtr& xMap );
 protected:
-    virtual String FindAddInFunction( const String& rUpperName, sal_Bool bLocalFirst ) const;
+    virtual String FindAddInFunction( const String& rUpperName, bool bLocalFirst ) const;
     virtual void fillFromAddInCollectionUpperName( NonConstOpCodeMapPtr xMap ) const;
     virtual void fillFromAddInMap( NonConstOpCodeMapPtr xMap, FormulaGrammar::Grammar _eGrammar ) const;
     virtual void fillFromAddInCollectionEnglishName( NonConstOpCodeMapPtr xMap ) const;
@@ -262,10 +262,10 @@ protected:
 
     virtual void SetError(sal_uInt16 nError);
     virtual FormulaTokenRef ExtendRangeReference( FormulaToken & rTok1, FormulaToken & rTok2, bool bReuseDoubleRef );
-    virtual sal_Bool HandleExternalReference(const FormulaToken& _aToken);
-    virtual sal_Bool HandleRange();
-    virtual sal_Bool HandleSingleRef();
-    virtual sal_Bool HandleDbData();
+    virtual bool HandleExternalReference(const FormulaToken& _aToken);
+    virtual bool HandleRange();
+    virtual bool HandleSingleRef();
+    virtual bool HandleDbData();
 
     virtual void CreateStringFromExternal(rtl::OUStringBuffer& rBuffer, FormulaToken* pTokenP);
     virtual void CreateStringFromSingleRef(rtl::OUStringBuffer& rBuffer,FormulaToken* pTokenP);
@@ -273,12 +273,12 @@ protected:
     virtual void CreateStringFromMatrix(rtl::OUStringBuffer& rBuffer,FormulaToken* pTokenP);
     virtual void CreateStringFromIndex(rtl::OUStringBuffer& rBuffer,FormulaToken* pTokenP);
     virtual void LocalizeString( String& rName );   // modify rName - input: exact name
-    virtual sal_Bool IsImportingXML() const;
+    virtual bool IsImportingXML() const;
 
     sal_uInt16 GetErrorConstant( const String& rName );
     void AppendErrorConstant( rtl::OUStringBuffer& rBuffer, sal_uInt16 nError );
 
-    sal_Bool   GetToken();
+    bool   GetToken();
     OpCode NextToken();
     void PutCode( FormulaTokenRef& );
     void Factor();
@@ -295,17 +295,17 @@ protected:
     void NotLine();
     OpCode Expression();
     void PopTokenArray();
-    void PushTokenArray( FormulaTokenArray*, sal_Bool = sal_False );
+    void PushTokenArray( FormulaTokenArray*, bool = false );
 
     bool MergeRangeReference( FormulaToken * * const pCode1, FormulaToken * const * const pCode2 );
 
-    String              aCorrectedFormula;          // autocorrected Formula
-    String              aCorrectedSymbol;           // autocorrected Symbol
+    String              aCorrectedFormula;      // autocorrected Formula
+    String              aCorrectedSymbol;       // autocorrected Symbol
 
-    OpCodeMapPtr        mxSymbols;                  // which symbols are used
+    OpCodeMapPtr        mxSymbols;              // which symbols are used
 
-    FormulaTokenRef     pToken;                     // current token
-    FormulaTokenRef     pCurrentFactorToken;        // current factor token (of Factor() method)
+    FormulaTokenRef     pToken;                 // current token
+    FormulaTokenRef     pCurrentFactorToken;    // current factor token (of Factor() method)
     FormulaTokenArray*  pArr;
     ExternalReferenceHelper* pExternalRef;
 
@@ -313,20 +313,19 @@ protected:
     FormulaArrayStack*  pStack;
 
     OpCode              eLastOp;
-    short               nRecursion;                 // GetToken() recursions
-    short               nNumFmt;                    // set during CompileTokenArray()
-    sal_uInt16              pc;
+    short               nRecursion;             // GetToken() recursions
+    short               nNumFmt;                // set during CompileTokenArray()
+    sal_uInt16          pc;                     // program counter
 
-    FormulaGrammar::Grammar
-                        meGrammar;          // The grammar used, language plus convention.
+    FormulaGrammar::Grammar meGrammar;          // The grammar used, language plus convention.
 
-    sal_Bool                bAutoCorrect;               // whether to apply AutoCorrection
-    sal_Bool                bCorrected;                 // AutoCorrection was applied
-    sal_Bool                bCompileForFAP;             //! not real RPN but names, for FunctionAutoPilot,
-                                                    // will not be resolved
-    sal_Bool                bIgnoreErrors;              // on AutoCorrect and CompileForFAP
-                                                    // ignore errors and create RPN nevertheless
-    sal_Bool                glSubTotal;                 // if code contains one or more subtotal functions
+    bool                bAutoCorrect;           // whether to apply AutoCorrection
+    bool                bCorrected;             // AutoCorrection was applied
+    bool                bCompileForFAP;         //! not real RPN but names, for FunctionAutoPilot
+                                                // will not be resolved
+    bool                bIgnoreErrors;          // on AutoCorrect and CompileForFAP
+                                                // ignore errors and create RPN nevertheless
+    bool                glSubTotal;             // if code contains one or more subtotal functions
 private:
     void InitSymbolsNative() const;    /// only SymbolsNative, on first document creation
     void InitSymbolsEnglish() const;   /// only SymbolsEnglish, maybe later

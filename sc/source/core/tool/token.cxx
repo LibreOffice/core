@@ -125,7 +125,7 @@ IMPL_FIXEDMEMPOOL_NEWDEL( ScDoubleRefToken, nMemPoolDoubleRefToken, nMemPoolDoub
 
 // --- helpers --------------------------------------------------------------
 
-inline sal_Bool lcl_IsReference( OpCode eOp, StackVar eType )
+inline bool lcl_IsReference( OpCode eOp, StackVar eType )
 {
     return
         (eOp == ocPush && (eType == svSingleRef || eType == svDoubleRef))
@@ -523,11 +523,11 @@ bool ScToken::Is3DRef() const
     {
         case svDoubleRef :
             if ( GetSingleRef2().IsFlag3D() )
-                return sal_True;
+                return true;
         //! fallthru
         case svSingleRef :
             if ( GetSingleRef().IsFlag3D() )
-                return sal_True;
+                return true;
             break;
         default:
         {
@@ -1275,9 +1275,9 @@ bool ScTokenArray::AddFormulaToken(const com::sun::star::sheet::FormulaToken& _a
     }
     return bError;
 }
-sal_Bool ScTokenArray::ImplGetReference( ScRange& rRange, sal_Bool bValidOnly ) const
+bool ScTokenArray::ImplGetReference( ScRange& rRange, bool bValidOnly ) const
 {
-    sal_Bool bIs = false;
+    bool bIs = false;
     if ( pCode && nLen == 1 )
     {
         const FormulaToken* pToken = pCode[0];
@@ -1303,14 +1303,14 @@ sal_Bool ScTokenArray::ImplGetReference( ScRange& rRange, sal_Bool bValidOnly ) 
     return bIs;
 }
 
-sal_Bool ScTokenArray::IsReference( ScRange& rRange ) const
+bool ScTokenArray::IsReference( ScRange& rRange ) const
 {
     return ImplGetReference( rRange, false );
 }
 
-sal_Bool ScTokenArray::IsValidReference( ScRange& rRange ) const
+bool ScTokenArray::IsValidReference( ScRange& rRange ) const
 {
-    return ImplGetReference( rRange, sal_True );
+    return ImplGetReference( rRange, true );
 }
 
 ////////////////////////////////////////////////////////////////////////////
@@ -1655,7 +1655,7 @@ FormulaToken* ScTokenArray::AddColRowName( const ScSingleRefData& rRef )
     return Add( new ScSingleRefToken( rRef, ocColRowName ) );
 }
 
-sal_Bool ScTokenArray::GetAdjacentExtendOfOuterFuncRefs( SCCOLROW& nExtend,
+bool ScTokenArray::GetAdjacentExtendOfOuterFuncRefs( SCCOLROW& nExtend,
         const ScAddress& rPos, ScDirection eDir )
 {
     SCCOL nCol = 0;
@@ -1698,7 +1698,7 @@ sal_Bool ScTokenArray::GetAdjacentExtendOfOuterFuncRefs( SCCOLROW& nExtend,
             sal_uInt8 nParamCount = t->GetByte();
             if ( nParamCount && nRPN > nParamCount )
             {
-                sal_Bool bRet = false;
+                bool bRet = false;
                 sal_uInt16 nParam = nRPN - nParamCount - 1;
                 for ( ; nParam < nRPN-1; nParam++ )
                 {
@@ -1716,7 +1716,7 @@ sal_Bool ScTokenArray::GetAdjacentExtendOfOuterFuncRefs( SCCOLROW& nExtend,
                                             && rRef.nRow > nExtend )
                                     {
                                         nExtend = rRef.nRow;
-                                        bRet = sal_True;
+                                        bRet = true;
                                     }
                                 break;
                                 case DIR_RIGHT :
@@ -1725,7 +1725,7 @@ sal_Bool ScTokenArray::GetAdjacentExtendOfOuterFuncRefs( SCCOLROW& nExtend,
                                             > nExtend )
                                     {
                                         nExtend = rRef.nCol;
-                                        bRet = sal_True;
+                                        bRet = true;
                                     }
                                 break;
                                 case DIR_TOP :
@@ -1733,7 +1733,7 @@ sal_Bool ScTokenArray::GetAdjacentExtendOfOuterFuncRefs( SCCOLROW& nExtend,
                                             && rRef.nRow < nExtend )
                                     {
                                         nExtend = rRef.nRow;
-                                        bRet = sal_True;
+                                        bRet = true;
                                     }
                                 break;
                                 case DIR_LEFT :
@@ -1742,7 +1742,7 @@ sal_Bool ScTokenArray::GetAdjacentExtendOfOuterFuncRefs( SCCOLROW& nExtend,
                                             < nExtend )
                                     {
                                         nExtend = rRef.nCol;
-                                        bRet = sal_True;
+                                        bRet = true;
                                     }
                                 break;
                             }
@@ -1759,7 +1759,7 @@ sal_Bool ScTokenArray::GetAdjacentExtendOfOuterFuncRefs( SCCOLROW& nExtend,
                                             && rRef.Ref2.nRow > nExtend )
                                     {
                                         nExtend = rRef.Ref2.nRow;
-                                        bRet = sal_True;
+                                        bRet = true;
                                     }
                                 break;
                                 case DIR_RIGHT :
@@ -1768,7 +1768,7 @@ sal_Bool ScTokenArray::GetAdjacentExtendOfOuterFuncRefs( SCCOLROW& nExtend,
                                             > nExtend )
                                     {
                                         nExtend = rRef.Ref2.nCol;
-                                        bRet = sal_True;
+                                        bRet = true;
                                     }
                                 break;
                                 case DIR_TOP :
@@ -1776,7 +1776,7 @@ sal_Bool ScTokenArray::GetAdjacentExtendOfOuterFuncRefs( SCCOLROW& nExtend,
                                             && rRef.Ref1.nRow < nExtend )
                                     {
                                         nExtend = rRef.Ref1.nRow;
-                                        bRet = sal_True;
+                                        bRet = true;
                                     }
                                 break;
                                 case DIR_LEFT :
@@ -1785,7 +1785,7 @@ sal_Bool ScTokenArray::GetAdjacentExtendOfOuterFuncRefs( SCCOLROW& nExtend,
                                             < nExtend )
                                     {
                                         nExtend = rRef.Ref1.nCol;
-                                        bRet = sal_True;
+                                        bRet = true;
                                     }
                                 break;
                             }

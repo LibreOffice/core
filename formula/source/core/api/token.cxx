@@ -64,7 +64,7 @@ IMPL_FIXEDMEMPOOL_NEWDEL_DLL( FormulaStringToken, nMemPoolStringToken, nMemPoolS
 
 // --- helpers --------------------------------------------------------------
 
-inline sal_Bool lcl_IsReference( OpCode eOp, StackVar eType )
+inline bool lcl_IsReference( OpCode eOp, StackVar eType )
 {
     return
         (eOp == ocPush && (eType == svSingleRef || eType == svDoubleRef))
@@ -81,7 +81,7 @@ FormulaToken::~FormulaToken()
 
 bool FormulaToken::Is3DRef() const
 {
-    return sal_False;
+    return false;
 }
 
 bool FormulaToken::IsFunction() const
@@ -108,7 +108,7 @@ sal_uInt8 FormulaToken::GetParamCount() const
             eOp != ocIf && eOp != ocChose && eOp != ocPercentSign )
         return 0;       // parameters and specials
                         // ocIf and ocChose not for FAP, have cByte then
-//2do: sal_Bool parameter whether FAP or not?
+//2do: bool parameter whether FAP or not?
     else if ( GetByte() )
         return GetByte();   // all functions, also ocExternal and ocMacro
     else if (SC_OPCODE_START_BIN_OP <= eOp && eOp < SC_OPCODE_STOP_BIN_OP)
@@ -570,9 +570,9 @@ bool FormulaTokenArray::HasOpCode( OpCode eOp ) const
     for ( sal_uInt16 j=0; j < nLen; j++ )
     {
         if ( pCode[j]->GetOpCode() == eOp )
-            return sal_True;
+            return true;
     }
-    return sal_False;
+    return false;
 }
 
 bool FormulaTokenArray::HasOpCodeRPN( OpCode eOp ) const
@@ -580,9 +580,9 @@ bool FormulaTokenArray::HasOpCodeRPN( OpCode eOp ) const
     for ( sal_uInt16 j=0; j < nRPN; j++ )
     {
         if ( pRPN[j]->GetOpCode() == eOp )
-            return sal_True;
+            return true;
     }
-    return sal_False;
+    return false;
 }
 
 bool FormulaTokenArray::HasNameOrColRowName() const
@@ -590,9 +590,9 @@ bool FormulaTokenArray::HasNameOrColRowName() const
     for ( sal_uInt16 j=0; j < nLen; j++ )
     {
         if( pCode[j]->GetType() == svIndex || pCode[j]->GetOpCode() == ocColRowName )
-            return sal_True;
+            return true;
     }
-    return sal_False;
+    return false;
 }
 
 
@@ -600,7 +600,7 @@ FormulaTokenArray::FormulaTokenArray()
 {
     pCode = NULL; pRPN = NULL;
     nError = nLen = nIndex = nRPN = nRefs = 0;
-    bHyperLink = sal_False;
+    bHyperLink = false;
     ClearRecalcMode();
 }
 
@@ -714,7 +714,7 @@ void FormulaTokenArray::Clear()
     }
     pCode = NULL; pRPN = NULL;
     nError = nLen = nIndex = nRPN = nRefs = 0;
-    bHyperLink = sal_False;
+    bHyperLink = false;
     ClearRecalcMode();
 }
 
@@ -851,7 +851,7 @@ bool FormulaTokenArray::HasMatrixDoubleRefOps()
                         {
                             pResult->Delete();
                             delete [] pStack;
-                            return sal_True;
+                            return true;
                         }
                     }
                 }
@@ -883,7 +883,7 @@ bool FormulaTokenArray::HasMatrixDoubleRefOps()
         delete [] pStack;
     }
 
-    return sal_False;
+    return false;
 }
 
 
@@ -932,21 +932,21 @@ void FormulaMissingContext::AddMoreArgs( FormulaTokenArray *pNewArr, const Missi
             if (mnCurArg == 2)
             {
                 pNewArr->AddOpCode( ocSep );
-                pNewArr->AddDouble( 1.0 );      // 4th, Cumulative=sal_True()
+                pNewArr->AddDouble( 1.0 );      // 4th, Cumulative=true()
             }
             break;
         case ocPoissonDist:
             if (mnCurArg == 1)
             {
                 pNewArr->AddOpCode( ocSep );
-                pNewArr->AddDouble( 1.0 );      // 3rd, Cumulative=sal_True()
+                pNewArr->AddDouble( 1.0 );      // 3rd, Cumulative=true()
             }
             break;
         case ocNormDist:
             if ( mnCurArg == 2 )
             {
                 pNewArr->AddOpCode( ocSep );
-                pNewArr->AddDouble( 1.0 );      // 4th, Cumulative=sal_True()
+                pNewArr->AddDouble( 1.0 );      // 4th, Cumulative=true()
             }
             break;
         case ocLogNormDist:
@@ -1207,7 +1207,7 @@ FormulaToken* FormulaTokenArray::AddOpCode( OpCode eOp )
             }
             break;
         default:
-            pRet = new FormulaByteToken( eOp, 0, sal_False );
+            pRet = new FormulaByteToken( eOp, 0, false );
             break;
     }
     return AddToken( *pRet );

@@ -102,7 +102,7 @@ public:
             The formula's position, used to calculate absolute positions from
             relative references.
         @param bReuseDoubleRef
-            If sal_True, a DoubleRef token is reused if passed as rTok1 or rTok2,
+            If true, a DoubleRef token is reused if passed as rTok1 or rTok2,
             else a new DoubleRef token is created and returned.
         @return
             A reused or new'ed ScDoubleRefToken, or a NULL TokenRef if rTok1 or
