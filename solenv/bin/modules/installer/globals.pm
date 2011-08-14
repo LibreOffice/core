@@ -104,8 +104,6 @@ BEGIN
     $ziplistname = "";
     $pathfilename = "";
     $setupscriptname = "";
-    $headerfilename = "";
-    $shellscriptsfilename = "";
     $product = "";
     $languagelist = "";
     $added_english = 0;
@@ -150,7 +148,6 @@ BEGIN
     $unpackpath = "";
     $idttemplatepath = "";
     $idtlanguagepath = "";
-    $packjobref = "";
     $buildid = "Not set";
     $guidcounter = 1000; # for uniqueness of guids
     $fontsfolder = "FontsFolder";
@@ -221,7 +218,6 @@ BEGIN
     $makelinuxlinkrpm = 0;
     $linuxlinkrpmprocess = 0;
     $add_required_package = "";
-    $linuxrespin = 0;
     @linuxpatchfiles = ();
     $linuxlibrarybaselevel = "1";
     $linuxlibrarypatchlevel = "1.1";
@@ -497,8 +493,6 @@ BEGIN
     @jdsremovedirs = ();
     @emptypackages = ();
     %fontpackageexists = ();
-
-    $exithandler = undef;
 
     $plat = $^O;
 
