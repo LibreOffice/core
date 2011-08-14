@@ -358,7 +358,7 @@ void OTableHelper::refreshPrimaryKeys(TStringVector& _rNames)
     ::comphelper::disposeComponent(xResult);
 }
 // -------------------------------------------------------------------------
-void OTableHelper::refreshForgeinKeys(TStringVector& _rNames)
+void OTableHelper::refreshForeignKeys(TStringVector& _rNames)
 {
     Any aCatalog;
     if ( m_CatalogName.getLength() )
@@ -430,7 +430,7 @@ void OTableHelper::refreshKeys()
     if(!isNew())
     {
         refreshPrimaryKeys(aNames);
-        refreshForgeinKeys(aNames);
+        refreshForeignKeys(aNames);
         m_pKeys = createKeys(aNames);
     } // if(!isNew())
     else if (!m_pKeys )

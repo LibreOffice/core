@@ -90,7 +90,7 @@ namespace connectivity
         ::std::auto_ptr<OTableHelperImpl> m_pImpl;
 
         void refreshPrimaryKeys(TStringVector& _rKeys);
-        void refreshForgeinKeys(TStringVector& _rKeys);
+        void refreshForeignKeys(TStringVector& _rKeys);
 
     protected:
         /** creates the column collection for the table
