@@ -292,7 +292,7 @@ void SfxDialogLibraryContainer::storeLibrariesToStorage( const uno::Reference< e
     Sequence< OUString > sLibraries = getElementNames();
     for ( sal_Int32 i=0; i < sLibraries.getLength(); ++i )
     {
-        // libraries will already be loaded from above
+        loadLibrary( sLibraries[ i ] );
         Reference< XNameContainer > xLib;
         getByName( sLibraries[ i ] ) >>= xLib;
         if ( xLib.is() )
