@@ -150,8 +150,9 @@ RscCmdLine::RscCmdLine( int argc, char ** argv, RscError * pEH )
                 nCommands |= PRINTSYNTAX_FLAG;
             }
             else if( !rsc_strnicmp( (*ppStr) + 1, "RefDeep", 7 ) )
-            { // maximale Aufloesungtiefe fuer Referenzen
-                nRefDeep = ByteString( (*ppStr) +1 + strlen( "RefDeep" ) ).ToInt32();
+            {
+                // maximale Aufloesungtiefe fuer Referenzen
+                nRefDeep = rtl::OString((*ppStr) + 1 + RTL_CONSTASCII_LENGTH("RefDeep")).toInt32();
             }
             else if( !rsc_stricmp( (*ppStr) + 1, "p" ) )
             { // kein Preprozessor
