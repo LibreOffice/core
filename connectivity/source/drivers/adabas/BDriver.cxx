@@ -1635,7 +1635,7 @@ void ODriver::checkAndInsertNewDevSpace(const ::rtl::OUString& sDBName,
         UCBContentHelper::Kill(sCommandFile);
 #endif
     SvStream* pFileStream = aCmdFile.GetStream(STREAM_STD_READWRITE);
-    ByteString sStateLine;
+    rtl::OString sStateLine;
     sal_Bool bRead = sal_True;
     sal_Int32 nDataPages = 0;
     while(pFileStream && bRead && !pFileStream->IsEof())
@@ -1643,7 +1643,7 @@ void ODriver::checkAndInsertNewDevSpace(const ::rtl::OUString& sDBName,
         bRead = pFileStream->ReadLine(sStateLine);
         if(bRead)
         {
-            nDataPages = sStateLine.ToInt32();
+            nDataPages = sStateLine.toInt32();
             if(nDataPages && nDataPages < 100)
             {
                 // the space isn't big enough anymore so we increment it
