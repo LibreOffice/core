@@ -87,7 +87,7 @@ public class IniFile implements Enumeration
 
     public void insertFirstComment(String[] _aList)
         {
-            if (m_aList.size() == 0)
+            if (m_aList.isEmpty())
             {
                 // can only insert if there is nothing else already in the ini file
                 for (int i = 0; i < _aList.length; i++)
@@ -224,7 +224,7 @@ public class IniFile implements Enumeration
                 {
                     continue;
                 }
-                if (sFindSection.equals("[]"))
+                if (("[]").equals(sFindSection))
                 {
                     // special case, empty Section.
                     return i - 1;
@@ -285,7 +285,7 @@ public class IniFile implements Enumeration
                     break;
                 }
 
-                int nEqual = sLine.indexOf("=");
+                int nEqual = sLine.indexOf('=');
                 if (nEqual >= 0)
                 {
                     String sKey = toLowerIfNeed(sLine.substring(0, nEqual).trim());
@@ -318,7 +318,7 @@ public class IniFile implements Enumeration
                     return j;
                 }
 
-                int nEqual = sLine.indexOf("=");
+                int nEqual = sLine.indexOf('=');
                 if (nEqual >= 0)
                 {
                     String sKey = toLowerIfNeed(sLine.substring(0, nEqual).trim());
@@ -338,12 +338,10 @@ public class IniFile implements Enumeration
             {
                 return "";
             }
-            int nEqual = sLine.indexOf("=");
+            int nEqual = sLine.indexOf('=');
             if (nEqual >= 0)
             {
-                String sKey = sLine.substring(0, nEqual).trim();
-                String sValue = sLine.substring(nEqual + 1).trim();
-                return sValue;
+                return(sLine.substring(nEqual + 1).trim());
             }
             return "";
         }
@@ -357,7 +355,6 @@ public class IniFile implements Enumeration
     // private String m_sOldKey;
     public String getValue(String _sSection, String _sKey)
         {
-            String sValue = "";
             int m_nCurrentPosition = findKey(_sSection, _sKey);
             if (m_nCurrentPosition == -1)
             {
@@ -365,22 +362,10 @@ public class IniFile implements Enumeration
                 return "";
             }
 
-            // m_sOldKey = _sKey;
-            sValue = getValue(m_nCurrentPosition);
+            return(getValue(m_nCurrentPosition));
 
-            return sValue;
         }
 
-//    private String getNextValue()
-//    {
-//        if (m_nCurrentPosition >= 0)
-//        {
-//            ++m_nCurrentPosition;
-//            String sValue = getValue(m_nCurrentPosition);
-//            return sValue;
-//        }
-//        return "";
-//    }
     /**
      * Returns the value at Section, Key converted to an integer
      * Check with hasValue(Section, Key) to check before you get into trouble.
@@ -397,7 +382,7 @@ public class IniFile implements Enumeration
             {
                 try
                 {
-                    nValue = Integer.valueOf(sValue).intValue();
+                    nValue = Integer.parseInt(sValue);
                 }
                 catch (java.lang.NumberFormatException e)
                 {
@@ -424,7 +409,7 @@ public class IniFile implements Enumeration
     // TODO: make private
     private void store()
         {
-            if (m_bListContainUnsavedChanges == false)
+            if (!m_bListContainUnsavedChanges)
             {
                 // nothing has changed, so no need to store
                 return;
@@ -537,59 +522,7 @@ public class IniFile implements Enumeration
                 m_bListContainUnsavedChanges = true;
             }
         }
-    // -----------------------------------------------------------------------------
-    // String replaceEvaluatedValue(String _sSection, String _sValue)
-    //     {
-    //         String sValue = _sValue;
-    //         int nIndex = 0;
-    //         while (( nIndex = sValue.indexOf("$(", nIndex)) >= 0)
-    //         {
-    //             int nNextIndex = sValue.indexOf(")", nIndex);
-    //             if (nNextIndex >= 0)
-    //             {
-    //                 String sKey = sValue.substring(nIndex + 2, nNextIndex);
-    //                 String sNewValue = getValue(_sSection, sKey);
-    //                 if (sNewValue != null && sNewValue.length() > 0)
-    //                 {
-    //                     String sRegexpKey = "\\$\\(" + sKey + "\\)";
-    //                     sValue = sValue.replaceAll(sRegexpKey, sNewValue);
-    //                 }
-    //                 nIndex = nNextIndex;
-    //             }
-    //             else
-    //             {
-    //                 nIndex += 2;
-    //             }
-    //         }
-    //         return sValue;
-    //     }
-    // -----------------------------------------------------------------------------
 
-    // public String getLocalEvaluatedValue(String _sSection, String _sKey)
-    //     {
-    //         String sValue = getValue(_sSection, _sKey);
-    //         sValue = replaceEvaluatedValue(_sSection, sValue);
-    //         return sValue;
-    //     }
-
-    // -----------------------------------------------------------------------------
-
-    // this is a special behaviour.
-    // public String getGlobalLocalEvaluatedValue(String _sSection, String _sKey)
-    //     {
-    //         String sGlobalValue = getKey("global", _sKey);
-    //         String sLocalValue = getKey(_sSection, _sKey);
-    //         if (sLocalValue.length() == 0)
-    //         {
-    //             sGlobalValue = replaceEvaluatedKey(_sSection, sGlobalValue);
-    //             sGlobalValue = replaceEvaluatedKey("global", sGlobalValue);
-    //             return sGlobalValue;
-    //         }
-    //         sLocalValue = replaceEvaluatedKey(_sSection, sLocalValue);
-    //         sLocalValue = replaceEvaluatedKey("global", sLocalValue);
-    //
-    //         return sLocalValue;
-    //     }
     public void removeSection(String _sSectionToRemove)
         {
             // first, search for the name

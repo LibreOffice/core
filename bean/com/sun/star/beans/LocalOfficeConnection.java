@@ -179,7 +179,7 @@ public class LocalOfficeConnection
     public void dispose()
     {
         Iterator itr = mComponents.iterator();
-        while (itr.hasNext() == true) {
+        while (itr.hasNext()) {
             // ignore runtime exceptions in dispose
             try { ((XEventListener)itr.next()).disposing(null); }
             catch ( RuntimeException aExc ) {}
@@ -462,12 +462,12 @@ public class LocalOfficeConnection
                 case ';':
                     idx     -= 1;           // put back the last read character
                     state   = 5;
-                    if (name.equals("path")) {
+                    if (("path").equals(name)) {
                         if (path == null)
                             path    = buffer.toString();
                         else
                             state   = -3;   // error: more then one 'path'
-                    } else if (name.equals("pipe")) {
+                    } else if (("pipe").equals(name)) {
                         if (pipe == null)
                             pipe    = buffer.toString();
                         else

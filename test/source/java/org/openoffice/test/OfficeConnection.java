@@ -70,7 +70,7 @@ public final class OfficeConnection {
             String envArg = Argument.get("env");
             if (envArg != null) {
                 Map<String, String> env = pb.environment();
-                int i = envArg.indexOf("=");
+                int i = envArg.indexOf('=');
                 if (i == -1) {
                     env.remove(envArg);
                 } else {

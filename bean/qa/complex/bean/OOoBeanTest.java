@@ -77,8 +77,7 @@ public class OOoBeanTest
     */
     private int getSleepTime(int time)
     {
-        int ret = time;
-        if (isWindows() == false)
+        if (!isWindows())
         {
             return time * 5;
         }
@@ -146,7 +145,7 @@ public class OOoBeanTest
         try
         {
             f = new WriterFrame(100, 100, 500,500, false, connection.getComponentContext());
-            if (f.checkUnoFramePosition() == false)
+            if (!f.checkUnoFramePosition())
             {
                 fail("Sizing error: Client are of Java frame does not match the UNO window.");
             }
@@ -162,18 +161,18 @@ public class OOoBeanTest
                 capturer.grabOne(f.getClientArea());
                 f.setExtendedState(Frame.ICONIFIED);
                 Thread.sleep(getSleepTime(200));
-                if (f.checkUnoFramePosition() == false)
+                if (!f.checkUnoFramePosition())
                 {
                     fail("Sizing error: Frame was iconified.");
                 }
                 f.setExtendedState(Frame.NORMAL);
                 Thread.sleep(getSleepTime(200));
-                if (f.checkUnoFramePosition() == false)
+                if (!f.checkUnoFramePosition())
                 {
                     fail("Sizing error: Frame size set back to normal after it was iconified.");
                 }
                 capturer.grabTwo(f.getClientArea());
-                if (capturer.compare() == false)
+                if (!capturer.compare())
                 {
                     fail("Painting error: Minimize (iconify) frame and back to normal size.");
                     capturer.writeImages();
@@ -187,18 +186,18 @@ public class OOoBeanTest
                 capturer.grabOne(f.getClientArea());
                 f.setExtendedState(Frame.MAXIMIZED_BOTH);
                 Thread.sleep(getSleepTime(200));
-                if (f.checkUnoFramePosition() == false)
+                if (!f.checkUnoFramePosition())
                 {
                     fail("Sizing error: Frame maximized.");
                 }
                 f.setExtendedState(Frame.NORMAL);
                 Thread.sleep(getSleepTime(200));
-                if (f.checkUnoFramePosition() == false)
+                if (!f.checkUnoFramePosition())
                 {
                     fail("Sizing error: Frame set from maximized to normal.");
                 }
                 capturer.grabTwo(f.getClientArea());
-                if (capturer.compare() == false)
+                if (!capturer.compare())
                 {
                     fail("Painting error: Maximize frame and back to normal size");
                     capturer.writeImages();
@@ -211,13 +210,13 @@ public class OOoBeanTest
             Rectangle oldPosition = f.getBounds();
             f.setBounds(0, 0, oldPosition.width, oldPosition.height);
             Thread.sleep(getSleepTime(200));
-            if (f.checkUnoFramePosition() == false)
+            if (!f.checkUnoFramePosition())
             {
                 fail("Sizing error: Frame moved.");
             }
 
             capturer.grabTwo(f.getClientArea());
-            if (capturer.compare() == false)
+            if (!capturer.compare())
             {
                 fail("Painting error: Move frame to a different position.");
                 capturer.writeImages();
@@ -235,7 +234,7 @@ public class OOoBeanTest
                 oldPosition = f.getBounds();
                 f.setBounds(0, curY, oldPosition.width, oldPosition.height);
                 capturer.grabTwo(f.getClientArea());
-                if (capturer.compare() == false)
+                if (!capturer.compare())
                 {
                     fail("Painting error: Move frame to a different position.");
                     capturer.writeImages();
@@ -261,13 +260,13 @@ public class OOoBeanTest
                 Thread.sleep(getSleepTime(200));
                 f.toFront();
                 Thread.sleep(getSleepTime(200));
-                if (f.checkUnoFramePosition() == false)
+                if (!f.checkUnoFramePosition())
                 {
                     fail("Sizing error: Frame moved from back to front.");
                 }
 
                 capturer.grabTwo(f.getClientArea());
-                if (capturer.compare() == false)
+                if (!capturer.compare())
                 {
                     fail("Painting error: Move frame to back and to front.");
                     capturer.writeImages();
@@ -299,7 +298,7 @@ public class OOoBeanTest
         try
         {
             f = new WriterFrame(100, 100, 500, 300, true, connection.getComponentContext());
-            if (f.checkUnoFramePosition() == false)
+            if (!f.checkUnoFramePosition())
             {
                 fail("Sizing error.");
             }
@@ -330,7 +329,7 @@ public class OOoBeanTest
                 b.releaseSystemWindow();
                 b.aquireSystemWindow();
             }
-            if (f.checkUnoFramePosition() == false)
+            if (!f.checkUnoFramePosition())
             {
                 fail("Sizing error.");
             }
@@ -341,7 +340,7 @@ public class OOoBeanTest
             {
                 f.dispose();
             }
-            if (isWindows() == false)
+            if (!isWindows())
             {
                 Thread.sleep(10000);
             }
@@ -375,14 +374,14 @@ public class OOoBeanTest
             Thread.sleep(getSleepTime(200));
             capturer.grabTwo();
 
-            if (capturer.compare() == false)
+            if (!capturer.compare())
             {
                 fail("Painting error: adding and removing OOoBean " +
                        "repeatedly to java.lang.Frame.");
                 capturer.writeImages();
             }
 
-            if (f.checkUnoFramePosition() == false)
+            if (!f.checkUnoFramePosition())
             {
                 fail("Sizing error.");
             }
@@ -394,7 +393,7 @@ public class OOoBeanTest
             {
                 f.dispose();
             }
-            if (isWindows() == false)
+            if (!isWindows())
             {
                 Thread.sleep(10000);
             }
@@ -428,17 +427,13 @@ public class OOoBeanTest
                 StringBuffer buf = new StringBuffer(1000);
                 for (int i = 0; i < 1; i++)
                 {
-//                    Thread.sleep(1000);
                     bean.releaseSystemWindow();
                     frame.remove(bean);
-//                    frame.validate();
-//                    Thread.sleep(1000);
                     frame.add(bean, BorderLayout.CENTER);
                     bean.aquireSystemWindow();
-//                    frame.validate();
                 }
 
-                if (isWindows() == false)
+                if (!isWindows())
                 {
                     Thread.sleep(5000);
                 }
@@ -532,7 +527,7 @@ public class OOoBeanTest
                 Thread.sleep(1000);
                 }
 
-                if (isWindows() == false)
+                if (!isWindows())
                 {
                     Thread.sleep(5000);
                 }
@@ -549,7 +544,7 @@ public class OOoBeanTest
                 roby.keyRelease(KeyEvent.VK_H);
                 roby.waitForIdle();
 
-                buf.append("h");
+                buf.append('h');
                 Thread.sleep(1000);
                 String s = getText(bean);
                 System.out.println(" getText: " + s);
@@ -610,7 +605,7 @@ public class OOoBeanTest
                 f.goToStart();
                 f.validate();
 
-                if (text.equals(f.getText()) == false)
+                if (!text.equals(f.getText()))
                 {
                     fail("Repeated loading of a document failed.");
                 }
@@ -712,8 +707,7 @@ public class OOoBeanTest
 
     private XMultiServiceFactory getMSF()
     {
-        final XMultiServiceFactory xMSF1 = UnoRuntime.queryInterface(XMultiServiceFactory.class, connection.getComponentContext().getServiceManager());
-        return xMSF1;
+        return(UnoRuntime.queryInterface(XMultiServiceFactory.class, connection.getComponentContext().getServiceManager()));
     }
 
     // setup and close connections
