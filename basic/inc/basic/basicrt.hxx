@@ -35,14 +35,14 @@
 class SbiRuntime;
 class SbErrorStackEntry;
 
-class BASIC_DLLPUBLIC BasicRuntime
+class BasicRuntime
 {
     SbiRuntime* pRun;
 public:
     BasicRuntime( SbiRuntime* p ) : pRun ( p ){;}
-    const String GetSourceRevision();
-    const String GetModuleName( SbxNameType nType );
-    const String GetMethodName( SbxNameType nType );
+    BASIC_DLLPUBLIC const String GetSourceRevision();
+    BASIC_DLLPUBLIC const String GetModuleName( SbxNameType nType );
+    BASIC_DLLPUBLIC const String GetMethodName( SbxNameType nType );
     xub_StrLen GetLine();
     xub_StrLen GetCol1();
     xub_StrLen GetCol2();
@@ -51,7 +51,7 @@ public:
     BasicRuntime GetNextRuntime();
 };
 
-class BASIC_DLLPUBLIC BasicErrorStackEntry
+class BasicErrorStackEntry
 {
     SbErrorStackEntry *pEntry;
 public:

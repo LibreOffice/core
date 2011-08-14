@@ -986,6 +986,21 @@ SvDispatch* SbxObject::GetSvDispatch()
     return NULL;
 }
 
+SbxMethod::SbxMethod( const String& r, SbxDataType t )
+    : SbxVariable( t )
+{
+    SetName( r );
+}
+
+SbxMethod::SbxMethod( const SbxMethod& r )
+    : SvRefBase( r ), SbxVariable( r )
+{
+}
+
+SbxMethod::~SbxMethod()
+{
+}
+
 sal_Bool SbxMethod::Run( SbxValues* pValues )
 {
     SbxValues aRes;
@@ -998,6 +1013,16 @@ sal_Bool SbxMethod::Run( SbxValues* pValues )
 SbxClassType SbxMethod::GetClass() const
 {
     return SbxCLASS_METHOD;
+}
+
+SbxProperty::SbxProperty( const String& r, SbxDataType t )
+    : SbxVariable( t )
+{
+    SetName( r );
+}
+
+SbxProperty::~SbxProperty()
+{
 }
 
 SbxClassType SbxProperty::GetClass() const

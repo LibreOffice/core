@@ -41,9 +41,9 @@ class BASIC_DLLPUBLIC SbxProperty : public SbxVariable
 public:
     SBX_DECL_PERSIST_NODATA(SBXCR_SBX,SBXID_PROPERTY,1);
     TYPEINFO();
-    SbxProperty( const String& r, SbxDataType t )
-    : SbxVariable( t ) { SetName( r ); }
+    SbxProperty( const String& r, SbxDataType t );
     SbxProperty( const SbxProperty& r ) : SvRefBase( r ), SbxVariable( r ) {}
+    virtual ~SbxProperty();
     SbxProperty& operator=( const SbxProperty& r )
     { SbxVariable::operator=( r ); return *this; }
     virtual SbxClassType GetClass() const;

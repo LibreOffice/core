@@ -249,7 +249,7 @@ public:
     SbxVariable* Get( SbxArray* );
     void Put( SbxVariable*, SbxArray* );
 
-    short  GetDims() const { return nDim;  }
+    short  GetDims() const;
     void   AddDim( short, short );
     void   unoAddDim( short, short );
     sal_Bool   GetDim( short, short&, short& ) const;

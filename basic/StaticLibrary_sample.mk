@@ -43,6 +43,10 @@ $(eval $(call gb_StaticLibrary_add_api,sample,\
 	offapi \
 ))
 
+$(eval $(call gb_StaticLibrary_add_defs,sample,\
+	-DBASIC_DLLIMPLEMENTATION \
+))
+
 $(eval $(call gb_StaticLibrary_add_exception_objects,sample,\
 	basic/source/sample/collelem \
 	basic/source/sample/object \

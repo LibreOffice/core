@@ -366,7 +366,7 @@ public:
     virtual SbxInfo* GetInfo();
     void SetInfo( SbxInfo* p );
     void SetParameters( SbxArray* p );
-    SbxArray* GetParameters() const     { return mpPar; }
+    SbxArray* GetParameters() const;
 
     // Sfx-Broadcasting-Support:
     // Due to data reduction and better DLL-hierarchie currently via casting
@@ -375,7 +375,7 @@ public:
     virtual void Broadcast( sal_uIntPtr nHintId );
 
     inline const SbxObject* GetParent() const { return pParent; }
-    inline SbxObject* GetParent() { return pParent; }
+    SbxObject* GetParent();
     virtual void SetParent( SbxObject* );
 
     const String& GetDeclareClassName( void );

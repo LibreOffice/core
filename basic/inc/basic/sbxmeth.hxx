@@ -41,11 +41,10 @@ class BASIC_DLLPUBLIC SbxMethod : public SbxVariable
 public:
     SBX_DECL_PERSIST_NODATA(SBXCR_SBX,SBXID_METHOD,1);
     TYPEINFO();
-    SbxMethod( const String& r, SbxDataType t )
-    : SbxVariable( t ) { SetName( r ); }
-    SbxMethod( const SbxMethod& r ) : SvRefBase( r ), SbxVariable( r ) {}
-    SbxMethod& operator=( const SbxMethod& r )
-    { SbxVariable::operator=( r ); return *this; }
+    SbxMethod( const String& r, SbxDataType t );
+    SbxMethod( const SbxMethod& r );
+    ~SbxMethod();
+    SbxMethod& operator=( const SbxMethod& r ) { SbxVariable::operator=( r ); return *this; }
     sal_Bool Run( SbxValues* pValues = NULL );
     virtual SbxClassType GetClass() const;
 };
