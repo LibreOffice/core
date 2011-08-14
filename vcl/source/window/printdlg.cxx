@@ -695,6 +695,19 @@ void PrintDialog::OutputOptPage::setupLayout()
 
 void PrintDialog::OutputOptPage::readFromSettings()
 {
+    SettingsConfigItem* pItem = SettingsConfigItem::get();
+    rtl::OUString aValue;
+    aValue = pItem->getValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintDialog" ) ),
+                              rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "CollateSingleJobs" ) ) );
+    if ( aValue.equalsIgnoreAsciiCaseAscii( "true" ) )
+    {
+        maCollateSingleJobsBox.Check( sal_True );
+    }
+    else
+    {
+        maCollateSingleJobsBox.Check( sal_False );
+    }
+    Resize();
 }
 
 void PrintDialog::OutputOptPage::storeToSettings()
@@ -704,6 +717,10 @@ void PrintDialog::OutputOptPage::storeToSettings()
                      rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ToFile" ) ),
                      maToFileBox.IsChecked() ? rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("true"))
                                              : rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("false")) );
+    pItem->setValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintDialog" ) ),
+                     rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "CollateSingleJobs" ) ),
+                     maCollateSingleJobsBox.IsChecked() ? rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("true")) :
+                                                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("false")) );
 }
 
 PrintDialog::PrintDialog( Window* i_pParent, const boost::shared_ptr<PrinterController>& i_rController )
