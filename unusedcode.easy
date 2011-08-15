@@ -121,14 +121,6 @@ CollatorWrapper::compareSubstring(rtl::OUString const&, int, int, rtl::OUString 
 CollatorWrapper::listCollatorOptions(rtl::OUString const&) const
 CollatorWrapper::loadCollatorAlgorithmWithEndUserOption(rtl::OUString const&, com::sun::star::lang::Locale const&, com::sun::star::uno::Sequence<int> const&)
 Color::IncreaseContrast(unsigned char)
-ComboBox::GetEntryPos(void const*) const
-ComboBox::GetListPosSizePixel() const
-ComboBox::GetProminentEntryType() const
-ComboBox::GetSeparatorPos() const
-ComboBox::GetUserItemSize() const
-ComboBox::IsDDAutoWidthEnabled() const
-ComboBox::IsUserDrawEnabled() const
-ComboBox::ShowProminentEntry(unsigned short)
 CommandExtTextInputData::CommandExtTextInputData()
 CommunicationLinkList::DeleteAndDestroy(unsigned short, unsigned short)
 CommunicationLinkList::Insert(CommunicationLink const*&, unsigned short&)

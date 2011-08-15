@@ -569,14 +569,6 @@ void ComboBox::EnableDDAutoWidth( sal_Bool b )
 
  // -----------------------------------------------------------------------
 
-sal_Bool ComboBox::IsDDAutoWidthEnabled() const
-{
-    return mpFloatWin ? mpFloatWin->IsAutoWidth() : sal_False;
-}
-
-
-// -----------------------------------------------------------------------
-
 void ComboBox::SetDropDownLineCount( sal_uInt16 nLines )
 {
     if ( mpFloatWin )
@@ -1032,16 +1024,6 @@ sal_uInt16 ComboBox::GetEntryPos( const XubString& rStr ) const
 
 // -----------------------------------------------------------------------
 
-sal_uInt16 ComboBox::GetEntryPos( const void* pData ) const
-{
-    sal_uInt16 nPos = mpImplLB->GetEntryList()->FindEntry( pData );
-    if ( nPos != LISTBOX_ENTRY_NOTFOUND )
-        nPos = sal::static_int_cast<sal_uInt16>(nPos - mpImplLB->GetEntryList()->GetMRUCount());
-    return nPos;
-}
-
-// -----------------------------------------------------------------------
-
 XubString ComboBox::GetEntry( sal_uInt16 nPos ) const
 {
     return mpImplLB->GetEntryList()->GetEntryText( nPos + mpImplLB->GetEntryList()->GetMRUCount() );
@@ -1338,23 +1320,9 @@ void ComboBox::SetUserItemSize( const Size& rSz )
 
 // -----------------------------------------------------------------------
 
-const Size& ComboBox::GetUserItemSize() const
-{
-    return mpImplLB->GetMainWindow()->GetUserItemSize();
-}
-
-// -----------------------------------------------------------------------
-
 void ComboBox::EnableUserDraw( sal_Bool bUserDraw )
 {
     mpImplLB->GetMainWindow()->EnableUserDraw( bUserDraw );
-}
-
-// -----------------------------------------------------------------------
-
-sal_Bool ComboBox::IsUserDrawEnabled() const
-{
-    return mpImplLB->GetMainWindow()->IsUserDrawEnabled();
 }
 
 // -----------------------------------------------------------------------
@@ -1370,13 +1338,6 @@ void ComboBox::DrawEntry( const UserDrawEvent& rEvt, sal_Bool bDrawImage, sal_Bo
 void ComboBox::SetSeparatorPos( sal_uInt16 n )
 {
     mpImplLB->SetSeparatorPos( n );
-}
-
-// -----------------------------------------------------------------------
-
-sal_uInt16 ComboBox::GetSeparatorPos() const
-{
-    return mpImplLB->GetSeparatorPos();
 }
 
 // -----------------------------------------------------------------------
@@ -1437,13 +1398,6 @@ void ComboBox::SetTopEntry( sal_uInt16 nPos )
 
 // -----------------------------------------------------------------------
 
-void ComboBox::ShowProminentEntry( sal_uInt16 nPos )
-{
-    mpImplLB->ShowProminentEntry( nPos + mpImplLB->GetEntryList()->GetMRUCount() );
-}
-
-// -----------------------------------------------------------------------
-
 sal_uInt16 ComboBox::GetTopEntry() const
 {
     sal_uInt16 nPos = GetEntryCount() ? mpImplLB->GetTopEntry() : LISTBOX_ENTRY_NOTFOUND;
@@ -1461,23 +1415,9 @@ void ComboBox::SetProminentEntryType( ProminentEntry eType )
 
 // -----------------------------------------------------------------------
 
-ProminentEntry ComboBox::GetProminentEntryType() const
-{
-    return mpImplLB->GetProminentEntryType();
-}
-
-// -----------------------------------------------------------------------
-
 Rectangle ComboBox::GetDropDownPosSizePixel() const
 {
     return mpFloatWin ? mpFloatWin->GetWindowExtentsRelative( const_cast<ComboBox*>(this) ) : Rectangle();
-}
-
-// -----------------------------------------------------------------------
-
-Rectangle ComboBox::GetListPosSizePixel() const
-{
-    return mpFloatWin ? Rectangle() : mpImplLB->GetMainWindow()->GetWindowExtentsRelative( const_cast<ComboBox*>(this) );
 }
 
 // -----------------------------------------------------------------------

@@ -111,9 +111,6 @@ public:
     { if( IsDropDownBox() ) SetPosSizePixel( 0, 0, rNewSize.Width(), rNewSize.Height(), WINDOW_POSSIZE_SIZE | WINDOW_POSSIZE_DROPDOWN ); }
 
     Rectangle       GetDropDownPosSizePixel() const;
-    Rectangle       GetListPosSizePixel() const;
-    // returns empty rectangle in DropDown mode,
-    // else it returns the PosSize of the ListBox
 
     void            SetDropDownLineCount( sal_uInt16 nLines );
     sal_uInt16          GetDropDownLineCount() const;
@@ -122,7 +119,6 @@ public:
     sal_Bool            IsAutoSizeEnabled() const               { return mbDDAutoSize; }
 
     void            EnableDDAutoWidth( sal_Bool b );
-    sal_Bool            IsDDAutoWidthEnabled() const;
 
     void            SetText( const XubString& rStr );
     void            SetText( const XubString& rStr, const Selection& rNewSelection );
@@ -136,7 +132,6 @@ public:
     void            Clear();
 
     sal_uInt16          GetEntryPos( const XubString& rStr ) const;
-    sal_uInt16          GetEntryPos( const void* pData ) const;
     Image           GetEntryImage( sal_uInt16 nPos ) const;
     XubString       GetEntry( sal_uInt16 nPos ) const;
     sal_uInt16          GetEntryCount() const;
@@ -148,16 +143,12 @@ public:
     long            CalcWindowSizePixel( sal_uInt16 nLines ) const;
 
     void            SetUserItemSize( const Size& rSz );
-    const Size&     GetUserItemSize() const;
-
     void            EnableUserDraw( sal_Bool bUserDraw );
-    sal_Bool            IsUserDrawEnabled() const;
 
     void            DrawEntry( const UserDrawEvent& rEvt, sal_Bool bDrawImage, sal_Bool bDrawText, sal_Bool bDrawTextAtImagePos = sal_False );
     void            SetBorderStyle( sal_uInt16 nBorderStyle );
 
     void            SetSeparatorPos( sal_uInt16 n = LISTBOX_ENTRY_NOTFOUND );
-    sal_uInt16          GetSeparatorPos() const;
 
     void            EnableAutocomplete( sal_Bool bEnable, sal_Bool bMatchCase = sal_False );
     sal_Bool            IsAutocompleteEnabled() const;
@@ -188,11 +179,9 @@ public:
     void*           GetEntryData( sal_uInt16 nPos ) const;
 
     void            SetTopEntry( sal_uInt16 nPos );
-    void            ShowProminentEntry( sal_uInt16 nPos );
     sal_uInt16          GetTopEntry() const;
 
     void            SetProminentEntryType( ProminentEntry eType );
-    ProminentEntry  GetProminentEntryType() const;
 
     sal_uInt16          GetDisplayLineCount() const;
 
