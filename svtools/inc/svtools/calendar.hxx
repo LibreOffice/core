@@ -273,14 +273,12 @@ private:
 #endif
 
 protected:
-    sal_Bool            ShowDropPos( const Point& rPos, Date& rDate );
     void            HideDropPos();
 
     DECL_STATIC_LINK( Calendar, ScrollHdl, Timer *);
 
 public:
                     Calendar( Window* pParent, WinBits nWinStyle = 0 );
-                    Calendar( Window* pParent, const ResId& rResId );
                     ~Calendar();
 
     virtual void    MouseButtonDown( const MouseEvent& rMEvt );
@@ -305,18 +303,9 @@ public:
 
     const CalendarWrapper& GetCalendarWrapper() const { return maCalendarWrapper; }
 
-    /// Set one of ::com::sun::star::i18n::Weekdays.
-    void            SetWeekStart( sal_Int16 nDay );
-
-    /// Set how many days of a week must reside in the first week of a year.
-    void            SetMinimumNumberOfDaysInWeek( sal_Int16 nDays );
-
     void            SelectDate( const Date& rDate, sal_Bool bSelect = sal_True );
-    void            SelectDateRange( const Date& rStartDate, const Date& rEndDate,
-                                     sal_Bool bSelect = sal_True );
     void            SetNoSelection();
     sal_Bool            IsDateSelected( const Date& rDate ) const;
-    sal_uLong           GetSelectDateCount() const;
     Date            GetSelectDate( sal_uLong nIndex = 0 ) const;
     void            EnableCallEverySelect( sal_Bool bEvery = sal_True ) { mbAllSel = bEvery; }
     sal_Bool            IsCallEverySelectEnabled() const { return mbAllSel; }
@@ -333,25 +322,13 @@ public:
     sal_uInt16          GetMonthCount() const;
     sal_Bool            GetDate( const Point& rPos, Date& rDate ) const;
     Rectangle       GetDateRect( const Date& rDate ) const;
-    sal_Bool            GetDropDate( Date& rDate ) const;
 
     long            GetCurMonthPerLine() const { return mnMonthPerLine; }
     long            GetCurLines() const { return mnLines; }
 
-    void            SetStandardColor( const Color& rColor );
     const Color&    GetStandardColor() const;
-    void            SetSaturdayColor( const Color& rColor );
     const Color&    GetSaturdayColor() const;
-    void            SetSundayColor( const Color& rColor );
     const Color&    GetSundayColor() const;
-
-    void            AddDateInfo( const Date& rDate, const XubString& rText,
-                                 const Color* pTextColor = NULL,
-                                 const Color* pFrameColor = NULL,
-                                 sal_uInt16 nFlags = 0 );
-    void            RemoveDateInfo( const Date& rDate );
-    void            ClearDateInfo();
-    XubString       GetDateInfoText( const Date& rDate );
 
     void            StartSelection();
     void            EndSelection();

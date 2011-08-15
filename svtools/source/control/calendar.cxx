@@ -299,22 +299,6 @@ Calendar::Calendar( Window* pParent, WinBits nWinStyle ) :
 
 // -----------------------------------------------------------------------
 
-Calendar::Calendar( Window* pParent, const ResId& rResId ) :
-    Control( pParent, rResId ),
-    maCalendarWrapper( Application::GetAppLocaleDataWrapper().getServiceFactory() ),
-    maOldFormatFirstDate( 0, 0, 1900 ),
-    maOldFormatLastDate( 0, 0, 1900 ),
-    maFirstDate( 0, 0, 1900 ),
-    maOldFirstDate( 0, 0, 1900 ),
-    maOldCurDate( 0, 0, 1900 ),
-    maAnchorDate( maCurDate ),
-    maDropDate( 0, 0, 1900 )
-{
-    ImplInit( rResId.GetWinBits() );
-}
-
-// -----------------------------------------------------------------------
-
 Calendar::~Calendar()
 {
     delete mpStandardColor;
@@ -341,36 +325,6 @@ Calendar::~Calendar()
 
     for ( sal_uInt16 i = 0; i < 31; i++ )
         delete mpDayText[i];
-}
-
-// -----------------------------------------------------------------------
-
-void Calendar::SetMinimumNumberOfDaysInWeek( sal_Int16 nDays )
-{
-    ImplUpdate( sal_True );
-    maCalendarWrapper.setMinimumNumberOfDaysForFirstWeek( nDays);
-}
-
-// -----------------------------------------------------------------------
-
-void Calendar::SetWeekStart( sal_Int16 nDay )
-{
-    ImplUpdate( sal_True );
-    switch (nDay)
-    {
-        case i18n::Weekdays::SUNDAY :
-        case i18n::Weekdays::MONDAY :
-        case i18n::Weekdays::TUESDAY :
-        case i18n::Weekdays::WEDNESDAY :
-        case i18n::Weekdays::THURSDAY :
-        case i18n::Weekdays::FRIDAY :
-        case i18n::Weekdays::SATURDAY :
-            ;   // nothing
-        default:
-            DBG_ERRORFILE("Calendar::SetWeekStart: unknown value for setFirstDayOfWeek() of a Gregorian calendar");
-            nDay = i18n::Weekdays::SUNDAY;
-    }
-    maCalendarWrapper.setFirstDayOfWeek( nDay);
 }
 
 // -----------------------------------------------------------------------
@@ -2043,30 +1997,6 @@ void Calendar::SelectDate( const Date& rDate, sal_Bool bSelect )
 
 // -----------------------------------------------------------------------
 
-void Calendar::SelectDateRange( const Date& rStartDate, const Date& rEndDate,
-                                sal_Bool bSelect )
-{
-    if ( !rStartDate.IsValid() || !rEndDate.IsValid() )
-        return;
-
-    Table* pOldSel;
-
-    if ( !mbInSelChange )
-        pOldSel = new Table( *mpSelectTable );
-    else
-        pOldSel = NULL;
-
-    ImplCalendarSelectDateRange( mpSelectTable, rStartDate, rEndDate, bSelect );
-
-    if ( pOldSel )
-    {
-        ImplUpdateSelection( pOldSel );
-        delete pOldSel;
-    }
-}
-
-// -----------------------------------------------------------------------
-
 void Calendar::SetNoSelection()
 {
     Table* pOldSel;
@@ -2090,13 +2020,6 @@ void Calendar::SetNoSelection()
 sal_Bool Calendar::IsDateSelected( const Date& rDate ) const
 {
     return mpSelectTable->IsKeyValid( rDate.GetDate() );
-}
-
-// -----------------------------------------------------------------------
-
-sal_uLong Calendar::GetSelectDateCount() const
-{
-    return mpSelectTable->Count();
 }
 
 // -----------------------------------------------------------------------
@@ -2221,18 +2144,6 @@ sal_uInt16 Calendar::GetMonthCount() const
 
 // -----------------------------------------------------------------------
 
-sal_Bool Calendar::GetDropDate( Date& rDate ) const
-{
-    if( mbDropPos )
-    {
-        rDate = maDropDate;
-        return sal_True;
-    }
-    return sal_False;
-}
-
-// -----------------------------------------------------------------------
-
 sal_Bool Calendar::GetDate( const Point& rPos, Date& rDate ) const
 {
     Date    aDate = maCurDate;
@@ -2346,209 +2257,6 @@ Rectangle Calendar::GetDateRect( const Date& rDate ) const
     }
 
     return aRect;
-}
-
-// -----------------------------------------------------------------------
-
-void Calendar::SetStandardColor( const Color& rColor )
-{
-    if ( mpStandardColor )
-        *mpStandardColor = rColor;
-    else
-        mpStandardColor = new Color( rColor );
-    ImplUpdate();
-}
-
-// -----------------------------------------------------------------------
-
-void Calendar::SetSaturdayColor( const Color& rColor )
-{
-    if ( mpSaturdayColor )
-        *mpSaturdayColor = rColor;
-    else
-        mpSaturdayColor = new Color( rColor );
-    ImplUpdate();
-}
-
-// -----------------------------------------------------------------------
-
-void Calendar::SetSundayColor( const Color& rColor )
-{
-    if ( mpSundayColor )
-        *mpSundayColor = rColor;
-    else
-        mpSundayColor = new Color( rColor );
-    ImplUpdate();
-}
-
-// -----------------------------------------------------------------------
-
-void Calendar::AddDateInfo( const Date& rDate, const String& rText,
-                            const Color* pTextColor, const Color* pFrameColor,
-                            sal_uInt16 nFlags )
-{
-    if ( !mpDateTable )
-        mpDateTable = new ImplDateTable( 256, 256 );
-
-    sal_Bool            bChanged = sal_False;
-    sal_uLong           nKey = rDate.GetDate();
-    ImplDateInfo*   pDateInfo = mpDateTable->Get( nKey );
-    if ( pDateInfo )
-        pDateInfo->maText = rText;
-    else
-    {
-        pDateInfo = new ImplDateInfo( rText );
-        mpDateTable->Insert( nKey, pDateInfo );
-    }
-    if ( pTextColor )
-    {
-        if ( pDateInfo->mpTextColor )
-        {
-            if ( *(pDateInfo->mpTextColor) != *pTextColor )
-            {
-                *(pDateInfo->mpTextColor) = *pTextColor;
-                bChanged = sal_True;
-            }
-        }
-        else
-        {
-            pDateInfo->mpTextColor = new Color( *pTextColor );
-            bChanged = sal_True;
-        }
-    }
-    else
-    {
-        if ( pDateInfo->mpTextColor )
-        {
-            delete pDateInfo->mpTextColor;
-            pDateInfo->mpTextColor = NULL;
-            bChanged = sal_True;
-        }
-    }
-    if ( pFrameColor )
-    {
-        if ( pDateInfo->mpFrameColor )
-        {
-            if ( *(pDateInfo->mpFrameColor) != *pFrameColor )
-            {
-                *(pDateInfo->mpFrameColor) = *pFrameColor;
-                bChanged = sal_True;
-            }
-        }
-        else
-        {
-            pDateInfo->mpFrameColor = new Color( *pFrameColor );
-            bChanged = sal_True;
-        }
-    }
-    else
-    {
-        if ( pDateInfo->mpFrameColor )
-        {
-            delete pDateInfo->mpFrameColor;
-            pDateInfo->mpFrameColor = NULL;
-            bChanged = sal_True;
-        }
-    }
-    if ( pDateInfo->mnFlags != nFlags )
-    {
-        pDateInfo->mnFlags = nFlags;
-        bChanged = sal_True;
-    }
-
-    if ( bChanged )
-        ImplUpdateDate( rDate );
-}
-
-// -----------------------------------------------------------------------
-
-void Calendar::RemoveDateInfo( const Date& rDate )
-{
-    if ( mpDateTable )
-    {
-        ImplDateInfo* pDateInfo = mpDateTable->Remove( rDate.GetDate() );
-        if ( pDateInfo )
-        {
-            delete pDateInfo;
-            ImplUpdateDate( rDate );
-        }
-    }
-}
-
-// -----------------------------------------------------------------------
-
-void Calendar::ClearDateInfo()
-{
-    if ( mpDateTable )
-    {
-        ImplDateInfo* pDateInfo = mpDateTable->First();
-        while ( pDateInfo )
-        {
-            sal_uLong nKey = mpDateTable->GetCurKey();
-            mpDateTable->Remove( nKey );
-            Date aDate( nKey );
-            ImplUpdateDate( aDate );
-            delete pDateInfo;
-            pDateInfo = mpDateTable->First();
-        }
-        delete mpDateTable;
-        mpDateTable = NULL;
-    }
-}
-
-// -----------------------------------------------------------------------
-
-XubString Calendar::GetDateInfoText( const Date& rDate )
-{
-    XubString aRet;
-    if ( mpDateTable )
-    {
-        sal_uLong           nKey = rDate.GetDate();
-        ImplDateInfo*   pDateInfo = mpDateTable->Get( nKey );
-        if ( pDateInfo )
-            aRet = pDateInfo->maText;
-    }
-    return aRet;
-}
-
-// -----------------------------------------------------------------------
-
-sal_Bool Calendar::ShowDropPos( const Point& rPos, Date& rDate )
-{
-    Date    aTempDate = maCurDate;
-    mnDragScrollHitTest = ImplHitTest( rPos, aTempDate );
-
-    if ( mnDragScrollHitTest )
-    {
-        if ( mnDragScrollHitTest & (CALENDAR_HITTEST_PREV | CALENDAR_HITTEST_NEXT) )
-        {
-            if ( !maDragScrollTimer.IsActive() )
-                maDragScrollTimer.Start();
-        }
-        else
-        {
-            maDragScrollTimer.Stop();
-            if ( mnDragScrollHitTest & CALENDAR_HITTEST_DAY )
-            {
-                if ( !mbDropPos || (aTempDate != maDropDate) )
-                {
-                    if( mbDropPos )
-                        ImplInvertDropPos();
-                    maDropDate = aTempDate;
-                    mbDropPos = sal_True;
-                    ImplInvertDropPos();
-                }
-
-                rDate = maDropDate;
-                return sal_True;
-            }
-        }
-    }
-    else
-        maDragScrollTimer.Stop();
-
-    HideDropPos();
-    return sal_False;
 }
 
 // -----------------------------------------------------------------------
