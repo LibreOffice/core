@@ -2291,7 +2291,14 @@ SwTwips SwWW8ImplReader::MoveOutsideFly(SwFrmFmt *pFlyFmt,
                                 aSize.SetHeightSizeType(ATT_MIN_SIZE);
                                 aSize.SetHeight(MINLAY);
                                 pFlyFmt->SetFmtAttr(aSize);
-                                pTblFmt->SetFmtAttr(SwFmtHoriOrient(0,text::HoriOrientation::FULL));
+                                SwFmtHoriOrient aHori = pTblFmt->GetHoriOrient();
+                                // passing the table orientaion of
+                                // LEFT_AND_WIDTH to the frame seems to
+                                // work better than FULL, especially if the
+                                // table width exceeds the page width, however
+                                // I am not brave enough to set it in all
+                                // instances
+                                pTblFmt->SetFmtAttr( SwFmtHoriOrient(0, ( aHori.GetHoriOrient() == text::HoriOrientation::LEFT_AND_WIDTH ) ? ::text::HoriOrientation::LEFT_AND_WIDTH : text::HoriOrientation::FULL ) );
                                 nRetWidth = aSize.GetWidth();
                             }
                         }
