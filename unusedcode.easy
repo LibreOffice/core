@@ -14,12 +14,6 @@ BitmapPalette::IsGreyPalette() const
 BreakPointList::clear()
 BreakPointList::push_back(BreakPoint*)
 BufferNode::childAt(int) const
-ByteArr::Append(char)
-ByteArr::ByteArr(unsigned char, unsigned char)
-ByteArr::Contains(char) const
-ByteArr::Insert(unsigned short, char)
-ByteArr::Remove(char)
-ByteArr::~ByteArr()
 CAT::Inverse() const
 CAT::makeChromaticAdaptationTag() const
 CIccCmm::FromInternalEncoding(icColorSpaceSignature, unsigned char*, float const*)
