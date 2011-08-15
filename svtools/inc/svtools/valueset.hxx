@@ -194,26 +194,11 @@ wird, sollte in jedem Fall HideDropPos() gerufen werden.
 
 --------------------------------------------------------------------------
 
-Mit SetItemBits() koennen Flags an einem Item gesetzt werden. Folgende
-Flags sind zur Zeit vorgesehen:
-
-VIB_NODOUBLECLICK   Jeder Klick fuehrt zu einer Select-Aktion. Der
-                    Doppelklick-Handler wird in diesem Fall nie
-                    gerufen.
-
---------------------------------------------------------------------------
-
 Diese Klasse befindet sich zur Zeit noch in den SV-Tools. Deshalb muss das
 ValueSet zur Zeit als Control aus der Resource geladen werden und die
 gewuenschten WinBits (vor Show) mit SetStyle() gesetzt werden.
 
 *************************************************************************/
-
-// -----------------------
-// - ValueSet-Item-Typen -
-// -----------------------
-
-#define VIB_NODOUBLECLICK       ((sal_uInt16)0x0080)
 
 // ------------------
 // - ValueSet-Typen -

@@ -81,7 +81,6 @@ struct ValueSetItem
 {
     ValueSet&           mrParent;
     sal_uInt16              mnId;
-    sal_uInt16              mnBits;
     ValueSetItemType    meType;
     Image               maImage;
     Color               maColor;

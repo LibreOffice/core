@@ -1353,7 +1353,7 @@ void ValueSet::MouseButtonDown( const MouseEvent& rMEvt )
         {
             if ( pItem && (pItem->meType != VALUESETITEM_SPACE) && !rMEvt.IsMod2() )
             {
-                if ( (pItem->mnBits & VIB_NODOUBLECLICK) || (rMEvt.GetClicks() == 1) )
+                if ( rMEvt.GetClicks() == 1 )
                 {
                     mnOldItemId  = mnSelItemId;
                     mbHighlight  = sal_True;
