@@ -177,6 +177,16 @@ namespace writerfilter {
                 int nBottom;
         };
 
+        /// Stores the properties of a picture.
+        class RTFPicture
+        {
+            public:
+                sal_uInt16 nWidth, nHeight;
+                sal_uInt16 nGoalWidth, nGoalHeight;
+                sal_uInt16 nScaleX, nScaleY;
+                short nCropT, nCropB, nCropL, nCropR;
+        };
+
         /// State of the parser, which gets saved / restored when changing groups.
         class RTFParserState
         {
@@ -229,8 +239,7 @@ namespace writerfilter {
                 /// List of character positions in leveltext to replace.
                 std::vector<sal_Int32> aLevelNumbers;
 
-                float nPictureScaleX;
-                float nPictureScaleY;
+                RTFPicture aPicture;
                 RTFShape aShape;
 
                 /// Current cellx value.

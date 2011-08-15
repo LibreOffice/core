@@ -594,9 +594,17 @@ int RTFDocumentImpl::resolvePict(bool bInline)
     RTFValue::Pointer_t pGraphicValue(new RTFValue(aGraphicAttributes, aGraphicSprms));
     // extent sprm
     RTFSprms aExtentAttributes;
-    for (RTFSprms::Iterator_t i = m_aStates.top().aCharacterAttributes->begin(); i != m_aStates.top().aCharacterAttributes->end(); ++i)
-        if (i->first == NS_rtf::LN_XEXT || i->first == NS_rtf::LN_YEXT)
-            aExtentAttributes->push_back(make_pair(i->first, i->second));
+    int nXExt, nYExt;
+    nXExt = (m_aStates.top().aPicture.nGoalWidth ? m_aStates.top().aPicture.nGoalWidth : m_aStates.top().aPicture.nWidth);
+    nYExt = (m_aStates.top().aPicture.nGoalHeight ? m_aStates.top().aPicture.nGoalHeight : m_aStates.top().aPicture.nHeight);
+    if (m_aStates.top().aPicture.nScaleX != 100)
+        nXExt = (((long)m_aStates.top().aPicture.nScaleX) * ( nXExt - ( m_aStates.top().aPicture.nCropL + m_aStates.top().aPicture.nCropR ))) / 100L;
+    if (m_aStates.top().aPicture.nScaleY != 100)
+        nYExt = (((long)m_aStates.top().aPicture.nScaleY) * ( nYExt - ( m_aStates.top().aPicture.nCropT + m_aStates.top().aPicture.nCropB ))) / 100L;
+    RTFValue::Pointer_t pXExtValue(new RTFValue(nXExt));
+    RTFValue::Pointer_t pYExtValue(new RTFValue(nYExt));
+    aExtentAttributes->push_back(make_pair(NS_rtf::LN_XEXT, pXExtValue));
+    aExtentAttributes->push_back(make_pair(NS_rtf::LN_YEXT, pYExtValue));
     RTFValue::Pointer_t pExtentValue(new RTFValue(aExtentAttributes));
     // docpr sprm
     RTFSprms aDocprAttributes;
@@ -1844,20 +1852,6 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
         return 0;
     }
 
-    // Trivial character attributes.
-    switch (nKeyword)
-    {
-        case RTF_PICW: nSprm = NS_rtf::LN_XEXT; if (m_aStates.top().nPictureScaleX) nParam = m_aStates.top().nPictureScaleX * nParam; break;
-        case RTF_PICH: nSprm = NS_rtf::LN_YEXT; if (m_aStates.top().nPictureScaleY) nParam = m_aStates.top().nPictureScaleY * nParam; break;
-        default: break;
-    }
-    if (nSprm > 0)
-    {
-        RTFValue::Pointer_t pValue(new RTFValue(nParam));
-        m_aStates.top().aCharacterAttributes->push_back(make_pair(nSprm, pValue));
-        return 0;
-    }
-
     // Info group.
     switch (nKeyword)
     {
@@ -2091,10 +2085,22 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
             // Ignore these for now, the exporter always emits them with a zero parameter.
             break;
         case RTF_PICSCALEX:
-            m_aStates.top().nPictureScaleX = 0.01 * nParam;
+            m_aStates.top().aPicture.nScaleX = nParam;
             break;
         case RTF_PICSCALEY:
-            m_aStates.top().nPictureScaleY = 0.01 * nParam;
+            m_aStates.top().aPicture.nScaleY = nParam;
+            break;
+        case RTF_PICW:
+            m_aStates.top().aPicture.nWidth = nParam;
+            break;
+        case RTF_PICH:
+            m_aStates.top().aPicture.nHeight = nParam;
+            break;
+        case RTF_PICWGOAL:
+            m_aStates.top().aPicture.nGoalWidth = TWIP_TO_MM100(nParam);
+            break;
+        case RTF_PICHGOAL:
+            m_aStates.top().aPicture.nGoalHeight = TWIP_TO_MM100(nParam);
             break;
         case RTF_SHPWRK:
             {
@@ -2525,6 +2531,7 @@ int RTFDocumentImpl::popState()
     bool bListOverrideEntryEnd = false;
     bool bLevelTextEnd = false;
     RTFShape aShape;
+    RTFPicture aPicture;
     bool bPopShapeProperties = false;
     bool bPopPictureProperties = false;
     bool bFaltEnd = false;
@@ -2642,6 +2649,7 @@ int RTFDocumentImpl::popState()
             || m_aStates.top().nDestinationState == DESTINATION_SHAPEPROPERTY)
     {
         aShape = m_aStates.top().aShape;
+        aPicture = m_aStates.top().aPicture;
         aAttributes = m_aStates.top().aCharacterAttributes;
         if (m_aStates.top().nDestinationState == DESTINATION_SHAPEPROPERTYNAME)
             aShape.aProperties.push_back(make_pair(m_aStates.top().aDestinationText.makeStringAndClear(), OUString()));
@@ -2669,7 +2677,7 @@ int RTFDocumentImpl::popState()
     else if (m_aStates.top().nDestinationState == DESTINATION_SHAPEPROPERTYVALUEPICT)
     {
         bPopPictureProperties = true;
-        aAttributes = m_aStates.top().aCharacterAttributes;
+        aPicture = m_aStates.top().aPicture;
         aDestinationText = m_aStates.top().aDestinationText;
     }
     else if (m_aStates.top().nDestinationState == DESTINATION_SHAPETEXT)
@@ -2890,13 +2898,14 @@ int RTFDocumentImpl::popState()
     else if (bPopShapeProperties)
     {
         m_aStates.top().aShape = aShape;
+        m_aStates.top().aPicture = aPicture;
         m_aStates.top().aCharacterAttributes = aAttributes;
     }
     else if (bFaltEnd)
         m_aStates.top().aTableSprms = aSprms;
     if (bPopPictureProperties)
     {
-        m_aStates.top().aCharacterAttributes = aAttributes;
+        m_aStates.top().aPicture = aPicture;
         m_aStates.top().aDestinationText = aDestinationText;
     }
     if (m_pCurrentBuffer == &m_aSuperBuffer)
@@ -2982,8 +2991,7 @@ RTFParserState::RTFParserState()
     nListLevelNum(0),
     aListLevelEntries(),
     aLevelNumbers(),
-    nPictureScaleX(0),
-    nPictureScaleY(0),
+    aPicture(),
     aShape(),
     nCellX(0),
     nCells(0),
