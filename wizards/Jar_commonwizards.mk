@@ -29,11 +29,11 @@
 $(eval $(call gb_Jar_Jar,commonwizards,SRCDIR))
 
 $(eval $(call gb_Jar_add_jars,commonwizards,\
-	$(OUTDIR)/bin/ridl.jar \
-	$(OUTDIR)/bin/unoil.jar \
-	$(OUTDIR)/bin/jurt.jar \
-	$(OUTDIR)/bin/juh.jar \
-	$(OUTDIR)/bin/java_uno.jar \
+	$(OUTDIR_FOR_BUILD)/bin/ridl.jar \
+	$(OUTDIR_FOR_BUILD)/bin/unoil.jar \
+	$(OUTDIR_FOR_BUILD)/bin/jurt.jar \
+	$(OUTDIR_FOR_BUILD)/bin/juh.jar \
+	$(OUTDIR_FOR_BUILD)/bin/java_uno.jar \
 ))
 
 $(eval $(call gb_Jar_set_packageroot,commonwizards,com))
