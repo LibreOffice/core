@@ -1773,17 +1773,6 @@ VCLUnoHelper::CreatePointer()
 VCLXDevice::IsCreatedWithToolkit() const
 VCLXPrinterServer::getImplementationId()
 VCLXPrinterServer::getTypes()
-ValueSet::CopyItems(ValueSet const&)
-ValueSet::GetHighlightHdl() const
-ValueSet::GetItemBits(unsigned short) const
-ValueSet::HideDropPos()
-ValueSet::InsertSpace(unsigned short, unsigned long)
-ValueSet::IsRTLActive()
-ValueSet::SetFirstLine(unsigned short)
-ValueSet::SetItemBits(unsigned short, unsigned short)
-ValueSet::ShowDropPos(Point const&)
-ValueSetAcc::IsDisposed()
-ValueSetItem::ClearAccessible()
 VbaFontBase::getUnderline()
 VbaFontBase::setUnderline(com::sun::star::uno::Any const&)
 VbaFoundFilesEnum::SetFileList(com::sun::star::uno::Sequence<rtl::OUString>&)

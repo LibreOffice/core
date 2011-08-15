@@ -95,7 +95,6 @@ struct ValueSetItem
 
     ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >
                         GetAccessible( bool bIsTransientChildrenDisabled );
-     void               ClearAccessible();
 };
 
 typedef ::std::vector< ValueSetItem* > ValueItemList;
@@ -241,14 +240,6 @@ private:
     */
     void ThrowIfDisposed (void)
         throw (::com::sun::star::lang::DisposedException);
-
-    /** Check whether or not the object has been disposed (or is in the
-        state of beeing disposed).
-
-        @return sal_True, if the object is disposed or in the course
-        of being disposed. Otherwise, sal_False is returned.
-    */
-    sal_Bool IsDisposed (void);
 
     /** Check whether the value set has a 'none' field, i.e. a field (button)
         that deselects any items (selects none of them).

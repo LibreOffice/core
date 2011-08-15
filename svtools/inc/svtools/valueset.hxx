@@ -138,8 +138,6 @@ SetLineCount() oder mit SetItemHeight() die Anzahl der sichtbaren
 Zeilen gesetzt wird, scrollt das ValueSet automatisch, wenn mehr Zeilen
 vorhanden sind, als sichtbar sind. Wenn scrollen auch ueber einen
 ScrollBar moeglich sein soll muss WB_VSCROLL gesetzt werden.
-Mit SetFirstLine() kann die erste sichtbare Zeile eingestellt werden, wenn
-mehr Zeilen vorhanden sind als sichtbar sind.
 
 Mit SetExtraSpacing() kann der Abstand zwischen den Items vergroessert
 werden. Der Abstand wird in Pixeln angegeben der zusaetzlich zwischen 2 Items
@@ -159,9 +157,6 @@ Mit SetColor() kann die Hintergrundfarbe eingestellt werden, mit der Image
 oder UserDraw-Items hinterlegt werden. Wenn keine Farbe eingestellt wird,
 wird der Hintergrund in der gleichen Farbe hinterlegt wie andere
 Fenster (WindowColor).
-
-Mit InsertSpace() kann man ein leeres Feld einfuegen, welches weder
-dargestellt noch selektierbar ist.
 
 --------------------------------------------------------------------------
 
@@ -317,8 +312,6 @@ private:
 protected:
 
     sal_Bool            StartDrag( const CommandEvent& rCEvt, Region& rRegion );
-    sal_uInt16          ShowDropPos( const Point& rPos );
-    void            HideDropPos();
 
 protected:
 
@@ -359,11 +352,8 @@ public:
                                 size_t nPos = VALUESET_APPEND );
     void            InsertItem( sal_uInt16 nItemId,
                                 size_t nPos = VALUESET_APPEND );
-    void            InsertSpace( sal_uInt16 nItemId,
-                                 size_t nPos = VALUESET_APPEND );
     void            RemoveItem( sal_uInt16 nItemId );
 
-    void            CopyItems( const ValueSet& rValueSet );
     void            Clear();
 
     size_t          GetItemCount() const;
@@ -382,7 +372,6 @@ public:
     long            GetItemWidth() const { return mnUserItemWidth; }
     void            SetItemHeight( long nLineHeight = 0 );
     long            GetItemHeight() const { return mnUserItemHeight; }
-    void            SetFirstLine( sal_uInt16 nNewLine = 0 );
     sal_uInt16          GetFirstLine() const { return mnFirstLine; }
 
     void            SelectItem( sal_uInt16 nItemId );
@@ -392,8 +381,6 @@ public:
     void            SetNoSelection();
     sal_Bool            IsNoSelection() const { return mbNoSelection; }
 
-    void            SetItemBits( sal_uInt16 nItemId, sal_uInt16 nBits );
-    sal_uInt16          GetItemBits( sal_uInt16 nItemId ) const;
     void            SetItemImage( sal_uInt16 nItemId, const Image& rImage );
     Image           GetItemImage( sal_uInt16 nItemId ) const;
     void            SetItemColor( sal_uInt16 nItemId, const Color& rColor );
@@ -427,19 +414,6 @@ public:
     const Link&     GetDoubleClickHdl() const { return maDoubleClickHdl; }
 
     void            SetHighlightHdl( const Link& rLink );
-    const Link&     GetHighlightHdl() const;
-
-private:
-    /** Determine whether RTL (right to left writing) is active.  For this
-        method to return <true/> two conditions have to be fullfilled:
-        <ol><li>RTL is active for the whole application.</li>
-        <li>RTL is enabled for the control.</li></ol>
-        @return
-             The method returns <true/> when RTL is active for the control
-             and <false/> when RTL is not active.  Note then just enabling
-             RTL for the control is not enough.
-    */
-    SVT_DLLPRIVATE bool IsRTLActive (void);
 };
 
 #endif  // _VALUESET_HXX

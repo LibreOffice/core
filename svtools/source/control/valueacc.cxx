@@ -77,15 +77,6 @@ uno::Reference< accessibility::XAccessible > ValueSetItem::GetAccessible( bool b
     return *mpxAcc;
 }
 
-// -----------------------------------------------------------------------
-
-void ValueSetItem::ClearAccessible()
-{
-    if( mpxAcc )
-        delete mpxAcc, mpxAcc = NULL;
-}
-
-
 // ---------------
 // - ValueSetAcc -
 // ---------------
@@ -777,14 +768,6 @@ void ValueSetAcc::ThrowIfDisposed (void)
         DBG_ASSERT (mpParent!=NULL, "ValueSetAcc not disposed but mpParent == NULL");
     }
 }
-
-
-
-sal_Bool ValueSetAcc::IsDisposed (void)
-{
-    return (rBHelper.bDisposed || rBHelper.bInDispose);
-}
-
 
 
 
