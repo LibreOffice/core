@@ -41,14 +41,14 @@ namespace {
 class TestString: public CppUnit::TestFixture
 {
 public:
-    void test();
+    void testSearchAndReplaceAsciiL();
     void testNatural();
     void testReplace();
     void testToken();
     void testDecimalStringToNumber();
 
     CPPUNIT_TEST_SUITE(TestString);
-    CPPUNIT_TEST(test);
+    CPPUNIT_TEST(testSearchAndReplaceAsciiL);
     CPPUNIT_TEST(testNatural);
     CPPUNIT_TEST(testReplace);
     CPPUNIT_TEST(testToken);
@@ -56,7 +56,7 @@ public:
     CPPUNIT_TEST_SUITE_END();
 };
 
-void TestString::test()
+void TestString::testSearchAndReplaceAsciiL()
 {
     rtl::OUString s1(RTL_CONSTASCII_USTRINGPARAM("foobarbar"));
     sal_Int32 n1;
