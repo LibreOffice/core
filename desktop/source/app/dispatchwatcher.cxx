@@ -340,7 +340,7 @@ sal_Bool DispatchWatcher::executeDispatchRequests( const DispatchList& aDispatch
                     else
                         xDispatcher->dispatch( aURL, aArgs2 );
                 }
-                catch ( ::com::sun::star::uno::Exception& )
+                catch (const ::com::sun::star::uno::Exception&)
                 {
                     OUString aMsg = OUString(RTL_CONSTASCII_USTRINGPARAM(
                         "Desktop::OpenDefault() IllegalArgumentException while calling XNotifyingDispatch: "));
@@ -397,14 +397,14 @@ sal_Bool DispatchWatcher::executeDispatchRequests( const DispatchList& aDispatch
             {
                 xDoc = Reference < XPrintable >( ::comphelper::SynchronousDispatch::dispatch( xDesktop, aName, aTarget, 0, aArgs ), UNO_QUERY );
             }
-            catch ( ::com::sun::star::lang::IllegalArgumentException& iae)
+            catch (const ::com::sun::star::lang::IllegalArgumentException& iae)
             {
                 OUString aMsg = OUString(RTL_CONSTASCII_USTRINGPARAM(
                     "Dispatchwatcher IllegalArgumentException while calling loadComponentFromURL: "))
                     + iae.Message;
                 OSL_FAIL( OUStringToOString(aMsg, RTL_TEXTENCODING_ASCII_US).getStr());
             }
-            catch (com::sun::star::io::IOException& ioe)
+            catch (const com::sun::star::io::IOException& ioe)
             {
                 OUString aMsg = OUString(RTL_CONSTASCII_USTRINGPARAM(
                     "Dispatchwatcher IOException while calling loadComponentFromURL: "))
@@ -483,7 +483,7 @@ sal_Bool DispatchWatcher::executeDispatchRequests( const DispatchList& aDispatch
                             {
                                 xStorable->storeToURL( aOutFile, conversionProperties );
                             }
-                            catch ( Exception& e )
+                            catch (const Exception&)
                             {
                                 fprintf( stderr, "Error: Please reverify input parameters...\n" );
                             }
@@ -566,7 +566,7 @@ sal_Bool DispatchWatcher::executeDispatchRequests( const DispatchList& aDispatch
                             xComp->dispose();
                     }
                 }
-                catch ( com::sun::star::util::CloseVetoException& )
+                catch (const com::sun::star::util::CloseVetoException&)
                 {
                 }
 
