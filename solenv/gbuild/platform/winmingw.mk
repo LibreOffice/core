@@ -382,7 +382,7 @@ $(call gb_Helper_abbreviate_dirs_native,\
 	mkdir -p $(dir $(1)) && \
 	$(gb_CXX) $(strip \
 		$(gb_Executable_TARGETTYPEFLAGS) \
-		$(if $(filter YES,$(gb_Executable_TARGETGUI)), --subsystem windows, --subsystem console) \
+		$(if $(filter YES,$(gb_Executable_TARGETGUI)), -mwindows, -mconsole) \
 		$(foreach object,$(COBJECTS),$(call gb_CObject_get_target,$(object))) \
 		$(foreach object,$(CXXOBJECTS),$(call gb_CxxObject_get_target,$(object))) \
 		$(foreach object,$(GENCOBJECTS),$(call gb_GenCObject_get_target,$(object))) \
