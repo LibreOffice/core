@@ -324,30 +324,6 @@ sal_Bool LwpStory::IsNeedSection()
     return bNewSection;
 }
 /**************************************************************************
- * @descr:  process frame which anchor type is to page, frame or cell
- * @param:
- * @param:
- * @return:
-**************************************************************************/
-void LwpStory::XFConvertFrame(XFContentContainer* pCont)
-{
-    LwpVirtualLayout* pLayout = GetLayout(NULL);
-    while(pLayout)
-    {
-        LwpVirtualLayout* pFrameLayout = dynamic_cast<LwpVirtualLayout*>(pLayout->GetChildHead()->obj());
-        while(pFrameLayout)
-        {
-            if((pFrameLayout->IsAnchorPage()&&(pFrameLayout->IsFrame()||pFrameLayout->IsSuperTable()||pFrameLayout->IsGroupHead()))
-                ||(pFrameLayout->IsAnchorFrame()))
-            {
-                pFrameLayout->XFConvert(pCont);
-            }
-            pFrameLayout = dynamic_cast<LwpVirtualLayout*>(pFrameLayout->GetNext()->obj());
-        }
-        pLayout = GetLayout(pLayout);
-    }
-}
-/**************************************************************************
  * @descr:  process frame which anchor type is to cell
  * @param:
  * @param:

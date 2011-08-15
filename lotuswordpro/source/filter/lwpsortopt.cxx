@@ -90,13 +90,6 @@ void LwpSortOption::Read(LwpObjectStream *pStrm)
     pStrm->SkipExtra();
 }
 /**
- * @descr       skip the sort option
- **/
-void LwpSortOption::Skip(LwpObjectStream *pStrm)
-{
-    pStrm->SeekRel(DiskSize());
-}
-/**
  * @descr       return the disk size
  **/
 sal_uInt16 LwpSortOption::DiskSize()

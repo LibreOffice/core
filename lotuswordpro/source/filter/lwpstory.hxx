@@ -97,7 +97,6 @@ private:
 
 protected:
     void Read();
-    void XFConvertFrame(XFContentContainer* pCont);
     void XFConvertFrameInCell(XFContentContainer* pCont);
     void XFConvertFrameInFrame(XFContentContainer* pCont);
     void XFConvertFrameInHeaderFooter(XFContentContainer* pCont);

@@ -126,7 +126,6 @@ public:
     LwpRowHeadingLayout(LwpObjectHeader &objHdr, LwpSvStream* pStrm);
     virtual ~LwpRowHeadingLayout();
     virtual LWP_LAYOUT_TYPE GetLayoutType () { return LWP_ROW_HEADING_LAYOUT;}
-    LwpRowLayout * GetRowLayout();
 protected:
     void Read();
     LwpObjectID cRowLayout;

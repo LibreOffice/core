@@ -92,7 +92,6 @@ public:
     ~LwpSortOption(){}
 public:
     void Read(LwpObjectStream *pStrm);
-    void Skip(LwpObjectStream *pStrm);
     sal_uInt16 DiskSize();
 private:
     LwpSortKey m_Keys[3];

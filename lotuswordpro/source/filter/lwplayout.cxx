@@ -2078,59 +2078,6 @@ sal_uInt8 LwpPlacableLayout::GetRelativeType()
     return LwpVirtualLayout::GetRelativeType();
 }
 /**
-* @descr:   Get relative from where type
-*
-*/
-sal_uInt8 LwpPlacableLayout::GetRelativeFromWhere()
-{
-    LwpLayoutRelativity* pLayRel = GetRelativityPiece();
-    if(pLayRel)
-    {
-        return pLayRel->GetRelGuts()->GetRelativeFromWhere();
-    }
-    return 0;
-}
-/**
-* @descr:   Get relative distance
-*
-*/
-LwpPoint LwpPlacableLayout::GetRelativeDistance()
-{
-    LwpPoint aPoint;
-    LwpLayoutRelativity* pLayRel = GetRelativityPiece();
-    if(pLayRel)
-    {
-        aPoint = pLayRel->GetRelGuts()->GetRelativeDistance();
-    }
-    return aPoint;
-}
-/**
-* @descr:   Get tether type
-*
-*/
-sal_uInt8 LwpPlacableLayout::GetTetherType()
-{
-    LwpLayoutRelativity* pLayRel = GetRelativityPiece();
-    if(pLayRel)
-    {
-        return pLayRel->GetRelGuts()->GetTetherType();
-    }
-    return 0;
-}
-/**
-* @descr:   Get tether where type
-*
-*/
-sal_uInt8 LwpPlacableLayout::GetTetherWhere()
-{
-    LwpLayoutRelativity* pLayRel = GetRelativityPiece();
-    if(pLayRel)
-    {
-        return pLayRel->GetRelGuts()->GetTetherWhere();
-    }
-    return 0;
-}
-/**
 * @descr:   Get offset from the baseline
 *
 */

@@ -1369,9 +1369,6 @@ sal_uInt32 SvXMLExport::exportDoc( enum ::xmloff::token::XMLTokenEnum eClass )
 
     mxHandler->startDocument();
 
-    // <?xml version="1.0" encoding="UTF-8"?>
-//  xHandler->processingInstruction( S2U( sXML_xml ), S2U( sXML_xml_pi ) );
-
     // <office:document ...>
     CheckAttrList();
 

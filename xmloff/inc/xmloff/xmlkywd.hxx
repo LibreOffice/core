@@ -56,7 +56,6 @@ XML_CONSTASCII_ACTION( sXML_CDATA, "CDATA" );
 XML_CONSTASCII_ACTION( sXML_WS, " " );
 XML_CONSTASCII_ACTION( sXML_xml, "xml" );
 XML_CONSTASCII_ACTION( sXML_xmlns, "xmlns" );
-XML_CONSTASCII_ACTION( sXML_xml_pi, "version=\"1.0\" encoding=\"UTF-8\"" );
 XML_CONSTASCII_ACTION( sXML_xml_doctype_prefix, "<!DOCTYPE " );
 XML_CONSTASCII_ACTION( sXML_xml_doctype_suffix, " PUBLIC \"-//OpenOffice.org//DTD OfficeDocument 1.0//EN\" \"office.dtd\">" );
 

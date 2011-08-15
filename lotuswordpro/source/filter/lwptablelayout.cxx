@@ -406,18 +406,6 @@ void  LwpSuperTableLayout::XFConvertFrame(XFContentContainer* pCont, sal_Int32 n
 
 }
 /**
- * @short   parse frame
- * @param
- * @return
- */
-void  LwpSuperTableLayout::ParseFrame(XFFrame * pXFFrame)
-{
-    if(m_pFrame)
-    {
-        m_pFrame->Parse(pXFFrame);
-    }
-}
-/**
  * @short  register frame style
  * @param
  * @return

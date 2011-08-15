@@ -61,10 +61,7 @@
 #define ATTRIBUTE_SALT "manifest:salt"
 #define ATTRIBUTE_ITERATION_COUNT "manifest:iteration-count"
 
-#define SHA256_URL "http://www.w3.org/2001/04/xmlenc#sha256"
-//http://tools.oasis-open.org/issues/browse/OFFICE-3702
-//http://tools.oasis-open.org/issues/browse/OFFICE-3708
-#define SHA256_URL_TYPO "http://www.w3.org/2000/09/xmldsig#sha256"
+#define SHA256_URL "http://www.w3.org/2000/09/xmldsig#sha256"
 #define SHA1_NAME "SHA1"
 #define SHA1_URL "http://www.w3.org/2000/09/xmldsig#sha1"
 

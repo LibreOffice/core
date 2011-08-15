@@ -420,10 +420,6 @@ public:
     virtual sal_uInt8 GetWrapType();
     virtual LwpLayoutRelativity* GetRelativityPiece();
     virtual sal_uInt8 GetRelativeType();
-    sal_uInt8 GetRelativeFromWhere();
-    LwpPoint GetRelativeDistance();
-    sal_uInt8 GetTetherType();
-    sal_uInt8 GetTetherWhere();
     virtual sal_Int32 GetBaseLineOffset();
     virtual sal_Bool IsAnchorPage();
     virtual sal_Bool IsAnchorFrame();

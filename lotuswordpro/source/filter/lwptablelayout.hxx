@@ -179,7 +179,6 @@ public:
     void XFConvert(XFContentContainer* pCont);
     // for frame style
     virtual void XFConvertFrame(XFContentContainer* pCont, sal_Int32 nStart = 0, sal_Int32 nEnd = 0, sal_Bool bAll = sal_False);
-    void ParseFrame(XFFrame* pXFFrame);
     void RegisterFrameStyle();
     LwpTableHeadingLayout* GetTableHeadingLayout();
 protected:
