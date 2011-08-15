@@ -12,9 +12,9 @@ use Cwd;
 
 $ENV{LC_ALL} = "C";
 
-sub check_whitespaces($)
+sub check_whitespaces($$)
 {
-    my ($h) = @_;
+    my ($h, $src_exts) = @_;
 
     my $found_bad = 0;
     my $filename;
@@ -22,6 +22,7 @@ sub check_whitespaces($)
     my $lineno;
     sub bad_line {
 	my ($why, $line) = @_;
+        if ($filename =~ /\.($src_exts)$/) {
 	if (!$found_bad) {
 	    print STDERR "*\n";
 	    print STDERR "* You have some suspicious patch lines:\n";
@@ -34,6 +35,7 @@ sub check_whitespaces($)
 	}
 	print STDERR "* $why (line $lineno)\n";
 	print STDERR "$filename:$lineno:$line\n";
+        }
     }
     open( FILES, "git-diff-index -p -M --cached $h |" ) ||  die "Cannot run git diff-index.";
     while (<FILES>) {
@@ -134,12 +136,13 @@ while (my $file = <FILES>) {
 # be strict about tabs - we don't want them at all, setup your editor
 # correctly ;-)
 my $err_ext = "";
+my $src_exts = "c|cpp|cxx|h|hrc|hxx|idl|inl|java|map|MK|pmk|pl|pm|sdi|sh|src|tab|xcu|xml";
 
 open( FILES, "git diff-index --cached --name-only $against |" ) || die "Cannot run git diff-index.";
 while ( my $file = <FILES> ) {
     chomp( $file );
     if ( $file ne "GNUmakefile" &&
-         $file =~ /\.(c|cpp|cxx|h|hrc|hxx|idl|inl|java|map|MK|pmk|pl|pm|sdi|sh|src|tab|xcu|xml)$/) {
+         $file =~ /\.($src_exts)$/) {
         open( F, "git diff-index -p --cached $against -- '$file' |" );
         while ( my $line = <F> ) {
             if ( $line =~ /^\+ *\t/ ) {
@@ -186,7 +189,7 @@ EOM
 }
 
 # fix whitespace in code
-check_whitespaces( $against );
+check_whitespaces( $against, $src_exts );
 
 # check the rest of the files
 my $filter_patches=`git diff-index --check --cached $against -- | sed '/\.\(diff\|patch\):/,/.*/d'`;
