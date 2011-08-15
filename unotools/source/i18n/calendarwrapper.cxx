@@ -529,27 +529,6 @@ void CalendarWrapper::setMinimumNumberOfDaysForFirstWeek( sal_Int16 nDays )
 }
 
 
-sal_Int16 CalendarWrapper::getMinimumNumberOfDaysForFirstWeek() const
-{
-    try
-    {
-        if ( xC.is() )
-            return xC->getMinimumNumberOfDaysForFirstWeek();
-    }
-    catch ( Exception& e )
-    {
-#ifdef DBG_UTIL
-        ByteString aMsg( "getMinimumNumberOfDaysForFirstWeek: Exception caught\n" );
-        aMsg += ByteString( String( e.Message ), RTL_TEXTENCODING_UTF8 );
-        DBG_ERRORFILE( aMsg.GetBuffer() );
-#else
-        (void)e;
-#endif
-    }
-    return 0;
-}
-
-
 sal_Int16 CalendarWrapper::getNumberOfMonthsInYear() const
 {
     try

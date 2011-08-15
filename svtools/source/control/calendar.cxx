@@ -2563,19 +2563,6 @@ CalendarField::CalendarField( Window* pParent, WinBits nWinStyle ) :
 
 // -----------------------------------------------------------------------
 
-CalendarField::CalendarField( Window* pParent, const ResId& rResId ) :
-    DateField( pParent, rResId ),
-    maDefaultDate( 0, 0, 0 )
-{
-    mpFloatWin      = NULL;
-    mpCalendar      = NULL;
-    mnCalendarStyle = 0;
-    mbToday         = sal_False;
-    mbNone          = sal_False;
-}
-
-// -----------------------------------------------------------------------
-
 CalendarField::~CalendarField()
 {
     if ( mpFloatWin )

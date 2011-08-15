@@ -443,7 +443,6 @@ private:
 
 public:
                         CalendarField( Window* pParent, WinBits nWinStyle );
-                        CalendarField( Window* pParent, const ResId& rResId );
                         ~CalendarField();
 
     virtual void        Select();

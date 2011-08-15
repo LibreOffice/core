@@ -89,7 +89,6 @@ public:
     sal_Int16 getFirstDayOfWeek() const;
     void setFirstDayOfWeek( sal_Int16 nDay );
     void setMinimumNumberOfDaysForFirstWeek( sal_Int16 nDays );
-    sal_Int16 getMinimumNumberOfDaysForFirstWeek() const;
     sal_Int16 getNumberOfMonthsInYear() const;
     sal_Int16 getNumberOfDaysInWeek() const;
     ::com::sun::star::uno::Sequence< ::com::sun::star::i18n::CalendarItem > getMonths() const;

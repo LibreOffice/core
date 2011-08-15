@@ -88,8 +88,6 @@ CNames::Insert(ControlItem const*&, unsigned short&)
 CNames::Insert(ControlItem const**, unsigned short)
 CNames::Remove(ControlItem const*&, unsigned short)
 CNames::Remove(unsigned short, unsigned short)
-CalendarField::CalendarField(Window*, ResId const&)
-CalendarWrapper::getMinimumNumberOfDaysForFirstWeek() const
 CertificateContainer::impl_createFactory(com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory> const&)
 CertificateExtension_XmlSecImpl::setCertExtn(com::sun::star::uno::Sequence<signed char>, com::sun::star::uno::Sequence<signed char>, unsigned char)
 CfgStack::Push(CfgStackData*)
