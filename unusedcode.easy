@@ -14,13 +14,6 @@ BitmapPalette::IsGreyPalette() const
 BreakPointList::clear()
 BreakPointList::push_back(BreakPoint*)
 BufferNode::childAt(int) const
-Button::Button(Window*, ResId const&)
-Button::Button(Window*, long)
-Button::GetFocusRect() const
-Button::GetModeBitmap() const
-Button::IsImageDisplayEnabled()
-Button::IsTextDisplayEnabled()
-Button::SetModeBitmap(BitmapEx const&)
 ButtonDialog::AddButton(PushButton*, unsigned short, unsigned short, long)
 ButtonDialog::ButtonDialog(Window*, ResId const&)
 ButtonDialog::GetButtonHelpId(unsigned short) const

@@ -74,8 +74,6 @@ protected:
                         Button( WindowType nType );
 
 public:
-                        Button( Window* pParent, WinBits nStyle = 0 );
-                        Button( Window* pParent, const ResId& rResId );
                        ~Button();
 
     virtual void        Click();
@@ -92,16 +90,10 @@ public:
     void                SetImageAlign( ImageAlign eAlign );
     ImageAlign          GetImageAlign() const;
 
-    sal_Bool            SetModeBitmap( const BitmapEx& rBitmap );
-    BitmapEx            GetModeBitmap( ) const;
-
     void                EnableImageDisplay( sal_Bool bEnable );
-    sal_Bool                IsImageDisplayEnabled();
     void                EnableTextDisplay( sal_Bool bEnable );
-    sal_Bool                IsTextDisplayEnabled();
 
     void                SetFocusRect( const Rectangle& rFocusRect );
-    const Rectangle&    GetFocusRect() const;
     void SetSmallSymbol (bool bSmall=true);
     bool IsSmallSymbol () const;
 };

@@ -79,7 +79,6 @@ public:
     sal_Bool            mbSmallSymbol;
 
     Image           maImage;
-    BitmapEx*       mpBitmapEx;
     ImageAlign      meImageAlign;
     SymbolAlign     meSymbolAlign;
 
@@ -94,7 +93,6 @@ ImplCommonButtonData::ImplCommonButtonData()
     mnButtonState   = 0;
     mbSmallSymbol = sal_False;
 
-    mpBitmapEx = NULL;
     meImageAlign = IMAGEALIGN_TOP;
     meSymbolAlign = SYMBOLALIGN_LEFT;
 }
@@ -102,7 +100,6 @@ ImplCommonButtonData::ImplCommonButtonData()
 // -----------------------------------------------------------------------
 ImplCommonButtonData::~ImplCommonButtonData()
 {
-    delete mpBitmapEx;
 }
 
 // =======================================================================
@@ -111,30 +108,6 @@ Button::Button( WindowType nType ) :
     Control( nType )
 {
     mpButtonData = new ImplCommonButtonData;
-}
-
-// -----------------------------------------------------------------------
-
-Button::Button( Window* pParent, WinBits nStyle ) :
-    Control( WINDOW_BUTTON )
-{
-    mpButtonData = new ImplCommonButtonData;
-    ImplInit( pParent, nStyle, NULL );
-}
-
-// -----------------------------------------------------------------------
-
-Button::Button( Window* pParent, const ResId& rResId ) :
-    Control( WINDOW_BUTTON )
-{
-    rResId.SetRT( RSC_BUTTON );
-    mpButtonData = new ImplCommonButtonData;
-    WinBits nStyle = ImplInitRes( rResId );
-    ImplInit( pParent, nStyle, NULL );
-    ImplLoadRes( rResId );
-
-    if ( !(nStyle & WB_HIDE) )
-        Show();
 }
 
 // -----------------------------------------------------------------------
@@ -209,9 +182,6 @@ sal_Bool Button::SetModeImage( const Image& rImage )
 {
     if ( rImage != mpButtonData->maImage )
     {
-        delete mpButtonData->mpBitmapEx;
-
-        mpButtonData->mpBitmapEx = NULL;
         mpButtonData->maImage = rImage;
 
         StateChanged( STATE_CHANGE_DATA );
@@ -248,38 +218,10 @@ ImageAlign Button::GetImageAlign() const
 }
 
 // -----------------------------------------------------------------------
-sal_Bool Button::SetModeBitmap( const BitmapEx& rBitmap )
-{
-    if ( SetModeImage( rBitmap ) )
-    {
-        if ( !mpButtonData->mpBitmapEx )
-            mpButtonData->mpBitmapEx = new BitmapEx( rBitmap );
-        return sal_True;
-    }
-    return sal_False;
-}
 
-// -----------------------------------------------------------------------
-BitmapEx Button::GetModeBitmap( ) const
-{
-    BitmapEx aBmp;
-
-    if ( mpButtonData->mpBitmapEx )
-        aBmp = *( mpButtonData->mpBitmapEx );
-
-    return aBmp;
-}
-
-// -----------------------------------------------------------------------
 void Button::SetFocusRect( const Rectangle& rFocusRect )
 {
     ImplSetFocusRect( rFocusRect );
-}
-
-// -----------------------------------------------------------------------
-const Rectangle& Button::GetFocusRect() const
-{
-    return ImplGetFocusRect();
 }
 
 // -----------------------------------------------------------------------
@@ -377,16 +319,6 @@ void Button::ImplDrawAlignedImage( OutputDevice* pDev, Point& rPos,
 
     // check for HC mode ( image only! )
     Image    *pImage    = &(mpButtonData->maImage);
-    BitmapEx *pBitmapEx = mpButtonData->mpBitmapEx;
-
-    if ( pBitmapEx && ( pDev->GetOutDevType() == OUTDEV_PRINTER ) )
-    {
-        // Die Groesse richtet sich nach dem Bildschirm, soll auf
-        // dem Drucker genau so aussehen...
-        MapMode aMap100thMM( MAP_100TH_MM );
-        aImageSize = PixelToLogic( aImageSize, aMap100thMM );
-        aImageSize = pDev->LogicToPixel( aImageSize, aMap100thMM );
-    }
 
     Size aTextSize;
     Size aSymbolSize;
@@ -592,19 +524,10 @@ void Button::ImplDrawAlignedImage( OutputDevice* pDev, Point& rPos,
          ! IsEnabled() )
         nStyle |= IMAGE_DRAW_DISABLE;
 
-    if ( pBitmapEx && ( pDev->GetOutDevType() == OUTDEV_PRINTER ) )
-    {
-        // Fuer die BitmapEx ueberlegt sich KA noch, wie man die disablete
-        // Darstellung hinbekommt...
-        pBitmapEx->Draw( pDev, aImagePos, aImageSize /*, nStyle*/ );
-    }
+    if ( IsZoom() )
+        pDev->DrawImage( aImagePos, aImageSize, *pImage, nStyle );
     else
-    {
-        if ( IsZoom() )
-            pDev->DrawImage( aImagePos, aImageSize, *pImage, nStyle );
-        else
-            pDev->DrawImage( aImagePos, *pImage, nStyle );
-    }
+        pDev->DrawImage( aImagePos, *pImage, nStyle );
 
     if ( bDrawText )
     {
@@ -689,24 +612,12 @@ void Button::EnableImageDisplay( sal_Bool bEnable )
 }
 
 // -----------------------------------------------------------------------
-sal_Bool Button::IsImageDisplayEnabled()
-{
-    return (mpButtonData->mnButtonState & BUTTON_DRAW_NOIMAGE) == 0;
-}
-
-// -----------------------------------------------------------------------
 void Button::EnableTextDisplay( sal_Bool bEnable )
 {
     if( bEnable )
         mpButtonData->mnButtonState &= ~BUTTON_DRAW_NOTEXT;
     else
         mpButtonData->mnButtonState |= BUTTON_DRAW_NOTEXT;
-}
-
-// -----------------------------------------------------------------------
-sal_Bool Button::IsTextDisplayEnabled()
-{
-    return (mpButtonData->mnButtonState & BUTTON_DRAW_NOTEXT) == 0;
 }
 
 // -----------------------------------------------------------------------
