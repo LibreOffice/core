@@ -51,11 +51,6 @@ namespace {
 
 namespace css = com::sun::star;
 
-bool isProtocolPropertyMessage(rtl::OUString const & oid) {
-    return oid.equalsAsciiL(
-        RTL_CONSTASCII_STRINGPARAM("UrpProtocolProperties"));
-}
-
 }
 
 Writer::Item::Item() {}
