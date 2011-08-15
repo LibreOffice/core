@@ -398,6 +398,7 @@ public:
     void                CopyItem( const ToolBox& rToolBox, sal_uInt16 nItemId,
                                   sal_uInt16 nNewPos = TOOLBOX_APPEND );
     void                Clear();
+    void                RecalcItems();
 
     const ImageList&    GetImageList() const { return maImageList; }
     void                SetImageList( const ImageList& rImageList );

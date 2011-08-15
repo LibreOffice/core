@@ -77,6 +77,7 @@
 #include "AccessibleEditObject.hxx"
 #include "AccessibleText.hxx"
 #include <svtools/miscopt.hxx>
+#include <comphelper/string.hxx>
 
 #define TEXT_STARTPOS       3
 #define TEXT_MULTI_STARTPOS 5
@@ -890,7 +891,7 @@ IMPL_LINK( ScInputBarGroup, ClickHdl, PushButton*, pBtn )
         pParent->SetMultiLineStatus(false);
     }
     pParent->Resize();
-    pParent->RecalcItems();
+    pParent->CalcWindowSizePixel(); // TODO: changed from RecalcItems(). check if this does the same thing.
     return 0;
 }
 
