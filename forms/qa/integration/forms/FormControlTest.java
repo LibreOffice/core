@@ -679,10 +679,12 @@ public class FormControlTest extends complexlib.ComplexTestCase implements XSQLE
     {
         try
         {
-            if ( fieldName.equals( "f_time" ) )
+            if ( ( "f_time" ).equals(fieldName) )
                 // http://bugs.mysql.com/bug.php?id=5681
                 return true;
-
+            if (fieldName == null) {
+                return false;
+            }
             int currentValue = ((Integer)getControlModel( fieldName ).getPropertyValue( propertyName )).intValue();
             if ( currentValue != requiredValue )
             {
