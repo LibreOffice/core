@@ -871,6 +871,7 @@ public:
     virtual String              GetObjName() const;
     /** Returns the graphic imported from the IMGDATA record. */
     inline const Graphic& GetGraphic() const { return maGraphic; }
+
     /** Returns the visible area of the imported graphic. */
     inline const Rectangle& GetVisArea() const { return maVisArea; }
 

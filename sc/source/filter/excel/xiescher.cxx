@@ -2856,6 +2856,19 @@ SdrObject* XclImpPictureObj::DoCreateSdrObj( XclImpDffConverter& rDffConv, const
     // try to create an OLE object or form control
     SdrObjectPtr xSdrObj( rDffConv.CreateSdrObject( *this, rAnchorRect ) );
 
+    // insert a graphic replacement for unsupported ole object ( if none already
+    // exists ) Hmm ok, it's possibly that there has been some imported
+    // graphic at a base level  but unlikely, normally controls have a valid
+    // preview in the IMGDATA record ( see below )
+    // It might be possible to push such an imported graphic up to this
+    // XclImpPictureObj instance but there are somany layers of indirection I
+    // don't see an easy way. This way at least ensures that we can
+    // avoid a 'blank' shape that can result from a failed control import
+    if ( !xSdrObj && IsOcxControl() && maGraphic.GetType() == GRAPHIC_NONE )
+    {
+        Graphic aReplacement( SdrOle2Obj::GetEmtyOLEReplacementBitmap() );
+        const_cast< XclImpPictureObj* >( this )->maGraphic = aReplacement;
+    }
     // no OLE - create a plain picture from IMGDATA record data
     if( !xSdrObj && (maGraphic.GetType() != GRAPHIC_NONE) )
     {
