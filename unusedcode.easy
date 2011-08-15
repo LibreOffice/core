@@ -379,18 +379,6 @@ LinguMgr::UpdateAll()
 LinguOptions::GetValue(com::sun::star::uno::Any&, int) const
 LinguOptions::SetValue(com::sun::star::uno::Any&, com::sun::star::uno::Any const&, int)
 LinkStructArr::DeleteAndDestroy(unsigned short, unsigned short)
-ListBox::CalcWindowSizePixel(unsigned short) const
-ListBox::GetMRUEntries(unsigned short) const
-ListBox::GetMaxMRUCount() const
-ListBox::GetProminentEntryType() const
-ListBox::GetUserItemSize() const
-ListBox::IsDDAutoWidthEnabled() const
-ListBox::IsUserDrawEnabled() const
-ListBox::SetMRUEntries(String const&, unsigned short)
-ListBox::SetMaxMRUCount(unsigned short)
-ListBox::SetProminentEntryType(ProminentEntry)
-ListBox::SetSeparatorPos()
-ListBox::ShowProminentEntry(unsigned short)
 LngSvcMgr::RemoveLngSvcEvtBroadcaster(com::sun::star::uno::Reference<com::sun::star::linguistic2::XLinguServiceEventBroadcaster> const&)
 LocaleDataWrapper::getCollatorImplementations() const
 LocaleDataWrapper::getTransliterations() const

@@ -117,7 +117,6 @@ public:
     sal_Bool                IsAutoSizeEnabled() const { return mbDDAutoSize; }
 
     void                EnableDDAutoWidth( sal_Bool b );
-    sal_Bool                IsDDAutoWidthEnabled() const;
 
     virtual sal_uInt16      InsertEntry( const XubString& rStr, sal_uInt16 nPos = LISTBOX_APPEND );
     virtual sal_uInt16      InsertEntry( const Image& rImage, sal_uInt16 nPos = LISTBOX_APPEND );
@@ -165,18 +164,13 @@ public:
     long            GetEntryFlags( sal_uInt16 nPos ) const;
 
     void            SetTopEntry( sal_uInt16 nPos );
-    void            ShowProminentEntry( sal_uInt16 nPos );
     void            SetTopEntryStr( const XubString& rStr );
     sal_uInt16          GetTopEntry() const;
-
-    void            SetProminentEntryType( ProminentEntry eType );
-    ProminentEntry  GetProminentEntryType() const;
 
     void            SaveValue() { mnSaveValue = GetSelectEntryPos(); }
     sal_uInt16          GetSavedValue() const { return mnSaveValue; }
 
-    void            SetSeparatorPos( sal_uInt16 n );
-    void            SetSeparatorPos();
+    void            SetSeparatorPos( sal_uInt16 n = LISTBOX_ENTRY_NOTFOUND );
     sal_uInt16          GetSeparatorPos() const;
 
     sal_Bool            IsTravelSelect() const;
@@ -190,14 +184,11 @@ public:
     void            SetReadOnly( sal_Bool bReadOnly = sal_True );
     sal_Bool            IsReadOnly() const;
 
-    long            CalcWindowSizePixel( sal_uInt16 nLines ) const;
     Rectangle       GetBoundingRectangle( sal_uInt16 nItem ) const;
 
     void            SetUserItemSize( const Size& rSz );
-    const Size&     GetUserItemSize() const;
 
     void            EnableUserDraw( sal_Bool bUserDraw );
-    sal_Bool            IsUserDrawEnabled() const;
 
     void            DrawEntry( const UserDrawEvent& rEvt, sal_Bool bDrawImage, sal_Bool bDrawText, sal_Bool bDrawTextAtImagePos = sal_False );
 
@@ -211,11 +202,6 @@ public:
     Size            CalcAdjustedSize( const Size& rPrefSize ) const;
     Size            CalcSize( sal_uInt16 nColumns, sal_uInt16 nLines ) const;
     void            GetMaxVisColumnsAndLines( sal_uInt16& rnCols, sal_uInt16& rnLines ) const;
-
-    void            SetMRUEntries( const XubString& rEntries, xub_Unicode cSep = ';' );
-    XubString       GetMRUEntries( xub_Unicode cSep = ';' ) const;
-    void            SetMaxMRUCount( sal_uInt16 n );
-    sal_uInt16          GetMaxMRUCount() const;
 
     sal_uInt16          GetDisplayLineCount() const;
 

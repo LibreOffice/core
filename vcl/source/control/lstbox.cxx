@@ -611,13 +611,6 @@ void ListBox::EnableDDAutoWidth( sal_Bool b )
 
 // -----------------------------------------------------------------------
 
-sal_Bool ListBox::IsDDAutoWidthEnabled() const
-{
-    return mpFloatWin ? mpFloatWin->IsAutoWidth() : sal_False;
-}
-
-// -----------------------------------------------------------------------
-
 void ListBox::SetDropDownLineCount( sal_uInt16 nLines )
 {
     mnLineCount = nLines;
@@ -1235,33 +1228,12 @@ void ListBox::SetTopEntry( sal_uInt16 nPos )
 
 // -----------------------------------------------------------------------
 
-void ListBox::ShowProminentEntry( sal_uInt16 nPos )
-{
-    mpImplLB->ShowProminentEntry( nPos + mpImplLB->GetEntryList()->GetMRUCount() );
-}
-
-// -----------------------------------------------------------------------
-
 sal_uInt16 ListBox::GetTopEntry() const
 {
     sal_uInt16 nPos = GetEntryCount() ? mpImplLB->GetTopEntry() : LISTBOX_ENTRY_NOTFOUND;
     if ( nPos < mpImplLB->GetEntryList()->GetMRUCount() )
         nPos = 0;
     return nPos;
-}
-
-// -----------------------------------------------------------------------
-
-void ListBox::SetProminentEntryType( ProminentEntry eType )
-{
-    mpImplLB->SetProminentEntryType( eType );
-}
-
-// -----------------------------------------------------------------------
-
-ProminentEntry ListBox::GetProminentEntryType() const
-{
-    return mpImplLB->GetProminentEntryType();
 }
 
 // -----------------------------------------------------------------------
@@ -1279,11 +1251,6 @@ sal_Bool ListBox::IsInDropDown() const
 }
 
 // -----------------------------------------------------------------------
-
-long ListBox::CalcWindowSizePixel( sal_uInt16 nLines ) const
-{
-    return mpImplLB->GetEntryHeight() * nLines;
-}
 
 Rectangle ListBox::GetBoundingRectangle( sal_uInt16 nItem ) const
 {
@@ -1509,25 +1476,11 @@ void ListBox::SetUserItemSize( const Size& rSz )
 
 // -----------------------------------------------------------------------
 
-const Size& ListBox::GetUserItemSize() const
-{
-    return mpImplLB->GetMainWindow()->GetUserItemSize();
-}
-
-// -----------------------------------------------------------------------
-
 void ListBox::EnableUserDraw( sal_Bool bUserDraw )
 {
     mpImplLB->GetMainWindow()->EnableUserDraw( bUserDraw );
     if ( mpImplWin )
         mpImplWin->EnableUserDraw( bUserDraw );
-}
-
-// -----------------------------------------------------------------------
-
-sal_Bool ListBox::IsUserDrawEnabled() const
-{
-    return mpImplLB->GetMainWindow()->IsUserDrawEnabled();
 }
 
 // -----------------------------------------------------------------------
@@ -1557,44 +1510,9 @@ void ListBox::SetSeparatorPos( sal_uInt16 n )
 
 // -----------------------------------------------------------------------
 
-void ListBox::SetSeparatorPos()
-{
-    mpImplLB->SetSeparatorPos( LISTBOX_ENTRY_NOTFOUND );
-}
-
-// -----------------------------------------------------------------------
-
 sal_uInt16 ListBox::GetSeparatorPos() const
 {
     return mpImplLB->GetSeparatorPos();
-}
-
-// -----------------------------------------------------------------------
-
-void ListBox::SetMRUEntries( const XubString& rEntries, xub_Unicode cSep )
-{
-    mpImplLB->SetMRUEntries( rEntries, cSep );
-}
-
-// -----------------------------------------------------------------------
-
-XubString ListBox::GetMRUEntries( xub_Unicode cSep ) const
-{
-    return mpImplLB->GetMRUEntries( cSep );
-}
-
-// -----------------------------------------------------------------------
-
-void ListBox::SetMaxMRUCount( sal_uInt16 n )
-{
-    mpImplLB->SetMaxMRUCount( n );
-}
-
-// -----------------------------------------------------------------------
-
-sal_uInt16 ListBox::GetMaxMRUCount() const
-{
-    return mpImplLB->GetMaxMRUCount();
 }
 
 // -----------------------------------------------------------------------
