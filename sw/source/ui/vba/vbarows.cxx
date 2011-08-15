@@ -263,6 +263,10 @@ void SwVbaRows::setIndentWithAdjustNone( sal_Int32 indent ) throw (uno::RuntimeE
     sal_Int32 nWidth = 0;
     xTableProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Width") ) ) >>= nWidth;
     sal_Int32 nNewWidth = nWidth - indent;
+    if ((nNewWidth <= 0) || (nWidth <= 0))
+    {
+        throw new RuntimeException("Pb with width, in SwVbaRows::setIndentWithAdjustProportional (nNewWidth <= 0) || (nWidth <= 0)");
+    }
     double propFactor = (double)nNewWidth/(double)nWidth;
 
     // get all columns, calculate and set the new width of the columns
