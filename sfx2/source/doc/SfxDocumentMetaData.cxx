@@ -501,8 +501,7 @@ const char* s_nsODF     = "urn:oasis:names:tc:opendocument:xmlns:office:1.0";
 const char* s_nsODFMeta = "urn:oasis:names:tc:opendocument:xmlns:meta:1.0";
 // const char* s_nsOOo     = "http://openoffice.org/2004/office"; // not used (yet?)
 
-const char* s_metaXml = "meta.xml";
-
+static const char s_meta    [] = "meta.xml";
 
 bool isValidDate(const css::util::Date & i_rDate)
 {
@@ -682,7 +681,7 @@ SfxDocumentMetaData::getURLProperties(
         }
         xPropArg->addProperty(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("StreamName")),
                 css::beans::PropertyAttribute::MAYBEVOID,
-                css::uno::makeAny(::rtl::OUString::createFromAscii(s_metaXml)));
+                css::uno::makeAny(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(s_meta))));
     } catch (css::uno::Exception &) {
         // ignore
     }
@@ -1932,7 +1931,7 @@ SfxDocumentMetaData::loadFromStorage(
     // open meta data file
     css::uno::Reference<css::io::XStream> xStream(
         xStorage->openStreamElement(
-            ::rtl::OUString::createFromAscii(s_metaXml),
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(s_meta)),
             css::embed::ElementModes::READ) );
     if (!xStream.is()) throw css::uno::RuntimeException();
     css::uno::Reference<css::io::XInputStream> xInStream =
@@ -1966,9 +1965,9 @@ SfxDocumentMetaData::loadFromStorage(
         xPropArg->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("BaseURI")))
             >>= input.sSystemId;
         input.sSystemId += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/")).concat(
-                ::rtl::OUString::createFromAscii(s_metaXml));
+                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(s_meta)));
     } catch (css::uno::Exception &) {
-        input.sSystemId = ::rtl::OUString::createFromAscii(s_metaXml);
+        input.sSystemId = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(s_meta));
     }
     css::uno::Sequence< css::uno::Any > args(1);
     args[0] <<= xPropArg;
@@ -2013,7 +2012,7 @@ SfxDocumentMetaData::storeToStorage(
 
     // write into storage
     css::uno::Reference<css::io::XStream> xStream =
-        xStorage->openStreamElement(::rtl::OUString::createFromAscii(s_metaXml),
+        xStorage->openStreamElement(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(s_meta)),
             css::embed::ElementModes::WRITE
             | css::embed::ElementModes::TRUNCATE);
     if (!xStream.is()) throw css::uno::RuntimeException();
