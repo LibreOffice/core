@@ -241,7 +241,7 @@ inline sal_uInt32 SaxWriterHelper::writeSequence() throw( SAXException )
     {
         m_out->writeBytes( m_Sequence );
     }
-    catch( IOException & e )
+    catch (const IOException & e)
     {
         Any a;
         a <<= e;
@@ -1125,7 +1125,7 @@ void SAXWriter::endDocument(void)                   throw(SAXException, RuntimeE
     {
         m_out->closeOutput();
     }
-    catch( IOException & e )
+    catch (const IOException & e)
     {
         Any a;
         a <<= e;
