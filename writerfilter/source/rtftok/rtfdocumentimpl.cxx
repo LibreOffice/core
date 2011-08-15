@@ -566,15 +566,6 @@ int RTFDocumentImpl::resolvePict(bool bInline)
         uno::Reference<graphic::XGraphic> xGraphic = xGraphicProvider->queryGraphic(aMediaProperties);
         xPropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Bitmap")), uno::Any(xGraphic));
 
-        // Set size
-        awt::Size aSize;
-        for (RTFSprms::Iterator_t i = m_aStates.top().aCharacterAttributes->begin(); i != m_aStates.top().aCharacterAttributes->end(); ++i)
-            if (i->first == NS_rtf::LN_XEXT)
-                aSize.Width = i->second->getInt();
-            else if (i->first == NS_rtf::LN_YEXT)
-                aSize.Height = i->second->getInt();
-        xShape->setSize(aSize);
-
         RTFValue::Pointer_t pShapeValue(new RTFValue(xShape));
         m_aObjectAttributes->push_back(make_pair(NS_ooxml::LN_shape, pShapeValue));
         return 0;
