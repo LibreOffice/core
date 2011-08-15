@@ -526,7 +526,8 @@ public:
                           const sal_Bool bLowerMode = sal_False,
                           const sal_Bool bLowerBorder = sal_False ) const;
     void PaintBorderLine( const SwRect&, const SwRect&, const SwPageFrm*,
-                          const Color *pColor, const editeng::SvxBorderStyle = editeng::SOLID ) const;
+                          const Color *pColor, const editeng::SvxBorderStyle = editeng::SOLID,
+                          sal_Bool bGhosted = sal_False ) const;
 
     drawinglayer::processor2d::BaseProcessor2D * CreateProcessor2D( ) const;
     void ProcessPrimitives( const drawinglayer::primitive2d::Primitive2DSequence& rSequence ) const;
