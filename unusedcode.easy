@@ -14,12 +14,6 @@ BitmapPalette::IsGreyPalette() const
 BreakPointList::clear()
 BreakPointList::push_back(BreakPoint*)
 BufferNode::childAt(int) const
-ButtonDialog::AddButton(PushButton*, unsigned short, unsigned short, long)
-ButtonDialog::ButtonDialog(Window*, ResId const&)
-ButtonDialog::GetButtonHelpId(unsigned short) const
-ButtonDialog::GetButtonHelpText(unsigned short) const
-ButtonDialog::GetButtonText(unsigned short) const
-ButtonDialog::SetButtonHelpId(unsigned short, rtl::OString const&)
 ByteArr::Append(char)
 ByteArr::ByteArr(unsigned char, unsigned char)
 ByteArr::Contains(char) const

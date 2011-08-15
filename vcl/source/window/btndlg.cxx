@@ -70,15 +70,6 @@ ButtonDialog::ButtonDialog( Window* pParent, WinBits nStyle ) :
     ImplInit( pParent, nStyle );
 }
 
-ButtonDialog::ButtonDialog( Window* pParent, const ResId& rResId ) :
-    Dialog( WINDOW_BUTTONDIALOG )
-{
-    ImplInitButtonDialogData();
-    rResId.SetRT( RSC_DIALOG );     // !!!!!!!!!! RSC_BUTTONDIALOG !!!!!!!!
-    ImplInit( pParent, ImplInitRes( rResId ) );
-    ImplLoadRes( rResId );
-}
-
 ButtonDialog::~ButtonDialog()
 {
     for ( btn_iterator it = maItemList.begin(); it != maItemList.end(); ++it)
@@ -338,24 +329,6 @@ void ButtonDialog::AddButton( StandardButtonType eType, sal_uInt16 nId,
     mbFormat = sal_True;
 }
 
-void ButtonDialog::AddButton( PushButton* pBtn, sal_uInt16 nId,
-                              sal_uInt16 nBtnFlags, long nSepPixel )
-{
-    // PageItem anlegen
-    ImplBtnDlgItem* pItem   = new ImplBtnDlgItem;
-    pItem->mnId             = nId;
-    pItem->mbOwnButton      = sal_False;
-    pItem->mnSepSize        = nSepPixel;
-    pItem->mpPushButton     = pBtn;
-
-    if ( nBtnFlags & BUTTONDIALOG_FOCUSBUTTON )
-        mnFocusButtonId = nId;
-
-    maItemList.push_back(pItem);
-
-    mbFormat = sal_True;
-}
-
 void ButtonDialog::RemoveButton( sal_uInt16 nId )
 {
     btn_iterator it;
@@ -425,47 +398,12 @@ void ButtonDialog::SetButtonText( sal_uInt16 nId, const XubString& rText )
     }
 }
 
-XubString ButtonDialog::GetButtonText( sal_uInt16 nId ) const
-{
-    ImplBtnDlgItem* pItem = ImplGetItem( nId );
-
-    if ( pItem )
-        return pItem->mpPushButton->GetText();
-    else
-        return ImplGetSVEmptyStr();
-}
-
 void ButtonDialog::SetButtonHelpText( sal_uInt16 nId, const XubString& rText )
 {
     ImplBtnDlgItem* pItem = ImplGetItem( nId );
 
     if ( pItem )
         pItem->mpPushButton->SetHelpText( rText );
-}
-
-XubString ButtonDialog::GetButtonHelpText( sal_uInt16 nId ) const
-{
-    ImplBtnDlgItem* pItem = ImplGetItem( nId );
-
-    if ( pItem )
-        return pItem->mpPushButton->GetHelpText();
-    else
-        return ImplGetSVEmptyStr();
-}
-
-void ButtonDialog::SetButtonHelpId( sal_uInt16 nId, const rtl::OString& rHelpId )
-{
-    ImplBtnDlgItem* pItem = ImplGetItem( nId );
-
-    if ( pItem )
-        pItem->mpPushButton->SetHelpId( rHelpId );
-}
-
-rtl::OString ButtonDialog::GetButtonHelpId( sal_uInt16 nId ) const
-{
-    ImplBtnDlgItem* pItem = ImplGetItem( nId );
-
-    return pItem ? rtl::OString( pItem->mpPushButton->GetHelpId() ) : rtl::OString();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

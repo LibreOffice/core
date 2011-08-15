@@ -81,7 +81,6 @@ protected:
 
 public:
                         ButtonDialog( Window* pParent, WinBits nStyle = WB_STDDIALOG );
-                        ButtonDialog( Window* pParent, const ResId& rResId );
                         ~ButtonDialog();
 
     virtual void        Resize();
@@ -96,18 +95,13 @@ public:
 
     void                AddButton( const XubString& rText, sal_uInt16 nId, sal_uInt16 nBtnFlags, long nSepPixel = 0 );
     void                AddButton( StandardButtonType eType, sal_uInt16 nId, sal_uInt16 nBtnFlags, long nSepPixel = 0 );
-    void                AddButton( PushButton* pBtn, sal_uInt16 nId, sal_uInt16 nBtnFlags, long nSepPixel = 0 );
     void                RemoveButton( sal_uInt16 nId );
     void                Clear();
     sal_uInt16              GetButtonCount() const;
     sal_uInt16              GetButtonId( sal_uInt16 nButton ) const;
     PushButton*         GetPushButton( sal_uInt16 nId ) const;
     void                SetButtonText( sal_uInt16 nId, const XubString& rText );
-    XubString           GetButtonText( sal_uInt16 nId ) const;
     void                SetButtonHelpText( sal_uInt16 nId, const XubString& rText );
-    XubString           GetButtonHelpText( sal_uInt16 nId ) const;
-    void                SetButtonHelpId( sal_uInt16 nId, const rtl::OString& rHelpId );
-    rtl::OString        GetButtonHelpId( sal_uInt16 nId ) const;
 
     void                SetFocusButton( sal_uInt16 nId = BUTTONDIALOG_BUTTON_NOTFOUND ) { mnFocusButtonId = nId; }
     sal_uInt16              GetFocusButton() const { return mnFocusButtonId; }
