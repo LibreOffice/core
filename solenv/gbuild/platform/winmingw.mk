@@ -41,6 +41,7 @@ gb_CC := $(CC)
 gb_CXX := $(CXX)
 gb_AR := $(shell $(CC) -print-prog-name=ar)
 gb_AWK := awk
+gb_CLASSPATHSEP := :
 gb_RC := $(WINDRES)
 ifeq ($(USE_MINGW),cygwin)
 gb_MINGWLIBDIR := $(COMPATH)/lib/mingw
