@@ -2102,6 +2102,10 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
         case RTF_PICHGOAL:
             m_aStates.top().aPicture.nGoalHeight = TWIP_TO_MM100(nParam);
             break;
+        case RTF_PICCROPL: m_aStates.top().aPicture.nCropL = TWIP_TO_MM100(nParam); break;
+        case RTF_PICCROPR: m_aStates.top().aPicture.nCropR = TWIP_TO_MM100(nParam); break;
+        case RTF_PICCROPT: m_aStates.top().aPicture.nCropT = TWIP_TO_MM100(nParam); break;
+        case RTF_PICCROPB: m_aStates.top().aPicture.nCropB = TWIP_TO_MM100(nParam); break;
         case RTF_SHPWRK:
             {
                 int nValue = 0;
