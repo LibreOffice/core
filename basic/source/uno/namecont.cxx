@@ -1849,10 +1849,8 @@ void SfxLibraryContainer::storeLibraries_Impl( const uno::Reference< embed::XSto
         // open the source storage which might be used to copy yet-unmodified libraries
         try
         {
-            if ( mxStorage->hasByName( maLibrariesDir ) )
+            if ( mxStorage->hasByName( maLibrariesDir ) || bInplaceStorage )
                 xSourceLibrariesStor = mxStorage->openStorageElement( maLibrariesDir, bInplaceStorage ? embed::ElementModes::READWRITE : embed::ElementModes::READ );
-            else if ( bInplaceStorage )
-                xSourceLibrariesStor = mxStorage->openStorageElement( maLibrariesDir, embed::ElementModes::READWRITE );
         }
         catch( const uno::Exception& )
         {
