@@ -5,11 +5,8 @@
 
 use strict;
 
-my $main_repo="bootstrap";
-my @pieces=("artwork", "base", "calc", "components",
-            "extensions", "extras", "filters", "help", "impress",
-            "libs-core", "libs-extern", "libs-extern-sys", "libs-gui",
-            "translations", "postprocess", "sdk", "testing", "ure", "writer");
+my $main_repo="core";
+my @pieces=("binfilter", "dictionaries", "help", "translations");
 
 sub search_bugs($$$$)
 {
