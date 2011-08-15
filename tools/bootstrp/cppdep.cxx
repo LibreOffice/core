@@ -226,7 +226,7 @@ ByteString CppDep::IsIncludeStatement( ByteString aLine )
 #endif
     if ( aTmpStr.Equals("#include") )
     {
-        aTmpStr = aLine.Erase( 0, 8 );
+        aLine.Erase( 0, 8 );
         sal_uInt16 nLen = aLine.Len();
         aLine.Erase( nLen-1, 1 );
         aLine.Erase( 0, 1 );
