@@ -57,10 +57,8 @@ struct SfxSlotType_Impl
     {}
 };
 
-DECL_2BYTEARRAY(SfxSlotGroupArr_Impl, sal_uInt16, 6, 4)
 DECL_PTRARRAY(SfxInterfaceArr_Impl, SfxInterface*, 6, 3)
 DECL_PTRARRAY(SfxSlotTypeArr_Impl, SfxSlotType_Impl*, 8, 8)
-
 
 //====================================================================
 
@@ -121,9 +119,7 @@ void SfxSlotPool::RegisterInterface( SfxInterface& rInterface )
         if ( _pParentPool )
         {
             // The Groups in parent Slotpool are also known here
-            SfxSlotGroupArr_Impl& rGroups = *_pParentPool->_pGroups;
-            for ( sal_uInt16 n=0; n<rGroups.Count(); n++ )
-                _pGroups->Append( rGroups[n] );
+            _pGroups->append( *_pParentPool->_pGroups );
         }
     }
 
@@ -133,12 +129,12 @@ void SfxSlotPool::RegisterInterface( SfxInterface& rInterface )
     {
         SfxSlot *pDef = rInterface[nFunc];
         if ( pDef->GetGroupId() && /* pDef->GetGroupId() != GID_INTERN && */
-             !_pGroups->Contains(pDef->GetGroupId()) )
+             _pGroups->find(pDef->GetGroupId()) == SfxSlotGroupArr_Impl::npos )
         {
             if (pDef->GetGroupId() == GID_INTERN)
-                _pGroups->Insert(0, pDef->GetGroupId());
+                _pGroups->insert(_pGroups->begin(), pDef->GetGroupId());
             else
-                _pGroups->Append(pDef->GetGroupId());
+                _pGroups->push_back(pDef->GetGroupId());
         }
     }
 }
@@ -193,13 +189,13 @@ String SfxSlotPool::SeekGroup( sal_uInt16 nNo )
     DBG_ASSERT( _pInterfaces != 0, "no Interfaces registered" );
 
     // if the group exists, use it
-    if ( _pGroups && nNo < _pGroups->Count() )
+    if ( _pGroups && nNo < _pGroups->size() )
     {
         _nCurGroup = nNo;
         if ( _pParentPool )
         {
             // In most cases, the order of the IDs agree
-            sal_uInt16 nParentCount = _pParentPool->_pGroups->Count();
+            sal_uInt16 nParentCount = _pParentPool->_pGroups->size();
             if ( nNo < nParentCount && (*_pGroups)[nNo] == (*_pParentPool->_pGroups)[nNo] )
                 _pParentPool->_nCurGroup = nNo;
             else
@@ -233,7 +229,7 @@ String SfxSlotPool::SeekGroup( sal_uInt16 nNo )
 
 sal_uInt16 SfxSlotPool::GetGroupCount()
 {
-    return _pGroups->Count();
+    return _pGroups->size();
 }
 
 
@@ -251,7 +247,7 @@ const SfxSlot* SfxSlotPool::SeekSlot( sal_uInt16 nStartInterface )
 
     // have reached the end of the Parent-Pools?
     if ( nStartInterface < nFirstInterface &&
-         _pParentPool->_nCurGroup >= _pParentPool->_pGroups->Count() )
+         _pParentPool->_nCurGroup >= _pParentPool->_pGroups->size() )
         nStartInterface = nFirstInterface;
 
     // Is the Interface still in the Parent-Pool?
@@ -274,7 +270,7 @@ const SfxSlot* SfxSlotPool::SeekSlot( sal_uInt16 nStartInterface )
               ++_nCurMsg )
         {
             const SfxSlot* pMsg = (*pInterface)[_nCurMsg];
-            if ( pMsg->GetGroupId() == _pGroups->GetObject(_nCurGroup) )
+            if ( pMsg->GetGroupId() == _pGroups->at(_nCurGroup) )
                 return pMsg;
         }
     }
@@ -293,7 +289,7 @@ const SfxSlot* SfxSlotPool::NextSlot()
     // The numbering starts at the interfaces of the parent pool
     sal_uInt16 nFirstInterface = _pParentPool ? _pParentPool->_pInterfaces->Count() : 0;
 
-    if ( _nCurInterface < nFirstInterface && _nCurGroup >= _pParentPool->_pGroups->Count() )
+    if ( _nCurInterface < nFirstInterface && _nCurGroup >= _pParentPool->_pGroups->size() )
         _nCurInterface = nFirstInterface;
 
     if ( _nCurInterface < nFirstInterface )
@@ -318,7 +314,7 @@ const SfxSlot* SfxSlotPool::NextSlot()
     while ( ++_nCurMsg < pInterface->Count() )
     {
         SfxSlot* pMsg = (*pInterface)[_nCurMsg];
-        if ( pMsg->GetGroupId() == _pGroups->GetObject(_nCurGroup) )
+        if ( pMsg->GetGroupId() == _pGroups->at(_nCurGroup) )
             return pMsg;
     }
 
