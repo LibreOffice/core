@@ -51,6 +51,7 @@
 #include <vcl/cursor.hxx>
 #include <vcl/help.hxx>
 #include <svl/stritem.hxx>
+#include <stdio.h>
 
 #include "inputwin.hxx"
 #include "scmod.hxx"
@@ -76,12 +77,12 @@
 #include "AccessibleEditObject.hxx"
 #include "AccessibleText.hxx"
 #include <svtools/miscopt.hxx>
-#include <comphelper/string.hxx>
 
 #define TEXT_STARTPOS       3
 #define TEXT_MULTI_STARTPOS 5
 #define THESIZE             1000000 //!!! langt... :-)
 #define TBX_WINDOW_HEIGHT   22 // in Pixeln - fuer alle Systeme gleich?
+#define LEFT_OFFSET         5
 
 enum ScNameInputType
 {
@@ -160,7 +161,8 @@ ScInputWindow::ScInputWindow( Window* pParent, SfxBindings* pBind ) :
         aTextCancel     ( ScResId( SCSTR_QHELP_BTNCANCEL ) ),
         aTextSum        ( ScResId( SCSTR_QHELP_BTNSUM ) ),
         aTextEqual      ( ScResId( SCSTR_QHELP_BTNEQUAL ) ),
-        bIsOkCancelMode ( false )
+        bIsOkCancelMode ( false ),
+        bIsMultiLine    ( false )
 {
     ScModule*        pScMod  = SC_MOD();
     SfxImageManager* pImgMgr = SfxImageManager::GetImageManager( pScMod );
@@ -177,7 +179,7 @@ ScInputWindow::ScInputWindow( Window* pParent, SfxBindings* pBind ) :
     }
     OSL_ENSURE( pViewSh, "no view shell for input window" );
 
-    // Positionsfenster, 3 Buttons, Eingabefenster
+    // Position window, 3 buttons, input window
     InsertWindow    ( 1, &aWndPos, 0,                                     0 );
     InsertSeparator (                                                     1 );
     InsertItem      ( SID_INPUT_FUNCTION, IMAGE( SID_INPUT_FUNCTION ), 0, 2 );
@@ -478,7 +480,7 @@ void ScInputWindow::Select()
             aTextWindow.StartEditEngine();
             if ( pScMod->IsEditMode() )         // nicht, wenn z.B. geschuetzt
             {
-                aTextWindow.GrabFocus();
+                aTextWindow.StartEditEngine();
                 aTextWindow.SetTextString( '=' );
 
                 EditView* pView = aTextWindow.GetEditView();
@@ -499,19 +501,33 @@ void ScInputWindow::Resize()
 {
     ToolBox::Resize();
 
-    long nWidth = GetSizePixel().Width();
-    long nLeft  = aTextWindow.GetPosPixel().X();
-    Size aSize  = aTextWindow.GetSizePixel();
-
-    aSize.Width() = Max( ((long)(nWidth - nLeft - 5)), (long)0 );
     if ( lcl_isExperimentalMode() )
     {
-        aSize.Height()= TBX_WINDOW_HEIGHT;
-        aTextWindow.SetSizePixel( aSize );
+        Size aSize = GetSizePixel();
+        //aTextWindow.SetSizePixel( aSize );
+        if( bIsMultiLine )
+        {
+        aSize.Height()=77;
+        }
+        else
+        {
+        aSize.Height()=33;
+        }
+        SetSizePixel(aSize);
+        //Invalidate();
         aTextWindow.Resize();
     }
-    aTextWindow.SetSizePixel( aSize );
-    aTextWindow.Invalidate();
+    else
+    {
+        long nWidth = GetSizePixel().Width();
+        long nLeft  = aTextWindow.GetPosPixel().X();
+        Size aSize  = aTextWindow.GetSizePixel();
+
+        aSize.Width() = Max( ((long)(nWidth - nLeft - 5)), (long)0 );
+
+        aTextWindow.SetSizePixel( aSize );
+        aTextWindow.Invalidate();
+    }
 }
 
 void ScInputWindow::SetFuncString( const String& rString, sal_Bool bDoEdit )
@@ -724,18 +740,33 @@ void ScInputWindow::DataChanged( const DataChangedEvent& rDCEvt )
     ToolBox::DataChanged( rDCEvt );
 }
 
+bool ScInputWindow::GetMultiLineStatus()
+{
+    return bIsMultiLine;
+}
+
+void ScInputWindow::SetMultiLineStatus(bool bMode)
+{
+    bIsMultiLine=bMode;
+}
+
+
 //========================================================================
 //                  ScInputBarGroup
 //========================================================================
 
 ScInputBarGroup::ScInputBarGroup(Window* pParent)
     :   ScTextWndBase        ( pParent, WinBits(WB_HIDE) ),
-        aTextWindow      ( this ),
-        bIsMultiLine    ( false )
+        aMultiTextWnd        ( this ),
+        aButton              ( this)
 {
-      aTextWindow.Show();
-      aTextWindow.SetQuickHelpText( ScResId( SCSTR_QHELP_INPUTWND ) );
-      aTextWindow.SetHelpId     ( HID_INSWIN_INPUT );
+      aMultiTextWnd.Show();
+      aMultiTextWnd.SetQuickHelpText( ScResId( SCSTR_QHELP_INPUTWND ) );
+      aMultiTextWnd.SetHelpId		( HID_INSWIN_INPUT );
+
+      aButton.SetClickHdl	( LINK( this, ScInputBarGroup, ClickHdl ) );
+      aButton.Show();
+      aButton.Enable();
 }
 
 ScInputBarGroup::~ScInputBarGroup()
@@ -746,78 +777,139 @@ ScInputBarGroup::~ScInputBarGroup()
 void
 ScInputBarGroup::InsertAccessibleTextData( ScAccessibleEditLineTextData& rTextData )
 {
-    aTextWindow.InsertAccessibleTextData( rTextData );
+    aMultiTextWnd.InsertAccessibleTextData( rTextData );
 }
 
 void
 ScInputBarGroup::RemoveAccessibleTextData( ScAccessibleEditLineTextData& rTextData )
 {
-    aTextWindow.RemoveAccessibleTextData( rTextData );
+    aMultiTextWnd.RemoveAccessibleTextData( rTextData );
 }
 
 const String&
 ScInputBarGroup::GetTextString() const
 {
-    return aTextWindow.GetTextString();
+    return aMultiTextWnd.GetTextString();
 }
 
 void ScInputBarGroup::SetTextString( const String& rString )
 {
-    aTextWindow.SetTextString(rString);
+    aMultiTextWnd.SetTextString(rString);
 }
 
 void ScInputBarGroup::Resize()
 {
-    long nWidth = GetSizePixel().Width();
-    long nLeft  = aTextWindow.GetPosPixel().X();
-    Size aSize  = aTextWindow.GetSizePixel();
+    Window *w=GetParent();
+    ScInputWindow *pParent;
+    pParent=dynamic_cast<ScInputWindow*>(w);
 
-    aSize.Width() = Max( ((long)(nWidth - nLeft - 40)), (long)0 );
-    aSize.Height()=22;
-    aTextWindow.SetSizePixel( aSize );
-    aTextWindow.Invalidate();
+    if(pParent==NULL)
+    {
+        OSL_FAIL("The parent window pointer pParent is null");
+        return;
+    }
+
+    long nWidth = pParent->GetSizePixel().Width();
+    Point aPos  = GetPosPixel();
+    Size aSize  = GetSizePixel();
+    aSize.Width() = Max( ((long)(nWidth - aPos.X() - LEFT_OFFSET)), (long)0 );
+
+    if(pParent->GetMultiLineStatus())
+    {
+        aSize.Height()=3*TBX_WINDOW_HEIGHT;
+    }
+    else
+    {
+        aSize.Height()=TBX_WINDOW_HEIGHT;
+    }
+    SetPosSizePixel(aPos,aSize);
+    Invalidate();
+
+    aButton.SetPosSizePixel(Point(aSize.Width()-3*LEFT_OFFSET,0),Size(0.5*TBX_WINDOW_HEIGHT,TBX_WINDOW_HEIGHT));
+
+    aMultiTextWnd.Resize();
 }
+
 
 void ScInputBarGroup::GainFocus()
 {
-    aTextWindow.GrabFocus();
+    aMultiTextWnd.GrabFocus();
 }
 
 
 void ScInputBarGroup::StopEditEngine( sal_Bool bAll )
 {
-    aTextWindow.StopEditEngine( bAll );
+    aMultiTextWnd.StopEditEngine( bAll );
 }
 
 void ScInputBarGroup::StartEditEngine()
 {
-    aTextWindow.StartEditEngine();
+    aMultiTextWnd.StartEditEngine();
 }
+
 
 void ScInputBarGroup::MakeDialogEditView()
 {
-    aTextWindow.MakeDialogEditView();
+    aMultiTextWnd.MakeDialogEditView();
 }
 
 
 EditView* ScInputBarGroup::GetEditView()
 {
-    return aTextWindow.GetEditView();
+    return aMultiTextWnd.GetEditView();
 }
 
 sal_Bool ScInputBarGroup::IsInputActive()
 {
-    return aTextWindow.IsInputActive();
+    return aMultiTextWnd.IsInputActive();
 }
 
 void ScInputBarGroup::SetFormulaMode(sal_Bool bSet)
 {
-    aTextWindow.SetFormulaMode(bSet);
+    aMultiTextWnd.SetFormulaMode(bSet);
 }
+
+IMPL_LINK( ScInputBarGroup, ClickHdl, PushButton*, pBtn )
+{
+    Window *w=GetParent();
+    ScInputWindow *pParent;
+    pParent=dynamic_cast<ScInputWindow*>(w);
+
+    if(pParent==NULL)
+    {
+        OSL_FAIL("The parent window pointer pParent is null");
+        return 1;
+    }
+
+    if(!pParent->GetMultiLineStatus())
+    {
+        pParent->SetMultiLineStatus(true);
+    }
+    else
+    {
+        pParent->SetMultiLineStatus(false);
+    }
+    pParent->Resize();
+    pParent->RecalcItems();
+    return 0;
+}
+
+//========================================================================
+//                      ScMultiTextWnd
+//========================================================================
 
 ScMultiTextWnd::ScMultiTextWnd( Window* pParen ) : ScTextWnd( pParen )
 {
     nTextStartPos = TEXT_MULTI_STARTPOS;
+}
+
+int ScMultiTextWnd::GetLineCount()
+{
+   if(pEditView)
+   {
+       return pEditEngine->GetLineCount(0);
+   }
+   return 1;
 }
 
 void ScMultiTextWnd::Paint( const Rectangle& rRec )
@@ -834,21 +926,225 @@ void ScMultiTextWnd::Paint( const Rectangle& rRec )
 
 void ScMultiTextWnd::Resize()
 {
-    if (pEditView)
-    {
-        Size aSize = GetOutputSizePixel();
+    Window *w=GetParent()->GetParent();
+    ScInputWindow *pParent;
+    pParent=dynamic_cast<ScInputWindow*>(w);
 
-        Size bSize = LogicToPixel(Size(0,pEditEngine->GetLineHeight(0,0)));
-        int nDiff=(aSize.Height()-bSize.Height())/2;
-        Point aPos(nTextStartPos,nDiff*aSize.Height()/aSize.Height());
-        Point aPos2(aSize.Width()-5,(aSize.Height()-nDiff)*aSize.Height()/aSize.Height());
-        pEditView->SetOutputArea(
-            PixelToLogic(Rectangle(aPos, aPos2)));
+    if(pParent==NULL)
+    {
+        OSL_FAIL("The parent window pointer pParent is null");
+        return;
+    }
+
+
+    long nWidth = GetParent()->GetSizePixel().Width();
+    Point aPos=GetPosPixel();
+    Size aTextBoxSize  = GetSizePixel();
+    aTextBoxSize.Width() = Max( ((long)(nWidth - aPos.X() - 3*LEFT_OFFSET)), (long)0 );
+
+    if(pParent->GetMultiLineStatus())
+    {
+        aTextBoxSize.Height()=3*LogicToPixel(Size(0,GetTextHeight())).Height()+8;
+
+        if(pEditView)
+        {
+            Size aOutputSize=GetOutputSizePixel();
+            Size aLineSize = LogicToPixel(Size(0,pEditEngine->GetLineHeight(0,0)));
+
+            int nDiff = (aOutputSize.Height() - 3*aLineSize.Height())/2;
+
+            Point aPos1(TEXT_STARTPOS,nDiff);
+            Point aPos2(aOutputSize.Width()-5,aOutputSize.Height()-2);
+
+            pEditView->SetOutputArea(
+                PixelToLogic(Rectangle(aPos1, aPos2)));
+
+        }
+
+    }
+
+    else
+    {
+
+        aTextBoxSize.Height()=TBX_WINDOW_HEIGHT;
+        if(pEditView)
+        {
+            Size aOutputSize=GetOutputSizePixel();
+            Size aLineSize = LogicToPixel(Size(0,pEditEngine->GetLineHeight(0,0)));
+
+            int nDiff = (aOutputSize.Height() - aLineSize.Height())/2;
+
+            Point aPos1(TEXT_STARTPOS,nDiff);
+            Point aPos2(aOutputSize.Width()-5,(aOutputSize.Height() - nDiff));
+            pEditView->SetOutputArea(
+                PixelToLogic(Rectangle(aPos1, aPos2)));
+        }
+
+    }
+
+    SetPosSizePixel(aPos,aTextBoxSize);
+}
+
+
+
+void ScMultiTextWnd::StartEditEngine()
+{
+    //	Bei "eigener Modalitaet" (Doc-modale Dialoge) nicht aktivieren
+
+    SfxObjectShell* pObjSh = SfxObjectShell::Current();
+    if ( pObjSh && pObjSh->IsInModalMode() )
+        return;
+
+    if ( !pEditView || !pEditEngine )
+    {
+        InitEditEngine(pObjSh);
+    }
+
+    SC_MOD()->SetInputMode( SC_INPUT_TOP );
+
+    SfxViewFrame* pViewFrm = SfxViewFrame::Current();
+    if (pViewFrm)
+        pViewFrm->GetBindings().Invalidate( SID_ATTR_INSERT );
+}
+
+void lcl_ExtendEditFontAttribs( SfxItemSet& rSet )
+{
+    const SfxPoolItem& rFontItem = rSet.Get( EE_CHAR_FONTINFO );
+    rSet.Put( rFontItem, EE_CHAR_FONTINFO_CJK );
+    rSet.Put( rFontItem, EE_CHAR_FONTINFO_CTL );
+    const SfxPoolItem& rHeightItem = rSet.Get( EE_CHAR_FONTHEIGHT );
+    rSet.Put( rHeightItem, EE_CHAR_FONTHEIGHT_CJK );
+    rSet.Put( rHeightItem, EE_CHAR_FONTHEIGHT_CTL );
+    const SfxPoolItem& rWeightItem = rSet.Get( EE_CHAR_WEIGHT );
+    rSet.Put( rWeightItem, EE_CHAR_WEIGHT_CJK );
+    rSet.Put( rWeightItem, EE_CHAR_WEIGHT_CTL );
+    const SfxPoolItem& rItalicItem = rSet.Get( EE_CHAR_ITALIC );
+    rSet.Put( rItalicItem, EE_CHAR_ITALIC_CJK );
+    rSet.Put( rItalicItem, EE_CHAR_ITALIC_CTL );
+    const SfxPoolItem& rLangItem = rSet.Get( EE_CHAR_LANGUAGE );
+    rSet.Put( rLangItem, EE_CHAR_LANGUAGE_CJK );
+    rSet.Put( rLangItem, EE_CHAR_LANGUAGE_CTL );
+}
+
+void lcl_ModifyRTLDefaults( SfxItemSet& rSet )
+{
+    rSet.Put( SvxAdjustItem( SVX_ADJUST_RIGHT, EE_PARA_JUST ) );
+
+    //	always using rtl writing direction would break formulas
+    //rSet.Put( SvxFrameDirectionItem( FRMDIR_HORI_RIGHT_TOP, EE_PARA_WRITINGDIR ) );
+
+    //	PaperSize width is limited to USHRT_MAX in RTL mode (because of EditEngine's
+    //	sal_uInt16 values in EditLine), so the text may be wrapped and line spacing must be
+    //	increased to not see the beginning of the next line.
+    SvxLineSpacingItem aItem( SVX_LINESPACE_TWO_LINES, EE_PARA_SBL );
+    aItem.SetPropLineSpace( 200 );
+    rSet.Put( aItem );
+}
+
+void lcl_ModifyRTLVisArea( EditView* pEditView )
+{
+    Rectangle aVisArea = pEditView->GetVisArea();
+    Size aPaper = pEditView->GetEditEngine()->GetPaperSize();
+    long nDiff = aPaper.Width() - aVisArea.Right();
+    aVisArea.Left()  += nDiff;
+    aVisArea.Right() += nDiff;
+    pEditView->SetVisArea(aVisArea);
+}
+
+
+void ScMultiTextWnd::InitEditEngine(SfxObjectShell* pObjSh)
+{
+    ScFieldEditEngine* pNew;
+    ScTabViewShell* pViewSh = ScTabViewShell::GetActiveViewShell();
+    if ( pViewSh )
+    {
+        const ScDocument* pDoc = pViewSh->GetViewData()->GetDocument();
+        pNew = new ScFieldEditEngine( pDoc->GetEnginePool(), pDoc->GetEditPool() );
+    }
+    else
+        pNew = new ScFieldEditEngine( EditEngine::CreatePool(),	NULL, sal_True );
+    pNew->SetExecuteURL( false );
+    pEditEngine = pNew;
+
+    Size barSize=GetOutputSizePixel();
+
+    long barHeight=barSize.Height();
+    long textHeight=LogicToPixel( Size( 0, GetTextHeight() ) ).Height();
+    long nDiff =  barHeight - textHeight;
+
+    barSize.Height()=nDiff+barHeight;
+    barSize.Width() -= 2*nTextStartPos-4;
+    pEditEngine->SetUpdateMode( false );
+    pEditEngine->SetPaperSize( PixelToLogic(Size(barSize.Width(),10000)) );
+    pEditEngine->SetWordDelimiters(
+                    ScEditUtil::ModifyDelimiters( pEditEngine->GetWordDelimiters() ) );
+
+    UpdateAutoCorrFlag();
+
+    {
+        SfxItemSet* pSet = new SfxItemSet( pEditEngine->GetEmptyItemSet() );
+        pEditEngine->SetFontInfoInItemSet( *pSet, aTextFont );
+        lcl_ExtendEditFontAttribs( *pSet );
+        // turn off script spacing to match DrawText output
+        pSet->Put( SvxScriptSpaceItem( false, EE_PARA_ASIANCJKSPACING ) );
+        if ( bIsRTL )
+            lcl_ModifyRTLDefaults( *pSet );
+        pEditEngine->SetDefaults( pSet );
+    }
+
+    //	Wenn in der Zelle URL-Felder enthalten sind, muessen die auch in
+    //	die Eingabezeile uebernommen werden, weil sonst die Positionen nicht stimmen.
+
+    sal_Bool bFilled = false;
+    ScInputHandler* pHdl = SC_MOD()->GetInputHdl();
+    if ( pHdl )			//!	Testen, ob's der richtige InputHdl ist?
+        bFilled = pHdl->GetTextAndFields( *pEditEngine );
+
+    pEditEngine->SetUpdateMode( sal_True );
+
+    //	aString ist die Wahrheit...
+    if ( bFilled && pEditEngine->GetText() == aString )
+        Invalidate();						// Repaint fuer (hinterlegte) Felder
+    else
+        pEditEngine->SetText(aString);		// dann wenigstens den richtigen Text
+
+    pEditView = new EditView( pEditEngine, this );
+    pEditView->SetInsertMode(bIsInsertMode);
+
+    // Text aus Clipboard wird als ASCII einzeilig uebernommen
+    sal_uLong n = pEditView->GetControlWord();
+    pEditView->SetControlWord( n | EV_CNTRL_SINGLELINEPASTE	);
+
+    pEditEngine->InsertView( pEditView, EE_APPEND );
+
+    Resize();
+
+    if ( bIsRTL )
+        lcl_ModifyRTLVisArea( pEditView );
+
+    pEditEngine->SetModifyHdl(LINK(this, ScTextWnd, NotifyHdl));
+
+    if (!maAccTextDatas.empty())
+        maAccTextDatas.back()->StartEdit();
+
+    //	as long as EditEngine and DrawText sometimes differ for CTL text,
+    //	repaint now to have the EditEngine's version visible
+//        SfxObjectShell* pObjSh = SfxObjectShell::Current();
+    if ( pObjSh && pObjSh->ISA(ScDocShell) )
+    {
+        ScDocument* pDoc = ((ScDocShell*)pObjSh)->GetDocument();	// any document
+        sal_uInt8 nScript = pDoc->GetStringScriptType( aString );
+        if ( nScript & SCRIPTTYPE_COMPLEX )
+            Invalidate();
     }
 }
 
+void ScMultiTextWnd::StopEditEngine( sal_Bool /*bAll*/ )
+{
+}
+
 //========================================================================
-//                          Eingabefenster
+// 							ScTextWnd
 //========================================================================
 
 ScTextWnd::ScTextWnd( Window* pParent )
@@ -1113,161 +1409,6 @@ void ScTextWnd::UpdateAutoCorrFlag()
         if ( nControl != nOld )
             pEditEngine->SetControlWord( nControl );
     }
-}
-
-void lcl_ExtendEditFontAttribs( SfxItemSet& rSet )
-{
-    const SfxPoolItem& rFontItem = rSet.Get( EE_CHAR_FONTINFO );
-    rSet.Put( rFontItem, EE_CHAR_FONTINFO_CJK );
-    rSet.Put( rFontItem, EE_CHAR_FONTINFO_CTL );
-    const SfxPoolItem& rHeightItem = rSet.Get( EE_CHAR_FONTHEIGHT );
-    rSet.Put( rHeightItem, EE_CHAR_FONTHEIGHT_CJK );
-    rSet.Put( rHeightItem, EE_CHAR_FONTHEIGHT_CTL );
-    const SfxPoolItem& rWeightItem = rSet.Get( EE_CHAR_WEIGHT );
-    rSet.Put( rWeightItem, EE_CHAR_WEIGHT_CJK );
-    rSet.Put( rWeightItem, EE_CHAR_WEIGHT_CTL );
-    const SfxPoolItem& rItalicItem = rSet.Get( EE_CHAR_ITALIC );
-    rSet.Put( rItalicItem, EE_CHAR_ITALIC_CJK );
-    rSet.Put( rItalicItem, EE_CHAR_ITALIC_CTL );
-    const SfxPoolItem& rLangItem = rSet.Get( EE_CHAR_LANGUAGE );
-    rSet.Put( rLangItem, EE_CHAR_LANGUAGE_CJK );
-    rSet.Put( rLangItem, EE_CHAR_LANGUAGE_CTL );
-}
-
-void lcl_ModifyRTLDefaults( SfxItemSet& rSet )
-{
-    rSet.Put( SvxAdjustItem( SVX_ADJUST_RIGHT, EE_PARA_JUST ) );
-
-    //  always using rtl writing direction would break formulas
-    //rSet.Put( SvxFrameDirectionItem( FRMDIR_HORI_RIGHT_TOP, EE_PARA_WRITINGDIR ) );
-
-    //  PaperSize width is limited to USHRT_MAX in RTL mode (because of EditEngine's
-    //  sal_uInt16 values in EditLine), so the text may be wrapped and line spacing must be
-    //  increased to not see the beginning of the next line.
-    SvxLineSpacingItem aItem( SVX_LINESPACE_TWO_LINES, EE_PARA_SBL );
-    aItem.SetPropLineSpace( 200 );
-    rSet.Put( aItem );
-}
-
-void lcl_ModifyRTLVisArea( EditView* pEditView )
-{
-    Rectangle aVisArea = pEditView->GetVisArea();
-    Size aPaper = pEditView->GetEditEngine()->GetPaperSize();
-    long nDiff = aPaper.Width() - aVisArea.Right();
-    aVisArea.Left()  += nDiff;
-    aVisArea.Right() += nDiff;
-    pEditView->SetVisArea(aVisArea);
-}
-
-void ScMultiTextWnd::StartEditEngine()
-{
-    //  Bei "eigener Modalitaet" (Doc-modale Dialoge) nicht aktivieren
-
-    SfxObjectShell* pObjSh = SfxObjectShell::Current();
-    if ( pObjSh && pObjSh->IsInModalMode() )
-        return;
-
-    if ( !pEditView || !pEditEngine )
-    {
-        InitEditEngine(pObjSh);
-    }
-
-    SC_MOD()->SetInputMode( SC_INPUT_TOP );
-
-    SfxViewFrame* pViewFrm = SfxViewFrame::Current();
-    if (pViewFrm)
-        pViewFrm->GetBindings().Invalidate( SID_ATTR_INSERT );
-}
-
-void ScMultiTextWnd::InitEditEngine(SfxObjectShell* pObjSh)
-{
-    ScFieldEditEngine* pNew;
-    ScTabViewShell* pViewSh = ScTabViewShell::GetActiveViewShell();
-    if ( pViewSh )
-    {
-        const ScDocument* pDoc = pViewSh->GetViewData()->GetDocument();
-        pNew = new ScFieldEditEngine( pDoc->GetEnginePool(), pDoc->GetEditPool() );
-    }
-    else
-        pNew = new ScFieldEditEngine( EditEngine::CreatePool(), NULL, sal_True );
-    pNew->SetExecuteURL( false );
-    pEditEngine = pNew;
-
-    Size barSize=GetOutputSizePixel();
-
-    long barHeight=barSize.Height();
-    long textHeight=LogicToPixel( Size( 0, GetTextHeight() ) ).Height();
-    long nDiff =  barHeight - textHeight;
-
-    barSize.Height()=nDiff+barHeight;
-    barSize.Width() -= 2*nTextStartPos-4;
-    pEditEngine->SetUpdateMode( false );
-    pEditEngine->SetPaperSize( PixelToLogic(Size(barSize.Width(),10000)) );
-    pEditEngine->SetWordDelimiters(
-                    ScEditUtil::ModifyDelimiters( pEditEngine->GetWordDelimiters() ) );
-
-    UpdateAutoCorrFlag();
-
-    {
-        SfxItemSet* pSet = new SfxItemSet( pEditEngine->GetEmptyItemSet() );
-        pEditEngine->SetFontInfoInItemSet( *pSet, aTextFont );
-        lcl_ExtendEditFontAttribs( *pSet );
-        // turn off script spacing to match DrawText output
-        pSet->Put( SvxScriptSpaceItem( false, EE_PARA_ASIANCJKSPACING ) );
-        if ( bIsRTL )
-            lcl_ModifyRTLDefaults( *pSet );
-        pEditEngine->SetDefaults( pSet );
-    }
-
-    //  Wenn in der Zelle URL-Felder enthalten sind, muessen die auch in
-    //  die Eingabezeile uebernommen werden, weil sonst die Positionen nicht stimmen.
-
-    sal_Bool bFilled = false;
-    ScInputHandler* pHdl = SC_MOD()->GetInputHdl();
-    if ( pHdl )         //! Testen, ob's der richtige InputHdl ist?
-        bFilled = pHdl->GetTextAndFields( *pEditEngine );
-
-    pEditEngine->SetUpdateMode( sal_True );
-
-    //  aString ist die Wahrheit...
-    if ( bFilled && pEditEngine->GetText() == aString )
-        Invalidate();                       // Repaint fuer (hinterlegte) Felder
-    else
-        pEditEngine->SetText(aString);      // dann wenigstens den richtigen Text
-
-    pEditView = new EditView( pEditEngine, this );
-    pEditView->SetInsertMode(bIsInsertMode);
-
-    // Text aus Clipboard wird als ASCII einzeilig uebernommen
-    sal_uLong n = pEditView->GetControlWord();
-    pEditView->SetControlWord( n | EV_CNTRL_SINGLELINEPASTE );
-
-    pEditEngine->InsertView( pEditView, EE_APPEND );
-
-    Resize();
-
-    if ( bIsRTL )
-        lcl_ModifyRTLVisArea( pEditView );
-
-    pEditEngine->SetModifyHdl(LINK(this, ScTextWnd, NotifyHdl));
-
-    if (!maAccTextDatas.empty())
-        maAccTextDatas.back()->StartEdit();
-
-    //  as long as EditEngine and DrawText sometimes differ for CTL text,
-    //  repaint now to have the EditEngine's version visible
-//        SfxObjectShell* pObjSh = SfxObjectShell::Current();
-    if ( pObjSh && pObjSh->ISA(ScDocShell) )
-    {
-        ScDocument* pDoc = ((ScDocShell*)pObjSh)->GetDocument();    // any document
-        sal_uInt8 nScript = pDoc->GetStringScriptType( aString );
-        if ( nScript & SCRIPTTYPE_COMPLEX )
-            Invalidate();
-    }
-}
-
-void ScMultiTextWnd::StopEditEngine( sal_Bool /*bAll*/ )
-{
 }
 
 void ScTextWnd::StartEditEngine()

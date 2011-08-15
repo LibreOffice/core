@@ -33,6 +33,7 @@
 #include <vcl/toolbox.hxx>
 #include <sfx2/childwin.hxx>
 #include <svl/lstner.hxx>
+#include <vcl/button.hxx>
 #include <vcl/combobox.hxx>
 #include <vcl/window.hxx>
 #include <svtools/transfer.hxx>
@@ -171,11 +172,14 @@ public:
     ScMultiTextWnd( Window* pParent );
     virtual void StartEditEngine();
     virtual void StopEditEngine( sal_Bool bAll );
+    int GetLineCount();
+    virtual void Resize();
 protected:
     void InitEditEngine(SfxObjectShell* pObjSh);
 
     virtual void Paint( const Rectangle& rRec );
-    virtual void Resize();
+private:
+//    bool bIsMultiLine;
 };
 
 class ScInputBarGroup : public ScTextWndBase
@@ -203,8 +207,11 @@ public:
 
 private:
 
-    ScMultiTextWnd      aTextWindow;
-    bool            bIsMultiLine;
+    ScMultiTextWnd  aMultiTextWnd;
+    PushButton      aButton;
+//    bool            bIsMultiLine;
+
+    DECL_LINK( ClickHdl,	 PushButton* );
 
 };
 
@@ -248,7 +255,8 @@ public:
 
     void            StateChanged( StateChangedType nType );
     virtual void    DataChanged( const DataChangedEvent& rDCEvt );
-
+    void SetMultiLineStatus(bool bMode);
+    bool GetMultiLineStatus();
 
 protected:
     virtual void    SetText( const String& rString );
@@ -267,6 +275,7 @@ private:
     String          aTextSum;
     String          aTextEqual;
     sal_Bool            bIsOkCancelMode;
+    bool            bIsMultiLine;
 };
 
 //==================================================================
