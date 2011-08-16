@@ -27,11 +27,11 @@
 
 .intel_syntax
 
-.globl _DllMgr_call32
-.globl _DllMgr_callFp
+.globl _DllMgr_call32@12
+.globl _DllMgr_callFp@12
 
-_DllMgr_call32:
-_DllMgr_callFp:
+_DllMgr_call32@12:
+_DllMgr_callFp@12:
     push ebp
     mov ebp, esp
     push esi
