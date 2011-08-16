@@ -585,6 +585,8 @@ void DocxAttributeOutput::EndRun()
     // append the actual run end
     m_pSerializer->endElementNS( XML_w, XML_r );
 
+    WritePostponedMath();
+
     while ( m_Fields.begin() != m_Fields.end() )
     {
         EndField_Impl( m_Fields.front( ) );
@@ -2302,12 +2304,25 @@ bool DocxAttributeOutput::WriteOLEMath( const SdrObject*, const SwOLENode& rOLEN
 
     if( !SotExchange::IsMath(aObjName) )
         return false;
-    uno::Reference< uno::XInterface > xInterface( aObjRef->getComponent(), uno::UNO_QUERY );
-    OoxmlFormulaExportBase* formulaexport = dynamic_cast< OoxmlFormulaExportBase* >( xInterface.get());
-    if( formulaexport == NULL )
-        return false;
-    formulaexport->writeFormulaOoxml( m_pSerializer );
+    assert( m_postponedMath == NULL ); // make it a list if there can be more inside one run
+    m_postponedMath = &rOLENode;
     return true;
+}
+
+void DocxAttributeOutput::WritePostponedMath()
+{
+    if( m_postponedMath == NULL )
+        return;
+    uno::Reference < embed::XEmbeddedObject > xObj(const_cast<SwOLENode*>(m_postponedMath)->GetOLEObj().GetOleRef());
+    sal_Int64 nAspect = m_postponedMath->GetAspect();
+    svt::EmbeddedObjectRef aObjRef( xObj, nAspect );
+
+    uno::Reference< uno::XInterface > xInterface( aObjRef->getComponent(), uno::UNO_QUERY );
+    if( OoxmlFormulaExportBase* formulaexport = dynamic_cast< OoxmlFormulaExportBase* >( xInterface.get()))
+        formulaexport->writeFormulaOoxml( m_pSerializer );
+    else
+        OSL_FAIL( "Math OLE object cannot write out OOXML" );
+    m_postponedMath = NULL;
 }
 
 void DocxAttributeOutput::OutputFlyFrame_Impl( const sw::Frame &rFrame, const Point& /*rNdTopLeft*/ )
@@ -4341,6 +4356,7 @@ DocxAttributeOutput::DocxAttributeOutput( DocxExport &rExport, FSHelperPtr pSeri
       m_pParentFrame( NULL ),
       m_nCloseHyperlinkStatus( Undetected ),
       m_postponedGraphic( NULL ),
+      m_postponedMath( NULL ),
       m_postitFieldsMaxId( 0 )
 {
 }

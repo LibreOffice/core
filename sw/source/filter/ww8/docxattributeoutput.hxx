@@ -530,6 +530,7 @@ private:
 
     void DoWriteBookmarks( );
     void WritePostponedGraphic();
+    void WritePostponedMath();
 
     void StartField_Impl( FieldInfos& rInfos, sal_Bool bWriteRun = sal_False );
     void DoWriteCmd( String& rCmd );
@@ -603,6 +604,7 @@ private:
         Size size;
     };
     std::list< PostponedGraphic >* m_postponedGraphic;
+    const SwOLENode* m_postponedMath;
     std::vector< const SwPostItField* > m_postitFields;
     unsigned int m_postitFieldsMaxId;
 
