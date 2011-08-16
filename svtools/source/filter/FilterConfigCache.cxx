@@ -323,8 +323,8 @@ void FilterConfigCache::ImplInitSmart()
         aEntry.sType = sExtension;
         aEntry.sUIName = sExtension;
 
-        ByteString sFlags( *pPtr++ );
-        aEntry.nFlags = sFlags.ToInt32();
+        rtl::OString sFlags( *pPtr++ );
+        aEntry.nFlags = sFlags.toInt32();
 
         OUString    sUserData( OUString::createFromAscii( *pPtr ) );
         aEntry.CreateFilterName( sUserData );
