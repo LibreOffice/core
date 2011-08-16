@@ -273,7 +273,6 @@ private:
     SVT_DLLPRIVATE void         ImplDrawSelect();
     SVT_DLLPRIVATE void         ImplHideSelect( sal_uInt16 nItemId );
     SVT_DLLPRIVATE void         ImplHighlightItem( sal_uInt16 nItemId, sal_Bool bIsSelection = sal_True );
-    SVT_DLLPRIVATE void         ImplDrawDropPos( sal_Bool bShow );
     SVT_DLLPRIVATE void         ImplDraw();
     using Window::ImplScroll;
     SVT_DLLPRIVATE sal_Bool         ImplScroll( const Point& rPos );
