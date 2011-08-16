@@ -200,7 +200,7 @@ FormViewPageWindowAdapter::FormViewPageWindowAdapter( const ::comphelper::Compon
                     setController( xForm, NULL );
             }
         }
-        catch( const Exception& )
+        catch (const Exception&)
         {
             DBG_UNHANDLED_EXCEPTION();
         }
@@ -237,7 +237,7 @@ void FormViewPageWindowAdapter::dispose()
             Reference< XComponent > xComp( xController, UNO_QUERY_THROW );
             xComp->dispose();
         }
-        catch( const Exception& )
+        catch (const Exception&)
         {
             DBG_UNHANDLED_EXCEPTION();
         }
@@ -430,7 +430,7 @@ void FormViewPageWindowAdapter::updateTabOrder( const Reference< XForm >& _rxFor
             setController( _rxForm, xParentController );
         }
     }
-    catch( const Exception& )
+    catch (const Exception&)
     {
         DBG_UNHANDLED_EXCEPTION();
     }
@@ -554,7 +554,7 @@ void SAL_CALL FmXFormView::elementInserted(const ContainerEvent& evt) throw( Run
                 pAdapter->updateTabOrder( xForm );
         }
     }
-    catch( const Exception& )
+    catch (const Exception&)
     {
         DBG_UNHANDLED_EXCEPTION();
     }
@@ -833,7 +833,7 @@ bool FmXFormView::isFocusable( const Reference< XControl >& i_rControl )
             return true;
         }
     }
-    catch( const Exception& e )
+    catch (const Exception&)
     {
         DBG_UNHANDLED_EXCEPTION();
     }
@@ -892,7 +892,7 @@ namespace
                 pFormObject->GetUnoControl( _rView, _rWindow );
             }
         }
-        catch( const Exception& )
+        catch (const Exception&)
         {
             DBG_UNHANDLED_EXCEPTION();
         }
@@ -985,7 +985,7 @@ IMPL_LINK(FmXFormView, OnAutoFocus, void*, /*EMPTYTAG*/)
             m_pView->MakeVisible( pCurrentWindow->PixelToLogic( aNonUnoRect ), *const_cast< Window* >( pCurrentWindow ) );
         }
     }
-    catch( const Exception& )
+    catch (const Exception&)
     {
         DBG_UNHANDLED_EXCEPTION();
     }
@@ -1046,7 +1046,7 @@ IMPL_LINK( FmXFormView, OnStartControlWizard, void*, /**/ )
     {
         OSL_VERIFY( m_xLastCreatedControlModel->getPropertyValue( FM_PROP_CLASSID ) >>= nClassId );
     }
-    catch( const Exception& )
+    catch (const Exception&)
     {
         DBG_UNHANDLED_EXCEPTION();
     }
@@ -1078,7 +1078,7 @@ IMPL_LINK( FmXFormView, OnStartControlWizard, void*, /**/ )
         {
             m_aContext.createComponentWithArguments( pWizardAsciiName, aWizardArgs.getWrappedPropertyValues(), xWizard );
         }
-        catch( const Exception& )
+        catch (const Exception&)
         {
             DBG_UNHANDLED_EXCEPTION();
         }
@@ -1094,7 +1094,7 @@ IMPL_LINK( FmXFormView, OnStartControlWizard, void*, /**/ )
             {
                 xWizard->execute();
             }
-            catch( const Exception& )
+            catch (const Exception&)
             {
                 DBG_UNHANDLED_EXCEPTION();
             }
@@ -1181,11 +1181,14 @@ SdrObject* FmXFormView::implCreateFieldControl( const ::svx::ODataAccessDescript
                 m_aContext.getLegacyServiceFactory()
             ) );
     }
-    catch ( const SQLException& )
+    catch (const SQLException&)
     {
         aError.Reason = ::cppu::getCaughtException();
     }
-    catch( const Exception& ) { /* will be asserted below */ }
+    catch (const Exception& )
+    {
+        /* will be asserted below */
+    }
     if (aError.Reason.hasValue())
     {
         displayAsyncErrorMessage( aError );
@@ -1348,7 +1351,7 @@ SdrObject* FmXFormView::implCreateFieldControl( const ::svx::ODataAccessDescript
 
         return pGroup; // und fertig
     }
-    catch(const Exception&)
+    catch (const Exception&)
     {
         DBG_UNHANDLED_EXCEPTION();
     }
@@ -1478,7 +1481,7 @@ SdrObject* FmXFormView::implCreateXFormsControl( const ::svx::OXFormsDescriptor 
             return pControl;
         }
     }
-    catch(const Exception&)
+    catch (const Exception&)
     {
         OSL_FAIL("FmXFormView::implCreateXFormsControl: caught an exception while creating the control !");
     }
@@ -1654,7 +1657,7 @@ bool FmXFormView::createControlLabelPair( const ::comphelper::ComponentContext& 
         {
             xControlSet->setPropertyValue( FM_PROP_CONTROLLABEL, makeAny( xLabelModel ) );
         }
-        catch( const Exception& )
+        catch (const Exception&)
         {
             DBG_UNHANDLED_EXCEPTION();
         }
