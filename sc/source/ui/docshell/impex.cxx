@@ -1363,7 +1363,19 @@ const sal_Unicode* ScImportExport::ScanNextFieldFromString( const sal_Unicode* p
 {
     rbIsQuoted = false;
     rField.Erase();
-    if ( *p == cStr )           // String in Anfuehrungszeichen
+    const sal_Unicode cBlank = ' ';
+    if (!ScGlobal::UnicodeStrChr( pSeps, cBlank))
+    {
+        // Cope with broken generators that put leading blanks before a quoted 
+        // field, like "field1", "field2", "..."
+        // NOTE: this is not in conformance with http://tools.ietf.org/html/rfc4180
+        const sal_Unicode* pb = p;
+        while (*pb == cBlank)
+            ++pb;
+        if (*pb == cStr)
+            p = pb;
+    }
+    if ( *p == cStr )           // String in quotes
     {
         rbIsQuoted = true;
         const sal_Unicode* p1;
@@ -1377,7 +1389,7 @@ const sal_Unicode* ScImportExport::ScanNextFieldFromString( const sal_Unicode* p
         if( *p )
             p++;
     }
-    else                        // bis zum Trennzeichen
+    else                        // up to delimiter
     {
         const sal_Unicode* p0 = p;
         while ( *p && !ScGlobal::UnicodeStrChr( pSeps, *p ) )
@@ -1386,7 +1398,7 @@ const sal_Unicode* ScImportExport::ScanNextFieldFromString( const sal_Unicode* p
         if( *p )
             p++;
     }
-    if ( bMergeSeps )           // folgende Trennzeichen ueberspringen
+    if ( bMergeSeps )           // skip following delimiters
     {
         while ( *p && ScGlobal::UnicodeStrChr( pSeps, *p ) )
             p++;
