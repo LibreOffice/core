@@ -1,0 +1,4 @@
+Put the msvcp70.dll and msvcr70.dll in this directory for Windows builds using a .NET compiler.
+The dll is part of the .NET installation and can be found in a directory similar
+to:
+"c:\Program Files\Microsoft Visual Studio .NET\Visual C++ .NET Professional - English\"
