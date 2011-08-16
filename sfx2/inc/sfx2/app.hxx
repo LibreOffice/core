@@ -162,7 +162,6 @@ public:
     static SfxApplication*      GetOrCreate();
 
     // Resource Manager
-    SfxResourceManager&         GetResourceManager() const;
     ResMgr*                     GetSfxResManager();
     static ResMgr*              CreateResManager( const char *pPrefix );
 
@@ -182,7 +181,6 @@ public:
 
     // "static" methods
     sal_uIntPtr                       LoadTemplate( SfxObjectShellLock& xDoc, const String& rFileName, sal_Bool bCopy=sal_True, SfxItemSet* pArgs = 0 );
-    ::com::sun::star::uno::Reference< ::com::sun::star::task::XStatusIndicator > GetStatusIndicator() const;
     SfxTemplateDialog*          GetTemplateDialog();
     Window*                     GetTopWindow() const;
 

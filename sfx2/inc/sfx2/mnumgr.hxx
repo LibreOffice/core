@@ -75,8 +75,6 @@ protected:
     sal_uInt32              GetType() { return nType; }
 public:
 
-            void            UseDefault();
-
     DECL_LINK( Select, Menu* );
 
     SfxVirtualMenu*         GetMenu() const
@@ -87,8 +85,6 @@ public:
     void                    SetResMgr(ResMgr* pMgr)  {pResMgr = pMgr; }
     ResMgr*                 GetResMgr() const { return pResMgr; }
     void                    SetPopupMenu( sal_uInt16 nId, PopupMenu *pMenu );
-
-    void            Construct_Impl( Menu* pMenu, sal_Bool bWithHelp );
 };
 
 //--------------------------------------------------------------------

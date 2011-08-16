@@ -265,61 +265,6 @@ PopupMenu* InsertThesaurusSubmenu_Impl( SfxBindings* pBindings, Menu* pSVMenu )
     return pThesSubMenu;
 }
 
-
-//--------------------------------------------------------------------
-
-void SfxMenuManager::UseDefault()
-{
-    DBG_MEMTEST();
-
-    SFX_APP();
-    SfxVirtualMenu *pOldVirtMenu=0;
-    if (pMenu)
-    {
-        pOldVirtMenu = pMenu;
-        pBindings->ENTERREGISTRATIONS();
-    }
-
-    SfxVirtualMenu *pVMenu = 0;
-    {
-        ResId aResId(GetType(),*pResMgr);
-        aResId.SetRT(RSC_MENU);
-        Menu *pSVMenu = new PopupMenu( aResId );
-
-        if ( bAddClipboardFuncs )
-        {
-            sal_uInt16 n, nCount = pSVMenu->GetItemCount();
-            for ( n=0; n<nCount; n++ )
-            {
-                sal_uInt16 nId = pSVMenu->GetItemId( n );
-                if ( nId == SID_COPY || nId == SID_CUT || nId == SID_PASTE )
-                    break;
-            }
-
-            if ( n == nCount )
-            {
-                PopupMenu aPop( SfxResId( MN_CLIPBOARDFUNCS ) );
-                nCount = aPop.GetItemCount();
-                pSVMenu->InsertSeparator();
-                for ( n=0; n<nCount; n++ )
-                {
-                    sal_uInt16 nId = aPop.GetItemId( n );
-                    pSVMenu->InsertItem( nId, aPop.GetItemText( nId ), aPop.GetItemBits( nId ) );
-                }
-            }
-        }
-
-        pVMenu = new SfxVirtualMenu( pSVMenu, sal_False, *pBindings, sal_True, sal_True );
-    }
-
-    Construct(*pVMenu);
-    if (pOldVirtMenu)
-    {
-        delete pOldVirtMenu;
-        pBindings->LEAVEREGISTRATIONS();
-    }
-}
-
 // ------------------------------------------------------------------------
 
 // executes the function for the selected item
@@ -351,29 +296,6 @@ IMPL_LINK( SfxMenuManager, Select, Menu *, pSelMenu )
         pBindings->GetDispatcher_Impl()->Execute( nId );
 
     return sal_True;
-}
-
-//--------------------------------------------------------------------
-
-void SfxMenuManager::Construct_Impl( Menu* pSVMenu, sal_Bool bWithHelp )
-{
-    SfxVirtualMenu *pOldVirtMenu=0;
-    if ( pMenu )
-    {
-        // It is reconfigured
-        pOldVirtMenu = pMenu;
-        pBindings->ENTERREGISTRATIONS();
-    }
-
-    TryToHideDisabledEntries_Impl( pSVMenu );
-    SfxVirtualMenu *pVMenu = new SfxVirtualMenu( pSVMenu, bWithHelp, *pBindings, sal_True );
-    Construct(*pVMenu);
-
-    if ( pOldVirtMenu )
-    {
-        delete pOldVirtMenu;
-        pBindings->LEAVEREGISTRATIONS();
-    }
 }
 
 //--------------------------------------------------------------------

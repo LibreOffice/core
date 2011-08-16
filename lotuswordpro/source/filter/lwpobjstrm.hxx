@@ -102,7 +102,6 @@ public:
     sal_uInt8 QuickReaduInt8(bool *pFailure=NULL);
     sal_Int32 QuickReadInt32(bool *pFailure=NULL);
     sal_Int16 QuickReadInt16(bool *pFailure=NULL);
-    sal_Int8 QuickReadInt8(bool *pFailure=NULL);
     double QuickReadDouble(bool *pFailure=NULL);
 
     OUString QuickReadStringPtr();

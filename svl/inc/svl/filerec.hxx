@@ -342,14 +342,6 @@ class SVL_DLLPUBLIC SfxSingleRecordWriter: public SfxMiniRecordWriter
     1*              sal_uInt8       Content-Version
     1*              sal_uInt16      Content-Tag
     SizeOfContent*  sal_uInt8       Content
-
-    [Beispiel]
-
-    {
-        SfxSingleRecordWriter aRecord( pStream, MY_TAG_X, MY_VERSION );
-        *aRecord << aMember1;
-        *aRecord << aMember2;
-    }
 */
 
 {
@@ -359,9 +351,6 @@ protected:
                                            sal_uInt16 nTag, sal_uInt8 nCurVer );
 
 public:
-                    SfxSingleRecordWriter( SvStream *pStream,
-                                           sal_uInt16 nTag, sal_uInt8 nCurVer );
-
     inline void     Reset();
 
     sal_uInt32          Close( bool bSeekToEndOfRec = true );
@@ -379,22 +368,6 @@ class SVL_DLLPUBLIC SfxSingleRecordReader: public SfxMiniRecordReader
 
     Es ist auch m"oglich, den Record zu "uberspringen, ohne sein internes
     Format zu kennen.
-
-    [Beispiel]
-
-    {
-        SfxSingleRecordReader aRecord( pStream );
-        switch ( aRecord.GetTag() )
-        {
-            case MY_TAG_X:
-                aRecord >> aMember1;
-                if ( aRecord.HasVersion(2) )
-                    *aRecord >> aMember2;
-                break;
-
-            ...
-        }
-    }
 */
 
 {
@@ -414,7 +387,6 @@ protected:
     bool                ReadHeader_Impl( sal_uInt16 nTypes );
 
 public:
-                        SfxSingleRecordReader( SvStream *pStream, sal_uInt16 nTag );
 
     inline sal_uInt16       GetTag() const;
 

@@ -373,36 +373,6 @@ SfxMenuControl* SfxMenuControl::CreateControl( sal_uInt16 nId, Menu &rMenu, SfxB
     return 0;
 }
 
-sal_Bool SfxMenuControl::IsSpecialControl( sal_uInt16 nId, SfxModule* pMod  )
-{
-    TypeId aSlotType = SFX_SLOTPOOL().GetSlotType( nId );
-    if ( aSlotType )
-    {
-        if ( pMod )
-        {
-            SfxMenuCtrlFactArr_Impl *pFactories = pMod->GetMenuCtrlFactories_Impl();
-            if ( pFactories )
-            {
-                SfxMenuCtrlFactArr_Impl &rFactories = *pFactories;
-                for ( sal_uInt16 nFactory = 0; nFactory < rFactories.Count(); ++nFactory )
-                    if ( rFactories[nFactory]->nTypeId == aSlotType &&
-                         ( ( rFactories[nFactory]->nSlotId == 0 ) ||
-                           ( rFactories[nFactory]->nSlotId == nId) ) )
-                        return sal_True;
-            }
-        }
-
-        SfxMenuCtrlFactArr_Impl &rFactories = SFX_APP()->GetMenuCtrlFactories_Impl();
-
-        for ( sal_uInt16 nFactory = 0; nFactory < rFactories.Count(); ++nFactory )
-            if ( rFactories[nFactory]->nTypeId == aSlotType &&
-                 ( ( rFactories[nFactory]->nSlotId == 0 ) ||
-                   ( rFactories[nFactory]->nSlotId == nId) ) )
-                return sal_True;
-    }
-    return 0;
-}
-
 //--------------------------------------------------------------------
 
 PopupMenu* SfxMenuControl::GetPopup () const

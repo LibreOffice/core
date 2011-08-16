@@ -305,7 +305,6 @@ public:
 
     LwpLayoutScale* GetLayoutScale(){return dynamic_cast<LwpLayoutScale*>(m_LayScale.obj());}
         sal_uInt16 GetScaleMode(void);
-    void SetScaleMode(sal_uInt16 nVal);
     sal_uInt16 GetScaleTile(void);
     void SetScaleTile(sal_uInt16 nVal);
     sal_uInt16 GetScaleCenter(void);

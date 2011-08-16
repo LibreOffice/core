@@ -944,13 +944,6 @@ sal_uInt16 LwpMiddleLayout::GetScaleMode(void)
         return (LwpLayoutScale::FIT_IN_FRAME | LwpLayoutScale::MAINTAIN_ASPECT_RATIO);
 }
 
-void LwpMiddleLayout::SetScaleMode(sal_uInt16 nVal)
-{
-    m_nOverrideFlag |= OVER_SCALING;
-//  nVal |= LwpLayoutScale::MAINTAIN_ASPECT_RATIO;
-    GetLayoutScale()->SetScaleMode(nVal);
-}
-
 sal_uInt16 LwpMiddleLayout::GetScaleTile(void)
 {
     if ((m_nOverrideFlag & OVER_SCALING) && m_LayScale.obj())

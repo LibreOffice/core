@@ -79,7 +79,6 @@ public:
     static SfxMenuControl*    CreateControl( sal_uInt16 nId, Menu &, SfxBindings & );
     static SfxUnoMenuControl* CreateControl( const String&, sal_uInt16, Menu&, SfxBindings&, SfxVirtualMenu* );
     static SfxUnoMenuControl* CreateControl( const String&, sal_uInt16, Menu&, const String& sItemText, SfxBindings&, SfxVirtualMenu* );
-    static sal_Bool             IsSpecialControl( sal_uInt16 nId, SfxModule* );
     static void             RegisterMenuControl(SfxModule*, SfxMenuCtrlFactory*);
 
 };

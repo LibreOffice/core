@@ -214,23 +214,4 @@ IMPL_LINK( SfxDocumentTemplateDlg, NameModify, Edit *, pBox )
     return 0;
 }
 
-//-------------------------------------------------------------------------
-
-String SfxDocumentTemplateDlg::GetTemplatePath()
-{
-    const String& rPath=GetTemplateName();
-    if(pTemplates->GetRegionCount())
-        return pTemplates->GetTemplatePath(
-            aRegionLb.GetSelectEntryPos(), rPath);
-    return pTemplates->GetDefaultTemplatePath(rPath);
-}
-
-//-------------------------------------------------------------------------
-
-void SfxDocumentTemplateDlg::NewTemplate(const String &rPath)
-{
-    pTemplates->NewTemplate(
-        aRegionLb.GetSelectEntryPos(), GetTemplateName(), rPath);
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

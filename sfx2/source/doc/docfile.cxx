@@ -2380,12 +2380,6 @@ void SfxMedium::SetDataAvailableLink( const Link& rLink )
     pImp->aAvailableLink = rLink;
 }
 
-//----------------------------------------------------------------
-void SfxMedium::StartDownload()
-{
-    GetInStream();
-}
-
 void SfxMedium::DownLoad( const Link& aLink )
 {
     SetDoneLink( aLink );
@@ -2770,14 +2764,6 @@ void SfxMedium::SetPhysicalName_Impl( const String& rNameP )
         bTriedStorage = sal_False;
         pImp->bIsStorage = sal_False;
     }
-}
-
-//------------------------------------------------------------------
-
-sal_Bool SfxMedium::Exists( sal_Bool /*bForceSession*/ )
-{
-    OSL_FAIL( "Not implemented!" );
-    return sal_True;
 }
 
 //------------------------------------------------------------------

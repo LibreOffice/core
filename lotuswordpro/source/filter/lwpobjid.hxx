@@ -88,7 +88,6 @@ public:
     sal_uInt32 Read( LwpObjectStream *pStrm );
     sal_uInt32 ReadIndexed( LwpSvStream* pStrm );
     sal_uInt32 ReadIndexed( LwpObjectStream *pStrm );
-    sal_uInt32 ReadCompressed( LwpSvStream* pStrm, LwpObjectID &prev );
     sal_uInt32 ReadCompressed( LwpObjectStream* pObj, LwpObjectID& prev );
 
     sal_uInt32 DiskSize() const;
@@ -103,7 +102,6 @@ public:
 
     sal_Bool operator == (const LwpObjectID &Other) const;
     sal_Bool operator != (const LwpObjectID &Other) const;
-    sal_Char* GetBuffer(sal_Char* buf);
     LwpObject* obj(VO_TYPE tag=VO_INVALID) const;
     size_t HashCode() const;
 };

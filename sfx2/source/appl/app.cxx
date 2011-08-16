@@ -583,20 +583,6 @@ Window* SfxApplication::GetTopWindow() const
     return pWork ? pWork->GetWindow() : NULL;
 }
 
-//--------------------------------------------------------------------
-
-uno::Reference< task::XStatusIndicator > SfxApplication::GetStatusIndicator() const
-{
-    if ( !pAppData_Impl->pViewFrame )
-        return uno::Reference< task::XStatusIndicator >();
-
-    SfxViewFrame *pTop = pAppData_Impl->pViewFrame;
-    while ( pTop->GetParentViewFrame_Impl() )
-        pTop = pTop->GetParentViewFrame_Impl();
-
-    return pTop->GetFrame().GetWorkWindow_Impl()->GetStatusIndicator();
-}
-
 SfxTbxCtrlFactArr_Impl&     SfxApplication::GetTbxCtrlFactories_Impl() const
 {
     return *pAppData_Impl->pTbxCtrlFac;
