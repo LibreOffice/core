@@ -35,6 +35,11 @@ $(eval $(call gb_StaticLibrary_set_include,toolshelpers,\
     -I$(realpath $(SRCDIR)/tools/bootstrp) \
 ))
 
+$(eval $(call gb_StaticLibrary_add_api,toolshelpers,\
+    udkapi \
+    offapi \
+))
+
 $(eval $(call gb_StaticLibrary_add_cxxflags,toolshelpers,\
     -D_TOOLS_STRINGLIST \
 ))

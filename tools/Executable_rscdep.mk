@@ -40,8 +40,9 @@ $(eval $(call gb_Executable_add_defs,rscdep,\
 ))
 
 $(eval $(call gb_Executable_add_linked_libs,rscdep,\
-    sal \
     tl \
+    comphelper \
+    sal \
     $(gb_STDLIBS) \
 ))
 

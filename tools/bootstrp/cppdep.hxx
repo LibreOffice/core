@@ -45,7 +45,7 @@ protected:
     sal_Bool            Search( ByteString aFileName );
     ByteString      Exists( ByteString aFileName );
 
-    ByteString      IsIncludeStatement( ByteString aLine );
+    rtl::OString IsIncludeStatement(rtl::OString aLine);
 public:
                     CppDep( ByteString aFileName );
                     CppDep();

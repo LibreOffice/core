@@ -31,11 +31,12 @@
 
 #include <stdio.h>
 #include <string.h>
-
 #include <unistd.h>
 
 #include <sys/stat.h>
 #include <tools/stream.hxx>
+#include <rtl/strbuf.hxx>
+#include <comphelper/string.hxx>
 #include "cppdep.hxx"
 
 CppDep::CppDep( ByteString aFileName )
@@ -189,49 +190,51 @@ ByteString CppDep::Exists( ByteString aFileName )
     return aString;
 }
 
-ByteString CppDep::IsIncludeStatement( ByteString aLine )
+rtl::OString CppDep::IsIncludeStatement(rtl::OString aLine)
 {
-    ByteString aRetStr;
-    if ( aLine.Search("/*",0) != STRING_NOTFOUND )
+    sal_Int32 nIndex;
+
+    nIndex = aLine.indexOf("/*");
+    if ( nIndex != -1 )
     {
 #ifdef DEBUG_VERBOSE
-        fprintf( stderr, "found starting C comment : %s\n", aLine.GetBuffer() );
+        fprintf( stderr, "found starting C comment : %s\n", aLine.getStr() );
 #endif
-        aLine.Erase(aLine.Search("/*",0), aLine.Len() - 1);
+        aLine = aLine.copy(0, nIndex);
 #ifdef DEBUG_VERBOSE
-        fprintf( stderr, "cleaned string : %s\n", aLine.GetBuffer() );
+        fprintf( stderr, "cleaned string : %s\n", aLine.getStr() );
 #endif
     }
-    if ( aLine.Search("//",0) != STRING_NOTFOUND )
+
+    nIndex = aLine.indexOf("//");
+    if ( nIndex != -1 )
     {
 #ifdef DEBUG_VERBOSE
-        fprintf( stderr, "found C++ comment : %s\n", aLine.GetBuffer() );
+        fprintf( stderr, "found C++ comment : %s\n", aLine.getStr() );
 #endif
-        aLine.Erase(aLine.Search("//",0), aLine.Len() - 1);
+        aLine = aLine.copy(0, nIndex);
 #ifdef DEBUG_VERBOSE
-        fprintf( stderr, "cleaned string : %s\n", aLine.GetBuffer() );
+        fprintf( stderr, "cleaned string : %s\n", aLine.getStr() );
 #endif
     }
     // WhiteSpacesfressen
-    aLine.EraseAllChars(' ');
-    aLine.EraseAllChars('\t');
+    using comphelper::string::replace;
+    aLine = replace(aLine, rtl::OString(' '), rtl::OString());
+    aLine = replace(aLine, rtl::OString('\t'), rtl::OString());
 #ifdef DEBUG_VERBOSE
-    fprintf( stderr, "now : %s\n", aLine.GetBuffer() );
+    fprintf( stderr, "now : %s\n", aLine.getStr() );
 #endif
     // ist der erste Teil ein #include ?
-    ByteString aTmpStr;
-    aTmpStr = aLine.Copy( 0, 8 );
-#ifdef DEBUG_VERBOSE
-    fprintf( stderr, "is include : %s\n", aTmpStr.GetBuffer() );
-#endif
-    if ( aTmpStr.Equals("#include") )
+    rtl::OString aRetStr;
+    if (
+        aLine.getLength() >= 10 &&
+        aLine.match(rtl::OString(RTL_CONSTASCII_STRINGPARAM("#include")))
+       )
     {
-        aLine.Erase( 0, 8 );
-        sal_uInt16 nLen = aLine.Len();
-        aLine.Erase( nLen-1, 1 );
-        aLine.Erase( 0, 1 );
+        //#include<foo> or #include"foo"
+        aLine = aLine.copy(9, aLine.getLength()-10);
 #ifdef DEBUG_VERBOSE
-        fprintf( stderr, "Gotcha : %s\n", aLine.GetBuffer() );
+        fprintf( stderr, "Gotcha : %s\n", aLine.getStr() );
 #endif
         aRetStr = aLine;
     }
