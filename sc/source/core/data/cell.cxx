@@ -131,7 +131,7 @@ ScBaseCell* lclCloneCell( const ScBaseCell& rSrcCell, ScDocument& rDestDoc, cons
     return 0;
 }
 
-void adjustRangeName(ScToken* pToken, ScDocument& aNewDoc, ScDocument* pOldDoc, ScAddress aNewPos, ScAddress aOldPos)
+void adjustRangeName(ScToken* pToken, ScDocument& rNewDoc, const ScDocument* pOldDoc, const ScAddress& aNewPos, const ScAddress& aOldPos)
 {
     bool bOldGlobal = static_cast<bool>(pToken->GetByte());
     SCTAB aOldTab = aOldPos.Tab();
@@ -158,35 +158,35 @@ void adjustRangeName(ScToken* pToken, ScDocument& aNewDoc, ScDocument* pOldDoc, 
     //find corresponding range name in new document
     //first search for local range name then global range names
     SCTAB aNewTab = aNewPos.Tab();
-    ScRangeName* pRangeName = aNewDoc.GetRangeName(aNewTab);
+    ScRangeName* pRangeName = rNewDoc.GetRangeName(aNewTab);
     ScRangeData* pRangeData = NULL;
     bool bNewGlobal = false;
     //search local range names
     if (pRangeName)
     {
-        pRangeData = pRangeName->findByUpperName(aRangeName.toAsciiUpperCase());
+        pRangeData = pRangeName->findByUpperName(ScGlobal::pCharClass->upper(aRangeName));
     }
     //search global range names
     if (!pRangeData)
     {
         //even if it is not in the global scope we'll have a global range name
         bNewGlobal = true;
-        pRangeName = aNewDoc.GetRangeName();
+        pRangeName = rNewDoc.GetRangeName();
         if (pRangeName)
-            pRangeData = pRangeName->findByUpperName(aRangeName.toAsciiUpperCase());
+            pRangeData = pRangeName->findByUpperName(ScGlobal::pCharClass->upper(aRangeName));
     }
     //if no range name was found copy it
     if (!pRangeData)
     {
-        pRangeData = new ScRangeData(*pOldRangeData, &aNewDoc);
-        aNewDoc.GetRangeName()->insert(pRangeData);
+        pRangeData = new ScRangeData(*pOldRangeData, &rNewDoc);
+        rNewDoc.GetRangeName()->insert(pRangeData);
     }
     sal_Int32 nIndex = pRangeData->GetIndex();
     pToken->SetIndex(nIndex);
     pToken->SetByte(bNewGlobal);
 }
 
-void adjustDBRange(ScToken* pToken, ScDocument& aNewDoc, ScDocument* pOldDoc)
+void adjustDBRange(ScToken* pToken, ScDocument& rNewDoc, const ScDocument* pOldDoc)
 {
     ScDBCollection* pOldDBCollection = pOldDoc->GetDBCollection();
     if (!pOldDBCollection)
@@ -198,10 +198,10 @@ void adjustDBRange(ScToken* pToken, ScDocument& aNewDoc, ScDocument* pOldDoc)
     rtl::OUString aDBName = pDBData->GetName();
 
     //search in new document
-    ScDBCollection* pNewDBCollection = aNewDoc.GetDBCollection();
+    ScDBCollection* pNewDBCollection = rNewDoc.GetDBCollection();
     if (!pNewDBCollection)
     {
-        pNewDBCollection = new ScDBCollection(&aNewDoc);
+        pNewDBCollection = new ScDBCollection(&rNewDoc);
     }
     ScDBCollection::NamedDBs& aNewNamedDBs = pNewDBCollection->getNamedDBs();
     ScDBData* pNewDBData = aNewNamedDBs.findByName(aDBName);
@@ -855,16 +855,19 @@ ScFormulaCell::ScFormulaCell( const ScFormulaCell& rCell, ScDocument& rDoc, cons
     sal_Bool bClipMode = rCell.pDocument->IsClipboard();
 
     //update ScNameTokens
-    if (!pDocument->IsClipboard())
+    if (!pDocument->IsClipOrUndo() || rDoc.IsUndo())
     {
-        ScToken* pToken = NULL;
-        while((pToken = static_cast<ScToken*>(pCode->GetNextName()))!= NULL)
+        if (!pDocument->IsClipboardSource() || aPos.Tab() != rCell.aPos.Tab())
         {
-            OpCode eOpCode = pToken->GetOpCode();
-            if (eOpCode == ocName)
-                adjustRangeName(pToken, rDoc, rCell.pDocument, aPos, rCell.aPos);
-            else if (eOpCode == ocDBArea)
-                adjustDBRange(pToken, rDoc, rCell.pDocument);
+            ScToken* pToken = NULL;
+            while((pToken = static_cast<ScToken*>(pCode->GetNextName()))!= NULL)
+            {
+                OpCode eOpCode = pToken->GetOpCode();
+                if (eOpCode == ocName)
+                    adjustRangeName(pToken, rDoc, rCell.pDocument, aPos, rCell.aPos);
+                else if (eOpCode == ocDBArea)
+                    adjustDBRange(pToken, rDoc, rCell.pDocument);
+            }
         }
     }
 

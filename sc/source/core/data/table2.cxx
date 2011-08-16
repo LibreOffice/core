@@ -465,7 +465,7 @@ void ScTable::CopyToClip(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
     {
         //  copy content
         //local range names need to be copied first for formula cells
-        if (!pTable->mpRangeName)
+        if (!pTable->mpRangeName && mpRangeName)
             pTable->mpRangeName = new ScRangeName(*mpRangeName);
         SCCOL i;
 
