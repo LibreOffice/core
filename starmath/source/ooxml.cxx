@@ -81,9 +81,8 @@ bool SmOoxml::ConvertFromStarMath( ::sax_fastparser::FSHelperPtr serializer )
     if( pTree == NULL )
         return false;
     m_pSerializer = serializer;
-// TODO check that the document includes the m namespace
     m_pSerializer->startElementNS( XML_m, XML_oMath,
-        FSNS( XML_xmlns, XML_m ), "http://schemas.openxmlformats.org/wordprocessingml/2006/math", FSEND );
+        FSNS( XML_xmlns, XML_m ), "http://schemas.openxmlformats.org/officeDocument/2006/math", FSEND );
     HandleNodes( pTree, 0 );
     m_pSerializer->endElementNS( XML_m, XML_oMath );
     return true;
