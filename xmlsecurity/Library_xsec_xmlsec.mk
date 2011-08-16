@@ -99,7 +99,7 @@ $(eval $(call gb_Library_add_linked_static_libs,xsec_xmlsec,\
 ))
 
 $(eval $(call gb_Library_add_linked_libs,xsec_xmlsec,\
-	crypt \
+	crypt32 \
 	advapi32 \
 ))
 
