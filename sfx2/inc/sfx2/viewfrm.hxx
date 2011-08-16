@@ -114,7 +114,6 @@ public:
     static SfxViewFrame*    Current();
     static SfxViewFrame*    GetFirst( const SfxObjectShell* pDoc = 0, sal_Bool bOnlyVisible = sal_True );
     static SfxViewFrame*    GetNext( const SfxViewFrame& rPrev, const SfxObjectShell* pDoc = 0, sal_Bool bOnlyVisible = sal_True );
-    static sal_uInt16           Count();
 
     static SfxViewFrame*    Get( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController>& i_rController, const SfxObjectShell* i_pDoc = NULL );
 
@@ -138,8 +137,6 @@ public:
     SfxObjectShell*         GetObjectShell() const
                             { return xObjSh; }
 
-    void                    DoAdjustPosSize( SfxViewShell *pSh,
-                                        const Point rPos, const Size &rSize );
     void                    LockAdjustPosSizePixel()
                             { nAdjustPosPixelLock++; }
     void                    UnlockAdjustPosSizePixel()
@@ -213,7 +210,6 @@ public:
 
     SAL_DLLPRIVATE void GetState_Impl( SfxItemSet &rSet );
     SAL_DLLPRIVATE void ExecReload_Impl( SfxRequest &rReq );
-    SAL_DLLPRIVATE void ExecReload_Impl( SfxRequest &rReq, sal_Bool bAsync );
     SAL_DLLPRIVATE void StateReload_Impl( SfxItemSet &rSet );
     SAL_DLLPRIVATE void ExecView_Impl( SfxRequest &rReq );
     SAL_DLLPRIVATE void StateView_Impl( SfxItemSet &rSet );
@@ -224,7 +220,6 @@ public:
     SAL_DLLPRIVATE sal_Bool IsResizeInToOut_Impl() const;
     SAL_DLLPRIVATE sal_Bool IsAdjustPosSizePixelLocked_Impl() const
                             { return nAdjustPosPixelLock != 0; }
-    SAL_DLLPRIVATE void ForceInnerResize_Impl( sal_Bool bOn );
     SAL_DLLPRIVATE void UpdateDocument_Impl();
 
     SAL_DLLPRIVATE void LockObjectShell_Impl(sal_Bool bLock=sal_True);

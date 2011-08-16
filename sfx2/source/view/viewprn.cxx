@@ -878,35 +878,6 @@ void SfxViewShell::ExecPrint_Impl( SfxRequest &rReq )
 
 //--------------------------------------------------------------------
 
-sal_Bool SfxViewShell::IsPrinterLocked() const
-{
-    return pImp->m_nPrinterLocks > 0;
-}
-
-//--------------------------------------------------------------------
-
-void SfxViewShell::LockPrinter( sal_Bool bLock)
-{
-    sal_Bool bChanged = sal_False;
-    if ( bLock )
-    {
-        bChanged = 1 == ++pImp->m_nPrinterLocks;
-    }
-    else
-    {
-        bChanged = 0 == --pImp->m_nPrinterLocks;
-    }
-
-    if ( bChanged )
-    {
-        Invalidate( SID_PRINTDOC );
-        Invalidate( SID_PRINTDOCDIRECT );
-        Invalidate( SID_SETUPPRINTER );
-    }
-}
-
-//--------------------------------------------------------------------
-
 SfxPrinter* SfxViewShell::GetPrinter( sal_Bool /*bCreate*/ )
 {
     return 0;

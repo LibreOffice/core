@@ -1480,39 +1480,6 @@ sal_Bool SfxViewShell::HasSelection( sal_Bool ) const
     return sal_False;
 }
 
-//--------------------------------------------------------------------
-
-void SfxViewShell::SetSubShell( SfxShell *pShell )
-
-/*  [Description]
-
-    With this method a selection or cursor Shell can be registered, which are
-    automatically pushed to SfxDispatcher immediately after SfxViewShell, and
-    and automatically popped immediately before SfxViewShell.
-
-    If the SfxViewShell instance is already pushed, then pShell will be
-    immediately pushed as well. Is another SfxShell instance registered by
-    using SetSubShell, which was previously registered, the previously
-    registered shell is popped automatically if possible. With pShell==0
-    the current sub-shell be can thus be unregistered.
-*/
-
-{
-    // Is this ViewShell even active?
-    SfxDispatcher *pDisp = pFrame->GetDispatcher();
-    if ( pDisp->IsActive(*this) )
-    {
-        // Update Dispatcher
-        if ( pSubShell )
-            pDisp->Pop(*pSubShell);
-        if ( pShell )
-            pDisp->Push(*pShell);
-        pDisp->Flush();
-    }
-
-    pSubShell = pShell;
-}
-
 void SfxViewShell::AddSubShell( SfxShell& rShell )
 {
     pImp->aArr.Insert( &rShell, pImp->aArr.Count() );
@@ -1839,14 +1806,6 @@ void SfxViewShell::QueryObjAreaPixel( Rectangle& ) const
 
 //--------------------------------------------------------------------
 
-void SfxViewShell::AdjustVisArea(const Rectangle& rRect)
-{
-    DBG_ASSERT (pFrame, "No Frame?");
-    GetObjectShell()->SetVisArea( rRect );
-}
-
-//--------------------------------------------------------------------
-
 void SfxViewShell::VisAreaChanged(const Rectangle& /*rVisArea*/)
 {
     SfxInPlaceClientList *pClients = GetIPClientList_Impl(sal_False);
@@ -2065,11 +2024,6 @@ void SfxViewShell::RemoveContextMenuInterceptor_Impl( const REFERENCE< XCONTEXTM
     pImp->aInterceptorContainer.removeInterface( xInterceptor );
 }
 
-::cppu::OInterfaceContainerHelper& SfxViewShell::GetContextMenuInterceptors() const
-{
-    return pImp->aInterceptorContainer;
-}
-
 void Change( Menu* pMenu, SfxViewShell* pView )
 {
     SfxDispatcher *pDisp = pView->GetViewFrame()->GetDispatcher();
@@ -2181,45 +2135,6 @@ void SfxViewShell::TakeFrameOwnerShip_Impl()
     // currently there is only one reason to take OwnerShip: a hidden frame is printed
     // so the ViewShell will check this on EndPrint (->prnmon.cxx)
     pImp->m_bGotFrameOwnership = true;
-}
-
-void SfxViewShell::CheckOwnerShip_Impl()
-{
-    sal_Bool bSuccess = sal_False;
-    if (pImp->m_bGotOwnership)
-    {
-        uno::Reference < util::XCloseable > xModel(
-            GetObjectShell()->GetModel(), uno::UNO_QUERY );
-        if ( xModel.is() )
-        {
-            try
-            {
-                // this call will destroy this object in case of success!
-                xModel->close( sal_True );
-                bSuccess = sal_True;
-            }
-            catch (const util::CloseVetoException&)
-            {
-            }
-        }
-    }
-
-    if (!bSuccess && pImp->m_bGotFrameOwnership)
-    {
-        // document couldn't be closed or it shouldn't, now try at least to close the frame
-        uno::Reference < util::XCloseable > xFrame(
-            GetViewFrame()->GetFrame().GetFrameInterface(), com::sun::star::uno::UNO_QUERY );
-        if ( xFrame.is() )
-        {
-            try
-            {
-                xFrame->close( sal_True );
-            }
-            catch (const util::CloseVetoException&)
-            {
-            }
-        }
-    }
 }
 
 long SfxViewShell::HandleNotifyEvent_Impl( NotifyEvent& rEvent )

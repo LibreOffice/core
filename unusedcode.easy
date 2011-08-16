@@ -1092,28 +1092,15 @@ SfxUnoStyleSheet::SfxUnoStyleSheet(SfxStyleSheet const&)
 SfxVersionTableDtor::GetVersions() const
 SfxViewFactory::InitFactory()
 SfxViewFactory::~SfxViewFactory()
-SfxViewFrame::Count()
-SfxViewFrame::DoAdjustPosSize(SfxViewShell*, Point, Size const&)
-SfxViewFrame::ExecReload_Impl(SfxRequest&, unsigned char)
-SfxViewFrame::ForceInnerResize_Impl(unsigned char)
 SfxViewFrame::Hide()
-SfxViewShell::AdjustVisArea(Rectangle const&)
-SfxViewShell::CheckOwnerShip_Impl()
-SfxViewShell::GetContextMenuInterceptors() const
-SfxViewShell::IsPrinterLocked() const
-SfxViewShell::LockPrinter(unsigned char)
 SfxViewShell::PlugInsActive() const
 SfxViewShell::SetAdditionalPrintOptions(com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue> const&)
 SfxViewShell::SetScrollingMode(SfxScrollingMode)
-SfxViewShell::SetSubShell(SfxShell*)
 SfxVirtualMenu::GetItemText(unsigned short) const
 SfxVirtualMenu::GetPopupMenu(unsigned short) const
 SfxVirtualMenu::SetHelpIds(ResMgr*)
 SfxVirtualMenu::UpdateImages()
 SfxWhichIter::LastWhich()
-SimpleResMgr::FreeBlob(void*)
-SimpleResMgr::GetLocale() const
-SimpleResMgr::ReadBlob(unsigned int, void**)
 Slider::SetRangeMax(long)
 Slider::SetRangeMin(long)
 Slider::Slider(Window*, ResId const&)

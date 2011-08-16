@@ -290,18 +290,6 @@ long ReloadDecouple_Impl( void* pObj, void* pArg )
     return 0;
 }
 
-void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq, sal_Bool bAsync )
-{
-    if( bAsync )
-    {
-        if( !pImp->pReloader )
-            pImp->pReloader = new svtools::AsynchronLink(
-                Link( this, ReloadDecouple_Impl ) );
-        pImp->pReloader->Call( new SfxRequest( rReq ) );
-    }
-    else ExecReload_Impl( rReq );
-}
-
 void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
 {
     SfxFrame *pParent = GetFrame().GetParentFrame();
@@ -1541,28 +1529,6 @@ SfxViewFrame* SfxViewFrame::Current()
 }
 
 //--------------------------------------------------------------------
-sal_uInt16 SfxViewFrame::Count()
-
-/*  [Description]
-
-    Returns the number of visable <SfxViewFrame> instances.
-*/
-
-{
-    SfxApplication *pSfxApp = SFX_APP();
-    SfxViewFrameArr_Impl& rFrames = pSfxApp->GetViewFrames_Impl();
-    const sal_uInt16 nCount = rFrames.Count();
-    sal_uInt16 nFound = 0;
-    for ( sal_uInt16 i = 0; i < nCount; ++i )
-    {
-        SfxViewFrame *pFrame = rFrames[i];
-        if ( pFrame->IsVisible() )
-            ++nFound;
-    }
-    return nFound;
-}
-
-//--------------------------------------------------------------------
 // returns the first window of spec. type viewing the specified doc.
 SfxViewFrame* SfxViewFrame::GetFirst
 (
@@ -1718,28 +1684,10 @@ void SfxViewFrame::ForceOuterResize_Impl(sal_Bool bOn)
         pImp->bResizeInToOut = !bOn;
 }
 
-void SfxViewFrame::ForceInnerResize_Impl(sal_Bool bOn)
-{
-    pImp->bDontOverwriteResizeInToOut = bOn;
-}
-
 //--------------------------------------------------------------------
 sal_Bool SfxViewFrame::IsResizeInToOut_Impl() const
 {
     return pImp->bResizeInToOut;
-}
-//--------------------------------------------------------------------
-void SfxViewFrame::DoAdjustPosSize( SfxViewShell *pSh,
-                                const Point rPos, const Size &rSize )
-{
-    DBG_CHKTHIS(SfxViewFrame, 0);
-    if( pSh && !nAdjustPosPixelLock )
-    {
-        Window *pWindow = pSh->GetWindow();
-        Point aPos = pWindow->LogicToPixel(rPos);
-        Size aSize = pWindow->LogicToPixel(rSize);
-        DoAdjustPosSizePixel(pSh, aPos, aSize);
-    }
 }
 
 //--------------------------------------------------------------------
