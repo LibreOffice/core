@@ -131,6 +131,88 @@ ScBaseCell* lclCloneCell( const ScBaseCell& rSrcCell, ScDocument& rDestDoc, cons
     return 0;
 }
 
+void adjustRangeName(ScToken* pToken, ScDocument& aNewDoc, ScDocument* pOldDoc, ScAddress aNewPos, ScAddress aOldPos)
+{
+    bool bOldGlobal = static_cast<bool>(pToken->GetByte());
+    SCTAB aOldTab = aOldPos.Tab();
+    rtl::OUString aRangeName;
+    int nOldIndex = pToken->GetIndex();
+    ScRangeData* pOldRangeData = NULL;
+
+    //search the name of the RangeName
+    if (!bOldGlobal)
+    {
+        pOldRangeData = pOldDoc->GetRangeName(aOldTab)->findByIndex(nOldIndex);
+        if (!pOldRangeData)
+            return;     //might be an error in the formula array
+        aRangeName = pOldRangeData->GetName();
+    }
+    else
+    {
+        pOldRangeData = pOldDoc->GetRangeName()->findByIndex(nOldIndex);
+        if (!pOldRangeData)
+            return;     //might be an error in the formula array
+        aRangeName = pOldRangeData->GetName();
+    }
+
+    //find corresponding range name in new document
+    //first search for local range name then global range names
+    SCTAB aNewTab = aNewPos.Tab();
+    ScRangeName* pRangeName = aNewDoc.GetRangeName(aNewTab);
+    ScRangeData* pRangeData = NULL;
+    bool bNewGlobal = false;
+    //search local range names
+    if (pRangeName)
+    {
+        pRangeData = pRangeName->findByUpperName(aRangeName.toAsciiUpperCase());
+    }
+    //search global range names
+    if (!pRangeData)
+    {
+        //even if it is not in the global scope we'll have a global range name
+        bNewGlobal = true;
+        pRangeName = aNewDoc.GetRangeName();
+        if (pRangeName)
+            pRangeData = pRangeName->findByUpperName(aRangeName.toAsciiUpperCase());
+    }
+    //if no range name was found copy it
+    if (!pRangeData)
+    {
+        pRangeData = new ScRangeData(*pOldRangeData, &aNewDoc);
+        aNewDoc.GetRangeName()->insert(pRangeData);
+    }
+    sal_Int32 nIndex = pRangeData->GetIndex();
+    pToken->SetIndex(nIndex);
+    pToken->SetByte(bNewGlobal);
+}
+
+void adjustDBRange(ScToken* pToken, ScDocument& aNewDoc, ScDocument* pOldDoc)
+{
+    ScDBCollection* pOldDBCollection = pOldDoc->GetDBCollection();
+    if (!pOldDBCollection)
+        return;//strange error case, don't do anything
+    ScDBCollection::NamedDBs& aOldNamedDBs = pOldDBCollection->getNamedDBs();
+    ScDBData* pDBData = aOldNamedDBs.findByIndex(pToken->GetIndex());
+    if (!pDBData)
+        return; //invalid index
+    rtl::OUString aDBName = pDBData->GetName();
+
+    //search in new document
+    ScDBCollection* pNewDBCollection = aNewDoc.GetDBCollection();
+    if (!pNewDBCollection)
+    {
+        pNewDBCollection = new ScDBCollection(&aNewDoc);
+    }
+    ScDBCollection::NamedDBs& aNewNamedDBs = pNewDBCollection->getNamedDBs();
+    ScDBData* pNewDBData = aNewNamedDBs.findByName(aDBName);
+    if (!pNewDBData)
+    {
+        pNewDBData = new ScDBData(*pNewDBData);
+        aNewNamedDBs.insert(pNewDBData);
+    }
+    pToken->SetIndex(pNewDBData->GetIndex());
+}
+
 } // namespace
 
 ScBaseCell* ScBaseCell::CloneWithoutNote( ScDocument& rDestDoc, int nCloneFlags ) const
@@ -771,6 +853,21 @@ ScFormulaCell::ScFormulaCell( const ScFormulaCell& rCell, ScDocument& rDoc, cons
     //! Compile ColRowNames on URM_MOVE/URM_COPY _after_ UpdateReference
     sal_Bool bCompileLater = false;
     sal_Bool bClipMode = rCell.pDocument->IsClipboard();
+
+    //update ScNameTokens
+    if (!pDocument->IsClipboard())
+    {
+        ScToken* pToken = NULL;
+        while((pToken = static_cast<ScToken*>(pCode->GetNextName()))!= NULL)
+        {
+            OpCode eOpCode = pToken->GetOpCode();
+            if (eOpCode == ocName)
+                adjustRangeName(pToken, rDoc, rCell.pDocument, aPos, rCell.aPos);
+            else if (eOpCode == ocDBArea)
+                adjustDBRange(pToken, rDoc, rCell.pDocument);
+        }
+    }
+
     if( !bCompile )
     {   // Name references with references and ColRowNames
         pCode->Reset();

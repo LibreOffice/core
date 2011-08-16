@@ -972,6 +972,11 @@ sal_uInt8 ScNameToken::GetByte() const
     return static_cast<sal_uInt8>(mbGlobal);
 }
 
+void ScNameToken::SetByte(sal_uInt8 aGlobal)
+{
+    mbGlobal = static_cast<bool>(aGlobal);
+}
+
 sal_uInt16 ScNameToken::GetIndex() const
 {
     return mnIndex;

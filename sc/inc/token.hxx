@@ -247,8 +247,9 @@ public:
                                 ScNameToken(sal_uInt16 nIndex, bool bGlobal, OpCode eOpCode = ocName);
                                 ScNameToken(const ScNameToken& r);
     virtual                     ~ScNameToken();
-    virtual sal_uInt8                GetByte() const;
-    virtual sal_uInt16              GetIndex() const;
+    virtual sal_uInt8           GetByte() const;
+    virtual void                SetByte(sal_uInt8 aGlobal);
+    virtual sal_uInt16          GetIndex() const;
     virtual bool                operator==( const formula::FormulaToken& rToken ) const;
     virtual FormulaToken*       Clone() const { return new ScNameToken(*this); }
 };

@@ -463,7 +463,10 @@ void ScTable::CopyToClip(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
 {
     if (ValidColRow(nCol1, nRow1) && ValidColRow(nCol2, nRow2))
     {
-        //  Inhalte kopieren
+        //  copy content
+        //local range names need to be copied first for formula cells
+        if (!pTable->mpRangeName)
+            pTable->mpRangeName = new ScRangeName(*mpRangeName);
         SCCOL i;
 
         for ( i = nCol1; i <= nCol2; i++)
@@ -480,6 +483,7 @@ void ScTable::CopyToClip(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
         pTable->CopyColFiltered(*this, 0, nCol2);
         if (pDBDataNoName)
             pTable->SetAnonymousDBData(new ScDBData(*pDBDataNoName));
+
 
         if (pRowFlags && pTable->pRowFlags && mpRowHeights && pTable->mpRowHeights)
         {

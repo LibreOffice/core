@@ -167,13 +167,13 @@ ScRangeData::ScRangeData( ScDocument* pDok,
         eType |= RT_ABSPOS;
 }
 
-ScRangeData::ScRangeData(const ScRangeData& rScRangeData) :
+ScRangeData::ScRangeData(const ScRangeData& rScRangeData, ScDocument* pDocument) :
     aName   (rScRangeData.aName),
     aUpperName  (rScRangeData.aUpperName),
     pCode       (rScRangeData.pCode ? rScRangeData.pCode->Clone() : new ScTokenArray()),        // echte Kopie erzeugen (nicht copy-ctor)
     aPos        (rScRangeData.aPos),
     eType       (rScRangeData.eType),
-    pDoc        (rScRangeData.pDoc),
+    pDoc        (pDocument ? pDocument : rScRangeData.pDoc),
     nIndex      (rScRangeData.nIndex),
     bModified   (rScRangeData.bModified),
     mnMaxRow    (rScRangeData.mnMaxRow),
