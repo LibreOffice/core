@@ -117,6 +117,19 @@ SdrRectObj::~SdrRectObj()
     }
 }
 
+SdrRectObj& SdrRectObj::operator=(const SdrRectObj& rCopy)
+{
+    if ( this == &rCopy )
+        return *this;
+
+    SdrTextObj::operator=( rCopy );
+
+    if ( rCopy.mpXPoly )
+        mpXPoly = new XPolygon( *rCopy.mpXPoly );
+
+    return *this;
+}
+
 void SdrRectObj::SetXPolyDirty()
 {
     if(mpXPoly)

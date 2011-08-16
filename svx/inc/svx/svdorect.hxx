@@ -81,6 +81,8 @@ public:
     SdrRectObj();
     SdrRectObj(const Rectangle& rRect);
 
+    SdrRectObj& operator=(const SdrRectObj& rCopy);
+
     // Konstruktion eines Textrahmens
     SdrRectObj(SdrObjKind eNewTextKind);
     SdrRectObj(SdrObjKind eNewTextKind, const Rectangle& rRect);
