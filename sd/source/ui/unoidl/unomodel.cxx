@@ -300,7 +300,7 @@ void SAL_CALL SdXImpressDocument::release() throw ( )
             {
                 dispose();
             }
-            catch (uno::RuntimeException const& exc)
+            catch (const uno::RuntimeException& exc)
             { // don't break throw ()
                 OSL_FAIL(
                     OUStringToOString(
@@ -1561,7 +1561,7 @@ void ImplPDFExportComments( uno::Reference< drawing::XDrawPage > xPage, vcl::PDF
                 static_cast< long >( aRealPoint2D.Y * 100 ) ), Size( 1000, 1000 ) ), aNote );
         }
     }
-    catch( uno::Exception& )
+    catch (const uno::Exception&)
     {
     }
 }
@@ -2093,7 +2093,7 @@ void SAL_CALL SdXImpressDocument::render( sal_Int32 nRenderer, const uno::Any& r
                             }
                             //<--- #i56629, #i40318
                         }
-                        catch( uno::Exception& e )
+                        catch (const uno::Exception&)
                         {
                         }
 
