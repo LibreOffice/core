@@ -229,7 +229,6 @@ $(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
     ooopathutils \
 	sample \
     salcpprt \
-    toolshelpers \
 	vclmain \
 	writerperfect \
 ))
