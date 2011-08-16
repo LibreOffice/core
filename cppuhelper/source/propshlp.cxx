@@ -229,10 +229,11 @@ Any OPropertySetHelper::queryInterface( const ::com::sun::star::uno::Type & rTyp
 ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > OPropertySetHelper::getTypes()
     throw (RuntimeException)
 {
-    Sequence< ::com::sun::star::uno::Type > aTypes( 3 );
+    Sequence< ::com::sun::star::uno::Type > aTypes( 4 );
     aTypes[ 0 ] = XPropertySet::static_type();
-    aTypes[ 1 ] = XMultiPropertySet::static_type();
-    aTypes[ 2 ] = XFastPropertySet::static_type();
+    aTypes[ 1 ] = XPropertySet2::static_type();
+    aTypes[ 2 ] = XMultiPropertySet::static_type();
+    aTypes[ 3 ] = XFastPropertySet::static_type();
     return aTypes;
 }
 

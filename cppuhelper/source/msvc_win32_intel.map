@@ -285,3 +285,7 @@ UDK_3.7 { # OOo 3.4
         ?setDependentFastPropertyValue@OPropertySetHelper@cppu@@IAEXJABVAny@uno@star@sun@com@@@Z;
 } UDK_3.6;
 
+UDK_3.8 { # LibO 3.5
+    global:
+        ?enableChangeListenerNotification@OPropertySetHelper@cppu@@UAAXE@Z;
+} UDK_3.7;
