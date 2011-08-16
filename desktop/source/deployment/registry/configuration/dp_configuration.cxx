@@ -376,7 +376,7 @@ void BackendImpl::configmgrini_verify_init(
             if (readLine( &line, OUSTR("SCHEMA="), ucb_content,
                           RTL_TEXTENCODING_UTF8 ))
             {
-                sal_Int32 index = sizeof ("SCHEMA=") - 1;
+                sal_Int32 index = RTL_CONSTASCII_LENGTH("SCHEMA=");
                 do {
                     OUString token( line.getToken( 0, ' ', index ).trim() );
                     if (token.getLength() > 0) {
@@ -391,7 +391,7 @@ void BackendImpl::configmgrini_verify_init(
             }
             if (readLine( &line, OUSTR("DATA="), ucb_content,
                           RTL_TEXTENCODING_UTF8 )) {
-                sal_Int32 index = sizeof ("DATA=") - 1;
+                sal_Int32 index = RTL_CONSTASCII_LENGTH("DATA=");
                 do {
                     OUString token( line.getToken( 0, ' ', index ).trim() );
                     if (token.getLength() > 0)
@@ -639,7 +639,7 @@ OUString replaceOrigin(
         else if (rtl_str_shortenedCompare_WithLength(
                      pBytes, nBytes,
                      RTL_CONSTASCII_STRINGPARAM("origin%"),
-                     sizeof ("origin%") - 1 ) == 0)
+                     RTL_CONSTASCII_LENGTH("origin%")) == 0)
         {
             if (origin.getLength() == 0) {
                 // encode only once
@@ -650,8 +650,8 @@ OUString replaceOrigin(
             }
             pAdd = origin.getStr();
             nAdd = origin.getLength();
-            pBytes += (sizeof ("origin%") - 1);
-            nBytes -= (sizeof ("origin%") - 1);
+            pBytes += SAL_N_ELEMENTS("origin%");
+            nBytes -= SAL_N_ELEMENTS("origin%");
             use_filtered = true;
         }
         if ((write_pos + nAdd) > filtered.getLength())
