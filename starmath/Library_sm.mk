@@ -47,7 +47,9 @@ $(eval $(call gb_Library_add_linked_libs,sm,\
         cppuhelper \
         editeng \
 	i18npaper \
+        msfilter \
         sal \
+        sax \
         sfx \
         sot \
         svl \

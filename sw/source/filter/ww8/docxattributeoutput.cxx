@@ -45,6 +45,7 @@
 #include <oox/export/drawingml.hxx>
 #include <oox/export/utils.hxx>
 #include <oox/export/vmlexport.hxx>
+#include <filter/msfilter/ooxmlexport.hxx>
 
 #include <i18npool/mslangid.hxx>
 
@@ -2301,7 +2302,11 @@ bool DocxAttributeOutput::WriteOLEMath( const SdrObject*, const SwOLENode& rOLEN
 
     if( !SotExchange::IsMath(aObjName) )
         return false;
-    // TODO
+    uno::Reference< uno::XInterface > xInterface( aObjRef->getComponent(), uno::UNO_QUERY );
+    OoxmlFormulaExportBase* formulaexport = dynamic_cast< OoxmlFormulaExportBase* >( xInterface.get());
+    if( formulaexport == NULL )
+        return false;
+    formulaexport->writeFormulaOoxml( m_pSerializer );
     return true;
 }
 
