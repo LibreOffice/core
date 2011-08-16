@@ -34,7 +34,7 @@
 #include <com/sun/star/lang/XServiceName.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
-#include <com/sun/star/beans/XPropertySet2.hpp>
+#include <com/sun/star/beans/XPropertySetOption.hpp>
 #include <comphelper/docpasswordhelper.hxx>
 #include <comphelper/processfactory.hxx>
 #include <tools/urlobj.hxx>
@@ -169,18 +169,18 @@ uno::Sequence< beans::NamedValue > ScfApiHelper::QueryEncryptionDataForMedium( S
 
 ScfPropertySet::~ScfPropertySet()
 {
-    Reference<beans::XPropertySet2> xPropSet2(mxPropSet, UNO_QUERY);
-    if (xPropSet2.is())
-        xPropSet2->enableChangeListenerNotification(true);
+    Reference<beans::XPropertySetOption> xPropSetOpt(mxPropSet, UNO_QUERY);
+    if (xPropSetOpt.is())
+        xPropSetOpt->enableChangeListenerNotification(true);
 }
 
 void ScfPropertySet::Set( Reference< XPropertySet > xPropSet )
 {
     mxPropSet = xPropSet;
     mxMultiPropSet.set( mxPropSet, UNO_QUERY );
-    Reference<beans::XPropertySet2> xPropSet2(mxPropSet, UNO_QUERY);
-    if (xPropSet2.is())
-        xPropSet2->enableChangeListenerNotification(false);
+    Reference<beans::XPropertySetOption> xPropSetOpt(mxPropSet, UNO_QUERY);
+    if (xPropSetOpt.is())
+        xPropSetOpt->enableChangeListenerNotification(false);
 }
 
 OUString ScfPropertySet::GetServiceName() const

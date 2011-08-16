@@ -34,7 +34,7 @@
 #include <cppuhelper/interfacecontainer.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/beans/XPropertySet2.hpp>
+#include <com/sun/star/beans/XPropertySetOption.hpp>
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
 #include <com/sun/star/beans/XFastPropertySet.hpp>
 
@@ -352,7 +352,7 @@ public:
 class OPropertySetHelper : public ::com::sun::star::beans::XMultiPropertySet,
                            public ::com::sun::star::beans::XFastPropertySet,
                            public ::com::sun::star::beans::XPropertySet,
-                           public ::com::sun::star::beans::XPropertySet2
+                           public ::com::sun::star::beans::XPropertySetOption
 {
 public:
     /**
@@ -506,7 +506,7 @@ public:
         const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertiesChangeListener > & Listener )
         throw(::com::sun::star::uno::RuntimeException);
 
-    // XPropertySet2
+    // XPropertySetOption
     virtual void SAL_CALL enableChangeListenerNotification( sal_Bool bEnable )
         throw(::com::sun::star::uno::RuntimeException);
 

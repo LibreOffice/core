@@ -159,10 +159,10 @@ $(eval $(call gb_UnoApiTarget_add_idlfiles,udkapi,\
 	udkapi/com/sun/star/beans/XPropertyChangeListener \
 	udkapi/com/sun/star/beans/XPropertyContainer \
 	udkapi/com/sun/star/beans/XPropertySet \
-	udkapi/com/sun/star/beans/XPropertySet2 \
 	udkapi/com/sun/star/beans/XPropertySetInfo \
 	udkapi/com/sun/star/beans/XPropertySetInfoChangeListener \
 	udkapi/com/sun/star/beans/XPropertySetInfoChangeNotifier \
+	udkapi/com/sun/star/beans/XPropertySetOption \
 	udkapi/com/sun/star/beans/XPropertyState \
 	udkapi/com/sun/star/beans/XPropertyStateChangeListener \
 	udkapi/com/sun/star/beans/XPropertyWithState \

@@ -61,7 +61,7 @@ UNOTYPES= \
         com.sun.star.beans.XMultiPropertySet \
         com.sun.star.beans.XPropertyAccess \
         com.sun.star.beans.XPropertySet \
-        com.sun.star.beans.XPropertySet2 \
+        com.sun.star.beans.XPropertySetOption \
         com.sun.star.bridge.UnoUrlResolver \
         com.sun.star.bridge.XUnoUrlResolver \
         com.sun.star.connection.SocketPermission \

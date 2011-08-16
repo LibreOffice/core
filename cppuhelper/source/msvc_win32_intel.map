@@ -288,5 +288,5 @@ UDK_3.7 { # OOo 3.4
 UDK_3.8 { # LibO 3.5
     global:
         ?enableChangeListenerNotification@OPropertySetHelper@cppu@@UAAXE@Z;
-        ??_7OPropertySetHelper@cppu@@6BXPropertySet2@beans@star@sun@com@@@;
+        ??_7OPropertySetHelper@cppu@@6BXPropertySetOption@beans@star@sun@com@@@;
 } UDK_3.7;

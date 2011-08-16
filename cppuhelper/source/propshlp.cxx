@@ -218,7 +218,7 @@ Any OPropertySetHelper::queryInterface( const ::com::sun::star::uno::Type & rTyp
     return ::cppu::queryInterface(
         rType,
         static_cast< XPropertySet * >( this ),
-        static_cast< XPropertySet2 * >( this ),
+        static_cast< XPropertySetOption * >( this ),
         static_cast< XMultiPropertySet * >( this ),
         static_cast< XFastPropertySet * >( this ) );
 }
@@ -231,7 +231,7 @@ Any OPropertySetHelper::queryInterface( const ::com::sun::star::uno::Type & rTyp
 {
     Sequence< ::com::sun::star::uno::Type > aTypes( 4 );
     aTypes[ 0 ] = XPropertySet::static_type();
-    aTypes[ 1 ] = XPropertySet2::static_type();
+    aTypes[ 1 ] = XPropertySetOption::static_type();
     aTypes[ 2 ] = XMultiPropertySet::static_type();
     aTypes[ 3 ] = XFastPropertySet::static_type();
     return aTypes;
