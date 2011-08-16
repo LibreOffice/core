@@ -32,6 +32,7 @@
 #include "node.hxx"
 
 #include <sax/fshelper.hxx>
+#include <oox/core/filterbase.hxx>
 
 /**
  Class implementing writing of formulas to OOXML.
@@ -39,7 +40,7 @@
 class SmOoxml
 {
 public:
-    SmOoxml(String &rIn,SmNode *pIn);
+    SmOoxml(String &rIn,SmNode *pIn, oox::core::OoxmlVersion version);
     bool ConvertFromStarMath( ::sax_fastparser::FSHelperPtr m_pSerializer );
 private:
     void HandleNodes(SmNode *pNode,int nLevel);
@@ -49,6 +50,7 @@ private:
     String str;
     SmNode *pTree;
     ::sax_fastparser::FSHelperPtr m_pSerializer;
+    oox::core::OoxmlVersion version;
 };
 
 

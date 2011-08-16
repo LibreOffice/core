@@ -48,6 +48,7 @@ $(eval $(call gb_Library_add_linked_libs,sm,\
         editeng \
 	i18npaper \
         msfilter \
+        oox \
         sal \
         sax \
         sfx \

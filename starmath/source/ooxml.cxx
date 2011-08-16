@@ -34,6 +34,7 @@
 #include <oox/token/tokens.hxx>
 
 using namespace oox;
+using namespace oox::core;
 
 // TODO duped from MathType
 
@@ -70,9 +71,10 @@ static sal_Unicode Convert(sal_Unicode nIn)
     return nIn;
 }
 
-SmOoxml::SmOoxml(String &rIn,SmNode *pIn)
+SmOoxml::SmOoxml(String &rIn,SmNode *pIn,OoxmlVersion v)
 : str( rIn )
 , pTree( pIn )
+, version( v )
 {
 }
 
@@ -222,6 +224,14 @@ void SmOoxml::HandleTable(SmNode *pNode,int nLevel)
 void SmOoxml::HandleText(SmNode *pNode, int /*nLevel*/)
 {
     m_pSerializer->startElementNS( XML_m, XML_r, FSEND );
+
+    if( version == ECMA_DIALECT )
+    { // HACK: MSOffice2007 does not import characters properly unless this font is explicitly given
+        m_pSerializer->startElementNS( XML_w, XML_rPr, FSEND );
+        m_pSerializer->singleElementNS( XML_w, XML_rFonts, FSNS( XML_w, XML_ascii ), "Cambria Math",
+            FSNS( XML_w, XML_hAnsi ), "Cambria Math", FSEND );
+        m_pSerializer->endElementNS( XML_w, XML_rPr );
+    }
     m_pSerializer->startElementNS( XML_m, XML_t, FSEND );
     SmTextNode *pTemp=(SmTextNode *)pNode;
     fprintf(stderr, "T %s\n", rtl::OUStringToOString( pTemp->GetText(), RTL_TEXTENCODING_UTF8 ).getStr());

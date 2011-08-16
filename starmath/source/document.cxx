@@ -991,7 +991,7 @@ sal_Bool SmDocShell::ConvertTo( SfxMedium &rMedium )
     return bRet;
 }
 
-bool SmDocShell::writeFormulaOoxml( ::sax_fastparser::FSHelperPtr m_pSerializer )
+bool SmDocShell::writeFormulaOoxml( ::sax_fastparser::FSHelperPtr m_pSerializer, oox::core::OoxmlVersion version )
 {
     RTL_LOGFILE_CONTEXT( aLog, "starmath: SmDocShell::writeFormulaOoxml" );
 
@@ -999,7 +999,7 @@ bool SmDocShell::writeFormulaOoxml( ::sax_fastparser::FSHelperPtr m_pSerializer 
         Parse();
     if( pTree && !IsFormulaArranged() )
         ArrangeFormula();
-    SmOoxml aEquation( aText, pTree );
+    SmOoxml aEquation( aText, pTree, version );
     return aEquation.ConvertFromStarMath( m_pSerializer );
 }
 

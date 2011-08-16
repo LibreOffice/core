@@ -40,6 +40,7 @@
 #include <vcl/jobset.hxx>
 #include <vcl/virdev.hxx>
 #include <sax/fshelper.hxx>
+#include <oox/core/filterbase.hxx>
 
 #include <set>
 
@@ -173,7 +174,7 @@ class SmDocShell : public SfxObjectShell, public SfxListener
      */
     void                InvalidateCursor();
 
-    bool writeFormulaOoxml( ::sax_fastparser::FSHelperPtr m_pSerializer );
+    bool writeFormulaOoxml( ::sax_fastparser::FSHelperPtr m_pSerializer, oox::core::OoxmlVersion version );
 
 public:
     TYPEINFO();

@@ -29,6 +29,7 @@
 #define _OOXMLEXPORT_HXX
 
 #include <sax/fshelper.hxx>
+#include <oox/core/filterbase.hxx>
 #include "filter/msfilter/msfilterdllapi.h"
 
 /**
@@ -38,7 +39,7 @@
 class MSFILTER_DLLPUBLIC OoxmlFormulaExportBase
 {
 public:
-    virtual void writeFormulaOoxml( ::sax_fastparser::FSHelperPtr m_pSerializer ) = 0;
+    virtual void writeFormulaOoxml( ::sax_fastparser::FSHelperPtr m_pSerializer, oox::core::OoxmlVersion version ) = 0;
 };
 
 #endif

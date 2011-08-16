@@ -2319,7 +2319,7 @@ void DocxAttributeOutput::WritePostponedMath()
 
     uno::Reference< uno::XInterface > xInterface( aObjRef->getComponent(), uno::UNO_QUERY );
     if( OoxmlFormulaExportBase* formulaexport = dynamic_cast< OoxmlFormulaExportBase* >( xInterface.get()))
-        formulaexport->writeFormulaOoxml( m_pSerializer );
+        formulaexport->writeFormulaOoxml( m_pSerializer, GetExport().GetFilter().getVersion());
     else
         OSL_FAIL( "Math OLE object cannot write out OOXML" );
     m_postponedMath = NULL;

@@ -103,7 +103,7 @@ public:
     virtual void SAL_CALL setParent( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& xParent ) throw( ::com::sun::star::lang::NoSupportException, ::com::sun::star::uno::RuntimeException );
 
     // OoxmlFormulaExportBase
-    virtual void writeFormulaOoxml( ::sax_fastparser::FSHelperPtr m_pSerializer );
+    virtual void writeFormulaOoxml( ::sax_fastparser::FSHelperPtr m_pSerializer, oox::core::OoxmlVersion version );
 
     static ::com::sun::star::uno::Sequence< rtl::OUString > getSupportedServiceNames_Static();
     static ::rtl::OUString getImplementationName_Static();
