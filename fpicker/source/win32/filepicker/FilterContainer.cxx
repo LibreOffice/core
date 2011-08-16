@@ -96,7 +96,7 @@ sal_Bool SAL_CALL CFilterContainer::addFilter(
 
 sal_Bool SAL_CALL CFilterContainer::delFilter( const OUString& aName )
 {
-    OSL_ASSERT( m_vFilters.size() > 0 );
+    OSL_ASSERT( !m_vFilters.empty() );
 
     sal_Int32 pos = getFilterTagPos( aName );
     if ( pos > -1 )
@@ -134,7 +134,7 @@ void SAL_CALL CFilterContainer::empty()
 
 sal_Bool SAL_CALL CFilterContainer::getFilter( const OUString& aName, OUString& theFilter ) const
 {
-    OSL_PRECOND( m_vFilters.size() > 0, "Empty filter container" );
+    OSL_PRECOND( !m_vFilters.empty() , "Empty filter container" );
 
     sal_Int32 pos = getFilterTagPos( aName );
 
@@ -188,7 +188,7 @@ sal_Int32 SAL_CALL CFilterContainer::getFilterPos( const OUString& aName ) const
 
 sal_Int32 SAL_CALL CFilterContainer::getFilterTagPos( const OUString& aName ) const
 {
-    if ( m_vFilters.size( ) > 0 )
+    if ( !m_vFilters.empty() )
     {
         sal_Int32 i = 0;
         FILTER_VECTOR_T::const_iterator iter;
