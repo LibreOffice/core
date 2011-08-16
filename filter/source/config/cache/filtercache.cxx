@@ -2018,10 +2018,10 @@ void FilterCache::impl_saveItem(const css::uno::Reference< css::container::XName
             // to a list of names ...
             // But note: because we work directly on a reference to the cache item,
             // its not allowd to change the value here. We must work on a copy!
-            sal_Int32 nFlags = 0;
             pIt = aItem.find(PROPNAME_FLAGS);
             if (pIt != aItem.end())
             {
+                sal_Int32 nFlags = 0;
                 pIt->second >>= nFlags;
                 css::uno::Any aFlagNameList;
                 aFlagNameList <<= FilterCache::impl_convertFlagField2FlagNames(nFlags);

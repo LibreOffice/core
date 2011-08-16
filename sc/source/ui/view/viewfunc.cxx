@@ -693,10 +693,10 @@ void ScViewFunc::EnterValue( SCCOL nCol, SCROW nRow, SCTAB nTab, const double& r
 {
     ScDocument* pDoc = GetViewData()->GetDocument();
     ScDocShell* pDocSh = GetViewData()->GetDocShell();
-    sal_Bool bUndo (pDoc->IsUndoEnabled());
 
     if ( pDoc && pDocSh )
     {
+        sal_Bool bUndo(pDoc->IsUndoEnabled());
         ScDocShellModificator aModificator( *pDocSh );
 
         ScEditableTester aTester( pDoc, nTab, nCol,nRow, nCol,nRow );
