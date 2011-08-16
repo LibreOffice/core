@@ -1134,7 +1134,7 @@ void SAL_CALL SmModel::setParent( const uno::Reference< uno::XInterface >& xPare
 
 void SmModel::writeFormulaOoxml( ::sax_fastparser::FSHelperPtr m_pSerializer )
 {
-//    static_cast< SmDocShell* >( GetObjectShell())->writeFormulaOoxml( m_pSerializer );
+    static_cast< SmDocShell* >( GetObjectShell())->writeFormulaOoxml( m_pSerializer );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

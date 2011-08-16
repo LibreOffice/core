@@ -95,6 +95,7 @@
 #include <utility.hxx>
 #include <view.hxx>
 #include "mathtype.hxx"
+#include "ooxml.hxx"
 #include "mathmlimport.hxx"
 #include "mathmlexport.hxx"
 #include <sfx2/sfxsids.hrc>
@@ -990,6 +991,18 @@ sal_Bool SmDocShell::ConvertTo( SfxMedium &rMedium )
     return bRet;
 }
 
+bool SmDocShell::writeFormulaOoxml( ::sax_fastparser::FSHelperPtr m_pSerializer )
+{
+    RTL_LOGFILE_CONTEXT( aLog, "starmath: SmDocShell::writeFormulaOoxml" );
+
+    if( !pTree )
+        Parse();
+    if( pTree && !IsFormulaArranged() )
+        ArrangeFormula();
+    SmOoxml aEquation( aText, pTree );
+    return aEquation.ConvertFromStarMath( m_pSerializer );
+}
+
 sal_Bool SmDocShell::SaveCompleted( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage )
 {
     RTL_LOGFILE_CONTEXT( aLog, "starmath: SmDocShell::SaveCompleted" );
@@ -1432,6 +1445,5 @@ bool SmDocShell::WriteAsMathType3( SfxMedium& rMedium )
     bool bRet = 0 != aEquation.ConvertFromStarMath( rMedium );
     return bRet;
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -39,6 +39,7 @@
 #include <svl/lstner.hxx>
 #include <vcl/jobset.hxx>
 #include <vcl/virdev.hxx>
+#include <sax/fshelper.hxx>
 
 #include <set>
 
@@ -171,6 +172,8 @@ class SmDocShell : public SfxObjectShell, public SfxListener
      * Deletes the current cursor
      */
     void                InvalidateCursor();
+
+    bool writeFormulaOoxml( ::sax_fastparser::FSHelperPtr m_pSerializer );
 
 public:
     TYPEINFO();
