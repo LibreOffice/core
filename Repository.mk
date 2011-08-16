@@ -232,9 +232,20 @@ $(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
     toolshelpers \
 	vclmain \
 	writerperfect \
+))
+
+ifeq ($(OS),WNT)
+$(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
 	xmlsec1 \
 	xmlsec1-nss \
 	xmlsec1-mscrypto \
 ))
+else
+$(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
+	xmlsec1 \
+	xmlsec1-nss \
+	xmlsec1-mscrypto \
+))
+endif
 
 # vim: set noet sw=4 ts=4:
