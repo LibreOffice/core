@@ -114,6 +114,9 @@ void SmOoxml::HandleNodes(SmNode *pNode,int nLevel)
             HandleOperator(pNode,nLevel);
             break;
 #endif
+        case NBINHOR:
+            HandleBinaryOperation(pNode,nLevel);
+            break;
         case NBINVER:
             HandleFractions(pNode,nLevel);
             break;
@@ -295,6 +298,9 @@ void SmOoxml::HandleText(SmNode *pNode, int /*nLevel*/)
 
 void SmOoxml::HandleMath(SmNode *pNode,int nLevel)
 {
+    fprintf(stderr,"MATH %d\n", pNode->GetToken().eType);
+    // these are handled elsewhere, e.g. when handling BINHOR
+    OSL_ASSERT( pNode->GetToken().eType != TDIVIDEBY );
     HandleText( pNode, nLevel );
 // TODO at least some items (e.g. y/2 need to handled as ooxml and not as plain text symbols)
 #if 0
@@ -405,9 +411,15 @@ void SmOoxml::HandleMath(SmNode *pNode,int nLevel)
 #endif
 }
 
-void SmOoxml::HandleFractions(SmNode *pNode,int nLevel)
+void SmOoxml::HandleFractions(SmNode *pNode,int nLevel, const char* type)
 {
     m_pSerializer->startElementNS( XML_m, XML_f, FSEND );
+    if( type != NULL )
+    {
+        m_pSerializer->startElementNS( XML_m, XML_fPr, FSEND );
+        m_pSerializer->singleElementNS( XML_m, XML_type, FSNS( XML_m, XML_val ), type, FSEND );
+        m_pSerializer->endElementNS( XML_m, XML_fPr );
+    }
     m_pSerializer->startElementNS( XML_m, XML_num, FSEND );
     if( SmNode* num = pNode->GetSubNode( 0 ))
         HandleNodes( num, nLevel + 1 );
@@ -417,6 +429,25 @@ void SmOoxml::HandleFractions(SmNode *pNode,int nLevel)
         HandleNodes( num, nLevel + 1 );
     m_pSerializer->endElementNS( XML_m, XML_den );
     m_pSerializer->endElementNS( XML_m, XML_f );
+}
+
+void SmOoxml::HandleBinaryOperation(SmNode *pNode,int nLevel)
+{
+    // update OSL_ASSERT in HandleMath() when adding new items
+    switch( pNode->GetToken().eType )
+    {
+        case TDIVIDEBY:
+            return HandleFractions( pNode, nLevel, "lin" );
+        default:
+        {
+            for( int i = 0;
+                 i < pNode->GetNumSubNodes();
+                 ++i )
+                if( SmNode *pTemp = pNode->GetSubNode( i ))
+                    HandleNodes( pTemp, nLevel + 1 );
+            break;
+        }
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
