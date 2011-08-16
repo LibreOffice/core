@@ -47,6 +47,7 @@ private:
     void HandleTable(SmNode *pNode,int nLevel);
     void HandleText(SmNode *pNode,int nLevel);
     void HandleMath(SmNode *pNode,int nLevel);
+    void HandleFractions(SmNode *pNode,int nLevel);
     String str;
     SmNode *pTree;
     ::sax_fastparser::FSHelperPtr m_pSerializer;

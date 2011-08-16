@@ -113,9 +113,11 @@ void SmOoxml::HandleNodes(SmNode *pNode,int nLevel)
         case NOPER:
             HandleOperator(pNode,nLevel);
             break;
+#endif
         case NBINVER:
             HandleFractions(pNode,nLevel);
             break;
+#if 0
         case NROOT:
             HandleRoot(pNode,nLevel);
             break;
@@ -294,6 +296,7 @@ void SmOoxml::HandleText(SmNode *pNode, int /*nLevel*/)
 void SmOoxml::HandleMath(SmNode *pNode,int nLevel)
 {
     HandleText( pNode, nLevel );
+// TODO at least some items (e.g. y/2 need to handled as ooxml and not as plain text symbols)
 #if 0
     if (pNode->GetToken().eType == TMLINE)
     {
@@ -400,6 +403,20 @@ void SmOoxml::HandleMath(SmNode *pNode,int nLevel)
     }
     nPendingAttributes = 0;
 #endif
+}
+
+void SmOoxml::HandleFractions(SmNode *pNode,int nLevel)
+{
+    m_pSerializer->startElementNS( XML_m, XML_f, FSEND );
+    m_pSerializer->startElementNS( XML_m, XML_num, FSEND );
+    if( SmNode* num = pNode->GetSubNode( 0 ))
+        HandleNodes( num, nLevel + 1 );
+    m_pSerializer->endElementNS( XML_m, XML_num );
+    m_pSerializer->startElementNS( XML_m, XML_den, FSEND );
+    if( SmNode* num = pNode->GetSubNode( 2 ))
+        HandleNodes( num, nLevel + 1 );
+    m_pSerializer->endElementNS( XML_m, XML_den );
+    m_pSerializer->endElementNS( XML_m, XML_f );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
