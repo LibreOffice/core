@@ -558,24 +558,6 @@ void LwpPara::OverrideParaNumbering(LwpParaProperty* pProps)
     m_pParaNumbering.reset(pOver.release());
 }
 
-/**************************************************************************
- * @short:
- * @descr:
- * @param:
- * @param:
- * @return:
-**************************************************************************/
-void LwpPara::OverrideTab(LwpTabOverride *base, LwpTabOverride *over, XFParaStyle *pOverStyle)
-{
-    if (base)
-    {
-        over->Override(base);
-        LwpParaStyle::ApplyTab(pOverStyle,base);
-    }
-    else
-        LwpParaStyle::ApplyTab(pOverStyle,over);
-}
-
 void LwpPara::FindLayouts()
 {
     m_Fribs.SetPara(this);
