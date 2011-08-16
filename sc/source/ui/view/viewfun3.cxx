@@ -1551,10 +1551,7 @@ bool ScViewFunc::PasteMultiRangesFromClip(
 
     // Determine the first and last selected sheet numbers.
     SCTAB nTab1 = aMark.GetFirstSelected();
-    SCTAB nTab2 = nTab1;
-    for (SCTAB i = nTab1+1; i < aMark.GetLastSelected(); ++i)
-        if (aMark.GetTableSelect(i))
-            nTab2 = i;
+    SCTAB nTab2 = aMark.GetLastSelected();
 
     ScDocShellModificator aModificator(*pDocSh);
 

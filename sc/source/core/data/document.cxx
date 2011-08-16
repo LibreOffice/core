@@ -1661,7 +1661,7 @@ void ScDocument::InitUndoSelected( ScDocument* pSrcDoc, const ScMarkData& rTabSe
         xPoolHelper = pSrcDoc->xPoolHelper;
 
         String aString;
-        for (SCTAB nTab = 0; nTab < rTabSelection.GetLastSelected(); nTab++)
+        for (SCTAB nTab = 0; nTab <= rTabSelection.GetLastSelected(); nTab++)
             if ( rTabSelection.GetTableSelect( nTab ) )
             {
                 ScTable* pTable = new ScTable(this, nTab, aString, bColInfo, bRowInfo);
