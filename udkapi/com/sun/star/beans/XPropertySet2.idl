@@ -6,8 +6,18 @@
 
 module com {  module sun {  module star {  module beans {
 
-interface XPropertySet2: com::sun::star::beans::XPropertySet
+/**
+ * This interface should be conceptually derived from XPropertySet but isn't
+ * due to ABI compatibility on Windows; cppu::OPrpertySetHelper exports
+ * XPropertySet's vtable symbol in the UDK_3_0_0 section which must stay
+ * there.  Once we hit LibreOffice 4 we should clean this mess up.
+ */
+interface XPropertySet2: com::sun::star::uno::XInterface
 {
+    /**
+     * Turn on or off notifying change listeners on property value change.  It
+     * notifies registered change listeners by default.
+     */
     void enableChangeListenerNotification( [in] boolean bEnable );
 };
 

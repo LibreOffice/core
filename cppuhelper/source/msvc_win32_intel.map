@@ -64,7 +64,7 @@ GetVersionInfo;
 ??_7OPropertyArrayHelper@cppu@@6B@;
 ??_7OPropertySetHelper@cppu@@6BXFastPropertySet@beans@star@sun@com@@@;
 ??_7OPropertySetHelper@cppu@@6BXMultiPropertySet@beans@star@sun@com@@@;
-??_7OPropertySetHelper@cppu@@6BXPropertySet2@beans@star@sun@com@@@;
+??_7OPropertySetHelper@cppu@@6BXPropertySet@beans@star@sun@com@@@;
 ??_GIPropertyArrayHelper@cppu@@UAEPAXI@Z;
 ??_GOPropertyArrayHelper@cppu@@UAEPAXI@Z;
 ?addPropertiesChangeListener@OPropertySetHelper@cppu@@UAAXABV?$Sequence@VOUString@rtl@@@uno@star@sun@com@@ABV?$Reference@VXPropertiesChangeListener@beans@star@sun@com@@@4567@@Z;
@@ -288,4 +288,5 @@ UDK_3.7 { # OOo 3.4
 UDK_3.8 { # LibO 3.5
     global:
         ?enableChangeListenerNotification@OPropertySetHelper@cppu@@UAAXE@Z;
+        ??_7OPropertySetHelper@cppu@@6BXPropertySet2@beans@star@sun@com@@@;
 } UDK_3.7;

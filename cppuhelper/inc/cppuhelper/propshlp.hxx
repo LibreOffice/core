@@ -33,6 +33,7 @@
 
 #include <cppuhelper/interfacecontainer.hxx>
 
+#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertySet2.hpp>
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
 #include <com/sun/star/beans/XFastPropertySet.hpp>
@@ -350,6 +351,7 @@ public:
  */
 class OPropertySetHelper : public ::com::sun::star::beans::XMultiPropertySet,
                            public ::com::sun::star::beans::XFastPropertySet,
+                           public ::com::sun::star::beans::XPropertySet,
                            public ::com::sun::star::beans::XPropertySet2
 {
 public:
