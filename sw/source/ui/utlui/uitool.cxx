@@ -677,8 +677,7 @@ SwTwips GetTableWidth( SwFrmFmt* pFmt, SwTabCols& rCols, sal_uInt16 *pPercent,
         {
             if(pSh)
             {
-                const SwFrmFmt *pFlyFmt;
-                if ( 0 == (pFlyFmt = pSh->GetFlyFrmFmt()) )
+                if ( 0 == pSh->GetFlyFrmFmt() )
                 {
                     nWidth = pSh->GetAnyCurRect(RECT_PAGE_PRT).Width();
                 }
