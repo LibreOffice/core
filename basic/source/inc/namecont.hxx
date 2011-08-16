@@ -78,18 +78,6 @@ class BasicManager;
 
 namespace basic
 {
-
-typedef ::cppu::WeakComponentImplHelper9<
-    ::com::sun::star::lang::XInitialization,
-    ::com::sun::star::script::XStorageBasedLibraryContainer,
-    ::com::sun::star::script::XLibraryContainerPassword,
-    ::com::sun::star::script::XLibraryContainerExport,
-    ::com::sun::star::script::XLibraryContainer3,
-    ::com::sun::star::container::XContainer,
-    ::com::sun::star::script::XLibraryQueryExecutable,
-    ::com::sun::star::script::vba::XVBACompatibility,
-    ::com::sun::star::lang::XServiceInfo > LibraryContainerHelper;
-
 typedef ::cppu::WeakImplHelper2< ::com::sun::star::container::XNameContainer,
     ::com::sun::star::container::XContainer > NameContainerHelper;
 
@@ -231,13 +219,14 @@ private:
 
 class SfxLibrary;
 
-typedef ::cppu::WeakComponentImplHelper8<
+typedef ::cppu::WeakComponentImplHelper9<
     ::com::sun::star::lang::XInitialization,
     ::com::sun::star::script::XStorageBasedLibraryContainer,
     ::com::sun::star::script::XLibraryContainerPassword,
     ::com::sun::star::script::XLibraryContainerExport,
     ::com::sun::star::script::XLibraryContainer3,
     ::com::sun::star::container::XContainer,
+    ::com::sun::star::script::XLibraryQueryExecutable,
     ::com::sun::star::script::vba::XVBACompatibility,
     ::com::sun::star::lang::XServiceInfo > SfxLibraryContainer_BASE;
 
