@@ -829,10 +829,10 @@ void RTFDocumentImpl::text(OUString& rString)
             xPropertySet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("HoriOrientPosition")), uno::Any(sal_Int32(m_aStates.top().aFrame.nX)));
             xPropertySet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("VertOrient")), uno::Any(text::VertOrientation::NONE));
             xPropertySet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("VertOrientPosition")), uno::Any(sal_Int32(m_aStates.top().aFrame.nY)));
-            xPropertySet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("LeftMargin")), uno::Any(sal_Int32(0)));
-            xPropertySet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("RightMargin")), uno::Any(sal_Int32(0)));
-            xPropertySet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("TopMargin")), uno::Any(sal_Int32(0)));
-            xPropertySet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("BottomMargin")), uno::Any(sal_Int32(0)));
+            xPropertySet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("LeftMargin")), uno::Any(sal_Int32(m_aStates.top().aFrame.nLeftMargin)));
+            xPropertySet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("RightMargin")), uno::Any(sal_Int32(m_aStates.top().aFrame.nRightMargin)));
+            xPropertySet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("TopMargin")), uno::Any(sal_Int32(m_aStates.top().aFrame.nTopMargin)));
+            xPropertySet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("BottomMargin")), uno::Any(sal_Int32(m_aStates.top().aFrame.nBottomMargin)));
 
             Mapper().startShape(xShape);
             Mapper().startParagraphGroup();
@@ -2389,6 +2389,16 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
             break;
         case RTF_POSY:
             m_aStates.top().aFrame.nY = TWIP_TO_MM100(nParam);
+            break;
+        case RTF_DFRMTXTX:
+            m_aStates.top().aFrame.nLeftMargin = m_aStates.top().aFrame.nRightMargin = TWIP_TO_MM100(nParam);
+            break;
+        case RTF_DFRMTXTY:
+            m_aStates.top().aFrame.nTopMargin = m_aStates.top().aFrame.nBottomMargin = TWIP_TO_MM100(nParam);
+            break;
+        case RTF_DXFRTEXT:
+            m_aStates.top().aFrame.nLeftMargin = m_aStates.top().aFrame.nRightMargin =
+                m_aStates.top().aFrame.nTopMargin = m_aStates.top().aFrame.nBottomMargin = TWIP_TO_MM100(nParam);
             break;
         default:
 #if OSL_DEBUG_LEVEL > 1

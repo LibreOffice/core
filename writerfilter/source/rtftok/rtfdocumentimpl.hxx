@@ -192,6 +192,7 @@ namespace writerfilter {
         {
             public:
                 int nX, nY, nW, nH;
+                int nLeftMargin, nRightMargin, nTopMargin, nBottomMargin;
         };
 
         /// State of the parser, which gets saved / restored when changing groups.
