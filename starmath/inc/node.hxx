@@ -750,6 +750,11 @@ public:
 
     virtual void Arrange(const OutputDevice &rDev, const SmFormat &rFormat);
     void Accept(SmVisitor* pVisitor);
+
+    SmMathSymbolNode* Symbol();
+    const SmMathSymbolNode* Symbol() const;
+    SmNode* Operand();
+    const SmNode* Operand() const;
 };
 
 
@@ -817,6 +822,13 @@ public:
 
     virtual void Arrange(const OutputDevice &rDev, const SmFormat &rFormat);
     void Accept(SmVisitor* pVisitor);
+
+    SmMathSymbolNode* Symbol();
+    const SmMathSymbolNode* Symbol() const;
+    SmNode* LeftOperand();
+    const SmNode* LeftOperand() const;
+    SmNode* RightOperand();
+    const SmNode* RightOperand() const;
 };
 
 
@@ -1133,6 +1145,11 @@ public:
     virtual void Arrange(const OutputDevice &rDev, const SmFormat &rFormat);
     void CreateTextFromNode(String &rText);
     void Accept(SmVisitor* pVisitor);
+
+    SmNode* Attribute();
+    const SmNode* Attribute() const;
+    SmNode* Body();
+    const SmNode* Body() const;
 };
 
 
@@ -1240,7 +1257,7 @@ inline const SmNode* SmRootNode::Argument() const
 }
 inline SmRootSymbolNode* SmRootNode::Symbol()
 {
-    OSL_ASSERT( GetSubNode( 0 )->GetType() == NROOTSYMBOL );
+    OSL_ASSERT( GetNumSubNodes() > 1 && GetSubNode( 1 )->GetType() == NROOTSYMBOL );
     return static_cast< SmRootSymbolNode* >( GetSubNode( 1 ));
 }
 inline const SmRootSymbolNode* SmRootNode::Symbol() const
@@ -1257,6 +1274,71 @@ inline const SmNode* SmRootNode::Body() const
     return const_cast< SmRootNode* >( this )->Body();
 }
 
+inline SmMathSymbolNode* SmUnHorNode::Symbol()
+{
+    OSL_ASSERT( GetNumSubNodes() > 0 && GetSubNode( 0 )->GetType() == NMATH );
+    return static_cast< SmMathSymbolNode* >( GetSubNode( 0 ));
+}
+inline const SmMathSymbolNode* SmUnHorNode::Symbol() const
+{
+    return const_cast< SmUnHorNode* >( this )->Symbol();
+}
+inline SmNode* SmUnHorNode::Operand()
+{
+    OSL_ASSERT( GetNumSubNodes() > 1 );
+    return GetSubNode( 1 );
+}
+inline const SmNode* SmUnHorNode::Operand() const
+{
+    return const_cast< SmUnHorNode* >( this )->Operand();
+}
+
+inline SmMathSymbolNode* SmBinHorNode::Symbol()
+{
+    OSL_ASSERT( GetNumSubNodes() > 1 && GetSubNode( 1 )->GetType() == NMATH );
+    return static_cast< SmMathSymbolNode* >( GetSubNode( 1 ));
+}
+inline const SmMathSymbolNode* SmBinHorNode::Symbol() const
+{
+    return const_cast< SmBinHorNode* >( this )->Symbol();
+}
+inline SmNode* SmBinHorNode::LeftOperand()
+{
+    OSL_ASSERT( GetNumSubNodes() > 0 );
+    return GetSubNode( 0 );
+}
+inline const SmNode* SmBinHorNode::LeftOperand() const
+{
+    return const_cast< SmBinHorNode* >( this )->LeftOperand();
+}
+inline SmNode* SmBinHorNode::RightOperand()
+{
+    OSL_ASSERT( GetNumSubNodes() > 2 );
+    return GetSubNode( 2 );
+}
+inline const SmNode* SmBinHorNode::RightOperand() const
+{
+    return const_cast< SmBinHorNode* >( this )->RightOperand();
+}
+
+inline SmNode* SmAttributNode::Attribute()
+{
+    OSL_ASSERT( GetNumSubNodes() > 0 );
+    return GetSubNode( 0 );
+}
+inline const SmNode* SmAttributNode::Attribute() const
+{
+    return const_cast< SmAttributNode* >( this )->Attribute();
+}
+inline SmNode* SmAttributNode::Body()
+{
+    OSL_ASSERT( GetNumSubNodes() > 1 );
+    return GetSubNode( 1 );
+}
+inline const SmNode* SmAttributNode::Body() const
+{
+    return const_cast< SmAttributNode* >( this )->Body();
+}
 
 #endif
 
