@@ -71,7 +71,7 @@ OleObjectHelper::OleObjectHelper( const Reference< XMultiServiceFactory >& rxMod
     {
         mxResolver.set( rxModelFactory->createInstance( CREATE_OUSTRING( "com.sun.star.document.ImportEmbeddedObjectResolver" ) ), UNO_QUERY );
     }
-    catch( Exception& )
+    catch(const Exception& )
     {
     }
 }
@@ -83,7 +83,7 @@ OleObjectHelper::~OleObjectHelper()
         Reference< XComponent > xResolverComp( mxResolver, UNO_QUERY_THROW );
         xResolverComp->dispose();
     }
-    catch( Exception& )
+    catch(const Exception& )
     {
     }
 }
@@ -122,7 +122,7 @@ bool OleObjectHelper::importOleObject( PropertyMap& rPropMap, const OleObjectInf
                 bRet = true;
             }
         }
-        catch( Exception& )
+        catch(const Exception& )
         {
         }
     }

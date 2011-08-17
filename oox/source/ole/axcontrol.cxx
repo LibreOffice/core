@@ -202,7 +202,7 @@ bool lclExtractRangeFromName( CellRangeAddress& orRangeAddr, const Reference< XM
         orRangeAddr = xAddressable->getRangeAddress();
         return true;
     }
-    catch( Exception& )
+    catch(const Exception& )
     {
     }
     return false;
@@ -234,7 +234,7 @@ void lclPrepareConverter( PropertySet& rConverter, const Reference< XModel >& rx
             CREATE_OUSTRING( "com.sun.star.table.CellAddressConversion" );
         rConverter.set( xModelFactory->createInstance( aServiceName ) );
     }
-    catch( Exception& )
+    catch(const Exception& )
     {
     }
     rConverter.setProperty( PROP_XLA1Representation, rAddressString );
@@ -351,7 +351,7 @@ void ControlConverter::bindToSources( const Reference< XControlModel >& rxCtrlMo
             CREATE_OUSTRING( "com.sun.star.table.CellValueBinding" ), aArgs ), UNO_QUERY_THROW );
         xBindable->setValueBinding( xBinding );
     }
-    catch( Exception& )
+    catch(const Exception& )
     {
     }
 
@@ -383,7 +383,7 @@ void ControlConverter::bindToSources( const Reference< XControlModel >& rxCtrlMo
             CREATE_OUSTRING( "com.sun.star.table.CellRangeListSource"  ), aArgs ), UNO_QUERY_THROW );
         xEntrySink->setListEntrySource( xEntrySource );
     }
-    catch( Exception& )
+    catch(const Exception& )
     {
     }
 }
@@ -1896,7 +1896,7 @@ bool EmbeddedControl::convertProperties( const Reference< XControlModel >& rxCtr
         {
             aPropMap.setProperty( PROP_GenerateVbaEvents, true);
         }
-        catch( Exception& )
+        catch(const Exception& )
         {
         }
         mxModel->convertProperties( aPropMap, rConv );
@@ -1936,7 +1936,7 @@ Reference< XControlModel > EmbeddedForm::convertAndInsert( const EmbeddedControl
         if( rControl.convertProperties( xCtrlModel, maControlConv ) )
             return xCtrlModel;
     }
-    catch( Exception& )
+    catch(const Exception& )
     {
     }
     return Reference< XControlModel >();
@@ -1961,7 +1961,7 @@ Reference< XIndexContainer > EmbeddedForm::createXForm()
                 mxFormIC.set( xForm, UNO_QUERY_THROW );
             }
         }
-        catch( Exception& )
+        catch(const Exception& )
         {
         }
         // always clear the forms supplier to not try to create the form again
