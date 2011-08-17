@@ -483,22 +483,6 @@ sal_Bool SfxObjectShell::AcceptStateUpdate() const
 
 //-------------------------------------------------------------------------
 
-sal_Bool SfxObjectShell::HasModalViews() const
-{
-    SfxViewFrame* pFrame = SfxViewFrame::GetFirst( this );
-    while( pFrame )
-    {
-        if ( pFrame->IsInModalMode() )
-            return sal_True;
-
-        pFrame = SfxViewFrame::GetNext( *pFrame, this );
-    }
-
-    return sal_False;
-}
-
-//-------------------------------------------------------------------------
-
 void SfxObjectShell::SetMacroMode_Impl( sal_Bool bModal )
 {
     if ( !pImp->bRunningMacro != !bModal )
@@ -1136,25 +1120,6 @@ void SfxObjectShell::PrepareReload( )
 */
 {
 }
-
-//-------------------------------------------------------------------------
-
-void SfxObjectShell::LockAutoLoad( sal_Bool bLock )
-
-/*  [Description]
-
-    Prevents an possible occuring autoload. Takes also FrameSet into account.
-    before the autoload.
-*/
-
-{
-    if ( bLock )
-        ++pImp->nAutoLoadLocks;
-    else
-        --pImp->nAutoLoadLocks;
-}
-
-//-------------------------------------------------------------------------
 
 // Can be moved to frame.cxx, when 358+36x-State have been merged
 

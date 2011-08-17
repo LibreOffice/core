@@ -105,8 +105,6 @@ private:
     ImageProcessingData m_aIPData;
 
     void GetRect(sal_Int32& nLeft, sal_Int32& nTop, sal_Int32& nRight, sal_Int32& nBottom);
-    XFRect GetRectInCM();
-    Rectangle GetRectIn100thMM();
     void XFConvertEquation(XFContentContainer* pCont);
 
     void ParseChart(IXFStream* pOutputStream);

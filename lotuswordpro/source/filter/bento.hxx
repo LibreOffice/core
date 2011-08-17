@@ -261,10 +261,7 @@ class LtcBenContainer
 {
 public:
     BenError Open();
-    void Release(); // Deletes container object--last call
     BenError Close();
-    BenError RegisterTypeName(const char * sTypeName,
-      pCBenTypeName * ppTypeName);
     BenError RegisterPropertyName(const char * sPropertyName,
       pCBenPropertyName * ppPropertyName);
     // Pass NULL to begin iteration.  Done when returns NULL.
@@ -285,8 +282,6 @@ public: // Internal methods
     BenError SeekToPosition(BenContainerPos Pos);
     BenError SeekFromEnd(long Offset);
 
-    BenError GetPosition(BenContainerPos * pPosition);
-
     BenObjectID GetNextAvailObjectID() { return cNextAvailObjectID; }
     void SetNextAvailObjectID(BenObjectID ID) { cNextAvailObjectID = ID; }
     pCUtList GetObjects() { return &cObjects; }
@@ -294,7 +289,6 @@ public: // Internal methods
 
     LtcUtBenValueStream * FindNextValueStreamWithPropertyName(const char * sPropertyName, LtcUtBenValueStream * pCurrentValueStream);
     LtcUtBenValueStream * FindValueStreamWithPropertyName(const char * sPropertyName);
-    LtcUtBenValueStream * FindObjectValueStreamWithObjectIDAndProperty(BenObjectID ObjectID, const char * sPropertyName);
     BenError CreateGraphicStream(SvStream * &pStream,  const char *pObjectName);
 
     BenError GetSize(sal_uLong * pLength);

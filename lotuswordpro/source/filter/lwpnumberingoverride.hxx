@@ -81,8 +81,6 @@ public:
 public:
     virtual void Read(LwpObjectStream *pStrm);
 
-    void Override(LwpNumberingOverride* pOther);
-
     inline sal_uInt16 GetLevel() const;
     inline sal_uInt16 GetPosition() const;
 

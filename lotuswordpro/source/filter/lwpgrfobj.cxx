@@ -250,40 +250,6 @@ void LwpGraphicObject::XFConvert (XFContentContainer* pCont)
     {
         XFConvertEquation(pCont);
     }
-    if (m_sServerContextFormat[1]=='l'&&m_sServerContextFormat[2]=='c'&&m_sServerContextFormat[3]=='h')
-    {
-        //LwpSvStream* pDocStream = m_pStrm;
-        //LwpChartStreamTools::ParseChart(pDocStream, GetObjectID(),
-        //                              GetRectIn100thMM(), GetRectInCM(), pOutputStream);
-        //LwpChartStreamTools::ParseChart(pDocStream, GetObjectID(),
-        //                              GetRectIn100thMM(), GetRectInCM(), pCont, m_strStyleName);
-    }
-}
-
-/**
-* @short   Get the rectangle of a chart in 100thMM
-* @descr
-* @return the rectangle of the chart
-*/
-Rectangle LwpGraphicObject::GetRectIn100thMM()
-{
-#define To100thMM(num) (long)(2540* (double(num)/(72 * 65536L)))
-    sal_Int32 nLeft,nTop,nRight,nBottom;
-    GetRect(nLeft,nTop,nRight,nBottom);
-    return Rectangle( To100thMM(nLeft),To100thMM(nTop),To100thMM(nRight),To100thMM(nBottom) );
-}
-
-/**
-* @short   Get the rectangle of a chart in CM
-* @descr
-* @return   The rectangle of the chart
-*/
-XFRect LwpGraphicObject::GetRectInCM()
-{
-#define ToCM(num) (2.54*(double(num)/(72 * 65536L)))
-    sal_Int32 nLeft,nTop,nRight,nBottom;
-    GetRect(nLeft,nTop,nRight,nBottom);
-    return XFRect( ToCM(nLeft),ToCM(nTop),ToCM(nRight-nLeft),ToCM(nBottom-nTop) );
 }
 
 /**

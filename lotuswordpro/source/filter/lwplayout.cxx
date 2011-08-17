@@ -955,15 +955,6 @@ sal_uInt16 LwpMiddleLayout::GetScaleTile(void)
         return 0;
 }
 
-void LwpMiddleLayout::SetScaleTile(sal_uInt16 nVal)
-{
-    m_nOverrideFlag |= OVER_SCALING;
-    if (nVal)
-        GetLayoutScale()->SetPlacement(GetLayoutScale()->GetPlacement() | LwpLayoutScale::TILED);
-    else
-        GetLayoutScale()->SetPlacement(GetLayoutScale()->GetPlacement() & ~LwpLayoutScale::TILED);
-}
-
 sal_uInt16 LwpMiddleLayout::GetScaleCenter(void)
 {
     if ((m_nOverrideFlag & OVER_SCALING) && m_LayScale.obj())
@@ -973,15 +964,6 @@ sal_uInt16 LwpMiddleLayout::GetScaleCenter(void)
         return dynamic_cast<LwpMiddleLayout*>(m_BasedOnStyle.obj())->GetScaleCenter();
     else
         return 0;
-}
-
-void LwpMiddleLayout::SetScaleCenter(sal_uInt16 nVal)
-{
-    m_nOverrideFlag |= OVER_SCALING;
-    if (nVal)
-        GetLayoutScale()->SetPlacement(GetLayoutScale()->GetPlacement() | LwpLayoutScale::CENTERED);
-    else
-        GetLayoutScale()->SetPlacement(GetLayoutScale()->GetPlacement() & ~LwpLayoutScale::CENTERED);
 }
 
 sal_uInt32 LwpMiddleLayout::GetScalePercentage(void)
@@ -994,12 +976,6 @@ sal_uInt32 LwpMiddleLayout::GetScalePercentage(void)
         return 100;
 }
 
-void LwpMiddleLayout::SetScalePercentage(sal_uInt32 nVal)
-{
-    m_nOverrideFlag |= OVER_SCALING;
-    GetLayoutScale()->SetScalePercentage(nVal*10);
-}
-
 double LwpMiddleLayout::GetScaleWidth(void)
 {
     if ((m_nOverrideFlag & OVER_SCALING) && m_LayScale.obj())
@@ -1008,12 +984,6 @@ double LwpMiddleLayout::GetScaleWidth(void)
         return dynamic_cast<LwpMiddleLayout*>(m_BasedOnStyle.obj())->GetScaleWidth();
     else
         return 0;
-}
-
-void LwpMiddleLayout::SetScaleWidth(double fVal)
-{
-    m_nOverrideFlag |= OVER_SCALING;
-    GetLayoutScale()->SetScaleWidth(LwpTools::ConvertToUnits(fVal));
 }
 
 double LwpMiddleLayout::GetScaleHeight(void)
@@ -1142,12 +1112,6 @@ LwpPoint LwpMiddleLayout::GetOrigin()
     }
 
     return LwpPoint();
-}
-
-void LwpMiddleLayout::SetScaleHeight(double fVal)
-{
-    m_nOverrideFlag |= OVER_SCALING;
-    GetLayoutScale()->SetScaleHeight(LwpTools::ConvertToUnits(fVal));
 }
 
 /**

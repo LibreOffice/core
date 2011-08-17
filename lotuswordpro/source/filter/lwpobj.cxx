@@ -61,12 +61,6 @@
 #include "lwpobj.hxx"
 
 /**
- * @descr  private contor to ensure only object constructed from stream
- */
-LwpObject::LwpObject()
-    : m_pObjStrm(NULL),  m_pFoundry(NULL), m_pStrm(NULL)
-{}
-/**
  * @descr  construct lwpobject from stream
  */
 LwpObject::LwpObject(LwpObjectHeader objHdr, LwpSvStream* pStrm)

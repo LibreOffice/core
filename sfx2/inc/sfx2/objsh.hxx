@@ -282,7 +282,6 @@ public:
     sal_Bool                    IsInModalMode() const;
     sal_Bool                    IsInPrepareClose() const;
     virtual sal_Bool            AcceptStateUpdate() const;
-    sal_Bool                    HasModalViews() const;
     sal_Bool                    IsHelpDocument() const;
 
     sal_Bool                    IsDocShared() const;
@@ -454,7 +453,6 @@ public:
     sal_Bool                    IsLoading() const;
     sal_Bool                    IsLoadingFinished() const;
     void                        SetAutoLoad( const INetURLObject&, sal_uInt32 nTime, sal_Bool bReload = sal_True );
-    void                        LockAutoLoad( sal_Bool bLock );
     sal_Bool                    IsAutoLoadLocked() const;
     void                        NotifyReloadAvailable();
     sal_Bool                    IsSecure();

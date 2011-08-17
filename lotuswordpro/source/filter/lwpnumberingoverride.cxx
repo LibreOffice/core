@@ -92,57 +92,6 @@ void    LwpNumberingOverride::Read(LwpObjectStream *pStrm)
     pStrm->SkipExtra();
 }
 
-void LwpNumberingOverride::Override(LwpNumberingOverride* pOther)
-{
-    if (m_nApply & NO_LEVEL)
-    {
-        if (IsLevelOverridden())
-        {
-            pOther->OverrideLevel(m_nLevel);
-        }
-        else
-        {
-            pOther->RevertLevel();
-        }
-    }
-
-    if (m_nApply & NO_POSITION)
-    {
-        if (IsPositionOverridden())
-        {
-            pOther->OverridePosition(m_nPosition);
-        }
-        else
-        {
-            pOther->RevertPosition();
-        }
-    }
-
-    if (m_nApply & HEADING)
-    {
-        if (IsHeadingOverridden())
-        {
-            pOther->OverrideHeading(IsHeading());
-        }
-        else
-        {
-            pOther->RevertHeading();
-        }
-    }
-
-    if (m_nApply & SMARTLEVEL)
-    {
-        if (IsSmartLevelOverridden())
-        {
-            pOther->OverrideSmartLevel(IsSmartLevel());
-        }
-        else
-        {
-            pOther->RevertSmartLevel();
-        }
-    }
-}
-
 void LwpNumberingOverride::OverrideLevel(sal_uInt16 nNewLv)
 {
     m_nLevel = nNewLv;

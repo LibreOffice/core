@@ -106,9 +106,6 @@ public:
     SfxMenuControl& operator[]( sal_uInt16 nPos ) const;
 
     sal_uInt16          GetItemId( sal_uInt16 nPos ) const;
-    SfxVirtualMenu* GetPopupMenu( sal_uInt16 nId ) const;
-    String          GetItemText( sal_uInt16 nId ) const;
-
 
     SfxVirtualMenu* GetParentMenu() const { return pParent; }
     void            SetParentMenu( SfxVirtualMenu* pNewParent )
@@ -121,8 +118,6 @@ public:
     void            InitializeHelp();
     void            SetResMgr(ResMgr* pMgr)  {pResMgr = pMgr; }
     ResMgr*         GetResMgr() { return pResMgr; }
-    void            SetHelpIds( ResMgr* );
-    void            UpdateImages();
 
     DECL_LINK( Select, Menu * );
 };
