@@ -710,6 +710,42 @@ bool RTFDocumentImpl::inFrame()
         || m_aStates.top().aFrame.nY > 0;
 }
 
+void RTFDocumentImpl::checkChangedFrame()
+{
+    // Check if this is a frame.
+    if (inFrame() && !m_bWasInFrame)
+    {
+        uno::Reference<text::XTextFrame> xTextFrame;
+        xTextFrame.set(getModelFactory()->createInstance(OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.TextFrame"))), uno::UNO_QUERY);
+        uno::Reference<drawing::XShape> xShape(xTextFrame, uno::UNO_QUERY);
+        uno::Reference<beans::XPropertySet> xPropertySet(xTextFrame, uno::UNO_QUERY);
+
+        // RTF allows frames larger than the text content by default
+        xPropertySet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("SizeType")), uno::Any(text::SizeType::MIN));
+
+        xShape->setSize(awt::Size(m_aStates.top().aFrame.nW, m_aStates.top().aFrame.nH));
+        xPropertySet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("HoriOrient")), uno::Any(text::HoriOrientation::NONE));
+        xPropertySet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("HoriOrientPosition")), uno::Any(sal_Int32(m_aStates.top().aFrame.nX)));
+        xPropertySet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("VertOrient")), uno::Any(text::VertOrientation::NONE));
+        xPropertySet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("VertOrientPosition")), uno::Any(sal_Int32(m_aStates.top().aFrame.nY)));
+        xPropertySet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("LeftMargin")), uno::Any(sal_Int32(m_aStates.top().aFrame.nLeftMargin)));
+        xPropertySet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("RightMargin")), uno::Any(sal_Int32(m_aStates.top().aFrame.nRightMargin)));
+        xPropertySet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("TopMargin")), uno::Any(sal_Int32(m_aStates.top().aFrame.nTopMargin)));
+        xPropertySet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("BottomMargin")), uno::Any(sal_Int32(m_aStates.top().aFrame.nBottomMargin)));
+
+        Mapper().startShape(xShape);
+        Mapper().startParagraphGroup();
+    }
+    else if (!inFrame() && m_bWasInFrame)
+    {
+        Mapper().endParagraphGroup();
+        Mapper().endShape();
+        Mapper().endParagraphGroup();
+        Mapper().startParagraphGroup();
+        m_bWasInFrame = false;
+    }
+}
+
 void RTFDocumentImpl::text(OUString& rString)
 {
     bool bRet = true;
@@ -811,38 +847,7 @@ void RTFDocumentImpl::text(OUString& rString)
     checkFirstRun();
     if (m_bNeedPap)
     {
-        // Check if this is a frame.
-        if (inFrame() && !m_bWasInFrame)
-        {
-            uno::Reference<text::XTextFrame> xTextFrame;
-            xTextFrame.set(getModelFactory()->createInstance(OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.TextFrame"))), uno::UNO_QUERY);
-            uno::Reference<drawing::XShape> xShape(xTextFrame, uno::UNO_QUERY);
-            uno::Reference<beans::XPropertySet> xPropertySet(xTextFrame, uno::UNO_QUERY);
-
-            // RTF allows frames larger than the text content by default
-            xPropertySet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("SizeType")), uno::Any(text::SizeType::MIN));
-
-            xShape->setSize(awt::Size(m_aStates.top().aFrame.nW, m_aStates.top().aFrame.nH));
-            xPropertySet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("HoriOrient")), uno::Any(text::HoriOrientation::NONE));
-            xPropertySet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("HoriOrientPosition")), uno::Any(sal_Int32(m_aStates.top().aFrame.nX)));
-            xPropertySet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("VertOrient")), uno::Any(text::VertOrientation::NONE));
-            xPropertySet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("VertOrientPosition")), uno::Any(sal_Int32(m_aStates.top().aFrame.nY)));
-            xPropertySet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("LeftMargin")), uno::Any(sal_Int32(m_aStates.top().aFrame.nLeftMargin)));
-            xPropertySet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("RightMargin")), uno::Any(sal_Int32(m_aStates.top().aFrame.nRightMargin)));
-            xPropertySet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("TopMargin")), uno::Any(sal_Int32(m_aStates.top().aFrame.nTopMargin)));
-            xPropertySet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("BottomMargin")), uno::Any(sal_Int32(m_aStates.top().aFrame.nBottomMargin)));
-
-            Mapper().startShape(xShape);
-            Mapper().startParagraphGroup();
-        }
-        else if (!inFrame() && m_bWasInFrame)
-        {
-            Mapper().endParagraphGroup();
-            Mapper().endShape();
-            Mapper().endParagraphGroup();
-            Mapper().startParagraphGroup();
-            m_bWasInFrame = false;
-        }
+        checkChangedFrame();
 
         if (!m_pCurrentBuffer)
             Mapper().props(pParagraphProperties);
@@ -1264,6 +1269,8 @@ int RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
             break;
         case RTF_PAR:
             {
+                if (m_bNeedPap)
+                    checkChangedFrame();
                 if (!m_pCurrentBuffer)
                     parBreak();
                 else if (m_aStates.top().nDestinationState != DESTINATION_SHAPETEXT)

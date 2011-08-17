@@ -336,6 +336,7 @@ namespace writerfilter {
                 void sectBreak(bool bFinal);
                 void replayBuffer(RTFBuffer_t& rBuffer);
                 bool inFrame();
+                void checkChangedFrame();
 
                 uno::Reference<uno::XComponentContext> const& m_xContext;
                 uno::Reference<io::XInputStream> const& m_xInputStream;
