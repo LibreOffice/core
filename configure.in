@@ -4811,16 +4811,16 @@ if test -n "$with_system_db" -o -n "$with_system_libs" && \
     for dbver in 5.1 5.0 5 4.8 4.7 4; do
         for dash in - ''; do
             AC_CHECK_HEADER([db$dash$dbver/db.h],
-                [ db_header="db$dash$dbver/db.h"; break ])
+                [ db_header="db$dash$dbver/db.h"; break 2 ])
         done
     done
 
     if test -z "$db_header"; then
-        AC_CHECK_HEADER([db/db.h], [db_header='db/db.h'])
+        AC_CHECK_HEADER([db/db.h], [db_header='db/db.h'; dbver=''])
     fi
 
     if test -z "$db_header"; then
-       AC_CHECK_HEADER(db.h, [ db_header='db.h' ])
+       AC_CHECK_HEADER(db.h, [ db_header='db.h'; dbver='' ])
     fi
 
     if test -z "$db_header"; then
@@ -4836,20 +4836,12 @@ if test -n "$with_system_db" -o -n "$with_system_libs" && \
     SYSTEM_DB_CFLAGS="-DSYSTEM_DB_HEADER='<$db_header>'"
 
     DB_LIB=
-    for dbver in 5.1 5.0 5 4.8 4.7 4 ''; do
-        for dash in - ''; do
-            AC_CHECK_LIB(db$dash$dbver, dbopen,
-                [ DB_LIB="db$dash$dbver"; DB_CPPLIB="db_cxx$dash$dbver"; break ])
-            AC_CHECK_LIB(db$dash$dbver, __db185_open,
-                [ DB_LIB="db$dash$dbver"; DB_CPPLIB="db_cxx$dash$dbver"; break ])
-        done
-        test -n "$DB_LIB" && break
+    for dash in - ''; do
+        AC_CHECK_LIB(db$dash$dbver, dbopen,
+            [ DB_LIB="db$dash$dbver"; DB_CPPLIB="db_cxx$dash$dbver"; break ])
+        AC_CHECK_LIB(db$dash$dbver, __db185_open,
+            [ DB_LIB="db$dash$dbver"; DB_CPPLIB="db_cxx$dash$dbver"; break ])
     done
-
-    if test -z "$DB_LIB"; then
-        AC_CHECK_LIB(db, dbopen,
-            [ DB_LIB="db"; DB_CPPLIB="db_cxx" ])
-    fi
 
     if test -z "$DB_LIB" ; then
         AC_MSG_ERROR([db library not found. Use the correct -L flag,
