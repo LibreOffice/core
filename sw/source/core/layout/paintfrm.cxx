@@ -123,6 +123,7 @@
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
+#include <basegfx/color/bcolortools.hxx>
 
 using namespace ::editeng;
 using namespace ::com::sun::star;
@@ -3316,7 +3317,9 @@ drawinglayer::primitive2d::Primitive2DSequence lcl_CreateHeaderFooterSeparatorPr
 
     // Colors
     basegfx::BColor aLineColor( 3.0 / 255.0, 105.0 / 255.0, 163.0 / 255.0 );
-    basegfx::BColor aFillColor( 170.0 / 255.0, 220.0 / 255.0, 247.0 / 255.0 );
+    basegfx::BColor aHslLine = basegfx::tools::rgb2hsl( aLineColor );
+    aHslLine.setZ( aHslLine.getZ( ) * 2.5 );
+    basegfx::BColor aFillColor = basegfx::tools::hsl2rgb( aHslLine );
 
     // Dashed line in twips
     std::vector< double > aStrokePattern;
