@@ -1918,8 +1918,8 @@ XclRoot::GetPixelXFromHmm(int) const
 XclRoot::GetPixelYFromHmm(int) const
 XclTokenArray::XclTokenArray(std::vector<unsigned char, std::allocator<unsigned char> >&, bool)
 XclTokenArrayIterator::Init()
-XclTools::GetBuiltInStyleName(String const&)
-XclTools::GetSbMacroUrl(String const&, String const&, SfxObjectShell*)
+XclTools::GetBuiltInStyleName(rtl::OUString const&)
+XclTools::GetSbMacroUrl(rtl::OUString const&, rtl::OUString const&, SfxObjectShell*)
 XmlSec::GetDateTimeString(rtl::OUString const&, rtl::OUString const&)
 XmlSecStatusBarControl::GetDefItemWidth(StatusBar&)
 ZipPackageStream::SetBaseEncryptionData(rtl::Reference<BaseEncryptionData> const&)
