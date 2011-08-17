@@ -712,7 +712,7 @@ const OUString XclTools::maSbMacroSuffix( RTL_CONSTASCII_USTRINGPARAM( "?languag
 
 OUString XclTools::GetSbMacroUrl( const OUString& rMacroName, SfxObjectShell* pDocShell )
 {
-    OSL_ENSURE( rMacroName.Len() > 0, "XclTools::GetSbMacroUrl - macro name is empty" );
+    OSL_ENSURE( rMacroName.getLength() > 0, "XclTools::GetSbMacroUrl - macro name is empty" );
     ::ooo::vba::MacroResolvedInfo aMacroInfo = ::ooo::vba::resolveVBAMacro( pDocShell, rMacroName, false );
     if( aMacroInfo.mbFound )
         return ::ooo::vba::makeMacroURL( aMacroInfo.msResolvedMacro );
@@ -721,8 +721,8 @@ OUString XclTools::GetSbMacroUrl( const OUString& rMacroName, SfxObjectShell* pD
 
 OUString XclTools::GetSbMacroUrl( const OUString& rModuleName, const OUString& rMacroName, SfxObjectShell* pDocShell )
 {
-    OSL_ENSURE( rModuleName.Len() > 0, "XclTools::GetSbMacroUrl - module name is empty" );
-    OSL_ENSURE( rMacroName.Len() > 0, "XclTools::GetSbMacroUrl - macro name is empty" );
+    OSL_ENSURE( rModuleName.getLength() > 0, "XclTools::GetSbMacroUrl - module name is empty" );
+    OSL_ENSURE( rMacroName.getLength() > 0, "XclTools::GetSbMacroUrl - macro name is empty" );
     return GetSbMacroUrl( rModuleName + OUString( sal_Unicode( '.' ) ) + rMacroName, pDocShell );
 }
 
