@@ -2636,6 +2636,8 @@ int RTFDocumentImpl::popState()
     bool bPopShapeProperties = false;
     bool bPopPictureProperties = false;
     bool bFaltEnd = false;
+    RTFFrame aFrame;
+    bool bPopFrame = false;
 
     if (m_aStates.top().nDestinationState == DESTINATION_FONTTABLE)
     {
@@ -2951,6 +2953,11 @@ int RTFDocumentImpl::popState()
         aSprms = m_aStates.top().aTableSprms;
         bFaltEnd = true;
     }
+    else if (m_aStates.top().nDestinationState == DESTINATION_FLYMAINCONTENT)
+    {
+        aFrame = m_aStates.top().aFrame;
+        bPopFrame = true;
+    }
 
     // See if we need to end a track change
     RTFValue::Pointer_t pTrackchange = m_aStates.top().aCharacterSprms.find(NS_ooxml::LN_trackchange);
@@ -3004,6 +3011,8 @@ int RTFDocumentImpl::popState()
     }
     else if (bFaltEnd)
         m_aStates.top().aTableSprms = aSprms;
+    else if (bPopFrame)
+        m_aStates.top().aFrame = aFrame;
     if (bPopPictureProperties)
     {
         m_aStates.top().aPicture = aPicture;
