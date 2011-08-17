@@ -58,6 +58,7 @@
 #include <rtfsprm.hxx>
 #include <rtfreferenceproperties.hxx>
 #include <rtfskipdestination.hxx>
+#include <rtffly.hxx>
 
 #define TWIP_TO_MM100(TWIP)     ((TWIP) >= 0 ? (((TWIP)*127L+36L)/72L) : (((TWIP)*127L-36L)/72L))
 
@@ -1211,6 +1212,9 @@ int RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
             break;
         case RTF_FALT:
             m_aStates.top().nDestinationState = DESTINATION_FALT;
+            break;
+        case RTF_FLYMAINCNT:
+            m_aStates.top().nDestinationState = DESTINATION_FLYMAINCONTENT;
             break;
         case RTF_LISTTEXT:
             // Should be ignored by any reader that understands Word 97 through Word 2007 numbering.
