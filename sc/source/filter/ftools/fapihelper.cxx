@@ -171,6 +171,7 @@ ScfPropertySet::~ScfPropertySet()
 {
     Reference<beans::XPropertySetOption> xPropSetOpt(mxPropSet, UNO_QUERY);
     if (xPropSetOpt.is())
+        // Turn the property value change notification back on when finished.
         xPropSetOpt->enableChangeListenerNotification(true);
 }
 
@@ -180,6 +181,8 @@ void ScfPropertySet::Set( Reference< XPropertySet > xPropSet )
     mxMultiPropSet.set( mxPropSet, UNO_QUERY );
     Reference<beans::XPropertySetOption> xPropSetOpt(mxPropSet, UNO_QUERY);
     if (xPropSetOpt.is())
+        // We don't want to broadcast property value changes during import to
+        // improve performance.
         xPropSetOpt->enableChangeListenerNotification(false);
 }
 
