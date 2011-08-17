@@ -330,7 +330,7 @@ public:
     String      SVFName;    // z.B. "Times New Roman" = 15 Chars
     sal_uInt16      SVWidth;    // Durchschnittliche Zeichenbreite in %
          SgfFontOne();
-    void ReadOne( ByteString& ID, ByteString& Dsc);
+    void ReadOne(const rtl::OString& rID, ByteString& Dsc);
 };
 
 class SgfFontLst {
