@@ -39,12 +39,6 @@ namespace writerfilter {
                     Value.nVal = nValue;
                 }
 
-                RTFVertOrient(sal_uInt16 nOrient, sal_uInt16 nRelOrient)
-                {
-                    Value.Flags.nOrient = nOrient;
-                    Value.Flags.nRelOrient = nRelOrient;
-                }
-
                 sal_uInt16 GetOrient() const
                 {
                     return Value.Flags.nOrient;
@@ -79,13 +73,6 @@ namespace writerfilter {
                 RTFHoriOrient(sal_uInt16 nValue)
                 {
                     Value.nVal = nValue;
-                }
-
-                RTFHoriOrient(sal_uInt16 nOrient, sal_uInt16 nRelOrient)
-                {
-                    Value.Flags.nOrient = nOrient;
-                    Value.Flags.nRelOrient = nRelOrient;
-                    Value.Flags.nRelAnchor = 0;
                 }
 
                 sal_uInt16 GetOrient() const
