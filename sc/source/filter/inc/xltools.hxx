@@ -176,21 +176,21 @@ public:
     // font names -------------------------------------------------------------
 
     /** Returns the matching Excel font name for a passed Calc font name. */
-    static String       GetXclFontName( const String& rFontName );
+    static rtl::OUString GetXclFontName( const rtl::OUString& rFontName );
 
     // built-in defined names -------------------------------------------------
 
     /** Returns the raw English UI representation of a built-in defined name used in NAME records.
         @param cBuiltIn  Excel index of the built-in name. */
-    static String       GetXclBuiltInDefName( sal_Unicode cBuiltIn );
+    static rtl::OUString GetXclBuiltInDefName( sal_Unicode cBuiltIn );
     /** Returns the Calc UI representation of a built-in defined name used in NAME records.
         @descr  Adds a prefix to the representation returned by GetXclBuiltInDefName().
         @param cBuiltIn  Excel index of the built-in name. */
-    static String       GetBuiltInDefName( sal_Unicode cBuiltIn );
+    static rtl::OUString GetBuiltInDefName( sal_Unicode cBuiltIn );
     /** Returns the Excel built-in name with OOXML prefix
         @descr  Adds the "_xlnm." prefix to the representation returned by GetXclBuiltInDefName()
         @param cBuiltIn  Excel index of the built in name.*/
-    static String       GetBuiltInDefNameXml( sal_Unicode cBuiltIn );
+    static rtl::OUString GetBuiltInDefNameXml( sal_Unicode cBuiltIn );
     /** Returns the Excel built-in name index of the passed defined name from Calc.
         @descr  Ignores any characters following a valid representation of a built-in name.
         @param pcBuiltIn  (out-param) If not 0, the index of the built-in name will be returned here.

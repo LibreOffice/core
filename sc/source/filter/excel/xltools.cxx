@@ -456,13 +456,11 @@ sal_uInt16 XclTools::GetXclCodePage( rtl_TextEncoding eTextEnc )
 
 // font names -----------------------------------------------------------------
 
-String XclTools::GetXclFontName( const String& rFontName )
+OUString XclTools::GetXclFontName( const OUString& rFontName )
 {
     // substitute with MS fonts
-    String aNewName( GetSubsFontName( rFontName, SUBSFONT_ONLYONE | SUBSFONT_MS ) );
-    if( aNewName.Len() )
-        return aNewName;
-    return rFontName;
+    OUString aNewName = GetSubsFontName(rFontName, SUBSFONT_ONLYONE | SUBSFONT_MS);
+    return aNewName.isEmpty() ? rFontName : aNewName;
 }
 
 // built-in defined names -----------------------------------------------------
@@ -489,26 +487,29 @@ static const sal_Char* const ppcDefNames[] =
     "_FilterDatabase"
 };
 
-String XclTools::GetXclBuiltInDefName( sal_Unicode cBuiltIn )
+OUString XclTools::GetXclBuiltInDefName( sal_Unicode cBuiltIn )
 {
     OSL_ENSURE( SAL_N_ELEMENTS( ppcDefNames ) == EXC_BUILTIN_UNKNOWN,
         "XclTools::GetXclBuiltInDefName - built-in defined name list modified" );
-    String aDefName;
+
     if( cBuiltIn < SAL_N_ELEMENTS( ppcDefNames ) )
-        aDefName.AssignAscii( ppcDefNames[ cBuiltIn ] );
+        return rtl::OUString::createFromAscii(ppcDefNames[cBuiltIn]);
     else
-        aDefName = String::CreateFromInt32( cBuiltIn );
-    return aDefName;
+        return rtl::OUString::valueOf(static_cast<sal_Int32>(cBuiltIn));
 }
 
-String XclTools::GetBuiltInDefName( sal_Unicode cBuiltIn )
+OUString XclTools::GetBuiltInDefName( sal_Unicode cBuiltIn )
 {
-    return String( maDefNamePrefix ).Append( GetXclBuiltInDefName( cBuiltIn ) );
+    rtl::OUStringBuffer aBuf(maDefNamePrefix);
+    aBuf.append(GetXclBuiltInDefName(cBuiltIn));
+    return aBuf.makeStringAndClear();
 }
 
-String XclTools::GetBuiltInDefNameXml( sal_Unicode cBuiltIn )
+OUString XclTools::GetBuiltInDefNameXml( sal_Unicode cBuiltIn )
 {
-    return String( maDefNamePrefixXml ).Append( GetXclBuiltInDefName( cBuiltIn ) );
+    rtl::OUStringBuffer aBuf(maDefNamePrefixXml);
+    aBuf.append(GetXclBuiltInDefName(cBuiltIn));
+    return aBuf.makeStringAndClear();
 }
 
 sal_Unicode XclTools::GetBuiltInDefNameIndex( const OUString& rDefName )

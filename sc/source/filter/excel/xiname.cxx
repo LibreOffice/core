@@ -103,7 +103,7 @@ XclImpName::XclImpName( XclImpStream& rStrm, sal_uInt16 nXclNameIdx ) :
     bool bBuiltIn = ::get_flag( nFlags, EXC_NAME_BUILTIN );
 
     // special case for BIFF5 filter range - name appears as plain text without built-in flag
-    if( (GetBiff() == EXC_BIFF5) && (maXclName == XclTools::GetXclBuiltInDefName( EXC_BUILTIN_FILTERDATABASE )) )
+    if( (GetBiff() == EXC_BIFF5) && (maXclName.Equals(XclTools::GetXclBuiltInDefName(EXC_BUILTIN_FILTERDATABASE))) )
     {
         bBuiltIn = true;
         maXclName.Assign( EXC_BUILTIN_FILTERDATABASE );
