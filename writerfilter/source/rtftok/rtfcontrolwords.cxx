@@ -1847,6 +1847,7 @@ RTFSymbol aRTFControlWords[] = {
     {"flymaincnt", CONTROL_DESTINATION, RTF_FLYMAINCNT},
     {"flyvert", CONTROL_VALUE, RTF_FLYVERT},
     {"flyhorz", CONTROL_VALUE, RTF_FLYHORZ},
+    {"flyanchor", CONTROL_VALUE, RTF_FLYANCHOR},
 };
 int nRTFControlWords = SAL_N_ELEMENTS(aRTFControlWords);
 

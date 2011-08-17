@@ -725,6 +725,7 @@ void RTFDocumentImpl::checkChangedFrame()
         xPropertySet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("SizeType")), uno::Any(text::SizeType::MIN));
 
         xShape->setSize(awt::Size(m_aStates.top().aFrame.nW, m_aStates.top().aFrame.nH));
+        xPropertySet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("AnchorType")), uno::Any(m_aStates.top().aFrame.nAnchorType));
         xPropertySet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("HoriOrient")), uno::Any(m_aStates.top().aFrame.nHoriOrient));
         xPropertySet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("HoriOrientRelation")), uno::Any(m_aStates.top().aFrame.nHoriOrientRelation));
         xPropertySet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("HoriOrientPosition")), uno::Any(sal_Int32(m_aStates.top().aFrame.nX)));
@@ -2433,6 +2434,9 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
                 m_aStates.top().aFrame.nHoriOrient = aHoriOrient.GetOrient();
                 m_aStates.top().aFrame.nHoriOrientRelation = aHoriOrient.GetRelation();
             }
+            break;
+        case RTF_FLYANCHOR:
+            m_aStates.top().aFrame.nAnchorType = nParam;
             break;
         default:
 #if OSL_DEBUG_LEVEL > 1
