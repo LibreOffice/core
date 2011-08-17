@@ -320,10 +320,6 @@ MY_FILES_main += \
 .ELSE
 ERROR : unknown-GUIBASE
 .END
-.IF "$(OS)" == "WNT" || "$(OS)" == "LINUX" || \
-        ("$(OS)" == "SOLARIS" && "$(CPU)" == "S") || "$(OS)" == "NETBSD"
-MY_FILES_main += $(MY_MOD)/DataAccess/adabas.xcu
-.END
 .IF "$(ENABLE_EVOAB2)" == "TRUE"
 MY_FILES_main += $(MY_MOD)/DataAccess/evoab2.xcu
 MY_FILES_main += $(MY_MOD)/org/openoffice/Office/DataAccess-evoab2.xcu
