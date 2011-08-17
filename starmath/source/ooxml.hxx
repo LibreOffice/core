@@ -45,6 +45,7 @@ public:
 private:
     void HandleNodes(SmNode *pNode,int nLevel);
     void HandleTable(SmNode *pNode,int nLevel);
+    void HandleVerticalStack( SmNode* pNode, int nLevel, int firstItem );
     void HandleText(SmNode *pNode,int nLevel);
     void HandleMath(SmNode *pNode,int nLevel);
     void HandleFractions( SmNode *pNode,int nLevel, const char* type = NULL );

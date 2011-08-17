@@ -92,7 +92,7 @@ bool SmOoxml::ConvertFromStarMath( ::sax_fastparser::FSHelperPtr serializer )
 
 void SmOoxml::HandleNodes(SmNode *pNode,int nLevel)
 {
-    fprintf(stderr,"XX %d %d\n", nLevel, pNode->GetType());
+    fprintf(stderr,"XX %d %d %d\n", nLevel, pNode->GetType(), pNode->GetNumSubNodes());
     switch(pNode->GetType())
     {
 #if 0
@@ -202,28 +202,42 @@ void SmOoxml::HandleTable(SmNode *pNode,int nLevel)
     sal_uInt16  nSize = pNode->GetNumSubNodes();
     //The root of the starmath is a table, if
     //we convert this them each iteration of
-    //conversion from starmath to mathtype will
+    //conversion from starmath to OOXML will
     //add an extra unnecessary level to the
-    //mathtype output stack which would grow
+    //OOXML output stack which would grow
     //without bound in a multi step conversion
-
-// TODO
-//    if ( nLevel || (nSize >1))
-//    {
-//        *pS << sal_uInt8(PILE);
-//        *pS << sal_uInt8(nHAlign); //vAlign ?
-//        *pS << sal_uInt8(0x01); //hAlign
-//    }
-
+    if( nLevel || nSize > 1 )
+        return HandleVerticalStack( pNode, nLevel, 0 );
     for (sal_uInt16 i = 0; i < nSize; i++)
         if (SmNode *pTemp = pNode->GetSubNode(i))
-        {
-//            *pS << sal_uInt8(LINE);
             HandleNodes(pTemp,nLevel+1);
-//            *pS << sal_uInt8(END);
-        }
-//    if (nLevel || (nSize>1))
-//        *pS << sal_uInt8(END);
+}
+
+// output vertical stack, firstItem says which child to use as first (if there
+// are more than two children, OOXML can have only a vertical stack of two items,
+// so create a bigger vertical stack recursively)
+void SmOoxml::HandleVerticalStack( SmNode* pNode, int nLevel, int firstItem )
+{
+    if( firstItem == pNode->GetNumSubNodes() - 1 ) // only one item, just output the item
+    {
+        if( SmNode *pTemp = pNode->GetSubNode( firstItem ))
+            HandleNodes( pTemp, nLevel + 1 );
+        return;
+    }
+    m_pSerializer->startElementNS( XML_m, XML_f, FSEND );
+    m_pSerializer->startElementNS( XML_m, XML_fPr, FSEND );
+    m_pSerializer->singleElementNS( XML_m, XML_type, FSNS( XML_m, XML_val ), "noBar", FSEND );
+    m_pSerializer->endElementNS( XML_m, XML_fPr );
+    m_pSerializer->startElementNS( XML_m, XML_num, FSEND );
+    if( SmNode* num = pNode->GetSubNode( firstItem ))
+        HandleNodes( num, nLevel + 1 );
+    m_pSerializer->endElementNS( XML_m, XML_num );
+    // TODO this nesting means MSOffice will use smaller fonts for nested items,
+    // not sure if there's another way to represent a bigger stack than 2 items
+    m_pSerializer->startElementNS( XML_m, XML_den, FSEND );
+    HandleVerticalStack( pNode, nLevel, firstItem + 1 );
+    m_pSerializer->endElementNS( XML_m, XML_den );
+    m_pSerializer->endElementNS( XML_m, XML_f );
 }
 
 void SmOoxml::HandleText(SmNode *pNode, int /*nLevel*/)
