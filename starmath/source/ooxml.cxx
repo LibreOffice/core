@@ -205,7 +205,15 @@ void SmOoxml::HandleAllSubNodes( SmNode* pNode, int nLevel )
     for( int i = 0;
          i < size;
          ++i )
+    {
+// TODO remove when all types of nodes are handled properly
+        if( pNode->GetSubNode( i ) == NULL )
+        {
+            OSL_FAIL( "Subnode is NULL, parent node not handled properly" );
+            continue;
+        }
         HandleNode( pNode->GetSubNode( i ), nLevel + 1 );
+    }
 }
 
 // output vertical stack, firstItem says which child to use as first (if there
