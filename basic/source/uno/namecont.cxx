@@ -1806,7 +1806,7 @@ void SfxLibraryContainer::storeLibraries_Impl( const uno::Reference< embed::XSto
             Any aLibAny = maNameContainer.getByName( aNames[0] );
             Reference< XNameAccess > xNameAccess;
             aLibAny >>= xNameAccess;
-            if ( !xNameAccess->hasElements() )
+            if ( ! ( xNameAccess->hasElements() || isModified() ) )
                 return;
         }
 
