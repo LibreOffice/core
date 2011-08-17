@@ -59,7 +59,7 @@ if test -f $DESTDIR$INSTALLDIR/help/en/sbasic.cfg -a \
 fi
 
 echo "Fixing permissions..."
-for dir in $DOCDIR $DESTDIR$INSTALLDIR/basis$PRODUCTVERSION/sdk/examples ; do
+for dir in $DESTDIR$DOCDIR $DESTDIR$INSTALLDIR/basis$PRODUCTVERSION/sdk/examples ; do
     if test -d $dir -a -w $dir ; then
 	find "$dir" -type f \( -name "*.txt" -o -name "*.java" -o -name "*.xml"    -o \
 			       -name "*.xcu" -o -name "*.xcs"  -o -name "*.html"   -o \
