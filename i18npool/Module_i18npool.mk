@@ -57,7 +57,7 @@ $(eval $(call gb_Module_add_targets,i18npool,\
 ))
 endif
 
-#$(eval $(call gb_Module_add_check_targets,i18npool,\
+$(eval $(call gb_Module_add_check_targets,i18npool,\
 	CppunitTest_i18npool_test_breakiterator \
 ))
 
