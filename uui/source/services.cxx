@@ -44,7 +44,7 @@ using namespace com::sun::star::registry;
 using ::rtl::OUString;
 
 
-extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(sal_Char const * pImplName,
+extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL uui_component_getFactory(sal_Char const * pImplName,
                         void * pServiceManager,
                         void *)
 {

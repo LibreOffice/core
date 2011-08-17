@@ -106,7 +106,7 @@ namespace xmlscript
 
 extern "C"
 {
-    SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(
+    SAL_DLLPUBLIC_EXPORT void * SAL_CALL xcr_component_getFactory(
         const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey )
     {
         return ::cppu::component_getFactoryHelper(
