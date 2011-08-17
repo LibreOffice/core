@@ -125,17 +125,10 @@ void SfxBasicManagerHolder::storeLibrariesToStorage( const Reference< XStorage >
 {
     OSL_PRECOND( isValid(), "SfxBasicManagerHolder::storeLibrariesToStorage: not initialized!" );
 
-    try
-    {
-        if ( mxBasicContainer.is() )
-            mxBasicContainer->storeLibrariesToStorage( _rxStorage );
-        if ( mxDialogContainer.is() )
-            mxDialogContainer->storeLibrariesToStorage( _rxStorage );
-    }
-    catch( const Exception& )
-    {
-        DBG_UNHANDLED_EXCEPTION();
-    }
+    if ( mxBasicContainer.is() )
+        mxBasicContainer->storeLibrariesToStorage( _rxStorage );
+    if ( mxDialogContainer.is() )
+        mxDialogContainer->storeLibrariesToStorage( _rxStorage );
 }
 
 Reference< XLibraryContainer > SfxBasicManagerHolder::getLibraryContainer( ContainerType _eType )
