@@ -200,7 +200,6 @@ public:
 
     DocTempl_EntryData_Impl*     GetEntry( size_t nIndex ) const;
     DocTempl_EntryData_Impl*     GetEntry( const OUString& rName ) const;
-    DocTempl_EntryData_Impl*     GetByTargetURL( const OUString& rName ) const;
 
     const OUString&     GetTitle() const { return maTitle; }
     const OUString&     GetTargetURL();
@@ -265,7 +264,6 @@ public:
                             { return maRegions.size(); }
     RegionData_Impl*    GetRegion( const OUString& rName ) const;
     RegionData_Impl*    GetRegion( size_t nIndex ) const;
-    size_t              GetRegionPos( const OUString& rTitle, sal_Bool& rFound ) const;
 
     sal_Bool            GetTitleFromURL( const OUString& rURL, OUString& aTitle );
     sal_Bool            InsertRegion( RegionData_Impl *pData, size_t nPos = size_t(-1) );
@@ -1881,18 +1879,6 @@ DocTempl_EntryData_Impl* RegionData_Impl::GetEntry( const OUString& rName ) cons
 }
 
 // -----------------------------------------------------------------------
-DocTempl_EntryData_Impl* RegionData_Impl::GetByTargetURL( const OUString& rName ) const
-{
-    for ( size_t i = 0, n = maEntries.size(); i < n; ++i )
-    {
-        DocTempl_EntryData_Impl *pEntry = maEntries[ i ];
-        if ( pEntry->GetTargetURL() == rName )
-            return pEntry;
-    }
-    return NULL;
-}
-
-// -----------------------------------------------------------------------
 DocTempl_EntryData_Impl* RegionData_Impl::GetEntry( size_t nIndex ) const
 {
     if ( nIndex < maEntries.size() )
@@ -2137,42 +2123,6 @@ void SfxDocTemplate_Impl::ReInitFromComponent()
         Clear();
         CreateFromHierarchy( aTemplRoot );
     }
-}
-
-// -----------------------------------------------------------------------
-size_t SfxDocTemplate_Impl::GetRegionPos( const OUString& rTitle, sal_Bool& rFound ) const
-{
-    int     nCompVal = 1;
-    size_t  nStart = 0;
-    size_t  nEnd = maRegions.size() - 1;
-    size_t  nMid = 0;
-
-    RegionData_Impl* pMid;
-
-    while ( nCompVal && ( nStart <= nEnd ) )
-    {
-        nMid = ( nEnd - nStart ) / 2 + nStart;
-        pMid = maRegions[ nMid ];
-
-        nCompVal = pMid->Compare( rTitle );
-
-        if ( nCompVal < 0 )     // pMid < pData
-            nStart = nMid + 1;
-        else
-            nEnd = nMid - 1;
-    }
-
-    if ( nCompVal == 0 )
-        rFound = sal_True;
-    else
-    {
-        if ( nCompVal < 0 )     // pMid < pData
-            nMid++;
-
-        rFound = sal_False;
-    }
-
-    return nMid;
 }
 
 // -----------------------------------------------------------------------

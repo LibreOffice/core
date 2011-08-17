@@ -47,7 +47,6 @@ protected:
 
     rtl::OString IsIncludeStatement(rtl::OString aLine);
 public:
-                    CppDep( ByteString aFileName );
                     CppDep();
                     virtual ~CppDep();
     virtual void    Execute();

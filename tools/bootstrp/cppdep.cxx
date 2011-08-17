@@ -39,14 +39,6 @@
 #include <comphelper/string.hxx>
 #include "cppdep.hxx"
 
-CppDep::CppDep( ByteString aFileName )
-{
-    aSourceFile = aFileName;
-
-    pSearchPath = new ByteStringList;
-    pFileList = new ByteStringList;
-}
-
 CppDep::CppDep()
 {
     pSources = new ByteStringList;
@@ -245,7 +237,7 @@ rtl::OString CppDep::IsIncludeStatement(rtl::OString aLine)
 
 int main( int argc, char **argv )
 {
-    CppDep *pDep = new CppDep( "cppdep.cxx" );
+    CppDep *pDep = new CppDep();
     pDep->AddSearchPath(".");
     pDep->AddSearchPath("/usr/include");
     pDep->AddSearchPath("/usr/local/include");
