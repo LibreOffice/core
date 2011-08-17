@@ -166,6 +166,9 @@ void SmOoxml::HandleNode(SmNode *pNode,int nLevel)
         case NALIGN:
             HandleMAlign(pNode,nLevel);
             break;
+        case NPLACE:
+            // explicitly do nothing, MSOffice treats that as a placeholder if item is missing
+            break;
         case NBLANK:
             *pS << sal_uInt8(CHAR);
             *pS << sal_uInt8(0x98);
