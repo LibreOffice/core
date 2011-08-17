@@ -673,9 +673,9 @@ rtl::OUString XclTools::GetCondFormatStyleName( SCTAB nScTab, sal_Int32 nFormat,
 {
     rtl::OUStringBuffer aBuf(maCFStyleNamePrefix1);
     aBuf.append(static_cast<sal_Int32>(nScTab+1));
-    aBuf.append('_');
+    aBuf.append(sal_Unicode('_'));
     aBuf.append(static_cast<sal_Int32>(nFormat+1));
-    aBuf.append('_');
+    aBuf.append(sal_Unicode('_'));
     aBuf.append(static_cast<sal_Int32>(nCondition+1));
     return aBuf.makeStringAndClear();
 }
