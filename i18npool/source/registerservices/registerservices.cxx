@@ -576,7 +576,7 @@ static const struct InstancesArray {
 extern "C"
 {
 
-SAL_DLLPUBLIC_EXPORT void* SAL_CALL component_getFactory( const sal_Char* sImplementationName, void* _pServiceManager, void* /*_pRegistryKey*/ )
+SAL_DLLPUBLIC_EXPORT void* SAL_CALL i18npool_component_getFactory( const sal_Char* sImplementationName, void* _pServiceManager, void* /*_pRegistryKey*/ )
 {
     void* pRet = NULL;
 

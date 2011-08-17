@@ -527,7 +527,7 @@ const ::cppu::ImplementationEntry s_entries [] = {
 
 extern "C" {
 
-SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(
+SAL_DLLPUBLIC_EXPORT void * SAL_CALL canvasfactory_component_getFactory(
     sal_Char const * pImplName,
     lang::XMultiServiceFactory * pServiceManager,
     registry::XRegistryKey * pRegistryKey )

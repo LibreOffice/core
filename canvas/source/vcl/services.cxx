@@ -88,6 +88,14 @@ namespace vclcanvas
 }
 
 // The C shared lib entry points
-COMPHELPER_SERVICEDECL_EXPORTS2(vclcanvas::vclCanvasDecl, vclcanvas::vclSpriteCanvasDecl)
+extern "C"
+{
+SAL_DLLPUBLIC_EXPORT void* SAL_CALL vclcanvas_component_getFactory( sal_Char const* pImplName,
+    ::com::sun::star::lang::XMultiServiceFactory* pServiceManager,
+    ::com::sun::star::registry::XRegistryKey* pRegistryKey )
+{
+    return component_getFactoryHelper( pImplName, pServiceManager, pRegistryKey, vclcanvas::vclCanvasDecl, vclcanvas::vclSpriteCanvasDecl );
+}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
