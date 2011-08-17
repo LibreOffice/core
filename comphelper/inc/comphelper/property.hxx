@@ -51,19 +51,6 @@ namespace comphelper
 
 /** compare two properties by name
 */
-    struct PropertyStringLessFunctor : ::std::binary_function< ::com::sun::star::beans::Property, ::rtl::OUString, bool >
-    {
-        // ................................................................
-        inline bool operator()( const ::com::sun::star::beans::Property& lhs, const ::rtl::OUString& rhs ) const
-        {
-            return lhs.Name.compareTo(rhs) < 0;
-        }
-        // ................................................................
-        inline bool operator()( const ::rtl::OUString& lhs, const ::com::sun::star::beans::Property& rhs ) const
-        {
-            return lhs.compareTo(rhs.Name) < 0;
-        }
-    };
     //--------------------------------------------------------------------------
     // comparing two property instances
     struct PropertyCompareByName : public ::std::binary_function< ::com::sun::star::beans::Property, ::com::sun::star::beans::Property, bool >
