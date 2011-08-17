@@ -43,7 +43,8 @@ public:
     SmOoxml(String &rIn,SmNode *pIn, oox::core::OoxmlVersion version);
     bool ConvertFromStarMath( ::sax_fastparser::FSHelperPtr m_pSerializer );
 private:
-    void HandleNodes(SmNode *pNode,int nLevel);
+    void HandleNode(SmNode *pNode,int nLevel);
+    void HandleAllSubNodes(SmNode *pNode,int nLevel);
     void HandleTable(SmNode *pNode,int nLevel);
     void HandleVerticalStack( SmNode* pNode, int nLevel, int firstItem );
     void HandleText(SmNode *pNode,int nLevel);

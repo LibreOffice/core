@@ -85,12 +85,12 @@ bool SmOoxml::ConvertFromStarMath( ::sax_fastparser::FSHelperPtr serializer )
     m_pSerializer = serializer;
     m_pSerializer->startElementNS( XML_m, XML_oMath,
         FSNS( XML_xmlns, XML_m ), "http://schemas.openxmlformats.org/officeDocument/2006/math", FSEND );
-    HandleNodes( pTree, 0 );
+    HandleNode( pTree, 0 );
     m_pSerializer->endElementNS( XML_m, XML_oMath );
     return true;
 }
 
-void SmOoxml::HandleNodes(SmNode *pNode,int nLevel)
+void SmOoxml::HandleNode(SmNode *pNode,int nLevel)
 {
     fprintf(stderr,"XX %d %d %d\n", nLevel, pNode->GetType(), pNode->GetNumSubNodes());
     switch(pNode->GetType())
@@ -145,12 +145,7 @@ void SmOoxml::HandleNodes(SmNode *pNode,int nLevel)
             break;
 #endif
         case NEXPRESSION:
-            {
-            sal_uInt16  nSize = pNode->GetNumSubNodes();
-            for (sal_uInt16 i = 0; i < nSize; i++)
-                if (SmNode *pTemp = pNode->GetSubNode(i))
-                    HandleNodes(pTemp,nLevel+1);
-            }
+            HandleAllSubNodes( pNode, nLevel );
             break;
         case NTABLE:
             //Root Node, PILE equivalent, i.e. vertical stack
@@ -164,12 +159,7 @@ void SmOoxml::HandleNodes(SmNode *pNode,int nLevel)
         case NLINE:
             {
 // TODO
-//            *pS << sal_uInt8(LINE);
-            sal_uInt16  nSize = pNode->GetNumSubNodes();
-            for (sal_uInt16 i = 0; i < nSize; i++)
-                if (SmNode *pTemp = pNode->GetSubNode(i))
-                    HandleNodes(pTemp,nLevel+1);
-//            *pS << sal_uInt8(END);
+            HandleAllSubNodes( pNode, nLevel );
             }
             break;
 #if 0
@@ -186,12 +176,7 @@ void SmOoxml::HandleNodes(SmNode *pNode,int nLevel)
             break;
 #endif
         default:
-            {
-            sal_uInt16  nSize = pNode->GetNumSubNodes();
-            for (sal_uInt16 i = 0; i < nSize; i++)
-                if (SmNode *pTemp = pNode->GetSubNode(i))
-                    HandleNodes(pTemp,nLevel+1);
-            }
+            HandleAllSubNodes( pNode, nLevel );
             break;
     }
 }
@@ -199,18 +184,25 @@ void SmOoxml::HandleNodes(SmNode *pNode,int nLevel)
 //Root Node, PILE equivalent, i.e. vertical stack
 void SmOoxml::HandleTable(SmNode *pNode,int nLevel)
 {
-    sal_uInt16  nSize = pNode->GetNumSubNodes();
     //The root of the starmath is a table, if
     //we convert this them each iteration of
     //conversion from starmath to OOXML will
     //add an extra unnecessary level to the
     //OOXML output stack which would grow
     //without bound in a multi step conversion
-    if( nLevel || nSize > 1 )
-        return HandleVerticalStack( pNode, nLevel, 0 );
-    for (sal_uInt16 i = 0; i < nSize; i++)
-        if (SmNode *pTemp = pNode->GetSubNode(i))
-            HandleNodes(pTemp,nLevel+1);
+    if( nLevel || pNode->GetNumSubNodes() > 1 )
+        HandleVerticalStack( pNode, nLevel, 0 );
+    else
+        HandleAllSubNodes( pNode, nLevel );
+}
+
+void SmOoxml::HandleAllSubNodes( SmNode* pNode, int nLevel )
+{
+    int size = pNode->GetNumSubNodes();
+    for( int i = 0;
+         i < size;
+         ++i )
+        HandleNode( pNode->GetSubNode( i ), nLevel + 1 );
 }
 
 // output vertical stack, firstItem says which child to use as first (if there
@@ -220,8 +212,7 @@ void SmOoxml::HandleVerticalStack( SmNode* pNode, int nLevel, int firstItem )
 {
     if( firstItem == pNode->GetNumSubNodes() - 1 ) // only one item, just output the item
     {
-        if( SmNode *pTemp = pNode->GetSubNode( firstItem ))
-            HandleNodes( pTemp, nLevel + 1 );
+        HandleNode( pNode->GetSubNode( firstItem ), nLevel + 1 );
         return;
     }
     m_pSerializer->startElementNS( XML_m, XML_f, FSEND );
@@ -229,8 +220,7 @@ void SmOoxml::HandleVerticalStack( SmNode* pNode, int nLevel, int firstItem )
     m_pSerializer->singleElementNS( XML_m, XML_type, FSNS( XML_m, XML_val ), "noBar", FSEND );
     m_pSerializer->endElementNS( XML_m, XML_fPr );
     m_pSerializer->startElementNS( XML_m, XML_num, FSEND );
-    if( SmNode* num = pNode->GetSubNode( firstItem ))
-        HandleNodes( num, nLevel + 1 );
+    HandleNode( pNode->GetSubNode( firstItem ), nLevel + 1 );
     m_pSerializer->endElementNS( XML_m, XML_num );
     // TODO this nesting means MSOffice will use smaller fonts for nested items,
     // not sure if there's another way to represent a bigger stack than 2 items
@@ -434,13 +424,12 @@ void SmOoxml::HandleFractions(SmNode *pNode,int nLevel, const char* type)
         m_pSerializer->singleElementNS( XML_m, XML_type, FSNS( XML_m, XML_val ), type, FSEND );
         m_pSerializer->endElementNS( XML_m, XML_fPr );
     }
+    OSL_ASSERT( pNode->GetNumSubNodes() == 3 );
     m_pSerializer->startElementNS( XML_m, XML_num, FSEND );
-    if( SmNode* num = pNode->GetSubNode( 0 ))
-        HandleNodes( num, nLevel + 1 );
+    HandleNode( pNode->GetSubNode( 0 ), nLevel + 1 );
     m_pSerializer->endElementNS( XML_m, XML_num );
     m_pSerializer->startElementNS( XML_m, XML_den, FSEND );
-    if( SmNode* num = pNode->GetSubNode( 2 ))
-        HandleNodes( num, nLevel + 1 );
+    HandleNode( pNode->GetSubNode( 2 ), nLevel + 1 );
     m_pSerializer->endElementNS( XML_m, XML_den );
     m_pSerializer->endElementNS( XML_m, XML_f );
 }
@@ -453,14 +442,8 @@ void SmOoxml::HandleBinaryOperation(SmNode *pNode,int nLevel)
         case TDIVIDEBY:
             return HandleFractions( pNode, nLevel, "lin" );
         default:
-        {
-            for( int i = 0;
-                 i < pNode->GetNumSubNodes();
-                 ++i )
-                if( SmNode *pTemp = pNode->GetSubNode( i ))
-                    HandleNodes( pTemp, nLevel + 1 );
+            HandleAllSubNodes( pNode, nLevel );
             break;
-        }
     }
 }
 
