@@ -96,8 +96,13 @@ APP1STDLIBS = \
     $(SALLIB)			\
     mscoree.lib
 
+.IF "$(USE_DEBUG_RUNTIME)" == ""
 APP1STDLIBS += \
     msvcmrt.lib
+.ELSE
+APP1STDLIBS += \
+    msvcmrtd.lib
+.ENDIF
 
 .ENDIF
 

@@ -65,8 +65,13 @@ SHL1STDLIBS = \
     $(SALLIB)			\
     mscoree.lib
 
+.IF "$(USE_DEBUG_RUNTIME)" == ""
 SHL1STDLIBS += \
     msvcmrt.lib
+.ELSE
+SHL1STDLIBS += \
+    msvcmrtd.lib
+.ENDIF
 
 SHL1VERSIONMAP = bridge_exports.map
 
