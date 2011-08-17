@@ -41,9 +41,6 @@
 
 #include <unx/headless/svpgdi.hxx>
 
-// Disabled for gtk3 - use legacy theming code
-#define GTK_GRAPHICS_DISABLED
-
 class GtkSalFrame;
 class GtkSalGraphics : public SvpSalGraphics
 {
@@ -65,10 +62,7 @@ class GtkSalGraphics : public X11SalGraphics
     Region               m_aClipRegion;
 
 public:
-                         GtkSalGraphics( GtkSalFrame *, GtkWidget *window )
-                            : m_pWindow( window ),
-                              m_aClipRegion( REGION_NULL )
-                              {}
+                        GtkSalGraphics( GtkSalFrame *, GtkWidget *window );
     virtual             ~GtkSalGraphics();
 
     inline GtkWidget*  GetGtkWidget() const { return m_pWindow; }

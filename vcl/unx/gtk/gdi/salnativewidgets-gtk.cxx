@@ -56,6 +56,15 @@ sal_Bool GtkSalGraphics::bGlobalNeedPixmapPaint = sal_False;
 sal_Bool GtkSalGraphics::bToolbarGripWorkaround = sal_False;
 sal_Bool GtkSalGraphics::bNeedButtonStyleAsEditBackgroundWorkaround = sal_False;
 
+GtkSalGraphics::GtkSalGraphics( GtkSalFrame *pFrame, GtkWidget *pWindow )
+    : X11SalGraphics(),
+      m_pWindow( pWindow ),
+      m_aClipRegion( REGION_NULL )
+{
+    Init( pFrame, GDK_WINDOW_XID( widget_get_window( pWindow ) ),
+          gdk_x11_screen_get_screen_number( gtk_widget_get_screen( pWindow ) ) );
+}
+
 GtkSalGraphics::~GtkSalGraphics()
 {
 }

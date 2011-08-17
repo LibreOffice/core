@@ -306,7 +306,7 @@ struct ImplSVNWFData
                                                           // toolbox dropdown buttons
     int                     mnMenuFormatExtraBorder;      // inner popup menu border
     bool                    mbFlatMenu;                   // no popup 3D border
-    Color                   maMenuBarHighlightTextColor;  // override higlight text color
+    ::Color                 maMenuBarHighlightTextColor;  // override higlight text color
                                                           // in menubar if not transparent
     bool                    mbOpenMenuOnF10;              // on gnome the first menu opens on F10
     bool                    mbNoFocusRects;               // on Aqua focus rects are not used
