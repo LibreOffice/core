@@ -120,10 +120,10 @@ void SmOoxml::HandleNode(SmNode *pNode,int nLevel)
         case NBINVER:
             HandleFractions(pNode,nLevel);
             break;
-#if 0
         case NROOT:
-            HandleRoot(pNode,nLevel);
+            HandleRoot( static_cast< SmRootNode* >( pNode ),nLevel);
             break;
+#if 0
         case NSPECIAL:
             {
             SmTextNode *pText=(SmTextNode *)pNode;
@@ -456,6 +456,28 @@ void SmOoxml::HandleBinaryOperation(SmNode *pNode,int nLevel)
             HandleAllSubNodes( pNode, nLevel );
             break;
     }
+}
+
+void SmOoxml::HandleRoot(SmRootNode *pNode,int nLevel)
+{
+    m_pSerializer->startElementNS( XML_m, XML_rad, FSEND );
+    if( SmNode* argument = pNode->Argument())
+    {
+        m_pSerializer->startElementNS( XML_m, XML_deg, FSEND );
+        HandleAllSubNodes( argument, nLevel );
+        m_pSerializer->endElementNS( XML_m, XML_deg );
+    }
+    else
+    {
+        m_pSerializer->startElementNS( XML_m, XML_radPr, FSEND );
+        m_pSerializer->singleElementNS( XML_m, XML_degHide, FSNS( XML_m, XML_val ), "1", FSEND );
+        m_pSerializer->endElementNS( XML_m, XML_radPr );
+        m_pSerializer->singleElementNS( XML_m, XML_deg, FSEND ); // empty but present
+    }
+    m_pSerializer->startElementNS( XML_m, XML_e, FSEND );
+    HandleAllSubNodes( pNode->Body(), nLevel );
+    m_pSerializer->endElementNS( XML_m, XML_e );
+    m_pSerializer->endElementNS( XML_m, XML_rad );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

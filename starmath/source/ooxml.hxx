@@ -51,6 +51,7 @@ private:
     void HandleMath(SmNode *pNode,int nLevel);
     void HandleFractions( SmNode *pNode,int nLevel, const char* type = NULL );
     void HandleBinaryOperation(SmNode *pNode,int nLevel);
+    void HandleRoot(SmRootNode *pNode,int nLevel);
     String str;
     SmNode *pTree;
     ::sax_fastparser::FSHelperPtr m_pSerializer;

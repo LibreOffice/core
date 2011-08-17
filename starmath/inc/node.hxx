@@ -764,7 +764,7 @@ public:
  * 0: Argument (optional)<BR>
  * 1: Symbol (instance of SmRootSymbolNode)<BR>
  * 2: Body<BR>
- * Where argument is optinal and may be NULL.
+ * Where argument is optional and may be NULL.
  */
 class SmRootNode : public SmStructureNode
 {
@@ -783,6 +783,13 @@ public:
     virtual void Arrange(const OutputDevice &rDev, const SmFormat &rFormat);
     void CreateTextFromNode(String &rText);
     void Accept(SmVisitor* pVisitor);
+
+    SmNode* Argument();
+    const SmNode* Argument() const;
+    SmRootSymbolNode* Symbol();
+    const SmRootSymbolNode* Symbol() const;
+    SmNode* Body();
+    const SmNode* Body() const;
 };
 
 
@@ -1220,6 +1227,36 @@ public:
 
 
 ////////////////////////////////////////////////////////////////////////////////
+
+
+inline SmNode* SmRootNode::Argument()
+{
+    OSL_ASSERT( GetNumSubNodes() > 0 );
+    return GetSubNode( 0 );
+}
+inline const SmNode* SmRootNode::Argument() const
+{
+    return const_cast< SmRootNode* >( this )->Argument();
+}
+inline SmRootSymbolNode* SmRootNode::Symbol()
+{
+    OSL_ASSERT( GetSubNode( 0 )->GetType() == NROOTSYMBOL );
+    return static_cast< SmRootSymbolNode* >( GetSubNode( 1 ));
+}
+inline const SmRootSymbolNode* SmRootNode::Symbol() const
+{
+    return const_cast< SmRootNode* >( this )->Symbol();
+}
+inline SmNode* SmRootNode::Body()
+{
+    OSL_ASSERT( GetNumSubNodes() > 2 );
+    return GetSubNode( 2 );
+}
+inline const SmNode* SmRootNode::Body() const
+{
+    return const_cast< SmRootNode* >( this )->Body();
+}
+
 
 #endif
 
