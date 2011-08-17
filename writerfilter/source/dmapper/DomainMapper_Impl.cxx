@@ -1430,7 +1430,6 @@ void DomainMapper_Impl::PushShapeContext( const uno::Reference< drawing::XShape 
         uno::Reference< lang::XServiceInfo > xSInfo( xShape, uno::UNO_QUERY_THROW );
         bool bIsGraphic = xSInfo->supportsService( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.drawing.GraphicObjectShape" ) ) );
 
-        xProps->setPropertyValue( rPropNameSupplier.GetName( PROP_ANCHOR_TYPE ), bIsGraphic  ?  uno::makeAny( text::TextContentAnchorType_AS_CHARACTER ) : uno::makeAny( text::TextContentAnchorType_AT_PARAGRAPH ) );
         xProps->setPropertyValue(
                 rPropNameSupplier.GetName( PROP_OPAQUE ),
                 uno::makeAny( true ) );
@@ -1439,6 +1438,10 @@ void DomainMapper_Impl::PushShapeContext( const uno::Reference< drawing::XShape 
             uno::Reference<text::XTextContent> xTextContent(xShape, uno::UNO_QUERY_THROW);
             uno::Reference<text::XTextRange> xTextRange(xTextAppend->createTextCursorByRange(xTextAppend->getEnd()), uno::UNO_QUERY_THROW);
             xTextAppend->insertTextContent(xTextRange, xTextContent, sal_False);
+        }
+        else
+        {
+            xProps->setPropertyValue( rPropNameSupplier.GetName( PROP_ANCHOR_TYPE ), bIsGraphic  ?  uno::makeAny( text::TextContentAnchorType_AS_CHARACTER ) : uno::makeAny( text::TextContentAnchorType_AT_PARAGRAPH ) );
         }
     }
     catch ( const uno::Exception& e )
