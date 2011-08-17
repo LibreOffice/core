@@ -75,6 +75,14 @@ namespace {
 /**
    @ index of the next to be used member in the initializer list !
  */
+// LEM TODO: export member names as keyword arguments in initialiser?
+// Python supports very flexible variadic functions. By marking
+// variables with one asterisk (e.g. *var) the given variable is
+// defined to be a tuple of all the extra arguments. By marking
+// variables with two asterisks (e.g. **var) the given variable is a
+// dictionary of all extra keyword arguments; the keys are strings,
+// which are the names that were used to identify the arguments. If
+// they exist, these arguments must be the last one in the list.
 sal_Int32 fillStructWithInitializer(
     const Reference< XInvocation2 > &inv,
     typelib_CompoundTypeDescription *pCompType,
@@ -90,6 +98,7 @@ sal_Int32 fillStructWithInitializer(
     int i;
     for( i = 0 ; i < pCompType->nMembers ; i ++ )
     {
+        // LEM TODO: and if too many? Silently ignored?
         if( i + nIndex >= nTupleSize )
         {
             OUStringBuffer buf;
