@@ -392,7 +392,9 @@ void XclImpDrawObjBase::SetAnchor( const XclObjAnchor& rAnchor )
     mbHasAnchor = true;
 }
 
-void XclImpDrawObjBase::SetDffData( const DffObjData& rDffObjData, const String& rObjName, const String& rHyperlink, bool bVisible, bool bAutoMargin )
+void XclImpDrawObjBase::SetDffData(
+    const DffObjData& rDffObjData, const rtl::OUString& rObjName, const rtl::OUString& rHyperlink,
+    bool bVisible, bool bAutoMargin )
 {
     mnDffShapeId = rDffObjData.nShapeId;
     mnDffFlags = rDffObjData.nSpFlags;
@@ -483,8 +485,7 @@ void XclImpDrawObjBase::PreProcessSdrObject( XclImpDffConverter& rDffConv, SdrOb
 
     // macro and hyperlink
     // removed oracle/sun check for mbSimpleMacro ( no idea what its for )
-    if( (maMacroName.Len() > 0 ) ||
- (maHyperlink.Len() > 0) )
+    if (!maMacroName.isEmpty() || !maHyperlink.isEmpty())
     {
         if( ScMacroInfo* pInfo = ScDrawLayer::GetMacroInfo( &rSdrObj, sal_True ) )
         {
@@ -519,7 +520,7 @@ void XclImpDrawObjBase::ReadName5( XclImpStream& rStrm, sal_uInt16 nNameLen )
 
 void XclImpDrawObjBase::ReadMacro3( XclImpStream& rStrm, sal_uInt16 nMacroSize )
 {
-    maMacroName.Erase();
+    maMacroName = rtl::OUString();
     rStrm.Ignore( nMacroSize );
     // skip padding byte for word boundaries, not contained in nMacroSize
     if( rStrm.GetRecPos() & 1 ) rStrm.Ignore( 1 );
@@ -527,19 +528,19 @@ void XclImpDrawObjBase::ReadMacro3( XclImpStream& rStrm, sal_uInt16 nMacroSize )
 
 void XclImpDrawObjBase::ReadMacro4( XclImpStream& rStrm, sal_uInt16 nMacroSize )
 {
-    maMacroName.Erase();
+    maMacroName = rtl::OUString();
     rStrm.Ignore( nMacroSize );
 }
 
 void XclImpDrawObjBase::ReadMacro5( XclImpStream& rStrm, sal_uInt16 nMacroSize )
 {
-    maMacroName.Erase();
+    maMacroName = rtl::OUString();
     rStrm.Ignore( nMacroSize );
 }
 
 void XclImpDrawObjBase::ReadMacro8( XclImpStream& rStrm )
 {
-    maMacroName.Erase();
+    maMacroName = rtl::OUString();
     if( rStrm.GetRecLeft() > 6 )
     {
         // macro is stored in a tNameXR token containing a link to a defined name

@@ -80,7 +80,9 @@ public:
     /** Sets the object anchor explicitly. */
     void                SetAnchor( const XclObjAnchor& rAnchor );
     /** Sets shape data from DFF stream. */
-    void                SetDffData( const DffObjData& rDffObjData, const String& rObjName, const String& rHyperlink, bool bVisible, bool bAutoMargin );
+    void                SetDffData(
+        const DffObjData& rDffObjData, const rtl::OUString& rObjName, const rtl::OUString& rHyperlink,
+        bool bVisible, bool bAutoMargin );
 
     /** If set to false, the SdrObject will not be created, processed, or inserted into the draw page. */
     inline void         SetProcessSdrObj( bool bProcess ) { mbProcessSdr = bProcess; }
@@ -96,7 +98,7 @@ public:
     /** Returns the name of this object, may generate a default name. */
     virtual rtl::OUString GetObjName() const;
     /** Returns associated macro name, if set, otherwise zero length string. */
-    inline const String& GetMacroName() const { return maMacroName; }
+    inline const rtl::OUString& GetMacroName() const { return maMacroName; }
 
     /** Returns the shape identifier used in the DFF stream. */
     inline sal_uInt32   GetDffShapeId() const { return mnDffShapeId; }
@@ -193,8 +195,8 @@ private:
     sal_uInt32          mnDffShapeId;   /// Shape ID from DFF stream.
     sal_uInt32          mnDffFlags;     /// Shape flags from DFF stream.
     rtl::OUString       maObjName;      /// Name of the object.
-    String              maMacroName;    /// Name of an attached macro.
-    String              maHyperlink;    /// On-click hyperlink URL.
+    rtl::OUString       maMacroName;    /// Name of an attached macro.
+    rtl::OUString       maHyperlink;    /// On-click hyperlink URL.
     bool                mbHasAnchor;    /// true = maAnchor is initialized.
     bool                mbHidden;       /// true = Object is hidden.
     bool                mbVisible;      /// true = Object is visible.
