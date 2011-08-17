@@ -52,6 +52,21 @@ public:
                            long nSrcWidth, long nSrcHeight,
                            sal_uInt16 /*nFlags*/ );
     void updateSettings( AllSettings& rSettings );
+    virtual sal_Bool        drawNativeControl( ControlType nType, ControlPart nPart,
+                                               const Rectangle& rControlRegion,
+                                               ControlState nState, const ImplControlValue& aValue,
+                                               const rtl::OUString& rCaption );
+    virtual sal_Bool        IsNativeControlSupported( ControlType nType, ControlPart nPart );
+    virtual sal_Bool        getNativeControlRegion( ControlType nType, ControlPart nPart,
+                                                    const Rectangle& rControlRegion,
+                                                    ControlState nState,
+                                                    const ImplControlValue& aValue,
+                                                    const rtl::OUString& rCaption,
+                                                    Rectangle &rNativeBoundingRegion,
+                                                    Rectangle &rNativeContentRegion );
+private:
+    GtkWidget       *mpWindow;
+    GtkStyleContext *mpButtonStyle;
 };
 
 #else

@@ -29,6 +29,91 @@
 // Gross inclusion hacks for now ...
 
 #include "../../headless/svpgdi.cxx"
+#include <unx/gtk/gtkframe.hxx>
+#include <unx/gtk/gtkdata.hxx>
+#include <unx/gtk/gtkinst.hxx>
+#include <unx/gtk/gtkgdi.hxx>
+
+/************************************************************************
+ * State conversion
+ ************************************************************************/
+static void NWConvertVCLStateToGTKState( ControlState nVCLState,
+            GtkStateFlags* nGTKState, GtkShadowType* nGTKShadow )
+{
+    *nGTKShadow = GTK_SHADOW_OUT;
+    *nGTKState = GTK_STATE_FLAG_INSENSITIVE;
+
+    if ( nVCLState & CTRL_STATE_ENABLED )
+    {
+        if ( nVCLState & CTRL_STATE_PRESSED )
+        {
+            *nGTKState = GTK_STATE_FLAG_ACTIVE;
+            *nGTKShadow = GTK_SHADOW_IN;
+        }
+        else if ( nVCLState & CTRL_STATE_ROLLOVER )
+        {
+            *nGTKState = GTK_STATE_FLAG_PRELIGHT;
+            *nGTKShadow = GTK_SHADOW_OUT;
+        }
+        else
+        {
+            *nGTKState = GTK_STATE_FLAG_NORMAL;
+            *nGTKShadow = GTK_SHADOW_OUT;
+        }
+    }
+}
+
+sal_Bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart, const Rectangle& rControlRegion,
+                                            ControlState nState, const ImplControlValue& aValue,
+                                            const rtl::OUString& rCaption )
+{
+    GtkStateFlags flags;
+    GtkShadowType shadow;
+    NWConvertVCLStateToGTKState(nState, &flags, &shadow);
+    cairo_t* cr = gdk_cairo_create(gtk_widget_get_window(mpWindow));
+    switch(nType)
+    {
+    case CTRL_PUSHBUTTON:
+        if(!GTK_IS_STYLE_CONTEXT(mpButtonStyle))
+        {
+            mpButtonStyle = gtk_widget_get_style_context(gtk_button_new());
+        }
+
+        gtk_style_context_set_state(mpButtonStyle, flags);
+
+        gtk_render_background(mpButtonStyle, cr,
+                rControlRegion.Left(), rControlRegion.Top(),
+                rControlRegion.GetWidth(), rControlRegion.GetHeight());
+        gtk_render_frame(mpButtonStyle, cr,
+                rControlRegion.Left(), rControlRegion.Top(),
+                rControlRegion.GetWidth(), rControlRegion.GetHeight());
+
+        return sal_True;
+    default:
+        return sal_False;
+    }
+    cairo_destroy(cr);
+}
+
+sal_Bool GtkSalGraphics::getNativeControlRegion( ControlType nType, ControlPart nPart, const Rectangle& rControlRegion, ControlState nState,
+                                                const ImplControlValue& aValue, const rtl::OUString& rCaption,
+                                                Rectangle &rNativeBoundingRegion, Rectangle &rNativeContentRegion )
+{
+    switch(nType)
+    {
+    default:
+        return sal_False;
+    }
+}
+
+sal_Bool GtkSalGraphics::IsNativeControlSupported( ControlType nType, ControlPart nPart )
+{
+#if 0
+    if(nType == CTRL_PUSHBUTTON)
+        return sal_True;
+#endif
+    return sal_False;
+}
 
 void GtkData::initNWF() {}
 void GtkData::deInitNWF() {}
@@ -122,6 +207,5 @@ void GtkSalGraphics::copyArea( long nDestX, long nDestY,
     cairo_region_destroy( clip_region );
     cairo_region_destroy( region );
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
