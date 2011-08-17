@@ -40,20 +40,20 @@
 class SmOoxml
 {
 public:
-    SmOoxml(String &rIn,SmNode *pIn, oox::core::OoxmlVersion version);
+    SmOoxml( const String &rIn,const SmNode* pIn, oox::core::OoxmlVersion version );
     bool ConvertFromStarMath( ::sax_fastparser::FSHelperPtr m_pSerializer );
 private:
-    void HandleNode(SmNode *pNode,int nLevel);
-    void HandleAllSubNodes(SmNode *pNode,int nLevel);
-    void HandleTable(SmNode *pNode,int nLevel);
-    void HandleVerticalStack( SmNode* pNode, int nLevel, int firstItem );
-    void HandleText(SmNode *pNode,int nLevel);
-    void HandleMath(SmNode *pNode,int nLevel);
-    void HandleFractions( SmNode *pNode,int nLevel, const char* type = NULL );
-    void HandleBinaryOperation(SmNode *pNode,int nLevel);
-    void HandleRoot(SmRootNode *pNode,int nLevel);
+    void HandleNode( const SmNode* pNode, int nLevel );
+    void HandleAllSubNodes( const SmNode* pNode, int nLevel );
+    void HandleTable( const SmNode* pNode, int nLevel );
+    void HandleVerticalStack( const SmNode* pNode, int nLevel, int firstItem );
+    void HandleText( const SmNode* pNode, int nLevel );
+    void HandleMath( const SmNode* pNode, int nLevel );
+    void HandleFractions( const SmNode* pNode, int nLevel, const char* type = NULL );
+    void HandleBinaryOperation( const SmNode* pNode, int nLevel );
+    void HandleRoot( const SmRootNode* pNode,int nLevel );
     String str;
-    SmNode *pTree;
+    const SmNode* const pTree;
     ::sax_fastparser::FSHelperPtr m_pSerializer;
     oox::core::OoxmlVersion version;
 };
