@@ -335,6 +335,7 @@ namespace writerfilter {
                 void checkFirstRun();
                 void sectBreak(bool bFinal);
                 void replayBuffer(RTFBuffer_t& rBuffer);
+                bool inFrame();
 
                 uno::Reference<uno::XComponentContext> const& m_xContext;
                 uno::Reference<io::XInputStream> const& m_xInputStream;
@@ -412,7 +413,7 @@ namespace writerfilter {
                 int m_nCurrentStyleIndex;
                 bool m_bEq;
                 /// If we are in a frame.
-                bool m_bIsInFrame;
+                bool m_bWasInFrame;
 
         };
     } // namespace rtftok

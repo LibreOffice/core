@@ -293,7 +293,7 @@ RTFDocumentImpl::RTFDocumentImpl(uno::Reference<uno::XComponentContext> const& x
     m_aStyleTableEntries(),
     m_nCurrentStyleIndex(0),
     m_bEq(false),
-    m_bIsInFrame(false)
+    m_bWasInFrame(false)
 {
     OSL_ASSERT(xInputStream.is());
     m_pInStream = utl::UcbStreamHelper::CreateStream(xInputStream, sal_True);
@@ -426,13 +426,6 @@ void RTFDocumentImpl::parBreak()
     runBreak();
     Mapper().endCharacterGroup();
     Mapper().endParagraphGroup();
-
-    if (m_bIsInFrame)
-    {
-        m_bIsInFrame = false;
-        Mapper().endShape();
-        Mapper().endParagraphGroup();
-    }
 
     // If we are not in a table, then the next table row will be the first one.
     RTFValue::Pointer_t pValue = m_aStates.top().aParagraphSprms.find(NS_sprm::LN_PFInTable);
@@ -709,6 +702,14 @@ int RTFDocumentImpl::resolveChars(char ch)
     return 0;
 }
 
+bool RTFDocumentImpl::inFrame()
+{
+    return m_aStates.top().aFrame.nW > 0
+        || m_aStates.top().aFrame.nH > 0
+        || m_aStates.top().aFrame.nX > 0
+        || m_aStates.top().aFrame.nY > 0;
+}
+
 void RTFDocumentImpl::text(OUString& rString)
 {
     bool bRet = true;
@@ -811,10 +812,7 @@ void RTFDocumentImpl::text(OUString& rString)
     if (m_bNeedPap)
     {
         // Check if this is a frame.
-        if (m_aStates.top().aFrame.nW > 0
-                || m_aStates.top().aFrame.nH > 0
-                || m_aStates.top().aFrame.nX > 0
-                || m_aStates.top().aFrame.nY > 0)
+        if (inFrame() && !m_bWasInFrame)
         {
             uno::Reference<text::XTextFrame> xTextFrame;
             xTextFrame.set(getModelFactory()->createInstance(OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.TextFrame"))), uno::UNO_QUERY);
@@ -836,7 +834,14 @@ void RTFDocumentImpl::text(OUString& rString)
 
             Mapper().startShape(xShape);
             Mapper().startParagraphGroup();
-            m_bIsInFrame = true;
+        }
+        else if (!inFrame() && m_bWasInFrame)
+        {
+            Mapper().endParagraphGroup();
+            Mapper().endShape();
+            Mapper().endParagraphGroup();
+            Mapper().startParagraphGroup();
+            m_bWasInFrame = false;
         }
 
         if (!m_pCurrentBuffer)
@@ -1268,6 +1273,7 @@ int RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
                 }
                 // but don't emit properties yet, since they may change till the first text token arrives
                 m_bNeedPap = true;
+                m_bWasInFrame = inFrame();
             }
             break;
         case RTF_SECT:
@@ -1598,6 +1604,7 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
         case RTF_PARD:
             m_aStates.top().aParagraphSprms = m_aDefaultState.aParagraphSprms;
             m_aStates.top().aParagraphAttributes = m_aDefaultState.aParagraphAttributes;
+            m_aStates.top().aFrame = RTFFrame();
             m_pCurrentBuffer = 0;
             break;
         case RTF_SECTD:
