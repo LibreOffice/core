@@ -232,6 +232,8 @@ void Shape::addShape(
 
 void Shape::applyShapeReference( const Shape& rReferencedShape )
 {
+    OSL_TRACE("apply shape reference: %s to shape id: %s", rtl::OUStringToOString(rReferencedShape.msId, RTL_TEXTENCODING_UTF8 ).getStr(), rtl::OUStringToOString(msId, RTL_TEXTENCODING_UTF8 ).getStr());
+
     if ( rReferencedShape.mpTextBody.get() )
         mpTextBody = TextBodyPtr( new TextBody( *rReferencedShape.mpTextBody.get() ) );
     else
@@ -534,6 +536,7 @@ Reference< XShape > Shape::createAndInsert(
                     if( pTheme )
                         if( const TextCharacterProperties* pCharProps = pTheme->getFontStyle( pFontRef->mnThemedIdx ) )
                             aCharStyleProperties.assignUsed( *pCharProps );
+                    OSL_TRACE("use font color");
                     aCharStyleProperties.maCharColor.assignIfUsed( pFontRef->maPhClr );
                 }
 
@@ -576,6 +579,8 @@ TextBodyPtr Shape::getTextBody()
 
 void Shape::setMasterTextListStyle( const TextListStylePtr& pMasterTextListStyle )
 {
+    OSL_TRACE("set master text list style to shape id: %s", rtl::OUStringToOString(msId, RTL_TEXTENCODING_UTF8 ).getStr());
+
     mpMasterTextListStyle = pMasterTextListStyle;
 }
 
