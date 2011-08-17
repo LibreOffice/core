@@ -32,6 +32,10 @@
 #include <com/sun/star/graphic/XGraphicProvider.hpp>
 #include <com/sun/star/io/UnexpectedEOFException.hpp>
 #include <com/sun/star/util/DateTime.hpp>
+#include <com/sun/star/text/XTextFrame.hpp>
+#include <com/sun/star/text/SizeType.hpp>
+#include <com/sun/star/text/HoriOrientation.hpp>
+#include <com/sun/star/text/VertOrientation.hpp>
 #include <editeng/borderline.hxx>
 #include <rtl/strbuf.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -288,7 +292,8 @@ RTFDocumentImpl::RTFDocumentImpl(uno::Reference<uno::XComponentContext> const& x
     m_nCurrentFontIndex(0),
     m_aStyleTableEntries(),
     m_nCurrentStyleIndex(0),
-    m_bEq(false)
+    m_bEq(false),
+    m_bIsInFrame(false)
 {
     OSL_ASSERT(xInputStream.is());
     m_pInStream = utl::UcbStreamHelper::CreateStream(xInputStream, sal_True);
@@ -421,6 +426,13 @@ void RTFDocumentImpl::parBreak()
     runBreak();
     Mapper().endCharacterGroup();
     Mapper().endParagraphGroup();
+
+    if (m_bIsInFrame)
+    {
+        m_bIsInFrame = false;
+        Mapper().endShape();
+        Mapper().endParagraphGroup();
+    }
 
     // If we are not in a table, then the next table row will be the first one.
     RTFValue::Pointer_t pValue = m_aStates.top().aParagraphSprms.find(NS_sprm::LN_PFInTable);
@@ -798,6 +810,35 @@ void RTFDocumentImpl::text(OUString& rString)
     checkFirstRun();
     if (m_bNeedPap)
     {
+        // Check if this is a frame.
+        if (m_aStates.top().aFrame.nW > 0
+                || m_aStates.top().aFrame.nH > 0
+                || m_aStates.top().aFrame.nX > 0
+                || m_aStates.top().aFrame.nY > 0)
+        {
+            uno::Reference<text::XTextFrame> xTextFrame;
+            xTextFrame.set(getModelFactory()->createInstance(OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.TextFrame"))), uno::UNO_QUERY);
+            uno::Reference<drawing::XShape> xShape(xTextFrame, uno::UNO_QUERY);
+            uno::Reference<beans::XPropertySet> xPropertySet(xTextFrame, uno::UNO_QUERY);
+
+            // RTF allows frames larger than the text content by default
+            xPropertySet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("SizeType")), uno::Any(text::SizeType::MIN));
+
+            xShape->setSize(awt::Size(m_aStates.top().aFrame.nW, m_aStates.top().aFrame.nH));
+            xPropertySet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("HoriOrient")), uno::Any(text::HoriOrientation::NONE));
+            xPropertySet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("HoriOrientPosition")), uno::Any(sal_Int32(m_aStates.top().aFrame.nX)));
+            xPropertySet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("VertOrient")), uno::Any(text::VertOrientation::NONE));
+            xPropertySet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("VertOrientPosition")), uno::Any(sal_Int32(m_aStates.top().aFrame.nY)));
+            xPropertySet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("LeftMargin")), uno::Any(sal_Int32(0)));
+            xPropertySet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("RightMargin")), uno::Any(sal_Int32(0)));
+            xPropertySet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("TopMargin")), uno::Any(sal_Int32(0)));
+            xPropertySet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("BottomMargin")), uno::Any(sal_Int32(0)));
+
+            Mapper().startShape(xShape);
+            Mapper().startParagraphGroup();
+            m_bIsInFrame = true;
+        }
+
         if (!m_pCurrentBuffer)
             Mapper().props(pParagraphProperties);
         else
@@ -2337,6 +2378,18 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
         case RTF_AFTNSTART:
             lcl_putNestedSprm(m_aDefaultState.aParagraphSprms, NS_ooxml::LN_EG_SectPrContents_endnotePr, NS_ooxml::LN_EG_FtnEdnNumProps_numStart, pIntValue);
             break;
+        case RTF_ABSW:
+            m_aStates.top().aFrame.nW = TWIP_TO_MM100(nParam);
+            break;
+        case RTF_ABSH:
+            m_aStates.top().aFrame.nH = TWIP_TO_MM100(nParam);
+            break;
+        case RTF_POSX:
+            m_aStates.top().aFrame.nX = TWIP_TO_MM100(nParam);
+            break;
+        case RTF_POSY:
+            m_aStates.top().aFrame.nY = TWIP_TO_MM100(nParam);
+            break;
         default:
 #if OSL_DEBUG_LEVEL > 1
             OSL_TRACE("%s: TODO handle value '%s'", OSL_THIS_FUNC, lcl_RtfToString(nKeyword));
@@ -2997,6 +3050,7 @@ RTFParserState::RTFParserState()
     aLevelNumbers(),
     aPicture(),
     aShape(),
+    aFrame(),
     nCellX(0),
     nCells(0),
     bIsCjk(false),

@@ -187,6 +187,13 @@ namespace writerfilter {
                 short nCropT, nCropB, nCropL, nCropR;
         };
 
+        /// Stores the properties of a frame
+        class RTFFrame
+        {
+            public:
+                int nX, nY, nW, nH;
+        };
+
         /// State of the parser, which gets saved / restored when changing groups.
         class RTFParserState
         {
@@ -241,6 +248,7 @@ namespace writerfilter {
 
                 RTFPicture aPicture;
                 RTFShape aShape;
+                RTFFrame aFrame;
 
                 /// Current cellx value.
                 int nCellX;
@@ -402,6 +410,8 @@ namespace writerfilter {
                 RTFReferenceTable::Entries_t m_aStyleTableEntries;
                 int m_nCurrentStyleIndex;
                 bool m_bEq;
+                /// If we are in a frame.
+                bool m_bIsInFrame;
 
         };
     } // namespace rtftok
