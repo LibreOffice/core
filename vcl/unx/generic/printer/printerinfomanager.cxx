@@ -45,7 +45,7 @@
 #include "tools/config.hxx"
 
 #include "i18npool/paper.hxx"
-
+#include <comphelper/string.hxx>
 #include "rtl/strbuf.hxx"
 #include <sal/macros.h>
 
@@ -273,52 +273,54 @@ void PrinterInfoManager::initialize()
             #endif
             aConfig.SetGroup( GLOBAL_DEFAULTS_GROUP );
 
-            ByteString aValue( aConfig.ReadKey( "Copies" ) );
-            if( aValue.Len() )
-                m_aGlobalDefaults.m_nCopies = aValue.ToInt32();
+            rtl::OString aValue( aConfig.ReadKey( "Copies" ) );
+            if (!aValue.isEmpty())
+                m_aGlobalDefaults.m_nCopies = aValue.toInt32();
 
             aValue = aConfig.ReadKey( "Orientation" );
-            if( aValue.Len() )
-                m_aGlobalDefaults.m_eOrientation = aValue.EqualsIgnoreCaseAscii( "Landscape" ) ? orientation::Landscape : orientation::Portrait;
+            if (!aValue.isEmpty())
+                m_aGlobalDefaults.m_eOrientation = aValue.equalsIgnoreAsciiCase("Landscape") ? orientation::Landscape : orientation::Portrait;
+
+            using comphelper::string::getToken;
 
             aValue = aConfig.ReadKey( "MarginAdjust" );
-            if( aValue.Len() )
+            if (!aValue.isEmpty())
             {
-                m_aGlobalDefaults.m_nLeftMarginAdjust   = aValue.GetToken( 0, ',' ).ToInt32();
-                m_aGlobalDefaults.m_nRightMarginAdjust  = aValue.GetToken( 1, ',' ).ToInt32();
-                m_aGlobalDefaults.m_nTopMarginAdjust    = aValue.GetToken( 2, ',' ).ToInt32();
-                m_aGlobalDefaults.m_nBottomMarginAdjust = aValue.GetToken( 3, ',' ).ToInt32();
+                m_aGlobalDefaults.m_nLeftMarginAdjust = getToken(aValue, 0, ',').toInt32();
+                m_aGlobalDefaults.m_nRightMarginAdjust  = getToken(aValue, 1, ',').toInt32();
+                m_aGlobalDefaults.m_nTopMarginAdjust = getToken(aValue, 2, ',').toInt32();
+                m_aGlobalDefaults.m_nBottomMarginAdjust = getToken(aValue, 3, ',').toInt32();
             }
 
             aValue = aConfig.ReadKey( "ColorDepth", "24" );
-            if( aValue.Len() )
-                m_aGlobalDefaults.m_nColorDepth = aValue.ToInt32();
+            if (!aValue.isEmpty())
+                m_aGlobalDefaults.m_nColorDepth = aValue.toInt32();
 
             aValue = aConfig.ReadKey( "ColorDevice" );
-            if( aValue.Len() )
-                m_aGlobalDefaults.m_nColorDevice = aValue.ToInt32();
+            if (!aValue.isEmpty())
+                m_aGlobalDefaults.m_nColorDevice = aValue.toInt32();
 
             aValue = aConfig.ReadKey( "PSLevel" );
-            if( aValue.Len() )
-                m_aGlobalDefaults.m_nPSLevel = aValue.ToInt32();
+            if (!aValue.isEmpty())
+                m_aGlobalDefaults.m_nPSLevel = aValue.toInt32();
 
             aValue = aConfig.ReadKey( "PDFDevice" );
-            if( aValue.Len() )
-                m_aGlobalDefaults.m_nPDFDevice = aValue.ToInt32();
+            if (!aValue.isEmpty())
+                m_aGlobalDefaults.m_nPDFDevice = aValue.toInt32();
 
             aValue = aConfig.ReadKey( "PerformFontSubstitution" );
-            if( aValue.Len() )
+            if (!aValue.isEmpty())
             {
-                if( ! aValue.Equals( "0" ) && ! aValue.EqualsIgnoreCaseAscii( "false" ) )
+                if (!aValue.equals("0") && !aValue.equalsIgnoreAsciiCase("false"))
                     m_aGlobalDefaults.m_bPerformFontSubstitution = true;
                 else
                     m_aGlobalDefaults.m_bPerformFontSubstitution = false;
             }
 
             aValue = aConfig.ReadKey( "DisableCUPS" );
-            if( aValue.Len() )
+            if (!aValue.isEmpty())
             {
-                if( aValue.Equals( "1" ) || aValue.EqualsIgnoreCaseAscii( "true" ) )
+                if (aValue.equals("1") || aValue.equalsIgnoreAsciiCase("true"))
                     m_bDisableCUPS = true;
                 else
                     m_bDisableCUPS = false;
@@ -336,7 +338,7 @@ void PrinterInfoManager::initialize()
                     {
                         m_aGlobalDefaults.m_aContext.
                         setValue( pKey,
-                        aValue.Equals( "*nil" ) ? NULL : pKey->getValue( String( aValue, RTL_TEXTENCODING_ISO_8859_1 ) ),
+                        aValue.equals("*nil") ? NULL : pKey->getValue(rtl::OStringToOUString(aValue, RTL_TEXTENCODING_ISO_8859_1)),
                         sal_True );
                     }
                 }
@@ -393,14 +395,14 @@ void PrinterInfoManager::initialize()
         for( int nGroup = 0; nGroup < aConfig.GetGroupCount(); nGroup++ )
         {
             aConfig.SetGroup( aConfig.GetGroupName( nGroup ) );
-            ByteString aValue = aConfig.ReadKey( "Printer" );
-            if( aValue.Len() )
+            rtl::OString aValue = aConfig.ReadKey( "Printer" );
+            if (!aValue.isEmpty())
             {
                 OUString aPrinterName;
 
-                int nNamePos = aValue.Search( '/' );
+                sal_Int32 nNamePos = aValue.indexOf('/');
                 // check for valid value of "Printer"
-                if( nNamePos == STRING_NOTFOUND )
+                if (nNamePos == -1)
                     continue;
 
                 Printer aPrinter;
@@ -412,9 +414,10 @@ void PrinterInfoManager::initialize()
                 aPrinter.m_aInfo.m_aFontSubstitutes.clear();
                 aPrinter.m_aInfo.m_aFontSubstitutions.clear();
 
-                aPrinterName = String( aValue.Copy( nNamePos+1 ), RTL_TEXTENCODING_UTF8 );
-                aPrinter.m_aInfo.m_aPrinterName     = aPrinterName;
-                aPrinter.m_aInfo.m_aDriverName      = String( aValue.Copy( 0, nNamePos ), RTL_TEXTENCODING_UTF8 );
+                aPrinterName = rtl::OStringToOUString(aValue.copy(nNamePos+1),
+                    RTL_TEXTENCODING_UTF8);
+                aPrinter.m_aInfo.m_aPrinterName = aPrinterName;
+                aPrinter.m_aInfo.m_aDriverName = rtl::OStringToOUString(aValue.copy(0, nNamePos), RTL_TEXTENCODING_UTF8);
 
                 // set parser, merge settings
                 // don't do this for CUPS printers as this is done
@@ -456,7 +459,7 @@ void PrinterInfoManager::initialize()
 
                     aValue = aConfig.ReadKey( "Command" );
                     // no printer without a command
-                    if( ! aValue.Len() )
+                    if (aValue.isEmpty())
                     {
                         /*  TODO:
                         *  porters: please append your platform to the Solaris
@@ -468,61 +471,63 @@ void PrinterInfoManager::initialize()
                         aValue = "lpr";
                         #endif
                     }
-                    aPrinter.m_aInfo.m_aCommand = String( aValue, RTL_TEXTENCODING_UTF8 );
+                    aPrinter.m_aInfo.m_aCommand = rtl::OStringToOUString(aValue, RTL_TEXTENCODING_UTF8);
                 }
 
                 aValue = aConfig.ReadKey( "QuickCommand" );
-                aPrinter.m_aInfo.m_aQuickCommand = String( aValue, RTL_TEXTENCODING_UTF8 );
+                aPrinter.m_aInfo.m_aQuickCommand = rtl::OStringToOUString(aValue, RTL_TEXTENCODING_UTF8);
 
                 aValue = aConfig.ReadKey( "Features" );
-                aPrinter.m_aInfo.m_aFeatures = String( aValue, RTL_TEXTENCODING_UTF8 );
+                aPrinter.m_aInfo.m_aFeatures = rtl::OStringToOUString(aValue, RTL_TEXTENCODING_UTF8);
 
                 // override the settings in m_aGlobalDefaults if keys exist
                 aValue = aConfig.ReadKey( "DefaultPrinter" );
-                if( ! aValue.Equals( "0" ) && ! aValue.EqualsIgnoreCaseAscii( "false" ) )
+                if (!aValue.equals("0") && !aValue.equalsIgnoreAsciiCase("false"))
                     aDefaultPrinter = aPrinterName;
 
                 aValue = aConfig.ReadKey( "Location" );
-                aPrinter.m_aInfo.m_aLocation = String( aValue, RTL_TEXTENCODING_UTF8 );
+                aPrinter.m_aInfo.m_aLocation = rtl::OStringToOUString(aValue, RTL_TEXTENCODING_UTF8);
 
                 aValue = aConfig.ReadKey( "Comment" );
-                aPrinter.m_aInfo.m_aComment = String( aValue, RTL_TEXTENCODING_UTF8 );
+                aPrinter.m_aInfo.m_aComment = rtl::OStringToOUString(aValue, RTL_TEXTENCODING_UTF8);
 
                 aValue = aConfig.ReadKey( "Copies" );
-                if( aValue.Len() )
-                    aPrinter.m_aInfo.m_nCopies = aValue.ToInt32();
+                if (!aValue.isEmpty())
+                    aPrinter.m_aInfo.m_nCopies = aValue.toInt32();
 
                 aValue = aConfig.ReadKey( "Orientation" );
-                if( aValue.Len() )
-                    aPrinter.m_aInfo.m_eOrientation = aValue.EqualsIgnoreCaseAscii( "Landscape" ) ? orientation::Landscape : orientation::Portrait;
+                if (!aValue.isEmpty())
+                    aPrinter.m_aInfo.m_eOrientation = aValue.equalsIgnoreAsciiCase("Landscape") ? orientation::Landscape : orientation::Portrait;
+
+                using comphelper::string::getToken;
 
                 aValue = aConfig.ReadKey( "MarginAdjust" );
-                if( aValue.Len() )
+                if (!aValue.isEmpty())
                 {
-                    aPrinter.m_aInfo.m_nLeftMarginAdjust    = aValue.GetToken( 0, ',' ).ToInt32();
-                    aPrinter.m_aInfo.m_nRightMarginAdjust   = aValue.GetToken( 1, ',' ).ToInt32();
-                    aPrinter.m_aInfo.m_nTopMarginAdjust     = aValue.GetToken( 2, ',' ).ToInt32();
-                    aPrinter.m_aInfo.m_nBottomMarginAdjust  = aValue.GetToken( 3, ',' ).ToInt32();
+                    aPrinter.m_aInfo.m_nLeftMarginAdjust = getToken(aValue, 0, ',' ).toInt32();
+                    aPrinter.m_aInfo.m_nRightMarginAdjust = getToken(aValue, 1, ',' ).toInt32();
+                    aPrinter.m_aInfo.m_nTopMarginAdjust = getToken(aValue, 2, ',' ).toInt32();
+                    aPrinter.m_aInfo.m_nBottomMarginAdjust = getToken(aValue, 3, ',' ).toInt32();
                 }
 
                 aValue = aConfig.ReadKey( "ColorDepth" );
-                if( aValue.Len() )
-                    aPrinter.m_aInfo.m_nColorDepth = aValue.ToInt32();
+                if (!aValue.isEmpty())
+                    aPrinter.m_aInfo.m_nColorDepth = aValue.toInt32();
 
                 aValue = aConfig.ReadKey( "ColorDevice" );
-                if( aValue.Len() )
-                    aPrinter.m_aInfo.m_nColorDevice = aValue.ToInt32();
+                if (!aValue.isEmpty())
+                    aPrinter.m_aInfo.m_nColorDevice = aValue.toInt32();
 
                 aValue = aConfig.ReadKey( "PSLevel" );
-                if( aValue.Len() )
-                    aPrinter.m_aInfo.m_nPSLevel = aValue.ToInt32();
+                if (!aValue.isEmpty())
+                    aPrinter.m_aInfo.m_nPSLevel = aValue.toInt32();
 
                 aValue = aConfig.ReadKey( "PDFDevice" );
-                if( aValue.Len() )
-                    aPrinter.m_aInfo.m_nPDFDevice = aValue.ToInt32();
+                if (!aValue.isEmpty())
+                    aPrinter.m_aInfo.m_nPDFDevice = aValue.toInt32();
 
                 aValue = aConfig.ReadKey( "PerformFontSubstitution" );
-                if( ! aValue.Equals( "0" ) && ! aValue.EqualsIgnoreCaseAscii( "false" ) )
+                if (!aValue.equals("0") && !aValue.equalsIgnoreAsciiCase("false"))
                     aPrinter.m_aInfo.m_bPerformFontSubstitution = true;
                 else
                     aPrinter.m_aInfo.m_bPerformFontSubstitution = false;
@@ -541,7 +546,7 @@ void PrinterInfoManager::initialize()
                         {
                             aPrinter.m_aInfo.m_aContext.
                             setValue( pKey,
-                            aValue.Equals( "*nil" ) ? NULL : pKey->getValue( String( aValue, RTL_TEXTENCODING_ISO_8859_1 ) ),
+                            aValue.equals("*nil") ? NULL : pKey->getValue(rtl::OStringToOUString(aValue, RTL_TEXTENCODING_ISO_8859_1)),
                             sal_True );
                         }
                     }

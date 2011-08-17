@@ -162,6 +162,29 @@ COMPHELPER_DLLPUBLIC inline rtl::OUString getToken(const rtl::OUString &rIn,
     return rIn.getToken(nToken, cTok, nIndex);
 }
 
+/**
+  Match against a substring appearing in another string.
+
+  The result is true if and only if the second string appears as a substring
+  of the first string, at the given position.
+  This function can't be used for language specific comparison.
+
+  @param    rStr        The string that pMatch will be compared to.
+  @param    pMatch      The substring rStr is to be compared against
+  @param    nMatchLen   The length of pMatch
+  @param    fromIndex   The index to start the comparion from.
+                        The index must be greater or equal than 0
+                        and less or equal as the string length.
+  @return   sal_True if pMatch match with the characters in the string
+            at the given position;
+            sal_False, otherwise.
+*/
+COMPHELPER_DLLPUBLIC inline sal_Bool matchL(const rtl::OString& rStr, const char *pMatch, sal_Int32 nMatchLen, sal_Int32 fromIndex = 0) SAL_THROW(())
+{
+    return rtl_str_shortenedCompare_WithLength( rStr.pData->buffer+fromIndex,
+        rStr.pData->length-fromIndex, pMatch, nMatchLen, nMatchLen ) == 0;
+}
+
 /** Convert a sequence of strings to a single comma separated string.
 
     Note that no escaping of commas or anything fancy is done.
