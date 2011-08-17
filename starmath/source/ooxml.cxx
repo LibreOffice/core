@@ -95,11 +95,9 @@ void SmOoxml::HandleNode( const SmNode* pNode, int nLevel )
     fprintf(stderr,"XX %d %d %d\n", nLevel, pNode->GetType(), pNode->GetNumSubNodes());
     switch(pNode->GetType())
     {
-#if 0
         case NATTRIBUT:
-            HandleAttributes(pNode,nLevel);
+            HandleAttribute( static_cast< const SmAttributNode* >( pNode ), nLevel );
             break;
-#endif
         case NTEXT:
             HandleText(pNode,nLevel);
             break;
@@ -114,8 +112,11 @@ void SmOoxml::HandleNode( const SmNode* pNode, int nLevel )
             HandleOperator(pNode,nLevel);
             break;
 #endif
+        case NUNHOR:
+            HandleUnaryOperation( static_cast< const SmUnHorNode* >( pNode ), nLevel );
+            break;
         case NBINHOR:
-            HandleBinaryOperation(pNode,nLevel);
+            HandleBinaryOperation( static_cast< const SmBinHorNode* >( pNode ), nLevel );
             break;
         case NBINVER:
             HandleFractions(pNode,nLevel);
@@ -311,121 +312,6 @@ void SmOoxml::HandleText( const SmNode* pNode, int /*nLevel*/)
     m_pSerializer->endElementNS( XML_m, XML_r );
 }
 
-void SmOoxml::HandleMath( const SmNode* pNode,int nLevel )
-{
-    fprintf(stderr,"MATH %d\n", pNode->GetToken().eType);
-    // these are handled elsewhere, e.g. when handling BINHOR
-    OSL_ASSERT( pNode->GetToken().eType != TDIVIDEBY );
-    HandleText( pNode, nLevel );
-// TODO at least some items (e.g. y/2 need to handled as ooxml and not as plain text symbols)
-#if 0
-    if (pNode->GetToken().eType == TMLINE)
-    {
-        *pS << sal_uInt8(END);
-        *pS << sal_uInt8(LINE);
-        bIsReInterpBrace=1;
-        return;
-    }
-    SmMathSymbolNode* pTemp=(SmMathSymbolNode* )pNode;
-    for(xub_StrLen i=0;i<pTemp->GetText().Len();i++)
-    {
-        sal_Unicode nArse = Convert(pTemp->GetText().GetChar(i));
-        if ((nArse == 0x2224) || (nArse == 0x2288) || (nArse == 0x2285) ||
-            (nArse == 0x2289))
-        {
-            *pS << sal_uInt8(CHAR|0x20);
-        }
-        else if ((nPendingAttributes) &&
-                (i == ((pTemp->GetText().Len()+1)/2)-1))
-            {
-                *pS << sal_uInt8(0x22);
-            }
-        else
-            *pS << sal_uInt8(CHAR); //char without formula recognition
-        //The typeface seems to be MTEXTRA for unicode characters,
-        //though how to determine when mathtype chooses one over
-        //the other is unknown. This should do the trick
-        //nevertheless.
-        sal_uInt8 nBias;
-        if ( (nArse == 0x2213) || (nArse == 0x2218) ||
-            (nArse == 0x210F) || (
-                (nArse >= 0x22EE) && (nArse <= 0x22FF)
-            ))
-        {
-            nBias = 0xB; //typeface
-        }
-        else if ((nArse > 0x2000) || (nArse == 0x00D7))
-            nBias = 0x6; //typeface
-        else if (nArse == 0x3d1)
-            nBias = 0x4;
-        else if ((nArse > 0xFF) && ((nArse < 0x393) || (nArse > 0x3c9)))
-            nBias = 0xB; //typeface
-        else if ((nArse == 0x2F) || (nArse == 0x2225))
-            nBias = 0x2; //typeface
-        else
-            nBias = 0x3; //typeface
-
-        *pS << sal_uInt8(nSpec+nBias+128); //typeface
-
-        if (nArse == 0x2224)
-        {
-            *pS << sal_uInt16(0x7C);
-            *pS << sal_uInt8(EMBEL);
-            *pS << sal_uInt8(0x0A);
-            *pS << sal_uInt8(END); //end embel
-            *pS << sal_uInt8(END); //end embel
-        }
-        else if (nArse == 0x2225)
-            *pS << sal_uInt16(0xEC09);
-        else if (nArse == 0xE421)
-            *pS << sal_uInt16(0x2265);
-        else if (nArse == 0x230A)
-            *pS << sal_uInt16(0xF8F0);
-        else if (nArse == 0x230B)
-            *pS << sal_uInt16(0xF8FB);
-        else if (nArse == 0xE425)
-            *pS << sal_uInt16(0x2264);
-        else if (nArse == 0x226A)
-        {
-            *pS << sal_uInt16(0x3C);
-            *pS << sal_uInt8(CHAR);
-            *pS << sal_uInt8(0x98);
-            *pS << sal_uInt16(0xEB01);
-            *pS << sal_uInt8(CHAR);
-            *pS << sal_uInt8(0x86);
-            *pS << sal_uInt16(0x3c);
-        }
-        else if (nArse == 0x2288)
-        {
-            *pS << sal_uInt16(0x2286);
-            *pS << sal_uInt8(EMBEL);
-            *pS << sal_uInt8(0x0A);
-            *pS << sal_uInt8(END); //end embel
-            *pS << sal_uInt8(END); //end embel
-        }
-        else if (nArse == 0x2289)
-        {
-            *pS << sal_uInt16(0x2287);
-            *pS << sal_uInt8(EMBEL);
-            *pS << sal_uInt8(0x0A);
-            *pS << sal_uInt8(END); //end embel
-            *pS << sal_uInt8(END); //end embel
-        }
-        else if (nArse == 0x2285)
-        {
-            *pS << sal_uInt16(0x2283);
-            *pS << sal_uInt8(EMBEL);
-            *pS << sal_uInt8(0x0A);
-            *pS << sal_uInt8(END); //end embel
-            *pS << sal_uInt8(END); //end embel
-        }
-        else
-            *pS << nArse;
-    }
-    nPendingAttributes = 0;
-#endif
-}
-
 void SmOoxml::HandleFractions( const SmNode* pNode, int nLevel, const char* type )
 {
     m_pSerializer->startElementNS( XML_m, XML_f, FSEND );
@@ -445,15 +331,72 @@ void SmOoxml::HandleFractions( const SmNode* pNode, int nLevel, const char* type
     m_pSerializer->endElementNS( XML_m, XML_f );
 }
 
-void SmOoxml::HandleBinaryOperation( const SmNode* pNode, int nLevel )
+void SmOoxml::HandleUnaryOperation( const SmUnHorNode* pNode, int nLevel )
 {
-    // update OSL_ASSERT in HandleMath() when adding new items
-    switch( pNode->GetToken().eType )
+    // update HandleMath() when adding new items
+    fprintf(stderr,"UNARY %d\n", pNode->Symbol()->GetToken().eType );
+    switch( pNode->Symbol()->GetToken().eType )
+    {
+        default:
+            HandleAllSubNodes( pNode, nLevel );
+            break;
+    }
+}
+
+void SmOoxml::HandleBinaryOperation( const SmBinHorNode* pNode, int nLevel )
+{
+    fprintf(stderr,"BINARY %d\n", pNode->Symbol()->GetToken().eType );
+    // update HandleMath() when adding new items
+    switch( pNode->Symbol()->GetToken().eType )
     {
         case TDIVIDEBY:
             return HandleFractions( pNode, nLevel, "lin" );
         default:
             HandleAllSubNodes( pNode, nLevel );
+            break;
+    }
+}
+
+void SmOoxml::HandleAttribute( const SmAttributNode* pNode, int nLevel )
+{
+    switch( pNode->Attribute()->GetToken().eType )
+    {
+        case TCHECK: // TODO check these all are really accents
+        case TACUTE:
+        case TGRAVE:
+        case TCIRCLE:
+        case TWIDETILDE:
+        case TWIDEHAT:
+        {
+            m_pSerializer->startElementNS( XML_m, XML_acc, FSEND );
+            m_pSerializer->startElementNS( XML_m, XML_accPr, FSEND );
+            rtl::OString value = rtl::OUStringToOString(
+                rtl::OUString( pNode->Attribute()->GetToken().cMathChar ), RTL_TEXTENCODING_UTF8 );
+            m_pSerializer->singleElementNS( XML_m, XML_chr, FSNS( XML_m, XML_val ), value.getStr(), FSEND );
+            m_pSerializer->endElementNS( XML_m, XML_accPr );
+            m_pSerializer->startElementNS( XML_m, XML_e, FSEND );
+            HandleNode( pNode->Body(), nLevel + 1 );
+            m_pSerializer->endElementNS( XML_m, XML_e );
+            m_pSerializer->endElementNS( XML_m, XML_acc );
+            break;
+        }
+        default:
+            HandleAllSubNodes( pNode, nLevel );
+            break;
+    }
+}
+
+void SmOoxml::HandleMath( const SmNode* pNode, int nLevel )
+{
+    fprintf(stderr,"MATH %d\n", pNode->GetToken().eType);
+    switch( pNode->GetToken().eType )
+    {
+        case TDIVIDEBY:
+        case TACUTE:
+        // these are handled elsewhere, e.g. when handling BINHOR
+            OSL_ASSERT( false );
+        default:
+            HandleText( pNode, nLevel );
             break;
     }
 }
@@ -464,7 +407,7 @@ void SmOoxml::HandleRoot( const SmRootNode* pNode, int nLevel )
     if( const SmNode* argument = pNode->Argument())
     {
         m_pSerializer->startElementNS( XML_m, XML_deg, FSEND );
-        HandleAllSubNodes( argument, nLevel );
+        HandleNode( argument, nLevel + 1 );
         m_pSerializer->endElementNS( XML_m, XML_deg );
     }
     else
@@ -475,7 +418,7 @@ void SmOoxml::HandleRoot( const SmRootNode* pNode, int nLevel )
         m_pSerializer->singleElementNS( XML_m, XML_deg, FSEND ); // empty but present
     }
     m_pSerializer->startElementNS( XML_m, XML_e, FSEND );
-    HandleAllSubNodes( pNode->Body(), nLevel );
+    HandleNode( pNode->Body(), nLevel + 1 );
     m_pSerializer->endElementNS( XML_m, XML_e );
     m_pSerializer->endElementNS( XML_m, XML_rad );
 }

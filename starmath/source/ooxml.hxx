@@ -50,8 +50,10 @@ private:
     void HandleText( const SmNode* pNode, int nLevel );
     void HandleMath( const SmNode* pNode, int nLevel );
     void HandleFractions( const SmNode* pNode, int nLevel, const char* type = NULL );
-    void HandleBinaryOperation( const SmNode* pNode, int nLevel );
+    void HandleUnaryOperation( const SmUnHorNode* pNode, int nLevel );
+    void HandleBinaryOperation( const SmBinHorNode* pNode, int nLevel );
     void HandleRoot( const SmRootNode* pNode,int nLevel );
+    void HandleAttribute( const SmAttributNode* pNode,int nLevel );
     String str;
     const SmNode* const pTree;
     ::sax_fastparser::FSHelperPtr m_pSerializer;
