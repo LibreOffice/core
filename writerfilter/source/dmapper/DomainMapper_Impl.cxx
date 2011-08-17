@@ -1412,6 +1412,7 @@ void DomainMapper_Impl::PopAnnotation()
 
 void DomainMapper_Impl::PushShapeContext( const uno::Reference< drawing::XShape > xShape )
 {
+    uno::Reference<text::XTextAppend> xTextAppend = m_aTextAppendStack.top().xTextAppend;
     m_bIsInShape = true;
     try
     {
@@ -1433,6 +1434,12 @@ void DomainMapper_Impl::PushShapeContext( const uno::Reference< drawing::XShape 
         xProps->setPropertyValue(
                 rPropNameSupplier.GetName( PROP_OPAQUE ),
                 uno::makeAny( true ) );
+        if (xSInfo->supportsService(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.text.TextFrame"))))
+        {
+            uno::Reference<text::XTextContent> xTextContent(xShape, uno::UNO_QUERY_THROW);
+            uno::Reference<text::XTextRange> xTextRange(xTextAppend->createTextCursorByRange(xTextAppend->getEnd()), uno::UNO_QUERY_THROW);
+            xTextAppend->insertTextContent(xTextRange, xTextContent, sal_False);
+        }
     }
     catch ( const uno::Exception& e )
     {
