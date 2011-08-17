@@ -725,9 +725,11 @@ void RTFDocumentImpl::checkChangedFrame()
         xPropertySet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("SizeType")), uno::Any(text::SizeType::MIN));
 
         xShape->setSize(awt::Size(m_aStates.top().aFrame.nW, m_aStates.top().aFrame.nH));
-        xPropertySet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("HoriOrient")), uno::Any(text::HoriOrientation::NONE));
+        xPropertySet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("HoriOrient")), uno::Any(m_aStates.top().aFrame.nHoriOrient));
+        xPropertySet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("HoriOrientRelation")), uno::Any(m_aStates.top().aFrame.nHoriOrientRelation));
         xPropertySet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("HoriOrientPosition")), uno::Any(sal_Int32(m_aStates.top().aFrame.nX)));
-        xPropertySet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("VertOrient")), uno::Any(text::VertOrientation::NONE));
+        xPropertySet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("VertOrient")), uno::Any(m_aStates.top().aFrame.nVertOrient));
+        xPropertySet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("VertOrientRelation")), uno::Any(m_aStates.top().aFrame.nVertOrientRelation));
         xPropertySet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("VertOrientPosition")), uno::Any(sal_Int32(m_aStates.top().aFrame.nY)));
         xPropertySet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("LeftMargin")), uno::Any(sal_Int32(m_aStates.top().aFrame.nLeftMargin)));
         xPropertySet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("RightMargin")), uno::Any(sal_Int32(m_aStates.top().aFrame.nRightMargin)));
@@ -2417,6 +2419,20 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
         case RTF_DXFRTEXT:
             m_aStates.top().aFrame.nLeftMargin = m_aStates.top().aFrame.nRightMargin =
                 m_aStates.top().aFrame.nTopMargin = m_aStates.top().aFrame.nBottomMargin = TWIP_TO_MM100(nParam);
+            break;
+        case RTF_FLYVERT:
+            {
+                RTFVertOrient aVertOrient(nParam);
+                m_aStates.top().aFrame.nVertOrient = aVertOrient.GetOrient();
+                m_aStates.top().aFrame.nVertOrientRelation = aVertOrient.GetRelation();
+            }
+            break;
+        case RTF_FLYHORZ:
+            {
+                RTFHoriOrient aHoriOrient(nParam);
+                m_aStates.top().aFrame.nHoriOrient = aHoriOrient.GetOrient();
+                m_aStates.top().aFrame.nHoriOrientRelation = aHoriOrient.GetRelation();
+            }
             break;
         default:
 #if OSL_DEBUG_LEVEL > 1

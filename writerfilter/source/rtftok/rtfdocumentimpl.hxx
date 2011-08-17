@@ -192,8 +192,9 @@ namespace writerfilter {
         class RTFFrame
         {
             public:
-                int nX, nY, nW, nH;
-                int nLeftMargin, nRightMargin, nTopMargin, nBottomMargin;
+                sal_Int32 nX, nY, nW, nH;
+                sal_Int32 nLeftMargin, nRightMargin, nTopMargin, nBottomMargin;
+                sal_Int16 nHoriOrient, nHoriOrientRelation, nVertOrient, nVertOrientRelation;
         };
 
         /// State of the parser, which gets saved / restored when changing groups.
