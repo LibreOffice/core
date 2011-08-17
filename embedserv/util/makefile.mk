@@ -69,8 +69,14 @@ SHL1STDLIBS=\
 
 .IF "$(COM)"=="MSC"
 SHL1STDLIBS+=\
-        $(ADVAPI32LIB)	\
+        $(ADVAPI32LIB)
+.IF "$(USE_DEBUG_RUNTIME)" == ""
+SHL1STDLIBS+=\
         $(ATL_LIB)$/atls.lib
+.ELSE
+SHL1STDLIBS+=\
+        $(ATL_LIB)$/atlsd.lib
+.ENDIF
 .ENDIF # "$(COM)"=="MSC"
 
 
