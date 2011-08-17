@@ -265,10 +265,6 @@ public:
                             { return maRegions.size(); }
     RegionData_Impl*    GetRegion( const OUString& rName ) const;
     RegionData_Impl*    GetRegion( size_t nIndex ) const;
-    void                GetTemplates( Content& rTargetFolder,
-                                      Content& rParentFolder,
-                                      RegionData_Impl* pRegion );
-
     size_t              GetRegionPos( const OUString& rTitle, sal_Bool& rFound ) const;
 
     sal_Bool            GetTitleFromURL( const OUString& rURL, OUString& aTitle );
@@ -387,39 +383,6 @@ const String& SfxDocumentTemplates::GetRegionName
     return maTmpString;
 }
 
-
-//------------------------------------------------------------------------
-
-sal_uInt16 SfxDocumentTemplates::GetRegionNo
-(
-    const String &rRegion       // Region Name
-)   const
-
-/*  [Description]
-
-    Returns the Index for a logical Region Name.
-
-    [Return value]
-
-    sal_uInt16          Index of 'rRegion' or USHRT_MAX if unknown
-
-*/
-{
-    DocTemplLocker_Impl aLocker( *pImp );
-
-    if ( !pImp->Construct() )
-        return USHRT_MAX;
-
-    sal_Bool    bFound;
-    size_t      nIndex = pImp->GetRegionPos( rRegion, bFound );
-
-    if ( bFound )
-        return (sal_uInt16) nIndex;
-    else
-        return USHRT_MAX;
-}
-
-
 //------------------------------------------------------------------------
 
 sal_uInt16 SfxDocumentTemplates::GetRegionCount() const
@@ -458,39 +421,6 @@ sal_Bool SfxDocumentTemplates::IsRegionLoaded( sal_uInt16 nIdx ) const
         return sal_True;
     else
         return sal_False;
-}
-
-//------------------------------------------------------------------------
-
-sal_uInt16 SfxDocumentTemplates::GetCount
-(
-    const String&   rName   /*  Region Name, for which the entries
-                                should be counted */
-
-)   const
-
-/*  [Description]
-
-    Number of entries in Region
-
-    [Return value]
-
-    sal_uInt16                      Number of entries
-*/
-
-{
-    DocTemplLocker_Impl aLocker( *pImp );
-
-    if ( !pImp->Construct() )
-        return 0;
-
-    RegionData_Impl *pData = pImp->GetRegion( rName );
-    sal_uIntPtr            nCount = 0;
-
-    if ( pData )
-        nCount = pData->GetCount();
-
-    return (sal_uInt16) nCount;
 }
 
 //------------------------------------------------------------------------
@@ -637,114 +567,6 @@ String SfxDocumentTemplates::GetPath
 
 //------------------------------------------------------------------------
 
-String SfxDocumentTemplates::GetTemplatePath
-(
-    sal_uInt16          nRegion,    //  Region Index, in which the entry lies
-    const String&   rLongName   //  logical Entry Name
-)   const
-
-/*  [Description]
-
-    Returns the file name with full path to the file assigned to an entry
-
-    [Return value]
-
-    String                          File name with full path
-*/
-{
-    DocTemplLocker_Impl aLocker( *pImp );
-
-    if ( !pImp->Construct() )
-        return String();
-
-    DocTempl_EntryData_Impl  *pEntry = NULL;
-    RegionData_Impl *pRegion = pImp->GetRegion( nRegion );
-
-    if ( pRegion )
-        pEntry = pRegion->GetEntry( rLongName );
-
-    if ( pEntry )
-        return pEntry->GetTargetURL();
-    else if ( pRegion )
-    {
-        // a new template is going to be inserted, generate a new URL
-        // TODO/LATER: if the title is localized, use minimized URL in future
-
-        // --**-- extension handling will become more complicated, because
-        //          every new document type will have it's own extension
-        //          e.g.: .stw or .stc instead of .vor
-        INetURLObject aURLObj( pRegion->GetTargetURL() );
-        aURLObj.insertName( rLongName, false,
-                     INetURLObject::LAST_SEGMENT, true,
-                     INetURLObject::ENCODE_ALL );
-
-        OUString aExtension = aURLObj.getExtension();
-
-        if ( ! aExtension.getLength() )
-            aURLObj.setExtension( OUString( RTL_CONSTASCII_USTRINGPARAM( "vor" ) ) );
-
-        return aURLObj.GetMainURL( INetURLObject::NO_DECODE );
-    }
-    else
-        return String();
-}
-
-//------------------------------------------------------------------------
-
-String SfxDocumentTemplates::GetDefaultTemplatePath
-(
-    const String& rLongName
-)
-
-/*  [Description]
-
-    Returns the default location for templates
-
-    [Return value]
-
-    String                  Default location for templates
-*/
-{
-    DocTemplLocker_Impl aLocker( *pImp );
-
-    if ( ! pImp->Construct() )
-        return String();
-
-    // the first region in the list should always be the standard
-    // group
-    // --**-- perhaps we have to create it ???
-    RegionData_Impl *pRegion = pImp->GetRegion( 0L );
-    DocTempl_EntryData_Impl  *pEntry = NULL;
-
-    if ( pRegion )
-        pEntry = pRegion->GetEntry( rLongName );
-
-    if ( pEntry )
-        return pEntry->GetTargetURL();
-    else if ( pRegion )
-    {
-        // a new template is going to be inserted, generate a new URL
-        // TODO/LATER: if the title is localized, use minimized URL in future
-
-        INetURLObject aURLObj( pRegion->GetTargetURL() );
-        aURLObj.insertName( rLongName, false,
-                     INetURLObject::LAST_SEGMENT, true,
-                     INetURLObject::ENCODE_ALL );
-
-        OUString aExtension = aURLObj.getExtension();
-
-        if ( ! aExtension.getLength() )
-            aURLObj.setExtension( OUString( RTL_CONSTASCII_USTRINGPARAM( "vor" ) ) );
-
-        return aURLObj.GetMainURL( INetURLObject::NO_DECODE );
-    }
-    else
-        return String();
-
-}
-
-//------------------------------------------------------------------------
-
 ::rtl::OUString SfxDocumentTemplates::GetTemplateTargetURLFromComponent( const ::rtl::OUString& aGroupName,
                                                                          const ::rtl::OUString& aTitle )
 {
@@ -797,69 +619,6 @@ OUString SfxDocumentTemplates::ConvertResourceString (
             return ResId::toString( SfxResId( nDestResIds + i ) );
     }
     return rString;
-}
-
-//------------------------------------------------------------------------
-
-sal_Bool SfxDocumentTemplates::SaveDir
-(
-//  SfxTemplateDir& rDir        //  Save Directory
-)
-
-/*  [Description]
-
-    Saves the Directory rDir
-
-    [Return value]
-
-    sal_Bool               sal_False,   Write error
-                           sal_True,    Saved
-*/
-
-{
-    return sal_True;
-}
-
-//------------------------------------------------------------------------
-
-void SfxDocumentTemplates::NewTemplate
-(
-    sal_uInt16          nRegion,    /*  Region Index, in which the template
-                                    should be applied */
-
-    const String&   rLongName,  //  logical name of the new template
-    const String&   rFileName   //  File name of the new template
-)
-
-/*  [Description]
-
-    Submit a new template in the administrative structures
-    overwriting a template of the same name is prevented (! Error message)
-*/
-
-{
-    DocTemplLocker_Impl aLocker( *pImp );
-
-    if ( ! pImp->Construct() )
-        return;
-
-    DocTempl_EntryData_Impl  *pEntry;
-    RegionData_Impl *pRegion = pImp->GetRegion( nRegion );
-
-    // do nothing if there is no region with that index
-    if ( !pRegion )
-        return;
-
-    pEntry = pRegion->GetEntry( rLongName );
-
-    // do nothing if there is already an entry with that name
-    if ( pEntry )
-        return;
-
-    uno::Reference< XDocumentTemplates > xTemplates = pImp->getDocTemplates();
-
-    if ( xTemplates->addTemplate( pRegion->GetTitle(), rLongName, rFileName ) )
-        pRegion->AddEntry( rLongName, rFileName );
 }
 
 //------------------------------------------------------------------------
@@ -1273,7 +1032,6 @@ sal_Bool SfxDocumentTemplates::Delete
 
     <SfxDocumentTemplates::InsertDir(const String&,sal_uInt16)>
     <SfxDocumentTemplates::KillDir(SfxTemplateDir&)>
-    <SfxDocumentTemplates::SaveDir(SfxTemplateDir&)>
 */
 
 {
@@ -1336,7 +1094,6 @@ sal_Bool SfxDocumentTemplates::InsertDir
     [Cross-references]
 
     <SfxDocumentTemplates::KillDir(SfxTemplateDir&)>
-    <SfxDocumentTemplates::SaveDir(SfxTemplateDir&)>
 */
 {
     DocTemplLocker_Impl aLocker( *pImp );
@@ -2381,65 +2138,6 @@ void SfxDocTemplate_Impl::ReInitFromComponent()
         CreateFromHierarchy( aTemplRoot );
     }
 }
-
-// -----------------------------------------------------------------------
-void SfxDocTemplate_Impl::GetTemplates( Content& rTargetFolder,
-                                        Content& /*rParentFolder*/,
-                                        RegionData_Impl* pRegion )
-{
-    uno::Reference< XResultSet > xResultSet;
-    Sequence< OUString >    aProps(1);
-
-    aProps[0] = OUString(RTL_CONSTASCII_USTRINGPARAM( TITLE ));
-
-    try
-    {
-        ResultSetInclude eInclude = INCLUDE_DOCUMENTS_ONLY;
-        Sequence< NumberedSortingInfo >     aSortingInfo(1);
-        aSortingInfo.getArray()->ColumnIndex = 1;
-        aSortingInfo.getArray()->Ascending = sal_True;
-        xResultSet = rTargetFolder.createSortedCursor( aProps, aSortingInfo, m_rCompareFactory, eInclude );
-    }
-    catch ( Exception& ) {}
-
-    if ( xResultSet.is() )
-    {
-        uno::Reference< XContentAccess > xContentAccess( xResultSet, UNO_QUERY );
-        uno::Reference< XRow > xRow( xResultSet, UNO_QUERY );
-
-        try
-        {
-            while ( xResultSet->next() )
-            {
-                OUString aTitle( xRow->getString(1) );
-
-                if ( aTitle.compareToAscii( "sfx.tlx" ) == 0 )
-                    continue;
-
-                OUString aId = xContentAccess->queryContentIdentifierString();
-
-                DocTempl_EntryData_Impl* pEntry = pRegion->GetByTargetURL( aId );
-
-                if ( ! pEntry )
-                {
-                    OUString aFullTitle;
-                    if( !GetTitleFromURL( aId, aFullTitle ) )
-                    {
-                        DBG_ERRORFILE( "GetTemplates(): template of alien format" );
-                        continue;
-                    }
-
-                    if ( aFullTitle.getLength() )
-                        aTitle = aFullTitle;
-
-                    pRegion->AddEntry( aTitle, aId );
-                }
-            }
-        }
-        catch ( Exception& ) {}
-    }
-}
-
 
 // -----------------------------------------------------------------------
 size_t SfxDocTemplate_Impl::GetRegionPos( const OUString& rTitle, sal_Bool& rFound ) const
