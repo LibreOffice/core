@@ -196,6 +196,7 @@ namespace writerfilter {
                 sal_Int32 nLeftMargin, nRightMargin, nTopMargin, nBottomMargin;
                 sal_Int16 nHoriOrient, nHoriOrientRelation, nVertOrient, nVertOrientRelation;
                 sal_Int16 nAnchorType;
+                sal_Bool bPositionToggle;
         };
 
         /// State of the parser, which gets saved / restored when changing groups.

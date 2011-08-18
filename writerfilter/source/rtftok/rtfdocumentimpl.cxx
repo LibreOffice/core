@@ -34,6 +34,7 @@
 #include <com/sun/star/util/DateTime.hpp>
 #include <com/sun/star/text/XTextFrame.hpp>
 #include <com/sun/star/text/SizeType.hpp>
+#include <com/sun/star/text/HoriOrientation.hpp>
 #include <com/sun/star/text/VertOrientation.hpp>
 #include <com/sun/star/text/RelOrientation.hpp>
 #include <editeng/borderline.hxx>
@@ -726,6 +727,8 @@ void RTFDocumentImpl::checkChangedFrame()
 
         xShape->setSize(awt::Size(m_aStates.top().aFrame.nW, m_aStates.top().aFrame.nH));
         xPropertySet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("AnchorType")), uno::Any(m_aStates.top().aFrame.nAnchorType));
+        if (m_aStates.top().aFrame.bPositionToggle)
+            xPropertySet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("PositionToggle")), uno::Any(m_aStates.top().aFrame.bPositionToggle));
         xPropertySet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("HoriOrient")), uno::Any(m_aStates.top().aFrame.nHoriOrient));
         xPropertySet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("HoriOrientRelation")), uno::Any(m_aStates.top().aFrame.nHoriOrientRelation));
         xPropertySet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("HoriOrientPosition")), uno::Any(sal_Int32(m_aStates.top().aFrame.nX)));
@@ -1844,6 +1847,12 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
         case RTF_PVPG: m_aStates.top().aFrame.nVertOrientRelation = text::RelOrientation::PAGE_FRAME; break;
         case RTF_PHCOL: m_aStates.top().aFrame.nHoriOrientRelation = text::RelOrientation::FRAME; break;
         case RTF_PVPARA: m_aStates.top().aFrame.nVertOrientRelation = text::RelOrientation::FRAME; break;
+
+        case RTF_POSXC: m_aStates.top().aFrame.nHoriOrient = text::HoriOrientation::CENTER; break;
+        case RTF_POSXI: m_aStates.top().aFrame.nHoriOrient = text::HoriOrientation::LEFT; m_aStates.top().aFrame.bPositionToggle = sal_True; break;
+        case RTF_POSXO: m_aStates.top().aFrame.nHoriOrient = text::HoriOrientation::RIGHT; m_aStates.top().aFrame.bPositionToggle = sal_True; break;
+        case RTF_POSXL: m_aStates.top().aFrame.nHoriOrient = text::HoriOrientation::LEFT; break;
+        case RTF_POSXR: m_aStates.top().aFrame.nHoriOrient = text::HoriOrientation::RIGHT; break;
         default:
 #if OSL_DEBUG_LEVEL > 1
             OSL_TRACE("%s: TODO handle flag '%s'", OSL_THIS_FUNC, lcl_RtfToString(nKeyword));
@@ -2416,6 +2425,7 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
             m_aStates.top().aFrame.nH = TWIP_TO_MM100(nParam);
             break;
         case RTF_POSX:
+            m_aStates.top().aFrame.nHoriOrient = text::HoriOrientation::NONE;
             m_aStates.top().aFrame.nX = TWIP_TO_MM100(nParam);
             break;
         case RTF_POSY:
