@@ -34,8 +34,8 @@
 #include <com/sun/star/util/DateTime.hpp>
 #include <com/sun/star/text/XTextFrame.hpp>
 #include <com/sun/star/text/SizeType.hpp>
-#include <com/sun/star/text/HoriOrientation.hpp>
 #include <com/sun/star/text/VertOrientation.hpp>
+#include <com/sun/star/text/RelOrientation.hpp>
 #include <editeng/borderline.hxx>
 #include <rtl/strbuf.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -1834,6 +1834,15 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
         case RTF_FORMSHADE:
             // Noop, this is the default in Writer.
             break;
+        case RTF_POSYT:
+            m_aStates.top().aFrame.nVertOrient = text::VertOrientation::TOP;
+            break;
+        case RTF_PHMRG: m_aStates.top().aFrame.nHoriOrientRelation = text::RelOrientation::PAGE_PRINT_AREA; break;
+        case RTF_PVMRG: m_aStates.top().aFrame.nVertOrientRelation = text::RelOrientation::PAGE_PRINT_AREA; break;
+        case RTF_PHPG: m_aStates.top().aFrame.nHoriOrientRelation = text::RelOrientation::PAGE_FRAME; break;
+        case RTF_PVPG: m_aStates.top().aFrame.nVertOrientRelation = text::RelOrientation::PAGE_FRAME; break;
+        case RTF_PHCOL: m_aStates.top().aFrame.nHoriOrientRelation = text::RelOrientation::FRAME; break;
+        case RTF_PVPARA: m_aStates.top().aFrame.nVertOrientRelation = text::RelOrientation::FRAME; break;
         default:
 #if OSL_DEBUG_LEVEL > 1
             OSL_TRACE("%s: TODO handle flag '%s'", OSL_THIS_FUNC, lcl_RtfToString(nKeyword));
