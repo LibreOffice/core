@@ -182,6 +182,7 @@ namespace writerfilter {
         class RTFPicture
         {
             public:
+                RTFPicture();
                 sal_uInt16 nWidth, nHeight;
                 sal_uInt16 nGoalWidth, nGoalHeight;
                 sal_uInt16 nScaleX, nScaleY;
@@ -192,6 +193,7 @@ namespace writerfilter {
         class RTFFrame
         {
             public:
+                RTFFrame();
                 sal_Int32 nX, nY, nW, nH;
                 sal_Int32 nLeftMargin, nRightMargin, nTopMargin, nBottomMargin;
                 sal_Int16 nHoriOrient, nHoriOrientRelation, nVertOrient, nVertOrientRelation;

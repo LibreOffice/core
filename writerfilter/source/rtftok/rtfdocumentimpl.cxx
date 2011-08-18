@@ -3147,6 +3147,38 @@ RTFColorTableEntry::RTFColorTableEntry()
 {
 }
 
+RTFPicture::RTFPicture()
+    : nWidth(0),
+    nHeight(0),
+    nGoalWidth(0),
+    nGoalHeight(0),
+    nScaleX(0),
+    nScaleY(0),
+    nCropT(0),
+    nCropB(0),
+    nCropL(0),
+    nCropR(0)
+{
+}
+
+RTFFrame::RTFFrame()
+    : nX(0),
+    nY(0),
+    nW(0),
+    nH(0),
+    nLeftMargin(0),
+    nRightMargin(0),
+    nTopMargin(0),
+    nBottomMargin(0),
+    nHoriOrient(0),
+    nHoriOrientRelation(0),
+    nVertOrient(0),
+    nVertOrientRelation(0),
+    nAnchorType(0),
+    bPositionToggle(false)
+{
+}
+
 } // namespace rtftok
 } // namespace writerfilter
 
