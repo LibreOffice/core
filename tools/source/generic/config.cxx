@@ -56,8 +56,8 @@
 struct ImplKeyData
 {
     ImplKeyData*    mpNext;
-    ByteString      maKey;
-    ByteString      maValue;
+    rtl::OString maKey;
+    rtl::OString maValue;
     sal_Bool            mbIsComment;
 };
 
@@ -493,11 +493,11 @@ static sal_uInt8* ImplGetConfigBuffer( const ImplConfigData* pData, sal_uIntPtr&
             pKey = pGroup->mpFirstKey;
             while ( pKey )
             {
-                nValueLen = pKey->maValue.Len();
+                nValueLen = pKey->maValue.getLength();
                 if ( pKey->mbIsComment )
                     nBufLen += nValueLen + nLineEndLen;
                 else
-                    nBufLen += pKey->maKey.Len() + nValueLen + nLineEndLen + 1;
+                    nBufLen += pKey->maKey.getLength() + nValueLen + nLineEndLen + 1;
 
                 pKey = pKey->mpNext;
             }
@@ -552,12 +552,12 @@ static sal_uInt8* ImplGetConfigBuffer( const ImplConfigData* pData, sal_uIntPtr&
             pKey = pGroup->mpFirstKey;
             while ( pKey )
             {
-                nValueLen = pKey->maValue.Len();
+                nValueLen = pKey->maValue.getLength();
                 if ( pKey->mbIsComment )
                 {
                     if ( nValueLen )
                     {
-                        memcpy( pBuf, pKey->maValue.GetBuffer(), nValueLen );
+                        memcpy( pBuf, pKey->maValue.getStr(), nValueLen );
                         pBuf += nValueLen;
                     }
                     *pBuf = aLineEndBuf[0]; pBuf++;
@@ -568,11 +568,11 @@ static sal_uInt8* ImplGetConfigBuffer( const ImplConfigData* pData, sal_uIntPtr&
                 }
                 else
                 {
-                    nKeyLen = pKey->maKey.Len();
-                    memcpy( pBuf, pKey->maKey.GetBuffer(), nKeyLen );
+                    nKeyLen = pKey->maKey.getLength();
+                    memcpy( pBuf, pKey->maKey.getStr(), nKeyLen );
                     pBuf += nKeyLen;
                     *pBuf = '=';    pBuf++;
-                    memcpy( pBuf, pKey->maValue.GetBuffer(), nValueLen );
+                    memcpy( pBuf, pKey->maValue.getStr(), nValueLen );
                     pBuf += nValueLen;
                     *pBuf = aLineEndBuf[0]; pBuf++;
                     if ( nLineEndLen == 2 )
@@ -998,7 +998,7 @@ ByteString Config::ReadKey( const ByteString& rKey, const ByteString& rDefault )
         ImplKeyData* pKey = pGroup->mpFirstKey;
         while ( pKey )
         {
-            if ( !pKey->mbIsComment && pKey->maKey.EqualsIgnoreCaseAscii( rKey ) )
+            if ( !pKey->mbIsComment && pKey->maKey.equalsIgnoreAsciiCase(rKey) )
                 return pKey->maValue;
 
             pKey = pKey->mpNext;
@@ -1010,19 +1010,18 @@ ByteString Config::ReadKey( const ByteString& rKey, const ByteString& rDefault )
 
 // -----------------------------------------------------------------------
 
-void Config::WriteKey( const ByteString& rKey, const ByteString& rStr )
+void Config::WriteKey(const rtl::OString& rKey, const rtl::OString& rStr)
 {
 #ifdef DBG_UTIL
-    ByteString aTraceStr( "Config::WriteKey( " );
-    aTraceStr += rKey;
-    aTraceStr += ", ";
-    aTraceStr += rStr;
-    aTraceStr += " ) to ";
-    aTraceStr += GetGroup();
-    aTraceStr += " in ";
-    aTraceStr += ByteString( maFileName, RTL_TEXTENCODING_UTF8 );
-    OSL_TRACE( "%s", aTraceStr.GetBuffer() );
-    DBG_ASSERTWARNING( rStr != ReadKey( rKey ), "Config::WriteKey() with the same Value" );
+    rtl::OStringBuffer aTraceStr(RTL_CONSTASCII_STRINGPARAM("Config::WriteKey( "));
+    aTraceStr.append(rKey);
+    aTraceStr.append(RTL_CONSTASCII_STRINGPARAM(", "));
+    aTraceStr.append(rStr);
+    aTraceStr.append(RTL_CONSTASCII_STRINGPARAM(" ) to "));
+    aTraceStr.append(GetGroup());
+    aTraceStr.append(RTL_CONSTASCII_STRINGPARAM(" in "));
+    aTraceStr.append(rtl::OUStringToOString(maFileName, RTL_TEXTENCODING_UTF8));
+    OSL_TRACE("%s", aTraceStr.getStr());
 #endif
 
     // Config-Daten evt. updaten
@@ -1040,7 +1039,7 @@ void Config::WriteKey( const ByteString& rKey, const ByteString& rStr )
         ImplKeyData* pKey = pGroup->mpFirstKey;
         while ( pKey )
         {
-            if ( !pKey->mbIsComment && pKey->maKey.EqualsIgnoreCaseAscii( rKey ) )
+            if ( !pKey->mbIsComment && pKey->maKey.equalsIgnoreAsciiCase(rKey) )
                 break;
 
             pPrevKey = pKey;
@@ -1096,7 +1095,7 @@ void Config::DeleteKey( const ByteString& rKey )
         ImplKeyData* pKey = pGroup->mpFirstKey;
         while ( pKey )
         {
-            if ( !pKey->mbIsComment && pKey->maKey.EqualsIgnoreCaseAscii( rKey ) )
+            if ( !pKey->mbIsComment && pKey->maKey.equalsIgnoreAsciiCase(rKey) )
                 break;
 
             pPrevKey = pKey;
