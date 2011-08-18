@@ -66,7 +66,6 @@ $(eval $(call gb_CustomTarget_add_outdir_dependencies,i18npool/source/localedata
 	$(call gb_Executable_get_target_for_build,saxparser) \
 	$(call gb_ComponentTarget_get_outdir_inbuild_target,sax/source/expatwrap/expwrap) \
 	$(gb_XSLTPROCTARGET) \
-	$(SOLARENV)/bin/packcomponents.xslt \
 	$(OUTDIR)/bin/types.rdb \
 ))
 
