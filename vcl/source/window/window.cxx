@@ -2438,13 +2438,13 @@ void Window::ImplCallPaint( const Region* pRegion, sal_uInt16 nPaintFlags )
 
     if ( nPaintFlags & (IMPL_PAINT_PAINTALLCHILDS | IMPL_PAINT_PAINTCHILDS) )
     {
-        // die Childfenster ausgeben
-        Window* pTempWindow = mpWindowImpl->mpFirstChild;
+        // Paint from the bottom child window and frontward.
+        Window* pTempWindow = mpWindowImpl->mpLastChild;
         while ( pTempWindow )
         {
             if ( pTempWindow->mpWindowImpl->mbVisible )
                 pTempWindow->ImplCallPaint( pChildRegion, nPaintFlags );
-            pTempWindow = pTempWindow->mpWindowImpl->mpNext;
+            pTempWindow = pTempWindow->mpWindowImpl->mpPrev;
         }
     }
 
