@@ -939,7 +939,6 @@ SfxFrameDescriptor::TakeProperties(SfxFrameProperties const&)
 SfxFrameHTMLWriter::CreateURL(SfxFrame*)
 SfxFrameProperties::SfxFrameProperties(SfxFrameDescriptor const*)
 SfxFrameWindow_Impl::LinkStubCloserHdl(void*, void*)
-SfxHTMLParser::FileDownloadDone(SfxHTMLParser*, void*)
 SfxHintPoster::SfxHintPoster()
 SfxImageItem::GetURL() const
 SfxImageItem::SfxImageItem(unsigned short, String const&)

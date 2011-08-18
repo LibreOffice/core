@@ -239,7 +239,7 @@ IMAPOBJ_SETEVENT:
 }
 
 
-void SfxHTMLParser::StartFileDownload( const String& rURL, int nToken,
+void SfxHTMLParser::StartFileDownload( const String& rURL,
                                        SfxObjectShell *pSh )
 {
     DBG_ASSERT( !pDLMedium, "StartFileDownload when active Download" );
@@ -288,18 +288,6 @@ sal_Bool SfxHTMLParser::FinishFileDownload( String& rStr )
     pDLMedium = 0;
 
     return bOK;
-}
-
-IMPL_STATIC_LINK( SfxHTMLParser, FileDownloadDone, void*, EMPTYARG )
-{
-    // The Download is now completed. also the Data-Available-Link
-    // must or are allowed to be passed through.
-    pThis->SetDownloadingFile( sal_False );
-
-    // ... and call once, thus will continue reading.
-    pThis->CallAsyncCallLink();
-
-    return 0;
 }
 
 void SfxHTMLParser::GetScriptType_Impl( SvKeyValueIterator *pHTTPHeader )

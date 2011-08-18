@@ -43,8 +43,6 @@ class SfxObjectShell;
 
 class SFX2_DLLPUBLIC SfxHTMLParser : public HTMLParser
 {
-    DECL_DLLPRIVATE_STATIC_LINK( SfxHTMLParser, FileDownloadDone, void* );
-
     String                  aScriptType;
 
     SfxMedium*              pMedium;
@@ -92,8 +90,7 @@ protected:
     // up by FinishFileDownload. To cancel the download should a shell be
     // left. It can only exist a single download at the same time, For every
     // started download FinshFileDownload must be called.
-    void StartFileDownload( const String& rURL, int nToken,
-                            SfxObjectShell *pSh=0 );
+    void StartFileDownload( const String& rURL, SfxObjectShell *pSh=0 );
 
     // End of an asynchronous file download. Returns TRUE if the download
     // was successful. The read file is then passed into String.
