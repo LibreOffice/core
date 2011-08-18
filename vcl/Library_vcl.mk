@@ -283,7 +283,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
 # handle X11 platforms, which have additional files and possibly system graphite
 ifeq ($(GUIBASE),unx)
 $(eval $(call gb_Library_add_exception_objects,vcl,\
-    vcl/source/glyphs/graphite_serverfont \
+    vcl/unx/generic/glyphs/graphite_serverfont \
 ))
 else
 $(eval $(call gb_Library_add_linked_libs,vcl,\
@@ -402,10 +402,10 @@ $(eval $(call gb_Library_add_defs,vcl,\
     $(if $(ENABLE_CUPS),-DENABLE_CUPS) \
 ))
 $(eval $(call gb_Library_add_exception_objects,vcl,\
-    vcl/source/glyphs/gcach_ftyp \
-    vcl/source/glyphs/gcach_layout \
-    vcl/source/glyphs/gcach_rbmp \
-    vcl/source/glyphs/glyphcache \
+    vcl/unx/generic/glyphs/gcach_ftyp \
+    vcl/unx/generic/glyphs/gcach_layout \
+    vcl/unx/generic/glyphs/gcach_rbmp \
+    vcl/unx/generic/glyphs/glyphcache \
     vcl/unx/generic/fontmanager/fontcache \
     vcl/unx/generic/fontmanager/fontconfig \
     vcl/unx/generic/fontmanager/fontmanager \
