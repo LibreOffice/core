@@ -210,6 +210,7 @@ class ImpPDFTabGeneralPage : public SfxTabPage
 
     CheckBox                    maCbExportEmptyPages;
     CheckBox                    maCbAddStream;
+    FixedText                   maFtAddStreamDescription;
     CheckBox                    maCbEmbedStandardFonts;
 
     sal_Bool                    mbIsPresentation;
