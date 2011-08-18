@@ -148,7 +148,7 @@ if (defined $ENV{NOCONFIGURE}) {
         }
     }
     print "running ./configure with '" . join ("' '", @args), "'\n";
-    system ("./configure", @args);
+    system ("./configure", @args) && die "Error running configure";
 }
 
 # Local Variables:
