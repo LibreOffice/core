@@ -209,7 +209,7 @@ $(eval $(call gb_Helper_register_libraries,UNOLIBS_OOO, \
 	i18npool \
 	i18nsearch \
     lomenubar \
-        msforms \
+    msforms \
 	mtfrenderer \
 	nullcanvas \
     OGLTrans \
