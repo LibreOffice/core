@@ -90,9 +90,12 @@ bool SmOoxml::ConvertFromStarMath( ::sax_fastparser::FSHelperPtr serializer )
     return true;
 }
 
+// NOTE: This is still work in progress and unfinished, but it already covers a good
+// part of the ooxml math stuff.
+
 void SmOoxml::HandleNode( const SmNode* pNode, int nLevel )
 {
-    fprintf(stderr,"XX %d %d %d\n", nLevel, pNode->GetType(), pNode->GetNumSubNodes());
+//    fprintf(stderr,"XX %d %d %d\n", nLevel, pNode->GetType(), pNode->GetNumSubNodes());
     switch(pNode->GetType())
     {
         case NATTRIBUT:
@@ -253,7 +256,7 @@ void SmOoxml::HandleText( const SmNode* pNode, int /*nLevel*/)
     }
     m_pSerializer->startElementNS( XML_m, XML_t, FSEND );
     SmTextNode* pTemp=(SmTextNode* )pNode;
-    fprintf(stderr, "T %s\n", rtl::OUStringToOString( pTemp->GetText(), RTL_TEXTENCODING_UTF8 ).getStr());
+//    fprintf(stderr, "T %s\n", rtl::OUStringToOString( pTemp->GetText(), RTL_TEXTENCODING_UTF8 ).getStr());
     for(xub_StrLen i=0;i<pTemp->GetText().Len();i++)
     {
 #if 0
@@ -332,7 +335,7 @@ void SmOoxml::HandleFractions( const SmNode* pNode, int nLevel, const char* type
 void SmOoxml::HandleUnaryOperation( const SmUnHorNode* pNode, int nLevel )
 {
     // update HandleMath() when adding new items
-    fprintf(stderr,"UNARY %d\n", pNode->Symbol()->GetToken().eType );
+//    fprintf(stderr,"UNARY %d\n", pNode->Symbol()->GetToken().eType );
     switch( pNode->Symbol()->GetToken().eType )
     {
         default:
@@ -343,7 +346,7 @@ void SmOoxml::HandleUnaryOperation( const SmUnHorNode* pNode, int nLevel )
 
 void SmOoxml::HandleBinaryOperation( const SmBinHorNode* pNode, int nLevel )
 {
-    fprintf(stderr,"BINARY %d\n", pNode->Symbol()->GetToken().eType );
+//    fprintf(stderr,"BINARY %d\n", pNode->Symbol()->GetToken().eType );
     // update HandleMath() when adding new items
     switch( pNode->Symbol()->GetToken().eType )
     {
@@ -386,7 +389,7 @@ void SmOoxml::HandleAttribute( const SmAttributNode* pNode, int nLevel )
 
 void SmOoxml::HandleMath( const SmNode* pNode, int nLevel )
 {
-    fprintf(stderr,"MATH %d\n", pNode->GetToken().eType);
+//    fprintf(stderr,"MATH %d\n", pNode->GetToken().eType);
     switch( pNode->GetToken().eType )
     {
         case TDIVIDEBY:
