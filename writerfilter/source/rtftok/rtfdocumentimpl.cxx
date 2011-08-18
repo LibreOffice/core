@@ -1834,9 +1834,10 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
         case RTF_FORMSHADE:
             // Noop, this is the default in Writer.
             break;
-        case RTF_POSYT:
-            m_aStates.top().aFrame.nVertOrient = text::VertOrientation::TOP;
-            break;
+        case RTF_POSYT: m_aStates.top().aFrame.nVertOrient = text::VertOrientation::TOP; break;
+        case RTF_POSYB: m_aStates.top().aFrame.nVertOrient = text::VertOrientation::BOTTOM; break;
+        case RTF_POSYC: m_aStates.top().aFrame.nVertOrient = text::VertOrientation::CENTER; break;
+
         case RTF_PHMRG: m_aStates.top().aFrame.nHoriOrientRelation = text::RelOrientation::PAGE_PRINT_AREA; break;
         case RTF_PVMRG: m_aStates.top().aFrame.nVertOrientRelation = text::RelOrientation::PAGE_PRINT_AREA; break;
         case RTF_PHPG: m_aStates.top().aFrame.nHoriOrientRelation = text::RelOrientation::PAGE_FRAME; break;
@@ -2418,6 +2419,7 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
             m_aStates.top().aFrame.nX = TWIP_TO_MM100(nParam);
             break;
         case RTF_POSY:
+            m_aStates.top().aFrame.nVertOrient = text::VertOrientation::NONE;
             m_aStates.top().aFrame.nY = TWIP_TO_MM100(nParam);
             break;
         case RTF_DFRMTXTX:
