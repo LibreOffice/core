@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -60,7 +60,7 @@ public class CGCategory
     {
         try
         {
-            oconfigView = Configuration.getConfigurationRoot(xMSF, CGROOTPATH, false);  //business/Tables
+            oconfigView = Configuration.getConfigurationRoot(xMSF, CGROOTPATH, false);  //business/Tables   
             xNameAccessCurBusinessNode = Configuration.getChildNodebyName(
                 UnoRuntime.queryInterface(XNameAccess.class, oconfigView),
                 category);
@@ -75,9 +75,8 @@ public class CGCategory
     {
         try
         {
-            xNameAccessTablesNode = (XNameAccess) UnoRuntime.queryInterface(XNameAccess.class, xNameAccessCurBusinessNode.getByName("Tables"));
-            String[] sTableNames = Configuration.getNodeDisplayNames(xNameAccessTablesNode);
-            return sTableNames;
+            xNameAccessTablesNode = UnoRuntime.queryInterface(XNameAccess.class, xNameAccessCurBusinessNode.getByName("Tables"));
+            return Configuration.getNodeDisplayNames(xNameAccessTablesNode);
         }
         catch (Exception e)
         {

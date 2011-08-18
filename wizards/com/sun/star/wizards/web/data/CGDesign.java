@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -72,7 +72,7 @@ public class CGDesign extends ConfigGroup implements XMLProvider
 
     public void setStyle(short[] newStyle)
     {
-        Object o = ((CGStyle) ((CGSettings) root).cp_Styles.getElementAt(newStyle[0]));
+        Object o = ((CGSettings) root).cp_Styles.getElementAt(newStyle[0]);
         cp_Style = (String) ((CGSettings) root).cp_Styles.getKey(o);
     }
 

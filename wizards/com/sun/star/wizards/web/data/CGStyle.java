@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -26,11 +26,13 @@
  ************************************************************************/
 package com.sun.star.wizards.web.data;
 
+import com.sun.star.wizards.common.PropertyNames;
+
 public class CGStyle extends ConfigSetItem
 {
 
     public String cp_Name;
-    //public boolean         cp_Readonly;
+    //public boolean         cp_Readonly; 
     public String cp_CssHref;
     public String cp_BackgroundImage;
     public String cp_IconSet;
@@ -42,7 +44,7 @@ public class CGStyle extends ConfigSetItem
 
     public String getBackgroundUrl()
     {
-        if (cp_BackgroundImage == null || cp_BackgroundImage.equals(""))
+        if (cp_BackgroundImage == null || cp_BackgroundImage.equals(PropertyNames.EMPTY_STRING))
         {
             return null;
         }

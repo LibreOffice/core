@@ -1,8 +1,8 @@
 /*
  * ***********************************************************************
- *
+ * 
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,8 +51,7 @@ public class ColumnarThreeColumns extends ColumnarTwoColumns
 
     public String getLocalizedName()
     {
-        final String sLocalizedName = getResource().getResText(UIConsts.RID_REPORT + 83);
-        return sLocalizedName;
+        return getResource().getResText(UIConsts.RID_REPORT + 83);
     }
 
     protected void insertDetailFields()

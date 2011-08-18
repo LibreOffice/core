@@ -7,3 +7,4 @@ class DebugHelper(object):
     @classmethod
     def writeInfo(self, msg):
         raise NotImplementedError
+

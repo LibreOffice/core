@@ -7,3 +7,4 @@ class CGFaxWizard(ConfigGroup):
         self.cp_FaxType = int()
         self.cp_BusinessFax = CGFax()
         self.cp_PrivateFax = CGFax()
+

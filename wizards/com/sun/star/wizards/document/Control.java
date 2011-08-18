@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -131,7 +131,7 @@ public class Control extends Shape
         {
             if (xFormName != null)
             {
-                XNameAccess xNameAccess = (XNameAccess) UnoRuntime.queryInterface(XNameAccess.class, xFormName);
+                XNameAccess xNameAccess = UnoRuntime.queryInterface(XNameAccess.class, xFormName);
                 String sControlName = Desktop.getUniqueName(xNameAccess, getControlName(_fieldname));
                 xPropertySet.setPropertyValue(PropertyNames.PROPERTY_NAME, sControlName);
                 xFormName.insertByName(sControlName, xControlModel);
@@ -145,7 +145,7 @@ public class Control extends Shape
 
     public String getControlName(String _fieldname)
     {
-        String controlname = "";
+        String controlname = PropertyNames.EMPTY_STRING;
         switch (getControlType())
         {
             case FormHandler.SOLABEL:
@@ -273,14 +273,14 @@ public class Control extends Shape
         }
     }
 
-    /** the peer should be retrieved every time before it is used because it
+    /** the peer should be retrieved every time before it is used because it 
      * might be disposed otherwise
-     *
+     * 
      * @return
      */
     public XLayoutConstrains getPeer()
     {
-        return (XLayoutConstrains) UnoRuntime.queryInterface(XLayoutConstrains.class, xControl.getPeer());
+        return UnoRuntime.queryInterface(XLayoutConstrains.class, xControl.getPeer());
     }
 
     public Size getPeerSize()
@@ -314,13 +314,13 @@ public class Control extends Shape
             }
             else if (getControlType() == FormHandler.SODATECONTROL)
             {
-                xPropertySet.setPropertyValue("Date", new Integer(4711));       //TODO find a better date
+                xPropertySet.setPropertyValue("Date", 4711);       //TODO find a better date
                 aPreferredSize = getPeer().getPreferredSize();
                 xPropertySet.setPropertyValue("Date", com.sun.star.uno.Any.VOID);
             }
             else if (getControlType() == FormHandler.SOTIMECONTROL)
             {
-                xPropertySet.setPropertyValue("Time", new Integer(47114));      //TODO find a better time
+                xPropertySet.setPropertyValue("Time", 47114);      //TODO find a better time
                 aPreferredSize = getPeer().getPreferredSize();
                 xPropertySet.setPropertyValue("Time", com.sun.star.uno.Any.VOID);
             }
@@ -338,7 +338,7 @@ public class Control extends Shape
                 }
                 xPropertySet.setPropertyValue("Text", stext);
                 aPreferredSize = getPeer().getPreferredSize();
-                xPropertySet.setPropertyValue("Text", "");
+                xPropertySet.setPropertyValue("Text", PropertyNames.EMPTY_STRING);
             }
             return aPreferredSize;
         }

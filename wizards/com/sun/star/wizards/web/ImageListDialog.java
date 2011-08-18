@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -47,7 +47,7 @@ import com.sun.star.wizards.ui.ImageList.Counter;
  * The model and the renderer are
  * still abstract in this class.
  * To use the class one should extend it,
- * in the constructor then set the imageList
+ * in the constructor then set the imageList 
  * properties (member name il) like image size, grid size,
  * model renderer aso, and then call "build".
  * This class uses a counter renderer which
@@ -60,9 +60,9 @@ import com.sun.star.wizards.ui.ImageList.Counter;
  * so dialogs which do not need those, should set the corresponding
  * members showDeselectButton and/or showOtherButton to false.
  * <br/>
- * the consturctor should recieve, among others, an Array of String resources - see
+ * the consturctor should recieve, among others, an Array of String resources - see 
  * constructor documentation for details.
- *
+ * 
  * @author rpiterman
  */
 public abstract class ImageListDialog extends UnoDialog2 implements UIConsts
@@ -96,12 +96,12 @@ public abstract class ImageListDialog extends UnoDialog2 implements UIConsts
     private int hid;
 
     /**
-     *
+     * 
      * @param xmsf
      * @param resources_ a string array with the following strings :
      * dialog title, label text, ok, cancel, help, deselect, other.
-     * <br/> if "deselect" and "other" are not displayed,
-     * the array can also be shorter. but if "other" is displayed
+     * <br/> if "deselect" and "other" are not displayed, 
+     * the array can also be shorter. but if "other" is displayed 
      * and "deselect" not, both must be there :-(
      */
     public ImageListDialog(
@@ -118,7 +118,7 @@ public abstract class ImageListDialog extends UnoDialog2 implements UIConsts
      * adds the controls to the dialog, depending on
      * the size of the image list.
      * This method should be called by subclasses after setting
-     * the il ImageList member properties
+     * the il ImageList member properties 
      */
     protected void build()
     {
@@ -133,11 +133,11 @@ public abstract class ImageListDialog extends UnoDialog2 implements UIConsts
         Helper.setUnoPropertyValues(xDialogModel,
                 new String[]
                 {
-                    "Closeable", PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, "Moveable", PropertyNames.PROPERTY_NAME, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, "Title", PropertyNames.PROPERTY_WIDTH
+                    PropertyNames.PROPERTY_CLOSEABLE, PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_MOVEABLE, PropertyNames.PROPERTY_NAME, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TITLE, PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
-                    Boolean.TRUE, new Integer(dialogHeight), HelpIds.getHelpIdString(hid), Boolean.TRUE, "imgDialog", new Integer(59), new Integer(24), INTEGERS[1], resources[RES_TITLE], new Integer(dialogWidth)
+                    Boolean.TRUE, new Integer(dialogHeight), HelpIds.getHelpIdString(hid), Boolean.TRUE, "imgDialog", 59, 24, INTEGERS[1], resources[RES_TITLE], new Integer(dialogWidth)
                 });
         //Set member- FontDescriptors...
         fontDescriptor1.Weight = 150;
@@ -153,19 +153,19 @@ public abstract class ImageListDialog extends UnoDialog2 implements UIConsts
                 PROPNAMES,
                 new Object[]
                 {
-                    Boolean.TRUE, INTEGER_14, HelpIds.getHelpIdString(hid + 3), resources[RES_OK], "btnOK", iButtonsX, new Integer(22), new Short((short) com.sun.star.awt.PushButtonType.OK_value), new Short((short) 7), INTEGER_50
+                    Boolean.TRUE, INTEGER_14, HelpIds.getHelpIdString(hid + 3), resources[RES_OK], "btnOK", iButtonsX, 22, new Short((short) com.sun.star.awt.PushButtonType.OK_value), new Short((short) 7), INTEGER_50
                 });
         btnCancel = insertButton("btnCancel", null,
                 PROPNAMES,
                 new Object[]
                 {
-                    Boolean.FALSE, INTEGER_14, HelpIds.getHelpIdString(hid + 4), resources[RES_CANCEL], "btnCancel", iButtonsX, new Integer(41), new Short((short) com.sun.star.awt.PushButtonType.CANCEL_value), new Short((short) 8), INTEGER_50
+                    Boolean.FALSE, INTEGER_14, HelpIds.getHelpIdString(hid + 4), resources[RES_CANCEL], "btnCancel", iButtonsX, 41, new Short((short) com.sun.star.awt.PushButtonType.CANCEL_value), new Short((short) 8), INTEGER_50
                 });
         btnHelp = insertButton("btnHelp", null,
                 PROPNAMES,
                 new Object[]
                 {
-                    Boolean.FALSE, INTEGER_14, "", resources[RES_HELP], "CommandButton3", iButtonsX, new Integer(71), new Short((short) com.sun.star.awt.PushButtonType.HELP_value), new Short((short) 9), INTEGER_50
+                    Boolean.FALSE, INTEGER_14, PropertyNames.EMPTY_STRING, resources[RES_HELP], "CommandButton3", iButtonsX, 71, new Short((short) com.sun.star.awt.PushButtonType.HELP_value), new Short((short) 9), INTEGER_50
                 });
 
         if (showOtherButton)
@@ -200,19 +200,19 @@ public abstract class ImageListDialog extends UnoDialog2 implements UIConsts
         il.tabIndex = 1;
         il.create(this);
 
-        /*lblContainer = insertLabel("lblContainer",
+        /*lblContainer = insertLabel("lblContainer", 
         new String[] {PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_NAME, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH},
-        new Object[] { new Integer(176),"lblContainer",new Integer(6),new Integer(17),new Short((short)5),new Integer(214)}
+        new Object[] { 176,"lblContainer",6,17,new Short((short)5),214}
         );*/
 
         lblTitle = insertLabel("lblTitle",
                 new String[]
                 {
-                    "FontDescriptor", PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_NAME, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
+                    PropertyNames.FONT_DESCRIPTOR, PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_NAME, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
-                    fontDescriptor1, INTEGERS[8], resources[RES_LABEL], "lblTitle", INTEGERS[6], INTEGERS[6], INTEGERS[1], new Short((short) 4), new Integer(216)
+                    fontDescriptor1, INTEGERS[8], resources[RES_LABEL], "lblTitle", INTEGERS[6], INTEGERS[6], INTEGERS[1], new Short((short) 4), 216
                 });
 
     }
@@ -275,9 +275,9 @@ public abstract class ImageListDialog extends UnoDialog2 implements UIConsts
 
         public String render(Object counter)
         {
-            String s = JavaTools.replaceSubString(template, "" + ((Counter) counter).start, START);
-            s = JavaTools.replaceSubString(s, "" + ((Counter) counter).end, END);
-            s = JavaTools.replaceSubString(s, "" + ((Counter) counter).max, TOTAL);
+            String s = JavaTools.replaceSubString(template, PropertyNames.EMPTY_STRING + ((Counter) counter).start, START);
+            s = JavaTools.replaceSubString(s, PropertyNames.EMPTY_STRING + ((Counter) counter).end, END);
+            s = JavaTools.replaceSubString(s, PropertyNames.EMPTY_STRING + ((Counter) counter).max, TOTAL);
             return s;
         }
     }

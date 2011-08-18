@@ -2,7 +2,7 @@
  ************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -28,6 +28,7 @@
 
 package com.sun.star.wizards.web;
 
+import com.sun.star.wizards.common.PropertyNames;
 import java.io.PrintStream;
 
 import com.sun.star.wizards.ui.event.TaskEvent;
@@ -91,7 +92,7 @@ public class LogTaskListener implements TaskListener, ErrorHandler
      */
     public boolean error(Exception ex, Object arg, int ix, int i)
     {
-        System.out.println("" + arg + "//" + ix + "//Exception: " + ex.getLocalizedMessage());
+        System.out.println(PropertyNames.EMPTY_STRING + arg + "//" + ix + "//Exception: " + ex.getLocalizedMessage());
         ex.printStackTrace();
         return true;
     }

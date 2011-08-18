@@ -1,8 +1,8 @@
 /*
  * ***********************************************************************
- *
+ * 
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -48,8 +48,7 @@ public class SectionLabel extends SectionObject
 
     public static SectionObject create(XFixedText _aFixedText)
     {
-        final SectionLabel a = new SectionLabel(_aFixedText);
-        return a;
+        return new SectionLabel(_aFixedText);
     }
 
     /**

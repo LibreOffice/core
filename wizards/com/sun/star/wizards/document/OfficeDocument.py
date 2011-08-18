@@ -290,3 +290,4 @@ class OfficeDocument(object):
 
     def setWindowPeer(self, windowPeer):
         self.xWindowPeer = windowPeer
+

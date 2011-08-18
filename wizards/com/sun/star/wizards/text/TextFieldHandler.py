@@ -187,3 +187,4 @@ class TextFieldHandler(object):
             self.refreshTextFields()
         except Exception, e:
             traceback.print_exc()
+

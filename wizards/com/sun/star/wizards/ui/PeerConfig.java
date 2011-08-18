@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -115,7 +115,7 @@ public class PeerConfig implements XWindowListener
             for (int i = 0; i < this.m_aPeerTasks.size(); i++)
             {
                 PeerTask aPeerTask = (PeerTask) m_aPeerTasks.elementAt(i);
-                XVclWindowPeer xVclWindowPeer = (XVclWindowPeer) UnoRuntime.queryInterface(XVclWindowPeer.class, aPeerTask.xControl.getPeer());
+                XVclWindowPeer xVclWindowPeer = UnoRuntime.queryInterface(XVclWindowPeer.class, aPeerTask.xControl.getPeer());
                 for (int n = 0; n < aPeerTask.propnames.length; n++)
                 {
                     xVclWindowPeer.setProperty(aPeerTask.propnames[n], aPeerTask.propvalues[n]);
@@ -129,7 +129,7 @@ public class PeerConfig implements XWindowListener
             for (int i = 0; i < this.aImageUrlTasks.size(); i++)
             {
                 ImageUrlTask aImageUrlTask = (ImageUrlTask) aImageUrlTasks.elementAt(i);
-                String sImageUrl = "";
+                String sImageUrl = PropertyNames.EMPTY_STRING;
                 if (AnyConverter.isInt(aImageUrlTask.oResource))
                 {
                     sImageUrl = oUnoDialog.getWizardImageUrl(((Integer) aImageUrlTask.oResource).intValue(), ((Integer) aImageUrlTask.oHCResource).intValue());
@@ -138,7 +138,7 @@ public class PeerConfig implements XWindowListener
                 {
                     sImageUrl = oUnoDialog.getImageUrl(((String) aImageUrlTask.oResource), ((String) aImageUrlTask.oHCResource));
                 }
-                if (!sImageUrl.equals(""))
+                if (!sImageUrl.equals(PropertyNames.EMPTY_STRING))
                 {
                     Helper.setUnoPropertyValue(aImageUrlTask.oModel, PropertyNames.PROPERTY_IMAGEURL, sImageUrl);
                 }
@@ -161,13 +161,13 @@ public class PeerConfig implements XWindowListener
     }
 
     /**
-     *
+     * 
      * @param oAPIControl an API control that the interface XControl can be derived from
-     * @param _saccessname
+     * @param _saccessname 
      */
     public void setAccessibleName(Object oAPIControl, String _saccessname)
     {
-        XControl xControl = (XControl) UnoRuntime.queryInterface(XControl.class, oAPIControl);
+        XControl xControl = UnoRuntime.queryInterface(XControl.class, oAPIControl);
         setPeerProperties(xControl, new String[]
                 {
                     "AccessibleName"
@@ -189,14 +189,14 @@ public class PeerConfig implements XWindowListener
     }
 
     /**
-     *
+     * 
      * @param oAPIControl an API control that the interface XControl can be derived from
-     * @param _propnames
-     * @param _propvalues
+     * @param _propnames 
+     * @param _propvalues 
      */
     public void setPeerProperties(Object oAPIControl, String[] _propnames, Object[] _propvalues)
     {
-        XControl xControl = (XControl) UnoRuntime.queryInterface(XControl.class, oAPIControl);
+        XControl xControl = UnoRuntime.queryInterface(XControl.class, oAPIControl);
         setPeerProperties(xControl, _propnames, _propvalues);
     }
 
@@ -222,7 +222,7 @@ public class PeerConfig implements XWindowListener
     /**
      * Assigns an image to the property 'ImageUrl' of a dialog control. The image id must be assigned in a resource file
      * within the wizards project
-     * wizards project
+     * wizards project 
      * @param _ocontrolmodel
      * @param _nResId
      * @param _nhcResId
@@ -234,7 +234,7 @@ public class PeerConfig implements XWindowListener
     }
 
     /**
-     * Assigns an image to the property 'ImageUrl' of a dialog control. The image ids that the Resource urls point to
+     * Assigns an image to the property 'ImageUrl' of a dialog control. The image ids that the Resource urls point to 
      * may be assigned in a Resource file outside the wizards project
      * @param _ocontrolmodel
      * @param _sResourceUrl
@@ -249,10 +249,10 @@ public class PeerConfig implements XWindowListener
     /**
      * Assigns an image to the property 'ImageUrl' of a dialog control. The image id must be assigned in a resource file
      * within the wizards project
-     * wizards project
+     * wizards project 
      * @param _ocontrolmodel
      * @param _oResource
-     * @param _oHCResource
+     * @param _oHCResource 
      */
     public void setImageUrl(Object _ocontrolmodel, Object _oResource, Object _oHCResource)
     {

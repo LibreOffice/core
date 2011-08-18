@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -128,7 +128,7 @@ public class AbstractListener
      */
     public static String getEventSourceName(EventObject eventObject)
     {
-        XControl xControl = (XControl) UnoRuntime.queryInterface(XControl.class, eventObject.Source);
+        XControl xControl = UnoRuntime.queryInterface(XControl.class, eventObject.Source);
         return (String) Helper.getUnoPropertyValue(xControl.getModel(), PropertyNames.PROPERTY_NAME, String.class);
     }
 }

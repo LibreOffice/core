@@ -2,7 +2,7 @@
  ************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,7 +52,7 @@ public class XMLHelper
         Element e = doc.createElement(name);
         for (int i = 0; i < attNames.length; i++)
         {
-            if (attValues[i] != null && (!attValues[i].equals("")))
+            if (attValues[i] != null && (!attValues[i].equals(PropertyNames.EMPTY_STRING)))
             {
                 e.setAttribute(attNames[i], attValues[i]);
             }

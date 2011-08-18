@@ -1,8 +1,8 @@
 /*
  * ***********************************************************************
- *
+ * 
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -44,8 +44,7 @@ public class SectionEmptyObject extends SectionObject
 
     public static SectionObject create()
     {
-        SectionEmptyObject a = new SectionEmptyObject();
-        return a;
+        return new SectionEmptyObject();
     }
 
     public FontDescriptor getFontDescriptor()

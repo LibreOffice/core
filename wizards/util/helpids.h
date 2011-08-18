@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -29,11 +29,11 @@
 //40768 - 42767
 
 /*
- * web wizard :         34200 - 34319
- * report wizard :      34320 - 34399
+ * web wizard : 		34200 - 34319
+ * report wizard : 		34320 - 34399
  * others to be listed...
  *
- * web wizard (cont.) :     41000 - 41050
+ * web wizard (cont.) :		41000 - 41050
  * agenda wizard :              41051 - 41099
  */
 
@@ -253,7 +253,7 @@
 #define HID_DLGFORM_CHKCREATESUBFORM                       "WIZARDS_HID_DLGFORM_CHKCREATESUBFORM"
 #define HID_DLGFORM_OPTONEXISTINGRELATION                  "WIZARDS_HID_DLGFORM_OPTONEXISTINGRELATION"
 #define HID_DLGFORM_OPTSELECTMANUALLY                      "WIZARDS_HID_DLGFORM_OPTSELECTMANUALLY"
-#define HID_DLGFORM_lstRELATIONS                   "WIZARDS_HID_DLGFORM_lstRELATIONS"
+#define HID_DLGFORM_lstRELATIONS		           "WIZARDS_HID_DLGFORM_lstRELATIONS"	
 
 
 #define HID_DLGFORM_SUB_LBTABLES                           "WIZARDS_HID_DLGFORM_SUB_LBTABLES"
@@ -405,7 +405,7 @@
 #define HID_DLGCONVERT_OPTIONBUTTON2                       "WIZARDS_HID_DLGCONVERT_OPTIONBUTTON2"
 #define HID_DLGCONVERT_OPTIONBUTTON3                       "WIZARDS_HID_DLGCONVERT_OPTIONBUTTON3"
 #define HID_DLGCONVERT_OPTIONBUTTON4                       "WIZARDS_HID_DLGCONVERT_OPTIONBUTTON4"
-#define HID_DLGCONVERT_LISTBOX1                          "WIZARDS_HID_DLGCONVERT_LISTBOX1"
+#define HID_DLGCONVERT_LISTBOX1                          "WIZARDS_HID_DLGCONVERT_LISTBOX1"  
 #define HID_DLGCONVERT_OBFILE                              "WIZARDS_HID_DLGCONVERT_OBFILE"
 #define HID_DLGCONVERT_OBDIR                               "WIZARDS_HID_DLGCONVERT_OBDIR"
 #define HID_DLGCONVERT_COMBOBOX1                           "WIZARDS_HID_DLGCONVERT_COMBOBOX1"

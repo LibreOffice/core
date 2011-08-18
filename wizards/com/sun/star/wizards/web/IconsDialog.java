@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -32,6 +32,7 @@ import com.sun.star.awt.Size;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.wizards.common.ConfigSet;
 import com.sun.star.wizards.common.FileAccess;
+import com.sun.star.wizards.common.PropertyNames;
 import com.sun.star.wizards.ui.ImageList;
 import com.sun.star.wizards.web.data.CGIconSet;
 
@@ -41,7 +42,7 @@ import com.sun.star.wizards.web.data.CGIconSet;
  * This class simulates a model, though it does not functions really as one,
  * since it does not cast events.
  * It also implements the ImageList.ImageRenderer interface, to handle
- * its own objects.
+ * its own objects. 
  */
 public class IconsDialog extends ImageListDialog implements ImageList.IImageRenderer, ListModel
 {
@@ -79,7 +80,7 @@ public class IconsDialog extends ImageListDialog implements ImageList.IImageRend
                     resources.resCounter
                 });
 
-        htmlexpDirectory = FileAccess.getOfficePath(xmsf, "Gallery", "share", "");
+        htmlexpDirectory = FileAccess.getOfficePath(xmsf, "Gallery", "share", PropertyNames.EMPTY_STRING);
         set = set_;
         objects = new Integer[set.getSize() * icons.length];
         for (int i = 0; i < objects.length; i++)
@@ -174,7 +175,7 @@ public class IconsDialog extends ImageListDialog implements ImageList.IImageRend
     {
         if (object == null)
         {
-            return "";
+            return PropertyNames.EMPTY_STRING;
         }
         int i = ((Number) object).intValue();
         int iset = getIconsetNum(i);

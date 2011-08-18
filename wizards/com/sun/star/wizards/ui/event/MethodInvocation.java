@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -28,11 +28,10 @@ package com.sun.star.wizards.ui.event;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import com.sun.star.wizards.common.PropertyNames;
 
 /**
  * Encapsulate a Method invocation.
- * In the constructor one defines a method, a target object and an optional
+ * In the constructor one defines a method, a target object and an optional 
  * Parameter.
  * Then one calls "invoke", with or without a parameter. <br/>
  * Limitations: I do not check anything myself. If the param is not ok, from the
@@ -81,16 +80,14 @@ public class MethodInvocation
     }
 
     /**
-     * Returns the result of calling the method on the object, or null, if no result.
+     * Returns the result of calling the method on the object, or null, if no result. 
      */
     public Object invoke(Object param) throws IllegalAccessException, InvocationTargetException
     {
         if (mWithParam)
         {
-            return mMethod.invoke(mObject, new Object[]
-                    {
-                        (Object) param
-                    });
+            return mMethod.invoke(mObject, (Object) param
+                    );
         }
         else
         {

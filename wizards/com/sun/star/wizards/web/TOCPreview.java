@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -35,6 +35,7 @@ import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.util.URL;
 import com.sun.star.wizards.common.Desktop;
 import com.sun.star.wizards.common.FileAccess;
+import com.sun.star.wizards.common.PropertyNames;
 import com.sun.star.wizards.common.UCB;
 import com.sun.star.wizards.ui.event.Task;
 import com.sun.star.wizards.web.data.CGLayout;
@@ -44,12 +45,12 @@ import com.sun.star.wizards.web.data.CGSettings;
  * @author rpiterman
  * This class both copies necessary files to
  * a temporary directory, generates a temporary TOC page,
- * and opens the generated html document in a web browser,
+ * and opens the generated html document in a web browser, 
  * by default "index.html" (unchangeable).
  * <br/>
- * Since the files are both static and dynamic (some are always the same,
- * while other change according to user choices)
- * I divide this tasks to two: all necessary
+ * Since the files are both static and dynamic (some are always the same, 
+ * while other change according to user choices) 
+ * I divide this tasks to two: all necessary 
  * static files, which should not regularily update are copied upon
  * instanciation.
  * The TOC is generated in refresh(...);
@@ -69,9 +70,9 @@ public class TOCPreview
 
     /**
      * @param xmsf_
-     * @param settings web wizard settings
-     * @param res resources
-     * @param tempDir_ destination
+     * @param settings web wizard settings 
+     * @param res resources 
+     * @param tempDir_ destination 
      * @throws Exception
      */
     public TOCPreview(XMultiServiceFactory xmsf_, CGSettings settings, WebWizardDialogResources res, String tempDir_, XFrame _xFrame)
@@ -101,16 +102,16 @@ public class TOCPreview
     {
         Document doc = (Document) settings.cp_DefaultSession.createDOM();
         CGLayout layout = settings.cp_DefaultSession.getLayout();
-        Task task = new Task("", "", 10000);
+        Task task = new Task(PropertyNames.EMPTY_STRING, PropertyNames.EMPTY_STRING, 10000);
         Process.generate(xmsf, layout, doc, fileAccess, tempDir, task);
         Process.copyLayoutFiles(ucb, fileAccess, settings, layout, tempDir);
-        xDispatch.dispatch(openHyperlink, loadArgs); //Dispatch.dispatch(openHyperlink, loadArgs);
+        xDispatch.dispatch(openHyperlink, loadArgs); //Dispatch.dispatch(openHyperlink, loadArgs);      
     }
 
     private PropertyValue[] loadArgs(String url)
     {
         PropertyValue pv = new PropertyValue();
-        pv.Name = "URL";
+        pv.Name = PropertyNames.URL;
         pv.Value = url;
         return new PropertyValue[]
                 {

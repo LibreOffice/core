@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -40,7 +40,7 @@ import com.sun.star.wizards.common.PropertyNames;
 
 public class FieldDescription
 {
-    private String tablename = "";
+    private String tablename = PropertyNames.EMPTY_STRING;
 //  String fieldname;
     private String keyname;
     private XNameAccess xNameAccessTableNode;
@@ -132,30 +132,30 @@ public class FieldDescription
     {
         try
         {
-            xPropertySet = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, _xNameAccessFieldNode);
-//      Integer Index = (Integer) xPropertySet.getPropertyValue("Index");
+            xPropertySet = UnoRuntime.queryInterface(XPropertySet.class, _xNameAccessFieldNode);
+//      Integer Index = (Integer) xPropertySet.getPropertyValue("Index");       
             if (propertyexists(PropertyNames.PROPERTY_NAME))
             {
                 aPropertyValues.addElement(Properties.createProperty(PropertyNames.PROPERTY_NAME, Name));
             }
             if (propertyexists("Type"))
             {
-                aPropertyValues.addElement(Properties.createProperty("Type", (Integer) xPropertySet.getPropertyValue("Type")));
+                aPropertyValues.addElement(Properties.createProperty("Type", xPropertySet.getPropertyValue("Type")));
             }
             if (propertyexists("Scale"))
             {
-                aPropertyValues.addElement(Properties.createProperty("Scale", (Integer) xPropertySet.getPropertyValue("Scale")));
-//          Scale =
+                aPropertyValues.addElement(Properties.createProperty("Scale", xPropertySet.getPropertyValue("Scale")));
+//          Scale =         
             }
             if (propertyexists("Precision"))
             {
-                aPropertyValues.addElement(Properties.createProperty("Precision", (Integer) xPropertySet.getPropertyValue("Precision")));
-//          Precision = (Integer) xPropertySet.getPropertyValue("Precision");
+                aPropertyValues.addElement(Properties.createProperty("Precision", xPropertySet.getPropertyValue("Precision")));
+//          Precision = (Integer) xPropertySet.getPropertyValue("Precision");       
             }
             if (propertyexists("DefaultValue"))
             {
-                aPropertyValues.addElement(Properties.createProperty("DefaultValue", (Boolean) xPropertySet.getPropertyValue("DefaultValue")));//          DefaultValue = (Boolean) xPropertySet.getPropertyValue("DefaultValue");
-            //Type =  new Integer(4); // TODO wo ist der Fehler?(Integer) xPropertySet.getPropertyValue("Type");
+                aPropertyValues.addElement(Properties.createProperty("DefaultValue", xPropertySet.getPropertyValue("DefaultValue")));//          DefaultValue = (Boolean) xPropertySet.getPropertyValue("DefaultValue");
+            //Type =  4; // TODO wo ist der Fehler?(Integer) xPropertySet.getPropertyValue("Type");
             }
         }
         catch (Exception e)

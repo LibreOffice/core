@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -28,14 +28,15 @@ package com.sun.star.wizards.web;
 
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.wizards.common.FileAccess;
+import com.sun.star.wizards.common.PropertyNames;
 import com.sun.star.wizards.web.data.CGStyle;
 
 /**
  * @author rpiterman
- * the style preview, which is a OOo Document Preview in
+ * the style preview, which is a OOo Document Preview in 
  * an Image Control.
  * This class copies the files needed for this
- * preview from the web wizard work directory
+ * preview from the web wizard work directory 
  * to a given temporary directory, and updates them
  * on request, according to the current style/background selection
  * of the user.
@@ -48,7 +49,7 @@ public class StylePreview
      * the destination html url.
      */
     public String htmlFilename;
-    /**
+    /** 
      * the destination css url
      */
     private String cssFilename;
@@ -67,7 +68,7 @@ public class StylePreview
 
     /**
      * copies the html file to the temp directory, and calculates the
-     * destination names of the background and css files.
+     * destination names of the background and css files. 
      * @param wwRoot is the root directory of the web wizard files (
      * usually [oo]/share/template/[lang]/wizard/web
      */
@@ -98,7 +99,7 @@ public class StylePreview
 
         String css = FileAccess.connectURLs(wwRoot, "styles/" + style.cp_CssHref);
 
-        if (background == null || background.equals(""))
+        if (background == null || background.equals(PropertyNames.EMPTY_STRING))
         {
             //delete the background image
             if (fileAccess.exists(backgroundFilename, false))
@@ -113,7 +114,7 @@ public class StylePreview
             //copy the background image to the temp directory.
             fileAccess.copy(background, backgroundFilename);
         }
-        //copy the actual css to the temp directory
+        //copy the actual css to the temp directory 
         fileAccess.copy(css, cssFilename);
     }
 
@@ -137,7 +138,7 @@ public class StylePreview
      */
     private String createTempDir(XMultiServiceFactory xmsf) throws Exception
     {
-        String tempPath = FileAccess.getOfficePath(xmsf, "Temp", "", "");
+        String tempPath = FileAccess.getOfficePath(xmsf, "Temp", PropertyNames.EMPTY_STRING, PropertyNames.EMPTY_STRING);
         String s = fileAccess.createNewDir(tempPath, "wwiz");
         fileAccess.createNewDir(s, "images");
         return s;

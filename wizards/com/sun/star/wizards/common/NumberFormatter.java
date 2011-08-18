@@ -1,7 +1,7 @@
 /*************************************************************************
 *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -51,53 +51,53 @@ public class NumberFormatter
     public int iTextFormatKey = -1;
     public int iTimeFormatKey = -1;
     public int iLogicalFormatKey = -1;
-    public long lDateCorrection;
+    public long lDateCorrection;    
     public XNumberFormatter xNumberFormatter;
     public XNumberFormats xNumberFormats;
     public XNumberFormatTypes xNumberFormatTypes;
     public XPropertySet xNumberFormatSettings;
     private boolean bNullDateCorrectionIsDefined = false;
-    private Locale aLocale;
-
-
+    private Locale aLocale; 
+    
+    
     public NumberFormatter(XMultiServiceFactory _xMSF, XNumberFormatsSupplier _xNumberFormatsSupplier, Locale _aLocale) throws Exception
     {
         aLocale = _aLocale;
         Object oNumberFormatter = _xMSF.createInstance("com.sun.star.util.NumberFormatter");
         xNumberFormats = _xNumberFormatsSupplier.getNumberFormats();
         xNumberFormatSettings = _xNumberFormatsSupplier.getNumberFormatSettings();
-        xNumberFormatter = (XNumberFormatter) UnoRuntime.queryInterface(XNumberFormatter.class, oNumberFormatter);
-        xNumberFormatter.attachNumberFormatsSupplier(_xNumberFormatsSupplier);
-        xNumberFormatTypes = (XNumberFormatTypes) UnoRuntime.queryInterface(XNumberFormatTypes.class, xNumberFormats);
-
+        xNumberFormatter = UnoRuntime.queryInterface(XNumberFormatter.class, oNumberFormatter);
+        xNumberFormatter.attachNumberFormatsSupplier(_xNumberFormatsSupplier);  
+        xNumberFormatTypes = UnoRuntime.queryInterface(XNumberFormatTypes.class, xNumberFormats);
+        
     }
-
+    
     public NumberFormatter(XNumberFormatsSupplier _xNumberFormatsSupplier, Locale _aLocale) throws Exception
     {
         aLocale = _aLocale;
         xNumberFormats = _xNumberFormatsSupplier.getNumberFormats();
         xNumberFormatSettings = _xNumberFormatsSupplier.getNumberFormatSettings();
-        xNumberFormatTypes = (XNumberFormatTypes) UnoRuntime.queryInterface(XNumberFormatTypes.class, xNumberFormats);
+        xNumberFormatTypes = UnoRuntime.queryInterface(XNumberFormatTypes.class, xNumberFormats);
     }
 
-
+    
     /**
      * @param _xMSF
      * @param _xNumberFormatsSupplier
      * @return
      * @throws Exception
      * @deprecated
-     *
+     * 
      */
     public static XNumberFormatter createNumberFormatter(XMultiServiceFactory _xMSF, XNumberFormatsSupplier _xNumberFormatsSupplier) throws Exception
     {
         Object oNumberFormatter = _xMSF.createInstance("com.sun.star.util.NumberFormatter");
-        XNumberFormatter xNumberFormatter = (XNumberFormatter) UnoRuntime.queryInterface(XNumberFormatter.class, oNumberFormatter);
-        xNumberFormatter.attachNumberFormatsSupplier(_xNumberFormatsSupplier);
+        XNumberFormatter xNumberFormatter = UnoRuntime.queryInterface(XNumberFormatter.class, oNumberFormatter);
+        xNumberFormatter.attachNumberFormatsSupplier(_xNumberFormatsSupplier);  
         return xNumberFormatter;
     }
-
-
+    
+    
     /**
      * gives a key to pass to a NumberFormat object. <br/>
      * example: <br/>
@@ -110,22 +110,22 @@ public class NumberFormatter
      * @param numberFormatsSupplier
      * @param type - a constant out of i18n.NumberFormatIndex enumeration.
      * @return a key to use with a util.NumberFormat instance.
-     *
+     * 
      */
-    public static int getNumberFormatterKey( Object numberFormatsSupplier, short type)
+    public static int getNumberFormatterKey( Object numberFormatsSupplier, short type) 
     {
-        Object numberFormatTypes = ((XNumberFormatsSupplier)UnoRuntime.queryInterface(XNumberFormatsSupplier.class,numberFormatsSupplier)).getNumberFormats();
+        Object numberFormatTypes = UnoRuntime.queryInterface(XNumberFormatsSupplier.class,numberFormatsSupplier).getNumberFormats();
         Locale l = new Locale();
-        return ((XNumberFormatTypes)UnoRuntime.queryInterface(XNumberFormatTypes.class,numberFormatTypes)).getFormatIndex(type, l);
+        return UnoRuntime.queryInterface(XNumberFormatTypes.class,numberFormatTypes).getFormatIndex(type, l);
     }
-
-
+    
+    
     public String convertNumberToString(int _nkey, double _dblValue)
     {
         return xNumberFormatter.convertNumberToString(_nkey, _dblValue);
     }
-
-
+    
+    
     public static String convertNumberToString(XNumberFormatter _xNumberFormatter, int _nkey, double _dblValue)
     {
         return _xNumberFormatter.convertNumberToString(_nkey, _dblValue);
@@ -137,19 +137,19 @@ public class NumberFormatter
         return xNumberFormatter.convertStringToNumber(_nkey, _sString);
     }
 
-
+    
     /**
      * @param dateCorrection The lDateCorrection to set.
      */
-    public void setNullDateCorrection(long dateCorrection)
+    public void setNullDateCorrection(long dateCorrection) 
     {
         lDateCorrection = dateCorrection;
-    }
-
-
+    }   
+    
+    
     public int defineNumberFormat(String _FormatString)
     {
-        try
+        try 
         {
             int NewFormatKey = xNumberFormats.queryKey(_FormatString, aLocale, true);
             if (NewFormatKey == -1)
@@ -165,13 +165,13 @@ public class NumberFormatter
         }
     }
 
-
+    
     /**
-     * returns a numberformat for a FormatString.
+     * returns a numberformat for a FormatString. 
      * @param _FormatString
-     * @param _aLocale
+     * @param _aLocale 
      * @return
-     */
+     */ 
     public int defineNumberFormat(String _FormatString, Locale _aLocale)
     {
         try
@@ -189,8 +189,8 @@ public class NumberFormatter
             return -1;
         }
     }
-
-
+    
+    
 
     public void setNumberFormat(XInterface _xFormatObject, int _FormatKey, NumberFormatter _oNumberFormatter)
     {
@@ -200,7 +200,7 @@ public class NumberFormatter
             String FormatString = AnyConverter.toString(Helper.getUnoPropertyValue(xNumberFormat, "FormatString"));
             Locale oLocale = (Locale) Helper.getUnoPropertyValue(xNumberFormat, "Locale");
             int NewFormatKey = defineNumberFormat(FormatString, oLocale);
-            XPropertySet xPSet = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, _xFormatObject);
+            XPropertySet xPSet = UnoRuntime.queryInterface(XPropertySet.class, _xFormatObject);
             xPSet.setPropertyValue("FormatsSupplier", _oNumberFormatter.xNumberFormatter.getNumberFormatsSupplier());
             if (xPSet.getPropertySetInfo().hasPropertyByName("NumberFormat"))
             {
@@ -243,7 +243,7 @@ public class NumberFormatter
         }
     }
 
-
+    
     public int setBooleanReportDisplayNumberFormat()
     {
         String FormatString = "[=1]" + '"' + (char)9745 + '"' + ";[=0]" + '"' + (char)58480 + '"' + ";0";
@@ -258,12 +258,12 @@ public class NumberFormatter
         catch (Exception e)
         {         //MalformedNumberFormat
             e.printStackTrace();
-            iLogicalFormatKey = xNumberFormatTypes.getStandardFormat(NumberFormat.LOGICAL, aLocale);
+            iLogicalFormatKey = xNumberFormatTypes.getStandardFormat(NumberFormat.LOGICAL, aLocale);                    
         }
         return iLogicalFormatKey;
-    }
-
-
+    }   
+    
+    
     /**
      * @return Returns the iDateFormatKey.
      */
@@ -271,7 +271,7 @@ public class NumberFormatter
     {
         if (iDateFormatKey == -1)
         {
-            iDateFormatKey = xNumberFormatTypes.getStandardFormat(NumberFormat.DATE, aLocale);
+            iDateFormatKey = xNumberFormatTypes.getStandardFormat(NumberFormat.DATE, aLocale);          
         }
         return iDateFormatKey;
     }
@@ -283,7 +283,7 @@ public class NumberFormatter
         if (iDateTimeFormatKey == -1)
         {
             iDateTimeFormatKey = xNumberFormatTypes.getStandardFormat(NumberFormat.DATETIME, aLocale);
-        }
+        }          
         return iDateTimeFormatKey;
     }
     /**
@@ -294,7 +294,7 @@ public class NumberFormatter
         if (iLogicalFormatKey == -1)
         {
             iLogicalFormatKey = xNumberFormatTypes.getStandardFormat(NumberFormat.LOGICAL, aLocale);
-        }
+        }            
         return iLogicalFormatKey;
     }
     /**
@@ -316,7 +316,7 @@ public class NumberFormatter
         if (iTextFormatKey == -1)
         {
             iTextFormatKey = xNumberFormatTypes.getStandardFormat(NumberFormat.TEXT, aLocale);
-        }
+        }          
         return iTextFormatKey;
     }
     /**
@@ -327,7 +327,7 @@ public class NumberFormatter
         if (iTimeFormatKey == -1)
         {
             iTimeFormatKey = xNumberFormatTypes.getStandardFormat(NumberFormat.TIME, aLocale);
-        }
+        }      
         return iTimeFormatKey;
-    }
+    }   
 }

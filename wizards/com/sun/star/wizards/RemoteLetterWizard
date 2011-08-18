@@ -3,5 +3,5 @@ from letter.LetterWizardDialogImpl import LetterWizardDialogImpl
 import sys
 
 if __name__ == "__main__":
-
+    
     LetterWizardDialogImpl.main(sys.argv)

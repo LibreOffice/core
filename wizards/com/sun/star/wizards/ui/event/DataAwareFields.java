@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -31,12 +31,12 @@ import com.sun.star.wizards.common.PropertyNames;
 import com.sun.star.uno.Any;
 
 /**
- * This class is a factory for Value objects for different types of
- * memebers.
- * Other than some Value implementations classes this class contains static
+ * This class is a factory for Value objects for different types of 
+ * memebers. 
+ * Other than some Value implementations classes this class contains static 
  * type conversion methods and factory methods.
- *
- * @see com.sun.star.wizards.ui.event.DataAware.Value
+ * 
+ * @see com.sun.star.wizards.ui.event.DataAware.Value 
  */
 public class DataAwareFields
 {
@@ -47,7 +47,7 @@ public class DataAwareFields
     /**
      * returns a Value Object which sets and gets values
      * and converting them to other types, according to the "value" argument.
-     *
+     * 
      * @param owner
      * @param fieldname
      * @param value
@@ -312,11 +312,11 @@ public class DataAwareFields
 
                 if (convertTo.equals(Boolean.class))
                 {
-                    return (s != null && !s.equals("") && s.equals("true")) ? Boolean.TRUE : Boolean.FALSE;
+                    return (s != null && !s.equals(PropertyNames.EMPTY_STRING) && s.equals("true")) ? Boolean.TRUE : Boolean.FALSE;
                 }
                 else if (convertTo.equals(Integer.class))
                 {
-                    if (s == null || s.equals(""))
+                    if (s == null || s.equals(PropertyNames.EMPTY_STRING))
                     {
                         return Any.VOID;
                     }
@@ -327,7 +327,7 @@ public class DataAwareFields
                 }
                 else if (convertTo.equals(Double.class))
                 {
-                    if (s == null || s.equals(""))
+                    if (s == null || s.equals(PropertyNames.EMPTY_STRING))
                     {
                         return Any.VOID;
                     }
@@ -352,7 +352,7 @@ public class DataAwareFields
         {
             try
             {
-                field.set(target, value == null || (value.equals(Any.VOID)) ? "" : value.toString());
+                field.set(target, value == null || (value.equals(Any.VOID)) ? PropertyNames.EMPTY_STRING : value.toString());
             }
             catch (IllegalAccessException ex)
             {
@@ -380,7 +380,7 @@ public class DataAwareFields
                 {
                     if (field.getType().equals(String.class))
                     {
-                        return "";
+                        return PropertyNames.EMPTY_STRING;
                     }
                     if (field.getType().equals(Short.class))
                     {
@@ -388,7 +388,7 @@ public class DataAwareFields
                     }
                     if (field.getType().equals(Integer.class))
                     {
-                        return new Integer(0);
+                        return 0;
                     }
                     if (field.getType().equals(short[].class))
                     {
@@ -460,7 +460,7 @@ public class DataAwareFields
         }
         else if (value instanceof String)
         {
-            return ((String) value).equals(TRUE);
+            return value.equals(TRUE);
         }
         else if (value instanceof short[])
         {

@@ -1,8 +1,8 @@
 /*
  * ***********************************************************************
- *
+ * 
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -46,8 +46,7 @@ public class SectionTextField extends SectionObject
 
     public static SectionObject create(XFormattedField _aFormattedField)
     {
-        SectionTextField a = new SectionTextField(_aFormattedField);
-        return a;
+        return new SectionTextField(_aFormattedField);
     }
 
     public FontDescriptor getFontDescriptor()

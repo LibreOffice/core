@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -64,7 +64,7 @@ public abstract class WWD_General extends WebWizardDialog
 
         StatusDialog statusDialog = new StatusDialog(xMSF, StatusDialog.STANDARD_WIDTH, resources.resLoadingSession, false, new String[]
                 {
-                    resources.prodName, "", "", "", "", ""
+                    resources.prodName, PropertyNames.EMPTY_STRING, PropertyNames.EMPTY_STRING, PropertyNames.EMPTY_STRING, PropertyNames.EMPTY_STRING, PropertyNames.EMPTY_STRING
                 }, HelpIds.getHelpIdString(HID0_STATUS_DIALOG));
         try
         {
@@ -88,7 +88,7 @@ public abstract class WWD_General extends WebWizardDialog
     }
 
     /*
-     *  File Dialog methods
+     *  File Dialog methods 
      */
     protected SystemDialog getDocAddDialog()
     {
@@ -100,7 +100,7 @@ public abstract class WWD_General extends WebWizardDialog
             docAddDialog.addFilter(
                     JavaTools.replaceSubString(f.cp_Name, resources.prodName, "%PRODNAME"), f.cp_Filter, i == 0);
         }
-        //docAddDialog.addFilter(resources.resSODocs, "*.oxt;*.sxw;*.sxc;*.sxd;*.sxi;*.sdw;*.sdc;*.sdd;*.sdi;*.sda;*.sdp"  ,true);
+        //docAddDialog.addFilter(resources.resSODocs, "*.oxt;*.sxw;*.sxc;*.sxd;*.sxi;*.sdw;*.sdc;*.sdd;*.sdi;*.sda;*.sdp"  ,true); 
         //docAddDialog.addFilter(resources.resMSDocs, "*.doc;*.xls;*.ppt;*.pps",false);
         //docAddDialog.addFilter(resources.resImages, "*.jpg;*.gif;*.png;*.bmp;*.tiff;*.jpeg;*.jpe",false);
         //docAddDialog.addFilter(resources.resAllFiles,"*.*",false);
@@ -161,7 +161,7 @@ public abstract class WWD_General extends WebWizardDialog
     }
 
     /**
-     * returns the document specified
+     * returns the document specified 
      * by the given short array.
      * @param s
      * @return
@@ -201,8 +201,8 @@ public abstract class WWD_General extends WebWizardDialog
     }
 
     /**
-     * returns a publisher object for the given name
-     * @param name one of the WebWizardConst constants : FTP
+     * returns a publisher object for the given name 
+     * @param name one of the WebWizardConst constants : FTP 
      * @return
      */
     protected CGPublish getPublisher(String name)
@@ -255,7 +255,7 @@ public abstract class WWD_General extends WebWizardDialog
         {
             return;
         /*
-         * disbale steps 3-7
+         * disbale steps 3-7 
          */
         }
         for (int i = 3; i < 8; i++)
@@ -263,7 +263,7 @@ public abstract class WWD_General extends WebWizardDialog
             setStepEnabled(i, enabled, true);
         /* in this place i just disable the finish button.
          * later, in the checkPublish, which is only performed if
-         * this one is true, it will be enabled (if the check
+         * this one is true, it will be enabled (if the check 
          * is positive)
          */
         }
@@ -302,7 +302,7 @@ public abstract class WWD_General extends WebWizardDialog
     public boolean checkSaveSession()
     {
         return (!isSaveSession() ||
-                !getSessionSaveName().equals(""));
+                !getSessionSaveName().equals(PropertyNames.EMPTY_STRING));
 
     }
 
@@ -317,7 +317,7 @@ public abstract class WWD_General extends WebWizardDialog
         if (p.cp_Publish)
         {
             String url = (String) Helper.getUnoPropertyValue(getModel(text), property);
-            if ((url == null) || (url.equals("")))
+            if ((url == null) || (url.equals(PropertyNames.EMPTY_STRING)))
             {
                 throw new IllegalArgumentException();
             }
@@ -333,9 +333,9 @@ public abstract class WWD_General extends WebWizardDialog
     }
 
     /**
-     *
+     * 
      * @return false either if publishing input is wrong or there
-     * are no publishing targets chosen. returns true when at least
+     * are no publishing targets chosen. returns true when at least 
      * one target is chosen, *and* all
      * which are chosen are legal.
      * If proxies are on, ftp publisher is ignored.
@@ -354,7 +354,7 @@ public abstract class WWD_General extends WebWizardDialog
 
     /**
      * This method checks if the publishing
-     * input is ok, and enables and disables
+     * input is ok, and enables and disables 
      * the 'create' button.
      * public because it is called from
      * an event listener object.
@@ -376,8 +376,8 @@ public abstract class WWD_General extends WebWizardDialog
     }
 
     /**
-     * substitutes path variables with the corresponding values.
-     * @param path a path, which might contain OOo path variables.
+     * substitutes path variables with the corresponding values. 
+     * @param path a path, which might contain OOo path variables. 
      * @return the path, after substituing path variables.
      */
     protected String substitute(String path)

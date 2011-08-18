@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -52,7 +52,7 @@ public class JavaTools
 /*
     public static void main(String args[])
     {
-        String sPath = "";
+        String sPath = PropertyNames.EMPTY_STRING;
         DateTime oDateTime = null;
         long n;
         String ConnectStr = "uno:socket,host=localhost,port=8100;urp,negotiate=0,forcesynchronous=1;StarOffice.NamingService";   //localhost  ;Lo-1.Germany.sun.com; 10.16.65.155
@@ -79,10 +79,7 @@ public class JavaTools
         if (FirstArray != null)
         {
             String[] SecondArray = new String[FirstArray.length];
-            for (int i = 0; i < FirstArray.length; i++)
-            {
-                SecondArray[i] = FirstArray[i];
-            }
+            System.arraycopy(FirstArray, 0, SecondArray, 0, FirstArray.length);
             return SecondArray;
         }
         else
@@ -135,7 +132,7 @@ public class JavaTools
 
     /**converts a list of Integer values included in an Integer vector to a list of int values
      *
-     *
+     * 
      * @param _aIntegerVector
      * @return
      */
@@ -160,8 +157,8 @@ public class JavaTools
     }
 
     /**converts a list of Boolean values included in a Boolean vector to a list of boolean values
-     *
-     *
+     * 
+     * 
      * @param _aBooleanVector
      * @return
      */
@@ -200,7 +197,7 @@ public class JavaTools
 
     public static String getlongestArrayItem(String[] StringArray)
     {
-        String sLongestItem = "";
+        String sLongestItem = PropertyNames.EMPTY_STRING;
         int FieldCount = StringArray.length;
         int iOldLength = 0;
         int iCurLength = 0;
@@ -218,17 +215,17 @@ public class JavaTools
 
     public static String ArraytoString(String[] LocArray)
     {
-        String ResultString = "";
+        StringBuilder ResultString = new StringBuilder(PropertyNames.EMPTY_STRING);
         int iLen = LocArray.length;
         for (int i = 0; i < iLen; i++)
         {
-            ResultString += LocArray[i];
+            ResultString.append(LocArray[i]);
             if (i < iLen - 1)
             {
-                ResultString += ";";
+                ResultString.append(PropertyNames.SEMI_COLON);
             }
         }
-        return ResultString;
+        return ResultString.toString();
     }
 
     /**
@@ -377,7 +374,7 @@ public class JavaTools
     public static String[] ArrayoutofString(String MainString, String Token)
     {
         String[] StringArray;
-        if (MainString.equals("") == false)
+        if (!MainString.equals(PropertyNames.EMPTY_STRING))
         {
             Vector StringVector = new Vector();
             String LocString = null;
@@ -443,17 +440,17 @@ public class JavaTools
     {
         String sFilename = getFilenameOutOfPath(sPath);
         String[] FilenameList = ArrayoutofString(sFilename, ".");
-        String FileDescription = "";
+        StringBuilder FileDescription = new StringBuilder(PropertyNames.EMPTY_STRING);
         for (int i = 0; i < FilenameList.length - 1; i++)
         {
-            FileDescription += FilenameList[i];
+            FileDescription.append(FilenameList[i]);
         }
-        return FileDescription;
+        return FileDescription.toString();
     }
 
     public static String convertfromURLNotation(String _sURLPath)
     {
-        String sPath = "";
+        String sPath = PropertyNames.EMPTY_STRING;
         try
         {
             URL oJavaURL = new URL(_sURLPath);
@@ -523,8 +520,8 @@ public class JavaTools
                 {
                     retvector.add(baselist[i]);
                 //          else
-                // here you could call the method of a defined interface to notify the calling method
-                //      }
+                // here you could call the method of a defined interface to notify the calling method                                           
+                //      }       
                 }
             }
             retarray = new String[retvector.size()];
@@ -548,7 +545,7 @@ public class JavaTools
                     {
                         retvector.add(baselist[i]);
                     //          else
-                    // here you could call the method of a defined interface to notify the calling method
+                    // here you could call the method of a defined interface to notify the calling method                                           
                     }
                 }
                 retarray = new String[retvector.size()][2];
@@ -565,44 +562,38 @@ public class JavaTools
 
     public static PropertyValue[][] removeOutdatedFields(PropertyValue[][] baselist, String[] _complist)
     {
-        PropertyValue[][] retarray = new PropertyValue[][]
-        {
-        };
         if ((baselist != null) && (_complist != null))
         {
-            Vector firstdimvector = new Vector();
-            int b = 0;
+            ArrayList<PropertyValue[]> firstdimvector = new ArrayList<PropertyValue[]>();
             for (int n = 0; n < baselist.length; n++)
             {
-                Vector secdimvector = new Vector();
-                PropertyValue[] internalArray;
-                int a = 0;
+                ArrayList<PropertyValue> secdimvector = new ArrayList<PropertyValue>();
                 for (int m = 0; m < baselist[n].length; m++)
                 {
                     if (FieldInList(_complist, baselist[n][m].Name) > -1)
                     {
                         secdimvector.add(baselist[n][m]);
-                        a++;
                     }
                 }
-                if (a > 0)
+                if (!secdimvector.isEmpty())
                 {
-                    internalArray = new PropertyValue[a];
+                    PropertyValue[] internalArray = new PropertyValue[secdimvector.size()];
                     secdimvector.toArray(internalArray);
                     firstdimvector.add(internalArray);
-                    b++;
                 }
             }
-            retarray = new PropertyValue[b][];
-            firstdimvector.toArray(retarray);
+            PropertyValue[][] retarray = new PropertyValue[firstdimvector.size()][];
+            return firstdimvector.toArray(retarray);
         }
-        return (retarray);
+        return new PropertyValue[][]
+        {
+        };
     }
 
     /**
      * searches a multidimensional array for duplicate fields. According to the following example
      * SlaveFieldName1 ;SlaveFieldName2; SlaveFieldName3
-     * MasterFieldName1;MasterFieldName2;MasterFieldName3
+     * MasterFieldName1;MasterFieldName2;MasterFieldName3 
      * The entries SlaveFieldNameX and MasterFieldNameX are grouped together and then the created groups are compared
      * If a group is duplicate the entry of the second group is returned.
      * @param _scomplist
@@ -621,7 +612,7 @@ public class JavaTools
                 {
                     if (n == 0)
                     {
-                        sDescList[m] = new String();
+                        sDescList[m] = "";
                     }
                     sDescList[m] += _scomplist[n][m];
                 }
@@ -762,16 +753,16 @@ public class JavaTools
         {
             if (sSecondString != null)
             {
-                bissame = sSecondString.equals("");
+                bissame = sSecondString.equals(PropertyNames.EMPTY_STRING);
             }
             else
             {
-                bissame = (sSecondString == null);
+                bissame = true;
             }
         }
         else
         {
-            if (sFirstString.equals(""))
+            if (sFirstString.equals(PropertyNames.EMPTY_STRING))
             {
                 bissame = (sSecondString == null);
             }

@@ -12,3 +12,4 @@ class PropertyNames:
     PROPERTY_TABINDEX = "TabIndex"
     PROPERTY_STATE = "State"
     PROPERTY_IMAGEURL = "ImageURL"
+

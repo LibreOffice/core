@@ -130,3 +130,4 @@ class TextSectionHandler(object):
             linkSectiontoTemplate(xTextSection, templateName, sectionName)
         except Exception, exception:
             traceback.print_exc()
+

@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -69,10 +69,10 @@ public class SimpleDataAware extends DataAware
     return (Boolean)value;
     else if (value.getClass().isArray())
     return ((short[])value).length != 0 ? Boolean.TRUE : Boolean.FALSE;
-    else if (value.equals("")) return Boolean.FALSE;
+    else if (value.equals(PropertyNames.EMPTY_STRING)) return Boolean.FALSE;
     else return Boolean.TRUE;
     }
-
+    
     public void disableControls(Object[] controls) {
     disableObjects = controls;
     }
