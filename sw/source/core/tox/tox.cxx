@@ -606,9 +606,6 @@ void SwTOXBase::SetTitle(const String& rTitle)
 
 SwTOXBase & SwTOXBase::operator = (const SwTOXBase & rSource)
 {
-    ByteString aTmpStr(aTitle, RTL_TEXTENCODING_ASCII_US);
-    ByteString aTmpStr1(rSource.aTitle, RTL_TEXTENCODING_ASCII_US);
-
     aForm = rSource.aForm;
     aName = rSource.aName;
     aTitle = rSource.aTitle;
