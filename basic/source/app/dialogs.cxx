@@ -804,7 +804,7 @@ StringList* GenericOptions::GetAllGroups()
     StringList* pGroups = new StringList();
     for ( sal_uInt16 i = 0 ; i < aConf.GetGroupCount() ; i++ )
     {
-        String *pGroup = new String( aConf.GetGroupName( i ), RTL_TEXTENCODING_UTF8 );
+        String *pGroup = new String(rtl::OStringToOUString(aConf.GetGroupName(i), RTL_TEXTENCODING_UTF8));
         pGroups->push_back( pGroup );
     }
     return pGroups;

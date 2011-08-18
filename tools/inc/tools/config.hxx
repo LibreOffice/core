@@ -42,7 +42,7 @@ class TOOLS_DLLPUBLIC Config
 {
 private:
     XubString           maFileName;
-    ByteString          maGroupName;
+    rtl::OString maGroupName;
     ImplConfigData*     mpData;
     ImplGroupData*      mpActGroup;
     sal_uIntPtr             mnDataUpdateId;
@@ -63,12 +63,12 @@ public:
     static XubString    GetDefDirectory();
     static XubString    GetConfigName( const XubString& rPath, const XubString& rBaseName );
 
-    void                SetGroup( const ByteString& rGroup );
-    const ByteString&   GetGroup() const { return maGroupName; }
-    void                DeleteGroup( const ByteString& rGroup );
-    ByteString          GetGroupName( sal_uInt16 nGroup ) const;
+    void SetGroup(const rtl::OString& rGroup);
+    const rtl::OString& GetGroup() const { return maGroupName; }
+    void DeleteGroup(const rtl::OString& rGroup);
+    rtl::OString GetGroupName(sal_uInt16 nGroup) const;
     sal_uInt16              GetGroupCount() const;
-    sal_Bool                HasGroup( const ByteString& rGroup ) const;
+    sal_Bool HasGroup(const rtl::OString& rGroup) const;
 
     ByteString          ReadKey( const ByteString& rKey ) const;
     UniString           ReadKey( const ByteString& rKey, rtl_TextEncoding eEncoding ) const;

@@ -65,7 +65,7 @@ struct ImplGroupData
 {
     ImplGroupData*  mpNext;
     ImplKeyData*    mpFirstKey;
-    ByteString      maGroupName;
+    rtl::OString maGroupName;
     sal_uInt16          mnEmptyLines;
 };
 
@@ -489,7 +489,7 @@ static sal_uInt8* ImplGetConfigBuffer( const ImplConfigData* pData, sal_uIntPtr&
         // Leere Gruppen werden nicht geschrieben
         if ( pGroup->mpFirstKey )
         {
-            nBufLen += pGroup->maGroupName.Len() + nLineEndLen + 2;
+            nBufLen += pGroup->maGroupName.getLength() + nLineEndLen + 2;
             pKey = pGroup->mpFirstKey;
             while ( pKey )
             {
@@ -541,8 +541,8 @@ static sal_uInt8* ImplGetConfigBuffer( const ImplConfigData* pData, sal_uIntPtr&
         if ( pGroup->mpFirstKey )
         {
             *pBuf = '[';    pBuf++;
-            memcpy( pBuf, pGroup->maGroupName.GetBuffer(), pGroup->maGroupName.Len() );
-            pBuf += pGroup->maGroupName.Len();
+            memcpy( pBuf, pGroup->maGroupName.getStr(), pGroup->maGroupName.getLength() );
+            pBuf += pGroup->maGroupName.getLength();
             *pBuf = ']';    pBuf++;
             *pBuf = aLineEndBuf[0]; pBuf++;
             if ( nLineEndLen == 2 )
@@ -736,7 +736,7 @@ ImplGroupData* Config::ImplGetGroup() const
         ImplGroupData* pGroup = mpData->mpFirstGroup;
         while ( pGroup )
         {
-            if ( pGroup->maGroupName.EqualsIgnoreCaseAscii( maGroupName ) )
+            if ( pGroup->maGroupName.equalsIgnoreAsciiCase(maGroupName) )
                 break;
 
             pPrevGroup = pGroup;
@@ -821,7 +821,7 @@ XubString Config::GetConfigName( const XubString& rPath,
 
 // -----------------------------------------------------------------------
 
-void Config::SetGroup( const ByteString& rGroup )
+void Config::SetGroup(const rtl::OString& rGroup)
 {
     // Wenn neue Gruppe gesetzt wird, muss beim naechsten mal die
     // Gruppe neu ermittelt werden
@@ -834,7 +834,7 @@ void Config::SetGroup( const ByteString& rGroup )
 
 // -----------------------------------------------------------------------
 
-void Config::DeleteGroup( const ByteString& rGroup )
+void Config::DeleteGroup(const rtl::OString& rGroup)
 {
     // Config-Daten evt. updaten
     if ( !mnLockCount || !mpData->mbRead )
@@ -847,7 +847,7 @@ void Config::DeleteGroup( const ByteString& rGroup )
     ImplGroupData* pGroup = mpData->mpFirstGroup;
     while ( pGroup )
     {
-        if ( pGroup->maGroupName.EqualsIgnoreCaseAscii( rGroup ) )
+        if ( pGroup->maGroupName.equalsIgnoreAsciiCase(rGroup) )
             break;
 
         pPrevGroup = pGroup;
@@ -889,7 +889,7 @@ void Config::DeleteGroup( const ByteString& rGroup )
 
 // -----------------------------------------------------------------------
 
-ByteString Config::GetGroupName( sal_uInt16 nGroup ) const
+rtl::OString Config::GetGroupName(sal_uInt16 nGroup) const
 {
     // Config-Daten evt. updaten
     if ( !mnLockCount )
@@ -897,7 +897,7 @@ ByteString Config::GetGroupName( sal_uInt16 nGroup ) const
 
     ImplGroupData*  pGroup = mpData->mpFirstGroup;
     sal_uInt16          nGroupCount = 0;
-    ByteString      aGroupName;
+    rtl::OString aGroupName;
     while ( pGroup )
     {
         if ( nGroup == nGroupCount )
@@ -934,7 +934,7 @@ sal_uInt16 Config::GetGroupCount() const
 
 // -----------------------------------------------------------------------
 
-sal_Bool Config::HasGroup( const ByteString& rGroup ) const
+sal_Bool Config::HasGroup(const rtl::OString& rGroup) const
 {
     // Config-Daten evt. updaten
     if ( !mnLockCount )
@@ -945,7 +945,7 @@ sal_Bool Config::HasGroup( const ByteString& rGroup ) const
 
     while( pGroup )
     {
-        if( pGroup->maGroupName.EqualsIgnoreCaseAscii( rGroup ) )
+        if( pGroup->maGroupName.equalsIgnoreAsciiCase(rGroup) )
         {
             bRet = sal_True;
             break;
@@ -981,7 +981,7 @@ ByteString Config::ReadKey( const ByteString& rKey, const ByteString& rDefault )
     ByteString aTraceStr( "Config::ReadKey( " );
     aTraceStr += rKey;
     aTraceStr += " ) from ";
-    aTraceStr += GetGroup();
+    aTraceStr += ByteString(GetGroup());
     aTraceStr += " in ";
     aTraceStr += ByteString( maFileName, RTL_TEXTENCODING_UTF8 );
     OSL_TRACE( "%s", aTraceStr.GetBuffer() );
@@ -1127,12 +1127,13 @@ void Config::DeleteKey( const ByteString& rKey )
 sal_uInt16 Config::GetKeyCount() const
 {
 #ifdef DBG_UTIL
-    ByteString aTraceStr( "Config::GetKeyCount()" );
-    aTraceStr += " from ";
-    aTraceStr += GetGroup();
-    aTraceStr += " in ";
-    aTraceStr += ByteString( maFileName, RTL_TEXTENCODING_UTF8 );
-    OSL_TRACE( "%s", aTraceStr.GetBuffer() );
+    rtl::OStringBuffer aTraceStr(
+        RTL_CONSTASCII_STRINGPARAM("Config::GetKeyCount()"));
+    aTraceStr.append(RTL_CONSTASCII_STRINGPARAM(" from "));
+    aTraceStr.append(GetGroup());
+    aTraceStr.append(RTL_CONSTASCII_STRINGPARAM(" in "));
+    aTraceStr.append(rtl::OUStringToOString(maFileName, RTL_TEXTENCODING_UTF8));
+    OSL_TRACE("%s", aTraceStr.getStr());
 #endif
 
     // Config-Daten evt. updaten
