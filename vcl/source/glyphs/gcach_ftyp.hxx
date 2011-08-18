@@ -200,22 +200,22 @@ public:
     virtual const ImplFontCharMap* GetImplFontCharMap( void ) const;
 
     virtual int                 GetGlyphIndex( sal_UCS4 ) const;
-    int                         GetRawGlyphIndex( sal_UCS4 ) const;
-    int                         FixupGlyphIndex( int nGlyphIndex, sal_UCS4 ) const;
+    virtual int                 GetRawGlyphIndex( sal_UCS4 ) const;
+    virtual int                 FixupGlyphIndex( int nGlyphIndex, sal_UCS4 ) const;
 
     virtual bool                GetAntialiasAdvice( void ) const;
     virtual bool                GetGlyphBitmap1( int nGlyphIndex, RawBitmap& ) const;
     virtual bool                GetGlyphBitmap8( int nGlyphIndex, RawBitmap& ) const;
     virtual bool                GetGlyphOutline( int nGlyphIndex, ::basegfx::B2DPolyPolygon& ) const;
     virtual int                 GetGlyphKernValue( int nLeftGlyph, int nRightGlyph ) const;
-    virtual sal_uLong               GetKernPairs( ImplKernPairData** ) const;
+    virtual sal_uLong           GetKernPairs( ImplKernPairData** ) const;
 
-    const unsigned char*        GetTable( const char* pName, sal_uLong* pLength )
+    virtual const unsigned char* GetTable( const char* pName, sal_uLong* pLength )
                                 { return mpFontInfo->GetTable( pName, pLength ); }
-    int                         GetEmUnits() const;
-    const FT_Size_Metrics&      GetMetricsFT() const { return maSizeFT->metrics; }
+    virtual int                 GetEmUnits() const;
+    virtual const FT_Size_Metrics& GetMetricsFT() const { return maSizeFT->metrics; }
 #ifdef ENABLE_GRAPHITE
-    GraphiteFaceWrapper*        GetGraphiteFace() const { return mpFontInfo->GetGraphiteFace(); }
+    virtual GraphiteFaceWrapper* GetGraphiteFace() const { return mpFontInfo->GetGraphiteFace(); }
 #endif
 
 protected:

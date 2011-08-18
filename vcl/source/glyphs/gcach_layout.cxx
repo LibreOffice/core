@@ -101,7 +101,7 @@ void ServerFontLayout::AdjustLayout( ImplLayoutArgs& rArgs )
 
 bool ServerFontLayoutEngine::operator()( ServerFontLayout& rLayout, ImplLayoutArgs& rArgs )
 {
-    FreetypeServerFont& rFont = static_cast<FreetypeServerFont&>(rLayout.GetServerFont());
+    ServerFont& rFont = rLayout.GetServerFont();
 
     Point aNewPos( 0, 0 );
     int nOldGlyphId = -1;
@@ -193,10 +193,10 @@ class IcuFontFromServerFont
 : public LEFontInstance
 {
 private:
-    FreetypeServerFont&     mrServerFont;
+    ServerFont&     mrServerFont;
 
 public:
-                            IcuFontFromServerFont( FreetypeServerFont& rFont )
+                            IcuFontFromServerFont( ServerFont& rFont )
                             : mrServerFont( rFont )
                             {}
 
@@ -361,7 +361,7 @@ private:
     LayoutEngine*           mpIcuLE;
 
 public:
-                            IcuLayoutEngine( FreetypeServerFont& );
+                            IcuLayoutEngine( ServerFont& );
     virtual                 ~IcuLayoutEngine();
 
     virtual bool            operator()( ServerFontLayout&, ImplLayoutArgs& );
@@ -369,7 +369,7 @@ public:
 
 // -----------------------------------------------------------------------
 
-IcuLayoutEngine::IcuLayoutEngine( FreetypeServerFont& rServerFont )
+IcuLayoutEngine::IcuLayoutEngine( ServerFont& rServerFont )
 :   maIcuFont( rServerFont ),
     meScriptCode( USCRIPT_INVALID_CODE ),
     mpIcuLE( NULL )
@@ -417,7 +417,7 @@ bool IcuLayoutEngine::operator()( ServerFontLayout& rLayout, ImplLayoutArgs& rAr
     le_int32* pCharIndices = (le_int32*)((char*)pIcuGlyphs + nGlyphCapacity * sizeof(LEGlyphID) );
     IcuPosition* pGlyphPositions = (IcuPosition*)((char*)pCharIndices + nGlyphCapacity * sizeof(le_int32) );
 
-    FreetypeServerFont& rFont = reinterpret_cast<FreetypeServerFont&>(rLayout.GetServerFont());
+    ServerFont& rFont = rLayout.GetServerFont();
 
     UErrorCode rcI18n = U_ZERO_ERROR;
     LEErrorCode rcIcu = LE_NO_ERROR;

@@ -49,9 +49,9 @@
 
 float freetypeServerFontAdvance(const void* appFontHandle, gr_uint16 glyphId)
 {
-    FreetypeServerFont * pServerFont =
-        const_cast<FreetypeServerFont*>
-        (reinterpret_cast<const FreetypeServerFont*>(appFontHandle));
+    ServerFont * pServerFont =
+        const_cast<ServerFont*>
+        (reinterpret_cast<const ServerFont*>(appFontHandle));
     if (pServerFont)
     {
         return static_cast<float>(pServerFont->GetGlyphMetric(glyphId).GetCharWidth());
@@ -63,23 +63,22 @@ float freetypeServerFontAdvance(const void* appFontHandle, gr_uint16 glyphId)
 // An implementation of the GraphiteLayout interface to enable Graphite enabled fonts to be used.
 //
 
-GraphiteServerFontLayout::GraphiteServerFontLayout(ServerFont & rServerFont) throw()
+GraphiteServerFontLayout::GraphiteServerFontLayout(ServerFont& rServerFont) throw()
   : ServerFontLayout(rServerFont),
-    maImpl(dynamic_cast<FreetypeServerFont&>(rServerFont).GetGraphiteFace()->face(),
+    maImpl(rServerFont.GetGraphiteFace()->face(),
         rServerFont),
     mpFeatures(NULL)
 {
-    FreetypeServerFont& rFTServerFont = dynamic_cast<FreetypeServerFont&>(rServerFont);
-    gr_font * pFont = rFTServerFont.GetGraphiteFace()->font(rServerFont.GetFontSelData().mnHeight);
+    gr_font * pFont = rServerFont.GetGraphiteFace()->font(rServerFont.GetFontSelData().mnHeight);
     if (!pFont)
     {
         pFont = gr_make_font_with_advance_fn(
                // need to use mnHeight here, mfExactHeight can give wrong values
                static_cast<float>(rServerFont.GetFontSelData().mnHeight),
-               &rFTServerFont,
+               &rServerFont,
                freetypeServerFontAdvance,
-               rFTServerFont.GetGraphiteFace()->face());
-        rFTServerFont.GetGraphiteFace()->addFont(rServerFont.GetFontSelData().mnHeight, pFont);
+               rServerFont.GetGraphiteFace()->face());
+        rServerFont.GetGraphiteFace()->addFont(rServerFont.GetFontSelData().mnHeight, pFont);
     }
     maImpl.SetFont(pFont);
     rtl::OString aLang("");
@@ -92,7 +91,7 @@ GraphiteServerFontLayout::GraphiteServerFontLayout(ServerFont & rServerFont) thr
         rServerFont.GetFontSelData().maTargetName, RTL_TEXTENCODING_UTF8 );
 #ifdef DEBUG
     printf("GraphiteServerFontLayout %lx %s size %d %f\n", (long unsigned int)this, name.getStr(),
-        rFTServerFont.GetMetricsFT().x_ppem,
+        rServerFont.GetMetricsFT().x_ppem,
         rServerFont.GetFontSelData().mfExactHeight);
 #endif
     sal_Int32 nFeat = name.indexOf(grutils::GrFeatureParser::FEAT_PREFIX) + 1;
@@ -100,7 +99,7 @@ GraphiteServerFontLayout::GraphiteServerFontLayout(ServerFont & rServerFont) thr
     {
         rtl::OString aFeat = name.copy(nFeat, name.getLength() - nFeat);
         mpFeatures = new grutils::GrFeatureParser(
-            rFTServerFont.GetGraphiteFace()->face(), aFeat, aLang);
+            rServerFont.GetGraphiteFace()->face(), aFeat, aLang);
 #ifdef DEBUG
         if (mpFeatures)
             printf("GraphiteServerFontLayout %s/%s/%s %x language %d features %d errors\n",
@@ -117,7 +116,7 @@ GraphiteServerFontLayout::GraphiteServerFontLayout(ServerFont & rServerFont) thr
     else
     {
         mpFeatures = new grutils::GrFeatureParser(
-            rFTServerFont.GetGraphiteFace()->face(), aLang);
+            rServerFont.GetGraphiteFace()->face(), aLang);
     }
     maImpl.SetFeatures(mpFeatures);
 }
@@ -128,18 +127,14 @@ GraphiteServerFontLayout::~GraphiteServerFontLayout() throw()
     mpFeatures = NULL;
 }
 
-bool GraphiteServerFontLayout::IsGraphiteEnabledFont(ServerFont * pServerFont)
+bool GraphiteServerFontLayout::IsGraphiteEnabledFont(ServerFont& rServerFont)
 {
-    FreetypeServerFont * pFtServerFont = dynamic_cast<FreetypeServerFont*>(pServerFont);
-    if (pFtServerFont)
+    if (rServerFont.GetGraphiteFace())
     {
-        if (pFtServerFont->GetGraphiteFace())
-        {
 #ifdef DEBUG
-            printf("IsGraphiteEnabledFont\n");
+        printf("IsGraphiteEnabledFont\n");
 #endif
-            return true;
-        }
+        return true;
     }
     return false;
 }

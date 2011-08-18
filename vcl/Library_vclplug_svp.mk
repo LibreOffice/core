@@ -36,6 +36,10 @@ $(eval $(call gb_Library_set_include,vclplug_svp,\
     -I$(OUTDIR)/inc \
 ))
 
+$(eval $(call gb_Library_add_cxxflags,vclplug_svp,\
+    $$(FREETYPE_CFLAGS) \
+))
+
 $(eval $(call gb_Library_add_defs,vclplug_svp,\
     -DVCLPLUG_SVP_IMPLEMENTATION \
 ))

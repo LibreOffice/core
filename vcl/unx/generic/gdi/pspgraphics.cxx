@@ -991,7 +991,7 @@ SalLayout* PspGraphics::GetTextLayout( ImplLayoutArgs& rArgs, int nFallbackLevel
     {
 #ifdef ENABLE_GRAPHITE
         // Is this a Graphite font?
-        if (GraphiteServerFontLayout::IsGraphiteEnabledFont(m_pServerFont[nFallbackLevel]))
+        if (GraphiteServerFontLayout::IsGraphiteEnabledFont(*m_pServerFont[nFallbackLevel]))
         {
             pLayout = new GraphiteServerFontLayout(*m_pServerFont[nFallbackLevel]);
         }

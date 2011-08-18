@@ -57,6 +57,13 @@ class RawBitmap;
 class ServerFontLayout;
 #include <sallayout.hxx>
 
+#ifdef ENABLE_GRAPHITE
+class GraphiteFaceWrapper;
+#endif
+
+#include <ft2build.h>
+#include FT_FREETYPE_H
+
 namespace vcl
 {
     struct FontCapabilities;
@@ -191,7 +198,10 @@ public:
     const ImplFontSelectData&   GetFontSelData() const      { return maFontSelData; }
 
     virtual void                FetchFontMetric( ImplFontMetricData&, long& rFactor ) const = 0;
-    virtual sal_uLong               GetKernPairs( ImplKernPairData** ) const = 0;
+    virtual sal_uLong           GetKernPairs( ImplKernPairData** ) const = 0;
+    virtual const unsigned char* GetTable( const char* pName, sal_uLong* pLength ) = 0;
+    virtual int                 GetEmUnits() const = 0;
+    virtual const FT_Size_Metrics& GetMetricsFT() const = 0;
     virtual int                 GetGlyphKernValue( int, int ) const = 0;
     virtual const ImplFontCharMap* GetImplFontCharMap() const = 0;
     virtual bool                GetFontCapabilities(vcl::FontCapabilities &) const = 0;
@@ -200,8 +210,13 @@ public:
     GlyphData&                  GetGlyphData( int nGlyphIndex );
     const GlyphMetric&          GetGlyphMetric( int nGlyphIndex )
                                 { return GetGlyphData( nGlyphIndex ).GetMetric(); }
+#ifdef ENABLE_GRAPHITE
+    virtual GraphiteFaceWrapper* GetGraphiteFace() const = 0;
+#endif
 
     virtual int                 GetGlyphIndex( sal_UCS4 ) const = 0;
+    virtual int                 GetRawGlyphIndex( sal_UCS4 ) const = 0;
+    virtual int                 FixupGlyphIndex( int nGlyphIndex, sal_UCS4 ) const = 0;
     virtual bool                GetGlyphOutline( int nGlyphIndex, ::basegfx::B2DPolyPolygon& ) const = 0;
     virtual bool                GetAntialiasAdvice( void ) const = 0;
     bool                        IsGlyphInvisible( int nGlyphIndex );
