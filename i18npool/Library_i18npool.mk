@@ -38,7 +38,7 @@ $(eval $(call gb_Library_set_include,i18npool,\
 	$$(INCLUDE) \
 	-I$(realpath $(SRCDIR)/i18npool/inc) \
 	-I$(realpath $(SRCDIR)/i18npool/inc/pch) \
-	-I$(realpath $(WORKDIR)/CustomTarget/i18npool/source/collator) \
+	-I$(WORKDIR)/CustomTarget/i18npool/source/collator \
 ))
 
 $(eval $(call gb_Library_add_api,i18npool,\
