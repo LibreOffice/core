@@ -421,6 +421,11 @@
                         <value xsi:nil="true"/>
                     </prop>
                 </node>
+                <node oor:name="WriterHeaderFooterMark">
+                    <prop oor:name="Color">
+                        <value xsi:nil="true"/>
+                    </prop>
+                </node>
                 <node oor:name="HTMLSGML">
                     <prop oor:name="Color">
                         <value xsi:nil="true"/>

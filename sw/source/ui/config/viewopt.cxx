@@ -73,6 +73,7 @@ Color SwViewOption::aSectionBoundColor(COL_LIGHTGRAY);
 Color SwViewOption::aPageBreakColor(COL_BLUE);
 Color SwViewOption::aScriptIndicatorColor(COL_GREEN);
 Color SwViewOption::aShadowColor(COL_GRAY);
+Color SwViewOption::aHeaderFooterMarkColor(COL_BLUE);
 
 sal_Int32 SwViewOption::nAppearanceFlags = VIEWOPT_DOC_BOUNDARIES|VIEWOPT_OBJECT_BOUNDARIES;
 sal_uInt16 SwViewOption::nPixelTwips = 0;   // one pixel on the screen
@@ -444,6 +445,11 @@ Color& SwViewOption::GetPageBreakColor()
     return aPageBreakColor;
 }
 
+Color& SwViewOption::GetHeaderFooterMarkColor()
+{
+    return aHeaderFooterMarkColor;
+}
+
 void SwViewOption::ApplyColorConfigValues(const svtools::ColorConfig& rConfig )
 {
     aDocColor.SetColor(rConfig.GetColorValue(svtools::DOCCOLOR).nColor);
@@ -508,6 +514,9 @@ void SwViewOption::ApplyColorConfigValues(const svtools::ColorConfig& rConfig )
 
     aValue = rConfig.GetColorValue(svtools::WRITERPAGEBREAKS);
     aPageBreakColor.SetColor(aValue.nColor);
+
+    aValue = rConfig.GetColorValue(svtools::WRITERHEADERFOOTERMARK);
+    aHeaderFooterMarkColor.SetColor(aValue.nColor);
 
     aScriptIndicatorColor.SetColor(rConfig.GetColorValue(svtools::WRITERSCRIPTINDICATOR).nColor);
 }

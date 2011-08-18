@@ -144,6 +144,7 @@ uno::Sequence< OUString> ColorConfig_Impl::GetPropertyNames(const rtl::OUString&
         { RTL_CONSTASCII_USTRINGPARAM("/WriterDirectCursor")    ,sal_True },
         { RTL_CONSTASCII_USTRINGPARAM("/WriterScriptIndicator")    ,sal_False },
         { RTL_CONSTASCII_USTRINGPARAM("/WriterSectionBoundaries")    ,sal_True },
+        { RTL_CONSTASCII_USTRINGPARAM("/WriterHeaderFooterMark")    ,sal_False },
         { RTL_CONSTASCII_USTRINGPARAM("/WriterPageBreaks")    ,sal_False },
         { RTL_CONSTASCII_USTRINGPARAM("/HTMLSGML")        ,sal_False },
         { RTL_CONSTASCII_USTRINGPARAM("/HTMLComment")     ,sal_False },
@@ -436,6 +437,7 @@ Color ColorConfig::GetDefaultColor(ColorConfigEntry eEntry)
         0, // WRITERDIRECTCURSOR
         COL_GREEN,  //WRITERSCRIPTINDICATOR
         0xc0c0c0, //WRITERSECTIONBOUNDARIES
+        0x0369a3, //WRITERHEADERFOOTERMARK,
         COL_BLUE, //WRITERPAGEBREAKS,
         COL_LIGHTBLUE, // HTMLSGML
         COL_LIGHTGREEN, // HTMLCOMMENT

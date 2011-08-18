@@ -3316,7 +3316,7 @@ drawinglayer::primitive2d::Primitive2DSequence lcl_CreateHeaderFooterSeparatorPr
     aText += rStyleName;
 
     // Colors
-    basegfx::BColor aLineColor( 3.0 / 255.0, 105.0 / 255.0, 163.0 / 255.0 );
+    basegfx::BColor aLineColor = SwViewOption::GetHeaderFooterMarkColor().getBColor();
     basegfx::BColor aHslLine = basegfx::tools::rgb2hsl( aLineColor );
     aHslLine.setZ( aHslLine.getZ( ) * 2.5 );
     basegfx::BColor aFillColor = basegfx::tools::hsl2rgb( aHslLine );
