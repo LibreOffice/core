@@ -4835,6 +4835,10 @@ if test -n "$with_system_db" -o -n "$with_system_libs" && \
     SYSTEM_DB_CFLAGS="-DSYSTEM_DB_HEADER='<$db_header>'"
 
     DB_LIB=
+    dnl At least on OpenBSD dbver is not appended to the library
+    if test "$_os" = "OpenBSD"; then
+        dbver=''
+    fi
     for dash in - ''; do
         AC_CHECK_LIB(db$dash$dbver, dbopen,
             [ DB_LIB="db$dash$dbver"; DB_CPPLIB="db_cxx$dash$dbver"; break ])
