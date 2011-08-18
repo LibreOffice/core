@@ -803,7 +803,7 @@ SvtMiscOptions::SvtMiscOptions()
     {
        RTL_LOGFILE_CONTEXT(aLog, "svtools ( ??? ) ::SvtMiscOptions_Impl::ctor()");
        m_pDataContainer = new SvtMiscOptions_Impl;
-       ItemHolder2::holdConfigItem(E_MISCOPTIONS);
+       svtools::ItemHolder2::holdConfigItem(E_MISCOPTIONS);
     }
 }
 

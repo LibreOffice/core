@@ -553,7 +553,7 @@ SvtHelpOptions::SvtHelpOptions()
         RTL_LOGFILE_CONTEXT(aLog, "svtools ( ??? ) ::SvtHelpOptions_Impl::ctor()");
         pOptions = new SvtHelpOptions_Impl;
 
-        ItemHolder2::holdConfigItem(E_HELPOPTIONS);
+        svtools::ItemHolder2::holdConfigItem(E_HELPOPTIONS);
     }
     pImp = pOptions;
 }

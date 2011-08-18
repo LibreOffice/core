@@ -45,6 +45,7 @@
 #define css ::com::sun::star
 #endif
 
+namespace svtools {
 //-----------------------------------------------
 // definitions
 
@@ -82,6 +83,7 @@ class ItemHolder2 : private ItemHolderMutexBase
         void impl_deleteItem(TItemInfo& rItem);
 };
 
+} // namespace svtools
 //-----------------------------------------------
 // namespaces
 
