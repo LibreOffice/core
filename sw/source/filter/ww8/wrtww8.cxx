@@ -1548,10 +1548,10 @@ void SwWW8Writer::InsAsString16(ww::bytes &rO, const String& rStr)
 void SwWW8Writer::InsAsString8(ww::bytes &rO, const String& rStr,
         rtl_TextEncoding eCodeSet)
 {
-    ByteString sTmp(rStr, eCodeSet);
-    const sal_Char *pStart = sTmp.GetBuffer();
-    const sal_Char *pEnd = pStart + sTmp.Len();
-    rO.reserve(rO.size() + sTmp.Len());
+    rtl::OString sTmp(rtl::OUStringToOString(rStr, eCodeSet));
+    const sal_Char *pStart = sTmp.getStr();
+    const sal_Char *pEnd = pStart + sTmp.getLength();
+    rO.reserve(rO.size() + sTmp.getLength());
 
     std::copy(pStart, pEnd, std::inserter(rO, rO.end()));
 }
@@ -1594,8 +1594,8 @@ void SwWW8Writer::InsAsString16( WW8Bytes& rO, const String& rStr )
 void SwWW8Writer::InsAsString8( WW8Bytes& rO, const String& rStr,
                                 rtl_TextEncoding eCodeSet )
 {
-    ByteString sTmp( rStr, eCodeSet );
-    rO.Insert( (sal_uInt8*)sTmp.GetBuffer(), sTmp.Len(), rO.Count() );
+    rtl::OString sTmp(rtl::OUStringToOString(rStr, eCodeSet));
+    rO.Insert((sal_uInt8*)sTmp.getStr(), sTmp.getLength(), rO.Count());
 }
 
 void SwWW8Writer::WriteString16(SvStream& rStrm, const String& rStr,

@@ -1419,9 +1419,9 @@ sal_Int32 SwBasicEscherEx::WriteGrfFlyFrame(const SwFrmFmt& rFmt, sal_uInt32 nSh
 
         Graphic         aGraphic(pGrfNd->GetGrf());
         GraphicObject   aGraphicObject( aGraphic );
-        ByteString      aUniqueId = aGraphicObject.GetUniqueID();
+        rtl::OString aUniqueId = aGraphicObject.GetUniqueID();
 
-        if ( aUniqueId.Len() )
+        if (!aUniqueId.isEmpty())
         {
             const   MapMode aMap100mm( MAP_100TH_MM );
             Size    aSize( aGraphic.GetPrefSize() );
@@ -1628,8 +1628,8 @@ void SwBasicEscherEx::WriteBrushAttr(const SvxBrushItem &rBrush,
     sal_uInt32 nOpaque = 0;
     if (const GraphicObject *pGraphicObject = rBrush.GetGraphicObject())
     {
-        ByteString aUniqueId = pGraphicObject->GetUniqueID();
-        if (aUniqueId.Len())
+        rtl::OString aUniqueId = pGraphicObject->GetUniqueID();
+        if (!aUniqueId.isEmpty())
         {
             const Graphic &rGraphic = pGraphicObject->GetGraphic();
             Size aSize(rGraphic.GetPrefSize());
@@ -2671,8 +2671,8 @@ void SwBasicEscherEx::WriteOLEPicture(EscherPropertyContainer &rPropOpt,
     AddShape(ESCHER_ShpInst_PictureFrame, nShapeFlags, nShapeId);
 
     GraphicObject aGraphicObject(rGraphic);
-    ByteString aId = aGraphicObject.GetUniqueID();
-    if (aId.Len())
+    rtl::OString aId = aGraphicObject.GetUniqueID();
+    if (!aId.getLength())
     {
         Rectangle aRect = rObj.GetLogicRect();
         aRect.SetPos(Point(0,0));
