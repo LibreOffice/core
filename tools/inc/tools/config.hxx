@@ -70,13 +70,13 @@ public:
     sal_uInt16              GetGroupCount() const;
     sal_Bool HasGroup(const rtl::OString& rGroup) const;
 
-    ByteString          ReadKey( const ByteString& rKey ) const;
-    UniString           ReadKey( const ByteString& rKey, rtl_TextEncoding eEncoding ) const;
-    ByteString          ReadKey( const ByteString& rKey, const ByteString& rDefault ) const;
+    rtl::OString ReadKey(const rtl::OString& rKey) const;
+    UniString           ReadKey(const rtl::OString& rKey, rtl_TextEncoding eEncoding) const;
+    rtl::OString ReadKey(const rtl::OString& rKey, const rtl::OString& rDefault) const;
     void                WriteKey(const rtl::OString& rKey, const rtl::OString& rValue);
-    void                DeleteKey( const ByteString& rKey );
-    ByteString          GetKeyName( sal_uInt16 nKey ) const;
-    ByteString          ReadKey( sal_uInt16 nKey ) const;
+    void DeleteKey(const rtl::OString& rKey);
+    rtl::OString GetKeyName(sal_uInt16 nKey) const;
+    rtl::OString ReadKey(sal_uInt16 nKey) const;
     sal_uInt16              GetKeyCount() const;
 
     sal_Bool                IsLocked() const { return (mnLockCount != 0); }

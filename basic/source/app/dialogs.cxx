@@ -146,7 +146,7 @@ void ConfEdit::Init( Config &aConf )
     ByteString aCurrentProfile = aConf.ReadKey( "CurrentProfile", "Path" );
     aConf.SetGroup( aCurrentProfile );
 
-    String aTemp = UniString( aConf.ReadKey( aKeyName ), RTL_TEXTENCODING_UTF8 );
+    String aTemp = rtl::OStringToOUString(aConf.ReadKey(aKeyName), RTL_TEXTENCODING_UTF8);
     aEdit.SetText( aTemp );
 }
 
@@ -182,7 +182,7 @@ void ConfEdit::Reload( Config &aConf )
     aConf.SetGroup("Misc");
     ByteString aCurrentProfile = aConf.ReadKey( "CurrentProfile", "Path" );
     aConf.SetGroup( aCurrentProfile );
-    String aValue = String( aConf.ReadKey( aKeyName ), RTL_TEXTENCODING_UTF8 );
+    String aValue = rtl::OStringToOUString(aConf.ReadKey(aKeyName), RTL_TEXTENCODING_UTF8);
     aEdit.SetText( aValue );
 }
 
@@ -817,7 +817,7 @@ void GenericOptions::LoadData()
     {
         String* pGroup = pGroups->at( i );
         aConf.SetGroup( ByteString( *pGroup, RTL_TEXTENCODING_UTF8 ) );
-        if ( aConf.ReadKey( C_KEY_AKTUELL ).Len() > 0 )
+        if ( aConf.ReadKey( C_KEY_AKTUELL ).getLength() > 0 )
             aCbArea.InsertEntry( *pGroup );
         delete pGroup;
     }
@@ -882,7 +882,7 @@ IMPL_LINK( GenericOptions, MoveButtons, AutoTimer*, aTimer )
 String GenericOptions::ReadKey( const ByteString &aGroup, const ByteString &aKey )
 {
     aConf.SetGroup( aGroup );
-    return UniString( aConf.ReadKey( aKey ), RTL_TEXTENCODING_UTF8 );
+    return rtl::OStringToOUString(aConf.ReadKey(aKey), RTL_TEXTENCODING_UTF8);
 }
 
 IMPL_LINK( GenericOptions, LoadGroup, ComboBox*, EMPTYARG )

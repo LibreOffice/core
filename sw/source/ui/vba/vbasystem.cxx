@@ -93,7 +93,7 @@ uno::Any PrivateProfileStringListener::getValueEvent()
         // get key/value from a file
         Config aCfg( maFileName );
         aCfg.SetGroup( maGroupName );
-        sValue = String( aCfg.ReadKey( maKey ), RTL_TEXTENCODING_DONTKNOW );
+        sValue = rtl::OStringToOUString(aCfg.ReadKey(maKey), RTL_TEXTENCODING_DONTKNOW);
     }
     else
     {

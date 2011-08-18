@@ -216,17 +216,17 @@ sal_uLong RemoteControlCommunicationManager::GetPort()
                 aConf.WriteKey( aNoTesttoolKey, "something" );
         }
 
-        nPortIs = aConf.ReadKey("TTPort","0").ToInt32();
+        nPortIs = aConf.ReadKey("TTPort","0").toInt32();
 
         // noch pr�fen ob dieses Office getestet werden soll.
         if ( !bAutomate || aConf.ReadKey( aNoTesttoolKey, "" ) != "" )
             nPortIs = 0;
 
-        nComm = (sal_uInt16)aConf.ReadKey("Comm","0").ToInt32();
+        nComm = (sal_uInt16)aConf.ReadKey("Comm","0").toInt32();
         if ( nComm )
             aConf.DeleteKey("Comm");
 
-        bQuiet = ( aConf.ReadKey("Quiet","no").CompareIgnoreCaseToAscii("yes") == COMPARE_EQUAL );
+        bQuiet = aConf.ReadKey("Quiet","no").equalsIgnoreAsciiCase("yes");
     }
     return nPortIs;
 }

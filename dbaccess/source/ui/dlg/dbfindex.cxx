@@ -395,7 +395,7 @@ void ODbaseIndexDialog::Init()
                 // yes -> add to the tables index list
                 if (aNDX == "NDX" )
                 {
-                    aEntry = String(aInfFile.ReadKey(aKeyName), gsl_getSystemTextEncoding());
+                    aEntry = rtl::OStringToOUString(aInfFile.ReadKey(aKeyName), gsl_getSystemTextEncoding());
                     rTabInfo.aIndexList.push_back( OTableIndex( aEntry ) );
 
                     // and remove it from the free index list

@@ -456,7 +456,7 @@ sal_Bool ODbaseIndex::DropImpl()
         aKeyName = aInfFile.GetKeyName( nKey );
         if (aKeyName.Copy(0,3) == "NDX")
         {
-            if(sEntry == String(aInfFile.ReadKey(aKeyName),m_pTable->getConnection()->getTextEncoding()))
+            if(sEntry == String(rtl::OStringToOUString(aInfFile.ReadKey(aKeyName),m_pTable->getConnection()->getTextEncoding())))
             {
                 aInfFile.DeleteKey(aKeyName);
                 break;

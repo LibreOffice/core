@@ -362,11 +362,11 @@ void TestToolObj::LoadIniFile()             // Laden der IniEinstellungen, die d
         aVar = UniString( __##aVar##__, RTL_TEXTENCODING_UTF8 );\
     }
 
-#define NEWOLD( NewKey, OldKey )                                                                \
-    {                                                                                           \
-        ByteString aValue;                                                                      \
-        if ( ( (aValue = aConf.ReadKey( OldKey )).Len() ) && !aConf.ReadKey( NewKey ).Len() )   \
-            aConf.WriteKey( NewKey, aValue );                                                   \
+#define NEWOLD( NewKey, OldKey ) \
+    {                            \
+        rtl::OString aValue;     \
+        if ( ( (aValue = aConf.ReadKey( OldKey )).getLength() ) && !aConf.ReadKey( NewKey ).getLength() )   \
+            aConf.WriteKey( NewKey, aValue );  \
     }
 
 
@@ -381,8 +381,8 @@ void TestToolObj::LoadIniFile()             // Laden der IniEinstellungen, die d
     pImpl->aFileBase = DirEntry(aFB);
 
     // remove old keys
-    if ( aConf.ReadKey("KeyCodes + Classes").Len() != 0 ||
-         aConf.ReadKey("KeyCodes + Classes + Res_Type").Len() != 0 )
+    if ( aConf.ReadKey("KeyCodes + Classes").getLength() != 0 ||
+         aConf.ReadKey("KeyCodes + Classes + Res_Type").getLength() != 0 )
     {
         aConf.DeleteKey("KeyCodes + Classes + Res_Type");
         aConf.DeleteKey("KeyCodes + Classes");
