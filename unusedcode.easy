@@ -1027,7 +1027,6 @@ SfxTabDialog::GetApplyButton() const
 SfxTabDialog::GetApplyHandler() const
 SfxTabDialog::GetOutputItemSet(unsigned short) const
 SfxTabDialog::SfxTabDialog(Window*, ResId const&, unsigned short, SfxBindings&, unsigned char, String const*)
-SfxTabPage::GetExchangeItem(SfxItemSet const&, unsigned short)
 SfxTabPage::SfxTabPage(Window*, long, SfxItemSet const&)
 SfxThesSubMenuControl::RegisterControl(unsigned short, SfxModule*)
 SfxToDoStack_Implarr_::Contains(SfxToDo_Impl const&) const
@@ -2401,13 +2400,6 @@ binfilter::SwBookmarks::Insert(binfilter::SwBookmark* const*, unsigned short)
 binfilter::SwBookmarks::Insert(binfilter::SwBookmarks const*, unsigned short, unsigned short)
 binfilter::SwBookmarks::Remove(binfilter::SwBookmark* const&, unsigned short)
 binfilter::SwChartBoxes::DeleteAndDestroy(unsigned short, unsigned short)
-binfilter::SwCurrShells::DeleteAndDestroy(unsigned short, unsigned short)
-binfilter::SwCurrShells::Insert(binfilter::CurrShell* const&)
-binfilter::SwCurrShells::Insert(binfilter::CurrShell* const&, unsigned short&)
-binfilter::SwCurrShells::Insert(binfilter::CurrShell* const*, unsigned short)
-binfilter::SwCurrShells::Insert(binfilter::SwCurrShells const*, unsigned short, unsigned short)
-binfilter::SwCurrShells::Remove(binfilter::CurrShell* const&, unsigned short)
-binfilter::SwCurrShells::Remove(unsigned short, unsigned short)
 binfilter::SwDependentFields::DeleteAndDestroy(unsigned short, unsigned short)
 binfilter::SwDestroyList::DeleteAndDestroy(unsigned short, unsigned short)
 binfilter::SwDestroyList::Insert(binfilter::SwDestroyList const*, unsigned short, unsigned short)
@@ -3103,7 +3095,7 @@ oox::drawingml::GraphicProperties::assignUsed(oox::drawingml::GraphicProperties 
 oox::drawingml::ShapeExport::GetXmlNamespace() const
 oox::drawingml::ShapeExport::SetXmlNamespace(int)
 oox::drawingml::TextBodyProperties::pushToPropMap(oox::PropertyMap&) const
-oox::drawingml::TextParagraphProperties::dump() const
+oox::drawingml::TextListStyle::dump() const
 oox::drawingml::Theme::getEffectStyle(int) const
 oox::drawingml::addMissingProperties(oox::PropertyMap const&, oox::PropertyMap&)
 oox::drawingml::chart::ObjectFormatter::convertAutomaticLine(oox::PropertySet&, oox::drawingml::chart::ObjectType, int)

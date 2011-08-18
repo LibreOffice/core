@@ -92,9 +92,6 @@ public:
     inline sal_Bool IsSmartLevel();
 
     void OverrideLevel(sal_uInt16 nNewLv);
-    void OverridePosition(sal_uInt16 nNewPos);
-    void OverrideHeading(sal_Bool bVal);
-    void OverrideSmartLevel(sal_Bool bVal);
 
     inline void RevertLevel();
     inline void RevertPosition();

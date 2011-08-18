@@ -267,7 +267,6 @@ public:
     // Pass NULL to begin iteration.  Done when returns NULL.
     // Objects are returned in order of increasing ID
     pCBenObject GetNextObject(pCBenObject pCurrObject);
-    pCBenObject FindObject(BenObjectID ObjectID);
     pCBenObject FindNextObjectWithProperty(pCBenObject pCurrObject,
       BenObjectID PropertyID);
     BenError BEN_EXPORT NewObject(pCBenObject * ppBenObject);

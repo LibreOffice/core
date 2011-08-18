@@ -171,12 +171,6 @@ LtcBenContainer::FindNextObjectWithProperty(pCBenObject pCurrObject,
     return NULL;
 }
 
-pCBenObject
-LtcBenContainer::FindObject(BenObjectID ObjectID)
-{
-    return (pCBenObject) FindID(&cObjects, ObjectID, NULL);
-}
-
 /**
 *   Construction
 *   @param  Bento file stream pointer

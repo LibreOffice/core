@@ -98,34 +98,4 @@ void LwpNumberingOverride::OverrideLevel(sal_uInt16 nNewLv)
     LwpOverride::Override(NO_LEVEL, STATE_ON);
 }
 
-void LwpNumberingOverride::OverridePosition(sal_uInt16 nNewPos)
-{
-    m_nPosition = nNewPos;
-    LwpOverride::Override(NO_POSITION, STATE_ON);
-}
-
-void LwpNumberingOverride::OverrideHeading(sal_Bool bVal)
-{
-    if (bVal)
-    {
-        LwpOverride::Override(HEADING, STATE_ON);
-    }
-    else
-    {
-        LwpOverride::Override(HEADING, STATE_OFF);
-    }
-}
-void LwpNumberingOverride::OverrideSmartLevel(sal_Bool bVal)
-{
-    if (bVal)
-    {
-        LwpOverride::Override(SMARTLEVEL, STATE_ON);
-    }
-    else
-    {
-        LwpOverride::Override(SMARTLEVEL, STATE_OFF);
-    }
-}
-//end add
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

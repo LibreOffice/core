@@ -1049,21 +1049,6 @@ Menu* SfxVirtualMenu::GetSVMenu() const
 
 //--------------------------------------------------------------------
 
-// return the position of the specified item
-
-sal_uInt16 SfxVirtualMenu::GetItemPos( sal_uInt16 nItemId ) const
-{
-    DBG_MEMTEST();
-    DBG_CHKTHIS(SfxVirtualMenu, 0);
-
-    for ( sal_uInt16 nPos = 0; nPos < nCount; ++nPos )
-        if ( (pItems+nPos)->GetId() == nItemId )
-            return nPos;
-    return MENU_ITEM_NOTFOUND;
-}
-
-//--------------------------------------------------------------------
-
 // set the checkmark of the specified item
 
 void SfxVirtualMenu::CheckItem( sal_uInt16 nItemId, sal_Bool bCheck )

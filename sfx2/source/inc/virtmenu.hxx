@@ -99,8 +99,6 @@ public:
     void            EnableItem( sal_uInt16 nItemId, sal_Bool bEnable );
     void            SetItemText( sal_uInt16 nItemId, const String& rText );
 
-    sal_uInt16          GetItemPos( sal_uInt16 nItemId ) const;
-
     sal_uInt16          GetItemCount() const;
     Menu*           GetSVMenu() const;
     SfxMenuControl& operator[]( sal_uInt16 nPos ) const;
