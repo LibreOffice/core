@@ -37,8 +37,11 @@ data/dict_%.cxx : data/dict_%_invis.cxx
 	sed 's/\tconst/\tSAL_DLLPUBLIC_EXPORT const/' $< > $@
 
 data/dict_%_invis.cxx : $(realpath $(SRC_ROOT)/i18npool/source/breakiterator/data)/%.dic data
+ifeq ($(OS_FOR_BUILD),WNT)
+	$(gb_Helper_execute)gendict `cygpath -m $<` $@
+else
 	$(gb_Helper_execute)gendict $< $@
-
+endif
 
 ifeq ($(SYSTEM_ICU),YES)
 GENBRK := $(SYSTEM_GENBRK)
