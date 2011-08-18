@@ -1701,8 +1701,8 @@ if test "$enable_ccache" = "yes" -o \( "$enable_ccache" = "" -a "$enable_icecrea
                 CCACHE=""
             else
                 CCACHE="ccache"
-                dnl need to check for ccache version: otherwise prevents
-                dnl caching of the results (like "-x objective-c++" for Mac)
+                # need to check for ccache version: otherwise prevents
+                # caching of the results (like "-x objective-c++" for Mac)
                 if test $_os = Darwin -o $_os = iOS; then
                     # check ccache version
                     AC_MSG_CHECKING([whether version of ccache is suitable])
@@ -1729,6 +1729,32 @@ else
     CCACHE=""
 fi
 
+if test "$CCACHE" != "" ; then
+    ccache_size_msg=$([ccache -s | tail -n 1 | sed 's/^[^0-9]*//' | sed -e 's/\.[0-9]*//'])
+    ccache_size=$(echo "$ccache_size_msg" | grep "G" | sed -e 's/G.*$//')
+    if test "$ccache_size" = "" ; then
+        ccache_size=$(echo "$ccache_size_msg" | grep "M" | sed -e 's/\ M.*$//')
+        if test "$ccache_size" = "" ; then
+            ccache_size=0
+        fi
+        # we could not determine the size or it was less than 1GB -> disable auto-ccache
+        if test $ccache_size -lt 1024 ; then
+            CCACHE=""
+            AC_MSG_WARN([ccache's cache size is less than 1GB using it is counter-producive: Disabling auto-ccache detection])
+            echo "ccache's cache size is less than 1GB using it is counter-producive: auto-ccache detection disabled" >> warn
+        else
+            # warn that ccache may be too small for debug build
+            AC_MSG_WARN([ccache's cache size is less than 5GB using it may be counter-producive for debug or symbol-enabled build])
+            echo "ccache's cache size is less than 5GB using it may be counter-producive for debug or symbol-enabled build" >> warn
+        fi
+    else
+        if test $ccache_size -lt 5  ; then
+            #warn that ccache may be too small for debug build
+            AC_MSG_WARN([ccache's cache size is less than 5GB using it may be counter-producive for debug or symbol-enabled build])
+            echo "ccache's cache size is less than 5GB using it may be counter-producive for debug or symbol-enabled build" >> warn
+        fi
+    fi
+fi
 
 dnl ===================================================================
 dnl  Checks for C compiler,
