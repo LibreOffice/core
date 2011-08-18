@@ -220,15 +220,16 @@ void BreakpointWindow::LoadBreakpoints( String aFilename )
 
     aConfig.SetGroup("Breakpoints");
 
-    ByteString aBreakpoints;
-    aBreakpoints = aConfig.ReadKey( ByteString( aFilename, RTL_TEXTENCODING_UTF8 ) );
+    rtl::OString aBreakpoints =
+        aConfig.ReadKey(rtl::OUStringToOString(aFilename, RTL_TEXTENCODING_UTF8));
 
-    xub_StrLen i;
-
-    for ( i = 0 ; i < aBreakpoints.GetTokenCount( ';' ) ; i++ )
+    sal_Int32 nIndex = 0;
+    do
     {
-        InsertBreakpoint( (sal_uInt16)aBreakpoints.GetToken( i, ';' ).ToInt32() );
+        rtl::OString aBreakpoint = aBreakpoints.getToken(0, ';', nIndex);
+        InsertBreakpoint(static_cast<sal_uInt16>(aBreakpoint.toInt32()));
     }
+    while ( nIndex >= 0 );
 }
 
 
