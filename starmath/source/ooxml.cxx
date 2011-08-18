@@ -140,11 +140,9 @@ void SmOoxml::HandleNode( const SmNode* pNode, int nLevel )
         case NMATH:
             HandleMath(pNode,nLevel);
             break;
-#if 0
         case NSUBSUP:
-            HandleSubSupScript(pNode,nLevel);
+            HandleSubSupScript( static_cast< const SmSubSupNode* >( pNode ), nLevel );
             break;
-#endif
         case NEXPRESSION:
             HandleAllSubNodes( pNode, nLevel );
             break;
@@ -421,6 +419,78 @@ void SmOoxml::HandleRoot( const SmRootNode* pNode, int nLevel )
     HandleNode( pNode->Body(), nLevel + 1 );
     m_pSerializer->endElementNS( XML_m, XML_e );
     m_pSerializer->endElementNS( XML_m, XML_rad );
+}
+
+void SmOoxml::HandleSubSupScript( const SmSubSupNode* pNode, int nLevel )
+{
+    // set flags to a bitfield of which sub/sup items exists
+    int flags = ( pNode->GetSubSup( CSUB ) != NULL ? ( 1 << CSUB ) : 0 )
+            | ( pNode->GetSubSup( CSUP ) != NULL ? ( 1 << CSUP ) : 0 )
+            | ( pNode->GetSubSup( RSUB ) != NULL ? ( 1 << RSUB ) : 0 )
+            | ( pNode->GetSubSup( RSUP ) != NULL ? ( 1 << RSUP ) : 0 )
+            | ( pNode->GetSubSup( LSUB ) != NULL ? ( 1 << RSUB ) : 0 )
+            | ( pNode->GetSubSup( LSUP ) != NULL ? ( 1 << LSUP ) : 0 );
+    if( flags == 0 ) // none
+        return;
+    HandleSubSupScriptInternal( pNode, nLevel, flags );
+}
+
+void SmOoxml::HandleSubSupScriptInternal( const SmSubSupNode* pNode, int nLevel, int flags )
+{
+    if( flags == ( 1 << RSUP | 1 << RSUB ))
+    { // m:sSubSup
+        m_pSerializer->startElementNS( XML_m, XML_sSubSup, FSEND );
+        m_pSerializer->startElementNS( XML_m, XML_e, FSEND );
+        HandleNode( pNode->GetBody(), nLevel + 1 );
+        m_pSerializer->endElementNS( XML_m, XML_e );
+        m_pSerializer->startElementNS( XML_m, XML_sub, FSEND );
+        HandleNode( pNode->GetSubSup( RSUB ), nLevel + 1 );
+        m_pSerializer->endElementNS( XML_m, XML_sub );
+        m_pSerializer->startElementNS( XML_m, XML_sup, FSEND );
+        HandleNode( pNode->GetSubSup( RSUP ), nLevel + 1 );
+        m_pSerializer->endElementNS( XML_m, XML_sup );
+        m_pSerializer->endElementNS( XML_m, XML_sSubSup );
+    }
+    else if( flags == 1 << RSUB )
+    { // m:sSub
+        m_pSerializer->startElementNS( XML_m, XML_sSub, FSEND );
+        m_pSerializer->startElementNS( XML_m, XML_e, FSEND );
+        HandleNode( pNode->GetBody(), nLevel + 1 );
+        m_pSerializer->endElementNS( XML_m, XML_e );
+        m_pSerializer->startElementNS( XML_m, XML_sub, FSEND );
+        HandleNode( pNode->GetSubSup( RSUB ), nLevel + 1 );
+        m_pSerializer->endElementNS( XML_m, XML_sub );
+        m_pSerializer->endElementNS( XML_m, XML_sSub );
+    }
+    else if( flags == 1 << RSUP )
+    { // m:sSup
+        m_pSerializer->startElementNS( XML_m, XML_sSup, FSEND );
+        m_pSerializer->startElementNS( XML_m, XML_e, FSEND );
+        HandleNode( pNode->GetBody(), nLevel + 1 );
+        m_pSerializer->endElementNS( XML_m, XML_e );
+        m_pSerializer->startElementNS( XML_m, XML_sup, FSEND );
+        HandleNode( pNode->GetSubSup( RSUP ), nLevel + 1 );
+        m_pSerializer->endElementNS( XML_m, XML_sup );
+        m_pSerializer->endElementNS( XML_m, XML_sSup );
+    }
+    else if( flags == ( 1 << LSUP | 1 << LSUB ))
+    { // m:sPre
+        m_pSerializer->startElementNS( XML_m, XML_sPre, FSEND );
+        m_pSerializer->startElementNS( XML_m, XML_sub, FSEND );
+        HandleNode( pNode->GetSubSup( LSUB ), nLevel + 1 );
+        m_pSerializer->endElementNS( XML_m, XML_sub );
+        m_pSerializer->startElementNS( XML_m, XML_sup, FSEND );
+        HandleNode( pNode->GetSubSup( LSUP ), nLevel + 1 );
+        m_pSerializer->endElementNS( XML_m, XML_sup );
+        m_pSerializer->startElementNS( XML_m, XML_e, FSEND );
+        HandleNode( pNode->GetBody(), nLevel + 1 );
+        m_pSerializer->endElementNS( XML_m, XML_e );
+        m_pSerializer->endElementNS( XML_m, XML_sSubSup );
+    }
+    else
+    {
+        OSL_FAIL( "Unhandled sub/sup combination" );
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

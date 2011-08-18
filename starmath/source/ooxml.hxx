@@ -54,6 +54,8 @@ private:
     void HandleBinaryOperation( const SmBinHorNode* pNode, int nLevel );
     void HandleRoot( const SmRootNode* pNode,int nLevel );
     void HandleAttribute( const SmAttributNode* pNode,int nLevel );
+    void HandleSubSupScript( const SmSubSupNode* pNode, int nLevel );
+    void HandleSubSupScriptInternal( const SmSubSupNode* pNode, int nLevel, int flags );
     String str;
     const SmNode* const pTree;
     ::sax_fastparser::FSHelperPtr m_pSerializer;

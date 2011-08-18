@@ -964,6 +964,7 @@ public:
      * @remarks this method may return NULL.
      */
     SmNode * GetSubSup(SmSubSup eSubSup) { return GetSubNode( sal::static_int_cast< sal_uInt16 >(1 + eSubSup) ); };
+    const SmNode * GetSubSup(SmSubSup eSubSup) const { return const_cast< SmSubSupNode* >( this )->GetSubSup( eSubSup ); }
 
     /** Set the body */
     void SetBody(SmNode* pBody) { SetSubNode(0, pBody); }
