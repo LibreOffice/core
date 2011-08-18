@@ -112,7 +112,8 @@ namespace writerfilter {
             DESTINATION_RESULT,
             DESTINATION_ANNOTATIONDATE,
             DESTINATION_ANNOTATIONAUTHOR,
-            DESTINATION_FALT
+            DESTINATION_FALT,
+            DESTINATION_FLYMAINCONTENT
         };
 
         enum RTFBorderState
@@ -177,6 +178,27 @@ namespace writerfilter {
                 int nBottom;
         };
 
+        /// Stores the properties of a picture.
+        class RTFPicture
+        {
+            public:
+                sal_uInt16 nWidth, nHeight;
+                sal_uInt16 nGoalWidth, nGoalHeight;
+                sal_uInt16 nScaleX, nScaleY;
+                short nCropT, nCropB, nCropL, nCropR;
+        };
+
+        /// Stores the properties of a frame
+        class RTFFrame
+        {
+            public:
+                sal_Int32 nX, nY, nW, nH;
+                sal_Int32 nLeftMargin, nRightMargin, nTopMargin, nBottomMargin;
+                sal_Int16 nHoriOrient, nHoriOrientRelation, nVertOrient, nVertOrientRelation;
+                sal_Int16 nAnchorType;
+                sal_Bool bPositionToggle;
+        };
+
         /// State of the parser, which gets saved / restored when changing groups.
         class RTFParserState
         {
@@ -229,9 +251,9 @@ namespace writerfilter {
                 /// List of character positions in leveltext to replace.
                 std::vector<sal_Int32> aLevelNumbers;
 
-                float nPictureScaleX;
-                float nPictureScaleY;
+                RTFPicture aPicture;
                 RTFShape aShape;
+                RTFFrame aFrame;
 
                 /// Current cellx value.
                 int nCellX;
@@ -317,6 +339,8 @@ namespace writerfilter {
                 void checkFirstRun();
                 void sectBreak(bool bFinal);
                 void replayBuffer(RTFBuffer_t& rBuffer);
+                bool inFrame();
+                void checkChangedFrame();
 
                 uno::Reference<uno::XComponentContext> const& m_xContext;
                 uno::Reference<io::XInputStream> const& m_xInputStream;
@@ -393,6 +417,8 @@ namespace writerfilter {
                 RTFReferenceTable::Entries_t m_aStyleTableEntries;
                 int m_nCurrentStyleIndex;
                 bool m_bEq;
+                /// If we are in a frame.
+                bool m_bWasInFrame;
 
         };
     } // namespace rtftok

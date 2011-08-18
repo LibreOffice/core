@@ -103,7 +103,6 @@
 #include <svx/xflclit.hxx>
 #include <svx/xlnwtit.hxx>
 #include <svx/svdoutl.hxx>
-#include <svtools/miscopt.hxx>
 #include <unotools/streamwrap.hxx>
 #include <comphelper/processfactory.hxx>
 #include <editeng/outlobj.hxx>
@@ -163,10 +162,7 @@ sal_uLong SwRTFReader::Read( SwDoc &rDoc, const String& /*rBaseURL*/, SwPaM& /*r
 
 extern "C" SAL_DLLPUBLIC_EXPORT Reader* SAL_CALL ImportRTF()
 {
-    SvtMiscOptions aMiscOptions;
-    if (aMiscOptions.IsExperimentalMode())
-        return new SwRTFReader();
-    return new RtfReader();
+    return new SwRTFReader();
 }
 
 // Aufruf fuer die allg. Reader-Schnittstelle

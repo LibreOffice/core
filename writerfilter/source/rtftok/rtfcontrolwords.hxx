@@ -1843,7 +1843,11 @@ enum RTFKeyword
     RTF_ZWBO,
     RTF_ZWJ,
     RTF_ZWNBO,
-    RTF_ZWNJ
+    RTF_ZWNJ,
+    RTF_FLYMAINCNT,
+    RTF_FLYVERT,
+    RTF_FLYHORZ,
+    RTF_FLYANCHOR
 };
 
 /// Types of an RTF Control Word
