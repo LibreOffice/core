@@ -1050,7 +1050,9 @@ try
             )
         {
             // binary search
-            Property* pResult = ::std::lower_bound(pNewProps, pNewProps + nNewLen,pOldProps[i].Name, ::comphelper::PropertyStringLessFunctor());
+            Property* pResult = ::std::lower_bound(
+                pNewProps, pNewProps + nNewLen, pOldProps[i], ::comphelper::PropertyCompareByName());
+
             if (    pResult
                 && ( pResult != pNewProps + nNewLen && pResult->Name == pOldProps[i].Name )
                 && ( (pResult->Attributes & PropertyAttribute::READONLY) == 0 )
