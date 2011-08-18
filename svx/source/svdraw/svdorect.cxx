@@ -124,13 +124,12 @@ SdrRectObj& SdrRectObj::operator=(const SdrRectObj& rCopy)
 
     SdrTextObj::operator=( rCopy );
 
-    if(mpXPoly)
-        delete mpXPoly;
+    delete mpXPoly;
 
     if ( rCopy.mpXPoly )
         mpXPoly = new XPolygon( *rCopy.mpXPoly );
     else
-        mpXPoly = rCopy.mpXPoly;
+        mpXPoly = NULL;
 
     return *this;
 }
