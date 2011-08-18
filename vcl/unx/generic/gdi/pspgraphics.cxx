@@ -37,6 +37,7 @@
 #include <sys/types.h>
 
 #include "unx/pspgraphics.h"
+#include "unx/glyphcache.hxx"
 
 #include "vcl/jobdata.hxx"
 #include "vcl/printerinfomanager.hxx"
@@ -46,7 +47,6 @@
 
 #include "printergfx.hxx"
 #include "salbmp.hxx"
-#include "glyphcache.hxx"
 #include "impfont.hxx"
 #include "outfont.hxx"
 #include "fontsubset.hxx"

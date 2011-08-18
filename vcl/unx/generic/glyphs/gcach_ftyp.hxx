@@ -29,18 +29,14 @@
 #ifndef _SV_GCACHFTYP_HXX
 #define _SV_GCACHFTYP_HXX
 
-#include <glyphcache.hxx>
-#include <rtl/textcvt.h>
+#include "unx/glyphcache.hxx"
 
-#include <ft2build.h>
-#include FT_FREETYPE_H
+#include <rtl/textcvt.h>
 
 class FreetypeServerFont;
 #ifdef ENABLE_GRAPHITE
 class GraphiteFaceWrapper;
 #endif
-
-struct FT_GlyphRec_;
 
 // -----------------------------------------------------------------------
 

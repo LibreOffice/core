@@ -40,12 +40,9 @@
 #include <sallayout.hxx>
 // Module
 #include "gcach_ftyp.hxx"
-#include <glyphcache.hxx>
+#include "unx/glyphcache.hxx"
 #include <graphite_features.hxx>
-//#include "graphite_textsrc.hxx"
 #include <graphite_serverfont.hxx>
-
-#ifndef WNT
 
 float freetypeServerFontAdvance(const void* appFontHandle, gr_uint16 glyphId)
 {
@@ -153,7 +150,5 @@ sal_GlyphId GraphiteLayoutImpl::getKashidaGlyph(int & width)
     }
     return nKashidaIndex;
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

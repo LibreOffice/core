@@ -33,7 +33,7 @@
 #include <X11/extensions/Xrender.h>
 #include <tools/postx.h>
 
-#include <glyphcache.hxx>
+#include "unx/glyphcache.hxx"
 
 class SalDisplay;
 struct MultiScreenGlyph;
