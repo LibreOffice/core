@@ -47,9 +47,6 @@ public:
     explicit ColorPropertySet( sal_Int32 nColor, bool bFillColor = true );
     virtual ~ColorPropertySet();
 
-    void setColor( sal_Int32 nColor );
-    sal_Int32 getColor();
-
 protected:
     // ____ XPropertySet ____
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo()

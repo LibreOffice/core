@@ -3756,5 +3756,3 @@ xmloff::OControlStyleContext::OControlStyleContext(SvXMLImport&, unsigned short,
 xmloff::OFormLayerXMLExport::exportControlNumberStyles()
 xmloff::OFormLayerXMLExport::initialize()
 xmloff::OFormLayerXMLImport::seekPage(com::sun::star::uno::Reference<com::sun::star::drawing::XDrawPage> const&)
-xmloff::chart::ColorPropertySet::getColor()
-xmloff::chart::ColorPropertySet::setColor(int)
