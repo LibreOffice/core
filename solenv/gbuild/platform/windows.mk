@@ -277,7 +277,6 @@ $(call gb_Helper_abbreviate_dirs_native,\
 		$(INCLUDE) \
 		-c $(realpath $(3)) \
 		-Fo$(1)) $(call gb_create_deps,$(1),$(4),$(realpath $(3)))
-$(call gb_Object__command_deponcompile,$(1),$(4),$(3),$(DEFS),$(T_CFLAGS),$(INCLUDE))
 endef
 
 
@@ -298,7 +297,6 @@ $(call gb_Helper_abbreviate_dirs_native,\
 		$(INCLUDE_STL) $(INCLUDE) \
 		-c $(realpath $(3)) \
 		-Fo$(1)) $(call gb_create_deps,$(1),$(4),$(realpath $(3)))
-$(call gb_Object__command_deponcompile,$(1),$(4),$(3),$(DEFS),$(T_CXXFLAGS),$(INCLUDE))
 endef
 
 
@@ -350,7 +348,6 @@ $(call gb_Helper_abbreviate_dirs_native,\
 	mkdir -p $(dir $(1)) $(dir $(4)) && \
 	$(ML_EXE) $(gb_AFLAGS) -D$(COM) /Fo$(1) $(3)) && \
 	echo "$(1) : $(realpath $(3))" > $(4)
-$(call gb_Object__command_deponcompile,$(1),$(4),$(3),,,)
 endef
 
 
