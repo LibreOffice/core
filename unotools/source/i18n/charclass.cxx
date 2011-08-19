@@ -33,11 +33,8 @@
 #include <tools/string.hxx>
 #include <tools/debug.hxx>
 
-#include <comphelper/componentfactory.hxx>
-#include <com/sun/star/uno/XInterface.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include "instance.hxx"
 
-#define CHARCLASS_LIBRARYNAME "i18n"
 #define CHARCLASS_SERVICENAME "com.sun.star.i18n.CharacterClassification"
 
 using namespace ::com::sun::star;
@@ -53,23 +50,7 @@ CharClass::CharClass(
         xSMgr( xSF )
 {
     setLocale( rLocale );
-    if ( xSMgr.is() )
-    {
-        try
-        {
-            xCC = Reference< XCharacterClassification > ( xSMgr->createInstance(
-                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( CHARCLASS_SERVICENAME ) ) ),
-                uno::UNO_QUERY );
-        }
-        catch ( const Exception& )
-        {
-            DBG_ERRORFILE( "CharClass ctor: Exception caught!" );
-        }
-    }
-    else
-    {   // try to get an instance somehow
-        getComponentInstance();
-    }
+    xCC = Reference< XCharacterClassification > ( intl_createInstance( xSMgr, CHARCLASS_SERVICENAME, "CharClass" ), uno::UNO_QUERY );
 }
 
 
@@ -77,34 +58,13 @@ CharClass::CharClass(
             const ::com::sun::star::lang::Locale& rLocale )
 {
     setLocale( rLocale );
-    getComponentInstance();
+    Reference< lang::XMultiServiceFactory > xNil;
+    xCC = Reference< XCharacterClassification > ( intl_createInstance( xNil, CHARCLASS_SERVICENAME, "CharClass" ), uno::UNO_QUERY );
 }
 
 
 CharClass::~CharClass()
 {
-}
-
-
-void CharClass::getComponentInstance()
-{
-    try
-    {
-        // CharClass may be needed by "small tools" like the Setup
-        // => maybe no service manager => loadLibComponentFactory
-        Reference < XInterface > xI = ::comphelper::getComponentInstance(
-            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( LLCF_LIBNAME( CHARCLASS_LIBRARYNAME ) ) ),
-            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( CHARCLASS_SERVICENAME ) ) );
-        if ( xI.is() )
-        {
-            Any x = xI->queryInterface( ::getCppuType((const Reference< XCharacterClassification >*)0) );
-            x >>= xCC;
-        }
-    }
-    catch ( const Exception& )
-    {
-        DBG_ERRORFILE( "getComponentInstance: Exception caught!" );
-    }
 }
 
 

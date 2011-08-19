@@ -85,9 +85,6 @@ class UNOTOOLS_DLLPUBLIC CharClass
                                 CharClass( const CharClass& );
             CharClass&          operator=( const CharClass& );
 
-                                // instantiate component somehow
-            void                getComponentInstance();
-
 public:
     /// Preferred ctor with service manager specified
                                 CharClass(

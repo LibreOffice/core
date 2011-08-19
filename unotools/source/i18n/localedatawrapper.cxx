@@ -40,10 +40,7 @@
 #include <tools/debug.hxx>
 #include <i18npool/mslangid.hxx>
 
-#include <comphelper/componentfactory.hxx>
-#include <unotools/processfactory.hxx>
-#include <com/sun/star/uno/XInterface.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include "instance.hxx"
 #include <com/sun/star/i18n/KNumberFormatUsage.hpp>
 #include <com/sun/star/i18n/KNumberFormatType.hpp>
 #include <com/sun/star/i18n/CalendarFieldIndex.hpp>
@@ -53,9 +50,6 @@
 #include <rtl/instance.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <sal/macros.h>
-
-#define LOCALEDATA_LIBRARYNAME "i18npool"
-#define LOCALEDATA_SERVICENAME "com.sun.star.i18n.LocaleData"
 
 static const int nDateFormatInvalid = -1;
 static const sal_uInt16 nCurrFormatInvalid = 0xffff;
@@ -90,50 +84,9 @@ LocaleDataWrapper::LocaleDataWrapper(
         bReservedWordValid( sal_False )
 {
     setLocale( rLocale );
-    if ( xSMgr.is() )
-    {
-        try
-        {
-            xLD = Reference< XLocaleData2 > ( xSMgr->createInstance(
-                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( LOCALEDATA_SERVICENAME ) ) ),
-                uno::UNO_QUERY );
-        }
-        catch ( Exception& e )
-        {
-#ifdef DBG_UTIL
-            ByteString aMsg( "LocaleDataWrapper ctor: Exception caught\n" );
-            aMsg += ByteString( String( e.Message ), RTL_TEXTENCODING_UTF8 );
-            DBG_ERRORFILE( aMsg.GetBuffer() );
-#else
-        (void)e;
-#endif
-        }
-    }
-    else
-    {   // try to get an instance somehow
-        DBG_ERRORFILE( "LocaleDataWrapper: no service manager, trying own" );
-        try
-        {
-            Reference< XInterface > xI = ::comphelper::getComponentInstance(
-                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( LLCF_LIBNAME( LOCALEDATA_LIBRARYNAME ) ) ),
-                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( LOCALEDATA_SERVICENAME ) ) );
-            if ( xI.is() )
-            {
-                Any x = xI->queryInterface( ::getCppuType((const Reference< XLocaleData2 >*)0) );
-                x >>= xLD;
-            }
-        }
-        catch ( Exception& e )
-        {
-#ifdef DBG_UTIL
-            ByteString aMsg( "getComponentInstance: Exception caught\n" );
-            aMsg += ByteString( String( e.Message ), RTL_TEXTENCODING_UTF8 );
-            DBG_ERRORFILE( aMsg.GetBuffer() );
-#else
-        (void)e;
-#endif
-        }
-    }
+    xLD = Reference< XLocaleData2 > (
+        intl_createInstance( xSMgr, "com.sun.star.i18n.LocaleData",
+                             "LocaleDataWrapper" ), uno::UNO_QUERY );
 }
 
 

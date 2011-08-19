@@ -32,15 +32,12 @@
 #include <unotools/calendarwrapper.hxx>
 #include <tools/string.hxx>
 #include <tools/debug.hxx>
-
-#include <comphelper/componentfactory.hxx>
+#include <instance.hxx>
 #include <com/sun/star/i18n/CalendarFieldIndex.hpp>
 #include <com/sun/star/i18n/XExtendedCalendar.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
 #define CALENDAR_LIBRARYNAME "i18n"
 #define CALENDAR_SERVICENAME "com.sun.star.i18n.LocaleCalendar"
-
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::i18n;
@@ -57,52 +54,8 @@ CalendarWrapper::CalendarWrapper(
         xSMgr( xSF ),
         aEpochStart( Date( 1, 1, 1970 ) )
 {
-    if ( xSMgr.is() )
-    {
-        try
-        {
-            xC = Reference< XExtendedCalendar > ( xSMgr->createInstance(
-                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( CALENDAR_SERVICENAME ) ) ),
-                uno::UNO_QUERY );
-        }
-        catch ( Exception& e )
-        {
-#ifdef DBG_UTIL
-            ByteString aMsg( "CalendarWrapper ctor: Exception caught\n" );
-            aMsg += ByteString( String( e.Message ), RTL_TEXTENCODING_UTF8 );
-            DBG_ERRORFILE( aMsg.GetBuffer() );
-#else
-            (void)e;
-#endif
-        }
-    }
-    else
-    {   // try to get an instance somehow
-        DBG_ERRORFILE( "CalendarWrapper: no service manager, trying own" );
-        try
-        {
-            Reference< XInterface > xI = ::comphelper::getComponentInstance(
-                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( LLCF_LIBNAME( CALENDAR_LIBRARYNAME ) ) ),
-                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( CALENDAR_SERVICENAME ) ) );
-            if ( xI.is() )
-            {
-                Any x = xI->queryInterface( ::getCppuType((const Reference< XExtendedCalendar >*)0) );
-                x >>= xC;
-            }
-        }
-        catch ( Exception& e )
-        {
-#ifdef DBG_UTIL
-            ByteString aMsg( "getComponentInstance: Exception caught\n" );
-            aMsg += ByteString( String( e.Message ), RTL_TEXTENCODING_UTF8 );
-            DBG_ERRORFILE( aMsg.GetBuffer() );
-#else
-            (void)e;
-#endif
-        }
-    }
+    xC = Reference< XExtendedCalendar >( intl_createInstance( xSMgr, CALENDAR_SERVICENAME, "CalendarWrapper" ), uno::UNO_QUERY );
 }
-
 
 CalendarWrapper::~CalendarWrapper()
 {

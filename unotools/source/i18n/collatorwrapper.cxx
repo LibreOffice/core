@@ -31,9 +31,7 @@
 #include <unotools/collatorwrapper.hxx>
 #include <tools/debug.hxx>
 
-#include <comphelper/componentfactory.hxx>
-#include <com/sun/star/uno/XInterface.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include "instance.hxx"
 
 using namespace ::com::sun::star;
 
@@ -41,44 +39,9 @@ CollatorWrapper::CollatorWrapper (
         const uno::Reference< lang::XMultiServiceFactory > &xServiceFactory)
     : mxServiceFactory (xServiceFactory)
 {
-    ::rtl::OUString aService (RTL_CONSTASCII_USTRINGPARAM("com.sun.star.i18n.Collator"));
-
-    if (mxServiceFactory.is())
-    {
-        try
-        {
-            mxInternationalCollator = uno::Reference< i18n::XCollator > (
-                mxServiceFactory->createInstance(aService), uno::UNO_QUERY);
-        }
-        catch (uno::Exception& rException)
-        {
-            (void)rException;
-            DBG_ERRORFILE ("CollatorWrapper: failed to create instance");
-        }
-    }
-    else
-    {
-        ::rtl::OUString aLibrary (RTL_CONSTASCII_USTRINGPARAM(LLCF_LIBNAME("i18n")));
-
-        try
-        {
-            uno::Reference< uno::XInterface > xInstance =
-                ::comphelper::getComponentInstance (aLibrary, aService);
-
-            if (xInstance.is())
-            {
-                uno::Any xInterface = xInstance->queryInterface (
-                    ::getCppuType((const uno::Reference< i18n::XCollator >*)0) );
-                xInterface >>= mxInternationalCollator;
-            }
-        }
-        catch (uno::Exception& rException)
-        {
-            (void)rException;
-            DBG_ERRORFILE ("CollatorWrapper: failed to get component instance!");
-        }
-    }
-
+    mxInternationalCollator = uno::Reference< i18n::XCollator > (
+        intl_createInstance( xServiceFactory, "com.sun.star.i18n.Collator",
+                             "CollatorWrapper" ), uno::UNO_QUERY );
     DBG_ASSERT (mxInternationalCollator.is(), "CollatorWrapper: no i18n collator");
 }
 
