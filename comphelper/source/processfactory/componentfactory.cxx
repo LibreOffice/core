@@ -46,27 +46,6 @@ using namespace ::rtl;
 namespace comphelper
 {
 
-Reference< XInterface > getComponentInstance(
-            const OUString & rLibraryName,
-            const OUString & rImplementationName
-            )
-{
-    Reference< XInterface > xI;
-    Reference< XMultiServiceFactory > xMSF = ::comphelper::getProcessServiceFactory();
-    if ( xMSF.is() )
-        xI = xMSF->createInstance( rImplementationName );
-    if( !xI.is() )
-    {
-        Reference< XSingleServiceFactory > xSSF =
-            loadLibComponentFactory( rLibraryName, rImplementationName,
-            Reference< XMultiServiceFactory >(), Reference< XRegistryKey >() );
-        if (xSSF.is())
-            xI = xSSF->createInstance();
-    }
-    return xI;
-}
-
-
 Reference< XSingleServiceFactory > loadLibComponentFactory(
             const OUString & rLibName,
             const OUString & rImplName,
