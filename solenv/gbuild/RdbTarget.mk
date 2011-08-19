@@ -47,7 +47,7 @@ $(call gb_RdbTarget_get_clean_target,%) :
 	$(call gb_Helper_abbreviate_dirs,\
 		rm -f $(call gb_RdbTarget_get_outdir_target,$*) $(call gb_RdbTarget_get_target,$*))
 
-$(call gb_RdbTarget_get_external_target,%) :
+$(call gb_RdbTarget_get_outdir_target,%) :
 	$(call gb_Deliver_deliver,$<,$@)
 
 define gb_RdbTarget_RdbTarget
