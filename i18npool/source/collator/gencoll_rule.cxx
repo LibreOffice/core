@@ -48,8 +48,8 @@ void data_write(char* file, char* name, sal_uInt8 *data, sal_Int32 len)
 {
     FILE *fp = fopen(file, "wb");
     if (fp == NULL) {
-        printf("Can't create the C source file.");
-        return;
+        fprintf(stderr, "Opening %s for writing failed: %s\n", file, strerror(errno));
+        exit(1);
     }
 
     fprintf(fp, "/*\n");
@@ -87,9 +87,10 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
     if (argc < 4) exit(-1);
 
     fp = fopen(argv[1], "rb");  // open the source file for read;
-    if (fp == NULL)
-        printf("Open the rule source file failed.");
-
+    if (fp == NULL){
+        fprintf(stderr, "Opening the rule source file %s for reading failed: %s\n", argv[1], strerror(errno));
+        exit(1);
+    }
 
     sal_Char str[1024];
     OUStringBuffer Obuf;

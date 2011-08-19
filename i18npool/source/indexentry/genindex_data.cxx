@@ -51,8 +51,8 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
 
     fp = fopen(argv[1], "rb");  // open the source file for read;
     if (fp == NULL) {
-        printf("Open the rule source file failed.");
-        return 1;
+        fprintf(stderr, "Opening the rule source file %s for reading failed: %s\n", argv[1], strerror(errno));
+        exit(1);
     }
 
 
@@ -97,8 +97,8 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
 
     fp = fopen(argv[2], "wb");
     if (fp == NULL) {
-        printf("Can't create the C source file.");
-        return 1;
+        fprintf(stderr, "Opening %s for writing failed: %s\n", argv[2], strerror(errno));
+        exit(1);
     }
 
     fprintf(fp, "/*\n");

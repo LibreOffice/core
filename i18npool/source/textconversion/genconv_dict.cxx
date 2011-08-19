@@ -57,16 +57,16 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
     sfp = fopen(argv[2], "rb"); // open the source file for read;
     if (sfp == NULL)
     {
-        printf("Open the dictionary source file failed.");
-        return -1;
+        fprintf(stderr, "Opening the dictionary source file %s for reading failed: %s\n", argv[1], strerror(errno));
+        exit(1);
     }
 
     // create the C source file to write
     cfp = fopen(argv[3], "wb");
     if (cfp == NULL) {
         fclose(sfp);
-        printf("Can't create the C source file.");
-        return -1;
+        fprintf(stderr, "Opening %s for writing failed: %s\n", argv[3], strerror(errno));
+        exit(1);
     }
 
     fprintf(cfp, "/*\n");
