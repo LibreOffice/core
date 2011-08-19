@@ -111,10 +111,7 @@ SdrRectObj::SdrRectObj(SdrObjKind eNewTextKind, const Rectangle& rRect)
 
 SdrRectObj::~SdrRectObj()
 {
-    if(mpXPoly)
-    {
-        delete mpXPoly;
-    }
+    delete mpXPoly;
 }
 
 SdrRectObj& SdrRectObj::operator=(const SdrRectObj& rCopy)
@@ -136,11 +133,8 @@ SdrRectObj& SdrRectObj::operator=(const SdrRectObj& rCopy)
 
 void SdrRectObj::SetXPolyDirty()
 {
-    if(mpXPoly)
-    {
-        delete mpXPoly;
-        mpXPoly = 0L;
-    }
+    delete mpXPoly;
+    mpXPoly = 0L;
 }
 
 XPolygon SdrRectObj::ImpCalcXPoly(const Rectangle& rRect1, long nRad1) const
@@ -169,6 +163,7 @@ XPolygon SdrRectObj::ImpCalcXPoly(const Rectangle& rRect1, long nRad1) const
 
 void SdrRectObj::RecalcXPoly()
 {
+    delete mpXPoly;
     mpXPoly = new XPolygon(ImpCalcXPoly(aRect,GetEckenradius()));
 }
 
