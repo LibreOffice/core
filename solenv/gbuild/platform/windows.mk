@@ -203,7 +203,7 @@ gb_LinkTarget_LDFLAGS := \
 	-nxcompat \
 	-dynamicbase \
 	$(patsubst %,-LIBPATH:%,$(filter-out .,$(subst ;, ,$(subst \,/,$(ILIB))))) \
-	
+
 gb_DEBUG_CFLAGS := -Zi
 
 # this does not use CFLAGS so it is not overridable
