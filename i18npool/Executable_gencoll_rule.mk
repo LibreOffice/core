@@ -41,7 +41,7 @@ $(eval $(call gb_Executable_add_linked_libs,gencoll_rule,\
 	$(gb_STDLIBS) \
 ))
 
-ifeq ($(OS),WNT)
+ifeq ($(OS)$(COM),WNTMSC)
 $(eval $(call gb_Executable_use_externals,gencoll_rule,\
 	icudt \
 	icuin \

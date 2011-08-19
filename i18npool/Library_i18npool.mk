@@ -56,7 +56,7 @@ $(eval $(call gb_Library_add_linked_libs,i18npool,\
 	$(gb_STDLIBS) \
 ))
 
-ifeq ($(OS),WNT)
+ifeq ($(OS)$(COM),WNTMSC)
 $(eval $(call gb_Library_use_externals,i18npool,\
 	icuin \
 	icuuc \

@@ -372,8 +372,8 @@ endef
 
 else # !SYSTEM_ICU
 
-# icudata and icui18n is called icudt and icuin on Windows :-(
-ifeq ($(OS),WNT)
+# icudata and icui18n is called icudt and icuin when built with MSVC :-(
+ifeq ($(OS)$(COM),WNTMSC)
 $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
 	icudt \
 	icuin \
