@@ -345,43 +345,6 @@ inline void GlyphCache::RemovingGlyph( ServerFont& rSF, GlyphData& rGD, int nGly
     --mnGlyphCount;
 }
 
-// =======================================================================
-// ServerFont
-// =======================================================================
-
-ServerFont::ServerFont( const ImplFontSelectData& rFSD )
-:   maGlyphList( 0),
-    maFontSelData(rFSD),
-    mnExtInfo(0),
-    mnRefCount(1),
-    mnBytesUsed( sizeof(ServerFont) ),
-    mpPrevGCFont( NULL ),
-    mpNextGCFont( NULL ),
-    mnCos( 0x10000),
-    mnSin( 0 ),
-    mnZWJ( 0 ),
-    mnZWNJ( 0 ),
-    mbCollectedZW( false )
-{
-    // TODO: move update of mpFontEntry into FontEntry class when
-    // it becomes reponsible for the ServerFont instantiation
-    ((ImplServerFontEntry*)rFSD.mpFontEntry)->SetServerFont( this );
-
-    if( rFSD.mnOrientation != 0 )
-    {
-        const double dRad = rFSD.mnOrientation * ( F_2PI / 3600.0 );
-        mnCos = static_cast<long>( 0x10000 * cos( dRad ) + 0.5 );
-        mnSin = static_cast<long>( 0x10000 * sin( dRad ) + 0.5 );
-    }
-}
-
-// -----------------------------------------------------------------------
-
-ServerFont::~ServerFont()
-{
-    ReleaseFromGarbageCollect();
-}
-
 // -----------------------------------------------------------------------
 
 void ServerFont::ReleaseFromGarbageCollect()

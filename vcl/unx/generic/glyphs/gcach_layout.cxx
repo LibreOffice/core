@@ -653,7 +653,7 @@ bool IcuLayoutEngine::operator()( ServerFontLayout& rLayout, ImplLayoutArgs& rAr
 
 // =======================================================================
 
-ServerFontLayoutEngine* FreetypeServerFont::GetLayoutEngine()
+ServerFontLayoutEngine* ServerFont::GetLayoutEngine()
 {
     // find best layout engine for font, platform, script and language
 #ifdef ENABLE_ICU_LAYOUT

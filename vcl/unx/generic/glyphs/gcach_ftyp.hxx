@@ -164,7 +164,7 @@ public:
     void                AnnounceFonts( ImplDevFontList* ) const;
     void                ClearFontList();
 
-    FreetypeServerFont* CreateFont( const ImplFontSelectData& );
+    ServerFont* CreateFont( const ImplFontSelectData& );
 
 private:
     typedef ::boost::unordered_map<sal_IntPtr,FtFontInfo*> FontList;
@@ -172,80 +172,6 @@ private:
 
     sal_IntPtr          mnMaxFontId;
     sal_IntPtr          mnNextFontId;
-};
-
-// -----------------------------------------------------------------------
-
-class FreetypeServerFont : public ServerFont
-{
-public:
-                                FreetypeServerFont( const ImplFontSelectData&, FtFontInfo* );
-    virtual                     ~FreetypeServerFont();
-
-    virtual const ::rtl::OString* GetFontFileName() const { return mpFontInfo->GetFontFileName(); }
-    virtual int                 GetFontFaceNumber() const { return mpFontInfo->GetFaceNum(); }
-    virtual bool                TestFont() const;
-    virtual void*               GetFtFace() const;
-    virtual void                SetFontOptions( boost::shared_ptr<ImplFontOptions> );
-    virtual boost::shared_ptr<ImplFontOptions> GetFontOptions() const;
-    virtual int                 GetLoadFlags() const { return (mnLoadFlags & ~FT_LOAD_IGNORE_TRANSFORM); }
-    virtual bool                NeedsArtificialBold() const { return mbArtBold; }
-    virtual bool                NeedsArtificialItalic() const { return mbArtItalic; }
-
-    virtual void                FetchFontMetric( ImplFontMetricData&, long& rFactor ) const;
-    virtual const ImplFontCharMap* GetImplFontCharMap( void ) const;
-
-    virtual int                 GetGlyphIndex( sal_UCS4 ) const;
-    virtual int                 GetRawGlyphIndex( sal_UCS4 ) const;
-    virtual int                 FixupGlyphIndex( int nGlyphIndex, sal_UCS4 ) const;
-
-    virtual bool                GetAntialiasAdvice( void ) const;
-    virtual bool                GetGlyphBitmap1( int nGlyphIndex, RawBitmap& ) const;
-    virtual bool                GetGlyphBitmap8( int nGlyphIndex, RawBitmap& ) const;
-    virtual bool                GetGlyphOutline( int nGlyphIndex, ::basegfx::B2DPolyPolygon& ) const;
-    virtual int                 GetGlyphKernValue( int nLeftGlyph, int nRightGlyph ) const;
-    virtual sal_uLong           GetKernPairs( ImplKernPairData** ) const;
-
-    virtual const unsigned char* GetTable( const char* pName, sal_uLong* pLength )
-                                { return mpFontInfo->GetTable( pName, pLength ); }
-    virtual int                 GetEmUnits() const;
-    virtual const FT_Size_Metrics& GetMetricsFT() const { return maSizeFT->metrics; }
-#ifdef ENABLE_GRAPHITE
-    virtual GraphiteFaceWrapper* GetGraphiteFace() const { return mpFontInfo->GetGraphiteFace(); }
-#endif
-
-protected:
-    friend class GlyphCache;
-
-    int                         ApplyGlyphTransform( int nGlyphFlags, FT_GlyphRec_*, bool ) const;
-    virtual void                InitGlyphData( int nGlyphIndex, GlyphData& ) const;
-    virtual bool                GetFontCapabilities(vcl::FontCapabilities &) const;
-    bool                        ApplyGSUB( const ImplFontSelectData& );
-    virtual ServerFontLayoutEngine* GetLayoutEngine();
-
-private:
-    int                         mnWidth;
-    int                         mnPrioEmbedded;
-    int                         mnPrioAntiAlias;
-    int                         mnPrioAutoHint;
-    FtFontInfo*                 mpFontInfo;
-    FT_Int                      mnLoadFlags;
-    double                      mfStretch;
-    FT_FaceRec_*                maFaceFT;
-    FT_SizeRec_*                maSizeFT;
-
-    boost::shared_ptr<ImplFontOptions> mpFontOptions;
-
-    bool                        mbFaceOk;
-    bool            mbArtItalic;
-    bool            mbArtBold;
-    bool            mbUseGamma;
-
-    typedef ::boost::unordered_map<int,int> GlyphSubstitution;
-    GlyphSubstitution           maGlyphSubstitution;
-    rtl_UnicodeToTextConverter  maRecodeConverter;
-
-    ServerFontLayoutEngine*     mpLayoutEngine;
 };
 
 // -----------------------------------------------------------------------

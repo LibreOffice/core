@@ -577,7 +577,7 @@ FreetypeManager::FreetypeManager()
 
 // -----------------------------------------------------------------------
 
-void* FreetypeServerFont::GetFtFace() const
+void* ServerFont::GetFtFace() const
 {
     if( maSizeFT )
         pFTActivateSize( maSizeFT );
@@ -640,7 +640,7 @@ void FreetypeManager::ClearFontList( )
 
 // -----------------------------------------------------------------------
 
-FreetypeServerFont* FreetypeManager::CreateFont( const ImplFontSelectData& rFSD )
+ServerFont* FreetypeManager::CreateFont( const ImplFontSelectData& rFSD )
 {
     FtFontInfo* pFontInfo = NULL;
 
@@ -653,7 +653,7 @@ FreetypeServerFont* FreetypeManager::CreateFont( const ImplFontSelectData& rFSD 
     if( !pFontInfo )
         return NULL;
 
-    FreetypeServerFont* pNew = new FreetypeServerFont( rFSD, pFontInfo );
+    ServerFont* pNew = new ServerFont( rFSD, pFontInfo );
 
     return pNew;
 }
@@ -677,11 +677,22 @@ ImplFontEntry* ImplFTSFontData::CreateFontInstance( ImplFontSelectData& rFSD ) c
 }
 
 // =======================================================================
-// FreetypeServerFont
+// ServerFont
 // =======================================================================
 
-FreetypeServerFont::FreetypeServerFont( const ImplFontSelectData& rFSD, FtFontInfo* pFI )
-:   ServerFont( rFSD ),
+ServerFont::ServerFont( const ImplFontSelectData& rFSD, FtFontInfo* pFI )
+:   maGlyphList( 0),
+    maFontSelData(rFSD),
+    mnExtInfo(0),
+    mnRefCount(1),
+    mnBytesUsed( sizeof(ServerFont) ),
+    mpPrevGCFont( NULL ),
+    mpNextGCFont( NULL ),
+    mnCos( 0x10000),
+    mnSin( 0 ),
+    mnZWJ( 0 ),
+    mnZWNJ( 0 ),
+    mbCollectedZW( false ),
     mnPrioEmbedded(nDefaultPrioEmbedded),
     mnPrioAntiAlias(nDefaultPrioAntiAlias),
     mnPrioAutoHint(nDefaultPrioAutoHint),
@@ -692,6 +703,17 @@ FreetypeServerFont::FreetypeServerFont( const ImplFontSelectData& rFSD, FtFontIn
     maRecodeConverter( NULL ),
     mpLayoutEngine( NULL )
 {
+    // TODO: move update of mpFontEntry into FontEntry class when
+    // it becomes reponsible for the ServerFont instantiation
+    ((ImplServerFontEntry*)rFSD.mpFontEntry)->SetServerFont( this );
+
+    if( rFSD.mnOrientation != 0 )
+    {
+        const double dRad = rFSD.mnOrientation * ( F_2PI / 3600.0 );
+        mnCos = static_cast<long>( 0x10000 * cos( dRad ) + 0.5 );
+        mnSin = static_cast<long>( 0x10000 * sin( dRad ) + 0.5 );
+    }
+
     maFaceFT = pFI->GetFaceFT();
 
     if( !maFaceFT )
@@ -833,7 +855,7 @@ FreetypeServerFont::FreetypeServerFont( const ImplFontSelectData& rFSD, FtFontIn
         mnLoadFlags |= FT_LOAD_NO_BITMAP;
 }
 
-void FreetypeServerFont::SetFontOptions( boost::shared_ptr<ImplFontOptions> pFontOptions)
+void ServerFont::SetFontOptions( boost::shared_ptr<ImplFontOptions> pFontOptions)
 {
     mpFontOptions = pFontOptions;
 
@@ -888,21 +910,21 @@ void FreetypeServerFont::SetFontOptions( boost::shared_ptr<ImplFontOptions> pFon
         mnLoadFlags |= FT_LOAD_NO_BITMAP;
 }
 
-boost::shared_ptr<ImplFontOptions> FreetypeServerFont::GetFontOptions() const
+boost::shared_ptr<ImplFontOptions> ServerFont::GetFontOptions() const
 {
     return mpFontOptions;
 }
 
 // -----------------------------------------------------------------------
 
-bool FreetypeServerFont::TestFont() const
+bool ServerFont::TestFont() const
 {
     return mbFaceOk;
 }
 
 // -----------------------------------------------------------------------
 
-FreetypeServerFont::~FreetypeServerFont()
+ServerFont::~ServerFont()
 {
     if( mpLayoutEngine )
         delete mpLayoutEngine;
@@ -914,18 +936,20 @@ FreetypeServerFont::~FreetypeServerFont()
         pFTDoneSize( maSizeFT );
 
     mpFontInfo->ReleaseFaceFT( maFaceFT );
+
+    ReleaseFromGarbageCollect();
 }
 
  // -----------------------------------------------------------------------
 
-int FreetypeServerFont::GetEmUnits() const
+int ServerFont::GetEmUnits() const
 {
     return maFaceFT->units_per_EM;
 }
 
 // -----------------------------------------------------------------------
 
-void FreetypeServerFont::FetchFontMetric( ImplFontMetricData& rTo, long& rFactor ) const
+void ServerFont::FetchFontMetric( ImplFontMetricData& rTo, long& rFactor ) const
 {
     static_cast<ImplFontAttributes&>(rTo) = mpFontInfo->GetFontAttributes();
 
@@ -1059,7 +1083,7 @@ void FreetypeServerFont::FetchFontMetric( ImplFontMetricData& rTo, long& rFactor
 
 // -----------------------------------------------------------------------
 
-static inline void SplitGlyphFlags( const FreetypeServerFont& rFont, int& nGlyphIndex, int& nGlyphFlags )
+static inline void SplitGlyphFlags( const ServerFont& rFont, int& nGlyphIndex, int& nGlyphFlags )
 {
     nGlyphFlags = nGlyphIndex & GF_FLAGMASK;
     nGlyphIndex &= GF_IDXMASK;
@@ -1070,7 +1094,7 @@ static inline void SplitGlyphFlags( const FreetypeServerFont& rFont, int& nGlyph
 
 // -----------------------------------------------------------------------
 
-int FreetypeServerFont::ApplyGlyphTransform( int nGlyphFlags,
+int ServerFont::ApplyGlyphTransform( int nGlyphFlags,
     FT_Glyph pGlyphFT, bool bForBitmapProcessing ) const
 {
     int nAngle = GetFontSelData().mnOrientation;
@@ -1153,7 +1177,7 @@ int FreetypeServerFont::ApplyGlyphTransform( int nGlyphFlags,
 
 // -----------------------------------------------------------------------
 
-int FreetypeServerFont::GetRawGlyphIndex( sal_UCS4 aChar ) const
+int ServerFont::GetRawGlyphIndex( sal_UCS4 aChar ) const
 {
     if( mpFontInfo->IsSymbolFont() )
     {
@@ -1211,7 +1235,7 @@ int FreetypeServerFont::GetRawGlyphIndex( sal_UCS4 aChar ) const
 
 // -----------------------------------------------------------------------
 
-int FreetypeServerFont::FixupGlyphIndex( int nGlyphIndex, sal_UCS4 aChar ) const
+int ServerFont::FixupGlyphIndex( int nGlyphIndex, sal_UCS4 aChar ) const
 {
     int nGlyphFlags = GF_NONE;
 
@@ -1248,7 +1272,7 @@ int FreetypeServerFont::FixupGlyphIndex( int nGlyphIndex, sal_UCS4 aChar ) const
 
 // -----------------------------------------------------------------------
 
-int FreetypeServerFont::GetGlyphIndex( sal_UCS4 aChar ) const
+int ServerFont::GetGlyphIndex( sal_UCS4 aChar ) const
 {
     int nGlyphIndex = GetRawGlyphIndex( aChar );
     nGlyphIndex = FixupGlyphIndex( nGlyphIndex, aChar );
@@ -1276,7 +1300,7 @@ static int lcl_GetCharWidth( FT_FaceRec_* pFaceFT, double fStretch, int nGlyphFl
 
 // -----------------------------------------------------------------------
 
-void FreetypeServerFont::InitGlyphData( int nGlyphIndex, GlyphData& rGD ) const
+void ServerFont::InitGlyphData( int nGlyphIndex, GlyphData& rGD ) const
 {
     if( maSizeFT )
         pFTActivateSize( maSizeFT );
@@ -1345,7 +1369,7 @@ void FreetypeServerFont::InitGlyphData( int nGlyphIndex, GlyphData& rGD ) const
 
 // -----------------------------------------------------------------------
 
-bool FreetypeServerFont::GetAntialiasAdvice( void ) const
+bool ServerFont::GetAntialiasAdvice( void ) const
 {
     if( GetFontSelData().mbNonAntialiased || (mnPrioAntiAlias<=0) )
         return false;
@@ -1356,7 +1380,7 @@ bool FreetypeServerFont::GetAntialiasAdvice( void ) const
 
 // -----------------------------------------------------------------------
 
-bool FreetypeServerFont::GetGlyphBitmap1( int nGlyphIndex, RawBitmap& rRawBitmap ) const
+bool ServerFont::GetGlyphBitmap1( int nGlyphIndex, RawBitmap& rRawBitmap ) const
 {
     if( maSizeFT )
         pFTActivateSize( maSizeFT );
@@ -1530,7 +1554,7 @@ bool FreetypeServerFont::GetGlyphBitmap1( int nGlyphIndex, RawBitmap& rRawBitmap
 
 // -----------------------------------------------------------------------
 
-bool FreetypeServerFont::GetGlyphBitmap8( int nGlyphIndex, RawBitmap& rRawBitmap ) const
+bool ServerFont::GetGlyphBitmap8( int nGlyphIndex, RawBitmap& rRawBitmap ) const
 {
     if( maSizeFT )
         pFTActivateSize( maSizeFT );
@@ -1710,7 +1734,7 @@ bool FreetypeServerFont::GetGlyphBitmap8( int nGlyphIndex, RawBitmap& rRawBitmap
 // determine unicode ranges in font
 // -----------------------------------------------------------------------
 
-const ImplFontCharMap* FreetypeServerFont::GetImplFontCharMap( void ) const
+const ImplFontCharMap* ServerFont::GetImplFontCharMap( void ) const
 {
     const ImplFontCharMap* pIFCMap = mpFontInfo->GetImplFontCharMap();
     return pIFCMap;
@@ -1783,7 +1807,7 @@ bool FtFontInfo::GetFontCodeRanges( CmapResult& rResult ) const
     return true;
 }
 
-bool FreetypeServerFont::GetFontCapabilities(vcl::FontCapabilities &rFontCapabilities) const
+bool ServerFont::GetFontCapabilities(vcl::FontCapabilities &rFontCapabilities) const
 {
     bool bRet = false;
 
@@ -1810,7 +1834,7 @@ bool FreetypeServerFont::GetFontCapabilities(vcl::FontCapabilities &rFontCapabil
 // kerning stuff
 // -----------------------------------------------------------------------
 
-int FreetypeServerFont::GetGlyphKernValue( int nGlyphLeft, int nGlyphRight ) const
+int ServerFont::GetGlyphKernValue( int nGlyphLeft, int nGlyphRight ) const
 {
     // if no kerning info is available from Freetype
     // then we may have to use extra info provided by e.g. psprint
@@ -1840,7 +1864,7 @@ int FreetypeServerFont::GetGlyphKernValue( int nGlyphLeft, int nGlyphRight ) con
 
 // -----------------------------------------------------------------------
 
-sal_uLong FreetypeServerFont::GetKernPairs( ImplKernPairData** ppKernPairs ) const
+sal_uLong ServerFont::GetKernPairs( ImplKernPairData** ppKernPairs ) const
 {
     // if no kerning info is available in the font file
     *ppKernPairs = NULL;
@@ -2260,7 +2284,7 @@ static int FT_cubic_to( FT_Vector_CPtr p1, FT_Vector_CPtr p2, FT_Vector_CPtr p3,
 
 // -----------------------------------------------------------------------
 
-bool FreetypeServerFont::GetGlyphOutline( int nGlyphIndex,
+bool ServerFont::GetGlyphOutline( int nGlyphIndex,
     ::basegfx::B2DPolyPolygon& rB2DPolyPoly ) const
 {
     if( maSizeFT )
@@ -2336,7 +2360,7 @@ bool FreetypeServerFont::GetGlyphOutline( int nGlyphIndex,
 
 // -----------------------------------------------------------------------
 
-bool FreetypeServerFont::ApplyGSUB( const ImplFontSelectData& rFSD )
+bool ServerFont::ApplyGSUB( const ImplFontSelectData& rFSD )
 {
 #define MKTAG(s) ((((((s[0]<<8)+s[1])<<8)+s[2])<<8)+s[3])
 
@@ -2579,6 +2603,18 @@ bool FreetypeServerFont::ApplyGSUB( const ImplFontSelectData& rFSD )
 
     return true;
 }
+
+const unsigned char* ServerFont::GetTable(const char* pName, sal_uLong* pLength)
+{
+    return mpFontInfo->GetTable( pName, pLength );
+}
+
+#ifdef ENABLE_GRAPHITE
+GraphiteFaceWrapper* ServerFont::GetGraphiteFace() const
+{
+    return mpFontInfo->GetGraphiteFace();
+}
+#endif
 
 // =======================================================================
 
