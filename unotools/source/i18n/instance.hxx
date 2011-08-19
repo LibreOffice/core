@@ -25,7 +25,7 @@
  * instead of those above.
  */
 #ifndef _INTL_INSTANCE_HXX
-#define INTL_INSTANCE_HXX
+#define _INTL_INSTANCE_HXX
 
 #include <comphelper/processfactory.hxx>
 #include <comphelper/componentfactory.hxx>
