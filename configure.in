@@ -1538,6 +1538,12 @@ cygwin*|interix*|mingw32*)
 
     mingw32*)
         WITH_MINGW=yes
+        if test -z "$CC" ; then
+            CC="$host_cpu-$host_vendor-$host_os-gcc"
+        fi
+        if test -z "$CXX" ; then
+            CXX="$host_cpu-$host_vendor-$host_os-g++"
+        fi
         ;;
     esac
     ;;
@@ -4696,7 +4702,11 @@ if test $enable_python != no; then
     BUILD_TYPE="$BUILD_TYPE PYUNO"
 fi
 
-if test "$cross_compiling" != yes; then
+if test "$cross_compiling" = yes; then
+    if test $enable_python = auto; then
+        enable_python=system
+    fi
+else
     if test $enable_python = system; then
         dnl This causes an error if no Python found
         AM_PATH_PYTHON([2.6])

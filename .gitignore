@@ -55,6 +55,7 @@
 /ooo.lst
 
 # misc
+/cross-build-toolset.built
 /set_soenv.last
 /set_soenv.stamp
 /warn
