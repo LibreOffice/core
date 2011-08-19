@@ -3727,7 +3727,3 @@ writerfilter::ooxmltest::ScannerTestService_supportsService(rtl::OUString const&
 writerfilter::resourcemodel::Fraction::Fraction(writerfilter::resourcemodel::Fraction const&, writerfilter::resourcemodel::Fraction const&)
 ww8::WW8TableNodeInfo::getTable() const
 ww8::WW8TableNodeInfo::toString() const
-xmloff::OControlStyleContext::OControlStyleContext(SvXMLImport&, unsigned short, rtl::OUString const&, com::sun::star::uno::Reference<com::sun::star::xml::sax::XAttributeList> const&, SvXMLStylesContext&, unsigned short, unsigned char)
-xmloff::OFormLayerXMLExport::exportControlNumberStyles()
-xmloff::OFormLayerXMLExport::initialize()
-xmloff::OFormLayerXMLImport::seekPage(com::sun::star::uno::Reference<com::sun::star::drawing::XDrawPage> const&)

@@ -176,7 +176,6 @@ $(eval $(call gb_Library_add_exception_objects,xo,\
     xmloff/source/forms/formlayerexport \
     xmloff/source/forms/formlayerimport \
     xmloff/source/forms/formsimp \
-    xmloff/source/forms/formstyles \
     xmloff/source/forms/gridcolumnproptranslator \
     xmloff/source/forms/layerexport \
     xmloff/source/forms/layerimport \

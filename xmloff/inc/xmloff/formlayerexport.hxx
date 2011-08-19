@@ -72,15 +72,6 @@ namespace xmloff
     public:
         OFormLayerXMLExport(SvXMLExport& _rContext);
 
-        /** initial the object
-
-            <p>To be called if you want to reuse the same object for exportin different documents.</p>
-
-            <p>You don't need to call this if you just constructed the object, in this case it is already
-            initialized..</p>
-        */
-        void initialize();
-
         /** initializes some internal structures for fast access to the given page
 
             <p>This method has to be called before you use getControlId for controls on the given page.
@@ -165,10 +156,6 @@ namespace xmloff
         /** determines whether the given page contains XForm instances
         */
         bool documentContainsXForms() const;
-
-        /** exports the controls number styles
-        */
-        void exportControlNumberStyles();
 
         /** exports the automatic controls number styles
         */

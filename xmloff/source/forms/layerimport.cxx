@@ -33,7 +33,6 @@
 #include "elementimport.hxx"
 #include "officeforms.hxx"
 #include "strings.hxx"
-#include "formstyles.hxx"
 #include <xmloff/xmlictxt.hxx>
 #include <xmloff/xmlstyle.hxx>
 #include <xmloff/families.hxx>

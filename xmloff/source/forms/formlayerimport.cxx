@@ -67,12 +67,6 @@ namespace xmloff
     }
 
     //---------------------------------------------------------------------
-    void OFormLayerXMLImport::seekPage(const Reference< XDrawPage >& _rxDrawPage)
-    {
-        m_pImpl->seekPage(_rxDrawPage);
-    }
-
-    //---------------------------------------------------------------------
     void OFormLayerXMLImport::startPage(const Reference< XDrawPage >& _rxDrawPage)
     {
         m_pImpl->startPage(_rxDrawPage);
