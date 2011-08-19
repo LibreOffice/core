@@ -3505,21 +3505,22 @@ sal_Bool SwTrnsfrDdeLink::WriteData( SvStream& rStrm )
         return sal_False;
 
     rtl_TextEncoding eEncoding = DDE_TXT_ENCODING;
-    const ByteString aAppNm( GetpApp()->GetAppName(), eEncoding );
-    const ByteString aTopic( pDocShell->GetTitle( SFX_TITLE_FULLNAME ),
-                            eEncoding );
-    const ByteString aName( sName, eEncoding );
+    const rtl::OString aAppNm(rtl::OUStringToOString(
+        GetpApp()->GetAppName(), eEncoding));
+    const rtl::OString aTopic(rtl::OUStringToOString(
+        pDocShell->GetTitle(SFX_TITLE_FULLNAME), eEncoding));
+    const rtl::OString aName(rtl::OUStringToOString(sName, eEncoding));
 
-    sal_Char* pMem = new char[ aAppNm.Len() + aTopic.Len() + aName.Len() + 4 ];
+    sal_Char* pMem = new sal_Char[ aAppNm.getLength() + aTopic.getLength() + aName.getLength() + 4 ];
 
-    xub_StrLen nLen = aAppNm.Len();
-    memcpy( pMem, aAppNm.GetBuffer(), nLen );
+    sal_Int32 nLen = aAppNm.getLength();
+    memcpy( pMem, aAppNm.getStr(), nLen );
     pMem[ nLen++ ] = 0;
-    memcpy( pMem + nLen, aTopic.GetBuffer(), aTopic.Len() );
-    nLen = nLen + aTopic.Len();
+    memcpy( pMem + nLen, aTopic.getStr(), aTopic.getLength() );
+    nLen = nLen + aTopic.getLength();
     pMem[ nLen++ ] = 0;
-    memcpy( pMem + nLen, aName.GetBuffer(), aName.Len() );
-    nLen = nLen + aName.Len();
+    memcpy( pMem + nLen, aName.getStr(), aName.getLength() );
+    nLen = nLen + aName.getLength();
     pMem[ nLen++ ] = 0;
     pMem[ nLen++ ] = 0;
 
