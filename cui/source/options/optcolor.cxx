@@ -485,7 +485,7 @@ sal_Int16 lcl_getGroup( sal_Int32 _nFeature )
 ColorConfigWindow_Impl::ColorConfigWindow_Impl(Window* pParent, const ResId& rResId) :
         Window(pParent, rResId),
         aGeneralBackWN(this),
-        aGeneralFT(&aGeneralBackWN,  ResId( FT_GENERAL, *rResId.GetResMgr() )),
+        aGeneralFT(this,  ResId( FT_GENERAL, *rResId.GetResMgr() )),
         aDocColorFT(this, ResId(        FT_DOCCOLOR, *rResId.GetResMgr())),
         aDocColorLB(this, ResId(        LB_DOCCOLOR, *rResId.GetResMgr())),
         aDocColorWN(this, ResId(        WN_DOCCOLOR, *rResId.GetResMgr())),
@@ -870,8 +870,11 @@ ColorConfigWindow_Impl::ColorConfigWindow_Impl(Window* pParent, const ResId& rRe
             Font aFont = aChapters[i]->GetFont();
             aFont.SetWeight(WEIGHT_BOLD);
             aChapters[i]->SetFont(aFont);
-            aChapters[i]->SetBackground(aTransparentWall);
-            aChapterWins[i]->SetPosSizePixel( Point(0, aChapters[i]->GetPosPixel().Y()),
+            aChapters[i]->SetBackground(Wallpaper(aBackColor));
+
+            long x = aChapters[i]->GetPosPixel().X() + aChapters[i]->GetSizePixel().Width();
+
+            aChapterWins[i]->SetPosSizePixel( Point(x, aChapters[i]->GetPosPixel().Y() ),
                                 Size(nWinWidth, nFTHeight));
             aChapterWins[i]->SetBackground(Wallpaper(aBackColor));
             aChapterWins[i]->Show();
