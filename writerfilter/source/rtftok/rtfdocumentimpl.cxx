@@ -1299,7 +1299,8 @@ int RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
                 // but don't emit properties yet, since they may change till the first text token arrives
                 m_bNeedPap = true;
                 m_bWasInFrame = inFrame();
-                m_bNeedPar = false;
+                if (!m_bWasInFrame)
+                    m_bNeedPar = false;
             }
             break;
         case RTF_SECT:
