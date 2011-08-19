@@ -2639,6 +2639,8 @@ connectivity::odbc::ODatabaseMetaDataResultSet::openTablesTypes()
 connectivity::odbc::OPreparedStatement::getDataBuf(int)
 connectivity::odbc::OPreparedStatement::getParamLength(int)
 connectivity::odbc::OPreparedStatement::getPrecision(int)
+connectivity::sdbcx::OGroup::OGroup(rtl::OUString const&, unsigned char)
+connectivity::sdbcx::OGroup::OGroup(unsigned char)
 connectivity::toString(com::sun::star::uno::Any const&)
 cppcanvas::BaseGfxFactory::createPolyPolygon(boost::shared_ptr<cppcanvas::Canvas> const&, basegfx::B2DPolyPolygon const&) const
 cppcanvas::BaseGfxFactory::createText(boost::shared_ptr<cppcanvas::Canvas> const&, rtl::OUString const&) const

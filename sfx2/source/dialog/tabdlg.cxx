@@ -1017,13 +1017,6 @@ SfxTabPage* SfxTabDialog::GetTabPage( sal_uInt16 nPageId ) const
 
 // -----------------------------------------------------------------------
 
-sal_Bool SfxTabDialog::IsInOK() const
-{
-    return pImpl->bInOK;
-}
-
-// -----------------------------------------------------------------------
-
 short SfxTabDialog::Ok()
 
 /*  [Description]
