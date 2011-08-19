@@ -152,7 +152,7 @@ String sCloseButton
 
 String sWelcometextLabel1
 {
-    Text [ en-US ] = "This wizard converts documents in StarOffice format and Microsoft Office documents to the new OpenDocument format.";
+    Text [ en-US ] = "This wizard convert legacy format documents to Open Document Format for Office Applications.";
 };
 
 String sWelcometextLabel2
