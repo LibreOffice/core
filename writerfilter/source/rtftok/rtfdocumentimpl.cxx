@@ -1960,6 +1960,7 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
     }
     if (pSprm)
     {
+        m_bNeedPap = true;
         *pSprm = TWIP_TO_MM100(nParam);
         return 0;
     }
