@@ -42,7 +42,7 @@ Sub Main()
 	RepaintHeaderPreview()
 	ImportDialog.ImportPreview.BackGroundColor = RGB(0,60,126)	
 	ImportDialog.cmdGoOn.DefaultButton = True
-	ImportDialogArea.GetControl(&quot;optSODocuments&quot;).SetFocus()
+	ImportDialogArea.GetControl(&quot;optMSDocuments&quot;).SetFocus()
 	ToggleCheckboxesWithBoolean(False)
 	RetValue = ImportDialogArea.Execute()
 	If bShowLogFile=TRUE Then 
