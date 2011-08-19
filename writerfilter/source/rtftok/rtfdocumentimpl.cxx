@@ -1032,6 +1032,7 @@ int RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
             m_aStates.top().nDestinationState = DESTINATION_LEVELNUMBERS;
             break;
         case RTF_SHPPICT:
+            m_aStates.top().aFrame = RTFFrame();
             m_aStates.top().nDestinationState = DESTINATION_SHPPICT;
             break;
         case RTF_PICT:
@@ -2992,7 +2993,8 @@ int RTFDocumentImpl::popState()
         aSprms = m_aStates.top().aTableSprms;
         bFaltEnd = true;
     }
-    else if (m_aStates.top().nDestinationState == DESTINATION_FLYMAINCONTENT)
+    else if (m_aStates.top().nDestinationState == DESTINATION_FLYMAINCONTENT
+            || m_aStates.top().nDestinationState == DESTINATION_SHPPICT)
     {
         aFrame = m_aStates.top().aFrame;
         bPopFrame = true;
