@@ -510,8 +510,8 @@ $(call gb_Library_get_clean_target,$(1)) : $(call gb_WinResTarget_get_clean_targ
 endef
 
 define gb_Library_add_nativeres
-$(call gb_LinkTarget_get_target,$(call gb_Library__get_linktargetname,$(1))) : $(call gb_WinResTarget_get_target,$(1)/$(2))
-$(call gb_LinkTarget_get_target,$(call gb_Library__get_linktargetname,$(1))) : NATIVERES += $(call gb_WinResTarget_get_target,$(1)/$(2))
+$(call gb_LinkTarget_get_target,$(call gb_Library_get_linktargetname,$(1))) : $(call gb_WinResTarget_get_target,$(1)/$(2))
+$(call gb_LinkTarget_get_target,$(call gb_Library_get_linktargetname,$(1))) : NATIVERES += $(call gb_WinResTarget_get_target,$(1)/$(2))
 
 endef
 
