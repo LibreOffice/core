@@ -68,13 +68,13 @@ const char* aColorLBHids[] =
      HID_COLORPAGE_FONTCOLOR_LB,
      HID_COLORPAGE_LINKS_LB,
      HID_COLORPAGE_LINKSVISITED_LB,
-     HID_COLORPAGE_ANCHOR_LB,
      HID_COLORPAGE_SPELL_LB,
+     HID_COLORPAGE_SMARTTAGS_LB,
+     HID_COLORPAGE_SHADOWCOLOR_LB,
      HID_COLORPAGE_WRITERTEXTGRID_LB,
      HID_COLORPAGE_WRITERFIELDSHADINGS_LB,
      HID_COLORPAGE_WRITERIDXSHADINGS_LB,
      HID_COLORPAGE_WRITERDIRECTCURSOR_LB,
-     HID_COLORPAGE_WRITERNOTESINDICATOR_LB,
      HID_COLORPAGE_WRITERSCRIPTINDICATOR_LB,
      HID_COLORPAGE_WRITERSECTIONBOUNDARIES_LB,
      HID_COLORPAGE_WRITERHEADERFOOTERMARK_LB,
@@ -92,15 +92,20 @@ const char* aColorLBHids[] =
      HID_COLORPAGE_CALCREFERENCE_LB,
      HID_COLORPAGE_CALCNOTESBACKGROUND_LB,
      HID_COLORPAGE_DRAWGRID_LB,
-     HID_COLORPAGE_DRAWDRAWING_LB,
-     HID_COLORPAGE_DRAWFILL_LB,
      HID_COLORPAGE_BASICIDENTIFIER_LB,
      HID_COLORPAGE_BASICCOMMENT_LB,
      HID_COLORPAGE_BASICNUMBER_LB,
      HID_COLORPAGE_BASICSTRING_LB,
      HID_COLORPAGE_BASICOPERATOR_LB,
      HID_COLORPAGE_BASICKEYWORD_LB,
-     HID_COLORPAGE_BASICERROR_LB
+     HID_COLORPAGE_BASICERROR_LB,
+     HID_COLORPAGE_SQLIDENTIFIER_LB,
+     HID_COLORPAGE_SQLNUMBER_LB,
+     HID_COLORPAGE_SQLSTRING_LB,
+     HID_COLORPAGE_SQLOPERATOR_LB,
+     HID_COLORPAGE_SQLKEYWORD_LB,
+     HID_COLORPAGE_SQLPARAMETER_LB,
+     HID_COLORPAGE_SQLCOMMENT_LB
 };
 
 const char* aColorCBHids[] =
@@ -113,13 +118,13 @@ const char* aColorCBHids[] =
      HID_COLORPAGE_FONTCOLOR_CB,
      HID_COLORPAGE_LINKS_CB,
      HID_COLORPAGE_LINKSVISITED_CB,
-     HID_COLORPAGE_ANCHOR_CB,
      HID_COLORPAGE_SPELL_CB,
+     HID_COLORPAGE_SMARTTAGS_CB,
+     HID_COLORPAGE_SHADOWCOLOR_CB,
      HID_COLORPAGE_WRITERTEXTGRID_CB,
      HID_COLORPAGE_WRITERFIELDSHADINGS_CB,
      HID_COLORPAGE_WRITERIDXSHADINGS_CB,
      HID_COLORPAGE_WRITERDIRECTCURSOR_CB,
-     HID_COLORPAGE_WRITERNOTESINDICATOR_CB,
      HID_COLORPAGE_WRITERSCRIPTINDICATOR_CB,
      HID_COLORPAGE_WRITERSECTIONBOUNDARIES_CB,
      HID_COLORPAGE_WRITERHEADERFOOTERMARK_CB,
@@ -137,15 +142,20 @@ const char* aColorCBHids[] =
      HID_COLORPAGE_CALCREFERENCE_CB,
      HID_COLORPAGE_CALCNOTESBACKGROUND_CB,
      HID_COLORPAGE_DRAWGRID_CB,
-     HID_COLORPAGE_DRAWDRAWING_CB,
-     HID_COLORPAGE_DRAWFILL_CB,
      HID_COLORPAGE_BASICIDENTIFIER_CB,
      HID_COLORPAGE_BASICCOMMENT_CB,
      HID_COLORPAGE_BASICNUMBER_CB,
      HID_COLORPAGE_BASICSTRING_CB,
      HID_COLORPAGE_BASICOPERATOR_CB,
      HID_COLORPAGE_BASICKEYWORD_CB,
-     HID_COLORPAGE_BASICERROR_CB
+     HID_COLORPAGE_BASICERROR_CB,
+     HID_COLORPAGE_SQLIDENTIFIER_CB,
+     HID_COLORPAGE_SQLNUMBER_CB,
+     HID_COLORPAGE_SQLSTRING_CB,
+     HID_COLORPAGE_SQLOPERATOR_CB,
+     HID_COLORPAGE_SQLKEYWORD_CB,
+     HID_COLORPAGE_SQLPARAMETER_CB,
+     HID_COLORPAGE_SQLCOMMENT_CB
 };
 
 class SvxExtFixedText_Impl : public FixedText
@@ -398,7 +408,6 @@ sal_Int16 lcl_getGroup( sal_Int32 _nFeature )
         case FONTCOLOR :
         case LINKS :
         case LINKSVISITED :
-        case ANCHOR :
         case SPELL :
         case SMARTTAGS :
         case SHADOWCOLOR :
@@ -414,6 +423,7 @@ sal_Int16 lcl_getGroup( sal_Int32 _nFeature )
         case WRITERSCRIPTINDICATOR :
         case WRITERSECTIONBOUNDARIES :
         case WRITERPAGEBREAKS :
+        case WRITERHEADERFOOTERMARK:
         {
             nRet = GROUP_WRITER;
             break;
@@ -442,10 +452,7 @@ sal_Int16 lcl_getGroup( sal_Int32 _nFeature )
         }
 
         case DRAWGRID :
-        case DRAWDRAWING :
-        case DRAWFILL :
         {
-            nRet = GROUP_DRAW;
             break;
         }
 
@@ -706,8 +713,8 @@ ColorConfigWindow_Impl::ColorConfigWindow_Impl(Window* pParent, const ResId& rRe
     aColorBoxes[WRITERDIRECTCURSOR  ] = &aWrtDirectCrsrLB           ;
     aColorBoxes[WRITERSCRIPTINDICATOR    ] = &aWrtScriptIndicatorLB           ;
     aColorBoxes[WRITERSECTIONBOUNDARIES  ] = &aWrtSectionBoundLB           ;
-    aColorBoxes[WRITERPAGEBREAKS] = &aWrtPageBreaksLB;
     aColorBoxes[WRITERHEADERFOOTERMARK] = &aWrtHeaderFooterMarkLB;
+    aColorBoxes[WRITERPAGEBREAKS] = &aWrtPageBreaksLB;
     aColorBoxes[HTMLSGML            ] = &aHTMLSGMLLB             ;
     aColorBoxes[HTMLCOMMENT         ] = &aHTMLCommentLB          ;
     aColorBoxes[HTMLKEYWORD         ] = &aHTMLKeywdLB            ;
@@ -892,8 +899,6 @@ ColorConfigWindow_Impl::ColorConfigWindow_Impl(Window* pParent, const ResId& rRe
     sal_Int16 nGroup = GROUP_UNKNOWN;
     for( sal_Int32 i = 0; i < nCount; i++ )
     {
-        if(ANCHOR == i)
-            continue;
         sal_Int16 nNewGroup = lcl_getGroup(i);
         sal_Bool bShow = lcl_isGroupVisible( nNewGroup, m_aModuleOptions );
 
@@ -954,7 +959,7 @@ ColorConfigWindow_Impl::ColorConfigWindow_Impl(Window* pParent, const ResId& rRe
 
     aColorBoxes[0]->SetHelpId( aColorLBHids[0] );
 
-    OSL_ENSURE( nCount < sal_Int32(sizeof(aColorLBHids)/sizeof(aColorLBHids[0])), "too few helpIDs for color listboxes" );
+    OSL_ENSURE( nCount <= sal_Int32(sizeof(aColorLBHids)/sizeof(aColorLBHids[0])), "too few helpIDs for color listboxes" );
     for( sal_Int32 i = 1; i < nCount; i++ )
     {
         if(aColorBoxes[i])
@@ -1139,16 +1144,13 @@ ColorConfigCtrl_Impl::ColorConfigCtrl_Impl(
     sal_Int32 nVisibleEntries = aScrollWindow.GetSizePixel().Height() / nScrollOffset;
 
     aVScroll.SetRangeMax(aScrollWindow.aCheckBoxes.size() + aScrollWindow.aChapters.size() );
-    // static: minus three for ANCHOR, DRAWFILL and DRAWDRAWING
-    aVScroll.SetRangeMax( aVScroll.GetRangeMax() - 3 );
+    aVScroll.SetRangeMax( aVScroll.GetRangeMax() );
     // dynamic: calculate the hidden lines
     long nInvisibleLines = 0;
     sal_Int16 nGroup = GROUP_UNKNOWN;
     sal_Int32 nCount = aScrollWindow.aCheckBoxes.size();
     for ( sal_Int32 i = 0; i < nCount; i++ )
     {
-        if ( ANCHOR == i || DRAWFILL == i || DRAWDRAWING == i ) // not used at the moment
-            continue;
         sal_Int16 nNewGroup = lcl_getGroup(i);
         sal_Bool bVisible = lcl_isGroupVisible( nNewGroup, aScrollWindow.GetModuleOptions() );
         if ( !bVisible )
@@ -1196,8 +1198,6 @@ void ColorConfigCtrl_Impl::Update()
     sal_Int32 i;
     for( i = 0; i < ColorConfigEntryCount; i++ )
     {
-        if(ANCHOR == i)
-            continue;
         const ColorConfigValue& rColorEntry = pColorConfig->GetColorValue(ColorConfigEntry(i));
         if(COL_AUTO == (sal_uInt32)rColorEntry.nColor)
         {
@@ -1282,8 +1282,6 @@ IMPL_LINK(ColorConfigCtrl_Impl, ScrollHdl, ScrollBar*, pScrollBar)
     sal_Int32 nCount = aScrollWindow.aFixedTexts.size();
     for( i = 0; i < nCount; i++ )
     {
-        if(ANCHOR == i)
-            continue;
         Point aPos;
         //controls outside of the view need to be hidden to speed up accessibility tools
         sal_Bool bShowCtrl = ( lcl_isGroupVisible(
@@ -1404,8 +1402,6 @@ IMPL_LINK(ColorConfigCtrl_Impl, ClickHdl, CheckBox*, pBox)
 
     for( sal_Int32 i = 0; i < ColorConfigEntryCount; i++ )
     {
-        if(ANCHOR == i)
-            continue;
         if(aScrollWindow.aCheckBoxes[i] == pBox )
         {
             ColorConfigValue aBoundCol = pColorConfig->GetColorValue(ColorConfigEntry(i));

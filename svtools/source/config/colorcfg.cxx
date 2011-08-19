@@ -427,7 +427,6 @@ Color ColorConfig::GetDefaultColor(ColorConfigEntry eEntry)
         0, // FONTCOLOR
         0xcc, // LINKS
         0x80, // LINKSVISITED
-        0, // ANCHOR
         0xff0000, // SPELL
         COL_LIGHTMAGENTA,// SMARTTAGS
         COL_GRAY, // SHADOWCOLOR
@@ -452,8 +451,6 @@ Color ColorConfig::GetDefaultColor(ColorConfigEntry eEntry)
         COL_LIGHTRED, // CALCREFERENCE
         0xffffc0, // CALCNOTESBACKGROUND
         0xc0c0c0, // DRAWGRID
-        0, // DRAWDRAWING
-        0xb8ff, // DRAWFILL
         COL_GREEN, // BASICIDENTIFIER,
         COL_GRAY,// BASICCOMMENT   ,
         COL_LIGHTRED,// BASICNUMBER    ,
@@ -478,16 +475,6 @@ Color ColorConfig::GetDefaultColor(ColorConfigEntry eEntry)
 
         case APPBACKGROUND :
             aRet = Application::GetSettings().GetStyleSettings().GetWorkspaceColor();
-            break;
-
-        case SPELL :
-        case DRAWDRAWING :
-        case SMARTTAGS :
-            aRet = aAutoColors[eEntry];
-            break;
-
-        case DRAWFILL            :
-            aRet = aAutoColors[eEntry];
             break;
 
         case FONTCOLOR :
