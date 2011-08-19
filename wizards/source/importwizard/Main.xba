@@ -228,7 +228,6 @@ Sub ToggleCheckboxesWithBoolean(bMSEnable as Boolean)
 		.GetControl(&quot;chkMSApplication3&quot;).Model.Enabled = bMSEnable
 	End With
 	CheckModuleInstallation()
-	ImportDialog.WelcomeTextLabel2.Enabled = bMSEnable
 	bDoKeepApplValues = False
 	ToggleNextButton()
 End Sub

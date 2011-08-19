@@ -19,7 +19,7 @@ Public SOApplicationName(5) As String
 Public sHelpButton As String, sCancelButton As String, sBackButton As String, sNextButton As String
 Public sSumInclusiveSubDir As String, sSumSaveDocuments As String
 Public sSummaryHeader As String
-Public sWelcometextLabel1 As String, sWelcometextLabel2 As String,  sWelcometextLabel3 As String
+Public sWelcometextLabel1 As String, sWelcometextLabel3 As String
 Public sBeginButton As String, sMsgDirNotThere As String
 Public sQueryForNewCreation As String, sPathError3 As String
 Public sNoDirCreation As String
@@ -58,7 +58,6 @@ Sub LoadLanguage()
 		sCloseButton = GetResText(1005)
 		
 		sWelcometextLabel1 = ReplaceString(GetResText(1006), GetProductName(),&quot;%PRODUCTNAME&quot;)
-		sWelcometextLabel2 = GetResText(1007)
 		sWelcometextLabel3 = GetResText(1008)
 
 		&apos; Microsoft Documents

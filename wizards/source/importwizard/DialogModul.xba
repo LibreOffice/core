@@ -82,7 +82,6 @@ Dim i as Integer
 		.cmdBack.Label = sBackButton
 		.cmdGoOn.Label = sNextButton
 		.WelcomeTextLabel.Label = sWelcomeTextLabel1
-		.WelcomeTextLabel2.Label = sWelcomeTextLabel2
 		.WelcomeTextLabel3.Label = sWelcomeTextLabel3
 
 		.optMSDocuments.Label = sContainerName(0)

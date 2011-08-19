@@ -78,18 +78,17 @@
   <dlg:checkbox dlg:id="chkMSApplication3" dlg:tab-index="35" dlg:disabled="true" dlg:left="12" dlg:top="139" dlg:width="141" dlg:height="9" dlg:page="1" dlg:help-url="HID:WIZARDS_HID_DLGIMPORT_2_CHKPOWERPOINT" dlg:value="chkMSApplication3" dlg:checked="false">
    <script:event script:event-name="on-itemstatechange" script:macro-name="vnd.sun.star.script:ImportWizard.Main.ToggleNextButton?language=Basic&amp;location=application" script:language="Script"/>
   </dlg:checkbox>
-  <dlg:text dlg:id="WelcomeTextLabel2" dlg:tab-index="36" dlg:disabled="true" dlg:left="6" dlg:top="152" dlg:width="258" dlg:height="18" dlg:page="1" dlg:value="WelcomeTextLabel2" dlg:multiline="true"/>
-  <dlg:checkbox dlg:id="chkTemplatePath" dlg:tab-index="37" dlg:left="12" dlg:top="48" dlg:width="240" dlg:height="10" dlg:page="2" dlg:tag="Template" dlg:help-url="HID:WIZARDS_HID_DLGIMPORT_2_CBTEMPLATE" dlg:value="chkTemplatePath" dlg:checked="true">
+  <dlg:checkbox dlg:id="chkTemplatePath" dlg:tab-index="36" dlg:left="12" dlg:top="48" dlg:width="240" dlg:height="10" dlg:page="2" dlg:tag="Template" dlg:help-url="HID:WIZARDS_HID_DLGIMPORT_2_CBTEMPLATE" dlg:value="chkTemplatePath" dlg:checked="true">
    <script:event script:event-name="on-itemstatechange" script:macro-name="vnd.sun.star.script:ImportWizard.DialogModul.ToggleInputPaths?language=Basic&amp;location=application" script:language="Script"/>
   </dlg:checkbox>
-  <dlg:checkbox dlg:id="chkTemplateSearchSubDir" dlg:tab-index="38" dlg:left="12" dlg:top="61" dlg:width="240" dlg:height="10" dlg:page="2" dlg:help-url="HID:WIZARDS_HID_DLGIMPORT_2_CBTEMPLATERECURSE" dlg:value="chkTemplateSearchSubDir" dlg:checked="false"/>
-  <dlg:text dlg:id="lblTemplateImport" dlg:tab-index="39" dlg:left="12" dlg:top="78" dlg:width="60" dlg:height="8" dlg:page="2" dlg:value="lblTemplateImport"/>
-  <dlg:checkbox dlg:id="chkLogfile" dlg:tab-index="40" dlg:left="6" dlg:top="171" dlg:width="136" dlg:height="9" dlg:page="1" dlg:help-url="HID:WIZARDS_HID_DLGIMPORT_0_CHKLOGFILE" dlg:value="chkLogfile" dlg:checked="true"/>
-  <dlg:fixedline dlg:id="hlnTemplates" dlg:tab-index="41" dlg:left="6" dlg:top="37" dlg:width="258" dlg:height="8" dlg:page="2" dlg:value="hlnTemplates"/>
-  <dlg:fixedline dlg:id="hlnDocuments" dlg:tab-index="42" dlg:left="6" dlg:top="110" dlg:width="258" dlg:height="8" dlg:page="2" dlg:value="hlnDocuments"/>
-  <dlg:fixedline dlg:id="FixedLine1" dlg:tab-index="43" dlg:left="6" dlg:top="181" dlg:width="258" dlg:height="6"/>
-  <dlg:fixedline dlg:id="hlnProgress" dlg:tab-index="44" dlg:left="6" dlg:top="55" dlg:width="258" dlg:height="8" dlg:page="4" dlg:value="hlnProgress"/>
-  <dlg:button dlg:id="cmdShowLogFile" dlg:tab-index="45" dlg:disabled="true" dlg:left="75" dlg:top="142" dlg:width="120" dlg:height="14" dlg:page="4" dlg:value="cmdShowLogFile">
+  <dlg:checkbox dlg:id="chkTemplateSearchSubDir" dlg:tab-index="37" dlg:left="12" dlg:top="61" dlg:width="240" dlg:height="10" dlg:page="2" dlg:help-url="HID:WIZARDS_HID_DLGIMPORT_2_CBTEMPLATERECURSE" dlg:value="chkTemplateSearchSubDir" dlg:checked="false"/>
+  <dlg:text dlg:id="lblTemplateImport" dlg:tab-index="38" dlg:left="12" dlg:top="78" dlg:width="60" dlg:height="8" dlg:page="2" dlg:value="lblTemplateImport"/>
+  <dlg:checkbox dlg:id="chkLogfile" dlg:tab-index="39" dlg:left="6" dlg:top="153" dlg:width="136" dlg:height="9" dlg:page="1" dlg:help-url="HID:WIZARDS_HID_DLGIMPORT_0_CHKLOGFILE" dlg:value="chkLogfile" dlg:checked="true"/>
+  <dlg:fixedline dlg:id="hlnTemplates" dlg:tab-index="40" dlg:left="6" dlg:top="37" dlg:width="258" dlg:height="8" dlg:page="2" dlg:value="hlnTemplates"/>
+  <dlg:fixedline dlg:id="hlnDocuments" dlg:tab-index="41" dlg:left="6" dlg:top="110" dlg:width="258" dlg:height="8" dlg:page="2" dlg:value="hlnDocuments"/>
+  <dlg:fixedline dlg:id="FixedLine1" dlg:tab-index="42" dlg:left="6" dlg:top="181" dlg:width="258" dlg:height="6"/>
+  <dlg:fixedline dlg:id="hlnProgress" dlg:tab-index="43" dlg:left="6" dlg:top="55" dlg:width="258" dlg:height="8" dlg:page="4" dlg:value="hlnProgress"/>
+  <dlg:button dlg:id="cmdShowLogFile" dlg:tab-index="44" dlg:disabled="true" dlg:left="75" dlg:top="142" dlg:width="120" dlg:height="14" dlg:page="4" dlg:value="cmdShowLogFile">
    <script:event script:event-name="on-performaction" script:macro-name="vnd.sun.star.script:ImportWizard.FilesModul.OpenLogDocument?language=Basic&amp;location=application" script:language="Script"/>
   </dlg:button>
  </dlg:bulletinboard>

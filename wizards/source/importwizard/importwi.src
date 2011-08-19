@@ -30,7 +30,6 @@
 #define sBeginButton	1004
 #define sCloseButton    1005
 #define sWelcometextLabel1  1006
-#define sWelcometextLabel2  1007
 #define sWelcometextLabel3  1008
 #define sMSTemplateCheckbox_1_    1009
 #define sMSTemplateCheckbox_2_    1010
@@ -153,11 +152,6 @@ String sCloseButton
 String sWelcometextLabel1
 {
     Text [ en-US ] = "This wizard convert legacy format documents to Open Document Format for Office Applications.";
-};
-
-String sWelcometextLabel2
-{
-    Text [ en-US ] = "Please note that when converting Microsoft documents any attached VBA macros lose their functionality.";
 };
 
 String sWelcometextLabel3
