@@ -199,9 +199,24 @@ sub do_link($$$$@)
 sub scan_one_dir($$$$)
 {
     my ($installed_files, $build_files, $path, $solver) = @_;
+    my $dirh_module;
+
+    if (!$solver) {
+	if (opendir ($dirh_module, "$path/..")) {
+	    while (my $file = readdir ($dirh_module)) {
+		if ($file =~ /Library_.*\.mk/) {
+		    if (-d $path) {
+			print STDERR "gnu-makeified module contains stale output dir '$path', renaming it away\n";
+			rename ($path, "$path.obsolete"); # if it fails, nevermind ...
+		    }
+		    return;
+		}
+	    }
+	    closedir ($dirh_module);
+	}
+    }
 
     for my $elem (@search_dirs) {
-	my $dirh_module;
 	my $module_path = "$path/$elem";
 	if (opendir ($dirh_module, $module_path)) {
 	    while (my $file = readdir ($dirh_module)) {
@@ -214,7 +229,7 @@ sub scan_one_dir($$$$)
 			    }
 			}
 			if (!$known && !$solver) {
-			    print STDERR "\nlinkoo:: Unknown duplicate file '$file' in: '" . 
+			    print STDERR "\nlinkoo:: Unknown duplicate file '$file' in: '" .
 				$build_files->{$file} . "' vs '" .
 				$module_path . "' in module $path\n";
 			    exit (1);
