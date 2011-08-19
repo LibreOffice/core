@@ -1959,7 +1959,7 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
         return 0;
 
     // Frame size / position.
-    int *pSprm = 0;
+    sal_Int32 *pSprm = 0;
     switch (nKeyword)
     {
         case RTF_ABSW: pSprm = &m_aStates.top().aFrame.nW; break;
