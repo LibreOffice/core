@@ -34,7 +34,12 @@ include $(GBUILDDIR)/gbuild_simple.mk
 	sed 's/\(^.*get\)/SAL_DLLPUBLIC_EXPORT \1/' $< > $@
 
 %_invis.cxx : $(realpath $(SRC_ROOT)/i18npool/source/textconversion/data)/%.dic
+ifeq ($(OS_FOR_BUILD),WNT)
+	$(gb_Helper_execute)genconv_dict $* `cygpath -m $<` $@
+else
 	$(gb_Helper_execute)genconv_dict $* $< $@
+endif
+
 
 .PHONY: all
 # vim: set noet sw=4 ts=4:
