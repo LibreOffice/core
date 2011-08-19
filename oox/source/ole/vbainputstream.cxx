@@ -128,21 +128,32 @@ void VbaInputStream::skip( sal_Int32 nBytes, size_t /*nAtomSize*/ )
 bool VbaInputStream::updateChunk()
 {
     if( mbEof || (mnChunkPos < maChunk.size()) ) return !mbEof;
-
     // try to read next chunk header, this may trigger EOF
     sal_uInt16 nHeader = mpInStrm->readuInt16();
+
     mbEof = mpInStrm->isEof();
     if( mbEof ) return false;
 
     // check header signature
-    OSL_ENSURE( (nHeader & VBACHUNK_SIGMASK) == VBACHUNK_SIG, "VbaInputStream::updateChunk - invalid chunk signature" );
-    mbEof = (nHeader & VBACHUNK_SIGMASK) != VBACHUNK_SIG;
-    if( mbEof ) return false;
+    bool bIgnoreBrokenSig = !( (nHeader & VBACHUNK_SIGMASK) == VBACHUNK_SIG );
 
     // decode length of chunk data and compression flag
     bool bCompressed = getFlag( nHeader, VBACHUNK_COMPRESSED );
     sal_uInt16 nChunkLen = (nHeader & VBACHUNK_LENMASK) + 1;
     OSL_ENSURE( bCompressed || (nChunkLen == 4096), "VbaInputStream::updateChunk - invalid uncompressed chunk size" );
+
+    // From the amazing bit detective work of Valek Filippov<frob@gnome.org>
+    // this tweak and the one at the bottom of the method to seek to the
+    // start of the next chunk we can read those strange broken
+    // ( I guess from a MSO bug ) commpessed streams > 4k
+
+    if ( bIgnoreBrokenSig || ( ! ( mpInStrm->getRemaining() < 4096 ) ) )
+    {
+        bCompressed = true;
+        nChunkLen = 4094;
+    }
+
+    sal_Int64 target = mpInStrm->tell() + nChunkLen;
     if( bCompressed )
     {
         maChunk.clear();
@@ -183,6 +194,7 @@ bool VbaInputStream::updateChunk()
                         }
                     }
                 }
+                // we suspect this will never be called
                 else
                 {
                     maChunk.resize( maChunk.size() + 1 );
@@ -197,7 +209,10 @@ bool VbaInputStream::updateChunk()
         maChunk.resize( nChunkLen );
         mpInStrm->readMemory( &maChunk.front(), nChunkLen );
     }
-
+    // decompression sometimes leaves the stream pos offset 1 place ( at
+    // least ) past or before the expected stream pos.
+    // here we make sure we are on the chunk boundry
+    mpInStrm->seek( target );
     mnChunkPos = 0;
     return !mbEof;
 }
