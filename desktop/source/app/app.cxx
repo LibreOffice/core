@@ -2199,16 +2199,21 @@ IMPL_LINK( Desktop, OpenClients_Impl, void*, EMPTYARG )
 {
     RTL_LOGFILE_PRODUCT_CONTEXT( aLog, "PERFORMANCE - DesktopOpenClients_Impl()" );
 
-    OpenClients();
+    try {
+        OpenClients();
 
-    OfficeIPCThread::SetReady();
+        OfficeIPCThread::SetReady();
 
-    CloseSplashScreen();
-    CheckFirstRun( );
-    EnableOleAutomation();
+        CloseSplashScreen();
+        CheckFirstRun( );
+        EnableOleAutomation();
 
-    if (getenv ("OOO_EXIT_POST_STARTUP"))
-        new ExitTimer();
+        if (getenv ("OOO_EXIT_POST_STARTUP"))
+            new ExitTimer();
+    } catch (const ::com::sun::star::uno::Exception &e) {
+        String a( RTL_CONSTASCII_USTRINGPARAM( "UNO exception during client open:\n" ) );
+        Application::Abort( a + e.Message );
+    }
     return 0;
 }
 
