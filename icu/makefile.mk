@@ -51,7 +51,8 @@ PATCH_FILES=\
     icu4c-aix.patch \
     icu4c-4_4_2-wchar_t.patch \
     icu4c-warnings.patch \
-    icu4c-escapespace.patch
+    icu4c-escapespace.patch \
+    icu4c-strict-c.patch
 
 .IF "$(GUI)"=="UNX"
 
@@ -187,8 +188,16 @@ icu_LIBS=
 icu_LIBS+=$(MINGW_SHARED_LIBSTDCPP)
 .ENDIF
 icu_LDFLAGS+=-Wl,--enable-runtime-pseudo-reloc-v2
+
+.IF "$(CROSS_COMPILING)"=="YES"
+# We require that the cross-build-toolset target from the top Makefile(.in) has bee built
+BUILD_AND_HOST=--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM) --with-cross-build=$(posix_PWD)/$(INPATH_FOR_BUILD)/misc/build/icu/source
+.ELSE
+BUILD_AND_HOST=--build=i586-pc-mingw32 --enable-64bit-libs=no
+.ENDIF
+
 CONFIGURE_ACTION+=sh -c 'CFLAGS="-O -D_MT" CXXFLAGS="-O -D_MT" LDFLAGS="$(icu_LDFLAGS)" LIBS="$(icu_LIBS)" \
-./configure --build=i586-pc-mingw32 --enable-layout --disable-static --enable-shared --enable-64bit-libs=no'
+./configure $(BUILD_AND_HOST) --enable-layout --disable-static --enable-shared'
 
 CONFIGURE_FLAGS=
 
