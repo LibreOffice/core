@@ -121,6 +121,10 @@ ifeq ($(HAVE_CXX0X),TRUE)
 gb_CXXFLAGS += -std=c++0x -Wno-deprecated-declarations
 endif
 
+ifeq ($(ENABLE_LTO),TRUE)
+gb_Library_LTOFLAGS := -flto
+endif
+
 ifneq ($(strip $(SYSBASE)),)
 gb_CXXFLAGS += --sysroot=$(SYSBASE)
 gb_CFLAGS += --sysroot=$(SYSBASE)
@@ -205,6 +209,7 @@ $(call gb_Helper_abbreviate_dirs,\
 	mkdir -p $(dir $(1)) $(dir $(4)) && \
 	$(gb_CC) \
 		$(DEFS) \
+		$(if $(filter Library,$(TARGETTYPE)),$(gb_Library_LTOFLAGS)) \
 		$(T_CFLAGS) \
 		-c $(3) \
 		-o $(1) \
@@ -224,6 +229,7 @@ $(call gb_Helper_abbreviate_dirs,\
 	mkdir -p $(dir $(1)) $(dir $(4)) && \
 	$(gb_CXX) \
 		$(DEFS) \
+		$(if $(filter Library,$(TARGETTYPE)),$(gb_Library_LTOFLAGS)) \
 		$(T_CXXFLAGS) \
 		-c $(3) \
 		-o $(1) \
@@ -288,6 +294,7 @@ $(call gb_Helper_abbreviate_dirs,\
 	mkdir -p $(dir $(1)) && \
 	$(gb_CXX) \
 		$(if $(filter Library CppunitTest,$(TARGETTYPE)),$(gb_Library_TARGETTYPEFLAGS)) \
+		$(if $(filter Library,$(TARGETTYPE)),$(gb_Library_LTOFLAGS)) \
 		$(subst \d,$$,$(RPATH)) \
 		$(T_LDFLAGS) \
 		$(foreach object,$(COBJECTS),$(call gb_CObject_get_target,$(object))) \

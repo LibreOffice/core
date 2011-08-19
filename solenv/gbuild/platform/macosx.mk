@@ -120,6 +120,10 @@ gb_CFLAGS_WERROR := -Werror
 gb_CXXFLAGS_WERROR := -Werror
 endif
 
+ifeq ($(ENABLE_LTO),TRUE)
+gb_Library_LTOFLAGS := -flto
+endif
+
 gb_LinkTarget_EXCEPTIONFLAGS := \
 	-DEXCEPTIONS_ON \
 	-fexceptions \
@@ -191,6 +195,7 @@ $(call gb_Helper_abbreviate_dirs,\
 	mkdir -p $(dir $(1)) $(dir $(4)) && \
 	$(gb_CC) \
 		$(DEFS) \
+		$(if $(filter Library,$(TARGETTYPE)),$(gb_Library_LTOFLAGS)) \
 		$(T_CFLAGS) \
 		-c $(3) \
 		-o $(1) \
@@ -210,6 +215,7 @@ $(call gb_Helper_abbreviate_dirs,\
 	mkdir -p $(dir $(1)) $(dir $(4)) && \
 	$(gb_CXX) \
 		$(DEFS) \
+		$(if $(filter Library,$(TARGETTYPE)),$(gb_Library_LTOFLAGS)) \
 		$(T_CXXFLAGS) \
 		-c $(3) \
 		-o $(1) \
@@ -309,12 +315,14 @@ $(call gb_Helper_abbreviate_dirs,\
 	$(PERL) $(SOLARENV)/bin/macosx-dylib-link-list.pl \
 		$(if $(filter Executable,$(TARGETTYPE)),$(gb_Executable_TARGETTYPEFLAGS)) \
 		$(if $(filter Library CppunitTest,$(TARGETTYPE)),$(gb_Library_TARGETTYPEFLAGS)) \
+		$(if $(filter Library,$(TARGETTYPE)),$(gb_Library_LTOFLAGS)) \
 		$(subst \d,$$,$(RPATH)) \
 		$(T_LDFLAGS) \
 		$(patsubst lib%.dylib,-l%,$(foreach lib,$(LINKED_LIBS),$(call gb_Library_get_filename,$(lib)))) > $${DYLIB_FILE} && \
 	$(gb_CXX) \
 		$(if $(filter Executable,$(TARGETTYPE)),$(gb_Executable_TARGETTYPEFLAGS)) \
 		$(if $(filter Library CppunitTest,$(TARGETTYPE)),$(gb_Library_TARGETTYPEFLAGS)) \
+		$(if $(filter Library,$(TARGETTYPE)),$(gb_Library_LTOFLAGS)) \
 		$(subst \d,$$,$(RPATH)) \
 		$(T_LDFLAGS) \
 		$(call gb_LinkTarget__get_liblinkflags,$(LINKED_LIBS)) \
