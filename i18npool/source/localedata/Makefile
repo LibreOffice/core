@@ -38,8 +38,8 @@ localedata_%.cxx : localedata_%_invis.cxx
 
 localedata_%_invis.cxx : $(realpath $(SRC_ROOT)/i18npool/source/localedata/data)/%.xml saxparser.rdb
 ifeq ($(OS_FOR_BUILD),WNT)
-	$(gb_Helper_execute)saxparser $* `cygpath -w $<` $@ \
-		$(my_file)`cygpath -m $(WORKDIR)/CustomTarget/i18npool/source/localedata/saxparser.rdb` `cygpath -w $(OUTDIR)/bin/types.rdb` \
+	$(gb_Helper_execute)saxparser $* `cygpath -m $<` $@ \
+		$(my_file)`cygpath -m $(WORKDIR)/CustomTarget/i18npool/source/localedata/saxparser.rdb` `cygpath -m $(OUTDIR)/bin/types.rdb` \
 		-env:OOO_INBUILD_SHAREDLIB_DIR=$(my_file)`cygpath -m $(OUTDIR)/bin`
 else
 	$(gb_Helper_execute)saxparser $* $< $@ \
