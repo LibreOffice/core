@@ -56,10 +56,17 @@ $(eval $(call gb_Library_add_linked_libs,i18npool,\
 	$(gb_STDLIBS) \
 ))
 
+ifeq ($(OS),WNT)
+$(eval $(call gb_Library_use_externals,i18npool,\
+	icuin \
+	icuuc \
+))
+else
 $(eval $(call gb_Library_use_externals,i18npool,\
 	icui18n \
 	icuuc \
 ))
+endif
 
 $(eval $(call gb_Library_add_exception_objects,i18npool,\
 	i18npool/source/breakiterator/breakiterator_cjk \

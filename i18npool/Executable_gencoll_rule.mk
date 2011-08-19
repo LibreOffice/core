@@ -41,11 +41,19 @@ $(eval $(call gb_Executable_add_linked_libs,gencoll_rule,\
 	$(gb_STDLIBS) \
 ))
 
+ifeq ($(OS),WNT)
+$(eval $(call gb_Executable_use_externals,gencoll_rule,\
+	icudt \
+	icuin \
+	icuuc \
+))
+else
 $(eval $(call gb_Executable_use_externals,gencoll_rule,\
 	icudata \
 	icui18n \
 	icuuc \
 ))
+endif
 
 $(eval $(call gb_Executable_add_exception_objects,gencoll_rule,\
 	i18npool/source/collator/gencoll_rule \

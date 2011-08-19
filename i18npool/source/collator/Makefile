@@ -26,7 +26,7 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
-txtlist := $(wildcard $(SRC_ROOT)/i18npool/source/collator/data/*.txt)
+txtlist := $(wildcard $(realpath $(SRC_ROOT)/i18npool/source/collator/data)/*.txt)
 
 all : lrl_include.hxx $(patsubst %.txt,collator_%.cxx,$(notdir $(txtlist)))
 

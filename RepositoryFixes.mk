@@ -123,8 +123,9 @@ gb_StaticLibrary_FILENAMES := $(patsubst graphite:graphite%,graphite:graphite_dl
 
 # change the names of all import libraries that don't have an "i" prefix as in our standard naming schema
 gb_Library_NOILIBFILENAMES := $(gb_Library_PLAINLIBS_NONE)
-gb_Library_NOILIBFILENAMES += icule icuuc \
+gb_Library_NOILIBFILENAMES += \
     graphite2_off \
+	icudt icuin icule icuuc \
     msvcprt \
     nspr4 \
     nss3 \
