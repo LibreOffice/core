@@ -8,6 +8,7 @@ Public ImportDialog as Object
 Public ImportDialogArea as Object
 Public oFactoryKey as Object
 Public bShowLogFile as Boolean
+Public oBinFilterComp as Object
 
 &apos; If the ProgressPage ist already on Top The Dialog will be immediately closed when this flag is
 &apos; set to False
@@ -43,7 +44,9 @@ Sub Main()
 	ImportDialog.ImportPreview.BackGroundColor = RGB(0,60,126)	
 	ImportDialog.cmdGoOn.DefaultButton = True
 	ImportDialogArea.GetControl(&quot;optMSDocuments&quot;).SetFocus()
-	ToggleCheckboxesWithBoolean(False)
+	oBinFilterComp = createUnoService( &quot;com.sun.star.comp.office.BF_MigrateFilter&quot; )
+	ToggleCheckboxesWithBoolean(True)
+
 	RetValue = ImportDialogArea.Execute()
 	If bShowLogFile=TRUE Then 
 		OpenDocument(sLogUrl, NoArgs())
@@ -125,6 +128,7 @@ Dim iCurStep as Integer
 				FillStep_InputPaths(CurOffice, False)
 			Else
 				FillStep_Welcome()
+			        ToggleCheckboxesWithBoolean(True)
 				bDoKeepApplValues = True
 			End If
 	End Select
@@ -206,7 +210,7 @@ Sub ToggleCheckboxes(oEvent as Object)
 Dim bMSEnable as Boolean
 	WizardMode = oEvent.Source.Model.Tag
 	bMSEnable = WizardMode = &quot;MS&quot;
-	ToggleCheckBoxesWithBoolean(bMSEnable)
+	ToggleCheckboxesWithBoolean(bMSEnable)
 End Sub
 
 
@@ -219,10 +223,18 @@ Sub ToggleCheckboxesWithBoolean(bMSEnable as Boolean)
 		MaxApplCount = 4
 	End If
 	With ImportDialogArea
-		.GetControl(&quot;chkSOApplication1&quot;).Model.Enabled = Not bMSEnable
-		.GetControl(&quot;chkSOApplication2&quot;).Model.Enabled = Not bMSEnable
-		.GetControl(&quot;chkSOApplication3&quot;).Model.Enabled = Not bMSEnable
-		.GetControl(&quot;chkSOApplication4&quot;).Model.Enabled = Not bMSEnable
+		If (isNull(oBinFilterComp)) Then
+			.GetControl(&quot;optSODocuments&quot;).Visible = False
+			.GetControl(&quot;chkSOApplication1&quot;).Visible = False
+			.GetControl(&quot;chkSOApplication2&quot;).Visible = False
+			.GetControl(&quot;chkSOApplication3&quot;).Visible = False
+			.GetControl(&quot;chkSOApplication4&quot;).Visible = False
+		Else
+			.GetControl(&quot;chkSOApplication1&quot;).Model.Enabled = Not bMSEnable
+			.GetControl(&quot;chkSOApplication2&quot;).Model.Enabled = Not bMSEnable
+			.GetControl(&quot;chkSOApplication3&quot;).Model.Enabled = Not bMSEnable
+			.GetControl(&quot;chkSOApplication4&quot;).Model.Enabled = Not bMSEnable
+		End if 
 		.GetControl(&quot;chkMSApplication1&quot;).Model.Enabled = bMSEnable
 		.GetControl(&quot;chkMSApplication2&quot;).Model.Enabled = bMSEnable
 		.GetControl(&quot;chkMSApplication3&quot;).Model.Enabled = bMSEnable
