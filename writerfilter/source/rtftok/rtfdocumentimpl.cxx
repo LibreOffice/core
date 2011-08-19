@@ -1632,6 +1632,7 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
             m_aStates.top().aParagraphSprms = m_aDefaultState.aParagraphSprms;
             m_aStates.top().aParagraphAttributes = m_aDefaultState.aParagraphAttributes;
             m_aStates.top().aFrame = RTFFrame();
+            checkChangedFrame();
             m_pCurrentBuffer = 0;
             break;
         case RTF_SECTD:
