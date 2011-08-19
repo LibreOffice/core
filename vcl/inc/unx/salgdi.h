@@ -214,10 +214,6 @@ protected:
     void                    DrawPrinterString( const SalLayout& );
 
     void                    DrawServerFontString( const ServerFontLayout& );
-    void                    DrawServerSimpleFontString( const ServerFontLayout& );
-    void                    DrawServerAAFontString( const ServerFontLayout& );
-    bool                    DrawServerAAForcedString( const ServerFontLayout& );
-    void                    DrawCairoAAFontString( const ServerFontLayout& );
 
     void freeResources();
 public:

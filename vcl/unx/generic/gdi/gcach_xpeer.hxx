@@ -47,7 +47,6 @@ public:
 
     Pixmap              GetPixmap( ServerFont&, int nGlyphIndex, int nScreen );
     const RawBitmap*    GetRawBitmap( ServerFont&, int nGlyphIndex );
-    bool                ForcedAntialiasing( const ServerFont&, int nScreen ) const;
 
     GlyphSet            GetGlyphSet( ServerFont&, int nScreen );
     Glyph               GetGlyphId( ServerFont&, int nGlyphIndex );

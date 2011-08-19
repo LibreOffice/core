@@ -404,16 +404,6 @@ void X11GlyphPeer::RemovingGlyph( ServerFont& /*rServerFont*/, GlyphData& rGlyph
 
 // ---------------------------------------------------------------------------
 
-bool X11GlyphPeer::ForcedAntialiasing( const ServerFont& rServerFont, int nScreen ) const
-{
-    bool bForceOk = rServerFont.GetAntialiasAdvice();
-    // maximum size for antialiasing is 250 pixels
-    bForceOk &= (rServerFont.GetFontSelData().mnHeight < 250);
-    return (bForceOk && ((mnForcedAA >> nScreen) & 1));
-}
-
-// ---------------------------------------------------------------------------
-
 GlyphSet X11GlyphPeer::GetGlyphSet( ServerFont& rServerFont, int nScreen )
 {
     if( (nScreen >= 0) && ((mnUsingXRender >> nScreen) & 1) == 0 )
