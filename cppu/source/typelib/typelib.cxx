@@ -338,7 +338,7 @@ TypeDescriptor_Init_Impl::~TypeDescriptor_Init_Impl() SAL_THROW( () )
         delete pWeakMap;
         pWeakMap = 0;
     }
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 2
     OSL_ENSURE( !nTypeDescriptionCount, "### nTypeDescriptionCount is not zero" );
     OSL_ENSURE( !nCompoundTypeDescriptionCount, "### nCompoundTypeDescriptionCount is not zero" );
     OSL_ENSURE( !nUnionTypeDescriptionCount, "### nUnionTypeDescriptionCount is not zero" );
