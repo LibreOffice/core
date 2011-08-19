@@ -298,7 +298,7 @@ void RecoveryUI::impl_doRecovery()
     ::rtl::OUString CFG_PATH_CRASHREPORTER( RTL_CONSTASCII_USTRINGPARAM( "CrashReporter"                 ));
     ::rtl::OUString CFG_ENTRY_ENABLED( RTL_CONSTASCII_USTRINGPARAM     ( "Enabled"                       ));
 
-    sal_Bool bCrashRepEnabled( sal_True );
+    sal_Bool bCrashRepEnabled(sal_False);
     css::uno::Any aVal = ::comphelper::ConfigurationHelper::readDirectKey(
                                 m_xSMGR,
                                 CFG_PACKAGE_RECOVERY,

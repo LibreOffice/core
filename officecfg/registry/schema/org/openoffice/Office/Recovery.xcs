@@ -127,7 +127,7 @@
                 <info>
                     <desc>Specifies if the crash reporter should be enabled or disabled.</desc>
                 </info>
-                <value>true</value>
+                <value>false</value>
             </prop>
         </group>
         <group oor:name="AutoSave">

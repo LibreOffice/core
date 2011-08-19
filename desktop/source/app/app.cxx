@@ -1192,7 +1192,7 @@ void Desktop::retrieveCrashReporterState()
 
     css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR = ::comphelper::getProcessServiceFactory();
 
-    sal_Bool bEnabled( sal_True );
+    sal_Bool bEnabled(sal_False);
     if ( xSMGR.is() )
     {
         css::uno::Any aVal = ::comphelper::ConfigurationHelper::readDirectKey(
