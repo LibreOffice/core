@@ -1815,6 +1815,7 @@ else
    ToFile( "WORKDIR_FOR_BUILD", $WORKDIR,        "e" );
 }
 ToFile( "GMAKE_PARALLELISM",    "@GMAKE_PARALLELISM@", "e" );
+ToFile( "GMAKE_MODULE_PARALLELISM","@GMAKE_MODULE_PARALLELISM@", "e" );
 ToFile( "SIZEOF_SHORT",         "@SIZEOF_SHORT@", "e" );
 ToFile( "SIZEOF_INT",           "@SIZEOF_INT@",  "e" );
 ToFile( "SIZEOF_LONG",          "@SIZEOF_LONG@", "e" );

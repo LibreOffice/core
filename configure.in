@@ -2443,8 +2443,12 @@ fi
 AC_MSG_CHECKING([the GNU make version])
 _make_version=`$GNUMAKE --version | grep GNU | grep -v GPL | $SED -e 's@^[[^0-9]]*@@' -e 's@ .*@@' -e 's@,.*@@'`;
 _make_longver=`echo $_make_version | $AWK -F. '{ print \$1*10000+\$2*100+\$3 }'`
-if test "$_make_longver" -ge "038100" ; then
+if test "$_make_longver" -ge "038200" ; then
     AC_MSG_RESULT([$GNUMAKE $_make_version])
+
+elif test "$_make_longver" -ge "038100" ; then
+    AC_MSG_RESULT([$GNUMAKE $_make_version])
+    no_parallelism_make="YES"
 else
     AC_MSG_ERROR([failed ($GNUMAKE version >= 3.81 needed])
 fi
@@ -9080,7 +9084,7 @@ AC_MSG_RESULT([$BUILD_MAX_JOBS])
 AC_SUBST(BUILD_MAX_JOBS)
 
 # =====================================================================
-# determine the parallelism for tail_build
+# determine the parallelism for gnu make
 # =====================================================================
 AC_MSG_CHECKING([for maximum parallelism for gmake])
 if test $BUILD_MAX_JOBS -gt $BUILD_NCPUS ; then
@@ -9088,8 +9092,28 @@ if test $BUILD_MAX_JOBS -gt $BUILD_NCPUS ; then
 else
     GMAKE_PARALLELISM="$BUILD_NCPUS"
 fi
-AC_MSG_RESULT([$GMAKE_PARALLELISM])
+GMAKE_MODULE_PARALLELISM="$BUILD_NCPUS"
+if test "$no_parallelism_make" = "YES" ; then
+    if test -z "$with_num_cpus"; then
+        GMAKE_PARALLELISM="1";
+        if test $GMAKE_MODULE_PARALLELISM -gt 1 ; then
+            AC_MSG_WARN([gmake 3.81 crashes with parallelism > 1, reducing it to 1. upgrade to 3.82 to avoid this.])
+            if test -z "$with_num_cpus"; then
+                echo "gmake 3.81 crashes with parallelism > 1, reducing it to 1. upgrade to 3.82 to avoid this." >> warn
+            fi
+            GMAKE_MODULE_PARALLELISM="1"
+        fi
+    else
+        GMAKE_PARALLELISM="$BUILD_NCPUS";
+        echo "make 3.81 is prone to crashes with parallelism > 1. Since --with-num-cpu was explicitely given, it is honored, but do not complain when make segfault on you." >> warn
+    fi
+fi
+
+# GMAKE_PARALLELISM is used in tail_build
+# GMAKE_MODULE_PARALLELISM is used when building individual gbuildified module
+AC_MSG_RESULT([per module:$GMAKE_MODULE_PARALLELISM, for tail_build:$GMAKE_PARALLELISM])
 AC_SUBST(GMAKE_PARALLELISM)
+AC_SUBST(GMAKE_MODULE_PARALLELISM)
 
 dnl ===================================================================
 dnl Setting up the environment.
