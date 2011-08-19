@@ -32,6 +32,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <errno.h>
 #include <sal/main.h>
 #include <sal/types.h>
 #include <rtl/ustring.hxx>
