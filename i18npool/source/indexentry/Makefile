@@ -34,7 +34,11 @@ include $(GBUILDDIR)/gbuild_simple.mk
 	sed 's/\(^.*get_\)/SAL_DLLPUBLIC_EXPORT \1/' $< > $@
 
 %_invis.cxx : $(realpath $(SRC_ROOT)/i18npool/source/indexentry/data)/%.txt
+ifeq ($(OS_FOR_BUILD),WNT)
+	$(gb_Helper_execute)genindex_data `cygpath -m $<` $@ $*
+else
 	$(gb_Helper_execute)genindex_data $< $@ $*
+endif
 
 .PHONY: all
 # vim: set noet sw=4 ts=4:
