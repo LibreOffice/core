@@ -194,7 +194,7 @@ public:
     const ::rtl::OString* GetFontFileName() const;
     int                 GetFontFaceNumber() const;
     bool                TestFont() const;
-    void*               GetFtFace() const;
+    FT_Face             GetFtFace() const;
     int                 GetLoadFlags() const { return (mnLoadFlags & ~FT_LOAD_IGNORE_TRANSFORM); }
     void                SetFontOptions( boost::shared_ptr<ImplFontOptions> );
     boost::shared_ptr<ImplFontOptions> GetFontOptions() const;

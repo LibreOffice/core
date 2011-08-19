@@ -577,7 +577,7 @@ FreetypeManager::FreetypeManager()
 
 // -----------------------------------------------------------------------
 
-void* ServerFont::GetFtFace() const
+FT_Face ServerFont::GetFtFace() const
 {
     if( maSizeFT )
         pFTActivateSize( maSizeFT );

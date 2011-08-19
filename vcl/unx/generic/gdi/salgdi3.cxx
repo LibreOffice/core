@@ -235,14 +235,6 @@ void ImplServerFontEntry::HandleFontOptions( void )
 
 //--------------------------------------------------------------------------
 
-namespace
-{
-    bool isCairoRenderable(const ServerFont& rFont)
-    {
-        return rFont.GetFtFace();
-    }
-} //namespace
-
 CairoFontsCache::LRUFonts CairoFontsCache::maLRUFonts;
 int CairoFontsCache::mnRefCount = 0;
 
@@ -370,9 +362,9 @@ void X11SalGraphics::DrawCairoAAFontString( const ServerFontLayout& rLayout )
 
     ServerFont& rFont = rLayout.GetServerFont();
 
-    void* pFace = rFont.GetFtFace();
+    FT_Face aFace = rFont.GetFtFace();
     CairoFontsCache::CacheId aId;
-    aId.mpFace = pFace;
+    aId.maFace = aFace;
     aId.mpOptions = rFont.GetFontOptions().get();
     aId.mbEmbolden = rFont.NeedsArtificialBold();
 
@@ -398,11 +390,11 @@ void X11SalGraphics::DrawCairoAAFontString( const ServerFontLayout& rLayout )
         if (!font_face)
         {
             const ImplFontOptions *pOptions = rFont.GetFontOptions().get();
-            void *pPattern = pOptions ? pOptions->GetPattern(pFace, aId.mbEmbolden, aId.mbVerticalMetrics) : NULL;
+            void *pPattern = pOptions ? pOptions->GetPattern(aFace, aId.mbEmbolden, aId.mbVerticalMetrics) : NULL;
             if (pPattern)
                 font_face = cairo_ft_font_face_create_for_pattern(reinterpret_cast<FcPattern*>(pPattern));
             if (!font_face)
-                font_face = cairo_ft_font_face_create_for_ft_face(reinterpret_cast<FT_Face>(pFace), rFont.GetLoadFlags());
+                font_face = cairo_ft_font_face_create_for_ft_face(reinterpret_cast<FT_Face>(aFace), rFont.GetLoadFlags());
             m_aCairoFontsCache.CacheFont(font_face, aId);
         }
         cairo_set_font_face(cr, font_face);
@@ -427,7 +419,6 @@ void X11SalGraphics::DrawCairoAAFontString( const ServerFontLayout& rLayout )
             cairo_matrix_init_identity(&em_square);
             cairo_get_matrix(cr, &em_square);
 
-            FT_Face aFace = reinterpret_cast<FT_Face>(pFace);
             cairo_matrix_scale(&em_square, aFace->units_per_EM,
                 aFace->units_per_EM);
             cairo_set_matrix(cr, &em_square);
@@ -832,20 +823,7 @@ void X11SalGraphics::DrawServerSimpleFontString( const ServerFontLayout& rSalLay
 
 void X11SalGraphics::DrawServerFontLayout( const ServerFontLayout& rLayout )
 {
-    // draw complex text
-    ServerFont& rFont = rLayout.GetServerFont();
-    if( isCairoRenderable(rFont) )
-        DrawCairoAAFontString( rLayout );
-    else
-    {
-        X11GlyphPeer& rGlyphPeer = X11GlyphCache::GetInstance().GetPeer();
-        if( rGlyphPeer.GetGlyphSet( rFont, m_nScreen ) )
-            DrawServerAAFontString( rLayout );
-        else if( !rGlyphPeer.ForcedAntialiasing( rFont, m_nScreen ) )
-            DrawServerSimpleFontString( rLayout );
-        else
-            DrawServerAAForcedString( rLayout );
-    }
+    DrawCairoAAFontString( rLayout );
 }
 
 //--------------------------------------------------------------------------
