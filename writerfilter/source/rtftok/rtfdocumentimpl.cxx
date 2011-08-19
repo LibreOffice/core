@@ -717,6 +717,7 @@ void RTFDocumentImpl::checkChangedFrame()
     // Check if this is a frame.
     if (inFrame() && !m_bWasInFrame)
     {
+        OSL_TRACE("%s starting frame", OSL_THIS_FUNC);
         uno::Reference<text::XTextFrame> xTextFrame;
         xTextFrame.set(getModelFactory()->createInstance(OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.TextFrame"))), uno::UNO_QUERY);
         uno::Reference<drawing::XShape> xShape(xTextFrame, uno::UNO_QUERY);
@@ -745,6 +746,7 @@ void RTFDocumentImpl::checkChangedFrame()
     }
     else if (!inFrame() && m_bWasInFrame)
     {
+        OSL_TRACE("%s ending frame", OSL_THIS_FUNC);
         Mapper().endParagraphGroup();
         Mapper().endShape();
         Mapper().endParagraphGroup();
@@ -1946,6 +1948,22 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
     if (nSprm > 0)
         return 0;
 
+    // Frame size / position.
+    int *pSprm = 0;
+    switch (nKeyword)
+    {
+        case RTF_ABSW: pSprm = &m_aStates.top().aFrame.nW; break;
+        case RTF_ABSH: pSprm = &m_aStates.top().aFrame.nH; break;
+        case RTF_POSX: pSprm = &m_aStates.top().aFrame.nX; m_aStates.top().aFrame.nHoriOrient = text::HoriOrientation::NONE; break;
+        case RTF_POSY: pSprm = &m_aStates.top().aFrame.nY; m_aStates.top().aFrame.nVertOrient = text::VertOrientation::NONE; break;
+        default: break;
+    }
+    if (pSprm)
+    {
+        *pSprm = TWIP_TO_MM100(nParam);
+        return 0;
+    }
+
     // Then check for the more complex ones.
     switch (nKeyword)
     {
@@ -2417,20 +2435,6 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
             break;
         case RTF_AFTNSTART:
             lcl_putNestedSprm(m_aDefaultState.aParagraphSprms, NS_ooxml::LN_EG_SectPrContents_endnotePr, NS_ooxml::LN_EG_FtnEdnNumProps_numStart, pIntValue);
-            break;
-        case RTF_ABSW:
-            m_aStates.top().aFrame.nW = TWIP_TO_MM100(nParam);
-            break;
-        case RTF_ABSH:
-            m_aStates.top().aFrame.nH = TWIP_TO_MM100(nParam);
-            break;
-        case RTF_POSX:
-            m_aStates.top().aFrame.nHoriOrient = text::HoriOrientation::NONE;
-            m_aStates.top().aFrame.nX = TWIP_TO_MM100(nParam);
-            break;
-        case RTF_POSY:
-            m_aStates.top().aFrame.nVertOrient = text::VertOrientation::NONE;
-            m_aStates.top().aFrame.nY = TWIP_TO_MM100(nParam);
             break;
         case RTF_DFRMTXTX:
             m_aStates.top().aFrame.nLeftMargin = m_aStates.top().aFrame.nRightMargin = TWIP_TO_MM100(nParam);
