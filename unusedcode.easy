@@ -3014,10 +3014,13 @@ layoutimpl::VCLXTabControl::AddChild(com::sun::star::uno::Reference<com::sun::st
 layoutimpl::WidgetFactory::sfx2CreateWindow(VCLXWindow**, Window*, rtl::OUString const&, long&)
 layoutimpl::getParent(com::sun::star::uno::Reference<com::sun::star::uno::XInterface>)
 layoutimpl::prophlp::getProperty(com::sun::star::uno::Reference<com::sun::star::uno::XInterface> const&, rtl::OUString const&)
+libvisio::VSDXCharacterList::getElement(unsigned int)
+libvisio::VSDXGeometryList::getElement(unsigned int)
 libvisio::VSDXOutputElementList::addEllipse(WPXPropertyList const&)
 libvisio::VSDXOutputElementList::addEndLayer()
 libvisio::VSDXOutputElementList::addStartLayer(WPXPropertyList const&)
 libvisio::VSDXOutputElementList::clear()
+libvisio::VSDXStyles::getTextStyle(unsigned int) const
 libvisio::VisioDocument::generateSVG(WPXInputStream*, WPXString&)
 libwpg::WPGDashArray::at(unsigned int) const
 libwpg::WPGraphics::generateSVG(unsigned char const*, unsigned long, WPXString&, libwpg::WPGFileFormat)
