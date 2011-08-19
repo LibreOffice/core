@@ -152,7 +152,7 @@ String sCloseButton
 
 String sWelcometextLabel1
 {
-    Text [ en-US ] = "This wizard converts documents in %PRODUCTNAME format and Microsoft Office documents to the new OpenDocument format.";
+    Text [ en-US ] = "This wizard converts documents in StarOffice format and Microsoft Office documents to the new OpenDocument format.";
 };
 
 String sWelcometextLabel2
@@ -476,48 +476,48 @@ String sSumSaveDokumente
 
 String sSumSOTextDocuments
 {
-    Text [ en-US ] = "All %PRODUCTNAME text documents contained in the following directory will be imported:";
+    Text [ en-US ] = "All StarOffice text documents contained in the following directory will be imported:";
 };
 
 
 String sSumSOTableDocuments
 {
-    Text [ en-US ] = "All %PRODUCTNAME spreadsheets contained in the following directory will be imported:";
+    Text [ en-US ] = "All StarOffice spreadsheets contained in the following directory will be imported:";
 };
 
 
 String sSumSODrawDocuments
 {
-    Text [ en-US ] = "All %PRODUCTNAME drawing and presentation documents contained in the following directory will be imported:";
+    Text [ en-US ] = "All StarOffice drawing and presentation documents contained in the following directory will be imported:";
 };
 
 
 String sSumSOMathDocuments
 {
-    Text [ en-US ] = "All %PRODUCTNAME formula documents contained in the following directory will be imported:";
+    Text [ en-US ] = "All StarOffice formula documents contained in the following directory will be imported:";
 };
 
 
 String sSumSOTextTemplates
 {
-    Text [ en-US ] = "All %PRODUCTNAME text templates contained in the following directory will be imported:";
+    Text [ en-US ] = "All StarOffice text templates contained in the following directory will be imported:";
 };
 
 
 String sSumSOTableTemplates
 {
-    Text [ en-US ] = "All %PRODUCTNAME table templates contained in the following directory will be imported:";
+    Text [ en-US ] = "All StarOffice table templates contained in the following directory will be imported:";
 };
 
 
 String sSumSODrawTemplates
 {
-    Text [ en-US ] = "All %PRODUCTNAME drawing and presentation templates contained in the following directory will be imported:";
+    Text [ en-US ] = "All StarOffice drawing and presentation templates contained in the following directory will be imported:";
 };
 
 String sSumSOGlobalDocuments
 {
-    Text [ en-US ] = "All %PRODUCTNAME master documents contained in the following directory will be imported:";
+    Text [ en-US ] = "All StarOffice master documents contained in the following directory will be imported:";
 };
 
 
