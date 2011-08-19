@@ -1,5 +1,5 @@
---- misc/libvisio-0.0.3/src/lib/libvisio_utils.h
-+++ misc/build/libvisio-0.0.3/src/lib/libvisio_utils.h
+--- misc/libvisio-0.0.5/src/lib/libvisio_utils.h
++++ misc/build/libvisio-0.0.5/src/lib/libvisio_utils.h
 @@ -31,17 +31,8 @@
  
  #else
