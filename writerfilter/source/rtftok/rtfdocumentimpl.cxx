@@ -271,6 +271,7 @@ RTFDocumentImpl::RTFDocumentImpl(uno::Reference<uno::XComponentContext> const& x
     m_bFirstRow(true),
     m_bNeedPap(false),
     m_bNeedCr(false),
+    m_bNeedPar(true),
     m_aListTableSprms(),
     m_aSettingsTableSprms(),
     m_xStorage(),
@@ -440,6 +441,9 @@ void RTFDocumentImpl::parBreak()
 
 void RTFDocumentImpl::sectBreak(bool bFinal = false)
 {
+    // If there is no paragraph in this section, then insert a dummy one, as required by Writer
+    if (m_bNeedPar)
+        dispatchSymbol(RTF_PAR);
     checkChangedFrame();
     while (m_nHeaderFooterPositions.size())
     {
@@ -471,6 +475,7 @@ void RTFDocumentImpl::sectBreak(bool bFinal = false)
         Mapper().startSectionGroup();
         Mapper().startParagraphGroup();
     }
+    m_bNeedPar = true;
 }
 
 void RTFDocumentImpl::seek(sal_uInt32 nPos)
@@ -1294,6 +1299,7 @@ int RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
                 // but don't emit properties yet, since they may change till the first text token arrives
                 m_bNeedPap = true;
                 m_bWasInFrame = inFrame();
+                m_bNeedPar = false;
             }
             break;
         case RTF_SECT:

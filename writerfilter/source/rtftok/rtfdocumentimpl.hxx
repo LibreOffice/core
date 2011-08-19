@@ -371,6 +371,8 @@ namespace writerfilter {
                 bool m_bNeedPap;
                 /// If we need to emit a CR at the end of substream.
                 bool m_bNeedCr;
+                /// If we need to add a dummy paragraph before a section break.
+                bool m_bNeedPar;
                 /// The list table and list override table combined.
                 RTFSprms m_aListTableSprms;
                 /// The settings table.
