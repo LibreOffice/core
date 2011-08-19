@@ -37,13 +37,24 @@ localedata_%.cxx : localedata_%_invis.cxx
 	sed 's/\(^.*get[^;]*$$\)/SAL_DLLPUBLIC_EXPORT \1/' $< > $@
 
 localedata_%_invis.cxx : $(realpath $(SRC_ROOT)/i18npool/source/localedata/data)/%.xml saxparser.rdb
+ifeq ($(OS_FOR_BUILD),WNT)
+	$(gb_Helper_execute)saxparser $* `cygpath -w $<` $@ \
+		$(my_file)`cygpath -m $(WORKDIR)/CustomTarget/i18npool/source/localedata/saxparser.rdb` `cygpath -w $(OUTDIR)/bin/types.rdb` \
+		-env:OOO_INBUILD_SHAREDLIB_DIR=$(my_file)`cygpath -m $(OUTDIR)/bin`
+else
 	$(gb_Helper_execute)saxparser $* $< $@ \
 		$(my_file)$(WORKDIR)/CustomTarget/i18npool/source/localedata/saxparser.rdb $(OUTDIR)/bin/types.rdb \
 		-env:OOO_INBUILD_SHAREDLIB_DIR=$(my_file)$(OUTDIR)/lib
+endif
 
 saxparser.rdb : saxparser.input
+ifeq ($(OS_FOR_BUILD),WNT)
+	$(gb_XSLTPROC) --nonet --stringparam prefix `cygpath -m $(OUTDIR)/xml/` -o $@ \
+		$(SOLARENV)/bin/packcomponents.xslt saxparser.input
+else
 	$(gb_XSLTPROC) --nonet --stringparam prefix $(OUTDIR)/xml/ -o $@ \
 		$(SOLARENV)/bin/packcomponents.xslt saxparser.input
+endif
 
 saxparser.input :
 	echo '<list><filename>$(my_components)</filename></list>' > $@
