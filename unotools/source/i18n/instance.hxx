@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * Version: MPL 1.1 / GPLv3+ / LGPLv3+
  *
@@ -30,6 +31,7 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/componentfactory.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <rtl/strbuf.hxx>
 
 // ugly but so is this namespacing evil.
 #define css ::com::sun::star
@@ -43,16 +45,19 @@ inline css::uno::Reference<css::uno::XInterface>
 {
     css::uno::Reference<css::uno::XInterface> xRet;
     css::uno::Reference<css::lang::XMultiServiceFactory > xSMgr( xOptSF );
-    try {
+    try
+    {
         if (!xSMgr.is())
 	    xSMgr = ::comphelper::getProcessServiceFactory();
         xRet = xSMgr->createInstance( rtl::OUString::createFromAscii( serviceName ) );
-    } catch (css::uno::Exception &e) {
+    }
+    catch (const css::uno::Exception &e)
+    {
 #ifdef DBG_UTIL
-        ByteString aMsg( context );
-	aMsg += "ctor: Exception caught\n";
-	aMsg += ByteString( String( e.Message ), RTL_TEXTENCODING_UTF8 );
-	DBG_ERRORFILE( aMsg.GetBuffer() );
+        rtl::OStringBuffer aMsg( context );
+	aMsg.append(RTL_CONSTASCII_STRINGPARAM("ctor: Exception caught\n"));
+	aMsg.append(rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8));
+	DBG_ERRORFILE(aMsg.getStr());
 #else
 	(void)e; (void)context;
 #endif
@@ -62,3 +67,5 @@ inline css::uno::Reference<css::uno::XInterface>
 }
 
 #endif // _INTL_INSTANCE_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
