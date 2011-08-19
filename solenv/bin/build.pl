@@ -1507,17 +1507,18 @@ sub cancel_build {
     }
     print STDERR "-----------------------------------------------------------------------\n";
     print STDERR "\n";
-    print STDERR "rm -Rf " . $ENV{'SRC_ROOT'} . "/$module/" . $ENV{'INPATH'} . " # optional module 'clean'\n";
     print STDERR "" . $ENV{'OOO_SHELL'} . "\n";
     print STDERR "cd " . $ENV{'SRC_ROOT'} . "\n";
     print STDERR "source ./" . $ENV{'ENV_SCRIPT'} . "\n";
     print STDERR "cd $module\n";
     if (is_gnumake_module($module))
     {
+        print STDERR "$ENV{GNUMAKE} clean # optional\n";
         print STDERR "$ENV{GNUMAKE} -r\n"
     }
     else
     {
+        print STDERR "rm -Rf " . $ENV{'SRC_ROOT'} . "/$module/" . $ENV{'INPATH'} . " # optional module 'clean'\n";
         print STDERR "build\n";
     }
     print STDERR "\n";
