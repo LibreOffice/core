@@ -100,7 +100,6 @@ my_components = \
     component/svl/source/passwordcontainer/passwordcontainer \
     component/svl/util/svl \
     component/svtools/source/hatchwindow/hatchwindowfactory \
-    component/svtools/source/productregistration/productregistration.uno \
     component/svtools/util/svt \
     component/svx/util/svx \
     component/svx/util/svxcore \

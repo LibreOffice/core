@@ -480,7 +480,6 @@ Module gid_Module_Root_Files_5
 	gid_File_Lib_Fsstorage,
 	gid_File_Lib_Hatchwindowfactory,
 	gid_File_Lib_Passwordcontainer,
-	gid_File_Lib_Productregistration,
 	gid_File_Lib_Svtmisc,
     gid_File_Lib_Updchkui,
     gid_File_Lib_Updatefeed,

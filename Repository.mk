@@ -214,7 +214,6 @@ $(eval $(call gb_Helper_register_libraries,UNOLIBS_OOO, \
 	nullcanvas \
     OGLTrans \
     passwordcontainer \
-    productregistration \
 	simplecanvas \
     slideshow \
     vbaobj \

@@ -29,10 +29,8 @@
 $(eval $(call gb_Module_Module,svtools))
 
 $(eval $(call gb_Module_add_targets,svtools,\
-    AllLangResTarget_productregistration \
     AllLangResTarget_svt \
     Library_hatchwindowfactory \
-    Library_productregistration \
     Library_svt \
     Package_inc \
 ))

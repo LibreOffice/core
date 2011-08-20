@@ -598,7 +598,6 @@
 ../../svtools/source/filter.vcl/filter/dlgejpg.src
 ../../svtools/source/filter.vcl/filter/strings.src
 ../../svtools/source/Accessibility/accessiblelistboxentry.src
-../../svtools/source/productregistration/registrationdlg.src
 ../../svtools/source/plugapp/commtest.src
 ../../svtools/source/plugapp/testtool.src
 ../../fpicker/source/office/OfficeFilePicker.src
