@@ -166,6 +166,7 @@ static PyRef importUnoModule( ) throw ( RuntimeException )
         PyRef valueRep( PyObject_Repr( excValue.get() ), SAL_NO_ACQUIRE );
         buf.appendAscii( PyString_AsString( valueRep.get())).appendAscii( ", traceback follows\n" );
         buf.appendAscii( PyString_AsString( str.get() ) );
+        buf.appendAscii( ")" );
         throw RuntimeException( buf.makeStringAndClear(), Reference< XInterface > () );
     }
     PyRef dict( PyModule_GetDict( module.get() ) );
