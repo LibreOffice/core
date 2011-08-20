@@ -77,7 +77,6 @@ class TestToolObj: public SbxObject
     friend class TTBasic;
     friend class Controls;
 public:
-    TestToolObj( String aName, String aFilePath );      // Alle Dateien in FilePath, Kein IPC
     TestToolObj( String aName, MyBasic* pBas ); // Pfade aus INI, IPC benutzen
     ~TestToolObj();
     void LoadIniFile();             // Laden der IniEinstellungen, die durch den ConfigDialog geändert werden können

@@ -1639,7 +1639,6 @@ TaskToolBox::EndUpdateTask()
 TaskToolBox::StartUpdateTask()
 TaskToolBox::UpdateTask(Image const&, String const&, unsigned char)
 TempFile::IsValid() const
-TestToolObj::TestToolObj(String, String)
 TextObj::TextObj(TextObj&)
 TextObj::Write(SvStream*)
 TransferableDataHelper::GetInterface(com::sun::star::datatransfer::DataFlavor const&, com::sun::star::uno::Reference<com::sun::star::uno::XInterface>&)

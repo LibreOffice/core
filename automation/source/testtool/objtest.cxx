@@ -285,37 +285,6 @@ SbxTransportMethod::SbxTransportMethod( SbxDataType DT )
 }
 
 
-TestToolObj::TestToolObj( String aName, String aFilePath )              // Interner Aufruf
-: SbxObject( aName )
-, bUseIPC(sal_False)
-, bReturnOK(sal_True)
-, nSequence(KEEP_SEQUENCES)
-, ProgPath()
-, IsBlock(sal_False)
-, SingleCommandBlock(sal_True)
-, m_pControls(NULL)
-, m_pNameKontext(NULL)
-, m_pSIds(NULL)
-, m_pReverseSlots(NULL)
-, m_pReverseControls(NULL)
-, m_pReverseControlsSon(NULL)
-, m_pReverseUIds(NULL)
-, pCommunicationManager(NULL)
-, aDialogHandlerName()
-, nWindowHandlerCallLevel(0)
-, nIdleCount(0)
-{
-    pImpl = new ImplTestToolObj;
-    pImpl->ProgParam = String();
-    pImpl->aFileBase = DirEntry(aFilePath);
-    pImpl->aHIDDir = DirEntry(aFilePath);
-    pImpl->bIsStart = sal_False;
-    pImpl->pMyBasic = NULL;
-
-    pImpl->aServerTimeout = Time(0,1,00);           // 1:00 Minuten fest
-    InitTestToolObj();
-}
-
 TestToolObj::TestToolObj( String aName, MyBasic* pBas )                // Aufruf im Testtool
 : SbxObject( aName )
 , bUseIPC(sal_True)
