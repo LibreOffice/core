@@ -58,9 +58,6 @@ namespace utl
         // retrieves the URL which should be used for online registration
         String              getRegistrationURL( ) const;
 
-        // checks if the menu item which can be used to trigger the online registration should be available
-        sal_Bool            allowMenu( ) const;
-
         enum DialogPermission
         {                       // the registration dialog shall be executed ....
             dpDisabled,         // ... never - it has been disabled
@@ -105,12 +102,6 @@ namespace utl
             done implicitly when you call <method>activateReminder</method>.</p>
         */
         void                activateReminder( sal_Int32 _nDaysFromNow );
-
-        /** removes the reminder
-
-            <p>If this method is called, the reminder for the dialog will be removed.
-        */
-        void                removeReminder();
     };
 
 //........................................................................

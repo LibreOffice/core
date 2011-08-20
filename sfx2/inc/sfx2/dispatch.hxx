@@ -137,7 +137,6 @@ friend class SfxHelp;
     sal_Bool                _FindServer( sal_uInt16 nId, SfxSlotServer &rServer, sal_Bool bModal );
     sal_Bool                _FillState( const SfxSlotServer &rServer,
                                     SfxItemSet &rState, const SfxSlot *pRealSlot );
-    const SfxPoolItem*  _Execute( const SfxSlotServer &rServer );
     void                _Execute( SfxShell &rShell, const SfxSlot &rSlot,
                                   SfxRequest &rReq,
                                   SfxCallMode eCall = SFX_CALLMODE_STANDARD);
@@ -156,7 +155,6 @@ public:
 
     virtual             ~SfxDispatcher();
 
-    const SfxPoolItem*  Execute( const SfxExecuteItem& rItem );
     virtual sal_uInt16      ExecuteFunction( sal_uInt16 nSID, SfxPoolItem** ppArgs=0, sal_uInt16 nMode=0 );
     sal_uInt16              ExecuteFunction( sal_uInt16 nSID, const SfxItemSet& rArgs , sal_uInt16 nMode=0 );
 
@@ -187,7 +185,6 @@ public:
                                  sal_uInt16 nModi,
                                  const SfxItemSet &rArgs );
 
-    sal_uInt16              GetSlotId( const String& rCommand );
     const SfxSlot*      GetSlot( const String& rCommand );
 
     sal_Bool                IsActive( const SfxShell& rShell );
@@ -208,9 +205,6 @@ public:
                               Window *pWin = 0, const Point *pPosPixel = 0 );
     static void         ExecutePopup( sal_uInt16 nConfigId = 0,
                               Window *pWin = 0, const Point *pPosPixel = 0 );
-    static void         ExecutePopup( sal_uInt16 nConfigId,
-                                      Window *pWin, const Point *pPosPixel,
-                                      const SfxPoolItem *pArg1, ...  );
 
     sal_Bool            IsAppDispatcher() const;
     sal_Bool            IsFlushed() const;
@@ -232,11 +226,9 @@ public:
     void                SetDisableFlags( sal_uInt32 nFlags );
     sal_uInt32              GetDisableFlags() const;
 
-    SAL_DLLPRIVATE sal_Bool HasSlot_Impl( sal_uInt16 );
     SAL_DLLPRIVATE void SetMenu_Impl();
     SAL_DLLPRIVATE void Update_Impl( sal_Bool bForce = sal_False ); // ObjectBars etc.
     SAL_DLLPRIVATE sal_Bool IsUpdated_Impl() const;
-    SAL_DLLPRIVATE void DebugOutput_Impl() const;
     SAL_DLLPRIVATE int GetShellAndSlot_Impl( sal_uInt16 nSlot, SfxShell **ppShell, const SfxSlot **ppSlot,
                                               sal_Bool bOwnShellsOnly, sal_Bool bModal, sal_Bool bRealSlot=sal_True );
     SAL_DLLPRIVATE void LockUI_Impl( sal_Bool bLock = sal_True );
@@ -244,7 +236,6 @@ public:
     SAL_DLLPRIVATE sal_Bool GetReadOnly_Impl() const;
     SAL_DLLPRIVATE sal_Bool IsSlotEnabledByFilter_Impl( sal_uInt16 nSID ) const;
     SAL_DLLPRIVATE void SetQuietMode_Impl( sal_Bool bOn );
-    SAL_DLLPRIVATE void SetModalMode_Impl( sal_Bool bOn );
     SAL_DLLPRIVATE sal_Bool IsReadOnlyShell_Impl( sal_uInt16 nShell ) const;
     SAL_DLLPRIVATE void RemoveShell_Impl( SfxShell& rShell );
     SAL_DLLPRIVATE void DoParentActivate_Impl();

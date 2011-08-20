@@ -174,7 +174,6 @@ public:
 
     // calling this method delegates the responsibility to call closeinput to the caller!
     NS_UNO::Reference < NS_IO::XInputStream > getInputStream();
-    NS_UNO::Reference < NS_IO::XStream > getStream();
 
 #if _SOLAR__PRIVATE
     sal_Bool                setInputStream_Impl( const NS_UNO::Reference < NS_IO::XInputStream > &rxInputStream,

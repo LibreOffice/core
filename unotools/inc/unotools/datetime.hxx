@@ -47,9 +47,6 @@ namespace utl
 
     namespace starutil = ::com::sun::star::util;
 
-    UNOTOOLS_DLLPUBLIC void typeConvert(const Time& _rTime, starutil::Time& _rOut);
-    UNOTOOLS_DLLPUBLIC void typeConvert(const starutil::Time& _rTime, Time& _rOut);
-
     UNOTOOLS_DLLPUBLIC void typeConvert(const Date& _rDate, starutil::Date& _rOut);
     UNOTOOLS_DLLPUBLIC void typeConvert(const starutil::Date& _rDate, Date& _rOut);
 

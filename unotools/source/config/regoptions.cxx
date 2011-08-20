@@ -182,7 +182,6 @@ namespace utl
         static void             revokeClient( );
 
         inline sal_Bool         hasURL( ) const             { return ( 0 != m_sRegistrationURL.Len() ); }
-        inline sal_Bool         allowMenu( ) const          { return hasURL() && m_bShowMenuItem; }
         inline String           getRegistrationURL( ) const { return m_sRegistrationURL; }
 
         RegOptions::DialogPermission    getDialogPermission( ) const;
@@ -466,29 +465,6 @@ namespace utl
     {
         const_cast< RegOptions* >( this )->ensureImpl( );
         m_pImpl->activateReminder( _nDaysFromNow );
-    }
-
-    //--------------------------------------------------------------------
-    sal_Bool RegOptions::allowMenu( ) const
-    {
-        /// we cache this setting, 'cause it is needed very often
-        static sal_Bool bKnowMenuPermission = sal_False;
-        static sal_Bool bAllowMenu          = sal_False;
-
-        if ( !bKnowMenuPermission )
-        {
-            const_cast< RegOptions* >( this )->ensureImpl( );
-            bAllowMenu = m_pImpl->allowMenu();
-            bKnowMenuPermission = sal_True;
-        }
-        return bAllowMenu;
-    }
-
-    //--------------------------------------------------------------------
-    void RegOptions::removeReminder()
-    {
-        const_cast< RegOptions* >( this )->ensureImpl( );
-        m_pImpl->removeReminder();
     }
 //........................................................................
 }   // namespace utl

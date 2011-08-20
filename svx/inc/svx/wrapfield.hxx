@@ -41,7 +41,6 @@ namespace svx {
 class SVX_DLLPUBLIC WrapField : public NumericField
 {
 public:
-    explicit            WrapField( Window* pParent, WinBits nWinStyle );
     explicit            WrapField( Window* pParent, const ResId& rResId );
 
 protected:

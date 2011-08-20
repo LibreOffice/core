@@ -60,15 +60,6 @@ SfxAllEnumItem::SfxAllEnumItem() :
 {
 }
 
-SfxAllEnumItem::SfxAllEnumItem( sal_uInt16 which, sal_uInt16 nVal, const XubString &rText ):
-    SfxEnumItem(which, nVal),
-    pValues( 0 ),
-    pDisabledValues( 0 )
-{
-    DBG_CTOR(SfxAllEnumItem, 0);
-    InsertValue( nVal, rText );
-}
-
 // -----------------------------------------------------------------------
 
 SfxAllEnumItem::SfxAllEnumItem(sal_uInt16 which, sal_uInt16 nVal):
@@ -291,17 +282,5 @@ void SfxAllEnumItem::RemoveValue( sal_uInt16 nValue )
     DBG_ASSERT( nPos != USHRT_MAX, "removing value not in enum" );
     pValues->Remove( nPos );
 }
-
-// -----------------------------------------------------------------------
-
-
-void SfxAllEnumItem::RemoveAllValues()
-{
-    DBG_CHKTHIS(SfxAllEnumItem, 0);
-    if ( pValues )
-        pValues->DeleteAndDestroy( 0, pValues->Count() );
-}
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

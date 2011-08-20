@@ -32,13 +32,6 @@
 
 namespace svx {
 
-// ============================================================================
-
-WrapField::WrapField( Window* pParent, WinBits nWinStyle ) :
-    NumericField( pParent, nWinStyle )
-{
-}
-
 WrapField::WrapField( Window* pParent, const ResId& rResId ) :
     NumericField( pParent, rResId )
 {

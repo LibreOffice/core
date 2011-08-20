@@ -160,12 +160,6 @@ public:
     void addProperties( const std::vector< rtl::OUString > & rProps,
                         const ContentProperties & rContentProps );
 
-    // overwrites probably existing entries.
-    void addProperties( const ContentProperties & rProps );
-
-    // overwrites probably existing entries.
-    void addProperties( const std::vector< DAVPropertyValue > & rProps );
-
     // overwrites probably existing entry.
     void addProperty( const rtl::OUString & rName,
                      const com::sun::star::uno::Any & rValue,

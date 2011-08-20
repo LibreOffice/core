@@ -124,53 +124,6 @@ namespace svxform
         }
     }
 
-    //------------------------------------------------------------------------
-    sal_Bool isModelShapeMarked( FmEntryData* _pEntry, const MapModelToShape& _rModelMap, SdrMarkView* _pView )
-    {
-        DBG_ASSERT( _pEntry && _pView, "isModelShapeMarked: invalid arguments!" );
-        if ( !_pEntry || !_pView )
-            return sal_False;
-
-        DBG_ASSERT( _pEntry->GetElement().get() == Reference< XInterface >( _pEntry->GetElement(), UNO_QUERY ).get(),
-            "isModelShapeMarked: element of the FmEntryData is not normalized!" );
-            // normalization of the XInterface is a prerequisite for properly finding it in the map
-
-        sal_Bool bIsMarked = sal_False;
-
-        MapModelToShape::const_iterator aPos = _rModelMap.find( _pEntry->GetElement() );
-        if ( _rModelMap.end() != aPos )
-        {   // there is a shape for this model ....
-            bIsMarked = _pView->IsObjMarked( aPos->second );
-            if ( !bIsMarked )
-            {
-                // IsObjMarked does not step down grouped objects, so the sal_False we
-                // have is not really reliable (while a sal_True would have been)
-                // Okay, travel the mark list, and see if there is a group marked, and our shape
-                // is a part of this group
-                sal_uInt32 nMarked = _pView->GetMarkedObjectList().GetMarkCount();
-                for ( sal_uInt32 i = 0; (i<nMarked ) && !bIsMarked; ++i )
-                {
-                    SdrMark* pMark = _pView->GetMarkedObjectList().GetMark( i );
-                    SdrObject* pObj = pMark ? pMark->GetMarkedSdrObj() : NULL;
-                    if ( pObj && pObj->IsGroupObject() )
-                    {   // the i-th marked shape is a group shape
-                        SdrObjListIter aIter( *pObj );
-                        while ( aIter.IsMore() )
-                        {
-                            if ( aIter.Next() == aPos->second )
-                            {
-                                bIsMarked = sal_True;
-                                break;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        return bIsMarked;
-    }
-
     //========================================================================
     // class NavigatorTree
     //========================================================================

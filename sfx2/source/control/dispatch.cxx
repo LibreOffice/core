@@ -1121,14 +1121,6 @@ sal_uInt16 SfxDispatcher::ExecuteFunction( sal_uInt16 nSlot, const SfxItemSet& r
     return nRet;
 }
 
-sal_uInt16 SfxDispatcher::GetSlotId( const String& rCommand )
-{
-    const SfxSlot *pSlot = GetSlot( rCommand );
-    if ( pSlot )
-        return pSlot->GetSlotId();
-    return 0;
-}
-
 const SfxSlot* SfxDispatcher::GetSlot( const String& rCommand )
 {
     // Count the number of Shells on the linked Dispatcher
@@ -1207,21 +1199,6 @@ SfxExecuteItem::SfxExecuteItem(
     sal_uInt16 nWhichId, sal_uInt16 nSlotP, SfxCallMode eModeP )
     : SfxPoolItem( nWhichId ), nSlot( nSlotP ), eCall( eModeP ), nModifier( 0 )
 {
-}
-
-//--------------------------------------------------------------------
-const SfxPoolItem* SfxDispatcher::Execute( const SfxExecuteItem& rItem )
-{
-    const SfxPoolItem** pPtr = new const SfxPoolItem*[ rItem.Count() + 1 ];
-    for( sal_uInt16 nPos = rItem.Count(); nPos--; )
-        pPtr[ nPos ] = rItem.GetObject( nPos );
-    pPtr[ rItem.Count() ] = 0;
-    const SfxPoolItem* pRet = Execute(
-        rItem.GetSlot(), rItem.GetCallMode(), pPtr, rItem.GetModifier() );
-
-    delete [] (SfxPoolItem**)pPtr;
-
-    return pRet;
 }
 
 //--------------------------------------------------------------------
@@ -2287,94 +2264,6 @@ sal_Bool SfxDispatcher::_FindServer
     return sal_False;
 }
 
-sal_Bool SfxDispatcher::HasSlot_Impl( sal_uInt16 nSlot )
-{
-    Flush();
-    sal_uInt16 nTotCount = pImp->aStack.Count();
-
-    if ( pImp->pParent && !pImp->pParent->pImp->pFrame )
-    {
-        // the last frame also uses the AppDispatcher
-        nTotCount = nTotCount + pImp->aStack.Count();
-    }
-
-    if (nSlot >= SID_VERB_START && nSlot <= SID_VERB_END)
-    {
-        // Verb-Slot?
-        for ( sal_uInt16 nShell = 0;; ++nShell )
-        {
-            SfxShell *pSh = GetShell(nShell);
-            if ( pSh == NULL )
-                return false;
-            if ( pSh->ISA(SfxViewShell) )
-                return true;
-        }
-    }
-
-    // SID check against set filter
-    sal_uInt16 nSlotEnableMode=0;
-    if ( pImp->pFrame )
-    {
-        nSlotEnableMode = IsSlotEnabledByFilter_Impl( nSlot );
-        if ( 0 == nSlotEnableMode )
-            return sal_False;
-    }
-
-    // In Quiet-Mode only Parent-Dispatcher
-    if ( pImp->bQuiet )
-        return sal_False;
-
-    sal_Bool bReadOnly = ( 2 != nSlotEnableMode && pImp->bReadOnly );
-
-    for ( sal_uInt16 i=0 ; i < nTotCount; ++i )
-    {
-        SfxShell *pObjShell = GetShell(i);
-        SfxInterface *pIFace = pObjShell->GetInterface();
-        const SfxSlot *pSlot = pIFace->GetSlot(nSlot);
-        if ( pSlot && pSlot->nDisableFlags && ( pSlot->nDisableFlags & pObjShell->GetDisableFlags() ) != 0 )
-            return sal_False;
-
-        if ( pSlot && !( pSlot->nFlags & SFX_SLOT_READONLYDOC ) && bReadOnly )
-            return sal_False;
-
-        if ( pSlot )
-        {
-            // Slot belongs to Container?
-            bool bIsContainerSlot = pSlot->IsMode(SFX_SLOT_CONTAINER);
-            bool bIsInPlace = pImp->pFrame && pImp->pFrame->GetObjectShell()->IsInPlaceActive();
-
-            // Shell belongs to Server?
-            // AppDispatcher or IPFrame-Dispatcher
-            bool bIsServerShell = !pImp->pFrame || bIsInPlace;
-
-            // Of course ShellServer-Slots are also executable even when it is
-            // excecuted on a container dispatcher without a IPClient
-            if ( !bIsServerShell )
-            {
-                SfxViewShell *pViewSh = pImp->pFrame->GetViewShell();
-                bIsServerShell = !pViewSh || !pViewSh->GetUIActiveClient();
-            }
-
-            // Shell belongs to Container?
-            // AppDispatcher or no IPFrameDispatcher
-            bool bIsContainerShell = !pImp->pFrame || !bIsInPlace;
-
-            // Shell and Slot match
-            if ( !( ( bIsContainerSlot && bIsContainerShell ) ||
-                    ( !bIsContainerSlot && bIsServerShell ) ) )
-                pSlot = 0;
-        }
-
-        if ( pSlot && !IsAllowed( nSlot ) )
-            pSlot = NULL;
-
-        if ( pSlot )
-            return sal_True;
-    }
-
-    return sal_False;
-}
-
 //--------------------------------------------------------------------
 sal_Bool SfxDispatcher::_FillState
 (
@@ -2457,61 +2346,6 @@ sal_Bool SfxDispatcher::_FillState
 
     DBG_PROFSTOP(SfxDispatcherFillState);
     return sal_False;
-}
-
-//--------------------------------------------------------------------
-const SfxPoolItem* SfxDispatcher::_Execute( const SfxSlotServer &rSvr )
-
-/*  [Description]
-
-    This method performs a request for a cached <Slot-Server>.
-*/
-
-{
-    const SfxSlot *pSlot = rSvr.GetSlot();
-    if ( IsLocked( pSlot->GetSlotId() ) )
-        return 0;
-
-    if ( pSlot )
-    {
-        Flush();
-
-        if ( pSlot->IsMode(SFX_SLOT_ASYNCHRON) )
-            //! ignore rSvr
-        {
-            SfxShell *pShell = GetShell( rSvr.GetShellLevel() );
-            SfxDispatcher *pDispat = this;
-            while ( pDispat )
-            {
-                sal_uInt16 nShellCount = pDispat->pImp->aStack.Count();
-                for ( sal_uInt16 n=0; n<nShellCount; n++ )
-                    if ( pShell == pDispat->pImp->aStack.Top(n) )
-                    {
-                        pDispat->pImp->xPoster->Post(
-                            new SfxRequest( pSlot->GetSlotId(),
-                                SFX_CALLMODE_RECORD, pShell->GetPool() ) );
-                        return 0;
-                    }
-            }
-        }
-        else
-        {
-            // Determine the object and call the Message of this object
-            SfxShell *pSh = GetShell(rSvr.GetShellLevel());
-            SfxRequest aReq( pSlot->GetSlotId(), SFX_CALLMODE_RECORD, pSh->GetPool() );
-            if ( Call_Impl( *pSh, *pSlot, aReq, sal_True ) ) // Bindings always recording
-                return aReq.GetReturnValue();
-        }
-    }
-    return 0;
-}
-
-//----------------------------------------------------------------------
-void SfxDispatcher::ExecutePopup( sal_uInt16 nConfigId,
-                                  Window *pWin, const Point *pPos,
-                                  const SfxPoolItem *, ... )
-{
-    ExecutePopup( nConfigId, pWin, pPos );
 }
 
 SfxPopupMenuManager* SfxDispatcher::Popup( sal_uInt16 nConfigId,Window *pWin, const Point *pPos )
@@ -2608,31 +2442,6 @@ sal_uInt32 SfxDispatcher::GetObjectBarId( sal_uInt16 nPos ) const
     return pImp->aObjBars[nPos].nResId;
 }
 
-//--------------------------------------------------------------------
-void SfxDispatcher::DebugOutput_Impl() const
-{
-#ifdef DBG_UTIL
-
-    sal_uInt16 nOld = (sal_uInt16) DbgGetData()->nTraceOut;
-    DbgGetData()->nTraceOut = DBG_OUT_FILE;
-
-    if (bFlushed)
-        OSL_TRACE("Flushed");
-    if (pImp->bUpdated)
-        OSL_TRACE("updated");
-
-    for ( sal_uInt16 nShell = pImp->aStack.Count(); nShell > 0; --nShell )
-    {
-        SfxShell *pShell = GetShell(nShell-1);
-        const SfxInterface *pIFace = pShell->GetInterface();
-        OSL_TRACE("%s", pIFace->GetClassName());
-    }
-
-    DbgGetData()->nTraceOut = nOld;
-
-#endif
-}
-
 void SfxDispatcher::LockUI_Impl( sal_Bool bLock )
 {
     sal_Bool bWasLocked = pImp->bUILocked;
@@ -2692,21 +2501,6 @@ void SfxDispatcher::SetQuietMode_Impl( sal_Bool bOn )
 
 {
     pImp->bQuiet = bOn;
-    SfxBindings* pBindings = GetBindings();
-    if ( pBindings )
-        pBindings->InvalidateAll(sal_True);
-}
-
-//-------------------------------------------------------------------------
-void SfxDispatcher::SetModalMode_Impl( sal_Bool bOn )
-
-/*  [Description]
-
-    With 'Bon' only slots of the parent dispatcher are found.
-*/
-
-{
-    pImp->bModal = bOn;
     SfxBindings* pBindings = GetBindings();
     if ( pBindings )
         pBindings->InvalidateAll(sal_True);

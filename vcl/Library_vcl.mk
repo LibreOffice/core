@@ -263,7 +263,6 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/window/window4 \
     vcl/source/window/window \
     vcl/source/window/winproc \
-    vcl/source/window/wpropset \
     vcl/source/window/wrkwin \
 ))
 
