@@ -42,7 +42,6 @@
 #define HTML_CFG_MSIE       1   // Internet Explorer
 #define HTML_CFG_WRITER     2   // Writer
 #define HTML_CFG_NS40       3   // Netscape 4.0
-#define HTML_CFG_MSIE_40_OLD 4   // Internet Explorer 4.0 - alter Wert
 
 #define HTML_CFG_MAX HTML_CFG_NS40
 

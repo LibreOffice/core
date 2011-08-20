@@ -166,7 +166,6 @@ void SvxHtmlOptions::Load( const Sequence< OUString >& aNames )
                                 case 1:     nExpMode = HTML_CFG_MSIE;    break;
                                 case 3:     nExpMode = HTML_CFG_WRITER;     break;
                                 case 4:     nExpMode = HTML_CFG_NS40;       break;
-                                case 5:     nExpMode = HTML_CFG_MSIE_40_OLD;break;
                                 default:    nExpMode = HTML_CFG_NS40;       break;
                             }
 
@@ -236,7 +235,6 @@ void    SvxHtmlOptions::Commit()
                         case HTML_CFG_MSIE:      nExpMode = 1;   break;
                         case HTML_CFG_WRITER:       nExpMode = 3;   break;
                         case HTML_CFG_NS40:         nExpMode = 4;   break;
-                        case HTML_CFG_MSIE_40_OLD:  nExpMode = 5;   break;
                         default:                    nExpMode = 4;   break;  // NS40
                     }
 
