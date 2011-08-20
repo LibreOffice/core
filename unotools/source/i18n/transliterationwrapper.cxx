@@ -32,7 +32,6 @@
 #include <unotools/transliterationwrapper.hxx>
 #include <tools/debug.hxx>
 #include <i18npool/mslangid.hxx>
-#include <comphelper/componentfactory.hxx>
 
 #include "instance.hxx"
 #include <com/sun/star/i18n/TransliterationModulesExtra.hpp>

@@ -29,7 +29,6 @@
 #define _INTL_INSTANCE_HXX
 
 #include <comphelper/processfactory.hxx>
-#include <comphelper/componentfactory.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <rtl/strbuf.hxx>
 
