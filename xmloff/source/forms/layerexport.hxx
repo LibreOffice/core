@@ -152,16 +152,6 @@ namespace xmloff
             const ::com::sun::star::uno::Sequence< ::com::sun::star::script::ScriptEventDescriptor >& _rEvents
             );
 
-        /** seek to the page given.
-
-            <p>This must be called before you can retrieve any ids for controls on the page.</p>
-
-            @see
-                getControlId
-        */
-        sal_Bool    seekPage(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage >& _rxDrawPage);
-
         /** get the id of the given control.
 
             <p>You must have sought to the page of the control before calling this.</p>
@@ -230,10 +220,6 @@ namespace xmloff
         /** determines whether the given page contains XForm instances
         */
         bool documentContainsXForms() const;
-
-        /** exports the controls number styles
-        */
-        void    exportControlNumberStyles();
 
         /** exports the automatic control number styles
         */

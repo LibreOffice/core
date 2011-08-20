@@ -277,13 +277,6 @@ namespace xmloff
     }
 
     //---------------------------------------------------------------------
-    void OFormLayerXMLExport_Impl::exportControlNumberStyles()
-    {
-        if (m_pControlNumberStyles)
-            m_pControlNumberStyles->Export(sal_False);
-    }
-
-    //---------------------------------------------------------------------
     void OFormLayerXMLExport_Impl::exportAutoControlNumberStyles()
     {
         if ( m_pControlNumberStyles )
@@ -380,30 +373,6 @@ namespace xmloff
                 m_aCurrentPageReferring->second.clear();
         }
         return bKnownPage;
-    }
-
-    //---------------------------------------------------------------------
-    sal_Bool OFormLayerXMLExport_Impl::seekPage(const Reference< XDrawPage >& _rxDrawPage)
-    {
-        sal_Bool bKnownPage = implMoveIterators( _rxDrawPage, sal_False );
-        if ( bKnownPage )
-            return sal_True;
-
-        // if the page is not yet known, this does not automatically mean that it has
-        // not been examined. Instead, examineForms returns silently and successfully
-        // if a page is a XFormsPageSupplier2, but does not have a forms collection
-        // (This behaviour of examineForms is a performance optimization, to not force
-        // the page to create a forms container just to see that it's empty.)
-
-        // So, in such a case, seekPage is considered to be successfull, too, though the
-        // page was not yet known
-        Reference< XFormsSupplier2 > xFormsSupp( _rxDrawPage, UNO_QUERY );
-        if ( xFormsSupp.is() && !xFormsSupp->hasForms() )
-            return sal_True;
-
-        // anything else means that the page has not been examined before, or it's no
-        // valid form page. Both cases are Bad (TM).
-        return sal_False;
     }
 
     //---------------------------------------------------------------------
