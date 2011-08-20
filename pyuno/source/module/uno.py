@@ -301,9 +301,6 @@ def _uno_import( name, *optargs, **kwargs ):
                       raise ImportError( "type "+ name + "." +x + " is unknown" )
     return mod
 
-# hook into the __import__ chain    
-__builtin__.__dict__["__import__"] = _uno_import
-        
 # private function, don't use
 def _impl_extractName(name):
     r = list(range(len(name)-1,0,-1))
@@ -366,4 +363,7 @@ def _uno_extract_printable_stacktrace( trace ):
         ret = "Couldn't import traceback module"
     return ret
 
+# hook into the __import__ chain    
+__builtin__.__dict__["__import__"] = _uno_import
+        
 # vim:set shiftwidth=4 softtabstop=4 expandtab:
