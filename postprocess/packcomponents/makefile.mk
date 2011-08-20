@@ -239,10 +239,6 @@ my_components += kde4be1
 my_components += component/slideshow/source/engine/OGLTrans/ogltrans
 .END
 
-.IF "$(ENABLE_SVCTAGS)" == "YES"
-my_components += productregistration.jar
-.END
-
 .IF "$(ENABLE_LOMENUBAR)" == "TRUE"
 my_components += component/framework/util/lomenubar
 .END
