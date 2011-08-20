@@ -31,11 +31,4 @@ gb_LinkTarget_LDFLAGS += \
 
 include $(GBUILDDIR)/platform/unxgcc.mk
 
-# convert parameters filesystem root to native notation
-# does some real work only on windows, make sure not to
-# break the dummy implementations on unx*
-define gb_Helper_convert_native
-$(1)
-endef
-
 # vim: set noet sw=4 ts=4:

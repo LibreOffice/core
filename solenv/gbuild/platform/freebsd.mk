@@ -40,11 +40,4 @@ gb_COMPILERDEFAULTOPTFLAGS := -O2
 
 include $(GBUILDDIR)/platform/unxgcc.mk
 
-# convert parameters filesystem root to native notation
-# does some real work only on windows, make sure not to
-# break the dummy implementations on unx*
-define gb_Helper_convert_native
-$(1)
-endef
-
 # vim: set noet sw=4:
