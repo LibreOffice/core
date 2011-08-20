@@ -1,4 +1,4 @@
-/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/* -*- Mode: C++; eval:(c-set-style "bsd"); tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -53,6 +53,7 @@ using com::sun::star::uno::TypeDescription;
 using com::sun::star::uno::Sequence;
 using com::sun::star::uno::Type;
 using com::sun::star::uno::UNO_QUERY;
+using com::sun::star::uno::Exception;
 using com::sun::star::uno::RuntimeException;
 using com::sun::star::uno::XComponentContext;
 using com::sun::star::lang::XSingleServiceFactory;
@@ -914,41 +915,56 @@ Any Runtime::pyObject2Any ( const PyRef & source, enum ConversionMode mode ) con
 
 Any Runtime::extractUnoException( const PyRef & excType, const PyRef &excValue, const PyRef &excTraceback) const
 {
-    PyRef str;
+    OUString str;
     Any ret;
     if( excTraceback.is() )
     {
-        PyRef unoModule( impl ? impl->cargo->getUnoModule() : 0 );
+        Exception e;
+        PyRef unoModule;
+        if ( impl )
+        {
+            try
+            {
+                unoModule = impl->cargo->getUnoModule();
+            }
+            catch (Exception ei)
+            {
+                e=ei;
+            }
+        }
         if( unoModule.is() )
         {
             PyRef extractTraceback(
                 PyDict_GetItemString(unoModule.get(),"_uno_extract_printable_stacktrace" ) );
 
-            if( extractTraceback.is() )
+            if( PyCallable_Check(extractTraceback.get()) )
             {
                 PyRef args( PyTuple_New( 1), SAL_NO_ACQUIRE );
                 PyTuple_SetItem( args.get(), 0, excTraceback.getAcquired() );
-                str = PyRef( PyObject_CallObject( extractTraceback.get(),args.get() ), SAL_NO_ACQUIRE);
+                PyRef pyStr( PyObject_CallObject( extractTraceback.get(),args.get() ), SAL_NO_ACQUIRE);
+                str = rtl::OUString::createFromAscii( PyString_AsString(pyStr.get()) );
             }
             else
             {
-                str = PyRef(
-                    PyString_FromString( "Couldn't find uno._uno_extract_printable_stacktrace" ),
-                    SAL_NO_ACQUIRE );
+                str = OUString(RTL_CONSTASCII_USTRINGPARAM("Couldn't find uno._uno_extract_printable_stacktrace"));
             }
         }
         else
         {
-            str = PyRef(
-                PyString_FromString( "Couldn't find uno.py, no stacktrace available" ),
-                SAL_NO_ACQUIRE );
+            str = OUString(RTL_CONSTASCII_USTRINGPARAM("Could not load uno.py, no stacktrace available"));
+            if ( e.Message.getLength() > 0 )
+            {
+                str += OUString (RTL_CONSTASCII_USTRINGPARAM(" (Error loading uno.py: "));
+                str += e.Message;
+                str += OUString (RTL_CONSTASCII_USTRINGPARAM(")"));
+            }
         }
 
     }
     else
     {
         // it may occur, that no traceback is given (e.g. only native code below)
-        str = PyRef( PyString_FromString( "no traceback available" ), SAL_NO_ACQUIRE);
+        str = OUString( RTL_CONSTASCII_USTRINGPARAM( "no traceback available" ) );
     }
 
     if( isInstanceOfStructOrException( excValue.get() ) )
@@ -978,9 +994,10 @@ Any Runtime::extractUnoException( const PyRef & excType, const PyRef &excValue, 
             buf.appendAscii( "Couldn't convert exception value to a string" );
         }
         buf.appendAscii( ", traceback follows\n" );
-        if( str.is() )
+        if( str.getLength() > 0 )
         {
-            buf.appendAscii( PyString_AsString( str.get() ) );
+            buf.append( str );
+            buf.appendAscii( "\n" );
         }
         else
         {
