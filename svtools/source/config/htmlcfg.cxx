@@ -162,7 +162,6 @@ void SvxHtmlOptions::Load( const Sequence< OUString >& aNames )
                             pValues[nProp] >>= nExpMode;
                             switch( nExpMode )
                             {
-                                case 0:     nExpMode = HTML_CFG_HTML32;     break;
                                 case 1:     nExpMode = HTML_CFG_MSIE;    break;
                                 case 3:     nExpMode = HTML_CFG_WRITER;     break;
                                 case 4:     nExpMode = HTML_CFG_NS40;       break;
@@ -231,7 +230,6 @@ void    SvxHtmlOptions::Commit()
 
                     switch( nExpMode )
                     {
-                        case HTML_CFG_HTML32:       nExpMode = 0;   break;
                         case HTML_CFG_MSIE:      nExpMode = 1;   break;
                         case HTML_CFG_WRITER:       nExpMode = 3;   break;
                         case HTML_CFG_NS40:         nExpMode = 4;   break;

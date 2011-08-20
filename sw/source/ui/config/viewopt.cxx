@@ -353,8 +353,6 @@ sal_uInt16      GetHtmlMode(const SwDocShell* pShell)
                         HTMLMODE_BLINK|HTMLMODE_DROPCAPS|HTMLMODE_GRAPH_POS|
                         HTMLMODE_FULL_ABS_POS|HTMLMODE_SOME_ABS_POS;
             break;
-            case HTML_CFG_HTML32:
-            break;
         }
     }
     return nRet;
