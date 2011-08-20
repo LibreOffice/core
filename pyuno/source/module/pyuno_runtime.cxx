@@ -74,7 +74,7 @@ namespace pyuno
 static PyTypeObject RuntimeImpl_Type =
 {
     PyVarObject_HEAD_INIT (&PyType_Type, 0)
-    const_cast< char * >("pyuno_runtime"),
+    "pyuno_runtime",
     sizeof (RuntimeImpl),
     0,
     (destructor) RuntimeImpl::del,
@@ -138,7 +138,7 @@ static void getRuntimeImpl( PyRef & globalDict, PyRef &runtimeImpl )
                                 Reference< XInterface > () );
     }
 
-    globalDict = PyRef( PyModule_GetDict(PyImport_AddModule(const_cast< char * >("__main__"))));
+    globalDict = PyRef( PyModule_GetDict(PyImport_AddModule("__main__")));
 
     if( ! globalDict.is() ) // FATAL !
     {
@@ -151,7 +151,7 @@ static void getRuntimeImpl( PyRef & globalDict, PyRef &runtimeImpl )
 static PyRef importUnoModule( ) throw ( RuntimeException )
 {
     // import the uno module
-    PyRef module( PyImport_ImportModule( const_cast< char * >("uno") ), SAL_NO_ACQUIRE );
+    PyRef module( PyImport_ImportModule( "uno" ), SAL_NO_ACQUIRE );
     if( PyErr_Occurred() )
     {
         PyRef excType, excValue, excTraceback;
@@ -551,7 +551,7 @@ PyRef Runtime::any2PyObject (const Any &a ) const
             PyTuple_SetItem( args.get(), 0 , pymsg.getAcquired() );
             // the exception base functions want to have an "args" tuple,
             // which contains the message
-            PyObject_SetAttrString( ret.get(), const_cast< char * >("args"), args.get() );
+            PyObject_SetAttrString( ret.get(), "args", args.get() );
         }
         return ret;
     }
@@ -626,7 +626,7 @@ static Sequence< Type > invokeGetTypes( const Runtime & r , PyObject * o )
 {
     Sequence< Type > ret;
 
-    PyRef method( PyObject_GetAttrString( o , const_cast< char * >("getTypes") ), SAL_NO_ACQUIRE );
+    PyRef method( PyObject_GetAttrString( o , "getTypes" ), SAL_NO_ACQUIRE );
     raiseInvocationTargetExceptionWhenNeeded( r );
     if( method.is() && PyCallable_Check( method.get() ) )
     {
@@ -765,7 +765,7 @@ Any Runtime::pyObject2Any ( const PyRef & source, enum ConversionMode mode ) con
         // should be removed, in case ByteSequence gets derived from String
         if( PyObject_IsInstance( o, getByteSequenceClass( runtime ).get() ) )
         {
-            PyRef str(PyObject_GetAttrString( o , const_cast< char * >("value") ),SAL_NO_ACQUIRE);
+            PyRef str(PyObject_GetAttrString( o , "value" ),SAL_NO_ACQUIRE);
             Sequence< sal_Int8 > seq;
             if( PyString_Check( str.get() ) )
             {
@@ -786,7 +786,7 @@ Any Runtime::pyObject2Any ( const PyRef & source, enum ConversionMode mode ) con
         }
         else if( isInstanceOfStructOrException( o ) )
         {
-            PyRef struc(PyObject_GetAttrString( o , const_cast< char * >("value") ),SAL_NO_ACQUIRE);
+            PyRef struc(PyObject_GetAttrString( o , "value" ),SAL_NO_ACQUIRE);
             PyUNO * obj = (PyUNO*)struc.get();
             Reference< XMaterialHolder > holder( obj->members->xInvocation, UNO_QUERY );
             if( holder.is( ) )
@@ -832,9 +832,9 @@ Any Runtime::pyObject2Any ( const PyRef & source, enum ConversionMode mode ) con
         {
             if( ACCEPT_UNO_ANY == mode )
             {
-                a = pyObject2Any( PyRef( PyObject_GetAttrString( o , const_cast< char * >("value") ), SAL_NO_ACQUIRE) );
+                a = pyObject2Any( PyRef( PyObject_GetAttrString( o , "value" ), SAL_NO_ACQUIRE) );
                 Type t;
-                pyObject2Any( PyRef( PyObject_GetAttrString( o, const_cast< char * >("type") ), SAL_NO_ACQUIRE ) ) >>= t;
+                pyObject2Any( PyRef( PyObject_GetAttrString( o, "type" ), SAL_NO_ACQUIRE ) ) >>= t;
 
                 try
                 {

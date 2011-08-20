@@ -76,7 +76,7 @@ static void raiseRuntimeExceptionWhenNeeded() throw ( RuntimeException )
 static PyRef getLoaderModule() throw( RuntimeException )
 {
     PyRef module(
-        PyImport_ImportModule( const_cast< char * >("pythonloader") ),
+        PyImport_ImportModule( "pythonloader" ),
         SAL_NO_ACQUIRE );
     raiseRuntimeExceptionWhenNeeded();
     if( !module.is() )

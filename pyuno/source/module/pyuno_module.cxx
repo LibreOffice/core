@@ -447,7 +447,7 @@ static PyObject *getTypeByName( PyObject *, PyObject *args )
     {
         char *name;
 
-        if (PyArg_ParseTuple (args, const_cast< char * >("s"), &name))
+        if (PyArg_ParseTuple (args, "s", &name))
         {
             OUString typeName ( OUString::createFromAscii( name ) );
             TypeDescription typeDesc( typeName );
@@ -479,7 +479,7 @@ static PyObject *getConstantByName( PyObject *, PyObject *args )
     {
         char *name;
 
-        if (PyArg_ParseTuple (args, const_cast< char * >("s"), &name))
+        if (PyArg_ParseTuple (args, "s", &name))
         {
             OUString typeName ( OUString::createFromAscii( name ) );
             Runtime runtime;
@@ -801,21 +801,21 @@ static PyObject *setCurrentContext( PyObject *, PyObject * args )
 
 struct PyMethodDef PyUNOModule_methods [] =
 {
-    {const_cast< char * >("getComponentContext"), getComponentContext, METH_VARARGS, NULL},
-    {const_cast< char * >("_createUnoStructHelper"), reinterpret_cast<PyCFunction>(createUnoStructHelper), METH_VARARGS | METH_KEYWORDS, NULL},
-    {const_cast< char * >("getTypeByName"), getTypeByName, METH_VARARGS, NULL},
-    {const_cast< char * >("getConstantByName"), getConstantByName, METH_VARARGS, NULL},
-    {const_cast< char * >("getClass"), getClass, METH_VARARGS, NULL},
-    {const_cast< char * >("checkEnum"), checkEnum, METH_VARARGS, NULL},
-    {const_cast< char * >("checkType"), checkType, METH_VARARGS, NULL},
-    {const_cast< char * >("generateUuid"), generateUuid, METH_VARARGS, NULL},
-    {const_cast< char * >("systemPathToFileUrl"), systemPathToFileUrl, METH_VARARGS, NULL},
-    {const_cast< char * >("fileUrlToSystemPath"), fileUrlToSystemPath, METH_VARARGS, NULL},
-    {const_cast< char * >("absolutize"), absolutize, METH_VARARGS | METH_KEYWORDS, NULL},
-    {const_cast< char * >("isInterface"), isInterface, METH_VARARGS, NULL},
-    {const_cast< char * >("invoke"), invoke, METH_VARARGS | METH_KEYWORDS, NULL},
-    {const_cast< char * >("setCurrentContext"), setCurrentContext, METH_VARARGS, NULL},
-    {const_cast< char * >("getCurrentContext"), getCurrentContext, METH_VARARGS, NULL},
+    {"getComponentContext", getComponentContext, METH_VARARGS, NULL},
+    {"_createUnoStructHelper", reinterpret_cast<PyCFunction>(createUnoStructHelper), METH_VARARGS | METH_KEYWORDS, NULL},
+    {"getTypeByName", getTypeByName, METH_VARARGS, NULL},
+    {"getConstantByName", getConstantByName, METH_VARARGS, NULL},
+    {"getClass", getClass, METH_VARARGS, NULL},
+    {"checkEnum", checkEnum, METH_VARARGS, NULL},
+    {"checkType", checkType, METH_VARARGS, NULL},
+    {"generateUuid", generateUuid, METH_VARARGS, NULL},
+    {"systemPathToFileUrl", systemPathToFileUrl, METH_VARARGS, NULL},
+    {"fileUrlToSystemPath", fileUrlToSystemPath, METH_VARARGS, NULL},
+    {"absolutize", absolutize, METH_VARARGS | METH_KEYWORDS, NULL},
+    {"isInterface", isInterface, METH_VARARGS, NULL},
+    {"invoke", invoke, METH_VARARGS | METH_KEYWORDS, NULL},
+    {"setCurrentContext", setCurrentContext, METH_VARARGS, NULL},
+    {"getCurrentContext", getCurrentContext, METH_VARARGS, NULL},
     {NULL, NULL, 0, NULL}
 };
 
@@ -845,7 +845,7 @@ PyObject* PyInit_pyuno()
 void initpyuno()
 {
     PyEval_InitThreads();
-    Py_InitModule (const_cast< char * >("pyuno"), PyUNOModule_methods);
+    Py_InitModule ("pyuno", PyUNOModule_methods);
 }
 #endif /* PY_MAJOR_VERSION >= 3 */
 

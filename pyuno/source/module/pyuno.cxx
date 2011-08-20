@@ -373,7 +373,7 @@ PyObject *PyUNO_invoke( PyObject *object, const char *name , PyObject *args )
                 if( PyObject_IsInstance( element , getAnyClass( runtime ).get() ) )
                 {
                     element = PyObject_GetAttrString(
-                        element, const_cast< char * >("value") );
+                        element, "value" );
                 }
                 else
                 {
@@ -647,7 +647,7 @@ static PyObject* PyUNO_cmp( PyObject *self, PyObject *that, int op )
 static PyTypeObject PyUNOType =
 {
     PyVarObject_HEAD_INIT( &PyType_Type, 0 )
-    const_cast< char * >("pyuno"),
+    "pyuno",
     sizeof (PyUNO),
     0,
     (destructor) PyUNO_del,
