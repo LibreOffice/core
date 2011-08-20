@@ -54,10 +54,17 @@ $(eval $(call gb_Library_add_linked_libs,lwpft,\
     $(gb_STDLIBS) \
 ))
 
+ifeq ($(OS)$(COM),WNTMSC)
+$(eval $(call gb_Library_use_externals,lwpft,\
+    icuin \
+    icuuc \
+))
+else
 $(eval $(call gb_Library_use_externals,lwpft,\
     icui18n \
     icuuc \
 ))
+endif
 
 $(eval $(call gb_Library_set_componentfile,lwpft,lotuswordpro/util/lwpfilter))
 
