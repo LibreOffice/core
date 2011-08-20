@@ -156,7 +156,10 @@ static PyRef importUnoModule( ) throw ( RuntimeException )
     {
         PyRef excType, excValue, excTraceback;
         PyErr_Fetch( (PyObject **)&excType, (PyObject**)&excValue,(PyObject**)&excTraceback);
-        PyRef str( PyObject_Repr( excTraceback.get() ), SAL_NO_ACQUIRE );
+        // As of Python 2.7 this gives a rather non-useful "<traceback object at 0xADDRESS>",
+        // but it is the best we can do in the absence of uno._uno_extract_printable_stacktrace
+        // Who knows, a future Python might print something better.
+        PyRef str( PyObject_Str( excTraceback.get() ), SAL_NO_ACQUIRE );
 
         OUStringBuffer buf;
         buf.appendAscii( "python object raised an unknown exception (" );
