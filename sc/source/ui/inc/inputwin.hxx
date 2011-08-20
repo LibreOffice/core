@@ -35,6 +35,7 @@
 #include <svl/lstner.hxx>
 #include <vcl/button.hxx>
 #include <vcl/combobox.hxx>
+#include <vcl/scrbar.hxx>
 #include <vcl/window.hxx>
 #include <svtools/transfer.hxx>
 
@@ -209,9 +210,11 @@ private:
 
     ScMultiTextWnd  aMultiTextWnd;
     PushButton      aButton;
+    ScrollBar       aScrollBar;
 //    bool            bIsMultiLine;
 
     DECL_LINK( ClickHdl,	 PushButton* );
+    DECL_LINK( Impl_ScrollHdl,  ScrollBar* );
 
 };
 

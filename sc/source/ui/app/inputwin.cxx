@@ -512,10 +512,10 @@ void ScInputWindow::Resize()
         }
         else
         {
-        aSize.Height()=33;
+        aSize.Height()=38;
         }
         SetSizePixel(aSize);
-        //Invalidate();
+        Invalidate();
         aTextWindow.Resize();
     }
     else
@@ -759,15 +759,24 @@ void ScInputWindow::SetMultiLineStatus(bool bMode)
 ScInputBarGroup::ScInputBarGroup(Window* pParent)
     :   ScTextWndBase        ( pParent, WinBits(WB_HIDE) ),
         aMultiTextWnd        ( this ),
-        aButton              ( this)
+        aButton              ( this ),
+        aScrollBar           ( this, WB_VERT )
 {
       aMultiTextWnd.Show();
       aMultiTextWnd.SetQuickHelpText( ScResId( SCSTR_QHELP_INPUTWND ) );
       aMultiTextWnd.SetHelpId		( HID_INSWIN_INPUT );
 
       aButton.SetClickHdl	( LINK( this, ScInputBarGroup, ClickHdl ) );
-      aButton.Show();
+      aButton.SetSizePixel(Size(0.5*TBX_WINDOW_HEIGHT,TBX_WINDOW_HEIGHT));
       aButton.Enable();
+      aButton.Show();
+
+      aScrollBar.SetSizePixel( Size(0.5*TBX_WINDOW_HEIGHT,TBX_WINDOW_HEIGHT) );
+
+      aScrollBar.SetPageSize( 1 );
+      aScrollBar.SetVisibleSize( 1 );
+      aScrollBar.SetLineSize( 1 );
+      aScrollBar.Show();
 }
 
 ScInputBarGroup::~ScInputBarGroup()
@@ -811,9 +820,10 @@ void ScInputBarGroup::Resize()
     }
 
     long nWidth = pParent->GetSizePixel().Width();
-    Point aPos  = GetPosPixel();
+    long nLeft  = GetPosPixel().X();
+
     Size aSize  = GetSizePixel();
-    aSize.Width() = Max( ((long)(nWidth - aPos.X() - LEFT_OFFSET)), (long)0 );
+    aSize.Width() = Max( ((long)(nWidth - nLeft - LEFT_OFFSET)), (long)0 );
 
     if(pParent->GetMultiLineStatus())
     {
@@ -823,11 +833,12 @@ void ScInputBarGroup::Resize()
     {
         aSize.Height()=TBX_WINDOW_HEIGHT;
     }
-    SetPosSizePixel(aPos,aSize);
+    SetSizePixel(aSize);
+
+    aButton.SetPosPixel(Point(aSize.Width()-4*LEFT_OFFSET,0));
+    aScrollBar.SetPosPixel(Point(aSize.Width()-2*LEFT_OFFSET,0));
+
     Invalidate();
-
-    aButton.SetPosSizePixel(Point(aSize.Width()-3*LEFT_OFFSET,0),Size(0.5*TBX_WINDOW_HEIGHT,TBX_WINDOW_HEIGHT));
-
     aMultiTextWnd.Resize();
 }
 
@@ -895,6 +906,12 @@ IMPL_LINK( ScInputBarGroup, ClickHdl, PushButton*, pBtn )
     return 0;
 }
 
+IMPL_LINK( ScInputBarGroup, Impl_ScrollHdl, ScrollBar*, EMPTYARG )
+{
+
+}
+
+
 //========================================================================
 //                      ScMultiTextWnd
 //========================================================================
@@ -917,7 +934,8 @@ void ScMultiTextWnd::Paint( const Rectangle& rRec )
 {
     // We always use edit engine to draw text at all times.
     if (!pEditEngine)
-        InitEditEngine(SfxObjectShell::Current());
+        //InitEditEngine(SfxObjectShell::Current());
+        StartEditEngine();
 
     if (pEditView)
     {
@@ -939,9 +957,10 @@ void ScMultiTextWnd::Resize()
 
 
     long nWidth = GetParent()->GetSizePixel().Width();
-    Point aPos=GetPosPixel();
+    long nLeft  = GetPosPixel().X();
+
     Size aTextBoxSize  = GetSizePixel();
-    aTextBoxSize.Width() = Max( ((long)(nWidth - aPos.X() - 3*LEFT_OFFSET)), (long)0 );
+    aTextBoxSize.Width() = Max( ((long)(nWidth - nLeft - 4*LEFT_OFFSET)), (long)0 );
 
     if(pParent->GetMultiLineStatus())
     {
@@ -966,7 +985,6 @@ void ScMultiTextWnd::Resize()
 
     else
     {
-
         aTextBoxSize.Height()=TBX_WINDOW_HEIGHT;
         if(pEditView)
         {
@@ -977,16 +995,13 @@ void ScMultiTextWnd::Resize()
 
             Point aPos1(TEXT_STARTPOS,nDiff);
             Point aPos2(aOutputSize.Width()-5,(aOutputSize.Height() - nDiff));
+
             pEditView->SetOutputArea(
                 PixelToLogic(Rectangle(aPos1, aPos2)));
         }
-
     }
-
-    SetPosSizePixel(aPos,aTextBoxSize);
+    SetSizePixel(aTextBoxSize);
 }
-
-
 
 void ScMultiTextWnd::StartEditEngine()
 {
@@ -1067,16 +1082,11 @@ void ScMultiTextWnd::InitEditEngine(SfxObjectShell* pObjSh)
     pNew->SetExecuteURL( false );
     pEditEngine = pNew;
 
-    Size barSize=GetOutputSizePixel();
-
-    long barHeight=barSize.Height();
-    long textHeight=LogicToPixel( Size( 0, GetTextHeight() ) ).Height();
-    long nDiff =  barHeight - textHeight;
-
-    barSize.Height()=nDiff+barHeight;
-    barSize.Width() -= 2*nTextStartPos-4;
+    Size barSize=GetSizePixel();
+    barSize.Width() -= (2*nTextStartPos-4);
+    printf("bar size width %ld",barSize.Width());
     pEditEngine->SetUpdateMode( false );
-    pEditEngine->SetPaperSize( PixelToLogic(Size(barSize.Width(),10000)) );
+    pEditEngine->SetPaperSize( PixelToLogic(Size(994-4*LEFT_OFFSET,10000)) );
     pEditEngine->SetWordDelimiters(
                     ScEditUtil::ModifyDelimiters( pEditEngine->GetWordDelimiters() ) );
 
