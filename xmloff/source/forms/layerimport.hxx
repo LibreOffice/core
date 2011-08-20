@@ -173,11 +173,6 @@ namespace xmloff
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
                 lookupControlId(const ::rtl::OUString& _rControlId);
 
-        /** seek to the given page
-        */
-        void seekPage(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage >& _rxDrawPage);
-
         /** announces the auto-style context to the form importer
         */
         void setAutoStyleContext(SvXMLStylesContext* _pNewContext);

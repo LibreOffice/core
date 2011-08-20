@@ -543,14 +543,6 @@ SvXMLImportContext* OFormLayerXMLImport_Impl::createContext(const sal_uInt16 _nP
 }
 
 //---------------------------------------------------------------------
-void OFormLayerXMLImport_Impl::seekPage(const Reference< XDrawPage >& _rxDrawPage)
-{
-    OSL_ENSURE(m_aCurrentPageIds == m_aControlIds.end(), "OFormLayerXMLImport_Impl::seekPage: importing another page currently! This will smash your import!");
-    m_aCurrentPageIds = m_aControlIds.find(_rxDrawPage);
-    OSL_ENSURE(m_aCurrentPageIds != m_aControlIds.end(), "OFormLayerXMLImport_Impl::seekPage: did not find the given page (perhaps it has not been imported, yet?)!");
-}
-
-//---------------------------------------------------------------------
 void OFormLayerXMLImport_Impl::documentDone( )
 {
     SvXMLImport& rImport = getGlobalContext();
