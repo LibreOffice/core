@@ -105,7 +105,6 @@ $(eval $(call gb_Package_add_file,comphelper_inc,inc/comphelper/logging.hxx,comp
 $(eval $(call gb_Package_add_file,comphelper_inc,inc/comphelper/sharedmutex.hxx,comphelper/sharedmutex.hxx))
 $(eval $(call gb_Package_add_file,comphelper_inc,inc/comphelper/documentinfo.hxx,comphelper/documentinfo.hxx))
 $(eval $(call gb_Package_add_file,comphelper_inc,inc/comphelper/weakeventlistener.hxx,comphelper/weakeventlistener.hxx))
-$(eval $(call gb_Package_add_file,comphelper_inc,inc/comphelper/componentfactory.hxx,comphelper/componentfactory.hxx))
 $(eval $(call gb_Package_add_file,comphelper_inc,inc/comphelper/containermultiplexer.hxx,comphelper/containermultiplexer.hxx))
 $(eval $(call gb_Package_add_file,comphelper_inc,inc/comphelper/broadcasthelper.hxx,comphelper/broadcasthelper.hxx))
 $(eval $(call gb_Package_add_file,comphelper_inc,inc/comphelper/numbers.hxx,comphelper/numbers.hxx))
