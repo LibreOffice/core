@@ -264,7 +264,9 @@ RSCINST GetFirstTupelEle( const RSCINST & rTop )
 #pragma warning(disable:4129 4273 4701 4702)
 #endif
 #if defined __GNUC__
+#ifndef MACOSX
 #pragma GCC diagnostic ignored "-Wwrite-strings"
+#endif
 #elif defined __SUNPRO_CC
 #pragma disable_warn
 #endif
