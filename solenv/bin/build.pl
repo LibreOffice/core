@@ -131,7 +131,7 @@
     my %platforms = (); # platforms available or being working with
     my %platforms_to_copy = (); # copy output trees for the platforms when --prepare
     my $tmp_dir = get_tmp_dir(); # temp directory for checkout and other actions
-    my @possible_build_lists = ('gbuild.lst', 'build.lst', 'build.xlist'); # build lists names
+
     my %build_list_paths = (); # build lists names
     my %build_lists_hash = (); # hash of arrays $build_lists_hash{$module} = \($path, $xml_list_object)
     my $pre_job = 'announce'; # job to add for not-single module build
@@ -175,8 +175,6 @@
     my $zenity_in = '';
     my $zenity_out = '';
     my $zenity_err = '';
-    my $allow_gbuild = 0;
-    my %is_gbuild = ();
     my $verbose = 0;
 
     my @modules_built = ();
@@ -200,6 +198,7 @@
     my %deliver_env = ();
     my $workspace_path = get_workspace_path();   # This also sets $initial_module
     my $build_error_log = Cwd::realpath(correct_path($workspace_path)) ."/build_error.log";
+    my $workdir = $ENV{WORKDIR};
     my $source_config = SourceConfig -> new($workspace_path);
     check_partial_gnumake_build($initial_module);
 
@@ -467,21 +466,14 @@ sub get_build_list_path {
     return $build_list_paths{$module} if (defined $build_list_paths{$module});
     foreach (@possible_dirs) {
         my $possible_dir_path = $module_paths{$_}.'/prj/';
-        if (-d $possible_dir_path) {
-            foreach my $build_list (@possible_build_lists) {
-                # if gbuild are allow we favor gbuild.lst as the build instruction
-                if($build_list ne "gbuild.lst" || $allow_gbuild) {
-                    my $possible_build_list_path = correct_path($possible_dir_path . $build_list);
-                    if (-f $possible_build_list_path) {
-                        $build_list_paths{$module} = $possible_build_list_path;
-                        if ($build_list eq "gbuild.lst") {
-#                           print  "Using gmake for module $module\n";
-                            $is_gbuild{$module} = 1;
-                        };
-                        return $possible_build_list_path;
-                    };
-                };
-            }
+        if (-d $possible_dir_path)
+	{
+	    my $possible_build_list_path = correct_path($possible_dir_path . "build.lst");
+	    if (-f $possible_build_list_path)
+	    {
+		$build_list_paths{$module} = $possible_build_list_path;
+		return $possible_build_list_path;
+            };
             print_error("There's no build list for $module");
         };
     };
@@ -741,25 +733,18 @@ sub dmake_dir {
 sub store_build_list_content {
     my $module = shift;
     my $build_list_path = get_build_list_path($module);
+
     return undef if (!defined $build_list_path);
     return if (!$build_list_path);
-    my $xml_list = undef;
-    if ($build_list_path =~ /\.xlist$/o) {
-        print_error("XMLBuildListParser.pm couldn\'t be found, so XML format for build lists is not enabled") if (!defined $enable_xml);
-        $xml_list = XMLBuildListParser->new();
-        if (!$xml_list->loadXMLFile($build_list_path)) {
-            print_error("Cannot use $build_list_path");
-        };
-        $build_lists_hash{$module} = $xml_list;
-    } else {
-        if (open (BUILD_LST, $build_list_path)) {
-            my @build_lst = <BUILD_LST>;
-            $build_lists_hash{$module} = \@build_lst;
-            close BUILD_LST;
-            return;
-        }
-        $dead_parents{$module}++;
+
+    if (open (BUILD_LST, $build_list_path))
+    {
+	my @build_lst = <BUILD_LST>;
+	$build_lists_hash{$module} = \@build_lst;
+	close BUILD_LST;
+	return;
     };
+    $dead_parents{$module}++;
 }
 #
 # Get string (list) of parent projects to build
@@ -1119,6 +1104,8 @@ sub check_deps_hash {
     backup_deps_hash($deps_hash_ref, \%deps_hash);
     my $string;
     my $log_name;
+    my $log_path;
+    my $long_log_path;
     my $build_number = 0;
 
     do {
@@ -1153,12 +1140,25 @@ sub check_deps_hash {
                     $log_name =~ s/\s/_/g;
                     $log_name = $module if ($log_name =~ /^\.+$/);
                     $log_name .= '.txt';
+
+		    if ( $source_config->is_gbuild($module) )
+		    {
+			$log_path = correct_path("$workdir/Logs/$module.log");
+			$long_log_path = correct_path("$workdir/Logs/$module.log");
+		    }
+		    else
+		    {
+			$log_path = '../' . $source_config->get_module_repository($module) . "/$module/$ENV{INPATH}/misc/logs/$log_name",
+			$long_log_path = correct_path($module_paths{$module} . "/$ENV{INPATH}/misc/logs/$log_name"),
+		    }
+
                     push(@possible_order, $key);
                     $jobs_hash{$key} = {    SHORT_NAME => $string,
                                             BUILD_NUMBER => $build_number,
                                             STATUS => 'waiting',
-                                            LOG_PATH => '../' . $source_config->get_module_repository($module) . "/$module/$ENV{INPATH}/misc/logs/$log_name",
-                                            LONG_LOG_PATH => correct_path($module_paths{$module} . "/$ENV{INPATH}/misc/logs/$log_name"),
+                                            LOG_PATH => $log_path,
+                                            LONG_LOG_PATH => $long_log_path,
+					    MODULE => $module,
                                             START_TIME => 0,
                                             FINISH_TIME => 0,
                                             CLIENT => '-'
@@ -1355,7 +1355,6 @@ sub get_options {
         $arg =~ /^--checkmodules$/       and $checkparents = 1 and $ignore = 1 and next;
         $arg =~ /^-s$/        and $show = 1                         and next;
         $arg =~ /^--deliver$/    and $deliver = 1                     and next;
-        $arg =~ /^--gmake$/    and $allow_gbuild = 1 and print "ALLOW GBUILD" and next;
         $arg =~ /^(--job=)/       and $custom_job = $' and next;
         $arg =~ /^(--pre_job=)/       and $pre_custom_job = $' and next;
         $arg =~ /^(--post_job=)/       and $post_custom_job = $' and next; #'
@@ -1450,7 +1449,6 @@ sub get_module_and_buildlist_paths {
             next if ($module eq $initial_module);
             $module_paths{$module} = $source_config->get_module_path($module);
             $build_list_paths{$module} = $source_config->get_module_build_list($module);
-            $is_gbuild{$module} = $source_config->{GBUILD};
         }
         $dead_parents{$_}++ foreach (keys %active_modules_copy);
     };
@@ -1511,7 +1509,7 @@ sub cancel_build {
     print STDERR "cd " . $ENV{'SRC_ROOT'} . "\n";
     print STDERR "source ./" . $ENV{'ENV_SCRIPT'} . "\n";
     print STDERR "cd $module\n";
-    if (is_gnumake_module($module))
+    if ($source_config->is_gbuild($module) )
     {
         print STDERR "$ENV{GNUMAKE} clean # optional\n";
         print STDERR "$ENV{GNUMAKE} -r\n"
@@ -1823,10 +1821,20 @@ sub run_job {
     getcwd();
 
     my $log_file = $jobs_hash{$registered_name}->{LONG_LOG_PATH};
+    print "logfile:$log_file\n";
     my $log_dir = File::Basename::dirname($log_file);
-    if (!-d $log_dir) {
-        system("$perl $mkout");
-    };
+
+    if ( $source_config->is_gbuild($jobs_hash{$registered_name}->{MODULE}) )
+    {
+	mkpath("$workdir/Logs");
+    }
+    else
+    {
+	if (!-d $log_dir)
+	{
+	    system("$perl $mkout");
+	};
+    }
     open (MAKE, "$job_to_do 2>&1 |") or return 8;
     open (LOGFILE, "> $log_file") or return 8;
     while (<MAKE>) { print LOGFILE $_; print $_ }
@@ -2024,14 +2032,14 @@ sub retrieve_build_list {
     $solver_inc_dir = correct_path($solver_inc_dir);
     $dead_parents{$module}++;
     print "Fetching dependencies for module $module from solver...";
-    foreach my $onelist (@possible_build_lists) {
-        my $build_list_candidate = "$solver_inc_dir/$onelist";
-        if (-e $build_list_candidate) {
-            print " ok\n";
-            select($old_fh);
-            return $build_list_candidate;
-        };
-    }
+
+    my $build_list_candidate = "$solver_inc_dir/build.lst";
+    if (-e $build_list_candidate)
+    {
+	print " ok\n";
+	select($old_fh);
+	return $build_list_candidate;
+    };
     print(" failed\n");
     print_error("incomplete dependencies!\n");
     return undef;
@@ -2937,14 +2945,10 @@ sub get_server_ports {
     @server_ports = ($default_port .. $default_port + 4);
 };
 
-sub is_gnumake_module {
-    my $module = shift;
-    my $bridgemakefile = $source_config->get_module_path($module) . "/prj/makefile.mk";
-    return (-e $bridgemakefile);
-}
-
-sub check_partial_gnumake_build {
-    if(!$build_all_parents && is_gnumake_module(shift)) {
+sub check_partial_gnumake_build
+{
+    if(!$build_all_parents && $source_config->is_gbuild(shift) )
+    {
         print "This module has been migrated to GNU make.\n";
         print "You can only use build --all/--since here with build.pl.\n";
         print "To do the equivalent of 'build && deliver' call:\n";
