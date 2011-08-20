@@ -229,14 +229,8 @@ gb_YaccObject_get_grammar = $(1)/$(2).y
 gb_YACC := bison
 
 # YaccObject class
-define gb_YaccObject__command
-$(call gb_Output_announce,$(2),$(true),YAC,3)
-$(call gb_Helper_abbreviate_dirs,\
-	mkdir -p $(dir $(1)) && \
-	$(gb_YACC) $(T_YACCFLAGS) -d -o $(1) $(3) )
-
-endef
-
+# defined by platform
+# gb_YaccObject__command(grammar-file, stem-for-message, source-target, include-target)
 
 # ObjCxxObject class
 #
@@ -898,7 +892,7 @@ $(call gb_GenCxxObject_get_target,$(2)) : $(call gb_YaccObject_get_target_source
 $(call gb_LinkTarget_get_target,$(1)) : $(call gb_GenCxxObject_get_target,$(2))
 $(call gb_GenCxxObject_get_target,$(2)) : $(call gb_YaccObject_get_target_source,$(2)) $(call gb_YaccObject_get_target_include,$(2))
 $(call gb_YaccObject_get_target_source,$(2)) $(call gb_YaccObject_get_target_include,$(2)) : $(call gb_YaccObject_get_grammar,$(gb_REPOS),$(2))
-	$$(call gb_YaccObject__command,$$@,$(2),$$<)
+	$$(call gb_YaccObject__command,$(call gb_YaccObject_get_grammar,$(gb_REPOS),$(2)),$(2),$(call gb_YaccObject_get_target_source,$(2)),$(call gb_YaccObject_get_target_include,$(2)))
 endef
 
 define gb_LinkTarget_add_noexception_object

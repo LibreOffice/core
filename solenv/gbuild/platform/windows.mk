@@ -39,6 +39,7 @@ gb_LINK := link
 gb_AWK := awk
 gb_CLASSPATHSEP := ;
 gb_RC := rc
+gb_YACC := bison
 
 # use CC/CXX if they are nondefaults
 ifneq ($(origin CC),default)
@@ -258,6 +259,16 @@ $(patsubst $(OUTDIR)%,$(gb_Helper_OUTDIR_NATIVE)%, \
 $(patsubst $(WORKDIR)%,$(gb_Helper_WORKDIR_NATIVE)%, \
 $(patsubst $(SRCDIR)%,$(gb_Helper_SRCDIR_NATIVE)%, \
 $(1)))))
+endef
+
+# YaccObject class
+
+define gb_YaccObject__command
+$(call gb_Output_announce,$(2),$(true),YAC,3)
+$(call gb_Helper_abbreviate_dirs,\
+	mkdir -p $(dir $(3)) && \
+	$(gb_YACC) $(T_YACCFLAGS) --defines=$(4) -o $(3) $(1) )
+
 endef
 
 # CObject class
