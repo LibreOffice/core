@@ -44,8 +44,8 @@
 #include <rscpar.hxx>
 #include <rscdef.hxx>
 
-#include "rsclex.hxx"
-#include <yyrscyacc.hxx>
+#include <rsclex.hxx>
+#include <rscyacc.hxx>
 
 #include <rtl/textcvt.h>
 #include <rtl/textenc.h>

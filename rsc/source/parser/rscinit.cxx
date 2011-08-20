@@ -51,8 +51,8 @@
 #include <rsckey.hxx>
 #include <rscdb.hxx>
 
-#include "rsclex.hxx"
-#include <yyrscyacc.hxx>
+#include <rsclex.hxx>
+#include <rscyacc.hxx>
 
 /****************** M a c r o s ******************************************/
 #define INS_WINBIT( pClass, WinBit )        \

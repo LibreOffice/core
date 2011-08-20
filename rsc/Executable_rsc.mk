@@ -28,13 +28,12 @@
 
 $(eval $(call gb_Executable_Executable,rsc))
 
-$(eval $(call gb_Executable_add_package_headers,rsc,rsc_yacc))
 
 $(eval $(call gb_Executable_set_include,rsc,\
 	$$(INCLUDE) \
-	-I$(realpath $(SRCDIR)/rsc/inc) \
-	-I$(realpath $(SRCDIR)/rsc/inc/pch) \
-	-I$(realpath $(WORKDIR))/CustomTarget/rsc/source/parser \
+	-I$(SRCDIR)/rsc/inc \
+	-I$(SRCDIR)/rsc/inc/pch \
+	-I$(WORKDIR)/GenCxxObject/rsc/source/parser \
 ))
 
 $(eval $(call gb_Executable_add_api,rsc,\
@@ -54,6 +53,14 @@ $(eval $(call gb_Executable_add_linked_libs,rsc,\
 	$(gb_STDLIBS) \
 ))
 
+$(eval $(call gb_Executable_add_grammars,rsc,\
+	rsc/source/parser/rscyacc, \
+	rsc/source/parser/rscibas \
+	rsc/source/parser/rscicpx \
+	rsc/source/parser/rscinit \
+	rsc/source/parser/rsclex \
+))
+
 $(eval $(call gb_Executable_add_exception_objects,rsc,\
 	rsc/source/misc/rscdbl \
 	rsc/source/misc/rsclst \
@@ -65,7 +72,6 @@ $(eval $(call gb_Executable_add_exception_objects,rsc,\
 	rsc/source/parser/rsckey \
 	rsc/source/parser/rsclex \
 	rsc/source/parser/rscpar \
-	rsc/source/parser/rscyacc \
 	rsc/source/prj/gui \
 	rsc/source/prj/start \
 	rsc/source/res/rscall \

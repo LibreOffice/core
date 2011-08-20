@@ -47,8 +47,8 @@
 #include <rscdb.hxx>
 
 
-#include "rsclex.hxx"
-#include <yyrscyacc.hxx>
+#include <rsclex.hxx>
+#include <rscyacc.hxx>
 
 #include <boost/unordered_map.hpp>
 

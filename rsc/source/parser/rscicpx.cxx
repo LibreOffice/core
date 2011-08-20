@@ -43,8 +43,8 @@
 #include <rscdb.hxx>
 #include <rsc/rscsfx.hxx>
 
-#include "rsclex.hxx"
-#include <yyrscyacc.hxx>
+#include <rsclex.hxx>
+#include <rscyacc.hxx>
 
 /*************************************************************************
 |*    RscTypCont::InsWinBit()
