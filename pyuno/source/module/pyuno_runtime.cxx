@@ -150,7 +150,6 @@ static void getRuntimeImpl( PyRef & globalDict, PyRef &runtimeImpl )
 
 static PyRef importUnoModule( ) throw ( RuntimeException )
 {
-    PyRef globalDict = PyRef( PyModule_GetDict(PyImport_AddModule(const_cast< char * >("__main__"))));
     // import the uno module
     PyRef module( PyImport_ImportModule( const_cast< char * >("uno") ), SAL_NO_ACQUIRE );
     if( PyErr_Occurred() )
