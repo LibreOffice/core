@@ -90,55 +90,6 @@ typedef ::std::vector< OUString* > StringList_Impl;
 namespace utl
 {
 
-sal_Bool UCBContentHelper::Transfer_Impl( const String& rSource, const String& rDest, sal_Bool bMoveData, sal_Int32 nNameClash )
-{
-    sal_Bool bRet = sal_True, bKillSource = sal_False;
-    INetURLObject aSourceObj( rSource );
-    DBG_ASSERT( aSourceObj.GetProtocol() != INET_PROT_NOT_VALID, "Invalid URL!" );
-
-    INetURLObject aDestObj( rDest );
-    DBG_ASSERT( aDestObj.GetProtocol() != INET_PROT_NOT_VALID, "Invalid URL!" );
-    if ( bMoveData && aSourceObj.GetProtocol() != aDestObj.GetProtocol() )
-    {
-        bMoveData = sal_False;
-        bKillSource = sal_True;
-    }
-    String aName = aDestObj.getName();
-    aDestObj.removeSegment();
-    aDestObj.setFinalSlash();
-
-    try
-    {
-        Content aDestPath( aDestObj.GetMainURL( INetURLObject::NO_DECODE ), uno::Reference< ::com::sun::star::ucb::XCommandEnvironment > () );
-        uno::Reference< ::com::sun::star::ucb::XCommandInfo > xInfo = aDestPath.getCommands();
-        OUString aTransferName(RTL_CONSTASCII_USTRINGPARAM("transfer"));
-        if ( xInfo->hasCommandByName( aTransferName ) )
-        {
-            aDestPath.executeCommand( aTransferName, makeAny(
-                ::com::sun::star::ucb::TransferInfo( bMoveData, aSourceObj.GetMainURL( INetURLObject::NO_DECODE ), aName, nNameClash ) ) );
-        }
-        else
-        {
-            DBG_ERRORFILE( "transfer command not available" );
-        }
-    }
-    catch( ::com::sun::star::ucb::CommandAbortedException& )
-    {
-        bRet = sal_False;
-    }
-    catch( ::com::sun::star::uno::Exception& )
-    {
-        bRet = sal_False;
-    }
-
-    if ( bKillSource )
-        UCBContentHelper::Kill( rSource );
-
-    return bRet;
-}
-
-// -----------------------------------------------------------------------
-
 sal_Bool UCBContentHelper::IsDocument( const String& rContent )
 {
     sal_Bool bRet = sal_False;
@@ -528,36 +479,6 @@ sal_Bool UCBContentHelper::IsYounger( const String& rIsYoung, const String& rIsO
     }
 
     return ( aYoungDate > aOlderDate );
-}
-
-// -----------------------------------------------------------------------
-sal_Bool UCBContentHelper::Find( const String& rFolder, const String& rName, String& rFile, sal_Bool bAllowWildCards )
-{
-    sal_Bool bWild = bAllowWildCards && ( rName.Search( '*' ) != STRING_NOTFOUND || rName.Search( '?' ) != STRING_NOTFOUND );
-
-    sal_Bool bRet = sal_False;
-
-    // get a list of URLs for all children of rFolder
-    Sequence< ::rtl::OUString > aFiles = GetFolderContents( rFolder, sal_False );
-
-    const ::rtl::OUString* pFiles  = aFiles.getConstArray();
-    sal_uInt32 i, nCount = aFiles.getLength();
-    for ( i = 0; i < nCount; ++i )
-    {
-        // get the last name of the URLs and compare it with rName
-        INetURLObject aFileObject( pFiles[i] );
-        String aFile = aFileObject.getName(
-            INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_WITH_CHARSET ).toAsciiLowerCase();
-        if ( (bWild && WildCard( rName ).Matches( aFile )) || aFile == rName )
-        {
-            // names match
-            rFile = aFileObject.GetMainURL( INetURLObject::NO_DECODE );
-            bRet = sal_True;
-            break;
-        }
-    }
-
-    return bRet;
 }
 
 // -----------------------------------------------------------------------

@@ -47,10 +47,6 @@ namespace utl
 {
     class UNOTOOLS_DLLPUBLIC UCBContentHelper
     {
-    private:
-        static sal_Bool             Transfer_Impl( const String& rSource, const String& rDest, sal_Bool bMoveData,
-                                                        sal_Int32 nNameClash );
-
     public:
         static sal_Bool             IsDocument( const String& rContent );
         static sal_Bool             IsFolder( const String& rContent );
@@ -72,7 +68,6 @@ namespace utl
         static sal_Bool             IsYounger( const String& rIsYoung, const String& rIsOlder );
 
         static sal_Bool             Exists( const String& rContent );
-        static sal_Bool             Find( const String& rFolder, const String& rName, String& rFile, sal_Bool bAllowWildCards = sal_False );
         static sal_Bool             IsSubPath( const ::rtl::OUString& rPath, const ::rtl::OUString& rChildCandidate, const ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContentProvider >& xContentProvider = ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContentProvider >() );
         static sal_Bool             EqualURLs( const ::rtl::OUString& aFirstURL, const ::rtl::OUString& aSecondURL );
     };
