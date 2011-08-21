@@ -581,7 +581,7 @@ Font OutputDevice::GetDefaultFont( sal_uInt16 nType, LanguageType eLang,
         aFont.SetLanguage( eLang );
 
         if ( aFont.GetCharSet() == RTL_TEXTENCODING_DONTKNOW )
-            aFont.SetCharSet( gsl_getSystemTextEncoding() );
+            aFont.SetCharSet( osl_getThreadTextEncoding() );
 
         // Should we only return available fonts on the given device
         if ( pOutDev )

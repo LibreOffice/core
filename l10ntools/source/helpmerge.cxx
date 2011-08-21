@@ -264,9 +264,9 @@ ByteString HelpParser::makeAbsolutePath( const ByteString& sHelpFile , const Byt
     String sFullEntry = aEntry.GetFull();
     aEntry += DirEntry( String( "..", RTL_TEXTENCODING_ASCII_US ));
     aEntry += DirEntry( rRoot_in );
-    ByteString sPrjEntry( aEntry.GetFull(), gsl_getSystemTextEncoding());
+    ByteString sPrjEntry( aEntry.GetFull(), osl_getThreadTextEncoding());
     ByteString sActFileName(
-    sFullEntry.Copy( sPrjEntry.Len() + 1 ), gsl_getSystemTextEncoding());
+    sFullEntry.Copy( sPrjEntry.Len() + 1 ), osl_getThreadTextEncoding());
 
     sActFileName.SearchAndReplaceAll( "/", "\\" );
     return sActFileName;

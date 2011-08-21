@@ -397,10 +397,8 @@ void SvFileStream::Open( const String& rFilename, StreamMode nMode )
     //    !!! DirEntry aDirEntry( rFilename );
     //    !!! aFilename = aDirEntry.GetFull();
     aFilename = aParsedFilename;
-#ifdef BOOTSTRAP
-    ByteString aFileNameA( aFilename, gsl_getSystemTextEncoding());
-#else
     ByteString aFileNameA( aFilename, osl_getThreadTextEncoding());
+#ifndef BOOTSTRAP
     FSysRedirector::DoRedirect( aFilename );
 #endif
     SetLastError( ERROR_SUCCESS );  // ggf. durch Redirector geaendert!

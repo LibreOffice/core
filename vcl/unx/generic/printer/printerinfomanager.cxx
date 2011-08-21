@@ -233,7 +233,7 @@ bool PrinterInfoManager::checkPrintersChanged( bool bWait )
 void PrinterInfoManager::initialize()
 {
     m_bUseIncludeFeature = false;
-    rtl_TextEncoding aEncoding = gsl_getSystemTextEncoding();
+    rtl_TextEncoding aEncoding = osl_getThreadTextEncoding();
     m_aPrinters.clear();
     m_aWatchFiles.clear();
     OUString aDefaultPrinter;

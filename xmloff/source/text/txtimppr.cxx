@@ -255,7 +255,7 @@ void XMLTextImportPropertyMapper::FontDefaultsCheck(
 
         if( !pFontCharSet )
         {
-            aAny <<= (sal_Int16)gsl_getSystemTextEncoding();
+            aAny <<= (sal_Int16)osl_getThreadTextEncoding();
     #ifdef DBG_UTIL
                 sal_Int16 nTmp = getPropertySetMapper()->GetEntryContextId(
                                                 pFontFamilyName->mnIndex + 4 );

@@ -614,7 +614,7 @@ StatusDrawCallback (XIC ic, XPointer client_data, XIMStatusDrawCallbackStruct *c
                 }
             }
             if( nLength )
-                aText = String( pMBString, nLength, gsl_getSystemTextEncoding() );
+                aText = String( pMBString, nLength, osl_getThreadTextEncoding() );
         }
         ::vcl::I18NStatus::get().setStatusText( aText );
     }

@@ -98,8 +98,8 @@ SvStream& operator>>( SvStream& rIStm, TransferableObjectDescriptor& rObjDesc )
     rIStm >> rObjDesc.maSize.Height();
     rIStm >> rObjDesc.maDragStartPos.X();
     rIStm >> rObjDesc.maDragStartPos.Y();
-    rIStm.ReadByteString( rObjDesc.maTypeName, gsl_getSystemTextEncoding() );
-    rIStm.ReadByteString( rObjDesc.maDisplayName, gsl_getSystemTextEncoding() );
+    rIStm.ReadByteString( rObjDesc.maTypeName, osl_getThreadTextEncoding() );
+    rIStm.ReadByteString( rObjDesc.maDisplayName, osl_getThreadTextEncoding() );
     rIStm >> nSig1 >> nSig2;
 
     rObjDesc.mnViewAspect = static_cast< sal_uInt16 >( nViewAspect );
@@ -128,8 +128,8 @@ SvStream& operator<<( SvStream& rOStm, const TransferableObjectDescriptor& rObjD
     rOStm << rObjDesc.maSize.Height();
     rOStm << rObjDesc.maDragStartPos.X();
     rOStm << rObjDesc.maDragStartPos.Y();
-    rOStm.WriteByteString( rObjDesc.maTypeName, gsl_getSystemTextEncoding() );
-    rOStm.WriteByteString( rObjDesc.maDisplayName, gsl_getSystemTextEncoding() );
+    rOStm.WriteByteString( rObjDesc.maTypeName, osl_getThreadTextEncoding() );
+    rOStm.WriteByteString( rObjDesc.maDisplayName, osl_getThreadTextEncoding() );
     rOStm << nSig1 << nSig2;
 
     const sal_uInt32 nLastPos = rOStm.Tell();
@@ -781,7 +781,7 @@ sal_Bool TransferableHelper::SetString( const ::rtl::OUString& rString, const Da
         TransferableDataHelper::IsEqual( aFileFlavor, rFlavor ) )
     {
         const String            aString( rString );
-        const ByteString        aByteStr( aString, gsl_getSystemTextEncoding() );
+        const ByteString        aByteStr( aString, osl_getThreadTextEncoding() );
         Sequence< sal_Int8 >    aSeq( aByteStr.Len() + 1 );
 
         rtl_copyMemory( aSeq.getArray(), aByteStr.GetBuffer(), aByteStr.Len() );
@@ -874,7 +874,7 @@ sal_Bool TransferableHelper::SetTransferableObjectDescriptor( const Transferable
 sal_Bool TransferableHelper::SetINetBookmark( const INetBookmark& rBmk,
                                               const ::com::sun::star::datatransfer::DataFlavor& rFlavor )
 {
-    rtl_TextEncoding eSysCSet = gsl_getSystemTextEncoding();
+    rtl_TextEncoding eSysCSet = osl_getThreadTextEncoding();
 
     switch( SotExchange::GetFormat( rFlavor ) )
     {
@@ -1709,7 +1709,7 @@ sal_Bool TransferableDataHelper::GetString( const DataFlavor& rFlavor, ::rtl::OU
             while( nLen && ( 0 == *( pChars + nLen - 1 ) ) )
                 --nLen;
 
-            rStr = ::rtl::OUString( pChars, nLen, gsl_getSystemTextEncoding() );
+            rStr = ::rtl::OUString( pChars, nLen, osl_getThreadTextEncoding() );
             bRet = sal_True;
         }
     }
@@ -1981,8 +1981,8 @@ sal_Bool TransferableDataHelper::GetINetBookmark( const ::com::sun::star::datatr
 
             if( GetSequence( rFlavor, aSeq ) && ( 2048 == aSeq.getLength() ) )
             {
-                rBmk = INetBookmark( String( reinterpret_cast< const sal_Char* >( aSeq.getConstArray() ), gsl_getSystemTextEncoding() ),
-                                     String( reinterpret_cast< const sal_Char* >( aSeq.getConstArray() ) + 1024, gsl_getSystemTextEncoding() ) );
+                rBmk = INetBookmark( String( reinterpret_cast< const sal_Char* >( aSeq.getConstArray() ), osl_getThreadTextEncoding() ),
+                                     String( reinterpret_cast< const sal_Char* >( aSeq.getConstArray() ) + 1024, osl_getThreadTextEncoding() ) );
                 bRet = sal_True;
             }
         }
@@ -2000,7 +2000,7 @@ sal_Bool TransferableDataHelper::GetINetBookmark( const ::com::sun::star::datatr
                 if( pFDesc->cItems )
                 {
                     ByteString          aDesc( pFDesc->fgd[ 0 ].cFileName );
-                    rtl_TextEncoding    eTextEncoding = gsl_getSystemTextEncoding();
+                    rtl_TextEncoding    eTextEncoding = osl_getThreadTextEncoding();
 
                     if( ( aDesc.Len() > 4 ) && aDesc.Copy( aDesc.Len() - 4 ).EqualsIgnoreCaseAscii( ".URL" ) )
                     {

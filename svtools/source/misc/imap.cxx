@@ -98,7 +98,7 @@ sal_uInt16 IMapObject::GetVersion() const
 void IMapObject::Write( SvStream& rOStm, const String& rBaseURL ) const
 {
     IMapCompat*             pCompat;
-    const rtl_TextEncoding  eEncoding = gsl_getSystemTextEncoding();
+    const rtl_TextEncoding  eEncoding = osl_getThreadTextEncoding();
 
     rOStm << GetType();
     rOStm << GetVersion();
@@ -1121,7 +1121,7 @@ void ImageMap::Write( SvStream& rOStm, const String& rBaseURL ) const
     String                  aDummy;
     sal_uInt16                  nOldFormat = rOStm.GetNumberFormatInt();
     sal_uInt16                  nCount = (sal_uInt16) GetIMapObjectCount();
-    const rtl_TextEncoding  eEncoding = gsl_getSystemTextEncoding();
+    const rtl_TextEncoding  eEncoding = osl_getThreadTextEncoding();
 
     rOStm.SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
 
@@ -1171,7 +1171,7 @@ void ImageMap::Read( SvStream& rIStm, const String& rBaseURL )
         // Version ueberlesen wir
         rIStm.SeekRel( 2 );
 
-        rIStm.ReadByteString( aString ); aName = String( aString, gsl_getSystemTextEncoding() );
+        rIStm.ReadByteString( aString ); aName = String( aString, osl_getThreadTextEncoding() );
         rIStm.ReadByteString( aString ); // Dummy
         rIStm >> nCount;
         rIStm.ReadByteString( aString ); // Dummy

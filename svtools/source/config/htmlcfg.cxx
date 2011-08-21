@@ -68,7 +68,7 @@ struct HtmlOptions_Impl
     HtmlOptions_Impl() :
         nFlags(HTMLCFG_LOCAL_GRF|HTMLCFG_IS_BASIC_WARNING),
         nExportMode(HTML_CFG_NS40),
-        eEncoding( gsl_getSystemTextEncoding() ),
+        eEncoding( osl_getThreadTextEncoding() ),
         bIsEncodingDefault(sal_True)
     {
         aFontSizeArr[0] = HTMLFONTSZ1_DFLT;

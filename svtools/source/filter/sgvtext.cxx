@@ -1208,7 +1208,7 @@ void SgfFontOne::ReadOne( const rtl::OString& rID, ByteString& Dsc )
             else if (matchL(s, RTL_CONSTASCII_USTRINGPARAM("IBMPC"))) SVChSet=RTL_TEXTENCODING_IBM_850;
             else if (matchL(s, RTL_CONSTASCII_USTRINGPARAM("MAC"))) SVChSet=RTL_TEXTENCODING_APPLE_ROMAN;
             else if (matchL(s, RTL_CONSTASCII_USTRINGPARAM("SYMBOL"))) SVChSet=RTL_TEXTENCODING_SYMBOL;
-            else if (matchL(s, RTL_CONSTASCII_USTRINGPARAM("SYSTEM"))) SVChSet = gsl_getSystemTextEncoding();
+            else if (matchL(s, RTL_CONSTASCII_USTRINGPARAM("SYSTEM"))) SVChSet = osl_getThreadTextEncoding();
             else if (comphelper::string::isAsciiDecimalString(s) ) SVWidth=sal::static_int_cast< sal_uInt16 >(s.toInt32());
         }
     }

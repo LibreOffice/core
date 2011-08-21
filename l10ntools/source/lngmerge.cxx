@@ -120,9 +120,9 @@ sal_Bool LngParser::CreateSDF(
     String sFullEntry = aEntry.GetFull();
     aEntry += DirEntry( String( "..", RTL_TEXTENCODING_ASCII_US ));
     aEntry += DirEntry( rRoot );
-    ByteString sPrjEntry( aEntry.GetFull(), gsl_getSystemTextEncoding());
+    ByteString sPrjEntry( aEntry.GetFull(), osl_getThreadTextEncoding());
     ByteString sActFileName(
-        sFullEntry.Copy( sPrjEntry.Len() + 1 ), gsl_getSystemTextEncoding());
+        sFullEntry.Copy( sPrjEntry.Len() + 1 ), osl_getThreadTextEncoding());
     sActFileName.SearchAndReplaceAll( "/", "\\" );
 
     size_t nPos  = 0;

@@ -3549,7 +3549,7 @@ void MetaFontAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
     rOStm << maFont;
     pData->meActualCharSet = maFont.GetCharSet();
     if ( pData->meActualCharSet == RTL_TEXTENCODING_DONTKNOW )
-        pData->meActualCharSet = gsl_getSystemTextEncoding();
+        pData->meActualCharSet = osl_getThreadTextEncoding();
 }
 
 // ------------------------------------------------------------------------
@@ -3560,7 +3560,7 @@ void MetaFontAction::Read( SvStream& rIStm, ImplMetaReadData* pData )
     rIStm >> maFont;
     pData->meActualCharSet = maFont.GetCharSet();
     if ( pData->meActualCharSet == RTL_TEXTENCODING_DONTKNOW )
-        pData->meActualCharSet = gsl_getSystemTextEncoding();
+        pData->meActualCharSet = osl_getThreadTextEncoding();
 }
 
 // ========================================================================

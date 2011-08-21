@@ -116,7 +116,7 @@ void INetMessage::SetHeaderField_Impl (
 {
     INetMIMEStringOutputSink aSink (0, STRING_MAXLEN);
     INetMIME::writeHeaderFieldBody (
-        aSink, eType, rValue, gsl_getSystemTextEncoding(), false);
+        aSink, eType, rValue, osl_getThreadTextEncoding(), false);
     SetHeaderField_Impl (
         INetMessageHeader (rName, aSink.takeBuffer()), rnIndex);
 }

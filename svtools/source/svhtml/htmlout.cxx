@@ -55,7 +55,7 @@ const sal_Char HTMLOutFuncs::sNewLine[] = "\015\012";
 HTMLOutContext::HTMLOutContext( rtl_TextEncoding eDestEnc )
 {
     m_eDestEnc = RTL_TEXTENCODING_DONTKNOW == eDestEnc
-                    ? gsl_getSystemTextEncoding()
+                    ? osl_getThreadTextEncoding()
                     : eDestEnc;
 
     m_hConv = rtl_createUnicodeToTextConverter( eDestEnc );
@@ -620,7 +620,7 @@ SvStream& HTMLOutFuncs::Out_ImageMap( SvStream& rStream,
                                         String *pNonConvertableChars    )
 {
     if( RTL_TEXTENCODING_DONTKNOW == eDestEnc )
-        eDestEnc = gsl_getSystemTextEncoding();
+        eDestEnc = osl_getThreadTextEncoding();
 
     const String& rOutName = rName.Len() ? rName : rIMap.GetName();
     DBG_ASSERT( rOutName.Len(), "Kein ImageMap-Name" );
@@ -797,7 +797,7 @@ SvStream& HTMLOutFuncs::OutScript( SvStream& rStrm,
                                    String *pNonConvertableChars )
 {
     if( RTL_TEXTENCODING_DONTKNOW == eDestEnc )
-        eDestEnc = gsl_getSystemTextEncoding();
+        eDestEnc = osl_getThreadTextEncoding();
 
     // Script wird komplett nicht eingerueckt!
     ByteString sOut( '<' );

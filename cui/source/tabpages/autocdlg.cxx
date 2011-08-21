@@ -2468,7 +2468,7 @@ void OfaAutoCompleteTabPage::CopyToClipboard() const
                 "\015\012";
 #endif
 
-        rtl_TextEncoding nEncode = gsl_getSystemTextEncoding();
+        rtl_TextEncoding nEncode = osl_getThreadTextEncoding();
 
         for( sal_uInt16 n = 0; n < nSelCnt; ++n )
         {

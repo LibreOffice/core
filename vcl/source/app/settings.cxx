@@ -546,7 +546,7 @@ ImplStyleData::ImplStyleData( const ImplStyleData& rData ) :
 void ImplStyleData::SetStandardStyles()
 {
     Font aStdFont( FAMILY_SWISS, Size( 0, 8 ) );
-    aStdFont.SetCharSet( gsl_getSystemTextEncoding() );
+    aStdFont.SetCharSet( osl_getThreadTextEncoding() );
     aStdFont.SetWeight( WEIGHT_NORMAL );
     aStdFont.SetName( utl::DefaultFontConfiguration::get().getUserInterfaceFont(com::sun::star::lang::Locale( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("en") ), rtl::OUString(), rtl::OUString() ) ) );
     maAppFont                   = aStdFont;

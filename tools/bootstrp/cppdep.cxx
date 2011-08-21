@@ -98,7 +98,7 @@ sal_Bool CppDep::Search( ByteString aFileName )
     SvFileStream aFile;
     ByteString aReadLine;
 
-    UniString suFileName( aFileName, gsl_getSystemTextEncoding());
+    UniString suFileName(aFileName, osl_getThreadTextEncoding());
 
     aFile.Open( suFileName, STREAM_READ );
     while ( aFile.ReadLine( aReadLine ))

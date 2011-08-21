@@ -905,19 +905,13 @@ sal_Bool DirEntry::First()
         String    aUniPathName( GetPath().GetFull() );
 #ifndef BOOTSTRAP
         FSysRedirector::DoRedirect( aUniPathName );
-        rtl::OString aPathName(rtl::OUStringToOString(aUniPathName, osl_getThreadTextEncoding()));
-#else
-        rtl::OString aPathName(rtl::OUStringToOString(aUniPathName, gsl_getSystemTextEncoding()));
 #endif
+        rtl::OString aPathName(rtl::OUStringToOString(aUniPathName, osl_getThreadTextEncoding()));
 
         DIR *pDir = opendir(aPathName.getStr());
         if ( pDir )
         {
-#ifndef BOOTSTRAP
                 WildCard aWildeKarte( String(CMP_LOWER( aName ), osl_getThreadTextEncoding()) );
-#else
-                WildCard aWildeKarte( String(CMP_LOWER( aName ), gsl_getSystemTextEncoding()) );
-#endif
                 for ( dirent* pEntry = readdir( pDir );
                           pEntry;
                           pEntry = readdir( pDir ) )

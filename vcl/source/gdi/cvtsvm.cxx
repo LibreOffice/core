@@ -298,7 +298,7 @@ void ImplWriteFont( SvStream& rOStm, const Font& rFont,
     rOStm << rFont.IsShadow();
     rOStm << rFont.IsTransparent();
     if ( rActualCharSet == RTL_TEXTENCODING_DONTKNOW )
-        rActualCharSet = gsl_getSystemTextEncoding();
+        rActualCharSet = osl_getThreadTextEncoding();
 }
 
 // ------------------------------------------------------------------------
@@ -541,7 +541,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
     LineInfo            aLineInfo( LINE_NONE, 0 );
     Stack               aLIStack;
     VirtualDevice       aFontVDev;
-    rtl_TextEncoding    eActualCharSet = gsl_getSystemTextEncoding();
+    rtl_TextEncoding    eActualCharSet = osl_getThreadTextEncoding();
     sal_Bool                bFatLine = sal_False;
 
     // TODO: fix reindentation below if you can accept being blamed by the SCM
@@ -868,7 +868,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
 
                     eActualCharSet = aFont.GetCharSet();
                     if ( eActualCharSet == RTL_TEXTENCODING_DONTKNOW )
-                        eActualCharSet = gsl_getSystemTextEncoding();
+                        eActualCharSet = osl_getThreadTextEncoding();
 
                     rMtf.AddAction( new MetaFontAction( aFont ) );
                     rMtf.AddAction( new MetaTextAlignAction( aFont.GetAlign() ) );
@@ -1384,7 +1384,7 @@ void SVMConverter::ImplConvertToSVM1( SvStream& rOStm, GDIMetaFile& rMtf )
     sal_uLong               nCountPos;
     Font                aSaveFont;
     const sal_uInt16        nOldFormat = rOStm.GetNumberFormatInt();
-    rtl_TextEncoding    eActualCharSet = gsl_getSystemTextEncoding();
+    rtl_TextEncoding    eActualCharSet = osl_getThreadTextEncoding();
     const Size          aPrefSize( rMtf.GetPrefSize() );
     sal_Bool                bRop_0_1 = sal_False;
     VirtualDevice       aSaveVDev;
