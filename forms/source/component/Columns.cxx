@@ -42,13 +42,15 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/form/binding/XBindableValue.hpp>
 #include <com/sun/star/beans/XPropertyContainer.hpp>
+#include <com/sun/star/text/XText.hpp>
 #include <comphelper/sequence.hxx>
 #include <comphelper/property.hxx>
 #include <comphelper/basicio.hxx>
+#include <comphelper/types.hxx>
+#include <comphelper/servicehelper.hxx>
 #include "services.hxx"
 #include "frm_resource.hrc"
 #include <tools/debug.hxx>
-#include <rtl/uuid.h>
 #include <rtl/memory.h>
 
 //.........................................................................
@@ -63,6 +65,7 @@ using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::util;
+using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::form::binding;
 
 const sal_uInt16 WIDTH              = 0x0001;
@@ -121,21 +124,14 @@ sal_Int32 getColumnTypeByModelName(const ::rtl::OUString& aModelName)
 
 /*************************************************************************/
 
-//------------------------------------------------------------------
+namespace
+{
+    class theOGridColumnImplementationId : public rtl::Static< UnoTunnelIdInit, theOGridColumnImplementationId > {};
+}
+
 const Sequence<sal_Int8>& OGridColumn::getUnoTunnelImplementationId()
 {
-    static Sequence< sal_Int8 > * pSeq = 0;
-    if( !pSeq )
-    {
-        ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-        if( !pSeq )
-        {
-            static Sequence< sal_Int8 > aSeq( 16 );
-            rtl_createUuid( (sal_uInt8*)aSeq.getArray(), 0, sal_True );
-            pSeq = &aSeq;
-        }
-    }
-    return *pSeq;
+    return theOGridColumnImplementationId::get().getSeq();
 }
 
 //------------------------------------------------------------------
@@ -173,12 +169,17 @@ Sequence<Type> SAL_CALL OGridColumn::getTypes() throw(RuntimeException)
     aTypes.removeType( XServiceInfo::static_type() );
     aTypes.removeType( XBindableValue::static_type() );
     aTypes.removeType( XPropertyContainer::static_type() );
+
     // but re-add their base class(es)
     aTypes.addType( XChild::static_type() );
 
     Reference< XTypeProvider > xProv;
     if ( query_aggregation( m_xAggregate, xProv ))
         aTypes.addTypes( xProv->getTypes() );
+
+    aTypes.removeType( XTextRange::static_type() );
+    aTypes.removeType( XSimpleText::static_type() );
+    aTypes.removeType( XText::static_type() );
 
     return aTypes.getTypes();
 }
@@ -192,6 +193,7 @@ Any SAL_CALL OGridColumn::queryAggregation( const Type& _rType ) throw (RuntimeE
         ||  _rType.equals(::getCppuType(static_cast< Reference< XServiceInfo >* >(NULL)))
         ||  _rType.equals(::getCppuType(static_cast< Reference< XBindableValue >* >(NULL)))
         ||  _rType.equals(::getCppuType(static_cast< Reference< XPropertyContainer >* >(NULL)))
+        ||  comphelper::isAssignableFrom(::getCppuType(static_cast< Reference< XTextRange >* >(NULL)),_rType)
         )
         return aReturn;
 

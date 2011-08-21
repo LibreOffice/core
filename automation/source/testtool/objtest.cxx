@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -96,7 +96,7 @@ static CommunicationFactory aComManFac;
 
 #define cMyDelim ' '
 #define P_FEHLERLISTE pFehlerListe
-#define KEEP_SEQUENCES		100			// Keep Names of last 100 Calls
+#define KEEP_SEQUENCES      100         // Keep Names of last 100 Calls
 
 
 ControlDefLoad const Controls::arClasses [] =
@@ -106,7 +106,7 @@ CNames *Controls::pClasses = NULL;
 ControlDefLoad const TestToolObj::arR_Cmds [] =
 #include "r_cmds.hxx"
 CNames *TestToolObj::pRCommands = NULL;
-CErrors *TestToolObj::pFehlerListe = NULL;		// Hier werden die Fehler des Testtools gespeichert
+CErrors *TestToolObj::pFehlerListe = NULL;      // Hier werden die Fehler des Testtools gespeichert
 
 
 DBG_NAME( ControlItem )
@@ -348,17 +348,17 @@ TestToolObj::TestToolObj( String aName, MyBasic* pBas )                // Aufruf
     pCommunicationManager->SetDataReceivedHdl( LINK( this, TestToolObj, ReturnResultsLink ));
 }
 
-void TestToolObj::LoadIniFile()				// Laden der IniEinstellungen, die durch den ConfigDialog ge�ndert werden k�nnen
+void TestToolObj::LoadIniFile()             // Laden der IniEinstellungen, die durch den ConfigDialog ge�ndert werden k�nnen
 {
-#define GETSET(aVar, KeyName, Dafault)							\
-    {															\
-        ByteString __##aVar##__;								\
-        __##aVar##__ = aConf.ReadKey(KeyName);		\
-        if ( !__##aVar##__.Len() )					\
-        {														\
-            __##aVar##__ = Dafault;								\
-            aConf.WriteKey(KeyName, __##aVar##__);				\
-        }														\
+#define GETSET(aVar, KeyName, Dafault)                          \
+    {                                                           \
+        ByteString __##aVar##__;                                \
+        __##aVar##__ = aConf.ReadKey(KeyName);      \
+        if ( !__##aVar##__.Len() )                  \
+        {                                                       \
+            __##aVar##__ = Dafault;                             \
+            aConf.WriteKey(KeyName, __##aVar##__);              \
+        }                                                       \
         aVar = UniString( __##aVar##__, RTL_TEXTENCODING_UTF8 );\
     }
 
@@ -503,7 +503,7 @@ void TestToolObj::LoadIniFile()				// Laden der IniEinstellungen, die durch den 
 
 void TestToolObj::InitTestToolObj()
 {
-    pImpl->nNumBorders = 0;					// F�r Profiling mit k�stchen
+    pImpl->nNumBorders = 0;                 // F�r Profiling mit k�stchen
 
     pImpl->nMinRemoteCommandDelay = 0;
     pImpl->nMaxRemoteCommandDelay = 0;
@@ -573,11 +573,11 @@ void TestToolObj::InitTestToolObj()
     MAKE_TT_KEYWORD( "MaybeAddErr", SbxCLASS_METHOD, SbxNULL, ID_MaybeAddErr );
     MAKE_TT_KEYWORD( "ClearError", SbxCLASS_METHOD, SbxNULL, ID_ClearError );
     MAKE_TT_KEYWORD( "SaveIDs", SbxCLASS_METHOD, SbxBOOL, ID_SaveIDs );
-    MAKE_TT_KEYWORD( "AutoExecute", SbxCLASS_PROPERTY, SbxBOOL, ID_AutoExecute );	// Achtung! PROPERTY Also eine Variable
+    MAKE_TT_KEYWORD( "AutoExecute", SbxCLASS_PROPERTY, SbxBOOL, ID_AutoExecute );   // Achtung! PROPERTY Also eine Variable
     MAKE_TT_KEYWORD( "Execute", SbxCLASS_METHOD, SbxNULL, ID_Execute );
     MAKE_TT_KEYWORD( "StopOnSyntaxError", SbxCLASS_PROPERTY, SbxBOOL, ID_StopOnSyntaxError );
 
-/*	Dialog Handler werden gebraucht, wenn im internen Testtool ein Dialog
+/*  Dialog Handler werden gebraucht, wenn im internen Testtool ein Dialog
     hochgerissen wird. Nach versenden der Remote-Kommandos wird IdleHandler aktiviert.
     Er testet, ob das Reschedule zum WaitForAnswer zur�ckkehrt. Bleibt das aus, so
     wird erst der RemoteHandler zur�ckgesetzt und dann die Handler-Sub im Basic
@@ -927,7 +927,7 @@ void TestToolObj::ReadNames( String Filename, CNames *&pNames, CNames *&pUIds, s
             else
             #endif
                 if ( !bUnoName && !bMozillaName )
-            {	// Bestimmen der ID aus der Hid.Lst
+            {   // Bestimmen der ID aus der Hid.Lst
                 ControlDef WhatName(aLongname,rtl::OString());
                 if (pUIds->Seek_Entry(&WhatName,&nElement))
                     aUId = pUIds->GetObject(nElement)->pData->aUId;
@@ -1232,7 +1232,7 @@ void TestToolObj::SendViaSocket()
 
     if ( !pCommunicationManager->IsCommunicationRunning() )
     {
-        // first try to run basic sub "startTheOffice" see i86540 
+        // first try to run basic sub "startTheOffice" see i86540
         SbxVariable* pMeth = pImpl->pMyBasic->Find( CUniString( "startTheOffice" ), SbxCLASS_DONTCARE);
         if( !pImpl->bIsStart && pMeth && pMeth->ISA(SbxMethod) )
         {
@@ -1278,7 +1278,7 @@ void TestToolObj::EndBlock()
 {
     if (IsBlock)
     {
-        pImpl->LocalStarttime = Time::GetSystemTicks();	// Setzen der Anfangszeit f�r Performancemessung
+        pImpl->LocalStarttime = Time::GetSystemTicks(); // Setzen der Anfangszeit f�r Performancemessung
 
         In->GenCmdFlow (F_EndCommandBlock);
 
@@ -1422,7 +1422,7 @@ sal_Bool TestToolObj::ReadNamesBin( String Filename, CNames *&pSIds, CNames *&pC
             {
                 pNewDef->Sons(new CNames());
 
-                pNewDef2 = new ControlDef(aName,aUId);		// Noch einen machen
+                pNewDef2 = new ControlDef(aName,aUId);      // Noch einen machen
                 if (!pNewDef->SonInsert(pNewDef2))                              // Dialog in eigenen Namespace eintragen
                 {
                     delete pNewDef2;
@@ -2146,9 +2146,9 @@ void TestToolObj::SFX_NOTIFY( SfxBroadcaster&, const TypeId&,
                         // Hier wird der Remote UNO Kram gestartet
                         // Eintrag in die Konfiguration unter
                         // org.openoffice.Office.Common/Start/Connection
-                        //	socket,host=0,port=12345;iiop;XBla
+                        //  socket,host=0,port=12345;iiop;XBla
                         // oder
-                        //	socket,host=0,port=12345;urp;;XBla
+                        //  socket,host=0,port=12345;urp;;XBla
 
                         String aString;
                         aString.AppendAscii( "socket,host=" );
@@ -2242,7 +2242,7 @@ void TestToolObj::SFX_NOTIFY( SfxBroadcaster&, const TypeId&,
                     {
                         switch (rPar->Get( 1 )->GetType())
                         {
-                            case SbxLONG:		// alles immer als Short �bertragen
+                            case SbxLONG:       // alles immer als Short �bertragen
                             case SbxULONG:
                             case SbxSALINT64:
                             case SbxSALUINT64:
@@ -2583,7 +2583,7 @@ void TestToolObj::SFX_NOTIFY( SfxBroadcaster&, const TypeId&,
             if ( pImpl->nErrorCount )
             {
                 ADD_WARNING_LOG( GEN_RES_STR1( S_ERRORS_DETECTED, String::CreateFromInt32( pImpl->nErrorCount ) ) );
-                pImpl->nWarningCount--;		// Anpassen, da diese Warnung nicht in die Statistik soll
+                pImpl->nWarningCount--;     // Anpassen, da diese Warnung nicht in die Statistik soll
             }
             else
                 ADD_MESSAGE_LOG( GEN_RES_STR0( S_NO_ERRORS_DETECTED ) );
@@ -2726,7 +2726,7 @@ SbxVariable* TestToolObj::Find( const String& aStr, SbxClassType aType)
             delete pWhatName;
             pWhatName = new ControlDef( aStr.Copy( 0, aStr.Len()-3 ), rtl::OString() );
             if ( m_pSIds->Seek_Entry( pWhatName, &nElement ) )
-            {	// Nach slots suchen
+            {   // Nach slots suchen
                 SbxVariable *pReturn = new SbxVariable;
                 delete pWhatName;
                 pWhatName = ( (ControlDef*)m_pSIds->GetObject( nElement ) );
@@ -2791,13 +2791,13 @@ void TestToolObj::CalcPosition( String const &aSource, xub_StrLen nPos, xub_StrL
 }
 
 
-#define CATCH_LABEL			CUniString( "ctch" )
-#define CATCHRES_LABEL		CUniString( "ctchres" )
-#define ENDCATCH_LABEL		CUniString( "endctch" )
+#define CATCH_LABEL         CUniString( "ctch" )
+#define CATCHRES_LABEL      CUniString( "ctchres" )
+#define ENDCATCH_LABEL      CUniString( "endctch" )
 
 sal_Bool IsAlphaChar( sal_Unicode cChar )
 {
-    return	( cChar >= 'a' && cChar <= 'z' ) ||
+    return  ( cChar >= 'a' && cChar <= 'z' ) ||
             ( cChar >= 'A' && cChar <= 'Z' );
 }
 
@@ -2867,7 +2867,7 @@ xub_StrLen TestToolObj::PreCompilePart( String &aSource, xub_StrLen nStart, xub_
 
     xub_StrLen nTry2 = 0;
     while ( !WasPrecompilerError() && (nTry2 = ImplSearch( aSource, nStart, nEnd, CUniString("try"), nTry+1 )) != STRING_NOTFOUND )
-    {	// Wir rekursieren erstmal mit dem 2. Try
+    {   // Wir rekursieren erstmal mit dem 2. Try
         if ( nTry2 < nCatch )
             nEnd += PreCompilePart( aSource, nTry2, nEndcatch+8, aCatchLabel, nLabelCount ) - nEndcatch-8;
         else
@@ -2890,7 +2890,7 @@ xub_StrLen TestToolObj::PreCompilePart( String &aSource, xub_StrLen nStart, xub_
     }
 
     String aReplacement;
-    int nTotalLength = -3 -5 -8;	// try, catch und endcatch fallen raus
+    int nTotalLength = -3 -5 -8;    // try, catch und endcatch fallen raus
 
     aReplacement.AppendAscii( "on error goto " );
     aReplacement += aCatchLabel;
@@ -3236,9 +3236,9 @@ sal_Bool TestToolObj::ReturnResults( SvStream *pIn )
                                 else
                                     pImpl->pNextReturn->PutULong( nLNr1 );
                             }
-                            if( nParams & PARAM_UINT16_1 )		pImpl->pNextReturn->PutUShort( nNr1 );
-                            if( nParams & PARAM_STR_1 )			pImpl->pNextReturn->PutString( aString1 );
-                            if( nParams & PARAM_BOOL_1 )		pImpl->pNextReturn->PutBool( bBool1 );
+                            if( nParams & PARAM_UINT16_1 )      pImpl->pNextReturn->PutUShort( nNr1 );
+                            if( nParams & PARAM_STR_1 )         pImpl->pNextReturn->PutString( aString1 );
+                            if( nParams & PARAM_BOOL_1 )        pImpl->pNextReturn->PutBool( bBool1 );
                             if( nParams & PARAM_SBXVALUE_1 )    // FIXME: allow generic datatype
                             {
                                 SbxValues aValues( SbxDATE );
@@ -3379,7 +3379,7 @@ sal_Bool TestToolObj::ReturnResults( SvStream *pIn )
                         {
                             switch ( nUId )
                             {
-                                case S_ProfileReset:	// nLNr1 = Anzahl Borders
+                                case S_ProfileReset:    // nLNr1 = Anzahl Borders
                                 {
                                     pImpl->nNumBorders = (sal_uInt16)nLNr1;     // Borders are 0 to 4
                                     sal_uInt16 i;
@@ -3394,15 +3394,15 @@ sal_Bool TestToolObj::ReturnResults( SvStream *pIn )
                                     }
                                     break;
                                 }
-                                case S_ProfileBorder1:	// nLNr1 = Border1 in ms
-                                case S_ProfileBorder2:	// nLNr1 = Border2 in ms
-                                case S_ProfileBorder3:	// nLNr1 = Border3 in ms
-                                case S_ProfileBorder4:	// nLNr1 = Border4 in ms
+                                case S_ProfileBorder1:  // nLNr1 = Border1 in ms
+                                case S_ProfileBorder2:  // nLNr1 = Border2 in ms
+                                case S_ProfileBorder3:  // nLNr1 = Border3 in ms
+                                case S_ProfileBorder4:  // nLNr1 = Border4 in ms
                                 {
                                     pImpl->naValBorders[ nUId - S_ProfileBorder1 ] = nLNr1;
                                     break;
                                 }
-                                case S_ProfileTime:		// nLNr1 = remote Zeit des Befehls
+                                case S_ProfileTime:     // nLNr1 = remote Zeit des Befehls
                                 {
                                     sal_uInt16 i;
                                     for ( i=0 ; i<pImpl->nNumBorders &&
@@ -3430,9 +3430,9 @@ sal_Bool TestToolObj::ReturnResults( SvStream *pIn )
 
                                     break;
                                 }
-                                case S_ProfileDump:		// Gibt die daten aus.
+                                case S_ProfileDump:     // Gibt die daten aus.
                                 {
-                                    if ( pImpl->nNumBorders == 0 )	// Also keine alte R�ckmeldung vom Office
+                                    if ( pImpl->nNumBorders == 0 )  // Also keine alte R�ckmeldung vom Office
                                         break;
                                     DirEntry FilePath = pImpl->aLogFileBase + DirEntry(DirEntry(aLogFileName).GetBase().AppendAscii(".prf"));
                                     SvFileStream aStrm( FilePath.GetFull(), STREAM_STD_WRITE );
@@ -3983,11 +3983,11 @@ static ControlDefLoad const arRes_Type [] =
 
 SbTextType TestToolObj::GetSymbolType( const String &rSymbol, sal_Bool bWasControl )
 {
-    if (	rSymbol.CompareToAscii( "try" ) == COMPARE_EQUAL
-        ||	rSymbol.CompareToAscii( "catch" ) == COMPARE_EQUAL
-        ||	rSymbol.CompareToAscii( "endcatch" ) == COMPARE_EQUAL
-        ||	rSymbol.CompareToAscii( "testcase" ) == COMPARE_EQUAL
-        ||	rSymbol.CompareToAscii( "endcase" ) == COMPARE_EQUAL )
+    if (    rSymbol.CompareToAscii( "try" ) == COMPARE_EQUAL
+        ||  rSymbol.CompareToAscii( "catch" ) == COMPARE_EQUAL
+        ||  rSymbol.CompareToAscii( "endcatch" ) == COMPARE_EQUAL
+        ||  rSymbol.CompareToAscii( "testcase" ) == COMPARE_EQUAL
+        ||  rSymbol.CompareToAscii( "endcase" ) == COMPARE_EQUAL )
     {
         return TT_KEYWORD;
     }
@@ -4037,7 +4037,7 @@ SbTextType TestToolObj::GetSymbolType( const String &rSymbol, sal_Bool bWasContr
         return TT_LOCALCMD;
     }
 
-    return SB_SYMBOL;	// Alles was hier landet ist vom Typ SB_SYMBOL und bleibt es auch
+    return SB_SYMBOL;   // Alles was hier landet ist vom Typ SB_SYMBOL und bleibt es auch
 }
 
 
@@ -4109,9 +4109,9 @@ SbxVariable* Controls::Find( const String& aStr, SbxClassType aType)
 
 String TTFormat::ms2s( sal_uLong nMilliSeconds )
 {
-    if ( nMilliSeconds < 100000 )		// 100 Sekunden
+    if ( nMilliSeconds < 100000 )       // 100 Sekunden
         return String::CreateFromInt64( nMilliSeconds );
-    if ( nMilliSeconds < 100000*60 )	// 100 Minuten
+    if ( nMilliSeconds < 100000*60 )    // 100 Minuten
         return String::CreateFromInt32( nMilliSeconds / 1000 ).AppendAscii("Sec");
     return String::CreateFromInt32( nMilliSeconds / 1000 / 60 ).AppendAscii("Min");
 }

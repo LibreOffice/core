@@ -43,7 +43,7 @@
 #include "securityenvironment_mscryptimpl.hxx"
 
 #include "x509certificate_mscryptimpl.hxx"
-#include <rtl/uuid.h>
+#include <comphelper/servicehelper.hxx>
 
 #include <xmlsec/xmlsec.h>
 #include <xmlsec/keysmngr.h>
@@ -230,17 +230,15 @@ sal_Int64 SAL_CALL SecurityEnvironment_MSCryptImpl :: getSomething( const Sequen
 }
 
 /* XUnoTunnel extension */
+
+
+namespace
+{
+    class theSecurityEnvironment_MSCryptImplUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theSecurityEnvironment_MSCryptImplUnoTunnelId > {};
+}
+
 const Sequence< sal_Int8>& SecurityEnvironment_MSCryptImpl :: getUnoTunnelId() {
-    static Sequence< sal_Int8 >* pSeq = 0 ;
-    if( !pSeq ) {
-        ::osl::Guard< ::osl::Mutex > aGuard( ::osl::Mutex::getGlobalMutex() ) ;
-        if( !pSeq ) {
-            static Sequence< sal_Int8> aSeq( 16 ) ;
-            rtl_createUuid( ( sal_uInt8* )aSeq.getArray() , 0 , sal_True ) ;
-            pSeq = &aSeq ;
-        }
-    }
-    return *pSeq ;
+    return theSecurityEnvironment_MSCryptImplUnoTunnelId::get().getSeq();
 }
 
 /* XUnoTunnel extension */

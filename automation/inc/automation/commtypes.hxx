@@ -36,13 +36,9 @@
  *
  ************************************************************************/
 
-/** defines al least types
+/** defines:
     comm_BYTE
-    comm_WORD;
-    comm_DWORD;
     comm_BOOL
-    comm_ULONG
-    comm_USHORT
     comm_UINT16
     comm_UINT32
     comm_UniChar
@@ -60,13 +56,8 @@ typedef sal_Unicode comm_UniChar;
 #include <tools/solar.h>
 typedef sal_uInt8 comm_BYTE;
 typedef sal_Bool comm_BOOL;
-typedef sal_uInt32 comm_ULONG;
-typedef sal_uInt16 comm_USHORT;
 typedef sal_uInt16 comm_UINT16;
 typedef sal_uInt32 comm_UINT32;
-
-typedef sal_uInt16      comm_WORD;
-typedef sal_uInt32      comm_DWORD;
 
 class String;
 #define comm_String String

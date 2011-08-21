@@ -209,7 +209,7 @@ sal_uInt16 MyDispatcher::ExecuteFunction( sal_uInt16 nSID, SfxPoolItem** ppArgs,
         case IDM_SYS_DLG:         pMainWin->SysDlg();               break;
         default:
             {
-                OSL_TRACE("Dispatcher kennt Funktion nicht %s",ByteString::CreateFromInt64(nSID).GetBuffer());
+                OSL_TRACE("Dispatcher kennt Funktion nicht %s", rtl::OString::valueOf(static_cast<sal_Int64>(nSID)).getStr());
                 return EXECUTE_NO;
             }
 

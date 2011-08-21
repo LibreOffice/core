@@ -111,8 +111,8 @@ comm_BOOL PacketHandler::ReceiveData( void* &pData, comm_UINT32 &nLen )
 
         if ( bMultiChannel || bForceMultiChannelThisPacket )
         {
-            comm_ULONG nReadSoFar = 0;
-            comm_ULONG nHeaderReadSoFar = 0;
+            comm_UINT32 nReadSoFar = 0;
+            comm_UINT32 nHeaderReadSoFar = 0;
 
             // Pr�fbyte f�r L�ngenangabe
             unsigned char nLenCheck = 0;

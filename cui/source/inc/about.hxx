@@ -67,10 +67,7 @@ protected:
 
 public:
     AboutDialog( Window* pParent, const ResId& rId);
-    ~AboutDialog();
 
-    DECL_LINK( TimerHdl, Timer * );
-    DECL_LINK( AccelSelectHdl, Accelerator * );
     DECL_LINK( HandleHyperlink, svt::FixedHyperlink * );
 };
 

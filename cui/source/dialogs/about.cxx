@@ -73,69 +73,37 @@ Image SfxApplication::GetApplicationLogo()
     return Image( aBitmap );
 }
 
-/* intense magic to get strong version information */
+/* get good version information */
 static String
 GetBuildId()
 {
-    const String sCWSSchema( String::CreateFromAscii( "[CWS:" ) );
     rtl::OUString sDefault;
-    String sBuildId( utl::Bootstrap::getBuildIdData( sDefault ) );
-    OSL_ENSURE( sBuildId.Len() > 0, "No BUILDID in bootstrap file" );
-    if ( sBuildId.Len() > 0 && sBuildId.Search( sCWSSchema ) == STRING_NOTFOUND )
+    rtl::OUString sBuildId( utl::Bootstrap::getBuildIdData( sDefault ) );
+    if (!sBuildId.isEmpty() && sBuildId.getLength() > 50)
     {
-        // no cws part in brand buildid -> try basis buildid
-        rtl::OUString sBasisBuildId( DEFINE_CONST_OUSTRING("${$OOO_BASE_DIR/program/" SAL_CONFIGFILE("version") ":buildid}" ) );
-        rtl::Bootstrap::expandMacros( sBasisBuildId );
-        sal_Int32 nIndex = sBasisBuildId.indexOf( sCWSSchema );
-        if ( nIndex != -1 )
-            sBuildId += String( sBasisBuildId.copy( nIndex ) );
+        rtl::OUStringBuffer aBuffer;
+        aBuffer.appendAscii(RTL_CONSTASCII_STRINGPARAM("\n\t"));
+        sal_Int32 nIndex = 0;
+        do
+        {
+            rtl::OUString aToken = sBuildId.getToken( 0, '-', nIndex );
+            if (!aToken.isEmpty())
+            {
+                aBuffer.append(aToken);
+                if (nIndex >= 0)
+                {
+                    if (nIndex % 5)
+                        aBuffer.append(static_cast<sal_Unicode>('-'));
+                    else
+                        aBuffer.appendAscii(RTL_CONSTASCII_STRINGPARAM("\n\t"));
+                }
+            }
+        }
+        while ( nIndex >= 0 );
+        sBuildId = aBuffer.makeStringAndClear();
     }
 
-    String sProductSource( utl::Bootstrap::getProductSource( sDefault ) );
-    OSL_ENSURE( sProductSource.Len() > 0, "No ProductSource in bootstrap file" );
-
-    // the product source is something like "DEV300", where the
-    // build id is something like "300m12(Build:12345)". For better readability,
-    // strip the duplicate UPD ("300").
-    if ( sProductSource.Len() )
-    {
-        bool bMatchingUPD =
-            ( sProductSource.Len() >= 3 )
-            &&  ( sBuildId.Len() >= 3 )
-            &&  ( sProductSource.Copy( sProductSource.Len() - 3 ) == sBuildId.Copy( 0, 3 ) );
-        OSL_ENSURE( bMatchingUPD, "BUILDID and ProductSource do not match in their UPD" );
-        if ( bMatchingUPD )
-            sProductSource = sProductSource.Copy( 0, sProductSource.Len() - 3 );
-
-        // prepend the product source
-        sBuildId.Insert( sProductSource, 0 );
-    }
-
-    // Version information (in about box) (#i94693#)
-    /* if the build ids of the basis or ure layer are different from the build id
-     * of the brand layer then show them */
-    rtl::OUString aBasisProductBuildId( DEFINE_CONST_OUSTRING("${$OOO_BASE_DIR/program/" SAL_CONFIGFILE("version") ":ProductBuildid}" ) );
-    rtl::Bootstrap::expandMacros( aBasisProductBuildId );
-    rtl::OUString aUREProductBuildId( DEFINE_CONST_OUSTRING("${$URE_BIN_DIR/" SAL_CONFIGFILE("version") ":ProductBuildid}" ) );
-    rtl::Bootstrap::expandMacros( aUREProductBuildId );
-    if ( sBuildId.Search( String( aBasisProductBuildId ) ) == STRING_NOTFOUND
-         || sBuildId.Search( String( aUREProductBuildId ) ) == STRING_NOTFOUND )
-    {
-        String sTemp( '-' );
-        sTemp += String( aBasisProductBuildId );
-        sTemp += '-';
-        sTemp += String( aUREProductBuildId );
-        sBuildId.Insert( sTemp, sBuildId.Search( ')' ) );
-    }
-
-    // the build id format is "milestone(build)[cwsname]". For readability, it would
-    // be nice to have some more spaces in there.
-    xub_StrLen nPos = 0;
-    if ( ( nPos = sBuildId.Search( sal_Unicode( '(' ) ) ) != STRING_NOTFOUND )
-        sBuildId.Insert( sal_Unicode( ' ' ), nPos );
-    if ( ( nPos = sBuildId.Search( sal_Unicode( '[' ) ) ) != STRING_NOTFOUND )
-        sBuildId.Insert( sal_Unicode( ' ' ), nPos );
-
+    OSL_ENSURE( sBuildId.getLength() > 0, "No BUILDID in bootstrap file" );
     return sBuildId;
 }
 
@@ -169,6 +137,8 @@ AboutDialog::AboutDialog( Window* pParent, const ResId& rId) :
     String sVersion = aVersionTextStr;
     sVersion.SearchAndReplaceAscii( "$(VER)", Application::GetDisplayName() );
     sVersion += '\n';
+    sVersion += m_sBuildStr;
+    sVersion += ' ';
     sVersion += GetBuildId();
 #ifdef BUILD_VER_STRING
     String aBuildString( DEFINE_CONST_UNICODE( BUILD_VER_STRING ) );
@@ -176,28 +146,6 @@ AboutDialog::AboutDialog( Window* pParent, const ResId& rId) :
     sVersion += aBuildString;
 #endif
     aVersionText.SetText( sVersion );
-
-    // Initialization call for developers
-    if ( aAccelStr.Len() && ByteString(U2S(aAccelStr)).IsAlphaAscii() )
-    {
-        Accelerator *pAccel = 0, *pPrevAccel = 0, *pFirstAccel = 0;
-        aAccelStr.ToUpperAscii();
-
-        for ( sal_uInt16 i = 0; i < aAccelStr.Len(); ++i )
-        {
-            pPrevAccel = pAccel;
-            pAccel = new Accelerator;
-            aAccelList.push_back( pAccel );
-            sal_uInt16 nKey = aAccelStr.GetChar(i) - 'A' + KEY_A;
-            pAccel->InsertItem( 1, KeyCode( nKey, KEY_MOD1 ) );
-            if ( i > 0 )
-                pPrevAccel->SetAccel( 1, pAccel );
-            if ( i == 0 )
-                pFirstAccel = pAccel;
-        }
-        pAccel->SetSelectHdl( LINK( this, AboutDialog, AccelSelectHdl ) );
-        GetpApp()->InsertAccel( pFirstAccel );
-    }
 
     // set for background and text the correct system color
     const StyleSettings& rSettings = GetSettings().GetStyleSettings();
@@ -235,17 +183,10 @@ AboutDialog::AboutDialog( Window* pParent, const ResId& rId) :
     // determine size and position of the dialog & elements
     Size aAppLogoSiz = aAppLogo.GetSizePixel();
 
-    if (aAppLogoSiz.Width() < 300)
-        aAppLogoSiz.Width() = 300;
-
-    Size aOutSiz     = GetOutputSizePixel();
-    aOutSiz.Width()  = aAppLogoSiz.Width();
-
     // analyze size of the aVersionText widget
     // character size
     Size a6Size      = aVersionText.LogicToPixel( Size( 6, 6 ), MAP_APPFONT );
     // preferred Version widget size
-    Size aVTSize = aVersionText.CalcMinimumSize();
     long nY          = aAppLogoSiz.Height() + ( a6Size.Height() * 2 );
     long nDlgMargin  = a6Size.Width() * 2;
     long nCtrlMargin = a6Size.Height() * 2;
@@ -269,97 +210,56 @@ AboutDialog::AboutDialog( Window* pParent, const ResId& rId) :
     long nTextWidth = (aOutSiz.Width() - nDlgMargin);
 
     // finally set the aVersionText widget position and size
-    Size aVTCopySize = aVTSize;
-    Point aVTCopyPnt;
-    aVTCopySize.Width()  = nTextWidth;
-    aVTCopyPnt.X() = ( aOutSiz.Width() - aVTCopySize.Width() ) / 2;
-    aVTCopyPnt.Y() = nY;
-    aVersionText.SetPosSizePixel( aVTCopyPnt, aVTCopySize );
+    Size aVTSize = aVersionText.GetSizePixel();
+    aVTSize.Width() = nTextWidth;
+    aVersionText.SetSizePixel(aVTSize);
+    aVTSize = aVersionText.CalcMinimumSize();
+    Point aVTPnt;
+    aVTPnt.X() = ( aOutSiz.Width() - aVTSize.Width() ) / 2;
+    aVTPnt.Y() = nY;
+    aVersionText.SetPosSizePixel( aVTPnt, aVTSize );
 
-    nY += nCtrlMargin;
+    nY += aVTSize.Height() + nCtrlMargin;
+
+    // Multiline edit with Copyright-Text
+    // preferred Version widget size
+    aCopyrightText.SetSizePixel(Size(nTextWidth,600));
+    Size aCTSize = aCopyrightText.CalcMinimumSize();
+    aCTSize.Width()= nTextWidth;
+    Point aCTPnt;
+    aCTPnt.X() = ( aOutSiz.Width() - aCTSize.Width() ) / 2;
+    aCTPnt.Y() = nY;
+    aCopyrightText.SetPosSizePixel( aCTPnt, aCTSize );
+
+    nY += aCTSize.Height() + nCtrlMargin;
+
+    // FixedHyperlink with more info link
+    Size aLTSize = aInfoLink.CalcMinimumSize();
+    Point aLTPnt;
+    aLTPnt.X() = ( aOutSiz.Width() - aLTSize.Width() ) / 2;
+    aLTPnt.Y() = nY;
+    aInfoLink.SetPosSizePixel( aLTPnt, aLTSize );
+
+    nY += aLTSize.Height() + nCtrlMargin;
 
     // OK-Button-Position (at the bottom and centered)
     Size aOKSiz = aOKButton.GetSizePixel();
-    Point aOKPnt = aOKButton.GetPosPixel();
-
-    // FixedHyperlink with more info link
-    Point aLinkPnt = aInfoLink.GetPosPixel();
-    Size aLinkSize = aInfoLink.GetSizePixel();
-
-    // Multiline edit with Copyright-Text
-    Point aCopyPnt = aCopyrightText.GetPosPixel();
-    Size aCopySize = aCopyrightText.GetSizePixel();
-    aCopySize.Width()  = nTextWidth;
-    aCopySize.Height() = aOutSiz.Height() - nY - ( aOKSiz.Height() * 2 ) - 3*aLinkSize.Height() - nCtrlMargin;
-
-    aCopyPnt.X() = ( aOutSiz.Width() - aCopySize.Width() ) / 2;
-    aCopyPnt.Y() = nY;
-    aCopyrightText.SetPosSizePixel( aCopyPnt, aCopySize );
-
-    nY += aCopySize.Height() + aLinkSize.Height();
-
-    aLinkSize.Width() = aInfoLink.CalcMinimumSize().Width();
-    aLinkPnt.X() = ( aOutSiz.Width() - aLinkSize.Width() ) / 2;
-    aLinkPnt.Y() = nY;
-    aInfoLink.SetPosSizePixel( aLinkPnt, aLinkSize );
-
-    nY += aLinkSize.Height() + nCtrlMargin;
-
+    Point aOKPnt;
     aOKPnt.X() = ( aOutSiz.Width() - aOKSiz.Width() ) / 2;
     aOKPnt.Y() = nY;
     aOKButton.SetPosPixel( aOKPnt );
 
-    // Change the width of the dialog
+    nY += aOKSiz.Height() + nCtrlMargin;
+
+    aOutSiz.Height() = nY;
+
+    // Change the size of the dialog
     SetOutputSizePixel( aOutSiz );
 
     FreeResource();
 
     // explicit Help-Id
     SetHelpId( CMD_SID_ABOUT );
-}
-
-// -----------------------------------------------------------------------
-
-AboutDialog::~AboutDialog()
-{
-    // Clearing the developers call
-    if ( !aAccelList.empty() )
-    {
-        GetpApp()->RemoveAccel( aAccelList.front() );
-
-        for ( size_t i = 0, n = aAccelList.size(); i < n; ++i )
-            delete aAccelList[ i ];
-        aAccelList.clear();
-    }
-}
-
-// -----------------------------------------------------------------------
-
-IMPL_LINK( AboutDialog, TimerHdl, Timer *, pTimer )
-{
-    (void)pTimer; //unused
-    ++m_nPendingScrolls;
-    Invalidate( INVALIDATE_NOERASE | INVALIDATE_NOCHILDREN );
-    return 0;
-}
-
-// -----------------------------------------------------------------------
-
-IMPL_LINK( AboutDialog, AccelSelectHdl, Accelerator *, pAccelerator )
-{
-    (void)pAccelerator; //unused
-    // init Timer
-    aTimer.SetTimeoutHdl( LINK( this, AboutDialog, TimerHdl ) );
-
-    // init scroll mode
-    nOff = GetOutputSizePixel().Height();
-    MapMode aMapMode( MAP_PIXEL );
-    SetMapMode( aMapMode );
-
-    // start scroll Timer
-    aTimer.SetTimeout( SCROLL_TIMER );
-    aTimer.Start();
-    return 0;
 }
 
 // -----------------------------------------------------------------------
@@ -394,15 +294,12 @@ IMPL_LINK( AboutDialog, HandleHyperlink, svt::FixedHyperlink*, pHyperlink )
 void AboutDialog::Paint( const Rectangle& rRect )
 {
     SetClipRegion( rRect );
-
-    Point aPos( m_nDeltaWidth / 2, 0 );
+    Point aPos( 0, 0 );
     DrawImage( aPos, aAppLogo );
 }
 
 sal_Bool AboutDialog::Close()
 {
-    // stop Timer and finish the dialog
-    aTimer.Stop();
     EndDialog( RET_OK );
     return sal_False;
 }

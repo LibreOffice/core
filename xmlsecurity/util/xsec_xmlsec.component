@@ -32,6 +32,7 @@
     <service name="com.sun.star.security.SerialNumberAdapter"/>
   </implementation>
   <implementation name="com.sun.star.xml.security.bridge.xmlsec.SEInitializer_NssImpl">
+    <service name="com.sun.star.xml.crypto.NSSInitializer"/>
     <service name="com.sun.star.xml.crypto.SEInitializer"/>
   </implementation>
   <implementation name="com.sun.star.xml.security.bridge.xmlsec.SecurityEnvironment_NssImpl">

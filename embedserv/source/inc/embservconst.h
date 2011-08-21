@@ -29,7 +29,7 @@
 #ifndef _EMBSERVCONST_H_
 #define _EMBSERVCONST_H_
 
-#include <initguid.h>
+#include <guiddef.h>
 
 #ifndef _COMPHELPER_CLASSIDS_HXX
 #include <comphelper/classids.hxx>

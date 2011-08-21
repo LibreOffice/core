@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -84,7 +84,7 @@ sal_Bool CommunicationManagerClientViaSocketTT::RetryConnect()
 
             if ( bSucc )
             {
-                aFirstRetryCall = Time() + Time( 0, 1 );	// Max eine Minute Zeit
+                aFirstRetryCall = Time() + Time( 0, 1 );    // Max eine Minute Zeit
                 for ( int i = 10 ; i-- ; )
                     GetpApp()->Reschedule();
             }
@@ -159,7 +159,7 @@ sal_uLong GetTTPortConfig()
 #endif
           )
         {
-            aPortToTalk = Application::GetCommandLineParam( i ).Copy(6);                
+            aPortToTalk = Application::GetCommandLineParam( i ).Copy(6);
             return (sal_uLong)aPortToTalk.ToInt64();
         }
     }

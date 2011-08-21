@@ -412,13 +412,13 @@ void EditorWindow::KeyInput( const KeyEvent& rKEvt )
     long nLinSz = pModulWindow->GetHScrollBar()->GetLineSize(); (void)nLinSz;
     long nThumb = pModulWindow->GetHScrollBar()->GetThumbPos(); (void)nThumb;
 #endif
-    sal_Bool bDone = sal_False;
     sal_Bool bWasModified = pEditEngine->IsModified();
-    if ( !TextEngine::DoesKeyChangeText( rKEvt ) || ImpCanModify() )
+    // see if there is an accelerator to be processed first
+    sal_Bool bDone = SfxViewShell::Current()->KeyInput( rKEvt );
+
+    if ( !bDone && ( !TextEngine::DoesKeyChangeText( rKEvt ) || ImpCanModify()  ) )
     {
-        if ( ( rKEvt.GetKeyCode().GetCode() == KEY_A) && rKEvt.GetKeyCode().IsMod1() )
-            pEditView->SetSelection( TextSelection( TextPaM( 0, 0 ), TextPaM( 0xFFFFFFFF, 0xFFFF ) ) );
-        else if ( ( rKEvt.GetKeyCode().GetCode() == KEY_Y ) && rKEvt.GetKeyCode().IsMod1() )
+        if ( ( rKEvt.GetKeyCode().GetCode() == KEY_Y ) && rKEvt.GetKeyCode().IsMod1() )
             bDone = sal_True; // CTRL-Y schlucken, damit kein Vorlagenkatalog
         else
         {
@@ -443,7 +443,6 @@ void EditorWindow::KeyInput( const KeyEvent& rKEvt )
     }
     if ( !bDone )
     {
-        if ( !SfxViewShell::Current()->KeyInput( rKEvt ) )
             Window::KeyInput( rKEvt );
     }
     else
@@ -1498,7 +1497,6 @@ void WatchWindow::UpdateWatches( bool bBasicStopped )
 StackWindow::StackWindow( Window* pParent ) :
     BasicDockingWindow( pParent ),
     aTreeListBox( this, WB_BORDER | WB_3DLOOK | WB_HSCROLL | WB_TABSTOP ),
-    aGotoCallButton( this, IDEResId( RID_IMGBTN_GOTOCALL ) ),
     aStackStr( IDEResId( RID_STR_STACK ) )
 {
        aTreeListBox.SetHelpId(HID_BASICIDE_STACKWINDOW_LIST);
@@ -1512,14 +1510,6 @@ StackWindow::StackWindow( Window* pParent ) :
     SetText( String( IDEResId( RID_STR_STACKNAME ) ) );
 
     SetHelpId( HID_BASICIDE_STACKWINDOW );
-
-    aGotoCallButton.SetClickHdl( LINK( this, StackWindow, ButtonHdl ) );
-    aGotoCallButton.SetPosPixel( Point( DWBORDER, 2 ) );
-    Size aSz( aGotoCallButton.GetModeImage().GetSizePixel() );
-    aSz.Width() += 6;
-    aSz.Height() += 6;
-    aGotoCallButton.SetSizePixel( aSz );
-    aGotoCallButton.Hide();
 
     // make stack window keyboard accessible
     GetSystemWindow()->GetTaskPaneList()->AddWindow( this );
@@ -1559,18 +1549,8 @@ void StackWindow::Resize()
 
 
 
-IMPL_LINK_INLINE_START( StackWindow, ButtonHdl, ImageButton *, pButton )
+IMPL_LINK_INLINE_START( StackWindow, ButtonHdl, ImageButton *, /*pButton*/ )
 {
-    if ( pButton == &aGotoCallButton )
-    {
-        BasicIDEShell* pIDEShell = IDE_DLL()->GetShell();
-        SfxViewFrame* pViewFrame = pIDEShell ? pIDEShell->GetViewFrame() : NULL;
-        SfxDispatcher* pDispatcher = pViewFrame ? pViewFrame->GetDispatcher() : NULL;
-        if( pDispatcher )
-        {
-            pDispatcher->Execute( SID_BASICIDE_GOTOCALL );
-        }
-    }
     return 0;
 }
 IMPL_LINK_INLINE_END( StackWindow, ButtonHdl, ImageButton *, pButton )

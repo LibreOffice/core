@@ -70,11 +70,9 @@ XMLSignatureHelper::XMLSignatureHelper( const uno::Reference< uno::XComponentCon
 
 XMLSignatureHelper::~XMLSignatureHelper()
 {
-    if ( mxSEInitializer.is() && mxSecurityContext.is() )
-        mxSEInitializer->freeSecurityContext( mxSecurityContext );
 }
 
-bool XMLSignatureHelper::Init( const rtl::OUString& rTokenPath )
+bool XMLSignatureHelper::Init()
 {
     DBG_ASSERT( !mxSEInitializer.is(), "XMLSignatureHelper::Init - mxSEInitializer already set!" );
     DBG_ASSERT( !mxSecurityContext.is(), "XMLSignatureHelper::Init - mxSecurityContext already set!" );
@@ -82,7 +80,7 @@ bool XMLSignatureHelper::Init( const rtl::OUString& rTokenPath )
     ImplCreateSEInitializer();
 
     if ( mxSEInitializer.is() )
-        mxSecurityContext = mxSEInitializer->createSecurityContext( rTokenPath );
+        mxSecurityContext = mxSEInitializer->createSecurityContext( ::rtl::OUString() );
 
     return mxSecurityContext.is();
 }
@@ -401,7 +399,6 @@ sal_Int32 XMLSignatureHelper::GetSecurityEnvironmentNumber()
 {
     return (mxSecurityContext.is()?(mxSecurityContext->getSecurityEnvironmentNumber()): 0);
 }
-
 
 IMPL_LINK( XMLSignatureHelper, SignatureCreationResultListener, XMLSignatureCreationResult*, pResult )
 {

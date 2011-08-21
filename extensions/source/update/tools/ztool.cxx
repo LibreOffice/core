@@ -37,11 +37,7 @@ void show_usage()
     fputs("ztool usage: ztool <source> <dest>\n", stderr);
 }
 
-int
-#ifdef WNT
-__cdecl
-#endif
-main( int argc, char **argv )
+int SAL_CALL main( int argc, char **argv )
 {
     if ( argc != 3 )
     {

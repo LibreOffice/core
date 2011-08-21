@@ -38,6 +38,12 @@ $(eval $(call gb_Library_set_include,frm,\
     -I$(OUTDIR)/inc \
 ))
 
+$(eval $(call gb_Library_add_api,frm,\
+    offapi \
+    oovbaapi \
+    udkapi \
+))
+
 $(eval $(call gb_Library_add_linked_libs,frm,\
     comphelper \
     cppu \

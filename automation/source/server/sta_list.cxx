@@ -124,11 +124,10 @@ TTSettings* GetTTSettings()
     return pTTSettings;
 }
 
-
-
-
 // FIXME: HELPID
-#define IS_WINP_CLOSING(pWin) (pWin->GetHelpId().equals( "TT_Win_is_closing_HID" ) && pWin->GetUniqueId().equals( "TT_Win_is_closing_UID" ))
+#define IS_WINP_CLOSING(pWin) \
+    (pWin->GetHelpId().equalsL(RTL_CONSTASCII_STRINGPARAM("TT_Win_is_closing_HID")) && \
+     pWin->GetUniqueId().equalsL(RTL_CONSTASCII_STRINGPARAM("TT_Win_is_closing_UID")))
 
 StatementList::StatementList()
 : nRetryCount(MAX_RETRIES)
@@ -167,7 +166,7 @@ void StatementList::SendProfile( String aText )
 
             if ( pProfiler->IsPartitioning() )
                                 // FIXME: HELPID
-                pRet->GenReturn( RET_ProfileInfo, S_ProfileTime, static_cast<comm_ULONG>(pProfiler->GetPartitioningTime()) ); // GetPartitioningTime() sal_uLong != comm_ULONG on 64bit
+                pRet->GenReturn( RET_ProfileInfo, S_ProfileTime, static_cast<comm_UINT32>(pProfiler->GetPartitioningTime()) ); // GetPartitioningTime() sal_uLong != comm_UINT32 on 64bit
         }
 
         if ( pProfiler->IsAutoProfiling() )

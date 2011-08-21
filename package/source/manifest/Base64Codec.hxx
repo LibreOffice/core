@@ -40,8 +40,8 @@ class OUStringBuffer;
 class Base64Codec
 {
 public:
-    static void encodeBase64(rtl::OUStringBuffer& aStrBuffer, const com::sun::star::uno::Sequence<sal_uInt8>& aPass);
-    static void decodeBase64(com::sun::star::uno::Sequence<sal_uInt8>& aPass, const rtl::OUString& sBuffer);
+    static void encodeBase64(rtl::OUStringBuffer& aStrBuffer, const com::sun::star::uno::Sequence<sal_Int8>& aPass);
+    static void decodeBase64(com::sun::star::uno::Sequence<sal_Int8>& aPass, const rtl::OUString& sBuffer);
 };
 #endif
 

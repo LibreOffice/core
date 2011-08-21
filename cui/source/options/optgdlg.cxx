@@ -180,9 +180,12 @@ namespace
                 if ( xEnum.is() && xEnum->hasMoreElements() )
                     bRet = sal_True;
             }
-
-            catch( IllegalArgumentException ) {}
-            catch( ElementExistException ) {}
+            catch (const IllegalArgumentException&)
+            {
+            }
+            catch (const ElementExistException&)
+            {
+            }
             return bRet;
         }
 }
@@ -639,7 +642,7 @@ CanvasSettings::CanvasSettings() :
             ++pCurr;
         }
     }
-    catch( Exception& )
+    catch (const Exception&)
     {
     }
 }
@@ -677,8 +680,9 @@ sal_Bool CanvasSettings::IsHardwareAccelerationAvailable() const
                             return mbHWAccelAvailable;
                         }
                 }
-                catch (Exception &)
-                {}
+                catch (const Exception&)
+                {
+                }
 
                 ++pCurrImpl;
             }
@@ -1339,7 +1343,7 @@ OfaLanguagesTabPage::OfaLanguagesTabPage( Window* pParent, const SfxItemSet& rSe
         }
 
     }
-    catch (Exception &e)
+    catch (const Exception &e)
     {
         // we'll just leave the box in it's default setting and won't
         // even give it event handler...
@@ -1522,7 +1526,7 @@ sal_Bool OfaLanguagesTabPage::FillItemSet( SfxItemSet& rSet )
             }
         }
     }
-    catch (Exception& e)
+    catch (const Exception& e)
     {
         // we'll just leave the box in it's default setting and won't
         // even give it event handler...
@@ -1757,7 +1761,7 @@ void OfaLanguagesTabPage::Reset( const SfxItemSet& rSet )
         aCTLLang >>= aLocale;
         eCurLangCTL = MsLangId::convertLocaleToLanguage( aLocale );
     }
-    catch(Exception&)
+    catch (const Exception&)
     {
     }
     //overwrite them by the values provided by the DocShell

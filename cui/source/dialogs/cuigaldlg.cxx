@@ -116,7 +116,7 @@ void SAL_CALL SearchThread::run()
             nBeginFormat = nEndFormat = nFileNumber;
 
         for( sal_uInt16 i = nBeginFormat; i <= nEndFormat; ++i )
-            aFormats.push_back( ( (FilterEntry*) mpBrowser->aFilterEntryList.GetObject( i ) )->aFilterName.ToLowerAscii() );
+            aFormats.push_back( mpBrowser->aFilterEntryList[ i ]->aFilterName.ToLowerAscii() );
 
         ImplSearch( maStartURL, aFormats, mpBrowser->bSearchRecursive );
     }
@@ -205,13 +205,13 @@ void SearchThread::ImplSearch( const INetURLObject& rStartURL,
             }
         }
     }
-    catch( const ContentCreationException& )
+    catch (const ContentCreationException&)
     {
     }
-    catch( const ::com::sun::star::uno::RuntimeException& )
+    catch (const ::com::sun::star::uno::RuntimeException&)
     {
     }
-        catch( const ::com::sun::star::uno::Exception& )
+    catch (const ::com::sun::star::uno::Exception&)
     {
     }
 }
@@ -279,10 +279,14 @@ void SearchProgress::StartExecuteModal( const Link& rEndDialogHdl )
 // - TakeThread -
 // --------------
 
-TakeThread::TakeThread( TakeProgress* pProgess, TPGalleryThemeProperties* pBrowser, List& rTakenList ) :
-        mpProgress  ( pProgess ),
-        mpBrowser   ( pBrowser ),
-        mrTakenList ( rTakenList )
+TakeThread::TakeThread(
+    TakeProgress* pProgess,
+    TPGalleryThemeProperties* pBrowser,
+    TokenList_impl& rTakenList
+) :
+    mpProgress  ( pProgess ),
+    mpBrowser   ( pBrowser ),
+    mrTakenList ( rTakenList )
 {
 }
 
@@ -298,9 +302,9 @@ void SAL_CALL TakeThread::run()
 {
     String              aName;
     INetURLObject       aURL;
-    sal_uInt16              nEntries;
+    sal_uInt16          nEntries;
     GalleryTheme*       pThm = mpBrowser->GetXChgData()->pTheme;
-    sal_uInt16              nPos;
+    sal_uInt16          nPos;
     GalleryProgress*    pStatusProgress;
 
     {
@@ -319,7 +323,7 @@ void SAL_CALL TakeThread::run()
             aURL = INetURLObject(*mpBrowser->aFoundList[ nPos = mpBrowser->aLbxFound.GetSelectEntryPos( i ) ]);
 
         // Position in Taken-Liste uebernehmen
-        mrTakenList.Insert( (void*) (sal_uLong)nPos, LIST_APPEND );
+        mrTakenList.push_back( (sal_uLong)nPos );
 
         {
             SolarMutexGuard aGuard;
@@ -392,10 +396,9 @@ IMPL_LINK( TakeProgress, CleanUpHdl, void*, EMPTYARG )
     mpBrowser->aLbxFound.SetNoSelection();
 
     // mark all taken positions in aRemoveEntries
-    for( i = 0UL, nCount = maTakenList.Count(); i < nCount; ++i )
-        aRemoveEntries[ (sal_uLong) maTakenList.GetObject( i ) ] = true;
-
-    maTakenList.Clear();
+    for( i = 0, nCount = maTakenList.size(); i < nCount; ++i )
+        aRemoveEntries[ maTakenList[ i ] ] = true;
+    maTakenList.clear();
 
     // refill found list
     for( i = 0, nCount = aRemoveEntries.size(); i < nCount; ++i )
@@ -827,8 +830,9 @@ TPGalleryThemeProperties::~TPGalleryThemeProperties()
     for ( size_t i = 0, n = aFoundList.size(); i < n; ++i )
         delete aFoundList[ i ];
 
-    for( void* pEntry = aFilterEntryList.First(); pEntry; pEntry = aFilterEntryList.Next() )
-        delete (FilterEntry*) pEntry;
+    for ( size_t i = 0, n = aFilterEntryList.size(); i < n; ++i ) {
+        delete aFilterEntryList[ i ];
+    }
 }
 
 // ------------------------------------------------------------------------
@@ -861,7 +865,7 @@ SfxTabPage* TPGalleryThemeProperties::Create( Window* pParent, const SfxItemSet&
 
 void TPGalleryThemeProperties::FillFilterList()
 {
-    GraphicFilter*      pFilter = GraphicFilter::GetGraphicFilter();
+    GraphicFilter &rFilter = GraphicFilter::GetGraphicFilter();
     String              aExt;
     String              aName;
     FilterEntry*        pFilterEntry;
@@ -870,11 +874,12 @@ void TPGalleryThemeProperties::FillFilterList()
     sal_Bool                bInList;
 
     // graphic filters
-    for( i = 0, nKeyCount = pFilter->GetImportFormatCount(); i < nKeyCount; i++ )
+    for( i = 0, nKeyCount = rFilter.GetImportFormatCount(); i < nKeyCount; i++ )
     {
-        aExt = pFilter->GetImportFormatShortName( i );
-        aName = pFilter->GetImportFormatName( i );
-        pTestEntry = (FilterEntry*) aFilterEntryList.First();
+        aExt = rFilter.GetImportFormatShortName( i );
+        aName = rFilter.GetImportFormatName( i );
+        size_t entryIndex = 0;
+        pTestEntry = aFilterEntryList.empty() ? NULL : aFilterEntryList[ entryIndex ];
         bInList = sal_False;
 
         String aExtensions;
@@ -882,7 +887,7 @@ void TPGalleryThemeProperties::FillFilterList()
         String sWildcard;
         while( sal_True )
         {
-            sWildcard = pFilter->GetImportWildcard( i, j++ );
+            sWildcard = rFilter.GetImportWildcard( i, j++ );
             if ( !sWildcard.Len() )
                 break;
             if ( aExtensions.Search( sWildcard ) == STRING_NOTFOUND )
@@ -901,18 +906,24 @@ void TPGalleryThemeProperties::FillFilterList()
                 bInList = sal_True;
                 break;
             }
-            pTestEntry = (FilterEntry*) aFilterEntryList.Next();
+            pTestEntry = ( ++entryIndex < aFilterEntryList.size() )
+                       ? aFilterEntryList[ entryIndex ] : NULL;
         }
         if ( !bInList )
         {
             pFilterEntry = new FilterEntry;
             pFilterEntry->aFilterName = aExt;
-            aFilterEntryList.Insert( pFilterEntry, aCbbFileType.InsertEntry( aName ) );
+            size_t pos = aCbbFileType.InsertEntry( aName );
+            if ( pos < aFilterEntryList.size() ) {
+                aFilterEntryList.insert( aFilterEntryList.begin() + pos, pFilterEntry );
+            } else {
+                aFilterEntryList.push_back( pFilterEntry );
+            }
         }
     }
 
     // media filters
-       static const ::rtl::OUString aWildcard( RTL_CONSTASCII_USTRINGPARAM( "*." ) );
+    static const ::rtl::OUString aWildcard( RTL_CONSTASCII_USTRINGPARAM( "*." ) );
     ::avmedia::FilterNameVector     aFilters;
     const ::rtl::OUString           aSeparator( RTL_CONSTASCII_USTRINGPARAM( ";" ) );
     ::rtl::OUString                 aAllTypes;
@@ -927,9 +938,20 @@ void TPGalleryThemeProperties::FillFilterList()
 
             pFilterEntry = new FilterEntry;
             pFilterEntry->aFilterName = aFilters[ l ].second.getToken( 0, ';', nIndex );
-            nFirstExtFilterPos = aCbbFileType.InsertEntry( addExtension( aFilters[ l ].first,
-                                                           aFilterWildcard += pFilterEntry->aFilterName ) );
-            aFilterEntryList.Insert( pFilterEntry, nFirstExtFilterPos );
+            nFirstExtFilterPos = aCbbFileType.InsertEntry(
+                addExtension(
+                    aFilters[ l ].first,
+                    aFilterWildcard += pFilterEntry->aFilterName
+                )
+            );
+            if ( nFirstExtFilterPos < aFilterEntryList.size() ) {
+                aFilterEntryList.insert(
+                    aFilterEntryList.begin() + nFirstExtFilterPos,
+                    pFilterEntry
+                );
+            } else {
+                aFilterEntryList.push_back( pFilterEntry );
+            }
         }
     }
 
@@ -943,7 +965,7 @@ void TPGalleryThemeProperties::FillFilterList()
         String sWildcard;
         while( sal_True )
         {
-            sWildcard = pFilter->GetImportWildcard( i, j++ );
+            sWildcard = rFilter.GetImportWildcard( i, j++ );
             if ( !sWildcard.Len() )
                 break;
             if ( aExtensions.Search( sWildcard ) == STRING_NOTFOUND )
@@ -975,8 +997,12 @@ void TPGalleryThemeProperties::FillFilterList()
     pFilterEntry = new FilterEntry;
     pFilterEntry->aFilterName = String( CUI_RES( RID_SVXSTR_GALLERY_ALLFILES ) );
     pFilterEntry->aFilterName = addExtension( pFilterEntry->aFilterName, aExtensions );
-    aFilterEntryList.Insert(pFilterEntry, aCbbFileType. InsertEntry( pFilterEntry->aFilterName, 0 ) );
-
+    size_t pos = aCbbFileType.InsertEntry( pFilterEntry->aFilterName, 0 );
+    if ( pos < aFilterEntryList.size() ) {
+        aFilterEntryList.insert( aFilterEntryList.begin() + pos, pFilterEntry );
+    } else {
+        aFilterEntryList.push_back( pFilterEntry );
+    }
     aCbbFileType.SetText( pFilterEntry->aFilterName );
 }
 
@@ -1065,7 +1091,7 @@ IMPL_LINK( TPGalleryThemeProperties, ClickSearchHdl, void *, EMPTYARG )
                 }
             }
         }
-        catch(IllegalArgumentException)
+        catch (const IllegalArgumentException&)
         {
             OSL_FAIL( "Folder picker failed with illegal arguments" );
         }

@@ -1,27 +1,27 @@
-mkdir: %COMMON_DEST%\bin%_EXT%\hid
-mkdir: %_DEST%\inc%_EXT%\automation
+mkdir: %COMMON_DEST%\bin\hid
+mkdir: %_DEST%\inc\automation
 
-#..\%COMMON_OUTDIR%\misc\*.hid %COMMON_DEST%\bin%_EXT%\hid\*.hid
-..\util\manually_added_ids.hid %COMMON_DEST%\bin%_EXT%\hid\manually_added_ids.hid
-..\%__SRC%\bin\*.dll %_DEST%\bin%_EXT%\*.dll
-..\%__SRC%\lib\lib* %_DEST%\lib%_EXT%\*
-..\%__SRC%\lib\ists.lib %_DEST%\lib%_EXT%\ists.lib
-..\%__SRC%\lib\isimplecm.lib %_DEST%\lib%_EXT%\isimplecm.lib
-..\%__SRC%\lib\icommuni.lib %_DEST%\lib%_EXT%\icommuni.lib
+#..\%COMMON_OUTDIR%\misc\*.hid %COMMON_DEST%\bin\hid\*.hid
+..\util\manually_added_ids.hid %COMMON_DEST%\bin\hid\manually_added_ids.hid
+..\%__SRC%\bin\*.dll %_DEST%\bin\*.dll
+..\%__SRC%\lib\lib* %_DEST%\lib\*
+..\%__SRC%\lib\ists.lib %_DEST%\lib\ists.lib
+..\%__SRC%\lib\isimplecm.lib %_DEST%\lib\isimplecm.lib
+..\%__SRC%\lib\icommuni.lib %_DEST%\lib\icommuni.lib
 
-..\inc\automation\automation.hxx %_DEST%\inc%_EXT%\automation\automation.hxx
-..\inc\automation\commdefines.hxx %_DEST%\inc%_EXT%\automation\commdefines.hxx
-..\inc\automation\commtypes.hxx %_DEST%\inc%_EXT%\automation\commtypes.hxx
-..\inc\automation\communi.hxx %_DEST%\inc%_EXT%\automation\communi.hxx
-..\inc\automation\simplecm.hxx %_DEST%\inc%_EXT%\automation\simplecm.hxx
+..\inc\automation\automation.hxx %_DEST%\inc\automation\automation.hxx
+..\inc\automation\commdefines.hxx %_DEST%\inc\automation\commdefines.hxx
+..\inc\automation\commtypes.hxx %_DEST%\inc\automation\commtypes.hxx
+..\inc\automation\communi.hxx %_DEST%\inc\automation\communi.hxx
+..\inc\automation\simplecm.hxx %_DEST%\inc\automation\simplecm.hxx
 
-..\%__SRC%\bin\testtool.exe %_DEST%\bin%_EXT%\testtool.bin
-..\%__SRC%\bin\testtool %_DEST%\bin%_EXT%\testtool.bin
-..\%__SRC%\inc\classes %_DEST%\bin%_EXT%\classes
-..\%__SRC%\inc\keycodes %_DEST%\bin%_EXT%\keycodes
-..\%__SRC%\inc\res_type %_DEST%\bin%_EXT%\res_type
+..\%__SRC%\bin\testtool.exe %_DEST%\bin\testtool.bin
+..\%__SRC%\bin\testtool %_DEST%\bin\testtool.bin
+..\%__SRC%\inc\classes %_DEST%\bin\classes
+..\%__SRC%\inc\keycodes %_DEST%\bin\keycodes
+..\%__SRC%\inc\res_type %_DEST%\bin\res_type
 
-..\%COMMON_OUTDIR%\bin\images_tt.zip %COMMON_DEST%\bin%_EXT%\images_tt.zip
+..\%COMMON_OUTDIR%\bin\images_tt.zip %COMMON_DEST%\bin\images_tt.zip
 
-..\%__SRC%\bin\testtoolrc %_DEST%\lib%_EXT%\testtoolrc
-..\%__SRC%\bin\testtool.ini %_DEST%\bin%_EXT%\testtool.ini
+..\%__SRC%\bin\testtoolrc %_DEST%\lib\testtoolrc
+..\%__SRC%\bin\testtool.ini %_DEST%\bin\testtool.ini

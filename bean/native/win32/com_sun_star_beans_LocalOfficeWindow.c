@@ -36,14 +36,6 @@
 
 #include "jawt.h"
 
-#if defined _MSC_VER
-#pragma warning(push, 1)
-#endif
-#include "jawt_md.h"
-#if defined _MSC_VER
-#pragma warning(pop)
-#endif
-
 #if defined assert
 #undef assert
 #endif
@@ -54,7 +46,6 @@
 #define SYSTEM_WIN32   1
 #define SYSTEM_WIN16   2
 #define SYSTEM_JAVA    3
-#define SYSTEM_OS2     4
 #define SYSTEM_MAC     5
 #define SYSTEM_XWINDOW 6
 

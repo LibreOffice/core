@@ -353,11 +353,6 @@ protected:
     Rectangle getBoundingBoxOnScreen()
         throw ( ::com::sun::star::lang::DisposedException );
 
-    /** Creates a new UUID, if rId is empty.
-        @attention  This method requires locked global mutex to prevent double
-                    creation of an UUID. */
-    static void implCreateUuid( ::com::sun::star::uno::Sequence< sal_Int8 >& rId );
-
     ::comphelper::AccessibleEventNotifier::TClientId getClientId() const { return m_aClientId; }
     void setClientId(::comphelper::AccessibleEventNotifier::TClientId _aNewClientId) { m_aClientId = _aNewClientId; }
 

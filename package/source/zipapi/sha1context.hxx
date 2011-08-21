@@ -25,37 +25,33 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
+#ifndef _SHA1CONTEXT_HXX
+#define _SHA1CONTEXT_HXX
 
-#ifndef _SVGWRITER_HXX
-#define _SVGWRITER_HXX
+#include <com/sun/star/xml/crypto/XDigestContext.hpp>
 
-#include "svgcom.hxx"
+#include <cppuhelper/implbase1.hxx>
+#include <osl/mutex.hxx>
 
-// -------------
-// - SVGWriter -
-// -------------
-
-class SVGWriter : public NMSP_CPPU::OWeakObject, NMSP_SVG::XSVGWriter
+class SHA1DigestContext : public cppu::WeakImplHelper1< ::com::sun::star::xml::crypto::XDigestContext >
 {
-private:
+    ::osl::Mutex m_aMutex;
+    void* m_pDigest;
 
-    REF( NMSP_LANG::XMultiServiceFactory )  mxFact;
-
-                                            SVGWriter();
+    SHA1DigestContext()
+    : m_pDigest( NULL )
+    {}
 
 public:
 
-                                            SVGWriter( const REF( NMSP_LANG::XMultiServiceFactory )& rxMgr );
-    virtual                                 ~SVGWriter();
+    virtual ~SHA1DigestContext();
 
-    // XInterface
-    virtual ANY SAL_CALL                    queryInterface( const NMSP_UNO::Type & rType ) throw( NMSP_UNO::RuntimeException );
-    virtual void SAL_CALL                   acquire() throw();
-    virtual void SAL_CALL                   release() throw();
+    static ::com::sun::star::uno::Reference< ::com::sun::star::xml::crypto::XDigestContext >
+        Create();
 
-    // XSVGWriter
-    virtual void SAL_CALL                   write( const REF( NMSP_SAX::XDocumentHandler )& rxDocHandler,
-                                                   const SEQ( sal_Int8 )& rMtfSeq ) throw( NMSP_UNO::RuntimeException );
+    virtual void SAL_CALL updateDigest( const ::com::sun::star::uno::Sequence< ::sal_Int8 >& aData ) throw (::com::sun::star::lang::DisposedException, ::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< ::sal_Int8 > SAL_CALL finalizeDigestAndDispose() throw (::com::sun::star::lang::DisposedException, ::com::sun::star::uno::RuntimeException);
+
 };
 
 #endif

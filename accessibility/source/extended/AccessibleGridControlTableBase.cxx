@@ -34,6 +34,7 @@
 #include <svtools/accessibletable.hxx>
 #include <tools/multisel.hxx>
 #include <comphelper/sequence.hxx>
+#include <comphelper/servicehelper.hxx>
 
 // ============================================================================
 
@@ -210,13 +211,15 @@ Sequence< uno::Type > SAL_CALL AccessibleGridControlTableBase::getTypes()
         AccessibleGridControlTableImplHelper::getTypes() );
 }
 
+namespace
+{
+    class theAccessibleGridControlTableBaseImplementationId : public rtl::Static< UnoTunnelIdInit, theAccessibleGridControlTableBaseImplementationId > {};
+}
+
 Sequence< sal_Int8 > SAL_CALL AccessibleGridControlTableBase::getImplementationId()
     throw ( uno::RuntimeException )
 {
-    ::osl::MutexGuard aGuard( getOslGlobalMutex() );
-    static Sequence< sal_Int8 > aId;
-    implCreateUuid( aId );
-    return aId;
+    return theAccessibleGridControlTableBaseImplementationId::get().getSeq();
 }
 
 // internal helper methods ----------------------------------------------------

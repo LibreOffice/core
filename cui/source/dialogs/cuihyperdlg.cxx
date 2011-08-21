@@ -290,7 +290,6 @@ sal_uInt16 SvxHpLinkDlg::SetPage ( SvxHyperlinkItem* pItem )
     {
         case INET_PROT_HTTP :
         case INET_PROT_FTP :
-        case INET_PROT_TELNET :
             nPageId = RID_SVXPAGE_HYPERLINK_INTERNET;
             break;
         case INET_PROT_FILE :

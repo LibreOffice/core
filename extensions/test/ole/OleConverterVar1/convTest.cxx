@@ -74,7 +74,7 @@ void printVariant( VARIANT & var);
 
 
 
-int __cdecl _tmain( int argc, _TCHAR * argv[] )
+int SAL_CALL _tmain( int argc, _TCHAR * argv[] )
 {
     HRESULT hr;
     if( FAILED( hr=CoInitialize(NULL)))

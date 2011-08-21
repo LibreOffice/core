@@ -40,7 +40,7 @@
 #include <sal/macros.h>
 #include "securityenvironment_nssimpl.hxx"
 #include "x509certificate_nssimpl.hxx"
-#include <rtl/uuid.h>
+#include <comphelper/servicehelper.hxx>
 #include "../diagnose.hxx"
 
 #include <sal/types.h>
@@ -89,7 +89,29 @@ extern X509Certificate_NssImpl* NssPrivKeyToXCert( SECKEYPrivateKey* ) ;
 struct UsageDescription
 {
     SECCertificateUsage usage;
-    char const * const description;
+    char const* description;
+
+    UsageDescription()
+    : usage( certificateUsageCheckAllUsages )
+    , description( NULL )
+    {}
+
+    UsageDescription( SECCertificateUsage i_usage, char const* i_description )
+    : usage( i_usage )
+    , description( i_description )
+    {}
+
+    UsageDescription( const UsageDescription& aDescription )
+    : usage( aDescription.usage )
+    , description( aDescription.description )
+    {}
+
+    UsageDescription& operator =( const UsageDescription& aDescription )
+    {
+        usage = aDescription.usage;
+        description = aDescription.description;
+        return *this;
+    }
 };
 
 
@@ -220,17 +242,14 @@ sal_Int64 SAL_CALL SecurityEnvironment_NssImpl :: getSomething( const Sequence< 
 }
 
 /* XUnoTunnel extension */
+
+namespace
+{
+    class theSecurityEnvironment_NssImplUnoTunnelId  : public rtl::Static< UnoTunnelIdInit, theSecurityEnvironment_NssImplUnoTunnelId > {};
+}
+
 const Sequence< sal_Int8>& SecurityEnvironment_NssImpl :: getUnoTunnelId() {
-    static Sequence< sal_Int8 >* pSeq = 0 ;
-    if( !pSeq ) {
-        ::osl::Guard< ::osl::Mutex > aGuard( ::osl::Mutex::getGlobalMutex() ) ;
-        if( !pSeq ) {
-            static Sequence< sal_Int8> aSeq( 16 ) ;
-            rtl_createUuid( ( sal_uInt8* )aSeq.getArray() , 0 , sal_True ) ;
-            pSeq = &aSeq ;
-        }
-    }
-    return *pSeq ;
+    return theSecurityEnvironment_NssImplUnoTunnelId::get().getSeq();
 }
 
 /* XUnoTunnel extension */
@@ -868,14 +887,12 @@ verifyCertificate( const Reference< csss::XCertificate >& aCert,
         // certificateUsageAnyCA
         // certificateUsageProtectedObjectSigner
 
-        UsageDescription arUsages[] =
-        {
-           {certificateUsageSSLClient, "certificateUsageSSLClient" },
-           {certificateUsageSSLServer, "certificateUsageSSLServer" },
-           {certificateUsageSSLCA, "certificateUsageSSLCA" },
-           {certificateUsageEmailSigner, "certificateUsageEmailSigner"}, //only usable for end certs
-           {certificateUsageEmailRecipient, "certificateUsageEmailRecipient"}
-        };
+        UsageDescription arUsages[5];
+        arUsages[0] = UsageDescription( certificateUsageSSLClient, "certificateUsageSSLClient"  );
+        arUsages[1] = UsageDescription( certificateUsageSSLServer, "certificateUsageSSLServer"  );
+        arUsages[2] = UsageDescription( certificateUsageSSLCA, "certificateUsageSSLCA"  );
+        arUsages[3] = UsageDescription( certificateUsageEmailSigner, "certificateUsageEmailSigner" );
+        arUsages[4] = UsageDescription( certificateUsageEmailRecipient, "certificateUsageEmailRecipient" );
 
         int numUsages = SAL_N_ELEMENTS(arUsages);
         for (int i = 0; i < numUsages; i++)

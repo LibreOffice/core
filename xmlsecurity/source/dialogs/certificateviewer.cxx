@@ -53,18 +53,9 @@ namespace css = ::com::sun::star;
 
 namespace
 {
-    void ShrinkToFit( FixedImage& _rImage );
-    void AdjustPosAndSize( Control& _rCtrl, Point& _rStartIn_EndOut, long _nXOffset = 0 );
-
     void ShrinkToFit( FixedImage& _rImg )
     {
         _rImg.SetSizePixel( _rImg.GetImage().GetSizePixel() );
-    }
-
-    void AdjustPosAndSize( Control& _rCtrl, Point& _rStartIn_EndOut, long _nOffs )
-    {
-        _rCtrl.SetPosPixel( _rStartIn_EndOut );
-        _rStartIn_EndOut.X() += XmlSec::ShrinkToFitWidth( _rCtrl, _nOffs );
     }
 }
 
@@ -300,12 +291,6 @@ CertificateViewerDetailsTP::CertificateViewerDetailsTP( Window* _pParent, Certif
     aLBEntry = pairIssuer.first;
     aDetails = pairIssuer.second;
     InsertElement( String( XMLSEC_RES( STR_ISSUER ) ), aLBEntry, aDetails );
-    /*
-    aSeq = xCert->getIssuerUniqueID();
-    aLBEntry = XmlSec::GetHexString( aSeq, pHexSep );
-    aDetails = XmlSec::GetHexString( aSeq, pHexSep, nLineBreak );
-    InsertElement( String( XMLSEC_RES( STR_ISSUER_ID ) ), aLBEntry, aDetails, true );
-    */
 
     DateTime aDateTime;
     utl::typeConvert( xCert->getNotValidBefore(), aDateTime );
@@ -324,12 +309,7 @@ CertificateViewerDetailsTP::CertificateViewerDetailsTP( Window* _pParent, Certif
     aLBEntry = pairSubject.first;
     aDetails = pairSubject.second;
     InsertElement( String( XMLSEC_RES( STR_SUBJECT ) ), aLBEntry, aDetails );
-    /*
-    aSeq = xCert->getSubjectUniqueID();
-    aLBEntry = XmlSec::GetHexString( aSeq, pHexSep );
-    aDetails = XmlSec::GetHexString( aSeq, pHexSep, nLineBreak );
-    InsertElement( String( XMLSEC_RES( STR_SUBJECT_ID ) ), aLBEntry, aDetails, true );
-    */
+
     aLBEntry = aDetails = xCert->getSubjectPublicKeyAlgorithm();
     InsertElement( String( XMLSEC_RES( STR_SUBJECT_PUBKEY_ALGO ) ), aLBEntry, aDetails );
     aSeq = xCert->getSubjectPublicKeyValue();

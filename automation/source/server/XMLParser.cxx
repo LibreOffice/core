@@ -2,7 +2,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
+ *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -351,7 +351,7 @@ void SAXParser::startElement( const ::rtl::OUString& aName, const ::com::sun::st
 
 void SAXParser::endElement( const ::rtl::OUString& aName ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException)
 {
-    (void) aName; /* avoid warning about unused parameter */ 
+    (void) aName; /* avoid warning about unused parameter */
     xCurrentNode = xCurrentNode->GetParent();
 }
 
@@ -375,18 +375,18 @@ void SAXParser::characters( const ::rtl::OUString& aChars ) throw (::com::sun::s
 
 void SAXParser::ignorableWhitespace( const ::rtl::OUString& aWhitespaces ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException)
 {
-    (void) aWhitespaces; /* avoid warning about unused parameter */ 
+    (void) aWhitespaces; /* avoid warning about unused parameter */
 }
 
 void SAXParser::processingInstruction( const ::rtl::OUString& aTarget, const ::rtl::OUString& aData ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException)
 {
-    (void) aTarget; /* avoid warning about unused parameter */ 
-    (void) aData; /* avoid warning about unused parameter */ 
+    (void) aTarget; /* avoid warning about unused parameter */
+    (void) aData; /* avoid warning about unused parameter */
 }
 
 void SAXParser::setDocumentLocator( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XLocator >& xLocator ) throw (::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException)
 {
-    (void) xLocator; /* avoid warning about unused parameter */ 
+    (void) xLocator; /* avoid warning about unused parameter */
 #if OSL_DEBUG_LEVEL > 1
     ::rtl::OUString aTester;
     aTester = xLocator->getPublicId();

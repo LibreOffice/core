@@ -693,9 +693,7 @@ namespace pcr
         }
 
         if ( !pColorTable )
-        {
-            pColorTable = XColorTable::GetStdColorTable();
-        }
+            pColorTable = &XColorTable::GetStdColorTable();
 
 
         DBG_ASSERT(pColorTable, "OColorControl::OColorControl: no color table!");

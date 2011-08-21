@@ -1,12 +1,12 @@
-mkdir: %_DEST%\bin%_EXT%\osl
-..\%__SRC%\bin\*.dll %_DEST%\bin%_EXT%\*.dll
-..\%__SRC%\bin\*.exe %_DEST%\bin%_EXT%\*.exe
-..\%__SRC%\class\*.jar %_DEST%\bin%_EXT%\*.jar
+mkdir: %_DEST%\bin\osl
+..\%__SRC%\bin\*.dll %_DEST%\bin\*.dll
+..\%__SRC%\bin\*.exe %_DEST%\bin\*.exe
+..\%__SRC%\class\*.jar %_DEST%\bin\*.jar
 
-mkdir: %_DEST%\bin%_EXT%\userscripts
-..\%__SRC%\bin\install %_DEST%\bin%_EXT%\userscripts\install
-..\%__SRC%\bin\uninstall %_DEST%\bin%_EXT%\userscripts\uninstall
-..\%__SRC%\bin\noarch\fake-db-1.0-0.noarch.rpm %_DEST%\bin%_EXT%\openoffice.org-userland-1.0-0.noarch.rpm
+mkdir: %_DEST%\bin\userscripts
+..\%__SRC%\bin\install %_DEST%\bin\userscripts\install
+..\%__SRC%\bin\uninstall %_DEST%\bin\userscripts\uninstall
+..\%__SRC%\bin\noarch\fake-db-1.0-0.noarch.rpm %_DEST%\bin\openoffice.org-userland-1.0-0.noarch.rpm
 
 mkdir: %_DEST%\bin\osolsmf
 ..\%__SRC%\bin\ulfconv %_DEST%\bin\ulfconv
@@ -48,6 +48,7 @@ mkdir: %_DEST%\bin\osolsmf
 ..\scripts\mac_install.script %_DEST%\bin\mac_install.script
 ..\scripts\osx_install_languagepack.applescript %_DEST%\bin\osx_install_languagepack.applescript
 ..\scripts\osx_install_patch.applescript %_DEST%\bin\osx_install_patch.applescript
-..\%__SRC%\lib\getuid.so %_DEST%\bin%_EXT%\getuid.so
+
+..\%__SRC%\lib\getuid.so %_DEST%\bin\getuid.so
 
 ..\inc\setup_native\qswin32.h %_DEST%\inc\setup_native\qswin32.h

@@ -53,7 +53,6 @@
 #define RID_PRINTDLG_STRLIST            ( RID_BASICIDE_START + 78 )
 
 #define RID_IMGBTN_REMOVEWATCH          ( RID_BASICIDE_START +  8 )
-#define RID_IMGBTN_GOTOCALL             ( RID_BASICIDE_START +  9 )
 #define RID_IMG_INSTALLATION            ( RID_BASICIDE_START + 20 )
 #define RID_IMG_DOCUMENT                ( RID_BASICIDE_START + 22 )
 #define RID_IMG_MODLIB                  ( RID_BASICIDE_START + 24 )

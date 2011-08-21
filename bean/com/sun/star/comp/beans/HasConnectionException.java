@@ -27,7 +27,7 @@
 
 package com.sun.star.comp.beans;
 
-/** This expception is thrown when a method is called which
+/** This exception is thrown when a method is called which
     is only defined for not already having an established
     connection.
 

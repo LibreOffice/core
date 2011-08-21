@@ -94,9 +94,7 @@ Reference< XInterface > SerialNumberAdapterImpl_createInstance(
 extern "C"
 {
 
-#if defined( XMLSEC_CRYPTO_NSS )
 extern void* nss_component_getFactory( const sal_Char*, void*, void* );
-#endif
 
 #if defined( XMLSEC_CRYPTO_MSCRYPTO )
 extern void* mscrypt_component_getFactory( const sal_Char*, void*, void* );
@@ -135,11 +133,9 @@ SAL_DLLPUBLIC_EXPORT void* SAL_CALL xsec_xmlsec_component_getFactory( const sal_
         xFactory->acquire() ;
         pRet = xFactory.get() ;
     } else {
-#if defined( XMLSEC_CRYPTO_NSS )
         pRet = nss_component_getFactory( pImplName, pServiceManager, pRegistryKey ) ;
         if( pRet != NULL )
             return pRet ;
-#endif
 
 #if defined( XMLSEC_CRYPTO_MSCRYPTO )
         pRet = mscrypt_component_getFactory( pImplName, pServiceManager, pRegistryKey ) ;
