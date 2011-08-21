@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="sw_SwXTextView" script:language="StarBasic">
+
+
+'*************************************************************************
+'
+' DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+' 
+' Copyright 2000, 2010 Oracle and/or its affiliates.
+'
+' OpenOffice.org - a multi-platform office productivity suite
+'
+' This file is part of OpenOffice.org.
+'
+' OpenOffice.org is free software: you can redistribute it and/or modify
+' it under the terms of the GNU Lesser General Public License version 3
+' only, as published by the Free Software Foundation.
+'
+' OpenOffice.org is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU Lesser General Public License version 3 for more details
+' (a copy is included in the LICENSE file that accompanied this code).
+'
+' You should have received a copy of the GNU Lesser General Public License
+' version 3 along with OpenOffice.org.  If not, see
+' <http://www.openoffice.org/license.html>
+' for a copy of the LGPLv3 License.
+'
+'*************************************************************************
+'*************************************************************************
+
+
+
+
+' REQUIRED VARIABLES for interface/service tests:
+
+' Requiered for XControlAccess
+ Global oControlModel As Object
+
+' Requiered for  com.sun.star.view.XSelectionSupplier
+ Global SelectableObj1 As Object
+ Global SelectableObj2 As Object
+
+
+Sub CreateObj()
+
+'*************************************************************************
+' COMPONENT: 
+' sw.SwXTextView
+'*************************************************************************
+On Error Goto ErrHndl
+
+    Dim bOK As Boolean
+    bOK = true
+
+    oDoc = utils.createDocument("swriter", cObjectName)
+
+    oCursor = oDoc.Text.createTextCursor()
+
+    oCursor.gotoStart(false)
+
+    oObj = oDoc.CurrentController
+
+    oDoc.Text.String = "This is a string for " &amp; cObjectName
+
+    SelectableObj1 = oDoc.Text.CreateTextCursor()
+    SelectableObj1.goRight(5, true)
+
+    SelectableObj2 = oDoc.Text.CreateTextCursor()
+    SelectableObj2.goRight(8, false)
+    SelectableObj2.goRight(10, true)
+
+
+    addControl(oCursor, 2000, 4000, cObjectName)
+    oControlModel = oDoc.Drawpage.Forms(0).getByName(cObjectName)
+
+
+Exit Sub
+ErrHndl:
+    Test.Exception()
+End Sub
+
+Sub addControl( oCursor as Object, nPointX as Integer, nPointY as Integer, sName as String )
+
+    Dim oDrawPage As Object
+    Dim oForm, oForms As Object
+    Dim oControl, oControlShape As Object
+    Dim aSz As Variant
+    Dim oText As Object
+
+    oDrawPage = oDoc.DrawPage
+    oControlShape = oDoc.createInstance( "com.sun.star.drawing.ControlShape" )
+    oControl = oDoc.createInstance( "com.sun.star.form.component.CommandButton" )
+    oForm = oDoc.createInstance( "com.sun.star.form.component.Form" )
+    oforms = oDrawPage.Forms
+
+    if oForms.count = 0 then
+        oForms.InsertByIndex( 0, oForm )
+    end if
+
+    aSz = oControlShape.Size
+    aSz.Width = 2900
+    aSz.Height = 1200
+    oControlShape.Size = aSz
+    oControlShape.Control = oControl
+
+    oControlShape.TextRange = oCursor.Start
+    apoint = ocontrolshape.position
+    apoint.x = nPointX
+    aPoint.y = nPointY
+    ocontrolshape.position = aPoint
+    oDrawPage.add( oControlShape )
+    if sName &lt;&gt; "" then
+        oControl.Name = sName
+    end if
+
+End Sub
+</script:module>

@@ -1,0 +1,79 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_inspection_XPropertyControlFactory_idl__
+#define __com_sun_star_inspection_XPropertyControlFactory_idl__
+
+#include <com/sun/star/lang/IllegalArgumentException.idl>
+
+//=============================================================================
+module com {  module sun {  module star {  module inspection {
+
+published interface XPropertyControl;
+
+//-----------------------------------------------------------------------------
+/** a factory for <type>XPropertyControl</type>s
+
+    @since OOo 2.0.3
+*/
+published interface XPropertyControlFactory
+{
+    /** creates a <type>XPropertyControl</type>
+
+        <p>A <type>XPropertyControlFactory</type> can create any of the control types denoted by
+        the <type>PropertyControlType</type> constants.</p>
+
+        @param ControlType
+            the type of the requested control
+
+        @param CreateReadOnly
+            determines whether the newly created control should be readonly.
+
+            <p>If this argument is <TRUE/>, this does not necessarily mean that the property cannot be
+            changed at all in the <type>ObjectInspector</type>. Instead, an <type>XPropertyHandler</type>
+            can still decide that there is a dedicated UI for entering the property value,
+            which is usually triggered by a <member>LineDescriptor::PrimaryButton</member>.</p>
+
+            <p>Note that this parameter might be ignored if the <member>XObjectInspectorModel::IsReadOnly</member>
+            attribute is <TRUE/>, in which case all created property controls must be readonly.</p>
+
+        @returns
+            a control of the given type.
+
+        @throws com::sun::star::lang::IllegalArgumentException
+            if the given <arg>ControlType</arg> is not a value <type>PropertyControlType</type>
+    */
+    XPropertyControl    createPropertyControl( [in] short ControlType, [in] boolean CreateReadOnly )
+        raises ( com::sun::star::lang::IllegalArgumentException );
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif
+

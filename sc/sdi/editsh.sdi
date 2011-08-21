@@ -1,0 +1,109 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+interface TableText
+{
+    //  von Basic aus nicht erreichbar, darum alles mit Export = FALSE
+
+    SID_ATTR_INSERT     [ ExecMethod = Execute; StateMethod = GetState; Export = FALSE; ]
+
+    SID_DELETE
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        Export = FALSE;
+        GroupId = GID_EDIT ;
+        Cachable ;
+    ]
+    SID_CUT             [ ExecMethod = Execute; StateMethod = GetState; Export = FALSE; ]
+    SID_COPY            [ ExecMethod = Execute; StateMethod = GetState; Export = FALSE; ]
+    SID_PASTE           [ ExecMethod = Execute; StateMethod = GetClipState; Export = FALSE; ]
+    SID_PASTE_SPECIAL   [ ExecMethod = Execute; StateMethod = GetClipState; Export = FALSE; ]
+    SID_CLIPBOARD_FORMAT_ITEMS [ ExecMethod = Execute; StateMethod = GetClipState; Export = FALSE; ]
+    SID_SELECTALL       [ ExecMethod = Execute; StateMethod = GetState; Export = FALSE; ]
+    SID_CHARMAP         [ ExecMethod = Execute; StateMethod = GetState; Export = FALSE; ]
+    FID_INSERT_NAME     [ ExecMethod = Execute; StateMethod = GetState; Export = FALSE; ]
+    SID_THES            [ ExecMethod = Execute; StateMethod = GetState; Export = FALSE; ]
+
+    SID_UNDO            [ ExecMethod = ExecuteUndo; StateMethod = GetUndoState; Export = FALSE; ]
+    SID_REDO            [ ExecMethod = ExecuteUndo; StateMethod = GetUndoState; Export = FALSE; ]
+    SID_REPEAT          [ ExecMethod = ExecuteUndo; StateMethod = GetUndoState; Export = FALSE; ]
+
+     // ---- Attribute:
+    SID_ATTR_CHAR_FONT          [ ExecMethod = ExecuteAttr; StateMethod = GetAttrState; Export = FALSE; ]
+    SID_ATTR_CHAR_FONTHEIGHT    [ ExecMethod = ExecuteAttr; StateMethod = GetAttrState; Export = FALSE; ]
+    SID_ATTR_CHAR_COLOR         [ ExecMethod = ExecuteAttr; StateMethod = GetAttrState; Export = FALSE; ]
+
+     // ---- Attribut - Toggles:
+    SID_ATTR_CHAR_WEIGHT        [ ExecMethod = ExecuteAttr; StateMethod = GetAttrState; Export = FALSE; ]
+    SID_ATTR_CHAR_POSTURE       [ ExecMethod = ExecuteAttr; StateMethod = GetAttrState; Export = FALSE; ]
+    SID_ATTR_CHAR_UNDERLINE     [ ExecMethod = ExecuteAttr; StateMethod = GetAttrState; Export = FALSE; ]
+
+    SID_ULINE_VAL_NONE          [ ExecMethod = ExecuteAttr; StateMethod = GetAttrState; Export = FALSE; ]
+    SID_ULINE_VAL_SINGLE        [ ExecMethod = ExecuteAttr; StateMethod = GetAttrState; Export = FALSE; ]
+    SID_ULINE_VAL_DOUBLE        [ ExecMethod = ExecuteAttr; StateMethod = GetAttrState; Export = FALSE; ]
+    SID_ULINE_VAL_DOTTED        [ ExecMethod = ExecuteAttr; StateMethod = GetAttrState; Export = FALSE; ]
+
+    SID_ATTR_CHAR_OVERLINE      [ ExecMethod = ExecuteAttr; StateMethod = GetAttrState; Export = FALSE; ]
+    SID_ATTR_CHAR_STRIKEOUT     [ ExecMethod = ExecuteAttr; StateMethod = GetAttrState; Export = FALSE; ]
+    SID_ATTR_CHAR_SHADOWED      [ ExecMethod = ExecuteAttr; StateMethod = GetAttrState; Export = FALSE; ]
+    SID_ATTR_CHAR_CONTOUR       [ ExecMethod = ExecuteAttr; StateMethod = GetAttrState; Export = FALSE; ]
+    SID_SET_SUPER_SCRIPT        [ ExecMethod = ExecuteAttr; StateMethod = GetAttrState; Export = FALSE; ]
+    SID_SET_SUB_SCRIPT          [ ExecMethod = ExecuteAttr; StateMethod = GetAttrState; Export = FALSE; ]
+    SID_CELL_FORMAT_RESET   [ ExecMethod = Execute; StateMethod = GetState; Export = FALSE; ]
+    SID_CHAR_DLG            [ ExecMethod = Execute; StateMethod = GetState; Export = FALSE; ]
+    SID_TOGGLE_REL          [ ExecMethod = Execute; StateMethod = GetState; Export = FALSE; ]
+
+    SID_HYPERLINK_SETLINK   [ ExecMethod = Execute; Export = FALSE; ]
+    SID_HYPERLINK_GETLINK   [ StateMethod = GetState; Export = FALSE; ]
+        SID_OPEN_HYPERLINK      [ ExecMethod = Execute; StateMethod = GetState; Export = FALSE; ]
+
+    SID_TRANSLITERATE_SENTENCE_CASE [ ExecMethod = ExecuteTrans; StateMethod = GetState;  Export = FALSE; ]
+    SID_TRANSLITERATE_TITLE_CASE    [ ExecMethod = ExecuteTrans; StateMethod = GetState;  Export = FALSE; ]
+    SID_TRANSLITERATE_TOGGLE_CASE   [ ExecMethod = ExecuteTrans; StateMethod = GetState;  Export = FALSE; ]
+    SID_TRANSLITERATE_UPPER     [ ExecMethod = ExecuteTrans; StateMethod = GetState; Export = FALSE; ]
+    SID_TRANSLITERATE_LOWER     [ ExecMethod = ExecuteTrans; StateMethod = GetState; Export = FALSE; ]
+    SID_TRANSLITERATE_HALFWIDTH [ ExecMethod = ExecuteTrans; StateMethod = GetState; Export = FALSE; ]
+    SID_TRANSLITERATE_FULLWIDTH [ ExecMethod = ExecuteTrans; StateMethod = GetState; Export = FALSE; ]
+    SID_TRANSLITERATE_HIRAGANA  [ ExecMethod = ExecuteTrans; StateMethod = GetState; Export = FALSE; ]
+    SID_TRANSLITERATE_KATAGANA  [ ExecMethod = ExecuteTrans; StateMethod = GetState; Export = FALSE; ]
+
+    FN_INSERT_SOFT_HYPHEN       [ ExecMethod = Execute; StateMethod = GetState; Export = FALSE; ]
+    FN_INSERT_HARDHYPHEN        [ ExecMethod = Execute; StateMethod = GetState; Export = FALSE; ]
+    FN_INSERT_HARD_SPACE        [ ExecMethod = Execute; StateMethod = GetState; Export = FALSE; ]
+    SID_INSERT_RLM              [ ExecMethod = Execute; StateMethod = GetState; Export = FALSE; ]
+    SID_INSERT_LRM              [ ExecMethod = Execute; StateMethod = GetState; Export = FALSE; ]
+    SID_INSERT_ZWSP             [ ExecMethod = Execute; StateMethod = GetState; Export = FALSE; ]
+    SID_INSERT_ZWNBSP           [ ExecMethod = Execute; StateMethod = GetState; Export = FALSE; ]
+}
+
+
+ // ===========================================================================
+shell ScEditShell
+{
+    import TableText;
+}
+

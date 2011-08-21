@@ -1,0 +1,7 @@
+module ooo { module vba { module word {
+    constants WdTrailingCharacter {
+        const long wdTrailingNone = 2;
+        const long wdTrailingSpace = 1;
+        const long wdTrailingTab = 0;
+    };
+}; }; };

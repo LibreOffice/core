@@ -1,0 +1,98 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_rdf_XMetadatable_idl__
+#define __com_sun_star_rdf_XMetadatable_idl__
+
+#include <com/sun/star/lang/IllegalArgumentException.idl>
+#include <com/sun/star/beans/StringPair.idl>
+#include <com/sun/star/rdf/XURI.idl>
+
+
+//=============================================================================
+
+module com {   module sun {   module star {   module rdf {
+
+//=============================================================================
+/** marks an object representing an ODF element that may have RDF meta data
+    attached.
+
+    <p>
+    To make using ODF elements as part of RDF statements more convenient,
+    this interface inherits from <type>XURI</type>.
+    The URI is constructed by concatenating the URI of the document, the
+    stream name, a fragment separator, and the XML ID.
+    </p>
+
+    <p>
+    Note that using the <type>XURI</type> interface on an instance of
+    <type>XMetadatable</type> may have the side effect of creating a metadata
+    reference for the instance.
+    </p>
+
+    @since OOo 3.2
+
+    @see XRepository
+    @see XDocumentMetadataAccess
+ */
+published interface XMetadatable : XURI
+{
+    //-------------------------------------------------------------------------
+    /** a metadata reference, comprising the stream name and the XML ID.
+
+        <p>
+        Note that this metadata reference must be unique for the ODF document.
+        This implies that the XML ID part must be unique for every stream.
+        A pair of two empty strings signifies "no metadata reference".
+        For example: Pair("content.xml", "foo-element-1")
+        </p>
+
+        @throws com::sun::star::lang::IllegalArgumentException
+            if the given metadata reference is invalid, or not unique
+     */
+    [attribute] com::sun::star::beans::StringPair MetadataReference {
+        set raises ( com::sun::star::lang::IllegalArgumentException );
+    };
+
+    //-------------------------------------------------------------------------
+    /** creates a metadata reference for this object, if necessary.
+
+        <p>
+        If this object already has a metadata reference, do nothing;
+        otherwise, create metadata reference with a fresh, unique XML ID
+        and assign it to the MetadataReference attribute.
+        </p>
+     */
+    void ensureMetadataReference();
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

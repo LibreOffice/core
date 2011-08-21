@@ -1,0 +1,118 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_sheet_DataPilotSource_idl__
+#define __com_sun_star_sheet_DataPilotSource_idl__
+
+#include <com/sun/star/sheet/XDimensionsSupplier.idl>
+#include <com/sun/star/sheet/XDataPilotResults.idl>
+#include <com/sun/star/util/XRefreshable.idl>
+#include <com/sun/star/beans/XPropertySet.idl>
+
+//=============================================================================
+
+module com {  module sun {  module star {  module sheet {
+
+//=============================================================================
+
+/** represents a data pilot source.
+
+    <p>A component that implements this service can be used as data source
+    for a data pilot table in a spreadsheet document.</p>
+ */
+published service DataPilotSource
+{
+    //-------------------------------------------------------------------------
+
+    /** provides access to the collection of the dimensions of the data
+        pilot source.
+     */
+    interface com::sun::star::sheet::XDimensionsSupplier;
+
+    //-------------------------------------------------------------------------
+
+    /** gives access to the results of the data pilot table.
+     */
+    interface com::sun::star::sheet::XDataPilotResults;
+
+    //-------------------------------------------------------------------------
+
+    /** provides methods to refresh the data pilot table, that means to
+        read the data again from the data pilot source.
+     */
+    interface com::sun::star::util::XRefreshable;
+
+    //-------------------------------------------------------------------------
+
+//!published service PropertySet
+    /** provides access to the properties.
+     */
+    interface com::sun::star::beans::XPropertySet;
+
+    //=========================================================================
+
+    /** specifies if grand totals for the columns are inserted.
+     */
+    [property] boolean ColumnGrand;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies if grand totals for the rows are inserted.
+     */
+    [property] boolean RowGrand;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies the number of row fields.
+
+        @since OOo 3.0
+     */
+    [readonly, property, optional] long RowFieldCount;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies the number of column fields.
+
+        @since OOo 3.0
+     */
+    [readonly, property, optional] long ColumnFieldCount;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies the number of data fields.
+
+        @since OOo 3.0
+     */
+    [readonly, property, optional] long DataFieldCount;
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif
+

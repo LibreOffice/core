@@ -1,0 +1,67 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#if ! defined INCLUDED_DESKTOP_HELPID_HRC
+#define INCLUDED_DESKTOP_HELPID_HRC
+
+#define HID_PACKAGE_MANAGER                                "DESKTOP_HID_PACKAGE_MANAGER"
+#define HID_PACKAGE_MANAGER_TREELISTBOX                    "DESKTOP_HID_PACKAGE_MANAGER_TREELISTBOX"
+#define HID_PACKAGE_MANAGER_PROGRESS                       "DESKTOP_HID_PACKAGE_MANAGER_PROGRESS"
+#define HID_PACKAGE_MANAGER_PROGRESS_CANCEL                "DESKTOP_HID_PACKAGE_MANAGER_PROGRESS_CANCEL"
+#define HID_PACKAGE_MANAGER_MENU_ITEM                      "DESKTOP_HID_PACKAGE_MANAGER_MENU_ITEM"
+
+#define HID_FIRSTSTART_DIALOG                              "DESKTOP_HID_FIRSTSTART_DIALOG"
+#define HID_FIRSTSTART_WELCOME                             "DESKTOP_HID_FIRSTSTART_WELCOME"
+#define HID_FIRSTSTART_LICENSE                             "DESKTOP_HID_FIRSTSTART_LICENSE"
+#define HID_FIRSTSTART_MIGRATION                           "DESKTOP_HID_FIRSTSTART_MIGRATION"
+#define HID_FIRSTSTART_REGISTRATION                        "DESKTOP_HID_FIRSTSTART_REGISTRATION"
+#define HID_FIRSTSTART_USER                                "DESKTOP_HID_FIRSTSTART_USER"
+#define HID_FIRSTSTART_PREV                                "DESKTOP_HID_FIRSTSTART_PREV"
+#define HID_FIRSTSTART_NEXT                                "DESKTOP_HID_FIRSTSTART_NEXT"
+#define HID_FIRSTSTART_CANCEL                              "DESKTOP_HID_FIRSTSTART_CANCEL"
+#define HID_FIRSTSTART_FINISH                              "DESKTOP_HID_FIRSTSTART_FINISH"
+#define UID_FIRSTSTART_HELP                                "DESKTOP_UID_FIRSTSTART_HELP"
+#define UID_BTN_LICENSE_ACCEPT                             "DESKTOP_UID_BTN_LICENSE_ACCEPT"
+#define HID_FIRSTSTART_UPDATE_CHECK                        "DESKTOP_HID_FIRSTSTART_UPDATE_CHECK"
+#define HID_DEPLOYMENT_GUI_UPDATE                          "DESKTOP_HID_DEPLOYMENT_GUI_UPDATE"
+#define HID_DEPLOYMENT_GUI_UPDATEINSTALL                   "DESKTOP_HID_DEPLOYMENT_GUI_UPDATEINSTALL"
+#define HID_DEPLOYMENT_GUI_UPDATE_PUBLISHER                "DESKTOP_HID_DEPLOYMENT_GUI_UPDATE_PUBLISHER"
+#define HID_DEPLOYMENT_GUI_UPDATE_RELEASENOTES             "DESKTOP_HID_DEPLOYMENT_GUI_UPDATE_RELEASENOTES"
+#define HID_DEPLOYMENT_GUI_UPDATE_AVAILABLE_UPDATES        "DESKTOP_HID_DEPLOYMENT_GUI_UPDATE_AVAILABLE_UPDATES"
+
+#define HID_EXTENSION_MANAGER_LISTBOX                      "DESKTOP_HID_EXTENSION_MANAGER_LISTBOX"
+#define HID_EXTENSION_MANAGER_LISTBOX_OPTIONS              "DESKTOP_HID_EXTENSION_MANAGER_LISTBOX_OPTIONS"
+#define HID_EXTENSION_MANAGER_LISTBOX_ENABLE               "DESKTOP_HID_EXTENSION_MANAGER_LISTBOX_ENABLE"
+#define HID_EXTENSION_MANAGER_LISTBOX_DISABLE              "DESKTOP_HID_EXTENSION_MANAGER_LISTBOX_DISABLE"
+#define HID_EXTENSION_MANAGER_LISTBOX_REMOVE               "DESKTOP_HID_EXTENSION_MANAGER_LISTBOX_REMOVE"
+
+#define HID_EXTENSION_DEPENDENCIES                         "DESKTOP_HID_EXTENSION_DEPENDENCIES"
+
+#define HID_PACKAGE_MANAGER_UPD_REQ                        "DESKTOP_HID_PACKAGE_MANAGER_UPD_REQ"
+
+#endif
+

@@ -1,0 +1,59 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * 
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+[STR_VALUE__43887C67_4D5D_4127_BAAC_87A288494C7C_]
+en-US = "Pocket Excel"
+
+[STR_VALUE__43887C67_4D5D_4127_BAAC_87A288494C7C__PEGASUSFILTER_DESCRIPTION]
+en-US = "Pocket Excel Workbook"
+
+[STR_VALUE__BDD611C3_7BAB_460F_8711_5B9AC9EF6020_]
+en-US = "%PRODUCTNAME Writer"
+
+[STR_VALUE__BDD611C3_7BAB_460F_8711_5B9AC9EF6020__PEGASUSFILTER_DESCRIPTION]
+en-US = "%PRODUCTNAME Writer XML Document"
+
+[STR_VALUE__C6AB3E74_9F4F_4370_8120_A8A6FABB7A7C_]
+en-US = "%PRODUCTNAME Calc"
+
+[STR_VALUE__C6AB3E74_9F4F_4370_8120_A8A6FABB7A7C__PEGASUSFILTER_DESCRIPTION]
+en-US = "%PRODUCTNAME Calc XML Document"
+
+[STR_VALUE__CB43F086_838D_4FA4_B5F6_3406B9A57439_]
+en-US = "Pocket Word"
+
+[STR_VALUE__CB43F086_838D_4FA4_B5F6_3406B9A57439__PEGASUSFILTER_DESCRIPTION]
+en-US = "Pocket Word Document - Pocket PC"
+
+[STR_VALUE_HKLM_SOFT_SUN_STAROFFICE_XMERGESYNC_MSGS_ERROR_CLASSPATH]
+en-US = "The %PRODUCTNAME mobile device filters cannot be located."
+
+[STR_VALUE_HKLM_SOFT_SUN_STAROFFICE_XMERGESYNC_MSGS_ERROR_JAVA]
+en-US = "A Java 1.4 installation cannot be located."
+
+[STR_VALUE_HKLM_SOFT_SUN_STAROFFICE_XMERGESYNC_MSGS_ERROR_JAVAINIT]
+en-US = "There was an error while initializing the Java Runtime Environment."

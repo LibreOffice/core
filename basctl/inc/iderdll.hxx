@@ -46,7 +46,6 @@ public:
     BasicIDEShell*  GetShell() const { return pShell; }
     BasicIDEData*   GetExtraData();
     static void     Init();
-    static void     Exit();
     static BasicIDEDLL* GetDLL();
 };
 

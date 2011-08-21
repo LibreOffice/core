@@ -1,0 +1,5 @@
+"GraphicExporter";"com::sun::star::document::XFilter";"filter()"
+"GraphicExporter";"com::sun::star::document::XFilter";"cancel()"
+"GraphicExporter";"com::sun::star::document::XMimeTypeInfo";"supportsMimeType()"
+"GraphicExporter";"com::sun::star::document::XMimeTypeInfo";"getSupportedMimeTypeNames()"
+"GraphicExporter";"com::sun::star::document::XExporter";"setSourceDocument()"

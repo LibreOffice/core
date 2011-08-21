@@ -1,0 +1,8 @@
+module ooo { module vba { module word {
+    constants WdArabicNumeral {
+        const long wdNumeralArabic = 0;
+        const long wdNumeralContext = 2;
+        const long wdNumeralHindi = 1;
+        const long wdNumeralSystem = 3;
+    };
+}; }; };

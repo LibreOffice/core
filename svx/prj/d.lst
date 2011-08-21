@@ -1,0 +1,5 @@
+..\inc\svx\linkwarn.hxx %_DEST%\inc\svx\linkwarn.hxx
+..\inc\svx\borderline.hxx %_DEST%\inc\svx\borderline.hxx
+..\inc\svx\boxitem.hxx %_DEST%\inc\svx\boxitem.hxx
+..\inc\svx\brkitem.hxx %_DEST%\inc\svx\brkitem.hxx
+..\inc\svx\brshitem.hxx %_DEST%\inc\svx\brshitem.hxx

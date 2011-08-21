@@ -77,6 +77,7 @@ const char* aColorLBHids[] =
      HID_COLORPAGE_WRITERNOTESINDICATOR_LB,
      HID_COLORPAGE_WRITERSCRIPTINDICATOR_LB,
      HID_COLORPAGE_WRITERSECTIONBOUNDARIES_LB,
+     HID_COLORPAGE_WRITERHEADERFOOTERMARK_LB,
      HID_COLORPAGE_WRITERPAGEBREAKS_LB,
      HID_COLORPAGE_HTMLSGML_LB,
      HID_COLORPAGE_HTMLCOMMENT_LB,
@@ -121,6 +122,7 @@ const char* aColorCBHids[] =
      HID_COLORPAGE_WRITERNOTESINDICATOR_CB,
      HID_COLORPAGE_WRITERSCRIPTINDICATOR_CB,
      HID_COLORPAGE_WRITERSECTIONBOUNDARIES_CB,
+     HID_COLORPAGE_WRITERHEADERFOOTERMARK_CB,
      HID_COLORPAGE_WRITERPAGEBREAKS_CB,
      HID_COLORPAGE_HTMLSGML_CB,
      HID_COLORPAGE_HTMLCOMMENT_CB,
@@ -218,6 +220,9 @@ class ColorConfigWindow_Impl : public Window
     CheckBox        aWrtSectionBoundCB;
     ColorListBox    aWrtSectionBoundLB;
     Window          aWrtSectionBoundWN;
+    FixedText       aWrtHeaderFooterMarkFT;
+    ColorListBox    aWrtHeaderFooterMarkLB;
+    Window          aWrtHeaderFooterMarkWN;
     FixedText       aWrtPageBreaksFT;
     ColorListBox    aWrtPageBreaksLB;
     Window          aWrtPageBreaksWN;
@@ -524,6 +529,9 @@ ColorConfigWindow_Impl::ColorConfigWindow_Impl(Window* pParent, const ResId& rRe
         aWrtSectionBoundCB(this, ResId(      CB_WRITERSECTIONBOUNDARIES, *rResId.GetResMgr())),
         aWrtSectionBoundLB(this, ResId(      LB_WRITERSECTIONBOUNDARIES, *rResId.GetResMgr())),
         aWrtSectionBoundWN(this, ResId(      WN_WRITERSECTIONBOUNDARIES, *rResId.GetResMgr())),
+        aWrtHeaderFooterMarkFT(this, ResId(      FT_WRITERHEADERFOOTERMARK, *rResId.GetResMgr())),
+        aWrtHeaderFooterMarkLB(this, ResId(      LB_WRITERHEADERFOOTERMARK, *rResId.GetResMgr())),
+        aWrtHeaderFooterMarkWN(this, ResId(      WN_WRITERHEADERFOOTERMARK, *rResId.GetResMgr())),
         aWrtPageBreaksFT(this, ResId(      FT_WRITERPAGEBREAKS, *rResId.GetResMgr())),
         aWrtPageBreaksLB(this, ResId(      LB_WRITERPAGEBREAKS, *rResId.GetResMgr())),
         aWrtPageBreaksWN(this, ResId(      WN_WRITERPAGEBREAKS, *rResId.GetResMgr())),
@@ -664,6 +672,7 @@ ColorConfigWindow_Impl::ColorConfigWindow_Impl(Window* pParent, const ResId& rRe
     aFixedTexts[CALCREFERENCE    ]=& aCalcReferenceFT;
     aFixedTexts[CALCNOTESBACKGROUND  ]=& aCalcNotesBackFT;
     aFixedTexts[WRITERPAGEBREAKS] = &aWrtPageBreaksFT;
+    aFixedTexts[WRITERHEADERFOOTERMARK] = &aWrtHeaderFooterMarkFT;
     aFixedTexts[DRAWGRID            ] = &aDrawGridFT             ;
     aFixedTexts[BASICIDENTIFIER ] = &aBasicIdentifierFT;
     aFixedTexts[BASICCOMMENT    ] = &aBasicCommentFT;
@@ -698,6 +707,7 @@ ColorConfigWindow_Impl::ColorConfigWindow_Impl(Window* pParent, const ResId& rRe
     aColorBoxes[WRITERSCRIPTINDICATOR    ] = &aWrtScriptIndicatorLB           ;
     aColorBoxes[WRITERSECTIONBOUNDARIES  ] = &aWrtSectionBoundLB           ;
     aColorBoxes[WRITERPAGEBREAKS] = &aWrtPageBreaksLB;
+    aColorBoxes[WRITERHEADERFOOTERMARK] = &aWrtHeaderFooterMarkLB;
     aColorBoxes[HTMLSGML            ] = &aHTMLSGMLLB             ;
     aColorBoxes[HTMLCOMMENT         ] = &aHTMLCommentLB          ;
     aColorBoxes[HTMLKEYWORD         ] = &aHTMLKeywdLB            ;
@@ -744,6 +754,7 @@ ColorConfigWindow_Impl::ColorConfigWindow_Impl(Window* pParent, const ResId& rRe
     aWindows[WRITERSCRIPTINDICATOR    ] = &aWrtScriptIndicatorWN           ;
     aWindows[WRITERSECTIONBOUNDARIES  ] = &aWrtSectionBoundWN           ;
     aWindows[WRITERPAGEBREAKS] = &aWrtPageBreaksWN;
+    aWindows[WRITERHEADERFOOTERMARK] = &aWrtHeaderFooterMarkWN;
     aWindows[HTMLSGML            ] = &aHTMLSGMLWN             ;
     aWindows[HTMLCOMMENT         ] = &aHTMLCommentWN          ;
     aWindows[HTMLKEYWORD         ] = &aHTMLKeywdWN            ;
@@ -935,7 +946,6 @@ ColorConfigWindow_Impl::ColorConfigWindow_Impl(Window* pParent, const ResId& rRe
     }
 
     XColorTable aColorTable( SvtPathOptions().GetPalettePath() );
-    aColorBoxes[0]->InsertAutomaticEntry();
     for( sal_Int32 i = 0; i < aColorTable.Count(); i++ )
     {
         XColorEntry* pEntry = aColorTable.GetColor(i);
@@ -952,8 +962,10 @@ ColorConfigWindow_Impl::ColorConfigWindow_Impl(Window* pParent, const ResId& rRe
             aColorBoxes[i]->CopyEntries( *aColorBoxes[0] );
             if( i < sal_Int32(sizeof(aColorLBHids)/sizeof(aColorLBHids[0])) )
                aColorBoxes[i]->SetHelpId( aColorLBHids[i] );
+            aColorBoxes[i]->InsertAutomaticEntryColor(ColorConfig::GetDefaultColor((ColorConfigEntry) i));
         }
     }
+    aColorBoxes[0]->InsertAutomaticEntryColor(ColorConfig::GetDefaultColor((ColorConfigEntry) 0));
 }
 
 ColorConfigWindow_Impl::~ColorConfigWindow_Impl()
@@ -1414,7 +1426,7 @@ IMPL_LINK(ColorConfigCtrl_Impl, ColorHdl, ColorListBox*, pBox)
         if(pBox && aScrollWindow.aColorBoxes[i] == pBox)
         {
             ColorConfigValue aColorEntry = pColorConfig->GetColorValue(ColorConfigEntry(i));
-            if(!pBox->GetSelectEntryPos())
+            if(pBox->IsAutomaticSelected())
             {
                 aColorEntry.nColor = COL_AUTO;
                 if(aScrollWindow.aWindows[i])

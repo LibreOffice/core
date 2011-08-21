@@ -1,0 +1,113 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_sheet_SpreadsheetView_idl__
+#define __com_sun_star_sheet_SpreadsheetView_idl__
+
+#include <com/sun/star/frame/Controller.idl>
+#include <com/sun/star/sheet/SpreadsheetViewSettings.idl>
+#include <com/sun/star/sheet/SpreadsheetViewPane.idl>
+#include <com/sun/star/sheet/XSpreadsheetView.idl>
+#include <com/sun/star/container/XIndexAccess.idl>
+#include <com/sun/star/view/XSelectionSupplier.idl>
+#include <com/sun/star/sheet/XViewSplitable.idl>
+#include <com/sun/star/sheet/XViewFreezable.idl>
+#include <com/sun/star/sheet/XRangeSelection.idl>
+#include <com/sun/star/container/XEnumerationAccess.idl>
+#include <com/sun/star/sheet/XActivationBroadcaster.idl>
+#include <com/sun/star/sheet/XEnhancedMouseClickBroadcaster.idl>
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module sheet {
+
+//=============================================================================
+
+/** represents a view of a spreadsheet document.
+ */
+published service SpreadsheetView
+{
+    /** provides the integration into the framework.
+     */
+    service com::sun::star::frame::Controller;
+
+    /** provides the view's settings.
+     */
+    service com::sun::star::sheet::SpreadsheetViewSettings;
+
+    /** provides direct access to the view's active pane.
+     */
+    service com::sun::star::sheet::SpreadsheetViewPane;
+
+    /** provides access to the active sheet in the view.
+     */
+    interface com::sun::star::sheet::XSpreadsheetView;
+
+    /** provides access to the collection of view panes.
+     */
+    interface com::sun::star::container::XIndexAccess;
+
+    /** creates an enumeration of view panes.
+
+        @see com::sun::star::sheet::SpreadsheetViewPanesEnumeration
+
+     */
+    interface com::sun::star::container::XEnumerationAccess;
+
+    /** provides access to the view's selection.
+    <p>The selection in a spreadsheet view can be a
+        <type scope="com::sun::star::sheet">SheetCell</type>,
+        <type scope="com::sun::star::sheet">SheetCellRange</type>,
+        <type scope="com::sun::star::sheet">SheetCellRanges</type>,
+        <type scope="com::sun::star::drawing">Shape</type> or
+        <type scope="com::sun::star::drawing">Shapes</type> object.
+    </p>
+     */
+    interface com::sun::star::view::XSelectionSupplier;
+
+    /** allows to split the view.
+     */
+    interface com::sun::star::sheet::XViewSplitable;
+
+    /** allows to freeze columns and rows of the view.
+     */
+    interface com::sun::star::sheet::XViewFreezable;
+
+    /** allows to let the user interactively select a cell range.
+     */
+    interface com::sun::star::sheet::XRangeSelection;
+
+    [optional] interface com::sun::star::sheet::XEnhancedMouseClickBroadcaster;
+
+    [optional] interface com::sun::star::sheet::XActivationBroadcaster;
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif
+

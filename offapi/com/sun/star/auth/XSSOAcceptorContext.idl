@@ -1,0 +1,70 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_auth_XSSOAcceptorContext_idl__
+#define __com_sun_star_auth_XSSOAcceptorContext_idl__
+
+#include <com/sun/star/auth/XSSOContext.idl>
+#include <com/sun/star/auth/SSOExceptions.idl>
+
+module com { module sun { module star { module auth {
+
+/** represents an acceptor side security context.
+    <P>This context may be used to authenticate a Single Sign-on initiator based
+       on a security token sent by the initiator and to generate a token to be
+       sent back to the initiator so that it can authenticate the acceptor.
+
+    @since OOo 1.1.2
+*/
+
+published interface XSSOAcceptorContext : ::com::sun::star::auth::XSSOContext
+{
+    /** accepts/authenticates an SSO token sent from the context initiator side.
+        <P>
+        accept() should be called only once. Subsequent calls produce
+        undefined results.
+
+        @param Token
+        the SSO token sent by the initiator.
+
+        @returns
+        the sequence of bytes to be sent back to the initiator to allow
+        authentication of the acceptor side, if mutual authentication is
+        supported by the security context. If mutual authentication is not
+        supported a zero length sequence is returned.
+     */
+
+    sequence< byte >    accept( [in] sequence< byte > Token )
+        raises( InvalidArgumentException,
+                InvalidCredentialException,
+                InvalidContextException,
+                AuthenticationFailedException );
+};
+
+}; }; }; };
+
+#endif

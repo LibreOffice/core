@@ -1,0 +1,54 @@
+
+sd-
+   |-idl
+   |-inc ----
+   |         |-usr -----
+   |    		|-IFACEID.hxx	(IDs fuer Interfaces)
+   |-jobs
+   |-prj
+   |-res
+   |-source -
+   |         |-ui ------
+   |    		|-inc ---- (Deklaration der Klassen)
+   |                    |         |-UNOMODEL.hxx
+   |                    |         |-UNOPAGE.hxx
+   |                    |
+   |    		|-unoidl - (Implementation der Klassen)
+   |                    	  |-UNOMODEL.cxx
+   |                    	  |-UNOPAGE.cxx
+   |-unoidl -
+   |         |-sd ------
+   |         |          |-XIMODEL.idl
+   |         |          |-XIPAGE.idl	(der eigentliche IDL-Code)
+   |         |-smart ---
+   |                    |-XIMODEL.idl
+   |                    |-XIPAGE.idl	(import/mapping des IDL-Codes)
+   |-util
+   |-wntmsci-
+   |         |-idl------
+   |         |  	|-usr --
+   |         |                  |-MAP.idl
+   |         |                  |-SDMAP.idl
+   |         |-inc------
+   |         |  	|-sd --- (Deklaration der Interfaces)
+   |         |                  |-XIMODEL.hxx
+   |         |                  |-XIPAGE.hxx	...
+   |         |-misc ----
+   |                    |-XIMODEL.cxx
+   |    		(Impl., fast ausschliesslich pure virtual functions)
+   |-workben
+
+
+
+usr-
+   |-idl ----
+   |         |-cponent -
+   |    		|-smart -
+   |                    |        |-MAP.idl
+   |    		|-usr ---
+   |                             |-SFXMAP.idl
+   |
+   |-inc ----
+             |-usr -----
+        		|-IFACEID.hxx
+

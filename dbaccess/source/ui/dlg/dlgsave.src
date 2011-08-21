@@ -1,0 +1,143 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef DBAUI_DLGSAVE_HRC
+#include "dlgsave.hrc"
+#endif
+#ifndef _DBU_DLG_HRC_
+#include "dbu_dlg.hrc"
+#endif
+#ifndef _DBA_DBACCESS_HELPID_HRC_
+#include "dbaccess_helpid.hrc"
+#endif
+
+ModalDialog DLG_SAVE_AS
+{
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    HelpId = HID_DLG_SAVE_AS ;
+    Size = MAP_APPFONT ( 174 , 75 ) ;
+    Moveable = TRUE ;
+    Closeable = TRUE ;
+    Text [ en-US ] = "Save As" ;
+
+    FixedText FT_DESCRIPTION
+    {
+        Pos = MAP_APPFONT ( 6 , 6 ) ;
+        Size = MAP_APPFONT ( 174 - 12 , 16 ) ;
+        WordBreak=TRUE;
+        Text [ en-US ] = "Please enter a name for the object to be created:";
+    };
+
+    FixedText FT_CATALOG
+    {
+        Pos = MAP_APPFONT ( 6 , 26 ) ;
+        Size = MAP_APPFONT ( 70 , 10 ) ;
+        Text [ en-US ] = "~Catalog";
+    };
+    ComboBox ET_CATALOG
+    {
+        HelpID = "dbaccess:ComboBox:DLG_SAVE_AS:ET_CATALOG";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 77 , 25 ) ;
+        Size = MAP_APPFONT ( 89 , 12 ) ;
+        SVLook      = TRUE ;
+        TabStop     = TRUE ;
+        DropDown    = TRUE ;
+        AutoHScroll = TRUE ;
+    };
+    FixedText FT_SCHEMA
+    {
+        Pos = MAP_APPFONT ( 6 , 43 ) ;
+        Size = MAP_APPFONT ( 70 , 10 ) ;
+        Text [ en-US ] = "~Schema";
+    };
+    ComboBox ET_SCHEMA
+    {
+        HelpID = "dbaccess:ComboBox:DLG_SAVE_AS:ET_SCHEMA";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 77 , 42 ) ;
+        Size = MAP_APPFONT ( 89 , 12 ) ;
+        SVLook      = TRUE ;
+        TabStop     = TRUE ;
+        DropDown    = TRUE ;
+        AutoHScroll = TRUE ;
+    };
+    FixedText FT_TITLE
+    {
+        Pos = MAP_APPFONT ( 6 , 60 ) ;
+        Size = MAP_APPFONT ( 70 , 10 ) ;
+    };
+    Edit ET_TITLE
+    {
+        HelpID = "dbaccess:Edit:DLG_SAVE_AS:ET_TITLE";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 77 , 59 ) ;
+        Size = MAP_APPFONT ( 89 , 12 ) ;
+        TabStop = TRUE ;
+    };
+    OKButton PB_OK
+    {
+        Pos = MAP_APPFONT ( 6 , 77 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        DefButton = TRUE ;
+    };
+    CancelButton PB_CANCEL
+    {
+        Pos = MAP_APPFONT ( 62 , 77 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    HelpButton PB_HELP
+    {
+        Pos = MAP_APPFONT ( 118 , 77 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+     // String Resourcen ------------------------------------------------------------------
+    String STR_TBL_LABEL
+    {
+        Text [ en-US ] = "~Table Name" ;
+    };
+    String STR_VW_LABEL
+    {
+        Text [ en-US ] = "~Name of table view" ;
+    };
+    String STR_QRY_LABEL
+    {
+        Text [ en-US ] = "~Query name" ;
+    };
+    String STR_TITLE_RENAME
+    {
+        Text [ en-US ] = "Rename to";
+    };
+    String STR_TITLE_PASTE_AS
+    {
+        Text [ en-US ] = "Insert as";
+    };
+};

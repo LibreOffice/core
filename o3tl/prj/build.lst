@@ -1,0 +1,2 @@
+ot	o3tl	:	sal CPPUNIT:cppunit BOOST:boost NULL
+ot	o3tl\prj	nmake	-	all	ot_prj NULL

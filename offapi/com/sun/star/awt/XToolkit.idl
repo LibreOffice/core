@@ -1,0 +1,104 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_awt_XToolkit_idl__
+#define __com_sun_star_awt_XToolkit_idl__
+
+#include <com/sun/star/uno/XInterface.idl>
+
+#include <com/sun/star/awt/XWindowPeer.idl>
+
+#include <com/sun/star/awt/Rectangle.idl>
+
+#include <com/sun/star/awt/WindowDescriptor.idl>
+
+#include <com/sun/star/lang/IllegalArgumentException.idl>
+
+#include <com/sun/star/awt/XDevice.idl>
+
+#include <com/sun/star/awt/XRegion.idl>
+
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module awt {
+
+//=============================================================================
+
+/** specifies a factory interface for the window toolkit.
+
+    <p>This is similar to the abstract window toolkit (AWT) in Java.</p>
+ */
+published interface XToolkit: com::sun::star::uno::XInterface
+{
+    //-------------------------------------------------------------------------
+
+    /** returns the desktop window.
+     */
+    com::sun::star::awt::XWindowPeer getDesktopWindow();
+
+    //-------------------------------------------------------------------------
+
+    /** returns the complete work area for this toolkit.
+     */
+    com::sun::star::awt::Rectangle getWorkArea();
+
+    //-------------------------------------------------------------------------
+
+    /** creates a new window using the given descriptor.
+     */
+    com::sun::star::awt::XWindowPeer createWindow( [in] com::sun::star::awt::WindowDescriptor Descriptor )
+            raises( com::sun::star::lang::IllegalArgumentException );
+
+    //-------------------------------------------------------------------------
+
+    /** returns a sequence of windows which are newly created using the
+        given descriptors.
+     */
+    sequence<com::sun::star::awt::XWindowPeer> createWindows(
+            [in] sequence<com::sun::star::awt::WindowDescriptor> Descriptors )
+        raises( com::sun::star::lang::IllegalArgumentException );
+
+    //-------------------------------------------------------------------------
+
+    /** creates a virtual device that is compatible with the screen.
+     */
+    com::sun::star::awt::XDevice createScreenCompatibleDevice( [in] long Width,
+             [in] long Height );
+
+    //-------------------------------------------------------------------------
+
+    /** creates a region.
+     */
+    com::sun::star::awt::XRegion createRegion();
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

@@ -1,0 +1,43 @@
+MAC specific information for dmake.  This information is provided in the
+hope that it makes it easier to install and recompile dmake in a MAC
+environment.  
+
+
+1. ENVIRONMENT VARIABLE SETTINGS
+
+Only a single set of settings is available for the macintosh.  There are no
+sub-selections for specific OS release and/or environment.
+
+   OS		 - mac
+   OSRELEASE	 - NULL
+   OSENVIRONMENT - NULL
+
+
+2. IMPLEMENTATION NOTES
+
+This port for the Macintosh is specifically designed to be run
+under MPW.
+
+I had to make a couple of changes to dmake in order to get it to work
+on the Mac.  First, MPW provides no documented way to run a
+subprocess, so when you use dmake, you MUST use the -n option and
+execute the output.  Typically, you will probably want to write a
+simple script file to do these operations for you.
+
+I added some code so that the Macintosh version of dmake can
+use UNIX-style directories to specify include paths and target
+and dependency file names.  I.e., if you specify a file "/dir/file",
+dmake will look at the file "dir:file".  However, Mac dmake does not
+do any translation from files specified by UNIX-style directories
+in the recipe line that gets executed.  If you need to translate,
+you can use substitution commands.  (For example,
+":$(RELATIVEUNIXFILE:s,/,:,)".)  This code was added so one could
+execute dmake's makefile, and also so one would have an easier time
+porting other UNIX makefiles.  I would suggest you stick with
+Macintosh-style directories for all other makefiles.
+
+In order to run dmake, you must set (and export) the environmental
+variable "OS" to "mac".
+
+Micah Doyle
+micah@leland.Stanford.EDU

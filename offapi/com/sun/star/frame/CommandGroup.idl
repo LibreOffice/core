@@ -1,0 +1,179 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_frame_CommandGroup_idl__
+#define __com_sun_star_frame_CommandGroup_idl__
+
+//=============================================================================
+
+module com {  module sun {  module star {  module frame {
+
+//=============================================================================
+/** provides information about a supported command
+
+    @see XDispatchInformationProvider
+    @see Controller
+
+    @since OOo 2.0
+ */
+published constants CommandGroup
+{
+    //-------------------------------------------------------------------------
+    /** specifies internal commands.
+     */
+    const short INTERNAL = 0;
+
+    //-------------------------------------------------------------------------
+    /** specifies application based commands.
+     */
+    const short APPLICATION = 1;
+
+    //-------------------------------------------------------------------------
+    /** specifies view specific commands.
+     */
+    const short VIEW = 2;
+
+    //-------------------------------------------------------------------------
+    /** specifies document specific commands.
+     */
+    const short DOCUMENT = 3;
+
+    //-------------------------------------------------------------------------
+    /** specifies edit specific commands.
+     */
+    const short EDIT = 4;
+
+    //-------------------------------------------------------------------------
+    /** specifies commands used by the built-in Basic.
+     */
+    const short MACRO = 5;
+
+    //-------------------------------------------------------------------------
+    /** specifies commands to change options.
+     */
+    const short OPTIONS = 6;
+
+    //-------------------------------------------------------------------------
+    /** specifies math specific commands.
+     */
+    const short MATH = 7;
+
+    //-------------------------------------------------------------------------
+    /** specifies navigate commands.
+     */
+    const short NAVIGATOR = 8;
+
+    //-------------------------------------------------------------------------
+    /** specifies insert commands.
+     */
+    const short INSERT = 9;
+
+    //-------------------------------------------------------------------------
+    /** specifies commands that are related to formats.
+     */
+    const short FORMAT = 10;
+
+    //-------------------------------------------------------------------------
+    /** specifies commands that are related to templates.
+     */
+    const short TEMPLATE = 11;
+
+    //-------------------------------------------------------------------------
+    /** specifies text specific commands.
+     */
+    const short TEXT = 12;
+
+    //-------------------------------------------------------------------------
+    /** specifies frame specific commands.
+     */
+    const short FRAME = 13;
+
+    //-------------------------------------------------------------------------
+    /** specifies commands that are related to graphical data.
+     */
+    const short GRAPHIC = 14;
+
+    //-------------------------------------------------------------------------
+    /** specifies commands that are related to tables.
+     */
+    const short TABLE = 15;
+
+    //-------------------------------------------------------------------------
+    /** specifies commands that are related to bullets and numbering.
+     */
+    const short ENUMERATION = 16;
+
+    //-------------------------------------------------------------------------
+    /** specifies commands that are related to data.
+     */
+    const short DATA = 17;
+
+    //-------------------------------------------------------------------------
+    /** specifies special commands.
+     */
+    const short SPECIAL = 18;
+
+    //-------------------------------------------------------------------------
+    /** specifies commands that are related to images.
+     */
+    const short IMAGE = 19;
+
+    //-------------------------------------------------------------------------
+    /** specifies chart specific commands.
+     */
+    const short CHART = 20;
+
+    //-------------------------------------------------------------------------
+    /** specifies explorer specific commands.
+     */
+    const short EXPLORER = 21;
+
+    //-------------------------------------------------------------------------
+    /** specifies commands that are related to connectors.
+     */
+    const short CONNECTOR = 22;
+
+    //-------------------------------------------------------------------------
+    /** specifies commands that are related to modifications.
+     */
+    const short MODIFY = 23;
+
+    //-------------------------------------------------------------------------
+    /** specifies commands that are related to drawing.
+     */
+    const short DRAWING = 24;
+
+    //-------------------------------------------------------------------------
+    /** specifies commands that are related to controls.
+     */
+    const short CONTROLS = 25;
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

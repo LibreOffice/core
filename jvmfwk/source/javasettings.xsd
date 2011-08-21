@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+    Document   : javasettings.xsd
+    Created on : 25. März 2004, 16:16
+    Author     : jl97489
+    Description:
+        Purpose of XML Schema document follows.
+-->
+
+<schema targetNamespace="http://openoffice.org/2004/java/framework/1.0"
+        xmlns:jf="http://openoffice.org/2004/java/framework/1.0"
+        xmlns="http://www.w3.org/2001/XMLSchema"
+        elementFormDefault="qualified">
+
+<element name="java">
+ <complexType> 
+  <sequence>
+   <element name="enabled" nillable="true" default="true" type="boolean"/>
+   <element name="userClassPath" nillable="true" type="string"/>
+   <element name="vmParameters" nillable="true" type="jf:vmParametersType"/>
+   <element name="jreLocations" nillable="true" type="jf:jreLocationsType"/>
+   <element name="javaInfo" nillable="true" type="jf:javaInfoType"/>
+  </sequence>
+ </complexType>
+
+</element>  
+
+<complexType name="javaInfoType">
+ <sequence>
+  <element name="vendor" type="string"/>
+  <element name="location" type="string"/>
+  <element name="version" type="string"/>
+  <element name="features" default="0" type="unsignedLong"/>
+  <element name="requirements" default="0" type="unsignedLong"/>
+  <element name="vendorData" type="base64Binary"/>
+ </sequence>
+ <attribute name="vendorUpdate" type="date"/>
+</complexType>      
+
+
+<complexType name="vmParametersType">
+ <sequence>
+  <element name="param" minOccurs="0" maxOccurs="unbounded" type="string"/>
+ </sequence>
+</complexType>
+
+<complexType name="jreLocationsType">
+ <sequence>
+  <element name="location" minOccurs="0" maxOccurs="unbounded" type="string"/>
+ </sequence>
+</complexType>
+
+</schema>

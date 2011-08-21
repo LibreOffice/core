@@ -1,0 +1,428 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef _CNTIDS_HRC
+#define _CNTIDS_HRC
+
+#ifndef _CNTWIDS_HRC
+#include <svl/cntwids.hrc>
+#endif
+
+#ifndef _SOLAR_HRC
+#include <svl/solar.hrc>
+#endif
+
+// Slot-ID's -----------------------------------------------------------------
+
+#ifndef SID_SFX_START
+// HACK() - SID's may not change its numerical value just like that,
+//          sfxsids.hrc may not be included!!! Solution: sfxsids.hrc
+//          include it on a lower level - for example svtools???
+#define SID_SFX_START                   5000
+#endif
+#define SID_TITLE                       (SID_SFX_START + 307)
+#define SID_DELETE                      (SID_SFX_START + 713)
+#define SID_INTERNET_ONLINE             (SID_SFX_START + 1370)
+
+// Don't let SID_CHAOS_END grow. Internal docking windows use the range between
+// SID_CHAOS_END and SID_LIB_START!! Look into sfxsids.hrc for more information!
+#define SID_CHAOS_START                 9000
+#define SID_CHAOS_END                   9799
+
+#define SID_BCC                         (SID_CHAOS_START +  2)
+#define SID_CC                          (SID_CHAOS_START +  3)
+#define SID_COMMENTS                    (SID_CHAOS_START +  4)
+#define SID_DATE                        (SID_CHAOS_START +  5)
+#define SID_IN_REPLY_TO                 (SID_CHAOS_START +  6)
+#define SID_KEYWORDS                    (SID_CHAOS_START +  7)
+#define SID_MESSAGE_ID                  (SID_CHAOS_START +  8)
+#define SID_RECEIVED                    (SID_CHAOS_START +  9)
+#define SID_REFERENCES                  (SID_CHAOS_START + 10)
+#define SID_RETURN_PATH                 (SID_CHAOS_START + 11)
+#define SID_SENDER                      (SID_CHAOS_START + 12)
+#define SID_TO                          (SID_CHAOS_START + 13)
+#define SID_NEWSGROUPS                  (SID_CHAOS_START + 14)
+#define SID_MAILER                      (SID_CHAOS_START + 15)
+#define SID_MIME_VERSION                (SID_CHAOS_START + 16)
+#define SID_CONTENT_DESCRIPTION         (SID_CHAOS_START + 17)
+#define SID_CONTENT_DISPOSITION         (SID_CHAOS_START + 18)
+#define SID_CONTENT_ID                  (SID_CHAOS_START + 19)
+#define SID_CONTENT_TYPE                (SID_CHAOS_START + 20)
+#define SID_IS_CONTAINER                (SID_CHAOS_START + 21)
+#define SID_IS_MESSAGE                  (SID_CHAOS_START + 22)
+#define SID_IS_MULTIPART                (SID_CHAOS_START + 23)
+#define SID_APPROVED                    (SID_CHAOS_START + 24)
+#define SID_CONTROL                     (SID_CHAOS_START + 25)
+#define SID_DISTRIBUTION                (SID_CHAOS_START + 26)
+#define SID_EXPIRES                     (SID_CHAOS_START + 27)
+#define SID_FOLLOWUPTO                  (SID_CHAOS_START + 28)
+#define SID_LINES                       (SID_CHAOS_START + 29)
+#define SID_DOCUMENT_BYTESIZE           (SID_CHAOS_START + 30)
+#define SID_MESSAGE_BYTESIZE            (SID_CHAOS_START + 31)
+#define SID_ORGANIZATION                (SID_CHAOS_START + 32)
+#define SID_SUMMARY                     (SID_CHAOS_START + 33)
+#define SID_XREF                        (SID_CHAOS_START + 34)
+#define SID_NEWSREADER                  (SID_CHAOS_START + 35)
+#define SID_SEND_DATETIME               (SID_CHAOS_START + 36)
+#define SID_RETURN_RECEIPT              (SID_CHAOS_START + 37)
+#define SID_PRIORITY                    (SID_CHAOS_START + 38)
+#define SID_SENT_TO                     (SID_CHAOS_START + 39)
+#define SID_RECEIVED_BY                 (SID_CHAOS_START + 40)
+#define SID_FLAG_DELETED                (SID_CHAOS_START + 41)
+#define SID_IS_FOLDER                   (SID_CHAOS_START + 42)
+#define SID_FLAG_GETBODY                (SID_CHAOS_START + 43)
+#define SID_FLAG_KEEP                   (SID_CHAOS_START + 44)
+#define SID_FLAG_FLAGGED                (SID_CHAOS_START + 45)
+#define SID_FLAG_ANSWERED               (SID_CHAOS_START + 46)
+#define SID_FLAG_RECENT                 (SID_CHAOS_START + 47)
+#define SID_FLAG_SEEN                   (SID_CHAOS_START + 48)
+#define SID_TOTALCONTENTCOUNT           (SID_CHAOS_START + 49)
+#define SID_SEENCONTENTCOUNT            (SID_CHAOS_START + 50)
+#define SID_RULES                       (SID_CHAOS_START + 51)
+#define SID_SORTCRITERIA                (SID_CHAOS_START + 52)
+#define SID_THREADED                    (SID_CHAOS_START + 53)
+//#define DEFAULT_CONTENT_THREAD_MASTER     (SID_CHAOS_START + 54)
+//#define DEFAULT_CONTENT_THREAD_SLAVE      (SID_CHAOS_START + 55)
+#define SID_AUTOUPDATE_MODE             (SID_CHAOS_START + 56)
+#define SID_AUTOUPDATE_INTERVAL         (SID_CHAOS_START + 57)
+#define SID_AUTOUPDATE_CONFIRMATION     (SID_CHAOS_START + 58)
+#define SID_UPDATE_MAXMESSAGECOUNT      (SID_CHAOS_START + 59)
+#define SID_UPDATE_MAXMESSAGESIZE       (SID_CHAOS_START + 60)
+#define SID_REMOVEFROMSERVER_MODE       (SID_CHAOS_START + 61)
+#define SID_REMOVEFROMSERVER_DELAY      (SID_CHAOS_START + 62)
+#define SID_EXPIRATION_MODE             (SID_CHAOS_START + 63)
+#define SID_EXPIRATION_TIME             (SID_CHAOS_START + 64)
+#define SID_EXPIRATION_MAXCOUNT         (SID_CHAOS_START + 65)
+#define SID_DELETE_CONFIRMATION         (SID_CHAOS_START + 66)
+#define SID_FLAG_SUBSCRIBED             (SID_CHAOS_START + 67)
+#define SID_SERVERPORT                  (SID_CHAOS_START + 68)
+#define SID_MAILSEND_SERVERNAME         (SID_CHAOS_START + 69)
+#define SID_MAILSEND_USERNAME           (SID_CHAOS_START + 70)
+#define SID_MAILSEND_PASSWORD           (SID_CHAOS_START + 71)
+#define SID_NEWSSEND_SERVERNAME         (SID_CHAOS_START + 72)
+#define SID_NEWSSEND_USERNAME           (SID_CHAOS_START + 73)
+#define SID_NEWSSEND_PASSWORD           (SID_CHAOS_START + 74)
+#define SID_RECEIVE_SERVERNAME          (SID_CHAOS_START + 75)
+#define SID_RECEIVE_USERNAME            (SID_CHAOS_START + 76)
+#define SID_RECEIVE_PASSWORD            (SID_CHAOS_START + 77)
+#define SID_FLAG_SUPPORTMODE            (SID_CHAOS_START + 78)
+#define SID_OWN_URL                     (SID_CHAOS_START + 81)
+#define SID_INTERIM_URL                 (SID_CHAOS_START + 82)
+#define SID_REFERED_URL                 (SID_CHAOS_START + 83)
+#define SID_FROM                        (SID_CHAOS_START + 84)
+#define SID_REPLY_TO                    (SID_CHAOS_START + 85)
+#define SID_UPDATE                      (SID_CHAOS_START + 86)
+#define SID_UPDATE_FROMSERVER           (SID_CHAOS_START + 87)
+#define SID_UPDATE_TOSERVER             (SID_CHAOS_START + 88)
+#define SID_CREATE_NEW                  (SID_CHAOS_START + 89)
+#define SID_INSERT                      (SID_CHAOS_START + 90)
+#define SID_SEND_AGAIN                  (SID_CHAOS_START + 91)
+#define SID_REPLY                       (SID_CHAOS_START + 92)
+#define SID_FOLLOWUP                    (SID_CHAOS_START + 93)
+#define SID_FORWARD                     (SID_CHAOS_START + 94)
+#define SID_REPLY_AND_FOLLOWUP          (SID_CHAOS_START + 95)
+#define SID_DATE_CREATED                (SID_CHAOS_START + 96)
+#define SID_DATE_MODIFIED               (SID_CHAOS_START + 97)
+#define SID_NEWSGROUPCOUNT              (SID_CHAOS_START + 98)
+#define SID_SUBSCRNEWSGROUPCOUNT        (SID_CHAOS_START + 99)
+#define SID_ARTICLECOUNT                (SID_CHAOS_START + 100)
+#define SID_UNREAD_ARTICLECOUNT         (SID_CHAOS_START + 101)
+#define SID_FLAG_READONLY               (SID_CHAOS_START + 102)
+#define SID_RECIPIENTLIST               (SID_CHAOS_START + 103)
+#define SID_OPEN_CNT                    (SID_CHAOS_START + 104)
+#define SID_MESSAGEBODY                 (SID_CHAOS_START + 105)
+#define SID_MSG_COLUMN_INFO             (SID_CHAOS_START + 106)
+#define SID_FLD_COLUMN_INFO             (SID_CHAOS_START + 107)
+#define SID_VIEW_DESCRIPTION            (SID_CHAOS_START + 108)
+#define SID_NEWS_GROUPLIST              (SID_CHAOS_START + 109)
+#define SID_REAL_URL                    (SID_CHAOS_START + 110)
+#define SID_CHAOS_SERVERBASE            (SID_CHAOS_START + 111)
+#define SID_FOLDERVIEW_MODE             (SID_CHAOS_START + 112)
+#define SID_MESSAGEVIEW_MODE            (SID_CHAOS_START + 113)
+#define SID_SENTMESSAGEVIEW_MODE        (SID_CHAOS_START + 114)
+#define SID_DELETE_ON_SERVER            (SID_CHAOS_START + 115)
+#define SID_FILTERED                    (SID_CHAOS_START + 116)
+#define SID_MESSAGE_STOREMODE           (SID_CHAOS_START + 117)
+#define SID_UNDELETE                    (SID_CHAOS_START + 118)
+#define SID_CLOSECNT                    (SID_CHAOS_START + 119)
+#define SID_REOPEN                      (SID_CHAOS_START + 120)
+#define SID_NEW_CNT_CONTENT             (SID_CHAOS_START + 121)
+#define SID_CNT_IMPORT                  (SID_CHAOS_START + 122)
+#define SID_CNT_DELETE                  (SID_CHAOS_START + 123)
+#define SID_CNT_RENAME                  (SID_CHAOS_START + 124)
+#define SID_CNT_SHOW                    (SID_CHAOS_START + 125)
+#define SID_CNT_SHOW_THREADED           (SID_CHAOS_START + 126)
+#define SID_CNT_SHOW_FILTERED           (SID_CHAOS_START + 127)
+#define SID_CNT_ACTUALIZE               (SID_CHAOS_START + 128)
+#define SID_CNT_RESEND_MSG              (SID_CHAOS_START + 129)
+#define SID_MARK_THREAD_READ            (SID_CHAOS_START + 130)
+#define SID_MARK_THREAD_UNREAD          (SID_CHAOS_START + 131)
+#define SID_KILL_THREAD                 (SID_CHAOS_START + 132)
+#define SID_KILL_AUTHOR                 (SID_CHAOS_START + 133)
+#define SID_KILL_SUBJECT                (SID_CHAOS_START + 134)
+#define SID_CNT_IS_READ                 (SID_CHAOS_START + 135)
+#define SID_CNT_IS_MARKED               (SID_CHAOS_START + 136)
+#define SID_CNT_IS_SUBSCRIBED           (SID_CHAOS_START + 137)
+#define SID_CNT_PROPERTIES              (SID_CHAOS_START + 138)
+#define SID_CNT_RESTORE                 (SID_CHAOS_START + 139)
+#define SID_UPDATE_ENABLED              (SID_CHAOS_START + 140)
+#define SID_SHOW_MSGS_HAS_TIMELIMIT     (SID_CHAOS_START + 141)
+#define SID_SHOW_MSGS_TIMELIMIT         (SID_CHAOS_START + 142)
+#ifndef _CHAOS_RESOURCE
+#define SID_STORE_MSGS_HAS_TIMELIMIT    (SID_CHAOS_START + 143)
+#define SID_STORE_MSGS_TIMELIMIT        (SID_CHAOS_START + 144)
+#endif
+#define SID_CNT_DEFAULT                 (SID_CHAOS_START + 145)
+#define SID_CNT_SYNCHRONIZE             (SID_CHAOS_START + 146)
+#define SID_SEND_SERVERNAME             (SID_CHAOS_START + 147)
+#define SID_SEND_USERNAME               (SID_CHAOS_START + 148)
+#define SID_SEND_PASSWORD               (SID_CHAOS_START + 149)
+#define SID_SEND_REPLY_TO_DEFAULT       (SID_CHAOS_START + 150)
+#define SID_SEND_FROM_DEFAULT           (SID_CHAOS_START + 151)
+#define SID_SEND_PUBLIC_PROT_ID         (SID_CHAOS_START + 152)
+#define SID_SEND_PRIVATE_PROT_ID        (SID_CHAOS_START + 153)
+#define SID_SEND_PUBLIC_OUTBOXPROPS     (SID_CHAOS_START + 154)
+#define SID_SEND_PRIVATE_OUTBOXPROPS    (SID_CHAOS_START + 155)
+#define SID_VIM_POPATH                  (SID_CHAOS_START + 156)
+#define SID_SEND_VIM_POPATH             (SID_CHAOS_START + 157)
+#define SID_SEARCH_CRITERIA             (SID_CHAOS_START + 158)
+#define SID_SEARCH_LOCATIONS            (SID_CHAOS_START + 159)
+#define SID_SEARCH_RECURSIVE            (SID_CHAOS_START + 160)
+#define SID_SEARCH_FOLDER_VIEW          (SID_CHAOS_START + 161)
+#define SID_SEARCH_DOCUMENT_VIEW        (SID_CHAOS_START + 162)
+#define SID_TRASHCAN_EMPTY_TRASH        (SID_CHAOS_START + 163)
+#define SID_TRASHCAN_FLAG_AUTODELETE    (SID_CHAOS_START + 164)
+#define SID_TRASHCAN_FLAG_CONFIRMEMPTY  (SID_CHAOS_START + 165)
+#define SID_TRASH_RESTORE               (SID_CHAOS_START + 166)
+#define SID_CNT_EXPORT                  (SID_CHAOS_START + 167)
+#define SID_EXPLORER_CREATEPOP3ACCOUNT  (SID_CHAOS_START + 168)
+#define SID_EXPLORER_CREATEIMAPACCOUNT  (SID_CHAOS_START + 169)
+#define SID_EXPLORER_CREATENEWS         (SID_CHAOS_START + 170)
+#define SID_EXPLORER_CREATEOUTTRAY      (SID_CHAOS_START + 171)
+#define SID_EXPLORER_CREATEFTPACCOUNT   (SID_CHAOS_START + 172)
+#define SID_EXPLORER_CREATEVIMACCOUNT   (SID_CHAOS_START + 173)
+#define SID_EXPLORER_CREATEPROPERTYSETFOLDER    (SID_CHAOS_START + 174)
+#define SID_EXPLORER_CREATEFSYS         (SID_CHAOS_START + 175)
+#define SID_EXPLORER_CREATEPROJECT      (SID_CHAOS_START + 176)
+#define SID_EXPLORER_CREATESEARCHFOLDER (SID_CHAOS_START + 177)
+#define SID_EXPLORER_CREATECHANNEL_SUBSCRIBE_BOX    (SID_CHAOS_START + 178)
+#define SID_EXPLORER_CREATECHANNEL_BMK  (SID_CHAOS_START + 179)
+#define SID_WHO_IS_MASTER               (SID_CHAOS_START + 180)
+#define SID_FSYS_KIND                   (SID_CHAOS_START + 181)
+#define SID_FSYS_FLAGS                  (SID_CHAOS_START + 182)
+#define SID_EXPLORER_CREATETRASHCAN     (SID_CHAOS_START + 183)
+#define SID_DOCUMENT_HEADER             (SID_CHAOS_START + 184)
+#define SID_VIEW_FLD_PIC                (SID_CHAOS_START + 185)
+#define SID_FSYS_VALUE_FOLDER           (SID_CHAOS_START + 186)
+#define SID_FOLDER_COUNT                (SID_CHAOS_START + 187)
+#define SID_PURGE                       (SID_CHAOS_START + 188)
+#define SID_FSYS_SHOW_HIDDEN            (SID_CHAOS_START + 189)
+#define SID_CNT_SET_AS_DEFAULT          (SID_CHAOS_START + 190)
+#define SID_FLAG_UPDATE_ON_OPEN         (SID_CHAOS_START + 191)
+#define SID_ATTR_FONT                   (SID_CHAOS_START + 192)
+#define SID_VALUE_ADDED_MODE            (SID_CHAOS_START + 193)
+#define SID_STORE_MARKED                (SID_CHAOS_START + 194)
+#define SID_SEND_COPY_TARGET            (SID_CHAOS_START + 195)
+
+// ERRCODE's -----------------------------------------------------------------
+
+#define ERRCODE_CHAOS_LOGIN_FAILURE_RECEIVE         (ERRCODE_AREA_CHAOS)
+#define ERRCODE_CHAOS_LOGINFAIL_NOEXCH              (ERRCODE_AREA_CHAOS + 1)
+#define ERRCODE_CHAOS_LOGINFAIL_ACCOUNT_NOEXCH      (ERRCODE_AREA_CHAOS + 2)
+#define ERRCODE_CHAOS_CONNECT_FAILURE               (ERRCODE_AREA_CHAOS + 3)
+#define ERRCODE_CHAOS_OFFLINE                       (ERRCODE_AREA_CHAOS + 4)
+#define ERRCODE_CHAOS_SERVER_ERROR                  (ERRCODE_AREA_CHAOS + 5)
+#define ERRCODE_CHAOS_IMAP_BAD_RESPONSE             (ERRCODE_AREA_CHAOS + 6)
+
+#define ERRCODE_CHAOS_WRONG_FILE_FORMAT             (ERRCODE_AREA_CHAOS + 8)
+
+#define ERRCODE_CHAOS_CNTOUT_NO_FROM                (ERRCODE_AREA_CHAOS + 10)
+#define ERRCODE_CHAOS_TO_MANY_GROUPS                (ERRCODE_AREA_CHAOS + 11)
+#define ERRCODE_CHAOS_DELETE_ABORTED                (ERRCODE_AREA_CHAOS + 12)
+#define ERRCODE_CHAOS_QUERY_DELETE                  (ERRCODE_AREA_CHAOS + 13)
+#define ERRCODE_CHAOS_NOTAVAILABLE                  (ERRCODE_AREA_CHAOS + 14)
+#define ERRCODE_CHAOS_VIM_LIBRARY_ERROR             (ERRCODE_AREA_CHAOS + 15)
+#define ERRCODE_CHAOS_FOLDER_INVALID                (ERRCODE_AREA_CHAOS + 16)
+#define ERRCODE_CHAOS_FTP_RESOLVERERROR             (ERRCODE_AREA_CHAOS + 17)
+#define ERRCODE_CHAOS_FTP_NETWORKERROR              (ERRCODE_AREA_CHAOS + 18)
+
+#define ERRCODE_CHAOS_NO_VIM_LIBRARY                (ERRCODE_AREA_CHAOS + 23)
+#define ERRCODE_CHAOS_VIM_LIBRARY_CORRUPTED         (ERRCODE_AREA_CHAOS + 24)
+#define ERRCODE_CHAOS_CCMAIL_EXPORT_ERROR           (ERRCODE_AREA_CHAOS + 25)
+#define ERRCODE_CHAOS_NO_CCMAIL_EXPORT_FILE         (ERRCODE_AREA_CHAOS + 26)
+#define ERRCODE_CHAOS_ILLEGAL_CCMAIL_EXPORT_FILE    (ERRCODE_AREA_CHAOS + 27)
+#define ERRCODE_CHAOS_MESSAGE_NOT_FOUND             (ERRCODE_AREA_CHAOS + 28)
+#define ERRCODE_CHAOS_BAD_CCMAIL_EXPORT_PASSWORD    (ERRCODE_AREA_CHAOS + 29)
+#define ERRCODE_CHAOS_CCMAIL_EXPORT_TOO_LONG        (ERRCODE_AREA_CHAOS + 30)
+#define ERRCODE_CHAOS_FOLDER_EXIST                  (ERRCODE_AREA_CHAOS + 31)
+#define ERRCODE_CHAOS_FOLDER_NOT_EXIST              (ERRCODE_AREA_CHAOS + 32)
+#define ERRCODE_CHAOS_NO_VIM_BBOARDLIST             (ERRCODE_AREA_CHAOS + 33)
+#define ERRCODE_CHAOS_ILLEGAL_MESSAGE_ID            (ERRCODE_AREA_CHAOS + 34)
+#define ERRCODE_CHAOS_SERVER_PORT_SYNTAX            (ERRCODE_AREA_CHAOS + 35)
+#define ERRCODE_CHAOS_SERVERNAME_SYNTAX             (ERRCODE_AREA_CHAOS + 36)
+#define ERRCODE_CHAOS_USERNAME_SYNTAX               (ERRCODE_AREA_CHAOS + 37)
+#define ERRCODE_CHAOS_IS_RESCHEDULED                (ERRCODE_AREA_CHAOS + 38)
+#define ERRCODE_CHAOS_VIM_NO_FAKE_MESSAGE_ID        (ERRCODE_AREA_CHAOS + 39)
+#define ERRCODE_CHAOS_FSYS_ROOT_DELETE              (ERRCODE_AREA_CHAOS + 40)
+#define ERRCODE_CHAOS_FILE_EXIST                    (ERRCODE_AREA_CHAOS + 41)
+#define ERRCODE_CHAOS_FILE_NOT_EXIST                (ERRCODE_AREA_CHAOS + 42)
+#define ERRCODE_CHAOS_FSYS_MISPLACED_CHAR           (ERRCODE_AREA_CHAOS + 43)
+#define ERRCODE_CHAOS_FSYS_INVALID_CHAR             (ERRCODE_AREA_CHAOS + 44)
+#define ERRCODE_CHAOS_FSYS_INVALID_DEVICE           (ERRCODE_AREA_CHAOS + 45)
+#define ERRCODE_CHAOS_FSYS_ACCESS_DENIED            (ERRCODE_AREA_CHAOS + 46)
+#define ERRCODE_CHAOS_FSYS_LOCK_VIOLATION           (ERRCODE_AREA_CHAOS + 47)
+#define ERRCODE_CHAOS_FSYS_VOLUME_FULL              (ERRCODE_AREA_CHAOS + 48)
+#define ERRCODE_CHAOS_FSYS_NOT_SUPPORTED            (ERRCODE_AREA_CHAOS + 49)
+#define ERRCODE_CHAOS_FSYS_UNKNOWN                  (ERRCODE_AREA_CHAOS + 50)
+#define ERRCODE_CHAOS_FSYS_NOT_A_FILE               (ERRCODE_AREA_CHAOS + 51)
+#define ERRCODE_CHAOS_FSYS_NOT_A_DIRECTORY          (ERRCODE_AREA_CHAOS + 52)
+#define ERRCODE_CHAOS_FSYS_IS_WILDCARD              (ERRCODE_AREA_CHAOS + 53)
+
+#define ERRCODE_CHAOS_FSYS_UPDATE_NEEDED            (ERRCODE_AREA_CHAOS + 55)
+#define ERRCODE_CHAOS_FSYS_CANT_RESOLVE_CONFLICT    (ERRCODE_AREA_CHAOS + 56)
+
+#define ERRCODE_CHAOS_ONE_NOT_SEARCHABLE            (ERRCODE_AREA_CHAOS + 58)
+#define ERRCODE_CHAOS_MULTIPLE_NOT_SEARCHABLE       (ERRCODE_AREA_CHAOS + 59)
+#define ERRCODE_CHAOS_FSYS_CACHE_INCONSISTENT       (ERRCODE_AREA_CHAOS + 60)
+#define ERRCODE_CHAOS_FSYS_READONLY                 (ERRCODE_AREA_CHAOS + 61)
+#define ERRCODE_CHAOS_FSYS_LOCK                     (ERRCODE_AREA_CHAOS + 62)
+#define ERRCODE_CHAOS_FSYS_UNLOCK                   (ERRCODE_AREA_CHAOS + 63)
+#define ERRCODE_CHAOS_FSYS_DELETE                   (ERRCODE_AREA_CHAOS + 64)
+#define ERRCODE_CHAOS_FSYS_IS_MARKED                (ERRCODE_AREA_CHAOS + 65)
+#define ERRCODE_CHAOS_FTP_GENERAL_FAILURE           (ERRCODE_AREA_CHAOS + 66)
+#define ERRCODE_CHAOS_DO_LOG                        (ERRCODE_AREA_CHAOS + 67)
+#define ERRCODE_CHAOS_HTTP_COOKIE_REQUEST           (ERRCODE_AREA_CHAOS + 68)
+#define ERRCODE_CHAOS_FSYS_LOST_ROOT                (ERRCODE_AREA_CHAOS + 69)
+#define ERRCODE_CHAOS_FTP_PROXY                     (ERRCODE_AREA_CHAOS + 70)
+#define ERRCODE_CHAOS_SOURCE_EQ_TARGET              (ERRCODE_AREA_CHAOS + 71)
+#define ERRCODE_CHAOS_CONFIRM_EMPTY_TRASH           (ERRCODE_AREA_CHAOS + 72)
+#define ERRCODE_CHAOS_FSYS_NO_TARGET                (ERRCODE_AREA_CHAOS + 73)
+#define ERRCODE_CHAOS_FSYS_RECURSIVE                (ERRCODE_AREA_CHAOS + 74)
+#define ERRCODE_CHAOS_FSYS_INSERT_MEDIUM            (ERRCODE_AREA_CHAOS + 75)
+#define ERRCODE_CHAOS_NO_DOCINFO                    (ERRCODE_AREA_CHAOS + 76)
+#define ERRCODE_CHAOS_CCMAIL_EXPORT_NOT_TERMINATING (ERRCODE_AREA_CHAOS + 77)
+#define ERRCODE_CHAOS_EXTERNAL_COMMAND_FAILED       (ERRCODE_AREA_CHAOS + 78)
+#define ERRCODE_CHAOS_RENAME_FAILED                 (ERRCODE_AREA_CHAOS + 79)
+#define ERRCODE_CHAOS_NOT_HANDLED                   (ERRCODE_AREA_CHAOS + 80)
+#define ERRCODE_CHAOS_COULD_NOT_INIT_CMP            (ERRCODE_AREA_CHAOS + 81)
+#define ERRCODE_CHAOS_TRANSFER_URL_NOT_SUPPORTED    (ERRCODE_AREA_CHAOS + 82)
+#define ERRCODE_CHAOS_EMPTY_SERVERNAME              (ERRCODE_AREA_CHAOS + 83)
+#define ERRCODE_CHAOS_EMPTY_USERNAME                (ERRCODE_AREA_CHAOS + 84)
+#define ERRCODE_CHAOS_BAD_INET                      (ERRCODE_AREA_CHAOS + 85)
+#define ERRCODE_CHAOS_IMAP_SERVER_MSG               (ERRCODE_AREA_CHAOS + 86)
+#define ERRCODE_CHAOS_IMAP_CONNECTION_CLOSED        (ERRCODE_AREA_CHAOS + 87)
+#define ERRCODE_CHAOS_IMAP_NOT_IMAP4                (ERRCODE_AREA_CHAOS + 88)
+#define ERRCODE_CHAOS_IMAP_BAD_SERVER               (ERRCODE_AREA_CHAOS + 89)
+#define ERRCODE_CHAOS_REORGANIZE_FILE_LOCKED        (ERRCODE_AREA_CHAOS + 90)
+#define ERRCODE_CHAOS_IMAP_BAD_TITLE                (ERRCODE_AREA_CHAOS + 91)
+#define ERRCODE_CHAOS_SERVER_CONNECT_FAILURE        (ERRCODE_AREA_CHAOS + 92)
+#define ERRCODE_CHAOS_PASSWORD_SYNTAX               (ERRCODE_AREA_CHAOS + 93)
+#define ERRCODE_CHAOS_QUERY_DELETE_CACHE            (ERRCODE_AREA_CHAOS + 94)
+#define ERRCODE_CHAOS_REORGANIZE_NO_DISKSPACE       (ERRCODE_AREA_CHAOS + 95)
+#define ERRCODE_CHAOS_LOGIN_FAILURE_ACCOUNT         (ERRCODE_AREA_CHAOS + 96)
+#define ERRCODE_CHAOS_ACCOUNT_SYNTAX                (ERRCODE_AREA_CHAOS + 97)
+#define ERRCODE_CHAOS_CHANNEL_TERMINATION           (ERRCODE_AREA_CHAOS + 98)
+
+// Tabpage-Ids ---------------------------------------------------------------
+
+#define CNT_TABPAGE_GENERAL                     1
+#define CNT_TABPAGE_SERVER_SETTINGS             2
+#define CNT_TABPAGE_RULES                       3
+#define CNT_TABPAGE_VIEW_PROPERTIES             4
+#define CNT_TABPAGE_CONTENT_PROPERTIES          5
+#define CNT_TABPAGE_SUBSCRIBE                   6
+#define CNT_TABPAGE_RECIPIENT_STATE             7
+#define CNT_TABPAGE_RECV_POP3                   8
+#define CNT_TABPAGE_RECV_NNTP                   9
+#define CNT_TABPAGE_RECV_IMAP                   10
+#define CNT_TABPAGE_RECV_VIM                    11
+#define CNT_TABPAGE_SEND_SMTP                   12
+#define CNT_TABPAGE_SEND_NNTP                   13
+#define CNT_TABPAGE_SEND_VIM                    14
+#define CNT_TABPAGE_MAIL_NEWS_SEND              15
+#define CNT_TABPAGE_SEARCH_CRITERIA         16
+#define CNT_TABPAGE_SEARCH_LOCATIONS        17
+#define CNT_TABPAGE_PROJECT_DATAEXCHANGE        18
+#define CNT_TABPAGE_SBOX_LOCATION           19
+#define CNT_TABPAGE_SBOX_SUBSCRIBTION       20
+#define CNT_TABPAGE_SBOX_SCHEDULE           21
+#define CNT_TABPAGE_FTP_SERVER              22
+#define CNT_TABPAGE_TRASHCAN_OPTIONS        23
+#define CNT_TABPAGE_BMK                     24
+#define CNT_TABPAGE_SBOX_NOTIFICATION       25
+#define CNT_TABPAGE_SBOX_SDC_GENERAL        26
+#define CNT_TABPAGE_SBOX_CDF_SUBSCRIBTION   27
+#define CNT_TABPAGE_BACKGROUND          28
+#define CNT_TABPAGE_HEADER                      29
+#define CNT_TABPAGE_DESCRIPTION                 30
+#define CNT_TABPAGE_FONT            31
+#define CNT_TABPAGE_FOLDER_BMK                  32
+#define CNT_TABPAGE_DOCUMENT_BMK                33
+#define CNT_TABPAGE_WEBVIEW                     34
+
+
+#define DEF_WIDTH_FROM                      150
+#define DEF_WIDTH_TITLE_MAIL                300
+#define DEF_WIDTH_IS_MARKED                 60
+#define DEF_WIDTH_IS_READ                   60
+#define DEF_WIDTH_DATE_CREATED              100
+#define DEF_WIDTH_PRIORITY                  30
+#define DEF_WIDTH_DOCUMENT_SIZE             90
+#define DEF_WIDTH_RECIPIENTLIST             150
+#define DEF_WIDTH_TITLE_FSYS                150
+#define DEF_WIDTH_TITLE_SUBSCRIBE           230
+#define DEF_WIDTH_SUBSCRIBE_CRAWL_STATUS    180
+#define DEF_WIDTH_SUBSCRIBE_NEXT_UPD        120
+#define DEF_WIDTH_SUBSCRIBE_TARGET_URL      190
+#define DEF_WIDTH_CONTENT_TYPE              100
+#define DEF_WIDTH_TRASH_ORIGIN              150
+
+
+// -----    Help IDs    -----
+
+#define HID_CHAOS_NEW_IMAP_BOX          HID_CHAOS_START
+#define HID_CHAOS_NEW_IMAP_MSG          (HID_CHAOS_START + 1)
+#define HID_CHAOS_NEW_IMAP_FLD          (HID_CHAOS_START + 2)
+#define HID_CHAOS_NEW_NEWS_BOX          (HID_CHAOS_START + 3)
+#define HID_CHAOS_NEW_NEWS_MSG          (HID_CHAOS_START + 4)
+#define HID_CHAOS_NEW_FSYS_FLD          (HID_CHAOS_START + 5)
+#define HID_CHAOS_NEW_FSYS_LNK          (HID_CHAOS_START + 6)
+#define HID_CHAOS_NEW_FTP_BOX           (HID_CHAOS_START + 7)
+#define HID_CHAOS_NEW_FTP_FLD           (HID_CHAOS_START + 8)
+#define HID_CHAOS_NEW_OUT_BOX           (HID_CHAOS_START + 9)
+#define HID_CHAOS_NEW_OUT_MSG           (HID_CHAOS_START + 10)
+#define HID_CHAOS_NEW_POP3_BOX          (HID_CHAOS_START + 11)
+#define HID_CHAOS_NEW_POP3_MSG          (HID_CHAOS_START + 12)
+#define HID_CHAOS_NEW_SEARCH            (HID_CHAOS_START + 13)
+#define HID_CHAOS_NEW_VIM_BOX           (HID_CHAOS_START + 14)
+#define HID_CHAOS_NEW_VIM_MSG           (HID_CHAOS_START + 15)
+#define HID_CHAOS_NEW_SUBSCR_BOX        (HID_CHAOS_START + 16)
+#define HID_CHAOS_NEW_BOOKMARK          (HID_CHAOS_START + 17)
+#define HID_CHAOS_NEW_PUB_BOX           (HID_CHAOS_START + 18)
+
+#endif
+

@@ -1,0 +1,245 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_configuration_ConfigurationAccess_idl__
+#define __com_sun_star_configuration_ConfigurationAccess_idl__
+
+#include <com/sun/star/configuration/HierarchyAccess.idl>
+#include <com/sun/star/configuration/HierarchyElement.idl>
+#include <com/sun/star/configuration/SetAccess.idl>
+#include <com/sun/star/configuration/GroupAccess.idl>
+#include <com/sun/star/configuration/AccessRootElement.idl>
+#include <com/sun/star/configuration/SetElement.idl>
+#include <com/sun/star/configuration/GroupElement.idl>
+
+//=============================================================================
+
+module com { module sun { module star { module configuration {
+
+//=============================================================================
+/** provides read access to a fragment of the configuration hierarchy.
+
+ <p>Values that are direct or indirect descendants of a root element can be
+ retrieved and, if themselves objects, navigated. Other interfaces provide
+ access to information about this element and its context.
+ Changes to values in the hierarchy can be monitored by event listeners.
+ </p>
+
+ <p>Descendants of this service also implement this service.
+ </p>
+
+ <p>Ultimately the configuration holds values. These values are organized into
+ a hierarchy using structural elements. The structure is defined in advance in
+ a schema. Necessary information from the schema is stored in the configuration
+ repository itself and is accessible through an implementation of this service.
+ </p>
+
+ <p>Two different kinds of structural elements are used in the configuration
+ hierarchy:
+ </p>
+ <dl>
+    <dt>Sets</dt>
+        <dd>are dynamic containers of homogeneous elements. Which elements
+        a <em>set</em> contains can vary. Their names are defined by the
+        clients that insert them. On the other hand, the <em>type</em> of
+        the elements is the same for all elements. In the case of elements
+        that are themselves hierarchy objects, the <em>type</em> includes
+        the structure of the hierarchy fragment they contain. Such types
+        are defined in the configuration schema as <em>templates</em>.
+        </dd>
+
+    <dt>Groups</dt>
+        <dd>are static collections of heterogeneous elements. The names and
+        types of the elements of a <em>group</em> are completely defined in the
+        configuration schema. Here each element may be of a different
+        <em>type</em>, allowing <em>groups</em> that contain a mix of
+        subobjects and simple values.
+        </dd>
+ </dl>
+
+ <p>Objects in the configuration hierarchy, for example, implementations of this service,
+ can thus be classified in the following ways:
+ </p>
+ <ul>
+    <li><em>Container</em> role:
+        An object that can hold child elements as a <em>set</em> or a <em>group</em>.
+    </li>
+    <li><em>Element</em> role:
+        An object may be an element of a <em>set</em> or a <em>group</em>
+        or else it may be the root element.
+    </li>
+ </ul>
+
+ <p>Several types of simple <em>values</em> can be used in the configuration.
+ In addition to the basic (scalar) types, sequences of the basic types are
+ supported. The basic types are:
+ </p>
+
+ <ul>
+    <li><strong>string</strong> can hold a human-readable text.
+        <p>Values are represented as <atom>string</atom>.</p>
+        <p>Sequences are represented as <atom dim="[]">string</atom>.</p>
+        <p>"<em>human-readable</em>" here excludes non-printing characters
+        except for CR, LF and TAB [Unicode code points 9,10,13].
+        For binary data, use type <strong>binary</strong> instead.</p>
+    </li>
+    <li><strong>boolean</strong> can hold the values <TRUE/> or <FALSE/>.
+        <p>Values are represented as <atom>boolean</atom>.
+        <p>Sequences are represented as <atom dim="[]">boolean</atom>.</p>
+    </li>
+    <li><strong>short</strong> can hold a 16-bit signed integer.
+        <p>Values are represented as <atom>short</atom>.</p>
+        <p>Sequences are represented as <atom dim="[]">short</atom>.</p>
+    </li>
+    <li><strong>int</strong> can hold a 32-bit signed integer.
+        <p>Values are represented as <atom>long</atom>.</p>
+        <p>Sequences are represented as <atom dim="[]">long</atom>.</p>
+    </li>
+    <li><strong>long</strong> can hold a 64-bit signed integer.
+        <p>Values are represented as <atom>hyper</atom>.</p>
+        <p>Sequences are represented as <atom dim="[]">hyper</atom>.</p>
+    </li>
+    <li><strong>double</strong> can hold a floating point number.
+        <p>Values are represented as <atom>double</atom>.</p>
+        <p>Sequences are represented as <atom dim="[]">double</atom>.</p>
+    </li>
+    <li><strong>binary</strong> can hold a sequence of octets.
+        <p>Values are represented as <atom dim="[]">byte</atom>.</p>
+        <p>Sequences are represented as <atom dim="[][]">byte</atom>.</p>
+    </li>
+ </ul>
+
+ <p>Within templates an additional type <strong>any</strong> can occur. When
+ such a template is used to create a new <type>SetElement</type>, the type
+ of the element is initially reported as <atom>any</atom> (having no value).
+ When the value of such an element is first set, it will assume the type used.
+ </p>
+
+ <p>If the schema marks a value as <em>nullable</em> (which is indicated by
+ attribute <const scope="com::sun::star::beans">PropertyAttribute::MAYBEVOID</const> ),
+ its contents may be <NULL/>.
+ </p>
+
+ <p>The configuration should support explicit access to default values
+ (implementing <type scope="com::sun::star::beans">XPropertyState</type>
+ and  <type scope="com::sun::star::beans">XPropertyWithState</type>).
+ </p>
+
+ @see ConfigurationProvider
+    Root instances of this service can be requested from a
+    <type>ConfigurationProvider</type>.
+
+ @see ConfigurationUpdateAccess
+    an extended service that includes facilities for modifying
+    configuration data.
+*/
+published service ConfigurationAccess
+{
+    /** provides interfaces to access child and descendent elements.
+
+     <p>An implementation actually implements a specialization of this service,
+     which depends on its <em>Container</em> role.
+     </p>
+
+     <p>Implementations shall implement exactly one of:</p>
+     <ul>
+        <li><type>SetAccess</type> if this element is a <em>Set</em>.</li>
+        <li><type>GroupAccess</type> if this element is a <em>Group</em>.</li>
+     </ul>
+     */
+    service HierarchyAccess;
+
+    /** provides interfaces to obtain information about this element and its
+     role and context in the hierarchy.
+
+     <p>An implementation actually implements a specialization of this service,
+     which depends on its <em>Element</em> role.
+     </p>
+
+     <p>Implementations shall implement exactly one of:</p>
+     <ul>
+        <li><type>AccessRootElement</type> if this element is the
+            <em>Root</em> of the whole hierarchy. Objects that can be
+            created directly by a <type>ConfigurationProvider</type>
+            implement this service.</li>
+        <li><type>SetElement</type> if this element may be contained in a
+            <em>Set</em>.</li>
+        <li><type>GroupElement</type> if this element is a child of a
+            <em>Group</em>.</li>
+     </ul>
+
+     */
+    service HierarchyElement;
+
+    /** specializes <type>HierarchyAccess</type>, if this element is a <em>Set</em>.
+
+         <p>This is an alternative to <type>GroupAccess</type>.
+        </p>
+    */
+    [optional] service SetAccess;
+
+    /** specializes <type>HierarchyAccess</type>,
+     if this element is a <em>Group</em>.
+     <p>This is an alternative to <type>SetAccess</type>.
+     </p>
+    */
+    [optional] service GroupAccess;
+
+    /** specializes <type>HierarchyElement</type>,
+     if this element is the <em>Root</em> of the whole hierarchy.
+     <p>This is an alternative to <type>SetElement</type>
+     or <type>GroupElement</type>.
+     </p>
+
+     @see ConfigurationProvider
+        Instances obtained from a <type>ConfigurationProvider</type> will
+        implement this version of <type>HierarchyElement</type>.
+    */
+    [optional] service AccessRootElement;
+
+    /** specializes <type>HierarchyElement</type>,
+     if this element may be contained in a <em>Set</em>.
+     <p>This is an alternative to <type>AccessRootElement</type>
+     or <type>GroupElement</type>.
+     </p>
+    */
+    [optional] service SetElement;
+
+    /** specializes <type>HierarchyElement</type>,
+     if this element is a child of a <em>Group</em>.
+     <p>This is an alternative to <type>AccessRootElement</type>
+     or <type>SetElement</type>.
+     </p>
+*/
+    [optional] service GroupElement;
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif
+

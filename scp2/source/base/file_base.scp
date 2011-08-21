@@ -1,0 +1,89 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * 
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#include "macros.inc"
+
+File gid_File_Exe_Sbase
+    BIN_FILE_BODY;
+    Dir = gid_Brand_Dir_Program;
+    Name = EXENAME(sbase);
+  #ifdef WNT
+    FileDescription = "%PRODUCTNAME Base";
+    Styles = (PACKED, PATCH_SO_NAME);
+  #else
+    Styles = (PACKED);
+  #endif
+End
+
+#if defined WNT
+File gid_File_Exe_Odbcconfig
+    BIN_FILE_BODY;
+    Dir = gid_Dir_Program;
+    Name = EXENAME(odbcconfig);
+    Styles = (PACKED);
+End
+#endif
+
+STD_LIB_FILE( gid_File_Lib_Abp, abp)
+STD_RES_FILE( gid_File_Res_Abp, abp)
+
+STD_LIB_FILE( gid_File_Lib_Dbp, dbp)
+STD_RES_FILE( gid_File_Res_Dbp, dbp)
+
+STD_LIB_FILE( gid_File_Lib_Dbu, dbu )
+STD_RES_FILE( gid_File_Res_Dbu, dbu)
+
+STD_LIB_FILE( gid_File_Lib_Adabasui, adabasui )
+STD_RES_FILE( gid_File_Res_Adabasui, adabasui)
+
+STD_RES_FILE( gid_File_Res_Cnr, cnr)
+STD_RES_FILE( gid_File_Res_Sdbcl, sdbcl)
+STD_RES_FILE( gid_File_Res_Sdberr, sdberr)
+
+STD_LIB_FILE( gid_File_Lib_Rpt, rpt )
+STD_RES_FILE( gid_File_Res_Rpt, rpt)
+
+STD_LIB_FILE( gid_File_Lib_Rptui, rptui )
+STD_RES_FILE( gid_File_Res_Rptui, rptui)
+
+STD_LIB_FILE( gid_File_Lib_Rptxml, rptxml )
+
+#if defined WITH_HELP
+File gid_File_Help_Sdatabase_Zip
+    Dir = gid_Dir_Help_Isolanguage;
+    ARCHIVE_TXT_FILE_BODY_HELPPACK;
+    EXTRA_ALL_GOOD_HELP_LOCALIZATIONS_LANG(sdatabase);
+    Patchfiles = (); 
+End
+#endif
+
+File gid_File_Share_Registry_Base_Xcd
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Registry;
+    Name = "base.xcd";
+End

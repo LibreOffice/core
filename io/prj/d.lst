@@ -1,0 +1,12 @@
+..\%__SRC%\bin\*.dll %_DEST%\bin\*
+..\%__SRC%\bin\*.rdb %_DEST%\rdb\*
+..\source\acceptor\acceptor.xml %_DEST%\xml\acceptor.uno.xml
+..\source\connector\connectr.xml %_DEST%\xml\connector.uno.xml
+..\source\stm\stm.xml %_DEST%\xml\streams.uno.xml
+..\%__SRC%\lib\*.so %_DEST%\lib\*
+..\%__SRC%\lib\*.dylib %_DEST%\lib\*
+..\%__SRC%\misc\acceptor.component %_DEST%\xml\acceptor.component
+..\%__SRC%\misc\connector.component %_DEST%\xml\connector.component
+..\%__SRC%\misc\streams.component %_DEST%\xml\streams.component
+..\%__SRC%\misc\textinstream.component %_DEST%\xml\textinstream.component
+..\%__SRC%\misc\textoutstream.component %_DEST%\xml\textoutstream.component

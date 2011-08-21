@@ -1,0 +1,443 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#include "CustomAnimation.hrc"
+
+Menu RID_EFFECT_CONTEXTMENU
+{
+    ItemList =
+    {
+        MenuItem
+        {
+            Identifier = CM_WITH_CLICK ;
+            Text [ en-US ] = "Start On ~Click" ;
+        };
+        MenuItem
+        {
+            Identifier = CM_WITH_PREVIOUS ;
+            Text [ en-US ] = "Start ~With Previous" ;
+        };
+        MenuItem
+        {
+            Identifier = CM_AFTER_PREVIOUS;
+            Text [ en-US ] = "Start ~After Previous" ;
+        };
+        MenuItem
+        {
+            Separator = TRUE ;
+        };
+        MenuItem
+        {
+            Identifier = CM_OPTIONS;
+            Text [ en-US ] = "~Effect Options..." ;
+        };
+        MenuItem
+        {
+            Identifier = CM_DURATION;
+            Text [ en-US ] = "~Timing..." ;
+        };
+        MenuItem
+        {
+            Identifier = CM_REMOVE;
+            Text [ en-US ] = "~Remove" ;
+        };
+    };
+};
+
+Menu RID_CUSTOMANIMATION_FONTSIZE_POPUP
+{
+    ItemList =
+    {
+        MenuItem
+        {
+            Identifier = CM_SIZE_25 ;
+            Text [ en-US ] = "Tiny" ;
+        };
+        MenuItem
+        {
+            Identifier = CM_SIZE_50 ;
+            Text [ en-US ] = "Smaller" ;
+        };
+        MenuItem
+        {
+            Identifier = CM_SIZE_150 ;
+            Text [ en-US ] = "Larger" ;
+        };
+        MenuItem
+        {
+            Identifier = CM_SIZE_400 ;
+            Text [ en-US ] = "Extra large" ;
+        };
+    };
+};
+
+Menu RID_CUSTOMANIMATION_SCALE_POPUP
+{
+    ItemList =
+    {
+        MenuItem
+        {
+            Identifier = CM_SIZE_25 ;
+            Text [ en-US ] = "Tiny" ;
+        };
+        MenuItem
+        {
+            Identifier = CM_SIZE_50 ;
+            Text [ en-US ] = "Smaller" ;
+        };
+        MenuItem
+        {
+            Identifier = CM_SIZE_150 ;
+            Text [ en-US ] = "Larger" ;
+        };
+        MenuItem
+        {
+            Identifier = CM_SIZE_400 ;
+            Text [ en-US ] = "Extra large" ;
+        };
+        MenuItem
+        {
+            Separator = TRUE ;
+        };
+        MenuItem
+        {
+            Identifier = CM_HORIZONTAL  ;
+            Text [ en-US ] = "Horizontal" ;
+
+        };
+        MenuItem
+        {
+            Identifier = CM_VERTICAL ;
+            Text [ en-US ] = "Vertical" ;
+
+        };
+        MenuItem
+        {
+            Identifier = CM_BOTH ;
+            Text [ en-US ] = "Both" ;
+
+        };
+    };
+};
+
+Menu RID_CUSTOMANIMATION_ROTATION_POPUP
+{
+    ItemList =
+    {
+        MenuItem
+        {
+            Identifier = CM_QUARTER_SPIN ;
+            Text [ en-US ] = "Quarter spin" ;
+        };
+        MenuItem
+        {
+            Identifier = CM_HALF_SPIN ;
+            Text [ en-US ] = "Half spin" ;
+        };
+        MenuItem
+        {
+            Identifier = CM_FULL_SPIN;
+            Text [ en-US ] = "Full spin" ;
+        };
+        MenuItem
+        {
+            Identifier = CM_TWO_SPINS;
+            Text [ en-US ] = "Two spins" ;
+        };
+        MenuItem
+        {
+            Separator = TRUE ;
+        };
+        MenuItem
+        {
+            Identifier = CM_CLOCKWISE;
+            Text [ en-US ] = "Clockwise" ;
+        };
+        MenuItem
+        {
+            Identifier = CM_COUNTERCLOCKWISE;
+            Text [ en-US ] = "Counter-clockwise" ;
+        };
+    };
+};
+
+Menu RID_CUSTOMANIMATION_FONTSTYLE_POPUP
+{
+    ItemList =
+    {
+        MenuItem
+        {
+            Identifier = CM_BOLD ;
+            Text [ en-US ] = "Bold" ;
+        };
+        MenuItem
+        {
+            Identifier = CM_ITALIC ;
+            Text [ en-US ] = "Italic" ;
+        };
+        MenuItem
+        {
+            Identifier = CM_UNDERLINED ;
+            Text [ en-US ] = "Underlined" ;
+        };
+    };
+};
+
+String STR_CUSTOMANIMATION_DURATION_VERY_SLOW
+{
+    Text [ en-US ] = "Very slow";
+};
+
+String STR_CUSTOMANIMATION_DURATION_SLOW
+{
+    Text [ en-US ] = "Slow";
+};
+
+String STR_CUSTOMANIMATION_DURATION_NORMAL
+{
+    Text [ en-US ] = "Medium";
+};
+
+String STR_CUSTOMANIMATION_DURATION_FAST
+{
+    Text [ en-US ] = "Fast";
+};
+
+String STR_CUSTOMANIMATION_DURATION_VERY_FAST
+{
+    Text [ en-US ] = "Very fast";
+};
+
+String STR_CUSTOMANIMATION_REPEAT_NONE
+{
+    Text [ en-US ] = "none";
+};
+
+String STR_CUSTOMANIMATION_REPEAT_UNTIL_NEXT_CLICK
+{
+    Text [ en-US ] = "Until next click";
+};
+
+String STR_CUSTOMANIMATION_REPEAT_UNTIL_END_OF_SLIDE
+{
+    Text [ en-US ] = "Until end of slide";
+};
+
+String STR_CUSTOMANIMATION_DIRECTION_PROPERTY
+{
+    Text [ en-US ] = "Direction";
+};
+
+String STR_CUSTOMANIMATION_ZOOM_PROPERTY
+{
+    Text [ en-US ] = "Zoom";
+};
+
+String STR_CUSTOMANIMATION_SPOKES_PROPERTY
+{
+    Text [ en-US ] = "Spokes";
+};
+
+String STR_CUSTOMANIMATION_FIRST_COLOR_PROPERTY
+{
+    Text [ en-US ] = "First color";
+};
+
+String STR_CUSTOMANIMATION_SECOND_COLOR_PROPERTY
+{
+    Text [ en-US ] = "Second color";
+};
+
+String STR_CUSTOMANIMATION_FILL_COLOR_PROPERTY
+{
+    Text [ en-US ] = "Fill color";
+};
+
+String STR_CUSTOMANIMATION_STYLE_PROPERTY
+{
+    Text [ en-US ] = "Style";
+};
+
+String STR_CUSTOMANIMATION_FONT_PROPERTY
+{
+    Text [ en-US ] = "Font";
+};
+
+String STR_CUSTOMANIMATION_FONT_COLOR_PROPERTY
+{
+    Text [ en-US ] = "Font color";
+};
+
+String STR_CUSTOMANIMATION_FONT_SIZE_STYLE_PROPERTY
+{
+    Text [ en-US ] = "Style";
+};
+
+String STR_CUSTOMANIMATION_FONT_STYLE_PROPERTY
+{
+    Text [ en-US ] = "Typeface";
+};
+
+String STR_CUSTOMANIMATION_LINE_COLOR_PROPERTY
+{
+    Text [ en-US ] = "Line color";
+};
+
+String STR_CUSTOMANIMATION_SIZE_PROPERTY
+{
+    Text [ en-US ] = "Font size";
+};
+
+String STR_CUSTOMANIMATION_SCALE_PROPERTY
+{
+    Text [ en-US ] = "Size";
+};
+
+String STR_CUSTOMANIMATION_AMOUNT_PROPERTY
+{
+    Text [ en-US ] = "Amount";
+};
+
+String STR_CUSTOMANIMATION_COLOR_PROPERTY
+{
+    Text [ en-US ] = "Color";
+};
+
+String STR_CUSTOMANIMATION_NO_SOUND
+{
+    Text [ en-US ] = "(No sound)";
+};
+
+String STR_CUSTOMANIMATION_STOP_PREVIOUS_SOUND
+{
+    Text [ en-US ] = "(Stop previous sound)";
+};
+
+String STR_CUSTOMANIMATION_BROWSE_SOUND
+{
+    Text [ en-US ] = "Other sound...";
+};
+
+String STR_CUSTOMANIMATION_SAMPLE
+{
+    Text [ en-US ] = "Sample";
+};
+
+String STR_CUSTOMANIMATION_1_SPOKES
+{
+    Text [ en-US ] = "1 Spoke";
+};
+
+String STR_CUSTOMANIMATION_2_SPOKES
+{
+    Text [ en-US ] = "2 Spokes";
+};
+
+String STR_CUSTOMANIMATION_3_SPOKES
+{
+    Text [ en-US ] = "3 Spokes";
+};
+
+String STR_CUSTOMANIMATION_4_SPOKES
+{
+    Text [ en-US ] = "4 Spokes";
+};
+
+String STR_CUSTOMANIMATION_8_SPOKES
+{
+    Text [ en-US ] = "8 Spokes";
+};
+
+String STR_CUSTOMANIMATION_INSTANT
+{
+    Text [ en-US ] = "Instant";
+};
+
+String STR_CUSTOMANIMATION_GRADUAL
+{
+    Text [ en-US ] = "Gradual";
+};
+
+String STR_CUSTOMANIMATION_TRIGGER
+{
+    Text [ en-US ] = "Trigger";
+};
+
+String STR_CUSTOMANIMATION_LIST_HELPTEXT
+{
+    Text [ en-US ] = "First select the slide element and then click 'Add...' to add an animation effect.";
+};
+
+Image IMG_CUSTOMANIMATION_ON_CLICK
+{
+    ImageBitmap = Bitmap { File = "click_16.png" ; };
+};
+
+Image IMG_CUSTOMANIMATION_AFTER_PREVIOUS
+{
+    ImageBitmap = Bitmap { File = "time_16.png" ; };
+};
+
+Image IMG_CUSTOMANIMATION_ENTRANCE_EFFECT
+{
+    ImageBitmap = Bitmap { File = "effect_16.png" ; };
+};
+
+Image IMG_CUSTOMANIMATION_EMPHASIS_EFFECT
+{
+    ImageBitmap = Bitmap { File = "effectshape_16.png" ; };
+};
+
+Image IMG_CUSTOMANIMATION_EXIT_EFFECT
+{
+    ImageBitmap = Bitmap { File = "effectfade_16.png" ; };
+};
+
+Image IMG_CUSTOMANIMATION_MOTION_PATH
+{
+    ImageBitmap = Bitmap { File = "effectpath_16.png" ; };
+};
+
+Image IMG_CUSTOMANIMATION_OLE
+{
+    ImageBitmap = Bitmap { File = "effectole_16.png"; } ;
+};
+
+Image IMG_CUSTOMANIMATION_MEDIA_PLAY
+{
+    ImageBitmap = Bitmap { File = "playblue_16.png"; } ;
+};
+
+Image IMG_CUSTOMANIMATION_MEDIA_PAUSE
+{
+    ImageBitmap = Bitmap { File = "breakplayingblue_16.png"; } ;
+};
+
+Image IMG_CUSTOMANIMATION_MEDIA_STOP
+{
+    ImageBitmap = Bitmap { File = "stopplayingblue_16.png"; } ;
+};

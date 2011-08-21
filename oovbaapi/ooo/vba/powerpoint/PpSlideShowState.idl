@@ -1,0 +1,9 @@
+module ooo { module vba { module powerpoint {
+    constants PpSlideShowState {
+        const long ppSlideShowBlackScreen = 3;
+        const long ppSlideShowDone = 5;
+        const long ppSlideShowPaused = 2;
+        const long ppSlideShowRunning = 1;
+        const long ppSlideShowWhiteScreen = 4;
+    };
+}; }; };

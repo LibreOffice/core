@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE Locale SYSTEM 'locale.dtd'>
+<Locale versionDTD="2.0.3" allowUpdateFromCLDR="no" version="0.1">
+  <LC_INFO>
+    <Language>
+      <LangID>nr</LangID>
+      <DefaultName>Ndebele, South</DefaultName>
+    </Language>
+    <Country>
+      <CountryID>ZA</CountryID>
+      <DefaultName>South Africa</DefaultName>
+    </Country>
+  </LC_INFO>
+  <LC_CTYPE ref="en_ZA"/>
+  <LC_FORMAT ref="en_ZA" replaceTo="[$R-62C]"/>
+  <LC_COLLATION ref="en_US"/>
+  <LC_SEARCH ref="en_US"/>
+  <LC_INDEX ref="en_US"/>
+  <LC_CALENDAR>
+    <Calendar unoid="gregorian" default="true">
+      <DaysOfWeek>
+        <Day>
+          <DayID>sun</DayID>
+          <DefaultAbbrvName>Son</DefaultAbbrvName>
+          <DefaultFullName>uSonto</DefaultFullName>
+        </Day>
+        <Day>
+          <DayID>mon</DayID>
+          <DefaultAbbrvName>Mvu</DefaultAbbrvName>
+          <DefaultFullName>uMvulo</DefaultFullName>
+        </Day>
+        <Day>
+          <DayID>tue</DayID>
+          <DefaultAbbrvName>Bil</DefaultAbbrvName>
+          <DefaultFullName>uLesibili</DefaultFullName>
+        </Day>
+        <Day>
+          <DayID>wed</DayID>
+          <DefaultAbbrvName>Tha</DefaultAbbrvName>
+          <DefaultFullName>Lesithathu</DefaultFullName>
+        </Day>
+        <Day>
+          <DayID>thu</DayID>
+          <DefaultAbbrvName>Ne</DefaultAbbrvName>
+          <DefaultFullName>uLesine</DefaultFullName>
+        </Day>
+        <Day>
+          <DayID>fri</DayID>
+          <DefaultAbbrvName>Hla</DefaultAbbrvName>
+          <DefaultFullName>ngoLesihlanu</DefaultFullName>
+        </Day>
+        <Day>
+          <DayID>sat</DayID>
+          <DefaultAbbrvName>Gqi</DefaultAbbrvName>
+          <DefaultFullName>umGqibelo</DefaultFullName>
+        </Day>
+      </DaysOfWeek>
+      <MonthsOfYear>
+        <Month>
+          <MonthID>jan</MonthID>
+          <DefaultAbbrvName>Jan</DefaultAbbrvName>
+          <DefaultFullName>Janabari</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>feb</MonthID>
+          <DefaultAbbrvName>Feb</DefaultAbbrvName>
+          <DefaultFullName>uFeberbari</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>mar</MonthID>
+          <DefaultAbbrvName>Mat</DefaultAbbrvName>
+          <DefaultFullName>uMatjhi</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>apr</MonthID>
+          <DefaultAbbrvName>Apr</DefaultAbbrvName>
+          <DefaultFullName>u-Apreli</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>may</MonthID>
+          <DefaultAbbrvName>Mey</DefaultAbbrvName>
+          <DefaultFullName>Meyi</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>jun</MonthID>
+          <DefaultAbbrvName>Jun</DefaultAbbrvName>
+          <DefaultFullName>Juni</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>jul</MonthID>
+          <DefaultAbbrvName>Jul</DefaultAbbrvName>
+          <DefaultFullName>Julayi</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>aug</MonthID>
+          <DefaultAbbrvName>Arh</DefaultAbbrvName>
+          <DefaultFullName>Arhostosi</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>sep</MonthID>
+          <DefaultAbbrvName>Sep</DefaultAbbrvName>
+          <DefaultFullName>Septemba</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>oct</MonthID>
+          <DefaultAbbrvName>Okt</DefaultAbbrvName>
+          <DefaultFullName>Oktoba</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>nov</MonthID>
+          <DefaultAbbrvName>Usi</DefaultAbbrvName>
+          <DefaultFullName>Usinyikhaba</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>dec</MonthID>
+          <DefaultAbbrvName>Dis</DefaultAbbrvName>
+          <DefaultFullName>Disemba</DefaultFullName>
+        </Month>
+      </MonthsOfYear>
+      <Eras>
+        <Era>
+          <EraID>bc</EraID>
+          <DefaultAbbrvName>BC</DefaultAbbrvName>
+          <DefaultFullName>BC</DefaultFullName>
+        </Era>
+        <Era>
+          <EraID>ad</EraID>
+          <DefaultAbbrvName>AD</DefaultAbbrvName>
+          <DefaultFullName>AD</DefaultFullName>
+        </Era>
+      </Eras>
+      <StartDayOfWeek>
+        <DayID>sun</DayID>
+      </StartDayOfWeek>
+      <MinimalDaysInFirstWeek>1</MinimalDaysInFirstWeek>
+    </Calendar>
+  </LC_CALENDAR>
+  <LC_CURRENCY ref="en_ZA"/>
+  <LC_TRANSLITERATION ref="en_US"/>
+  <LC_MISC>
+    <ReservedWords>
+      <trueWord>qiniso</trueWord>
+      <falseWord>mamala</falseWord>
+      <quarter1Word>1st quarter</quarter1Word>
+      <quarter2Word>2nd quarter</quarter2Word>
+      <quarter3Word>3rd quarter</quarter3Word>
+      <quarter4Word>4th quarter</quarter4Word>
+      <aboveWord>ngaphezulu</aboveWord>
+      <belowWord>ngaphasi</belowWord>
+      <quarter1Abbreviation>Q1</quarter1Abbreviation>
+      <quarter2Abbreviation>Q2</quarter2Abbreviation>
+      <quarter3Abbreviation>Q3</quarter3Abbreviation>
+      <quarter4Abbreviation>Q4</quarter4Abbreviation>
+    </ReservedWords>
+  </LC_MISC>
+  <LC_NumberingLevel ref="en_US"/>
+  <LC_OutLineNumberingLevel ref="en_US"/>
+</Locale>

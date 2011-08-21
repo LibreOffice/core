@@ -1,0 +1,392 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_sdb_RowSet_idl__
+#define __com_sun_star_sdb_RowSet_idl__
+
+#include <com/sun/star/sdbc/RowSet.idl>
+
+module com {  module sun {  module star {  module sdbc {
+published interface XConnection;
+};};};};
+#include <com/sun/star/sdb/ResultSet.idl>
+#include <com/sun/star/sdb/XCompletedExecution.idl>
+
+ module com {  module sun {  module star {  module sdbcx {
+published interface XDeleteRows;
+};};};};
+
+ module com {  module sun {  module star {  module sdb {
+
+published interface XRowSetApproveBroadcaster;
+published interface XResultSetAccess;
+published interface XParametersSupplier;
+
+
+/** is a client side RowSet, which use retrieves is data based on a database table,
+    a query or a SQL command or by a row set reader, who mustn't support SQL.
+    The connection of the row set is typically a named DataSource or a DataAccess component
+    or a previous instantiated connection.
+    <p>
+    Depending on the
+    <type scope="com::sun::star::sdbc">ResultSetConcurrency</type>
+    , the RowSet caches all data or uses
+    an optimized way for retrieving the data, such as, refetching rows by their keys or
+    if provided, by their bookmarks.
+    </p>
+    <p>
+    In addition, it provides events for RowSet navigation and RowSet modifications
+    to approve the actions and to react on them.
+    @see com::sun::star::sdb::RowChangeAction
+    @see com::sun::star::sdb::RowChangeEvent
+    @see com::sun::star::sdb::RowsChangeEvent
+    </p>
+
+    <h3>Notifications</h3>
+    <p>A row set is able to be operated in various ways, and additionally it notifies various changes in it's
+    state. Clients of this service can rely on a fixed order of notifications, depending on how they operate
+    on the component.</br>
+    The following describes the general order of all possible notifications which you can encounter when
+    working with a row set:
+    <table>
+        <tr><td valign="top"><em>approving</em></td>
+            <td valign="top">Before anything really happens, any veto listeners are called to approve the operation
+                which is just being done. This may be either a
+                <member>XRowSetApproveListener::approveCursorMove</member> or
+                <member>XRowSetApproveListener::approveRowChange</member> call.
+                @see XRowSetApproveListener
+            </td>
+        </tr>
+        <tr><td valign="top"><em>column values</em></td>
+            <td valign="top">If the operation includes changes in the values of the columns of the row set, then these are
+            notified before anything else (except requests for approval).
+            @see ResultSet
+            @see com::sun::star::sdbcx::XColumnsSupplier
+            </td>
+        </tr>
+        <tr><td valign="top"><em>operation done</em></td>
+            <td valign="top">When the operation is done, you get a notification about this. It may be a
+            <member scope="com::sun::star::sdbc">XRowSetListener::cursorMoved</member> or a
+            <member scope="com::sun::star::sdbc">XRowSetListener::rowChanged</member> call or a
+            <member>XRowsChangeListener::rowsChanged</member> call.
+            </td>
+        </tr>
+        <tr><td valign="top"><em>row state</em></td>
+            <td valign="top">If the operation leads to a change in the state of the <member>IsModified</member>
+            and/or <member>IsNew</member> property, this is notified next (in this order).
+            </td>
+        </tr>
+        <tr><td valign="top"><em>row count</em></td>
+            <td valign="top">If the operation leads to new knowledge about the number of rows in the result set,
+            the respective changes in the <member>RowCount</member> and <member>IsRowCountFinal</member>
+            are notified last (in this order).
+            </td>
+        </tr>
+    </table>
+    </p>
+
+    <br/>
+
+    <p>The following matrix shows the notifications which apply to the different operations:
+    <table border="1" frame="all">
+        <tr><td/><td><strong>approveCursorMove</strong></td><td><strong>approveRowChange</strong></td>
+                <td><strong>column values</strong></td>
+                <td><strong>cursorMoved</strong></td><td><strong>rowChanged</strong></td>
+                <td><strong>rowsChanged</strong></td>
+                <td><strong>IsModified</strong></td><td><strong>IsNew</strong></td>
+                <td><strong>RowCount</strong></td><td><strong>IsRowCountFinal</strong></td>
+        </tr>
+
+        <tr><td><type scope="com::sun::star::sdbc">XResultSet</type></td><td/><td/><td/><td/><td/><td/><td/><td/></tr>
+
+        <tr><td align="right"><em>next</em></td><td align="center">X</td><td/><td align="center">X</td><td align="center">X</td><td/><td/><td align="center">X</td><td align="center">X</td><td align="center">X</td><td align="center">X</td>
+        <tr><td align="right"><em>beforeFirst</em></td><td align="center">X</td><td/><td align="center">X</td><td align="center">X</td><td/><td/><td align="center">X</td><td align="center">X</td><td/><td/></tr>
+        <tr><td align="right"><em>afterLast</em></td><td align="center">X</td><td/><td align="center">X</td><td align="center">X</td><td/><td/><td align="center">X</td><td align="center">X</td><td align="center">X</td><td align="center">X</td></tr>
+        <tr><td align="right"><em>first</em></td><td align="center">X</td><td/><td align="center">X</td><td align="center">X</td><td/><td/><td align="center">X</td><td align="center">X</td><td align="center">X</td><td align="center">X</td></tr>
+        <tr><td align="right"><em>last</em></td><td align="center">X</td><td/><td align="center">X</td><td align="center">X</td><td/><td/><td align="center">X</td><td align="center">X</td><td align="center">X</td><td align="center">X</td></tr>
+        <tr><td align="right"><em>absolute</em></td><td align="center">X</td><td/><td align="center">X</td><td align="center">X</td><td/><td/><td align="center">X</td><td align="center">X</td><td align="center">X</td><td align="center">X</td></tr>
+        <tr><td align="right"><em>relative</em></td><td align="center">X</td><td/><td align="center">X</td><td align="center">X</td><td/><td/><td align="center">X</td><td align="center">X</td><td align="center">X</td><td align="center">X</td></tr>
+        <tr><td align="right"><em>previous</em></td><td align="center">X</td><td/><td align="center">X</td><td align="center">X</td><td/><td/><td align="center">X</td><td align="center">X</td><td align="center">X</td><td align="center">X</td></tr>
+        <tr><td align="right"><em>refreshRow</em></td><td/><td/><td align="center">X</td><td/><td/><td/><td align="center">X</td><td align="center">X</td><td/><td/></tr>
+        <tr><td align="right"><em>cancelRowUpdates</em></td><td/><td/><td align="center">X</td><td/><td/><td/><td align="center">X</td><td/><td/><td/></tr>
+
+        <tr><td><type scope="com::sun::star::sdbc">XResultSetUpdate</type></td><td/><td/><td/><td/><td/><td/><td/><td/></tr>
+
+        <tr><td align="right"><em>insertRow</em></td><td/><td align="center">X</td><td align="center">X</td><td/><td align="center">X</td><td align="center">X</td><td align="center">X</td><td align="center">X</td><td align="center">X</td><td align="center">X</td></tr>
+        <tr><td align="right"><em>updateRow</em></td><td/><td align="center">X</td><td align="center">X</td><td/><td align="center">X</td><td align="center">X</td><td align="center">X</td><td/><td/><td/></tr>
+        <tr><td align="right"><em>deleteRow</em></td><td/><td align="center">X</td><td/><td/><td align="center">X</td><td align="center">X</td><td align="center">X</td><td align="center">X</td><td align="center">X</td><td align="center">X</td></tr>
+        <tr><td align="right"><em>moveToInsertRow</em></td><td align="center">X</td><td/><td align="center">X</td><td align="center">X</td><td/><td/><td/><td align="center">X</td><td align="center">X</td></tr>
+        <tr><td align="right"><em>moveToCurrentRow</em></td><td align="center">X</td><td/><td/><td align="center">X</td><td/><td/><td align="center">X</td><td align="center">X</td><td/><td/></tr>
+
+        <tr><td><type scope="com::sun::star::sdbcx">XDeleteRows</type></td><td/><td/><td/><td/><td/><td/><td/><td/></tr>
+
+        <tr><td align="right"><em>deleteRows</em></td><td/><td align="center">X</td><td/><td/><td align="center">X</td><td align="center">X</td><td align="center">X</td><td align="center">X</td><td align="center">X</td><td align="center">X</td></tr>
+
+        <tr><td><type scope="com::sun::star::sdbcx">XRowLocate</type></td><td/><td/><td/><td/><td/><td/><td/><td/></tr>
+
+        <tr><td align="right"><em>moveToBookmark</em></td><td align="center">X</td><td/><td align="center">X</td><td align="center">X</td><td/><td/><td align="center">X</td><td align="center">X</td><td/><td/></tr>
+        <tr><td align="right"><em>moveRelativeToBookmark</em></td><td align="center">X</td><td/><td align="center">X</td><td align="center">X</td><td/><td/><td align="center">X</td><td align="center">X</td><td align="center">X</td><td align="center">X</td></tr>
+
+        </tr>
+    </table>
+    </p>
+
+    <h3>Deletions</h3>
+    <p>Via <member scope="com::sun::star::sdbc">XResultSetUpdate::deleteRow</member>, you can delete the current row of a
+    <type>RowSet</type>. This deleted row then doesn't vanish immediately, but is still present, and subsequent calls to
+    <member scope="com::sun::star::sdbc">XResultSet::rowDeleted</member> will return <TRUE/>. The deleted row "vanishes" from
+    the <type>RowSet</type> as soon as the cursor is moved away from it.<br/>
+    As a consequence, the behavior of several other methods is affected:<br/>
+    <dl>
+        <dt><member scope="com::sun::star::sdbc">XResultSet::getRow</member></dt>
+        <dd>returns the position of the cursor, which has not been changed by the deletion.</dd>
+
+        <dt><type scope="com::sun::star::sdbc">XResultSet</type>: <code>next</code>, <code>first</code>, <code>last</code>, <code>absolute</code>,
+            <code>relative</code>, <code>previous</code>, <code>beforeFirst</code>, <code>afterLast</code></dt>
+        <dd>will let the deleted row vanish from the result set. As a consequence, the <member>RowCount</member>
+            will decrease when you do such a move operation after deleting a row.<br/>
+            A special case to note is the <code>next<code> call: When you delete row, say,
+            <code>15</code>, followed by <code>next</code>, then your <type>RowSet</type> afterwards
+            still is on row 15, since the deleted row vanished with the move operation.</dd>
+
+        <dt><member scope="com::sun::star::sdbc">XResultSet::refreshRow</member></dt>
+        <dd>will throw an exception when the cursor is on a deleted row.</dd>
+
+        <dt><type scope="com::sun::star::sdbc">XRow</type>: <code>getFoo</code></dt>
+        <dd>will return an empty value when the cursor is on a deleted row.</dd>
+
+        <dt><member scope="com::sun::star::sdbcx">XRowLocate::getBookmark</member></dt>
+        <dd>will throw an exception when the cursor is on a deleted row.</dd>
+
+        <dt><type scope="com::sun::star::sdbc">XRowUpdate</type>: <code>updateFoo</code></dt>
+        <dd>will throw an exception when the cursor is on a deleted row.</dd>
+
+        <dt><member scope="com::sun::star::sdbc">XResultSetUpdate::deleteRow</member></dt>
+        <dd>will throw an exception when the cursor is on a deleted row.</dd>
+
+        <dt><member scope="com::sun::star::sdbc">XResultSetUpdate::moveToInsertRow</member></dt>
+        <dd>will let the deleted row vanish from the result set. As a consequence, the <member>RowCount</member>
+            will decrease. Also, subsequent calls to
+            <member scope="com::sun::star::sdbc">XResultSetUpdate::moveToCurrentRow</member> will not
+            be able to move back to the deleted row (since it vanished), but only to the
+            row after the deleted row.</dd>
+    </dl>
+    </p>
+ */
+published service RowSet
+{
+    service com::sun::star::sdbc::RowSet;
+
+    service com::sun::star::sdb::ResultSet;
+
+    /** can be used to allow an interaction handler to supply missing data during a execute process.
+
+        <p>If you want a row set to be based on a parametrized query, you will usually use
+        the <type scope="com::sun::star::sdbc">XParameters</type> interface.<br/>
+        However, you can also choose to let an interaction handler supply such data. For this, you may
+        for instance instantiate an <type>InteractionHandler</type>, which asks the user for the
+        data, or you may write your own one, which supplies the data from somewhere else.
+        The default implementation will only ask for parameters which aren't set before through the <type scope="com::sun::star::sdbc">XParameters</type> interface.</p>
+
+        @see com::sun::star::sdb::InteractionHandler
+    */
+    interface com::sun::star::sdb::XCompletedExecution;
+
+    /** approving of actions performed on the row set.
+
+        <p>The support of this interface implies a semantical extension to the <type scope="com::sun::star::sdbc">XResultSetUpdate</type>
+        interface which is supported via the <type scope="com::sun::star::sdbc">ResultSet</type>.</p>
+
+        @see XResultSetUpdate
+     */
+    interface XRowSetApproveBroadcaster;
+
+    /** is the interface for updating row data to the database.
+
+        <p>The optional support of this interface is already implied with the support of the <type scope="com::sun::star::sdbc">ResultSet</type> service.</p>
+
+        <p>However, note that the additional support of the <type>XRowSetApproveBroadcaster</type> interface results
+        in a semantical extension: the methods <member scope="com::sun::star::sdbc">XResultSetUpdate::insertRow</member>,
+        <member scope="com::sun::star::sdbc">XResultSetUpdate::updateRow</member> and <member scope="com::sun::star::sdbc">XResultSetUpdate::deleteRow</member>
+        will now throw the <type>RowSetVetoException</type> if the action which is to be performed was vetoed
+        by one of the <type>XRowSetApproveListener</type>'s.</p>
+     */
+    [optional] interface com::sun::star::sdbc::XResultSetUpdate;
+
+    /** is the interface for deleting more than one row, identified by it's bookmark.
+
+        <p>The optional support of this interface is already implied with the support of the <type scope="com::sun::star::sdbcx">ResultSet</type> service.</p>
+
+        <p>However, note that the additional support of the <type>XRowSetApproveBroadcaster</type> interface results
+        in a semantical extension: the method <member scope="com::sun::star::sdbcx">XDeleteRows::deleteRows</member>
+        will now throw the <type>RowSetVetoException</type> if the deletion was vetoed
+        by one of the <type>XRowSetApproveListener</type>'s.</p>
+     */
+    [optional] interface com::sun::star::sdbcx::XDeleteRows;
+
+    /** creates a second result set which is based on the same data.
+        <p>
+        The new result set is interoperable with the row set which created it,
+        e.g., you can exchange bookmarks between both sets.
+        </p>
+        <p>
+        If the row set is not alive (i.e., it was not executed before),
+        <NULL/>
+        is returned.
+        </p>
+    */
+    interface XResultSetAccess;
+
+    /** gives access to the parameters contained in the SQL statement represented by the component.
+
+        <p>If your <code>RowSet</code> is bound to an SQL command or query which contains parameters, or has
+        a <member>Filter</member> or <member>Order</member> which contains parameters, then those can be accessed
+        using the <code>XParametersSupplier</code> interface.</p>
+
+        <p>The returned container contains parameter objects which do allow write access to the parameters (which
+        is equivalent to using the <type scope="com::sun::star::sdbc">XParameters</type> interface inherited from
+        <type scope="com::sun::star::sdbc">RowSet</type>). Additionally, they provide information about the parameters,
+        such as their name (if they have one), their type, and the like.</p>
+    */
+    [optional] interface XParametersSupplier;
+
+    /** is the connection generated by a DataSource or by a URL. It could
+        also be set from outside. When set from outside the RowSet is not responsible for the closing of the connection.
+     */
+    [property] com::sun::star::sdbc::XConnection ActiveConnection;
+
+
+    /** is the name of the datasource to use, this could be a named datasource
+        or the URL of a data access component.
+     */
+    [property] string DataSourceName;
+
+
+    /** is the command which should be executed, the type of command depends
+        on the CommandType.
+
+        <p>In case of a <member>CommandType</member> of <member>CommandType::COMMAND</member>,
+        means in case the <member>Command</member> specifies an SQL statement, the inherited
+        <member scope="com::sun::star::sdbc">RowSet::EscapeProcessing</member>
+        becomes relevant:<br/>
+        It then can be to used to specify whether the SQL statement should be analyzed on the
+        client side before sending it to the database server.<br/>
+        The default value for <member scope="com::sun::star::sdbc">RowSet::EscapeProcessing</member>
+        is <TRUE/>. By switching it to <FALSE/>, you can pass backend-specific SQL statements,
+        which are not standard SQL, to your database.</p>
+
+        @see com::sun::star::sdb::CommandType
+        @see com::sun::star::sdbc::RowSet::EscapeProcessing
+     */
+    [property] string Command;
+
+    /** is the type of the command.
+        @see com::sun::star::sdb::CommandType
+     */
+    [property] long CommandType;
+
+    /** is the command which is currently used.
+        @see com::sun::star::sdb::CommandType
+     */
+    [readonly, property] string ActiveCommand;
+
+
+    /** indicates whether all results should be discarded or not.
+     */
+    [property] boolean IgnoreResult;
+
+
+    /** additional filter for a row set.
+     */
+    [property] string Filter;
+
+
+    /** indicates whether the filter should be applied or not,
+        default is <FALSE/>.
+     */
+    [property] boolean ApplyFilter;
+
+    /** additional having clause for the row set
+     */
+    [optional,property] string HavingClause;
+
+    /** additional group by for the row set
+     */
+    [optional,property] string GroupBy;
+
+    /** is a additional sort order definition for a row set.
+     */
+    [property] string Order;
+
+
+    /** indicates the privileges for insert, update, and delete.
+        @see com::sun::star::sdbcx::Privilege
+     */
+    [readonly, property] long Privileges;
+
+
+    /** indicates that the current row is modified.
+     */
+    [readonly, property] boolean IsModified;
+
+
+    /** indicates that the current row is going to be inserted to the database.
+     */
+    [readonly, property] boolean IsNew;
+
+
+    /** contains the number of rows accessed in a the data source.
+     */
+    [readonly, property] long RowCount;
+
+
+    /** indicates that all rows of the row set have been counted.
+     */
+    [readonly, property] boolean IsRowCountFinal;
+
+
+    /** is the name of the table which should be updated, this is usually used
+        for queries which relate to more than one table.
+     */
+    [optional, property] string UpdateTableName;
+
+    /** is the name of the table catalog
+     */
+    [optional, property] string UpdateCatalogName;
+
+
+    /** is the name of the table schema.
+     */
+    [optional, property] string UpdateSchemaName;
+};
+
+//=============================================================================
+
+}; }; }; };
+
+/*===========================================================================
+===========================================================================*/
+#endif

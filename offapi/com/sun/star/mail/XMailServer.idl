@@ -1,0 +1,235 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_mail_XMailServer_idl__
+#define __com_sun_star_mail_XMailServer_idl__
+
+#include <com/sun/star/uno/XInterface.idl>
+#include <com/sun/star/mail/XAuthenticator.idl>
+#include <com/sun/star/mail/XMailMessage.idl>
+#include <com/sun/star/auth/AuthenticationFailedException.idl>
+#include <com/sun/star/io/AlreadyConnectedException.idl>
+#include <com/sun/star/io/NotConnectedException.idl>
+#include <com/sun/star/io/UnknownHostException.idl>
+#include <com/sun/star/io/NoRouteToHostException.idl>
+#include <com/sun/star/io/ConnectException.idl>
+#include <com/sun/star/lang/IllegalArgumentException.idl>
+#include <com/sun/star/ucb/InteractiveIOException.idl>
+#include <com/sun/star/mail/MailException.idl>
+#include <com/sun/star/mail/SendMailMessageFailedException.idl>
+#include <com/sun/star/mail/XConnectionListener.idl>
+#include <com/sun/star/datatransfer/UnsupportedFlavorException.idl>
+
+module com { module sun { module star { module mail {
+
+/**
+   Represents a mail server abstraction.
+
+   @see com::sun::star::mail::XMailMessage
+
+   @since OOo 2.0
+ */
+interface XMailServer: ::com::sun::star::uno::XInterface {
+
+    /**
+        The complete domain name of the mail server.
+    */
+    [attribute, readonly] string Name;
+
+    /**
+        The port number that will be used to connect to the mail server.
+        If no port number has been set the default port number 25 will
+        be used.
+    */
+    [attribute] long Port;
+
+    /**
+        Returns all connection types which are supported by the
+        mail server. Possible connection types are for instance
+        secure connections like "SSL" or "TLS".
+
+        @returns
+        a sequence of supported connection types.
+    */
+    sequence<string> getSupportedConnectionTypes();
+
+    /**
+        Set the connection type that will be used to connect to the
+        mail server. The supported connection types may be queried
+        using <code>getSupportedConnectionTypes()</code>.
+        If no connection types has explicitly been set the default
+        connection type will be used.
+
+        @param sConnectionType
+        [in] identifies the connection that should be used to connect
+        to the mail server.
+
+        @throws com::sun::star::lang::IllegalArgumentException
+        if the provided connection type is not supported.
+
+        @see getSupportedConnectionTypes
+        @see isConnectionTypeSupported
+    */
+    void setConnectionType([in] string sConnectionType)
+        raises (com::sun::star::lang::IllegalArgumentException);
+
+    /**
+        Allow a client to query if a certain connection type is
+        supported.
+
+        @param sConnectionType
+        [in] query if a certain connection type is supported.
+
+        @returns
+        <TRUE/> if the specified connection type is supported.
+    */
+    boolean isConnectionTypeSupported([in] string sConnectionType);
+
+    /**
+        Register a connection listener.
+
+        @param xListener
+        [in] a listener that will be informed about connection events.
+
+        @see com::sun::star::mail::XConnectionListener
+    */
+    void addConnectionListener([in] XConnectionListener xListener);
+
+    /**
+        Unregister a connection listener.
+
+        @param xListener
+        [in] a listener that no longer need to be informed about connection events.
+
+        @see com::sun::star::mail::XConnectionListener
+    */
+    void removeConnectionListener([in] XConnectionListener xListener);
+
+    /**
+        Login a user to the mail server. Only one user may logged in
+        at a time. An attempt to login while another user is logged in
+        causes an exception to be thrown.
+
+        @param xAuthenticator
+        [in] an interface used to query for the necessary user information
+        needed to login to the mail server.
+
+        @throws com::sun::star::io::AlreadyConnectedException
+        on a try to connect to an already connect mail server.
+
+        @throws com::sun::star::io::UnknownHostException
+        usually if the IP address of the mail server could not be
+        determined. Possible causes are a broken network connection,
+        a wrong server name, an unreachable DNS server, etc.
+
+        @throws com::sun::star::io::NoRouteToHostException
+        if an error occurred to connect to the remote mail server.
+        Typically the remote mail server cannot be reach because of an
+        intervening firewall, or if an intermediate router is down,
+        the network connection is broken, etc.
+
+        @throws com::sun::star::io::ConnectException
+        if an error occurred while attempting to connect to the remote
+        mail server. Typically the connection was refused remotely,
+        because the mail server is not listening on the remote address/port.
+
+        @throws com::sun::star::auth::AuthenticationException
+        if the specified user could not be logged in.
+
+        @throws com::sun::star::mail::IllegalStateException
+        if a user is currently logged in.
+
+        @throws com::sun::star::mail::MailException
+        for other errors during login.
+
+        @see com::sun::star::mail::XAuthenticator
+        @see com::sun::star::io::AlreadyConnectedException
+        @see com::sun::star::io::UnknownHostException
+        @see com::sun::star::io::NoRouteToHostException
+        @see com::sun::star::io::ConnectException
+        @see com::sun::star::auth::AuthenticationException
+        @see com::sun::star::mail::IllegalStateException
+        @see com::sun::star::mail::MailException
+    */
+    void connectUser([in] XAuthenticator xAuthenticator)
+        raises(com::sun::star::io::AlreadyConnectedException,
+               com::sun::star::io::UnknownHostException,
+               com::sun::star::io::NoRouteToHostException,
+               com::sun::star::io::ConnectException,
+               com::sun::star::auth::AuthenticationFailedException,
+               com::sun::star::mail::MailException);
+
+    /**
+        Log off the currently logged in user.
+
+        @throws com::sun::star::mail::MessagingException
+        if errors occur during logoff.
+    */
+    void disconnectUser()
+        raises(com::sun::star::mail::MailException);
+
+    /**
+        Returns whether a user is currently logged in to the mail server or not.
+
+        @returns
+        <TRUE/> if a user is currently logged in to the mail server.
+    */
+    boolean isUserConnected();
+
+    /**
+        Send a mail message to its recipients.
+
+        @throws com::sun::star::io::NotConnectedException
+        if no user is currently connected to the mail server.
+
+        @throws com::sun::star::mail::SendMailMessageFailedException
+        if the message could not be sent because of invalid recipient
+        addresses. The e-mail addresses of recipients have to conform to
+        <a href="http://www.ietf.org/rfc/rfc822.txt">RFC&nbsp;822</a>.
+
+        @throws com::sun::star::mail::MailException
+        is thrown on other errors that may happen during sending.
+        A possible reason may be for instance that a file attachment
+        specified in a mail message could not be found or accessed.
+
+        @throws com::sun::star::datatransfer::UnsupportedFlavorException
+        is thrown when the body of the mail message is provided in an
+        unsupported mime content type or may be thrown if one of the file
+        attachments specifies an unsupported mime content type.
+
+        @see com::sun::star::io::NotConnectedExceptionException
+        @see com::sun::star::mail::SendMailMessageFailedException
+        @see com::sun::star::mail::MailException
+        @see com::sun::star::datatransfer::UnsupportedFlavorException
+    */
+    void sendMailMessage([in] XMailMessage xMailMessage)
+        raises(com::sun::star::io::NotConnectedException, com::sun::star::mail::SendMailMessageFailedException, com::sun::star::mail::MailException, com::sun::star::datatransfer::UnsupportedFlavorException);
+};
+
+}; }; }; };
+
+#endif

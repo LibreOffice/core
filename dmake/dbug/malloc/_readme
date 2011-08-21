@@ -1,0 +1,133 @@
+# (c) Copyright 1990 Conor P. Cahill. (uunet!virtech!cpcahil) 
+# You may copy, distribute, and use this software as long as this
+# copyright statement is not removed.
+
+This package is a collection of routines which are a drop-in replacement
+for the malloc(3), memory(3), string(3), and bstring(3) library functions.
+
+The purpose of these programs is to aid the development and/or debugging
+of programs using these functions by providing a high level of consistancy
+checking whenever a malloc pointer is used.  Due to this increased 
+level of consistancy checking, these functions have a considerably larger
+overhead than the standard functions, but the extra checking should be
+well worth it in a development environment.
+
+To use these functions all you need to do is compile the library and
+include it on your loader command line.  You do not need to recompile
+your code, only a relink is necessary.  
+
+Features of this library:
+
+ 1. The malloced area returned from each call to malloc is filled with
+    non-null bytes.  This should catch any use of uninitialized malloc
+    area.  The fill pattern for malloced area is 0x01.
+
+ 2. When free is called numerous validity checks are made on the 
+    pointer it is passed.  In addition, the data in the malloc block
+    beyound the size requested on the initial malloc is checked to 
+    verify that it is still filled with the original fill characters.
+
+	This is usefull for catching things like:
+
+		ptr = malloc(5);
+		ptr[5] = '\0';
+
+		/*
+		 * You should not that this will be caught when it is
+		 * freed not when it is done
+		 */
+
+    And finally, the freed block is filled with a different fill pattern
+    so that you can easily determine if you are still using free'd space.
+    The fill pattern for free'd areas is 0x02.
+
+	This is usefull for catching things like:
+
+		ptr = malloc(20);
+
+		bptr = ptr+10;
+
+		/* do something usefule with bptr */
+
+		free(ptr);
+
+		/* 
+		 * now try to do something useful with bptr, it should
+		 * be trashed enough that it would cause real problems
+		 * and when you went to debug the problem it would be
+		 * filled with 0x02's and you would then know to look 
+		 * for something free'ing what bptr points to.
+		 */
+		
+
+ 3. Whenever a bstring(3)/string(3)/memory(3) function is called, it's 
+    parameters are checked as follows:
+
+	If they point somewhere in the malloc arena
+		If the operation goes beyond requested malloc space
+			call malloc_warning()
+
+	This is usefull for catching things like:
+
+		ptr = malloc(5);
+		strcpy(ptr,"abcde");
+			
+	
+ 4. Malloc_warning() and malloc_fatal() are used when an error condition
+    is detected.  If the error is severe, malloc_fatal is called.  
+    Malloc_warning is used otherwise.  The decision about what is fatal
+    and what is a warning was made somewhat arbitrarily.
+
+    Warning messages include:
+
+	Calling free with a bad pointer
+        Calling a bstring/string/memory (3) function which will go beyond
+	    the end of a malloc block (Note that the library function is
+            not modified to refuse the operation.  If malloc warnings are
+	    in the default IGNORE case, the operation will continue and 
+	    at some point cause a real problem).
+
+    Fatal errors are:
+
+	Detectable corruption to the malloc chain.
+	
+
+ 5. The operations to perform when an error is detected are specified at
+    run time by the use of environment variables.
+
+	MALLOC_WARN - specifies the warning error message handling
+	MALLOC_FATAL - specifies the fatal error handling
+
+
+	When one of these error conditions occur you will get an error
+	message and the handler will execute based upon what setting
+	is in the environment variables.  Currently understood settings
+	are as follows:
+
+		  0 - continue operations
+		  1 - drop core and exit
+		  2 - just exit
+		  3 - drop core, but continue executing.  Core files will
+	 		be placed into core.[PID].[counter] i.e: core.00123.001
+		128 - dump malloc chain and continue
+		129 - dump malloc chain, dump core, and exit
+		130 - dump malloc chain, exit
+		131 - dump malloc chain, dump core, continue processing
+		
+
+	There is an additional environment variable MALLOC_ERRFILE which
+	is used to indicate the name of the file for error message output.
+
+	For example, to set up the session to generate a core file for
+	every malloc warning, to drop core and exit on a malloc fatal, and 
+	to log all messages to the file "malloc_log" do the following:
+
+		MALLOC_WARN=131
+		MALLOC_FATAL=1
+		MALLOC_ERRFILE=malloc_log
+
+		export MALLOC_WARN MALLOC_FATAL MALLOC_ERRFILE
+
+ 6. The function malloc_dump() is available to dump the malloc chain whenever
+    you might want.  It's only argument is a file descriptor to use to write
+    the data.  Review the code if you need to know what data is printed.

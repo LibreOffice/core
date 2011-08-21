@@ -1,0 +1,14 @@
+module ooo { module vba { module office {
+    constants MsoPresetExtrusionDirection {
+        const long msoExtrusionBottom = 2;
+        const long msoExtrusionBottomLeft = 3;
+        const long msoExtrusionBottomRight = 1;
+        const long msoExtrusionLeft = 6;
+        const long msoExtrusionNone = 5;
+        const long msoExtrusionRight = 4;
+        const long msoExtrusionTop = 8;
+        const long msoExtrusionTopLeft = 9;
+        const long msoExtrusionTopRight = 7;
+        const long msoPresetExtrusionDirectionMixed = -2;
+    };
+}; }; };

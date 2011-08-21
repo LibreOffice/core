@@ -1,0 +1,60 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_beans_Optional_idl__
+#define __com_sun_star_beans_Optional_idl__
+
+module com {  module sun {  module star {  module beans {
+
+/**
+   An optional value of a given type.
+
+   <p>This structure is used as the type of interface attributes corresponding
+   to instances of <type scopye="com::sun::star::beans">Property</type> that
+   have the <const
+   scope="com::sun::star::beans">PropertyAttribute::MAYBEVOID</const>.  It might
+   also be useful in other situations, for example as the return type of an
+   interface method.</p>
+ */
+published struct Optional<T> {
+    /**
+       Marks this structure instance as having an actual value.
+     */
+    boolean IsPresent;
+
+    /**
+       The actual value of this structure instance.
+
+       <p>If no actual value is present, a producer of such a structure instance
+       should leave this member defaulted, and a consumer of such a structure
+       instance should ignore the specific value stored in this member.</p>
+     */
+    T Value;
+};
+
+}; }; }; };
+
+#endif

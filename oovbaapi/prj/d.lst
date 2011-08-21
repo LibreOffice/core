@@ -1,0 +1,15 @@
+mkdir: %COMMON_DEST%\idl\ooo
+
+mkdir: %COMMON_DEST%\idl\ooo\vba 
+mkdir: %COMMON_DEST%\idl\ooo\vba\constants 
+mkdir: %COMMON_DEST%\idl\ooo\vba\excel 
+mkdir: %COMMON_DEST%\idl\ooo\vba\msforms
+mkdir: %COMMON_DEST%\idl\ooo\vba\word
+
+..\%__SRC%\ucr\oovbaapi.db %_DEST%\bin\oovbaapi.rdb
+
+..\ooo\vba\*.idl %COMMON_DEST%\idl\ooo\vba
+..\ooo\vba\constants\*.idl %COMMON_DEST%\idl\ooo\vba\constants 
+..\ooo\vba\excel\*.idl %COMMON_DEST%\idl\ooo\vba\excel
+..\ooo\vba\msforms\*.idl %COMMON_DEST%\idl\ooo\vba\msforms
+..\ooo\vba\word\*.idl %COMMON_DEST%\idl\ooo\vba\word

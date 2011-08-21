@@ -1,0 +1,392 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#include "GroupsSorting.hrc"
+#include "RptResId.hrc"
+#include "helpids.hrc"
+#ifndef _GLOBLMN_HRC
+#include <svx/globlmn.hrc>
+#endif
+#ifndef _SBASLTID_HRC
+#include <svx/svxids.hrc>
+#endif
+
+
+FloatingWindow RID_GROUPS_SORTING
+{
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( PAGE_WIDTH , PAGE_HEIGHT ) ;
+    Text [ en-US ] = "Sorting and Grouping" ;
+    HelpId = HID_RPT_GROUPSSORTING_DLG;
+    Moveable = TRUE ;
+    Closeable = TRUE ;
+    Sizeable = TRUE;
+
+    FixedLine FL_SEPARATOR2
+    {
+        Pos = MAP_APPFONT ( RELATED_CONTROLS , RELATED_CONTROLS ) ;
+        Size = MAP_APPFONT ( PAGE_WIDTH - 2*RELATED_CONTROLS , FIXEDTEXT_HEIGHT ) ;
+        Text [ en-US ] = "Groups";
+    };
+
+    Control WND_CONTROL
+    {
+        Pos = MAP_APPFONT( UNRELATED_CONTROLS, 2*UNRELATED_CONTROLS );
+        Size = MAP_APPFONT( PAGE_WIDTH - 2*UNRELATED_CONTROLS, BROWSER_HEIGHT );
+        HelpId = HID_RPT_GROUPSBRW ;
+        Border = TRUE;
+        TabStop = TRUE;
+    };
+
+    FixedText FT_MOVELABEL
+    {
+        Pos = MAP_APPFONT ( UNRELATED_CONTROLS , 3*UNRELATED_CONTROLS + BROWSER_HEIGHT ) ;
+        Size = MAP_APPFONT ( FIXEDTEXT_WIDTH , FIXEDTEXT_HEIGHT ) ;
+        Text [ en-US ] = "Group actions" ;
+    };
+
+    ToolBox TB_TOOLBOX
+    {
+        Pos = MAP_APPFONT ( PAGE_WIDTH - 4*14 - UNRELATED_CONTROLS, 3*UNRELATED_CONTROLS + BROWSER_HEIGHT - 1 ) ;
+        ButtonType = BUTTON_SYMBOL;
+        Customize = FALSE;
+        ItemList =
+        {
+            ToolBoxItem
+            {
+                Identifier = SID_RPT_GROUPSORT_MOVE_UP ;
+                HelpID = HID_RPT_GROUPSORT_MOVE_UP ;
+                Text [ en-US ] = "Move up" ;
+                Checkable = TRUE;
+            };
+            ToolBoxItem
+            {
+                Identifier = SID_RPT_GROUPSORT_MOVE_DOWN ;
+                HelpID = HID_RPT_GROUPSORT_MOVE_DOWN ;
+                Text [ en-US ] = "Move down" ;
+                Checkable = TRUE;
+            };
+            ToolBoxItem
+            {
+                Identifier = SID_RPT_GROUPSORT_DELETE ;
+                HelpID = HID_RPT_GROUPSORT_DELETE ;
+                Text [ en-US ] = "~Delete" ;
+                Checkable = TRUE;
+            };
+        };
+    };
+
+    FixedLine FL_SEPARATOR3
+    {
+        Pos = MAP_APPFONT ( RELATED_CONTROLS , 3*UNRELATED_CONTROLS + BROWSER_HEIGHT + BUTTON_HEIGHT) ;
+        Size = MAP_APPFONT ( PAGE_WIDTH - 2*RELATED_CONTROLS , FIXEDTEXT_HEIGHT ) ;
+        Text [ en-US ] = "Properties";
+    };
+
+    FixedText FT_ORDER
+    {
+        Pos = MAP_APPFONT ( UNRELATED_CONTROLS , 4*UNRELATED_CONTROLS + BROWSER_HEIGHT + BUTTON_HEIGHT + FIXEDTEXT_HEIGHT ) ;
+        Size = MAP_APPFONT ( FIXEDTEXT_WIDTH , FIXEDTEXT_HEIGHT ) ;
+        Hide = TRUE;
+        Text [ en-US ] = "Sorting" ;
+    };
+
+    ListBox LST_ORDER
+    {
+        HelpID = "reportdesign:ListBox:RID_GROUPS_SORTING:LST_ORDER";
+        Border = TRUE;
+        Pos = MAP_APPFONT(2*UNRELATED_CONTROLS + FIXEDTEXT_WIDTH, 4*UNRELATED_CONTROLS + BROWSER_HEIGHT + BUTTON_HEIGHT + FIXEDTEXT_HEIGHT - 1 );
+        Size = MAP_APPFONT( LISTBOX_WIDTH, 60 );
+        DropDown = TRUE;
+        TabStop = TRUE;
+        Hide = TRUE;
+        CurPos = 0 ;
+        StringList [ en-US ] =
+        {
+            < "Ascending" ; 0 ; > ;
+            < "Descending" ; 1 ; > ;
+        };
+
+    };
+
+    FixedText FT_HEADER
+    {
+        Pos = MAP_APPFONT ( UNRELATED_CONTROLS , 5*UNRELATED_CONTROLS + BROWSER_HEIGHT + BUTTON_HEIGHT + 2*FIXEDTEXT_HEIGHT) ;
+        Size = MAP_APPFONT ( FIXEDTEXT_WIDTH , FIXEDTEXT_HEIGHT ) ;
+        Hide = TRUE;
+        Text [ en-US ] = "Group Header" ;
+
+    };
+
+    ListBox LST_HEADERLST
+    {
+        HelpID = "reportdesign:ListBox:RID_GROUPS_SORTING:LST_HEADERLST";
+        Border = TRUE;
+        Hide = TRUE;
+        Pos = MAP_APPFONT( 2*UNRELATED_CONTROLS + FIXEDTEXT_WIDTH, 5*UNRELATED_CONTROLS + BROWSER_HEIGHT + BUTTON_HEIGHT + 2*FIXEDTEXT_HEIGHT -1);
+        Size = MAP_APPFONT( LISTBOX_WIDTH, 60 );
+        DropDown = TRUE;
+        TabStop = TRUE;
+        CurPos = 1 ;
+        StringList [ en-US ] =
+        {
+            < "Present" ; Default ; > ;
+            < "Not present" ; Default ; > ;
+        };
+    };
+
+    FixedText FT_FOOTER
+    {
+        Pos = MAP_APPFONT (  UNRELATED_CONTROLS, 6*UNRELATED_CONTROLS + BROWSER_HEIGHT + BUTTON_HEIGHT + 3*FIXEDTEXT_HEIGHT) ;
+        Size = MAP_APPFONT ( FIXEDTEXT_WIDTH , FIXEDTEXT_HEIGHT ) ;
+        Hide = TRUE;
+        Text [ en-US ] = "Group Footer" ;
+
+    };
+
+    ListBox LST_FOOTERLST
+    {
+        HelpID = "reportdesign:ListBox:RID_GROUPS_SORTING:LST_FOOTERLST";
+        Border = TRUE;
+        Hide = TRUE;
+        Pos = MAP_APPFONT( 2*UNRELATED_CONTROLS + FIXEDTEXT_WIDTH, 6*UNRELATED_CONTROLS + BROWSER_HEIGHT + BUTTON_HEIGHT + 3*FIXEDTEXT_HEIGHT -1);
+        Size = MAP_APPFONT( LISTBOX_WIDTH, 60 );
+        DropDown = TRUE;
+        TabStop = TRUE;
+        CurPos = 1 ;
+        StringList [ en-US ] =
+        {
+            < "Present" ; Default ; > ;
+            < "Not present" ; Default ; > ;
+        };
+    };
+
+    FixedText FT_GROUPON
+    {
+        Pos = MAP_APPFONT (  UNRELATED_CONTROLS, 7*UNRELATED_CONTROLS + BROWSER_HEIGHT + BUTTON_HEIGHT + 4*FIXEDTEXT_HEIGHT) ;
+        Size = MAP_APPFONT ( FIXEDTEXT_WIDTH , FIXEDTEXT_HEIGHT ) ;
+        Hide = TRUE;
+        Text [ en-US ] = "Group On" ;
+
+    };
+
+    ListBox LST_GROUPONLST
+    {
+        HelpID = "reportdesign:ListBox:RID_GROUPS_SORTING:LST_GROUPONLST";
+        Border = TRUE;
+        Hide = TRUE;
+        Pos = MAP_APPFONT( 2*UNRELATED_CONTROLS + FIXEDTEXT_WIDTH, 7*UNRELATED_CONTROLS + BROWSER_HEIGHT + BUTTON_HEIGHT + 4*FIXEDTEXT_HEIGHT -1);
+        Size = MAP_APPFONT( LISTBOX_WIDTH, 60 );
+        DropDown = TRUE;
+        TabStop = TRUE;
+        CurPos = 0 ;
+        StringList [ en-US ] =
+        {
+            < "Each Value" ; Default ; > ;
+        };
+    };
+
+    FixedText FT_GROUPINTERVAL
+    {
+        Pos = MAP_APPFONT ( UNRELATED_CONTROLS , 8*UNRELATED_CONTROLS + BROWSER_HEIGHT + BUTTON_HEIGHT + 5*FIXEDTEXT_HEIGHT) ;
+        Size = MAP_APPFONT ( FIXEDTEXT_WIDTH , FIXEDTEXT_HEIGHT ) ;
+        Hide = TRUE;
+        Text [ en-US ] = "Group Interval" ;
+    };
+
+    NumericField ED_GROUPINTERVALLST
+    {
+        HelpID = "reportdesign:NumericField:RID_GROUPS_SORTING:ED_GROUPINTERVALLST";
+        Border = TRUE;
+        Hide = TRUE;
+        Pos = MAP_APPFONT(2*UNRELATED_CONTROLS + FIXEDTEXT_WIDTH , 8*UNRELATED_CONTROLS + BROWSER_HEIGHT + BUTTON_HEIGHT + 5*FIXEDTEXT_HEIGHT -1);
+        Size = MAP_APPFONT( LISTBOX_WIDTH, EDIT_HEIGHT );
+        TabStop = TRUE;
+    };
+
+    FixedText FT_KEEPTOGETHER
+    {
+        Pos = MAP_APPFONT ( UNRELATED_CONTROLS , 9*UNRELATED_CONTROLS + BROWSER_HEIGHT + BUTTON_HEIGHT + 6*FIXEDTEXT_HEIGHT) ;
+        Size = MAP_APPFONT ( FIXEDTEXT_WIDTH , FIXEDTEXT_HEIGHT ) ;
+        Hide = TRUE;
+        Text [ en-US ] = "Keep Together" ;
+    };
+    ListBox LST_KEEPTOGETHERLST
+    {
+        HelpID = "reportdesign:ListBox:RID_GROUPS_SORTING:LST_KEEPTOGETHERLST";
+        Border = TRUE;
+        Hide = TRUE;
+        Pos = MAP_APPFONT(2*UNRELATED_CONTROLS + FIXEDTEXT_WIDTH , 9*UNRELATED_CONTROLS + BROWSER_HEIGHT + BUTTON_HEIGHT + 6*FIXEDTEXT_HEIGHT -1);
+        Size = MAP_APPFONT( LISTBOX_WIDTH, 60 );
+        DropDown = TRUE;
+        TabStop = TRUE;
+        CurPos = 0 ;
+        StringList [ en-US ] =
+        {
+            < "No" ; 0 ; > ;
+            < "Whole Group" ; 1 ; > ;
+            < "With First Detail" ; 2 ; > ;
+        };
+    };
+
+    FixedLine FL_SEPARATOR1
+    {
+        Pos = MAP_APPFONT ( RELATED_CONTROLS , 10*UNRELATED_CONTROLS + BROWSER_HEIGHT + BUTTON_HEIGHT + 7*FIXEDTEXT_HEIGHT) ;
+        Size = MAP_APPFONT ( PAGE_WIDTH - 2*RELATED_CONTROLS , FIXEDTEXT_HEIGHT ) ;
+        Text [ en-US ] = "Help";
+    };
+
+    FixedText HELP_FIELD
+    {
+        Pos = MAP_APPFONT ( UNRELATED_CONTROLS , 12*UNRELATED_CONTROLS + BROWSER_HEIGHT + BUTTON_HEIGHT + 7*FIXEDTEXT_HEIGHT) ;
+        Size = MAP_APPFONT( PAGE_WIDTH - 2*UNRELATED_CONTROLS, 4*FIXEDTEXT_HEIGHT);
+        WordBreak = TRUE;
+    };
+
+};
+
+String STR_RPT_EXPRESSION
+{
+    Text [ en-US ] = "Field/Expression" ;
+};
+
+String STR_RPT_SORTING
+{
+    Text [ en-US ] = "Sort Order" ;
+};
+
+String STR_RPT_PREFIXCHARS
+{
+    Text [ en-US ] = "Prefix Characters" ;
+};
+
+String STR_RPT_YEAR
+{
+    Text [ en-US ] = "Year" ;
+};
+
+String STR_RPT_QUARTER
+{
+    Text [ en-US ] = "Quarter" ;
+};
+
+String STR_RPT_MONTH
+{
+    Text [ en-US ] = "Month" ;
+};
+
+String STR_RPT_WEEK
+{
+    Text [ en-US ] = "Week" ;
+};
+
+String STR_RPT_DAY
+{
+    Text [ en-US ] = "Day" ;
+};
+
+String STR_RPT_HOUR
+{
+    Text [ en-US ] = "Hour" ;
+};
+
+String STR_RPT_MINUTE
+{
+    Text [ en-US ] = "Minute" ;
+};
+
+String STR_RPT_INTERVAL
+{
+    Text [ en-US ] = "Interval" ;
+};
+
+String STR_RPT_HELP_FIELD
+{
+    Text [ en-US ] = "Select a field or type an expression to sort or group on." ;
+};
+
+String STR_RPT_HELP_HEADER
+{
+    Text [ en-US ] = "Display a header for this group?" ;
+};
+
+String STR_RPT_HELP_FOOTER
+{
+    Text [ en-US ] = "Display a footer for this group?" ;
+};
+
+String STR_RPT_HELP_GROUPON
+{
+    Text [ en-US ] = "Select the value or range of values that starts a new group." ;
+};
+
+String STR_RPT_HELP_INTERVAL
+{
+    Text [ en-US ] = "Interval or number of characters to group on." ;
+};
+
+String STR_RPT_HELP_KEEP
+{
+    Text [ en-US ] = "Keep group together on one page?" ;
+};
+
+String STR_RPT_HELP_SORT
+{
+    Text [ en-US ] = "Select ascending or descending sort order. Ascending means from A to Z or 0 to 9" ;
+};
+
+Menu RID_GROUPSROWPOPUPMENU
+{
+    ItemList =
+    {
+        MenuItem
+        {
+            ITEM_EDIT_DELETE
+        };
+    };
+};
+
+
+#define DEF_MASKCOLOR MaskColor = Color { Red = 0xFFFF; Green = 0x0000; Blue = 0xFFFF; }
+
+#define DEF_IL_GROUPSORT \
+\
+    IdList = {\
+        SID_RPT_GROUPSORT_MOVE_UP;\
+        SID_RPT_GROUPSORT_MOVE_DOWN;\
+        SID_RPT_GROUPSORT_DELETE;\
+        };\
+    IdCount = {\
+    3;\
+    }
+
+ImageList IMGLST_GROUPSORT_DLG_SC
+{
+    DEF_MASKCOLOR;
+    prefix = "sc";
+    DEF_IL_GROUPSORT ;
+};

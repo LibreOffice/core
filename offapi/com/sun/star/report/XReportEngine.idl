@@ -1,0 +1,147 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_report_XReportEngine_idl__
+#define __com_sun_star_report_XReportEngine_idl__
+
+#include <com/sun/star/report/XReportDefinition.idl>
+#include <com/sun/star/beans/XPropertySet.idl>
+#include <com/sun/star/lang/XComponent.idl>
+#include <com/sun/star/util/URL.idl>
+#include <com/sun/star/frame/XModel.idl>
+#include <com/sun/star/task/XStatusIndicator.idl>
+#include <com/sun/star/frame/XFrame.idl>
+#include <com/sun/star/sdbc/XConnection.idl>
+#include <com/sun/star/lang/IllegalArgumentException.idl>
+#include <com/sun/star/lang/DisposedException.idl>
+#include <com/sun/star/uno/Exception.idl>
+
+//=============================================================================
+module com {  module sun {  module star {  module report {
+/** identifies a <type>XReportEngine</type> which allows the creation of OpenDocument files.
+
+    <p>The following events are supported by the report engine.
+        OnPageStarted       Is fired when a new page started.
+        OnReportStarted     Is fired when a new report started.
+        OnGroupStarted      Is fired when a new group started.
+        OnGroupEnded        Is fired when the group ended.
+        OnReportEnded       Is fired when the report ended.
+        OnPageEnded         Is fired when the page ended.
+
+    @see com.sun.star.document.OfficeDocument
+*/
+
+published interface XReportEngine
+{
+    /** allows life-time control of report engine.
+     */
+    interface com::sun::star::lang::XComponent;
+
+    /** gives access to the properties.
+    */
+    interface com::sun::star::beans::XPropertySet;
+
+    /** creates a report document.
+        @throws <type scope="com::sun::star::lang">DisposedException</type>
+            If the report engine is already disposed.
+        @throws <type scope="com::sun::star::lang">IllegalArgumentException</type>
+            If the report definition was not set or is <NULL/>.
+    */
+    com::sun::star::frame::XModel createDocumentModel()
+        raises( ::com::sun::star::lang::DisposedException,
+                com::sun::star::lang::IllegalArgumentException,
+                ::com::sun::star::uno::Exception );
+
+    /** creates a report document.
+        @param  _frame
+            The frame must have a controller set. This controller will be set at the model.
+        @throws <type scope="com::sun::star::lang">DisposedException</type>
+            If the report engine is already disposed.
+        @throws <type scope="com::sun::star::lang">IllegalArgumentException</type>
+            If the report definition was not set or is <NULL/>.
+
+        OJ: Has to be discussed if this method is useful.
+    */
+    com::sun::star::frame::XModel createDocumentAlive([in] com::sun::star::frame::XFrame frame)
+        raises( ::com::sun::star::lang::DisposedException,
+                com::sun::star::lang::IllegalArgumentException,
+                ::com::sun::star::uno::Exception );
+
+    /** creates a report document.
+        @return
+            The URL where the new document is located.
+        @throws <type scope="com::sun::star::lang">DisposedException</type>
+            If the report engine is already disposed.
+        @throws <type scope="com::sun::star::lang">IllegalArgumentException</type>
+            If the report definition was not set or is <NULL/>.
+    */
+    com::sun::star::util::URL createDocument()
+        raises( ::com::sun::star::lang::DisposedException,
+                com::sun::star::lang::IllegalArgumentException,
+                ::com::sun::star::uno::Exception );
+
+    /** allows to interrupt the creation process of the report document.
+        @throws <type scope="com::sun::star::lang">DisposedException</type>
+            If the report engine is already disposed.
+    */
+    void interrupt()
+        raises( ::com::sun::star::lang::DisposedException,
+                ::com::sun::star::uno::Exception );
+
+    /** specifies the report definition object which is used to create the resulting report.
+    */
+    [attribute,bound] XReportDefinition ReportDefinition
+    {
+        set raises (com::sun::star::lang::IllegalArgumentException);
+    };
+
+    /** specifies the active connection which is used to create the resulting report.
+    */
+    [attribute,bound] com::sun::star::sdbc::XConnection ActiveConnection
+    {
+        set raises (com::sun::star::lang::IllegalArgumentException);
+    };
+
+    /** specifies the status indicator which shows the progress of the report generation process.
+    */
+    [attribute] com::sun::star::task::XStatusIndicator StatusIndicator;
+
+    /** defines the maximum number of rows which should be fetched for the report.
+        If the limit is exceeded, the excess rows are silently dropped.
+        <br/>
+        There is no limitation, if set to zero.
+     */
+    [attribute,bound] long MaxRows;
+};
+
+//=============================================================================
+
+}; }; }; };
+
+/*=============================================================================
+
+=============================================================================*/
+#endif

@@ -1,0 +1,114 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+
+#ifndef __com_sun_star_mozilla_MenuMultipleChange_idl__
+#define __com_sun_star_mozilla_MenuMultipleChange_idl__
+
+#include <com/sun/star/lang/XComponent.idl>
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module mozilla {
+
+//=============================================================================
+
+
+// DocMerge from idl: struct com::sun::star::mozilla::MenuMultipleChange
+/** Explains properties of a menu item
+ */
+published struct MenuMultipleChange
+{
+    // DocMerge from xml: field com::sun::star::mozilla::MenuMultipleChange::ID
+    /** unique ID of this menu item
+     */
+    short       ID;
+
+        //-------------------------------------------------------------------------
+
+    // DocMerge from xml: field com::sun::star::mozilla::MenuMultipleChange::GroupID
+    /** unique ID of the group this menu item belongs to
+     */
+    short       GroupID;
+
+        //-------------------------------------------------------------------------
+
+    // DocMerge from xml: field com::sun::star::mozilla::MenuMultipleChange::PreItemID
+    /** unique ID of the item directly above this menu item, used for fuzzy placement
+     */
+    short       PreItemID;
+
+        //-------------------------------------------------------------------------
+
+    // DocMerge from xml: field com::sun::star::mozilla::MenuMultipleChange::ItemText
+    /** text of the menu item
+     */
+    string      ItemText;
+
+        //-------------------------------------------------------------------------
+
+    // DocMerge from xml: field com::sun::star::mozilla::MenuMultipleChange::IsVisible
+    /** true if visible
+     */
+    boolean     IsVisible;
+
+        //-------------------------------------------------------------------------
+
+    // DocMerge from xml: field com::sun::star::mozilla::MenuMultipleChange::IsActive
+    /** true if active, so clickable
+     */
+    boolean     IsActive;
+
+        //-------------------------------------------------------------------------
+
+    // DocMerge from xml: field com::sun::star::mozilla::MenuMultipleChange::IsCheckable
+    /** true if checkable, so there can be a checkmark
+     */
+    boolean     IsCheckable;
+
+        //-------------------------------------------------------------------------
+
+    // DocMerge from xml: field com::sun::star::mozilla::MenuMultipleChange::IsChecked
+    /** true if there is a checkmark
+     */
+    boolean     IsChecked;
+
+        //-------------------------------------------------------------------------
+
+    // DocMerge from idl: field com::sun::star::mozilla::MenuMultipleChange::Image
+    /** sequence of bytes representing a possible image
+     */
+    sequence<byte> Image;
+    };
+
+//=============================================================================
+
+}; }; }; };
+
+
+
+#endif

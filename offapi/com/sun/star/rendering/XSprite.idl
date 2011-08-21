@@ -1,0 +1,202 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_rendering_XSprite_idl__
+#define __com_sun_star_rendering_XSprite_idl__
+
+#include <com/sun/star/uno/XInterface.idl>
+#include <com/sun/star/lang/IllegalArgumentException.idl>
+#include <com/sun/star/geometry/RealPoint2D.idl>
+#include <com/sun/star/geometry/AffineMatrix2D.idl>
+#include <com/sun/star/rendering/ViewState.idl>
+#include <com/sun/star/rendering/RenderState.idl>
+
+module com { module sun { module star { module rendering {
+
+/** Interface to control a sprite object.<p>
+
+    This is the basic interface to control a sprite object on a
+    <type>XSpriteCanvas</type>. Sprites are moving, back-buffered
+    objects.<p>
+ */
+published interface XSprite : ::com::sun::star::uno::XInterface
+{
+    /** Set overall transparency of the sprite.<p>
+
+        This method is useful for e.g. fading in/out of animations.<p>
+
+        Please note that if this sprite is not animated, the
+        associated <type>XSpriteCanvas</type> does not update changed
+        sprites automatically, but has to be told to do so via
+        <member>XSpriteCanvas::updateScreen()</member>.<p>
+
+        @param nAlpha
+        New global alpha value to composite this sprite with the
+        background. Valid range is [0,1].
+
+        @throws <type>com::sun::star::lang::IllegalArgumentException</type>
+        if nAlpha is not within the permissible range.
+     */
+    void setAlpha( [in] double nAlpha )
+        raises (com::sun::star::lang::IllegalArgumentException);
+
+    //-------------------------------------------------------------------------
+
+    /** Move sprite to the specified position.<p>
+
+        The position specified here is first transformed by the
+        combined view and render transformation. The resulting
+        position is then used as the output position (also in device
+        coordinates) of the rendered sprite content.<p>
+
+        Please note that if this sprite is not animated, the
+        associated <type>XSpriteCanva</type> does not update changed sprites
+        automatically, but has to be told to do so via
+        <member>XSpriteCanvas::updateScreen()</member>.<p>
+
+        @param aNewPos
+        The new position, in user coordinate space, to move the sprite to.
+
+        @param aViewState
+        The view state to be used when interpreting aNewPos.
+
+        @param aRenderState
+        The render state to be used when interpreting aNewPos.
+
+        @throws <type>com::sun::star::lang::IllegalArgumentException</type>
+        if one of the view and render state parameters are outside the
+        specified range.
+     */
+    void move( [in] ::com::sun::star::geometry::RealPoint2D aNewPos, [in] ViewState aViewState, [in] RenderState aRenderState )
+        raises (com::sun::star::lang::IllegalArgumentException);
+
+    //-------------------------------------------------------------------------
+
+    /** Apply a local transformation to the sprite.<p>
+
+        The given transformation matrix locally transforms the sprite
+        shape. If this transformation contains translational
+        components, be aware that sprite content moved beyond the
+        sprite area (a box from (0,0) to (spriteWidth,spriteHeight))
+        might (but need not) be clipped. Use
+        <member>XSprite::move</member> to change the sprite location
+        on screen. The canvas implementations are free, if they have a
+        cached representation of the sprite at hand, to transform only
+        this cached representation (e.g. a bitmap), instead of
+        re-rendering the sprite from first principles. This is usually
+        the case for an implementation of a <type>XCustomSprite</type>
+        interface, since it typically has no other cached pictorial
+        information at hand.<p>
+
+        Please note that if this sprite is not animated, the
+        associated <type>XSpriteCanvas</type> does not update changed
+        sprites automatically, but has to be told to do so via
+        <member>XSpriteCanvas::updateScreen()</member>.<p>
+
+        @param aTransformation
+        The transformation to apply to the sprite shape.
+
+        @throws <type>com::sun::star::lang::IllegalArgumentException</type>
+        if the given transformation matrix is singular.
+     */
+    void transform( [in] com::sun::star::geometry::AffineMatrix2D aTransformation )
+        raises (com::sun::star::lang::IllegalArgumentException);
+
+    //-------------------------------------------------------------------------
+
+    /** Apply a clipping to the shape output.<p>
+
+        The given clip poly-polygon is always interpreted in device
+        coordinate space. As the sprite has its own local coordinate
+        system, with its origin on screen being equal to its current
+        position, the clip poly-polygon's origin will always coincide
+        with the sprite's origin. Furthermore, if any sprite
+        transformation is set via transform(), the clip is subject to
+        this transformation, too. The implementation is free, if it
+        has a cached representation of the sprite at hand, to
+        clip-output only this cached representation (e.g. a bitmap),
+        instead of re-rendering the sprite from first principles. This
+        is usually the case for an implementation of a
+        <type>XCustomSprite</type> interface, since it typically has
+        no other cached pictorial information at hand.<p>
+
+        Please note that if this sprite is not animated, the
+        associated <type>XSpriteCanvas</type> does not update changed
+        sprites automatically, but has to be told to do so via
+        <member>XSpriteCanvas::updateScreen()</member>.<p>
+
+        Specifying an empty interface denotes no clipping,
+        i.e. everything contained in the sprite will be visible
+        (subject to device-dependent constraints, of
+        course). Specifying an empty XPolyPolygon2D, i.e. a
+        poly-polygon containing zero polygons, or an XPolyPolygon2D
+        with any number of empty sub-polygons, denotes the NULL
+        clip. That means, nothing from the sprite will be visible.<p>
+
+        @param aClip
+        The clip poly-polygon to apply.
+     */
+    void clip( [in] XPolyPolygon2D aClip );
+
+    //-------------------------------------------------------------------------
+
+    /** Set sprite priority.<p>
+
+        The sprite priority determines the order of rendering relative
+        to all other sprites of the associated canvas. The higher the
+        priority, the later will the sprite be rendered, or, in other
+        words, the closer to the screen surface the sprite is shown.<p>
+
+        @param nPriority
+        New sprite priority value to serve as the sort key when
+        determining sprite rendering order. Avoid NaNs and other
+        irregular floating point values here, the order position for
+        sprites with such a priority value is undefined.
+     */
+    void setPriority( [in] double nPriority );
+
+    //-------------------------------------------------------------------------
+
+    /** Make the sprite visible.<p>
+
+        This method makes the sprite visible on the canvas it was
+        created on.<p>
+     */
+    void show();
+
+    //-------------------------------------------------------------------------
+
+    /** Make the sprite invisible.<p>
+
+        This method makes the sprite invisible.<p>
+     */
+    void hide();
+
+};
+
+}; }; }; };
+
+#endif

@@ -1,0 +1,182 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_embed_XOptimizedStorage_idl__
+#define __com_sun_star_embed_XOptimizedStorage_idl__
+
+#include <com/sun/star/uno/XInterface.idl>
+#include <com/sun/star/io/XStream.idl>
+#include <com/sun/star/io/XInputStream.idl>
+#include <com/sun/star/io/IOException.idl>
+#include <com/sun/star/lang/IllegalArgumentException.idl>
+#include <com/sun/star/embed/StorageWrappedTargetException.idl>
+#include <com/sun/star/embed/InvalidStorageException.idl>
+#include <com/sun/star/container/NoSuchElementException.idl>
+#include <com/sun/star/container/ElementExistException.idl>
+#include <com/sun/star/packages/EncryptionNotAllowedException.idl>
+#include <com/sun/star/packages/NoRawFormatException.idl>
+#include <com/sun/star/packages/WrongPasswordException.idl>
+#include <com/sun/star/beans/PropertyValue.idl>
+#include <com/sun/star/beans/UnknownPropertyException.idl>
+#include <com/sun/star/beans/PropertyVetoException.idl>
+
+//============================================================================
+
+ module com {  module sun {  module star {  module embed {
+
+//============================================================================
+/** This is a temporary interface that is introduced to temporarily optimize
+    the document storing process. PLEASE DO NOT USE IT, it might change in any
+    time and will be deprecated soon!
+    Another solution will be introduced as final one.
+ */
+published interface XOptimizedStorage
+{
+    // -----------------------------------------------------------------------
+    /** allows to insert a raw stream representing non-encrypted stream with
+        header.
+     */
+    void insertRawNonEncrStreamElementDirect(
+            [in] string sStreamName,
+            [in] ::com::sun::star::io::XInputStream xInStream )
+        raises( ::com::sun::star::embed::InvalidStorageException,
+                ::com::sun::star::lang::IllegalArgumentException,
+                ::com::sun::star::packages::NoRawFormatException,
+                ::com::sun::star::container::ElementExistException,
+                ::com::sun::star::io::IOException,
+                ::com::sun::star::embed::StorageWrappedTargetException );
+
+    // -----------------------------------------------------------------------
+    /** allows to insert a stream to the storage directly. The stream must
+        stay alive till the storage is commited.
+     */
+    void insertStreamElementDirect(
+            [in] string sStreamName,
+            [in] ::com::sun::star::io::XInputStream xInStream,
+            [in] sequence < ::com::sun::star::beans::PropertyValue > aProperties )
+        raises( ::com::sun::star::embed::InvalidStorageException,
+                ::com::sun::star::lang::IllegalArgumentException,
+                ::com::sun::star::container::ElementExistException,
+                ::com::sun::star::io::IOException,
+                ::com::sun::star::embed::StorageWrappedTargetException );
+
+    // -----------------------------------------------------------------------
+    /** allows to copy storage element directly, not guarantied to work.
+     */
+    void copyElementDirectlyTo(
+            [in] string sSourceName,
+            [in] ::com::sun::star::embed::XOptimizedStorage xTargetStorage,
+            [in] string sTargetName )
+        raises( ::com::sun::star::embed::InvalidStorageException,
+                ::com::sun::star::lang::IllegalArgumentException,
+                ::com::sun::star::container::NoSuchElementException,
+                ::com::sun::star::container::ElementExistException,
+                ::com::sun::star::io::IOException,
+                ::com::sun::star::embed::StorageWrappedTargetException );
+
+    // -----------------------------------------------------------------------
+    /** allows to switch storage persistence to the provided stream. The stream
+        will be filled by the storage. If an empty reference is provided, the
+        storage will create a temporary stream to switch to itself.
+        It is applicable only for root storages.
+     */
+    void writeAndAttachToStream(
+            [in] ::com::sun::star::io::XStream xStream )
+        raises( ::com::sun::star::embed::InvalidStorageException,
+                ::com::sun::star::lang::IllegalArgumentException,
+                ::com::sun::star::io::IOException,
+                ::com::sun::star::embed::StorageWrappedTargetException );
+
+    // -----------------------------------------------------------------------
+    /** allows to switch storage persistence to the provided URL. The caller is
+        responsible to be sure that the file referenced by the URL contains the
+        same contents as the stream the storage is based currently. Thus using
+        of this method is very dangerous and should be avoided when possible.
+        It is applicable only for root storages.
+     */
+    void attachToURL( [in] string sURL,
+                      [in] boolean bReadOnly )
+        raises( ::com::sun::star::embed::InvalidStorageException,
+                ::com::sun::star::lang::IllegalArgumentException,
+                ::com::sun::star::io::IOException,
+                ::com::sun::star::embed::StorageWrappedTargetException );
+
+    // -----------------------------------------------------------------------
+    /** allows to get property of the child element with the specified name.
+        The implementation of the method might allow to access only subset
+        of the supported by element properties.
+     */
+    any getElementPropertyValue( [in] string sElementName,
+                                 [in] string sPropertyName )
+        raises( ::com::sun::star::embed::InvalidStorageException,
+                ::com::sun::star::lang::IllegalArgumentException,
+                ::com::sun::star::container::NoSuchElementException,
+                ::com::sun::star::io::IOException,
+                ::com::sun::star::beans::UnknownPropertyException,
+                ::com::sun::star::beans::PropertyVetoException,
+                ::com::sun::star::embed::StorageWrappedTargetException );
+
+    // -----------------------------------------------------------------------
+    /** fills the provided stream with the last flushed version of data from
+        the child stream of the storage.
+
+        @param sStreamName
+            the name of the substream that should be copied
+
+        @param xTargetStream
+            the target stream where the data must be copied to
+
+        @throws ::com::sun::star::embed::InvalidStorageException
+            this storage is in invalid state for any reason
+
+        @throws ::com::sun::star::lang::IllegalArgumentException
+            one of provided arguments is illegal
+
+        @throws ::com::sun::star::packages::WrongPasswordException
+            the provided password is wrong
+
+        @throws ::com::sun::star::io::IOException
+            in case of io errors during stream opening
+
+        @throws ::com::sun::star::embed::StorageWrappedTargetException
+            wraps other exceptions
+     */
+    void copyStreamElementData( [in] string sStreamName,
+                                [in] ::com::sun::star::io::XStream xTargetStream )
+        raises( ::com::sun::star::embed::InvalidStorageException,
+                ::com::sun::star::lang::IllegalArgumentException,
+                ::com::sun::star::packages::WrongPasswordException,
+                ::com::sun::star::io::IOException,
+                ::com::sun::star::embed::StorageWrappedTargetException );
+
+};
+
+//============================================================================
+
+}; }; }; };
+
+#endif
+

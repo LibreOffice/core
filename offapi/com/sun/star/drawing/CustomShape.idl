@@ -1,0 +1,99 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_drawing_CustomShape_idl__
+#define __com_sun_star_drawing_CustomShape_idl__
+
+#include <com/sun/star/drawing/Shape.idl>
+
+#include <com/sun/star/drawing/FillProperties.idl>
+#include <com/sun/star/drawing/LineProperties.idl>
+
+#include <com/sun/star/drawing/ShadowProperties.idl>
+#include <com/sun/star/drawing/Text.idl>
+#include <com/sun/star/drawing/RotationDescriptor.idl>
+
+#include <com/sun/star/beans/PropertyValue.idl>
+
+//=============================================================================
+
+module com {  module sun {  module star {  module drawing {
+
+//=============================================================================
+
+/** This service is for a CustomShape
+ */
+service CustomShape
+{
+    service com::sun::star::drawing::Shape;
+
+    service com::sun::star::drawing::FillProperties;
+
+    service com::sun::star::drawing::LineProperties;
+
+    service com::sun::star::drawing::ShadowProperties;
+
+    service com::sun::star::drawing::Text;
+
+    service com::sun::star::drawing::RotationDescriptor;
+
+    //-------------------------------------------------------------------------
+    /** This property contains the CustomShapeEngine service name that has to
+        be used for rendering.
+    */
+    [property] string CustomShapeEngine;
+
+    //-------------------------------------------------------------------------
+    /** This property can be used to store data that the CustomShapeEngine may
+        use for rendering
+    */
+    [optional, property] string CustomShapeData;
+
+    //-------------------------------------------------------------------------
+    /** This property describes the geometry of the CustomShape. The CustomShapeEngine
+        that is used should be able to get on with the content of this property.
+
+        If the CustomShapeEngine property is "com.sun.star.drawing.EnhancedCustomShapeEngine",
+        then this property is containing properties as they are specified in the service
+        com.sun.star.drawing.EnhancedCustomShapeGeometry
+    */
+    [optional, property] sequence<::com::sun::star::beans::PropertyValue> CustomShapeGeometry;
+
+    //-------------------------------------------------------------------------
+    /** This property describes the URL to a replacement graphic that could
+        be displayed if the CustomShape engine is not available.
+    */
+    [optional, property] string CustomShapeReplacementURL;
+
+    //-------------------------------------------------------------------------
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif
+

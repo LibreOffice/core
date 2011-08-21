@@ -1,0 +1,8 @@
+module ooo { module vba { module powerpoint {
+    constants PpTransitionSpeed {
+        const long ppTransitionSpeedFast = 3;
+        const long ppTransitionSpeedMedium = 2;
+        const long ppTransitionSpeedMixed = -2;
+        const long ppTransitionSpeedSlow = 1;
+    };
+}; }; };

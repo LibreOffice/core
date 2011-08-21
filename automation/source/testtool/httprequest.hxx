@@ -71,16 +71,12 @@ public:
     void SetProxy( rtl::OString aHost, sal_uInt16 nPort );
 
     sal_Bool Execute();
-    void Abort();
 
     rtl::OString GetHeader() const { return aHeader; }
     SvMemoryStream* GetBody();
 
     rtl::OString GetContentType() const { return aContentType; }
     sal_uInt16 GetResultId() const { return nResultId; }
-
-    sal_uInt16 GetStatus();
-
 };
 
 #endif

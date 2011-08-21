@@ -1,0 +1,246 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_configuration_ConfigurationProvider_idl__
+#define __com_sun_star_configuration_ConfigurationProvider_idl__
+
+#include <com/sun/star/lang/XMultiServiceFactory.idl>
+#include <com/sun/star/lang/XComponent.idl>
+
+//=============================================================================
+
+module com { module sun { module star { module configuration {
+
+//=============================================================================
+/** manages one, or more, complete sets of configuration data and serves as a
+ factory for objects that provide access to a subset of the configuration.
+
+ <p>An implementation is usually obtained from a
+ <type scope="com::sun::star::lang">ServiceManager</type>. The arguments passed to
+ <member scope="com::sun::star::lang">XMultiComponentFactory::createInstanceWithContextAndArguments()</member>
+ select the configuration data source. Arguments must be provided as
+ <type scope="com::sun::star::beans">NamedValue</type>
+ or <type scope="com::sun::star::beans">PropertyValue</type>.
+ If the parameters given are incomplete missing values are taken
+ from the context or the environment. If an instance already exists for the
+ given set of arguments, the existing instance may be reused.
+ In particular, instantiating a provider without explicit arguments to access
+ the default configuration data will always yield the same
+ <type scope="com::sun::star::configuration">DefaultProvider</type> object.
+ </p>
+ <p>Some arguments for
+ <member scope="com::sun::star::lang">XMultiServiceFactory::createInstanceWithArguments()</member>
+ may be given default values during creation of this service. In particular
+ this applies to the parameters <code>"Locale"</code> and <code>"EnableAsync"</code>.
+ </p>
+ */
+published service ConfigurationProvider
+{
+/** allows creating access objects for specific views such as subsets and fragments
+ of the configuration.
+
+ <p>The parameter <var>aServiceSpecifier</var> passed to
+ <member scope="com::sun::star::lang">XMultiServiceFactory::createInstanceWithArguments()</member>
+ supports at least the service specifiers
+ <code>"com.sun.star.configuration.ConfigurationAccess"</code> and
+ <code>"com.sun.star.configuration.ConfigurationUpdateAccess"</code>.
+ </p>
+
+ <p>Using the first of these service specifiers requests a read-only view of
+ the configuration.
+ The object that is created implements service <type>ConfigurationAccess</type>.
+ To reflect its <em>element role</em> as root of the view, it implements
+ service <type>AccessRootElement</type>.
+ </p>
+
+ <p>Using the second form requests an updatable view of the configuration.
+ The object that is created should implement service
+ <type>ConfigurationUpdateAccess</type>. To reflect its <em>element role</em>
+ which includes controlling updates for the whole view, it implements
+ service <type>UpdateRootElement</type>.
+ <BR />If the root element of the view is marked read-only (as indicated
+ by <const scope="com::sun::star::beans">PropertyAttributes::READONLY</const>),
+ the implementation may either raise an exception or return a (read-only)
+ <type>ConfigurationAccess</type>/<type>AccessRootElement</type> instead.
+ </p>
+
+ <p>The arguments passed to
+ <member scope="com::sun::star::lang">XMultiServiceFactory::createInstanceWithArguments()</member>
+ in parameter <var>aArguments</var> specify the view of the configuration that
+ should be created. That is, they determine the subset of elements that can be
+ accessed starting from the returned object. Each element of the argument
+ sequence should be a <type scope="com::sun::star::beans">PropertyValue</type>
+ or a <type scope="com::sun::star::beans">NamedValue</type>,
+ so that the parameters can be identified by name rather than by position.
+ </p>
+
+ <p>What combinations of arguments are supported depends on the service name.
+ </p>
+
+ <p>With both of the standard service-specifiers above, an implementation must
+ accept a single argument named <code>nodepath</code> of type <atom>string</atom>.
+ This argument must contain the absolute path to an element of the
+ configuration. The view that is selected consists of the named element and
+ all its descendants.
+ </p>
+
+ <p>Other arguments can be used to control the behavior of the view. These
+ are different for different implementations. Whether and how they are used
+ may also depend on the configuration store and configuration that were
+ selected when the provider was created.
+ </p>
+
+ <p>An implementation must ignore unknown arguments.</p>
+
+ <p>Some parameters that are commonly supported are:</p>
+
+ <ul>
+    <li>
+       <strong>Selecting data into a view:</strong>
+       <dl>
+         <dt><code>"nodepath"</code> : <atom>string</atom></dt>
+         <dd>specifies the location of the view root in the configuration.</dd>
+         <dt><code>"depth"</code> : <atom>short</atom></dt>
+         <dd>specifies that elements of the hierarchy that are more than the given
+          number of nesting levels away from the root need not be included in the
+          view.
+         </dd>
+         <dt><code>"locale"</code> : <type scope="com::sun::star::lang">Locale</type></dt>
+         <dd>specifies the locale for which localized values should be
+          retrieved.
+         </dd>
+       </dl>
+
+       <p><strong>Example:</strong> In the hierarchy
+<BR /><pre>
+ A - B1 - C1
+   |
+   - B2 - C2 (localized: de, en, fr, ..)
+   |    |
+   |    - C3 - D1
+   |    |    |
+   |    |    - D2 - E1
+   |    |
+   |    - C4 - D3 - E2 - F1
+   |    |              |
+   |    |              - F2
+   |    |
+   |    - C5
+   |
+   - B3
+   |
+   - B4 - C6 - D4 - E3
+
+</pre>
+         <BR />selecting a view with <code>nodepath = "/A/B2"</code>,
+         <code>depth = 2</code> and <code>locale = &lt;Locale for en_US&gt;</code>
+         would result in the tree fragment
+<BR /><pre>
+(A-) B2 - C2 (en)
+        |
+        - C3 - D1
+        |    |
+        |    - D2 (..)
+        |
+        - C4 - D3 (..)
+        |
+        - C5
+
+</pre>
+       </p>
+    </li>
+
+    <li>
+       <strong>Controlling cache behavior:</strong> (with providers that
+        cache configuration data)
+       <dl>
+         <dt><code>"enableasync"</code> : <atom>boolean</atom></dt>
+         <dd>controls how updates are handled in the cache. If <TRUE/>, the
+          cache may operate in <em>write-back</em> mode, where updates at
+          first only affect the cache and are written to persistent storage
+          at some later time. If <FALSE/>, the cache must operate in
+          <em>write-through</em> mode, where updates are written to persistent
+          storage at once - that is before
+          <member scope="com::sun::star::util">XChangesBatch::commitChanges()</member>
+          returns.
+          <p><em>This parameter was formerly called <code>"lazywrite"</code>.
+            The old name should still be supported for compatibility.
+          </em></p>
+         </dd>
+
+         <dt><code>"nocache"</code> : <atom>boolean</atom></dt>
+         <dd>This deprecated parameter
+          specifies that data for the view is not taken from the cache, but
+          read directly from storage. This may entail that future changes that
+          become visible in the cache are not reflected in this view and that
+          changes done through this view are not reflected in the cache.
+          <BR /><strong>Use with caution !</strong>
+          <p><em>This parameter is not supported by all implementations and may be
+          silently ignored !
+          </em></p>
+         </dd>
+       </dl>
+    </li>
+ </ul>
+
+ <p><member scope="com::sun::star::lang">XMultiServiceFactory::createInstance()</member>
+ may be unusable. Only an implementation that supports service names that can be
+ used with no further arguments support this method. It should return the
+ same result as if
+ <member scope="com::sun::star::lang">XMultiServiceFactory::createInstanceWithArguments()</member>
+ had been called using an empty sequence of arguments.
+ </p>
+*/
+    interface com::sun::star::lang::XMultiServiceFactory;
+
+
+/** allows controlling or observing the lifetime of the configuration.
+
+ <p>The owner of the provider may dispose of this object
+ using <member scope="com::sun::star::lang">XComponent::dispose()</member>.
+ Note that the default provider is owned by the
+ <type scope="com::sun::star::lang">ServiceManager</type> and should not be
+ disposed of by user code.
+ </p>
+
+ <p>Views created by the provider generally refer to data that is managed by
+  the provider. Therefore, disposing of the provider will cause all objects
+  belonging to these views to be disposed of as well. This does not apply to
+  <em>snapshot</em> views that have their own copy of the data, if available.
+ </p>
+
+*/
+    interface com::sun::star::lang::XComponent;
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif
+
+

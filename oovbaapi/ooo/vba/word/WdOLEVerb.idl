@@ -1,0 +1,11 @@
+module ooo { module vba { module word {
+    constants WdOLEVerb {
+        const long wdOLEVerbDiscardUndoState = -6;
+        const long wdOLEVerbHide = -3;
+        const long wdOLEVerbInPlaceActivate = -5;
+        const long wdOLEVerbOpen = -2;
+        const long wdOLEVerbPrimary = 0;
+        const long wdOLEVerbShow = -1;
+        const long wdOLEVerbUIActivate = -4;
+    };
+}; }; };

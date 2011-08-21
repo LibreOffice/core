@@ -1,0 +1,77 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_xml_sax_XFastDocumentHandler_idl__
+#define __com_sun_star_xml_sax_XFastDocumentHandler_idl__
+
+#include <com/sun/star/uno/XInterface.idl>
+
+#include <com/sun/star/xml/sax/SAXException.idl>
+
+#include <com/sun/star/xml/sax/XFastAttributeList.idl>
+#include <com/sun/star/xml/sax/XFastContextHandler.idl>
+#include <com/sun/star/xml/sax/XLocator.idl>
+
+
+//=============================================================================
+
+module com {  module sun {  module star {  module xml {  module sax {
+
+//=============================================================================
+
+/** receives notification of sax document events from a
+    <type>XFastParser</type>
+ */
+interface XFastDocumentHandler: XFastContextHandler
+{
+    //-------------------------------------------------------------------------
+
+    /** called by the parser when parsing of an XML stream is started.
+     */
+    void startDocument()
+            raises( com::sun::star::xml::sax::SAXException );
+
+    //-------------------------------------------------------------------------
+
+    /** called by the parser after the last XML element of a stream is processed.
+     */
+    void endDocument()
+            raises( com::sun::star::xml::sax::SAXException );
+
+    //-------------------------------------------------------------------------
+
+    /** receives an object for locating the origin of SAX document events.
+     */
+    void setDocumentLocator( [in] com::sun::star::xml::sax::XLocator xLocator )
+            raises( com::sun::star::xml::sax::SAXException );
+
+};
+
+//=============================================================================
+
+}; }; }; }; };
+
+#endif

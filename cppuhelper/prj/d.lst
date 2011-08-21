@@ -1,0 +1,74 @@
+mkdir: %_DEST%\inc\cppuhelper
+
+..\inc\cppuhelper\implbase.hxx %_DEST%\inc\cppuhelper\implbase.hxx
+..\inc\cppuhelper\implbase_ex.hxx %_DEST%\inc\cppuhelper\implbase_ex.hxx
+..\inc\cppuhelper\implbase_ex_pre.hxx %_DEST%\inc\cppuhelper\implbase_ex_pre.hxx
+..\inc\cppuhelper\implbase_ex_post.hxx %_DEST%\inc\cppuhelper\implbase_ex_post.hxx
+..\inc\cppuhelper\implbase1.hxx %_DEST%\inc\cppuhelper\implbase1.hxx
+..\inc\cppuhelper\implbase2.hxx %_DEST%\inc\cppuhelper\implbase2.hxx
+..\inc\cppuhelper\implbase3.hxx %_DEST%\inc\cppuhelper\implbase3.hxx
+..\inc\cppuhelper\implbase4.hxx %_DEST%\inc\cppuhelper\implbase4.hxx
+..\inc\cppuhelper\implbase5.hxx %_DEST%\inc\cppuhelper\implbase5.hxx
+..\inc\cppuhelper\implbase6.hxx %_DEST%\inc\cppuhelper\implbase6.hxx
+..\inc\cppuhelper\implbase7.hxx %_DEST%\inc\cppuhelper\implbase7.hxx
+..\inc\cppuhelper\implbase8.hxx %_DEST%\inc\cppuhelper\implbase8.hxx
+..\inc\cppuhelper\implbase9.hxx %_DEST%\inc\cppuhelper\implbase9.hxx
+..\inc\cppuhelper\implbase10.hxx %_DEST%\inc\cppuhelper\implbase10.hxx
+..\inc\cppuhelper\implbase11.hxx %_DEST%\inc\cppuhelper\implbase11.hxx
+..\inc\cppuhelper\implbase12.hxx %_DEST%\inc\cppuhelper\implbase12.hxx
+
+..\inc\cppuhelper\compbase.hxx %_DEST%\inc\cppuhelper\compbase.hxx
+..\inc\cppuhelper\compbase_ex.hxx %_DEST%\inc\cppuhelper\compbase_ex.hxx
+..\inc\cppuhelper\compbase1.hxx %_DEST%\inc\cppuhelper\compbase1.hxx
+..\inc\cppuhelper\compbase2.hxx %_DEST%\inc\cppuhelper\compbase2.hxx
+..\inc\cppuhelper\compbase3.hxx %_DEST%\inc\cppuhelper\compbase3.hxx
+..\inc\cppuhelper\compbase4.hxx %_DEST%\inc\cppuhelper\compbase4.hxx
+..\inc\cppuhelper\compbase5.hxx %_DEST%\inc\cppuhelper\compbase5.hxx
+..\inc\cppuhelper\compbase6.hxx %_DEST%\inc\cppuhelper\compbase6.hxx
+..\inc\cppuhelper\compbase7.hxx %_DEST%\inc\cppuhelper\compbase7.hxx
+..\inc\cppuhelper\compbase8.hxx %_DEST%\inc\cppuhelper\compbase8.hxx
+..\inc\cppuhelper\compbase9.hxx %_DEST%\inc\cppuhelper\compbase9.hxx
+..\inc\cppuhelper\compbase10.hxx %_DEST%\inc\cppuhelper\compbase10.hxx
+..\inc\cppuhelper\compbase11.hxx %_DEST%\inc\cppuhelper\compbase11.hxx
+..\inc\cppuhelper\compbase12.hxx %_DEST%\inc\cppuhelper\compbase12.hxx
+
+..\inc\cppuhelper\shlib.hxx %_DEST%\inc\cppuhelper\shlib.hxx
+..\inc\cppuhelper\basemutex.hxx %_DEST%\inc\cppuhelper\basemutex.hxx
+..\inc\cppuhelper\bootstrap.hxx %_DEST%\inc\cppuhelper\bootstrap.hxx
+..\inc\cppuhelper\exc_hlp.hxx %_DEST%\inc\cppuhelper\exc_hlp.hxx
+..\inc\cppuhelper\typeprovider.hxx %_DEST%\inc\cppuhelper\typeprovider.hxx
+..\inc\cppuhelper\factory.hxx %_DEST%\inc\cppuhelper\factory.hxx
+..\inc\cppuhelper\component_context.hxx %_DEST%\inc\cppuhelper\component_context.hxx
+..\inc\cppuhelper\interfacecontainer.hxx %_DEST%\inc\cppuhelper\interfacecontainer.hxx
+..\inc\cppuhelper\interfacecontainer.h %_DEST%\inc\cppuhelper\interfacecontainer.h
+..\inc\cppuhelper\component.hxx %_DEST%\inc\cppuhelper\component.hxx
+..\inc\cppuhelper\propshlp.hxx %_DEST%\inc\cppuhelper\propshlp.hxx
+..\inc\cppuhelper\proptypehlp.hxx %_DEST%\inc\cppuhelper\proptypehlp.hxx
+..\inc\cppuhelper\propertysetmixin.hxx %_DEST%\inc\cppuhelper\propertysetmixin.hxx
+..\inc\cppuhelper\proptypehlp.h %_DEST%\inc\cppuhelper\proptypehlp.h
+..\inc\cppuhelper\stdidlclass.hxx %_DEST%\inc\cppuhelper\stdidlclass.hxx
+..\inc\cppuhelper\weak.hxx %_DEST%\inc\cppuhelper\weak.hxx
+..\inc\cppuhelper\weakagg.hxx %_DEST%\inc\cppuhelper\weakagg.hxx
+..\inc\cppuhelper\queryinterface.hxx %_DEST%\inc\cppuhelper\queryinterface.hxx
+..\inc\cppuhelper\weakref.hxx %_DEST%\inc\cppuhelper\weakref.hxx
+..\inc\cppuhelper\servicefactory.hxx %_DEST%\inc\cppuhelper\servicefactory.hxx
+..\inc\cppuhelper\implementationentry.hxx %_DEST%\inc\cppuhelper\implementationentry.hxx
+..\inc\cppuhelper\access_control.hxx %_DEST%\inc\cppuhelper\access_control.hxx
+..\inc\cppuhelper\unourl.hxx %_DEST%\inc\cppuhelper\unourl.hxx
+
+..\%__SRC%\bin\cppuh*.dll %_DEST%\bin\cppuh*.dll
+..\%__SRC%\lib\*cppuhelper*.lib %_DEST%\lib\*
+
+..\%__SRC%\lib\libuno_cppuhelper*.* %_DEST%\lib\*
+
+..\%__SRC%\lib\libcppuhelper*.a %_DEST%\lib\*
+..\%__SRC%\lib\cppuhelper*.lib %_DEST%\lib\*
+
+..\source\unorc %_DEST%\bin\uno.ini
+..\source\unorc %_DEST%\lib\unorc
+
+..\inc\cppuhelper\findsofficepath.h %_DEST%\inc\cppuhelper\findsofficepath.h
+..\%__SRC%\obj\findsofficepath.o %_DEST%\lib\findsofficepath.o
+..\%__SRC%\obj\findsofficepath.obj %_DEST%\lib\findsofficepath.obj
+
+linklib: libuno_cppuhelper*.*.*

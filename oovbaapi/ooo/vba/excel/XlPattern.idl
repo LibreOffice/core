@@ -1,0 +1,24 @@
+module ooo { module vba { module excel {
+    constants XlPattern {
+        const long xlPatternAutomatic = -4105;
+        const long xlPatternChecker = 9;
+        const long xlPatternCrissCross = 16;
+        const long xlPatternDown = -4121;
+        const long xlPatternGray16 = 17;
+        const long xlPatternGray25 = -4124;
+        const long xlPatternGray50 = -4125;
+        const long xlPatternGray75 = -4126;
+        const long xlPatternGray8 = 18;
+        const long xlPatternGrid = 15;
+        const long xlPatternHorizontal = -4128;
+        const long xlPatternLightDown = 13;
+        const long xlPatternLightHorizontal = 11;
+        const long xlPatternLightUp = 14;
+        const long xlPatternLightVertical = 12;
+        const long xlPatternNone = -4142;
+        const long xlPatternSemiGray75 = 10;
+        const long xlPatternSolid = 1;
+        const long xlPatternUp = -4162;
+        const long xlPatternVertical = -4166;
+    };
+}; }; };

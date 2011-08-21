@@ -1,0 +1,409 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#include "pagedlg.hrc"
+
+ModelessDialog RID_SCDLG_AREAS
+{
+    HelpId = HID_SCPAGE_AREAS ;
+    Size = MAP_APPFONT ( 316 , 90 ) ;
+    OutputSize = TRUE ;
+    Moveable = TRUE ;
+     //Closeable = TRUE;    // Dieser Dialog hat einen Cancel-Button !
+    Hide = TRUE ;
+    SVLook = TRUE ;
+    Text [ en-US ] = "Edit Print Ranges" ;
+    OKButton BTN_OK
+    {
+        Pos = MAP_APPFONT ( 260 , 6 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        DefButton = TRUE ;
+    };
+    CancelButton BTN_CANCEL
+    {
+        Pos = MAP_APPFONT ( 260 , 23 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+    };
+    HelpButton BTN_HELP
+    {
+        Pos = MAP_APPFONT ( 260 , 43 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+    };
+    FixedLine FL_PRINTAREA
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
+        Text [ en-US ] = "Print range" ;
+    };
+    ListBox LB_PRINTAREA
+    {
+        HelpID = "sc:ListBox:RID_SCDLG_AREAS:LB_PRINTAREA";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 12 , 14 ) ;
+        Size = MAP_APPFONT ( 90 , 60 ) ;
+        DropDown = TRUE ;
+        StringList [ en-US ] =
+        {
+            < "- none -" ; Default ; > ;
+            < "- entire sheet -" ; Default ; > ;
+            < "- user defined -" ; Default ; > ;
+            < "- selection -" ; Default ; > ;
+        };
+    };
+    Edit ED_PRINTAREA
+    {
+        HelpID = "sc:Edit:RID_SCDLG_AREAS:ED_PRINTAREA";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 106 , 14 ) ;
+        Size = MAP_APPFONT ( 131 , 12 ) ;
+    };
+    ImageButton RB_PRINTAREA
+    {
+        HelpID = "sc:ImageButton:RID_SCDLG_AREAS:RB_PRINTAREA";
+        Pos = MAP_APPFONT ( 239 , 13 ) ;
+        Size = MAP_APPFONT ( 13 , 15 ) ;
+        TabStop = FALSE ;
+        QuickHelpText [ en-US ] = "Shrink" ;
+    };
+    FixedLine FL_REPEATROW
+    {
+        Pos = MAP_APPFONT ( 6 , 32 ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
+        Text [ en-US ] = "Rows to repeat" ;
+    };
+    ListBox LB_REPEATROW
+    {
+        HelpID = "sc:ListBox:RID_SCDLG_AREAS:LB_REPEATROW";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 12 , 43 ) ;
+        Size = MAP_APPFONT ( 90 , 60 ) ;
+        DropDown = TRUE ;
+        StringList [ en-US ] =
+        {
+            < "- none -" ; Default ; > ;
+            < "- user defined -" ; Default ; > ;
+        };
+    };
+    Edit ED_REPEATROW
+    {
+        HelpID = "sc:Edit:RID_SCDLG_AREAS:ED_REPEATROW";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 106 , 43 ) ;
+        Size = MAP_APPFONT ( 131 , 12 ) ;
+    };
+    ImageButton RB_REPEATROW
+    {
+        HelpID = "sc:ImageButton:RID_SCDLG_AREAS:RB_REPEATROW";
+        Pos = MAP_APPFONT ( 239 , 42 ) ;
+        Size = MAP_APPFONT ( 13 , 15 ) ;
+        TabStop = FALSE ;
+        QuickHelpText [ en-US ] = "Shrink" ;
+    };
+    FixedLine FL_REPEATCOL
+    {
+        Pos = MAP_APPFONT ( 6 , 61 ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
+        Text [ en-US ] = "Columns to repeat" ;
+    };
+    ListBox LB_REPEATCOL
+    {
+        HelpID = "sc:ListBox:RID_SCDLG_AREAS:LB_REPEATCOL";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 12 , 72 ) ;
+        Size = MAP_APPFONT ( 90 , 60 ) ;
+        DropDown = TRUE ;
+        StringList [ en-US ] =
+        {
+            < "- none -" ; Default ; > ;
+            < "- user defined -" ; Default ; > ;
+        };
+    };
+    Edit ED_REPEATCOL
+    {
+        HelpID = "sc:Edit:RID_SCDLG_AREAS:ED_REPEATCOL";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 106 , 72 ) ;
+        Size = MAP_APPFONT ( 131 , 12 ) ;
+    };
+    ImageButton RB_REPEATCOL
+    {
+        HelpID = "sc:ImageButton:RID_SCDLG_AREAS:RB_REPEATCOL";
+        Pos = MAP_APPFONT ( 239 , 71 ) ;
+        Size = MAP_APPFONT ( 13 , 15 ) ;
+        TabStop = FALSE ;
+        QuickHelpText [ en-US ] = "Shrink" ;
+    };
+};
+
+TabPage RID_SCPAGE_TABLE
+{
+    Hide = TRUE ;
+    HelpId = HID_SCPAGE_TABLE ;
+    SVLook = TRUE ;
+    Pos = MAP_APPFONT ( 0 , 0 ) ;
+    Size = MAP_APPFONT ( 260 , 185 ) ;
+    CheckBox BTN_HEADER
+    {
+        HelpID = "sc:CheckBox:RID_SCPAGE_TABLE:BTN_HEADER";
+        Pos = MAP_APPFONT ( 12 , 73 ) ;
+        Size = MAP_APPFONT ( 142 , 10 ) ;
+        Text [ en-US ] = "~Column and row headers" ;
+        TabStop = TRUE ;
+    };
+    CheckBox BTN_GRID
+    {
+        HelpID = "sc:CheckBox:RID_SCPAGE_TABLE:BTN_GRID";
+        Pos = MAP_APPFONT ( 12 , 87 ) ;
+        Size = MAP_APPFONT ( 142 , 10 ) ;
+        Text [ en-US ] = "~Grid" ;
+        TabStop = TRUE ;
+    };
+    CheckBox BTN_NOTES
+    {
+        HelpID = "sc:CheckBox:RID_SCPAGE_TABLE:BTN_NOTES";
+            Pos = MAP_APPFONT ( 12 , 101 ) ;
+        Size = MAP_APPFONT ( 142 , 10 ) ;
+        Text [ en-US ] = "~Comments" ;
+        TabStop = TRUE ;
+    };
+    CheckBox BTN_OBJECTS
+    {
+        HelpID = "sc:CheckBox:RID_SCPAGE_TABLE:BTN_OBJECTS";
+        Pos = MAP_APPFONT ( 12 , 115 ) ;
+        Size = MAP_APPFONT ( 142 , 10 ) ;
+        Text [ en-US ] = "~Objects/graphics" ;
+        TabStop = TRUE ;
+    };
+    CheckBox BTN_CHARTS
+    {
+        HelpID = "sc:CheckBox:RID_SCPAGE_TABLE:BTN_CHARTS";
+        Pos = MAP_APPFONT ( 160 , 73 ) ;
+        Size = MAP_APPFONT ( 91 , 10 ) ;
+        Text [ en-US ] = "Ch~arts" ;
+        TabStop = TRUE ;
+    };
+    CheckBox BTN_DRAWINGS
+    {
+        HelpID = "sc:CheckBox:RID_SCPAGE_TABLE:BTN_DRAWINGS";
+        Pos = MAP_APPFONT ( 160 , 87 ) ;
+        Size = MAP_APPFONT ( 91 , 10 ) ;
+        Text [ en-US ] = "~Drawing objects" ;
+        TabStop = TRUE ;
+    };
+    CheckBox BTN_FORMULAS
+    {
+        HelpID = "sc:CheckBox:RID_SCPAGE_TABLE:BTN_FORMULAS";
+        Pos = MAP_APPFONT ( 160 , 101 ) ;
+        Size = MAP_APPFONT ( 91 , 10 ) ;
+        Text [ en-US ] = "~Formulas" ;
+        TabStop = TRUE ;
+    };
+    CheckBox BTN_NULLVALS
+    {
+        HelpID = "sc:CheckBox:RID_SCPAGE_TABLE:BTN_NULLVALS";
+        Pos = MAP_APPFONT ( 160 , 115 ) ;
+        Size = MAP_APPFONT ( 91 , 10 ) ;
+        Text [ en-US ] = "Zero ~values" ;
+        TabStop = TRUE ;
+    };
+    FixedLine FL_PRINT
+    {
+        Pos = MAP_APPFONT ( 6 , 62 ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
+        Text [ en-US ] = "Print" ;
+    };
+    RadioButton BTN_TOPDOWN
+    {
+        HelpID = "sc:RadioButton:RID_SCPAGE_TABLE:BTN_TOPDOWN";
+        Pos = MAP_APPFONT ( 12 , 14 ) ;
+        Size = MAP_APPFONT ( 142 , 10 ) ;
+        Text [ en-US ] = "~Top to bottom, then right" ;
+        TabStop = TRUE ;
+    };
+    RadioButton BTN_LEFTRIGHT
+    {
+        HelpID = "sc:RadioButton:RID_SCPAGE_TABLE:BTN_LEFTRIGHT";
+        Pos = MAP_APPFONT ( 12 , 28 ) ;
+        Size = MAP_APPFONT ( 142 , 10 ) ;
+        Text [ en-US ] = "~Left to right, then down" ;
+        TabStop = TRUE ;
+    };
+    FixedImage BMP_PAGEDIR
+    {
+        Pos = MAP_APPFONT ( 160 , 14 ) ;
+        Size = MAP_APPFONT ( 25 , 25 ) ;
+    };
+    Image IMG_LEFTRIGHT
+    {
+        ImageBitmap = Bitmap { File = "lftrgt.png" ; };
+        MaskColor = STD_MASKCOLOR;
+    };
+    Image IMG_TOPDOWN
+    {
+        ImageBitmap = Bitmap { File = "topdown.png" ; };
+        MaskColor = STD_MASKCOLOR;
+    };
+    CheckBox BTN_PAGENO
+    {
+        HelpID = "sc:CheckBox:RID_SCPAGE_TABLE:BTN_PAGENO";
+        Pos = MAP_APPFONT ( 12 , 46 ) ;
+        Size = MAP_APPFONT ( 90 , 10 ) ;
+        Text [ en-US ] = "First ~page number" ;
+        TabStop = TRUE ;
+    };
+    NumericField ED_PAGENO
+    {
+        HelpID = "sc:NumericField:RID_SCPAGE_TABLE:ED_PAGENO";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 106 , 44 ) ;
+        Size = MAP_APPFONT ( 30 , 12 ) ;
+        TabStop = TRUE ;
+        Spin = TRUE ;
+        Minimum = 1 ;
+        Maximum = 9999 ;
+        SpinSize = 1 ;
+        Repeat = TRUE ;
+    };
+    FixedLine FL_PAGEDIR
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
+        Text [ en-US ] = "Page order" ;
+    };
+    FixedText FT_SCALEMODE
+    {
+        Pos = MAP_APPFONT( 12, 144 );
+        Size = MAP_APPFONT( 124, 8 );
+        Text [ en-US ] = "Scaling ~mode";
+    };
+    ListBox LB_SCALEMODE
+    {
+        HelpID = "sc:ListBox:RID_SCPAGE_TABLE:LB_SCALEMODE";
+        Border = TRUE;
+        Pos = MAP_APPFONT( 12, 155 );
+        Size = MAP_APPFONT( 124, 60 );
+        DropDown = TRUE;
+        StringList [ en-US ] =
+        {
+            < "Reduce/enlarge printout"; SC_TPTABLE_SCALE_PERCENT; >;
+            < "Fit print range(s) to width/height"; SC_TPTABLE_SCALE_TO; >;
+            < "Fit print range(s) on number of pages"; SC_TPTABLE_SCALE_TO_PAGES; >;
+        };
+    };
+    MetricField ED_SCALEALL
+    {
+        HelpID = "sc:MetricField:RID_SCPAGE_TABLE:ED_SCALEALL";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 218 , 155 ) ;
+        Size = MAP_APPFONT ( 30 , 12 ) ;
+        TabStop = TRUE ;
+        Spin = TRUE ;
+        Repeat = TRUE ;
+        Minimum = 10 ;
+        Maximum = 400 ;
+        First = 15 ;
+        Last = 200 ;
+        SpinSize = 1 ;
+        Unit = FUNIT_CUSTOM ;
+        CustomUnitText = "%" ;
+    };
+    NumericField ED_SCALEPAGEWIDTH
+    {
+        HelpID = "sc:NumericField:RID_SCPAGE_TABLE:ED_SCALEPAGEWIDTH";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 218 , 144 ) ;
+        Size = MAP_APPFONT ( 30 , 12 ) ;
+        TabStop = TRUE ;
+        Hide = TRUE ;
+        Spin = TRUE ;
+        Repeat = TRUE ;
+        Minimum = 1 ;
+        Maximum = 1000 ;
+        SpinSize = 1 ;
+    };
+    NumericField ED_SCALEPAGEHEIGHT
+    {
+        HelpID = "sc:NumericField:RID_SCPAGE_TABLE:ED_SCALEPAGEHEIGHT";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 218 , 160 ) ;
+        Size = MAP_APPFONT ( 30 , 12 ) ;
+        TabStop = TRUE ;
+        Hide = TRUE ;
+        Spin = TRUE ;
+        Repeat = TRUE ;
+        Minimum = 1 ;
+        Maximum = 1000 ;
+        SpinSize = 1 ;
+    };
+    NumericField ED_SCALEPAGENUM
+    {
+        HelpID = "sc:NumericField:RID_SCPAGE_TABLE:ED_SCALEPAGENUM";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 218 , 155 ) ;
+        Size = MAP_APPFONT ( 30 , 12 ) ;
+        TabStop = TRUE ;
+        Hide = TRUE ;
+        Spin = TRUE ;
+        Repeat = TRUE ;
+        Minimum = 1 ;
+        Maximum = 1000 ;
+        SpinSize = 1 ;
+    };
+    FixedText FT_SCALEFACTOR
+    {
+        Pos = MAP_APPFONT( 148, 157 );
+        Size = MAP_APPFONT( 68 , 8 );
+        Hide = TRUE;
+        Text [ en-US ] = "~Scaling factor";
+    };
+    FixedText FT_SCALEPAGEWIDTH
+    {
+        Pos = MAP_APPFONT( 148, 146 );
+        Size = MAP_APPFONT( 68 , 8 );
+        Hide = TRUE;
+        Text [ en-US ] = "~Width in pages";
+    };
+    FixedText FT_SCALEPAGEHEIGHT
+    {
+        Pos = MAP_APPFONT( 148, 162 );
+        Size = MAP_APPFONT( 68 , 8 );
+        Hide = TRUE;
+        Text [ en-US ] = "H~eight in pages";
+    };
+    FixedText FT_SCALEPAGENUM
+    {
+        Pos = MAP_APPFONT( 148, 157 );
+        Size = MAP_APPFONT( 68, 8 );
+        Hide = TRUE;
+        Text [ en-US ] = "N~umber of pages";
+    };
+    FixedLine FL_SCALE
+    {
+        Pos = MAP_APPFONT ( 6 , 131 ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
+        Text [ en-US ] = "Scale" ;
+    };
+};

@@ -1,0 +1,97 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_form_DefaultFormComponentInspectorModel_idl__
+#define __com_sun_star_form_DefaultFormComponentInspectorModel_idl__
+
+#include <com/sun/star/inspection/XObjectInspectorModel.idl>
+#include <com/sun/star/lang/IllegalArgumentException.idl>
+
+//=============================================================================
+
+module com {  module sun {  module star {  module form { module inspection {
+
+//=============================================================================
+
+/** implements a <type scope="com::sun::star::inspection">XObjectInspectorModel</type> for
+    inspecting form components, in particular all components implementing the <type>FormComponent</type>
+    service.
+
+    <p>A <type>DefaultFormComponentInspectorModel</type> provides the following handlers by default:
+    <ul><li><type>ButtonNavigationHandler</type></li>
+        <li><type>CellBindingPropertyHandler</type></li>
+        <li><type>EditPropertyHandler</type></li>
+        <li><type>EventHandler</type></li>
+        <li><type>FormComponentPropertyHandler</type></li>
+        <li><type>SubmissionPropertyHandler</type></li>
+        <li><type>XMLFormsPropertyHandler</type></li>
+        <li><type>XSDValidationPropertyHandler</type></li>
+    </ul></p>
+
+    @see com::sun::star::inspection::XObjectInspectorModel::HandlerFactories
+*/
+service DefaultFormComponentInspectorModel : com::sun::star::inspection::XObjectInspectorModel
+{
+    /** creates a default DefaultFormComponentInspectorModel, providing factories for all
+        handlers listed above.
+
+        @since OOo 2.2
+    */
+    createDefault();
+
+    /** creates a default DefaultFormComponentInspectorModel, providing factories for all
+        handlers listed above, and describing an ObjectInspector which has a help section.
+
+        @param minHelpTextLines
+            denotes the minimum number of lines of text to be reserved for the help
+            section.
+
+        @param maxHelpTextLines
+            denotes the maximum number of lines of text to be reserved for the help
+            section.
+
+        @throws ::com::sun::star::lang::IllegalArgumentException
+            if <arg>minHelpTextLines</arg> or <arg>maxHelpTextLines</arg> are negative,
+            or if <arg>minHelpTextLines</arg> is greater than <arg>maxHelpTextLines</arg>.
+
+        @see XObjectInspectorModel::HasHelpSection
+        @see XObjectInspectorModel::MinHelpTextLines
+        @see XObjectInspectorModel::MaxHelpTextLines
+
+        @since OOo 2.2
+    */
+    createWithHelpSection(
+        [in] long minHelpTextLines,
+        [in] long maxHelpTextLines
+    )
+        raises ( ::com::sun::star::lang::IllegalArgumentException );
+};
+
+//=============================================================================
+
+}; }; }; }; };
+
+#endif

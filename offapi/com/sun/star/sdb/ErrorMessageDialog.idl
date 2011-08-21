@@ -1,0 +1,160 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_sdb_ErrorMessageDialog_idl__
+#define __com_sun_star_sdb_ErrorMessageDialog_idl__
+
+#include <com/sun/star/ui/dialogs/XExecutableDialog.idl>
+#include <com/sun/star/awt/XWindow.idl>
+#include <com/sun/star/lang/XInitialization.idl>
+#include <com/sun/star/beans/XPropertySet.idl>
+
+//=============================================================================
+
+module com {  module sun {  module star {  module sdb {
+
+
+/** provides a dialog for displaying database related exceptions.
+    <p>
+    If applications use any of the functionality provided in the modules
+    <module scope="com.sun.star">
+    sdbc
+    </module>
+    ,
+    <module scope="com.sun.star">
+    sdbcx
+    </module>
+     and
+     <module scope="com.sun.star">
+     sdb
+     </module>
+     ,
+    they will - sooner or later - encounter
+    <type scope="com::sun::star::sdbc">SQLException</type>
+    's.
+    <br/>
+    These exceptions can be chained, so the information wrapped in one single
+    <type scope="com::sun::star::sdbc">SQLException</type>
+    can be rather complex (e.g., every instance where such an exception is passing before it is finally caught, could
+    append a
+    <type scope="com::sun::star::sdb">SQLContext</type>
+    to explain what it was doing), and they should be
+    presented to the user in a consistent way.
+    <br/>
+    This can be reached by using this service.
+    @see com.sun.star.sdb.InteractionHandler
+    </p>
+*/
+published service ErrorMessageDialog
+{
+    /** the title of the (dialog) window
+    */
+    [property] string Title;
+
+    /** parent window to use for the dialog
+        <p>
+        This property can't be set while the dialog is being displayed.
+        </p>
+    */
+    [property] com::sun::star::awt::XWindow ParentWindow;
+
+    /** is the exception displayed by the dialog
+        <p>
+        This should contain a
+        <type scope="com::sun::star::sdbc">SQLException</type>
+        instance, or an instance
+        of any class derived from this exception.
+        </p>
+        <p>
+        This property can't be set while the dialog is being displayed.
+        </p>
+    */
+    [property] any SQLException;
+
+    /** specifies the URL to the help topic to associate with the dialog.
+
+        <p>If This URL is not empty, then the dialog will get a "Help" button, which
+        directs the user to the given help topic.</p>
+    */
+    [optional, property] string HelpURL;
+
+    /** allows access to the properties of the object
+    */
+    interface com::sun::star::beans::XPropertySet;
+
+    /** allows starting execution of the dialog
+    */
+    interface com::sun::star::ui::dialogs::XExecutableDialog;
+
+    /** allows initializing the dialog
+        <p>
+        You do not need to call the initialize method directly, instead you may use the createInstanceWithArguments
+        method of your
+        <type scope="com::sun::star::lang">XMultiServiceFactory</type>
+        .
+        </p>
+        <p>
+        You specify a parameter by passing one (or more)
+        <type scope="com::sun::star::beans">PropertyValue</type>
+        object(s) to the initialize method, where the <em>Name</em> field contains a string describing which aspect
+        you want to affect, and the <em>Value</em> field containing a value.
+        <br/>
+        Imagine the initialization values, as if you use
+        <method scope="com::sun::star::beans">XPropertySet::setPropertyValue()
+        </method>
+         of the
+        <type scope="com::sun::star::beans">XPropertySet</type>
+        interface ...
+        <br/>
+        allowed parameters are
+        <ul>
+            <li><b>Title</b><br/>
+                String describing the initial title of the dialog. If not specified, a default title is used.
+            </li>
+            <li><b>ParentWindow</b><br/>
+                <type scope="com::sun::star::awt">XWindow</type>
+                describing the parent window to use for the dialog.
+            </li>
+            <li><b>SQLException</b><br/>
+                <type scope="com::sun::star::sdbc">SQLException</type>
+                describing the error which is being displayed.<br/>
+                When initializing this value, you may use any derivative of
+                <type scope="com::sun::star::sdbc">SQLException</type>
+                .
+            </li>
+        </ul>
+        </p>
+    */
+    interface com::sun::star::lang::XInitialization;
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif
+

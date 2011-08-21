@@ -1,0 +1,304 @@
+﻿/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+ // include ---------------------------------------------------------------
+#include <svx/dialogs.hrc>
+#include "helpid.hrc"
+#include "stbctrls.h"
+ // pragma ----------------------------------------------------------------
+
+ // Strings ---------------------------------------------------------------
+String RID_SVXSTR_INSERT_TEXT
+{
+     // 'Einf"ugen' bzw. 'Insert' abgek"urzt auf h"ochstens 5 Zeichen
+    Text [ en-US ] = "INSRT" ;
+};
+String RID_SVXSTR_OVERWRITE_TEXT
+{
+     // '"Uberschreiben' bzw. 'Overwrite' abgek"urzt auf h"ochstens 5 Zeichen
+    Text [ en-US ] = "OVER" ;
+};
+String RID_SVXSTR_SELMODE_STD
+{
+     // 'Standard' abgek"urzt auf h"ochstens 3 Zeichen
+    Text [ en-US ] = "STD" ;
+};
+String RID_SVXSTR_SELMODE_ER
+{
+     // 'Erweitert' bzw. 'Extended' abgek"urzt auf h"ochstens 3 Zeichen
+    Text [ en-US ] = "EXT" ;
+};
+String RID_SVXSTR_SELMODE_ERG
+{
+     // 'Erg"anzend' bzw. 'Added' abgek"urzt auf h"ochstens 3 Zeichen
+    Text [ en-US ] = "ADD" ;
+};
+
+String RID_SVXSTR_SELMODE_BLK
+{
+     // 'Block' shortened to max. 3 chararcters
+    Text [ en-US ] = "BLK" ;
+    Text [ x-comment ] = " ";
+};
+
+String RID_SVXSTR_XMLSEC_SIG_OK
+{
+    Text [ en-US ] = "Digital Signature: The document signature is OK.";
+};
+
+String RID_SVXSTR_XMLSEC_SIG_OK_NO_VERIFY
+{
+    Text [ en-US ] = "Digital Signature: The document signature is OK, but the certificates could not be validated.";
+};
+
+String RID_SVXSTR_XMLSEC_SIG_NOT_OK
+{
+    Text [ en-US ] = "Digital Signature: The document signature does not match the document content. We strongly recommend you to do not trust this document.";
+};
+
+String RID_SVXSTR_XMLSEC_NO_SIG
+{
+    Text [ en-US ] = "Digital Signature: The document is not signed.";
+};
+
+String RID_SVXSTR_XMLSEC_SIG_CERT_OK_PARTIAL_SIG
+{
+    Text [ en-US ] = "Digital Signature: The document signature and the certificate are OK, but not all parts of the document are signed.";
+};
+
+String RID_SVXSTR_DOC_MODIFIED_YES
+{
+    Text [ en-US ] = "The document has been modified. Double-click to save the document.";
+};
+
+String RID_SVXSTR_DOC_MODIFIED_NO
+{
+    Text [ en-US ] = "The document has not been modified since the last save.";
+};
+
+ // PopupMenu -------------------------------------------------------------
+Menu RID_SVXMNU_ZOOM
+{
+    ItemList =
+    {
+        MenuItem
+        {
+            Identifier = ZOOM_200 ;
+            HelpId = HID_MNU_ZOOM_200 ;
+            Text = "200%" ;
+        };
+        MenuItem
+        {
+            Identifier = ZOOM_150 ;
+            HelpId = HID_MNU_ZOOM_150 ;
+            Text = "150%" ;
+        };
+        MenuItem
+        {
+            Identifier = ZOOM_100 ;
+            HelpId = HID_MNU_ZOOM_100 ;
+            Text = "100%" ;
+        };
+        MenuItem
+        {
+            Identifier = ZOOM_75 ;
+            HelpId = HID_MNU_ZOOM_75 ;
+            Text = "75%" ;
+        };
+        MenuItem
+        {
+            Identifier = ZOOM_50 ;
+            HelpId = HID_MNU_ZOOM_50 ;
+            Text = "50%" ;
+        };
+        MenuItem
+        {
+            Identifier = ZOOM_OPTIMAL ;
+            HelpId = HID_MNU_ZOOM_OPTIMAL ;
+            Text [ en-US ] = "Optimal" ;
+        };
+        MenuItem
+        {
+            Identifier = ZOOM_PAGE_WIDTH ;
+            HelpId = HID_MNU_ZOOM_PAGE_WIDTH ;
+            Text [ en-US ] = "Page Width" ;
+        };
+        MenuItem
+        {
+            Identifier = ZOOM_WHOLE_PAGE ;
+            HelpId = HID_MNU_ZOOM_WHOLE_PAGE ;
+            Text [ en-US ] = "Entire Page" ;
+        };
+    };
+};
+ // Funktionsauswahl auf dem SvxPosSizeStatusBarControl fuer Calc
+Menu RID_SVXMNU_PSZ_FUNC
+{
+    ItemList =
+    {
+        MenuItem
+        {
+            Identifier = PSZ_FUNC_AVG ;
+            HelpId = HID_MNU_FUNC_AVG ;
+            Text [ en-US ] = "Average" ;
+        };
+        MenuItem
+        {
+            Identifier = PSZ_FUNC_COUNT2 ;
+            HelpId = HID_MNU_FUNC_COUNT2 ;
+            Text [ en-US ] = "CountA" ;
+        };
+        MenuItem
+        {
+            Identifier = PSZ_FUNC_COUNT ;
+            HelpId = HID_MNU_FUNC_COUNT ;
+            Text [ en-US ] = "Count" ;
+        };
+        MenuItem
+        {
+            Identifier = PSZ_FUNC_MAX ;
+            HelpId = HID_MNU_FUNC_MAX ;
+            Text [ en-US ] = "Maximum" ;
+        };
+        MenuItem
+        {
+            Identifier = PSZ_FUNC_MIN ;
+            HelpId = HID_MNU_FUNC_MIN ;
+            Text [ en-US ] = "Minimum" ;
+        };
+        MenuItem
+        {
+            Identifier = PSZ_FUNC_SUM ;
+            HelpId = HID_MNU_FUNC_SUM ;
+            Text [ en-US ] = "Sum" ;
+        };
+        MenuItem
+        {
+            Identifier = PSZ_FUNC_NONE ;
+            HelpId = HID_MNU_FUNC_NONE ;
+            Text [ en-US ] = "None" ;
+        };
+    };
+};
+Menu RID_SVXMNU_XMLSECSTATBAR
+{
+    ItemList =
+    {
+        MenuItem
+        {
+            Identifier = XMLSEC_CALL ;
+            HelpId = HID_XMLSEC_CALL ;
+            Text [ en-US ] = "Digital Signatures..." ;
+        };
+    };
+};
+
+// Images ----------------------------------------------------------------
+
+#define STD_MASKCOLOR   Color{Red=0xffff;Green=0x0000;Blue=0xffff;}
+
+Image RID_SVXBMP_POSITION
+{
+    ImageBitmap = Bitmap
+    {
+        File = "sc10223.bmp" ;
+    };
+    MaskColor = STD_MASKCOLOR;
+};
+Image RID_SVXBMP_SIZE
+{
+    ImageBitmap = Bitmap
+    {
+        File = "sc10224.bmp" ;
+    };
+    MaskColor = STD_MASKCOLOR;
+};
+Image RID_SVXBMP_SIGNET
+{
+    ImageBitmap = Bitmap
+    {
+        File = "signet_11x16.png" ;
+    };
+    MaskColor = STD_MASKCOLOR;
+};
+Image RID_SVXBMP_SIGNET_BROKEN
+{
+    ImageBitmap = Bitmap
+    {
+        File = "caution_11x16.png" ;
+    };
+    MaskColor = STD_MASKCOLOR;
+};
+Image RID_SVXBMP_SIGNET_NOTVALIDATED
+{
+    ImageBitmap = Bitmap
+    {
+        File = "notcertificate_16.png" ;
+    };
+    MaskColor = STD_MASKCOLOR;
+};
+
+
+Image RID_SVXBMP_SLIDERBUTTON
+{
+    ImageBitmap = Bitmap
+    {
+        File = "navigationball_10.png" ;
+    };
+    MaskColor = STD_MASKCOLOR;
+};
+Image RID_SVXBMP_SLIDERDECREASE
+{
+    ImageBitmap = Bitmap
+    {
+        File = "slidezoomout_11.png" ;
+    };
+    MaskColor = STD_MASKCOLOR;
+};
+Image RID_SVXBMP_SLIDERINCREASE
+{
+    ImageBitmap = Bitmap
+    {
+        File = "slidezoomin_11.png" ;
+    };
+    MaskColor = STD_MASKCOLOR;
+};
+Image RID_SVXBMP_DOC_MODIFIED_YES
+{
+    ImageBitmap = Bitmap
+    {
+        File = "doc_modified_yes_14.png" ;
+    };
+    MaskColor = STD_MASKCOLOR;
+};
+Image RID_SVXBMP_DOC_MODIFIED_NO
+{
+    ImageBitmap = Bitmap
+    {
+        File = "doc_modified_no_14.png" ;
+    };
+    MaskColor = STD_MASKCOLOR;
+};

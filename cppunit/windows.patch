@@ -1,0 +1,48 @@
+--- misc/cppunit-1.12.1/include/cppunit/plugin/TestPlugIn.h	2010-01-11 14:42:25.084658287 +0100
++++ misc/build/cppunit-1.12.1/include/cppunit/plugin/TestPlugIn.h	2010-01-11 14:42:18.660706180 +0100
+@@ -133,9 +133,8 @@
+ /*! \def CPPUNIT_PLUGIN_IMPLEMENT_MAIN()
+  * \brief Implements the 'main' function for the plug-in.
+  *
+- * This macros implements the main() function for dynamic library.
+- * For example, WIN32 requires a DllMain function, while some Unix 
+- * requires a main() function. This macros takes care of the implementation.
++ * This macro implements the main() function for dynamic library
++ * on Unix for some weird reason.
+  */
+ 
+ // Win32
+@@ -149,21 +149,7 @@
+ 
+ // Win32
+ #if defined(CPPUNIT_HAVE_WIN32_DLL_LOADER)
+-#if !defined(APIENTRY)
+-#define WIN32_LEAN_AND_MEAN 
+-#define NOGDI
+-#define NOUSER
+-#define NOKERNEL
+-#define NOSOUND
+-#define NOMINMAX
+-#define BLENDFUNCTION void    // for mingw & gcc
+-#include <windows.h>
+-#endif
+ #define CPPUNIT_PLUGIN_IMPLEMENT_MAIN()               \
+-  BOOL APIENTRY DllMain( HANDLE, DWORD, LPVOID )      \
+-  {                                                   \
+-      return TRUE;                                    \
+-  }                                                   \
+   typedef char __CppUnitPlugInImplementMainDummyTypeDef
+ 
+ // Unix
+--- misc/cppunit-1.12.1/include/cppunit/TestAssert.h
++++ misc/build/cppunit-1.12.1/include/cppunit/TestAssert.h
+@@ -76,7 +76,7 @@
+        const int precision = 15;
+ #endif  // #ifdef DBL_DIG
+        char buffer[128];
+-#ifdef __STDC_SECURE_LIB__ // Use secure version with visual studio 2005 to avoid warning.
++#if defined(_MSC_VER) && defined(__STDC_SECURE_LIB__) // Use secure version with visual studio 2005 to avoid warning.
+        sprintf_s(buffer, sizeof(buffer), "%.*g", precision, x); 
+ #else	
+        sprintf(buffer, "%.*g", precision, x); 
+

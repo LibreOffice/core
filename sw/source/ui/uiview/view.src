@@ -1,0 +1,221 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#include <svx/svxids.hrc>
+#include <svx/globlmn.hrc>
+#include "view.hrc"
+#include "shells.hrc"
+#include "globals.hrc"
+#include "popup.hrc"
+#include "helpid.h"
+#include "cmdid.h"
+ImageButton BTN_PAGEUP
+{
+    SVLOOK = TRUE ;
+    HIDE = TRUE ;
+    RectStyle = TRUE ;
+    SmallStyle = TRUE ;
+    SYMBOL = IMAGEBUTTON_PAGEUP ;
+};
+ImageButton BTN_PAGEDOWN
+{
+    SVLOOK = TRUE ;
+    HIDE = TRUE ;
+    RectStyle = TRUE ;
+    SmallStyle = TRUE ;
+    SYMBOL = IMAGEBUTTON_PAGEDOWN ;
+};
+QueryBox DLG_WRAP
+{
+    BUTTONS = WB_YES_NO ;
+    DEFBUTTON = WB_DEF_YES ;
+    Message [ en-US ] = "Do you want to continue checking at the beginning of the document?" ;
+};
+QueryBox DLG_BODY
+{
+    BUTTONS = WB_YES_NO ;
+    DEFBUTTON = WB_DEF_NO ;
+    Message [ en-US ] = "Do you want to check the main text?" ;
+};
+QueryBox DLG_PRT_FIELDNAME
+{
+    BUTTONS = WB_YES_NO_CANCEL ;
+    DEFBUTTON = WB_DEF_CANCEL ;
+    Message [ en-US ] = "Show field commands option is checked.\nDo you want to print the document with field names?" ;
+};
+QueryBox DLG_SPECIAL
+{
+    BUTTONS = WB_YES_NO ;
+    DEFBUTTON = WB_DEF_NO ;
+    Message [ en-US ] = "Do you want check the special regions?" ;
+};
+QueryBox DLG_THESAURUS
+{
+    BUTTONS = WB_YES_NO ;
+    DEFBUTTON = WB_DEF_NO ;
+    Message [ en-US ] = "This word appears in the list of words you want to avoid! Start thesaurus?" ;
+};
+QueryBox DLG_SPECIAL_FORCED
+{
+    BUTTONS = WB_YES_NO ;
+    DEFBUTTON = WB_DEF_NO ;
+    Message [ en-US ] = "Check special regions is deactivated. Check anyway?" ;
+};
+QueryBox MSG_SEARCH_END
+{
+    Buttons = WB_YES_NO ;
+    DefButton = WB_DEF_YES ;
+    Message [ en-US ] = "%PRODUCTNAME Writer has searched to the end of the document. Do you want to continue at the beginning?" ;
+};
+QueryBox MSG_SEARCH_START
+{
+    Buttons = WB_YES_NO ;
+    DefButton = WB_DEF_YES ;
+    Message [ en-US ] = "%PRODUCTNAME Writer has searched to the beginning of the document. Do you want to continue at the end?" ;
+};
+InfoBox MSG_NO_MERGE_ENTRY
+{
+    Message [ en-US ] = "Could not merge documents." ;
+};
+InfoBox MSG_ERR_INSERT_GLOS
+{
+    Message [ en-US ] = "AutoText could not be created." ;
+};
+InfoBox MSG_ERR_SRCSTREAM
+{
+    Message [ en-US ] = "The source cannot be loaded." ;
+};
+InfoBox MSG_ERR_NO_FAX
+{
+    Message [ en-US ] = "No fax printer has been set under Tools/Options/%1/Print." ;
+};
+String STR_WEBOPTIONS
+{
+    Text [ en-US ] = "HTML document";
+};
+String STR_TEXTOPTIONS
+{
+    Text [ en-US ] = "Text document";
+};
+InfoBox MSG_NOT_FOUND
+{
+    Message [ en-US ] = "Search key not found." ;
+};
+InfoBox MSG_INDEX_OVERFLOW
+{
+    Message [ en-US ] = "found." ;
+};
+InfoBox MSG_SCAN_NOSOURCE
+{
+    Message [ en-US ] = "Source not specified." ;
+};
+String STR_NUM_LEVEL
+{
+    Text [ en-US ] = "Level " ;
+};
+//#outline level,zhaojianwei
+String STR_NUM_OUTLINE
+{
+    Text [ en-US ] = "Outline ";
+};//<-end,zhaojianwei
+String STR_ERROR_NOLANG
+{
+    Text [ en-US ] = "No language is selected in the proofed section." ;
+};
+String STR_EDIT_FOOTNOTE
+{
+    Text [ en-US ] = "Edit Footnote/Endnote" ;
+};
+String STR_NB_REPLACED
+{
+    Text [ en-US ] = "Search key replaced XX times." ;
+};
+String RID_TOOLS_TOOLBOX
+{
+    Text [ en-US ] = "Main Toolbar" ;
+};
+String STR_SRCVIEW_ROW
+{
+    Text [ en-US ] = "Row " ;
+};
+String STR_SRCVIEW_COL
+{
+    Text [ en-US ] = "Column " ;
+};
+String STR_PRINT_TITLE
+{
+    Text [ en-US ] = "Printing selection";
+};
+String STR_PRINT_MSG
+{
+    Text [ en-US ] = "Do you want to print the selection or the entire document?";
+};
+String STR_PRINT_ALL
+{
+    Text [ en-US ] = "All";
+};
+String STR_PRINT_SELECTION
+{
+    Text [ en-US ] = "Selection";
+};
+String STR_READONLY_SEL
+{
+    Text [ en-US ] = "read-only";
+};
+String STR_SAVEAS_SRC
+{
+    Text [ en-US ] = "~Export source..." ;
+};
+String MN_SRCVIEW_POPUPMENU
+{
+    Text [ en-US ] = "HTML source" ;
+};
+
+Menu MN_SRCVIEW_POPUPMENU
+{
+    ItemList =
+    {
+        MenuItem
+        {
+            ITEM_FORMAT_ATTR_CHAR_FONT
+        };
+        MenuItem
+        {
+            ITEM_FORMAT_ATTR_CHAR_FONTHEIGHT
+        };
+        MenuItem
+        {
+            Separator = TRUE ;
+        };
+        MenuItem
+        {
+            Identifier = SID_SOURCEVIEW ;
+            HelpID = HID_SOURCEVIEW ;
+            Text [ en-US ] = "HTML Source" ;
+        };
+    };
+};

@@ -1,0 +1,98 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_frame_XDispatchProvider_idl__
+#define __com_sun_star_frame_XDispatchProvider_idl__
+
+#include <com/sun/star/uno/XInterface.idl>
+#include <com/sun/star/frame/XDispatch.idl>
+#include <com/sun/star/util/URL.idl>
+#include <com/sun/star/frame/DispatchDescriptor.idl>
+
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module frame {
+
+//=============================================================================
+/** provides <type>XDispatch</type> interfaces for certain functions which
+    are useful at the UI.
+
+    @see XDispatch
+ */
+published interface XDispatchProvider: com::sun::star::uno::XInterface
+{
+    //-------------------------------------------------------------------------
+    /** searches for an <type>XDispatch</type> for the specified URL within
+        the specified target frame.
+
+        @param URL
+            describe the feature which should be supported by returned dispatch object
+
+        @param TargetFrameName
+            specify the frame which should be the target for this request
+
+        @param SearchFlags
+            optional search parameter for finding the frame if no special
+            <var>TargetFrameName</var> was used
+
+        @return
+            the dispatch object which provides queried functionality
+            <br>
+            or <NULL/> if no dispatch object is available
+
+        @see XFrame::findFrame()
+        @see XDispatchProvider::queryDispatches()
+     */
+    XDispatch queryDispatch(
+        [in] com::sun::star::util::URL URL,
+        [in] string TargetFrameName,
+        [in] long SearchFlags );
+
+    //-------------------------------------------------------------------------
+    /** actually this method is redundant to <member>XDispatchProvider::queryDispatch()</member>
+        to avoid multiple remote calls.
+
+        @param Requests
+            list of dispatch requests
+
+        @returns
+            multiple dispatch interfaces for the specified descriptors at once
+
+            <p>
+            It's not allowed to pack it - because every request must match
+            to his real result. Means: don't delete <NULL/> entries inside this list.
+            </p>
+     */
+    sequence< XDispatch > queryDispatches(
+        [in] sequence<DispatchDescriptor> Requests);
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

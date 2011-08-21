@@ -1,0 +1,67 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_animations_Event_idl__
+#define __com_sun_star_animations_Event_idl__
+
+#include <com/sun/star/uno/XInterface.idl>
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module animations {
+
+//=============================================================================
+
+/** an event has a source that causes an event to be fired and a trigger
+    that defines under which condition an event should be raised and
+    an offset if the event should be raised a defined amount of time
+    after the event is triggered.
+*/
+struct Event
+{
+    /** this is the source for this event. */
+    any Source;
+
+    /** this is the trigger that fires this event. */
+    short Trigger;
+
+    /** an optional offset in seconds or <const>Timing::INDEFINITE</const>. This is the timespan
+        between the triggering of the event and actually raising the event
+    */
+    any Offset;
+
+    /** an option repeat value. If the <member>Trigger</member> is
+        <const>EventTrigger</const>, this is the number of repeats
+        after which the event is initially raised.
+    */
+    unsigned short Repeat;
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

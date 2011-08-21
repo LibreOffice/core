@@ -1,0 +1,397 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#include "dbaccess_helpid.hrc"
+#include "dbu_dlg.hrc"
+#include "advancedsettings.hrc"
+
+//-------------------------------------------------------------------------
+
+#define AUTO_DATAHANDLING(AUTO_Y)                                                   \
+    FixedLine FL_DATAHANDLING                                                       \
+    {                                                                               \
+        Pos = MAP_APPFONT ( RELATED_CONTROLS , AUTO_Y ) ;                           \
+        Size = MAP_APPFONT ( ADVANCED_PAGE_X - 2*RELATED_CONTROLS , FIXEDTEXT_HEIGHT ) ;        \
+        Text [ en-US ] = "Options";                                                 \
+    };
+
+//-------------------------------------------------------------------------
+
+#define AUTO_SQL92CHECK(AUTO_Y)                                                     \
+    CheckBox CB_SQL92CHECK                                                          \
+    {                                                                               \
+        Pos     = MAP_APPFONT ( 6 , AUTO_Y) ;                                       \
+        Size    = MAP_APPFONT ( ADVANCED_PAGE_X -12 , CHECKBOX_HEIGHT ) ;           \
+        TabStop = TRUE ;                                                            \
+        HelpId = HID_DSADMIN_SQL92CHECK;                                            \
+        Text[ en-US ] = "Use SQL92 naming constraints";                             \
+    };
+
+//-------------------------------------------------------------------------
+
+#define AUTO_APPENDTABLEALIAS(AUTO_Y)                                               \
+    CheckBox CB_APPENDTABLEALIAS                                                    \
+    {                                                                               \
+        Pos     = MAP_APPFONT ( 6 , AUTO_Y ) ;                                      \
+        Size    = MAP_APPFONT ( ADVANCED_PAGE_X -12  , CHECKBOX_HEIGHT ) ;          \
+        TabStop = TRUE ;                                                            \
+        HelpId = HID_DSADMIN_APPENDTABLEALIAS;                                      \
+        Text[ en-US ] = "Append the table alias name on SELECT statements";         \
+    };
+
+//-------------------------------------------------------------------------
+
+#define AUTO_AS_BEFORE_CORR_NAME(AUTO_Y)                                            \
+    CheckBox CB_AS_BEFORE_CORR_NAME                                                 \
+    {                                                                               \
+        Pos     = MAP_APPFONT ( 6 , AUTO_Y ) ;                                      \
+        Size    = MAP_APPFONT ( ADVANCED_PAGE_X -12  , CHECKBOX_HEIGHT ) ;          \
+        TabStop = TRUE ;                                                            \
+        HelpId = HID_DSADMIN_AS_BEFORE_CORRELATION_NAME;                            \
+        Text[ en-US ] = "Use keyword AS before table alias names";                  \
+    };
+
+//-------------------------------------------------------------------------
+
+#define AUTO_ENABLEOUTERJOIN(AUTO_Y)                                                \
+    CheckBox CB_ENABLEOUTERJOIN                                                     \
+    {                                                                               \
+        Pos     = MAP_APPFONT ( 6 , AUTO_Y ) ;                                      \
+        Size    = MAP_APPFONT ( ADVANCED_PAGE_X -12 , CHECKBOX_HEIGHT ) ;           \
+        TabStop = TRUE ;                                                            \
+        HelpId = HID_DSADMIN_ENABLEOUTERJOIN;                                       \
+        Text [ en-US ] = "Use Outer Join syntax '{OJ }'";                           \
+    };
+
+
+//-------------------------------------------------------------------------
+
+#define AUTO_IGNOREDRIVER_PRIV(AUTO_Y)                                              \
+    CheckBox CB_IGNOREDRIVER_PRIV                                                   \
+    {                                                                               \
+        Pos     = MAP_APPFONT ( 6 , AUTO_Y ) ;                                      \
+        Size    = MAP_APPFONT ( ADVANCED_PAGE_X -12 , CHECKBOX_HEIGHT ) ;           \
+        TabStop = TRUE ;                                                            \
+        HelpId = HID_DSADMIN_IGNOREDRIVER_PRIV;                                     \
+        Text[ en-US ] = "Ignore the privileges from the database driver";           \
+    };
+
+//-------------------------------------------------------------------------
+
+#define AUTO_PARAMETERNAMESUBST(AUTO_Y)                                             \
+    CheckBox CB_PARAMETERNAMESUBST                                                  \
+    {                                                                               \
+        Pos     = MAP_APPFONT ( 6 , AUTO_Y) ;                                       \
+        Size    = MAP_APPFONT ( ADVANCED_PAGE_X -12 , CHECKBOX_HEIGHT ) ;           \
+        TabStop = TRUE ;                                                            \
+        HelpId = HID_DSADMIN_PARAMETERNAMESUBST;                                    \
+        Text[ en-US ] = "Replace named parameters with '?'";                        \
+    };
+
+//-------------------------------------------------------------------------
+
+#define AUTO_SUPPRESVERSIONCOLUMN(AUTO_Y)                                           \
+    CheckBox CB_SUPPRESVERSIONCL                                                    \
+    {                                                                               \
+        Pos     = MAP_APPFONT ( 6 , AUTO_Y ) ;                                      \
+        Size    = MAP_APPFONT ( ADVANCED_PAGE_X -12 , CHECKBOX_HEIGHT ) ;           \
+        TabStop = TRUE ;                                                            \
+        HelpId = HID_DSADMIN_SUPPRESS_VERSIONCL;                                    \
+        Text [ en-US ] = "Display version columns (when available)";                \
+    };
+
+//-------------------------------------------------------------------------
+
+#define AUTO_CATALOG(AUTO_Y)                                                        \
+    CheckBox CB_CATALOG                                                             \
+    {                                                                               \
+        Pos     = MAP_APPFONT ( 6 , AUTO_Y ) ;                                      \
+        Size    = MAP_APPFONT ( ADVANCED_PAGE_X -12 , CHECKBOX_HEIGHT ) ;           \
+        TabStop = TRUE ;                                                            \
+        HelpId = HID_DSADMIN_CATALOG;                                               \
+        Text [ en-US ] = "Use catalog name in SELECT statements";                   \
+    };
+
+
+//-------------------------------------------------------------------------
+
+#define AUTO_SCHEMA(AUTO_Y)                                                         \
+    CheckBox CB_SCHEMA                                                              \
+    {                                                                               \
+        Pos     = MAP_APPFONT ( 6 , AUTO_Y ) ;                                      \
+        Size    = MAP_APPFONT ( ADVANCED_PAGE_X -12 , CHECKBOX_HEIGHT ) ;           \
+        TabStop = TRUE ;                                                            \
+        HelpId = HID_DSADMIN_SCHEMA;                                                \
+        Text [ en-US ] = "Use schema name in SELECT statements";                    \
+    };
+
+//-------------------------------------------------------------------------
+
+#define AUTO_IGNOREINDEXAPPENDIX(AUTO_Y)                                            \
+    CheckBox CB_IGNOREINDEXAPPENDIX                                                 \
+    {                                                                               \
+        Pos     = MAP_APPFONT ( 6 , AUTO_Y ) ;                                      \
+        Size    = MAP_APPFONT ( ADVANCED_PAGE_X -12  , CHECKBOX_HEIGHT ) ;          \
+        TabStop = TRUE ;                                                            \
+        HelpId = HID_DSADMIN_IGNOREINDEXAPPENDIX;                                   \
+        Text[ en-US ] = "Create index with ASC or DESC statement";                  \
+    };
+
+//-------------------------------------------------------------------------
+
+#define AUTO_DOSLINEENDS(AUTO_Y)                                                    \
+    CheckBox CB_DOSLINEENDS                                                         \
+    {                                                                               \
+        Pos     = MAP_APPFONT ( 6 , AUTO_Y ) ;                                      \
+        Size    = MAP_APPFONT ( ADVANCED_PAGE_X -12 , CHECKBOX_HEIGHT ) ;           \
+        TabStop = TRUE ;                                                            \
+        HelpId = HID_DSADMIN_DOSLINEENDS;                                           \
+        Text [ en-US ] = "End text lines with CR+LF";                               \
+    };
+
+//-------------------------------------------------------------------------
+#define AUTO_IGNORECURRENCY(AUTO_Y)                                                 \
+    CheckBox CB_IGNORECURRENCY                                                      \
+    {                                                                               \
+        Pos     = MAP_APPFONT ( 6 , AUTO_Y ) ;                                      \
+        Size    = MAP_APPFONT ( ADVANCED_PAGE_X -12 , CHECKBOX_HEIGHT ) ;           \
+        TabStop = TRUE ;                                                            \
+        HelpId = HID_DSADMIN_IGNORECURRENCY;                                        \
+        Text [ en-US ] = "Ignore currency field information";                       \
+    };
+
+//-------------------------------------------------------------------------
+
+#define AUTO_CHECKREQUIRED(AUTO_Y)                                                  \
+    CheckBox CB_CHECK_REQUIRED                                                      \
+    {                                                                               \
+        Pos     = MAP_APPFONT ( 6 , AUTO_Y ) ;                                      \
+        Size    = MAP_APPFONT ( ADVANCED_PAGE_X -12 , CHECKBOX_HEIGHT ) ;           \
+        TabStop = TRUE ;                                                            \
+        HelpId = HID_DSADMIN_CHECK_REQUIRED_FIELDS;                                 \
+        Text [ en-US ] = "Form data input checks for required fields";            \
+    };
+
+#define AUTO_ESCAPE_DATETIME(AUTO_Y)                                                \
+    CheckBox CB_ESCAPE_DATETIME                                                     \
+    {                                                                               \
+        Pos     = MAP_APPFONT ( 6 , AUTO_Y ) ;                                      \
+        Size    = MAP_APPFONT ( ADVANCED_PAGE_X -12 , CHECKBOX_HEIGHT ) ;           \
+        TabStop = TRUE ;                                                            \
+        HelpId = HID_DSADMIN_ESCAPE_DATETIME;                                       \
+        Text [ en-US ] = "Use ODBC conformant date/time literals";                  \
+    };
+
+
+#define AUTO_PRIMARY_KEY_SUPPORT(AUTO_Y)                                            \
+    CheckBox CB_PRIMARY_KEY_SUPPORT                                                 \
+    {                                                                               \
+        Pos     = MAP_APPFONT ( 6 , AUTO_Y ) ;                                      \
+        Size    = MAP_APPFONT ( ADVANCED_PAGE_X - 12 , CHECKBOX_HEIGHT ) ;          \
+        TabStop = TRUE ;                                                            \
+        HelpId = HID_DSADMIN_PRIMARY_KEY_SUPPORT;                                   \
+        Text [ en-US ] = "Supports primary keys";                                   \
+    };
+
+#define AUTO_RESPECTRESULTSETTYPE(AUTO_Y)                                            \
+    CheckBox CB_RESPECTRESULTSETTYPE                                                 \
+    {                                                                               \
+        Pos     = MAP_APPFONT ( 6 , AUTO_Y ) ;                                      \
+        Size    = MAP_APPFONT ( ADVANCED_PAGE_X - 12 , CHECKBOX_HEIGHT ) ;          \
+        TabStop = TRUE ;                                                            \
+        HelpId = HID_DSADMIN_RESPECTRESULTSETTYPE;                                   \
+        Text [ en-US ] = "Respect the result set type from the database driver";                                   \
+    };
+
+
+//-------------------------------------------------------------------------
+
+#define WORKAROUND                                                                  \
+        StringList [ en-US ] =                                                      \
+        {                                                                           \
+            < "Default" ; Default ; > ;                                             \
+            < "SQL" ; Default ; > ;                                                 \
+            < "Mixed" ; Default ; > ;                                               \
+            < "MS Access" ; Default ; > ;                                           \
+        };
+
+
+#define AUTO_BOOLEANCOMPARISON(AUTO_Y)                                              \
+    FixedText FT_BOOLEANCOMPARISON                                                  \
+    {                                                                               \
+        Pos     = MAP_APPFONT ( START_X , AUTO_Y + ( LISTBOX_HEIGHT - CHECKBOX_HEIGHT ) / 2 ) ;   \
+        Size    = MAP_APPFONT ( 100 , CHECKBOX_HEIGHT );                            \
+        Text [ en-US ] = "Comparison of Boolean values";                            \
+    };                                                                              \
+    ListBox LB_BOOLEANCOMPARISON                                                    \
+    {                                                                               \
+        Pos     = MAP_APPFONT ( START_X + 100, AUTO_Y ) ;                           \
+        Size    = MAP_APPFONT ( 60 , LISTBOX_HEIGHT ) ;                             \
+        TabStop = TRUE ;                                                            \
+        SvLook = TRUE;                                                              \
+        DropDown = TRUE;                                                            \
+        Border = TRUE;                                                              \
+        HelpId = HID_DSADMIN_BOOLEANCOMPARISON;                                     \
+        WORKAROUND                                                                  \
+    };                                                                              \
+
+#define AUTO_MAXROWSCAN(AUTO_Y)                                              \
+    FixedText FT_MAXROWSCAN                                                  \
+    {                                                                               \
+        Pos     = MAP_APPFONT ( START_X , AUTO_Y + ( LISTBOX_HEIGHT - CHECKBOX_HEIGHT ) / 2 ) ;   \
+        Size    = MAP_APPFONT ( 100 , CHECKBOX_HEIGHT );                            \
+        Text [ en-US ] = "Rows to scan column types";                               \
+    };                                                                              \
+    NumericField NF_MAXROWSCAN                                                      \
+    {                                                                               \
+        Pos     = MAP_APPFONT ( START_X + 100, AUTO_Y ) ;                           \
+        Size    = MAP_APPFONT ( 60 , EDIT_HEIGHT ) ;                                \
+        TabStop = TRUE ;                                                            \
+        NoThousandSep = TRUE;                                                       \
+        Border = TRUE;                                                              \
+        HelpId = HID_DSADMIN_MAXROWSCAN;                                            \
+    };                                                                              \
+
+
+//-------------------------------------------------------------------------
+
+TabPage PAGE_GENERATED_VALUES
+{
+    HelpID = "dbaccess:TabPage:PAGE_GENERATED_VALUES";
+    SVLook = TRUE ;
+    Pos = MAP_APPFONT ( 0 , 0 ) ;
+    Size = MAP_APPFONT ( ADVANCED_PAGE_X , ADVANCED_PAGE_Y ) ;
+    Hide = TRUE;
+
+    FixedLine FL_SEPARATORAUTO
+    {
+        Pos = MAP_APPFONT ( 4, UNRELATED_CONTROLS ) ;
+        Size = MAP_APPFONT ( ADVANCED_PAGE_X - 2*RELATED_CONTROLS , FIXEDTEXT_HEIGHT ) ;
+        Text [ en-US ] = "Settings";
+    };
+
+    CheckBox CB_RETRIEVE_AUTO
+    {
+        Pos     = MAP_APPFONT ( 6 , UNRELATED_CONTROLS + FIXEDTEXT_HEIGHT + RELATED_CONTROLS) ;
+        Size    = MAP_APPFONT ( ADVANCED_PAGE_X - 2*UNRELATED_CONTROLS , CHECKBOX_HEIGHT ) ;
+        TabStop = TRUE ;
+        HelpId = HID_DSADMIN_AUTORETRIEVEENABLED;
+        Text [ en-US ] = "Re~trieve generated values";
+    };
+
+    FixedText FT_AUTOINCREMENTVALUE
+    {
+        Pos     = MAP_APPFONT ( 15 , UNRELATED_CONTROLS + FIXEDTEXT_HEIGHT + 2*RELATED_CONTROLS + CHECKBOX_HEIGHT ) ;
+        Size = MAP_APPFONT ( ADVANCED_PAGE_X - 15 - 6 , FIXEDTEXT_HEIGHT ) ;
+        Text[ en-US ] = "~Auto-increment statement";
+    };
+
+    Edit ET_AUTOINCREMENTVALUE
+    {
+        Border = TRUE ;
+        Pos     = MAP_APPFONT ( 15 , UNRELATED_CONTROLS + 2*FIXEDTEXT_HEIGHT + CHECKBOX_HEIGHT + 3*RELATED_CONTROLS ) ;
+        Size = MAP_APPFONT ( ADVANCED_PAGE_X - 15 - 2*UNRELATED_CONTROLS , EDIT_HEIGHT ) ;
+        TabStop = TRUE ;
+        HelpId = HID_DSADMIN_AUTOINCREMENTVALUE;
+    };
+
+    FixedText FT_RETRIEVE_AUTO
+    {
+        Pos     = MAP_APPFONT ( 15 , UNRELATED_CONTROLS + 2*FIXEDTEXT_HEIGHT + CHECKBOX_HEIGHT + 4*RELATED_CONTROLS + EDIT_HEIGHT) ;
+        Size = MAP_APPFONT ( ADVANCED_PAGE_X - 15 - 6 , 10 ) ;
+        Text [ en-US ] = "~Query of generated values";
+    };
+
+    Edit ET_RETRIEVE_AUTO
+    {
+        Border = TRUE ;
+        Pos     = MAP_APPFONT ( 15 , UNRELATED_CONTROLS + 3*FIXEDTEXT_HEIGHT + CHECKBOX_HEIGHT + 5*RELATED_CONTROLS + EDIT_HEIGHT ) ;
+        Size = MAP_APPFONT ( ADVANCED_PAGE_X - 15 - 2*UNRELATED_CONTROLS, EDIT_HEIGHT ) ;
+        TabStop = TRUE ;
+        HelpId = HID_DSADMIN_RETRIEVE_AUTO;
+    };
+};
+
+//-------------------------------------------------------------------------
+
+TabPage PAGE_ADVANCED_SETTINGS_SPECIAL
+{
+    HelpID = "dbaccess:TabPage:PAGE_ADVANCED_SETTINGS_SPECIAL";
+    SVLook = TRUE ;
+    Pos = MAP_APPFONT ( 0 , 0 ) ;
+    Size = MAP_APPFONT ( ADVANCED_PAGE_X , ADVANCED_PAGE_Y ) ;
+    Hide = TRUE;
+    AUTO_DATAHANDLING(            RELATED_CONTROLS )
+    AUTO_SQL92CHECK(            1*RELATED_CONTROLS + FIXEDTEXT_HEIGHT +                      RELATED_CONTROLS )
+    AUTO_APPENDTABLEALIAS(      2*RELATED_CONTROLS + FIXEDTEXT_HEIGHT +  1*CHECKBOX_HEIGHT + RELATED_CONTROLS )
+    AUTO_AS_BEFORE_CORR_NAME(   3*RELATED_CONTROLS + FIXEDTEXT_HEIGHT +  2*CHECKBOX_HEIGHT + RELATED_CONTROLS )
+    AUTO_ENABLEOUTERJOIN(       4*RELATED_CONTROLS + FIXEDTEXT_HEIGHT +  3*CHECKBOX_HEIGHT + RELATED_CONTROLS )
+    AUTO_IGNOREDRIVER_PRIV(     5*RELATED_CONTROLS + FIXEDTEXT_HEIGHT +  4*CHECKBOX_HEIGHT + RELATED_CONTROLS )
+    AUTO_PARAMETERNAMESUBST(    6*RELATED_CONTROLS + FIXEDTEXT_HEIGHT +  5*CHECKBOX_HEIGHT + RELATED_CONTROLS )
+    AUTO_SUPPRESVERSIONCOLUMN(  7*RELATED_CONTROLS + FIXEDTEXT_HEIGHT +  6*CHECKBOX_HEIGHT + RELATED_CONTROLS )
+    AUTO_CATALOG(               8*RELATED_CONTROLS + FIXEDTEXT_HEIGHT +  7*CHECKBOX_HEIGHT + RELATED_CONTROLS )
+    AUTO_SCHEMA(                9*RELATED_CONTROLS + FIXEDTEXT_HEIGHT +  8*CHECKBOX_HEIGHT + RELATED_CONTROLS )
+    AUTO_IGNOREINDEXAPPENDIX(  10*RELATED_CONTROLS + FIXEDTEXT_HEIGHT +  9*CHECKBOX_HEIGHT + RELATED_CONTROLS )
+    AUTO_DOSLINEENDS(          11*RELATED_CONTROLS + FIXEDTEXT_HEIGHT + 10*CHECKBOX_HEIGHT + RELATED_CONTROLS )
+    AUTO_CHECKREQUIRED(        12*RELATED_CONTROLS + FIXEDTEXT_HEIGHT + 11*CHECKBOX_HEIGHT + RELATED_CONTROLS )
+    AUTO_IGNORECURRENCY(       13*RELATED_CONTROLS + FIXEDTEXT_HEIGHT + 12*CHECKBOX_HEIGHT + RELATED_CONTROLS )
+    AUTO_ESCAPE_DATETIME(      14*RELATED_CONTROLS + FIXEDTEXT_HEIGHT + 14*CHECKBOX_HEIGHT + RELATED_CONTROLS )
+    AUTO_PRIMARY_KEY_SUPPORT(  15*RELATED_CONTROLS + FIXEDTEXT_HEIGHT + 15*CHECKBOX_HEIGHT + RELATED_CONTROLS )
+    AUTO_RESPECTRESULTSETTYPE( 16*RELATED_CONTROLS + FIXEDTEXT_HEIGHT + 16*CHECKBOX_HEIGHT + RELATED_CONTROLS )
+    AUTO_BOOLEANCOMPARISON(    17*RELATED_CONTROLS + FIXEDTEXT_HEIGHT + 15*CHECKBOX_HEIGHT + RELATED_CONTROLS + ( LISTBOX_HEIGHT - CHECKBOX_HEIGHT ) / 2 )
+    AUTO_MAXROWSCAN(           18*RELATED_CONTROLS + FIXEDTEXT_HEIGHT + 15*CHECKBOX_HEIGHT + RELATED_CONTROLS + ( LISTBOX_HEIGHT - CHECKBOX_HEIGHT ) / 2 )
+};
+
+//-------------------------------------------------------------------------
+
+TabDialog DLG_DATABASE_ADVANCED
+{
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Moveable = TRUE ;
+    Closeable = TRUE ;
+    Hide = TRUE;
+    HelpId = HID_DSADMIN_ADVANCED;
+
+    TabControl 1
+    {
+        OutputSize = TRUE ;
+        HelpId = HID_DSADMIN_TABCONTROL;
+    };
+
+    String STR_GENERATED_VALUE
+    {
+        Text [ en-US ] = "Generated Values";
+    };
+
+    String STR_DS_BEHAVIOUR
+    {
+        Text [ en-US ] = "Special Settings";
+    };
+
+    Text [ en-US ] = "Advanced Settings" ;
+};

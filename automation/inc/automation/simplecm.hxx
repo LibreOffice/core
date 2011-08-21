@@ -114,14 +114,12 @@ private:
 
 class PacketHandler;
 class CommunicationManager;
-class SingleCommunicationManager;
 class MultiCommunicationManager;
 class CommunicationManagerServerAcceptThread;
 class CommunicationLink : public SvRefBase
 {
 protected:
     friend class CommunicationManager;
-    friend class SingleCommunicationManager;
     friend class MultiCommunicationManager;
     friend class CommunicationManagerServerAcceptThread;
     // Darf nicht abger�umt werden zwischen Empfang des Streams und ende des Callbacks
@@ -287,24 +285,6 @@ private:
     sal_Bool bIsMultiChannel;
 };
 
-class SingleCommunicationManager : public CommunicationManager
-{
-public:
-    SingleCommunicationManager( sal_Bool bUseMultiChannel = sal_False );
-    virtual ~SingleCommunicationManager();
-    virtual sal_Bool StopCommunication();       // H�lt alle CommunicationLinks an
-    virtual sal_Bool IsLinkValid( CommunicationLink* pCL );
-    virtual sal_uInt16 GetCommunicationLinkCount();
-    virtual CommunicationLinkRef GetCommunicationLink( sal_uInt16 nNr );
-
-protected:
-    virtual void CallConnectionOpened( CommunicationLink* pCL );
-    virtual void CallConnectionClosed( CommunicationLink* pCL );
-    CommunicationLinkRef xActiveLink;
-    CommunicationLink *pInactiveLink;
-    virtual void DestroyingLink( CommunicationLink *pCL );  // Link tr�gt sich im Destruktor aus
-};
-
 class ICommunicationManagerClient
 {
     friend class CommonSocketFunctions;
@@ -341,21 +321,9 @@ protected:
     SvStream *pReceiveStream;
     sal_Bool DoReceiveDataStream();             /// Recieve DataPacket from Socket
     virtual sal_Bool SendHandshake( HandshakeType aHandshakeType, SvStream* pData = NULL);
-    bool IsReceiveReady();
     sal_Bool bIsRequestShutdownPending;
     virtual void WaitForShutdown()=0;
     void SetNewPacketAsCurrent();
-};
-
-class SimpleCommunicationLinkViaSocketWithReceiveCallbacks : public SimpleCommunicationLinkViaSocket
-{
-public:
-    SimpleCommunicationLinkViaSocketWithReceiveCallbacks( CommunicationManager *pMan, osl::StreamSocket* pSocket );
-    ~SimpleCommunicationLinkViaSocketWithReceiveCallbacks();
-    virtual sal_Bool ReceiveDataStream();
-protected:
-    virtual sal_Bool ShutdownCommunication();   /// Really stop the Communication
-    virtual void WaitForShutdown();
 };
 
 class CommonSocketFunctions
@@ -364,22 +332,6 @@ public:
     sal_Bool DoStartCommunication( CommunicationManager *pCM, ICommunicationManagerClient *pCMC, ByteString aHost, sal_uLong nPort );
 protected:
     virtual CommunicationLink *CreateCommunicationLink( CommunicationManager *pCM, osl::ConnectorSocket* pCS )=0;
-};
-
-class SingleCommunicationManagerClientViaSocket : public SingleCommunicationManager, public ICommunicationManagerClient, CommonSocketFunctions
-{
-public:
-    using CommunicationManager::StartCommunication;
-
-    SingleCommunicationManagerClientViaSocket( ByteString aHost, sal_uLong nPort, sal_Bool bUseMultiChannel = sal_False );
-    SingleCommunicationManagerClientViaSocket( sal_Bool bUseMultiChannel = sal_False );
-    virtual sal_Bool StartCommunication(){ return DoStartCommunication( this, (ICommunicationManagerClient*) this, aHostToTalk, nPortToTalk );}
-    virtual sal_Bool StartCommunication( ByteString aHost, sal_uLong nPort ){ return DoStartCommunication( this, (ICommunicationManagerClient*) this, aHost, nPort );}
-private:
-    ByteString aHostToTalk;
-    sal_uLong nPortToTalk;
-protected:
-    virtual CommunicationLink *CreateCommunicationLink( CommunicationManager *pCM, osl::ConnectorSocket* pCS ){ return new SimpleCommunicationLinkViaSocketWithReceiveCallbacks( pCM, pCS ); }
 };
 
 #endif

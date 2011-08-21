@@ -1,0 +1,9 @@
+module ooo { module vba { module office {
+    constants MsoCalloutType {
+        const long msoCalloutFour = 4;
+        const long msoCalloutMixed = -2;
+        const long msoCalloutOne = 1;
+        const long msoCalloutThree = 3;
+        const long msoCalloutTwo = 2;
+    };
+}; }; };

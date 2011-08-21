@@ -1,0 +1,8 @@
+module ooo { module vba { module msforms {
+    constants fmBorders {
+        const long fmBordersBox = 1;
+        const long fmBordersLeft = 2;
+        const long fmBordersNone = 0;
+        const long fmBordersTop = 3;
+    };
+}; }; };

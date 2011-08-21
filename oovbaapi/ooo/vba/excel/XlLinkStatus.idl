@@ -1,0 +1,15 @@
+module ooo { module vba { module excel {
+    constants XlLinkStatus {
+        const long xlLinkStatusCopiedValues = 10;
+        const long xlLinkStatusIndeterminate = 5;
+        const long xlLinkStatusInvalidName = 7;
+        const long xlLinkStatusMissingFile = 1;
+        const long xlLinkStatusMissingSheet = 2;
+        const long xlLinkStatusNotStarted = 6;
+        const long xlLinkStatusOK = 0;
+        const long xlLinkStatusOld = 3;
+        const long xlLinkStatusSourceNotCalculated = 4;
+        const long xlLinkStatusSourceNotOpen = 8;
+        const long xlLinkStatusSourceOpen = 9;
+    };
+}; }; };

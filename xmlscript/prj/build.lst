@@ -1,0 +1,3 @@
+xt	xmlscript :	comphelper tools offapi LIBXSLT:libxslt NULL
+xt	xmlscript\prj						nmake	-	all	xt_prj NULL
+

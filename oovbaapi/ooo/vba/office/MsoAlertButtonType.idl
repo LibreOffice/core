@@ -1,0 +1,11 @@
+module ooo { module vba { module office {
+    constants MsoAlertButtonType {
+        const long msoAlertButtonAbortRetryIgnore = 2;
+        const long msoAlertButtonOK = 0;
+        const long msoAlertButtonOKCancel = 1;
+        const long msoAlertButtonRetryCancel = 5;
+        const long msoAlertButtonYesAllNoCancel = 6;
+        const long msoAlertButtonYesNo = 4;
+        const long msoAlertButtonYesNoCancel = 3;
+    };
+}; }; };

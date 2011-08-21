@@ -1,0 +1,119 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_document_XTypeDetection_idl__
+#define __com_sun_star_document_XTypeDetection_idl__
+
+#include <com/sun/star/uno/XInterface.idl>
+#include <com/sun/star/beans/PropertyValue.idl>
+
+//============================================================================
+
+module com { module sun { module star { module document {
+
+//============================================================================
+/** support "flat" and "deep" type detection of a given document
+
+    <p>
+    A "flat" detection means specifying the document format by using
+    the URL and some configuration data only. That will perform but produce
+    may invalid results if e.g., the extension of the document is wrong.
+    A "deep" detection means looking into the document stream to be right
+    which format it supports. Of course that includes a "flat" detection before.
+    The combination of both ones should produce stable results every time.
+    </p>
+
+    @see TypeDetection
+ */
+published interface XTypeDetection: com::sun::star::uno::XInterface
+{
+    //-------------------------------------------------------------------------
+    /** make a "flat" detection by using the URL of the document
+
+        <p>
+        It use given URL in combination with the internal configuration of well known
+        types only to specify the format of given document.
+        </p>
+
+        @param URL
+            specify the document by name
+
+        @returns
+            an internal type name which represent the detected format
+            <br>
+            or an empty value for unknown ones
+     */
+    string queryTypeByURL( [in] string URL );
+
+    //-------------------------------------------------------------------------
+    /** make a "deep" detection or optional a "flat" detection by using a
+        <type>MediaDescriptor</type>
+
+        <p>
+        Instead of <member>XTypeDetection::queryTypeByURL()</member> this function
+        use a <type>MediaDescriptor</type> to specify the document for detection.
+        Such descriptor hold different informations about the document.
+        He will be passed to any part of made detection process and every part
+        can change it to actualize it.
+        The property <member>MediaDescriptor::URL</member> should be set on
+        this descriptor as minimum. It specifies the location of the document.
+        If this parameter is missing another one is required: <member>MediaDescriptor::InputStream</member>.
+        This can be useful to prevent operation against multiple opening of the stream
+        and perform the operation. If this stream isn't already included the detection
+        will open it (if allowed!) and add it to the descriptor so it will be available for
+        all following parts.
+        A combination of both parameters can be useful to perform the operation
+        and make results more stable; but only one of them is required.
+        Of course its possible to specify more document properties (e.g.
+        <member>MediaDescriptor::ReadOnly</member>).
+        <br>
+        As an additional feature it's possible to suppress "deep" detection by using argument
+        <var>AllowDeep</var>.
+        </p>
+
+        @param Descriptor
+            means the <type>MediaDescriptor</type> which specify the resource for detection
+
+        @param AllowDeep
+            if it is set to <TRUE/> a "deep" detection will be follow a "flat" detection
+            <br>
+            if it is set to <FALSE/> a "flat" detection will be made only
+
+        @returns
+            an internal type name which represent the detected format
+            <br>
+            or an empty value for unknown ones
+     */
+    string queryTypeByDescriptor(
+        [inout] sequence< com::sun::star::beans::PropertyValue > Descriptor,
+        [in] boolean AllowDeep );
+};
+
+//============================================================================
+
+}; }; }; };
+
+#endif

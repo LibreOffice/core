@@ -1,0 +1,71 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_document_HeaderFooterSettings_idl__
+#define __com_sun_star_document_HeaderFooterSettings_idl__
+
+#include <com/sun/star/beans/XPropertySet.idl>
+
+//=============================================================================
+
+module com {   module sun {   module star {   module document {
+
+//=============================================================================
+
+// Note: Where is the distinction between header and footer ?
+/** describes properties that control the formatting of headers and
+    footers for documents that do not allow individual settings for
+    individual parts like pages or slides.
+ */
+published service HeaderFooterSettings
+{
+    /** gives access to the properties implemented by this service.
+     */
+    interface com::sun::star::beans::XPropertySet;
+
+    //-------------------------------------------------------------------------
+
+    /** enables or disables the printing of the page name in the
+        header or footer
+     */
+    [optional, property] boolean IsPrintPageName;
+
+    /** enables or disables the printing of the date in the
+        header or footer
+     */
+    [optional, property] boolean IsPrintDate;
+
+    /** enables or disables the printing of the current time in the
+        header or footer
+     */
+    [optional, property] boolean IsPrintTime;
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

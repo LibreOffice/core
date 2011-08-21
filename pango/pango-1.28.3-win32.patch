@@ -1,0 +1,649 @@
+--- misc/pango-1.28.3/configure	2010-09-29 13:02:33.000000000 +0200
++++ misc/build/pango-1.28.3/configure	2011-03-26 06:09:01.021181200 +0100
+@@ -18596,16 +18596,16 @@
+   fi
+ 
+   if $have_atsui; then
+-    if test -n "$PKG_CONFIG" && \
+-    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"cairo-quartz-font >= \$cairo_required\""; } >&5
+-  ($PKG_CONFIG --exists --print-errors "cairo-quartz-font >= $cairo_required") 2>&5
+-  ac_status=$?
+-  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+-  test $ac_status = 0; }; then
++#    if test -n "$PKG_CONFIG" && \
++#    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"cairo-quartz-font >= \$cairo_required\""; } >&5
++#  ($PKG_CONFIG --exists --print-errors "cairo-quartz-font >= $cairo_required") 2>&5
++#  ac_status=$?
++#  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
++#  test $ac_status = 0; }; then
+   have_cairo_atsui=true
+-else
+-  :
+-fi
++#else
++#  :
++#fi
+   fi
+   if $have_cairo_atsui; then
+ 
+@@ -18859,7 +18859,7 @@
+ 
+ # Setup GLIB_MKENUMS to use glib-mkenums even if GLib is uninstalled.
+ GLIB_MKENUMS=`$PKG_CONFIG --variable=glib_mkenums glib-2.0`
+-
++GLIB_MKENUMS=glib-mkenums
+ 
+ 
+ # Add in gthread-2.0 to CFLAGS but not to LIBS so we get any
+--- misc/pango-1.28.3/pango/makefile.msc	2010-02-09 13:06:28.000000000 +0100
++++ misc/build/pango-1.28.3/pango/makefile.msc	2011-03-26 15:41:45.375966400 +0100
+@@ -1,5 +1,15 @@
+-TOP = ../..
+-!INCLUDE $(TOP)/glib/build/win32/make.msc
++PRJ_TOP = ..
++GLIB_INC = -I$(OUTDIR)\inc\external\glib-2.0
++CAIRO_INC = -I$(OUTDIR)\inc\external\cairo
++
++INTL_LIB = $(OUTDIR)\lib\intl.lib
++GLIB_LIB = $(OUTDIR)\lib\glib-2.0.lib		\
++				$(OUTDIR)\lib\gobject-2.0.lib	\
++				$(OUTDIR)\lib\gmodule-2.0.lib 
++CAIRO_LIB = $(OUTDIR)\lib\cairo.lib
++USP10_LIB = USP10.lib
++
++!INCLUDE $(OUTDIR)\inc\external\glib-2.0\make.msc
+ 
+ !IFNDEF PERL
+ PERL = perl
+@@ -16,7 +26,7 @@
+ 
+ !IFNDEF PACKAGE
+ 
+-DLLS = pango pangowin32 pangoft2 pangocairo # pangox
++DLLS = pango pangowin32 pangocairo # pangox pangoft2 
+ EXES = querymodules testfonts
+ #? test1 test2 test3 test4 test5
+ 
+@@ -30,7 +30,7 @@
+ 	nmake -nologo -f makefile.msc $(THIS)-$(PANGO_VER)s.lib PACKAGE=$(THIS) OBJS_$(THIS)=1
+ 
+ sub-one-dll:
+-	nmake -nologo -f makefile.msc lib$(THIS)-$(PANGO_VER)-0.dll PACKAGE=$(THIS) OBJS_$(THIS)=1
++	nmake -nologo -f makefile.msc $(THIS)lo.dll PACKAGE=$(THIS) OBJS_$(THIS)=1
+ 
+ sub-one-exe:
+ 	nmake -nologo -f makefile.msc $(THIS).exe PACKAGE=$(THIS) OBJS_$(THIS)=1
+@@ -40,28 +50,28 @@
+ 
+ !ELSE
+ 
+-PRJ_TOP = ..
++CFLAGS = -I. -I$(PRJ_TOP) $(SOLARINC) $(GLIB_INC) $(CAIRO_INC)	
++
+ PKG_VER = $(PANGO_VER)
+ PKG_DEF = $(PACKAGE).def
+-
+-PKG_CFLAGS = -FImsvc_recommended_pragmas.h -I.. -I. -I$(PRJ_TOP) \
++PKG_CFLAGS = -FI$(PRJ_TOP)\msvc_recommended_pragmas.h $(CFLAGS) \
+ 		-DPACKAGE=\"Pango\" -DVERSION=\"$(PANGO_VER)\" \
+ 		-DPANGO_ENABLE_BACKEND -DPANGO_ENABLE_ENGINE \
+ 		-DMODULE_VERSION=\"$(PANGO_MODULE_VERSION)\" \
+ 		$(GLIB_CFLAGS) $(LIBICONV_CFLAGS) \
+ 		$(X11_CFLAGS)  -DSYSCONFDIR=\"/etc\" \
+-		-DPANGO_BINARY_AGE=0 
++		-DPANGO_BINARY_AGE=0 	\
++		-DLIBDIR=\".\\\\\"	
+ 
+ #-DHAVE_USP10_H
+-		
+ 
+ !IFDEF OBJS_pango
+ # don't link with itself
+-PKG_LINK = $(GLIB_LIBS) $(FONTCONFIG_LIBS)
++PKG_LINK = $(GLIB_LIB)
+ !ENDIF
+ 
+ !IFDEF OBJS_pangowin32
+-PKG_LINK = $(GLIB_LIBS) $(LIBICONV_LIBS) \
++PKG_LINK = $(GLIB_LIB) $(INTL_LIB) $(USP10_LIB)	\
+ 	pango-$(PANGO_VER).lib
+ !ENDIF
+ 
+@@ -69,23 +79,24 @@
+ PKG_CFLAGS = $(PKG_CFLAGS) $(FREETYPE2_CFLAGS) $(FONTCONFIG_CFLAGS) \
+ 	-DPANGO_MODULE_PREFIX=_pango_basic_ft2
+ 
+-PKG_LINK = $(GLIB_LIBS) $(LIBICONV_LIBS) $(FREETYPE2_LIBS) $(FONTCONFIG_LIBS) \
++PKG_LINK = $(GLIB_LIB) $(INTL_LIB) $(FREETYPE2_LIBS) $(FONTCONFIG_LIBS) \
+ 	pango-$(PANGO_VER).lib opentype\pango-ot.lib
+ !ENDIF
+ 
+ !IFDEF OBJS_pangox
+-PKG_LINK = $(GLIB_LIBS) $(LIBICONV_LIBS) \
++PKG_LINK = $(GLIB_LIB) $(INTL_LIB) \
+ 	pango-$(PANGO_VER).lib $(X11_LIBS)
+ !ENDIF
+ 
+ !IFDEF OBJS_pangocairo
+-PKG_LINK = $(GLIB_LIBS) $(LIBICONV_LIBS) \
+-	pango-$(PANGO_VER).lib $(CAIRO_LIBS) \
+-	pangowin32-$(PANGO_VER).lib $(FONTCONFIG_LIBS) 
++PKG_CFLAGS = $(PKG_CFLAGS)
++PKG_LINK = $(GLIB_LIB) $(INTL_LIB) \
++	pango-$(PANGO_VER).lib $(CAIRO_LIB) \
++	pangowin32-$(PANGO_VER).lib 
+ !ENDIF
+ 
+ !IF DEFINED (OBJS_querymodules) || DEFINED (OBJS_testfonts)
+-PKG_LINK = $(GLIB_LIBS) $(LIBICONV_LIBS) \
++PKG_LINK = $(GLIB_LIB) $(INTL_LIB) \
+ 	pango-$(PANGO_VER).lib pangowin32-$(PANGO_VER).lib
+ !ENDIF
+ 
+@@ -99,9 +110,10 @@
+ 	ellipsize.obj \
+ 	fonts.obj \
+ 	glyphstring.obj \
+-	mapping.obj \
++#	mapping.obj \
+ 	modules.obj \
+ 	pango-attributes.obj \
++	pango-bidi-type.obj \
+ 	pango-engine.obj \
+ 	pango-color.obj \
+ 	pango-context.obj \
+@@ -121,7 +133,6 @@
+ 	pango-utils.obj \
+ 	reorder-items.obj \
+ 	shape.obj \
+-	\
+ 	fribidi.obj \
+ 	fribidi_types.obj \
+ 	fribidi_char_type.obj
+@@ -215,15 +226,6 @@
+ OBJECTS = $(PACKAGE).obj
+ !ENDIF
+ 
+-module-defs-win32.c : module-defs-win32.c.win32
+-	copy module-defs-win32.c.win32 module-defs-win32.c
+-
+-module-defs-fc.c : module-defs-fc.c.win32
+-	copy module-defs-fc.c.win32 module-defs-fc.c
+-
+-module-defs-lang.c : module-defs-lang.c.win32
+-	copy module-defs-lang.c.win32 module-defs-lang.c
+-
+ pango_headers=		   \
+ 	pango.h		   \
+ 	pango-attributes.h \
+@@ -249,7 +251,7 @@
+ 	pangofc-fontmap.h
+ 
+ pango-enum-types.h: $(pango_headers) makefile.msc
+-	$(PERL) $(GLIB)\gobject\glib-mkenums  \
++	perl $(OUTDIR)\bin\glib-mkenums  \
+ 		--fhead "#ifndef __PANGO_ENUM_TYPES_H__\n#define __PANGO_ENUM_TYPES_H__\n\n#include <glib-object.h>\n\nG_BEGIN_DECLS\n" \
+ 		--fprod "/* enumerations from \"@filename@\" */\n" \
+ 		--vhead "GType @enum_name@_get_type (void);\n#define PANGO_TYPE_@ENUMSHORT@ (@enum_name@_get_type())\n" 	\
+@@ -257,7 +259,7 @@
+ 		$(pango_headers) > pango-enum-types.h
+ 
+ pango-enum-types.c: $(pango_headers) pango-enum-types.h makefile.msc
+-	$(PERL) $(GLIB)\gobject\glib-mkenums  \
++	perl $(OUTDIR)\bin\glib-mkenums  \
+ 		--fhead "#include <pango.h>" \
+ 		--fprod "\n/* enumerations from \"@filename@\" */" \
+ 		--vhead "GType\n@enum_name@_get_type (void)\n{\n  static GType etype = 0;\n  if (etype == 0) {\n    static const G@Type@Value values[] = {" 	\
+@@ -275,22 +277,13 @@
+ $(PACKAGE)-$(PKG_VER)s.lib : $(OBJECTS) $(PRJ_TOP)\config.h
+ 	lib /out:$(PACKAGE)-$(PKG_VER)s.lib $(OBJECTS)
+ 
+-lib$(PACKAGE)-$(PKG_VER)-0.dll : $(OBJECTS) $(PKG_DEF) $(PRJ_TOP)\config.h
++$(PACKAGE)lo.dll : $(OBJECTS) $(PKG_DEF) $(PRJ_TOP)\config.h
+ 	$(CC) $(CFLAGS) -LD -Fe$@ $(OBJECTS) $(PKG_LINK) \
+ 	user32.lib gdi32.lib advapi32.lib $(LDFLAGS) /implib:$(PACKAGE)-$(PKG_VER).lib /def:$(PKG_DEF)
+ 
+ $(PACKAGE).exe : $(PKG_LINK) $(OBJECTS)
+ 	$(CC) $(CFLAGS) -Fe$(PACKAGE).exe $(OBJECTS) $(PKG_LINK) gdi32.lib user32.lib
+ 
+-$(PRJ_TOP)\config.h.win32 : makefile.msc
+-	echo /*almostempty*/ > $(PRJ_TOP)\config.h.win32
+-	echo #define PANGO_BINARY_AGE 0 >> $(PRJ_TOP)\config.h.win32
+-	echo #define DHAVE_USP10_H 1 >> $(PRJ_TOP)\config.h.win32
+-
+-$(PRJ_TOP)\config.h: $(PRJ_TOP)\config.h.win32
+-	copy $(PRJ_TOP)\config.h.win32 $(PRJ_TOP)\config.h
+-
+-
+ .c.obj :
+ 	$(CC) $(CFLAGS) -GD -c $(PKG_CFLAGS) $<
+ 
+--- misc/pango-1.28.3/pango/module-defs-win32.c	2010-09-29 13:02:42.000000000 +0200
++++ misc/build/pango-1.28.3/pango/module-defs-win32.c	2011-03-26 08:57:53.088370000 +0100
+@@ -1,7 +1,25 @@
+-/* Autogenerated by configure. Do not edit */
++/* Hand-written, for builds using Microsoft's compiler and makefile.msc,
++ * where the configure mechanism isn't used.
++ */
+ 
+-#include "module-defs.h"
++#include "modules.h"
++
++#ifdef PANGO_MODULE_PREFIX
++void         _pango_basic_win32_script_engine_list   (PangoEngineInfo **engines,
++                                                      gint             *n_engines);
++void         _pango_basic_win32_script_engine_init   (GTypeModule      *module);
++void         _pango_basic_win32_script_engine_exit   (void);
++PangoEngine *_pango_basic_win32_script_engine_create (const char       *id);
++#endif
+ 
+ PangoIncludedModule _pango_included_win32_modules[] = {
+- { NULL, NULL, NULL, NULL },
++#ifdef PANGO_MODULE_PREFIX
++ { 
++   _pango_basic_win32_script_engine_list,  
++   _pango_basic_win32_script_engine_init, 
++   _pango_basic_win32_script_engine_exit,  
++   _pango_basic_win32_script_engine_create 
++ },
++#endif
++ { NULL, NULL, NULL },
+ };
+--- misc/pango-1.28.3/pango/pango-enum-types.c	2010-09-29 13:02:42.000000000 +0200
++++ misc/build/pango-1.28.3/pango/pango-enum-types.c	2011-03-26 15:41:51.313542400 +0100
+@@ -35,7 +35,7 @@
+       { PANGO_ATTR_GRAVITY_HINT, "PANGO_ATTR_GRAVITY_HINT", "gravity-hint" },
+       { 0, NULL, NULL }
+     };
+-    etype = g_enum_register_static (g_intern_static_string ("PangoAttrType"), values);
++    etype = g_enum_register_static ("PangoAttrType", values);
+   }
+   return etype;
+ }
+@@ -52,59 +52,7 @@
+       { PANGO_UNDERLINE_ERROR, "PANGO_UNDERLINE_ERROR", "error" },
+       { 0, NULL, NULL }
+     };
+-    etype = g_enum_register_static (g_intern_static_string ("PangoUnderline"), values);
+-  }
+-  return etype;
+-}
+-
+-/* enumerations from "pango-bidi-type.h" */
+-GType
+-pango_bidi_type_get_type (void)
+-{
+-  static GType etype = 0;
+-  if (etype == 0) {
+-    static const GEnumValue values[] = {
+-      { PANGO_BIDI_TYPE_L, "PANGO_BIDI_TYPE_L", "l" },
+-      { PANGO_BIDI_TYPE_LRE, "PANGO_BIDI_TYPE_LRE", "lre" },
+-      { PANGO_BIDI_TYPE_LRO, "PANGO_BIDI_TYPE_LRO", "lro" },
+-      { PANGO_BIDI_TYPE_R, "PANGO_BIDI_TYPE_R", "r" },
+-      { PANGO_BIDI_TYPE_AL, "PANGO_BIDI_TYPE_AL", "al" },
+-      { PANGO_BIDI_TYPE_RLE, "PANGO_BIDI_TYPE_RLE", "rle" },
+-      { PANGO_BIDI_TYPE_RLO, "PANGO_BIDI_TYPE_RLO", "rlo" },
+-      { PANGO_BIDI_TYPE_PDF, "PANGO_BIDI_TYPE_PDF", "pdf" },
+-      { PANGO_BIDI_TYPE_EN, "PANGO_BIDI_TYPE_EN", "en" },
+-      { PANGO_BIDI_TYPE_ES, "PANGO_BIDI_TYPE_ES", "es" },
+-      { PANGO_BIDI_TYPE_ET, "PANGO_BIDI_TYPE_ET", "et" },
+-      { PANGO_BIDI_TYPE_AN, "PANGO_BIDI_TYPE_AN", "an" },
+-      { PANGO_BIDI_TYPE_CS, "PANGO_BIDI_TYPE_CS", "cs" },
+-      { PANGO_BIDI_TYPE_NSM, "PANGO_BIDI_TYPE_NSM", "nsm" },
+-      { PANGO_BIDI_TYPE_BN, "PANGO_BIDI_TYPE_BN", "bn" },
+-      { PANGO_BIDI_TYPE_B, "PANGO_BIDI_TYPE_B", "b" },
+-      { PANGO_BIDI_TYPE_S, "PANGO_BIDI_TYPE_S", "s" },
+-      { PANGO_BIDI_TYPE_WS, "PANGO_BIDI_TYPE_WS", "ws" },
+-      { PANGO_BIDI_TYPE_ON, "PANGO_BIDI_TYPE_ON", "on" },
+-      { 0, NULL, NULL }
+-    };
+-    etype = g_enum_register_static (g_intern_static_string ("PangoBidiType"), values);
+-  }
+-  return etype;
+-}
+-GType
+-pango_direction_get_type (void)
+-{
+-  static GType etype = 0;
+-  if (etype == 0) {
+-    static const GEnumValue values[] = {
+-      { PANGO_DIRECTION_LTR, "PANGO_DIRECTION_LTR", "ltr" },
+-      { PANGO_DIRECTION_RTL, "PANGO_DIRECTION_RTL", "rtl" },
+-      { PANGO_DIRECTION_TTB_LTR, "PANGO_DIRECTION_TTB_LTR", "ttb-ltr" },
+-      { PANGO_DIRECTION_TTB_RTL, "PANGO_DIRECTION_TTB_RTL", "ttb-rtl" },
+-      { PANGO_DIRECTION_WEAK_LTR, "PANGO_DIRECTION_WEAK_LTR", "weak-ltr" },
+-      { PANGO_DIRECTION_WEAK_RTL, "PANGO_DIRECTION_WEAK_RTL", "weak-rtl" },
+-      { PANGO_DIRECTION_NEUTRAL, "PANGO_DIRECTION_NEUTRAL", "neutral" },
+-      { 0, NULL, NULL }
+-    };
+-    etype = g_enum_register_static (g_intern_static_string ("PangoDirection"), values);
++    etype = g_enum_register_static ("PangoUnderline", values);
+   }
+   return etype;
+ }
+@@ -122,7 +70,7 @@
+       { PANGO_COVERAGE_EXACT, "PANGO_COVERAGE_EXACT", "exact" },
+       { 0, NULL, NULL }
+     };
+-    etype = g_enum_register_static (g_intern_static_string ("PangoCoverageLevel"), values);
++    etype = g_enum_register_static ("PangoCoverageLevel", values);
+   }
+   return etype;
+ }
+@@ -139,7 +87,7 @@
+       { PANGO_STYLE_ITALIC, "PANGO_STYLE_ITALIC", "italic" },
+       { 0, NULL, NULL }
+     };
+-    etype = g_enum_register_static (g_intern_static_string ("PangoStyle"), values);
++    etype = g_enum_register_static ("PangoStyle", values);
+   }
+   return etype;
+ }
+@@ -153,7 +101,7 @@
+       { PANGO_VARIANT_SMALL_CAPS, "PANGO_VARIANT_SMALL_CAPS", "small-caps" },
+       { 0, NULL, NULL }
+     };
+-    etype = g_enum_register_static (g_intern_static_string ("PangoVariant"), values);
++    etype = g_enum_register_static ("PangoVariant", values);
+   }
+   return etype;
+ }
+@@ -176,7 +124,7 @@
+       { PANGO_WEIGHT_ULTRAHEAVY, "PANGO_WEIGHT_ULTRAHEAVY", "ultraheavy" },
+       { 0, NULL, NULL }
+     };
+-    etype = g_enum_register_static (g_intern_static_string ("PangoWeight"), values);
++    etype = g_enum_register_static ("PangoWeight", values);
+   }
+   return etype;
+ }
+@@ -197,7 +145,7 @@
+       { PANGO_STRETCH_ULTRA_EXPANDED, "PANGO_STRETCH_ULTRA_EXPANDED", "ultra-expanded" },
+       { 0, NULL, NULL }
+     };
+-    etype = g_enum_register_static (g_intern_static_string ("PangoStretch"), values);
++    etype = g_enum_register_static ("PangoStretch", values);
+   }
+   return etype;
+ }
+@@ -216,7 +164,7 @@
+       { PANGO_FONT_MASK_GRAVITY, "PANGO_FONT_MASK_GRAVITY", "gravity" },
+       { 0, NULL, NULL }
+     };
+-    etype = g_flags_register_static (g_intern_static_string ("PangoFontMask"), values);
++    etype = g_flags_register_static ("PangoFontMask", values);
+   }
+   return etype;
+ }
+@@ -235,7 +183,7 @@
+       { PANGO_GRAVITY_AUTO, "PANGO_GRAVITY_AUTO", "auto" },
+       { 0, NULL, NULL }
+     };
+-    etype = g_enum_register_static (g_intern_static_string ("PangoGravity"), values);
++    etype = g_enum_register_static ("PangoGravity", values);
+   }
+   return etype;
+ }
+@@ -250,7 +198,7 @@
+       { PANGO_GRAVITY_HINT_LINE, "PANGO_GRAVITY_HINT_LINE", "line" },
+       { 0, NULL, NULL }
+     };
+-    etype = g_enum_register_static (g_intern_static_string ("PangoGravityHint"), values);
++    etype = g_enum_register_static ("PangoGravityHint", values);
+   }
+   return etype;
+ }
+@@ -267,7 +215,7 @@
+       { PANGO_ALIGN_RIGHT, "PANGO_ALIGN_RIGHT", "right" },
+       { 0, NULL, NULL }
+     };
+-    etype = g_enum_register_static (g_intern_static_string ("PangoAlignment"), values);
++    etype = g_enum_register_static ("PangoAlignment", values);
+   }
+   return etype;
+ }
+@@ -282,7 +230,7 @@
+       { PANGO_WRAP_WORD_CHAR, "PANGO_WRAP_WORD_CHAR", "word-char" },
+       { 0, NULL, NULL }
+     };
+-    etype = g_enum_register_static (g_intern_static_string ("PangoWrapMode"), values);
++    etype = g_enum_register_static ("PangoWrapMode", values);
+   }
+   return etype;
+ }
+@@ -298,7 +246,7 @@
+       { PANGO_ELLIPSIZE_END, "PANGO_ELLIPSIZE_END", "end" },
+       { 0, NULL, NULL }
+     };
+-    etype = g_enum_register_static (g_intern_static_string ("PangoEllipsizeMode"), values);
++    etype = g_enum_register_static ("PangoEllipsizeMode", values);
+   }
+   return etype;
+ }
+@@ -316,7 +264,7 @@
+       { PANGO_RENDER_PART_STRIKETHROUGH, "PANGO_RENDER_PART_STRIKETHROUGH", "strikethrough" },
+       { 0, NULL, NULL }
+     };
+-    etype = g_enum_register_static (g_intern_static_string ("PangoRenderPart"), values);
++    etype = g_enum_register_static ("PangoRenderPart", values);
+   }
+   return etype;
+ }
+@@ -409,7 +357,7 @@
+       { PANGO_SCRIPT_LYDIAN, "PANGO_SCRIPT_LYDIAN", "lydian" },
+       { 0, NULL, NULL }
+     };
+-    etype = g_enum_register_static (g_intern_static_string ("PangoScript"), values);
++    etype = g_enum_register_static ("PangoScript", values);
+   }
+   return etype;
+ }
+@@ -424,7 +372,7 @@
+       { PANGO_TAB_LEFT, "PANGO_TAB_LEFT", "left" },
+       { 0, NULL, NULL }
+     };
+-    etype = g_enum_register_static (g_intern_static_string ("PangoTabAlign"), values);
++    etype = g_enum_register_static ("PangoTabAlign", values);
+   }
+   return etype;
+ }
+--- misc/pango-1.28.3/pango/pango-enum-types.h	2010-09-29 13:02:42.000000000 +0200
++++ misc/build/pango-1.28.3/pango/pango-enum-types.h	2011-03-26 15:41:50.922912400 +0100
+@@ -12,11 +12,6 @@
+ #define PANGO_TYPE_ATTR_TYPE (pango_attr_type_get_type())
+ GType pango_underline_get_type (void);
+ #define PANGO_TYPE_UNDERLINE (pango_underline_get_type())
+-/* enumerations from "pango-bidi-type.h" */
+-GType pango_bidi_type_get_type (void);
+-#define PANGO_TYPE_BIDI_TYPE (pango_bidi_type_get_type())
+-GType pango_direction_get_type (void);
+-#define PANGO_TYPE_DIRECTION (pango_direction_get_type())
+ /* enumerations from "pango-coverage.h" */
+ GType pango_coverage_level_get_type (void);
+ #define PANGO_TYPE_COVERAGE_LEVEL (pango_coverage_level_get_type())
+@@ -53,7 +48,6 @@
+ GType pango_tab_align_get_type (void);
+ #define PANGO_TYPE_TAB_ALIGN (pango_tab_align_get_type())
+ G_END_DECLS
+-
+ #endif /* __PANGO_ENUM_TYPES_H__ */
+ 
+ 
+--- misc/pango-1.28.3/pango/pango-language.c	2010-02-09 13:06:28.000000000 +0100
++++ misc/build/pango-1.28.3/pango/pango-language.c	2011-03-26 10:25:32.858819200 +0100
+@@ -169,7 +169,6 @@
+ static gchar *
+ _pango_get_lc_ctype (void)
+ {
+-#ifdef G_OS_WIN32
+   /* Somebody might try to set the locale for this process using the
+    * LANG or LC_ environment variables. The Microsoft C library
+    * doesn't know anything about them. You set the locale in the
+@@ -196,9 +195,6 @@
+     return g_strdup (p);
+ 
+   return g_win32_getlocale ();
+-#else
+-  return g_strdup (setlocale (LC_CTYPE, NULL));
+-#endif
+ }
+ 
+ /**
+--- misc/pango-1.28.3/pango/pango-utils.c	2010-09-29 12:39:16.000000000 +0200
++++ misc/build/pango-1.28.3/pango/pango-utils.c	2011-03-26 11:07:49.125658000 +0100
+@@ -38,15 +38,11 @@
+ #  define getc_unlocked(f) getc(f)
+ #endif /* !HAVE_FLOCKFILE */
+ 
+-#ifdef G_OS_WIN32
+-
+ #include <sys/types.h>
+ 
+ #define STRICT
+ #include <windows.h>
+ 
+-#endif
+-
+ struct PangoAlias
+ {
+   char *alias;
+@@ -204,25 +200,6 @@
+ 
+ 	  continue;
+ 	}
+-#ifndef G_OS_WIN32
+-      /* '~' is a quite normal and common character in file names on
+-       * Windows, especially in the 8.3 versions of long file names, which
+-       * still occur now and then. Also, few Windows user are aware of the
+-       * Unix shell convention that '~' stands for the home directory,
+-       * even if they happen to have a home directory.
+-       */
+-      if (file[0] == '~' && file[1] == G_DIR_SEPARATOR)
+-	{
+-	  char *tmp = g_strconcat (g_get_home_dir(), file + 1, NULL);
+-	  g_free (file);
+-	  file = tmp;
+-	}
+-      else if (file[0] == '~' && file[1] == '\0')
+-	{
+-	  g_free (file);
+-	  file = g_strdup (g_get_home_dir());
+-	}
+-#endif
+       g_free (files[i]);
+       files[i] = file;
+ 
+@@ -655,8 +632,6 @@
+   return g_strdup (g_hash_table_lookup (config_hash, key));
+ }
+ 
+-#ifdef G_OS_WIN32
+-
+ /* DllMain function needed to tuck away the DLL handle */
+ 
+ static HMODULE pango_dll;
+@@ -676,8 +651,6 @@
+   return TRUE;
+ }
+ 
+-#endif
+-
+ /**
+  * pango_get_sysconf_subdirectory:
+  *
+@@ -692,7 +665,6 @@
+ G_CONST_RETURN char *
+ pango_get_sysconf_subdirectory (void)
+ {
+-#ifdef G_OS_WIN32
+   static gchar *result = NULL;
+ 
+   if (result == NULL)
+@@ -702,9 +674,6 @@
+       g_free (root);
+     }
+   return result;
+-#else
+-  return SYSCONFDIR "/pango";
+-#endif
+ }
+ 
+ /**
+@@ -721,7 +690,6 @@
+ G_CONST_RETURN char *
+ pango_get_lib_subdirectory (void)
+ {
+-#ifdef G_OS_WIN32
+   static gchar *result = NULL;
+ 
+   if (result == NULL)
+@@ -737,9 +705,6 @@
+       g_free (root);
+     }
+   return result;
+-#else
+-  return LIBDIR "/pango";
+-#endif
+ }
+ 
+ 
+--- misc/pango-1.28.3/pango/pango.def	2010-02-09 13:06:28.000000000 +0100
++++ misc/build/pango-1.28.3/pango/pango.def	2011-03-26 11:10:51.284239600 +0100
+@@ -49,7 +49,6 @@
+ 	pango_attribute_destroy
+ 	pango_attribute_equal
+ 	pango_bidi_type_for_unichar
+-	pango_bidi_type_get_type
+ 	pango_break
+ 	pango_color_copy
+ 	pango_color_free
+@@ -89,7 +88,6 @@
+ 	pango_coverage_to_bytes
+ 	pango_coverage_unref
+ 	pango_default_break
+-	pango_direction_get_type
+ 	pango_ellipsize_mode_get_type
+ 	pango_engine_get_type
+ 	pango_engine_lang_get_type
+--- misc/pango-1.28.3/config.h	2011-03-26 08:43:30.577330000 +0100
++++ misc/build/pango-1.28.3/config.h	2011-03-26 08:42:01.216811200 +0100
+@@ -1 +1,3 @@
+-dummy
++/*almostempty*/
++#define PANGO_BINARY_AGE 0
++#define DHAVE_USP10_H   1
+--- misc/pango-1.28.3/msvc_recommended_pragmas.h	2011-03-26 07:30:07.692848800 +0100
++++ misc/build/pango-1.28.3/msvc_recommended_pragmas.h	2011-03-26 07:34:43.524504400 +0100
+@@ -1 +1,31 @@
+-dummy
++#ifndef _MSC_VER
++#pragma error "This header is for Microsoft VC only."
++#endif /* _MSC_VER */
++
++/* Make MSVC more pedantic, this is a recommended pragma list
++ * from _Win32_Programming_ by Rector and Newcomer.
++ */
++#pragma warning(error:4002) /* too many actual parameters for macro */
++#pragma warning(error:4003) /* not enough actual parameters for macro */
++#pragma warning(1:4010)     /* single-line comment contains line-continuation character */
++#pragma warning(error:4013) /* 'function' undefined; assuming extern returning int */
++#pragma warning(1:4016)     /* no function return type; using int as default */
++#pragma warning(error:4020) /* too many actual parameters */
++#pragma warning(error:4021) /* too few actual parameters */
++#pragma warning(error:4027) /* function declared without formal parameter list */
++#pragma warning(error:4029) /* declared formal parameter list different from definition */
++#pragma warning(error:4033) /* 'function' must return a value */
++#pragma warning(error:4035) /* 'function' : no return value */
++#pragma warning(error:4045) /* array bounds overflow */
++#pragma warning(error:4047) /* different levels of indirection */
++#pragma warning(error:4049) /* terminating line number emission */
++#pragma warning(error:4053) /* An expression of type void was used as an operand */
++#pragma warning(error:4071) /* no function prototype given */
++#pragma warning(disable:4101) /* unreferenced local variable */
++#pragma warning(error:4150)
++
++#pragma warning(disable:4244)	/* No possible loss of data warnings */
++#pragma warning(disable:4305)   /* No truncation from int to char warnings */
++
++/* work around Microsoft's premature attempt to deprecate the C-Library */
++#pragma warning(disable:4996)   /* This function or variable may be unsafe. */

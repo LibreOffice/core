@@ -1,0 +1,8 @@
+module ooo { module vba { module dao {
+    constants SynchronizeTypeEnum {
+        const long dbRepExportChanges = 1;
+        const long dbRepImpExpChanges = 4;
+        const long dbRepImportChanges = 2;
+        const long dbRepSyncInternet = 16;
+    };
+}; }; };

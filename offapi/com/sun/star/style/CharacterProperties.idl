@@ -1,0 +1,439 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_style_CharacterProperties_idl__
+#define __com_sun_star_style_CharacterProperties_idl__
+
+#include <com/sun/star/lang/Locale.idl>
+#include <com/sun/star/util/Color.idl>
+#include <com/sun/star/awt/FontSlant.idl>
+#include <com/sun/star/container/XNameContainer.idl>
+
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module style {
+
+//=============================================================================
+
+/** This is a set of properties to describe the style of characters.@see ParagraphProperties
+ */
+published service CharacterProperties
+{
+    //-------------------------------------------------------------------------
+
+    /** This property specifies the name of the font style.
+
+        <p>It may contain more than one name separated by comma.</p>
+     */
+    [property] string CharFontName;
+
+    //-------------------------------------------------------------------------
+
+    /** This property contains the name of the font style.
+
+        <p>This property may be empty.</p>
+     */
+    [property] string CharFontStyleName;
+
+    //-------------------------------------------------------------------------
+
+    /** This property contains font family.
+        @see com::sun::star::awt::FontFamily
+     */
+    [property] short CharFontFamily;
+
+    //-------------------------------------------------------------------------
+
+    /** This property contains the text encoding of the font.
+        @see com::sun::star::awt::CharSet
+     */
+    [property] short CharFontCharSet;
+
+    //-------------------------------------------------------------------------
+
+    /** This property contains the font pitch.
+        @see com::sun::star::awt::FontPitch
+     */
+    [property] short CharFontPitch;
+
+    //-------------------------------------------------------------------------
+
+    /** This property contains the value of the text color.
+     */
+    [property] com::sun::star::util::Color CharColor;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies the percentage by which to raise/lower superscript/subscript
+        characters.
+
+        <p>Negative values denote subscripts and positive values superscripts.</p>
+
+        @see CharEscapementHeight
+     */
+    [optional, property] short CharEscapement;
+
+    //-------------------------------------------------------------------------
+
+    /** This value contains the height of the characters in point.
+     */
+    [property] float CharHeight;
+
+    //-------------------------------------------------------------------------
+
+    /** This property contains the value for the character underline.
+        @see com::sun::star::awt::FontUnderline
+     */
+    [property] short CharUnderline;
+
+    //-------------------------------------------------------------------------
+
+    /** This property contains the value of the font weight.
+        @see com::sun::star::awt::FontWeight
+     */
+    [property] float CharWeight;
+
+    //-------------------------------------------------------------------------
+
+    /** This property contains the value of the posture of the document.
+        @see com::sun::star::awt::FontSlant
+     */
+    [property] com::sun::star::awt::FontSlant CharPosture;
+
+    //-------------------------------------------------------------------------
+
+    /** This optional property determines whether the kerning tables from the
+        current font are used.
+
+        <p>Automatic <em>kerning</em> applies a spacing in between certain
+        pairs of characters to make the text look better.</p>
+     */
+    [optional, property] boolean CharAutoKerning;
+
+    //-------------------------------------------------------------------------
+
+    /** This optional property contains the text background color.
+     */
+    [optional, property] com::sun::star::util::Color CharBackColor;
+
+    //-------------------------------------------------------------------------
+
+    /** This property determines if the text background color is set to
+        transparent.
+     */
+    [optional, property] boolean CharBackTransparent;
+
+    //-------------------------------------------------------------------------
+
+    /** This optional property contains the value of the case-mapping of the
+        text for formatting and displaying.
+
+        @see CaseMap
+     */
+    [optional, property] short CharCaseMap;
+
+    //-------------------------------------------------------------------------
+
+    /** This property is <TRUE/> if the characters are crossed out.
+     */
+    [optional, property] boolean CharCrossedOut;
+
+    //-------------------------------------------------------------------------
+
+    /** If this optional property is <TRUE/>, then the characters are flashing.
+     */
+    [optional, property] boolean CharFlash;
+
+    //-------------------------------------------------------------------------
+
+    /** This property determines the type of the strike out of the character.
+        @see com::sun::star::awt::FontStrikeout
+    */
+    [optional, property] short CharStrikeout;
+
+    //-------------------------------------------------------------------------
+
+    /** If this property is <TRUE/>, the underline and strike-through
+        properties are not applied to white spaces.
+     */
+    [optional, property] boolean CharWordMode;
+
+    //-------------------------------------------------------------------------
+
+    /** This optional property contains the value of the kerning of the
+        characters.
+     */
+    [optional, property] short CharKerning;
+
+    //-------------------------------------------------------------------------
+
+    /** This property contains the value of the locale.
+     */
+    [property] com::sun::star::lang::Locale CharLocale;
+
+   //-------------------------------------------------------------------------
+
+    /** This optional property marks a range of characters to prevent it from
+        being broken into two lines.
+
+        <p> A line break is applied before the range of characters if
+        the layout makes a break necessary within the range.</p>
+    */
+    [optional, property] boolean CharKeepTogether;
+
+    //-------------------------------------------------------------------------
+
+    /** This optional property marks a range of characters to ignore a line
+        break in this area.
+
+        <p> A line break is applied behind the range of characters if
+        the layout makes a break necessary within the range. That means that
+        the text may go through the border.</p>
+     */
+    [optional, property] boolean CharNoLineBreak;
+
+    //-------------------------------------------------------------------------
+
+    /** This optional property specifies if the characters are formatted and
+        displayed with a shadow effect.
+     */
+    [optional, property] boolean CharShadowed;
+
+    //-------------------------------------------------------------------------
+
+    /** This optional property specifies the fundamental technology of the font.
+        @see com::sun::star::awt::FontType
+     */
+    [optional, property] short CharFontType;
+
+    //-------------------------------------------------------------------------
+
+    /** This optional property specifies the name of the style of the font.
+     */
+    [optional, property] string CharStyleName;
+
+    //-------------------------------------------------------------------------
+
+    /** This optional property specifies if the characters are formatted and
+        displayed with a contour effect.
+     */
+    [optional, property] boolean CharContoured;
+
+    //-------------------------------------------------------------------------
+
+    /** This optional property determines whether text is formatted in two lines.
+
+        <p>It is linked to the properties CharCombinePrefix and CharCombineSuffix.</p>
+     */
+    [optional, property] boolean CharCombineIsOn;
+
+    //-------------------------------------------------------------------------
+
+    /** This optional property contains the prefix (usually parenthesis) before
+        text that is formatted in two lines.
+
+        <p>It is linked to the properties CharCombineIsOn and CharCombineSuffix.</p>
+     */
+    [optional, property] string CharCombinePrefix;
+
+    //-------------------------------------------------------------------------
+
+    /** This optional property contains the suffix (usually parenthesis) after
+        text that is formatted in two lines.
+
+        <p>It is linked to the properties CharCombineIsOn and CharCombinePrefix.</p>
+     */
+    [optional, property] string CharCombineSuffix;
+
+    //-------------------------------------------------------------------------
+
+    /** This optional property contains the font emphasis value.
+        @see com::sun::star::text::FontEmphasis
+     */
+    [optional, property] short CharEmphasis;
+
+    //-------------------------------------------------------------------------
+
+    /** This optional property contains the relief style of the characters.
+        @see com::sun::star::text::FontRelief
+     */
+    [optional, property] short CharRelief;
+
+    //-------------------------------------------------------------------------
+
+    /** This optional property contains the text that is set as ruby.
+     */
+    [optional, property] string RubyText;
+
+    //-------------------------------------------------------------------------
+
+    /** This optional property determines the adjustment of the ruby .
+        @see com::sun::star::text::RubyAdjust
+     */
+    [optional, property] short RubyAdjust;
+
+    //-------------------------------------------------------------------------
+
+    /** This optional property contains the name of the character style that is
+        applied to RubyText.
+     */
+    [optional, property] string RubyCharStyleName;
+
+    //-------------------------------------------------------------------------
+
+    /** This optional property determines whether the ruby text is printed
+        above/left or below/right of the text.
+     */
+    [optional, property] boolean RubyIsAbove;
+
+    //-------------------------------------------------------------------------
+
+    /** This optional property determines the rotation of a character in tenths
+        of a degree.
+
+       <p>Depending on the implementation only certain values may be allowed.</p>
+     */
+    [optional, property] short CharRotation;
+
+    //-------------------------------------------------------------------------
+
+    /** This optional property determines whether the text formatting tries to
+        fit rotated text into the surrounded line height.
+     */
+    [optional, property] boolean CharRotationIsFitToLine;
+
+    //-------------------------------------------------------------------------
+
+    /** This optional property determines the percentage value for scaling the
+        width of characters.
+
+        <p>The value refers to the original width which is denoted by 100,
+        and it has to be greater than 0.</p>
+   */
+    [optional, property] short CharScaleWidth;
+
+    //-------------------------------------------------------------------------
+
+    /** This optional property contains the URL of a hyperlink.
+     */
+    [optional, property] string HyperLinkURL;
+
+    //-------------------------------------------------------------------------
+
+    /** This optional property contains the name of the target for a hyperlink.
+     */
+    [optional, property] string HyperLinkTarget;
+
+    //-------------------------------------------------------------------------
+
+    /** This optional property contains the name of the hyperlink.
+     */
+    [optional, property] string HyperLinkName;
+
+    //-------------------------------------------------------------------------
+
+    /** This optional property contains the character style name for visited
+        hyperlinks.
+     */
+    [optional, property] string VisitedCharStyleName;
+
+    //-------------------------------------------------------------------------
+
+    /** This optional property contains the character style name for unvisited
+        hyperlinks.
+     */
+    [optional, property] string UnvisitedCharStyleName;
+
+    //-------------------------------------------------------------------------
+
+    /** This is the relative height used for subscript or superscript
+        characters in units of percent.
+
+        <p>The value 100 denotes the original height of the characters.</p>
+
+        @see CharEscapement
+     */
+    [optional, property] byte CharEscapementHeight;
+
+    //-------------------------------------------------------------------------
+
+    /** This optional property determines if the word can be hyphenated at the
+        character.
+     */
+    [optional, property] boolean CharNoHyphenation;
+
+    //-------------------------------------------------------------------------
+
+    /** This property contains the color of the underline for the characters.
+        @see CharUnderlineHasColor
+     */
+    [property] com::sun::star::util::Color CharUnderlineColor;
+
+    //-------------------------------------------------------------------------
+
+    /** This property specifies if the property CharUnderlineColor is used for
+        an underline.
+        @see CharUnderlineColor
+     */
+    [property] boolean CharUnderlineHasColor;
+
+    //-------------------------------------------------------------------------
+
+    /** This optional property specifies the names of the all styles applied to
+        the font.
+
+        <p> It is not guaranteed that the order in the sequence reflects
+        the order of the evaluation of the character style attributes.</p>
+
+        @since OOo 1.1.2
+     */
+    [optional, property] sequence<string> CharStyleNames;
+
+    //-------------------------------------------------------------------------
+
+    /** If this optional property is <TRUE/>, then the characters are invisible.
+
+        @since OOo 2.0
+     */
+    [optional, property] boolean CharHidden;
+
+    //-------------------------------------------------------------------------
+
+    /** This property stores XML attributes. They will be saved to and restored
+        from automatic styles inside XML files.
+
+        @see com::sun::star::xml::AttributeContainer
+     */
+    [optional, property] com::sun::star::container::XNameContainer  TextUserDefinedAttributes;
+
+};
+
+//=============================================================================
+}; }; }; };
+
+#endif
+

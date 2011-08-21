@@ -1,0 +1,266 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_sdb_XSingleSelectQueryComposer_idl__
+#define __com_sun_star_sdb_XSingleSelectQueryComposer_idl__
+
+#include <com/sun/star/beans/XPropertySet.idl>
+
+#include <com/sun/star/beans/PropertyValue.idl>
+
+#include <com/sun/star/sdbc/SQLException.idl>
+
+#include <com/sun/star/sdb/XSingleSelectQueryAnalyzer.idl>
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module sdb {
+
+//=============================================================================
+
+/** simplifies the composing of single select statements.
+
+    <p>
+    The interface can be used for composing single SELECT statements without knowing the
+    structure of the used query.
+    </p>
+
+    @see com::sun::star::sdb::SingleSelectQueryComposer
+ */
+published interface XSingleSelectQueryComposer: XSingleSelectQueryAnalyzer
+{
+    //-------------------------------------------------------------------------
+    // FILTER
+    //-------------------------------------------------------------------------
+
+    /** makes it possible to set a filter condition for the query.
+        @param filter
+            the filter to set
+        @throws com::sun::star::sdbc::SQLException
+            if a database access error occurs
+            or the statement isn't valid
+            or the statement isn't parsable.
+     */
+    void setFilter([in] string filter)
+            raises (com::sun::star::sdbc::SQLException);
+    //-------------------------------------------------------------------------
+
+    /** appends a new set of filter criteria which is split into levels.
+        @param filter
+            The filter criteria is split into levels. Each level represents the
+            OR criteria. Within each level, the filters are provided as an AND criteria
+            with the name of the column and the filter condition. The filter condition
+            is of type string. The operator used, is defined by <type scope="com::sun::star::sdb">SQLFilterOperator</type>.
+
+        @throws com::sun::star::sdbc::SQLException
+            if a database access error occurs.
+     */
+    void setStructuredFilter([in] sequence< sequence<com::sun::star::beans::PropertyValue> > filter)
+        raises (com::sun::star::sdbc::SQLException,com::sun::star::lang::IllegalArgumentException);
+    //-------------------------------------------------------------------------
+
+    /** appends a new filter condition by a
+        <type scope="com::sun::star::sdb">DataColumn</type>
+        providing the name and the value for the filter.
+        The value property must be supported by the <type scope="com::sun::star::sdb">DataColumn</type>.
+        @param column
+            the column which is used to create a filter
+        @param  andCriteria
+            If <TRUE/> the filter condition will be appended as an AND condition, otherwise
+            the new filter condition will be appended as OR criteria.
+            E.g. (xx AND bb AND cc) OR newCriteria
+        @param  filterOperator
+            The operator used, is defined by <type scope="com::sun::star::sdb">SQLFilterOperator</type>.
+        @throws com::sun::star::sdbc::SQLException
+            if a database access error occurs.
+     */
+    void appendFilterByColumn([in] com::sun::star::beans::XPropertySet column,[in] boolean andCriteria,[in] long filterOperator)
+            raises (com::sun::star::sdbc::SQLException);
+
+    //-------------------------------------------------------------------------
+    // GROUP BY
+    //-------------------------------------------------------------------------
+
+
+    /** makes it possible to set a group for the query.
+        @param group
+            the group part to set
+        @throws com::sun::star::sdbc::SQLException
+            if a database access error occurs
+            or the statement isn't valid
+            or the statement isn't parsable.
+     */
+    void setGroup([in] string group)
+            raises (com::sun::star::sdbc::SQLException);
+
+    //-------------------------------------------------------------------------
+
+    /** appends an additional part to the group criteria of the select
+        statement. The column must be a <type scope="com::sun::star::sdbcx">Column</type>.
+        @param column
+            the column which is used to create a group part
+        @throws com::sun::star::sdbc::SQLException
+            if a database access error occurs.
+     */
+    void appendGroupByColumn([in] com::sun::star::beans::XPropertySet column)
+            raises (com::sun::star::sdbc::SQLException);
+
+    //-------------------------------------------------------------------------
+    // HAVING
+    //-------------------------------------------------------------------------
+
+    /** makes it possible to set a HAVING filter condition for the query.
+        @param filter
+            the filter to set
+        @throws com::sun::star::sdbc::SQLException
+            if a database access error occurs
+            or the statement isn't valid
+            or the statement isn't parsable.
+     */
+    void setHavingClause([in] string filter)
+            raises (com::sun::star::sdbc::SQLException);
+
+    //-------------------------------------------------------------------------
+
+    /** appends a new set of HAVING filter criteria which is split into levels.
+        @param filter
+            The HAVING filter criteria is split into levels. Each level represents the
+            OR criteria. Within each level, the filters are provided as an AND criteria
+            with the name of the column and the filter condition. The filter condition
+            is of type string. The operator used, is defined by <type scope="com::sun::star::sdb">SQLFilterOperator</type>.
+
+        @throws com::sun::star::sdbc::SQLException
+            if a database access error occurs.
+     */
+    void setStructuredHavingClause([in] sequence< sequence<com::sun::star::beans::PropertyValue> > filter)
+            raises (com::sun::star::sdbc::SQLException);
+    //-------------------------------------------------------------------------
+
+    /** appends a new HAVING filter condition by a
+        <type scope="com::sun::star::sdb">DataColumn</type>
+        providing the name and the value for the filter.
+        @param column
+            the column which is used to create a filter
+        @param  andCriteria
+            If <TRUE/> the filter condition will be appended as an AND condition, otherwise
+            the new filter condition will be appended as OR criteria.
+            E.g. (xx AND bb AND cc) OR newCriteria
+        @param  filterOperator
+            The operator used, is defined by <type scope="com::sun::star::sdb">SQLFilterOperator</type>.
+        @throws com::sun::star::sdbc::SQLException
+            if a database access error occurs.
+     */
+    void appendHavingClauseByColumn([in] com::sun::star::beans::XPropertySet column,[in] boolean andCriteria,[in] long filterOperator)
+            raises (com::sun::star::sdbc::SQLException);
+
+    //-------------------------------------------------------------------------
+    // ORDER BY
+    //-------------------------------------------------------------------------
+
+    /** makes it possible to set a sort condition for the query.
+        @param order
+            the order part to set
+        @throws com::sun::star::sdbc::SQLException
+            if a database access error occurs
+            or the order isn't valid
+            or the statement isn't parsable.
+     */
+    void setOrder([in] string order)
+            raises (com::sun::star::sdbc::SQLException);
+
+    //-------------------------------------------------------------------------
+
+    /** appends an additional part to the sort order criteria of the select
+        statement. The column must be a <type scope="com::sun::star::sdbcx">Column</type>.
+        @param column
+            the column which is used to create a order part
+        @param  ascending
+            <TRUE/> when the order should be ascending, otherwise if <FALSE/> descending.
+        @throws com::sun::star::sdbc::SQLException
+            if a database access error occurs.
+     */
+    void appendOrderByColumn([in] com::sun::star::beans::XPropertySet column,
+                             [in] boolean ascending)
+            raises (com::sun::star::sdbc::SQLException);
+
+    //-------------------------------------------------------------------------
+    // cumulative composing
+    //-------------------------------------------------------------------------
+
+    /** sets a new elementary query for the composer
+
+        <p>An elementary query or statement is a (single select) statement whose parts are
+        not covered by the various set and get methods of the composer. That is, if the
+        elementary statement contains a filter clause, a call to
+        <member>XSingleSelectQueryAnalyzer::getFilter</member> will not return you this
+        filter. Instead, only filters which have been set using for instance <member>setFilter</member>
+        are covered by the get methods.</p>
+
+        <p>The only methods which take all parts of the elementary statement into account are
+        <member>XSingleSelectQueryAnalyzer::getQuery</member> and
+        <member>XSingleSelectQueryAnalyzer::getQueryWithSubstitution</member>, which always returns
+        the complete composed query.</p>
+
+        <p>As a result, you can use the composer to build cumulative filter expressions. That
+        is, you can set <member>ElementaryQuery</member> to a statement already containing
+        filters, and then use <member>setFilter</member> to append additional filters.</p>
+
+        <p>The very same holds for sort orders, <code>HAVING</code> and <code>GROUP BY</code>
+        clauses.</p>
+
+        <p>There are various use cases for this. For instance, you might want to use the
+        statement represented by a <type>QueryDefinition</type>, and extend it with additional
+        filters or sort orders, while not touching the respective parts already present
+        in <member>QueryDefinition::Command</member>. This can be achieved by setting the
+        <member>QueryDefinition::Command</member> as <member>ElementaryQuery</member> of a
+        <type>SingleSelectQueryComposer</type>.</p>
+
+        <p>If, in such a scenario, you would be interested in the filter part of the
+        <member>QueryDefinition::Command</member>, you would set it via
+        <member>XSingleSelectQueryAnalyzer::setQuery</member>, and retrieve the filter
+        part via <member>XSingleSelectQueryAnalyzer::getFilter</member>.</p>
+
+        <p>If you'd be interested in the composed filter, you would set the
+        <member>QueryDefinition::Command</member> as <member>ElementaryQuery</member>, add your
+        filter, and propagate the resulting query (<member>XSingleSelectQueryAnalyzer::getQuery</member>)
+        to an <type>SingleSelectQueryAnalyzer</type> instance via
+        <member>XSingleSelectQueryAnalyzer::setQuery</member>.</p>
+    */
+    [attribute] string ElementaryQuery
+    {
+        set raises (com::sun::star::sdbc::SQLException);
+    };
+};
+
+//=============================================================================
+
+}; }; }; };
+
+/*=============================================================================
+
+=============================================================================*/
+#endif
+

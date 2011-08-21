@@ -1,0 +1,72 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_sdb_application_CopyTableOperation_idl__
+#define __com_sun_star_sdb_application_CopyTableOperation_idl__
+
+//=============================================================================
+
+module com { module sun { module star { module sdb { module application {
+
+//=============================================================================
+
+/** specifies the different basic operations a <type>CopyTableWizard</type>
+    can do.
+
+    @since OOo 2.4
+*/
+constants CopyTableOperation
+{
+    /** specifies that the wizard should copy the source table to the target database,
+        by creating a new table and copying all data.
+    */
+    const short CopyDefinitionAndData   = 0;
+
+    /** specifies that the wizard should copy the source table to the target database,
+        by only creating a new table with the same structure as the source table.
+    */
+    const short CopyDefinitionOnly      = 1;
+
+    /** specifies the wizard should create the source table as view
+
+        <p>This option is not available if the target database does not support views.</p>
+    */
+    const short CreateAsView            = 2;
+
+    /** specifies the wizard should append the source table's data to an existing
+        table in the target database.
+    */
+    const short AppendData              = 3;
+};
+
+//=============================================================================
+
+}; }; }; }; };
+
+//=============================================================================
+
+#endif

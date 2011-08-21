@@ -1,0 +1,103 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_rendering_XBitmap_idl__
+#define __com_sun_star_rendering_XBitmap_idl__
+
+#include <com/sun/star/uno/XInterface.idl>
+#include <com/sun/star/lang/IllegalArgumentException.idl>
+#include <com/sun/star/geometry/IntegerSize2D.idl>
+#include <com/sun/star/geometry/RealSize2D.idl>
+#include <com/sun/star/rendering/VolatileContentDestroyedException.idl>
+
+module com { module sun { module star { module rendering {
+
+/** This is a generic interface to a bitmap.<p>
+
+    This interface contains the generic functionality to be used on
+    every <type>XCanvas</type> bitmap object. More format-specific
+    methods can be found at the <type>XIntegerBitmap</type>,
+    <type>XIeeeDoubleBitmap</type>, <type>XIeeeFloatBitmap</type> and
+    <type>XHalfFloatBitmap</type> interfaces.<p>
+
+    @since OOo 2.0
+ */
+published interface XBitmap : ::com::sun::star::uno::XInterface
+{
+    /** Query the size of the bitmap.<p>
+
+        This method queries the bitmap size in pixel.<p>
+
+        @return the bitmap size in pixel.
+     */
+    ::com::sun::star::geometry::IntegerSize2D   getSize();
+
+    //-------------------------------------------------------------------------
+
+    /** Query transparency status of the bitmap.<p>
+
+        The method checks, whether the bitmap contains any alpha
+        information. The same information is also available at the
+        <type>XColorSpace</type> associated with this bitmap, though
+        much easier to access here (the color space then has a
+        component flagged
+        <member>ColorComponentTag::ALPHA</member>).<p>
+
+        @return <TRUE/>, if the bitmap has alpha data, or <FALSE/> if
+        not.
+     */
+    boolean                                     hasAlpha();
+
+    //-------------------------------------------------------------------------
+
+    /** Query a scaled copy of the original bitmap.
+
+        @param newSize
+        Requested size of the new bitmap. Both of the two size
+        components must be greater than zero.
+
+        @param beFast
+        When set to true, this parameter advises getScaledBitmap to
+        use the fastest available algorithm to scale the bitmap, which
+        might cause visible artifacts.
+
+        @returns the new scaled bitmap.
+
+        @throws <type>com::sun::star::lang::IllegalArgumentException</type>
+        if the size components are outside the specified range.
+
+        @throws <type>VolatileContentDestroyedException</type>
+        if the contents of a volatile bitmap have been destroyed, and
+        thus cannot be read to generate the scaled bitmap.
+     */
+    XBitmap                         getScaledBitmap( [in] ::com::sun::star::geometry::RealSize2D newSize, [in] boolean beFast )
+        raises (com::sun::star::lang::IllegalArgumentException,
+                VolatileContentDestroyedException);
+};
+
+}; }; }; };
+
+#endif

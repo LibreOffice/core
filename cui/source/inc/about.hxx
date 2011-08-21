@@ -53,19 +53,13 @@ private:
     MultiLineEdit       aCopyrightText;
     svt::FixedHyperlink aInfoLink;
 
-//    ResStringArray    aDeveloperAry; // RIP ...
-    String          aAccelStr;
-    String          aVersionData;
-    String          aVersionTextStr;
-    String          aCopyrightTextStr;
-    String          aLinkStr;
-
-    AccelList       aAccelList;
-
-    AutoTimer       aTimer;
-    long            nOff;
-    long            m_nDeltaWidth;
-    int             m_nPendingScrolls;
+    String aVersionData;
+    String aVersionTextStr;
+    String m_aVendorTextStr;
+    String m_aOracleCopyrightTextStr;
+    String m_aAcknowledgementTextStr;
+    String m_aLinkStr;
+    String m_sBuildStr;
 
 protected:
     virtual sal_Bool Close();

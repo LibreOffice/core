@@ -1,0 +1,95 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_datatransfer_clipboard_XClipboard_idl__
+#define __com_sun_star_datatransfer_clipboard_XClipboard_idl__
+
+#include <com/sun/star/datatransfer/XTransferable.idl>
+#include <com/sun/star/uno/XInterface.idl>
+
+//=============================================================================
+
+module com { module sun { module star { module datatransfer { module clipboard {
+
+//=============================================================================
+/** The default interface to access clipboard instances.
+*/
+
+ published interface XClipboardListener;
+ published interface XClipboardOwner;
+
+published interface XClipboard: com::sun::star::uno::XInterface
+{
+    //-------------------------------------------------------------------------
+    /** To get the current content of the clipboard.
+
+        @returns
+        The transferable object representing the current content of
+        this clipboard.
+
+        @see com::sun::star::datatransfer::XTransferable
+    */
+    XTransferable getContents();
+
+    //-------------------------------------------------------------------------
+    /** Sets the current contents of the clipboard to the specified
+        transferable object and registers the specified clipboard owner
+        as the owner of the new contents.
+
+        @param xTrans
+        The transferable object to set as new content.
+        <p>If the given <type scope="com::sun::star::datatransfer">XTransferable</type>
+        has no <type scope="com::sun::star::datatransfer">DataFlavor</type> the clipboard
+        will be deleted.
+        <p>A NULL value is not allowed.</p>
+
+        @param xClipboardOwner
+        The new owner of the clipboard.
+        <p>NULL is an acceptable value and means that the
+        caller is not interested in lost ownership notifications.</p>
+
+        @see com::sun::star::datatransfer::XTransferable
+        @see com::sun::star::datatransfer::clipboard::XClipboardOwner
+    */
+    [oneway] void setContents( [in] XTransferable xTrans, [in] XClipboardOwner xClipboardOwner );
+
+    //-------------------------------------------------------------------------
+    /** To get the name of the clipboard instance.
+
+        @returns
+        The name of this clipboard object.
+        <p>If the returned string is empty the
+        clipboard instance is the system clipboard.</p>
+    */
+    string getName();
+};
+
+//=============================================================================
+
+}; }; }; }; };
+
+#endif

@@ -1,0 +1,232 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef com_sun_star_chart_XChartTypeTemplate_idl
+#define com_sun_star_chart_XChartTypeTemplate_idl
+
+#include <com/sun/star/uno/XInterface.idl>
+#include <com/sun/star/beans/PropertyValue.idl>
+#include <com/sun/star/lang/IllegalArgumentException.idl>
+#include <com/sun/star/chart2/XDiagram.idl>
+#include <com/sun/star/chart2/data/XDataSource.idl>
+#include <com/sun/star/chart2/XChartType.idl>
+#include <com/sun/star/chart2/XDataInterpreter.idl>
+
+module com
+{
+module sun
+{
+module star
+{
+module chart2
+{
+
+interface XChartTypeTemplate : ::com::sun::star::uno::XInterface
+{
+    /** Creates a new diagram based upon the given data .
+
+        @param xDataSource
+            This data source will be interpreted in a chart-type
+            specific way and appropriate <type>DataSeries</type> will
+            be created which serve as input for the new diagram.
+
+        @param aArguments
+            Arguments that tell the template how to slice the given
+            range.  The properties should be defined in a separate
+            service.
+
+            <p>For standard parameters that may be used, see the
+            service <type>StandardDiagramCreationParameters</type>.
+            </p>
+
+        @return
+            The new diagram which represents this
+            <type>ChartTypeTemplate</type>.
+     */
+    XDiagram createDiagramByDataSource(
+        [in] data::XDataSource xDataSource,
+        [in] sequence< com::sun::star::beans::PropertyValue > aArguments );
+
+    /** @return
+            <TRUE/> if the template does support categories
+     */
+    boolean supportsCategories();
+
+    /** Analyses the given diagram and reinterprets its
+        <type>DataSeries</type> and <type>Categories</type> and
+        creates a new diagram based on these series.
+
+        <p>Note, that if <member>matchesTemplate</member> returns
+        <TRUE/> for the given <type>XDiagram</type>, the latter should
+        not be changed.</p>
+
+        @param xDiagram
+            The diagram given will be modified such that it represents
+            this <type>ChartTypeTemplate</type>.
+     */
+    void changeDiagram( [in] XDiagram xDiagram );
+
+    /** Changes the given diagram <code>xDiagram</code> by using the
+        new data given in <code>xDataSource</code>.
+
+        <p>Note that the data is interpreted in a way that fits this
+        template, but not necessarily the chart-types of the diagram.
+        This method should only be called if the data-format of the
+        diagram is compatible with the data-format of this
+        template.</p>
+
+        <p>Ideally a <member>matchesTemplate</member> call for the
+        given diagram should return <TRUE/> before this method is
+        called.</p>
+
+        @param xDataSource
+            This data source will be interpreted in a chart-type
+            specific way and the <type>DataSeries</type> found in
+            <code>xDiagram</code> will be adapted to the new data.
+            Missing data series will be created and unused ones will
+            be deleted in <code>xDiagram</code>.
+
+        @param aArguments
+            Arguments that tell the template how to slice the given
+            range.  The properties should be defined in a separate
+            service.
+
+            <p>For standard parameters that may be used, see the
+            service <type>StandardDiagramCreationParameters</type>.
+            </p>
+     */
+    void changeDiagramData(
+        [in] XDiagram xDiagram,
+        [in] data::XDataSource xDataSource,
+        [in] sequence< com::sun::star::beans::PropertyValue > aArguments );
+
+    /** States whether the given diagram could have been created by
+        the template.
+
+        <p>The template will parse the <type>DataSeriesTree</type> of
+        the diagram to determine if the structure matches the one
+        which would have been created by
+        <member>createDiagramByDataSource</member>.</p>
+
+        <p>For analysis all parts of the diagram may be used,
+        e.g. also properties set at the data series (like symbols)./p>
+
+        @param xDiagram
+            The diagram to be analyzed.
+
+        @param bAdaptProperties
+            If <TRUE/> the properties of the template are set, such
+            that the template matches more accurately.  E.g. for a
+            line-chart with symbols the property "Symbol" would be set
+            to <TRUE/>.  If this parameter is <FALSE/> the template
+            itself stays unmodified.
+
+        @return
+            <TRUE/> if the diagram given is structurally identical to
+            a diagram that was created using
+            <member>createDiagramByDataSource</member> or
+            <member>changeDiagram</member>.  If <FALSE/> is returned
+            the template stays unmodified even if
+            <code>bAdaptProperties</code> is <TRUE/>.
+     */
+    boolean matchesTemplate( [in] XDiagram xDiagram,
+                             [in] boolean bAdaptProperties );
+
+    /** Provides a chart type object that can be used to create new
+        series.
+
+        @param aFormerlyUsedChartTypes
+            The list can be used to copy some aspects from old chart types during the creation of a new chart type.
+            The list might be empty.
+     */
+    XChartType getChartTypeForNewSeries( [in] sequence< XChartType > aFormerlyUsedChartTypes );
+
+    /**
+     */
+    XDataInterpreter getDataInterpreter();
+
+    /** Applies default styles to the given XDataSeries.
+
+        The default implementation assigns the system-wide chart-color defaults
+        as "Color" property to all series.
+
+        @param nIndex
+            The index of the series.  This is used to obtain a default style
+            (e.g. color) for the nth series.
+     */
+//     void applyDefaultStyle( [in] XDataSeries xSeries,
+//                             [in] long nSeriesIndex );
+
+    /** Applies a chart-type specific style (e.g. symbols) to all series in the
+        sequence aSeries.
+
+        @param xSeries
+            a single data series to which a style will be applied
+
+        @param nChartTypeGroupIndex
+            Denotes in which chart-type group the series lies, such this method
+            can apply different styles for different chart-type groups
+
+        @param nSeriesIndex
+            The index of the series inside the current chart-type group.
+            nSeriesIndex does not uniquely identify a data series alone, but
+            only together with nChartTypeGroupIndex
+
+        @param nSeriesCount
+            The number of series in the current chart-type group.
+
+        @todo In the future, this should only change the "Style" property and no
+              hard attributes.
+     */
+    void applyStyle( [in] XDataSeries xSeries,
+                     [in] long nChartTypeGroupIndex,
+                     [in] long nSeriesIndex,
+                     [in] long nSeriesCount );
+
+    /** Resets all styles that were changed from the default at any
+        object in the chart and have not been later modified.
+
+        <p>In <member>createDiagramByDataSource</member> or
+        <member>changeDiagram</member> a template might e.g. change
+        the page background color or the line style of all data
+        series.  This method should reset all objects that still have
+        the changed settings to the default.</p>
+
+        <p>If for example the template changed the
+        <type scope="com::sun::star::drawing">LineStyle</type> of all
+        series to NONE, this method should reset all series with
+        LineStyle NONE back to SOLID.  If a series has a style DASH,
+        it must not be changed.</p>
+     */
+    void resetStyles( [in] XDiagram xDiagram );
+};
+
+} ; // chart2
+} ; // com
+} ; // sun
+} ; // star
+
+#endif

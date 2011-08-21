@@ -122,7 +122,6 @@ friend class ContainerListenerImpl;
     void                ImplStartListening( StarBASIC* pBasic );
 
     DECL_LINK( TabBarHdl, TabBar* );
-    DECL_LINK( AccelSelectHdl, Accelerator* );
     DECL_LINK( ObjectDialogCancelHdl, ObjectCatalog * );
     DECL_LINK( TabBarSplitHdl, TabBar * );
 #endif

@@ -1,0 +1,98 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_ui_UIElement_idl__
+#define __com_sun_star_ui_UIElement_idl__
+
+#include <com/sun/star/ui/XUIElement.idl>
+#include <com/sun/star/beans/XPropertySet.idl>
+#include <com/sun/star/lang/XInitialization.idl>
+#include <com/sun/star/lang/XComponent.idl>
+#include <com/sun/star/util/XUpdatable.idl>
+
+//=============================================================================
+
+module com { module sun { module star { module ui {
+
+//=============================================================================
+
+/** specifies a user interface element.
+
+    <p>
+    A user interface element consists of a unique identifier and a type specifier. It
+    provides an interface to retrieve a special purpose interface which depends on
+    the specific user interface element type. Every user interface must be initialized
+    before it can be used.
+    </p>
+
+    @since OOo 2.0
+*/
+
+service UIElement
+{
+    /** provides a function to retrieve a special purpose interface which depends on
+        the specific user interface element type.
+    */
+    interface ::com::sun::star::ui::XUIElement;
+
+    /** interface to initialize a user interface element instance.
+
+        A user interface element must be initialized using
+        <member scope=com::sun::star::lang>XInitialization::initialize</member> before
+        it can be used. The following property must be provided:
+        <ul>
+            <li><b>ResourceURL</b>specifies a string property which is the unique identifier of
+            the user interface element.</li>
+        </ul>
+
+        A user interface element factory creates and initializes every user interface element
+        correctly.
+
+        @see com::sun::star::ui::UIElementFactoryManager;
+        @see com::sun::star::ui::UIElementFactory
+    */
+    [optional] interface ::com::sun::star::lang::XInitialization;
+
+    /** used to notify an implementation that it needs to update its visual representation.
+
+        <p>
+        A user interface element implementation should check if it has to update its visual
+        representation. It is up to the implementation if it ignores notifications.
+        </p>
+    */
+    [optional] interface com::sun::star::util::XUpdatable;
+
+    /** controls the life-time of the object.
+    */
+    interface ::com::sun::star::lang::XComponent;
+};
+
+}; }; }; };
+
+//=============================================================================
+
+#endif

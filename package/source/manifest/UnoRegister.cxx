@@ -46,14 +46,6 @@ using namespace ::com::sun::star::packages::manifest;
 
 using rtl::OUString;
 
-// C functions to implement this as a component
-
-extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL component_getImplementationEnvironment(
-    const sal_Char ** ppEnvTypeName, uno_Environment ** /*ppEnv*/ )
-{
-    *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
-}
-
 /**
  * This function is called to get service factories for an implementation.
  * @param pImplName name of implementation

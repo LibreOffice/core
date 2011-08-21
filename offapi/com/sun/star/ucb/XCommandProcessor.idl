@@ -1,0 +1,142 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_ucb_XCommandProcessor_idl__
+#define __com_sun_star_ucb_XCommandProcessor_idl__
+
+#include <com/sun/star/uno/XInterface.idl>
+#include <com/sun/star/ucb/XCommandEnvironment.idl>
+#include <com/sun/star/ucb/Command.idl>
+#include <com/sun/star/ucb/CommandAbortedException.idl>
+
+//=============================================================================
+
+module com { module sun { module star { module ucb {
+
+//=============================================================================
+/** defines a processor for synchronous commands, which are executed in a
+    specific execution environment.
+
+    @version  1.0
+    @author   Kai Sommerfeld
+
+    @see com::sun::star::ucb::XCommandProcessor2
+    for the improved version of this interface.
+
+    @see      Command
+    @see      XCommandEnvironment
+    @see      XContent
+*/
+published interface XCommandProcessor : com::sun::star::uno::XInterface
+{
+    //-------------------------------------------------------------------------
+    /** creates a unique identifier for a command.
+
+        <p>This identifier can be used to abort the execution of the command
+        associated with that identifier. Note that it is generally not
+        necessary to obtain a new id for each command, because commands are
+        executed synchronously. So the id for a command is valid again after a
+        command previously associated with this id has finished. In fact you
+        only should get one identifier per thread and assign it to every
+        command executed by that thread.</p>
+
+        <p>Also, after a call to <member>XCommandProcessor::abort</member>, an
+        identifier should not be used any longer (and instead be released by a
+        call to <member>XCommandProcessor2::releaseCommandIdentifier</member>),
+        because it may well abort <em>all</em> further calls to
+        <member>XCommandProcessor::execute</member>.</p>
+
+        <p>To avoid ever-increasing resource consumption, the identifier
+        should be released via
+        <member>XCommandProcessor2::releaseCommandIdentifier</member>
+        when it is no longer used.</p>
+
+        @returns
+        a command identifier.
+    */
+    long createCommandIdentifier();
+
+    //-------------------------------------------------------------------------
+    /** executes a command.
+
+        <p>Common command definitions can be found in the specification of the
+        service <type>Content</type>.
+
+        @param aCommand
+        is the command to execute.
+
+        @param CommandId
+        is a unique id for the command. This identifier was obtained by calling
+        <member>XCommandProcessor::createCommandIdentifier</member>. A value of
+        zero can be used, if the command never shall be aborted. Different
+        threads MUST NOT share one command identifier (except <code>0</code>).
+        This can easily achieved, if every thread that wants to use an
+        <type>XCommandProcessor</type>, obtains exactly one identifier
+        using <member>XCommandProcessor::createCommandIdentifier</member>.
+        This identifier can be used for every call to
+        <member>XCommandProcessor::execute</member> done by that thread.
+
+        @param Environment
+        is the execution environment.
+
+        @returns
+        the result according to the specification of the command.
+
+        @throws CommandAbortedException
+        to indicate that the command was aborted.
+
+        @throws DuplicateCommandIdentifierException
+        to indicate that two threads tried to use the same command identifier
+
+        @throws Exception
+        if an error occurred during the execution of the command.
+    */
+    any execute( [in] Command aCommand,
+                 [in] long CommandId,
+                 [in] XCommandEnvironment Environment )
+        raises ( com::sun::star::uno::Exception, CommandAbortedException );
+
+    //-------------------------------------------------------------------------
+    /** ends the command associated with the given id.
+
+        <p>Not every command can be aborted. It's up to the implementation
+        to decide whether this method will actually end the processing of
+        the command or simply do nothing.
+
+        @param CommandId
+        is a unique id for the command to abort. This must be the identifier
+        passed to <member>XCommandProcessor::execute</member> for the command
+        to abort.
+    */
+    [oneway] void abort( [in] long CommandId );
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

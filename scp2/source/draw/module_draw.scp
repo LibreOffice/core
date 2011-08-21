@@ -1,0 +1,71 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * 
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#include "macros.inc"
+
+Module gid_Module_Prg_Draw
+    MOD_NAME_DESC ( MODULE_PRG_DRAW );
+    ParentID = gid_Module_Prg;
+    Sortkey = "300";
+    Styles =(APPLICATIONMODULE);
+End
+
+Module gid_Module_Prg_Draw_Bin
+    PackageInfo = "packinfo_office.txt";
+    MOD_NAME_DESC ( MODULE_PRG_DRAW_BIN );
+    ParentID = gid_Module_Prg_Draw;
+    Sortkey = "100";
+    Minimal = YES;
+    Default = YES;
+    Styles = (HIDDEN_ROOT);
+    Files = (gid_File_Extra_Urldesktop_Draw,gid_File_Extra_Urlnew_Draw,gid_File_Extra_Urlstart_Draw,gid_File_Extra_Urltasks_Draw,gid_File_Share_Config_Sofficecfg_Draw_Menubar_Xml,
+    gid_File_Share_Registry_Draw_Xcd,
+    gid_File_Tmp_Userinstall_Draw_Inf);
+End
+
+Module gid_Module_Brand_Prg_Draw
+    PackageInfo = "packinfo_brand.txt";
+    Name = "gid_Module_Brand_Prg_Draw";
+    Description = "gid_Module_Brand_Prg_Draw";
+    ParentID = gid_Module_Prg_Draw;
+    Sortkey = "100";
+    InstallOrder = "1040";
+    Minimal = YES;
+    Default = YES;
+    Styles = (HIDDEN_ROOT);
+    Files = (gid_File_Exe_Sdraw);
+End
+
+Module gid_Module_Langpack_Draw_Template
+    ParentID = gid_Module_Prg_Draw_Bin;
+    Name = "gid_Module_Langpack_Draw_Template";
+    Description = "gid_Module_Langpack_Draw_Template";
+    Styles = (TEMPLATEMODULE);
+    Files = ();
+End
+
+#include "alllangmodules_draw.inc"

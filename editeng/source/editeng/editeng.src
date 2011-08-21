@@ -1,0 +1,124 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#include <editeng.hrc>
+#include <helpid.hrc>
+
+String RID_EDITUNDO_DEL
+{
+    Text [ en-US ] = "Delete" ;
+};
+
+String RID_EDITUNDO_MOVE
+{
+    Text [ en-US ] = "Move" ;
+};
+
+String RID_EDITUNDO_INSERT
+{
+    Text [ en-US ] = "Insert" ;
+};
+
+String RID_EDITUNDO_REPLACE
+{
+    Text [ en-US ] = "Replace" ;
+};
+
+String RID_EDITUNDO_SETATTRIBS
+{
+    Text [ en-US ] = "Apply attributes" ;
+};
+
+String RID_EDITUNDO_RESETATTRIBS
+{
+    Text [ en-US ] = "Reset attributes" ;
+};
+
+String RID_EDITUNDO_INDENT
+{
+    Text [ en-US ] = "Indent" ;
+};
+
+String RID_EDITUNDO_SETSTYLE
+{
+    Text [ en-US ] = "Apply Styles" ;
+};
+
+String RID_EDITUNDO_TRANSLITERATE
+{
+    Text [ en-US ] = "~Change Case";
+};
+
+
+Menu RID_MENU_SPELL
+{
+    ItemList =
+    {
+        MenuItem
+        {
+            Identifier = MN_SPELLING ;
+            HelpId = HID_EDITENG_SPELLER_START;
+            Text [ en-US ] = "~Spellcheck..." ;
+        };
+        MenuItem
+        {
+            Identifier = MN_INSERT ;
+            HelpId = HID_EDITENG_SPELLER_ADDWORD;
+            SubMenu = Menu
+            {
+            };
+            Text [ en-US ] = "~Add" ;
+        };
+        MenuItem
+        {
+            Identifier = MN_IGNORE ;
+            HelpId = HID_EDITENG_SPELLER_IGNORE;
+            Text [ en-US ] = "Ignore All" ;
+        };
+        MenuItem
+        {
+            Identifier = MN_AUTOCORR ;
+            HelpId = HID_EDITENG_SPELLER_AUTOCORRECT;
+            SubMenu = Menu
+            {
+            };
+            Text [ en-US ] = "AutoCorrect" ;
+        };
+    };
+};
+
+
+String RID_STR_WORD
+{
+    Text [ en-US ] = "Word is %x";
+};
+
+String RID_STR_PARAGRAPH
+{
+    Text [ en-US ] = "Paragraph is %x";
+};
+

@@ -1,0 +1,4 @@
+"OConnectionPool";"com::sun::star::sdbc::XDriverManager";"getConnection()"
+"OConnectionPool";"com::sun::star::sdbc::XDriverManager";"getConnectionWithInfo()"
+"OConnectionPool";"com::sun::star::sdbc::XDriverManager";"setLoginTimeout()"
+"OConnectionPool";"com::sun::star::sdbc::XDriverManager";"getLoginTimeout()"

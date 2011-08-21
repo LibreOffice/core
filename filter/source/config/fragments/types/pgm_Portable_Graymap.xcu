@@ -1,0 +1,12 @@
+    <node oor:name="pgm_Portable_Graymap" oor:op="replace" >
+        <prop oor:name="DetectService"><value>com.sun.star.comp.draw.FormatDetector</value></prop>
+        <prop oor:name="URLPattern"/>
+        <prop oor:name="Extensions"><value>pgm</value></prop>
+        <prop oor:name="MediaType"><value>image/x-portable-graymap</value></prop>
+        <prop oor:name="Preferred"><value>false</value></prop>
+        <prop oor:name="PreferredFilter"><value>PGM - Portable Graymap</value></prop>
+        <prop oor:name="UIName">
+            <value>PGM - Portable Graymap</value>
+        </prop>
+        <prop oor:name="ClipboardFormat"/>
+    </node>

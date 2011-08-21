@@ -1,0 +1,11 @@
+module ooo { module vba { module excel {
+    constants XlChartPicturePlacement {
+        const long xlAllFaces = 7;
+        const long xlEnd = 2;
+        const long xlEndSides = 3;
+        const long xlFront = 4;
+        const long xlFrontEnd = 6;
+        const long xlFrontSides = 5;
+        const long xlSides = 1;
+    };
+}; }; };

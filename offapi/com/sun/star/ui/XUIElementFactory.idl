@@ -1,0 +1,119 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_ui_XUIElementFactory_idl__
+#define __com_sun_star_ui_XUIElementFactory_idl__
+
+#include <com/sun/star/ui/XUIElement.idl>
+#include <com/sun/star/container/NoSuchElementException.idl>
+#include <com/sun/star/lang/IllegalArgumentException.idl>
+#include <com/sun/star/beans/PropertyValue.idl>
+
+//=============================================================================
+
+module com { module sun { module star { module ui {
+
+//=============================================================================
+
+/** specifies a user interface element factory that can create and initialize
+    user interface elements.
+
+    <p>
+    User interface element factories must be registered at a
+    <type>UIElementFactoryManager</type> service to provide access to itself.
+
+    Currently the following user interface element types are defined:
+    <ul>
+        <li><b>menubar</b>A configurable user interface element.</li>
+        <li><b>popupmenu</b>A configurable user interface element.</li>
+        <li><b>toolbar</b>A configurable user interface element.</li>
+        <li><b>statusbar</b>A configurable user interface element.</li>
+        <li><b>floater</b>A basic user interface element.</li>
+    </ul>
+    </p>
+
+    @since OOo 2.0
+*/
+
+published interface XUIElementFactory : ::com::sun::star::uno::XInterface
+{
+    /** creates a new instances of a specific user interface element.
+
+        @param ResourceURL
+            specifies which unique user interface element should be created
+            by the factory. A resource URL must meet the following syntax:
+            "private:resource/$type/$name. It is only allowed to use ASCII
+            characters for type and name. This argument must not be empty to
+            have a working user interface element instance.The implementation
+            can throw an
+            <type scope="com::sun::star::container">NoSuchElementException</type>
+            if it doesn't know how to create the request user interface
+            element.
+
+        @param Args
+            The following arguments are supported:
+            <ul>
+                <li><b>Frame</b><br>
+                    specifies the <type scope="com::sun::star::frame">XFrame</type>
+                    instance to which the user interface element belongs to. To
+                    create a configurable user interface element the frame
+                    instance must contain a visible component. Otherwise it is
+                    not possible to determine the correct user interface
+                    configuration manager. This argument is <b>mandatory</b> to
+                    have a working configurable user interface element instance.
+                </li>
+                <li><b>ParentWindow</b><br/>
+                    specifies a parent window to use for the window(s) representing
+                    the UI element. Depending on the concrete UI element type, this parameter
+                    might be required or ignored by an implementation.
+                </li>
+                <li><b>Persistent</b><br>specifies if changes to a configurable
+                    user interface element should be persistent. This is an
+                    optional argument. The default value is <TRUE/>.</li>
+            </ul>
+
+        <p>
+        An implementation is responsible to initialize every newly created user
+        interface element if the necessary properties are provided. Especially
+        it must connect a configurable user interface element to the correct user
+        interface configuration manager. Without this connection the configurable
+        user interface element cannot retrieve its structure data and changes to
+        the user interface element structure won't be persistent. It is up to the
+        implementation to throw an
+        <type scope="com::sun::star::lang">IllegalArgumentException</type>
+        if it cannot create a user interface element with the provided arguments.
+
+        @see ConfigurableUIElement
+        @see UIElement
+        </p>
+    */
+    ::com::sun::star::ui::XUIElement createUIElement( [in] string ResourceURL, [in] sequence< com::sun::star::beans::PropertyValue > Args ) raises ( com::sun::star::container::NoSuchElementException, com::sun::star::lang::IllegalArgumentException );
+};
+
+}; }; }; };
+
+#endif

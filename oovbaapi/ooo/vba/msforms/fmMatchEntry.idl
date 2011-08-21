@@ -1,0 +1,7 @@
+module ooo { module vba { module msforms {
+    constants fmMatchEntry {
+        const long fmMatchEntryComplete = 1;
+        const long fmMatchEntryFirstLetter = 0;
+        const long fmMatchEntryNone = 2;
+    };
+}; }; };

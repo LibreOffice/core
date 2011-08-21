@@ -1,0 +1,323 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+ // #pragma ******************************************************************
+
+#include "envfmt.hrc"
+#include "helpid.h"
+ // TP_ENV_FMT ---------------------------------------------------------------
+TabPage TP_ENV_FMT
+{
+    HelpID = HID_ENV_FMT ;
+    Size = MAP_APPFONT ( 260 , 185 ) ;
+    Hide = TRUE ;
+    FixedLine FL_ADDRESSEE
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
+        Text [ en-US ] = "Addressee" ;
+    };
+    FixedText TXT_ADDR_POS
+    {
+        Pos = MAP_APPFONT ( 12 , 14 ) ;
+        Size = MAP_APPFONT ( 40 , 8 ) ;
+        Left = TRUE ;
+        Text [ en-US ] = "Position";
+    };
+    FixedText TXT_ADDR_LEFT
+    {
+        Pos = MAP_APPFONT ( 18 , 27 ) ;
+        Size = MAP_APPFONT ( 40 , 8 ) ;
+        Left = TRUE ;
+        Text [ en-US ] = "from left" ;
+    };
+    MetricField FLD_ADDR_LEFT
+    {
+        HelpID = "sw:MetricField:TP_ENV_FMT:FLD_ADDR_LEFT";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 60 , 25 ) ;
+        Size = MAP_APPFONT ( 40 , 12 ) ;
+        TabStop = TRUE ;
+        Left = TRUE ;
+        Spin = TRUE ;
+        DecimalDigits = 2 ;
+        Unit = FUNIT_CM ;
+        Minimum = 0 ;
+        Maximum = 10000 ;
+        First = 0 ;
+        Last = 10000 ;
+        SpinSize = 10 ;
+        Repeat = TRUE ;
+    };
+    FixedText TXT_ADDR_TOP
+    {
+        Pos = MAP_APPFONT ( 18 , 43 ) ;
+        Size = MAP_APPFONT ( 40 , 8 ) ;
+        Left = TRUE ;
+        Text [ en-US ] = "from top" ;
+    };
+    MetricField FLD_ADDR_TOP
+    {
+        HelpID = "sw:MetricField:TP_ENV_FMT:FLD_ADDR_TOP";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 60 , 41 ) ;
+        Size = MAP_APPFONT ( 40 , 12 ) ;
+        TabStop = TRUE ;
+        Left = TRUE ;
+        Spin = TRUE ;
+        DecimalDigits = 2 ;
+        Unit = FUNIT_CM ;
+        Minimum = 0 ;
+        Maximum = 10000 ;
+        First = 0 ;
+        Last = 10000 ;
+        SpinSize = 10 ;
+        Repeat = TRUE ;
+    };
+    FixedText TXT_ADDR_FORMAT
+    {
+        Pos = MAP_APPFONT ( 149 , 27 ) ;
+        Size = MAP_APPFONT ( 40 , 8 ) ;
+        Left = TRUE ;
+        Text [ en-US ] = "Format";
+    };
+    MenuButton BTN_ADDR_EDIT
+    {
+        HelpID = "sw:MenuButton:TP_ENV_FMT:BTN_ADDR_EDIT";
+        Pos = MAP_APPFONT ( 194 , 24 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "Edit" ;
+    };
+    FixedLine FL_SENDER
+    {
+        Pos = MAP_APPFONT ( 6 , 56 ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
+        Text [ en-US ] = "Sender" ;
+    };
+    FixedText TXT_SEND_POS
+    {
+        Pos = MAP_APPFONT ( 12 , 67 ) ;
+        Size = MAP_APPFONT ( 40 , 8 ) ;
+        Left = TRUE ;
+        Text [ en-US ] = "Position";
+    };
+    FixedText TXT_SEND_LEFT
+    {
+        Pos = MAP_APPFONT ( 18 , 80 ) ;
+        Size = MAP_APPFONT ( 40 , 8 ) ;
+        Left = TRUE ;
+        Text [ en-US ] = "from left" ;
+    };
+    MetricField FLD_SEND_LEFT
+    {
+        HelpID = "sw:MetricField:TP_ENV_FMT:FLD_SEND_LEFT";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 60 , 78 ) ;
+        Size = MAP_APPFONT ( 40 , 12 ) ;
+        TabStop = TRUE ;
+        Left = TRUE ;
+        Spin = TRUE ;
+        DecimalDigits = 2 ;
+        Unit = FUNIT_CM ;
+        Minimum = 0 ;
+        Maximum = 10000 ;
+        First = 0 ;
+        Last = 10000 ;
+        SpinSize = 10 ;
+        Repeat = TRUE ;
+    };
+    FixedText TXT_SEND_TOP
+    {
+        Pos = MAP_APPFONT ( 18 , 96 ) ;
+        Size = MAP_APPFONT ( 40 , 8 ) ;
+        Left = TRUE ;
+        Text [ en-US ] = "from top" ;
+    };
+    MetricField FLD_SEND_TOP
+    {
+        HelpID = "sw:MetricField:TP_ENV_FMT:FLD_SEND_TOP";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 60 , 94 ) ;
+        Size = MAP_APPFONT ( 40 , 12 ) ;
+        TabStop = TRUE ;
+        Left = TRUE ;
+        Spin = TRUE ;
+        DecimalDigits = 2 ;
+        Unit = FUNIT_CM ;
+        Minimum = 0 ;
+        Maximum = 10000 ;
+        First = 0 ;
+        Last = 10000 ;
+        SpinSize = 10 ;
+        Repeat = TRUE ;
+    };
+    FixedText TXT_SEND_FORMAT
+    {
+        Pos = MAP_APPFONT ( 149 , 80 ) ;
+        Size = MAP_APPFONT ( 40 , 8 ) ;
+        Left = TRUE ;
+        Text [ en-US ] = "Format";
+    };
+    MenuButton BTN_SEND_EDIT
+    {
+        HelpID = "sw:MenuButton:TP_ENV_FMT:BTN_SEND_EDIT";
+        Pos = MAP_APPFONT ( 194 , 77 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Text [ en-US ] = "Edit" ;
+        TabStop = TRUE ;
+    };
+    FixedLine FL_SIZE
+    {
+        Pos = MAP_APPFONT ( 6 , 109 ) ;
+        Size = MAP_APPFONT ( 148 , 8 ) ;
+        Text [ en-US ] = "Size" ;
+    };
+    FixedText TXT_SIZE_FORMAT
+    {
+        Pos = MAP_APPFONT ( 12 , 122 ) ;
+        Size = MAP_APPFONT ( 40 , 8 ) ;
+        Text [ en-US ] = "F~ormat" ;
+        Left = TRUE ;
+    };
+    ListBox BOX_SIZE_FORMAT
+    {
+        HelpID = "sw:ListBox:TP_ENV_FMT:BOX_SIZE_FORMAT";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 60 , 120 ) ;
+        Size = MAP_APPFONT ( 40 , 72 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+    };
+    FixedText TXT_SIZE_WIDTH
+    {
+        Pos = MAP_APPFONT ( 12 , 138 ) ;
+        Size = MAP_APPFONT ( 40 , 8 ) ;
+        Text [ en-US ] = "~Width" ;
+        Left = TRUE ;
+    };
+    MetricField FLD_SIZE_WIDTH
+    {
+        HelpID = "sw:MetricField:TP_ENV_FMT:FLD_SIZE_WIDTH";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 60 , 136 ) ;
+        Size = MAP_APPFONT ( 40 , 12 ) ;
+        TabStop = TRUE ;
+        Left = TRUE ;
+        Spin = TRUE ;
+        DecimalDigits = 2 ;
+        Unit = FUNIT_CM ;
+        Minimum = 500 ;
+        Maximum = 10000 ;
+        First = 500 ;
+        Last = 10000 ;
+        SpinSize = 10 ;
+        Repeat = TRUE ;
+    };
+    FixedText TXT_SIZE_HEIGHT
+    {
+        Pos = MAP_APPFONT ( 12 , 154 ) ;
+        Size = MAP_APPFONT ( 40 , 8 ) ;
+        Left = TRUE ;
+        Text [ en-US ] = "~Height" ;
+    };
+    MetricField FLD_SIZE_HEIGHT
+    {
+        HelpID = "sw:MetricField:TP_ENV_FMT:FLD_SIZE_HEIGHT";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 60 , 152 ) ;
+        Size = MAP_APPFONT ( 40 , 12 ) ;
+        TabStop = TRUE ;
+        Left = TRUE ;
+        Spin = TRUE ;
+        DecimalDigits = 2 ;
+        Unit = FUNIT_CM ;
+        Minimum = 500 ;
+        Maximum = 10000 ;
+        First = 500 ;
+        Last = 10000 ;
+        SpinSize = 10 ;
+        Repeat = TRUE ;
+    };
+    Window WIN_PREVIEW
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 160 , 116 ) ;
+        Size = MAP_APPFONT ( 84 , 63 ) ;
+    };
+};
+ // Menu *********************************************************************
+Menu MNU_EDIT
+{
+    ItemList =
+    {
+        MenuItem
+        {
+            IDENTIFIER = MID_CHAR ;
+            Text [ en-US ] = "C~haracter..." ;
+        };
+        MenuItem
+        {
+            IDENTIFIER = MID_PARA ;
+            Text [ en-US ] = "P~aragraph..." ;
+        };
+    };
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,161 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_style_Style_idl__
+#define __com_sun_star_style_Style_idl__
+
+#include <com/sun/star/style/XStyle.idl>
+#include <com/sun/star/beans/XPropertySet.idl>
+#include <com/sun/star/beans/XMultiPropertySet.idl>
+#include <com/sun/star/beans/XMultiPropertyStates.idl>
+#include <com/sun/star/beans/NamedValue.idl>
+#include <com/sun/star/xml/UserDefinedAttributesSupplier.idl>
+
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module style {
+
+//=============================================================================
+
+/** This service specifies a single style sheet.
+ */
+published service Style
+{
+    //-------------------------------------------------------------------------
+    /** contains user defined attributes.
+
+        @see    <type scope="com::sun::star::xml">UserDefinedAttributesSupplier</type>
+     */
+    [optional] service com::sun::star::xml::UserDefinedAttributesSupplier;
+
+    //-------------------------------------------------------------------------
+
+    interface com::sun::star::style::XStyle;
+
+        interface com::sun::star::beans::XPropertySet;
+
+        [optional] interface com::sun::star::beans::XMultiPropertySet;
+
+    /* This optional interface is available as an optimization, allowing users
+       to use "setAllPropertiesToDefault", for example. */
+    //-------------------------------------------------------------------------
+
+    [optional] interface com::sun::star::beans::XMultiPropertyStates;
+
+    //-------------------------------------------------------------------------
+
+    /** determines if a style is physically created.
+
+        <p> Built in styles may not be created until they are needed.
+        To prevent standard style properties from being exported, it may be
+        useful to check if the style is created first.
+        </p>
+     */
+    [optional, readonly, property] boolean IsPhysical;
+    //-------------------------------------------------------------------------
+
+    /** contains the name of the style that is applied to the next paragraph.
+
+        <p> This property is usually available at paragraph styles only. </p>
+     */
+    [optional, property] string FollowStyle;
+    //-------------------------------------------------------------------------
+
+    /** contains the name of the style as it is displayed in the user interface.
+
+        <p> The names of the styles at the API are language independent. The user interface
+        names are localized.</p>
+     */
+    [optional, readonly, property] string DisplayName;
+    //-------------------------------------------------------------------------
+
+    /** determines if a style is automatically updated, if the properties of an object
+        that the style is applied to are changed.
+
+        <p> For example, if the style is applied to a paragraph and the properties of the paragraph
+        are changed then the style will be updated accordingly.</p>
+     */
+    [optional, property] string IsAutoUpdate;
+    //-------------------------------------------------------------------------
+
+    /** defines the context and styles for conditional paragraphs.
+
+        <p>This property is only available if the style is a conditional
+        paragraph style.</p>
+
+        <p>The sequence consists of pairs where the name part of the pair
+        defines the context where it should be applied and the value part
+        is a string naming the style to be used in that context.</p>
+
+        <p>Assigning an empty string to the style name will disable
+        the conditional style for that context.</p>
+
+        <p>The allowed strings (contexts) for the name part of an entry
+        of the sequence are:</p>
+
+        <ul>
+            <li>TableHeader</li>
+            <li>Table</li>
+            <li>Frame</li>
+            <li>Section</li>
+            <li>Footnote</li>
+            <li>Endnote</li>
+            <li>Header</li>
+            <li>Footer</li>
+            <li>OutlineLevel1</li>
+            <li>OutlineLevel2</li>
+            <li>OutlineLevel3</li>
+            <li>OutlineLevel4</li>
+            <li>OutlineLevel5</li>
+            <li>OutlineLevel6</li>
+            <li>OutlineLevel7</li>
+            <li>OutlineLevel8</li>
+            <li>OutlineLevel9</li>
+            <li>OutlineLevel10</li>
+            <li>NumberingLevel1</li>
+            <li>NumberingLevel2</li>
+            <li>NumberingLevel3</li>
+            <li>NumberingLevel4</li>
+            <li>NumberingLevel5</li>
+            <li>NumberingLevel6</li>
+            <li>NumberingLevel7</li>
+            <li>NumberingLevel8</li>
+            <li>NumberingLevel9</li>
+            <li>NumberingLevel10</li>
+        </ul>
+
+
+        @since  OOo 2.0.1
+     */
+    [optional, property] sequence< com::sun::star::beans::NamedValue > ParaStyleConditions;
+
+};
+
+//=============================================================================
+
+}; }; }; };
+#endif

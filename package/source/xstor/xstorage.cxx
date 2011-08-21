@@ -328,7 +328,7 @@ OStorage_Impl::~OStorage_Impl()
         else if ( !m_aReadOnlyWrapList.empty() )
         {
             for ( OStorageList_Impl::iterator pStorageIter = m_aReadOnlyWrapList.begin();
-                  pStorageIter != m_aReadOnlyWrapList.end(); pStorageIter++ )
+                  pStorageIter != m_aReadOnlyWrapList.end(); ++pStorageIter )
             {
                 uno::Reference< embed::XStorage > xTmp = pStorageIter->m_xWeakRef;
                 if ( xTmp.is() )
@@ -348,13 +348,13 @@ OStorage_Impl::~OStorage_Impl()
     }
 
     for ( SotElementList_Impl::iterator pElementIter = m_aChildrenList.begin();
-          pElementIter != m_aChildrenList.end(); pElementIter++ )
+          pElementIter != m_aChildrenList.end(); ++pElementIter )
         delete *pElementIter;
 
     m_aChildrenList.clear();
 
     for ( SotElementList_Impl::iterator pDeletedIter = m_aDeletedList.begin();
-          pDeletedIter != m_aDeletedList.end(); pDeletedIter++ )
+          pDeletedIter != m_aDeletedList.end(); ++pDeletedIter )
         delete *pDeletedIter;
 
     m_aDeletedList.clear();
@@ -369,7 +369,7 @@ OStorage_Impl::~OStorage_Impl()
     m_xPackage = uno::Reference< lang::XSingleServiceFactory >();
 
     ::rtl::OUString aPropertyName = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "URL" ) );
-    for ( sal_Int32 aInd = 0; aInd < m_xProperties.getLength(); aInd++ )
+    for ( sal_Int32 aInd = 0; aInd < m_xProperties.getLength(); ++aInd )
     {
         if ( m_xProperties[aInd].Name.equals( aPropertyName ) )
         {
@@ -451,11 +451,11 @@ void OStorage_Impl::RemoveReadOnlyWrap( OStorage& aStorage )
             }
 
             OStorageList_Impl::iterator pIterToDelete( pStorageIter );
-            pStorageIter++;
+            ++pStorageIter;
             m_aReadOnlyWrapList.erase( pIterToDelete );
         }
         else
-            pStorageIter++;
+            ++pStorageIter;
     }
 }
 
@@ -726,7 +726,7 @@ void OStorage_Impl::CopyToStorage( const uno::Reference< embed::XStorage >& xDes
         throw embed::InvalidStorageException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
 
     for ( SotElementList_Impl::iterator pElementIter = m_aChildrenList.begin();
-          pElementIter != m_aChildrenList.end(); pElementIter++ )
+          pElementIter != m_aChildrenList.end(); ++pElementIter )
     {
         if ( !(*pElementIter)->m_bIsRemoved )
             CopyStorageElement( *pElementIter, xDest, (*pElementIter)->m_aName, bDirect );
@@ -1088,7 +1088,7 @@ void OStorage_Impl::Commit()
     // remove replaced removed elements
     for ( SotElementList_Impl::iterator pDeletedIter = m_aDeletedList.begin();
           pDeletedIter != m_aDeletedList.end();
-          pDeletedIter++ )
+          ++pDeletedIter )
     {
 
         if ( m_nStorageType == embed::StorageFormats::OFOPXML && !(*pDeletedIter)->m_bIsStorage )
@@ -1120,17 +1120,17 @@ void OStorage_Impl::Commit()
 
             SotElement_Impl* pToDelete = *pElementIter;
 
-            pElementIter++; // to let the iterator be valid it should be increased before removing
+            ++pElementIter; // to let the iterator be valid it should be increased before removing
 
             m_aChildrenList.remove( pToDelete );
             delete pToDelete;
         }
         else
-            pElementIter++;
+            ++pElementIter;
     }
 
     // there should be no more deleted elements
-    for ( pElementIter = m_aChildrenList.begin(); pElementIter != m_aChildrenList.end(); pElementIter++ )
+    for ( pElementIter = m_aChildrenList.begin(); pElementIter != m_aChildrenList.end(); ++pElementIter )
     {
         // if it is a 'duplicate commit' inserted elements must be really inserted to package later
         // since thay can conflict with renamed elements
@@ -1204,7 +1204,7 @@ void OStorage_Impl::Commit()
         }
     }
 
-    for ( pElementIter = m_aChildrenList.begin(); pElementIter != m_aChildrenList.end(); pElementIter++ )
+    for ( pElementIter = m_aChildrenList.begin(); pElementIter != m_aChildrenList.end(); ++pElementIter )
     {
         // now inserted elements can be inserted to the package
         if ( (*pElementIter)->m_bIsInserted )
@@ -1317,7 +1317,7 @@ void OStorage_Impl::Revert()
         {
             SotElement_Impl* pToDelete = *pElementIter;
 
-            pElementIter++; // to let the iterator be valid it should be increased before removing
+            ++pElementIter; // to let the iterator be valid it should be increased before removing
 
             m_aChildrenList.remove( pToDelete );
             delete pToDelete;
@@ -1329,14 +1329,14 @@ void OStorage_Impl::Revert()
             (*pElementIter)->m_aName = (*pElementIter)->m_aOriginalName;
             (*pElementIter)->m_bIsRemoved = sal_False;
 
-            pElementIter++;
+            ++pElementIter;
         }
     }
 
     // return replaced removed elements
     for ( SotElementList_Impl::iterator pDeletedIter = m_aDeletedList.begin();
           pDeletedIter != m_aDeletedList.end();
-          pDeletedIter++ )
+          ++pDeletedIter )
     {
         m_aChildrenList.push_back( (*pDeletedIter) );
 
@@ -1396,7 +1396,7 @@ SotElement_Impl* OStorage_Impl::FindElement( const ::rtl::OUString& rName )
     ReadContents();
 
     for ( SotElementList_Impl::iterator pElementIter = m_aChildrenList.begin();
-          pElementIter != m_aChildrenList.end(); pElementIter++ )
+          pElementIter != m_aChildrenList.end(); ++pElementIter )
     {
         if ( (*pElementIter)->m_aName == rName && !(*pElementIter)->m_bIsRemoved )
             return *pElementIter;
@@ -1532,7 +1532,7 @@ SotElement_Impl* OStorage_Impl::InsertElement( ::rtl::OUString aName, sal_Bool b
     SotElement_Impl* pDeletedElm = NULL;
 
     for ( SotElementList_Impl::iterator pElementIter = m_aChildrenList.begin();
-          pElementIter != m_aChildrenList.end(); pElementIter++ )
+          pElementIter != m_aChildrenList.end(); ++pElementIter )
     {
         if ( (*pElementIter)->m_aName == aName )
         {
@@ -1627,7 +1627,7 @@ uno::Sequence< ::rtl::OUString > OStorage_Impl::GetElementNames()
 
     sal_uInt32 nInd = 0;
     for ( SotElementList_Impl::iterator pElementIter = m_aChildrenList.begin();
-          pElementIter != m_aChildrenList.end(); pElementIter++ )
+          pElementIter != m_aChildrenList.end(); ++pElementIter )
     {
         if ( !(*pElementIter)->m_bIsRemoved )
             aElementNames[nInd++] = (*pElementIter)->m_aName;
@@ -2029,7 +2029,7 @@ void SAL_CALL OStorage::InternalDispose( sal_Bool bNotifyImpl )
             if ( !m_pData->m_aOpenSubComponentsList.empty() )
             {
                 for ( WeakComponentList::iterator pCompIter = m_pData->m_aOpenSubComponentsList.begin();
-                      pCompIter != m_pData->m_aOpenSubComponentsList.end(); pCompIter++ )
+                      pCompIter != m_pData->m_aOpenSubComponentsList.end(); ++pCompIter )
                 {
                     uno::Reference< lang::XComponent > xTmp = (*pCompIter);
                     if ( xTmp.is() )
@@ -2090,11 +2090,11 @@ void OStorage::ChildIsDisposed( const uno::Reference< uno::XInterface >& xChild 
             if ( !xTmp.is() || xTmp == xChild )
             {
                 WeakComponentList::iterator pIterToRemove = pCompIter;
-                pCompIter++;
+                ++pCompIter;
                 m_pData->m_aOpenSubComponentsList.erase( pIterToRemove );
             }
             else
-                pCompIter++;
+                ++pCompIter;
         }
     }
 }
@@ -2662,7 +2662,7 @@ uno::Reference< embed::XStorage > SAL_CALL OStorage::openStorageElement(
                            pElementIter != pElement->m_pStorage->m_aChildrenList.end(); )
                        {
                         SotElement_Impl* pElementToDel = (*pElementIter);
-                        pElementIter++;
+                        ++pElementIter;
 
                         m_pImpl->RemoveElement( pElementToDel );
                        }
@@ -4180,7 +4180,7 @@ void SAL_CALL OStorage::revert()
     }
 
     for ( SotElementList_Impl::iterator pElementIter = m_pImpl->m_aChildrenList.begin();
-          pElementIter != m_pImpl->m_aChildrenList.end(); pElementIter++ )
+          pElementIter != m_pImpl->m_aChildrenList.end(); ++pElementIter )
     {
         if ( ((*pElementIter)->m_pStorage
                 && ( (*pElementIter)->m_pStorage->m_pAntiImpl || !(*pElementIter)->m_pStorage->m_aReadOnlyWrapList.empty() ))

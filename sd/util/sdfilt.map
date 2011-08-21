@@ -1,0 +1,9 @@
+UDK_3_0_0 {
+        global:
+                ExportPPT;
+                ImportPPT;
+                SaveVBA;
+                component_getFactory;
+        local:
+                *;
+};

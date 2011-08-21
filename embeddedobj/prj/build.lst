@@ -1,0 +1,7 @@
+eo	embeddedobj	:	offapi sal cppu cppuhelper comphelper tools unotools LIBXSLT:libxslt NULL
+eo	embeddedobj									usr1	-	all	eo_mkout NULL
+eo	embeddedobj\inc								nmake	-	all	eo_inc NULL
+eo	embeddedobj\source\commonembedding			nmake	-	all	eo_commonembed eo_inc NULL
+eo	embeddedobj\source\general					nmake	-	all	eo_general eo_inc NULL
+eo	embeddedobj\util							nmake	-	all	eo_util eo_commonembed eo_general eo_inc NULL
+eo	embeddedobj\source\msole					nmake	-	all	eo_msole eo_util eo_inc NULL

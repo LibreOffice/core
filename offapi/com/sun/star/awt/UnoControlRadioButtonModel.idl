@@ -1,0 +1,224 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_awt_UnoControlRadioButtonModel_idl__
+#define __com_sun_star_awt_UnoControlRadioButtonModel_idl__
+
+#include <com/sun/star/awt/FontDescriptor.idl>
+#include <com/sun/star/awt/UnoControlModel.idl>
+#include <com/sun/star/style/VerticalAlignment.idl>
+#include <com/sun/star/util/Color.idl>
+#include <com/sun/star/graphic/XGraphic.idl>
+
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module awt {
+
+//=============================================================================
+
+/** specifies the standard model of an <type>UnoControlRadioButton</type>.
+ */
+published service UnoControlRadioButtonModel
+{
+    service com::sun::star::awt::UnoControlModel;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies the horizontal alignment of the text in the control.
+
+        <pre>
+        0: left
+        1: center
+        2: right
+        </pre>
+
+        @since OOo 2.0
+     */
+    [optional, property] short Align;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies the background color (RGB) of the control.
+     */
+    [optional, property] long BackgroundColor;
+
+    //-------------------------------------------------------------------------
+
+    /** determines whether the control is enabled or disabled.
+     */
+    [property] boolean Enabled;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies the font attributes of the text in the control.
+     */
+    [property] com::sun::star::awt::FontDescriptor FontDescriptor;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies the <type scope="com::sun::star::text">FontEmphasis</type>
+        value of the text in the control.
+     */
+    [property] short FontEmphasisMark;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies the <type scope="com::sun::star::text">FontRelief</type>
+        value of the text in the control.
+     */
+    [property] short FontRelief;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies the help text of the control.
+     */
+    [property] string HelpText;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies the help URL of the control.
+     */
+    [property] string HelpURL;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies the position of the image, if any, relative to the text, if any
+
+        <p>Valid values of this property are specified with <type>ImagePosition</type>.</p>
+    */
+    [optional, property] short ImagePosition;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies an URL to an image to display besides the label of the control
+        @see Graphic
+     */
+    [optional, property] string ImageURL;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies a graphic to be displayed besides the label of the control
+
+        <p>If this property is present, it interacts with the <member>ImageURL</member>in the
+        following way:
+        <ul><li>If <member>ImageURL</member> is set, <member>Graphic</member> will be reset
+            to an object as loaded from the given image URL, or <NULL/> if <member>ImageURL</member>
+            does not point to a valid image file.</li>
+            <li>If <member>Graphic</member> is set, <member>ImageURL</member> will be reset
+            to an empty string.</li>
+        </ul></p>
+
+        @since OOo 2.1
+     */
+    [optional, property, transient] com::sun::star::graphic::XGraphic Graphic;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies the label of the control.
+     */
+    [property] string Label;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies that the text may be displayed on more than one line.
+
+        @since OOo 2.0
+     */
+    [optional, property] boolean MultiLine;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies that the control will be printed with the document.
+     */
+    [property] boolean Printable;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies the state of the control.
+
+        <pre>
+        0: not checked
+        1: checked
+        </pre>
+     */
+    [property] short State;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies that the control can be reached with the TAB key.
+     */
+    [property] boolean Tabstop;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies the text color (RGB) of the control.
+     */
+    [property] com::sun::star::util::Color TextColor;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies the text line color (RGB) of the control.
+     */
+    [property] com::sun::star::util::Color TextLineColor;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies the vertical alignment of the text in the control.
+
+        @since OOo 2.0
+     */
+    [optional, property] com::sun::star::style::VerticalAlignment VerticalAlign;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies a visual effect to apply to the radio button control.
+
+        <p>Possible values for this property are <type>VisualEffect</type>::FLAT and
+        <type>VisualEffect</type>::LOOK3D.</p>
+
+        @see com::sun::star::awt::VisualEffect
+
+        @since OOo 2.0
+     */
+    [optional, property] short VisualEffect;
+
+    /** denotes the writing mode used in the control, as specified in the
+        <type scope="com::sun::star::text">WritingMode2</type> constants group.
+
+        <p>Only <member scope="com::sun::star::text">WritingMode2::LR_TB</member> and
+        <member scope="com::sun::star::text">WritingMode2::RL_TB</member> are supported at the moment.</p>
+
+        @since OOo 3.1
+    */
+    [optional, property] short WritingMode;
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

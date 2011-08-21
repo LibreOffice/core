@@ -1,0 +1,130 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#define _SV_STDTEXT_SRC
+
+#include <svids.hrc>
+
+String SV_STDTEXT_SERVICENOTAVAILABLE
+{
+    Text [ en-US ] = "The component (%s) could not be loaded.\nPlease start setup with the repair option.";
+};
+
+String SV_STDTEXT_DONTHINTAGAIN
+{
+    Text [ en-US ] = "Do not show this information again.";
+};
+
+String SV_STDTEXT_DONTASKAGAIN
+{
+    Text [ en-US ] = "Do not show this question again.";
+};
+
+String SV_STDTEXT_DONTWARNAGAIN
+{
+    Text [ en-US ] = "Do not show warning again.";
+};
+
+String SV_ACCESSERROR_WRONG_VERSION
+{
+    Text [ en-US ] = "Wrong Version";
+};
+
+String SV_ACCESSERROR_BRIDGE_MSG
+{
+    Text [ en-US ] = "%PRODUCTNAME %PRODUCTVERSION requires a Java Access Bridge 1.0.3 or later version to support accessibility.";
+};
+
+String SV_ACCESSERROR_OK_CANCEL_MSG
+{
+    Text [ en-US ] = "Click '%OK' to start %PRODUCTNAME %PRODUCTVERSION without accessibility support, or click '%CANCEL' to exit %PRODUCTNAME %PRODUCTVERSION.";
+};
+
+String SV_ACCESSERROR_MISSING_BRIDGE
+{
+    Text [ en-US ] = "No Java Access Bridge";
+};
+
+String SV_ACCESSERROR_FAULTY_JAVA
+{
+    Text [ en-US ] = "Faulty Java Installation";
+};
+
+String SV_ACCESSERROR_JAVA_MSG
+{
+    Text [ en-US ] = "%PRODUCTNAME %PRODUCTVERSION requires Java 1.4.0_02 or later version to support accessibility.";
+};
+
+String SV_ACCESSERROR_MISSING_JAVA
+{
+    Text [ en-US ] = "No Java Installation";
+};
+
+String SV_ACCESSERROR_JAVA_NOT_CONFIGURED
+{
+    Text [ en-US ] = "Missing Java Configuration";
+};
+
+String SV_ACCESSERROR_JAVA_DISABLED
+{
+    Text [ en-US ] = "Java Disabled";
+};
+
+String SV_ACCESSERROR_TURNAROUND_MSG
+{
+    Text [ en-US ] = "The Java Access Bridge could not be started.";
+};
+
+String SV_ACCESSERROR_NO_FONTS
+{
+    Text [ en-US ] = "No fonts could be found on the system.";
+};
+
+String SV_STDTEXT_ABOUT
+{
+    Text [ en-US ] = "About %PRODUCTNAME";
+};
+
+String SV_STDTEXT_PREFERENCES
+{
+    Text [ en-US ] = "Preferences...";
+};
+
+WarningBox  SV_EDIT_WARNING_BOX
+{
+    Message [en-US] = "The inserted text exceeded the maximum length of this text field. The text was truncated.";
+};
+
+String SV_MAC_SCREENNNAME
+{
+    Text [en-US] = "Screen %d";
+};
+
+String SV_STDTEXT_ALLFILETYPES
+{
+    Text [en-US] = "Any type";
+};

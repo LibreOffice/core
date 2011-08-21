@@ -1,0 +1,198 @@
+#*************************************************************************
+#
+# DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+# 
+# Copyright 2000, 2010 Oracle and/or its affiliates.
+#
+# OpenOffice.org - a multi-platform office productivity suite
+#
+# This file is part of OpenOffice.org.
+#
+# OpenOffice.org is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Lesser General Public License version 3
+# only, as published by the Free Software Foundation.
+#
+# OpenOffice.org is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Lesser General Public License version 3 for more details
+# (a copy is included in the LICENSE file that accompanied this code).
+#
+# You should have received a copy of the GNU Lesser General Public License
+# version 3 along with OpenOffice.org.  If not, see
+# <http://www.openoffice.org/license.html>
+# for a copy of the LGPLv3 License.
+#
+#*************************************************************************
+
+# used for sdk common files
+PRODUCT_RELEASE=3.4
+OFFICENAME=LibreOffice
+SDKDIRNAME=libreoffice$(PRODUCT_RELEASE)_sdk
+OFFICEPRODUCTNAME=$(OFFICENAME) $(PRODUCT_RELEASE)
+TITLE=$(OFFICENAME) $(PRODUCT_RELEASE) SDK
+IDLDOCREFNAME="$(OFFICENAME) $(PRODUCT_RELEASE) API"
+
+
+PRODUCT_NAME=odkcommon
+PRODUCTZIPFILE=$(PRODUCT_NAME).zip
+
+DESTDIR=$(OUT)/bin/$(PRODUCT_NAME)
+DESTDIRBIN=$(DESTDIR)/bin
+DESTDIRLIB=$(DESTDIR)/lib
+DESTDIRDLL=$(DESTDIRLIB)
+DESTDIRIDL=$(DESTDIR)/idl
+DESTDIRINC=$(DESTDIR)/include
+DESTDIRJAR=$(DESTDIR)/classes
+DESTDIRXML=$(DESTDIR)/xml
+DESTDIRSETTINGS=$(DESTDIR)/settings
+DESTDIREXAMPLES=$(DESTDIR)/examples
+DESTDIRINC=$(DESTDIR)/include
+DESTDIRCLASSES=$(DESTDIR)/classes
+DESTDIRDOCU=$(DESTDIR)/docs
+DESTDIRCOMMONDOCU=$(DESTDIRDOCU)/common
+DESTDIRGENIDLREF=$(DESTDIRCOMMONDOCU)/ref
+DESTDIRDOCUIMAGES=$(DESTDIRDOCU)/images
+DESTDIRCPPDOCU=$(DESTDIRDOCU)/cpp
+DESTDIRGENCPPREF=$(DESTDIRDOCU)/cpp/ref
+DESTDIRJAVADOCU=$(DESTDIRDOCU)/java
+DESTDIRGENJAVAREF=$(DESTDIRDOCU)/java/ref
+
+.IF "$(CROSS_COMPILING)" == "YES"
+BINOUT=$(SOLARVERSION)/$(INPATH)/bin
+.ELSE
+BINOUT=$(SOLARBINDIR)
+.ENDIF
+INCOUT=$(SOLARINCDIR)
+IDLOUT=$(SOLARIDLDIR)
+XMLOUT=$(SOLARXMLDIR)
+LIBOUT=$(SOLARLIBDIR)
+
+MY_AUTODOC=$(AUGMENT_LIBRARY_PATH) $(WRAPCMD) $(SOLARBINDIR)/autodoc
+
+.IF "$(OS)"=="FREEBSD" || "$(OS)"=="NETBSD" || "$(OS)"=="MACOSX" || \
+    "$(OS)"=="AIX" || "$(OS)"=="DRAGONFLY"
+MY_COPY=$(GNUCOPY)
+MY_COPY_RECURSIVE=$(GNUCOPY) -r
+.ELSE
+MY_COPY=$(GNUCOPY) -u
+MY_COPY_RECURSIVE=$(GNUCOPY) -urf
+.ENDIF
+
+MY_DELETE_RECURSIVE=rm -rf
+MY_TEXTCOPY=@cp 
+
+.IF "$(GUI)"=="WNT"
+#--------------------
+# WNT ONLY
+#--------------------
+
+MY_DLLPREFIX=
+MY_DLLPOSTFIX=.dll
+MY_DLLOUT=$(OUT)/bin
+EXEPOSTFIX=.exe
+DLLOUT=$(SOLARBINDIR)
+DESTDIRCPPEXAMPLES=$(DESTDIR)/examples/cpp
+
+.IF "$(COM)"=="GCC"
+DESTPLATFROM=mingw
+.ELSE
+DESTPLATFROM=windows
+.ENDIF
+DESTDIRDLL=$(DESTDIRBIN)
+DESTDIRCLI=$(DESTDIR)/cli
+
+.ELSE
+#--------------------
+
+MY_DLLPREFIX=lib
+.IF "$(OS)"=="MACOSX"
+MY_DLLPOSTFIX=.dylib
+.ELSE
+MY_DLLPOSTFIX=.so
+.ENDIF
+MY_DLLOUT=$(OUT)/lib
+DLLOUT=$(SOLARLIBDIR)
+
+.IF "$(OS)$(CPU)"=="SOLARISS"
+# SOLARIS SPARC
+DESTPLATFROM=solsparc
+
+.ELIF "$(OS)$(CPU)"=="SOLARISU"
+# SOLARIS SPARC 64
+DESTPLATFROM=solsparc64
+
+.ELIF "$(OS)$(CPU)"=="SOLARISI"
+# SOLARIS INTEL
+DESTPLATFROM=solintel
+
+.ELIF "$(OS)"=="LINUX"
+# LINUX
+DESTPLATFROM=linux
+
+.ELIF "$(OS)"=="NETBSD"
+# NETBSD
+DESTPLATFROM=netbsd
+
+.ELIF "$(OS)"=="FREEBSD"
+# FREEBSD
+DESTPLATFROM=freebsd
+
+.ELIF "$(OS)"=="DRAGONFLY"
+DESTPLATFROM=dragonfly
+
+.ELIF "$(OS)"=="MACOSX"
+# MACOSX
+DESTPLATFROM=macosx
+
+.ELIF "$(OS)"=="AIX"
+# MACOSX
+DESTPLATFROM=aix
+
+.ENDIF
+
+.ENDIF
+
+
+INCLUDETOPDIRLIST= \
+    $(INCOUT)/sal \
+    $(INCOUT)/salhelper \
+    $(INCOUT)/rtl \
+    $(INCOUT)/osl \
+    $(INCOUT)/store \
+    $(INCOUT)/typelib \
+    $(INCOUT)/uno \
+    $(INCOUT)/cppu \
+    $(INCOUT)/cppuhelper \
+    $(INCOUT)/registry
+
+.IF "$(GUI)"=="WNT"
+INCLUDETOPDIRLIST += $(INCOUT)/systools
+.ENDIF
+
+INCLUDEDIRLIST:={$(subst,/,/ $(shell @$(FIND) $(INCLUDETOPDIRLIST) -type d -print))}
+
+INCLUDEFILELIST=\
+    $(INCOUT)/com/sun/star/uno/Any.h \
+    $(INCOUT)/com/sun/star/uno/Any.hxx \
+    $(INCOUT)/com/sun/star/uno/genfunc.h \
+    $(INCOUT)/com/sun/star/uno/genfunc.hxx \
+    $(INCOUT)/com/sun/star/uno/Reference.h \
+    $(INCOUT)/com/sun/star/uno/Reference.hxx \
+    $(INCOUT)/com/sun/star/uno/Sequence.h \
+    $(INCOUT)/com/sun/star/uno/Sequence.hxx \
+    $(INCOUT)/com/sun/star/uno/Type.h \
+    $(INCOUT)/com/sun/star/uno/Type.hxx
+
+INCLUDELIST:=\
+    {$(shell @$(FIND) $(INCLUDETOPDIRLIST) -type f ! \( -name "*~" -o -name "*build.lst" -o -name "*deliver.log" \) -print)} \
+    $(INCLUDEFILELIST)
+
+SDK_CONTENT_CHECK_FILES= \
+    $(MISC)/copying_files.txt
+
+SDK_CHECK_FLAGS= \
+    $(MISC)/checkbin.txt \
+    $(MISC)/checkidl.txt \
+    $(MISC)/checkinc.txt \
+    $(MISC)/checkinc2.txt

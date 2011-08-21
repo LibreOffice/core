@@ -1,0 +1,73 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_rendering_PathJoinType_idl__
+#define __com_sun_star_rendering_PathJoinType_idl__
+
+module com { module sun { module star { module rendering {
+
+/** Determines which shape to use when joining path segments.<p>
+
+    The joins between different paths segments can be formed out of
+    several different shapes (which are of course only visible for
+    strokes wider than one device pixel).<p>
+
+    @since OOo 2.0
+ */
+constants PathJoinType
+{
+    /** Do not join the path segments at all.<p>
+
+        This join type might lead, depending on the angle between the
+        segments, to visible cracks at the meeting points.<p>
+     */
+    const byte NONE=0;
+
+    //-------------------------------------------------------------------------
+
+    /** Join the path segment by extending the outer border until they
+        intersect.
+     */
+    const byte MITER=1;
+
+    //-------------------------------------------------------------------------
+
+    /** Join the path segment with a pie-like patch, such that the
+        outer line of the meeting point is round.
+     */
+    const byte ROUND=2;
+
+    //-------------------------------------------------------------------------
+
+    /** Join the path segment by connecting the outer ends of the
+        abutting segments with a straight line.
+     */
+    const byte BEVEL=3;
+};
+
+}; }; }; };
+
+#endif

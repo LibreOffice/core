@@ -1,0 +1,231 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_uri_XUriReference_idl__
+#define __com_sun_star_uri_XUriReference_idl__
+
+#include <com/sun/star/uno/XInterface.idl>
+
+module com { module sun { module star { module uri {
+
+/**
+   represents generic, mutable URI references.
+
+   <p>See <a href="http://www.ietf.org/rfc/rfc2396.txt">RFC&nbsp;2396</a> for a
+   description of URI references and related terms.</p>
+
+   <p>This interface only handles generic URI references (both absolute and
+   relative).  For specific URI schemes, there will be additional interfaces
+   that offer extra, scheme-specific functionality.</p>
+
+   @see com::sun::star::uri::UriReferenceFactory
+   which allows to create URI reference objects that support
+   <type scope="com::sun::star::uri">XUriReference</type> and additional,
+   scheme-specific interfaces.
+
+   @since OOo 2.0
+ */
+published interface XUriReference: com::sun::star::uno::XInterface {
+    /**
+       returns the textual representation of the complete URI reference.
+
+       @returns
+       the textual representation of the complete URI reference.  The exact
+       spelling of the URI reference is retained.
+     */
+    string getUriReference();
+
+    /**
+       returns whether this URI reference is absolute or relative.
+
+       @returns
+       <TRUE/> if this URI reference is absolute, <FALSE/> if it is relative.
+     */
+    boolean isAbsolute();
+
+    /**
+       returns the scheme part of this (absolute) URI reference.
+
+       @returns
+       the textual representation of the scheme part (with the exact spelling
+       retained; without the delimiting &ldquo;<code>:</code>&rdquo;), if this
+       is an absolute URI reference; otherwise, an empty <atom>string</atom> is
+       returned.
+     */
+    string getScheme();
+
+    /**
+       returns the scheme-specific part of this URI reference.
+
+       <p>For an absolute URI reference, the scheme-specific part is everything
+       after the scheme part and the delimiting &ldquo;<code>:</code>&rdquo;,
+       and before the optional &ldquo;<code>#</code>&rdquo; and fragment part.
+       For a relative URI reference, the scheme-specific part is everything
+       before the optional &ldquo;<code>#</code>&rdquo; and fragment part.</p>
+
+       @returns
+       the textual representation of the scheme-specific part (with the exact
+       spelling retained).
+     */
+    string getSchemeSpecificPart();
+
+    /**
+       returns whether this URI reference is hierarchical or opaque.
+
+       <p>An absolute URI reference is hierarchical if its scheme-specific part
+       starts with &ldquo;<code>/</code>&rdquo;.  A relative URI reference is
+       always hierarchical.</p>
+
+       @returns
+       <TRUE/> if this URI reference is hierarchical, <FALSE/> if it is opaque.
+     */
+    boolean isHierarchical();
+
+    /**
+       returns whether this (hierarchical) URI reference has an authority part.
+
+       @returns
+       <TRUE/> if this URI reference is hierarchical and has an authority part.
+     */
+    boolean hasAuthority();
+
+    /**
+       returns the authority part of this (hierarchical) URI reference.
+
+       @returns
+       the textual representation of the authority part (with the exact spelling
+       retained), if this is a hierarchical URI reference that has an authority
+       part; otherwise, an empty <atom>string</atom> is returned.
+     */
+    string getAuthority();
+
+    /**
+       returns the path part of this URI reference.
+
+       @returns
+       the textual representation of the path part (with the exact spelling
+       retained), if this is a hierarchical URI reference; for an opaque URI
+       reference, the scheme-specific part (with the exact spelling retained) is
+       returned.
+     */
+    string getPath();
+
+    /**
+       returns whether this (relative) URI reference has a relative path.
+
+       @returns
+       <TRUE/> if this URI reference is relative and has a relative path.
+     */
+    boolean hasRelativePath();
+
+    /**
+       returns the number of path segments of this (hierarchical) URI reference.
+
+       <p>For an opaque URI reference, and for a hierarchical URI reference with
+       an empty path, the number of path segments is zero.  For a hierarchical
+       URI reference with an absolute, non-empty path, the number of path
+       segments equals the number of &ldquo;<code>/</code>&rdquo; delimiters.
+       For a hierarchical URI reference with a relative, non-empty path, the
+       number of path segments equals the number of &ldquo;<code>/</code>&rdquo;
+       delimiters, plus one.</p>
+
+       @returns
+       the number of path segments.
+     */
+    long getPathSegmentCount();
+
+    /**
+       returns a given path segment of this (hierarchical) URI reference.
+
+       @param index
+       the index of the path segment, starting at zero.
+
+       @returns
+       the textual representation of the given path segment (with the exact
+       spelling retained, without any delimiting &ldquo;<code>/</code>&rdquo;),
+       if this URI reference is hierarchical and has that many path segments;
+       otherwise, and in particular if <code>index</code> is negative, an empty
+       <atom>string</atom> is returned.
+     */
+    string getPathSegment([in] long index);
+
+    /**
+       returns whether this (hierarchical) URI reference has a query part.
+
+       @returns
+       <TRUE/> if this URI reference is hierarchical and has a query part.
+     */
+    boolean hasQuery();
+
+    /**
+       returns the query part of this (hierarchical) URI reference.
+
+       @returns
+       the textual representation of the query part (with the exact spelling
+       retained; without the delimiting &ldquo;<code>?</code>&rdquo;), if this
+       is a hierarchical URI reference that has a query part; otherwise, an
+       empty <atom>string</atom> is returned.
+     */
+    string getQuery();
+
+    /**
+       returns whether this URI reference has a fragment part.
+
+       @returns
+       <TRUE/> if this URI reference has a fragment part.
+     */
+    boolean hasFragment();
+
+    /**
+       returns the fragment part of this URI reference.
+
+       @returns
+       the textual representation of the fragment part (with the exact spelling
+       retained; without the delimiting &ldquo;<code>#</code>&rdquo;), if this
+       is a URI reference that has a fragment part; otherwise, an empty
+       <atom>string</atom> is returned.
+     */
+    string getFragment();
+
+    /**
+       sets the fragment part of this URI reference.
+
+       @param fragment
+       the textual representation of the new fragment part.  The exact spelling
+       will be preserved, and no escaping is performed.
+     */
+    void setFragment([in] string fragment);
+
+    /**
+       clears the fragment part of this URI reference.
+     */
+    void clearFragment();
+};
+
+}; }; }; };
+
+#endif

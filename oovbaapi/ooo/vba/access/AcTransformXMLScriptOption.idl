@@ -1,0 +1,7 @@
+module ooo { module vba { module access {
+    constants AcTransformXMLScriptOption {
+        const long acDisableScript = 2;
+        const long acEnableScript = 0;
+        const long acPromptScript = 1;
+    };
+}; }; };

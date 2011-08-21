@@ -1,0 +1,8 @@
+module ooo { module vba { module word {
+    constants WdTableFieldSeparator {
+        const long wdSeparateByCommas = 2;
+        const long wdSeparateByDefaultListSeparator = 3;
+        const long wdSeparateByParagraphs = 0;
+        const long wdSeparateByTabs = 1;
+    };
+}; }; };

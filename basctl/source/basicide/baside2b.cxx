@@ -60,6 +60,7 @@
 
 #include <com/sun/star/script/XLibraryContainer2.hpp>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/string.hxx>
 
 
 using namespace ::com::sun::star;
@@ -268,7 +269,7 @@ void EditorWindow::RequestHelp( const HelpEvent& rHEvt )
                 TextPaM aCursor = GetEditView()->GetTextEngine()->GetPaM( aDocPos, sal_False );
                 TextPaM aStartOfWord;
                 String aWord = GetEditView()->GetTextEngine()->GetWord( aCursor, &aStartOfWord );
-                if ( aWord.Len() && !ByteString( aWord, RTL_TEXTENCODING_UTF8 ).IsNumericAscii() )
+                if ( aWord.Len() && !comphelper::string::isAsciiDecimalString(aWord) )
                 {
                     sal_uInt16 nLastChar =aWord.Len()-1;
                     if ( strchr( cSuffixes, aWord.GetChar( nLastChar ) ) )

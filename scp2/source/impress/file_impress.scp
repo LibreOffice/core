@@ -1,0 +1,92 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * 
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#include "macros.inc"
+
+File gid_File_Lib_Placeware
+    Name = LIBNAME(placeware);
+    PACKED_LIB_FILE_BODY;
+End
+
+File gid_File_Lib_Animcore
+	Name = LIBNAME(animcore);
+	PACKED_LIB_FILE_BODY;
+End
+
+File gid_File_Share_Registry_Impress_Xcd
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Registry;
+    Name = "impress.xcd";
+End
+
+#if defined WITH_HELP
+File gid_File_Help_Simpress_Zip
+    Dir = gid_Dir_Help_Isolanguage;
+    ARCHIVE_TXT_FILE_BODY_HELPPACK;
+    EXTRA_ALL_GOOD_HELP_LOCALIZATIONS_LANG(simpress);
+    Patchfiles = (); 
+End
+#endif
+
+File gid_File_Exe_Simpress
+    BIN_FILE_BODY;
+    Dir = gid_Brand_Dir_Program;
+    Name = EXENAME(simpress);
+  #ifdef WNT
+    FileDescription = "%PRODUCTNAME Impress";
+    Styles = (PACKED, PATCH_SO_NAME);
+  #else
+    Styles = (PACKED);
+  #endif
+End
+
+// new user interface configuration files
+/*
+File gid_File_Share_Config_Sofficecfg_Impress_Menubar_Xml
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Config_Sofficecfg_Simpress_Menubar;
+    Name = "/uiconfig/simpress/menubar/menubar.xml";
+End
+*/
+
+// configuration files for custom animation effects
+
+File gid_File_Share_Config_Sofficecfg_Impress_Effects_Xml
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Config_Sofficecfg_Simpress;
+    Name = "effects.xml";
+End
+
+File gid_File_Share_Config_Sofficecfg_Impress_Transitions_Xml
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Config_Sofficecfg_Simpress;
+    Name = "transitions.xml";
+End

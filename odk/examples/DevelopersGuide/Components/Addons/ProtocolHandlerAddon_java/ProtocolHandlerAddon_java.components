@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<components xmlns="http://openoffice.org/2010/uno-components">
+  <component loader="com.sun.star.loader.Java2" uri="ProtocolHandlerAddon_java.uno.jar">
+    <implementation name="ProtocolHandlerAddon$ProtocolHandlerAddonImpl">
+      <service name="com.sun.star.frame.ProtocolHandler"/>
+    </implementation>
+  </component>
+</components>

@@ -1,0 +1,9 @@
+module ooo { module vba { module powerpoint {
+    constants PpTabStopType {
+        const long ppTabStopCenter = 2;
+        const long ppTabStopDecimal = 4;
+        const long ppTabStopLeft = 1;
+        const long ppTabStopMixed = -2;
+        const long ppTabStopRight = 3;
+    };
+}; }; };

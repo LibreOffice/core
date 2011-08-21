@@ -1,0 +1,92 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_frame_ProtocolHandler_idl__
+#define __com_sun_star_frame_ProtocolHandler_idl__
+
+#include <com/sun/star/frame/XDispatchProvider.idl>
+#include <com/sun/star/lang/XInitialization.idl>
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module frame {
+
+//=============================================================================
+/** special dispatch provider registered for URL protocols
+
+    <p>
+    The generic dispatch mechanism on a <type>Frame</type>
+    search for such registered protocol handler and use it if it agrees with
+    the dispatched URL.
+    </p>
+
+    <p>
+    Supported URLs must match follow format: <protocol scheme>:<protocol specific part>
+    If a handler provides optional arguments ("?") or jump marks ("#") depends from his
+    definition and implementation. The generic dispatch provider will use registered
+    URL pattern to detect right handler.
+    </p>
+ */
+published service ProtocolHandler
+{
+        //-------------------------------------------------------------------------
+        /** used from the generic dispatch mechanism of the frame, to ask ProtocolHandler
+            for his agreement for the dispatched URL
+
+        <p>
+        Such asked handler can agree by returning itself or a special sub dispatch object, which
+        can handle the given URL. Of course he can disagree with it by returning an empty reference.
+        </p>
+        */
+        interface XDispatchProvider;
+
+        //-------------------------------------------------------------------------
+        /** initialize the new handler instance with some context informations
+
+        <p>
+        Sometimes it can be useful for a handler object, to know something about the
+        environment, in which it runs - especially the frame. For this case the generic
+        code (which uses the handler) will ask for this optional interface and use it, if it exist.
+        Following parameters are passed to the service:
+        <ul>
+        <li>sequence< any >[0] => the frame for which this ProtocolHandler was created [com.sun.star.frame.XFrame]</li>
+        </ul>
+        </p>
+
+        <p>
+        Please note: if this mechanism is used it seams not useful (nor possible) to implement a ProtocolHandler
+        as a singleton. Otherwise the implementation can't distinguish between different environments
+        and her corresponding dispatch requests.
+        </p>
+        */
+        [optional] interface ::com::sun::star::lang::XInitialization;
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

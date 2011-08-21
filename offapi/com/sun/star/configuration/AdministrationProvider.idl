@@ -1,0 +1,186 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_configuration_ConfigurationProvider_idl__
+#define __com_sun_star_configuration_ConfigurationProvider_idl__
+
+#include <com/sun/star/lang/XMultiServiceFactory.idl>
+#include <com/sun/star/lang/XComponent.idl>
+
+//=============================================================================
+
+module com { module sun { module star { module configuration {
+
+//=============================================================================
+/** manages one, or more, complete sets of configuration data for
+ administrative purposes and serves as a factory for objects that
+ provide access to subsets of these shared configurations.
+
+ <p>Shared sets of configuration data usually serve to provide defaults,
+ which are used if no individual settings are present. Depending on the data
+ store multiple layers of defaults may be combined with a user-specific layer
+ to make up the final configuration.
+ </p>
+ <p>Many aspects of the supported behavior depend strongly on the underlying
+ data store and on the administrative structures it defines. With some data
+ stores this service also enables access to individual user's configuration
+ data by an administrator.
+ </p>
+ <p>On the other hand, in the simplest model there is only a single layer of
+ default data which is accessible through this service.
+ </p>
+ <p>An implementation is usually obtained from a
+ <type scope="com::sun::star::lang">ServiceManager</type>. The arguments passed to
+ <member scope="com::sun::star::lang">XMultiComponentFactory::createInstanceWithContextAndArguments()</member>
+ select the configuration data source. They may also define the scope of
+ administrable data or contain credentials to be used to authorize the
+ administrative access. Missing parameters may be filled in
+ from the context or the environment.
+ </p>
+
+ @see com::sun::star::configuration::ConfigurationProvider
+    Offers the same services and creates the same accessor objects as this
+    service, but accesses the personal configuration.
+
+    <p>A <type> ConfigurationProvider</type> provides access to the personal
+    layer of configuration data of the current user context. It should in
+    most cases be used when <em>using</em> the configuration data, although
+    for most contexts a <type>AdministrationProvider</type> can be used as
+    a drop-in replacement.
+    </p>
+ */
+published service AdministrationProvider
+{
+/** allows creating access objects for specific views such as subsets and fragments
+ of the configuration.
+
+ <p>The parameter <var>aServiceSpecifier</var> passed to
+ <member scope="com::sun::star::lang">XMultiServiceFactory::createInstanceWithArguments()</member>
+ supports at least the service specifiers
+ <code>"com.sun.star.configuration.ConfigurationAccess"</code> and
+ <code>"com.sun.star.configuration.ConfigurationUpdateAccess"</code>.
+ </p>
+
+ <p>Using the first of these service specifiers requests a read-only view of
+ the configuration.
+ The object that is created implements service <type>ConfigurationAccess</type>.
+ To reflect its <em>element role</em> as root of the view, it implements
+ service <type>AccessRootElement</type>.
+ </p>
+
+ <p>Using the second form requests an updatable view of the configuration.
+ The object that is created should implement service
+ <type>ConfigurationUpdateAccess</type>. To reflect its <em>element role</em>
+ which includes controlling updates for the whole view, it implements
+ service <type>UpdateRootElement</type>.
+ <BR />If the root element of the view is marked read-only (as indicated
+ by <const scope="com::sun::star::beans">PropertyAttributes::READONLY</const>),
+ the implementation may either raise an exception or return a (read-only)
+ <type>ConfigurationAccess</type>/<type>AccessRootElement</type> instead.
+ </p>
+
+ <p>The arguments passed to
+ <member scope="com::sun::star::lang">XMultiServiceFactory::createInstanceWithArguments()</member>
+ in parameter <var>aArguments</var> specify the administrative entity for which
+ data should be administered. In other words they determine the layer to which
+ changes will apply. They also specify the view of that configuration that
+ should be created. That is, they determine the subset of elements that can be
+ accessed starting from the returned object. Each element of the argument
+ sequence should be a <type scope="com::sun::star::beans">PropertyValue</type>
+ or a <type scope="com::sun::star::beans">NamedValue</type>,
+ so that the parameters can be identified by name rather than by position.
+ </p>
+
+ <p>What combinations of arguments are supported depends on the service name
+ and on the data store being administered.
+ </p>
+
+ <p>With both of the standard service-specifiers above, an implementation must
+ accept a single argument named <code>nodepath</code> of type <atom>string</atom>.
+ This argument must contain the absolute path to an element of the
+ configuration. The view that is selected consists of the named element and
+ all its descendants. The administrative entity is the default for the
+ <type>AdministrationProvider</type>. Usually this is the largest entity
+ encompassing all entities accessible from this instance. In other words this
+ can be used to influence as global a scope as possible.
+ </p>
+
+ <p>Other arguments can be used to select a more specific entity and to control
+ the behavior of the view. These are different for different implementations
+ and data stores. Whether and how they are used may also depend on properties
+ that were selected when the provider was created.
+ </p>
+
+ <p>An implementation may ignore unknown arguments.</p>
+
+ <p>Some parameters that are commonly supported are described for service
+ <type>ConfigurationProvider</type>.
+ </p>
+ <p>One notable difference exists for parameter <code>"Locale"</code>. For a
+ <type>ConfigurationProvider</type> the default behavior usually is to select
+ the locale set up for the user. But this service by default gets data for all
+ locales for which data is present. Locale-dependent values in this case are
+ replaced by a <type>SetAccess</type> using the language names as accessors.
+ This also allows targeted setting of values for selected locales.
+ This behavior can be requested explicitly by specifying a special argument
+ value <code>locale = "*"</code>.
+ </p>
+
+ <p><member scope="com::sun::star::lang">XMultiServiceFactory::createInstance()</member>
+ may be unusable. Only an implementation that supports service names that can be
+ used with no further arguments support this method. It should return the
+ same result as if
+ <member scope="com::sun::star::lang">XMultiServiceFactory::createInstanceWithArguments()</member>
+ had been called using an empty sequence of arguments.
+ </p>
+*/
+    interface com::sun::star::lang::XMultiServiceFactory;
+
+
+/** allows controlling or observing the lifetime of the configuration.
+
+ <p>The owner of the provider may dispose of this object
+ using <member scope="com::sun::star::lang">XComponent::dispose()</member>.
+ </p>
+
+ <p>Views created by the provider generally refer to data that is managed by
+  the provider. Therefore, disposing of the provider will cause all objects
+  belonging to these views to be disposed of as well. This does not apply to
+  <em>snapshot</em> views that have their own copy of the data, if available.
+ </p>
+
+*/
+    interface com::sun::star::lang::XComponent;
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif
+
+

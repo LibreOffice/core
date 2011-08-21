@@ -1,0 +1,11 @@
+mkdir: %_DEST%\bin\ure
+mkdir: %_DEST%\xml\ure
+..\%__SRC%\bin\uretest.zip %COMMON_DEST%\bin\uretest.zip
+..\%__SRC%\misc\services.rdb %_DEST%\xml\ure\services.rdb
+..\source\README %_DEST%\bin\ure\README
+..\source\THIRDPARTYLICENSEREADME.html %_DEST%\bin\ure\THIRDPARTYLICENSEREADME.html
+..\source\jvmfwk3.ini %_DEST%\bin\ure\jvmfwk3.ini
+..\source\jvmfwk3rc %_DEST%\bin\ure\jvmfwk3rc
+..\source\startup.sh %_DEST%\bin\ure\startup.sh
+..\source\uno.ini %_DEST%\bin\ure\uno.ini
+..\source\unorc %_DEST%\bin\ure\unorc

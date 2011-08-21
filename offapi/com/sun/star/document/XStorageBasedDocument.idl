@@ -1,0 +1,103 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_embed_XStorageBasedDocument_idl__
+#define __com_sun_star_embed_XStorageBasedDocument_idl__
+
+#include <com/sun/star/uno/XInterface.idl>
+#include <com/sun/star/embed/XStorage.idl>
+#include <com/sun/star/io/IOException.idl>
+#include <com/sun/star/frame/DoubleInitializationException.idl>
+#include <com/sun/star/document/XStorageChangeListener.idl>
+#include <com/sun/star/lang/IllegalArgumentException.idl>
+#include <com/sun/star/beans/PropertyValue.idl>
+
+//============================================================================
+
+ module com {  module sun {  module star {  module document {
+
+//============================================================================
+/** allows to initialize document with a storage, to store document to
+    a storage, and to set document to be based on provided storage.
+ */
+published interface XStorageBasedDocument: com::sun::star::uno::XInterface
+{
+    //------------------------------------------------------------------------
+    /** lets the document load itself using provided storage.
+     */
+    void loadFromStorage(
+            [in] ::com::sun::star::embed::XStorage xStorage,
+            [in] sequence< ::com::sun::star::beans::PropertyValue > aMediaDescriptor )
+        raises( ::com::sun::star::lang::IllegalArgumentException,
+                ::com::sun::star::frame::DoubleInitializationException,
+                ::com::sun::star::io::IOException,
+                ::com::sun::star::uno::Exception );
+
+    //------------------------------------------------------------------------
+    /** lets the document store itself to the provided storage.
+     */
+    void storeToStorage(
+            [in] ::com::sun::star::embed::XStorage xStorage,
+            [in] sequence< ::com::sun::star::beans::PropertyValue > aMediaDescriptor )
+        raises( ::com::sun::star::lang::IllegalArgumentException,
+                ::com::sun::star::io::IOException,
+                ::com::sun::star::uno::Exception );
+
+    //------------------------------------------------------------------------
+    /** allows to switch the document to the provided storage.
+     */
+    void switchToStorage( [in] ::com::sun::star::embed::XStorage xStorage )
+        raises( ::com::sun::star::lang::IllegalArgumentException,
+                ::com::sun::star::io::IOException,
+                ::com::sun::star::uno::Exception );
+
+
+    //------------------------------------------------------------------------
+    /** allows to get the storage the document is based on.
+     */
+    ::com::sun::star::embed::XStorage getDocumentStorage()
+        raises( ::com::sun::star::io::IOException,
+                ::com::sun::star::uno::Exception );
+
+    //------------------------------------------------------------------------
+    /** allows to register a listener that will be notified when another
+        storage is set to the document.
+     */
+    void addStorageChangeListener( [in] XStorageChangeListener xListener );
+
+    //------------------------------------------------------------------------
+    /** allows to deregister the listener.
+     */
+    void removeStorageChangeListener( [in] XStorageChangeListener xListener );
+
+};
+
+//============================================================================
+
+}; }; }; };
+
+#endif
+

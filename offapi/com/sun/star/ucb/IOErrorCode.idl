@@ -1,0 +1,233 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_ucb_IOErrorCode_idl__
+#define __com_sun_star_ucb_IOErrorCode_idl__
+
+
+//=============================================================================
+
+module com { module sun { module star { module ucb {
+
+//=============================================================================
+/** Types of input/output errors.
+
+    <P>See <type scope="com::sun::star::task">InteractionHandler</type> for a
+    description of what kinds of arguments
+    <type>InteractiveAugmentedIOException</type> should use with each of these
+    error codes.</P>
+*/
+published enum IOErrorCode
+{
+    //-------------------------------------------------------------------------
+    /** An operation was aborted.
+    */
+    ABORT,
+
+    //-------------------------------------------------------------------------
+    /** An object cannot be accessed due to insufficient user rights.
+    */
+    ACCESS_DENIED,
+
+    //-------------------------------------------------------------------------
+    /** An object already exists.
+    */
+    ALREADY_EXISTING,
+
+    //-------------------------------------------------------------------------
+    /** A bad checksum.
+    */
+    BAD_CRC,
+
+    //-------------------------------------------------------------------------
+    /** An object could not be created.
+    */
+    CANT_CREATE,
+
+    //-------------------------------------------------------------------------
+    /** Data could not be read from a file.
+    */
+    CANT_READ,
+
+    //-------------------------------------------------------------------------
+    /** A seek operation could not be run.
+    */
+    CANT_SEEK,
+
+    //-------------------------------------------------------------------------
+    /** A tell operation could not be run.
+    */
+    CANT_TELL,
+
+    //-------------------------------------------------------------------------
+    /** Data could not be written to a file.
+    */
+    CANT_WRITE,
+
+    //-------------------------------------------------------------------------
+    /** A function is not possible because the path contains the current
+        directory.
+    */
+    CURRENT_DIRECTORY,
+
+    //-------------------------------------------------------------------------
+    /** A device (drive) not ready.
+    */
+    DEVICE_NOT_READY,
+
+    //-------------------------------------------------------------------------
+    /** A function is not possible because the devices (drives) are not
+        identical.
+    */
+    DIFFERENT_DEVICES,
+
+    //-------------------------------------------------------------------------
+    /** A general input/output error.
+    */
+    GENERAL,
+
+    //-------------------------------------------------------------------------
+    /** An invalid attempt was made to access an object.
+    */
+    INVALID_ACCESS,
+
+    //-------------------------------------------------------------------------
+    /** A file name contains invalid characters.
+    */
+    INVALID_CHARACTER,
+
+    //-------------------------------------------------------------------------
+    /** A specified device is invalid.
+    */
+    INVALID_DEVICE,
+
+    //-------------------------------------------------------------------------
+    /** Invalid data length.
+    */
+    INVALID_LENGTH,
+
+    //-------------------------------------------------------------------------
+    /** An operation was started with an invalid parameter.
+    */
+    INVALID_PARAMETER,
+
+    //-------------------------------------------------------------------------
+    /** An operation cannot be run on file names containing wildcards.
+    */
+    IS_WILDCARD,
+
+    //-------------------------------------------------------------------------
+    /** A locking problem.
+    */
+    LOCKING_VIOLATION,
+
+    //-------------------------------------------------------------------------
+    /** An invalid file name.
+    */
+    MISPLACED_CHARACTER,
+
+    //-------------------------------------------------------------------------
+    /** A file name is too long.
+    */
+    NAME_TOO_LONG,
+
+    //-------------------------------------------------------------------------
+    /** A nonexistent object.
+    */
+    NOT_EXISTING,
+
+    //-------------------------------------------------------------------------
+    /** The path to a file does not exist.
+    */
+    NOT_EXISTING_PATH,
+
+    //-------------------------------------------------------------------------
+    /** An action is not supported.
+    */
+    NOT_SUPPORTED,
+
+    //-------------------------------------------------------------------------
+    /** An object is not a directory.
+    */
+    NO_DIRECTORY,
+
+    //-------------------------------------------------------------------------
+    /** An object is not a file.
+    */
+    NO_FILE,
+
+    //-------------------------------------------------------------------------
+    /** No more space on a device.
+    */
+    OUT_OF_DISK_SPACE,
+
+    //-------------------------------------------------------------------------
+    /** No more file handles available.
+    */
+    OUT_OF_FILE_HANDLES,
+
+    //-------------------------------------------------------------------------
+    /** An operation could not be run due to insufficient memory.
+    */
+    OUT_OF_MEMORY,
+
+    //-------------------------------------------------------------------------
+    /** An operation is still pending.
+    */
+    PENDING,
+
+    //-------------------------------------------------------------------------
+    /** An object cannot be copied into itself.
+    */
+    RECURSIVE,
+
+    //-------------------------------------------------------------------------
+    /** An unknown I/O error has occurred.
+    */
+    UNKNOWN,
+
+    //-------------------------------------------------------------------------
+    /** A function is not possible because the object is write protected.
+    */
+    WRITE_PROTECTED,
+
+    //-------------------------------------------------------------------------
+    /** An incorrect file format.
+    */
+    WRONG_FORMAT,
+
+    //-------------------------------------------------------------------------
+    /** An incorrect file version.
+    */
+    WRONG_VERSION
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

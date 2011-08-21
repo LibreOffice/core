@@ -56,6 +56,7 @@ private:
     FixedLine                   m_aJavaLine;
     CheckBox                    m_aJavaEnableCB;
     FixedText                   m_aJavaFoundLabel;
+    SvxSimpleTableContainer     m_aJavaListContainer;
     svx::SvxRadioButtonListBox  m_aJavaList;
     FixedText                   m_aJavaPathText;
     PushButton                  m_aAddBtn;

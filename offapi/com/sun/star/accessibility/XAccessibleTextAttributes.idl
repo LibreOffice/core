@@ -1,0 +1,101 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_accessibility_XAccessibleTextAttributes_idl__
+#define __com_sun_star_accessibility_XAccessibleTextAttributes_idl__
+
+#include <com/sun/star/lang/IndexOutOfBoundsException.idl>
+#include <com/sun/star/beans/PropertyValue.idl>
+
+module com { module sun { module star { module accessibility {
+
+/** Implement this interface to give access to the attributes of a text.
+
+    @since OOo 2.0.4
+*/
+published interface XAccessibleTextAttributes
+{
+    /** Get the default attribute set for the text.
+
+        <p>Returns a set of all default paragraph and default character
+        attributes that are associated for the text. To prevent the method
+        from returning possibly large sets of attributes that the caller
+        is not interested in the caller can provide a list of attributes
+        that he wants to be returned.</p>
+
+        @param RequestedAttributes
+            This string sequence defines the set of attributes that the
+            caller is interested in. When there are requested attributes
+            that are not defined for the text then they are ignored.
+
+            <p>When the sequence is empty all attributes are returned.</p>
+
+        @return
+            Returns the requested attributes of the text. Each attribute
+            is represented by a <type scope="::com::sun::star::beans">PropertyValue</type>
+            object.
+    */
+    sequence<::com::sun::star::beans::PropertyValue>
+        getDefaultAttributes ( [in] sequence<string> RequestedAttributes );
+
+    /** Get the run attribute set for the specified position.
+
+        <p>Returns a set of character attributes that are associated for
+        the character at the given index and are directly set or are set
+        via a character style. To prevent the method from returning all of
+        these attributes the caller can provide a list of attributes
+        that he wants to be returned.</p>
+
+        @param Index
+            The index of the character for which to return its attributes.
+            The valid range is 0..length of text-1.
+
+        @param RequestedAttributes
+            This string sequence defines the set of attributes that the
+            caller is interested in. When there are requested attributes
+            that are not defined for the text then they are ignored.
+
+            <p>When the sequence is empty all attributes are returned.</p>
+
+        @return
+            Returns the requested attributes of the specified character.
+            Each attribute is represented by a
+            <type scope="::com::sun::star::beans">PropertyValue</type> object.
+
+        @throws ::com::sun::star::lang::IndexOutOfBoundsException
+            if the index is invalid
+    */
+    sequence<::com::sun::star::beans::PropertyValue>
+        getRunAttributes ( [in] long Index,
+                           [in] sequence<string> RequestedAttributes )
+        raises (::com::sun::star::lang::IndexOutOfBoundsException);
+
+};
+
+}; }; }; };
+
+#endif

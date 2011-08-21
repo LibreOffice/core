@@ -1,0 +1,84 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_xml_dom_XDOMImplementation_idl__
+#define __com_sun_star_xml_dom_XDOMImplementation_idl__
+
+#include <com/sun/star/uno/XInterface.idl>
+#include <com/sun/star/xml/dom/DOMException.idl>
+
+
+module com { module sun { module star { module xml { module dom {
+
+interface XDocument;
+interface XDocumentType;
+
+interface XDOMImplementation : com::sun::star::uno::XInterface
+{
+    /**
+    Creates a DOM Document object of the specified type with its document element.
+    Throws:
+    DOMException - INVALID_CHARACTER_ERR: Raised if the specified qualified name contains an illegal character.
+                   NAMESPACE_ERR: Raised if the qualifiedName is malformed, if the qualifiedName has a prefix
+                      and the namespaceURI is null, or if the qualifiedName has a prefix that is "xml" and
+                      the namespaceURI is different from " http://www.w3.org/XML/1998/namespace" , or if the
+                      DOM implementation does not support the "XML" feature but a non-null namespace URI was
+                      provided, since namespaces were defined by XML.
+                   WRONG_DOCUMENT_ERR: Raised if doctype has already been used with a different document or
+                      was created from a different implementation.
+                   NOT_SUPPORTED_ERR: May be raised by DOM implementations which do not support the
+                      "XML" feature, if they choose not to support this method. Other features introduced
+                      in the future, by the DOM WG or in extensions defined by other groups, may also
+                      demand support for this method; please consult the definition of the feature to see
+                      if it requires this method.
+    */
+    XDocument createDocument([in] string namespaceURI, [in] string qualifiedName, [in] XDocumentType doctype)
+        raises (DOMException);
+
+    /**
+    Creates an empty DocumentType node.
+    Throws:
+    DOMException - INVALID_CHARACTER_ERR: Raised if the specified qualified name contains an illegal character.
+                   NAMESPACE_ERR: Raised if the qualifiedName is malformed.
+                   NOT_SUPPORTED_ERR: May be raised by DOM implementations which do not support the
+                      "XML" feature, if they choose not to support this method. Other features introduced
+                      in the future, by the DOM WG or in extensions defined by other groups, may also demand
+                      support for this method; please consult the definition of the feature to see if it
+                      requires this method.
+    */
+    XDocumentType createDocumentType([in] string qualifiedName, [in] string publicId, [in] string systemId)
+        raises (DOMException);
+
+    /**
+    Test if the DOM implementation implements a specific feature.
+    */
+    boolean hasFeature([in] string feature, [in] string ver);
+};
+
+}; }; }; }; };
+
+#endif

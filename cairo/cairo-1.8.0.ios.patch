@@ -1,0 +1,84 @@
+--- misc/build/cairo-1.8.0.org/src/cairo-quartz.h
++++ misc/build/cairo-1.8.0/src/cairo-quartz.h
+@@ -40,7 +40,7 @@
+ 
+ #if CAIRO_HAS_QUARTZ_SURFACE
+ 
+-#include <ApplicationServices/ApplicationServices.h>
++#include <CoreGraphics/CoreGraphics.h>
+ 
+ CAIRO_BEGIN_DECLS
+ 
+@@ -66,8 +66,12 @@
+ cairo_public cairo_font_face_t *
+ cairo_quartz_font_face_create_for_cgfont (CGFontRef font);
+ 
++#if 0
++
+ cairo_public cairo_font_face_t *
+ cairo_quartz_font_face_create_for_atsu_font_id (ATSUFontID font_id);
++
++#endif /* 0 */
+ 
+ #endif /* CAIRO_HAS_QUARTZ_FONT */
+ 
+--- misc/build/cairo-1.8.0.org/src/cairo-quartz-surface.c
++++ misc/build/cairo-1.8.0/src/cairo-quartz-surface.c
+@@ -152,10 +152,6 @@
+     CGContextGetAllowsFontSmoothingPtr = dlsym(RTLD_DEFAULT, "CGContextGetAllowsFontSmoothing");
+     CGContextSetAllowsFontSmoothingPtr = dlsym(RTLD_DEFAULT, "CGContextSetAllowsFontSmoothing");
+ 
+-    if (Gestalt(gestaltSystemVersion, &_cairo_quartz_osx_version) != noErr) {
+-	// assume 10.4
+-	_cairo_quartz_osx_version = 0x1040;
+-    }
+ 
+     _cairo_quartz_symbol_lookup_done = TRUE;
+ }
+@@ -2093,7 +2093,10 @@
+ 	yprev = yf;
+     }
+ 
+-    if (_cairo_quartz_osx_version >= 0x1050 && isClipping) {
++    if (0) {
++	/* Assume the bug mentioned below is not present in iOS,
++	 * until proven otherwise.
++	 */
+ 	/* If we're clipping, OSX 10.5 (at least as of 10.5.2) has a
+ 	 * bug (apple bug ID #5834794) where the glyph
+ 	 * advances/positions are not transformed by the text matrix
+--- misc/build/cairo-1.8.0.org/src/cairo-quartz-font.c
++++ misc/build/cairo-1.8.0/src/cairo-quartz-font.c
+@@ -766,6 +766,8 @@
+ }
+ 
+ 
++#if 0
++
+ /*
+  * compat with old ATSUI backend
+  */
+@@ -808,3 +808,5 @@
+ {
+     return cairo_quartz_font_face_create_for_atsu_font_id (font_id);
+ }
++
++#endif /* 0 */
+--- misc/build/cairo-1.8.0.org/configure
++++ misc/build/cairo-1.8.0/configure
+@@ -29309,6 +29309,7 @@
+ quartz_NONPKGCONFIG_LIBS="$ac_env_quartz_NONPKGCONFIG_LIBS_value"
+ 
+ 
++if false; then
+     if test "${ac_cv_header_ApplicationServices_ApplicationServices_h+set}" = set; then
+   { echo "$as_me:$LINENO: checking for ApplicationServices/ApplicationServices.h" >&5
+ echo $ECHO_N "checking for ApplicationServices/ApplicationServices.h... $ECHO_C" >&6; }
+@@ -29444,6 +29444,7 @@
+ else
+   use_quartz="no (requires ApplicationServices framework)"
+ fi
++fi
+ 
+   if test "x$use_quartz" != "xyes" ; then
+         if test "${ac_cv_header_CoreGraphics_CoreGraphics_h+set}" = set; then

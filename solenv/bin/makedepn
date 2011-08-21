@@ -1,0 +1,13 @@
+#!/bin/sh -e
+if [ -z "$1" ]; then
+  exit 1;
+fi
+infile=`echo "$1" | sed 's/^@//'`
+for i in `cat "$infile"`; do
+  i=`echo "$i" | fgrep -- "-O:" | awk -F: '{print $2}'`
+  if [ ! -z "$i" ]; then
+    echo "#" > "$i"
+    exit 0;
+  fi;
+done
+exit 1

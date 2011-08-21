@@ -1,0 +1,68 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_packages_zip_XZipFileAccess_idl__
+#define __com_sun_star_packages_zip_XZipFileAccess_idl__
+
+#include <com/sun/star/uno/XInterface.idl>
+#include <com/sun/star/packages/zip/ZipEntry.idl>
+#include <com/sun/star/container/NoSuchElementException.idl>
+#include <com/sun/star/io/IOException.idl>
+
+
+//=============================================================================
+
+module com {  module sun {  module star {   module packages {  module zip {
+
+//=============================================================================
+
+/** allows to get reading access to non-encrypted entries inside zip file.
+ */
+interface XZipFileAccess: ::com::sun::star::uno::XInterface
+{
+    //-------------------------------------------------------------------------
+    /** allows to get stream by specifying a pattern.
+
+        <p>
+        The first stream with a name that fits to the pattern will be returned.
+        The pattern allows to use "*" wildcard symbol. If the name contains "*"
+        or "\" symbols itself they must guarded with backslash "\".
+        The slashes have no special meaning here so they can be replaced
+        by wildcards also.
+        </p>
+     */
+    ::com::sun::star::io::XInputStream getStreamByPattern( [in] string aPattern )
+        raises( ::com::sun::star::container::NoSuchElementException,
+                ::com::sun::star::io::IOException );
+
+};
+
+//=============================================================================
+
+}; }; }; }; };
+
+#endif
+

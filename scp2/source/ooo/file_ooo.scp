@@ -1,0 +1,2137 @@
+/*************************************************************************
+*
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * 
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+************************************************************************/
+
+#include "macros.inc"
+
+File gid_File_Basic_Depot
+    Dir = gid_Dir_Basic_Depot;
+    ARCHIVE_TXT_FILE_BODY;
+    Name = "basicsrvdepot.zip";
+End
+
+File gid_File_Basic_Euro
+    Dir = gid_Dir_Basic_Euro;
+    ARCHIVE_TXT_FILE_BODY;
+    Name = "basicsrveuro.zip";
+End
+
+File gid_File_Basic_Gimmicks
+    Dir = gid_Dir_Basic_Gimmicks;
+    ARCHIVE_TXT_FILE_BODY;
+    Name = "basicsrvgimmicks.zip";
+End
+
+File gid_File_Basic_Importwiz
+    Dir = gid_Dir_Basic_Importwiz;
+    ARCHIVE_TXT_FILE_BODY;
+    Name = "basicsrvimport.zip";
+End
+
+File gid_File_Basic_Formwiz
+    Dir = gid_Dir_Basic_Formwiz;
+    ARCHIVE_TXT_FILE_BODY;
+    Name = "basicsrvform.zip";
+End
+
+File gid_File_Basic_Schedule
+    Dir = gid_Dir_Basic_Schedule;
+    ARCHIVE_TXT_FILE_BODY;
+    Name = "basicsrvschedule.zip";
+End
+
+File gid_File_Basic_Scriptbindinglib
+    Dir = gid_Dir_Basic_Scriptbindinglib;
+    ARCHIVE_TXT_FILE_BODY;
+    Name = "scriptbindinglib.zip";
+End
+
+File gid_File_Basic_Template
+    Dir = gid_Dir_Basic_Template;
+    ARCHIVE_TXT_FILE_BODY;
+    Name = "basicsrvtemplate.zip";
+End
+
+File gid_File_Basic_Tools
+    Dir = gid_Dir_Basic_Tools;
+    ARCHIVE_TXT_FILE_BODY;
+    Name = "basicsrvtools.zip";
+End
+
+File gid_File_Basic_User
+    USER_FILE_BODY;
+    Styles = (ARCHIVE, WORKSTATION, DONT_OVERWRITE);
+    Dir = gid_Dir_User_Basic;
+    Name = "basicusr.zip";
+End
+
+File gid_File_Basic_Share
+    USER_FILE_BODY;
+    Styles = (ARCHIVE, WORKSTATION, DONT_OVERWRITE);
+    Dir = gid_Dir_Basic;
+    Name = "basicshare.zip";
+End
+
+File gid_File_Basic_User_Standard
+    USER_FILE_BODY;
+    Styles = (ARCHIVE, WORKSTATION, DONT_OVERWRITE);
+    Dir = gid_Dir_Basic_Standard;
+    Name = "basicsrvstandard.zip";
+End
+
+File gid_File_Basic_Tutorials
+    Dir = gid_Dir_Basic_Tutorials;
+    ARCHIVE_TXT_FILE_BODY;
+    Name = "basicsrvtutorials.zip";
+End
+
+#ifndef WITHOUT_MOZILLA
+
+#if !defined(UNX) || defined(ENABLE_GTK)
+File gid_File_Exe_Nsplugin
+        BIN_FILE_BODY;
+        Styles          = (PACKED);
+        Dir             = gid_Dir_Program;
+ #ifdef UNX
+        Name            = "nsplugin";
+ #else
+    Name = "nsplugin.exe";
+  #endif
+End
+#endif
+#endif
+
+#if !defined(WITHOUT_MOZILLA) && defined(UNX) && !defined(QUARTZ)
+
+File gid_File_Bin_Pluginapp
+    BIN_FILE_BODY;
+    Dir = gid_Dir_Program;
+    Name = "pluginapp.bin";
+    Styles = (PACKED);
+End
+
+#endif
+
+#ifdef UNX
+
+File gid_File_Bin_Open_Url
+    BIN_FILE_BODY;
+    Dir = gid_Dir_Program;
+    Name = "open-url";
+    Styles = (PACKED);
+End
+
+#endif
+
+#if defined UNX && ! defined MACOSX
+
+File gid_File_Bin_Gnome_Open_Url
+    BIN_FILE_BODY;
+    Dir = gid_Dir_Program;
+    Name = "gnome-open-url";
+    Styles = (PACKED);
+End
+
+File gid_File_Bin_Gnome_Open_Url_Bin
+    BIN_FILE_BODY;
+    Dir = gid_Dir_Program;
+    Name = "gnome-open-url.bin";
+    Styles = (PACKED);
+End
+
+File gid_File_Bin_Kde_Open_Url
+    BIN_FILE_BODY;
+    Dir = gid_Dir_Program;
+    Name = "kde-open-url";
+    Styles = (PACKED);
+End
+
+File gid_File_Bin_Cde_Open_Url
+    BIN_FILE_BODY;
+    Dir = gid_Dir_Program;
+    Name = "cde-open-url";
+    Styles = (PACKED);
+End
+
+#endif
+
+#ifdef UNX
+
+File gid_File_Bin_Uri_Encode
+    BIN_FILE_BODY;
+    Dir = gid_Dir_Program;
+    Name = "uri-encode";
+    Styles = (PACKED);
+End
+
+#endif
+
+File gid_File_Bin_Senddoc
+    BIN_FILE_BODY;
+    Dir = gid_Dir_Program;
+  #ifdef UNX
+    Name = "senddoc";
+    Styles = (PACKED);
+  #else
+    Name = "senddoc.exe";
+    Styles = (PACKED);
+  #endif
+End
+
+#if defined(UNX) && !defined(QUARTZ)
+
+File gid_File_Bin_Spadmin_Bin
+    BIN_FILE_BODY;
+    Dir = gid_Dir_Program;
+    Styles = (PACKED);
+    Name = "spadmin.bin";
+End
+
+#endif
+
+File gid_File_Dtd_Accelerator
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Dtd_Ooo_1_0;
+    Name = "accelerator.dtd";
+End
+
+File gid_File_Dtd_Dialog
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Dtd_Ooo_1_0;
+    Name = "dialog.dtd";
+End
+
+File gid_File_Dtd_Event
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Dtd_Ooo_1_0;
+    Name = "event.dtd";
+End
+
+File gid_File_Dtd_Groupuinames
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Dtd_Ooo_1_0;
+    Name = "groupuinames.dtd";
+End
+
+File gid_File_Dtd_Image
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Dtd_Ooo_1_0;
+    Name = "image.dtd";
+End
+
+File gid_File_Dtd_Libraries
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Dtd_Ooo_1_0;
+    Name = "libraries.dtd";
+End
+
+File gid_File_Dtd_Library
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Dtd_Ooo_1_0;
+    Name = "library.dtd";
+End
+
+File gid_File_Dtd_Manifest
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Dtd_Ooo_1_0;
+    Name = "Manifest.dtd";
+End
+
+File gid_File_Dtd_Menubar
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Dtd_Ooo_1_0;
+    Name = "menubar.dtd";
+End
+
+File gid_File_Dtd_Module
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Dtd_Ooo_1_0;
+    Name = "module.dtd";
+End
+
+File gid_File_Dtd_Office
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Dtd_Ooo_1_0;
+    Name = "office.dtd";
+End
+
+File gid_File_Dtd_Statusbar
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Dtd_Ooo_1_0;
+    Name = "statusbar.dtd";
+End
+
+File gid_File_Dtd_Toolbar
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Dtd_Ooo_1_0;
+    Name = "toolbar.dtd";
+End
+
+STD_FILTER_FILE( gid_File_Filter_Sdfilt, sdfilt)
+
+STD_FILTER_FILE( gid_File_Filter_Eme, eme)
+
+STD_FILTER_FILE( gid_File_Filter_Icg, icg)
+
+STD_FILTER_FILE( gid_File_Filter_Egi, egi)
+
+STD_FILTER_FILE( gid_File_Filter_Epb, epb)
+
+STD_FILTER_FILE( gid_File_Filter_Epg, epg)
+
+STD_FILTER_FILE( gid_File_Filter_Epp, epp)
+
+STD_FILTER_FILE( gid_File_Filter_Eps, eps)
+
+STD_FILTER_FILE( gid_File_Filter_Ept, ept)
+
+STD_FILTER_FILE( gid_File_Filter_Era, era)
+
+STD_FILTER_FILE( gid_File_Filter_Eti, eti)
+
+STD_FILTER_FILE( gid_File_Filter_Exp, exp)
+
+STD_FILTER_FILE( gid_File_Filter_Icd, icd)
+
+STD_FILTER_FILE( gid_File_Filter_Idx, idx)
+
+STD_FILTER_FILE( gid_File_Filter_Ime, ime)
+
+STD_FILTER_FILE( gid_File_Filter_Ipb, ipb)
+
+STD_FILTER_FILE( gid_File_Filter_Ipd, ipd)
+
+STD_FILTER_FILE( gid_File_Filter_Ips, ips)
+
+STD_FILTER_FILE( gid_File_Filter_Ipt, ipt)
+
+STD_FILTER_FILE( gid_File_Filter_Ipx, ipx)
+
+STD_FILTER_FILE( gid_File_Filter_Ira, ira)
+
+STD_FILTER_FILE( gid_File_Filter_Itg, itg)
+
+STD_FILTER_FILE( gid_File_Filter_Iti, iti)
+
+STD_RES_FILE( gid_File_Res_Eps, eps )
+
+#if defined WITH_HELP
+File gid_File_Help_Common_Zip
+    Dir = gid_Dir_Help_Isolanguage;
+    ARCHIVE_TXT_FILE_BODY_HELPPACK;
+    EXTRA_ALL_GOOD_HELP_LOCALIZATIONS_LANG(shared);
+    Patchfiles = ();
+End
+
+File gid_File_Help_Help_Zip
+    Dir = gid_Dir_Help;
+    ARCHIVE_TXT_FILE_BODY;
+    Name = "helpxsl.zip";
+End
+
+File gid_File_Help_Sbasic_Zip
+    Dir = gid_Dir_Help_Isolanguage;
+    ARCHIVE_TXT_FILE_BODY_HELPPACK;
+    EXTRA_ALL_GOOD_HELP_LOCALIZATIONS_LANG(sbasic);
+    Patchfiles = ();
+End
+
+File gid_File_Help_Schart_Zip
+    Dir = gid_Dir_Help_Isolanguage;
+    ARCHIVE_TXT_FILE_BODY_HELPPACK;
+    EXTRA_ALL_GOOD_HELP_LOCALIZATIONS_LANG(schart);
+End
+#endif
+
+#if defined WNT
+
+File gid_File_Jar_Accessbridge
+    TXT_FILE_BODY;
+    Name = "java_uno_accessbridge.jar";
+    Dir = gid_Dir_Classes;
+    Styles = (PACKED,DONT_OVERWRITE);
+End
+
+#endif
+
+#ifdef SOLAR_JAVA
+#ifndef SYSTEM_BSH
+STD_JAR_FILE( gid_File_Jar_Bsh, bsh )
+#endif
+#endif
+
+#ifdef SOLAR_JAVA
+#ifndef SYSTEM_LUCENE
+STD_JAR_FILE( gid_File_Jar_Lucene_Core, lucene-core-2.3 )
+STD_JAR_FILE( gid_File_Jar_Lucene_Analyzers, lucene-analyzers-2.3 )
+#endif
+#endif
+
+#ifdef SOLAR_JAVA
+STD_JAR_FILE( gid_File_Jar_Lucenehelpwrapper, LuceneHelpWrapper )
+#endif
+
+#ifdef SOLAR_JAVA
+
+#ifndef MACOSX
+
+File gid_File_Jar_Officebean
+    TXT_FILE_BODY;
+    Name = JARFILENAME(officebean);
+    Dir = gid_Dir_Classes;
+    Styles = (PACKED);
+End
+
+#endif
+
+#endif
+
+
+#ifdef SOLAR_JAVA
+STD_JAR_FILE( gid_File_Jar_Report, report )
+STD_JAR_FILE( gid_File_Jar_Table, table )
+STD_JAR_FILE( gid_File_Jar_Letter, letter )
+STD_JAR_FILE( gid_File_Jar_Form, form )
+STD_JAR_FILE( gid_File_Jar_Fax, fax )
+STD_JAR_FILE( gid_File_Jar_Agenda, agenda )
+STD_JAR_FILE( gid_File_Jar_Query, query )
+STD_JAR_FILE( gid_File_Jar_Web, web )
+#endif
+
+#ifdef SOLAR_JAVA
+#ifndef SYSTEM_HSQLDB
+STD_JAR_FILE( gid_File_Jar_Hsqldb, hsqldb )
+#endif
+STD_JAR_FILE( gid_File_Jar_Hsqldb_Sdbc, sdbc_hsqldb )
+#endif
+
+#ifdef SOLAR_JAVA
+File gid_File_Jar_Commonwizards
+    TXT_FILE_BODY;
+    Name = JARFILENAME(commonwizards);
+    Dir = gid_Dir_Classes;
+    Styles = (PACKED);
+End
+#endif
+
+#ifdef SOLAR_JAVA
+STD_JAR_FILE( gid_File_Jar_Scriptframework, ScriptFramework )
+STD_JAR_FILE( gid_File_Jar_Scriptproviderforjava, ScriptProviderForJava )
+#endif
+
+#ifdef SOLAR_JAVA
+
+File gid_File_Jar_Unoil
+    TXT_FILE_BODY;
+    Name = "unoil.jar";
+    Dir = gid_Dir_Classes;
+    Styles = (PACKED,DONT_OVERWRITE);
+End
+
+#endif
+
+#ifdef SOLAR_JAVA
+#ifndef SYSTEM_SAXON
+STD_JAR_FILE( gid_File_Jar_Saxon, saxon9 )
+#endif
+#endif
+
+#ifndef SYSTEM_LIBTEXTCAT_DATA
+// fingerprint files (lm)
+
+File gid_File_Conf_Fpdb
+    TXT_FILE_BODY;
+    Name = "fpdb.conf";
+    Dir = gid_Dir_Share_Fingerprint;
+    Styles = (PACKED);
+End
+
+File gid_File_Lm_Afrikaans
+    TXT_FILE_BODY;
+    Name = "afrikaans.lm";
+    Dir = gid_Dir_Share_Fingerprint;
+    Styles = (PACKED);
+End
+
+File gid_File_Lm_Albanian
+    TXT_FILE_BODY;
+    Name = "albanian.lm";
+    Dir = gid_Dir_Share_Fingerprint;
+    Styles = (PACKED);
+End
+
+File gid_File_Lm_Amharic_Utf
+    TXT_FILE_BODY;
+    Name = "amharic_utf.lm";
+    Dir = gid_Dir_Share_Fingerprint;
+    Styles = (PACKED);
+End
+
+File gid_File_Lm_Arabic
+    TXT_FILE_BODY;
+    Name = "arabic.lm";
+    Dir = gid_Dir_Share_Fingerprint;
+    Styles = (PACKED);
+End
+
+File gid_File_Lm_Armenian
+    TXT_FILE_BODY;
+    Name = "armenian.lm";
+    Dir = gid_Dir_Share_Fingerprint;
+    Styles = (PACKED);
+End
+
+File gid_File_Lm_Basque
+    TXT_FILE_BODY;
+    Name = "basque.lm";
+    Dir = gid_Dir_Share_Fingerprint;
+    Styles = (PACKED);
+End
+
+File gid_File_Lm_Belarus
+    TXT_FILE_BODY;
+    Name = "belarus.lm";
+    Dir = gid_Dir_Share_Fingerprint;
+    Styles = (PACKED);
+End
+
+File gid_File_Lm_Bosnian
+    TXT_FILE_BODY;
+    Name = "bosnian.lm";
+    Dir = gid_Dir_Share_Fingerprint;
+    Styles = (PACKED);
+End
+
+File gid_File_Lm_Breton
+    TXT_FILE_BODY;
+    Name = "breton.lm";
+    Dir = gid_Dir_Share_Fingerprint;
+    Styles = (PACKED);
+End
+
+File gid_File_Lm_Catalan
+    TXT_FILE_BODY;
+    Name = "catalan.lm";
+    Dir = gid_Dir_Share_Fingerprint;
+    Styles = (PACKED);
+End
+
+File gid_File_Lm_Chinese_Simplified
+    TXT_FILE_BODY;
+    Name = "chinese_simplified.lm";
+    Dir = gid_Dir_Share_Fingerprint;
+    Styles = (PACKED);
+End
+
+File gid_File_Lm_Chinese_Traditional
+    TXT_FILE_BODY;
+    Name = "chinese_traditional.lm";
+    Dir = gid_Dir_Share_Fingerprint;
+    Styles = (PACKED);
+End
+
+File gid_File_Lm_Croatian
+    TXT_FILE_BODY;
+    Name = "croatian.lm";
+    Dir = gid_Dir_Share_Fingerprint;
+    Styles = (PACKED);
+End
+
+File gid_File_Lm_Czech
+    TXT_FILE_BODY;
+    Name = "czech.lm";
+    Dir = gid_Dir_Share_Fingerprint;
+    Styles = (PACKED);
+End
+
+File gid_File_Lm_Danish
+    TXT_FILE_BODY;
+    Name = "danish.lm";
+    Dir = gid_Dir_Share_Fingerprint;
+    Styles = (PACKED);
+End
+
+File gid_File_Lm_Drents
+    TXT_FILE_BODY;
+    Name = "drents.lm";
+    Dir = gid_Dir_Share_Fingerprint;
+    Styles = (PACKED);
+End
+
+File gid_File_Lm_Dutch
+    TXT_FILE_BODY;
+    Name = "dutch.lm";
+    Dir = gid_Dir_Share_Fingerprint;
+    Styles = (PACKED);
+End
+
+File gid_File_Lm_English
+    TXT_FILE_BODY;
+    Name = "english.lm";
+    Dir = gid_Dir_Share_Fingerprint;
+    Styles = (PACKED);
+End
+
+File gid_File_Lm_Esperanto
+    TXT_FILE_BODY;
+    Name = "esperanto.lm";
+    Dir = gid_Dir_Share_Fingerprint;
+    Styles = (PACKED);
+End
+
+File gid_File_Lm_Estonian
+    TXT_FILE_BODY;
+    Name = "estonian.lm";
+    Dir = gid_Dir_Share_Fingerprint;
+    Styles = (PACKED);
+End
+
+File gid_File_Lm_Finnish
+    TXT_FILE_BODY;
+    Name = "finnish.lm";
+    Dir = gid_Dir_Share_Fingerprint;
+    Styles = (PACKED);
+End
+
+File gid_File_Lm_French
+    TXT_FILE_BODY;
+    Name = "french.lm";
+    Dir = gid_Dir_Share_Fingerprint;
+    Styles = (PACKED);
+End
+
+File gid_File_Lm_Frisian
+    TXT_FILE_BODY;
+    Name = "frisian.lm";
+    Dir = gid_Dir_Share_Fingerprint;
+    Styles = (PACKED);
+End
+
+File gid_File_Lm_Georgian
+    TXT_FILE_BODY;
+    Name = "georgian.lm";
+    Dir = gid_Dir_Share_Fingerprint;
+    Styles = (PACKED);
+End
+
+File gid_File_Lm_German
+    TXT_FILE_BODY;
+    Name = "german.lm";
+    Dir = gid_Dir_Share_Fingerprint;
+    Styles = (PACKED);
+End
+
+File gid_File_Lm_Greek
+    TXT_FILE_BODY;
+    Name = "greek.lm";
+    Dir = gid_Dir_Share_Fingerprint;
+    Styles = (PACKED);
+End
+
+File gid_File_Lm_Hebrew
+    TXT_FILE_BODY;
+    Name = "hebrew.lm";
+    Dir = gid_Dir_Share_Fingerprint;
+    Styles = (PACKED);
+End
+
+File gid_File_Lm_Hindi
+    TXT_FILE_BODY;
+    Name = "hindi.lm";
+    Dir = gid_Dir_Share_Fingerprint;
+    Styles = (PACKED);
+End
+
+File gid_File_Lm_Hungarian
+    TXT_FILE_BODY;
+    Name = "hungarian.lm";
+    Dir = gid_Dir_Share_Fingerprint;
+    Styles = (PACKED);
+End
+
+File gid_File_Lm_Icelandic
+    TXT_FILE_BODY;
+    Name = "icelandic.lm";
+    Dir = gid_Dir_Share_Fingerprint;
+    Styles = (PACKED);
+End
+
+File gid_File_Lm_Indonesian
+    TXT_FILE_BODY;
+    Name = "indonesian.lm";
+    Dir = gid_Dir_Share_Fingerprint;
+    Styles = (PACKED);
+End
+
+File gid_File_Lm_Irish_Gaelic
+    TXT_FILE_BODY;
+    Name = "irish_gaelic.lm";
+    Dir = gid_Dir_Share_Fingerprint;
+    Styles = (PACKED);
+End
+
+
+File gid_File_Lm_Italian
+    TXT_FILE_BODY;
+    Name = "italian.lm";
+    Dir = gid_Dir_Share_Fingerprint;
+    Styles = (PACKED);
+End
+
+File gid_File_Lm_Japanese
+    TXT_FILE_BODY;
+    Name = "japanese.lm";
+    Dir = gid_Dir_Share_Fingerprint;
+    Styles = (PACKED);
+End
+
+File gid_File_Lm_Korean
+    TXT_FILE_BODY;
+    Name = "korean.lm";
+    Dir = gid_Dir_Share_Fingerprint;
+    Styles = (PACKED);
+End
+
+File gid_File_Lm_Latin
+    TXT_FILE_BODY;
+    Name = "latin.lm";
+    Dir = gid_Dir_Share_Fingerprint;
+    Styles = (PACKED);
+End
+
+File gid_File_Lm_Latvian
+    TXT_FILE_BODY;
+    Name = "latvian.lm";
+    Dir = gid_Dir_Share_Fingerprint;
+    Styles = (PACKED);
+End
+
+File gid_File_Lm_Lithuanian
+    TXT_FILE_BODY;
+    Name = "lithuanian.lm";
+    Dir = gid_Dir_Share_Fingerprint;
+    Styles = (PACKED);
+End
+
+File gid_File_Lm_Luxembourgish
+    TXT_FILE_BODY;
+    Name = "luxembourgish.lm";
+    Dir = gid_Dir_Share_Fingerprint;
+    Styles = (PACKED);
+End
+
+File gid_File_Lm_Malay
+    TXT_FILE_BODY;
+    Name = "malay.lm";
+    Dir = gid_Dir_Share_Fingerprint;
+    Styles = (PACKED);
+End
+
+File gid_File_Lm_Manx_Gaelic
+    TXT_FILE_BODY;
+    Name = "manx_gaelic.lm";
+    Dir = gid_Dir_Share_Fingerprint;
+    Styles = (PACKED);
+End
+
+File gid_File_Lm_Marathi
+    TXT_FILE_BODY;
+    Name = "marathi.lm";
+    Dir = gid_Dir_Share_Fingerprint;
+    Styles = (PACKED);
+End
+
+File gid_File_Lm_Middle_Frisian
+    TXT_FILE_BODY;
+    Name = "middle_frisian.lm";
+    Dir = gid_Dir_Share_Fingerprint;
+    Styles = (PACKED);
+End
+
+File gid_File_Lm_Mingo
+    TXT_FILE_BODY;
+    Name = "mingo.lm";
+    Dir = gid_Dir_Share_Fingerprint;
+    Styles = (PACKED);
+End
+
+File gid_File_Lm_Mongolian_Cyrillic
+    TXT_FILE_BODY;
+    Name = "mongolian_cyrillic.lm";
+    Dir = gid_Dir_Share_Fingerprint;
+    Styles = (PACKED);
+End
+
+File gid_File_Lm_Nepali
+    TXT_FILE_BODY;
+    Name = "nepali.lm";
+    Dir = gid_Dir_Share_Fingerprint;
+    Styles = (PACKED);
+End
+
+File gid_File_Lm_Norwegian
+    TXT_FILE_BODY;
+    Name = "norwegian.lm";
+    Dir = gid_Dir_Share_Fingerprint;
+    Styles = (PACKED);
+End
+
+File gid_File_Lm_Persian
+    TXT_FILE_BODY;
+    Name = "persian.lm";
+    Dir = gid_Dir_Share_Fingerprint;
+    Styles = (PACKED);
+End
+
+File gid_File_Lm_Polish
+    TXT_FILE_BODY;
+    Name = "polish.lm";
+    Dir = gid_Dir_Share_Fingerprint;
+    Styles = (PACKED);
+End
+
+File gid_File_Lm_Portuguese
+    TXT_FILE_BODY;
+    Name = "portuguese.lm";
+    Dir = gid_Dir_Share_Fingerprint;
+    Styles = (PACKED);
+End
+
+File gid_File_Lm_Quechua
+    TXT_FILE_BODY;
+    Name = "quechua.lm";
+    Dir = gid_Dir_Share_Fingerprint;
+    Styles = (PACKED);
+End
+
+File gid_File_Lm_Romanian
+    TXT_FILE_BODY;
+    Name = "romanian.lm";
+    Dir = gid_Dir_Share_Fingerprint;
+    Styles = (PACKED);
+End
+
+File gid_File_Lm_Romansh
+    TXT_FILE_BODY;
+    Name = "romansh.lm";
+    Dir = gid_Dir_Share_Fingerprint;
+    Styles = (PACKED);
+End
+
+File gid_File_Lm_Russian
+    TXT_FILE_BODY;
+    Name = "russian.lm";
+    Dir = gid_Dir_Share_Fingerprint;
+    Styles = (PACKED);
+End
+
+File gid_File_Lm_Sanskrit
+    TXT_FILE_BODY;
+    Name = "sanskrit.lm";
+    Dir = gid_Dir_Share_Fingerprint;
+    Styles = (PACKED);
+End
+
+File gid_File_Lm_Scots
+    TXT_FILE_BODY;
+    Name = "scots.lm";
+    Dir = gid_Dir_Share_Fingerprint;
+    Styles = (PACKED);
+End
+
+File gid_File_Lm_Scots_Gaelic
+    TXT_FILE_BODY;
+    Name = "scots_gaelic.lm";
+    Dir = gid_Dir_Share_Fingerprint;
+    Styles = (PACKED);
+End
+
+File gid_File_Lm_Serbian
+    TXT_FILE_BODY;
+    Name = "serbian.lm";
+    Dir = gid_Dir_Share_Fingerprint;
+    Styles = (PACKED);
+End
+
+File gid_File_Lm_Serbian_Latin
+    TXT_FILE_BODY;
+    Name = "serbian-latin.lm";
+    Dir = gid_Dir_Share_Fingerprint;
+    Styles = (PACKED);
+End
+
+File gid_File_Lm_Slovak_Ascii
+    TXT_FILE_BODY;
+    Name = "slovak_ascii.lm";
+    Dir = gid_Dir_Share_Fingerprint;
+    Styles = (PACKED);
+End
+
+File gid_File_Lm_Slovenian
+    TXT_FILE_BODY;
+    Name = "slovenian.lm";
+    Dir = gid_Dir_Share_Fingerprint;
+    Styles = (PACKED);
+End
+
+File gid_File_Lm_Spanish
+    TXT_FILE_BODY;
+    Name = "spanish.lm";
+    Dir = gid_Dir_Share_Fingerprint;
+    Styles = (PACKED);
+End
+
+File gid_File_Lm_Swahili
+    TXT_FILE_BODY;
+    Name = "swahili.lm";
+    Dir = gid_Dir_Share_Fingerprint;
+    Styles = (PACKED);
+End
+
+File gid_File_Lm_Swedish
+    TXT_FILE_BODY;
+    Name = "swedish.lm";
+    Dir = gid_Dir_Share_Fingerprint;
+    Styles = (PACKED);
+End
+
+File gid_File_Lm_Tagalog
+    TXT_FILE_BODY;
+    Name = "tagalog.lm";
+    Dir = gid_Dir_Share_Fingerprint;
+    Styles = (PACKED);
+End
+
+File gid_File_Lm_Tamil
+    TXT_FILE_BODY;
+    Name = "tamil.lm";
+    Dir = gid_Dir_Share_Fingerprint;
+    Styles = (PACKED);
+End
+
+File gid_File_Lm_Thai
+    TXT_FILE_BODY;
+    Name = "thai.lm";
+    Dir = gid_Dir_Share_Fingerprint;
+    Styles = (PACKED);
+End
+
+File gid_File_Lm_Turkish
+    TXT_FILE_BODY;
+    Name = "turkish.lm";
+    Dir = gid_Dir_Share_Fingerprint;
+    Styles = (PACKED);
+End
+
+File gid_File_Lm_Ukrainian
+    TXT_FILE_BODY;
+    Name = "ukrainian.lm";
+    Dir = gid_Dir_Share_Fingerprint;
+    Styles = (PACKED);
+End
+
+File gid_File_Lm_Vietnamese
+    TXT_FILE_BODY;
+    Name = "vietnamese.lm";
+    Dir = gid_Dir_Share_Fingerprint;
+    Styles = (PACKED);
+End
+
+File gid_File_Lm_Welsh
+    TXT_FILE_BODY;
+    Name = "welsh.lm";
+    Dir = gid_Dir_Share_Fingerprint;
+    Styles = (PACKED);
+End
+
+File gid_File_Lm_Yiddish_Utf
+    TXT_FILE_BODY;
+    Name = "yiddish_utf.lm";
+    Dir = gid_Dir_Share_Fingerprint;
+    Styles = (PACKED);
+End
+
+File gid_File_Lm_Zulu
+    TXT_FILE_BODY;
+    Name = "zulu.lm";
+    Dir = gid_Dir_Share_Fingerprint;
+    Styles = (PACKED);
+End
+#endif
+
+// mod files
+
+File gid_File_Mod_Chart
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Dtd_Ooo_1_0;
+    Name = "chart.mod";
+End
+
+File gid_File_Mod_Datastyl
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Dtd_Ooo_1_0;
+    Name = "datastyl.mod";
+End
+
+File gid_File_Mod_Defs
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Dtd_Ooo_1_0;
+    Name = "defs.mod";
+End
+
+File gid_File_Mod_Drawing
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Dtd_Ooo_1_0;
+    Name = "drawing.mod";
+End
+
+File gid_File_Mod_Dtypes
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Dtd_Ooo_1_0;
+    Name = "dtypes.mod";
+End
+
+File gid_File_Mod_Form
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Dtd_Ooo_1_0;
+    Name = "form.mod";
+End
+
+File gid_File_Mod_Meta
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Dtd_Ooo_1_0;
+    Name = "meta.mod";
+End
+
+File gid_File_Mod_Nmspace
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Dtd_Ooo_1_0;
+    Name = "nmspace.mod";
+End
+
+File gid_File_Mod_Office
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Dtd_Ooo_1_0;
+    Name = "office.mod";
+End
+
+File gid_File_Mod_Script
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Dtd_Ooo_1_0;
+    Name = "script.mod";
+End
+
+File gid_File_Mod_Settings
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Dtd_Ooo_1_0;
+    Name = "settings.mod";
+End
+
+File gid_File_Mod_Style
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Dtd_Ooo_1_0;
+    Name = "style.mod";
+End
+
+File gid_File_Mod_Table
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Dtd_Ooo_1_0;
+    Name = "table.mod";
+End
+
+File gid_File_Mod_Text
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Dtd_Ooo_1_0;
+    Name = "text.mod";
+End
+
+#if !defined(SYSTEM_MOZILLA) && !defined(WITHOUT_MOZILLA) 
+
+File gid_File_Mozilla_Runtime
+    TXT_FILE_BODY;
+    Styles = (ARCHIVE);
+    Dir = SCP2_OOO_BIN_DIR;
+    Name = "mozruntime.zip";
+End
+
+#endif
+
+File gid_File_Share_Registry_Main_Xcd
+    TXT_FILE_BODY;
+    Styles = (PACKED, SCPZIP_REPLACE);
+    Dir = gid_Dir_Share_Registry;
+    Name = "main.xcd";
+End
+
+#ifdef WNT
+
+File gid_File_Share_Registry_Forcedefault_Xcd
+    TXT_FILE_BODY;
+    Styles = (PACKED, SCPZIP_REPLACE, SET_OFFICE_LANGUAGE);
+    Dir = gid_Dir_Share_Registry;
+    Name = "forcedefault.xcd";
+End
+
+#endif
+
+File gid_File_Oo_Ldap_Xcd_Sample
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Registry;
+    Name = "oo-ldap.xcd.sample";
+End
+
+File gid_File_Oo_Ad_Ldap_Xcd_Sample
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Registry;
+    Name = "oo-ad-ldap.xcd.sample";
+End
+
+File gid_File_Rdb_Offapi
+    TXT_FILE_BODY;
+    Dir = gid_Dir_Program;
+    Styles = (PACKED);
+    Name = "offapi.rdb";
+End
+
+File gid_File_Rdb_TypesVba
+    TXT_FILE_BODY;
+    Dir = gid_Dir_Program;
+    Styles = (PACKED, OVERWRITE);
+    Name = "oovbaapi.rdb";
+End
+
+File gid_File_Registry_Lang
+    Dir = gid_Dir_Share_Registry_Res;
+    TXT_FILE_BODY;
+    EXTRA_ALL_LANG_BUT_EN_US(registry,xcd);
+End
+
+File gid_File_Registry_Filter_Zip
+    Dir = gid_Dir_Share_Registry_Res;
+    TXT_FILE_BODY;
+    EXTRA_ALL_LANG(fcfg_langpack,xcd);
+End
+
+File gid_File_Registry_Spool_Langpack_Lang
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Registry;
+    FILE_ALL_LANG_LETTER(Langpack-,xcd);
+End
+
+File gid_File_Share_Registry_Ctl_Xcd
+    TXT_FILE_BODY;
+    Styles = (PACKED,MAKE_LANG_SPECIFIC);
+    Dir = gid_Dir_Share_Registry;
+    Name (ar) = "ctl.xcd";
+    Name (dz) = "ctl.xcd";
+    Name (fa) = "ctl.xcd";
+    Name (gu) = "ctl.xcd";
+    Name (he) = "ctl.xcd";
+    Name (hi) = "ctl.xcd";
+    Name (km) = "ctl.xcd";
+    Name (lo) = "ctl.xcd";
+    Name (my) = "ctl.xcd";
+    Name (ne) = "ctl.xcd";
+    Name (or) = "ctl.xcd";
+    Name (pa-IN) = "ctl.xcd";
+    Name (ta) = "ctl.xcd";
+    Name (th) = "ctl.xcd";
+End
+
+File gid_File_Share_Registry_Ctlseqcheck_Xcd
+    TXT_FILE_BODY;
+    Styles = (PACKED,MAKE_LANG_SPECIFIC);
+    Dir = gid_Dir_Share_Registry;
+    Name (km) = "ctlseqcheck.xcd";
+    Name (lo) = "ctlseqcheck.xcd";
+    Name (th) = "ctlseqcheck.xcd";
+End
+
+File gid_File_Scripts_Beanshell
+    Dir = gid_Dir_Share_Scripts;
+    ARCHIVE_TXT_FILE_BODY;
+    Name = "ScriptsBeanShell.zip";
+End
+
+#ifdef SOLAR_JAVA
+File gid_File_Scripts_Java
+    Dir = gid_Dir_Share_Scripts;
+    ARCHIVE_TXT_FILE_BODY;
+    Name = "ScriptsJava.zip";
+End
+#endif
+
+File gid_File_Scripts_Javascript
+    Dir = gid_Dir_Share_Scripts;
+    ARCHIVE_TXT_FILE_BODY;
+    Name = "ScriptsJavaScript.zip";
+End
+
+// new user interface configuration files
+File gid_File_Share_Config_Sofficecfg_uiconfig_Zip
+    TXT_FILE_BODY;
+    Styles = (ARCHIVE);
+    Dir = gid_Dir_Share_Config_Sofficecfg;
+    Name = "uiconfig.zip";
+    Patchfiles = ();
+End
+
+#ifdef WNT
+
+STD_SHELLNEW_FILE(gid_File_Shellnew_Ods_Soffice, soffice.ods)
+
+File gid_File_Shellnew2_Ods_Soffice
+    TXT_FILE_BODY;
+    Styles = (PACKED,WORKSTATION, OVERWRITE);
+    Dir = PREDEFINED_OSWINSHELLNEWDIR;
+    NetDir = gid_Dir_ShellnewToo;
+    Name = "soffice.ods";
+End
+
+#endif
+
+#ifdef WNT
+
+STD_SHELLNEW_FILE(gid_File_Shellnew_Odg_Soffice, soffice.odg)
+
+File gid_File_Shellnew2_Odg_Soffice
+    TXT_FILE_BODY;
+    Styles = (PACKED,WORKSTATION, OVERWRITE);
+    Dir = PREDEFINED_OSWINSHELLNEWDIR;
+    NetDir = gid_Dir_ShellnewToo;
+    Name = "soffice.odg";
+End
+
+#endif
+
+#ifdef WNT
+
+STD_SHELLNEW_FILE(gid_File_Shellnew_Odp_Soffice, soffice.odp)
+
+File gid_File_Shellnew2_Odp_Soffice
+    TXT_FILE_BODY;
+    Styles = (PACKED,WORKSTATION, OVERWRITE);
+    Dir = PREDEFINED_OSWINSHELLNEWDIR;
+    NetDir = gid_Dir_ShellnewToo;
+    Name = "soffice.odp";
+End
+
+#endif
+
+#ifdef WNT
+
+STD_SHELLNEW_FILE(gid_File_Shellnew_Odt_Soffice, soffice.odt)
+
+File gid_File_Shellnew2_Odt_Soffice
+    TXT_FILE_BODY;
+    Styles = (PACKED,WORKSTATION, OVERWRITE);
+    Dir = PREDEFINED_OSWINSHELLNEWDIR;
+    NetDir = gid_Dir_ShellnewToo;
+    Name = "soffice.odt";
+End
+
+#endif
+
+#if defined UNX && ! defined MACOSX
+
+File gid_File_Txt_Pagein_Calc
+    TXT_FILE_BODY;
+    Dir = gid_Dir_Program;
+    Styles = (PACKED);
+    Name = "pagein-calc";
+End
+
+File gid_File_Txt_Pagein_Common
+    TXT_FILE_BODY;
+    Dir = gid_Dir_Program;
+    Styles = (PACKED);
+    Name = "pagein-common";
+End
+
+File gid_File_Txt_Pagein_Draw
+    TXT_FILE_BODY;
+    Dir = gid_Dir_Program;
+    Styles = (PACKED);
+    Name = "pagein-draw";
+End
+
+File gid_File_Txt_Pagein_Impress
+    TXT_FILE_BODY;
+    Dir = gid_Dir_Program;
+    Styles = (PACKED);
+    Name = "pagein-impress";
+End
+
+File gid_File_Txt_Pagein_Writer
+    TXT_FILE_BODY;
+    Dir = gid_Dir_Program;
+    Styles = (PACKED);
+    Name = "pagein-writer";
+End
+
+#endif
+
+File gid_File_Xsl_Common_Measure_Conversion
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Xslt_Common;
+    Name = "/xslt/common/measure_conversion.xsl";
+End
+
+File gid_File_Xsl_Common_Math_Functions
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Xslt_Common;
+    Name = "/xslt/common/math.xsl";
+End
+
+File gid_File_Xsl_Export_Common_Body
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Xslt_Export_Common;
+    Name = "/xslt/export/common/body.xsl";
+End
+
+File gid_File_Xsl_Export_Common_Table_Of_Content
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Xslt_Export_Common;
+    Name = "/xslt/export/common/table_of_content.xsl";
+End
+
+File gid_File_Xsl_Export_Common_Ooo2ms_Docpr
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Xslt_Export_Common;
+    Name = "/xslt/export/common/ooo2ms_docpr.xsl";
+End
+
+File gid_File_Xsl_Export_Common_Styles_Styles_Collector
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Xslt_Export_Common_Styles;
+    Name = "/xslt/export/common/styles/style_collector.xsl";
+End
+
+File gid_File_Xsl_Export_Common_Styles_Style_Mapping_Css
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Xslt_Export_Common_Styles;
+    Name = "/xslt/export/common/styles/style_mapping_css.xsl";
+End
+
+File gid_File_Xsl_Export_Common_Table_Table
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Xslt_Export_Common_Table;
+    Name = "/xslt/export/common/table/table.xsl";
+End
+
+File gid_File_Xsl_Export_Common_Table_Table_Cells
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Xslt_Export_Common_Table;
+    Name = "/xslt/export/common/table/table_cells.xsl";
+End
+
+File gid_File_Xsl_Export_Common_Table_Table_Columns
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Xslt_Export_Common_Table;
+    Name = "/xslt/export/common/table/table_columns.xsl";
+End
+
+File gid_File_Xsl_Export_Common_Table_Table_Rows
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Xslt_Export_Common_Table;
+    Name = "/xslt/export/common/table/table_rows.xsl";
+End
+
+File gid_File_Xsl_Export_Spreadsheetml_Formular
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Xslt_Export_Spreadsheetml;
+    Name = "/xslt/export/spreadsheetml/formular.xsl";
+End
+
+File gid_File_Xsl_Export_Spreadsheetml_Ooo2spreadsheetml
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Xslt_Export_Spreadsheetml;
+    Name = "/xslt/export/spreadsheetml/ooo2spreadsheetml.xsl";
+End
+
+File gid_File_Xsl_Export_Spreadsheetml_Style_Mapping
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Xslt_Export_Spreadsheetml;
+    Name = "/xslt/export/spreadsheetml/style_mapping.xsl";
+End
+
+File gid_File_Xsl_Export_Spreadsheetml_Styles
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Xslt_Export_Spreadsheetml;
+    Name = "/xslt/export/spreadsheetml/styles.xsl";
+End
+
+File gid_File_Xsl_Export_Spreadsheetml_Table
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Xslt_Export_Spreadsheetml;
+    Name = "/xslt/export/spreadsheetml/table.xsl";
+End
+
+File gid_File_Xsl_Export_Wordml_Ooo2wordml
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Xslt_Export_Wordml;
+    Name = "/xslt/export/wordml/ooo2wordml.xsl";
+End
+File gid_File_Xsl_Export_uof_odf2uof_text
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Xslt_Export_uof;
+    Name = "/xslt/export/uof/odf2uof_text.xsl";
+End
+File gid_File_Xsl_Export_uof_odf2uof_spreadsheet
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Xslt_Export_uof;
+    Name = "/xslt/export/uof/odf2uof_spreadsheet.xsl";
+End
+File gid_File_Xsl_Export_uof_odf2uof_presentation
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Xslt_Export_uof;
+    Name = "/xslt/export/uof/odf2uof_presentation.xsl";
+End
+File gid_File_Xsl_Import_uof_uof2odf_text
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Xslt_Import_uof;
+    Name = "/xslt/import/uof/uof2odf_text.xsl";
+End
+File gid_File_Xsl_Import_uof_uof2odf_spreadsheet
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Xslt_Import_uof;
+    Name = "/xslt/import/uof/uof2odf_spreadsheet.xsl";
+End
+File gid_File_Xsl_Import_uof_uof2odf_presentation
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Xslt_Import_uof;
+    Name = "/xslt/import/uof/uof2odf_presentation.xsl";
+End
+File gid_File_Xsl_Export_Wordml_Ooo2wordml_Border
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Xslt_Export_Wordml;
+    Name = "/xslt/export/wordml/ooo2wordml_border.xsl";
+End
+
+File gid_File_Xsl_Export_Wordml_Ooo2wordml_Custom_Draw
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Xslt_Export_Wordml;
+    Name = "/xslt/export/wordml/ooo2wordml_custom_draw.xsl";
+End
+
+File gid_File_Xsl_Export_Wordml_Ooo2wordml_Draw
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Xslt_Export_Wordml;
+    Name = "/xslt/export/wordml/ooo2wordml_draw.xsl";
+End
+
+File gid_File_Xsl_Export_Wordml_Ooo2wordml_Field
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Xslt_Export_Wordml;
+    Name = "/xslt/export/wordml/ooo2wordml_field.xsl";
+End
+
+File gid_File_Xsl_Export_Wordml_Ooo2wordml_List
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Xslt_Export_Wordml;
+    Name = "/xslt/export/wordml/ooo2wordml_list.xsl";
+End
+
+File gid_File_Xsl_Export_Wordml_Ooo2wordml_Page
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Xslt_Export_Wordml;
+    Name = "/xslt/export/wordml/ooo2wordml_page.xsl";
+End
+
+File gid_File_Xsl_Export_Wordml_Ooo2wordml_Path
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Xslt_Export_Wordml;
+    Name = "/xslt/export/wordml/ooo2wordml_path.xsl";
+End
+
+File gid_File_Xsl_Export_Wordml_Ooo2wordml_Settings
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Xslt_Export_Wordml;
+    Name = "/xslt/export/wordml/ooo2wordml_settings.xsl";
+End
+
+File gid_File_Xsl_Export_Wordml_Ooo2wordml_Table
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Xslt_Export_Wordml;
+    Name = "/xslt/export/wordml/ooo2wordml_table.xsl";
+End
+
+File gid_File_Xsl_Export_Wordml_Ooo2wordml_Text
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Xslt_Export_Wordml;
+    Name = "/xslt/export/wordml/ooo2wordml_text.xsl";
+End
+
+File gid_File_Xsl_Import_Common_Ms2ooo_Docpr
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Xslt_Import_Common;
+    Name = "/xslt/import/common/ms2ooo_docpr.xsl";
+End
+
+File gid_File_Xsl_Import_Spreadsheetml_Spreadsheetml2ooo
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Xslt_Import_Spreadsheetml;
+    Name = "/xslt/import/spreadsheetml/spreadsheetml2ooo.xsl";
+End
+
+File gid_File_Xsl_Import_Wordml_Wordml2ooo
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Xslt_Import_Wordml;
+    Name = "/xslt/import/wordml/wordml2ooo.xsl";
+End
+
+File gid_File_Xsl_Import_Wordml_Wordml2ooo_Custom_Draw
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Xslt_Import_Wordml;
+    Name = "/xslt/import/wordml/wordml2ooo_custom_draw.xsl";
+End
+
+
+File gid_File_Xsl_Import_Wordml_Wordml2ooo_Draw
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Xslt_Import_Wordml;
+    Name = "/xslt/import/wordml/wordml2ooo_draw.xsl";
+End
+
+File gid_File_Xsl_Import_Wordml_Wordml2ooo_Field
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Xslt_Import_Wordml;
+    Name = "/xslt/import/wordml/wordml2ooo_field.xsl";
+End
+
+File gid_File_Xsl_Import_Wordml_Wordml2ooo_List
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Xslt_Import_Wordml;
+    Name = "/xslt/import/wordml/wordml2ooo_list.xsl";
+End
+
+File gid_File_Xsl_Import_Wordml_Wordml2ooo_Page
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Xslt_Import_Wordml;
+    Name = "/xslt/import/wordml/wordml2ooo_page.xsl";
+End
+
+File gid_File_Xsl_Import_Wordml_Wordml2ooo_Settings
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Xslt_Import_Wordml;
+    Name = "/xslt/import/wordml/wordml2ooo_settings.xsl";
+End
+
+File gid_File_Xsl_Import_Wordml_Wordml2ooo_Table
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Xslt_Import_Wordml;
+    Name = "/xslt/import/wordml/wordml2ooo_table.xsl";
+End
+
+File gid_File_Xsl_Import_Wordml_Wordml2ooo_Text
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Xslt_Import_Wordml;
+    Name = "/xslt/import/wordml/wordml2ooo_text.xsl";
+End
+
+File gid_File_Xsl_Import_Wordml_Wordml2ooo_Path
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Xslt_Import_Wordml;
+    Name = "/xslt/import/wordml/wordml2ooo_path.xsl";
+End
+
+
+File gid_File_Xsl_Import_Wordml_Wordml2ooo_Props
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Xslt_Import_Wordml;
+    Name = "/xslt/import/wordml/wordml2ooo_props.xsl";
+End
+
+#ifdef WNT
+File gid_File_Txt_Patchfiles
+    TXT_FILE_BODY;
+    Name = "patchlist.txt";
+    Dir = gid_Dir_Program;
+    Styles = (PACKED,PATCH,PATCH_ONLY,DONTRENAMEINPATCH);
+End
+#endif
+
+File gid_Starregistry_Services_Rdb
+    TXT_FILE_BODY;
+    Name = "services.rdb";
+    Dir = gid_Dir_Program;
+    Styles = (PACKED);
+End
+
+#ifdef LINUX
+File gid_File_Dat_Root3
+    TXT_FILE_BODY;
+    Dir = gid_Dir_Program;
+    Name = "root3.dat";
+    Styles = (PACKED);
+End
+#endif
+
+#ifdef LINUX
+File gid_File_Dat_Root4
+    TXT_FILE_BODY;
+    Dir = gid_Dir_Program;
+    Name = "root4.dat";
+    Styles = (PACKED);
+End
+#endif
+
+#ifdef LINUX
+File gid_File_Dat_Root5
+    TXT_FILE_BODY;
+    Dir = gid_Dir_Program;
+    Name = "root5.dat";
+    Styles = (PACKED);
+End
+#endif
+
+#ifdef MACOSX 
+File gid_File_App_PkgInfo
+    TXT_FILE_BODY;
+    Dir = gid_Dir_Bundle_Contents;
+    Name = "PkgInfo";
+End
+#endif
+
+#ifdef MACOSX 
+File gid_File_App_InfoPlist
+    TXT_FILE_BODY;
+    Dir = gid_Dir_Bundle_Contents;
+    Name = "Info.plist";
+    Styles = (SCPZIP_REPLACE);
+End
+#endif
+
+#ifdef MACOSX
+File gid_File_Icns_Bundle
+    ARCHIVE_TXT_FILE_BODY;
+    Dir = gid_Dir_Bundle_Contents_Resources;
+    Name = "osxicons.zip";
+    Styles = (ARCHIVE);
+End
+#endif
+
+#ifdef MACOSX
+File gid_File_Res_Bundle
+    ARCHIVE_TXT_FILE_BODY;
+    Dir = gid_Dir_Bundle_Contents_Resources;
+    Name = "osxres.zip";
+    Styles = (ARCHIVE);
+End
+#endif
+
+#ifdef MACOSX
+File gid_File_InfoPlist_Lang
+    Dir = gid_Dir_Bundle_Contents_Resources_Lang;
+    ARCHIVE_TXT_FILE_BODY;
+    Styles = (ARCHIVE);
+    EXTRA_ALL_LANG(InfoPlist,zip);
+End
+#endif
+
+#ifdef MACOSX
+File gid_File_Spotlight_Bundle
+    ARCHIVE_TXT_FILE_BODY;
+    Dir = gid_Dir_Bundle_Contents_Library_Spotlight_Bundle_Contents;
+    Name = "mdibundle.zip";
+    Styles = (ARCHIVE,USE_INTERNAL_RIGHTS);
+End
+#endif
+
+File gid_File_Config_Javasettingsunopkginstall
+    USER_FILE_BODY;
+    Dir = gid_Dir_Config;
+    Name = "javasettingsunopkginstall.xml";
+  #ifdef SOLARIS
+    Styles = (PACKED,VOLATILEFILE);
+  #else
+    Styles = (PACKED);
+  #endif
+End
+
+#ifdef THEME_DEFAULT
+File gid_File_Images_Zip
+    TXT_FILE_BODY;
+    Dir = gid_Dir_Share_Config;
+    Name = "images.zip";
+    Styles = (PACKED);
+End
+#endif
+
+#ifdef THEME_CRYSTAL
+File gid_File_ImagesCrystal_Zip
+    TXT_FILE_BODY;
+    Dir = gid_Dir_Share_Config;
+    Name = "images_crystal.zip";
+    Styles = (PACKED);
+End
+#endif
+
+#ifdef THEME_OXYGEN
+File gid_File_ImagesOxygen_Zip
+    TXT_FILE_BODY;
+    Dir = gid_Dir_Share_Config;
+    Name = "images_oxygen.zip";
+    Styles = (PACKED);
+End
+#endif
+
+#ifdef THEME_HICONTRAST
+File gid_File_ImagesHicontrast_Zip
+    TXT_FILE_BODY;
+    Dir = gid_Dir_Share_Config;
+    Name = "images_hicontrast.zip";
+    Styles = (PACKED);
+End
+#endif
+
+#ifdef THEME_TANGO
+File gid_File_ImagesTango_Zip
+    TXT_FILE_BODY;
+    Dir = gid_Dir_Share_Config;
+    Name = "images_tango.zip";
+    Styles = (PACKED);
+End
+#endif
+
+File gid_File_Share_Registry_Lingucomponent_Xcd
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Registry;
+    Name = "lingucomponent.xcd";
+End
+
+// Dictionary extensions
+
+#ifndef WITHOUT_MYSPELL_DICTS
+File gid_File_Extension_Dictionary_Af
+	Dir = gid_Brand_Dir_Share_Extensions_Dict_Af;
+	Name = "dict-af.oxt";
+	Styles = (PACKED, FORCELANGUAGEPACK, ARCHIVE);
+	UnixRights = 444;
+End
+#endif
+
+#ifndef WITHOUT_MYSPELL_DICTS
+File gid_File_Extension_Dictionary_Br
+	Dir = gid_Brand_Dir_Share_Extensions_Dict_Br;
+	Name = "dict-br.oxt";
+	Styles = (PACKED, FORCELANGUAGEPACK, ARCHIVE);
+	UnixRights = 444;
+End
+#endif
+
+#ifndef WITHOUT_MYSPELL_DICTS
+File gid_File_Extension_Dictionary_Ca
+    Dir = gid_Brand_Dir_Share_Extensions_Dict_Ca;
+    Name = "dict-ca.oxt";
+    Styles = (PACKED, FORCELANGUAGEPACK, ARCHIVE);
+    UnixRights = 444;
+End
+#endif
+
+#ifndef WITHOUT_MYSPELL_DICTS
+File gid_File_Extension_Dictionary_Cs
+	Dir = gid_Brand_Dir_Share_Extensions_Dict_Cs;
+	Name = "dict-cs.oxt";
+	Styles = (PACKED, FORCELANGUAGEPACK, ARCHIVE);
+	UnixRights = 444;
+End
+#endif
+
+#ifndef WITHOUT_MYSPELL_DICTS
+File gid_File_Extension_Dictionary_Da
+	Dir = gid_Brand_Dir_Share_Extensions_Dict_Da;
+	Name = "dict-da.oxt";
+	Styles = (PACKED, FORCELANGUAGEPACK, ARCHIVE);
+	UnixRights = 444;
+End
+#endif
+
+#ifndef WITHOUT_MYSPELL_DICTS
+File gid_File_Extension_Dictionary_De_AT
+	Dir = gid_Brand_Dir_Share_Extensions_Dict_De_At;
+	Name = "dict-de-AT.oxt";
+	Styles = (PACKED, FORCELANGUAGEPACK, ARCHIVE);
+	UnixRights = 444;
+End
+#endif
+
+#ifndef WITHOUT_MYSPELL_DICTS
+File gid_File_Extension_Dictionary_De_CH
+    Dir = gid_Brand_Dir_Share_Extensions_Dict_De_Ch;
+    Name = "dict-de-CH.oxt";
+    Styles = (PACKED, FORCELANGUAGEPACK, ARCHIVE);
+    UnixRights = 444;
+End
+#endif
+
+#ifndef WITHOUT_MYSPELL_DICTS
+File gid_File_Extension_Dictionary_De_DE
+    Dir = gid_Brand_Dir_Share_Extensions_Dict_De_De;
+    Name = "dict-de-DE.oxt";
+    Styles = (PACKED, FORCELANGUAGEPACK, ARCHIVE);
+    UnixRights = 444;
+End
+#endif
+
+#ifndef WITHOUT_MYSPELL_DICTS
+File gid_File_Extension_Dictionary_En
+	Dir = gid_Brand_Dir_Share_Extensions_Dict_En;
+	Name = "dict-en.oxt";
+	Styles = (PACKED, FORCELANGUAGEPACK, ARCHIVE);
+	UnixRights = 444;
+End
+#endif
+
+#ifndef WITHOUT_MYSPELL_DICTS
+File gid_File_Extension_Dictionary_Es
+	Dir = gid_Brand_Dir_Share_Extensions_Dict_Es;
+	Name = "dict-es.oxt";
+	Styles = (PACKED, FORCELANGUAGEPACK, ARCHIVE);
+	UnixRights = 444;
+End
+#endif
+
+#ifndef WITHOUT_MYSPELL_DICTS
+File gid_File_Extension_Dictionary_Et
+	Dir = gid_Brand_Dir_Share_Extensions_Dict_Et;
+	Name = "dict-et.oxt";
+	Styles = (PACKED, FORCELANGUAGEPACK, ARCHIVE);
+	UnixRights = 444;
+End
+#endif
+
+#ifndef WITHOUT_MYSPELL_DICTS
+File gid_File_Extension_Dictionary_Fr
+	Dir = gid_Brand_Dir_Share_Extensions_Dict_Fr;
+	Name = "dict-fr.oxt";
+	Styles = (PACKED, FORCELANGUAGEPACK, ARCHIVE);
+	UnixRights = 444;
+End
+#endif
+
+#ifndef WITHOUT_MYSPELL_DICTS
+File gid_File_Extension_Dictionary_Gl
+	Dir = gid_Brand_Dir_Share_Extensions_Dict_Gl;
+	Name = "dict-gl.oxt";
+	Styles = (PACKED, FORCELANGUAGEPACK, ARCHIVE);
+	UnixRights = 444;
+End
+#endif
+
+#ifndef WITHOUT_MYSPELL_DICTS
+File gid_File_Extension_Dictionary_He
+    Dir = gid_Brand_Dir_Share_Extensions_Dict_He;
+    Name = "dict-he.oxt";
+    Styles = (PACKED, FORCELANGUAGEPACK, ARCHIVE);
+    UnixRights = 444;
+End
+#endif
+
+#ifndef WITHOUT_MYSPELL_DICTS
+File gid_File_Extension_Dictionary_Hu
+	Dir = gid_Brand_Dir_Share_Extensions_Dict_Hu;
+	Name = "dict-hu.oxt";
+	Styles = (PACKED, FORCELANGUAGEPACK, ARCHIVE);
+	UnixRights = 444;
+End
+#endif
+
+#ifndef WITHOUT_MYSPELL_DICTS
+File gid_File_Extension_Dictionary_Hr
+	Dir = gid_Brand_Dir_Share_Extensions_Dict_Hr;
+	Name = "dict-hr.oxt";
+	Styles = (PACKED, FORCELANGUAGEPACK, ARCHIVE);
+	UnixRights = 444;
+End
+#endif
+
+#ifndef WITHOUT_MYSPELL_DICTS
+File gid_File_Extension_Dictionary_It
+	Dir = gid_Brand_Dir_Share_Extensions_Dict_It;
+	Name = "dict-it.oxt";
+	Styles = (PACKED, FORCELANGUAGEPACK, ARCHIVE);
+	UnixRights = 444;
+End
+#endif
+
+#ifndef WITHOUT_MYSPELL_DICTS
+File gid_File_Extension_Dictionary_Ku_Tr
+	Dir = gid_Brand_Dir_Share_Extensions_Dict_Ku_Tr;
+	Name = "dict-ku-TR.oxt";
+	Styles = (PACKED, FORCELANGUAGEPACK, ARCHIVE);
+	UnixRights = 444;
+End
+#endif
+
+#ifndef WITHOUT_MYSPELL_DICTS
+File gid_File_Extension_Dictionary_Lt
+	Dir = gid_Brand_Dir_Share_Extensions_Dict_Lt;
+	Name = "dict-lt.oxt";
+	Styles = (PACKED, FORCELANGUAGEPACK, ARCHIVE);
+	UnixRights = 444;
+End
+#endif
+
+#ifndef WITHOUT_MYSPELL_DICTS
+File gid_File_Extension_Dictionary_Ne
+	Dir = gid_Brand_Dir_Share_Extensions_Dict_Ne;
+	Name = "dict-ne.oxt";
+	Styles = (PACKED, FORCELANGUAGEPACK, ARCHIVE);
+	UnixRights = 444;
+End
+#endif
+
+#ifndef WITHOUT_MYSPELL_DICTS
+File gid_File_Extension_Dictionary_Nl
+	Dir = gid_Brand_Dir_Share_Extensions_Dict_Nl;
+	Name = "dict-nl.oxt";
+	Styles = (PACKED, FORCELANGUAGEPACK, ARCHIVE);
+	UnixRights = 444;
+End
+#endif
+
+#ifndef WITHOUT_MYSPELL_DICTS
+File gid_File_Extension_Dictionary_No
+    Dir = gid_Brand_Dir_Share_Extensions_Dict_No;
+    Name = "dict-no.oxt";
+    Styles = (PACKED, FORCELANGUAGEPACK, ARCHIVE);
+    UnixRights = 444;
+End
+#endif
+
+#ifndef WITHOUT_MYSPELL_DICTS
+File gid_File_Extension_Dictionary_Oc
+	Dir = gid_Brand_Dir_Share_Extensions_Dict_Oc;
+	Name = "dict-oc.oxt";
+	Styles = (PACKED, FORCELANGUAGEPACK, ARCHIVE);
+	UnixRights = 444;
+End
+#endif
+
+#ifndef WITHOUT_MYSPELL_DICTS
+File gid_File_Extension_Dictionary_Pl
+	Dir = gid_Brand_Dir_Share_Extensions_Dict_Pl;
+	Name = "dict-pl.oxt";
+	Styles = (PACKED, FORCELANGUAGEPACK, ARCHIVE);
+	UnixRights = 444;
+End
+#endif
+
+#ifndef WITHOUT_MYSPELL_DICTS
+File gid_File_Extension_Dictionary_Pt
+	Dir = gid_Brand_Dir_Share_Extensions_Dict_Pt;
+	Name = "dict-pt.oxt";
+	Styles = (PACKED, FORCELANGUAGEPACK, ARCHIVE);
+	UnixRights = 444;
+End
+#endif
+
+#ifndef WITHOUT_MYSPELL_DICTS
+File gid_File_Extension_Dictionary_Ro
+    Dir = gid_Brand_Dir_Share_Extensions_Dict_Ro;
+    Name = "dict-ro.oxt";
+    Styles = (PACKED, FORCELANGUAGEPACK, ARCHIVE);
+    UnixRights = 444;
+End
+#endif
+
+#ifndef WITHOUT_MYSPELL_DICTS
+File gid_File_Extension_Dictionary_Ru
+	Dir = gid_Brand_Dir_Share_Extensions_Dict_Ru;
+	Name = "dict-ru.oxt";
+	Styles = (PACKED, FORCELANGUAGEPACK, ARCHIVE);
+	UnixRights = 444;
+End
+#endif
+
+#ifndef WITHOUT_MYSPELL_DICTS
+File gid_File_Extension_Dictionary_Sk
+	Dir = gid_Brand_Dir_Share_Extensions_Dict_Sk;
+	Name = "dict-sk.oxt";
+	Styles = (PACKED, FORCELANGUAGEPACK, ARCHIVE);
+	UnixRights = 444;
+End
+#endif
+
+#ifndef WITHOUT_MYSPELL_DICTS
+File gid_File_Extension_Dictionary_Sl
+	Dir = gid_Brand_Dir_Share_Extensions_Dict_Sl;
+	Name = "dict-sl.oxt";
+	Styles = (PACKED, FORCELANGUAGEPACK, ARCHIVE);
+	UnixRights = 444;
+End
+#endif
+
+#ifndef WITHOUT_MYSPELL_DICTS
+File gid_File_Extension_Dictionary_Sr
+	Dir = gid_Brand_Dir_Share_Extensions_Dict_Sr;
+	Name = "dict-sr.oxt";
+	Styles = (PACKED, FORCELANGUAGEPACK, ARCHIVE);
+	UnixRights = 444;
+End
+#endif
+
+#ifndef WITHOUT_MYSPELL_DICTS
+File gid_File_Extension_Dictionary_Sv
+	Dir = gid_Brand_Dir_Share_Extensions_Dict_Sv;
+	Name = "dict-sv.oxt";
+	Styles = (PACKED, FORCELANGUAGEPACK, ARCHIVE);
+	UnixRights = 444;
+End
+#endif
+
+#ifndef WITHOUT_MYSPELL_DICTS
+File gid_File_Extension_Dictionary_Sw
+	Dir = gid_Brand_Dir_Share_Extensions_Dict_Sw;
+	Name = "dict-sw.oxt";
+	Styles = (PACKED, FORCELANGUAGEPACK, ARCHIVE);
+	UnixRights = 444;
+End
+#endif
+
+#ifndef WITHOUT_MYSPELL_DICTS
+File gid_File_Extension_Dictionary_Th
+	Dir = gid_Brand_Dir_Share_Extensions_Dict_Th;
+	Name = "dict-th.oxt";
+	Styles = (PACKED, FORCELANGUAGEPACK, ARCHIVE);
+	UnixRights = 444;
+End
+#endif
+
+#ifndef WITHOUT_MYSPELL_DICTS
+File gid_File_Extension_Dictionary_Uk
+	Dir = gid_Brand_Dir_Share_Extensions_Dict_Uk;
+	Name = "dict-uk.oxt";
+	Styles = (PACKED, FORCELANGUAGEPACK, ARCHIVE);
+	UnixRights = 444;
+End
+#endif
+
+#ifndef WITHOUT_MYSPELL_DICTS
+File gid_File_Extension_Dictionary_Vi
+	Dir = gid_Brand_Dir_Share_Extensions_Dict_Vi;
+	Name = "dict-vi.oxt";
+	Styles = (PACKED, FORCELANGUAGEPACK, ARCHIVE);
+	UnixRights = 444;
+End
+#endif
+
+#ifndef WITHOUT_MYSPELL_DICTS
+File gid_File_Extension_Dictionary_Zu
+	Dir = gid_Brand_Dir_Share_Extensions_Dict_Zu;
+	Name = "dict-zu.oxt";
+	Styles = (PACKED, FORCELANGUAGEPACK, ARCHIVE);
+	UnixRights = 444;
+End
+#endif
+
+// #ifdef BUILD_SPECIAL
+// File gid_File_Extension_Oxt_Oooimprovement
+//    Name = "OOoImprovement.oxt";
+//    Dir = gid_Brand_Dir_Share_Extensions_Oooimprovement;
+//    Styles = (PACKED, ARCHIVE);
+//    UnixRights = 444;
+// End
+// #endif
+

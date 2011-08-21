@@ -1,0 +1,84 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+//i20156 - new file for XML security module
+
+/** -- idl definition -- **/
+
+#ifndef __com_sun_star_xml_crypto_xxmlsignaturetemplate_idl_
+#define __com_sun_star_xml_crypto_xxmlsignaturetemplate_idl_
+
+#include <com/sun/star/uno/XInterface.idl>
+#include <com/sun/star/lang/IllegalArgumentException.idl>
+#include <com/sun/star/xml/wrapper/XXMLElementWrapper.idl>
+#include <com/sun/star/xml/crypto/XUriBinding.idl>
+#include <com/sun/star/xml/crypto/XXMLSecurityTemplate.idl>
+
+module com { module sun { module star { module xml { module crypto {
+
+/**
+ * Interface of XML signature template
+ *
+ * <p>This interface represents a signature template, which is the same as the
+ * desired XML signature element but some of the nodes may be empty. The empty
+ * entities include digest value and signature value. Empty entities are not
+ * allowed in a signature template when performing validation.</p>
+ *
+ * <p>In some cases, the signer or verifier can determine and locate the
+ * contents to be signed from the template by dereference the URI.</p>
+ *
+ * <p>With the help of signature context, the signer or verifier specifies the
+ * key from the KeyInfo in the signature template.</p>
+ *
+ * Owner: Andrew Fan
+ */
+interface XXMLSignatureTemplate : XXMLSecurityTemplate
+{
+    /**
+     * Get the target XML element, i.e. the element to be signed
+     */
+    sequence< com::sun::star::xml::wrapper::XXMLElementWrapper > getTargets(
+    ) ;
+
+    /**
+     * Set the dynamic URI binding
+     */
+    void setBinding(
+        [in] com::sun::star::xml::crypto::XUriBinding aUriBinding
+    ) raises( com::sun::star::lang::IllegalArgumentException ) ;
+
+    /**
+     * Get the dynamic URI binding
+     */
+    com::sun::star::xml::crypto::XUriBinding getBinding( ) ;
+} ;
+
+} ; } ; } ; } ; } ;
+
+
+#endif
+

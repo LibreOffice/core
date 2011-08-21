@@ -1,0 +1,113 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_drawing_XShapeArranger_idl__
+#define __com_sun_star_drawing_XShapeArranger_idl__
+
+#include <com/sun/star/uno/XInterface.idl>
+
+#include <com/sun/star/drawing/XShapes.idl>
+
+#include <com/sun/star/drawing/Arrangement.idl>
+
+#include <com/sun/star/drawing/XShape.idl>
+
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module drawing {
+
+//=============================================================================
+
+// DocMerge from xml: interface com::sun::star::drawing::XShapeArranger
+/** Objects implementing this interface can be used to arrange
+    <type>Shape</type>s.
+
+    @deprecated
+ */
+published interface XShapeArranger: com::sun::star::uno::XInterface
+{
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::drawing::XShapeArranger::arrange
+    /** applies the specified <type>Arrangement</type> to
+        the specified collection of <type>Shape</type>s.
+     */
+    void arrange( [in] com::sun::star::drawing::XShapes xShapes,
+             [in] com::sun::star::drawing::Arrangement eType );
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::drawing::XShapeArranger::bringToFront
+    /** moves the specified <type>Shape</type>s by a specified number
+        of objects more to the front.
+     */
+    void bringToFront( [in] com::sun::star::drawing::XShapes xShapes,
+             [in] short nSteps );
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::drawing::XShapeArranger::sendToBack
+    /** moves the specified <type>Shape</type>s
+        <var>nSteps</var> objects more to the back.
+     */
+    void sendToBack( [in] com::sun::star::drawing::XShapes xShapes,
+             [in] short nSteps );
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::drawing::XShapeArranger::setBehindShape
+    /** moves the specified collection of <type>Shape</type>s
+        behind the specified single <type>Shape</type>.
+     */
+    void setBehindShape( [in] com::sun::star::drawing::XShapes xShapes,
+             [in] com::sun::star::drawing::XShape xShape );
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::drawing::XShapeArranger::setInFrontOf
+    /** moves the specified collection of <type>Shape</type>s in
+        front of the specified single <type>Shape</type>.
+     */
+    void setInFrontOf( [in] com::sun::star::drawing::XShapes xShapes,
+             [in] com::sun::star::drawing::XShape xShape );
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::drawing::XShapeArranger::reverseOrder
+    /** reverses the order of the specified collection of
+        <type>Shape</type>s.
+     */
+    void reverseOrder( [in] com::sun::star::drawing::XShapes xShapes );
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif
+

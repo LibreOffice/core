@@ -1,0 +1,12 @@
+module ooo { module vba { module excel {
+    constants XlDVType {
+        const long xlValidateCustom = 7;
+        const long xlValidateDate = 4;
+        const long xlValidateDecimal = 2;
+        const long xlValidateInputOnly = 0;
+        const long xlValidateList = 3;
+        const long xlValidateTextLength = 6;
+        const long xlValidateTime = 5;
+        const long xlValidateWholeNumber = 1;
+    };
+}; }; };

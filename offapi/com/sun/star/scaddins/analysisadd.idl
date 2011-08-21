@@ -1,0 +1,594 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_sheet_NoConvergenceException_idl__
+#include <com/sun/star/sheet/NoConvergenceException.idl>
+#endif
+
+#include <com/sun/star/uno/XInterface.idl>
+#include <com/sun/star/beans/XPropertySet.idl>
+#include <com/sun/star/sheet/LocalizedName.idl>
+
+module com
+{
+module sun
+{
+module star
+{
+module sheet
+{
+module addin
+{
+    interface XCompatibilityNames  : com::sun::star::uno::XInterface
+    {
+        /// getCompatibilityNames.
+        sequence< com::sun::star::sheet::LocalizedName > getCompatibilityNames ( [in] string aProgrammaticName );
+    };
+
+    /**
+    * Interface with analysis functions.
+    */
+    interface XAnalysis : com::sun::star::uno::XInterface
+    {
+        /// workday.
+        long getWorkday(
+                    [in] com::sun::star::beans::XPropertySet xOptions,
+                    [in] long nStartDate, [in] long nDays, [in] any aHolidays )
+            raises( com::sun::star::lang::IllegalArgumentException );
+
+        /// yearfrac.
+        double getYearfrac(
+                    [in] com::sun::star::beans::XPropertySet xOptions,
+                    [in] long StartDate, [in] long EndDate, [in] any Mode )
+            raises( com::sun::star::lang::IllegalArgumentException );
+
+        /// edate.
+        long getEdate(
+                    [in] com::sun::star::beans::XPropertySet xOptions,
+                    [in] long nStartDate, [in] long nNumOfMonths )
+            raises( com::sun::star::lang::IllegalArgumentException );
+
+        /// weeknum.
+        long getWeeknum(
+                    [in] com::sun::star::beans::XPropertySet xOptions,
+                    [in] long nStartDate, [in] long nMode )
+            raises( com::sun::star::lang::IllegalArgumentException );
+
+        /// eomonth.
+        long getEomonth(
+                    [in] com::sun::star::beans::XPropertySet xOptions,
+                    [in] long nStartDate, [in] long nMonths )
+            raises( com::sun::star::lang::IllegalArgumentException );
+
+        /// networkdays.
+        long getNetworkdays(
+                    [in] com::sun::star::beans::XPropertySet xOptions,
+                    [in] long StartDate, [in] long EndDate, [in] any Holidays )
+            raises( com::sun::star::lang::IllegalArgumentException );
+
+        /// iseven.
+        long getIseven( [in] long nValue )
+            raises( com::sun::star::lang::IllegalArgumentException );
+
+        /// isodd.
+        long getIsodd( [in] long nValue )
+            raises( com::sun::star::lang::IllegalArgumentException );
+
+        /// multinomial.
+        double getMultinomial(
+                    [in] com::sun::star::beans::XPropertySet xOptions,
+                    [in] sequence< sequence< long > > aValList,
+                    [in] sequence< any > aOptVLst )
+            raises( com::sun::star::lang::IllegalArgumentException );
+
+        /// seriessum.
+        double getSeriessum(
+                    [in] double X, [in] double N, [in] double M,
+                    [in] sequence< sequence< double > > CoeffList )
+            raises( com::sun::star::lang::IllegalArgumentException );
+
+        // quotient.
+        double getQuotient( [in] double Num, [in] double Denum )
+            raises( com::sun::star::lang::IllegalArgumentException );
+
+        // mround.
+        double getMround( [in] double Number, [in] double Multiple )
+            raises( com::sun::star::lang::IllegalArgumentException );
+
+        // sqrtpi.
+        double getSqrtpi( [in] double Number )
+            raises( com::sun::star::lang::IllegalArgumentException );
+
+        // randbetween.
+        double getRandbetween( [in] double Min, [in] double Max )
+            raises( com::sun::star::lang::IllegalArgumentException );
+
+        /// gcd.
+        double getGcd(
+                    [in] com::sun::star::beans::XPropertySet xOptions,
+                    [in] sequence< sequence< double > > FirstValList,
+                    [in] sequence< any > OptionalValList )
+            raises( com::sun::star::lang::IllegalArgumentException );
+
+        /// lcm.
+        double getLcm(
+                    [in] com::sun::star::beans::XPropertySet xOptions,
+                    [in] sequence< sequence< double > > FirstValList,
+                    [in] sequence< any > OptionalValList )
+            raises( com::sun::star::lang::IllegalArgumentException );
+
+        /// besseli.
+        double getBesseli( [in] double Num, [in] long Order )
+            raises( com::sun::star::lang::IllegalArgumentException,
+                    com::sun::star::sheet::NoConvergenceException );
+
+        /// besselj.
+        double getBesselj( [in] double Num, [in] long Order )
+            raises( com::sun::star::lang::IllegalArgumentException,
+                    com::sun::star::sheet::NoConvergenceException );
+
+        /// besselk.
+        double getBesselk( [in] double Num, [in] long Order )
+            raises( com::sun::star::lang::IllegalArgumentException,
+                    com::sun::star::sheet::NoConvergenceException );
+
+        /// bessely.
+        double getBessely( [in] double Num, [in] long Order )
+            raises( com::sun::star::lang::IllegalArgumentException,
+                    com::sun::star::sheet::NoConvergenceException );
+
+        /// bin2oct.
+        string getBin2Oct(
+                    [in] com::sun::star::beans::XPropertySet xOptions,
+                    [in] string BinaryNum, [in] any Places )
+            raises( com::sun::star::lang::IllegalArgumentException );
+
+        /// bin2dec.
+        double getBin2Dec( [in] string BinaryNum )
+            raises( com::sun::star::lang::IllegalArgumentException );
+
+        /// bin2hex.
+        string getBin2Hex(
+                    [in] com::sun::star::beans::XPropertySet xOptions,
+                    [in] string BinaryNum, [in] any Places )
+            raises( com::sun::star::lang::IllegalArgumentException );
+
+        /// oct2bin.
+        string getOct2Bin(
+                    [in] com::sun::star::beans::XPropertySet xOptions,
+                    [in] string OctalNum, [in] any Places )
+            raises( com::sun::star::lang::IllegalArgumentException );
+
+        /// oct2dec.
+        double getOct2Dec( [in] string OctalNum )
+            raises( com::sun::star::lang::IllegalArgumentException );
+
+        /// oct2hex.
+        string getOct2Hex(
+                    [in] com::sun::star::beans::XPropertySet xOptions,
+                    [in] string OctalNum, [in] any Places )
+            raises( com::sun::star::lang::IllegalArgumentException );
+
+        /// dec2bin.
+        string getDec2Bin(
+                    [in] com::sun::star::beans::XPropertySet xOptions,
+                    [in] long Value, [in] any Places )
+            raises( com::sun::star::lang::IllegalArgumentException );
+
+        /// dec2oct.
+        string getDec2Oct(
+                    [in] com::sun::star::beans::XPropertySet xOptions,
+                    [in] long Value, [in] any Places )
+            raises( com::sun::star::lang::IllegalArgumentException );
+
+        /// dec2hex.
+        string getDec2Hex(
+                    [in] com::sun::star::beans::XPropertySet xOptions,
+                    [in] double Value, [in] any Places )
+            raises( com::sun::star::lang::IllegalArgumentException );
+
+        /// hex2bin.
+        string getHex2Bin(
+                    [in] com::sun::star::beans::XPropertySet xOptions,
+                    [in] string HexadecimalValue, [in] any Places )
+            raises( com::sun::star::lang::IllegalArgumentException );
+
+        /// hex2dec.
+        double getHex2Dec( [in] string HexadecimalValue )
+            raises( com::sun::star::lang::IllegalArgumentException );
+
+        /// hex2oct.
+        string getHex2Oct(
+                    [in] com::sun::star::beans::XPropertySet xOptions,
+                    [in] string HexadecimalValue, [in] any Places )
+            raises( com::sun::star::lang::IllegalArgumentException );
+
+        /// delta.
+        long getDelta(
+                    [in] com::sun::star::beans::XPropertySet xOptions,
+                    [in] double Num1, [in] any Num2 )
+            raises( com::sun::star::lang::IllegalArgumentException );
+
+        /// erf.
+        double getErf(
+                    [in] com::sun::star::beans::XPropertySet xOptions,
+                    [in] double LowerLimit, [in] any UpperLimit )
+            raises( com::sun::star::lang::IllegalArgumentException );
+
+        /// erfc.
+        double getErfc( [in] double LowerLimit )
+            raises( com::sun::star::lang::IllegalArgumentException );
+
+        /// gestep.
+        long getGestep(
+                    [in] com::sun::star::beans::XPropertySet xOptions,
+                    [in] double Num, [in] any Step )
+            raises( com::sun::star::lang::IllegalArgumentException );
+
+        /// factdouble.
+        double getFactdouble( [in] long Num )
+            raises( com::sun::star::lang::IllegalArgumentException );
+
+        /// imabs.
+        double getImabs( [in] string Num )
+            raises( com::sun::star::lang::IllegalArgumentException );
+
+        /// imaginary.
+        double getImaginary( [in] string Num )
+            raises( com::sun::star::lang::IllegalArgumentException );
+
+        /// impower.
+        string getImpower( [in] string Num, [in] double Power )
+            raises( com::sun::star::lang::IllegalArgumentException );
+
+        /// imargument.
+        double getImargument( [in] string Num )
+            raises( com::sun::star::lang::IllegalArgumentException );
+
+        /// imcos.
+        string getImcos( [in] string Num )
+            raises( com::sun::star::lang::IllegalArgumentException );
+
+        /// imdiv.
+        string getImdiv( [in] string Num1, [in] string Num2 )
+            raises( com::sun::star::lang::IllegalArgumentException );
+
+        /// imexp.
+        string getImexp( [in] string Num )
+            raises( com::sun::star::lang::IllegalArgumentException );
+
+        /// imconjugate.
+        string getImconjugate( [in] string Num )
+            raises( com::sun::star::lang::IllegalArgumentException );
+
+        /// imln.
+        string getImln( [in] string Num )
+            raises( com::sun::star::lang::IllegalArgumentException );
+
+        /// imlog10.
+        string getImlog10( [in] string Num )
+            raises( com::sun::star::lang::IllegalArgumentException );
+
+        /// imlog2.
+        string getImlog2( [in] string Num )
+            raises( com::sun::star::lang::IllegalArgumentException );
+
+        /// improduct.
+        string getImproduct(
+                    [in] com::sun::star::beans::XPropertySet xOptions,
+                    [in] sequence< sequence< string > > Num1,
+                    [in] sequence< any > NumberList )
+            raises( com::sun::star::lang::IllegalArgumentException );
+
+        /// imreal.
+        double getImreal( [in] string Num )
+            raises( com::sun::star::lang::IllegalArgumentException );
+
+        /// imsin.
+        string getImsin( [in] string Num )
+            raises( com::sun::star::lang::IllegalArgumentException );
+
+        /// imsub.
+        string getImsub( [in] string Num1, [in] string Num2 )
+            raises( com::sun::star::lang::IllegalArgumentException );
+
+        /// imsum.
+        string getImsum(
+                    [in] com::sun::star::beans::XPropertySet xOptions,
+                    [in] sequence< sequence< string > > Num1,
+                    [in] sequence< any > OptNums )
+            raises( com::sun::star::lang::IllegalArgumentException );
+
+        /// imsqrt.
+        string getImsqrt( [in] string Num )
+            raises( com::sun::star::lang::IllegalArgumentException );
+
+        /// complex.
+        string getComplex( [in] double Real, [in] double Imaginary, [in] any Suffix )
+            raises( com::sun::star::lang::IllegalArgumentException );
+
+        /// convert.
+        double getConvert( [in] double Value, [in] string FromUnit, [in] string ToUnit )
+            raises( com::sun::star::lang::IllegalArgumentException );
+
+
+        /// amordegrc.
+        double getAmordegrc(
+                    [in] com::sun::star::beans::XPropertySet xOptions,
+                    [in] double Cost, [in] long Date, [in] long FirstPer, [in] double RestVal,
+                    [in] double Periode, [in] double Rate, [in] any Base )
+            raises( com::sun::star::lang::IllegalArgumentException );
+
+        /// amorlinc.
+        double getAmorlinc(
+                    [in] com::sun::star::beans::XPropertySet xOptions,
+                    [in] double Cost, [in] long Date, [in] long FirstPer, [in] double RestVal,
+                    [in] double Periode, [in] double Rate, [in] any Base )
+            raises( com::sun::star::lang::IllegalArgumentException );
+
+        /// accrint.
+        double getAccrint(
+                    [in] com::sun::star::beans::XPropertySet xOptions,
+                    [in] long Issue, [in] long FirstInterest, [in] long Settlement, [in] double Rate,
+                    [in] any Value, [in] long Frequency, [in] any Base )
+            raises( com::sun::star::lang::IllegalArgumentException );
+
+        /// accrintm.
+        double getAccrintm(
+                    [in] com::sun::star::beans::XPropertySet xOptions,
+                    [in] long Issue, [in] long Settlement, [in] double Rate, [in] any Value, [in] any Base )
+            raises( com::sun::star::lang::IllegalArgumentException );
+
+        /// received.
+        double getReceived(
+                    [in] com::sun::star::beans::XPropertySet xOptions,
+                    [in] long Settlement, [in] long Maturity, [in] double Investment, [in] double Discount,
+                    [in] any Base )
+            raises( com::sun::star::lang::IllegalArgumentException );
+
+        /// disc.
+        double getDisc(
+                    [in] com::sun::star::beans::XPropertySet xOptions,
+                    [in] long Settlement, [in] long Maturity, [in] double Price, [in] double Redemption,
+                    [in] any Base )
+            raises( com::sun::star::lang::IllegalArgumentException );
+
+        /// duration.
+        double getDuration(
+                    [in] com::sun::star::beans::XPropertySet xOptions,
+                    [in] long Settlement, [in] long Maturity, [in] double Coupon, [in] double Yield,
+                    [in] long Frequncy, [in] any Base )
+            raises( com::sun::star::lang::IllegalArgumentException );
+
+        /// effect.
+        double getEffect( [in] double Nomial, [in] long NumOfPeriods )
+            raises( com::sun::star::lang::IllegalArgumentException );
+
+        /// cumprinc.
+        double getCumprinc(
+                    [in] double Rate, [in] long NumOfPeriods, [in] double Val, [in] long StartPeriode,
+                    [in] long EndPeriode, [in] long PayType )
+            raises( com::sun::star::lang::IllegalArgumentException );
+
+        /// cumipmt.
+        double getCumipmt(
+                    [in] double Rate, [in] long NumOfPeriods, [in] double Val, [in] long StartPeriode,
+                    [in] long EndPeriode, [in] long PayType )
+            raises( com::sun::star::lang::IllegalArgumentException );
+
+        /// price.
+        double getPrice(
+                    [in] com::sun::star::beans::XPropertySet xOptions,
+                    [in] long Settlement, [in] long Maturity, [in] double Rate, [in] double Yield,
+                    [in] double Redemption, [in] long Frequncy, [in] any Base )
+            raises( com::sun::star::lang::IllegalArgumentException );
+
+        /// pricedisc.
+        double getPricedisc(
+                    [in] com::sun::star::beans::XPropertySet xOptions,
+                    [in] long Settlement, [in] long Maturity, [in] double Discont, [in] double Redemption,
+                    [in] any Base )
+            raises( com::sun::star::lang::IllegalArgumentException );
+
+        /// pricemat.
+        double getPricemat(
+                    [in] com::sun::star::beans::XPropertySet xOptions,
+                    [in] long Settlement, [in] long Maturity, [in] long Issue, [in] double Rate, [in] double Yield,
+                    [in] any Base )
+            raises( com::sun::star::lang::IllegalArgumentException );
+
+        /// mduration.
+        double getMduration(
+                    [in] com::sun::star::beans::XPropertySet xOptions,
+                    [in] long Settlement, [in] long Maturity, [in] double Coupon, [in] double Yield,
+                    [in] long Frequency, [in] any Base )
+            raises( com::sun::star::lang::IllegalArgumentException );
+
+        /// nominal.
+        double getNominal( [in] double Rate, [in] long NumOfPeriods )
+            raises( com::sun::star::lang::IllegalArgumentException );
+
+        /// dollarfr.
+        double getDollarfr( [in] double DollarDecimal, [in] long Fraction )
+            raises( com::sun::star::lang::IllegalArgumentException );
+
+        /// dollarde.
+        double getDollarde( [in] double DollarFractional, [in] long Fraction )
+            raises( com::sun::star::lang::IllegalArgumentException );
+
+        /// yield.
+        double getYield(
+                    [in] com::sun::star::beans::XPropertySet xOptions,
+                    [in] long Settlement, [in] long Maturity, [in] double Coupon, [in] double Price,
+                    [in] double Redemption, [in] long Frequency, [in] any Base )
+            raises( com::sun::star::lang::IllegalArgumentException );
+
+        /// yielddisc.
+        double getYielddisc(
+                    [in] com::sun::star::beans::XPropertySet xOptions,
+                    [in] long Settlement, [in] long Maturity, [in] double Price,
+                    [in] double Redemption, [in] any Base )
+            raises( com::sun::star::lang::IllegalArgumentException );
+
+        /// yieldmat.
+        double getYieldmat(
+                    [in] com::sun::star::beans::XPropertySet xOptions,
+                    [in] long Settlement, [in] long Maturity, [in] long Issue, [in] double Rate,
+                    [in] double Price, [in] any Base )
+            raises( com::sun::star::lang::IllegalArgumentException );
+
+        /// tbilleq.
+        double getTbilleq(
+                    [in] com::sun::star::beans::XPropertySet xOptions,
+                    [in] long Settlement, [in] long Maturity, [in] double Discont )
+            raises( com::sun::star::lang::IllegalArgumentException );
+
+        /// tbillprice.
+        double getTbillprice(
+                    [in] com::sun::star::beans::XPropertySet xOptions,
+                    [in] long Settlement, [in] long Maturity, [in] double Discont )
+            raises( com::sun::star::lang::IllegalArgumentException );
+
+        /// tbillyield.
+        double getTbillyield(
+                    [in] com::sun::star::beans::XPropertySet xOptions,
+                    [in] long Settlement, [in] long Maturity, [in] double Price )
+            raises( com::sun::star::lang::IllegalArgumentException );
+
+        /// oddfprice.
+        double getOddfprice(
+                    [in] com::sun::star::beans::XPropertySet xOptions,
+                    [in] long Settlement, [in] long Maturity, [in] long Issue, [in] long FirstCouponDate,
+                    [in] double Rate, [in] double Yield, [in] double Redemption,
+                    [in] long Frequency, [in] any Base )
+            raises( com::sun::star::lang::IllegalArgumentException );
+
+        /// oddfyield.
+        double getOddfyield(
+                    [in] com::sun::star::beans::XPropertySet xOptions,
+                    [in] long Settlement, [in] long Maturity, [in] long Issue, [in] long FirstCouponDate,
+                    [in] double Rate, [in] double Price, [in] double Redemption,
+                    [in] long Frequency, [in] any Base )
+            raises( com::sun::star::lang::IllegalArgumentException );
+
+        /// oddlprice.
+        double getOddlprice(
+                    [in] com::sun::star::beans::XPropertySet xOptions,
+                    [in] long Settlement, [in] long Maturity, [in] long LastInterest,
+                    [in] double Rate, [in] double Yield, [in] double Redemption,
+                    [in] long Frequency, [in] any Base )
+            raises( com::sun::star::lang::IllegalArgumentException );
+
+        /// oddlyield.
+        double getOddlyield(
+                    [in] com::sun::star::beans::XPropertySet xOptions,
+                    [in] long Settlement, [in] long Maturity, [in] long LastInterest,
+                    [in] double Rate, [in] double Price, [in] double Redemption,
+                    [in] long Frequency, [in] any Base )
+            raises( com::sun::star::lang::IllegalArgumentException );
+
+        /// xirr.
+        double getXirr(
+                    [in] com::sun::star::beans::XPropertySet xOptions,
+                    [in] sequence< sequence< double > > Values,
+                    [in] sequence< sequence< long > > Dates, [in] any Guess )
+            raises( com::sun::star::lang::IllegalArgumentException );
+
+        /// xnpv.
+        double getXnpv(
+                    [in] double Rate,
+                    [in] sequence< sequence< double > > Values,
+                    [in] sequence< sequence< long > > Dates )
+            raises( com::sun::star::lang::IllegalArgumentException );
+
+        /// intrate.
+        double getIntrate(
+                    [in] com::sun::star::beans::XPropertySet xOptions,
+                    [in] long Settlement, [in] long Maturity,
+                    [in] double Investment, [in] double Redemption, [in] any Base )
+            raises( com::sun::star::lang::IllegalArgumentException );
+
+        /// coupncd.
+        double getCoupncd(
+                    [in] com::sun::star::beans::XPropertySet xOptions,
+                    [in] long Settlement, [in] long Maturity,
+                    [in] long Frequency, [in] any Base )
+            raises( com::sun::star::lang::IllegalArgumentException );
+
+        /// coupdays.
+        double getCoupdays(
+                    [in] com::sun::star::beans::XPropertySet xOptions,
+                    [in] long Settlement, [in] long Maturity,
+                    [in] long Frequency, [in] any Base )
+            raises( com::sun::star::lang::IllegalArgumentException );
+
+
+        /// coupdaysnc.
+        double getCoupdaysnc(
+                    [in] com::sun::star::beans::XPropertySet xOptions,
+                    [in] long Settlement, [in] long Maturity,
+                    [in] long Frequency, [in] any Base )
+            raises( com::sun::star::lang::IllegalArgumentException );
+
+        /// coupdaybs.
+        double getCoupdaybs(
+                    [in] com::sun::star::beans::XPropertySet xOptions,
+                    [in] long Settlement, [in] long Maturity,
+                    [in] long Frequency, [in] any Base )
+            raises( com::sun::star::lang::IllegalArgumentException );
+
+        /// couppcd.
+        double getCouppcd(
+                    [in] com::sun::star::beans::XPropertySet xOptions,
+                    [in] long Settlement, [in] long Maturity,
+                    [in] long Frequency, [in] any Base )
+            raises( com::sun::star::lang::IllegalArgumentException );
+
+        /// coupnum.
+        double getCoupnum(
+                    [in] com::sun::star::beans::XPropertySet xOptions,
+                    [in] long Settlement, [in] long Maturity,
+                    [in] long Frequency, [in] any Base )
+            raises( com::sun::star::lang::IllegalArgumentException );
+
+        /// fvschedule.
+        double getFvschedule( [in] double Principal, [in] sequence< sequence< double > > Schedule )
+            raises( com::sun::star::lang::IllegalArgumentException );
+    };
+
+    service Analysis
+    {
+        // exported interfaces:
+        interface XCompatibilityNames;
+        interface XAnalysis;
+    };
+};
+};
+};
+};
+};
+

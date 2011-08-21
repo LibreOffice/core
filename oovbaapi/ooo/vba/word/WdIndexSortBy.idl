@@ -1,0 +1,6 @@
+module ooo { module vba { module word {
+    constants WdIndexSortBy {
+        const long wdIndexSortByStroke = 0;
+        const long wdIndexSortBySyllable = 1;
+    };
+}; }; };

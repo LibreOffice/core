@@ -1,0 +1,216 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_sheet_DataPilotField_idl__
+#define __com_sun_star_sheet_DataPilotField_idl__
+
+#include <com/sun/star/container/XNamed.idl>
+#include <com/sun/star/beans/XPropertySet.idl>
+#include <com/sun/star/sheet/XDataPilotField.idl>
+#include <com/sun/star/sheet/XDataPilotFieldGrouping.idl>
+#include <com/sun/star/sheet/DataPilotFieldOrientation.idl>
+#include <com/sun/star/sheet/GeneralFunction.idl>
+#include <com/sun/star/sheet/DataPilotFieldReference.idl>
+#include <com/sun/star/sheet/DataPilotFieldLayoutInfo.idl>
+#include <com/sun/star/sheet/DataPilotFieldAutoShowInfo.idl>
+#include <com/sun/star/sheet/DataPilotFieldSortInfo.idl>
+#include <com/sun/star/sheet/DataPilotFieldGroupInfo.idl>
+
+//=============================================================================
+
+module com {  module sun {  module star {  module sheet {
+
+//=============================================================================
+
+/** represents a single field in a data pilot table.
+
+    <p>If the data pilot table is based on a spreadsheet cell range, a field
+    is represented by a column of the range and is named using the topmost
+    cell of the column.</p>
+ */
+published service DataPilotField
+{
+    //-------------------------------------------------------------------------
+
+    /** provides access to the name of the data pilot field.
+     */
+    interface com::sun::star::container::XNamed;
+
+    //-------------------------------------------------------------------------
+
+//!published service PropertySet
+    /** provides access to the properties.
+     */
+    interface com::sun::star::beans::XPropertySet;
+
+    //-------------------------------------------------------------------------
+
+    [optional] interface XDataPilotField;
+
+    //-------------------------------------------------------------------------
+
+    [optional] interface XDataPilotFieldGrouping;
+
+    //=========================================================================
+
+    /** specifies the orientation of the field.
+
+        <p>If the orientation of a field has been changed using this property,
+        the field will be moved to the last position in the collection of all
+        fields with the specified orientation.</p>
+     */
+    [property] DataPilotFieldOrientation Orientation;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies the function used to calculate results for this field.
+
+        <p>For column and row fields, this is the function for subtotals
+        (<const>GeneralFunction::NONE</const> means no subtotals).
+        For data fields, this is the function shown in the data pilot
+        table.</p>
+     */
+    [property] GeneralFunction Function;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies the functions used to calculate subtotals for this field.
+
+        <p>This property is supported by column and row fields only.</p>
+
+        <p>An empty sequence means no subtotals. The same effect can be
+        achieved by setting the property <member>Function</member> to the
+        value <const>GeneralFunction::NONE</const>. If the length of the
+        sequence is greater then 1, then the sequence MUST NOT contain one of
+        the values <const>GeneralFunction::NONE</const> or
+        <const>GeneralFunction::AUTO</const>.</p>
+
+        <p>The order of the functions in this sequence is reflected in the
+        DataPilot table. Multiple entries of the same function are ignored
+        when setting the property.</p>
+     */
+    [property, optional] sequence<GeneralFunction> Subtotals;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies the selected page which is used to filter the data pilot.
+     */
+    [property, optional] string SelectedPage;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies whether to use the selected page to filter the data pilot or
+        show all.
+     */
+    [property, optional] boolean UseSelectedPage;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies which hierarchy of the dimension is used.
+
+    @see com::sun::star::sheet::DataPilotSourceHierarchies
+     */
+    [property, optional] string UsedHierarchy;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies whether this field has sorting information.
+     */
+    [property, optional] boolean HasSortInfo;
+
+    //-------------------------------------------------------------------------
+
+    /** controls how the field's items are sorted.
+     */
+    [property, optional] DataPilotFieldSortInfo SortInfo;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies whether this field has layout information.
+     */
+    [property, optional] boolean HasLayoutInfo;
+
+    //-------------------------------------------------------------------------
+
+    /** controls how the field's items are laid out in the result table.
+     */
+    [property, optional] DataPilotFieldLayoutInfo LayoutInfo;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies whether this field has auto show information.
+     */
+    [property, optional] boolean HasAutoShowInfo;
+
+    //-------------------------------------------------------------------------
+
+    /** enables the automatic inclusion of only a number of items with
+        the highest or lowest result values.
+     */
+    [property, optional] DataPilotFieldAutoShowInfo AutoShowInfo;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies whether this field has a reference.
+     */
+    [property, optional] boolean HasReference;
+
+    //-------------------------------------------------------------------------
+
+    /** controls how the results are shown in relation to a selected
+        reference result.
+     */
+    [property, optional] DataPilotFieldReference Reference;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies whether this field is a group field.
+     */
+    [property, optional] boolean IsGroupField;
+
+    //-------------------------------------------------------------------------
+
+    /** contains the grouping information of the DataPilot field.
+
+        <p>By changing the value of this property it is possible to modify the
+        grouping settings of this field.</p>
+     */
+    [property, optional] DataPilotFieldGroupInfo GroupInfo;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies whether to show this field also if it is empty or not.
+     */
+    [property, optional] boolean ShowEmpty;
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif
+

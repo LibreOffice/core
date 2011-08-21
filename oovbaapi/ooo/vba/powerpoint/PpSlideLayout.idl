@@ -1,0 +1,36 @@
+module ooo { module vba { module powerpoint {
+    constants PpSlideLayout {
+        const long ppLayoutBlank = 12;
+        const long ppLayoutChart = 8;
+        const long ppLayoutChartAndText = 6;
+        const long ppLayoutClipartAndText = 10;
+        const long ppLayoutClipArtAndVerticalText = 26;
+        const long ppLayoutFourObjects = 24;
+        const long ppLayoutLargeObject = 15;
+        const long ppLayoutMediaClipAndText = 18;
+        const long ppLayoutMixed = -2;
+        const long ppLayoutObject = 16;
+        const long ppLayoutObjectAndText = 14;
+        const long ppLayoutObjectAndTwoObjects = 30;
+        const long ppLayoutObjectOverText = 19;
+        const long ppLayoutOrgchart = 7;
+        const long ppLayoutTable = 4;
+        const long ppLayoutText = 2;
+        const long ppLayoutTextAndChart = 5;
+        const long ppLayoutTextAndClipart = 9;
+        const long ppLayoutTextAndMediaClip = 17;
+        const long ppLayoutTextAndObject = 13;
+        const long ppLayoutTextAndTwoObjects = 21;
+        const long ppLayoutTextOverObject = 20;
+        const long ppLayoutTitle = 1;
+        const long ppLayoutTitleOnly = 11;
+        const long ppLayoutTwoColumnText = 3;
+        const long ppLayoutTwoObjects = 29;
+        const long ppLayoutTwoObjectsAndObject = 31;
+        const long ppLayoutTwoObjectsAndText = 22;
+        const long ppLayoutTwoObjectsOverText = 23;
+        const long ppLayoutVerticalText = 25;
+        const long ppLayoutVerticalTitleAndText = 27;
+        const long ppLayoutVerticalTitleAndTextOverChart = 28;
+    };
+}; }; };

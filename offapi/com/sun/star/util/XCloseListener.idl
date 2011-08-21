@@ -1,0 +1,131 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_util_XCloseListener_idl__
+#define __com_sun_star_util_XCloseListener_idl__
+
+#include <com/sun/star/util/CloseVetoException.idl>
+#include <com/sun/star/lang/XEventListener.idl>
+#include <com/sun/star/lang/EventObject.idl>
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module util {
+
+//=============================================================================
+/** makes it possible to receive events when an object
+    is called for closing
+
+    <p>
+    Such close events are broadcasted by a <type>XCloseBroadcaster</type>
+    if somewhere tries to close it by calling <member>XCloseable::close()</member>.
+    Listener can:
+    <ul>
+        <li>break that by throwing <type>CloseVetoException</type></li>
+        <li>or accept that by deregister himself at this broadcaster.</li>
+    </ul>
+    </p>
+
+    <p>
+    If an event <method scope="com::sun::star::lang">XEventListener::disposing</method>
+    occurred, nobody called <method>XCloseable::close</method> on listened object before.
+    Then it's not allowed to break this request - it must be accepted!
+    </p>
+
+    @see XCloseable
+    @see XCloseBroadcaster
+ */
+published interface XCloseListener: com::sun::star::lang::XEventListener
+{
+    //-------------------------------------------------------------------------
+    /** is called when somewhere tries to close listened object
+
+        <p>
+        Is called before <member>XCloseListener::notifyClosing()</member>.
+        Listener has the chance to break that by throwing a <type>CloseVetoException</type>.
+        This exception must be passed to the original caller of <member>XCloseable::close()</member>
+        without any interaction.
+        </p>
+
+        <p>
+        The parameter <var>GetsOwnership</var> regulate who has to try to close the listened object
+        again, if this listener disagree with the request by throwing the exception.
+        If it's set to <FALSE/> the original caller of <member>XCloseable::close()</member>
+        will be the owner in every case. It's not allowed to call close() from this listener then.
+        If it's set to <TRUE/> this listener will be the new owner if he throw the exception,
+        otherwise not! If his still running processes will be finished he must call close() on
+        listened object again then.
+        </p>
+
+        <p>
+        If this listener doesn't disagree with th close request it depends from his internal
+        implementation if he deregister himself at the listened object.
+        But normally this must be done in <member>XCloseListener::notifyClosing()</member>.
+        </p>
+
+        @param Source
+            describes the source of the event (must be the listened object)
+
+        @param GetsOwnership
+            <TRUE/> pass the ownership to this listener, if he throw the veto exception
+            (otherwise this parameter must be ignored!)
+            <br>
+            <FALSE/> forbids to grab the ownership for the listened close object and call
+            close() on that any time.
+
+        @throws CloseVetoException
+            if listener disagree with the close request on listened object he must throw this exception
+     */
+    void queryClosing(
+        [in] com::sun::star::lang::EventObject Source,
+        [in] boolean GetsOwnership )
+            raises( CloseVetoException );
+
+    //-------------------------------------------------------------------------
+    /** is called when the listened object is closed really
+
+        <p>
+        Now the listened object is closed really. Listener has to accept that;
+        should deregister himself and release all references to it.
+        It's not allowed nor possible to disagree with that by throwing any exception.
+        </p>
+
+        <p>
+        If the event <member scope="com::sun::star::lang">XEventListener::disposing()</member> occurred before
+        it must be accepted too. There exist no chance for a disagreement any more.
+        </p>
+
+        @param Source
+            describes the source of the event (must be the listened object)
+     */
+    void notifyClosing( [in] com::sun::star::lang::EventObject Source );
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

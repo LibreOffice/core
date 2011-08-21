@@ -1,0 +1,211 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_text_GenericTextDocument_idl__
+#define __com_sun_star_text_GenericTextDocument_idl__
+
+#include <com/sun/star/document/OfficeDocument.idl>
+#include <com/sun/star/text/XTextDocument.idl>
+#include <com/sun/star/util/XSearchable.idl>
+#include <com/sun/star/util/XRefreshable.idl>
+#include <com/sun/star/text/XFootnotesSupplier.idl>
+#include <com/sun/star/text/XEndnotesSupplier.idl>
+#include <com/sun/star/util/XReplaceable.idl>
+#include <com/sun/star/text/XPagePrintable.idl>
+#include <com/sun/star/text/XReferenceMarksSupplier.idl>
+#include <com/sun/star/text/XLineNumberingSupplier.idl>
+#include <com/sun/star/text/XChapterNumberingSupplier.idl>
+#include <com/sun/star/text/XTextGraphicObjectsSupplier.idl>
+#include <com/sun/star/text/XTextEmbeddedObjectsSupplier.idl>
+#include <com/sun/star/text/XTextTablesSupplier.idl>
+#include <com/sun/star/style/XStyleFamiliesSupplier.idl>
+#include <com/sun/star/util/XNumberFormatsSupplier.idl>
+#include <com/sun/star/text/XBookmarksSupplier.idl>
+#include <com/sun/star/text/XDocumentIndexesSupplier.idl>
+#include <com/sun/star/text/XTextFieldsSupplier.idl>
+#include <com/sun/star/text/XTextFramesSupplier.idl>
+#include <com/sun/star/text/XTextSectionsSupplier.idl>
+#include <com/sun/star/lang/XMultiServiceFactory.idl>
+#include <com/sun/star/lang/Locale.idl>
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module text {
+
+//=============================================================================
+
+/** A text document is a model component which contains text
+    structured by paragraphs.
+
+    <p>Each paragraph and each portion of text can be fitted with
+    some attributes (technically properties).</p>
+
+    <p>Its declared as generic text document, because its function is
+    needed by different derived services (TextDocument/WebDocument/GlobalDocument).</p>
+
+    <p>In addition, all text objects can be searched.</p>
+ */
+published service GenericTextDocument
+{
+    service com::sun::star::document::OfficeDocument;
+
+    /** provides methods to create instances of several text document
+        services.
+        A text document provides several services which need the context
+        of a text document and these text document dependent services are
+        created at the text document directly and not over the global service
+        manager.
+     */
+    interface com::sun::star::lang::XMultiServiceFactory;
+
+    interface com::sun::star::text::XTextDocument;
+
+    interface com::sun::star::util::XSearchable;
+
+    interface com::sun::star::util::XRefreshable;
+
+    [optional] interface com::sun::star::text::XFootnotesSupplier;
+
+    [optional] interface com::sun::star::text::XEndnotesSupplier;
+
+    [optional] interface com::sun::star::util::XReplaceable;
+
+    [optional] interface com::sun::star::text::XPagePrintable;
+
+    [optional] interface com::sun::star::text::XReferenceMarksSupplier;
+
+    [optional] interface com::sun::star::text::XLineNumberingSupplier;
+
+    [optional] interface com::sun::star::text::XChapterNumberingSupplier;
+
+    [optional] interface com::sun::star::beans::XPropertySet;
+
+    [optional] interface com::sun::star::text::XTextGraphicObjectsSupplier;
+
+    [optional] interface com::sun::star::text::XTextEmbeddedObjectsSupplier;
+
+    [optional] interface com::sun::star::text::XTextTablesSupplier;
+
+    [optional] interface com::sun::star::style::XStyleFamiliesSupplier;
+
+    /** @since OOo 1.1.2
+     */
+    [optional] interface com::sun::star::text::XBookmarksSupplier;
+
+    /** @since OOo 1.1.2
+     */
+    [optional] interface com::sun::star::text::XDocumentIndexesSupplier;
+
+    /** @since OOo 1.1.2
+     */
+    [optional] interface com::sun::star::text::XTextFieldsSupplier;
+
+    /** @since OOo 1.1.2
+     */
+    [optional] interface com::sun::star::text::XTextFramesSupplier;
+
+    /** @since OOo 1.1.2
+     */
+    [optional] interface com::sun::star::text::XTextSectionsSupplier;
+
+    /** @since OOo 1.1.2
+     */
+    [optional] interface com::sun::star::util::XNumberFormatsSupplier;
+    //-------------------------------------------------------------------------
+
+    /** contains the identifier of the default locale of the document.
+     */
+    [optional, property] com::sun::star::lang::Locale CharLocale;
+
+    //-------------------------------------------------------------------------
+
+    /** contains the count of all characters in the document.
+     */
+    [optional, readonly, property] long CharacterCount;
+
+
+    //-------------------------------------------------------------------------
+
+    /** contains the count of all paragraphs in the document.
+     */
+    [optional, readonly, property] long ParagraphCount;
+
+    //-------------------------------------------------------------------------
+
+    /** contains the count of all words in the document.@see WordSeparator
+     */
+    [optional, readonly, property] long WordCount;
+
+    //-------------------------------------------------------------------------
+
+    /** contains a string that consists of characters that mark the
+        separation of words in counting the words in a document.
+
+
+
+        <p> I.e. slash and backslash. Whitespace (tab stop,
+        space, paragraph break, line break) always separate
+        words.</p>@see WordCount
+     */
+    [optional, property] string WordSeparator;
+
+        //-------------------------------------------------------------------------
+        /** specifies the concordance file taken into account when
+         *  creating an index.
+         *
+         *  When no concordance file should be used the string is empty.
+         *  Used for text documents only.
+     *
+     *  @since OOo 1.1.2
+         */
+        [optional, property] string IndexAutoMarkFileURL;
+
+        //-------------------------------------------------------------------------
+        /** specifies if change recording is active.
+     *
+     *  @since OOo 1.1.2
+         */
+        [optional, property] boolean RecordChanges;
+
+        //-------------------------------------------------------------------------
+        /** specifies the first 4 digit year to be used when years
+         *  are given in 2 digits.
+         *
+         *  Example: if set to 1930
+         *    Oct-12-29 will be interpreted as Oct-12-2029
+         *    Oct-12-30 will be interpreted as Oct-12-1930
+         *    Oct-12-02 will be interpreted as Oct-12-2002
+     *
+     *  @since OOo 1.1.2
+         */
+        [optional, property] short TwoDigitYear;
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

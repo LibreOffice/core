@@ -1,0 +1,132 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_sdb_ColumnSettings_idl__
+#define __com_sun_star_sdb_ColumnSettings_idl__
+
+#include <com/sun/star/beans/XPropertySet.idl>
+
+ module com {  module sun {  module star {  module sdb {
+
+
+/** describes the common properties of a database column.
+ */
+published service ColumnSettings
+{
+    interface com::sun::star::beans::XPropertySet;
+
+
+    /** contains the index of the number format that is used for the
+        column.
+
+        <p>The proper value can be determined by using the
+        <type scope="com::sun::star::util">XNumberFormatter</type>
+        interface.
+        </p>
+        <p>
+        If the value is
+        <void/>
+        , a default number format should be used according to the datatype of the column.
+        </p>
+
+    */
+    [property] long FormatKey;
+
+
+    /** specifies the alignment of columns text.
+
+        <pre>
+        0: left
+        1: center
+        2: right
+        </pre>
+        <p>
+        If the value is
+        <void/>
+        , a default alignment should be used according
+        to the datatype of the column.
+        </p>
+     */
+    [property] long Align;
+
+
+    /** specifies the width of the column displayed in a grid, the unit is 10THMM.
+
+        <p>
+        If the value is
+        <void/>
+        , a default width should be used according to the label of the column.
+        </p>
+     */
+    [property] long Width;
+
+
+    /** Position of the column within a grid.
+
+        <p>
+        If the value is
+        <void/>
+        , the default position should be taken according.
+        </p>
+     */
+    [property] long Position;
+
+
+    /** determines whether the column should be displayed or not.
+     */
+    [property] boolean Hidden;
+
+
+    /** indicates a control model which defines the settings for layouting.
+        The default is
+        <NULL/>
+        .
+     */
+    [optional, property] com::sun::star::beans::XPropertySet ControlModel;
+
+    /** describes an optional help text which can be used by UI components
+        when representing this column.
+        The default is
+        <NULL/>
+        .
+    */
+    [optional, property] string HelpText;
+
+    /** describes the default value which should be displayed by a control when moving to a new row.
+        The default is
+        <NULL/>
+        .
+    */
+    [optional, property] string ControlDefault;
+};
+
+//=============================================================================
+
+}; }; }; };
+
+/*===========================================================================
+===========================================================================*/
+#endif

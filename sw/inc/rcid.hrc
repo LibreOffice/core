@@ -1,0 +1,276 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef _RDIC_HRC
+#define _RDIC_HRC
+
+#ifndef _SFXSIDS_HRC //autogen
+#include <sfx2/sfxsids.hrc>
+#endif
+
+#define IMAGE_MASK_COLOR Color { Red = 0xFF00; Green = 0x0000; Blue = 0xFF00; }
+// ----------------------------------------------------------------
+// Bereiche fuer die UI-Verzeichnisse
+// ----------------------------------------------------------------
+
+#define RC_BASE                     RID_SW_START    // From solar.hrc
+
+#define RC_APP                      RC_BASE
+#define RC_DIALOG                   (RC_BASE + 200)
+#define RC_DOCVW                    (RC_BASE + 300)
+#define RC_WEB                      (RC_BASE + 400)
+#define RC_GLOBDOC                  (RC_BASE + 500)
+#define RC_VIEW                     (RC_BASE + 600)
+#define RC_CHRDLG                   (RC_BASE + 700)
+#define RC_RIBBAR                   (RC_BASE + 720)
+#define RC_GLOBALS                  (RC_BASE + 800)
+#define RC_FMTUI                    (RC_BASE + 920)
+#define RC_FRMDLG                   (RC_BASE + 1000)
+#define RC_FLDDLG                   (RC_BASE + 1100)
+#define RC_UTLUI                    (RC_BASE + 1250)
+#define RC_ATTR                     (RC_BASE + 1350)
+#define RC_TABLE                    (RC_BASE + 1450)
+#define RC_CONFIG                   (RC_BASE + 1550)
+#define RC_MISC                     (RC_BASE + 1650)
+#define RC_WRTSH                    (RC_BASE + 1750)
+#define RC_INDEX                    (RC_BASE + 1950)
+#define RC_DBUI                     (RC_BASE + 2050)
+#define RC_DOCHDL                   (RC_BASE + 2150)
+#define RC_POOLCHRFMT               (RC_BASE + 2250)
+#define RC_POOLHTMLCHRFMT           (RC_BASE + 2290)
+#define RC_POOLFRMFMT               (RC_BASE + 2330)
+#define RC_POOLTXTCOLL              (RC_BASE + 2360)
+#define RC_POOLPAGEDESC             (RC_BASE + 2550)
+#define RC_POOLNUMRULE              (RC_BASE + 2650)
+#define RC_ENVELP                   (RC_BASE + 2750)
+#define RC_STATLIN_STR              (RC_BASE + 2850)
+#define RC_COMMON_CORE              (RC_BASE + 2950)
+#define RC_WIZARD                   (RC_BASE + 3050)
+#define RC_POPUPS                   (RC_BASE + 3150)
+#define RC_SHELLS                   (RC_BASE + 3250)
+#define RC_CFGITEMS                 (RC_BASE + 3350)
+#define RC_LINGU                    (RC_BASE + 3450)
+#define RC_ACCESS                   (RC_BASE + 3550)
+#define STR_POOLPARSTYLE            (RC_BASE + 3650)
+#define RC_UNDO                     (RC_BASE + 3750)
+#define RC_SMARTTAG                    (RC_BASE + 3950)  // SMARTTAGS
+#define RC_UNOCORE                  (RC_BASE + 4050)
+#define RC_ANNOTATION               (RC_BASE + 4150)
+#define RC_PAGEFRM                  (RC_BASE + 4250)
+
+/*--------------------------------------------------------------------
+    Beschreibung:   Bereiche ausspannen
+ --------------------------------------------------------------------*/
+
+// App-Verzeichnis
+#define RC_APP_BEGIN                RC_APP
+#define RC_APP_END                  (RC_APP_BEGIN + 199)
+
+// Dialog-Verzeichnis
+#define RC_DIALOG_BEGIN             RC_DIALOG
+#define RC_DIALOG_END               (RC_DIALOG_BEGIN + 99)
+
+// Editwin & Co
+#define RC_DOCVW_BEGIN              RC_DOCVW
+#define RC_DOCVW_END                (RC_DOCVW_BEGIN + 99)
+
+// Annotation
+#define RC_ANNOTATION_BEGIN             RC_ANNOTATION
+#define RC_ANNOTATION_END               (RC_ANNOTATION_BEGIN + 99)
+
+// Page frame
+#define RC_PAGEFRM_BEGIN            RC_PAGEFRM
+#define RC_PAGEFRM_END               (RC_PAGEFRM + 99)
+
+// SW/Web
+#define RC_WEB_BEGIN                RC_WEB
+#define RC_WEB_END                  (RC_WEB_BEGIN + 199)
+
+//Globaldocument
+#define RC_GLOBDOC_BEGIN            RC_GLOBDOC
+#define RC_GLOBDOC_END              (RC_GLOBDOC_BEGIN + 99)
+
+// UI-View
+#define RC_VIEW_BEGIN               RC_VIEW
+#define RC_VIEW_END                 (RC_VIEW_BEGIN + 99)
+
+// Zeichen Absatz Tab-Dialog
+#define RC_CHRDLG_BEGIN             RC_CHRDLG
+#define RC_CHRDLG_END               (RC_CHRDLG_BEGIN + 19)
+
+// Unsere Shell
+#define RC_WRTSH_BEGIN              RC_WRTSH
+#define RC_WRTSH_END                (RC_WRTSH_BEGIN + 49)
+
+// Verzeichnisse
+#define RC_INDEX_BEGIN              RC_INDEX
+#define RC_INDEX_END                (RC_INDEX + 99)
+
+//
+#define RC_RIBBAR_BEGIN             RC_RIBBAR
+#define RC_RIBBAR_END               (RC_RIBBAR_BEGIN + 79)
+
+// globale Ressourcen
+#define RC_GLOBALS_BEGIN            RC_GLOBALS
+#define RC_GLOBALS_END              (RC_GLOBALS_BEGIN + 120)
+
+// Format-Vorlagen
+#define RC_FMTUI_BEGIN              RC_FMTUI
+#define RC_FMTUI_END                (RC_FMTUI_BEGIN + 69)
+
+
+// Grafik Dialoge
+#define RC_GRFDLG_BEGIN             RC_GRFDLG
+#define RC_GRFDLG_END               (RC_GRFDLG_BEGIN + 99)
+
+// ????
+#define RC_FSTDLG_BEGIN             RC_FSTDLG
+#define RC_FSTDLG_END               (RC_FSTDLG_BEGIN + 99)
+
+// Rahmen Dialoge
+#define RC_FRMDLG_BEGIN             RC_FRMDLG
+#define RC_FRMDLG_END               (RC_FRMDLG_BEGIN + 99)
+
+// Feld Dialoge
+#define RC_FLDDLG_BEGIN             RC_FLDDLG
+#define RC_FLDDLG_END               (RC_FLDDLG_BEGIN + 149)
+
+// Utilities UI
+#define RC_UTLUI_BEGIN              RC_UTLUI
+#define RC_UTLUI_END                (RC_UTLUI + 99)
+
+// Utilities UI-Attribute
+#define RC_ATTR_BEGIN               RC_ATTR
+#define RC_ATTR_END                 (RC_ATTR + 99)
+
+// Tabellen
+#define RC_TABLE_BEGIN              RC_TABLE
+#define RC_TABLE_END                (RC_TABLE + 99)
+
+// Konfiguration
+#define RC_CONFIG_BEGIN             RC_CONFIG
+#define RC_CONFIG_END               (RC_CONFIG + 99)
+
+
+// Verschiedenes
+#define RC_MISC_BEGIN               RC_MISC
+#define RC_MISC_END                 (RC_MISC + 99)
+
+// DBMgr
+#define RC_DBUI_BEGIN               RC_DBUI
+#define RC_DBUI_END                 (RC_DBUI + 99)
+
+// Der Rest der Imp-Klassen
+#define RC_DOCHDL_BEGIN             RC_DOCHDL
+#define RC_DOCHDL_END               (RC_DOCHDL + 99)
+
+// Zeichenvorlagen
+#define RC_POOLCHRFMT_BEGIN         RC_POOLCHRFMT
+#define RC_POOLCHRFMT_END           (RC_POOLCHRFMT + 29)
+#define RC_POOLCHRFMT_HTML_BEGIN    RC_POOLHTMLCHRFMT
+#define RC_POOLCHRFMT_HTML_END      (RC_POOLHTMLCHRFMT+ 30)
+
+
+// Rahmenvorlagen
+#define RC_POOLFRMFMT_BEGIN         RC_POOLFRMFMT
+#define RC_POOLFRMFMT_END           (RC_POOLFRMFMT + 20)
+
+// Collections
+#define RC_POOLTXTCOLL_BEGIN        RC_POOLTXTCOLL
+
+#define RC_POOLCOLL_TEXT_BEGIN      RC_POOLTXTCOLL
+#define RC_POOLCOLL_TEXT_END        (RC_POOLTXTCOLL + 19)
+#define RC_POOLCOLL_LISTS_BEGIN     (RC_POOLTXTCOLL + 20)
+#define RC_POOLCOLL_LISTS_END       (RC_POOLTXTCOLL + 69)
+#define RC_POOLCOLL_EXTRA_BEGIN     (RC_POOLTXTCOLL + 70)
+#define RC_POOLCOLL_EXTRA_END       (RC_POOLTXTCOLL + 89)
+#define RC_POOLCOLL_REGISTER_BEGIN  (RC_POOLTXTCOLL + 90)
+#define RC_POOLCOLL_REGISTER_END    (RC_POOLTXTCOLL + 119)
+#define RC_POOLCOLL_DOC_BEGIN       (RC_POOLTXTCOLL + 130)
+#define RC_POOLCOLL_DOC_END         (RC_POOLTXTCOLL + 139)
+#define RC_POOLCOLL_HTML_BEGIN      (RC_POOLTXTCOLL + 140)
+#define RC_POOLCOLL_HTML_END        (RC_POOLTXTCOLL + 169)
+
+#define RC_POOLTXTCOLL_END          RC_POOLCOLL_HTML_END
+
+// Poolvorlagen Seite
+#define RC_POOLPAGEDESC_BEGIN       RC_POOLPAGEDESC
+#define RC_POOLPAGEDESC_END         (RC_POOLPAGEDESC + 10)
+
+// Poolvorlagen Numerierung
+#define RC_POOLNUMRULE_BEGIN        RC_POOLNUMRULE
+#define RC_POOLNUMRULE_END          (RC_POOLNUMRULE + 10)
+
+// Pooltemplate Paragraph
+#define STR_POOLPARSTYLE_BEGIN      STR_POOLPARSTYLE
+#define STR_POOLPARSTYLE_END        (STR_POOLPARSTYLE + 9)
+
+// Envelp-Verzeichnis
+#define RC_ENVELP_BEGIN             (RC_ENVELP     )
+#define RC_ENVELP_END               (RC_ENVELP + 99)
+
+// Statuszeile mit Laufbalken
+#define RC_STATLIN_STR_BEGIN        (RC_STATLIN_STR)
+#define RC_STATLIN_STR_END          (RC_STATLIN_STR + 49)
+
+// Gemeinsame Core-Strings
+#define RC_COMCORE_BEGIN            (RC_COMMON_CORE)
+#define RC_COMCORE_END              (RC_COMMON_CORE + 59)
+
+// Shell-Verzeichnis
+#define RC_SHELLS_BEGIN             RC_SHELLS
+#define RC_SHELLS_END               (RC_SHELLS + 99)
+
+// PopUpMenu's
+#define RC_POPUPS_BEGIN             RC_POPUPS
+#define RC_POPUPS_END               (RC_POPUPS + 99)
+
+// Strings fuer ConfigItems in div. Verzeichnissen
+#define RC_CFGITEMS_BEGIN           RC_CFGITEMS
+#define RC_CFGITEMS_END             (RC_CFGITEMS + 99)
+
+// Lingu
+#define RC_LINGU_BEGIN          RC_LINGU
+#define RC_LINGU_END                    (RC_LINGU + 99)
+
+// Accessibility
+#define RC_ACCESS_BEGIN             RC_ACCESS
+#define RC_ACCESS_END               (RC_ACCESS + 99)
+
+// Undos
+#define RC_UNDO_BEGIN               RC_UNDO
+#define RC_UNDO_END                 (RC_UNDO + 199)
+
+// SMARTTAGS
+// Smarttags
+#define RC_SMARTTAG_BEGIN                      RC_SMARTTAG
+#define RC_SMARTTAG_END                    (RC_SMARTTAG + 99)
+
+// unocore
+#define RC_UNOCORE_BEGIN            RC_UNOCORE
+#define RC_UNOCORE_END              (RC_UNOCORE + 10)
+
+#endif

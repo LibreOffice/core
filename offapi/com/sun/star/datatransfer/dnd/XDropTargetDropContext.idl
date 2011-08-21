@@ -1,0 +1,91 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_datatransfer_dnd_XDropTargetDropContext_idl__
+#define __com_sun_star_datatransfer_dnd_XDropTargetDropContext_idl__
+
+#include <com/sun/star/datatransfer/dnd/InvalidDNDOperationException.idl>
+#include <com/sun/star/uno/XInterface.idl>
+
+//=============================================================================
+
+module com { module sun { module star { module datatransfer { module dnd {
+
+//=============================================================================
+/** This interface is implemented by any drop target context object.
+
+    <p>A DropTargetContext is created whenever the logical cursor associated
+    with a Drag and Drop operation moves within the visible geometry of a
+    window associated with a DropTarget. </p>
+
+    <p>The drop target context provides the mechanism for a potential receiver
+    of a drop operation to provide the end user with the appropriate drag
+    under feedback and to effect the subsequent data transfer, if appropriate. </p>
+*/
+
+published interface XDropTargetDropContext : com::sun::star::uno::XInterface
+{
+    //-------------------------------------------------------------------------
+    /** Accept the Drop.
+
+        <p>This method should be called from the
+        <member scope="com::sun::star::datatransfer::dnd">XDropTargetListener::drop()</member>
+        method if the implementation wishes to accept the drop operation with the specified action.</p>
+
+        @param dragOperation
+        The operation accepted by the target.
+
+        @see DNDConstants
+        @see DropTargetDragEvent
+    */
+
+    [oneway] void acceptDrop( [in] byte dragOperation );
+
+    //-------------------------------------------------------------------------
+    /** Reject the drop as a result of examining the available
+        <type scope="com::sun::star::datatransfer">DataFlavor</type> types
+        received in the <member>XDropTargetListener::dragEnter()</member> method.
+    */
+
+    [oneway] void rejectDrop();
+
+    //-------------------------------------------------------------------------
+    /** Signals that the drop is completed and if it was successful or not.
+
+        @param success
+        A value of <TRUE/> means the drop completed successfully
+        <p>A value of <FALSE/> means the drop completed unsuccessfully.</p>
+    */
+
+    [oneway] void dropComplete( [in] boolean success );
+};
+
+//=============================================================================
+
+}; }; }; }; };
+
+#endif

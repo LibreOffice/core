@@ -1,0 +1,178 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_frame_XComponentLoader_idl__
+#define __com_sun_star_frame_XComponentLoader_idl__
+
+#include <com/sun/star/uno/XInterface.idl>
+#include <com/sun/star/lang/XComponent.idl>
+#include <com/sun/star/beans/PropertyValue.idl>
+#include <com/sun/star/io/IOException.idl>
+#include <com/sun/star/lang/IllegalArgumentException.idl>
+
+
+//=============================================================================
+
+module com {  module sun {  module star {  module frame {
+
+//=============================================================================
+/** this is a simple interface to load components by an URL into a
+    frame environment
+
+    @see Desktop
+    @see Frame
+    @see XFrame
+ */
+published interface XComponentLoader: com::sun::star::uno::XInterface
+{
+    //-------------------------------------------------------------------------
+    /** loads a component specified by an URL into the specified
+        new or existing frame.
+
+        @param URL
+            specifies the URL of the document to load
+
+            <p>
+            To create new documents, use "private:factory/scalc", "private:factory/swriter", etc.
+            Other special protocols (e.g. "slot:", ".uno") are not allowed and raise
+            an <type scope="com::sun::star::lang">IllegalArgumentException</type>.
+            </p>
+
+        @param TargetFrameName
+            specifies the name of the frame to view the document in
+
+            <p>
+            If a frame with the specified name already exists, it is used, otherwise it
+            is created. There exist some special targets which never can be used
+            as real frame names:
+            <table border=1>
+                <tr>
+                    <td><strong>"_blank"</strong></td>
+                    <td>always creates a new frame</td>
+                </tr>
+                <tr>
+                    <td><strong>"_default"</strong></td>
+                    <td>special UI functionality<br>(e.g. detecting of already loaded documents, using of empty frames of creating of new top frames as fallback)</td>
+                </tr>
+                <tr>
+                    <td><strong>"_self", ""(!)</strong></td>
+                    <td>means frame himself</td>
+                </tr>
+                <tr>
+                    <td><strong>"_parent"</strong></td>
+                    <td>address direct parent of frame</td>
+                </tr>
+                <tr>
+                    <td><strong>"_top"</strong></td>
+                    <td>indicates top frame of current path in tree</td>
+                </tr>
+                <tr>
+                    <td><strong>"_beamer"</strong></td>
+                    <td>means special sub frame</td>
+                </tr>
+            </table>
+
+        @param SearchFlags
+            use the values of <type>FrameSearchFlag</type> to specify
+            how to find the specified <var>TargetFrameName</var>
+
+            <p>
+            Note: These flags are optional ones and will be used for non special
+            target names only.
+            </p>
+
+        @param Arguments
+            these arguments specify component or filter specific behavior
+
+            <p>
+            For example, "ReadOnly" with a boolean value specifies whether
+            the document is opened read-only. "FilterName" specifies the
+            component type to create and the filter to use, for example:
+            "Text - CSV". For more information see
+            <type scope="com::sun::star::document">MediaDescriptor</type>.
+            </p>
+
+        @return
+            a <type scope="com::sun::star::lang">XComponent</type> for successfully loaded
+            documents or
+            <br>
+            <NULL/>if it failed
+
+            <p>
+            This interface is a generic one and can be used to start further requests on
+            loaded document or control the lifetime of it (means dispose() it after using).
+            The real document service behind this interface can be one of follow three ones:
+            <ul>
+                <li>
+                    <type scope="com::sun::star::awt">XWindow</type> for simple components<br/>
+                    Should be used for viewable components only. It is not allowed to dispose
+                    it after use directly, because the frame containing the component is its owner.
+                    Because the frame object is not accessible through the interface too,
+                    only an interacting user can do this by closing the frame's window.
+                </li>
+                <li>
+                    <type>XController</type> for richer components<br/>
+                    Should be used for real editable components which doesn't need a model.
+                    It is not allowed to dispose it after use directly, because the frame
+                    containing the component is its owner. Here the object can be disposed
+                    by disposing the frame, that the <member>XController::getFrame()</member>
+                    method of the controller returns. But for visible components the controller
+                    should be asked for permission by calling <member>XController::suspend()</member> before.
+                </li>
+                <li>
+                    <type>XModel</type> for full featured components<br/>
+                    A model that in general can be shared between several view/controller pairs,
+                    does not have an explicit owner. Every view and also the component that
+                    loaded the document may consider itself as an owner.
+                    Simply calling <method scope="com::sun::star::lang">XComponent::dispose</method> on this model may
+                    cause problems, if some members of the "owner community" are currently
+                    busy working on the model. These problems are handled by explicit closing
+                    negotiations through the interface <type scope="com::sun::star::util">XCloseable</type>.
+                    Direct dispose of the model is allowed only, if this special interface doesn't exist.
+                </li>
+            </ul>
+            </p>
+
+        @throws com::sun::star::io::IOException
+            when <var>URL</var> couldn't be found or was corrupt
+
+        @throws com::sun::star::lang::IllegalArgumentException
+            when given parameters doesn't perform the specification
+     */
+    com::sun::star::lang::XComponent loadComponentFromURL(
+        [in] string URL,
+        [in] string TargetFrameName,
+        [in] long SearchFlags,
+        [in] sequence<com::sun::star::beans::PropertyValue> Arguments)
+        raises( com::sun::star::io::IOException,
+                com::sun::star::lang::IllegalArgumentException );
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

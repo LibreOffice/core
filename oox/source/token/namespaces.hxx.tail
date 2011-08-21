@@ -1,0 +1,39 @@
+
+// ============================================================================
+
+const sal_Int32 TOKEN_MASK          = static_cast< sal_Int32 >( (1 << NMSP_SHIFT) - 1 );
+const sal_Int32 NMSP_MASK           = static_cast< sal_Int32 >( SAL_MAX_INT32 & ~TOKEN_MASK );
+
+/** Returns the raw token identifier without namespace of the passed token. */
+inline sal_Int32 getBaseToken( sal_Int32 nToken ) { return nToken & TOKEN_MASK; }
+
+/** Returns the namespace without token identifier of the passed token. */
+inline sal_Int32 getNamespace( sal_Int32 nToken ) { return nToken & NMSP_MASK; }
+
+
+// defines for tokens with specific namespaces
+#define OOX_TOKEN( namespace, token ) (::oox::NMSP_##namespace | ::oox::XML_##token)
+
+#define A_TOKEN( token )        OOX_TOKEN( dml, token )
+#define AX_TOKEN( token )       OOX_TOKEN( ax, token )
+#define C_TOKEN( token )        OOX_TOKEN( dmlChart, token )
+#define CDR_TOKEN( token )      OOX_TOKEN( dmlChartDr, token )
+#define DGM_TOKEN( token )      OOX_TOKEN( dmlDiagram, token )
+#define MCE_TOKEN( token )      OOX_TOKEN( mce, token)
+#define O_TOKEN( token )        OOX_TOKEN( vmlOffice, token )
+#define PC_TOKEN( token )       OOX_TOKEN( packageContentTypes, token )
+#define PPT_TOKEN( token )      OOX_TOKEN( ppt, token )
+#define PR_TOKEN( token )       OOX_TOKEN( packageRel, token )
+#define R_TOKEN( token )        OOX_TOKEN( officeRel, token )
+#define VML_TOKEN( token )      OOX_TOKEN( vml, token )
+#define VMLX_TOKEN( token )     OOX_TOKEN( vmlExcel, token )
+#define XDR_TOKEN( token )      OOX_TOKEN( dmlSpreadDr, token )
+#define XLS_TOKEN( token )      OOX_TOKEN( xls, token )
+#define XM_TOKEN( token )       OOX_TOKEN( xm, token )
+#define XML_TOKEN( token )      OOX_TOKEN( xml, token )
+
+// ============================================================================
+
+} // namespace oox
+
+#endif

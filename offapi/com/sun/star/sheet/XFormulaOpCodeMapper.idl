@@ -1,0 +1,146 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_sheet_XFormulaOpCodeMapper_idl__
+#define __com_sun_star_sheet_XFormulaOpCodeMapper_idl__
+
+#include <com/sun/star/sheet/FormulaOpCodeMapEntry.idl>
+#include <com/sun/star/lang/IllegalArgumentException.idl>
+
+//=============================================================================
+
+module com {  module sun {  module star {  module sheet {
+
+//=============================================================================
+
+/** gives access to spreadsheet compiler token interns.
+ */
+published interface XFormulaOpCodeMapper
+{
+    //-------------------------------------------------------------------------
+
+    /** OpCode value used for external Add-In functions.
+
+        <p>Needed to be able to identify which of the function names map to an
+        Add-In implementation where this OpCode is used in the returned
+        mapping and the programmatic name is available as additional
+        information.</p>
+     */
+    [attribute, readonly] long OpCodeExternal;
+
+    //-------------------------------------------------------------------------
+
+    /** OpCode value used for unknown functions.
+
+        <p>Used to identify which of the function names queried with
+        <member>getMappings</member> are unknown to the implementation.</p>
+     */
+    [attribute, readonly] long OpCodeUnknown;
+
+    //-------------------------------------------------------------------------
+
+    /** returns a sequence of tokens matching the input sequence of
+        strings in order.
+
+        @param Names
+            Sequence of names to be mapped. These can be function names,
+            operators, separators and other symbols the formula compiler
+            knows.
+
+        @param Language
+            Formula language to be used, one of <type>FormulaLanguage</type>
+            constants. If a constant unknown to the implementation is passed,
+            <type scope="com::sun::star::lang">IllegalArgumentException</type>
+            is thrown.
+
+        @returns
+            a sequence of <type>FormulaToken</type> matching the input
+            sequence in order.
+
+            <p>Each string element in parameter Names according to the formula
+            language in parameter Language is mapped to a <type>FormulaToken
+            </type> containing the internal OpCode used by the spreadsheet
+            application in <member>FormulaToken::OpCode</member> and by
+            contract maybe additional information in <member>
+            FormulaToken::Data</member>.</p>
+
+            <p>The order of the FormulaToken sequence returned matches the
+            input order of the string sequence.</p>
+
+            <p>An unknown Name string gets the OpCode value of <member>
+            OpCodeUnknown</member> assigned.</p>
+
+            <p>Additional information in <member>FormulaToken::Data</member>
+            is returned for:
+            <ul>
+            <li>Add-in names: the programmatic name. The OpCode value used
+            for add-ins can be queried with the <member>OpCodeExternal</member>
+            getter method.</li>
+            </ul></p>
+     */
+    sequence< FormulaToken > getMappings(
+            [in] sequence< string > Names,
+            [in] long Language )
+        raises( com::sun::star::lang::IllegalArgumentException );
+
+    //-------------------------------------------------------------------------
+
+    /** returns a sequence of map entries for all available elements of
+        a given formula language.
+
+        @param Language
+            Formula language to be used, one of <type>FormulaLanguage</type>
+            constants. If a constant unknown to the implementation is passed,
+            <type scope="com::sun::star::lang">IllegalArgumentException</type>
+            is thrown.
+
+        @param Groups
+            Group of mappings to be returned, a bit mask of <type>
+            FormulaMapGroup</type> constants.
+
+        @returns
+            Sequence of <type>FormulaOpCodeMapEntry</type>.
+
+            <p>Each element of the formula language in parameter Language is
+            mapped to a <type>FormulaToken</type> containing the internal
+            OpCode used by the spreadsheet application in <member>
+            FormulaToken::OpCode</member> and by contract maybe additional
+            information in <member>FormulaToken::Data</member>. See <member>
+            getMappings</member> for more details.</p>
+     */
+    sequence< FormulaOpCodeMapEntry > getAvailableMappings(
+            [in] long Language, [in] long Groups )
+        raises( com::sun::star::lang::IllegalArgumentException );
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif
+

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<oor:node xmlns:oor="http://openoffice.org/2001/registry"
+             xmlns:xs="http://www.w3.org/2001/XMLSchema"
+         oor:name="Addons" oor:package="org.openoffice.Office">
+<node oor:name="AddonUI">
+ <node oor:name="AddonMenu">
+  <node oor:name="org.openoffice.comp.pyuno.demo.HelloWorld" oor:op="replace">
+   <prop oor:name="URL" oor:type="xs:string">
+     <value>service:org.openoffice.comp.pyuno.demo.HelloWorld?insert</value>
+   </prop>
+   <prop oor:name="ImageIdentifier" oor:type="xs:string">
+    <value>private:image/3216</value>
+   </prop>
+   <prop oor:name="Title" oor:type="xs:string">
+   <value xml:lang="x-no-translate">Insert Hello World</value>
+   <value xml:lang="en-US">Insert Hello World</value>
+   </prop>
+  </node>
+ </node>
+</node>
+</oor:node>

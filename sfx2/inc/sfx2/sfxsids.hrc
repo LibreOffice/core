@@ -1,0 +1,1025 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef _SFXSIDS_HRC
+#define _SFXSIDS_HRC
+
+// include ---------------------------------------------------------------
+
+#include <svl/solar.hrc>
+#include <sfx2/cntids.hrc>
+#include <svl/memberid.hrc>
+
+// Please be careful:
+// Changing just one part here doesn't add new
+// docking windows automatically!
+//
+
+#define SID_DOCKWIN_0               SID_DOCKWIN_START
+#define SID_DOCKWIN_1               SID_DOCKWIN_START+1
+#define SID_DOCKWIN_2               SID_DOCKWIN_START+2
+#define SID_DOCKWIN_3               SID_DOCKWIN_START+3
+#define SID_DOCKWIN_4               SID_DOCKWIN_START+4
+#define SID_DOCKWIN_5               SID_DOCKWIN_START+5
+#define SID_DOCKWIN_6               SID_DOCKWIN_START+6
+#define SID_DOCKWIN_7               SID_DOCKWIN_START+7
+#define SID_DOCKWIN_8               SID_DOCKWIN_START+8
+#define SID_DOCKWIN_9               SID_DOCKWIN_START+9
+
+//=========================================================================
+
+#define SID_NONE                            0
+#define SID_UNKNOWN                         SID_SFX_START
+
+//-------------------------------------------------------------------------
+
+#define SID_STDTENPLATE_MENU_START          (SID_SFX_START + 3100)
+#define SID_STDTENPLATE_MENU_END            (SID_SFX_START + 3140)
+
+// default-ids for application
+#define SID_QUITAPP                         (SID_SFX_START + 300)
+#define SID_ABOUT                           (SID_SFX_START + 301)
+#define SID_SETUPPRINTER                    (SID_SFX_START + 302)
+#define SID_EXITANDRETURN                   (SID_SFX_START + 303)
+
+// SID_TITLE, this value below is given in chaos/cntids.hrc!!
+//#define SID_TITLE             (SID_SFX_START + 307)
+
+#define SID_CONTEXT                         (SID_SFX_START + 310)
+
+#define SID_PASTE_SPECIAL                   (SID_SFX_START + 311)
+#define SID_CLIPBOARD_FORMAT_ITEMS          (SID_SFX_START + 312)
+
+#define SID_VERSION_VISIBLE                 (SID_SFX_START + 313)
+#define SID_PASTE_UNFORMATTED               (SID_SFX_START + 314)
+#define SID_DIALOG_RETURN                   (SID_SFX_START + 318)
+#define SID_PRINTER_NOTFOUND_WARN           (SID_SFX_START + 320)
+#define SID_PRINTER_USETHREAD               (SID_SFX_START + 321)
+#define SID_PRINTER_NAME                    (SID_SFX_START + 322)
+#define SID_PRINTER_FORMATCHG_WARN          (SID_SFX_START + 323)
+#define SID_PRINTER_CHANGESTODOC            (SID_SFX_START + 324)
+#define SID_PRINTPREVIEW                    (SID_SFX_START + 325)
+
+#define SID_MAIL_SUBJECT                    (SID_SFX_START + 328)
+#define SID_MAIL_NOTIFY                     (SID_SFX_START + 330)
+#define SID_MAIL_SENDDOC                    (SID_SFX_START + 331)
+#define SID_MAIL_SENDDOCASPDF               (SID_SFX_START + 1672)
+
+#define SID_MAIL_RECIPIENT                  (SID_SFX_START + 334)
+#define SID_MAIL_TEXT                       (SID_SFX_START + 335)
+#define SID_MAIL_ATTACH                     (SID_SFX_START + 336)
+#define SID_MAIL_PRIORITY                   (SID_SFX_START + 337)
+
+#define SID_MAIL_ATTACH_FILE                (SID_SFX_START + 375)
+#define SID_MAIL_PREPAREEXPORT              (SID_SFX_START + 385)
+#define SID_MAIL_NEEDS_PREPAREEXPORT        (SID_SFX_START + 386)
+
+#define SID_MAIL_EXPORT_FINISHED            (SID_SFX_START + 388)
+#define SID_WEBHTML                         (SID_SFX_START + 393)
+#define SID_MAIL_SCROLLBODY_PAGEDOWN        (SID_SFX_START + 1588)
+
+#define SID_PROGRESS_STATUSBAR_CONTROL      (SID_SFX_START + 1597)
+
+#define SID_APPLICATION                     (SID_SFX_START + 340)
+#define SID_PROGNAME                        (SID_SFX_START + 341)
+#define SID_PROGFILENAME                    (SID_SFX_START + 342)
+#define SID_SELECTION                       (SID_SFX_START + 346)
+
+// 360-400 see SID_MAIL_...
+
+// default-ids for help
+#define SID_HELPONHELP                      (SID_SFX_START + 400)
+#define SID_HELPINDEX                       (SID_SFX_START + 401)
+#define SID_EXTENDEDHELP                    (SID_SFX_START + 402)
+#define SID_HELPBALLOONS                    (SID_SFX_START + 403)
+#define SID_HELPTIPS                        (SID_SFX_START + 404)
+#define SID_HELPMENU                        (SID_SFX_START + 410)
+#define SID_HELP_INDEX                      (SID_SFX_START + 411)
+#define SID_HELP_SEARCH                     (SID_SFX_START + 412)
+#define SID_HELP_ANNOTATE                   (SID_SFX_START + 413)
+#define SID_HELP_BOOKMARK                   (SID_SFX_START + 414)
+#define SID_HELP_DOWNLOAD                   (SID_SFX_START + 415)
+#define SID_HELP_START                      (SID_SFX_START + 416)
+#define SID_HELP_ZOOMIN                     (SID_SFX_START + 417)
+#define SID_HELP_ZOOMOUT                    (SID_SFX_START + 418)
+#define SID_HELP_HELPFILEBOX                (SID_SFX_START + 419)
+#define SID_HELP_HELPFILEBOX_SELECTED       (SID_SFX_START + 420)
+#define SID_SHOW_LICENSE                    (SID_SFX_START + 1683)
+#define SID_SHOW_CREDITS                    (SID_SFX_START + 1711)
+#define SID_HELP_TUTORIALS                  (SID_SFX_START + 1695)
+
+// default-ids for document
+#define SID_NEWDOC                          (SID_SFX_START + 500)
+#define SID_OPENDOC                         (SID_SFX_START + 501)
+#define SID_OPENURL                         (SID_SFX_START + 596)
+#define SID_SAVEASURL                       (SID_SFX_START + 643)
+#define SID_JUMPTOMARK                      (SID_SFX_START + 598)
+#define SID_OPENTEMPLATE                    (SID_SFX_START + 594)
+#define SID_SAVEASDOC                       (SID_SFX_START + 502)
+#define SID_CLOSING                         (SID_SFX_START +1539)
+#define SID_CLOSEDOC                        (SID_SFX_START + 503)
+#define SID_CLOSEDOCS                       (SID_SFX_START + 595)
+#define SID_CLOSEDOC_SAVE                   (SID_SFX_START +   1)
+#define SID_CLOSEDOC_FILENAME               (SID_SFX_START +   2)
+#define SID_PRINTDOC                        (SID_SFX_START + 504)
+#define SID_PRINT_FIRST_PAGE                (SID_SFX_START +   1)
+#define SID_PRINT_LAST_PAGE                 (SID_SFX_START +   2)
+#define SID_PRINT_COPIES                    (SID_SFX_START +   3)
+#define SID_PRINT_PAGES                     (SID_SFX_START +1589)
+#define SID_PRINT_COLLATE                   (SID_SFX_START +1590)
+#define SID_PRINT_SORT                      (SID_SFX_START +1591)
+#define SID_SAVEDOC                         (SID_SFX_START + 505)
+#define SID_UPDATEDOC                       (SID_SFX_START + 506)
+#define SID_FILE_NAME                       (SID_SFX_START + 507)
+#define SID_DOCINFO_TITLE                   (SID_SFX_START + 557)
+#define SID_FILE_FILTEROPTIONS              (SID_SFX_START + 527)
+#define SID_RELOAD                          (SID_SFX_START + 508)
+#define SID_PRINTDOCDIRECT                  (SID_SFX_START + 509)
+#define SID_PICKLIST                        (SID_SFX_START + 510)
+#define SID_ATTR_XWINDOW                    (SID_SFX_START + 777)
+#define SID_PLUGIN_MODE                     (SID_SFX_START + 827)
+#define SID_EXPORTDOC                       (SID_SFX_START + 829)
+#define SID_EXPORTDOCASPDF                  (SID_SFX_START + 1673)
+#define SID_DIRECTEXPORTDOCASPDF            (SID_SFX_START + 1674)
+#define SID_UPDATEDOCMODE                   (SID_SFX_START + 1668)
+
+#define SID_FORCERELOAD                     (SID_SFX_START + 1502)
+#define SID_FILE_DIALOG                     (SID_SFX_START + 304)
+#define SID_PATH                            (SID_SFX_START + 308)
+#define SID_SAVEDOCS                        (SID_SFX_START + 309)
+#define SID_STANDARD_DIR                    (SID_SFX_START + 450)
+#define SID_BLACK_LIST                      (SID_SFX_START + 451)
+
+// browse-ids
+#define SID_BROWSE_FORWARD                  (SID_SFX_START + 1300)
+#define SID_BROWSE_BACKWARD                 (SID_SFX_START + 1301)
+#define SID_BROWSE_HOME                     (SID_SFX_START + 1303)
+#define SID_CREATELINK                      (SID_SFX_START + 1309)
+#define SID_BOOKMARK_TITLE                  (SID_SFX_START + 1310)
+#define SID_BOOKMARK_URL                    (SID_SFX_START + 1311)
+#define SID_EDITDOC                         (SID_SFX_START + 1312)
+#define SID_BROWSER_MODE                    (SID_SFX_START + 1313)
+#define SID_PLUGINS_ACTIVE                  (SID_SFX_START + 1314)
+#define SID_BROWSER                         (SID_SFX_START + 1318)
+#define SID_MACROEXECMODE                   (SID_SFX_START + 1319)
+
+// The Id value is given in chaos/cntids.hrc!!
+//#define SID_INTERNET_ONLINE       (SID_SFX_START + 1370)
+
+#define SID_FILTER_DATA                     (SID_SFX_START + 1375)
+
+#define SID_EXPLORER_FILEPROPS_START        (SID_SFX_START + 1390)
+#define SID_EXPLORER_FILEPROPS_END          (SID_SFX_START + 1399)
+
+#define ID_FILETP_START                     SID_EXPLORER_FILEPROPS_START
+#define ID_FILETP_READONLY                      (ID_FILETP_START + 0)
+#define ID_FILETP_TITLE                     (ID_FILETP_START + 1)
+
+#define SID_EXPLORER_PROPS_START            (SID_SFX_START + 1410)
+#define SID_EXPLORER_PROPS_END              (SID_SFX_START + 1499)
+
+#define SID_AUTOLOAD                        (SID_SFX_START + 1509)
+#define SID_FILLFRAME                       (SID_SFX_START + 1516)
+#define SID_BASEURL                         (SID_SFX_START + 1518)
+#define SID_TEMPLATE                        (SID_SFX_START + 1519)
+
+#define SID_CONTENTTYPE                     (SID_SFX_START + 1541)
+
+#define SID_SAVETO                          (SID_SFX_START + 1546)
+
+#define SID_CREATE_BASICOBJECT              (SID_SFX_START + 1555)
+#define SID_DELETE_BASICOBJECT              (SID_SFX_START + 1556)
+
+//#define SID_EXPLORER_CREATEPROJECT    (SID_SFX_START + 1567)
+
+#define SID_UPDATE_VERSION                  (SID_SFX_START + 1568)
+#define SID_BUILD_VERSION                   (SID_SFX_START + 1569)
+
+#define SID_VERSION                         (SID_SFX_START + 1583)
+
+#define SID_DOCUMENT_COMPARE                (SID_SFX_START + 1586)
+#define SID_DOCUMENT_MERGE                  (SID_SFX_START + 1587)
+
+#define SID_OFFICE_PLK                      (SID_SFX_START + 1601)
+#define SID_OFFICE_PALK                     (SID_SFX_START + 1604)
+#define SID_CHECK_KEY                       (SID_SFX_START + 1605)
+#define SID_OFFICE_PRIVATE_USE                  (SID_SFX_START + 1606)
+#define SID_OFFICE_COMMERCIAL_USE               (SID_SFX_START + 1607)
+#define SID_OFFICE_CUSTOMERNUMBER               (SID_SFX_START + 1608)
+#define SID_OFFICE_INVALIDATE_TITLE         (SID_SFX_START + 1609)
+#define SID_OFFICE_CHECK_PLZ                (SID_SFX_START + 1610)
+#define SID_INTERNET_SEARCH                 (SID_SFX_START + 1611)
+#define SID_CURRENT_URL                     (SID_SFX_START + 1613)
+#define SID_FSETHTMLPARSER                  (SID_SFX_START + 1614)
+#define SID_NEXTWINDOW                      (SID_SFX_START + 1615)
+#define SID_PREVWINDOW                      (SID_SFX_START + 1616)
+#define SID_OLD_PALK                        (SID_SFX_START + 1620)
+#define SID_GROUPVIEW                       (SID_SFX_START + 1621)
+#define SID_NEW_MSG_PARENT                  (SID_SFX_START + 1622)
+
+
+#define SID_PGP_ENCODE                          (SID_SFX_START + 1625)
+#define SID_PGP_DECODE                          (SID_SFX_START + 1626)
+#define SID_TIPWINDOW                           (SID_SFX_START + 1632)
+#define SID_CHARSET                         (SID_SFX_START + 1633)
+#define SID_OVERWRITE                           (SID_SFX_START + 1634)
+#define SID_RENAME                          (SID_SFX_START + 1653)
+#define SID_PARTWIN                         (SID_SFX_START + 1640)
+#define SID_CRASH                           (SID_SFX_START + 1645)
+#define SID_FAIL_ON_WARNING                 (SID_SFX_START + 1646)
+#define SID_MAIL_CHILDWIN                   (SID_SFX_START + 1647)
+#define SID_INPUTSTREAM                     (SID_SFX_START + 1648)
+#define SID_LOGOUT                          (SID_SFX_START + 1652)
+#define SID_JUMPMARK                        (SID_SFX_START + 1654)
+#define SID_BROWSE                          (SID_SFX_START + 1658)
+    // FREE (was: SID_BACKTOWEBTOP)
+#define SID_SEGMENTSIZE                     (SID_SFX_START + 1659)
+#define SID_VIEW_DATA_SOURCE_BROWSER        (SID_SFX_START + 1660)
+#define SID_TOGGLE_MENUBAR                  (SID_SFX_START + 1661)
+#define SID_UNPACK                          (SID_SFX_START + 1662)
+// (SID_SFX_START + 1663) used further down
+#define SID_MACRO_WARNING                   (SID_SFX_START + 1664)
+#define SID_MACRO_CONFIRMATION              (SID_SFX_START + 1665)
+#define SID_OUTPUTSTREAM                    (SID_SFX_START + 1666)
+#define SID_IMAGE_ORIENTATION               (SID_SFX_START + 1667)
+
+#define SID_SAVE_VERSION_ON_CLOSE           (SID_SFX_START + 1670)
+#define SID_STOP_RECORDING                  (SID_SFX_START + 1671)
+#define SID_INTERACTIONHANDLER              (SID_SFX_START + 1675)
+#define SID_OPENHYPERLINK                   (SID_SFX_START + 1676)
+#define SID_ADDONLIST                       (SID_SFX_START + 1677)
+#define SID_ADDONS                          (SID_SFX_START + 1678)
+#define SID_CONTENT                         (SID_SFX_START + 1679)
+#define SID_SHOW_IME_STATUS_WINDOW          (SID_SFX_START + 1680)
+#define SID_UPDATE_CONFIG                   (SID_SFX_START + 1681)
+#define SID_VIEWONLY                        (SID_SFX_START + 1682)
+#define SID_REPAIRPACKAGE                       (SID_SFX_START + 1683)
+#define SID_ADDONHELP                       (SID_SFX_START + 1684)
+#define SID_OBJECTSHELL                     (SID_SFX_START + 1685)
+#define SID_MINIMIZED                       (SID_SFX_START + 1687)
+#define SID_COMPONENTDATA                   (SID_SFX_START + 1688)
+#define SID_COMPONENTCONTEXT                (SID_SFX_START + 1689)
+#define SID_SCRIPTORGANIZER                 (SID_SFX_START + 1690)
+#define SID_MACROORGANIZER                  (SID_SFX_START + 1691)
+#define SID_RUNMACRO                        (SID_SFX_START + 1692)
+#define SID_AVMEDIA_TOOLBOX                 (SID_SFX_START + 1693)
+#define SID_AVMEDIA_PLAYER                  (SID_SFX_START + 1694)
+#define SID_INSERT_AVMEDIA                  (SID_SFX_START + 1696)
+#define SID_RECENTFILELIST                  (SID_SFX_START + 1697)
+#define SID_AVAILABLE_TOOLBARS              (SID_SFX_START + 1698)
+#define SID_STREAM                          (SID_SFX_START + 1699)
+#define SID_DOC_BASEURL                     (SID_SFX_START + 1700)
+#define SID_DOC_HIERARCHICALNAME            (SID_SFX_START + 1701)
+#define SID_TERMINATE_INPLACEACTIVATION     (SID_SFX_START + 1702)
+#define SID_APPLY_STYLE                     (SID_SFX_START + 1703)
+#define SID_MACRO_SIGNATURE                 (SID_SFX_START + 1704)
+#define SID_ATTR_WARNALIENFORMAT            (SID_SFX_START + 1705)
+#define SID_COPY_STREAM_IF_POSSIBLE         (SID_SFX_START + 1706)
+#define SID_MAIL_SENDDOCASFORMAT            (SID_SFX_START + 1707)
+#define SID_MAIL_SENDDOCASMS                (SID_SFX_START + 1708)
+#define SID_MAIL_SENDDOCASOOO               (SID_SFX_START + 1709)
+#define SID_NOAUTOSAVE                      (SID_SFX_START + 1711)
+#define SID_PRINT_SELECTEDSHEET             (SID_SFX_START + 1712)
+#define SID_OPTIONS_PAGEURL                 (SID_SFX_START + 1713)
+#define SID_MORE_DICTIONARIES               (SID_SFX_START + 1714)
+#define SID_ACTIVATE_STYLE_APPLY            (SID_SFX_START + 1715)
+#define SID_FONT_NAME                       (SID_SFX_START + 1716)
+#define SID_DEFAULTFILENAME                 (SID_SFX_START + 1717)
+#define SID_MODIFYPASSWORDINFO              (SID_SFX_START + 1718)
+#define SID_RECOMMENDREADONLY               (SID_SFX_START + 1719)
+#define SID_SUGGESTEDSAVEASDIR              (SID_SFX_START + 1720)
+#define SID_SUGGESTEDSAVEASNAME             (SID_SFX_START + 1721)
+#define SID_ENCRYPTIONDATA                  (SID_SFX_START + 1722)
+#define SID_PASSWORDINTERACTION             (SID_SFX_START + 1723)
+#define SID_SFX_free_START                  (SID_SFX_START + 1724)
+#define SID_SFX_free_END                    (SID_SFX_START + 3999)
+
+#define SID_OPEN_NEW_VIEW                   (SID_SFX_START + 520)
+    // FREE, was SID_VIEW_ZOOM_MODE
+    // FREE, was SID_VIEW_POS_SIZE
+#define SID_VIEW_ID                         (SID_SFX_START + 523)
+    // FREE, was SID_USER_DATA
+#define SID_VIEW_DATA                       (SID_SFX_START + 1582)
+#define SID_SILENT                          (SID_SFX_START + 528)
+#define SID_HIDDEN                          (SID_SFX_START + 534)
+#define SID_PREVIEW                         (SID_SFX_START + 1404)
+
+#define SID_FOCUSURLBOX                     (SID_SFX_START + 1406)
+
+#define SID_ACTIVATE                        (SID_SFX_START + 525)
+#define SID_PRINTOUT                        (SID_SFX_START + 526)
+
+#define SID_FILE_LONGNAME                   (SID_SFX_START + 529)
+#define SID_FILTER_NAME                     (SID_SFX_START + 530)
+#define SID_DOC_SALVAGE                     (SID_SFX_START + 531)
+#define SID_INSERTDOC                       (SID_SFX_START + 532)
+#define SID_TYPE_NAME                       (SID_SFX_START + 533)
+
+#define SID_DOC_READONLY                    (SID_SFX_START + 590)
+#define SID_DOC_MODIFIED                    (SID_SFX_START + 584)
+#define SID_DOC_LOADING                     (SID_SFX_START + 585)
+#define SID_IMG_LOADING                     (SID_SFX_START + 586)
+#define SID_DOC_SAVED                       (SID_SFX_START + 599)
+#define SID_DOC_MODAL                       (SID_SFX_START + 655)
+#define SID_DOCINFO                         (SID_SFX_START + 535)
+#define SID_DOCINFO_LOAD                    (SID_SFX_START + 536)
+#define SID_DOCINFO_SAVE                    (SID_SFX_START + 537)
+#define SID_DOCINFO_KEYWORDS                (SID_SFX_START + 591)
+#define SID_DOCINFO_COMMENTS                (SID_SFX_START + 592)
+#define SID_DOCINFO_AUTHOR                  (SID_SFX_START + 593)
+#define SID_HAS_PASSWORD                    (SID_SFX_START + 536)
+#define SID_NEWDOCDIRECT                    (SID_SFX_START + 537)
+#define SID_DOCVIEW                         (SID_SFX_START + 597)
+#define SID_DOCFRAME                        (SID_SFX_START + 598)
+#define SID_ONLYSUBFRAMES                   (SID_SFX_START + 690)
+#define SID_TARGETNAME                      (SID_SFX_START + 560)
+#define SID_ORIGURL                         (SID_SFX_START + 644)
+#define SID_POSTSTRING                      (SID_SFX_START + 645)
+#define SID_POSTDATA                        (SID_SFX_START + 1536)
+#define SID_DONELINK                        (SID_SFX_START + 646)
+#define SID_REFERER                         (SID_SFX_START + 654)
+#define SID_EXPLORER_CONTENT                (SID_SFX_START + 656)
+#define SID_MODIFIER                        (SID_SFX_START + 669)
+#define SID_SETOPTIONS                      (SID_SFX_START + 670)
+#define SID_OPENCOPY                        (SID_SFX_START + 674)
+#define SID_SOURCEVIEW                      (SID_SFX_START + 675)
+#define SID_DOC_STARTPRESENTATION           (SID_SFX_START + 695)
+#define SID_DDE_RECONNECT_ONLOAD            (SID_SFX_START + 696)
+
+#define SID_PLUGFRAMEARG                    (SID_SFX_START + 666)
+#define SID_NEWWINDOWFOREDIT                (SID_SFX_START + 667)
+#define SID_FRAMETITLE                      (SID_SFX_START + 668)
+
+#define SID_DOCTEMPLATE                     (SID_SFX_START + 538)
+#define SID_JSCALL                          (SID_SFX_START + 1382)
+#define SID_AUTOPILOTMENU                   (SID_SFX_START + 1381)
+
+// Floating Window Template
+#define SID_STYLE_DESIGNER                  (SID_SFX_START + 539)
+
+// Organizer
+#define SID_ORGANIZER                       (SID_SFX_START + 540)
+#define SID_TEMPLATE_ADDRESSBOKSOURCE       (SID_SFX_START + 1655)
+
+// Ruby dialog
+#define SID_RUBY_DIALOG                     (SID_SFX_START + 1656)
+
+#define SID_STYLE_FAMILY_START              (SID_SFX_START + 541)
+#define SID_STYLE_FAMILY1                   (SID_STYLE_FAMILY_START)
+#define SID_STYLE_FAMILY2                   (SID_STYLE_FAMILY_START + 1)
+#define SID_STYLE_FAMILY3                   (SID_STYLE_FAMILY_START + 2)
+#define SID_STYLE_FAMILY4                   (SID_STYLE_FAMILY_START + 3)
+#define SID_STYLE_FAMILY5                   (SID_STYLE_FAMILY_START + 4)
+
+#define SID_ENABLE_METAFILEPRINT            (SID_SFX_START + 543)
+#define SID_FILEDIALOG_EXTENSION            (SID_SFX_START + 544)
+
+#define SID_STYLE_NEW                       (SID_SFX_START + 549)
+#define SID_STYLE_EDIT                      (SID_SFX_START + 550)
+#define SID_STYLE_DELETE                    (SID_SFX_START + 551)
+#define SID_STYLE_APPLY                     (SID_SFX_START + 552)
+#define SID_STYLE_FAMILY                    (SID_SFX_START + 553)
+#define SID_STYLE_FAMILYNAME                (SID_SFX_START + 566)
+#define SID_STYLE_WATERCAN                  (SID_SFX_START + 554)
+#define SID_STYLE_NEW_BY_EXAMPLE            (SID_SFX_START + 555)
+#define SID_STYLE_UPDATE_BY_EXAMPLE         (SID_SFX_START + 556)
+#define SID_STYLE_DRAGHIERARCHIE            (SID_SFX_START + 565)
+#define SID_STYLE_DISABLEDRAGHIERARCHIE     (SID_SFX_START + 567)
+#define SID_STYLE_DISABLENEW                (SID_SFX_START + 568)
+#define SID_STYLE_MASK                      (SID_SFX_START + 562)
+#define SID_STYLE_NAME                      (SID_SFX_START + 564)
+#define SID_STYLE_UPD_BY_EX_NAME            (SID_SFX_START + 1585)
+#define SID_STYLE_REFERENCE                 (SID_SFX_START + 1602)
+
+#define SID_TEMPLATE_NAME                   (SID_SFX_START + 660)
+#define SID_TEMPLATE_REGION                 (SID_SFX_START + 661)
+#define SID_TEMPLATE_REGIONNAME             (SID_SFX_START + 662)
+#define SID_TEMPLATE_LOAD                   (SID_SFX_START + 663)
+#define SID_LOAD_LAYOUT                     (SID_SFX_START + 664)
+
+#define SID_WRITE_REGFILE                   (SID_SFX_START + 560)
+#define SID_INSERT_OBJECT                   (SID_SFX_START + 561)
+#define SID_INSERT_FLOATINGFRAME            (SID_SFX_START + 563)
+#define SID_INSERT_OBJFROMFILE              (SID_SFX_START + 671)
+#define SID_INSERT_PLUGIN                   (SID_SFX_START + 672)
+#define SID_INSERT_SOUND                    (SID_SFX_START + 676)
+#define SID_INSERT_VIDEO                    (SID_SFX_START + 677)
+
+#define SID_HYPERLINK_DIALOG                (SID_SFX_START + 678)
+
+#define SID_ACTIVEDOCUMENT                  (SID_SFX_START + 570)
+#define SID_DEFAULTFILEPATH                 (SID_SFX_START + 571)
+#define SID_DOCUMENTLIST                    (SID_SFX_START + 572)
+#define SID_STYLE_CATALOG                   (SID_SFX_START + 573)
+#define SID_ACTIVEWINDOW                    (SID_SFX_START + 574)
+#define SID_OBJECT                          (SID_SFX_START + 575)
+#define SID_THISDOCUMENT                    (SID_SFX_START + 576)
+#define SID_THISWINDOW                      (SID_SFX_START + 577)
+#define SID_TOPWINDOW                       (SID_SFX_START + 589)
+#define SID_ACTIVEMODULE                    (SID_SFX_START + 587)
+#define SID_DOCUMENTS                       (SID_SFX_START + 578)
+#define SID_WINDOWS                         (SID_SFX_START + 579)
+
+// Doc-Properties
+#define SID_DOCNAME                         (SID_SFX_START + 580)
+#define SID_DOCFULLNAME                     (SID_SFX_START + 581)
+#define SID_DOCPATH                         (SID_SFX_START + 582)
+#define SID_DOCTITLE                        (SID_SFX_START + 583)
+
+#define SID_DOCUMENT                        (SID_SFX_START + 588)
+
+// default-ids for windows
+
+#define SID_CLOSEWINS                       (SID_SFX_START + 605)
+#define SID_MDIWINDOWLIST                   (SID_SFX_START + 610)
+#define SID_MDIWINDOW1                      (SID_SFX_START + 611)
+#define SID_MDIWINDOW2                      (SID_SFX_START + 612)
+#define SID_MDIWINDOW3                      (SID_SFX_START + 613)
+#define SID_MDIWINDOW4                      (SID_SFX_START + 614)
+#define SID_MDIWINDOW5                      (SID_SFX_START + 615)
+#define SID_MDIWINDOW6                      (SID_SFX_START + 616)
+#define SID_MDIWINDOW7                      (SID_SFX_START + 617)
+#define SID_MDIWINDOW8                      (SID_SFX_START + 618)
+#define SID_MDIWINDOW9                      (SID_SFX_START + 619)
+#define SID_MDIWINDOW_END                   SID_MDIWINDOW9
+#define SID_NEWWINDOW                       (SID_SFX_START + 620)
+#define SID_CLOSEWIN                        (SID_SFX_START + 621)
+#define SID_OPTIMIZEWIN                     (SID_SFX_START + 622)
+#define SID_VIEWSHELL                       (SID_SFX_START + 623)
+#define SID_WIN_MINIMIZED                   (SID_SFX_START + 625)
+#define SID_WIN_MAXIMIZED                   (SID_SFX_START + 626)
+#define SID_WIN_FULLSCREEN                  (SID_SFX_START + 627)
+    // FREE, was SID_WIN_POSSIZE
+#define SID_WIN_VISIBLE                     (SID_SFX_START + 629)
+
+#define SID_VIEWSHELL0                      (SID_SFX_START + 630)
+#define SID_VIEWSHELL1                      (SID_SFX_START + 631)
+#define SID_VIEWSHELL2                      (SID_SFX_START + 632)
+#define SID_VIEWSHELL3                      (SID_SFX_START + 633)
+#define SID_VIEWSHELL4                      (SID_SFX_START + 634)
+#define SID_RESTOREWIN                      (SID_SFX_START + 635)
+
+#define SID_CAPTION                         (SID_SFX_START + 641)
+#define SID_STATUSBARTEXT                   (SID_SFX_START + 642)
+
+// id for thesaurs entry in context menu
+#define SID_THES                            (SID_SFX_START + 698)
+
+// default-ids for editing, cursor travellung and selection
+#define SID_REDO                            (SID_SFX_START + 700)
+#define SID_UNDO                            (SID_SFX_START + 701)
+#define SID_REPEAT                          (SID_SFX_START + 702)
+#define SID_CLEARHISTORY                    (SID_SFX_START + 703)
+#define SID_CUT                             (SID_SFX_START + 710)
+#define SID_COPY                            (SID_SFX_START + 711)
+#define SID_PASTE                           (SID_SFX_START + 712)
+
+// Value below given in chaos/cntids.hrc!!!
+//#define SID_DELETE                (SID_SFX_START + 713)
+
+#define SID_BACKSPACE                       (SID_SFX_START + 714)
+#define SID_FORMATPAINTBRUSH                (SID_SFX_START + 715)
+#define SID_SELECT                          (SID_SFX_START + 720)
+#define SID_EXPANDSELECTION                 (SID_SFX_START + 721)
+#define SID_ENHANCESELECTION                (SID_SFX_START + 722)
+#define SID_SELECTALL                       (SID_SFX_START + 723)
+#define SID_SELECTDOWN                      (SID_SFX_START + 724)
+#define SID_SELECTUP                        (SID_SFX_START + 725)
+#define SID_CURSORDOWN                      (SID_SFX_START + 731)
+#define SID_CURSORUP                        (SID_SFX_START + 732)
+#define SID_CURSORLEFT                      (SID_SFX_START + 733)
+#define SID_CURSORRIGHT                     (SID_SFX_START + 734)
+#define SID_CURSORPAGEDOWN                  (SID_SFX_START + 735)
+#define SID_CURSORPAGEUP                    (SID_SFX_START + 736)
+#define SID_CURSORPAGERIGHT                 (SID_SFX_START + 737)
+#define SID_CURSORPAGELEFT                  (SID_SFX_START + 738)
+#define SID_CURSORENDOFFILE                 (SID_SFX_START + 741)
+#define SID_CURSORTOPOFFILE                 (SID_SFX_START + 742)
+#define SID_CURSORENDOFSCREEN               (SID_SFX_START + 743)
+#define SID_CURSORTOPOFSCREEN               (SID_SFX_START + 744)
+#define SID_CURSORHOME                      (SID_SFX_START + 745)
+#define SID_CURSOREND                       (SID_SFX_START + 746)
+#define SID_FORMATMENU                      (SID_SFX_START + 780)
+#define SID_OBJECTMENU0                     SID_FORMATMENU
+#define SID_OBJECTMENU1                     (SID_SFX_START + 781)
+#define SID_OBJECTMENU2                     (SID_SFX_START + 782)
+#define SID_OBJECTMENU3                     (SID_SFX_START + 783)
+#define SID_OBJECTMENU_LAST                 SID_OBJECTMENU3
+#define SID_FORMATMENUSTATE                 (SID_SFX_START + 791)
+
+// default-ids for macros
+#define SID_RECORDING_FLOATWINDOW           (SID_SFX_START + 800)
+#define SID_RECORDMACRO                     (SID_SFX_START + 1669)
+    // FREE: SID_SFX_START + 801
+    // FREE: SID_SFX_START + 802
+    // FREE: SID_SFX_START + 803
+    // FREE: SID_SFX_START + 804
+    // FREE: SID_SFX_START + 805
+    // FREE: SID_SFX_START + 806
+    // FREE: SID_SFX_START + 807
+    // FREE: SID_SFX_START + 808
+    // FREE: SID_SFX_START + 809
+    // FREE: SID_SFX_START + 810
+#define SID_ASYNCHRON                       (SID_SFX_START + 811)
+
+// default-ids for configuration
+#define SID_RESTOREMENU                     (SID_SFX_START + 901)
+#define SID_RESTOREACCELS                   (SID_SFX_START + 902)
+#define SID_RESTORETOOLBOX                  (SID_SFX_START + 903)
+#define SID_CONFIG                          (SID_SFX_START + 904)
+#define SID_TOGGLECOMMONTASKBAR             (SID_SFX_START + 928)
+#define SID_TOGGLEINETBAR                   (SID_SFX_START + 928)
+#define SID_TOGGLEOBJECTBAR                 (SID_SFX_START + 905)
+#define SID_CONFIGTOOLBOX                   (SID_SFX_START + 906)
+#define SID_TOOLBOXOPTIONS                  (SID_SFX_START + 907)
+#define SID_TOGGLETOOLBAR                   (SID_SFX_START + 909)
+#define SID_CUSTOMIZETOOLBOX                (SID_SFX_START + 908)
+#define SID_TOGGLEFUNCTIONBAR               (SID_SFX_START + 910)
+#define SID_TOGGLEOPTIONBAR                 (SID_SFX_START + 911)
+#define SID_PREPTOGGLEFLOATMODE             (SID_SFX_START + 912)
+#define SID_TOGGLEFLOATMODE                 (SID_SFX_START + 913)
+#define SID_SETDOCKINGRECTS                 (SID_SFX_START + 914)
+#define SID_SETTOOLBOXLINES                 (SID_SFX_START + 915)
+#define SID_STYLETOOLBOXSYMBOL              (SID_SFX_START + 916)
+#define SID_STYLETOOLBOXTEXT                (SID_SFX_START + 917)
+#define SID_CONFIGITEMID                    (SID_SFX_START + 919)
+#define SID_MACROINFO                       (SID_SFX_START + 919)
+#define SID_TOGGLESTATUSBAR                 (SID_SFX_START + 920)
+#define SID_CONFIGSTATUSBAR                 (SID_SFX_START + 921)
+#define SID_CONFIGDOCKWIN                   (SID_SFX_START + 922)
+#define SID_TOGGLEMACROBAR                  (SID_SFX_START + 923)
+#define SID_CONFIGMENU                      (SID_SFX_START + 924)
+#define SID_CONFIGACCEL                     (SID_SFX_START + 925)
+#define SID_CONFIGEVENT                     (SID_SFX_START + 926)
+#define SID_CFGFILE                         (SID_SFX_START + 927)
+#define SID_SHOWPOPUPS                      (SID_SFX_START + 929)
+#define SID_TASKBAR                         (SID_SFX_START + 931)
+#define SID_AUTOHIDE                        (SID_SFX_START + 932)
+#define SID_TOGGLENAVBAR                    (SID_SFX_START + 1603)
+
+// Item-Id for the assinged event Tabpage
+#define SID_ATTR_MACROITEM                  (SID_SFX_START + 934)
+
+#define SID_SAVECONFIG                      (SID_SFX_START + 930)
+#define SID_LOADCONFIG                      (SID_SFX_START + 933)
+#define SID_OPTIONS                         (SID_SFX_START + 940)
+#define SID_BASICIDE                        (SID_SFX_START + 950)
+#define SID_BASICLOAD                       (SID_SFX_START + 951)
+#define SID_BASICSAVE                       (SID_SFX_START + 952)
+#define SID_BASICSAVEAS                     (SID_SFX_START + 953)
+#define SID_BASICCOMPILE                    (SID_SFX_START + 954)
+#define SID_BASICRUN                        (SID_SFX_START + 955)
+#define SID_BASICSTEPINTO                   (SID_SFX_START + 956)
+#define SID_BASICSTEPOVER                   (SID_SFX_START + 957)
+#define SID_BASICSTEPOUT                    (SID_SFX_START + 963)
+#define SID_BASICSTOP                       (SID_SFX_START + 958)
+#define SID_BASICCHOOSER                    (SID_SFX_START + 959)
+#define SID_GALLERY                         (SID_SFX_START + 960)
+#define SID_SEARCH_DLG                      (SID_SFX_START + 961)
+#define SID_SEARCH_QUIET                    (SID_SFX_START + 1684)
+#define SID_HELP_PI                         (SID_SFX_START + 962)
+#define SID_BASIC_ENABLED                   (SID_SFX_START + 964)
+#define SID_EXPORT_DIALOG                   (SID_SFX_START + 965)
+#define SID_IMPORT_DIALOG                   (SID_SFX_START + 966)
+
+#define SID_BASICBREAK                      (SID_SFX_START +1521)
+
+#define SID_OBJECTRESIZE                    (SID_SFX_START + 1000)
+#define SID_INSERT_TEXT                     (SID_SFX_START + 1001)
+
+#define SID_EVENTCONFIG                     (SID_SFX_START + 1101)
+#define SID_VERB_START                      (SID_SFX_START + 1100)
+#define SID_VERB_END                        (SID_SFX_START + 1121)
+
+#define SID_BROWSER_TASK                    (SID_MACRO_END + 22)
+
+#define SID_SAVESETTINGS                    (SID_SFX_START + 1200)
+#define SID_OPT_AUTOSAVE                    (SID_SFX_START + 1201)
+#define SID_OPT_AUTOSAVEINTERVAL            (SID_SFX_START + 1202)
+#define SID_OPT_AUTOSAVEQUERY               (SID_SFX_START + 1203)
+#define SID_OPT_BACKUP                      (SID_SFX_START + 1204)
+#define SID_OPT_GRAPHICSFORMAT              (SID_SFX_START + 1205)
+#define SID_OPT_SAVEDOCINFO                 (SID_SFX_START + 1206)
+#define SID_OPT_SAVEWORKINGSET              (SID_SFX_START + 1207)
+#define SID_OPT_SAVEWINDOWS                 (SID_SFX_START + 1208)
+#define SID_OPT_SAVEVIEW                    (SID_SFX_START + 1209)
+
+#define SID_PATHSETTINGS                    (SID_SFX_START + 1210)
+#define SID_OPT_AUTOTEXT_PATH               (SID_SFX_START + 1211)
+#define SID_OPT_BACKUP_PATH                 (SID_SFX_START + 1212)
+#define SID_OPT_BASIC_PATH                  (SID_SFX_START + 1213)
+#define SID_OPT_CONFIG_PATH                 (SID_SFX_START + 1214)
+#define SID_OPT_DATABASEQUERIES_PATH        (SID_SFX_START + 1215)
+#define SID_OPT_DICTIONARIES_PATH           (SID_SFX_START + 1216)
+#define SID_OPT_DOCMANAGERINI_PATH          (SID_SFX_START + 1217)
+#define SID_OPT_GRAPHICS_PATH               (SID_SFX_START + 1218)
+#define SID_OPT_MODULES_PATH                (SID_SFX_START + 1219)
+#define SID_OPT_PALLETS_PATH                (SID_SFX_START + 1220)
+#define SID_OPT_SUBINI_PATH                 (SID_SFX_START + 1221)
+#define SID_OPT_SYMBOLS_PATH                (SID_SFX_START + 1222)
+#define SID_OPT_TEMPLATES_PATH              (SID_SFX_START + 1223)
+#define SID_OPT_WORKING_PATH                (SID_SFX_START + 1224)
+
+#define SID_OPT_DESKTOP_PATH                (SID_SFX_START + 1558)
+#define SID_OPT_CACHE_PATH                  (SID_SFX_START + 1559)
+#define SID_OPT_HELP_PATH                   (SID_SFX_START + 1560)
+#define SID_OPT_BOOKMARKS_PATH              (SID_SFX_START + 1561)
+#define SID_OPT_GALLERY_PATH                (SID_SFX_START + 1562)
+#define SID_OPT_NEWDOC_PATH                     (SID_SFX_START + 1563)
+#define SID_OPT_AGENTS_PATH                 (SID_SFX_START + 1564)
+#define SID_OPT_AUTOPILOT_PATH              (SID_SFX_START + 1565)
+#define SID_OPT_EXPLORER_PATH               (SID_SFX_START + 1566)
+#define SID_OPT_TRASH_PATH                  (SID_SFX_START + 1557)
+
+#define SID_OPT_STORAGE_PATH                (SID_SFX_START + 1627)
+#define SID_OPT_STARTMENU_PATH              (SID_SFX_START + 1628)
+#define SID_OPT_DOWNLOAD_PATH               (SID_SFX_START + 1629)
+#define SID_OPT_QUICKSTART_PATH             (SID_SFX_START + 1630)
+#define SID_OPT_GROUP_PATH                  (SID_SFX_START + 1631)
+
+#define SID_OPT_PLUGINS_PATH                (SID_SFX_START + 1636)
+#define SID_OPT_FAVORITES_PATH              (SID_SFX_START + 1637)
+#define SID_OPT_FILTER_PATH                 (SID_SFX_START + 1638)
+#define SID_OPT_ADDINS_PATH                 (SID_SFX_START + 1639)
+#define SID_OPT_USERCONFIG_PATH             (SID_SFX_START + 1641)
+#define SID_OPT_USERDICTIONARIES_DIR        (SID_SFX_START + 1642)
+#define SID_SIGNATURE                       (SID_SFX_START + 1643)
+#define SID_OPT_INSTPATH                    (SID_SFX_START + 1649)
+#define SID_OPT_PROGPATH                    (SID_SFX_START + 1650)
+#define SID_OPT_USERPATH                    (SID_SFX_START + 1651)
+
+#define SID_CONVERTSTRING                   (SID_SFX_START + 1225)
+#define SID_SYMBOLSET                       (SID_SFX_START + 1226)
+#define SID_BUTTONTYPE                      (SID_SFX_START + 1227)
+#define SID_OUTSTYLE                        (SID_SFX_START + 1228)
+#define SID_FRAMEDESCRIPTOR                 (SID_SFX_START + 1229)
+
+#define SID_SFXNODES_START                  (SID_SFX_START + 1230)
+#define SID_SFXNODES_SUBJECT                (SID_SFXNODES_START)
+#define SID_SFXNODES_BCC                    (SID_SFXNODES_START + 1)
+#define SID_SFXNODES_CC                     (SID_SFXNODES_START + 2)
+#define SID_SFXNODES_COMMENTS               (SID_SFXNODES_START + 3)
+#define SID_SFXNODES_DATE                   (SID_SFXNODES_START + 4)
+#define SID_SFXNODES_FROM                   (SID_SFXNODES_START + 5)
+#define SID_SFXNODES_IN_REPLY_TO            (SID_SFXNODES_START + 6)
+#define SID_SFXNODES_KEYWORDS               (SID_SFXNODES_START + 7)
+#define SID_SFXNODES_MESSAGE_ID             (SID_SFXNODES_START + 8)
+#define SID_SFXNODES_RECEIVED               (SID_SFXNODES_START + 9)
+#define SID_SFXNODES_REFERENCES             (SID_SFXNODES_START + 10)
+#define SID_SFXNODES_REPLY_TO               (SID_SFXNODES_START + 11)
+#define SID_SFXNODES_RETURN_PATH            (SID_SFXNODES_START + 12)
+#define SID_SFXNODES_SENDER                 (SID_SFXNODES_START + 13)
+#define SID_SFXNODES_TO                     (SID_SFXNODES_START + 14)
+#define SID_SFXNODES_XMAILER                (SID_SFXNODES_START + 15)
+#define SID_SFXNODES_XSTAROFFICE_RCPT       (SID_SFXNODES_START + 16)
+#define SID_SFXNODES_MIME_VERSION           (SID_SFXNODES_START + 17)
+#define SID_SFXNODES_CONTENT_DESCRIPTION    (SID_SFXNODES_START + 18)
+#define SID_SFXNODES_CONTENT_DISPOSITION    (SID_SFXNODES_START + 19)
+#define SID_SFXNODES_CONTENT_ID             (SID_SFXNODES_START + 20)
+#define SID_SFXNODES_CONTENT_TYPE           (SID_SFXNODES_START + 21)
+#define SID_SFXNODES_CONTENT_TRANSFER_ENCODING (SID_SFXNODES_START + 22)
+#define SID_SFXNODES_IS_CONTAINER           (SID_SFXNODES_START + 23)
+#define SID_SFXNODES_IS_MESSAGE             (SID_SFXNODES_START + 24)
+#define SID_SFXNODES_IS_MULTIPART           (SID_SFXNODES_START + 25)
+#define SID_SFXNODES_APPROVED               (SID_SFXNODES_START + 26)
+#define SID_SFXNODES_CONTROL                (SID_SFXNODES_START + 27)
+#define SID_SFXNODES_DISTRIBUTION           (SID_SFXNODES_START + 28)
+#define SID_SFXNODES_EXPIRES                (SID_SFXNODES_START + 29)
+#define SID_SFXNODES_FOLLOWUPTO             (SID_SFXNODES_START + 30)
+#define SID_SFXNODES_LINES                  (SID_SFXNODES_START + 31)
+#define SID_SFXNODES_ORGANIZATION           (SID_SFXNODES_START + 32)
+#define SID_SFXNODES_SUMMARY                (SID_SFXNODES_START + 33)
+#define SID_SFXNODES_XREF                   (SID_SFXNODES_START + 34)
+#define SID_SFXNODES_XNEWSREADER            (SID_SFXNODES_START + 35)
+#define SID_SFXNODES_SEND_DATETIME          (SID_SFXNODES_START + 36)
+#define SID_SFXNODES_RETURN_RECEIPT         (SID_SFXNODES_START + 37)
+#define SID_SFXNODES_PRIORITY               (SID_SFXNODES_START + 38)
+#define SID_SFXNODES_MESSAGE                (SID_SFXNODES_START + 39)
+#define SID_SFXNODES_RECEIVERLIST           (SID_SFXNODES_START + 40)
+#define SID_SFXNODES_ATTACHLIST             (SID_SFXNODES_START + 41)
+#define SID_SFXNODES_END                    SID_SFXNODES_ATTACHLIST
+
+// SaveTabPage
+#define SID_ATTR_DOCINFO                (SID_OPTIONS_START +  0)
+#define SID_ATTR_BACKUP                 (SID_OPTIONS_START +  1)
+#define SID_ATTR_AUTOSAVE               (SID_OPTIONS_START +  2)
+#define SID_ATTR_AUTOSAVEPROMPT         (SID_OPTIONS_START +  3)
+#define SID_ATTR_AUTOSAVEMINUTE         (SID_OPTIONS_START +  5)
+#define SID_ATTR_WORKINGSET             (SID_OPTIONS_START + 13)
+#define SID_ATTR_UNDO_COUNT             (SID_OPTIONS_START + 16)
+    // unused
+#define SID_ATTR_SAVEDOCVIEW            (SID_OPTIONS_START + 18)
+
+// GeneralTabPage
+
+#define SID_ATTR_METRIC                 (SID_OPTIONS_START +  8)
+#define SID_ATTR_DEFTABSTOP             (SID_OPTIONS_START + 14)
+#define SID_ATTR_BUTTON_OUTSTYLE3D      (SID_OPTIONS_START + 62)
+#define SID_ATTR_BUTTON_BIGSIZE         (SID_OPTIONS_START + 63)
+#define SID_ATTR_AUTOHELPAGENT          (SID_OPTIONS_START + 67)
+#define SID_AUTOHELPAGENT_RESET         (SID_OPTIONS_START + 68)
+#define SID_HELPAGENT_TIMEOUT           (SID_OPTIONS_START + 93)
+#define SID_ATTR_WELCOMESCREEN              (SID_OPTIONS_START + 81)
+#define SID_WELCOMESCREEN_RESET         (SID_OPTIONS_START + 82)
+#define SID_RESTORE_EXPAND_STATE            (SID_OPTIONS_START + 83)
+#define SID_ATTR_QUICKLAUNCHER          (SID_OPTIONS_START + 74)
+#define SID_ATTR_YEAR2000               (SID_OPTIONS_START + 87)
+#define SID_ATTR_ALLOWFOLDERWEBVIEW     (SID_OPTIONS_START + 92)
+#define SID_ATTR_APPLYCHARUNIT          (SID_OPTIONS_START + 88)
+
+
+// PathTabPage
+#define SID_ATTR_PATHGROUP              (SID_OPTIONS_START + 10)
+#define SID_ATTR_PATHNAME               (SID_OPTIONS_START + 11)
+
+// LinguTabPage
+#define SID_ATTR_LANGUAGE               (SID_OPTIONS_START +  7)
+#define SID_ATTR_SPELL                  (SID_OPTIONS_START +  9)
+#define SID_ATTR_HYPHENREGION           (SID_OPTIONS_START + 12)
+#define SID_SPELL_MODIFIED              (SID_OPTIONS_START + 15)
+#define SID_AUTOSPELL_CHECK             (SID_OPTIONS_START + 21)
+
+// InetTabPage
+#define SID_INET_SMTPGATEWAY            (SID_OPTIONS_START + 50)
+#define SID_INET_EMAIL_NAME             (SID_OPTIONS_START + 19)
+#define SID_INET_PROXY                  (SID_OPTIONS_START + 20)
+
+#define SID_INET_PROXY_TYPE             (SID_OPTIONS_START + 23)
+#define SID_INET_PROXY_NAME             (SID_OPTIONS_START + 24)
+#define SID_INET_PROXY_PORT             (SID_OPTIONS_START + 25)
+#define SID_INET_HOMEPAGE               (SID_OPTIONS_START + 26)
+#define SID_INET_MEMCACHE               (SID_OPTIONS_START + 27)
+#define SID_INET_DISKCACHE              (SID_OPTIONS_START + 28)
+#define SID_INET_EXPIRATION             (SID_OPTIONS_START + 29)
+#define SID_INET_CACHEDIR               (SID_OPTIONS_START + 32)
+
+#define SID_INET_SMTPSERVER             (SID_OPTIONS_START + 33)
+#define SID_INET_POPSERVER              (SID_OPTIONS_START + 34)
+#define SID_INET_MAILUSERNAME           (SID_OPTIONS_START + 35)
+#define SID_INET_MAILPASSWORD           (SID_OPTIONS_START + 36)
+#define SID_PASSWORD                    (SID_OPTIONS_START + 36)
+#define SID_INET_MAILTEXTFORMAT         (SID_OPTIONS_START + 61)
+
+#define SID_INET_NOPROXY                (SID_OPTIONS_START + 37)
+
+#define SID_INET_HTTP_PROXY_NAME        (SID_OPTIONS_START + 38)
+#define SID_INET_HTTP_PROXY_PORT        (SID_OPTIONS_START + 39)
+#define SID_INET_FTP_PROXY_NAME         (SID_OPTIONS_START + 40)
+#define SID_INET_FTP_PROXY_PORT         (SID_OPTIONS_START + 41)
+#define SID_INET_SOCKS_PROXY_NAME       (SID_OPTIONS_START + 42)
+#define SID_INET_SOCKS_PROXY_PORT       (SID_OPTIONS_START + 43)
+#define SID_INET_SECURITY_PROXY_NAME    (SID_OPTIONS_START + 44)
+#define SID_INET_SECURITY_PROXY_PORT    (SID_OPTIONS_START + 45)
+
+#define SID_INET_NNTPSERVER             (SID_OPTIONS_START + 46)
+#define SID_INET_MAXNEWS                (SID_OPTIONS_START + 47)
+
+#define SID_INET_MAXHTTPCONS            (SID_OPTIONS_START + 48)
+#define SID_INET_MAXFTPCONS             (SID_OPTIONS_START + 49)
+
+#define SID_INET_EXE_JAVASCRIPT         (SID_OPTIONS_START + 51)
+#define SID_INET_EXE_PLUGIN             (SID_OPTIONS_START + 52)
+#define SID_INET_EXE_APPLETS            (SID_OPTIONS_START + 91)
+
+#define SID_INET_JAVA_ENABLE            (SID_OPTIONS_START + 53)
+#define SID_INET_JAVA_ACCESSTYPE        (SID_OPTIONS_START + 54)
+#define SID_INET_JAVA_SECURITY          (SID_OPTIONS_START + 55)
+#define SID_INET_JAVA_CLASSPATH         (SID_OPTIONS_START + 56)
+
+#define SID_INET_DNS_AUTO               (SID_OPTIONS_START + 57)
+#define SID_INET_DNS_SERVER             (SID_OPTIONS_START + 58)
+
+#define SID_INET_USERAGENT              (SID_OPTIONS_START + 59)
+#define SID_INET_NONCACHED_SERVER       (SID_OPTIONS_START + 60)
+
+#define SID_INET_CHANNELS_ONOFF         (SID_OPTIONS_START + 64)
+
+#define SID_INET_COOKIESHANDLE              (SID_OPTIONS_START + 69)
+
+#define SID_INET_CACHEJS                (SID_OPTIONS_START + 70)
+#define SID_INET_CACHEEXPIRED           (SID_OPTIONS_START + 71)
+#define SID_INET_CACHEABORTED           (SID_OPTIONS_START + 72)
+#define SID_INET_REVEAL_MAILADDR        (SID_OPTIONS_START + 73)
+
+#define SID_SAVEREL_INET                (SID_OPTIONS_START + 30)
+#define SID_SAVEREL_FSYS                (SID_OPTIONS_START + 31)
+
+// Automatic update of Styles - manage TabPage
+#define SID_ATTR_AUTO_STYLE_UPDATE      (SID_OPTIONS_START + 65)
+
+#define SID_SECURE_URL                  (SID_OPTIONS_START + 66)
+
+
+#define SID_OPT_SCREENSCALING           (SID_OPTIONS_START + 78)
+#define SID_OPT_SNAPTYPE                (SID_OPTIONS_START + 79)
+#define SID_OPT_DRAGMODE                (SID_OPTIONS_START + 80)
+
+// configured locale changed
+#define SID_OPT_LOCALE_CHANGED              (SID_OPTIONS_START + 94)
+#define SID_OPT_FONT_ANTIALIASING_ENABLED   (SID_OPTIONS_START + 95)
+#define SID_OPT_FONT_ANTIALIASING_MINPIXELS (SID_OPTIONS_START + 96)
+//middle mouse button
+#define SID_OPT_MIDDLE_MOUSE                (SID_OPTIONS_START + 97)
+#define SID_ATTR_PRETTYPRINTING             (SID_OPTIONS_START + 98)
+#define SID_HELP_STYLESHEET                 (SID_OPTIONS_START + 99)
+
+// slot IDs from SVX (svxids.hrc) ---------------------------------------------
+
+#define SID_ZOOM_TOOLBOX                    (SID_SVX_START +  96)
+#define SID_ZOOM_OUT                        (SID_SVX_START +  97)
+#define SID_ZOOM_IN                         (SID_SVX_START +  98)
+#define SID_SIZE_REAL                       (SID_SVX_START +  99)
+#define SID_ZOOM_100_PERCENT                (SID_SIZE_REAL)
+#define SID_SIZE_PAGE                       (SID_SVX_START + 100)
+#define SID_ZOOM_PAGE                       (SID_SIZE_PAGE)
+#define SID_SHOW_BROWSER                    (SID_SVX_START + 163)
+#define SID_GALLERY_BG_BRUSH                (SID_SVX_START + 279)
+#define SID_SEARCH_OPTIONS                  (SID_SVX_START + 281)
+#define SID_ZOOM                            (SID_SVX_START + 289)
+#define SID_SEARCH_ITEM                     (SID_SVX_START + 291)
+#define SID_ATTR_CHAR_FONTWIDTH             (SID_SVX_START + 303)
+#define SID_HYPERLINK_GETLINK               (SID_SVX_START + 361)
+#define SID_HYPERLINK_SETLINK               (SID_SVX_START + 362)
+#define SID_NAVIGATOR                       (SID_SVX_START + 366)
+#define SID_TASKPANE                        (SID_SVX_START + 370)
+#define SID_ZOOM_NEXT                       (SID_SVX_START + 402)
+#define SID_ZOOM_PREV                       (SID_SVX_START + 403)
+#define SID_INET_DLG                        (SID_SVX_START + 416)
+#define SID_AUTO_CORRECT_DLG                (SID_SVX_START + 424)
+#define SID_SD_AUTOPILOT                    (SID_SVX_START + 425)
+#define SID_SW_AGENDA_WIZZARD               (SID_SVX_START + 426)
+#define SID_SW_FAX_WIZZARD                  (SID_SVX_START + 427)
+#define SID_SW_LETTER_WIZZARD               (SID_SVX_START + 428)
+#define SID_SW_MEMO_WIZZARD                 (SID_SVX_START + 429)
+#define SID_ATTR_CHAR_COLOR_EXT             (SID_SVX_START + 488)
+#define SID_ATTR_CHAR_COLOR_BACKGROUND      (SID_SVX_START + 489)
+#define SID_ATTR_CHAR_COLOR_BACKGROUND_EXT  (SID_SVX_START + 490)
+#define SID_ATTR_CHAR_COLOR2                (SID_SVX_START + 537)
+#define SID_COMP_BIBLIOGRAPHY               (SID_SVX_START + 880)
+#define SID_ADDRESS_DATA_SOURCE             (SID_SVX_START + 934)
+
+#define FID_SVX_START                       (SID_LIB_START + 500)
+#define FID_SEARCH_NOW                      (FID_SVX_START + 2)
+
+// SlotIds for Basic -------------------------------------------------------
+#define SID_BASICIDE_TOGGLEBRKPNT           ( SID_BASICIDE_START +  0 )
+#define SID_BASICIDE_ADDWATCH               ( SID_BASICIDE_START +  1 )
+#define SID_BASICIDE_APPEAR                 ( SID_BASICIDE_START + 15 )
+#define SID_BASICIDE_BRKPNTSCHANGED         ( SID_BASICIDE_START + 36 )
+#define SID_BASICIDE_CHOOSEMACRO            ( SID_BASICIDE_START +  2 )
+#define SID_BASICIDE_CREATEMACRO            ( SID_BASICIDE_START +  4 )
+#define SID_BASICIDE_DELETECURRENT          ( SID_BASICIDE_START + 22 )
+#define SID_BASICIDE_EDITMACRO              ( SID_BASICIDE_START +  3 )
+#define SID_BASICIDE_HIDECURPAGE            ( SID_BASICIDE_START + 10 )
+#define SID_BASICIDE_LIBLOADED              ( SID_BASICIDE_START + 27 )
+#define SID_BASICIDE_LIBSELECTOR            ( SID_BASICIDE_START + 19 )
+#define SID_BASICIDE_LIBSELECTED            ( SID_BASICIDE_START + 18 )
+#define SID_BASICIDE_LIBREMOVED             ( SID_BASICIDE_START + 28 )
+#define SID_BASICIDE_ARG_LIBNAME            ( SID_BASICIDE_START + 34 )
+#define SID_BASICIDE_MATCHGROUP             ( SID_BASICIDE_START + 14 )
+#define SID_BASICIDE_MODULEDLG              ( SID_BASICIDE_START +  5 )
+#define SID_BASICIDE_NAMECHANGEDONTAB       ( SID_BASICIDE_START + 11 )
+#define SID_BASICIDE_ARG_TABID              ( SID_BASICIDE_START + 30 )
+#define SID_BASICIDE_ARG_MACROINFO          ( SID_BASICIDE_START + 32 )
+#define SID_BASICIDE_ARG_MODULENAME         ( SID_BASICIDE_START + 35 )
+#define SID_BASICIDE_ARG_SBX                ( SID_BASICIDE_START + 31 )
+#define SID_BASICIDE_NEWMODULE              ( SID_BASICIDE_START + 21 )
+#define SID_BASICIDE_NEWDIALOG              ( SID_BASICIDE_START + 20 )
+#define SID_BASICIDE_OBJCAT                 ( SID_BASICIDE_START +  6 )
+#define SID_BASICIDE_REMOVEWATCH            ( SID_BASICIDE_START +  7 )
+#define SID_BASICIDE_RENAMECURRENT          ( SID_BASICIDE_START + 23 )
+#define SID_BASICIDE_SBXDELETED             ( SID_BASICIDE_START + 24 )
+#define SID_BASICIDE_SBXINSERTED            ( SID_BASICIDE_START + 25 )
+#define SID_BASICIDE_SBXRENAMED             ( SID_BASICIDE_START + 26 )
+#define SID_BASICIDE_SHOWSBX                ( SID_BASICIDE_START +  9 )
+#define SID_BASICIDE_STAT_POS               ( SID_BASICIDE_START + 38 )
+#define SID_BASICIDE_STAT_DATE              ( SID_BASICIDE_START + 39 )
+#define SID_BASICIDE_STAT_TITLE             ( SID_BASICIDE_START + 40 )
+#define SID_BASICIDE_STOREMODULESOURCE      ( SID_BASICIDE_START + 13 )
+#define SID_BASICIDE_STOREALLMODULESOURCES  ( SID_BASICIDE_START + 16 )
+#define SID_BASICIDE_UPDATEALLMODULESOURCES ( SID_BASICIDE_START + 17 )
+#define SID_BASICIDE_UPDATEMODULESOURCE     ( SID_BASICIDE_START + 12 )
+#define SID_BASICIDE_MANAGEBRKPNTS          ( SID_BASICIDE_START + 42 )
+#define SID_BASICIDE_TOGGLEBRKPNTENABLED    ( SID_BASICIDE_START + 43 )
+#define SID_BASICIDE_SHOWWINDOW             ( SID_BASICIDE_START + 44 )
+#define SID_BASICIDE_ARG_DOCUMENT           ( SID_BASICIDE_START + 45 )
+#define SID_BASICIDE_ARG_NAME               ( SID_BASICIDE_START + 46 )
+#define SID_BASICIDE_ARG_TYPE               ( SID_BASICIDE_START + 47 )
+#define SID_BASICIDE_ARG_LINE               ( SID_BASICIDE_START + 48 )
+#define SID_BASICIDE_ARG_COLUMN1            ( SID_BASICIDE_START + 49 )
+#define SID_BASICIDE_ARG_COLUMN2            ( SID_BASICIDE_START + 50 )
+#define SID_BASICIDE_ARG_DOCUMENT_MODEL     ( SID_BASICIDE_START + 51 )
+#define SID_BASICIDE_MANAGE_LANG            ( SID_BASICIDE_START + 52 )
+#define SID_BASICIDE_CURRENT_LANG           ( SID_BASICIDE_START + 53 )
+
+// SlotIds for Apps --------------------------------------------------------
+#define FN_PARAM                            (SID_SW_START + 1100)
+#define FN_PARAM_1                          (FN_PARAM+60)
+#define FN_PARAM_2                          (FN_PARAM+61)
+#define FN_PARAM_3                          (FN_PARAM+62)
+#define FN_PARAM_4                          (FN_PARAM+63)
+#define FN_PARAM_5                          (FN_PARAM+64)
+#define FN_PARAM_6                          (FN_PARAM+65)
+#define FN_PARAM_7                          (FN_PARAM+66)
+#define FN_PARAM_8                          (FN_PARAM+67)
+#define FN_FAX                              (SID_SW_START + 28)   /* Fax */
+
+#define SID_KEYFUNC_START                   (SID_SC_START + 521)
+#define SID_CURSORDOWN_SEL                  (SID_KEYFUNC_START + 0)
+#define SID_CURSORUP_SEL                    (SID_KEYFUNC_START + 1)
+#define SID_CURSORLEFT_SEL                  (SID_KEYFUNC_START + 2)
+#define SID_CURSORRIGHT_SEL                 (SID_KEYFUNC_START + 3)
+#define SID_CURSORPAGEDOWN_SEL              (SID_KEYFUNC_START + 4)
+#define SID_CURSORPAGEUP_SEL                (SID_KEYFUNC_START + 5)
+#define SID_CURSORPAGELEFT_SEL              (SID_KEYFUNC_START + 7)
+#define SID_CURSORPAGERIGHT_SEL             (SID_KEYFUNC_START + 9)
+#define SID_CURSORTOPOFFILE_SEL             (SID_KEYFUNC_START + 10)
+#define SID_CURSORENDOFFILE_SEL             (SID_KEYFUNC_START + 11)
+#define SID_CURSORHOME_SEL                  (SID_KEYFUNC_START + 12)
+#define SID_CURSOREND_SEL                   (SID_KEYFUNC_START + 13)
+#define SID_REPAINT                         (SID_SC_START + 12)
+
+#define SID_MODIFIED                        (SID_SD_START+89)
+#define ID_VAL_DUMMY0                       (SID_SD_START+230)
+#define ID_VAL_ZOOM                         (SID_SD_START+234)
+#define SID_SIZE_OPTIMAL                    (SID_SD_START+99)
+#define SID_ZOOM_OBJECTS                    (SID_SIZE_OPTIMAL)
+
+//-----------------------------------------------------------------------
+
+#define SID_STARWRITER                      (SID_SFX_START+1401)
+#define SID_STARDRAW                        (SID_SFX_START+1402)
+#define SID_STARCALC                        (SID_SFX_START+1403)
+
+#define SID_LANGUAGEID                      (SID_SFX_START+1407)
+#define SID_COUNTRYID                       (SID_SFX_START+1408)
+#define SID_SUBSTPATHVARS                   (SID_SFX_START+1409)
+
+//-----------------------------------------------------------------------
+
+#define SID_ATTR_CHAR_FILLCOLOR             (SID_SFX_START + 1551)
+
+// SfxScriptOrganizerItem
+#define MID_SCRIPT_ORGANIZER_LANGUAGE       1 // Don't use zero for MID's. It's forbidden to do it!
+
+#define SID_NEWSD                           (SID_SFX_START + 1686)
+#define FN_LABEL                            (SID_SW_START + 1051 )
+#define FN_BUSINESS_CARD                    (SID_SW_START + 1052)
+#define FN_XFORMS_INIT                      (SID_SW_START + 1053)
+#define SID_OPTIONS_TREEDIALOG              ( SID_BASICIDE_START + 862)
+
+
+#define SID_RESTORE_EDITING_VIEW            (SID_SFX_START + 1663)
+
+#endif  // #ifndef _SFXSIDS_HRC
+
+//-----------------------------------------------------------------------
+// SfxSecurityPage related stuff
+
+#define FN_EDIT2                (SID_SW_START + 1800)
+#define FN_REDLINE_PROTECT      (FN_EDIT2 + 23)
+#define FN_REDLINE_ON           (FN_EDIT2 + 25)
+
+#define SID_HTML_MODE           (SID_SVX_START + 414)
+
+// Calc-Id's used for SfxSecurityPage
+#ifndef SC_FUNCTION_START
+#define SC_FUNCTION_START       (SID_SC_START + 200)
+#endif
+#ifndef FILE_MENU_END
+#define FILE_MENU_END           (SC_FUNCTION_START + 20)
+#endif
+#ifndef EDIT_MENU_START
+#define EDIT_MENU_START         (FILE_MENU_END)
+#endif
+#ifndef SC_VIEW_START
+#define SC_VIEW_START           (SID_SC_START)
+#endif
+#define FID_CHG_RECORD          (EDIT_MENU_START + 18)
+#define SID_CHG_PROTECT         (SC_VIEW_START + 84)
+
+// eof ------------------------------------------------------------------------
+

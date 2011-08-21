@@ -1,0 +1,8 @@
+module ooo { module vba { module powerpoint {
+    constants PpSoundEffectType {
+        const long ppSoundEffectsMixed = -2;
+        const long ppSoundFile = 2;
+        const long ppSoundNone = 0;
+        const long ppSoundStopPrevious = 1;
+    };
+}; }; };

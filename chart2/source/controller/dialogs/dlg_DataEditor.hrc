@@ -1,0 +1,46 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#define DLG_DIAGRAM_DATA 744
+
+#define FT_POS 1
+#define TBX_EDIT 1
+#define EDT_FIELD 1
+#define TBX_DATA 2
+#define CTL_DATA 1
+
+// images for toolbox image list
+//the numbers correspond to the icon names: default_images\chart2\res\dataeditor_icon_xy
+#define TBI_DATA_INSERT_ROW 1
+#define TBI_DATA_INSERT_COL 2
+#define TBI_DATA_DELETE_ROW 3
+#define TBI_DATA_DELETE_COL 4
+#define TBI_DATA_SWAP_COL 5
+#define TBI_DATA_SWAP_ROW 6
+#define TBI_DATA_INSERT_TEXT_COL 7
+
+// image lists for toolbox
+#define IL_DIAGRAM_DATA     1

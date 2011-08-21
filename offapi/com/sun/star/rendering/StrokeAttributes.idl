@@ -1,0 +1,146 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_rendering_StrokeAttributes_idl__
+#define __com_sun_star_rendering_StrokeAttributes_idl__
+
+module com { module sun { module star { module rendering {
+
+/** This structure contains all attributes required for path stroking.<p>
+
+    Path stroking is the process of drawing a polygon with a thick
+    pen. The various attributes contained in this structure can be
+    used to customize that process.<p>
+
+    @single #110496#
+ */
+published struct StrokeAttributes
+{
+    /** Defines the width of the stroke, measured in user
+        coordinate space.
+
+        This value must be positive (or 0.0)
+     */
+    double                  StrokeWidth;
+
+    //-------------------------------------------------------------------------
+
+    /** Determines the maximal length of the diagonal in mitered
+        corners.<p>
+
+        This attribute is only used when
+        <member>StrokeAttributes::JoinType</member> is set to
+        <member>PathJoinType::MITER</member>. Should the length of a
+        corner's diagonal exceed this limit, a beveled join is used
+        instead. This value must be positive (or 0.0, which is
+        equivalent to setting
+        <member>StrokeAttributes::JoinType</member> to
+        <member>PathJoinType::BEVEL</member>.<p>
+
+        Before performing the actual comparison, implementations will
+        multiply the MiterLimit with the current StrokeWidth, such
+        that, with phi being the angle between the two joining
+        segments, MiterLimit=1/sin(phi/2.0).<p>
+     */
+    double              MiterLimit;
+
+    //-------------------------------------------------------------------------
+
+    /** Array of ink on and off lengths, measured in user coordinate
+        space.<p>
+
+        The first element specifies the length of the first "on"
+        segment of the dashing, the second element the length of the
+        first "off" segment, and so forth. Give zero elements here for
+        solid strokes. This array always have an even number of
+        elements, with zero, as usual, counting as even
+        here. Furthermore, each entry in this array must have a value
+        that is positive (or 0.0)<p>
+     */
+    sequence<double>    DashArray;
+
+    //-------------------------------------------------------------------------
+
+    /** Array of line widths and spacings for multiple-line
+        strokes.<p>
+
+        The entries here are relative to the
+        <member>StrokeAttributes::StrokeWidth</member> attribute
+        above, i.e. the total width of all lines and spacings will
+        always equal
+        <member>StrokeAttributes::StrokeWidth</member>. The first
+        element specifies the width of the rightmost line, when
+        traveling from the start point of the path to the end
+        point. The second element specifies the space between the
+        first line and the second line, and so forth. If the array
+        ends with a spacing, this spacing is included in the total
+        width of the multiple-line stroke. That is, the stroke becomes
+        asymmetric.<p>
+     */
+    sequence<double>    LineArray;
+
+    //-------------------------------------------------------------------------
+
+    /** The start shape of the stroke.<p>
+
+        The start point is the first point of every polygon of the
+        path poly-polygon.<p>
+
+        @see <type>PathCapType</type>
+     */
+    byte                StartCapType;
+
+    //-------------------------------------------------------------------------
+
+    /** The end shape of the stroke.<p>
+
+        The end point is the last point of every polygon of the path
+        poly-polygon.<p>
+
+        @see <type>PathCapType</type>
+     */
+    byte                EndCapType;
+
+    //-------------------------------------------------------------------------
+
+    /** The join shape of the stroke.<p>
+
+        After every sub-stroke, i.e. after every line or curve segment
+        within a single path polygon, a shape of this type is inserted
+        into the stroke to glue the segments together. Please note
+        that distinct polygons within the path poly-polygon are not
+        connected, and therefore also not joined via the shape
+        specified here.<p>
+
+        @see <type>PathJoinType</type>
+     */
+    byte                JoinType;
+
+};
+
+}; }; }; };
+
+#endif

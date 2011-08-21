@@ -1,0 +1,15 @@
+module ooo { module vba { module excel {
+    constants XlDataLabelPosition {
+        const long xlLabelPositionAbove = 0;
+        const long xlLabelPositionBelow = 1;
+        const long xlLabelPositionBestFit = 5;
+        const long xlLabelPositionCenter = -4108;
+        const long xlLabelPositionCustom = 7;
+        const long xlLabelPositionInsideBase = 4;
+        const long xlLabelPositionInsideEnd = 3;
+        const long xlLabelPositionLeft = -4131;
+        const long xlLabelPositionMixed = 6;
+        const long xlLabelPositionOutsideEnd = 2;
+        const long xlLabelPositionRight = -4152;
+    };
+}; }; };

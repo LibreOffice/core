@@ -1,0 +1,11 @@
+#!/bin/sh -e
+if [ -z "$1" ]; then
+  exit 1;
+fi
+mkdir -p "$1"/bin
+mkdir -p "$1"/inc
+mkdir -p "$1"/lib
+mkdir -p "$1"/misc
+mkdir -p "$1"/obj
+mkdir -p "$1"/slb
+mkdir -p "$1"/slo

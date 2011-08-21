@@ -1,0 +1,136 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_ui_dialogs_XFilePreview_idl__
+#define __com_sun_star_ui_dialogs_XFilePreview_idl__
+
+#include <com/sun/star/uno/XInterface.idl>
+#include <com/sun/star/util/Color.idl>
+#include <com/sun/star/lang/IllegalArgumentException.idl>
+
+//=============================================================================
+
+module com { module sun { module star { module ui { module dialogs {
+
+//=============================================================================
+/** FilePicker that support the preview of various file formats should implement
+    this interface.
+*/
+
+published interface XFilePreview: com::sun::star::uno::XInterface
+{
+    //-------------------------------------------------------------------------
+    /** The method returns all image formats that the preview supports.
+
+        @returns
+        A sequence of all supported preview formats
+
+        @see com::sun::star::ui::dialogs::FilePreviewImageFormats
+    */
+    sequence< short > getSupportedImageFormats( );
+
+    //-------------------------------------------------------------------------
+    /** The method returns the supported color depth of the target device.
+
+        @returns
+        The color depth in bit, e.g. 8 bit, 16 bit, 32 bit.
+    */
+    com::sun::star::util::Color getTargetColorDepth( );
+
+    //-------------------------------------------------------------------------
+    /** The method returns the available width of the preview window
+        even if the window is invisible or could not be created.
+        If a service implementation doesn't support a file preview
+        0 will be returned.
+
+        @returns
+        The width of the preview window in pixel.
+    */
+    long getAvailableWidth( );
+
+    //-------------------------------------------------------------------------
+    /** The method returns the available height of the preview window
+        even if the window is invisible or could not be created.
+        If a service implementation doesn't support a file preview
+        0 will be returned.
+
+        @returns
+        The heigth of the preview window in pixel.
+    */
+    long getAvailableHeight( );
+
+    //-------------------------------------------------------------------------
+    /** Sets a new image. If the preview is currently hidden the
+        image will be ignored. An empty any will clear the preview window.
+
+        @param aImageFormat
+        Specifies the format of the data that will be delivered
+
+        @param aImage
+        The image data, the image format defines how
+        the image data have to be delivered
+
+        @throws com::sun::star::lang::IllegalArgumentException
+        If the specified image format is invalid or not
+        supported by the preview implementation
+
+        @see com::sun::star::ui::dialogs::FilePreviewImageFormats
+    */
+    void setImage( [in] short aImageFormat, [in] any aImage )
+        raises( ::com::sun::star::lang::IllegalArgumentException );
+
+    //-------------------------------------------------------------------------
+    /** Optionally sets the current show state of the preview. It is possible
+        that the preview implementation doesn't support hiding the preview.
+
+        @param bShowState
+        A value of <TRUE/> shows the preview window.
+        <p>A value of <FALSE/> hides the preview window.</p>
+
+        @returns
+        A value of <TRUE/> on success.
+        <p>A value of <FALSE/> if the operation fails for any reason or the preview
+        implementation doesn't support hiding the preview.</p>
+    */
+    boolean setShowState( [in] boolean bShowState );
+
+    //-------------------------------------------------------------------------
+    /** Returns the current show state of the preview.
+
+        @returns
+        A value of <TRUE/> if the preview window is visible.
+        <p>A value of <FALSE/> if the preview window is invisible.</p>
+    */
+    boolean getShowState( );
+};
+
+//=============================================================================
+
+}; }; }; }; };
+
+
+#endif

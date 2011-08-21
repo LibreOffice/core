@@ -1,0 +1,61 @@
+: # -*- perl -*-
+eval 'exec perl -wS $0 ${1+"$@"}'
+	if 0;
+# This is a script to get rid of bogus error messages that are spit out
+# by the compiler - sub 30/11/1999
+
+# Lines that contain `xxxx' where xxxx belongs to the list knownMessages
+# and is surrounded by a backtick (`) and a forward tick (') 
+# will not be seen in the compiler output
+
+
+@knownMessages	= (
+"__pure_virtual",
+"__vt_9bad_alloc",
+"__vt_9exception",
+"_._9bad_alloc",
+"__cp_push_exception",
+"__uncatch_exception",
+"__rtti_user",
+"__rtti_si",
+"__throw",
+"terminate__Fv",
+"__cp_pop_exception",
+"__builtin_vec_new",
+"__cmpdi2",
+"__builtin_vec_delete",
+"__cp_eh_info",
+"__builtin_delete",
+"__builtin_new",
+"__eh_alloc",
+"__check_eh_spec",
+"_type_match_rtti",
+"__rtti_class",
+"set_new_handler_FPFv_v",
+"__throw_type_match_rtti",
+"__check_eh_spec",
+"exception_type_info",
+"exception type_info function",
+"exception type_info node",
+"exception virtual table",
+"terminate(void)"
+);
+
+# Create a hash %msgHash from list @knownMessages
+foreach $msg (@knownMessages) {
+	$msgHash {$msg}++;
+}
+while ( <STDIN> ) {
+	
+	if (/\`([\s\w]+)\'/) {
+		$entry = $1;
+		if (defined($entry)) {
+			if (!exists $msgHash{$entry}) {
+				print $_;
+			}
+		}
+	}
+	else {
+		print $_;
+	}
+}

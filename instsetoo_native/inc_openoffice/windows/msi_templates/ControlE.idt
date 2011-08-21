@@ -1,0 +1,152 @@
+Dialog_	Control_	Event	Argument	Condition	Ordering
+s72	s50	s50	s255	S255	I2
+ControlEvent	Dialog_	Control_	Event	Argument	Condition
+AdminChangeFolder	Cancel	EndDialog	Return	1	2
+AdminChangeFolder	Cancel	Reset	0	1	1
+AdminChangeFolder	NewFolder	DirectoryListNew	0	1	0
+AdminChangeFolder	OK	EndDialog	Return	1	0
+AdminChangeFolder	OK	SetTargetPath	TARGETDIR	1	1
+AdminChangeFolder	Up	DirectoryListUp	0	1	0
+AdminNetworkLocation	Back	NewDialog	AdminWelcome	1	0
+AdminNetworkLocation	Browse	SpawnDialog	AdminChangeFolder	1	0
+AdminNetworkLocation	Cancel	SpawnDialog	CancelSetup	1	0
+AdminNetworkLocation	InstallNow	EndDialog	Return	OutOfNoRbDiskSpace <> 1	3
+AdminNetworkLocation	InstallNow	NewDialog	OutOfSpace	OutOfNoRbDiskSpace = 1	2
+AdminNetworkLocation	InstallNow	SetTargetPath	TARGETDIR	1	1
+AdminWelcome	Cancel	SpawnDialog	CancelSetup	1	0
+AdminWelcome	Next	NewDialog	AdminNetworkLocation	1	0
+ApplicationInfo1	OK	EndDialog	Return	1	0
+CancelSetup	No	EndDialog	Return	1	0
+CancelSetup	Yes	EndDialog	Exit	1	2
+CustomerInformation	Back	NewDialog	LicenseAgreement	HIDEEULA <> 1	1
+CustomerInformation	Back	NewDialog	InstallWelcome	HIDEEULA = 1	1
+CustomerInformation	Cancel	SpawnDialog	CancelSetup	1	0
+CustomerInformation	Next	[ALLUSERS]	{}	ApplicationUsers = "OnlyCurrentUser" And Privileged	2
+CustomerInformation	Next	[ALLUSERS]	1	ApplicationUsers = "AllUsers" And Privileged	1
+CustomerInformation	Next	EndDialog	Exit	(SERIALNUMVALRETRYLIMIT) And (SERIALNUMVALRETRYLIMIT<0) And (SERIALNUMVALRETURN<>SERIALNUMVALSUCCESSRETVAL)	3
+CustomerInformation	Next	NewDialog	SetupType	((Not SERIALNUMVALRETURN) OR (SERIALNUMVALRETURN=SERIALNUMVALSUCCESSRETVAL))	4
+CustomSetup	Back	NewDialog	MaintenanceType	Installed	0
+CustomSetup	Back	NewDialog	SetupType	NOT Installed	0
+CustomSetup	Cancel	SpawnDialog	CancelSetup	1	0
+CustomSetup	ChangeFolder	SelectionBrowse	InstallChangeFolder	1	0
+CustomSetup	Details	SelectionBrowse	DiskSpaceRequirements	1	1
+CustomSetup	Help	SpawnDialog	CustomSetupTips	1	1
+CustomSetup	Next	[_IsSetupTypeMin]	Custom	1	0
+CustomSetup	Next	NewDialog	OutOfSpace	OutOfNoRbDiskSpace = 1	0
+CustomSetup	Next	NewDialog	FileTypeDialog	OutOfNoRbDiskSpace <> 1 And (LANG_SELECTED = 1) And (APP_SELECTED = 1)	9
+CustomSetup	Next	DoAction	ResetLanguageSelected	1	1
+CustomSetup	Next	DoAction	SetLanguageSelected	(isMulti <> 1) Or Installed	3
+CustomSetup	Next	DoAction	SetLanguageSelected	(isMulti = 1) And Not Installed And (LANGUAGECONDITIONINSTALL)	4
+CustomSetup	Next	SpawnDialog	LanguageInfo1	(isMulti = 1) And (LANG_SELECTED <> 1)	7
+CustomSetup	Next	DoAction	ResetApplicationSelected	1	2
+CustomSetup	Next	DoAction	SetApplicationSelected	Not Installed And (APPLICATIONCONDITIONINSTALL)	5
+CustomSetup	Next	DoAction	SetApplicationSelected	Installed	5
+CustomSetup	Next	SpawnDialog	ApplicationInfo1	APP_SELECTED <> 1	6
+CustomSetupTips	OK	EndDialog	Return	1	1
+DatabaseFolder	Back	NewDialog	CustomerInformation	1	1
+DatabaseFolder	Cancel	SpawnDialog	CancelSetup	1	1
+DatabaseFolder	ChangeFolder	[_BrowseProperty]	DATABASEDIR	1	2
+DatabaseFolder	ChangeFolder	SpawnDialog	InstallChangeFolder	1	1
+DatabaseFolder	Next	NewDialog	SetupType	1	1
+DestinationFolder	Back	NewDialog	CustomerInformation	1	0
+DestinationFolder	Cancel	SpawnDialog	CancelSetup	1	1
+DestinationFolder	ChangeFolder	[_BrowseProperty]	INSTALLLOCATION	1	2
+DestinationFolder	ChangeFolder	SpawnDialog	InstallChangeFolder	1	1
+DestinationFolder	Next	NewDialog	SetupType	1	0
+DiskSpaceRequirements	OK	EndDialog	Return	1	0
+FilesInUse	Exit	EndDialog	Exit	1	0
+FilesInUse	Ignore	EndDialog	Ignore	1	0
+FilesInUse	Retry	EndDialog	Retry	1	0
+FileTypeDialog	Back	NewDialog	CustomSetup	1	1
+FileTypeDialog	Cancel	SpawnDialog	CancelSetup	1	0
+FileTypeDialog	Next	NewDialog	ReadyToInstall	1	0
+InstallChangeFolder	Cancel	EndDialog	Return	1	2
+InstallChangeFolder	Cancel	Reset	0	1	1
+InstallChangeFolder	NewFolder	DirectoryListNew	0	1	0
+InstallChangeFolder	OK	EndDialog	Return	1	3
+InstallChangeFolder	OK	SetTargetPath	[_BrowseProperty]	1	2
+InstallChangeFolder	Up	DirectoryListUp	0	1	0
+InstallWelcome	Back	NewDialog	SplashBitmap	Display_IsBitmapDlg	1
+InstallWelcome	Cancel	SpawnDialog	CancelSetup	1	0
+InstallWelcome	Next	NewDialog	LicenseAgreement	HIDEEULA <> 1	0
+InstallWelcome	Next	NewDialog	CustomerInformation	HIDEEULA = 1	0
+LanguageInfo1	OK	EndDialog	Return	1	0
+LanguageSelection	Back	NewDialog	CustomerInformation	1	1
+LanguageSelection	Cancel	SpawnDialog	CancelSetup	1	1
+LanguageSelection	Next	NewDialog	SetupType	1	1
+LicenseAgreement	Back	NewDialog	InstallWelcome	1	0
+LicenseAgreement	Cancel	SpawnDialog	CancelSetup	1	0
+LicenseAgreement	Next	NewDialog	CustomerInformation	AgreeToLicense = "Yes"	0
+MaintenanceType	Back	NewDialog	MaintenanceWelcome	1	0
+MaintenanceType	Cancel	SpawnDialog	CancelSetup	1	0
+MaintenanceType	Next	[ProgressType0]	Modify	_IsMaintenance = "Change"	2
+MaintenanceType	Next	[ProgressType0]	Repair	_IsMaintenance = "Reinstall"	1
+MaintenanceType	Next	[ProgressType1]	Modifying	_IsMaintenance = "Change"	3
+MaintenanceType	Next	[ProgressType1]	Repairing	_IsMaintenance = "Reinstall"	4
+MaintenanceType	Next	[ProgressType2]	modified	_IsMaintenance = "Change"	6
+MaintenanceType	Next	[ProgressType2]	repairs	_IsMaintenance = "Reinstall"	5
+MaintenanceType	Next	[ProgressType3]	modifies	_IsMaintenance = "Change"	7
+MaintenanceType	Next	[ProgressType3]	repairs	_IsMaintenance = "Reinstall"	8
+MaintenanceType	Next	NewDialog	CustomSetup	_IsMaintenance = "Change"	12
+MaintenanceType	Next	NewDialog	ReadyToInstall	_IsMaintenance = "Reinstall"	13
+MaintenanceType	Next	NewDialog	ReadyToRemove	_IsMaintenance = "Remove"	11
+MaintenanceType	Next	Reinstall	ALL	_IsMaintenance = "Reinstall"	10
+MaintenanceType	Next	ReinstallMode	[ReinstallModeText]	_IsMaintenance = "Reinstall"	9
+MaintenanceWelcome	Cancel	SpawnDialog	CancelSetup	1	0
+MaintenanceWelcome	Next	NewDialog	MaintenanceType	1	0
+OutOfSpace	Resume	NewDialog	AdminNetworkLocation	ACTION = "ADMIN"	0
+OutOfSpace	Resume	NewDialog	CustomSetup	ACTION <> "ADMIN"	0
+PatchWelcome	Back	NewDialog	SplashBitmap	Display_IsBitmapDlg	0
+PatchWelcome	Cancel	SpawnDialog	CancelSetup	1	1
+PatchWelcome	Next	EndDialog	Return	1	3
+PatchWelcome	Next	Reinstall	ALL	PATCH And REINSTALL=""	1
+PatchWelcome	Next	ReinstallMode	omus	PATCH And REINSTALLMODE=""	2
+ReadyToInstall	Back	NewDialog	FileTypeDialog	Installed OR _IsSetupTypeMin = "Custom"	2
+ReadyToInstall	Back	NewDialog	MaintenanceType	Installed AND _IsMaintenance = "Reinstall"	3
+ReadyToInstall	Back	NewDialog	SetupType	NOT Installed AND _IsSetupTypeMin <> "Custom"	1
+ReadyToInstall	Cancel	SpawnDialog	CancelSetup	1	0
+ReadyToInstall	InstallNow	[ProgressType1]	Installing	1	0
+ReadyToInstall	InstallNow	[ProgressType2]	installed	1	0
+ReadyToInstall	InstallNow	[ProgressType3]	installs	1	0
+ReadyToInstall	InstallNow	EndDialog	Return	OutOfNoRbDiskSpace <> 1	0
+ReadyToInstall	InstallNow	NewDialog	OutOfSpace	OutOfNoRbDiskSpace = 1	0
+ReadyToRemove	Back	NewDialog	MaintenanceType	1	0
+ReadyToRemove	Cancel	SpawnDialog	CancelSetup	1	0
+ReadyToRemove	RemoveNow	[ProgressType1]	Uninstalling	1	0
+ReadyToRemove	RemoveNow	[ProgressType2]	uninstalled	1	0
+ReadyToRemove	RemoveNow	[ProgressType3]	uninstalls	1	0
+ReadyToRemove	RemoveNow	EndDialog	Return	OutOfNoRbDiskSpace <> 1	2
+ReadyToRemove	RemoveNow	NewDialog	OutOfSpace	OutOfNoRbDiskSpace = 1	2
+ReadyToRemove	RemoveNow	Remove	ALL	1	1
+SetupCompleteError	Back	[Suspend]	{}	1	1
+SetupCompleteError	Back	EndDialog	Return	1	2
+SetupCompleteError	Cancel	[Suspend]	1	1	1
+SetupCompleteError	Cancel	EndDialog	Return	1	2
+SetupCompleteError	Finish	EndDialog	Exit	1	2
+SetupCompleteSuccess	OK	DoAction	CheckForProductUpdates	ISCHECKFORPRODUCTUPDATES="1" And ISENABLEDWUSFINISHDIALOG And NOT ISREBOOTREQUIRED And NOT Installed And ACTION="INSTALL"	4
+SetupCompleteSuccess	OK	DoAction	CheckForProductUpdatesOnReboot	ISCHECKFORPRODUCTUPDATES="1" And ISENABLEDWUSFINISHDIALOG And ISREBOOTREQUIRED And NOT Installed And ACTION="INSTALL"	5
+SetupCompleteSuccess	OK	EndDialog	Exit	1	2
+SetupError	A	EndDialog	ErrorAbort	1	0
+SetupError	C	EndDialog	ErrorCancel	1	0
+SetupError	I	EndDialog	ErrorIgnore	1	0
+SetupError	N	EndDialog	ErrorNo	1	0
+SetupError	O	EndDialog	ErrorOk	1	0
+SetupError	R	EndDialog	ErrorRetry	1	0
+SetupError	Y	EndDialog	ErrorYes	1	0
+SetupInitialization	Cancel	SpawnDialog	CancelSetup	1	0
+SetupInterrupted	Back	[Suspend]	{}	1	1
+SetupInterrupted	Back	EndDialog	Exit	1	2
+SetupInterrupted	Cancel	[Suspend]	1	1	1
+SetupInterrupted	Cancel	EndDialog	Exit	1	2
+SetupInterrupted	Finish	EndDialog	Exit	1	2
+SetupProgress	Cancel	SpawnDialog	CancelSetup	1	0
+SetupResume	Cancel	SpawnDialog	CancelSetup	1	0
+SetupResume	Next	EndDialog	Return	OutOfNoRbDiskSpace <> 1	0
+SetupResume	Next	NewDialog	OutOfSpace	OutOfNoRbDiskSpace = 1	0
+SetupType	Back	NewDialog	CustomerInformation	1	0
+SetupType	Cancel	SpawnDialog	CancelSetup	1	0
+SetupType	Next	NewDialog	CustomSetup	_IsSetupTypeMin = "Custom"	0
+SetupType	Next	[FILETYPEDIALOGUSED]	0	_IsSetupTypeMin <> "Custom"	5
+SetupType	Next	NewDialog	ReadyToInstall	_IsSetupTypeMin <> "Custom"	6
+SplashBitmap	Cancel	SpawnDialog	CancelSetup	1	0
+SplashBitmap	Next	NewDialog	InstallWelcome	1	0

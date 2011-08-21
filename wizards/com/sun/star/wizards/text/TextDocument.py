@@ -218,6 +218,7 @@ class TextDocument(object):
             year = time.strftime("%Y", now)
             month = time.strftime("%m", now)
             day = time.strftime("%d", now)
+
             dateObject = dateTimeObject(int(year), int(month), int(day))
             du = Helper.DateUtils(self.xMSF, TextDocument.xTextDocument)
             ff = du.getFormat(DATE_SYS_DDMMYY)

@@ -1,0 +1,16 @@
+module ooo { module vba { module access {
+    constants AcObjectType {
+        const long acDataAccessPage = 6;
+        const long acDefault = -1;
+        const long acDiagram = 8;
+        const long acForm = 2;
+        const long acFunction = 10;
+        const long acMacro = 4;
+        const long acModule = 5;
+        const long acQuery = 1;
+        const long acReport = 3;
+        const long acServerView = 7;
+        const long acStoredProcedure = 9;
+        const long acTable = 0;
+    };
+}; }; };

@@ -1,0 +1,9 @@
+module ooo { module vba { module excel {
+    constants XlArrowHeadStyle {
+        const long xlArrowHeadStyleClosed = 3;
+        const long xlArrowHeadStyleDoubleClosed = 5;
+        const long xlArrowHeadStyleDoubleOpen = 4;
+        const long xlArrowHeadStyleNone = -4142;
+        const long xlArrowHeadStyleOpen = 2;
+    };
+}; }; };

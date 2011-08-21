@@ -1,0 +1,33 @@
+module ooo { module vba { module word {
+    constants WdNoteNumberStyle {
+        const long wdNoteNumberStyleArabic = 0;
+        const long wdNoteNumberStyleArabicFullWidth = 14;
+        const long wdNoteNumberStyleArabicLetter1 = 46;
+        const long wdNoteNumberStyleArabicLetter2 = 48;
+        const long wdNoteNumberStyleHanjaRead = 41;
+        const long wdNoteNumberStyleHanjaReadDigit = 42;
+        const long wdNoteNumberStyleHebrewLetter1 = 45;
+        const long wdNoteNumberStyleHebrewLetter2 = 47;
+        const long wdNoteNumberStyleHindiArabic = 51;
+        const long wdNoteNumberStyleHindiCardinalText = 52;
+        const long wdNoteNumberStyleHindiLetter1 = 49;
+        const long wdNoteNumberStyleHindiLetter2 = 50;
+        const long wdNoteNumberStyleKanji = 10;
+        const long wdNoteNumberStyleKanjiDigit = 11;
+        const long wdNoteNumberStyleKanjiTraditional = 16;
+        const long wdNoteNumberStyleLowercaseLetter = 4;
+        const long wdNoteNumberStyleLowercaseRoman = 2;
+        const long wdNoteNumberStyleNumberInCircle = 18;
+        const long wdNoteNumberStyleSimpChinNum1 = 37;
+        const long wdNoteNumberStyleSimpChinNum2 = 38;
+        const long wdNoteNumberStyleSymbol = 9;
+        const long wdNoteNumberStyleThaiArabic = 54;
+        const long wdNoteNumberStyleThaiCardinalText = 55;
+        const long wdNoteNumberStyleThaiLetter = 53;
+        const long wdNoteNumberStyleTradChinNum1 = 33;
+        const long wdNoteNumberStyleTradChinNum2 = 34;
+        const long wdNoteNumberStyleUppercaseLetter = 3;
+        const long wdNoteNumberStyleUppercaseRoman = 1;
+        const long wdNoteNumberStyleVietCardinalText = 56;
+    };
+}; }; };

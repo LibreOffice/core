@@ -1,0 +1,3 @@
+ovba	oovbaapi	:	offapi solenv NULL
+ovba	oovbaapi                            usr1	-	all	ovba_mkout NULL
+ovba	oovbaapi\prj                        nmake	-   all ovba_prj NULL

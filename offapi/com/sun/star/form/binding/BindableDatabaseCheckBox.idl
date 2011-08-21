@@ -1,0 +1,90 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_form_binding_BindableDatabaseCheckBox_idl__
+#define __com_sun_star_form_binding_BindableDatabaseCheckBox_idl__
+
+#include <com/sun/star/form/component/DatabaseCheckBox.idl>
+#include <com/sun/star/form/binding/BindableDataAwareControlModel.idl>
+
+//=============================================================================
+
+module com {  module sun {  module star {  module form {  module binding {
+
+//=============================================================================
+
+/** This service specifies a check box which is data-aware and thus can be bound to a
+    database field, and additionally supports binding to arbitrary external values.
+
+    <p>The <type scope="com::sun::star::form::binding">XValueBinding</type> instance which
+    can be associated with a <type>BindableDatabaseCheckBox</type> must support exchanging
+    boolean values. The following mapping between external values and control states apply:
+    <ul><li><TRUE/> will be mapped to the box being checked, and vice versa</li>
+        <li><FALSE/> will be mapped to it being unchecked, and vice versa</li>
+        <li><NULL/> will be mapped to it being in undetermined state, if the box currently supports
+        this, or being unchecked else. The undetermined of the check box will always be
+        mapped to <NULL/> when writing the external value.</li>
+    </ul></p>
+
+    <p>If the value binding associated with a <type>BindableDatabaseCheckBox</type>
+    supports exchanging string values, <em>and</em> the <member scope="com::sun::star::form::component">CheckBox::RefValue</member>
+    is <em>not</em> empty, then the radio button will exchange it's value as string:
+    <ul><li>A string equal to the reference value will be mapped to the button being checked, and vice versa</li>
+        <li>A string not equal to the reference value will be mapped to the button being unchecked, and vice versa</li>
+        <li><NULL/> will be mapped to it being in undetermined state</li>
+    </ul></p>
+
+    @see com::sun::star::form::binding::XValueBinding::supportsType
+    @see com::sun::star::awt::UnoControlCheckBoxModel::State
+    @see com::sun::star::awt::UnoControlCheckBoxModel::TriState
+    @see com::sun::star::form::component::CheckBox::RefValue
+ */
+service BindableDatabaseCheckBox
+{
+    service com::sun::star::form::component::DatabaseCheckBox;
+
+    /** specifies the interaction between an internal binding to a database column,
+        and an external value binding.</p>
+    */
+    service com::sun::star::form::binding::BindableDataAwareControlModel;
+
+    /** specifies a value which is to be associated with the control when it's <em>not</em>
+        checked.
+
+        <p><member scope="com::sun::star::form::component">CheckBox::RefValue</member> is transferred to
+        possible external value bindings as soon as the check box is checked. With the member
+        <member>SecondaryRefValue</member>, clients of the check box can also associate a value with
+        the <em>not checked</em> state of the control.</p>
+    */
+    [property] string SecondaryRefValue;
+};
+
+//=============================================================================
+
+}; }; }; }; };
+
+#endif

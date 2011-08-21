@@ -1,0 +1,47 @@
+dt      desktop :    TRANSLATIONS:translations sfx2 stoc BERKELEYDB:berkeleydb sysui BOOST:boost svx xmlhelp sal unoil officecfg offapi filter LIBXSLT:libxslt NULL
+dt	desktop									usr1	-	all	dt_mkout NULL
+dt	desktop\inc								nmake	-	all	dt_inc NULL
+dt	desktop\prj								get		-	all	dt_prj NULL
+dt	desktop\res								get		-	all	dt_res NULL
+dt	desktop\source\app						nmake	-	all	dt_app dt_migr dt_inc dt_dp_misc NULL
+dt	desktop\source\migration				nmake	-	all	dt_migr dt_inc NULL
+dt	desktop\source\migration\services		nmake	-	all	dt_services dt_inc dt_dp_misc NULL
+dt	desktop\source\offacc					nmake	-	all	dt_offac dt_inc NULL
+dt	desktop\source\splash					nmake	-	all	dt_spl dt_migr dt_inc NULL
+dt	desktop\win32\source					nmake	-	w	dt_wrapper dt_inc NULL
+dt	desktop\win32\source\setup				nmake	-	w	dt_setup dt_inc NULL
+dt	desktop\win32\source\officeloader		nmake	-	w	dt_officeloader dt_inc NULL
+dt	desktop\win32\source\guiloader			nmake	-	w	dt_guiloader dt_wrapper.w dt_inc NULL
+dt  desktop\win32\source\guistdio           nmake   -   w   dt_guistdio dt_inc NULL
+dt	desktop\win32\source\applauncher		nmake	-	w	dt_applauncher dt_inc NULL
+dt	desktop\win32\source\applauncher\ooo	nmake	-	w	dt_applauncher_ooo dt_applauncher.w dt_inc NULL
+dt	desktop\win32\source\QuickStart		nmake	-	w	dt_win32_quickstart NULL
+dt	desktop\win32\source\QuickStart\so	nmake	-	w	dt_win32_quickstart_so dt_win32_quickstart.w NULL
+
+dt	desktop\os2\source\applauncher			nmake	-	p	dt_applauncher dt_inc NULL
+dt	desktop\unx\source\officeloader		nmake	-	u	dt_officeloader_unx dt_inc NULL
+dt     desktop\unx\source                      nmake   -       u       dt_uwrapper dt_pagein.u dt_inc NULL
+dt	desktop\source\pagein					nmake	-	u	dt_pagein dt_inc NULL
+dt	desktop\source\pkgchk\unopkg			nmake	-	all	dt_unopkg dt_dp_misc dt_app dt_inc dt_guiloader.w NULL
+dt     desktop\unx\splash                      nmake   -       u       dt_usplash      dt_pagein.u dt_inc NULL
+dt	desktop\source\deployment				nmake	-	all	dt_deployment dt_dp_manager dt_dp_registry dt_dp_registry_package dt_dp_registry_executable dt_dp_registry_help dt_dp_registry_script dt_dp_registry_sfwk dt_dp_registry_component dt_dp_registry_configuration dt_dp_unopkg dt_inc dt_dp_misc NULL
+dt	desktop\source\deployment\misc				nmake	-	all	dt_dp_misc dt_inc NULL
+dt	desktop\source\deployment\unopkg			nmake	-	all	dt_dp_unopkg dt_inc NULL
+dt	desktop\source\deployment\gui				nmake	-	all	dt_dp_gui dt_dp_misc dt_inc NULL
+dt	desktop\source\deployment\manager			nmake	-	all	dt_dp_manager dt_inc NULL
+dt	desktop\source\deployment\registry			nmake	-	all	dt_dp_registry dt_inc NULL
+dt	desktop\source\deployment\registry\package		nmake	-	all	dt_dp_registry_package dt_inc NULL
+dt	desktop\source\deployment\registry\script		nmake	-	all	dt_dp_registry_script dt_inc NULL
+dt	desktop\source\deployment\registry\sfwk		nmake	-	all	dt_dp_registry_sfwk dt_inc NULL
+dt	desktop\source\deployment\registry\component		nmake	-	all	dt_dp_registry_component dt_inc NULL
+dt	desktop\source\deployment\registry\configuration	nmake	-	all	dt_dp_registry_configuration dt_inc NULL
+dt	desktop\source\deployment\registry\help			nmake	-	all	dt_dp_registry_help dt_inc NULL
+dt	desktop\source\deployment\registry\executable		nmake	-	all	dt_dp_registry_executable dt_inc NULL
+dt	desktop\scripts 						nmake	-	u	dt_scripts dt_inc NULL
+dt	desktop\util							nmake	-	all	dt_util dt_app dt_pagein.u dt_spl dt_uwrapper.u dt_usplash.u dt_wrapper.w dt_officeloader.w dt_officeloader_unx.u dt_migr dt_win32_quickstart_so.w dt_zipintro NULL
+dt	desktop\zipintro							nmake	-	all	dt_zipintro NULL
+dt  desktop\registry\data\org\openoffice\Office                     nmake   -  all sn_regconfig NULL
+dt desktop\qa\deployment_misc nmake - all sn_qa_deployment_misc dt_dp_misc dt_inc NULL
+dt desktop\test\deployment\active nmake - all dt_test_deployment_active NULL
+dt desktop\test\deployment\boxt nmake - all dt_test_deployment_boxt NULL
+dt desktop\test\deployment\passive nmake - all dt_test_deployment_passive NULL

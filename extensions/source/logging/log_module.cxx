@@ -36,7 +36,24 @@ namespace logging
 {
 //........................................................................
 
-    IMPLEMENT_COMPONENT_MODULE( LogModule );
+    struct LogModuleCreator
+    {
+        LogModule m_aLogModule;
+    };
+    namespace
+    {
+        class theLogModuleInstance : public rtl::Static<LogModuleCreator, theLogModuleInstance> {};
+    }
+
+    LogModule::LogModule()
+        :BaseClass()
+    {
+    }
+
+    LogModule& LogModule::getInstance()
+    {
+        return theLogModuleInstance::get().m_aLogModule;
+    }
 
 //........................................................................
 } // namespace logging

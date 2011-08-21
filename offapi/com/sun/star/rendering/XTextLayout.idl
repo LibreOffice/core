@@ -1,0 +1,410 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_rendering_XTextLayout_idl__
+#define __com_sun_star_rendering_XTextLayout_idl__
+
+#include <com/sun/star/uno/XInterface.idl>
+#include <com/sun/star/lang/IllegalArgumentException.idl>
+#include <com/sun/star/lang/IndexOutOfBoundsException.idl>
+#include <com/sun/star/geometry/RealPoint2D.idl>
+#include <com/sun/star/geometry/RealBezierSegment2D.idl>
+#include <com/sun/star/geometry/RealRectangle2D.idl>
+#include <com/sun/star/rendering/ViewState.idl>
+#include <com/sun/star/rendering/RenderState.idl>
+#include <com/sun/star/rendering/StringContext.idl>
+#include <com/sun/star/rendering/TextHit.idl>
+#include <com/sun/star/rendering/Caret.idl>
+
+
+module com { module sun { module star { module rendering {
+
+published interface XCanvas;
+published interface XCanvasFont;
+published interface XPolyPolygon2D;
+
+/** This is the central interface for text layouting.<p>
+
+    This is the central interface for text-related tasks more
+    complicated than simple string rendering. Note that all query
+    methods are subject to the current layout state of this
+    object. That is, calls to <member>XTextLayout::justify()</member>
+    or <member>XTextLayout::applyLogicalAdvancements()</member> are
+    likely to change subsequent output of those query methods.<p>
+
+    Similar to <type>XCanvasFont</type>, all measurements and
+    coordinates accepted and returned by this interface are relative
+    to the font's local coordinate system (which only equals device
+    coordinate space, if the combined render transformation used
+    during text output is the identity transformation). Conversely, if
+    the combined transformation used during text output is
+    <em>not</em> the identity transformation, all measurements
+    returned by this interface should be subjected to that
+    transformation, to yield values in device coordinate space.
+    Depending on the underlying font technology, actual device output
+    might be off by up to one device pixel from the transformed
+    metrics.<p>
+
+    @since OOo 2.0
+ */
+published interface XTextLayout : ::com::sun::star::uno::XInterface
+{
+    /** Extract the polygonal shapes of the layouted text.<p>
+
+        Each glyph is represented by a separate
+        <type>XPolyPolygon2D</type> in the returned sequence.<p>
+
+        @returns a sequence of <type>XPolyPolygon2D</type> in font
+        coordinate space, one for every glyph.
+     */
+    sequence<XPolyPolygon2D>    queryTextShapes();
+
+    //-------------------------------------------------------------------------
+
+    /** Query the ink bounding boxes for every glyph in the layouted
+        text.<p>
+
+        Ink, or tight bounding boxes in this case means that for
+        e.g. an "a", the bounding box for the
+        <type>XPolyPolygon2D</type> describing the glyph "a" is
+        returned, not the logical dimensions of the character in the
+        font.<p>
+
+        @returns a sequence of rectangles in font coordinate space,
+        specifying the bounds, one for every glyph.
+
+        @see <member>XTextLayout::queryMeasures()</member>
+     */
+    sequence<::com::sun::star::geometry::RealRectangle2D >  queryInkMeasures();
+
+    //-------------------------------------------------------------------------
+
+    /** Query the logical bounding boxes of every character in the
+        given text string.<p>
+
+        Logical bounding boxes means the space that the font allocates
+        for the given character, which, e.g. for a ".", might be
+        significantly broader than the bounds returned via
+        <member>XTextLayout::queryInkMeasures()</member>.
+
+        @returns a sequence of rectangles specifying the bounds in
+        font coordinate space, one for every glyph.
+
+        @see <member>XTextLayout::queryInkMeasures()</member>
+     */
+    sequence<::com::sun::star::geometry::RealRectangle2D>   queryMeasures();
+
+    //-------------------------------------------------------------------------
+
+    /** Query the advancements for every character in the input string.<p>
+
+        This method returns a sequence of advancements, one for each
+        character in the input string (<em>not</em> for every
+        glyph. There might be multiple glyphs per input character, or
+        multiple input characters per glyph). Adding up all
+        advancements yields the total advancement of this layout. To
+        manipulate the layout of a string on the level of characters,
+        this method can be used to query for the layout's default
+        advancements, which can subsequently be changed and applied to
+        the layout via
+        <member>XTextLayout::applyLogicalAdvancements()</member>.<p>
+
+        @returns a sequence of <type>double</type> specifying the
+        advancements per character in font coordinate space.
+
+        @see <member>XTextLayout::applyLogicalAdvancements()</member>
+     */
+    sequence<double>            queryLogicalAdvancements();
+
+    //-------------------------------------------------------------------------
+
+    /** Apply explicit advancements for every character in the layout
+        string.<p>
+
+        This method applies the specified advancements to every
+        logical character in the input string (<em>not</em> for every
+        glyph. There might be multiple glyphs per input character, or
+        multiple input characters per glyph). This is useful to
+        explicitly manipulate the exact output positions of
+        characters, e.g. relative to a reference output device.<p>
+
+        @param aAdvancements
+        A sequence of character advancements, in font coordinate
+        space.
+
+        @see <member>XTextLayout::queryLogicalAdvancements()</member>
+
+        @throws <type>com::sun::star::lang::IllegalArgumentException</type>
+        if the size of aAdvancements does not match the number of
+        characters in the text.
+     */
+    void                        applyLogicalAdvancements( [in] sequence< double > aAdvancements )
+        raises (com::sun::star::lang::IllegalArgumentException);
+
+    //-------------------------------------------------------------------------
+
+    /** Query the overall bounding box of the text.<p>
+
+        This method is similar to
+        <member>XTextLayout::queryTextMeasures</member>, only that the
+        overall bounds are returned by this method.<p>
+
+        @return the overall bounding box for the given layout, in font
+        coordinate space.
+     */
+    ::com::sun::star::geometry::RealRectangle2D   queryTextBounds();
+
+    //-------------------------------------------------------------------------
+
+    /** Justify the text to the given size.<p>
+
+        This method is the core of the <type>XTextLayout</type>
+        interface, because it layouts the text in a typographically
+        correct way into the available space.<p>
+
+        @param nSize
+        The requested size of the text after justification (either
+        width or height, depending on the writing mode). This
+        parameter is interpreted in font coordinate space.
+
+        @return the actual size of the text after the justification in
+        the font coordinate space. Depending on the font and the
+        script type, this might be somewhat different from the size
+        requested. If the requested size was smaller than the
+        justification algorithm could compress the text, this value
+        might even be significantly larger than nSize.
+
+        @throws <type>com::sun::star::lang::IllegalArgumentException</type>
+        if nSize is 0 or negative.
+     */
+    double justify( [in] double nSize )
+        raises (com::sun::star::lang::IllegalArgumentException);
+
+    //-------------------------------------------------------------------------
+
+    /** Justify a number of text layouts to the given size.<p>
+
+        This method can be used to combine the layout of a text line
+        into a single justification run. This is e.g. useful if the
+        line consists of several text portions (e.g. because of
+        different fonts or colors), but it is desirable to spread the
+        available space more globally across the different layout
+        objects. If, for example, one layout object contains
+        significantly more whitespace or Kashidas than the rest, this
+        method can assign proportionally more space to this layout
+        object.<p>
+
+        @param aNextLayouts
+        A sequence of layouts following this one in logical text
+        order.
+
+        @param nSize
+        The requested size of the text for <em>all</em>
+        <type>XTextLayout</type>s after justification in font
+        coordinate space (either width or height, depending on the
+        writing mode).
+
+        @return the actual size of the text after the justification,
+        in font coordinate space. Depending on the font and the
+        script type, this might be somewhat different from the size
+        requested. If the requested size was smaller than the
+        justification algorithm could compress the text, this value
+        might even be significantly larger than nSize.
+
+        @throws <type>com::sun::star::lang::IllegalArgumentException</type>
+        if one of the parameters are not in the valid range.
+     */
+    double combinedJustify( [in] sequence< XTextLayout > aNextLayouts, [in] double nSize )
+        raises (com::sun::star::lang::IllegalArgumentException);
+
+    //-------------------------------------------------------------------------
+
+    /** This method determines the hit position in the text.<p>
+
+        This method determines the index of the character hit at the
+        specified position (in font coordinate space).<p>
+
+        @param aHitPoint
+        The position in font coordinate space to determine the
+        underlying character index for.
+
+     */
+    TextHit getTextHit( [in] ::com::sun::star::geometry::RealPoint2D aHitPoint );
+
+    //-------------------------------------------------------------------------
+
+    /** This method converts an insertion index to a caret.<p>
+
+        This method generates caret information for a given insertion
+        point in the layout text.<p>
+
+        @param nInsertionIndex
+        The insertion index, as e.g. returned by
+        <member>XTextLayout::getTextHit()</member>. This value must be
+        in the range 0 up to the number of characters in the string.
+
+        @param bExcludeLigatures
+        Set this to <TRUE/>, to skip the positions inside ligatures as
+        valid caret placements. That means, on cannot e.g. set the
+        caret between the "f" and the "i" in a "fi" ligature.
+
+        @returns the generated Caret structure.
+
+        @throws <type>com::sun::star::lang::IndexOutOfBoundsException</type>
+        if nInsertionIndex is outside the permissible range.
+     */
+    Caret getCaret( [in] long nInsertionIndex,
+                    [in] boolean bExcludeLigatures )
+        raises (com::sun::star::lang::IndexOutOfBoundsException);
+
+    //-------------------------------------------------------------------------
+
+    /** This method calculates a new insertion index.<p>
+
+        This method calculates a new insertion index, given a start
+        index and the number of characters to skip. This is most
+        useful for caret traveling.<p>
+
+        @param nStartIndex
+        The insertion index to start from.
+
+        @param nCaretAdvancement
+        For values greater than 0, the caret is visually moved to the
+        right. For values smaller than 0, the caret is visually moved
+        to the left.
+
+        @returns the new insertion index.
+
+        @throws <type>com::sun::star::lang::IndexOutOfBoundsException</type>
+        if nStartIndex or nCaretAdvancement is outside the permissible
+        range.
+     */
+    long getNextInsertionIndex( [in] long nStartIndex,
+                                [in] long nCaretAdvancement,
+                                [in] boolean bExcludeLigatures )
+        raises (com::sun::star::lang::IndexOutOfBoundsException);
+
+    //-------------------------------------------------------------------------
+
+    /** This method generates a highlight polygon.<p>
+
+        This method generates a highlighting polygon from two
+        insertion indices. This polygon will be visually continuous,
+        i.e. will not have non-highlighted text in between.<p>
+
+        @param nStartIndex
+        Start of the selection range.
+
+        @param nEndIndex
+        End of the selection range.
+
+        @return the highlight polygon in the font coordinate space.
+
+        @throws <type>com::sun::star::lang::IndexOutOfBoundsException</type>
+        if nStartIndex or nEndIndex are outside the permissible
+        range.
+     */
+    XPolyPolygon2D queryVisualHighlighting( [in] long nStartIndex,
+                                            [in] long nEndIndex )
+        raises (com::sun::star::lang::IndexOutOfBoundsException);
+
+    //-------------------------------------------------------------------------
+
+    /** This method generates a highlight polygon.<p>
+
+        This method generates a highlighting polygon from two
+        insertion indices. This polygon will not always be visually
+        continuous, if e.g. the text direction changes in the middle
+        of the selection, the might be parts visually between start
+        and end position that are not selected.<p>
+
+        @param nStartIndex
+        Start of the selection range.
+
+        @param nEndIndex
+        End of the selection range.
+
+        @return the highlight polygon in the font coordinate space.
+
+        @throws <type>com::sun::star::lang::IndexOutOfBoundsException</type>
+        if nStartIndex or nEndIndex are outside the permissible
+        range.
+     */
+    XPolyPolygon2D queryLogicalHighlighting( [in] long nStartIndex,
+                                             [in] long nEndIndex )
+        raises (com::sun::star::lang::IndexOutOfBoundsException);
+
+    //-------------------------------------------------------------------------
+
+    /** This method yields the baseline offset.<p>
+
+        This method returns the baseline offset for this layout
+        object, either measured from the top or the left edge,
+        depending on the writing direction (horizontally or
+        vertically). Since rendering this layout via
+        <member>XCanvas::drawTextLayout()</member> outputs relative to
+        the layout object's baseline, this method can be used to
+        e.g. output relative to the left, top edge.<p>
+
+        @returns the distance of the main baseline from the top or the
+        left edge of this object, depending on the writing direction.
+     */
+    double getBaselineOffset();
+
+    //-------------------------------------------------------------------------
+
+    /** This method returns the main writing direction.<p>
+
+        This method returns the main writing direction of this layout,
+        i.e. either LEFT_TO_RIGHT or RIGHT_TO_LEFT.<p>
+
+        @returns the main text direction of this layout.
+     */
+    byte getMainTextDirection();
+
+    //-------------------------------------------------------------------------
+
+    /** Request the associated font for this layout..
+
+        @returns the associated font for this layout.
+     */
+    XCanvasFont getFont();
+
+    //-------------------------------------------------------------------------
+
+    /** Request the text this layout contains.
+
+        @returns the text this layout contains.
+     */
+    StringContext getText();
+
+    //-------------------------------------------------------------------------
+
+};
+
+}; }; }; };
+
+#endif

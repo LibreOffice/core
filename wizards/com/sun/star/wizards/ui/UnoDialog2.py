@@ -202,7 +202,6 @@ class UnoDialog2(UnoDialog):
             sName, sPropNames, oPropValues)
         return oLine
 
-
     def insertLabel(self, sName, sPropNames, oPropValues):
         oFixedText = self.insertControlModel(
             "com.sun.star.awt.UnoControlFixedTextModel",
@@ -238,4 +237,3 @@ class UnoDialog2(UnoDialog):
         return SystemDialog.showMessageBox(
             xMSF, self.xControl.Peer,
             windowServiceName, windowAttribute, MessageText)
-

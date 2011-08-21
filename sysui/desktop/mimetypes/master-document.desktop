@@ -1,0 +1,9 @@
+[Desktop Entry]
+Version=1.0
+Encoding=UTF-8
+Hidden=false
+Icon=master-document
+Type=MimeType
+Patterns=*.sxg
+MimeType=application/vnd.sun.xml.writer.global
+Comment=%PRODUCTNAME Master Document

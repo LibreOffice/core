@@ -1,0 +1,3 @@
+sn  solenv : NULL
+sn	solenv									usr1	-	all	sn_mkout NULL
+sn	solenv									nmake	-	all	sn_init NULL

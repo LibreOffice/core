@@ -1,0 +1,7 @@
+module ooo { module vba { module word {
+    constants WdMonthNames {
+        const long wdMonthNamesArabic = 0;
+        const long wdMonthNamesEnglish = 1;
+        const long wdMonthNamesFrench = 2;
+    };
+}; }; };

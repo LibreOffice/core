@@ -1396,40 +1396,4 @@ void BasicIDEShell::Deactivate( sal_Bool bMDI )
     }
 }
 
-
-IMPL_LINK( BasicIDEShell, AccelSelectHdl, Accelerator*, pAccel )
-{
-    sal_Bool bDone = sal_True;
-    SfxViewFrame* pViewFrame = GetViewFrame();
-    SfxDispatcher* pDispatcher = pViewFrame ? pViewFrame->GetDispatcher() : NULL;
-    if( !pDispatcher )
-        return sal_False;
-    switch ( pAccel->GetCurKeyCode().GetCode() )
-    {
-        case KEY_F5:
-            if ( pAccel->GetCurKeyCode().IsShift() )
-                pDispatcher->Execute( SID_BASICSTOP, SFX_CALLMODE_SYNCHRON );
-            else
-                pDispatcher->Execute( SID_BASICRUN, SFX_CALLMODE_SYNCHRON );
-        break;
-        case KEY_F7:
-            pDispatcher->Execute( SID_BASICIDE_ADDWATCH, SFX_CALLMODE_SYNCHRON );
-        break;
-        case KEY_F8:
-            if ( pAccel->GetCurKeyCode().IsShift() )
-                pDispatcher->Execute( SID_BASICSTEPOVER, SFX_CALLMODE_SYNCHRON );
-            else
-                pDispatcher->Execute( SID_BASICSTEPINTO, SFX_CALLMODE_SYNCHRON );
-        break;
-        case KEY_F9:
-            if ( pAccel->GetCurKeyCode().IsShift() )
-                pDispatcher->Execute( SID_BASICIDE_TOGGLEBRKPNTENABLED, SFX_CALLMODE_SYNCHRON );
-            else
-                pDispatcher->Execute( SID_BASICIDE_TOGGLEBRKPNT, SFX_CALLMODE_SYNCHRON );
-        break;
-        default:    bDone = sal_False;
-    }
-    return bDone;
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

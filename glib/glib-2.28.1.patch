@@ -1,0 +1,153 @@
+--- misc/glib-2.28.1/gio/gzlibcompressor.c	2011-02-11 16:23:12.000000000 +0100
++++ misc/build/glib-2.28.1/gio/gzlibcompressor.c	2011-02-25 15:59:17.000000000 +0100
+@@ -73,7 +73,7 @@
+ g_zlib_compressor_set_gzheader (GZlibCompressor *compressor)
+ {
+   /* On win32, these functions were not exported before 1.2.4 */
+-#if !defined (G_OS_WIN32) || ZLIB_VERNUM >= 0x1240
++#if (!defined (G_OS_WIN32) && ! defined(BUILD_OS_APPLEOSX)) || ZLIB_VERNUM >= 0x1240
+   const gchar *filename;
+ 
+   if (compressor->format != G_ZLIB_COMPRESSOR_FORMAT_GZIP ||
+--- misc/glib-2.28.1/gio/gzlibdecompressor.c	2011-02-11 16:23:12.000000000 +0100
++++ misc/build/glib-2.28.1/gio/gzlibdecompressor.c	2011-02-25 16:00:43.000000000 +0100
+@@ -76,7 +76,7 @@
+ g_zlib_decompressor_set_gzheader (GZlibDecompressor *decompressor)
+ {
+   /* On win32, these functions were not exported before 1.2.4 */
+-#if !defined (G_OS_WIN32) || ZLIB_VERNUM >= 0x1240
++#if (!defined (G_OS_WIN32) && !defined(BUILD_OS_APPLEOSX)) || ZLIB_VERNUM >= 0x1240
+   if (decompressor->format != G_ZLIB_COMPRESSOR_FORMAT_GZIP)
+     return;
+ 
+@@ -376,7 +376,7 @@
+   *bytes_read = inbuf_size - decompressor->zstream.avail_in;
+   *bytes_written = outbuf_size - decompressor->zstream.avail_out;
+ 
+-#if !defined (G_OS_WIN32) || ZLIB_VERNUM >= 0x1240
++#if (!defined (G_OS_WIN32) && !defined(BUILD_OS_APPLEOSX)) || ZLIB_VERNUM >= 0x1240
+   if (decompressor->header_data != NULL &&
+       decompressor->header_data->gzheader.done == 1)
+     {
+--- misc/glib-2.28.1/glib/gatomic.c	2011-02-11 16:23:12.000000000 +0100
++++ misc/build/glib-2.28.1/glib/gatomic.c	2011-02-25 15:51:45.000000000 +0100
+@@ -28,6 +28,7 @@
+ #endif
+ 
+ #include "gatomic.h"
++#include "gthread.h"
+ #include "gthreadprivate.h"
+ 
+ /**
+--- misc/glib-2.28.1/glib/gconvert.c
++++ misc/build/glib-2.28.1/glib/gconvert.c
+@@ -58,13 +58,6 @@
+ 
+ #include "glibintl.h"
+ 
+-#if defined(USE_LIBICONV_GNU) && !defined (_LIBICONV_H)
+-#error GNU libiconv in use but included iconv.h not from libiconv
+-#endif
+-#if !defined(USE_LIBICONV_GNU) && defined (_LIBICONV_H)
+-#error GNU libiconv not in use but included iconv.h is from libiconv
+-#endif
+-
+ 
+ /**
+  * SECTION:conversions
+
+--- misc/glib-2.28.1/configure
++++ misc/build/glib-2.28.1/configure
+@@ -7097,6 +7097,7 @@
+ fi
+ 
+ 
++if false; then
+ # Need suitable python path for greport
+ 
+ 
+@@ -7325,6 +7326,7 @@
+ 
+ 
+ 
++fi
+ 
+ 
+ 
+@@ -7988,6 +7988,7 @@
+ CONFIG_STATUS_DEPENDENCIES='$(top_srcdir)/po/LINGUAS'
+ 
+ 
++ if false; then
+    for ac_header in locale.h
+ do :
+   ac_fn_c_check_header_mongrel "$LINENO" "locale.h" "ac_cv_header_locale_h" "$ac_includes_default"
+@@ -8701,6 +8701,8 @@
+ 
+ LIBS="$INTLLIBS $LIBS"
+ 
++fi
++
+ GETTEXT_PACKAGE=glib20
+ 
+ 
+--- misc/glib-2.28.1/Makefile.in
++++ misc/build/glib-2.28.1/Makefile.in
+@@ -422,7 +422,7 @@
+ 	gio-2.0-uninstalled.pc.in gio-unix-2.0-uninstalled.pc.in
+ TEST_PROGS = 
+ ACLOCAL_AMFLAGS = -I m4macros ${ACLOCAL_FLAGS}
+-SUBDIRS = . m4macros glib gmodule gthread gobject gio tests po docs
++SUBDIRS = . m4macros glib gmodule gthread gobject gio tests
+ DIST_SUBDIRS = $(SUBDIRS) build
+ bin_SCRIPTS = glib-gettextize
+ AM_CPPFLAGS = \
+--- misc/glib-2.28.1/glib/gi18n.h
++++ misc/build/glib-2.28.1/glib/gi18n.h
+@@ -20,15 +20,10 @@
+ #ifndef __G_I18N_H__
+ #define __G_I18N_H__
+ 
+-#include <glib.h>
+-
+-#include <libintl.h>
+-#include <string.h>
+-
+-#define  _(String) gettext (String)
+-#define Q_(String) g_dpgettext (NULL, String, 0)
+-#define N_(String) (String)
+-#define C_(Context,String) g_dpgettext (NULL, Context "\004" String, strlen (Context) + 1)
++#define _(String) (String)
++#define Q_(String) (String)
++#define N_(String) (String)
++#define C_(Context,String) (String)
+ #define NC_(Context, String) (String)
+ 
+ #endif  /* __G_I18N_H__ */
+--- misc/glib-2.28.1/gio/tests/gsettings.c
++++ misc/build/glib-2.28.1/gio/tests/gsettings.c
+@@ -1,7 +1,9 @@
++#include "config.h"
++
+ #include <stdlib.h>
+ #include <locale.h>
+-#include <libintl.h>
+ #include <gio/gio.h>
++#include "glibintl.h"
+ #include <gstdio.h>
+ #define G_SETTINGS_ENABLE_BACKEND
+ #include <gio/gsettingsbackend.h>
+--- misc/glib-2.28.1/gio/tests/gschema-compile.c
++++ misc/build/glib-2.28.1/gio/tests/gschema-compile.c
+@@ -1,8 +1,10 @@
++#include "config.h"
++
+ #include <stdlib.h>
+ #include <unistd.h>
+ #include <locale.h>
+-#include <libintl.h>
+ #include <gio/gio.h>
++#include "glibintl.h"
+ #include <gstdio.h>
+ 
+ typedef struct {

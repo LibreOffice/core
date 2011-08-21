@@ -1,0 +1,73 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * 
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+
+#include "macros.inc"
+
+File gid_File_Share_Registry_Binfilter_Xcd
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Registry;
+    Name = "binfilter.xcd";
+End
+
+File gid_Starregistry_Legacy_Binfilters_Rdb
+    TXT_FILE_BODY;
+    Name = "legacy_binfilters.rdb";
+    Dir = gid_Dir_Program;
+    Styles = (PACKED);
+End
+
+
+
+STD_LIB_FILE( gid_File_Lib_Bf_Go, bf_go)
+STD_LIB_FILE( gid_File_Lib_Bf_Sch, bf_sch)
+STD_LIB_FILE( gid_File_Lib_Bf_Xo, bf_xo)
+STD_LIB_FILE( gid_File_Lib_Bf_Svx, bf_svx)
+STD_LIB_FILE( gid_File_Lib_Bf_Svt, bf_svt)
+STD_LIB_FILE( gid_File_Lib_Bf_Frm, bf_frm)
+STD_LIB_FILE( gid_File_Lib_Bf_Ofa, bf_ofa)
+STD_LIB_FILE( gid_File_Lib_Bf_Sb, bf_sb)
+STD_LIB_FILE( gid_File_Lib_Bf_Sc, bf_sc)
+STD_LIB_FILE( gid_File_Lib_Bf_Sd, bf_sd)
+STD_LIB_FILE( gid_File_Lib_Bf_Sm, bf_sm)
+STD_LIB_FILE( gid_File_Lib_Bf_Sw, bf_sw)
+STD_LIB_FILE( gid_File_Lib_Bf_Wrapper, bf_wrapper)
+STD_LIB_FILE( gid_File_Lib_Legacy_Binfilters, legacy_binfilters)
+STD_LIB_FILE( gid_File_Lib_Bf_So, bf_so)
+STD_LIB_FILE( gid_File_Lib_Bf_Migratefilter, bf_migratefilter)
+STD_LIB_FILE( gid_File_Lib_Bindet, bindet)
+
+BINFILTER_RES_FILE( gid_File_Res_Bf_Sch, bf_sch )
+BINFILTER_RES_FILE( gid_File_Res_Bf_Svx, bf_svx )
+BINFILTER_RES_FILE( gid_File_Res_Bf_Svt, bf_svt )
+BINFILTER_RES_FILE( gid_File_Res_Bf_Frm, bf_frm )
+BINFILTER_RES_FILE( gid_File_Res_Bf_Ofa, bf_ofa )
+BINFILTER_RES_FILE( gid_File_Res_Bf_Sc, bf_sc )
+BINFILTER_RES_FILE( gid_File_Res_Bf_Sd, bf_sd )
+BINFILTER_RES_FILE( gid_File_Res_Bf_Sm, bf_sm)
+BINFILTER_RES_FILE( gid_File_Res_Bf_Sw, bf_sw )

@@ -1,0 +1,9 @@
+module ooo { module vba { module adodb {
+    constants CompareEnum {
+        const long adCompareEqual = 1;
+        const long adCompareGreaterThan = 2;
+        const long adCompareLessThan = 0;
+        const long adCompareNotComparable = 4;
+        const long adCompareNotEqual = 3;
+    };
+}; }; };

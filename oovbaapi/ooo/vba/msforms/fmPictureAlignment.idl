@@ -1,0 +1,9 @@
+module ooo { module vba { module msforms {
+    constants fmPictureAlignment {
+        const long fmPictureAlignmentBottomLeft = 3;
+        const long fmPictureAlignmentBottomRight = 4;
+        const long fmPictureAlignmentCenter = 2;
+        const long fmPictureAlignmentTopLeft = 0;
+        const long fmPictureAlignmentTopRight = 1;
+    };
+}; }; };

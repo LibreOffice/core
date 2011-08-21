@@ -1,0 +1,198 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_text_AccessibleParagraphView_idl__
+#define __com_sun_star_text_AccessibleParagraphView_idl__
+
+#include <com/sun/star/accessibility/XAccessibleContext.idl>
+#include <com/sun/star/accessibility/XAccessibleComponent.idl>
+#include <com/sun/star/accessibility/XAccessibleEditableText.idl>
+#include <com/sun/star/accessibility/XAccessibleEventBroadcaster.idl>
+#include <com/sun/star/accessibility/XAccessibleTextAttributes.idl>
+
+//=============================================================================
+
+module com {  module sun {  module star {  module text {
+
+//=============================================================================
+
+/** The accessible view of a paragraph fragment.
+
+
+     @since OOo 1.1.2
+ */
+published service AccessibleParagraphView
+{
+    /** This interface gives access to a paragraph fragment that is at least
+          partially visible on the screen. A paragraph fragment is the portion
+        of a paragraph that is displayed on a single page or a in a single
+        column.
+
+        <ul>
+            <li>The parent returned by
+                <method scope="::com::sun::star::accessibility"
+                >XAccessibleContext::getAccessibleParent</method> is the
+                accessible view of a text document (in this case the
+                paragraph is contained in a page body) or the accessible
+                view of a header, footer, footnote, endnote, table cell,
+                text frame, page or shape.</li>
+            <li>The children returned by
+                <method scope="::com::sun::star::accessibility"
+                >XAccessibleContext::getAccessibleChild</method> are the
+                graphics, text boxes and OLE objects that are bound
+                <em>as</em> character within the paragraph. Graphics, text
+                boxes and OLE objects that are bound to the paragraph or
+                <em>to</em> a character within the paragraph are not
+                children of the paragraph fragment but of the document view
+                itself.</li>
+            <li>The role is either
+                <const scope="::com::sun::star::accessibility"
+                >AccessibleRole::PARAGRAPH</const> or
+                <const scope="::com::sun::star::accessibility"
+                >AccessibleRole::HEADING</const>. The later one is returned
+                if the paragraph's style is contained in the chapter
+                numbering of a text document.
+            <li>The name is "paragraph" or "heading" (or the equivalent term
+                in application's language) with a number appended.
+            <li>The description contains the term "paragraph" (or the equivalent
+                term in application's language) and the first sentence of
+                the paragraph.
+            <li>There are no relations.
+            <li>The following states are supported by the
+                <type scope="::com::sun::star::accessibility"
+                >XAccessibleStateSet</type> returned by
+                <method scope="::com::sun::star::accessibility"
+                >XAccessibleContext::getAccessibleStateSet</method>.
+                <ul>
+                    <li><const scope="::com::sun::star::accessibility"
+                        >AccessibleStateType::DEFUNC</const> (indicates that
+                        the document window has been closed or the paragraph
+                        fragment is not existing any longer).
+                    <li><const scope="::com::sun::star::accessibility"
+                        >AccessibleStateType::EDITABLE</const>
+                    <li><const scope="::com::sun::star::accessibility"
+                        >AccessibleStateType::ENABLED</const> (always
+                        contained)
+                    <li><const scope="::com::sun::star::accessibility"
+                        >AccessibleStateType::MULTILINE</const> (always
+                        contained)
+                    <li><const scope="::com::sun::star::accessibility"
+                        >AccessibleStateType::MULTISELECTABLE</const>
+                        (always contained)
+                    <li><const scope="::com::sun::star::accessibility"
+                        >AccessibleStateType::OPAQUE</const>
+                    <li><const scope="::com::sun::star::accessibility"
+                        >AccessibleStateType::SHOWING</const>
+                    <li><const scope="::com::sun::star::accessibility"
+                        >AccessibleStateType::VISIBLE</const>
+                    <li><const scope="::com::sun::star::accessibility"
+                        >AccessibleStateType::FOCUSED</const>
+                </ul>
+            <li>Depending of the application's region setting, the locale is
+                the western, Asian or complex language of the paragraph.
+        </ul>
+
+     */
+    interface ::com::sun::star::accessibility::XAccessibleContext;
+
+    /** This interface describes the graphical representation of a paragraph
+          fragment.
+     */
+    interface ::com::sun::star::accessibility::XAccessibleComponent;
+
+    /** This interface gives access to a paragraph fragment's text. The text
+          contains the paragraph's editable text as well as generated text,
+        like chapter numbers, hyphens or fields. Characters of generated
+        text contribute to the text's character indexing. However, it is not
+        possible to set the caret or start a selection within generated text.
+        <p>For text frames, graphics, etc. that are bound as character some
+        text is generated that contains the objects description.
+        <p>The attributes (or properties) returned by
+        <method scope="::com::sun::star::accessibility"
+        >XAccessibleText::getCharacterAttributes</method>
+        are a sub set of the properties described by the service
+        <type scope="::com::sun::star::style">CharacterProperties</type>. For
+        properties that have Asian and complex counterparts, the value that
+        is visible is returned. This can be in fact the western, Asian or
+        complex value.  Its not possible to change the value of any property
+        by using
+        <method scope="::com::sun::star::accessibility"
+        >XAccessibleEditableText::setAttributes</method>.
+        <p><em>TODO: If there is a demand, some attributes might be added that
+        tells whether the character at a certain index is editable or generated.
+        </em>
+
+     */
+    [optional] interface ::com::sun::star::accessibility::XAccessibleEditableText;
+
+    /** This interface is a subset of
+        <type scope="::com::sun::star::accessibility"
+        >XAccessibleEditableText</type> and gives access to a paragraph
+        fragment's text in a read-only mode.  The text contains the
+        paragraph's text (changeable as well as generated text, like chapter
+        numbers, hyphens or fields). Characters of generated text contribute
+        to the text's character indexing.
+        <p>For text frames, graphics, etc. that are bound as character
+        some text is generated that contains the objects description.
+        <p>The attributes (or properties) returned by
+        <method scope="::com::sun::star::accessibility"
+        >XAccessibleText::getCharacterAttributes</method> are a sub set of the properties
+        described by the service
+        <type scope="::com::sun::star::style">CharacterProperties</type>. For
+        properties that have Asian and complex counterparts, the value that
+        is visible is returned. This can be in fact the western, Asian or
+        complex value.
+        <p><em>TODO: If there is a demand, some attributes might be added
+        that tells whether the character at a certain index is changeable or
+        generated.
+        </em>
+     */
+    interface ::com::sun::star::accessibility::XAccessibleText;
+
+    /** This interface is for selecting the paragraph's children. Multi
+        selection is supported only for children that are multi selectable
+        in the GUI, too.
+    */
+    [optional] interface ::com::sun::star::accessibility::XAccessibleSelection;
+
+    /** This is the interface for listeners.
+    */
+    interface ::com::sun::star::accessibility::XAccessibleEventBroadcaster;
+
+        /** This interface gives access to the default attributes of a paragraph
+            and to the run attributes of a certain character in a paragraph
+
+            @since OOo 2.0.4
+        */
+        [optional] interface ::com::sun::star::accessibility::XAccessibleTextAttributes;
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

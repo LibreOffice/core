@@ -1,0 +1,8 @@
+module ooo { module vba { module dao {
+    constants ParameterDirectionEnum {
+        const long dbParamInput = 1;
+        const long dbParamInputOutput = 3;
+        const long dbParamOutput = 2;
+        const long dbParamReturnValue = 4;
+    };
+}; }; };

@@ -1,0 +1,7 @@
+module ooo { module vba { module word {
+    constants WdDefaultListBehavior {
+        const long wdWord10ListBehavior = 2;
+        const long wdWord8ListBehavior = 0;
+        const long wdWord9ListBehavior = 1;
+    };
+}; }; };

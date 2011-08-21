@@ -1,0 +1,108 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_datatransfer_dnd_XDropTargetListener_idl__
+#define __com_sun_star_datatransfer_dnd_XDropTargetListener_idl__
+
+#include <com/sun/star/datatransfer/dnd/DropTargetDragEnterEvent.idl>
+#include <com/sun/star/datatransfer/dnd/DropTargetDropEvent.idl>
+#include <com/sun/star/lang/XEventListener.idl>
+
+//=============================================================================
+
+module com { module sun { module star { module datatransfer { module dnd {
+
+//=============================================================================
+/** This interface is the callback interface used by the drop target object to
+    provide notification of Drag and Drop operations that involve the subject
+    drop target.
+
+    <p>Methods of this interface may be implemented to provide "drag under"
+    visual feedback to the user throughout the Drag and Drop operation.</p>
+*/
+
+published interface XDropTargetListener: com::sun::star::lang::XEventListener
+{
+    //-------------------------------------------------------------------------
+    /** The drag operation has terminated with a drop on this drop target.
+
+        <p><strong>NOTE:</strong> This method should not be oneway. The implementation
+        has to wait until the method <method>XDropTargetDropContext::dropComplete</method>
+        is called before releasing the data for the drop operation. This
+        should occur before returning from drop in a normal flow of operation.
+        Also, the implementor of <type>XDropTargetListener</type> should not assume
+        the <type>DropTargetDropEvent</type> to be meaningful after returning
+        from the <member>XDropTargetListener::drop()</member> method.</p>
+
+        @param dtde
+        The <type>DropTargetDropEvent</type>.
+    */
+
+    void drop( [in] DropTargetDropEvent dtde );
+
+      //-------------------------------------------------------------------------
+    /** Called when a drag operation has encountered the drop target.
+
+        @param dtde
+        The <type>DropTargetDragEvent</type>.
+    */
+
+    [oneway] void dragEnter( [in] DropTargetDragEnterEvent dtdee );
+
+      //-------------------------------------------------------------------------
+    /** The drag operation has departed the drop target without dropping.
+
+        @param dte
+        The <type>DropTargetEvent</type>.
+    */
+
+    [oneway] void dragExit( [in] DropTargetEvent dte );
+
+      //-------------------------------------------------------------------------
+    /** Called when a drag operation is ongoing on the drop target.
+
+        @param dtde
+        The <type>DropTargetEvent</type>.
+    */
+
+    [oneway] void dragOver( [in] DropTargetDragEvent dtde );
+
+      //-------------------------------------------------------------------------
+    /** Called when the user has modified the drop gesture.
+
+        @param dtde
+        The <type>DropTargetEvent</type>.
+    */
+
+    [oneway] void dropActionChanged( [in] DropTargetDragEvent dtde );
+};
+
+//=============================================================================
+
+}; }; }; }; };
+
+#endif

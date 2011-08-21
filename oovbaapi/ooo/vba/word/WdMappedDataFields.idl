@@ -1,0 +1,34 @@
+module ooo { module vba { module word {
+    constants WdMappedDataFields {
+        const long wdAddress1 = 10;
+        const long wdAddress2 = 11;
+        const long wdAddress3 = 29;
+        const long wdBusinessFax = 17;
+        const long wdBusinessPhone = 16;
+        const long wdCity = 12;
+        const long wdCompany = 9;
+        const long wdCountryRegion = 15;
+        const long wdCourtesyTitle = 2;
+        const long wdDepartment = 30;
+        const long wdEmailAddress = 20;
+        const long wdFirstName = 3;
+        const long wdHomeFax = 19;
+        const long wdHomePhone = 18;
+        const long wdJobTitle = 8;
+        const long wdLastName = 5;
+        const long wdMiddleName = 4;
+        const long wdNickname = 7;
+        const long wdPostalCode = 14;
+        const long wdRubyFirstName = 27;
+        const long wdRubyLastName = 28;
+        const long wdSpouseCourtesyTitle = 22;
+        const long wdSpouseFirstName = 23;
+        const long wdSpouseLastName = 25;
+        const long wdSpouseMiddleName = 24;
+        const long wdSpouseNickname = 26;
+        const long wdState = 13;
+        const long wdSuffix = 6;
+        const long wdUniqueIdentifier = 1;
+        const long wdWebPageURL = 21;
+    };
+}; }; };

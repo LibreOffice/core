@@ -1,0 +1,12 @@
+module ooo { module vba { module adodb {
+    constants ConnectModeEnum {
+        const long adModeRead = 1;
+        const long adModeReadWrite = 3;
+        const long adModeShareDenyNone = 16;
+        const long adModeShareDenyRead = 4;
+        const long adModeShareDenyWrite = 8;
+        const long adModeShareExclusive = 12;
+        const long adModeUnknown = 0;
+        const long adModeWrite = 2;
+    };
+}; }; };

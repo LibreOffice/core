@@ -1,0 +1,26 @@
+module ooo { module vba { module excel {
+    constants XlPivotFormatType {
+        const long xlPTClassic = 20;
+        const long xlPTNone = 21;
+        const long xlReport1 = 0;
+        const long xlReport10 = 9;
+        const long xlReport2 = 1;
+        const long xlReport3 = 2;
+        const long xlReport4 = 3;
+        const long xlReport5 = 4;
+        const long xlReport6 = 5;
+        const long xlReport7 = 6;
+        const long xlReport8 = 7;
+        const long xlReport9 = 8;
+        const long xlTable1 = 10;
+        const long xlTable10 = 19;
+        const long xlTable2 = 11;
+        const long xlTable3 = 12;
+        const long xlTable4 = 13;
+        const long xlTable5 = 14;
+        const long xlTable6 = 15;
+        const long xlTable7 = 16;
+        const long xlTable8 = 17;
+        const long xlTable9 = 18;
+    };
+}; }; };

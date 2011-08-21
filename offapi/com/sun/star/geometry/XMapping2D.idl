@@ -1,0 +1,68 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_geometry_XMapping2D_idl__
+#define __com_sun_star_geometry_XMapping2D_idl__
+
+#include <com/sun/star/uno/XInterface.idl>
+#include <com/sun/star/geometry/RealPoint2D.idl>
+
+module com {  module sun {  module star {  module geometry {
+
+/** Interface defining an arbitrary bijective mapping from R^2 to R^2.<p>
+
+    This interface provides methods to define an arbitrary bijective
+    mapping from R^2 to R^2, i.e. from the two-dimensional space of
+    real numbers onto itself, as is representable by the
+    <type>double</type> floating point type. The mapping must be
+    bijective, i.e. map a pair of real numbers to exactly one other
+    pair of real numbers an vice versa, to facilitate a working
+    inverse. Bijectiveness also implies completeness, i.e. for every
+    pair of real numbers there must be another pair that is mapped
+    upon them.<p>
+
+    @since OOo 2.0
+ */
+published interface XMapping2D : ::com::sun::star::uno::XInterface
+{
+    /** Forward 2D mapping function
+     */
+    RealPoint2D     map( [in] RealPoint2D aPoint );
+
+    //-------------------------------------------------------------------------
+
+    /** Inverse 2D mapping function.<p>
+
+        The following invariant must hold:
+        <code>map(mapInverse(p))=p</code>. This effectively rules out
+        non-bijective mappings.<p>
+     */
+    RealPoint2D     mapInverse( [in] RealPoint2D aPoint );
+};
+
+}; }; }; };
+
+#endif

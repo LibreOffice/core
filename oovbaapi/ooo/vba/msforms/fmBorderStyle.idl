@@ -1,0 +1,6 @@
+module ooo { module vba { module msforms {
+    constants fmBorderStyle {
+        const long fmBorderStyleNone = 0;
+        const long fmBorderStyleSingle = 1;
+    };
+}; }; };

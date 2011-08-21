@@ -1,0 +1,174 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_sdbc_XDriver_idl__
+#define __com_sun_star_sdbc_XDriver_idl__
+
+#include <com/sun/star/uno/XInterface.idl>
+
+#include <com/sun/star/beans/PropertyValue.idl>
+
+#include <com/sun/star/sdbc/SQLException.idl>
+
+#include <com/sun/star/sdbc/DriverPropertyInfo.idl>
+
+ module com {  module sun {  module star {  module sdbc {
+
+ published interface XConnection;
+ published interface XDriverManager;
+
+
+/** is the interface that every driver class must implement.
+
+
+
+    <p>
+    Each driver should supply a service that implements
+    the Driver interface.
+
+    </p>
+    <p>The DriverManager will try to load as many drivers as it can
+    find, and then for any given connection request, it will ask each
+    driver in turn to try to connect to the target URL.
+
+    </p>
+    <p>
+    It is strongly recommended that each Driver object should be
+    small and standalone so that the Driver object can be loaded and
+    queried without bringing in vast quantities of supporting code.
+
+    </p>
+    @see com::sun::star::sdbc::XDriverManager
+     @see com::sun::star::sdbc::XConnection
+ */
+published interface XDriver: com::sun::star::uno::XInterface
+{
+
+    /** attempts to make a database connection to the given URL.
+        The driver should return
+        <NULL/>
+        if it realizes it is the wrong kind
+        of driver to connect to the given URL.  This will be common, as when
+        the driver manager is asked to connect to a given URL it passes
+        the URL to each loaded driver in turn.
+
+
+
+        <p>
+        The driver should raise a
+        <type scope="com::sun::star::sdbc">SQLException</type>
+        if it is the right
+        driver to connect to the given URL, but has trouble connecting to
+        the database.
+
+        </p>
+        <p>
+        The info argument can be used to pass arbitrary
+        string tag/value pairs as connection arguments.
+        Normally at least "user" and "password" properties should be
+        included in the Properties. For a JDBC driver also the Java class must
+        be supplied in the property named JavaDriverClass, and a class path (a
+        space-separated list of URLs) needed to locate that class can optionally
+        be supplied in a property named JavaDriverClassPath.
+        Possible property value names are when supported by the driver:
+        @see com::sun::star::sdbc::ConnectionProperties
+        </p>
+
+        @param url
+            is the URL of the database to which to connect.
+        @param info
+            a list of arbitrary string tag/value pairs as connection arguments. Normally at least a "user" and "password" property should be included.
+            @see com::sun::star::sdbc::ConnectionProperties
+        @returns
+            a Connection object that represents a connection to the URL
+        @throws SQLException
+            if a database access error occurs
+
+     */
+    XConnection connect(
+                [in]string url,
+                [in]sequence<com::sun::star::beans::PropertyValue> info)
+        raises (SQLException);
+    //-------------------------------------------------------------------------
+
+    /** returns <TRUE/> if the driver thinks that it can open a connection
+        to the given URL.  Typically drivers will return <TRUE/> if they
+        understand the subprotocol specified in the URL and <FALSE/> if
+        they do not.
+
+        @param url
+            is the URL of the database to which to connect.
+        @returns
+            <TRUE/> if this driver can connect to the given URL.
+        @throws SQLException
+            if a database access error occurs.
+     */
+    boolean acceptsURL([in]string url) raises (SQLException);
+    //-------------------------------------------------------------------------
+
+    /** gets information about the possible properties for this driver.
+             <p>The getPropertyInfo method is intended to allow a generic GUI tool to
+             discover what properties it should prompt a human for in order to get
+             enough information to connect to a database.  Note that depending on
+             the values the human has supplied so far, additional values may become
+             necessary, so it may be necessary to iterate though several calls
+             to getPropertyInfo.
+             @param url
+                is the URL of the database to which to connect.
+             @param info
+                is a proposed list of tag/value pairs that will be sent on
+                connect open.
+             @returns
+                an array of DriverPropertyInfo objects describing possible
+                properties. This array may be an empty array if no properties
+                are required.
+             @throws SQLException
+                if a database access error occurs.
+     */
+    sequence<DriverPropertyInfo> getPropertyInfo([in]string url,
+                    [in] sequence<com::sun::star::beans::PropertyValue> info)
+        raises (SQLException);
+    //-------------------------------------------------------------------------
+
+    /** gets the driver's major version number. Initially this should be 1.
+        @returns
+            this driver's major version number
+     */
+    long getMajorVersion();
+    //-------------------------------------------------------------------------
+
+    /** gets the driver's minor version number. Initially this should be 0.
+        @returns
+            this driver's minor version number.
+     */
+    long getMinorVersion();
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

@@ -1,0 +1,106 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_drawing_EnhancedCustomShapePath_idl__
+#define __com_sun_star_drawing_EnhancedCustomShapePath_idl__
+
+#include <com/sun/star/awt/Size.idl>
+#include <com/sun/star/awt/Point.idl>
+#include <com/sun/star/beans/PropertyValue.idl>
+#include <com/sun/star/drawing/EnhancedCustomShapeParameterPair.idl>
+#include <com/sun/star/drawing/EnhancedCustomShapeSegment.idl>
+#include <com/sun/star/drawing/EnhancedCustomShapeTextFrame.idl>
+
+//=============================================================================
+
+module com { module sun { module star { module drawing {
+
+//=============================================================================
+/**
+  This service may be represented by a ::com::sun::star::beans::PropertyValue [].
+*/
+
+service EnhancedCustomShapePath
+{
+    /** This property is specifying the points that makes the geometry of the shape
+    */
+    [optional, property] sequence<::com::sun::star::drawing::EnhancedCustomShapeParameterPair> Coordinates;
+
+    /** This property specifies the commands and the way the Coordinates have to be interpreted.
+    */
+    [optional, property] sequence<::com::sun::star::drawing::EnhancedCustomShapeSegment> Segments;
+
+    /** This property specifies the horizontal StretchPoint that has to be used. No stretching is used if
+        this property is omitted.
+    */
+    [optional, property] long StretchX;
+
+    /** This property specifies the vertical StretchPoint that has to be used. No stretching is used if
+        this property is omitted.
+    */
+    [optional, property] long StretchY;
+
+    /** This property specifies the text frames that can be used with the shape. In general
+       the first text frame is used, except the shape is containing vertical text, then the object
+       tries to use the second text frame. The default text frame will be as big as the shape.
+    */
+    [optional, property] sequence<::com::sun::star::drawing::EnhancedCustomShapeTextFrame> TextFrames;
+
+    /** This property specifies custom glue points
+    */
+    [optional, property] sequence<::com::sun::star::drawing::EnhancedCustomShapeParameterPair> GluePoints;
+
+    /** This property specifies GluePoint leaving directions.
+    */
+    [optional, property] sequence< double > GluePointLeavingDirections;
+
+    /** This property defines the GluePoint type. The values that can be used are
+        specified in com::sun::star::drawing::EnhancedCustomShapeGluePointType
+    */
+    [optional, property] short GluePointType;
+
+    /** This property specifies if this shape supports the EnhancedCustomShapeExtrusion
+        properties. The default is true.
+    */
+    [optional, property] boolean ExtrusionAllowed;
+
+    /** This property specifies if this shape supports concentric gradient fill. The default
+        is false.
+    */
+    [optional, property] boolean ConcentricGradientFillAllowed;
+
+    /** This property specifies if this shape supports concentric gradient fill. The
+        default is false;
+    */
+    [optional, property] boolean TextPathAllowed;
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif
+

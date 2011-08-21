@@ -1,3 +1,4 @@
+# -*- Mode: makefile-gmake; tab-width: 4; indent-tabs-mode: t -*-
 # Version: MPL 1.1 / GPLv3+ / LGPLv3+
 #
 # The contents of this file are subject to the Mozilla Public License Version
@@ -38,8 +39,7 @@ $(eval $(call gb_Library_set_include,cui,\
     -I$(OUTDIR)/inc/offuh \
 ))
 
-$(eval $(call gb_Library_set_defs,cui,\
-    $$(DEFS) \
+$(eval $(call gb_Library_add_defs,cui,\
     $(if $(filter TRUE,$(ENABLE_GTK)),-DENABLE_GTK) \
     $(if $(filter TRUE,$(ENABLE_KDE)),-DENABLE_KDE) \
     $(if $(filter TRUE,$(ENABLE_KDE4)),-DENABLE_KDE4) \
@@ -57,7 +57,6 @@ $(eval $(call gb_Library_add_linked_libs,cui,\
     cppuhelper \
     editeng \
     i18nisolang1 \
-    icuuc \
     jvmfwk \
     lng \
     sal \
@@ -75,6 +74,10 @@ $(eval $(call gb_Library_add_linked_libs,cui,\
     utl \
     vcl \
     $(gb_STDLIBS) \
+))
+
+$(eval $(call gb_Library_use_externals,cui,\
+    icuuc \
 ))
 
 ifeq ($(GUI),WNT)
@@ -214,4 +217,4 @@ $(eval $(call gb_Library_add_exception_objects,cui,\
 ))
 endif
 
-# vim: set noet ts=4 sw=4:
+# vim: set noet sw=4 ts=4:

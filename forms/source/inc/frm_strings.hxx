@@ -327,6 +327,7 @@ namespace frm
     FORMS_CONSTASCII_STRING( PROPERTY_CONTROL_BORDER_COLOR_FOCUS,  "ControlBorderColorOnFocus"   );
     FORMS_CONSTASCII_STRING( PROPERTY_CONTROL_BORDER_COLOR_MOUSE,  "ControlBorderColorOnHover"   );
     FORMS_CONSTASCII_STRING( PROPERTY_CONTROL_BORDER_COLOR_INVALID,"ControlBorderColorOnInvalid" );
+    FORMS_CONSTASCII_STRING( PROPERTY_GENERATEVBAEVENTS,  "GenerateVbaEvents" );
 
     //--------------------------------------------------------------------------
     //- URLs

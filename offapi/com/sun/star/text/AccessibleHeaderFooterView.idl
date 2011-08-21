@@ -1,0 +1,135 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_text_AccessibleHeaderFooterView_idl__
+#define __com_sun_star_text_AccessibleHeaderFooterView_idl__
+
+#include <com/sun/star/accessibility/XAccessibleContext.idl>
+#include <com/sun/star/accessibility/XAccessibleComponent.idl>
+#include <com/sun/star/accessibility/XAccessibleEventBroadcaster.idl>
+
+
+//=============================================================================
+
+module com {  module sun {  module star {  module text {
+
+//=============================================================================
+
+/** The accessible view of headers and footers.
+
+     @since OOo 1.1.2
+
+ */
+published service AccessibleHeaderFooterView
+{
+    /** This interface gives access to any paragraph and table that is
+          contained in the header and footer and is at least partially visible
+        on the screen.
+
+        <ul>
+            <li>The parent returned by
+                <method scope="::com::sun::star::accessibility"
+                >XAccessibleContext::getAccessibleParent</method>
+                is either the accessible view of a text document,
+                a page of the accessible page preview of a text document,
+                or the accessible page preview of a spreadsheet document.
+            <li>The children returned by
+                <method scope="::com::sun::star::accessibility"
+                >XAccessibleContext::getAccessibleChild</method> all
+                support the interface XAccessible. Calling
+                <method scope="::com::sun::star::accessibility"
+                >XAccessible::getAccessibleContext</method> for these children returns
+                an object that supports one of the following services.
+                <ul>
+                    <li><type scope="::com::sun::star::text"
+                        >AccessibleParagraphView</type>:
+                        A child of this kind is returned for every paragraph
+                        that is contained in the document body and
+                        is at least partially visible. The child always
+                        represents a whole paragraph (and not a fragment only),
+                        because there are no page breaks within headers and
+                        footers.
+                    <li><type scope="::com::sun::star::table"
+                        >AccessibleTableView</type>:
+                        A child of this kind is returned for every table
+                        that is contained in the document body
+                        and is at least partially visible. The child always
+                        represents a whole table (and not a fragment only),
+                        because there are no page breaks within headers and
+                        footers.
+                </ul>
+            <p>The logical order of paragraphs and tables is never changed.
+            <li>The role is either
+                <const scope="::com::sun::star::accessibility"
+                >AccessibleRole::HEADER</const> or
+                <const scope="::com::sun::star::accessibility"
+                >AccessibleRole::FOOTER</const>.
+            <li>The name is "header" or "footer" (or the equivalent term
+                in application's language) with a number appended.
+            <li>The description is "header" or "footer" (or the equivalent term
+                in application's language) with the page number appended in
+                the format that is specified in the page's style.
+            <li>There are no relations.
+            <li>The following states might be contained in the state set
+                returned by <method scope="::com::sun::star::accessibility"
+                >XAccessible::getAccessibleStateSet</type>:
+                <ul>
+                    <li><const scope="::com::sun::star::accessibility"
+                        >AccessibleStateType::DEFUNC</const> (indicates that
+                        the document window has been closed or the header or
+                        footer is not existing any longer)
+                    <li><const scope="::com::sun::star::accessibility"
+                        >AccessibleStateType::EDITABLE</const>
+                    <li><const scope="::com::sun::star::accessibility"
+                        >AccessibleStateType::ENABLED</const> (always contained)
+                    <li><const scope="::com::sun::star::accessibility"
+                        >AccessibleStateType::OPAQUE</const>
+                    <li><const scope="::com::sun::star::accessibility"
+                        >AccessibleStateType::SHOWING</const>
+                    <li><const scope="::com::sun::star::accessibility"
+                        >AccessibleStateType::VISIBLE</const>
+                </ul>
+            <li>Depending of the application's region setting, the locale is
+                the western, Asian or complex default language of the document.
+        </ul>
+
+     */
+    interface ::com::sun::star::accessibility::XAccessibleContext;
+
+    /** This interface describes the graphical representation of a header
+          or footer.
+     */
+    interface ::com::sun::star::accessibility::XAccessibleComponent;
+
+    /** This is the interface for listeners */
+    interface ::com::sun::star::accessibility::XAccessibleEventBroadcaster;
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

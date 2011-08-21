@@ -1359,7 +1359,7 @@ UpdateCheck::setUpdateInfo(const UpdateInfo& aInfo)
     rModel->updateLastChecked();
 
     UpdateState eUIState;
-    if( m_aUpdateInfo.Sources.size() > 0 )
+    if( !m_aUpdateInfo.Sources.empty() )
     {
         rModel->storeUpdateFound(aInfo, getBuildId());
 

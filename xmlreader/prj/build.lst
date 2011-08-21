@@ -1,0 +1,2 @@
+xr xmlreader : BOOST:boost cppu offapi sal stlport NULL
+xr xmlreader\prj nmake - all xr_prj NULL

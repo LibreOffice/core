@@ -1,0 +1,642 @@
+﻿/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#include <svx/dialogs.hrc>
+#include "helpid.hrc"
+
+#include "docrecovery.hrc"
+
+TabDialog RID_SVX_TABDLG_DOCRECOVERY
+{
+    Size = MAP_APPFONT( TABDLG_WIDTH, TABDLG_HEIGHT );
+    HelpId = HID_SVX_TABDLG_DOCRECOVERY;
+    OutputSize = TRUE;
+    SVLook = TRUE;
+    Moveable = TRUE;
+    Closeable = FALSE;
+    Text = "%PRODUCTNAME %PRODUCTVERSION";
+};
+
+TabPage RID_SVXPAGE_DOCRECOVERY_SAVE
+{
+    Size = MAP_APPFONT( SAVE_WIDTH, SAVE_HEIGHT );
+    HelpId = HID_SVX_TP_DOCRECOVERY_SAVE;
+    OutputSize = TRUE;
+    SVLook = TRUE;
+    Hide = TRUE;
+    Window WIN_SAVE_TITLE
+    {
+        Pos = MAP_APPFONT( 0 , 0 );
+        Size = MAP_APPFONT( SAVE_WIDTH, SAVE_ROW1 );
+    };
+    FixedText FT_SAVE_TITLE
+    {
+        Pos = MAP_APPFONT( SAVE_COL0 , SAVE_ROW0 );
+        Size = MAP_APPFONT( SAVE_CONTROLWIDTH, RSC_CD_FIXEDTEXT_HEIGHT );
+        Text[ en-US ] = "%PRODUCTNAME Document Recovery";
+    };
+    FixedLine FL_SAVE_TITLE
+    {
+        Pos = MAP_APPFONT( 0 , SAVE_ROW1 );
+        Size = MAP_APPFONT( SAVE_WIDTH, 2 );
+    };
+    FixedText FT_SAVE_DESCR
+    {
+        Pos = MAP_APPFONT( SAVE_COL0 , SAVE_ROW2 );
+        Size = MAP_APPFONT( SAVE_CONTROLWIDTH, (SAVE_ROW3-SAVE_ROW2-RSC_SP_CTRL_DESC_Y) );
+        WordBreak = TRUE;
+        Text[ en-US ] = "Due to an unexpected error, %PRODUCTNAME crashed. All the files you were working on will now be saved. The next time %PRODUCTNAME is launched, your files will be recovered automatically.";
+    };
+    FixedText FT_SAVE_FILELIST
+    {
+        Pos = MAP_APPFONT( SAVE_COL0 , SAVE_ROW3 );
+        Size = MAP_APPFONT( SAVE_CONTROLWIDTH, RSC_CD_FIXEDTEXT_HEIGHT );
+        Text[ en-US ] = "The following files will be recovered:";
+    };
+    ListBox LB_SAVE_FILELIST
+    {
+        HelpID = "svx:ListBox:RID_SVXPAGE_DOCRECOVERY_SAVE:LB_SAVE_FILELIST";
+        Pos = MAP_APPFONT( SAVE_COL0 , SAVE_ROW4 );
+        Size = MAP_APPFONT( SAVE_CONTROLWIDTH, SAVE_FILELISTHEIGHT );
+        Border = TRUE;
+        TabStop = TRUE;
+    };
+    FixedLine FL_SAVE_BOTTOM
+    {
+        Pos = MAP_APPFONT( 0 , SAVE_ROW7 );
+        Size = MAP_APPFONT( SAVE_WIDTH, RSC_CD_FIXEDLINE_HEIGHT );
+    };
+    OKButton BT_SAVE_OK
+    {
+        Pos = MAP_APPFONT( SAVE_COL1 , SAVE_ROW8 );
+        Size = MAP_APPFONT( RSC_CD_PUSHBUTTON_WIDTH, RSC_CD_PUSHBUTTON_HEIGHT );
+        DefButton = TRUE;
+    };
+};
+
+ModalDialog RID_SVX_MDLG_DOCRECOVERY_PROGR
+{
+    Size = MAP_APPFONT( SAVEPROGR_WIDTH, SAVEPROGR_HEIGHT );
+    HelpId = HID_SVX_MDLG_DOCRECOVERY_PROGR;
+    OutputSize = TRUE;
+    SVLook = TRUE;
+    Moveable = TRUE;
+    Closeable = FALSE;
+    Text = "%PRODUCTNAME %PRODUCTVERSION";
+
+    FixedText FT_SAVEPROGR_HINT
+    {
+        Pos = MAP_APPFONT( SAVEPROGR_COL0, SAVEPROGR_ROW0 );
+        Size = MAP_APPFONT( SAVEPROGR_CONTROLWIDTH, RSC_CD_FIXEDTEXT_HEIGHT );
+        Text[ en-US ] = "Documents are being saved.";
+    };
+    FixedText FT_SAVEPROGR_PROGR
+    {
+        Pos = MAP_APPFONT( SAVEPROGR_COL0, SAVEPROGR_ROW1 );
+        Size = MAP_APPFONT( SAVEPROGR_CONTROLWIDTH, RSC_CD_FIXEDTEXT_HEIGHT );
+        Text[ en-US ] = "Progress of saving: ";
+    };
+    Window WIN_SAVEPROGR_PROGR
+    {
+        Pos = MAP_APPFONT( SAVEPROGR_COL0, SAVEPROGR_ROW2 );
+        Size = MAP_APPFONT( SAVEPROGR_CONTROLWIDTH, PROGR_HEIGHT );
+        Border = TRUE;
+    };
+};
+
+TabPage RID_SVXPAGE_DOCRECOVERY_RECOVER
+{
+    Size = MAP_APPFONT( RECOV_WIDTH, RECOV_HEIGHT );
+    HelpId = HID_SVX_TP_DOCRECOVERY_RECOVER;
+    OutputSize = TRUE;
+    SVLook = TRUE;
+    Hide = TRUE;
+    Window WIN_RECOV_TITLE
+    {
+        Pos = MAP_APPFONT( 0 , 0 );
+        Size = MAP_APPFONT( RECOV_WIDTH, RECOV_TITLEWINHEIGHT );
+    };
+    FixedText FT_RECOV_TITLE
+    {
+        Pos = MAP_APPFONT( RECOV_COL1, RECOV_ROW0 );
+        Size = MAP_APPFONT( RECOV_CONTROLWIDTH, RSC_CD_FIXEDTEXT_HEIGHT );
+        Text[ en-US ] = "%PRODUCTNAME Document Recovery";
+    };
+    FixedLine FL_RECOV_TITLE
+    {
+        Pos = MAP_APPFONT( 0 , RECOV_TITLEWINHEIGHT );
+        Size = MAP_APPFONT( RECOV_WIDTH, 2 );
+    };
+    FixedText FT_RECOV_DESCR
+    {
+        Pos = MAP_APPFONT( RECOV_COL1, RECOV_ROW2 );
+        Size = MAP_APPFONT( RECOV_CONTROLWIDTH, RECOV_DESCRHEIGHT );
+        WordBreak = TRUE;
+        Text[ en-US ] = "Press 'Start Recovery' to start the recovery process of the documents listed below.\n\nThe 'Status' column shows whether the document could be recovered.";
+    };
+    FixedText FT_RECOV_PROGR
+    {
+        Pos = MAP_APPFONT( RECOV_COL1, RECOV_ROW3 );
+        Size = MAP_APPFONT( RECOV_CONTROLWIDTH, RSC_CD_FIXEDTEXT_HEIGHT );
+        Text[ en-US ] = "Recovering document:";
+    };
+    Window WIN_RECOV_PROGR
+    {
+        Pos = MAP_APPFONT( RECOV_COL1, RECOV_ROW4 );
+        Size = MAP_APPFONT( RECOV_CONTROLWIDTH, PROGR_HEIGHT );
+        Border = TRUE;
+    };
+    FixedText FT_RECOV_FILELIST
+    {
+        Pos = MAP_APPFONT( RECOV_COL1, RECOV_ROW5 );
+        Size = MAP_APPFONT( RECOV_CONTROLWIDTH, RSC_CD_FIXEDTEXT_HEIGHT );
+        Text[ en-US ] = "Status of recovered documents:";
+    };
+    String STR_HEADERBAR
+    {
+        Text[ en-US ] = "Document Name\tStatus";
+    };
+    Control LB_RECOV_FILELIST
+    {
+        Pos = MAP_APPFONT( RECOV_COL1, RECOV_ROW6 );
+        Size = MAP_APPFONT( RECOV_CONTROLWIDTH, RECOV_FILELISTHEIGHT );
+        Border = TRUE;
+        SVLook = TRUE;
+    };
+    FixedLine FL_RECOV_BOTTOM
+    {
+        Pos = MAP_APPFONT( 0 , RECOV_ROW8 );
+        Size = MAP_APPFONT( RECOV_WIDTH, RSC_CD_FIXEDLINE_HEIGHT );
+    };
+    PushButton BTN_RECOV_NEXT
+    {
+        HelpID = "svx:PushButton:RID_SVXPAGE_DOCRECOVERY_RECOVER:BTN_RECOV_NEXT";
+        Pos = MAP_APPFONT( RECOV_COL_C, RECOV_ROW9 );
+        Size = MAP_APPFONT( RSC_CD_PUSHBUTTON_WIDTH*2, RSC_CD_PUSHBUTTON_HEIGHT );
+        Text[ en-US ] = "~Start Recovery >";
+        DefButton = TRUE;
+    };
+    String STR_RECOVERY_NEXT
+    {
+        Text[ en-US ] = "~Next >";
+    };
+    CancelButton BTN_RECOV_CANCEL
+    {
+        Pos = MAP_APPFONT( RECOV_COL_F, RECOV_ROW9 );
+        Size = MAP_APPFONT( RSC_CD_PUSHBUTTON_WIDTH, RSC_CD_PUSHBUTTON_HEIGHT );
+    };
+    Image IMG_GREENCHECK
+    {
+        ImageBitmap = Bitmap { File = "nu01.png"; };
+    };
+    Image IMG_YELLOWCHECK
+    {
+        ImageBitmap = Bitmap { File = "nu04.png"; };
+    };
+    Image IMG_REDCROSS
+    {
+        ImageBitmap = Bitmap { File = "nu02.png"; };
+    };
+    String STR_SUCCESSRECOV
+    {
+        Text[ en-US ] = "Successfully recovered";
+    };
+    String STR_ORIGDOCRECOV
+    {
+        Text[ en-US ] = "Original document recovered";
+    };
+    String STR_RECOVFAILED
+    {
+        Text[ en-US ] = "Recovery failed";
+    };
+    String STR_RECOVINPROGR
+    {
+        Text[ en-US ] = "Recovery in progress";
+    };
+    String STR_NOTRECOVYET
+    {
+        Text[ en-US ] = "Not recovered yet";
+    };
+    String STR_RECOVERY_INPROGRESS
+    {
+        Text[ en-US ] = "%PRODUCTNAME %PRODUCTVERSION will start to recover your documents. Depending on the size of the documents this process can take some time." ;
+    };
+    String STR_RECOVERY_REPORT
+    {
+        Text[ en-US ] = "A report of the crash was created to help us identify the reason why %PRODUCTNAME crashed. Click 'Next' to get to the Error Report Tool or press 'Cancel' to skip this step." ;
+    };
+    String STR_RECOVERYONLY_FINISH_DESCR
+    {
+        Text[ en-US ] = "Recovery of your documents was finished.\nClick 'Finish' to see your documents.";
+    };
+    String STR_RECOVERYONLY_FINISH
+    {
+        Text[ en-US ] = "~Finish";
+    };
+};
+
+QueryBox RID_SVXQB_EXIT_RECOVERY
+{
+    BUTTONS = WB_YES_NO ;
+    DEFBUTTON = WB_DEF_YES ;
+    Message [ en-US ] = "Are you sure you want to cancel the %PRODUCTNAME document recovery?";
+};
+
+ModalDialog RID_SVX_MDLG_DOCRECOVERY_BROKEN
+{
+    Size = MAP_APPFONT( BROKEN_WIDTH, BROKEN_HEIGHT );
+    HelpId = HID_SVX_MDLG_DOCRECOVERY_BROKEN;
+    OutputSize = TRUE;
+    SVLook = TRUE;
+    Moveable = TRUE;
+    Text = "%PRODUCTNAME %PRODUCTVERSION";
+
+    FixedText FT_BROKEN_DESCR
+    {
+        Pos = MAP_APPFONT( BROKEN_COL0, BROKEN_ROW0 );
+        Size = MAP_APPFONT( BROKEN_CONTROLWIDTH, (5*RSC_CD_FIXEDTEXT_HEIGHT) );
+        WordBreak = TRUE;
+        Text[ en-US ] = "The automatic recovery process was interrupted.\n\nThe documents listed below will be saved in the folder noted below if you click 'Save'. Click 'Cancel' to close the wizard without saving the documents.";
+    };
+    FixedText FT_BROKEN_FILELIST
+    {
+        Pos = MAP_APPFONT( BROKEN_COL0, BROKEN_ROW1 );
+        Size = MAP_APPFONT( BROKEN_CONTROLWIDTH, RSC_CD_FIXEDTEXT_HEIGHT );
+        Text[ en-US ] = "Documents";
+    };
+    ListBox LB_BROKEN_FILELIST
+    {
+        HelpID = "svx:ListBox:RID_SVX_MDLG_DOCRECOVERY_BROKEN:LB_BROKEN_FILELIST";
+        Pos = MAP_APPFONT( BROKEN_COL0, BROKEN_ROW2 );
+        Size = MAP_APPFONT( BROKEN_CONTROLWIDTH, (BROKEN_ROW3-BROKEN_ROW2) );
+        Border = TRUE;
+        TabStop = TRUE;
+    };
+    FixedText FT_BROKEN_SAVEDIR
+    {
+        Pos = MAP_APPFONT( BROKEN_COL0, BROKEN_ROW4 + 1 ); // see ED_BROKEN_SAVEDIR
+        Size = MAP_APPFONT( BROKEN_CONTROLWIDTH, RSC_CD_FIXEDTEXT_HEIGHT );
+        Text[ en-US ] = "~Save to";
+    };
+    Edit ED_BROKEN_SAVEDIR
+    {
+        HelpID = "svx:Edit:RID_SVX_MDLG_DOCRECOVERY_BROKEN:ED_BROKEN_SAVEDIR";
+        Pos = MAP_APPFONT( BROKEN_COL0, BROKEN_ROW5 + 1 ); // center to pushbutton
+        Size = MAP_APPFONT( BROKEN_COL2 - BROKEN_COL0, RSC_CD_TEXTBOX_HEIGHT );
+        Border = TRUE;
+    };
+    PushButton BTN_BROKEN_SAVEDIR
+    {
+        HelpID = "svx:PushButton:RID_SVX_MDLG_DOCRECOVERY_BROKEN:BTN_BROKEN_SAVEDIR";
+        Pos = MAP_APPFONT( BROKEN_COL3, BROKEN_ROW5 );
+        Size = MAP_APPFONT( RSC_CD_PUSHBUTTON_WIDTH, RSC_CD_PUSHBUTTON_HEIGHT );
+        Text [ en-US ] = "Chan~ge...";
+    };
+    FixedLine FL_BROKEN_BOTTOM
+    {
+        Pos = MAP_APPFONT( 0 , BROKEN_ROW6 );
+        Size = MAP_APPFONT( BROKEN_WIDTH, RSC_CD_FIXEDLINE_HEIGHT );
+    };
+    OKButton BTN_BROKEN_OK
+    {
+        Pos = MAP_APPFONT( BROKEN_COL1, BROKEN_ROW7 );
+        Size = MAP_APPFONT( RSC_CD_PUSHBUTTON_WIDTH, RSC_CD_PUSHBUTTON_HEIGHT );
+        DefButton = TRUE;
+        Text [ en-US ] = "~Save";
+    };
+    CancelButton BTN_BROKEN_CANCEL
+    {
+        Pos = MAP_APPFONT( BROKEN_COL3, BROKEN_ROW7 );
+        Size = MAP_APPFONT( RSC_CD_PUSHBUTTON_WIDTH, RSC_CD_PUSHBUTTON_HEIGHT );
+    };
+};
+
+TabPage RID_SVXPAGE_ERR_REP_WELCOME
+{
+    Size = MAP_APPFONT( RECOV_WIDTH, RECOV_HEIGHT );
+    HelpId = HID_SVX_TP_ERR_REP_WELCOME;
+    OutputSize = TRUE;
+    SVLook = TRUE;
+    Hide = TRUE;
+    Window WIN_RECOV_TITLE
+    {
+        Pos = MAP_APPFONT( 0 , 0 );
+        Size = MAP_APPFONT( RECOV_WIDTH, RECOV_TITLEWINHEIGHT );
+    };
+    FixedText FT_RECOV_TITLE
+    {
+        Pos = MAP_APPFONT( RECOV_COL1, RECOV_ROW0 );
+        Size = MAP_APPFONT( RECOV_CONTROLWIDTH, RSC_CD_FIXEDTEXT_HEIGHT );
+        Text[ en-US ] = "Welcome to the %PRODUCTNAME %PRODUCTVERSION Error Report";
+    };
+    FixedLine FL_RECOV_TITLE
+    {
+        Pos = MAP_APPFONT( 0 , RECOV_TITLEWINHEIGHT );
+        Size = MAP_APPFONT( RECOV_WIDTH, 2 );
+    };
+    FixedText FT_RECOV_DESCR
+    {
+        Pos = MAP_APPFONT( RECOV_COL1, RECOV_ROW2 );
+        Size = MAP_APPFONT( RECOV_CONTROLWIDTH, (RECOV_ROW7-RECOV_ROW2-RSC_SP_CTRL_Y) );
+        WordBreak = TRUE;
+        Text[ en-US ] = "This error report tool gathers information about how %PRODUCTNAME is working and sends it to Oracle to help improve future versions.\n\nIt's easy - just send the report without any further effort on your part by clicking 'Send' in the next dialog, or you can briefly describe how the error occurred and then click 'Send'. If you want to see the report, click the 'Show Report' button. No data will be sent if you click 'Do Not Send'.\n\nCustomer Privacy\nThe information gathered is limited to data concerning the state of %PRODUCTNAME %PRODUCTVERSION when the error occurred. Other information about passwords or document contents is not collected.\n\nThe information will only be used to improve the quality of %PRODUCTNAME and will not be shared with third parties.\nFor more information on Oracle's privacy policy, visit\nwww.oracle.com/html/services-privacy-policy.html";
+    };
+    FixedLine FL_RECOV_BOTTOM
+    {
+        Pos = MAP_APPFONT( 0 , RECOV_ROW8 );
+        Size = MAP_APPFONT( RECOV_WIDTH, RSC_CD_FIXEDLINE_HEIGHT );
+    };
+    PushButton BTN_RECOV_PREV
+    {
+        HelpID = "svx:PushButton:RID_SVXPAGE_ERR_REP_WELCOME:BTN_RECOV_PREV";
+        Pos = MAP_APPFONT( RECOV_COL_C, RECOV_ROW9 );
+        Size = MAP_APPFONT( RSC_CD_PUSHBUTTON_WIDTH, RSC_CD_PUSHBUTTON_HEIGHT );
+        Text[ en-US ] = "< ~Back";
+    };
+    OKButton BTN_RECOV_NEXT
+    {
+        Pos = MAP_APPFONT( RECOV_COL_D, RECOV_ROW9 );
+        Size = MAP_APPFONT( RSC_CD_PUSHBUTTON_WIDTH, RSC_CD_PUSHBUTTON_HEIGHT );
+        Text[ en-US ] = "~Next >";
+        DefButton = TRUE;
+    };
+    CancelButton BTN_RECOV_CANCEL
+    {
+        Pos = MAP_APPFONT( RECOV_COL_F, RECOV_ROW9 );
+        Size = MAP_APPFONT( RSC_CD_PUSHBUTTON_WIDTH, RSC_CD_PUSHBUTTON_HEIGHT );
+    };
+};
+
+TabPage RID_SVXPAGE_ERR_REP_SEND
+{
+    Size = MAP_APPFONT( ERRSEND_WIDTH, ERRSEND_HEIGHT );
+    HelpId = HID_SVX_TP_ERR_REP_SEND;
+    OutputSize = TRUE;
+    SVLook = TRUE;
+    Hide = TRUE;
+    Window WIN_RECOV_TITLE
+    {
+        Pos = MAP_APPFONT( 0 , 0 );
+        Size = MAP_APPFONT( ERRSEND_WIDTH, RECOV_TITLEWINHEIGHT );
+    };
+    FixedText FT_RECOV_TITLE
+    {
+        Pos = MAP_APPFONT( ERRSEND_COL0, ERRSEND_ROW0 );
+        Size = MAP_APPFONT( ERRSEND_CONTROLWIDTH1, RSC_CD_FIXEDTEXT_HEIGHT );
+        Text[ en-US ] = "Sending the Error Report";
+    };
+    FixedLine FL_RECOV_TITLE
+    {
+        Pos = MAP_APPFONT( 0 , RECOV_TITLEWINHEIGHT );
+        Size = MAP_APPFONT( RECOV_WIDTH, 2 );
+    };
+    FixedText FT_RECOV_DESCR
+    {
+        Pos = MAP_APPFONT( ERRSEND_COL0, ERRSEND_ROW2 );
+        Size = MAP_APPFONT( ERRSEND_CONTROLWIDTH2, (ERRSEND_ROW3-ERRSEND_ROW2) );
+        WordBreak = TRUE;
+        Text[ en-US ] = "In the spaces below, you can enter a title for your error report and describe the action you were trying to carry out when the error occurred. Then click 'Send'.";
+    };
+
+    FixedText FT_ERRSEND_DOCTYPE
+    {
+        Pos = MAP_APPFONT( ERRSEND_COL0, ERRSEND_ROW4 );
+        Size = MAP_APPFONT( ERRSEND_CONTROLWIDTH2, 2*RSC_CD_FIXEDTEXT_HEIGHT );
+        WordBreak = TRUE;
+        Text[ en-US ] = "~Which type of document (e.g. presentation) were you using when the error occurred?";
+    };
+    Edit ED_ERRSEND_DOCTYPE
+    {
+        HelpID = "svx:Edit:RID_SVXPAGE_ERR_REP_SEND:ED_ERRSEND_DOCTYPE";
+        Pos = MAP_APPFONT( ERRSEND_COL0, ERRSEND_ROW5 );
+        Size = MAP_APPFONT( ERRSEND_CONTROLWIDTH2, RSC_CD_TEXTBOX_HEIGHT );
+        Border = TRUE;
+    };
+    FixedText FT_ERRSEND_USING
+    {
+        Pos = MAP_APPFONT( ERRSEND_COL0, ERRSEND_ROW7 );
+        Size = MAP_APPFONT( ERRSEND_CONTROLWIDTH2, RSC_CD_FIXEDTEXT_HEIGHT );
+        Text[ en-US ] = "~How were you using %PRODUCTNAME when the error occurred? (optional)";
+    };
+    MultiLineEdit ML_ERRSEND_USING
+    {
+        HelpID = "svx:MultiLineEdit:RID_SVXPAGE_ERR_REP_SEND:ML_ERRSEND_USING";
+        Pos = MAP_APPFONT( ERRSEND_COL0, ERRSEND_ROW8 );
+        Size = MAP_APPFONT( ERRSEND_CONTROLWIDTH2, (ERRSEND_ROW12-ERRSEND_ROW8-RSC_SP_CTRL_Y) );
+        VScroll = TRUE;
+        IgnoreTab = TRUE;
+        Border = TRUE;
+    };
+    PushButton BTN_ERRSEND_SHOWREP
+    {
+        HelpID = "svx:PushButton:RID_SVXPAGE_ERR_REP_SEND:BTN_ERRSEND_SHOWREP";
+        Pos = MAP_APPFONT( ERRSEND_COL3, ERRSEND_ROW8 );
+        Size = MAP_APPFONT( RSC_CD_PUSHBUTTON_WIDTH, RSC_CD_PUSHBUTTON_HEIGHT );
+        Text[ en-US ] = "Show ~Report";
+    };
+    PushButton BTN_ERRSEND_OPT
+    {
+        HelpID = "svx:PushButton:RID_SVXPAGE_ERR_REP_SEND:BTN_ERRSEND_OPT";
+        Pos = MAP_APPFONT( ERRSEND_COL3, ERRSEND_ROW10 );
+        Size = MAP_APPFONT( RSC_CD_PUSHBUTTON_WIDTH, RSC_CD_PUSHBUTTON_HEIGHT );
+        Text[ en-US ] = "~Options...";
+    };
+    CheckBox CB_ERRSEND_CONTACT
+    {
+        HelpID = "svx:CheckBox:RID_SVXPAGE_ERR_REP_SEND:CB_ERRSEND_CONTACT";
+        Pos = MAP_APPFONT( ERRSEND_COL0, ERRSEND_ROW12 );
+        Size = MAP_APPFONT( ERRSEND_CONTROLWIDTH2, RSC_CD_CHECKBOX_HEIGHT );
+        Check = FALSE;
+        Text[ en-US ] = "~I allow Oracle to contact me regarding this report.";
+    };
+    FixedText FT_ERRSEND_EMAILADDR
+    {
+        Pos = MAP_APPFONT( ERRSEND_COL1, ERRSEND_ROW13 );
+        Size = MAP_APPFONT( ERRSEND_CONTROLWIDTH3, RSC_CD_FIXEDTEXT_HEIGHT );
+        Text[ en-US ] = "~Please enter your e-mail address";
+    };
+    Edit ED_ERRSEND_EMAILADDR
+    {
+        HelpID = "svx:Edit:RID_SVXPAGE_ERR_REP_SEND:ED_ERRSEND_EMAILADDR";
+        Pos = MAP_APPFONT( ERRSEND_COL1, ERRSEND_ROW14 );
+        Size = MAP_APPFONT( ERRSEND_CONTROLWIDTH3, RSC_CD_TEXTBOX_HEIGHT );
+        Border = TRUE;
+    };
+    FixedLine FL_RECOV_BOTTOM
+    {
+        Pos = MAP_APPFONT( 0 , ERRSEND_ROW15 );
+        Size = MAP_APPFONT( ERRSEND_WIDTH, RSC_CD_FIXEDLINE_HEIGHT );
+    };
+    PushButton BTN_RECOV_PREV
+    {
+        HelpID = "svx:PushButton:RID_SVXPAGE_ERR_REP_SEND:BTN_RECOV_PREV";
+        Pos = MAP_APPFONT( ERRSEND_COL5, ERRSEND_ROW16 );
+        Size = MAP_APPFONT( RSC_CD_PUSHBUTTON_WIDTH, RSC_CD_PUSHBUTTON_HEIGHT );
+        Text[ en-US ] = "< ~Back";
+    };
+    OKButton BTN_RECOV_NEXT
+    {
+        Pos = MAP_APPFONT( ERRSEND_COL6, ERRSEND_ROW16 );
+        Size = MAP_APPFONT( RSC_CD_PUSHBUTTON_WIDTH, RSC_CD_PUSHBUTTON_HEIGHT );
+        Text[ en-US ] = "S~end";
+        DefButton = TRUE;
+    };
+    CancelButton BTN_RECOV_CANCEL
+    {
+        Pos = MAP_APPFONT( ERRSEND_COL3, ERRSEND_ROW16 );
+        Size = MAP_APPFONT( RSC_CD_PUSHBUTTON_WIDTH, RSC_CD_PUSHBUTTON_HEIGHT );
+        Text[ en-US ] = "Do ~Not Send";
+    };
+};
+
+ModalDialog RID_SVX_MDLG_ERR_REP_OPTIONS
+{
+    Size = MAP_APPFONT( ERROPT_WIDTH, ERROPT_HEIGHT );
+    HelpId = HID_SVX_MDLG_ERR_REP_OPTIONS;
+    OutputSize = TRUE;
+    SVLook = TRUE;
+    Moveable = TRUE;
+    Text[ en-US ] = "Options";
+
+    FixedLine FL_ERROPT_PROXY
+    {
+        Pos = MAP_APPFONT( ERROPT_COLA, ERROPT_ROW0 );
+        Size = MAP_APPFONT( ERROPT_COLF - ERROPT_COLA, RSC_CD_FIXEDLINE_HEIGHT );
+        Text[ en-US ] = "Proxy settings";
+    };
+
+    RadioButton BTN_ERROPT_SYSTEM
+    {
+        HelpID = "svx:RadioButton:RID_SVX_MDLG_ERR_REP_OPTIONS:BTN_ERROPT_SYSTEM";
+        Pos = MAP_APPFONT( ERROPT_COLB, ERROPT_ROW1 );
+        Size = MAP_APPFONT( ERROPT_COLF - ERROPT_COLB, RSC_CD_RADIOBUTTON_HEIGHT );
+        Text[ en-US ] = "Use ~system settings";
+    };
+
+    RadioButton BTN_ERROPT_DIRECT
+    {
+        HelpID = "svx:RadioButton:RID_SVX_MDLG_ERR_REP_OPTIONS:BTN_ERROPT_DIRECT";
+        Pos = MAP_APPFONT( ERROPT_COLB, ERROPT_ROW2 );
+        Size = MAP_APPFONT( ERROPT_COLF - ERROPT_COLB, RSC_CD_RADIOBUTTON_HEIGHT );
+        Text[ en-US ] = "Use ~direct connection to the Internet";
+    };
+
+    RadioButton BTN_ERROPT_MANUAL
+    {
+        HelpID = "svx:RadioButton:RID_SVX_MDLG_ERR_REP_OPTIONS:BTN_ERROPT_MANUAL";
+        Pos = MAP_APPFONT( ERROPT_COLB, ERROPT_ROW3 );
+        Size = MAP_APPFONT( ERROPT_COLF - ERROPT_COLB, RSC_CD_RADIOBUTTON_HEIGHT );
+        Text[ en-US ] = "Use ~manual settings";
+    };
+
+    FixedText FT_ERROPT_PROXYSERVER
+    {
+        Pos = MAP_APPFONT( ERROPT_COLC, ERROPT_ROW4 );
+        Size = MAP_APPFONT( ERROPT_SERVER_WIDTH, RSC_CD_FIXEDTEXT_HEIGHT );
+        Text[ en-US ] = "HT~TP Proxy";
+    };
+
+    Edit ED_ERROPT_PROXYSERVER
+    {
+        HelpID = "svx:Edit:RID_SVX_MDLG_ERR_REP_OPTIONS:ED_ERROPT_PROXYSERVER";
+        Pos = MAP_APPFONT( ERROPT_COLC, ERROPT_ROW5 );
+        Size = MAP_APPFONT( ERROPT_SERVER_WIDTH, RSC_CD_TEXTBOX_HEIGHT );
+        Border = TRUE;
+    };
+
+    FixedText FT_ERROPT_PROXYPORT
+    {
+        Pos = MAP_APPFONT( ERROPT_COLC + ERROPT_SERVER_WIDTH + RSC_SP_CTRL_GROUP_X, ERROPT_ROW4 );
+        Size = MAP_APPFONT( ERROPT_PORT_WIDTH, RSC_CD_FIXEDTEXT_HEIGHT );
+        Text[ en-US ] = "~Port";
+    };
+
+    Edit ED_ERROPT_PROXYPORT
+    {
+        HelpID = "svx:Edit:RID_SVX_MDLG_ERR_REP_OPTIONS:ED_ERROPT_PROXYPORT";
+        Pos = MAP_APPFONT( ERROPT_COLC + ERROPT_SERVER_WIDTH + RSC_SP_CTRL_GROUP_X, ERROPT_ROW5 );
+        Size = MAP_APPFONT( ERROPT_PORT_WIDTH, RSC_CD_TEXTBOX_HEIGHT );
+        Border = TRUE;
+    };
+
+    FixedText FT_ERROPT_DESCRIPTION
+    {
+        Pos = MAP_APPFONT( ERROPT_COLB, ERROPT_ROW6 );
+        Size = MAP_APPFONT( ERROPT_COLF - ERROPT_COLB, ERROPT_ROW7 - ERROPT_ROW6 );
+        WordBreak = TRUE;
+        Text[ en-US ] = "The %PRODUCTNAME Error Report tool needs to be connected to the Internet to be able to send error reports.\nCompanies often use proxy servers in conjunction with a firewall to protect the network.\nIf this applies to your situation, you have to specify the address and port for the server.";
+    };
+
+    FixedLine FL_ERROPT_BUTTONS
+    {
+        Pos = MAP_APPFONT( 0, ERROPT_ROW8 );
+        Size = MAP_APPFONT( ERROPT_WIDTH, RSC_CD_FIXEDLINE_HEIGHT );
+    };
+
+    OKButton BTN_ERROPT_OK
+    {
+        Pos = MAP_APPFONT( ERROPT_COLD, ERROPT_ROW9 );
+        Size = MAP_APPFONT( RSC_CD_PUSHBUTTON_WIDTH, RSC_CD_PUSHBUTTON_HEIGHT );
+        DefButton = TRUE;
+    };
+
+    CancelButton BTN_ERROPT_CANCEL
+    {
+        Pos = MAP_APPFONT( ERROPT_COLE, ERROPT_ROW9 );
+        Size = MAP_APPFONT( RSC_CD_PUSHBUTTON_WIDTH, RSC_CD_PUSHBUTTON_HEIGHT );
+    };
+};
+
+
+ModalDialog RID_SVX_MDLG_ERR_REP_PREVIEW
+{
+    Size = MAP_APPFONT( ERRPREVIEW_WIDTH, ERRPREVIEW_HEIGHT );
+    HelpId = HID_SVX_MDLG_ERR_REP_PREVIEW;
+    OutputSize = TRUE;
+    SVLook = TRUE;
+    Moveable = TRUE;
+    Sizeable = TRUE;
+    Text[ en-US ] = "Error Report";
+
+    MultiLineEdit ML_ERRPREVIEW_CONTENT
+    {
+        HelpID = "svx:MultiLineEdit:RID_SVX_MDLG_ERR_REP_PREVIEW:ML_ERRPREVIEW_CONTENT";
+        Pos = MAP_APPFONT( ERRPREVIEW_COLA, ERRPREVIEW_ROW0 );
+        Size = MAP_APPFONT( ERRPREVIEW_COLC - ERRPREVIEW_COLA, ERRPREVIEW_ROW1 - ERRPREVIEW_ROW0 );
+        VScroll = TRUE;
+        HScroll = TRUE;
+        ReadOnly = TRUE;
+        Border = TRUE;
+    };
+
+    OKButton BTN_ERRPREVIEW_OK
+    {
+        Pos = MAP_APPFONT( ERRPREVIEW_COLB, ERRPREVIEW_ROW2 );
+        Size = MAP_APPFONT( RSC_CD_PUSHBUTTON_WIDTH, RSC_CD_PUSHBUTTON_HEIGHT );
+        DefButton = TRUE;
+    };
+};

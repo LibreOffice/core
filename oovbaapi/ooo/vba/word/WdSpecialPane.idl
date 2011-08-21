@@ -1,0 +1,23 @@
+module ooo { module vba { module word {
+    constants WdSpecialPane {
+        const long wdPaneComments = 15;
+        const long wdPaneCurrentPageFooter = 17;
+        const long wdPaneCurrentPageHeader = 16;
+        const long wdPaneEndnoteContinuationNotice = 12;
+        const long wdPaneEndnoteContinuationSeparator = 13;
+        const long wdPaneEndnotes = 8;
+        const long wdPaneEndnoteSeparator = 14;
+        const long wdPaneEvenPagesFooter = 6;
+        const long wdPaneEvenPagesHeader = 3;
+        const long wdPaneFirstPageFooter = 5;
+        const long wdPaneFirstPageHeader = 2;
+        const long wdPaneFootnoteContinuationNotice = 9;
+        const long wdPaneFootnoteContinuationSeparator = 10;
+        const long wdPaneFootnotes = 7;
+        const long wdPaneFootnoteSeparator = 11;
+        const long wdPaneNone = 0;
+        const long wdPanePrimaryFooter = 4;
+        const long wdPanePrimaryHeader = 1;
+        const long wdPaneRevisions = 18;
+    };
+}; }; };

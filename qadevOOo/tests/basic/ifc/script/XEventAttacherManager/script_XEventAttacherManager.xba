@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="script_XEventAttacherManager" script:language="StarBasic">
+
+
+'*************************************************************************
+'
+' DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+' 
+' Copyright 2000, 2010 Oracle and/or its affiliates.
+'
+' OpenOffice.org - a multi-platform office productivity suite
+'
+' This file is part of OpenOffice.org.
+'
+' OpenOffice.org is free software: you can redistribute it and/or modify
+' it under the terms of the GNU Lesser General Public License version 3
+' only, as published by the Free Software Foundation.
+'
+' OpenOffice.org is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU Lesser General Public License version 3 for more details
+' (a copy is included in the LICENSE file that accompanied this code).
+'
+' You should have received a copy of the GNU Lesser General Public License
+' version 3 along with OpenOffice.org.  If not, see
+' <http://www.openoffice.org/license.html>
+' for a copy of the LGPLv3 License.
+'
+'*************************************************************************
+'*************************************************************************
+
+
+
+
+
+Sub RunTest()
+
+'*************************************************************************
+' INTERFACE: 
+' com.sun.star.script.XEventAttacherManager
+'*************************************************************************
+On Error Goto ErrHndl
+    Dim bOK As Boolean
+
+	oObj.insertEntry(0)
+
+    Test.StartMethod("addScriptListener()")
+    bOK = true
+    Dim oListener1 As Object
+    Dim oListener2 As Object
+
+	oListener = createUnoListener("CB1_", "com.sun.star.script.XScriptListener")
+
+    oObj.addScriptListener(oListener)
+
+    Test.MethodTested("addScriptListener()", bOK)
+
+
+    Test.StartMethod("registerScriptEvent()")
+    bOK = true
+
+	Dim aScriptEvent1 As New com.sun.star.script.ScriptEventDescriptor
+	aScriptEvent1.ListenerType = "ScriptListener"
+	aScriptEvent1.EventMethod = "Test"
+	aScriptEvent1.AddListenerParam = ""
+	aScriptEvent1.ScriptType = "Basic"
+	aScriptEvent1.ScriptCode = "MsgBox ""Script1"""
+	oObj.registerScriptEvent(0, aScriptEvent1)
+
+    Test.MethodTested("registerScriptEvent()", bOK)
+
+    Test.StartMethod("registerScriptEvents()")
+    bOK = true
+	Dim aScriptEvent2 As New com.sun.star.script.ScriptEventDescriptor
+	aScriptEvent2.ListenerType = "ScriptListener"
+	aScriptEvent2.EventMethod = "Test"
+	aScriptEvent2.AddListenerParam = ""
+	aScriptEvent2.ScriptType = "Basic"
+	aScriptEvent2.ScriptCode = "MsgBox ""Script2"""
+	Dim aScriptEvent3 As New com.sun.star.script.ScriptEventDescriptor
+	aScriptEvent3.ListenerType = "ScriptListener"
+	aScriptEvent3.EventMethod = "Test"
+	aScriptEvent3.AddListenerParam = ""
+	aScriptEvent3.ScriptType = "Basic"
+	aScriptEvent3.ScriptCode = "MsgBox ""Script3"""
+
+	Dim aScripts(1)
+	aScripts(0) = aScriptEvent2
+	aScripts(1) = aScriptEvent3
+
+	oObj.registerScriptEvents(0, aScripts())
+
+    Test.MethodTested("registerScriptEvents()", bOK)
+
+    Test.StartMethod("getScriptEvents()")
+    bOK = true
+    allScripts = oObj.getScriptEvents(0)
+    bOK = bOK AND ubound(allScripts) = 2
+    bOK = bOK AND allScripts(0).ScriptCode = "MsgBox ""Script1"""
+    bOK = bOK AND allScripts(1).ScriptCode = "MsgBox ""Script2"""
+    bOK = bOK AND allScripts(2).ScriptCode = "MsgBox ""Script3"""
+    Test.MethodTested("getScriptEvents()", bOK)
+
+    Test.StartMethod("insertEntry()")
+    bOK = true
+    oObj.insertEntry(0)
+    allScripts = oObj.getScriptEvents(0)
+    bOK = bOK AND ubound(allScripts) = -1
+    allScripts = oObj.getScriptEvents(1)
+    bOK = bOK AND ubound(allScripts) = 2
+    Test.MethodTested("insertEntry()", bOK)
+
+    Test.StartMethod("removeEntry()")
+    bOK = true
+    oObj.removeEntry(0)
+    allScripts = oObj.getScriptEvents(1)
+    bOK = bOK AND ubound(allScripts) = -1
+    allScripts = oObj.getScriptEvents(0)
+    bOK = bOK AND ubound(allScripts) = 2
+    Test.MethodTested("removeEntry()", bOK)
+
+    Test.StartMethod("attach()")
+    bOK = true
+    oObj.attach(0, oObj, "")
+    Test.MethodTested("attach()", bOK)
+
+    Test.StartMethod("detach()")
+    bOK = true
+    oObj.detach(0, oObj)
+    Test.MethodTested("detach()", bOK)
+
+
+    Test.StartMethod("revokeScriptEvent()")
+    bOK = true
+    oObj.revokeScriptEvent(0, "ScriptListener", "Test", "")
+    allScripts = oObj.getScriptEvents(0)
+    bOK = bOK AND ubound(allScripts) = 1
+    Test.MethodTested("revokeScriptEvent()", bOK)
+
+    Test.StartMethod("revokeScriptEvents()")
+    bOK = true
+    oObj.revokeScriptEvents(0)
+    allScripts = oObj.getScriptEvents(0)
+    bOK = bOK AND ubound(allScripts) = -1
+    Test.MethodTested("revokeScriptEvents()", bOK)
+
+    Test.StartMethod("removeScriptListener()")
+    bOK = true
+    oObj.removeScriptListener(oListener)
+    Test.MethodTested("removeScriptListener()", bOK)
+
+Exit Sub
+ErrHndl:
+    Test.Exception()
+    bOK = false
+    resume next
+End Sub
+</script:module>

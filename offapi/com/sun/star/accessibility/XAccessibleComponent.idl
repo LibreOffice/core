@@ -1,0 +1,220 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_accessibility_XAccessibleComponent_idl__
+#define __com_sun_star_accessibility_XAccessibleComponent_idl__
+
+#include <com/sun/star/uno/XInterface.idl>
+#include <com/sun/star/awt/XFocusListener.idl>
+#include <com/sun/star/awt/XFont.idl>
+#include <com/sun/star/awt/FontDescriptor.idl>
+#include <com/sun/star/awt/Point.idl>
+#include <com/sun/star/awt/Rectangle.idl>
+#include <com/sun/star/awt/Size.idl>
+#include <com/sun/star/util/Color.idl>
+
+module com { module sun { module star { module accessibility {
+
+ published interface XAccessible;
+
+/** The <type>XAccessibleComponent</type> interface should be supported by
+    any class that can be rendered on the screen.
+
+    <p>This interface provides the standard mechanism for an assistive
+    technology to retrieve information concerning the graphical
+    representation of an object.  This interface combines methods from
+    the Java interfaces <code>javax.accessibility.AccessibleComponent</code>
+    and <code>javax.accessibility.AccessibleExtendedComponent</code>.</p>
+
+    <p>Further information about the graphical appearance of an object can
+    be expressed with the <type>XAccessibleExtendedComponent</type>
+    interface.</p>
+
+    <p>Coordinates used by the functions of this interface are specified in
+    different coordinate systems.  Their scale is the same and is equal to
+    that of the screen coordinate system.  In other words all coordinates
+    are measured in pixel.  They differ in their respective origin:
+    <ul><li>The screen coordinate system has its origin in the upper left
+    corner of the current screen.  Used by the
+    <method>getLocationOnScreen</method> function.</li>
+    <li>The origin of the parent coordinate system is the upper left corner
+    of the parent's bounding box.  With no parent the screen coordinate
+    system is used instead.  Used by the <method>getLocation</method>
+    function.</li>
+    <li>The object coordinate system is relative to the upper left corner of
+    an object's bounding box.  It is relative to itself so to speak.  Used
+    by the <method>containsPoint</method> and
+    <method>getAccessibleAtPoint</method> functions.</li>
+    </ul></p>
+
+    <p>Key bindings which are associated with an accessible component can be
+    retrieved at the component's action.  The reason for this is that key
+    bindings are associated with actions and directly with a component.
+    This distinction becomes important when there are more than one action.
+    To get access to the key bindings you have to get the
+    <type>XAccessibleAction</type> interface of a component, provided that
+    it is supported, and use the <method
+    scope="XAccessibleAction">getAccessibleKeyBinding()</method>.</p>
+
+    @see XAccessibleExtendedComponent
+
+    @since OOo 1.1.2
+*/
+published interface XAccessibleComponent : ::com::sun::star::uno::XInterface
+{
+    /** Tests whether the specified point lies within this object's bounds.
+
+        <p>The test point's coordinates are defined relative to the
+        coordinate system of the object.  That means that when the object is
+        an opaque rectangle then both the points (0,0) and (with-1,height-1)
+        would yield a <TRUE/> value.</p>
+
+        @param point
+            Coordinates of the point to test.  The origin of the coordinate
+            system is the upper left corner of the object's bounding box as
+            returned by the <method>getBounds</method>.  The scale of the
+            coordinate system is identical to that of the screen coordinate
+            system.
+
+        @return
+            Returns <TRUE/> if the point lies within or on the object's bounding
+            box and <FALSE/> otherwise.
+    */
+    boolean containsPoint ([in] ::com::sun::star::awt::Point aPoint);
+
+    /** Returns the Accessible child that is rendered under the given point.
+
+        <p>The test point's coordinates are defined relative to the
+        coordinate system of the object.  That means that when the object is
+        an opaque rectangle then both the points (0,0) and (with-1,height-1)
+        would yield a <TRUE/> value.</p>
+
+        @param aPoint
+            Coordinates of the test point for which to find the Accessible
+            child.  The origin of the coordinate system is the upper left
+            corner of the object's bounding box as returned by the
+            <method>getBounds</method>.  The scale of the coordinate
+            system is identical to that of the screen coordinate system.
+
+        @return
+            If there is one child which is rendered so that its bounding box
+            contains the test point then a reference to that object is
+            returned.  If there is more than one child which satisfies that
+            condition then a reference to that one is returned that is
+            painted on top of the others.  If no there is no child which is
+            rendered at the test point an empty reference is returned.
+    */
+    XAccessible  getAccessibleAtPoint ([in] ::com::sun::star::awt::Point aPoint);
+
+    /** Returns the bounding box of this object.
+
+        <p>The returned bounding box has the form of a rectangle.  Its
+        coordinates are relative to the object's parent coordinate system.
+        Note that the two methods <method>getLocation</methodmber> and
+        <method>getSize</method> return the same information.  With method
+        <method>getLocationOnScreen</method> you can get the bound box
+        position in screen coordinates.</p>
+
+        @return
+            The coordinates of the returned rectangle are relative to this
+            object's parent or relative to the screen on which this object
+            is rendered if it has no parent.  If the object is not on any
+            screen the returned rectangle is empty and located at position
+            (0,0).
+    */
+    ::com::sun::star::awt::Rectangle getBounds ();
+
+    /** Returns the location of the upper left corner of the object's
+        bounding box relative to the parent.</p>
+
+        <p>The coordinates of the bounding box are given relative to the
+        parent's coordinate system.</p>
+
+        @return
+            The coordinates of the returned position are relative to this
+            object's parent or relative to the screen on which this object
+            is rendered if it has no parent.  If the object is not on any
+            screen the returned position is (0,0).
+    */
+    ::com::sun::star::awt::Point getLocation ();
+
+    /** Returns the location of the upper left corner of the object's
+        bounding box in screen coordinates.
+
+        <p>This method returns the same point as does the method
+        <method>getLocation</method>.  The difference is that the
+        coordinates are absolute screen coordinates of the screen to which
+        the object is rendered instead of being relative to the object's
+        parent.</p>
+
+        @return
+            The coordinates of the returned position are relative to the
+            screen on which this object is rendered.  If the object is not
+            on any screen the returned position is (0,0).
+    */
+    ::com::sun::star::awt::Point getLocationOnScreen ();
+
+    /** Returns the size of this object's bounding box.
+
+        @return
+            The returned size is the size of this object or empty if it is
+            not rendered on any screen.
+    */
+    ::com::sun::star::awt::Size getSize();
+
+    /** Grabs the focus to this object.
+
+        <p>If this object can not accept the focus,
+        i.e. <method>isFocusTraversable</method> returns <FALSE/> for this
+        object then nothing happens.  Otherwise the object will attempt to
+        take the focus.  Nothing happens if that fails, otherwise the object
+        has the focus.  This method is called <code>requestFocus</code> in
+        the Java Accessibility API 1.4.</p>
+    */
+    [oneway] void grabFocus ();
+
+    /** Returns the foreground color of this object.
+
+        @return
+            The returned color is the foreground color of this object or, if
+            that is not supported, the default foreground color.
+    */
+    ::com::sun::star::util::Color getForeground ();
+
+    /** Returns the background color of this object.
+
+        @return
+            The returned color is the background color of this object or, if
+            that is not supported, the default background color.
+    */
+    ::com::sun::star::util::Color getBackground ();
+
+};
+
+}; }; }; };
+
+#endif

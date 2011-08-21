@@ -1,0 +1,127 @@
+/*************************************************************************
+* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+*
+* Copyright 2009 by Sun Microsystems, Inc.
+*
+* OpenOffice.org - a multi-platform office productivity suite
+*
+* This file is part of OpenOffice.org.
+*
+* OpenOffice.org is free software: you can redistribute it and/or modify
+* it under the terms of the GNU Lesser General Public License version 3
+* only, as published by the Free Software Foundation.
+*
+* OpenOffice.org is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU Lesser General Public License version 3 for more details
+* (a copy is included in the LICENSE file that accompanied this code).
+*
+* You should have received a copy of the GNU Lesser General Public License
+* version 3 along with OpenOffice.org.  If not, see
+* <http://www.openoffice.org/license.html>
+* for a copy of the LGPLv3 License.
+************************************************************************/
+
+#ifndef __offapcom_sun_star_document_XDocumentRecovery_idl__
+#define __offapcom_sun_star_document_XDocumentRecovery_idl__
+
+#include <com/sun/star/beans/PropertyValue.idl>
+#include <com/sun/star/io/IOException.idl>
+#include <com/sun/star/lang/WrappedTargetException.idl>
+
+//=============================================================================
+
+module com { module sun { module star { module document {
+
+//=============================================================================
+
+/** is the interface to be implemented by documents who wish to participate in
+    the document emergency-save / recovery process.
+ */
+interface XDocumentRecovery
+{
+    /** determines whether the document has been modified since the last call to <member>storeToRecoveryFile</member>.
+
+        <p>If <code>storeToRecoveryFile</code> has not been called before, this method returns whether the document
+        has been modified since it has been loaded respectively created.</p>
+
+        <p>When saving a session, either in case of a emergency (when OpenOffice.org crashed), or during a
+        periodic session save as configured by the user, <member>storeToRecoveryFile</member> is called for every
+        document where <code>wasModifiedSinceLastSave</code> returns <TRUE/>.</p>
+
+        <p>It's allowed to implement this method sloppy, by returning <TRUE/> in cases where it is not sure whether
+        the document actually has been modified. So, the most simple implementation could simply delegate this call
+        to <member scope="com::sun::star::util">XModifiable::isModified</member>. (Well, actually that's the
+        second simple implementation, the <em>most</em> simple one would, still legitimately, always return <TRUE/>.)</p>
+
+        <p>However, in such a case, the document might be saved more often than needed. In particular during the
+        periodic session save, this might become a problem when saving is expensive, for a single document
+        or the sum of all open documents.</p>
+    */
+    boolean wasModifiedSinceLastSave();
+
+    /** does an emergency save of the document
+
+        <p>A default implementation of this method could simply delegate this call to
+        <member scope="com::sun::star::frame">XStorable::storeToURL</member>.</p>
+
+        @param TargetLocation
+            specifies the URL of the location to which the document should be emergency-saved.
+
+        @param MediaDescriptor
+            contains additional arguments for the save process, for instance an StatusIndicator.
+
+        @see MediaDescriptor
+    */
+    void    storeToRecoveryFile(
+                [in] string TargetLocation,
+                [in] sequence< ::com::sun::star::beans::PropertyValue > MediaDescriptor
+            )
+            raises  (   ::com::sun::star::io::IOException,
+                        ::com::sun::star::lang::WrappedTargetException
+                    );
+
+    /** recovers the document after a previous emergency or session save.
+
+        <p>The document itself has previously been created, but <em>not</em> loaded
+        (via <member scope="com::sun::star::frame">XLoadable::load</member>) or initialized (via
+        <member scope="com::sun::star::frame">XLoadable::initNew</member>).</p>
+
+        <p>Upon successful return, the document must be fully initialized. In particular, the
+        caller is not responsible for calling <member scope="com::sun::star::frame">XModel::attachResource</member>.
+        Instead, the implementation is responsible to do so, if required.</p>
+
+        <p>A default implementation of this method could simply delegate this call to
+        <member scope="::com::sun::star::frame:">XLodable::load</member>, followed by
+        <member scope="com::sun::star::frame">XModel::attachResource</member>.</p>
+
+        @param SourceLocation
+            specifies the URL of the location to which the document was previously emergency-saved.
+
+        @param SalvagedFile
+            specifies the original URL of the file which had been emergency-saved. If this is empty,
+            then the file should be recovered from its original location.
+
+        @param MediaDescriptor
+            contains additional arguments for the load process, for instance an StatusIndicator.
+
+        @see MediaDescriptor
+    */
+    void    recoverFromFile(
+                [in] string SourceLocation,
+                [in] string SalvagedFile,
+                [in] sequence< ::com::sun::star::beans::PropertyValue > MediaDescriptor
+            )
+            raises  (   ::com::sun::star::io::IOException,
+                        ::com::sun::star::lang::WrappedTargetException
+                    );
+};
+
+//=============================================================================
+
+}; }; }; };
+
+//=============================================================================
+
+#endif

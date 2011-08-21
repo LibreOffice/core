@@ -26,7 +26,7 @@
 *
 **********************************************************************-->
 
-<component loader="com.sun.star.loader.SharedLibrary"
+<component loader="com.sun.star.loader.SharedLibrary" prefix="xsec_xmlsec"
     xmlns="http://openoffice.org/2010/uno-components">
   <implementation name="com.sun.star.security.SerialNumberAdapter">
     <service name="com.sun.star.security.SerialNumberAdapter"/>

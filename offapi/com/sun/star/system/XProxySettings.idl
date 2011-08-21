@@ -1,0 +1,139 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_system_XProxySettings_idl__
+#define __com_sun_star_system_XProxySettings_idl__
+
+#include <com/sun/star/uno/RuntimeException.idl>
+#include <com/sun/star/uno/XInterface.idl>
+
+//=============================================================================
+
+module com { module sun { module star { module system {
+
+//=============================================================================
+/** Enables access to different proxy settings. If particular settings are not
+    available an empty string will be returned.
+
+    @deprecated
+*/
+
+published interface XProxySettings: com::sun::star::uno::XInterface
+{
+    //-------------------------------------------------------------------------
+    /** Access to the FTP proxy address.
+        @returns
+        The address of the FTP proxy server, if any has been specified.
+    */
+    string getFtpProxyAddress( );
+
+    //-------------------------------------------------------------------------
+    /** Access to the FTP proxy port.
+        @returns
+        The port of the FTP proxy server, if any has been specified.
+    */
+    string getFtpProxyPort( );
+
+    //-------------------------------------------------------------------------
+    /** Access to the Gopher proxy address.
+        @returns
+        The address of the gopher proxy server, if any has been specified.
+    */
+    string getGopherProxyAddress( );
+
+    //-------------------------------------------------------------------------
+    /** Access to the Gopher proxy port.
+        @returns
+        The port of the gopher proxy server, if any has been specified.
+    */
+    string getGopherProxyPort( );
+
+    //-------------------------------------------------------------------------
+    /** Access to the Http proxy address.
+        @returns
+        The address of the http proxy server, if any has been specified.
+    */
+    string getHttpProxyAddress( );
+
+    //-------------------------------------------------------------------------
+    /** Access to the Http proxy port.
+        @returns
+        The port of the http proxy server, if any has been specified.
+    */
+    string getHttpProxyPort( );
+
+    //-------------------------------------------------------------------------
+    /** Access to the HTTPS proxy address.
+        @returns
+        The address of the HTTPS proxy server, if any has been specified.
+    */
+    string getHttpsProxyAddress( );
+
+    //-------------------------------------------------------------------------
+    /** Access to the HTTPS proxy port.
+        @returns
+        The port of the HTTPS proxy server, if any has been specified.
+    */
+    string getHttpsProxyPort( );
+
+    //-------------------------------------------------------------------------
+    /** Access to the Socks proxy address.
+        @returns
+        The address of the socks proxy server, if any has been specified.
+    */
+    string getSocksProxyAddress( );
+
+    //-------------------------------------------------------------------------
+    /** Access to the Socks proxy port.
+        @returns
+        The port of the socks proxy server, if any has been specified.
+    */
+    string getSocksProxyPort( );
+
+    //-------------------------------------------------------------------------
+    /** Access to the Proxy-Bypass address.
+        @returns
+        A string of ";" separated addresses for which no proxy server
+        should be used.
+    */
+    string getProxyBypassAddress( );
+
+    //-------------------------------------------------------------------------
+    /** Either a proxy is enabled or not.
+        @returns
+        A value of <TRUE/> if a proxy is enabled.
+        <p>A value of <FALSE/> if a proxy is disabled.</p>
+    */
+    boolean isProxyEnabled( );
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif
+

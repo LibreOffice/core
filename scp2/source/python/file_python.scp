@@ -1,0 +1,318 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#include "macros.inc"
+
+#ifndef DISABLE_PYUNO
+
+File gid_File_Lib_Pyuno
+    TXT_FILE_BODY;
+  #ifdef UNX
+    Name = STRING(CONCAT2(libpyuno,UNXSUFFIX));
+  #else
+    Name = "pyuno.pyd";
+  #endif
+    Dir = gid_Dir_Program;
+    Styles = (PACKED);
+End
+
+File gid_File_Lib_Pythonloader
+    TXT_FILE_BODY;
+    Dir = gid_Dir_Program;
+  #ifdef UNX
+    Name = STRING(CONCAT2(pythonloader.uno,UNXSUFFIX));
+  #else
+    Name = "pythonloader.uno.dll";
+  #endif
+    Styles = (PACKED);
+End
+
+File gid_File_Py_Unohelper
+    TXT_FILE_BODY;
+    Dir = gid_Dir_Program;
+    Name = "unohelper.py";
+    Styles = (PACKED);
+End
+
+File gid_File_Py_Officehelper
+    TXT_FILE_BODY;
+    Dir = gid_Dir_Program;
+    Name = "officehelper.py";
+    Styles = (PACKED);
+End
+
+File gid_File_Py_Uno
+    TXT_FILE_BODY;
+    Dir = gid_Dir_Program;
+    Name = "uno.py";
+    Styles = (PACKED);
+End
+
+File gid_File_Py_Pythonloader
+    TXT_FILE_BODY;
+    Dir = gid_Dir_Program;
+    Name = "pythonloader.py";
+    Styles = (PACKED);
+End
+
+#ifndef SYSTEM_PYTHON
+File gid_File_Py_Python_Core
+    TXT_FILE_BODY;
+    Dir = gid_Dir_Program;
+  #ifdef MACOSX
+    Name = "OOoPython.framework.zip";
+    Styles = (ARCHIVE,USE_INTERNAL_RIGHTS);
+  #else
+    Name = STRING(CONCAT3(python-core-,PYVERSION,.zip));
+    Styles = (ARCHIVE);
+  #endif
+End
+
+#ifdef UNX
+#ifndef MACOSX
+File gid_File_Py_Python_Bin
+    BIN_FILE_BODY;
+    Dir = gid_Dir_Program;
+    Name = "python.bin";
+    Styles = (PACKED);
+End
+#endif
+#endif
+#endif
+
+//Scripting Framework Python example scripts
+
+File gid_File_Scripts_Python
+    TXT_FILE_BODY;
+    Styles = (ARCHIVE);
+    Dir = gid_Dir_Share_Scripts;
+    Name = "ScriptsPython.zip";
+End
+
+// Scripting Framework Python configuration settings
+
+File gid_File_Share_Registry_Pyuno_Xcd
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Registry;
+    Name = "pyuno.xcd";
+End
+
+#ifndef SYSTEM_PYTHON
+#ifndef MACOSX
+File gid_File_Lib_Python_So
+    TXT_FILE_BODY;
+    Dir = gid_Dir_Program;
+    Name = STRING(PY_FULL_DLL_NAME);
+    Styles = (PACKED);
+End
+#ifdef UNX
+Shortcut gid_Shortcut_Lib_Python_So
+    FileID = gid_File_Lib_Python_So;
+    Dir = gid_Dir_Program;
+    Name = STRING(CONCAT3(libpython,PYMAJMIN,UNXSUFFIX));
+    Styles = (NETWORK,RELATIVE);
+End
+#endif //UNX
+#else //MACOSX
+//directory entries solely to be able to create the symlinks
+Directory gid_Dir_PythonFramework
+    ParentID = gid_Dir_Program;
+    HostName = "OOoPython.framework";
+End
+
+Unixlink gid_Unixlink_Python_Headers
+    BIN_FILE_BODY;
+    Dir = gid_Dir_PythonFramework;
+    Name = "Headers";
+    Target = "Versions/Current/Headers";
+    Styles = ();
+End
+
+Unixlink gid_Unixlink_Python_Resources
+    BIN_FILE_BODY;
+    Dir = gid_Dir_PythonFramework;
+    Name = "Resources";
+    Target = "Versions/Current/Resources";
+    Styles = ();
+End
+
+Directory gid_Dir_PythonFramework_Versions
+    ParentID = gid_Dir_PythonFramework;
+    HostName = "Versions";
+End
+
+Unixlink gid_Unixlink_Python_Versions_Current
+    BIN_FILE_BODY;
+    Dir = gid_Dir_PythonFramework_Versions;
+    Name = "Current";
+    Target = STRING(PYMAJMIN);
+    Styles = ();
+End
+
+Directory gid_Dir_PythonFramework_Versions_ver
+    ParentID = gid_Dir_PythonFramework_Versions;
+    HostName = STRING(PYMAJMIN);
+End
+
+Unixlink gid_Unixlink_Python_Versions_ver_Headers
+    BIN_FILE_BODY;
+    Dir = gid_Dir_PythonFramework_Versions_ver;
+    Name = "Headers";
+    Target = STRING(CONCAT2(include/python,PYMAJMIN));
+    Styles = ();
+End
+
+Directory gid_Dir_PythonFramework_Versions_ver_bin
+    ParentID = gid_Dir_PythonFramework_Versions_ver;
+    HostName = "bin";
+End
+
+Directory gid_Dir_PythonFramework_Versions_ver_lib
+    ParentID = gid_Dir_PythonFramework_Versions_ver;
+    HostName = "lib";
+End
+
+Directory gid_Dir_PythonFramework_Versions_ver_lib_pythonver
+    ParentID = gid_Dir_PythonFramework_Versions_ver_lib;
+    HostName = STRING(CONCAT2(python,PYMAJMIN));
+End
+
+Directory gid_Dir_PythonFramework_Versions_ver_lib_pythonver_config
+    ParentID = gid_Dir_PythonFramework_Versions_ver_lib_pythonver;
+    HostName = "config";
+End
+
+Unixlink gid_Unixlink_Python_OOoPython
+    BIN_FILE_BODY;
+    Dir = gid_Dir_PythonFramework;
+    Name = "OOoPython";
+    Target = "Versions/Current/OOoPython";
+    Styles = ();
+End
+
+Unixlink gid_Unixlink_Python_bin_idle
+    BIN_FILE_BODY;
+    Dir = gid_Dir_PythonFramework_Versions_ver_bin;
+    Name = "idle";
+    Target = STRING(CONCAT2(idle,PYMAJMIN));
+    Styles = ();
+End
+
+Unixlink gid_Unixlink_Python_bin_pydoc
+    BIN_FILE_BODY;
+    Dir = gid_Dir_PythonFramework_Versions_ver_bin;
+    Name = "pydoc";
+    Target = STRING(CONCAT2(pydoc,PYMAJMIN));
+    Styles = ();
+End
+
+Unixlink gid_Unixlink_Python_bin_python_real
+    BIN_FILE_BODY;
+    Dir = gid_Dir_PythonFramework_Versions_ver_bin;
+    Name = "python";
+    Target = "../Resources/Python.app/Contents/MacOS/OOoPython";
+    Styles = ();
+End
+
+Unixlink gid_Unixlink_Python_bin_python
+    BIN_FILE_BODY;
+    Dir = gid_Dir_PythonFramework_Versions_ver_bin;
+    Name = "python";
+    Target = STRING(CONCAT2(python,PYMAJMIN));
+    Styles = ();
+End
+
+Unixlink gid_Unixlink_Python_bin_pythonconfig
+    BIN_FILE_BODY;
+    Dir = gid_Dir_PythonFramework_Versions_ver_bin;
+    Name = "python-config";
+    Target = STRING(CONCAT3(python,PYMAJMIN,-config));
+    Styles = ();
+End
+
+Unixlink gid_Unixlink_Python_bin_pythonw_real
+    BIN_FILE_BODY;
+    Dir = gid_Dir_PythonFramework_Versions_ver_bin;
+    Name = "pythonw";
+    Target = "../Resources/Python.app/Contents/MacOS/OOoPython";
+    Styles = ();
+End
+
+Unixlink gid_Unixlink_Python_bin_pythonw
+    BIN_FILE_BODY;
+    Dir = gid_Dir_PythonFramework_Versions_ver_bin;
+    Name = "pythonw";
+    Target = STRING(CONCAT2(pythonw,PYMAJMIN));
+    Styles = ();
+End
+
+Unixlink gid_Unixlink_Python_bin_smtpdpy
+    BIN_FILE_BODY;
+    Dir = gid_Dir_PythonFramework_Versions_ver_bin;
+    Name = "smtpd.py";
+    Target = STRING(CONCAT3(smtpd,PYMAJMIN,.py));
+    Styles = ();
+End
+
+Unixlink gid_Unixlink_Python_libpython
+    BIN_FILE_BODY;
+    Dir = gid_Dir_PythonFramework_Versions_ver_lib_pythonver_config;
+    Name = STRING(PY_FULL_DLL_NAME);
+    Target = "../../../OOoPython";
+    Styles = ();
+End
+#endif //MACOSX
+
+#ifdef WNT
+File gid_File_Lib_Python_So_Brand // Fix for system-python-problem on windows
+    TXT_FILE_BODY;
+    Dir = gid_Brand_Dir_Program;
+    Name = STRING(PY_FULL_DLL_NAME);
+    Styles = (PACKED);
+End
+#endif
+#endif
+
+#ifdef UNX
+
+File gid_File_Pyuno
+    TXT_FILE_BODY;
+#ifdef MACOSX
+    // note: Mac OS X use .dylib, even for python modules
+    Name = "pyuno.dylib";
+#else
+    Name = "pyuno.so";
+#endif
+    Dir = gid_Dir_Program;
+    Styles = (PACKED);
+End
+
+#endif
+
+// DISABLE_PYUNO
+#endif

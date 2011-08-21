@@ -1,0 +1,290 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE Locale SYSTEM 'locale.dtd'>
+<Locale versionDTD="2.0.3" allowUpdateFromCLDR="yes" version="1.2">
+  <LC_INFO>
+    <Language>
+      <LangID>ar</LangID>
+      <DefaultName>Arabic</DefaultName>
+    </Language>
+    <Country>
+      <CountryID>LB</CountryID>
+      <DefaultName>Lebanon</DefaultName>
+    </Country>
+  </LC_INFO>
+  <LC_CTYPE>
+    <Separators>
+      <DateSeparator>/</DateSeparator>
+      <ThousandSeparator>٬</ThousandSeparator>
+      <DecimalSeparator>٫</DecimalSeparator>
+      <TimeSeparator>:</TimeSeparator>
+      <Time100SecSeparator>.</Time100SecSeparator>
+      <ListSeparator>;</ListSeparator>
+      <LongDateDayOfWeekSeparator>، </LongDateDayOfWeekSeparator>
+      <LongDateDaySeparator>، </LongDateDaySeparator>
+      <LongDateMonthSeparator>، </LongDateMonthSeparator>
+      <LongDateYearSeparator> </LongDateYearSeparator>
+    </Separators>
+    <Markers>
+      <QuotationStart>‘</QuotationStart>
+      <QuotationEnd>’</QuotationEnd>
+      <DoubleQuotationStart>"</DoubleQuotationStart>
+      <DoubleQuotationEnd>"</DoubleQuotationEnd>
+    </Markers>
+    <TimeAM>ص</TimeAM>
+    <TimePM>م</TimePM>
+    <MeasurementSystem>metric</MeasurementSystem>
+  </LC_CTYPE>
+  <LC_FORMAT ref="ar_EG" replaceFrom="[CURRENCY]" replaceTo="[$ل.ل.‏-3001]"/>
+  <LC_COLLATION ref="en_US" />
+  <LC_SEARCH ref="en_US"/>
+  <LC_INDEX ref="ar_EG"/>
+  <LC_CALENDAR>
+    <Calendar unoid="gregorian" default="true">
+      <DaysOfWeek>
+        <Day>
+          <DayID>sun</DayID>
+          <DefaultAbbrvName>الأحد</DefaultAbbrvName>
+          <DefaultFullName>الأحد</DefaultFullName>
+        </Day>
+        <Day>
+          <DayID>mon</DayID>
+          <DefaultAbbrvName>الاثنين</DefaultAbbrvName>
+          <DefaultFullName>الاثنين</DefaultFullName>
+        </Day>
+        <Day>
+          <DayID>tue</DayID>
+          <DefaultAbbrvName>الثلاثاء</DefaultAbbrvName>
+          <DefaultFullName>الثلاثاء</DefaultFullName>
+        </Day>
+        <Day>
+          <DayID>wed</DayID>
+          <DefaultAbbrvName>الأربعاء</DefaultAbbrvName>
+          <DefaultFullName>الأربعاء</DefaultFullName>
+        </Day>
+        <Day>
+          <DayID>thu</DayID>
+          <DefaultAbbrvName>الخميس</DefaultAbbrvName>
+          <DefaultFullName>الخميس</DefaultFullName>
+        </Day>
+        <Day>
+          <DayID>fri</DayID>
+          <DefaultAbbrvName>الجمعة</DefaultAbbrvName>
+          <DefaultFullName>الجمعة</DefaultFullName>
+        </Day>
+        <Day>
+          <DayID>sat</DayID>
+          <DefaultAbbrvName>السبت</DefaultAbbrvName>
+          <DefaultFullName>السبت</DefaultFullName>
+        </Day>
+      </DaysOfWeek>
+      <MonthsOfYear>
+        <Month>
+          <MonthID>jan</MonthID>
+          <DefaultAbbrvName>كانون الثاني</DefaultAbbrvName>
+          <DefaultFullName>كانون الثاني</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>feb</MonthID>
+          <DefaultAbbrvName>شباط</DefaultAbbrvName>
+          <DefaultFullName>شباط</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>mar</MonthID>
+          <DefaultAbbrvName>آذار</DefaultAbbrvName>
+          <DefaultFullName>آذار</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>apr</MonthID>
+          <DefaultAbbrvName>نيسان</DefaultAbbrvName>
+          <DefaultFullName>نيسان</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>may</MonthID>
+          <DefaultAbbrvName>نوار</DefaultAbbrvName>
+          <DefaultFullName>نوار</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>jun</MonthID>
+          <DefaultAbbrvName>حزيران</DefaultAbbrvName>
+          <DefaultFullName>حزيران</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>jul</MonthID>
+          <DefaultAbbrvName>تموز</DefaultAbbrvName>
+          <DefaultFullName>تموز</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>aug</MonthID>
+          <DefaultAbbrvName>آب</DefaultAbbrvName>
+          <DefaultFullName>آب</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>sep</MonthID>
+          <DefaultAbbrvName>أيلول</DefaultAbbrvName>
+          <DefaultFullName>أيلول</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>oct</MonthID>
+          <DefaultAbbrvName>تشرين الأول</DefaultAbbrvName>
+          <DefaultFullName>تشرين الأول</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>nov</MonthID>
+          <DefaultAbbrvName>تشرين الثاني</DefaultAbbrvName>
+          <DefaultFullName>تشرين الثاني</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>dec</MonthID>
+          <DefaultAbbrvName>كانون الأول</DefaultAbbrvName>
+          <DefaultFullName>كانون الأول</DefaultFullName>
+        </Month>
+      </MonthsOfYear>
+      <Eras>
+        <Era>
+          <EraID>bc</EraID>
+          <DefaultAbbrvName>ق.م</DefaultAbbrvName>
+          <DefaultFullName>ق.م</DefaultFullName>
+        </Era>
+        <Era>
+          <EraID>ad</EraID>
+          <DefaultAbbrvName>م</DefaultAbbrvName>
+          <DefaultFullName>م</DefaultFullName>
+        </Era>
+      </Eras>
+      <StartDayOfWeek>
+        <DayID>sat</DayID>
+      </StartDayOfWeek>
+      <MinimalDaysInFirstWeek>1</MinimalDaysInFirstWeek>
+    </Calendar>
+    <Calendar unoid="hijri" default="false">
+      <DaysOfWeek>
+        <Day>
+          <DayID>sun</DayID>
+          <DefaultAbbrvName>الأحد</DefaultAbbrvName>
+          <DefaultFullName>الأحد</DefaultFullName>
+        </Day>
+        <Day>
+          <DayID>mon</DayID>
+          <DefaultAbbrvName>الاثنين</DefaultAbbrvName>
+          <DefaultFullName>الاثنين</DefaultFullName>
+        </Day>
+        <Day>
+          <DayID>tue</DayID>
+          <DefaultAbbrvName>الثلاثاء</DefaultAbbrvName>
+          <DefaultFullName>الثلاثاء</DefaultFullName>
+        </Day>
+        <Day>
+          <DayID>wed</DayID>
+          <DefaultAbbrvName>الأربعاء</DefaultAbbrvName>
+          <DefaultFullName>الأربعاء</DefaultFullName>
+        </Day>
+        <Day>
+          <DayID>thu</DayID>
+          <DefaultAbbrvName>الخميس</DefaultAbbrvName>
+          <DefaultFullName>الخميس</DefaultFullName>
+        </Day>
+        <Day>
+          <DayID>fri</DayID>
+          <DefaultAbbrvName>الجمعة</DefaultAbbrvName>
+          <DefaultFullName>الجمعة</DefaultFullName>
+        </Day>
+        <Day>
+          <DayID>sat</DayID>
+          <DefaultAbbrvName>السبت</DefaultAbbrvName>
+          <DefaultFullName>السبت</DefaultFullName>
+        </Day>
+      </DaysOfWeek>
+      <MonthsOfYear>
+        <Month>
+          <MonthID>jan</MonthID>
+          <DefaultAbbrvName>محرم</DefaultAbbrvName>
+          <DefaultFullName>محرم</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>feb</MonthID>
+          <DefaultAbbrvName>صفر</DefaultAbbrvName>
+          <DefaultFullName>صفر</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>mar</MonthID>
+          <DefaultAbbrvName>ربيع الأول</DefaultAbbrvName>
+          <DefaultFullName>ربيع الأول</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>apr</MonthID>
+          <DefaultAbbrvName>ربيع الآخر</DefaultAbbrvName>
+          <DefaultFullName>ربيع الآخر</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>may</MonthID>
+          <DefaultAbbrvName>جمادى الأولى</DefaultAbbrvName>
+          <DefaultFullName>جمادى الأولى</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>jun</MonthID>
+          <DefaultAbbrvName>جمادى الآخرة</DefaultAbbrvName>
+          <DefaultFullName>جمادى الآخرة</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>jul</MonthID>
+          <DefaultAbbrvName>رجب</DefaultAbbrvName>
+          <DefaultFullName>رجب</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>aug</MonthID>
+          <DefaultAbbrvName>شعبان</DefaultAbbrvName>
+          <DefaultFullName>شعبان</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>sep</MonthID>
+          <DefaultAbbrvName>رمضان</DefaultAbbrvName>
+          <DefaultFullName>رمضان</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>oct</MonthID>
+          <DefaultAbbrvName>شوال</DefaultAbbrvName>
+          <DefaultFullName>شوال</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>nov</MonthID>
+          <DefaultAbbrvName>ذو القعدة</DefaultAbbrvName>
+          <DefaultFullName>ذو القعدة</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>dec</MonthID>
+          <DefaultAbbrvName>ذو الحجة</DefaultAbbrvName>
+          <DefaultFullName>ذو الحجة</DefaultFullName>
+        </Month>
+      </MonthsOfYear>
+      <Eras>
+        <Era>
+          <EraID>BeforeHijra</EraID>
+          <DefaultAbbrvName>ه‍</DefaultAbbrvName>
+          <DefaultFullName>قبل الهجرة</DefaultFullName>
+        </Era>
+        <Era>
+          <EraID>AfterHijra</EraID>
+          <DefaultAbbrvName/>
+          <DefaultFullName>هجري</DefaultFullName>
+        </Era>
+      </Eras>
+      <StartDayOfWeek>
+        <DayID>sat</DayID>
+      </StartDayOfWeek>
+      <MinimalDaysInFirstWeek>1</MinimalDaysInFirstWeek>
+    </Calendar>
+  </LC_CALENDAR>
+  <LC_CURRENCY>
+    <Currency default="true" usedInCompatibleFormatCodes="true">
+      <CurrencyID>LBP</CurrencyID>
+      <CurrencySymbol>ل.ل.‏</CurrencySymbol>
+      <BankSymbol>LBP</BankSymbol>
+      <CurrencyName>LBP</CurrencyName>
+      <DecimalPlaces>2</DecimalPlaces>
+    </Currency>
+  </LC_CURRENCY>
+  <LC_TRANSLITERATION ref="en_US"/>
+  <LC_MISC ref="ar_EG"/>
+  <LC_NumberingLevel ref="ar_EG"/>
+  <LC_OutLineNumberingLevel ref="ar_EG"/>
+</Locale>

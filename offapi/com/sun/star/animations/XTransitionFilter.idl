@@ -1,0 +1,97 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_animations_XTransitionFilter_idl__
+#define __com_sun_star_animations_XTransitionFilter_idl__
+
+#include <com/sun/star/animations/XAnimate.idl>
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module animations {
+
+//=============================================================================
+
+/**
+    Base members <member>XAnimate::Values</member>, <member>XAnimate::From</member>,
+    <member>XAnimate::To</member> and <member>XAnimate::By</member> can be used
+    with <atom>double</atom> values that set the transition progress the specific
+    amount of time.
+
+
+    @see http://www.w3.org/TR/smil20/smil-transitions.html#edef-transitionFilter
+*/
+interface XTransitionFilter : XAnimate
+{
+    /** This is the type or family of transition.
+        <br>This attribute is required and must be one of the transition families listed in
+        <const>TransitionType</const>.
+    */
+    [attribute] short Transition;
+
+    /** This is the subtype of the transition.
+        <br>
+        This must be one of the transition subtypes appropriate for the specified <member>Type</member>
+        as listed in <const>TransitionSubType</const>.
+        <const>TransitionSubType::DEFAULT</const> is the default.
+    */
+    [attribute] short Subtype;
+
+    /** Indicates whether the transitionFilter's parent element will transition in or out.
+        Legal values are <true/> indicating that the parent media will become more visible as
+        the transition progress increases and <false/> indicating that the parent media will
+        become less visible as the transition progress increases.
+
+        The default value is <true/>.
+    */
+    [attribute] boolean Mode;
+
+    /** This specifies the direction the transition will run.
+        <br>
+        The legal values are <true/> for forward and <false/> for reverse.
+        The default value is <true/>.
+        Note that this does not impact the media being transitioned to, but
+        only affects the geometry of the transition.
+        Transitions which do not have a reverse interpretation should ignore the
+        direction attribute and assume the default value of <true/>.
+    */
+    [attribute] boolean Direction;
+
+    /** If the value of the <member>Type</member> attribute is <const>TransitionType::FADE</const> and
+        the value of the <member>Subtype</member> attribute is  <const>TransitionSubType::FADETOCOLOR</const> or
+        <const>TransitionSubType::FADEFROMCOLOR</const>, then this attribute specifies the starting or ending
+        color of the fade.
+        The default value is 0 (black).
+
+    */
+    [attribute] long FadeColor;
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

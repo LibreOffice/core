@@ -1,0 +1,152 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_rendering_XSpriteCanvas_idl__
+#define __com_sun_star_rendering_XSpriteCanvas_idl__
+
+#include <com/sun/star/lang/IllegalArgumentException.idl>
+#include <com/sun/star/rendering/XBitmapCanvas.idl>
+#include <com/sun/star/rendering/XAnimation.idl>
+#include <com/sun/star/rendering/VolatileContentDestroyedException.idl>
+
+module com { module sun { module star { module rendering {
+
+published interface XSprite;
+published interface XAnimatedSprite;
+published interface XCustomSprite;
+
+/** Specialization of a XBitmapCanvas, where moving, animated objects
+    (called sprites) are supported.<p>
+
+    @attention The screen output of canvas drawing operations is
+    undefined, unless XSpriteCanvas::updateScreen() is called. This is
+    because a sprite canvas might choose to employ double buffering to
+    reduce animation flicker, and cannot know the instant suitable to
+    display the newly rendered canvas content. When using external
+    double-buffering via XBufferController on a sprite canvas, the
+    implementation takes care of this issue, and in this case is able
+    to render correctly even without explicit updateScreen() calls
+    (because there's a defined moment in time where content display
+    can happen, namely the XBufferController::showBuffer()) call. If
+    you don't need sprite functionality, and don't want the
+    updateScreen hassle, simply use the XBitmapCanvas.
+ */
+published interface XSpriteCanvas : XBitmapCanvas
+{
+    /** Create a sprite object from the specified animation
+        sequence. A sprite is a back-buffered object with its own,
+        independent animation.
+     */
+    XAnimatedSprite createSpriteFromAnimation( [in] XAnimation animation )
+        raises (com::sun::star::lang::IllegalArgumentException);
+
+    /** Create a sprite object from the specified animation
+        sequence.
+
+        A sprite is a back-buffered object with its own,
+        independent animation.
+
+        @param animationBitmaps
+        Sequence of bitmaps. The bitmaps don't need to have the same
+        size, but they are all rendered with their left, top edges
+        aligned.
+
+        @param interpolationMode
+        Value of <type>InterpolationMode</type>, to determine whether
+        and how to interpolate between the provided bitmaps, if
+        animation runs fast enough.
+
+        @throws <type>VolatileContentDestroyedException</type>
+        if at least one of the bitmap is volatile, and its content has been destroyed by the system.
+     */
+    XAnimatedSprite createSpriteFromBitmaps( [in] sequence<XBitmap> animationBitmaps, [in] byte interpolationMode )
+        raises (com::sun::star::lang::IllegalArgumentException,
+                VolatileContentDestroyedException);
+
+    /** Create a custom, user-handles-it-all sprite object.
+
+        A sprite is a back-buffered object with its own, independent
+        animation.
+
+        @param spriteSize
+        The required size of the sprite in device
+        coordinates. Everything that is rendered outside this area
+        might be clipped on output. Both components of the size must
+        be greater than zero.
+
+        @return an interface to a custom sprite object.
+     */
+    XCustomSprite createCustomSprite( [in] ::com::sun::star::geometry::RealSize2D spriteSize )
+        raises (com::sun::star::lang::IllegalArgumentException);
+
+    /** Create a cloned version of an already existing sprite
+        object.
+
+        The cloned sprite always shows the same content as its
+        original. Furthermore, cloned copies of a hidden original are
+        never visible, although cloned copies of a visible original
+        can of course be invisible.
+
+        @param original
+        The original sprite to copy the content from. This sprite must
+        have been created by the same XSpriteCanvas instance as this
+        method is called on. Other sprite instances will generate an
+        IllegalArgumentException.
+
+        @return an interface to a sprite object.
+     */
+    XSprite createClonedSprite( [in] XSprite original )
+        raises (com::sun::star::lang::IllegalArgumentException);
+
+    /** Tells the sprite canvas to now update the screen
+        representation.
+
+        Required to display rendered changes to the canvas, and
+        updates to stopped animations and XCustomSprites in
+        general. This method will return only after the screen update
+        is done, or earlier if an error happened.<p>
+
+        If double buffering is enabled via XBufferController, no
+        explicit call of updateScreen() is necessary, since the
+        XBufferController methods will automatically notify all
+        associated XSpriteCanvas instances.<p>
+
+        @param bUpdateAll
+        When <TRUE/>, update the whole screen. When <FALSE/>,
+        implementation is permitted to restrict update to areas the
+        canvas itself changed (e.g. because of render operations, or
+        changes on the sprites). The former is useful for updates
+        after window expose events. the latter for animation display.
+
+        @return <TRUE/>, if the screen update was successfully
+        performed
+     */
+    boolean updateScreen( [in] boolean bUpdateAll );
+};
+
+}; }; }; };
+
+#endif

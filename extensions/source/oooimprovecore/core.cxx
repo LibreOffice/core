@@ -36,7 +36,6 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/oooimprovement/XCoreController.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
-#include <comphelper/componentmodule.hxx>
 #include <comphelper/configurationhelper.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/uieventslogger.hxx>

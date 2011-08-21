@@ -1,0 +1,174 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_sdb_tools_XObjectNames_idl__
+#define __com_sun_star_sdb_tools_XObjectNames_idl__
+
+#include <com/sun/star/lang/IllegalArgumentException.idl>
+#include <com/sun/star/sdbc/SQLException.idl>
+
+//=============================================================================
+module com {  module sun {  module star {  module sdb { module tools {
+//=============================================================================
+
+//-----------------------------------------------------------------------------
+/** encapsulates functionality which you might find useful when writing a
+    database application which deals with query and table names.
+
+    <p>The most important task fulfilled by this instance is that it hides
+    different naming restrictions from you, which are caused by server-side
+    or client side specialties.</p>
+
+    <p>For instance, it can validate names against
+    the characters allowed in the object names of a connection. Also, it
+    relieves you from caring whether a database supports queries in a <code>SELECT</code>
+    statement's <code>FROM</code> part (known as "queries in queries"). In such
+    databases, query and table names share a common namespace, thus they must be
+    unique. Using this interface, you can easily ensure this uniqueness.</p>
+
+    <p>All of the functionality present in this interface depends on a connection,
+    thus it entry point for obtaining it is a <type scope="com::sun::star::sdb">Connection</type>
+    service.</p>
+
+    <p>The component itself does not have life-time control mechanisms, i.e. you
+    cannot explicitly dispose it (<member scope="com::sun::star::lang">XComponent::dispose</member>),
+    and you cannot be notified when it dies.<br/>
+    However, if your try to access any of its methods or attributes, after the
+    connection which was used to create it was closed, a <type scope="com::sun::star::lang">DisposedException</type>
+    will be thrown.</p>
+
+    @see XConnectionTools
+
+    @since OOo 2.0.4
+*/
+published interface XObjectNames
+{
+    /** suggests a (unique) table or query name
+
+        <p>If in the database, tables and queries share a common namespace, this will be respected
+        by this function.</p>
+
+        <p>Note that in an multi-threaded environment, the name you obtain here is not absolutely
+        guaranteed to be unique. It is unique at the very moment the function returns to you.
+        But already when you evaluate the returned value, it might not be unique anymore, if
+        another process or thread created a query or table with this name.</p>
+
+        <p>This implies that you cannot rely on the name's uniqueness, but you can use it as
+        first guess to present to the user. In most cases, it will still be sufficient when
+        you are actually creating the table respectively query.</p>
+
+        @param CommandType
+            specifies the <type scope="com::sun::star::sdb">CommandType</type> of the object for which
+            a unique name is to be generated. Must be either <member scope="com::sun::star::sdb">CommandType::TABLE</member>
+            or <member scope="com::sun::star::sdb">CommandType::QUERY</member>.
+
+        @param BaseName
+            specifies the base of the to-be-created object name. If empty, a default
+            base name will be used.
+
+        @throws com::sun::star::lang::IllegalArgumentException
+            if <arg>CommandType</arg> specifies an invalid command type.
+    */
+    string  suggestName( [in] long CommandType, [in] string BaseName )
+        raises ( com::sun::star::lang::IllegalArgumentException );
+
+    /** converts the given object name to a name which is valid in the database.
+
+        <p>The conversion takes place by converting every character which is neither
+        allowed by the SQL-92 standard, nor part of the special characters supported
+        by the database, with an underscore character (_).</p>
+
+        @see com::sun::star::sdbc::XDatabaseMetaData::getExtraNameCharacters
+    */
+    string  convertToSQLName( [in] string Name );
+
+    /** checks whether a given name is used as table respectively query name in the database.
+
+        <p>If in the database, tables and queries share a common namespace, this will be respected
+        by this function.</p>
+
+        <p>As before, the information you obtain by calling this method might be obsolete
+        in the very moment you evaluate this, in case another process or thread interferes.
+        However, it's usually sufficiently up-to-date for purpose of using it in a database
+        application driven by user interactions.</p>
+
+        @param CommandType
+            specifies the <type scope="com::sun::star::sdb">CommandType</type> of the object whose
+            name should be checked. Must be either <member scope="com::sun::star::sdb">CommandType::TABLE</member>
+            or <member scope="com::sun::star::sdb">CommandType::QUERY</member>.
+
+        @param Name
+            specifies the to-be-checked name of the object.
+
+        @return
+            <TRUE/> if and only if the given name is legitimate as table respectively query name
+            to be used in the database.
+
+        @throws com::sun::star::lang::IllegalArgumentException
+            if <arg>CommandType</arg> specifies an invalid command type.
+
+        @see checkNameIsUsed
+    */
+    boolean isNameUsed( [in] long CommandType, [in] string Name )
+        raises ( com::sun::star::lang::IllegalArgumentException );
+
+    /** checks whether a given name is valid as table or query name
+
+        <p>For tables, the name must consist of characters allowed by the SQL-92 standard,
+        plus characters allowed by the connection as extra name characters.</p>
+
+        <p>For queries, names are nearly arbitrary, except that usual quoting characters
+        must not be part of the name.</p>
+
+        @see com::sun::star::sdbc::XDatabaseMetaData::getExtraNameCharacters
+    */
+    boolean isNameValid( [in] long CommandType, [in] string Name )
+        raises ( com::sun::star::lang::IllegalArgumentException );
+
+    /** checks whether a given name is allowed for a to-be-created table or query in the
+        database.
+
+        <p>This method basically does the same checks as <member>isNameUsed</member> and
+        <member>isNameValid</member>. In case the given name is not allowed, it throws an
+        exception. This error can be presented to the user, to give it a common experience
+        in all cases where he's required to enter an object name.</p>
+
+        @see isNameUsed
+        @see isNameValid
+        @see com::sun::star::sdb::ErrorMessageDialog
+        @see com::sun::star::sdb::InteractionHandler
+    */
+    void    checkNameForCreate( [in] long CommandType, [in] string Name )
+            raises ( com::sun::star::sdbc::SQLException );
+};
+
+//=============================================================================
+}; }; }; }; };
+//=============================================================================
+
+#endif
+

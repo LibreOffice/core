@@ -1,0 +1,133 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_text_XTextTable_idl__
+#define __com_sun_star_text_XTextTable_idl__
+
+#include <com/sun/star/text/XTextContent.idl>
+
+#include <com/sun/star/table/XTableRows.idl>
+
+#include <com/sun/star/table/XTableColumns.idl>
+
+#include <com/sun/star/table/XCell.idl>
+
+#include <com/sun/star/text/XTextTableCursor.idl>
+
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module text {
+
+//=============================================================================
+
+/** manages a text table.
+
+    @see com::sun::star::text::TextTable
+    @see com::sun::star::text::Cell
+ */
+published interface XTextTable: com::sun::star::text::XTextContent
+{
+    //-------------------------------------------------------------------------
+
+    /** determines the numbers of rows and columns of the text table.
+
+        <p> This method must be called after the object is created and
+            before the object is insert or attached elsewhere.
+        </p>
+     */
+    void initialize( [in] long nRows,
+             [in] long nColumns );
+
+    //-------------------------------------------------------------------------
+
+    /** @returns
+            the access object for the text table rows.
+
+        @see com::sun::star::table::XTableRows
+     */
+    com::sun::star::table::XTableRows getRows();
+
+    //-------------------------------------------------------------------------
+
+    /** @returns
+            the access object for the text table columns.
+
+        @see com::sun::star::table::XTableColumns
+     */
+    com::sun::star::table::XTableColumns getColumns();
+
+    //-------------------------------------------------------------------------
+
+    /** @returns
+            the <type scope="com::sun::star::table">XCell</type> interface of the cell with the specified name.
+
+        @param aCellName
+            is a concatenation of the alphanumeric column name and the
+            index of the row.
+
+            <p>Example: The cell in the 4th column and third row has the name "D3".
+
+            <p>In cells that are split, the naming convention is more complex.
+            In this case the name is a concatenation of the former cell name
+            (i.e. "D3") and the number of the new column and row index inside
+            of the original table cell separated by dots. This is done
+            recursively.
+
+            <p>Example: If the cell "D3" is horizontally split, it now contains
+            the cells "D3.1.1" and "D3.1.2"
+
+        @see com::sun::star::table::Cell
+        @see com::sun::star::table::XCell
+     */
+    com::sun::star::table::XCell getCellByName( [in] string aCellName );
+
+    //-------------------------------------------------------------------------
+
+    /** @returns
+            the names of all cells of this text table.
+     */
+    sequence<string> getCellNames();
+
+    //-------------------------------------------------------------------------
+
+    /** creates a text table cursor and returns the
+        <type>XTextTableCursor</type> interface.
+
+        <p>Initially the cursor is positioned in the cell with the specified name.
+        </p>
+
+        @see com::sun::star::text::TextTableCursor
+     */
+    com::sun::star::text::XTextTableCursor createCursorByCellName( [in] string aCellName );
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

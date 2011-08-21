@@ -1,0 +1,7 @@
+module ooo { module vba { module excel {
+    constants XlRangeValueDataType {
+        const long xlRangeValueDefault = 10;
+        const long xlRangeValueMSPersistXML = 12;
+        const long xlRangeValueXMLSpreadsheet = 11;
+    };
+}; }; };

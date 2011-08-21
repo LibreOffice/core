@@ -53,8 +53,10 @@ class SvxFontSubstCheckListBox : public SvxSimpleTable
         virtual void    KeyInput( const KeyEvent& rKEvt );
 
     public:
-        SvxFontSubstCheckListBox(Window* pParent, const ResId& rResId ) :
-            SvxSimpleTable( pParent, rResId ){}
+        SvxFontSubstCheckListBox(SvxSimpleTableContainer& rParent, WinBits nBits = WB_BORDER)
+            : SvxSimpleTable(rParent, nBits)
+        {
+        }
 
         inline void     *GetUserData(sal_uLong nPos) { return GetEntry(nPos)->GetUserData(); }
         inline void     SetUserData(sal_uLong nPos, void *pData ) { GetEntry(nPos)->SetUserData(pData); }
@@ -78,6 +80,7 @@ class SvxFontSubstTabPage : public SfxTabPage
     FixedText                   aFont2FT;
     FontNameBox                 aFont2CB;
     ToolBox                     aNewDelTBX;
+    SvxSimpleTableContainer m_aCheckLBContainer;
     SvxFontSubstCheckListBox    aCheckLB;
 
     FixedLine                   aSourceViewFontsFL;

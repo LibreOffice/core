@@ -1,0 +1,118 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_animations_XTimeContainer_idl__
+#define __com_sun_star_animations_XTimeContainer_idl__
+
+#include <com/sun/star/animations/XAnimationNode.idl>
+#include <com/sun/star/container/XContainer.idl>
+#include <com/sun/star/container/XEnumerationAccess.idl>
+#include <com/sun/star/lang/IllegalArgumentException.idl>
+#include <com/sun/star/container/ElementExistException.idl>
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module animations {
+
+//=============================================================================
+
+/**
+
+    Supported modules
+    <ul>
+    <li>BasicInlineTiming</li>
+    <li>EventTiming</li>
+    <li>FillDefault</li>
+    <li>MultiArcTiming</li>
+    <li>
+        RepeatTiming
+        <b>
+        The deprecated <code>repeat</code> is not supported.
+    </li>
+    <li>RestartDefault</li>
+    <li>RestartTiming</li>
+    <li>TimeContainerAttributes</li>
+    </ul>
+    @see http://www.w3.org/TR/smil20/smil-timing.html
+    @see http://www.w3.org/TR/smil20/smil-timing.html#Timing-TimingConcepts
+*/
+interface XTimeContainer : XAnimationNode
+{
+    /*
+    com::sun::star::container::XContainer;
+    com::sun::star::container::XEnumerationAccess;
+    */
+
+    /*
+    [attribute] long PresetId;
+    [attribute] long PresetSubType;
+    [attribute] long PresetClass;
+    */
+
+    /**
+    */
+    XAnimationNode insertBefore( [in] XAnimationNode newChild, [in] XAnimationNode refChild )
+        raises( com::sun::star::lang::IllegalArgumentException,
+                com::sun::star::container::NoSuchElementException,
+                com::sun::star::container::ElementExistException,
+                com::sun::star::lang::WrappedTargetException );
+
+    /**
+    */
+    XAnimationNode insertAfter( [in] XAnimationNode newChild, [in] XAnimationNode refChild )
+        raises( com::sun::star::lang::IllegalArgumentException,
+                com::sun::star::container::NoSuchElementException,
+                com::sun::star::container::ElementExistException,
+                com::sun::star::lang::WrappedTargetException );
+
+    /**
+    */
+    XAnimationNode replaceChild( [in] XAnimationNode newChild, [in] XAnimationNode oldChild )
+        raises( com::sun::star::lang::IllegalArgumentException,
+                com::sun::star::container::NoSuchElementException,
+                com::sun::star::container::ElementExistException,
+                com::sun::star::lang::WrappedTargetException );
+
+    /**
+    */
+    XAnimationNode removeChild( [in] XAnimationNode oldChild )
+        raises( com::sun::star::lang::IllegalArgumentException,
+                com::sun::star::container::NoSuchElementException,
+                com::sun::star::lang::WrappedTargetException );
+
+    /**
+    */
+    XAnimationNode appendChild( [in] XAnimationNode newChild )
+        raises( com::sun::star::lang::IllegalArgumentException,
+                com::sun::star::container::ElementExistException,
+                com::sun::star::lang::WrappedTargetException );
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

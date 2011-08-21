@@ -1,0 +1,86 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_datatransfer_dnd_X11DragSource_idl__
+#define __com_sun_star_datatransfer_dnd_X11DragSource_idl__
+
+#include <com/sun/star/lang/XComponent.idl>
+#include <com/sun/star/lang/XServiceInfo.idl>
+#include <com/sun/star/lang/XInitialization.idl>
+#include <com/sun/star/lang/XTypeProvider.idl>
+
+//=============================================================================
+
+module com { module sun { module star { module datatransfer { module dnd {
+
+//=============================================================================
+
+ published interface XDragSource;
+
+//=============================================================================
+/** This service connects the Java-like UNO Drag and Drop protocol to the
+    X Drag and Drop protocol used on X-Servers to transfer data between
+    applications via Drag and Drop operations.
+
+    @see XDragSource
+*/
+
+published service X11DragSource
+{
+    //-------------------------------------------------------------------------
+    /** Used to provide data to other applications via X Drag and Drop protocol.
+    */
+    interface XDragSource;
+
+    //-------------------------------------------------------------------------
+    /** The service expects an instance of
+        <type scope="com::sun::star::awt">XDisplayConnection</type>
+        as the first parameter.
+    */
+    interface com::sun::star::lang::XInitialization;
+
+    //-------------------------------------------------------------------------
+    /** For shutdown and listener support.
+    */
+    interface com::sun::star::lang::XComponent;
+
+    //-------------------------------------------------------------------------
+    /** Service should always support this interface.
+    */
+    interface com::sun::star::lang::XServiceInfo;
+
+    //-------------------------------------------------------------------------
+    /** Service should always support this interface.
+    */
+    interface com::sun::star::lang::XTypeProvider;
+};
+
+//=============================================================================
+
+}; }; }; }; };
+
+#endif

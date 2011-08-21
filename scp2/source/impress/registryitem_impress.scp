@@ -1,0 +1,1041 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * 
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#include "macros.inc"
+
+#ifdef WITH_ACTIVEX_COMPONENT
+
+// MSOLE embedded object in SO7 file format
+RegistryItem gid_Regitem_Clsid__E5a0b632_Dfba_4549_9346_E414da06e6f8_
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Impress_Bin;
+    Subkey = "CLSID\{E5A0B632-DFBA-4549-9346-E414DA06E6F8}";
+    REG_VALUE_LNG(SO60_PRESENT)
+End
+
+RegistryItem gid_Regitem_Clsid__E5a0b632_Dfba_4549_9346_E414da06e6f8__Auxusertype_2
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Impress_Bin;
+    Subkey = "CLSID\{E5A0B632-DFBA-4549-9346-E414DA06E6F8}\AuxUserType\2";
+    Value = "%PRODUCTNAME";
+End
+
+RegistryItem gid_Regitem_Clsid__E5a0b632_Dfba_4549_9346_E414da06e6f8__Auxusertype_3
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Impress_Bin;
+    Subkey = "CLSID\{E5A0B632-DFBA-4549-9346-E414DA06E6F8}\AuxUserType\3";
+    REG_VALUE_LNG(SO60_PRESENT)
+End
+
+RegistryItem gid_Regitem_Clsid__E5a0b632_Dfba_4549_9346_E414da06e6f8__Dataformats_Getset_0
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Impress_Bin;
+    Subkey = "CLSID\{E5A0B632-DFBA-4549-9346-E414DA06E6F8}\DataFormats\GetSet\0";
+    Value = "Embed Source,1,8,1";
+End
+
+RegistryItem gid_Regitem_Clsid__E5a0b632_Dfba_4549_9346_E414da06e6f8__Dataformats_Getset_1
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Impress_Bin;
+    Subkey = "CLSID\{E5A0B632-DFBA-4549-9346-E414DA06E6F8}\DataFormats\GetSet\1";
+    Value = "3,1,32,1";
+End
+
+RegistryItem gid_Regitem_Clsid__E5a0b632_Dfba_4549_9346_E414da06e6f8__Dataformats_Getset_2
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Impress_Bin;
+    Subkey = "CLSID\{E5A0B632-DFBA-4549-9346-E414DA06E6F8}\DataFormats\GetSet\2";
+    Value = "2,1,16,1";
+End
+
+RegistryItem gid_Regitem_Clsid__E5a0b632_Dfba_4549_9346_E414da06e6f8__Defaulticon
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Impress_Bin;
+    Subkey = "CLSID\{E5A0B632-DFBA-4549-9346-E414DA06E6F8}\DefaultIcon";
+    Value = "<progpath>\program\soffice.exe,0";
+End
+
+RegistryItem gid_Regitem_Clsid__E5a0b632_Dfba_4549_9346_E414da06e6f8__Inprochandler32
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Impress_Bin;
+    Subkey = "CLSID\{E5A0B632-DFBA-4549-9346-E414DA06E6F8}\InprocHandler32";
+    Value = "<progpath>\program\inprocserv.dll";
+    Styles = ();
+End
+
+RegistryItem gid_Regitem_Clsid__E5a0b632_Dfba_4549_9346_E414da06e6f8__Insertable
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Impress_Bin;
+    Subkey = "CLSID\{E5A0B632-DFBA-4549-9346-E414DA06E6F8}\Insertable";
+End
+
+RegistryItem gid_Regitem_Clsid__E5a0b632_Dfba_4549_9346_E414da06e6f8__Localserver32
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Impress_Bin;
+    Subkey = "CLSID\{E5A0B632-DFBA-4549-9346-E414DA06E6F8}\LocalServer32";
+    Value = "<progpath>\program\soffice.exe -nodefault -nologo";
+End
+
+RegistryItem gid_Regitem_Clsid__E5a0b632_Dfba_4549_9346_E414da06e6f8__Miscstatus
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Impress_Bin;
+    Subkey = "CLSID\{E5A0B632-DFBA-4549-9346-E414DA06E6F8}\MiscStatus";
+    Value = "16";
+End
+
+RegistryItem gid_Regitem_Clsid__E5a0b632_Dfba_4549_9346_E414da06e6f8__Progid
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Impress_Bin;
+    Subkey = "CLSID\{E5A0B632-DFBA-4549-9346-E414DA06E6F8}\ProgID";
+    Value = "soffice.StarImpressDocument.6";
+End
+
+RegistryItem gid_Regitem_Clsid__E5a0b632_Dfba_4549_9346_E414da06e6f8__Programmable
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Impress_Bin;
+    Subkey = "CLSID\{E5A0B632-DFBA-4549-9346-E414DA06E6F8}\Programmable";
+End
+
+RegistryItem gid_Regitem_Clsid__E5a0b632_Dfba_4549_9346_E414da06e6f8__Verb_0
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Impress_Bin;
+    Subkey = "CLSID\{E5A0B632-DFBA-4549-9346-E414DA06E6F8}\verb\0";
+    Value = "&Edit,0,0";
+End
+
+RegistryItem gid_Regitem_Clsid__E5a0b632_Dfba_4549_9346_E414da06e6f8__Verb__1
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Impress_Bin;
+    Subkey = "CLSID\{E5A0B632-DFBA-4549-9346-E414DA06E6F8}\verb\-1";
+    Value = "Show,0,0";
+End
+
+RegistryItem gid_Regitem_Clsid__E5a0b632_Dfba_4549_9346_E414da06e6f8__Verb__2
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Impress_Bin;
+    Subkey = "CLSID\{E5A0B632-DFBA-4549-9346-E414DA06E6F8}\verb\-2";
+    Value = "Open,0,0";
+End
+
+RegistryItem gid_Regitem_Clsid__E5a0b632_Dfba_4549_9346_E414da06e6f8__Versionindependentprogid
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Impress_Bin;
+    Subkey = "CLSID\{E5A0B632-DFBA-4549-9346-E414DA06E6F8}\VersionIndependentProgID";
+    Value = "soffice.StarImpressDocument.6";
+End
+
+// MSOLE embedded object in OASIS file format
+RegistryItem gid_Regitem_Clsid__Ee5d1ea4_D445_4289_B2fc_55fc93693917_
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Impress_Bin;
+    Subkey = "CLSID\{EE5D1EA4-D445-4289-B2FC-55FC93693917}";
+    REG_VALUE_LNG(OO_PRESENT)
+End
+
+RegistryItem gid_Regitem_Clsid__Ee5d1ea4_D445_4289_B2fc_55fc93693917__Auxusertype_2
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Impress_Bin;
+    Subkey = "CLSID\{EE5D1EA4-D445-4289-B2FC-55FC93693917}\AuxUserType\2";
+    Value = "%PRODUCTNAME";
+End
+
+RegistryItem gid_Regitem_Clsid__Ee5d1ea4_D445_4289_B2fc_55fc93693917__Auxusertype_3
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Impress_Bin;
+    Subkey = "CLSID\{EE5D1EA4-D445-4289-B2FC-55FC93693917}\AuxUserType\3";
+    REG_VALUE_LNG(OO_PRESENT)
+End
+
+RegistryItem gid_Regitem_Clsid__Ee5d1ea4_D445_4289_B2fc_55fc93693917__Dataformats_Getset_0
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Impress_Bin;
+    Subkey = "CLSID\{EE5D1EA4-D445-4289-B2FC-55FC93693917}\DataFormats\GetSet\0";
+    Value = "Embed Source,1,8,1";
+End
+
+RegistryItem gid_Regitem_Clsid__Ee5d1ea4_D445_4289_B2fc_55fc93693917__Dataformats_Getset_1
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Impress_Bin;
+    Subkey = "CLSID\{EE5D1EA4-D445-4289-B2FC-55FC93693917}\DataFormats\GetSet\1";
+    Value = "3,1,32,1";
+End
+
+RegistryItem gid_Regitem_Clsid__Ee5d1ea4_D445_4289_B2fc_55fc93693917__Dataformats_Getset_2
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Impress_Bin;
+    Subkey = "CLSID\{EE5D1EA4-D445-4289-B2FC-55FC93693917}\DataFormats\GetSet\2";
+    Value = "2,1,16,1";
+End
+
+RegistryItem gid_Regitem_Clsid__Ee5d1ea4_D445_4289_B2fc_55fc93693917__Defaulticon
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Impress_Bin;
+    Subkey = "CLSID\{EE5D1EA4-D445-4289-B2FC-55FC93693917}\DefaultIcon";
+    Value = "<progpath>\program\soffice.exe,0";
+End
+
+RegistryItem gid_Regitem_Clsid__Ee5d1ea4_D445_4289_B2fc_55fc93693917__Inprochandler32
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Impress_Bin;
+    Subkey = "CLSID\{EE5D1EA4-D445-4289-B2FC-55FC93693917}\InprocHandler32";
+    Value = "<progpath>\program\inprocserv.dll";
+    Styles = ();
+End
+
+RegistryItem gid_Regitem_Clsid__Ee5d1ea4_D445_4289_B2fc_55fc93693917__Insertable
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Impress_Bin;
+    Subkey = "CLSID\{EE5D1EA4-D445-4289-B2FC-55FC93693917}\Insertable";
+End
+
+RegistryItem gid_Regitem_Clsid__Ee5d1ea4_D445_4289_B2fc_55fc93693917__Localserver32
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Impress_Bin;
+    Subkey = "CLSID\{EE5D1EA4-D445-4289-B2FC-55FC93693917}\LocalServer32";
+    Value = "<progpath>\program\soffice.exe -nodefault -nologo";
+End
+
+RegistryItem gid_Regitem_Clsid__Ee5d1ea4_D445_4289_B2fc_55fc93693917__Miscstatus
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Impress_Bin;
+    Subkey = "CLSID\{EE5D1EA4-D445-4289-B2FC-55FC93693917}\MiscStatus";
+    Value = "16";
+End
+
+RegistryItem gid_Regitem_Clsid__Ee5d1ea4_D445_4289_B2fc_55fc93693917__Progid
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Impress_Bin;
+    Subkey = "CLSID\{EE5D1EA4-D445-4289-B2FC-55FC93693917}\ProgID";
+    Value = "opendocument.ImpressDocument.1";
+End
+
+RegistryItem gid_Regitem_Clsid__Ee5d1ea4_D445_4289_B2fc_55fc93693917__Programmable
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Impress_Bin;
+    Subkey = "CLSID\{EE5D1EA4-D445-4289-B2FC-55FC93693917}\Programmable";
+End
+
+RegistryItem gid_Regitem_Clsid__Ee5d1ea4_D445_4289_B2fc_55fc93693917__Verb_0
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Impress_Bin;
+    Subkey = "CLSID\{EE5D1EA4-D445-4289-B2FC-55FC93693917}\verb\0";
+    Value = "&Edit,0,0";
+End
+
+RegistryItem gid_Regitem_Clsid__Ee5d1ea4_D445_4289_B2fc_55fc93693917__Verb__1
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Impress_Bin;
+    Subkey = "CLSID\{EE5D1EA4-D445-4289-B2FC-55FC93693917}\verb\-1";
+    Value = "Show,0,0";
+End
+
+RegistryItem gid_Regitem_Clsid__Ee5d1ea4_D445_4289_B2fc_55fc93693917__Verb__2
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Impress_Bin;
+    Subkey = "CLSID\{EE5D1EA4-D445-4289-B2FC-55FC93693917}\verb\-2";
+    Value = "Open,0,0";
+End
+
+RegistryItem gid_Regitem_Clsid__Ee5d1ea4_D445_4289_B2fc_55fc93693917__Versionindependentprogid
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Impress_Bin;
+    Subkey = "CLSID\{EE5D1EA4-D445-4289-B2FC-55FC93693917}\VersionIndependentProgID";
+    Value = "opendocument.ImpressDocument.1";
+End
+
+#endif // WITH_ACTIVEX_COMPONENT
+
+RegistryItem gid_Regitem_Soffice_Starimpressdocument_6
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Impress_Bin;
+    Subkey = "soffice.StarImpressDocument.6";
+    REG_VALUE_LNG(SO60_PRESENT)
+End
+
+#ifdef WITH_ACTIVEX_COMPONENT
+
+RegistryItem gid_Regitem_Soffice_Starimpressdocument_6_Clsid
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Impress_Bin;
+    Subkey = "soffice.StarImpressDocument.6\CLSID";
+    Value = "{E5A0B632-DFBA-4549-9346-E414DA06E6F8}";
+End
+
+#endif // WITH_ACTIVEX_COMPONENT
+
+RegistryItem gid_Regitem_Soffice_Starimpressdocument_6_Defaulticon
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Impress_Bin;
+    Subkey = "soffice.StarImpressDocument.6\DefaultIcon";
+    Value = "<progpath>\program\soffice.exe,33";
+End
+
+RegistryItem gid_Regitem_Soffice_Starimpressdocument_6_Insertable
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Impress_Bin;
+    Subkey = "soffice.StarImpressDocument.6\Insertable";
+End
+
+RegistryItem gid_Regitem_Soffice_Starimpressdocument_6_Protocol_Stdfileediting_Server
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Impress_Bin;
+    Subkey = "soffice.StarImpressDocument.6\protocol\StdFileEditing\server";
+    Value = "<progpath>\program\soffice.exe";
+End
+
+RegistryItem gid_Regitem_Soffice_Starimpressdocument_6_Protocol_Stdfileediting_Verb_0
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Impress_Bin;
+    Subkey = "soffice.StarImpressDocument.6\protocol\StdFileEditing\verb\0";
+    Value = "&Edit";
+End
+
+RegistryItem gid_Regitem_Soffice_Starimpressdocument_6_Protocol_Stdfileediting_Verb__1
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Impress_Bin;
+    Subkey = "soffice.StarImpressDocument.6\protocol\StdFileEditing\verb\-1";
+    Value = "&Show";
+End
+
+RegistryItem gid_Regitem_Soffice_Starimpressdocument_6_Protocol_Stdfileediting_Verb__2
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Impress_Bin;
+    Subkey = "soffice.StarImpressDocument.6\protocol\StdFileEditing\verb\-2";
+    Value = "&Open";
+End
+
+RegistryItem gid_Regitem_Soffice_Starimpressdocument_6_Shell
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Impress_Bin;
+    Subkey = "soffice.StarImpressDocument.6\shell";
+    Value = "open";
+End
+
+RegistryItem gid_Regitem_Soffice_Starimpressdocument_6_Shell_New
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Impress_Bin;
+    Subkey = "soffice.StarImpressDocument.6\shell\new";
+    REG_VALUE_LNG(NEW)
+End
+
+RegistryItem gid_Regitem_Soffice_Starimpressdocument_6_Shell_New_Command
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Impress_Bin;
+    Subkey = "soffice.StarImpressDocument.6\shell\new\command";
+    Value = "\"<progpath>\program\soffice.exe\" -n \"%1\"";
+End
+
+RegistryItem gid_Regitem_Soffice_Starimpressdocument_6_Shell_Open_Command
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Impress_Bin;
+    Subkey = "soffice.StarImpressDocument.6\shell\open\command";
+    Value = "\"<progpath>\program\simpress.exe\" -o \"%1\"";
+End
+
+RegistryItem gid_Regitem_Soffice_Starimpressdocument_6_Shell_Print_Command
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Impress_Bin;
+    Subkey = "soffice.StarImpressDocument.6\shell\print\command";
+    Value = "\"<progpath>\program\soffice.exe\" -p \"%1\"";
+End
+
+RegistryItem gid_Regitem_Soffice_Starimpressdocument_6_Shell_Printto_Command
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Impress_Bin;
+    Subkey = "soffice.StarImpressDocument.6\shell\printto\command";
+    Value = "\"<progpath>\program\soffice.exe\" -pt \"%2\" \"%1\"";
+End
+
+RegistryItem gid_Regitem_Soffice_Starimpressdocument_6_Shell_Show
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Impress_Bin;
+    Subkey = "soffice.StarImpressDocument.6\shell\show";
+    REG_VALUE_LNG(SO60_SHOW)
+End
+
+RegistryItem gid_Regitem_Soffice_Starimpressdocument_6_Shell_Show_Command
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Impress_Bin;
+    Subkey = "soffice.StarImpressDocument.6\shell\show\command";
+    Value = "\"<progpath>\program\soffice.exe\" -show \"%1\"";
+End
+
+RegistryItem gid_Regitem_Soffice_Starimpressdocument_Curver
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    Subkey = "soffice.StarImpressDocument\CurVer";
+    ModuleID = gid_Module_Prg_Impress_Bin;
+    Value = "soffice.StarImpressDocument.6";
+End
+
+RegistryItem gid_Regitem_Soffice_Starimpresstemplate_6
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    Subkey = "soffice.StarImpressTemplate.6";
+    ModuleID = gid_Module_Prg_Impress_Bin;
+    REG_VALUE_LNG(SO60_IMPRESS_TEMPLATE)
+End
+
+RegistryItem gid_Regitem_Soffice_Starimpresstemplate_6_Defaulticon
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    Subkey = "soffice.StarImpressTemplate.6\DefaultIcon";
+    ModuleID = gid_Module_Prg_Impress_Bin;
+    Value = "<progpath>\program\soffice.exe,34";
+End
+
+RegistryItem gid_Regitem_Soffice_Starimpresstemplate_6_Shell
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    Subkey = "soffice.StarImpressTemplate.6\shell";
+    ModuleID = gid_Module_Prg_Impress_Bin;
+    Value = "new";
+End
+
+RegistryItem gid_Regitem_Soffice_Starimpresstemplate_6_Shell_New
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    Subkey = "soffice.StarImpressTemplate.6\shell\new";
+    ModuleID = gid_Module_Prg_Impress_Bin;
+    REG_VALUE_LNG(NEW)
+End
+
+RegistryItem gid_Regitem_Soffice_Starimpresstemplate_6_Shell_New_Command
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    Subkey = "soffice.StarImpressTemplate.6\shell\new\command";
+    ModuleID = gid_Module_Prg_Impress_Bin;
+    Value = "\"<progpath>\program\soffice.exe\" -n \"%1\"";
+End
+
+RegistryItem gid_Regitem_Soffice_Starimpresstemplate_6_Shell_Open_Command
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    Subkey = "soffice.StarImpressTemplate.6\shell\open\command";
+    ModuleID = gid_Module_Prg_Impress_Bin;
+    Value = "\"<progpath>\program\simpress.exe\" -o \"%1\"";
+End
+
+RegistryItem gid_Regitem_Soffice_Starimpresstemplate_6_Shell_Print_Command
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    Subkey = "soffice.StarImpressTemplate.6\shell\print\command";
+    ModuleID = gid_Module_Prg_Impress_Bin;
+    Value = "\"<progpath>\program\soffice.exe\" -p \"%1\"";
+End
+
+RegistryItem gid_Regitem_Soffice_Starimpresstemplate_6_Shell_Printto_Command
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    Subkey = "soffice.StarImpressTemplate.6\shell\printto\command";
+    ModuleID = gid_Module_Prg_Impress_Bin;
+    Value = "\"<progpath>\program\soffice.exe\" -pt \"%2\" \"%1\"";
+End
+
+RegistryItem gid_Regitem_Sti
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    Subkey = ".sti";
+    ModuleID = gid_Module_Prg_Impress_Bin;
+    Value = "soffice.StarImpressTemplate.6";
+End
+
+RegistryItem gid_Regitem_Sti_PersistentHandler
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Impress_Bin;
+    Subkey = ".sti\PersistentHandler";
+    Value = "{7BC0E713-5703-45BE-A29D-5D46D8B39262}";
+End
+
+RegistryItem gid_Regitem_Sti_Shellex_00021500_0000_0000_C000_000000000046
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Impress_Bin;
+    Subkey = ".sti\shellex\{00021500-0000-0000-C000-000000000046}";
+    Value = "{087B3AE3-E237-4467-B8DB-5A38AB959AC9}";
+End
+
+RegistryItem gid_Regitem_Sti_Shellex_BB2E617C_0920_11D1_9A0B_00C04FC2D6C1
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Impress_Bin;
+    Subkey = ".sti\shellex\{BB2E617C-0920-11D1-9A0B-00C04FC2D6C1}";
+    Value = "{3B092F0C-7696-40E3-A80F-68D74DA84210}";
+End
+
+RegistryItem gid_Regitem_StarImpressTemplate_6_Shellex_PropertySheetHandlers_MyPropSheet1
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Impress_Bin;
+    Subkey = "soffice.StarImpressTemplate.6\shellex\PropertySheetHandlers\MyPropSheet1";
+    Value = "{63542C48-9552-494A-84F7-73AA6A7C99C1}";
+End
+
+RegistryItem gid_Regitem_Sti_Contenttype
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Impress_Bin;
+    Subkey = ".sti";
+    Name = "Content Type";
+    Value = "application/vnd.sun.xml.impress.template";
+End
+
+RegistryItem gid_Regitem_sti_FullDetails
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Optional_Winexplorerext_PropertyHdl;
+    Subkey = "soffice.StarImpressTemplate.6";
+    Name = "FullDetails";
+    Value = "prop:System.PropGroup.Description;System.Title;System.Author;System.Subject;System.Keywords;System.Comment;System.PropGroup.FileSystem;System.ItemNameDisplay;System.ItemType;System.ItemFolderPathDisplay;System.Size;System.DateCreated;System.DateModified;System.FileAttributes;System.ComputerName";
+End
+
+RegistryItem gid_Regitem_Sxi_PersistentHandler
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Impress_Bin;
+    Subkey = ".sxi\PersistentHandler";
+    Value = "{7BC0E713-5703-45BE-A29D-5D46D8B39262}";
+End
+
+RegistryItem gid_Regitem_Sxi_Shellex_00021500_0000_0000_C000_000000000046
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Impress_Bin;
+    Subkey = ".sxi\shellex\{00021500-0000-0000-C000-000000000046}";
+    Value = "{087B3AE3-E237-4467-B8DB-5A38AB959AC9}";
+End
+
+RegistryItem gid_Regitem_Sxi_Shellex_BB2E617C_0920_11D1_9A0B_00C04FC2D6C1
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Impress_Bin;
+    Subkey = ".sxi\shellex\{BB2E617C-0920-11D1-9A0B-00C04FC2D6C1}";
+    Value = "{3B092F0C-7696-40E3-A80F-68D74DA84210}";
+End
+
+RegistryItem gid_Regitem_StarImpressDocument_6_Shellex_PropertySheetHandlers_MyPropSheet1
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Impress_Bin;
+    Subkey = "soffice.StarImpressDocument.6\shellex\PropertySheetHandlers\MyPropSheet1";
+    Value = "{63542C48-9552-494A-84F7-73AA6A7C99C1}";
+End
+
+RegistryItem gid_Regitem_Sxi_Contenttype
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Impress_Bin;
+    Subkey = ".sxi";
+    Name = "Content Type";
+    Value = "application/vnd.sun.xml.impress";
+End
+
+RegistryItem gid_Regitem_Sxi_Mime_Database
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Impress_Bin;
+    Subkey = "MIME\Database\Content Type\application/vnd.sun.xml.impress";
+    Name = "Extension";
+    Value = ".sxi";
+End
+
+RegistryItem gid_Regitem__Sxi
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Impress_Bin;
+    Subkey = ".sxi";
+    Value = "soffice.StarImpressDocument.6";
+End
+
+RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabilities_FileAssociations_sxi
+    ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
+    Subkey = "Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\Capabilities\FileAssociations";
+    ModuleID = gid_Module_Prg_Impress_Bin;
+    Name = ".sxi";
+    Value = "soffice.StarImpressDocument.6";
+    Styles = ();
+End
+
+RegistryItem gid_Regitem_sxi_FullDetails
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Optional_Winexplorerext_PropertyHdl;
+    Subkey = "soffice.StarImpressDocument.6";
+    Name = "FullDetails";
+    Value = "prop:System.PropGroup.Description;System.Title;System.Author;System.Subject;System.Keywords;System.Comment;System.PropGroup.FileSystem;System.ItemNameDisplay;System.ItemType;System.ItemFolderPathDisplay;System.Size;System.DateCreated;System.DateModified;System.FileAttributes;System.ComputerName";
+End
+
+// new odp file extension
+
+RegistryItem gid_Regitem_Odp_PersistentHandler
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Impress_Bin;
+    Subkey = ".odp\PersistentHandler";
+    Value = "{7BC0E713-5703-45BE-A29D-5D46D8B39262}";
+End
+
+RegistryItem gid_Regitem_Odp_Shellex_00021500_0000_0000_C000_000000000046
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Impress_Bin;
+    Subkey = ".odp\shellex\{00021500-0000-0000-C000-000000000046}";
+    Value = "{087B3AE3-E237-4467-B8DB-5A38AB959AC9}";
+End
+
+RegistryItem gid_Regitem_Odp_Shellex_BB2E617C_0920_11D1_9A0B_00C04FC2D6C1
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Impress_Bin;
+    Subkey = ".odp\shellex\{BB2E617C-0920-11D1-9A0B-00C04FC2D6C1}";
+    Value = "{3B092F0C-7696-40E3-A80F-68D74DA84210}";
+End
+
+RegistryItem gid_Regitem_ImpressDocument_1_Shellex_PropertySheetHandlers_MyPropSheet1
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Impress_Bin;
+    Subkey = "opendocument.ImpressDocument.1\shellex\PropertySheetHandlers\MyPropSheet1";
+    Value = "{63542C48-9552-494A-84F7-73AA6A7C99C1}";
+End
+
+RegistryItem gid_Regitem__Odp
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Impress_Bin;
+    Subkey = ".odp";
+    Value = "opendocument.ImpressDocument.1";
+End
+
+RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabilities_FileAssociations_odp
+    ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
+    Subkey = "Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\Capabilities\FileAssociations";
+    ModuleID = gid_Module_Prg_Impress_Bin;
+    Name = ".odp";
+    Value = "opendocument.ImpressDocument.1";
+    Styles = ();
+End
+
+RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabilities_MimeAssociations_odp
+    ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
+    Subkey = "Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\Capabilities\MimeAssociations";
+    ModuleID = gid_Module_Prg_Impress_Bin;
+    Name = "application/vnd.oasis.opendocument.presentation";
+    Value = "opendocument.ImpressDocument.1";
+    Styles = ();
+End
+
+
+RegistryItem gid_Regitem_Odp_Contenttype
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Impress_Bin;
+    Subkey = ".odp";
+    Name = "Content Type";
+    Value = "application/vnd.oasis.opendocument.presentation";
+End
+
+RegistryItem gid_Regitem_Odp_Mime_Database
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Impress_Bin;
+    Subkey = "MIME\Database\Content Type\application/vnd.oasis.opendocument.presentation";
+    Name = "Extension";
+    Value = ".odp";
+End
+
+RegistryItem gid_Regitem_Odp_Openoffice_Impressdocument_1_Shellnew
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Impress_Bin;
+    Subkey = ".odp\opendocument.ImpressDocument.1\ShellNew";
+    Name = "FileName";
+    Value = "soffice.odp";
+End
+
+RegistryItem gid_Regitem_Openoffice_Starimpressdocument_Curver
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    Subkey = "soffice.StarImpressDocument\CurVer";
+    ModuleID = gid_Module_Prg_Impress_Bin;
+    Value = "opendocument.ImpressDocument.1";
+End
+
+RegistryItem gid_Regitem_Openoffice_Impressdocument_1
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Impress_Bin;
+    Subkey = "opendocument.ImpressDocument.1";
+    REG_VALUE_LNG(OO_PRESENT)
+End
+
+#ifdef WITH_ACTIVEX_COMPONENT
+
+RegistryItem gid_Regitem_Openoffice_Impressdocument_1_Clsid
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Impress_Bin;
+    Subkey = "opendocument.ImpressDocument.1\CLSID";
+    Value = "{EE5D1EA4-D445-4289-B2FC-55FC93693917}";
+End
+
+#endif // WITH_ACTIVEX_COMPONENT
+
+RegistryItem gid_Regitem_Openoffice_Impressdocument_1_Defaulticon
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Impress_Bin;
+    Subkey = "opendocument.ImpressDocument.1\DefaultIcon";
+    Value = "<progpath>\program\soffice.exe,7";
+End
+
+RegistryItem gid_Regitem_odp_FullDetails
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Optional_Winexplorerext_PropertyHdl;
+    Subkey = "opendocument.ImpressDocument.1";
+    Name = "FullDetails";
+    Value = "prop:System.PropGroup.Description;System.Title;System.Author;System.Subject;System.Keywords;System.Comment;System.PropGroup.FileSystem;System.ItemNameDisplay;System.ItemType;System.ItemFolderPathDisplay;System.Size;System.DateCreated;System.DateModified;System.FileAttributes;System.ComputerName";
+End
+
+RegistryItem gid_Regitem_Openoffice_Impressdocument_1_Insertable
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Impress_Bin;
+    Subkey = "opendocument.ImpressDocument.1\Insertable";
+End
+
+RegistryItem gid_Regitem_Openoffice_Impressdocument_1_Protocol_Stdfileediting_Server
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Impress_Bin;
+    Subkey = "opendocument.ImpressDocument.1\protocol\StdFileEditing\server";
+    Value = "<progpath>\program\soffice.exe";
+End
+
+RegistryItem gid_Regitem_Openoffice_Impressdocument_1_Protocol_Stdfileediting_Verb_0
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Impress_Bin;
+    Subkey = "opendocument.ImpressDocument.1\protocol\StdFileEditing\verb\0";
+    Value = "&Edit";
+End
+
+RegistryItem gid_Regitem_Openoffice_Impressdocument_1_Protocol_Stdfileediting_Verb__1
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Impress_Bin;
+    Subkey = "opendocument.ImpressDocument.1\protocol\StdFileEditing\verb\-1";
+    Value = "&Show";
+End
+
+RegistryItem gid_Regitem_Openoffice_Impressdocument_1_Protocol_Stdfileediting_Verb__2
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Impress_Bin;
+    Subkey = "opendocument.ImpressDocument.1\protocol\StdFileEditing\verb\-2";
+    Value = "&Open";
+End
+
+RegistryItem gid_Regitem_Openoffice_Impressdocument_1_Shell
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Impress_Bin;
+    Subkey = "opendocument.ImpressDocument.1\shell";
+    Value = "open";
+End
+
+RegistryItem gid_Regitem_Openoffice_Impressdocument_1_Shell_New
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Impress_Bin;
+    Subkey = "opendocument.ImpressDocument.1\shell\new";
+    REG_VALUE_LNG(NEW)
+End
+
+RegistryItem gid_Regitem_Openoffice_Impressdocument_1_Shell_New_Command
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Impress_Bin;
+    Subkey = "opendocument.ImpressDocument.1\shell\new\command";
+    Value = "\"<progpath>\program\soffice.exe\" -n \"%1\"";
+End
+
+RegistryItem gid_Regitem_Openoffice_Impressdocument_1_Shell_Open_Command
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Impress_Bin;
+    Subkey = "opendocument.ImpressDocument.1\shell\open\command";
+    Value = "\"<progpath>\program\simpress.exe\" -o \"%1\"";
+    Styles = ();
+End
+
+RegistryItem gid_Regitem_Openoffice_Impressdocument_1_Shell_Print_Command
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Impress_Bin;
+    Subkey = "opendocument.ImpressDocument.1\shell\print\command";
+    Value = "\"<progpath>\program\soffice.exe\" -p \"%1\"";
+End
+
+RegistryItem gid_Regitem_Openoffice_Impressdocument_1_Shell_Printto_Command
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Impress_Bin;
+    Subkey = "opendocument.ImpressDocument.1\shell\printto\command";
+    Value = "\"<progpath>\program\soffice.exe\" -pt \"%2\" \"%1\"";
+End
+
+RegistryItem gid_Regitem_Openoffice_Impressdocument_1_Shell_Show
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Impress_Bin;
+    Subkey = "opendocument.ImpressDocument.1\shell\show";
+    REG_VALUE_LNG(SO60_SHOW)
+End
+
+RegistryItem gid_Regitem_Openoffice_Impressdocument_1_Shell_Show_Command
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Impress_Bin;
+    Subkey = "opendocument.ImpressDocument.1\shell\show\command";
+    Value = "\"<progpath>\program\soffice.exe\" -show \"%1\"";
+End
+
+// .fodp
+
+RegistryItem gid_Regitem_Fodp_PersistentHandler
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Impress_Bin;
+    Subkey = ".fodp\PersistentHandler";
+    Value = "{7BC0E713-5703-45BE-A29D-5D46D8B39262}";
+End
+
+RegistryItem gid_Regitem_Fodp_Shellex_00021500_0000_0000_C000_000000000046
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Impress_Bin;
+    Subkey = ".fodp\shellex\{00021500-0000-0000-C000-000000000046}";
+    Value = "{087B3AE3-E237-4467-B8DB-5A38AB959AC9}";
+End
+
+RegistryItem gid_Regitem_Fodp_Shellex_BB2E617C_0920_11D1_9A0B_00C04FC2D6C1
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Impress_Bin;
+    Subkey = ".fodp\shellex\{BB2E617C-0920-11D1-9A0B-00C04FC2D6C1}";
+    Value = "{3B092F0C-7696-40E3-A80F-68D74DA84210}";
+End
+
+RegistryItem gid_Regitem__Fodp
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Impress_Bin;
+    Subkey = ".fodp";
+    Value = "opendocument.ImpressDocument.1";
+End
+
+RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabilities_FileAssociations_fodp
+    ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
+    Subkey = "Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\Capabilities\FileAssociations";
+    ModuleID = gid_Module_Root;
+    Name = ".fodp";
+    Value = "opendocument.ImpressDocument.1";
+    Styles = (PATCH);
+End
+
+RegistryItem gid_Regitem_Fodp_Contenttype
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Impress_Bin;
+    Subkey = ".fodp";
+    Name = "Content Type";
+    Value = "application/vnd.oasis.opendocument.presentation";
+End
+
+// new otp file extension
+
+RegistryItem gid_Regitem_Otp_PersistentHandler
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Impress_Bin;
+    Subkey = ".otp\PersistentHandler";
+    Value = "{7BC0E713-5703-45BE-A29D-5D46D8B39262}";
+End
+
+RegistryItem gid_Regitem_Otp_Shellex_00021500_0000_0000_C000_000000000046
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Impress_Bin;
+    Subkey = ".otp\shellex\{00021500-0000-0000-C000-000000000046}";
+    Value = "{087B3AE3-E237-4467-B8DB-5A38AB959AC9}";
+End
+
+RegistryItem gid_Regitem_Otp_Shellex_BB2E617C_0920_11D1_9A0B_00C04FC2D6C1
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Impress_Bin;
+    Subkey = ".otp\shellex\{BB2E617C-0920-11D1-9A0B-00C04FC2D6C1}";
+    Value = "{3B092F0C-7696-40E3-A80F-68D74DA84210}";
+End
+
+RegistryItem gid_Regitem_ImpressTemplate_1_Shellex_PropertySheetHandlers_MyPropSheet1
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Impress_Bin;
+    Subkey = "opendocument.ImpressTemplate.1\shellex\PropertySheetHandlers\MyPropSheet1";
+    Value = "{63542C48-9552-494A-84F7-73AA6A7C99C1}";
+End
+
+RegistryItem gid_Regitem_Otp
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    Subkey = ".otp";
+    ModuleID = gid_Module_Prg_Impress_Bin;
+    Value = "opendocument.ImpressTemplate.1";
+End
+
+RegistryItem gid_Regitem_Otp_Contenttype
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Impress_Bin;
+    Subkey = ".otp";
+    Name = "Content Type";
+    Value = "application/vnd.oasis.opendocument.presentation-template";
+End
+
+RegistryItem gid_Regitem_Openoffice_Impresstemplate_1
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    Subkey = "opendocument.ImpressTemplate.1";
+    ModuleID = gid_Module_Prg_Impress_Bin;
+    REG_VALUE_LNG(OO_PRESENT_TEMPLATE)
+End
+
+RegistryItem gid_Regitem_Openoffice_Impresstemplate_1_Defaulticon
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    Subkey = "opendocument.ImpressTemplate.1\DefaultIcon";
+    ModuleID = gid_Module_Prg_Impress_Bin;
+    Value = "<progpath>\program\soffice.exe,8";
+End
+
+RegistryItem gid_Regitem_otp_FullDetails
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Optional_Winexplorerext_PropertyHdl;
+    Subkey = "opendocument.ImpressTemplate.1";
+    Name = "FullDetails";
+    Value = "prop:System.PropGroup.Description;System.Title;System.Author;System.Subject;System.Keywords;System.Comment;System.PropGroup.FileSystem;System.ItemNameDisplay;System.ItemType;System.ItemFolderPathDisplay;System.Size;System.DateCreated;System.DateModified;System.FileAttributes;System.ComputerName";
+End
+
+RegistryItem gid_Regitem_Openoffice_Impresstemplate_1_Shell
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    Subkey = "opendocument.ImpressTemplate.1\shell";
+    ModuleID = gid_Module_Prg_Impress_Bin;
+    Value = "new";
+End
+
+RegistryItem gid_Regitem_Openoffice_Impresstemplate_1_Shell_New
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    Subkey = "opendocument.ImpressTemplate.1\shell\new";
+    ModuleID = gid_Module_Prg_Impress_Bin;
+    REG_VALUE_LNG(NEW)
+End
+
+RegistryItem gid_Regitem_Openoffice_Impresstemplate_1_Shell_New_Command
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    Subkey = "opendocument.ImpressTemplate.1\shell\new\command";
+    ModuleID = gid_Module_Prg_Impress_Bin;
+    Value = "\"<progpath>\program\soffice.exe\" -n \"%1\"";
+End
+
+RegistryItem gid_Regitem_Openoffice_Impresstemplate_1_Shell_Open_Command
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    Subkey = "opendocument.ImpressTemplate.1\shell\open\command";
+    ModuleID = gid_Module_Prg_Impress_Bin;
+    Value = "\"<progpath>\program\simpress.exe\" -o \"%1\"";
+End
+
+RegistryItem gid_Regitem_Openoffice_Impresstemplate_1_Shell_Print_Command
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    Subkey = "opendocument.ImpressTemplate.1\shell\print\command";
+    ModuleID = gid_Module_Prg_Impress_Bin;
+    Value = "\"<progpath>\program\soffice.exe\" -p \"%1\"";
+End
+
+RegistryItem gid_Regitem_Openoffice_Impresstemplate_1_Shell_Printto_Command
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    Subkey = "opendocument.ImpressTemplate.1\shell\printto\command";
+    ModuleID = gid_Module_Prg_Impress_Bin;
+    Value = "\"<progpath>\program\soffice.exe\" -pt \"%2\" \"%1\"";
+End
+
+// "OpenWith" Windows Registry keys for extensions supported by Impress
+
+// .ODP
+RegistryItem gid_Regitem_OpenOffice_ODP_OpenWith_Impress
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    Subkey = ".odp\OpenWithProgIDs";
+    ModuleID = gid_Module_Prg_Impress_Bin;
+    Name = "opendocument.ImpressDocument.1";
+    Value = " ";
+End
+
+// .OTP
+RegistryItem gid_Regitem_OpenOffice_OTP_OpenWith_Impress
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    Subkey = ".otp\OpenWithProgIDs";
+    ModuleID = gid_Module_Prg_Impress_Bin;
+    Name = "opendocument.ImpressTemplate.1";
+    Value = " ";
+End
+
+// .SXI
+RegistryItem gid_Regitem_OpenOffice_SXI_OpenWith_Impress
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    Subkey = ".sxi\OpenWithProgIDs";
+    ModuleID = gid_Module_Prg_Impress_Bin;
+    Name = "soffice.StarImpressDocument.6";
+    Value = " ";
+End
+
+// .STI
+RegistryItem gid_Regitem_OpenOffice_STI_OpenWith_Impress
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    Subkey = ".sti\OpenWithProgIDs";
+    ModuleID = gid_Module_Prg_Impress_Bin;
+    Name = "soffice.StarImpressTemplate.6";
+    Value = " ";
+End
+
+// .SXD
+RegistryItem gid_Regitem_OpenOffice_SXD_OpenWith_Impress
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    Subkey = ".sxd\OpenWithProgIDs";
+    ModuleID = gid_Module_Prg_Impress_Bin;
+    Name = "soffice.StarImpressDocument.6";
+    Value = " ";
+End
+
+// .ODG
+RegistryItem gid_Regitem_OpenOffice_ODG_OpenWith_Impress
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    Subkey = ".odg\OpenWithProgIDs";
+    ModuleID = gid_Module_Prg_Impress_Bin;
+    Name = "opendocument.ImpressDocument.1";
+    Value = " ";
+End
+
+
+RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabilities_FileAssociations_Otp
+    ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
+    Subkey = "Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\Capabilities\FileAssociations";
+    ModuleID = gid_Module_Prg_Impress_Bin;
+    Name = ".otp";
+    Value = "opendocument.ImpressTemplate.1";
+    Styles = ();
+End
+
+RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabilities_FileAssociations_Sti
+    ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
+    Subkey = "Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\Capabilities\FileAssociations";
+    ModuleID = gid_Module_Prg_Impress_Bin;
+    Name = ".sti";
+    Value = "soffice.StarImpressTemplate.6";
+    Styles = ();
+End
+
+RegistryItem gid_Regitem_Software_Microsoft_Windows_Currentversion_Apppaths_Simpress_Exe
+    ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
+    Subkey = "Software\Microsoft\Windows\CurrentVersion\App Paths\simpress.exe";
+    ModuleID = gid_Module_Prg_Impress_Bin;
+    Value = "<progpath>\program\simpress.exe";
+End
+
+RegistryItem gid_Regitem_Software_Microsoft_Windows_Currentversion_Apppaths_Simpress_Exepath
+    ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
+    Subkey = "Software\Microsoft\Windows\CurrentVersion\App Paths\simpress.exe";
+    ModuleID = gid_Module_Prg_Impress_Bin;
+    Name = "Path";
+    Value = "<progpath>";
+End
+
+// registering the property handler for the supported file types
+
+REGISTER_PROPERTY_HANDLER_FOR_EXTENSION( odp )
+REGISTER_PROPERTY_HANDLER_FOR_EXTENSION( otp )
+REGISTER_PROPERTY_HANDLER_FOR_EXTENSION( sxi )
+REGISTER_PROPERTY_HANDLER_FOR_EXTENSION( sti )
+
+// registering the mso file types
+
+CONDITIONAL_REGISTER_DOC_EXTENSION( Ppt,  gid_Module_Prg_Impress_MSO_Reg, ppt,  PPT,  MS_POWERPOINT_PRESENTATION_OLD, 33, simpress.exe, open, Impress )
+CONDITIONAL_REGISTER_DOC_EXTENSION( Pps,  gid_Module_Prg_Impress_MSO_Reg, pps,  PPS,  MS_POWERPOINT_SHOW, 33, simpress.exe, open, Impress )
+CONDITIONAL_REGISTER_DOC_EXTENSION( Pptx, gid_Module_Prg_Impress_MSO_Reg, pptx, PPTX, MS_POWERPOINT_PRESENTATION, 33, simpress.exe, open, Impress )
+CONDITIONAL_REGISTER_DOC_EXTENSION( Pptm, gid_Module_Prg_Impress_MSO_Reg, pptm, PPTM, MS_POWERPOINT_PRESENTATION, 33, simpress.exe, open, Impress )
+CONDITIONAL_REGISTER_DOCTEMPLATE_EXTENSION( Pot,  gid_Module_Prg_Impress_MSO_Reg, pot,  POT,  MS_POWERPOINT_TEMPLATE_OLD, 34, simpress.exe, new, Impress )
+CONDITIONAL_REGISTER_DOCTEMPLATE_EXTENSION( Potx, gid_Module_Prg_Impress_MSO_Reg, potx, POTX, MS_POWERPOINT_TEMPLATE, 34, simpress.exe, new, Impress )
+CONDITIONAL_REGISTER_DOCTEMPLATE_EXTENSION( Potm, gid_Module_Prg_Impress_MSO_Reg, potm, POTM, MS_POWERPOINT_TEMPLATE, 34, simpress.exe, new, Impress )

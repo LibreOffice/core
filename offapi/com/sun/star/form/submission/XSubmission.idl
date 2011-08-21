@@ -1,0 +1,104 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_form_submission_XSubmission_idl__
+#define __com_sun_star_form_submission_XSubmission_idl__
+
+#include <com/sun/star/uno/XInterface.idl>
+#include <com/sun/star/util/VetoException.idl>
+#include <com/sun/star/lang/WrappedTargetException.idl>
+#include <com/sun/star/lang/NoSupportException.idl>
+#include <com/sun/star/task/XInteractionHandler.idl>
+
+//=============================================================================
+
+module com {  module sun {  module star {  module form { module submission {
+
+interface XSubmissionVetoListener;
+
+//=============================================================================
+
+/** is implemented by components which support submitting data.
+*/
+interface XSubmission : com::sun::star::uno::XInterface
+{
+    /** tells the component to submit data
+
+        @throws com::sun::star::util::VetoException
+            if the submission has been vetoed. Usually, this indicates that not all
+            requirements for the submission, e.g. data consistency, are fulfilled.
+
+        @throws com::sun::star::lang::WrappedTargetException
+            if an error occurred during invoking the submission target
+    */
+    void submit( )
+                raises ( com::sun::star::util::VetoException, com::sun::star::lang::WrappedTargetException );
+
+    /** tells the component to submit data
+
+        @param aHandler
+            This handler allows additional user interaction, which may be necessary before
+            the submission can be performed.
+
+        @throws com::sun::star::util::VetoException
+            if the submission has been vetoed. Usually, this indicates that not all
+            requirements for the submission, e.g. data consistency, are fulfilled.
+
+        @throws com::sun::star::lang::WrappedTargetException
+            if an error occurred during invoking the submission target
+    */
+    void submitWithInteraction( [in] com::sun::star::task::XInteractionHandler aHandler )
+                raises ( com::sun::star::util::VetoException, com::sun::star::lang::WrappedTargetException );
+
+    /** registers the given listener to be notified when a submission occurs
+
+        @param listener
+            the listener to register
+
+        @throws com::sun::star::lang::NoSupportException
+            when the component does not support external components vetoing the submission
+     */
+    void addSubmissionVetoListener( [in] XSubmissionVetoListener listener )
+        raises ( com::sun::star::lang::NoSupportException );
+
+    /** revokes a listener which has previously been registered to be notified when a submission occurs
+
+        @param listener
+            the listener to revoke
+
+        @throws com::sun::star::lang::NoSupportException
+            when the component does not support external components vetoing the submission
+     */
+    void removeSubmissionVetoListener( [in] XSubmissionVetoListener listener )
+        raises ( com::sun::star::lang::NoSupportException );
+};
+
+//=============================================================================
+
+}; }; }; }; };
+
+#endif

@@ -1,0 +1,130 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_awt_XImageConsumer_idl__
+#define __com_sun_star_awt_XImageConsumer_idl__
+
+#include <com/sun/star/uno/XInterface.idl>
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module awt {
+
+ published interface XImageProducer;
+
+//=============================================================================
+
+/** specifies a data sink for an image.
+
+    <p>An image consumer is a component which wants to display or just
+    receive an image from an image producer.</p>
+
+    @see XImageProducer
+ */
+published interface XImageConsumer: com::sun::star::uno::XInterface
+{
+    //-------------------------------------------------------------------------
+
+    /** initializes the consumer with image dimensions.
+     */
+    [oneway] void init( [in] long Width,
+             [in] long Height );
+
+    //-------------------------------------------------------------------------
+
+    /** changes color model for next pixels
+        typically called once after initialization.
+     */
+    [oneway] void setColorModel( [in] short BitCount,
+             [in] sequence<long> RGBAPal,
+             [in] long RedMask,
+             [in] long GreenMask,
+             [in] long BlueMask,
+             [in] long AlphaMask );
+
+    //-------------------------------------------------------------------------
+
+    /** delivers a chunk of pixels as <atom>long</atom> values.
+
+        <p>The pixels of the image are delivered using one or more calls
+        to this method.  Each call specifies the location and size of the
+        rectangle of source pixels that are contained in the array of pixels.
+        The specified color model object should be used to convert
+        the pixels into their corresponding color and alpha components.  Pixel
+        (m,n) is stored in the pixels array at index (n * <var>nScanSize</var>
+        + m + nOffset).</p>
+     */
+    [oneway] void setPixelsByBytes( [in] long nX,
+             [in] long nY,
+             [in] long nWidth,
+             [in] long nHeight,
+             [in] sequence<byte> aProducerData,
+             [in] long nOffset,
+             [in] long nScanSize );
+
+    //-------------------------------------------------------------------------
+
+    /** delivers a chunk of pixels as <atom>byte</atom> values.
+
+        <p>The pixels of the image are delivered using one or more calls
+        to this method.  Each call specifies the location and size of the
+        rectangle of source pixels that are contained in the array of pixels.
+        The specified color model object should be used to convert
+        the pixels into their corresponding color and alpha components.  Pixel
+        (m,n) is stored in the pixels array at index (n * <var>nScanSize</var>
+        + m + nOffset).</p>
+     */
+    [oneway] void setPixelsByLongs( [in] long nX,
+             [in] long nY,
+             [in] long nWidth,
+             [in] long nHeight,
+             [in] sequence<long> aProducerData,
+             [in] long nOffset,
+             [in] long nScanSize );
+
+    //-------------------------------------------------------------------------
+
+    /** is called for the notification of the degree to which the
+        image is delivered.
+
+        <p>The complete method is called when the image producer
+        has finished delivering all of the pixels that the source image
+        contains, or when a single frame of a multi-frame animation has
+        been completed, or when an error in loading or producing the
+        image has occurred.  The image consumer should remove itself from the
+        list of consumers registered with the image producer
+        at this time, unless it is interested in successive frames.</p>
+     */
+    [oneway] void complete( [in] long Status,
+             [in] XImageProducer xProducer );
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

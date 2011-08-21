@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--***********************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * 
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************ -->
+<!DOCTYPE oor:component-schema SYSTEM "../../../../component-schema.dtd">
+<oor:component-schema xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="Views" oor:package="org.openoffice.Office" xml:lang="en-US"> <info>
+		<author>AS</author>
+		<desc >Contains persistent information about opened dialogs, windows, tab pages, and so on.</desc>
+	</info>
+	<templates>
+		<group oor:name="DialogType">
+			<info>
+				<desc>Contains the persistent data for a general office dialog.</desc>
+			</info>
+			<prop oor:name="WindowState" oor:type="xs:string">
+				<info>
+					<desc>Includes information (position,size, and states) about the used vcl window.</desc>
+				</info>
+			</prop>
+			<group oor:name="UserData" oor:extensible="true">
+				<info>
+					<desc>Denotes an additional field for arbitrary data. There is no special semantic associated with this field. Application is to be determined by the user.</desc>
+				</info>
+			</group>
+		</group>
+		<group oor:name="TabDialogType">
+			<info>
+				<desc>Contains the persistent data for a special tab dialog.</desc>
+			</info>
+			<prop oor:name="WindowState" oor:type="xs:string">
+				<info>
+					<desc>Includes information (position,size, and states) about the used vcl window.</desc>
+				</info>
+			</prop>
+			<prop oor:name="PageID" oor:type="xs:int">
+				<info>
+					<desc>Represents the number of an active tab page inside a dialog.</desc>
+				</info>
+			</prop>
+			<group oor:name="UserData" oor:extensible="true">
+				<info>
+					<desc>Denotes an additional field for arbitrary data. There is no special semantic associated with this field. Application is to be determined by the user.</desc>
+				</info>
+			</group>
+		</group>
+		<group oor:name="TabPageType">
+			<info>
+				<desc>Contains the persistent data for a tab page.</desc>
+			</info>
+			<prop oor:name="WindowState" oor:type="xs:string">
+				<info>
+					<desc>Includes information (position,size, and states) about the used vcl window.</desc>
+				</info>
+			</prop>
+			<group oor:name="UserData" oor:extensible="true">
+				<info>
+					<desc>Denotes an additional field for arbitrary data. There is no special semantic associated with this field. Application is to be determined by the user.</desc>
+				</info>
+			</group>
+		</group>
+		<group oor:name="WindowType">
+			<info>
+				<desc>Contains the persistent data for a general office window.</desc>
+			</info>
+			<prop oor:name="WindowState" oor:type="xs:string">
+				<info>
+					<desc>Includes information (position,size, and states) about the used vcl window.</desc>
+				</info>
+			</prop>
+			<prop oor:name="Visible" oor:type="xs:boolean">
+				<info>
+					<desc>Makes window visible.</desc>
+				</info>
+			</prop>
+			<group oor:name="UserData" oor:extensible="true">
+				<info>
+					<desc>Denotes an additional field for arbitrary data. There is no special semantic associated with this field. Application is to be determined by the user.</desc>
+				</info>
+			</group>
+		</group>
+	</templates>
+	<component>
+		<set oor:name="Dialogs" oor:node-type="DialogType">
+			<info>
+				<desc>Lists persistent dialog states.</desc>
+			</info>
+		</set>
+		<set oor:name="TabDialogs" oor:node-type="TabDialogType">
+			<info>
+				<desc>Lists persistent tab dialog states.</desc>
+			</info>
+		</set>
+		<set oor:name="TabPages" oor:node-type="TabPageType">
+			<info>
+				<desc>Lists persistent tab page states.</desc>
+			</info>
+		</set>
+		<set oor:name="Windows" oor:node-type="WindowType">
+			<info>
+				<desc>Lists persistent window states.</desc>
+			</info>
+		</set>
+	</component>
+</oor:component-schema>
+
+
+
+
+
+
+
+

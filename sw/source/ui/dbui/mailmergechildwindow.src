@@ -1,0 +1,265 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#include "mailmergechildwindow.hrc"
+#include "dbui.hrc"
+#include "helpid.h"
+#include <cmdid.h>
+
+#define WIDTH  100
+#define HEIGHT 16
+
+#define WORKAROUND \
+    Text [ en-US ] = "Return to Mail Merge Wizard" ; \
+
+
+FloatingWindow DLG_MAILMERGECHILD\
+{
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( WIDTH , HEIGHT ) ;
+    Moveable = TRUE ;
+    Closeable = FALSE ;
+    Sizeable = FALSE ;
+    Zoomable = TRUE ;
+    HelpID = HID_MAILMERGECHILD ;
+    Hide = TRUE ;
+    Text [ en-US ] = "Mail Merge Wizard";\
+    ToolBox TB_BACK\
+    {
+        MenuStrings = TRUE ;
+        SVLook = TRUE ;
+        ItemList =
+        {
+            ToolBoxItem\
+            {
+                Identifier = 1;
+                HelpID = HID_RETURN_TO_MAILMERGE ;
+                Left = TRUE;
+                WORKAROUND
+            };
+        };
+    };
+    #define IMGLIST1_IDS\
+        IdList = \
+        { \
+            FN_SHOW_ROOT; \
+        }; \
+        IdCount = 1
+
+    ImageList ILIST_TBX
+    {
+        Prefix = "sc";
+        MaskColor = IMAGE_MASK_COLOR;
+        IMGLIST1_IDS;
+    };
+};
+
+//FloatingWindow DLG_MM_SENDMAILS
+ModelessDialog /*ModalDialog*/ DLG_MM_SENDMAILS
+{
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    HelpID = HID_MM_SENDMAILS;
+    Size = MAP_APPFONT ( 250 , 221 ) ;
+    Moveable = TRUE ;
+    Closeable = TRUE;
+
+    Text [ en-US ] = "Sending E-mail messages";
+
+    FixedLine  FL_STATUS
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 238 , 8 ) ;
+        Text[ en-US ] = "Connection status";
+    };
+    FixedText  FT_STATUS1
+    {
+        Pos = MAP_APPFONT ( 12 , 14 ) ;
+        Size = MAP_APPFONT ( 226 , 8 ) ;
+        Text[ en-US ] = "The connection to the outgoing mail server has been established";
+    };
+    String ST_SEND
+    {
+        Text[ en-US ] = "Sending e-mails...";
+    };
+    FixedLine  FL_TRANSFERSTATUS
+    {
+        Pos = MAP_APPFONT ( 6 , 28 ) ;
+        Size = MAP_APPFONT ( 238 , 8 ) ;
+        Text[ en-US ] = "Transfer status";
+    };
+    FixedText  FT_TRANSFERSTATUS
+    {
+        Pos = MAP_APPFONT ( 12, 39 ) ;
+        Size = MAP_APPFONT ( 110 , 8 ) ;
+        Text[ en-US ] = "%1 of %2 e-mails sent";
+    };
+    FixedText  FI_PAUSED
+    {
+        Pos = MAP_APPFONT ( 125, 39 ) ;
+        Size = MAP_APPFONT ( 100 , 8 ) ;
+        Hide = TRUE;
+        Text[ en-US ] = "Sending paused";
+    };
+    Window    PB_PROGRESS
+    {
+        Pos = MAP_APPFONT ( 12 , 50 ) ;
+        Size = MAP_APPFONT ( 226 , 14 ) ;
+        Border = TRUE;
+    };
+    FixedText  FT_ERRORSTATUS
+    {
+        Pos = MAP_APPFONT ( 12 , 67 ) ;
+        Size = MAP_APPFONT ( 226 , 8 ) ;
+        Text[ en-US ] = "E-mails not sent: %1";
+    };
+    PushButton PB_DETAILS
+    {
+        Pos = MAP_APPFONT ( 188 , 81 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Text[ en-US ] = "More >>";
+    };
+    String  ST_LESS
+    {
+        Text[ en-US ] = "<< Less";
+    };
+
+    Control LB_STATUS
+    {
+        Pos = MAP_APPFONT ( 12 , 101 ) ;
+        Size = MAP_APPFONT ( 226 , 80 ) ;
+        Border = TRUE;
+    };
+    FixedLine  FL_SEPARATOR
+    {
+        Pos = MAP_APPFONT ( 0 , 187 ) ;
+        Size = MAP_APPFONT ( 250 , 8 ) ;
+    };
+    PushButton PB_STOP
+    {
+        Pos = MAP_APPFONT ( 141 , 201 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Text[ en-US ] = "~Stop";
+    };
+    PushButton PB_CLOSE
+    {
+        Pos = MAP_APPFONT ( 194 , 201 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Text[ en-US ] = "C~lose";
+    };
+    String     ST_CONTINUE
+    {
+        Text[ en-US ] = "~Continue";
+    };
+    #define IMGLIST2_IDS\
+        IdList = \
+        { \
+            FN_FORMULA_CANCEL ;\
+            FN_FORMULA_APPLY     ;\
+        }; \
+        IdCount = 2
+
+    ImageList ILIST
+    {
+        Prefix = "sc";
+        MaskColor = IMAGE_MASK_COLOR;
+        IMGLIST2_IDS;
+    };
+    String ST_TASK
+    {
+        Text[ en-US ] = "Task";
+    };
+    String ST_STATUS
+    {
+        Text[ en-US ] = "Status";
+    };
+    String ST_SENDINGTO
+    {
+        Text[ en-US ] = "Sending to: %1";
+    };
+    String ST_COMPLETED
+    {
+        Text[ en-US ] = "Successfully sent";
+    };
+    String ST_FAILED
+    {
+        Text[ en-US ] = "Sending failed";
+    };
+    String ST_TERMINATEQUERY
+    {
+        Text[ en-US ] = "There are still e-mail messages in your %PRODUCTNAME Outbox.\nWould you like to exit anyway?";
+    };
+};
+
+ModalDialog DLG_MM_SENDWARNING
+{
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    HelpID = HID_MM_SENDWARNING;
+    Size = MAP_APPFONT ( 240 , 137 ) ;
+    Moveable = TRUE ;
+
+    Text[en-US] = "E-Mails could not be sent";
+    FixedImage IM_WARNING
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 30 , 30 ) ;
+    };
+    FixedText FI_WARNING
+    {
+        Pos = MAP_APPFONT ( 40 , 6 ) ;
+        Size = MAP_APPFONT ( 170 , 30 ) ;
+        WordBreak = TRUE;
+        Text[ en-US ] = "The following error occurred:";
+    };
+    FixedText   FT_DETAILS
+    {
+        Pos = MAP_APPFONT (  40, 39 ) ;
+        Size = MAP_APPFONT (  174, 8 ) ;
+        Text[ en-US ] = "Detailed information";
+    };
+    MultiLineEdit ED_DETAILS
+    {
+        HelpID = "sw:MultiLineEdit:DLG_MM_SENDWARNING:ED_DETAILS";
+        Pos = MAP_APPFONT ( 40 , 50 ) ;
+        Size = MAP_APPFONT ( 194 , 50 ) ;
+        Border = TRUE;
+        Readonly = TRUE;
+    };
+    FixedLine FL_SEPARATOR
+    {
+        Pos = MAP_APPFONT ( 0 , 106 ) ;
+        Size = MAP_APPFONT ( 240 , 8 ) ;
+    };
+    OKButton PB_OK
+    {
+        Pos = MAP_APPFONT ( 95 ,  117) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        DefButton = TRUE;
+    };
+};
+

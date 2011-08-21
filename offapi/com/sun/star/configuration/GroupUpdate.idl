@@ -1,0 +1,88 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_configuration_GroupUpdate_idl__
+#define __com_sun_star_configuration_GroupUpdate_idl__
+
+#include <com/sun/star/configuration/GroupAccess.idl>
+#include <com/sun/star/container/XNameReplace.idl>
+
+//=============================================================================
+
+module com { module sun { module star { module configuration {
+
+//=============================================================================
+/** provides write access to a predefined heterogeneous group of values
+ and nested trees as part of a hierarchy.
+
+ <p>This service extends <type>GroupAccess</type> to support
+ modifying values.
+ </p>
+*/
+published service GroupUpdate
+{
+/** is the basic service providing read access to a group element of the
+ hierarchy.
+
+ <p>Any child and descendant objects support modifying access as well,
+ unless they represent a read-only tree element as indicated by
+ <const scope="com::sun::star::beans">PropertyAttribute::READONLY</const>.
+ </p>
+*/
+    service GroupAccess;
+
+/** allows replacing values.
+
+ <p>This service extends the interface
+ <type scope="com::sun::star::container">XNameAccess</type> supported
+ by service <type>GroupAccess</type> to allow changing values.
+ This strongly overlaps with functionality available through
+ <type>PropertyHierarchy</type> (from <type>GroupAccess</type>), so that
+ <code>xGroup.setPropertyValue( aName, aValue )</code> is equivalent to
+ <code>xGroup.replaceByName( aName, aValue )</code>.
+ </p>
+
+ <p>Changes can be observed by registering a listener with interface
+ <type scope="com::sun::star::beans">XPropertySet</type> or
+ <type scope="com::sun::star::beans">XMultiPropertySet</type>.
+ </p>
+
+ <p>Elements of this group may be replaced only if they are of simple type.
+ The type returned by
+ <member scope="com::sun::star::container">XElementAccess::getElementType()</member>
+ must not be an interface type. Replacing whole subtrees is not supported.
+ </p>
+*/
+    interface com::sun::star::container::XNameReplace;
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif
+

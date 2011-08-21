@@ -1,0 +1,100 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+
+#ifndef __com_sun_star_text_DocumentIndex_idl__
+#define __com_sun_star_text_DocumentIndex_idl__
+
+#include <com/sun/star/text/BaseIndex.idl>
+#include <com/sun/star/text/XDocumentIndexMark.idl>
+
+//=============================================================================
+
+module com {  module sun {  module star {  module text {
+
+//=============================================================================
+
+/** specifies service of content indexes within a document.@see com::sun::star::text::BaseIndex
+ */
+published service DocumentIndex
+{
+    service  com::sun::star::text::BaseIndex;
+
+    /** determines if alphabetical separators are generated.
+     */
+    [optional, property] boolean UseAlphabeticalSeparators;
+
+    /** determines if a index entry is generated for each primary/secondary key.
+     */
+    [optional, property] boolean UseKeyAsEntry;
+
+    /** determines if same entries on different pages are combined into one index entry.
+     */
+    [optional, property] boolean UseCombinedEntries;
+
+    /** determines if the similarity of index entries is checked case sensitively.
+     */
+    [optional, property] boolean IsCaseSensitive;
+
+    /** determines if following page numbers are displayed using a "pp.".
+     */
+    [optional, property] boolean UsePP;
+
+    /** determines if if following page numbers are displayed using a dash.
+     */
+    [optional, property] boolean UseDash;
+
+    /** determines if all entries start with a capital letter.
+     */
+    [optional, property] boolean UseUpperCase;
+
+    /** determines the name of the character style that is applied to the number
+     of a page where main index entry is located.
+     */
+    [optional, property] string MainEntryCharacterStyleName;
+
+    /**
+     contains all index marks that are related to this index.
+     */
+    [readonly, property] sequence <com::sun::star::text::XDocumentIndexMark> DocumentIndexMarks;
+
+    //------------------------------------------------------------------------
+    /** contains the locale of the index.
+     */
+    [property] com::sun::star::lang::Locale  Locale;
+
+    //------------------------------------------------------------------------
+    /** contains the name of the sort algorithm that is used to sort the entries.
+     */
+    [property] string SortAlgorithm;
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

@@ -1,0 +1,87 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_drawing_framework_XConfigurationControllerBroadcaster_idl__
+#define __com_sun_star_drawing_framework_XConfigurationControllerBroadcaster_idl__
+
+#include <com/sun/star/uno/XInterface.idl>
+#include <com/sun/star/drawing/framework/ConfigurationChangeEvent.idl>
+
+module com { module sun { module star { module drawing { module framework {
+
+published interface XConfigurationChangeListener;
+
+/** Manage the set of registered event listeners and the event notification for a configuration
+    controller.
+    <p>The listeners are called in the order in which they are registered.</p>
+*/
+published interface XConfigurationControllerBroadcaster
+{
+    /** Add a new listener for configuration changes.
+        <p>The listener is notified only for the specified type of
+        configuration changes.  When the listener is interested in more than
+        one event type this method has to be called multiple times.
+        Alternatively it can register as universal listener that will be
+        called for all event types.  However, this option is provided
+        primarily to support debugging and monitoring.</p>
+        @param xListener
+            The new listener.
+        @param sEventType
+            The event type that the listener is interested in.  The set of
+            event types is not fixed and there can be no exhaustive
+            list. The empty string is a special value in that the listener
+            will be called for all types of event.
+        @param aUserData
+            Arbitrary data that is passed to the listener when it is called
+            for the specified event type.  When one listener is registered
+            for more than one event type then different user data objects
+            may be given as well.  Supplying unique integer values allows
+            the listener to use a switch statement to distinguish between
+            the different event types.
+    */
+    void addConfigurationChangeListener (
+        [in] XConfigurationChangeListener xListener,
+        [in] string sEventType,
+        [in] any aUserData);
+
+    /** Remove a listener for configuration changes.
+        @param xListener
+            The listener that is to be removed.
+    */
+    void removeConfigurationChangeListener (
+        [in] XConfigurationChangeListener xListener);
+
+    /** With this method other objects can send events to all the registered
+        listeners.
+    */
+    void notifyEvent (
+        [in] ConfigurationChangeEvent aEvent);
+};
+
+}; }; }; }; }; // ::com::sun::star::drawing::framework
+
+#endif

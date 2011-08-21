@@ -1,0 +1,83 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_document_XFilter_idl__
+#define __com_sun_star_document_XFilter_idl__
+
+#include <com/sun/star/uno/XInterface.idl>
+#include <com/sun/star/beans/PropertyValue.idl>
+
+//=============================================================================
+
+module com {  module sun {  module star {  module document {
+
+//=============================================================================
+/** interface to filter documents
+
+    <p>
+    This interface will be used by service <type>ImportFilter</type> or
+    <type>ExportFilter</type> to support loading/saving of documents in
+    different formats. The target/source of such filter operations must
+    be known <em>before</em> filtering will be started.
+    (see <type>XImporter</type> and <type>XExporter</type> too)
+    Otherwise this interface can't work right.
+    <p>
+
+    @see ImportFilter
+    @see ExportFilter
+    @see XImporter
+    @see XExporter
+ */
+published interface XFilter: com::sun::star::uno::XInterface
+{
+    //-------------------------------------------------------------------------
+        /** filter the document.
+
+        <p>
+        The given <type>MediaDescriptor</type> holds all necessary information
+        about the document.
+
+        Don't hold hard references to the descriptor items. You must copy needed information!
+        Otherwise we couldn't destroy (for example) an existing input stream!
+        </p>
+        @param aDescriptor
+            the MediaDescriptor describing the respective document.
+        @return a boolean value indicating whether the filter operation was successful or not.
+     */
+    boolean filter( [in] sequence< com::sun::star::beans::PropertyValue > aDescriptor );
+
+    //-------------------------------------------------------------------------
+        /** cancel the process.
+      */
+    void cancel();
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

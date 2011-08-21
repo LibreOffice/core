@@ -1,0 +1,7 @@
+module ooo { module vba { module office {
+    constants MsoFeatureInstall {
+        const long msoFeatureInstallNone = 0;
+        const long msoFeatureInstallOnDemand = 1;
+        const long msoFeatureInstallOnDemandWithUI = 2;
+    };
+}; }; };

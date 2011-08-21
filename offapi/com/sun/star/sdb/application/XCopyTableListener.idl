@@ -1,0 +1,94 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_sdb_application_XCopyTableListener_idl__
+#define __com_sun_star_sdb_application_XCopyTableListener_idl__
+
+#include <com/sun/star/lang/XEventListener.idl>
+#include <com/sun/star/sdb/application/CopyTableRowEvent.idl>
+
+//=============================================================================
+
+module com { module sun { module star { module sdb { module application {
+
+//=============================================================================
+
+/** specifies the interface required to listen for progress in copying
+    table rows via a <code>CopyTableWizard</code>.
+
+    @see CopyTableRowEvent
+    @see CopyTableWizard
+ */
+interface XCopyTableListener : ::com::sun::star::lang::XEventListener
+{
+    /** is called when a row is about to be copied.
+
+        <p>This method is called immediately before a row is copied. It might be used, for instance,
+        to update a progress indicator.</p>
+
+        @param Event
+            describes the current state of the copy operation.
+            <member>CopyTableRowEvent::SourceData</member> is positioned at the row
+            which is about to be copied.
+    */
+    void    copyingRow( [in] CopyTableRowEvent Event );
+
+    /** is called when a row was successfully copied.
+
+        <p>This method is called right after a row has been successfully copied. It might be used,
+        for instance, to update a progress indicator.</p>
+
+        @param Event
+            describes the current state of the copy operation.
+            <member>CopyTableRowEvent::SourceData</member> is positioned at the row
+            which was just copied to the target database.
+    */
+    void    copiedRow( [in] CopyTableRowEvent Event );
+
+    /** is called when copying a row failed.
+
+        @param Event
+            describes the current state of the copy operation.
+            <member>CopyTableRowEvent::SourceData</member> is positioned at the row
+            which was attempted to be copied to the target database.
+            <member>CopyTableRowEvent::Error</member> will contain the actual error which
+            happened.
+
+        @return
+            how to continue with copying. Must be one of the <type>CopyTableContinuation</type>
+            constants.
+    */
+    short   copyRowError( [in] CopyTableRowEvent Event );
+};
+
+//=============================================================================
+
+}; }; }; }; };
+
+//=============================================================================
+
+#endif

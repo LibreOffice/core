@@ -1,0 +1,478 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef _DBU_APP_HRC_
+#include "dbu_app.hrc"
+#endif
+#ifndef _GLOBLMN_HRC
+#include <svx/globlmn.hrc>
+#endif
+#ifndef _CNTIDS_HRC
+#include <sfx2/cntids.hrc>
+#endif
+#ifndef DBACCESS_UI_BROWSER_ID_HXX
+#include "browserids.hxx"
+#endif
+#ifndef _DBA_DBACCESS_HELPID_HRC_
+#include "dbaccess_helpid.hrc"
+#endif
+#ifndef DBAUI_TOOLBOX_HXX
+#include "toolbox.hrc"
+#endif
+
+#define MN_PROPS    25
+
+
+String RID_STR_NEW_FORM
+{
+    Text [ en-US ] = "Create Form in Design View..." ;
+};
+
+String RID_STR_NEW_FORM_AUTO
+{
+    Text [ en-US ] = "Use Wizard to Create Form..." ;
+};
+
+String RID_STR_NEW_REPORT_AUTO
+{
+    Text [ en-US ] = "Use Wizard to Create Report..." ;
+};
+
+String RID_STR_NEW_REPORT
+{
+    Text [ en-US ] = "Create Report in Design View..." ;
+};
+
+String RID_STR_NEW_QUERY
+{
+    Text [ en-US ] = "Create Query in Design View..." ;
+};
+
+String RID_STR_NEW_QUERY_SQL
+{
+    Text [ en-US ] = "Create Query in SQL View..." ;
+};
+
+String RID_STR_NEW_QUERY_AUTO
+{
+    Text [ en-US ] = "Use Wizard to Create Query..." ;
+};
+String RID_STR_NEW_TABLE
+{
+    Text [ en-US ] = "Create Table in Design View..." ;
+};
+
+String RID_STR_NEW_TABLE_AUTO
+{
+    Text [ en-US ] = "Use Wizard to Create Table..." ;
+};
+String RID_STR_NEW_VIEW
+{
+    Text [ en-US ] = "Create View..." ;
+};
+
+String RID_STR_FORMS_CONTAINER
+{
+    Text [ en-US ] = "Forms" ;
+};
+
+String RID_STR_REPORTS_CONTAINER
+{
+    Text [ en-US ] = "Reports" ;
+};
+
+Menu RID_MENU_APP_NEW
+{
+    ItemList =
+    {
+        MenuItem
+        {
+            Identifier = SID_APP_NEW_FORM;
+            Command = ".uno:DBNewForm";
+            Text [ en-US ] = "Form..." ;
+        };
+        MenuItem
+        {
+            Identifier = SID_APP_NEW_REPORT;
+            Command = ".uno:DBNewReport";
+            Text [ en-US ] = "Report..." ;
+        };
+        MenuItem
+        {
+            MID_DOCUMENT_CREATE_REPWIZ
+            Command = ".uno:DBNewReportAutoPilot";
+        };
+        MenuItem
+        {
+            MID_QUERY_NEW_DESIGN
+            Command = ".uno:DBNewQuery";
+        };
+        MenuItem
+        {
+            MID_QUERY_NEW_SQL
+            Command = ".uno:DBNewQuerySql";
+        };
+        MenuItem
+        {
+            Separator = TRUE;
+        };
+        MenuItem
+        {
+            MID_NEW_TABLE_DESIGN
+            Command = ".uno:DBNewTable";
+        };
+        MenuItem
+        {
+            MID_NEW_VIEW_DESIGN
+            Command = ".uno:DBNewView";
+        };
+        MenuItem
+        {
+            Identifier = SID_DB_NEW_VIEW_SQL;
+            Command = ".uno:DBNewViewSQL";
+            Text [ en-US ] = "View (Simple)..." ;
+        };
+
+    };
+};
+
+Menu RID_MENU_APP_EDIT
+{
+    ItemList =
+    {
+        MenuItem
+        {
+            ITEM_EDIT_COPY
+        };
+        MenuItem
+        {
+            ITEM_EDIT_PASTE
+        };
+        MenuItem
+        {
+            Identifier = SID_DB_APP_PASTE_SPECIAL;
+            Text[ en-US ] = "Paste Special...";
+            Command = ".uno:PasteSpecial";
+        };
+        MenuItem
+        {
+            Separator = TRUE ;
+        };
+        MenuItem
+        {
+            Identifier = SID_DB_APP_DELETE;
+            Text[ en-US ] = "Delete";
+            Command = ".uno:DBDelete";
+        };
+        MenuItem
+        {
+            Identifier = SID_DB_APP_RENAME;
+            Text[ en-US ] = "Rename";
+            Command = ".uno:DBRename";
+        };
+        MenuItem
+        {
+            Identifier = SID_DB_APP_EDIT;
+            Text[ en-US ] = "Edit";
+            Command = ".uno:DBEdit";
+        };
+        MenuItem
+        {
+            Identifier = SID_DB_APP_EDIT_SQL_VIEW;
+            Text [ en-US ] = "Edit in SQL View...";
+            Command = ".uno:DBEditSqlView";
+        };
+        MenuItem
+        {
+            Identifier = SID_DB_APP_OPEN;
+            Text[ en-US ] = "Open";
+            Command = ".uno:DBOpen";
+        };
+        MenuItem
+        {
+            Identifier = SID_DB_APP_CONVERTTOVIEW;
+            Text[ en-US ] = "Create as View";
+            Command = ".uno:DBConvertToView";
+        };
+        MenuItem
+        {
+            Identifier = SID_FORM_CREATE_REPWIZ_PRE_SEL;
+            Text [ en-US ] = "Form Wizard...";
+            Command = ".uno:DBNewFormAutoPilotWithPreSelection";
+        };
+        MenuItem
+        {
+            Identifier = SID_APP_NEW_REPORT_PRE_SEL;
+            Command = ".uno:DBNewReportWithPreSelection";
+            Text [ en-US ] = "Report..." ;
+        };
+        MenuItem
+        {
+            Identifier = SID_REPORT_CREATE_REPWIZ_PRE_SEL ;
+            Text[ en-US ] = "Report Wizard...";
+
+            Command = ".uno:DBNewReportAutoPilotWithPreSelection";
+        };
+        MenuItem
+        {
+            Separator = TRUE ;
+        };
+        MenuItem
+        {
+            Identifier = SID_SELECTALL;
+            Text[ en-US ] = "Select All";
+            Command = ".uno:SelectAll";
+        };
+        MenuItem
+        {
+            Separator = TRUE ;
+        };
+        MenuItem
+        {
+            Identifier = MN_PROPS;
+            Text[ en-US ] = "~Database";
+            SubMenu = Menu
+            {
+                ItemList =
+                {
+                    MenuItem
+                    {
+                        Identifier = SID_DB_APP_DSPROPS;
+                        Text[ en-US ] = "Properties...";
+                        Command = ".uno:DBDSProperties";
+                    };
+                    MenuItem
+                    {
+                        Identifier = SID_DB_APP_DSCONNECTION_TYPE;
+                        Text[ en-US ] = "Connection Type...";
+                        Command = ".uno:DBDSConnectionType";
+                    };
+                    MenuItem
+                    {
+                        Identifier = SID_DB_APP_DSADVANCED_SETTINGS;
+                        Text[ en-US ] = "Advanced Settings...";
+                        Command = ".uno:DBDSAdvancedSettings";
+                    };
+                };
+            };
+        };
+    };
+};
+
+String STR_QUERY_DELETE_DATASOURCE
+{
+    Text [ en-US ] = "Do you want to delete the data source '%1'?" ;
+};
+
+String STR_APP_TITLE
+{
+    Text [ en-US ] = " - %PRODUCTNAME Base" ;
+};
+
+String RID_STR_REPORTS_HELP_TEXT_WIZARD
+{
+    Text [ en-US ] = "The wizard will guide you through the steps necessary to create a report." ;
+};
+
+String RID_STR_FORMS_HELP_TEXT
+{
+    Text [ en-US ] = "Create a form by specifying the record source, controls, and control properties." ;
+};
+
+String RID_STR_REPORT_HELP_TEXT
+{
+    Text [ de ] ="Erstellen Sie einen Bericht, indem Sie die Datensatzquelle, Steuerelemente und Steuerelementeigenschaften angeben." ;
+    Text [ en-US ] = "Create a report by specifying the record source, controls, and control properties." ;
+};
+
+String RID_STR_FORMS_HELP_TEXT_WIZARD
+{
+    Text [ en-US ] = "The wizard will guide you through the steps necessary to create a form." ;
+};
+
+String RID_STR_QUERIES_HELP_TEXT
+{
+    Text [ en-US ] = "Create a query by specifying the filters, input tables, field names, and properties for sorting or grouping." ;
+};
+
+String RID_STR_QUERIES_HELP_TEXT_SQL
+{
+    Text [ en-US ] = "Create a query entering an SQL statement directly." ;
+};
+
+String RID_STR_QUERIES_HELP_TEXT_WIZARD
+{
+    Text [ en-US ] = "The wizard will guide you through the steps necessary to create a query." ;
+};
+
+String RID_STR_TABLES_HELP_TEXT_DESIGN
+{
+    Text [ en-US ] = "Create a table by specifying the field names and properties, as well as the data types." ;
+};
+
+String RID_STR_TABLES_HELP_TEXT_WIZARD
+{
+    Text [ en-US ] = "Choose from a selection of business and personal table samples, which you customize to create a table." ;
+};
+
+String RID_STR_VIEWS_HELP_TEXT_DESIGN
+{
+    Text [ en-US ] = "Create a view by specifying the tables and field names you would like to have visible." ;
+};
+
+String RID_STR_VIEWS_HELP_TEXT_WIZARD
+{
+    Text [ en-US ] = "Opens the view wizard" ;
+};
+
+String STR_DATABASE
+{
+    Text [ en-US ] = "Database" ;
+};
+
+String STR_TASKS
+{
+    Text [ en-US ] = "Tasks" ;
+};
+
+String STR_DESCRIPTION
+{
+    Text [ en-US ] = "Description" ;
+};
+
+String STR_PREVIEW
+{
+    Text [ en-US ] = "Preview" ;
+};
+
+String STR_DISABLEPREVIEW
+{
+    Text [ en-US ] = "Disable Preview" ;
+};
+
+QueryBox APP_SAVEMODIFIED
+{
+    Buttons = WB_YES_NO_CANCEL ;
+    DefButton = WB_DEF_YES ;
+    Message [ en-US ] = "The database has been modified.\nDo you want to save the changes?" ;
+};
+
+QueryBox APP_CLOSEDOCUMENTS
+{
+    Buttons = WB_YES_NO ;
+    DefButton = WB_DEF_YES ;
+    Message [ en-US ] = "The connection type has been altered.\nFor the changes to take effect, all forms, reports, queries and tables must be closed.\n\nDo you want to close all documents now?" ;
+};
+
+Menu RID_MENU_APP_PREVIEW
+{
+    ItemList =
+    {
+        MenuItem
+        {
+            Identifier = SID_DB_APP_DISABLE_PREVIEW;
+            Text[ en-US ] = "None";
+            Command = ".uno:DBDisablePreview";
+            Checkable = TRUE;
+            RadioCheck = TRUE;
+            AutoCheck = TRUE;
+        };
+        MenuItem
+        {
+            Identifier = SID_DB_APP_VIEW_DOCINFO_PREVIEW;
+            Text[ en-US ] = "Document Information";
+            Command = ".uno:DBShowDocInfoPreview";
+            Checkable = TRUE;
+            RadioCheck = TRUE;
+            AutoCheck = TRUE;
+        };
+        MenuItem
+        {
+            Identifier = SID_DB_APP_VIEW_DOC_PREVIEW;
+            Text[ en-US ] = "Document";
+            Command = ".uno:DBShowDocPreview";
+            Checkable = TRUE;
+            RadioCheck = TRUE;
+            AutoCheck = TRUE;
+        };
+    };
+};
+
+String RID_STR_FORM
+{
+    Text [ en-US ] = "Form";
+};
+
+String RID_STR_REPORT
+{
+    Text [ en-US ] = "Report";
+};
+
+String STR_FRM_LABEL
+{
+    Text [ en-US ] = "F~orm name" ;
+};
+
+String STR_RPT_LABEL
+{
+    Text [ en-US ] = "~Report name" ;
+};
+
+String STR_FOLDER_LABEL
+{
+    Text [ en-US ] = "F~older name" ;
+};
+
+String STR_SUB_DOCS_WITH_SCRIPTS
+{
+    Text [ en-US ] = "The document contains forms or reports with embedded macros.";
+};
+
+String STR_SUB_DOCS_WITH_SCRIPTS_DETAIL
+{
+    Text [ en-US ] = "Macros should be embedded into the database document itself.\n\n"
+
+                    "You can continue to use your document as before, however, you are encouraged to migrate "
+                    "your macros. The menu item 'Tools / Migrate Macros ...' will assist you with this.\n\n"
+
+                    "Note that you won't be able to embed macros into the database document itself until "
+                    "this migration is done. ";
+};
+
+String RID_STR_EMBEDDED_DATABASE
+{
+    Text [ en-US ] = "Embedded database";
+};
+
+String RID_STR_NO_DIFF_CAT
+{
+    Text [ en-US ] = "You cannot select different categories.";
+};
+
+String RID_STR_UNSUPPORTED_OBJECT_TYPE
+{
+    Text [ en-US ] = "Unsupported object type found ($type$).";
+};

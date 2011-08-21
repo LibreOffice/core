@@ -1,0 +1,251 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_sdbc_XArray_idl__
+#define __com_sun_star_sdbc_XArray_idl__
+
+#include <com/sun/star/uno/XInterface.idl>
+
+ module com {  module sun {  module star {  module container {
+ published interface XNameAccess;
+};};};};
+
+#include <com/sun/star/sdbc/SQLException.idl>
+
+ module com {  module sun {  module star {  module sdbc {
+
+ published interface XResultSet;
+
+
+/** is used for mapping the SQL type
+    <member scope= "com::sun::star::sdbc">DataType::ARRAY</member>
+    .
+    By default, an
+    <code>Array</code>
+    is a transaction duration
+    reference to an SQL array. By default, an
+
+    <code>Array</code>
+
+    is implemented using a SQL LOCATOR(array) internally.
+ */
+published interface XArray: com::sun::star::uno::XInterface
+{
+
+    /** returns the SQL type name of the elements in
+        the array designated by this
+        <code>Array</code>
+        object.
+        <p>
+        If the elements are a built-in type, it returns
+        the database-specific type name of the elements.
+        If the elements are a user-defined type (UDT),
+        this method returns the fully-qualified SQL type name.
+        </p>
+        @returns
+            a String that is the database-specific name for a built-in base type or the fully-qualified SQL type name for a base type that is a UDT
+
+        @throws SQLException
+            if a database access error occurs.
+     */
+    string getBaseTypeName() raises (SQLException);
+
+      //-------------------------------------------------------------------------
+
+    /** returns the SDBC type of the elements in the array designated
+        by this
+        <code>Array</code>
+        object.
+        @returns
+            a constant from the SDBC types that is the type code for the elements in the array designated by this Array object.
+        @throws SQLException
+            if a database access error occurs.
+     */
+    long getBaseType() raises (SQLException);
+
+    //-------------------------------------------------------------------------
+
+    /** retrieves the contents of the SQL array designated by this
+                <code>Array</code>
+             object, using the specified
+             <code>typeMap</code>
+             for type map customizations.
+             <p>
+             If the base type of the array does not match a user-defined type
+             in
+             <code>typeMap</code>
+             , the standard mapping is used instead.
+
+             @param typeMap
+                is a map object that contains mappings of SQL type names to
+                services. If the
+                <code>typeMap</code>
+                is
+                <NULL/>
+                , the type-map
+                    associated with the connection for customizations of the type-mappings
+                 is used.
+
+             @returns
+                an sequence that contains the ordered elements
+                of the SQL array designated by this object.
+
+             @throws SQLException
+                if an error occurs while attempting to access the array.
+     */
+    sequence<any> getArray([in]com::sun::star::container::XNameAccess typeMap)
+        raises (SQLException);
+
+      //-------------------------------------------------------------------------
+
+    /** returns an array containing a slice of the SQL array, beginning with the
+                specified
+             <code>index</code>
+             and containing up to
+             <code>count</code>
+                successive elements of the SQL array.
+
+             @param index
+                is the array index of the first element to retrieve;
+                the first element is at index 1.
+                @param count
+                is the number of successive SQL array elements to retrieve.
+             @param typeMap
+                is a map object that contains mappings of SQL type names to
+                services. If the
+                <code>typeMap</code>
+                is
+                <NULL/>
+                , the type-map
+                   associated with the connection for customizations of the type-mappings
+                is used.
+             @returns
+                an array containing up to
+                <code>count</code>
+                consecutive elements
+                   of the SQL array, beginning with element
+                <code>index</code>
+                .
+                @throws SQLException
+                if an error occurs while attempting to access the array.
+     */
+    sequence<any> getArrayAtIndex([in]long index,
+                                  [in]long count,
+                                  [in]com::sun::star::container::XNameAccess
+                                                                      typeMap)
+            raises (SQLException);
+
+      //-------------------------------------------------------------------------
+
+    /** returns a result set that contains the elements of the array
+        designated by this
+        <code>Array</code>
+        object and uses the given
+        <code>typeMap</code>
+        to map the array elements.  If the base
+        type of the array does not match a user-defined type in
+        <code>typeMap</code>
+        or the
+        <code>typeMap</code>
+        is
+        <NULL/>
+        ,
+        the connection type mapping is used instead.
+
+
+        <p>
+        The result set contains one row for each array element, with
+        two columns in each row.  The second column stores the element
+        value; the first column stores the index into the array for
+        that element (with the first array element being at index 1).
+        The rows are in ascending order corresponding to
+        the order of the indices.
+        </p>
+
+        @param  typeMap
+            contains mapping of SQL user-defined types to classes in the UNO programming language
+        @returns
+            a ResultSet object containing one row for each of the elements in the array designated by this Array object,
+            with the rows in ascending order based on the indices.
+        @throws SQLException
+            if a database access error occurs.
+     */
+    XResultSet getResultSet([in]com::sun::star::container::XNameAccess typeMap)
+        raises (SQLException);
+
+      //-------------------------------------------------------------------------
+
+    /** returns a result set holding the elements of the subarray that
+        starts at index
+        <code>index</code>
+        and contains up to
+        <code>count</code>
+        successive elements. This method uses the given
+        <code>typeMap</code>
+        to map the array elements. If the base
+        type of the array does not match a user-defined type in
+        <code>typeMap</code>
+        or the
+        <code>typeMap</code>
+        is
+        <NULL/>
+        ,
+        the connection type mapping is used instead.
+
+
+        <p>
+        The result set contains one row for each array element, with
+        two columns in each row.  The second column stores the element
+        value; the first column stores the index into the array for
+        that element (with the first array element being at index 1).
+        The rows are in ascending order corresponding to
+        the order of the indices.
+        </p>
+        @param index
+            the array index of the first element to retrieve; the first element is at index 1.
+        @param count
+            the number of successive SQL array elements to retrieve,
+        @param typeMap
+            the Map object that contains the mapping of SQL type names to classes in the UNO programming language.
+        @returns
+            a ResultSet object containing up to count consecutive elements of the SQL array
+            designated by this Array object, starting at index index.
+        @throws SQLException
+            if a database access error occurs.
+     */
+    XResultSet getResultSetAtIndex([in]long index,
+                                   [in]long count,
+                                   [in]com::sun::star::container::XNameAccess typeMap)
+        raises (SQLException);
+};
+
+//=============================================================================
+
+}; }; }; };
+
+/*===========================================================================
+===========================================================================*/
+#endif

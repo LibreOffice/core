@@ -1,0 +1,75 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef com_sun_star_chart2_XRegressionCurveContainer_idl
+#define com_sun_star_chart2_XRegressionCurveContainer_idl
+
+#include <com/sun/star/uno/XInterface.idl>
+#include <com/sun/star/chart2/XRegressionCurve.idl>
+#include <com/sun/star/lang/IllegalArgumentException.idl>
+#include <com/sun/star/container/NoSuchElementException.idl>
+
+module com
+{
+module sun
+{
+module star
+{
+module chart2
+{
+
+interface XRegressionCurveContainer : com::sun::star::uno::XInterface
+{
+    /** add an regression curve to the container
+
+        @throws IllegalArgumentException
+            If the given regression curve is already contained in the
+            container.
+     */
+    void addRegressionCurve( [in] XRegressionCurve aRegressionCurve )
+        raises( com::sun::star::lang::IllegalArgumentException );
+
+    /** removes one regression curve from the container.
+     */
+    void removeRegressionCurve( [in] XRegressionCurve aRegressionCurve )
+        raises( com::sun::star::container::NoSuchElementException );
+
+    /** retrieve all regression curves
+     */
+    sequence< XRegressionCurve > getRegressionCurves();
+
+    /** set all regression curves
+     */
+    void setRegressionCurves( [in] sequence< XRegressionCurve > aRegressionCurves )
+        raises( com::sun::star::lang::IllegalArgumentException );
+};
+
+} ; // chart2
+} ; // com
+} ; // sun
+} ; // star
+
+#endif

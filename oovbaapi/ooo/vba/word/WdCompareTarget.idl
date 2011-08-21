@@ -1,0 +1,7 @@
+module ooo { module vba { module word {
+    constants WdCompareTarget {
+        const long wdCompareTargetCurrent = 1;
+        const long wdCompareTargetNew = 2;
+        const long wdCompareTargetSelected = 0;
+    };
+}; }; };

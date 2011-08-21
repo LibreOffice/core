@@ -1,0 +1,96 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_drawing_GraphicExportFilter_idl__
+#define __com_sun_star_drawing_GraphicExportFilter_idl__
+
+#include <com/sun/star/document/XFilter.idl>
+#include <com/sun/star/document/XExporter.idl>
+#include <com/sun/star/document/XMimeTypeInfo.idl>
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module drawing {
+
+//=============================================================================
+
+/** a component that supports this service lets you export pages, shapes, or
+    groups of shapes from a DrawingDocument to a file in one of the file formats
+    supported by the component.
+*/
+published service GraphicExportFilter
+{
+    /** calling <method scope=scope="com::sun::star::document">XFilter::filter
+        </method> starts the export of the graphic file. The following properties
+        from the        <type scope="com::sun::star::document">MediaDescriptor
+        </type> are supported:<p>
+
+        <member scope="com::sun::star::document">MediaDescriptor::MediaType
+        </member><b>
+
+        Depending on the export filters supported by this component this is
+        the mime type of the target graphic file. Possible values are<b>
+        image/x-MS-bmp<b>
+        application/dxf<b>
+        application/postscript<b>
+        image/gif<b>
+        image/jpeg<b>
+        image/png<b>
+        image/x-pict<b>
+        image/x-pcx<b>
+        image/x-portable-bitmap<b>
+        image/x-portable-graymap<b>
+        image/x-portable-pixmap<b>
+        image/x-cmu-raster<b>
+        image/targa<b>
+        image/tiff<b>
+        image/x-xbitmap<b>
+        image/x-xpixmap<b>
+        image/svg+xml<p>
+        Ask the interface <type scope="com::sun::star::document">XMimeTypeInfo
+        </type> for all values supported by the component.
+
+        <member scope="com::sun::star::document">MediaDescriptor::URL</member><b>
+        This is the target url of the file that will be created during export.
+    */
+    interface ::com::sun::star::document::XFilter;
+
+    /** sets the source component for this export filter.
+        This could either be a <type>DrawPage</type>, a <type>Shape</type>
+        or a <type>Shapes</type>.
+     */
+    interface ::com::sun::star::document::XExporter;
+
+    /** lets you query the supported mime types by this component */
+    interface ::com::sun::star::document::XMimeTypeInfo;
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif
+

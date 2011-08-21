@@ -1,0 +1,103 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_datatransfer_clipboard_SystemClipboard_idl__
+#define __com_sun_star_datatransfer_clipboard_SystemClipboard_idl__
+
+#include <com/sun/star/lang/XComponent.idl>
+#include <com/sun/star/lang/XServiceInfo.idl>
+#include <com/sun/star/lang/XTypeProvider.idl>
+#include <com/sun/star/lang/XInitialization.idl>
+
+//=============================================================================
+
+module com { module sun { module star { module datatransfer { module clipboard {
+
+//=============================================================================
+
+ published interface XClipboardEx;
+ published interface XClipboardNotifier;
+ published interface XFlushableClipboard;
+
+//=============================================================================
+/** The system clipboard service builds a bridge to the OS specific clipboard
+    interfaces.
+
+    <br/><br/><p><strong>Notes:</strong> The Unix implementation needs to be instantiated with 2 Arguments:
+    <ul>
+        <li>A <type scope="com::sun::star::awt">XDisplayConnection</type> that provides the
+        display to be used.</li>
+        <li>A string that names the selection to be used</li>
+    </ul>
+    It is possible to use clipboards for different selections simultaneously.</p>
+*/
+published service SystemClipboard
+{
+    //-------------------------------------------------------------------------
+    /** Provides access to the clipboard content.
+    */
+    interface XClipboardEx;
+
+    //-------------------------------------------------------------------------
+    /** Provides the ability to request notifications on content changes.
+    */
+    interface XClipboardNotifier;
+
+    //-------------------------------------------------------------------------
+    /** Provides the ability to render the complete clipboard content. This
+        interface is only available if the method
+        <member scope="com::sun::star::datatransfer::clipboard">XClipboardEx::getRenderingCapabilities()</member>
+        returns Persistant
+    */
+    [optional] interface XFlushableClipboard;
+
+    //-------------------------------------------------------------------------
+    /** Provides the ability to initialize the clipboard
+    */
+    [optional] interface com::sun::star::lang::XInitialization;
+
+    //-------------------------------------------------------------------------
+    /** For shutdown and listener support.
+    */
+    interface com::sun::star::lang::XComponent;
+
+    //-------------------------------------------------------------------------
+    /** Service should always support this interface.
+    */
+    interface com::sun::star::lang::XServiceInfo;
+
+    //-------------------------------------------------------------------------
+    /** Service should always support this interface.
+    */
+    interface com::sun::star::lang::XTypeProvider;
+};
+
+//=============================================================================
+
+}; }; }; }; };
+
+#endif

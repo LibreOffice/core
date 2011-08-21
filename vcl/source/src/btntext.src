@@ -1,0 +1,80 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#define _SV_BTNTEXT_SRC
+
+#include <svids.hrc>
+
+String SV_BUTTONTEXT_OK
+{
+    Text [ en-US ] = "OK";
+};
+
+String SV_BUTTONTEXT_CANCEL
+{
+    Text [ en-US ] = "Cancel";
+};
+
+String SV_BUTTONTEXT_YES
+{
+    Text [ en-US ] = "~Yes";
+};
+
+String SV_BUTTONTEXT_NO
+{
+    Text [ en-US ] = "~No";
+};
+
+String SV_BUTTONTEXT_RETRY
+{
+    Text [ en-US ] = "~Retry";
+};
+
+String SV_BUTTONTEXT_HELP
+{
+    Text [ en-US ] = "~Help";
+};
+
+String SV_BUTTONTEXT_MORE
+{
+    Text [ en-US ] = "~More";
+};
+
+String SV_BUTTONTEXT_LESS
+{
+    Text [ en-US ] = "~Less";
+};
+
+String SV_BUTTONTEXT_IGNORE
+{
+    Text [ en-US ] = "~Ignore";
+};
+
+String SV_BUTTONTEXT_ABORT
+{
+    Text [ en-US ] = "~Abort";
+};

@@ -1,0 +1,76 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_inspection_InteractiveSelectionResult_idl__
+#define __com_sun_star_inspection_InteractiveSelectionResult_idl__
+
+//=============================================================================
+module com {  module sun {  module star {  module inspection {
+
+//-----------------------------------------------------------------------------
+/** describes possible results of an interactive selection of a property value
+    in an object inspector
+
+    @see XPropertyHandler::onInteractivePropertySelection
+
+    @since OOo 2.0.3
+*/
+published enum InteractiveSelectionResult
+{
+    /** The interactive selection of a property value was canceled.
+    */
+    Cancelled,
+
+    /** The interactive selection of a property value succeeded, and the
+        new property value chosen by the user has already been set at the
+        inspected component.
+    */
+    Success,
+
+    /** The interactive selection of a property value succeeded, a new
+        property value has been obtained, but not yet set at the inspected
+        component.
+
+        <p>In this case, the obtained value is passed to the caller of
+        <member>XPropertyHandler::onInteractivePropertySelection<member>, which is
+        responsible for forwarding this value to the inspected component.</p>
+    */
+    ObtainedValue,
+
+    /** The interactive selection of a property value is still pending.
+
+        <p>This is usually used when this selection involves non-modal user interface.</p>
+    */
+    Pending
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif
+
+

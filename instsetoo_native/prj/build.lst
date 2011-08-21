@@ -1,0 +1,5 @@
+oon	instsetoo_native	::	TRANSLATIONS:translations postprocess packimages testautomation NULL
+oon	instsetoo_native						usr1	-	all	oon_mkout NULL
+oon	instsetoo_native\inc_openoffice\unix	nmake	-	u	oon_unix NULL
+oon	instsetoo_native\inc_openoffice\windows\msi_languages	nmake	-	all	oon_msilang NULL
+oon	instsetoo_native\util					nmake	-	all	oon_util oon_msilang oon_unix.u NULL

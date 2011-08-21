@@ -1,0 +1,558 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+ // include ------------------------------------------------------------------
+
+#include <sfx2/sfx.hrc>
+#include "app.hrc"
+#include "helpid.hrc"
+
+String STR_NONAME
+{
+    Text [ en-US ] = "Untitled" ;
+};
+String STR_CLOSE
+{
+    Text [ en-US ] = "Close" ;
+};
+String STR_STYLE_FILTER_AUTO
+{
+    Text [ en-US ] = "Automatic" ;
+};
+String STR_STANDARD_SHORTCUT
+{
+    Text [ en-US ] = "Standard" ;
+};
+String STR_BYTES
+{
+    Text [ en-US ] = "Bytes" ;
+};
+String STR_KB
+{
+    Text [ en-US ] = "KB" ;
+};
+String STR_MB
+{
+    Text [ en-US ] = "MB" ;
+};
+String STR_GB
+{
+    Text [ en-US ] = "GB" ;
+};
+QueryBox MSG_QUERY_LASTVERSION
+{
+    Buttons = WB_YES_NO ;
+    DefButton = WB_DEF_NO ;
+    Message [ en-US ] = "Cancel all changes?" ;
+};
+
+InfoBox RID_DOCALREADYLOADED_DLG
+{
+    Message [ en-US ] = "Document already open." ;
+};
+
+ErrorBox MSG_ERR_NO_WEBBROWSER_FOUND
+{
+    BUTTONS = WB_OK ;
+    DEFBUTTON = WB_DEF_OK ;
+    Message[ en-US ] = "%PRODUCTNAME could not find a web browser on your system. Please check your Desktop Preferences or install a web browser (for example, Mozilla) in the default  location requested during the browser installation." ;
+};
+
+Resource SID_UNKNOWN
+{
+    String 1 "-" ;
+};
+
+String GID_INTERN
+{
+    Text [ en-US ] = "Internal" ;
+};
+
+String GID_APPLICATION
+{
+    Text [ en-US ] = "Application" ;
+};
+
+String GID_VIEW
+{
+    Text [ en-US ] = "View" ;
+};
+
+String GID_DOCUMENT
+{
+    Text [ en-US ] = "Documents" ;
+};
+
+String GID_EDIT
+{
+    Text [ en-US ] = "Edit" ;
+};
+
+String GID_MACRO
+{
+    Text [ en-US ] = "BASIC" ;
+};
+
+String GID_OPTIONS
+{
+    Text [ en-US ] = "Options" ;
+};
+
+String GID_MATH
+{
+    Text [ en-US ] = "Math" ;
+};
+
+String GID_NAVIGATOR
+{
+    Text [ en-US ] = "Navigate" ;
+};
+
+String GID_INSERT
+{
+    Text [ en-US ] = "Insert" ;
+};
+
+String GID_FORMAT
+{
+    Text [ en-US ] = "Format" ;
+};
+
+String GID_TEMPLATE
+{
+    Text [ en-US ] = "Templates" ;
+};
+
+String GID_TEXT
+{
+    Text [ en-US ] = "Text" ;
+};
+
+String GID_FRAME
+{
+    Text [ en-US ] = "Frame" ;
+};
+
+String GID_GRAPHIC
+{
+    Text [ en-US ] = "Graphic" ;
+};
+
+String GID_TABLE
+{
+    Text [ en-US ] = "Table" ;
+};
+
+String GID_ENUMERATION
+{
+    Text [ en-US ] = "Numbering" ;
+};
+
+String GID_DATA
+{
+    Text [ en-US ] = "Data" ;
+};
+
+String GID_SPECIAL
+{
+    Text [ en-US ] = "Special Functions" ;
+};
+
+String GID_IMAGE
+{
+    Text [ en-US ] = "Image" ;
+};
+
+String GID_CHART
+{
+    Text [ en-US ] = "Chart" ;
+};
+
+String GID_EXPLORER
+{
+    Text [ en-US ] = "Explorer" ;
+};
+
+String GID_CONNECTOR
+{
+    Text [ en-US ] = "Connector" ;
+};
+
+String GID_MODIFY
+{
+    Text [ en-US ] = "Modify" ;
+};
+
+String GID_DRAWING
+{
+    Text [ en-US ] = "Drawing" ;
+};
+
+String GID_CONTROLS
+{
+    Text [ en-US ] = "Controls" ;
+};
+
+InfoBox MSG_CANT_QUIT
+{
+    Message [ en-US ] = "The application cannot be terminated at the moment.\nPlease wait until all print jobs and/or\nOLE actions have finished and close all dialogs." ;
+};
+
+String STR_ISMODIFIED
+{
+    Text [ en-US ] = "Do you want to save the changes to %1?" ;
+};
+
+String RID_FULLSCREENTOOLBOX
+{
+    Text  = "" ;
+};
+
+ToolBox RID_FULLSCREENTOOLBOX
+{
+    HelpId = HID_FULLSCREENTOOLBOX ;
+    ButtonType = BUTTON_SYMBOL ;
+    LineSpacing = TRUE ;
+    Border = TRUE ;
+    Scroll = TRUE ;
+    SVLook = TRUE ;
+    Moveable = TRUE ;
+    Sizeable = TRUE ;
+    Closeable = TRUE ;
+    Zoomable = TRUE ;
+    Customize = TRUE ;
+    FloatingMode = TRUE ;
+    Hide = TRUE ;
+    _FloatingPosMapMode = MAP_APPFONT ;
+    _FloatingPosX = -50 ;
+    _FloatingPosY = -70 ;
+    FloatingLines = 1 ;
+    HideWhenDeactivate = TRUE ;
+    Align = BOXALIGN_TOP ;
+    ItemList =
+    {
+        ToolBoxItem
+        {
+            Identifier = SID_WIN_FULLSCREEN ;
+        };
+    };
+};
+
+String STR_QUITAPP
+{
+    Text [ en-US ] = "E~xit" ;
+};
+
+String RID_STR_HELP
+{
+    Text [ en-US ] = "Help" ;
+};
+
+String RID_STR_NOAUTOSTARTHELPAGENT
+{
+    Text [ en-US ] = "No automatic start at 'XX'" ;
+};
+
+String RID_HELPBAR
+{
+    Text [ en-US ] = "Help Bar" ;
+};
+
+ToolBox RID_HELPBAR
+{
+    HelpId = HID_HELPBAR ;
+    Hide = TRUE ;
+    ItemList  =
+    {
+        ToolBoxItem
+        {
+            Identifier = SID_HELP_INDEX ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_HELP_HELPFILEBOX ;
+        };
+        ToolBoxItem
+        {
+            Type = TOOLBOXITEM_SEPARATOR ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_HELP_ZOOMOUT;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_HELP_ZOOMIN;
+        };
+        ToolBoxItem
+        {
+            Type = TOOLBOXITEM_SEPARATOR ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_HELP_SEARCH ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_HELP_BOOKMARK ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_HELP_ANNOTATE ;
+        };
+    };
+};
+
+String RID_STR_HLPFILENOTEXIST
+{
+    Text [ en-US ] = "The help file for this topic is not installed." ;
+};
+
+ //----------------------------------------------------------------------------
+
+String RID_ENVTOOLBOX
+{
+    Text [ en-US ] = "Function Bar" ;
+};
+
+String RID_SPECIALCONFIG_ERROR
+{
+    Text [ en-US ] = "An error has occurred in the special configuration.\nPlease contact your administrator." ;
+};
+
+String STR_QUICKSTART_EXIT
+{
+    Text [ en-US ] = "Exit Quickstarter" ;
+};
+String STR_QUICKSTART_TIP
+{
+    Text [ en-US ] = "%PRODUCTNAME %PRODUCTVERSION Quickstarter" ;
+};
+String STR_QUICKSTART_FILEOPEN
+{
+    Text [ en-US ] = "Open Document..." ;
+};
+String STR_QUICKSTART_FROMTEMPLATE
+{
+    Text [ en-US ] = "From Template..." ;
+};
+String STR_QUICKSTART_PRELAUNCH
+{
+    Text [ en-US ] = "Load %PRODUCTNAME During System Start-Up" ;
+};
+String STR_QUICKSTART_PRELAUNCH_UNX
+{
+    Text[ en-US ] = "Disable systray Quickstarter";
+};
+String STR_QUICKSTART_LNKNAME
+{
+    Text [ en-US ] = "%PRODUCTNAME %PRODUCTVERSION" ;
+};
+String STR_QUICKSTART_FILE
+{
+    Text [ en-US ] = "File";
+};
+
+String STR_QUICKSTART_STARTCENTER
+{
+    Text [ en-US ] = "Startcenter";
+};
+
+String STR_QUICKSTART_RECENTDOC
+{
+    Text [ en-US ] = "Recent Documents";
+};
+
+String STR_QUERY_UPDATE_LINKS
+{
+    Text [ en-US ] = "This document contains one or more links to external data.\n\nWould you like to change the document, and update all links\nto get the most recent data?" ;
+};
+
+String STR_DDE_ERROR
+{
+    Text [ en-US ] = "DDE link to % for % area % are not available." ;
+};
+
+WarningBox RID_SECURITY_WARNING_HYPERLINK
+{
+    HelpId = HID_WARNING_SECURITY_HYPERLINK;
+    Buttons = WB_YES_NO ;
+    DefButton = WB_DEF_NO ;
+    Message [ en-US ] = "This hyperlink is going to open \"%s\". Do you want to proceed?" ;
+};
+
+WarningBox RID_SECURITY_WARNING_NO_HYPERLINKS
+{
+    Buttons = WB_OK ;
+    DefButton = WB_DEF_OK ;
+    Message [ en-US ] = "For security reasons, the hyperlink cannot be executed.\nThe stated address will not be opened.";
+};
+
+String RID_SECURITY_WARNING_TITLE
+{
+    Text [ en-US ] = "Security Warning" ;
+};
+
+String RID_DESKTOP
+{
+    Text = "%PRODUCTNAME" ;
+};
+
+QueryBox RID_XMLSEC_QUERY_LOSINGSIGNATURE
+{
+    Buttons = WB_YES_NO ;
+    DefButton = WB_DEF_NO ;
+    Message [ en-US ] = "Saving will remove all existing signatures.\nDo you want to continue saving the document?" ;
+};
+
+QueryBox RID_XMLSEC_QUERY_SAVEBEFORESIGN
+{
+    Buttons = WB_YES_NO ;
+    DefButton = WB_DEF_YES ;
+    Message [ en-US ] = "The document has to be saved before it can be signed.\nDo you want to save the document?" ;
+};
+
+InfoBox RID_XMLSEC_INFO_WRONGDOCFORMAT
+{
+    Message [ en-US ] = "This document must be saved in OpenDocument file format before it can be digitally signed." ;
+};
+
+String RID_XMLSEC_DOCUMENTSIGNED
+{
+    Text [ en-US ] = " (Signed)" ;
+};
+
+String STR_STANDARD
+{
+    Text [ en-US ] = "Standard" ;
+};
+
+String RID_SVXSTR_FILELINK
+{
+    Text [ en-US ] = "Document" ;
+};
+
+String STR_NONE
+{
+    Text [ en-US ] = "- None -" ;
+};
+String RID_SVXSTR_GRAFIKLINK
+{
+    Text [ en-US ] = "Graphic" ;
+};
+String STR_SFX_FILTERNAME_ALL
+{
+    Text [ en-US ] = "All files (*.*)" ;
+};
+String RID_SVXSTR_EDITGRFLINK
+{
+    Text [ en-US ] = "Link graphics" ;
+};
+// i66948 used in project scripting
+String STR_ERRUNOEVENTBINDUNG
+{
+    Text [ en-US ] = "An appropriate component method %1\ncould not be found.\n\nCheck spelling of method name.";
+};
+String RID_SVXSTR_GRFILTER_OPENERROR
+{
+    Text [ en-US ] = "Graphics file cannot be opened" ;
+};
+String RID_SVXSTR_GRFILTER_IOERROR
+{
+    Text [ en-US ] = "Graphics file cannot be read" ;
+};
+String RID_SVXSTR_GRFILTER_FORMATERROR
+{
+    Text [ en-US ] = "Unknown graphics format" ;
+};
+String RID_SVXSTR_GRFILTER_VERSIONERROR
+{
+    Text [ en-US ] = "This version of the graphics file is not supported" ;
+};
+String RID_SVXSTR_GRFILTER_FILTERERROR
+{
+    Text [ en-US ] = "Graphics filter not found" ;
+};
+String RID_SVXSTR_GRFILTER_TOOBIG
+{
+    Text [ en-US ] = "Not enough memory to insert graphic" ;
+};
+
+ModalDialog DLG_HELP_LICENSING
+{
+    // Size is computed
+    Text [ en-US ] = "Licensing and Legal information";
+    MOVEABLE = TRUE ;
+    CLOSEABLE = TRUE ;
+    OUTPUTSIZE = TRUE ;
+    SVLOOK = TRUE ;
+    String STR_LICENSING_INFORMATION_1
+    {
+        Text [ en-US ] =
+            "%PRODUCTNAME is made available subject to the terms of GNU Lesser General Public\n"
+            "License Version 3. A copy of the LGPL license can be found at\n"
+            "http://www.gnu.org/licenses/lgpl-3.0.html" ;
+    };
+    String STR_LICENSING_INFORMATION_2
+    {
+        Text [ en-US ] =
+            "Third Party Code Additional copyright notices and license terms applicable to\n"
+            "portions of the Software are set forth in the THIRDPARTYLICENSEREADME.html\n"
+            "file; choose Show License to see exact details in English." ;
+    };
+    String STR_LICENSING_INFORMATION_3
+    {
+        Text [ en-US ] =
+            "All trademarks and registered trademarks mentioned herein are the property of\n"
+            "their respective owners." ;
+    };
+    String STR_LICENSING_INFORMATION_4
+    {
+        Text [ en-US ] =
+            "Copyright © 2000, 2010 LibreOffice contributors and/or their affiliates. All rights\n"
+            "reserved." ;
+    };
+    String STR_LICENSING_INFORMATION_5
+    {
+        Text [ en-US ] =
+            "This product was created by %OOOVENDOR, based on OpenOffice.org,\n"
+            "which is Copyright 2000, 2010 Oracle and/or its affiliates.\n"
+            "%OOOVENDOR acknowledges all community members, please see\n"
+            "http://www.libreoffice.org/ for more details." ;
+    };
+    OKButton PB_LICENSING_SHOW
+    {
+        // Position and size is computed
+        Text [ en-US ] = "~Show License" ;
+        DefButton = TRUE ;
+    };
+    CancelButton PB_LICENSING_CLOSE
+    {
+        // Position and size is computed
+        Text [ en-US ] = "~Close" ;
+    };
+};

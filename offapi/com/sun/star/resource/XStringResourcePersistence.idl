@@ -1,0 +1,239 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_resource_XStringResourcePersistence_idl__
+#define __com_sun_star_resource_XStringResourcePersistence_idl__
+
+#include <com/sun/star/resource/XStringResourceManager.idl>
+#include <com/sun/star/embed/XStorage.idl>
+#include <com/sun/star/task/XInteractionHandler.idl>
+
+
+//=============================================================================
+
+module com { module sun { module star { module resource {
+
+//=============================================================================
+/**
+    Interface derived from XStringResourceManager containing
+    basic persistence functionality limited to operations that
+    are independent from a associated location or storage.
+
+    @see <type>XStringResourceManager</type>.
+*/
+published interface XStringResourcePersistence: com::sun::star::resource::XStringResourceManager
+{
+    /**
+        Stores all string table data respectively all data modified since
+        the last call to <member>store</member> to the location or storage
+        associated with the StringResourceManager. Each locale is stored
+        in a single file following the format of Java properties files.
+
+        This interface is supported by the services
+        <type>StringResourceWithLocation</type> and
+        <type>StringResourceWithStorage</type>
+
+        The StringResourceWithLocation is initialized with an URL
+        specifying a location used to load data from and store data to,
+        see <type>StringResourceWithLocation</type>.
+
+        The StringResourceWithStorage is initialized with an instance
+        of <type scope="com::sun::star::embed">XStorage</type>
+        used to load data from and store data to,
+        see <type>StringResourceWithStorage</type>.
+
+        If the string table isn't modified (see <member>isModified</member>)
+        this method does nothing.
+
+        This method can throw all exceptions thrown by the methods of
+        <type scope="com::sun::star::embed">XStorage</type> respectively
+        a <type scope="com::sun::star::ucb">CommandAbortedException in
+        case of a StringResourceWithLocation for all exceptions that are
+        not handled by a previously specified
+        <type scope="com::sun::star::task">XInteractionHandler</type>.
+        The handler to be used for the store operation can be specified
+        during initialization of <type>StringResourceWithLocation</type>.
+
+        @throws <type scope="com::sun::star::lang">NoSupportException</type>
+            if no URL or no valid storage are provided.
+    */
+    void store()
+        raises( com::sun::star::lang::NoSupportException,
+                com::sun::star::uno::Exception );
+
+
+     /**
+        provides the current modify state of the StringResourceManager instance.
+
+        @return
+            <TRUE/> if the string table has changed since the last call to
+            <member>store</member> or, if supported
+            <code>XStringResourceWithStorage::storeAsStorage</code>.
+            <FALSE/> if the table hasn't changed.
+    */
+    boolean isModified();
+
+
+    /**
+        Sets the comment stored first in each locale data file.
+
+        This interface method can be used to overwrite the comment used
+        during initialization of the services
+        <type>StringResourceWithLocation</type> or
+        <type>StringResourceWithStorage</type>
+
+        @param Comment
+            Comment stored first in each properties file followed by a line
+            feed character. The line feed character is added automatically
+            and hasn't to be part of the comment string. The caller is
+            responsible that the passed string is a valid comment in a Java
+            properties file, e.g. "# My strings". The string may be empty.
+    */
+    void setComment( [in] string Comment );
+
+
+    /**
+        Stores all string table data to the provided storage.
+
+        Calling this method does not affect the association with a location
+        (in case of a <type>StringResourceWithLocation</type> instance)
+        respectively with a storage (in case of a
+        <type>StringResourceWithStorage</type> instance).
+        The modified state isn't affected either.
+
+        This method can be used to make a copy of the current string
+        table data to a storage. This method can throw all exceptions
+        thrown by the methods of <type scope="com::sun::star::embed">XStorage</type>
+
+        @param Storage
+            all string table data will be stored to this storage.
+
+        @param BaseName
+            Base string for the file names used to store the locale data.
+            The locale data is stored in Java properties files also following
+            the corresponding naming scheme. The files will be named like this:
+            "[BaseName]_[Language]_[Country].properties",
+            e.g. "MyBaseName_en_US.properties"
+            If an empty string is passed for BaseName, "strings" will be used
+            as BaseName.
+
+        @param Comment
+            Comment stored first in each properties file,
+            for a detailed description see <member>setComment</member>.
+
+        This method can throw all exceptions thrown by the methods of
+        <type scope="com::sun::star::embed">XStorage</type>
+    */
+    void storeToStorage( [in] ::com::sun::star::embed::XStorage Storage,
+        [in] string BaseName, [in] string Comment )
+            raises ( com::sun::star::uno::Exception );
+
+
+    /**
+        Stores all string table data to the location specified by the
+        passed URL string.
+
+        Calling this method does not affect the association with a location
+        (in case of a <type>StringResourceWithLocation</type> instance)
+        respectively with a storage (in case of a
+        <type>StringResourceWithStorage</type> instance).
+        The modified state isn't affected either.
+
+        This method can be used to make a copy of the current string
+        table data to a location.
+
+        @param URL
+            the location the string table data should be stored to.
+
+        @param BaseName
+            Base string for the file names used to store the locale data.
+            The locale data is stored in Java properties files also following
+            the corresponding naming scheme. The files will be named like this:
+            "[BaseName]_[Language]_[Country].properties",
+            e.g. "MyBaseName_en_US.properties"
+            If an empty string is passed for BaseName, "strings" will be used
+            as BaseName.
+
+        @param Comment
+            Comment stored first in each properties file,
+            for a detailed description see <member>setComment</member>.
+
+        @param Handler
+            a <type scope="com::sun::star::task">XInteractionHandler</type>.
+            It will be passed to ucb handle exceptions. Exceptions not processed
+            by this handler will be passed as com::sun::star::uno::Exception. If
+            this parameter is null this applies to all exceptions thrown by ucb.
+
+        @see com::sun::star::task::InteractionHandler
+    */
+    void storeToURL( [in] string URL, [in] string BaseName, [in] string Comment,
+        [in] com::sun::star::task::XInteractionHandler Handler )
+            raises( com::sun::star::uno::Exception );
+
+
+    /**
+        Returns a sequence of byte representing the complete string resource
+        in a binary format.
+
+        This method is intended to support datatransfer functionality, e.g. provided
+        by <type scope="com::sun::star::datatransfer">XTransferable</type> and
+        related interfaces.
+
+        See <member>importBinary</member>).
+
+        @return  a sequence of byte representing the string resource.
+    */
+    sequence<byte> exportBinary();
+
+
+    /**
+        Initializes the string resource with binary data. This method
+        expects the data format returned by <member>exportBinary</member>.
+
+        All locales and strings previously added to the string resource
+        will be deleted. So after calling this method the string resource
+        only contains the locales and strings specified in the binary data.
+
+        This method is intended to support datatransfer functionality, e.g. provided
+        by <type scope="com::sun::star::datatransfer">XTransferable</type> and
+        related interfaces.
+
+        See <member>importBinary</member>).
+
+        @throws com::sun::star::lang::IllegalArgumentException
+        if Data is empty or does not meet the binary format returned by
+        the current or earlier version of <member>exportBinary</member>).
+    */
+    void importBinary( [in] sequence<byte> Data )
+        raises ( com::sun::star::lang::IllegalArgumentException );
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

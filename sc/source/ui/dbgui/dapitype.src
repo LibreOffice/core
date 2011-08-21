@@ -1,0 +1,310 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#include "sc.hrc"
+#include "dapitype.hrc"
+
+
+ModalDialog RID_SCDLG_DAPITYPE
+{
+    Text [ en-US ] = "Select Source";
+    OutputSize = TRUE ;
+    HelpId = HID_DATAPILOT_TYPE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 241 , 76 ) ;
+    Moveable = TRUE ;
+    Closeable = FALSE ;
+
+    FixedLine FL_FRAME
+    {
+        Pos = MAP_APPFONT ( 6 , 6 ) ;
+        Size = MAP_APPFONT ( 173 , 8 ) ;
+        Text [ en-US ] = "Selection";
+    };
+    OKButton BTN_OK
+    {
+        Pos = MAP_APPFONT ( 185 , 6 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        DefButton = TRUE ;
+    };
+    CancelButton BTN_CANCEL
+    {
+        Pos = MAP_APPFONT ( 185 , 23 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    HelpButton BTN_HELP
+    {
+        Pos = MAP_APPFONT ( 185 , 43 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    RadioButton BTN_SELECTION
+    {
+        Pos = MAP_APPFONT ( 12 , 18 ) ;
+        Size = MAP_APPFONT ( 164 , 10 ) ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "~Current selection";
+    };
+    RadioButton BTN_NAMED_RANGE
+    {
+        Pos = MAP_APPFONT ( 12 , 32 ) ;
+        Size = MAP_APPFONT ( 80 , 10 ) ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "~Named range";
+    };
+    ListBox LB_NAMED_RANGE
+    {
+        Pos = MAP_APPFONT ( 100 , 31 ) ;
+        Size = MAP_APPFONT ( 70 , 10 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+    };
+    RadioButton BTN_DATABASE
+    {
+        Pos = MAP_APPFONT ( 12 , 46 ) ;
+        Size = MAP_APPFONT ( 164 , 10 ) ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "~Data source registered in %PRODUCTNAME";
+    };
+    RadioButton BTN_EXTERNAL
+    {
+        Pos = MAP_APPFONT ( 12 , 60 ) ;
+        Size = MAP_APPFONT ( 164 , 10 ) ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "~External source/interface";
+    };
+};
+
+
+//------------------------------------------------------------------------
+
+
+ModalDialog RID_SCDLG_DAPISERVICE
+{
+    OutputSize = TRUE ;
+    HelpId = HID_DATAPILOT_SERVICE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 241 , 94 ) ;
+    Moveable = TRUE ;
+    Closeable = FALSE ;
+    OKButton BTN_OK
+    {
+        Pos = MAP_APPFONT ( 185 , 6 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        DefButton = TRUE ;
+    };
+    CancelButton BTN_CANCEL
+    {
+        Pos = MAP_APPFONT ( 185 , 23 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    HelpButton BTN_HELP
+    {
+        Pos = MAP_APPFONT ( 185 , 43 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    FixedText FT_SERVICE
+    {
+        Pos = MAP_APPFONT ( 12 , 14 ) ;
+        Size = MAP_APPFONT ( 40 , 8 ) ;
+        Text [ en-US ] = "~Service";
+    };
+    ListBox LB_SERVICE
+    {
+        HelpID = "sc:ListBox:RID_SCDLG_DAPISERVICE:LB_SERVICE";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 56 , 12 ) ;
+        Size = MAP_APPFONT ( 120 , 80 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+    };
+    FixedText FT_SOURCE
+    {
+        Pos = MAP_APPFONT ( 12 , 30 ) ;
+        Size = MAP_APPFONT ( 40 , 8 ) ;
+        Text [ en-US ] = "So~urce";
+    };
+    Edit ED_SOURCE
+    {
+        HelpID = "sc:Edit:RID_SCDLG_DAPISERVICE:ED_SOURCE";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 56 , 28 ) ;
+        Size = MAP_APPFONT ( 120 , 12 ) ;
+        TabStop = TRUE ;
+    };
+    FixedText FT_NAME
+    {
+        Pos = MAP_APPFONT ( 12 , 46 ) ;
+        Size = MAP_APPFONT ( 40 , 8 ) ;
+        Text [ en-US ] = "~Name";
+    };
+    Edit ED_NAME
+    {
+        HelpID = "sc:Edit:RID_SCDLG_DAPISERVICE:ED_NAME";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 56 , 44 ) ;
+        Size = MAP_APPFONT ( 120 , 12 ) ;
+        TabStop = TRUE ;
+    };
+    FixedText FT_USER
+    {
+        Pos = MAP_APPFONT ( 12 , 62 ) ;
+        Size = MAP_APPFONT ( 40 , 8 ) ;
+        Text [ en-US ] = "Us~er";
+    };
+    Edit ED_USER
+    {
+        HelpID = "sc:Edit:RID_SCDLG_DAPISERVICE:ED_USER";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 56 , 60 ) ;
+        Size = MAP_APPFONT ( 120 , 12 ) ;
+        TabStop = TRUE ;
+    };
+    FixedText FT_PASSWD
+    {
+        Pos = MAP_APPFONT ( 12 , 78 ) ;
+        Size = MAP_APPFONT ( 40 , 8 ) ;
+        Text [ en-US ] = "~Password";
+    };
+    Edit ED_PASSWD
+    {
+        HelpID = "sc:Edit:RID_SCDLG_DAPISERVICE:ED_PASSWD";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 56 , 76 ) ;
+        Size = MAP_APPFONT ( 120 , 12 ) ;
+        TabStop = TRUE ;
+        PassWord = TRUE ;
+    };
+    FixedLine FL_FRAME
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 173 , 8 ) ;
+        Text [ en-US ] = "Selection";
+    };
+    Text [ en-US ] = "External Source";
+};
+
+
+//------------------------------------------------------------------------
+
+
+ModalDialog RID_SCDLG_DAPIDATA
+{
+    OutputSize = TRUE ;
+    HelpId = HID_DATAPILOT_DATABASE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 241 , 63 ) ;
+    Moveable = TRUE ;
+    Closeable = FALSE ;
+    OKButton BTN_OK
+    {
+        Pos = MAP_APPFONT ( 185 , 6 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        DefButton = TRUE ;
+    };
+    CancelButton BTN_CANCEL
+    {
+        Pos = MAP_APPFONT ( 185 , 23 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    HelpButton BTN_HELP
+    {
+        Pos = MAP_APPFONT ( 185 , 43 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+
+    FixedText FT_DATABASE
+    {
+        Pos = MAP_APPFONT ( 12 , 14 ) ;
+        Size = MAP_APPFONT ( 52 , 8 ) ;
+        Text [ en-US ] = "~Database";
+    };
+    ListBox LB_DATABASE
+    {
+        HelpID = "sc:ListBox:RID_SCDLG_DAPIDATA:LB_DATABASE";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 66 , 12 ) ;
+        Size = MAP_APPFONT ( 110 , 80 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+    };
+
+    FixedText FT_OBJECT
+    {
+        Pos = MAP_APPFONT ( 12 , 30 ) ;
+        Size = MAP_APPFONT ( 52 , 8 ) ;
+        Text [ en-US ] = "Data so~urce";
+    };
+    ComboBox CB_OBJECT
+    {
+        HelpID = "sc:ComboBox:RID_SCDLG_DAPIDATA:CB_OBJECT";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 66 , 28 ) ;
+        Size = MAP_APPFONT ( 110 , 80 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+    };
+
+    FixedText FT_OBJTYPE
+    {
+        Pos = MAP_APPFONT ( 12 , 46 ) ;
+        Size = MAP_APPFONT ( 52 , 8 ) ;
+        Text [ en-US ] = "~Type";
+    };
+    ListBox LB_OBJTYPE
+    {
+        HelpID = "sc:ListBox:RID_SCDLG_DAPIDATA:LB_OBJTYPE";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 66 , 44 ) ;
+        Size = MAP_APPFONT ( 110 , 80 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+    StringList [ en-US ] =
+    {
+            < "Sheet" ; Default ; > ;
+        < "Query" ; Default ; > ;
+        < "Sql" ; Default ; > ;
+        < "Sql [Native]" ; Default ; > ;
+    };
+    };
+
+    FixedLine FL_FRAME
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 173 , 8 ) ;
+        Text [ en-US ] = "Selection";
+    };
+    Text [ en-US ] = "Select Data Source";
+};

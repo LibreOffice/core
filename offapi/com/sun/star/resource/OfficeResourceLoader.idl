@@ -1,0 +1,79 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_resource_OfficeResourceLoader_idl__
+#define __com_sun_star_resource_OfficeResourceLoader_idl__
+
+#include <com/sun/star/resource/XResourceBundleLoader.idl>
+
+//=============================================================================
+module com { module sun { module star { module resource {
+//=============================================================================
+
+/** describes a <type>XResourceBundleLoader</type> which provides access to the OpenOffice.org
+    resource files.
+
+    <p>An OpenOffice.org installation comes with a number of resource files in an proprietary
+    format, located inside the installation's program/resource directory. The <type>OfficeResoureLoader</type>
+    singleton (available at a component context as value with the key
+    <code>/singletons/com.sun.star.resource.OfficeResourceLoader</code>), provides access to some
+    types of resources within those files.</p>
+
+    <p>Clients have to specify the resource file base name in the call to
+    <member>XResourceBundleLoader::loadBundle</member> resp. <member>XResourceBundleLoader::loadBundle_Default</member>
+    method. The loader will extent this base name so that the resulting name conforms to the OpenOffice.org
+    resource file naming conventions, and look up the respective resource file, for the requested locale,
+    in OpenOffice.org's installation.</p>
+
+    <p>The lookup process uses the fallback mechanism as described at the <type>XResourceBundle</type> interface,
+    except that <code>Locale.getDefault()</code> is not used.</p>
+
+    <p>Resource keys, as passed to the <member>XResourceBundle::getDirectElement</member> or
+    <member scope="com::sun::star::container">XNameAccess::getByName</member>, have the following format:
+    <code>&lt;resource_type&gt;:&lt;numeric_identifier&gt;</code>, where <code>&lt;resource_type&gt; specifies
+    the type of the requested resource (see below) and <code>&lt;numeric_identifier&gt;</code> is the numeric
+    identifier of the resource.</p>
+
+    <p>The following resource types are currently supported:
+    <ul>
+        <li><em>string</em>: denotes a string resource</li>
+    </ul>
+    </p>
+
+    <p>Since the numeric resource identifiers are highly build-dependent (e.g. can change with any next
+    OpenOffice.org build), you are <strong>strongly</strong> discouraged from using the <type>OfficeResoureLoader</type>
+    service in a component which targets more than one particular OpenOffice.org build.</p>
+
+    @since OOo 2.0.3
+*/
+singleton OfficeResourceLoader : XResourceBundleLoader;
+
+//=============================================================================
+}; }; }; };
+//=============================================================================
+
+#endif

@@ -1,0 +1,2 @@
+@echo off
+call perl5 %SOLARENV\bin\oochkpatch.pl %1&

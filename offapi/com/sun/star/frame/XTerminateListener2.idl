@@ -1,0 +1,67 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_frame_XTerminateListener2_idl__
+#define __com_sun_star_frame_XTerminateListener2_idl__
+
+#include <com/sun/star/frame/XTerminateListener.idl>
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module frame {
+
+//=============================================================================
+/** extend interface XTerminateListener so a listener will be informed
+    in case termination process was canceled by other reasons.
+ */
+interface XTerminateListener2 : ::com::sun::star::frame::XTerminateListener
+{
+    //-------------------------------------------------------------------------
+    /** is called when the master environment (e.g., desktop) was canceled in
+        it's terminate request.
+
+        <p>
+        Termination can be intercepted by throwing <type>TerminationVetoException</type>.
+        But if a listener was queried for termination .. doesn't throw a veto exception ...
+        it doesn't know if termination will be real next time.
+        Because any other listener can throw those exception too ... and so it can happen
+        that after queryTermination() no notifyTermination() will occur. But these listener
+        don't know if its allowed to start new processes then.
+        Using this optional(!) interface will make it possible to be informed about
+        canceled termination requests also.
+        </p>
+
+        @param Event
+               describe the source of the event (e.g., the desktop)
+     */
+    void cancelTermination( [in] com::sun::star::lang::EventObject Event );
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

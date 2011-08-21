@@ -1,0 +1,104 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_rendering_RenderState_idl__
+#define __com_sun_star_rendering_RenderState_idl__
+
+#include <com/sun/star/geometry/AffineMatrix2D.idl>
+#include <com/sun/star/rendering/XColorSpace.idl>
+
+module com { module sun { module star { module rendering {
+
+published interface XPolyPolygon2D;
+
+/** This structure contains information passed to each
+    <type>XCanvas</type> render operation.<p>
+
+    This structure contains information considered as the render
+    state, i.e. the common setup required to render each individual
+    <type>XCanvas</type> primitive.<p>
+
+    @since OOo 2.0
+ */
+published struct RenderState
+{
+    /** The affine transform associated with this render
+        operation.<p>
+
+        This is used to transform coordinates of canvas primitives
+        from user space to view space (from which they are
+        subsequently transformed to device space by the view
+        transform).<p>
+     */
+    ::com::sun::star::geometry::AffineMatrix2D  AffineTransform;
+
+    //-------------------------------------------------------------------------
+
+    /** The clipping area associated with this render operation.<p>
+
+        This clipping is interpreted in the user coordinate system,
+        i.e. subject to the render state transform followed by the
+        view transform before mapped to device coordinate space.<p>
+
+        Specifying an empty interface denotes no clipping,
+        i.e. everything rendered to the canvas will be visible
+        (subject to device-dependent constraints, of
+        course). Specifying an empty XPolyPolygon2D, i.e. a
+        poly-polygon containing zero polygons, or an XPolyPolygon2D
+        with any number of empty sub-polygons, denotes the NULL
+        clip. That means, nothing rendered to the canvas will be
+        visible.<p>
+     */
+    XPolyPolygon2D                                      Clip;
+
+    //-------------------------------------------------------------------------
+
+    /** The device color associated with this render operation.<p>
+
+        Note that this need not be RGB here, but depends on the active
+        device color space.<p>
+
+        @see XGraphicDevice
+        @see XColorSpace
+     */
+    sequence<ColorComponent>                            DeviceColor;
+
+    //-------------------------------------------------------------------------
+
+    /** The composition mode associated with this render
+        operation.<p>
+
+        The composite mode determines in which way the primitive and
+        possibly existing background is combined. The permissible
+        values must be one out of the <type>CompositeOperation</type>
+        constants.<p>
+     */
+    byte                                                CompositeOperation;
+};
+
+}; }; }; };
+
+#endif

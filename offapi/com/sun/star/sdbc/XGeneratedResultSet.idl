@@ -1,0 +1,67 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_sdbc_XGeneratedResultSet_idl__
+#define __com_sun_star_sdbc_XGeneratedResultSet_idl__
+
+#include <com/sun/star/uno/XInterface.idl>
+
+#include <com/sun/star/sdbc/SQLException.idl>
+
+ module com {  module sun {  module star {  module sdbc {
+
+ published interface XResultSet;
+
+/** provides a result set which gives access to automatically generated values after a new row was inserted.
+
+    <p>The relative order of columns in the result set returned by <member>getGeneratedValues</member> must be the same
+    as the relative order of the same columns as returned when executing a "SELECT * FROM table". This ensures that
+    clients of this interface can reliably fetch the column values.</p>
+
+    @see com::sun::star::sdbc::Statement
+    @see com::sun::star::sdbc::PreparedStatement
+    @since OOo 1.1.2
+ */
+published interface XGeneratedResultSet: com::sun::star::uno::XInterface
+{
+    //-------------------------------------------------------------------------
+    /** gives access to automatically generated values after a new row was inserted.
+        @returns
+            a result set that contains the data produced by the query
+        @throws SQLException
+            if a database access error occurs.
+    */
+    XResultSet getGeneratedValues() raises (SQLException);
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+/*===========================================================================
+===========================================================================*/
+#endif

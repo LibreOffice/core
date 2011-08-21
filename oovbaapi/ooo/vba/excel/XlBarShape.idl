@@ -1,0 +1,10 @@
+module ooo { module vba { module excel {
+    constants XlBarShape {
+        const long xlBox = 0;
+        const long xlConeToMax = 5;
+        const long xlConeToPoint = 4;
+        const long xlCylinder = 3;
+        const long xlPyramidToMax = 2;
+        const long xlPyramidToPoint = 1;
+    };
+}; }; };

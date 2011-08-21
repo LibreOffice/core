@@ -1,0 +1,3 @@
+mkdir: %_DEST%\inc\vigra
+
+..\%__SRC%\misc\build\vigra1.4.0\include\vigra\*.hxx %_DEST%\inc\vigra\*.hxx

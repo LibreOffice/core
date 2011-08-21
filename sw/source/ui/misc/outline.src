@@ -1,0 +1,382 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#include "misc.hrc"
+#include "outline.hrc"
+#include "globals.hrc"
+#include "cmdid.h"
+#include "helpid.h"
+ModalDialog DLG_NUM_NAMES
+{
+    HelpID = HID_NUM_NAMES ;
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 164 , 82 ) ;
+    Text [ en-US ] = "Save As";
+    Moveable = TRUE ;
+    OKButton BT_OK
+    {
+        Pos = MAP_APPFONT ( 108 , 6 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        DefButton = TRUE ;
+    };
+    CancelButton BT_CANCEL
+    {
+        Pos = MAP_APPFONT ( 108 , 23 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    HelpButton BT_HELP
+    {
+        Pos = MAP_APPFONT ( 108 , 43 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    FixedLine FL_FORM
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 96 , 8 ) ;
+        Text [ en-US ] = "Format" ;
+    };
+    ListBox LB_FORM
+    {
+        HelpID = "sw:ListBox:DLG_NUM_NAMES:LB_FORM";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 12 , 29 ) ;
+        Size = MAP_APPFONT ( 84 , 42 ) ;
+        TabStop = TRUE ;
+        CurPos = 0 ;
+        StringList [ en-US ] =
+        {
+            < "Untitled 1" ; > ;
+            < "Untitled 2" ; > ;
+            < "Untitled 3" ; > ;
+            < "Untitled 4" ; > ;
+            < "Untitled 5" ; > ;
+            < "Untitled 6" ; > ;
+            < "Untitled 7" ; > ;
+            < "Untitled 8" ; > ;
+            < "Untitled 9" ; > ;
+        };
+    };
+    Edit ED_FORM
+    {
+        HelpID = "sw:Edit:DLG_NUM_NAMES:ED_FORM";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 12 , 14 ) ;
+        Size = MAP_APPFONT ( 84 , 12 ) ;
+        TabStop = TRUE ;
+        Left = TRUE ;
+    };
+};
+/**************************************************************************/
+/*                                                                        */
+/*                                                                        */
+/*                                                                        */
+/**************************************************************************/
+TabDialog DLG_TAB_OUTLINE
+{
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    // --> OD 2008-04-14 #outlinelevel#
+    // dialog title is now given by resource STR_OUTLINE_NUMBERING
+//    Text [ en-US ] = "Outline Numbering" ;
+    Moveable = TRUE ;
+    TabControl 1
+    {
+        SVLook = TRUE ;
+        PageList =
+        {
+            PageItem
+            {
+                Identifier = TP_OUTLINE_NUM ;
+                Text [ en-US ] = "Numbering" ;
+            };
+            PageItem
+            {
+                Identifier = TP_NUM_POSITION ;
+                Text [ en-US ] = "Position" ;
+            };
+        };
+    };
+    String ST_FORM
+    {
+        Text [ en-US ] = "~Format" ;
+    };
+    Menu MN_FORM
+    {
+        ItemList =
+        {
+            MenuItem
+            {
+                Identifier = MN_FORM1 ;
+                Text [ en-US ] = "Untitled 1" ;
+                HelpID = HID_NUM_OUTL_NAMED_NUMS ;
+            };
+            MenuItem
+            {
+                Identifier = MN_FORM2 ;
+                Text [ en-US ] = "Untitled 2" ;
+                HelpID = HID_NUM_OUTL_NAMED_NUMS ;
+            };
+            MenuItem
+            {
+                Identifier = MN_FORM3 ;
+                Text [ en-US ] = "Untitled 3" ;
+                HelpID = HID_NUM_OUTL_NAMED_NUMS ;
+            };
+            MenuItem
+            {
+                Identifier = MN_FORM4 ;
+                Text [ en-US ] = "Untitled 4" ;
+                HelpID = HID_NUM_OUTL_NAMED_NUMS ;
+            };
+            MenuItem
+            {
+                Identifier = MN_FORM5 ;
+                Text [ en-US ] = "Untitled 5" ;
+                HelpID = HID_NUM_OUTL_NAMED_NUMS ;
+            };
+            MenuItem
+            {
+                Identifier = MN_FORM6 ;
+                Text [ en-US ] = "Untitled 6" ;
+                HelpID = HID_NUM_OUTL_NAMED_NUMS ;
+            };
+            MenuItem
+            {
+                Identifier = MN_FORM7 ;
+                Text [ en-US ] = "Untitled 7" ;
+                HelpID = HID_NUM_OUTL_NAMED_NUMS ;
+            };
+            MenuItem
+            {
+                Identifier = MN_FORM8 ;
+                Text [ en-US ] = "Untitled 8" ;
+                HelpID = HID_NUM_OUTL_NAMED_NUMS ;
+            };
+            MenuItem
+            {
+                Identifier = MN_FORM9 ;
+                Text [ en-US ] = "Untitled 9" ;
+                HelpID = HID_NUM_OUTL_NAMED_NUMS ;
+            };
+            MenuItem
+            {
+                Separator = TRUE ;
+            };
+            MenuItem
+            {
+                Identifier = MN_SAVE ;
+                Text [ en-US ] = "Save ~As...";
+                HelpID = HID_NUM_OUTL_NUM_SAVEAS ;
+            };
+        };
+    };
+};
+/**************************************************************************/
+/*                                                                        */
+/*  TabPage                                                               */
+/*                                                                        */
+/**************************************************************************/
+TabPage TP_OUTLINE_NUM
+{
+    HelpID = HID_TP_OUTLINE_NUM ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 260 , 185 ) ;
+        Hide = TRUE;
+    ListBox LB_LEVEL
+    {
+        HelpID = "sw:ListBox:TP_OUTLINE_NUM:LB_LEVEL";
+        Pos = MAP_APPFONT ( 12 , 14 ) ;
+        Size = MAP_APPFONT ( 23 , 129 ) ;
+        TabStop = TRUE ;
+        DropDown = FALSE ;
+        Border = TRUE ;
+    };
+    FixedLine FL_LEVEL
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 32 , 8 ) ;
+        Text [ en-US ] = "Level" ;
+    };
+    FixedText FT_COLL
+    {
+        Pos = MAP_APPFONT ( 50 , 14 ) ;
+        Size = MAP_APPFONT ( 120 , 8 ) ;
+        Text [ en-US ] = "~Paragraph Style" ;
+        Group = TRUE ;
+        Left = TRUE ;
+    };
+    ListBox LB_COLL
+    {
+        HelpID = "sw:ListBox:TP_OUTLINE_NUM:LB_COLL";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 50 , 25 ) ;
+        Size = MAP_APPFONT ( 120 , 75 ) ;
+        TabStop = TRUE ;
+        Group = TRUE ;
+        Sort = TRUE ;
+        DropDown = TRUE ;
+        CurPos = 0 ;
+    };
+    FixedText FT_NUMBER
+    {
+        Pos = MAP_APPFONT ( 50 , 43 ) ;
+        Size = MAP_APPFONT ( 52 , 8 ) ;
+        Text [ en-US ] = "~Number" ;
+        Left = TRUE ;
+    };
+    ListBox LB_NUMBER
+    {
+        HelpID = "sw:ListBox:TP_OUTLINE_NUM:LB_NUMBER";
+        Pos = MAP_APPFONT ( 104 , 41 ) ;
+        Size = MAP_APPFONT ( 66 , 65 ) ;
+        TabStop = TRUE ;
+        Group = TRUE ;
+        DropDown = TRUE ;
+        CurPos = 0 ;
+    };
+    FixedText FT_CHARFMT
+    {
+        Pos = MAP_APPFONT ( 50 , 59 ) ;
+        Size = MAP_APPFONT ( 52 , 8 ) ;
+        Text [ en-US ] = "~Character Style" ;
+    };
+    ListBox LB_CHARFMT
+    {
+        HelpID = "sw:ListBox:TP_OUTLINE_NUM:LB_CHARFMT";
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+        Pos = MAP_APPFONT ( 104 , 57 ) ;
+        Size = MAP_APPFONT ( 66 , 65 ) ;
+    };
+    FixedText FT_ALL_LEVEL
+    {
+        Pos = MAP_APPFONT ( 50 , 75 ) ;
+        Size = MAP_APPFONT ( 52 , 8 ) ;
+        Text [ en-US ] = "Sho~w sublevels" ;
+    };
+    NumericField NF_ALL_LEVEL
+    {
+        HelpID = "sw:NumericField:TP_OUTLINE_NUM:NF_ALL_LEVEL";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 104 , 73 ) ;
+        Size = MAP_APPFONT ( 66 , 12 ) ;
+        TabStop = TRUE ;
+        Left = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Minimum = 1 ;
+        Maximum = 10 ;
+        Value = 1 ;
+        First = 1 ;
+        Last = 10 ;
+    };
+    FixedText FT_DELIM
+    {
+        Pos = MAP_APPFONT ( 50 , 89 ) ;
+        Size = MAP_APPFONT ( 52 , 8 ) ;
+        Text [ en-US ] = "Separator" ;
+        Left = TRUE ;
+    };
+    FixedText FT_PREFIX
+    {
+        Pos = MAP_APPFONT ( 56 , 102 ) ;
+        Size = MAP_APPFONT ( 46 , 8 ) ;
+        Text [ en-US ] = "~Before" ;
+        Left = TRUE ;
+    };
+    Edit ED_PREFIX
+    {
+        HelpID = "sw:Edit:TP_OUTLINE_NUM:ED_PREFIX";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 104 , 100 ) ;
+        Size = MAP_APPFONT ( 66 , 12 ) ;
+        TabStop = TRUE ;
+        Group = TRUE ;
+        Left = TRUE ;
+    };
+    FixedText FT_SUFFIX
+    {
+        Pos = MAP_APPFONT ( 56 , 117 ) ;
+        Size = MAP_APPFONT ( 46 , 8 ) ;
+        Text [ en-US ] = "~After" ;
+        Left = TRUE ;
+    };
+    Edit ED_SUFFIX
+    {
+        HelpID = "sw:Edit:TP_OUTLINE_NUM:ED_SUFFIX";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 104 , 115 ) ;
+        Size = MAP_APPFONT ( 66 , 12 ) ;
+        TabStop = TRUE ;
+        Group = TRUE ;
+        Left = TRUE ;
+    };
+    FixedText FT_START
+    {
+        Pos = MAP_APPFONT ( 50 , 133 ) ;
+        Size = MAP_APPFONT ( 52 , 8 ) ;
+        Text [ en-US ] = "~Start at" ;
+        Left = TRUE ;
+    };
+    NumericField ED_START
+    {
+        HelpID = "sw:NumericField:TP_OUTLINE_NUM:ED_START";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 104 , 131 ) ;
+        Size = MAP_APPFONT ( 66 , 12 ) ;
+        TabStop = TRUE ;
+        Left = TRUE ;
+        Spin = TRUE ;
+        Repeat = TRUE ;
+        Maximum = 999 ;
+        Value = 0 ;
+        First = 0 ;
+        Last = 99 ;
+        SpinSize = 1 ;
+    };
+    FixedLine FL_NUMBER
+    {
+        Pos = MAP_APPFONT ( 44 , 3 ) ;
+        Size = MAP_APPFONT ( 210 , 8 ) ;
+        Text [ en-US ] = "Numbering" ;
+        Group = TRUE ;
+    };
+    Window WIN_PREVIEW
+    {
+        Pos = MAP_APPFONT ( 179 , 14 ) ;
+        Size = MAP_APPFONT ( 72 , 129 ) ;
+    };
+    String ST_NO_COLL
+    {
+        Text [ en-US ] = "(none)" ;
+    };
+};
+

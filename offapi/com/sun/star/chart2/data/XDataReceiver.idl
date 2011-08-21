@@ -1,0 +1,106 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef com_sun_star_chart2_data_XDataReceiver_idl
+#define com_sun_star_chart2_data_XDataReceiver_idl
+
+#include <com/sun/star/uno/XInterface.idl>
+#include <com/sun/star/lang/IllegalArgumentException.idl>
+#include <com/sun/star/chart2/data/XDataProvider.idl>
+#include <com/sun/star/chart2/data/XRangeHighlighter.idl>
+#include <com/sun/star/beans/PropertyValue.idl>
+#include <com/sun/star/util/XNumberFormatsSupplier.idl>
+
+module com
+{
+module sun
+{
+module star
+{
+module chart2
+{
+module data
+{
+
+interface XDataReceiver : ::com::sun::star::uno::XInterface
+{
+    /** attaches a component that provides data for the document.
+
+        <p>The previously set data provider will be released.</p>
+
+        @param xProvider
+              The new DataProvider.  If it is an empty reference, the
+              ChartDocument will have no data.
+     */
+    void attachDataProvider( [in] XDataProvider xProvider );
+
+    void setArguments( [in] sequence< com::sun::star::beans::PropertyValue > aArguments )
+        raises( com::sun::star::lang::IllegalArgumentException );
+
+    /** returns a list of all range strings for which data has been
+        requested by the most recently attached data provider, and
+        which is still used.
+
+        <p>This list may be used by the data provider to swap charts
+        out of memory, but still get informed by changes of ranges
+        while the chart is not loaded.</p>
+        @return a list of used range strings.
+     */
+    sequence< string > getUsedRangeRepresentations();
+
+    /** Returns the data requested by the most recently attached data
+        provider, that is still used.
+     */
+    XDataSource getUsedData();
+
+    /** attaches an <type>XNumberFormatsSupplier</type> to this
+        <type>XDataReceiver</type>.
+
+        <p>The given number formats will be used for display purposes.</p>
+     */
+    void attachNumberFormatsSupplier( [in] com::sun::star::util::XNumberFormatsSupplier xSupplier );
+
+    /** Returns a component at which a view representing the data of
+        the attached data provider may listen for highlighting the
+        data ranges used by the currently selected objects in the data
+        receiver component.
+
+        <p>This is typically used by a spreadsheet to highlight the
+        ranges used by the currently selected object in a chart.</p>
+
+        <p>The range highlighter is optional, i.e., this method may
+        return an empty object.</p>
+     */
+    XRangeHighlighter getRangeHighlighter();
+};
+
+} ; // data
+} ; // chart2
+} ; // com
+} ; // sun
+} ; // star
+
+#endif

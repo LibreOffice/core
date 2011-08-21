@@ -1,0 +1,9 @@
+module ooo { module vba { module excel {
+    constants XlWindowType {
+        const long xlChartAsWindow = 5;
+        const long xlChartInPlace = 4;
+        const long xlClipboard = 3;
+        const long xlInfo = -4129;
+        const long xlWorkbook = 1;
+    };
+}; }; };

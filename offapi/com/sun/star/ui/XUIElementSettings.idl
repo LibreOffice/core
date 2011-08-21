@@ -1,0 +1,97 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_ui_XUIElementSettings_idl__
+#define __com_sun_star_ui_XUIElementSettings_idl__
+
+#include <com/sun/star/uno/XInterface.idl>
+#include <com/sun/star/container/XIndexAccess.idl>
+
+//=============================================================================
+
+module com { module sun { module star { module ui {
+
+//=============================================================================
+
+/** provides functions to retrieve and change user interface element structure
+    data and to update its visible representation.
+
+    @since OOo 2.0
+*/
+
+published interface XUIElementSettings : com::sun::star::uno::XInterface
+{
+    /** forces the user interface element to retrieve new settings from its
+        configuration source.
+
+        <p>
+        This is not done automatically as configurable user interface elements
+        are controlled by layout managers. It is more efficient to let the
+        responsible layout manager to control the update process in a single
+        task.
+        </p>
+    */
+    void updateSettings();
+
+    /** provides a <type>UIElementSettings</type> instance that provides access
+        to the structure of user interface element if the user interface element
+        type supports it.
+
+        @param bWriteable
+            must be <TRUE/> if the retrieved settings should be a writable.
+            Otherwise <FALSE/> should be provided to get a shareable reference
+            to the settings data.
+
+        @return
+            the current settings of the user interface element.
+    */
+    com::sun::star::container::XIndexAccess getSettings( [in] boolean bWriteable );
+
+    /** set changes to the structure of the user interface element.
+
+        @param UISettings
+            new data settings for the configurable user interface element.
+
+
+        <p>
+        User interface elements cannot be changed directly. The changed structure
+        data has to be set again. This speeds up the configuration process if many
+        changes have to be made on the structure. The persistence of changes are
+        controlled by the boolean property <member>Persistent</member>.
+
+        </p>
+
+        @see com::sun::star::ui::UIElementSettings
+    */
+    void setSettings( [in] com::sun::star::container::XIndexAccess UISettings );
+};
+
+}; }; }; };
+
+//=============================================================================
+
+#endif

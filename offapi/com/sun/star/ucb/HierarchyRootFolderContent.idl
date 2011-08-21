@@ -1,0 +1,197 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_ucb_HierarchyRootFolderContent_idl__
+#define __com_sun_star_ucb_HierarchyRootFolderContent_idl__
+
+#include <com/sun/star/lang/XComponent.idl>
+#include <com/sun/star/ucb/XContent.idl>
+#include <com/sun/star/ucb/XCommandProcessor.idl>
+#include <com/sun/star/ucb/XCommandProcessor2.idl>
+#include <com/sun/star/beans/XPropertiesChangeNotifier.idl>
+#include <com/sun/star/beans/XPropertyContainer.idl>
+#include <com/sun/star/beans/XPropertySetInfoChangeNotifier.idl>
+#include <com/sun/star/ucb/XCommandInfoChangeNotifier.idl>
+#include <com/sun/star/container/XChild.idl>
+#include <com/sun/star/ucb/XContentCreator.idl>
+
+//=============================================================================
+
+module com { module sun { module star { module ucb {
+
+//=============================================================================
+/** A HCP Root Folder is the root container for all other HCP Folders and HCP
+    Links.
+
+    <p>It always has the URL "vnd.sun.star.hier:/". A HCP Root Folder neither
+    can't be created nor deleted by a UCB client.
+
+    @see com::sun::star::ucb::HierarchyContentProvider
+    @see com::sun::star::ucb::HierarchyFolderContent
+    @see com::sun::star::ucb::HierarchyLinkContent
+*/
+published service HierarchyRootFolderContent
+{
+    //-------------------------------------------------------------------------
+    /** This interface is implemented according to the specification of
+        service <type>Content</type>.
+     */
+    interface com::sun::star::lang::XComponent;
+
+    //-------------------------------------------------------------------------
+    /** This interface is implemented according to the specification of
+        service <type>Content</type>.
+     */
+    interface com::sun::star::ucb::XContent;
+
+    //-------------------------------------------------------------------------
+    /** This interface is implemented according to the specification of
+        service <type>Content</type>.
+
+        <p>
+
+        <b>Supported Commands</b>
+        <ul>
+        <li>
+        getCommandInfo
+        </li>
+        <li>
+        getPropertySetInfo
+        </li>
+        <li>
+        getPropertyValues
+        </li>
+        <li>
+        setPropertyValues
+        </li>
+        <li>
+        open
+        </li>
+        <li>
+        transfer ( only transfers from one hierarchy folder to another supported )
+        </li>
+        </ul>
+
+        <b>Supported Properties</b>
+        <ul>
+        <li>
+        string ContentType ( read-only, always "application/vnd.sun.star.hier-folder" )
+        </li>
+        <li>
+        boolean IsDocument ( read-only, always false )
+        </li>
+        <li>
+        boolean IsFolder ( read-only, always true )
+        </li>
+        <li>
+        string Title ( read-only, always an empty string )
+        </li>
+        </ul>
+
+        </p>
+     */
+    interface com::sun::star::ucb::XCommandProcessor;
+
+    //-------------------------------------------------------------------------
+    /** is an enhanced version of <type>XCommandProcessor</type> that has an
+        additional method for releasing command identifiers obtained via
+        <member>XCommandProcessor::createCommandIdentifier</member> to avoid
+        resource leaks. For a detailed description of the problem refer to
+        <member>XCommandProcessor2::releaseCommandIdentifier</member>.
+
+        <p>Where many existing <type>Content</type> implementations do not
+        (yet), every new implementation should support this interface.
+     */
+    [optional] interface com::sun::star::ucb::XCommandProcessor2;
+
+    //-------------------------------------------------------------------------
+    /** This interface is implemented according to the specification of
+        service <type>Content</type>.
+     */
+    interface com::sun::star::beans::XPropertiesChangeNotifier;
+
+    //-------------------------------------------------------------------------
+    /** This interface is implemented according to the specification of
+        service <type>Content</type>.
+     */
+    interface com::sun::star::beans::XPropertyContainer;
+
+    //-------------------------------------------------------------------------
+    /** This interface is implemented according to the specification of
+        service <type>Content</type>.
+     */
+    interface com::sun::star::beans::XPropertySetInfoChangeNotifier;
+
+    //-------------------------------------------------------------------------
+    /** This interface is implemented according to the specification of
+        service <type>Content</type>.
+     */
+    interface com::sun::star::ucb::XCommandInfoChangeNotifier;
+
+    //-------------------------------------------------------------------------
+    /** This interface is implemented according to the specification of
+        service <type>Content</type>.
+     */
+    interface com::sun::star::container::XChild;
+
+    //-------------------------------------------------------------------------
+    /** This interface is implemented according to the specification of
+        service <type>Content</type>.
+
+        <p>
+
+        A HCP Root Folder can create HCP Folders and HCP Links. To create
+        a new child of a HCP Root Folder:
+
+        <ol>
+        <li>
+        Let the parent folder create a new content by calling
+        <member>XContentCreator::createNewContent</member> on it. The content
+        type to use for new folders is "application/vnd.sun.star.hier-folder".
+        To create a new link, use the type "application/vnd.sun.star.hier-link".
+        </li>
+        <li>
+        Set a title at the new folder / link. ( Let the new child execute
+        the command "setPropertyValues", which sets at least the property
+        "Title" to a non-empty value ). For a link, you need to set the
+        property "TargetURL" as well to a non-empty value.
+        </li>
+        <li>
+        Let the new child ( not the parent! ) execute the command "insert".
+        This will commit the creation process.
+        </li>
+        </ol>
+
+        </p>
+     */
+    interface com::sun::star::ucb::XContentCreator;
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

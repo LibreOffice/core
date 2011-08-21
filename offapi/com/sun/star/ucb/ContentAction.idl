@@ -1,0 +1,161 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_ucb_ContentAction_idl__
+#define __com_sun_star_ucb_ContentAction_idl__
+
+
+//=============================================================================
+
+module com { module sun { module star { module ucb {
+
+//=============================================================================
+/** specifies actions which can be transported with content events.
+
+    <p>
+    The situations under which contents will send ContentEvents of the various
+    action types are described below.  The description is broken into a list of
+    useful definitions, a list of events that happen to contents, and a list of
+    reactions taken by contents in response to those events.
+    </p>
+
+    <p>
+    The definitions are as follows:
+    </p>
+
+    <table border =1>
+    <tr><td>D1</td><td>A content C has an identifier id(C).</td></tr>
+    <tr><td>D2</td><td>A content C is in one of two states, Alive or Deleted.
+                       </td></tr>
+    <tr><td>D3</td><td>A folder content F has a set of children H(F) that is a
+                       set of content identifiers. For example, an "open"
+                       command will usually return a    subset of the contents
+                       denoted by H(F).</td></tr>
+    </table>
+
+    <p>
+    The events that can happen to contents (and that are of interest in this
+    context) are listed next.  Note that "event" here does not mean an
+    ContentEvent, but rather some event that occurs either because some content
+    processes a command, or because a content gets informed about a relevant
+    change in the underlying system it represents.
+    </p>
+
+    <table border =1>
+    <tr><td>E1</td><td>The identifier of a content C changes from id1(C) == A
+                       to id2(C) == B, denoted as E1(C: A->B). For example,
+                       this event may occur when content C processes a
+                       "setPropertyValues" command changing its "Title" property,
+                       or when a folder that hierarchically contains C changes
+                       its identity.</td></tr>
+    <tr><td>E2</td><td>The state of a content C changes from Alive to Deleted,
+                       denoted as E2(C). For example, this event may occur when
+                       content C processes a "delete"   command, or when a content
+                       representing an IMAP message gets informed   by the IMAP
+                       server that the message has been deleted.</td></tr>
+    <tr><td>E3</td><td>The set of children of a folder content F is enlarged by
+                       some identifier A (that was not previously in that set,
+                       i.e., !(A in H1(F)) && (A in H2(F))), denoted as E3(F, A).
+                       For example, this event may occur when a new content
+                       created at folder F processes its "insert" command, or
+                       when a folder representing   an IMAP mailbox gets informed
+                       by the IMAP server that a new message has arrived at that
+                       mailbox.</td></tr>
+    </table>
+
+    <p>
+    Finally, the list of reactions taken by contents in response to the above
+    events gives a description of what kinds of ContentEvents are sent in which
+    situations:
+    </p>
+
+    <table border =1>
+    <tr><td>R1</td><td>E1(C: A->B) results in C sending an EXCHANGED
+                       ContentEvent, which then results in the following: All
+                       folders F that used to have A as a child, but will not
+                       have B as a child, i.e., (A in H1(F)) && !(B in H2(F)),
+                       send a REMOVED ContentEvent.</td></tr>
+    <tr><td>R2</td><td>E2(C) results in C sending a DELETED ContentEvent,
+                       which then results in the following:  All folders F that
+                       used to have A as a child, but will not continue to have
+                       A as a child, i.e., (A in H1(F)) && !(A in H2(F)), send
+                       a REMOVED event.</td></tr>
+    <tr><td>R3</td><td>E3(F, A) results in F sending an INSERTED event.</td></tr>
+    </table>
+*/
+published constants ContentAction
+{
+    //-------------------------------------------------------------------------
+    /** A content was inserted into a folder content (i.e., while updating the
+        folder).
+
+        <p>This action must be notified at the listeners of the folder content.
+    */
+    const long INSERTED = 0;
+
+    //-------------------------------------------------------------------------
+    /** A content was removed from a folder content, but not physically
+        destroyed (i.e., due to rules just applied to the folder).
+
+        <p>This action must be notified at the listeners of the folder content.
+    */
+    const long REMOVED = 1;
+
+    //-------------------------------------------------------------------------
+    /** A content was physically destroyed.
+
+        <p>Events containing this action may be generated at any time. So a
+        content event listener should be prepared to get notified the "death"
+        of the related content!
+
+        <p>This action must be notified at the listeners of the deleted
+        content.
+    */
+    const long DELETED = 2;
+
+    //-------------------------------------------------------------------------
+    /** This Action indicates that a content has changed its identity (i.e.
+        after renaming a file system folder).
+
+        <p>This action must be notified at the listeners of the exchanged
+        content.
+    */
+    const long EXCHANGED = 4;
+
+    //-------------------------------------------------------------------------
+    /** This is obsolete and should no longer be used.
+
+        @deprecated
+    */
+    const long SEARCH_MATCHED = 128;
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

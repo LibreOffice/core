@@ -1,0 +1,110 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_xml_dom_XCharacterData_idl__
+#define __com_sun_star_xml_dom_XCharacterData_idl__
+
+#include <com/sun/star/xml/dom/XNode.idl>
+
+module com { module sun { module star { module xml { module dom {
+
+interface XCharacterData: XNode
+{
+    /**
+    Append the string to the end of the character data of the node.
+    Throws:
+        DOMException - NO_MODIFICATION_ALLOWED_ERR: Raised if this node is readonly.
+    */
+    void appendData([in] string arg) raises (DOMException);
+
+    /**
+    Remove a range of 16-bit units from the node.
+    Throws:
+        DOMException - INDEX_SIZE_ERR: Raised if the specified offset is negative or greater
+            than the number of 16-bit units in data, or if the specified count is negative.
+        NO_MODIFICATION_ALLOWED_ERR: Raised if this node is readonly.
+    */
+    void deleteData([in] long offset, [in] long count) raises (DOMException);
+
+    /**
+    Return the character data of the node that implements this interface.
+    Throws:
+        DOMException - NO_MODIFICATION_ALLOWED_ERR: Raised when the node is readonly.
+        DOMException - DOMSTRING_SIZE_ERR: Raised when it would return more characters
+            than fit in a DOMString variable on the implementation platform.
+
+
+    */
+    string getData() raises (DOMException);
+
+    /**
+    The number of 16-bit units that are available through data and the
+    substringData method below.
+    */
+    long getLength();
+
+    /**
+    Insert a string at the specified 16-bit unit offset.
+    Throws:
+    DOMException - INDEX_SIZE_ERR: Raised if the specified offset is negative or greater than
+                                   the number of 16-bit units in data.
+                   NO_MODIFICATION_ALLOWED_ERR: Raised if this node is readonly.
+    */
+    void insertData([in] long offset, [in] string arg) raises (DOMException);
+
+    /**
+    Replace the characters starting at the specified 16-bit unit offset
+    with the specified string.
+    Throws;
+    DOMException - INDEX_SIZE_ERR: Raised if the specified offset is negative or greater than
+                      the number of 16-bit units in data, or if the specified count is negative.
+                   NO_MODIFICATION_ALLOWED_ERR: Raised if this node is readonly.
+    */
+    void replaceData([in] long offset, [in] long count, [in] string arg) raises (DOMException);
+
+    /**
+    Set the character data of the node that implements this interface.
+    Throws:
+        DOMException - NO_MODIFICATION_ALLOWED_ERR: Raised when the node is readonly.
+        DOMException - DOMSTRING_SIZE_ERR: Raised when it would return more characters than
+            fit in a DOMString variable on the implementation platform.
+    */
+    void setData([in] string data) raises (DOMException);
+
+    /**
+    Extracts a range of data from the node.
+    Throws:
+        DOMException - INDEX_SIZE_ERR: Raised if the specified offset is negative or greater
+            than the number of 16-bit units in data, or if the specified count is negative.
+        DOMSTRING_SIZE_ERR: Raised if the specified range of text does not fit into a DOMString.
+    */
+    string subStringData([in] long offset, [in] long count) raises (DOMException);
+
+};
+};};};};};
+
+#endif

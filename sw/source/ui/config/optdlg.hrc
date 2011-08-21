@@ -1,0 +1,208 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+/* TabPage View */
+#define FL_DISP                 1
+#define FL_NOPRINT              2
+#define FL_WINDOW               3
+
+#define CB_GRF                  1
+#define CB_TBL                  2
+#define CB_DRWFAST              3
+#define CB_FIELD                4
+#define CB_PARA                 5
+#define CB_TAB                  6
+#define CB_SPACE                7
+#define CB_HSPACE               8
+#define CB_SHYPH                9
+#define CB_FLD_HIDDEN           10
+#define CB_BREAK                11
+#define CB_ANY_RULER            12
+#define CB_CROSS                14
+#define CB_HSCROLL              15
+#define CB_VSCROLL              16
+#define CB_HRULER               17
+#define CB_VRULER               18
+#define FL_LINE                 22
+#define CB_POSTIT               23
+#define CB_VRULER_RIGHT         24
+#define CB_BIGHANDLE            25
+
+#define FL_SETTINGS             26
+#define LB_METRIC               27
+#define FT_METRIC               28
+
+//test tab page
+#define CB_TEST1        25
+#define CB_TEST2        26
+#define CB_TEST3        27
+#define CB_TEST4        28
+#define CB_TEST5        29
+#define CB_TEST6        30
+#define CB_TEST7        31
+#define CB_TEST8        32
+#define CB_TEST9        33
+#define CB_TEST10       34
+#define FL_TEST                 35
+
+#define CB_FLD_HIDDEN_PARA 36  // right in the middle of it, so that HelpIds stay compatible to FPII
+#define CB_SMOOTH_SCROLL 37
+
+#define BT_OK           38
+#define BT_CANCEL       39
+#define BT_MORE         40
+#define BT_GRID         41
+#define MF_HFRAME       42
+#define MF_VFRAME       43
+
+#define CB_INDEX        44
+
+#define LB_COLOR        50
+#define WIN_COLOR       52
+#define ED_COLORNAME    53
+#define BT_EDIT         55
+#define BT_NEW          56
+#define BT_DELETE       57
+#define BT_DEFAULT      58
+#define CB_HANDLE       59
+#define CB_SECT_BOUNDS  60
+#define CB_CHAR_HIDDEN  61
+// Print-Extra-Page
+#define CB_PGRF            61
+//#define CB_PTAB            62 merged with CB_PGRF in printerpullpages
+//#define CB_PDRAW         63   removed in printerpullpages
+#define CB_LEFTP           64
+#define CB_RIGHTP          65
+//#define CB_REVERSE         66 removed in printerpullpages
+#define CB_PROSPECT        67
+//#define CB_SINGLEJOBS      68 removed in printerpullpages
+#define CB_CTRLFLD         69
+#define CB_PAPERFROMSETUP  70
+#define FL_1              71
+#define FL_2              72
+#define FL_3              73
+#define FL_4              74
+#define FT_FAX             76
+#define CB_BACKGROUND      79
+
+#define RB_NO              80
+#define RB_ONLY            81
+#define RB_END             82
+#define RB_PAGEEND         83
+#define ST_NONE            84
+#define LB_FAX             86
+#define CB_BLACK_FONT      87
+#define LB_HMETRIC         88
+#define LB_VMETRIC         89
+#define FL_SEP_PRT_LEFT     90
+#define FL_SEP_PRT_RIGHT    91
+#define CB_PRINTEMPTYPAGES  92
+#define CB_HIDDEN_TEXT      93
+#define CB_TEXT_PLACEHOLDER  94
+
+
+// Tabpage Basic Fonts
+#define FT_STANDARD         90
+#define LB_STANDARD                     91
+#define FT_TITLE                        92
+#define LB_TITLE                        93
+#define FT_LIST                         94
+#define LB_LIST                         95
+#define FT_LABEL                        96
+#define LB_LABEL                        97
+#define FT_IDX                          98
+#define LB_IDX                          99
+#define FL_STDCHR                      100
+#define PB_STANDARD                    101
+#define CB_DOCONLY                     102
+#define ST_SCRIPT_WESTERN              103
+#define ST_SCRIPT_ASIAN                104
+#define ST_SCRIPT_CTL                  105
+#define FT_TYPE                        106
+#define FT_SIZE                        107
+#define LB_STANDARD_SIZE               108
+#define LB_TITLE_SIZE                  109
+#define LB_LIST_SIZE                   110
+#define LB_LABEL_SIZE                  111
+#define LB_INDEX_SIZE                  112
+
+//Tabpage Table
+#define CB_HEADER           101
+#define CB_REPEAT_HEADER    102
+#define CB_DONT_SPLIT       103
+#define CB_BORDER           104
+#define CB_NUMFORMATTING    105
+#define CB_NUMALIGNMENT     106
+#define FL_TABLE            107
+#define FL_TABLE_INSERT     108
+#define CB_NUMFMT_FORMATTING    109
+#define FL_MOVE                 110
+#define FT_ROWMOVE                  111
+#define MF_ROWMOVE                  112
+#define FT_COLMOVE                  113
+#define MF_COLMOVE                  114
+#define FT_INSERT                   115
+#define FT_ROWINSERT                    116
+#define MF_ROWINSERT                    117
+#define FT_COLINSERT                    118
+#define MF_COLINSERT                    119
+#define FT_HANDLING                     120
+#define RB_FIX                      121
+#define RB_FIXPROP                  122
+#define RB_VAR                      123
+#define FT_FIX                      124
+#define FT_FIXPROP                  125
+#define FT_VAR                      126
+
+#define FT_MOVE                     128
+#define FL_COLOR                                        130
+#define FT_SGML                     131
+#define LB_SGML                     132
+#define FT_COMMENT                  133
+#define LB_COMMENT                  134
+#define FT_KEYWD                    135
+#define LB_KEYWD                    136
+#define FT_UNKNOWN                  137
+#define LB_UNKNOWN                  138
+#define FL_TABLE_SEPARATOR          139
+#define CB_PROSPECT_RTL        140
+
+#define FL_SHDWCRSFLAG                 1
+#define CB_SHDWCRSONOFF                2
+#define FL_SHDWCRSMODE                 3
+#define FT_SHDWCRSFILLMODE             4
+#define RB_SHDWCRSFILLMARGIN           5
+#define RB_SHDWCRSFILLINDENT           6
+#define RB_SHDWCRSFILLTAB              7
+#define RB_SHDWCRSFILLSPACE            8
+#define CB_ALLOW_IN_PROT              12
+#define FL_CRSR_OPT                   13
+#define FL_SEPARATOR_SHDW             14
+#define FL_LAYOUT_OPTIONS             15
+#define CB_MATH_BASELINE_ALIGNMENT    16
+
+

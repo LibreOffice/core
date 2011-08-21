@@ -1,0 +1,176 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+//i20156 - new file for XML security module
+
+/** -- idl definition -- **/
+
+#ifndef __com_sun_star_xml_wrapper_xxmldocumentwrapper_idl_
+#define __com_sun_star_xml_wrapper_xxmldocumentwrapper_idl_
+
+#include <com/sun/star/uno/XInterface.idl>
+#include <com/sun/star/uno/Exception.idl>
+#include <com/sun/star/xml/sax/XDocumentHandler.idl>
+
+module com { module sun { module star { module xml { module wrapper {
+
+interface XXMLElementWrapper;
+
+/**
+ * Interface of XML Document Wrapper.
+ * <p>
+ * When converting SAX events into a DOM tree, this interface is
+ * used to manipulate the DOM data in UNO perspective.
+ * <p>
+ * Every language has its own methods to manipulate its native DOM
+ * data structure, this interface provides a common method set which
+ * each language have to implement.
+ * <p>
+ * In another word, this interface wraps language dependent methods,
+ * then other component can manipulate DOM data through UNO methods.
+ */
+interface XXMLDocumentWrapper : com::sun::star::uno::XInterface
+{
+    /**
+     * Gets the current element.
+     *
+     * @return   the current element in the SAX event stream
+     */
+    XXMLElementWrapper getCurrentElement();
+
+    /**
+     * Sets the current element.
+     * <p>
+     * When the current element is replaced outside of this interface, then
+     * uses this method can update the current element pointer.
+     *
+     * @param element   the new current element
+     */
+    void setCurrentElement([in] XXMLElementWrapper element);
+
+    /**
+     * Removes the current element.
+     * <p>
+     * When the current element is removed, then its parent element becomes
+     * the new current element.
+     */
+    void removeCurrentElement();
+
+    /**
+     * Checks whether an element is the current element.
+     *
+     * @param node   the element to be checked
+     * @return       <code>true</code> if the node is the current element,
+     *               <code>false</code> otherwise
+     */
+    boolean isCurrent([in] XXMLElementWrapper node);
+
+    /**
+     * Checks whether the current element is empty.
+     *
+     * @return   <code>true</code> if the current element is empty,
+     *           <code>false</code> otherwise
+     */
+    boolean isCurrentElementEmpty();
+
+    /**
+     * Gets the name of the element.
+     *
+     * @param node   the element whose name will be gotten
+     * @return       the name of the element
+     */
+    string getNodeName([in] XXMLElementWrapper node);
+
+    /**
+     * Clears all useless element in a branch of the DOM tree along the
+     * tree order.
+     *
+     * @param node                  the start point of the branch to clear
+     * @param reservedDescendants   an array including all elements that
+     *                              need to be reserved (along their
+     *                              ancestor path)
+     * @param stopAtNode            the stop element. The operation have
+     *                              to interrupt when this element is met
+     *                              during clearing
+     */
+    void clearUselessData(
+        [in] XXMLElementWrapper node,
+        [in] sequence< XXMLElementWrapper > reservedDescendants,
+        [in] XXMLElementWrapper stopAtNode);
+
+    /**
+     * Collapses a tree path
+     * <p>
+     * Each element in the ancestor path of the node will be checked,
+     * if this element is empty, then deletes it.
+     *
+     * @param node   the start point of the path from where the tree
+     *               path will be collapsed
+     */
+    void collapse([in] XXMLElementWrapper node);
+
+    /**
+     * Converts a part of the DOM tree into SAX events.
+     *
+     * @param handler                 the document handler which will receive
+     *                                generated SAX events
+     * @param saxEventKeeperHandler   the SAXEventKeeper connecting with
+     *                                this XMLDocumentHandler
+     * @param startNode               the start point to generate SAX events
+     * @param endNode                 the end point where to stop generating
+     */
+    void generateSAXEvents(
+        [in] com::sun::star::xml::sax::XDocumentHandler handler,
+        [in] com::sun::star::xml::sax::XDocumentHandler saxEventKeeperHandler,
+        [in] XXMLElementWrapper startNode,
+        [in] XXMLElementWrapper endNode)
+        raises(  com::sun::star::xml::sax::SAXException );
+
+    /**
+     * Converts the whole DOM tree into a SAX event stream.
+     *
+     * @param handler   the document handler which will receive the SAX event
+     *                  stream
+     */
+    void getTree([in] com::sun::star::xml::sax::XDocumentHandler handler)
+        raises(  com::sun::star::xml::sax::SAXException );
+
+    /**
+     * Rebuild the ID attribute in the branch starting from the particular
+     * element.
+     *
+     * @param node   the root element of the branch whose ID link will be
+     *               built
+     */
+    void rebuildIDLink([in] XXMLElementWrapper node);
+};
+
+} ; } ; } ; } ; } ;
+
+
+#endif
+

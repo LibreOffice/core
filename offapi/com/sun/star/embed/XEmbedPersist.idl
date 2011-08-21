@@ -1,0 +1,255 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_embed_XEmbedPersist_idl__
+#define __com_sun_star_embed_XEmbedPersist_idl__
+
+#include <com/sun/star/uno/XInterface.idl>
+#include <com/sun/star/embed/XStorage.idl>
+#include <com/sun/star/embed/XCommonEmbedPersist.idl>
+#include <com/sun/star/io/IOException.idl>
+#include <com/sun/star/embed/WrongStateException.idl>
+#include <com/sun/star/lang/IllegalArgumentException.idl>
+#include <com/sun/star/beans/PropertyValue.idl>
+
+//============================================================================
+
+ module com {  module sun {  module star {  module embed {
+
+//============================================================================
+/** specifies an implementation for embedded object persistence.
+    <p>
+    The idea is that any usable embedded object should be initialized
+    with an entry in the parent storage that will be used as persistent
+    representation.
+    </p>
+ */
+published interface XEmbedPersist: XCommonEmbedPersist
+{
+    //------------------------------------------------------------------------
+    /** provides object with a parent storage and a name for object's entry.
+
+        <p>
+        An entry with the specified name should be created/opened inside
+        provided storage. It can be a storage or a stream. For example,
+        OOo API will refer to OLE storages only by streams, but the object
+        implementation will use storage based on this stream.
+        </p>
+
+        <p>
+        Factory does this call to initialize the embedded object.
+        The linked object can be initialized by factory in different way
+        ( internally ).
+        </p>
+
+        <p>
+        It is also possible to switch object persistent representation through
+        this call. Actually this is the way, this call can be used by user
+        ( since initialization is done by factory ).
+        </p>
+
+        @param xStorage
+            a parent storage the entry should be created in
+
+        @param sEntName
+            a name for the entry
+
+        @param nEntryConnectionMode
+            a mode in which the object should be initialized from entry
+            can take values from EntryInitModes constant set
+
+        @param aMediaArgs
+            optional parameters for the embedded document persistence
+            initialization, see also
+            <type scope="com::sun::star::document">MediaDescriptor</type>
+
+        @param aObjectArgs
+            optional parameters for the object persistence initialization,
+            see also
+            <type scope="com::sun::star::embed">EmbeddedObjectDescriptor</type>
+
+        @thrown ::com::sun::star::lang::IllegalArgumentException
+            one of arguments is illegal
+
+        @throws com::sun::star::embed::WrongStateException
+            the object is in wrong state
+
+        @throws com::sun::star::io::IOException
+            in case of io problems during opening\creation
+
+        @throws com::sun::star::uno::Exception
+            in case of other problems
+     */
+    void setPersistentEntry(
+            [in] ::com::sun::star::embed::XStorage xStorage,
+            [in] string sEntName,
+            [in] long nEntryConnectionMode,
+            [in] sequence< ::com::sun::star::beans::PropertyValue > aMediaArgs,
+            [in] sequence< ::com::sun::star::beans::PropertyValue > aObjectArgs )
+        raises( ::com::sun::star::lang::IllegalArgumentException,
+                ::com::sun::star::embed::WrongStateException,
+                ::com::sun::star::io::IOException,
+                ::com::sun::star::uno::Exception );
+
+    //------------------------------------------------------------------------
+    /** lets the object store itself to an entry in destination storage,
+        the own persistence entry is not changed.
+
+        @param xStorage
+            a parent storage the entry should be created inside
+
+        @param sEntName
+            a name for the entry
+
+        @param aMediaArgs
+            optional parameters for document saving, see also
+            <type scope="com::sun::star::document">MediaDescriptor</type>
+
+        @param aObjectArgs
+            optional parameters for the object saving, see also
+            <type scope="com::sun::star::embed">EmbeddedObjectDescriptor</type>
+
+        @thrown ::com::sun::star::lang::IllegalArgumentException
+            one of arguments is illegal
+
+        @throws com::sun::star::embed::WrongStateException
+            the object is in wrong state
+
+        @throws com::sun::star::io::IOException
+            in case of io problems during storing
+
+        @throws com::sun::star::uno::Exception
+            in case of other problems
+     */
+    void storeToEntry(
+            [in] ::com::sun::star::embed::XStorage xStorage,
+            [in] string sEntName,
+            [in] sequence< ::com::sun::star::beans::PropertyValue > aMediaArgs,
+            [in] sequence< ::com::sun::star::beans::PropertyValue > aObjectArgs )
+        raises( ::com::sun::star::lang::IllegalArgumentException,
+                ::com::sun::star::embed::WrongStateException,
+                ::com::sun::star::io::IOException,
+                ::com::sun::star::uno::Exception );
+
+    //------------------------------------------------------------------------
+    /** lets the object store itself to an entry in destination storage and
+        prepare to use the new entry for own persistence.
+
+        <p>
+        The object should be stored to the new entry, after that the entry
+        should be remembered by the object. After the storing process is
+        finished the <method>XEmbedPersist::saveCompleted</method> method
+        can be used to specify whether the object should use the new entry or
+        the old one. The object persistence can not be used until
+        <method>XEmbedPersist::saveCompleted</method> is called.
+        So this state can be treated as "HandsOff" state.
+        <p>
+
+        @param xStorage
+            a parent storage the entry should be created in
+
+        @param sEntName
+            a name for the entry
+
+        @param aMediaArgs
+            optional parameters for document saving, see also
+            <type scope="com::sun::star::document">MediaDescriptor</type>
+
+        @param aObjectArgs
+            optional parameters for the object saving, see also
+            <type scope="com::sun::star::embed">EmbeddedObjectDescriptor</type>
+
+        @thrown ::com::sun::star::lang::IllegalArgumentException
+            one of arguments is illegal
+
+        @throws com::sun::star::embed::WrongStateException
+            the object is in wrong state
+
+        @throws com::sun::star::io::IOException
+            in case of io problems during storing
+
+        @throws com::sun::star::uno::Exception
+            in case of other problems
+     */
+    void storeAsEntry(
+            [in] ::com::sun::star::embed::XStorage xStorage,
+            [in] string sEntName,
+            [in] sequence< ::com::sun::star::beans::PropertyValue > aMediaArgs,
+            [in] sequence< ::com::sun::star::beans::PropertyValue > aObjectArgs )
+        raises( ::com::sun::star::lang::IllegalArgumentException,
+                ::com::sun::star::embed::WrongStateException,
+                ::com::sun::star::io::IOException,
+                ::com::sun::star::uno::Exception );
+
+
+    //------------------------------------------------------------------------
+    /** specifies whether the object should use an old storage or a new one
+        after "save as" operation.
+
+        @param bUseNew
+            <TRUE/> the new storage should be used
+            <FALSE/> the old one
+
+        @throws com::sun::star::embed::WrongStateException
+            the object is in wrong state
+
+        @throws com::sun::star::uno::Exception
+            in case of other problems
+     */
+
+    void saveCompleted( [in] boolean bUseNew )
+        raises( ::com::sun::star::embed::WrongStateException,
+                ::com::sun::star::uno::Exception );
+
+    //------------------------------------------------------------------------
+    /** allows to detect if the object has entry.
+
+        @returns
+            <TRUE/> if the object has own entry set
+            <FALSE/> otherwise
+     */
+    boolean hasEntry()
+        raises( ::com::sun::star::embed::WrongStateException );
+
+    //------------------------------------------------------------------------
+    /** allows to retrieve the current object entry name.
+
+        @returns
+            the object entry name if any
+
+        @throws com::sun::star::embed::WrongStateException
+            the object is in wrong state ( has no entry )
+     */
+    string getEntryName()
+        raises( ::com::sun::star::embed::WrongStateException );
+};
+
+//============================================================================
+
+}; }; }; };
+
+#endif
+

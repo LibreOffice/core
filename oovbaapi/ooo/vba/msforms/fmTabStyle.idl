@@ -1,0 +1,7 @@
+module ooo { module vba { module msforms {
+    constants fmTabStyle {
+        const long fmTabStyleButtons = 1;
+        const long fmTabStyleNone = 2;
+        const long fmTabStyleTabs = 0;
+    };
+}; }; };

@@ -1,0 +1,94 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_sdb_DatabaseAccessConnection_idl__
+#define __com_sun_star_sdb_DatabaseAccessConnection_idl__
+
+#include <com/sun/star/container/XChild.idl>
+
+#include <com/sun/star/sdbcx/DatabaseDefinition.idl>
+
+#include <com/sun/star/sdbc/Connection.idl>
+
+ module com {  module sun {  module star {  module sdb {
+
+ published interface XQueriesSupplier;
+ published interface XFormDocumentsSupplier;
+ published interface XReportDocumentsSupplier;
+ published interface XSQLQueryComposerFactory;
+
+
+/** specifies a component, which supplies and stores additional information related
+    to a certain database connection, such as, DatabaseQueries, FormDocuments, and ReportDocuments.
+    Objects for data definition are supplied as well, for instance, Tables, Views, etc.
+
+    <p>
+    Implements the service
+    <type scope="com::sun::star::sdbc">Connection</type>
+    .
+    It is possible to open more than one connection at the same time, but the method
+    <member scope="com::sun::star::sdb">DatabaseAccessConnection::dispose()</member>
+    will close only one of these connections. You have to close all connections in order
+    to close the connection to the database.
+    </p>
+
+    @deprecated
+*/
+published service DatabaseAccessConnection
+{
+    /** supporting of the base connection service.
+             <p><B>Note:</B><br/>
+                 Don't use the "dispose" method of the XComponent interface, as the DataAccess
+                 uses a more sophisticated interface for closing a connection.
+                 @see XDatabaseAccess
+             </p>
+     */
+    service com::sun::star::sdbc::Connection;
+
+    /** access to the DatabaseDefinition beans of the connection.
+     */
+    service com::sun::star::sdbcx::DatabaseDefinition;
+
+    /** access to the owning data access bean.
+     */
+    interface com::sun::star::container::XChild;
+
+    /** returns a tool for composing queries.
+     */
+    interface XSQLQueryComposerFactory;
+
+    /** provides access to the queries.
+    */
+    interface XQueriesSupplier;
+};
+
+//=============================================================================
+
+}; }; }; };
+
+/*===========================================================================
+===========================================================================*/
+#endif

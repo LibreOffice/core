@@ -1,0 +1,67 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_document_NoSuchFilterRequest_idl__
+#define __com_sun_star_document_NoSuchFilterRequest_idl__
+
+#include <com/sun/star/uno/Exception.idl>
+
+//=============================================================================
+
+module com { module sun { module star { module document {
+
+//=============================================================================
+/** should be used for interaction to handle states of unknown filter during detection
+
+    <p>
+    If during loading time the filter can't be detected and wasn't given at calling time,
+    a possible <type scope="com::sun::star::task">InteractionHandler</type> will be used.
+    (it's a a part of used <type>MediaDescriptor</type>)
+    Such "NoSuchFilterRequest" will be used then to start right interaction on that to
+    get a decision which filter should be used for given URL. A possible continuation
+    of type <type>XInteractionFilterSelect</type> will transport this decision back to
+    generic filter detection and force using of it. Of course it's possible to abort
+    the loading process by use another continuation <type scope="com::sun::star::task">XInteractionAbort</type>.
+    </p>
+
+    @see MediaDescriptor
+    @see com::sun::star::task::InteractionHandler
+    @see XInteractionFilterSelect
+    @see com::sun::star::task::XInteractionAbort
+*/
+published exception NoSuchFilterRequest : ::com::sun::star::uno::Exception
+{
+    //-------------------------------------------------------------------------
+    /** transport URL which couldn't be detected
+     */
+    string URL;
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

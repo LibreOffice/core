@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="sc_ScChartsObj" script:language="StarBasic">
+
+
+'*************************************************************************
+'
+' DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+' 
+' Copyright 2000, 2010 Oracle and/or its affiliates.
+'
+' OpenOffice.org - a multi-platform office productivity suite
+'
+' This file is part of OpenOffice.org.
+'
+' OpenOffice.org is free software: you can redistribute it and/or modify
+' it under the terms of the GNU Lesser General Public License version 3
+' only, as published by the Free Software Foundation.
+'
+' OpenOffice.org is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU Lesser General Public License version 3 for more details
+' (a copy is included in the LICENSE file that accompanied this code).
+'
+' You should have received a copy of the GNU Lesser General Public License
+' version 3 along with OpenOffice.org.  If not, see
+' <http://www.openoffice.org/license.html>
+' for a copy of the LGPLv3 License.
+'
+'*************************************************************************
+'*************************************************************************
+
+
+
+' Be sure that all variables are dimensioned:
+option explicit
+
+
+' REQUIRED VARIABLES for interface/service tests:
+Global cChartDataAddress As New com.sun.star.table.CellRangeAddress
+
+
+Sub CreateObj()
+
+'*************************************************************************
+' COMPONENT: 
+' sc.ScChartsObj
+'*************************************************************************
+On Error Goto ErrHndl
+    Dim bOK As Boolean
+    Dim oSheet As Object
+    Dim i,j As Integer
+    
+    bOK = true
+    oDoc = utils.createDocument("scalc", cObjectName)
+    oSheet = oDoc.Sheets(0)
+
+    ' Filling some cells with the text
+    for i = 1 to 6
+      oSheet.getCellByPosition(0, i).setString("Row" &amp; i)
+      oSheet.getCellByPosition(i, 0).setString("Col" &amp; i)
+    next i
+
+    for i = 1 to 6
+        for j = 1 to 6
+            oSheet.getCellByPosition(i, j).Value = (i + 1) * j
+        next j
+    next i
+
+    Dim tAddr As New com.sun.star.table.CellRangeAddress
+    tAddr.Sheet = 0
+    tAddr.StartRow = 0
+    tAddr.StartColumn = 0
+    tAddr.EndRow = 6
+    tAddr.EndColumn = 6
+
+    Dim tRect As New com.sun.star.awt.Rectangle
+    tRect.X = 200
+    tRect.Y = 200
+    tRect.Width = 10000
+    tRect.Height = 5000
+
+    cChartDataAddress = tAddr
+    oObj = oSheet.getCharts()
+
+    Dim oRanges(0) As New com.sun.star.table.CellRangeAddress
+    oRanges(0) = tAddr
+    oObj.addNewByName(cObjectName, tRect, oRanges(), true, true)
+
+Exit Sub
+ErrHndl:
+    Test.Exception()
+End Sub
+</script:module>

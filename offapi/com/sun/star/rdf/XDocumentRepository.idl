@@ -1,0 +1,235 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_rdf_XDocumentRepository_idl__
+#define __com_sun_star_rdf_XDocumentRepository_idl__
+
+#include <com/sun/star/beans/Pair.idl>
+#include <com/sun/star/rdf/XMetadatable.idl>
+#include <com/sun/star/rdf/XRepository.idl>
+
+
+//=============================================================================
+
+module com {   module sun {   module star {   module rdf {
+
+//=============================================================================
+/** extends <type>XRepository</type> with document-specific functionality.
+
+    <p>
+    This subclass of <type>XRepository</type> provides some methods which
+    only make sense for repositories that are attached to a document.
+    For example, the methods allow for manipulating in-content metadata,
+    which is stored as RDFa.
+    </p>
+
+    @since OOo 3.2
+
+    @see XRepositorySupplier
+    @see XDocumentMetadataAccess
+ */
+interface XDocumentRepository : XRepository
+{
+
+    //-------------------------------------------------------------------------
+    /** update the RDFa statement(s) that correspond to an ODF element in the
+        repository.
+
+        <p>
+        This method will do the following steps:
+        <ol>
+        <li>Remove all previously set RDFa statements for the Object parameter
+             from the repository</li>
+        <li>If the RDFaContent parameter is the empty <atom>string</atom>,
+            for every Predicate in the given list of Predicates,
+            add the following RDF statement to an unspecified named graph:
+            <ul>
+            <li><code>Subject Predicate
+                      XLiteral(Object->getText()^^RDFaDatatype)</code></li>
+            </ul>
+        </li>
+        <li>If the RDFaContent parameter is not the empty <atom>string</atom>,
+            for every Predicate in the given list of Predicates,
+            add the following RDF statement to an unspecified named graph:
+            <ul>
+            <li>
+            <code>Subject Predicate XLiteral(RDFaContent^^RDFaDatatype)</code>
+            </li>
+            </ul>
+        </li>
+        </ol>
+        </p>
+
+        <p>
+        RDFa statements are handled specially because they are not logically
+        part of any named graph in the repository.
+        Also, they have rather unusual semantics;
+        just using <member>XNamedGraph::addStatement</member> would be
+        ambiguous:
+        if the object is a <type>XMetadatable</type>, do we insert
+        the object itself (URI) or its literal content (RDFa)?
+        </p>
+
+        @param Subject
+            the subject of the RDF triple(s).
+
+        @param Predicates
+            the predicates of the RDF triple(s).
+
+        @param Object
+            the object of the RDF triple(s) is the text content of this
+            parameter.
+
+        @param RDFaContent
+            the <code>rdfa:content</code> attribute (may be the empty
+            <atom>string</atom>).
+
+        @param RDFaDatatype
+            the <code>rdfa:datatype</code> attribute (may be <NULL/>)
+
+        @throws com::sun::star::lang::IllegalArgumentException
+            if any parameter is <NULL/>, Predicates is empty,
+            or Object is of a type that can not have RDFa metadata attached.
+
+        @throws RepositoryException
+            if an error occurs when accessing the repository.
+     */
+    void setStatementRDFa(
+            [in] XResource Subject,
+            [in] sequence<XURI> Predicates,
+            [in] XMetadatable Object,
+            [in] string RDFaContent,
+            [in] XURI RDFaDatatype)
+        raises( com::sun::star::lang::IllegalArgumentException,
+                RepositoryException );
+
+    //-------------------------------------------------------------------------
+    /** remove the RDFa statement(s) that correspond to an ODF element from the
+        repository.
+
+        <p>
+        RDFa statements are handled specially because they are not logically
+        part of any graph.
+        </p>
+
+        @param Element
+            the element whose RDFa statement(s) should be removed
+
+        @throws com::sun::star::lang::IllegalArgumentException
+            if the given Element is <NULL/>, or of a type that can not have
+            RDFa metadata attached.
+
+        @throws RepositoryException
+            if an error occurs when accessing the repository.
+     */
+    void removeStatementRDFa([in] XMetadatable Element)
+        raises( com::sun::star::lang::IllegalArgumentException,
+                RepositoryException );
+
+    //-------------------------------------------------------------------------
+    /** find the RDFa statement(s) associated with an ODF element.
+
+        @param Element
+            the ODF element for which RDFa statements should be found
+
+        @returns
+            <ul>
+            <li>if the element has no RDFa meta-data attributes:
+                the empty sequence.</li>
+            <li>if the element has RDFa meta-data attributes:
+                <ul>
+                <li>a sequence with the RDFa-statements corresponding to the
+                attributes.</li>
+                <li>a flag indicating whether there is a xhtml:content
+                attribute.</li>
+                </ul>
+            </li>
+            </ul>
+
+        @throws com::sun::star::lang::IllegalArgumentException
+            if the given Element is <NULL/>, or of a type that can not have
+            RDFa metadata attached.
+
+        @throws RepositoryException
+            if an error occurs when accessing the repository.
+
+        @see Statement
+     */
+    com::sun::star::beans::Pair< sequence<Statement>, boolean >
+            getStatementRDFa([in] XMetadatable Element)
+        raises( com::sun::star::lang::IllegalArgumentException,
+                RepositoryException );
+
+    //-------------------------------------------------------------------------
+    /** gets matching RDFa statements from the repository.
+
+        <p>
+        This method exists because RDFa statements are not part of any named
+        graph, and thus they cannot be enumerated with
+        <member>XNamedGraph::getStatements</member>.
+        </p>
+
+        <p>
+        Any parameter may be <NULL/>, which acts as a wildcard.
+        For example, to get all statements about myURI:
+        <code>getStatementsRDFa(myURI, null, null)</code>
+        </p>
+
+        @param Subject
+            the subject of the RDF triple.
+
+        @param Predicate
+            the predicate of the RDF triple.
+
+        @param Object
+            the object of the RDF triple.
+
+        @returns
+            an iterator over all RDFa statements in the repository that match
+            the parameters, represented as an
+            enumeration of <type>Statement</type>
+
+        @throws RepositoryException
+            if an error occurs when accessing the repository.
+
+        @see Statement
+        @see XRepository::getStatements
+        @see XNamedGraph::getStatements
+     */
+    com::sun::star::container::XEnumeration/*<Statement>*/ getStatementsRDFa(
+            [in] XResource Subject,
+            [in] XURI Predicate,
+            [in] XNode Object)
+        raises( RepositoryException );
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

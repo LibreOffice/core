@@ -1,0 +1,105 @@
+#!/usr/bin/env bash
+
+# Version: MPL 1.1 / GPLv3+ / LGPLv3+
+#
+# The contents of this file are subject to the Mozilla Public License Version
+# 1.1 (the "License"); you may not use this file except in compliance with
+# the License or as specified alternatively below. You may obtain a copy of
+# the License at http://www.mozilla.org/MPL/
+#
+# Software distributed under the License is distributed on an "AS IS" basis,
+# WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+# for the specific language governing rights and limitations under the
+# License.
+#
+# The Initial Developer of the Original Code is
+#       Petr Mladek <pmladek@suse.cz>
+# Portions created by the Initial Developer are Copyright (C) 2011 the
+# Initial Developer. All Rights Reserved.
+#
+# Major Contributor(s):
+# Ted <ted@bear.com>
+# Portions created by the Ted are Copyright (C) 2010 Ted. All Rights Reserved.
+#
+# For minor contributions see the git repository.
+#
+# Alternatively, the contents of this file may be used under the terms of
+# either the GNU General Public License Version 3 or later (the "GPLv3+"), or
+# the GNU Lesser General Public License Version 3 or later (the "LGPLv3+"),
+# in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
+# instead of those above.
+
+usage()
+{
+    echo "Helper script to unpack the LO source tarbals"
+    echo
+    echo "Usage: ${0##*/} [--help] start-dir tarball..."
+    echo
+    echo "Options:"
+    echo
+    echo "	--help 		 this help"
+    echo "	start-dir	 path where the sources are unpacked (bootstrap directory)"
+    echo "      tarball          list of LO source tarball that need to be unpacked"
+}
+
+start_dir=
+tarballs=
+
+while test -n "$1" ; do
+    case "$1" in
+	--help)
+	    usage
+	    exit 0;
+	    ;;
+	--download)
+	    download="yes"
+	    ;;
+	-*)
+	    echo "Error: unknown option: $1"
+	    exit 1;
+	    ;;
+	*)
+	    if test -z "$start_dir" ; then
+		start_dir="$1"
+	    else
+	        tarballs="$tarballs $1"
+	    fi
+	    ;;
+    esac
+    shift
+done
+
+if test -z "$start_dir" ; then
+    echo "Error: Please, define where to unpack sources, try --help"
+fi
+
+if ! test -d $start_dir/src -a -f $start_dir/solenv/inc/target.mk ; then
+    echo "Error: $start_dir is not a valid bootstrap directory"
+    exit 1;
+fi
+
+if test ! -f $start_dir/bootstrap.ver -o -d $start_dir/.git ; then
+    echo "Warning: bootstrap sources are from git and not from tarball"
+    echo "         Do nothing."
+    exit 0;
+fi
+
+source $start_dir/bootstrap.ver
+lo_src_dir="$start_dir/src"
+mkdir -p "$lo_src_dir"
+
+for tarball in $tarballs ; do
+    tarname=`basename $tarball | sed -e "s/.tar.bz2//"`
+    if test -d $lo_src_dir/$tarname ; then
+        echo "Warning: $lo_src_dir/$tarname already exists => skipping"
+        continue;
+    fi
+
+    echo "Unpacking $tarname..."
+    tar -xjf "$tarball" -C "$lo_src_dir"
+
+    # create symlinks
+    for dir in `find "$lo_src_dir/$tarname" -mindepth 1 -maxdepth 1 -type d -printf "$tarname/%f\n"` ; do
+        ln -sf "src/$dir" "$start_dir"
+    done
+done

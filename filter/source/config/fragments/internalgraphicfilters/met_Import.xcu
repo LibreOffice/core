@@ -1,0 +1,10 @@
+    <node oor:name="met_Import" oor:op="replace"  >
+        <prop oor:name="Type"><value>met_OS2_Metafile</value></prop>
+        <prop oor:name="FormatName"><value>ime</value></prop>
+        <prop oor:name="RealFilterName"><value>MET - OS/2 Metafile</value></prop>
+        <prop oor:name="UIComponent"/>
+        <prop oor:name="UIName">
+            <value xml:lang="en-US">MET - OS/2 Metafile</value>
+        </prop>
+        <prop oor:name="Flags"><value>IMPORT</value></prop>
+    </node>

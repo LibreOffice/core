@@ -1,0 +1,86 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef com_sun_star_chart2_RelativePosition_idl
+#define com_sun_star_chart2_RelativePosition_idl
+
+#include <com/sun/star/drawing/Alignment.idl>
+
+module com
+{
+module sun
+{
+module star
+{
+module chart2
+{
+
+/** Determines a position of an object relative to a size defined by other means.
+    Values from 0 to 1 cover the entire reference rectangle. Values
+    may also be outside this range, especially negative.
+ */
+struct RelativePosition
+{
+    /** The position in the primary direction.
+        The direction is defined by the object using this point.
+
+        <p>For example for western languages the primary direction may be
+        the horizontal distance measured from left to right.</p>
+
+        <p>The values are relative to a reference size (for example the page size).
+        Values between 0 and 1 span the complete bounding rectangle.</p>
+     */
+    double       Primary;
+
+    /** The position in the secondary direction.
+        The direction is defined by the object using this point.
+
+        <p>For example for western languages the secondary direction may be
+        the vertical distance measured from top to bottom.</p>
+
+        <p>The values are relative to a reference size (for example the page size).
+        Values between 0 and 1 span the complete bounding rectangle.</p>
+     */
+    double       Secondary;
+
+    /** This indicates how the object is placed at the relative position.
+
+        <p>The Anchor indicates which point of the placed object
+        will be placed at the coordinates given within Primary and Secondary.</p>
+
+        <p>For example if Anchor is TOP_LEFT the top left corner of an object will
+        be placed at the given coordinates. If Anchor is RIGHT the right middle corner of the object will
+        be placed at the given coordinates.</p>
+     */
+    ::com::sun::star::drawing::Alignment Anchor;
+};
+
+} ; // chart2
+} ; // com
+} ; // sun
+} ; // star
+
+#endif

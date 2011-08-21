@@ -1,0 +1,117 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __ooo_vba_excel_XApplication_idl__
+#define __ooo_vba_excel_XApplication_idl__
+
+#include <com/sun/star/beans/XExactName.idl>
+#include <com/sun/star/script/XInvocation.idl>
+#include <ooo/vba/XHelperInterface.idl>
+#include <ooo/vba/XAssistant.idl>
+#include <ooo/vba/XFileDialog.idl>
+#include <ooo/vba/XFileSearch.idl>
+
+module ooo {  module vba {  module excel {
+
+interface XRange;
+interface XWorkbook;
+interface XWorkbooks;
+interface XWorksheets;
+interface XWorksheetFunction;
+interface XWindow;
+interface XWorksheet;
+interface XFileDialog;
+interface XFileSearch;
+
+interface XApplication
+{
+    // Application serves as WorksheetFunction object with little differences
+    interface ::com::sun::star::beans::XExactName;
+    interface ::com::sun::star::script::XInvocation;
+
+//  interface ::ooo::vba::XHelperInterface;
+
+    [attribute, readonly] any Selection;
+    [attribute, readonly] XWorkbook ActiveWorkbook;
+    [attribute, readonly] XRange ActiveCell;
+    [attribute, readonly] XWindow ActiveWindow;
+    [attribute, readonly] XWorksheet ActiveSheet;
+    [attribute, readonly] ooo::vba::XAssistant Assistant;
+    [attribute, readonly] ooo::vba::XFileSearch FileSearch;
+    [attribute] long Calculation;
+    [attribute, readonly] XWorkbook ThisWorkbook;
+    [attribute, readonly] ooo::vba::XFileDialog FileDialog;
+    [attribute, readonly] string Name;
+    [attribute] boolean DisplayAlerts;
+    [attribute] boolean DisplayFormulaBar;
+    [attribute] any CutCopyMode;
+    [attribute] any StatusBar;
+    [attribute] long Cursor;
+    [attribute] boolean EnableEvents;
+    [attribute] boolean Visible;
+    [attribute] boolean Iteration;
+    [attribute] long EnableCancelKey;
+
+    void setDefaultFilePath([in] string DefaultFilePath) raises(com::sun::star::script::BasicErrorException);
+
+    string getDefaultFilePath() raises(com::sun::star::script::BasicErrorException);
+
+    any GetOpenFilename([in] /*Optional*/ any FileFilter, [in] /*Optional*/ any FilterIndex, [in] /*Optional*/ any Title, [in] /*Optional*/ any ButtonText, [in] /*Optional*/ any MultiSelect); //minz, 2009-07-08
+
+    string LibraryPath() raises(com::sun::star::script::BasicErrorException);
+    string TemplatesPath() raises(com::sun::star::script::BasicErrorException);
+    string PathSeparator() raises(com::sun::star::script::BasicErrorException);
+    //any CommandBars( [in] any Index );
+    any Workbooks( [in] any Index );
+    any Worksheets( [in] any Index );
+    any Windows( [in] any Index );
+    any WorksheetFunction();
+    any Evaluate( [in] string Name );
+    any Dialogs( [in] any DialogIndex );
+    any Range( [in] any Cell1, [in] any Cell2 );
+    any Names( [in] any Index );
+    void GoTo( [in] any Reference, [in] any Scroll );
+
+    void wait( [in] double time );
+    void Calculate() raises(com::sun::star::script::BasicErrorException);
+    XRange Intersect([in] XRange Arg1, [in] XRange Arg2, [in] /*Optional*/ any Arg3, [in] /*Optional*/ any Arg4, [in] /*Optional*/ any Arg5, [in] /*Optional*/ any Arg6, [in] /*Optional*/ any Arg7, [in] /*Optional*/ any Arg8, [in] /*Optional*/ any Arg9, [in] /*Optional*/ any Arg10, [in] /*Optional*/ any Arg11, [in] /*Optional*/ any Arg12, [in] /*Optional*/ any Arg13, [in] /*Optional*/ any Arg14, [in] /*Optional*/ any Arg15, [in] /*Optional*/ any Arg16, [in] /*Optional*/ any Arg17, [in] /*Optional*/ any Arg18, [in] /*Optional*/ any Arg19, [in] /*Optional*/ any Arg20, [in] /*Optional*/ any Arg21, [in] /*Optional*/ any Arg22, [in] /*Optional*/ any Arg23, [in] /*Optional*/ any Arg24, [in] /*Optional*/ any Arg25, [in] /*Optional*/ any Arg26, [in] /*Optional*/ any Arg27, [in] /*Optional*/ any Arg28, [in] /*Optional*/ any Arg29, [in] /*Optional*/ any Arg30)
+        raises(com::sun::star::script::BasicErrorException);
+    XRange Union([in] XRange Arg1, [in] XRange Arg2, [in] /*Optional*/ any Arg3, [in] /*Optional*/ any Arg4, [in] /*Optional*/ any Arg5, [in] /*Optional*/ any Arg6, [in] /*Optional*/ any Arg7, [in] /*Optional*/ any Arg8, [in] /*Optional*/ any Arg9, [in] /*Optional*/ any Arg10, [in] /*Optional*/ any Arg11, [in] /*Optional*/ any Arg12, [in] /*Optional*/ any Arg13, [in] /*Optional*/ any Arg14, [in] /*Optional*/ any Arg15, [in] /*Optional*/ any Arg16, [in] /*Optional*/ any Arg17, [in] /*Optional*/ any Arg18, [in] /*Optional*/ any Arg19, [in] /*Optional*/ any Arg20, [in] /*Optional*/ any Arg21, [in] /*Optional*/ any Arg22, [in] /*Optional*/ any Arg23, [in] /*Optional*/ any Arg24, [in] /*Optional*/ any Arg25, [in] /*Optional*/ any Arg26, [in] /*Optional*/ any Arg27, [in] /*Optional*/ any Arg28, [in] /*Optional*/ any Arg29, [in] /*Optional*/ any Arg30)
+        raises(com::sun::star::script::BasicErrorException);
+    void Volatile([in] any Volatile);
+    any Caller( [in] any Index );
+    any MenuBars( [in] any aIndex );
+    any International([in] long Index);
+    any GetSaveAsFilename( [in] any InitialFilename, [in] any FileFilter, [in] any FilterIndex, [in] any Title,[in] any ButtonText);
+    void Undo();  //2009-10-11  limingl
+    double InchesToPoints([in] double Inches);
+    void setSheetsInNewWorkbook( [in] long SheetsInNewWorkbook ) raises(com::sun::star::script::BasicErrorException);
+    long getSheetsInNewWorkbook();
+};
+
+}; }; };
+
+#endif

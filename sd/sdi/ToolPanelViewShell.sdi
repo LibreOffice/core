@@ -1,0 +1,130 @@
+/*************************************************************************
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+************************************************************************/
+
+interface MasterPagesSelectorInterface
+{
+    SID_TP_APPLY_TO_ALL_SLIDES
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_TP_APPLY_TO_SELECTED_SLIDES
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_TP_USE_FOR_NEW_PRESENTATIONS
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_TP_SHOW_SMALL_PREVIEW
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_TP_SHOW_LARGE_PREVIEW
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+
+    SID_TP_EDIT_MASTER
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+
+    // The copy and paste slots are included here so that they later can be
+    // disabled in order to remove them from context menus.
+    SID_CUT
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_COPY
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_PASTE
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_DELETE_MASTER_PAGE
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+}
+
+interface TaskPaneLayoutMenuInterface
+{
+    SID_TP_APPLY_TO_SELECTED_SLIDES
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_INSERTPAGE_LAYOUT_MENU
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+
+    // The copy and paste slots are included here so that they later can be
+    // disabled in order to remove them from context menus.
+    SID_CUT
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_COPY
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_PASTE
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+}
+
+shell MasterPagesSelector
+{
+    import MasterPagesSelectorInterface[Automation];
+}
+
+shell LayoutMenu
+{
+    import TaskPaneLayoutMenuInterface[Automation];
+}
+
+shell ToolPanelViewShell
+{
+}
+

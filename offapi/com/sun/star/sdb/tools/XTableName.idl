@@ -1,0 +1,146 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_sdb_tools_XTableName_idl__
+#define __com_sun_star_sdb_tools_XTableName_idl__
+
+#include <com/sun/star/lang/IllegalArgumentException.idl>
+#include <com/sun/star/container/NoSuchElementException.idl>
+#include <com/sun/star/beans/XPropertySet.idl>
+
+//=============================================================================
+module com {  module sun {  module star {  module sdb { module tools {
+//=============================================================================
+
+//-----------------------------------------------------------------------------
+/** allows to manipulate table names.
+
+    <p>When, in a database application, dealing with table names, there's many degrees
+    of freedom to deal with. For instance, suppose you want to have the full name of a
+    table object, as it should be used in a <code>SELECT</code> statement's <code>FROM</code>
+    part. This requires you to evaluate whether or not the table has a catalog and/or schema
+    name, to combine the catalog, the schema, and the basic table name into one name, respecting
+    the database's quoting character, and the order in which all those parts should be combined.
+    Additionally, you have to respect the client-side settings which tell OpenOffice.org
+    to use or not use catalogs and schemas in <code>SELECT</code> at all.</p>
+
+    <p>The <type>XTableName</type> interface eases this and other, similar tasks around table
+    names.</p>
+
+    <p>The component itself does not have life-time control mechanisms, i.e. you
+    cannot explicitly dispose it (<member scope="com::sun::star::lang">XComponent::dispose</member>),
+    and you cannot be notified when it dies.<br/>
+    However, if your try to access any of its methods or attributes, after the
+    connection which was used to create it was closed, a <type scope="com::sun::star::lang">DisposedException</type>
+    will be thrown.</p>
+
+    @see XConnectionTools
+    @see com::sun::star::sdbc::XDatabaseMetaData
+    @see com::sun::star::sdb::DataSource::Settings
+
+    @since OOo 2.0.4
+*/
+published interface XTableName
+{
+    /** denotes the name of the catalog which the table is a part of
+    */
+    [attribute] string  CatalogName;
+
+    /** denotes the name of the schema which the table is a part of
+    */
+    [attribute] string  SchemaName;
+
+    /** denotes the mere, unqualified table name, excluding any catalog and
+        schema.
+    */
+    [attribute] string  TableName;
+
+    /** returns the composed table name, including the catalog and schema name,
+        respecting the database's quoting requirements, plus
+
+        @param Type
+            the type of name composition to be used.
+
+        @param Quote
+            specifies whether the single parts of the table name should be quoted
+
+        @see CompositionType
+
+        @throws com::sun::star::IllegalArgumentException
+            if the given <arg>Type</arg> does not denote a valid <type>CompositionType</type>
+    */
+    string  getComposedName( [in] long Type, [in] boolean Quote )
+        raises ( com::sun::star::lang::IllegalArgumentException );
+
+
+    /** sets a new composed table name
+        @param ComposedName
+            specifies the composed table name
+        @param Type
+            specifies the composition type which was used to create the composed table name
+    */
+    void    setComposedName( [in] string ComposedName, [in] long Type );
+
+    /** represents the table name in a form to be used in a <code>SELECT</code> statement.
+
+        <p>On a per-data-source basis, OpenOffice.org allows to override database meta
+        data information in that you can specify to not use catalog and or schema names
+        in <code>SELECT</code> statements. Using this attribute, you can generate a table
+        name which respects those settings.</p>
+
+        @see com::sun::star::sdb::DataSource::Settings
+    */
+    [attribute, readonly]   string  NameForSelect;
+
+    /** is the <type scope="com::sun::star::sdb">Table</type> object specified
+        by the current name.
+
+        <p>Retrieving this attribute is equivalent to obtaining the tables
+        container from the connection (via <type scope="com::sun::star::sdbcx">XTablesSupplier</type>),
+        and calling its <member scope="com::sun::star::container">XNameAccess::getByName</member>
+        method with the ComposedName.</p>
+
+        @throws com::sun::star::container::NoSuchElementException
+            if, upon getting the attribute value, the current composed table name
+            represented by this instance does not denote an existing table in the database.
+        @throws com::sun::star::lang::IllegalArgumentException
+            if you try to set an object which does not denote a table from the underlying
+            database.
+    */
+    [attribute] ::com::sun::star::beans::XPropertySet    Table
+    {
+        get raises ( com::sun::star::container::NoSuchElementException );
+        set raises ( com::sun::star::lang::IllegalArgumentException );
+    };
+};
+
+//=============================================================================
+}; }; }; }; };
+//=============================================================================
+
+#endif
+

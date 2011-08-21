@@ -1,0 +1,4 @@
+//Pops up a window into which you can type BeanShell code and run it 
+//against the current document
+editor();
+return 0;

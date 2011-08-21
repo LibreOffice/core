@@ -1,0 +1,17 @@
+module ooo { module vba { module excel {
+    constants XlPictureConvertorType {
+        const long xlBMP = 1;
+        const long xlCGM = 7;
+        const long xlDRW = 4;
+        const long xlDXF = 5;
+        const long xlEPS = 8;
+        const long xlHGL = 6;
+        const long xlPCT = 13;
+        const long xlPCX = 10;
+        const long xlPIC = 11;
+        const long xlPLT = 12;
+        const long xlTIF = 9;
+        const long xlWMF = 2;
+        const long xlWPG = 3;
+    };
+}; }; };

@@ -1,0 +1,99 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_auth_XSSOManager_idl__
+#define __com_sun_star_auth_XSSOManager_idl__
+
+#include <com/sun/star/uno/XInterface.idl>
+#include <com/sun/star/auth/InvalidArgumentException.idl>
+#include <com/sun/star/auth/SSOExceptions.idl>
+#include <com/sun/star/auth/XSSOAcceptorContext.idl>
+#include <com/sun/star/auth/XSSOInitiatorContext.idl>
+
+module com { module sun { module star { module auth {
+
+/** supports the creation of security contexts for both
+    the initiator/source side and the acceptor/target side.
+
+    @since OOo 1.1.2
+ */
+published interface XSSOManager : ::com::sun::star::uno::XInterface
+{
+    /** retrieves the mechanism name of all security contexts created using
+        this manager.
+
+        @returns
+        the mechanism name ( e.g. "KERBEROS" )
+     */
+    string                  getMechanism();
+
+
+    /** creates an initiator side security context.
+
+        @param SourcePrincipal
+        the name of the initiator side principal for which the context
+        will be created.
+
+        @param TargetPrincipal
+        the name of the target/acceptor side principal to which the source
+        principal intends to authenticate.
+
+        @param TargetHost
+        the host name associated with the target principal.
+
+        @returns
+        the newly created initiator context.
+     */
+    XSSOInitiatorContext    createInitiatorContext(
+                                [in] string SourcePrincipal,
+                                [in] string TargetPrincipal,
+                                [in] string TargetHost )
+                                    raises( InvalidArgumentException,
+                                            InvalidCredentialException,
+                                            InvalidPrincipalException,
+                                            UnsupportedException );
+
+
+    /** creates an acceptor side security context.
+
+        @param TargetPrincipal
+        the name of the acceptor side principal.
+
+        @returns
+        the newly created acceptor side context.
+     */
+    XSSOAcceptorContext     createAcceptorContext(
+                                [in] string TargetPrincipal )
+                                    raises( InvalidArgumentException,
+                                            InvalidCredentialException,
+                                            InvalidPrincipalException,
+                                            UnsupportedException );
+};
+
+}; }; }; };
+
+#endif

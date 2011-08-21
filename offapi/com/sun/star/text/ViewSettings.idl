@@ -1,0 +1,356 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_text_ViewSettings_idl__
+#define __com_sun_star_text_ViewSettings_idl__
+
+#include <com/sun/star/beans/XPropertySet.idl>
+#include <com/sun/star/view/DocumentZoomType.idl>
+#include <com/sun/star/lang/IllegalArgumentException.idl>
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module text {
+
+//=============================================================================
+
+// DocMerge from xml: service com::sun::star::text::ViewSettings
+/** provides access to the settings of the controller of a text document.
+ */
+published service ViewSettings
+{
+    // DocMerge: empty anyway
+    interface com::sun::star::beans::XPropertySet;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::text::ViewSettings::ShowAnnotations
+    /** If this property is <TRUE/>, annotations (notes) are visible.
+     */
+    [property] boolean ShowAnnotations;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::text::ViewSettings::ShowBreaks
+    /** If this property is <TRUE/>, paragraph line breaks are visible.
+     */
+    [property] boolean ShowBreaks;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::text::ViewSettings::ShowFieldCommandsShowDrawings
+    /** If this property is <TRUE/>, shapes are visible.
+     */
+    [property] boolean ShowDrawings;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::text::ViewSettings::ShowFieldCommands
+    /** If this property is <TRUE/>, text fields are shown with their commands; otherwise
+        the content is visible.
+     */
+    [property] boolean ShowFieldCommands;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::text::ViewSettings::ShowFootnoteBackground
+    /** If this property is <TRUE/>, footnotes symbols are displayed with gray background.
+     */
+    [property] boolean ShowFootnoteBackground;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::text::ViewSettings::ShowGraphics
+    /** If this property is <TRUE/>, graphic objects are visible.
+     */
+    [property] boolean ShowGraphics;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::text::ViewSettings::ShowHiddenParagraphs
+    /** If this property is <TRUE/>, hidden paragraphs are displayed.
+     */
+    [property] boolean ShowHiddenParagraphs;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::text::ViewSettings::ShowHiddenText
+    /** If this property is <TRUE/>, hidden text is displayed.
+     */
+    [property] boolean ShowHiddenText;
+
+    //-------------------------------------------------------------------------
+
+         /** ShowHoriRuler and ShowVertRuler determine whether a ruler is visible.
+         */
+        [property] boolean ShowRulers;
+
+        //-------------------------------------------------------------------------
+
+        /** If this property is <TRUE/> and the property ShowRulers is <TRUE/>,
+           the horizontal ruler is displayed.
+     */
+    [property] boolean ShowHoriRuler;
+
+    //-------------------------------------------------------------------------
+
+        /** If this property is <TRUE/> and the property ShowRulers is <TRUE/>,
+           the horizontal scroll bar is displayed.
+     */
+    [property] boolean ShowHoriScrollBar;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::text::ViewSettings::ShowIndexMarkBackground
+    /** If this property is <TRUE/>, index marks are displayed with gray background.
+     */
+    [property] boolean ShowIndexMarkBackground;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::text::ViewSettings::ShowParaBreaks
+    /** If this property is <TRUE/>, paragraph breaks are visible.
+     */
+    [property] boolean ShowParaBreaks;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::text::ViewSettings::ShowProtectedSpaces
+    /** If this property is <TRUE/>, protected spaces (hard spaces) are displayed with gray
+        background.
+     */
+    [property] boolean ShowProtectedSpaces;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::text::ViewSettings::ShowSoftHyphens
+    /** If this property is <TRUE/>, soft hyphens are displayed with gray background.
+     */
+    [property] boolean ShowSoftHyphens;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::text::ViewSettings::ShowSpaces
+    /** If this property is <TRUE/>, spaces are displayed with dots.
+     */
+    [property] boolean ShowSpaces;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::text::ViewSettings::ShowTableBoundaries
+    /** If this property is <TRUE/>, table boundaries are displayed.
+     */
+    [property] boolean ShowTableBoundaries;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::text::ViewSettings::ShowTables
+    /** If this property is <TRUE/>, tables are visible.
+     */
+    [property] boolean ShowTables;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::text::ViewSettings::ShowTabstops
+    /** If this property is <TRUE/>, tab stops are visible.
+     */
+    [property] boolean ShowTabstops;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::text::ViewSettings::ShowTextBoundaries
+    /** If this property is <TRUE/>, text boundaries are displayed.
+     */
+    [property] boolean ShowTextBoundaries;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::text::ViewSettings::ShowTextFieldBackground
+    /** If this property is <TRUE/>, text fields are displayed with gray background.
+     */
+    [property] boolean ShowTextFieldBackground;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::text::ViewSettings::ShowVertRuler
+    /** If this property is <TRUE/>, the vertical ruler is displayed.
+     */
+    [property] boolean ShowVertRuler;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::text::ViewSettings::ShowVertScrollBar
+    /** If this property is <TRUE/>, the vertical scroll bar is displayed.
+     */
+    [property] boolean ShowVertScrollBar;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::text::ViewSettings::SmoothScrolling
+    /** If this property is <TRUE/>, smooth scrolling is active.
+     */
+    [property] boolean SmoothScrolling;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::text::ViewSettings::SolidMarkHandles
+    /** If this property is <TRUE/>, handles of drawing objects are visible.
+     */
+    [property] boolean SolidMarkHandles;
+    //-------------------------------------------------------------------------
+    /** If this property is <TRUE/>, the vertical ruler is aligned to the right side
+     of the view and the vertical scrollbar is on the left.
+     */
+    [property] boolean IsVertRulerRightAligned;
+
+    //-------------------------------------------------------------------------
+    /** If this property is <TRUE/> the document will be displayed as if it
+        were a HTML document.
+     */
+    [property] boolean ShowOnlineLayout;
+
+    //-------------------------------------------------------------------------
+    /** This property defines the zoom type for the document.
+
+        @see com::sun::star::view::DocumentZoomType
+     */
+    [property] short ZoomType;
+
+    //-------------------------------------------------------------------------
+    /** Defines the zoom value to use.
+        Valid only if the ZoomType is set to
+        <member scope="com::sun::star::view::DocumentZoomType">BY_VALUE</member>.
+     */
+    [property] short ZoomValue;
+    //-------------------------------------------------------------------------
+    /** If this property is <TRUE/> hyperlinks in the document are executed (loaded) on
+     mouse click. Otherwise they are handled like normal text.
+         */
+    [optional, property] boolean IsExecuteHyperlinks;
+
+    //-------------------------------------------------------------------------
+    /** Specifies whether to display the grid or not
+
+        @since OOo 2.0
+     */
+    [optional, property] boolean IsRasterVisible;
+
+    //-------------------------------------------------------------------------
+    /** Specifies whether to move frames, drawing elements, and form
+        functions only between grid points.
+
+        @since OOo 2.0
+     */
+    [optional, property] boolean IsSnapToRaster;
+
+    //-------------------------------------------------------------------------
+    /** Specifies the number of intervals between grid points on the X-axis.
+
+        <p>The value must be greater or equal to 0, and the application
+        may enforce an upper bound for the value.</p>
+
+        @since OOo 2.0
+        @throws com::sun::star::lang::IllegalArgumentException
+            if the value is out of bounds.
+     */
+    [optional, property] long RasterSubdivisionX;
+
+    //-------------------------------------------------------------------------
+    /** Specifies the number of intervals between grid points on the Y-axis.
+
+        <p>The value must be greater or equal to 0, and the application
+        may enforce an upper bound for the value.</p>
+
+        @since OOo 2.0
+        @throws com::sun::star::lang::IllegalArgumentException
+            if the value is out of bounds.
+     */
+    [optional, property] long RasterSubdivisionY;
+
+    //-------------------------------------------------------------------------
+    /** Defines the unit of measure for the spacing between grid points
+        on the X-axis.
+
+        <p>The value must be greater than 0. The application
+        may enforce more restricting bounds for the value.</p>
+
+        @since OOo 2.0
+        @throws com::sun::star::lang::IllegalArgumentException
+            if the value is out of bounds.
+     */
+    [optional, property] long RasterResolutionX;
+
+    //-------------------------------------------------------------------------
+    /** Defines the unit of measure for the spacing between grid points
+        on the Y-axis.
+
+        <p>The value must be greater than 0. The application
+        may enforce more restricting bounds for the value.</p>
+
+        @since OOo 2.0
+        @throws com::sun::star::lang::IllegalArgumentException
+            if the value is out of bounds.
+     */
+    [optional, property] long RasterResolutionY;
+
+    //-------------------------------------------------------------------------
+    /** If this property is <TRUE/>, hidden characters are displayed
+
+        @since OOo 3.0
+     */
+    [optional, property] boolean ShowHiddenCharacters;
+    //-------------------------------------------------------------------------
+    /** If this property is <TRUE/>, the settings of non-printing characters are applied.
+
+        <p>This option controls the use of the settings ShowHiddenCharacters,
+        ShowTabstops, ShowSpaces, ShowBreaks and ShowParaBreaks </p>
+
+        @since OOo 3.0
+     */
+    [optional, property] boolean ShowNonprintingCharacters;
+    //-------------------------------------------------------------------------
+    /** metric unit of the horizontal ruler
+
+        <p>Uses values <type scope="com::sun::star::awt">FieldUnit</type></p>
+
+        @since OOo 3.1
+     */
+    [optional, property] long HorizontalRulerMetric;
+    //-------------------------------------------------------------------------
+    /** metric unit of the vertical ruler
+
+        <p>Uses values from <type scope="com::sun::star::awt">FieldUnit</type></p>
+
+        @since OOo 3.1
+     */
+    [optional, property] long VerticalRulerMetric;
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

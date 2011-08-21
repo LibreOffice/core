@@ -1,0 +1,97 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_sdb_DefinitionContainer_idl__
+#define __com_sun_star_sdb_DefinitionContainer_idl__
+
+ module com {  module sun {  module star {  module container {
+ published interface XNameAccess;
+ published interface XNameContainer;
+ published interface XIndexAccess;
+ published interface XEnumerationAccess;
+};};};};
+
+ module com {  module sun {  module star {  module util {
+ published interface XRefreshable;
+};};};};
+ module com {  module sun {  module star {  module lang {
+ published interface XSingleServiceFactory;
+};};};};
+
+ module com {  module sun {  module star {  module sdb {
+
+
+/** describes a container which provides access to database related definitions like
+    commands, forms, and reports.
+
+    <p>
+    The container supports access to its elements by the elements name or
+    by the elements position.
+    </p>
+    <p>
+    Simple enumeration must be supported as well.
+    </p>
+    <p>
+    To reflect the changes with the underlying database, a refresh mechanism
+    needs to be supported.
+    </p>
+ */
+published service DefinitionContainer
+{
+    // gives access to the elements by name.
+    interface com::sun::star::container::XNameAccess;
+
+    // allows to insert and remove by name.
+    interface com::sun::star::container::XNameContainer;
+
+    // gives access to the elements by index.
+    interface com::sun::star::container::XIndexAccess;
+
+    // allows to create an enumeration of the elements.
+    interface com::sun::star::container::XEnumerationAccess;
+
+
+    /** is used to refresh the container, to reflect changes in the underlying database.
+     */
+    [optional] interface com::sun::star::util::XRefreshable;
+
+    /** can be used to create container elements.
+        <p>
+        If this interface is supported, the object created using it (e.g., the object returned by
+        <method scope="com.sun.star.lang">XSingleServiceFactory::createInstance()</method>
+        ) can be used as container elements.
+        </p>
+     */
+    [optional] interface com::sun::star::lang::XSingleServiceFactory;
+};
+
+//=============================================================================
+
+}; }; }; };
+
+/*===========================================================================
+===========================================================================*/
+#endif

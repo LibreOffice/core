@@ -1,0 +1,6 @@
+module ooo { module vba { module office {
+    constants MsoSyncVersionType {
+        const long msoSyncVersionLastViewed = 0;
+        const long msoSyncVersionServer = 1;
+    };
+}; }; };

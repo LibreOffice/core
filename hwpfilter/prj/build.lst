@@ -1,0 +1,2 @@
+hw	hwpfilter	:	offapi cppuhelper ZLIB:zlib LIBXSLT:libxslt ucbhelper ucb ure test NULL
+hw	hwpfilter\prj	nmake	-	all	hw_prj NULL

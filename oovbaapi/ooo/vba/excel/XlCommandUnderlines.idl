@@ -1,0 +1,7 @@
+module ooo { module vba { module excel {
+    constants XlCommandUnderlines {
+        const long xlCommandUnderlinesAutomatic = -4105;
+        const long xlCommandUnderlinesOff = -4146;
+        const long xlCommandUnderlinesOn = 1;
+    };
+}; }; };

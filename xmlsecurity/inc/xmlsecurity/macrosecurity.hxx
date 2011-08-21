@@ -138,7 +138,8 @@ class MacroSecurityTrustedSourcesTP : public MacroSecurityTP
 private:
     FixedLine           maTrustCertFL;
     ReadOnlyImage       maTrustCertROFI;
-    SvxSimpleTable      maTrustCertLB;  // #i48648 now SvHeaderTabListBox
+    SvxSimpleTableContainer m_aTrustCertLBContainer;
+    SvxSimpleTable      maTrustCertLB;
     PushButton          maAddCertPB;
     PushButton          maViewCertPB;
     PushButton          maRemoveCertPB;

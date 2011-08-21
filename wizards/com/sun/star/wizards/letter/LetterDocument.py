@@ -202,7 +202,6 @@ class BusinessPaperObject(object):
             Helper.setUnoPropertyValue(
                 self.xFrame,
                 "Print", False)
-
             xTextCursor = \
                 TextDocument.xTextDocument.Text.createTextCursor()
             xTextCursor.gotoEnd(True)

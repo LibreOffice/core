@@ -1,0 +1,203 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_text_TextDocumentSettings_idl__
+#define __com_sun_star_text_TextDocumentSettings_idl__
+
+#include <com/sun/star/beans/XPropertySet.idl>
+#include <com/sun/star/document/Settings.idl>
+#include <com/sun/star/text/PrintSettings.idl>
+#include <com/sun/star/text/PrintPreviewSettings.idl>
+
+//=============================================================================
+
+module com { module sun { module star { module text {
+
+//=============================================================================
+
+/** describes properties that apply to the whole text document.
+ */
+published service DocumentSettings
+{
+    service com::sun::star::document::Settings;
+
+    [optional] service com::sun::star::text::PrintSettings;
+
+    [optional] service com::sun::star::text::PrintPreviewSettings;
+
+    //-------------------------------------------------------------------------
+    /** gives access to the properties implemented by this service.
+     */
+    interface com::sun::star::beans::XPropertySet;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies if charts in text documents are updated automatically.
+
+        This has no effect if "FieldAutoUpdate" is <FALSE/>.
+    */
+    [optional, property] boolean ChartAutoUpdate;
+
+    /** specifies if spacing between paragraphs and tables is to be
+        added.
+
+        <p>If between two paragraphs, two tables, or a paragraph and a
+        table, you have defined spacing above and below each object,
+        usually only the larger one of the two spaces is used.  If the
+        spacing between the objects are to be added this property has
+        to be <TRUE/>.</p>
+    */
+    [optional, property] boolean AddParaTableSpacing;
+
+    /** specifies if top paragraph spacing is applied to paragraphs
+        on the first page of text documents.
+
+        <p>If <TRUE/>, the paragraph or table spacing to the top will
+        also be effective at the beginning of a page or column if the
+        paragraph or table is positioned on the first page of the
+        document.  The same applies for a page break.</p>
+    */
+    [optional, property] boolean AddParaTableSpacingAtStart;
+
+    /** specifies the alignment of tab stops in text documents.
+
+        <p>If <TRUE/> centered and right-aligned paragraphs containing
+        tabs are formatted as a whole in the center or aligned to the
+        right. If <FALSE/>, only the text to the right of the last
+        tab, for example, is aligned to the right, while the text to
+        the left remains where it is.</p>
+    */
+    [optional, property] boolean AlignTabStopPosition;
+
+    // ------------------------------------------------------------
+    /** specifies if the contents of links in the global document
+        are saved or not.
+
+        <p>This property applies only for master documents.</p>
+
+        <p><em>Note</em>: This name is a bit misleading, it should be
+        something like <code>SaveLinkedDocumentContent</code>.</p>
+    */
+    [optional, property] boolean SaveGlobalDocumentLinks;
+    // ------------------------------------------------------------
+    /** specifies if the document has been created as a label document.
+
+        <p>This property indicates that the document contains multiple text frames
+        and that the content of one frame is duplicated into the other frames
+        by internally linked text sections.</p>
+
+    */
+    [optional, property] boolean IsLabelDocument;
+    // ------------------------------------------------------------
+    /** specifies if the former (till OpenOffice.org 1.1) or the new
+        line spacing formatting is applied.
+
+        <p>This property controls how a set line spacing at a paragraph
+        influences the formatting of the text lines and the spacing between
+        paragraphs.
+        If <TRUE/>, the formatting till OpenOffice.org 1.1 is
+        applied. This means, that a proportional line spacing is applied
+        above and below a text line and that the maximum of the line spacing
+        value between two paragraph is added respectively reckoned up with the
+        paragraph spacing (adding or reckoning up is controlled by document
+        option AddParaTableSpacing).
+        If <FALSE/> (default for documents since OpenOffice.org 2.0),
+        a proportional line spacing is only applied below a text line and
+        it's always added to the paragraph spacing between two paragraphs.</p>
+
+        @since OOo 2.0
+    */
+    [optional, property] boolean UseFormerLineSpacing;
+    // ------------------------------------------------------------
+    /** specifies if paragraph and table spacing is added at the
+        bottom of table cells
+
+        <p>This property controls, if the spacing of the last paragraph
+        respectively table of a table cell is added at the bottom of this
+        table cells
+        If <TRUE/> (default for documents since OpenOffice.org 2.0),
+        the spacing of the last paragraph respectively table of a table
+        cell is added at the bottom of this table cell.
+        If <FALSE/> (typically for documents till OpenOffice.org 1.1),
+        the spacing of the last paragraph respectively table of a table
+        cell isn't added at the bottom of this table cell.</p>
+
+        @since OOo 2.0
+    */
+    [optional, property] boolean AddParaSpacingToTableCells;
+    // ------------------------------------------------------------
+    /** specifies if the former (till OpenOffice.org 1.1) or the new
+        object positioning is applied.
+
+        <p>This property controls how floating screen objects (Writer
+        fly frames and drawing objects are positioned.
+        If <TRUE/>, the object positioning till OpenOffice.org 1.1 is
+        applied. This means, that the top of a paragraph, at which a
+        floating screen object orients its vertical position, includes
+        the lower spacing and the line spacing of the previous paragraph.
+        If <FALSE/> (default for documents since OpenOffice.org 2.0),
+        the top of a paragraph, at which a floating screen object orients
+        its vertical position, doesn't include the lower spacing and the
+        line spacing of the previous paragraph.</p>
+
+        @since OOo 2.0
+    */
+    [optional, property] boolean UseFormerObjectPositioning;
+
+    // ------------------------------------------------------------
+    /** specifies if the text wrap of floating screen objects are
+        considered in a specified way in the positioning algorithm.
+
+        <p>This property controls how floating screen objects (Writer
+        fly frames and drawing objects) are positioned.
+        If <TRUE/>, the object positioning algorithm will consider
+        the text wrap style, set at the floating screen object.
+        The attribute <member>BaseFrameProperties::WrapInfluenceOnPosition</member>
+        specifies how the text wrap is considered.
+        If <FALSE/> (default value), the former object positioning
+        algorithm (known from OpenOffice.org 1.1) is applied.</p>
+
+        @since OOo 2.0
+    */
+    [optional, property] boolean ConsiderTextWrapOnObjPos;
+
+    // ------------------------------------------------------------
+    /** specifies if Math objects should automatically vertically aligned to
+        match the baseline of the surrounding text.
+
+        <p>If activated formula object that are anchored 'As Character' will be
+        vertically aligned to have their baseline match with the one from the text.</p>
+
+        @since OOo 3.4
+    */
+    [optional, property] boolean MathBaselineAlignment;
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

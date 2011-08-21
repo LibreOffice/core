@@ -1,0 +1,96 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_form_binding_XValueBinding_idl__
+#define __com_sun_star_form_binding_XValueBinding_idl__
+
+#include <com/sun/star/uno/XInterface.idl>
+#include <com/sun/star/lang/NoSupportException.idl>
+#include <com/sun/star/form/binding/IncompatibleTypesException.idl>
+#include <com/sun/star/form/binding/InvalidBindingStateException.idl>
+
+//=============================================================================
+
+module com {  module sun {  module star {  module form { module binding {
+
+//=============================================================================
+
+/** specifies a binding to a value which can be read and written.
+*/
+interface XValueBinding : com::sun::star::uno::XInterface
+{
+    //-------------------------------------------------------------------------
+    /** determines the types which are supported by this binding for value exchange
+
+        @see supportsType
+    */
+    sequence< type >
+            getSupportedValueTypes( );
+
+    /** determines whether a given type is supported by this binding for value exchange
+
+        <p>Calling this method is equal to calling <member>getSupportedValueTypes</member>,
+        and looking up the given type in the resulting type sequence.</p>
+
+        @see getSupportedValueTypes
+    */
+    boolean supportsType( [in] type aType );
+
+    /** retrieves the current value
+
+        @throws <type>IncompatibleTypesException</type>
+            if the requested value type is not supported by the binding
+        @see getSupportedValueTypes
+        @see supportsType
+    */
+    any     getValue( [in] type aType )
+                raises( IncompatibleTypesException );
+
+    /** sets the current value
+
+        @throws <type>IncompatibleTypesException</type>
+            if the given value type is not supported by the binding
+        @throws <type>InvalidBindingStateException</type>
+            if the value currently cannot be changed, since the binding is not
+            fully operational. Possible reasons for this include the binding being
+            readonly, or the target of the binding not being present.
+        @throws <type scope="com::sun::star::lang">NoSupportException</type>
+            if the binding in general does not support write access to it's binding
+
+        @see getSupportedValueTypes
+        @see supportsType
+        @see ValueBinding
+    */
+    void    setValue( [in] any aValue )
+                raises( IncompatibleTypesException, InvalidBindingStateException, com::sun::star::lang::NoSupportException );
+};
+
+//=============================================================================
+
+}; }; }; }; };
+
+#endif

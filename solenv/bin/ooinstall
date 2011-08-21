@@ -1,0 +1,138 @@
+#!/usr/bin/env perl
+
+# This script has three uses:
+# 1. From the command line to install straight into a given directory:
+#    bin/ooinstall /opt/Foo
+# 2. From the command line to link into a given directory:
+#    bin/ooinstall -l /opt/FooLinked
+# 3. When packaging (called from package-ooo), to install to DESTDIR
+
+use File::Find;
+use File::Path qw(mkpath);
+use Cwd;
+
+$path = '';
+$do_link = 0;
+$is_windows = 0;
+my $tmp_dir;
+
+if ($ENV{GUI} eq 'WNT') {
+    $is_windows = 1;
+}
+
+if( defined($ENV{TMPDIR}) ) {
+    $tmp_dir = $ENV{TMPDIR};
+} elsif( defined($ENV{TMP}) ) {
+   $tmp_dir = $ENV{TMP};
+} else {
+   $tmp_dir = '/tmp';
+}
+if (!-d $tmp_dir) {die "Set TMP or TMPDIR!\n";}
+
+# Workaround for system Mozilla
+if ( $ENV{'SYSTEM_MOZILLA'} eq 'YES' ) {
+    $ENV{'LD_LIBRARY_PATH'} = "$ENV{'MOZ_LIB'}:$ENV{'LD_LIBRARY_PATH'}";
+}
+
+# Workaround for the Python
+$ENV{'PYTHONPATH'} = "$ENV{'SRC_ROOT'}/instsetoo_native/$ENV{'INPATH'}/bin:$ENV{'SOLARVERSION'}/$ENV{'INPATH'}/lib:$ENV{'SOLARVERSION'}/$ENV{'INPATH'}/lib/python:$ENV{'SOLARVERSION'}/$ENV{'INPATH'}/lib/python/lib-dynload";
+
+for $arg (@ARGV) {
+    if ($arg eq '-l') {
+	$do_link = 1;
+    } elsif ($arg eq '-h' || $arg eq '--help') {
+	$help = 1;
+    } else {
+		# Cwd::realpath does not work if the path does not exist
+		mkpath($ENV{DESTDIR} . $arg) unless -d $ENV{DESTDIR} . $arg;
+		$path = Cwd::realpath( $ENV{DESTDIR} . $arg );
+		if (!$do_link) {
+			my $destdir = Cwd::realpath( $ENV{DESTDIR} );
+			$path =~ s|$destdir||;
+	    }
+    }
+}
+
+$help = 1 if $path eq '';
+
+if ($help) {
+    print "ooinstall [-l] <prefix to install to>\n";
+    print "  -l - performs a linkoo on the installed source\n";
+    exit 1;
+}
+
+my $BUILD=undef;
+my $LAST_MINOR=undef;
+open MINORMK, "$ENV{'SOLARENV'}/inc/minor.mk";
+while (<MINORMK>) {
+	my $t = "\$" . $_;
+	if(/^BUILD/ || /^LAST_MINOR/) {
+		eval $t;
+	}
+}
+close MINORMK;
+$ENV{LAST_MINOR} = $LAST_MINOR;
+$ENV{OUT} = "../$ENV{'INPATH'}";
+$ENV{LOCAL_OUT} = $ENV{OUT};
+$ENV{LOCAL_COMMON_OUT} = $ENV{OUT};
+# FIXME: the following variable helps to install localizations even if some
+# files are not localized (like Japanese, Chinese wordbook), it makes
+# the installer to use the English localization of the file instead.
+$ENV{DEFAULT_TO_ENGLISH_FOR_PACKING} = 1;
+
+my @larr;
+$langs=$ENV{WITH_LANG};
+$langs='en-US' if $langs eq '';
+if ($langs eq 'ALL') {
+    opendir(DIR,$ENV{L10N_MODULE} . "/source");
+    @larr = readdir(DIR);
+    @larr = grep { $_ ne '.' } @larr;
+    @larr = grep { $_ ne '..' } @larr;
+    @larr = (@larr,"en-US");
+    closedir(DIR);
+}
+else {
+    @larr = grep { $_ ne '' } split(/ /, $langs);
+}
+$langs = join (",", @larr);
+
+$destdir='';
+if ( defined $ENV{DESTDIR} &&
+     $ENV{DESTDIR} ne "" ) {
+    $destdir = "-destdir \"$ENV{DESTDIR}\"";
+}
+
+$strip='';
+if ( defined $ENV{DISABLE_STRIP} &&
+     $ENV{DISABLE_STRIP} eq "TRUE" ) {
+    $strip = "-dontstrip";
+}
+
+$msi='';
+if ($is_windows) {
+    $msi = "-msitemplate $ENV{SRC_ROOT}/instsetoo_native/$ENV{INPATH}/misc/openoffice/msi_templates " .
+           "-msilanguage $ENV{SRC_ROOT}/instsetoo_native/$ENV{INPATH}/misc/win_ulffiles";
+}
+
+print "Running LibreOffice installer\n";
+system ("cd $ENV{SRC_ROOT}/instsetoo_native/util ; " .
+	"perl -w $ENV{SOLARENV}/bin/make_installer.pl " .
+	"-f openoffice.lst -l $langs -p LibreOffice " .
+	"-u $tmp_dir " .
+	"-buildid $BUILD $destdir $strip $msi " .
+	"-simple $path") && die "Failed to install: $!";
+
+if ($ENV{BUILD_TYPE} =~ m/ODK/) {
+    print "Running SDK installer\n";
+    system ("cd $ENV{SRC_ROOT}/instsetoo_native/util ; " .
+	"perl -w $ENV{SOLARENV}/bin/make_installer.pl " .
+	"-f openoffice.lst -l en-US -p LibreOffice_SDK " .
+	"-u $tmp_dir " .
+	"-buildid $BUILD $destdir $strip $msi" .
+	"-simple $path") && die "Failed to install: $!";
+}
+print "Installer finished\n";
+
+if ($do_link && !$is_windows) {
+    `$ENV{SOLARENV}/bin/linkoo $path $ENV{SRC_ROOT}`;
+}

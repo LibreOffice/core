@@ -1,0 +1,2 @@
+..\%__SRC%\lib\*.a %_DEST%\lib\*.a
+..\inc\sax\tools\documenthandleradapter.hxx %_DEST%\inc\sax\tools\documenthandleradapter.hxx

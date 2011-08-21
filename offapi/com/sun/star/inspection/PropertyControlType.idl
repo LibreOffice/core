@@ -1,0 +1,153 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_inspection_PropertyControlType_idl__
+#define __com_sun_star_inspection_PropertyControlType_idl__
+
+//=============================================================================
+module com {  module sun {  module star {  module inspection {
+
+//-----------------------------------------------------------------------------
+/** describes pre-defined possible control types to be used to display and enter
+    property values within a <type>ObjectInspector</type>.
+
+    <p>The type of a control determines its visual appearance, its behavior, and - important
+    for property handlers using a control - the expected type when reading and writing the
+    control's value.</p>
+
+    @see XPropertyControl
+    @see XPropertyControlFactory
+    @see XPropertyControl::ValueType
+
+    @since OOo 2.0.3
+*/
+published constants PropertyControlType
+{
+    /** denotes a control which allows the user to choose from a list of
+        possible property values
+
+        <p>Controls of type <member>ListBox</member> exchange their values as <code>string</code>.</p>
+
+        <p>Additionally, those controls support the <type>XStringListControl</type> interface.</p>
+    */
+    const short ListBox = 1;
+
+    /** denotes a control which allows the user to choose from a list of
+        possible property values, combined with the possibility to enter a new
+        property value.
+
+        <p>Controls of type <member>ComboBox</member> exchange their values as <code>string</code>.</p>
+
+        <p>Additionally, those controls support the <type>XStringListControl</type> interface.</p>
+    */
+    const short ComboBox = 2;
+
+    /** denotes a control which allows the user to enter property values consisting of a single line of text
+
+        <p>Controls of type <member>TextField</member> exchange their values as <code>string</code>.</p>
+    */
+    const short TextField = 3;
+
+    /** denotes a control which allows the user to enter pure text, including line breaks
+
+        <p>Controls of type <member>MultiLineTextField</member> exchange their values as <code>string</code>.</p>
+    */
+    const short MultiLineTextField = 4;
+
+    /** denotes a control which allows the user to enter a single character
+
+        <p>Controls of type <member>CharacterField</member> exchange their values as <code>short</code>,
+        being a single UTF-16 character.</p>
+    */
+    const short CharacterField = 5;
+
+    /** denotes a control which allows the user to enter a list of single-line strings
+
+        <p>Controls of type <member>StringListField</member> exchange their values as <code>sequence&lt; string &gt;<code>.</p>
+    */
+    const short StringListField = 6;
+
+    /** denotes a control which allows the user to choose from a list of colors.
+
+        <p>Controls of type <member>ColorListBox</member> usually exchange their values as
+        <type scope="com::sun::star::util">Color</type>.</p>
+
+        <p>Additionally, those controls support the <type>XStringListControl</type> interface. If you use
+        this interface to add additional entries to the list box, which have no color associated with it,
+        then you can also exchange values as <code>string</code>. That is, if you write a string into
+        <member>XPropertyControl::Value</member>, and if this string has previously been added to the list
+        using the <type>XStringListControl</type> interface, this string is selected. Vice versa, if the user
+        selects one of those non-color strings in the list, then reading <member>XPropertyControl::Value</member>
+        will retrieve you this string.</p>
+    */
+    const short ColorListBox = 7;
+
+    /** denotes a control which allows the user to enter a numerical value
+
+        <p>Controls of type <member>NumericField</member> exchange their values as <code>double</code>.</p>
+
+        <p>Additionally, those controls support the <type>XNumericControl</type> interface.</p>
+    */
+    const short NumericField = 8;
+
+    /** denotes a control which allows the user to enter a date value
+
+        <p>Controls of type <member>DateField</member> exchange their values as <type scope="com::sun::star::util">Date</type>.</p>
+    */
+    const short DateField = 9;
+
+    /** denotes a control which allows the user to enter a time value
+
+        <p>Controls of type <member>TimeField</member> exchange their values as <type scope="com::sun::star::util">Time</type>.</p>
+    */
+    const short TimeField = 10;
+
+    /** denotes a control which allows the user to enter a combined date/time value
+
+        <p>Controls of type <member>DateTimeField</member> exchange their values as <type scope="com::sun::star::util">DateTime</type>.</p>
+    */
+    const short DateTimeField = 11;
+
+    /** denotes a control which displays a string in a hyperlink-like appearance
+
+        <p>Controls of type <member>HyperlinkField</member> exchange their values as <code>string</code>.</p>
+
+        <p>Additionally, those controls support the <type>XHyperlinkControl</type> interface.</p>
+    */
+    const short HyperlinkField = 12;
+
+    /** denotes a non-standard property control, which is usually provided by an <type>XPropertyHandler</type>
+    */
+    const short Unknown = 13;
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif
+

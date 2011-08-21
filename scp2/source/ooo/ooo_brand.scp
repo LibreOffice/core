@@ -1,0 +1,61 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * 
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#include "macros.inc"
+
+#ifndef MACOSX
+Directory gid_Dir_Brand_Root
+    ParentID = PREDEFINED_PROGDIR;
+  #ifdef WNT
+    HostName = "${PRODUCTNAME} ${BRANDPACKAGEVERSION}";
+  #else
+    HostName = ".";
+  #endif
+    Styles = (OFFICEDIRECTORY,ISINSTALLLOCATION,CREATE);
+End
+#endif
+
+File gid_Brand_File_ServicesRdb
+    TXT_FILE_BODY;
+    Dir = gid_Brand_Dir_Program;
+    Name = "/ooo/services.rdb";
+    Styles = (PACKED);
+End
+
+ProfileItem gid_Brand_Profileitem_Bootstrap_Errorreport_Server
+    ProfileID = gid_Brand_Profile_Bootstrap_Ini;
+    ModuleID = gid_Module_Root_Brand;
+    Section = "ErrorReport";
+    Order = 8;
+    Key = "ErrorReportServer";
+  #if defined(BUILD_SPECIAL)
+    Value = "report.libreoffice.org";
+  #else
+    Value = "";
+  #endif
+End
+

@@ -1,0 +1,387 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+interface Annotation : _Annotation
+[
+    uuid = "CA0C4280-293D-11D1-89CB-008029E4B0B1"
+]
+{
+
+    SID_THESAURUS // api:
+    [
+        ExecMethod = ExecLingu ;
+        StateMethod = GetLinguState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_HANGUL_HANJA_CONVERSION  // api:
+    [
+        ExecMethod = ExecLingu ;
+        StateMethod = GetLinguState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_CHINESE_CONVERSION  // api:
+    [
+        ExecMethod = ExecLingu ;
+        StateMethod = GetLinguState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_STYLE_CATALOG  // ole(no) api(play/rec)
+    [
+        StateMethod = StateDisableItems ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_TWAIN_SELECT
+    [
+        StateMethod = StateDisableItems ;
+    ]
+
+    SID_TWAIN_TRANSFER
+    [
+        StateMethod = StateDisableItems ;
+    ]
+
+     SID_INSERT_GRAPHIC
+    [
+        StateMethod = StateDisableItems ;
+    ]
+
+    SID_AUTOSPELL_CHECK
+    [
+        ExecMethod = Exec;
+        StateMethod = GetState;
+    ]
+
+    SID_HYPERLINK_SETLINK  // status()
+    [
+        ExecMethod = Exec ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+    SID_HYPERLINK_GETLINK // status()
+    [
+        StateMethod = StateInsert ;
+    ]
+
+    FN_INSERT_SOFT_HYPHEN // status(final|play)
+    [
+        ExecMethod = Exec ;
+        StateMethod = NoState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    FN_INSERT_HARDHYPHEN // status()
+    [
+        ExecMethod = Exec ;
+        StateMethod = NoState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    FN_INSERT_HARD_SPACE // status(final|play)
+    [
+        ExecMethod = Exec ;
+        StateMethod = NoState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_INSERT_RLM
+    [
+        ExecMethod = Exec ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_INSERT_LRM
+    [
+        ExecMethod = Exec ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_INSERT_ZWSP
+    [
+        ExecMethod = Exec ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_INSERT_ZWNBSP
+    [
+        ExecMethod = Exec ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_ATTR_PARA_LEFT_TO_RIGHT
+    [
+        ExecMethod = Exec ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_ATTR_PARA_RIGHT_TO_LEFT
+    [
+        ExecMethod = Exec ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_TEXTDIRECTION_LEFT_TO_RIGHT
+    [
+        ExecMethod = Exec ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_TEXTDIRECTION_TOP_TO_BOTTOM
+    [
+        ExecMethod = Exec ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_VERTICALTEXT_STATE
+    [
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_CTLFONT_STATE
+    [
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_TRANSLITERATE_SENTENCE_CASE
+    [
+        ExecMethod = ExecTransliteration;
+        StateMethod = NoState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_TRANSLITERATE_TITLE_CASE
+    [
+        ExecMethod = ExecTransliteration;
+        StateMethod = NoState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_TRANSLITERATE_TOGGLE_CASE
+    [
+        ExecMethod = ExecTransliteration;
+        StateMethod = NoState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_TRANSLITERATE_ROTATE_CASE
+    [
+        ExecMethod = ExecRotateTransliteration;
+        StateMethod = NoState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_TRANSLITERATE_UPPER
+    [
+        ExecMethod = ExecTransliteration;
+        StateMethod = NoState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_TRANSLITERATE_LOWER
+    [
+        ExecMethod = ExecTransliteration;
+        StateMethod = NoState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_TRANSLITERATE_HALFWIDTH
+    [
+        ExecMethod = ExecTransliteration;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_TRANSLITERATE_FULLWIDTH
+    [
+        ExecMethod = ExecTransliteration;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_TRANSLITERATE_HIRAGANA
+    [
+        ExecMethod = ExecTransliteration;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_TRANSLITERATE_KATAGANA
+    [
+        ExecMethod = ExecTransliteration;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_ATTR_CHAR_WORDLINEMODE // status(final|play)
+    [
+        ExecMethod = Exec ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_ATTR_CHAR_RELIEF
+    [
+        ExecMethod = Exec ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_ATTR_CHAR_LANGUAGE // status(final|play)
+    [
+        ExecMethod = Exec ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_ATTR_CHAR_KERNING // status(final|play)
+    [
+        ExecMethod = Exec ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_ATTR_CHAR_AUTOKERN // // status(final|play)
+    [
+        ExecMethod = Exec ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_ATTR_CHAR_ESCAPEMENT // status(final|play)
+    [
+        ExecMethod = Exec ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_ATTR_CHAR_SCALEWIDTH // status()
+    [
+        ExecMethod = Exec ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_STYLE_FAMILY1
+    [
+        StateMethod = StateDisableItems ;
+    ]
+
+    SID_STYLE_FAMILY2
+    [
+        StateMethod = StateDisableItems ;
+    ]
+
+    SID_STYLE_FAMILY3
+    [
+        StateMethod = StateDisableItems ;
+    ]
+
+    SID_STYLE_FAMILY4
+    [
+        StateMethod = StateDisableItems ;
+    ]
+
+    SID_STYLE_FAMILY5
+    [
+        StateMethod = StateDisableItems ;
+    ]
+
+    SID_STYLE_WATERCAN // status()
+    [
+        StateMethod = StateDisableItems ;
+    ]
+
+    SID_STYLE_UPDATE_BY_EXAMPLE // status()
+    [
+        StateMethod = StateDisableItems ;
+    ]
+
+    SID_STYLE_NEW_BY_EXAMPLE // status(fina|play)
+    [
+        StateMethod = StateDisableItems ;
+    ]
+
+    SID_STYLE_APPLY // status(fina|play)
+    [
+        StateMethod = StateDisableItems ;
+    ]
+
+    SID_STYLE_NEW // ole : no, status : ?
+    [
+        StateMethod = StateDisableItems ;
+    ]
+
+    SID_STYLE_EDIT // ole : no, status : ?
+    [
+        StateMethod = StateDisableItems ;
+    ]
+
+    SID_STYLE_DELETE // ole : no, status : ?
+    [
+        StateMethod = StateDisableItems ;
+    ]
+    FN_STAT_SELMODE
+    [
+        StateMethod = StateStatusLine ;
+    ]
+
+    FN_STAT_TEMPLATE
+    [
+        StateMethod = StateStatusLine ;
+    ]
+
+    SID_LANGUAGE_STATUS
+    [
+        ExecMethod = ExecLingu ;
+        StateMethod = GetLinguState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_THES
+    [
+        ExecMethod = ExecLingu ;
+        StateMethod = GetLinguState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";  // e.g. disable for read-only documents
+    ]
+
+}
+
+shell SwAnnotationShell
+{
+    import Annotation[Automation];
+}

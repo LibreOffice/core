@@ -1,0 +1,89 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_configuration_backend_XVersionedSchemaSupplier_idl__
+#define __com_sun_star_configuration_backend_XVersionedSchemaSupplier_idl__
+
+#include <com/sun/star/configuration/backend/XSchemaSupplier.idl>
+#include <com/sun/star/configuration/backend/BackendAccessException.idl>
+#include <com/sun/star/lang/IllegalArgumentException.idl>
+
+//=============================================================================
+
+module com { module sun { module star { module configuration { module backend {
+
+//=============================================================================
+
+/**
+  provides access to versioned configuration component schemas.
+
+  @since OOo 2.0
+*/
+interface XVersionedSchemaSupplier : XSchemaSupplier
+{
+    //-------------------------------------------------------------------------
+
+    /**
+      Returns the schema version for a particular component.
+
+      @param aComponent
+                component whose schema version will be determined
+
+      @returns
+                a <atom>string</atom> that identifies the schema version for
+                the given component.
+
+                <p> The format of the version string is arbitrary. No meaning
+                should be attached to it, unless an implementing service
+                defines one. If no version can be determined, an empty
+                <atom>string</atom> may be returned.
+                </p>
+
+                <p> Clients may assume that all instances of a schema with the
+                same version are identical. The converse is not true.
+                In particular an implementation may return the same version
+                string for all schemas it supplies (i.e. return a version for
+                the complete schema, including all components)
+                </p>
+
+      @throws   com::sun::star::lang::IllegalArgumentException
+                if the component identifier is invalid.
+
+      @throws   com::sun::star::configuration::backend::BackendAccessException
+                if an error occurs while accessing the version data.
+    */
+    string getSchemaVersion([in] string aComponent)
+        raises (BackendAccessException,
+                com::sun::star::lang::IllegalArgumentException) ;
+
+    //-------------------------------------------------------------------------
+} ;
+
+//=============================================================================
+
+} ; } ; } ; } ; } ;
+
+#endif

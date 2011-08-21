@@ -1,0 +1,108 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_ui_ConfigurableUIElement_idl__
+#define __com_sun_star_ui_ConfigurableUIElement_idl__
+
+#include <com/sun/star/ui/UIElement.idl>
+#include <com/sun/star/ui/XUIElementSettings.idl>
+#include <com/sun/star/beans/XPropertySet.idl>
+#include <com/sun/star/ui/UIElementType.idl>
+#include <com/sun/star/ui/XUIConfigurationManager.idl>
+#include <com/sun/star/frame/XFrame.idl>
+#include <com/sun/star/lang/XInitialization.idl>
+
+//=============================================================================
+
+module com { module sun { module star { module ui {
+
+//=============================================================================
+
+/** specifies a configurable user interface element that supports persistence.
+
+    <p>
+    Configurable user interface elements are:
+    <ul>
+        <li>menubar</li>
+        <li>popupmenu<li>
+        <li>toolbar</li>
+        <li>statusbar</li>
+    </ul>
+    </p>
+
+    @since OOo 2.0
+*/
+
+service ConfigurableUIElement
+{
+    /** provides properties and functions to initialize and identify a user
+        interface element.
+
+        <p>
+        A configurable user interface element must be initialized using
+        <member scope=com::sun::star::lang>XInitialization::initialize</member> before
+        it can be used. The following properties must be provided:
+        <ul>
+            <li><b>ResourceURL</b><br>specifies the user interface name.</li>
+            <li><b>Frame</b><br>specifies to which frame instance the user interface belongs to.</li>
+            <li><b>ConfigurationSource</b><br>specifies to which configuration manager a user interface
+            element instance is bound to.</li>
+        </ul>
+        </p>
+
+        A user interface element factory creates and initializes every user interface element
+        correctly.
+
+        @see com::sun::star::ui::UIElementFactory
+    */
+    service UIElement;
+
+    /** provides functions to retrieve and change the user interface element structure data and to
+        update its visible representation.
+    */
+    interface com::sun::star::ui::XUIElementSettings;
+
+    /** specifies if the user interface element stores changes of its structure to its creator
+        source defined by the property <member>ConfigurationSource</member>. */
+    [property] boolean Persistent;
+
+    /** specifies the configuration source of this user interface element.
+
+        <p>
+        If the property <member>Persistent</member> is <TRUE/> changes on the structure of
+        the user interface element are written back to configuration source. When this property is
+        changed, afterwards <member>XUIElementSettings::updateSettings</member>  must be called so
+        the user interface element tries to retrieve its settings from the new user interface
+        configuration manager.
+        </p>
+    */
+    [property] com::sun::star::ui::XUIConfigurationManager ConfigurationSource;
+};
+
+}; }; }; };
+
+#endif

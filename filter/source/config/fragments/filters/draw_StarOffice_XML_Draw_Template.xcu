@@ -1,0 +1,10 @@
+    <node oor:name="draw_StarOffice_XML_Draw_Template" oor:op="replace">
+        <prop oor:name="Flags"><value>IMPORT EXPORT TEMPLATE TEMPLATEPATH OWN ALIEN ENCRYPTION</value></prop>
+        <prop oor:name="UIComponent"/>
+        <prop oor:name="FilterService"/>
+        <prop oor:name="UserData"><value>CXMLV</value></prop>
+        <prop oor:name="FileFormatVersion"><value>6200</value></prop>
+        <prop oor:name="Type"><value>draw_StarOffice_XML_Draw_Template</value></prop>
+        <prop oor:name="TemplateName"/>
+        <prop oor:name="DocumentService"><value>com.sun.star.drawing.DrawingDocument</value></prop>
+    </node>

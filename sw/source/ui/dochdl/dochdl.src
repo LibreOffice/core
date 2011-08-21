@@ -1,0 +1,76 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+
+#include "dochdl.hrc"
+#include "globals.hrc"
+
+
+String STR_NOGLOS
+{
+    Text [ en-US ] = "AutoText for Shortcut '%1' not found." ;
+};
+String STR_NO_TABLE
+{
+    Text [ en-US ] = "A table cannot be inserted into another table. However, you can paste the data into the document when the cursor is not in a table.";
+};
+
+
+InfoBox MSG_ERR_INSERT_GLOS
+{
+    Message [ en-US ] = "AutoText could not be created." ;
+};
+
+InfoBox MSG_CLPBRD_FORMAT_ERROR
+{
+    Message [ en-US ] = "Requested clipboard format is not available." ;
+};
+
+QueryBox MSG_UPDATE_NEW_GLOS_FMT
+{
+    BUTTONS = WB_YES_NO ;
+    DEFBUTTON = WB_DEF_YES ;
+    Message [ en-US ] = "The section format is outdated.\nIt needs to be converted so that changes\ncan be saved.\nShould it be converted now?" ;
+};
+
+String STR_PRIVATETEXT
+{
+    Text [ en-US ] = "%PRODUCTNAME Writer" ;
+};
+String STR_PRIVATEGRAPHIC
+{
+    Text [ en-US ] = "Graphics [%PRODUCTNAME Writer]" ;
+};
+String STR_PRIVATEOLE
+{
+    Text [ en-US ] = "Object [%PRODUCTNAME Writer]" ;
+};
+String STR_DDEFORMAT
+{
+    Text [ en-US ] = "DDE link" ;
+};
+

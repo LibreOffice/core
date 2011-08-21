@@ -1,0 +1,194 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_mail_XMailService_idl__
+#define __com_sun_star_mail_XMailService_idl__
+
+#include <com/sun/star/uno/XInterface.idl>
+#include <com/sun/star/mail/XAuthenticator.idl>
+#include <com/sun/star/auth/AuthenticationFailedException.idl>
+#include <com/sun/star/io/AlreadyConnectedException.idl>
+#include <com/sun/star/io/NotConnectedException.idl>
+#include <com/sun/star/io/UnknownHostException.idl>
+#include <com/sun/star/io/NoRouteToHostException.idl>
+#include <com/sun/star/io/ConnectException.idl>
+#include <com/sun/star/lang/IllegalArgumentException.idl>
+#include <com/sun/star/mail/XConnectionListener.idl>
+#include <com/sun/star/mail/MailException.idl>
+#include <com/sun/star/uno/XCurrentContext.idl>
+
+
+module com { module sun { module star { module mail {
+
+/**
+   Represents a mail server abstraction.
+
+   @since OOo 2.0
+ */
+interface XMailService: ::com::sun::star::uno::XInterface {
+
+    /**
+        Returns all connection types which are supported to
+        connect to the mail service. At least support insecure
+        connections must be supported. Currently defined
+        connection types are (the values should be handled
+        case insensitive):
+        "Insecure" - insecure connections
+        "SSL" - Secure Socket Layer 2.0/3.0 based connection
+
+        @returns
+        a sequence of supported connection types.
+    */
+    sequence<string> getSupportedConnectionTypes();
+
+    /**
+        Register a connection listener.
+
+        @param xListener
+        [in] a listener that will be informed about connection events.
+
+        @see com::sun::star::mail::XConnectionListener
+    */
+    void addConnectionListener([in] XConnectionListener xListener);
+
+    /**
+        Unregister a connection listener.
+
+        @param xListener
+        [in] a listener that no longer need to be informed about connection events.
+
+        @see com::sun::star::mail::XConnectionListener
+    */
+    void removeConnectionListener([in] XConnectionListener xListener);
+
+    /**
+        Return the context of the current connection. The context
+        contains information like the server name, port, connection type
+        etc.
+
+        @precond
+        <code>isConnected</code> returns true.
+
+        @returns
+        the current connection context.
+
+        @throws com::sun::star::io::NotConnectedException
+        if no connection is currently established.
+
+        @see com::sun::star::mail::connectUser
+        @see com::sun::star::io::NotConnectedException
+    */
+    com::sun::star::uno::XCurrentContext getCurrentConnectionContext()
+        raises(com::sun::star::io::NotConnectedException);
+
+    /**
+        Connect to a mail service. Only one connection to a mail service
+        can be established at a time.
+
+        @param xConnectionContext
+        [in] an interface used to query for connection related information.
+        The context must contain the following values:
+        "ServerName" of type "string", "Port" of type "long", "ConnectionType"
+        of type "string". A list of supported connection types can be queried
+        using <code>getSupportedConnectionTypes</code>.
+
+        @param xAuthenticator
+        [in] an interface used to query for the necessary user information
+        needed to login to the mail server. If no authentication is required
+        the xAuthenticator must return an empty user name and an empty password.
+
+        @throws com::sun::star::lang::IllegalArgumentException
+        if the provided connection context contains invalid values or
+        misses required connection parameters.
+
+        @throws com::sun::star::io::AlreadyConnectedException
+        on a try to connect to an already connect mail server.
+
+        @throws com::sun::star::io::UnknownHostException
+        usually if the IP address of the mail server could not be
+        determined. Possible causes are a broken network connection,
+        a wrong server name, an unreachable DNS server, etc.
+
+        @throws com::sun::star::io::NoRouteToHostException
+        if an error occurred to connect to the remote mail server.
+        Typically the remote mail server cannot be reach because of an
+        intervening firewall, or if an intermediate router is down,
+        the network connection is broken, etc.
+
+        @throws com::sun::star::io::ConnectException
+        if an error occurred while attempting to connect to the remote
+        mail server. Typically the connection was refused remotely,
+        because the mail server is not listening on the remote address/port.
+
+        @throws com::sun::star::auth::AuthenticationException
+        if the specified user could not be logged in.
+
+        @throws com::sun::star::mail::MailException
+        for other errors during login.
+
+        @see com::sun::star::uno::XCurrentContext
+        @see com::sun::star::mail::XAuthenticator
+        @see com::sun::star::lang::IllegalArgumentException
+        @see com::sun::star::io::AlreadyConnectedException
+        @see com::sun::star::io::UnknownHostException
+        @see com::sun::star::io::NoRouteToHostException
+        @see com::sun::star::io::ConnectException
+        @see com::sun::star::auth::AuthenticationException
+        @see com::sun::star::mail::IllegalStateException
+        @see com::sun::star::mail::MailException
+    */
+    void connect([in] com::sun::star::uno::XCurrentContext xConnectionContext, [in] XAuthenticator xAuthenticator)
+        raises(com::sun::star::lang::IllegalArgumentException,
+               com::sun::star::io::AlreadyConnectedException,
+               com::sun::star::io::UnknownHostException,
+               com::sun::star::io::NoRouteToHostException,
+               com::sun::star::io::ConnectException,
+               com::sun::star::auth::AuthenticationFailedException,
+               com::sun::star::mail::MailException);
+
+    /**
+        Disconnect from a mail service.
+
+        @throws com::sun::star::mail::MailException
+        if errors occur during disconnecting.
+    */
+    void disconnect()
+        raises(com::sun::star::mail::MailException);
+
+    /**
+        Returns whether a connection to a mail service
+        currently exist or not.
+
+        @returns
+        <TRUE/> if a connection to a mail service is established.
+    */
+    boolean isConnected();
+};
+
+}; }; }; };
+
+#endif

@@ -1,0 +1,186 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_plugin_XPluginContext_idl__
+#define __com_sun_star_plugin_XPluginContext_idl__
+
+#include <com/sun/star/uno/XInterface.idl>
+
+#include <com/sun/star/plugin/XPlugin.idl>
+
+#include <com/sun/star/plugin/PluginVariable.idl>
+
+#include <com/sun/star/plugin/PluginException.idl>
+
+#include <com/sun/star/lang/XEventListener.idl>
+
+#include <com/sun/star/io/XActiveDataSource.idl>
+
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module plugin {
+
+//=============================================================================
+
+/** Interface receiving calls from a plugin library.
+    A default context can be created using the <type>PluginManager</type>.
+*/
+published interface XPluginContext: com::sun::star::uno::XInterface
+{
+    /** Requests global application parameters like display connection
+        on UNIX systems.
+
+        @param xPlugin
+               plugin
+        @param aVariable
+               variable
+        @return value
+    */
+    string getValue( [in] com::sun::star::plugin::XPlugin xPlugin,
+             [in] com::sun::star::plugin::PluginVariable aVariable )
+            raises( com::sun::star::plugin::PluginException );
+
+    /** Requests a notification of completion of the operation on an URL.
+
+        @param plugin
+               plugin
+        @param url
+               url
+        @param target
+               target frame
+        @param listener
+               event listener
+    */
+    void getURLNotify( [in] com::sun::star::plugin::XPlugin plugin,
+             [in] string url,
+             [in] string target,
+             [in] com::sun::star::lang::XEventListener listener )
+            raises( com::sun::star::plugin::PluginException );
+
+    /** Requests an URL to be loaded into the frame target.
+
+        @param plugin
+               plugin
+        @param url
+               url
+        @param target
+               target frame
+    */
+    void getURL( [in] com::sun::star::plugin::XPlugin plugin,
+             [in] string url,
+             [in] string target )
+            raises( com::sun::star::plugin::PluginException );
+
+    /** Posts data from a buffer or file to an URL and receives a
+        notification upon completion.
+
+        @param plugin
+               plugin
+        @param url
+               url
+        @param target
+               target frame
+        @param buf
+               data
+        @param file
+               whether data is from file
+        @param listener
+               event listener
+    */
+    void postURLNotify( [in] com::sun::star::plugin::XPlugin plugin,
+             [in] string url,
+             [in] string target,
+             [in] sequence<byte> buf,
+             [in] boolean file,
+             [in] com::sun::star::lang::XEventListener listener )
+            raises( com::sun::star::plugin::PluginException );
+
+    /** Posts data from a buffer or file to an URL.
+
+        @param plugin
+               plugin
+        @param url
+               url
+        @param target
+               target frame
+        @param buf
+               data
+        @param file
+               whether data is from file
+    */
+    void postURL( [in] com::sun::star::plugin::XPlugin plugin,
+             [in] string url,
+             [in] string target,
+             [in] sequence<byte> buf,
+             [in] boolean file )
+            raises( com::sun::star::plugin::PluginException );
+
+    /** Requests a new stream that is created by the plugin and consumed
+        by the browser.
+
+        @param plugin
+               plugin
+        @param mimetype
+               mime type
+        @param target
+               target frame
+        @param aSource
+               data source
+    */
+    void newStream( [in] com::sun::star::plugin::XPlugin plugin,
+             [in] string mimetype,
+             [in] string target,
+             [in] com::sun::star::io::XActiveDataSource aSource )
+            raises( com::sun::star::plugin::PluginException );
+
+    /** Displays a message in the browser status line.
+
+        @param plugin
+               plugin
+        @param message
+               message
+    */
+    void displayStatusText( [in] com::sun::star::plugin::XPlugin plugin,
+             [in] string message )
+            raises( com::sun::star::plugin::PluginException );
+
+    /** Returns an application dependent identification string.
+        This is the same string that is transmitted by a browser to an http server.
+
+        @param plugin
+               plugin
+        @return id
+    */
+    string getUserAgent( [in] com::sun::star::plugin::XPlugin plugin )
+            raises( com::sun::star::plugin::PluginException );
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

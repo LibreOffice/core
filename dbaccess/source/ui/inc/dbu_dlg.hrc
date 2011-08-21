@@ -1,0 +1,135 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef _DBU_DLG_HRC_
+#define _DBU_DLG_HRC_
+
+#ifndef _DBU_RESOURCE_HRC_
+#include "dbu_resource.hrc"
+#endif
+
+#define PAGE_X              281
+#define PAGE_Y              185
+#define WIZARD_PAGE_X       225
+#define WIZARD_PAGE_Y       210
+#define START_X             6
+#define START_Y             6
+
+
+#define CHECKBOX_HEIGHT      8
+#define LISTBOX_HEIGHT      12
+#define FIXEDTEXT_HEIGHT     8
+#define RELATED_CONTROLS     4
+#define UNRELATED_CONTROLS   7
+#define EDIT_HEIGHT         12
+#define BUTTON_HEIGHT       14
+#define BUTTON_WIDTH        50
+
+//constants for the wizards
+#define INIT_Y               28
+#define INDENTED_X           6
+#define INDENT_BELOW_RADIO   10
+#define INDENT_BELOW_CHECK   10
+
+
+#define STR_ADABAS_HELP_SYSDEVSPACE         RID_STR_DLG_START
+#define STR_ADABAS_HELP_TRANSACT            RID_STR_DLG_START + 1
+#define STR_ADABAS_HELP_DATADEVSPACES       RID_STR_DLG_START + 2
+#define STR_ADABAS_HELP_SIZE                RID_STR_DLG_START + 3
+#define STR_ADABAS_HELP_FREESIZE            RID_STR_DLG_START + 4
+#define STR_ADABAS_HELP_MEMORYUSING         RID_STR_DLG_START + 5
+#define STR_ADABAS_ERROR_SYSTEMTABLES       RID_STR_DLG_START + 6
+#define STR_ERROR_PASSWORDS_NOT_IDENTICAL   RID_STR_DLG_START + 7
+#define STR_INDEXDESIGN_DOUBLE_COLUMN_NAME  RID_STR_DLG_START + 8
+    // FREE
+    // FREE
+#define STR_ERR_USE_CONNECT_TO              RID_STR_DLG_START + 11
+#define STR_ALREADYEXISTOVERWRITE           RID_STR_DLG_START + 12
+    // FREE
+#define STR_INDEX_NAME_ALREADY_USED         RID_STR_DLG_START + 14
+#define STR_ASK_FOR_DIRECTORY_CREATION      RID_STR_DLG_START + 15
+#define STR_COULD_NOT_CREATE_DIRECTORY      RID_STR_DLG_START + 16
+    // FREE
+    // FREE
+    // FREE
+    // FREE
+    // FREE
+    // FREE
+#define STR_COMMAND_EXECUTED_SUCCESSFULLY   RID_STR_DLG_START + 23
+#define STR_DIRECTSQL_CONNECTIONLOST        RID_STR_DLG_START + 24
+    // FREE
+    // FREE
+#define STR_USERADMIN_NOT_AVAILABLE         RID_STR_DLG_START + 27
+#define STR_TAB_INDEX_SORTORDER             RID_STR_DLG_START + 28
+#define STR_TAB_INDEX_FIELD                 RID_STR_DLG_START + 29
+#define STR_ORDER_ASCENDING                 RID_STR_DLG_START + 30
+#define STR_ORDER_DESCENDING                RID_STR_DLG_START + 31
+#define STR_CONFIRM_DROP_INDEX              RID_STR_DLG_START + 32
+#define STR_LOGICAL_INDEX_NAME              RID_STR_DLG_START + 33
+#define STR_CONNECTION_TEST                 RID_STR_DLG_START + 34
+#define STR_CONNECTION_SUCCESS              RID_STR_DLG_START + 35
+    // FREE
+#define STR_JDBCDRIVER_SUCCESS              RID_STR_DLG_START + 37
+#define STR_JDBCDRIVER_NO_SUCCESS           RID_STR_DLG_START + 38
+#define STR_MSACCESS_FILTERNAME             RID_STR_DLG_START + 39
+#define STR_CONNECTION_NO_SUCCESS           RID_STR_DLG_START + 40
+#define STR_DBASE_PATH_OR_FILE              RID_STR_DLG_START + 41
+#define STR_TEXT_PATH_OR_FILE               RID_STR_DLG_START + 45
+#define STR_FLAT_PATH_OR_FILE               RID_STR_DLG_START + 46
+#define STR_CALC_PATH_OR_FILE               RID_STR_DLG_START + 47
+#define STR_NAME_OF_ODBC_DATASOURCE         RID_STR_DLG_START + 48
+#define STR_MYSQL_DATABASE_NAME             RID_STR_DLG_START + 49
+#define STR_ORACLE_DATABASE_NAME            RID_STR_DLG_START + 50
+#define STR_ADABAS_DATABASE_NAME            RID_STR_DLG_START + 51
+#define STR_MSACCESS_MDB_FILE               RID_STR_DLG_START + 52
+#define STR_COMMONURL                       RID_STR_DLG_START + 53
+#define STR_DATABASEDEFAULTNAME             RID_STR_DLG_START + 54
+#define STR_NO_ADABASE_DATASOURCES          RID_STR_DLG_START + 55
+#define STR_NO_ADDITIONAL_SETTINGS          RID_STR_DLG_START + 56
+#define STR_HOSTNAME                        RID_STR_DLG_START + 57
+    // FREE
+#define STR_MOZILLA_PROFILE_NAME            RID_STR_DLG_START + 59
+#define STR_THUNDERBIRD_PROFILE_NAME        RID_STR_DLG_START + 60
+#define STR_EXPLAN_STRINGCONVERSION_ERROR   RID_STR_DLG_START + 61
+#define STR_EXCEPTION_ERROR                 RID_STR_DLG_START + 62
+#define STR_EXCEPTION_WARNING               RID_STR_DLG_START + 63
+#define STR_EXCEPTION_INFO                  RID_STR_DLG_START + 64
+#define STR_EXCEPTION_DETAILS               RID_STR_DLG_START + 65
+#define STR_MSACCESS_2007_FILTERNAME        RID_STR_DLG_START + 66
+#define STR_MSACCESS_ACCDB_FILE             RID_STR_DLG_START + 67
+
+
+// please adjust checking before insert new strings
+
+#define LAST_STR_HERE                       RID_STR_DLG_START + 67
+
+#if LAST_STR_HERE > RID_STR_DLG_END
+#error Resource-Id Overflow in #file, #line
+#endif
+
+#endif //_DBU_DLG_HRC_
+
+

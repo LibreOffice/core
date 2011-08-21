@@ -1,0 +1,38 @@
+mkdir: %_DEST%\inc\cppunit
+..\%__SRC%\inc\cppunit\*.h %_DEST%\inc\cppunit\*.h
+mkdir: %_DEST%\inc\cppunit\config
+..\%__SRC%\inc\cppunit\config\*.h %_DEST%\inc\cppunit\config\*.h
+mkdir: %_DEST%\inc\cppunit\extensions
+..\%__SRC%\inc\cppunit\extensions\*.h %_DEST%\inc\cppunit\extensions\*.h
+mkdir: %_DEST%\inc\cppunit\plugin
+..\%__SRC%\inc\cppunit\plugin\*.h %_DEST%\inc\cppunit\plugin\*.h
+mkdir: %_DEST%\inc\cppunit\portability
+..\%__SRC%\inc\cppunit\portability\*.h %_DEST%\inc\cppunit\portability\*.h
+mkdir: %_DEST%\inc\cppunit\tools
+..\%__SRC%\inc\cppunit\tools\*.h %_DEST%\inc\cppunit\tools\*.h
+mkdir: %_DEST%\inc\cppunit\ui\text
+..\%__SRC%\inc\cppunit\ui\text\*.h %_DEST%\inc\cppunit\ui\text\*.h
+
+..\%__SRC%\bin\cppunit_dll.dll %_DEST%\bin\cppunit_dll.dll
+..\%__SRC%\lib\icppunit_dll.lib %_DEST%\lib\icppunit_dll.lib
+
+..\%__SRC%\bin\libcppunit-1-12-1.dll %_DEST%\bin\libcppunit-1-12-1.dll
+..\%__SRC%\lib\libcppunit.dll.a %_DEST%\lib\libcppunit.dll.a
+
+..\%__SRC%\lib\libcppunit-1.12.1.dylib %_DEST%\lib\libcppunit-1.12.1.dylib
+symlink: %_DEST%\lib\libcppunit-1.12.1.dylib %_DEST%\lib\libcppunit.dylib
+
+..\%__SRC%\lib\libcppunit-1.12.so.1 %_DEST%\lib\libcppunit-1.12.so.1
+symlink: %_DEST%\lib\libcppunit-1.12.so.1 %_DEST%\lib\libcppunit.so
+
+..\%__SRC%\lib\libcppunit-1.12.so.1.0 %_DEST%\lib\libcppunit-1.12.so.1.0
+symlink: %_DEST%\lib\libcppunit-1.12.so.1.0 %_DEST%\lib\libcppunit.so
+
+..\%__SRC%\lib\libcppunit-1.12.a %_DEST%\lib\libcppunit-1.12.a
+symlink: %_DEST%\lib\libcppunit-1.12.a %_DEST%\lib\libcppunit.a
+
+..\%__SRC%\lib\libcppunit.a %_DEST%\lib\libcppunit.a
+
+..\%__SRC%\bin\DllPlugInTester %_DEST%\bin\DllPlugInTester
+..\%__SRC%\bin\DllPlugInTester.exe %_DEST%\bin\DllPlugInTester.exe
+..\%__SRC%\bin\DllPlugInTester_dll.exe %_DEST%\bin\DllPlugInTester_dll.exe

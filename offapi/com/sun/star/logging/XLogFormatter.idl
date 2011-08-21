@@ -1,0 +1,83 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_logging_XLogFormatter_idl__
+#define __com_sun_star_logging_XLogFormatter_idl__
+
+#include <com/sun/star/uno/XInterface.idl>
+#include <com/sun/star/logging/LogRecord.idl>
+
+//=============================================================================
+
+module com { module sun { module star { module logging {
+
+//=============================================================================
+
+/** specifies the interface to be used for formatting log records
+
+    @see XLogHandler
+
+    @since OOo 2.3
+*/
+published interface XLogFormatter
+{
+    /** returns the header string for the log
+
+        <p>This can be used to generate a header string, which by the <type>XLogHandler</type>
+        is emitted to its output channel before actually logging any concrete
+        <type>LogRecord</type>.</p>
+
+        <p>For instance, a formatter might produce table-like plain text output,
+        and could return a table-head string (potentially including line breaks)
+        here.</p>
+    */
+    string  getHead();
+
+    /** formats the given log record for output
+
+        <p>A <type>XLogHandler</type> will call this method to format a given
+        log record. The resulting string will be emitted to the handler's output
+        channel, without processing it any further (except possibly encoding it with
+        the handler's <code>Encoding</code>).</p>
+    */
+    string  format( [in] LogRecord Record );
+
+    /** returns the footer string for the log
+
+        <p>This can be used to generate a footer string, which by the <type>XLogHandler</type>
+        is emitted to its output channel before it is finally being closed.</p>
+    */
+    string  getTail();
+};
+
+//=============================================================================
+
+}; }; }; };
+
+//=============================================================================
+
+#endif

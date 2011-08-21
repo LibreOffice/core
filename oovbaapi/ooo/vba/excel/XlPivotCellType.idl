@@ -1,0 +1,14 @@
+module ooo { module vba { module excel {
+    constants XlPivotCellType {
+        const long xlPivotCellBlankCell = 9;
+        const long xlPivotCellCustomSubtotal = 7;
+        const long xlPivotCellDataField = 4;
+        const long xlPivotCellDataPivotField = 8;
+        const long xlPivotCellGrandTotal = 3;
+        const long xlPivotCellPageFieldItem = 6;
+        const long xlPivotCellPivotField = 5;
+        const long xlPivotCellPivotItem = 1;
+        const long xlPivotCellSubtotal = 2;
+        const long xlPivotCellValue = 0;
+    };
+}; }; };

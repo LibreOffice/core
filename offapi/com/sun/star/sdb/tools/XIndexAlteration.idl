@@ -1,0 +1,87 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2008 by Sun Microsystems, Inc.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_sdb_tools_XIndexAlteration_idl__
+#define __com_sun_star_sdb_tools_XIndexAlteration_idl__
+
+#include <com/sun/star/sdbc/SQLException.idl>
+#include <com/sun/star/sdb/tools/XConnectionSupplier.idl>
+#include <com/sun/star/lang/XInitialization.idl>
+#include <com/sun/star/beans/XPropertySet.idl>
+
+//=============================================================================
+module com {  module sun {  module star {  module sdb { module tools {
+//=============================================================================
+
+//-----------------------------------------------------------------------------
+/** allows to alter the indexes of a table.
+
+    @see com::sun::star::sdb::DataSource::Settings
+    @see com::sun::star::sdbcx::XAppend
+    @see com::sun::star::sdbcx::XDrop
+
+    @since OOo 3.3
+*/
+interface XIndexAlteration
+{
+    interface XConnectionSupplier;
+
+    /** drops an object of the related container identified by its name.
+        @param table
+            the table to be altered
+        @param index
+            the name of the column to be dropped
+        @throws com::sun::star::sdbc::SQLException
+            if a database access error occurs.
+     */
+    void dropIndex([in] com::sun::star::beans::XPropertySet table,[in] string index)
+        raises ( com::sun::star::sdbc::SQLException);
+
+    /** creates a new object using the given descriptor and appends it
+        to the related container.
+        <b>
+        Note:
+        </b>
+        The descriptor will not be changed and can be used again to append another object.
+        @param table
+            the table to be altered
+        @param descriptor
+            the descriptor which should be serve to append a new object
+        @throws com::sun::star::sdbc::SQLException
+            if a database access error occurs.
+     */
+    void addIndex([in] com::sun::star::beans::XPropertySet table,[in]com::sun::star::beans::XPropertySet descriptor)
+        raises (com::sun::star::sdbc::SQLException);
+
+
+};
+//=============================================================================
+}; }; }; }; };
+//=============================================================================
+
+#endif
+

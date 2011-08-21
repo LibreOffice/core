@@ -36,7 +36,55 @@ namespace logging
 {
 //........................................................................
 
-    DECLARE_COMPONENT_MODULE( LogModule, LogModuleClient )
+    class LogModule : public ::comphelper::OModule
+    {
+        friend struct LogModuleCreator;
+        typedef ::comphelper::OModule BaseClass;
+
+    public:
+        static LogModule& getInstance();
+
+    private:
+        LogModule();
+    };
+
+    /* -------------------------------------------------------------------- */
+    class LogModuleClient : public ::comphelper::OModuleClient
+    {
+    private:
+        typedef ::comphelper::OModuleClient BaseClass;
+
+    public:
+        LogModuleClient() : BaseClass( LogModule::getInstance() )
+        {
+        }
+    };
+
+    /* -------------------------------------------------------------------- */
+    template < class TYPE >
+    class OAutoRegistration : public ::comphelper::OAutoRegistration< TYPE >
+    {
+    private:
+        typedef ::comphelper::OAutoRegistration< TYPE > BaseClass;
+
+    public:
+        OAutoRegistration() : BaseClass( LogModule::getInstance() )
+        {
+        }
+    };
+
+    /* -------------------------------------------------------------------- */
+    template < class TYPE >
+    class OSingletonRegistration : public ::comphelper::OSingletonRegistration< TYPE >
+    {
+    private:
+        typedef ::comphelper::OSingletonRegistration< TYPE > BaseClass;
+
+    public:
+        OSingletonRegistration() : BaseClass( LogModule::getInstance() )
+        {
+        }
+    };
 
 //........................................................................
 } // namespace logging

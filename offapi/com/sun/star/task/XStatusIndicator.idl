@@ -1,0 +1,128 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_task_XStatusIndicator_idl__
+#define __com_sun_star_task_XStatusIndicator_idl__
+
+#include <com/sun/star/uno/XInterface.idl>
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module task {
+
+//=============================================================================
+/** controls a status indicator which displays progress of
+    longer actions to the user
+
+    <p>
+    Such objects are provided by a <type>XStatusIndicatorFactory</type>.
+    </p>
+
+    @see XStatusIndicatorFactory
+ */
+published interface XStatusIndicator: com::sun::star::uno::XInterface
+{
+    //-------------------------------------------------------------------------
+    /** initialize and start the progress
+
+        <p>
+        It activates a new created or reactivate an already used indicator
+        (must be finished by calling <member>XStatusIndicator::end()</member>
+        before!). By the way it's possible to set first progress description
+        and the possible range of progress value. That means that a progress
+        can runs from 0 to <var>Range</var>.
+        </p>
+
+        @param Text
+            initial value for progress description for showing
+            Value can be updated by calling <member>XStatusIndicator::setText()</member>.
+
+        @param Range
+            means the maximum value of the progress which can be set by
+            calling <member>XStatusIndicator::setValue()</member>.
+     */
+    [oneway] void start(
+        [in] string Text,
+        [in] long Range);
+
+    //-------------------------------------------------------------------------
+    /** stop the progress
+
+        <p>
+        Further calls of <member>XStatusIndicator::setText()</member>,
+        <member>XStatusIndicator::setValue()</member> or
+        <member>XStatusIndicator::reset()</member> must be ignored.
+        Only <member>XStatusIndicator::start()</member> can reactivate this
+        indicator.
+        It's not allowed to destruct the indicator inside this method.
+        The instance must be gone by using ref count or disposing.
+        </p>
+     */
+    [oneway] void end();
+
+    //-------------------------------------------------------------------------
+    /** update progress description
+
+        <p>
+        Initial value can be set during starting of the progress by calling
+        <member>XStatusIndicator::start()</member>.
+        Stopped indicators must ignore this call.
+        </p>
+
+        @param Text
+            new value for progress description which should be shown now
+     */
+    [oneway] void setText( [in] string Text );
+
+    //-------------------------------------------------------------------------
+    /** update progress value
+
+        <p>
+        Wrong values must be ignored and stopped indicators must ignore this
+        call generally.
+        </p>
+
+        @param Value
+            new value for progress which should be shown now
+            Must fit the range [0..Range] which was set during
+            <member>XStatusIndicator::start()</member>.
+     */
+    [oneway] void setValue( [in] long Value );
+
+    //-------------------------------------------------------------------------
+    /** clear progress value and description
+
+        <p>
+        Calling of setValue(0) and setText("") should do the same.
+        Stopped indicators must ignore this call.
+        </p>
+     */
+    [oneway] void reset();
+};
+
+}; }; }; };
+
+#endif

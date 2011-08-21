@@ -1,0 +1,6 @@
+module ooo { module vba {
+    constants FormShowConstants {
+        const long vbModal = 1;
+        const long vbModeless = 0;
+    };
+}; };

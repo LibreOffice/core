@@ -1,0 +1,175 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_configuration_SetElement_idl__
+#define __com_sun_star_configuration_SetElement_idl__
+
+#include <com/sun/star/configuration/HierarchyElement.idl>
+#include <com/sun/star/container/XChild.idl>
+#include <com/sun/star/lang/XComponent.idl>
+#include <com/sun/star/configuration/XTemplateInstance.idl>
+
+//=============================================================================
+
+module com { module sun { module star { module configuration {
+
+//=============================================================================
+/** provides information about a dynamic element that can be inserted into a
+ homogeneous set of elements within a hierarchy.
+
+ <p>Provides information about the element.
+ Provides access to its containing set object.
+ Allows controlling the lifetime of the element.
+ </p>
+
+ <p>Set elements may be added to and removed from the hierarchy at runtime.
+ They bear user-defined names. They may exist independently, outside any
+ container.
+ </p>
+
+ <p>New set element instances generally are created through members of
+ <type scope="com::sun::star::lang">XSingleServiceFactory</type> or,
+ if supported, <type scope="com::sun::star::lang">XMultiServiceFactory</type>
+ on an implementation of <type>SetUpdate</type>. Initially, they are not
+ contained in a set object and have no meaningful name.
+ </p>
+
+ <p>While an instance is not contained in a set object, it is owned by
+ the client and can be disposed by calling
+ <member scope="com::sun::star::lang">XComponent::dispose()</member>. The name
+ of the object can freely be changed in that situation though without
+ persistent effect.
+ </p>
+
+ <p>When the instance is inserted into a set (this includes replacing an
+ existing element), ownership is transferred to the container.
+ While it is contained in the container, clients must not dispose the
+ object. When inserted, the name of the object is fixed and is used to
+ identify it within the container. An implementation may support
+ <member scope="com::sun::star::container">XNamed::setName()</member> even in
+ this case. If it does, changing the name has the same effect of removing
+ the object (under the old name) and then reinserting it into the same
+ container (using the new name).
+ </p>
+
+ <p>When an instance is removed from a set (this includes being replaced by
+ a new element), ownership is transferred to the client again. It can then be
+ disposed or reinserted into a container. An instance can only be inserted
+ into a container, if it was obtained from the same hierarchy.
+ </p>
+
+ <p>When a set element is removed from its set from outside the hierarchy, the
+ container disposes of the object. This occurrence can be detected by registering
+ a <type scope="com::sun::star::lang">XEventListener</type> with the object.
+ </p>
+
+ <p>If an implementation is part of a <em>read-only</em> view of the hierarchy,
+ changing the name or parent is not supported (the object can't be removed from
+ its container anyway).
+ </p>
+
+ @see com::sun::star::configuration::SetAccess
+    Parent objects of this service generally implement service SetAccess.
+
+ @see com::sun::star::configuration::GroupElement
+    A complementary service for elements of a static heterogeneous collection.
+
+ @see com::sun::star::configuration::AccessRootElement
+    A complementary service for the root element of a hierarchy.
+
+*/
+published service SetElement
+{
+/** is the basic service for accessing information about an element in the
+ hierarchy.
+*/
+    service HierarchyElement;
+
+/** provides access to the containing set object.
+
+ <p>In this service, this interface is mandatory</p>
+
+ <p><member scope="com::sun::star::container">XChild::getParent()</member>
+ returns <NULL/>, if the object is currently not contained in a container.
+ </p>
+
+ <p>An implementation may also support
+ <member scope="com::sun::star::container">XChild::setParent()</member>.
+ If it does, changing the parent has the effect of first removing the object
+ from its old parent (if any) and then inserting it into the new parent
+ (unless that is <NULL/>) under the same name. The new parent must be part of
+ the same hierarchy as the old one. The name of the object must have been set
+ before.
+ </p>
+*/
+    interface com::sun::star::container::XChild;
+
+/** allows controlling or observing the lifetime of the object.
+
+ <p>Clients may dispose of the object using
+ <member scope="com::sun::star::lang">XComponent::dispose()</member>, only if
+ the object is currently not contained in a container (
+ <member scope="com::sun::star::container">XChild::getParent()</member>
+ returns <NULL/>).
+ </p>
+
+ <p>Clients may register an <type scope="com::sun::star::lang">XEventListener</type>
+ to be notified, if the object is removed from its container by an outside source.
+ </p>
+*/
+    interface com::sun::star::lang::XComponent;
+
+/** provides information about the type of the element.
+
+ <p>Set elements have a predetermined structure (their <em>type</em>),
+ that is described by and can be generated from a <em>template</em>.
+ </p>
+
+ <p>If the object was created using interface
+ <type scope="com::sun::star::lang">XSingleServiceFactory</type>
+ on an implementation of <type>SetUpdate</type>, this interface describes the
+ same template as interface <type>XTemplateContainer</type> on that
+ <type>SetUpdate</type>.
+ </p>
+ <p>If the object was created using interface
+ <type scope="com::sun::star::lang">XMultiServiceFactory</type>
+ on an implementation of <type>SetUpdate</type>, this interface describes the
+ template whose name was used as a service identifier for the factory method.
+ </p>
+ <p>Otherwise, the semantics of the information provided about the template depends on the
+ implementation.
+ </p>
+
+ @ see com::sun::star::configuration::XTemplateContainer
+*/
+    interface com::sun::star::configuration::XTemplateInstance;
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

@@ -1,0 +1,9 @@
+module ooo { module vba { module word {
+    constants WdTextOrientation {
+        const long wdTextOrientationDownward = 3;
+        const long wdTextOrientationHorizontal = 0;
+        const long wdTextOrientationHorizontalRotatedFarEast = 4;
+        const long wdTextOrientationUpward = 2;
+        const long wdTextOrientationVerticalFarEast = 1;
+    };
+}; }; };

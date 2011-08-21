@@ -1,0 +1,130 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_util_XClosable_idl__
+#define __com_sun_star_util_XClosable_idl__
+
+#include <com/sun/star/uno/XInterface.idl>
+#include <com/sun/star/util/XCloseBroadcaster.idl>
+
+//=============================================================================
+
+module com {  module sun {  module star {  module util {
+
+//=============================================================================
+/** makes it possible to release any objects in a ordered manner by using
+    a two-step mechanism
+
+    <p>
+    If an object should be terminated, it can be:<br>
+    <ul>
+        <li>disposed (if it supports <member scope="com::sun::star::lang">XComponent::dispose()</member>)</li>
+        <li>closed   (if it supports <member>XCloseable::close()</member>)</li>
+    </ul>
+    First version gives the object no chance to disagree with that (e.g. if a
+    process is still running and can't be canceled really). Last version
+    provides this possibility, but can't guarantee real termination of called object.
+    It depends from the environment of an object, if one or both mechanism are necessary.
+    </p>
+
+    <p>
+    Base interface <type>XCloseBroadcaster</type> makes it possible that any listener
+    which is interested on life time of listened object ...
+    <ul>
+        <li>can get a notification about closing of it</li>
+        <li>or can have a veto to break that.</li>
+    </ul>
+    </p>
+
+    @see com::sun::star::lang::XComponent::dispose()
+    @see XCloseBroadcaster
+    @see XCloseListener
+ */
+published interface XCloseable: XCloseBroadcaster
+{
+    //-------------------------------------------------------------------------
+    /** try to close the object
+
+        <p>
+        Must definitely be called before <member scope="com::sun::star::lang">XComponent::dispose()</member>.
+        But nobody can guarantee real closing of called object - because it can disagree with that if any
+        still running processes can't be canceled yet. It's not allowed to block this call till internal
+        operations will be finished here. They must be canceled or call must return immediately by throwing
+        the <type>CloseVetoException</type>.  Otherwise (if nothing exist to disagree) it must return normally.
+        </p>
+
+        <p>
+        Before any internal processes will be canceled, all registered <type>XCloseListener</type>
+        must be notified. Any of them can disagree with a <type>CloseVetoException</type> too.
+        It's forbidden to catch this exception inside the called close() method because the caller must
+        get this information!
+        </p>
+
+        <p>
+        If somewhere disagree with a CloseVetoException it will not clear who has to close the object again
+        after still running processes was finished. The parameter <var>DeliverOwnership</var> regulate that.
+        If it is set to <FALSE/> the caller of the method close() will be the owner of this object in every case.
+        Then it's not allowed to call close() from any other place (may a registered XCloseListener).
+        If it is set to <TRUE/> the caller gives up his ownership. If a XCloseListener throw the veto exception
+        he will be the new owner of the closing object. This information is passed to the listener by a parameter of
+        his notification method <member>XCloseListener::queryClosing()</member>. After his operations was finished
+        he MUST try to close it again. If the closing object itself disagree by an exception and the parameter
+        <var>DeliverOwnership</var> was set to <TRUE/> the object will be his own owner with all consequences of that.
+        <br><strong>Note:</strong><br>
+        There is no way to get the ownership back if it was delivered!
+        </p>
+
+        <p>
+        If this method was already called on an object it should return without any reaction. Normally it's possible to throw
+        a <type scope="com::sun::star::lang">DisposedException</type> for already disposed or closed objects
+        (which represent a <type scope="com::sun::star::uno">RuntimeException</type> and can be thrown by every interface call),
+        but it shouldn't be used here. The veto exception should be the only way to indicates the result.
+        </p>
+
+        @param DeliverOwnership
+                <TRUE/> delegates the ownership of this closing object to any one which throw the CloseVetoException.
+                This new owner has to close the closing object again if his still running processes will be finished.
+                <br>
+                <FALSE/> let the ownership at the original one which called the close() method. He must react for possible
+                CloseVetoExceptions and try it again at a later time. This can be useful for a generic UI handling.
+
+        @throws CloseVetoException
+            indicates that the closing object himself or any of his currently registered listener disagree with this close() request.
+
+        @see XCloseListener
+        @see CloseVetoException
+        @see com::sun::star::lang::XComponent::dispose()
+        @see com::sun::star::lang::DisposedException
+     */
+    void close( [in] boolean DeliverOwnership )
+            raises( CloseVetoException );
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

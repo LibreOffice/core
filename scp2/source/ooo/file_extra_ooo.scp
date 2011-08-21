@@ -1,0 +1,423 @@
+/*************************************************************************
+*
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * 
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+************************************************************************/
+
+#include "macros.inc"
+
+File gid_File_Extra_Autocorr
+    Dir = gid_Dir_Share_Autocorr;
+    USER_FILE_BODY;
+    Styles = (ARCHIVE);
+    Name = "autocorr.zip";
+End
+
+File gid_File_Extra_Autotextshare_Lang
+    Dir = gid_Dir_Autotext_Language;
+    USER_FILE_BODY;
+    Styles = (ARCHIVE, DONT_OVERWRITE);
+    EXTRA_ALL_LANG(autotextshare,zip);
+End
+
+File gid_File_Extra_Autotextuser
+    Dir = gid_Dir_User_Autotext;
+    USER_FILE_BODY;
+    Styles = (ARCHIVE, WORKSTATION, DOCLANG, DONT_OVERWRITE);
+    Name = "autotextuser.zip";
+End
+
+#ifdef UNX
+
+File gid_File_Extra_Cfgsrv_Bitmap_Unx
+    Dir = gid_Dir_Config;
+    ARCHIVE_TXT_FILE_BODY;
+    Name = "cfgsrvbitmapunx.zip";
+End
+
+#endif
+
+File gid_File_Extra_Cfgusr
+    Dir = gid_Dir_User_Config;
+    USER_FILE_BODY;
+    Styles = (ARCHIVE, WORKSTATION, DONT_OVERWRITE);
+    Name = "cfgusr.zip";
+End
+
+File gid_File_Extra_Cfgsrv
+    Dir = gid_Dir_Config;
+    TXT_FILE_BODY;
+    Styles = (ARCHIVE);
+    Name = "cfgsrvnolang.zip";
+    Patchfiles = ();
+End
+
+File gid_File_Extra_Common_Inc
+    Dir = gid_Dir_Config_Webcast;
+    PACKED_TXT_FILE_BODY;
+    Name = "common.inc";
+End
+
+File gid_File_Extra_Common_Pl
+    Dir = gid_Dir_Config_Webcast;
+    PACKED_TXT_FILE_BODY;
+    Name = "common.pl";
+End
+
+File gid_File_Extra_Database
+    Dir = gid_Dir_Database;
+    USER_FILE_BODY;
+    Styles = (ARCHIVE, WORKSTATION, DONT_OVERWRITE);
+    Name = "database.zip";
+End
+
+File gid_File_Extra_Databasebiblio
+    Dir = gid_Dir_Database_Biblio;
+    USER_FILE_BODY;
+    Styles = (ARCHIVE, WORKSTATION, DONT_OVERWRITE);
+    Name = "databasebiblio.zip";
+End
+
+File gid_File_Extra_Edit_Asp
+    Dir = gid_Dir_Config_Webcast;
+    PACKED_TXT_FILE_BODY;
+    Name = "edit.asp";
+End
+
+File gid_File_Extra_Edit_Pl
+    Dir = gid_Dir_Config_Webcast;
+    PACKED_TXT_FILE_BODY;
+    Name = "edit.pl";
+End
+
+File gid_File_Extra_Editpic_Asp
+    Dir = gid_Dir_Config_Webcast;
+    PACKED_TXT_FILE_BODY;
+    Name = "editpic.asp";
+End
+
+File gid_File_Extra_Editpic_Pl
+    Dir = gid_Dir_Config_Webcast;
+    PACKED_TXT_FILE_BODY;
+    Name = "editpic.pl";
+End
+
+File gid_File_Extra_Glas_Blue_Zip
+    Dir = gid_Dir_Share_Config_Wizard_Web_Buttons;
+    USER_FILE_BODY;
+	Styles = ();
+    Name = "glas-blue.zip";
+End
+
+File gid_File_Extra_Glas_Green_Zip
+    Dir = gid_Dir_Share_Config_Wizard_Web_Buttons;
+    USER_FILE_BODY;
+	Styles = ();
+    Name = "glas-green.zip";
+End
+
+File gid_File_Extra_Glas_Red_Zip
+    Dir = gid_Dir_Share_Config_Wizard_Web_Buttons;
+    USER_FILE_BODY;
+	Styles = ();
+    Name = "glas-red.zip";
+End
+
+File gid_File_Extra_Round_Gorilla_Zip
+    Dir = gid_Dir_Share_Config_Wizard_Web_Buttons;
+    USER_FILE_BODY;
+	Styles = ();
+    Name = "round-gorilla.zip";
+End
+
+File gid_File_Extra_Round_White_Zip
+    Dir = gid_Dir_Share_Config_Wizard_Web_Buttons;
+    USER_FILE_BODY;
+	Styles = ();
+    Name = "round-white.zip";
+End
+File gid_File_Extra_Simple_Zip
+    Dir = gid_Dir_Share_Config_Wizard_Web_Buttons;
+    USER_FILE_BODY;
+	Styles = ();
+    Name = "simple.zip";
+End
+File gid_File_Extra_Square_Blue_Zip
+    Dir = gid_Dir_Share_Config_Wizard_Web_Buttons;
+    USER_FILE_BODY;
+	Styles = ();
+    Name = "square-blue.zip";
+End
+File gid_File_Extra_Square_Gray_Zip
+    Dir = gid_Dir_Share_Config_Wizard_Web_Buttons;
+    USER_FILE_BODY;
+	Styles = ();
+    Name = "square-gray.zip";
+End
+File gid_File_Extra_Square_Green_Zip
+    Dir = gid_Dir_Share_Config_Wizard_Web_Buttons;
+    USER_FILE_BODY;
+	Styles = ();
+    Name = "square-green.zip";
+End
+File gid_File_Extra_Square_Red_Zip
+    Dir = gid_Dir_Share_Config_Wizard_Web_Buttons;
+    USER_FILE_BODY;
+	Styles = ();
+    Name = "square-red.zip";
+End
+File gid_File_Extra_Square_Yellow_Zip
+    Dir = gid_Dir_Share_Config_Wizard_Web_Buttons;
+    USER_FILE_BODY;
+	Styles = ();
+    Name = "square-yellow.zip";
+End
+
+#ifdef UNX
+
+#ifndef WITHOUT_AFMS
+File gid_File_Extra_Fontunxafm
+    Dir = gid_Dir_Psprint_Fontmetric;
+    TXT_FILE_BODY;
+    Styles = (ARCHIVE);
+    Name = "fontunxafm.zip";
+End
+#endif
+
+#endif
+
+#ifdef UNX
+
+#ifndef WITHOUT_PPDS
+File gid_File_Extra_Fontunxppds
+    Dir = gid_Dir_Psprint_Driver;
+    TXT_FILE_BODY;
+    Styles = (ARCHIVE);
+    Name = "fontunxppds.zip";
+End
+#endif
+
+#endif
+
+#ifdef UNX
+
+File gid_File_Extra_Fontunxpsprint
+    Dir = gid_Dir_Psprint;
+    TXT_FILE_BODY;
+    Styles = (ARCHIVE, DONT_OVERWRITE);
+    Name = "fontunxpsprint.zip";
+End
+
+#endif
+
+File gid_File_Extra_Gallbullets
+    Dir = gid_Dir_Gallery_Bullets;
+    ARCHIVE_TXT_FILE_BODY;
+    Name = "gallbullets.zip";
+End
+
+File gid_File_Extra_Gallhtmlexpo
+    Dir = gid_Dir_Gallery_Htmlexpo;
+    ARCHIVE_TXT_FILE_BODY;
+    Name = "gallhtmlexpo.zip";
+End
+
+File gid_File_Extra_Gallroot
+    Dir = gid_Dir_Gallery;
+    ARCHIVE_TXT_FILE_BODY;
+    Name = "gallroot.zip";
+End
+
+File gid_File_Extra_Gallrulers
+    Dir = gid_Dir_Gallery_Rulers;
+    ARCHIVE_TXT_FILE_BODY;
+    Name = "gallrulers.zip";
+End
+
+File gid_File_Extra_Gallsound
+    Dir = gid_Dir_User_Gallery;
+    USER_FILE_BODY;
+    Styles = (ARCHIVE, WORKSTATION, DONT_OVERWRITE);
+    Name = "gallsound.zip";
+End
+
+File gid_File_Extra_Gallsounds
+    Dir = gid_Dir_Gallery_Sounds;
+    ARCHIVE_TXT_FILE_BODY;
+    Name = "gallsounds.zip";
+End
+
+File gid_File_Extra_Gallsystem
+    Dir = gid_Dir_Gallery;
+    ARCHIVE_TXT_FILE_BODY;
+    Name = "gallsystem.zip";
+    Patchfiles = ();
+End
+
+File gid_File_Extra_Gallwwwback
+    Dir = gid_Dir_Gallery_Wwwback;
+    ARCHIVE_TXT_FILE_BODY;
+    Name = "gallwwwback.zip";
+End
+
+File gid_File_Extra_Gallwwwgraf
+    Dir = gid_Dir_Gallery_Wwwgraf;
+    ARCHIVE_TXT_FILE_BODY;
+    Name = "gallwwwgraf.zip";
+End
+
+File gid_File_Extra_Index_Pl
+    Dir = gid_Dir_Config_Webcast;
+    PACKED_TXT_FILE_BODY;
+    Name = "index.pl";
+End
+
+File gid_File_Extra_Palettes
+    Dir = gid_Dir_User_Config;
+    USER_FILE_BODY;
+    Styles = (ARCHIVE, WORKSTATION, DONT_OVERWRITE);
+    Name = "palettes.zip";
+    Patchfiles = ();
+End
+
+File gid_File_Extra_Poll_Asp
+    Dir = gid_Dir_Config_Webcast;
+    PACKED_TXT_FILE_BODY;
+    Name = "poll.asp";
+End
+
+File gid_File_Extra_Poll_Pl
+    Dir = gid_Dir_Config_Webcast;
+    PACKED_TXT_FILE_BODY;
+    Name = "poll.pl";
+End
+
+File gid_File_Extra_Savepic_Asp
+    Dir = gid_Dir_Config_Webcast;
+    PACKED_TXT_FILE_BODY;
+    Name = "savepic.asp";
+End
+
+File gid_File_Extra_Savepic_Pl
+    Dir = gid_Dir_Config_Webcast;
+    PACKED_TXT_FILE_BODY;
+    Name = "savepic.pl";
+End
+
+File gid_File_Extra_Show_Asp
+    Dir = gid_Dir_Config_Webcast;
+    PACKED_TXT_FILE_BODY;
+    Name = "show.asp";
+End
+
+File gid_File_Extra_Show_Pl
+    Dir = gid_Dir_Config_Webcast;
+    PACKED_TXT_FILE_BODY;
+    Name = "show.pl";
+End
+
+File gid_File_Extra_Symbols
+    Dir = gid_Dir_Config_Symbol;
+    ARCHIVE_TXT_FILE_BODY;
+    Name = "symbols.zip";
+End
+
+File gid_File_Extra_Tplpresntimpr_Lang
+    Dir = gid_Dir_Template_Presnt;
+    TXT_FILE_BODY;
+    Styles = (ARCHIVE, DONT_OVERWRITE);
+    EXTRA_ALL_LANG(tplpresntimpr,zip);
+End
+
+File gid_File_Extra_Tpllayoutimpr
+    Dir = gid_Dir_Template_Common_Layout;
+    ARCHIVE_TXT_FILE_BODY;
+    Name = "tpllayoutimpr.zip";
+End
+
+File gid_File_Extra_Tplwizbitmap
+    Dir = gid_Dir_Share_Template_Wizard_Bitmap;
+    ARCHIVE_TXT_FILE_BODY;
+    Name = "tplwizbitmap.zip";
+End
+
+File gid_File_Extra_Tplwizdesktop_Lang
+    Dir = gid_Dir_Template_Internal;
+    TXT_FILE_BODY;
+    Styles = (ARCHIVE, DONT_OVERWRITE);
+    EXTRA_ALL_LANG(tplwizdesktop,zip);
+End
+
+File gid_File_Extra_Tplwizletter
+    Dir = gid_Dir_Share_Template_Wizard_Letter;
+    ARCHIVE_TXT_FILE_BODY;
+    Name = "tplwizletter.zip";
+End
+
+File gid_File_Extra_Tplwizfax_Lang
+    Dir = gid_Dir_Template_Wizard_Fax;
+    TXT_FILE_BODY;
+    Styles = (ARCHIVE, DONT_OVERWRITE);
+    EXTRA_ALL_LANG(tplwizfax,zip);
+End
+
+File gid_File_Extra_Tplwizagenda_Lang
+    Dir = gid_Dir_Template_Wizard_Agenda;
+    TXT_FILE_BODY;
+    Styles = (ARCHIVE, DONT_OVERWRITE);
+    EXTRA_ALL_LANG(tplwizagenda,zip);
+End
+
+File gid_File_Extra_Tplwizreport_Lang
+    Dir = gid_Dir_Template_Wizard_Report;
+    TXT_FILE_BODY;
+    Styles = (ARCHIVE, DONT_OVERWRITE);
+    EXTRA_ALL_LANG(tplwizreport,zip);
+End
+
+File gid_File_Extra_Tplwizstyles_Lang
+    Dir = gid_Dir_Template_Wizard_Styles;
+    TXT_FILE_BODY;
+    Styles = (ARCHIVE, DONT_OVERWRITE);
+    EXTRA_ALL_LANG(tplwizstyles,zip);
+End
+
+File gid_File_Extra_Webcast_Asp
+    Dir = gid_Dir_Config_Webcast;
+    PACKED_TXT_FILE_BODY;
+    Name = "webcast.asp";
+End
+
+File gid_File_Extra_Webcast_Pl
+    Dir = gid_Dir_Config_Webcast;
+    PACKED_TXT_FILE_BODY;
+    Name = "webcast.pl";
+End
+
+File gid_File_Extra_Wordbook
+    Dir = gid_Dir_Wordbook;
+    TXT_FILE_BODY;
+    Styles = (ARCHIVE, DONT_OVERWRITE);
+    Name = "wordbook.zip";
+End

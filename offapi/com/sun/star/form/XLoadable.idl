@@ -1,0 +1,103 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_form_XLoadable_idl__
+#define __com_sun_star_form_XLoadable_idl__
+
+#include <com/sun/star/uno/XInterface.idl>
+
+#include <com/sun/star/form/XLoadListener.idl>
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module form {
+
+//=============================================================================
+
+/** provides functionality to implement objects which may be loaded.
+
+    <p>The object is typically implemented by high-level objects which can connect to a data source.</p>
+
+    @see XLoadListener
+ */
+published interface XLoadable: com::sun::star::uno::XInterface
+{
+    //-------------------------------------------------------------------------
+
+    /** loads the data.
+
+        <p>If the data is already loaded (->isLoaded), then the method returns silently.
+        In this case, you should use ->reload.</p>
+     */
+    [oneway] void load();
+
+    //-------------------------------------------------------------------------
+
+    /** unloads the data.
+     */
+    [oneway] void unload();
+
+    //-------------------------------------------------------------------------
+
+    /** does a smart refresh of the object.
+
+        <p>The final state will be the same as if unload and load were called, but reload
+        is the more efficient way to do the same. If the object isn't loaded, nothing happens.</p>
+     */
+    [oneway] void reload();
+
+    //-------------------------------------------------------------------------
+
+    /** returns if the object is in loaded state.
+     */
+    boolean isLoaded();
+
+    //-------------------------------------------------------------------------
+
+    /** adds the specified listener to receive load-related events
+
+        @param aListener
+            the listener to add.
+     */
+    [oneway] void addLoadListener( [in] com::sun::star::form::XLoadListener aListener );
+
+    //-------------------------------------------------------------------------
+
+    /** removes the specified listener.
+
+        @param aListener
+            the listener to remove.
+     */
+    [oneway] void removeLoadListener( [in] com::sun::star::form::XLoadListener aListener );
+};
+
+}; }; }; };
+
+#endif
+
+/*=============================================================================
+
+=============================================================================*/

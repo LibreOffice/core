@@ -1,0 +1,300 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_sdbc_XSQLOutput_idl__
+#define __com_sun_star_sdbc_XSQLOutput_idl__
+
+#include <com/sun/star/uno/XInterface.idl>
+
+#include <com/sun/star/util/Date.idl>
+
+#include <com/sun/star/util/DateTime.idl>
+
+#include <com/sun/star/util/Time.idl>
+
+ module com {  module sun {  module star {  module io {
+ published interface XInputStream;
+};};};};
+
+#include <com/sun/star/sdbc/SQLException.idl>
+
+ module com {  module sun {  module star {  module sdbc {
+
+ published interface XRef;
+ published interface XArray;
+ published interface XBlob;
+ published interface XClob;
+ published interface XStruct;
+ published interface XSQLData;
+
+
+/** is used as an output stream for writing the attributes of a user-defined
+    type back to the database.  This interface, used only for custom mapping,
+    is used by the driver, and its methods are never directly invoked
+    by a programmer.
+
+
+    <p>
+    When an object of a class implementing interface
+    <type scope="com::sun::star::sdbc">XSQLData</type>
+    is passed as an argument to a SQL statement, the JDBC driver calls
+    <method scope="com::sun::star::sdbc">SQLData::getSQLType</method>
+    to determine the kind of SQL datum being passed to the database.
+    <br/>
+    The driver then creates an instance of
+    <code>XSQLOutput</code>
+    and passes it to the method
+    <method scope="com::sun::star::sdbc">XSQLData::writeSQL</method>
+    . The method
+    <code>writeSQL</code>
+    in turn calls the appropriate
+    <code>XSQLOutput.writeXXX</code>
+    methods to write data from the
+    <type scope="com::sun::star::sdbc">XSQLData</type>
+    object to the
+    <code>XSQLOutput</code>
+    output stream as the representation of a SQL user-defined type.</p>
+ */
+published interface XSQLOutput: com::sun::star::uno::XInterface
+{
+
+    /** writes the next attribute to the stream as a string.
+        @param x
+            the value to pass to the database.
+        @throws SQLException
+            if a database access error occurs.
+     */
+    void writeString([in]string x) raises (SQLException);
+      //-------------------------------------------------------------------------
+
+    /** writes the next attribute to the stream as boolean.
+        @param x
+            the value to pass to the database.
+        @throws SQLException
+            if a database access error occurs.
+     */
+    void writeBoolean([in]boolean x) raises (SQLException);
+      //-------------------------------------------------------------------------
+
+    /** writes the next attribute to the stream as byte.
+        @param x
+            the value to pass to the database.
+        @throws SQLException
+            if a database access error occurs.
+     */
+    void writeByte([in]byte x) raises (SQLException);
+      //-------------------------------------------------------------------------
+
+    /** writes the next attribute to the stream as short.
+        @param x
+            the value to pass to the database.
+        @throws SQLException
+            if a database access error occurs.
+     */
+    void writeShort([in]short x) raises (SQLException);
+      //-------------------------------------------------------------------------
+
+    /** writes the next attribute to the stream as long.
+        @param x
+            the value to pass to the database.
+        @throws SQLException
+            if a database access error occurs.
+     */
+    void writeInt([in]long x) raises (SQLException);
+      //-------------------------------------------------------------------------
+
+    /** writes the next attribute to the stream as hyper.
+        @param x
+            the value to pass to the database.
+        @throws SQLException
+            if a database access error occurs.
+     */
+    void writeLong([in]hyper x) raises (SQLException);
+      //-------------------------------------------------------------------------
+
+    /** writes the next attribute to the stream as float.
+        @param x
+            the value to pass to the database.
+        @throws SQLException
+            if a database access error occurs.
+     */
+    void writeFloat([in]float x) raises (SQLException);
+      //-------------------------------------------------------------------------
+
+    /** writes the next attribute to the stream as double.
+        @param x
+            the value to pass to the database.
+        @throws SQLException
+            if a database access error occurs.
+     */
+    void writeDouble([in]double x) raises (SQLException);
+      //-------------------------------------------------------------------------
+
+    /** writes the next attribute to the stream as byte sequence.
+        @param x
+            the value to pass to the database.
+        @throws SQLException
+            if a database access error occurs.
+     */
+    void writeBytes([in]sequence<byte> x) raises (SQLException);
+      //-------------------------------------------------------------------------
+
+    /** writes the next attribute to the stream as a date.
+        @param x
+            the value to pass to the database.
+        @throws SQLException
+            if a database access error occurs.
+     */
+    void writeDate([in]com::sun::star::util::Date x) raises (SQLException);
+      //-------------------------------------------------------------------------
+
+    /** writes the next attribute to the stream as a time.
+        @param x
+            the value to pass to the database.
+        @throws SQLException
+            if a database access error occurs.
+     */
+    void writeTime([in]com::sun::star::util::Time x) raises (SQLException);
+      //-------------------------------------------------------------------------
+
+    /** writes the next attribute to the stream as a datetime.
+        @param x
+            the value to pass to the database.
+        @throws SQLException
+            if a database access error occurs.
+     */
+    void writeTimestamp([in]com::sun::star::util::DateTime x)
+        raises (SQLException);
+      //-------------------------------------------------------------------------
+
+    /** writes the next attribute to the stream as a stream of uninterpreted
+        bytes.
+        @param x
+            the value to pass to the database.
+        @throws SQLException
+            if a database access error occurs.
+     */
+    void writeBinaryStream([in]com::sun::star::io::XInputStream x)
+        raises (SQLException);
+      //-------------------------------------------------------------------------
+
+    /** writes the next attribute to the stream as a stream of Unicode string.
+        @param x
+            the value to pass to the database.
+        @throws SQLException
+            if a database access error occurs.
+     */
+    void writeCharacterStream([in]com::sun::star::io::XInputStream x)
+        raises (SQLException);
+    //-------------------------------------------------------------------------
+
+    /** writes to the stream the data contained in the given
+        <code>XSQLData</code> object.
+
+
+        <p
+        >When the
+        <code>XSQLData</code>
+        object is
+        <NULL/>
+        , this method writes an SQL NULL to the stream.
+        Otherwise, it calls the
+        <member scope="com::sun::star::sdbc">XSQLData::writeSQL()</member>
+        method of the given object, which
+        writes the object's attributes to the stream.
+        The implementation of the method
+        <code>XSQLData::writeSQL()</code>
+        calls the appropriate
+        <code>XSQLOutput.writeXXX</code>
+        method(s) for writing each of the object's attributes in order.
+        <br/>
+        The attributes must be read from an
+        <type scope="com::sun::star::sdbc">XSQLInput</type>
+        input stream and written to an
+        <code>XSQLOutput</code>
+        output stream in the same order in which they were
+        listed in the SQL definition of the user-defined type.
+        </p>
+        @param x
+            the value to pass to the database.
+        @throws SQLException
+            if a database access error occurs.
+     */
+    void writeObject([in]XSQLData x) raises (SQLException);
+      //-------------------------------------------------------------------------
+
+    /** writes a REF(&amp;lt;structured-type&amp;gt;) to the stream.
+        @param x
+            the value to pass to the database.
+        @throws SQLException
+            if a database access error occurs.
+     */
+    void writeRef([in]XRef x) raises (SQLException);
+      //-------------------------------------------------------------------------
+
+    /** writes a BLOB to the stream.
+        @param x
+            the value to pass to the database.
+        @throws SQLException
+            if a database access error occurs.
+     */
+    void writeBlob([in]XBlob x) raises (SQLException);
+    //-------------------------------------------------------------------------
+
+    /** writes a CLOB to the stream.
+        @param x
+            the value to pass to the database.
+        @throws SQLException
+            if a database access error occurs.
+     */
+    void writeClob([in]XClob x) raises (SQLException);
+    //-------------------------------------------------------------------------
+
+    /** writes a structured-type to the stream.
+        @param x
+            the value to pass to the database.
+        @throws SQLException
+            if a database access error occurs.
+     */
+    void writeStruct([in]XStruct x) raises (SQLException);
+    //-------------------------------------------------------------------------
+
+    /** writes an array to the stream.
+        @param x
+            the value to pass to the database.
+        @throws SQLException
+            if a database access error occurs.
+     */
+    void writeArray([in]XArray x) raises (SQLException);
+};
+
+//=============================================================================
+
+}; }; }; };
+
+/*===========================================================================
+===========================================================================*/
+#endif

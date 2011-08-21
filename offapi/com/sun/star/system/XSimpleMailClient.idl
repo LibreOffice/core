@@ -1,0 +1,91 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_system_XSimpleMailClient_idl__
+#define __com_sun_star_system_XSimpleMailClient_idl__
+
+#include <com/sun/star/uno/RuntimeException.idl>
+#include <com/sun/star/uno/XInterface.idl>
+#include <com/sun/star/lang/IllegalArgumentException.idl>
+#include <com/sun/star/system/XSimpleMailMessage.idl>
+#include <com/sun/star/system/SimpleMailClientFlags.idl>
+
+//=============================================================================
+
+module com { module sun { module star { module system {
+
+//=============================================================================
+/** Specifies an interface for creating and sending email messages.
+*/
+
+published interface XSimpleMailClient: com::sun::star::uno::XInterface
+{
+    //-------------------------------------------------------------------------
+    /** Create a simple mail message object that implements the interface
+        <type>XSimpleMailMessage</type>.
+        @returns
+        An object that implements the <type>XSimpleMailMessage</type> interface.
+    */
+    XSimpleMailMessage createSimpleMailMessage( );
+
+    //-------------------------------------------------------------------------
+    /** Sends a given simple mail message object that implements the interface
+        <type>XSimpleMailMessage</type>.
+
+        @param xSimpleMailMessage
+        Specifies a configured mail object to be sent.
+
+        @param aFlag
+        Specifies different flags that control the send process
+        if the flag NO_USER_INTERFACE is specified. A recipient
+        address must have been specified for the given xMailMessage object.
+
+        @throws com::sun::star::lang::IllegalArgumentException
+        <ul>
+            <li>If invalid or excluding flags have been specified.</li>
+            <li>The flag NO_USER_INTERFACE is specified and no recipient
+            address has been specified for the given xSimpleMailMessage object.</li>
+            <li>The parameter xSimpleMailMessage is NULL.</li>
+        </ul>
+
+        @throws com::sun::star::uno::Exception
+        if an error occurs while sending the mail.
+        <p>The Message member of the exception may contain an error description.</p>
+
+        @see com::sun::star::system::XSimpleMailMessage
+        @see com::sun::star::system::SimpleMailClientFlags
+    */
+    void sendSimpleMailMessage( [in] XSimpleMailMessage xSimpleMailMessage, [in] long aFlag )
+        raises( ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::Exception );
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif
+

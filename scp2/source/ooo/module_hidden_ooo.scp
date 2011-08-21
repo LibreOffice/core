@@ -1,0 +1,886 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * 
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+************************************************************************/
+
+#include "macros.inc"
+
+#ifdef AIX
+#ifndef SYSTEM_CURL
+Unixlink gid_Unixlink_File_Lib_Curl
+    BIN_FILE_BODY;
+    Dir = SCP2_OOO_BIN_DIR;
+    Name = STRING(CONCAT2(libcurl,UNXSUFFIX));
+    Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
+    Target = STRING(CONCAT3(libcurl,UNXSUFFIX,.3));
+End
+#endif
+#ifndef SYSTEM_REDLAND
+Unixlink gid_Unixlink_File_Lib_Raptor
+    BIN_FILE_BODY;
+    Dir = SCP2_OOO_BIN_DIR;
+    Name = STRING(CONCAT2(libraptor,UNXSUFFIX));
+    Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
+    Target = STRING(CONCAT3(libraptor,UNXSUFFIX,.1));
+End
+
+Unixlink gid_Unixlink_File_Lib_Rasqal
+    BIN_FILE_BODY;
+    Dir = SCP2_OOO_BIN_DIR;
+    Name = STRING(CONCAT2(librasqal,UNXSUFFIX));
+    Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
+    Target = STRING(CONCAT3(librasqal,UNXSUFFIX,.1));
+End
+
+Unixlink gid_Unixlink_File_Lib_Rdf
+    BIN_FILE_BODY;
+    Dir = SCP2_OOO_BIN_DIR;
+    Name = STRING(CONCAT2(librdf,UNXSUFFIX));
+    Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
+    Target = STRING(CONCAT3(librdf,UNXSUFFIX,.0));
+End
+#endif
+#ifndef SYSTEM_LIBXSLT
+Unixlink gid_Unixlink_File_Lib_Xslt
+    BIN_FILE_BODY;
+    Dir = SCP2_OOO_BIN_DIR;
+    Name = STRING(CONCAT2(libxslt,UNXSUFFIX));
+    Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
+    Target = STRING(CONCAT3(libxslt,UNXSUFFIX,.1));
+End
+#endif
+#endif
+
+Module gid_Module_Root_Files_2
+    PackageInfo = "packinfo_office.txt";
+	ParentID = gid_Module_Root;
+    InstallOrder = "50";
+	Name = "gid_Module_Root_Files_2";
+	Description = "gid_Module_Root_Files_2";
+	Sortkey = "1200";
+	Default = YES;
+	Styles = (HIDDEN_ROOT);
+	Files = (gid_File_Bin_Cde_Open_Url,
+	gid_File_Bin_Kde_Open_Url,
+	gid_File_Bin_Open_Url,
+	gid_File_Bin_Pagein,
+	gid_File_Bin_Pluginapp,
+	gid_File_Bin_Senddoc,
+	gid_File_Bin_Gengal,
+	gid_File_Script_Gengal,
+ 	gid_File_Profile_Gengal,
+	gid_File_Bin_Spadmin_Bin,
+	gid_File_Bin_Uri_Encode,
+	gid_File_Exe_Nsplugin,
+	gid_File_Lib_Npsoplugin,
+        gid_File_Lib_Soffice,
+        gid_File_Lib_Unopkgapp,
+	gid_File_Server_Bonobo_Presentationstarter,
+	gid_File_Txt_Pagein_Common,
+	gid_File_Txt_Pagein_Calc,
+	gid_File_Txt_Pagein_Draw,
+	gid_File_Txt_Pagein_Impress,
+	gid_File_Txt_Pagein_Writer,
+	gid_File_Txt_Patchfiles,
+	gid_File_Bmp_Installation,
+	gid_File_Shellnew_Ods_Soffice,
+	gid_File_Shellnew_Odg_Soffice,
+	gid_File_Shellnew_Odp_Soffice,
+	gid_File_Shellnew_Odt_Soffice,
+	gid_File_Exe_Java,
+	gid_File_Exe_Userinst,
+	gid_File_Exe_Userdeinst,
+	gid_File_Regcleanold,
+	gid_File_Exe_Regdeinstall,
+	gid_File_Tmp_Inf_Oldreg,
+	gid_File_Tmp_Userinstall_Inf,
+	gid_File_Config_Javasettingsunopkginstall);
+End
+
+Module gid_Module_Root_Files_3
+    PackageInfo = "packinfo_office.txt";
+	ParentID = gid_Module_Root;
+    InstallOrder = "60";
+	Name = "gid_Module_Root_Files_3";
+	Description = "gid_Module_Root_Files_3";
+	Sortkey = "1300";
+	Default = YES;
+	Styles = (HIDDEN_ROOT);
+	Files = (gid_File_Dat_Root3,
+	gid_File_Jar_Saxon,
+	gid_File_Jar_Unoil,
+	gid_File_Jar_Hsqldb,
+	gid_File_Jar_Hsqldb_Sdbc,
+	gid_File_Jar_Accessbridge,
+	gid_File_Jar_Officebean,
+	gid_File_Jar_Report,
+	gid_File_Jar_Table,
+	gid_File_Jar_Letter,
+	gid_File_Jar_Form,
+	gid_File_Jar_Fax,
+	gid_File_Jar_Agenda,
+	gid_File_Jar_Web,
+	gid_File_Jar_Query,
+	gid_File_Jar_Commonwizards,
+	gid_File_Jar_Sandbox,
+	gid_File_Jar_Scriptframework,
+	gid_File_Jar_Scriptproviderforjava,
+	gid_File_Jar_Xml_Apis,
+	gid_File_Jar_Bsh,
+	gid_File_Jar_Classes,
+	gid_File_Jar_AVmedia,
+	gid_File_Jar_Xsltfilter,
+	gid_File_Jar_Xsltvalidate,
+	gid_File_Jar_Docbook,
+	gid_File_Jar_Htmlsoff,
+	gid_File_Jar_Xflatxml,
+	gid_File_Jar_Xmerge,
+	gid_File_Jar_Xmergebridge,
+	gid_File_Jar_Lucene_Core,
+	gid_File_Jar_Lucene_Analyzers,
+	gid_File_Jar_Lucenehelpwrapper,
+	gid_File_Rdb_Offapi,
+	gid_Starregistry_Services_Rdb);
+End
+
+Module gid_Module_Root_Files_4
+    PackageInfo = "packinfo_office.txt";
+	ParentID = gid_Module_Root;
+    InstallOrder = "30";
+	Name = "gid_Module_Root_Files_4";
+	Description = "gid_Module_Root_Files_4";
+	Sortkey = "1400";
+	Default = YES;
+	Styles = (HIDDEN_ROOT);
+	Files = (gid_File_Dat_Root4,
+	gid_File_Filter_Eme,
+	gid_File_Filter_Sdfilt,
+	gid_File_Filter_Icg,
+	gid_File_Filter_Egi,
+	gid_File_Filter_Epb,
+	gid_File_Filter_Epg,
+	gid_File_Filter_Epp,
+	gid_File_Filter_Eps,
+	gid_File_Filter_Ept,
+	gid_File_Filter_Era,
+	gid_File_Filter_Eti,
+	gid_File_Filter_Exp,
+	gid_File_Filter_Icd,
+	gid_File_Filter_Idx,
+	gid_File_Filter_Ime,
+	gid_File_Filter_Ipb,
+	gid_File_Filter_Ipd,
+	gid_File_Filter_Ips,
+	gid_File_Filter_Ipt,
+	gid_File_Filter_Ipx,
+	gid_File_Filter_Ira,
+	gid_File_Filter_Itg,
+	gid_File_Filter_Iti,
+	gid_File_Lib_Bib,
+	gid_File_Lib_Chartmodel,
+	gid_File_Lib_Chartview,
+	gid_File_Lib_Chartcontroller,
+	gid_File_Lib_Charttools,
+	gid_File_Lib_Ctl,
+	gid_File_Lib_Cui,
+    gid_File_Lib_Sdbt,
+    gid_File_Lib_Dbmm,
+	gid_File_Lib_Dba,
+	gid_File_Lib_Dbase2,
+	gid_File_Lib_Dbaxml,
+	gid_File_Lib_Dbt,
+	gid_File_Lib_Dbfile,
+	gid_File_Lib_Drawinglayer,
+        gid_File_Lib_Editeng,
+	gid_File_Lib_Flat,
+	gid_File_Lib_For,
+	gid_File_Lib_Forui,
+	gid_File_Lib_Frm,
+	gid_File_Lib_Fwe,
+	gid_File_Lib_Fwi,
+	gid_File_Lib_Fwk,
+	gid_File_Lib_Fwl,
+	gid_File_Lib_Go,
+	gid_File_Lib_Helplinker,
+	gid_File_Lib_J,
+	gid_File_Lib_Lks,
+	gid_File_Lib_Lng,
+	gid_File_Lib_Offacc,
+	gid_File_Lib_Oox,
+	gid_File_Lib_Pcr,
+	gid_File_Lib_Pdffilter,
+	gid_File_Lib_Pk,
+	gid_File_Lib_Pl,
+	gid_File_Lib_Sf_Prothdlr,
+	gid_File_Lib_Psp,
+	gid_File_Lib_Res,
+	gid_File_Lib_Sax,
+	gid_File_Lib_Sb,
+	gid_File_Lib_Scn,
+	gid_File_Lib_Sd,
+	gid_File_Lib_Sdd,
+	gid_File_Lib_Sdui,
+	gid_File_Lib_Sfx,
+	gid_File_Lib_Sot,
+	gid_File_Lib_Spa,
+	gid_File_Lib_Spl,
+	gid_File_Lib_Sts,
+	gid_File_Lib_Svl,
+	gid_File_Lib_Svtools,
+	gid_File_Lib_Svx,
+	gid_File_Lib_AVMedia,
+	gid_File_Lib_AVMediaWin,
+    gid_File_Lib_AVMediaGStreamer,
+	gid_File_Lib_BaseGfx,
+	gid_File_Lib_Sysdtrans,
+	gid_File_Lib_Sw,
+	gid_File_Lib_TextConversionDlgs,
+	gid_File_Lib_Tk,
+    gid_File_Lib_Acc,
+    gid_File_Lib_BaseBmp,
+	gid_File_Lib_Tools,
+	gid_File_Lib_Utl,
+	gid_File_Lib_Uui,
+	gid_File_Lib_Vcl,
+	gid_File_Lib_Xcr,
+	gid_File_Lib_Xmlfa,
+	gid_File_Lib_Xmlfd,
+	gid_File_Lib_Xmx,
+	gid_File_Lib_Xo,
+	gid_File_Lib_Xof,
+	gid_File_Lib_Xsltdlg,
+	gid_File_Lib_Xsltfilter,
+	gid_File_Lib_Odfflatxml,
+	gid_File_Lib_Zip,
+	gid_File_Lib_Vclplug_Gen,
+	gid_File_Lib_Vclplug_Kde,
+	gid_File_Lib_Vclplug_Kde4,
+	gid_File_Lib_Vclplug_Svp,
+	gid_File_Lib_Basctl,
+	gid_File_Lib_CanvasTools,
+	gid_File_Lib_CppCanvas,
+	gid_File_Lib_Agg,
+	gid_File_Lib_Fwm,
+	gid_File_Lib_Lprx2,
+	gid_File_Lib_Lprxw,
+    gid_File_Lib_Libtextcat,
+    gid_File_Lib_Guesslang,
+	gid_File_Lib_Tfu);
+End
+
+Module gid_Module_Root_Files_5
+    PackageInfo = "packinfo_office.txt";
+    TabPackageInfo = "packinfo_office_tab.txt";
+	ParentID = gid_Module_Root;
+    InstallOrder = "40";
+	Name = "gid_Module_Root_Files_5";
+	Description = "gid_Module_Root_Files_5";
+	Sortkey = "1500";
+	Default = YES;
+	Styles = (HIDDEN_ROOT);
+	Files = (gid_File_Dat_Root5,
+#if ! defined SYSTEM_GETTEXT
+    gid_File_Lib_Intl,
+#endif
+#if ! defined SYSTEM_GLIB
+    gid_File_Lib_Glib,
+    gid_File_Lib_Gobject,
+    gid_File_Lib_Gthread,
+    gid_File_Lib_Gmodule,
+    gid_File_Lib_Gio,
+#endif
+#if ! defined SYSTEM_GDKPIXBUF
+    gid_File_Lib_Gdkpixbuf,
+#endif
+#if ! defined SYSTEM_LIBCROCO
+    gid_File_Lib_Libcroco,
+#endif
+#if ! defined SYSTEM_PANGO
+    gid_File_Lib_Libpango,
+    gid_File_Lib_Libpangocairo,
+#ifdef WNT
+    gid_File_Lib_Libpangowin32,
+#endif
+#endif
+#if ! defined SYSTEM_LIBGSF
+    gid_File_Lib_Libgsf,
+#endif
+	gid_File_Lib_Dict_Ja,
+	gid_File_Lib_Dict_Zh,
+    gid_File_Lib_Collator_Data,
+    gid_File_Lib_Index_Data,
+    gid_File_Lib_Textconv_Dict,
+	gid_File_Lib_Basprov,
+	gid_File_Lib_Configmgr,
+	gid_File_Lib_Crypto,
+	gid_File_Lib_Dlgprov,
+	gid_File_Lib_Stringresource,
+	gid_File_Lib_Ldapbe2,
+	gid_File_Lib_Comphelper2,
+	gid_File_Lib_Cached1,
+	gid_File_Lib_Curl,
+	gid_Unixlink_File_Lib_Curl,
+	gid_File_Lib_Db,
+	gid_File_Lib_Dbpool,
+	gid_File_Lib_Embobj,
+	gid_File_Lib_Emboleobj,
+	gid_File_Lib_Kab_1,
+    gid_File_Lib_Kab_Drv_1,
+	gid_File_Lib_Macab_1,
+    gid_File_Lib_Macab_Drv_1,
+	gid_File_Lib_Evtatt,
+	gid_File_Lib_Fileacc,
+	gid_File_Lib_Filterconfig1,
+	gid_File_Lib_Dbodbcbase,
+	gid_File_Lib_I18npool,
+	gid_File_Lib_I18npaper,
+	gid_File_Lib_I18nregexp,
+	gid_File_Lib_I18nsearch,
+    gid_File_Lib_I18nisolang,
+	gid_File_Lib_I18nutil,
+	gid_File_Lib_Icudata,
+	gid_File_Lib_Icui18n,
+	gid_File_Lib_Icule,
+	gid_File_Lib_Icuuc,
+	gid_File_Lib_Localedata_En,
+	gid_File_Lib_Localedata_Es,
+	gid_File_Lib_Localedata_Euro,
+	gid_File_Lib_Localedata_Others,
+	gid_File_Lib_Hsqldb_2,
+	gid_File_Lib_Jdbc,
+	gid_File_Lib_Mcnttype,
+	gid_File_Lib_Mozab_2,
+	gid_File_Lib_Mozabdrv,
+	gid_File_Lib_Mozbootstrap,
+	gid_File_Lib_Mysql,
+	gid_File_Lib_Odbc,
+	gid_File_Lib_Officebean,
+	gid_File_Lib_Openssl,
+	gid_File_Lib_Package2,
+	gid_File_Lib_Deployment,
+	gid_File_Lib_DeploymentGui,
+	gid_File_Lib_Expwrap_Uno,
+	gid_File_Lib_Fastsax_Uno,
+	gid_File_Lib_Slideshow,
+	gid_File_Lib_Recentfile,
+	gid_File_Lib_Scriptframe,
+	gid_File_Lib_Sdbc_2,
+	gid_File_Lib_Srtrs1,
+	gid_File_Lib_Bat,
+	gid_File_Lib_Tab,
+	gid_File_Lib_Tab2,
+	gid_File_Lib_Unoxml,
+	gid_File_Lib_Localebe,
+	gid_File_Lib_Migrationoo2,
+	gid_File_Lib_Migrationoo3,
+	gid_File_Lib_Syssh,
+	gid_File_Ucptdoc1,
+	gid_File_Ucpexpand1,
+	gid_File_Lib_Raptor,
+	gid_Unixlink_File_Lib_Raptor,
+	gid_File_Lib_Rasqal,
+	gid_Unixlink_File_Lib_Rasqal,
+	gid_File_Lib_Rdf,
+	gid_Unixlink_File_Lib_Rdf,
+	gid_File_Lib_Unordf,
+	gid_File_Lib_Sndfile,
+	gid_File_Lib_Tvhlp1,
+	gid_File_Lib_Ucb1,
+	gid_File_Lib_Ucbhelper,
+	gid_File_Lib_Ucpchelp1,
+	gid_File_Lib_Ucpdav1,
+	gid_File_Lib_Neon,
+	gid_File_Lib_Ucpfile1,
+	gid_File_Lib_Ucpftp1,
+	gid_File_Lib_Ucphier1,
+	gid_File_Lib_Ucppkg1,
+	gid_File_Lib_Xslt,
+	gid_Unixlink_File_Lib_Xslt,
+	gid_File_Lib_LibXMLSec_xmlsecnss,
+	gid_File_Lib_LibXMLSec_xmlseccore,
+	gid_File_Lib_LibXMLSec_xmlsecmscrypto,
+	gid_File_Lib_XSec_XMLSecurity,
+	gid_File_Lib_XSec_Framework,
+	gid_File_Lib_XSec_XmlSec,
+	gid_File_Lib_Xstor,
+	gid_File_CanvasFactory,
+	gid_File_SimpleCanvas,
+	gid_File_Lib_Cmdmail,
+	gid_File_Lib_I18n,
+	gid_File_Lib_VCLCanvas,
+	gid_File_Lib_DirectX5Canvas,
+	gid_File_Lib_DirectX9Canvas,
+	gid_File_Lib_GdiPlusCanvas,
+	gid_File_Lib_Hhc_Word,
+	gid_File_Lib_Socomp,
+	gid_File_Lib_Sogpstarter,
+	gid_File_Lib_Stdc_3,
+	gid_File_Lib_Stdc_5,
+	gid_File_Lib_Accessbridge,
+	gid_File_Lib_Ado,
+	gid_File_Lib_Dl,
+	gid_File_Lib_Dnd,
+	gid_File_Lib_Dtrans,
+	gid_File_Lib_Emser,
+	gid_File_Lib_Inprocserv,
+	gid_File_Lib_Fop,
+	gid_File_Lib_Fps,
+	gid_File_Lib_Ftransl,
+	gid_File_Lib_Lngpckinsthlp,
+#ifdef ENABLE_LOMENUBAR
+	gid_File_Lib_Lomenubar,
+#endif
+    gid_File_Lib_sn_tools,
+    GID_FILE_LIB_WPD,
+    gid_File_Lib_Mingw_GccS,
+    gid_File_Lib_Mingw_Stdcpp,
+    gid_File_Lib_Mingwm10,
+	gid_File_Lib_Msvcp70,
+	gid_File_Lib_Msvcr70,
+	gid_File_Lib_Ole,
+	gid_File_Lib_Patchmsi,
+	gid_File_Lib_Reg4allmsdoc,
+	gid_File_Lib_Qslnkmsi,
+	gid_File_Lib_Sdqsmsi,
+	gid_File_Lib_Instooofiltmsi,
+	gid_File_Lib_Smplmail,
+	gid_File_Lib_Gconfebe,
+	gid_File_Lib_Wininetbe,
+	gid_File_Lib_Macbe,
+	gid_File_Lib_Msvcp70_So,
+	gid_File_Lib_Msvcr70_So,
+	gid_File_Lib_Gdiplus,
+	gid_File_Lib_Stlport_Vc6,
+	gid_File_Lib_Stlport_Vc7,
+	gid_File_Tabaction,
+	gid_File_Lib_Fps_Office,
+	gid_File_Lib_Fpicker,
+	gid_File_Lib_Fsstorage,
+	gid_File_Lib_Hatchwindowfactory,
+	gid_File_Lib_Passwordcontainer,
+	gid_File_Lib_Productregistration,
+	gid_File_Lib_Svtmisc,
+    gid_File_Lib_Updchkui,
+    gid_File_Lib_Updatefeed,
+	gid_File_Lib_Onlinecheck,
+	gid_File_Lib_Cli_Oootypes_Assembly,
+	gid_File_Lib_Policy_Cli_Oootypes_Assembly,
+	gid_File_Lib_Policy_Cli_Oootypes_Config);
+    Unixlinks = (gid_Unixlink_File_Lib_Curl,
+	gid_Unixlink_File_Lib_Raptor,
+	gid_Unixlink_File_Lib_Rasqal,
+	gid_Unixlink_File_Lib_Rdf,
+	gid_Unixlink_File_Lib_Xslt);
+End
+
+Module gid_Module_Root_Files_6
+    PackageInfo = "packinfo_office.txt";
+	ParentID = gid_Module_Root;
+    InstallOrder = "70";
+	Name = "gid_Module_Root_Files_6";
+	Description = "gid_Module_Root_Files_6";
+	Sortkey = "1600";
+	Default = YES;
+	Styles = (HIDDEN_ROOT);
+	Files = (gid_File_Basic_User,
+	gid_File_Basic_Share,
+	gid_File_Basic_User_Standard,
+	gid_File_Extra_Autotextuser,
+	gid_File_Extra_Cfgusr,
+	gid_File_Extra_Palettes,
+	gid_File_Extra_Database,
+	gid_File_Extra_Databasebiblio,
+	gid_File_Extra_Gallsound,
+	gid_File_Extra_Autocorr,
+	gid_File_Extra_Autocorr_Lang,
+	gid_File_Extra_Gallroot,
+	gid_File_Extra_Gallbullets,
+	gid_File_Extra_Gallhtmlexpo,
+	gid_File_Extra_Gallrulers,
+	gid_File_Extra_Gallsystem,
+	gid_File_Extra_Gallflagscontrol,
+	gid_File_Extra_Gallsounds,
+	gid_File_Extra_Gallwwwanim,
+	gid_File_Extra_Gallwwwback,
+	gid_File_Extra_Gallwwwgraf,
+	gid_File_Extra_Migration,
+	gid_File_Extra_Migration_Lang_Multi,
+	gid_File_Extra_Tpllayoutimpr,
+	gid_File_Extra_Tplwizbitmap,
+	gid_File_Extra_Tplwizletter,
+	gid_File_Extra_Tplwizmemo_Lang,
+	gid_File_Extra_Autotextuser_Lang,
+	gid_File_Extra_Dir_Fonts,
+	gid_File_Scripts_Beanshell,
+	gid_File_Scripts_Java,
+	gid_File_Scripts_Javascript,
+	gid_File_Basic_Depot,
+	gid_File_Basic_Euro,
+	gid_File_Basic_Form,
+	gid_File_Basic_Gimmicks,
+	gid_File_Basic_Importwiz,
+	gid_File_Basic_Formwiz,
+	gid_File_Basic_Schedule,
+	gid_File_Basic_Scriptbindinglib,
+	gid_File_Basic_Template,
+	gid_File_Basic_Tools,
+	gid_File_Basic_Tutorials,
+	gid_File_Extra_Cfgsrv,
+	gid_File_Extra_Cfgsrv_Bitmap_Unx,
+	gid_File_Extra_Symbols,
+	gid_File_Extra_Common_Inc,
+	gid_File_Extra_Common_Pl,
+	gid_File_Extra_Edit_Asp,
+	gid_File_Extra_Edit_Pl,
+	gid_File_Extra_Editpic_Asp,
+	gid_File_Extra_Editpic_Pl,
+	gid_File_Extra_Index_Pl,
+	gid_File_Extra_Poll_Asp,
+	gid_File_Extra_Poll_Pl,
+	gid_File_Extra_Savepic_Asp,
+	gid_File_Extra_Savepic_Pl,
+	gid_File_Extra_Show_Asp,
+	gid_File_Extra_Show_Pl,
+	gid_File_Extra_Webcast_Asp,
+	gid_File_Extra_Webcast_Pl,
+	gid_File_Extra_Square_Yellow_Zip,
+	gid_File_Extra_Square_Red_Zip,
+	gid_File_Extra_Square_Green_Zip,
+	gid_File_Extra_Square_Gray_Zip,
+	gid_File_Extra_Square_Blue_Zip,
+	gid_File_Extra_Simple_Zip,
+	gid_File_Extra_Round_White_Zip,
+	gid_File_Extra_Round_Gorilla_Zip,
+	gid_File_Extra_Glas_Red_Zip,
+	gid_File_Extra_Glas_Green_Zip,
+	gid_File_Extra_Glas_Blue_Zip,
+	gid_File_Share_Config_Sofficecfg_uiconfig_Zip,
+	gid_File_Share_Config_Sofficecfg_Basicide_Menubar_Xml,
+	gid_File_Share_Config_Sofficecfg_Bibliography_Menubar_Xml,
+	gid_File_Share_Config_Sofficecfg_Dbuquery_Menubar_Xml,
+	gid_File_Share_Config_Sofficecfg_Dbubrowser_Menubar_Xml,
+	gid_File_Share_Config_Sofficecfg_Dbuapp_Menubar_Xml,
+	gid_File_Share_Config_Sofficecfg_Dburelation_Menubar_Xml,
+	gid_File_Share_Config_Sofficecfg_Dbutable_Menubar_Xml,
+	gid_File_Share_Config_Sofficecfg_Startmodule_Menubar_Xml,
+	gid_File_Share_Config_Sofficecfg_Chart_Menubar_Xml,
+	gid_File_Dtd_Accelerator,
+	gid_File_Dtd_Dialog,
+	gid_File_Dtd_Event,
+	gid_File_Dtd_Groupuinames,
+	gid_File_Dtd_Image,
+	gid_File_Dtd_Libraries,
+	gid_File_Dtd_Library,
+	gid_File_Dtd_Manifest,
+	gid_File_Dtd_Menubar,
+	gid_File_Dtd_Module,
+	gid_File_Dtd_Office,
+	gid_File_Dtd_Statusbar,
+	gid_File_Dtd_Toolbar,
+    gid_File_Conf_Fpdb,
+    gid_File_Lm_Afrikaans,
+    gid_File_Lm_Albanian,
+    gid_File_Lm_Amharic_Utf,
+    gid_File_Lm_Arabic,
+    gid_File_Lm_Armenian,
+    gid_File_Lm_Basque,
+    gid_File_Lm_Belarus,
+    gid_File_Lm_Bosnian,
+    gid_File_Lm_Breton,
+    gid_File_Lm_Catalan,
+    gid_File_Lm_Chinese_Simplified,
+    gid_File_Lm_Chinese_Traditional,
+    gid_File_Lm_Croatian,
+    gid_File_Lm_Czech,
+    gid_File_Lm_Danish,
+    gid_File_Lm_Drents,
+    gid_File_Lm_Dutch,
+    gid_File_Lm_English,
+    gid_File_Lm_Esperanto,
+    gid_File_Lm_Estonian,
+    gid_File_Lm_Finnish,
+    gid_File_Lm_French,
+    gid_File_Lm_Frisian,
+    gid_File_Lm_Georgian,
+    gid_File_Lm_German,
+    gid_File_Lm_Greek,
+    gid_File_Lm_Hebrew,
+    gid_File_Lm_Hindi,
+    gid_File_Lm_Hungarian,
+    gid_File_Lm_Icelandic,
+    gid_File_Lm_Indonesian,
+    gid_File_Lm_Irish_Gaelic,
+    gid_File_Lm_Italian,
+    gid_File_Lm_Japanese,
+    gid_File_Lm_Korean,
+    gid_File_Lm_Latin,
+    gid_File_Lm_Latvian,
+    gid_File_Lm_Lithuanian,
+    gid_File_Lm_Luxembourgish,
+    gid_File_Lm_Malay,
+    gid_File_Lm_Manx_Gaelic,
+    gid_File_Lm_Marathi,
+    gid_File_Lm_Middle_Frisian,
+    gid_File_Lm_Mingo,
+    gid_File_Lm_Mongolian_Cyrillic,
+    gid_File_Lm_Nepali,
+    gid_File_Lm_Norwegian,
+    gid_File_Lm_Persian,
+    gid_File_Lm_Polish,
+    gid_File_Lm_Portuguese,
+    gid_File_Lm_Quechua,
+    gid_File_Lm_Romanian,
+    gid_File_Lm_Romansh,
+    gid_File_Lm_Russian,
+    gid_File_Lm_Sanskrit,
+    gid_File_Lm_Scots,
+    gid_File_Lm_Scots_Gaelic,
+    gid_File_Lm_Serbian,
+    gid_File_Lm_Serbian_Latin,
+    gid_File_Lm_Slovak_Ascii,
+    gid_File_Lm_Slovenian,
+    gid_File_Lm_Spanish,
+    gid_File_Lm_Swahili,
+    gid_File_Lm_Swedish,
+    gid_File_Lm_Tagalog,
+    gid_File_Lm_Tamil,
+    gid_File_Lm_Thai,
+    gid_File_Lm_Turkish,
+    gid_File_Lm_Ukrainian,
+    gid_File_Lm_Vietnamese,
+    gid_File_Lm_Welsh,
+    gid_File_Lm_Yiddish_Utf,
+    gid_File_Lm_Zulu,
+	gid_File_Mod_Chart,
+	gid_File_Mod_Datastyl,
+	gid_File_Mod_Defs,
+	gid_File_Mod_Drawing,
+	gid_File_Mod_Dtypes,
+	gid_File_Mod_Form,
+	gid_File_Mod_Meta,
+	gid_File_Mod_Nmspace,
+	gid_File_Mod_Office,
+	gid_File_Mod_Script,
+	gid_File_Mod_Settings,
+	gid_File_Mod_Style,
+	gid_File_Mod_Table,
+	gid_File_Mod_Text,
+    gid_File_Oo_Ldap_Xcd_Sample,
+    gid_File_Oo_Ad_Ldap_Xcd_Sample,
+    gid_File_Share_Registry_Main_Xcd,
+    gid_File_Share_Registry_Forcedefault_Xcd,
+	gid_File_Pymailmerge,
+	gid_File_Pymailmerge_msgbox,
+    gid_File_Xsl_Common_Measure_Conversion,
+	gid_File_Xsl_Common_Math_Functions,
+	gid_File_Xsl_Export_Common_Body,
+	gid_File_Xsl_Export_Common_Table_Of_Content,
+	gid_File_Xsl_Export_Common_Ooo2ms_Docpr,
+	gid_File_Xsl_Export_Common_Styles_Styles_Collector,
+	gid_File_Xsl_Export_Common_Styles_Style_Mapping_Css,
+	gid_File_Xsl_Export_Common_Styles_Style_Mapping_html32,
+	gid_File_Xsl_Export_Common_Table_Table,
+	gid_File_Xsl_Export_Common_Table_Table_Cells,
+	gid_File_Xsl_Export_Common_Table_Table_Columns,
+	gid_File_Xsl_Export_Common_Table_Table_Rows,
+	gid_File_Xsl_Export_Spreadsheetml_Formular,
+	gid_File_Xsl_Export_Spreadsheetml_Ooo2spreadsheetml,
+	gid_File_Xsl_Export_Spreadsheetml_Style_Mapping,
+	gid_File_Xsl_Export_Spreadsheetml_Styles,
+	gid_File_Xsl_Export_Spreadsheetml_Table,
+	gid_File_Xsl_Export_uof_odf2uof_text,
+	gid_File_Xsl_Export_uof_odf2uof_spreadsheet,
+	gid_File_Xsl_Export_uof_odf2uof_presentation,
+	gid_File_Xsl_Import_uof_uof2odf_text,
+	gid_File_Xsl_Import_uof_uof2odf_spreadsheet,
+	gid_File_Xsl_Import_uof_uof2odf_presentation,
+	gid_File_Xsl_Export_Wordml_Ooo2wordml,
+	gid_File_Xsl_Export_Wordml_Ooo2wordml_Border,
+	gid_File_Xsl_Export_Wordml_Ooo2wordml_Custom_Draw,
+	gid_File_Xsl_Export_Wordml_Ooo2wordml_Draw,
+	gid_File_Xsl_Export_Wordml_Ooo2wordml_Field,
+	gid_File_Xsl_Export_Wordml_Ooo2wordml_List,
+	gid_File_Xsl_Export_Wordml_Ooo2wordml_Page,
+	gid_File_Xsl_Export_Wordml_Ooo2wordml_Path,
+	gid_File_Xsl_Export_Wordml_Ooo2wordml_Settings,
+	gid_File_Xsl_Export_Wordml_Ooo2wordml_Table,
+	gid_File_Xsl_Export_Wordml_Ooo2wordml_Text,
+	gid_File_Xsl_Import_Common_Ms2ooo_Docpr,
+	gid_File_Xsl_Import_Spreadsheetml_Spreadsheetml2ooo,
+	gid_File_Xsl_Import_Wordml_Wordml2ooo_Props,
+	gid_File_Xsl_Import_Wordml_Wordml2ooo,
+	gid_File_Xsl_Import_Wordml_Wordml2ooo_Custom_Draw,
+	gid_File_Xsl_Import_Wordml_Wordml2ooo_Draw,
+	gid_File_Xsl_Import_Wordml_Wordml2ooo_Field,
+	gid_File_Xsl_Import_Wordml_Wordml2ooo_List,
+	gid_File_Xsl_Import_Wordml_Wordml2ooo_Page,
+	gid_File_Xsl_Import_Wordml_Wordml2ooo_Settings,
+	gid_File_Xsl_Import_Wordml_Wordml2ooo_Table,
+	gid_File_Xsl_Import_Wordml_Wordml2ooo_Text,
+	gid_File_Xsl_Import_Wordml_Wordml2ooo_Path,
+	gid_File_Extra_Fontunxpsprint,
+	gid_File_Extra_Fontunxppds,
+	gid_File_Extra_Fontunxafm,
+	gid_File_Kspprof_Ini,
+	gid_File_Sp_Adsf_Mcd,
+	gid_File_Sp_Bnd_Mcd,
+	gid_File_Sp_Fre_Mcd,
+	gid_File_Sp_Jlsf_Mcd,
+	gid_File_Sp_Klsf_Mcd,
+	gid_File_Sp_Subm_Mcd,
+	gid_File_Spuser1_Txt);
+End
+
+Module gid_Module_Root_Files_7
+    PackageInfo = "packinfo_office.txt";
+	ParentID = gid_Module_Root;
+    InstallOrder = "80";
+	Name = "gid_Module_Root_Files_7";
+	Description = "gid_Module_Root_Files_7";
+	Sortkey = "1900";
+	Default = YES;
+	Styles = (HIDDEN_ROOT);
+	Files = (gid_File_Help_Help_Zip,
+             gid_File_Moz_Msvcp71,
+             gid_File_Moz_Msvcr71,
+             gid_File_Mozilla_Runtime);
+End
+
+Module gid_Module_Root_Files_Images
+    PackageInfo = "packinfo_office.txt";
+	ParentID = gid_Module_Root;
+    InstallOrder = "100";
+	Name = "gid_Module_Root_Files_Images";
+	Description = "gid_Module_Root_Files_Images";
+	Sortkey = "2050";
+	Default = YES;
+	Styles = (HIDDEN_ROOT);
+	Files = (
+#ifdef THEME_DEFAULT
+	     gid_File_Images_Zip,
+#endif
+#ifdef THEME_CRYSTAL
+             gid_File_ImagesCrystal_Zip,
+#endif
+#ifdef THEME_OXYGEN
+             gid_File_ImagesOxygen_Zip,
+#endif
+#ifdef THEME_HICONTRAST
+             gid_File_ImagesHicontrast_Zip,
+#endif
+#ifdef THEME_TANGO
+             gid_File_ImagesTango_Zip
+#endif
+	);
+End
+
+#ifndef WITHOUT_FONTS
+Module gid_Module_Root_Fonts_OOo_Hidden
+    PackageInfo = "packinfo_office.txt";
+	ParentID = gid_Module_Root;
+    InstallOrder = "100";
+	Name = "gid_Module_Root_Fonts_OOo_Hidden";
+	Description = "gid_Module_Root_Fonts_OOo_Hidden";
+	Sortkey = "2100";
+	Default = YES;
+	Styles = (HIDDEN_ROOT);
+	Files = (gid_File_Fnt_Opensymb,
+	gid_File_Fnt_DejaVuSans_Bold,
+	gid_File_Fnt_DejaVuSans_BoldOblique,
+	gid_File_Fnt_DejaVuSans_Oblique,
+	gid_File_Fnt_DejaVuSans,
+	gid_File_Fnt_DejaVuSansCondensed_Bold,
+	gid_File_Fnt_DejaVuSansCondensed_BoldOblique,
+	gid_File_Fnt_DejaVuSansCondensed_Oblique,
+	gid_File_Fnt_DejaVuSansCondensed,
+	gid_File_Fnt_DejaVuSansExtraLight,
+	gid_File_Fnt_DejaVuSansMono_Bold,
+	gid_File_Fnt_DejaVuSansMono_BoldOblique,
+	gid_File_Fnt_DejaVuSansMono_Oblique,
+	gid_File_Fnt_DejaVuSansMono,
+	gid_File_Fnt_DejaVuSerif_Bold,
+	gid_File_Fnt_DejaVuSerif_BoldItalic,
+	gid_File_Fnt_DejaVuSerif_Italic,
+	gid_File_Fnt_DejaVuSerif,
+	gid_File_Fnt_DejaVuSerifCondensed_Bold,
+	gid_File_Fnt_DejaVuSerifCondensed_BoldItalic,
+	gid_File_Fnt_DejaVuSerifCondensed_Italic,
+	gid_File_Fnt_DejaVuSerifCondensed,
+	gid_File_Fnt_LibSansNarrow_Regular, 
+	gid_File_Fnt_LibSansNarrow_Bold,
+	gid_File_Fnt_LibSansNarrow_BoldItalic,
+	gid_File_Fnt_LibSansNarrow_Italic,
+	gid_File_Fnt_LiberationMono_Bold, 
+	gid_File_Fnt_LiberationMono_BoldItalic, 
+	gid_File_Fnt_LiberationMono_Italic,
+	gid_File_Fnt_LiberationMono_Regular, 
+	gid_File_Fnt_LiberationSans_Bold,
+	gid_File_Fnt_LiberationSans_BoldItalic,
+	gid_File_Fnt_LiberationSans_Italic,
+	gid_File_Fnt_LiberationSans_Regular,
+	gid_File_Fnt_LiberationSerif_Bold,
+	gid_File_Fnt_LiberationSerif_BoldItalic,
+	gid_File_Fnt_LiberationSerif_Italic,
+	gid_File_Fnt_LiberationSerif_Regular);
+End
+#endif
+
+Module gid_Module_Oo_Linguistic
+    PackageInfo = "packinfo_office.txt";
+    Name = "gid_Module_Oo_Linguistic";
+    Description = "gid_Module_Oo_Linguistic";
+    ParentID = gid_Module_Root;
+    Default = YES;
+    Styles = (HIDDEN_ROOT);
+    Files = (gid_File_Lib_Spell,
+        gid_File_Lib_Hunspell,
+        gid_File_Lib_Hyph,
+        gid_File_Lib_Lnth,
+        gid_File_Share_Registry_Lingucomponent_Xcd);
+End
+
+#ifdef LINUX
+Module gid_Module_Root_Userland
+    ParentID = gid_Module_Root;
+    InstallOrder = "5";
+	Name = "gid_Module_Root_Userland";
+	Description = "gid_Module_Root_Userland";
+	Subdir = "userland";
+    Styles = (HIDDEN_ROOT,USERLANDMODULE,USERINSTALLONLY,NOTRELOCATABLE,XPD_ONLY,INSTALLCANFAIL);
+    PackageName = "${USERLANDPACKAGENAME}";
+End
+#endif
+
+// #ifdef BUILD_SPECIAL
+// Module gid_Module_Root_Extension_Oooimprovement
+//    Name = "gid_Module_Root_Extension_Oooimprovement";
+//    Description = "gid_Module_Root_Extension_Oooimprovement";
+//    Files = (gid_File_Extension_Oxt_Oooimprovement);
+//    InstallOrder = "1990";
+//    PackageInfo = "packinfo_office.txt";
+//    ParentID = gid_Module_Root;
+//    Styles = (HIDDEN_ROOT);
+// End
+// #endif

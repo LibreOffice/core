@@ -1,0 +1,330 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_sdb_application_XDatabaseDocumentUI_idl__
+#define __com_sun_star_sdb_application_XDatabaseDocumentUI_idl__
+
+#include <com/sun/star/sdbc/XDataSource.idl>
+#include <com/sun/star/sdbc/SQLException.idl>
+#include <com/sun/star/sdbc/XConnection.idl>
+#include <com/sun/star/awt/XWindow.idl>
+#include <com/sun/star/lang/IllegalArgumentException.idl>
+#include <com/sun/star/container/NoSuchElementException.idl>
+#include <com/sun/star/lang/XComponent.idl>
+#include <com/sun/star/beans/PropertyValue.idl>
+#include <com/sun/star/beans/Pair.idl>
+
+//=============================================================================
+
+module com { module sun { module star { module sdb { module application {
+
+//=============================================================================
+
+/** provides access to the user interface of a database document
+
+    <p>This interface is available when a database document has been loaded into
+    a frame, at the controller of this frame.</p>
+
+    @see com::sun::star::frame::Controller
+    @see com::sun::star::sdb::DatabaseDocument
+
+    @since OOo 2.2
+ */
+published interface XDatabaseDocumentUI
+{
+    /** provides access to the data source belong to the database document
+    */
+    [attribute, readonly] com::sun::star::sdbc::XDataSource DataSource;
+
+    /** provides access to the application's main window
+
+        <p>Note that reading this attribute is equivalent to querying the component
+        for the <type scope="com::sun::star::frame">XController</type> interface,
+        asking the controller for its frame, and asking this frame for its
+        container window.</p>
+
+        @see ::com::sun::star::frame::XController
+        @see ::com::sun::star::frame::XFrame
+    */
+    [attribute, readonly] com::sun::star::awt::XWindow ApplicationMainWindow;
+
+    /** provides access to the current connection of the application
+
+        <p>Note that the connection returned here is really the working connection
+        of the application. Clients should not misuse it, in particular, closing
+        the connection can yield unexpected results and should definitely be
+        avoided. If you need a separate connection to the data source, use
+        <member scope="com::sun::star::sdbc">XDataSource::getConnection</member>.</p>
+    */
+    [attribute, readonly] com::sun::star::sdbc::XConnection ActiveConnection;
+
+    /** determines whether the application is currently connected to the database
+    */
+    boolean isConnected();
+
+    /** lets the application connect to the database
+
+        <p>If the application is already connected, nothing happens. If it is not
+        connected, the application will try to establish a connection by using
+        <member scope="com::sun::star::sdbc">XDataSource::getConnection</member>
+        with the current settings, as specified in the
+        <member scope="com::sun::star::sdb">DataSource::Settings</member> member.</p>
+
+        <p>If the connection cannot be established, the respective error message is shown
+        in the application window.</p>
+
+        @throws ::com::sun::star::sdbc::SQLException
+            if the connection cannot be established
+    */
+    void    connect()
+        raises ( ::com::sun::star::sdbc::SQLException );
+
+    /** contains all sub components of the database document
+
+        <p>During working with the database, the user might open different sub components:
+        forms, reports, tables, queries. Those components are tracked by the application,
+        and provided in this attribute.</p>
+
+        <p>The components here might either be documents (<type scope="com::sun::star::frame">XModel</type>),
+        controllers (<type scope="com::sun::star::frame">XController</type>), or frames
+        (<type scope="com::sun::star::frame">XFrame</type>).
+
+        @since OOo 3.0
+    */
+    [attribute, readonly] sequence< ::com::sun::star::lang::XComponent >
+            SubComponents;
+
+    /** identifies the given sub component
+
+        @param SubComponent
+            the component to identify. Must be one of the components in <member>SubComponents</member>.
+
+        @return
+            a record describing the sub component. The first element of the returned pair is the type
+            of the component, denoted by one of the <type>DatabaseObject</type> constants. The second
+            element is the name of the component. For object types which support nested structures (forms
+            and reports, actually), this might be a hierarchical name. If the sub component has been newly created,
+            and not yet saved, this name is empty.
+
+        @throws ::com::sun::star::lang::IllegalArgumentException
+            if the given component is not one of the controller's sub components
+    */
+    ::com::sun::star::beans::Pair< long, string >
+            identifySubComponent(
+                [in] ::com::sun::star::lang::XComponent SubComponent
+            )
+            raises (
+                ::com::sun::star::lang::IllegalArgumentException
+            );
+
+    /** closes all sub components of the database document.
+
+        <p>During working with the database, the user might open different sub components:
+        forms, reports, tables, queries. If you need to close all those documents, use
+        <code>closeSubComponents</code>, which will gracefully do this.</p>
+
+        <p>In a first step, the sub components will be suspended
+        (<member scope="com::sun::star::frame">XController::suspend</member>). There
+        are basically two reasons why suspending a single sub component can fail: The
+        user might veto it (she's asked if the document is currently modified), and
+        the component might be uncloseable currently, e.g. due to an open modal
+        dialog, or a long-lasting operation running currently (e.g. printing).</p>
+
+        <p>Once all sub components have been suspended, they will, in a second step,
+        be closed. Again, closing might be vetoed by other instances, e.g. by a close
+        listener registered at the component.</p>
+
+        @return
+            <TRUE/> if and only if both suspending and closing all sub components succeeds.
+
+        @since OOo 3.0
+    */
+    boolean closeSubComponents();
+
+    /** loads the given sub component of the database document
+
+        <p>This method allows programmatic access to the functionality which is present in the UI:
+        it allows opening a table, query, form, or report for either editing or viewing.</p>
+
+        <p>This method is a convenience wrapper for API which is also available otherwise. For instance,
+        for loading forms and reports, you could use the <type scope="com::sun::star::frame">XComponentLoader</type>
+        interface of the <type scope="::com::sun::star::sdb">Forms</type> resp. <type scope="::com::sun::star::sdb">Reports</type>
+        collections.</p>
+
+        <p>Note there must exist a connection to the database before you can call this method.</p>
+
+        <p>If an error occurs opening the given object, then this is reported to the user via an error dialog.</p>
+
+        @see isConnected
+        @see connect
+
+        @param ObjectType
+            specifies the type of the object, must be one of the <type>DatabaseObject</type>
+            constants.
+
+        @param ObjectName
+            specifies the name of the object. In case hierarchical objects are supported
+            (as is the case form forms and reports), hierarchical names are supported here, too.
+
+        @param ForEditing
+            specifies whether the object should be opened for editing (<TRUE/>) or viewing (<FALSE/>).
+
+            <p>For the different object types, this means the following
+            <a name="component_types"></a>
+            <table style="width:100%;" border="1 solid black" cellpadding="2" cellspacing="2"><tbody>
+              <tr style="vertical-align: top;">
+                <td></td>
+                <td><code>ForEditing</code> = <TRUE/></td>
+                <td><code>ForEditing</code> = <FALSE/></td>
+              </tr>
+
+              <tr style="vertical-align: top;">
+                <td><em>Tables</em></td>
+                <td>A table designer is opened, and allows to edit the structure of the table.
+                    See also <type scope="::com::sun::star::sdb">TableDesign</type></td>
+                <td>A table data view is opened, and allows to view and edit the data contained in the table.
+                    See also <type scope="::com::sun::star::sdb">DataSourceBrowser</type></td>
+              </tr>
+
+              <tr style="vertical-align: top;">
+                <td><em>Queries</em></td>
+                <td>A query designer is opened, and allows to edit the statement constituting the query.
+                    See also <type scope="::com::sun::star::sdb">QueryDesign</type></td>
+                <td>A table data view is opened, and allows to view and edit the data contained in the query.
+                    See also <type scope="::com::sun::star::sdb">DataSourceBrowser</type></td>
+              </tr>
+
+              <tr style="vertical-align: top;">
+                <td><em>Forms</em></td>
+                <td>The form document is opened in design mode, that is, you can modify it.</td>
+                <td>The form document is opened in read-only mode, allowing you to view and enter the data
+                    which the form is based on, but not the form design.</td>
+              </tr>
+
+              <tr style="vertical-align: top;">
+                <td><em>Reports</em></td>
+                <td>The report document is opened in design mode, that is, you can modify it.</td>
+                <td>The report is executed, and the results will be displayed.</td>
+              </tr>
+
+            </tbody></table>
+            </p>
+
+        @return
+            the component which has been loaded. This is either an <type scope="com::sun::star::frame">XModel</type>,
+            or an <type scope="com::sun::star::frame">XController</type> if the component does is model-less.
+
+        @throws ::com::sun::star::lang::IllegalArgumentException
+            if <arg>ObjectType</arg> denotes an invalid object type
+
+        @throws ::com::sun::star::container::NoSuchElementException
+            if an object with the given name and of the given type does not exist
+
+        @throws ::com::sun::star::sdbc::SQLException
+            if there is no connection to the database at the time the method is called.
+    */
+    ::com::sun::star::lang::XComponent loadComponent(
+                    [in] long ObjectType,
+                    [in] string ObjectName,
+                    [in] boolean ForEditing )
+        raises ( ::com::sun::star::lang::IllegalArgumentException,
+                 ::com::sun::star::container::NoSuchElementException,
+                 ::com::sun::star::sdbc::SQLException );
+
+    /** loads the given sub component of the database document
+
+        <p>In opposite to <member>loadComponent</member>, this method allows you to specify
+        additional arguments which are passed to the to-be-loaded component.</p>
+
+        <p>The meaning of the the arguments is defined at the service which is effectively
+        created. See the <a href="#component_types">above table</a> for a list of those
+        services.</p>
+    */
+    ::com::sun::star::lang::XComponent loadComponentWithArguments(
+                    [in] long ObjectType,
+                    [in] string ObjectName,
+                    [in] boolean ForEditing,
+                    [in] sequence< ::com::sun::star::beans::PropertyValue > Arguments )
+        raises ( ::com::sun::star::lang::IllegalArgumentException,
+                 ::com::sun::star::container::NoSuchElementException,
+                 ::com::sun::star::sdbc::SQLException );
+
+    /** creates a new sub component of the given type
+
+        @param ObjectType
+            specifies the type of the object, must be one of the <type>DatabaseObject</type>
+            constants.
+
+        @param DocumentDefinition
+            Upon successful return, and if and only if <arg>ObjectType</arg> equals <member>DatabaseObject::FORM</member>
+            or <member>DatabaseObject::REPORT</member>, this will contain the <type scope="com::sun::star::sdb">DocumentDefinition</type>
+            object which controls the sub component.
+    */
+    ::com::sun::star::lang::XComponent createComponent(
+                    [in] long ObjectType,
+                    [out] ::com::sun::star::lang::XComponent DocumentDefinition )
+        raises ( ::com::sun::star::lang::IllegalArgumentException,
+                 ::com::sun::star::sdbc::SQLException );
+
+    /** creates a new sub component of the given type
+
+        <p>In opposite to <member>createComponent</member>, this method allows you to specify
+        additional arguments which are passed to the to-be-loaded component.</p>
+
+        <p>The meaning of the the arguments is defined at the service which is effectively
+        created. See the <a href="#component_types">above table</a> for a list of those
+        services.</p>
+
+        @param ObjectType
+            specifies the type of the object, must be one of the <type>DatabaseObject</type>
+            constants.
+
+        @param DocumentDefinition
+            Upon successful return, and if and only if <arg>ObjectType</arg> equals <member>DatabaseObject::FORM</member>
+            or <member>DatabaseObject::REPORT</member>, this will contain the <type scope="com::sun::star::sdb">DocumentDefinition</type>
+            object which controls the sub component.<br/>
+            You can use this object to control various aspects of the sub component. For instance, you could decide
+            to create the component hidden, by passing a <code>Hidden</code> flag (set to <TRUE/>) in <arg>Arguments</arg>,
+            manipulate the component, and then finally show it by invoking the <code>show</code> command at the
+            definition object.
+    */
+    ::com::sun::star::lang::XComponent createComponentWithArguments(
+                    [in] long ObjectType,
+                    [in] sequence< ::com::sun::star::beans::PropertyValue > Arguments,
+                    [out] ::com::sun::star::lang::XComponent DocumentDefinition )
+        raises ( ::com::sun::star::lang::IllegalArgumentException,
+                 ::com::sun::star::sdbc::SQLException );
+};
+
+//=============================================================================
+
+}; }; }; }; };
+
+//=============================================================================
+
+#endif
+

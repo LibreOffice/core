@@ -1,0 +1,140 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_sheet_AccessiblePageHeaderFooterAreasView_idl__
+#define __com_sun_star_sheet_AccessiblePageHeaderFooterAreasView_idl__
+
+#include <com/sun/star/accessibility/XAccessibleContext.idl>
+#include <com/sun/star/accessibility/XAccessibleComponent.idl>
+#include <com/sun/star/accessibility/XAccessibleEventBroadcaster.idl>
+
+//=============================================================================
+
+module com {  module sun {  module star {  module sheet {
+
+//=============================================================================
+
+/** The accessible view of the Header/Footer in a spreadsheet page preview
+
+     @since OOo 1.1.2
+
+ */
+published service AccessiblePageHeaderFooterAreasView
+{
+    /** This interface gives access to the three Header/Footer areas in the
+        page preview.
+
+    <ul>
+        <li>The parent returned by <method scope="::com::sun::star::accessibility"
+            >XAccessibleContext::getAccessibleParent</method>
+            is the accessible spreadsheet page preview.</li>
+        <li>The children returned by
+            <method scope="::com::sun::star::accessibility"
+            >XAccessibleContext::getAccessibleChild</method> all
+            support the interface
+            <type scope="::com::sun::star::accessibility">XAccessible</type.
+            Calling
+            <method scope="::com::sun::star::accessibility"
+            >XAccessible::getAccessibleContext</method> for these children
+            returns an object that supports one of the following services.</li>
+        <ul>
+            <li><type scope="::com::sun::star::text">AccessibleHeaderFooterView</type>:
+                A child where calling <method scope="::com::sun::star::text"
+                >XAccessibleContext::getAccessibleChild</method>
+                an object that supports this service is returned for
+                every header and footer that is at least partially visible.</li>
+        </ul>
+        <p>The following rules apply to the children order.</p>
+        <ul>
+            <li>The first is the left area, than the center area and the last
+            is the right area.</li>
+        </ul>
+        <li>The description is ???.</li>
+        <li>The name is Header or Footer respectively.</li>
+        <li>The role is <const scope="::com::sun::star::accessibility"
+            >AccessibleRole::HEADER</const> or
+            <const scope="::com::sun::star::accessibility"
+            >AccessibleRole::FOOTER</const>.</li>
+        <li>There are no relations.</li>
+        <li>The following states are supported:
+            <ul>
+                <li><const scope="::com::sun::star::accessibility"
+                    >AccessibleStateType::DEFUNC</const> is always false until
+                    the preview is closed.</li>
+                <li><const scope="::com::sun::star::accessibility"
+                    >AccessibleStateType::EDITABLE</const> is always false,
+                    because the document is not editable in the page preview.
+                    So it is left out of the list.</li>
+                <li><const scope="::com::sun::star::accessibility"
+                    >AccessibleStateType::ENABLED</const> is always true.</li>
+                <li><const scope="::com::sun::star::accessibility"
+                    >AccessibleStateType::MULTILINE</const> makes no sense on
+                    a document and so it is left out of the list.</li>
+                <li><const scope="::com::sun::star::accessibility"
+                    >AccessibleStateType::MULTISELECTABLE</const> is always
+                    false, because in a page preview a selection is not
+                    possible. So it is left out of the list.</li>
+                <li><const scope="::com::sun::star::accessibility"
+                    >AccessibleStateType::OPAQUE</const> is always true.</li>
+                <li><const scope="::com::sun::star::accessibility"
+                    >AccessibleStateType::RESIZEABLE</const> is always false,
+                    because you can resize the window of the page preview, but
+                    not the page preview itself. So it is left out of the
+                    list.</li>
+                <li><const scope="::com::sun::star::accessibility"
+                    >AccessibleStateType::SELECTABLE</const> is always false,
+                    because in the page preview is no selection possible. So it
+                    is left out of the list.</li>
+                <li><const scope="::com::sun::star::accessibility"
+                    >AccessibleStateType::SELECTED</const> is always false,
+                    because in the page preview is no selection possible. So it
+                    is left out of the list.</li>
+                <li><const scope="::com::sun::star::accessibility"
+                    >AccessibleStateType::SHOWING</const>Is true if the
+                    Bounding Box lies in the Bounding Box of the parent.
+                    Otherwise it is false.</li>
+                <li><const scope="::com::sun::star::accessibility"
+                    >AccessibleStateType::VISIBLE</const>Is always true.</li>
+            </ul>
+        </li>
+    </ul>
+
+     */
+    interface ::com::sun::star::accessibility::XAccessibleContext;
+
+    /** This interface gives access to the visibility of the document.
+    */
+    interface ::com::sun::star::accessibility::XAccessibleComponent;
+
+    /** This is the interface for listeners */
+    interface ::com::sun::star::accessibility::XAccessibleEventBroadcaster;
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

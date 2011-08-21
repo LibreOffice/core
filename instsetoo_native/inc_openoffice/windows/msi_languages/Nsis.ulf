@@ -1,0 +1,41 @@
+[SetupCaption]
+en-US = "%PRODUCTNAME %PRODUCTVERSION Installation Preparation"
+
+[MUI_TEXT_WELCOME_INFO_TITLE]
+en-US = "Thank you for downloading %PRODUCTNAME %PRODUCTVERSION."
+
+[MUI_TEXT_WELCOME_INFO_TEXT]
+en-US = "The installation files must be unpacked and copied to your hard disk in preparation for the installation. After that, the %PRODUCTNAME installation will start automatically.\n\nClick \'Next\' to continue."
+
+[MUI_TEXT_DIRECTORY_TITLE]
+en-US = "Select Folder"
+
+[MUI_TEXT_DIRECTORY_SUBTITLE]
+en-US = "Select the folder in which to save the unpacked files."
+
+[InstallBtn]
+en-US = "&Unpack"
+
+[DirText]
+en-US = "The %PRODUCTNAME %PRODUCTVERSION installation files will be unpacked and saved in the folder shown below. If you would like to save %PRODUCTNAME to a different folder, click \'Browse\' to select another folder."
+
+[DirSubText]
+en-US = "Destination Folder"
+
+[SpaceRequired]
+en-US = "Space required: "
+
+[SpaceAvailable]
+en-US = "Space available: "
+
+[MUI_TEXT_INSTALLING_TITLE]
+en-US = "Unpacking"
+
+[MUI_TEXT_INSTALLING_SUBTITLE]
+en-US = "Please wait while the installation files are being unpacked."
+
+[Extract]
+en-US = "Extract: "
+
+[MUI_TEXT_ABORTWARNING]
+en-US = "Are you sure you want to quit the %PRODUCTNAME %PRODUCTVERSION Installation Preparation"

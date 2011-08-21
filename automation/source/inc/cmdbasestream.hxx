@@ -63,11 +63,10 @@ public:
     void GenReturn( comm_USHORT nRet, comm_USHORT nMethod, comm_USHORT nNr );
 
 // MacroRecorder
-    void GenReturn( comm_USHORT nRet, rtl::OString *pUId, comm_USHORT nMethod ); // also used outside MacroRecorder
-    void GenReturn( comm_USHORT nRet, rtl::OString *pUId, comm_USHORT nMethod, comm_String *pString );
-    void GenReturn( comm_USHORT nRet, rtl::OString *pUId, comm_USHORT nMethod, comm_String *pString, comm_BOOL bBool );
-    void GenReturn( comm_USHORT nRet, rtl::OString *pUId, comm_USHORT nMethod, comm_BOOL bBool );
-    void GenReturn( comm_USHORT nRet, rtl::OString *pUId, comm_USHORT nMethod, comm_ULONG nNr );
+    void GenReturn( comm_UINT16 nRet, rtl::OString *pUId, comm_UINT16 nMethod ); // also used outside MacroRecorder
+    void GenReturn( comm_UINT16 nRet, rtl::OString *pUId, comm_UINT16 nMethod, comm_String *pString );
+    void GenReturn( comm_UINT16 nRet, rtl::OString *pUId, comm_UINT16 nMethod, comm_String *pString, comm_BOOL bBool );
+    void GenReturn( comm_UINT16 nRet, rtl::OString *pUId, comm_UINT16 nMethod, comm_UINT32 nNr );
 
     void Read ( comm_USHORT &nNr );
     void Read ( comm_ULONG &nNr );

@@ -1,0 +1,129 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#if ! defined INCLUDED_com_sun_star_deployment_XPackageRegistry_idl
+#define INCLUDED_com_sun_star_deployment_XPackageRegistry_idl
+
+#include <com/sun/star/deployment/XPackage.idl>
+#include <com/sun/star/deployment/XPackageTypeInfo.idl>
+#include <com/sun/star/deployment/InvalidRemovedParameterException.idl>
+#include <com/sun/star/beans/StringPair.idl>
+
+
+module com { module sun { module star { module deployment {
+
+/** Interface to bind an UNO package.
+
+    @since OOo 2.0
+*/
+interface XPackageRegistry
+{
+    /** binds a package URL to a <type>XPackage</type> handle.
+        The returned UNO package handle ought to late-initialize itself,
+        thus the process of binding must not be an expensive operation, because
+        it is not abortable.
+
+        Calling the function several time with the same parameters must result
+        in returning the same object.
+
+        The file or folder at the location where url points to may not exist or
+        it was replaced. This can happen, for example, when a bundled extension
+        was removed by the setup and a user later starts OOo. Then the user data
+        may still contain all registration data of that extension, but the
+        actual extension files do not exist anymore. The registration data must
+        then be cleaned of all the remains of that extension. To to that one
+        creates an <type>XPackage</type> object on behalf of that extension and
+        calls <member>XPackage::revokePakage</member>. The parameter
+        <code>removed</code> indicates this case. The returned object may not
+        rely on the file or folder to which refers <code>url</url>. Instead it
+        must use previously saved data to successfully carry out the revocation
+        of this object (<member>XPackage::revokePackage</member>).
+
+        The implementation must ensure that there is only one instance of
+        <type>XPackage</type> for the same <code>url</code> at any
+        time. Therefore calling <member>bindPackage</member> again with the same
+        <code>url</code> but different <code>mediaType<code> (the exception is,
+        if previously an empty string was provided to cause the determination
+        of the media type) or <code>removed</code> parameters will cause an
+        exception. An <type
+        scope="com::sun::star::lang">IllegalArgumentException</type> will be
+        thrown in case of a different <code>mediaType</code> parameter and a
+        <type>InvalidRemovedParameterException</type> is thrown if the
+        <code>removed</code> parameter is different.
+
+        The <code>identifier</code> parameter must be provided when
+        <code>removed</code> = true. If not, then an <type
+        scope="com::sun::star::lang">IllegalArgumentException</type> will be
+        thrown.
+
+        @param url
+               package URL, must be UCB conform
+        @param mediaType
+               media type of package, empty string if to be detected
+        @param removed
+
+        @param unfulfilledPrerequisites
+              has a value other null if the extension could not be installed previously
+              because <member>XPackage::checkPrerequisites</member> failed.
+
+        @param identifier
+               the identifier of the extension
+
+        @param xCmdEnv
+               command environment for error and progress handling
+        @return
+               <type>XPackage</type> handle
+    */
+    XPackage bindPackage(
+        [in] string url,
+        [in] string mediaType,
+        [in] boolean removed,
+        [in] string identifier,
+        [in] com::sun::star::ucb::XCommandEnvironment xCmdEnv )
+        raises (DeploymentException,
+                InvalidRemovedParameterException,
+                com::sun::star::ucb::CommandFailedException,
+                com::sun::star::lang::IllegalArgumentException);
+
+    /** gets the supported <type>XPackageTypeInfo</type>s.
+
+        @return
+                supported <type>XPackageTypeInfo</type>s.
+    */
+    sequence<XPackageTypeInfo> getSupportedPackageTypes();
+
+    void packageRemoved(
+        [in] string url,
+        [in] string mediaType)
+        raises (DeploymentException,
+                com::sun::star::lang::IllegalArgumentException);
+
+};
+
+}; }; }; };
+
+#endif

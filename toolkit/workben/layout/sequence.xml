@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<framewindow xmlns="http://openoffice.org/2007/layout"
+             xmlns:cnt="http://openoffice.org/2007/layout/container"
+             xmlns:style="http://openoffice.org/2007/layout/style"
+             title="Sequence Test" style:optimumsize="true"
+             style:has_border="true" style:sizeable="true" style:moveable="true">
+        <vbox>
+            <multilistbox linecount="5" string-item-list=":a:b::c:::d::::e:as:"
+                                        selected-items="0:1" />
+            <okbutton cnt:expand="false" />
+        </vbox>
+</framewindow>

@@ -1,0 +1,9 @@
+module ooo { module vba { module office {
+    constants MsoDocProperties {
+        const long msoPropertyTypeBoolean = 2;
+        const long msoPropertyTypeDate = 3;
+        const long msoPropertyTypeFloat = 5;
+        const long msoPropertyTypeNumber = 1;
+        const long msoPropertyTypeString = 4;
+    };
+}; }; };

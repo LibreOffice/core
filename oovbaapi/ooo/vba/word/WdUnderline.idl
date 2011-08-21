@@ -1,0 +1,22 @@
+module ooo { module vba { module word {
+    constants WdUnderline {
+        const long wdUnderlineDash = 7;
+        const long wdUnderlineDashHeavy = 23;
+        const long wdUnderlineDashLong = 39;
+        const long wdUnderlineDashLongHeavy = 55;
+        const long wdUnderlineDotDash = 9;
+        const long wdUnderlineDotDashHeavy = 25;
+        const long wdUnderlineDotDotDash = 10;
+        const long wdUnderlineDotDotDashHeavy = 26;
+        const long wdUnderlineDotted = 4;
+        const long wdUnderlineDottedHeavy = 20;
+        const long wdUnderlineDouble = 3;
+        const long wdUnderlineNone = 0;
+        const long wdUnderlineSingle = 1;
+        const long wdUnderlineThick = 6;
+        const long wdUnderlineWavy = 11;
+        const long wdUnderlineWavyDouble = 43;
+        const long wdUnderlineWavyHeavy = 27;
+        const long wdUnderlineWords = 2;
+    };
+}; }; };

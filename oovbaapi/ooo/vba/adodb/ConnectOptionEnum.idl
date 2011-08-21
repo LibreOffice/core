@@ -1,0 +1,6 @@
+module ooo { module vba { module adodb {
+    constants ConnectOptionEnum {
+        const long adAsyncConnect = 16;
+        const long adConnectUnspecified = -1;
+    };
+}; }; };

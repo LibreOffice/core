@@ -1,0 +1,114 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * 
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+Module gid_Module_Langpack_Basis_Template
+    ParentID = gid_Module_Langpack_Languageroot;
+    Name = "gid_Module_Langpack_Root_Template";
+    Description = "gid_Module_Langpack_Root_Template";
+    Styles = (TEMPLATEMODULE);
+    Files = (gid_File_Extra_Autotextshare_Lang,
+             gid_File_Extra_Tplpresntimpr_Lang,
+             gid_File_Extra_Tplwizagenda_Lang,
+             gid_File_Extra_Tplwizdesktop_Lang,
+             gid_File_Extra_Tplwizfax_Lang,
+             gid_File_Extra_Tplwizreport_Lang,
+             gid_File_Extra_Tplwizstyles_Lang,
+             gid_File_Registry_Filter_Zip,
+             gid_File_Registry_Lang,
+             gid_File_Registry_Spool_Langpack_Lang,
+             gid_File_Share_Registry_Ctl_Xcd,
+             gid_File_Share_Registry_Ctlseqcheck_Xcd,
+             gid_File_InfoPlist_Lang);
+    Dirs = (gid_Dir_Samples_Language);
+End
+
+Module gid_Module_Langpack_Resource_Template
+    ParentID = gid_Module_Langpack_Languageroot;
+    Name = "gid_Module_Langpack_Resource_Template";
+    Description = "gid_Module_Langpack_Resource_Template";
+    Styles = (TEMPLATEMODULE);
+    Files = (gid_File_Res_Basctl,
+             gid_File_Res_Bib,
+             gid_File_Res_Cal,
+             gid_File_Res_Chartcontroller,
+             gid_File_Res_Sdbt,
+             gid_File_Res_Dbmm,
+             gid_File_Res_Dba,
+             gid_File_Res_Dbw,
+             gid_File_Res_Dkt,
+             gid_File_Res_Editeng,
+             gid_File_Res_Eur,
+             gid_File_Res_For,
+             gid_File_Res_Forui,
+             gid_File_Res_Fps_Office,
+             gid_File_Res_Frm,
+             gid_File_Res_Fwe,
+             gid_File_Res_Gal,
+             gid_File_Res_Imp,
+             gid_File_Res_Deployment,
+             gid_File_Res_DeploymentGui,
+             gid_File_Res_Ofa,
+             gid_File_Res_Pcr,
+             gid_File_Res_Pdffilter,
+             gid_File_Res_San,
+             gid_File_Res_Productregistration,
+             gid_File_Res_Sb,
+             gid_File_Res_Sd,
+             gid_File_Res_Sfx,
+             gid_File_Res_Spa,
+             gid_File_Res_Svl,
+             gid_File_Res_Svt,
+             gid_File_Res_Svx,
+             gid_File_Res_Cui,
+             gid_File_Res_TextConversionDlgs,
+             gid_File_Res_Sw,
+             gid_File_Res_Tab,
+             gid_File_Res_Tk,
+             gid_File_Res_Acc,
+             gid_File_Res_Tpl,
+             gid_File_Res_Uui,
+             gid_File_Res_Vcl,
+             gid_File_Res_Wzi,
+             gid_File_Res_Xsltdlg,
+             gid_File_Res_AVMedia,
+             gid_File_Res_XMLSecurity,
+             gid_File_Res_Gallery,
+             gid_File_Res_Stt,
+             gid_File_Res_Tfu,
+             gid_File_Res_Eps,
+             gid_File_Res_UpdChk,
+             gid_File_Res_Upd);
+End
+Module gid_Module_Langpack_Fonts_Template
+    ParentID = gid_Module_Langpack_Languageroot;
+    Name = "gid_Module_Langpack_Fonts_Template";
+    Description = "gid_Module_Langpack_Fonts_Template";
+    Styles = (TEMPLATEMODULE);
+    Files = ();
+End
+
+#include "alllangmodules_root.inc"

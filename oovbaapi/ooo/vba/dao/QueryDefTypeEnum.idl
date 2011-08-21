@@ -1,0 +1,17 @@
+module ooo { module vba { module dao {
+    constants QueryDefTypeEnum {
+        const long dbQAction = 240;
+        const long dbQAppend = 64;
+        const long dbQCompound = 160;
+        const long dbQCrosstab = 16;
+        const long dbQDDL = 96;
+        const long dbQDelete = 32;
+        const long dbQMakeTable = 80;
+        const long dbQProcedure = 224;
+        const long dbQSelect = 0;
+        const long dbQSetOperation = 128;
+        const long dbQSPTBulk = 144;
+        const long dbQSQLPassThrough = 112;
+        const long dbQUpdate = 48;
+    };
+}; }; };

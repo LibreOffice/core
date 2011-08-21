@@ -1,0 +1,160 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_drawing_EnhancedCustomShapeExtrusion_idl__
+#define __com_sun_star_drawing_EnhancedCustomShapeExtrusion_idl__
+
+#include <com/sun/star/awt/Size.idl>
+#include <com/sun/star/awt/Point.idl>
+#include <com/sun/star/beans/PropertyValue.idl>
+#include <com/sun/star/drawing/Position3D.idl>
+#include <com/sun/star/drawing/Direction3D.idl>
+#include <com/sun/star/drawing/ProjectionMode.idl>
+#include <com/sun/star/drawing/ShadeMode.idl>
+#include <com/sun/star/drawing/EnhancedCustomShapeParameterPair.idl>
+
+//=============================================================================
+
+module com { module sun { module star { module drawing {
+
+//=============================================================================
+/**
+  This service may be represented by a ::com::sun::star::beans::PropertyValue [].
+*/
+
+service EnhancedCustomShapeExtrusion
+{
+    /** This property specifies if extrusion is displayed. The default for this property
+        is "false"
+    */
+    [optional, property] boolean Extrusion;
+
+    /** This attribute specifies the brightness of a scene in percent.
+    */
+    [optional, property] double Brightness;
+
+    /** The first value of EnhancedCustomShapeParameterPair specifies the depth of the
+        extrusion in 1/100 mm. The second value (0.0 to 1.0) specifies the fraction of
+        the extrusion that lies before the shape, a value of 0 is default.
+    */
+    [optional, property] ::com::sun::star::drawing::EnhancedCustomShapeParameterPair Depth;
+
+    /** This attribute specifies the amount of diffusion reflected by the shape
+        in percent
+    */
+    [optional, property] double Diffusion;
+
+    /** Specifies the number of line segments that should be used to display curved surfaces.
+        The higher the number the more line segments are used.
+    */
+    [optional, property] long NumberOfLineSegments;
+
+    /** Specifies if the front face of the extrusion responds to lightning changes.
+    */
+    [optional, property] boolean LightFace;
+
+    /** Specifies if the primary light is harsh.
+    */
+    [optional, property] boolean FirstLightHarsh;
+
+    /** Specifies if the secondary light is harsh.
+    */
+    [optional, property] boolean SecondLightHarsh;
+
+    /** Specifies the intensity for the first light in percent.
+    */
+    [optional, property] double FirstLightLevel;
+
+    /** Specifies the intensity for the second light in percent.
+    */
+    [optional, property] double SecondLightLevel;
+
+    /** Specifies the direction of the first light.
+    */
+    [optional, property] ::com::sun::star::drawing::Direction3D FirstLightDirection;
+
+    /** Specifies the direction of the second light.
+    */
+    [optional, property] ::com::sun::star::drawing::Direction3D SecondLightDirection;
+
+    /** Specifies if the surface of the extrusion object looks like metal.
+    */
+    [optional, property] boolean Metal;
+
+    /** This property defines the shade mode.
+    */
+    [optional, property] ::com::sun::star::drawing::ShadeMode ShadeMode;
+
+    /** This attributes specifies the rotation angle about the x-axis in grad.
+        The order of rotation is: z-axis, y-axis and then x-axis. The z-axis is
+        specified by the draw:rotate-angle.
+    */
+    [optional, property] ::com::sun::star::drawing::EnhancedCustomShapeParameterPair RotateAngle;
+
+    /** This attribute specifies the position of the rotate center
+        in terms of shape size fractions, if the property is omitted, then
+        the geometrical center of the shape is used (this is the default).
+    */
+    [optional, property] ::com::sun::star::drawing::Direction3D RotationCenter;
+
+    /** The draw:extrusion-shininess specifies the shininess of a mirror in percent.
+    */
+    [optional, property] double Shininess;
+
+    /** The first value of the draw:extrusion-skew attribute specifies the skew amount of
+        an extrusion in percent. The second parameter specifies the skew-angle. Skew settings
+        are only applied if the attribute ProjectionMode is ProjectionMode_PARALLEL.
+    */
+    [optional, property] ::com::sun::star::drawing::EnhancedCustomShapeParameterPair Skew;
+
+    /** This attribute specifies the specularity of an extrusion object in percent.
+    */
+    [optional, property] double Specularity;
+
+    /** This property defines the projection mode.
+    */
+    [optional, property] com::sun::star::drawing::ProjectionMode ProjectionMode;
+
+    /** This attribute specifies the viewpoint of the observer.
+    */
+    [optional, property] ::com::sun::star::drawing::Position3D ViewPoint;
+
+    /** This attribute specifies the origin within the bounding box of the
+        shape in terms of the shape size fractions.
+    */
+    [optional, property] ::com::sun::star::drawing::EnhancedCustomShapeParameterPair Origin;
+
+    /** This attribute specifies if the "SecondFillColor" is used as extrusion color
+    */
+    [optional, property] boolean ExtrusionColor;
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif
+

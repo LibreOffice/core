@@ -1,0 +1,601 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+//============================================================================
+//
+//  Internet Media Type Presentations
+//
+//============================================================================
+
+#ifndef _SVTOOLS_HRC
+#include <svl/svl.hrc>
+#endif
+
+String STR_SVT_MIMETYPE_APP_OCTSTREAM
+{
+    Text [ en-US ] = "Binary file" ;
+};
+
+String STR_SVT_MIMETYPE_APP_PDF
+{
+    Text [ en-US ] = "PDF file" ;
+};
+
+String STR_SVT_MIMETYPE_APP_RTF
+{
+    Text [ en-US ] = "RTF File" ;
+};
+
+String STR_SVT_MIMETYPE_APP_MSWORD
+{
+    Text [ en-US ] = "MS-Word document" ;
+};
+
+String STR_SVT_MIMETYPE_APP_STARCALC
+{
+    Text [ en-US ] = "%PRODUCTNAME Spreadsheet" ;
+};
+
+String STR_SVT_MIMETYPE_APP_STARCHART
+{
+    Text [ en-US ] = "%PRODUCTNAME Chart" ;
+};
+
+String STR_SVT_MIMETYPE_APP_STARDRAW
+{
+    Text [ en-US ] = "%PRODUCTNAME Drawing" ;
+};
+
+String STR_SVT_MIMETYPE_APP_STARIMAGE
+{
+    Text [ en-US ] = "%PRODUCTNAME Image" ;
+};
+
+String STR_SVT_MIMETYPE_APP_STARMATH
+{
+    Text [ en-US ] = "%PRODUCTNAME Formula" ;
+};
+
+String STR_SVT_MIMETYPE_APP_STARWRITER
+{
+    Text [ en-US ] = "%PRODUCTNAME Text" ;
+};
+
+String STR_SVT_MIMETYPE_APP_ZIP
+{
+    Text [ en-US ] = "ZIP file" ;
+};
+
+String STR_SVT_MIMETYPE_APP_JAR
+{
+    Text [ en-US ] = "JAR file" ;
+};
+
+String STR_SVT_MIMETYPE_AUDIO_AIFF
+{
+    Text [ en-US ] = "Audio file" ;
+};
+
+String STR_SVT_MIMETYPE_AUDIO_BASIC
+{
+    Text [ en-US ] = "Audio file" ;
+};
+
+String STR_SVT_MIMETYPE_AUDIO_MIDI
+{
+    Text [ en-US ] = "Audio file" ;
+};
+
+String STR_SVT_MIMETYPE_AUDIO_VORBIS
+{
+    Text [ en-US ] = "Audio file" ;
+};
+
+String STR_SVT_MIMETYPE_AUDIO_WAV
+{
+    Text [ en-US ] = "Audio file" ;
+};
+
+String STR_SVT_MIMETYPE_AUDIO_WEBM
+{
+    Text [ en-US ] = "Audio file" ;
+};
+
+String STR_SVT_MIMETYPE_IMAGE_GIF
+{
+    Text [ en-US ] = "Graphics" ;
+};
+
+String STR_SVT_MIMETYPE_IMAGE_JPEG
+{
+    Text [ en-US ] = "Graphics" ;
+};
+
+String STR_SVT_MIMETYPE_IMAGE_PCX
+{
+    Text [ en-US ] = "Graphics" ;
+};
+
+String STR_SVT_MIMETYPE_IMAGE_BMP
+{
+    Text [ en-US ] = "Bitmap" ;
+};
+
+String STR_SVT_MIMETYPE_TEXT_HTML
+{
+    Text [ en-US ] = "HTML document" ;
+};
+
+String STR_SVT_MIMETYPE_TEXT_PLAIN
+{
+    Text [ en-US ] = "Text file" ;
+};
+
+String STR_SVT_MIMETYPE_TEXT_URL
+{
+    Text [ en-US ] = "Bookmark" ;
+};
+
+String STR_SVT_MIMETYPE_TEXT_VCARD
+{
+    Text [ en-US ] = "vCard file" ;
+};
+
+String STR_SVT_MIMETYPE_VIDEO_MSVIDEO
+{
+    Text [ en-US ] = "Video file" ;
+};
+
+String STR_SVT_MIMETYPE_VIDEO_THEORA
+{
+    Text [ en-US ] = "Video file" ;
+};
+
+String STR_SVT_MIMETYPE_VIDEO_VDO
+{
+    Text [ en-US ] = "Video file" ;
+};
+
+String STR_SVT_MIMETYPE_VIDEO_WEBM
+{
+    Text [ en-US ] = "Video file" ;
+};
+
+String STR_SVT_MIMETYPE_X_STARMAIL
+{
+    Text [ en-US ] = "Message" ;
+};
+
+String STR_SVT_MIMETYPE_X_VRML
+{
+    Text [ en-US ] = "VRML file" ;
+};
+
+String STR_SVT_MIMETYPE_APP_STARIMPRESS
+{
+    Text [ en-US ] = "%PRODUCTNAME Presentation" ;
+};
+
+String STR_SVT_MIMETYPE_APP_IMPRESSPACKED
+{
+    Text [ en-US ] = "%PRODUCTNAME Presentation (packed)";
+};
+
+String STR_SVT_MIMETYPE_APP_STARHELP
+{
+    Text [ en-US ] = "%PRODUCTNAME Help" ;
+};
+
+
+String STR_SVT_MIMETYPE_CNT_MSG
+{
+    Text [ en-US ] = "Message" ;
+};
+
+String STR_SVT_MIMETYPE_CNT_DOCUMENT
+{
+    Text [ en-US ] = "Document" ;
+};
+
+String STR_SVT_MIMETYPE_CNT_POP3BOX
+{
+    Text [ en-US ] = "POP3 Account" ;
+};
+
+String STR_SVT_MIMETYPE_CNT_IMAPBOX
+{
+    Text [ en-US ] = "IMAP Account" ;
+};
+
+String STR_SVT_MIMETYPE_CNT_IMAPFLD
+{
+    Text [ en-US ] = "Folder" ;
+};
+
+String STR_SVT_MIMETYPE_CNT_VIMBOX
+{
+    Text [ en-US ] = "VIM Account" ;
+};
+
+String STR_SVT_MIMETYPE_CNT_VIMINBOX
+{
+    Text [ en-US ] = "Inbox" ;
+};
+
+String STR_SVT_MIMETYPE_CNT_BBBOX
+{
+    Text [ en-US ] = "Newsgroups" ;
+};
+
+String STR_SVT_MIMETYPE_CNT_VIM_BB
+{
+    Text [ en-US ] = "Newsgroup" ;
+};
+
+String STR_SVT_MIMETYPE_CNT_NEWSBOX
+{
+    Text [ en-US ] = "News" ;
+};
+
+String STR_SVT_MIMETYPE_CNT_NEWSGRP
+{
+    Text [ en-US ] = "Group" ;
+};
+
+String STR_SVT_MIMETYPE_CNT_OUTBOX
+{
+    Text [ en-US ] = "Outbox" ;
+};
+
+String STR_SVT_MIMETYPE_CNT_FTPBOX
+{
+    Text [ en-US ] = "FTP Account" ;
+};
+
+String STR_SVT_MIMETYPE_CNT_FTPFLD
+{
+    Text [ en-US ] = "FTP Folder" ;
+};
+
+String STR_SVT_MIMETYPE_CNT_FTPFILE
+{
+    Text [ en-US ] = "FTP File" ;
+};
+
+String STR_SVT_MIMETYPE_CNT_FTPLINK
+{
+    Text [ en-US ] = "FTP Link" ;
+};
+
+String STR_SVT_MIMETYPE_CNT_HTTPBOX
+{
+    Text [ en-US ] = "HTTP" ;
+};
+
+String STR_SVT_MIMETYPE_CNT_FSYSBOX
+{
+    Text [ en-US ] = "Workplace" ;
+};
+
+String STR_SVT_MIMETYPE_CNT_FSYSFLD
+{
+    Text [ en-US ] = "Folder" ;
+};
+
+String STR_SVT_MIMETYPE_CNT_FSYSFILE
+{
+    Text [ en-US ] = "File" ;
+};
+
+String STR_SVT_MIMETYPE_CNT_FSYSURLFILE
+{
+    Text [ en-US ] = "Link" ;
+};
+
+String STR_SVT_MIMETYPE_CNT_PUBLBOX
+{
+    Text [ en-US ] = "Project" ;
+};
+
+String STR_SVT_MIMETYPE_CNT_SRCHBOX
+{
+    Text [ en-US ] = "Find" ;
+};
+
+String STR_SVT_MIMETYPE_CNT_SUBSCRBOX
+{
+    Text [ en-US ] = "Subscriptions" ;
+};
+
+String STR_SVT_MIMETYPE_CNT_BOOKMARK
+{
+    Text [ en-US ] = "Bookmark subscription" ;
+};
+
+String STR_SVT_MIMETYPE_CNT_CDF
+{
+    Text [ en-US ] = "Channel subscription" ;
+};
+
+String STR_SVT_MIMETYPE_CNT_CDFSUB
+{
+    Text [ en-US ] = "Channel subscription" ;
+};
+
+String STR_SVT_MIMETYPE_CNT_CDFITEM
+{
+    Text [ en-US ] = "Channel subscription" ;
+};
+
+String STR_SVT_MIMETYPE_CNT_STARCHANNEL
+{
+    Text [ en-US ] = "StarChannel" ;
+};
+
+String STR_SVT_MIMETYPE_CNT_TRASHBOX
+{
+    Text [ en-US ] = "Recycle Bin" ;
+};
+
+String STR_SVT_MIMETYPE_CNT_TRASH
+{
+    Text [ en-US ] = "Deleted Object" ;
+};
+
+String STR_SVT_MIMETYPE_CNT_REMOV_VOL
+{
+    Text [ en-US ] = "Local drive" ;
+};
+
+String STR_SVT_MIMETYPE_CNT_FIX_VOL
+{
+    Text [ en-US ] = "Local drive" ;
+};
+
+String STR_SVT_MIMETYPE_CNT_REM_VOL
+{
+    Text [ en-US ] = "Network connection" ;
+};
+
+String STR_SVT_MIMETYPE_CNT_RAM_VOL
+{
+    Text [ en-US ] = "RAM Disk" ;
+};
+
+String STR_SVT_MIMETYPE_CNT_CDROM
+{
+    Text [ en-US ] = "CD-ROM drive" ;
+};
+
+String STR_SVT_MIMETYPE_CNT_DISK_35
+{
+    Text [ en-US ] = "3.5'' Disk" ;
+};
+
+String STR_SVT_MIMETYPE_CNT_DISK_525
+{
+    Text [ en-US ] = "5.25'' Disk" ;
+};
+
+String STR_SVT_MIMETYPE_CNT_TAPEDRIVE
+{
+    Text [ en-US ] = "Tape drive" ;
+};
+
+String STR_SVT_MIMETYPE_APP_GAL
+{
+    Text [ en-US ] = "Gallery";
+};
+
+String STR_SVT_MIMETYPE_APP_GAL_THEME
+{
+    Text [ en-US ] = "Gallery theme" ;
+};
+
+String STR_SVT_MIMETYPE_CNT_SEPARATOR
+{
+    Text = "CntMenuView-Separator" ;
+};
+
+String STR_SVT_MIMETYPE_APP_STARW_GLOB
+{
+    Text [ en-US ] = "%PRODUCTNAME Master Document" ;
+};
+
+String STR_SVT_MIMETYPE_APP_SDM
+{
+    Text [ en-US ] = "Message" ;
+};
+
+String STR_SVT_MIMETYPE_APP_SMD
+{
+    Text [ en-US ] = "Message" ;
+};
+
+String STR_SVT_MIMETYPE_APP_STARW_WEB
+{
+    Text [ en-US ] = "%PRODUCTNAME Writer/Web" ;
+};
+
+String STR_SVT_MIMETYPE_SCHEDULE
+{
+    Text [ en-US ] = "Tasks & Events" ;
+};
+
+String STR_SVT_MIMETYPE_SCHEDULE_EVT
+{
+    Text [ en-US ] = "%PRODUCTNAME Events View" ;
+};
+
+String STR_SVT_MIMETYPE_SCHEDULE_TASK
+{
+    Text [ en-US ] = "%PRODUCTNAME Task View" ;
+};
+
+String STR_SVT_MIMETYPE_SCHEDULE_FEVT
+{
+    Text [ en-US ] = "%PRODUCTNAME Event" ;
+};
+
+String STR_SVT_MIMETYPE_SCHEDULE_FTASK
+{
+    Text [ en-US ] = "%PRODUCTNAME Task" ;
+};
+
+String STR_SVT_MIMETYPE_FRAMESET
+{
+    Text [ en-US ] = "Frameset Document" ;
+};
+
+String STR_SVT_MIMETYPE_MACRO
+{
+    Text [ en-US ] = "Macro file" ;
+};
+
+String STR_SVT_MIMETYPE_CNT_SFSYSFOLDER
+{
+    Text [ en-US ] = "System folder" ;
+};
+
+String STR_SVT_MIMETYPE_CNT_SFSYSFILE
+{
+    Text [ en-US ] = "System object" ;
+};
+
+String STR_SVT_MIMETYPE_APP_TEMPLATE
+{
+    Text [ en-US ] = "%PRODUCTNAME Template";
+};
+
+String STR_SVT_MIMETYPE_IMAGE_GENERIC
+{
+    Text [ en-US ] = "Graphics";
+};
+
+String STR_SVT_MIMETYPE_APP_MSEXCEL
+{
+    Text [ en-US ] = "MS Excel document" ;
+};
+
+String STR_SVT_MIMETYPE_APP_MSEXCEL_TEMPL
+{
+    Text [ en-US ] = "MS Excel Template" ;
+};
+
+String STR_SVT_MIMETYPE_APP_MSPPOINT
+{
+    Text [ en-US ] = "MS PowerPoint document" ;
+};
+
+String STR_SVT_MIMETYPE_TEXT_VCALENDAR
+{
+    Text [ en-US ] = "vCalendar-file" ;
+};
+
+String STR_SVT_MIMETYPE_TEXT_ICALENDAR
+{
+    Text [ en-US ] = "iCalendar-File";
+};
+
+String STR_SVT_MIMETYPE_TEXT_XMLICALENDAR
+{
+    Text [ en-US ] = "XML-iCalendar-File";
+};
+
+String STR_SVT_MIMETYPE_TEXT_CDE_CALENDAR_APP
+{
+    Text [ en-US ] = "CDE-Calendar-File";
+};
+
+String STR_SVT_MIMETYPE_INET_MSG_RFC822
+{
+    Text [ en-US ] = "message/rfc822" ;
+};
+
+String STR_SVT_MIMETYPE_INET_MULTI_ALTERNATIVE
+{
+    Text [ en-US ] = "multipart/alternative" ;
+};
+
+String STR_SVT_MIMETYPE_INET_MULTI_DIGEST
+{
+    Text [ en-US ] = "multipart/digest" ;
+};
+
+String STR_SVT_MIMETYPE_INET_MULTI_PARALLEL
+{
+    Text [ en-US ] = "multipart/parallel" ;
+};
+
+String STR_SVT_MIMETYPE_INET_MULTI_RELATED
+{
+    Text [ en-US ] = "multipart/related" ;
+};
+
+String STR_SVT_MIMETYPE_INET_MULTI_MIXED
+{
+    Text [ en-US ] = "multipart/mixed" ;
+};
+
+String STR_SVT_MIMETYPE_APP_SXCALC
+{
+    Text [ en-US ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION Spreadsheet" ;
+};
+
+String STR_SVT_MIMETYPE_APP_SXCHART
+{
+    Text [ en-US ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION Chart" ;
+};
+
+String STR_SVT_MIMETYPE_APP_SXDRAW
+{
+    Text [ en-US ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION Drawing" ;
+};
+
+String STR_SVT_MIMETYPE_APP_SXMATH
+{
+    Text [ en-US ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION Formula" ;
+};
+
+String STR_SVT_MIMETYPE_APP_SXWRITER
+{
+    Text [ en-US ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION Text Document" ;
+};
+
+String STR_SVT_MIMETYPE_APP_SXIMPRESS
+{
+    Text [ en-US ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION Presentation" ;
+};
+
+String STR_SVT_MIMETYPE_APP_SXGLOBAL
+{
+    Text [ en-US ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION Master Document" ;
+};
+
+String STR_SVT_MIMETYPE_APP_SXIPACKED
+{
+    Text [ en-US ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION Presentation (packed)" ;
+};

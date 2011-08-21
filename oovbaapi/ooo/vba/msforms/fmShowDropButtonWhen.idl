@@ -1,0 +1,7 @@
+module ooo { module vba { module msforms {
+    constants fmShowDropButtonWhen {
+        const long fmShowDropButtonWhenAlways = 2;
+        const long fmShowDropButtonWhenFocus = 1;
+        const long fmShowDropButtonWhenNever = 0;
+    };
+}; }; };

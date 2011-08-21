@@ -1,0 +1,7 @@
+module ooo { module vba { module excel {
+    constants XlFillWith {
+        const long xlFillWithAll = -4104;
+        const long xlFillWithContents = 2;
+        const long xlFillWithFormats = -4122;
+    };
+}; }; };

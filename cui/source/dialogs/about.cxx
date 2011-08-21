@@ -55,6 +55,7 @@
 #include "about.hrc"
 #include <sfx2/sfxdefs.hxx>
 #include <sfx2/app.hxx>
+#include <rtl/ustrbuf.hxx>
 
 using namespace ::com::sun::star;
 
@@ -146,14 +147,12 @@ AboutDialog::AboutDialog( Window* pParent, const ResId& rId) :
     aVersionText    ( this,     ResId( ABOUT_FTXT_VERSION, *rId.GetResMgr() ) ),
     aCopyrightText  ( this,     ResId( ABOUT_FTXT_COPYRIGHT, *rId.GetResMgr() ) ),
     aInfoLink       ( this,     ResId( ABOUT_FTXT_LINK, *rId.GetResMgr() ) ),
-    aAccelStr       (           ResId( ABOUT_STR_ACCEL, *rId.GetResMgr() ) ),
-    aVersionTextStr(            ResId( ABOUT_STR_VERSION, *rId.GetResMgr() ) ),
-    aCopyrightTextStr(          ResId( ABOUT_STR_COPYRIGHT, *rId.GetResMgr() ) ),
-    aLinkStr        (           ResId( ABOUT_STR_LINK, *rId.GetResMgr() ) ),
-    aTimer          (),
-    nOff            ( 0 ),
-    m_nDeltaWidth   ( 0 ),
-    m_nPendingScrolls( 0 )
+    aVersionTextStr(ResId(ABOUT_STR_VERSION, *rId.GetResMgr())),
+    m_aVendorTextStr(ResId(ABOUT_STR_VENDOR, *rId.GetResMgr())),
+    m_aOracleCopyrightTextStr(ResId(ABOUT_STR_COPYRIGHT_ORACLE_DERIVED, *rId.GetResMgr())),
+    m_aAcknowledgementTextStr(ResId(ABOUT_STR_ACKNOWLEDGEMENT, *rId.GetResMgr())),
+    m_aLinkStr(ResId( ABOUT_STR_LINK, *rId.GetResMgr())),
+    m_sBuildStr(ResId(ABOUT_STR_BUILD, *rId.GetResMgr()))
 {
     rtl::OUString sProduct;
     utl::ConfigManager::GetDirectConfigProperty(utl::ConfigManager::PRODUCTNAME) >>= sProduct;
@@ -213,7 +212,7 @@ AboutDialog::AboutDialog( Window* pParent, const ResId& rId) :
 
     aVersionText.SetBackground();
     aCopyrightText.SetBackground();
-    aInfoLink.SetURL( aLinkStr );
+    aInfoLink.SetURL(m_aLinkStr);
     aInfoLink.SetBackground();
     aInfoLink.SetClickHdl( LINK( this, AboutDialog, HandleHyperlink ) );
 
@@ -221,7 +220,17 @@ AboutDialog::AboutDialog( Window* pParent, const ResId& rId) :
     aVersionText.SetControlForeground( aTextColor );
     aCopyrightText.SetControlForeground( aTextColor );
 
-    aCopyrightText.SetText( aCopyrightTextStr );
+    rtl::OUStringBuffer sText(m_aVendorTextStr);
+    sText.appendAscii(RTL_CONSTASCII_STRINGPARAM("\n\n"));
+    sal_uInt32 nCopyrightId = sProduct.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("LibreOffice" )) ?
+        ABOUT_STR_COPYRIGHT : ABOUT_STR_COPYRIGHT_DERIVED;
+    String aProductCopyrightTextStr(ResId(nCopyrightId, *rId.GetResMgr()));
+    sText.append(aProductCopyrightTextStr);
+    sText.appendAscii(RTL_CONSTASCII_STRINGPARAM("\n\n"));
+    sText.append(m_aOracleCopyrightTextStr);
+    sText.appendAscii(RTL_CONSTASCII_STRINGPARAM("\n\n"));
+    sText.append(m_aAcknowledgementTextStr);
+    aCopyrightText.SetText(sText.makeStringAndClear());
 
     // determine size and position of the dialog & elements
     Size aAppLogoSiz = aAppLogo.GetSizePixel();
@@ -238,9 +247,26 @@ AboutDialog::AboutDialog( Window* pParent, const ResId& rId) :
     // preferred Version widget size
     Size aVTSize = aVersionText.CalcMinimumSize();
     long nY          = aAppLogoSiz.Height() + ( a6Size.Height() * 2 );
-    long nDlgMargin  = a6Size.Width() * 3 ;
-    long nCtrlMargin = aVTSize.Height() + ( a6Size.Height() * 2 );
-    long nTextWidth  = aOutSiz.Width() - nDlgMargin;
+    long nDlgMargin  = a6Size.Width() * 2;
+    long nCtrlMargin = a6Size.Height() * 2;
+
+    aVersionText.SetSizePixel(Size(800, 600));
+    Size aVersionTextSize = aVersionText.CalcMinimumSize();
+    aVersionTextSize.Width() += nDlgMargin;
+
+    Size aOutSiz = GetOutputSizePixel();
+    aOutSiz.Width() = aAppLogoSiz.Width();
+
+    if (aOutSiz.Width() < aVersionTextSize.Width())
+        aOutSiz.Width() = aVersionTextSize.Width();
+
+    if (aOutSiz.Width() < 300)
+        aOutSiz.Width() = 300;
+
+    //round up to nearest even
+    aOutSiz.Width() += aOutSiz.Width() & 1;
+
+    long nTextWidth = (aOutSiz.Width() - nDlgMargin);
 
     // finally set the aVersionText widget position and size
     Size aVTCopySize = aVTSize;

@@ -1,0 +1,11 @@
+module ooo { module vba { module word {
+    constants WdSortFieldType {
+        const long wdSortFieldAlphanumeric = 0;
+        const long wdSortFieldDate = 2;
+        const long wdSortFieldJapanJIS = 4;
+        const long wdSortFieldKoreaKS = 6;
+        const long wdSortFieldNumeric = 1;
+        const long wdSortFieldStroke = 5;
+        const long wdSortFieldSyllable = 3;
+    };
+}; }; };

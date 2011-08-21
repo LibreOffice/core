@@ -1,0 +1,8 @@
+module ooo { module vba { module word {
+    constants WdSalutationGender {
+        const long wdGenderFemale = 0;
+        const long wdGenderMale = 1;
+        const long wdGenderNeutral = 2;
+        const long wdGenderUnknown = 3;
+    };
+}; }; };

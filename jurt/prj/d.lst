@@ -1,0 +1,8 @@
+..\%__SRC%\class\jurt.jar %_DEST%\bin\jurt.jar
+..\%__SRC%\bin\jpipe.dll %_DEST%\bin\jpipe.dll
+..\%__SRC%\bin\jpipx.dll %_DEST%\bin\jpipx.dll
+..\%__SRC%\lib\libjpipe*.so %_DEST%\lib\libjpipe*.so
+..\%__SRC%\lib\libjpipe.jnilib %_DEST%\lib\libjpipe.jnilib
+..\%__SRC%\lib\libjpipe*.jnilib %_DEST%\lib\libjpipe*.jnilib
+
+..\%__SRC%\bin\jurt_src.zip %COMMON_DEST%\bin\jurt_src.zip

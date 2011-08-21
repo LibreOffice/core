@@ -1,0 +1,516 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#include "globals.hrc"
+#include "utlui.hrc"
+#include "helpid.h"
+#include "initui.hrc"
+
+/*---------------------------------------------------------------------
+    Fehler Calculator
+ ---------------------------------------------------------------------*/
+Resource RID_SW_SHELLRES
+{
+    String STR_POSTIT_PAGE
+    {
+        Text [ en-US ] = "Page" ;
+    };
+    String STR_POSTIT_LINE
+    {
+        Text [ en-US ] = "Line" ;
+    };
+    String STR_POSTIT_AUTHOR
+    {
+        Text [ en-US ] = "Author" ;
+    };
+    String STR_CALC_SYNTAX
+    {
+        Text [ en-US ] = "** Syntax Error **" ;
+    };
+    String STR_CALC_ZERODIV
+    {
+        Text [ en-US ] = "** Division by zero **" ;
+    };
+    String STR_CALC_BRACK
+    {
+        Text [ en-US ] = "** Wrong use of brackets **" ;
+    };
+    String STR_CALC_POW
+    {
+        Text [ en-US ] = "** Square function overflow **" ;
+    };
+    String STR_CALC_VARNFND
+    {
+        Text [ en-US ] = "** Variable not found **" ;
+    };
+    String STR_CALC_OVERFLOW
+    {
+        Text [ en-US ] = "** Overflow **" ;
+    };
+    String STR_CALC_WRONGTIME
+    {
+        Text [ en-US ] = "** Wrong time format **" ;
+    };
+    String STR_CALC_DEFAULT
+    {
+        Text [ en-US ] = "** Error **" ;
+    };
+    String STR_CALC_ERROR
+    {
+        Text [ en-US ] = "** Expression is faulty **" ;
+    };
+    String STR_GETREFFLD_UP
+    {
+        Text [ en-US ] = "above" ;
+    };
+    String STR_GETREFFLD_DOWN
+    {
+        Text [ en-US ] = "below" ;
+    };
+    String STR_GETREFFLD_REFITEMNOTFOUND
+    {
+        Text [ en-US ] = "Error: Reference source not found" ;
+    };
+    String STR_ALLPAGE_HEADFOOT
+    {
+        Text [ en-US ] = "All" ;
+    };
+    String STR_TEMPLATE_NONE
+    {
+        Text [ en-US ] = "None" ;
+    };
+    String STR_FIELD_FIXED
+    {
+        Text [ en-US ] = "(fixed)" ;
+    };
+    String STR_DURATION_FORMAT
+    {
+        Text [en-US] = " Y: %1 M: %2 D: %3 H: %4 M: %5 S: %6";
+    };
+    String STR_TOI
+    {
+        Text [ en-US ] = "Alphabetical Index" ;
+    };
+
+    String STR_TOU
+    {
+        Text [ en-US ] = "User-Defined" ;
+    };
+
+    String STR_TOC
+    {
+        Text [ en-US ] = "Table of Contents" ;
+    };
+
+    String STR_TOX_AUTH
+    {
+        Text [ en-US ] = "Bibliography";
+    };
+    String STR_TOX_TBL
+    {
+        Text [ en-US ] = "Index of Tables";
+    };
+    String STR_TOX_OBJ
+    {
+        Text [ en-US ] = "Table of Objects";
+    };
+    String STR_TOX_ILL
+    {
+        Text [ en-US ] = "Illustration Index";
+    };
+    String STR_HYPERLINK_CLICK
+    {
+        Text [ en-US ] = "%s-click to open hyperlink";
+    };
+
+
+     // SubType DocInfo
+     //
+    String FLD_DOCINFO_TITEL
+    {
+        Text [ en-US ] = "Title" ;
+    };
+    String FLD_DOCINFO_THEMA
+    {
+        Text [ en-US ] = "Subject" ;
+    };
+    String FLD_DOCINFO_KEYS
+    {
+        Text [ en-US ] = "Keywords" ;
+    };
+    String FLD_DOCINFO_COMMENT
+    {
+        Text [ en-US ] = "Comments" ;
+    };
+    String FLD_DOCINFO_CREATE
+    {
+        Text [ en-US ] = "Created" ;
+    };
+    String FLD_DOCINFO_CHANGE
+    {
+        Text [ en-US ] = "Modified" ;
+    };
+    String FLD_DOCINFO_PRINT
+    {
+        Text [ en-US ] = "Last printed" ;
+    };
+    String FLD_DOCINFO_DOCNO
+    {
+        Text [ en-US ] = "Revision number" ;
+    };
+    String FLD_DOCINFO_EDIT
+    {
+        Text [ en-US ] = "Total editing time" ;
+    };
+    BITMAP BMP_FRAME_ANCHOR { FILE = "anchor.bmp" ; };
+    BITMAP BMP_FRAME_DRAG_ANCHOR { FILE = "danchor.bmp" ; };
+
+    String STR_PAGEDESC_NAME
+    {
+        Text [ en-US ] = "Convert $(ARG1)";
+    };
+    String STR_PAGEDESC_FIRSTNAME
+    {
+        Text [ en-US ] = "First convert $(ARG1)";
+    };
+    String STR_PAGEDESC_FOLLOWNAME
+    {
+        Text [ en-US ] = "Next convert $(ARG1)";
+    };
+};
+
+String STR_AUTH_TYPE_ARTICLE
+{
+    Text [ en-US ] = "Article";
+};
+String STR_AUTH_TYPE_BOOK
+{
+    Text [ en-US ] = "Book";
+};
+String STR_AUTH_TYPE_BOOKLET
+{
+    Text [ en-US ] = "Brochures";
+};
+String STR_AUTH_TYPE_CONFERENCE
+{
+    Text [ en-US ] = "Conference proceedings";
+};
+String STR_AUTH_TYPE_INBOOK
+{
+    Text [ en-US ] = "Book excerpt";
+};
+String STR_AUTH_TYPE_INCOLLECTION
+{
+    Text [ en-US ] = "Book excerpt with title";
+};
+String STR_AUTH_TYPE_INPROCEEDINGS
+{
+    Text [ en-US ] = "Conference proceedings";
+};
+String STR_AUTH_TYPE_JOURNAL
+{
+    Text [ en-US ] = "Journal";
+};
+String STR_AUTH_TYPE_MANUAL
+{
+    Text [ en-US ] = "Techn. documentation";
+};
+String STR_AUTH_TYPE_MASTERSTHESIS
+{
+    Text [ en-US ] = "Thesis";
+};
+String STR_AUTH_TYPE_MISC
+{
+    Text [ en-US ] = "Miscellaneous";
+};
+String STR_AUTH_TYPE_PHDTHESIS
+{
+    Text [ en-US ] = "Dissertation";
+};
+String STR_AUTH_TYPE_PROCEEDINGS
+{
+    Text [ en-US ] = "Conference proceedings";
+};
+String STR_AUTH_TYPE_TECHREPORT
+{
+    Text [ en-US ] = "Research report";
+};
+String STR_AUTH_TYPE_UNPUBLISHED
+{
+    Text [ en-US ] = "Unpublished";
+};
+String STR_AUTH_TYPE_EMAIL
+{
+    Text [ en-US ] = "e-mail";
+};
+String STR_AUTH_TYPE_WWW
+{
+    Text [ en-US ] = "WWW document";
+};
+String STR_AUTH_TYPE_CUSTOM1
+{
+    Text [ en-US ] = "User-defined1";
+};
+String STR_AUTH_TYPE_CUSTOM2
+{
+    Text [ en-US ] = "User-defined2";
+};
+String STR_AUTH_TYPE_CUSTOM3
+{
+    Text [ en-US ] = "User-defined3";
+};
+String STR_AUTH_TYPE_CUSTOM4
+{
+    Text [ en-US ] = "User-defined4";
+};
+String STR_AUTH_TYPE_CUSTOM5
+{
+    Text [ en-US ] = "User-defined5";
+};
+
+String STR_AUTH_FIELD_IDENTIFIER
+{
+    Text [ en-US ] = "Short name";
+};
+String STR_AUTH_FIELD_AUTHORITY_TYPE
+{
+    Text [ en-US ] = "Type";
+};
+String STR_AUTH_FIELD_ADDRESS
+{
+    Text [ en-US ] = "Address";
+};
+String STR_AUTH_FIELD_ANNOTE
+{
+    Text [ en-US ] = "Annotation";
+};
+String STR_AUTH_FIELD_AUTHOR
+{
+    Text [ en-US ] = "Author(s)";
+};
+String STR_AUTH_FIELD_BOOKTITLE
+{
+    Text [ en-US ] = "Book title";
+};
+String STR_AUTH_FIELD_CHAPTER
+{
+    Text [ en-US ] = "Chapter";
+};
+String STR_AUTH_FIELD_EDITION
+{
+    Text [ en-US ] = "Edition";
+};
+String STR_AUTH_FIELD_EDITOR
+{
+    Text [ en-US ] = "Editor";
+};
+String STR_AUTH_FIELD_HOWPUBLISHED
+{
+    Text [ en-US ] = "Publication type";
+};
+String STR_AUTH_FIELD_INSTITUTION
+{
+    Text [ en-US ] = "Institution";
+};
+String STR_AUTH_FIELD_JOURNAL
+{
+    Text [ en-US ] = "Journal";
+};
+String STR_AUTH_FIELD_MONTH
+{
+    Text [ en-US ] = "Month";
+};
+String STR_AUTH_FIELD_NOTE
+{
+    Text [ en-US ] = "Note";
+};
+String STR_AUTH_FIELD_NUMBER
+{
+    Text [ en-US ] = "Number";
+};
+String STR_AUTH_FIELD_ORGANIZATIONS
+{
+    Text [ en-US ] = "Organization";
+};
+String STR_AUTH_FIELD_PAGES
+{
+    Text [ en-US ] = "Page(s)";
+};
+String STR_AUTH_FIELD_PUBLISHER
+{
+    Text [ en-US ] = "Publisher";
+};
+String STR_AUTH_FIELD_SCHOOL
+{
+    Text [ en-US ] = "University";
+};
+String STR_AUTH_FIELD_SERIES
+{
+    Text [ en-US ] = "Series";
+};
+String STR_AUTH_FIELD_TITLE
+{
+    Text [ en-US ] = "Title";
+};
+String STR_AUTH_FIELD_TYPE
+{
+    Text [ en-US ] = "Type of report";
+};
+String STR_AUTH_FIELD_VOLUME
+{
+    Text [ en-US ] = "Volume";
+};
+String STR_AUTH_FIELD_YEAR
+{
+    Text [ en-US ] = "Year";
+};
+String STR_AUTH_FIELD_URL
+{
+    Text [ en-US ] = "URL";
+};
+String STR_AUTH_FIELD_CUSTOM1
+{
+    Text [ en-US ] = "User-defined1";
+};
+String STR_AUTH_FIELD_CUSTOM2
+{
+    Text [ en-US ] = "User-defined2";
+};
+String STR_AUTH_FIELD_CUSTOM3
+{
+    Text [ en-US ] = "User-defined3";
+};
+String STR_AUTH_FIELD_CUSTOM4
+{
+    Text [ en-US ] = "User-defined4";
+};
+String STR_AUTH_FIELD_CUSTOM5
+{
+    Text [ en-US ] = "User-defined5";
+};
+String STR_AUTH_FIELD_ISBN
+{
+    Text [ en-US ] = "ISBN";
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

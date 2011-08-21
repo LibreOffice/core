@@ -83,8 +83,10 @@ class OfaACorrCheckListBox : public SvxSimpleTable
         virtual void    KeyInput( const KeyEvent& rKEvt );
 
     public:
-        OfaACorrCheckListBox(Window* pParent, const ResId& rResId ) :
-            SvxSimpleTable( pParent, rResId ){}
+        OfaACorrCheckListBox(SvxSimpleTableContainer& rParent, WinBits nBits = WB_BORDER)
+            : SvxSimpleTable(rParent, nBits)
+        {
+        }
 
         inline void *GetUserData(sal_uLong nPos) { return GetEntry(nPos)->GetUserData(); }
         inline void SetUserData(sal_uLong nPos, void *pData ) { GetEntry(nPos)->SetUserData(pData); }
@@ -136,6 +138,7 @@ class OfaSwAutoFmtOptionsPage : public SfxTabPage
 {
     using TabPage::ActivatePage;
 
+    SvxSimpleTableContainer m_aCheckLBContainer;
     OfaACorrCheckListBox    aCheckLB;
     PushButton      aEditPB;
     FixedText       aHeader1Expl;
@@ -334,6 +337,7 @@ private:
     SvxCheckListBox aCheckLB;
 
     // Just for writer
+    SvxSimpleTableContainer m_aSwCheckLBContainer;
     OfaACorrCheckListBox    aSwCheckLB;
     String          sHeader1;
     String          sHeader2;

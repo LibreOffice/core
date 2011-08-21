@@ -1,0 +1,100 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef DBAUI_TOOLBOX_HXX
+#define DBAUI_TOOLBOX_HXX
+
+#define CUR_ITEM ToolBoxItem
+#define CUR_SEPARATOR CUR_ITEM {Type = TOOLBOXITEM_SEPARATOR;}
+
+#define MID_SBA_QRY_REFRESH \
+    Identifier = ID_BROWSER_REFRESH ; \
+    Text [ en-US ] = "Refresh"; \
+    Text [ x-comment ] = " ";   \
+
+
+#define MID_NEW_VIEW_DESIGN \
+    Identifier = ID_NEW_VIEW_DESIGN;    \
+    HelpId = HID_BROWSER_VIEW_CREATE_DESIGN ; \
+    Text [ en-US ] = "New ~View Design" ; \
+
+
+#define MID_NEW_TABLE_DESIGN \
+    Identifier = ID_NEW_TABLE_DESIGN;   \
+    HelpId = HID_BROWSER_TABLE_CREATE_DESIGN ; \
+    Text [ en-US ] = "New ~Table Design" ;\
+
+
+#define MID_QUERY_WIZARD    \
+    Identifier = ID_NEW_QUERY_WIZARD;   \
+    HelpId = HID_BROWSER_QUERY_WIZARD ; \
+    Text[ en-US ] = "Query AutoPilot...";   \
+
+
+#define MID_QUERY_NEW_DESIGN    \
+    Identifier = ID_NEW_QUERY_DESIGN;   \
+    HelpId = HID_BROWSER_QUERY_CREATE_DESIGN ; \
+    Text [ en-US ] = "New ~Query (Design View)" ; \
+
+
+#define MID_QUERY_EDIT_DESIGN   \
+    Identifier = ID_EDIT_QUERY_DESIGN;  \
+    HelpId = HID_BROWSER_QUERY_EDIT ; \
+    Text [ en-US ] = "~Edit Query" ; \
+
+
+#define MID_QUERY_NEW_SQL   \
+    Identifier = ID_NEW_QUERY_SQL;  \
+    HelpId = HID_BROWSER_QUERY_CREATE_TEXT ; \
+    Text [ en-US ] = "New Query (~SQL View)" ; \
+
+
+#define MID_DBUI_QUERY_EDIT_JOINCONNECTION                                    \
+    Identifier = ID_QUERY_EDIT_JOINCONNECTION;                                \
+    HelpId = HID_QUERY_EDIT_JOINCONNECTION ;                                    \
+    Text [ en-US ] = "Edit..."; \
+
+
+#define MID_COLUMN_WIDTH\
+    Identifier = ID_BROWSER_COLWIDTH ;\
+    HelpID = HID_BROWSER_COLUMNWIDTH ;\
+    Text [ en-US ] = "Column ~Width..." ;\
+
+
+#define MID_DOCUMENT_CREATE_REPWIZ\
+    Identifier = ID_DOCUMENT_CREATE_REPWIZ ;\
+    HelpID = HID_DOCUMENT_CREATE_REPWIZ ;\
+    Text [ en-US ] = "Report Wizard...";    \
+
+
+#define MID_DOCUMENT_NEW_AUTOPILOT                              \
+    Identifier = SID_DB_FORM_NEW_PILOT;                             \
+    HelpID = SID_DB_FORM_NEW_PILOT ;\
+    Text [ en-US ] = "Form AutoPilot...";   \
+
+
+#endif // DBAUI_TOOLBOX_HXX
+

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<description xmlns="http://openoffice.org/extensions/description/2006" xmlns:d="http://openoffice.org/extensions/description/2006"
+    xmlns:xlink="http://www.w3.org/1999/xlink">
+
+    <identifier value="UPDATED_IDENTIFIER"/>
+    <version value="#VERSION#" />
+    <platform value="UPDATED_SUPPORTED_PLATFORM" />
+    <display-name>
+        <name lang="en-US">#TITLE#</name>
+    </display-name>
+    <dependencies>
+         <OpenOffice.org-minimal-version value="3.1" d:name="OpenOffice.org 3.1"/>
+    </dependencies>
+    <publisher>
+        <name xlink:href="http://www.oracle.com/us/products/applications/open-office" lang="en">Oracle</name>
+    </publisher>
+    <icon>
+        <default xlink:href="images/extension_32.png" />
+    </icon>
+    <extension-description>
+        <src lang="#LANG#" xlink:href="description/description_#LANG#.txt"/>
+    </extension-description>
+</description>

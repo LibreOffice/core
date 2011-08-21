@@ -1,0 +1,283 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+ // includes ------------------------------------------------------------------
+
+#include "templwin.hrc"
+#include <svtools/controldims.hrc>
+#include <svtools/helpid.hrc>
+#include <svtools/svtools.hrc>
+
+// Magenta and Grey as mask colors
+#define MASK_COL_MAGENTA    Color { Red = 0xFFFF ; Green = 0x0000 ; Blue = 0xFFFF ; };
+
+Control CTRL_FILEVIEW
+{
+    Pos = MAP_APPFONT ( 0 , 0 ) ;
+    Size = MAP_APPFONT ( 200 , 180 ) ;
+};
+
+String STR_SVT_NEWDOC
+{
+    Text [ en-US ] = "New Document";
+};
+
+Image IMG_SVT_NEWDOC
+{
+    ImageBitmap = Bitmap { File = "new_doc.png" ; };
+    MaskColor = MASK_COL_MAGENTA
+};
+
+String STR_SVT_MYDOCS
+{
+    Text [ en-US ] = "My Documents";
+};
+
+Image IMG_SVT_MYDOCS
+{
+    ImageBitmap = Bitmap { File = "my_docs.png" ; };
+    MaskColor = MASK_COL_MAGENTA
+};
+
+String STR_SVT_TEMPLATES
+{
+    Text [ en-US ] = "Templates";
+};
+
+Image IMG_SVT_TEMPLATES
+{
+    ImageBitmap = Bitmap { File = "template.png" ; };
+    MaskColor = MASK_COL_MAGENTA
+};
+
+String STR_SVT_SAMPLES
+{
+    Text [ en-US ] = "Samples";
+};
+
+Image IMG_SVT_SAMPLES
+{
+    ImageBitmap = Bitmap { File = "samples.png" ; };
+    MaskColor = MASK_COL_MAGENTA
+};
+
+ToolBox TB_SVT_FILEVIEW
+{
+    Pos = MAP_APPFONT ( 0 , 0 ) ;
+    Size = MAP_APPFONT ( 100 , 12 ) ;
+    ItemList =
+    {
+        ToolBoxItem
+        {
+            Identifier = TI_DOCTEMPLATE_BACK;
+            HelpId = HID_TEMPLATEDLG_TB_BACK;
+            Text [ en-US ] = "Back" ;
+        };
+        ToolBoxItem
+        {
+            Identifier = TI_DOCTEMPLATE_PREV;
+            HelpId = HID_TEMPLATEDLG_TB_PREV;
+            Text [ en-US ] = "Up One Level" ;
+        };
+        ToolBoxItem
+        {
+            Type = TOOLBOXITEM_SEPARATOR ;
+        };
+        ToolBoxItem
+        {
+            Identifier = TI_DOCTEMPLATE_PRINT;
+            HelpId = HID_TEMPLATEDLG_TB_PRINT;
+            Text [ en-US ] = "Print" ;
+        };
+    };
+};
+
+Image IMG_SVT_DOCTEMPLATE_BACK_SMALL
+{
+    ImageBitmap = Bitmap { File = "back_small.png" ; };
+    MaskColor = MASK_COL_MAGENTA
+};
+Image IMG_SVT_DOCTEMPLATE_BACK_LARGE
+{
+    ImageBitmap = Bitmap { File = "back_large.png" ; };
+    MaskColor = MASK_COL_MAGENTA
+};
+Image IMG_SVT_DOCTEMPLATE_PREV_SMALL
+{
+    ImageBitmap = Bitmap { File = "up_small.png" ; };
+    MaskColor = MASK_COL_MAGENTA
+};
+Image IMG_SVT_DOCTEMPLATE_PREV_LARGE
+{
+    ImageBitmap = Bitmap { File = "up_large.png" ; };
+    MaskColor = MASK_COL_MAGENTA
+};
+Image IMG_SVT_DOCTEMPLATE_PRINT_SMALL
+{
+    ImageBitmap = Bitmap { File = "sc05509.png" ; };
+    MaskColor = MASK_COL_MAGENTA
+};
+Image IMG_SVT_DOCTEMPLATE_PRINT_LARGE
+{
+    ImageBitmap = Bitmap { File = "lc05509.png" ; };
+    MaskColor = MASK_COL_MAGENTA
+};
+
+ToolBox TB_SVT_FRAMEWIN
+{
+    Pos = MAP_APPFONT ( 0 , 0 ) ;
+    Size = MAP_APPFONT ( 100 , 12 ) ;
+    ItemList =
+    {
+        ToolBoxItem
+        {
+            RadioCheck = TRUE;
+            AutoCheck = TRUE;
+            Identifier = TI_DOCTEMPLATE_DOCINFO;
+            HelpId = HID_TEMPLATEDLG_TB_DOCINFO;
+            Text [ en-US ] = "Document Properties" ;
+        };
+        ToolBoxItem
+        {
+            RadioCheck = TRUE;
+            AutoCheck = TRUE;
+            Identifier = TI_DOCTEMPLATE_PREVIEW;
+            HelpId = HID_TEMPLATEDLG_TB_PREVIEW;
+            Text [ en-US ] = "Preview" ;
+        };
+    };
+};
+
+Image IMG_SVT_DOCTEMPLATE_DOCINFO_SMALL
+{
+    ImageBitmap = Bitmap { File = "info_small.png" ; };
+    MaskColor = MASK_COL_MAGENTA
+};
+Image IMG_SVT_DOCTEMPLATE_DOCINFO_LARGE
+{
+    ImageBitmap = Bitmap { File = "info_large.png" ; };
+    MaskColor = MASK_COL_MAGENTA
+};
+Image IMG_SVT_DOCTEMPLATE_PREVIEW_SMALL
+{
+    ImageBitmap = Bitmap { File = "preview_small.png" ; };
+    MaskColor = MASK_COL_MAGENTA
+};
+Image IMG_SVT_DOCTEMPLATE_PREVIEW_LARGE
+{
+    ImageBitmap = Bitmap { File = "preview_large.png" ; };
+    MaskColor = MASK_COL_MAGENTA
+};
+
+ModalDialog DLG_DOCTEMPLATE
+{
+    HelpId = HID_TEMPLATEDLG_DIALOG ;
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT( 320, 250 );
+    Text [ en-US ] = "Templates and Documents" ;
+    Moveable = TRUE ;
+    FixedText FT_DOCTEMPLATE_LINK
+    {
+        Left = TRUE ;
+        Pos = MAP_APPFONT ( 6 , 208 ) ;
+        Size = MAP_APPFONT ( 311 , RSC_CD_FIXEDTEXT_HEIGHT ) ;
+        Text [ en-US ] = "~Get more templates online...";
+    };
+    FixedLine FL_DOCTEMPLATE
+    {
+        Pos = MAP_APPFONT( 0, 219 );
+        Size = MAP_APPFONT( 320, 8 );
+    };
+    PushButton BTN_DOCTEMPLATE_MANAGE
+    {
+        HelpID = "svtools:PushButton:DLG_DOCTEMPLATE:BTN_DOCTEMPLATE_MANAGE";
+        Pos = MAP_APPFONT( 6, 230 );
+        Size = MAP_APPFONT( 50, 14 );
+        Text [ en-US ] = "Organi~ze...";
+    };
+    PushButton BTN_DOCTEMPLATE_EDIT
+    {
+        HelpID = "svtools:PushButton:DLG_DOCTEMPLATE:BTN_DOCTEMPLATE_EDIT";
+        Pos = MAP_APPFONT( 59, 230 );
+        Size = MAP_APPFONT( 50, 14 );
+        Text [ en-US ] = "~Edit";
+    };
+    OKButton BTN_DOCTEMPLATE_OPEN
+    {
+        Pos = MAP_APPFONT( 155, 230 );
+        Size = MAP_APPFONT( 50, 14 );
+        DefButton = TRUE;
+        Text [ en-US ] = "~Open";
+    };
+    CancelButton BTN_DOCTEMPLATE_CANCEL
+    {
+        Pos = MAP_APPFONT( 208, 230 );
+        Size = MAP_APPFONT( 50, 14 );
+    };
+    HelpButton BTN_DOCTEMPLATE_HELP
+    {
+        Pos = MAP_APPFONT( 264, 230 );
+        Size = MAP_APPFONT( 50, 14 );
+    };
+};
+
+StringArray STRARY_SVT_DOCINFO
+{
+    ItemList [ en-US ] =
+    {
+        < "Title" ; DI_TITLE ; > ;
+        < "By" ; DI_FROM ; > ;
+        < "Date" ; DI_DATE ; > ;
+        < "Keywords" ; DI_KEYWORDS ; > ;
+        < "Description" ; DI_DESCRIPTION ; > ;
+        < "Type" ; DI_MIMETYPE ; > ;
+        < "Modified on" ; DI_MODIFIEDDATE ; > ;
+        < "Modified by" ; DI_MODIFIEDBY ; > ;
+        < "Printed on" ; DI_PRINTDATE ; > ;
+        < "Printed by" ; DI_PRINTBY ; > ;
+        < "Subject" ; DI_THEME ; > ;
+        < "Size" ; DI_SIZE ; > ;
+    };
+    };
+
+String STR_SVT_NEWDOC_HELP
+{
+    Text [ en-US ] = "Click here to create new documents.";
+};
+String STR_SVT_MYDOCS_HELP
+{
+    Text [ en-US ] = "Contains your letters, reports and other documents";
+};
+String STR_SVT_TEMPLATES_HELP
+{
+    Text [ en-US ] = "Contains templates for creating new documents";
+};
+String STR_SVT_SAMPLES_HELP
+{
+    Text [ en-US ] = "Contains a selection of sample letters, reports and other documents";
+};

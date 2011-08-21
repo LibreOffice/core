@@ -1,0 +1,103 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_frame_ContentHandlerFactory_idl__
+#define __com_sun_star_frame_ContentHandlerFactory_idl__
+
+#include <com/sun/star/lang/XMultiServiceFactory.idl>
+#include <com/sun/star/container/XNameAccess.idl>
+#include <com/sun/star/container/XContainerQuery.idl>
+
+//=============================================================================
+
+module com { module sun { module star { module frame {
+
+//=============================================================================
+/** factory to create content loader
+
+    <p>
+    With this factory it's possible to
+    <ul>
+        <li>have access on configuration of set of registered content handler objects</li>
+        <li>create a content handler by his internal name</li>
+        <li>query for a content handler by using special query or property description.</li>
+    </ul>
+    </p>
+ */
+published service ContentHandlerFactory
+{
+    //-------------------------------------------------------------------------
+    /** interface to create handler objects by using his internal name
+
+        <p>
+        Returned objects must support the service specification of a <type>ContentHandler</type>.
+        They can be created by using of his internal name, which must be unambiguous everytime, only.
+        To get this name use further specified interfaces of this factory for access on
+        the flat configuration.
+        </p>
+    */
+    interface com::sun::star::lang::XMultiServiceFactory;
+
+    //-------------------------------------------------------------------------
+    /** provides access to the whole content handler configuration
+
+        <p>
+        This interface supports an access to the internal configuration
+        of all accessible handler objects. The return value of
+        <member scope="com::sun::star::container">XNameAccess::getByName()</member> is a property sequence
+        packed in an any.
+        </p>
+        <table border=1>
+            <tr>
+                <td><b>Types<b></td>
+                <td>[string]</td>
+                <td>file types for which handler is registered</td>
+            </tr>
+            <tr>
+                <td><b>UIName<b></td>
+                <td>[string]</td>
+                <td>UI representable and localized name</td>
+            </tr>
+        </table>
+    */
+    interface com::sun::star::container::XNameAccess;
+
+    //-------------------------------------------------------------------------
+    /** supports query mode for configuration access
+
+        <p>
+        This interface can be used to get sub sets of current configuration entries
+        which represent given search parameters.
+        </p>
+     */
+    interface com::sun::star::container::XContainerQuery;
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

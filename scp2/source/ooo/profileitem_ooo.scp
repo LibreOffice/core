@@ -1,0 +1,477 @@
+/*************************************************************************
+*
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * 
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+************************************************************************/
+
+#include "macros.inc"
+
+ProfileItem gid_Profileitem_Setup_Uno_Java_Comppath
+    ProfileID = gid_Profile_Setup_Ini;
+    ModuleID = gid_Module_Root;
+    Section = "Bootstrap";
+    Order = 1;
+    Key = "UNO_JAVA_COMPPATH";
+    Value = "$ORIGIN/classes";
+End
+
+ProfileItem gid_Profileitem_Setup_Uno_Services
+    ProfileID = gid_Profile_Setup_Ini;
+    ModuleID = gid_Module_Root;
+    Section = "Bootstrap";
+    Order = 2;
+    Key = "UNO_SERVICES";
+    Value = "$ORIGIN/setup_services.rdb";
+End
+
+ProfileItem gid_Profileitem_Setup_Uno_Types
+    ProfileID = gid_Profile_Setup_Ini;
+    ModuleID = gid_Module_Root;
+    Section = "Bootstrap";
+    Order = 3;
+    Key = "UNO_TYPES";
+    Value = "$ORIGIN/types.rdb";
+End
+
+#ifdef WNT
+
+ProfileItem gid_Profileitem_Setup_Alluserset
+    ProfileID = gid_Profile_Setup_Ini;
+    ModuleID = gid_Module_Root;
+    Section = "Bootstrap";
+    Order = 4;
+    Key = "ALLUSERS";
+    Value = "[ALLUSERS]";
+    Inifiletablekey = "AllUsersSet";
+    Inifiletableaction = "1";
+    Styles = (INIFILETABLE);
+End
+
+#endif
+
+#ifdef WNT
+
+ProfileItem gid_Profileitem_Setup_Findproduct
+    ProfileID = gid_Profile_Setup_Ini;
+    ModuleID = gid_Module_Root;
+    Section = "Bootstrap";
+    Order = 5;
+    Key = "FINDPRODUCT";
+    Value = "[FINDPRODUCT]";
+    Inifiletablekey = "FindProductSet";
+    Inifiletableaction = "1";
+    Styles = (INIFILETABLE);
+End
+
+#endif
+
+#ifdef WNT
+
+ProfileItem gid_Profileitem_Setup_Productcode
+    ProfileID = gid_Profile_Setup_Ini;
+    ModuleID = gid_Module_Root;
+    Section = "Bootstrap";
+    Order = 6;
+    Key = "ProductCode";
+    Value = "<productcode>";
+End
+
+#endif
+
+#ifdef WNT
+
+ProfileItem gid_Profileitem_Setup_Upgradecode
+    ProfileID = gid_Profile_Setup_Ini;
+    ModuleID = gid_Module_Root;
+    Section = "Bootstrap";
+    Order = 7;
+    Key = "UpgradeCode";
+    Value = "<upgradecode>";
+End
+
+#endif
+
+ProfileItem gid_Profileitem_Soffice_Logo
+    ProfileID = gid_Profile_Soffice_Ini;
+    ModuleID = gid_Module_Root;
+    Section = "Bootstrap";
+    Order = 1;
+    Key = "Logo";
+    Value = "1";
+End
+
+ProfileItem gid_Profileitem_Soffice_ProgressBarColor
+    ProfileID = gid_Profile_Soffice_Ini;
+    ModuleID = gid_Module_Root;
+    Section = "Bootstrap";
+    Order = 2;
+    Key = "ProgressBarColor";
+    Value = "0,0,128";
+End
+
+ProfileItem gid_Profileitem_Soffice_ProgressSize
+    ProfileID = gid_Profile_Soffice_Ini;
+    ModuleID = gid_Module_Root;
+    Section = "Bootstrap";
+    Order = 3;
+    Key = "ProgressSize";
+    Value = "-1,6";
+End
+
+ProfileItem gid_Profileitem_Soffice_ProgressPosition
+    ProfileID = gid_Profile_Soffice_Ini;
+    ModuleID = gid_Module_Root;
+    Section = "Bootstrap";
+    Order = 4;
+    Key = "ProgressPosition";
+    Value = "-1,-1";
+End
+
+ProfileItem gid_Profileitem_Soffice_NativeProgress
+    ProfileID = gid_Profile_Soffice_Ini;
+    ModuleID = gid_Module_Root;
+    Section = "Bootstrap";
+    Order = 6;
+    Key = "NativeProgress";
+    Value = "true";
+End
+
+#ifdef WNT
+
+ProfileItem gid_Profileitem_Soffice_Hideeula
+    ProfileID = gid_Profile_Soffice_Ini;
+    ModuleID = gid_Module_Root;
+    Section = "Bootstrap";
+    Order = 8;
+    Key = "HideEula";
+    Value = "[HIDEEULA]";
+    Inifiletablekey = "HideEula";
+    Inifiletableaction = "1";
+    Styles = (INIFILETABLE);
+End
+
+#endif
+
+ProfileItem gid_Profileitem_Uno_Uno_Bundled_Extensions
+    ProfileID = gid_Profile_Uno_Ini;
+    ModuleID = gid_Module_Root;
+    Section = "Bootstrap";
+    Order = 1;
+    Key = "BUNDLED_EXTENSIONS";
+    Value = "$BRAND_BASE_DIR/share/extensions";
+End
+
+ProfileItem gid_Profileitem_Uno_Uno_Bundled_Extensions_User
+    ProfileID = gid_Profile_Uno_Ini;
+    ModuleID = gid_Module_Root;
+    Section = "Bootstrap";
+    Order = 1;
+    Key = "BUNDLED_EXTENSIONS_USER";
+    Value = "${$BRAND_BASE_DIR/program/" PROFILENAME(bootstrap) ":UserInstallation}/user/extensions/bundled";
+End
+
+ProfileItem gid_Profileitem_Uno_Uno_Bundled_Extensions_Prereg
+    ProfileID = gid_Profile_Uno_Ini;
+    ModuleID = gid_Module_Root;
+    Section = "Bootstrap";
+    Order = 1;
+    Key = "BUNDLED_EXTENSIONS_PREREG";
+    Value = "$BRAND_BASE_DIR/share/prereg/bundled";
+End
+
+
+ProfileItem gid_Profileitem_Uno_Uno_Shared_Packages
+    ProfileID = gid_Profile_Uno_Ini;
+    ModuleID = gid_Module_Root;
+    Section = "Bootstrap";
+    Order = 1;
+    Key = "UNO_SHARED_PACKAGES";
+    Value = "$BRAND_BASE_DIR/share/uno_packages";
+End
+
+ProfileItem gid_Profileitem_Uno_Uno_Shared_Packages_Cache
+    ProfileID = gid_Profile_Uno_Ini;
+    ModuleID = gid_Module_Root;
+    Section = "Bootstrap";
+    Order = 2;
+    Key = "UNO_SHARED_PACKAGES_CACHE";
+    Value = "$UNO_SHARED_PACKAGES/cache";
+End
+
+ProfileItem gid_Profileitem_Uno_Uno_Shared_Extensions_User
+    ProfileID = gid_Profile_Uno_Ini;
+    ModuleID = gid_Module_Root;
+    Section = "Bootstrap";
+    Order = 1;
+    Key = "SHARED_EXTENSIONS_USER";
+    Value = "${$BRAND_BASE_DIR/program/" PROFILENAME(bootstrap) ":UserInstallation}/user/extensions/shared";
+End
+
+ProfileItem gid_Profileitem_Uno_Uno_User_Packages
+    ProfileID = gid_Profile_Uno_Ini;
+    ModuleID = gid_Module_Root;
+    Section = "Bootstrap";
+    Order = 3;
+    Key = "UNO_USER_PACKAGES";
+    Value = "${$BRAND_BASE_DIR/program/" PROFILENAME(bootstrap) ":UserInstallation}/user/uno_packages";
+End
+
+ProfileItem gid_Profileitem_Uno_Uno_Bundled_Tmp_Extensions
+    ProfileID = gid_Profile_Uno_Ini;
+    ModuleID = gid_Module_Root;
+    Section = "Bootstrap";
+    Order = 1;
+    Key = "TMP_EXTENSIONS";
+    Value = "${$BRAND_BASE_DIR/program/" PROFILENAME(bootstrap) ":UserInstallation}/user/extensions/tmp";
+End
+
+ProfileItem gid_Profileitem_Uno_Uno_User_Packages_Cache
+    ProfileID = gid_Profile_Uno_Ini;
+    ModuleID = gid_Module_Root;
+    Section = "Bootstrap";
+    Order = 4;
+    Key = "UNO_USER_PACKAGES_CACHE";
+    Value = "$UNO_USER_PACKAGES/cache";
+End
+ProfileItem gid_Profileitem_Uno_Pkg_BundledUnoFile
+    ProfileID = gid_Profile_Uno_Ini;
+    ModuleID = gid_Module_Root;
+    Section = "Bootstrap";
+    Order = 5;
+    Key = "PKG_BundledUnoFile";
+    Value = "$BUNDLED_EXTENSIONS_USER/registry/com.sun.star.comp.deployment.component.PackageRegistryBackend/unorc";
+End
+
+ProfileItem gid_Profileitem_Uno_Pkg_SharedUnoFile
+    ProfileID = gid_Profile_Uno_Ini;
+    ModuleID = gid_Module_Root;
+    Section = "Bootstrap";
+    Order = 5;
+    Key = "PKG_SharedUnoFile";
+    Value = "$SHARED_EXTENSIONS_USER/registry/com.sun.star.comp.deployment.component.PackageRegistryBackend/unorc";
+End
+
+ProfileItem gid_Profileitem_Uno_Pkg_UserUnoFile
+    ProfileID = gid_Profile_Uno_Ini;
+    ModuleID = gid_Module_Root;
+    Section = "Bootstrap";
+    Order = 6;
+    Key = "PKG_UserUnoFile";
+    Value = "$UNO_USER_PACKAGES_CACHE/registry/com.sun.star.comp.deployment.component.PackageRegistryBackend/unorc";
+End
+
+ProfileItem gid_Profileitem_Fundamentalbasis_Uno_Bundled_Extensions
+    ModuleID = gid_Module_Root;
+    ProfileID = gid_Profile_Fundamentalbasis_Ini;
+    Section = "Bootstrap";
+    Key = "BUNDLED_EXTENSIONS";
+    Value = "${$ORIGIN/" PROFILENAME(uno) ":BUNDLED_EXTENSIONS}";
+End
+
+ProfileItem gid_Profileitem_Fundamentalbasis_Uno_Bundled_Extensions_User
+    ModuleID = gid_Module_Root;
+    ProfileID = gid_Profile_Fundamentalbasis_Ini;
+    Section = "Bootstrap";
+    Key = "BUNDLED_EXTENSIONS_USER";
+    Value = "${$ORIGIN/" PROFILENAME(uno) ":BUNDLED_EXTENSIONS_USER}";
+End
+
+ProfileItem gid_Profileitem_Fundamentalbasis_Uno_Bundled_Extensions_Prereg
+    ModuleID = gid_Module_Root;
+    ProfileID = gid_Profile_Fundamentalbasis_Ini;
+    Section = "Bootstrap";
+    Key = "BUNDLED_EXTENSIONS_PREREG";
+    Value = "${$ORIGIN/" PROFILENAME(uno) ":BUNDLED_EXTENSIONS_PREREG}";
+End
+
+ProfileItem gid_Profileitem_Fundamentalbasis_Uno_Shared_Packages_Cache
+    ModuleID = gid_Module_Root;
+    ProfileID = gid_Profile_Fundamentalbasis_Ini;
+    Section = "Bootstrap";
+    Key = "UNO_SHARED_PACKAGES_CACHE";
+    Value = "${$ORIGIN/" PROFILENAME(uno) ":UNO_SHARED_PACKAGES_CACHE}";
+End
+
+ProfileItem gid_Profileitem_Fundamentalbasis_Uno_Shared_Extensions_User
+    ModuleID = gid_Module_Root;
+    ProfileID = gid_Profile_Fundamentalbasis_Ini;
+    Section = "Bootstrap";
+    Key = "SHARED_EXTENSIONS_USER";
+    Value = "${$ORIGIN/" PROFILENAME(uno) ":SHARED_EXTENSIONS_USER}";
+End
+
+ProfileItem gid_Profileitem_Fundamentalbasis_Uno_User_Packages_Cache
+    ModuleID = gid_Module_Root;
+    ProfileID = gid_Profile_Fundamentalbasis_Ini;
+    Section = "Bootstrap";
+    Key = "UNO_USER_PACKAGES_CACHE";
+    Value = "${$ORIGIN/" PROFILENAME(uno) ":UNO_USER_PACKAGES_CACHE}";
+End
+
+ProfileItem gid_Profileitem_Fundamentalbasis_Uno_Tmp_Extensions
+    ModuleID = gid_Module_Root;
+    ProfileID = gid_Profile_Fundamentalbasis_Ini;
+    Section = "Bootstrap";
+    Key = "TMP_EXTENSIONS";
+    Value = "${$ORIGIN/" PROFILENAME(uno) ":TMP_EXTENSIONS}";
+End
+
+ProfileItem gid_Profileitem_Fundamentalbasis_Ure_More_Types
+    ModuleID = gid_Module_Root;
+    ProfileID = gid_Profile_Fundamentalbasis_Ini;
+    Section = "Bootstrap";
+    Key = "URE_MORE_TYPES";
+    Value = "$ORIGIN/offapi.rdb $ORIGIN/oovbaapi.rdb ${${$ORIGIN/" PROFILENAME(uno) ":PKG_UserUnoFile}:UNO_TYPES} ${${$ORIGIN/" PROFILENAME(uno) ":PKG_SharedUnoFile}:UNO_TYPES} ${${$ORIGIN/" PROFILENAME(uno) ":PKG_BundledUnoFile}:UNO_TYPES}";
+End
+
+ProfileItem gid_Profileitem_Fundamentalbasis_Ure_More_Services
+    ModuleID = gid_Module_Root;
+    ProfileID = gid_Profile_Fundamentalbasis_Ini;
+    Section = "Bootstrap";
+    Key = "URE_MORE_SERVICES";
+    Value = "${${$ORIGIN/" PROFILENAME(uno) ":PKG_UserUnoFile}:UNO_SERVICES} ${${$ORIGIN/" PROFILENAME(uno) ":PKG_SharedUnoFile}:UNO_SERVICES} ${${$ORIGIN/" PROFILENAME(uno) ":PKG_BundledUnoFile}:UNO_SERVICES} $ORIGIN/services.rdb";
+End
+
+ProfileItem gid_Profileitem_Fundamentalbasis_Ure_More_Java_Types
+    ModuleID = gid_Module_Root;
+    ProfileID = gid_Profile_Fundamentalbasis_Ini;
+    Section = "Bootstrap";
+    Key = "URE_MORE_JAVA_TYPES";
+    Value = "$ORIGIN/classes/unoil.jar $ORIGIN/classes/ScriptFramework.jar ${${$ORIGIN/" PROFILENAME(uno) ":PKG_UserUnoFile}:UNO_JAVA_CLASSPATH} ${${$ORIGIN/" PROFILENAME(uno) ":PKG_SharedUnoFile}:UNO_JAVA_CLASSPATH} ${${$ORIGIN/" PROFILENAME(uno) ":PKG_BundledUnoFile}:UNO_JAVA_CLASSPATH}";
+End
+
+ProfileItem gid_Profileitem_Fundamentalbasis_Ure_Java_Jfw_Shared_Data
+    ModuleID = gid_Module_Root;
+    ProfileID = gid_Profile_Fundamentalbasis_Ini;
+    Section = "Bootstrap";
+    Key = "URE_OVERRIDE_JAVA_JFW_SHARED_DATA";
+    Value = "${BRAND_BASE_DIR}/share/config/javasettings_${_OS}_${_ARCH}.xml";
+End
+
+ProfileItem gid_Profileitem_Fundamentalbasis_Ure_Java_Jfw_User_Data
+    ModuleID = gid_Module_Root;
+    ProfileID = gid_Profile_Fundamentalbasis_Ini;
+    Section = "Bootstrap";
+    Key = "URE_OVERRIDE_JAVA_JFW_USER_DATA";
+    Value = "${${BRAND_BASE_DIR}/program/" PROFILENAME(bootstrap) ":UserInstallation}/user/config/javasettings_${_OS}_${_ARCH}.xml";
+End
+
+ProfileItem gid_Profileitem_Fundamentalbasis_Ure_Java_Classpath_Urls
+    ModuleID = gid_Module_Root;
+    ProfileID = gid_Profile_Fundamentalbasis_Ini;
+    Section = "Bootstrap";
+    Key = "URE_MORE_JAVA_CLASSPATH_URLS";
+    Value = "";
+#ifdef SYSTEM_BSH
+    ValueList1 = BSH_JAR;
+#endif
+#ifdef SYSTEM_HSQLDB
+    ValueList2 = HSQLDB_JAR;
+#endif
+#ifdef SYSTEM_SAXON
+    ValueList3 = SAXON_JAR;
+#endif
+End
+
+ProfileItem gid_Profileitem_Fundamentalbasis_Ure_Bin_Dir
+    ModuleID = gid_Module_Root;
+    ProfileID = gid_Profile_Fundamentalbasis_Ini;
+    Section = "Bootstrap";
+    Key = "URE_BIN_DIR";
+#if defined WNT
+    Value = "${.link:$ORIGIN/../ure-link}/bin";
+#else
+    Value = "$ORIGIN/../ure-link/bin";
+#endif
+End
+
+ProfileItem gid_Profileitem_Fundamentalbasis_Ure_Lib_Dir
+    ModuleID = gid_Module_Root;
+    ProfileID = gid_Profile_Fundamentalbasis_Ini;
+    Section = "Bootstrap";
+    Key = "URE_LIB_DIR";
+#if defined WNT
+    Value = "${.link:$ORIGIN/../ure-link}/bin";
+#else
+    Value = "$ORIGIN/../ure-link/lib";
+#endif
+End
+
+// Basis layer: gid_Profile_Version_Ini_Basis
+
+ProfileItem gid_Basis_Profileitem_Version_Buildid
+    ProfileID = gid_Profile_Version_Ini_Basis;
+    ModuleID = gid_Module_Root;
+    Section = "Version";
+    Key = "buildid";
+    Value = "<buildid>";
+End
+
+ProfileItem gid_Basis_Profileitem_Version_Productsource
+    ProfileID = gid_Profile_Version_Ini_Basis;
+    ModuleID = gid_Module_Root;
+    Section = "Version";
+    Key = "ProductSource";
+    Value = "<sourceid>";
+End
+
+ProfileItem gid_Basis_Profileitem_Version_Productmajor
+    ProfileID = gid_Profile_Version_Ini_Basis;
+    ModuleID = gid_Module_Root;
+    Section = "Version";
+    Key = "ProductMajor";
+    Value = "<productmajor>";
+End
+
+ProfileItem gid_Basis_Profileitem_Version_Productminor
+    ProfileID = gid_Profile_Version_Ini_Basis;
+    ModuleID = gid_Module_Root;
+    Section = "Version";
+    Key = "ProductMinor";
+    Value = "<productminor>";
+End
+
+ProfileItem gid_Basis_Profileitem_Version_Productbuildid
+    ProfileID = gid_Profile_Version_Ini_Basis;
+    ModuleID = gid_Module_Root;
+    Section = "Version";
+    Key = "ProductBuildid";
+    Value = "<productbuildid>";
+End
+
+ProfileItem gid_Basis_Profileitem_Version_Ooobaseversion
+    ProfileID = gid_Profile_Version_Ini_Basis;
+    ModuleID = gid_Module_Root;
+    Section = "Version";
+    Key = "OOOBaseVersion";
+    Value = "${OOOBASEVERSION}";
+End
+
+ProfileItem gid_Basis_Profileitem_Version_Ooopackageversion
+    ProfileID = gid_Profile_Version_Ini_Basis;
+    ModuleID = gid_Module_Root;
+    Section = "Version";
+    Key = "OOOPackageVersion";
+    Value = "${OOOPACKAGEVERSION}";
+End

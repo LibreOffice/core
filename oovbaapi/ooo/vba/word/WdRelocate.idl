@@ -1,0 +1,6 @@
+module ooo { module vba { module word {
+    constants WdRelocate {
+        const long wdRelocateDown = 1;
+        const long wdRelocateUp = 0;
+    };
+}; }; };

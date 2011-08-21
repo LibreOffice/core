@@ -1,0 +1,11 @@
+module ooo { module vba { module dao {
+    constants FieldAttributeEnum {
+        const long dbAutoIncrField = 16;
+        const long dbDescending = 1;
+        const long dbFixedField = 1;
+        const long dbHyperlinkField = 32768;
+        const long dbSystemField = 8192;
+        const long dbUpdatableField = 32;
+        const long dbVariableField = 2;
+    };
+}; }; };

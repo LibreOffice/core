@@ -1,0 +1,78 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef com_sun_star_chart2_XDataSeries_idl
+#define com_sun_star_chart2_XDataSeries_idl
+
+#include <com/sun/star/beans/XPropertySet.idl>
+#include <com/sun/star/uno/XInterface.idl>
+#include <com/sun/star/lang/IndexOutOfBoundsException.idl>
+
+module com
+{
+module sun
+{
+module star
+{
+module chart2
+{
+
+/** A data series represents the object that has all the knowledge to
+    be rendered as a visual data series.
+ */
+interface XDataSeries : ::com::sun::star::uno::XInterface
+{
+    /** @returns
+            the element at the specified index.
+
+        @param nIndex
+            specifies the index of the data point within the series. The first index is 0.
+
+        @throws com::sun::star::lang::IndexOutOfBoundException
+            if the index is not valid.
+     */
+    ::com::sun::star::beans::XPropertySet getDataPointByIndex( [in] long nIndex )
+        raises( ::com::sun::star::lang::IndexOutOfBoundsException );
+
+    /** the formatting of the specified data point is cleared
+
+        @param nIndex
+            specifies the index of the data point within the series. The first index is 0.
+     */
+    void resetDataPoint( [in] long nIndex );
+
+    /** all data point formatting are cleared
+     */
+    void resetAllDataPoints();
+};
+
+} ; // chart2
+} ; // com
+} ; // sun
+} ; // star
+
+
+#endif

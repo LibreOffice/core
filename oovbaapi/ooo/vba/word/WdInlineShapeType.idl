@@ -1,0 +1,15 @@
+module ooo { module vba { module word {
+    constants WdInlineShapeType {
+        const long wdInlineShapeEmbeddedOLEObject = 1;
+        const long wdInlineShapeHorizontalLine = 6;
+        const long wdInlineShapeLinkedOLEObject = 2;
+        const long wdInlineShapeLinkedPicture = 4;
+        const long wdInlineShapeLinkedPictureHorizontalLine = 8;
+        const long wdInlineShapeOLEControlObject = 5;
+        const long wdInlineShapeOWSAnchor = 11;
+        const long wdInlineShapePicture = 3;
+        const long wdInlineShapePictureBullet = 9;
+        const long wdInlineShapePictureHorizontalLine = 7;
+        const long wdInlineShapeScriptAnchor = 10;
+    };
+}; }; };

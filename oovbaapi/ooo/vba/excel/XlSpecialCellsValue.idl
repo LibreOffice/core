@@ -1,0 +1,8 @@
+module ooo { module vba { module excel {
+    constants XlSpecialCellsValue {
+        const long xlErrors = 16;
+        const long xlLogical = 4;
+        const long xlNumbers = 1;
+        const long xlTextValues = 2;
+    };
+}; }; };

@@ -216,12 +216,6 @@ Sequence< rtl::OUString > BibliographyLoader::getSupportedServiceNames_Static(vo
 
 extern "C"
 {
-    SAL_DLLPUBLIC_EXPORT void SAL_CALL component_getImplementationEnvironment(
-        const sal_Char ** ppEnvTypeName, uno_Environment ** /*ppEnv*/ )
-    {
-        *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
-    }
-
     SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(
         const sal_Char * pImplName, XMultiServiceFactory * pServiceManager, void * /*pRegistryKey*/ )
     {
@@ -285,33 +279,6 @@ void BibliographyLoader::loadView(const Reference< XFrame > & rFrame, const rtl:
     if(!m_pBibMod)
         m_pBibMod = OpenBibModul();
 
-/*
-    //create the menu
-    ResMgr* pResMgr = (*m_pBibMod)->GetResMgr();
-    INetURLObject aEntry( URIHelper::SmartRelToAbs(pResMgr->GetFileName()) );
-    String aMenuRes( RTL_CONSTASCII_USTRINGPARAM( "private:resource/" ));
-    aMenuRes += ( aEntry.GetName() += '/' );
-    aMenuRes+=String::CreateFromInt32(RID_MAIN_MENU);
-
-    util::URL aURL;
-    aURL.Complete = aMenuRes;
-
-    Reference< XMultiServiceFactory >  xMgr = comphelper::getProcessServiceFactory();
-    Reference< util::XURLTransformer >  xTrans ( xMgr->createInstance( C2U("com.sun.star.util.URLTransformer") ), UNO_QUERY );
-    if( xTrans.is() )
-    {
-        // Datei laden
-        xTrans->parseStrict( aURL );
-
-        Reference< XDispatchProvider >  xProv( rFrame, UNO_QUERY );
-        if ( xProv.is() )
-        {
-            Reference< XDispatch >  aDisp = xProv->queryDispatch( aURL, C2U("_menubar"), 12 );
-            if ( aDisp.is() )
-                aDisp->dispatch( aURL, Sequence<PropertyValue>() );
-        }
-    }
-*/
     m_pDatMan = (*m_pBibMod)->createDataManager();
     m_xDatMan = m_pDatMan;
     BibDBDescriptor aBibDesc = BibModul::GetConfig()->GetBibliographyURL();

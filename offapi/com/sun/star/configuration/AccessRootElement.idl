@@ -1,0 +1,165 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_configuration_AccessRootElement_idl__
+#define __com_sun_star_configuration_AccessRootElement_idl__
+
+#include <com/sun/star/configuration/HierarchyElement.idl>
+#include <com/sun/star/lang/XComponent.idl>
+#include <com/sun/star/lang/XLocalizable.idl>
+#include <com/sun/star/util/XChangesNotifier.idl>
+
+//=============================================================================
+
+module com { module sun { module star { module configuration {
+
+//=============================================================================
+/** provides information about the root element of a hierarchy and
+    about the hierarchy as a whole.
+
+ <p>Provides information about the element and the whole hierarchy.
+ Allows controlling the lifetime of the hierarchy.
+ Allows observing changes in the hierarchy as a whole.
+ </p>
+
+ <p>When access to a hierarchy is first obtained from a factory or provider,
+ this is the initial object that is created by the factory.
+ It represents the <em>root</em> of the accessible part of the hierarchy.
+ </p>
+
+ <p><em><strong>NOTE:</strong> In this description "hierarchy" may actually
+ designate a part or fragment of a larger hierarchy. It is that part that is
+ rooted in the element represented by an implementation of this service
+ and that is accessible starting from this element.</em>
+ </p>
+
+ <p>Generally it is not possible to navigate the parent or siblings, if any,
+ of this element, so <type scope="com::sun::star::container">XChild</type> is
+ not supported.
+ </p>
+
+ @see com::sun::star::configuration::UpdateRootElement
+    Implementations that support modifying data in the hierarchy
+    implement service UpdateRootElement.
+
+ @see com::sun::star::configuration::SetElement
+    A complementary service, for children of a dynamic homogeneous container.
+
+ @see com::sun::star::configuration::GroupElement
+    A complementary service, for children of a static heterogeneous collection.
+
+ @see com::sun::star::configuration::ConfigurationProvider
+    Objects provided by a <type>ConfigurationProvider</type> implement this service.
+*/
+published service AccessRootElement
+{
+/** the basic service for accessing information about an element in the
+ hierarchy.
+*/
+    service HierarchyElement;
+
+/** allows controlling or observing the lifetime of the whole hierarchy.
+
+ <p>The owner of the hierarchy may dispose of this object
+ using <member scope="com::sun::star::lang">XComponent::dispose()</member>.
+ As this object owns its child elements and, recursively, the whole hierarchy,
+ any descendant elements obtained, directly or indirectly, from this object
+ will also be disposed. Disposing of the object does not affect a persistent
+ representation of the hierarchy.
+ </p>
+
+ <p>When an implementation is obtained from a factory or provider, ownership
+ of it is usually transferred to the client. See the documentation
+ of the particular provider or factory service for details.
+ </p>
+
+ <p>The provider of this object may still dispose of this object, when the
+ lifetime of the provider ends or if these objects represent
+ the root of only a fragment of an enclosing hierarchy and
+ this fragment is removed from the complete hierarchy by an outside source.
+ </p>
+
+ <p>Clients may register an <type scope="com::sun::star::lang">XEventListener</type>
+ to be notified when the object is disposed for either cause.
+ </p>
+*/
+    interface com::sun::star::lang::XComponent;
+
+/** allows registering listeners that observe the whole hierarchy.
+
+ <p>A client can register an
+ <type scope="com::sun::star::util">XChangesListener</type>,
+ which will receive notifications for any changes within the
+ hierarchy (fragment) this object represents.
+ </p>
+
+ <p>An implementation will collect as many changes as possible into a single
+ <type scope="com::sun::star::util">ChangesEvent</type>. For Example:
+ </p>
+
+ <p>
+ If <member scope="com::sun::star::beans">XMultiPropertySet::setPropertyValues()</member>
+ or <member scope="com::sun::star::beans">XMultiHierarchicalPropertySet::setHierarchicalPropertyValues()</member>
+ is used on an element of the hierarchy to change multiple values within
+ the hierarchy, all changes will be notified with a single event.
+ </p>
+
+ <p>If an outside source uses
+ <member scope="com::sun::star::util">XChangesBatch::commitChanges()</member>
+ on an overlapping hierarchy access, all relevant changes will be notified
+ with a single event.
+ </p>
+
+ @ see UpdateRootElement
+ @ see com::sun::star::util::XChangesBatch
+*/
+    interface com::sun::star::util::XChangesNotifier;
+
+/** provides access to the locale that applies to locale-dependent data
+ in this hierarchy. [optional]
+
+ <p>This interface may be missing if the implementation does not support
+ locale-dependent data in the hierarchy or if the (partial) hierarchy rooted
+ in this object does not contain any locale-dependent elements.
+ </p>
+
+ <p><em>Changing the locale is generally not supported.</em> If it is supported,
+ there is no guarantee that values already loaded into the hierarchy, or an
+ application cache, are refreshed to reflect the new locale. Use of
+ <member scope="com::sun::star::lang">XLocalizable::setLocale()</member>
+ is therefore not recommended.
+ </p>
+*/
+    [optional] interface com::sun::star::lang::XLocalizable;
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif
+

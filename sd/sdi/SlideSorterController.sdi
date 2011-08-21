@@ -1,0 +1,316 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+enum FadeEffect
+{
+    FADE_EFFECT_NONE ,
+    FADE_EFFECT_FADE_FROM_LEFT ,
+    FADE_EFFECT_FADE_FROM_TOP ,
+    FADE_EFFECT_FADE_FROM_RIGHT ,
+    FADE_EFFECT_FADE_FROM_BOTTOM ,
+    FADE_EFFECT_FADE_TO_CENTER ,
+    FADE_EFFECT_FADE_FROM_CENTER ,
+    FADE_EFFECT_MOVE_FROM_LEFT ,
+    FADE_EFFECT_MOVE_FROM_TOP ,
+    FADE_EFFECT_MOVE_FROM_RIGHT ,
+    FADE_EFFECT_MOVE_FROM_BOTTOM ,
+    FADE_EFFECT_ROLL_FROM_LEFT ,
+    FADE_EFFECT_ROLL_FROM_TOP ,
+    FADE_EFFECT_ROLL_FROM_RIGHT ,
+    FADE_EFFECT_ROLL_FROM_BOTTOM ,
+    FADE_EFFECT_VERTICAL_STRIPES ,
+    FADE_EFFECT_HORIZONTAL_STRIPES ,
+    FADE_EFFECT_OPEN_VERTICAL ,
+    FADE_EFFECT_CLOSE_VERTICAL ,
+    FADE_EFFECT_OPEN_HORIZONTAL ,
+    FADE_EFFECT_CLOSE_HORIZONTAL ,
+    FADE_EFFECT_CLEAR_AWAY ,
+    FADE_EFFECT_OVERLAY
+}
+
+enum FadeSpeed
+{
+    FADE_SPEED_SLOW ,
+    FADE_SPEED_MEDIUM ,
+    FADE_SPEED_FAST
+}
+
+enum PresChange
+{
+    PRESCHANGE_MANUAL ,
+    PRESCHANGE_AUTO ,
+    PRESCHANGE_SEMIAUTO
+} ;
+
+ // Items
+item UINT32 DiaTimeItem ;
+item PresChange DiaAutoItem ;
+item FadeEffect DiaEffectItem ;
+item FadeSpeed DiaSpeedItem ;
+
+
+interface SlideSorterView
+{
+    SID_INSERTPAGE
+    [
+        ExecMethod = FuTemporary ;
+        StateMethod = GetMenuState ;
+    ]
+    SID_INSERT_MASTER_PAGE
+    [
+        ExecMethod = FuTemporary ;
+        StateMethod = GetMenuState ;
+    ]
+    SID_DUPLICATE_PAGE
+    [
+        ExecMethod = FuTemporary ;
+        StateMethod = GetMenuState ;
+    ]
+    SID_DELETE_PAGE
+    [
+        ExecMethod = FuTemporary ;
+        StateMethod = GetClipboardState ;
+    ]
+    SID_DELETE_MASTER_PAGE
+    [
+        ExecMethod = FuTemporary ;
+        StateMethod = GetClipboardState ;
+    ]
+    SID_RENAMEPAGE
+    [
+        ExecMethod = FuTemporary ;
+        StateMethod = GetMenuState ;
+    ]
+    SID_RENAME_MASTER_PAGE
+    [
+        ExecMethod = FuTemporary ;
+        StateMethod = GetMenuState ;
+    ]
+    SID_DELETE
+    [
+        ExecMethod = FuTemporary ;
+        StateMethod = GetMenuState ;
+    ]
+    SID_CUT // ole : no, status : ?
+    [
+        ExecMethod = FuSupport ;
+        StateMethod = GetClipboardState ;
+    ]
+    SID_COPY // ole : no, status : ?
+    [
+        ExecMethod = FuSupport ;
+        StateMethod = GetClipboardState ;
+    ]
+    SID_PASTE // ole : no, status : ?
+    [
+        ExecMethod = FuSupport ;
+        StateMethod = GetClipboardState ;
+    ]
+    SID_PASTE_SPECIAL // ole : no, status : ?
+    [
+        ExecMethod = FuSupport ;
+        StateMethod = GetClipboardState ;
+    ]
+    SID_REHEARSE_TIMINGS // ole : no, status : ?
+    [
+        ExecMethod = FuTemporary ;
+        StateMethod = GetMenuState ;
+    ]
+    SID_PRESENTATION // ole : no, status : ?
+    [
+        ExecMethod = FuTemporary ;
+        StateMethod = GetMenuState ;
+    ]
+    SID_HIDE_SLIDE // ole : no, status : ?
+    [
+        ExecMethod = FuTemporary ;
+        StateMethod = GetMenuState ;
+    ]
+    SID_SHOW_SLIDE // ole : no, status : ?
+    [
+        ExecMethod = FuTemporary ;
+        StateMethod = GetMenuState ;
+    ]
+    SID_OBJECT_SELECT // ole : no, status : ?
+    [
+        ExecMethod = FuPermanent ;
+        StateMethod = GetMenuState ;
+    ]
+    SID_ZOOM_TOOLBOX // ole : no, status : ?
+    [
+        ExecMethod = FuTemporary ;
+        StateMethod = GetMenuState ;
+    ]
+    SID_SIZE_VISAREA // ole : no, status : no
+    [
+        ExecMethod = FuTemporary ;
+        StateMethod = GetMenuState ;
+    ]
+    SID_PAGES_PER_ROW // ole : no, status : ?
+    [
+        ExecMethod = FuTemporary ;
+        StateMethod = GetAttrState ;
+    ]
+    SID_SELECTALL // ole : no, status : ?
+    [
+        ExecMethod = FuTemporary ;
+        StateMethod = GetMenuState ;
+    ]
+    SID_STATUS_PAGE // ole : no, status : ?
+    [
+        ExecMethod = ExecStatusBar ;
+        StateMethod = GetStatusBarState ;
+    ]
+    SID_STATUS_LAYOUT // ole : no, status : ?
+    [
+        ExecMethod = ExecStatusBar ;
+        StateMethod = GetStatusBarState ;
+    ]
+    SID_ATTR_ZOOMSLIDER // status()
+    [
+        ExecMethod = ExecStatusBar ;
+        StateMethod = GetStatusBarState ;
+    ]
+
+    SID_RELOAD // ole : no, status : ?
+    [
+        GroupId = GID_DOCUMENT ;
+        ExecMethod = ExecCtrl ;
+        StateMethod = GetCtrlState ;
+        Asynchron , AutoUpdate ,
+        MenuConfig , AccelConfig , ToolBoxConfig ;
+    ]
+    SID_SEARCH_DLG // ole : no, status : ?
+    [
+        ExecMethod = ExecCtrl ;
+        StateMethod = GetMenuState ;
+    ]
+    SID_STYLE_CATALOG // ole : no, status : ?
+    [
+        ExecMethod = FuTemporary ;
+        StateMethod = GetMenuState ;
+    ]
+    SID_SLIDE_TRANSITIONS_PANEL // ole : no, status : ?
+    [
+        ExecMethod = FuTemporary ;
+        StateMethod = GetMenuState ;
+    ]
+    SID_PRESENTATION_DLG
+    [
+        ExecMethod = FuTemporary ;
+    ]
+    SID_CUSTOMSHOW_DLG
+    [
+        ExecMethod = FuTemporary ;
+    ]
+    SID_EXPAND_PAGE // ole : no, status : play rec
+    [
+        ExecMethod = FuTemporary ;
+        StateMethod = GetMenuState ;
+    ]
+    SID_SUMMARY_PAGE // ole : no, status : ?
+    [
+        ExecMethod = FuTemporary ;
+        StateMethod = GetMenuState ;
+    ]
+    SID_OUTPUT_QUALITY_COLOR // ole : no, status : play rec
+    [
+        ExecMethod = ExecCtrl ;
+        StateMethod = GetCtrlState ;
+    ]
+    SID_OUTPUT_QUALITY_GRAYSCALE // ole : no, status : play rec
+    [
+        ExecMethod = ExecCtrl ;
+        StateMethod = GetCtrlState ;
+    ]
+    SID_OUTPUT_QUALITY_BLACKWHITE // ole : no, status : play rec
+    [
+        ExecMethod = ExecCtrl ;
+        StateMethod = GetCtrlState ;
+    ]
+    SID_OUTPUT_QUALITY_CONTRAST // ole : no, status : play rec
+    [
+        ExecMethod = ExecCtrl ;
+        StateMethod = GetCtrlState ;
+    ]
+    SID_MAIL_SCROLLBODY_PAGEDOWN // ole : no, status : ?
+    [
+        ExecMethod = ExecCtrl ;
+        StateMethod = GetCtrlState ;
+    ]
+    SID_STYLE_FAMILY
+    [
+        ExecMethod = FuSupport ;
+        StateMethod = GetMenuState ;
+    ]
+    SID_OPT_LOCALE_CHANGED // ole : no, status : ?
+    [
+        ExecMethod = ExecCtrl ;
+        StateMethod = GetCtrlState ;
+    ]
+
+    SID_GETUNDOSTRINGS // ole : no, status : ?
+    [
+        ExecMethod = FuSupport ;
+        StateMethod = GetMenuState ;
+    ]
+    SID_UNDO // ole : no, status : ?
+    [
+        ExecMethod = FuSupport ;
+        StateMethod = GetMenuState ;
+    ]
+    SID_GETREDOSTRINGS // ole : no, status : ?
+    [
+        ExecMethod = FuSupport ;
+        StateMethod = GetMenuState ;
+    ]
+    SID_REDO // ole : no, status : ?
+    [
+        ExecMethod = FuSupport ;
+        StateMethod = GetMenuState ;
+    ]
+    SID_MODIFYPAGE
+    [
+        ExecMethod = FuTemporary ;
+        StateMethod = GetMenuState ;
+    ]
+    SID_ASSIGN_LAYOUT
+    [
+        ExecMethod = FuTemporary;
+        StateMethod = GetMenuState;
+    ]
+}
+
+shell SlideSorterController
+{
+    import SlideSorterView[Automation];
+}
+
+shell SlideSorterViewShell
+{
+    import SlideSorterView[Automation];
+}

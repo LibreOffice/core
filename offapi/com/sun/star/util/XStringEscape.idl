@@ -1,0 +1,79 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_util_XStringEscape_idl__
+#define __com_sun_star_util_XStringEscape_idl__
+
+#include <com/sun/star/uno/XInterface.idl>
+
+#include <com/sun/star/lang/IllegalArgumentException.idl>
+
+//=============================================================================
+
+module com {  module sun {  module star {  module util {
+
+/** This interface is used to encode an arbitrary String into a
+    escaped form.
+
+    <p>The escaped form is chosen to be suitable for use with other interfaces
+    of the object or service providing this interface.</p>
+
+    <p>Any characters or character sequences that are not compatible with
+    any naming rules or restrictions must be replaced by an escaped form,
+    that complies to these rules.
+
+    <p>The transformation should preserve all traits of the string that are
+    generally respected by the service. For example, the case of a string
+    may be lost after encoding and then decoding, if the service
+    generally is case insensitive.
+
+    <p>Other than that the encoding is one-to-one and can be reversed. The
+    encoding should try to preserve as much as possible of the original
+    string, to keep human-readable input human-friendly where possible.
+    Strings that already conform to the naming conventions should be left
+    unchanged or minimally modified.</p>
+ */
+published interface XStringEscape: com::sun::star::uno::XInterface
+{
+    /** encodes an arbitrary string into an escaped form compatible with some naming rules.
+     */
+    string escapeString([in] string aString)
+        raises( com::sun::star::lang::IllegalArgumentException);
+
+    /** decodes an escaped string into the original form.
+     */
+    string unescapeString([in] string aEscapedString)
+        raises( com::sun::star::lang::IllegalArgumentException);
+};
+
+
+//=============================================================================
+
+}; }; }; };
+
+#endif
+
+

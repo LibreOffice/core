@@ -1,0 +1,165 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_embed_XVisualObject_idl__
+#define __com_sun_star_embed_XVisualObject_idl__
+
+#include <com/sun/star/uno/XInterface.idl>
+#include <com/sun/star/awt/Size.idl>
+#include <com/sun/star/embed/VisualRepresentation.idl>
+#include <com/sun/star/embed/WrongStateException.idl>
+#include <com/sun/star/lang/IllegalArgumentException.idl>
+
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module embed {
+
+//=============================================================================
+/** represents common visualization functionality for embedded objects.
+ */
+published interface XVisualObject: ::com::sun::star::uno::XInterface
+{
+    //-------------------------------------------------------------------------
+    /** sets the size of object's visual area.
+
+        <p>
+        The size must be provided in logical units according to map mode the
+        object communicates in.
+        </p>
+
+        <p>
+        If an object is inplace- or ui-active the method must not initiate
+        repainting itself.
+        </p>
+
+        @param nAspect
+            the aspect specifying the form of object representation.
+            Can take values from <type>Aspects</type> constant set.
+
+        @param aSize
+            the new size of the visual area
+
+        @throws ::com::sun::star::lang::IllegalArgumentException
+            one of arguments is illegal
+
+        @throws ::com::sun::star::embed::WrongStateException
+            the object is in wrong state
+
+        @throws ::com::sun::star::uno::Exception
+            the object failed to resize
+     */
+    void setVisualAreaSize( [in] hyper nAspect,
+                         [in] ::com::sun::star::awt::Size aSize )
+        raises( ::com::sun::star::lang::IllegalArgumentException,
+                ::com::sun::star::embed::WrongStateException,
+                ::com::sun::star::uno::Exception );
+
+    //-------------------------------------------------------------------------
+    /** gets the size of object's visual area.
+
+        <p>
+        The size must be provided in logical units according to map mode the
+        object communicates in.
+        </p>
+
+        @param nAspect
+            the aspect specifying the form of object representation.
+            Can take values from <type>Aspects</type> constant set.
+
+        @return
+            the size of visual area
+
+        @throws ::com::sun::star::lang::IllegalArgumentException
+            one of arguments is illegal
+
+        @throws ::com::sun::star::embed::WrongStateException
+            the object is in wrong state
+     */
+    ::com::sun::star::awt::Size getVisualAreaSize( [in] hyper nAspect )
+        raises( ::com::sun::star::lang::IllegalArgumentException,
+                ::com::sun::star::embed::WrongStateException,
+                ::com::sun::star::uno::Exception );
+
+    //------------------------------------------------------------------------
+    /** retrieves visual representation of the object in preferable format.
+
+        <p>
+        If the object persistence entry contains cached visual representation
+        then it can be retrieved by using this method even in loaded state.
+        </p>
+
+        @param nAspect
+            the aspect the representation is requested for.
+            Can take values from <type>Aspects</type> constant set.
+
+        @return
+            the visual representation of the object in the default format and
+            the format
+
+        @throws ::com::sun::star::lang::IllegalArgumentException
+            one of arguments is illegal
+
+        @throws ::com::sun::star::embed::WrongStateException
+            the object is in wrong state
+
+        @throws ::com::sun::star::uno::Exception
+            in case of problems
+
+     */
+    VisualRepresentation getPreferredVisualRepresentation( [in] hyper nAspect )
+        raises( ::com::sun::star::lang::IllegalArgumentException,
+                ::com::sun::star::embed::WrongStateException,
+                ::com::sun::star::uno::Exception );
+
+
+    //-------------------------------------------------------------------------
+    /** retrieves map mode the object communicates in.
+
+        @param nAspect
+            the aspect the map mode is requested for.
+            Can take values from <type>Aspects</type> constant set.
+
+        @return
+            the map mode the object communicates in, it can take values from
+            <type>EmbedMapUnits</type> constant
+
+        @throws ::com::sun::star::embed::WrongStateException
+            the object is in wrong state
+
+        @throws ::com::sun::star::uno::Exception
+            in case of problems
+     */
+    long getMapUnit( [in] hyper nAspect )
+        raises( ::com::sun::star::uno::Exception );
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif
+

@@ -1,0 +1,78 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef _FRAMEWORK_HRC
+#define _FRAMEWORK_HRC
+
+#include "svl/solar.hrc"
+
+#define RID_FWK_START                       260
+
+#define RID_GROUPS_OFFSET                   32000
+#define RID_GROUPS_END                      32767
+
+#define RID_FWK_DIALOG_START_CORRECT        (RID_FWK_START + 2048)
+
+#define DLG_FILTER_SELECT                   (RID_FWK_DIALOG_START_CORRECT + 0)
+
+#define STR_FILTER_DOWNLOAD                 (RID_FWK_START+0)
+#define STR_FILTER_CHOOSER                  (RID_FWK_START+1)
+#define STR_FILTER_OTHERS                   (RID_FWK_START+2)
+#define STR_FILTER_ZIPPED                   (RID_FWK_START+3)
+
+// ResIds for BackingWindow
+#define DLG_BACKING                         (RID_FWK_DIALOG_START_CORRECT+100)
+#define STR_BACKING_WELCOME                 1
+#define STR_BACKING_WELCOMEPRODUCT          2
+#define STR_BACKING_CREATE                  3
+#define STR_BACKING_TEMPLATE                4
+#define STR_BACKING_FILE                    5
+#define STR_BACKING_EXTHELP                 6
+#define STR_BACKING_INFOHELP                7
+#define STR_BACKING_TPLREP                  8
+
+#define RES_BACKING_IMAGES                  (DLG_BACKING+1)
+
+#define BMP_BACKING_EXT                     6
+#define BMP_BACKING_REG                     7
+#define BMP_BACKING_INFO                    8
+#define BMP_BACKING_TPLREP                  9
+#define BMP_BACKING_WRITER                  10
+#define BMP_BACKING_CALC                    11
+#define BMP_BACKING_IMPRESS                 12
+#define BMP_BACKING_DRAW                    13
+#define BMP_BACKING_DATABASE                14
+#define BMP_BACKING_FORMULA                 15
+#define BMP_BACKING_OPENFILE                16
+#define BMP_BACKING_OPENTEMPLATE            17
+
+// Ids of TabWindow
+#define WIN_TABWINDOW                       (RID_FWK_DIALOG_START_CORRECT+101)
+#define TC_TABCONTROL                        1
+
+#endif
+

@@ -1,0 +1,8 @@
+module ooo { module vba { module msforms {
+    constants fmShowListWhen {
+        const long fmShowListWhenAlways = 3;
+        const long fmShowListWhenButton = 1;
+        const long fmShowListWhenFocus = 2;
+        const long fmShowListWhenNever = 0;
+    };
+}; }; };

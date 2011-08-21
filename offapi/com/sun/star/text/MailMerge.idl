@@ -1,0 +1,398 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_text_MailMerge_idl__
+#define __com_sun_star_text_MailMerge_idl__
+
+#include <com/sun/star/task/XJob.idl>
+#include <com/sun/star/sdbc/XResultSet.idl>
+#include <com/sun/star/sdbc/XConnection.idl>
+#include <com/sun/star/frame/XModel.idl>
+#include <com/sun/star/beans/XPropertySet.idl>
+#include <com/sun/star/text/XMailMergeBroadcaster.idl>
+#include <com/sun/star/sdb/DataAccessDescriptor.idl>
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module text {
+
+//=============================================================================
+
+/** Gives access to mail merge functionality.
+
+    @since OOo 1.1.2
+ */
+published service MailMerge
+{
+    /** interface to execute the mail merge action.
+
+        <p>The <member scope="com::sun::star::task">XJob::execute</member>
+        method of the interface accepts exactly the same properties
+        as provided by this service in its argument sequence.</p>
+
+        <p>The default values for the properties to be used in the method
+        call are those given by this service. If a property is also listed
+        in the argument sequence that value will be used for the call.
+        The value of the property in this service will remain unchanged
+        by that.</p>
+     */
+    interface com::sun::star::task::XJob;
+
+    /** interface to access the services properties.
+     */
+    interface com::sun::star::beans::XPropertySet;
+
+    /** interface to notify mail merge listeners.
+     */
+    [optional] interface com::sun::star::text::XMailMergeBroadcaster;
+
+    //=============================================================================
+
+    /* database properties */
+
+    //=============================================================================
+    /** allows to specify the data which the mail merge should be based on.
+
+        <p>This service describe the interaction between all data access related properties,
+        namely <member>DataSourceName</member>, <member>Command</member>, <member>CommandType</member>,
+        <member>Connection</member>, <member>Selection</member>, <member>ResultSet</member>,
+        <member>Filter</member> and <member>EscapeProcessing</member>
+    */
+    service com::sun::star::sdb::DataAccessDescriptor;
+
+    /** contains the name of the data source that is to be used for merging.
+
+        <p>For the interaction of this property with other data access relevant properties, see
+        the <type scope="com::sun::star::sdb">DataAccessDescriptor</type> service.</p>
+     */
+    [property] string DataSourceName;
+
+    //=============================================================================
+
+    /** determines the type of the database command as
+        described in <type scope="com::sun::star::sdb">CommandType</type>
+
+        <p>For the interaction of this property with other data access relevant properties, see
+        the <type scope="com::sun::star::sdb">DataAccessDescriptor</type> service.</p>
+     */
+    [property] long CommandType;
+
+    //=============================================================================
+
+    /** contains the database command.
+
+        <p>For the interaction of this property with other data access relevant properties, see
+        the <type scope="com::sun::star::sdb">DataAccessDescriptor</type> service.</p>
+     */
+    [property] string Command;
+
+    //=============================================================================
+
+    /** provides access to a
+        <type scope="com::sun::star::sdbc">XResultSet</type> of
+        a <type scope="com::sun::star::sdbc">ResultSet</type> service.
+
+        <p>Note that any superservices of <type scope="com::sun::star::sdbc">ResultSet</type>
+        are also allowed. Especially, this member can denote an instance of the
+        <type scope="com::sun::star::sdb">RowSet</type>, or an instance obtained
+        by calling <member scope="com::sun::star::sdb">XResultSetAccess::createResultSet</member>
+        on such a <type scope="com::sun::star::sdb">RowSet</type>. This becomes important in
+        conjunction with the <member>Selection</member> property.</p>
+
+        <p>For the interaction of this property with other data access relevant properties, see
+        the <type scope="com::sun::star::sdb">DataAccessDescriptor</type> service.</p>
+     */
+    [property] com::sun::star::sdbc::XResultSet ResultSet;
+
+    //=============================================================================
+
+    /** contains the connection to the database.
+
+        <p>For the interaction of this property with other data access relevant properties, see
+        the <type scope="com::sun::star::sdb">DataAccessDescriptor</type> service.</p>
+     */
+    [property] com::sun::star::sdbc::XConnection ActiveConnection;
+
+    //=============================================================================
+
+    /** contains a selection that refers to bookmarks of the ResultSet.
+
+        <p>This property is relevant in conjunction with the <member>ResultSet</member>
+        only. A single element of this array describes a bookmark relative to the result set.<br/>
+        Note that this implies that the <member>ResultSet</member> needs to support the
+        <type scope="com::sun::star::sdbcx">XRowLocate</type> interface.</p>
+
+        <p>If this array is empty, the whole result set, as described by <member>ResultSet</member>
+        respectively the triple (<member>DataSourceName</member>, <member>DataCommandType</member>,
+        <member>DataCommand</member>).</p>
+
+        <p>For the interaction of this property with other data access relevant properties, see
+        the <type scope="com::sun::star::sdb">DataAccessDescriptor</type> service.</p>
+     */
+    [property] sequence< any > Selection;
+
+    //=============================================================================
+
+    /** returns if escape processing is on or off.
+
+        <p>For the interaction of this property with other data access relevant properties, see
+        the <type scope="com::sun::star::sdb">DataAccessDescriptor</type> service.</p>
+     */
+    [property] boolean EscapeProcessing;
+
+    //=============================================================================
+
+    /** contains a filter expression for an SQL statement.
+
+        <p>For the interaction of this property with other data access relevant properties, see
+        the <type scope="com::sun::star::sdb">DataAccessDescriptor</type> service.</p>
+     */
+    [property] string Filter;
+
+    //=============================================================================
+
+    /* input properties */
+
+    //=============================================================================
+
+    /** contains the URL of a text document that is to be processed.
+
+        <p>If this property is not set an empty document is created.</p>
+     */
+    [property] string DocumentURL;
+
+    //=============================================================================
+
+    /** provides access to the model of the document to be processed.
+
+        <p>This property will automatically be set to the documents model
+        if a document URL was set.</p>
+     */
+    [property, readonly] com::sun::star::frame::XModel Model;
+
+    //=============================================================================
+
+    /* output properties */
+
+    //=============================================================================
+
+    /** determines the destination of the mail merge action.
+
+        @see com::sun::star::text::MailMergeType
+     */
+    [property] short OutputType;
+
+    //=============================================================================
+
+    /** determines whether single print jobs will be generated per output document.
+
+        <p>This property is only evaluated for printer output.</p>
+     */
+    [property] boolean SinglePrintJobs;
+
+    //=============================================================================
+
+    /** contains the path where generated files are created.
+
+        <p>If "OutputURL" or "FileNamePrefix" are empty the missing value is
+        generated from the location or title of the source documents.</p>
+
+        <p>This property is only evaluated for file output.</p>
+     */
+    [property] string OutputURL;
+
+    //=============================================================================
+
+    /** determines whether file names of created files are generated using
+        the content of a database column.
+
+        <p>This property is only evaluated for file output.</p>
+     */
+    [property] boolean FileNameFromColumn;
+
+    //=============================================================================
+
+    /** contains the name of the column to generate the output file names.
+
+        <p>If FileNameFromColumn is true the content of the related column
+        is added to the OutputURL.</p>
+        <p>If "OutputURL" or "FileNamePrefix" are empty the missing value is
+        generated from the location or title of the source documents.</p>
+
+        <p>This property is only evaluated for file output.</p>
+     */
+    [property] string FileNamePrefix;
+
+    //=============================================================================
+
+    /** Contains the password of the outgoing mail server. It is necessary to set this
+        if the password is not already stored in the configuration for security reasons.
+
+        <p>This property is only evaluated for e-Mail output.</p>
+
+        @since OOo 2.0
+    */
+    [property, optional] string OutServerPassword;
+    //=============================================================================
+
+    /** Contains the password of the incoming mail server. It is necessary to set this
+        if the mail server configuration is set to "SMTP after POP" authentication and
+        the password is not already stored in the configuration for security reasons.
+
+        <p>This property is only evaluated for e-Mail output.</p>
+
+        @since OOo 2.0
+    */
+    [property, optional] string InServerPassword;
+    //=============================================================================
+
+    /** contains the subject of the e-Mail message.
+
+        <p>This property is only evaluated for e-Mail output.</p>
+        @since OOo 2.0
+    */
+    [property, optional] string Subject;
+
+    //=============================================================================
+
+    /** contains the name of the data base column that contains the e-Mail address
+        to the e-Mail to.
+
+        <p>This property is only evaluated for e-Mail output.</p>
+
+        @since OOo 2.0
+    */
+    [property, optional] string AddressFromColumn;
+
+    //=============================================================================
+
+    /** determines that the created mail merge document is sent as body in HTML format.
+        This property is only valid if the property "SendAsAttachment" is set to <false/>.
+
+        <p>This property is only evaluated for e-Mail output.</p>
+
+        @since OOo 2.0
+    */
+    [property, optional] boolean SendAsHTML;
+
+    //=============================================================================
+
+
+    /** determines that the created mail merge document is sent as attachment.
+
+        <p>This property is only evaluated for e-Mail output.</p>
+
+        @since OOo 2.0
+    */
+    [property, optional] boolean SendAsAttachment;
+
+    //=============================================================================
+
+    /** contains the text of the mail body.
+        This property is only valid if the property "SendAsAttachment" is set to <true/>
+        <p>This property is only evaluated for e-Mail output.</p>
+
+        @since OOo 2.0
+    */
+    [property, optional] string MailBody;
+
+    //=============================================================================
+
+    /** contains the name of the attachment.
+        This property is only valid if "SendAsAttachment" is set to <true/>.
+
+        <p>This property is only evaluated for e-Mail output.</p>
+
+        @since OOo 2.0
+    */
+    [property, optional] string AttachmentName;
+
+    //=============================================================================
+
+    /** contains the name of the document filter to save the attached mail merge document.
+        This property is only valid if "SendAsAttachment" is set to <true/>.
+
+        <p>This property is only evaluated for e-Mail output.</p>
+
+        @since OOo 2.0
+    */
+    [property, optional] string AttachmentFilter;
+
+    //=============================================================================
+
+    /** contains a list of e-Mail addresses to
+        <p>This property is only evaluated for e-Mail output.</p>
+
+        @since OOo 2.0
+    */
+    [property, optional] sequence< string > CopiesTo;
+
+    //=============================================================================
+
+    /**
+        <p>This property is only evaluated for e-Mail output.</p>
+
+        @since OOo 2.0
+    */
+    [property, optional] sequence< string > BlindCopiesTo;
+
+
+    //=============================================================================
+
+    /** determines that the output of the mail merge is save in one single file.
+        <p>This property is only evaluated for file output.</p>
+
+        @since OOo 2.0
+    */
+    [property, optional] boolean SaveAsSingleFile;
+
+    //=============================================================================
+
+    /** contains the name of the document filter to save the output file(s).
+        <p>This property is only evaluated for file output.</p>
+
+        @since OOo 2.0
+    */
+    [property, optional] string SaveFilter;
+
+    //=============================================================================
+
+    /** contains the properties that are defined in <com::sun::star::view::PrintOptions>.
+
+        <p>This property is only evaluated for printer output.</p>
+
+        @since OOo 2.0
+    */
+    [property, optional] sequence< com::sun::star::beans::PropertyValue > PrintOptions;
+
+};
+
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

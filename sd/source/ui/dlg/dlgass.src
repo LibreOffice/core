@@ -1,0 +1,595 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#include "dlgass.hrc"
+#include "helpids.h"
+ModalDialog DLG_ASS
+{
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 272 , 190 ) ;
+    Text[ en-US ] = "Presentation Wizard";
+
+    HelpId = HID_SD_AUTOPILOT_PAGE1 ;
+    Moveable = TRUE ;
+    Closeable = FALSE;
+
+    Control CT_PREVIEW
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 144 , 40  ) ;
+        Size = MAP_APPFONT ( 122 , 96 ) ;
+        SVLook = FALSE ;
+    };
+
+    CheckBox CB_PREVIEW
+    {
+        HelpID = "sd:CheckBox:DLG_ASS:CB_PREVIEW";
+        Pos = MAP_APPFONT ( 144 , 140  );
+        Size = MAP_APPFONT ( 122 , 10 );
+        TabStop = TRUE;
+        Text [ en-US ] = "Previe~w";
+    };
+
+    CheckBox CB_STARTWITH
+    {
+        HelpID = "sd:CheckBox:DLG_ASS:CB_STARTWITH";
+        Pos = MAP_APPFONT ( 144 , 154  );
+        Size = MAP_APPFONT ( 122 , 10 );
+        TabStop = TRUE;
+        Text [ en-US ] = "~Do not show this wizard again" ;
+    };
+
+    // Seite 1
+
+    FixedBitmap FB_PAGE1
+    {
+        OutputSize = TRUE ;
+        Scale = TRUE;
+        Border = TRUE;
+        Pos = MAP_APPFONT ( 6 , 4  ) ;
+        Size = MAP_APPFONT ( 258 , 29 ) ;
+        Fixed = Bitmap { File = "dlgass1.bmp" ; };
+    };
+
+    FixedLine FL_PAGE1_ARTGROUP
+    {
+        OutputSize = TRUE;
+        Pos = MAP_APPFONT ( 6 , 37  );
+        Size =MAP_APPFONT ( 132 , 8 );
+        Text [ en-US ] = "Type";
+    };
+
+    RadioButton RB_PAGE1_EMPTY
+    {
+        HelpID = "sd:RadioButton:DLG_ASS:RB_PAGE1_EMPTY";
+        Pos = MAP_APPFONT ( 12 , 48  );
+        Size = MAP_APPFONT ( 130 , 10 );
+        TabStop = TRUE;
+        Text [ en-US ] = "~Empty presentation";
+    };
+
+    RadioButton RB_PAGE1_TEMPLATE
+    {
+        HelpID = "sd:RadioButton:DLG_ASS:RB_PAGE1_TEMPLATE";
+        Pos = MAP_APPFONT ( 12 , 62  );
+        Size = MAP_APPFONT ( 130 , 10 );
+        Text [ en-US ] = "~From template";
+    };
+
+    RadioButton RB_PAGE1_OPEN
+    {
+        HelpID = "sd:RadioButton:DLG_ASS:RB_PAGE1_OPEN";
+        Pos = MAP_APPFONT ( 12 , 76  );
+        Size = MAP_APPFONT ( 130 , 10 );
+        Text [ en-US ] = "O~pen existing presentation";
+    };
+
+    PushButton PB_PAGE1_OPEN
+    {
+        HelpID = "sd:PushButton:DLG_ASS:PB_PAGE1_OPEN";
+        OutputSize = TRUE ;
+        Pos = MAP_APPFONT ( 18 , 89 ) ;
+        Size = MAP_APPFONT ( 50 , 18 ) ;
+        TabStop = TRUE ;
+    };
+
+    ListBox LB_PAGE1_REGION
+    {
+        Pos = MAP_APPFONT ( 12 , 90  );
+        Size = MAP_APPFONT ( 120 , 12 );
+        TabStop = TRUE ;
+        Border = TRUE ;
+        DropDown = TRUE ;
+        HelpId = HID_SD_AUTOPILOT_REGION ;
+    };
+
+    ListBox LB_PAGE1_TEMPLATES
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 12 , 106  ) ;
+        Size = MAP_APPFONT ( 120 , 59 ) ;
+        HelpId = HID_SD_AUTOPILOT_TEMPLATES ;
+    };
+
+    ListBox LB_PAGE1_OPEN
+    {
+        Pos = MAP_APPFONT ( 18 , 110  );
+        Size = MAP_APPFONT ( 120 , 55 );
+        TabStop = TRUE;
+        Border = TRUE;
+        HelpId = HID_SD_AUTOPILOT_OPEN ;
+        AutoHScroll = TRUE;
+    };
+
+    // Seite 2
+    FixedBitmap FB_PAGE2
+    {
+        OutputSize = TRUE ;
+        Scale = TRUE;
+        Border = TRUE;
+        Pos = MAP_APPFONT ( 6 , 4  ) ;
+        Size = MAP_APPFONT ( 258 , 29 ) ;
+        Fixed = Bitmap { File = "dlgass2.bmp" ; };
+    };
+
+    FixedLine FL_PAGE2_LAYOUT
+    {
+        OutputSize = TRUE ;
+        Pos = MAP_APPFONT ( 6 , 37  ) ;
+        Size = MAP_APPFONT ( 132 , 8 ) ;
+        Text [ en-US ] = "~Select a slide design" ;
+    };
+
+    ListBox LB_PAGE2_REGION
+    {
+        Pos = MAP_APPFONT ( 12 , 48  );
+        Size = MAP_APPFONT ( 120 , 12 );
+        TabStop = TRUE ;
+        Border = TRUE ;
+        DropDown = TRUE ;
+        HelpId = HID_SD_AUTOPILOT_PAGETEMPLATES ;
+    };
+
+    ListBox LB_PAGE2_LAYOUT
+    {
+        HelpID = "sd:ListBox:DLG_ASS:LB_PAGE2_LAYOUT";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 12 , 64  ) ;
+        Size = MAP_APPFONT ( 120 , 40 ) ;
+    };
+
+    FixedLine FL_PAGE2_OUTPUTTYPES
+    {
+        OutputSize = TRUE ;
+        Pos = MAP_APPFONT ( 6 , 110  ) ;
+        Size = MAP_APPFONT ( 132 , 8 ) ;
+        Text [ en-US ] = "Select an output medium" ;
+    };
+
+    RadioButton RB_PAGE2_MEDIUM5
+    {
+        HelpID = "sd:RadioButton:DLG_ASS:RB_PAGE2_MEDIUM5";
+        OutputSize = TRUE;
+        Pos = MAP_APPFONT ( 12 , 121  );
+        Size = MAP_APPFONT ( 59 , 10 );
+        Text [ en-US ] = "~Original";
+    };
+
+    RadioButton RB_PAGE2_MEDIUM1
+    {
+        HelpID = "sd:RadioButton:DLG_ASS:RB_PAGE2_MEDIUM1";
+        OutputSize = TRUE ;
+        Pos = MAP_APPFONT ( 75 , 121  ) ;
+        Size = MAP_APPFONT ( 59 , 10 ) ;
+        Text [ en-US ] = "Sc~reen";
+    };
+
+    RadioButton RB_PAGE2_MEDIUM2
+    {
+        HelpID = "sd:RadioButton:DLG_ASS:RB_PAGE2_MEDIUM2";
+        OutputSize = TRUE ;
+        Pos = MAP_APPFONT ( 75 , 135  ) ;
+        Size = MAP_APPFONT ( 59 , 10 ) ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "Sli~de" ;
+    };
+
+    RadioButton RB_PAGE2_MEDIUM3
+    {
+        HelpID = "sd:RadioButton:DLG_ASS:RB_PAGE2_MEDIUM3";
+        OutputSize = TRUE ;
+        Pos = MAP_APPFONT ( 12 , 135  ) ;
+        Size = MAP_APPFONT ( 59 , 10 ) ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "O~verhead sheet" ;
+    };
+
+    RadioButton RB_PAGE2_MEDIUM4
+    {
+        HelpID = "sd:RadioButton:DLG_ASS:RB_PAGE2_MEDIUM4";
+        OutputSize = TRUE ;
+        Pos = MAP_APPFONT ( 12 , 149  ) ;
+        Size = MAP_APPFONT ( 59 , 10 ) ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "P~aper" ;
+    };
+
+    // Seite 3
+    FixedBitmap FB_PAGE3
+    {
+        OutputSize = TRUE ;
+        Scale = TRUE;
+        Border = TRUE;
+        Pos = MAP_APPFONT ( 6 , 4  ) ;
+        Size = MAP_APPFONT ( 258 , 29 ) ;
+        Fixed = Bitmap { File = "dlgass3.bmp" ; };
+    };
+
+    FixedLine FL_PAGE3_EFFECT
+    {
+        OutputSize = TRUE ;
+        Pos = MAP_APPFONT ( 6 , 37  );
+        Size = MAP_APPFONT ( 132 , 8 );
+        Text [ en-US ] = "Select a slide transition";
+    };
+
+    FixedText FT_PAGE3_EFFECT
+    {
+        OutputSize = TRUE ;
+        Pos = MAP_APPFONT ( 12 , 49  );
+        Size = MAP_APPFONT ( 60 , 10 );
+        Text [ en-US ] = "~Effect";
+    };
+
+    ListBox LB_PAGE3_EFFECT
+    {
+        HelpID = "sd:ListBox:DLG_ASS:LB_PAGE3_EFFECT";
+        OutputSize = TRUE ;
+        Pos = MAP_APPFONT ( 72 , 48  );
+        Size = MAP_APPFONT ( 60 , 12 );
+        TabStop = TRUE;
+        Border = TRUE;
+        DropDown = TRUE;
+    };
+
+    FixedText FT_PAGE3_SPEED
+    {
+        OutputSize = TRUE ;
+        Pos = MAP_APPFONT ( 12 , 65  );
+        Size = MAP_APPFONT ( 60 , 10 );
+        Text [ en-US ] = "~Speed";
+    };
+
+    ListBox LB_PAGE3_SPEED
+    {
+        HelpID = "sd:ListBox:DLG_ASS:LB_PAGE3_SPEED";
+        OutputSize = TRUE ;
+        Pos = MAP_APPFONT ( 72 , 64  );
+        Size = MAP_APPFONT ( 60 , 12 );
+        TabStop = TRUE;
+        Border = TRUE;
+        DropDown = TRUE;
+    };
+
+    FixedLine FL_PAGE3_PRESTYPE
+    {
+        OutputSize = TRUE;
+        Pos = MAP_APPFONT ( 6 , 83  );
+        Size = MAP_APPFONT ( 132 , 8 );
+        Text [ en-US ] = "Select the presentation type";
+    };
+
+    RadioButton RB_PAGE3_LIVE
+    {
+        HelpID = "sd:RadioButton:DLG_ASS:RB_PAGE3_LIVE";
+        OutputSize = TRUE;
+        Pos = MAP_APPFONT ( 12 , 94  );
+        Size = MAP_APPFONT ( 120 , 10 );
+        Text [ en-US ] = "~Default";
+    };
+
+    RadioButton RB_PAGE3_KIOSK
+    {
+        HelpID = "sd:RadioButton:DLG_ASS:RB_PAGE3_KIOSK";
+        OutputSize = TRUE;
+        Pos = MAP_APPFONT ( 12 , 108  );
+        Size = MAP_APPFONT ( 120 , 10 );
+        Text [ en-US ] = "~Automatic";
+    };
+
+    FixedText FT_PAGE3_TIME
+    {
+        OutputSize = TRUE;
+        Pos = MAP_APPFONT ( 21 , 123  );
+        Size = MAP_APPFONT ( 55 , 10 );
+        Text [ en-US ] = "D~uration of page";
+    };
+
+    TimeField TMF_PAGE3_TIME
+    {
+        HelpID = "sd:TimeField:DLG_ASS:TMF_PAGE3_TIME";
+        OutputSize = TRUE;
+        Pos = MAP_APPFONT ( 77 , 122  ) ;
+        Size = MAP_APPFONT ( 55 , 12 ) ;
+        Border = TRUE ;
+        TabStop = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Duration = TRUE ;
+        StrictFormat = TRUE ;
+        Maximum = Time
+        {
+            Hour = 23 ;
+            Minute = 59 ;
+            Second = 59 ;
+        };
+        Last = Time
+        {
+            Hour = 23 ;
+            Minute = 59 ;
+            Second = 59 ;
+        };
+    };
+
+    FixedText FT_PAGE3_BREAK
+    {
+        OutputSize = TRUE;
+        Pos = MAP_APPFONT ( 21 , 139  );
+        Size = MAP_APPFONT ( 55 , 10 );
+        Text [ en-US ] = "Du~ration of pause";
+    };
+
+    TimeField TMF_PAGE3_BREAK
+    {
+        HelpID = "sd:TimeField:DLG_ASS:TMF_PAGE3_BREAK";
+        OutputSize = TRUE;
+        Pos = MAP_APPFONT ( 77 , 138  ) ;
+        Size = MAP_APPFONT ( 55 , 12 ) ;
+        Border = TRUE ;
+        TabStop = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Duration = TRUE ;
+        StrictFormat = TRUE ;
+        Maximum = Time
+        {
+            Hour = 23 ;
+            Minute = 59 ;
+            Second = 59 ;
+        };
+        Last = Time
+        {
+            Hour = 23 ;
+            Minute = 59 ;
+            Second = 59 ;
+        };
+    };
+
+    CheckBox CB_PAGE3_LOGO
+    {
+        HelpID = "sd:CheckBox:DLG_ASS:CB_PAGE3_LOGO";
+        OutputSize = TRUE;
+        Pos = MAP_APPFONT ( 21 , 154  );
+        Size = MAP_APPFONT ( 111 , 10 );
+        TabStop = TRUE;
+        Text [ en-US ] = "Sh~ow logo";
+    };
+
+    // Seite 4
+    FixedBitmap FB_PAGE4
+    {
+        OutputSize = TRUE ;
+        Scale = TRUE;
+        Border = TRUE;
+        Pos = MAP_APPFONT ( 6 , 4  ) ;
+        Size = MAP_APPFONT ( 258 , 29 ) ;
+        Fixed = Bitmap { File = "dlgass4.bmp" ; };
+    };
+
+    FixedLine FL_PAGE4_PERSONAL
+    {
+        OutputSize = TRUE ;
+        Pos = MAP_APPFONT ( 6 , 37  );
+        Size = MAP_APPFONT ( 260 , 8 );
+        Text [ en-US ] = "Describe your basic ideas" ;
+    };
+
+    FixedText FT_PAGE4_ASKNAME
+    {
+        OutputSize = TRUE ;
+        Pos = MAP_APPFONT ( 12 , 48 ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
+        Text [ en-US ] = "What is your name or the name of your company?" ;
+
+    };
+    Edit EDT_PAGE4_ASKNAME
+    {
+        HelpID = "sd:Edit:DLG_ASS:EDT_PAGE4_ASKNAME";
+        OutputSize = TRUE ;
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 12 , 59 ) ;
+        Size = MAP_APPFONT ( 248 , 12 ) ;
+        TabStop = TRUE ;
+    };
+    FixedText FT_PAGE4_ASKTOPIC
+    {
+        OutputSize = TRUE ;
+        Pos = MAP_APPFONT ( 12 , 77 ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
+        Text [ en-US ] = "What is the subject of your presentation?" ;
+    };
+    Edit EDT_PAGE4_ASKTOPIC
+    {
+        HelpID = "sd:Edit:DLG_ASS:EDT_PAGE4_ASKTOPIC";
+        OutputSize = TRUE ;
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 12 , 88 ) ;
+        Size = MAP_APPFONT ( 248 , 12 ) ;
+        TabStop = TRUE ;
+    };
+    FixedText FT_PAGE4_ASKINFORMATION
+    {
+        OutputSize = TRUE ;
+        Pos = MAP_APPFONT ( 12 , 106 ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
+        Text [ en-US ] = "Further ideas to be presented?" ;
+    };
+    MultiLineEdit EDT_PAGE4_ASKINFORMATION
+    {
+        HelpID = "sd:MultiLineEdit:DLG_ASS:EDT_PAGE4_ASKINFORMATION";
+        OutputSize = TRUE ;
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 12 , 117  ) ;
+        Size = MAP_APPFONT ( 248 , 47 ) ;
+        TabStop = TRUE ;
+        IgnoreTab = TRUE ;
+        VSCROLL = TRUE ;
+    };
+
+    // Seite 5
+    FixedBitmap FB_PAGE5
+    {
+        OutputSize = TRUE ;
+        Scale = TRUE;
+        Border = TRUE;
+        Pos = MAP_APPFONT ( 6 , 4  ) ;
+        Size = MAP_APPFONT ( 258 , 29 ) ;
+        Fixed = Bitmap { File = "dlgass5.bmp" ; };
+    };
+
+    FixedText FT_PAGE5_PAGELIST
+    {
+        OutputSize = TRUE ;
+        Pos = MAP_APPFONT ( 6 , 39 );
+        Size = MAP_APPFONT ( 132 , 8 );
+        Text [ en-US ] = "Ch~oose your pages";
+    };
+
+    Control CT_PAGE5_PAGELIST
+    {
+        OutputSize = TRUE ;
+        Pos = MAP_APPFONT ( 6 , 50 );
+        Size = MAP_APPFONT ( 132 , 100 );
+        Border = TRUE;
+        TabStop = TRUE ;
+    };
+
+    CheckBox CB_PAGE5_SUMMARY
+    {
+        HelpID = "sd:CheckBox:DLG_ASS:CB_PAGE5_SUMMARY";
+        OutputSize = TRUE;
+        Pos = MAP_APPFONT ( 6 , 154  );
+        Size = MAP_APPFONT ( 132 , 10 );
+        TabStop = TRUE ;
+        Text [ en-US ] = "C~reate summary";
+    };
+
+    // generell
+    HelpButton BUT_HELP
+    {
+        OutputSize = TRUE ;
+        Pos = MAP_APPFONT ( 6 , 170 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+
+    CancelButton BUT_CANCEL
+    {
+        OutputSize = TRUE ;
+        Pos = MAP_APPFONT ( 59 , 170 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+
+    PushButton BUT_LAST
+    {
+        HelpID = "sd:PushButton:DLG_ASS:BUT_LAST";
+        OutputSize = TRUE ;
+        Pos = MAP_APPFONT ( 112 , 170 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "<< ~Back" ;
+    };
+
+    PushButton BUT_NEXT
+    {
+        HelpID = "sd:PushButton:DLG_ASS:BUT_NEXT";
+        DefButton = TRUE ;
+        OutputSize = TRUE ;
+        Pos = MAP_APPFONT ( 165 , 170 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "~Next >>" ;
+    };
+
+    OKButton BUT_FINISH
+    {
+        OutputSize = TRUE ;
+        Pos = MAP_APPFONT ( 218 , 170 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "~Create" ;
+    };
+
+    String STR_OPEN
+    {
+        Text [ en-US ] = "~Open";
+    };
+
+    String STR_CREATE
+    {
+        Text [ en-US ] = "~Create" ;
+    };
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

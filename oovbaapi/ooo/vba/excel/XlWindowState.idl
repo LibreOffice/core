@@ -1,0 +1,7 @@
+module ooo { module vba { module excel {
+    constants XlWindowState {
+        const long xlMaximized = -4137;
+        const long xlMinimized = -4140;
+        const long xlNormal = -4143;
+    };
+}; }; };

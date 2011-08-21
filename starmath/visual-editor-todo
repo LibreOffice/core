@@ -1,0 +1,43 @@
+Visual Formula Editor for LibreOffice Math
+==========================================
+
+This file contains a list of things to do for the visual formula editor.
+The visual formula editor hack was started by Jonas during GSoC...
+He is, as of writing this, still working on this features, but do by all
+means feel free to help out.
+
+Here is the list of things to be done. They are organized by complexity and necessity, note that
+some of the items are wishful thinking... If you have questions please feel free to ping me (Jonas)
+on IRC (jopsen) or e-mail me at jopsen@gmail.com.
+
+Easy
+----
+1. SmGraphicWindow::KeyInput relies on comparison of sal_Char, a better way must be available for CTRL+c
+2. Code style (missing spaces, linebreaks and a few renames)
+3. More documentation
+4. Remove the CreateTextFromNode methods and replace calls to it with NodeToTextVisitor
+5. Extend NodeToTextVisitor to update token offsets so SmNode::GetRow and SmNode::GetColumn will work.
+   (These methods can be used to enable synchronization of caret positions between visual and non-visual editor).
+
+Medium
+------
+1. SmCursor::InsertCol() method for added columns to matrices should be implemented.
+2. SmCursor` should support deletion of lines, rows, cols and sub-/superscripts.
+3. SmCursor::InsertSubSup() should wrap the body in a SmBraceNode if the body is an SmOperNode, SmBinVerNode, etc.
+4. When OpenOffice Math runs in standalone mode it centers the current formula, this is not nice for visual editing.
+
+Complex
+-------
+1. SmAlignNode and SmFontNode are ignored by visual editor, figure out how these should work.
+2. Solve the flickering issue when drawing formulas (See dev@gsl.OpenOffice.org)
+3. Make " a shortcut for creating an SmTextNode with FNT_TEXT, also check that SmNodeToTextVisitor supports this.
+4. parse.cxx merges multiple blanks into one SmBlankNode, the visual editor doesn't...
+
+Complex and non-essential
+-------------------------
+* Global clipboard integration
+* Consider improving GUI for "Formula Elements"-dialog, most buttons work with visual editor
+* Consider allowing users to enter commands in visual editor, by prefixing the command...
+* Optimize things, for instance SmCursor::AnnotateSelection() is called way too many places...
+* Improve handling of MoveUp and MoveDown in SmCursor::Move, SmCaretPos2LineVisitor might need improvement.
+* Synchronized command text caret and visual editor caret.

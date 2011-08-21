@@ -1,0 +1,292 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="style_CharacterProperties" script:language="StarBasic">
+
+
+'*************************************************************************
+'
+' DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+' 
+' Copyright 2000, 2010 Oracle and/or its affiliates.
+'
+' OpenOffice.org - a multi-platform office productivity suite
+'
+' This file is part of OpenOffice.org.
+'
+' OpenOffice.org is free software: you can redistribute it and/or modify
+' it under the terms of the GNU Lesser General Public License version 3
+' only, as published by the Free Software Foundation.
+'
+' OpenOffice.org is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU Lesser General Public License version 3 for more details
+' (a copy is included in the LICENSE file that accompanied this code).
+'
+' You should have received a copy of the GNU Lesser General Public License
+' version 3 along with OpenOffice.org.  If not, see
+' <http://www.openoffice.org/license.html>
+' for a copy of the LGPLv3 License.
+'
+'*************************************************************************
+'*************************************************************************
+
+
+
+' Be sure that all variables are dimensioned:
+option explicit
+
+
+
+Sub RunTest()
+
+'*************************************************************************
+' SERVICE: 
+' com.sun.star.style.CharacterProperties
+'*************************************************************************
+On Error Goto ErrHndl
+    Dim bOK As Boolean
+    Dim oStyleFamilies, oCharStyles As Variant
+
+    PropertyTester.TestProperty("CharFontName")
+
+    PropertyTester.TestProperty("CharFontStyleName")
+
+    Dim aFamilys(6) As Integer
+    with com.sun.star.awt.FontFamily
+        aFamilys(0) = .DONTKNOW
+        aFamilys(1) = .DECORATIVE
+        aFamilys(2) = .MODERN
+        aFamilys(3) = .ROMAN
+        aFamilys(4) = .SCRIPT
+        aFamilys(5) = .SWISS
+        aFamilys(6) = .SYSTEM
+    end with
+    PropertyTester.TestProperty("CharFontFamily",aFamilys())
+
+    Dim aCharSetArray(10) As Integer
+    with com.sun.star.awt.CharSet
+        aCharSetArray(0) = .DONTKNOW
+        aCharSetArray(1) = .ANSI
+        aCharSetArray(2) = .MAC
+        aCharSetArray(3) = .IBMPC_437
+        aCharSetArray(4) = .IBMPC_850
+        aCharSetArray(5) = .IBMPC_860
+        aCharSetArray(6) = .IBMPC_861
+        aCharSetArray(7) = .IBMPC_863
+        aCharSetArray(8) = .IBMPC_865
+        aCharSetArray(9) = .SYSTEM
+        aCharSetArray(10) = .SYMBOL
+    end with
+
+    PropertyTester.TestProperty("CharFontCharSet",aCharSetArray())
+
+    Dim aFontPitchArray(3) As Integer
+    with com.sun.star.awt.FontPitch
+        aFontPitchArray(0) = .DONTKNOW
+        aFontPitchArray(1) = .FIXED
+        aFontPitchArray(2) = .VARIABLE
+    end with
+    PropertyTester.TestProperty("CharFontPitch",aFontPitchArray())
+
+    PropertyTester.TestProperty("CharColor")
+
+    Dim vCharEsc (0 to 4) As Integer
+    vCharEsc(0) = -100
+    vCharEsc(1) = 100
+    vCharEsc(2) = -63
+    vCharEsc(3) = 76
+    vCharEsc(4) = 0
+    PropertyTester.TestProperty("CharEscapement",vCharEsc())
+
+    Dim aHeightArray(3) As Double
+    aHeightArray(0) = 10
+    aHeightArray(1) = 20.1
+    aHeightArray(2) = 25.2
+    aHeightArray(3) = 30.3
+    PropertyTester.TestProperty("CharHeight",aHeightArray())
+
+    Dim aUnderlineArray(18) As Integer
+    with com.sun.star.awt.FontUnderline
+        aUnderlineArray(0) = .NONE
+        aUnderlineArray(1) = .SINGLE
+        aUnderlineArray(2) = .DOUBLE
+        aUnderlineArray(3) = .DOTTED
+        aUnderlineArray(4) = .DONTKNOW
+        aUnderlineArray(5) = .DASH
+        aUnderlineArray(6) = .LONGDASH
+        aUnderlineArray(7) = .DASHDOT
+        aUnderlineArray(8) = .DASHDOTDOT
+        aUnderlineArray(9) = .SMALLWAVE
+        aUnderlineArray(10) = .WAVE
+        aUnderlineArray(11) = .DOUBLEWAVE
+        aUnderlineArray(12) = .BOLD
+        aUnderlineArray(13) = .BOLDDOTTED
+        aUnderlineArray(14) = .BOLDDASH
+        aUnderlineArray(15) = .BOLDLONGDASH
+        aUnderlineArray(16) = .BOLDDASHDOT
+        aUnderlineArray(17) = .BOLDDASHDOTDOT
+        aUnderlineArray(18) = .BOLDWAVE
+    end with
+    PropertyTester.TestProperty("CharUnderline",aUnderlineArray())
+
+    Dim aWeightArray(9) As Integer
+    with com.sun.star.awt.FontWeight
+        aWeightArray(0) = .DONTKNOW
+        aWeightArray(1) = .THIN
+        aWeightArray(2) = .ULTRALIGHT
+        aWeightArray(3) = .LIGHT
+        aWeightArray(4) = .SEMILIGHT
+        aWeightArray(5) = .NORMAL
+        aWeightArray(6) = .SEMIBOLD
+        aWeightArray(7) = .BOLD
+        aWeightArray(8) = .ULTRABOLD
+        aWeightArray(9) = .BLACK
+    end with
+
+    PropertyTester.TestProperty("CharWeight",aWeightArray())
+
+    PropertyTester.TestProperty("CharPosture")
+
+    PropertyTester.TestProperty("CharAutoKerning")
+
+    PropertyTester.TestProperty("CharBackColor")
+
+    PropertyTester.TestProperty("CharBackTransparent")
+
+    Dim aCaseMaps(4) As Integer
+    with com.sun.star.style.CaseMap
+        aCaseMaps(0) = .NONE
+        aCaseMaps(1) = .UPPERCASE
+        aCaseMaps(2) = .LOWERCASE
+        aCaseMaps(3) = .TITLE
+        aCaseMaps(4) = .SMALLCAPS
+    end with
+    PropertyTester.TestProperty("CharCaseMap",aCaseMaps())
+
+    PropertyTester.TestProperty("CharCrossedOut")
+
+    PropertyTester.TestProperty("CharFlash")
+
+    Dim aStrikeoutArray(6) As Integer
+    with com.sun.star.awt.FontStrikeout
+        aStrikeoutArray(0) = .NONE
+        aStrikeoutArray(1) = .SINGLE
+        aStrikeoutArray(2) = .DOUBLE
+        aStrikeoutArray(3) = .DONTKNOW
+        aStrikeoutArray(4) = .BOLD
+        aStrikeoutArray(5) = .SLASH
+        aStrikeoutArray(6) = .X
+    end with
+    PropertyTester.TestProperty("CharStrikeout",aStrikeoutArray())
+
+    PropertyTester.TestProperty("CharWordMode")
+
+    PropertyTester.TestProperty("CharKerning")
+
+    PropertyTester.TestProperty("CharLocale")
+
+    PropertyTester.TestProperty("CharKeepTogether")
+
+    PropertyTester.TestProperty("CharNoLineBreak")
+
+    PropertyTester.TestProperty("CharShadowed")
+
+    PropertyTester.TestProperty("CharFontType")
+
+    PropertyTester.TestProperty("CharContoured")
+
+    PropertyTester.TestProperty("CharCombineIsOn")
+
+    oObj.setPropertyValue("CharCombineIsOn", true)
+    Dim aPrifixes(1) As String
+    aPrifixes(0) = "("
+    aPrifixes(1) = "["
+    PropertyTester.TestProperty("CharCombinePrefix", aPrifixes())
+
+    Dim aSuffixes(1) As String
+    aSuffixes(0) = ")"
+    aSuffixes(1) = "]"
+    PropertyTester.TestProperty("CharCombineSuffix", aSuffixes())
+
+    Dim aCharEmphasizeArr(8) As Integer
+    with com.sun.star.text.FontEmphasis
+        aCharEmphasizeArr(0) = .NONE
+        aCharEmphasizeArr(1) = .DOT_ABOVE
+        aCharEmphasizeArr(2) = .CIRCLE_ABOVE
+        aCharEmphasizeArr(3) = .DISK_ABOVE
+        aCharEmphasizeArr(4) = .ACCENT_ABOVE
+        aCharEmphasizeArr(5) = .DOT_BELOW
+        aCharEmphasizeArr(6) = .CIRCLE_BELOW
+        aCharEmphasizeArr(7) = .DISK_BELOW
+        aCharEmphasizeArr(8) = .ACCENT_BELOW
+    end with
+    PropertyTester.TestProperty("CharEmphasize",aCharEmphasizeArr())
+
+    Dim aReliefs(2) As Integer
+    with com.sun.star.text.FontRelief
+        aReliefs(0) = .NONE
+        aReliefs(1) = .EMBOSSED
+        aReliefs(2) = .ENGRAVED
+    end with
+    PropertyTester.TestProperty("CharRelief",aReliefs())
+
+    PropertyTester.TestProperty("CharRotationIsFitToLine")
+
+    PropertyTester.TestProperty("CharScaleWidth")
+
+    Dim aRotat(2) As Integer
+    aRotat(0) = 900
+    aRotat(1) = 2700
+    aRotat(2) = 0
+    PropertyTester.TestProperty("CharRotation",aRotat())
+
+    PropertyTester.TestProperty("RubyText")
+
+    PropertyTester.TestProperty("RubyIsAbove")
+
+    Dim aAdjusts(5) As Integer
+    aAdjusts(0) = com.sun.star.text.RubyAdjust.LEFT
+    aAdjusts(1) = com.sun.star.text.RubyAdjust.CENTER
+    aAdjusts(2) = com.sun.star.text.RubyAdjust.RIGHT
+    aAdjusts(3) = com.sun.star.text.RubyAdjust.LEFT
+    aAdjusts(4) = com.sun.star.text.RubyAdjust.BLOCK
+    aAdjusts(5) = com.sun.star.text.RubyAdjust.INDENT_BLOCK
+    PropertyTester.TestProperty("RubyAdjust", aAdjusts())
+
+    Dim aCharStyleNames() As String
+    oStyleFamilies = oDoc.StyleFamilies
+    oCharStyles = oStyleFamilies.getByIndex(0)
+    aCharStyleNames() = oCharStyles.Elementnames()
+    aCharStyleNames(0) = aCharStyleNames(2) ' "Standard" the same as "", exclude it...
+
+    PropertyTester.TestProperty("RubyCharStyleName",aCharStyleNames())
+
+    PropertyTester.TestProperty("CharStyleName",aCharStyleNames())
+
+    PropertyTester.TestProperty("CharRotationIsFitToLine")
+    PropertyTester.TestProperty("CharScaleWidth")
+    PropertyTester.TestProperty("HyperLinkURL")
+    PropertyTester.TestProperty("HyperLinkTarget")
+    PropertyTester.TestProperty("HyperLinkName")
+
+	Dim nHeight(0 to 2) as Integer
+		nHeight(0)=1
+		nHeight(1)=33
+		nHeight(2)=100
+	PropertyTester.TestProperty("CharEscapementHeight", nHeight())
+
+    PropertyTester.TestProperty("CharNoHyphenation")
+    PropertyTester.TestProperty("CharUnderlineHasColor")
+	oObj.CharUnderlineHasColor = TRUE
+    PropertyTester.TestProperty("CharUnderlineColor")
+
+    ReCreateObj()
+
+Exit Sub
+ErrHndl:
+    Test.Exception()
+    bOK = false
+    resume next
+End Sub
+</script:module>

@@ -1,0 +1,261 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#include <mmgreetingspage.hrc>
+#include <dbui.hrc>
+#include <helpid.h>
+
+#define _LB_FEMALECOLUMN                \
+        StringList [en-US]=             \
+        {                               \
+            < "< not available >" ; > ; \
+        };
+
+
+#define GREETINGS_BODY  \
+    CheckBox CB_PERSONALIZED                                                    \
+    {                                                                               \
+        Pos = MAP_APPFONT ( 12 + LEFT_OFFSET , 17 + TOP_OFFSET ) ;                  \
+        Size = MAP_APPFONT ( 226 , 10 ) ;                                           \
+        Text[ en-US ] = "Insert personalized salutation";                    \
+    };                                                                              \
+    FixedText   FT_FEMALE                                                           \
+    {                                                                               \
+        Pos = MAP_APPFONT ( 18 + LEFT_OFFSET , 32 + TOP_OFFSET ) ;                  \
+        Size = MAP_APPFONT ( 50 , 8 ) ;                                             \
+        Text[ en-US ] = "~Female";                                              \
+    };                                                                              \
+    ListBox     LB_FEMALE                                                           \
+    {                                                                               \
+        Pos = MAP_APPFONT ( 71 + LEFT_OFFSET , 30 + TOP_OFFSET ) ;                                             \
+        Size = MAP_APPFONT ( 121 , 50 ) ;                                           \
+        DropDown = TRUE;                                                            \
+        Border = TRUE;                                                              \
+    };                                                                              \
+    PushButton  PB_FEMALE                                                           \
+    {                                                                               \
+        Pos = MAP_APPFONT ( 198 + LEFT_OFFSET , 29 + TOP_OFFSET ) ;                                            \
+        Size = MAP_APPFONT ( 50 , 14 ) ;                                            \
+        Text[ en-US ] = "~New...";                                              \
+    };                                                                              \
+    FixedText   FT_MALE                                                             \
+    {                                                                               \
+        Pos = MAP_APPFONT ( 18 + LEFT_OFFSET , 49 + TOP_OFFSET ) ;                                             \
+        Size = MAP_APPFONT ( 50 , 8 ) ;                                             \
+        Text[ en-US ] = "~Male";                                                \
+    };                                                                              \
+    ListBox     LB_MALE                                                             \
+    {                                                                               \
+        Pos = MAP_APPFONT ( 71 + LEFT_OFFSET , 47 + TOP_OFFSET ) ;                                             \
+        Size = MAP_APPFONT ( 121 , 50 ) ;                                           \
+        DropDown = TRUE;                                                            \
+        Border = TRUE;                                                              \
+    };                                                                              \
+    PushButton  PB_MALE                                                             \
+    {                                                                               \
+        Pos = MAP_APPFONT ( 198 + LEFT_OFFSET , 48 + TOP_OFFSET ) ;                                            \
+        Size = MAP_APPFONT ( 50 , 14 ) ;                                            \
+        Text[ en-US ] = "N~ew...";                                              \
+    };                                                                              \
+    FixedText   FI_FEMALE                                                       \
+    {                                                                               \
+        Pos = MAP_APPFONT ( 18 + LEFT_OFFSET , 67 + TOP_OFFSET ) ;                                             \
+        Size = MAP_APPFONT ( 225 , 8 ) ;                                            \
+        Text[ en-US ] = "Address list field indicating a female recipient";     \
+    };                                                                              \
+    FixedText   FT_FEMALECOLUMN                                                     \
+    {                                                                               \
+        Pos = MAP_APPFONT ( 18 + LEFT_OFFSET , 80 + TOP_OFFSET ) ;                  \
+        Size = MAP_APPFONT ( 50 , 8 ) ;                                            \
+        Text[ en-US ] = "Field name";           \
+    };                                                                              \
+    ListBox LB_FEMALECOLUMN                                                         \
+    {                                                                               \
+        Pos = MAP_APPFONT ( 71 + LEFT_OFFSET , 78 + TOP_OFFSET ) ;                  \
+        Size = MAP_APPFONT ( 121 , 50 ) ;                                           \
+        DropDown = TRUE;                                                            \
+        Border = TRUE;                                                              \
+        _LB_FEMALECOLUMN                                                           \
+    };                                                                              \
+    FixedText   FT_FEMALEFIELD                                                       \
+    {                                                                               \
+        Pos = MAP_APPFONT ( 18 + LEFT_OFFSET , 95 + TOP_OFFSET ) ;                  \
+        Size = MAP_APPFONT ( 50 , 8 ) ;                                            \
+        Text[ en-US ] = "Field value";           \
+    };                                                                              \
+    ComboBox CB_FEMALEFIELD                                                         \
+    {                                                                               \
+        Pos = MAP_APPFONT ( 71 + LEFT_OFFSET , 93 + TOP_OFFSET ) ;                                             \
+        Size = MAP_APPFONT ( 121 , 50 ) ;                                           \
+        DropDown = TRUE;                                                            \
+        Border = TRUE;                                                              \
+    };                                                                              \
+    FixedText   FT_NEUTRAL                                                       \
+    {                                                                               \
+        Pos = MAP_APPFONT ( 12 + LEFT_OFFSET , 113 + TOP_OFFSET ) ;                                             \
+        Size = MAP_APPFONT ( 180 , 8 ) ;                                            \
+        Text[ en-US ] = "General salutation";           \
+    };                                                                              \
+    ComboBox     CB_NEUTRAL                                                         \
+    {                                                                               \
+        Pos = MAP_APPFONT ( 12 + LEFT_OFFSET , 124 + TOP_OFFSET ) ;                 \
+        Size = MAP_APPFONT ( 180 , 50 ) ;                                           \
+        DropDown = TRUE;                                                            \
+        Border = TRUE;                                                              \
+    };
+
+#define TOP_OFFSET 24
+#define LEFT_OFFSET 6
+
+TabPage DLG_MM_GREETINGS_PAGE
+{
+    HelpID = HID_MM_GREETINGSPAGE ;
+    Size = MAP_APPFONT ( 260 , 250 ) ;
+    Hide = TRUE ;
+
+    FixedText FI_HEADER
+    {
+        Pos = MAP_APPFONT ( 6 , 8 ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
+        Text [ en-US ] = "Create a salutation";
+    };
+    CheckBox    CB_GREETINGLINE
+    {
+        HelpID = "sw:CheckBox:DLG_MM_GREETINGS_PAGE:CB_GREETINGLINE";
+        Pos = MAP_APPFONT ( 12 , 27 );
+        Size = MAP_APPFONT ( 242 , 10 );
+        Text[ en-US ] = "This document should contain a salutation";
+    };
+    GREETINGS_BODY
+    FixedText       FI_PREVIEW
+    {
+        Pos = MAP_APPFONT ( 12 , 168 ) ;
+        Size = MAP_APPFONT ( 242 , 8 ) ;
+        Text[ en-US ] = "Preview";
+    };
+    Window          WIN_PREVIEW
+    {
+        Pos = MAP_APPFONT ( 12 , 179 );
+        Size = MAP_APPFONT ( 186 , 21 ) ;
+        Border = TRUE;
+    };
+    PushButton      PB_ASSIGN
+    {
+        HelpID = "sw:PushButton:DLG_MM_GREETINGS_PAGE:PB_ASSIGN";
+        Pos = MAP_APPFONT ( 204 , 179 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Text[ en-US ] = "~Match fields...";
+    };
+    FixedText       FI_DOCINDEX
+    {
+        Pos = MAP_APPFONT ( 121 , 206 ) ;
+        Size = MAP_APPFONT (  50, 8 ) ;
+        Right = TRUE;
+    };
+    ImageButton     IB_PREVSET
+    {
+        HelpID = "sw:ImageButton:DLG_MM_GREETINGS_PAGE:IB_PREVSET";
+        Pos = MAP_APPFONT ( 177 , 204 ) ;
+        Size = MAP_APPFONT ( 10 , 10 ) ;
+        SYMBOL = IMAGEBUTTON_PREV;
+        QuickHelpText[ en-US ] = "Preview Previous Salutation";
+    };
+    ImageButton     IB_NEXTSET
+    {
+        HelpID = "sw:ImageButton:DLG_MM_GREETINGS_PAGE:IB_NEXTSET";
+        Pos = MAP_APPFONT ( 188 , 204 ) ;
+        Size = MAP_APPFONT ( 10 , 10 ) ;
+        SYMBOL = IMAGEBUTTON_NEXT ;
+        QuickHelpText[ en-US ] = "Preview Next Salutation";
+    };
+    String STR_DOCUMENT
+    {
+        Text[ en-US ] = "Document: %1";
+    };
+};
+
+#undef TOP_OFFSET
+#undef LEFT_OFFSET
+
+#define TOP_OFFSET 0
+#define LEFT_OFFSET 0
+ModalDialog DLG_MM_MAILBODY
+{
+    HelpID = HID_MM_MAILBODY;
+    Size = MAP_APPFONT ( 254 , 238 ) ;
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Moveable = TRUE ;
+    Text [ en-US ] = "E-Mail Message";
+    CheckBox    CB_GREETINGLINE
+    {
+        HelpID = "sw:CheckBox:DLG_MM_MAILBODY:CB_GREETINGLINE";
+        Pos = MAP_APPFONT ( 6  , 3 ) ;
+        Size = MAP_APPFONT ( 242 , 10 ) ;
+        Text[ en-US ] = "This e-mail should contain a salutation";
+    };
+    GREETINGS_BODY
+    FixedText           FT_BODY
+    {
+        Pos = MAP_APPFONT ( 12 , 140 ) ;
+        Size = MAP_APPFONT ( 174 , 8 ) ;
+        Text[ en-US ] = "Write your message here";
+    };
+    MultiLineEdit MLE_BODY
+    {
+        HelpID = "sw:MultiLineEdit:DLG_MM_MAILBODY:MLE_BODY";
+        Pos = MAP_APPFONT ( 12,   151 ) ;
+        Size = MAP_APPFONT ( 180 , 50 ) ;
+        Border = TRUE;
+        TabStop = TRUE ;
+        Left = TRUE ;
+        VScroll = TRUE ;
+        HScroll = TRUE ;
+        IgnoreTab = TRUE;
+    };
+    FixedLine           FL_SEPARATOR
+    {
+        Pos = MAP_APPFONT ( 0 , 207 ) ;
+        Size = MAP_APPFONT ( 254 , 8 ) ;
+    };
+    OKButton            PB_OK
+    {
+        Pos = MAP_APPFONT ( 89, 218 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+    };
+    CancelButton        PB_CANCEL
+    {
+        Pos = MAP_APPFONT ( 142 , 218 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+    };
+    HelpButton          PB_HELP
+    {
+        Pos = MAP_APPFONT ( 198 , 218 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+    };
+};
+
+

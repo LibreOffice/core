@@ -1,0 +1,548 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_editeng.hxx"
+
+#include <boost/scoped_ptr.hpp>
+
+#include <osl/endian.h>
+#include <tools/cachestr.hxx>
+#include <vcl/graph.hxx>
+#include <vcl/svapp.hxx>
+#include <svtools/rtfkeywd.hxx>
+#include <svtools/rtftoken.h>
+#include <svtools/filter.hxx>
+#include <svtools/wmf.hxx>
+
+#include <editeng/svxrtf.hxx>
+
+using namespace ::rtl;
+
+static sal_uInt8 aPal1[ 2 * 4 ] = {
+        0x00, 0x00, 0x00, 0x00,             // Black
+        0xFF, 0xFF, 0xFF, 0x00              // White
+};
+
+static sal_uInt8 aPal4[ 16 * 4 ] = {
+        0x00, 0x00, 0x00, 0x00,
+        0x80, 0x00, 0x00, 0x00,
+        0x00, 0x80, 0x00, 0x00,
+        0x80, 0x80, 0x00, 0x00,
+        0x00, 0x00, 0x80, 0x00,
+        0x80, 0x00, 0x80, 0x00,
+        0x00, 0x80, 0x80, 0x00,
+        0x80, 0x80, 0x80, 0x00,
+        0xC0, 0xC0, 0xC0, 0x00,
+        0xFF, 0x00, 0x00, 0x00,
+        0x00, 0xFF, 0x00, 0x00,
+        0xFF, 0xFF, 0x00, 0x00,
+        0x00, 0x00, 0xFF, 0x00,
+        0xFF, 0x00, 0xFF, 0x00,
+        0x00, 0xFF, 0xFF, 0x00,
+        0xFF, 0xFF, 0xFF, 0x00
+};
+
+static sal_uInt8 aPal8[ 256 * 4 ] =
+{
+0x00, 0x00, 0x00, 0x00,   0x80, 0x00, 0x00, 0x00,   0x00, 0x92, 0x00, 0x00,
+0x80, 0x92, 0x00, 0x00,   0x00, 0x00, 0xAA, 0x00,   0x80, 0x00, 0xAA, 0x00,
+0x00, 0x92, 0xAA, 0x00,   0xC1, 0xC1, 0xC1, 0x00,   0xC9, 0xC9, 0xC9, 0x00,
+0xAA, 0xDB, 0xFF, 0x00,   0x00, 0x49, 0xAA, 0x00,   0x00, 0x49, 0xFF, 0x00,
+0x00, 0x6D, 0x00, 0x00,   0x00, 0x6D, 0x55, 0x00,   0x00, 0x6D, 0xAA, 0x00,
+0x00, 0x6D, 0xFF, 0x00,   0x00, 0x24, 0x00, 0x00,   0x00, 0x92, 0x55, 0x00,
+0x00, 0x24, 0xAA, 0x00,   0x00, 0x92, 0xFF, 0x00,   0x00, 0xB6, 0x00, 0x00,
+0x00, 0xB6, 0x55, 0x00,   0x00, 0xB6, 0xAA, 0x00,   0x00, 0xB6, 0xFF, 0x00,
+0x00, 0xDB, 0x00, 0x00,   0x00, 0xDB, 0x55, 0x00,   0x00, 0xDB, 0xAA, 0x00,
+0x00, 0xDB, 0xFF, 0x00,   0xFF, 0xDB, 0xAA, 0x00,   0x00, 0xFF, 0x55, 0x00,
+0x00, 0xFF, 0xAA, 0x00,   0xFF, 0xFF, 0xAA, 0x00,   0x2B, 0x00, 0x00, 0x00,
+0x2B, 0x00, 0x55, 0x00,   0x2B, 0x00, 0xAA, 0x00,   0x2B, 0x00, 0xFF, 0x00,
+0x2B, 0x24, 0x00, 0x00,   0x2B, 0x24, 0x55, 0x00,   0x2B, 0x24, 0xAA, 0x00,
+0x2B, 0x24, 0xFF, 0x00,   0x2B, 0x49, 0x00, 0x00,   0x2B, 0x49, 0x55, 0x00,
+0x2B, 0x49, 0xAA, 0x00,   0x2B, 0x49, 0xFF, 0x00,   0x2B, 0x6D, 0x00, 0x00,
+0x2B, 0x6D, 0x55, 0x00,   0x2B, 0x6D, 0xAA, 0x00,   0x2B, 0x6D, 0xFF, 0x00,
+0x2B, 0x92, 0x00, 0x00,   0x2B, 0x92, 0x55, 0x00,   0x2B, 0x92, 0xAA, 0x00,
+0x2B, 0x92, 0xFF, 0x00,   0x2B, 0xB6, 0x00, 0x00,   0x2B, 0xB6, 0x55, 0x00,
+0x2B, 0xB6, 0xAA, 0x00,   0x2B, 0xB6, 0xFF, 0x00,   0x2B, 0xDB, 0x00, 0x00,
+0x2B, 0xDB, 0x55, 0x00,   0x2B, 0xDB, 0xAA, 0x00,   0x2B, 0xDB, 0xFF, 0x00,
+0x2B, 0xFF, 0x00, 0x00,   0x2B, 0xFF, 0x55, 0x00,   0x2B, 0xFF, 0xAA, 0x00,
+0x2B, 0xFF, 0xFF, 0x00,   0x55, 0x00, 0x00, 0x00,   0x55, 0x00, 0x55, 0x00,
+0x55, 0x00, 0xAA, 0x00,   0x55, 0x00, 0xFF, 0x00,   0x55, 0x24, 0x00, 0x00,
+0x55, 0x24, 0x55, 0x00,   0x55, 0x24, 0xAA, 0x00,   0x55, 0x24, 0xFF, 0x00,
+0x55, 0x49, 0x00, 0x00,   0x55, 0x49, 0x55, 0x00,   0x55, 0x49, 0xAA, 0x00,
+0x55, 0x49, 0xFF, 0x00,   0x55, 0x6D, 0x00, 0x00,   0x55, 0x6D, 0x55, 0x00,
+0x55, 0x6D, 0xAA, 0x00,   0x55, 0x6D, 0xFF, 0x00,   0x55, 0x92, 0x00, 0x00,
+0x55, 0x92, 0x55, 0x00,   0x55, 0x92, 0xAA, 0x00,   0x55, 0x92, 0xFF, 0x00,
+0x55, 0xB6, 0x00, 0x00,   0x55, 0xB6, 0x55, 0x00,   0x55, 0xB6, 0xAA, 0x00,
+0x55, 0xB6, 0xFF, 0x00,   0x55, 0xDB, 0x00, 0x00,   0x55, 0xDB, 0x55, 0x00,
+0x55, 0xDB, 0xAA, 0x00,   0x55, 0xDB, 0xFF, 0x00,   0x55, 0xFF, 0x00, 0x00,
+0x55, 0xFF, 0x55, 0x00,   0x55, 0xFF, 0xAA, 0x00,   0x55, 0xFF, 0xFF, 0x00,
+0x00, 0x00, 0x55, 0x00,   0x80, 0x00, 0x55, 0x00,   0x00, 0x24, 0x55, 0x00,
+0x80, 0x00, 0xFF, 0x00,   0x80, 0x24, 0x00, 0x00,   0x80, 0x24, 0x55, 0x00,
+0x80, 0x24, 0xAA, 0x00,   0x80, 0x24, 0xFF, 0x00,   0x80, 0x49, 0x00, 0x00,
+0x80, 0x49, 0x55, 0x00,   0x80, 0x49, 0xAA, 0x00,   0x80, 0x49, 0xFF, 0x00,
+0x80, 0x6D, 0x00, 0x00,   0x80, 0x6D, 0x55, 0x00,   0x80, 0x6D, 0xAA, 0x00,
+0x80, 0x6D, 0xFF, 0x00,   0x08, 0x08, 0x08, 0x00,   0x0F, 0x0F, 0x0F, 0x00,
+0x17, 0x17, 0x17, 0x00,   0x1F, 0x1F, 0x1F, 0x00,   0x27, 0x27, 0x27, 0x00,
+0x2E, 0x2E, 0x2E, 0x00,   0x36, 0x36, 0x36, 0x00,   0x3E, 0x3E, 0x3E, 0x00,
+0x46, 0x46, 0x46, 0x00,   0x4D, 0x4D, 0x4D, 0x00,   0x55, 0x55, 0x55, 0x00,
+0x5D, 0x5D, 0x5D, 0x00,   0x64, 0x64, 0x64, 0x00,   0x6C, 0x6C, 0x6C, 0x00,
+0x74, 0x74, 0x74, 0x00,   0x7C, 0x7C, 0x7C, 0x00,   0xFF, 0xDB, 0x00, 0x00,
+0x8B, 0x8B, 0x8B, 0x00,   0x93, 0x93, 0x93, 0x00,   0x9B, 0x9B, 0x9B, 0x00,
+0xFF, 0xB6, 0xFF, 0x00,   0xAA, 0xAA, 0xAA, 0x00,   0xB2, 0xB2, 0xB2, 0x00,
+0xB9, 0xB9, 0xB9, 0x00,   0x00, 0x24, 0xFF, 0x00,   0x00, 0x49, 0x00, 0x00,
+0xD1, 0xD1, 0xD1, 0x00,   0xD8, 0xD8, 0xD8, 0x00,   0xE0, 0xE0, 0xE0, 0x00,
+0xE8, 0xE8, 0xE8, 0x00,   0xF0, 0xF0, 0xF0, 0x00,   0xFF, 0xB6, 0xAA, 0x00,
+0xFF, 0xDB, 0xFF, 0x00,   0x80, 0x92, 0x55, 0x00,   0x80, 0x92, 0xAA, 0x00,
+0x80, 0x92, 0xFF, 0x00,   0x80, 0xB6, 0x00, 0x00,   0x80, 0xB6, 0x55, 0x00,
+0x80, 0xB6, 0xAA, 0x00,   0x80, 0xB6, 0xFF, 0x00,   0x80, 0xDB, 0x00, 0x00,
+0x80, 0xDB, 0x55, 0x00,   0x80, 0xDB, 0xAA, 0x00,   0x80, 0xDB, 0xFF, 0x00,
+0x80, 0xFF, 0x00, 0x00,   0x80, 0xFF, 0x55, 0x00,   0x80, 0xFF, 0xAA, 0x00,
+0x80, 0xFF, 0xFF, 0x00,   0xAA, 0x00, 0x00, 0x00,   0xAA, 0x00, 0x55, 0x00,
+0xAA, 0x00, 0xAA, 0x00,   0xAA, 0x00, 0xFF, 0x00,   0xAA, 0x24, 0x00, 0x00,
+0xAA, 0x24, 0x55, 0x00,   0xAA, 0x24, 0xAA, 0x00,   0xAA, 0x24, 0xFF, 0x00,
+0xAA, 0x49, 0x00, 0x00,   0xAA, 0x49, 0x55, 0x00,   0xAA, 0x49, 0xAA, 0x00,
+0xAA, 0x49, 0xFF, 0x00,   0xAA, 0x6D, 0x00, 0x00,   0xAA, 0x6D, 0x55, 0x00,
+0xAA, 0x6D, 0xAA, 0x00,   0xAA, 0x6D, 0xFF, 0x00,   0xAA, 0x92, 0x00, 0x00,
+0xAA, 0x92, 0x55, 0x00,   0xAA, 0x92, 0xAA, 0x00,   0xAA, 0x92, 0xFF, 0x00,
+0xAA, 0xB6, 0x00, 0x00,   0xAA, 0xB6, 0x55, 0x00,   0xAA, 0xB6, 0xAA, 0x00,
+0xAA, 0xB6, 0xFF, 0x00,   0xAA, 0xDB, 0x00, 0x00,   0xAA, 0xDB, 0x55, 0x00,
+0xAA, 0xDB, 0xAA, 0x00,   0x00, 0x49, 0x55, 0x00,   0xAA, 0xFF, 0x00, 0x00,
+0xAA, 0xFF, 0x55, 0x00,   0xAA, 0xFF, 0xAA, 0x00,   0xAA, 0xFF, 0xFF, 0x00,
+0xD5, 0x00, 0x00, 0x00,   0xD5, 0x00, 0x55, 0x00,   0xD5, 0x00, 0xAA, 0x00,
+0xD5, 0x00, 0xFF, 0x00,   0xD5, 0x24, 0x00, 0x00,   0xD5, 0x24, 0x55, 0x00,
+0xD5, 0x24, 0xAA, 0x00,   0xD5, 0x24, 0xFF, 0x00,   0xD5, 0x49, 0x00, 0x00,
+0xD5, 0x49, 0x55, 0x00,   0xD5, 0x49, 0xAA, 0x00,   0xD5, 0x49, 0xFF, 0x00,
+0xD5, 0x6D, 0x00, 0x00,   0xD5, 0x6D, 0x55, 0x00,   0xD5, 0x6D, 0xAA, 0x00,
+0xD5, 0x6D, 0xFF, 0x00,   0xD5, 0x92, 0x00, 0x00,   0xD5, 0x92, 0x55, 0x00,
+0xD5, 0x92, 0xAA, 0x00,   0xD5, 0x92, 0xFF, 0x00,   0xD5, 0xB6, 0x00, 0x00,
+0xD5, 0xB6, 0x55, 0x00,   0xD5, 0xB6, 0xAA, 0x00,   0xD5, 0xB6, 0xFF, 0x00,
+0xD5, 0xDB, 0x00, 0x00,   0xD5, 0xDB, 0x55, 0x00,   0xD5, 0xDB, 0xAA, 0x00,
+0xD5, 0xDB, 0xFF, 0x00,   0xD5, 0xFF, 0x00, 0x00,   0xD5, 0xFF, 0x55, 0x00,
+0xD5, 0xFF, 0xAA, 0x00,   0xD5, 0xFF, 0xFF, 0x00,   0xFF, 0xDB, 0x55, 0x00,
+0xFF, 0x00, 0x55, 0x00,   0xFF, 0x00, 0xAA, 0x00,   0xFF, 0xFF, 0x55, 0x00,
+0xFF, 0x24, 0x00, 0x00,   0xFF, 0x24, 0x55, 0x00,   0xFF, 0x24, 0xAA, 0x00,
+0xFF, 0x24, 0xFF, 0x00,   0xFF, 0x49, 0x00, 0x00,   0xFF, 0x49, 0x55, 0x00,
+0xFF, 0x49, 0xAA, 0x00,   0xFF, 0x49, 0xFF, 0x00,   0xFF, 0x6D, 0x00, 0x00,
+0xFF, 0x6D, 0x55, 0x00,   0xFF, 0x6D, 0xAA, 0x00,   0xFF, 0x6D, 0xFF, 0x00,
+0xFF, 0x92, 0x00, 0x00,   0xFF, 0x92, 0x55, 0x00,   0xFF, 0x92, 0xAA, 0x00,
+0xFF, 0x92, 0xFF, 0x00,   0xFF, 0xB6, 0x00, 0x00,   0xFF, 0xB6, 0x55, 0x00,
+0xF7, 0xF7, 0xF7, 0x00,   0xA2, 0xA2, 0xA2, 0x00,   0x83, 0x83, 0x83, 0x00,
+0xFF, 0x00, 0x00, 0x00,   0x00, 0xFF, 0x00, 0x00,   0xFF, 0xFF, 0x00, 0x00,
+0x00, 0x00, 0xFF, 0x00,   0xFF, 0x00, 0xFF, 0x00,   0x00, 0xFF, 0xFF, 0x00,
+0xFF, 0xFF, 0xFF, 0x00
+};
+
+
+
+
+inline long SwapLong( long n )
+{
+#ifndef OSL_LITENDIAN
+    return SWAPLONG( n );
+#else
+    return n;
+#endif
+}
+
+inline short SwapShort( short n )
+{
+#ifndef OSL_LITENDIAN
+    return SWAPSHORT( n );
+#else
+    return n;
+#endif
+}
+
+
+static void WriteBMPHeader( SvStream& rStream,
+                            const SvxRTFPictureType& rPicType )
+{
+    sal_uInt32 n4Width = rPicType.nWidth;
+    sal_uInt32 n4Height = rPicType.nHeight;
+    sal_uInt16 n4ColBits = rPicType.nBitsPerPixel;
+
+    sal_uInt16 nColors = (1 << n4ColBits);  // Number of colors (1, 16, 256)
+    sal_uInt16 nWdtOut = rPicType.nWidthBytes;
+    if( !nWdtOut )
+        nWdtOut = (sal_uInt16)((( n4Width * n4ColBits + 31 ) / 32 ) * 4 );
+
+    long nOffset = 14 + 40;     // BMP_FILE_HD_SIZ + sizeof(*pBmpInfo);
+    if( 256 >= nColors )
+        nOffset += nColors * 4;
+    long nSize = nOffset + nWdtOut * n4Height;
+    rStream << "BM"                     // = "BM"
+            << SwapLong(nSize)          // Filesize in Bytes
+            << SwapShort(0)             // Reserved
+            << SwapShort(0)             // Reserved
+            << SwapLong(nOffset);       // Offset?
+
+    rStream << SwapLong(40)             // sizeof( BmpInfo )
+            << SwapLong(n4Width)
+            << SwapLong(n4Height)
+            << (sal_uInt16)1
+            << n4ColBits
+            << SwapLong(0)
+            << SwapLong(0)
+            << SwapLong( rPicType.nGoalWidth
+                        ? rPicType.nGoalWidth * 1000L / 254L
+                        : 0 )         // DPI in Pixel per Meter
+            << SwapLong( rPicType.nGoalHeight
+                        ? rPicType.nGoalHeight * 1000L / 254L      // dito
+                        : 0 )
+            << SwapLong(0)
+            << SwapLong(0);
+
+
+    switch( rPicType.nBitsPerPixel )
+    {
+    case 1:     rStream.Write( aPal1, sizeof( aPal1 )); break;
+    case 4:     rStream.Write( aPal4, sizeof( aPal4 )); break;
+    case 8:     rStream.Write( aPal8, sizeof( aPal8 )); break;
+    }
+}
+
+        // Converts the ASCII characters to hexadecimal codes in binary.
+        // If invalid data is found (eg. characters outside 0-9|a-f|A-F), then
+        // USHRT_MAX is returned, else the number of converted charachters.
+xub_StrLen SvxRTFParser::HexToBin( String& rToken )
+{
+    // then create "Binary data" from the hex values.
+    // (missuse the String as temp Buffer)
+    if( rToken.Len() & 1 )      // odd number, fill out with 0
+        rToken += '0';
+
+    xub_StrLen n, nLen;
+    sal_Unicode nVal;
+    sal_Bool bValidData = sal_True;
+    const sal_Unicode* pStr = rToken.GetBufferAccess();
+    sal_Char* pData = (sal_Char*)pStr;
+    for( n = 0, nLen = rToken.Len(); n < nLen; ++n, ++pStr )
+    {
+        if( ((nVal = *pStr) >= '0') && ( nVal <= '9') )
+            nVal -= '0';
+        else if( (nVal >= 'A') && (nVal <= 'F') )
+            nVal -= 'A' - 10;
+        else if( (nVal >= 'a') && (nVal <= 'f') )
+            nVal -= 'a' - 10;
+        else
+        {
+            DBG_ASSERT( !this, "invalid Hex value" );
+            bValidData = sal_False;
+            break;
+        }
+
+        if( n & 1 )
+            *(pData++) |= nVal & 0x0f;
+        else
+            *(pData) = sal::static_int_cast< char >( ( nVal << 4 ) & 0xf0 );
+    }
+    // the len div 2, because 2 character are one byte
+    return bValidData ? nLen / 2  : STRING_NOTFOUND;
+}
+
+sal_Bool SvxRTFParser::ReadBmpData( Graphic& rGrf, SvxRTFPictureType& rPicType )
+{
+    // Delete the old data
+    rGrf.Clear();
+
+    rtl_TextEncoding eOldEnc = GetSrcEncoding();
+    SetSrcEncoding( RTL_TEXTENCODING_MS_1252 );
+
+    const sal_Char* pFilterNm = 0;
+    boost::scoped_ptr<SvCacheStream> pTmpFile;
+
+    int nToken = 0;
+    bool bValidBmp = true, bFirstTextToken = true;
+    int _nOpenBrakets = 1,      // the first was already recognized before!
+        nValidDataBraket = 1;
+
+    if( RTF_SHPPICT == GetStackPtr(0)->nTokenId )
+        ++nValidDataBraket;
+    OUString sShapePropertyName, sShapePropertyValue;
+    int nShapePropertyBracket = -1;
+    while( _nOpenBrakets && IsParserWorking() && bValidBmp )
+    {
+        nToken = GetNextToken();
+        sal_uInt16 nVal = sal_uInt16( nTokenValue );
+        switch( nToken )
+        {
+        case '}':
+            --_nOpenBrakets;
+            if( nShapePropertyBracket > 0 && nShapePropertyBracket > _nOpenBrakets )
+            {
+                nShapePropertyBracket = -1;
+                if( sShapePropertyName.getLength() )
+                {
+                    rPicType.aPropertyPairs.push_back( ::std::pair< OUString, OUString >( sShapePropertyName, sShapePropertyValue ) );
+                    sShapePropertyName = sShapePropertyValue = ::rtl::OUString();
+                }
+            }
+        break;
+        case '{':
+            {
+                if( RTF_IGNOREFLAG != GetNextToken() )
+                    nToken = SkipToken( -1 );
+                else if( RTF_UNKNOWNCONTROL != GetNextToken() )
+                    nToken = SkipToken( -2 );
+                else
+                {
+                    // gleich herausfiltern
+                    ReadUnknownData();
+                    nToken = GetNextToken();
+                    if( '}' != nToken )
+                        eState = SVPAR_ERROR;
+                    break;
+                }
+                ++_nOpenBrakets;
+            }
+            break;
+
+        case RTF_MACPICT:
+            {
+                rPicType.eStyle = SvxRTFPictureType::MAC_QUICKDRAW;
+                // Mac-Pict gets a empty header above
+                pTmpFile.reset(new SvCacheStream);
+                ByteString aStr;
+                aStr.Fill( 512, '\0' );
+                pTmpFile->Write( aStr.GetBuffer(), aStr.Len() );
+                pFilterNm = "PCT";
+            }
+            break;
+
+        case RTF_EMFBLIP:
+        case RTF_WMETAFILE:
+        case RTF_PNGBLIP:
+        case RTF_JPEGBLIP:
+        case RTF_WBITMAP:
+        case RTF_OSMETAFILE:
+        case RTF_DIBITMAP:
+            {
+                switch( nToken )
+                {
+                case RTF_EMFBLIP:
+                    rPicType.eStyle = SvxRTFPictureType::ENHANCED_MF;
+                    pFilterNm = "EMF";
+                    break;
+                case RTF_WMETAFILE:
+                    rPicType.eStyle = SvxRTFPictureType::WIN_METAFILE;
+                    pFilterNm = "WMF";
+                    break;
+                case RTF_PNGBLIP:
+                    rPicType.eStyle = SvxRTFPictureType::RTF_PNG;
+                    pFilterNm = "PNG";
+                    break;
+                case RTF_JPEGBLIP:
+                    rPicType.eStyle = SvxRTFPictureType::RTF_JPG;
+                    pFilterNm = "JPG";
+                    break;
+
+                case RTF_WBITMAP:
+                    rPicType.eStyle = SvxRTFPictureType::RTF_BITMAP;
+                    break;
+                case RTF_OSMETAFILE:
+                    rPicType.eStyle = SvxRTFPictureType::OS2_METAFILE;
+                    break;
+                case RTF_DIBITMAP:
+                    rPicType.eStyle = SvxRTFPictureType::RTF_DI_BMP;
+                    break;
+                }
+
+                rPicType.nType = nVal;
+                pTmpFile.reset(new SvCacheStream);
+            }
+            break;
+
+        case RTF_PICW:              rPicType.nWidth = nVal; break;
+        case RTF_PICH:              rPicType.nHeight = nVal; break;
+        case RTF_WBMBITSPIXEL:      rPicType.nBitsPerPixel = nVal; break;
+        case RTF_WBMPLANES:         rPicType.nPlanes = nVal; break;
+        case RTF_WBMWIDTHBYTES:     rPicType.nWidthBytes = nVal; break;
+        case RTF_PICWGOAL:          rPicType.nGoalWidth = nVal; break;
+        case RTF_PICHGOAL:          rPicType.nGoalHeight = nVal; break;
+        case RTF_BIN:
+            rPicType.nMode = SvxRTFPictureType::BINARY_MODE;
+            rPicType.uPicLen = nTokenValue;
+            if (rPicType.uPicLen)
+            {
+                rStrm.SeekRel(-1);
+                sal_uInt8 aData[4096];
+                sal_uInt32 nSize = sizeof(aData);
+
+                while (rPicType.uPicLen > 0)
+                {
+                    if (rPicType.uPicLen < nSize)
+                        nSize = rPicType.uPicLen;
+
+                    rStrm.Read(aData, nSize);
+                    pTmpFile->Write(aData, nSize);
+                    rPicType.uPicLen -= nSize;
+                }
+                nNextCh = GetNextChar();
+                bValidBmp = !pTmpFile->GetError();
+            }
+            break;
+        case RTF_PICSCALEX:         rPicType.nScalX = nVal; break;
+        case RTF_PICSCALEY:         rPicType.nScalY = nVal; break;
+        case RTF_PICSCALED:         break;
+
+        case RTF_PICCROPT:          rPicType.nCropT = (short)nTokenValue; break;
+        case RTF_PICCROPB:          rPicType.nCropB = (short)nTokenValue; break;
+        case RTF_PICCROPL:          rPicType.nCropL = (short)nTokenValue; break;
+        case RTF_PICCROPR:          rPicType.nCropR = (short)nTokenValue; break;
+        case RTF_SP:
+            //read pairs of {\sn Name}{\sv Value}
+            nShapePropertyBracket = _nOpenBrakets;
+        break;
+        case RTF_SN:
+            nToken = GetNextToken();
+            if( nToken != '}' )
+                sShapePropertyName = aToken;
+            else
+                nToken = SkipToken( -1 );
+        break;
+        case RTF_SV:
+            nToken = GetNextToken();
+            if( nToken != '}' )
+                sShapePropertyValue = aToken;
+            else
+                nToken = SkipToken( -1 );
+        break;
+        case RTF_TEXTTOKEN:
+            if( nValidDataBraket != _nOpenBrakets )
+                break;
+
+            if( bFirstTextToken )
+            {
+                switch( rPicType.eStyle )
+                {
+                case SvxRTFPictureType::RTF_BITMAP:
+                    // first write the header and the info structure
+                    if( pTmpFile )
+                        ::WriteBMPHeader( *pTmpFile, rPicType );
+                    break;
+                default:
+                    break;
+                }
+                bFirstTextToken = sal_False;
+            }
+
+            if( pTmpFile && SvxRTFPictureType::HEX_MODE == rPicType.nMode )
+            {
+                xub_StrLen nTokenLen = HexToBin( aToken );
+                if( STRING_NOTFOUND == nTokenLen )
+                    bValidBmp = sal_False;
+                else
+                {
+                    pTmpFile->Write( (sal_Char*)aToken.GetBuffer(),
+                                        nTokenLen );
+                    bValidBmp = 0 == pTmpFile->GetError();
+                }
+            }
+            break;
+        }
+    }
+
+    if (pTmpFile)
+    {
+        //#i20775#
+        if (pTmpFile->Tell() == 0)
+            bValidBmp = false;
+
+        if( bValidBmp )
+        {
+            GraphicFilter& rGF = GraphicFilter::GetGraphicFilter();
+            sal_uInt16 nImportFilter = GRFILTER_FORMAT_DONTKNOW;
+
+            if( pFilterNm )
+            {
+                String sTmp;
+                for( sal_uInt16 n = rGF.GetImportFormatCount(); n; )
+                {
+                    sTmp = rGF.GetImportFormatShortName( --n );
+                    if( sTmp.EqualsAscii( pFilterNm ))
+                    {
+                        nImportFilter = n;
+                        break;
+                    }
+                }
+            }
+
+            String sTmpStr;
+            WMF_APMFILEHEADER aAPMHeader;
+            aAPMHeader.left=0;
+            aAPMHeader.top=0;
+            aAPMHeader.right=rPicType.nWidth;
+            aAPMHeader.bottom=rPicType.nHeight;
+
+            WMF_APMFILEHEADER *pAPMHeader=(aAPMHeader.right>0 && aAPMHeader.bottom>0?&aAPMHeader:NULL);
+            pTmpFile->Seek( STREAM_SEEK_TO_BEGIN );
+            bValidBmp = 0 == rGF.ImportGraphic( rGrf, sTmpStr, *pTmpFile, nImportFilter, NULL, 0, pAPMHeader );
+        }
+    }
+
+    if( !bValidBmp )
+    {
+        rGrf.Clear();
+        // TODO: If nToken were not initialized to 0 above, it would potentially
+        // be used uninitialized here (if IsParserWorking() is false at the
+        // start of the while loop above):
+        if( '}' != nToken )
+            SkipGroup();
+    }
+    else
+    {
+        switch( rPicType.eStyle )
+        {
+        case SvxRTFPictureType::RTF_PNG:
+        case SvxRTFPictureType::RTF_JPG:
+            {
+                const MapMode aMap( MAP_100TH_MM );
+                 Size aSize( rGrf.GetPrefSize() );
+                if( MAP_PIXEL == rGrf.GetPrefMapMode().GetMapUnit() )
+                    aSize = Application::GetDefaultDevice()->PixelToLogic(
+                                        aSize, aMap );
+                else
+                    aSize = OutputDevice::LogicToLogic( aSize,
+                                        rGrf.GetPrefMapMode(), aMap );
+                rPicType.nWidth = sal::static_int_cast< sal_uInt16 >(aSize.Width());
+                rPicType.nHeight = sal::static_int_cast< sal_uInt16 >(
+                    aSize.Height());
+            }
+            break;
+        default:
+            break;
+        }
+    }
+    SetSrcEncoding( eOldEnc );
+
+    SkipToken( -1 );        // the closing brace is evaluated "above"
+    return bValidBmp;
+}
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

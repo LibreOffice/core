@@ -1,0 +1,210 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_ucb_ContentResultSet_idl__
+#define __com_sun_star_ucb_ContentResultSet_idl__
+
+#include <com/sun/star/lang/XComponent.idl>
+#include <com/sun/star/beans/XPropertySet.idl>
+#include <com/sun/star/sdbc/XResultSet.idl>
+#include <com/sun/star/sdbc/XResultSetMetaDataSupplier.idl>
+#include <com/sun/star/sdbc/XRow.idl>
+#include <com/sun/star/sdbc/XCloseable.idl>
+#include <com/sun/star/ucb/XContentAccess.idl>
+#include <com/sun/star/sdbc/ResultSet.idl>
+
+//=============================================================================
+
+module com { module sun { module star { module ucb {
+
+//=============================================================================
+/** provides access to the children of a folder content.
+
+    <p>It can be understand as a table containing a row for each child. The
+    table columns may contain values of properties of the children.
+*/
+published service ContentResultSet
+{
+    //-------------------------------------------------------------------------
+    /** must be implemented to make it possible to resolve cyclic object
+        references ( i.e. between an implementation of
+        <type scope="com::sun::star::beans">XPropertySet</type>
+        - which may hold property change listeners - and
+        <type scope="com::sun::star::beans">XPropertyChangeListener</type>
+        - which may hold the property set ).
+
+        <p>This interface is required.
+     */
+    interface com::sun::star::lang::XComponent;
+
+    /** provides access to the result set meta data. Meta data are for
+        example the number of columns of the result set, information
+        on the data types of columns, column names, and more.
+
+        <p>This interface is required.
+     */
+    interface com::sun::star::sdbc::XResultSetMetaDataSupplier;
+
+    //-------------------------------------------------------------------------
+    /** enables traveling through the result set members ( the contents ).
+        This interface mainly provides a cursor for the result set.
+
+        <p>Note that every method of this interface implementation additionally
+        may throw a <type>ResultSetException</type> ( which is derived from
+        <type scope="com::sun::star::sdbc">SQLException</type> to be compatible
+        to that interface ). The new exception transports another exception,
+        which indicates the reason for the failure of the method call.
+
+        <p>This interface is required.
+     */
+    interface com::sun::star::sdbc::XResultSet;
+
+    //-------------------------------------------------------------------------
+    /** provides access to data of the content the cursor is pointing to.
+
+        <p>Note that every method of this interface implementation additionally
+        may throw a <type>ResultSetException</type> ( which is derived from
+        <type scope="com::sun::star::sdbc">SQLException</type> to be compatible
+        to that interface ). The new exception transports another exception,
+        which indicates the reason for the failure of the method call.
+
+        <p>This interface is required.
+     */
+    interface com::sun::star::sdbc::XRow;
+
+    //-------------------------------------------------------------------------
+    /** makes it possible to abort running activities ( i.e. to cancel
+        retrieving data from a server ).
+
+        <p>Note that every method of this interface implementation additionally
+        may throw a <type>ResultSetException</type> ( which is derived from
+        <type scope="com::sun::star::sdbc">SQLException</type> to be compatible
+        to that interface ). The new exception transports another exception,
+        which indicates the reason for the failure of the method call.
+
+        <p>This interface is required.
+     */
+    interface com::sun::star::sdbc::XCloseable;
+
+    //-------------------------------------------------------------------------
+    /** holds properties of the result set.
+
+        <p>This interface is required.
+     */
+    interface com::sun::star::beans::XPropertySet;
+
+    //-------------------------------------------------------------------------
+    /** controls the travel mode of the result set cursor.
+
+        <p>There are two possible travel modes:
+
+        <p><table border=1>
+        <tr><td><member>CursorTravelMode::BLOCKING</member></td>
+            <td>Each travel method of the result set will not return until the
+                data for the new position were retrieved.</td></tr>
+        <tr><td><member>CursorTravelMode::NONBLOCKING</member></td>
+            <td>The implementation will throw a
+                <code>CursorWouldBlockException</code>, if the data for the new
+                position are not retrieved yet.</td></tr>
+        </table>
+
+        <p>The following pseudo-code illustrates the usage of a non-blocking
+        cursor:
+
+        <p><pre>
+        bProcessedAllRows = false
+        while ( !bProcessedAllRows )
+        {
+            cursor.setPropertyValue( "CursorTravelMode", BLOCKING )
+
+            cursor.travelSomeWhere()
+            collectRowData()
+
+            cursor.setPropertyValue( "CursorTravelMode", NONBLOCKING )
+
+            bGoOn = true;
+            while ( bGoOn )
+            {
+                try
+                {
+                    cursor.travelSomeWhere()
+                    collectRowData()
+                }
+                catch ( CursorWouldBlockException )
+                {
+                    // No more data at the moment.
+                   bGoOn = false
+                }
+            }
+
+            doSomethingWithCollectedRowData()
+
+            bProcessedAllRows = ...
+        }
+        </pre>
+
+        <p>
+         If this property is not supported, the implementation needs to provide
+        a blocking cursor.
+        </p>
+
+        <p>
+        The implementation initially needs to set the value of this property
+        to <member>CursorTravelMode::BLOCKING</member>.
+        </p>
+
+        @see CursorTravelMode
+     */
+    [optional, property] long CursorTravelMode;
+
+    /** contains the number of rows obtained (so far) from the data source. */
+    [readonly, property] long RowCount;
+
+    /** indicates that all rows of the result set have been obtained. */
+    [readonly, property] boolean IsRowCountFinal;
+
+    //-------------------------------------------------------------------------
+    /** provides access to the content identifier and the content object
+        itself.
+
+        <p>This interface is required.
+     */
+    interface XContentAccess;
+
+    //-------------------------------------------------------------------------
+    /** can be implemented to provide a complete JDBC conform result set
+        interface for the implementation of this service.
+
+        <p>The implementation of this service is optional.
+     */
+    service com::sun::star::sdbc::ResultSet;
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

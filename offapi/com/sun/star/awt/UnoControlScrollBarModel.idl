@@ -1,0 +1,196 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_awt_UnoControlScrollBarModel_idl__
+#define __com_sun_star_awt_UnoControlScrollBarModel_idl__
+
+#include <com/sun/star/awt/UnoControlModel.idl>
+#include <com/sun/star/util/Color.idl>
+
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module awt {
+
+//=============================================================================
+
+/** specifies the standard model of an <type>UnoControlScrollBar</type>.
+ */
+published service UnoControlScrollBarModel
+{
+    service com::sun::star::awt::UnoControlModel;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies the RGB color to be used for the control.
+
+        @since OOo 2.0
+     */
+    [optional, property] com::sun::star::util::Color BackgroundColor;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies the increment for a block move.
+     */
+    [property] long BlockIncrement;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies the border style of the control.
+
+        <pre>
+        0: No border
+        1: 3D border
+        2: simple border
+        </pre>
+     */
+    [property] short Border;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies the color of the border, if present
+
+        <p>Not every border style (see <member>Border</member>) may support coloring.
+        For instance, usually a border with 3D effect will ignore the BorderColor setting.</p>
+
+        @since OOo 2.0
+     */
+    [optional, property] long BorderColor;
+
+    //-------------------------------------------------------------------------
+
+    /** determines whether the control is enabled or disabled.
+     */
+    [property] boolean Enabled;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies the help text of the control.
+     */
+    [property] string HelpText;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies the help URL of the control.
+     */
+    [property] string HelpURL;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies the increment for a single line move.
+     */
+    [property] long LineIncrement;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies the scrolling behavior of the control.
+
+        <p><TRUE/> means, that when the user moves the slider in the scroll bar,
+        the content of the window is updated immediately.
+        <FALSE/> means, that the window is only updated after the user has
+        released the mouse button.</p>
+
+        @since OOo 2.0
+     */
+    [optional, property] boolean LiveScroll;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies the <type>ScrollBarOrientation</type> of the control.
+     */
+    [property] long Orientation;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies that the control will be printed with the document.
+     */
+    [property] boolean Printable;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies the mouse repeat delay, in milliseconds.
+
+        <p>When the user presses a mouse in a control area where this triggers
+        an action (such as scrolling the scrollbar), then usual control implementations
+        allow to repeatedly trigger this action, without the need to release the
+        mouse button and to press it again. The delay between two such triggers
+        is specified with this property.</p>
+
+        @since OOo 2.0
+     */
+    [optional, property] long RepeatDelay;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies the scroll value of the control.
+     */
+    [property] long ScrollValue;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies the minimum scroll value of the control.
+
+        <p>If this optional property is not present, clients of the component should assume
+        a minimal scroll value of 0.</p>
+    */
+    [optional, property] long ScrollValueMin;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies the maximum scroll value of the control.
+     */
+    [property] long ScrollValueMax;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies the RGB color to be used when painting symbols which are
+        part of the control's appearance, such as the arrow buttons.
+
+        @since OOo 2.0
+     */
+    [optional, property] com::sun::star::util::Color SymbolColor;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies that the control can be reached with the TAB key.
+
+        @since OOo 2.0
+     */
+    [optional, property] boolean Tabstop;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies the visible size of the scroll bar.
+     */
+    [property] long VisibleSize;
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

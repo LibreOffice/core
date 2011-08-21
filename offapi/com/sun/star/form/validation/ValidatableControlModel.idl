@@ -1,0 +1,89 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_form_validation_ValidatableControlModel_idl__
+#define __com_sun_star_form_validation_ValidatableControlModel_idl__
+
+#include <com/sun/star/form/FormControlModel.idl>
+#include <com/sun/star/form/validation/XValidatableFormComponent.idl>
+#include <com/sun/star/form/validation/XValidityConstraintListener.idl>
+
+//=============================================================================
+
+module com {  module sun {  module star {  module form { module validation {
+
+/** specifies the model of a form control which supports live validation of its
+    input.
+
+    <p>Validatable control models support setting a validator with dynamic
+    validity constraints, and broadcasting changes in their value as well as the
+    validity of their value.</p>
+*/
+service ValidatableControlModel
+{
+    /** specifies the basic functionality for a form control model
+
+        <p>Via this service, validatable control models inherit the
+        <type scope="com::sun::star::util">XCloneable</type> interface.<br/>
+        If an validatable control model, at which a validator has been set (via
+        <member>XValidatable::setValidator</member>), is being cloned, then the
+        validator is also set at the clone. Effectively, this means that
+        both control model instances share the same validator instance.</p>
+    */
+    service com::sun::star::form::FormControlModel;
+
+    /** enables support for validating the value of the control model
+
+        <p>Setting an retrieving the current validator of the control model is
+        possible via the <type>XValidatable</type> interface (which
+        <type>XValidatableFormComponent</type> is derived from).</p>
+
+        <p>Easy access to the current value of the control, as well as it's validity
+        (relative to the active validator), is provided by the methods <member>XValidatableFormComponent::isValid</member>
+        and <member>XValidatableFormComponent::getCurrentValue</member>.</p>
+
+        <p>Note that the type of the value provided by <member>XValidatableFormComponent::getCurrentValue</member>
+        is not specified here, but depends on the concrete control type.</p>
+    */
+    interface XValidatableFormComponent;
+
+    /** enables support for validators with dynamic validity constraints.
+
+        <p>As soon as a validator is set via <member>XValidatable::setValidator</member>, the validatable
+        control model registers itself as listener. If the validity constraint of the validator
+        changes, the <type>ValidatableControlModel</type> re-validates it's current valid, and
+        broadcasts any resuling changes to all its <type>XFormComponentValidityListener</type>, if
+        necessary.</p>
+    */
+    interface XValidityConstraintListener;
+};
+
+//=============================================================================
+
+}; }; }; }; };
+
+#endif

@@ -1,0 +1,77 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_xml_sax_XDTDHandler_idl__
+#define __com_sun_star_xml_sax_XDTDHandler_idl__
+
+#include <com/sun/star/uno/XInterface.idl>
+
+
+//=============================================================================
+
+module com {  module sun {  module star {  module xml {  module sax {
+
+//=============================================================================
+
+/** receives events according to the DTD of the document.
+
+    <p>The SAX parser may report these events in any order, regardless of the
+    order in which the notations and unparsed entities were declared; however,
+    all DTD events must be reported after the document handler's
+    <code>startDocument</code> event, and before the first <code>startElement</code>
+    event.  It is up to the application to store the information for future
+    use (perhaps in a hash table or object tree). If the application encounters
+    attributes of type "NOTATION", "ENTITY", or "ENTITIES", it can use the
+    information that it obtained through this interface to find the entity
+    and/or notation that corresponds with the attribute value.
+    </p>
+ */
+published interface XDTDHandler: com::sun::star::uno::XInterface
+{
+    //-------------------------------------------------------------------------
+
+    /** receives notification of a notation declaration event.
+     */
+    void notationDecl( [in] string sName,
+             [in] string sPublicId,
+             [in] string sSystemId );
+
+    //-------------------------------------------------------------------------
+
+    /** receives notification of an unparsed entity declaration event.
+     */
+    void unparsedEntityDecl( [in] string sName,
+             [in] string sPublicId,
+             [in] string sSystemId,
+             [in] string sNotationName );
+
+};
+
+//=============================================================================
+
+}; }; }; }; };
+
+#endif

@@ -1,0 +1,123 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_plugin_XPluginManager_idl__
+#define __com_sun_star_plugin_XPluginManager_idl__
+
+#include <com/sun/star/uno/XInterface.idl>
+
+#include <com/sun/star/plugin/XPluginContext.idl>
+
+#include <com/sun/star/plugin/PluginDescription.idl>
+
+#include <com/sun/star/plugin/XPlugin.idl>
+
+#include <com/sun/star/plugin/PluginException.idl>
+
+#include <com/sun/star/awt/XToolkit.idl>
+
+#include <com/sun/star/awt/XWindowPeer.idl>
+
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module plugin {
+
+//=============================================================================
+
+/** Interface accessing all recognized Netscape plugins.
+*/
+published interface XPluginManager: com::sun::star::uno::XInterface
+{
+    /** Creates a default context.  This context depends on the service
+        <type scope="com::sun::star::frame">Desktop</type>.</p>
+
+        @return plugin context
+    */
+    com::sun::star::plugin::XPluginContext createPluginContext();
+
+    /** Returns the descriptions for all recognized plugins.
+
+        @return plugin descriptions
+    */
+    sequence<com::sun::star::plugin::PluginDescription> getPluginDescriptions();
+
+    /** Creates a new plugin instance.
+
+        @param acontext
+               plugin context
+        @param mode
+               plugin mode
+        @param argn
+               argument name list provided to plugin
+        @param argv
+               argument value list provided to plugin
+        @param plugintype
+               plugin description
+        @return plugin instance
+    */
+    com::sun::star::plugin::XPlugin createPlugin(
+        [in] com::sun::star::plugin::XPluginContext acontext,
+        [in] short mode,
+        [in] sequence<string> argn,
+        [in] sequence<string> argv,
+        [in] com::sun::star::plugin::PluginDescription plugintype )
+        raises( com::sun::star::plugin::PluginException );
+
+    /** Creates a new plugin instance.
+
+        @param acontext
+               plugin context
+        @param mode
+               plugin mode
+        @param argn
+               argument name list provided to plugin
+        @param argv
+               argument value list provided to plugin
+        @param toolkit
+               toolkit to be used to get system window handle for plugin
+        @param parent
+               parent window
+        @param url
+               url
+        @return plugin instance
+    */
+    com::sun::star::plugin::XPlugin createPluginFromURL(
+        [in] com::sun::star::plugin::XPluginContext acontext,
+        [in] short mode,
+        [in] sequence<string> argn,
+        [in] sequence<string> argv,
+        [in] com::sun::star::awt::XToolkit toolkit,
+        [in] com::sun::star::awt::XWindowPeer parent,
+        [in] string url );
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

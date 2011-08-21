@@ -1,0 +1,142 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_document_XDocumentInfo_idl__
+#define __com_sun_star_document_XDocumentInfo_idl__
+
+#include <com/sun/star/uno/XInterface.idl>
+#include <com/sun/star/lang/ArrayIndexOutOfBoundsException.idl>
+
+//=============================================================================
+
+module com {   module sun {   module star {   module document {
+
+//=============================================================================
+/** provides access to the user fields for the information regarding the
+    document
+
+    <p>
+    These fields are special one of the set of available document properties.
+    Other ones are accessed as properties (by using the interface
+    <type scope="com::sun::star::beans">XPropertySet</type>) of service
+    <type>DocumentInfo</type>.
+    </p>
+
+    @deprecated     Use <type>XDocumentProperties</type> instead.
+
+    @see DocumentInfo
+    @see StandaloneDocumentInfo
+    @see com::sun::star::beans::XPropertySet
+ */
+published interface XDocumentInfo: com::sun::star::uno::XInterface
+{
+    //-------------------------------------------------------------------------
+    /** provides information about count of available fields
+
+        <p>
+        This count marks the top range of possible requests for get/set
+        any of these fields. Range = [0..count-1]
+        </p>
+
+        @returns
+            current count
+     */
+    short getUserFieldCount();
+
+    //-------------------------------------------------------------------------
+    /** returns the name of an user field
+
+        @param Index
+            specifies the position of requested field
+            Range = [0..count-1]
+
+        @returns
+            the name of the requested field
+
+        @throws com::sun::star::lang::ArrayIndexOutOfBoundsException
+            if <var>Index</var> don't fit range of [0..count-1]
+     */
+    string getUserFieldName( [in] short Index )
+        raises( com::sun::star::lang::ArrayIndexOutOfBoundsException );
+
+    //-------------------------------------------------------------------------
+    /** returns the value of an user field
+
+        @param Index
+            specifies the position of requested field
+            Range = [0..count-1]
+
+        @returns
+            the value of the requested field
+
+        @throws com::sun::star::lang::ArrayIndexOutOfBoundsException
+            if <var>Index</var> don't fit range of [0..count-1]
+     */
+    string getUserFieldValue( [in] short Index )
+        raises( com::sun::star::lang::ArrayIndexOutOfBoundsException );
+
+    //-------------------------------------------------------------------------
+    /** changes the name of one of the user fields
+
+        @param Index
+            specifies the position of requested field
+            Range = [0..count-1]
+
+        @param Name
+            the new name for this field to be set
+
+        @throws com::sun::star::lang::ArrayIndexOutOfBoundsException
+            if <var>Index</var> don't fit range of [0..count-1]
+     */
+    void setUserFieldName(
+        [in] short  Index ,
+        [in] string Name  )
+            raises( com::sun::star::lang::ArrayIndexOutOfBoundsException );
+
+    //-------------------------------------------------------------------------
+    /** changes the value of one of the user fields
+
+        @param Index
+            specifies the position of requested field
+            Range = [0..count-1]
+
+        @param Value
+            the new value for this field to be set
+
+        @throws com::sun::star::lang::ArrayIndexOutOfBoundsException
+            if <var>Index</var> don't fit range of [0..count-1]
+     */
+    void setUserFieldValue(
+        [in] short  Index ,
+        [in] string Value )
+            raises( com::sun::star::lang::ArrayIndexOutOfBoundsException );
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

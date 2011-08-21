@@ -1,0 +1,8 @@
+module ooo { module vba { module office {
+    constants MsoFileDialogType {
+        const long msoFileDialogFilePicker = 3;
+        const long msoFileDialogFolderPicker = 4;
+        const long msoFileDialogOpen = 1;
+        const long msoFileDialogSaveAs = 2;
+    };
+}; }; };

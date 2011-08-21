@@ -1,0 +1,9 @@
+module ooo { module vba { module word {
+    constants WdMeasurementUnits {
+        const long wdCentimeters = 1;
+        const long wdInches = 0;
+        const long wdMillimeters = 2;
+        const long wdPicas = 4;
+        const long wdPoints = 3;
+    };
+}; }; };

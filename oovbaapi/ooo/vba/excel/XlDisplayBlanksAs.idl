@@ -1,0 +1,7 @@
+module ooo { module vba { module excel {
+    constants XlDisplayBlanksAs {
+        const long xlInterpolated = 3;
+        const long xlNotPlotted = 1;
+        const long xlZero = 2;
+    };
+}; }; };

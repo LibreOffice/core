@@ -1,0 +1,11 @@
+module ooo { module vba { module office {
+    constants MsoIconType {
+        const long msoIconAlert = 2;
+        const long msoIconAlertCritical = 7;
+        const long msoIconAlertInfo = 4;
+        const long msoIconAlertQuery = 6;
+        const long msoIconAlertWarning = 5;
+        const long msoIconNone = 0;
+        const long msoIconTip = 3;
+    };
+}; }; };

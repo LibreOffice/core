@@ -1,0 +1,497 @@
+/*************************************************************************
+*
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * 
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+************************************************************************/
+
+#include "macros.inc"
+
+WindowsCustomAction gid_Customaction_RenamePrgFolder
+	Name = "RenamePrgFolder";
+	Typ = "1";
+	Source = "shlxtmsi.dll";
+	Target = "RenamePrgFolder";
+	Inbinarytable = 1;
+	Assignment1 = ("InstallExecuteSequence", "VersionNT >= 600 And OLDPRODUCTSSAMEMAJOR And Not REMOVE=\"ALL\" And Not PATCH", "ValidateProductID");
+End
+
+WindowsCustomAction gid_Customaction_RemovePrgFolder
+	Name = "RemovePrgFolder";
+	Typ = "1";
+	Source = "shlxtmsi.dll";
+	Target = "RemovePrgFolder";
+	Inbinarytable = 1;
+	Assignment1 = ("InstallExecuteSequence", "VersionNT >= 600 And OLDPRODUCTSSAMEMAJOR And Not REMOVE=\"ALL\" And Not PATCH", "end");
+End
+
+WindowsCustomAction gid_Customaction_Regallmsdocdll
+	Name = "Regallmsdocdll";
+	Typ = "65";
+	Source = "reg4allmsdoc.dll";
+	Target = "FindRegisteredExtensions";
+	Inbinarytable = 1;
+	Assignment1 = ("InstallExecuteSequence", "Not REMOVE=\"ALL\" And Not PATCH And _IsSetupTypeMin<>\"Custom\"", "CostFinalize");
+End
+
+WindowsCustomAction gid_Customaction_Restoreregallmsdocdll
+    Name = "Restoreregallmsdocdll";
+    Typ = "65";
+    Source = "reg4allmsdoc.dll";
+    Target = "RestoreRegAllMSDoc";
+    Inbinarytable = 1;
+    Assignment1 = ("InstallExecuteSequence", "REMOVE=\"ALL\" And Not PATCH", "end");
+End
+
+WindowsCustomAction gid_Customaction_Regactivexdll1
+	Name = "Regactivexdll1";
+	Typ = "65";
+	Source = "regactivex.dll";
+	Target = "InstallActiveXControl";
+	Inbinarytable = 1;
+	Assignment1 = ("InstallExecuteSequence", "(\&FEATURETEMPLATE=3 Or (\!FEATURETEMPLATE=3 And \&FEATURETEMPLATE=-1)) And Not PATCH", "end");
+End
+
+WindowsCustomAction gid_Customaction_Regactivexdll2
+	Name = "Regactivexdll2";
+	Typ = "65";
+	Source = "regactivex.dll";
+	Target = "DeinstallActiveXControl";
+	Inbinarytable = 1;
+	Assignment1 = ("InstallExecuteSequence", "\&FEATURETEMPLATE=2 And \!FEATURETEMPLATE=3 And Not PATCH", "RemoveExistingProducts");
+End
+
+WindowsCustomAction gid_Customaction_Reg64dll1
+	Name = "Reg64dll1";
+	Typ = "65";
+	Source = "reg64msi.dll";
+	Target = "InstallReg64";
+	Inbinarytable = 1;
+	Assignment1 = ("InstallExecuteSequence", "Not REMOVE=\"ALL\" and VersionNT64", "end");
+End
+
+WindowsCustomAction gid_Customaction_Reg64dll2
+	Name = "Reg64dll2";
+	Typ = "65";
+	Source = "reg64msi.dll";
+	Target = "DeinstallReg64";
+	Inbinarytable = 1;
+	Assignment1 = ("InstallExecuteSequence", "REMOVE=\"ALL\" and VersionNT64", "end");
+End
+
+WindowsCustomAction gid_Customaction_Jfregcadll1
+	Name = "Jfregcadll1";
+	Typ = "65";
+	Source = "jfregca.dll";
+	Target = "install_jf";
+	Inbinarytable = 1;
+	Assignment1 = ("InstallExecuteSequence", "\&FEATURETEMPLATE=3 And Not PATCH", "end");
+End
+
+WindowsCustomAction gid_Customaction_Jfregcadll2
+	Name = "Jfregcadll2";
+	Typ = "65";
+	Source = "jfregca.dll";
+	Target = "uninstall_jf";
+	Inbinarytable = 1;
+	Assignment1 = ("InstallExecuteSequence", "\&FEATURETEMPLATE=2 And \!FEATURETEMPLATE=3 And Not PATCH", "end");
+End
+
+WindowsCustomAction gid_Customaction_sdqsmsidll
+	Name = "sdqsmsidll";
+	Typ = "65";
+	Source = "sdqsmsi.dll";
+	Target = "ShutDownQuickstarter";
+	Inbinarytable = 1;
+	Assignment1 = ("InstallExecuteSequence", "", "IsOfficeRunning");
+End
+
+WindowsCustomAction gid_Customaction_qslnkmsidll
+	Name = "qslnkmsidll";
+	Typ = "65";
+	Source = "qslnkmsi.dll";
+	Target = "RemoveQuickstarterLink";
+	Inbinarytable = 1;
+	Assignment1 = ("InstallExecuteSequence", "REMOVE=\"ALL\" And Not PATCH", "sdqsmsidll");
+End
+
+WindowsCustomAction gid_Customaction_Shellextensionsdll1
+	Name = "Shellextensionsdll1";
+	Typ = "65";
+	Source = "shlxtmsi.dll";
+	Target = "InstallExecSequenceEntry";
+	Inbinarytable = 1;
+	Assignment1 = ("InstallExecuteSequence", "\&FEATURETEMPLATE=3 And Not PATCH", "end");
+End
+
+WindowsCustomAction gid_Customaction_Shellextensionsdll2
+	Name = "Shellextensionsdll2";
+	Typ = "65";
+	Source = "shlxtmsi.dll";
+	Target = "DeinstallExecSequenceEntry";
+	Inbinarytable = 1;
+	Assignment1 = ("InstallExecuteSequence", "\&FEATURETEMPLATE=2 And \!FEATURETEMPLATE=3 And Not PATCH", "end");
+End
+
+WindowsCustomAction gid_Customaction_Instooofiltmsidll2
+	Name = "Instooofiltmsidll";
+	Typ = "65";
+	Source = "instooofiltmsi.dll";
+	Target = "RestartIndexingService";
+	Inbinarytable = 1;
+	Assignment1 = ("InstallExecuteSequence", "Not REMOVE=\"ALL\" And Not PATCH", "end");
+End
+
+WindowsCustomAction gid_Customaction_Shellextensionsdll3
+	Name = "Shellextensionsdll3";
+	Typ = "65";
+	Source = "shlxtmsi.dll";
+	Target = "InstallStartmenuFolderIcon";
+	Inbinarytable = 1;
+	Assignment1 = ("InstallExecuteSequence", "Not REMOVE=\"ALL\" And Not PATCH", "end");
+End
+
+WindowsCustomAction gid_Customaction_Shellextensionsdll4
+	Name = "Shellextensionsdll4";
+	Typ = "65";
+	Source = "shlxtmsi.dll";
+	Target = "DeinstallStartmenuFolderIcon";
+	Inbinarytable = 1;
+	Assignment1 = ("InstallExecuteSequence", "REMOVE=\"ALL\" And Not PATCH", "MigrateFeatureStates");
+End
+
+WindowsCustomAction gid_Customaction_Shellextensionsdll5
+	Name = "Shellextensionsdll5";
+	Typ = "321";
+	Source = "shlxtmsi.dll";
+	Target = "SetProductInstallMode";
+	Inbinarytable = 1;
+	Assignment1 = ("InstallExecuteSequence", "Not REMOVE=\"ALL\" And Not PATCH", "FindRelatedProducts");
+	Assignment2 = ("InstallUISequence", "Not REMOVE=\"ALL\" And Not PATCH", "FindRelatedProducts");
+End
+
+WindowsCustomAction gid_Customaction_Shellextensionsdll6
+	Name = "Shellextensionsdll6";
+	Typ = "65";
+	Source = "shlxtmsi.dll";
+	Target = "RebuildShellIconCache";
+	Inbinarytable = 1;
+	Assignment1 = ("InstallExecuteSequence", "Not PATCH", "end");
+End
+
+WindowsCustomAction gid_Customaction_Shellextensionsdll7
+	Name = "Shellextensionsdll7";
+	Typ = "65";
+	Source = "shlxtmsi.dll";
+	Target = "ExecutePostUninstallScript";
+	Inbinarytable = 1;
+	Assignment1 = ("InstallExecuteSequence", "REMOVE=\"ALL\" And Not PATCH", "InstallValidate");
+End
+
+WindowsCustomAction gid_Customaction_Register_Extensions
+	Name = "RegisterExtensions";
+	Typ = "1025";
+	Source = "shlxtmsi.dll";
+	Target = "RegisterExtensions";
+	Inbinarytable = 1;
+	Assignment1 = ("InstallExecuteSequence", "Not REMOVE=\"ALL\"", "behind_SetInstalllocation");
+	Assignment2 = ("AdminExecuteSequence", "Not REMOVE=\"ALL\"", "behind_SetInstalllocation");
+End
+
+WindowsCustomAction gid_Customaction_Remove_Extensions
+	Name = "RemoveExtensions";
+	Typ = "65";
+	Source = "shlxtmsi.dll";
+	Target = "RemoveExtensions";
+	Inbinarytable = 1;
+	Assignment1 = ("InstallExecuteSequence", "REMOVE=\"ALL\" And Not PATCH", "FileCost");
+End
+
+WindowsCustomAction gid_Customaction_Set_Admininstall
+	Name = "SetAdminInstallProperty";
+	Typ = "65";
+	Source = "shlxtmsi.dll";
+	Target = "SetAdminInstallProperty";
+	Inbinarytable = 1;
+	Assignment1 = ("AdminExecuteSequence", "", "InstallInitialize");
+End
+
+WindowsCustomAction gid_Customaction_Check_Install_Directory
+	Name = "CheckInstallDirectory";
+	Typ = "65";
+	Source = "shlxtmsi.dll";
+	Target = "CheckInstallDirectory";
+	Inbinarytable = 1;
+	Assignment1 = ("InstallExecuteSequence", "Not Installed", "CheckVersions");
+	Assignment2 = ("ControlEvent", "SetupType", "Next", "DoAction", "CheckInstallDirectory", "_IsSetupTypeMin = \"Typical\" And Not Installed", "2");
+	Assignment3 = ("ControlEvent", "CustomSetup", "Next", "DoAction", "CheckInstallDirectory", "Not Installed", "2");
+End
+
+WindowsCustomAction gid_Customaction_Dotnetcheck
+	Name = "DotNetCheck";
+	Typ = "321";
+	Source = "shlxtmsi.dll";
+	Target = "DotNetCheck";
+	Inbinarytable = 1;
+	Assignment1 = ("InstallExecuteSequence", "Not REMOVE=\"ALL\"", "LaunchConditions");
+	Assignment2 = ("InstallUISequence", "Not REMOVE=\"ALL\"", "LaunchConditions");
+End
+
+WindowsCustomAction gid_Customaction_CopyEditionData
+    Name = "CopyEditionData";
+    Typ = "1";
+    Source = "shlxtmsi.dll";
+    Target = "copyEditionData";
+    Inbinarytable = 1;
+    Assignment1 = ("InstallExecuteSequence", "Not REMOVE=\"ALL\"", "end");
+    Assignment2 = ("AdminExecuteSequence", "", "end");
+End
+
+WindowsCustomAction gid_Customaction_CopyExtensionData
+    Name = "CopyExtensionData";
+    Typ = "1";
+    Source = "shlxtmsi.dll";
+    Target = "copyExtensionData";
+    Inbinarytable = 1;
+    Assignment1 = ("InstallExecuteSequence", "Not REMOVE=\"ALL\"", "end");
+    Assignment2 = ("AdminExecuteSequence", "", "end");
+End
+
+WindowsCustomAction gid_Customaction_RegCleanOld
+	Name = "RegCleanOld";
+	Typ = "65";
+	Source = "regcleanold.dll";
+	Target = "CleanCurUserOldSystemRegistryFromSetup";
+	Inbinarytable = 1;
+	Assignment1 = ("InstallExecuteSequence", "Not REMOVE=\"ALL\" And Not PATCH And Not ALLUSERS=\"\"", "end");
+End
+
+WindowsCustomAction gid_Customaction_Patch_Regpatchactivex_Patchactivexcontrol
+	Name = "PatchActiveXControl";
+	Typ = "65";
+	Source = "regpatchactivex.dll";
+	Target = "PatchActiveXControl";
+	Inbinarytable = 1;
+	Assignment1 = ("InstallExecuteSequence", "\&FEATURETEMPLATE=3", "end");
+End
+
+WindowsCustomAction gid_Customaction_Patch_SetProductInstallModeAction
+	Name = "SetProductInstallModeAction";
+	Typ = "321";
+	Source = "patchmsi.dll";
+	Target = "SetProductInstallMode";
+	Inbinarytable = 1;
+	Assignment1 = ("InstallExecuteSequence", "Not Installed", "FindRelatedProducts");
+	Assignment2 = ("InstallUISequence", "Not Installed", "FindRelatedProducts");
+End
+
+WindowsCustomAction gid_Customaction_Patch_InstallExchangeFiles
+	Name = "InstallExchangeFiles";
+	Typ = "65";
+	Source = "patchmsi.dll";
+	Target = "InstallPatchedFiles";
+	Inbinarytable = 1;
+	Assignment1 = ("InstallExecuteSequence", "Not Installed", "behind_InstallFinalize");
+	Assignment2 = ("AdminExecuteSequence", "", "behind_InstallFinalize");
+End
+
+WindowsCustomAction gid_Customaction_Langpack_Register_Extensions
+	Name = "RegisterExtensions";
+	Typ = "65";
+	Source = "lngpckinsthlp.dll";
+	Target = "RegisterExtensions";
+	Inbinarytable = 1;
+	Assignment1 = ("InstallExecuteSequence", "", "end");
+	Assignment2 = ("AdminExecuteSequence", "", "end");
+End
+
+WindowsCustomAction gid_Customaction_Patch_SetFeatureState
+	Name = "SetFeatureState";
+	Typ = "65";
+	Source = "patchmsi.dll";
+	Target = "SetFeatureState";
+	Inbinarytable = 1;
+	Assignment1 = ("InstallExecuteSequence", "Not Installed", "SetNewFeatureState");
+End
+
+WindowsCustomAction gid_Customaction_Patch_DeinstallExchangeFiles
+	Name = "DeinstallExchangeFiles";
+	Typ = "65";
+	Source = "patchmsi.dll";
+	Target = "UninstallPatchedFiles";
+	Inbinarytable = 1;
+	Assignment1 = ("InstallExecuteSequence", "Installed", "RemoveIniValues");
+End
+
+WindowsCustomAction gid_Customaction_Patch_Shutdownquickstarter
+	Name = "ShutDownQuickstarter";
+	Typ = "65";
+	Source = "patchmsi.dll";
+	Target = "ShutDownQuickstarter";
+	Inbinarytable = 1;
+	Assignment1 = ("ControlEvent", "DestinationFolder", "Next", "DoAction", "ShutDownQuickstarter", "1", "0");
+	Assignment2 = ("InstallExecuteSequence", "", "IsolateComponents");
+End
+
+WindowsCustomAction gid_Customaction_Patch_Isofficerunning
+	Name = "IsOfficeRunning";
+	Typ = "321";
+	Source = "patchmsi.dll";
+	Target = "IsOfficeRunning";
+	Inbinarytable = 1;
+	Assignment1 = ("ControlEvent", "ReadyToInstall", "InstallNow", "DoAction", "IsOfficeRunning", "1", "1");
+	Assignment2 = ("InstallExecuteSequence", "VersionNT < 600", "RunningOffice");
+End
+
+WindowsCustomAction gid_Customaction_Full_Isofficerunning
+	Name = "IsOfficeRunning";
+	Typ = "65";
+	Source = "shlxtmsi.dll";
+	Target = "IsOfficeRunning";
+	Inbinarytable = 1;
+	Assignment1 = ("InstallExecuteSequence", "VersionNT < 600 Or Not PATCH", "RunningOffice");
+End
+
+WindowsCustomAction gid_Customaction_Langpack_Isofficerunning
+	Name = "IsOfficeRunning";
+	Typ = "65";
+	Source = "lngpckinsthlp.dll";
+	Target = "IsOfficeRunning";
+	Inbinarytable = 1;
+	Assignment1 = ("InstallExecuteSequence", "PATCH And VersionNT < 600", "RunningOffice");
+End
+
+WindowsCustomAction gid_Customaction_CheckPatchList
+	Name = "CheckPatchList";
+	Typ = "65";
+	Source = "shlxtmsi.dll";
+	Target = "CheckPatchList";
+	Inbinarytable = 1;
+	Assignment1 = ("InstallExecuteSequence", "PATCH", "Patch1NotInstalled");
+End
+
+WindowsCustomAction gid_Customaction_Patch_SetUserInstallMode
+	Name = "SetUserInstallMode";
+	Typ = "321";
+	Source = "patchmsi.dll";
+	Target = "GetUserInstallMode";
+	Inbinarytable = 1;
+	Assignment1 = ("ControlEvent", "InstallWelcome", "Next", "DoAction", "SetUserInstallMode", "1", "1");
+	Assignment2 = ("ControlEvent", "InstallChangeFolder", "OK", "DoAction", "SetUserInstallMode", "1", "8");
+	Assignment3 = ("ControlCondition", "DestinationFolder", "Next", "Enable", "NOT INVALIDDIRECTORY And NOT PATCHISOLDER And NOT ISWRONGPRODUCT");
+	Assignment4 = ("ControlCondition", "DestinationFolder", "Next", "Disable", "INVALIDDIRECTORY Or PATCHISOLDER Or ISWRONGPRODUCT");
+	Assignment5 = ("ControlCondition", "DestinationFolder", "LabelStartInstall", "Show", "NOT INVALIDDIRECTORY And NOT PATCHISOLDER And NOT ISWRONGPRODUCT");
+	Assignment6 = ("ControlCondition", "DestinationFolder", "LabelInvalidDir", "Show", "INVALIDDIRECTORY");
+	Assignment7 = ("ControlCondition", "DestinationFolder", "LabelPatchOlder", "Show", "PATCHISOLDER");
+	Assignment8 = ("ControlCondition", "DestinationFolder", "LabelWrongProduct", "Show", "ISWRONGPRODUCT");
+	Assignment9 = ("ControlCondition", "DestinationFolder", "LabelStartInstall2", "Show", "NOT INVALIDDIRECTORY And NOT PATCHISOLDER And NOT ISWRONGPRODUCT");
+	Assignment10 = ("ControlCondition", "DestinationFolder", "LabelInvalidDir2", "Show", "INVALIDDIRECTORY");
+	Assignment11 = ("ControlCondition", "DestinationFolder", "LabelPatchOlder2", "Show", "PATCHISOLDER");
+	Assignment12 = ("ControlCondition", "DestinationFolder", "LabelWrongProduct2", "Show", "ISWRONGPRODUCT");
+	Assignment13 = ("InstallExecuteSequence", "Not Installed", "PatchIsOlder");
+End
+
+WindowsCustomAction gid_Customaction_Langpack_SetUserInstallMode
+	Name = "SetUserInstallMode";
+	Typ = "65";
+	Source = "lngpckinsthlp.dll";
+	Target = "GetUserInstallMode";
+	Inbinarytable = 1;
+	Assignment1 = ("ControlEvent", "InstallWelcome", "Next", "DoAction", "SetUserInstallMode", "1", "1");
+	Assignment2 = ("ControlEvent", "InstallChangeFolder", "OK", "DoAction", "SetUserInstallMode", "1", "8");
+	Assignment3 = ("ControlCondition", "DestinationFolder", "Next", "Enable", "NOT INVALIDDIRECTORY And NOT ISWRONGPRODUCT");
+	Assignment4 = ("ControlCondition", "DestinationFolder", "Next", "Disable", "INVALIDDIRECTORY Or ISWRONGPRODUCT");
+	Assignment5 = ("ControlCondition", "DestinationFolder", "LabelStartInstall", "Show", "NOT INVALIDDIRECTORY And NOT ISWRONGPRODUCT");
+	Assignment6 = ("ControlCondition", "DestinationFolder", "LabelInvalidDir", "Show", "INVALIDDIRECTORY");
+	Assignment7 = ("ControlCondition", "DestinationFolder", "LabelWrongProduct", "Show", "ISWRONGPRODUCT");
+	Assignment8 = ("ControlCondition", "DestinationFolder", "LabelStartInstall2", "Show", "NOT INVALIDDIRECTORY And NOT ISWRONGPRODUCT");
+	Assignment9 = ("ControlCondition", "DestinationFolder", "LabelInvalidDir2", "Show", "INVALIDDIRECTORY");
+	Assignment10 = ("ControlCondition", "DestinationFolder", "LabelWrongProduct2", "Show", "ISWRONGPRODUCT");
+End
+
+WindowsCustomAction gid_Customaction_MigrateInstallPath
+      Name = "MigrateInstallPath";
+      Typ = "321";
+      Source = "shlxtmsi.dll";
+      Target = "MigrateInstallPath";
+      Inbinarytable = 1;
+      Assignment1 = ("InstallExecuteSequence", "Not REMOVE=\"ALL\" And Not PATCH", "CostInitialize");
+      Assignment2 = ("InstallUISequence", "Not REMOVE=\"ALL\" And Not PATCH", "CostInitialize");
+End
+
+WindowsCustomAction gid_Customaction_CompleteInstallPath
+      Name = "CompleteInstallPath";
+      Typ = "321";
+      Source = "shlxtmsi.dll";
+      Target = "CompleteInstallPath";
+      Inbinarytable = 1;
+      Assignment1 = ("InstallExecuteSequence", "Not REMOVE=\"ALL\" And Not PATCH", "MigrateInstallPath");
+      Assignment2 = ("InstallUISequence", "Not REMOVE=\"ALL\" And Not PATCH", "MigrateInstallPath");
+End
+
+WindowsCustomAction gid_Customaction_CheckVersions
+	Name = "CheckVersions";
+	Typ = "321";
+	Source = "sn_tools.dll";
+	Target = "CheckVersions";
+	Inbinarytable = 1;
+	Assignment1 = ("InstallExecuteSequence", "NOT Installed", "NewProductFound");
+	Assignment2 = ("InstallUISequence", "NOT Installed", "NewProductFound");
+End
+
+WindowsCustomAction gid_Customaction_SelectLanguage
+    Name = "SelectLanguage";
+    Typ = "321";
+    Source = "sellangmsi.dll";
+    Target = "SelectLanguage";
+    Inbinarytable = 1;
+    Assignment1 = ("ControlEvent", "SetupType", "Next", "DoAction", "SelectLanguage", "1", "1");
+End
+
+WindowsCustomAction gid_Customaction_RebaseLibrariesonproperties
+	Name = "RebaseLibrariesOnProperties";
+	Typ = "65";
+	Source = "rebase.dll";
+	Target = "RebaseLibrariesOnProperties";
+	Inbinarytable = 1;
+	Assignment1 = ("InstallExecuteSequence", "VersionNT < 600 And Not REMOVE=\"ALL\"", "end");
+	Assignment2 = ("AdminExecuteSequence", "VersionNT < 600 And Not REMOVE=\"ALL\"", "end");
+End
+
+WindowsCustomAction gid_Customaction_LookForRegisteredExtensions
+	Name = "LookForRegisteredExtensions";
+	Typ = "65";
+	Source = "reg4allmsdoc.dll";
+	Target = "LookForRegisteredExtensions";
+	Inbinarytable = 1;
+	Assignment1 = ("ControlEvent", "CustomSetup", "Next", "DoAction", "LookForRegisteredExtensions", "1", "2");
+End
+
+WindowsCustomAction gid_Customaction_RegisterSomeExtensions
+	Name = "RegisterSomeExtensions";
+	Typ = "65";
+	Source = "reg4allmsdoc.dll";
+	Target = "RegisterSomeExtensions";
+	Inbinarytable = 1;
+	Assignment1 = ("ControlEvent", "FileTypeDialog", "Next", "DoAction", "RegisterSomeExtensions", "1", "1");
+End

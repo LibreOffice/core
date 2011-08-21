@@ -1,0 +1,136 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_i18n_UnicodeScript_idl__
+#define __com_sun_star_i18n_UnicodeScript_idl__
+
+//============================================================================
+
+module com {  module sun {  module star {  module i18n {
+
+//============================================================================
+
+/**
+    Unicode script types, returned by
+    <member>XCharacterClassification::getScript()</member>
+ */
+
+published enum UnicodeScript
+{
+    kBasicLatin,
+    kLatin1Supplement,
+    kLatinExtendedA,
+    kLatinExtendedB,
+    kIPAExtension,
+    kSpacingModifier,
+    kCombiningDiacritical,
+    kGreek,
+    kCyrillic,
+    kArmenian,
+    kHebrew,
+    kArabic,
+    kSyriac,
+    kThaana,
+    kDevanagari,
+    kBengali,
+    kGurmukhi,
+    kGujarati,
+    kOriya,
+    kTamil,
+    kTelugu,
+    kKannada,
+    kMalayalam,
+    kSinhala,
+    kThai,
+    kLao,
+    kTibetan,
+    kMyanmar,
+    kGeorgian,
+    kHangulJamo,
+    kEthiopic,
+    kCherokee,
+    kUnifiedCanadianAboriginalSyllabics,
+    kOgham,
+    kRunic,
+    kKhmer,
+    kMongolian,
+    kLatinExtendedAdditional,
+    kGreekExtended,
+    kGeneralPunctuation,
+    kSuperSubScript,
+    kCurrencySymbolScript,
+    kSymbolCombiningMark,
+    kLetterlikeSymbol,
+    kNumberForm,
+    kArrow,
+    kMathOperator,
+    kMiscTechnical,
+    kControlPicture,
+    kOpticalCharacter,
+    kEnclosedAlphanumeric,
+    kBoxDrawing,
+    kBlockElement,
+    kGeometricShape,
+    kMiscSymbol,
+    kDingbat,
+    kBraillePatterns,
+    kCJKRadicalsSupplement,
+    kKangxiRadicals,
+    kIdeographicDescriptionCharacters,
+    kCJKSymbolPunctuation,
+    kHiragana,
+    kKatakana,
+    kBopomofo,
+    kHangulCompatibilityJamo,
+    kKanbun,
+    kBopomofoExtended,
+    kEnclosedCJKLetterMonth,
+    kCJKCompatibility,
+    k_CJKUnifiedIdeographsExtensionA,
+    kCJKUnifiedIdeograph,
+    kYiSyllables,
+    kYiRadicals,
+    kHangulSyllable,
+    kHighSurrogate,
+    kHighPrivateUseSurrogate,
+    kLowSurrogate,
+    kPrivateUse,
+    kCJKCompatibilityIdeograph,
+    kAlphabeticPresentation,
+    kArabicPresentationA,
+    kCombiningHalfMark,
+    kCJKCompatibilityForm,
+    kSmallFormVariant,
+    kArabicPresentationB,
+    kNoScript,
+    kHalfwidthFullwidthForm,
+    kScriptCount
+};
+
+//============================================================================
+}; }; }; };
+
+#endif

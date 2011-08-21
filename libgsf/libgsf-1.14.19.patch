@@ -1,0 +1,90 @@
+--- misc/libgsf-1.14.19/configure	2010-09-25 18:53:55.000000000 +0200
++++ misc/build/libgsf-1.14.19/configure	2011-03-03 12:42:21.000000000 +0100
+@@ -11475,7 +11475,7 @@
+ 
+ 
+ 
+-
++if false; then
+ case "$am__api_version" in
+     1.01234)
+ 	as_fn_error "Automake 1.5 or newer is required to use intltool" "$LINENO" 5
+@@ -11650,7 +11650,7 @@
+ 
+ 
+ 
+-
++fi
+ 
+ 
+ 
+@@ -11963,7 +11963,7 @@
+    { $as_echo "$as_me:${as_lineno-$LINENO}: result: $IT_PERL_VERSION" >&5
+ $as_echo "$IT_PERL_VERSION" >&6; }
+ fi
+-if test "x" != "xno-xml"; then
++if test "xno-xml" != "xno-xml"; then
+    { $as_echo "$as_me:${as_lineno-$LINENO}: checking for XML::Parser" >&5
+ $as_echo_n "checking for XML::Parser... " >&6; }
+    if `$INTLTOOL_PERL -e "require XML::Parser" 2>/dev/null`; then
+@@ -12846,7 +12846,7 @@
+ fi
+ 
+ fi
+-if test -n "$PKG_CONFIG"; then
++if test "$PKG_CONFIG" != "no" ; then
+ 	_pkg_min_version=0.9.0
+ 	{ $as_echo "$as_me:${as_lineno-$LINENO}: checking pkg-config is at least version $_pkg_min_version" >&5
+ $as_echo_n "checking pkg-config is at least version $_pkg_min_version... " >&6; }
+--- misc/libgsf-1.14.19/gsf/gsf-infile-zip.c
++++ misc/build/libgsf-1.14.19/gsf/gsf-infile-zip.c
+@@ -30,6 +30,10 @@
+ 
+ #include <string.h>
+ #include <zlib.h>
++
++#if defined(Z_PREFIX) && defined(crc32)
++#undef crc32
++#endif
+ 
+ #undef G_LOG_DOMAIN
+ #define G_LOG_DOMAIN "libgsf:zip"
+
+--- misc/libgsf-1.14.19/gsf/gsf-outfile-zip.c
++++ misc/build/libgsf-1.14.19/gsf/gsf-outfile-zip.c
+@@ -29,6 +29,11 @@
+ #include <string.h>
+ #include <time.h>
+ #include <zlib.h>
++
++#if defined(Z_PREFIX) && defined(crc32)
++#define CRC32_WAS_DEFINED_AS_Z_CRC32
++#undef crc32
++#endif
+ 
+ #undef G_LOG_DOMAIN
+ #define G_LOG_DOMAIN "libgsf:zip"
+@@ -345,7 +345,11 @@
+ 	zip_header_write (zip);
+ 	zip->writing = TRUE;
+ 	zip->root->writing = TRUE;
++#if defined(CRC32_WAS_DEFINED_AS_Z_CRC32)
++	dirent->crc32 = z_crc32 (0L, Z_NULL, 0);
++#else
+ 	dirent->crc32 = crc32 (0L, Z_NULL, 0);
++#endif
+ 	if (zip->compression_method == GSF_ZIP_DEFLATED) {
+ 		if (!zip->stream) {
+ 			zip->stream = g_new0 (z_stream, 1);
+@@ -544,7 +544,11 @@
+ 			return FALSE;
+ 		dirent->csize += num_bytes;
+ 	}
++#if defined(CRC32_WAS_DEFINED_AS_Z_CRC32)
++	dirent->crc32 = z_crc32 (dirent->crc32, data, num_bytes);
++#else
+ 	dirent->crc32 = crc32 (dirent->crc32, data, num_bytes);
++#endif
+ 	dirent->usize += num_bytes;
+ 
+ 	return TRUE;

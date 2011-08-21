@@ -1,0 +1,204 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#include "custsdlg.hrc"
+#include "app.hrc"
+#include "helpids.h"
+#define DIFF 20
+#define DIFF_Y 17
+ModalDialog DLG_CUSTOMSHOW
+{
+    HelpID = CMD_SID_CUSTOMSHOW_DLG ;
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 175 + DIFF , 114 + DIFF_Y ) ;
+    Moveable = TRUE ;
+    Closeable = TRUE ;
+    PushButton BTN_NEW
+    {
+        HelpID = "sd:PushButton:DLG_CUSTOMSHOW:BTN_NEW";
+        Pos = MAP_APPFONT ( 120 + DIFF , 6 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "~New..." ;
+    };
+    PushButton BTN_EDIT
+    {
+        HelpID = "sd:PushButton:DLG_CUSTOMSHOW:BTN_EDIT";
+        Pos = MAP_APPFONT ( 120 + DIFF , 23 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "~Edit..." ;
+    };
+    PushButton BTN_REMOVE
+    {
+        HelpID = "sd:PushButton:DLG_CUSTOMSHOW:BTN_REMOVE";
+        Pos = MAP_APPFONT ( 120 + DIFF , 40 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "~Delete" ;
+    };
+    PushButton BTN_COPY
+    {
+        HelpID = "sd:PushButton:DLG_CUSTOMSHOW:BTN_COPY";
+        Pos = MAP_APPFONT ( 120 + DIFF , 57 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "Cop~y" ;
+    };
+    HelpButton BTN_HELP
+    {
+        Pos = MAP_APPFONT ( 120 + DIFF , 74 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    PushButton BTN_STARTSHOW
+    {
+        HelpID = "sd:PushButton:DLG_CUSTOMSHOW:BTN_STARTSHOW";
+        Pos = MAP_APPFONT ( 120 + DIFF , 94 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "~Start" ;
+    };
+    OKButton BTN_OK
+    {
+        Pos = MAP_APPFONT ( 120 + DIFF , 94 + DIFF_Y ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        DefButton = TRUE ;
+        Text [ en-US ] = "~Close" ;
+    };
+    ListBox LB_CUSTOMSHOWS
+    {
+        HelpID = "sd:ListBox:DLG_CUSTOMSHOW:LB_CUSTOMSHOWS";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 6 , 6 ) ;
+        Size = MAP_APPFONT ( 102 + DIFF , 86 + DIFF_Y ) ;
+        TabStop = TRUE ;
+        //IAccessibility2 Implementation 2009-----
+        QuickHelpText [ en-US ] = "Custom Screen Show" ;
+        //-----IAccessibility2 Implementation 2009
+    };
+    CheckBox CBX_USE_CUSTOMSHOW
+    {
+        HelpID = "sd:CheckBox:DLG_CUSTOMSHOW:CBX_USE_CUSTOMSHOW";
+        Pos = MAP_APPFONT ( 6 , 96 + DIFF_Y ) ;
+        Size = MAP_APPFONT ( 112 + DIFF , 12 ) ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "~Use Custom Slide Show" ;
+    };
+    Text [ en-US ] = "Custom Slide Shows" ;
+};
+ModalDialog DLG_DEFINE_CUSTOMSHOW
+{
+    HelpID = HID_DLG_DEFINE_CUSTOMSHOW ;
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 248 , 117 ) ;
+    Moveable = TRUE ;
+    Closeable = TRUE ;
+    OKButton BTN_OK
+    {
+        Pos = MAP_APPFONT ( 187 , 6 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        DefButton = TRUE ;
+    };
+    CancelButton BTN_CANCEL
+    {
+        Pos = MAP_APPFONT ( 187 , 23 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    HelpButton BTN_HELP
+    {
+        Pos = MAP_APPFONT ( 187 , 43 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    FixedText FT_NAME
+    {
+        Pos = MAP_APPFONT ( 6 , 8 ) ;
+        Size = MAP_APPFONT ( 30 , 10 ) ;
+        Text [ en-US ] = "Name" ;
+    };
+    Edit EDT_NAME
+    {
+        HelpID = "sd:Edit:DLG_DEFINE_CUSTOMSHOW:EDT_NAME";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 38 , 6 ) ;
+        Size = MAP_APPFONT ( 141 , 12 ) ;
+        TabStop = TRUE ;
+    };
+    MultiListBox LB_PAGES
+    {
+        HelpID = "sd:MultiListBox:DLG_DEFINE_CUSTOMSHOW:LB_PAGES";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 6 , 35 ) ;
+        Size = MAP_APPFONT ( 75 , 75 ) ;
+        TabStop = TRUE ;
+        SimpleMode = TRUE ;
+    };
+    PushButton BTN_ADD
+    {
+        HelpID = "sd:PushButton:DLG_DEFINE_CUSTOMSHOW:BTN_ADD";
+        Pos = MAP_APPFONT ( 84 , 67 ) ;
+        Size = MAP_APPFONT ( 14 , 14 ) ;
+        Text = "~>>" ;
+        TabStop = TRUE ;
+    };
+    Control LB_CUSTOM_PAGES
+    {
+        HelpID = HID_DLG_DEFINE_CUSTOMSHOW_CTL ;
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 103 , 35 ) ;
+        Size = MAP_APPFONT ( 75 , 75 ) ;
+        TabStop = TRUE ;
+    };
+    PushButton BTN_REMOVE
+    {
+        HelpID = "sd:PushButton:DLG_DEFINE_CUSTOMSHOW:BTN_REMOVE";
+        Pos = MAP_APPFONT ( 84 , 95 ) ;
+        Size = MAP_APPFONT ( 14 , 14 ) ;
+        Text = "~<<" ;
+        TabStop = TRUE ;
+    };
+    FixedText FT_PAGES
+    {
+        Pos = MAP_APPFONT ( 6 , 24 ) ;
+        Size = MAP_APPFONT ( 83 , 10 ) ;
+        Text [ en-US ] = "Existing slides" ;
+    };
+    FixedText FT_CUSTOM_PAGES
+    {
+        Pos = MAP_APPFONT ( 103 , 24 ) ;
+        Size = MAP_APPFONT ( 80 , 10 ) ;
+        Text [ en-US ] = "Selected slides" ;
+    };
+    Text [ en-US ] = "Define Custom Slide Show" ;
+};
+

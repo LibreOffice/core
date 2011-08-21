@@ -2188,9 +2188,9 @@ void lcl_dispatch(const Reference< XFrame >& xFrame,const Reference<XURLTransfor
         aArgs.getArray()[0].Value <<= aReferer;
 
         // build a sequence from the to-be-submitted string
-        ByteString a8BitData(aData.getStr(), (sal_uInt16)aData.getLength(), _eEncoding);
+        rtl::OString a8BitData(rtl::OUStringToOString(aData, _eEncoding));
             // always ANSI #58641
-        Sequence< sal_Int8 > aPostData((sal_Int8*)a8BitData.GetBuffer(), a8BitData.Len());
+        Sequence< sal_Int8 > aPostData((const sal_Int8*)a8BitData.getStr(), a8BitData.getLength());
         Reference< XInputStream > xPostData = new SequenceInputStream(aPostData);
 
         aArgs.getArray()[1].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PostData") );

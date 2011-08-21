@@ -1,0 +1,107 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_frame_XModuleManager_idl__
+#define __com_sun_star_frame_XModuleManager_idl__
+
+#include <com/sun/star/uno/XInterface.idl>
+#include <com/sun/star/lang/IllegalArgumentException.idl>
+#include <com/sun/star/frame/UnknownModuleException.idl>
+
+//===============================================
+
+module com { module sun { module star { module frame {
+
+//===============================================
+/** can be used to identify office modules.
+
+    @since OOo 2.0
+ */
+published interface XModuleManager : com::sun::star::uno::XInterface
+{
+    //-------------------------------------------
+    /**
+       @short  identifies the given module.
+
+       @descr  This identifier can then be used at the service <type>ModuleManager</type>
+               to get more information about this module.
+
+               For identification the interface <type scope="com::sun::star::lang">XServiceInfo</type>
+               is requested on the given module. Because all module service registrations must be unique
+               this value can be queried and checked against the configuration.
+
+               Since OOo 2.3.0 also the optional interface <type>XModule</type> will be used.
+               If its exists it will be preferred.
+
+       @param  Module
+               Possible objects for this parameter can be the following one:
+               <ul>
+                   <li>
+                       <b><type scope="com::sun::star::frame">XFrame</type></b><br>
+                       A frame contains (against a component window) a controller.
+                       Such controller represent the module (in case no model exists).
+                   </li>
+                   <li>
+                       <b><type scope="com::sun::star::frame">XController</type></b><br>
+                       A controller can be bound to a model. Then the model represent the module.
+                       If no model exists - the controller is used for identification.
+                   </li>
+                   <li>
+                       <b><type scope="com::sun::star::frame">XModel</type></b><br>
+                       A model represent a module everytime and can be used for
+                       identification directly.
+                   </li>
+               </ul>
+
+       @throws <type scope="com::sun::star::lang">IllegalArgumentException</type>
+               if the parameter Module is:
+               <ul>
+                   <li>an empty one</li>
+                   <li>or does not provide one of the needed interface
+                       XFrame, XController, XModel</li>
+                   <li>or does not provide the needed interface XServiceInfo.</li>
+               </ul>
+
+       @throws <type>UnknownModuleException</type>
+               if the given module could not be identified.
+               Note: If the module represent a XFrame instance with does not contain
+               a document, this exception is thrown too!
+
+       @return An identifier for the given module.
+               Note: This value varies everytime. Error will be transported
+               by thrown exceptions!
+     */
+    string identify( [in] ::com::sun::star::uno::XInterface Module )
+        raises(::com::sun::star::lang::IllegalArgumentException,
+                                       UnknownModuleException  );
+
+
+};
+
+}; }; }; };
+
+#endif

@@ -184,17 +184,7 @@ void CmdBaseStream::GenReturn( comm_USHORT nRet, rtl::OString *pUId, comm_USHORT
     Write(bBool);
 }
 
-void CmdBaseStream::GenReturn( comm_USHORT nRet, rtl::OString *pUId, comm_USHORT nMethod, comm_BOOL bBool )
-{
-    Write(comm_USHORT(SIReturn));
-    Write(nRet);
-    Write(pUId);
-    Write(comm_USHORT(PARAM_USHORT_1|PARAM_BOOL_1));        // Typ der folgenden Parameter
-    Write(nMethod);
-    Write(bBool);
-}
-
-void CmdBaseStream::GenReturn( comm_USHORT nRet, rtl::OString *pUId, comm_USHORT nMethod, comm_ULONG nNr )
+void CmdBaseStream::GenReturn( comm_UINT16 nRet, rtl::OString *pUId, comm_UINT16 nMethod, comm_UINT32 nNr )
 {
     Write(comm_USHORT(SIReturn));
     Write(nRet);

@@ -170,7 +170,7 @@ sal_uLong GetTTPortConfig()
 
     GETSET( abPortToTalk, "TTPort",
         rtl::OString::valueOf(static_cast<sal_Int32>(TESTTOOL_DEFAULT_PORT)) );
-    return (sal_uLong)abPortToTalk.ToInt64();
+    return (sal_uLong)abPortToTalk.ToInt32();
 }
 
 
@@ -197,7 +197,7 @@ sal_uLong GetUnoPortConfig()
 
     GETSET( abPortToTalk, "UnoPort",
         rtl::OString::valueOf(static_cast<sal_Int32>(UNO_DEFAULT_PORT)) );
-    return (sal_uLong)abPortToTalk.ToInt64();
+    return (sal_uLong)abPortToTalk.ToInt32();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

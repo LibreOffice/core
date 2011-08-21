@@ -1,0 +1,135 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_configuration_backend_XBackendEntities_idl__
+#define __com_sun_star_configuration_backend_XBackendEntities_idl__
+
+#include <com/sun/star/uno/XInterface.idl>
+#include <com/sun/star/lang/IllegalArgumentException.idl>
+#include <com/sun/star/configuration/backend/BackendAccessException.idl>
+
+//=============================================================================
+
+module com { module sun { module star { module configuration { module backend {
+
+//=============================================================================
+
+/**
+  Provides functionality relating to common and supported entities
+  for a configuration data backend.
+
+  @see com::sun::star::configuration::backend::XBackend
+  @see com::sun::star::configuration::backend::XMultiLayerStratum
+
+  @since OOo 1.1.2
+*/
+published interface XBackendEntities : ::com::sun::star::uno::XInterface
+{
+    //-------------------------------------------------------------------------
+
+    /**
+        provides the entity id of the owner entity of the backend.
+
+        @returns
+            an entity identifier for the owner entity.
+            <p> The owner entity is the default entity for the backend.
+               For normal configuration data access the owner entity
+               should always be used.
+            </p>
+
+        @see com::sun::star::configuration::backend::XBackend::listOwnLayers()
+        @see com::sun::star::configuration::backend::XBackend::getOwnUpdateHandler()
+    */
+    string getOwnerEntity() ;
+
+    //-------------------------------------------------------------------------
+
+    /**
+        provides the entity id of an entity for general administrative access.
+
+        <p> The admin entity is an entity that should be used to
+           read and manage configuration data that applies to all entities
+           within the backend.
+        </p>
+
+        @returns
+            an entity identifier for the admin entity or
+            an empty string, if there is no entity that can be used for
+            general administrative access.
+
+    */
+    string getAdminEntity() ;
+
+    //-------------------------------------------------------------------------
+
+    /**
+        determines, if a given entity id exists in this backend.
+
+        @param aEntity
+            The name of an entity.
+
+        @throws   com::sun::star::configuration::backend::BackendAccessException
+                if an error occurs while accessing the backend.
+
+        @returns
+            <TRUE/>, if aEntity is a valid, existing entity for this backend,
+            <FALSE/> otherwise.
+    */
+    boolean supportsEntity([in] string aEntity)
+        raises( BackendAccessException );
+
+    //-------------------------------------------------------------------------
+
+    /**
+        determines, if two given entity ids denote the same entity.
+
+        @param aEntity
+            The name of an entity.
+
+        @param aOtherEntity
+            The name of another entity.
+
+        @returns
+            <TRUE/>, if aEntity and aOtherEntity denote the same entity
+            within this backend, <FALSE/> otherwise.
+
+        @throws   com::sun::star::configuration::backend::BackendAccessException
+                if an error occurs while accessing the backend.
+
+        @throws   com::sun::star::lang::IllegalArgumentException
+            if either entity does not exist.
+    */
+    boolean isEqualEntity([in] string aEntity, [in] string aOtherEntity)
+        raises( BackendAccessException, com::sun::star::lang::IllegalArgumentException) ;
+
+    //-------------------------------------------------------------------------
+} ;
+
+//=============================================================================
+
+} ; } ; } ; } ; } ;
+
+#endif

@@ -1,0 +1,80 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_awt_tree_XMutableTreeDataModel_idl__
+#define __com_sun_star_awt_tree_XMutableTreeDataModel_idl__
+
+#include <com/sun/star/awt/tree/XTreeDataModel.idl>
+#include <com/sun/star/awt/tree/XMutableTreeNode.idl>
+
+//=============================================================================
+
+module com {  module sun {  module star {  module awt {  module tree {
+
+//=============================================================================
+
+/** This is the editable version of the <type>XTreeDataModel</type>.
+
+    <p>Note that only <type>XTreeNode</type> created from the same instance with <member>createNode</member>
+    are valid nodes for this instance.</p>
+ */
+published interface XMutableTreeDataModel : XTreeDataModel
+{
+    /** creates a new tree node with the given value and given settings.
+
+        @param DisplayValue
+            should be convertible to a string and is used by the <type>XTreeControl</type>
+            as a textual representation of the created node.
+
+        @param ChildrenOnDemand
+            if <TRUE/> is used as a parameter, the created node will be treated as a non-leaf
+            node by the <type>XTreeControl</type>, even when it has no child nodes.
+
+        @returns
+            a new <type>XMutableTreeNode</type> that can be used for this model.
+
+        @see XTreeNode::getDisplayValue()
+        @see XTreeNode::hasChildrenOnDemand()
+    */
+    XMutableTreeNode createNode( [in] any DisplayValue, [in] boolean ChildrenOnDemand );
+
+    /** changes the root node of this model to <var>RootNode</var>.
+
+        @param RootNode
+            the <type>XMutableTreeNode</type> that becomes the new root node of this model.
+
+        @throws ::com::sun::star::lang::IllegalArgumentException
+            if <var>RootNode</var> is not a valid node of this <type>XTreeDataModel</type>.
+    */
+    void setRoot( [in] XMutableTreeNode RootNode )
+        raises( ::com::sun::star::lang::IllegalArgumentException );
+};
+
+//=============================================================================
+
+}; }; }; }; };
+
+#endif

@@ -1,0 +1,141 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_chart_StockDiagram_idl__
+#define __com_sun_star_chart_StockDiagram_idl__
+
+#include <com/sun/star/chart/XStatisticDisplay.idl>
+
+#include <com/sun/star/chart/ChartStatistics.idl>
+
+#include <com/sun/star/chart/Diagram.idl>
+
+#include <com/sun/star/chart/ChartAxisXSupplier.idl>
+
+#include <com/sun/star/chart/ChartTwoAxisYSupplier.idl>
+
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module chart {
+
+//=============================================================================
+
+/** specifies a diagram which can be used for presenting stock quotes.
+
+    <p>Note that the data must have a specific structure for stock
+    diagrams.  Let us assume that data is interpreted, such that
+    series are taken from columns (see property
+    <member>Diagram::DataRowSource</member>).  Then you need tables of
+    the following structures for different types:</p>
+
+    <p><strong>
+     <member>StockDiagram::Volume</member> is <FALSE/><br>
+     <member>StockDiagram::UpDown</member> is <FALSE/>
+    </strong>
+    <table border>
+     <tr><td>Low</td><td>High</td><td>Close</td></tr>
+     <tr><td>&hellip;</td><td>&hellip;</td><td>&hellip;</td></tr>
+    </table></p>
+
+    <p><strong>
+     <member>StockDiagram::Volume</member> is <TRUE/><br>
+     <member>StockDiagram::UpDown</member> is <FALSE/>
+    </strong>
+    <table border>
+     <tr><td><strong>Volume</strong></td><td>Low</td><td>High</td><td>Close</td></tr>
+     <tr><td>&hellip;</td><td>&hellip;</td><td>&hellip;</td><td>&hellip;</td></tr>
+    </table></p>
+
+    <p><strong>
+     <member>StockDiagram::Volume</member> is <FALSE/><br>
+     <member>StockDiagram::UpDown</member> is <TRUE/>
+    </strong>
+    <table border>
+     <tr><td><strong>Open</strong></td><td>Low</td><td>High</td><td>Close</td></tr>
+     <tr><td>&hellip;</td><td>&hellip;</td><td>&hellip;</td><td>&hellip;</td></tr>
+    </table></p>
+
+    <p><strong>
+     <member>StockDiagram::Volume</member> is <TRUE/><br>
+     <member>StockDiagram::UpDown</member> is <TRUE/>
+    </strong>
+    <table border>
+     <tr><td><strong>Volume</strong></td><td><strong>Open</strong></td><td>Low</td><td>High</td><td>Close</td></tr>
+     <tr><td>&hellip;</td><td>&hellip;</td><td>&hellip;</td><td>&hellip;</td><td>&hellip;</td></tr>
+    </table></p>
+*/
+published service StockDiagram
+{
+    interface com::sun::star::chart::XStatisticDisplay;
+    service com::sun::star::chart::ChartStatistics;
+    service com::sun::star::chart::Diagram;
+    service com::sun::star::chart::ChartAxisXSupplier;
+    service com::sun::star::chart::ChartTwoAxisYSupplier;
+
+    //-------------------------------------------------------------------------
+
+    /** indicates if a stock chart contains data representing the
+        volume of stocks.
+
+        <p>The values of the volume are represented as columns like
+        those of a <type>BarDiagram</type>.</p>
+
+        <p>If this property is set to <TRUE/>, the values of the first
+        series of the chart data are interpreted as volume.</p>
+     */
+    [property] boolean Volume;
+
+    //-------------------------------------------------------------------------
+
+    /** indicates if a stock chart contains data representing the
+        value of stocks on the opening and closing date.
+
+        <p>The difference will be indicated by bars.  The color
+        of the bar will be significant for positive or negative
+        differences between open and closed data.</p>
+
+        <p>If this property is <FALSE/>, the values of the first
+        series (or second if <member>StockDiagram::Volume</member> is
+        <TRUE/>) of the chart data are interpreted as the day's lowest
+        value.  The next series is interpreted as the day's highest
+        value, and the last series is interpreted as the closing
+        value.</p>
+
+        <p>If this property is set to <TRUE/>, one additional series
+        is needed with the opening value of the stocks.  It is assumed
+        as the series before the series with the day's lowest
+        value.</p>
+     */
+    [property] boolean UpDown;
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

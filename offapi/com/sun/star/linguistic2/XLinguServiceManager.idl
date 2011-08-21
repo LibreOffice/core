@@ -1,0 +1,183 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_linguistic2_XLinguServiceManager_idl__
+#define __com_sun_star_linguistic2_XLinguServiceManager_idl__
+
+
+#include <com/sun/star/linguistic2/XSpellChecker.idl>
+#include <com/sun/star/linguistic2/XHyphenator.idl>
+#include <com/sun/star/linguistic2/XThesaurus.idl>
+#include <com/sun/star/lang/XEventListener.idl>
+
+//=============================================================================
+
+module com { module sun { module star { module linguistic2 {
+
+//=============================================================================
+/** the basic interface to be used to access linguistic functionality.
+
+    <P>This interface is used to access spell checker, hyphenator, and
+    thesaurus functionality.
+    Additionally, it can query what implementations of those services are
+    available (for specific languages or in general).
+    It can select and query which of those implementations should
+    be used for a specific language.</P>
+
+    <P>
+    For spell checking and thesaurus, the order in the list defines the order
+    of creation/usage of those services.
+    That is, if the first spell checker implementation does not recognize
+    the given word as correct, the second service implementation for that
+    language is created and gets queried. If that one fails, the third one
+    gets created and queried and so on.
+    This chain stops if an implementation reports the word as correct or the
+    end of the list is reached, in which case the word is reported as incorrect.
+    </P>
+
+    <P> For the thesaurus, the behavior is the same when no meaning was found.
+    </P>
+
+    @see    <type scope="com::sun::star::linguistic2">SpellChecker</type>
+    @see    <type scope="com::sun::star::linguistic2">Hyphenator</type>
+    @see    <type scope="com::sun::star::linguistic2">Thesaurus</type>
+*/
+published interface XLinguServiceManager : com::sun::star::uno::XInterface
+{
+    //-------------------------------------------------------------------------
+    /**
+        @returns
+            the <type scope="com::sun::star::linguistic2">XSpellChecker</type>
+            interface to be used for spell checking.
+    */
+    com::sun::star::linguistic2::XSpellChecker  getSpellChecker();
+
+    //-------------------------------------------------------------------------
+    /**
+        @returns
+            the <type scope="com::sun::star::linguistic2">XHyphenator</type>
+            interface to be used for hyphenation.
+    */
+    com::sun::star::linguistic2::XHyphenator    getHyphenator();
+
+    //-------------------------------------------------------------------------
+    /**
+        @returns
+            the <type scope="com::sun::star::linguistic2">XThesaurus</type>
+            interface to be used for thesaurus functionality.
+    */
+    com::sun::star::linguistic2::XThesaurus     getThesaurus();
+
+    //-------------------------------------------------------------------------
+    /** adds a listener to the list of event listeners.
+
+        <P>The listeners may support one or both of
+        <type scope="com::sun::star::linguistic2">XDictionaryEventListener</type>
+        and
+        <type scope="com::sun::star::linguistic2">XLinguServiceEventListener</type>
+        interfaces.
+        </P>
+
+        @returns
+            <TRUE/> if the listener was successfully added, <FALSE/> otherwise.
+
+        @param xListener
+            the listener to be added.
+    */
+    boolean     addLinguServiceManagerListener(
+        [in] com::sun::star::lang::XEventListener xListener );
+
+    //-------------------------------------------------------------------------
+    /** removes a listener from the list of event listeners.
+
+        @returns
+            <TRUE/> if the listener was successfully removed, <FALSE/> otherwise.
+
+        @param xListener
+            the listener to be removed.
+    */
+    boolean     removeLinguServiceManagerListener(
+        [in] com::sun::star::lang::XEventListener xListener );
+
+    //-------------------------------------------------------------------------
+    /**
+        @returns
+            the list of implementation names of the available services.
+
+        @param aServiceName
+            the name of the service requesting the list of available
+            implementations.
+
+        @param aLocale
+            the language used to query the list of available implementations.
+    */
+    sequence< string >  getAvailableServices(
+        [in] string                         aServiceName,
+        [in] com::sun::star::lang::Locale   aLocale );
+
+    //-------------------------------------------------------------------------
+    /** sets the list of service implementations to be used for a
+        given service and language.
+
+        @param aServiceName
+            the name of the service to set the list of implementations
+            to be used.
+
+        @param aLocale
+            the language to set the list.
+
+        @param aServiceImplNames
+            the name of the service to set the list.
+    */
+    void                setConfiguredServices(
+        [in] string                         aServiceName,
+        [in] com::sun::star::lang::Locale   aLocale,
+        [in] sequence< string >             aServiceImplNames );
+
+    //-------------------------------------------------------------------------
+    /** queries the list of service implementations to be used for a
+        given service and language.
+
+        @returns
+            the list of implementation names of the services to be used.
+
+        @param aServiceName
+            the name of the service to get queried.
+
+        @param aLocale
+            the language to get queried.
+    */
+    sequence< string >  getConfiguredServices(
+        [in] string                         aServiceName,
+        [in] com::sun::star::lang::Locale   aLocale );
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

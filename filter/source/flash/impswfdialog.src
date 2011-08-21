@@ -1,0 +1,191 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#include "impswfdialog.hrc"
+
+ModalDialog DLG_OPTIONS
+{
+    HelpID = "filter:ModalDialog:DLG_OPTIONS";
+    Size = MAP_APPFONT ( 200 , 200 ) ;
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Moveable = TRUE ;
+    Closeable = TRUE ;
+    Text [ en-US ] = "Macromedia Flash (SWF) Options" ;
+
+    FixedText FI_DESCR
+    {
+        Pos = MAP_APPFONT ( 12 , 14 ) ;
+        Size = MAP_APPFONT ( 81 , 16 ) ;
+        Text [ en-US ] = "1: min. quality\n100: max. quality" ;
+    };
+    NumericField NUM_FLD_QUALITY
+    {
+        HelpID = "filter:NumericField:DLG_OPTIONS:NUM_FLD_QUALITY";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 12 , 33 ) ;
+        Size = MAP_APPFONT ( 50 , 12 ) ;
+        TabStop = TRUE ;
+        Spin = TRUE ;
+        Minimum = 1;
+        Maximum = 100 ;
+        StrictFormat = TRUE ;
+        Last = 100 ;
+        Repeat = TRUE ;
+    };
+    CheckBox BOOL_EXPORT_ALL
+    {
+        HelpID = "filter:CheckBox:DLG_OPTIONS:BOOL_EXPORT_ALL";
+        Pos = MAP_APPFONT ( 12 , 65 ) ;
+        Size = MAP_APPFONT ( 10 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    FixedText FI_EXPORT_ALL_DESCR
+    {
+        Pos = MAP_APPFONT ( 25 , 65 ) ;
+        Size = MAP_APPFONT ( 150 , 16 ) ;
+        Text = "Export All Slides (Uncheck exports current slide)" ;
+    };
+    CheckBox BOOL_EXPORT_MULTIPLE_FILES
+    {
+        HelpID = "filter:CheckBox:DLG_OPTIONS:BOOL_EXPORT_MULTIPLE_FILES";
+        Pos = MAP_APPFONT ( 12 , 80 ) ;
+        Size = MAP_APPFONT ( 10 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    FixedText FI_EXPORT_MULTIPLE_FILES_DESCR
+    {
+        Pos = MAP_APPFONT ( 25 , 80 ) ;
+        Size = MAP_APPFONT ( 150 , 16 ) ;
+        Text = "Export As Multiple Files" ;
+    };
+    CheckBox BOOL_EXPORT_BACKGROUNDS
+    {
+        HelpID = "filter:CheckBox:DLG_OPTIONS:BOOL_EXPORT_BACKGROUNDS";
+        Pos = MAP_APPFONT ( 22 , 95 ) ;
+        Size = MAP_APPFONT ( 10 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    FixedText FI_EXPORT_BACKGROUNDS_DESCR
+    {
+        Pos = MAP_APPFONT ( 35 , 95 ) ;
+        Size = MAP_APPFONT ( 100 , 16 ) ;
+        Text = "Export Backgrounds" ;
+    };
+    CheckBox BOOL_EXPORT_BACKGROUND_OBJECTS
+    {
+        HelpID = "filter:CheckBox:DLG_OPTIONS:BOOL_EXPORT_BACKGROUND_OBJECTS";
+        Pos = MAP_APPFONT ( 22 , 107) ;
+        Size = MAP_APPFONT ( 10 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    FixedText FI_EXPORT_BACKGROUND_OBJECTS_DESCR
+    {
+        Pos = MAP_APPFONT ( 35 , 107) ;
+        Size = MAP_APPFONT ( 100 , 16 ) ;
+        Text = "Export Background Objects" ;
+    };
+    CheckBox BOOL_EXPORT_SLIDE_CONTENTS
+    {
+        HelpID = "filter:CheckBox:DLG_OPTIONS:BOOL_EXPORT_SLIDE_CONTENTS";
+        Pos = MAP_APPFONT ( 22 , 119 ) ;
+        Size = MAP_APPFONT ( 10 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    FixedText FI_EXPORT_SLIDE_CONTENTS_DESCR
+    {
+        Pos = MAP_APPFONT ( 35 , 119 ) ;
+        Size = MAP_APPFONT ( 100 , 16 ) ;
+        Text = "Export Slide Contents" ;
+    };
+    CheckBox BOOL_EXPORT_SOUND
+    {
+        HelpID = "filter:CheckBox:DLG_OPTIONS:BOOL_EXPORT_SOUND";
+        Pos = MAP_APPFONT ( 12 , 134 ) ;
+        Size = MAP_APPFONT ( 10 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    FixedText FI_EXPORT_SOUND_DESCR
+    {
+        Pos = MAP_APPFONT ( 25 , 134 ) ;
+        Size = MAP_APPFONT ( 100 , 16 ) ;
+        Text = "Export Verilogix Slide Annotations" ;
+    };
+    CheckBox BOOL_EXPORT_OLE_AS_JPEG
+    {
+        HelpID = "filter:CheckBox:DLG_OPTIONS:BOOL_EXPORT_OLE_AS_JPEG";
+        Pos = MAP_APPFONT ( 12 , 146 ) ;
+        Size = MAP_APPFONT ( 10 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    FixedText FI_EXPORT_OLE_AS_JPEG_DESCR
+    {
+        Pos = MAP_APPFONT ( 25 , 146 ) ;
+        Size = MAP_APPFONT ( 100 , 16 ) ;
+        Text = "Export OLE Objects as JPEG images" ;
+    };
+
+
+    OKButton BTN_OK
+    {
+        Pos = MAP_APPFONT ( 12 , 180 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        DefButton = TRUE ;
+    };
+    CancelButton BTN_CANCEL
+    {
+        Pos = MAP_APPFONT ( 70 , 180 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    HelpButton BTN_HELP
+    {
+        Pos = MAP_APPFONT ( 140 , 180 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,130 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_ucb_PackageContentProvider_idl__
+#define __com_sun_star_ucb_PackageContentProvider_idl__
+
+#include <com/sun/star/ucb/XContentProvider.idl>
+
+//=============================================================================
+
+module com { module sun { module star { module ucb {
+
+//=============================================================================
+/** The Package Content Provider (PCP) implements a <type>ContentProvider</type>
+    for the <type>UniversalContentBroker</type> (UCB).
+
+    <p>It provides access to packages ( zip / jar archive files ) containing
+    folders and streams.
+
+    @see com::sun::star::ucb::Content
+*/
+published service PackageContentProvider
+{
+    //-------------------------------------------------------------------------
+    /** provides two types of contents: Stream and Folder.
+
+        <p>
+
+        <b>PCP Contents</b>
+        <ol>
+        <li>
+        A PCP Stream (<type>PackageStreamContent</type>) is a content which
+        represents a file inside a package. It is always contained in a PCP
+        Folder. A PCP Stream has no children.
+        </li>
+        <li>
+        A PCP Folder (<type>PackageFolderContent</type>) is a container for
+        other PCP Folders and PCP Streams.
+        </li>
+        </ol>
+
+        <p><b>URL Scheme for PCP Contents</b>
+
+        <p>Each HCP content has an identifier corresponding to the following
+        scheme:
+
+        <ul>
+        <li>
+        package-URL    = "vnd.sun.star.pkg://" orig-URL [ abs-path ]
+        </li>
+        <li>
+        abs-path       = "/" path-segments
+        </li>
+        <li>
+        path-segments = segment *( "/" segment )
+        </li>
+        <li>
+        segment        = pchar
+        </li>
+        <li>
+        pchar          = unreserved | escaped | ":" | "@" | "&" | "="
+                         | "+" | "$" | ","
+        </li>
+        <li>
+        unreserved     = alphanum | mark
+        </li>
+        <li>
+        mark           = "-" | "_" | "." | "!" | "~" | "*" | "'" | "(" | ")"
+        </li>
+        <li>
+        escaped        = "%" hex hex
+        </li>
+        <li>
+        orig-URL       = 1 *( unreserved | escaped | "$" | "," | ";"
+                         | ":" | "@" | "&" | "&" | "=" | "+"
+        </li>
+        </ul>
+
+        <p>Examples:
+
+        <ul>
+        <li>
+        vnd.sun.star.pkg://file:%2F%2F%2Fe:%2Fmy.xsw/
+        ( The root folder of the package located at file:///e:/my.xsw )
+        </li>
+        <li>
+        vnd.sun.star.pkg://file:%2F%2F%2Fe:%2Fmy.xsw/Content
+        ( The folder/stream named "Content" that is contained in the root
+        folder of the located at file:///e:/my.xsw )
+        </li>
+        <li>
+        vnd.sun.star.pkg://file:%2F%2F%2Fe:%2Fmy.xsw/Content%20A
+        ( The folder/stream named "Content A" that is contained in the root
+        folder of the located at file:///e:/my.xsw )
+        </li>
+        </ul>
+
+        </p>
+     */
+    interface com::sun::star::ucb::XContentProvider;
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

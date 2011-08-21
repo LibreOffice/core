@@ -1,0 +1,101 @@
+
+#define ABC \
+		ggg
+
+ABC
+
+/* Standards --------------------------------------------------------------- */
+
+#define NOTHING
+NOTHING
+
+#define SYMBOL symbol
+#undef SYMBOL
+#define SYMBOL _symbol_
+
+< SYMBOL >                      // < _symbol_ >
+xSYMBOLx                        // xSYMBOLx
++SYMBOL-                        // +_symbol_-
+>SYMBOL<                        // >_symbol_<
+<SYMBOL>                        // <_symbol_>
+
+#define FALSE 0
+#define TRUE  !FALSE
+a = x > 0 ? TRUE : FALSE        // a = x > 0 ? !0 : 0
+
+#define A x
+#define B y
+#define MAC(a, b) \
+	T() { a(); return b; }      // T() { x(); return y; }
+MAC(A,B);
+
+#ifdef MAC
+MAC(X,Y)
+#endif // MAC
+
+/* Recursions -------------------------------------------------------------- */
+
+#define y x
+#define x y
+x                               // x
+
+#define Test(a) a
+#define b Test(b)
+a = b;                          // a = b;
+
+#define func abc(func)
+a = func                        // a = abc(func)
+
+#define func1 func(abc)
+a = func1                       // a = abc(func)(abc)
+
+#define args(func, args) func args
+args(t1, (args(t2, (x, y))))    // t1 (t2 (x, y))
+
+#define ARGS(a) a
+#define __ ARGS
+int foo __((int x));            // int foo (int x);
+
+/* Concatinations ---------------------------------------------------------- */
+
+#define tail _Test
+// Txt_##tail                      // Txt_##_Test
+
+#define z(e,f) e##_##f
+z ( abc, xyz )                  // abc_xyz
+
+
+#define CAT( var ) fix##.var
+CAT( a )                        // fix.a
+
+#define CAT3( class, ref ) class##ref::class##ref
+CAT3( a, b )                    // ab::ab
+
+#define CAT2( var ) fix##var::fix##var
+CAT2( a )                       // fixa::fixa
+
+/* Extrems ----------------------------------------------------------------- */
+
+#define MAKE_X( name )  name##_Test
+#define MAKE_Y( name )  MAKE_X( name##_Sym )
+MAKE_Y( Txt );                  // Txt_Sym_Test;
+
+
+/* Extensions -------------------------------------------------------------- */
+
+/*
+#ident "(c)# Test.txt"
+
+#if #machine(i386)
+#   error illegal machine
+#endif
+char machine[6];
+*/
+
+/* Last bug ----------------------------------------------------------------- */
+#define Cfstrcpy		Cstrcpy
+#define Cstrcpy( s1, s2 )	strcpy( s1, s2 )
+
+Cfstrcpy(Par1,Par2 )   		// blub( Par1, Par2 )
+
+/* ---------------------------------------------------------------------- */

@@ -1,0 +1,138 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_frame_PopupMenuController_idl__
+#define __com_sun_star_frame_PopupMenuController_idl__
+
+#include <com/sun/star/frame/XPopupMenuController.idl>
+#include <com/sun/star/lang/XInitialization.idl>
+#include <com/sun/star/frame/XStatusListener.idl>
+#include <com/sun/star/frame/XDispatchProvider.idl>
+#include <com/sun/star/lang/XComponent.idl>
+
+//=============================================================================
+
+module com { module sun { module star { module frame {
+
+//=============================================================================
+
+/** provides access to a pop-up menu controller.
+
+    <p>
+    A pop-up menu controller is used to make special functions available to
+    users, which depend on runtime or context specific conditions.<br/>
+    A typical example for a pop-up menu controller can be a recent file list
+    implementation which provides a list of latest files that a user has
+    worked on. This list gets changes consistently during a work session.
+    </p>
+
+    @since OOo 2.0
+*/
+
+service PopupMenuController
+{
+    //-------------------------------------------------------------------------
+    /** supports functions to initialize and update a pop-up menu controller
+        implementation.
+
+        <p>
+        A pop-up menu controller implementation gets initialized with a
+        <type scope="com::sun::star::awt">XPopupMenu</type> object. This assures
+        that a pop-up menu controller can be implemented with any UNO based
+        language.
+        </p>
+    */
+    interface com::sun::star::frame::XPopupMenuController;
+
+    //-------------------------------------------------------------------------
+    /** provides functions to initialize a pop-up menu controller with
+        specific data which are needed.
+
+        <p>
+        This interface should not directly used. A factory service is responsible to
+        initialize every controller correctly.<br/>
+
+        A pop-up menu controller needs at least two additional arguments
+        provided as <type scope="com::sun::star::beans">PropertyValue</type>:
+        <ul>
+            <li><b>Frame</b><br>specifies the <type scope="com::sun::star::frame">XFrame</type>
+                   instance to which the pop-up menu controller belongs to.</li>
+            <li><b>CommandURL</b><br>specifies which pop-up menu controller should be created.</li>
+        </ul>
+        </p>
+
+        @see PopupMenuControllerFactory
+    */
+    interface com::sun::star::lang::XInitialization;
+
+    //-------------------------------------------------------------------------
+    /** used to brief the pop-up menu controller with new status information.
+
+        <p>
+        A pop-up menu controller makes special functions available to users which
+        normally depend on the state of other data. This interface is used to
+        send this data to a controller implementation.
+        </p>
+    */
+    interface com::sun::star::frame::XStatusListener;
+
+    //-------------------------------------------------------------------------
+    /** used to query for commands supported by the pop-up menu controller to
+        execute them directly.
+
+        <p>
+        A pop-up menu controller provides special functions which should be
+        available by the normal dispatch API. This optional interface enables
+        pop-up menu controller to be normal dispatch providers.<br/>
+        <b>Attention:</b><br/>
+        Po-pup menu controller functions must be specified using the following
+        the dispatch URL scheme: "vnd.sun.star.popup:" opaque_part [ "?" query ].
+        </p>
+
+        @since OOo 2.2
+    */
+    [optional] interface com::sun::star::frame::XDispatchProvider;
+
+    //-------------------------------------------------------------------------
+    /** used to dispose pop-up menu controller by the owner instance.
+
+        <p>
+        A pop-up menu controller resides in a menu which has a limited
+        life-time. For correct life-time handling a pop-up menu
+        controller should support this interface.
+        </p>
+
+        @since OOo 2.2
+    */
+    [optional] interface com::sun::star::lang::XComponent;
+};
+
+}; }; }; };
+
+//=============================================================================
+
+#endif

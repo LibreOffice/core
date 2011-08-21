@@ -1,0 +1,9 @@
+module ooo { module vba { module excel {
+    constants XlVAlign {
+        const long xlVAlignBottom = -4107;
+        const long xlVAlignCenter = -4108;
+        const long xlVAlignDistributed = -4117;
+        const long xlVAlignJustify = -4130;
+        const long xlVAlignTop = -4160;
+    };
+}; }; };

@@ -1,0 +1,3 @@
+uh	ucbhelper   :   offapi sal cppu cppuhelper salhelper NULL
+uh	ucbhelper\prj               nmake   -   all uh_prj NULL
+

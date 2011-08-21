@@ -1,0 +1,203 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_embed_XStorageRawAccess_idl__
+#define __com_sun_star_embed_XStorageRawAccess_idl__
+
+#include <com/sun/star/uno/XInterface.idl>
+#include <com/sun/star/io/XStream.idl>
+#include <com/sun/star/io/XInputStream.idl>
+#include <com/sun/star/io/IOException.idl>
+#include <com/sun/star/lang/IllegalArgumentException.idl>
+#include <com/sun/star/embed/StorageWrappedTargetException.idl>
+#include <com/sun/star/embed/InvalidStorageException.idl>
+#include <com/sun/star/container/NoSuchElementException.idl>
+#include <com/sun/star/container/ElementExistException.idl>
+#include <com/sun/star/packages/NoEncryptionException.idl>
+#include <com/sun/star/packages/NoRawFormatException.idl>
+
+
+//============================================================================
+
+ module com {  module sun {  module star {  module embed {
+
+//============================================================================
+/** This interface represents main storage functionality.
+ */
+published interface XStorageRawAccess
+{
+    // -----------------------------------------------------------------------
+    /** allows to get a plain raw stream representing a package stream.
+
+        <p>
+        This method returns a stream from the package as it is stored there,
+        without any decompression/description and etc. This method can be
+        helpful to check file consistency, for example by signing.
+        </p>
+
+        @returns
+            the raw representation of encrypted stream with all the data
+            required to copy the stream without information loss
+
+        @param sStreamName
+            the name of the substream that should be open
+
+        @throws ::com::sun::star::embed::InvalidStorageException
+            this storage is in invalid state for any reason
+
+        @throws ::com::sun::star::lang::IllegalArgumentException
+            one of provided arguments is illegal
+
+        @throws ::com::sun::star::container::NoSuchElementException
+            there is no element with specified name
+
+        @throws ::com::sun::star::io::IOException
+            in case of io errors during stream opening
+
+        @throws ::com::sun::star::embed::StorageWrappedTargetException
+            wraps other exceptions
+     */
+    ::com::sun::star::io::XInputStream getPlainRawStreamElement(
+            [in] string sStreamName )
+        raises( ::com::sun::star::embed::InvalidStorageException,
+                ::com::sun::star::lang::IllegalArgumentException,
+                ::com::sun::star::container::NoSuchElementException,
+                ::com::sun::star::io::IOException,
+                ::com::sun::star::embed::StorageWrappedTargetException );
+
+    // -----------------------------------------------------------------------
+    /** allows to get a raw stream representing encrypted stream with header.
+
+        <p>
+        This method allows to transport encrypted streams without decryption.
+        Mainly this method is introduced to allow to copy one encrypted
+        storage stream to another without decryption. It is not recommended to
+        use this method outside of storage implementation since different
+        storages implementation could have different encryption format. If the
+        method is used outside of storage implementation the user code is
+        responsible to get sure that the raw format of source and target
+        storages is the same.
+        </p>
+
+        <p>
+        The difference of this method from the previous one is that it handles
+        only encrypted streams. The contents of returned by these methods
+        streams can differ for the same entry, since this method can add
+        additional data into the stream to allow successful insertion.
+        </p>
+
+        @param sStreamName
+            the name of the substream that should be open
+
+        @param xInputStream
+            a raw stream representing encrypted stream
+
+        @throws ::com::sun::star::embed::InvalidStorageException
+            this storage is in invalid state for any reason
+
+        @throws ::com::sun::star::lang::IllegalArgumentException
+            one of provided arguments is illegal
+
+        @throws ::com::sun::star::packages::NoEncryptionException
+            the stream is not an encrypted one
+
+        @throws ::com::sun::star::container::NoSuchElementException
+            there is no element with specified name
+
+        @throws ::com::sun::star::io::IOException
+            in case of io errors during stream opening
+
+        @throws ::com::sun::star::embed::StorageWrappedTargetException
+            wraps other exceptions
+     */
+    ::com::sun::star::io::XInputStream getRawEncrStreamElement(
+            [in] string sStreamName )
+        raises( ::com::sun::star::embed::InvalidStorageException,
+                ::com::sun::star::lang::IllegalArgumentException,
+                ::com::sun::star::packages::NoEncryptionException,
+                ::com::sun::star::container::NoSuchElementException,
+                ::com::sun::star::io::IOException,
+                ::com::sun::star::embed::StorageWrappedTargetException );
+
+    // -----------------------------------------------------------------------
+    /** allows to insert a raw stream representing encrypted stream with
+        header.
+
+        <p>
+        This method allows to insert a stream retrieved by
+        <method>XStorageRawAccess::getRawEncrStreamElement()</method> into a
+        storage.
+        </p>
+
+        <p>
+        This method allows to transport encrypted streams without decryption.
+        Mainly this method is introduced to allow to copy one encrypted
+        storage stream to another without decryption. It is not recommended to
+        use this method outside of storage implementation since different
+        storages implementation could have different encryption format.
+        </p>
+
+        @param sStreamName
+            the name of the substream that should be open
+
+        @param xInputStream
+            a raw stream representing encrypted stream
+
+        @throws ::com::sun::star::embed::InvalidStorageException
+            this storage is in invalid state for any reason
+
+        @throws ::com::sun::star::lang::IllegalArgumentException
+            one of provided arguments is illegal
+
+        @throws ::com::sun::star::packages::NoRawFormatException
+            the stream is not one of raw package stream format
+
+        @throws ::com::sun::star::container::ElementExistException
+            an element with specified name already exists
+
+        @throws ::com::sun::star::io::IOException
+            in case of io errors during stream opening
+
+        @throws ::com::sun::star::embed::StorageWrappedTargetException
+            wraps other exceptions
+     */
+    void insertRawEncrStreamElement(
+            [in] string sStreamName,
+            [in] ::com::sun::star::io::XInputStream xInStream )
+        raises( ::com::sun::star::embed::InvalidStorageException,
+                ::com::sun::star::lang::IllegalArgumentException,
+                ::com::sun::star::packages::NoRawFormatException,
+                ::com::sun::star::container::ElementExistException,
+                ::com::sun::star::io::IOException,
+                ::com::sun::star::embed::StorageWrappedTargetException );
+};
+
+//============================================================================
+
+}; }; }; };
+
+#endif
+

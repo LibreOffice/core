@@ -1,0 +1,102 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_text_XTextRange_idl__
+#define __com_sun_star_text_XTextRange_idl__
+
+#include <com/sun/star/uno/XInterface.idl>
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module text {
+
+ published interface XText;
+
+//=============================================================================
+
+// DocMerge from xml: interface com::sun::star::text::XTextRange
+/** describes the object's position in a text.
+
+
+
+    <p>It represents a text range. The beginning and end of the range may
+    be identical.
+    </p>
+ */
+published interface XTextRange: com::sun::star::uno::XInterface
+{
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: method com::sun::star::text::XTextRange::getText
+    /** @returns
+                the text interface in which the text position is contained.
+     */
+    XText getText();
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: method com::sun::star::text::XTextRange::getStart
+    /** @returns
+                a text range which contains only the start of this text range.
+     */
+    XTextRange getStart();
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: method com::sun::star::text::XTextRange::getEnd
+    /** @returns
+                a text range which contains only the end of this text range.
+     */
+    XTextRange getEnd();
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: method com::sun::star::text::XTextRange::getString
+    /** @returns
+                 the string that is included in this text range.
+     */
+    string getString();
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::text::XTextRange::setString
+    /** the whole string of characters of this piece of text is replaced.
+
+
+
+        <p>All styles are removed when applying this method.
+
+        </p>
+     */
+    [oneway] void setString( [in] string aString );
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

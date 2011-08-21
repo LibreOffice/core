@@ -1,0 +1,154 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#include "sc.hrc" // -> #include <sfx.hrc>
+#include <svx/globlmn.hrc>
+#include "tbinsert.hrc" // Sub-IDs
+
+
+ // ToolBoxen: ----------------------------------------------------------------
+
+/*
+ *  ToolBox mit Eingabezeile: HelpStrings fuer Knoepfe und Fenster:
+ */
+
+#define ITEM_TOOLBAR_SORT_ASCENDING \
+    Identifier = SID_SORT_ASCENDING ; \
+    HelpId = SID_SORT_ASCENDING ;
+
+#define ITEM_TOOLBAR_SORT_DESCENDING \
+    Identifier = SID_SORT_DESCENDING ; \
+    HelpId = SID_SORT_DESCENDING ;
+
+#define ITEM_TOOLBAR_INSERT_FRAME \
+    Identifier = SID_INSERT_FRAME ; \
+    HelpId = SID_INSERT_FRAME ;
+
+
+#define ITEM_TOOLBAR_INSERT_GRAPHIC \
+    Identifier = SID_INSERT_GRAPHIC ; \
+    HelpId = SID_INSERT_GRAPHIC ;
+
+#define ITEM_TOOLBAR_AUTO_FILTER \
+    Identifier = SID_AUTO_FILTER ; \
+    HelpId = SID_AUTO_FILTER ;
+
+
+#define ITEM_TOOLBAR_OUTLINE_MAKE \
+    Identifier = SID_OUTLINE_MAKE ; \
+    HelpId = SID_OUTLINE_MAKE ;
+
+
+#define ITEM_TOOLBAR_OUTLINE_REMOVE \
+    Identifier = SID_OUTLINE_REMOVE ; \
+    HelpId = SID_OUTLINE_REMOVE ;
+
+#define ITEM_TOOLBAR_DRAW_CHART \
+    Identifier = SID_INSERT_DIAGRAM ; \
+    HelpId = SID_DRAW_CHART ;
+
+#define ITEM_TOOLBAR_SPELLING \
+    Identifier = SID_SPELL_DIALOG ; \
+    HelpId = SID_SPELL_DIALOG ;
+
+#define ITEM_TOOLBAR_THESAURUS \
+    Identifier = SID_THESAURUS ; \
+    HelpId = SID_THESAURUS ;
+
+#define ITEM_TOOLBAR_FILTER \
+    Identifier = SID_FILTER ; \
+    HelpId = SID_FILTER ;
+
+#define ITEM_TOOLBAR_SPECIAL_FILTER \
+    Identifier = SID_SPECIAL_FILTER;\
+    HelpId = SID_SPECIAL_FILTER ;
+
+String SCSTR_QHELP_POSWND
+{
+    Text [ en-US ] = "Name Box" ;
+};
+
+String SCSTR_QHELP_INPUTWND
+{
+    Text [ en-US ] = "Input line" ;
+};
+
+String SCSTR_QHELP_BTNCALC
+{
+    Text [ en-US ] = "Function Wizard" ;
+};
+
+String SCSTR_QHELP_BTNOK
+{
+    Text [ en-US ] = "Accept" ;
+};
+
+String SCSTR_QHELP_BTNCANCEL
+{
+    Text [ en-US ] = "Cancel" ;
+};
+
+String SCSTR_QHELP_BTNSUM
+{
+    Text [ en-US ] = "Sum" ;
+};
+
+String SCSTR_QHELP_BTNEQUAL
+{
+    Text [ en-US ] = "Function" ;
+};
+
+// Don't use this image list for normal toolbar images. We have now our commandimagelist
+// folder in default_images. This list is now only used for special toolboxes that are
+// used in floating windows.
+
+#define DEFAULT_IDLIST \
+    IdList = {                                          \
+        /* Eingabezeile */                              \
+        SID_INPUT_FUNCTION;             /* 26047 */     \
+        SID_INPUT_SUM;                  /* 26048 */     \
+        SID_INPUT_EQUAL;                /* 26049 */     \
+        SID_INPUT_CANCEL;               /* 26050 */     \
+        SID_INPUT_OK;                   /* 26051 */     \
+    };                                                  \
+    IdCount = {                                         \
+        5;                                              \
+    };
+
+ImageList RID_DEFAULTIMAGELIST_SC
+{
+    Prefix = "sc";
+    MaskColor = STD_MASKCOLOR ;
+    DEFAULT_IDLIST
+};
+
+ImageList RID_DEFAULTIMAGELIST_LC
+{
+    Prefix = "lc";
+    MaskColor = STD_MASKCOLOR ;
+    DEFAULT_IDLIST
+};

@@ -1,0 +1,98 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_script_XPersistentLibraryContainer_idl__
+#define __com_sun_star_script_XPersistentLibraryContainer_idl__
+
+#include <com/sun/star/util/XModifiable.idl>
+#include <com/sun/star/script/XLibraryContainer2.idl>
+#include <com/sun/star/lang/WrappedTargetException.idl>
+
+//=============================================================================
+
+module com { module sun { module star { module script {
+
+//=============================================================================
+
+/** describes a container of script libraries which is persistent.
+
+    <p>The type of persistence of the container elements is not defined here,
+    but in derived interfaces or services using
+    <code>XPersistentLibraryContainer</code>.</p>
+
+    <p>The actual libraries are stored in some object - a sub folder, or a sub storage,
+    for example - below the root location.</p>
+
+    @since OOo 2.3
+ */
+interface XPersistentLibraryContainer
+{
+    interface ::com::sun::star::util::XModifiable;
+    interface XLibraryContainer2;
+
+    /** denotes the root location associated with the container.
+
+        <p>The type of this location - it might be a folder in a file system,
+        a storage, or anything else - is not specified here, but in derived interfaces
+        or services implementing <code>XPersistentLibraryContainer</code>.</p>
+
+        <p>All operations of the library container take place in a location below
+        the root location, the so-called container location, whose
+        name is exposed as <member>ContainerLocationName</member>.</p>
+
+        @see ContainerLocationName
+    */
+    [attribute, readonly] any   RootLocation;
+
+    /** denotes the name of the sub location where the container elements are
+        actually stored.
+
+        @see RootLocation
+    */
+    [attribute, readonly] string ContainerLocationName;
+
+    /** stores the libraries to the current location.
+
+        @throws ::com::sun::star::lang::WrappedTargetException
+            if an error occurs during storing.
+
+        @see RootLocation
+        @see ContainerLocationName
+    */
+    void    storeLibraries()
+        raises ( ::com::sun::star::lang::WrappedTargetException );
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+//=============================================================================
+
+#endif
+

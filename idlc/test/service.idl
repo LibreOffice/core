@@ -1,0 +1,44 @@
+#include <interface.idl>
+
+module idlc
+{
+module test
+{
+
+exception bla
+{
+};
+
+service IdlTest
+{
+//  [property] bla p0;
+    [property] short p1;
+    [optional, property] unsigned short p2;
+
+    [maybevoid, property] long p3;
+    [bound, property] unsigned long p4;
+
+    [constrained, property] hyper p5;
+    [transient, property] unsigned hyper p6;
+
+    [maybeambiguous, property] string p7;
+    [maybedefault, property] type p8;
+    [removable, property] any p9;
+
+    [readonly, optional, removable, property] ::idlc::test::BaseStruct p10;
+
+    interface XTestBaseTypes;
+    [optional] interface ::idlc::test::XTestComplexTypes;
+};
+
+service BetterIdlTest
+{
+    service IdlTest;
+
+    interface XTestBaseTypes;
+    [optional] interface ::idlc::test::XTestComplexTypes;
+};
+
+};
+};
+

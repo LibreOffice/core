@@ -1,0 +1,40 @@
+#!/bin/sh
+
+if [ ! -d /usr/local ]; then mkdir /usr/local ; fi
+if [ ! -d /usr/local/bin ]; then mkdir /usr/local/bin ; fi
+if [ ! -d /usr/local/lib ]; then mkdir /usr/local/lib ; fi
+if [ ! -d /usr/local/lib/dmake-4.1 ]; then mkdir /usr/local/lib/dmake-4.1 ; fi
+
+
+if [ -d /usr/local/lib/dmake-4.1/startup ]
+then
+   if [ -f /usr/local/lib/dmake-4.1/startup/local.mk ]; then
+      cp /usr/local/lib/dmake-4.1/startup/local.mk  /tmp/local$$
+   elif [ -d /usr/local/lib/dmake ]; then
+      if [ -f /usr/local/lib/dmake/startup/local.mk ]; then
+	 cp /usr/local/lib/dmake/startup/local.mk  /tmp/local$$
+      fi
+   fi
+   /bin/rm -rf /usr/local/lib/dmake-4.1/startup /usr/local/lib/dmake
+fi
+
+mkdir /usr/local/lib/dmake-4.1/startup
+
+echo "Installing Dmake into /usr/local/bin"
+
+cp dmake-4.1g/dmake /usr/local/bin/dmake-4.1;
+/bin/rm -f /usr/local/bin/dmake
+(cd /usr/local/bin; ln -s dmake-4.1 dmake; chmod a+x,og-w dmake-4.1)
+cp -r dmake-4.1g/startup /usr/local/lib/dmake-4.1/startup
+(cd /usr/local/lib; ln -s dmake-4.1 dmake)
+find /usr/local/lib/dmake-4.1 -type d -exec chmod a+x {} \;
+find /usr/local/lib/dmake-4.1 -type f -exec chmod og-w,a+r {} \;
+
+if [ -f /tmp/local$$ ]
+then
+   cp /tmp/local$$ /usr/local/lib/dmake/startup/local.mk
+fi
+
+/bin/rm -rf dmake-4.1g
+
+echo "Dmake setup is complete"

@@ -1,0 +1,43 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * 
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#include "macros.inc"
+
+#ifndef DISABLE_PYUNO
+
+Module gid_Module_Optional_Pyuno
+    PackageInfo = "packinfo_office.txt";
+    MOD_NAME_DESC ( MODULE_OPTIONAL_PYTHON );
+    ParentID = gid_Module_Optional;
+    Sortkey = "750";
+    Files = (gid_File_Pyuno,gid_File_Lib_Pyuno,gid_File_Lib_Pythonloader,gid_File_Py_Unohelper,gid_File_Py_Officehelper,gid_File_Py_Uno,gid_File_Py_Pythonloader,gid_File_Py_Python_Core,gid_File_Py_Python_Bin,gid_File_Lib_Python_So,gid_Shortcut_Lib_Python_So,gid_File_Lib_Python_So_Brand,gid_File_Scripts_Python,gid_File_Share_Registry_Pyuno_Xcd);
+    Minimal = NO;
+    Default = YES;
+    Styles = ( );
+End
+
+#endif

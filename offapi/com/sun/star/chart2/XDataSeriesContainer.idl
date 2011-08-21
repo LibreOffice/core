@@ -1,0 +1,74 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef com_sun_star_chart2_XDataSeriesContainer_idl
+#define com_sun_star_chart2_XDataSeriesContainer_idl
+
+#include <com/sun/star/uno/XInterface.idl>
+#include <com/sun/star/chart2/XDataSeries.idl>
+#include <com/sun/star/lang/IllegalArgumentException.idl>
+#include <com/sun/star/container/NoSuchElementException.idl>
+
+module com
+{
+module sun
+{
+module star
+{
+module chart2
+{
+
+interface XDataSeriesContainer : com::sun::star::uno::XInterface
+{
+    /** add a data series to the data series container
+
+        @throws IllegalArgumentException
+            If the given data series is already contained in the data series container.
+     */
+    void addDataSeries( [in] XDataSeries aDataSeries )
+        raises( com::sun::star::lang::IllegalArgumentException );
+
+    /** removes one data series from the data series container.
+     */
+    void removeDataSeries( [in] XDataSeries aDataSeries )
+        raises( com::sun::star::container::NoSuchElementException );
+
+    /** retrieve all data series
+     */
+    sequence< XDataSeries > getDataSeries();
+
+    /** set all data series
+     */
+    void setDataSeries( [in] sequence< XDataSeries > aDataSeries )
+        raises( com::sun::star::lang::IllegalArgumentException );
+};
+
+} ; // chart2
+} ; // com
+} ; // sun
+} ; // star
+
+#endif

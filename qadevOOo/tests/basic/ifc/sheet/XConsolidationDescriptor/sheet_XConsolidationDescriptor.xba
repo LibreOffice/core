@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="sheet_XConsolidationDescriptor" script:language="StarBasic">
+
+
+'*************************************************************************
+'
+' DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+' 
+' Copyright 2000, 2010 Oracle and/or its affiliates.
+'
+' OpenOffice.org - a multi-platform office productivity suite
+'
+' This file is part of OpenOffice.org.
+'
+' OpenOffice.org is free software: you can redistribute it and/or modify
+' it under the terms of the GNU Lesser General Public License version 3
+' only, as published by the Free Software Foundation.
+'
+' OpenOffice.org is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU Lesser General Public License version 3 for more details
+' (a copy is included in the LICENSE file that accompanied this code).
+'
+' You should have received a copy of the GNU Lesser General Public License
+' version 3 along with OpenOffice.org.  If not, see
+' <http://www.openoffice.org/license.html>
+' for a copy of the LGPLv3 License.
+'
+'*************************************************************************
+'*************************************************************************
+
+
+
+' Be sure that all variables are dimensioned:
+option explicit
+
+
+
+Sub RunTest()
+
+'*************************************************************************
+' INTERFACE: 
+' com.sun.star.sheet.XConsolidationDescriptor
+'*************************************************************************
+On Error Goto ErrHndl
+    Dim bOK As Boolean
+    Dim mStartPos, objpos As Variant
+    Dim bUseCols, bUseRows, bUsed, bLinks As Boolean
+    Dim src(0) As New com.sun.star.table.CellRangeAddress
+    Dim outpos As New com.sun.star.table.CellAddress
+    Dim objSrc() As Variant
+
+    Test.StartMethod("getFunction()")
+    bOK = true
+    bOK = bOK AND NOT IsNULL(oObj.Function)
+    Test.MethodTested("getFunction()", bOK)
+
+    Test.StartMethod("getSources()")
+    bOK = true
+    bOK = bOK AND NOT isNULL(oObj.getSources())
+    Test.MethodTested("getSources()", bOK)
+
+    Test.StartMethod("getStartOutputPosition()")
+    bOK = true
+    mStartPos = oObj.getStartOutputPosition()
+    bOK = mStartPos.Row &gt;= 0 ' Checking that returned type is correct
+                             ' (if Object has such field)
+    Test.MethodTested("getStartOutputPosition()", bOK)
+
+    Test.StartMethod("getUseRowHeaders()")
+    Test.StartMethod("setUseRowHeaders()")
+    bOK = true
+    bUsed = oObj.getUseRowHeaders
+    oObj.setUseRowHeaders(NOT bUsed)
+    bOK = bOK AND (oObj.getUseRowHeaders &lt;&gt; bUsed)
+    Test.MethodTested("getUseRowHeaders()", bOK)
+    Test.MethodTested("setUseRowHeaders()", bOK)
+
+    Test.StartMethod("setFunction()")
+    bOK = true
+    oObj.setFunction(com.sun.star.sheet.GeneralFunction.MAX)
+    bOK = bOK AND (oObj.getFunction = com.sun.star.sheet.GeneralFunction.MAX)
+    Test.MethodTested("setFunction()", bOK)
+
+    Test.StartMethod("getInsertLinks()")
+    Test.StartMethod("setInsertLinks()")
+    bOK = true
+    bLinks = oObj.getInsertLinks
+    oObj.setInsertLinks(NOT bLinks)
+    bOK = bOK AND (oObj.getInsertLinks &lt;&gt; bLinks)
+    Test.MethodTested("getInsertLinks()", bOK)
+    Test.MethodTested("setInsertLinks()", bOK)
+
+    Test.StartMethod("setSources()")
+    bOK = true
+    src(0).Sheet = 0
+    src(0).StartRow = 5
+    src(0).StartColumn = 5
+    src(0).EndRow = 10
+    src(0).EndColumn = 10
+    oObj.setSources(src())
+    objSrc() = oObj.getSources
+    bOK = bOK AND ((objSrc(0).Sheet  = src(0).Sheet) AND _
+                   (objSrc(0).StartRow = src(0).StartRow) AND _
+                   (objSrc(0).EndRow = src(0).EndRow) AND _
+                   (objSrc(0).StartColumn = src(0).StartColumn) AND _
+                   (objSrc(0).EndColumn = src(0).EndColumn))
+    Test.MethodTested("setSources()", bOK)
+
+    Test.StartMethod("setStartOutputPosition()")
+    bOK = true
+    outpos.Sheet = 0
+    outpos.Row = 2
+    outpos.Column = 2
+    oObj.setStartOutputPosition(outpos)
+    objpos = oObj.getStartOutputPosition
+    bOK = bOK AND ((objpos(0).Sheet  = outpos(0).Sheet) AND _
+                   (objpos(0).Row = outpos(0).Row) AND _
+                   (objpos(0).Column = outpos(0).Column))
+    Test.MethodTested("setStartOutputPosition()", bOK)
+
+    Test.StartMethod("getUseColumnHeaders()")
+    bOK = true
+    bUseCols = oObj.getUseColumnHeaders()
+    oObj.setUseColumnHeaders(NOT bUseCols)
+    bOK = bOK AND (oObj.getUseColumnHeaders() &lt;&gt; bUseCols)
+    Test.MethodTested("getUseColumnHeaders()", bOK)
+
+    Test.StartMethod("setUseColumnHeaders()")
+    bOK = true
+    bUseRows = oObj.getUseRowHeaders
+    oObj.setUseRowHeaders(NOT bUseRows)
+    bOK = bOK AND (oObj.getUseRowHeaders &lt;&gt; bUseRows)
+    Test.MethodTested("setUseColumnHeaders()", bOK)
+
+Exit Sub
+ErrHndl:
+    Test.Exception()
+    bOK = false
+    resume next
+End Sub
+</script:module>

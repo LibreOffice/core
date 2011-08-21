@@ -1,0 +1,6 @@
+module ooo { module vba { module excel {
+    constants XlErrorBarDirection {
+        const long xlX = -4168;
+        const long xlY = 1;
+    };
+}; }; };

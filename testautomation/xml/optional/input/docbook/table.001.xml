@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
+                  "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd">
+<article>
+<articleinfo>
+<title>Unit Test: table.001</title>
+<releaseinfo role="CVS">$Id: table.001.xml,v 1.2 2008-07-11 08:00:42 rt Exp $</releaseinfo>
+<author><firstname>Norman</firstname><surname>Walsh</surname>
+        <affiliation><address><email>ndw@nwalsh.com</email></address></affiliation>
+</author>
+</articleinfo>
+
+<table frame="all">
+<title>TFoot Test</title>
+<tgroup cols="2">
+<tfoot>
+<row>
+<entry>Foot Left</entry>
+<entry>Foot Right</entry>
+</row>
+</tfoot>
+<tbody>
+<row>
+<entry>Body Left</entry>
+<entry>Body Right</entry>
+</row>
+</tbody>
+</tgroup>
+</table>
+
+</article>

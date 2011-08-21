@@ -1,0 +1,95 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_sdbcx_Index_idl__
+#define __com_sun_star_sdbcx_Index_idl__
+
+#include <com/sun/star/beans/XPropertySet.idl>
+
+ module com {  module sun {  module star {  module sdbcx {
+
+ published interface XColumnsSupplier;
+ published interface XDataDescriptorFactory;
+
+
+/** is used to specify the index for a database table. It refers to one or
+    more columns of a table.
+    <p>
+    <b>
+    Note:
+    </b>
+    All properties and columns of an index could by modified before they are appended
+    to a table. In that case the service is a data descriptor.
+    </p>
+ */
+published service Index
+{
+
+    /** optional, could be used to copy an index.
+     */
+    [optional] interface XDataDescriptorFactory;
+
+
+    /** access to the contained index columns.
+     */
+    interface XColumnsSupplier;
+
+    // gives access to the properties.
+    interface com::sun::star::beans::XPropertySet;
+
+
+    /** is the name of the index.
+     */
+    [readonly, property] string Name;
+
+
+    /** is the name of the index catalog, may be empty.
+     */
+    [readonly, property] string Catalog;
+
+
+    /** indicates that the index allow only unique values.
+     */
+    [readonly, property] boolean IsUnique;
+
+
+    /** indicates that the index is used for the primary key.
+     */
+    [readonly, property] boolean IsPrimaryKeyIndex;
+
+
+    /** indicates that the index is clustered.
+     */
+    [readonly, property] boolean IsClustered;
+};
+
+//=============================================================================
+
+}; }; }; };
+
+/*===========================================================================
+===========================================================================*/
+#endif

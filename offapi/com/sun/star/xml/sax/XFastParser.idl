@@ -1,0 +1,177 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_xml_sax_XFastParser_idl__
+#define __com_sun_star_xml_sax_XFastParser_idl__
+
+#include <com/sun/star/uno/XInterface.idl>
+
+#include <com/sun/star/xml/sax/InputSource.idl>
+
+#include <com/sun/star/xml/sax/SAXException.idl>
+
+#include <com/sun/star/io/IOException.idl>
+
+#include <com/sun/star/xml/sax/XFastDocumentHandler.idl>
+#include <com/sun/star/xml/sax/XFastTokenHandler.idl>
+#include <com/sun/star/xml/sax/XErrorHandler.idl>
+
+#include <com/sun/star/xml/sax/XDTDHandler.idl>
+
+#include <com/sun/star/xml/sax/XEntityResolver.idl>
+
+#include <com/sun/star/lang/Locale.idl>
+
+#include <com/sun/star/lang/IllegalArgumentException.idl>
+
+//=============================================================================
+
+module com {  module sun {  module star {  module xml {  module sax {
+
+//=============================================================================
+
+/** specifies a SAX parser that uses integer values for known XML names
+    (elements, attributes and attribute values). The parser also handles
+    namespaces and allows to have individual contexts for each XML element.
+
+    <p>Before parsing is possible you have to set your
+    <type>XFastDocumentHandler</type> using <member>setFastDocumentHandler</member>.
+
+    <p>Parsing starts with calling <member>parseStream</member>. If the parser
+    finds a valid XML file with the given <type>InputSource</type>, it calls
+    <member>XFastDocumentHandler::startDocument</member> first.
+
+    <p>This parser generates either "fast" events that use integer token
+    values for namespaces, elements and attributes or "unknown" events for
+    elements that are unknown.
+
+    <p>A namespace is unknown if the namespace URL was not registered with
+    <member>registerNamespace</member>.
+
+    <p>An element is unknown if no <type>XFastTokenHandler</type> is set
+    or if the <type>XFastTokenHandler</type> does not return a valid
+    identifier for the elements local name. An element is also unknown if
+    the elements local name is known but it uses a namespace that is unknown.
+
+    <p>Setting a <type>XFastTokenHandler</type> with <member>setTokenHandler</member>
+    is optional, but without a <type>XFastTokenHandler</type> you will only
+    get unknown sax events. This can be useful if you are only interested
+    in the namespace handling and/or the context feature.
+
+    <p>For each element the parser sends a create child element event to the
+    elements parent context by calling
+    <member>XFastContextHandler::createFastChildContext</member> for known
+    elements or <member>XFastContextHandler::createUnknownChildContext</member>
+    for unknown elements.
+    <br>The parent context for the root element is the <type>XFastDocumentHandler</type>
+    itself.
+
+    <p>If the parent context returns an empty reference, no further events for
+    the element and all of its children are created.
+
+    <p>If a valid context is returned this context gets a start event by a call to
+    <member>XFastContextHandler::startFastElement</member> for known elements or
+    <member>XFastContextHandler::startUnknownElement</member> for unknown elements.
+
+    <p>After processing all its child elements the context gets an end event by a call to
+    <member>XFastContextHandler::endFastElement</member> for known elements or
+    <member>XFastContextHandler::endUnknownElement</member> for unknown elements.
+
+    <p>It is valid to return one instance of <type>XFastContextHandler</type> more
+    than once. It is even possible to only use the <type>XFastDocumentHandler</type>
+    by always returning a reference to itself for each create child context event.
+
+    <p>After the last element is processed the parser generates an end document
+    event at the <type>XFastDocumentHandler</type> by calling
+    <member>XFastDocumentHandler::endDocument</member>.
+
+    @see http://wiki.services.openoffice.org/wiki/FastParser
+*/
+interface XFastParser: com::sun::star::uno::XInterface
+{
+    //-------------------------------------------------------------------------
+    /** parses an XML document from a stream.
+
+        <p>Set the desired handlers before calling this method.</p>
+     */
+    void parseStream( [in] InputSource aInputSource )
+            raises( SAXException, com::sun::star::io::IOException );
+
+    //-------------------------------------------------------------------------
+
+    /** Application must register a document event handler to get
+        sax events for the parsed stream.
+     */
+    void setFastDocumentHandler( [in] XFastDocumentHandler Handler );
+
+    //-------------------------------------------------------------------------
+
+    /** must be registered to translate known XML names to integer tokens.
+     */
+    void setTokenHandler( [in] XFastTokenHandler Handler );
+
+    //-------------------------------------------------------------------------
+
+    /** registers a known namespace url with the given integer token.<br>
+        @param NamespaceToken
+            an integer token that must be greater than FastToken::NAMESPACE.
+     */
+    void registerNamespace( [in] string NamespaceURL, [in] long NamespaceToken )
+        raises( com::sun::star::lang::IllegalArgumentException );
+
+    //-------------------------------------------------------------------------
+    /** allows an application to register an error event handler.
+
+        <p>Note that the error handler can throw an exception when an error or
+        warning occurs.  Note that an exception is thrown by the parser when
+        an unrecoverable (fatal) error occurs.</p>
+     */
+    void setErrorHandler( [in] XErrorHandler Handler );
+
+    //-------------------------------------------------------------------------
+    /** allows an application to register a DTD-Handler.
+     */
+    void setEntityResolver( [in] XEntityResolver Resolver );
+
+    //-------------------------------------------------------------------------
+    /** sets a locale specified for localization of warnings and error messages.
+
+        <p>Set the language of the error messages. Useful when the parsing
+        errors will be presented to the user.</p>
+     */
+    void setLocale( [in] com::sun::star::lang::Locale locale );
+
+    /** Gets the namespace url string.
+      */
+    string getNamespaceURL( [in] string prefix )
+        raises( com::sun::star::lang::IllegalArgumentException );
+};
+
+//=============================================================================
+
+}; }; }; }; };
+
+#endif

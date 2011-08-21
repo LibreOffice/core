@@ -1,0 +1,152 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_table_TableBorder_idl__
+#define __com_sun_star_table_TableBorder_idl__
+
+#include <com/sun/star/table/BorderLine.idl>
+
+//=============================================================================
+
+module com {  module sun {  module star {  module table {
+
+//=============================================================================
+
+/** contains the style settings of the border lines of all cells in a cell
+    range.
+
+    <p>In a queried structure, the flags in
+    <member>TableBorder::Is...LineValid</member> indicate that not all
+    lines of the boxes have the same values.</p>
+
+    <p>In a structure which is used for setting, these flags determine
+    if the corresponding line should be set or if the old value should
+    be kept.</p>
+ */
+published struct TableBorder
+{
+    //-------------------------------------------------------------------------
+
+    /** determines the line style at the top edge.
+     */
+    com::sun::star::table::BorderLine TopLine;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies whether the value of <member>TableBorder::TopLine</member>
+        is used.
+     */
+    boolean IsTopLineValid;
+
+    //-------------------------------------------------------------------------
+
+    /** determines the line style at the bottom edge.
+     */
+    com::sun::star::table::BorderLine BottomLine;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies whether the value of
+        <member>TableBorder::BottomLine</member> is used.
+     */
+    boolean IsBottomLineValid;
+
+    //-------------------------------------------------------------------------
+
+    /** determines the line style at the left edge.
+     */
+    com::sun::star::table::BorderLine LeftLine;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies whether the value of <member>TableBorder::LeftLine</member>
+        is used.
+     */
+    boolean IsLeftLineValid;
+
+    //-------------------------------------------------------------------------
+
+    /** determines the line style at the right edge.
+     */
+    com::sun::star::table::BorderLine RightLine;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies whether the value of <member>TableBorder::RightLine</member>
+        is used.
+     */
+    boolean IsRightLineValid;
+
+    //-------------------------------------------------------------------------
+
+    /** determines the line style of horizontal lines for the inner part
+        of a cell range.
+     */
+    com::sun::star::table::BorderLine HorizontalLine;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies whether the value of
+        <member>TableBorder::HorizontalLine</member> is used.
+     */
+    boolean IsHorizontalLineValid;
+
+    //-------------------------------------------------------------------------
+
+    /** determines the line style of vertical lines for the inner part
+        of a cell range.
+     */
+    com::sun::star::table::BorderLine VerticalLine;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies whether the value of
+        <member>TableBorder::VerticalLine</member> is used.
+     */
+    boolean IsVerticalLineValid;
+
+    //-------------------------------------------------------------------------
+
+    /** contains the distance between the lines and other contents.
+     */
+    short Distance;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies whether the value of <member>TableBorder::Distance</member>
+        is used.
+     */
+    boolean IsDistanceValid;
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif
+

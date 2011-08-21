@@ -61,7 +61,6 @@ class ItemListenerProcAdapter( unohelper.Base, XItemListener ):
             except:
                 apply( self.oProcToCall, (oItemEvent,) + self.tParams )
 
-
 from com.sun.star.awt import XTextListener
 class TextListenerProcAdapter( unohelper.Base, XTextListener ):
     def __init__( self, oProcToCall, tParams=() ):

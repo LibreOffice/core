@@ -1,0 +1,620 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_embed_XStorage_idl__
+#define __com_sun_star_embed_XStorage_idl__
+
+#include <com/sun/star/uno/XInterface.idl>
+#include <com/sun/star/io/XStream.idl>
+#include <com/sun/star/io/XInputStream.idl>
+#include <com/sun/star/io/IOException.idl>
+#include <com/sun/star/lang/XComponent.idl>
+#include <com/sun/star/lang/IllegalArgumentException.idl>
+#include <com/sun/star/embed/StorageWrappedTargetException.idl>
+#include <com/sun/star/embed/InvalidStorageException.idl>
+#include <com/sun/star/packages/WrongPasswordException.idl>
+#include <com/sun/star/container/XNameAccess.idl>
+#include <com/sun/star/container/NoSuchElementException.idl>
+#include <com/sun/star/container/ElementExistException.idl>
+#include <com/sun/star/packages/NoEncryptionException.idl>
+#include <com/sun/star/packages/NoRawFormatException.idl>
+
+
+//============================================================================
+
+ module com {  module sun {  module star {  module embed {
+
+//============================================================================
+/** This interface represents main storage functionality.
+ */
+published interface XStorage
+{
+    // INTERFACES
+    //
+    // -----------------------------------------------------------------------
+    /** allows to get list of child elements and to check if an element with a
+        specified name exists in a storage.
+
+        <p>
+        It is also possible to use this interface to get read access to
+        a child element by
+        <method scope="com::sun::star::container">XNameAccess::getByName</method>
+        call. But the recommended way is to use <type>XStorage</type>
+        interface for this purpose.
+        </p>
+     */
+    interface ::com::sun::star::container::XNameAccess;
+
+    // -----------------------------------------------------------------------
+    /** allows to control and track lifetime of the storage.
+
+        <p>
+        In case a storage is disposed any call to it's methods should result
+        in <type scope="com::sun::star::lang">DisposedException</type>.
+        </p>
+     */
+    interface ::com::sun::star::lang::XComponent;
+
+
+    // METHODS
+    //
+    // -----------------------------------------------------------------------
+    /** allows to copy current storage to another one
+
+        <p>
+        The destination storage contents are overwritten.
+        After the successful copying the target storage is automatically
+        commited if it implements transacted access.
+        </p>
+
+        @param xDest
+            a destination storage this storage must be copied to.
+
+        @throws ::com::sun::star::embed::InvalidStorageException
+            this storage is in invalid state for any reason
+
+        @throws ::com::sun::star::lang::IllegalArgumentException
+            an illegal argument is provided
+
+        @throws ::com::sun::star::io::IOException
+            in case of io errors during copying
+
+        @throws ::com::sun::star::embed::StorageWrappedTargetException
+            wraps other exception acquired during copying
+     */
+    void copyToStorage( [in] XStorage xDest )
+        raises( ::com::sun::star::embed::InvalidStorageException,
+                ::com::sun::star::lang::IllegalArgumentException,
+                ::com::sun::star::io::IOException,
+                ::com::sun::star::embed::StorageWrappedTargetException );
+
+    // -----------------------------------------------------------------------
+    /** allows to get access to a child stream of the storage.
+
+        <p>
+        In case the stream is open in readonly mode the
+        <method scope="com::sun::star::io">XStream::getOutputStream</method>
+        method will return an empty reference.
+        </p>
+
+        @param sStreamName
+            the name of the substream that should be open
+
+        @param nOpenMode
+            a mode the stream should be open in,
+            can be a combination of <type>ElementModes</type> values
+
+        @throws ::com::sun::star::embed::InvalidStorageException
+            this storage is in invalid state for any reason
+
+        @throws ::com::sun::star::lang::IllegalArgumentException
+            one of provided arguments is illegal
+
+        @throws ::com::sun::star::packages::WrongPasswordException
+            the provided password is wrong
+
+        @throws ::com::sun::star::io::IOException
+            in case of io errors during stream opening
+
+        @throws ::com::sun::star::embed::StorageWrappedTargetException
+            wraps other exceptions
+     */
+    ::com::sun::star::io::XStream  openStreamElement(
+            [in] string sStreamName,
+            [in] long nOpenMode )
+        raises( ::com::sun::star::embed::InvalidStorageException,
+                ::com::sun::star::lang::IllegalArgumentException,
+                ::com::sun::star::packages::WrongPasswordException,
+                ::com::sun::star::io::IOException,
+                ::com::sun::star::embed::StorageWrappedTargetException );
+
+    // -----------------------------------------------------------------------
+    /** allows to get access to a child encrypted stream with password.
+
+        <p>
+        If storage does not allow any encryption this method will always throw
+        <type scope="com::sun::star::packages">NoEncryptionException</type>.
+        </p>
+
+        <p>
+        In case the stream is open in readonly mode the
+        <method scope="com::sun::star::io">XStream::getOutputStream</method>
+        method will return an empty reference.
+        </p>
+
+        @param sStreamName
+            the name of the substream that should be open
+
+        @param nOpenMode
+            a mode the stream should be open in,
+            can be a combination of <type>ElementModes</type> values
+
+        @param sPassword
+            this parameter allows to specify a reading password for the
+            stream, the password must be a correct one, otherwise an
+            exception will be thrown
+
+        @throws ::com::sun::star::embed::InvalidStorageException
+            this storage is in invalid state for any reason
+
+        @throws ::com::sun::star::lang::IllegalArgumentException
+            one of provided arguments is illegal
+
+        @throws ::com::sun::star::packages::NoEncryptionException
+            the stream is not encrypted
+
+        @throws ::com::sun::star::packages::WrongPasswordException
+            the provided password is wrong
+
+        @throws ::com::sun::star::io::IOException
+            in case of io errors during stream opening
+
+        @throws ::com::sun::star::embed::StorageWrappedTargetException
+            wraps other exceptions
+     */
+    ::com::sun::star::io::XStream  openEncryptedStreamElement(
+            [in] string sStreamName,
+            [in] long nOpenMode,
+            [in] string sPassword )
+        raises( ::com::sun::star::embed::InvalidStorageException,
+                ::com::sun::star::lang::IllegalArgumentException,
+                ::com::sun::star::packages::NoEncryptionException,
+                ::com::sun::star::packages::WrongPasswordException,
+                ::com::sun::star::io::IOException,
+                ::com::sun::star::embed::StorageWrappedTargetException );
+
+    // -----------------------------------------------------------------------
+    /** allows to get access to a child storage.
+
+        <p>
+        The opened substorage must support specified in "nOpenMode" access
+        modes. It can support "read" mode in addition. But any child element
+        can support one of those modes only in case this mode is supported by
+        parent storage.
+        </p>
+
+        @param sStorName
+            the name of the storage that should be open
+
+        @param nOpenMode
+            a mode the storage should be open in
+
+        @throws ::com::sun::star::embed::InvalidStorageException
+            this storage is in invalid state for any reason
+
+        @throws ::com::sun::star::lang::IllegalArgumentException
+            one of provided arguments is illegal
+
+        @throws ::com::sun::star::io::IOException
+            in case of io errors during stream opening
+
+        @throws ::com::sun::star::embed::StorageWrappedTargetException
+            wraps other exceptions
+
+     */
+    XStorage openStorageElement( [in] string sStorName,
+                                 [in] long nOpenMode )
+        raises( ::com::sun::star::embed::InvalidStorageException,
+                ::com::sun::star::lang::IllegalArgumentException,
+                ::com::sun::star::io::IOException,
+                ::com::sun::star::embed::StorageWrappedTargetException );
+
+    // -----------------------------------------------------------------------
+    /** allows to get readonly copy of a child stream of the storage.
+
+        <p>
+        The stream is open in readonly mode so the
+        <method scope="com::sun::star::io">XStream::getOutputStream</method>
+        method will return an empty reference.
+        </p>
+
+        @param sStreamName
+            the name of the substream that should be copied
+
+        @throws ::com::sun::star::embed::InvalidStorageException
+            this storage is in invalid state for any reason
+
+        @throws ::com::sun::star::lang::IllegalArgumentException
+            one of provided arguments is illegal
+
+        @throws ::com::sun::star::packages::WrongPasswordException
+            the provided password is wrong
+
+        @throws ::com::sun::star::io::IOException
+            in case of io errors during stream opening
+
+        @throws ::com::sun::star::embed::StorageWrappedTargetException
+            wraps other exceptions
+     */
+    ::com::sun::star::io::XStream cloneStreamElement( [in] string sStreamName )
+        raises( ::com::sun::star::embed::InvalidStorageException,
+                ::com::sun::star::lang::IllegalArgumentException,
+                ::com::sun::star::packages::WrongPasswordException,
+                ::com::sun::star::io::IOException,
+                ::com::sun::star::embed::StorageWrappedTargetException );
+
+    // -----------------------------------------------------------------------
+    /** allows to get readonly copy of a child encrypted stream with password.
+
+        <p>
+        If storage does not allow any encryption this method will always throw
+        <type scope="com::sun::star::packages">NoEncryptionException</type>.
+        </p>
+
+        <p>
+        The stream is open in readonly mode so the
+        <method scope="com::sun::star::io">XStream::getOutputStream</method>
+        method will return an empty reference.
+        </p>
+
+        <p>
+        This method allows to specify reading password for the child stream
+        explicitly.
+        </p>
+
+        @param sStreamName
+            the name of the substream that should be copied
+
+        @param sPassword
+            this parameter allows to specify a reading password for the
+            stream, the password must be a correct one, otherwise an
+            exception will be thrown
+
+        @throws ::com::sun::star::embed::InvalidStorageException
+            this storage is in invalid state for any reason
+
+        @throws ::com::sun::star::lang::IllegalArgumentException
+            one of provided arguments is illegal
+
+        @throws ::com::sun::star::packages::NoEncryptionException
+            the stream is not encrypted
+
+        @throws ::com::sun::star::packages::WrongPasswordException
+            the provided password is wrong
+
+        @throws ::com::sun::star::io::IOException
+            in case of io errors during stream opening
+
+        @throws ::com::sun::star::embed::StorageWrappedTargetException
+            wraps other exceptions
+     */
+    ::com::sun::star::io::XStream cloneEncryptedStreamElement(
+            [in] string sStreamName,
+            [in] string sPassword )
+        raises( ::com::sun::star::embed::InvalidStorageException,
+                ::com::sun::star::lang::IllegalArgumentException,
+                ::com::sun::star::packages::NoEncryptionException,
+                ::com::sun::star::packages::WrongPasswordException,
+                ::com::sun::star::io::IOException,
+                ::com::sun::star::embed::StorageWrappedTargetException );
+
+    // -----------------------------------------------------------------------
+    /** allows to get copy of this storage at the state of it's last commit.
+
+        <p>
+        This method makes sense only for services implementations that allow
+        transaction in the storage.
+        </p>
+
+        @param xStorage
+            the target storage that will be filled in with copy.
+
+        @throws ::com::sun::star::embed::InvalidStorageException
+            this storage is in invalid state for any reason
+
+        @throws ::com::sun::star::lang::IllegalArgumentException
+            one of provided arguments is illegal
+
+        @throws ::com::sun::star::io::IOException
+            in case of io errors during copying
+
+        @throws ::com::sun::star::embed::StorageWrappedTargetException
+            wraps other exceptions
+
+     */
+    void copyLastCommitTo( [in] XStorage xTargetStorage )
+        raises( ::com::sun::star::embed::InvalidStorageException,
+                ::com::sun::star::lang::IllegalArgumentException,
+                ::com::sun::star::io::IOException,
+                ::com::sun::star::embed::StorageWrappedTargetException );
+
+    // -----------------------------------------------------------------------
+    /** allows to get copy of a child storage at the state of it's last commit.
+
+        <p>
+        This method makes sense only for services implementations that allow
+        transaction in the storage.
+        </p>
+
+        @param sStorName
+            the name of the storage that should be copied
+
+        @param xStorage
+            the target storage that will be filled in with copy
+
+        @throws ::com::sun::star::embed::InvalidStorageException
+            this storage is in invalid state for any reason
+
+        @throws ::com::sun::star::lang::IllegalArgumentException
+            one of provided arguments is illegal
+
+        @throws ::com::sun::star::io::IOException
+            in case of io errors during copying
+
+        @throws ::com::sun::star::embed::StorageWrappedTargetException
+            wraps other exceptions
+
+     */
+    void copyStorageElementLastCommitTo(
+            [in] string sStorName,
+            [in] XStorage xTargetStorage )
+        raises( ::com::sun::star::embed::InvalidStorageException,
+                ::com::sun::star::lang::IllegalArgumentException,
+                ::com::sun::star::io::IOException,
+                ::com::sun::star::embed::StorageWrappedTargetException );
+
+    // -----------------------------------------------------------------------
+    /** allows to check if an element is a child stream with specified name.
+
+        <p>
+        In case there is no child element with such name an exception will be
+        thrown.
+        </p>
+
+        @param sElementName
+            the name of the element to check
+
+        @returns
+            <TRUE/> in case the element is a stream
+            <FALSE/> - the element is a storage
+
+        @throws ::com::sun::star::container::NoSuchElementException
+            there is no element with such name
+
+        @throws ::com::sun::star::lang::IllegalArgumentException
+            an illegal argument is provided
+
+        @throws ::com::sun::star::embed::InvalidStorageException
+            this storage is in invalid state for any reason
+
+     */
+    boolean isStreamElement( [in] string sElementName )
+        raises( ::com::sun::star::container::NoSuchElementException,
+                ::com::sun::star::lang::IllegalArgumentException,
+                ::com::sun::star::embed::InvalidStorageException );
+
+
+    // -----------------------------------------------------------------------
+    /** allows to check if an element is a child storage with specified name.
+
+        <p>
+        In case there is no child element with such name an exception will be
+        thrown.
+        </p>
+
+        @param sElementName
+            the name of the element to check
+
+        @returns
+            <TRUE/> in case the element is a storage
+            <FALSE/> - the element is a stream
+
+        @throws ::com::sun::star::container::NoSuchElementException
+            there is no element with such name
+
+        @throws ::com::sun::star::lang::IllegalArgumentException
+            an illegal argument is provided
+
+        @throws ::com::sun::star::embed::InvalidStorageException
+            this storage is in invalid state for any reason
+
+     */
+    boolean isStorageElement( [in] string sElementName )
+        raises( ::com::sun::star::container::NoSuchElementException,
+                ::com::sun::star::lang::IllegalArgumentException,
+                ::com::sun::star::embed::InvalidStorageException );
+
+    // -----------------------------------------------------------------------
+    /** removes an element from a storage.
+
+        @param sElementName
+            the name of the element to remove
+
+        @throws ::com::sun::star::embed::InvalidStorageException
+            this storage is in invalid state for any reason
+
+        @throws ::com::sun::star::lang::IllegalArgumentException
+            an illegal argument is provided
+
+        @throws ::com::sun::star::container::NoSuchElementException
+            there is no element with such name
+
+        @throws ::com::sun::star::io::IOException
+            in case of io errors during removing
+
+        @throws ::com::sun::star::embed::StorageWrappedTargetException
+            wraps other exceptions
+
+     */
+    void removeElement( [in] string sElementName )
+        raises( ::com::sun::star::embed::InvalidStorageException,
+                ::com::sun::star::lang::IllegalArgumentException,
+                ::com::sun::star::container::NoSuchElementException,
+                ::com::sun::star::io::IOException,
+                ::com::sun::star::embed::StorageWrappedTargetException );
+
+    // -----------------------------------------------------------------------
+    /** renames an element in a storage.
+
+        @param sElementName
+            the old name of the element to rename
+
+        @param sNewName
+            the new name of the element to rename
+
+        @throws ::com::sun::star::embed::InvalidStorageException
+            this storage is in invalid state for any reason
+
+        @throws ::com::sun::star::lang::IllegalArgumentException
+            an illegal argument is provided
+
+        @throws ::com::sun::star::container::NoSuchElementException
+            there is no element with old name in this storage
+
+        @throws ::com::sun::star::container::ElementExistException
+            an element with new name already exists in this storage
+
+        @throws ::com::sun::star::io::IOException
+            in case of io errors during renaming
+
+        @throws ::com::sun::star::embed::StorageWrappedTargetException
+            wraps other exceptions
+
+     */
+    void renameElement( [in] string sElementName, [in] string sNewName )
+        raises( ::com::sun::star::embed::InvalidStorageException,
+                ::com::sun::star::lang::IllegalArgumentException,
+                ::com::sun::star::container::NoSuchElementException,
+                ::com::sun::star::container::ElementExistException,
+                ::com::sun::star::io::IOException,
+                ::com::sun::star::embed::StorageWrappedTargetException );
+
+    // -----------------------------------------------------------------------
+    /** allows to copy an entry from one storage to another.
+
+        <p>
+        If target element supports transacted mode it must be commited by this
+        method after successful copying.
+        </p>
+
+        @param sElementName
+            the name of the element in this storage
+
+        @param xDest
+            a destination storage
+
+        @param sNewName
+            the name of the result element in destination storage
+
+        @throws ::com::sun::star::embed::InvalidStorageException
+            this storage is in invalid state for any reason
+
+        @throws ::com::sun::star::container::NoSuchElementException
+            there is no specified source element in this storage
+
+        @throws ::com::sun::star::container::ElementExistException
+            an element with specified destination name already exists in destination storage
+
+        @throws ::com::sun::star::io::IOException
+            in case of io errors during copying
+
+        @throws ::com::sun::star::embed::StorageWrappedTargetException
+            wraps other exceptions
+
+     */
+    void copyElementTo(
+            [in] string sElementName,
+            [in] XStorage xDest,
+            [in] string sNewName )
+        raises( ::com::sun::star::embed::InvalidStorageException,
+                ::com::sun::star::lang::IllegalArgumentException,
+                ::com::sun::star::container::NoSuchElementException,
+                ::com::sun::star::container::ElementExistException,
+                ::com::sun::star::io::IOException,
+                ::com::sun::star::embed::StorageWrappedTargetException );
+
+    // -----------------------------------------------------------------------
+    /** allows to move an entry from one storage to another.
+
+        <p>
+        If target element supports transacted mode it must be commited by this
+        method after successful moving.
+        </p>
+
+        @param sElementName
+            the name of the element in this storage
+
+        @param xDest
+            a destination storage
+
+        @param sNewName
+            the name of the result element in destination storage
+
+        @throws ::com::sun::star::embed::InvalidStorageException
+            this storage is in invalid state for any reason
+
+        @throws ::com::sun::star::container::NoSuchElementException
+            there is no specified source element in this storage
+
+        @throws ::com::sun::star::container::ElementExistException
+            an element with specified destination name already exists in destination storage
+
+        @throws ::com::sun::star::io::IOException
+            in case of io errors during moving
+
+        @throws ::com::sun::star::embed::StorageWrappedTargetException
+            wraps other exceptions
+
+     */
+    void moveElementTo(
+            [in] string sElementName,
+            [in] XStorage xDest,
+            [in] string sNewName )
+        raises( ::com::sun::star::embed::InvalidStorageException,
+                ::com::sun::star::lang::IllegalArgumentException,
+                ::com::sun::star::container::NoSuchElementException,
+                ::com::sun::star::container::ElementExistException,
+                ::com::sun::star::io::IOException,
+                ::com::sun::star::embed::StorageWrappedTargetException );
+
+};
+
+//============================================================================
+
+}; }; }; };
+
+#endif
+

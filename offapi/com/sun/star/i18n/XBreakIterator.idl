@@ -1,0 +1,360 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_i18n_XBreakIterator_idl__
+#define __com_sun_star_i18n_XBreakIterator_idl__
+
+#include <com/sun/star/lang/Locale.idl>
+#include <com/sun/star/i18n/LineBreakUserOptions.idl>
+#include <com/sun/star/i18n/LineBreakHyphenationOptions.idl>
+#include <com/sun/star/i18n/LineBreakResults.idl>
+#include <com/sun/star/i18n/Boundary.idl>
+
+//============================================================================
+
+module com {  module sun {  module star {  module i18n {
+
+//============================================================================
+
+/**
+    contains the base routines for iteration in Unicode string. Iterates over
+    characters, words, sentences and line breaks.
+
+    <p> Assumption: StartPos is inclusive and EndPos is exclusive. </p>
+ */
+
+published interface XBreakIterator: com::sun::star::uno::XInterface
+{
+    //------------------------------------------------------------------------
+    /** Traverses specified number of characters/cells in Text from
+        <em>nStartPos</em> forwards.
+        <type>CharacterIteratorMode</type> can be cell based or
+        character based. A cell is made of more than one character.
+
+        @param nCount
+            Number of characters to traverse, it should not be less than 0.
+            If you want to traverse in the opposite direction use
+            <member>XBreakIterator::previousCharacters()</member> instead.
+     */
+    long nextCharacters( [in] string aText, [in] long nStartPos,
+                     [in] ::com::sun::star::lang::Locale aLocale,
+                     [in] short nCharacterIteratorMode,
+                     [in] long nCount, [out] long nDone );
+
+    //------------------------------------------------------------------------
+    /** Traverses specified number of characters/cells in Text from
+        <em>nStartPos</em> backwards.
+        <type>CharacterIteratorMode</type> can be cell based or
+        character based. A cell is made of more than one character.
+
+        @param nCount
+            Number of characters to traverse, it should not be less than 0.
+            If you want to traverse in the opposite direction use
+            <member>XBreakIterator::nextCharacters()</member> instead.
+     */
+    long previousCharacters( [in] string aText, [in] long nStartPos,
+                     [in] ::com::sun::star::lang::Locale aLocale,
+                     [in] short nCharacterIteratorMode,
+                     [in] long nCount, [out] long nDone );
+
+    //------------------------------------------------------------------------
+    /** Traverses one word in Text from <em>nStartPos</em> forwards.
+
+        @param nWordType
+            One of <type>WordType</type>, specifies the type of
+            traveling.
+
+        @returns
+            The <type>Boundary</type> of the found word. Normally used for
+            CTRL-Right.
+     */
+    Boundary nextWord( [in] string aText, [in] long nStartPos,
+                   [in] ::com::sun::star::lang::Locale aLocale,
+                   [in] short nWordType);
+
+    //------------------------------------------------------------------------
+    /** Traverses one word in Text from <em>nStartPos</em> backwards.
+
+        @param aLocale
+            The locale of the character preceding <em>nStartPos</em>.
+
+            <p> If the previous character is a space character and
+            <em>nWordType</em> indicates spaces should be skipped, and
+            if the first non-space character is an Asian character,
+            then, since Asian word break needs language specific
+            wordbreak dictionaries, the method will return -1 in
+            <member>Boundary::endPos</member> and the position after the
+            Asian character (i.e. the space character) in
+            <member>Boundary::startPos</member>. The caller then has to
+            call this method again with a correct <em>aLocale</em>
+            referring to the Asian character, which is then the previous
+            character of the space character where <em>nStartPos</em>
+            points to. </p>
+
+            <p> <b>Note</b> that the OpenOffice.org 1.0 / StarOffice 6.0
+            / StarSuite 6.0 i18n framework doesn't behave like this and
+            mixed Western/CJK text may lead to wrong word iteration.
+            This is fixed in later versions. </p>
+
+        @param nWordType
+            One of <type>WordType</type>, specifies the type of
+            traveling.
+
+        @returns
+            The <type>Boundary</type> of the found word. Normally used for
+            CTRL-Left.
+    */
+    Boundary previousWord( [in] string aText, [in] long nStartPos,
+                       [in] ::com::sun::star::lang::Locale aLocale,
+                       [in] short nWordType);
+
+    //------------------------------------------------------------------------
+    /** Identifies StartPos and EndPos of current word.
+
+        <p> If <em>nPos</em> is the boundary of a word, it is StartPos
+        of one word and EndPos of previous word. In this situation, the
+        outcome of the algorithm can be indeterminate. In this situation
+        the <em>bPreferForward</em> flag is used. If bPreferForward ==
+        <FALSE/>, <em>nPos</em> is considered to be the end of the word
+        and we look backwards for beginning of word, otherwise
+        <em>nPos</em> is considered to be the start of the next word and
+        we look forwards for the end of the word. </p>
+
+        @param nWordType
+            One of <type>WordType</type>.
+
+        @returns
+            The Boundary of the current word.
+    */
+    Boundary getWordBoundary( [in] string aText, [in] long nPos,
+                      [in] ::com::sun::star::lang::Locale aLocale,
+                      [in] short nWordType,
+                      [in] boolean bPreferForward );
+
+    //------------------------------------------------------------------------
+    /** @deprecated
+        Get the <type>WordType</type> of the word that starts at
+        position <em>nPos</em>.
+
+        <p> This method is mis-defined, since <type>WordType</type>
+        is not an attribute of a word, but a way to break words,
+        like excluding or including tail spaces for spell checker
+        or cursor traveling. It returns 0 always.
+        </p>
+     */
+    short getWordType( [in] string aText, [in] long nPos,
+                   [in] ::com::sun::star::lang::Locale aLocale);
+
+    //------------------------------------------------------------------------
+    /** If a word starts at position <em>nPos</em>.
+
+        <p> It is possible that both of this method
+        and following method <em>isEndWord</em> all return
+        <TRUE/>, since StartPos of a word is inclusive
+        while EndPos of a word is exclusive.
+        </p>
+
+     */
+    boolean isBeginWord( [in] string aText, [in] long nPos,
+                     [in] ::com::sun::star::lang::Locale aLocale,
+                     [in] short nWordType);
+
+    //------------------------------------------------------------------------
+    /** If a word ends at position <em>nPos</em>.
+     */
+    boolean isEndWord( [in] string aText, [in] long nPos,
+                   [in] ::com::sun::star::lang::Locale aLocale,
+                   [in] short nWordType);
+
+    //------------------------------------------------------------------------
+    /** Traverses in Text from <em>nStartPos</em> to the start of a
+        sentence.
+
+        @returns
+            The position where the sentence starts.
+     */
+    long beginOfSentence( [in] string aText, [in] long nStartPos,
+                      [in] ::com::sun::star::lang::Locale aLocale );
+
+    //------------------------------------------------------------------------
+    /** Traverses in Text from <em>nStartPos</em> to the end of a
+        sentence.
+
+        @returns
+            The position where the sentence ends.
+     */
+    long endOfSentence( [in] string aText, [in] long nStartPos,
+                    [in] ::com::sun::star::lang::Locale aLocale );
+
+    //------------------------------------------------------------------------
+    /** Calculate the line break position in the Text from the specified
+        <em>nStartPos</em>.
+
+        @param nMinBreakPos
+            Defines a minimum break position for hyphenated line break.
+            When the position for hyphenated line break is less than
+            <em>nMinBreakPos</em>, break position in
+            <type>LineBreakResults</type> is set to -1.
+
+        @param aHyphOptions
+            Defines if the hyphenator is to be used.
+
+        @param aUserOptions
+            Defines how to handle hanging punctuations and forbidden
+            characters at the start/end of a line.
+
+        @returns
+            The <type>LineBreakResults</type> contain the break
+            position of the line, <type>BreakType</type> and
+            <type scope="com::sun::star::linguistic2">XHyphenatedWord</type>
+     */
+    LineBreakResults getLineBreak( [in] string aText, [in] long nStartPos,
+                    [in] ::com::sun::star::lang::Locale aLocale,
+                    [in] long nMinBreakPos,
+                    [in] LineBreakHyphenationOptions aHyphOptions,
+                    [in] LineBreakUserOptions aUserOptions );
+
+    //------------------------------------------------------------------------
+    /** Traverses in Text from <em>nStartPos</em> to the beginning of
+        the specified script type.
+
+        @param nScriptType
+            One of <type>ScriptType</type>.
+
+        @returns
+            The position where the script type starts.
+     */
+    long beginOfScript( [in] string aText, [in] long nStartPos,
+                    [in] short nScriptType );
+
+    //------------------------------------------------------------------------
+    /** Traverses in Text from <em>nStartPos</em> to the end of the
+        specified script type.
+
+        @param nScriptType
+            One of <type>ScriptType</type>.
+
+        @returns
+            The position where the script type ends.
+     */
+    long endOfScript( [in] string aText, [in] long nStartPos,
+                  [in] short nScriptType );
+
+    //------------------------------------------------------------------------
+    /** Traverses in Text from <em>nStartPos</em> to the next start of
+        the specified script type.
+
+        @param nScriptType
+            One of <type>ScriptType</type>.
+
+        @returns
+            The position where the next script type starts.
+     */
+    long nextScript( [in] string aText, [in] long nStartPos,
+                 [in] short nScriptType );
+
+    //------------------------------------------------------------------------
+    /** Traverses in Text from <em>nStartPos</em> to the previous start
+        of the specified script type.
+
+        @param nScriptType
+            One of <type>ScriptType</type>.
+
+        @returns
+            The position where the previous script type starts.
+     */
+    long previousScript( [in] string aText, [in] long nStartPos,
+                      [in] short nScriptType );
+
+    //------------------------------------------------------------------------
+    /** Get the script type of the character at position <em>nPos</em>.
+
+        @returns
+            One of <type>ScriptType</type>.
+     */
+    short   getScriptType( [in] string aText, [in] long nPos);
+
+    //------------------------------------------------------------------------
+    /** Traverses in Text from <em>nStartPos</em> to the beginning of
+        the specified character type.
+
+        @param nCharType
+            One of <type>CharType</type>
+
+        @returns
+            The position where the character type starts
+     */
+    long beginOfCharBlock( [in] string aText, [in] long nStartPos,
+                       [in] ::com::sun::star::lang::Locale aLocale,
+                       [in] short nCharType );
+
+    //------------------------------------------------------------------------
+    /** Traverses in Text from <em>nStartPos</em> to the end of the
+        specified character type.
+
+        @param nCharType
+            One of <type>CharType</type>
+
+        @returns
+            The position where the character type ends.
+     */
+    long endOfCharBlock( [in] string aText, [in] long nStartPos,
+                     [in] ::com::sun::star::lang::Locale aLocale,
+                     [in] short nCharType );
+
+    //------------------------------------------------------------------------
+    /** Traverses in Text from <em>nStartPos</em> to the next start of
+        the specified character type.
+
+        @param nCharType
+            One of <type>CharType</type>
+
+        @returns
+            The position where the next character type starts.
+     */
+    long nextCharBlock( [in] string aText, [in] long nStartPos,
+                    [in] ::com::sun::star::lang::Locale aLocale,
+                    [in] short nCharType );
+
+    //------------------------------------------------------------------------
+    /** Traverses in Text from <em>nStartPos</em> to the previous start
+        of the specified character type.
+
+        @param nCharType
+            One of <type>CharType</type>
+
+        @returns
+            The position where the previous character type starts.
+     */
+    long previousCharBlock ( [in] string aText, [in] long nStartPos,
+                     [in] ::com::sun::star::lang::Locale aLocale,
+                     [in] short nCharType );
+};
+
+//============================================================================
+}; }; }; };
+
+#endif

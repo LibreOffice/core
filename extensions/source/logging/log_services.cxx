@@ -59,6 +59,11 @@ namespace logging
 } // namespace logging
 //........................................................................
 
-IMPLEMENT_COMPONENT_LIBRARY_API( ::logging::LogModule, ::logging::initializeModule )
+extern "C" SAL_DLLPUBLIC_EXPORT void* SAL_CALL component_getFactory(
+    const sal_Char* pImplementationName, void* pServiceManager, void* pRegistryKey )
+{
+    ::logging::initializeModule();
+    return ::logging::LogModule::getInstance().getComponentFactory( pImplementationName, pServiceManager, pRegistryKey );
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

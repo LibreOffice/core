@@ -1,0 +1,106 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_presentation_PreviewView_idl__
+#define __com_sun_star_presentation_PreviewView_idl__
+
+#include <com/sun/star/drawing/XDrawView.idl>
+
+#include <com/sun/star/beans/XPropertySet.idl>
+
+#include <com/sun/star/frame/Controller.idl>
+
+#include <com/sun/star/lang/XServiceInfo.idl>
+#include <com/sun/star/drawing/XDrawPage.idl>
+
+#include <com/sun/star/awt/XWindow.idl>
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module presentation {
+
+//=============================================================================
+
+/** This component integrates a preview view to a slide show of a presentation
+    document into the desktop.
+
+    @since OOo 1.1.2
+ */
+published service PreviewView
+{
+    //-------------------------------------------------------------------------
+
+    /** this services offers the  integration of this component into the
+        desktop.
+    */
+    service com::sun::star::frame::Controller;
+
+    //-------------------------------------------------------------------------
+
+    /** lets you access the window for this view
+    */
+    interface com::sun::star::awt::XWindow;
+
+    //-------------------------------------------------------------------------
+
+    /** lets you set/get the current page displayed by this
+        view.
+     */
+    interface com::sun::star::drawing::XDrawView;
+
+    //-------------------------------------------------------------------------
+
+
+    /** lets you access the properties of this service.
+     */
+    interface com::sun::star::beans::XPropertySet;
+
+    //-------------------------------------------------------------------------
+
+    /** provides the names of the services implemented by
+                this instance.
+     */
+    interface com::sun::star::lang::XServiceInfo;
+
+    //-------------------------------------------------------------------------
+
+    /** This is the drawing page that is currently visible.
+     */
+    [property] com::sun::star::drawing::XDrawPage CurrentPage;
+
+    //-------------------------------------------------------------------------
+
+    /** This is the area that is currently visible.
+     */
+    [readonly, property] com::sun::star::awt::Rectangle VisibleArea;
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

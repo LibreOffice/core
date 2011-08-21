@@ -1,0 +1,107 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_sdbc_XStruct_idl__
+#define __com_sun_star_sdbc_XStruct_idl__
+
+#include <com/sun/star/uno/XInterface.idl>
+
+ module com {  module sun {  module star {  module container {
+ published interface XNameAccess;
+};};};};
+
+#include <com/sun/star/sdbc/SQLException.idl>
+
+ module com {  module sun {  module star {  module sdbc {
+
+
+/** is used for the standard mapping for a SQL structured type.
+
+
+    <p>
+    A
+    <code>Struct</code>
+    object contains a value for each attribute
+    of the SQL structured type that it represents.
+    By default, an instance of
+    <code>Struct</code>
+    is valid as long as the
+    application has a reference to it.
+    </p>
+ */
+published interface XStruct: com::sun::star::uno::XInterface
+{
+
+    /** retrieves the SQL type name of the SQL structured type
+        that this
+        <code>Struct</code>
+        object represents.
+        @returns
+            the name of the SQL type.
+        @throws SQLException
+            if a database access error occurs.
+     */
+    string getSQLTypeName() raises (SQLException);
+
+      //-------------------------------------------------------------------------
+
+    /** produces the ordered values of the attributes of the SQL
+             structured type that this
+             <code>Struct</code>
+             object represents.
+             <p>
+             This method uses the given type map for customizations of the type
+             mappings. If there is no entry in the given type map that matches or
+             the given type map is
+             <NULL/>
+             , the structured type that this
+             <code>Struct</code>
+             object represents, the driver uses
+             the connection type mapping.
+             @param typeMap
+                is a map object that contains mappings of SQL type names to
+                services. If the
+                <code>typeMap</code>is
+                <NULL/>
+                , the type-map
+                   associated with the connection for customizations of the type-mappings
+                is used.
+             @returns
+                an array containing the ordered attribute values.
+             @throws SQLException
+                if a database access error occurs.
+     */
+    sequence<any> getAttributes([in]com::sun::star::container::XNameAccess typeMap)
+        raises (SQLException);
+};
+
+//=============================================================================
+
+}; }; }; };
+
+/*===========================================================================
+===========================================================================*/
+#endif

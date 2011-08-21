@@ -1,0 +1,15 @@
+module ooo { module vba { module access {
+    constants AcSpreadSheetType {
+        const long acSpreadsheetTypeExcel3 = 0;
+        const long acSpreadsheetTypeExcel4 = 6;
+        const long acSpreadsheetTypeExcel5 = 5;
+        const long acSpreadsheetTypeExcel7 = 5;
+        const long acSpreadsheetTypeExcel8 = 8;
+        const long acSpreadsheetTypeExcel9 = 8;
+        const long acSpreadsheetTypeExcel97 = 8;
+        const long acSpreadsheetTypeLotusWJ2 = 4;
+        const long acSpreadsheetTypeLotusWK1 = 2;
+        const long acSpreadsheetTypeLotusWK3 = 3;
+        const long acSpreadsheetTypeLotusWK4 = 7;
+    };
+}; }; };

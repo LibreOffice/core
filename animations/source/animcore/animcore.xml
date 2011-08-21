@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE module-description PUBLIC "-//StarOffice//DTD ComponentDescription 1.0//EN" "module-description.dtd">
+<module-description xmlns:xlink="http://www.w3.org/1999/xlink">
+    <module-name> animations </module-name>
+
+    <component-description>
+        <author> Christian Lippka </author>
+        <name> todo </name>
+        <description>
+            This component provides ...
+        </description>
+        <loader-name> com.sun.star.loader.SharedLibrary </loader-name>
+        <language>  c++ </language>
+        <status value="draft"/>
+        <supported-service> </supported-service>
+        <service-dependency> ... </service-dependency>
+        <type> ... </type>
+    </component-description>
+
+    <project-build-dependency>  cppuhelper  </project-build-dependency>
+    <project-build-dependency>  cppu        </project-build-dependency>
+    <project-build-dependency>  sal         </project-build-dependency>
+
+    <runtime-module-dependency> cppuhelper  </runtime-module-dependency>
+    <runtime-module-dependency> cppu2       </runtime-module-dependency>
+    <runtime-module-dependency> sal2        </runtime-module-dependency>
+</module-description>
+

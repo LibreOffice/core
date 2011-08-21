@@ -1,0 +1,308 @@
+/*************************************************************************
+*
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * 
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+************************************************************************/
+
+#include "macros.inc"
+
+#ifdef MACOSX
+ScpAction scp_Copy_Thirdpartylicense_Readme_Html
+    Copy = "THIRDPARTYLICENSEREADME.html";
+    Name= "THIRDPARTYLICENSEREADME.html";
+    Subdir = "LICENSEs";
+End
+#endif
+
+ScpAction scp_Copy_Readme_Txt
+  #ifdef UNX
+    README_ALL_LANG(Copy, README);
+    README_ALL_LANG(Name, README);
+  #else
+    README_TXT_ALL_LANG(Copy, readme, txt);
+    README_TXT_ALL_LANG(Name, readme, txt);
+  #endif
+    Styles = (SCPZIP_REPLACE);
+  #ifndef MACOSX
+    Subdir = "readmes";
+  #else
+    Subdir = "READMEs";
+  #endif
+End
+
+#if defined(WNT) && defined(_gcc3)
+ScpAction SCP_COPY_MINGWM10
+    Copy = "mingwm10.dll";
+    Name = "mingwm10.dll";
+End
+#if defined(MINGW_GCCDLL)
+ScpAction SCP_COPY_MINGW_GCCS
+    Copy = MINGW_GCCDLL;
+    Name = MINGW_GCCDLL;
+End
+#endif
+#if defined(MINGW_GXXDLL)
+ScpAction SCP_COPY_MINGW_STDCPP
+    Copy = MINGW_GXXDLL;
+    Name = MINGW_GXXDLL;
+End
+#endif
+#endif
+
+ScpAction scp_Copy_Xpd_Javaloader
+  	Copy = "javaloader.sh";
+    Name = "setup";
+    Styles = (XPD_ONLY);
+    UnixRights = 775;
+End
+
+ScpAction scp_Copy_Xpd_Javajarfile
+  	Copy = "JavaSetup.jar";
+    Name = "JavaSetup.jar";
+    Styles = (XPD_ONLY);
+End
+
+// #ifdef SOLARIS
+// ScpAction scp_Copy_Xpd_Getuidso
+//     Copy = "getuid.so";
+//     Name = "getuid.so";
+//     Styles = (XPD_ONLY);
+//     Subdir = "installdata/getuid";
+// End
+// #endif
+
+// Setup image
+ScpAction scp_Copy_Xpd_Gif_Setup
+  	Copy = "Setup.gif";
+    Name = "Setup.gif";
+    Styles = (XPD_ONLY);
+    Subdir = "installdata/images";
+End
+
+// Setup help files
+
+ScpAction scp_Copy_Xpd_Help_Html_Acceptlicense
+    README_TXT_ALL_LANG(Copy, AcceptLicense, html);
+    README_TXT_ALL_LANG(Name, AcceptLicense, html);
+    Styles = (XPD_ONLY);
+    Subdir = "installdata/html";
+End
+
+ScpAction scp_Copy_Xpd_Help_Html_Acceptlicense_En_Us
+    Copy = "AcceptLicense_en-US.html";
+    Name = "AcceptLicense.html";
+    Styles = (XPD_ONLY);
+    Subdir = "installdata/html";
+End
+
+ScpAction scp_Copy_Xpd_Help_Html_Choosecomponents
+    README_TXT_ALL_LANG(Copy, ChooseComponents, html);
+    README_TXT_ALL_LANG(Name, ChooseComponents, html);
+    Styles = (XPD_ONLY);
+    Subdir = "installdata/html";
+End
+
+ScpAction scp_Copy_Xpd_Help_Html_Choosecomponents_En_Us
+    Copy = "ChooseComponents_en-US.html";
+    Name = "ChooseComponents.html";
+    Styles = (XPD_ONLY);
+    Subdir = "installdata/html";
+End
+
+ScpAction scp_Copy_Xpd_Help_Html_Choosedirectory
+    README_TXT_ALL_LANG(Copy, ChooseDirectory, html);
+    README_TXT_ALL_LANG(Name, ChooseDirectory, html);
+    Styles = (XPD_ONLY);
+    Subdir = "installdata/html";
+End
+
+ScpAction scp_Copy_Xpd_Help_Html_Choosedirectory_En_Us
+    Copy = "ChooseDirectory_en-US.html";
+    Name = "ChooseDirectory.html";
+    Styles = (XPD_ONLY);
+    Subdir = "installdata/html";
+End
+
+ScpAction scp_Copy_Xpd_Help_Html_Chooseinstallationtype
+    README_TXT_ALL_LANG(Copy, ChooseInstallationType, html);
+    README_TXT_ALL_LANG(Name, ChooseInstallationType, html);
+    Styles = (XPD_ONLY);
+    Subdir = "installdata/html";
+End
+
+ScpAction scp_Copy_Xpd_Help_Html_Chooseinstallationtype_En_Us
+    Copy = "ChooseInstallationType_en-US.html";
+    Name = "ChooseInstallationType.html";
+    Styles = (XPD_ONLY);
+    Subdir = "installdata/html";
+End
+
+// ScpAction scp_Copy_Xpd_Help_Html_Chooselanguage
+//    README_TXT_ALL_LANG(Copy, ChooseLanguage, html);
+//    README_TXT_ALL_LANG(Name, ChooseLanguage, html);
+//    Styles = (XPD_ONLY);
+//    Subdir = "installdata/html";
+// End
+
+// ScpAction scp_Copy_Xpd_Help_Html_Chooselanguage_En_Us
+//    Copy = "ChooseLanguage_en-US.html";
+//    Name = "ChooseLanguage.html";
+//    Styles = (XPD_ONLY);
+//    Subdir = "installdata/html";
+// End
+
+ScpAction scp_Copy_Xpd_Help_Html_Chooseuninstallationcomponents
+    README_TXT_ALL_LANG(Copy, ChooseUninstallationComponents, html);
+    README_TXT_ALL_LANG(Name, ChooseUninstallationComponents, html);
+    Styles = (XPD_ONLY);
+    Subdir = "installdata/html";
+End
+
+ScpAction scp_Copy_Xpd_Help_Html_Chooseuninstallationcomponents_En_Us
+    Copy = "ChooseUninstallationComponents_en-US.html";
+    Name = "ChooseUninstallationComponents.html";
+    Styles = (XPD_ONLY);
+    Subdir = "installdata/html";
+End
+
+ScpAction scp_Copy_Xpd_Help_Html_Chooseuninstallationtype
+    README_TXT_ALL_LANG(Copy, ChooseUninstallationType, html);
+    README_TXT_ALL_LANG(Name, ChooseUninstallationType, html);
+    Styles = (XPD_ONLY);
+    Subdir = "installdata/html";
+End
+
+ScpAction scp_Copy_Xpd_Help_Html_Chooseuninstallationtype_En_Us
+    Copy = "ChooseUninstallationType_en-US.html";
+    Name = "ChooseUninstallationType.html";
+    Styles = (XPD_ONLY);
+    Subdir = "installdata/html";
+End
+
+ScpAction scp_Copy_Xpd_Help_Html_Installationimminent
+    README_TXT_ALL_LANG(Copy, InstallationImminent, html);
+    README_TXT_ALL_LANG(Name, InstallationImminent, html);
+    Styles = (XPD_ONLY);
+    Subdir = "installdata/html";
+End
+
+ScpAction scp_Copy_Xpd_Help_Html_Installationimminent_En_Us
+    Copy = "InstallationImminent_en-US.html";
+    Name = "InstallationImminent.html";
+    Styles = (XPD_ONLY);
+    Subdir = "installdata/html";
+End
+
+ScpAction scp_Copy_Xpd_Help_Html_Installationongoing
+    README_TXT_ALL_LANG(Copy, InstallationOngoing, html);
+    README_TXT_ALL_LANG(Name, InstallationOngoing, html);
+    Styles = (XPD_ONLY);
+    Subdir = "installdata/html";
+End
+
+ScpAction scp_Copy_Xpd_Help_Html_Installationongoing_En_Us
+    Copy = "InstallationOngoing_en-US.html";
+    Name = "InstallationOngoing.html";
+    Styles = (XPD_ONLY);
+    Subdir = "installdata/html";
+End
+
+ScpAction scp_Copy_Xpd_Help_Html_Prologue
+    README_TXT_ALL_LANG(Copy, Prologue, html);
+    README_TXT_ALL_LANG(Name, Prologue, html);
+    Styles = (XPD_ONLY);
+    Subdir = "installdata/html";
+End
+
+ScpAction scp_Copy_Xpd_Help_Html_Prologue_En_Us
+    Copy = "Prologue_en-US.html";
+    Name = "Prologue.html";
+    Styles = (XPD_ONLY);
+    Subdir = "installdata/html";
+End
+
+ScpAction scp_Copy_Xpd_Help_Html_Uninstallationimminent
+    README_TXT_ALL_LANG(Copy, UninstallationImminent, html);
+    README_TXT_ALL_LANG(Name, UninstallationImminent, html);
+    Styles = (XPD_ONLY);
+    Subdir = "installdata/html";
+End
+
+ScpAction scp_Copy_Xpd_Help_Html_Uninstallationimminent_En_Us
+    Copy = "UninstallationImminent_en-US.html";
+    Name = "UninstallationImminent.html";
+    Styles = (XPD_ONLY);
+    Subdir = "installdata/html";
+End
+
+ScpAction scp_Copy_Xpd_Help_Html_Uninstallationongoing
+    README_TXT_ALL_LANG(Copy, UninstallationOngoing, html);
+    README_TXT_ALL_LANG(Name, UninstallationOngoing, html);
+    Styles = (XPD_ONLY);
+    Subdir = "installdata/html";
+End
+
+ScpAction scp_Copy_Xpd_Help_Html_Uninstallationongoing_En_Us
+    Copy = "UninstallationOngoing_en-US.html";
+    Name = "UninstallationOngoing.html";
+    Styles = (XPD_ONLY);
+    Subdir = "installdata/html";
+End
+
+ScpAction scp_Copy_Xpd_Help_Html_Uninstallationprologue
+    README_TXT_ALL_LANG(Copy, UninstallationPrologue, html);
+    README_TXT_ALL_LANG(Name, UninstallationPrologue, html);
+    Styles = (XPD_ONLY);
+    Subdir = "installdata/html";
+End
+
+ScpAction scp_Copy_Xpd_Help_Html_Uninstallationprologue_En_Us
+    Copy = "UninstallationPrologue_en-US.html";
+    Name = "UninstallationPrologue.html";
+    Styles = (XPD_ONLY);
+    Subdir = "installdata/html";
+End
+
+#ifdef MACOSX
+ScpAction scp_Copy_Dmg_Background_Image
+  #if defined(BUILD_SPECIAL)
+    Copy = "osxdndinstall.png";
+  #else
+    Copy = "osxdndinstall_nologo.png";
+  #endif
+    Name = "background.png";
+    UnixRights = 444;
+    Styles = ();
+    Subdir = ".background";
+End
+
+ScpAction scp_Copy_Ds_Store
+    Copy = "DS_Store";
+    LangPackCopy = "DS_Store_Langpack";
+    PatchCopy = "DS_Store_Patch";
+    Name = ".DS_Store";
+    UnixRights = 444;
+    Styles = (FORCELANGUAGEPACK);
+End
+#endif

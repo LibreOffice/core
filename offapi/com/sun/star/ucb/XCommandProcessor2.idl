@@ -1,0 +1,67 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_ucb_XCommandProcessor2_idl__
+#define __com_sun_star_ucb_XCommandProcessor2_idl__
+
+#include <com/sun/star/ucb/XCommandProcessor.idl>
+
+module com { module sun { module star { module ucb {
+
+//============================================================================
+/** An improved version of a
+    <type scope="com::sun::star::ucb">XCommandProcessor</type> that helps avoid
+    ever-increasing resource consumption.
+ */
+published interface XCommandProcessor2: com::sun::star::ucb::XCommandProcessor
+{
+    //------------------------------------------------------------------------
+    /** releases a command identifier obtained through
+        <member>XCommandProcessor::createCommandIdentifier</member> when it is
+        no longer used.
+
+        <p>After this call the command identifier cannot be used any longer in
+        calls to <member>XCommandProcessor::execute</member> and
+        <member>XCommandProcessor::abort</member>.  (But it can happen that a
+        call to <member>XCommandProcessor::createCommandIdentifier</member>
+        reuses this identifier.)</p>
+
+        @param CommandId
+        A command identifier obtained through
+        <member>XCommandProcessor::createCommandIdentifier</member>.  If the
+        identifier is zero, the request is silently ignored; but if the
+        identifier is invalid (not obtained via
+        <member>XCommandProcessor::createCommandIdentifier</member> or already
+        handed to <member>XCommandProcessor2::releaseCommandIdentifier</member>
+        before), the behavior is undefined.
+     */
+    [oneway] void releaseCommandIdentifier([in] long CommandId);
+};
+
+}; }; }; };
+
+#endif

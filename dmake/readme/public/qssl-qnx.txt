@@ -1,0 +1,5 @@
+QNX differs from UNIX only in that the library format is that of MSDOS and
+as such the normal stating of library members does not work.  QNX versions of
+dmake stat the library instead of the members (as does the MSDOS
+implementation).  Otherwise see the readme/unix file for further unix related
+information.

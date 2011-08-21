@@ -1,0 +1,68 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_form_binding_ListEntrySource_idl__
+#define __com_sun_star_form_binding_ListEntrySource_idl__
+
+#include <com/sun/star/form/binding/XListEntrySource.idl>
+#include <com/sun/star/lang/XComponent.idl>
+#include <com/sun/star/util/XModifyBroadcaster.idl>
+
+//=============================================================================
+
+module com {  module sun {  module star {  module form { module binding {
+
+//=============================================================================
+
+/** defines a component which provides a list of string entries
+*/
+service ListEntrySource
+{
+    //-------------------------------------------------------------------------
+    /** allows read access to the entries represented by this component
+    */
+    interface XListEntrySource;
+
+    /** allows life time control for the component
+
+        <p>An <type>ListEntrySource</type> will be known to one ore more components
+        supporting the <type>XListEntrySink</type> interface, which all work with
+        this source. However, they will not <em>own</em> the <type>ListEntrySource</type>.
+        The ownership is with another instance, which may also decide to obsolete
+        the <type>ListEntrySource</type> for whatever reasons (e.g. because the data model
+        which the binding reflected died). For this reason, a <type>ListEntrySource</type>
+        must offer a possibility to be obsoleted by it's owner, and to notify this
+        obsoleteness to other interested parties, such as <type>XListEntrySink</type>s.</p>
+    */
+    interface com::sun::star::lang::XComponent;
+};
+
+//=============================================================================
+
+}; }; }; }; };
+
+#endif

@@ -1,0 +1,109 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef com_sun_star_chart2_XDiagram_idl
+#define com_sun_star_chart2_XDiagram_idl
+
+#include <com/sun/star/uno/XInterface.idl>
+#include <com/sun/star/beans/XPropertySet.idl>
+#include <com/sun/star/beans/PropertyValue.idl>
+#include <com/sun/star/chart2/XLegend.idl>
+#include <com/sun/star/chart2/XColorScheme.idl>
+#include <com/sun/star/chart2/data/XDataSource.idl>
+#include <com/sun/star/chart2/data/XLabeledDataSequence.idl>
+
+module com
+{
+module sun
+{
+module star
+{
+module chart2
+{
+
+interface XDiagram : ::com::sun::star::uno::XInterface
+{
+    /** returns the property set that determines the visual appearance
+        of the wall.
+
+        <p>The wall is the area behind the union of all
+        coordinate systems used in a diagram.</p>
+     */
+    com::sun::star::beans::XPropertySet getWall();
+
+    /** returns the property set that determines the visual appearance
+        of the floor if any.
+
+        <p>The floor is the bottom of a 3D diagram.
+        For a 2D diagram NULL is returned.</p>
+     */
+    com::sun::star::beans::XPropertySet getFloor();
+
+    /** returns the legend, which may represent data series and other
+        information about a diagram in a separate box.
+     */
+    XLegend getLegend();
+
+    /** sets a new legend.
+     */
+    void setLegend( [in] XLegend xLegend );
+
+    /** returns an <type>XColorScheme</type> that defines the default
+        colors for data series (or data points) in the diagram.
+     */
+    XColorScheme   getDefaultColorScheme();
+
+    /** sets an <type>XColorScheme</type> that defines the default
+        colors for data series (or data points) in the diagram.
+     */
+    void setDefaultColorScheme( [in] XColorScheme xColorScheme );
+
+    /** sets new data to the diagram.
+
+        @param xDataSource
+            This data source will be interpreted in a chart-type
+            specific way and the <type>DataSeries</type> found in
+            <code>xDiagram</code> will be adapted to the new data.
+            Missing data series will be created and unused ones will
+            be deleted.
+
+        @param aArguments
+            Arguments tells how to slice the given data.
+
+            <p>For standard parameters that may be used, see the
+            service <type>StandardDiagramCreationParameters</type>.
+            </p>
+     */
+    void setDiagramData( [in] data::XDataSource xDataSource,
+        [in] sequence< com::sun::star::beans::PropertyValue > aArguments );
+};
+
+} ; // chart2
+} ; // com
+} ; // sun
+} ; // star
+
+#endif

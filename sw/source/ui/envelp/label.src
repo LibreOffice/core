@@ -1,0 +1,757 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+ // #pragma ******************************************************************
+
+#include "label.hrc"
+#include "globals.hrc"
+#include "helpid.h"
+// ----- defined strings -----------------------------------------------------
+#define LABEL_STRING                                    \
+    Text [ en-US ] = "Labels" ;                    \
+
+#define BUSINESS_CARD_STRING \
+    Text [ en-US ] = "Business Cards";              \
+
+ // DLG_LAB ------------------------------------------------------------------
+TabDialog DLG_LAB
+{
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Moveable = TRUE ;
+    LABEL_STRING
+    TabControl 1
+    {
+        OutputSize = TRUE ;
+        PageList =
+        {
+            PageItem
+            {
+                Identifier = TP_VISITING_CARDS;
+                PageResID = TP_VISITING_CARDS;
+                BUSINESS_CARD_STRING
+            };
+            PageItem
+            {
+                Identifier = TP_PRIVATE_DATA;
+                PageResID = TP_PRIVATE_DATA;
+                Text [ en-US ] = "Private";
+            };
+            PageItem
+            {
+                Identifier = TP_BUSINESS_DATA;
+                PageResID = TP_BUSINESS_DATA;
+                Text [ en-US ] = "Business";
+            };
+            PageItem
+            {
+                Identifier = TP_LAB_FMT ;
+                PageResID = TP_LAB_FMT ;
+                Text [ en-US ] = "Format" ;
+            };
+            PageItem
+            {
+                Identifier = TP_LAB_PRT ;
+                PageResID = TP_LAB_PRT ;
+                Text [ en-US ] = "Options" ;
+            };
+        };
+    };
+    String ST_BUSINESSCARDDLG
+    {
+        BUSINESS_CARD_STRING
+    };
+    String ST_FIRSTPAGE_LAB
+    {
+        LABEL_STRING
+    };
+    String ST_FIRSTPAGE_BC
+    {
+        Text [ en-US ] = "Medium";
+    };
+};
+ // TP_LAB_LAB ---------------------------------------------------------------
+TabPage TP_LAB_LAB
+{
+    HelpID = HID_LAB_LAB ;
+    Size = MAP_APPFONT ( 260 , 185 ) ;
+    Hide = TRUE ;
+    FixedText TXT_WRITING
+    {
+        Pos = MAP_APPFONT ( 12 , 15 ) ;
+        Size = MAP_APPFONT ( 50 , 8 ) ;
+        Group = TRUE ;
+        Left = TRUE ;
+        Text [ en-US ] = "Label text" ;
+    };
+    CheckBox BOX_ADDR
+    {
+        HelpID = "sw:CheckBox:TP_LAB_LAB:BOX_ADDR";
+        Pos = MAP_APPFONT ( 67 , 14 ) ;
+        Size = MAP_APPFONT ( 50 , 10 ) ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "Address" ;
+    };
+    MultiLineEdit EDT_WRITING
+    {
+        HelpID = "sw:MultiLineEdit:TP_LAB_LAB:EDT_WRITING";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 12 , 27 ) ;
+        Size = MAP_APPFONT ( 105 , 89 ) ;
+        TabStop = TRUE ;
+        Left = TRUE ;
+        HScroll = TRUE ;
+        VScroll = TRUE ;
+        IgnoreTab = TRUE;
+    };
+    FixedText FT_DATABASE
+    {
+        Pos = MAP_APPFONT ( 149 , 16 ) ;
+        Size = MAP_APPFONT ( 99 , 8 ) ;
+        Text [ en-US ] = "Database" ;
+    };
+    ListBox LB_DATABASE
+    {
+        HelpID = "sw:ListBox:TP_LAB_LAB:LB_DATABASE";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 149 , 27 ) ;
+        Size = MAP_APPFONT ( 99 , 70 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+    };
+    FixedText FT_TABLE
+    {
+        Pos = MAP_APPFONT ( 149 , 45 ) ;
+        Size = MAP_APPFONT ( 99 , 8 ) ;
+        Text [ en-US ] = "Table" ;
+    };
+    ListBox LB_TABLE
+    {
+        HelpID = "sw:ListBox:TP_LAB_LAB:LB_TABLE";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 149 , 56 ) ;
+        Size = MAP_APPFONT ( 99 , 70 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+    };
+    ImageButton BTN_INSERT
+    {
+        HelpID = "sw:ImageButton:TP_LAB_LAB:BTN_INSERT";
+        Pos = MAP_APPFONT ( 124 , 92 ) ;
+        Size = MAP_APPFONT ( 18 , 12 ) ;
+        SYMBOL = IMAGEBUTTON_ARROW_LEFT ;
+        TabStop = TRUE ;
+    };
+    FixedText FT_DBFIELD
+    {
+        Pos = MAP_APPFONT ( 149 , 81 ) ;
+        Size = MAP_APPFONT ( 99 , 8 ) ;
+        Text [ en-US ] = "Database field" ;
+    };
+    ListBox LB_DBFIELD
+    {
+        HelpID = "sw:ListBox:TP_LAB_LAB:LB_DBFIELD";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 149 , 92 ) ;
+        Size = MAP_APPFONT ( 99 , 70 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+    };
+    FixedLine FL_WRITING
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
+        Group = TRUE ;
+        Text [ en-US ] = "Inscription" ;
+    };
+    RadioButton BTN_CONT
+    {
+        HelpID = "sw:RadioButton:TP_LAB_LAB:BTN_CONT";
+        Pos = MAP_APPFONT ( 12 , 137 ) ;
+        Size = MAP_APPFONT ( 65 , 10 ) ;
+        TabStop = TRUE ;
+        Group = TRUE ;
+        Text [ en-US ] = "~Continuous" ;
+    };
+    RadioButton BTN_SHEET
+    {
+        HelpID = "sw:RadioButton:TP_LAB_LAB:BTN_SHEET";
+        Pos = MAP_APPFONT ( 12 , 153 ) ;
+        Size = MAP_APPFONT ( 65 , 10 ) ;
+        Text [ en-US ] = "~Sheet" ;
+    };
+    FixedText TXT_MAKE
+    {
+        Pos = MAP_APPFONT ( 91 , 138 ) ;
+        Size = MAP_APPFONT ( 30 , 8 ) ;
+        Text [ en-US ] = "Brand" ;
+        Left = TRUE ;
+    };
+    ListBox BOX_MAKE
+    {
+        HelpID = "sw:ListBox:TP_LAB_LAB:BOX_MAKE";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 124 , 136 ) ;
+        Size = MAP_APPFONT ( 124 , 90 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+    };
+    FixedText TXT_TYPE
+    {
+        Pos = MAP_APPFONT ( 91 , 154 ) ;
+        Size = MAP_APPFONT ( 30 , 8 ) ;
+        Left = TRUE ;
+        Text [ en-US ] = "~Type" ;
+    };
+    ListBox BOX_TYPE
+    {
+        HelpID = "sw:ListBox:TP_LAB_LAB:BOX_TYPE";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 124 , 152 ) ;
+        Size = MAP_APPFONT ( 124 , 90 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+    };
+    FixedText INF_FORMAT
+    {
+        Pos = MAP_APPFONT ( 12 , 168 ) ;
+        Size = MAP_APPFONT ( 236 , 8 ) ;
+        Left = TRUE ;
+    };
+    FixedLine FL_FORMAT
+    {
+        Pos = MAP_APPFONT ( 6 , 125 ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
+        Group = TRUE ;
+        Text [ en-US ] = "Format" ;
+    };
+};
+#define WIDTH  100
+#define HEIGHT 16
+FloatingWindow DLG_SYNC_BTN
+{
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( WIDTH , HEIGHT ) ;
+    Moveable = TRUE ;
+    Closeable = FALSE ;
+    Sizeable = FALSE ;
+    Zoomable = TRUE ;
+    HelpID = HID_SYNC_BTN ;
+    Hide = TRUE ;
+    PushButton BTN_SYNC
+    {
+        HelpID = "sw:PushButton:DLG_SYNC_BTN:BTN_SYNC";
+        Pos = MAP_APPFONT ( 1 , 1 ) ;
+        Size = MAP_APPFONT ( WIDTH - 1 , HEIGHT - 1 ) ;
+        Text [ en-US ] = "Synchronize Labels" ;
+    };
+};
+ // String *******************************************************************
+String STR_DOC_TITLE
+{
+    Text [ en-US ] = "Labels" ;
+};
+String STR_CUSTOM
+{
+    Text [ en-US ] = "[User]";
+};
+/********************************************************************/
+TabPage TP_VISITING_CARDS
+{
+    HelpID = HID_TP_VISITING_CARDS ;
+    Size = MAP_APPFONT ( 260 , 185 ) ;
+    Hide = TRUE ;
+
+    Control LB_AUTO_TEXT
+    {
+        Pos = MAP_APPFONT ( 12 , 14 ) ;
+        Size = MAP_APPFONT ( 109 , 135 ) ;
+        Border = TRUE ;
+        TabStop = TRUE ;
+    };
+    FixedText FT_AUTO_TEXT_GROUP
+    {
+        Pos = MAP_APPFONT ( 12 ,  153) ;
+        Size = MAP_APPFONT ( 109 , 8 ) ;
+        Text [ en-US ] = "AutoText - Section";
+    };
+    ListBox LB_AUTO_TEXT_GROUP
+    {
+        HelpID = "sw:ListBox:TP_VISITING_CARDS:LB_AUTO_TEXT_GROUP";
+        Pos = MAP_APPFONT ( 12 , 164) ;
+        Size = MAP_APPFONT ( 109 , 50 ) ;
+        Border = TRUE ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+    };
+    FixedLine FL_CONTENT
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
+        Text [ en-US ] = "Content";
+    };
+    Window WIN_EXAMPLE
+    {
+        Pos = MAP_APPFONT ( 139, 14 ) ;
+        Size = MAP_APPFONT ( 109 , 162 ) ;
+    };
+    String ST_VISCARD_GROUP
+    {
+       Text = "Cards";
+    };
+};
+TabPage TP_PRIVATE_DATA
+{
+    HelpID = HID_TP_PRIVATE_DATA  ;
+    Size = MAP_APPFONT ( 260 , 185 ) ;
+    Hide = TRUE ;
+    FixedLine FL_DATA
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
+        Text [ en-US ] = "Private data";
+    };
+    FixedText FT_NAME
+    {
+        Pos = MAP_APPFONT ( 12 ,  16) ;
+        Size = MAP_APPFONT ( 90 , 8 ) ;
+        Text [ en-US ] = "First/Last ~name/Initials";
+    };
+    Edit ED_FIRSTNAME
+    {
+        HelpID = "sw:Edit:TP_PRIVATE_DATA:ED_FIRSTNAME";
+        Pos = MAP_APPFONT ( 105 , 14 ) ;
+        Size = MAP_APPFONT ( 55 , 12 ) ;
+        Border = TRUE ;
+    };
+    Edit ED_NAME
+    {
+        HelpID = "sw:Edit:TP_PRIVATE_DATA:ED_NAME";
+        Pos = MAP_APPFONT ( 163 , 14 ) ;
+        Size = MAP_APPFONT ( 55 , 12 ) ;
+        Border = TRUE ;
+    };
+    Edit ED_SHORTCUT
+    {
+        HelpID = "sw:Edit:TP_PRIVATE_DATA:ED_SHORTCUT";
+        Pos = MAP_APPFONT ( 221 , 14 ) ;
+        Size = MAP_APPFONT ( 27 , 12 ) ;
+        Border = TRUE ;
+    };
+    FixedText FT_NAME_2
+    {
+        Pos = MAP_APPFONT ( 12 ,  32) ;
+        Size = MAP_APPFONT ( 90 , 8 ) ;
+        Text [ en-US ] = "First/Last ~name/Initials 2";
+    };
+    Edit ED_FIRSTNAME_2
+    {
+        HelpID = "sw:Edit:TP_PRIVATE_DATA:ED_FIRSTNAME_2";
+        Pos = MAP_APPFONT ( 105 , 30 ) ;
+        Size = MAP_APPFONT ( 55 , 12 ) ;
+        Border = TRUE ;
+    };
+    Edit ED_NAME_2
+    {
+        HelpID = "sw:Edit:TP_PRIVATE_DATA:ED_NAME_2";
+        Pos = MAP_APPFONT ( 163 , 30 ) ;
+        Size = MAP_APPFONT ( 55 , 12 ) ;
+        Border = TRUE ;
+    };
+    Edit ED_SHORTCUT_2
+    {
+        HelpID = "sw:Edit:TP_PRIVATE_DATA:ED_SHORTCUT_2";
+        Pos = MAP_APPFONT ( 221 , 30 ) ;
+        Size = MAP_APPFONT ( 27 , 12 ) ;
+        Border = TRUE ;
+    };
+    FixedText FT_STREET
+    {
+        Pos = MAP_APPFONT ( 12 ,  48) ;
+        Size = MAP_APPFONT ( 90 , 8 ) ;
+        Text [ en-US ] = "S~treet";
+    };
+    Edit ED_STREET
+    {
+        HelpID = "sw:Edit:TP_PRIVATE_DATA:ED_STREET";
+        Pos = MAP_APPFONT ( 105 , 46 ) ;
+        Size = MAP_APPFONT ( 143 , 12 ) ;
+        Border = TRUE ;
+    };
+    FixedText FT_ZIPCITY
+    {
+        Pos = MAP_APPFONT ( 12 ,  64) ;
+        Size = MAP_APPFONT ( 90 , 8 ) ;
+        Text [ en-US ] = "Zip/Cit~y";
+    };
+    Edit ED_ZIP
+    {
+        HelpID = "sw:Edit:TP_PRIVATE_DATA:ED_ZIP";
+        Pos = MAP_APPFONT ( 105 , 62 ) ;
+        Size = MAP_APPFONT ( 50 , 12 ) ;
+        Border = TRUE ;
+    };
+    Edit ED_CITY
+    {
+        HelpID = "sw:Edit:TP_PRIVATE_DATA:ED_CITY";
+        Pos = MAP_APPFONT ( 158 , 62 ) ;
+        Size = MAP_APPFONT ( 90 , 12 ) ;
+        Border = TRUE ;
+    };
+    FixedText FT_COUNTRYSTATE
+    {
+        Pos = MAP_APPFONT ( 12 ,  80) ;
+        Size = MAP_APPFONT ( 90 , 8 ) ;
+        Text [ en-US ] = "Co~untry/State";
+    };
+    Edit ED_COUNTRY
+    {
+        HelpID = "sw:Edit:TP_PRIVATE_DATA:ED_COUNTRY";
+        Pos = MAP_APPFONT ( 105 , 78 ) ;
+        Size = MAP_APPFONT ( 71 , 12 ) ;
+        Border = TRUE ;
+    };
+    Edit ED_STATE
+    {
+        HelpID = "sw:Edit:TP_PRIVATE_DATA:ED_STATE";
+        Pos = MAP_APPFONT ( 179 , 78 ) ;
+        Size = MAP_APPFONT ( 69 , 12 ) ;
+        Border = TRUE ;
+    };
+    FixedText FT_TITLEPROF
+    {
+        Pos = MAP_APPFONT ( 12 ,  96) ;
+        Size = MAP_APPFONT ( 90 , 8 ) ;
+        Text [ en-US ] = "Title/~Profession";
+    };
+    Edit ED_TITLE
+    {
+        HelpID = "sw:Edit:TP_PRIVATE_DATA:ED_TITLE";
+        Pos = MAP_APPFONT ( 105 , 94 ) ;
+        Size = MAP_APPFONT ( 71 , 12 ) ;
+        Border = TRUE ;
+    };
+    Edit ED_PROFESSION
+    {
+        HelpID = "sw:Edit:TP_PRIVATE_DATA:ED_PROFESSION";
+        Pos = MAP_APPFONT ( 179 , 94 ) ;
+        Size = MAP_APPFONT ( 69 , 12 ) ;
+        Border = TRUE ;
+    };
+    FixedText FT_PHONE_MOBILE
+    {
+        Pos = MAP_APPFONT ( 12 ,  112) ;
+        Size = MAP_APPFONT ( 90 , 8 ) ;
+        Text [ en-US ] = "Phone/Mobile";
+    };
+    Edit ED_PHONE
+    {
+        HelpID = "sw:Edit:TP_PRIVATE_DATA:ED_PHONE";
+        Pos = MAP_APPFONT ( 105 , 110 ) ;
+        Size = MAP_APPFONT ( 71 , 12 ) ;
+        Border = TRUE ;
+    };
+    Edit ED_MOBILE
+    {
+        HelpID = "sw:Edit:TP_PRIVATE_DATA:ED_MOBILE";
+        Pos = MAP_APPFONT ( 179 , 110 ) ;
+        Size = MAP_APPFONT ( 69 , 12 ) ;
+        Border = TRUE ;
+    };
+    FixedText FT_FAX
+    {
+        Pos = MAP_APPFONT ( 12 ,  128) ;
+        Size = MAP_APPFONT ( 90 , 8 ) ;
+        Text [ en-US ] = "Fa~x";
+    };
+    Edit ED_FAX
+    {
+        HelpID = "sw:Edit:TP_PRIVATE_DATA:ED_FAX";
+        Pos = MAP_APPFONT ( 105 , 126 ) ;
+        Size = MAP_APPFONT ( 143 , 12 ) ;
+        Border = TRUE ;
+    };
+    FixedText FT_WWWMAIL
+    {
+        Pos = MAP_APPFONT ( 12 ,  144) ;
+        Size = MAP_APPFONT ( 90 , 8 ) ;
+        Text [ en-US ] = "Homepage / e-mail";
+    };
+    Edit ED_WWW
+    {
+        HelpID = "sw:Edit:TP_PRIVATE_DATA:ED_WWW";
+        Pos = MAP_APPFONT ( 105 , 142) ;
+        Size = MAP_APPFONT ( 71 , 12 ) ;
+        Border = TRUE ;
+    };
+    Edit ED_MAIL
+    {
+        HelpID = "sw:Edit:TP_PRIVATE_DATA:ED_MAIL";
+        Pos = MAP_APPFONT ( 179 , 142) ;
+        Size = MAP_APPFONT ( 69 , 12 ) ;
+        Border = TRUE ;
+    };
+};
+TabPage TP_BUSINESS_DATA
+{
+    HelpID = HID_TP_BUSINESS_DATA;
+    Size = MAP_APPFONT ( 260 , 185 ) ;
+    Hide = TRUE ;
+    FixedLine FL_DATA
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
+        Text [ en-US ] = "Business data";
+    };
+    FixedText FT_COMP
+    {
+        Pos = MAP_APPFONT ( 12 ,  16) ;
+        Size = MAP_APPFONT ( 90 , 8 ) ;
+        Text [ en-US ] = "Company";
+    };
+    Edit ED_COMP
+    {
+        HelpID = "sw:Edit:TP_BUSINESS_DATA:ED_COMP";
+        Pos = MAP_APPFONT ( 105 , 14) ;
+        Size = MAP_APPFONT ( 143 , 12 ) ;
+        Border = TRUE ;
+    };
+    FixedText FT_COMP_EXT
+    {
+        Pos = MAP_APPFONT ( 12 ,  32) ;
+        Size = MAP_APPFONT ( 90 , 8 ) ;
+        Text [ en-US ] = "Company 2nd line";
+    };
+    Edit ED_COMP_EXT
+    {
+        HelpID = "sw:Edit:TP_BUSINESS_DATA:ED_COMP_EXT";
+        Pos = MAP_APPFONT ( 105 , 30) ;
+        Size = MAP_APPFONT ( 143 , 12 ) ;
+        Border = TRUE ;
+    };
+    FixedText FT_SLOGAN
+    {
+        Pos = MAP_APPFONT ( 12 ,  48) ;
+        Size = MAP_APPFONT ( 90 , 8 ) ;
+        Text [ en-US ] = "Slogan";
+    };
+    Edit ED_SLOGAN
+    {
+        HelpID = "sw:Edit:TP_BUSINESS_DATA:ED_SLOGAN";
+        Pos = MAP_APPFONT ( 105 , 46) ;
+        Size = MAP_APPFONT ( 143 , 12 ) ;
+        Border = TRUE ;
+    };
+    FixedText FT_STREET
+    {
+        Pos = MAP_APPFONT ( 12 ,  64) ;
+        Size = MAP_APPFONT ( 90 , 8 ) ;
+        Text [ en-US ] = "Street";
+    };
+    Edit ED_STREET
+    {
+        HelpID = "sw:Edit:TP_BUSINESS_DATA:ED_STREET";
+        Pos = MAP_APPFONT ( 105 , 62) ;
+        Size = MAP_APPFONT ( 143 , 12 ) ;
+        Border = TRUE ;
+    };
+    FixedText FT_ZIPCITY
+    {
+        Pos = MAP_APPFONT ( 12 ,  80) ;
+        Size = MAP_APPFONT ( 90 , 8 ) ;
+        Text [ en-US ] = "ZIP/City";
+    };
+    Edit ED_ZIP
+    {
+        HelpID = "sw:Edit:TP_BUSINESS_DATA:ED_ZIP";
+        Pos = MAP_APPFONT ( 105 , 78) ;
+        Size = MAP_APPFONT ( 50 , 12 ) ;
+        Border = TRUE ;
+    };
+    Edit ED_CITY
+    {
+        HelpID = "sw:Edit:TP_BUSINESS_DATA:ED_CITY";
+        Pos = MAP_APPFONT ( 158 , 78) ;
+        Size = MAP_APPFONT ( 90 , 12 ) ;
+        Border = TRUE ;
+    };
+    FixedText FT_COUNTRYSTATE
+    {
+        Pos = MAP_APPFONT ( 12 ,  96) ;
+        Size = MAP_APPFONT ( 90 , 8 ) ;
+        Text [ en-US ] = "Country/State";
+    };
+    Edit ED_COUNTRY
+    {
+        HelpID = "sw:Edit:TP_BUSINESS_DATA:ED_COUNTRY";
+        Pos = MAP_APPFONT ( 105 , 94) ;
+        Size = MAP_APPFONT ( 71 , 12 ) ;
+        Border = TRUE ;
+    };
+    Edit ED_STATE
+    {
+        HelpID = "sw:Edit:TP_BUSINESS_DATA:ED_STATE";
+        Pos = MAP_APPFONT ( 179 , 94) ;
+        Size = MAP_APPFONT ( 69 , 12 ) ;
+        Border = TRUE ;
+    };
+    FixedText FT_POSITION
+    {
+        Pos = MAP_APPFONT ( 12 ,  112) ;
+        Size = MAP_APPFONT ( 90 , 8 ) ;
+        Text [ en-US ] = "Position";
+    };
+    Edit ED_POSITION
+    {
+        HelpID = "sw:Edit:TP_BUSINESS_DATA:ED_POSITION";
+        Pos = MAP_APPFONT ( 105 , 110) ;
+        Size = MAP_APPFONT ( 143 , 12 ) ;
+        Border = TRUE ;
+    };
+    FixedText FT_PHONE_MOBILE
+    {
+        Pos = MAP_APPFONT ( 12 ,  128) ;
+        Size = MAP_APPFONT ( 90 , 8 ) ;
+        Text [ en-US ] = "Phone/Mobile";
+    };
+    Edit ED_PHONE
+    {
+        HelpID = "sw:Edit:TP_BUSINESS_DATA:ED_PHONE";
+        Pos = MAP_APPFONT ( 105 , 126) ;
+        Size = MAP_APPFONT ( 71 , 12 ) ;
+        Border = TRUE ;
+    };
+    Edit ED_MOBILE
+    {
+        HelpID = "sw:Edit:TP_BUSINESS_DATA:ED_MOBILE";
+        Pos = MAP_APPFONT ( 179 , 126) ;
+        Size = MAP_APPFONT ( 69 , 12 ) ;
+        Border = TRUE ;
+    };
+    FixedText FT_FAX
+    {
+        Pos = MAP_APPFONT ( 12 ,  144) ;
+        Size = MAP_APPFONT ( 90 , 8 ) ;
+        Text [ en-US ] = "Fax";
+    };
+    Edit ED_FAX
+    {
+        HelpID = "sw:Edit:TP_BUSINESS_DATA:ED_FAX";
+        Pos = MAP_APPFONT ( 105 , 142) ;
+        Size = MAP_APPFONT ( 143 , 12 ) ;
+        Border = TRUE ;
+    };
+    FixedText FT_WWWMAIL
+    {
+        Pos = MAP_APPFONT ( 12 ,  160) ;
+        Size = MAP_APPFONT ( 90 , 8 ) ;
+        Text [ en-US ] = "Ho~mepage / e-mail";
+    };
+    Edit ED_WWW
+    {
+        HelpID = "sw:Edit:TP_BUSINESS_DATA:ED_WWW";
+        Pos = MAP_APPFONT ( 105 , 158) ;
+        Size = MAP_APPFONT ( 71 , 12 ) ;
+        Border = TRUE ;
+    };
+    Edit ED_MAIL
+    {
+        HelpID = "sw:Edit:TP_BUSINESS_DATA:ED_MAIL";
+        Pos = MAP_APPFONT ( 179 , 158) ;
+        Size = MAP_APPFONT ( 69 , 12 ) ;
+        Border = TRUE ;
+    };
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

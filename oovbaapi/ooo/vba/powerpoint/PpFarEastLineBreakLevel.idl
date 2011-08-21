@@ -1,0 +1,7 @@
+module ooo { module vba { module powerpoint {
+    constants PpFarEastLineBreakLevel {
+        const long ppFarEastLineBreakLevelCustom = 3;
+        const long ppFarEastLineBreakLevelNormal = 1;
+        const long ppFarEastLineBreakLevelStrict = 2;
+    };
+}; }; };

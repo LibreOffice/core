@@ -1,0 +1,160 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_sheet_XPrintAreas_idl__
+#define __com_sun_star_sheet_XPrintAreas_idl__
+
+#include <com/sun/star/uno/XInterface.idl>
+#include <com/sun/star/table/CellRangeAddress.idl>
+
+//=============================================================================
+
+module com {  module sun {  module star {  module sheet {
+
+//=============================================================================
+
+/** represents a sheet which has print areas.
+ */
+published interface XPrintAreas: com::sun::star::uno::XInterface
+{
+    //-------------------------------------------------------------------------
+
+    /** returns a sequence containing all print areas of the sheet.
+     */
+    sequence< com::sun::star::table::CellRangeAddress > getPrintAreas();
+
+    //-------------------------------------------------------------------------
+
+    /** sets the print areas of the sheet.
+
+        <p>If none of the sheets in a document have print areas,
+        the whole sheets are printed. If any sheet contains print areas,
+        other sheets without print areas are not printed.</p>
+
+        @param aPrintAreas
+            a sequence containing all print areas for this sheet.
+     */
+    void setPrintAreas( [in] sequence< com::sun::star::table::CellRangeAddress > aPrintAreas );
+
+    //-------------------------------------------------------------------------
+
+    /** returns, whether the title columns are repeated on all subsequent
+        print pages to the right.
+     */
+    boolean getPrintTitleColumns();
+
+    //-------------------------------------------------------------------------
+
+    /** specifies whether the title columns are repeated on all subsequent
+        print pages to the right.
+
+        @param bPrintTitleColumns
+            if <TRUE/>, title columns are repeated on each page.
+     */
+    void setPrintTitleColumns( [in] boolean bPrintTitleColumns );
+
+    //-------------------------------------------------------------------------
+
+    /** returns the range that is specified as title columns range.
+
+        <p>Title columns can be automatically repeated on all subsequent
+        print pages to the right, using
+        <member>XPrintAreas::setPrintTitleColumns</member>.</p>
+
+        @returns
+            the range of columns that is specified as title columns range.
+     */
+    com::sun::star::table::CellRangeAddress getTitleColumns();
+
+    //-------------------------------------------------------------------------
+
+    /** specifies a range of columns as title columns range.
+
+        <p>The rows of the passed range are ignored.</p>
+
+        <p>Title columns can be automatically repeated on all subsequent
+        print pages to the right, using
+        <member>XPrintAreas::setPrintTitleColumns</member>.</p>
+
+        @param aTitleColumns
+            the title columns range.
+     */
+    void setTitleColumns( [in] com::sun::star::table::CellRangeAddress aTitleColumns );
+
+    //-------------------------------------------------------------------------
+
+    /** returns, whether the title rows are repeated on all subsequent
+        print pages to the bottom.
+     */
+    boolean getPrintTitleRows();
+
+    //-------------------------------------------------------------------------
+
+    /** specifies whether the title rows are repeated on all subsequent
+        print pages to the bottom.
+
+        @param bPrintTitleRows
+            if <TRUE/>, title rows are repeated on each page.
+     */
+    void setPrintTitleRows( [in] boolean bPrintTitleRows );
+
+    //-------------------------------------------------------------------------
+
+    /** returns the range that is specified as title rows range.
+
+        <p>Title rows can be automatically repeated on all subsequent
+        print pages to the bottom, using
+        <member>XPrintAreas::setPrintTitleRows</member>.</p>
+
+        @returns
+            the range of rows that is specified as title rows range.
+     */
+    com::sun::star::table::CellRangeAddress getTitleRows();
+
+    //-------------------------------------------------------------------------
+
+    /** specifies a range of rows as title rows range.
+
+        <p>The columns of the passed range are ignored.</p>
+
+        <p>Title rows can be automatically repeated on all subsequent
+        print pages to the bottom, using
+        <member>XPrintAreas::setPrintTitleRows</member>.</p>
+
+        @param aTitleRows
+            the title rows range.
+     */
+    void setTitleRows( [in] com::sun::star::table::CellRangeAddress aTitleRows );
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif
+

@@ -1,0 +1,139 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_sheet_XDataPilotDescriptor_idl__
+#define __com_sun_star_sheet_XDataPilotDescriptor_idl__
+
+#include <com/sun/star/container/XNamed.idl>
+#include <com/sun/star/table/CellRangeAddress.idl>
+#include <com/sun/star/sheet/XSheetFilterDescriptor.idl>
+#include <com/sun/star/container/XIndexAccess.idl>
+
+//=============================================================================
+
+module com {  module sun {  module star {  module sheet {
+
+//=============================================================================
+
+/** provides access to the layout settings of a data pilot table.
+
+    <p>This interface extends the interface
+    <type scope="com::sun::star::container">XNamed</type> which provides
+    access to the name of the data pilot table used e.g. in collections.</p>
+
+    @see com::sun::star::sheet::DataPilotDescriptor
+    @see com::sun::star::sheet::DataPilotTable
+ */
+published interface XDataPilotDescriptor: com::sun::star::container::XNamed
+{
+    //-------------------------------------------------------------------------
+
+    /** returns an additional string stored in the data pilot table.
+     */
+    string getTag();
+
+    //-------------------------------------------------------------------------
+
+    /** sets an additional string stored in the data pilot table.
+     */
+    void setTag( [in] string aTag );
+
+    //-------------------------------------------------------------------------
+
+    /** returns the cell range containing the data for the data pilot table.
+     */
+    com::sun::star::table::CellRangeAddress getSourceRange();
+
+    //-------------------------------------------------------------------------
+
+    /** sets the cell range containing the data for the data pilot table.
+     */
+    void setSourceRange(
+            [in] com::sun::star::table::CellRangeAddress aSourceRange );
+
+    //-------------------------------------------------------------------------
+
+    /** returns the filter descriptor specifying which data from the
+        source cell range are used for the data pilot table.
+     */
+    com::sun::star::sheet::XSheetFilterDescriptor getFilterDescriptor();
+
+    //-------------------------------------------------------------------------
+
+    /** returns the collection of all the data pilot fields.
+     */
+    com::sun::star::container::XIndexAccess getDataPilotFields();
+
+    //-------------------------------------------------------------------------
+
+    /** returns the collection of the data pilot fields used as column fields.
+
+        @see com::sun::star::sheet::DataPilotFields
+     */
+    com::sun::star::container::XIndexAccess getColumnFields();
+
+    //-------------------------------------------------------------------------
+
+    /** returns the collection of the data pilot fields used as row fields.
+
+        @see com::sun::star::sheet::DataPilotFields
+     */
+    com::sun::star::container::XIndexAccess getRowFields();
+
+    //-------------------------------------------------------------------------
+
+    /** returns the collection of the data pilot fields used as page fields.
+
+        @see com::sun::star::sheet::DataPilotFields
+     */
+    com::sun::star::container::XIndexAccess getPageFields();
+
+    //-------------------------------------------------------------------------
+
+    /** returns the collection of the data pilot fields used as data fields.
+
+        @see com::sun::star::sheet::DataPilotFields
+     */
+    com::sun::star::container::XIndexAccess getDataFields();
+
+    //-------------------------------------------------------------------------
+
+    /** returns the collection of the data pilot fields not used as
+        column, row, page, or data fields.
+
+        @see com::sun::star::sheet::DataPilotFields
+     */
+    com::sun::star::container::XIndexAccess getHiddenFields();
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif
+

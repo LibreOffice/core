@@ -1,0 +1,177 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_xml_dom_XDocument_idl__
+#define __com_sun_star_xml_dom_XDocument_idl__
+
+#include <com/sun/star/xml/dom/XNode.idl>
+#include <com/sun/star/xml/dom/XAttr.idl>
+#include <com/sun/star/xml/dom/XCDATASection.idl>
+#include <com/sun/star/xml/dom/XComment.idl>
+#include <com/sun/star/xml/dom/XDocumentFragment.idl>
+#include <com/sun/star/xml/dom/XEntityReference.idl>
+#include <com/sun/star/xml/dom/XProcessingInstruction.idl>
+#include <com/sun/star/xml/dom/XDocumentType.idl>
+#include <com/sun/star/xml/dom/XDOMImplementation.idl>
+
+module com { module sun { module star { module xml { module dom {
+
+interface XDocument: XNode
+{
+    /**
+    Creates an Attr of the given name.
+    Throws:
+    DOMException - INVALID_CHARACTER_ERR: Raised if the specified name contains an illegal character.
+    */
+    XAttr createAttribute([in] string name) raises (DOMException);
+
+    /**
+    Creates an attribute of the given qualified name and namespace URI.
+    Throws:
+    DOMException - INVALID_CHARACTER_ERR: Raised if the specified qualified name contains an illegal
+                      character, per the XML 1.0 specification .
+                   NAMESPACE_ERR: Raised if the qualifiedName is malformed per the Namespaces in XML
+                      specification, if the qualifiedName has a prefix and the namespaceURI is null, if
+                      the qualifiedName has a prefix that is "xml" and the namespaceURI is different from
+                      " http://www.w3.org/XML/1998/namespace", or if the qualifiedName, or its prefix, is
+                      "xmlns" and the namespaceURI is different from " http://www.w3.org/2000/xmlns/".
+                   NOT_SUPPORTED_ERR: Always thrown if the current document does not support the "XML"
+                      feature, since namespaces were defined by XML.
+    */
+    XAttr createAttributeNS([in] string namespaceURI, [in] string qualifiedName) raises (DOMException);
+
+    /**
+    Creates a CDATASection node whose value is the specified string.
+    Throws:
+    DOMException - NOT_SUPPORTED_ERR: Raised if this document is an HTML document.
+    */
+    XCDATASection createCDATASection([in] string data) raises (DOMException);
+
+    /**
+    Creates a Comment node given the specified string.
+    */
+    XComment createComment([in] string data);
+
+    /**
+    Creates an empty DocumentFragment object.
+    */
+    XDocumentFragment createDocumentFragment();
+
+
+    /**
+    Creates an element of the type specified.
+    Throws:
+    DOMException - INVALID_CHARACTER_ERR: Raised if the specified name contains an illegal character.
+    */
+    XElement createElement([in] string tagName) raises (DOMException);
+
+
+    /**
+    Creates an element of the given qualified name and namespace URI.
+    Throws:
+    DOMException - INVALID_CHARACTER_ERR: Raised if the specified qualified name contains an
+                      illegal character, per the XML 1.0 specification .
+                   NAMESPACE_ERR: Raised if the qualifiedName is malformed per the Namespaces in
+                      XML specification, if the qualifiedName has a prefix and the namespaceURI is
+                      null, or if the qualifiedName has a prefix that is "xml" and the namespaceURI
+                      is different from " http://www.w3.org/XML/1998/namespace" .
+                   NOT_SUPPORTED_ERR: Always thrown if the current document does not support the
+                      "XML" feature, since namespaces were defined by XML.
+    */
+    XElement createElementNS([in] string namespaceURI, [in] string qualifiedName) raises (DOMException);
+
+    /**
+   Throws:
+    DOMException - NOT_SUPPORTED_ERR: Raised if the type of node being imported is not supported.
+    Creates an EntityReference object.
+    Throws:
+    DOMException - INVALID_CHARACTER_ERR: Raised if the specified name contains an illegal character.
+    NOT_SUPPORTED_ERR: Raised if this document is an HTML document.
+    */
+    XEntityReference createEntityReference([in] string name) raises (DOMException);
+
+    /**
+    Creates a ProcessingInstruction node given the specified name and
+    data strings.
+    Throws:
+    DOMException - INVALID_CHARACTER_ERR: Raised if the specified target contains an illegal character.
+    NOT_SUPPORTED_ERR: Raised if this document is an HTML document.
+    */
+    XProcessingInstruction createProcessingInstruction(
+    [in] string target, [in] string data) raises (DOMException);
+
+    /**
+    Creates a Text node given the specified string.
+    */
+    XText createTextNode([in] string data);
+
+    /**
+    The Document Type Declaration (see DocumentType) associated with this
+    document.
+    */
+    XDocumentType getDoctype();
+
+    /**
+    This is a convenience attribute that allows direct access to the child
+    node that is the root element of the document.
+    */
+    XElement getDocumentElement();
+
+    /**
+    Returns the Element whose ID is given by elementId.
+    */
+    XElement getElementById([in] string elementId);
+
+    /**
+    Returns a NodeList of all the Elements with a given tag name in the
+    order in which they are encountered in a preorder traversal of the
+    Document tree.
+    */
+    XNodeList getElementsByTagName([in] string tagname);
+
+    /**
+    Returns a NodeList of all the Elements with a given local name and
+    namespace URI in the order in which they are encountered in a preorder
+    traversal of the Document tree.
+    */
+    XNodeList getElementsByTagNameNS([in] string namespaceURI, [in] string localName);
+
+    /**
+    The DOMImplementation object that handles this document.
+    */
+    XDOMImplementation getImplementation();
+
+    /**
+    Imports a node from another document to this document.
+    Throws:
+    DOMException - NOT_SUPPORTED_ERR: Raised if the type of node being imported is not supported.
+    */
+    XNode importNode([in] XNode importedNode, [in] boolean deep) raises (DOMException);
+};
+};};};};};
+
+#endif

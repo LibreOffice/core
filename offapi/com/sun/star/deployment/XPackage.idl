@@ -1,0 +1,366 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#if ! defined INCLUDED_com_sun_star_deployment_XPackage_idl
+#define INCLUDED_com_sun_star_deployment_XPackage_idl
+
+#include <com/sun/star/beans/Optional.idl>
+#include <com/sun/star/beans/Ambiguous.idl>
+#include <com/sun/star/beans/StringPair.idl>
+#include <com/sun/star/deployment/DeploymentException.idl>
+#include <com/sun/star/deployment/XPackageTypeInfo.idl>
+#include <com/sun/star/deployment/ExtensionRemovedException.idl>
+#include <com/sun/star/graphic/XGraphic.idl>
+#include <com/sun/star/lang/XComponent.idl>
+#include <com/sun/star/lang/IllegalArgumentException.idl>
+#include <com/sun/star/task/XAbortChannel.idl>
+#include <com/sun/star/ucb/CommandFailedException.idl>
+#include <com/sun/star/ucb/CommandAbortedException.idl>
+#include <com/sun/star/ucb/XCommandEnvironment.idl>
+#include <com/sun/star/util/XModifyBroadcaster.idl>
+
+
+module com { module sun { module star { module deployment {
+
+/** Objects of this interface reflect a bound package and are issued by a
+    <type>PackageRegistryBackend</type>.
+
+    @since OOo 2.0
+*/
+interface XPackage
+{
+    /** implemented to notify that the package has been removed
+     */
+    interface com::sun::star::lang::XComponent;
+
+    /** notifies changes of the registration state of the package
+     */
+    interface com::sun::star::util::XModifyBroadcaster;
+
+
+    /** creates a command channel to be used to asynchronously abort a command.
+
+        @return
+                abort channel
+    */
+    com::sun::star::task::XAbortChannel createAbortChannel();
+
+    /** checks if the package can be installed.
+
+        Only if the return value is <TRUE/> the package is allowed to be installed.
+        In case of <FALSE/> or in case of an exception, the package must be removed
+        completely.
+        After return of this function no code from the extension may be used
+        anymore, so that the extension can be safely removed from the hard disk.
+
+        @param xCmdEnv
+               command environment for error handling and other interaction.
+        @alreadyInstalled
+            indicates that an extension with the same identifier is already installed.
+
+        @return
+            <NULL/> - all prerequisites are met. Otherwise, a value from
+            <member>Prerequisites</member> indicating what prerequisites are missing.
+     */
+    long checkPrerequisites(
+        [in] com::sun::star::task::XAbortChannel xAbortChannel,
+        [in] com::sun::star::ucb::XCommandEnvironment xCmdEnv,
+        [in] boolean alreadyInstalled)
+        raises (DeploymentException,
+                ExtensionRemovedException,
+                com::sun::star::ucb::CommandFailedException,
+                com::sun::star::ucb::CommandAbortedException);
+
+    /** checks if the dependencies for this package are still satisfied
+
+        After updating the OpenOffice.org, some dependencies for packages might
+        no longer be satisfied.
+
+        @since OOo 3.2
+
+        @param xCmdEnv
+               command environment for error handling and other interaction.
+
+        @return
+            <TRUE/> - all dependencies are satisfied
+            <FALSE/> - at least one dependency failed.
+     */
+    boolean checkDependencies(
+        [in] com::sun::star::ucb::XCommandEnvironment xCmdEnv )
+        raises (DeploymentException,
+                ExtensionRemovedException,
+                com::sun::star::ucb::CommandFailedException);
+
+
+    /** determines whether the package is currently registered, i.e.
+        whether it is active.
+
+        @param xAbortChannel
+               abort channel to asynchronously abort the registration process,
+               or <NULL/>
+        @param xCmdEnv
+               command environment for error and progress handling
+        @return
+                status whether the package is registered (<TRUE/>, <FALSE/>) or
+                the status is ambiguous.  Additionally, a registration status
+                may not apply, e.g. in case of an empty package bundle.
+    */
+    com::sun::star::beans::Optional<
+        com::sun::star::beans::Ambiguous<boolean> > isRegistered(
+            [in] com::sun::star::task::XAbortChannel xAbortChannel,
+            [in] com::sun::star::ucb::XCommandEnvironment xCmdEnv )
+        raises (DeploymentException,
+                com::sun::star::ucb::CommandFailedException,
+                com::sun::star::ucb::CommandAbortedException);
+
+    /** registers this <type>XPackage</type>.
+
+        NEVER call this directly. This is done by the extension manager if necessary.
+
+        @param startup
+               indicates that registration is adapted to the particular
+               startup scenario. That is, it is set to <TRUE/>, when called
+               from <member>XExtensionManager::synchronize</member>
+        @param xAbortChannel
+               abort channel to asynchronously abort the registration process,
+               or <NULL/>
+        @param xCmdEnv
+               command environment for error and progress handling
+    */
+    void registerPackage(
+        [in] boolean startup,
+        [in] com::sun::star::task::XAbortChannel xAbortChannel,
+        [in] com::sun::star::ucb::XCommandEnvironment xCmdEnv )
+        raises (DeploymentException,
+                ExtensionRemovedException,
+                com::sun::star::ucb::CommandFailedException,
+                com::sun::star::ucb::CommandAbortedException,
+                com::sun::star::lang::IllegalArgumentException);
+
+    /** revokes this <type>XPackage</type>.
+
+        NEVER call this directly. This is done by the extension manager if necessary.
+
+        @param xAbortChannel
+               abort channel to asynchronously abort the registration process,
+               or <NULL/>
+        @param xCmdEnv
+               command environment for error and progress handling
+    */
+    void revokePackage(
+        [in] com::sun::star::task::XAbortChannel xAbortChannel,
+        [in] com::sun::star::ucb::XCommandEnvironment xCmdEnv )
+        raises (DeploymentException,
+                com::sun::star::ucb::CommandFailedException,
+                com::sun::star::ucb::CommandAbortedException,
+                com::sun::star::lang::IllegalArgumentException);
+
+    /** reflects whether this package is a bundle of one or more packages,
+        e.g. a zip (legacy) package file or a document hosting script packages.
+
+        @return
+                <TRUE/> if this package is a package bundle, <FALSE/> otherwise
+    */
+    boolean isBundle();
+
+    /** Gets packages of the bundle.
+
+        If <member>isRemoved</member> returns <TRUE/> then getBundle may return an
+        empty sequence in case the object is not registered.
+
+        @param xAbortChannel
+               abort channel to asynchronously abort the registration process,
+               or <NULL/>
+        @param xCmdEnv
+               command environment for error and progress handling
+        @return
+                set of packages enclosed in this package
+    */
+    sequence<XPackage> getBundle(
+        [in] com::sun::star::task::XAbortChannel xAbortChannel,
+        [in] com::sun::star::ucb::XCommandEnvironment xCmdEnv )
+        raises (DeploymentException,
+                com::sun::star::ucb::CommandFailedException,
+                com::sun::star::ucb::CommandAbortedException,
+                com::sun::star::lang::IllegalArgumentException);
+
+    /** returns the file name of the package.
+
+        @return
+                file name of the package
+    */
+    string getName();
+
+    /** returns the unique extension identifier.
+
+        @return
+                the extension identifier (a
+        <code>"org.openoffice.legacy."</code> one if the extension does not
+        explicitly specify one), or an empty <code>Optional</code> if this
+        package does not represent an extension
+    */
+    com::sun::star::beans::Optional<string> getIdentifier();
+
+    /** returns the textual version representation of the package.
+
+        A textual version representation is a finite string following the
+        BNF<br/>
+        version ::= [element ("." element)*]<br/>
+        element ::= ("0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9")+
+
+        @return
+                the textual version representation
+    */
+    string getVersion()
+        raises (ExtensionRemovedException);
+
+    /** returns the location of the package.
+
+        @return
+                location of package
+    */
+    string getURL();
+
+    /** returns the display name of the package, e.g. for graphical user
+        interfaces (GUI).
+
+        @return
+                display name of the package
+    */
+    string getDisplayName()
+        raises (ExtensionRemovedException);
+
+    /** returns a description string to describe the  package.
+
+        @return
+                description
+    */
+    string getDescription()
+         raises (ExtensionRemovedException);
+
+    /** returns a string containing the license text.
+
+        @return
+                license
+    */
+    string getLicenseText()
+         raises (ExtensionRemovedException);
+
+    /** returns a sequence of update information URLs.
+
+        The sequence may be empty in case no update information is available.
+        If the sequence contains more than one URL, the extra URLs must mirror
+        the information available at the first URL.
+
+        @return
+                update information URLs
+    */
+    sequence<string> getUpdateInformationURLs()
+        raises (ExtensionRemovedException);
+    /** returns the publisher info for the package, the strings
+        might be empty, if there is no publisher
+
+        <type scope="::com::sun::star::beans">StringPair</type>::First
+        represents the publisher name and
+        <type scope="::com::sun::star::beans">StringPair</type>::Second
+        represents the URL to the publisher.
+    */
+
+    ::com::sun::star::beans::StringPair getPublisherInfo()
+        raises (ExtensionRemovedException);
+    /** returns the <type>XPackageTypeInfo</type>, e.g. media-type etc.
+
+        @return
+                media type of package
+    */
+    XPackageTypeInfo getPackageType();
+
+    /** exports package to given destination URL.
+
+        @param destFolderURL
+               package destination folder URL, must be UCB conforming
+        @param newTitle
+               new package name
+        @param nameClashAction
+               one of <type scope="com::sun::star::ucb">NameClash</type>
+        @param xCmdEnv
+               command environment for error and progress handling
+    */
+    void exportTo( [in] string destFolderURL,
+                   [in] string newTitle,
+                   [in] long nameClashAction,
+                   [in] com::sun::star::ucb::XCommandEnvironment xCmdEnv )
+        raises (
+            ExtensionRemovedException,
+            com::sun::star::ucb::CommandFailedException,
+            com::sun::star::ucb::CommandAbortedException);
+
+    /** returns an icon for a package.
+
+        @param highContrast
+            return high contrast icon
+        @return
+            the icon which should be used to represent the table in the
+            database application window, or <NULL/> if the default icon
+            should be used.
+    */
+    com::sun::star::graphic::XGraphic getIcon( [in] boolean highContrast )
+        raises (ExtensionRemovedException);
+
+    /** returns the name of the repository where this object comes from.
+     */
+    string getRepositoryName();
+
+    /** return a URL to a directory which contains the registration data.
+
+        This data may be created when calling
+        <member>XPackage::registerPackage</member>.  If this is the case is
+        indicated by <member
+        scope="com::sun::star::beans">Optional::IsPresent</member> of the return
+        value.
+        If registration data are created during registration, but the package is
+        currently not registered, for example after calling
+        <member>XPackage::revokePackage</member>, then <member
+        scope="com::sun::star::beans">Optional::IsPresent</member> is <TRUE/> and
+        the <member scope="com::sun::star::beans">Optional::Value</member> may
+        be an empty string.
+    */
+    com::sun::star::beans::Optional<string> getRegistrationDataURL()
+        raises (ExtensionRemovedException);
+
+    /** indicates if this object represents a removed extension or extension
+        item. This is the case when it was created by providing
+        <TRUE/> for the <code>removed</code> parameter in the function
+        <member>XPackageRegistry::bindPackage</member>.
+     */
+    boolean isRemoved();
+
+};
+
+}; }; }; };
+
+#endif

@@ -1,0 +1,432 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_sdbc_XConnection_idl__
+#define __com_sun_star_sdbc_XConnection_idl__
+
+#include <com/sun/star/uno/XInterface.idl>
+
+ module com {  module sun {  module star {  module container {
+ published interface XNameAccess;
+};};};};
+
+#include <com/sun/star/sdbc/SQLException.idl>
+
+#include <com/sun/star/sdbc/XCloseable.idl>
+
+ module com {  module sun {  module star {  module sdbc {
+
+ published interface XStatement;
+ published interface XPreparedStatement;
+ published interface XDatabaseMetaData;
+
+
+/** represents a connection (session) with a specific
+    database. Within the context of a Connection, SQL statements are
+    executed and results are returned.
+
+
+    <p>
+    A Connection's database is able to provide information
+    describing its tables, its supported SQL grammar, its stored
+    procedures, and the capabilities of this connection. This
+    information is obtained with the
+    <member scope="com::sun::star::sdbc">XDatabaseMetaData::getMetaData()</member>
+    method.
+
+    </p>
+    @see com::sun::star::sdbc::XDriverManager
+    @see com::sun::star::sdbc::XStatement
+    @see com::sun::star::sdbc::XDatabaseMetaData
+ */
+published interface XConnection: com::sun::star::sdbc::XCloseable
+{
+
+    /** creates a new
+        <type scope="com::sun::star::sdbc">Statement</type>
+        object for sending SQL statements to the database.
+
+
+        <p>
+        SQL statements without parameters are normally
+        executed using Statement objects. If the same SQL statement
+        is executed many times, it is more efficient to use a
+        <type scope="com::sun::star::sdbc">PreparedStatement</type>
+        .
+        </p>
+        <p>
+        Result sets created using the returned Statement will have
+        forward-only type, and read-only concurrency, by default.
+        </p>
+        <p>
+        Escape processing for the SQL-Statement is enabled, by default.
+        </p>
+
+        @returns
+            a new Statement object
+        @throws SQLException
+            if a database access error occurs.
+     */
+    XStatement createStatement() raises (SQLException);
+    //-------------------------------------------------------------------------
+
+    /** creates a
+        <type scope="com::sun::star::sdbc">PreparedStatement</type>
+        object for sending parameterized SQL statements to the database.
+
+
+        <p>
+        A SQL statement with or without IN parameters can be
+        pre-compiled and stored in a PreparedStatement object. This
+        object can then be used to efficiently execute this statement
+        multiple times.
+
+        </p>
+        <p>
+        <b>
+        Note:
+        </b>
+        This method is optimized for handling
+        parametric SQL statements that benefit from precompilation. If
+        the driver supports precompilation,
+        the method
+        <code>prepareStatement</code>
+        will send
+        the statement to the database for precompilation. Some drivers
+        may not support precompilation. In this case, the statement may
+        not be sent to the database until the
+        <type scope="com::sun::star::sdbc">PreparedStatement</type>
+        is executed.  This has no direct effect on users; however, it does
+        affect which method throws certain SQLExceptions.
+        </p>
+        <p>
+        Result sets created using the returned PreparedStatement will have
+        forward-only type and read-only concurrency, by default.
+        </p>
+        <p>
+        Escape processing for the SQL-Statement is enabled, by default.
+        </p>
+
+        @param sql
+            a SQL statement that may contain one or more "?" IN parameter placeholders
+        @returns
+            a new PreparedStatement object containing the pre-compiled statement
+        @throws SQLException
+            if a database access error occurs.
+     */
+    XPreparedStatement prepareStatement([in]string sql) raises (SQLException);
+    //-------------------------------------------------------------------------
+
+    /** creates a
+        <type scope="com::sun::star::sdbc">CallableStatement</type>
+        object for calling
+        database stored procedures.
+
+
+        <p>
+        The CallableStatement provides methods for setting up its IN and OUT
+        parameters, and methods for executing the call to a stored procedure.
+        </p>
+        <p>
+        <b>
+        Note:
+        </b>
+        This method is optimized for handling stored
+        procedure call statements. Some drivers may send the call
+        statement to the database when the method
+        <code>prepareCall</code>
+        is done;
+        <br/>
+        others may wait until the CallableStatement is executed. This has no
+        direct effect on users; however, it does affect which method
+        throws certain SQLExceptions.
+        Result sets created using the returned CallableStatement will have
+        forward-only type and read-only concurrency, by default.
+        </p>
+
+        @param sql
+            a SQL statement that may contain one or more "?" IN parameter placeholders
+        @returns
+            a new PreparedStatement object containing the pre-compiled statement
+        @throws SQLException
+            if a database access error occurs.
+     */
+    XPreparedStatement prepareCall([in]string sql) raises (SQLException);
+    //-------------------------------------------------------------------------
+
+    /** converts the given SQL statement into the system's native SQL grammar.
+        A driver may convert the JDBC SQL grammar into its system's
+        native SQL grammar prior to sending it; this method returns the
+        native form of the statement that the driver would have sent.
+
+        @param sql
+            a SQL statement that may contain one or more "?" parameter placeholders
+        @returns
+            the native form of this statement
+        @throws SQLException
+            if a database access error occurs.
+     */
+    string nativeSQL([in]string sql) raises (SQLException);
+    //-------------------------------------------------------------------------
+
+    /** sets this connection's auto-commit mode.
+
+
+        <p>
+        If a connection is in auto-commit mode, then all its SQL
+        statements will be executed and committed as individual
+        transactions. Otherwise, its SQL statements are grouped into
+        transactions that are terminated by a call to either
+        the method
+        <member scope="com::sun::star::sdbc">XConnection::commit()</member>
+        or the method
+        <member scope="com::sun::star::sdbc">XConnection::rollback()</member>
+        .
+        By default, new connections are in auto-commit mode.
+        </p>
+        <p>
+        The commit occurs when the statement completes or the next
+        execute occurs, whichever comes first. In the case of
+        statements returning a ResultSet, the statement completes when
+        the last row of the ResultSet has been retrieved or the
+        ResultSet has been closed. In advanced cases, a single
+        statement may return multiple results as well as output
+        parameter values. In these cases the commit occurs when all results and
+        output parameter values have been retrieved.
+        </p>
+
+        @param autoCommit
+            <TRUE/> enables auto-commit; <FALSE/> disables auto-commit.
+        @throws SQLException
+            if a database access error occurs.
+     */
+    void setAutoCommit([in] boolean autoCommit) raises (SQLException);
+    //-------------------------------------------------------------------------
+
+    /** gets the current auto-commit state.
+
+        @returns
+            the current state of auto-commit mode.
+        @throws SQLException
+            if a database access error occurs.
+
+        @see setAutoCommit
+     */
+    boolean getAutoCommit() raises (SQLException);
+    //-------------------------------------------------------------------------
+
+    /** makes all changes made since the previous commit/rollback
+        permanent and releases any database locks currently held
+        by the Connection. This method should be
+        used only when auto-commit mode has been disabled.
+
+        @throws SQLException
+            if a database access error occurs.
+
+        @see setAutoCommit
+     */
+    void commit() raises (SQLException);
+    //-------------------------------------------------------------------------
+
+    /** drops all changes made since the previous
+        commit/rollback and releases any database locks currently held
+        by this Connection. This method should be used only when auto-commit has been disabled.
+
+        @throws SQLException
+            if a database access error occurs.
+
+        @see setAutoCommit
+     */
+    void rollback() raises (SQLException);
+    //-------------------------------------------------------------------------
+
+    /** tests to see if a connection is closed.
+
+
+        <p>
+        <b>
+        Note:
+        </b>
+        A Connection is automatically closed if no one references it
+        anymore. Certain fatal errors also result in a closed Connection.
+        </p>
+
+        @returns
+            <TRUE/> if the connection is closed; <FALSE/> if it's still open.
+        @throws SQLException
+            if a database access error occurs.
+     */
+    boolean isClosed() raises (SQLException);
+    //-------------------------------------------------------------------------
+
+    /** gets the metadata regarding this connection's database.
+
+
+        <p>
+        A Connection's database is able to provide information
+        describing its tables, its supported SQL grammar, its stored
+        procedures, the capabilities of this connection, and so on. This
+        information is made available through a DatabaseMetaData
+        object.
+        </p>
+
+        @returns
+            a DatabaseMetaData object for this Connection.
+        @throws SQLException
+            if a database access error occurs.
+     */
+    XDatabaseMetaData getMetaData() raises (SQLException);
+    //-------------------------------------------------------------------------
+
+    /** puts this connection in read-only mode as a hint to enable
+        database optimizations.
+
+
+        <p>
+        <b>
+        Note:
+        </b>
+        This method cannot be called while in the
+        middle of a transaction. Calling setReadOnly with
+        <TRUE/>
+        does not
+        necessarily cause writes to be prohibited.
+        </p>
+
+        @param readONly
+            <TRUE/> enables read-only mode; <FALSE/> disables read-only mode.
+        @throws SQLException
+            if a database access error occurs.
+     */
+    void setReadOnly([in]boolean readOnly) raises (SQLException);
+    //-------------------------------------------------------------------------
+
+    /** tests to see if the connection is in read-only mode.
+        @returns
+            <TRUE/> if connection is read-only and <FALSE/> otherwise.
+        @throws SQLException
+            if a database access error occurs.
+     */
+    boolean isReadOnly() raises (SQLException);
+    //-------------------------------------------------------------------------
+
+    /** sets a catalog name in order to select
+        a subspace of this Connection's database in which to work.
+        If the driver does not support catalogs, it will
+        silently ignore this request.
+        @param catalog
+            the name of the catalog.
+        @throws SQLException
+            if a database access error occurs.
+     */
+    void setCatalog([in]string catalog) raises (SQLException);
+    //-------------------------------------------------------------------------
+
+    /** returns the Connection's current catalog name.
+        @returns
+            the current catalog name or an empty string.
+        @throws SQLException
+            if a database access error occurs.
+     */
+    string getCatalog() raises (SQLException);
+    //-------------------------------------------------------------------------
+
+    /** attempts to change the transaction isolation level to the one given.
+
+
+        <p>
+        The constants defined in
+        <type scope="com::sun::star::sdbc">TransactionIsolation</type>
+        are the possible transaction isolation levels.
+        </p>
+        <p>
+        <b>
+        Note:
+        </b>
+        This method cannot be called while
+        in the middle of a transaction.
+        </p>
+        @param level
+            one of the TransactionIsolation values with the exception of NONE; some databases may not support other values.
+        @throws SQLException
+            if a database access error occurs.
+
+        @see com::sun::star::sdbc::XDatabaseMetaData::supportsTransactionIsolationLevel()
+     */
+    void setTransactionIsolation([in]long level) raises (SQLException);
+    //-------------------------------------------------------------------------
+
+    /** gets this Connection's current transaction isolation level.
+        @returns
+            the current TransactionIsolation mode value.
+        @throws SQLException
+            if a database access error occurs.
+     */
+    long getTransactionIsolation() raises (SQLException);
+    //-------------------------------------------------------------------------
+
+    /** gets the type map object associated with this connection. Only drivers
+        which implement the custom type mapping facility will return an object otherwise
+        NULL could be returned.
+
+        <p>
+        Unless the application has added an entry to the type map, the map
+        returned will be empty.
+        </p>
+        @returns
+            the XNameAccess object associated with this Connection object.
+
+        @throws SQLException
+            if a database access error occurs.
+     */
+    com::sun::star::container::XNameAccess getTypeMap() raises (SQLException);
+    //-------------------------------------------------------------------------
+
+    /** installs the given type map as the type map for this connection.
+        The type map will be used for the custom mapping of SQL structured types
+        and distinct types.
+
+
+        <p>
+        Only if the driver supports custom type mapping is the setting of a map allowed.
+        </p>
+
+        @param typeMap
+            set the XNameAccess object associated with this Connection object.
+        @throws SQLException
+            if a database access error occurs.
+     */
+    void setTypeMap([in]com::sun::star::container::XNameAccess typeMap)
+        raises (SQLException);
+};
+
+//=============================================================================
+
+}; }; }; };
+
+/*===========================================================================
+===========================================================================*/
+#endif

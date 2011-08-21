@@ -1,0 +1,99 @@
+/*************************************************************************
+*
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * 
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+************************************************************************/
+
+#include "macros.inc"
+
+#ifdef UNX
+#ifndef SYSTEM_ICU
+
+Shortcut gid_Shortcut_Lib_Icudata
+    FileID = gid_File_Lib_Icudata;
+    Dir = SCP2_OOO_BIN_DIR;
+#ifndef AIX
+    Name = STRING(CONCAT5(libicudata,UNXSUFFIX,.,ICU_MAJOR,ICU_MINOR));
+#else
+    Name = "libicudata.so";
+#endif
+    Styles = (NETWORK,RELATIVE,FORCE_INTO_UPDATE_PACKAGE);
+End
+
+Shortcut gid_Shortcut_Lib_Icui18n
+    FileID = gid_File_Lib_Icui18n;
+    Dir = SCP2_OOO_BIN_DIR;
+#ifndef AIX
+    Name = STRING(CONCAT5(libicui18n,UNXSUFFIX,.,ICU_MAJOR,ICU_MINOR));
+#else
+    Name = "libicui18n.so";
+#endif
+    Styles = (NETWORK,RELATIVE,FORCE_INTO_UPDATE_PACKAGE);
+End
+
+Shortcut gid_Shortcut_Lib_Icule
+    FileID = gid_File_Lib_Icule;
+    Dir = SCP2_OOO_BIN_DIR;
+#ifndef AIX
+    Name = STRING(CONCAT5(libicule,UNXSUFFIX,.,ICU_MAJOR,ICU_MINOR));
+#else
+    Name = "libicule.so";
+#endif
+    Styles = (NETWORK,RELATIVE,FORCE_INTO_UPDATE_PACKAGE);
+End
+
+Shortcut gid_Shortcut_Lib_Icuuc
+    FileID = gid_File_Lib_Icuuc;
+    Dir = SCP2_OOO_BIN_DIR;
+#ifndef AIX
+    Name = STRING(CONCAT5(libicuuc,UNXSUFFIX,.,ICU_MAJOR,ICU_MINOR));
+#else
+    Name = "libicuuc.so";
+#endif
+    Styles = (NETWORK,RELATIVE,FORCE_INTO_UPDATE_PACKAGE);
+End
+
+#endif
+
+#endif
+
+#ifdef MACOSX
+
+Shortcut gid_Shortcut_Lib_Hsqldb_2
+    FileID = gid_File_Lib_Hsqldb_2;
+    Dir = SCP2_OOO_BIN_DIR;
+    Name = "libhsqldb.jnilib";
+    Styles = (NETWORK, RELATIVE);
+End
+
+Shortcut gid_Shortcut_Lib_Libcroco
+    FileID = gid_File_Lib_Libcroco;
+    Dir = SCP2_OOO_BIN_DIR;
+    Name = "libcroco-0.6.3.dylib";
+    Styles = (NETWORK, RELATIVE);
+End
+
+#endif
+
+//i44154 -end-

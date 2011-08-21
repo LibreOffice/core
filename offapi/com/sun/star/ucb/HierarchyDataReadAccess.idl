@@ -1,0 +1,163 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_ucb_HierarchyDataReadAccess_idl__
+#define __com_sun_star_ucb_HierarchyDataReadAccess_idl__
+
+#include <com/sun/star/container/XNameAccess.idl>
+#include <com/sun/star/container/XHierarchicalNameAccess.idl>
+#include <com/sun/star/util/XChangesNotifier.idl>
+#include <com/sun/star/lang/XComponent.idl>
+
+//=============================================================================
+
+module com { module sun { module star { module ucb {
+
+//=============================================================================
+/** provides read access to a fragment of the hierarchy data.
+
+    <p>A hierarchy data source provides access to a tree of hierarchy data
+    nodes. Each hierarchy data node, except the root node, has a parent that
+    is a hierarchy data node too. A hierarchy data node has a name.
+
+    <p>Each hierarchy data node has three data members:
+
+    <ul>
+    <li>"Title", which is of type <atom>string</atom>. It contains a title
+    for the node. This value must not be empty.
+    <li>"TargetURL", which is of type <atom>string</atom></li> It may contain
+    any URL, which will be treated as the target of a hierarchy link.
+    <li>"Children", which is of type <type>HierarchyDataReadAccess</type> or
+    of type <type>HierarchyDataReadWriteAccess</type></li>, depending on the
+    type of the node. This member provides access to the children of a node.
+    </ul>
+*/
+published service HierarchyDataReadAccess
+{
+    //-------------------------------------------------------------------------
+    /** gives access to the data members of a hierarchy data node.
+
+        <p>Examples:
+        <ul>
+        <li><code>getByName( "Title" )</code> will return an <atom>any</atom>
+        containing a string containing the title of the node.
+        </li>
+        <li><code>getByName( "Children" )</code> will return an <atom>any</atom>
+        containing an implementation of service
+        <type>HierarchyDataReadAccess</type>, if it was called on a read-only
+        node. It will return an implementation of service
+        <type>HierarchyDataReadWriteAccess</type> if it was called on a
+        writable node.
+        </li>
+        </ul>
+     */
+    interface com::sun::star::container::XNameAccess;
+
+    //-------------------------------------------------------------------------
+    /** gives access to the data members of a hierarchy data node as well
+        as to any child nodes or to the data members of child nodes using a
+        hierarchical name.
+
+        <p>A hierarchical name consists of segments that are separated by a
+        single slash ("/"). There is neither a leading nor a trailing slash
+        allowed.
+
+        <ul>
+        <li>
+        path = segment ( '/' segment )*
+        </li>
+        <li>
+        segment = '[' quoted-string ']'
+        </li>
+        <li>
+        quoted-string = "'" escaped-string "'"
+        </li>
+        <li>
+        escaped-string = escaped according to XML attribute naming conventions
+        </li>
+        </ul>
+
+        <p>Examples:
+        <ul>
+        <li>
+        <code>getByHierarchicalName( "Title" )</code> will return an
+        <atom>any</atom> containing a string containing the title of the node
+        itself.
+        </li>
+        <li>
+        <code>getByHierarchicalName( "Children/['subnode1']" )</code> will give
+        access to the child node named "subnode1" of the node. It will return
+        an <atom>any</atom> containing an implementation of service
+        <type>HierarchyDataReadAccess</type>, if it was called on a read-only
+        node. It will return an implementation of service
+        <type>HierarchyDataReadWriteAccess</type> if it was called on a
+        writable node.
+        </li>
+        <li>
+        <code>getByHierarchicalName( "Children/['subnode2']/TargetURL" )</code>
+        will give direct access to the "TargetURL" data member of the child node
+        named "subnode2" of the node. It will return an <atom>any</atom>
+        containing a <atom>string</atom> containing the target URL of the node.
+        </li>
+        <li>
+        <code>getByHierarchicalName( "Children/['subnode3']/Children" )</code>
+        will give direct access to the "Children" data member of the child node
+        named "subnode3" of the node. It will return an <atom>any</atom>
+        containing an implementation of service
+        <type>HierarchyDataReadAccess</type>, if it was called on a read-only
+        node. It will return an implementation of service
+        <type>HierarchyDataReadWriteAccess</type> if it was called on a
+        writable node.
+        </li>
+        </ul>
+     */
+    interface com::sun::star::container::XHierarchicalNameAccess;
+
+    //-------------------------------------------------------------------------
+    /** allows registering listeners that observe the hierarchy data source.
+
+        <p>A client can register an
+        <type scope="com::sun::star::util">XChangesListener</type>, which will
+        receive notifications for any changes within the hierarchy (fragment)
+        this object represents.
+
+        <p>An implementation should collect as many changes as possible into a
+        single <type scope="com::sun::star::util">ChangesEvent</type>.
+    */
+    interface com::sun::star::util::XChangesNotifier;
+
+    //-------------------------------------------------------------------------
+    /** allows controlling or observing the lifetime of the hierarchy data
+        access object.
+     */
+    interface com::sun::star::lang::XComponent;
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

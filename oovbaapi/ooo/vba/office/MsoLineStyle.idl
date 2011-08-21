@@ -1,0 +1,10 @@
+module ooo { module vba { module office {
+    constants MsoLineStyle {
+        const long msoLineSingle = 1;
+        const long msoLineStyleMixed = -2;
+        const long msoLineThickBetweenThin = 5;
+        const long msoLineThickThin = 4;
+        const long msoLineThinThick = 3;
+        const long msoLineThinThin = 2;
+    };
+}; }; };

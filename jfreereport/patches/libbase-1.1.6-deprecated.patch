@@ -1,0 +1,11 @@
+--- misc/libbase-1.1.6/source/org/pentaho/reporting/libraries/base/boot/ModuleInitializeException.java	2010-04-27 15:58:44.000000000 +0200
++++ misc/build/libbase-1.1.6/source/org/pentaho/reporting/libraries/base/boot/ModuleInitializeException.java	2011-06-13 01:28:14.000000000 +0200
+@@ -48,7 +48,7 @@
+    */
+   public ModuleInitializeException(final String s, final Exception e)
+   {
+-    super(s, e);
++    super(s, (Throwable) e);
+   }
+ 
+   /**

@@ -63,9 +63,6 @@ namespace
 
 extern "C"
 {
-    SAL_DLLPUBLIC_EXPORT void SAL_CALL component_getImplementationEnvironment(const sal_Char** env_type_name, uno_Environment**)
-    { *env_type_name = CPPU_CURRENT_LANGUAGE_BINDING_NAME; }
-
     SAL_DLLPUBLIC_EXPORT void* SAL_CALL component_getFactory(const sal_Char* pImplName, void* pServiceManager, void*)
     {
         if ( !pServiceManager || !pImplName ) return 0;

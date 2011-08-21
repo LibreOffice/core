@@ -1,0 +1,9 @@
+module ooo { module vba { module word {
+    constants WdEmphasisMark {
+        const long wdEmphasisMarkNone = 0;
+        const long wdEmphasisMarkOverComma = 2;
+        const long wdEmphasisMarkOverSolidCircle = 1;
+        const long wdEmphasisMarkOverWhiteCircle = 3;
+        const long wdEmphasisMarkUnderSolidCircle = 4;
+    };
+}; }; };

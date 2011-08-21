@@ -1,0 +1,481 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_vcl.hxx"
+
+#include <tools/table.hxx>
+#include <tools/debug.hxx>
+#include <tools/rc.h>
+
+#include <vcl/svapp.hxx>
+#include <accel.h>
+#include <vcl/accel.hxx>
+#include <vector>
+
+// =======================================================================
+
+DECLARE_TABLE( ImplAccelTable, ImplAccelEntry* )
+typedef ::std::vector< ImplAccelEntry* > ImplAccelList;
+
+#define ACCELENTRY_NOTFOUND     ((sal_uInt16)0xFFFF)
+
+// =======================================================================
+
+class ImplAccelData
+{
+public:
+    ImplAccelTable  maKeyTable;     // Fuer KeyCodes, die mit einem Code erzeugt wurden
+    ImplAccelList   maIdList;       // Id-List
+};
+
+// =======================================================================
+
+DBG_NAME( Accelerator )
+
+// =======================================================================
+
+sal_uInt16 ImplAccelEntryGetIndex( ImplAccelList* pList, sal_uInt16 nId,
+                               sal_uInt16* pIndex = NULL )
+{
+    size_t  nLow;
+    size_t  nHigh;
+    size_t  nMid;
+    size_t  nCount = pList->size();
+    sal_uInt16  nCompareId;
+
+    // Abpruefen, ob der erste Key groesser als der Vergleichskey ist
+    if ( !nCount || (nId < (*pList)[ 0 ]->mnId) )
+    {
+        if ( pIndex )
+            *pIndex = 0;
+        return ACCELENTRY_NOTFOUND;
+    }
+
+    // Binaeres Suchen
+    nLow  = 0;
+    nHigh = nCount-1;
+    do
+    {
+        nMid = (nLow + nHigh) / 2;
+        nCompareId = (*pList)[ nMid ]->mnId;
+        if ( nId < nCompareId )
+            nHigh = nMid-1;
+        else
+        {
+            if ( nId > nCompareId )
+                nLow = nMid + 1;
+            else
+                return (sal_uInt16)nMid;
+        }
+    }
+    while ( nLow <= nHigh );
+
+    if ( pIndex )
+    {
+        if ( nId > nCompareId )
+            *pIndex = (sal_uInt16)(nMid+1);
+        else
+            *pIndex = (sal_uInt16)nMid;
+    }
+
+    return ACCELENTRY_NOTFOUND;
+}
+
+// -----------------------------------------------------------------------
+
+static void ImplAccelEntryInsert( ImplAccelList* pList, ImplAccelEntry* pEntry )
+{
+    sal_uInt16  nInsIndex;
+    sal_uInt16  nIndex = ImplAccelEntryGetIndex( pList, pEntry->mnId, &nInsIndex );
+
+    if ( nIndex != ACCELENTRY_NOTFOUND )
+    {
+        do
+        {
+            nIndex++;
+            ImplAccelEntry* pTempEntry = NULL;
+            if ( nIndex < pList->size() )
+                pTempEntry = (*pList)[ nIndex ];
+            if ( !pTempEntry || (pTempEntry->mnId != pEntry->mnId) )
+                break;
+        }
+        while ( nIndex < pList->size() );
+
+        if ( nIndex < pList->size() ) {
+            ImplAccelList::iterator it = pList->begin();
+            ::std::advance( it, nIndex );
+            pList->insert( it, pEntry );
+        } else {
+            pList->push_back( pEntry );
+        }
+    }
+    else {
+        if ( nInsIndex < pList->size() ) {
+            ImplAccelList::iterator it = pList->begin();
+            ::std::advance( it, nInsIndex );
+            pList->insert( it, pEntry );
+        } else {
+            pList->push_back( pEntry );
+        }
+    }
+}
+
+// -----------------------------------------------------------------------
+
+static sal_uInt16 ImplAccelEntryGetFirstPos( ImplAccelList* pList, sal_uInt16 nId )
+{
+    sal_uInt16 nIndex = ImplAccelEntryGetIndex( pList, nId );
+    if ( nIndex != ACCELENTRY_NOTFOUND )
+    {
+        while ( nIndex )
+        {
+            nIndex--;
+            if ( (*pList)[ nIndex ]->mnId != nId )
+                break;
+        }
+
+        if ( (*pList)[ nIndex ]->mnId != nId )
+            nIndex++;
+    }
+
+    return nIndex;
+}
+
+// =======================================================================
+
+void Accelerator::ImplInit()
+{
+    mnCurId             = 0;
+    mnCurRepeat         = 0;
+    mbIsCancel          = sal_False;
+    mpDel               = NULL;
+}
+
+// -----------------------------------------------------------------------
+
+ImplAccelEntry* Accelerator::ImplGetAccelData( const KeyCode& rKeyCode ) const
+{
+    return mpData->maKeyTable.Get( rKeyCode.GetFullKeyCode() );
+}
+
+// -----------------------------------------------------------------------
+
+void Accelerator::ImplCopyData( ImplAccelData& rAccelData )
+{
+    // Tabellen kopieren
+    for ( size_t i = 0, n = rAccelData.maIdList.size(); i < n; ++i )
+    {
+        ImplAccelEntry* pEntry = new ImplAccelEntry( *rAccelData.maIdList[ i ] );
+
+        // Folge-Accelerator, dann auch kopieren
+        if ( pEntry->mpAccel )
+        {
+            pEntry->mpAccel = new Accelerator( *(pEntry->mpAccel) );
+            pEntry->mpAutoAccel = pEntry->mpAccel;
+        }
+        else
+            pEntry->mpAutoAccel = NULL;
+
+        mpData->maKeyTable.Insert( (sal_uLong)pEntry->maKeyCode.GetFullKeyCode(), pEntry );
+        mpData->maIdList.push_back( pEntry );
+    }
+}
+
+// -----------------------------------------------------------------------
+
+void Accelerator::ImplDeleteData()
+{
+    // Accelerator-Eintraege ueber die Id-Tabelle loeschen
+    for ( size_t i = 0, n = mpData->maIdList.size(); i < n; ++i ) {
+        ImplAccelEntry* pEntry = mpData->maIdList[ i ];
+        if ( pEntry->mpAutoAccel ) {
+            delete pEntry->mpAutoAccel;
+        }
+        delete pEntry;
+    }
+    mpData->maIdList.clear();
+}
+
+// -----------------------------------------------------------------------
+
+void Accelerator::ImplInsertAccel( sal_uInt16 nItemId, const KeyCode& rKeyCode,
+                                   sal_Bool bEnable, Accelerator* pAutoAccel )
+{
+    DBG_CHKTHIS( Accelerator, NULL );
+    DBG_ASSERT( nItemId, "Accelerator::InsertItem(): ItemId == 0" );
+
+    if ( rKeyCode.IsFunction() )
+    {
+        sal_uInt16 nCode1;
+        sal_uInt16 nCode2;
+        sal_uInt16 nCode3;
+                sal_uInt16 nCode4;
+        ImplGetKeyCode( rKeyCode.GetFunction(), nCode1, nCode2, nCode3, nCode4 );
+        if ( nCode1 )
+            ImplInsertAccel( nItemId, KeyCode( nCode1, nCode1 ), bEnable, pAutoAccel );
+        if ( nCode2 )
+        {
+            if ( pAutoAccel )
+                pAutoAccel = new Accelerator( *pAutoAccel );
+            ImplInsertAccel( nItemId, KeyCode( nCode2, nCode2 ), bEnable, pAutoAccel );
+            if ( nCode3 )
+            {
+                if ( pAutoAccel )
+                    pAutoAccel = new Accelerator( *pAutoAccel );
+                ImplInsertAccel( nItemId, KeyCode( nCode3, nCode3 ), bEnable, pAutoAccel );
+            }
+        }
+        return;
+    }
+
+    // Neuen Eintrag holen und fuellen
+    ImplAccelEntry* pEntry  = new ImplAccelEntry;
+    pEntry->mnId            = nItemId;
+    pEntry->maKeyCode       = rKeyCode;
+    pEntry->mpAccel         = pAutoAccel;
+    pEntry->mpAutoAccel     = pAutoAccel;
+    pEntry->mbEnabled       = bEnable;
+
+    // Ab in die Tabellen
+    sal_uLong nCode = rKeyCode.GetFullKeyCode();
+    if ( !nCode )
+    {
+        OSL_FAIL( "Accelerator::InsertItem(): KeyCode with KeyCode 0 not allowed" );
+        delete pEntry;
+    }
+    else if ( !mpData->maKeyTable.Insert( nCode, pEntry ) )
+    {
+        OSL_TRACE( "Accelerator::InsertItem(): KeyCode (Key: %lx) already exists", nCode );
+        delete pEntry;
+    }
+    else
+        ImplAccelEntryInsert( &(mpData->maIdList), pEntry );
+}
+
+// -----------------------------------------------------------------------
+
+Accelerator::Accelerator()
+{
+    DBG_CTOR( Accelerator, NULL );
+
+    ImplInit();
+    mpData = new ImplAccelData;
+}
+
+// -----------------------------------------------------------------------
+
+Accelerator::Accelerator( const Accelerator& rAccel ) :
+    Resource(),
+    maHelpStr( rAccel.maHelpStr ),
+    maCurKeyCode( rAccel.maCurKeyCode )
+{
+    DBG_CTOR( Accelerator, NULL );
+    DBG_CHKOBJ( &rAccel, Accelerator, NULL );
+
+    ImplInit();
+    mpData = new ImplAccelData;
+    ImplCopyData( *((ImplAccelData*)(rAccel.mpData)) );
+}
+
+// -----------------------------------------------------------------------
+
+Accelerator::Accelerator( const ResId& rResId )
+{
+    DBG_CTOR( Accelerator, NULL );
+
+    ImplInit();
+    mpData = new ImplAccelData;
+    rResId.SetRT( RSC_ACCEL );
+    ImplLoadRes( rResId );
+}
+
+// -----------------------------------------------------------------------
+
+void Accelerator::ImplLoadRes( const ResId& rResId )
+{
+    GetRes( rResId );
+
+    maHelpStr = ReadStringRes();
+    sal_uLong nObjFollows = ReadLongRes();
+
+    for( sal_uLong i = 0; i < nObjFollows; i++ )
+    {
+        InsertItem( ResId( (RSHEADER_TYPE *)GetClassRes(), *rResId.GetResMgr() ) );
+        IncrementRes( GetObjSizeRes( (RSHEADER_TYPE *)GetClassRes() ) );
+    }
+}
+
+// -----------------------------------------------------------------------
+
+Accelerator::~Accelerator()
+{
+    DBG_DTOR( Accelerator, NULL );
+
+    // AccelManager benachrichtigen, das Accelrator geloescht wurde
+    if ( mpDel )
+        *mpDel = sal_True;
+
+    ImplDeleteData();
+    delete mpData;
+}
+
+// -----------------------------------------------------------------------
+
+void Accelerator::Activate()
+{
+    maActivateHdl.Call( this );
+}
+
+// -----------------------------------------------------------------------
+
+void Accelerator::Deactivate()
+{
+    maDeactivateHdl.Call( this );
+}
+
+// -----------------------------------------------------------------------
+
+void Accelerator::Select()
+{
+    maSelectHdl.Call( this );
+}
+
+// -----------------------------------------------------------------------
+
+void Accelerator::InsertItem( sal_uInt16 nItemId, const KeyCode& rKeyCode )
+{
+    ImplInsertAccel( nItemId, rKeyCode, sal_True, NULL );
+}
+
+// -----------------------------------------------------------------------
+
+void Accelerator::InsertItem( const ResId& rResId )
+{
+    DBG_CHKTHIS( Accelerator, NULL );
+
+    sal_uLong               nObjMask;
+    sal_uInt16              nAccelKeyId;
+    sal_uInt16              bDisable;
+    KeyCode             aKeyCode;
+    Accelerator*        pAutoAccel  = NULL;
+
+    GetRes( rResId.SetRT( RSC_ACCELITEM ) );
+    nObjMask        = ReadLongRes();
+    nAccelKeyId     = sal::static_int_cast<sal_uInt16>(ReadLongRes());
+    bDisable        = ReadShortRes();
+
+    if ( nObjMask & ACCELITEM_KEY )
+    {
+        // es wird ein neuer Kontext aufgespannt
+        RSHEADER_TYPE * pKeyCodeRes = (RSHEADER_TYPE *)GetClassRes();
+        ResId aResId( pKeyCodeRes, *rResId.GetResMgr());
+        aKeyCode = KeyCode( aResId );
+        IncrementRes( GetObjSizeRes( (RSHEADER_TYPE *)GetClassRes() ) );
+    }
+
+    if ( nObjMask & ACCELITEM_ACCEL )
+    {
+        pAutoAccel = new Accelerator( ResId( (RSHEADER_TYPE *)GetClassRes(), *rResId.GetResMgr() ) );
+        IncrementRes( GetObjSizeRes( (RSHEADER_TYPE *)GetClassRes() ) );
+    }
+
+    ImplInsertAccel( nAccelKeyId, aKeyCode, !bDisable, pAutoAccel );
+}
+
+// -----------------------------------------------------------------------
+
+sal_uInt16 Accelerator::GetItemCount() const
+{
+    DBG_CHKTHIS( Accelerator, NULL );
+
+    return (sal_uInt16)mpData->maIdList.size();
+}
+
+// -----------------------------------------------------------------------
+
+KeyCode Accelerator::GetKeyCode( sal_uInt16 nItemId ) const
+{
+    DBG_CHKTHIS( Accelerator, NULL );
+
+    sal_uInt16 nIndex = ImplAccelEntryGetFirstPos( &(mpData->maIdList), nItemId );
+    if ( nIndex != ACCELENTRY_NOTFOUND )
+        return mpData->maIdList[ nIndex ]->maKeyCode;
+    else
+        return KeyCode();
+}
+
+// -----------------------------------------------------------------------
+
+sal_uInt16 Accelerator::GetItemId( sal_uInt16 nPos ) const
+{
+    DBG_CHKTHIS( Accelerator, NULL );
+
+    ImplAccelEntry* pEntry = ( nPos < mpData->maIdList.size() ) ? mpData->maIdList[ nPos ] : NULL;
+    if ( pEntry )
+        return pEntry->mnId;
+    else
+        return 0;
+}
+
+// -----------------------------------------------------------------------
+
+Accelerator* Accelerator::GetAccel( sal_uInt16 nItemId ) const
+{
+    DBG_CHKTHIS( Accelerator, NULL );
+
+    sal_uInt16 nIndex = ImplAccelEntryGetIndex( &(mpData->maIdList), nItemId );
+    if ( nIndex != ACCELENTRY_NOTFOUND )
+        return mpData->maIdList[ nIndex ]->mpAccel;
+    else
+        return NULL;
+}
+
+// -----------------------------------------------------------------------
+
+Accelerator& Accelerator::operator=( const Accelerator& rAccel )
+{
+    DBG_CHKTHIS( Accelerator, NULL );
+    DBG_CHKOBJ( &rAccel, Accelerator, NULL );
+
+    // Neue Daten zuweisen
+    maHelpStr       = rAccel.maHelpStr;
+    maCurKeyCode    = KeyCode();
+    mnCurId         = 0;
+    mnCurRepeat     = 0;
+    mbIsCancel      = sal_False;
+
+    // Tabellen loeschen und kopieren
+    ImplDeleteData();
+    mpData->maKeyTable.Clear();
+    ImplCopyData( *((ImplAccelData*)(rAccel.mpData)) );
+
+    return *this;
+}
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

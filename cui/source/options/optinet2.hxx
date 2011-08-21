@@ -36,7 +36,7 @@
 #include <svtools/stdctrl.hxx>
 #include <svtools/svtabbx.hxx>
 #include <sfx2/tabdlg.hxx>
-#include <svl/srchcfg.hxx>
+#include <unotools/configitem.hxx>
 
 #ifdef _SVX_OPTINET2_CXX
 #include <svtools/headbar.hxx>
@@ -226,7 +226,6 @@ protected:
 
 // class SvxSecurityTabPage ---------------------------------------------
 
-class SvtJavaOptions;
 class SvtSecurityOptions;
 
 class SvxSecurityTabPage : public SfxTabPage
@@ -249,7 +248,6 @@ private:
     FixedLine           maMacroSecFL;
     FixedInfo           maMacroSecFI;
     PushButton          maMacroSecPB;
-
 
     SvtSecurityOptions*         mpSecOptions;
     svx::SecurityOptionsDialog* mpSecOptDlg;

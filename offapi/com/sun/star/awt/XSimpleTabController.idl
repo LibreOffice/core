@@ -1,0 +1,161 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_awt_XSimpleTabController_idl__
+#define __com_sun_star_awt_XSimpleTabController_idl__
+
+#include <com/sun/star/awt/XTabListener.idl>
+#include <com/sun/star/uno/XInterface.idl>
+#include <com/sun/star/lang/IndexOutOfBoundsException.idl>
+#include <com/sun/star/beans/NamedValue.idl>
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module awt {
+
+//=============================================================================
+
+/** specifies the basic operations for a tab controller,
+    but does not require XControl as type of tabs.
+ */
+published interface XSimpleTabController : com::sun::star::uno::XInterface
+{
+    //-------------------------------------------------------------------------
+    /** create a new tab and return an unique ID,
+        which can be used further to address this tab by using other methods
+        of this interface.
+
+        @return [long
+                an unique ID for this new tab.
+     */
+    long insertTab();
+
+    //-------------------------------------------------------------------------
+    /** remove a tab with the given ID.
+
+        @param  ID
+                the ID of the tab, which should be removed.
+
+        @throws  ::com::sun::star::lang::IndexOutOfBoundsException
+                if the specified ID isn't used inside this tab controller.
+     */
+    void removeTab( [in] long ID )
+        raises( com::sun::star::lang::IndexOutOfBoundsException );
+
+    //-------------------------------------------------------------------------
+    /** change some properties of the specified tab.
+
+        @descr  Such properties can be:
+                <table>
+                    <tr>
+                        <td><b>Property</b></td>
+                        <td><b>Type</b></td>
+                        <td><b>Description</b></td>
+                    </tr>
+                    <tr>
+                        <td>Title</td>
+                        <td>string</td>
+                        <td>the title of the tab, which is shown at the UI.</td>
+                    </tr>
+                    <tr>
+                        <td>Position</td>
+                        <td>int</td>
+                        <td>describe the order of this tab in relation to all other tabs inside this control.</td>
+                    </tr>
+                </table>
+
+        @attention  Not all properties must be supported by all implementations of this interface.
+                    Of course some important ones should be handled by every implementation ...
+                    as e.g. "Title".
+
+        @param  ID
+                the ID of the tab, which should be changed.
+
+        @throws  ::com::sun::star::lang::IndexOutOfBoundsException
+                if the specified ID isn't used inside this tab controller.
+     */
+    void setTabProps( [in] long                                          ID         ,
+                      [in] sequence< com::sun::star::beans::NamedValue > Properties )
+        raises( com::sun::star::lang::IndexOutOfBoundsException );
+
+    //-------------------------------------------------------------------------
+    /** retrieve the set of properties for the specified tab.
+
+        @param  ID
+                the ID of the tab.
+
+        @throws  ::com::sun::star::lang::IndexOutOfBoundsException
+                if the specified ID isn't used inside this tab controller.
+     */
+    sequence< com::sun::star::beans::NamedValue > getTabProps( [in] long ID )
+        raises( com::sun::star::lang::IndexOutOfBoundsException );
+
+    //-------------------------------------------------------------------------
+    /** activate the specified tab.
+
+        @descr  The new tab will be activated and all listener will get an event describing this.
+                Of course there will be an event too, which notifies listener about the deactivation
+                of the last active tab.
+
+        @param  ID
+                the ID of the new active tab.
+
+        @throws  ::com::sun::star::lang::IndexOutOfBoundsException
+                if the specified ID isn't used inside this tab controller.
+     */
+    void activateTab( [in] long ID )
+        raises( com::sun::star::lang::IndexOutOfBoundsException );
+
+    //-------------------------------------------------------------------------
+    /** return the unique ID of the current active tab.
+
+        @return  [long]
+                the ID of the active tab.
+     */
+    long getActiveTabID();
+
+    //-------------------------------------------------------------------------
+    /** register listener for inserting/removing tabs and changing their properties.
+
+        @param  Listener
+                the listener to register.
+     */
+    void addTabListener( [in] XTabListener Listener );
+
+    //-------------------------------------------------------------------------
+    /** unregister listener for inserting/removing tabs and changing their properties.
+
+        @param  Listener
+                the listener to unregister.
+     */
+    void removeTabListener( [in] XTabListener Listener );
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

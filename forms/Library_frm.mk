@@ -1,3 +1,4 @@
+# -*- Mode: makefile-gmake; tab-width: 4; indent-tabs-mode: t -*-
 # Version: MPL 1.1 / GPLv3+ / LGPLv3+
 #
 # The contents of this file are subject to the Mozilla Public License Version
@@ -35,13 +36,6 @@ $(eval $(call gb_Library_set_include,frm,\
     -I$(realpath $(SRCDIR)/forms/source/inc) \
     -I$(realpath $(SRCDIR)/forms/source/solar/inc) \
     -I$(OUTDIR)/inc \
-    -I$(OUTDIR)/inc/offuh \
-    $(if $(filter YES,$(SYSTEM_LIBXML)),$(filter -I%,$(LIBXML_CFLAGS))) \
-))
-
-$(eval $(call gb_Library_set_defs,frm,\
-    $$(DEFS) \
-    $(if $(filter YES,$(SYSTEM_LIBXML)),-DSYSTEM_LIBXML $(filter-out -I%,$(LIBXML_CFLAGS))) \
 ))
 
 $(eval $(call gb_Library_add_linked_libs,frm,\
@@ -51,8 +45,6 @@ $(eval $(call gb_Library_add_linked_libs,frm,\
     dbtools \
     editeng \
     i18nisolang1 \
-    icui18n \
-    icuuc \
     sal \
     sfx \
     svl \
@@ -63,9 +55,22 @@ $(eval $(call gb_Library_add_linked_libs,frm,\
     ucbhelper \
     utl \
     vcl \
-    xml2 \
     $(gb_STDLIBS) \
 ))
+
+ifeq ($(OS)$(COM),WNTMSC)
+$(eval $(call gb_Library_use_externals,frm,\
+    icuin \
+    icuuc \
+    libxml2 \
+))
+else
+$(eval $(call gb_Library_use_externals,frm,\
+    icui18n \
+    icuuc \
+    libxml2 \
+))
+endif
 
 $(eval $(call gb_Library_set_componentfile,frm,forms/util/frm))
 
@@ -172,4 +177,4 @@ $(eval $(call gb_Library_add_exception_objects,frm,\
     forms/source/xforms/xpathlib/xpathlib \
 ))
 
-# vim: set noet ts=4 sw=4:
+# vim: set noet sw=4 ts=4:

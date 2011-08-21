@@ -1,0 +1,223 @@
+.TH MALLOC 3 "" "" "1.0"
+.ds ]T 
+.\"/*
+.\" * (c) Copyright 1990 Conor P. Cahill (uunet!virtech!cpcahil).  
+.\" * You may copy, distribute, and use this software as long as this
+.\" * copyright statement is not removed.
+.\" */
+.\" $Id: malloc.3,v 1.1.1.1 2000-09-22 15:33:26 hr Exp $
+.SH NAME
+malloc \t- debugging malloc library
+.SH SYNOPSIS
+.ft B
+.nf
+#include <malloc.h>
+
+char	* calloc(nelem,elsize);
+void	  free(ptr);
+char	* malloc(size);
+int	  malloc_chain_check(flag);
+void	  malloc_dump(fd);
+int	  mallopt(cmd,val)
+char	* realloc(ptr,size);
+
+int			  cmd,fd,flag;
+unsigned		  elsize,nelem,size;
+char			* ptr;
+union malloptarg	  val;
+
+.fi
+.ft R
+.SH DESCRIPTION
+This malloc library is a replacement for the standard library to be used
+during software development/debugging.  See the standard malloc(3) pages
+for more information on the use of the following functions:
+.nf
+.in +.5i
+calloc(), free(), malloc(), realloc()
+.in -.5i
+.fi
+.sp
+This library differs from the standard malloc library in the
+following ways:
+.P
+1. Each malloc segment contains a magic number so that free can 
+verify that the pointer passed points to a valid malloc segment.
+.P
+2. Each malloc segment is filled with a non-zero pattern so that code that
+depends upon malloc segments being null will fail.
+.P
+3. The size of each segment will be at least 1 byte larger than requested
+and the extra bytes will be filled with a non-zero pattern.  When free is
+called, it will verify that you did not go beyond the number of bytes 
+you asked for.
+.P
+4. When a segment is freed, it will be filled with a different non-zero pattern
+to ensure that the program doesn't depend upon the use of already freed data.
+.P
+5. Whenever any of the string or memory functions (str*, b*, mem*) are 
+called with a pointer that is within the malloc arena,  the operation is
+checked to verify that it does not overrun the malloced segment.  A failure
+of this check is considered a "warning level error" (described later) and
+is handled accordingly.
+.P
+7. Run time checking can include verification of the malloc chain at each
+and every call to one of the malloc functions or manually by calling the
+malloc_chain_check function.
+.P
+6. When a problem is found, the action taken is specified at runtime by
+environment variables or at compile time by the use of the mallopt()
+function.
+.P
+There are two arbitrary levels of errors, warning and fatal, that this
+library will detect.  They are broken down as follows:
+.P
+.nf
+.in +.25i
+Warning messages include:
+.sp
+.in +.5i
+.ti -.25i
+Calling free with a bad pointer
+.br
+.ti -.25i
+Calling a bstring/string/memory (3) function which will go beyond
+the end of a malloc block. Note that the library function is
+not modified to refuse the operation.
+.sp
+.in -.5i
+Fatal errors are:
+.in +.5i
+.ti -.25i
+Detectable corruption to the malloc chain.
+.in -.5i
+.in -.25i
+.P
+The error handling for each level (warning or fatal) are specified using
+environment variables or mallopt().  The coding for the error handling is
+as follows:
+.sp
+.nf
+.in +.5i
+.ti -.25i
+  0 - continue operations
+.ti -.25i
+  1 - drop core and exit
+.ti -.25i
+  2 - just exit
+.ti -.25i
+  3 - drop core, but continue executing.  Core files will
+be placed into core.[PID].[counter] i.e: core.00123.001
+.ti -.25i
+128 - dump malloc chain and continue
+.ti -.25i
+129 - dump malloc chain, dump core, and exit
+.ti -.25i
+130 - dump malloc chain, exit
+.ti -.25i
+131 - dump malloc chain, dump core, continue processing
+.in -.5i
+.P
+In addition error messages can be placed into an error file.
+.P
+\fBmalloc_opt\fP() is used to set the malloc debugging options. The
+following options can be set:
+.br
+.sp
+.in +.5i
+MALLOC_WARN - set the error handling for warning level errors.  \fBval.i\fP is
+an integer that can contain any one of the following values:
+.sp
+.in +.5i
+M_HANDLE_IGNORE - ignore error
+.br
+M_HANDLE_ABORT - drop core and exit
+.br
+M_HANDLE_EXIT - just exit (no core drop)
+.br
+M_HANDLE_CORE - drop core, but keep on going
+.br
+.in -.5i
+.sp
+In addition, M_HANDLE_DUMP may be or'd in to cause a dump of the current
+malloc chain.
+.br
+.sp
+MALLOC_FATAL - set the error handling for fatal level errors.  \fBval.i\fP is
+equivalent to \fBval.i\fP for MALLOC_WARN.
+.br
+.sp
+MALLOC_ERRFILE - set the destination for malloc error messages.  \fBval.str\fP
+is a pointer to a character string containing the name of the file to be used
+for error messages.
+.br
+.sp
+MALLOC_CKCHAIN - set the malloc chain checking flag.  If \fBval.i\fP is
+non-zero, chain checking at every call to malloc is turned on.
+.br
+.sp
+For example, to set up the session to generate a core file for
+every malloc warning, to drop core and exit on a malloc fatal, and 
+to log all messages to the file "malloc_log" do the following:
+.sp
+.nf
+.in +.5i
+#include <malloc.h>
+malloc_opt(MALLOC_WARN,131);
+malloc_opt(MALLOC_FATAL,1);
+malloc_opt(MALLOC_ERRFILE,"malloc_log");
+.in -.5i
+.fi
+.in -.5i
+.sp
+\fBmalloc_opt\fP() can be used to set/alter the debugging options at any
+time.
+.P
+\fBmalloc_dump\fP() will dump a table of the malloc arena showing all
+allocated/freed segments and the first few bytes of data in each segment.
+\fBfd\fP is the file descriptor to write the data to.
+.P
+\fBmalloc_chain_check\fP() will check the status of the malloc arena.
+If \fBflag\fP is non-zero, an error found in the chain will cause a 
+fatal error.  \fBmalloc_chain_check\fP() returns zero when there are no
+problems found in the malloc chain, non-zero otherwise.
+.SH "ENVIRONMENT VARIABLES"
+Environment variables can be used to control error handling, error logging
+and malloc chain checking at run time.  The following environment variables
+are used:
+.P
+MALLOC_WARN - specifies the error handling for warning errors
+.br
+MALLOC_FATAL - specifies the error handling for fatal errors
+.br
+MALLOC_ERRFILE - specifies the error log file for error messages.  
+.br
+MALLOC_CKCHAIN - if 1, turns on malloc chain checking at every call to any
+of the malloc functions.
+.P
+For example, to set up the session to generate a core file for
+every malloc warning, to drop core and exit on a malloc fatal, and 
+to log all messages to the file "malloc_log" do the following:
+.sp
+.nf
+.in +.5i
+MALLOC_WARN=131
+MALLOC_FATAL=1
+MALLOC_ERRFILE=malloc_log
+
+export MALLOC_WARN MALLOC_FATAL MALLOC_ERRFILE
+.in -.5i
+.fi
+.SH WARNINGS
+This malloc library and it's associated string and memory functions are
+much less efficient than the standard functions due in part to the extra
+error checking.  You do not want to use this library when generating a
+production (i.e. releasable) version of your software.  It should only
+be used during development and testing.
+.SH SEE ALSO
+stat(2)
+.SH AUTHOR
+Conor P. Cahill
+Virtual Technologies Incorporated
+.sp
+uunet!virtech!cpcahil

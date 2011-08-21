@@ -1,0 +1,1074 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+/* StarView ressource file */
+#ifndef _SFX_HRC
+#include <sfx2/sfx.hrc>
+#endif
+#ifndef _SVX_DIALOGS_HRC
+#include <svx/dialogs.hrc>
+#endif
+#include "globals.hrc"
+#include "config.hrc"
+#include "optdlg.hrc"
+#include "helpid.h"
+
+/**************************************************************************/
+/*                                                                        */
+/*  TabPage View/Content                                              */
+/*                                                                        */
+/**************************************************************************/
+TabPage TP_CONTENT_OPT
+{
+    HelpID = HID_CONTENT_OPT ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 260 , 185 ) ;
+    Hide = TRUE ;
+    FixedLine FL_LINE
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 118 , 8 ) ;
+        Group = TRUE ;
+        Text [ en-US ] = "Guides";
+    };
+    CheckBox CB_CROSS
+    {
+        HelpID = "sw:CheckBox:TP_CONTENT_OPT:CB_CROSS";
+        Pos = MAP_APPFONT ( 12 , 14 ) ;
+        Size = MAP_APPFONT ( 118 , 10 ) ;
+        Text [ en-US ] = "Helplines ~While Moving";
+    };
+    CheckBox CB_HANDLE
+    {
+        HelpID = "sw:CheckBox:TP_CONTENT_OPT:CB_HANDLE";
+        Pos = MAP_APPFONT ( 12 , 27 ) ;
+        Size = MAP_APPFONT ( 118 , 10 ) ;
+        Text [ en-US ] = "Sim~ple handles";
+    };
+    CheckBox CB_BIGHANDLE
+    {
+        HelpID = "sw:CheckBox:TP_CONTENT_OPT:CB_BIGHANDLE";
+        Pos = MAP_APPFONT ( 12 , 40 ) ;
+        Size = MAP_APPFONT ( 118 , 10 ) ;
+        Text [ en-US ] = "Large handles";
+    };
+    FixedLine FL_WINDOW
+    {
+        Pos = MAP_APPFONT ( 130 , 3 ) ;
+        Size = MAP_APPFONT ( 124 , 8 ) ;
+        Group = TRUE ;
+        Text [ en-US ] = "View";
+    };
+    CheckBox CB_HSCROLL
+    {
+        HelpID = "sw:CheckBox:TP_CONTENT_OPT:CB_HSCROLL";
+        Pos = MAP_APPFONT ( 136 , 14 ) ;
+        Size = MAP_APPFONT ( 108 , 10 ) ;
+        Text [ en-US ] = "H~orizontal scrollbar" ;
+    };
+    CheckBox CB_VSCROLL
+    {
+        HelpID = "sw:CheckBox:TP_CONTENT_OPT:CB_VSCROLL";
+        Pos = MAP_APPFONT ( 136 , 27 ) ;
+        Size = MAP_APPFONT ( 108 , 10 ) ;
+        Text [ en-US ] = "~Vertical scrollbar" ;
+    };
+    CheckBox CB_ANY_RULER
+    {
+        HelpID = "sw:CheckBox:TP_CONTENT_OPT:CB_ANY_RULER";
+        Pos = MAP_APPFONT ( 136 , 40 ) ;
+        Size = MAP_APPFONT ( 65 , 10 ) ;
+        Text [ en-US ] = "R~uler" ;
+    };
+    CheckBox CB_HRULER
+    {
+        HelpID = "sw:CheckBox:TP_CONTENT_OPT:CB_HRULER";
+        Pos = MAP_APPFONT ( 142 , 53 ) ;
+        Size = MAP_APPFONT ( 62 , 10 ) ;
+        Text [ en-US ] = "Hori~zontal ruler" ;
+    };
+    ListBox LB_HMETRIC
+    {
+        HelpID = "sw:ListBox:TP_CONTENT_OPT:LB_HMETRIC";
+        Pos = MAP_APPFONT ( 206 , 51 ) ;
+        Size = MAP_APPFONT ( 45 , 60 ) ;
+        DropDown = TRUE;
+    };
+    CheckBox CB_VRULER
+    {
+        HelpID = "sw:CheckBox:TP_CONTENT_OPT:CB_VRULER";
+        Pos = MAP_APPFONT ( 142 , 66 ) ;
+        Size = MAP_APPFONT ( 62 , 10 ) ;
+        Text [ en-US ] = "Verti~cal ruler" ;
+    };
+    CheckBox CB_VRULER_RIGHT
+    {
+        HelpID = "sw:CheckBox:TP_CONTENT_OPT:CB_VRULER_RIGHT";
+        Pos = MAP_APPFONT ( 148 , 79 ) ;
+        Size = MAP_APPFONT ( 100 , 10 ) ;
+        Text [ en-US ] = "Right-aligned";
+    };
+    ListBox LB_VMETRIC
+    {
+        HelpID = "sw:ListBox:TP_CONTENT_OPT:LB_VMETRIC";
+        Pos = MAP_APPFONT ( 206 , 64 ) ;
+        Size = MAP_APPFONT ( 45 , 60 ) ;
+        DropDown = TRUE;
+    };
+    CheckBox CB_SMOOTH_SCROLL
+    {
+        HelpID = "sw:CheckBox:TP_CONTENT_OPT:CB_SMOOTH_SCROLL";
+        Pos = MAP_APPFONT ( 136 , 79 ) ;
+        Size = MAP_APPFONT ( 108 , 10 ) ;
+        Text [ en-US ] = "S~mooth scroll" ;
+    };
+    FixedLine FL_DISP
+    {
+        Pos = MAP_APPFONT ( 6 , 56 ) ;
+        Size = MAP_APPFONT ( 118 , 8 ) ;
+        Text [ en-US ] = "Display" ;
+        Group = TRUE ;
+    };
+    CheckBox CB_GRF
+    {
+        HelpID = "sw:CheckBox:TP_CONTENT_OPT:CB_GRF";
+        Pos = MAP_APPFONT ( 12 , 67 ) ;
+        Size = MAP_APPFONT ( 108 , 10 ) ;
+        Text [ en-US ] = "~Graphics and objects" ;
+        TabStop = TRUE ;
+        Group = TRUE ;
+    };
+    CheckBox CB_TBL
+    {
+        HelpID = "sw:CheckBox:TP_CONTENT_OPT:CB_TBL";
+        Pos = MAP_APPFONT ( 12 , 80 ) ;
+        Size = MAP_APPFONT ( 108 , 10 ) ;
+        Text [ en-US ] = "~Tables " ;
+    };
+    CheckBox CB_DRWFAST
+    {
+        HelpID = "sw:CheckBox:TP_CONTENT_OPT:CB_DRWFAST";
+        Pos = MAP_APPFONT ( 12 , 93 ) ;
+        Size = MAP_APPFONT ( 108 , 10 ) ;
+        Text [ en-US ] = "Dra~wings and controls" ;
+    };
+    CheckBox CB_FIELD
+    {
+        HelpID = "sw:CheckBox:TP_CONTENT_OPT:CB_FIELD";
+        Pos = MAP_APPFONT ( 12 , 106 ) ;
+        Size = MAP_APPFONT ( 108 , 10 ) ;
+        Text [ en-US ] = "~Field codes" ;
+    };
+    CheckBox CB_POSTIT
+    {
+        HelpID = "sw:CheckBox:TP_CONTENT_OPT:CB_POSTIT";
+        Pos = MAP_APPFONT ( 12 , 119 ) ;
+        Size = MAP_APPFONT ( 108 , 10 ) ;
+        Text [ en-US ] = "~Comments" ;
+    };
+    FixedLine FL_SETTINGS
+    {
+        Pos = MAP_APPFONT ( 130 , 122 ) ;
+        Size = MAP_APPFONT ( 124 , 8 ) ;
+        Text [ en-US ] = "Settings";
+        Hide = TRUE;
+    };
+    FixedText FT_METRIC
+    {
+        Pos = MAP_APPFONT ( 136 , 135 ) ;
+        Size = MAP_APPFONT ( 60 , 8 ) ;
+        Text [ en-US ] = "Measurement unit";
+        Hide = TRUE;
+    };
+    ListBox LB_METRIC
+    {
+        HelpID = "sw:ListBox:TP_CONTENT_OPT:LB_METRIC";
+        Pos = MAP_APPFONT ( 199, 133 ) ;
+        Size = MAP_APPFONT ( 50 , 50 ) ;
+        Border = TRUE ;
+        DropDown = TRUE ;
+        Hide = TRUE;
+    };
+};
+/**************************************************************************/
+/*                                                                        */
+/*                                                                        */
+/*                                                                        */
+/**************************************************************************/
+TabPage TP_OPTPRINT_PAGE
+{
+    HelpID = HID_OPTPRINT_PAGE ;
+    Size = MAP_APPFONT ( 260 , 185 ) ;
+    Hide = TRUE ;
+    FixedLine FL_1
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 78 , 8 ) ;
+        Text [ en-US ] = "Contents" ;
+        Group = TRUE ;
+    };
+    CheckBox CB_PGRF /*functionally merged with CB_PDRAW*/
+    {
+        HelpID = "sw:CheckBox:TP_OPTPRINT_PAGE:CB_PGRF";
+        Pos = MAP_APPFONT ( 12 , 14 ) ;
+        Size = MAP_APPFONT ( 70 , 10 ) ;
+        Text [ en-US ] = "~Pictures and objects" ;
+        TabStop = TRUE ;
+        Group = TRUE ;
+    };
+/*
+    removed, tables now always get printed
+    CheckBox CB_PTAB
+    {
+        HelpID = "sw:CheckBox:TP_OPTPRINT_PAGE:CB_PTAB";
+        Pos = MAP_APPFONT ( 12 , 27 ) ;
+        Size = MAP_APPFONT ( 70 , 10 ) ;
+        Text [ en-US ] = "~Tables" ;
+    };
+*/
+/*
+    functionally merged with CB_PGRF (pictures and graphics)
+    CheckBox CB_PDRAW
+    {
+        HelpID = "sw:CheckBox:TP_OPTPRINT_PAGE:CB_PDRAW";
+        Pos = MAP_APPFONT ( 12 , 40 ) ;
+        Size = MAP_APPFONT ( 70 , 10 ) ;
+        Text [ en-US ] = "Dra~wings" ;
+    };
+*/
+    CheckBox CB_CTRLFLD
+    {
+        HelpID = "sw:CheckBox:TP_OPTPRINT_PAGE:CB_CTRLFLD";
+        Pos = MAP_APPFONT ( 12 , 27 ) ;
+        Size = MAP_APPFONT ( 70 , 10 ) ;
+        Text [ en-US ] = "Form control~s" ;
+    };
+    CheckBox CB_BACKGROUND
+    {
+        HelpID = "sw:CheckBox:TP_OPTPRINT_PAGE:CB_BACKGROUND";
+        Pos = MAP_APPFONT ( 12 , 40 ) ;
+        Size = MAP_APPFONT ( 70 , 10 ) ;
+        Text [ en-US ] = "Page ba~ckground" ;
+    };
+    CheckBox CB_BLACK_FONT
+    {
+        HelpID = "sw:CheckBox:TP_OPTPRINT_PAGE:CB_BLACK_FONT";
+        Pos = MAP_APPFONT ( 12 , 53 ) ;
+        Size = MAP_APPFONT ( 70 , 10 ) ;
+        Text [ en-US ] = "Print text in blac~k" ;
+    };
+    CheckBox CB_HIDDEN_TEXT
+    {
+        HelpID = "sw:CheckBox:TP_OPTPRINT_PAGE:CB_HIDDEN_TEXT";
+        Pos = MAP_APPFONT ( 12 , 66 ) ;
+        Size = MAP_APPFONT ( 70 , 10 ) ;
+        Text [ en-US ] = "Hidden te~xt" ;
+    };
+    CheckBox CB_TEXT_PLACEHOLDER
+    {
+        HelpID = "sw:CheckBox:TP_OPTPRINT_PAGE:CB_TEXT_PLACEHOLDER";
+        Pos = MAP_APPFONT ( 12 , 79 ) ;
+        Size = MAP_APPFONT ( 70 , 10 ) ;
+        Text [ en-US ] = "Text ~placeholder" ;
+    };
+    FixedLine FL_SEP_PRT_LEFT
+    {
+        Pos = MAP_APPFONT ( 85 , 14 ) ;
+        Size = MAP_APPFONT ( 4 , 78 ) ;
+        Vert = TRUE;
+    };
+    FixedLine FL_2
+    {
+        Pos = MAP_APPFONT ( 90 , 3 ) ;
+        Size = MAP_APPFONT ( 78 , 8 ) ;
+        Text [ en-US ] = "Pages" ;
+        Group = TRUE ;
+    };
+    CheckBox CB_LEFTP
+    {
+        HelpID = "sw:CheckBox:TP_OPTPRINT_PAGE:CB_LEFTP";
+        Pos = MAP_APPFONT ( 96 , 14 ) ;
+        Size = MAP_APPFONT ( 70 , 10 ) ;
+        Text [ en-US ] = "~Left pages" ;
+        TabStop = TRUE ;
+        Group = TRUE ;
+    };
+    CheckBox CB_RIGHTP
+    {
+        HelpID = "sw:CheckBox:TP_OPTPRINT_PAGE:CB_RIGHTP";
+        Pos = MAP_APPFONT ( 96 , 27 ) ;
+        Size = MAP_APPFONT ( 70 , 10 ) ;
+        Text [ en-US ] = "~Right pages" ;
+    };
+/*
+    removed, noe handled by the new print dialog (i.e. vcl) itself
+    CheckBox CB_REVERSE
+    {
+        HelpID = "sw:CheckBox:TP_OPTPRINT_PAGE:CB_REVERSE";
+        Pos = MAP_APPFONT ( 96 , 40 ) ;
+        Size = MAP_APPFONT ( 70 , 10 ) ;
+        Text [ en-US ] = "Re~versed" ;
+    };
+*/
+    CheckBox CB_PROSPECT
+    {
+        HelpID = "sw:CheckBox:TP_OPTPRINT_PAGE:CB_PROSPECT";
+        Pos = MAP_APPFONT ( 96 , 40 ) ;
+        Size = MAP_APPFONT ( 70 , 10 ) ;
+        Text [ en-US ] = "Broch~ure" ;
+    };
+    CheckBox CB_PROSPECT_RTL
+    {
+        HelpID = "sw:CheckBox:TP_OPTPRINT_PAGE:CB_PROSPECT_RTL";
+        Pos = MAP_APPFONT ( 103 , 53 ) ;
+        Size = MAP_APPFONT ( 70 , 10 ) ;
+        Text [ en-US ] = "Right to Left" ;
+        Text [ x-comment ] = " ";
+    };
+    RadioButton RB_NO
+    {
+        HelpID = "sw:RadioButton:TP_OPTPRINT_PAGE:RB_NO";
+        Pos = MAP_APPFONT ( 180 , 14 ) ;
+        Size = MAP_APPFONT ( 74 , 10 ) ;
+        Text [ en-US ] = "~None" ;
+        TabStop = TRUE ;
+        Group = TRUE ;
+    };
+    RadioButton RB_ONLY
+    {
+        HelpID = "sw:RadioButton:TP_OPTPRINT_PAGE:RB_ONLY";
+        Pos = MAP_APPFONT ( 180 , 27 ) ;
+        Size = MAP_APPFONT ( 74 , 10 ) ;
+        Text [ en-US ] = "Comments ~only" ;
+    };
+    RadioButton RB_END
+    {
+        HelpID = "sw:RadioButton:TP_OPTPRINT_PAGE:RB_END";
+        Pos = MAP_APPFONT ( 180 , 40 ) ;
+        Size = MAP_APPFONT ( 74 , 10 ) ;
+        Text [ en-US ] = "End of docu~ment" ;
+    };
+    RadioButton RB_PAGEEND
+    {
+        HelpID = "sw:RadioButton:TP_OPTPRINT_PAGE:RB_PAGEEND";
+        Pos = MAP_APPFONT ( 180 , 53 ) ;
+        Size = MAP_APPFONT ( 74 , 10 ) ;
+        Text [ en-US ] = "~End of page" ;
+    };
+    FixedLine FL_SEP_PRT_RIGHT
+    {
+        Pos = MAP_APPFONT ( 169 , 14 ) ;
+        Size = MAP_APPFONT ( 4 , 78 ) ;
+        Vert = TRUE;
+    };
+    FixedLine FL_3
+    {
+        Pos = MAP_APPFONT ( 174 , 3 ) ;
+        Size = MAP_APPFONT ( 80 , 8 ) ;
+        Text [ en-US ] = "Comments" ;
+        Group = TRUE ;
+    };
+    FixedLine FL_4
+    {
+        Pos = MAP_APPFONT ( 6 , 95 ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
+        Group = TRUE ;
+        Text [ en-US ] = "Other";
+    };
+    CheckBox CB_PRINTEMPTYPAGES
+    {
+        HelpID = "sw:CheckBox:TP_OPTPRINT_PAGE:CB_PRINTEMPTYPAGES";
+        Pos = MAP_APPFONT ( 12 , 106 ) ;
+        Size = MAP_APPFONT ( 200 , 10 ) ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "Print ~automatically inserted blank pages";
+    };
+/*
+    CheckBox CB_SINGLEJOBS
+    {
+        HelpID = "sw:CheckBox:TP_OPTPRINT_PAGE:CB_SINGLEJOBS";
+        Pos = MAP_APPFONT ( 12 , 119 ) ;
+        Size = MAP_APPFONT ( 200 , 10 ) ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "Create s~ingle print jobs" ;
+    };
+*/
+    CheckBox CB_PAPERFROMSETUP
+    {
+        HelpID = "sw:CheckBox:TP_OPTPRINT_PAGE:CB_PAPERFROMSETUP";
+        Pos = MAP_APPFONT ( 12 , 119 ) ;
+        Size = MAP_APPFONT ( 200 , 10 ) ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "~Paper tray from printer settings";
+    };
+    FixedText FT_FAX
+    {
+        Pos = MAP_APPFONT ( 12 , 134 ) ;
+        Size = MAP_APPFONT ( 50 , 8 ) ;
+        Group = TRUE ;
+        Text [ en-US ] = "~Fax";
+    };
+    ListBox LB_FAX
+    {
+        HelpID = "sw:ListBox:TP_OPTPRINT_PAGE:LB_FAX";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 70 , 132 ) ;
+        Size = MAP_APPFONT ( 184 , 70 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+        Group = TRUE ;
+    };
+    String ST_NONE
+    {
+        Text [ en-US ] = "<None>";
+    };
+};
+/**************************************************************************/
+/*                                                                        */
+/*                                                                        */
+/*                                                                        */
+/**************************************************************************/
+TabPage TP_STD_FONT
+{
+    HelpID = HID_STD_FONT ;
+    Size = MAP_APPFONT ( 260 , 185 ) ;
+    Hide = TRUE ;
+    FixedLine FL_STDCHR
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
+        Text [ en-US ] = "Basic fonts (%1)";
+    };
+    FixedText FT_TYPE
+    {
+        Pos = MAP_APPFONT ( 63 , 14 ) ;
+        Size = MAP_APPFONT ( 100 , 8 ) ;
+        Text [ en-US ] = "Font";
+    };
+    FixedText FT_SIZE
+    {
+        Pos = MAP_APPFONT ( 204 , 14 ) ;
+        Size = MAP_APPFONT ( 40 , 8 ) ;
+        Text [ en-US ] = "Size";
+    };
+    MetricBox LB_STANDARD_SIZE
+    {
+        HelpID = "sw:MetricBox:TP_STD_FONT:LB_STANDARD_SIZE";
+        Pos = MAP_APPFONT ( 204 , 25 ) ;
+        Size = MAP_APPFONT ( 30 , 60 ) ;
+        Border = TRUE ;
+        DropDown = TRUE;
+    };
+    MetricBox LB_TITLE_SIZE
+    {
+        HelpID = "sw:MetricBox:TP_STD_FONT:LB_TITLE_SIZE";
+        Pos = MAP_APPFONT ( 204 , 42 ) ;
+        Size = MAP_APPFONT ( 30 , 60 ) ;
+        Border = TRUE ;
+        DropDown = TRUE;
+    };
+    MetricBox LB_LIST_SIZE
+    {
+        HelpID = "sw:MetricBox:TP_STD_FONT:LB_LIST_SIZE";
+        Pos = MAP_APPFONT ( 204 , 59 ) ;
+        Size = MAP_APPFONT ( 30 , 60 ) ;
+        Border = TRUE ;
+        DropDown = TRUE;
+    };
+    MetricBox LB_LABEL_SIZE
+    {
+        HelpID = "sw:MetricBox:TP_STD_FONT:LB_LABEL_SIZE";
+        Pos = MAP_APPFONT ( 204 , 76 ) ;
+        Size = MAP_APPFONT ( 30 , 60 ) ;
+        Border = TRUE ;
+        DropDown = TRUE;
+    };
+    MetricBox LB_INDEX_SIZE
+    {
+        HelpID = "sw:MetricBox:TP_STD_FONT:LB_INDEX_SIZE";
+        Pos = MAP_APPFONT ( 204 , 93 ) ;
+        Size = MAP_APPFONT ( 30 , 60 ) ;
+        Border = TRUE ;
+        DropDown = TRUE;
+    };
+    FixedText FT_STANDARD
+    {
+        Pos = MAP_APPFONT ( 12 , 26 ) ;
+        Size = MAP_APPFONT ( 48 , 10 ) ;
+        Left = TRUE ;
+        Text [ en-US ] = "De~fault" ;
+    };
+    FixedText FT_TITLE
+    {
+        Pos = MAP_APPFONT ( 12 , 43 ) ;
+        Size = MAP_APPFONT ( 48 , 10 ) ;
+        Text [ en-US ] = "Headin~g" ;
+        Left = TRUE ;
+    };
+    FixedText FT_LIST
+    {
+        Pos = MAP_APPFONT ( 12 , 60 ) ;
+        Size = MAP_APPFONT ( 48 , 10 ) ;
+        Text [ en-US ] = "~List" ;
+        Left = TRUE ;
+    };
+    FixedText FT_LABEL
+    {
+        Pos = MAP_APPFONT ( 12 , 77 ) ;
+        Size = MAP_APPFONT ( 48 , 10 ) ;
+        Text [ en-US ] = "C~aption" ;
+        Left = TRUE ;
+    };
+    FixedText FT_IDX
+    {
+        Pos = MAP_APPFONT ( 12 , 94 ) ;
+        Size = MAP_APPFONT ( 48 , 10 ) ;
+        Text [ en-US ] = "~Index" ;
+        Left = TRUE ;
+    };
+    ComboBox LB_STANDARD
+    {
+        HelpID = "sw:ComboBox:TP_STD_FONT:LB_STANDARD";
+        Pos = MAP_APPFONT ( 63 , 25 ) ;
+        Size = MAP_APPFONT ( 135 , 73 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+        Sort = TRUE ;
+    };
+    ComboBox LB_TITLE
+    {
+        HelpID = "sw:ComboBox:TP_STD_FONT:LB_TITLE";
+        Pos = MAP_APPFONT ( 63 , 42 ) ;
+        Size = MAP_APPFONT ( 135, 73 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+        Sort = TRUE ;
+    };
+    ComboBox LB_LIST
+    {
+        HelpID = "sw:ComboBox:TP_STD_FONT:LB_LIST";
+        Pos = MAP_APPFONT ( 63 , 59 ) ;
+        Size = MAP_APPFONT ( 135 , 73 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+        Sort = TRUE ;
+    };
+    ComboBox LB_LABEL
+    {
+        HelpID = "sw:ComboBox:TP_STD_FONT:LB_LABEL";
+        Pos = MAP_APPFONT ( 63 , 76 ) ;
+        Size = MAP_APPFONT ( 135 , 73 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+        Sort = TRUE ;
+    };
+    ComboBox LB_IDX
+    {
+        HelpID = "sw:ComboBox:TP_STD_FONT:LB_IDX";
+        Pos = MAP_APPFONT ( 63 , 94 ) ;
+        Size = MAP_APPFONT ( 135, 73 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+        Sort = TRUE ;
+    };
+    CheckBox CB_DOCONLY
+    {
+        HelpID = "sw:CheckBox:TP_STD_FONT:CB_DOCONLY";
+        Pos = MAP_APPFONT ( 12 , 111 ) ;
+        Size = MAP_APPFONT ( 147 , 10 ) ;
+        Text [ en-US ] = "C~urrent document only" ;
+    };
+    PushButton PB_STANDARD
+    {
+        HelpID = "sw:PushButton:TP_STD_FONT:PB_STANDARD";
+        Pos = MAP_APPFONT ( 204 , 165 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Text [ en-US ] = "~Default" ;
+    };
+    String ST_SCRIPT_ASIAN
+    {
+        Text [ en-US ] = "Asian";
+    };
+    String ST_SCRIPT_CTL
+    {
+        Text [ en-US ] = "CTL";
+    };
+    String ST_SCRIPT_WESTERN
+    {
+        Text [ en-US ] = "Western";
+    };
+};
+/**************************************************************************/
+/*                                                                        */
+/*                                                                        */
+/*                                                                        */
+/**************************************************************************/
+TabPage TP_OPTTABLE_PAGE
+{
+    HelpID = HID_OPTTABLE_PAGE ;
+    Size = MAP_APPFONT ( 260 , 185 ) ;
+    Hide = TRUE ;
+    FixedLine FL_TABLE
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 113 , 8 ) ;
+        Text [ en-US ] = "Default";
+    };
+    CheckBox CB_HEADER
+    {
+        HelpID = "sw:CheckBox:TP_OPTTABLE_PAGE:CB_HEADER";
+        Pos = MAP_APPFONT ( 12 , 14 ) ;
+        Size = MAP_APPFONT ( 107 , 10 ) ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "H~eading";
+    };
+    CheckBox CB_REPEAT_HEADER
+    {
+        HelpID = "sw:CheckBox:TP_OPTTABLE_PAGE:CB_REPEAT_HEADER";
+        Pos = MAP_APPFONT ( 21 , 27 ) ;
+        Size = MAP_APPFONT ( 99 , 10 ) ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "Re~peat on each page";
+    };
+    CheckBox CB_DONT_SPLIT
+    {
+        HelpID = "sw:CheckBox:TP_OPTTABLE_PAGE:CB_DONT_SPLIT";
+        Pos = MAP_APPFONT ( 12 , 40 ) ;
+        Size = MAP_APPFONT ( 107 , 10 ) ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "Do not split";
+    };
+    CheckBox CB_BORDER
+    {
+        HelpID = "sw:CheckBox:TP_OPTTABLE_PAGE:CB_BORDER";
+        Pos = MAP_APPFONT ( 12 , 53 ) ;
+        Size = MAP_APPFONT ( 107 , 10 ) ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "B~order";
+    };
+    FixedLine FL_TABLE_SEPARATOR
+    {
+        Pos = MAP_APPFONT ( 120 , 14 ) ;
+        Size = MAP_APPFONT ( 4 , 52 ) ;
+        Vert = TRUE;
+    };
+    FixedLine FL_TABLE_INSERT
+    {
+        Pos = MAP_APPFONT ( 125 , 3 ) ;
+        Size = MAP_APPFONT ( 129 , 8 ) ;
+        Text [ en-US ] = "Input in tables";
+    };
+    CheckBox CB_NUMFORMATTING
+    {
+        HelpID = "sw:CheckBox:TP_OPTTABLE_PAGE:CB_NUMFORMATTING";
+        Pos = MAP_APPFONT ( 131 , 14 ) ;
+        Size = MAP_APPFONT ( 118 , 10 ) ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "Number recognition";
+    };
+    CheckBox CB_NUMFMT_FORMATTING
+    {
+        HelpID = "sw:CheckBox:TP_OPTTABLE_PAGE:CB_NUMFMT_FORMATTING";
+        Pos = MAP_APPFONT ( 140 , 27 ) ;
+        Size = MAP_APPFONT ( 114 , 10 ) ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "Number format recognition";
+    };
+    CheckBox CB_NUMALIGNMENT
+    {
+        HelpID = "sw:CheckBox:TP_OPTTABLE_PAGE:CB_NUMALIGNMENT";
+        Pos = MAP_APPFONT ( 140 , 40 ) ;
+        Size = MAP_APPFONT ( 114 , 10 ) ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "Alignment";
+    };
+    FixedLine FL_MOVE
+    {
+        Pos = MAP_APPFONT ( 6 , 69 ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
+        Text [ en-US ] = "Keyboard handling";
+    };
+    FixedText FT_MOVE
+    {
+        Pos = MAP_APPFONT ( 12 , 80) ;
+        Size = MAP_APPFONT ( 100 , 8 ) ;
+        Text [ en-US ] = "Move cells";
+    };
+    FixedText FT_ROWMOVE
+    {
+        Pos = MAP_APPFONT ( 21 , 93 ) ;
+        Size = MAP_APPFONT ( 51 , 8 ) ;
+        Text [ en-US ] = "~Row" ;
+    };
+    MetricField MF_ROWMOVE
+    {
+        HelpID = "sw:MetricField:TP_OPTTABLE_PAGE:MF_ROWMOVE";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 83 , 91 ) ;
+        Size = MAP_APPFONT ( 40 , 12 ) ;
+        Left = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        DecimalDigits = 2 ;
+        Unit = FUNIT_CM ;
+        SpinSize = 10 ;
+        Minimum = 25 ;
+        Maximum = 999 ;
+        First = 25 ;
+        Last = 2000 ;
+    };
+    FixedText FT_COLMOVE
+    {
+        Pos = MAP_APPFONT ( 21 , 108 ) ;
+        Size = MAP_APPFONT ( 51 , 8 ) ;
+        Text [ en-US ] = "~Column" ;
+    };
+    MetricField MF_COLMOVE
+    {
+        HelpID = "sw:MetricField:TP_OPTTABLE_PAGE:MF_COLMOVE";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 83 , 106 ) ;
+        Size = MAP_APPFONT ( 40 , 12 ) ;
+        Left = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        DecimalDigits = 2 ;
+        Unit = FUNIT_CM ;
+        SpinSize = 10 ;
+        Minimum = 25 ;
+        Maximum = 999 ;
+        First = 25 ;
+        Last = 2000 ;
+    };
+    FixedText FT_INSERT
+    {
+        Pos = MAP_APPFONT ( 136 , 80 ) ;
+        Size = MAP_APPFONT ( 110 , 8 ) ;
+        Text [ en-US ] = "Insert cell";
+    };
+    FixedText FT_ROWINSERT
+    {
+        Pos = MAP_APPFONT ( 145 , 93 ) ;
+        Size = MAP_APPFONT ( 51 , 8 ) ;
+        Text [ en-US ] = "Ro~w" ;
+    };
+    MetricField MF_ROWINSERT
+    {
+        HelpID = "sw:MetricField:TP_OPTTABLE_PAGE:MF_ROWINSERT";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 211 , 91 ) ;
+        Size = MAP_APPFONT ( 40 , 12 ) ;
+        Left = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        DecimalDigits = 2 ;
+        Unit = FUNIT_CM ;
+        SpinSize = 10 ;
+        Minimum = 25 ;
+        Maximum = 999 ;
+        First = 25 ;
+        Last = 2000 ;
+    };
+    FixedText FT_COLINSERT
+    {
+        Pos = MAP_APPFONT ( 145 , 108 ) ;
+        Size = MAP_APPFONT ( 51 , 10 ) ;
+        Text [ en-US ] = "Colu~mn" ;
+    };
+    MetricField MF_COLINSERT
+    {
+        HelpID = "sw:MetricField:TP_OPTTABLE_PAGE:MF_COLINSERT";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 211 , 106 ) ;
+        Size = MAP_APPFONT ( 40 , 12 ) ;
+        Left = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        DecimalDigits = 2 ;
+        Unit = FUNIT_CM ;
+        SpinSize = 10 ;
+        Minimum = 25 ;
+        Maximum = 999 ;
+        First = 25 ;
+        Last = 2000 ;
+    };
+    FixedText FT_HANDLING
+    {
+        Pos = MAP_APPFONT ( 12 , 122 ) ;
+        Size = MAP_APPFONT ( 230 , 8 ) ;
+        Text [ en-US ] = "Behavior of rows/columns";
+    };
+    RadioButton RB_FIX
+    {
+        HelpID = "sw:RadioButton:TP_OPTTABLE_PAGE:RB_FIX";
+        Pos = MAP_APPFONT ( 21 , 133 ) ;
+        Size = MAP_APPFONT ( 70 , 10 ) ;
+        Text [ en-US ] = "~Fixed" ;
+    };
+    FixedText FT_FIX
+    {
+        Pos = MAP_APPFONT ( 93 , 133 ) ;
+        Size = MAP_APPFONT ( 155 , 16 ) ;
+        WordBreak = TRUE ;
+        Text [ en-US ] = "Changes affect the adjacent area only";
+    };
+    RadioButton RB_FIXPROP
+    {
+        HelpID = "sw:RadioButton:TP_OPTTABLE_PAGE:RB_FIXPROP";
+        Pos = MAP_APPFONT ( 21 , 151 ) ;
+        Size = MAP_APPFONT ( 70 , 10 ) ;
+        Text [ en-US ] = "Fi~xed, proportional" ;
+    };
+    FixedText FT_FIXPROP
+    {
+        Pos = MAP_APPFONT ( 93 , 151 ) ;
+        Size = MAP_APPFONT ( 155 , 16 ) ;
+        WordBreak = TRUE ;
+        Text [ en-US ] = "Changes affect the entire table";
+    };
+    RadioButton RB_VAR
+    {
+        HelpID = "sw:RadioButton:TP_OPTTABLE_PAGE:RB_VAR";
+        Pos = MAP_APPFONT ( 21 , 169 ) ;
+        Size = MAP_APPFONT ( 70 , 10 ) ;
+        Text [ en-US ] = "~Variable" ;
+    };
+    FixedText FT_VAR
+    {
+        Pos = MAP_APPFONT ( 93 , 169 ) ;
+        Size = MAP_APPFONT ( 155 , 16 ) ;
+        WordBreak = TRUE ;
+        Text [ en-US ] = "Changes affect the table size";
+    };
+};
+/**************************************************************************/
+/*                                                                        */
+/*  TabPage ShadowCursor                                                  */
+/*                                                                        */
+/**************************************************************************/
+TabPage TP_OPTSHDWCRSR
+{
+    HelpID = HID_OPTSHDWCRSR ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 260 , 185 ) ;
+    Hide = TRUE ;
+     //_----------------------------
+    FixedLine FL_NOPRINT
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 118 , 8 ) ;
+        Group = TRUE ;
+        Text [ en-US ] = "Display of";
+    };
+    CheckBox CB_PARA
+    {
+        HelpID = "sw:CheckBox:TP_OPTSHDWCRSR:CB_PARA";
+        Pos = MAP_APPFONT ( 12 , 14 ) ;
+        Size = MAP_APPFONT ( 108 , 10 ) ;
+        Text [ en-US ] = "Pa~ragraph end" ;
+        TabStop = TRUE ;
+        Group = TRUE ;
+    };
+    CheckBox CB_SHYPH
+    {
+        HelpID = "sw:CheckBox:TP_OPTSHDWCRSR:CB_SHYPH";
+        Pos = MAP_APPFONT ( 12 , 27 ) ;
+        Size = MAP_APPFONT ( 108 , 10 ) ;
+        Text [ en-US ] = "Custom h~yphens" ;
+    };
+    CheckBox CB_SPACE
+    {
+        HelpID = "sw:CheckBox:TP_OPTSHDWCRSR:CB_SPACE";
+        Pos = MAP_APPFONT ( 12 , 40 ) ;
+        Size = MAP_APPFONT ( 108 , 10 ) ;
+        Text [ en-US ] = "Spac~es" ;
+    };
+    CheckBox CB_HSPACE
+    {
+        HelpID = "sw:CheckBox:TP_OPTSHDWCRSR:CB_HSPACE";
+        Pos = MAP_APPFONT ( 12 , 53 ) ;
+        Size = MAP_APPFONT ( 108 , 10 ) ;
+        Text [ en-US ] = "Non-breaking s~paces" ;
+    };
+    CheckBox CB_TAB
+    {
+        HelpID = "sw:CheckBox:TP_OPTSHDWCRSR:CB_TAB";
+        Pos = MAP_APPFONT ( 12 , 66 ) ;
+        Size = MAP_APPFONT ( 108 , 10 ) ;
+        Text [ en-US ] = "Ta~bs" ;
+    };
+    CheckBox CB_BREAK
+    {
+        HelpID = "sw:CheckBox:TP_OPTSHDWCRSR:CB_BREAK";
+        Pos = MAP_APPFONT ( 12 , 79 ) ;
+        Size = MAP_APPFONT ( 108 , 10 ) ;
+        Text [ en-US ] = "Brea~ks" ;
+    };
+    CheckBox CB_CHAR_HIDDEN
+    {
+        HelpID = "sw:CheckBox:TP_OPTSHDWCRSR:CB_CHAR_HIDDEN";
+        Pos = MAP_APPFONT ( 12 , 92 ) ;
+        Size = MAP_APPFONT ( 108 , 10 ) ;
+        Text [ en-US ] = "Hidden text" ;
+    };
+    CheckBox CB_FLD_HIDDEN
+    {
+        HelpID = "sw:CheckBox:TP_OPTSHDWCRSR:CB_FLD_HIDDEN";
+        Pos = MAP_APPFONT ( 12 , 105 ) ;
+        Size = MAP_APPFONT ( 108 , 10 ) ;
+        Text [ en-US ] = "Fields: Hidden te~xt" ;
+    };
+    CheckBox CB_FLD_HIDDEN_PARA
+    {
+        HelpID = "sw:CheckBox:TP_OPTSHDWCRSR:CB_FLD_HIDDEN_PARA";
+        Pos = MAP_APPFONT ( 12 , 118 ) ;
+        Size = MAP_APPFONT ( 108 , 10 ) ;
+        Text [ en-US ] = "Fields: Hidden p~aragraphs" ;
+    };
+    FixedLine FL_SEPARATOR_SHDW
+    {
+        Pos = MAP_APPFONT ( 125 , 14 ) ;
+        Size = MAP_APPFONT ( 4 , 79 ) ;
+        Vert = TRUE;
+    };
+    FixedLine FL_SHDWCRSFLAG
+    {
+        Pos = MAP_APPFONT ( 130 , 3 ) ;
+        Size = MAP_APPFONT ( 124 , 8 ) ;
+        Text [ en-US ] = "Direct cursor" ;
+    };
+    CheckBox CB_SHDWCRSONOFF
+    {
+        HelpID = "sw:CheckBox:TP_OPTSHDWCRSR:CB_SHDWCRSONOFF";
+        Pos = MAP_APPFONT ( 136 , 14 ) ;
+        Size = MAP_APPFONT ( 100 , 10 ) ;
+        TabStop = TRUE ;
+        Group = TRUE ;
+        Text [ en-US ] = "~Direct cursor" ;
+    };
+    FixedText FT_SHDWCRSFILLMODE
+    {
+        Pos = MAP_APPFONT ( 136 , 27 ) ;
+        Size = MAP_APPFONT ( 48 , 8 ) ;
+        Left = TRUE ;
+        Text [ en-US ] = "Insert" ;
+    };
+    RadioButton RB_SHDWCRSFILLMARGIN
+    {
+        HelpID = "sw:RadioButton:TP_OPTSHDWCRSR:RB_SHDWCRSFILLMARGIN";
+        Pos = MAP_APPFONT ( 145 , 39 ) ;
+        Size = MAP_APPFONT ( 100 , 10 ) ;
+        TabStop = TRUE ;
+        Group = TRUE ;
+        Text [ en-US ] = "Para~graph alignment" ;
+    };
+    RadioButton RB_SHDWCRSFILLINDENT
+    {
+        HelpID = "sw:RadioButton:TP_OPTSHDWCRSR:RB_SHDWCRSFILLINDENT";
+        Pos = MAP_APPFONT ( 145 , 52 ) ;
+        Size = MAP_APPFONT ( 100 , 10 ) ;
+        Text [ en-US ] = "~Left paragraph margin" ;
+    };
+    RadioButton RB_SHDWCRSFILLTAB
+    {
+        HelpID = "sw:RadioButton:TP_OPTSHDWCRSR:RB_SHDWCRSFILLTAB";
+        Pos = MAP_APPFONT ( 145 , 66 ) ;
+        Size = MAP_APPFONT ( 100 , 10 ) ;
+        Text [ en-US ] = "~Tabs" ;
+    };
+    RadioButton RB_SHDWCRSFILLSPACE
+    {
+        HelpID = "sw:RadioButton:TP_OPTSHDWCRSR:RB_SHDWCRSFILLSPACE";
+        Pos = MAP_APPFONT ( 145 , 79 ) ;
+        Size = MAP_APPFONT ( 100 , 10 ) ;
+        Text [ en-US ] = "Tabs a~nd spaces" ;
+    };
+    FixedLine FL_CRSR_OPT
+    {
+        Pos = MAP_APPFONT ( 130 , 96 ) ;
+        Size = MAP_APPFONT ( 124 , 8 ) ;
+        Text [ en-US ] = "Cursor in protected areas";
+    };
+    CheckBox CB_ALLOW_IN_PROT
+    {
+        HelpID = "sw:CheckBox:TP_OPTSHDWCRSR:CB_ALLOW_IN_PROT";
+        Pos = MAP_APPFONT ( 136 , 107 ) ;
+        Size = MAP_APPFONT ( 100 , 10 ) ;
+        TabStop = TRUE ;
+        Group = TRUE ;
+        Text [ en-US ] = "Enable";
+    };
+    FixedLine FL_LAYOUT_OPTIONS
+    {
+        Pos = MAP_APPFONT ( 6 , 133 ) ;
+        Size = MAP_APPFONT ( 118 , 8 ) ;
+        Text [ en-US ] = "Layout assistance";
+    };
+    CheckBox CB_MATH_BASELINE_ALIGNMENT
+    {
+        Pos = MAP_APPFONT ( 12 , 144 ) ;
+        Size = MAP_APPFONT ( 236 , 10 ) ;
+        Text [ en-US ] = "Math baseline alignment";
+    };
+};
+
+StringArray STR_PRINTOPTUI
+{
+    ItemList [en-US] =
+    {
+        < "%PRODUCTNAME %s"; >;
+        < "Contents"; >;
+        < "Page ba~ckground"; >;
+        < "P~ictures and other graphic objects"; >;
+        < "Hidden te~xt"; >;
+        < "~Text placeholders"; >;
+        < "Form control~s"; >;
+        < "Color"; >;
+        < "Print text in blac~k"; >;
+        < "Pages"; >;
+        < "Print ~automatically inserted blank pages"; >;
+        < "~Use only paper tray from printer preferences"; >;
+        < "Print"; >;
+        < "None (document only)"; >;
+        < "Comments only"; >;
+        < "Place at end of document"; >;
+        < "Place at end of page"; >;
+        < "~Comments"; >;
+        < "Page sides";>;
+        < "All pages"; >;
+        < "Back sides / left pages"; >;
+        < "Front sides / right pages"; >;
+        < "Include"; >;
+        < "Broch~ure"; >;
+        < "Left-to-right script"; >;
+        < "Right-to-left script"; >;
+        < "Range and copies"; >;
+        < "~All pages"; >;
+        < "Pa~ges"; >;
+        < "~Selection"; >;
+    };
+};
+

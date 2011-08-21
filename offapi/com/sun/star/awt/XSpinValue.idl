@@ -1,0 +1,140 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_awt_XSpinValue_idl__
+#define __com_sun_star_awt_XSpinValue_idl__
+
+#include <com/sun/star/uno/XInterface.idl>
+#include <com/sun/star/awt/XAdjustmentListener.idl>
+#include <com/sun/star/lang/NoSupportException.idl>
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module awt {
+
+//=============================================================================
+
+/** gives access to the value and settings of a control which is associated with
+    a spinnable value.
+ */
+interface XSpinValue : com::sun::star::uno::XInterface
+{
+    //-------------------------------------------------------------------------
+
+    /** registers an adjustment event listener.
+     */
+    [oneway] void addAdjustmentListener( [in] com::sun::star::awt::XAdjustmentListener listener );
+
+    //-------------------------------------------------------------------------
+
+    /** unregisters an adjustment event listener.
+     */
+    [oneway] void removeAdjustmentListener( [in] com::sun::star::awt::XAdjustmentListener listener );
+
+    //-------------------------------------------------------------------------
+
+    /** sets the current value of the control
+     */
+    [oneway] void setValue( [in] long value );
+
+    //-------------------------------------------------------------------------
+
+    /** sets the value and value range of the control
+
+        @see setValue
+        @see setMinimum
+        @see setMaximum
+     */
+    [oneway] void setValues( [in] long minValue, [in] long maxValue, [in] long currentValue );
+
+    //-------------------------------------------------------------------------
+
+    /** returns the current value of the control.
+     */
+    long getValue();
+
+    //-------------------------------------------------------------------------
+
+    /** sets the  minimum value which can be set on the control
+     */
+    [oneway] void setMinimum( [in] long minValue );
+
+    //-------------------------------------------------------------------------
+
+    /** sets the  maximum value which can be set on the control
+     */
+    [oneway] void setMaximum( [in] long maxValue );
+
+    //-------------------------------------------------------------------------
+
+    /** returns the currently set minimum value of the control
+     */
+    long getMinimum();
+
+    //-------------------------------------------------------------------------
+
+    /** returns the currently set maximum value of the control
+     */
+    long getMaximum();
+
+    //-------------------------------------------------------------------------
+
+    /** sets the value by which the current value of the control
+        should be incremented or decremented upon spinning.
+     */
+    [oneway] void setSpinIncrement( [in] long spinIncrement );
+
+    //-------------------------------------------------------------------------
+
+    /** returns the value by which the current value of the control
+        should be incremented or decremented upon spinning.
+     */
+    long getSpinIncrement();
+
+    //-------------------------------------------------------------------------
+
+    /** controls the orientation of the control
+        @param orientation
+            one of the <type>ScrollBarOrientation</type> values specifying the orientation
+        @throws com::sun::star::lang::NoSupportException
+            in case the given orientation is not supported
+     */
+    void setOrientation( [in] long orientation )
+            raises( com::sun::star::lang::NoSupportException );
+
+    //-------------------------------------------------------------------------
+
+    /** returns the current orientation of the control
+     */
+    long getOrientation();
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

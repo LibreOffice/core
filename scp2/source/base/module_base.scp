@@ -1,0 +1,86 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * 
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#include "macros.inc"
+
+Module gid_Module_Prg_Base
+    MOD_NAME_DESC(MODULE_PRG_BASE);
+    ParentID = gid_Module_Prg;
+    Sortkey = "500";
+    Styles =(APPLICATIONMODULE);
+End
+
+Module gid_Module_Prg_Base_Bin
+    PackageInfo = "packinfo_office.txt";
+    MOD_NAME_DESC ( MODULE_PRG_BASE_BIN );
+    ParentID = gid_Module_Prg_Base;
+    Sortkey = "100";
+    Minimal = NO;
+    Default = YES;
+    Styles = (HIDDEN_ROOT);
+    Files = (
+        gid_File_Share_Registry_Base_Xcd
+        ,gid_File_Lib_Abp
+        ,gid_File_Lib_Dbp
+        ,gid_File_Lib_Dbu
+        ,gid_File_Lib_Adabasui
+        ,gid_File_Lib_Rpt
+        ,gid_File_Lib_Rptui
+        ,gid_File_Lib_Rptxml
+    );
+End
+
+Module gid_Module_Brand_Prg_Base
+    PackageInfo = "packinfo_brand.txt";
+    Name = "gid_Module_Brand_Prg_Base";
+    Description = "gid_Module_Brand_Prg_Base";
+    ParentID = gid_Module_Prg_Base;
+    Sortkey = "100";
+    InstallOrder = "1040";
+    Minimal = YES;
+    Default = YES;
+    Styles = (HIDDEN_ROOT);
+    Files = (gid_File_Exe_Sbase);
+End
+
+Module gid_Module_Langpack_Base_Template
+    ParentID = gid_Module_Prg_Base_Bin;
+    Name = "gid_Module_Langpack_Base_Template";
+    Description = "gid_Module_Langpack_Base_Template";
+    Styles = (TEMPLATEMODULE);
+    Files = (gid_File_Res_Abp,
+             gid_File_Res_Adabasui,
+             gid_File_Res_Cnr,
+             gid_File_Res_Dbp,
+             gid_File_Res_Dbu,
+             gid_File_Res_Rpt,
+             gid_File_Res_Rptui,
+             gid_File_Res_Sdbcl,
+             gid_File_Res_Sdberr);
+End
+
+#include "alllangmodules_base.inc"

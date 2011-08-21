@@ -1,0 +1,115 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_ucb_WebDAVContentProvider_idl__
+#define __com_sun_star_ucb_WebDAVContentProvider_idl__
+
+#include <com/sun/star/ucb/XContentProvider.idl>
+
+//=============================================================================
+
+module com { module sun { module star { module ucb {
+
+//=============================================================================
+/** The WebDAV Content Provider (DCP) implements a <type>ContentProvider</type>
+    for the <type>UniversalContentBroker</type> (UCB).
+
+    <p>It provides access to WebDAV and standard HTTP servers. The DCP
+    communicates with the server using the WebDAV protocol which is an
+    extension to the HTTP protocol or using the plain HTTP protocol in case
+    the server  is not WebDAV enabled.
+
+    @see com::sun::star::ucb::Content
+*/
+published service WebDAVContentProvider
+{
+    //-------------------------------------------------------------------------
+    /** provides two types of content: a Folder or Document which corresponds
+        to a collection or non-collection (nodes and leafs) in WebDAV
+        respectively.
+
+        <p>
+
+        <b>DCP Contents</b>
+        <ol>
+        <li>
+        A DCP Folder (<type>WebDAVFolderContent</type>) is a container for
+        other DCP Folders or Documents.
+        </li>
+        <li>
+        A DCP Document (<type>WebDAVDocumentContent</type>) is a container for
+        Document data/content. The data/content may be anything, a WebDAV
+        server, like an HTTP server, does not necessarily mandate what type of
+        data/content may be contained within Documents. The type of data/content
+        is defined by the MediaType property which is different from the content
+        type returned from the getContentType method. The MediaType property is
+        mapped to the equivalent WebDAV property and the WebDAV server
+        calculates the value.
+        </li>
+        </ol>
+
+        <p><b>URL Scheme for DCP Contents</b>
+
+        <p>Each DCP content has an identifier corresponding to the following
+        scheme:
+
+            <ul>
+            <li>
+            vnd.sun.star.webdav://host:port/&lt;path&gt; where &lt;path&gt; is
+            a hierarchical path of the form &lt;name&gt;/.../&lt;name&gt; and
+            where &lt;name&gt; is a string encoded according to the URL
+            conventions.
+            </li>
+            </ul>
+
+        <p>It is also possible to use standard HTTP-URLs. In this case the
+        implementation will determine by itself, if the requested resource
+        is DAV enabled.
+
+        <p>Examples:
+
+        <ul>
+        <li>
+        vnd.sun.star.webdav://localhost/davhome/ ( a DAV collection )
+        </li>
+        <li>
+        vnd.sun.star.webdav://dav.foo.com/Documents/report.sdw
+        </li>
+        <li>
+        http://dav.foo.com/Documents/report.sdw
+        </li>
+        </ul>
+
+        </p>
+     */
+    interface com::sun::star::ucb::XContentProvider;
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<inst:description xmlns:inst="http://installation.openoffice.org/description">
+  <inst:id></inst:id>
+  <inst:name></inst:name>
+  <inst:version></inst:version>
+  <inst:buildid></inst:buildid>
+  <inst:os></inst:os>
+  <inst:arch></inst:arch>
+  <inst:update type="text/html" src="http://update.libreoffice.org/ooo/snapshot.html" />
+</inst:description>

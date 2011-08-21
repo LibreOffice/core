@@ -161,22 +161,6 @@ pkg_list_entry = "%BASISPACKAGEPREFIX%WITHOUTDOTOOOBASEVERSION-base"
 End
 
 Start
-module = "gid_Module_Langpack_Binfilter"
-solarispackagename = "%BASISPACKAGEPREFIX%WITHOUTDOTOOOBASEVERSION-%LANGUAGESTRING-binfilter"
-solarisrequires = "%BASISPACKAGEPREFIX%WITHOUTDOTOOOBASEVERSION-%LANGUAGESTRING"
-packagename = "%BASISPACKAGEPREFIX%OOOBASEVERSION-%LANGUAGESTRING-binfilter"
-provides = "%BASISPACKAGEPREFIX%WITHOUTDOTOOOBASEVERSION-%LANGUAGESTRING-binfilter"
-requires = "%BASISPACKAGEPREFIX%OOOBASEVERSION-%LANGUAGESTRING"
-copyright = "1999-2009 by OpenOffice.org"
-solariscopyright = "solariscopyrightfile"
-vendor = "The Document Foundation"
-description = "Legacy filters (e.g. StarOffice 5.2) for LibreOffice %OOOBASEVERSION, language %LANGUAGESTRING"
-destpath = "/opt"
-packageversion = "%OOOPACKAGEVERSION"
-pkg_list_entry = "%BASISPACKAGEPREFIX%WITHOUTDOTOOOBASEVERSION-binfilter"
-End
-
-Start
 module = "gid_Module_Langpack_Onlineupdate"
 solarispackagename = "%BASISPACKAGEPREFIX%WITHOUTDOTOOOBASEVERSION-%LANGUAGESTRING-onlineupd"
 solarisrequires = "%BASISPACKAGEPREFIX%WITHOUTDOTOOOBASEVERSION-%LANGUAGESTRING"

@@ -1,0 +1,123 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_frame_XController_idl__
+#define __com_sun_star_frame_XController_idl__
+
+#include <com/sun/star/lang/XComponent.idl>
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module frame {
+
+ published interface XFrame;
+ published interface XModel;
+
+//=============================================================================
+/** With this interface, components viewed in a <type>Frame</type> can serve
+    events (by supplying dispatches).
+
+    @see XFrame
+    @see com::sun::star::awt::XWindow
+    @see XModel
+ */
+published interface XController: com::sun::star::lang::XComponent
+{
+    //-------------------------------------------------------------------------
+    /** is called to attach the controller with its managing frame.
+
+        @param Frame
+            the new owner frame of this controller
+     */
+    void attachFrame( [in] XFrame Frame );
+
+    //-------------------------------------------------------------------------
+    /** is called to attach the controller to a new model.
+
+        @param Model
+            the new model for this controller
+
+        @return
+            <TRUE/>if attach was successfully
+            <br>
+            <FALSE/>otherwise
+     */
+    boolean attachModel( [in] XModel Model );
+
+    //-------------------------------------------------------------------------
+    /** is called to prepare the controller for closing the view
+
+        @param Suspend
+            <TRUE/>force the controller to suspend his work
+            <FALSE/>try to reactivate the controller
+
+        @return
+            <TRUE/>if request was accepted and of course successfully finished
+            <br>
+            <FALSE/>otherwise
+     */
+    boolean suspend( [in] boolean Suspend );
+
+    //-------------------------------------------------------------------------
+    /** provides access to current view status
+
+        @returns
+            set of data that can be used to restore the current view status
+            at later time by using <member>XController::restoreViewData()</member>
+     */
+    any getViewData();
+
+    //-------------------------------------------------------------------------
+    /** restores the view status using the data gotten from a previous call to
+        <member>XController::getViewData()</member>.
+
+        @param Data
+            set of data to restore it
+     */
+    void restoreViewData( [in] any Data );
+
+    //-------------------------------------------------------------------------
+    /** provides access to currently attached model
+
+        @returns
+            the currently attached model.
+     */
+    XModel getModel();
+
+    //-------------------------------------------------------------------------
+    /** provides access to owner frame of this controller
+
+        @returns
+            the frame containing this controller.
+     */
+    XFrame getFrame();
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

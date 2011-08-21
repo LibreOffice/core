@@ -1,0 +1,8 @@
+module ooo { module vba { module excel {
+    constants XlHebrewModes {
+        const long xlHebrewFullScript = 0;
+        const long xlHebrewMixedAuthorizedScript = 3;
+        const long xlHebrewMixedScript = 2;
+        const long xlHebrewPartialScript = 1;
+    };
+}; }; };

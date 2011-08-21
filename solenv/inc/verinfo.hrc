@@ -1,0 +1,201 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef _VERINFO_HRC
+#define _VERINFO_HRC
+
+// include ---------------------------------------------------------------
+
+#ifndef WIN32
+#include <ver.h>
+#else
+#include <winver.h>
+#endif
+
+// general preprocessor string management --------------------------------
+
+#ifndef PPSX
+#define PPSX(s) #s
+#endif
+#ifndef PPS
+#define PPS(s) PPSX(s)
+#endif
+
+#ifndef PPCX
+#define PPCX(s1, s2) s1##s2
+#endif
+#ifndef PPCAT
+#define PPCAT(s1, s2) PPCX(s1, s2)
+#endif
+
+// define order of date parts --------------------------------------------
+
+#define VER_YMD
+
+// set VERVARIANT to 0 if not defined ------------------------------------
+
+#if !defined(VERVARIANT)
+  #define VERVARIANT 0
+#endif
+
+// define pre release state ----------------------------------------------
+
+#ifdef VER_CONCEPT
+  #define VER_PREL 1
+  #define VER_COUNT (0+VER_CONCEPT)
+  #define VER1 Concept (Level VER_CONCEPT)
+#endif
+
+#ifdef VER_ALPHA
+  #define VER_PREL 1
+  #define VER_COUNT (100+VER_ALPHA)
+  #define VER1 Alpha (Level VER_ALPHA)
+#endif
+
+#ifdef VER_BETA
+  #define VER_PREL 1
+  #define VER_COUNT (200+VER_BETA)
+  #define VER1 Beta (Level VER_BETA)
+#endif
+
+#ifdef VER_GAMMA
+  #define VER_PREL 1
+  #define VER_COUNT (300+VER_GAMMA)
+  #define VER1 Gamma (Level VER_GAMMA)
+#endif
+
+#ifdef VER_FINAL
+  #define VER_COUNT (500+VER_FINAL)
+  #if VER_FINAL==0
+    #undef VER1
+  #elif VER_FINAL==1
+    #define VER1 1
+  #elif VER_FINAL==2
+    #define VER1 2
+  #elif VER_FINAL==3
+    #define VER1 3
+  #elif VER_FINAL==4
+    #define VER1 4
+  #elif VER_FINAL==5
+    #define VER1 5
+  #elif VER_FINAL==6
+    #define VER1 6
+  #elif VER_FINAL==7
+    #define VER1 7
+  #elif VER_FINAL==8
+    #define VER1 8
+  #elif VER_FINAL==9
+    #define VER1 9
+  #elif VER_FINAL==10
+    #define VER1 a
+  #elif VER_FINAL==11
+    #define VER1 b
+  #elif VER_FINAL==12
+    #define VER1 c
+  #endif
+#endif
+
+#ifdef SUBVERSION
+#if SUBVERSION < 10
+  #define VER4 PPCAT(0, SUBVERSION)
+#else
+  #define VER4 SUBVERSION
+#endif
+#else
+  #define VER4 0.0
+#endif
+
+#ifndef VER1
+#if VERVARIANT > 0
+  #define VER_LEVEL VERSION.VER4.VERVARIANT
+#else
+  #define VER_LEVEL VERSION.VER4
+#endif
+#else
+  #define VERC1(a, b, c) a.b##c
+  #define VERC2(a, b, c) VERC1(a, b, c)
+  #define VER_LEVEL VERC2(VERSION, VER4, VER1)
+#endif
+
+#if !defined(VER_DMY) && VER_DAY < 10
+  #define VER5 PPCAT(0, VER_DAY)
+#else
+  #define VER5 VER_DAY
+#endif
+
+// define month strings --------------------------------------------------
+
+#if VER_MONTH==1
+  #define VER2 Jan
+#elif VER_MONTH==2
+  #define VER2 Feb
+#elif VER_MONTH==3
+  #define VER2 Mar
+#elif VER_MONTH==4
+  #define VER2 Apr
+#elif VER_MONTH==5
+  #define VER2 May
+#elif VER_MONTH==6
+  #define VER2 Jun
+#elif VER_MONTH==7
+  #define VER2 Jul
+#elif VER_MONTH==8
+  #define VER2 Aug
+#elif VER_MONTH==9
+  #define VER2 Sep
+#elif VER_MONTH==10
+  #define VER2 Oct
+#elif VER_MONTH==11
+  #define VER2 Nov
+#elif VER_MONTH==12
+  #define VER2 Dec
+#endif
+
+#define VERC3(a, b, c) c-b-a
+#define VERC4(a, b, c) VERC3(a, b, c)
+#define VER_DATE VERC4(VER5, VER2, VER_YEAR)
+
+#if PPCAT(1, VER_FIRSTYEAR)==PPCAT(1, VER_YEAR)
+  #define VER_YEARRANGE VER_FIRSTYEAR
+#else
+  #define VER_YEARRANGE VER_FIRSTYEAR-VER_YEAR
+#endif
+
+#if VER_FIRSTYEAR > 100
+#define VERC5(a) Copyright \251 a by
+#define VERC6(a) VERC5(a)
+#else
+#define VERC5(a) Copyright \251 20##a by
+#define VERC6(a) VERC5(a)
+#endif
+
+#define S_CRIGHT PPS(VERC6(VER_YEARRANGE))
+
+#define S_VERSION PPS(Version VER_LEVEL of VER_DATE)
+
+#endif  // _VERINFO_HRC
+

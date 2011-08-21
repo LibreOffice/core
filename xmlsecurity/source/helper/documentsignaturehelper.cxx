@@ -155,7 +155,7 @@ bool DocumentSignatureHelper::isOOo3_2_Signature(const SignatureInformation & si
     bool bOOo3_2 = false;
     typedef ::std::vector< SignatureReferenceInformation >::const_iterator CIT;
     for (CIT i = sigInfo.vSignatureReferenceInfors.begin();
-        i < sigInfo.vSignatureReferenceInfors.end(); i++)
+        i < sigInfo.vSignatureReferenceInfors.end(); ++i)
     {
         if (i->ouURI.equals(sManifestURI))
         {

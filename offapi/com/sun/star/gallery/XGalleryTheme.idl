@@ -1,0 +1,160 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_gallery_XGalleryTheme_idl__
+#define __com_sun_star_gallery_XGalleryTheme_idl__
+
+#include <com/sun/star/container/XIndexAccess.idl>
+#include <com/sun/star/lang/XComponent.idl>
+#include <com/sun/star/lang/IndexOutOfBoundsException.idl>
+#include <com/sun/star/lang/WrappedTargetException.idl>
+#include <com/sun/star/graphic/XGraphic.idl>
+#include <com/sun/star/gallery/XGalleryItem.idl>
+
+//=============================================================================
+
+module com {  module sun {  module star {  module gallery {
+
+//=============================================================================
+
+/** provides access to the items of a Gallery themes. It also allows
+    inserting and removing of single items.
+
+    <p>This interface extends the interface
+    <type scope="com::sun::star::container">XIndexAccess</type> which provides
+    access to existing Gallery items collection.</p>
+
+    @see com::sun::star::container::XIndexAccess
+    @see com::sun::star::sheet::DataPilotTable
+ */
+interface XGalleryTheme : com::sun::star::container::XIndexAccess
+{
+    /** retrieves the name of the Gallery theme
+
+        @returns
+            The name of the Gallery theme
+     */
+    string getName();
+
+    /** updates the theme
+
+        <p>This method iterates over each item of the Gallery theme
+        and updates it accordingly. Main purpose is to automatically
+        regenerate the thumbnails and to remove invalid items, that is items
+        who have got an URL that has become invalid. This method also
+        optimizes underlying data structures.</p>
+     */
+    void update();
+
+    /** inserts an item
+
+        @param URL
+            The URL of a graphic or media object, that should
+            be added to the collection
+
+        @param Index
+            The zero based index of the position where to insert
+            the new object inside the collection. If the index is larger than
+            or equal to the number of already inserted items, the
+            item is inserted at the end of the collection. If the index
+            is smaller than 0, the item is inserted at the beginning of
+            the collection.
+
+        @returns
+            The zero based position at which the object was inserted.
+            If the object could not be inserted, -1 is returned.
+
+        @see XGalleryItem
+        @see com::sun::star::lang::WrappedTargetException
+    */
+    long insertURLByIndex( [in] string URL, [in] long Index )
+        raises ( com::sun::star::lang::WrappedTargetException );
+    /** inserts an item
+
+        @param Graphic
+            The <type scope="com::sun::star::graphic">XGraphic</type> object
+            that should be added to the collection
+
+        @param Index
+            The zero based index of the position where to insert
+            the new object inside the collection. If the index is larger than
+            or equal to the number of already inserted items, the
+            item is inserted at the end of the collection. If the index
+            is smaller than 0, the item is inserted at the beginning of
+            the collection.
+
+        @returns
+            The zero based position at which the object was inserted.
+            If the object could not be inserted, -1 is returned.
+
+        @see com::sun::star::graphic::XGraphic
+        @see XGalleryItem
+        @see com::sun::star::lang::WrappedTargetException
+    */
+    long insertGraphicByIndex( [in] com::sun::star::graphic::XGraphic Graphic, [in] long Index )
+        raises ( com::sun::star::lang::WrappedTargetException );
+
+    /** inserts an item
+
+        @param Drawing
+            A drawing model that should be added to the collection
+
+        @param Index
+            The zero based index of the position where to insert
+            the new object inside the collection. If the index is larger than
+            or equal to the number of already inserted items, the
+            item is inserted at the end of the collection. If the index
+            is smaller than 0, the item is inserted at the beginning of
+            the collection.
+
+        @returns
+            The zero based position at which the object was inserted.
+            If the object could not be inserted, -1 is returned.
+
+        @see XGalleryItem
+        @see com::sun::star::lang::WrappedTargetException
+    */
+    long insertDrawingByIndex( [in] com::sun::star::lang::XComponent Drawing, [in] long Index )
+        raises ( com::sun::star::lang::WrappedTargetException );
+
+    /** deletes an item from the collection
+
+        @param Index
+            The position of the item to be removed. The
+            position is zero based.
+
+        @see com::sun::star::container::NoSuchElementException
+    */
+    void removeByIndex( [in] long Index )
+        raises ( com::sun::star::lang::IndexOutOfBoundsException );
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

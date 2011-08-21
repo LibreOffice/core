@@ -1,0 +1,284 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+ // #pragma ******************************************************************
+
+#include "dbui.hrc"
+#include "helpid.h"
+
+ModalDialog DLG_DBSELECTION
+{
+    HelpID = "sw:ModalDialog:DLG_DBSELECTION";
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 168 , 132 ) ;
+    Moveable = TRUE ;
+    Control TLB_DBLIST
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 6 , 6 ) ;
+        Size = MAP_APPFONT ( 100 , 120 ) ;
+    };
+    OKButton BTN_OK
+    {
+        Pos = MAP_APPFONT ( 112 , 6 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        Disable = TRUE ;
+    };
+    CancelButton BTN_CANCEL
+    {
+        Pos = MAP_APPFONT ( 112 , 23 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    HelpButton BTN_HELP
+    {
+        Pos = MAP_APPFONT ( 112 , 43 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    Text [ en-US ] = "Database Selection" ;
+};
+ // DLG_PRINTMONITOR ------------------------------------------------------
+ModelessDialog DLG_PRINTMONITOR
+{
+    HelpID = HID_MERGE_PRINTMONITOR  ;
+    SVLOOK = TRUE ;
+    HIDE = TRUE ;
+    OUTPUTSIZE = TRUE ;
+    Size = MAP_APPFONT ( 118, 72 ) ;
+    MOVEABLE = TRUE ;
+    APP = FALSE ;
+    FixedText FT_DOCNAME
+    {
+        Pos = MAP_APPFONT ( 6,6 ) ;
+        Size = MAP_APPFONT ( 100, 8 ) ;
+        CENTER = TRUE ;
+    };
+    FixedText FT_PRINTING
+    {
+        Pos = MAP_APPFONT ( 6, 17 ) ;
+        Size = MAP_APPFONT (  100, 8 ) ;
+        CENTER = TRUE ;
+        Text [ en-US ] = "is being prepared for printing on" ;
+    };
+    FixedText FT_SENDING
+    {
+        Pos = MAP_APPFONT ( 6, 17 ) ;
+        Size = MAP_APPFONT (  100, 8 ) ;
+        CENTER = TRUE ;
+        Text [ en-US ] = "is being sent to";
+    };
+    FixedText FT_SAVING
+    {
+        Pos = MAP_APPFONT ( 6, 17 ) ;
+        Size = MAP_APPFONT (  100, 8 ) ;
+        CENTER = TRUE ;
+        Text [ en-US ] = "is being saved to" ;
+    };
+    FixedText FT_PRINTER
+    {
+        Pos = MAP_APPFONT ( 6, 28 ) ;
+        Size = MAP_APPFONT (  100, 8 ) ;
+        CENTER = TRUE ;
+    };
+    FixedText FT_PRINTINFO
+    {
+        Pos = MAP_APPFONT ( 6, 39 ) ;
+        Size = MAP_APPFONT (  100, 8 ) ;
+        CENTER = TRUE ;
+    };
+    CancelButton PB_CANCELPRNMON
+    {
+        Pos = MAP_APPFONT ( 31, 52 ) ;
+        Size = MAP_APPFONT (  50, 14 ) ;
+        TABSTOP = TRUE ;
+    };
+    String STR_EMAILMON
+    {
+        Text [ en-US ] = "Send-Monitor";
+    };
+    String STR_SAVEMON
+    {
+        Text [ en-US ] = "Save-Monitor";
+    };
+    Text [ en-US ] = "Print monitor" ;
+};
+
+String STR_DB_EMAIL
+{
+    Text [ en-US ] = "E-mail" ;
+};
+
+StringArray SA_ADDRESS_HEADER
+{
+    ItemList [en-US]=
+    {
+        < "Title" ;                 MM_PART_TITLE           ;> ;
+        < "First Name" ;            MM_PART_FIRSTNAME       ;> ;
+        < "Last Name" ;             MM_PART_LASTNAME        ;> ;
+        < "Company Name" ;          MM_PART_COMPANY         ;> ;
+        < "Address Line 1" ;        MM_PART_ADDRESS_1       ;> ;
+        < "Address Line 2" ;        MM_PART_ADDRESS_2       ;> ;
+        < "City" ;                  MM_PART_CITY            ;> ;
+        < "State" ;                 MM_PART_REGION          ;> ;
+        < "ZIP" ;                   MM_PART_ZIP             ;> ;
+        < "Country" ;               MM_PART_COUNTRY         ;> ;
+        < "Telephone private" ;     MM_PART_PHONE_PRIVATE   ;> ;
+        < "Telephone business" ;    MM_PART_PHONE_BUSINESS  ;> ;
+        < "E-mail Address" ;        MM_PART_E_MAIL          ;> ;
+        < "Gender";                 MM_PART_GENDER          ;> ;
+    };
+};
+String STR_NOTASSIGNED
+{
+    Text[ en-US ] = " not yet matched ";
+};
+String STR_FILTER_ALL
+{
+    Text [ en-US ] = "All files (*.*)" ;
+};
+String STR_FILTER_ALL_DATA
+{
+    Text [ en-US ] = "Address lists(*.*)" ;
+};
+String STR_FILTER_SXB
+{
+    Text [ en-US ] = "%PRODUCTNAME Base (*.odb)" ;
+};
+String STR_FILTER_SXC
+{
+    Text [ en-US ] = "%PRODUCTNAME Calc (*.ods;*.sxc)" ;
+};
+String STR_FILTER_DBF
+{
+    Text [ en-US ] = "dBase (*.dbf)" ;
+};
+String STR_FILTER_XLS
+{
+    Text [ en-US ] = "Microsoft Excel (*.xls)" ;
+};
+String STR_FILTER_TXT
+{
+    Text [ en-US ] = "Plain text (*.txt)" ;
+};
+String STR_FILTER_CSV
+{
+    Text [ en-US ] = "Text Comma Separated (*.csv)" ;
+};
+String STR_FILTER_MDB
+{
+    Text [ en-US ] = "Microsoft Access (*.mdb)" ;
+};
+String STR_FILTER_ACCDB
+{
+    Text [ en-US ] = "Microsoft Access 2007 (*.accdb)" ;
+};
+
+ // DLG_MM_CREATIONMONITOR ------------------------------------------------------
+ModelessDialog DLG_MM_CREATIONMONITOR
+{
+    HelpID = HID_MERGE_PRINTMONITOR  ;
+    SVLOOK = TRUE ;
+    HIDE = TRUE ;
+    OUTPUTSIZE = TRUE ;
+    _WHMAPMODE = MAP_APPFONT ;
+    _WIDTH = 140 ;
+    _HEIGHT = 52 ;
+    MOVEABLE = TRUE ;
+    APP = FALSE ;
+
+    Text [ en-US ] = "Mail Merge" ;
+
+    FixedText FT_STATUS
+    {
+        HIDE = FALSE ;
+        _XYMAPMODE = MAP_APPFONT ;
+        _X = 6 ;
+        _Y = 6 ;
+        _WHMAPMODE = MAP_APPFONT ;
+        _WIDTH = 35 ;
+        _HEIGHT = 8 ;
+        Text [ en-US ] = "Status:" ;
+        LEFT = FALSE ;
+        CENTER = FALSE ;
+        RIGHT = TRUE ;
+    };
+    FixedText FT_PROGRESS
+    {
+        HIDE = FALSE ;
+        _XYMAPMODE = MAP_APPFONT ;
+        _X = 6 ;
+        _Y = 17 ;
+        _WHMAPMODE = MAP_APPFONT ;
+        _WIDTH = 35 ;
+        _HEIGHT = 8 ;
+        Text [ en-US ] = "Progress:" ;
+        LEFT = FALSE ;
+        CENTER = FALSE ;
+        RIGHT = TRUE ;
+    };
+    FixedText FT_CREATEDOCUMENTS
+    {
+        HIDE = FALSE ;
+        _XYMAPMODE = MAP_APPFONT ;
+        _X = 45 ;
+        _Y = 6 ;
+        _WHMAPMODE = MAP_APPFONT ;
+        _WIDTH = 91 ;
+        _HEIGHT = 8 ;
+        Text [ en-US ] = "Creating documents...";
+        LEFT = TRUE ;
+        CENTER = FALSE ;
+        RIGHT = FALSE ;
+    };
+    FixedText FT_COUNTING
+    {
+        HIDE = FALSE ;
+        _XYMAPMODE = MAP_APPFONT ;
+        _X = 45 ;
+        _Y = 17 ;
+        _WHMAPMODE = MAP_APPFONT ;
+        _WIDTH = 91 ;
+        _HEIGHT = 8 ;
+        Text [ en-US ] = "%X of %Y";
+        LEFT = TRUE ;
+        CENTER = FALSE ;
+        RIGHT = FALSE ;
+    };
+    CancelButton PB_CANCELPRNMON
+    {
+        HIDE = FALSE ;
+        _XYMAPMODE = MAP_APPFONT ;
+        _X = 74 ;
+        _Y = 32 ;
+        _WHMAPMODE = MAP_APPFONT ;
+        _WIDTH = 50 ;
+        _HEIGHT = 14 ;
+        TABSTOP = TRUE ;
+    };
+};

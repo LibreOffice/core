@@ -1,0 +1,121 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_table_XTable_idl__
+#define __com_sun_star_table_XTable_idl__
+
+#include <com/sun/star/lang/XComponent.idl>
+#include <com/sun/star/table/XCellRange.idl>
+#include <com/sun/star/table/XColumnRowRange.idl>
+#include <com/sun/star/table/XCellCursor.idl>
+#include <com/sun/star/util/XModifiable.idl>
+#include <com/sun/star/beans/XMultiPropertySet.idl>
+#include <com/sun/star/beans/XPropertySet.idl>
+#include <com/sun/star/beans/XFastPropertySet.idl>
+#include <com/sun/star/lang/IllegalArgumentException.idl>
+
+//=============================================================================
+
+module com {  module sun {  module star {  module table {
+
+//=============================================================================
+
+/**
+*/
+interface XTable
+{
+
+    interface com::sun::star::lang::XComponent;
+
+    //-------------------------------------------------------------------------
+
+    interface com::sun::star::table::XCellRange;
+
+    //-------------------------------------------------------------------------
+
+    interface com::sun::star::table::XColumnRowRange;
+
+    //-------------------------------------------------------------------------
+
+    /** interface to make the modify state of the table accessible.
+        <p>Additionally, it makes it possible to register listener objects, which
+        get notification whenever the content of the table changes.
+    */
+    interface ::com::sun::star::util::XModifiable;
+
+    //-------------------------------------------------------------------------
+
+    /* interface ::com::sun::star::beans::XMultiPropertySet; */
+
+    //-------------------------------------------------------------------------
+
+    interface ::com::sun::star::beans::XPropertySet;
+
+    //-------------------------------------------------------------------------
+
+    interface ::com::sun::star::beans::XFastPropertySet;
+
+    //-------------------------------------------------------------------------
+
+    /** creates a cell cursor including the whole table
+
+        @see com::sun::star::table::CellCursor
+     */
+    com::sun::star::table::XCellCursor createCursor();
+
+    //-------------------------------------------------------------------------
+
+    /** creates a cell cursor to travel in the given range context.
+
+        @param aRange
+            the cell range for the cursor.
+
+        @throws <type scope="com::sun::star::lang">IllegalArgumentException</type>
+            if the given reference is empty or not a range from this table.
+
+        @see com::sun::star::table::CellCursor
+     */
+    com::sun::star::table::XCellCursor createCursorByRange( [in] com::sun::star::table::XCellRange Range )
+        raises ( com::sun::star::lang::IllegalArgumentException );
+
+    //-------------------------------------------------------------------------
+
+    /** stores the current row count of this table */
+    [readonly, attribute] long RowCount;
+
+    //-------------------------------------------------------------------------
+
+    /** stores the current column count of this table */
+    [readonly, attribute] long ColumnCount;
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif
+

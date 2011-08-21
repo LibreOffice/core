@@ -1,0 +1,529 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+interface BaseTextSelection
+[
+    Automation = FALSE;
+]
+{
+    SID_ATTR_BRUSH
+    [
+        ExecMethod = Execute ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_DELETE  // status(final|play)
+    [
+        ExecMethod = ExecDelete ;
+        StateMethod = GetState ;
+        FastCall = FALSE ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    FN_BACKSPACE  // status(final|play)
+    [
+        ExecMethod = ExecDelete ;
+        StateMethod = GetState ;
+        FastCall = FALSE ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    FN_SHIFT_BACKSPACE // status()
+    [
+        ExecMethod = ExecDelete ;
+        StateMethod = NoState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_UNDO // status(final|play)
+    [
+        ExecMethod = ExecUndo ;
+        StateMethod = StateUndo ;
+    ]
+
+    SID_GETUNDOSTRINGS  // status(final|play)
+    [
+        StateMethod = StateUndo ;
+    ]
+
+    SID_REDO // status(final|play)
+    [
+        ExecMethod = ExecUndo ;
+        StateMethod = StateUndo ;
+    ]
+
+    SID_GETREDOSTRINGS  // status(final|play)
+    [
+        StateMethod = StateUndo ;
+    ]
+
+    SID_REPEAT // status()
+    [
+        ExecMethod = ExecUndo ;
+        StateMethod = StateUndo ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_CUT // status(final|play)
+    [
+        ExecMethod = ExecClpbrd ;
+        StateMethod = StateClpbrd ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_COPY   // status(final|play)
+    [
+        ExecMethod = ExecClpbrd ;
+        StateMethod = StateClpbrd ;
+    ]
+
+    SID_PASTE  // status(final|play)
+    [
+        ExecMethod = ExecClpbrd ;
+        StateMethod = StateClpbrd ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_CLIPBOARD_FORMAT_ITEMS  // status(final|play)
+    [
+        StateMethod = StateClpbrd ;
+        ExecMethod = ExecClpbrd ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_PASTE_UNFORMATTED  // status(final|play)
+    [
+        ExecMethod = ExecClpbrd ;
+        StateMethod = StateClpbrd ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_PASTE_SPECIAL  // status(final|play)
+    [
+        ExecMethod = ExecClpbrd ;
+        StateMethod = StateClpbrd ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    FN_REPAGINATE  // status(final|play)
+    [
+        ExecMethod = Execute ;
+        StateMethod = NoState ;
+    ]
+
+    FN_CHANGE_DBFIELD
+    [
+        ExecMethod = ExecField ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    FN_UPDATE_FIELDS // status(final|play)
+    [
+        ExecMethod = Execute ;
+        StateMethod = NoState ;
+    ]
+
+    FN_UPDATE_CHARTS // status(final|play)
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    FN_UPDATE_ALL // status(final|play)
+    [
+        ExecMethod = Execute ;
+        StateMethod = NoState ;
+    ]
+
+    FN_UPDATE_INPUTFIELDS  // status(final|play)
+    [
+        ExecMethod = Execute ;
+        StateMethod = NoState ;
+    ]
+
+    FN_FRAME_TO_ANCHOR // status()
+    [
+        /*OS: Datentypen unvertraeglich ?? */
+        ExecMethod = Execute ;
+        StateMethod = NoState ;
+    ]
+
+    FN_GOTO_NEXT_OBJ // status(final|play)
+    [
+        ExecMethod = Execute ;
+        StateMethod = NoState ;
+    ]
+
+    FN_GOTO_PREV_OBJ // status(final|play)
+    [
+        ExecMethod = Execute ;
+        StateMethod = NoState ;
+    ]
+
+    FN_GOTO_NEXT_MARK // status(final|play)
+    [
+        ExecMethod = Execute ;
+        StateMethod = NoState ;
+    ]
+
+    FN_GOTO_PREV_MARK  // status(final|play)
+    [
+        ExecMethod = Execute ;
+        StateMethod = NoState ;
+    ]
+
+    FN_PREV_BOOKMARK // status(final|play)
+    [
+        ExecMethod = Execute ;
+        StateMethod = NoState ;
+    ]
+
+    FN_NEXT_BOOKMARK // status(final|play)
+    [
+        ExecMethod = Execute ;
+        StateMethod = NoState ;
+    ]
+
+    SID_GALLERY_FORMATS // status()
+    [
+        Export = FALSE ;
+        ExecMethod = Execute ;
+    ]
+
+    SID_GALLERY_ENABLE_ADDCOPY
+    [
+        Export = FALSE;
+        StateMethod = GetState;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_BACKGROUND_COLOR // status()
+    [
+        ExecMethod = ExecBckCol ;
+        StateMethod = GetBckColState ;
+        Cachable , AutoUpdate ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    FN_EDIT_REGION // status(final|play)
+    [
+        ExecMethod = EditRegionDialog ;
+        StateMethod = GetState ;
+    ]
+
+    FN_INSERT_REGION // status()
+    [
+        ExecMethod = InsertRegionDialog;
+        StateMethod = GetState;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    FN_FORMAT_PAGE_DLG  // status(final|play)
+    [
+        ExecMethod = ExecDlg ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    FN_FORMAT_TITLEPAGE_DLG  // status(final|play)
+    [
+        ExecMethod = ExecDlg ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    FN_FORMAT_PAGE_COLUMN_DLG  // status(final|play)
+    [
+        ExecMethod = ExecDlg ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    FN_CONVERT_TABLE_TO_TEXT
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    FN_CONVERT_TEXT_TO_TABLE
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+    FN_CONVERT_TEXT_TABLE // status(final|play)
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+    FN_FORMAT_BORDER_DLG // status(final|play)
+    [
+        ExecMethod = ExecDlg ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_ATTR_BORDER_INNER // status()
+    [
+        StateMethod = GetBorderState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+        SID_ATTR_BORDER_OUTER // status()
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetBorderState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_BORDER_REDUCED_MODE
+    [
+        StateMethod = GetBorderState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    FN_FORMAT_BACKGROUND_DLG  // status(final|play)
+    [
+        ExecMethod = ExecDlg ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SfxBoolItem StyleWatercanMode SID_STYLE_WATERCAN // status()
+    [
+        SfxUInt16Item WatercanStyleModeOnOff
+        (
+            SfxStringItem Param SID_STYLE_WATERCAN ,
+            SfxUInt16Item Family SID_STYLE_FAMILY
+        ) ;
+        ExecMethod = Execute ;
+        StateMethod = StateStyle ;
+            NoRecord;
+        GroupId = GID_TEMPLATE ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_STYLE_UPDATE_BY_EXAMPLE // status()
+    [
+        ExecMethod = Execute ;
+        StateMethod = StateStyle ;
+    ]
+
+    SID_STYLE_NEW_BY_EXAMPLE // status(fina|play)
+    [
+        ExecMethod = Execute ;
+        StateMethod = StateStyle ;
+        FastCall = TRUE; // fuer Macroausfuehrung!
+    ]
+    SID_STYLE_APPLY // status(fina|play)
+    [
+        ExecMethod = Execute ;
+        StateMethod = StateStyle ;
+        FastCall = TRUE;// fuer Macroausfuehrung!
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_STYLE_FAMILY1 // status(fina|play)
+    [
+        StateMethod = StateStyle ;
+    ]
+
+    SID_STYLE_FAMILY2 // status(fina|play)
+    [
+        StateMethod = StateStyle ;
+    ]
+
+    SID_STYLE_FAMILY3 // status(fina|play)
+    [
+        StateMethod = StateStyle ;
+    ]
+
+    SID_STYLE_FAMILY4 // status(fina|play)
+    [
+        StateMethod = StateStyle ;
+    ]
+
+    SID_STYLE_FAMILY5 // status(fina|play)
+    [
+        StateMethod = StateStyle ;
+    ]
+
+     //OS: Selection.Escape gibt es zusaetzlich zu Window.Escape
+
+    FN_ESCAPE // status(final|play|rec)
+    [
+        ExecMethod = Execute ;
+    ]
+
+    SID_IMAP
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        Toggle = FALSE;
+    ]
+
+    SID_IMAP_EXEC
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+// Methode fuer Rahmen und Objekte
+    FN_TOOL_ANKER
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    FN_TOOL_ANKER_PARAGRAPH
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    FN_TOOL_ANKER_CHAR
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    FN_TOOL_ANKER_AT_CHAR
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    FN_TOOL_ANKER_FRAME
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    FN_UPDATE_ALL_LINKS // status()
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+
+// from here on Export = FALSE
+
+    FN_FRAME_WRAP   // status()
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        Export = FALSE;
+    ]
+
+    FN_FRAME_WRAP_IDEAL // status()
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        Export = FALSE;
+    ]
+
+    FN_FRAME_NOWRAP   // status()
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        Export = FALSE;
+    ]
+
+    FN_FRAME_WRAPTHRU   // status()
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        Export = FALSE;
+    ]
+
+    FN_FRAME_WRAPTHRU_TRANSP // status()
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        Export = FALSE;
+    ]
+
+    FN_FRAME_WRAP_CONTOUR // status()
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        Export = FALSE;
+    ]
+
+    FN_WRAP_ANCHOR_ONLY // status()
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        Export = FALSE;
+    ]
+
+    FN_FRAME_WRAP_LEFT // status()
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        Export = FALSE;
+    ]
+
+    FN_FRAME_WRAP_RIGHT // status()
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        Export = FALSE;
+    ]
+
+
+
+    SID_GALLERY_BG_BRUSH
+    [
+        ExecMethod = ExecuteGallery;
+        StateMethod = GetGalleryState;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+        Export = FALSE;
+    ]
+    SID_ATTR_BORDER_SHADOW // status(final|play)
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    FN_XFORMS_DESIGN_MODE
+    [
+        ExecMethod = Execute;
+        StateMethod = GetState;
+    ]
+}
+

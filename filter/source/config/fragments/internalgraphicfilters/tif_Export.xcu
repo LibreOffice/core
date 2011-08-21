@@ -1,0 +1,10 @@
+    <node oor:name="tif_Export" oor:op="replace"  >
+        <prop oor:name="Type"><value>tif_Tag_Image_File</value></prop>
+        <prop oor:name="FormatName"><value>eti</value></prop>
+        <prop oor:name="RealFilterName"/>
+        <prop oor:name="UIComponent"><value>com.sun.star.svtools.SvFilterOptionsDialog</value></prop>
+        <prop oor:name="UIName">
+            <value xml:lang="en-US">TIFF - Tagged Image File Format</value>
+        </prop>
+        <prop oor:name="Flags"><value>EXPORT</value></prop>
+    </node>

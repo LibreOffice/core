@@ -1,0 +1,12 @@
+mkdir: %_DEST%\inc\store
+..\inc\store\*.h %_DEST%\inc\store\*.h
+..\inc\store\store.hxx %_DEST%\inc\store\store.hxx
+..\inc\store\store.inl %_DEST%\inc\store\store.inl
+..\util\store.xml %_DEST%\xml\store.xml
+
+..\%__SRC%\lib\istore.lib %_DEST%\lib\istore.lib
+..\%__SRC%\lib\libstore.*.* %_DEST%\lib\*
+..\%__SRC%\lib\libstore.a %_DEST%\lib\libstore.a
+..\%__SRC%\bin\sto*.dll %_DEST%\bin\sto*.dll
+
+linklib: libstore.*.*

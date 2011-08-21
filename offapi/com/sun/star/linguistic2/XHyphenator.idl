@@ -1,0 +1,194 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_linguistic2_XHyphenator_idl__
+#define __com_sun_star_linguistic2_XHyphenator_idl__
+
+
+#include <com/sun/star/lang/Locale.idl>
+#include <com/sun/star/linguistic2/XSupportedLocales.idl>
+#include <com/sun/star/linguistic2/XDictionaryList.idl>
+#include <com/sun/star/linguistic2/XHyphenatedWord.idl>
+#include <com/sun/star/linguistic2/XPossibleHyphens.idl>
+#include <com/sun/star/beans/PropertyValues.idl>
+#include <com/sun/star/lang/IllegalArgumentException.idl>
+
+//=============================================================================
+
+module com { module sun { module star { module linguistic2 {
+
+//=============================================================================
+/** provides functionality for hyphenation of single words.
+
+    <P>Its three main functionalities are to provide a suitable position for
+    breaking lines within a word, query about the existence of an alternative
+    spelling at a specific position of a word and provide a list of
+    possible hyphenation positions within a word.</P>
+
+    <P>A hyphenation position for a word with n characters is represented
+    by a value in the range from 0 to n-2, indicating the position
+    of the character after which the hyphenation is done. That is,
+    it is after the first and before the last character.</P>
+
+    <P>A valid hyphenation position is a hyphenation position that
+    fulfills all the restrictions implied by the properties
+    MinLeading, MinTrailing and MinWordLength.</P>
+
+    @see    <type scope="com::sun::star::linguistic2">LinguProperties</type>
+    @see    <type scope="com::sun::star::linguistic2">XSupportedLocales</type>
+*/
+published interface XHyphenator : com::sun::star::linguistic2::XSupportedLocales
+{
+    //-------------------------------------------------------------------------
+    /** tries to find a valid hyphenation position relative
+        to the beginning of a word.
+
+        <P>Note: Some languages, for example Arabic, are written from right
+        to left.</P>
+
+        @returns
+            the XHyphenatedWord for the last valid hyphenation position
+             that is less than or equal to nMaxLeading - 1.
+            If there is no such valid hyphenation position, <NULL/> is returned.
+
+        @param  aWord
+            is the word to be hyphenated.
+
+        @param  aLocale
+            defines the language to be used.
+
+            <P>If the language is not supported, an IllegalArgumentException
+            exception is raised.</P>
+
+        @param  nMaxLeading
+            specifies the maximum number of characters to remain
+            before the hyphen in the hyphenated word.
+
+            <P>It has to be greater than or equal to 0.</P>
+
+        @param aProperties
+            provides property values to be used for this function call only.
+            It is usually empty in order to use the default values supplied
+            with the property set.
+
+        @see    <type scope="com::sun::star::linguistic2">XHyphenatedWord</type>
+        @see    <type scope="com::sun::star::lang">Locale</type>
+    */
+    com::sun::star::linguistic2::XHyphenatedWord hyphenate(
+            [in] string aWord,
+            [in] com::sun::star::lang::Locale aLocale,
+            [in] short nMaxLeading,
+            [in] com::sun::star::beans::PropertyValues aProperties )
+        raises( com::sun::star::lang::IllegalArgumentException );
+
+    //-------------------------------------------------------------------------
+    /** checks whether hyphenation at a position in a word will result in
+        an alternative spelling or not.
+
+        <P>An alternative spelling position is a hyphen position where,
+        if hyphenation is done here, the writing of the word changes.
+        Example: "B&auml;cker" in German pre spelling-reform becomes
+         "B&auml;kker" if hyphenation is done after the "c".</P>
+
+        <P>The hyphenation position does not need to be a valid one to be an
+        alternative spelling position.</P>
+
+        @returns
+            the information about the alternative spelling found at the
+            specified position. Otherwise, if no alternative spelling was
+            found, <NULL/> is returned.
+
+        @param  aWord
+            is the original word to be looked at for having an alternative
+            spelling, if hyphenation is done at position nIndex.
+
+        @param aLocale
+            specifies the language to be used.
+
+            <P>If the language is not supported, an IllegalArgumentException
+            exception is raised.</P>
+
+        @param  nIndex
+            is the position in the word to be looked at.
+
+            <P>If the length of the word is n, the value of this
+            parameter has to be in the range from 0 to n-2.</P>
+
+        @param aProperties
+            provides property values to be used for this function call only.
+            It is usually empty in order to use the default values supplied
+            with the property set.
+
+        @see    <type scope="com::sun::star::linguistic2">XHyphenatedWord</type>
+        @see    <type scope="com::sun::star::lang">Locale</type>
+    */
+    com::sun::star::linguistic2::XHyphenatedWord queryAlternativeSpelling(
+            [in] string aWord,
+            [in] com::sun::star::lang::Locale aLocale,
+            [in] short nIndex,
+            [in] com::sun::star::beans::PropertyValues aProperties )
+        raises( com::sun::star::lang::IllegalArgumentException );
+
+    //-------------------------------------------------------------------------
+    /** returns information about all possible hyphenation positions of a word.
+
+        @returns
+            an <type scope="com::sun::star::linguistic2">XPossibleHyphens</type>
+            for the given word and language if there are any hyphenation
+            positions. <NULL/> otherwise.
+
+        @param  aWord
+            is the word for which information about the possible
+             hyphenation positions is to be retrieved.
+
+        @param  aLocale
+            defines the language of the word.
+
+            <P>If the language is not supported, an IllegalArgumentException
+            exception is raised.</P>
+
+        @param aProperties
+            provides property values to be used for this function call only.
+            It is usually empty in order to use the default values supplied
+            with the property set.
+
+        @see    <type scope="com::sun::star::linguistic2">XPossibleHyphens</type>
+        @see    <type scope="com::sun::star::lang">Locale</type>
+    */
+    com::sun::star::linguistic2::XPossibleHyphens createPossibleHyphens(
+            [in] string aWord,
+            [in] com::sun::star::lang::Locale aLocale,
+            [in] com::sun::star::beans::PropertyValues aProperties )
+        raises( com::sun::star::lang::IllegalArgumentException );
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif
+

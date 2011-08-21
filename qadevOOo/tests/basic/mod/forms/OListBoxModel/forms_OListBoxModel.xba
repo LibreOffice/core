@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="forms_OListBoxModel" script:language="StarBasic">
+
+
+'*************************************************************************
+'
+' DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+' 
+' Copyright 2000, 2010 Oracle and/or its affiliates.
+'
+' OpenOffice.org - a multi-platform office productivity suite
+'
+' This file is part of OpenOffice.org.
+'
+' OpenOffice.org is free software: you can redistribute it and/or modify
+' it under the terms of the GNU Lesser General Public License version 3
+' only, as published by the Free Software Foundation.
+'
+' OpenOffice.org is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU Lesser General Public License version 3 for more details
+' (a copy is included in the LICENSE file that accompanied this code).
+'
+' You should have received a copy of the GNU Lesser General Public License
+' version 3 along with OpenOffice.org.  If not, see
+' <http://www.openoffice.org/license.html>
+' for a copy of the LGPLv3 License.
+'
+'*************************************************************************
+'*************************************************************************
+
+
+
+' Be sure that all variables are dimensioned:
+option explicit
+
+
+' REQUIRED VARIABLES for interface/service tests:
+
+' for XComponent
+Global oComponentInstance As Object
+
+' for XPersistObject
+Global oPersistInstance As Object
+
+' for XUpdateBroadcaster
+Global bCustomUpdate As Boolean
+
+Global oForm As Object
+Global aList(1) As Variant
+
+
+Sub CreateObj()
+
+'*************************************************************************
+' COMPONENT: 
+' forms.OListBoxModel
+'*************************************************************************
+On Error Goto ErrHndl
+    Dim bOK As Boolean
+    Dim aSelection(0 to 0) As Variant
+    Dim oShape As Object, oDrawPage As Object
+
+    bOK = true
+
+    oDoc = utils.createDocument("swriter", cObjectName)
+
+    oShape = toolkittools.addControlToDefaultForm("ListBox", 1000, 1000, 2000, 1000)
+    oObj = oShape.getControl()
+    oShape = toolkittools.addControlToDefaultForm("ListBox", 1000, 3000, 2000, 1000)
+    oComponentInstance = oShape.getControl()
+    oShape = toolkittools.addControlToDefaultForm("ListBox", 1000, 5000, 2000, 1000)
+    oPersistInstance = oShape.getControl()
+
+    'for UnoControlListBoxModel::SelectedItems
+    aList(0) = "Hello"
+    aList(1) = "World"
+    aSelection(0) = 1
+    oObj.DefaultSelection = aSelection()
+    oObj.ListSource = aList()
+
+    'get control from document
+    oDrawPage = oDoc.DrawPage
+    oForm = oDrawPage.Forms.getByName("Standard")
+    
+	oForm.DataSourceName = "Bibliography"
+	oForm.Command = "biblio"
+	oForm.CommandType = com.sun.star.sdb.CommandType.TABLE
+
+    oObj.DataField = "Author"
+
+    oForm.load()
+    
+    ' for XUpdateBroadcaster
+    bCustomUpdate = true
+
+Exit Sub
+ErrHndl:
+    Test.Exception()
+End Sub
+
+Global sChangedText As String
+
+' for XBoundComponent
+Sub prepareCommit() 
+On Error Goto ErrHndl
+    Dim items As Variant
+    Dim item As Variant
+    
+    Out.Log("prepareCommit() called.")
+    items = oObj.SelectedItems
+    if ubound(items()) &lt; 0 then
+        item = 0
+    else
+        if items(0) = 0 then item = 1 else item = 0
+    endif
+
+    sChangedText = aList(item)
+    oObj.SelectedItems = Array(item)
+    
+    exit sub
+ErrHndl:
+    Test.Exception()
+End Sub
+
+' for XBoundComponent
+Function checkCommit() As Boolean
+On Error Goto ErrHndl
+    Out.Log("checkCommit() called.")
+    Dim rowText As Variant
+    
+    rowText = oForm.getString(oForm.findColumn("Author"))
+    checkCommit() = (rowText = sChangedText)
+
+    exit function
+ErrHndl:
+    Test.Exception()
+End Function
+
+' for XUpdateBroadcaster
+Sub UpdateComponent()
+    Out.Log("UpdateComponent() called.")
+
+    Dim items As Variant
+    Dim item As Variant
+    items = oObj.SelectedItems
+    if ubound(items()) &lt; 0 then
+        item = 0
+    else
+        if items(0) = 0 then item = 1 else item = 0
+    endif
+    oObj.SelectedItems = Array(item)
+
+    oObj.commit()
+End Sub
+</script:module>

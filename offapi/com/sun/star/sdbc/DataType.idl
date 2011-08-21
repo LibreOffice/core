@@ -1,0 +1,147 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_sdbc_DataType_idl__
+#define __com_sun_star_sdbc_DataType_idl__
+
+ module com {  module sun {  module star {  module sdbc {
+
+
+/** These constants are used to specify database data types which are used
+        to identify the generic SQL types. The definition is based on JDBC 3.0.
+
+        <p>
+        The actual type constant values are equivalent to those in the X/Open CLI.
+        </p>
+        <p>
+        Precise information about the specific types can be got from
+        <member>XDatabaseMetaData::getTypeInfo()</member>
+        .</p>
+ */
+published constants DataType
+{
+    const long BIT          =  -7;
+
+    const long TINYINT      =  -6;
+
+    const long SMALLINT     =   5;
+
+    const long INTEGER      =   4;
+
+    const long BIGINT       =  -5;
+
+    const long FLOAT        =   6;
+
+    const long REAL         =   7;
+
+    const long DOUBLE       =   8;
+
+    const long NUMERIC      =   2;
+
+    const long DECIMAL      =   3;
+
+    const long CHAR         =   1;
+
+    const long VARCHAR      =  12;
+
+    const long LONGVARCHAR  =  -1;
+
+    const long DATE         =  91;
+
+    const long TIME         =  92;
+
+    const long TIMESTAMP    =  93;
+
+    const long BINARY       =  -2;
+
+    const long VARBINARY    =  -3;
+
+    const long LONGVARBINARY =  -4;
+
+    const long SQLNULL      =   0;
+
+
+    /** indicates that the SQL type is database-specific and
+             gets mapped to an object that can be accessed via
+             the method
+             <member scope="com::sun::star::sdbc">XRow::getObject()</member>
+             .
+     */
+    const long OTHER        = 1111;
+
+
+    /** indicates a type which is represented by an object which implements
+             this type.
+     */
+    const long OBJECT        = 2000;
+
+
+    /** describes a type based on a built-in type.
+                 It is a user-defined data type (UDT).
+     */
+    const long DISTINCT     = 2001;
+
+
+    /** indicates a type consisting of attributes that may be any type.
+                 It is a user-defined data type (UDT).
+     */
+    const long STRUCT       = 2002;
+
+
+    /** indicates a type representing an SQL ARRAY.
+     */
+    const long ARRAY        = 2003;
+
+
+    /** indicates a type representing an SQL Binary Large Object.
+     */
+    const long BLOB         = 2004;
+
+
+    /** indicates a type representing an SQL Character Large Object.
+     */
+    const long CLOB         = 2005;
+
+
+    /** indicates a type representing an SQL REF, a referencing type.
+     */
+    const long REF          = 2006;
+
+    /** identifies the generic SQL type
+     * <code>BOOLEAN</code>.
+     *
+     * @since OOo 2.0
+     */
+    const long BOOLEAN = 16;
+};
+
+//=============================================================================
+
+}; }; }; };
+
+/*===========================================================================
+===========================================================================*/
+#endif

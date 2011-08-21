@@ -1,0 +1,254 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_drawing_FillProperties_idl__
+#define __com_sun_star_drawing_FillProperties_idl__
+
+#include <com/sun/star/drawing/FillStyle.idl>
+#include <com/sun/star/util/Color.idl>
+#include <com/sun/star/awt/Gradient.idl>
+#include <com/sun/star/drawing/Hatch.idl>
+#include <com/sun/star/drawing/BitmapMode.idl>
+#include <com/sun/star/awt/XBitmap.idl>
+#include <com/sun/star/drawing/RectanglePoint.idl>
+
+
+//=============================================================================
+
+module com { module sun { module star { module drawing {
+
+//=============================================================================
+
+/** This is a set of properties to describe the style for rendering an area.
+ */
+published service FillProperties
+{
+    //-------------------------------------------------------------------------
+    /** This enumeration selects the style the area will be filled with.
+    */
+    [property] FillStyle FillStyle;
+
+    //-------------------------------------------------------------------------
+    /** If the property <member>FillStyle</member> is set to <const>
+        FillStyle::SOLID</const>, this is the color used.
+    */
+    [property] com::sun::star::util::Color FillColor;
+
+    //-------------------------------------------------------------------------
+    /** This is the transparence of the filled area.
+
+        <p>This property is only valid if the property <member>FillStyle
+        </member> is set to <const>FillStyle::SOLID</const>.
+    */
+    [property] short FillTransparence;
+
+    //-------------------------------------------------------------------------
+    /** If a gradient is used for transparency, this is the name of the
+        used transparence gradient style or it is empty. If you set the name
+        of a transparence gradient style contained in the document, this
+        style used.
+    */
+    [property] string FillTransparenceGradientName;
+
+
+    //-------------------------------------------------------------------------
+    /** This describes the transparency of the fill area as a gradient.
+    */
+    [optional, property] com::sun::star::awt::Gradient FillTransparenceGradient;
+
+    //-------------------------------------------------------------------------
+    /** If the property <member>FillStyle</member> is set to <const>
+        FillStyle::GRADIENT</const>, this is the name of the used fill
+        gradient style.
+    */
+    [property] string FillGradientName;
+
+    //-------------------------------------------------------------------------
+    /** If the property <member>FillStyle</member> is set to <const>
+        FillStyle::GRADIENT</const>, this describes the gradient used.
+    */
+    [optional, property] com::sun::star::awt::Gradient FillGradient;
+
+    //-------------------------------------------------------------------------
+    /** If the property <member>FillStyle</member> is set to <const>
+        FillStyle::HATCH</const>, this is the name of the used fill hatch
+        style.
+    */
+    [property] string FillHatchName;
+
+    //-------------------------------------------------------------------------
+    /** If the property <member>FillStyle</member> is set to <const>
+        FillStyle::HATCH</const>, this describes the hatch used.
+    */
+    [optional, property] Hatch FillHatch;
+
+    //-------------------------------------------------------------------------
+    /** if this is <TRUE/>, the transparent background of a
+        hatch filled area is drawn in the current background color.
+    */
+    [property] boolean FillBackground;
+
+    //-------------------------------------------------------------------------
+    /** If the property <member>FillStyle</member> is set to <const>
+        FillStyle::BITMAP</const>, this is the name of the used fill bitmap
+        style.
+    */
+    [property] string FillBitmapName;
+
+    //-------------------------------------------------------------------------
+    /** If the property <member>FillStyle</member> is set to <const>
+        FillStyle::BITMAP</const>, this is the bitmap used.
+    */
+    [optional, property] com::sun::star::awt::XBitmap FillBitmap;
+
+    //-------------------------------------------------------------------------
+    /** If the property <member>FillStyle</member> is set to <const>
+        FillStyle::BITMAP</const>, this is a URL to the bitmap used.
+    */
+    [optional, property] string FillBitmapURL;
+
+    //-------------------------------------------------------------------------
+    /** This is the horizontal offset where the tile starts.
+
+        <p>It is given in percent in relation to the width of the bitmap.</p>
+    */
+    [property] short FillBitmapPositionOffsetX;
+
+    //-------------------------------------------------------------------------
+    /** This is the vertical offset where the tile starts.
+
+        <p>It is given in percent in relation to the height of the bitmap.</p>
+    */
+    [property] short FillBitmapPositionOffsetY;
+
+    //-------------------------------------------------------------------------
+    /** Every second line of tiles is moved the given percent of the
+        width of the bitmap.
+    */
+    [property] short FillBitmapOffsetX;
+
+    //-------------------------------------------------------------------------
+    /** Every second row of tiles is moved the given percent of the
+        height of the bitmap.
+    */
+    [property] short FillBitmapOffsetY;
+
+    //-------------------------------------------------------------------------
+    /** The RectanglePoint specifies the position inside of the bitmap to
+        use as the top left position for rendering.
+    */
+    [property] RectanglePoint FillBitmapRectanglePoint;
+
+    //-------------------------------------------------------------------------
+    /** specifies if the size is given in percentage or as an absolute value.
+
+        <p>If this is <TRUE/>, the properties <member>FillBitmapSizeX</member>
+        and <member>FillBitmapSizeY</member> contain the size of the tile in
+        percent of the size of the original bitmap. If this is <FALSE/>, the
+        size of the tile is specified with 1/100th mm.
+    */
+    [property] boolean FillBitmapLogicalSize;
+
+    //-------------------------------------------------------------------------
+    /** This is the width of the tile for filling.
+
+        <p>Depending on the property <member>FillBitmapLogicalSize</member>,
+        this is either relative or absolute.
+    */
+    [property] long FillBitmapSizeX;
+
+    //-------------------------------------------------------------------------
+    /** This is the height of the tile for filling.
+
+        <p>Depending on the property <member>FillBitmapLogicalSize</member>,
+        this is either relative or absolute.
+    */
+    [property] long FillBitmapSizeY;
+
+    //-------------------------------------------------------------------------
+    /** this enum selects how a area is filled with a single bitmap.
+
+        <p>This property corresponds to the properties <member>
+        FillBitmapStretch</member> and <member>FillBitmapTile</member>.</p>
+
+        <p>If set to <const>BitmapMode::REPEAT</const>, the property
+        FillBitmapStretch is set to <FALSE/>, and the property FillBitmapTile
+        is set to <TRUE/>.</p>
+
+        <p>If set to <const>BitmapMode::STRETCH</const>, the property
+        FillBitmapStretch is set to <TRUE/>, and the property FillBitmapTile
+        is set to <FALSE/>.</p>
+
+        <p>If set to <const>BitmapMode::NO_REPEAT</const>, both properties
+        FillBitmapStretch and FillBitmapTile are set to <FALSE/>.</p>
+    */
+    [property] BitmapMode FillBitmapMode;
+
+    //-------------------------------------------------------------------------
+    /** if set, the fill bitmap is stretched to fill the area of the shape.
+
+        <p>This property should not be used anymore and is included here for
+        completeness. The <member>FillBitmapMode</member> property can be used
+        instead to set all supported bitmap modes.</p>
+
+        <p>If set to <TRUE/>, the value of the FillBitmapMode property changes
+        to <const>BitmapMode::STRETCH</const>. BUT: behavior is undefined, if
+        the property <member>FillBitmapTile</member> is <TRUE/> too.</p>
+
+        <p>If set to <FALSE/>, the value of the FillBitmapMode property
+        changes to <const>BitmapMode::REPEAT</const> or <const>
+        BitmapMode::NO_REPEAT</const>, depending on the current value of the
+        <member>FillBitmapTile</member> property.</p>
+     */
+    [optional, property] boolean FillBitmapStretch;
+
+    //-------------------------------------------------------------------------
+    /** if set, the fill bitmap is repeated to fill the area of the shape.
+
+        <p>This property should not be used anymore and is included here for
+        completeness. The <member>FillBitmapMode</member> property can be used
+        instead to set all supported bitmap modes.</p>
+
+        <p>If set to <TRUE/>, the value of the FillBitmapMode property changes
+        to <const>BitmapMode::REPEAT</const>. BUT: behavior is undefined, if
+        the property <member>FillBitmapStretch</member> is <TRUE/> too.</p>
+
+        <p>If set to <FALSE/>, the value of the FillBitmapMode property
+        changes to <const>BitmapMode::STRETCH</const> or <const>
+        BitmapMode::NO_REPEAT</const>, depending on the current value of the
+        <member>FillBitmapStretch</member> property.</p>
+     */
+    [optional, property] boolean FillBitmapTile;
+
+    //-------------------------------------------------------------------------
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif
+

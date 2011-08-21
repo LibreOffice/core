@@ -1,0 +1,96 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_sdb_DocumentDefinition2_idl__
+#define __com_sun_star_sdb_DocumentDefinition2_idl__
+
+#include <com/sun/star/beans/XPropertySet.idl>
+#include <com/sun/star/sdb/DefinitionContent.idl>
+
+module com { module sun { module star { module sdb {
+
+    interface XSubDocument;
+
+/** specifies a sub document of a <type>OfficeDatabaseDocument</type>.
+
+    <p>Usual instances of a <code>DocumentDefinition</code> are forms and reports.</p>
+
+    <p>Note that the <code>DocumentDefinition</code> does not denote the actual document
+    (i.e. an object supporting the <type scope="com::sun::star::frame">XModel</type> interface),
+    but only a shortcut to access and load those actual documents.</p>
+*/
+service DocumentDefinition
+{
+    /** provides functionality for treating the object as part of a hierarchy
+        of a database document's sub documents.
+
+        <p>The <member scope="com::sun::star::ucb">XCommandProcessor::execute</member> method
+        of a <code>DocumentDefinition</code> supports at least the following commands, additionally to
+        the ones already supported by the DefinitionContent:
+        <ul>
+            <li><strong>open</strong>: loads the sub document in an own frame. The return value of
+                the <code>execute</code> method is the model of the loaded document.</li>
+            <li><strong>store</strong>: stores the document.</li>
+            <li><strong>openDesign</strong>: opens the sub document in an own frame, in design mode.
+                The user can make changes to the document, and save those changes. The return value of
+                the <code>execute</code> method is the model of the loaded document.</li>
+            <li><strong>preview</strong>: retrieves an image showing a preview of the sub document.</li>
+            <li><strong>getDocumentInfo</strong>: retrieves the document information, as
+                <type scope="com::sun::star::document">XDocumentInfo</type> instance, of the sub document.</li>
+            <li><strong>delete</strong>: deletes the sub document from the database document.</li>
+            <li><strong>close</strong>: closes the sub document, if it had previously been opened
+                using either the <code>open</code> or <code>openDesign</code> command. The return value
+                of the <code>execute</code> command is a <code>boolean</code> value indicating whether
+                the sub document could be closed. Reasons for not closing the document include vetoes by
+                third parties, for instance, because the user opened a dialog modal to the sub document,
+                or a long-running task such as printing is currently running.</li>
+            <li><strong>show</strong>: shows the sub document. This is useful if you previously opened the
+                document hidden, or if you previously hide it using the <em>hide</em> command.<br/>
+                The <em>open</em> command is not available if the sub document has not been loaded, yet.</li>
+            <li><strong>hide</strong>: hides the sub document. In opposite to the <em>close</em> command,
+                only the document window is hidden, but the document is kept loaded. A subsequent execution
+                of the <em>show</em> command will show the window, again.</li>
+        </ul>
+    */
+    service DefinitionContent;
+
+    interface ::com::sun::star::beans::XPropertySet;
+
+    interface ::com::sun::star::sdb::XSubDocument;
+
+    /** is the name of the document. If the document is part of the container,
+        it is not possible to alter the name.*/
+    [readonly, property] string Name;
+
+    /** Indicates if the document is to be used as template, for example, if a report is to be filled with data. */
+    [readonly, property] boolean AsTemplate;
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

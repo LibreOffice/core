@@ -1,0 +1,118 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_sdb_DatasourceAdministrationDialog_idl__
+#define __com_sun_star_sdb_DatasourceAdministrationDialog_idl__
+
+#include <com/sun/star/ui/dialogs/XExecutableDialog.idl>
+#include <com/sun/star/awt/XWindow.idl>
+#include <com/sun/star/lang/XInitialization.idl>
+#include <com/sun/star/beans/XPropertySet.idl>
+
+//=============================================================================
+
+module com {  module sun {  module star {  module sdb {
+
+
+/** provides a user interface for administrating the system wide registered data sources.
+    <p>
+    Here, <em>system wide registered</em> means registered on the (one and only) instance
+    of the
+    <type scope="com::sun::star::sdb">
+    DatabaseContext
+    </type>
+    service.
+    </p>
+*/
+published service DatasourceAdministrationDialog
+{
+    /** the title of the (dialog) window
+    */
+    [property] string Title;
+
+    /** parent window to use for the administration dialog
+        <p>
+        This property can't be set while the dialog is being displayed.
+        </p>
+    */
+    [property] com::sun::star::awt::XWindow ParentWindow;
+
+    /** allows access to the properties of the object
+    */
+    interface com::sun::star::beans::XPropertySet;
+
+    /** allows starting execution of the administration dialog
+    */
+    interface com::sun::star::ui::dialogs::XExecutableDialog;
+
+    /** allows initializing the dialog
+        <p>
+        You do not need to call the initialize method directly, instead you may use the createInstanceWithArguments
+        method of your
+        <type scope="com::sun::star::lang">XMultiServiceFactory</type>
+        .
+        </p>
+
+        <p>
+        You specify a parameter by passing one (or more)
+        <type scope="com::sun::star::beans">PropertyValue</type>
+        object(s) to the initialize method, where the <em>Name</em> field contains a string describing which aspect
+        you want to affect, and the <em>Value</em> field containing a value.
+        <br/>
+        Imagine the initialization values as if you use setPropertyValue of the
+        <type scope="com::sun::star::beans">XPropertySet</type>
+        interface ...
+        <br/>
+        allowed parameters are
+        <ul>
+            <li><b>Title</b><br/>
+                String describing the initial title of the dialog.
+                If not specified, a default title is used.
+            </li>
+            <li><b>ParentWindow</b><br/>
+                <type scope="com::sun::star::awt">XWindow</type>
+                describing the parent window to use for the dialog.
+            </li>
+            <li><b>InitialSelection</b><br/>
+                String or XDataSource describing which data source should be selected initially.
+                This String name must be known to the
+                <type scope="com::sun::star::sdb">
+                DatabaseContext
+                </type>
+                .
+            </li>
+        </ul>
+        </p>
+    */
+    interface com::sun::star::lang::XInitialization;
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

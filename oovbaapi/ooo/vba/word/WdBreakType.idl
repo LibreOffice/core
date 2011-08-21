@@ -1,0 +1,14 @@
+module ooo { module vba { module word {
+    constants WdBreakType {
+        const long wdColumnBreak = 8;
+        const long wdLineBreak = 6;
+        const long wdLineBreakClearLeft = 9;
+        const long wdLineBreakClearRight = 10;
+        const long wdPageBreak = 7;
+        const long wdSectionBreakContinuous = 3;
+        const long wdSectionBreakEvenPage = 4;
+        const long wdSectionBreakNextPage = 2;
+        const long wdSectionBreakOddPage = 5;
+        const long wdTextWrappingBreak = 11;
+    };
+}; }; };

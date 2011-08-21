@@ -1,0 +1,89 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef _SD_CUSTOMANIMATIONDIALOG_HRC
+#define _SD_CUSTOMANIMATIONDIALOG_HRC
+
+// TabPage RID_TP_CUSTOMANIMATION_EFFECT
+#define FL_SETTINGS                 1
+#define FT_PROPERTY_1               2
+#define LB_PROPERTY_1               3
+#define FT_PROPERTY_2               4
+#define LB_PROPERTY_2               5
+#define CB_SMOOTH_START             6
+#define CB_SMOOTH_END               7
+#define CB_AUTORESTART              8
+#define FL_ENHANCEMENTS             9
+#define FT_SOUND                    10
+#define LB_SOUND                    11
+#define PB_SOUND_PREVIEW            12
+#define FT_AFTER_EFFECT             13
+#define LB_AFTER_EFFECT             14
+#define FT_DIMCOLOR                 15
+#define CLB_DIMCOLOR                16
+#define FT_TEXT_ANIM                17
+#define LB_TEXT_ANIM                18
+#define MF_TEXT_DELAY               19
+#define FT_TEXT_DELAY               20
+#define FL_PLAY                     21
+#define RB_FROM_START               22
+#define RB_FROM_LAST                23
+#define RB_FROM_TIME                24
+#define MF_START_TIME               25
+#define FL_STOP                     26
+#define RB_STOP_ON_CLICK            27
+#define RB_STOP_ON_NEXT_SLIDE       28
+#define RB_STOP_AFTER_N_SLIDES      29
+#define MF_STOP_AFTER_SLIDES        30
+#define TP_CUSTOMANIMATION_EFFECT_COUNT 31
+
+// TabPage RID_TP_CUSTOMANIMATION_DURATION
+#define FT_START                    1
+#define LB_START                    2
+#define FT_START_DELAY              3
+#define MF_START_DELAY              4
+#define FT_DURATION                 5
+#define CB_DURATION                 6
+#define FT_REPEAT                   7
+#define CB_REPEAT                   8
+#define CBX_REWIND                  9
+#define FL_TRIGGER                  10
+#define RB_CLICKSEQUENCE            11
+#define RB_INTERACTIVE              12
+#define LB_TRIGGER                  13
+#define TP_CUSTOMANIMATION_DURATION_COUNT 13
+
+// TabPage RID_TP_CUSTOMANIMATION_TEXT
+#define FT_GROUP_TEXT               1
+#define LB_GROUP_TEXT               2
+#define CBX_GROUP_AUTO              3
+#define MF_GROUP_AUTO               4
+#define CBX_ANIMATE_FORM            5
+#define CBX_REVERSE                 6
+#define TP_CUSTOMANIMATION_TEXT_COUNT 6
+
+#endif // _SD_CUSTOMANIMATIONDIALOG_HRC

@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<menu:menubar xmlns:menu="http://openoffice.org/2001/menu" menu:id="menubar">
+    <menu:menu menu:id=".uno:PickList">
+        <menu:menupopup>
+            <menu:menuitem menu:id=".uno:AddDirect"/>
+            <menu:menuitem menu:id=".uno:Open"/>
+            <menu:menuitem menu:id=".uno:RecentFileList"/>
+            <menu:menuseparator/>
+            <menu:menuitem menu:id=".uno:AutoPilotMenu"/>
+            <menu:menuseparator/>
+            <menu:menuitem menu:id=".uno:CloseDoc"/>
+            <menu:menuitem menu:id=".uno:Save"/>
+            <menu:menuitem menu:id=".uno:SaveAs"/>
+            <menu:menuitem menu:id=".uno:SaveAll"/>
+            <menu:menuseparator/>
+            <menu:menuitem menu:id=".uno:ExportTo"/>
+            <menu:menu menu:id=".uno:SendToMenu">
+                <menu:menupopup>
+                    <menu:menuitem menu:id=".uno:SendMail"/>
+                    <menu:menuitem menu:id=".uno:DBSendReportAsMail"/>
+                    <menu:menuseparator/>
+                    <menu:menuitem menu:id=".uno:DBSendReportToWriter"/>
+                </menu:menupopup>
+            </menu:menu>
+            <menu:menuseparator/>
+            <menu:menuitem menu:id=".uno:Quit"/>
+        </menu:menupopup>
+    </menu:menu>
+    <menu:menu menu:id=".uno:EditMenu">
+        <menu:menupopup>
+            <menu:menuitem menu:id=".uno:Undo"/>
+            <menu:menuseparator/>
+            <menu:menuitem menu:id=".uno:Cut"/>
+            <menu:menuitem menu:id=".uno:Copy"/>
+            <menu:menuitem menu:id=".uno:Paste"/>
+            <menu:menuitem menu:id=".uno:PasteSpecial"/>
+            <menu:menuseparator/>
+            <menu:menuitem menu:id=".uno:DBDelete"/>
+            <menu:menuitem menu:id=".uno:DBRename"/>
+            <menu:menuitem menu:id=".uno:DBEdit"/>
+      <menu:menuitem menu:id=".uno:DBEditSqlView"/>
+            <menu:menuitem menu:id=".uno:DBOpen"/>
+            <menu:menuitem menu:id=".uno:DBConvertToView"/>
+            <menu:menuitem menu:id=".uno:DBNewFormAutoPilotWithPreSelection"/>
+            <menu:menuitem menu:id=".uno:DBNewReportAutoPilotWithPreSelection"/>
+            <menu:menuseparator/>
+            <menu:menuitem menu:id=".uno:SelectAll"/>
+            <menu:menuseparator/>
+            <menu:menu menu:id=".uno:DBDatabasePropertiesMenu">
+                <menu:menupopup>
+                    <menu:menuitem menu:id=".uno:DBDSProperties"/>
+                    <menu:menuitem menu:id=".uno:DBDSConnectionType"/>
+                    <menu:menuitem menu:id=".uno:DBDSAdvancedSettings"/>
+                </menu:menupopup>
+            </menu:menu>
+        </menu:menupopup>
+    </menu:menu>
+    <menu:menu menu:id=".uno:ViewMenu">
+        <menu:menupopup>
+            <menu:menu menu:id=".uno:DBDatabaseObjectsMenu">
+                <menu:menupopup>
+                    <menu:menuitem menu:id=".uno:DBViewTables" menu:style="radio"/>
+                    <menu:menuitem menu:id=".uno:DBViewQueries" menu:style="radio"/>
+                    <menu:menuitem menu:id=".uno:DBViewForms" menu:style="radio"/>
+                    <menu:menuitem menu:id=".uno:DBViewReports" menu:style="radio"/>
+                </menu:menupopup>
+            </menu:menu>
+            <menu:menuseparator/>
+            <menu:menuitem menu:id=".uno:AvailableToolbars"/>
+            <menu:menuitem menu:id=".uno:StatusBarVisible"/>
+            <menu:menu menu:id=".uno:DBPreview">
+                <menu:menupopup>
+                    <menu:menuitem menu:id=".uno:DBDisablePreview" menu:style="radio"/>
+                    <menu:menuitem menu:id=".uno:DBShowDocInfoPreview" menu:style="radio"/>
+                    <menu:menuitem menu:id=".uno:DBShowDocPreview" menu:style="radio"/>
+                </menu:menupopup>
+            </menu:menu>
+            <menu:menuseparator/>
+            <menu:menu menu:id=".uno:DBSort">
+                <menu:menupopup>
+                    <menu:menuitem menu:id=".uno:Sortup"/>
+                    <menu:menuitem menu:id=".uno:SortDown"/>
+                </menu:menupopup>
+            </menu:menu>
+            <menu:menuitem menu:id=".uno:DBRefreshTables"/>
+        </menu:menupopup>
+    </menu:menu>
+    <menu:menu menu:id=".uno:InsertMenu">
+        <menu:menupopup>
+            <menu:menuitem menu:id=".uno:DBNewForm" menu:helpid="12305" menu:label="" />
+            <menu:menuitem menu:id=".uno:DBNewReport" menu:helpid="12316" menu:label="" />
+            <menu:menuitem menu:id=".uno:DBNewQuery" menu:helpid="38873" menu:label="" />
+            <menu:menuitem menu:id=".uno:DBNewQuerySql" menu:helpid="38841" menu:label="" />
+            <menu:menuseparator/>
+            <menu:menuitem menu:id=".uno:DBNewTable"/>
+            <menu:menuitem menu:id=".uno:DBNewView"/>
+            <menu:menuitem menu:id=".uno:DBNewViewSQL"/>
+            <menu:menuseparator/>
+            <menu:menuitem menu:id=".uno:DBNewFolder"/>
+        </menu:menupopup>
+    </menu:menu>
+    <menu:menu menu:id=".uno:ToolsMenu">
+        <menu:menupopup>
+            <menu:menuitem menu:id=".uno:DBRelationDesign"/>
+            <menu:menuitem menu:id=".uno:DBUserAdmin"/>
+            <menu:menuitem menu:id=".uno:DBTableFilter"/>
+            <menu:menuitem menu:id=".uno:DBDirectSQL"/>
+            <menu:menuitem menu:id=".uno:DBMigrateScripts"/>
+            <menu:menuseparator/>
+            <menu:menu menu:id=".uno:MacrosMenu">
+                <menu:menupopup>
+                    <menu:menuitem menu:id=".uno:MacroRecorder"/>
+                    <menu:menuitem menu:id=".uno:RunMacro"/>
+                    <menu:menu menu:id=".uno:ScriptOrganizer"/>
+                    <menu:menuseparator/>
+                    <menu:menuitem menu:id=".uno:MacroOrganizer?TabId:short=1"/>
+                </menu:menupopup>
+            </menu:menu>
+            <menu:menuitem menu:id="service:com.sun.star.deployment.ui.PackageManagerDialog"/>
+            <menu:menuitem menu:id=".uno:OpenXMLFilterSettings"/>
+            <menu:menuitem menu:id=".uno:ConfigureDialog"/>
+            <menu:menuitem menu:id=".uno:OptionsTreeDialog"/>
+        </menu:menupopup>
+    </menu:menu>
+    <menu:menu menu:id=".uno:WindowList">
+        <menu:menupopup>
+            <menu:menuitem menu:id=".uno:NewWindow"/>
+            <menu:menuitem menu:id=".uno:CloseWin"/>
+        </menu:menupopup>
+    </menu:menu>
+    <menu:menu menu:id=".uno:HelpMenu">
+        <menu:menupopup>
+            <menu:menuitem menu:id=".uno:HelpIndex"/>
+            <menu:menuitem menu:id=".uno:ExtendedHelp"/>
+            <menu:menuseparator/>
+            <menu:menuitem menu:id=".uno:ShowLicense"/>
+            <menu:menuseparator/>
+            <menu:menuitem menu:id=".uno:ShowCredits"/>
+            <menu:menuitem menu:id=".uno:About"/>
+        </menu:menupopup>
+    </menu:menu>
+</menu:menubar>
+

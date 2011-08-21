@@ -1,0 +1,75 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_frame_FrameControl_idl__
+#define __com_sun_star_frame_FrameControl_idl__
+
+#include <com/sun/star/awt/UnoControl.idl>
+#include <com/sun/star/beans/XPropertySet.idl>
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module frame {
+
+//=============================================================================
+/** contains a frame with a desktop component
+
+    <p>
+    If the control is visible and has a valid (loadable) component URL,
+    then the <member>FrameControl::Frame</member> property is set.
+    Normally this control can be used for preview functionality inside
+    any UI.
+    </p>
+ */
+published service FrameControl
+{
+    //-------------------------------------------------------------------------
+    /** the base service of all controls
+     */
+    service com::sun::star::awt::UnoControl;
+
+    //-------------------------------------------------------------------------
+    /** contains the type of the component which is loaded into the frame,
+        or the document which implicitly specifies the type
+     */
+    [property] string ComponentUrl;
+
+    //-------------------------------------------------------------------------
+    /** the frame held by this control
+
+        <p>
+        The <type>Frame</type> is created if the control
+        is shown and the <member>ComponentUrl</member> is set.
+        </p>
+     */
+    [property, readonly] string Frame;
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

@@ -1,0 +1,7 @@
+module ooo { module vba { module excel {
+    constants XlPrintLocation {
+        const long xlPrintInPlace = 16;
+        const long xlPrintNoComments = -4142;
+        const long xlPrintSheetEnd = 1;
+    };
+}; }; };

@@ -1,0 +1,6 @@
+module ooo { module vba { module word {
+    constants WdMailMergeMailFormat {
+        const long wdMailFormatHTML = 1;
+        const long wdMailFormatPlainText = 0;
+    };
+}; }; };

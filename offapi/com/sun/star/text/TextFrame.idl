@@ -1,0 +1,167 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_text_TextFrame_idl__
+#define __com_sun_star_text_TextFrame_idl__
+
+#include <com/sun/star/text/XTextFrame.idl>
+#include <com/sun/star/text/BaseFrame.idl>
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module text {
+
+//=============================================================================
+
+/** specifies a rectangular shape which contains a <type>Text</type> object
+    and is attached to a piece of surrounding <type>Text</type>.
+
+    @see Text
+
+    @example StarBasic
+
+    <p>This example shows how to create a <type>TextFrame</type> and insert
+    it at the very beginning of <type>Text</type> component. The macro
+    is ready to run, if it is a script within a text document. </p>
+
+    <listing>
+    Sub Main
+    oFrame = ThisComponent.createInstance( "com.sun.star.text.TextFrame" )
+    oFrame.Width = 6000
+    ThisComponent.Text.insertTextContent( ThisComponent.Text.Start, oFrame, false )
+    oFrame.Text.String = "Hello, this text is within the frame."
+    End Sub
+    </listing>
+ */
+published service TextFrame
+{
+    /** contains the definition of interfaces and properties that are supported by text frames,
+     graphic objects and embedded objects.
+     */
+    service BaseFrame;
+
+    /** This interface makes it possible to access the text within this
+                text frame.
+     */
+    interface com::sun::star::text::XTextFrame;
+    //-------------------------------------------------------------------------
+    /** contains the metric height value of the frame.
+     */
+    [property] long FrameHeightAbsolute;
+
+    //-------------------------------------------------------------------------
+    /** contains the metric width value of the frame.
+     */
+    [property] long FrameWidthAbsolute;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies a width relative to the width of the
+        surrounding text.
+        <p>If the value for "WidthPercent" is 0, the absolute value from
+        is used.</p>
+     */
+    [property] byte FrameWidthPercent;
+
+    //-------------------------------------------------------------------------
+    /** specifies a width relative to the width of the
+        surrounding text.
+
+        <p>If the value for "HeightPercent" is 0, the absolute value from
+        is used.</p>
+     */
+    [property] byte FrameHeightPercent;
+    //-------------------------------------------------------------------------
+    /** If "AutomaticHeight" is set, then the object grows if it is required
+        by the frame content.
+     */
+    [property] boolean FrameIsAutomaticHeight;
+    //-------------------------------------------------------------------------
+    /** determines the interpretation of the height and relative
+        height properties.
+
+            @see SizeType
+     */
+    [property] short SizeType;
+    //-------------------------------------------------------------------------
+    /** determines if the text frame should be editable in a read-only document.
+        (This is usually used in forms.)
+
+     */
+    [optional, property] boolean EditInReadonly;
+
+    //-------------------------------------------------------------------------
+    /** determines the interpretation of the width and relative
+        width properties.
+
+        @see    SizeType
+        @since  OOo 2.4
+     */
+    [optional, property] short WidthType;
+
+    //-----------------------------------------------------------------------------
+    /** contains the writing direction, as represented by the
+        <type scope="com::sun::star::text">WritingMode2</type> constants
+     */
+    [optional, property] short WritingMode;
+
+    //-----------------------------------------------------------------------------
+    /** controls, if the frame follows the text flow or can leave its layout environment
+
+        <p>If set, the frame follows the text flow and doesn't leaves the layout
+        environment, which is given by its anchor, above and below.
+        E.g.: Anchor resides in the document body then the frame doesn't leave
+        the document body above and below and follows the text flow through
+        the document bodies of the different pages.
+
+        If not set, the frame doesn't follow the text flow and stays on the page,
+        on which its anchor is found, but it may leave the layout environment,
+        which is given by its anchor.
+        E.g.: Anchor resides in the document body then the frame stays on page,
+        where this document body is, but it could leave the document body above
+        and below, e.g. overlapping with the page header.
+
+        Note: The areas for the vertical orientation relation at page areas are
+        interpreted in dependence to this property (@see BaseFrameProperties.VertOrientRelation).
+        If property is set, the page area is interpreted as the layout environment,
+        given by its anchor. E.g.: Anchor resides in the page header then the
+        page header determines the page area. If property isn't set, the page area is
+        determined by the document page, the anchor is on. E.g.: Anchor resides
+        in the page header then the document page, the page header is on, determines
+        the page area.
+        An exception of this interpretation rule is applied, if the anchor resides
+        in a table cell. In this situation the page area is always determined by
+        the table cell.</p>
+     */
+    [optional, property] boolean IsFollowingTextFlow;
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

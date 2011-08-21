@@ -1,0 +1,89 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef _FMTUI_HRC
+#define _FMTUI_HRC
+
+#include "rcid.hrc"
+
+
+#define DLG_FMTENTRY                (RC_FMTUI_BEGIN)
+#define DLG_NEW_FILE                (RC_FMTUI_BEGIN + 1)
+#define STR_PAGE_STD                            (RC_FMTUI_BEGIN + 2)
+#define STR_PAGE_BORDER                         (RC_FMTUI_BEGIN + 3)
+#define STR_PAGE_HEADER                         (RC_FMTUI_BEGIN + 4)
+#define STR_PAGE_FOOTER                         (RC_FMTUI_BEGIN + 5)
+#define STR_PAGE_COLUMN                         (RC_FMTUI_BEGIN + 6)
+#define STR_PAGE_FOOTNOTE                       (RC_FMTUI_BEGIN + 7)
+#define STR_PAGE_TEXTGRID                       (RC_FMTUI_BEGIN + 8)
+
+#define DLG_STD_CHAR                (RC_FMTUI_BEGIN + 15)
+
+#define MN_TEXT                     (RC_FMTUI_BEGIN + 20)
+#define MN_GRAFIC                   (RC_FMTUI_BEGIN + 21)
+#define MN_TABLE                    (RC_FMTUI_BEGIN + 22)
+
+#define MN_REGION                   (RC_FMTUI_BEGIN + 24)
+#define MN_REGION_SUB                (RC_FMTUI_BEGIN + 25)
+
+
+#define DLG_DOC_STYLE               (RC_FMTUI_BEGIN + 26)
+#define DLG_NEW_COLL                (RC_FMTUI_BEGIN + 28)
+
+#define DLG_TEMPLATE_PI             (RC_FMTUI_BEGIN + 29)
+#define DLG_HELP_ID                 (RC_FMTUI_BEGIN + 30)
+
+#define STR_OVERWRITE               (RC_FMTUI_BEGIN + 32)
+#define ST_CUSTOMIZE                1
+
+// Do not change relations to base 2!!!
+#define DLG_TEMPLATE_BASE           (RC_FMTUI_BEGIN + 40)
+#define DLG_TEMPLATE_1              (RC_FMTUI_BEGIN + 41)
+#define DLG_TEMPLATE_2              (RC_FMTUI_BEGIN + 42)
+#define DLG_TEMPLATE_3              (RC_FMTUI_BEGIN + 44)
+#define DLG_TEMPLATE_4              (RC_FMTUI_BEGIN + 48)
+#define DLG_TEMPLATE_5              (RC_FMTUI_BEGIN + 56)
+
+
+#if DLG_TEMPLATE_5 > RC_FMTUI_END
+#error Resource-Id Ueberlauf in #file, #line
+#endif
+
+#define TEMPLATEPI_IDX_ALL          1
+#define TEMPLATEPI_IDX_USED         2
+#define TEMPLATEPI_IDX_USER         3
+#define TEMPLATEPI_IDX_AUTOMATIC    4
+#define TEMPLATEPI_IDX_TEXT         5
+#define TEMPLATEPI_IDX_CHAPTER      6
+#define TEMPLATEPI_IDX_LIST         7
+#define TEMPLATEPI_IDX_IDX          8
+#define TEMPLATEPI_IDX_EXTRA        9
+
+
+
+#endif
+

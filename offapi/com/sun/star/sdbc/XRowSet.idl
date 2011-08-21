@@ -1,0 +1,84 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_sdbc_XRowSet_idl__
+#define __com_sun_star_sdbc_XRowSet_idl__
+
+#include <com/sun/star/sdbc/XResultSet.idl>
+
+ module com {  module sun {  module star {  module sdbc {
+
+ published interface XRowSetListener;
+ published interface XConnection;
+
+
+/** enhances the functionality of a result set. It allows implementation of
+    a special behavior for a result set and notifies an application on
+    certain row set events such as a change in its value.
+
+
+
+    <p>
+    The XRowSet interface is unique in that it is intended to be
+    a software layer on top of an SDBC driver. Implementations of the
+    RowSet interface can be provided by anyone.
+    </p>
+ */
+published interface XRowSet: XResultSet
+{
+    //-------------------------------------------------------------------------
+
+    /** populates a row set with data. The description of the data source and
+        other important information for filling the row set with data.
+
+        @throws SQLException
+            if a database access error occurs.
+     */
+    void execute() raises (SQLException);
+    //-------------------------------------------------------------------------
+
+    /** adds the specified listener to receive the events "cursorMoved",
+        "rowChanged", and "rowSetChanged".
+        @param listener
+            the listener which should be registered
+     */
+    [oneway] void addRowSetListener([in]XRowSetListener listener );
+    //-------------------------------------------------------------------------
+
+    /** removes the specified listener.
+        @param listener
+            the listener which should be registered
+     */
+    [oneway] void removeRowSetListener([in]XRowSetListener listener );
+};
+
+//=============================================================================
+
+}; }; }; };
+
+/*===========================================================================
+===========================================================================*/
+#endif

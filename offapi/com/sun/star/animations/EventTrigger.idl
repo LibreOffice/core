@@ -1,0 +1,91 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_animations_EventTrigger_idl__
+#define __com_sun_star_animations_EventTrigger_idl__
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module animations {
+
+//=============================================================================
+
+/**
+*/
+constants EventTrigger
+{
+    /** Nothing triggers this event.
+    */
+    const short NONE = 0;
+
+    const short ON_BEGIN = 1;
+    const short ON_END = 2;
+
+    /** This event is raised when the element local timeline begins to play.
+        It will be raised each time the element begins the active duration
+        (i.e. when it restarts, but not when it repeats).
+
+        @see http://www.w3.org/TR/smil20/smil-timing.html#Timing-DOMEvents
+    */
+    const short BEGIN_EVENT = 3;
+
+    /** This event is raised at the active end of the element. Note that this
+        event is not raised at the simple end of each repeat.
+
+        @see http://www.w3.org/TR/smil20/smil-timing.html#Timing-DOMEvents
+    */
+    const short END_EVENT = 4;
+
+    const short ON_CLICK = 5;
+
+    const short ON_DBL_CLICK = 6;
+    const short ON_MOUSE_ENTER = 7;
+    const short ON_MOUSE_LEAVE = 8;
+
+    /** This event is raised when the user wants the presentation to go one step forward.
+    */
+    const short ON_NEXT = 9;
+
+    /** This event is raised when the user wants the presentation to go one step backward.
+    */
+    const short ON_PREV = 10;
+
+    const short ON_STOP_AUDIO = 11;
+
+    /**  This event is raised when the element local timeline repeats.
+        It will be raised each time the element repeats, after the first iteration.
+
+        @see http://www.w3.org/TR/smil20/smil-timing.html#Timing-DOMEvents
+    */
+    const short REPEAT = 12;
+};
+
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

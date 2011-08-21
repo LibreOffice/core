@@ -1,0 +1,87 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_io_XSeekable_idl__
+#define __com_sun_star_io_XSeekable_idl__
+
+#include <com/sun/star/uno/XInterface.idl>
+
+#include <com/sun/star/io/IOException.idl>
+#include <com/sun/star/lang/IllegalArgumentException.idl>
+
+//=============================================================================
+
+module com {  module sun {  module star {  module io {
+
+//=============================================================================
+
+// DocMerge from xml: interface com::sun::star::io::XSeekable
+/** makes it possible to seek to a certain position within a stream.
+
+    <p>This interface should be supported, if it is possible to access the
+    data at the new position quickly.
+    You should not support this interface, if you have a continuous
+    stream, for example, a video stream.
+ */
+published interface XSeekable: com::sun::star::uno::XInterface
+{
+
+    // DocMerge from xml: method com::sun::star::io::XSeekable::seek
+    /** changes the seek pointer to a new location relative to the beginning of the stream.
+
+
+        <p> This method changes the seek pointer so subsequent reads and writes can take place at a different
+        location in the stream object. It is an error to seek before the beginning of the stream or after the
+        end of the stream. </p>
+
+        @throws com::sun::star::lang::IllegalArgumentException in case location is negative or greater than <member>XSeekable::getLength</member>.
+     */
+    void seek( [in] hyper location )
+        raises( com::sun::star::lang::IllegalArgumentException, com::sun::star::io::IOException );
+
+
+    // DocMerge from xml: method com::sun::star::io::XSeekable::getPosition
+    /** returns the current offset of the stream.
+       @returns
+             the current offset in this stream.
+     */
+    hyper getPosition()
+        raises( com::sun::star::io::IOException );
+
+
+    // DocMerge from xml: method com::sun::star::io::XSeekable::getLength
+    /** returns the length of the stream.
+       @returns
+            the length of the storage medium on which the stream works.
+     */
+    hyper getLength()
+        raises( com::sun::star::io::IOException );
+};
+
+//=============================================================================
+
+}; }; }; };
+#endif

@@ -1067,8 +1067,7 @@ class LetterWizardDialog(WizardDialog):
                 "lblFinalExplanation2", 104, 145, 6, 54, 199))
         self.insertImage(
             "ImageControl2",
-            (
-            "Border", PropertyNames.PROPERTY_HEIGHT,
+            ("Border", PropertyNames.PROPERTY_HEIGHT,
                 PropertyNames.PROPERTY_IMAGEURL,
                 PropertyNames.PROPERTY_NAME,
                 PropertyNames.PROPERTY_POSITION_X,

@@ -1,0 +1,121 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_accessibility_AccessibleRelationType_idl__
+#define __com_sun_star_accessibility_AccessibleRelationType_idl__
+
+module com { module sun { module star { module accessibility {
+
+/** Collection of relation types.
+
+    <p>This list of constants defines the available types of relations that
+    are usable by <type>AccessibleRelation</type>.</p>
+
+    <p>We are using constants instead of a more typesafe enum.  The reason
+    for this is that IDL enums may not be extended.  Therefore, in order to
+    include future extensions to the set of roles we have to use constants
+    here.</p>
+
+    @since OOo 1.1.2
+*/
+published constants AccessibleRelationType
+{
+    /** Invalid relation type.
+
+        <p>Indicates an invalid relation type.  This is used to indicate
+        that a retrieval method could not find a requested relation.</p>
+    */
+    const short INVALID = 0;
+
+    /** Content-flows-from relation.
+
+        <p>Indicates a content flow between the related objects.</p>
+    */
+    const short CONTENT_FLOWS_FROM = 1;
+
+    /** Content-flows-to relation.
+
+        <p>Indicates a content flow between the related objects.</p>
+    */
+    const short CONTENT_FLOWS_TO = 2;
+
+    /** Controlled-by relation type.
+
+        <p>Indicates an object is controlled by one or more target
+        objects.</p>
+    */
+    const short CONTROLLED_BY = 3;
+
+    /** Controller-for relation type.
+
+        <p>Indicates an object is a controller for one or more target
+        objects.</p>
+    */
+    const short CONTROLLER_FOR = 4;
+
+    /** Label-for relation type.
+
+        <p>Indicates an object is a label for one or more target
+        objects.</p>
+    */
+    const short LABEL_FOR = 5;
+
+    /** Labeled-by relation type.
+
+        <p>Indicates an object is labeled by one or more target objects.</p>
+    */
+    const short LABELED_BY = 6;
+
+    /** Member-of relation type.
+
+        <p>Indicates an object is a member of a group of one or more target
+        objects.</p>
+    */
+    const short MEMBER_OF = 7;
+
+    /** Sub-Window-of relation type.
+
+        <p>With this relation you can realize an alternative parent-child
+        relationship.  The target of the relation contains the parent
+        window.  Note that there is no relation that points the other way,
+        from the parent window to the child window.</p>
+    */
+    const short SUB_WINDOW_OF = 8;
+
+    /** Node-Child-of relation type.
+
+        <p>Indicates an object is a cell in a tree or tree table which is
+        displayed because a cell in the same column is expanded and
+        identifies that cell.</p>
+
+        @since OOo 3.0
+    */
+    const short NODE_CHILD_OF = 9;
+};
+
+}; }; }; };
+
+#endif

@@ -1,0 +1,8 @@
+module ooo { module vba { module word {
+    constants WdStyleSheetPrecedence {
+        const long wdStyleSheetPrecedenceHigher = -1;
+        const long wdStyleSheetPrecedenceHighest = 1;
+        const long wdStyleSheetPrecedenceLower = -2;
+        const long wdStyleSheetPrecedenceLowest = 0;
+    };
+}; }; };

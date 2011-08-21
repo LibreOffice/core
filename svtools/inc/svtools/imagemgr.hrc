@@ -1,0 +1,161 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef _SVTOOLS_IMAGEMGR_HRC
+#define _SVTOOLS_IMAGEMGR_HRC
+
+// includes ******************************************************************
+
+#define IMAGELIST_START                 3076  // must match to old Id's in SFX!
+
+#define IMG_IMPRESS                     (IMAGELIST_START + 47)
+#define IMG_BITMAP                      (IMAGELIST_START + 49)
+#define IMG_CALC                        (IMAGELIST_START + 50)
+#define IMG_CALCTEMPLATE                (IMAGELIST_START + 51)
+#define IMG_CHART                       (IMAGELIST_START + 52)
+#define IMG_DATABASE                    (IMAGELIST_START + 53)
+#define IMG_IMPRESSTEMPLATE             (IMAGELIST_START + 54)
+#define IMG_GIF                         (IMAGELIST_START + 61)
+#define IMG_HELP                        (IMAGELIST_START + 62)
+#define IMG_HTML                        (IMAGELIST_START + 63)
+#define IMG_JPG                         (IMAGELIST_START + 64)
+#define IMG_MATH                        (IMAGELIST_START + 68)
+#define IMG_MATHTEMPLATE                (IMAGELIST_START + 69)
+#define IMG_FILE                        (IMAGELIST_START + 74)
+#define IMG_PCD                         (IMAGELIST_START + 76)
+#define IMG_PCT                         (IMAGELIST_START + 77)
+#define IMG_PCX                         (IMAGELIST_START + 78)
+#define IMG_SIM                         (IMAGELIST_START + 79)
+#define IMG_TEXTFILE                    (IMAGELIST_START + 80)
+#define IMG_TIFF                        (IMAGELIST_START + 82)
+#define IMG_URL                         (IMAGELIST_START + 83)
+#define IMG_WMF                         (IMAGELIST_START + 84)
+#define IMG_WRITER                      (IMAGELIST_START + 86)
+#define IMG_WRITERTEMPLATE              (IMAGELIST_START + 87)
+#define IMG_FIXEDDEV                    (IMAGELIST_START + 88)
+#define IMG_REMOVEABLEDEV               (IMAGELIST_START + 89)
+#define IMG_CDROMDEV                    (IMAGELIST_START + 90)
+#define IMG_NETWORKDEV                  (IMAGELIST_START + 91)
+#define IMG_TABLE                       (IMAGELIST_START + 112)
+#define IMG_FOLDER                      (IMAGELIST_START + 113)
+#define IMG_MACROLIB                    (IMAGELIST_START + 140)
+#define IMG_DXF                         (IMAGELIST_START + 141)
+#define IMG_MET                         (IMAGELIST_START + 142)
+#define IMG_PNG                         (IMAGELIST_START + 143)
+#define IMG_SGF                         (IMAGELIST_START + 144)
+#define IMG_SGV                         (IMAGELIST_START + 145)
+#define IMG_SVM                         (IMAGELIST_START + 146)
+#define IMG_GLOBAL_DOC                  (IMAGELIST_START + 150)
+#define IMG_DRAW                        (IMAGELIST_START + 151)
+#define IMG_DRAWTEMPLATE                (IMAGELIST_START + 152)
+#define IMG_NEWFROMTEMPLATE             (IMAGELIST_START + 166)
+#define IMG_OO_DATABASE_DOC             (IMAGELIST_START + 169)
+#define IMG_OO_DRAW_DOC                 (IMAGELIST_START + 170)
+#define IMG_OO_MATH_DOC                 (IMAGELIST_START + 171)
+#define IMG_OO_GLOBAL_DOC               (IMAGELIST_START + 172)
+#define IMG_OO_IMPRESS_DOC              (IMAGELIST_START + 173)
+#define IMG_OO_CALC_DOC                 (IMAGELIST_START + 174)
+#define IMG_OO_WRITER_DOC               (IMAGELIST_START + 175)
+#define IMG_OO_DRAW_TEMPLATE            (IMAGELIST_START + 176)
+#define IMG_OO_IMPRESS_TEMPLATE         (IMAGELIST_START + 177)
+#define IMG_OO_CALC_TEMPLATE            (IMAGELIST_START + 178)
+#define IMG_OO_WRITER_TEMPLATE          (IMAGELIST_START + 179)
+#define IMG_EXTENSION                   (IMAGELIST_START + 180)
+
+#define RID_DESCRIPTION_START           256
+
+#define STR_DESCRIPTION_SOURCEFILE                  (RID_DESCRIPTION_START +  0)
+#define STR_DESCRIPTION_BOOKMARKFILE                (RID_DESCRIPTION_START +  1)
+#define STR_DESCRIPTION_GRAPHIC_DOC                 (RID_DESCRIPTION_START +  2)
+#define STR_DESCRIPTION_CFGFILE                     (RID_DESCRIPTION_START +  3)
+#define STR_DESCRIPTION_APPLICATION                 (RID_DESCRIPTION_START +  4)
+#define STR_DESCRIPTION_DATABASE_TABLE              (RID_DESCRIPTION_START +  5)
+#define STR_DESCRIPTION_SYSFILE                     (RID_DESCRIPTION_START +  6)
+#define STR_DESCRIPTION_WORD_DOC                    (RID_DESCRIPTION_START +  7)
+#define STR_DESCRIPTION_HELP_DOC                    (RID_DESCRIPTION_START +  8)
+#define STR_DESCRIPTION_HTMLFILE                    (RID_DESCRIPTION_START +  9)
+#define STR_DESCRIPTION_ARCHIVFILE                  (RID_DESCRIPTION_START + 10)
+#define STR_DESCRIPTION_LOGFILE                     (RID_DESCRIPTION_START + 11)
+#define STR_DESCRIPTION_SMATH_DOC                   (RID_DESCRIPTION_START + 12)
+#define STR_DESCRIPTION_SCHART_DOC                  (RID_DESCRIPTION_START + 13)
+#define STR_DESCRIPTION_SDRAW_DOC                   (RID_DESCRIPTION_START + 14)
+#define STR_DESCRIPTION_SCALC_DOC                   (RID_DESCRIPTION_START + 15)
+#define STR_DESCRIPTION_SIMPRESS_DOC                (RID_DESCRIPTION_START + 16)
+#define STR_DESCRIPTION_SWRITER_DOC                 (RID_DESCRIPTION_START + 17)
+#define STR_DESCRIPTION_GLOBALDOC                   (RID_DESCRIPTION_START + 18)
+#define STR_DESCRIPTION_SIMAGE_DOC                  (RID_DESCRIPTION_START + 19)
+#define STR_DESCRIPTION_TEXTFILE                    (RID_DESCRIPTION_START + 20)
+#define STR_DESCRIPTION_LINK                        (RID_DESCRIPTION_START + 21)
+#define STR_DESCRIPTION_SOFFICE_TEMPLATE_DOC        (RID_DESCRIPTION_START + 22)
+#define STR_DESCRIPTION_EXCEL_DOC                   (RID_DESCRIPTION_START + 23)
+#define STR_DESCRIPTION_EXCEL_TEMPLATE_DOC          (RID_DESCRIPTION_START + 24)
+#define STR_DESCRIPTION_BATCHFILE                   (RID_DESCRIPTION_START + 25)
+#define STR_DESCRIPTION_FILE                        (RID_DESCRIPTION_START + 26)
+#define STR_DESCRIPTION_FOLDER                      (RID_DESCRIPTION_START + 27)
+#define STR_DESCRIPTION_FACTORY_WRITER              (RID_DESCRIPTION_START + 28)
+#define STR_DESCRIPTION_FACTORY_CALC                (RID_DESCRIPTION_START + 29)
+#define STR_DESCRIPTION_FACTORY_IMPRESS             (RID_DESCRIPTION_START + 30)
+#define STR_DESCRIPTION_FACTORY_DRAW                (RID_DESCRIPTION_START + 31)
+#define STR_DESCRIPTION_FACTORY_WRITERWEB           (RID_DESCRIPTION_START + 32)
+#define STR_DESCRIPTION_FACTORY_GLOBALDOC           (RID_DESCRIPTION_START + 33)
+#define STR_DESCRIPTION_FACTORY_MATH                (RID_DESCRIPTION_START + 34)
+#define STR_DESCRIPTION_CALC_TEMPLATE               (RID_DESCRIPTION_START + 35)
+#define STR_DESCRIPTION_DRAW_TEMPLATE               (RID_DESCRIPTION_START + 36)
+#define STR_DESCRIPTION_IMPRESS_TEMPLATE            (RID_DESCRIPTION_START + 37)
+#define STR_DESCRIPTION_WRITER_TEMPLATE             (RID_DESCRIPTION_START + 38)
+#define STR_DESCRIPTION_LOCALE_VOLUME               (RID_DESCRIPTION_START + 39)
+#define STR_DESCRIPTION_FLOPPY_VOLUME               (RID_DESCRIPTION_START + 40)
+#define STR_DESCRIPTION_CDROM_VOLUME                (RID_DESCRIPTION_START + 41)
+#define STR_DESCRIPTION_REMOTE_VOLUME               (RID_DESCRIPTION_START + 42)
+#define STR_DESCRIPTION_POWERPOINT                  (RID_DESCRIPTION_START + 43)
+#define STR_DESCRIPTION_POWERPOINT_TEMPLATE         (RID_DESCRIPTION_START + 44)
+#define STR_DESCRIPTION_POWERPOINT_SHOW             (RID_DESCRIPTION_START + 45)
+#define STR_DESCRIPTION_SXMATH_DOC                  (RID_DESCRIPTION_START + 46)
+#define STR_DESCRIPTION_SXCHART_DOC                 (RID_DESCRIPTION_START + 47)
+#define STR_DESCRIPTION_SXDRAW_DOC                  (RID_DESCRIPTION_START + 48)
+#define STR_DESCRIPTION_SXCALC_DOC                  (RID_DESCRIPTION_START + 49)
+#define STR_DESCRIPTION_SXIMPRESS_DOC               (RID_DESCRIPTION_START + 50)
+#define STR_DESCRIPTION_SXWRITER_DOC                (RID_DESCRIPTION_START + 51)
+#define STR_DESCRIPTION_SXGLOBAL_DOC                (RID_DESCRIPTION_START + 52)
+#define STR_DESCRIPTION_MATHML_DOC                  (RID_DESCRIPTION_START + 53)
+#define STR_DESCRIPTION_SDATABASE_DOC               (RID_DESCRIPTION_START + 54)
+#define STR_DESCRIPTION_OO_DATABASE_DOC             (RID_DESCRIPTION_START + 55)
+#define STR_DESCRIPTION_OO_DRAW_DOC                 (RID_DESCRIPTION_START + 56)
+#define STR_DESCRIPTION_OO_MATH_DOC                 (RID_DESCRIPTION_START + 57)
+#define STR_DESCRIPTION_OO_GLOBAL_DOC               (RID_DESCRIPTION_START + 58)
+#define STR_DESCRIPTION_OO_IMPRESS_DOC              (RID_DESCRIPTION_START + 59)
+#define STR_DESCRIPTION_OO_CALC_DOC                 (RID_DESCRIPTION_START + 60)
+#define STR_DESCRIPTION_OO_WRITER_DOC               (RID_DESCRIPTION_START + 61)
+#define STR_DESCRIPTION_OO_DRAW_TEMPLATE            (RID_DESCRIPTION_START + 62)
+#define STR_DESCRIPTION_OO_IMPRESS_TEMPLATE         (RID_DESCRIPTION_START + 63)
+#define STR_DESCRIPTION_OO_CALC_TEMPLATE            (RID_DESCRIPTION_START + 64)
+#define STR_DESCRIPTION_OO_WRITER_TEMPLATE          (RID_DESCRIPTION_START + 65)
+#define STR_DESCRIPTION_FACTORY_DATABASE            (RID_DESCRIPTION_START + 66)
+#define STR_DESCRIPTION_EXTENSION                   (RID_DESCRIPTION_START + 67)
+
+#endif
+

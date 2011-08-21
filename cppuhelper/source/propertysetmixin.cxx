@@ -1,0 +1,1431 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_cppuhelper.hxx"
+
+#include "sal/config.h"
+
+#include "cppuhelper/propertysetmixin.hxx"
+
+#include "com/sun/star/beans/Property.hpp"
+#include "com/sun/star/beans/PropertyChangeEvent.hpp"
+#include "com/sun/star/beans/PropertyAttribute.hpp"
+#include "com/sun/star/beans/PropertyValue.hpp"
+#include "com/sun/star/beans/PropertyVetoException.hpp"
+#include "com/sun/star/beans/UnknownPropertyException.hpp"
+#include "com/sun/star/beans/XFastPropertySet.hpp"
+#include "com/sun/star/beans/XPropertyAccess.hpp"
+#include "com/sun/star/beans/XPropertyChangeListener.hpp"
+#include "com/sun/star/beans/XPropertySet.hpp"
+#include "com/sun/star/beans/XPropertySetInfo.hpp"
+#include "com/sun/star/beans/XVetoableChangeListener.hpp"
+#include "com/sun/star/container/NoSuchElementException.hpp"
+#include "com/sun/star/container/XHierarchicalNameAccess.hpp"
+#include "com/sun/star/lang/DisposedException.hpp"
+#include "com/sun/star/lang/EventObject.hpp"
+#include "com/sun/star/lang/IllegalAccessException.hpp"
+#include "com/sun/star/lang/IllegalArgumentException.hpp"
+#include "com/sun/star/lang/WrappedTargetException.hpp"
+#include "com/sun/star/lang/WrappedTargetRuntimeException.hpp"
+#include "com/sun/star/lang/XComponent.hpp"
+#include "com/sun/star/lang/XMultiComponentFactory.hpp"
+#include "com/sun/star/reflection/XCompoundTypeDescription.hpp"
+#include "com/sun/star/reflection/XIdlClass.hpp"
+#include "com/sun/star/reflection/XIdlField2.hpp"
+#include "com/sun/star/reflection/XIdlReflection.hpp"
+#include "com/sun/star/reflection/XIndirectTypeDescription.hpp"
+#include "com/sun/star/reflection/XInterfaceAttributeTypeDescription2.hpp"
+#include "com/sun/star/reflection/XInterfaceMemberTypeDescription.hpp"
+#include "com/sun/star/reflection/XInterfaceTypeDescription2.hpp"
+#include "com/sun/star/reflection/XStructTypeDescription.hpp"
+#include "com/sun/star/reflection/XTypeDescription.hpp"
+#include "com/sun/star/uno/Any.hxx"
+#include "com/sun/star/uno/DeploymentException.hpp"
+#include "com/sun/star/uno/Exception.hpp"
+#include "com/sun/star/uno/Reference.hxx"
+#include "com/sun/star/uno/RuntimeException.hpp"
+#include "com/sun/star/uno/Sequence.hxx"
+#include "com/sun/star/uno/Type.hxx"
+#include "com/sun/star/uno/TypeClass.hpp"
+#include "com/sun/star/uno/XComponentContext.hpp"
+#include "com/sun/star/uno/XInterface.hpp"
+#include "cppuhelper/implbase1.hxx"
+#include "cppuhelper/weak.hxx"
+#include "osl/diagnose.h"
+#include "osl/mutex.hxx"
+#include "rtl/ref.hxx"
+#include "rtl/string.h"
+#include "rtl/ustring.h"
+#include "rtl/ustring.hxx"
+#include "sal/types.h"
+#include "salhelper/simplereferenceobject.hxx"
+
+#include <algorithm>
+#include <map>
+#include <new>
+#include <set>
+#include <vector>
+
+using cppu::PropertySetMixinImpl;
+
+namespace css = com::sun::star;
+
+namespace {
+
+template< typename T > struct AutoDispose {
+    AutoDispose() {}
+
+    ~AutoDispose() {
+        try {
+            dispose();
+        } catch (...) {}
+    }
+
+    void dispose() {
+        css::uno::Reference< css::lang::XComponent > comp(
+            ifc, css::uno::UNO_QUERY);
+        if (comp.is()) {
+            comp->dispose();
+        }
+        ifc.clear();
+    }
+
+    css::uno::Reference< T > ifc;
+
+private:
+    AutoDispose(AutoDispose &); // not defined
+    void operator =(AutoDispose); // not defined
+};
+
+struct PropertyData {
+    explicit PropertyData(
+        css::beans::Property const & theProperty, bool thePresent):
+        property(theProperty), present(thePresent) {}
+
+    css::beans::Property property;
+    bool present;
+};
+
+struct Data: public salhelper::SimpleReferenceObject {
+    typedef std::map< rtl::OUString, PropertyData > PropertyMap;
+
+    PropertyMap properties;
+
+    PropertyMap::const_iterator get(
+        css::uno::Reference< css::uno::XInterface > const & object,
+        rtl::OUString const & name) const;
+
+protected:
+    void initProperties(
+        css::uno::Reference< css::reflection::XTypeDescription > const & type,
+        css::uno::Sequence< rtl::OUString > const & absentOptional,
+        std::vector< rtl::OUString > * handleNames)
+    {
+        TypeSet seen;
+        initProperties(type, absentOptional, handleNames, &seen);
+    }
+
+private:
+    typedef std::set< rtl::OUString > TypeSet;
+
+    void initProperties(
+        css::uno::Reference< css::reflection::XTypeDescription > const & type,
+        css::uno::Sequence< rtl::OUString > const & absentOptional,
+        std::vector< rtl::OUString > * handleNames, TypeSet * seen);
+
+    static css::uno::Reference< css::reflection::XTypeDescription >
+    resolveTypedefs(
+        css::uno::Reference< css::reflection::XTypeDescription > const & type);
+};
+
+Data::PropertyMap::const_iterator Data::get(
+    css::uno::Reference< css::uno::XInterface > const & object,
+    rtl::OUString const & name) const
+{
+    PropertyMap::const_iterator i(properties.find(name));
+    if (i == properties.end() || !i->second.present) {
+        throw css::beans::UnknownPropertyException(name, object);
+    }
+    return i;
+}
+
+void Data::initProperties(
+    css::uno::Reference< css::reflection::XTypeDescription > const & type,
+    css::uno::Sequence< rtl::OUString > const & absentOptional,
+    std::vector< rtl::OUString > * handleNames, TypeSet * seen)
+{
+    css::uno::Reference< css::reflection::XInterfaceTypeDescription2 > ifc(
+        resolveTypedefs(type), css::uno::UNO_QUERY_THROW);
+    if (seen->insert(ifc->getName()).second) {
+        css::uno::Sequence<
+        css::uno::Reference< css::reflection::XTypeDescription > > bases(
+            ifc->getBaseTypes());
+        for (sal_Int32 i = 0; i < bases.getLength(); ++i) {
+            initProperties(bases[i], absentOptional, handleNames, seen);
+        }
+        css::uno::Sequence<
+        css::uno::Reference<
+        css::reflection::XInterfaceMemberTypeDescription > > members(
+            ifc->getMembers());
+        rtl::OUString const * absentBegin = absentOptional.getConstArray();
+        rtl::OUString const * absentEnd =
+            absentBegin + absentOptional.getLength();
+        for (sal_Int32 i = 0; i < members.getLength(); ++i) {
+            if (members[i]->getTypeClass()
+                == css::uno::TypeClass_INTERFACE_ATTRIBUTE)
+            {
+                css::uno::Reference<
+                css::reflection::XInterfaceAttributeTypeDescription2 > attr(
+                    members[i], css::uno::UNO_QUERY_THROW);
+                sal_Int16 attrAttribs = 0;
+                if (attr->isBound()) {
+                    attrAttribs |= css::beans::PropertyAttribute::BOUND;
+                }
+                bool setUnknown = false;
+                if (attr->isReadOnly()) {
+                    attrAttribs |= css::beans::PropertyAttribute::READONLY;
+                    setUnknown = true;
+                }
+                css::uno::Sequence<
+                css::uno::Reference<
+                css::reflection::XCompoundTypeDescription > > excs(
+                    attr->getGetExceptions());
+                bool getUnknown = false;
+                //XXX  Special interpretation of getter/setter exceptions only
+                // works if the specified exceptions are of the exact type, not
+                // of a supertype:
+                for (sal_Int32 j = 0; j < excs.getLength(); ++j) {
+                    if (excs[j]->getName().equalsAsciiL(
+                            RTL_CONSTASCII_STRINGPARAM(
+                                "com.sun.star.beans.UnknownPropertyException")))
+                    {
+                        getUnknown = true;
+                        break;
+                    }
+                }
+                excs = attr->getSetExceptions();
+                for (sal_Int32 j = 0; j < excs.getLength(); ++j) {
+                    if (excs[j]->getName().equalsAsciiL(
+                            RTL_CONSTASCII_STRINGPARAM(
+                                "com.sun.star.beans.UnknownPropertyException")))
+                    {
+                        setUnknown = true;
+                    } else if (excs[j]->getName().equalsAsciiL(
+                                   RTL_CONSTASCII_STRINGPARAM(
+                                       "com.sun.star.beans."
+                                       "PropertyVetoException")))
+                    {
+                        attrAttribs
+                            |= css::beans::PropertyAttribute::CONSTRAINED;
+                    }
+                }
+                if (getUnknown && setUnknown) {
+                    attrAttribs |= css::beans::PropertyAttribute::OPTIONAL;
+                }
+                css::uno::Reference< css::reflection::XTypeDescription > t(
+                    attr->getType());
+                for (;;)
+                {
+                    t = resolveTypedefs(t);
+                    sal_Int16 n;
+                    if (t->getName().matchAsciiL(
+                            RTL_CONSTASCII_STRINGPARAM(
+                                "com.sun.star.beans.Ambiguous<")))
+                    {
+                        n = css::beans::PropertyAttribute::MAYBEAMBIGUOUS;
+                    } else if (t->getName().matchAsciiL(
+                                   RTL_CONSTASCII_STRINGPARAM(
+                                       "com.sun.star.beans.Defaulted<")))
+                    {
+                        n = css::beans::PropertyAttribute::MAYBEDEFAULT;
+                    } else if (t->getName().matchAsciiL(
+                                   RTL_CONSTASCII_STRINGPARAM(
+                                       "com.sun.star.beans.Optional<")))
+                    {
+                        n = css::beans::PropertyAttribute::MAYBEVOID;
+                    } else {
+                        break;
+                    }
+                    if ((attrAttribs & n) != 0) {
+                        break;
+                    }
+                    attrAttribs |= n;
+                    css::uno::Sequence<
+                    css::uno::Reference< css::reflection::XTypeDescription > >
+                        args(
+                            css::uno::Reference<
+                            css::reflection::XStructTypeDescription >(
+                                t,
+                                css::uno::UNO_QUERY_THROW)->getTypeArguments());
+                    if (args.getLength() != 1) {
+                        throw css::uno::RuntimeException(
+                            rtl::OUString(
+                                RTL_CONSTASCII_USTRINGPARAM(
+                                    "inconsistent UNO type registry")),
+                            css::uno::Reference< css::uno::XInterface >());
+                    }
+                    t = args[0];
+                }
+                std::vector< rtl::OUString >::size_type handles
+                    = handleNames->size();
+                if (handles > SAL_MAX_INT32) {
+                    throw css::uno::RuntimeException(
+                        rtl::OUString(
+                            RTL_CONSTASCII_USTRINGPARAM(
+                                "interface type has too many attributes")),
+                        css::uno::Reference< css::uno::XInterface >());
+                }
+                rtl::OUString name(members[i]->getMemberName());
+                if (!properties.insert(
+                        PropertyMap::value_type(
+                            name,
+                            PropertyData(
+                                css::beans::Property(
+                                    name, static_cast< sal_Int32 >(handles),
+                                    css::uno::Type(
+                                        t->getTypeClass(), t->getName()),
+                                    attrAttribs),
+                                (std::find(absentBegin, absentEnd, name)
+                                 == absentEnd)))).
+                    second)
+                {
+                    throw css::uno::RuntimeException(
+                        rtl::OUString(
+                            RTL_CONSTASCII_USTRINGPARAM(
+                                "inconsistent UNO type registry")),
+                        css::uno::Reference< css::uno::XInterface >());
+                }
+                handleNames->push_back(name);
+            }
+        }
+    }
+}
+
+css::uno::Reference< css::reflection::XTypeDescription > Data::resolveTypedefs(
+    css::uno::Reference< css::reflection::XTypeDescription > const & type)
+{
+    css::uno::Reference< css::reflection::XTypeDescription > t(type);
+    while (t->getTypeClass() == css::uno::TypeClass_TYPEDEF) {
+        t = css::uno::Reference< css::reflection::XIndirectTypeDescription >(
+            t, css::uno::UNO_QUERY_THROW)->getReferencedType();
+    }
+    return t;
+}
+
+class Info: public cppu::WeakImplHelper1< css::beans::XPropertySetInfo > {
+public:
+    explicit Info(Data * data): m_data(data) {}
+
+    virtual css::uno::Sequence< css::beans::Property > SAL_CALL getProperties()
+        throw (css::uno::RuntimeException);
+
+    virtual css::beans::Property SAL_CALL getPropertyByName(
+        rtl::OUString const & name)
+        throw (
+            css::beans::UnknownPropertyException, css::uno::RuntimeException);
+
+    virtual sal_Bool SAL_CALL hasPropertyByName(rtl::OUString const & name)
+        throw (css::uno::RuntimeException);
+
+private:
+    rtl::Reference< Data > m_data;
+};
+
+css::uno::Sequence< css::beans::Property > Info::getProperties()
+    throw (css::uno::RuntimeException)
+{
+    try {
+        OSL_ASSERT(m_data->properties.size() <= SAL_MAX_INT32);
+        css::uno::Sequence< css::beans::Property > s(
+            static_cast< sal_Int32 >(m_data->properties.size()));
+        sal_Int32 n = 0;
+        for (Data::PropertyMap::iterator i(m_data->properties.begin());
+             i != m_data->properties.end(); ++i)
+        {
+            if (i->second.present) {
+                s[n++] = i->second.property;
+            }
+        }
+        s.realloc(n);
+        return s;
+    } catch (std::bad_alloc &) {
+        //TODO  OutOfMemoryException:
+        throw css::uno::RuntimeException(
+            rtl::OUString(), static_cast< cppu::OWeakObject * >(this));
+    }
+}
+
+css::beans::Property Info::getPropertyByName(rtl::OUString const & name)
+    throw (css::beans::UnknownPropertyException, css::uno::RuntimeException)
+{
+    return m_data->get(static_cast< cppu::OWeakObject * >(this), name)->
+        second.property;
+}
+
+sal_Bool Info::hasPropertyByName(rtl::OUString const & name)
+    throw (css::uno::RuntimeException)
+{
+    Data::PropertyMap::iterator i(m_data->properties.find(name));
+    return i != m_data->properties.end() && i->second.present;
+}
+
+typedef
+std::multiset< css::uno::Reference< css::beans::XPropertyChangeListener > >
+BoundListenerBag;
+
+}
+
+class PropertySetMixinImpl::BoundListeners::Impl {
+public:
+    BoundListenerBag specificListeners;
+    BoundListenerBag unspecificListeners;
+    css::beans::PropertyChangeEvent event;
+};
+
+PropertySetMixinImpl::BoundListeners::BoundListeners(): m_impl(new Impl) {}
+
+PropertySetMixinImpl::BoundListeners::~BoundListeners() {
+    delete m_impl;
+}
+
+void PropertySetMixinImpl::BoundListeners::notify() const {
+    for (BoundListenerBag::const_iterator i(m_impl->specificListeners.begin());
+         i != m_impl->specificListeners.end(); ++i)
+    {
+        try {
+            (*i)->propertyChange(m_impl->event);
+        } catch (css::lang::DisposedException &) {}
+    }
+    for (BoundListenerBag::const_iterator i(
+             m_impl->unspecificListeners.begin());
+         i != m_impl->unspecificListeners.end(); ++i)
+    {
+        try {
+            (*i)->propertyChange(m_impl->event);
+        } catch (css::lang::DisposedException &) {}
+    }
+}
+
+class PropertySetMixinImpl::Impl: public Data {
+public:
+    Impl(
+        css::uno::Reference< css::uno::XComponentContext > const & context,
+        Implements theImplements,
+        css::uno::Sequence< rtl::OUString > const & absentOptional,
+        css::uno::Type const & type);
+
+    rtl::OUString translateHandle(
+        css::uno::Reference< css::uno::XInterface > const & object,
+        sal_Int32 handle) const;
+
+    void setProperty(
+        css::uno::Reference< css::uno::XInterface > const & object,
+        rtl::OUString const & name, css::uno::Any const & value,
+        bool isAmbiguous, bool isDefaulted, sal_Int16 illegalArgumentPosition)
+        const;
+
+    css::uno::Any getProperty(
+        css::uno::Reference< css::uno::XInterface > const & object,
+        rtl::OUString const & name, css::beans::PropertyState * state) const;
+
+    PropertySetMixinImpl::Implements implements;
+    css::uno::Sequence< rtl::OUString > handleMap;
+
+    typedef std::map< rtl::OUString, BoundListenerBag > BoundListenerMap;
+
+    typedef
+    std::multiset< css::uno::Reference< css::beans::XVetoableChangeListener > >
+    VetoListenerBag;
+
+    typedef std::map< rtl::OUString, VetoListenerBag > VetoListenerMap;
+
+    mutable osl::Mutex mutex;
+    BoundListenerMap boundListeners;
+    VetoListenerMap vetoListeners;
+    bool disposed;
+
+private:
+    css::uno::Reference< css::reflection::XIdlClass > getReflection(
+        rtl::OUString const & typeName) const;
+
+    static css::uno::Any wrapValue(
+        css::uno::Reference< css::uno::XInterface > const & object,
+        css::uno::Any const & value,
+        css::uno::Reference< css::reflection::XIdlClass > const & type,
+        bool wrapAmbiguous, bool isAmbiguous, bool wrapDefaulted,
+        bool isDefaulted, bool wrapOptional);
+
+    css::uno::Reference< css::uno::XComponentContext > const & m_context;
+    css::uno::Sequence< rtl::OUString > m_absentOptional;
+    css::uno::Type m_type;
+    css::uno::Reference< css::reflection::XIdlClass > m_idlClass;
+};
+
+PropertySetMixinImpl::Impl::Impl(
+    css::uno::Reference< css::uno::XComponentContext > const & context,
+    Implements theImplements,
+    css::uno::Sequence< rtl::OUString > const & absentOptional,
+    css::uno::Type const & type):
+    implements(theImplements), disposed(false), m_context(context),
+    m_absentOptional(absentOptional), m_type(type)
+{
+    OSL_ASSERT(
+        context.is()
+        && ((implements
+             & ~(IMPLEMENTS_PROPERTY_SET | IMPLEMENTS_FAST_PROPERTY_SET
+                 | IMPLEMENTS_PROPERTY_ACCESS))
+            == 0));
+    m_idlClass = getReflection(m_type.getTypeName());
+    css::uno::Reference< css::reflection::XTypeDescription > ifc;
+    try {
+        ifc = css::uno::Reference< css::reflection::XTypeDescription >(
+            css::uno::Reference< css::container::XHierarchicalNameAccess >(
+                m_context->getValueByName(
+                    rtl::OUString(
+                        RTL_CONSTASCII_USTRINGPARAM(
+                            "/singletons/com.sun.star.reflection."
+                            "theTypeDescriptionManager"))),
+                css::uno::UNO_QUERY_THROW)->getByHierarchicalName(
+                    m_type.getTypeName()),
+            css::uno::UNO_QUERY_THROW);
+    } catch (css::container::NoSuchElementException & e) {
+        throw css::uno::RuntimeException(
+            (rtl::OUString(
+                RTL_CONSTASCII_USTRINGPARAM(
+                    "unexpected"
+                    " com.sun.star.container.NoSuchElementException: "))
+             + e.Message),
+            css::uno::Reference< css::uno::XInterface >());
+    }
+    std::vector< rtl::OUString > handleNames;
+    initProperties(ifc, m_absentOptional, &handleNames);
+    std::vector< rtl::OUString >::size_type size = handleNames.size();
+    OSL_ASSERT(size <= SAL_MAX_INT32);
+    handleMap.realloc(static_cast< sal_Int32 >(size));
+    std::copy(handleNames.begin(), handleNames.end(), handleMap.getArray());
+}
+
+rtl::OUString PropertySetMixinImpl::Impl::translateHandle(
+    css::uno::Reference< css::uno::XInterface > const & object,
+    sal_Int32 handle) const
+{
+    if (handle < 0 || handle >= handleMap.getLength()) {
+        throw css::beans::UnknownPropertyException(
+            (rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("bad handle "))
+             + rtl::OUString::valueOf(handle)),
+            object);
+    }
+    return handleMap[handle];
+}
+
+void PropertySetMixinImpl::Impl::setProperty(
+    css::uno::Reference< css::uno::XInterface > const & object,
+    rtl::OUString const & name, css::uno::Any const & value, bool isAmbiguous,
+    bool isDefaulted, sal_Int16 illegalArgumentPosition) const
+{
+    PropertyMap::const_iterator i(properties.find(name));
+    if (i == properties.end()) {
+        throw css::beans::UnknownPropertyException(name, object);
+    }
+    if ((isAmbiguous
+         && ((i->second.property.Attributes
+              & css::beans::PropertyAttribute::MAYBEAMBIGUOUS)
+             == 0))
+        || (isDefaulted
+            && ((i->second.property.Attributes
+                 & css::beans::PropertyAttribute::MAYBEDEFAULT)
+                == 0)))
+    {
+        throw css::lang::IllegalArgumentException(
+            (rtl::OUString(
+                RTL_CONSTASCII_USTRINGPARAM(
+                    "flagging as ambiguous/defaulted non-ambiguous/defaulted"
+                    " property "))
+             + name),
+            object, illegalArgumentPosition);
+    }
+    css::uno::Reference< css::reflection::XIdlField2 > f(
+        m_idlClass->getField(name), css::uno::UNO_QUERY_THROW);
+    css::uno::Any o(object->queryInterface(m_type));
+    css::uno::Any v(
+        wrapValue(
+            object, value,
+            (css::uno::Reference< css::reflection::XIdlField2 >(
+                m_idlClass->getField(name), css::uno::UNO_QUERY_THROW)->
+             getType()),
+            ((i->second.property.Attributes
+              & css::beans::PropertyAttribute::MAYBEAMBIGUOUS)
+             != 0),
+            isAmbiguous,
+            ((i->second.property.Attributes
+              & css::beans::PropertyAttribute::MAYBEDEFAULT)
+             != 0),
+            isDefaulted,
+            ((i->second.property.Attributes
+              & css::beans::PropertyAttribute::MAYBEVOID)
+             != 0)));
+    try {
+        f->set(o, v);
+    } catch (css::lang::IllegalArgumentException & e) {
+        if (e.ArgumentPosition == 1) {
+            throw css::lang::IllegalArgumentException(
+                e.Message, object, illegalArgumentPosition);
+        } else {
+            throw css::uno::RuntimeException(
+                (rtl::OUString(
+                    RTL_CONSTASCII_USTRINGPARAM(
+                        "unexpected"
+                        " com.sun.star.lang.IllegalArgumentException: "))
+                 + e.Message),
+                object);
+        }
+    } catch (css::lang::IllegalAccessException &) {
+        //TODO  Clarify whether PropertyVetoException is the correct exception
+        // to throw when trying to set a read-only property:
+        throw css::beans::PropertyVetoException(
+            (rtl::OUString(
+                RTL_CONSTASCII_USTRINGPARAM("cannot set read-only property "))
+             + name),
+            object);
+    } catch (css::lang::WrappedTargetRuntimeException & e) {
+        //FIXME  A WrappedTargetRuntimeException from XIdlField2.get is not
+        // guaranteed to originate directly within XIdlField2.get (and thus have
+        // the expected semantics); it might also be passed through from lower
+        // layers.
+        if (e.TargetException.isExtractableTo(
+                getCppuType(
+                    static_cast< css::beans::UnknownPropertyException * >(0)))
+            && ((i->second.property.Attributes
+                 & css::beans::PropertyAttribute::OPTIONAL)
+                != 0))
+        {
+            throw css::beans::UnknownPropertyException(name, object);
+        } else if (e.TargetException.isExtractableTo(
+                       getCppuType(
+                           static_cast< css::beans::PropertyVetoException * >(
+                               0)))
+                   && ((i->second.property.Attributes
+                        & css::beans::PropertyAttribute::CONSTRAINED)
+                       != 0))
+        {
+            throw css::beans::PropertyVetoException(name, object);
+        } else {
+            throw css::lang::WrappedTargetException(
+                e.Message, object, e.TargetException);
+        }
+    }
+}
+
+css::uno::Any PropertySetMixinImpl::Impl::getProperty(
+    css::uno::Reference< css::uno::XInterface > const & object,
+    rtl::OUString const & name, css::beans::PropertyState * state) const
+{
+    PropertyMap::const_iterator i(properties.find(name));
+    if (i == properties.end()) {
+        throw css::beans::UnknownPropertyException(name, object);
+    }
+    css::uno::Reference< css::reflection::XIdlField2 > field(
+        m_idlClass->getField(name), css::uno::UNO_QUERY_THROW);
+    css::uno::Any value;
+    try {
+        value = field->get(object->queryInterface(m_type));
+    } catch (css::lang::IllegalArgumentException & e) {
+        throw css::uno::RuntimeException(
+            (rtl::OUString(
+                RTL_CONSTASCII_USTRINGPARAM(
+                    "unexpected com.sun.star.lang.IllegalArgumentException: "))
+             + e.Message),
+            object);
+    } catch (css::lang::WrappedTargetRuntimeException & e) {
+        //FIXME  A WrappedTargetRuntimeException from XIdlField2.get is not
+        // guaranteed to originate directly within XIdlField2.get (and thus have
+        // the expected semantics); it might also be passed through from lower
+        // layers.
+        if (e.TargetException.isExtractableTo(
+                getCppuType(
+                    static_cast< css::beans::UnknownPropertyException * >(0)))
+            && ((i->second.property.Attributes
+                 & css::beans::PropertyAttribute::OPTIONAL)
+                != 0))
+        {
+            throw css::beans::UnknownPropertyException(name, object);
+        } else {
+            throw css::lang::WrappedTargetException(
+                e.Message, object, e.TargetException);
+        }
+    }
+    bool undoAmbiguous
+        = ((i->second.property.Attributes
+            & css::beans::PropertyAttribute::MAYBEAMBIGUOUS)
+           != 0);
+    bool undoDefaulted
+        = ((i->second.property.Attributes
+            & css::beans::PropertyAttribute::MAYBEDEFAULT)
+           != 0);
+    bool undoOptional
+        = ((i->second.property.Attributes
+            & css::beans::PropertyAttribute::MAYBEVOID)
+           != 0);
+    bool isAmbiguous = false;
+    bool isDefaulted = false;
+    while (undoAmbiguous || undoDefaulted || undoOptional) {
+        if (undoAmbiguous
+            && value.getValueTypeName().matchAsciiL(
+                RTL_CONSTASCII_STRINGPARAM("com.sun.star.beans.Ambiguous<")))
+        {
+            css::uno::Reference< css::reflection::XIdlClass > ambiguous(
+                getReflection(value.getValueTypeName()));
+            try {
+                if (!(css::uno::Reference< css::reflection::XIdlField2 >(
+                          ambiguous->getField(
+                              rtl::OUString(
+                                  RTL_CONSTASCII_USTRINGPARAM("IsAmbiguous"))),
+                          css::uno::UNO_QUERY_THROW)->get(value)
+                      >>= isAmbiguous))
+                {
+                    throw css::uno::RuntimeException(
+                        rtl::OUString(
+                            RTL_CONSTASCII_USTRINGPARAM(
+                                "unexpected type of"
+                                " com.sun.star.beans.Ambiguous IsAmbiguous"
+                                " member")),
+                        object);
+                }
+                value = css::uno::Reference< css::reflection::XIdlField2 >(
+                    ambiguous->getField(
+                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Value"))),
+                    css::uno::UNO_QUERY_THROW)->get(value);
+            } catch (css::lang::IllegalArgumentException & e) {
+                throw css::uno::RuntimeException(
+                    (rtl::OUString(
+                        RTL_CONSTASCII_USTRINGPARAM(
+                            "unexpected com.sun.star.lang."
+                            "IllegalArgumentException: "))
+                     + e.Message),
+                    object);
+            }
+            undoAmbiguous = false;
+        } else if (undoDefaulted
+                   && value.getValueTypeName().matchAsciiL(
+                       RTL_CONSTASCII_STRINGPARAM(
+                           "com.sun.star.beans.Defaulted<")))
+        {
+            css::uno::Reference< css::reflection::XIdlClass > defaulted(
+                getReflection(value.getValueTypeName()));
+            try {
+
+                if (!(css::uno::Reference< css::reflection::XIdlField2 >(
+                          defaulted->getField(
+                              rtl::OUString(
+                                  RTL_CONSTASCII_USTRINGPARAM("IsDefaulted"))),
+                          css::uno::UNO_QUERY_THROW)->get(value)
+                      >>= isDefaulted))
+                {
+                    throw css::uno::RuntimeException(
+                        rtl::OUString(
+                            RTL_CONSTASCII_USTRINGPARAM(
+                                "unexpected type of"
+                                " com.sun.star.beans.Defaulted IsDefaulted"
+                                " member")),
+                        object);
+                }
+                value = css::uno::Reference< css::reflection::XIdlField2 >(
+                    defaulted->getField(
+                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Value"))),
+                    css::uno::UNO_QUERY_THROW)->get(value);
+            } catch (css::lang::IllegalArgumentException & e) {
+                throw css::uno::RuntimeException(
+                    (rtl::OUString(
+                        RTL_CONSTASCII_USTRINGPARAM(
+                            "unexpected com.sun.star.lang."
+                            "IllegalArgumentException: "))
+                     + e.Message),
+                    object);
+            }
+            undoDefaulted = false;
+        } else if (undoOptional
+                   && value.getValueTypeName().matchAsciiL(
+                       RTL_CONSTASCII_STRINGPARAM(
+                           "com.sun.star.beans.Optional<")))
+        {
+            css::uno::Reference< css::reflection::XIdlClass > optional(
+                getReflection(value.getValueTypeName()));
+            try {
+                bool present = false;
+                if (!(css::uno::Reference< css::reflection::XIdlField2 >(
+                          optional->getField(
+                              rtl::OUString(
+                                  RTL_CONSTASCII_USTRINGPARAM("IsPresent"))),
+                          css::uno::UNO_QUERY_THROW)->get(value)
+                      >>= present))
+                {
+                    throw css::uno::RuntimeException(
+                        rtl::OUString(
+                            RTL_CONSTASCII_USTRINGPARAM(
+                                "unexpected type of com.sun.star.beans.Optional"
+                                " IsPresent member")),
+                        object);
+                }
+                if (!present) {
+                    value.clear();
+                    break;
+                }
+                value = css::uno::Reference< css::reflection::XIdlField2 >(
+                    optional->getField(
+                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Value"))),
+                    css::uno::UNO_QUERY_THROW)->get(value);
+            } catch (css::lang::IllegalArgumentException & e) {
+                throw css::uno::RuntimeException(
+                    (rtl::OUString(
+                        RTL_CONSTASCII_USTRINGPARAM(
+                            "unexpected com.sun.star.lang."
+                            "IllegalArgumentException: "))
+                     + e.Message),
+                    object);
+            }
+            undoOptional = false;
+        } else {
+            throw css::uno::RuntimeException(
+                (rtl::OUString(
+                    RTL_CONSTASCII_USTRINGPARAM(
+                        "unexpected type of attribute "))
+                 + name),
+                object);
+        }
+    }
+    if (state != 0) {
+        //XXX  If isAmbiguous && isDefaulted, arbitrarily choose AMBIGUOUS_VALUE
+        // over DEFAULT_VALUE:
+        *state = isAmbiguous
+            ? css::beans::PropertyState_AMBIGUOUS_VALUE
+            : isDefaulted
+            ? css::beans::PropertyState_DEFAULT_VALUE
+            : css::beans::PropertyState_DIRECT_VALUE;
+    }
+    return value;
+}
+
+css::uno::Reference< css::reflection::XIdlClass >
+PropertySetMixinImpl::Impl::getReflection(rtl::OUString const & typeName) const
+{
+    css::uno::Reference< css::lang::XMultiComponentFactory > factory(
+        m_context->getServiceManager(), css::uno::UNO_QUERY_THROW);
+    AutoDispose< css::reflection::XIdlReflection > refl;
+    try {
+        refl.ifc = css::uno::Reference< css::reflection::XIdlReflection >(
+            factory->createInstanceWithContext(
+                rtl::OUString(
+                    RTL_CONSTASCII_USTRINGPARAM(
+                        "com.sun.star.reflection.CoreReflection")),
+                m_context),
+            css::uno::UNO_QUERY_THROW);
+    } catch (css::uno::RuntimeException &) {
+        throw;
+    } catch (css::uno::Exception & e) {
+        throw css::uno::DeploymentException(
+            (rtl::OUString(
+                RTL_CONSTASCII_USTRINGPARAM(
+                    "component context fails to supply service"
+                    " com.sun.star.reflection.CoreReflection: "))
+             + e.Message),
+            m_context);
+    }
+    css::uno::Reference< css::reflection::XIdlClass > idlClass(
+        refl.ifc->forName(typeName), css::uno::UNO_QUERY_THROW);
+    refl.dispose();
+    return idlClass;
+}
+
+css::uno::Any PropertySetMixinImpl::Impl::wrapValue(
+    css::uno::Reference< css::uno::XInterface > const & object,
+    css::uno::Any const & value,
+    css::uno::Reference< css::reflection::XIdlClass > const & type,
+    bool wrapAmbiguous, bool isAmbiguous, bool wrapDefaulted, bool isDefaulted,
+    bool wrapOptional)
+{
+    OSL_ASSERT(
+        (wrapAmbiguous || !isAmbiguous) && (wrapDefaulted || !isDefaulted));
+    if (wrapAmbiguous
+        && type->getName().matchAsciiL(
+            RTL_CONSTASCII_STRINGPARAM("com.sun.star.beans.Ambiguous<")))
+    {
+        css::uno::Any strct;
+        type->createObject(strct);
+        try {
+            css::uno::Reference< css::reflection::XIdlField2 > field(
+                type->getField(
+                    rtl::OUString(
+                        RTL_CONSTASCII_USTRINGPARAM("Value"))),
+                css::uno::UNO_QUERY_THROW);
+            field->set(
+                strct,
+                wrapValue(
+                    object, value, field->getType(), false, false,
+                    wrapDefaulted, isDefaulted, wrapOptional));
+            css::uno::Reference< css::reflection::XIdlField2 >(
+                type->getField(
+                    rtl::OUString(
+                        RTL_CONSTASCII_USTRINGPARAM("IsAmbiguous"))),
+                css::uno::UNO_QUERY_THROW)->set(
+                    strct, css::uno::makeAny(isAmbiguous));
+        } catch (css::lang::IllegalArgumentException & e) {
+            throw css::uno::RuntimeException(
+                (rtl::OUString(
+                    RTL_CONSTASCII_USTRINGPARAM(
+                        "unexpected"
+                        " com.sun.star.lang.IllegalArgumentException: "))
+                 + e.Message),
+                object);
+        } catch (css::lang::IllegalAccessException & e) {
+            throw css::uno::RuntimeException(
+                (rtl::OUString(
+                    RTL_CONSTASCII_USTRINGPARAM(
+                        "unexpected"
+                        " com.sun.star.lang.IllegalAccessException: "))
+                 + e.Message),
+                object);
+        }
+        return strct;
+    } else if (wrapDefaulted
+               && type->getName().matchAsciiL(
+                   RTL_CONSTASCII_STRINGPARAM("com.sun.star.beans.Defaulted<")))
+    {
+        css::uno::Any strct;
+        type->createObject(strct);
+        try {
+            css::uno::Reference< css::reflection::XIdlField2 > field(
+                type->getField(
+                    rtl::OUString(
+                        RTL_CONSTASCII_USTRINGPARAM("Value"))),
+                css::uno::UNO_QUERY_THROW);
+            field->set(
+                strct,
+                wrapValue(
+                    object, value, field->getType(), wrapAmbiguous, isAmbiguous,
+                    false, false, wrapOptional));
+            css::uno::Reference< css::reflection::XIdlField2 >(
+                type->getField(
+                    rtl::OUString(
+                        RTL_CONSTASCII_USTRINGPARAM("IsDefaulted"))),
+                css::uno::UNO_QUERY_THROW)->set(
+                    strct, css::uno::makeAny(isDefaulted));
+        } catch (css::lang::IllegalArgumentException & e) {
+            throw css::uno::RuntimeException(
+                (rtl::OUString(
+                    RTL_CONSTASCII_USTRINGPARAM(
+                        "unexpected"
+                        " com.sun.star.lang.IllegalArgumentException: "))
+                 + e.Message),
+                object);
+        } catch (css::lang::IllegalAccessException & e) {
+            throw css::uno::RuntimeException(
+                (rtl::OUString(
+                    RTL_CONSTASCII_USTRINGPARAM(
+                        "unexpected"
+                        " com.sun.star.lang.IllegalAccessException: "))
+                 + e.Message),
+                object);
+        }
+        return strct;
+    } else if (wrapOptional
+               && type->getName().matchAsciiL(
+                   RTL_CONSTASCII_STRINGPARAM("com.sun.star.beans.Optional<")))
+    {
+        css::uno::Any strct;
+        type->createObject(strct);
+        bool present = value.hasValue();
+        try {
+            css::uno::Reference< css::reflection::XIdlField2 >(
+                type->getField(
+                    rtl::OUString(
+                        RTL_CONSTASCII_USTRINGPARAM("IsPresent"))),
+                css::uno::UNO_QUERY_THROW)->set(
+                    strct, css::uno::makeAny(present));
+            if (present) {
+                css::uno::Reference< css::reflection::XIdlField2 > field(
+                    type->getField(
+                        rtl::OUString(
+                            RTL_CONSTASCII_USTRINGPARAM("Value"))),
+                    css::uno::UNO_QUERY_THROW);
+                field->set(
+                    strct,
+                    wrapValue(
+                        object, value, field->getType(), wrapAmbiguous,
+                        isAmbiguous, wrapDefaulted, isDefaulted, false));
+            }
+        } catch (css::lang::IllegalArgumentException & e) {
+            throw css::uno::RuntimeException(
+                (rtl::OUString(
+                    RTL_CONSTASCII_USTRINGPARAM(
+                        "unexpected"
+                        " com.sun.star.lang.IllegalArgumentException: "))
+                 + e.Message),
+                object);
+        } catch (css::lang::IllegalAccessException & e) {
+            throw css::uno::RuntimeException(
+                (rtl::OUString(
+                    RTL_CONSTASCII_USTRINGPARAM(
+                        "unexpected"
+                        " com.sun.star.lang.IllegalAccessException: "))
+                 + e.Message),
+                object);
+        }
+        return strct;
+    } else {
+        if (wrapAmbiguous || wrapDefaulted || wrapOptional) {
+            throw css::uno::RuntimeException(
+                rtl::OUString(
+                    RTL_CONSTASCII_USTRINGPARAM(
+                        "unexpected type of attribute")),
+                object);
+        }
+        return value;
+    }
+}
+
+PropertySetMixinImpl::PropertySetMixinImpl(
+    css::uno::Reference< css::uno::XComponentContext > const & context,
+    Implements implements,
+    css::uno::Sequence< rtl::OUString > const & absentOptional,
+    css::uno::Type const & type)
+{
+    m_impl = new Impl(context, implements, absentOptional, type);
+    m_impl->acquire();
+}
+
+PropertySetMixinImpl::~PropertySetMixinImpl() {
+    m_impl->release();
+}
+
+void PropertySetMixinImpl::checkUnknown(rtl::OUString const & propertyName) {
+    if (propertyName.getLength() != 0) {
+        m_impl->get(
+            static_cast< css::beans::XPropertySet * >(this), propertyName);
+    }
+}
+
+void PropertySetMixinImpl::prepareSet(
+    rtl::OUString const & propertyName, css::uno::Any const & oldValue,
+    css::uno::Any const & newValue, BoundListeners * boundListeners)
+{
+    Impl::PropertyMap::const_iterator it(m_impl->properties.find(propertyName));
+    OSL_ASSERT(it != m_impl->properties.end());
+    Impl::VetoListenerBag specificVeto;
+    Impl::VetoListenerBag unspecificVeto;
+    {
+        osl::MutexGuard g(m_impl->mutex);
+        if (m_impl->disposed) {
+            throw css::lang::DisposedException(
+                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("disposed")),
+                static_cast< css::beans::XPropertySet * >(this));
+        }
+        if ((it->second.property.Attributes
+             & css::beans::PropertyAttribute::CONSTRAINED)
+            != 0)
+        {
+            Impl::VetoListenerMap::const_iterator i(
+                m_impl->vetoListeners.find(propertyName));
+            if (i != m_impl->vetoListeners.end()) {
+                specificVeto = i->second;
+            }
+            i = m_impl->vetoListeners.find(rtl::OUString());
+            if (i != m_impl->vetoListeners.end()) {
+                unspecificVeto = i->second;
+            }
+        }
+        if ((it->second.property.Attributes
+             & css::beans::PropertyAttribute::BOUND)
+            != 0)
+        {
+            OSL_ASSERT(boundListeners != 0);
+            Impl::BoundListenerMap::const_iterator i(
+                m_impl->boundListeners.find(propertyName));
+            if (i != m_impl->boundListeners.end()) {
+                boundListeners->m_impl->specificListeners = i->second;
+            }
+            i = m_impl->boundListeners.find(rtl::OUString());
+            if (i != m_impl->boundListeners.end()) {
+                boundListeners->m_impl->unspecificListeners = i->second;
+            }
+        }
+    }
+    if ((it->second.property.Attributes
+         & css::beans::PropertyAttribute::CONSTRAINED)
+        != 0)
+    {
+        css::beans::PropertyChangeEvent event(
+            static_cast< css::beans::XPropertySet * >(this), propertyName,
+            false, it->second.property.Handle, oldValue, newValue);
+        for (Impl::VetoListenerBag::iterator i(specificVeto.begin());
+             i != specificVeto.end(); ++i)
+        {
+            try {
+                (*i)->vetoableChange(event);
+            } catch (css::lang::DisposedException &) {}
+        }
+        for (Impl::VetoListenerBag::iterator i(unspecificVeto.begin());
+             i != unspecificVeto.end(); ++i)
+        {
+            try {
+                (*i)->vetoableChange(event);
+            } catch (css::lang::DisposedException &) {}
+        }
+    }
+    if ((it->second.property.Attributes & css::beans::PropertyAttribute::BOUND)
+        != 0)
+    {
+        OSL_ASSERT(boundListeners != 0);
+        boundListeners->m_impl->event = css::beans::PropertyChangeEvent(
+            static_cast< css::beans::XPropertySet * >(this), propertyName,
+            false, it->second.property.Handle, oldValue, newValue);
+    }
+}
+
+void PropertySetMixinImpl::dispose() {
+    Impl::BoundListenerMap boundListeners;
+    Impl::VetoListenerMap vetoListeners;
+    {
+        osl::MutexGuard g(m_impl->mutex);
+        boundListeners.swap(m_impl->boundListeners);
+        vetoListeners.swap(m_impl->vetoListeners);
+        m_impl->disposed = true;
+    }
+    css::lang::EventObject event(
+        static_cast< css::beans::XPropertySet * >(this));
+    for (Impl::BoundListenerMap::iterator i(boundListeners.begin());
+         i != boundListeners.end(); ++i)
+    {
+        for (BoundListenerBag::iterator j(i->second.begin());
+             j != i->second.end(); ++j)
+        {
+            (*j)->disposing(event);
+        }
+    }
+    for (Impl::VetoListenerMap::iterator i(vetoListeners.begin());
+         i != vetoListeners.end(); ++i)
+    {
+        for (Impl::VetoListenerBag::iterator j(i->second.begin());
+             j != i->second.end(); ++j)
+        {
+            (*j)->disposing(event);
+        }
+    }
+}
+
+css::uno::Any PropertySetMixinImpl::queryInterface(css::uno::Type const & type)
+    throw (css::uno::RuntimeException)
+{
+    if (((m_impl->implements & IMPLEMENTS_PROPERTY_SET) != 0
+         && type == css::beans::XPropertySet::static_type()))
+    {
+        css::uno::Reference< css::uno::XInterface > ifc(
+            static_cast< css::beans::XPropertySet * >(this));
+        return css::uno::Any(&ifc, type);
+    } else if ((m_impl->implements & IMPLEMENTS_FAST_PROPERTY_SET) != 0
+               && type == css::beans::XFastPropertySet::static_type())
+    {
+        css::uno::Reference< css::uno::XInterface > ifc(
+            static_cast< css::beans::XFastPropertySet * >(this));
+        return css::uno::Any(&ifc, type);
+    } else if ((m_impl->implements & IMPLEMENTS_PROPERTY_ACCESS) != 0
+               && type == css::beans::XPropertyAccess::static_type())
+    {
+        css::uno::Reference< css::uno::XInterface > ifc(
+            static_cast< css::beans::XPropertyAccess * >(this));
+        return css::uno::Any(&ifc, type);
+    } else {
+        return css::uno::Any();
+    }
+}
+
+css::uno::Reference< css::beans::XPropertySetInfo >
+PropertySetMixinImpl::getPropertySetInfo() throw (css::uno::RuntimeException) {
+    try {
+        return new Info(m_impl);
+    } catch (std::bad_alloc &) {
+        //TODO  OutOfMemoryException:
+        throw css::uno::RuntimeException(
+            rtl::OUString(), static_cast< css::beans::XPropertySet * >(this));
+    }
+}
+
+void PropertySetMixinImpl::setPropertyValue(
+    rtl::OUString const & propertyName, css::uno::Any const & value)
+    throw (
+        css::beans::UnknownPropertyException, css::beans::PropertyVetoException,
+        css::lang::IllegalArgumentException, css::lang::WrappedTargetException,
+        css::uno::RuntimeException)
+{
+    try {
+        m_impl->setProperty(
+            static_cast< css::beans::XPropertySet * >(this), propertyName,
+            value, false, false, 1);
+    } catch (std::bad_alloc &) {
+        //TODO  OutOfMemoryException:
+        throw css::uno::RuntimeException(
+            rtl::OUString(), static_cast< css::beans::XPropertySet * >(this));
+    }
+}
+
+css::uno::Any PropertySetMixinImpl::getPropertyValue(
+    rtl::OUString const & propertyName)
+    throw (
+        css::beans::UnknownPropertyException, css::lang::WrappedTargetException,
+        css::uno::RuntimeException)
+{
+    try {
+        return m_impl->getProperty(
+            static_cast< css::beans::XPropertySet * >(this), propertyName, 0);
+    } catch (std::bad_alloc &) {
+        //TODO  OutOfMemoryException:
+        throw css::uno::RuntimeException(
+            rtl::OUString(), static_cast< css::beans::XPropertySet * >(this));
+    }
+}
+
+void PropertySetMixinImpl::addPropertyChangeListener(
+    rtl::OUString const & propertyName,
+    css::uno::Reference< css::beans::XPropertyChangeListener > const & listener)
+    throw (
+        css::beans::UnknownPropertyException, css::lang::WrappedTargetException,
+        css::uno::RuntimeException)
+{
+    css::uno::Reference< css::beans::XPropertyChangeListener >(
+        listener, css::uno::UNO_QUERY_THROW); // reject NULL listener
+    checkUnknown(propertyName);
+    try {
+        bool disposed;
+        {
+            osl::MutexGuard g(m_impl->mutex);
+            disposed = m_impl->disposed;
+            if (!disposed) {
+                m_impl->boundListeners[propertyName].insert(listener);
+            }
+        }
+        if (disposed) {
+            listener->disposing(
+                css::lang::EventObject(
+                    static_cast< css::beans::XPropertySet * >(this)));
+        }
+    } catch (std::bad_alloc &) {
+        //TODO  OutOfMemoryException:
+        throw css::uno::RuntimeException(
+            rtl::OUString(), static_cast< css::beans::XPropertySet * >(this));
+    }
+}
+
+void PropertySetMixinImpl::removePropertyChangeListener(
+    rtl::OUString const & propertyName,
+    css::uno::Reference< css::beans::XPropertyChangeListener > const & listener)
+    throw (
+        css::beans::UnknownPropertyException, css::lang::WrappedTargetException,
+        css::uno::RuntimeException)
+{
+    OSL_ASSERT(listener.is());
+    checkUnknown(propertyName);
+    try {
+        osl::MutexGuard g(m_impl->mutex);
+        Impl::BoundListenerMap::iterator i(
+            m_impl->boundListeners.find(propertyName));
+        if (i != m_impl->boundListeners.end()) {
+            BoundListenerBag::iterator j(i->second.find(listener));
+            if (j != i->second.end()) {
+                i->second.erase(j);
+            }
+        }
+    } catch (std::bad_alloc &) {
+        //TODO  OutOfMemoryException:
+        throw css::uno::RuntimeException(
+            rtl::OUString(), static_cast< css::beans::XPropertySet * >(this));
+    }
+}
+
+void PropertySetMixinImpl::addVetoableChangeListener(
+    rtl::OUString const & propertyName,
+    css::uno::Reference< css::beans::XVetoableChangeListener > const & listener)
+    throw (
+        css::beans::UnknownPropertyException, css::lang::WrappedTargetException,
+        css::uno::RuntimeException)
+{
+    css::uno::Reference< css::beans::XVetoableChangeListener >(
+        listener, css::uno::UNO_QUERY_THROW); // reject NULL listener
+    checkUnknown(propertyName);
+    try {
+        bool disposed;
+        {
+            osl::MutexGuard g(m_impl->mutex);
+            disposed = m_impl->disposed;
+            if (!disposed) {
+                m_impl->vetoListeners[propertyName].insert(listener);
+            }
+        }
+        if (disposed) {
+            listener->disposing(
+                css::lang::EventObject(
+                    static_cast< css::beans::XPropertySet * >(this)));
+        }
+    } catch (std::bad_alloc &) {
+        //TODO  OutOfMemoryException:
+        throw css::uno::RuntimeException(
+            rtl::OUString(), static_cast< css::beans::XPropertySet * >(this));
+    }
+}
+
+void PropertySetMixinImpl::removeVetoableChangeListener(
+    rtl::OUString const & propertyName,
+    css::uno::Reference< css::beans::XVetoableChangeListener > const & listener)
+    throw (
+        css::beans::UnknownPropertyException, css::lang::WrappedTargetException,
+        css::uno::RuntimeException)
+{
+    OSL_ASSERT(listener.is());
+    checkUnknown(propertyName);
+    try {
+        osl::MutexGuard g(m_impl->mutex);
+        Impl::VetoListenerMap::iterator i(
+            m_impl->vetoListeners.find(propertyName));
+        if (i != m_impl->vetoListeners.end()) {
+            Impl::VetoListenerBag::iterator j(i->second.find(listener));
+            if (j != i->second.end()) {
+                i->second.erase(j);
+            }
+        }
+    } catch (std::bad_alloc &) {
+        //TODO  OutOfMemoryException:
+        throw css::uno::RuntimeException(
+            rtl::OUString(), static_cast< css::beans::XPropertySet * >(this));
+    }
+}
+
+void PropertySetMixinImpl::setFastPropertyValue(
+    sal_Int32 handle, css::uno::Any const & value)
+    throw (
+        css::beans::UnknownPropertyException, css::beans::PropertyVetoException,
+        css::lang::IllegalArgumentException, css::lang::WrappedTargetException,
+        css::uno::RuntimeException)
+{
+    try {
+        m_impl->setProperty(
+            static_cast< css::beans::XPropertySet * >(this),
+            m_impl->translateHandle(
+                static_cast< css::beans::XPropertySet * >(this), handle),
+            value, false, false, 1);
+    } catch (std::bad_alloc &) {
+        //TODO  OutOfMemoryException:
+        throw css::uno::RuntimeException(
+            rtl::OUString(), static_cast< css::beans::XPropertySet * >(this));
+    }
+}
+
+css::uno::Any PropertySetMixinImpl::getFastPropertyValue(sal_Int32 handle)
+    throw (
+        css::beans::UnknownPropertyException, css::lang::WrappedTargetException,
+        css::uno::RuntimeException)
+{
+    try {
+        return m_impl->getProperty(
+            static_cast< css::beans::XPropertySet * >(this),
+            m_impl->translateHandle(
+                static_cast< css::beans::XPropertySet * >(this), handle),
+            0);
+    } catch (std::bad_alloc &) {
+        //TODO  OutOfMemoryException:
+        throw css::uno::RuntimeException(
+            rtl::OUString(), static_cast< css::beans::XPropertySet * >(this));
+    }
+}
+
+css::uno::Sequence< css::beans::PropertyValue >
+PropertySetMixinImpl::getPropertyValues() throw (css::uno::RuntimeException) {
+    try {
+        css::uno::Sequence< css::beans::PropertyValue > s(
+            m_impl->handleMap.getLength());
+        sal_Int32 n = 0;
+        for (sal_Int32 i = 0; i < m_impl->handleMap.getLength(); ++i) {
+            try {
+                s[n].Value = m_impl->getProperty(
+                    static_cast< css::beans::XPropertySet * >(this),
+                    m_impl->handleMap[i], &s[n].State);
+            } catch (css::beans::UnknownPropertyException &) {
+                continue;
+            } catch (css::lang::WrappedTargetException & e) {
+                throw css::lang::WrappedTargetRuntimeException(
+                    e.Message, static_cast< css::beans::XPropertySet * >(this),
+                    e.TargetException);
+            }
+            s[n].Name = m_impl->handleMap[i];
+            s[n].Handle = i;
+            ++n;
+        }
+        s.realloc(n);
+        return s;
+    } catch (std::bad_alloc &) {
+        //TODO  OutOfMemoryException:
+        throw css::uno::RuntimeException(
+            rtl::OUString(), static_cast< css::beans::XPropertySet * >(this));
+    }
+}
+
+void PropertySetMixinImpl::setPropertyValues(
+    css::uno::Sequence< css::beans::PropertyValue > const & props)
+    throw (
+        css::beans::UnknownPropertyException, css::beans::PropertyVetoException,
+        css::lang::IllegalArgumentException, css::lang::WrappedTargetException,
+        css::uno::RuntimeException)
+{
+    try {
+        for (sal_Int32 i = 0; i < props.getLength(); ++i) {
+            if (props[i].Handle != -1
+                && (props[i].Name
+                    != m_impl->translateHandle(
+                        static_cast< css::beans::XPropertySet * >(this),
+                        props[i].Handle)))
+            {
+                throw css::beans::UnknownPropertyException(
+                    (rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("name "))
+                     + props[i].Name
+                     + rtl::OUString(
+                         RTL_CONSTASCII_USTRINGPARAM(" does not match handle "))
+                     + rtl::OUString::valueOf(props[i].Handle)),
+                    static_cast< css::beans::XPropertySet * >(this));
+            }
+            m_impl->setProperty(
+                static_cast< css::beans::XPropertySet * >(this), props[i].Name,
+                props[i].Value,
+                props[i].State == css::beans::PropertyState_AMBIGUOUS_VALUE,
+                props[i].State == css::beans::PropertyState_DEFAULT_VALUE, 0);
+        }
+    } catch (std::bad_alloc &) {
+        //TODO  OutOfMemoryException:
+        throw css::uno::RuntimeException(
+            rtl::OUString(), static_cast< css::beans::XPropertySet * >(this));
+    }
+}
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

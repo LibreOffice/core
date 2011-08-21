@@ -1,0 +1,7 @@
+module ooo { module vba { module word {
+    constants WdEmailHTMLFidelity {
+        const long wdEmailHTMLFidelityHigh = 3;
+        const long wdEmailHTMLFidelityLow = 1;
+        const long wdEmailHTMLFidelityMedium = 2;
+    };
+}; }; };

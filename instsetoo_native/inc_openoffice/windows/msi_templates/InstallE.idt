@@ -1,0 +1,192 @@
+Action	Condition	Sequence
+s72	S255	I2
+InstallExecuteSequence	Action
+AllocateRegistrySpace	NOT Installed	750
+AppSearch		25
+BindImage		2100
+CCPSearch	CCP_TEST	200
+CostFinalize		500
+CostInitialize		350
+CreateFolders		1850
+CreateShortcuts		2150
+DeleteServices	VersionNT	1000
+DontRemoveProducts	REMOVEOLDPRODUCTS<>"1"	155
+DontRemoveLpafProducts	REMOVEOLDPRODUCTS<>"1"	160
+DontRemoveLparProducts	REMOVEOLDPRODUCTS<>"1"	160
+DontRemoveLpasinProducts	REMOVEOLDPRODUCTS<>"1"	160
+DontRemoveLpbebyProducts	REMOVEOLDPRODUCTS<>"1"	160
+DontRemoveLpboProducts	REMOVEOLDPRODUCTS<>"1"	160
+DontRemoveLpbgProducts	REMOVEOLDPRODUCTS<>"1"	160
+DontRemoveLpbrProducts	REMOVEOLDPRODUCTS<>"1"	160
+DontRemoveLpbrxProducts	REMOVEOLDPRODUCTS<>"1"	160
+DontRemoveLpbnProducts	REMOVEOLDPRODUCTS<>"1"	160
+DontRemoveLpbnbdProducts	REMOVEOLDPRODUCTS<>"1"	160
+DontRemoveLpbninProducts	REMOVEOLDPRODUCTS<>"1"	160
+DontRemoveLpbsProducts	REMOVEOLDPRODUCTS<>"1"	160
+DontRemoveLpbyProducts	REMOVEOLDPRODUCTS<>"1"	160
+DontRemoveLpcaProducts	REMOVEOLDPRODUCTS<>"1"	160
+DontRemoveLpcsProducts	REMOVEOLDPRODUCTS<>"1"	160
+DontRemoveLpcyProducts	REMOVEOLDPRODUCTS<>"1"	160
+DontRemoveLpdaProducts	REMOVEOLDPRODUCTS<>"1"	160
+DontRemoveLpdeProducts	REMOVEOLDPRODUCTS<>"1"	160
+DontRemoveLpdgoProducts	REMOVEOLDPRODUCTS<>"1"	160
+DontRemoveLpdzProducts	REMOVEOLDPRODUCTS<>"1"	160
+DontRemoveLpelProducts	REMOVEOLDPRODUCTS<>"1"	160
+DontRemoveLpengbProducts	REMOVEOLDPRODUCTS<>"1"	160
+DontRemoveLpenusProducts	REMOVEOLDPRODUCTS<>"1"	160
+DontRemoveLpenzaProducts	REMOVEOLDPRODUCTS<>"1"	160
+DontRemoveLpeoProducts	REMOVEOLDPRODUCTS<>"1"	160
+DontRemoveLpesProducts	REMOVEOLDPRODUCTS<>"1"	160
+DontRemoveLpetProducts	REMOVEOLDPRODUCTS<>"1"	160
+DontRemoveLpeuProducts	REMOVEOLDPRODUCTS<>"1"	160
+DontRemoveLpfaProducts	REMOVEOLDPRODUCTS<>"1"	160
+DontRemoveLpfiProducts	REMOVEOLDPRODUCTS<>"1"	160
+DontRemoveLpfrProducts	REMOVEOLDPRODUCTS<>"1"	160
+DontRemoveLpgaProducts	REMOVEOLDPRODUCTS<>"1"	160
+DontRemoveLpgdProducts	REMOVEOLDPRODUCTS<>"1"	160
+DontRemoveLpglProducts	REMOVEOLDPRODUCTS<>"1"	160
+DontRemoveLpguProducts	REMOVEOLDPRODUCTS<>"1"	160
+DontRemoveLpguinProducts	REMOVEOLDPRODUCTS<>"1"	160
+DontRemoveLpheProducts	REMOVEOLDPRODUCTS<>"1"	160
+DontRemoveLphiProducts	REMOVEOLDPRODUCTS<>"1"	160
+DontRemoveLphiinProducts	REMOVEOLDPRODUCTS<>"1"	160
+DontRemoveLphrProducts	REMOVEOLDPRODUCTS<>"1"	160
+DontRemoveLphuProducts	REMOVEOLDPRODUCTS<>"1"	160
+DontRemoveLpisProducts	REMOVEOLDPRODUCTS<>"1"	160
+DontRemoveLpitProducts	REMOVEOLDPRODUCTS<>"1"	160
+DontRemoveLpjaProducts	REMOVEOLDPRODUCTS<>"1"	160
+DontRemoveLpkidProducts	REMOVEOLDPRODUCTS<>"1"	160
+DontRemoveLpkyProducts	REMOVEOLDPRODUCTS<>"1"	160
+DontRemoveLpkaProducts	REMOVEOLDPRODUCTS<>"1"	160
+DontRemoveLpkkProducts	REMOVEOLDPRODUCTS<>"1"	160
+DontRemoveLpkmProducts	REMOVEOLDPRODUCTS<>"1"	160
+DontRemoveLpknProducts	REMOVEOLDPRODUCTS<>"1"	160
+DontRemoveLpkoProducts	REMOVEOLDPRODUCTS<>"1"	160
+DontRemoveLpkokProducts	REMOVEOLDPRODUCTS<>"1"	160
+DontRemoveLpksProducts	REMOVEOLDPRODUCTS<>"1"	160
+DontRemoveLpkuProducts	REMOVEOLDPRODUCTS<>"1"	160
+DontRemoveLploProducts	REMOVEOLDPRODUCTS<>"1"	160
+DontRemoveLpltProducts	REMOVEOLDPRODUCTS<>"1"	160
+DontRemoveLplvProducts	REMOVEOLDPRODUCTS<>"1"	160
+DontRemoveLpmaiProducts	REMOVEOLDPRODUCTS<>"1"	160
+DontRemoveLpmkProducts	REMOVEOLDPRODUCTS<>"1"	160
+DontRemoveLpmnProducts	REMOVEOLDPRODUCTS<>"1"	160
+DontRemoveLpmniProducts	REMOVEOLDPRODUCTS<>"1"	160
+DontRemoveLpmsProducts	REMOVEOLDPRODUCTS<>"1"	160
+DontRemoveLpmlinProducts	REMOVEOLDPRODUCTS<>"1"	160
+DontRemoveLpmrinProducts	REMOVEOLDPRODUCTS<>"1"	160
+DontRemoveLpmyProducts	REMOVEOLDPRODUCTS<>"1"	160
+DontRemoveLpneProducts	REMOVEOLDPRODUCTS<>"1"	160
+DontRemoveLpnbProducts	REMOVEOLDPRODUCTS<>"1"	160
+DontRemoveLpnlProducts	REMOVEOLDPRODUCTS<>"1"	160
+DontRemoveLpnnProducts	REMOVEOLDPRODUCTS<>"1"	160
+DontRemoveLpnoProducts	REMOVEOLDPRODUCTS<>"1"	160
+DontRemoveLpnrProducts	REMOVEOLDPRODUCTS<>"1"	160
+DontRemoveLpnsProducts	REMOVEOLDPRODUCTS<>"1"	160
+DontRemoveLpomProducts	REMOVEOLDPRODUCTS<>"1"	160
+DontRemoveLpocProducts	REMOVEOLDPRODUCTS<>"1"	160
+DontRemoveLporinProducts	REMOVEOLDPRODUCTS<>"1"	160
+DontRemoveLppapProducts	REMOVEOLDPRODUCTS<>"1"	160
+DontRemoveLppainProducts	REMOVEOLDPRODUCTS<>"1"	160
+DontRemoveLpplProducts	REMOVEOLDPRODUCTS<>"1"	160
+DontRemoveLppsProducts	REMOVEOLDPRODUCTS<>"1"	160
+DontRemoveLpptProducts	REMOVEOLDPRODUCTS<>"1"	160
+DontRemoveLpptbrProducts	REMOVEOLDPRODUCTS<>"1"	160
+DontRemoveLpruProducts	REMOVEOLDPRODUCTS<>"1"	160
+DontRemoveLprwProducts	REMOVEOLDPRODUCTS<>"1"	160
+DontRemoveLpsatProducts	REMOVEOLDPRODUCTS<>"1"	160
+DontRemoveLpsainProducts	REMOVEOLDPRODUCTS<>"1"	160
+DontRemoveLpsiProducts	REMOVEOLDPRODUCTS<>"1"	160
+DontRemoveLpscProducts	REMOVEOLDPRODUCTS<>"1"	160
+DontRemoveLpsdProducts	REMOVEOLDPRODUCTS<>"1"	160
+DontRemoveLpskProducts	REMOVEOLDPRODUCTS<>"1"	160
+DontRemoveLpslProducts	REMOVEOLDPRODUCTS<>"1"	160
+DontRemoveLpshProducts	REMOVEOLDPRODUCTS<>"1"	160
+DontRemoveLpsrProducts	REMOVEOLDPRODUCTS<>"1"	160
+DontRemoveLpssProducts	REMOVEOLDPRODUCTS<>"1"	160
+DontRemoveLpstProducts	REMOVEOLDPRODUCTS<>"1"	160
+DontRemoveLpsvProducts	REMOVEOLDPRODUCTS<>"1"	160
+DontRemoveLpswProducts	REMOVEOLDPRODUCTS<>"1"	160
+DontRemoveLpswtzProducts	REMOVEOLDPRODUCTS<>"1"	160
+DontRemoveLpteinProducts	REMOVEOLDPRODUCTS<>"1"	160
+DontRemoveLptierProducts	REMOVEOLDPRODUCTS<>"1"	160
+DontRemoveLptainProducts	REMOVEOLDPRODUCTS<>"1"	160
+DontRemoveLpthProducts	REMOVEOLDPRODUCTS<>"1"	160
+DontRemoveLptnProducts	REMOVEOLDPRODUCTS<>"1"	160
+DontRemoveLptrProducts	REMOVEOLDPRODUCTS<>"1"	160
+DontRemoveLptsProducts	REMOVEOLDPRODUCTS<>"1"	160
+DontRemoveLptgProducts	REMOVEOLDPRODUCTS<>"1"	160
+DontRemoveLpugProducts	REMOVEOLDPRODUCTS<>"1"	160
+DontRemoveLpurinProducts	REMOVEOLDPRODUCTS<>"1"	160
+DontRemoveLpukProducts	REMOVEOLDPRODUCTS<>"1"	160
+DontRemoveLpuzProducts	REMOVEOLDPRODUCTS<>"1"	160
+DontRemoveLpveProducts	REMOVEOLDPRODUCTS<>"1"	160
+DontRemoveLpviProducts	REMOVEOLDPRODUCTS<>"1"	160
+DontRemoveLpxhProducts	REMOVEOLDPRODUCTS<>"1"	160
+DontRemoveLpzhcnProducts	REMOVEOLDPRODUCTS<>"1"	160
+DontRemoveLpzhtwProducts	REMOVEOLDPRODUCTS<>"1"	160
+DontRemoveLpzuProducts	REMOVEOLDPRODUCTS<>"1"	160
+DuplicateFiles		2050
+FileCost		400
+FindRelatedProducts	NOT ISSETUPDRIVEN	100
+InstallFiles		1950
+InstallFinalize		3150
+InstallInitialize		700
+InstallODBC		2600
+InstallServices	VersionNT	2750
+InstallValidate		650
+ISInitAllUsers	VersionNT And NOT Installed And Privileged	525
+IsolateComponents		450
+LaunchConditions		50
+MigrateFeatureStates		600
+MoveFiles		1900
+MsiPublishAssemblies		3025
+MsiUnpublishAssemblies		875
+NewProductFound	NEWPRODUCTS	110
+PatchFiles		2000
+ProcessComponents		800
+PublishComponents		3000
+PublishFeatures		3050
+PublishProduct		3100
+RegisterClassInfo		2200
+RegisterComPlus		2700
+RegisterExtensionInfo		2250
+RegisterFonts		2550
+RegisterMIMEInfo		2350
+RegisterProduct		2950
+RegisterProgIdInfo		2300
+RegisterTypeLibraries		2650
+RegisterUser		2900
+RemoveDuplicateFiles		1700
+RemoveEnvironmentStrings		1650
+RemoveExistingProducts		675
+RemoveFiles		1750
+RemoveFolders		1800
+RemoveIniValues		1550
+RemoveODBC		1200
+RemoveRegistryValues		1300
+RemoveShortcuts		1600
+RunningOffice	OFFICERUNS="1"	135
+RMCCPSearch	Not CCP_SUCCESS And CCP_TEST	250
+SameProductFound	SAMEPRODUCTS	120
+ScheduleReboot	ISSCHEDULEREBOOT	3125
+SelfRegModules		2850
+SelfUnregModules		1100
+SetARPInstallLocation		990
+SetInstalllocation		3140
+SetODBCFolders		550
+StartServices	VersionNT	2800
+StopServices	VersionNT	950
+UnpublishComponents		850
+UnpublishFeatures		900
+UnregisterClassInfo		1350
+UnregisterComPlus		1050
+UnregisterExtensionInfo		1400
+UnregisterFonts		1250
+UnregisterMIMEInfo		1500
+UnregisterProgIdInfo		1450
+UnregisterTypeLibraries		1150
+ValidateProductID		300
+WriteEnvironmentStrings		2500
+WriteIniValues		2450
+WriteRegistryValues		2400

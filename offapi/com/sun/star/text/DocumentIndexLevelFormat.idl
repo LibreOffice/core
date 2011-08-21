@@ -1,0 +1,154 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_text_DocumentIndex_idl__
+#define __com_sun_star_text_DocumentIndex_idl__
+
+#include <com/sun/star/container/XIndexReplace.idl>
+
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module text {
+
+//=============================================================================
+
+// DocMerge from xml: service com::sun::star::text::DocumentIndexLevelFormat
+/** This service provides access to the structure of the levels of document indexes.
+
+
+    <p>
+    The element type is Sequence&lt; PropertyValues &gt;. Each element in this sequence represents
+    a member of an index line. The following properties are part of such an element.
+    </p>
+    <ul>
+    <li>
+    <p>TokenType</p>
+    <p>Values:</p>
+    <ul>
+    <li>
+    <p>TokenEntryNumber - chapter number, used in content indexes
+    only</p>
+    </li>
+    <li>
+    <p>TokenEntryText  - text of the entry
+    </p>
+    </li>
+    <li>
+    <p>TokenTabStop - tab stop
+    </p>
+    </li>
+    <li>
+    <p>TokenText - user defined text
+    </p>
+    </li>
+    <li>
+    <p>TokenPageNumber - page number
+    </p>
+    </li>
+    <li>
+    <p>TokenChapterInfo - chapter info, in illustration indexes,
+    table indexes, user indexes, table of objects and alphabetical indexes
+    only</p>
+    </li>
+    <li>
+    <p>TokenHyperlinkStart - start of a hyperlink</p>
+    </li>
+    <li>
+    <p>TokenHyperlinkEnd - end of a hyperlink</p>
+    </li>
+    <li>
+    <p>TokenBibliographyDataField - bibliographic data field
+    </p>
+    </li>
+    </ul>
+    </li>
+    <li>
+    <p>CharacterStyleName</p>
+    <p>Name of the character style applied to the element. Invalid in tab stops.</p>
+    </li>
+    <li>
+    <p>TabStopRightAligned</p>
+    <p>Tab stop is right aligned. Only valid for tab stops.</p>
+    </li>
+    <li>
+    <p>TabStopPosition</p>
+    <p>Position of the tab stop. Only valid for tab stops.</p>
+    </li>
+    <li>
+    <p>TabStopFillCharacter</p>
+    <p>Fill character in tab stops. Only valid for tab stops.</p>
+    </li>
+    <li>
+    <p>WithTab</p>
+    <p>If true insert tab character.</p>
+    </li>
+    <li>
+    <p>Text</p>
+    <p>Text. Only valid in user defined text.</p>
+    </li>
+    <li>
+    <p>ChapterFormat</p>
+    <p>Valid in chapter info and entry number only. See <type>ChapterFormat</type>.</p>
+    <p>Other information.</p>
+    <ul>
+    <li>
+    <p>In chapter info only com.sun.star.text.ChapterFormat.NUMBER, com.sun.star.text.ChapterFormat.NAME, and
+    com.sun.star.text.ChapterFormat.NAME_NUMBER constants are allowed.</p>
+    </li>
+    <li>
+    <p>In entry number only com.sun.star.text.ChapterFormat.NUMBER and com.sun.star.text.ChapterFormat.DIGIT constants are allowed.</p>
+    </li>
+    </ul>
+    </li>
+    <li>
+    <p>ChapterLevel</p>
+    <p>Valid in chapter info and entry number only.  Denotes the level up to which
+    the chapter information is given. Values permitted 1 to 10 inclusive.</p>
+    </li>
+    </ul>
+ */
+published service DocumentIndexLevelFormat
+{
+    // DocMerge: empty anyway
+    interface com::sun::star::container::XIndexReplace;
+
+    //-------------------------------------------------------------------------
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif
+
+
+
+
+
+
+

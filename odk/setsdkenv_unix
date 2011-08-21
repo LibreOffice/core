@@ -1,0 +1,67 @@
+#! /bin/sh
+
+OSTYPE=`uname -s`
+HOSTNAME=`hostname`
+CURRENTDIR=`/bin/pwd`
+SDKTMPDIR=`dirname $0`
+OO_SDK_HOME=`(cd $SDKTMPDIR && pwd && cd $CURRENTDIR) | head -n 1`
+OOVERSION=`cat $OO_SDK_HOME/settings/dk.mk | tail -2 | head -n 1 | cut -d"=" -f2 | cut -d"." -f1,2`
+if [ "$OSTYPE" = "Darwin" ] 
+then
+    OO_SDK_NAME=`basename $OO_SDK_HOME`
+else
+    OO_SDK_NAME=libreoffice${OOVERSION}_sdk
+fi
+
+export OO_SDK_HOME
+
+if [ "$1" = "--force-configure" ]
+then
+    if [ -r $HOME/$OO_SDK_NAME/$HOSTNAME/setsdkenv_unix.sh ]
+    then
+	rm $HOME/$OO_SDK_NAME/$HOSTNAME/setsdkenv_unix.sh
+    fi	
+    if [ -r $HOME/$OO_SDK_NAME/$HOSTNAME/setsdkenv_unix.csh ]
+    then
+	rm $HOME/$OO_SDK_NAME/$HOSTNAME/setsdkenv_unix.csh
+    fi
+    shift
+elif [ "$1" = "-h" ] || [ "$1" = "--help" ] || [ -n "$1" ]
+then
+    echo 
+    echo " using: setsdkenv_unix [options]"
+    echo ""
+    echo " options:"
+    echo "   --force-configure : force a new configuration of your SDK environment."
+    echo "                       Alternatively can you edit your SDK environment scripts directly:"
+    echo "                        $HOME/$OO_SDK_NAME/setsdkenv_unix.sh"
+    echo "                        $HOME/$OO_SDK_NAME/setsdkenv_unix.csh"
+    echo "   -h, --help        : print this help and exit"
+    echo
+    exit 1
+fi
+
+# source the prepared environment and start a new shell
+if [ -r $HOME/$OO_SDK_NAME/$HOSTNAME/setsdkenv_unix.sh ]
+then
+    . $HOME/$OO_SDK_NAME/$HOSTNAME/setsdkenv_unix.sh
+else
+    echo 
+    echo " ************************************************************************"
+    echo " *"
+    echo " *  You have to configure your SDK environment first before you can"
+    echo " *  can use it! The configuration has to be done only once."
+    echo " *"
+    echo " ************************************************************************"
+    echo 
+
+    perl $OO_SDK_HOME/configure.pl $HOSTNAME $OO_SDK_HOME $OO_SDK_NAME
+
+    . $HOME/$OO_SDK_NAME/$HOSTNAME/setsdkenv_unix.sh
+fi
+
+"$SHELL" "$@"
+echo  Shell terminated.
+
+TERMHEAD=$HOSTNAME
+echo "]2;$TERMHEAD"

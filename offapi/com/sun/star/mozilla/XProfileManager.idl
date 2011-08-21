@@ -1,0 +1,112 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_mozilla_XProfileManager_idl__
+#define __com_sun_star_mozilla_XProfileManager_idl__
+
+#include <com/sun/star/uno/XInterface.idl>
+#include <com/sun/star/mozilla/MozillaProductType.idl>
+
+
+
+ module com {  module sun {  module star {  module mozilla {
+
+
+
+/** is the interface to boot up and switch Mozilla/Thunderbird profiles
+
+    @see com::sun::star::mozilla::MozillaProductType
+    @see com::sun::star::mozilla::XProfileDiscover
+    @see com::sun::star::mozilla::MozillaBootstrap
+ */
+published interface XProfileManager: com::sun::star::uno::XInterface
+{
+
+    // DocMerge from xml: method com::sun::star::mozilla::XProfileManager::bootupProfile
+    /** attempts to init XPCOM runtime using given profile.
+
+        @param product
+            is the product to start up.
+        @param profileName
+            the profile name to be used.
+        @returns
+            the current reference count for the given profile.
+
+     */
+    long bootupProfile( [in]MozillaProductType product,[in]string profileName);
+
+    /** attempts to shutdown the current profile.
+
+        @returns
+            the current reference count for the current profile.
+
+     */
+    long shutdownProfile();
+
+    /** attempts to get the current product.
+
+        @returns
+            the current used product.
+
+     */
+    MozillaProductType getCurrentProduct();
+
+    /** attempts to get the current profile name.
+
+        @returns
+            the current used profile.
+
+     */
+    string getCurrentProfile();
+
+    /** attempts to check whether the current profile locked or not
+
+        @returns
+            return sal_True is current profile is locked
+
+     */
+    boolean isCurrentProfileLocked();
+
+    /** attempts to set the current used profile name for the given product.
+
+        @param product
+            is the product to be used.
+        @param profileName
+            the profile name to be used.
+        @returns
+            the current used profile name for the given product.
+
+     */
+    string setCurrentProfile( [in]MozillaProductType product,[in]string profileName);
+
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

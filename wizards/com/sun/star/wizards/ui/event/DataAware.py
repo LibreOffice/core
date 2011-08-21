@@ -101,6 +101,7 @@ class DataAware(object):
             self.enableControls(ui)
         except Exception:
             traceback.print_exc()
+
     '''
     given a collection containing DataAware objects,
     calls updateUI() on each memebr of the collection.

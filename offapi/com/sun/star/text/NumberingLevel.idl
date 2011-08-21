@@ -1,0 +1,256 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_text_NumberingLevel_idl__
+#define __com_sun_star_text_NumberingLevel_idl__
+
+#include <com/sun/star/util/Color.idl>
+#include <com/sun/star/awt/Size.idl>
+#include <com/sun/star/awt/FontDescriptor.idl>
+#include <com/sun/star/awt/XBitmap.idl>
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module text {
+
+//=============================================================================
+
+/** provides access to a numbering level as part of the Numbering Rules.
+ */
+published service NumberingLevel
+{
+    //-------------------------------------------------------------------------
+
+    /** adjusts the numbering (HoriOrientation_LEFT/RIGHT/CENTER)
+
+        <p>
+        </p>
+     */
+    [property] short Adjust;
+
+    //-------------------------------------------------------------------------
+
+    /** number of upper levels that are included in the current numbering symbol.
+     */
+    [optional, property] short ParentNumbering;
+
+    //-------------------------------------------------------------------------
+
+    /** the prefix of the numbering symbol.
+     */
+    [property] string Prefix;
+
+    //-------------------------------------------------------------------------
+
+    /** the suffix of the numbering symbol.
+     */
+    [property] string Suffix;
+
+    //-------------------------------------------------------------------------
+
+    /** Name of the character style that is used for the numbering symbol.
+     */
+    [optional, property] string CharStyleName;
+
+    //-------------------------------------------------------------------------
+
+    /** the ID of the symbol in the given font. This is only valid if the
+        numbering type is <const scope="com::sun::star::style">NumberingType::CHAR_SPECIAL</const>.
+          @deprecated
+     */
+    [optional, property] short BulletId;
+    //-------------------------------------------------------------------------
+
+    /** contains the symbol in the given font. This is only valid if the
+        numbering type is <const scope="com::sun::star::style">NumberingType::CHAR_SPECIAL</const>.
+     */
+    [property] string BulletChar;
+    //-------------------------------------------------------------------------
+
+    /** the name of the font for the symbol. This is only valid if the
+        numbering type is <const scope="com::sun::star::style">NumberingType::CHAR_SPECIAL</const>.
+     */
+    [property] string BulletFontName;
+
+    //-------------------------------------------------------------------------
+
+    /** the font used to paint the bullet.
+     */
+    [optional, property] com::sun::star::awt::FontDescriptor BulletFont;
+
+    //-------------------------------------------------------------------------
+
+    /** the URL of the graphic file that is used as the numbering symbol.
+
+        <p> This is only valid if the numbering type is
+        <const scope="com::sun::star::style">NumberingType::BITMAP</const>.</p>
+     */
+    [property] string GraphicURL;
+
+    //-------------------------------------------------------------------------
+
+    /** the bitmap containing the bullet.
+     */
+    [optional, property] com::sun::star::awt::XBitmap GraphicBitmap;
+
+    //-------------------------------------------------------------------------
+
+    /** size of the graphic that is used as bullet.
+     */
+    [optional, property] com::sun::star::awt::Size    GraphicSize;
+    //-------------------------------------------------------------------------
+
+    //-------------------------------------------------------------------------
+
+    /** contains the vertical orientation of a graphic.
+
+        <p> It is set using com::sun::star::text::VertOrientation.</p>
+     */
+    [optional, property] short VertOrient;
+    //-------------------------------------------------------------------------
+
+    /** specifies the start value for the numbering.
+
+        <p>This property is only valid if the numbering type is not
+        <const scope="com::sun::star::style">NumberingType::BITMAP</const> or
+        <const scope="com::sun::star::style">NumberingType::CHAR_SPECIAL</const>.</p>
+     */
+    [optional, property] short StartWith;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies the left margin of the numbering
+     */
+    [property] long LeftMargin;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies the distance between the numbering symbol and the text of
+        the paragraph.
+     */
+    [optional, property] long SymbolTextDistance;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies the offset between the beginning of the first line and
+        the beginning of the following lines of the paragraph.
+     */
+    [property] long FirstLineOffset;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies the type of numbering.
+     */
+    [property] short NumberingType;
+
+    //-------------------------------------------------------------------------
+
+    /** contains the name of the paragraph style that is interpreted as the
+        header of this level. It is only contained in the levels of
+        chapter numbering rules.
+     */
+    [property] string HeadingStyleName;
+
+    /** contains the color for the symbol. This is only valid if the
+        numbering type is <const scope="com::sun::star::style">NumberingType::CHAR_SPECIAL</const>.
+    */
+    [optional, property] com::sun::star::util::Color BulletColor;
+
+    /** contains the size of the symbol relative to the high of the paragraph. This is only valid if the
+        numbering type is <const scope="com::sun::star::style">NumberingType::CHAR_SPECIAL</const>.
+    */
+    [optional, property] short BulletRelSize;
+
+        /** position and space mode
+
+                <p>
+                Specifies the position and space mode of the numbering level.
+                For valid values see com::sun::star::text::PositionAndSpaceMode.
+                If it equals LABEL_WIDTH_AND_POSITION, properties Adjust,
+                LeftMargin, SymbolTextDistance and FirstLineOffset are used.
+                If it equals LABEL_ALIGNMENT, properties Adjust, LabelFollowedBy,
+                ListtabStopPosition, FirstLineIndent, IndentAt are used.
+                </p>
+
+                @since OOo 3.0
+        */
+        [optional, property] short PositionAndSpaceMode;
+
+        /** character following the list label
+
+                <p>
+                Specifies the character following the list label.
+                For valid values see com::sun::star::text::LabelFollow.
+                Only of relevance, if PositionAndSpaceMode equals LABEL_ALIGNMENT.
+                </p>
+
+                @since OOo 3.0
+        */
+        [optional, property] short LabelFollowedBy;
+
+        /** list tab position
+
+                <p>
+                Specifies the position of the list tab stop - only non-negative
+                values are allowed.
+                Only of relevance, if PositionAndSpaceMode equals LABEL_ALIGNMENT
+                and LabelFollowedBy equal LABELFOLLOW_LISTTAB
+                </p>
+
+                @since OOo 3.0
+        */
+        [optional, property] long ListtabStopPosition;
+
+        /** additional line indent for the first text line
+
+                <p>
+                Specifies the first line indent.
+                Only of relevance, if PositionAndSpaceMode equals LABEL_ALIGNMENT.
+                </p>
+
+                @since OOo 3.0
+        */
+        [optional, property] long FirstLineIndent;
+
+        /** indentation of the text lines
+
+                <p>
+                Specifies the indent of the text lines
+                Only of relevance, if PositionAndSpaceMode equals LABEL_ALIGNMENT.
+                </p>
+
+                @since OOo 3.0
+        */
+        [optional, property] long IndentAt;
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif
+

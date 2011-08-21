@@ -1,0 +1,126 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_rendering_XPolyPolygon2D_idl__
+#define __com_sun_star_rendering_XPolyPolygon2D_idl__
+
+#include <com/sun/star/uno/XInterface.idl>
+#include <com/sun/star/lang/IndexOutOfBoundsException.idl>
+#include <com/sun/star/lang/IllegalArgumentException.idl>
+#include <com/sun/star/rendering/FillRule.idl>
+#include <com/sun/star/geometry/RealPoint2D.idl>
+
+module com { module sun { module star { module rendering {
+
+/** Generic interface for poly-polygons in 2D.
+
+    @since OOo 2.0
+ */
+published interface XPolyPolygon2D : ::com::sun::star::uno::XInterface
+{
+    /** Add the specified poly-polygon at the given position.
+
+        One can do symbolic path construction with this method. The
+        poly-polygons added by this method are not joined in the sense
+        that they participate in mutual fill rule calculations like
+        the polygons inside a single poly-polygon do. When rendering
+        such a poly-polygon without transparency, it will look like the
+        constituting poly-polygons rendered separately on top of
+        another. Alas, when rendering with transparency, separate
+        rendering will combine the alpha of overlapping areas, whereas
+        addPolyPolygon results in constant alpha, regardless how many
+        internal poly-polygons overlap at a single place.
+
+        @param position
+        The poly-polygon will be added at the given position, i.e. the
+        upper, left edge of the referenced poly-polygon will be at
+        this position relative to the target poly-polygon.
+
+        @param polyPolygon
+        The poly-polygon to add. Note that the content of this
+        poly-polygon is copied, later changes to polyPolygon will have
+        no effect on the poly-polygon it was added to.
+
+        @throws a
+        <type>com::sun::star::lang::IllegalArgumentException</type>,
+        if the XPolyPolygon2D parameter does not support one of the
+        data-providing derivative interfaces
+        (<type>XBezierPolyPolygon2D</type>,
+        <type>XLinePolyPolygon2D</type>).
+     */
+    void        addPolyPolygon( [in] ::com::sun::star::geometry::RealPoint2D position, [in] XPolyPolygon2D polyPolygon )
+        raises (com::sun::star::lang::IllegalArgumentException);
+
+    //-------------------------------------------------------------------------
+
+    /** Query number of polygons inside this poly-polygon
+     */
+    long        getNumberOfPolygons();
+
+    //-------------------------------------------------------------------------
+
+    /** Query number of points inside given polygon
+
+        @param polygon
+        The index of the polygon to query the number of points
+        for. Must be in the range [0,getNumberOfPolygons()-1].
+     */
+    long        getNumberOfPolygonPoints( [in] long polygon )
+        raises (com::sun::star::lang::IndexOutOfBoundsException);
+
+    //-------------------------------------------------------------------------
+
+    /** Query the rule used to determine inside and outside of the
+        poly-polygon.
+     */
+    FillRule    getFillRule();
+
+    //-------------------------------------------------------------------------
+
+    /** Set the rule used to determine inside and outside of the
+        poly-polygon.
+     */
+    void        setFillRule( [in] FillRule fillRule );
+
+    //-------------------------------------------------------------------------
+
+    /** Query whether the specified polygon outline is closed.
+     */
+    boolean     isClosed( [in] long index )
+        raises (com::sun::star::lang::IndexOutOfBoundsException);
+
+    //-------------------------------------------------------------------------
+
+    /** Set the close state of the specified polygon outline. Use -1
+        as the index to affect all polygons of this poly-polygon.
+     */
+    void        setClosed( [in] long index, [in] boolean closedState )
+        raises (com::sun::star::lang::IndexOutOfBoundsException);
+};
+
+}; }; }; };
+
+#endif

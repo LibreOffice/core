@@ -1,0 +1,83 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_rendering_XHalfFloatBitmap_idl__
+#define __com_sun_star_rendering_XHalfFloatBitmap_idl__
+
+#include <com/sun/star/lang/IllegalArgumentException.idl>
+#include <com/sun/star/lang/IndexOutOfBoundsException.idl>
+#include <com/sun/star/rendering/FloatingPointBitmapLayout.idl>
+#include <com/sun/star/geometry/IntegerPoint2D.idl>
+#include <com/sun/star/geometry/IntegerRectangle2D.idl>
+#include <com/sun/star/rendering/XHalfFloatReadOnlyBitmap.idl>
+#include <com/sun/star/rendering/VolatileContentDestroyedException.idl>
+
+module com { module sun { module star { module rendering {
+
+/** Specialized interface for bitmaps containing half floats as their
+    color components.<p>
+
+    Half floats are 16 bit wide, and newer GPUs already have them as
+    supported frame buffer format.
+ */
+interface XHalfFloatBitmap : XHalfFloatReadOnlyBitmap
+{
+    //-------------------------------------------------------------------------
+
+    /** Set raw data of a bitmap.<p>
+
+        Set raw data of a bitmap, in the format as defined by
+        getMemoryLayout(). With the given rectangle, a subset of the
+        bitmap can be changed. When setting subsets of the bitmap, the
+        same scanline padding takes place as when the whole bitmap is
+        changed.<p>
+
+     */
+    void                        setData( [in] sequence<short> data, [in] FloatingPointBitmapLayout bitmapLayout, [in] ::com::sun::star::geometry::IntegerRectangle2D rect )
+        raises (com::sun::star::lang::IllegalArgumentException,
+                com::sun::star::lang::IndexOutOfBoundsException);
+
+    //-------------------------------------------------------------------------
+
+    /** Set a single pixel of the bitmap with the given color
+        value.<p>
+
+        When setting data on volatile bitmaps, always call isValid()
+        before, and retrieve a new memory layout via
+        getMemoryLayout(). At least under Windows, the memory layout
+        can change for the same bitmap, if the user e.g. switches the
+        screen resolution. Thus, this method will throw an
+        IllegalArgumentException, if the memory layout changed between
+        a call to getMemoryLayout() and setData().<p>
+     */
+    void                        setPixel( [in] sequence<short> color, [in] FloatingPointBitmapLayout bitmapLayout, [in] ::com::sun::star::geometry::IntegerPoint2D pos )
+        raises (com::sun::star::lang::IllegalArgumentException,
+                com::sun::star::lang::IndexOutOfBoundsException);
+};
+
+}; }; }; };
+
+#endif

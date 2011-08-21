@@ -1,0 +1,206 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_sdbc_XClob_idl__
+#define __com_sun_star_sdbc_XClob_idl__
+
+#include <com/sun/star/uno/XInterface.idl>
+
+ module com {  module sun {  module star {  module io {
+ published interface XInputStream;
+};};};};
+
+#include <com/sun/star/sdbc/SQLException.idl>
+
+ module com {  module sun {  module star {  module sdbc {
+
+
+/** is the mapping for the SQL
+    <code>CLOB</code>
+    type.
+
+
+    <p>
+    A SQL
+    <code>CLOB</code>
+    is a built-in type
+    that stores a Character Large Object as a column value in a row of
+    a database table.
+    The driver implements a
+    <code>Clob</code>
+    object using a SQL
+    <code>locator(CLOB)</code>
+    , which means that a
+    <code>Clob</code>
+    object
+    contains a logical pointer to the SQL
+    <code>CLOB</code>
+    data rather than
+    the data itself. A
+    <code>Clob</code>
+    object is valid for the duration
+    of the transaction in which it was created.
+    </p>
+    <p>
+    The
+    <code>Clob</code>
+    interface provides methods for getting the
+    length of a SQL
+    <code>CLOB</code>
+    (Character Large Object) value,
+    for materializing a
+    <code>CLOB</code>
+    value on the client, and for
+    searching for a substring or
+    <code>CLOB</code>
+    object within a
+    <code>CLOB</code>
+    value.
+    </p>
+    <p>
+    Methods in the interfaces
+    <type scope="com::sun::star::sdbc">XResultSet</type>
+    ,
+    and
+    <type scope="com::sun::star::sdbc">XPreparedStatement</type>
+    , such as
+    <code>getClob</code>
+    and
+    <code>setClob</code>
+    allow a programmer to
+    access the SQL
+    <code>CLOB</code>
+    .
+    </p>
+ */
+published interface XClob: com::sun::star::uno::XInterface
+{
+    //-------------------------------------------------------------------------
+
+    /** returns the number of characters in the
+        <code>CLOB</code>
+        value
+        designated by this
+        <code>Clob</code>
+        object.
+        @returns
+            the length of the CLOB object
+        @throws SQLException
+            if a database access error occurs.
+     */
+    hyper length() raises (SQLException);
+
+      //-------------------------------------------------------------------------
+
+    /** returns a copy of the specified substring in the
+        <code>Clob</code>
+        value
+        designated by this
+        <code>Clob</code>
+        object.
+
+
+        <p>
+        The substring begins at position <code>pos</code> and has up
+        to
+        <code>length</code>
+        consecutive characters.
+        </p>
+        @param pos
+            the starting position
+        @param length
+            the length of the substring
+        @returns
+            the substring
+        @throws SQLException
+            if a database access error occurs.
+     */
+    string getSubString([in]hyper pos, [in]long length) raises (SQLException);
+
+    //-------------------------------------------------------------------------
+
+    /** gets the
+        <code>Clob</code>
+        contents as a stream.
+        @returns
+            the stream
+        @throws SQLException
+            if a database access error occurs.
+     */
+    com::sun::star::io::XInputStream getCharacterStream() raises (SQLException);
+
+    //-------------------------------------------------------------------------
+
+    /** determines the character position at which the specified substring
+        <code>searchstr</code>
+        appears in the
+        <code>Clob</code>
+        . The search begins at position
+        <code>start</code>
+        .
+        @param searchstr
+            the string to search
+        @param start
+            the starting position
+        @returns
+            the length of the CLOB object
+        @throws SQLException
+            if a database access error occurs.
+     */
+    hyper position([in]string searchstr, [in]long start)
+        raises (SQLException);
+
+      //-------------------------------------------------------------------------
+
+    /** determines the position at which the specified
+        <code>Clob</code>
+        object
+        <code>pattern</code>
+        appears in this
+        <code>Clob</code>
+        object. The search begins at position
+        <code>start</code>
+        .
+        @param pattern
+            the CLOB to search
+        @param start
+            the starting position
+        @returns
+            the position of the CLOB inside
+        @throws SQLException
+            if a database access error occurs.
+     */
+    hyper positionOfClob([in]XClob pattern, [in]hyper start)
+        raises (SQLException);
+};
+
+//=============================================================================
+
+}; }; }; };
+
+/*===========================================================================
+===========================================================================*/
+#endif

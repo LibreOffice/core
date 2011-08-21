@@ -1,0 +1,188 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_awt_FontDescriptor_idl__
+#define __com_sun_star_awt_FontDescriptor_idl__
+
+#include <com/sun/star/awt/FontSlant.idl>
+
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module awt {
+
+//=============================================================================
+
+/** describes the characteristics of a font.
+
+    <p>For example, this can be used to select a font.</p>
+ */
+published struct FontDescriptor
+{
+    //-------------------------------------------------------------------------
+
+    /** specifies the exact name of the font.
+     */
+    string Name;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies the height of the font in the measure of the
+        destination.
+     */
+    short Height;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies the width of the font in the measure of the
+        destination.
+     */
+    short Width;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies the style name of the font.
+     */
+    string StyleName;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies the general style of the font.
+
+        <p>Use one value out of the constant group
+        <type scope="com::sun::star::awt">FontFamily</type>.</p>
+     */
+    short Family;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies the character set which is supported by the font.
+
+        <p>Use one value out of the constant group
+        <type scope="com::sun::star::awt">CharSet</type>.</p>
+     */
+    short CharSet;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies the pitch of the font.
+
+        <p>Use one value out of the constant group
+        <type scope="com::sun::star::awt">FontPitch</type>.</p>
+     */
+    short Pitch;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies the character width.
+
+        <p>Depending on the specified width, a font that supports this
+        width may be selected.</p>
+
+        <p>The value is expressed as a percentage.</p>
+     */
+    float CharacterWidth;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies the thickness of the line.
+
+        <p>Depending on the specified weight, a font that supports this
+        thickness may be selected.</p>
+
+        <p>The value is expressed as a percentage.</p>
+     */
+    float Weight;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies the slant of the font.
+     */
+    com::sun::star::awt::FontSlant Slant;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies the kind of underlining.
+
+        <p>Use one value out of the constant group
+        <type scope="com::sun::star::awt">FontUnderline</type>.</p>
+     */
+    short Underline;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies the kind of strikeout.
+
+        <p>Use one value out of the constant group
+        <type scope="com::sun::star::awt">FontStrikeout</type>.</p>
+     */
+    short Strikeout;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies the rotation of the font.
+
+        <p>The unit of measure is degrees; 0 is the baseline.</p>
+     */
+    float Orientation;
+
+    //-------------------------------------------------------------------------
+
+    /** For requesting, it specifies if there is a kerning table available.
+        For selecting, it specifies if the kerning table is to be used.
+     */
+    boolean Kerning;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies if only words get underlined.
+
+        <p><TRUE/> means that only non-space characters get underlined,
+        <FALSE/> means that the spacing also gets underlined.</p>
+
+        <p>This property is only valid if the property
+        <member scope="com::sun::star::awt">FontDescriptor::Underline</member>
+        is not <const>FontUnderline::NONE</const>.</p>
+     */
+    boolean WordLineMode;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies the technology of the font representation.
+
+        <p>One or more values out of the constant group
+        <type scope="com::sun::star::awt">FontType</type> can be combined by
+        an arithmetical or-operation.</p>
+     */
+    short Type;
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

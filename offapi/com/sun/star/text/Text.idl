@@ -1,0 +1,143 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_text_Text_idl__
+#define __com_sun_star_text_Text_idl__
+
+#include <com/sun/star/container/XEnumerationAccess.idl>
+#include <com/sun/star/beans/XPropertySet.idl>
+#include <com/sun/star/beans/PropertyValues.idl>
+
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module text {
+
+ published interface XText;
+ published interface XTextRangeMover;
+ published interface XTextRangeCompare;
+ published interface XRelativeTextContentInsert;
+//=============================================================================
+
+/** is an independent piece of text which consists of a
+    series of one or more paragraphs.
+
+    <p>This service is used, for example, for the text of a TextDocument
+    or the text in a cell or TextFrame.
+
+    @see com::sun::star::text::TextDocument
+    @see com::sun::star::text::TextFrame
+    @see com::sun::star::table::Cell
+ */
+published service Text
+{
+    /** This is the factory for an enumeration of the paragraphs in this text.
+
+        <p>This interface is mainly useful for exporting the text to a
+        data format.
+     */
+    interface com::sun::star::container::XEnumerationAccess;
+
+//=============================================================================
+
+    /** provides a cursor factory and the possibility to insert and remove contents.
+     */
+    interface XText;
+
+//=============================================================================
+
+    /** optional interface to compare positions of <type>TextRange</type>
+                instances within this text.
+     */
+    [optional] interface XTextRangeCompare;
+
+//=============================================================================
+
+    /** makes it possible to change the position of paragraphs.
+
+     */
+    [optional] interface XTextRangeMover;
+
+//=============================================================================
+
+    /** makes it possible to insert a new text content, before or
+                   after existing text contents.
+
+                   @deprecated hack
+     */
+    [optional] interface XRelativeTextContentInsert;
+
+//=============================================================================
+
+    /** contains the properties of a redline at the start of the document.<br>
+    The sequence contains the following properties
+    <UL>
+        <LI><P>string RedlineAuthor        </P></LI>
+        <LI><P>com::sun::star::util::DateTime RedlineDate_Time     </P></LI>
+        <LI><P>string RedlineComment       </P></LI>
+        <LI><P>string RedlineType          </P></LI>
+        <LI><P>string RedlineIdentifier    </P></LI>
+        <LI><P>boolean IsCollapsed          </P></LI>
+        <LI><P>boolean IsStart              </P></LI>
+        <LI><P>boolean MergeLastPara        </P></LI>
+        <LI><P>[maybevoid] com::sun::star::text::XText RedlineText  (maybevoid)</P></LI>
+        <LI><P>com::sun::star::beans::PropertyValues RedlineSuccessorData
+            (contains the same properties except for the RedlineSuccessorData)</P></LI>
+    </UL>
+     @see EndRedline
+     */
+    [optional, property] ::com::sun::star::beans::PropertyValues StartRedline;
+
+//=============================================================================
+
+    /** contains the properties of a redline at the start of the document.
+    The sequence contains the following properties
+    <UL>
+        <LI><P>string RedlineAuthor        </P></LI>
+        <LI><P>com::sun::star::util::DateTime RedlineDate_Time     </P></LI>
+        <LI><P>string RedlineComment       </P></LI>
+        <LI><P>string RedlineType          </P></LI>
+        <LI><P>string RedlineIdentifier    </P></LI>
+        <LI><P>boolean IsCollapsed          </P></LI>
+        <LI><P>boolean IsStart              </P></LI>
+        <LI><P>boolean MergeLastPara        </P></LI>
+        <LI><P>[maybevoid] com::sun::star::text::XText RedlineText  (maybevoid)</P></LI>
+        <LI><P>com::sun::star::beans::PropertyValues RedlineSuccessorData
+            (contains the same properties except for the RedlineSuccessorData)</P></LI>
+    </UL>
+     @see StartRedline
+     */
+    [optional, maybevoid, property] ::com::sun::star::beans::PropertyValues EndRedline;
+
+//=============================================================================
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

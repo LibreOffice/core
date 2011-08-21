@@ -1,0 +1,6 @@
+module ooo { module vba { module word {
+    constants WdHorizontalLineWidthType {
+        const long wdHorizontalLineFixedWidth = -2;
+        const long wdHorizontalLinePercentWidth = -1;
+    };
+}; }; };

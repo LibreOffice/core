@@ -1,0 +1,13 @@
+This directory contains two public domain debugging packages.
+
+	1. Fred Fishes DEBUG macros.
+	2. Connor P. Cahills malloc library.
+
+Descriptions of both can be found in their respective sub-directories.  dbug
+for the DEBUG macros and malloc for the malloc library.  I have left the
+malloc distribution intact as it comes from the net except for the changes
+noted in the _changes file.
+
+I thank the authors for making them available for others to use.
+
+-dennis

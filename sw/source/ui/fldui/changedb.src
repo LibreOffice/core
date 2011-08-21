@@ -1,0 +1,130 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#include "changedb.hrc"
+#include "fldui.hrc"
+
+
+ModalDialog DLG_CHANGE_DB
+{
+    HelpID = "sw:ModalDialog:DLG_CHANGE_DB";
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 286 , 175 ) ;
+
+    Text [ en-US ] = "Exchange Databases" ;
+    Moveable = TRUE ;
+    FixedLine FL_DBLIST
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 218 , 8 ) ;
+
+        Text [ en-US ] = "Exchange databases" ;
+    };
+    FixedText FT_USEDDB
+    {
+        Pos = MAP_APPFONT ( 12 , 14 ) ;
+        Size = MAP_APPFONT ( 90 , 8 ) ;
+        Left = TRUE ;
+        Text [ en-US ] = "Databases in Use" ;
+    };
+    FixedText FT_AVAILDB
+    {
+        Pos = MAP_APPFONT ( 118 , 14 ) ;
+        Size = MAP_APPFONT ( 90 ,  8 ) ;
+        Left = TRUE ;
+        Text [ en-US ] = "Available Databases" ;
+    };
+    Control TLB_USEDDB
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 12 , 25 ) ;
+        Size = MAP_APPFONT ( 100 , 62 ) ;
+        TabStop = TRUE ;
+    };
+    Control TLB_AVAILDB
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 118 , 25 ) ;
+        Size = MAP_APPFONT ( 100 , 62 ) ;
+        TabStop = TRUE ;
+    };
+    PushButton PB_ADDDB
+    {
+        HelpID = "sw:PushButton:DLG_CHANGE_DB:PB_ADDDB";
+        Pos = MAP_APPFONT ( 118 ,  90  ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Text [ en-US ] = "Browse..." ;
+    };
+    FixedText FT_DESC
+    {
+        Pos = MAP_APPFONT ( 12 , 110 ) ;
+        Size = MAP_APPFONT ( 210 , 45 ) ;
+        WordBreak = TRUE ;
+        Left = TRUE ;
+        Text [ en-US ] = "Use this dialog to replace the databases you access in your document via database fields, with other databases. You can only make one change at a time. Multiple selection is possible in the list on the left.\nUse the browse button to select a database file." ;
+    };
+    FixedText FT_DOCDBTEXT
+    {
+        Pos = MAP_APPFONT ( 6 , 161 ) ;
+        Size = MAP_APPFONT ( 100 , 8 ) ;
+        Left = TRUE ;
+        Text [ en-US ] = "Database applied to document:" ;
+    };
+    FixedText FT_DOCDBNAME
+    {
+        Pos = MAP_APPFONT ( 109 , 161 ) ;
+        Size = MAP_APPFONT ( 114 , 8 ) ;
+        Left = TRUE ;
+        Text [ en-US ] = "Addresses.Addresses" ;
+    };
+    OKButton BT_OK
+    {
+        Pos = MAP_APPFONT ( 230 , 6 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        DefButton = TRUE ;
+        Disable = TRUE ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "Define" ;
+    };
+    CancelButton BT_CANCEL
+    {
+        Pos = MAP_APPFONT ( 230 , 23 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "~Close" ;
+    };
+    HelpButton BT_HELP
+    {
+        Pos = MAP_APPFONT ( 230 , 43 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+};
+
+

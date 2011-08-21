@@ -1,0 +1,7 @@
+module ooo { module vba { module word {
+    constants WdHorizontalLineAlignment {
+        const long wdHorizontalLineAlignCenter = 1;
+        const long wdHorizontalLineAlignLeft = 0;
+        const long wdHorizontalLineAlignRight = 2;
+    };
+}; }; };

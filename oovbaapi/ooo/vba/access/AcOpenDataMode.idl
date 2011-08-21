@@ -1,0 +1,7 @@
+module ooo { module vba { module access {
+    constants AcOpenDataMode {
+        const long acAdd = 0;
+        const long acEdit = 1;
+        const long acReadOnly = 2;
+    };
+}; }; };

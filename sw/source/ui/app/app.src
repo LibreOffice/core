@@ -1,0 +1,645 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#include <svl/style.hrc>
+#include <sfx2/sfx.hrc>
+#include <svx/dialogs.hrc>
+#include <svx/globlmn.hrc>
+#include "cmdid.h"
+#include "globals.hrc"
+#include "app.hrc"
+#include "statstr.hrc"
+#include "swstyle.h"
+#include "comcore.hrc"
+#include "shells.hrc"
+#include "helpid.h"
+
+String RID_SW_NAME
+{
+    Text = "StarWriter" ;
+};
+
+String STR_PRINT_MERGE_MACRO
+{
+    Text [ en-US ] = "Print form letters" ;
+};
+
+String STR_PAGE_COUNT_MACRO
+{
+    Text [ en-US ] = "Changing the page count" ;
+};
+
+ // Image-list ----------------------------------------------------------------
+ // Don't use this image list for normal toolbar images. We have now our commandimagelist
+ // folder in default_images. This list is now only used for special toolboxes that are
+ // used in floating windows.
+
+#define IMAGELIST_AND_COUNT             \
+    IdList = {                          \
+        FN_FORMULA_CALC                 ;\
+        FN_FORMULA_CANCEL               ;\
+        FN_FORMULA_APPLY                ;\
+        };                              \
+    IdCount = {                         \
+        3;                              \
+    };
+
+ImageList RID_DEFAULTIMAGELIST_SC
+{
+    Prefix = "sc";
+    MaskColor = IMAGE_MASK_COLOR ;
+    IMAGELIST_AND_COUNT
+};
+
+ImageList RID_DEFAULTIMAGELIST_LC
+{
+    Prefix = "lc";
+    MaskColor = IMAGE_MASK_COLOR ;
+    IMAGELIST_AND_COUNT
+};
+
+// Templates
+#define STYLE_IMAGE_LISTEF \
+    MaskColor = IMAGE_MASK_COLOR ; \
+    IdList = \
+    { \
+        1; 2; 3; 4; 5; \
+    }; \
+    IdCount = 5;
+
+SfxStyleFamilies DLG_STYLE_DESIGNER
+{
+    StyleFamilyList =
+    {
+        SfxStyleFamilyItem
+        {
+            Text [ en-US ] = "Paragraph Styles" ;
+            StyleFamily = SFX_STYLE_FAMILY_PARA ;
+            FilterList [ en-US ] =
+            {
+                < "All Styles"          ; SFXSTYLEBIT_ALL       ; > ;
+                < "Applied Styles"      ; SFXSTYLEBIT_USED      ; > ;
+                < "Custom Styles"       ; SFXSTYLEBIT_USERDEF   ; > ;
+                < "Automatic"           ; SFXSTYLEBIT_AUTO      ; > ;
+                < "Text Styles"         ; SWSTYLEBIT_TEXT       ; > ;
+                < "Chapter Styles"      ; SWSTYLEBIT_CHAPTER    ; > ;
+                < "List Styles"         ; SWSTYLEBIT_LIST       ; > ;
+                < "Index Styles"        ; SWSTYLEBIT_IDX        ; > ;
+                < "Special Styles"      ; SWSTYLEBIT_EXTRA      ; > ;
+                < "HTML Styles"         ; SWSTYLEBIT_HTML       ; > ;
+                < "Conditional Styles"  ; SWSTYLEBIT_CONDCOLL   ; > ;
+            };
+        };
+        SfxStyleFamilyItem
+        {
+            Text [ en-US ] = "Character Styles" ;
+            StyleFamily = SFX_STYLE_FAMILY_CHAR ;
+            FilterList [ en-US ] =
+            {
+                < "All"             ; SFXSTYLEBIT_ALL       ; > ;
+                < "Applied Styles"  ; SFXSTYLEBIT_USED      ; > ;
+                < "Custom Styles"   ; SFXSTYLEBIT_USERDEF   ; > ;
+            };
+        };
+        SfxStyleFamilyItem
+        {
+            Text [ en-US ] = "Frame Styles" ;
+            StyleFamily = SFX_STYLE_FAMILY_FRAME ;
+            FilterList [ en-US ] =
+            {
+                < "All"             ; SFXSTYLEBIT_ALL       ; > ;
+                < "Applied Styles"  ; SFXSTYLEBIT_USED      ; > ;
+                < "Custom Styles"   ; SFXSTYLEBIT_USERDEF   ; > ;
+            };
+        };
+        SfxStyleFamilyItem
+        {
+            Text [ en-US ] = "Page Styles" ;
+            StyleFamily = SFX_STYLE_FAMILY_PAGE ;
+            FilterList [ en-US ] =
+            {
+                < "All"             ; SFXSTYLEBIT_ALL       ; > ;
+                < "Applied Styles"  ; SFXSTYLEBIT_USED      ; > ;
+                < "Custom Styles"   ; SFXSTYLEBIT_USERDEF   ; > ;
+            };
+        };
+        SfxStyleFamilyItem
+        {
+            StyleFamily = SFX_STYLE_FAMILY_PSEUDO ;
+            FilterList [ en-US ] =
+            {
+                < "All"             ; SFXSTYLEBIT_ALL       ; > ;
+                < "Applied Styles"  ; SFXSTYLEBIT_USED      ; > ;
+                < "Custom Styles"   ; SFXSTYLEBIT_USERDEF   ; > ;
+            };
+            Text [ en-US ] = "List Styles" ;
+        };
+    };
+
+    ImageList 1 // == BMP_COLOR_NORMAL + 1
+    {
+        Prefix = "sf";
+        STYLE_IMAGE_LISTEF
+    };
+};
+
+
+
+// Bitmap for the NumberingTemplates in the Organizer
+Bitmap BMP_STYLES_FAMILY_NUM { File = "styfamnu.bmp" ; };
+
+String STR_ENV_TITLE
+{
+    Text [ en-US ] = "Envelope" ;
+};
+
+String STR_LAB_TITLE
+{
+    Text [ en-US ] = "Labels" ;
+};
+
+ // ShortName!!!
+String STR_HUMAN_SWDOC_NAME
+{
+    Text [ en-US ] = "Text" ;
+};
+
+String STR_WRITER_DOCUMENT_FULLTYPE
+{
+    Text [ en-US ] = "%PRODUCTNAME %PRODUCTVERSION Text Document";
+};
+
+
+String STR_CANTOPEN
+{
+    Text [ en-US ] = "Cannot open document." ;
+};
+
+String STR_CANTCREATE
+{
+    Text [ en-US ] = "Can't create document.";
+};
+
+String STR_DLLNOTFOUND
+{
+    Text [ en-US ] = "Filter not found." ;
+};
+
+String STR_UNBENANNT
+{
+    Text [ en-US ] = "Untitled" ;
+};
+
+String STR_LOAD_GLOBAL_DOC
+{
+    Text [ en-US ] = "Name and Path of Master Document" ;
+};
+
+String STR_LOAD_HTML_DOC
+{
+    Text [ en-US ] = "Name and Path of the HTML Document" ;
+};
+
+InfoBox MSG_ERROR_SEND_MAIL
+{
+    BUTTONS = WB_OK ;
+    DEFBUTTON = WB_DEF_OK ;
+    Message [ en-US ] = "Error sending mail." ;
+};
+
+InfoBox MSG_ERROR_PASSWD
+{
+    BUTTONS = WB_OK ;
+    DEFBUTTON = WB_DEF_OK ;
+    Message [ en-US ] = "Invalid password" ;
+};
+
+/*
+ * commented out, because the Toolbox can't be loaded from the resource
+ * at this time.
+Window WIN_TOOLBOX {
+       "Bearbeitung von Text, Rahmen, Grafik, Tabellen oder "
+       "Numerierungen.";
+HelpText [ en-US ] = "The objectbar contains, depending on your current "
+            "working context, buttons for the editing of text, "
+            "frames, graphics, tables or numberings.";
+    OUTPUTSIZE = TRUE;
+    BORDER = TRUE;
+    Size = (28,27);
+};
+ */
+
+String STR_FMT_STD
+{
+    Text [ en-US ] = "(none)" ;
+};
+
+String STR_DOC_STAT
+{
+    Text [ en-US ] = "Statistics" ;
+};
+
+ // ----------------------------
+ // Statusbar-titles
+ // ----------------------------
+
+String STR_STATSTR_W4WREAD
+{
+    Text [ en-US ] = "Importing document..." ;
+};
+
+String STR_STATSTR_W4WWRITE
+{
+    Text [ en-US ] = "Exporting document..." ;
+};
+
+String STR_STATSTR_SWGREAD
+{
+    Text [ en-US ] = "Loading document..." ;
+};
+
+String STR_STATSTR_SWGWRITE
+{
+    Text [ en-US ] = "Saving document..." ;
+};
+
+String STR_STATSTR_REFORMAT
+{
+    Text [ en-US ] = "Repagination..." ;
+};
+
+String STR_STATSTR_AUTOFORMAT
+{
+    Text [ en-US ] = "Formatting document automatically..." ;
+};
+
+String STR_STATSTR_IMPGRF
+{
+    Text [ en-US ] = "Importing graphics..." ;
+};
+
+String STR_STATSTR_SEARCH
+{
+    Text [ en-US ] = "Search..." ;
+};
+
+String STR_STATSTR_FORMAT
+{
+    Text [ en-US ] = "Formatting..." ;
+};
+
+String STR_STATSTR_PRINT
+{
+    Text [ en-US ] = "Printing..." ;
+};
+
+String STR_STATSTR_LAYOUTINIT
+{
+    Text [ en-US ] = "Converting..." ;
+};
+
+String STR_STATSTR_LETTER
+{
+    Text [ en-US ] = "Letter" ;
+};
+
+String STR_STATSTR_SPELL
+{
+    Text [ en-US ] = "Spellcheck..." ;
+};
+
+String STR_STATSTR_HYPHEN
+{
+    Text [ en-US ] = "Hyphenation..." ;
+};
+
+String STR_STATSTR_TOX_INSERT
+{
+    Text [ en-US ] = "Inserting Index..." ;
+};
+
+String STR_STATSTR_TOX_UPDATE
+{
+    Text [ en-US ] = "Updating Index..." ;
+};
+
+String STR_STATSTR_SUMMARY
+{
+    Text [ en-US ] = "Creating abstract..." ;
+};
+
+String STR_STATSTR_SWGPRTOLENOTIFY
+{
+    Text [ en-US ] = "Adapt Objects...";
+};
+
+
+QueryBox MSG_COMCORE_ASKSEARCH
+{
+    Buttons = WB_YES_NO_CANCEL ;
+    DefButton = WB_DEF_YES ;
+    Message [ en-US ] = "To proceed with this action, you must first turn off the \"undo\" function. Do you want to turn off the \"undo\" function?" ;
+};
+
+Bitmap RID_GRAPHIC_REPLACEBMP
+{
+    File = "grafikei.bmp" ;
+};
+
+Bitmap RID_GRAPHIC_ERRORBMP
+{
+    File = "grafikde.bmp" ;
+};
+
+String STR_TABLE_DEFNAME
+{
+    Text [ en-US ] = "Table" ;
+};
+
+String STR_GRAPHIC_DEFNAME
+{
+    Text[ en-US ] = "graphics" ;
+};
+
+String STR_OBJECT_DEFNAME
+{
+    Text [ en-US ] = "Object" ;
+};
+
+String STR_FRAME_DEFNAME
+{
+    Text [ en-US ] = "Frame" ;
+};
+
+String STR_REGION_DEFNAME
+{
+    Text [ en-US ] = "Section" ;
+};
+
+String STR_NUMRULE_DEFNAME
+{
+    Text [ en-US ] = "Numbering" ;
+};
+
+String STR_EMPTYPAGE
+{
+    Text [ en-US ] = "blank page" ;
+};
+
+String STR_HEADER
+{
+    Text [ en-US ] = "Header: " ;
+};
+
+String STR_FOOTER
+{
+    Text [ en-US ] = "Footer: " ;
+};
+
+QueryBox MSG_CLPBRD_CLEAR
+{
+    BUTTONS = WB_YES_NO ;
+    DEFBUTTON = WB_DEF_NO ;
+    Message [ en-US ] = "You have a large amount of data saved in the clipboard.\nShould the clipboard contents remain available for other applications?" ;
+};
+
+QueryBox MSG_SAVE_HTML_QUERY
+{
+    BUTTONS = WB_YES_NO_CANCEL ;
+    DEFBUTTON = WB_DEF_YES ;
+    Message [ en-US ] = "Conversion into HTML format \nmay cause information loss. \nDo you want to save the document?" ;
+};
+QueryBox MSG_SAVEAS_HTML_QUERY
+{
+    BUTTONS = WB_YES_NO;
+    DEFBUTTON = WB_DEF_NO ;
+    Message [ en-US ] = "The source code can only be displayed if the document is saved in HTML format.\nWould you like to save the document as HTML?";
+};
+
+String STR_ABSTRACT_TITLE
+{
+    Text [ en-US ] = "Abstract: " ;
+};
+
+String STR_FDLG_TEMPLATE_BUTTON
+{
+    Text [ en-US ] = "Style" ;
+};
+
+String STR_FDLG_TEMPLATE_NAME
+{
+    Text [ en-US ] = "separated by: " ;
+};
+
+String STR_FDLG_OUTLINE_LEVEL
+{
+    Text [ en-US ] = "Outline: Level ";
+};
+
+String STR_FDLG_STYLE
+{
+    Text [ en-US ] = "Style: ";
+};
+
+String STR_PAGEOFFSET
+{
+    Text [ en-US ] = "Page number: " ;
+};
+
+String STR_PAGEBREAK
+{
+    Text [ en-US ] = "Break before new page" ;
+};
+
+String STR_WESTERN_FONT
+{
+    Text [ en-US ] = "Western text: ";
+};
+
+String STR_CJK_FONT
+{
+    Text [ en-US ] = "Asian text: ";
+};
+
+String STR_REDLINE_UNKNOWN_AUTHOR
+{
+    Text [ en-US ] = "Unknown Author";
+};
+
+WarningBox MSG_DISABLE_UNDO_QUESTION
+{
+    BUTTONS = WB_YES_NO_CANCEL;
+    DEFBUTTON = WB_DEF_YES ;
+    Message [ en-US ] = "This action deletes the list of actions that can be undone. Previous changes made to the document are still valid, but cannot be undone. Do you want to continue formatting?";
+};
+
+QueryBox MSG_PRINT_AS_MERGE
+{
+    HelpId = HID_PRINT_AS_MERGE;
+    Buttons = WB_YES_NO ;
+    DefButton = WB_DEF_YES ;
+    Message [ en-US ] = "Your document contains address database fields. Do you want to print a form letter?";
+};
+
+ModalDialog DLG_MERGE_SOURCE_UNAVAILABLE
+{
+    HelpId = HID_MERGE_SOURCE_UNAVAILABLE;
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 202 , 72 ) ;
+    Moveable = TRUE ;
+
+    FixedImage IMG_MERGE
+    {
+        Pos = MAP_APPFONT ( 12 , 14 ) ;
+        Size = MAP_APPFONT ( 103 , 32 ) ;
+    };
+    FixedText ST_MERGE_SOURCE_UNAVAILABLE
+    {
+        Pos = MAP_APPFONT ( 12 , 6 ) ;
+        Size = MAP_APPFONT ( 178 , 40 ) ;
+        WordBreak = TRUE;
+        Text [ en-US ] = "The data source \'%1\' was not found. Thus the connection to the data source could not be established.\n\nPlease check the connections settings.";
+    };
+    OKButton PB_MERGE_OK
+    {
+        Pos = MAP_APPFONT ( 12 , 52 ) ;
+        Size = MAP_APPFONT ( 125 , 14 ) ;
+        Text [ en-US ] = "Check Connection Settings...";
+    };
+    CancelButton PB_MERGE_CANCEL
+    {
+        Pos = MAP_APPFONT ( 140 , 52 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+    };
+};
+
+WarningBox MSG_DATA_SOURCES_UNAVAILABLE
+{
+    HelpId = HID_DATA_SOURCES_UNAVAILABLE;
+    Buttons = WB_OK_CANCEL;
+    Message [ en-US ] = "No data source has been set up yet. You need a data source, such as a database, to supply data (for example, names and addresses) for the fields.";
+};
+
+String RID_MODULE_TOOLBOX
+{
+    Text [ en-US ] = "Function Bar (viewing mode)" ;
+};
+
+String  STR_DONT_ASK_AGAIN
+{
+    Text [ en-US ] = "~Do not show warning again" ;
+};
+
+String STR_OUTLINE_NUMBERING
+{
+    Text [ en-US ] = "Outline Numbering";
+};
+
+ToolBox RID_MODULE_TOOLBOX
+{
+    HelpID = HID_MODULE_TOOLBOX ;
+    Border = TRUE ;
+    SVLook = TRUE ;
+    Dockable = TRUE ;
+    Moveable = TRUE ;
+    Sizeable = TRUE ;
+    Closeable = TRUE ;
+    Zoomable = TRUE ;
+    HideWhenDeactivate = TRUE ;
+    LineSpacing = TRUE ;
+    Customize = TRUE ;
+    MenuStrings = TRUE ;
+    Hide = TRUE ;
+    ItemList =
+    {
+        ToolBoxItem
+        {
+            Identifier = SID_SAVEASDOC ;
+        };
+        ToolBoxItem
+        {
+            Type = TOOLBOXITEM_SEPARATOR ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_EDITDOC ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_MAIL_SENDDOC ;
+        };
+        ToolBoxItem
+        {
+            Type = TOOLBOXITEM_SEPARATOR ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_DIRECTEXPORTDOCASPDF ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_PRINTDOCDIRECT ;
+        };
+        ToolBoxItem
+        {
+            Type = TOOLBOXITEM_SEPARATOR ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_COPY ;
+        };
+        ToolBoxItem
+        {
+            Type = TOOLBOXITEM_SEPARATOR ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_SEARCH_DLG ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_NAVIGATOR ;
+        };
+        ToolBoxItem
+        {
+            Type = TOOLBOXITEM_SEPARATOR ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_ATTR_ZOOM ;
+        };
+    };
+    Scroll = TRUE ;
+};
+
+WarningBox MSG_DISABLE_READLINE_QUESTION
+{
+    BUTTONS = WB_YES_NO;
+    DEFBUTTON = WB_DEF_YES ;
+    Message [ en-US ] = "In the current document, changes are being recorded but not shown as such. In large documents, delays can occur when the document is edited. Do you want to show the changes to avoid delays?";
+};

@@ -1,0 +1,169 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_xml_sax_XFastAttributeList_idl__
+#define __com_sun_star_xml_sax_XFastAttributeList_idl__
+
+#include <com/sun/star/uno/XInterface.idl>
+#include <com/sun/star/xml/Attribute.idl>
+#include <com/sun/star/xml/FastAttribute.idl>
+#include <com/sun/star/xml/sax/SAXException.idl>
+
+//=============================================================================
+
+module com {  module sun {  module star {  module xml {  module sax {
+
+//=============================================================================
+
+/** a container for the attributes of an XML element.
+
+    <br>Attributes are separated into known attributes and unknown attributes.
+    <p>Known attributes have a local name that is known to the <type>XFastTokenHandler</token>
+    registered at the <type>XFastParser</type> which created the sax event containing
+    this attributes. If an attribute also has a namespace, that must be registered
+    at the <type>XFastParser</type>, else this attribute is also unknown even if
+    the local name is known.
+ */
+interface XFastAttributeList: com::sun::star::uno::XInterface
+{
+    /** checks if an attribute is available.<br>
+
+        @param Token
+            contains the integer token from the <type>XFastTokenHandler</type>
+            registered at the <type>XFastParser</type>.<br>
+
+            If the attribute name has a namespace that was registered with the
+            <type>XFastParser</type>, Token contains the integer token of the
+            attributes local name from the <type>XFastTokenHandler</type> and
+            the integer token of the namespace combined with an arithmetic
+            <b>or</b> operation.
+
+        @returns
+            <TRUE/>, if the attribute is available
+    */
+    boolean hasAttribute( [in] long Token );
+
+    /** retrieves the token of an attributes value.<br>
+
+        @param Token
+            contains the integer token from the <type>XFastTokenHandler</type>
+            registered at the <type>XFastParser</type>.<br>
+
+            If the attribute name has a namespace that was registered with the
+            <type>XFastParser</type>, Token contains the integer token of the
+            attributes local name from the <type>XFastTokenHandler</type> and
+            the integer token of the namespace combined with an arithmetic
+            <b>or</b> operation.
+
+        @returns
+            The integer token of the value from the attribute or <const>FastToken::Invalid</const>
+
+        @throws SAXEXception
+            if the attribute is not available
+
+    */
+    long getValueToken( [in] long Token )
+        raises( SAXException );
+
+    /**retrieves the token of an attributes value.<br>
+
+        @param Token
+            contains the integer token from the <type>XFastTokenHandler</type>
+            registered at the <type>XFastParser</type>.<br>
+
+            If the attribute name has a namespace that was registered with the
+            <type>XFastParser</type>, Token contains the integer token of the
+            attributes local name from the <type>XFastTokenHandler</type> and
+            the integer token of the namespace combined with an arithmetic
+            <b>or</b> operation.
+
+        @param Default
+            This value will be returned if the attribute is not available
+
+        @returns
+            If the attribute is available it returns the integer token of the value
+            from the attribute or <const>FastToken::Invalid</const>.
+            If not the value of <param>Default</param> is returned.
+
+    */
+    long getOptionalValueToken( [in] long Token, [in] long Default );
+
+    /** retrieves the value of an attributes.<br>
+
+        @param Token
+            contains the integer token from the <type>XFastTokenHandler</type>
+            registered at the <type>XFastParser</type>.<br>
+
+            If the attribute name has a namespace that was registered with the
+            <type>XFastParser</type>, Token contains the integer token of the
+            attributes local name from the <type>XFastTokenHandler</type> and
+            the integer token of the namespace combined with an arithmetic
+            <b>or</b> operation.
+
+        @returns
+            The string value from the attribute.
+
+        @throws SAXEXception
+            if the attribute is not available
+
+    */
+    string getValue( [in] long Token )
+        raises( SAXException );
+
+    /** retrieves the value of an attributes.<br>
+
+        @param Token
+            contains the integer token from the <type>XFastTokenHandler</type>
+            registered at the <type>XFastParser</type>.<br>
+
+            If the attribute name has a namespace that was registered with the
+            <type>XFastParser</type>, Token contains the integer token of the
+            attributes local name from the <type>XFastTokenHandler</type> and
+            the integer token of the namespace combined with an arithmetic
+            <b>or</b> operation.
+
+        @returns
+            The string value from the attribute or an empty string if the
+            attribute is not available.
+    */
+    string getOptionalValue( [in] long Token );
+
+    /** returns a sequence of attributes which names and or namespaces URLS
+        can not be translated to tokens.
+    */
+    sequence< ::com::sun::star::xml::Attribute > getUnknownAttributes();
+
+    /** returns a sequence of attributes which names and or namespaces URLS
+        are translated to tokens.
+    */
+    sequence< ::com::sun::star::xml::FastAttribute > getFastAttributes();
+};
+
+//=============================================================================
+
+}; }; }; }; };
+
+#endif

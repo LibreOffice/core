@@ -1,3 +1,4 @@
+# -*- Mode: makefile-gmake; tab-width: 4; indent-tabs-mode: t -*-
 # Version: MPL 1.1 / GPLv3+ / LGPLv3+
 #
 # The contents of this file are subject to the Mozilla Public License Version
@@ -25,7 +26,7 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
-$(eval $(call gb_JunitTest_JunitTest,forms_unoapi))
+$(eval $(call gb_JunitTest_JunitTest,forms_unoapi,SRCDIR))
 
 $(eval $(call gb_JunitTest_set_defs,forms_unoapi,\
     $$(DEFS) \

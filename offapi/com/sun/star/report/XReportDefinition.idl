@@ -1,0 +1,323 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_report_XReportDefinition_idl__
+#define __com_sun_star_report_XReportDefinition_idl__
+
+#include <com/sun/star/report/XReportComponent.idl>
+#include <com/sun/star/report/XFunctionsSupplier.idl>
+#include <com/sun/star/view/PaperOrientation.idl>
+#include <com/sun/star/container/NoSuchElementException.idl>
+#include <com/sun/star/style/GraphicLocation.idl>
+#include <com/sun/star/view/PaperFormat.idl>
+#include <com/sun/star/util/XCloseable.idl>
+#include <com/sun/star/ui/XUIConfigurationManagerSupplier.idl>
+#include <com/sun/star/document/XDocumentSubStorageSupplier.idl>
+#include <com/sun/star/frame/XModel.idl>
+#include <com/sun/star/document/XViewDataSupplier.idl>
+#include <com/sun/star/frame/XLoadable.idl>
+#include <com/sun/star/embed/XVisualObject.idl>
+#include <com/sun/star/document/XStorageBasedDocument.idl>
+#include <com/sun/star/awt/Size.idl>
+#include <com/sun/star/util/XModifiable2.idl>
+#include <com/sun/star/document/XEventBroadcaster.idl>
+#include <com/sun/star/lang/DisposedException.idl>
+#include <com/sun/star/style/XStyleFamiliesSupplier.idl>
+
+module com {  module sun {  module star {  module sdbc {
+published interface XConnection;
+};};};};
+//=============================================================================
+
+ module com {  module sun {  module star {  module report {
+
+     published interface XSection;
+     published interface XGroups;
+//=============================================================================
+
+/** identifies a <type>XReportComponent</type> as being a (sub-) report.
+
+    <p>This interface does not really provide an own functionality, it is only for easier
+    runtime identification of report components.</p>
+
+    <p>A report fulfills several tasks, like storing the structure of its
+    report components and it provides the
+    event environment for its contained elements.</p>
+
+    @see XReportComponent
+ */
+published interface XReportDefinition
+{
+    /** allows the access to the model embedded in the database storage.
+    */
+    interface com::sun::star::frame::XModel;
+
+    /** offers a simple way to initialize a component.
+    */
+    interface com::sun::star::frame::XLoadable;
+
+    /** represents common visualization functionality for the embedded report.
+    */
+    interface com::sun::star::embed::XVisualObject;
+
+    /** allows to initialize the document with a storage.
+    */
+    interface com::sun::star::document::XStorageBasedDocument;
+
+    /** gives access to some properties describing all open views to a document.
+    */
+    interface com::sun::star::document::XViewDataSupplier;
+
+    /** allows to close the document.
+    */
+    interface com::sun::star::util::XCloseable;
+
+    /** allows to retrieve the user interface configuration manager related to an object.
+    */
+    interface com::sun::star::ui::XUIConfigurationManagerSupplier;
+
+    interface com::sun::star::document::XDocumentSubStorageSupplier;
+
+    /** provides access to the collection of style families.
+
+        <p>A spreadsheet document contains 2 families of styles:
+        "PageStyles" and "CellStyles".</p>
+     */
+    interface com::sun::star::style::XStyleFamiliesSupplier;
+
+    //-------------------------------------------------------------------------
+    /** a storable document should provide information about his modify state
+
+        <p>
+        With this interface it's possible too, to reset the modify state.
+        That can be necessary to prevent code against problem during closing
+        of the document without saving any changes.
+        </p>
+     */
+    interface com::sun::star::util::XModifiable2;
+
+    /** allows the creation of sub reports.
+    */
+    interface XReportComponent;
+
+    /** gives access to functions defined in the report definition.
+    */
+    interface XFunctionsSupplier;
+
+    /** makes it possible to register listeners which are called whenever
+        a document event occurs.
+        This is a workaround due to the fact that this interface can not be directly inherited from <type scope="com::sun::star::document">XEventBroadcaster</type>
+        because the methods addEventListener and removeEventListener are already defined in <type scope="com::sun::star::lang">XComponent</type>.
+        A queryInterface call is still supported to the <type scope="com::sun::star::document">XEventBroadcaster</type> interface.
+     */
+    com::sun::star::document::XEventBroadcaster getEventBroadcaster()
+        raises( ::com::sun::star::lang::DisposedException,
+                ::com::sun::star::uno::Exception );
+
+    /** returns a sequence of the currently supported output formats.
+    */
+    sequence<string> getAvailableMimeTypes()
+        raises( ::com::sun::star::lang::DisposedException,
+                ::com::sun::star::uno::Exception );
+
+    //-------------------------------------------------------------------------
+
+    /** Represents the output format (media (mime) type) of the resulting document when executing this report.
+    */
+    [attribute,bound] string MimeType
+    {
+        set raises (com::sun::star::lang::IllegalArgumentException);
+    };
+
+    /** Represents the title of the report in print preview.
+    */
+    [attribute,bound] string Caption;
+
+    /** Specifies whether groups in a multi column report are kept together.
+        @see com.sun.star.report.GroupKeepTogether
+    */
+    [attribute,bound] short GroupKeepTogether
+    {
+        set raises (com::sun::star::lang::IllegalArgumentException);
+    };
+
+    /** Represents the location of the page header.
+        @see ReportPrintOption
+    */
+    [attribute,bound] short PageHeaderOption;
+
+    /** Represents the location of the page footer.
+        @see ReportPrintOption
+    */
+    [attribute,bound] short PageFooterOption;
+
+
+    /** is the command which should be executed, the type of command depends
+    on the CommandType.
+    <p>In case of a <member>CommandType</member> of <member>CommandType::COMMAND</member>,
+    means in case the <member>Command</member> specifies an SQL statement, the inherited
+    <member scope="com::sun::star::sdbc">RowSet::EscapeProcessing</member>
+    becomes relevant:<br/>
+    It then can be to used to specify whether the SQL statement should be analyzed on the
+    client side before sending it to the database server.<br/>
+    The default value for <member scope="com::sun::star::sdbc">RowSet::EscapeProcessing</member>
+    is <TRUE/>. By switching it to <FALSE/>, you can pass backend-specific SQL statements,
+    which are not standard SQL, to your database.</p>
+
+
+    @see com::sun::star::sdb::CommandType
+    */
+    [attribute,bound] string Command;
+
+    /** specifies the type of the command to be executed to retrieve a result set.
+
+        <p><member>Command</member> needs to be interpreted depending on the value of this property.</p>
+
+        <p>This property is only meaningful together with the <member>Command</member>
+        property, thus either <em>both</em> or <em>none</em> of them are present.</p>
+
+        @see com::sun::star::sdb::CommandType
+     */
+    [attribute,bound] long CommandType;
+
+    /** specifies an additional filter to optionally use.
+
+        <p>The Filter string has to form a SQL WHERE-clause, <em>without</em> the WHERE-string itself.</p>
+
+        <p>If a <member>DataSourceName</member>, <member>Command</member> and <member>CommandType</member>
+        are specified, a <type>RowSet</type> can be created with this information. If the results provided by the
+        row set are to be additionally filtered, the Filter property can be used.</p>
+
+        <p>Note that the Filter property does not make sense if a <member>ResultSet</member> has been specified
+        in the DataAccessDescriptor.</p>
+
+        @see com::sun::star::sdb::RowSet
+        @see ResultSet
+    */
+    [attribute,bound] string Filter;
+
+    /** specifies if the <member>Command</member> should be analyzed on the client side before sending it
+        to the database server.
+
+        <p>The default value of this property is <TRUE/>. By switching it to <FALSE/>, you can pass
+        backend-specific SQL statements, which are not standard SQL, to your database.</p>
+
+        <p>This property is usually present together with the <member>Command</member> and
+        <member>CommandType</member> properties, and is evaluated if and only if <member>CommandType</member>
+        equals <member>CommandType::COMMAND</member>.</p>
+    */
+    [attribute,bound] boolean EscapeProcessing;
+
+    /** specifies the active connection which is used to create the resulting report.
+    */
+    [attribute,bound] com::sun::star::sdbc::XConnection ActiveConnection
+    {
+        set raises (com::sun::star::lang::IllegalArgumentException);
+    };
+
+    /** is the name of the datasource to use, this could be a named datasource
+        or the URL of a data access component.
+     */
+    [attribute,bound] string DataSourceName;
+
+    /** Defines that the report header is on.
+        Default is <FALSE/>.
+    */
+    [attribute,bound] boolean ReportHeaderOn;
+
+    /** Defines that the report footer is on.
+        Default is <FALSE/>.
+    */
+    [attribute,bound] boolean ReportFooterOn;
+
+    /** Defines that the page header is on.
+        Default is <TRUE/>.
+    */
+    [attribute,bound] boolean PageHeaderOn;
+
+    /** Defines that the page footer is on.
+        Default is <TRUE/>.
+    */
+    [attribute,bound] boolean PageFooterOn;
+
+    /** Represents the groups of the report.
+    */
+    [attribute,readonly] com::sun::star::report::XGroups Groups;
+
+    /** returns the report header if the <member>ReportHeaderOn</member>is <TRUE/>.
+        @throws <type scope="com::sun::star::container">NoSuchElementException</type>
+            If the report has the report header disabled.
+        @see XSection
+    */
+    [attribute,readonly] com::sun::star::report::XSection ReportHeader
+    {
+        get raises (com::sun::star::container::NoSuchElementException);
+    };
+
+    /** returns the page header if the <member>PageHeaderOn</member>is <TRUE/>.
+        @throws <type scope="com::sun::star::container">NoSuchElementException</type>
+            If the report has the page header disabled.
+        @see XSection
+    */
+    [attribute,readonly] com::sun::star::report::XSection PageHeader
+    {
+        get raises (com::sun::star::container::NoSuchElementException);
+    };
+
+    /** returns the detail section.
+        @see XSection
+    */
+    [attribute,readonly] com::sun::star::report::XSection Detail;
+
+    /** returns the page footer if the <member>PageFooterOn</member>is <TRUE/>.
+        @throws <type scope="com::sun::star::container">NoSuchElementException</type>
+            If the report has the page footer disabled.
+        @see XSection
+    */
+    [attribute,readonly] com::sun::star::report::XSection PageFooter
+    {
+        get raises (com::sun::star::container::NoSuchElementException);
+    };
+
+    /** returns the report footer if the <member>ReportFooterOn</member>is <TRUE/>.
+        @throws <type scope="com::sun::star::container">NullPointerException</type>
+            If the report has the report footer disabled.
+        @see XSection
+    */
+    [attribute,readonly] com::sun::star::report::XSection ReportFooter
+    {
+        get raises (com::sun::star::container::NoSuchElementException);
+    };
+};
+
+//=============================================================================
+
+}; }; }; };
+
+/*=============================================================================
+
+=============================================================================*/
+#endif

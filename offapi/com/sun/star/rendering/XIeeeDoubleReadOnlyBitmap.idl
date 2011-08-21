@@ -1,0 +1,126 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_rendering_XIeeeDoubleReadOnlyBitmap_idl__
+#define __com_sun_star_rendering_XIeeeDoubleReadOnlyBitmap_idl__
+
+#include <com/sun/star/lang/IllegalArgumentException.idl>
+#include <com/sun/star/lang/IndexOutOfBoundsException.idl>
+#include <com/sun/star/rendering/FloatingPointBitmapLayout.idl>
+#include <com/sun/star/geometry/IntegerPoint2D.idl>
+#include <com/sun/star/geometry/IntegerRectangle2D.idl>
+#include <com/sun/star/rendering/XBitmap.idl>
+#include <com/sun/star/rendering/VolatileContentDestroyedException.idl>
+
+
+module com { module sun { module star { module rendering {
+
+/** This is a specialized interface for bitmaps containing IEEE
+    doubles for their color components. In contrast to
+    <type>XIeeeDoubleBitmap</type>, this interface only permits
+    read-only access.<p>
+
+    Use this interface for e.g. bitmaps that are calculated
+    on-the-fly, or that are pure functional, and thus cannot be
+    modified.<p>
+
+    If you get passed an instance of
+    <type>XHalfFloatReadOnlyBitmap</type> that also supports the
+    <type>XVolatileBitmap</type> interface, things become a bit more
+    complicated. When reading data, one has to check for both
+    <type>VolatileContentDestroyedException</type> and mismatching
+    <type>FloatingPointBitmapLayout</type> return values. If either of them
+    occurs, the whole bitmap read operation should be repeated.<p>
+ */
+interface XIeeeDoubleReadOnlyBitmap : XBitmap
+{
+    /** Query the raw data of this bitmap.<p>
+
+        Query the raw data of this bitmap, in the format as defined by
+        getMemoryLayout(). With the given rectangle, a subset of the
+        whole bitmap can be queried. When querying subsets of the
+        bitmap, the same scanline padding takes place as when the
+        whole bitmap is requested.<p>
+
+        Note that the bitmap memory layout might change for volatile
+        bitmaps.<p>
+
+        @param bitmapLayout
+        The memory layout the returned data is in.
+
+        @param rect
+        A rectangle, within the bounds of the bitmap, to retrieve the
+        consent from.
+
+        @throws <type>VolatileContentDestroyedException</type>
+        if the bitmap is volatile, and the content has been destroyed by the system.
+
+        @throws <type>com::sun::star::lang::IndexOutOfBoundsException</type>
+        if parts of the given rectangle are outside the permissible
+        bitmap area.
+     */
+    sequence<double>            getData( [out] FloatingPointBitmapLayout bitmapLayout, [in] ::com::sun::star::geometry::IntegerRectangle2D rect )
+        raises (com::sun::star::lang::IndexOutOfBoundsException,
+                VolatileContentDestroyedException);
+
+    //-------------------------------------------------------------------------
+
+    /** Get a single pixel of the bitmap, returning its color
+        value.<p>
+
+        Note that the bitmap memory layout might change for volatile
+        bitmaps.<p>
+
+        @param bitmapLayout
+        The memory layout the returned data is in.
+
+        @param pos
+        A position, within the bounds of the bitmap, to retrieve the
+        color from.
+
+        @throws <type>VolatileContentDestroyedException</type>
+        if the bitmap is volatile, and the content has been destroyed by the system.
+
+        @throws <type>com::sun::star::lang::IndexOutOfBoundsException</type>
+        if the given position is outside the permissible bitmap area.
+     */
+    sequence<double>            getPixel( [out] FloatingPointBitmapLayout bitmapLayout, [in] ::com::sun::star::geometry::IntegerPoint2D pos )
+        raises (com::sun::star::lang::IndexOutOfBoundsException,
+                VolatileContentDestroyedException);
+
+    //-------------------------------------------------------------------------
+
+    /** Query the memory layout for this bitmap.<p>
+
+        Please note that for volatile bitmaps, the memory layout might
+        change between subsequent calls.<p>
+     */
+    FloatingPointBitmapLayout   getMemoryLayout();
+};
+
+}; }; }; };
+
+#endif

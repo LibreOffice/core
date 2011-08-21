@@ -1,0 +1,112 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_chart_XChartDataArray_idl__
+#define __com_sun_star_chart_XChartDataArray_idl__
+
+#include <com/sun/star/chart/XChartData.idl>
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module chart {
+
+//=============================================================================
+
+/** gives access to data represented as an array of rows.
+
+    <p>Can be obtained from interface <type>XChartDocument</type> via method getData().</p>
+
+    <p>If used for an <type>XYDiagram</type>, the row number 0
+    represents the <i>x</i>-values.</p>
+ */
+published interface XChartDataArray: XChartData
+{
+    //-------------------------------------------------------------------------
+
+    /** retrieves the numerical data as a nested sequence of values.
+
+        @returns
+            the values as a sequence of sequences.  The inner sequence
+            represents rows.
+    */
+    sequence< sequence< double > > getData();
+
+    //-------------------------------------------------------------------------
+
+    /** sets the chart data as an array of numbers.
+
+        @param aData
+            the values as a sequence of sequences.  The inner sequence
+            represents rows.
+     */
+    void setData( [in] sequence< sequence< double > > aData );
+
+    //-------------------------------------------------------------------------
+
+    /** retrieves the description texts for all rows.
+
+        @returns
+            a sequence of strings, each representing the description
+            of a row.
+     */
+    sequence< string > getRowDescriptions();
+
+    //-------------------------------------------------------------------------
+
+    /** sets the description texts for all rows.
+
+        @param aRowDescriptions
+            a sequence of strings which represent a description for
+            each row.
+    */
+    void setRowDescriptions( [in] sequence< string > aRowDescriptions );
+
+    //-------------------------------------------------------------------------
+
+    /** retrieves the description texts for all columns.
+
+        @returns
+            a sequence of strings, each representing the description
+            of a column.
+     */
+    sequence< string > getColumnDescriptions();
+
+    //-------------------------------------------------------------------------
+
+    /** sets the description texts for all columns.
+
+        @param aColumnDescriptions
+            a sequence of strings which represent a description for
+            each column.
+     */
+    void setColumnDescriptions( [in] sequence< string > aColumnDescriptions );
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

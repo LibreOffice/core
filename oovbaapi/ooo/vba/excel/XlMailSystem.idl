@@ -1,0 +1,7 @@
+module ooo { module vba { module excel {
+    constants XlMailSystem {
+        const long xlMAPI = 1;
+        const long xlNoMailSystem = 0;
+        const long xlPowerTalk = 2;
+    };
+}; }; };

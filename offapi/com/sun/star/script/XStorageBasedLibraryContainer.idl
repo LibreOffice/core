@@ -1,0 +1,101 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+
+#ifndef __com_sun_star_script_XStorageBasedLibraryContainer_idl__
+#define __com_sun_star_script_XStorageBasedLibraryContainer_idl__
+
+#include <com/sun/star/embed/XStorage.idl>
+#include <com/sun/star/script/XPersistentLibraryContainer.idl>
+
+//=============================================================================
+
+module com { module sun { module star { module script {
+
+//=============================================================================
+
+/** is the interface for an <type>XLibraryContainer</type> which can be made
+    persistent in an <type scope="com::sun::star::embed">XStorage</type>.
+
+    <p>A persistent library container is associated with a root storage. The
+    container is responsible for a particular sub storage of the root storage,
+    the container storage.</p>
+
+    @since OOo 2.3
+ */
+interface XStorageBasedLibraryContainer
+{
+    interface XPersistentLibraryContainer;
+
+    /** denotes the root storage associated with the container.
+
+        <p>Effectively, this attribute is a typed version of
+        <member>XPersistentLibraryContainer::RootLocation</member>, it's guaranteed
+        that at every time, <code>XPersistentLibraryContainer::RootLocation</code> and
+        <code>RootStorage</code> have the same value.</p>
+
+        <p>You should only <em>set</em> this attribute to a new value if you previously
+        called storeLibrariesToStorage with the same storage. Setting this attribute
+        to a storage into which the container has not been stored previously might
+        result in unexpected behavior.</p>
+    */
+    [attribute] ::com::sun::star::embed::XStorage RootStorage
+    {
+        set raises ( ::com::sun::star::lang::IllegalArgumentException );
+    };
+
+    /** stores the libraries to a storage other than the current container storage
+
+        <p>Note that the library container is not automatically associated with the
+        new root storage. Instead, you need to manually set the <type>RootStroage</type>
+        attribute afterwards. This separation allows for Save-To as well Save-As
+        operations.</p>
+
+        @param RootStorage
+            denotes the root storage into which the libraries should be written, which
+            must not be <NULL/>.<br/>
+            Note that the actual libraries are written into a sub storage of this
+            root storage, as usual.
+
+        @throws ::com::sun::star::lang::IllegalArgumentException
+            if the <code>RootStorage</code> parameter is <NULL/>, or equals
+            <member>RootStorage</member>.
+
+        @throws ::com::sun::star::lang::WrappedTargetException
+            if an error occurs during storing.
+    */
+    void    storeLibrariesToStorage( [in] ::com::sun::star::embed::XStorage RootStorage )
+        raises ( ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException );
+};
+
+//=============================================================================
+
+}; }; }; };
+
+//=============================================================================
+
+#endif

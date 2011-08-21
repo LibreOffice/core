@@ -1,0 +1,195 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_sheet_SpreadsheetViewSettings_idl__
+#define __com_sun_star_sheet_SpreadsheetViewSettings_idl__
+
+#include <com/sun/star/beans/XPropertySet.idl>
+
+#include <com/sun/star/util/Color.idl>
+
+//=============================================================================
+
+module com {  module sun {  module star {  module sheet {
+
+//=============================================================================
+
+/** contains settings which are specific to each view of a spreadsheet
+ */
+published service SpreadsheetViewSettings
+{
+    /** provides access to the properties.
+     */
+    interface com::sun::star::beans::XPropertySet;
+
+    //-------------------------------------------------------------------------
+
+    /** controls whether formulas are displayed instead of their
+        results.
+     */
+    [property] boolean ShowFormulas;
+
+    //-------------------------------------------------------------------------
+
+    /** enables display of zero-values.
+     */
+    [property] boolean ShowZeroValues;
+
+    //-------------------------------------------------------------------------
+
+    /** controls whether strings, values, and formulas are
+        displayed in different colors.
+     */
+    [property] boolean IsValueHighlightingEnabled;
+
+    //-------------------------------------------------------------------------
+
+    /** controls whether a marker is shown for notes in cells.
+     */
+    [property] boolean ShowNotes;
+
+    //-------------------------------------------------------------------------
+
+    /** enables the vertical scroll bar of the view.
+     */
+    [property] boolean HasVerticalScrollBar;
+
+    //-------------------------------------------------------------------------
+
+    /** enables the horizontal scroll bar of the view.
+     */
+    [property] boolean HasHorizontalScrollBar;
+
+    //-------------------------------------------------------------------------
+
+    /** enables the sheet tabs of the view.
+     */
+    [property] boolean HasSheetTabs;
+
+    //-------------------------------------------------------------------------
+
+    /** enables the display of outline symbols.
+     */
+    [property] boolean IsOutlineSymbolsSet;
+
+    //-------------------------------------------------------------------------
+
+    /** enables the column and row headers of the view.
+     */
+    [property] boolean HasColumnRowHeaders;
+
+    //-------------------------------------------------------------------------
+
+    /** enables the display of the cell grid.
+     */
+    [property] boolean ShowGrid;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies the color in which the cell grid is
+        displayed.
+     */
+    [property] com::sun::star::util::Color GridColor;
+
+    //-------------------------------------------------------------------------
+
+    /** enables display of help lines when moving drawing
+        objects.
+     */
+    [property] boolean ShowHelpLines;
+
+    //-------------------------------------------------------------------------
+
+    /** enables display of anchor symbols when drawing
+        objects are selected.
+     */
+    [property] boolean ShowAnchor;
+
+    //-------------------------------------------------------------------------
+
+    /** enables display of page breaks.
+     */
+    [property] boolean ShowPageBreaks;
+
+    //-------------------------------------------------------------------------
+
+    /** enables solid (colored) handles when drawing
+        objects are selected.
+     */
+    [property] boolean SolidHandles;
+
+    //-------------------------------------------------------------------------
+
+    /** enables display of embedded objects in the view.
+
+        @see SpreadsheetViewObjectsMode
+     */
+    [property] short ShowObjects;
+
+    //-------------------------------------------------------------------------
+
+    /** enables the display of charts in the view.
+
+        @see SpreadsheetViewObjectsMode
+     */
+    [property] short ShowCharts;
+
+    //-------------------------------------------------------------------------
+
+    /** enables the display of drawing objects in the view.
+
+        @see SpreadsheetViewObjectsMode
+     */
+    [property] short ShowDrawing;
+
+    //-------------------------------------------------------------------------
+
+    /** disables the display of marks from online spelling.
+     */
+    [property] boolean HideSpellMarks;
+
+    //-------------------------------------------------------------------------
+    /** This property defines the zoom type for the document.
+
+        @see com::sun::star::view::DocumentZoomType
+    */
+    [property] short ZoomType;
+
+        //-------------------------------------------------------------------------
+        /** Defines the zoom value to use.
+            Valid only if the ZoomType is set to
+            <member scope="com::sun::star::view::DocumentZoomType">BY_VALUE</member>.
+    */
+    [property] short ZoomValue;
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif
+

@@ -1,0 +1,94 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_xsd_XDataType_idl__
+#define __com_sun_star_xsd_XDataType_idl__
+
+#include <com/sun/star/container/XNamed.idl>
+#include <com/sun/star/util/VetoException.idl>
+#include <com/sun/star/lang/IllegalArgumentException.idl>
+#include <com/sun/star/beans/XPropertySet.idl>
+
+//=============================================================================
+module com {  module sun {  module star {  module xsd {
+
+//-----------------------------------------------------------------------------
+/** specifies an <a href="http://www.w3.org/TR/xmlschema-2/#built-in-datatypes">XSD compliant simple data type</a>
+*/
+interface XDataType
+{
+    /** provides generic access to the instance properties
+    */
+    interface com::sun::star::beans::XPropertySet;
+
+    /** provides access to the name of the type
+    */
+    [attribute] string Name
+    {
+        set raises ( com::sun::star::util::VetoException );
+    };
+
+    /** specifies the pattern which strings conforming to this type comply to
+
+        <p>See <a href="http://www.w3.org/TR/xmlschema-2/#rf-pattern">http://www.w3.org/TR/xmlschema-2/#rf-pattern</a></p>
+    */
+    [attribute] string Pattern;
+
+    /** specifies how strings of this data type are to be processed, with respect to
+        white spaces
+
+        <p>See <a href="http://www.w3.org/TR/xmlschema-2/#rf-whiteSpace">http://www.w3.org/TR/xmlschema-2/#rf-whiteSpace</a></p>
+    */
+    [attribute] short WhiteSpaceTreatment
+    {
+        set raises ( com::sun::star::lang::IllegalArgumentException );
+    };
+
+    /** specifies whether the type is a basic type
+
+        <p>Basic types are built into the type system, and cannot be changed by the user.</p>
+    */
+    [attribute, readonly] boolean IsBasic;
+
+    /** class of the type
+
+        @see DataTypeClass
+    */
+    [attribute, readonly] short TypeClass;
+
+    /// TODO
+    boolean validate( [in] string value );
+
+    /// TODO
+    string  explainInvalid( [in] string value );
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

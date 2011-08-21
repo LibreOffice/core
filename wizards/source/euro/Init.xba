@@ -71,6 +71,7 @@ Public sCurrSLOVENIAN as String
 Public sCurrCYPRIOT as String
 Public sCurrMALTESE as String
 Public sCurrSLOVAK as String
+Public sCurrESTONIAN as String
 Public sCurrUNKNOWN as String
 Public sCurrSYSUNKNOWN as String
 
@@ -79,7 +80,7 @@ Public sPrgsCONVERTING as String
 Public sPrgsUNPROTECT as String
 Public sInclusiveSubDir as String
 
-Public Const SBCOUNTRYCOUNT = 15
+Public Const SBCOUNTRYCOUNT = 17
 Public CurMimeType as String
 Public CurCellCount as Long
 Public oSheets as Object
@@ -115,8 +116,8 @@ Public CurExtension(2) as String
 Public Currfactor as Double
 Public CurrSymbolList(2) as String
 Public CurrLanguage as String
-Public CurrValue(15,5)
-Public LangIDValue(15,2,2) as String
+Public CurrValue(16,5)
+Public LangIDValue(16,2,2) as String
 Public PreName as String
 Public Separator as String
 Public BitmapDir as String
@@ -195,8 +196,9 @@ Dim LocWorkPath as String
 		sCurrCYPRIOT = GetResText(1513)
 		sCurrMALTESE = GetResText(1514)
 		sCurrSLOVAK = GetResText(1515)
-		sCurrUNKNOWN = GetResText(1516)
-		sCurrSYSUNKNOWN = GetResText(1517)
+		sCurrESTONIAN = GetResText(1516)
+		sCurrUNKNOWN = GetResText(1517)
+		sCurrSYSUNKNOWN = GetResText(1518)
 		.cmdCancel.Label =  sCANCEL
 		.cmdHelp.Label =  sHELP
 		.cmdBack.Label =  GetResText(1002)
@@ -357,6 +359,11 @@ Sub InitializeLanguages()
 	LangIDValue(15,0,1) = &quot;SK&quot;
 	LangIDValue(15,0,2) = &quot;-41B&quot;
 
+&apos; CURRENCIES_ESTONIAN
+       LangIDValue(16,0,0) = &quot;et&quot;
+       LangIDValue(16,0,1) = &quot;ET&quot;
+       LangIDValue(16,0,2) = &quot;-425&quot;
+
 End Sub
 
 
@@ -508,6 +515,15 @@ Dim i as Integer
 	CurrValue(15,3) = &quot;Sk&quot;
 	CurrValue(15,4) = &quot;Sk&quot;
 	CurrValue(15,5) = &quot;SKK&quot;
+
+	CurrValue(16,0) = sCurrESTONIAN
+	&apos; real conversion rate
+	CurrValue(16,1) = 15.6466
+	&apos; rounded conversion rate
+	CurrValue(16,2) = 16
+	CurrValue(16,3) = &quot;kr&quot;
+	CurrValue(16,4) = &quot;kr&quot;
+	CurrValue(16,5) = &quot;EEK&quot;
 
 	i = -1
 	CurrSymbolList(0) = &quot;&quot;

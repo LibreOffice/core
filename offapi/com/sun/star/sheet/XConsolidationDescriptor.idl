@@ -1,0 +1,139 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_sheet_XConsolidationDescriptor_idl__
+#define __com_sun_star_sheet_XConsolidationDescriptor_idl__
+
+#include <com/sun/star/uno/XInterface.idl>
+#include <com/sun/star/sheet/GeneralFunction.idl>
+#include <com/sun/star/table/CellRangeAddress.idl>
+#include <com/sun/star/table/CellAddress.idl>
+
+//=============================================================================
+
+module com {  module sun {  module star {  module sheet {
+
+//=============================================================================
+
+/** provides access to the settings of a consolidation descriptor.
+
+    @deprecated
+
+    @see com::sun::star::sheet::ConsolidationDescriptor
+ */
+published interface XConsolidationDescriptor: com::sun::star::uno::XInterface
+{
+    //-------------------------------------------------------------------------
+
+    /** returns the function by which the ranges are consolidated.
+     */
+    com::sun::star::sheet::GeneralFunction getFunction();
+
+    //-------------------------------------------------------------------------
+
+    /** sets the function by which the ranges are consolidated.
+     */
+    void setFunction( [in] com::sun::star::sheet::GeneralFunction nFunction );
+
+    //-------------------------------------------------------------------------
+
+    /** returns the cell ranges which are consolidated.
+     */
+    sequence< com::sun::star::table::CellRangeAddress > getSources();
+
+    //-------------------------------------------------------------------------
+
+    /** sets the cell ranges which are consolidated.
+     */
+    void setSources(
+            [in] sequence< com::sun::star::table::CellRangeAddress > aSources );
+
+    //-------------------------------------------------------------------------
+
+    /** returns the position of the top left cell of the cell range where
+        the consolidated data are copied.
+     */
+    com::sun::star::table::CellAddress getStartOutputPosition();
+
+    //-------------------------------------------------------------------------
+
+    /** sets the position of the top left cell of the cell range
+        where the consolidated data are copied.
+     */
+    void setStartOutputPosition(
+            [in] com::sun::star::table::CellAddress aStartOutputPosition );
+
+    //-------------------------------------------------------------------------
+
+    /** returns, whether column headers from the cell ranges are used to
+        find matching data or not.
+     */
+    boolean getUseColumnHeaders();
+
+    //-------------------------------------------------------------------------
+
+    /** specifies if column headers from the cell ranges are used to find
+        matching data.
+     */
+    void setUseColumnHeaders( [in] boolean bUseColumnHeaders );
+
+    //-------------------------------------------------------------------------
+
+    /** returns, whether row headers from the cell ranges are used to
+        find matching data or not.
+     */
+    boolean getUseRowHeaders();
+
+    //-------------------------------------------------------------------------
+
+    /** specifies if row headers from the cell ranges are used to find
+        matching data.
+     */
+    void setUseRowHeaders( [in] boolean bUseRowHeaders );
+
+    //-------------------------------------------------------------------------
+
+    /** returns, whether links to the original data are inserted in the
+        output area or not.
+     */
+    boolean getInsertLinks();
+
+    //-------------------------------------------------------------------------
+
+    /** specifies if links to the original data are inserted in the
+        output area.
+     */
+    void setInsertLinks( [in] boolean bInsertLinks );
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif
+

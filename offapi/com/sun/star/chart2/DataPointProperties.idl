@@ -1,0 +1,326 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef com_sun_star_chart2_DataPointProperties_idl
+#define com_sun_star_chart2_DataPointProperties_idl
+
+#include <com/sun/star/beans/PropertySet.idl>
+#include <com/sun/star/awt/Gradient.idl>
+#include <com/sun/star/drawing/Hatch.idl>
+#include <com/sun/star/drawing/LineDash.idl>
+#include <com/sun/star/style/XStyle.idl>
+#include <com/sun/star/chart2/BitmapProperty.idl>
+#include <com/sun/star/chart2/TransparencyStyle.idl>
+#include <com/sun/star/chart2/DataCaptionStyle.idl>
+#include <com/sun/star/chart2/Symbol.idl>
+
+module com
+{
+module sun
+{
+module star
+{
+module chart2
+{
+
+service DataPointProperties
+{
+    /** to give access to the properties required by this service.
+    */
+    service ::com::sun::star::beans::PropertySet;
+
+    // ----------------------------------------------------------------------
+
+    /** points to a style that also supports this service (but not
+        this property) that is used as default, if the PropertyState
+        of a property is <code>DEFAULT_VALUE</code>.
+     */
+//     [optional, property] ::com::sun::star::style::XStyle        Style;
+
+    // Common Properties
+    // -----------------
+
+
+    /** This is the main color of a data point.
+
+        <p>For charts with filled areas, like bar-charts, this should
+        map to the <code>FillColor</code> of the objects.  For
+        line-charts this should map to the <code>LineColor</code>
+        property.</p>
+
+        @see com::sun::star::drawing::FillProperties
+        @see com::sun::star::drawing::LineProperties
+     */
+    [property] long                                   Color;
+
+    /** This is the main transparency value of a data point.
+
+        <p>For charts with filled areas, like bar-charts, this should
+        map to the <code>FillTransparence</code> of the objects.  For
+        line-charts this should map to the
+        <code>LineTransparence</code> property.</p>
+
+        @see com::sun::star::drawing::FillProperties
+        @see com::sun::star::drawing::LineProperties
+     */
+    [property] short                                  Transparency;
+
+
+    // Fill Properties
+    // ---------------
+
+    /** This enumeration selects the style with which the area will be filled.
+    */
+    [property] ::com::sun::star::drawing::FillStyle   FillStyle;
+
+    /** This describes the transparency of the fill area as a gradient.
+    */
+    [optional, property] ::com::sun::star::awt::Gradient        TransparencyGradient;
+    [optional, property] ::com::sun::star::awt::Gradient        Gradient;
+    [optional, property] ::com::sun::star::drawing::Hatch       Hatch;
+
+    [property] string TransparencyGradientName;
+    [property] string GradientName;
+    [property] string HatchName;
+    [property] string FillBitmapName;
+
+    /** If <TRUE/>, fills the background of a hatch with the color
+        given in the <member>Color</member> property.
+     */
+    [property] boolean FillBackground;
+
+    /** Is used for borders around filled objects.  See
+        <code>LineColor</code>.
+
+        @see com::sun::star::drawing::LineProperties
+     */
+    [property] long                                   BorderColor;
+    /** Is used for borders around filled objects.  See
+        <code>LineStyle</code>.
+
+        @see com::sun::star::drawing::LineProperties
+     */
+    [property] ::com::sun::star::drawing::LineStyle   BorderStyle;
+    /** Is used for borders around filled objects.  See
+        <code>LineWidth</code>.
+
+        @see com::sun::star::drawing::LineProperties
+     */
+    [property] long                                   BorderWidth;
+    /** Is used for borders around filled objects.  See
+        <code>LineDash</code>.
+
+        @see com::sun::star::drawing::LineProperties
+     */
+    [property] ::com::sun::star::drawing::LineDash    BorderDash;
+
+    /** The name of a dash that can be found in the
+        <type scope="com::sun::star::container">XNameContainer</type>
+        "com.sun.star.drawing.LineDashTable", that can be created via
+        the
+        <type scope="com::sun::star::uno">XMultiServiceFactory</type>
+        of the <type>ChartDocument</type>.
+     */
+    [optional, property] string                       BorderDashName;
+
+    /** Is used for borders around filled objects.  See
+        <code>LineTransparence</code>.
+
+        @see com::sun::star::drawing::LineProperties
+     */
+    [optional, property] short                        BorderTransparency;
+
+
+    // Line Properties
+    // ---------------
+    [property] ::com::sun::star::drawing::LineStyle   LineStyle;
+    /** Is only used for line-chart types.
+
+        @see com::sun::star::drawing::LineProperties
+     */
+    [property] long                                   LineWidth;
+    /** Is only used for line-chart types.
+
+        @see com::sun::star::drawing::LineProperties
+     */
+    [property] ::com::sun::star::drawing::LineDash    LineDash;
+
+    /** The name of a dash that can be found in the
+        <type scope="com::sun::star::container">XNameContainer</type>
+        "com.sun.star.drawing.LineDashTable", that can be created via
+        the
+        <type scope="com::sun::star::uno">XMultiServiceFactory</type>
+        of the <type>ChartDocument</type>.
+     */
+    [optional, property] string                       LineDashName;
+
+    //-------------------------------------------------------------------------
+
+    // bitmap properties /copied from drawing::FillProperties
+
+    /** This is the horizontal offset where the tile starts.
+
+        <p>It is given in percent in relation to the width of the bitmap.
+    */
+    [property] short FillBitmapOffsetX;
+
+    /** This is the vertical offset where the tile starts.
+
+        It is given in percent in relation to the width of the bitmap.
+    */
+    [property] short FillBitmapOffsetY;
+
+    /** Every second line of tiles is moved the given percent of the
+        width of the bitmap.
+    */
+    [property] short FillBitmapPositionOffsetX;
+
+    /** Every second row of tiles is moved the given percent of the
+        width of the bitmap.
+    */
+    [property] short FillBitmapPositionOffsetY;
+
+    /** The RectanglePoint specifies the position inside of the bitmap to
+        use as the top left position for rendering.
+    */
+    [property] com::sun::star::drawing::RectanglePoint FillBitmapRectanglePoint;
+
+    /** specifies if the size is given in percentage or
+        as an absolute value.
+
+        <p>If this is <TRUE/>, the properties FillBitmapSizeX
+        and  FillBitmapSizeY contain the size of the tile in percent
+        of the size of the original bitmap. If this
+        is <FALSE/>, the size of the tile is specified
+        with 1/100th mm.
+    */
+    [property] boolean FillBitmapLogicalSize;
+
+    /** This is the width of the tile for filling.
+
+        <p>Depending on the property FillBitmapLogicalSize, this is
+        either relative or absolute.
+    */
+    [property] long FillBitmapSizeX;
+
+    /** This is the height of the tile for filling.
+
+        <p>Depending on the property FillBitmapLogicalSize, this
+        is either relative or absolute.
+    */
+    [property] long FillBitmapSizeY;
+
+    /** this enum selects how a area is filled with a single bitmap.
+    */
+    [property] com::sun::star::drawing::BitmapMode FillBitmapMode;
+
+    //-------------------------------------------------------------------------
+
+    /**
+     */
+    [optional, property] Symbol                       Symbol;
+
+    /** describes a value by which a data point is moved from its
+        default position in percent of the maximum allowed distance.
+
+        <p>This is especially useful for the explosion of pie-chart
+        segments.</p>
+     */
+    [optional, property] double                       Offset;
+
+    /** describes the geometry of a 3 dimensional data point.
+        Number is one of constant group <type>DataPointGeometry3D</type>.
+        <p>This is especially used for 3D bar-charts.</p>
+        <p>CUBOID==0 CYLINDER==1 CONE==2 PYRAMID==3 CUBOID==else</p>
+    */
+    [optional, property] long                         Geometry3D;
+
+    [property] DataPointLabel                         Label;
+
+    /** specifies a string that is used to separate the parts of a data label (caption)
+     */
+    [optional, property] string LabelSeparator;
+
+    /** specifies a number format for the display of the value in the data label
+     */
+    [optional, property] long NumberFormat;
+
+    /** specifies a number format for the display of the percentage value in the data label
+     */
+    [optional, property] long PercentageNumberFormat;
+
+    /** specifies a relative position for the data label
+
+        @see ::com::sun::star::chart::DataLabelPlacement
+     */
+    [optional, property] long LabelPlacement;
+
+    /** The size of the page at the moment when the font size for
+        data labels was set.
+
+        <p>This size is used to resize text in the view when the size
+        of the page has changed since the font sizes were set
+        (automatic text scaling).</p>
+     */
+    [maybevoid, property] com::sun::star::awt::Size   ReferencePageSize;
+
+    // statistics
+
+    /** If void, no error bars are shown for the data point in
+        x-direction.
+
+        <p>The <type scope="com::sun::star::beans">XPropertySet</type>
+        must support the service <type>ErrorBar</type>.</p>
+     */
+    [optional, maybevoid, property] com::sun::star::beans::XPropertySet      ErrorBarX;
+
+    /** If void, no error bars are shown for the data point in
+        y-direction.
+
+        <p>The <type scope="com::sun::star::beans">XPropertySet</type>
+        must support the service <type>ErrorBar</type>.</p>
+     */
+    [optional, maybevoid, property] com::sun::star::beans::XPropertySet      ErrorBarY;
+
+    /** In case <member>ErrorBarX</member> and
+        <member>ErrorBarY</member> both are set, and error bars are
+        shown, a box spanning all error-indicators is rendered.
+     */
+    [optional, maybevoid, property] boolean           ShowErrorBox;
+
+
+    /** A value between 0 and 100 indicating the percentage how round an edge should be.
+    */
+    [optional, maybevoid, property] short             PercentDiagonal;
+};
+
+} ; // chart2
+} ; // com
+} ; // sun
+} ; // star
+
+
+#endif

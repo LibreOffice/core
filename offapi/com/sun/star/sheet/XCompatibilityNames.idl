@@ -1,0 +1,80 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_sheet_XCompatibilityNames_idl__
+#define __com_sun_star_sheet_XCompatibilityNames_idl__
+
+#include <com/sun/star/sheet/LocalizedName.idl>
+
+//=============================================================================
+
+module com {  module sun {  module star {  module sheet {
+
+//=============================================================================
+
+/** gives access to the sequence of compatibility names for an Addin
+    function.
+ */
+published interface XCompatibilityNames: com::sun::star::uno::XInterface
+{
+    /** returns the compatibility names of the specified function.
+
+        <p>Compatibility names are localized names of AddIn functions that
+        are used to import files from other applications.</p>
+
+        <p>If on import a localized function name is read, this list of
+        compatibility names is used to find the internal name of the
+        function. The current locale may differ from the locale used in
+        the imported file, so the method
+        <member>XAddIn::getProgrammaticFuntionName</member> cannot be used
+        here.</p>
+
+        <p>The order inside the sequence of compatibility names is used to
+        prioritize the names. Initially the first compatibility name of
+        each function is compared to the imported name (each function may
+        provide a sequence of compatibility names - the first entry of all
+        sequences is used). If no entry is equal, the second entry of each
+        sequence is used and so on.</p>
+
+        <p>If a locale is not present in the sequence of compatibility names,
+        the first entry of the sequence is used. So the method should return
+        a sequence which contains first the entry representing the current
+        locale.<TRUE/></p>
+
+        @param aProgrammaticName
+            is the exact name of a method within its interface.
+     */
+    sequence< com::sun::star::sheet::LocalizedName >
+        getCompatibilityNames( [in] string aProgrammaticName );
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif
+

@@ -1,0 +1,32 @@
+#ifndef __com_sun_star_logging_LoggerPool_idl__
+#define __com_sun_star_logging_LoggerPool_idl__
+
+#include <com/sun/star/logging/XLoggerPool.idl>
+
+//=============================================================================
+
+module com { module sun { module star { module logging {
+
+//=============================================================================
+
+/** the global pool of named <type>XLogger</type> instances
+
+    <p>The one and only <code>LoggerPool</code> instance is available at a component context as value with the key
+    <code>/singletons/com.sun.star.logging.LoggerPool</code>.</p>
+*/
+/** the global pool of named <type>XLogger</type> instances
+
+    <p>The one and only <code>LoggerPool</code> instance is available at a component context as value with the key
+    <code>/singletons/com.sun.star.logging.LoggerPool</code>.</p>
+
+    @since OOo 2.3
+*/
+singleton LoggerPool : XLoggerPool;
+
+//=============================================================================
+
+}; }; }; };
+
+//=============================================================================
+
+#endif

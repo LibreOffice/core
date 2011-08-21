@@ -1,0 +1,150 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_animations_XAnimate_idl__
+#define __com_sun_star_animations_XAnimate_idl__
+
+#include <com/sun/star/animations/XAnimationNode.idl>
+#include <com/sun/star/animations/TimeFilterPair.idl>
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module animations {
+
+//=============================================================================
+
+/** Interface for generic animation.
+
+    @see http://www.w3.org/TR/smil20/animation.html#edef-animate
+*/
+interface XAnimate : XAnimationNode
+{
+    /** This attribute specifies the target element to be animated.
+        <br>
+        See documentation of used animation engine for supported targets.
+    */
+    [attribute] any Target;
+
+    /** This attribute specifies an optional subitem from the target element
+        that should be animated.
+        <br>
+        A value of zero should always be the default and animate the complete target.
+        <br>
+        See documentation of used animation engine for supported subitems.
+    */
+    [attribute] short SubItem;
+
+    /** Specifies the target attribute.
+
+        @see http://www.w3.org/TR/smil20/animation.html#adef-attributeName
+    */
+    [attribute] string AttributeName;
+
+    /** A sequence of one or more values, each of which must be a legal value for
+        the specified attribute.
+
+        @see http://www.w3.org/TR/smil20/animation.html#adef-values
+    */
+    [attribute] sequence< any > Values;
+
+    /**
+    */
+    [attribute] sequence< double > KeyTimes;
+
+    /**
+        @see AnimationValueType
+    */
+    [attribute] short ValueType;
+
+    /** Specifies the interpolation mode for the animation.
+        <br>
+        If the target attribute does not support linear interpolation (e.g. for strings),
+        or if the values attribute has only one value, the CalcMode attribute is ignored
+        and discrete interpolation is used.
+
+        @see AnimationCalcMode;
+    */
+    [attribute] short CalcMode;
+
+    /** Controls whether or not the animation is cumulative.
+
+        @see http://www.w3.org/TR/smil20/animation.html#adef-accumulate
+    */
+    [attribute] boolean Accumulate;
+
+    /** Controls whether or not the animation is additive.
+
+        @see AnimationAdditiveMode
+        @see http://www.w3.org/TR/smil20/animation.html#adef-additive
+    */
+    [attribute] short Additive;
+
+    /** Specifies the starting value of the animation.
+        <br>
+        Must be a legal value for the specified attribute.
+        Ignored if the <member>Values</member> attribute is specified.
+
+        @see http://www.w3.org/TR/smil20/animation.html#adef-from
+    */
+    [attribute] any From;
+
+    /** Specifies the ending value of the animation.
+        <br>
+        Must be a legal value for the specified attribute.
+        Ignored if the <member>Values</member> attribute is specified.
+
+        @see http://www.w3.org/TR/smil20/animation.html#adef-to
+    */
+    [attribute] any To;
+
+    /** Specifies a relative offset value for the animation.
+        <br>
+        Must be a legal value of a domain for which addition to the attributeType
+        domain is defined and which yields a value in the attributeType domain.
+        Ignored if the values attribute is specified.
+        Ignored if the <member>Values</member> attribute is specified.
+
+        @see http://www.w3.org/TR/smil20/animation.html#adef-by
+    */
+    [attribute] any By;
+
+    /** todo: timeFilter="0,0; 0.14,0.36; 0.43,0.73; 0.71,0.91; 1.0,1.0" ?
+    */
+    [attribute] sequence< TimeFilterPair > TimeFilter;
+
+    /** if this string is set, its contents will be parsed as a formula.
+        All values are used as a parameter for this formula and the computed
+        result will be used.
+    */
+    [attribute] string Formula;
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif
+

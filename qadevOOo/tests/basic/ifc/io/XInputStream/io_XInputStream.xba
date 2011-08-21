@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="io_XInputStream" script:language="StarBasic">
+
+
+'*************************************************************************
+'
+' DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+' 
+' Copyright 2000, 2010 Oracle and/or its affiliates.
+'
+' OpenOffice.org - a multi-platform office productivity suite
+'
+' This file is part of OpenOffice.org.
+'
+' OpenOffice.org is free software: you can redistribute it and/or modify
+' it under the terms of the GNU Lesser General Public License version 3
+' only, as published by the Free Software Foundation.
+'
+' OpenOffice.org is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU Lesser General Public License version 3 for more details
+' (a copy is included in the LICENSE file that accompanied this code).
+'
+' You should have received a copy of the GNU Lesser General Public License
+' version 3 along with OpenOffice.org.  If not, see
+' <http://www.openoffice.org/license.html>
+' for a copy of the LGPLv3 License.
+'
+'*************************************************************************
+'*************************************************************************
+
+
+
+
+
+Sub RunTest()
+
+'*************************************************************************
+' INTERFACE: 
+' com.sun.star.io.XInputStream
+'*************************************************************************
+On Error Goto ErrHndl
+    Dim bOK As Boolean
+    Dim Bytes(10) As Integer
+    Dim rBytes(10) As Integer
+    Dim oOutputStream As Object
+    Dim i As Integer
+    Dim nRead As Integer
+
+    Out.Log("First writeBytes()...")
+    bOK = true
+
+    for i = 0 to ubound(Bytes())
+        Bytes(i) = i
+    next i
+
+    oOutputStream = getOutStream()
+    oOutputStream.writeBytes(Bytes())
+
+    if (cObjectName &lt;&gt; "stm.Pipe") then ResetStreams()
+
+    Test.StartMethod("readBytes()")
+    bOK = true
+    nRead = oObj.readBytes(Bytes(), 5)
+    bOK = bOK AND nRead = 5
+    for i = 0 to 4
+        Out.Log("Expected " &amp; i &amp; ", actual is " &amp; int(Bytes(i)))
+        bOK = bOK AND Bytes(i) = i
+    next i
+    Test.MethodTested("readBytes()", bOK)
+
+    Test.StartMethod("skipBytes()")
+    bOK = true
+    oObj.skipBytes(2)
+    nRead = oObj.readBytes(Bytes(), 2)
+    Out.Log("Expected " &amp; 7 &amp; ", actual is " &amp; int(Bytes(0)))
+    bOK = bOK AND Bytes(0) = 7
+    Test.MethodTested("skipBytes()", bOK)
+
+    Test.StartMethod("available()")
+    bOK = true
+    iAvail = oObj.available()
+    Out.Log("bytes available without blocking: " &amp; iAvail)
+    bOK = bOK AND iAvail &gt;= 0
+    Test.MethodTested("available()", bOK)
+
+    Test.StartMethod("readSomeBytes()")
+    bOK = true
+    nRead = oObj.readSomeBytes(Bytes(), 10)
+    Out.Log("Can read " &amp; nRead &amp; " bytes.")
+    for i = 0 to ubound(Bytes())
+        Out.Log(int(Bytes(i)))
+    next i
+    bOK = bOK AND ubound(Bytes()) = 1
+    bOK = bOK AND nRead = 2
+    bOK = bOK AND Bytes(0) = 9
+    bOK = bOK AND Bytes(1) = 10
+    Test.MethodTested("readSomeBytes()", bOK)
+
+    Test.StartMethod("closeInput()")
+    bOK = true
+    Out.Log("This method is called in main module.")
+    Test.MethodTested("closeInput()", bOK)
+
+    ResetStreams()
+
+Exit Sub
+ErrHndl:
+    Test.Exception()
+    bOK = false
+    resume next
+End Sub
+</script:module>

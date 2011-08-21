@@ -1,0 +1,107 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_text_XAutoTextGroup_idl__
+#define __com_sun_star_text_XAutoTextGroup_idl__
+
+#include <com/sun/star/container/XNameAccess.idl>
+
+#include <com/sun/star/lang/IllegalArgumentException.idl>
+
+#include <com/sun/star/container/ElementExistException.idl>
+
+#include <com/sun/star/io/IOException.idl>
+
+#include <com/sun/star/text/XAutoTextEntry.idl>
+
+#include <com/sun/star/text/XTextRange.idl>
+
+#include <com/sun/star/container/NoSuchElementException.idl>
+
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module text {
+
+//=============================================================================
+
+// DocMerge from xml: interface com::sun::star::text::XAutoTextGroup
+/** The interface provide methods to insert, rename and delete autotext entries from the current autotext group.
+ */
+published interface XAutoTextGroup: com::sun::star::container::XNameAccess
+{
+    //-------------------------------------------------------------------------
+
+    // DocMerge from idl: method com::sun::star::text::XAutoTextGroup::getTitles
+    /** returns the titles of all autotext entries. The order of the entries
+                corresponds to the output of the function getElementNames().
+     */
+    sequence<string> getTitles();
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::text::XAutoTextGroup::renameByName
+    /** renames an entry in the autotext group.
+
+
+
+        <p>The position of the autotext entry is not changed.
+
+        </p>
+     */
+    void renameByName( [in] string aElementName,
+             [in] string aNewElementName,
+             [in] string aNewElementTitle )
+            raises( com::sun::star::lang::IllegalArgumentException,
+                    com::sun::star::container::ElementExistException,
+                    com::sun::star::io::IOException );
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::text::XAutoTextGroup::insertNewByName
+    /** creates a new <type>AutoTextEntry</type> entry.
+     */
+    com::sun::star::text::XAutoTextEntry insertNewByName( [in] string aName,
+             [in] string aTitle,
+             [in] com::sun::star::text::XTextRange xTextRange )
+            raises( com::sun::star::container::ElementExistException );
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::text::XAutoTextGroup::removeByName
+    /** removes the specified autotext entry.
+     */
+    void removeByName( [in] string aEntryName )
+            raises( com::sun::star::container::NoSuchElementException );
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+
+#endif

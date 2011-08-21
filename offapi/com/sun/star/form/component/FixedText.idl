@@ -1,0 +1,60 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_form_component_FixedText_idl__
+#define __com_sun_star_form_component_FixedText_idl__
+
+#include <com/sun/star/awt/UnoControlFixedTextModel.idl>
+
+#include <com/sun/star/form/FormControlModel.idl>
+
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module form {  module component {
+
+//=============================================================================
+
+/** This service specifies the control model for a text which can be
+    displayed, but not edited by the user.
+
+    <p>These kind of controls is usually used to label other controls.</p>
+
+    @see com::sun::star::form::DataAwareControlModel::LabelControl
+ */
+published service FixedText
+{
+    service com::sun::star::awt::UnoControlFixedTextModel;
+
+    service com::sun::star::form::FormControlModel;
+
+};
+
+//=============================================================================
+
+}; }; }; }; };
+
+#endif

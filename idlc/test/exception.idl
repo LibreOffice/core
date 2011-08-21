@@ -1,0 +1,20 @@
+module idlc
+{
+module test
+{
+
+exception BaseException
+{
+    string  Description;
+};
+
+exception RuntimeException : BaseException
+{
+    long    Id;
+    type    Context;
+};
+
+
+};
+};
+

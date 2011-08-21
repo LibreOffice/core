@@ -1,0 +1,167 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_sheet_XDataPilotFieldGrouping_idl__
+#define __com_sun_star_sheet_XDataPilotFieldGrouping_idl__
+
+#include <com/sun/star/uno/XInterface.idl>
+#include <com/sun/star/sheet/DataPilotFieldGroupInfo.idl>
+#include <com/sun/star/lang/IllegalArgumentException.idl>
+
+//=============================================================================
+
+module com {  module sun {  module star {  module sheet {
+
+//=============================================================================
+
+/** Provides methods to create new DataPilot fields where some or all items of
+    this DataPilot field are grouped in some way.
+
+    @see DataPilotField
+ */
+published interface XDataPilotFieldGrouping: com::sun::star::uno::XInterface
+{
+    //-------------------------------------------------------------------------
+
+    /** Creates a new DataPilot field which contains a group containing the
+        given DataPilot field items (members).
+
+        <p>It is possible to create multiple groups by calling this method
+        several times at the same DataPilot field. On subsequent calls, the
+        DataPilot field created at the first call is used to insert the new
+        groups.</p>
+
+        <p>The collection of groups can be accessed via the
+        <member>DataPilotField::GroupInfo</member> property. The returned
+        struct contains the sequence of groups in its member
+        <member>DataPilotFieldGroupInfo::Groups</member>.</p>
+
+        @param aItems
+            a sequence containing the names of the items (members) which will
+            be part of the new group. Must be names of items contained in the
+            current field.
+
+        @returns
+            the new created field if there is one created on the first call of
+            this method. <NULL/> is returned on subsequent calls.
+
+        @see DataPilotField
+        @see DataPilotFieldGroupInfo
+     */
+    XDataPilotField createNameGroup([in] sequence< string > aItems)
+        raises( com::sun::star::lang::IllegalArgumentException );
+
+    //-------------------------------------------------------------------------
+
+    /** Groups the members of this field by dates, according to the passed
+        settings.
+
+        <p>If this field is already grouped by dates, a new DataPilot field
+        will be created and returned. If this field is not grouped at all, the
+        date grouping is performed inside of this field (no new field will be
+        created). There must not be any other grouping (by member names or by
+        numeric ranges), otherwise an exception is thrown.</p>
+
+        @param aInfo
+            contains the information how to group the items of the field. The
+            members of this struct have to fulfill the following requirements:
+
+            <ul>
+            <li>If the member <member>DataPilotFieldGroupInfo::HasAutoStart
+            </member> is set to <FALSE/>, then the value of <member>
+            DataPilotFieldGroupInfo::Start</member> must be a floating-point
+            value representing a valid date/time value (if <member>
+            DataPilotFieldGroupInfo::HasAutoStart</member> is set to <TRUE/>,
+            the value of <member>DataPilotFieldGroupInfo::Start</member> will
+            be ignored).</li>
+
+            <li>If the member <member>DataPilotFieldGroupInfo::HasAutoEnd
+            </member> is set to <FALSE/>, then the value of <member>
+            DataPilotFieldGroupInfo::End</member> must be a floating-point
+            value representing a valid date/time value( if <member>
+            DataPilotFieldGroupInfo::HasAutoEnd</member> is set to <TRUE/>,
+            the value of <member>DataPilotFieldGroupInfo::End</member> will be
+            ignored).</li>
+
+            <li>If the members <member>DataPilotFieldGroupInfo::HasAutoStart
+            </member> and <member>DataPilotFieldGroupInfo::HasAutoEnd</member>
+            are set to <FALSE/> both, then the value of <member>
+            DataPilotFieldGroupInfo::Start</member> must be less than or equal
+            to the value of <member>DataPilotFieldGroupInfo::End</member>.</li>
+
+            <li>The member <member>DataPilotFieldGroupInfo::HasDateValues</member>
+            must be set to <TRUE/>.</li>
+
+            <li>The member <member>DataPilotFieldGroupInfo::Step</member> must
+            be zero, unless ranges of days have to be grouped (see the
+            description of the member GroupBy below), in that case the value
+            must be greater than or equal to 1 and less than or equal to 32767.
+            The fractional part of the value will be ignored.</li>
+
+            <li>The member <member>DataPilotFieldGroupInfo::GroupBy</member>
+            must contain exactly one of the flags from <type>DataPilotFieldGroupBy</type>.
+            A combination of several flags will not be accepted. If
+            <const>DataPilotFieldGroupBy::DAYS</const> is specified, the
+            value of the member <member>DataPilotFieldGroupInfo::Step</member>
+            will specify the type of day grouping (see above). If that value
+            is zero, grouping is performed on all days of the year (e.g. the
+            members containing the 1st of January of any year are grouped
+            together). If that value is greater than zero, grouping is done on
+            ranges of days, and the value specifies the number of days grouped
+            into one range (e.g. a value of 7 groups the members of a week
+            into a range).</li>
+
+            <li>The contents of the member <member>
+            DataPilotFieldGroupInfo::SourceField</member> will be ignored.</li>
+
+            <li>The contents of the member <member>
+            DataPilotFieldGroupInfo::Groups</member> will be ignored.</li>
+            </ul>
+
+        @returns
+            the new created field if there is one created. <NULL/> is returned,
+            if date grouping is performed inside this field (i.e. this field
+            was not grouped by dates before).
+
+        @throws com::sun::star::lang::IllegalArgumentException
+            if the passed struct does not contain valid settings as described,
+            or if this field is already grouped by member names or numeric
+            ranges.
+
+        @see DataPilotField
+     */
+    XDataPilotField createDateGroup([in] DataPilotFieldGroupInfo aInfo)
+        raises( com::sun::star::lang::IllegalArgumentException );
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif
+

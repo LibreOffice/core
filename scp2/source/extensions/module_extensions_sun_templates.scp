@@ -1,0 +1,58 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: module_extensions_sun_templates.scp,v $
+ *
+ *  $Revision: 1.0 $
+ *
+ *  last change: $Author: KAMI $ $Date: 2006/02/18 14:50:39 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 3.
+ *
+ *
+ *    GNU Lesser General Public License Version 3
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+
+#include "macros.inc"
+
+/* ** Sun Template Pack ** */
+
+#ifdef WITH_EXTENSION_INTEGRATION
+
+#ifdef WITH_EXTENSION_SUN_TEMPLATE_PACK
+
+Module gid_Module_Optional_Extensions_Sun_T_Pack_Template
+    ParentID = gid_Module_Optional_Extensions_Sun_Template_Pack;
+    Name = "gid_Module_Optional_Extensions_Sun_T_Pack_Template";
+    Description = "gid_Module_Optional_Extensions_Sun_T_Pack_Template";
+    Styles = (TEMPLATEMODULE);
+    Files = ( gid_File_Optional_Extensions_Sun_Template_Pack );
+    Minimal = NO;
+    Default = YES;
+End
+
+#include "alllangmodules_extensions_templates.inc"
+
+#endif
+
+#endif

@@ -1,0 +1,186 @@
+losmoketest.py
+--------------
+Yifan Jiang <yfjiang@suse.com>
+http://dev-builds.libreoffice.org/
+
+The tool is designed to enable test machine fully automatically run smoketest
+with both daily and pre release build located in dev-build.libreoffice.org.
+
+The purpose of daily build testing is obvious, we want to catch bugs as early
+as possible:) some ideas canbe found here:
+
+    http://wiki.documentfoundation.org/Testing_Daily_Builds#Is_parallel_installation_possible_.2F_planned.3F
+
+For the purpose of smoketest for pre release testing, currently there is an
+about 24 hrs lag syncing RC build from dev-build to official site. We need to
+guarantee at least the very basic function working before more people download
+the RC build from official site and play with it, in as short as 24 hrs.
+
+The tool is named as losmoketest for its purpose, meanwhile it help you to
+check, download and install the latest build. By the fact the installation is
+designed not to be different from manually doing these repeated work, the
+installed libreoffice build can also be good for manual test.
+
+Quick Start
+-----------
+
+This chapter describe step by step tutorials for a typical quick use of the
+tool. More functions can be discovered in section "The Tool -> Usage".
+
+[Linux]
+
+    0. If you do not have a python environment, firstly download python here:
+
+        http://www.python.org/download/
+
+    1. Download binary:
+
+        http://dev-builds.libreoffice.org/daily/losmoketest-0.2.tar.bz2
+
+    2. Unpack it to, for example, your home directory:
+
+        tar xvjf losmoketest-0.2.tar.bz2 -C $HOME
+
+    3. Open a terminal
+
+    4. In the terminal, input (there's an Enter between each lines):
+
+        su -
+        (enter your root password when it prompts)
+        cp /etc/sudoers /etc/sudoers.ori
+        echo "$USER ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
+        exit
+
+    5. In the terminal, input (there's an Enter between each lines):
+
+        cd $HOME/losmoketest-0.2
+        python ./losmoketest.py
+
+    A msg OK(1) would be shown When the result successfully
+    finished. Otherwise, please send the 'log' file to the author or mailing
+    list libreoffice-qa@lists.freedesktop.org for more investigation.
+
+    6. After finish testing, recover the sudoers file by (there's an Enter
+    between each lines),
+
+        su -
+        (enter your root password)
+        cp /etc/sudoers.ori /etc/sudoers
+        exit
+
+[Windows]
+
+    0. If you do not have a python environment, firstly download python here:
+
+        http://www.python.org/download/
+
+    1. Download binary:
+
+        http://dev-builds.libreoffice.org/daily/losmoketest-0.2.tar.bz2
+
+    2. Unpack it to, for example, C:\
+
+    3. Open a console by clicking Start menu -> Run ...
+
+    4. Input 'cmd' and press Enter
+
+    5. In the terminal, input (there's an Enter between each lines):
+
+        cd C:\losmoketest-0.2
+        .\losmoketest.py
+
+    A msg OK(1) would be shown When the result successfully
+    finished. Otherwise, please send the 'log' file to the author or mailing
+    list libreoffice-qa@lists.freedesktop.org for more investigation.
+
+
+The tool
+--------
+
+[Prerequisite]
+
+    - Python > 2.6
+        http://www.python.org/download/
+
+    - A machine free to play (The test may *override* your existed
+    libreoffice3.4 installation).
+
+    - On Linux, add the following line in /etc/sudoer:
+
+        $USER	ALL=(ALL) NOPASSWD: ALL
+
+      where $USER is your real user name. With this line, every command
+      initialed with `sudo` will not be asked to input a password. Please
+      consider the security risk brought by it.
+
+[Features Availability]
+
+    Full features are implemented on Linux x86 and x86_64, rpm and deb:
+
+        - Checking and dowloading the latest build
+        - Install the latest build
+        - Run smoke test on the build (not stable)
+
+    Partial features are implemented on Windows:
+
+        - Checking and dowloading the latest build
+        - Install the latest build (Thanks *blip* help find out the command for silent install)
+
+    Partial features are implemented on Mac:
+
+        - Checking and dowloading the latest build
+
+[Usages]
+
+    1. Test the latest pre releases build:
+
+           $ cd /path/to/losmoketest
+           $ ./losmoketest.py                 # Test the latest pre releases build:
+           $ ./losmoketest.py -t daily_master # Test the latest daily master build
+           $ ./losmoketest.py -t daily_branch # Test the latest daily branch build (now 3.4)
+
+    2. Just Install the latest LOCAL build:
+
+           $ cd /path/to/losmoketest
+           $ ./losmoketest.py -i                  # Install the latest pre releases build in losmoketest/_download
+           $ ./losmoketest.py -i -t daily_master  # Install the latest daily master build in losmoketest/_download
+           $ ./losmoketest.py -i -t daily_branch  # Install the latest daily branch build (now 3.4) in losmoketest/_download
+
+    3. Just Verify the installed build:
+
+           $ cd /path/to/losmoketest
+           $ ./losmoketest.py -v
+
+    4. More tips in:
+
+           $ cd /path/to/losmoketest
+           $ ./losmoketest.py -h
+
+[Tested on]
+
+    - SLED 11 sp1 x86
+    - SLED 11 sp1 x86_64
+    - OpenSuSE 11.4 x86
+    - Ubuntu 10.10 x86
+
+[TODO]
+
+    1. verify_smoketest() improvement (replace it with more simple script
+      rather than complicated cppunittester)
+
+    2. 'git' it when we have a stable code base
+
+    3. handling mac and windows build
+
+[Known issue]
+
+    1. The cppunittest performs not quite stable in different libreoffice
+       build, some times it just hangs there without noticing :(
+
+    2. The version tag is desired to get dynamically. The current hard coded
+       3.4 is not reliable, especially not reliable when verify_smoketest()
+       tries to set LD_LIBRARY_PATH.
+
+    3. Parallel installation with official build has a dependancy on Tinderbox
+       improvement (the dev-build is ideally to be installed on something like
+       /opt/lo-dev).

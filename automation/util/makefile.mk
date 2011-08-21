@@ -49,18 +49,18 @@ SHL1TARGET= sts$(DLLPOSTFIX)
 SHL1IMPLIB= ists
 
 SHL1STDLIBS= \
-            $(TOOLSLIB) \
-            $(UNOTOOLSLIB) \
-            $(SVTOOLLIB) \
-            $(SVLLIB)       \
-            $(VCLLIB) \
             $(BASICLIB) \
-            $(SALLIB) \
+            $(COMPHELPERLIB) \
             $(CPPUHELPERLIB) \
             $(CPPULIB) \
-            $(COMPHELPERLIB) \
-            $(SOTLIB)
-
+            $(SALLIB) \
+            $(SOTLIB) \
+            $(SVLLIB) \
+            $(SVTLIB) \
+            $(SVTOOLLIB) \
+            $(TOOLSLIB) \
+            $(UNOTOOLSLIB) \
+            $(VCLLIB) \
 
 .IF "$(GUI)"=="WNT"
 SHL1STDLIBS+= \

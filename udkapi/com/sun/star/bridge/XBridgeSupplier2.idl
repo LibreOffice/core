@@ -1,0 +1,117 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_bridge_XBridgeSupplier2_idl__
+#define __com_sun_star_bridge_XBridgeSupplier2_idl__
+
+#include <com/sun/star/uno/XInterface.idl>
+
+#include <com/sun/star/lang/IllegalArgumentException.idl>
+
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module bridge {
+
+//=============================================================================
+
+/** defines the interface for creating bridges to other object models.
+    <p />
+    <p>
+    The created bridges are transparent to the user. That is, if one maps
+    an interface into the target model, then the resulting target interface
+    is a bridge implementation, that is not being noticed by an user. During
+    a call on that interface, the bridge is invoked to convert the arguments
+    and carry out a call according to the rules of the source model.
+    Return values are automatically mapped to the types of the target model.
+    </p>
+    <p>
+    Simple types are mapped to simple target types. That is, there is no additional
+    bridging code involved when those types are being used.
+    </p>
+
+    <p>Sometimes a bridge cannot be created, depending on whether a programm uses
+    the XBridgeSupplier2 interface remotely. Assuming one wants to bridge an
+    OLE Automation object to UNO by calling createBridge on a proxy, then the UNO remote
+    bridge would not recognise that the Any argument contains an IDispatch interface.
+    Therefore it cannot marshal it as COM requires it and the bridgeing would fail.
+    To prevent this, implementations of this interface should be aware of this scenario and
+    if necessary take the appropriate steps. The process ID argument to the createBridge
+    function represents the calling process and may be used by the implementation to determine
+    if it is being accessed remotely.
+    </p>
+    <p>All objects, whether they are part of the UNO object model or not,
+    are carried in an <atom>any</atom>.  The representation of this object
+    is heavily model-dependent and has to be specified in the following list: </p>
+
+    <dl>
+        <dt>UNO: </dt>
+        <dd>The any carries normal UNO types, which can be any base type,
+        struct, sequence, enum or interface.  </dd>
+
+        <dt>OLE:    </dt>
+        <dd>The any carries an <atom>unsigned long</atom> (on 32-bit systems)
+        or an <atom>unsigned hyper</atom> (on 64-bit systems), which is
+        interpreted as a variant pointer. The any does not control the
+        lifetime of the represented variant. That implies that the caller
+        has the responsibility of freeing the OLE resources represented
+        by the any value.  </dd>
+
+        <dt>JAVA:   </dt>
+        <dd>not specified yet.  </dd>
+
+        <dt>CORBA: </dt>
+        <dd>not specified yet.  </dd>
+    </dl>
+
+    </p>
+    <p>Any implementation can supply its own bridges to other object
+    models by implementing this interface and returning the bridge
+    when the method <member>XBridgeSupplier2::createBridge()</member>
+    is called with itself as the first parameter.  </p>
+
+    @see com::sun::star::bridge::OleBridgeSupplier2
+ */
+published interface XBridgeSupplier2: com::sun::star::uno::XInterface
+{
+    /** creates a bridge to provide an object of one object model with another.
+     */
+    any createBridge( [in] any aModelDepObject,
+             [in] sequence< byte > aProcessId,
+             [in] short nSourceModelType,
+             [in] short nDestModelType )
+            raises( com::sun::star::lang::IllegalArgumentException );
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+/*=============================================================================
+
+=============================================================================*/
+#endif

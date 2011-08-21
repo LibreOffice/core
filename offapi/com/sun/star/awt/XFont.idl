@@ -1,0 +1,120 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_awt_XFont_idl__
+#define __com_sun_star_awt_XFont_idl__
+
+#include <com/sun/star/uno/XInterface.idl>
+
+#include <com/sun/star/awt/FontDescriptor.idl>
+
+#include <com/sun/star/awt/SimpleFontMetric.idl>
+
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module awt {
+
+//=============================================================================
+
+/** describes a font on a specific device.
+
+    <p>All values are in pixels within this device.</p>
+ */
+published interface XFont: com::sun::star::uno::XInterface
+{
+    //-------------------------------------------------------------------------
+
+    /** returns the description of the font.
+
+        <p>The unit of measurement is pixels for the device.
+     */
+    com::sun::star::awt::FontDescriptor getFontDescriptor();
+
+    //-------------------------------------------------------------------------
+
+    /** returns additional information about the font.
+     */
+    com::sun::star::awt::SimpleFontMetric getFontMetric();
+
+    //-------------------------------------------------------------------------
+
+    /** returns the width of the specified character.
+
+        @returns
+                the character width measured in pixels for the device.
+     */
+    short getCharWidth( [in] char c );
+
+    //-------------------------------------------------------------------------
+
+    /** returns the widths of the specified characters.
+
+        @returns
+                a sequence of the widths of subsequent characters for this font.
+     */
+    sequence<short> getCharWidths( [in] char nFirst, [in] char nLast );
+
+    //-------------------------------------------------------------------------
+
+    /** returns the string width.
+
+        @returns
+                the width of the specified string of characters
+                measured in pixels for the device.
+     */
+    long getStringWidth( [in] string str );
+
+    //-------------------------------------------------------------------------
+
+    /** returns the string and the character widths.
+
+        @returns
+                the width of the specified string of characters
+                measured in pixels for the device.
+
+        @param aDXArray
+                receives the width of every single character
+                measured in pixels for the device.
+     */
+    long getStringWidthArray( [in] string str,
+             [out] sequence<long> aDXArray );
+
+    //-------------------------------------------------------------------------
+
+    /** queries the kerning pair table.
+     */
+    void getKernPairs( [out] sequence<char> Chars1,
+             [out] sequence<char> Chars2,
+             [out] sequence<short> Kerns );
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

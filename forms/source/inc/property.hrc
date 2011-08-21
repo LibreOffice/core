@@ -305,6 +305,7 @@ namespace frm
 #define PROPERTY_ID_XSD_TYPE_CLASS              ( PROPERTY_ID_START + 258 )
 
 #define PROPERTY_ID_LINEEND_FORMAT              ( PROPERTY_ID_START + 259 ) // css.awt.LineEndFormat
+#define PROPERTY_ID_GENERATEVBAEVENTS           ( PROPERTY_ID_START + 260 )
 
 // start ID fuer aggregierte Properties
 #define PROPERTY_ID_AGGREGATE_ID        (PROPERTY_ID_START + 10000)

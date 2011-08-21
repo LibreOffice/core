@@ -1,0 +1,1179 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * 
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#include "macros.inc"
+
+#ifdef WITH_ACTIVEX_COMPONENT
+
+// MSOLE embedded object in SO7 file format
+RegistryItem gid_Regitem_Clsid__7b342dc4_139a_4a46_8a93_Db0827ccee9c_
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Calc_Bin;
+    Subkey = "CLSID\{7B342DC4-139A-4a46-8A93-DB0827CCEE9C}";
+    REG_VALUE_LNG(SO60_SPREADSHEET)
+End
+
+RegistryItem gid_Regitem_Clsid__7b342dc4_139a_4a46_8a93_Db0827ccee9c__Auxusertype_2
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Calc_Bin;
+    Subkey = "CLSID\{7B342DC4-139A-4a46-8A93-DB0827CCEE9C}\AuxUserType\2";
+    Value = "%PRODUCTNAME";
+End
+
+RegistryItem gid_Regitem_Clsid__7b342dc4_139a_4a46_8a93_Db0827ccee9c__Auxusertype_3
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Calc_Bin;
+    Subkey = "CLSID\{7B342DC4-139A-4a46-8A93-DB0827CCEE9C}\AuxUserType\3";
+    REG_VALUE_LNG(SO60_SPREADSHEET)
+End
+
+RegistryItem gid_Regitem_Clsid__7b342dc4_139a_4a46_8a93_Db0827ccee9c__Dataformats_Getset_0
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Calc_Bin;
+    Subkey = "CLSID\{7B342DC4-139A-4a46-8A93-DB0827CCEE9C}\DataFormats\GetSet\0";
+    Value = "Embed Source,1,8,1";
+End
+
+RegistryItem gid_Regitem_Clsid__7b342dc4_139a_4a46_8a93_Db0827ccee9c__Dataformats_Getset_1
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Calc_Bin;
+    Subkey = "CLSID\{7B342DC4-139A-4a46-8A93-DB0827CCEE9C}\DataFormats\GetSet\1";
+    Value = "3,1,32,1";
+End
+
+RegistryItem gid_Regitem_Clsid__7b342dc4_139a_4a46_8a93_Db0827ccee9c__Dataformats_Getset_2
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Calc_Bin;
+    Subkey = "CLSID\{7B342DC4-139A-4a46-8A93-DB0827CCEE9C}\DataFormats\GetSet\2";
+    Value = "2,1,16,1";
+End
+
+RegistryItem gid_Regitem_Clsid__7b342dc4_139a_4a46_8a93_Db0827ccee9c__Defaulticon
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Calc_Bin;
+    Subkey = "CLSID\{7B342DC4-139A-4a46-8A93-DB0827CCEE9C}\DefaultIcon";
+    Value = "<progpath>\program\soffice.exe,0";
+End
+
+RegistryItem gid_Regitem_Clsid__7b342dc4_139a_4a46_8a93_Db0827ccee9c__Inprochandler32
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Calc_Bin;
+    Subkey = "CLSID\{7B342DC4-139A-4a46-8A93-DB0827CCEE9C}\InprocHandler32";
+    Value = "<progpath>\program\inprocserv.dll";
+    Styles = ();
+End
+
+RegistryItem gid_Regitem_Clsid__7b342dc4_139a_4a46_8a93_Db0827ccee9c__Insertable
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Calc_Bin;
+    Subkey = "CLSID\{7B342DC4-139A-4a46-8A93-DB0827CCEE9C}\Insertable";
+End
+
+RegistryItem gid_Regitem_Clsid__7b342dc4_139a_4a46_8a93_Db0827ccee9c__Localserver32
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Calc_Bin;
+    Subkey = "CLSID\{7B342DC4-139A-4a46-8A93-DB0827CCEE9C}\LocalServer32";
+    Value = "<progpath>\program\soffice.exe -nodefault -nologo";
+End
+
+RegistryItem gid_Regitem_Clsid__7b342dc4_139a_4a46_8a93_Db0827ccee9c__Miscstatus
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Calc_Bin;
+    Subkey = "CLSID\{7B342DC4-139A-4a46-8A93-DB0827CCEE9C}\MiscStatus";
+    Value = "16";
+End
+
+RegistryItem gid_Regitem_Clsid__7b342dc4_139a_4a46_8a93_Db0827ccee9c__Progid
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Calc_Bin;
+    Subkey = "CLSID\{7B342DC4-139A-4a46-8A93-DB0827CCEE9C}\ProgID";
+    Value = "soffice.StarCalcDocument.6";
+End
+
+RegistryItem gid_Regitem_Clsid__7b342dc4_139a_4a46_8a93_Db0827ccee9c__Programmable
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Calc_Bin;
+    Subkey = "CLSID\{7B342DC4-139A-4a46-8A93-DB0827CCEE9C}\Programmable";
+End
+
+RegistryItem gid_Regitem_Clsid__7b342dc4_139a_4a46_8a93_Db0827ccee9c__Verb_0
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Calc_Bin;
+    Subkey = "CLSID\{7B342DC4-139A-4a46-8A93-DB0827CCEE9C}\verb\0";
+    Value = "&Edit,0,0";
+End
+
+RegistryItem gid_Regitem_Clsid__7b342dc4_139a_4a46_8a93_Db0827ccee9c__Verb__1
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Calc_Bin;
+    Subkey = "CLSID\{7B342DC4-139A-4a46-8A93-DB0827CCEE9C}\verb\-1";
+    Value = "Show,0,0";
+End
+
+RegistryItem gid_Regitem_Clsid__7b342dc4_139a_4a46_8a93_Db0827ccee9c__Verb__2
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Calc_Bin;
+    Subkey = "CLSID\{7B342DC4-139A-4a46-8A93-DB0827CCEE9C}\verb\-2";
+    Value = "Open,0,0";
+End
+
+RegistryItem gid_Regitem_Clsid__7b342dc4_139a_4a46_8a93_Db0827ccee9c__Versionindependentprogid
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Calc_Bin;
+    Subkey = "CLSID\{7B342DC4-139A-4a46-8A93-DB0827CCEE9C}\VersionIndependentProgID";
+    Value = "soffice.StarCalcDocument.6";
+End
+
+// MSOLE embedded object in OASIS file format
+RegistryItem gid_Regitem_Clsid__7fa8ae11_B3e3_4d88_Aabf_255526cd1ce8_
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Calc_Bin;
+    Subkey = "CLSID\{7FA8AE11-B3E3-4D88-AABF-255526CD1CE8}";
+    REG_VALUE_LNG(OO_CALC)
+End
+
+RegistryItem gid_Regitem_Clsid__7fa8ae11_B3e3_4d88_Aabf_255526cd1ce8__Auxusertype_2
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Calc_Bin;
+    Subkey = "CLSID\{7FA8AE11-B3E3-4D88-AABF-255526CD1CE8}\AuxUserType\2";
+    Value = "%PRODUCTNAME";
+End
+
+RegistryItem gid_Regitem_Clsid__7fa8ae11_B3e3_4d88_Aabf_255526cd1ce8__Auxusertype_3
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Calc_Bin;
+    Subkey = "CLSID\{7FA8AE11-B3E3-4D88-AABF-255526CD1CE8}\AuxUserType\3";
+    REG_VALUE_LNG(OO_CALC)
+End
+
+RegistryItem gid_Regitem_Clsid__7fa8ae11_B3e3_4d88_Aabf_255526cd1ce8__Dataformats_Getset_0
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Calc_Bin;
+    Subkey = "CLSID\{7FA8AE11-B3E3-4D88-AABF-255526CD1CE8}\DataFormats\GetSet\0";
+    Value = "Embed Source,1,8,1";
+End
+
+RegistryItem gid_Regitem_Clsid__7fa8ae11_B3e3_4d88_Aabf_255526cd1ce8__Dataformats_Getset_1
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Calc_Bin;
+    Subkey = "CLSID\{7FA8AE11-B3E3-4D88-AABF-255526CD1CE8}\DataFormats\GetSet\1";
+    Value = "3,1,32,1";
+End
+
+RegistryItem gid_Regitem_Clsid__7fa8ae11_B3e3_4d88_Aabf_255526cd1ce8__Dataformats_Getset_2
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Calc_Bin;
+    Subkey = "CLSID\{7FA8AE11-B3E3-4D88-AABF-255526CD1CE8}\DataFormats\GetSet\2";
+    Value = "2,1,16,1";
+End
+
+RegistryItem gid_Regitem_Clsid__7fa8ae11_B3e3_4d88_Aabf_255526cd1ce8__Defaulticon
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Calc_Bin;
+    Subkey = "CLSID\{7FA8AE11-B3E3-4D88-AABF-255526CD1CE8}\DefaultIcon";
+    Value = "<progpath>\program\soffice.exe,0";
+End
+
+RegistryItem gid_Regitem_Clsid__7fa8ae11_B3e3_4d88_Aabf_255526cd1ce8__Inprochandler32
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Calc_Bin;
+    Subkey = "CLSID\{7FA8AE11-B3E3-4D88-AABF-255526CD1CE8}\InprocHandler32";
+    Value = "<progpath>\program\inprocserv.dll";
+    Styles = ();
+End
+
+RegistryItem gid_Regitem_Clsid__7fa8ae11_B3e3_4d88_Aabf_255526cd1ce8__Insertable
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Calc_Bin;
+    Subkey = "CLSID\{7FA8AE11-B3E3-4D88-AABF-255526CD1CE8}\Insertable";
+End
+
+RegistryItem gid_Regitem_Clsid__7fa8ae11_B3e3_4d88_Aabf_255526cd1ce8__Localserver32
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Calc_Bin;
+    Subkey = "CLSID\{7FA8AE11-B3E3-4D88-AABF-255526CD1CE8}\LocalServer32";
+    Value = "<progpath>\program\soffice.exe -nodefault -nologo";
+End
+
+RegistryItem gid_Regitem_Clsid__7fa8ae11_B3e3_4d88_Aabf_255526cd1ce8__Miscstatus
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Calc_Bin;
+    Subkey = "CLSID\{7FA8AE11-B3E3-4D88-AABF-255526CD1CE8}\MiscStatus";
+    Value = "16";
+End
+
+RegistryItem gid_Regitem_Clsid__7fa8ae11_B3e3_4d88_Aabf_255526cd1ce8__Progid
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Calc_Bin;
+    Subkey = "CLSID\{7FA8AE11-B3E3-4D88-AABF-255526CD1CE8}\ProgID";
+    Value = "opendocument.CalcDocument.1";
+End
+
+RegistryItem gid_Regitem_Clsid__7fa8ae11_B3e3_4d88_Aabf_255526cd1ce8__Programmable
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Calc_Bin;
+    Subkey = "CLSID\{7FA8AE11-B3E3-4D88-AABF-255526CD1CE8}\Programmable";
+End
+
+RegistryItem gid_Regitem_Clsid__7fa8ae11_B3e3_4d88_Aabf_255526cd1ce8__Verb_0
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Calc_Bin;
+    Subkey = "CLSID\{7FA8AE11-B3E3-4D88-AABF-255526CD1CE8}\verb\0";
+    Value = "&Edit,0,0";
+End
+
+RegistryItem gid_Regitem_Clsid__7fa8ae11_B3e3_4d88_Aabf_255526cd1ce8__Verb__1
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Calc_Bin;
+    Subkey = "CLSID\{7FA8AE11-B3E3-4D88-AABF-255526CD1CE8}\verb\-1";
+    Value = "Show,0,0";
+End
+
+RegistryItem gid_Regitem_Clsid__7fa8ae11_B3e3_4d88_Aabf_255526cd1ce8__Verb__2
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Calc_Bin;
+    Subkey = "CLSID\{7FA8AE11-B3E3-4D88-AABF-255526CD1CE8}\verb\-2";
+    Value = "Open,0,0";
+End
+
+RegistryItem gid_Regitem_Clsid__7fa8ae11_B3e3_4d88_Aabf_255526cd1ce8__Versionindependentprogid
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Calc_Bin;
+    Subkey = "CLSID\{7FA8AE11-B3E3-4D88-AABF-255526CD1CE8}\VersionIndependentProgID";
+    Value = "opendocument.CalcDocument.1";
+End
+
+#endif // WITH_ACTIVEX_COMPONENT
+
+RegistryItem gid_Regitem_Soffice_Starcalcdocument_6
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Calc_Bin;
+    Subkey = "soffice.StarCalcDocument.6";
+    REG_VALUE_LNG(SO60_SPREADSHEET)
+End
+
+#ifdef WITH_ACTIVEX_COMPONENT
+
+RegistryItem gid_Regitem_Soffice_Starcalcdocument_6_Clsid
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Calc_Bin;
+    Subkey = "soffice.StarCalcDocument.6\CLSID";
+    Value = "{7B342DC4-139A-4a46-8A93-DB0827CCEE9C}";
+End
+
+#endif // WITH_ACTIVEX_COMPONENT
+
+RegistryItem gid_Regitem_Soffice_Starcalcdocument_6_Defaulticon
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Calc_Bin;
+    Subkey = "soffice.StarCalcDocument.6\DefaultIcon";
+    Value = "<progpath>\program\soffice.exe,29";
+End
+
+RegistryItem gid_Regitem_Soffice_Starcalcdocument_6_Insertable
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Calc_Bin;
+    Subkey = "soffice.StarCalcDocument.6\Insertable";
+End
+
+RegistryItem gid_Regitem_Soffice_Starcalcdocument_6_Protocol_Stdfileediting_Server
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Calc_Bin;
+    Subkey = "soffice.StarCalcDocument.6\protocol\StdFileEditing\server";
+    Value = "<progpath>\program\soffice.exe";
+End
+
+RegistryItem gid_Regitem_Soffice_Starcalcdocument_6_Protocol_Stdfileediting_Verb_0
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Calc_Bin;
+    Subkey = "soffice.StarCalcDocument.6\protocol\StdFileEditing\verb\0";
+    Value = "&Edit";
+End
+
+RegistryItem gid_Regitem_Soffice_Starcalcdocument_6_Protocol_Stdfileediting_Verb__1
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Calc_Bin;
+    Subkey = "soffice.StarCalcDocument.6\protocol\StdFileEditing\verb\-1";
+    Value = "&Show";
+End
+
+RegistryItem gid_Regitem_Soffice_Starcalcdocument_6_Protocol_Stdfileediting_Verb__2
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Calc_Bin;
+    Subkey = "soffice.StarCalcDocument.6\protocol\StdFileEditing\verb\-2";
+    Value = "&Open";
+End
+
+RegistryItem gid_Regitem_Soffice_Starcalcdocument_6_Shell
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Calc_Bin;
+    Subkey = "soffice.StarCalcDocument.6\shell";
+    Value = "open";
+End
+
+RegistryItem gid_Regitem_Soffice_Starcalcdocument_6_Shell_New
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Calc_Bin;
+    Subkey = "soffice.StarCalcDocument.6\shell\new";
+    REG_VALUE_LNG(NEW)
+End
+
+RegistryItem gid_Regitem_Soffice_Starcalcdocument_6_Shell_New_Command
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Calc_Bin;
+    Subkey = "soffice.StarCalcDocument.6\shell\new\command";
+    Value = "\"<progpath>\program\soffice.exe\" -n \"%1\"";
+End
+
+RegistryItem gid_Regitem_Soffice_Starcalcdocument_6_Shell_Open_Command
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Calc_Bin;
+    Subkey = "soffice.StarCalcDocument.6\shell\open\command";
+    Value = "\"<progpath>\program\scalc.exe\" -o \"%1\"";
+End
+
+RegistryItem gid_Regitem_Soffice_Starcalcdocument_6_Shell_Print_Command
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Calc_Bin;
+    Subkey = "soffice.StarCalcDocument.6\shell\print\command";
+    Value = "\"<progpath>\program\soffice.exe\" -p \"%1\"";
+End
+
+RegistryItem gid_Regitem_Soffice_Starcalcdocument_6_Shell_Printto_Command
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Calc_Bin;
+    Subkey = "soffice.StarCalcDocument.6\shell\printto\command";
+    Value = "\"<progpath>\program\soffice.exe\" -pt \"%2\" \"%1\"";
+End
+
+RegistryItem gid_Regitem_Soffice_Starcalcdocument_Curver
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Calc_Bin;
+    Subkey = "soffice.StarCalcDocument\CurVer";
+    Value = "soffice.StarCalcDocument.6";
+End
+
+RegistryItem gid_Regitem_Soffice_Starcalctemplate_6
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    Subkey = "soffice.StarCalcTemplate.6";
+    ModuleID = gid_Module_Prg_Calc_Bin;
+    REG_VALUE_LNG(SO60_CALC_TEMPLATE)
+End
+
+RegistryItem gid_Regitem_Soffice_Starcalctemplate_6_Defaulticon
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    Subkey = "soffice.StarCalcTemplate.6\DefaultIcon";
+    ModuleID = gid_Module_Prg_Calc_Bin;
+    Value = "<progpath>\program\soffice.exe,30";
+End
+
+RegistryItem gid_Regitem_Soffice_Starcalctemplate_6_Shell
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    Subkey = "soffice.StarCalcTemplate.6\shell";
+    ModuleID = gid_Module_Prg_Calc_Bin;
+    Value = "new";
+End
+
+RegistryItem gid_Regitem_Soffice_Starcalctemplate_6_Shell_New
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    Subkey = "soffice.StarCalcTemplate.6\shell\new";
+    ModuleID = gid_Module_Prg_Calc_Bin;
+    REG_VALUE_LNG(NEW)
+End
+
+RegistryItem gid_Regitem_Soffice_Starcalctemplate_6_Shell_New_Command
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    Subkey = "soffice.StarCalcTemplate.6\shell\new\command";
+    ModuleID = gid_Module_Prg_Calc_Bin;
+    Value = "\"<progpath>\program\soffice.exe\" -n \"%1\"";
+End
+
+RegistryItem gid_Regitem_Soffice_Starcalctemplate_6_Shell_Open_Command
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    Subkey = "soffice.StarCalcTemplate.6\shell\open\command";
+    ModuleID = gid_Module_Prg_Calc_Bin;
+    Value = "\"<progpath>\program\scalc.exe\" -o \"%1\"";
+End
+
+RegistryItem gid_Regitem_Soffice_Starcalctemplate_6_Shell_Print_Command
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    Subkey = "soffice.StarCalcTemplate.6\shell\print\command";
+    ModuleID = gid_Module_Prg_Calc_Bin;
+    Value = "\"<progpath>\program\soffice.exe\" -p \"%1\"";
+End
+
+RegistryItem gid_Regitem_Soffice_Starcalctemplate_6_Shell_Printto_Command
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    Subkey = "soffice.StarCalcTemplate.6\shell\printto\command";
+    ModuleID = gid_Module_Prg_Calc_Bin;
+    Value = "\"<progpath>\program\soffice.exe\" -pt \"%2\" \"%1\"";
+End
+
+RegistryItem gid_Regitem_Sxc_PersistentHandler
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Calc_Bin;
+    Subkey = ".sxc\PersistentHandler";
+    Value = "{7BC0E713-5703-45BE-A29D-5D46D8B39262}";
+End
+
+RegistryItem gid_Regitem_Sxc_Shellex_00021500_0000_0000_C000_000000000046
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Calc_Bin;
+    Subkey = ".sxc\shellex\{00021500-0000-0000-C000-000000000046}";
+    Value = "{087B3AE3-E237-4467-B8DB-5A38AB959AC9}";
+End
+
+RegistryItem gid_Regitem_Sxc_Shellex_BB2E617C_0920_11D1_9A0B_00C04FC2D6C1
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Calc_Bin;
+    Subkey = ".sxc\shellex\{BB2E617C-0920-11D1-9A0B-00C04FC2D6C1}";
+    Value = "{3B092F0C-7696-40E3-A80F-68D74DA84210}";
+End
+
+RegistryItem gid_Regitem_StarCalcDocument_1_Shellex_PropertySheetHandlers_MyPropSheet1
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Calc_Bin;
+    Subkey = "soffice.StarCalcDocument.6\shellex\PropertySheetHandlers\MyPropSheet1";
+    Value = "{63542C48-9552-494A-84F7-73AA6A7C99C1}";
+End
+
+RegistryItem gid_Regitem_Stc_PersistentHandler
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Calc_Bin;
+    Subkey = ".stc\PersistentHandler";
+    Value = "{7BC0E713-5703-45BE-A29D-5D46D8B39262}";
+End
+
+RegistryItem gid_Regitem_Stc_Shellex_00021500_0000_0000_C000_000000000046
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Calc_Bin;
+    Subkey = ".stc\shellex\{00021500-0000-0000-C000-000000000046}";
+    Value = "{087B3AE3-E237-4467-B8DB-5A38AB959AC9}";
+End
+
+RegistryItem gid_Regitem_Stc_Shellex_BB2E617C_0920_11D1_9A0B_00C04FC2D6C1
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Calc_Bin;
+    Subkey = ".stc\shellex\{BB2E617C-0920-11D1-9A0B-00C04FC2D6C1}";
+    Value = "{3B092F0C-7696-40E3-A80F-68D74DA84210}";
+End
+
+RegistryItem gid_Regitem_StarCalcTemplate_6_Shellex_PropertySheetHandlers_MyPropSheet1
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Calc_Bin;
+    Subkey = "soffice.StarCalcTemplate.6\shellex\PropertySheetHandlers\MyPropSheet1";
+    Value = "{63542C48-9552-494A-84F7-73AA6A7C99C1}";
+End
+
+RegistryItem gid_Regitem_Stc
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    Subkey = ".stc";
+    ModuleID = gid_Module_Prg_Calc_Bin;
+    Value = "soffice.StarCalcTemplate.6";
+End
+
+RegistryItem gid_Regitem_Stc_Contenttype
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Calc_Bin;
+    Subkey = ".stc";
+    Name = "Content Type";
+    Value = "application/vnd.sun.xml.calc.template";
+End
+
+RegistryItem gid_Regitem_stc_FullDetails
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Optional_Winexplorerext_PropertyHdl;
+    Subkey = "soffice.StarCalcTemplate.6";
+    Name = "FullDetails";
+    Value = "prop:System.PropGroup.Description;System.Title;System.Author;System.Subject;System.Keywords;System.Comment;System.PropGroup.FileSystem;System.ItemNameDisplay;System.ItemType;System.ItemFolderPathDisplay;System.Size;System.DateCreated;System.DateModified;System.FileAttributes;System.ComputerName";
+End
+
+RegistryItem gid_Regitem_Sxc_Contenttype
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Calc_Bin;
+    Subkey = ".sxc";
+    Name = "Content Type";
+    Value = "application/vnd.sun.xml.calc";
+End
+
+RegistryItem gid_Regitem_Sxc_Mime_Database
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Calc_Bin;
+    Subkey = "MIME\Database\Content Type\application/vnd.sun.xml.calc";
+    Name = "Extension";
+    Value = ".sxc";
+End
+
+
+RegistryItem gid_Regitem__Sxc
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Calc_Bin;
+    Subkey = ".sxc";
+    Value = "soffice.StarCalcDocument.6";
+End
+
+RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabilities_FileAssociations_sxc
+    ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
+    Subkey = "Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\Capabilities\FileAssociations";
+    ModuleID = gid_Module_Prg_Calc_Bin;
+    Name = ".sxc";
+    Value = "soffice.StarCalcDocument.6";
+    Styles = ();
+End
+
+RegistryItem gid_Regitem_sxc_FullDetails
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Optional_Winexplorerext_PropertyHdl;
+    Subkey = "soffice.StarCalcDocument.6";
+    Name = "FullDetails";
+    Value = "prop:System.PropGroup.Description;System.Title;System.Author;System.Subject;System.Keywords;System.Comment;System.PropGroup.FileSystem;System.ItemNameDisplay;System.ItemType;System.ItemFolderPathDisplay;System.Size;System.DateCreated;System.DateModified;System.FileAttributes;System.ComputerName";
+End
+
+
+// new ods file extension 
+
+RegistryItem gid_Regitem_Ods_PersistentHandler
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Calc_Bin;
+    Subkey = ".ods\PersistentHandler";
+    Value = "{7BC0E713-5703-45BE-A29D-5D46D8B39262}";
+End
+
+RegistryItem gid_Regitem_Ods_Shellex_00021500_0000_0000_C000_000000000046
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Calc_Bin;
+    Subkey = ".ods\shellex\{00021500-0000-0000-C000-000000000046}";
+    Value = "{087B3AE3-E237-4467-B8DB-5A38AB959AC9}";
+End
+
+RegistryItem gid_Regitem_Ods_Shellex_BB2E617C_0920_11D1_9A0B_00C04FC2D6C1
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Calc_Bin;
+    Subkey = ".ods\shellex\{BB2E617C-0920-11D1-9A0B-00C04FC2D6C1}";
+    Value = "{3B092F0C-7696-40E3-A80F-68D74DA84210}";
+End
+
+RegistryItem gid_Regitem_CalcDocument_1_Shellex_PropertySheetHandlers_MyPropSheet1
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Calc_Bin;
+    Subkey = "opendocument.CalcDocument.1\shellex\PropertySheetHandlers\MyPropSheet1";
+    Value = "{63542C48-9552-494A-84F7-73AA6A7C99C1}";
+End
+
+RegistryItem gid_Regitem__Ods
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Calc_Bin;
+    Subkey = ".ods";
+    Value = "opendocument.CalcDocument.1";
+End
+
+RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabilities_FileAssociations_ods
+    ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
+    Subkey = "Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\Capabilities\FileAssociations";
+    ModuleID = gid_Module_Prg_Calc_Bin;
+    Name = ".ods";
+    Value = "opendocument.CalcDocument.1";
+    Styles = ();
+End
+
+RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabilities_MimeAssociations_ods
+    ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
+    Subkey = "Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\Capabilities\MimeAssociations";
+    ModuleID = gid_Module_Prg_Calc_Bin;
+    Name = "application/vnd.oasis.opendocument.spreadsheet";
+    Value = "opendocument.CalcDocument.1";
+    Styles = ();
+End
+
+RegistryItem gid_Regitem_Ods_Contenttype
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Calc_Bin;
+    Subkey = ".ods";
+    Name = "Content Type";
+    Value = "application/vnd.oasis.opendocument.spreadsheet";
+End
+
+RegistryItem gid_Regitem_Ods_Mime_Database
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Calc_Bin;
+    Subkey = "MIME\Database\Content Type\application/vnd.oasis.opendocument.spreadsheet";
+    Name = "Extension";
+    Value = ".ods";
+End
+
+RegistryItem gid_Regitem_Ods_Openoffice_Calcdocument_1_Shellnew
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Calc_Bin;
+    Subkey = ".ods\opendocument.CalcDocument.1\ShellNew";
+    Name = "FileName";
+    Value = "soffice.ods";
+End
+
+RegistryItem gid_Regitem_Openoffice_Calcdocument_Curver
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Calc_Bin;
+    Subkey = "opendocument.CalcDocument\CurVer";
+    Value = "opendocument.CalcDocument.1";
+End
+
+RegistryItem gid_Regitem_Openoffice_Calcdocument_1
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Calc_Bin;
+    Subkey = "opendocument.CalcDocument.1";
+    REG_VALUE_LNG(OO_CALC)
+End
+
+#ifdef WITH_ACTIVEX_COMPONENT
+
+RegistryItem gid_Regitem_Openoffice_Calcdocument_1_Clsid
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Calc_Bin;
+    Subkey = "opendocument.CalcDocument.1\CLSID";
+    Value = "{7FA8AE11-B3E3-4D88-AABF-255526CD1CE8}";
+End
+
+#endif // WITH_ACTIVEX_COMPONENT
+
+RegistryItem gid_Regitem_Openoffice_Calcdocument_1_Defaulticon
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Calc_Bin;
+    Subkey = "opendocument.CalcDocument.1\DefaultIcon";
+    Value = "<progpath>\program\soffice.exe,3";
+End
+
+RegistryItem gid_Regitem_ods_FullDetails
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Optional_Winexplorerext_PropertyHdl;
+    Subkey = "opendocument.CalcDocument.1";
+    Name = "FullDetails";
+    Value = "prop:System.PropGroup.Description;System.Title;System.Author;System.Subject;System.Keywords;System.Comment;System.PropGroup.FileSystem;System.ItemNameDisplay;System.ItemType;System.ItemFolderPathDisplay;System.Size;System.DateCreated;System.DateModified;System.FileAttributes;System.ComputerName";
+End
+
+RegistryItem gid_Regitem_Openoffice_Calcdocument_1_Insertable
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Calc_Bin;
+    Subkey = "opendocument.CalcDocument.1\Insertable";
+End
+
+RegistryItem gid_Regitem_Openoffice_Calcdocument_1_Protocol_Stdfileediting_Server
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Calc_Bin;
+    Subkey = "opendocument.CalcDocument.1\protocol\StdFileEditing\server";
+    Value = "<progpath>\program\soffice.exe";
+End
+
+RegistryItem gid_Regitem_Openoffice_Calcdocument_1_Protocol_Stdfileediting_Verb_0
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Calc_Bin;
+    Subkey = "opendocument.CalcDocument.1\protocol\StdFileEditing\verb\0";
+    Value = "&Edit";
+End
+
+RegistryItem gid_Regitem_Openoffice_Calcdocument_1_Protocol_Stdfileediting_Verb__1
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Calc_Bin;
+    Subkey = "opendocument.CalcDocument.1\protocol\StdFileEditing\verb\-1";
+    Value = "&Show";
+End
+
+RegistryItem gid_Regitem_Openoffice_Calcdocument_1_Protocol_Stdfileediting_Verb__2
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Calc_Bin;
+    Subkey = "opendocument.CalcDocument.1\protocol\StdFileEditing\verb\-2";
+    Value = "&Open";
+End
+
+RegistryItem gid_Regitem_Openoffice_Calcdocument_1_Shell
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Calc_Bin;
+    Subkey = "opendocument.CalcDocument.1\shell";
+    Value = "open";
+End
+
+RegistryItem gid_Regitem_Openoffice_Calcdocument_1_Shell_New
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Calc_Bin;
+    Subkey = "opendocument.CalcDocument.1\shell\new";
+    REG_VALUE_LNG(NEW)
+End
+
+RegistryItem gid_Regitem_Openoffice_Calcdocument_1_Shell_New_Command
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Calc_Bin;
+    Subkey = "opendocument.CalcDocument.1\shell\new\command";
+    Value = "\"<progpath>\program\soffice.exe\" -n \"%1\"";
+End
+
+RegistryItem gid_Regitem_Openoffice_Calcdocument_1_Shell_Open_Command
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Calc_Bin;
+    Subkey = "opendocument.CalcDocument.1\shell\open\command";
+    Value = "\"<progpath>\program\scalc.exe\" -o \"%1\"";
+    Styles = ();
+End
+
+RegistryItem gid_Regitem_Openoffice_Calcdocument_1_Shell_Print_Command
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Calc_Bin;
+    Subkey = "opendocument.CalcDocument.1\shell\print\command";
+    Value = "\"<progpath>\program\soffice.exe\" -p \"%1\"";
+End
+
+RegistryItem gid_Regitem_Openoffice_Calcdocument_1_Shell_Printto_Command
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Calc_Bin;
+    Subkey = "opendocument.CalcDocument.1\shell\printto\command";
+    Value = "\"<progpath>\program\soffice.exe\" -pt \"%2\" \"%1\"";
+End
+
+// .fods
+
+RegistryItem gid_Regitem_Fods_PersistentHandler
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Calc_Bin;
+    Subkey = ".fods\PersistentHandler";
+    Value = "{7BC0E713-5703-45BE-A29D-5D46D8B39262}";
+End
+
+RegistryItem gid_Regitem_Fods_Shellex_00021500_0000_0000_C000_000000000046
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Calc_Bin;
+    Subkey = ".fods\shellex\{00021500-0000-0000-C000-000000000046}";
+    Value = "{087B3AE3-E237-4467-B8DB-5A38AB959AC9}";
+End
+
+RegistryItem gid_Regitem_Fods_Shellex_BB2E617C_0920_11D1_9A0B_00C04FC2D6C1
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Calc_Bin;
+    Subkey = ".fods\shellex\{BB2E617C-0920-11D1-9A0B-00C04FC2D6C1}";
+    Value = "{3B092F0C-7696-40E3-A80F-68D74DA84210}";
+End
+
+RegistryItem gid_Regitem__Fods
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Calc_Bin;
+    Subkey = ".fods";
+    Value = "opendocument.CalcDocument.1";
+End
+
+RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabilities_FileAssociations_fods
+    ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
+    Subkey = "Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\Capabilities\FileAssociations";
+    ModuleID = gid_Module_Root;
+    Name = ".fods";
+    Value = "opendocument.CalcDocument.1";
+    Styles = (PATCH);
+End
+
+RegistryItem gid_Regitem_Fods_Contenttype
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Calc_Bin;
+    Subkey = ".fods";
+    Name = "Content Type";
+    Value = "application/vnd.oasis.opendocument.spreadsheet";
+End
+
+// new ots file extension 
+
+RegistryItem gid_Regitem_Ots_PersistentHandler
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Calc_Bin;
+    Subkey = ".ots\PersistentHandler";
+    Value = "{7BC0E713-5703-45BE-A29D-5D46D8B39262}";
+End
+
+RegistryItem gid_Regitem_Ots_Shellex_00021500_0000_0000_C000_000000000046
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Calc_Bin;
+    Subkey = ".ots\shellex\{00021500-0000-0000-C000-000000000046}";
+    Value = "{087B3AE3-E237-4467-B8DB-5A38AB959AC9}";
+End
+
+RegistryItem gid_Regitem_Ots_Shellex_BB2E617C_0920_11D1_9A0B_00C04FC2D6C1
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Calc_Bin;
+    Subkey = ".ots\shellex\{BB2E617C-0920-11D1-9A0B-00C04FC2D6C1}";
+    Value = "{3B092F0C-7696-40E3-A80F-68D74DA84210}";
+End
+
+RegistryItem gid_Regitem_CalcTemplate_1_Shellex_PropertySheetHandlers_MyPropSheet1
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Calc_Bin;
+    Subkey = "opendocument.CalcTemplate.1\shellex\PropertySheetHandlers\MyPropSheet1";
+    Value = "{63542C48-9552-494A-84F7-73AA6A7C99C1}";
+End
+
+RegistryItem gid_Regitem_Ots
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    Subkey = ".ots";
+    ModuleID = gid_Module_Prg_Calc_Bin;
+    Value = "opendocument.CalcTemplate.1";
+End
+
+RegistryItem gid_Regitem_Ots_Contenttype
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Calc_Bin;
+    Subkey = ".ots";
+    Name = "Content Type";
+    Value = "application/vnd.oasis.opendocument.spreadsheet-template";
+End
+
+RegistryItem gid_Regitem_Openoffice_Calctemplate_1
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    Subkey = "opendocument.CalcTemplate.1";
+    ModuleID = gid_Module_Prg_Calc_Bin;
+    REG_VALUE_LNG(OO_CALC_TEMPLATE)
+End
+
+RegistryItem gid_Regitem_Openoffice_Calctemplate_1_Defaulticon
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    Subkey = "opendocument.CalcTemplate.1\DefaultIcon";
+    ModuleID = gid_Module_Prg_Calc_Bin;
+    Value = "<progpath>\program\soffice.exe,4";
+End
+
+RegistryItem gid_Regitem_ots_FullDetails
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Optional_Winexplorerext_PropertyHdl;
+    Subkey = "opendocument.CalcTemplate.1";
+    Name = "FullDetails";
+    Value = "prop:System.PropGroup.Description;System.Title;System.Author;System.Subject;System.Keywords;System.Comment;System.PropGroup.FileSystem;System.ItemNameDisplay;System.ItemType;System.ItemFolderPathDisplay;System.Size;System.DateCreated;System.DateModified;System.FileAttributes;System.ComputerName";
+End
+
+RegistryItem gid_Regitem_Openoffice_Calctemplate_1_Shell
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    Subkey = "opendocument.CalcTemplate.1\shell";
+    ModuleID = gid_Module_Prg_Calc_Bin;
+    Value = "new";
+End
+
+RegistryItem gid_Regitem_Openoffice_Calctemplate_1_Shell_New
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    Subkey = "opendocument.CalcTemplate.1\shell\new";
+    ModuleID = gid_Module_Prg_Calc_Bin;
+    REG_VALUE_LNG(NEW)
+End
+
+RegistryItem gid_Regitem_Openoffice_Calctemplate_1_Shell_New_Command
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    Subkey = "opendocument.CalcTemplate.1\shell\new\command";
+    ModuleID = gid_Module_Prg_Calc_Bin;
+    Value = "\"<progpath>\program\soffice.exe\" -n \"%1\"";
+End
+
+RegistryItem gid_Regitem_Openoffice_Calctemplate_1_Shell_Open_Command
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    Subkey = "opendocument.CalcTemplate.1\shell\open\command";
+    ModuleID = gid_Module_Prg_Calc_Bin;
+    Value = "\"<progpath>\program\scalc.exe\" -o \"%1\"";
+End
+
+RegistryItem gid_Regitem_Openoffice_Calctemplate_1_Shell_Print_Command
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    Subkey = "opendocument.CalcTemplate.1\shell\print\command";
+    ModuleID = gid_Module_Prg_Calc_Bin;
+    Value = "\"<progpath>\program\soffice.exe\" -p \"%1\"";
+End
+
+RegistryItem gid_Regitem_Openoffice_Calctemplate_1_Shell_Printto_Command
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    Subkey = "opendocument.CalcTemplate.1\shell\printto\command";
+    ModuleID = gid_Module_Prg_Calc_Bin;
+    Value = "\"<progpath>\program\soffice.exe\" -pt \"%2\" \"%1\"";
+End
+
+// "OpenWith" Windows Registry keys for extensions supported by Calc
+
+// .ODS
+RegistryItem gid_Regitem_OpenOffice_ODS_OpenWith_Calc
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    Subkey = ".ods\OpenWithProgIDs";
+    ModuleID = gid_Module_Prg_Calc_Bin;
+    Name = "opendocument.CalcDocument.1";
+    Value = " ";
+End
+
+// .OTS
+RegistryItem gid_Regitem_OpenOffice_OTS_OpenWith_Calc
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    Subkey = ".ots\OpenWithProgIDs";
+    ModuleID = gid_Module_Prg_Calc_Bin;
+    Name = "opendocument.CalcTemplate.1";
+    Value = " ";
+End
+
+// .SXC
+RegistryItem gid_Regitem_OpenOffice_SXC_OpenWith_Calc
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    Subkey = ".sxc\OpenWithProgIDs";
+    ModuleID = gid_Module_Prg_Calc_Bin;
+    Name = "soffice.StarCalcDocument.6";
+    Value = " ";
+End
+
+// .STC
+RegistryItem gid_Regitem_OpenOffice_STC_OpenWith_Calc
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    Subkey = ".stc\OpenWithProgIDs";
+    ModuleID = gid_Module_Prg_Calc_Bin;
+    Name = "soffice.StarCalcTemplate.6";
+    Value = " ";
+End
+
+// .DIF
+RegistryItem gid_Regitem_OpenOffice_DIF_OpenWith_Calc
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    Subkey = ".dif\OpenWithProgIDs";
+    ModuleID = gid_Module_Prg_Calc_Bin;
+    Name = "soffice.StarCalcDocument.6";
+    Value = " ";
+End
+
+// .DBF
+RegistryItem gid_Regitem_OpenOffice_DBF_OpenWith_Calc
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    Subkey = ".dbf\OpenWithProgIDs";
+    ModuleID = gid_Module_Prg_Calc_Bin;
+    Name = "soffice.StarCalcDocument.6";
+    Value = " ";
+End
+
+// .XLW
+RegistryItem gid_Regitem_OpenOffice_XLW_OpenWith_Calc
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    Subkey = ".xlw\OpenWithProgIDs";
+    ModuleID = gid_Module_Prg_Calc_Bin;
+    Name = "soffice.StarCalcDocument.6";
+    Value = " ";
+End
+
+// .RTF
+RegistryItem gid_Regitem_OpenOffice_RTF_OpenWith_Calc
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    Subkey = ".rtf\OpenWithProgIDs";
+    ModuleID = gid_Module_Prg_Calc_Bin;
+    Name = "soffice.StarCalcDocument.6";
+    Value = " ";
+End
+
+// .SLK
+RegistryItem gid_Regitem_OpenOffice_SLK_OpenWith_Calc
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    Subkey = ".slk\OpenWithProgIDs";
+    ModuleID = gid_Module_Prg_Calc_Bin;
+    Name = "soffice.StarCalcDocument.6";
+    Value = " ";
+End
+
+// .CSV
+RegistryItem gid_Regitem_OpenOffice_CSV_OpenWith_Calc
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    Subkey = ".csv\OpenWithProgIDs";
+    ModuleID = gid_Module_Prg_Calc_Bin;
+    Name = "soffice.StarCalcDocument.6";
+    Value = " ";
+End
+
+// .TXT
+RegistryItem gid_Regitem_OpenOffice_TXT_OpenWith_Calc
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    Subkey = ".txt\OpenWithProgIDs";
+    ModuleID = gid_Module_Prg_Calc_Bin;
+    Name = "soffice.StarCalcDocument.6";
+    Value = " ";
+End
+
+// .HTM
+RegistryItem gid_Regitem_OpenOffice_HTM_OpenWith_Calc
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    Subkey = ".htm\OpenWithProgIDs";
+    ModuleID = gid_Module_Prg_Calc_Bin;
+    Name = "soffice.StarCalcDocument.6";
+    Value = " ";
+End
+
+// .HTML
+RegistryItem gid_Regitem_OpenOffice_HTML_OpenWith_Calc
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    Subkey = ".html\OpenWithProgIDs";
+    ModuleID = gid_Module_Prg_Calc_Bin;
+    Name = "soffice.StarCalcDocument.6";
+    Value = " ";
+End
+
+// .WK1
+RegistryItem gid_Regitem_OpenOffice_WK1_OpenWith_Calc
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    Subkey = ".wk1\OpenWithProgIDs";
+    ModuleID = gid_Module_Prg_Calc_Bin;
+    Name = "soffice.StarCalcDocument.6";
+    Value = " ";
+End
+
+// .WKS
+RegistryItem gid_Regitem_OpenOffice_WKS_OpenWith_Calc
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    Subkey = ".wks\OpenWithProgIDs";
+    ModuleID = gid_Module_Prg_Calc_Bin;
+    Name = "soffice.StarCalcDocument.6";
+    Value = " ";
+End
+
+// .123
+RegistryItem gid_Regitem_OpenOffice_123_OpenWith_Calc
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    Subkey = ".123\OpenWithProgIDs";
+    ModuleID = gid_Module_Prg_Calc_Bin;
+    Name = "soffice.StarCalcDocument.6";
+    Value = " ";
+End
+
+// .XML
+RegistryItem gid_Regitem_OpenOffice_XML_OpenWith_Calc
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    Subkey = ".xml\OpenWithProgIDs";
+    ModuleID = gid_Module_Prg_Calc_Bin;
+    Name = "soffice.StarCalcDocument.6";
+    Value = " ";
+End
+
+// "FileAssociations" entries
+
+RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabilities_FileAssociations_Stc
+    ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
+    Subkey = "Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\Capabilities\FileAssociations";
+    ModuleID = gid_Module_Prg_Calc_Bin;
+    Name = ".stc";
+    Value = "soffice.StarCalcTemplate.6";
+    Styles = ();
+End
+
+RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabilities_FileAssociations_Dif
+    ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
+    Subkey = "Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\Capabilities\FileAssociations";
+    ModuleID = gid_Module_Prg_Calc_Bin;
+    Name = ".dif";
+    Value = "soffice.StarCalcDocument.6";
+    Styles = ();
+End
+
+RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabilities_FileAssociations_Dbf
+    ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
+    Subkey = "Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\Capabilities\FileAssociations";
+    ModuleID = gid_Module_Prg_Calc_Bin;
+    Name = ".dbf";
+    Value = "soffice.StarCalcDocument.6";
+    Styles = ();
+End
+
+RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabilities_FileAssociations_Slk
+    ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
+    Subkey = "Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\Capabilities\FileAssociations";
+    ModuleID = gid_Module_Prg_Calc_Bin;
+    Name = ".slk";
+    Value = "soffice.StarCalcDocument.6";
+    Styles = ();
+End
+
+RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabilities_FileAssociations_Csv
+    ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
+    Subkey = "Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\Capabilities\FileAssociations";
+    ModuleID = gid_Module_Prg_Calc_Bin;
+    Name = ".csv";
+    Value = "soffice.StarCalcDocument.6";
+    Styles = ();
+End
+
+RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabilities_FileAssociations_Xlw
+    ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
+    Subkey = "Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\Capabilities\FileAssociations";
+    ModuleID = gid_Module_Prg_Calc_Bin;
+    Name = ".xlw";
+    Value = "soffice.StarCalcDocument.6";
+    Styles = ();
+End
+
+RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabilities_FileAssociations_Wk1
+    ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
+    Subkey = "Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\Capabilities\FileAssociations";
+    ModuleID = gid_Module_Prg_Calc_Bin;
+    Name = ".wk1";
+    Value = "soffice.StarCalcDocument.6";
+    Styles = ();
+End
+
+RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabilities_FileAssociations_Wks
+    ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
+    Subkey = "Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\Capabilities\FileAssociations";
+    ModuleID = gid_Module_Prg_Calc_Bin;
+    Name = ".wks";
+    Value = "soffice.StarCalcDocument.6";
+    Styles = ();
+End
+
+RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabilities_FileAssociations_123
+    ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
+    Subkey = "Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\Capabilities\FileAssociations";
+    ModuleID = gid_Module_Prg_Calc_Bin;
+    Name = ".123";
+    Value = "soffice.StarCalcDocument.6";
+    Styles = ();
+End
+
+
+RegistryItem gid_Regitem_Software_Microsoft_Windows_Currentversion_Apppaths_Scalc_Exe
+    ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
+    Subkey = "Software\Microsoft\Windows\CurrentVersion\App Paths\scalc.exe";
+    ModuleID = gid_Module_Prg_Calc_Bin;
+    Value = "<progpath>\program\scalc.exe";
+End
+
+RegistryItem gid_Regitem_Software_Microsoft_Windows_Currentversion_Apppaths_Scalc_Exepath
+    ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
+    Subkey = "Software\Microsoft\Windows\CurrentVersion\App Paths\scalc.exe";
+    ModuleID = gid_Module_Prg_Calc_Bin;
+    Name = "Path";
+    Value = "<progpath>";
+End
+
+// registering the property handler for the supported file types
+
+REGISTER_PROPERTY_HANDLER_FOR_EXTENSION( ods )
+REGISTER_PROPERTY_HANDLER_FOR_EXTENSION( ots )
+REGISTER_PROPERTY_HANDLER_FOR_EXTENSION( sxc )
+REGISTER_PROPERTY_HANDLER_FOR_EXTENSION( stc )
+
+// registering the mso file types
+
+CONDITIONAL_REGISTER_DOC_EXTENSION( Xls,  gid_Module_Prg_Calc_MSO_Reg, xls,  XLS,  MS_EXCEL_WORKSHEET_OLD, 29, scalc.exe, open, Calc )
+CONDITIONAL_REGISTER_DOC_EXTENSION( Xlsx, gid_Module_Prg_Calc_MSO_Reg, xlsx, XLSX, MS_EXCEL_WORKSHEET, 29, scalc.exe, open, Calc )
+CONDITIONAL_REGISTER_DOC_EXTENSION( Xlsm, gid_Module_Prg_Calc_MSO_Reg, xlsm, XLSM, MS_EXCEL_WORKSHEET, 29, scalc.exe, open, Calc )
+CONDITIONAL_REGISTER_DOC_EXTENSION( Xlsb, gid_Module_Prg_Calc_MSO_Reg, xlsb, XLSB, MS_EXCEL_WORKSHEET, 29, scalc.exe, open, Calc )
+CONDITIONAL_REGISTER_DOCTEMPLATE_EXTENSION( Xlt,  gid_Module_Prg_Calc_MSO_Reg, xlt,  XLT,  MS_EXCEL_TEMPLATE_OLD, 30, scalc.exe, new, Calc )
+CONDITIONAL_REGISTER_DOCTEMPLATE_EXTENSION( Xltx, gid_Module_Prg_Calc_MSO_Reg, xltx, XLTX, MS_EXCEL_TEMPLATE, 30, scalc.exe, new, Calc )
+CONDITIONAL_REGISTER_DOCTEMPLATE_EXTENSION( Xltm, gid_Module_Prg_Calc_MSO_Reg, xltm, XLTM, MS_EXCEL_TEMPLATE, 30, scalc.exe, new, Calc )
+

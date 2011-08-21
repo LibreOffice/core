@@ -1,0 +1,17 @@
+module ooo { module vba { module word {
+    constants WdReferenceKind {
+        const long wdContentText = -1;
+        const long wdEndnoteNumber = 6;
+        const long wdEndnoteNumberFormatted = 17;
+        const long wdEntireCaption = 2;
+        const long wdFootnoteNumber = 5;
+        const long wdFootnoteNumberFormatted = 16;
+        const long wdNumberFullContext = -4;
+        const long wdNumberNoContext = -3;
+        const long wdNumberRelativeContext = -2;
+        const long wdOnlyCaptionText = 4;
+        const long wdOnlyLabelAndNumber = 3;
+        const long wdPageNumber = 7;
+        const long wdPosition = 15;
+    };
+}; }; };

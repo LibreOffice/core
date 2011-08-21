@@ -1,0 +1,116 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_awt_XPrinter_idl__
+#define __com_sun_star_awt_XPrinter_idl__
+
+#include <com/sun/star/awt/XPrinterPropertySet.idl>
+
+#include <com/sun/star/awt/PrinterException.idl>
+
+#include <com/sun/star/lang/IllegalArgumentException.idl>
+
+#include <com/sun/star/awt/XDevice.idl>
+
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module awt {
+
+//=============================================================================
+
+/** represents a virtual printer.
+
+    <p>All properties are vetoable properties.
+    If you change the properties between a call to
+    <member scope="com::sun::star::awt">XPrinter::startPage</member> and a call
+    to <member scope="com::sun::star::awt">XPrinter::endPage</member>,
+    a <type scope="com::sun::star::beans">PropertyVetoException</type> is
+    thrown.</p>
+ */
+published interface XPrinter: com::sun::star::awt::XPrinterPropertySet
+{
+    //-------------------------------------------------------------------------
+
+    /** puts the job into the printer spooler.
+
+        <p>This call may block the thread. So release all resources
+        (mutex, semaphore, etc.) before this call.</p>
+     */
+    boolean start( [in] string nJobName,
+             [in] short nCopies,
+             [in] boolean nCollate )
+            raises( com::sun::star::awt::PrinterException,
+                    com::sun::star::lang::IllegalArgumentException );
+
+    //-------------------------------------------------------------------------
+
+    /** notifies the printer spooler that the job is done and printing
+        starts.
+
+        @see terminate
+     */
+    void end()
+            raises( com::sun::star::awt::PrinterException );
+
+    //-------------------------------------------------------------------------
+
+    /** stops the current print job.
+
+        <p>If the method
+        <member scope="com::sun::star::awt">XPrinter::end</member>
+        is called beforehand, then this call does nothing. If you call
+        <member scope="com::sun::star::awt">XPrinter::terminate</member>
+        in or before the call to
+        <member scope="com::sun::star::awt">XPrinter::start</member>,
+        <member scope="com::sun::star::awt">XPrinter::terminate</member>
+        returns <FALSE/>. This call must not block the thread.</p>
+
+        @see end
+     */
+    void terminate();
+
+    //-------------------------------------------------------------------------
+
+    /** begins with a new page.
+     */
+    com::sun::star::awt::XDevice startPage()
+            raises( com::sun::star::awt::PrinterException );
+
+    //-------------------------------------------------------------------------
+
+    /** ends the current page.
+     */
+    void endPage()
+            raises( com::sun::star::awt::PrinterException );
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

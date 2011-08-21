@@ -1,0 +1,406 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2008 by Sun Microsystems, Inc.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef _EDIT_RIDS_HRC
+#define _EDIT_RIDS_HRC
+
+// include ------------------------------------------------------------------
+
+#include <svl/solar.hrc>
+
+// strings also used in cui
+#define RID_SVXSTR_PAPERBIN_SETTINGS        (RID_EDIT_START)
+#define RID_SVXSTR_PAPERBIN                 (RID_EDIT_START + 1)
+
+#define RID_OUTLUNDO_EXPAND                 (RID_EDIT_START + 2)
+#define RID_OUTLUNDO_COLLAPSE               (RID_EDIT_START + 3)
+#define RID_OUTLUNDO_ATTR                   (RID_EDIT_START + 4)
+#define RID_OUTLUNDO_INSERT                 (RID_EDIT_START + 5)
+#define RID_OUTLUNDO_DEPTH                  (RID_EDIT_START + 6)
+#define RID_OUTLUNDO_HEIGHT                 (RID_EDIT_START + 7)
+
+// strings for items
+
+#define RID_SVXITEMS_FRMDIR_BEGIN           (RID_EDIT_START + 9)
+#define RID_SVXITEMS_FRMDIR_HORI_LEFT_TOP   (RID_EDIT_START + 9)
+#define RID_SVXITEMS_FRMDIR_HORI_RIGHT_TOP  (RID_EDIT_START + 10)
+#define RID_SVXITEMS_FRMDIR_VERT_TOP_RIGHT  (RID_EDIT_START + 11)
+#define RID_SVXITEMS_FRMDIR_VERT_TOP_LEFT   (RID_EDIT_START + 12)
+#define RID_SVXITEMS_FRMDIR_ENVIRONMENT     (RID_EDIT_START + 13)
+#define RID_SVXITEMS_FRMDIR_END             (RID_EDIT_START + 14)
+
+#define RID_SVXITEMS_TRUE                   (RID_EDIT_START + 15)
+#define RID_SVXITEMS_FALSE                  (RID_EDIT_START + 16)
+#define RID_SVXITEMS_BORDER_COMPLETE        (RID_EDIT_START + 17)
+#define RID_SVXITEMS_BORDER_TOP             (RID_EDIT_START + 18)
+#define RID_SVXITEMS_BORDER_BOTTOM          (RID_EDIT_START + 19)
+#define RID_SVXITEMS_BORDER_LEFT            (RID_EDIT_START + 20)
+#define RID_SVXITEMS_BORDER_RIGHT           (RID_EDIT_START + 21)
+#define RID_SVXITEMS_BORDER_DISTANCE        (RID_EDIT_START + 22)
+#define RID_SVXITEMS_BORDER_NONE            (RID_EDIT_START + 23)
+
+#define RID_SVXITEMS_TRANSPARENT_TRUE       (RID_EDIT_START + 24)
+#define RID_SVXITEMS_TRANSPARENT_FALSE      (RID_EDIT_START + 25)
+#define RID_SVXITEMS_OPAQUE_TRUE            (RID_EDIT_START + 26)
+#define RID_SVXITEMS_OPAQUE_FALSE           (RID_EDIT_START + 27)
+
+#define RID_SVXITEMS_SHADOW_COMPLETE        (RID_EDIT_START + 28)
+#define RID_SVXITEMS_GRAPHIC                (RID_EDIT_START + 29)
+#define RID_SVXITEMS_LINES                  (RID_EDIT_START + 30)
+#define RID_SVXITEMS_ORPHANS_COMPLETE       (RID_EDIT_START + 31)
+#define RID_SVXITEMS_WIDOWS_COMPLETE        (RID_EDIT_START + 32)
+#define RID_SVXITEMS_PAGEMODEL_COMPLETE     (RID_EDIT_START + 33)
+
+#define RID_SVXITEMS_SHADOWED_TRUE          (RID_EDIT_START + 34)
+#define RID_SVXITEMS_SHADOWED_FALSE         (RID_EDIT_START + 35)
+#define RID_SVXITEMS_AUTOKERN_TRUE          (RID_EDIT_START + 36)
+#define RID_SVXITEMS_AUTOKERN_FALSE         (RID_EDIT_START + 37)
+#define RID_SVXITEMS_WORDLINE_TRUE          (RID_EDIT_START + 38)
+#define RID_SVXITEMS_WORDLINE_FALSE         (RID_EDIT_START + 39)
+#define RID_SVXITEMS_CONTOUR_TRUE           (RID_EDIT_START + 40)
+#define RID_SVXITEMS_CONTOUR_FALSE          (RID_EDIT_START + 41)
+#define RID_SVXITEMS_NOLINEBREAK_TRUE       (RID_EDIT_START + 42)
+#define RID_SVXITEMS_NOLINEBREAK_FALSE      (RID_EDIT_START + 43)
+#define RID_SVXITEMS_NOHYPHEN_TRUE          (RID_EDIT_START + 44)
+#define RID_SVXITEMS_NOHYPHEN_FALSE         (RID_EDIT_START + 45)
+#define RID_SVXITEMS_FMTKEEP_TRUE           (RID_EDIT_START + 46)
+#define RID_SVXITEMS_FMTKEEP_FALSE          (RID_EDIT_START + 47)
+#define RID_SVXITEMS_FMTSPLIT_TRUE          (RID_EDIT_START + 48)
+#define RID_SVXITEMS_FMTSPLIT_FALSE         (RID_EDIT_START + 49)
+#define RID_SVXITEMS_PRINT_TRUE             (RID_EDIT_START + 50)
+#define RID_SVXITEMS_PRINT_FALSE            (RID_EDIT_START + 51)
+#define RID_SVXITEMS_PROT_POS_TRUE          (RID_EDIT_START + 52)
+#define RID_SVXITEMS_PROT_POS_FALSE         (RID_EDIT_START + 53)
+#define RID_SVXITEMS_PROT_SIZE_TRUE         (RID_EDIT_START + 54)
+#define RID_SVXITEMS_PROT_SIZE_FALSE        (RID_EDIT_START + 55)
+#define RID_SVXITEMS_PROT_CONTENT_TRUE      (RID_EDIT_START + 56)
+#define RID_SVXITEMS_PROT_CONTENT_FALSE     (RID_EDIT_START + 57)
+#define RID_SVXITEMS_ULSPACE_UPPER          (RID_EDIT_START + 58)
+#define RID_SVXITEMS_ULSPACE_LOWER          (RID_EDIT_START + 59)
+#define RID_SVXITEMS_LRSPACE_LEFT           (RID_EDIT_START + 60)
+#define RID_SVXITEMS_LRSPACE_FLINE          (RID_EDIT_START + 62)
+#define RID_SVXITEMS_LRSPACE_RIGHT          (RID_EDIT_START + 63)
+#define RID_SVXITEMS_SIZE_WIDTH             (RID_EDIT_START + 64)
+#define RID_SVXITEMS_SIZE_HEIGHT            (RID_EDIT_START + 65)
+#define RID_SVXITEMS_PAGE_END_TRUE          (RID_EDIT_START + 66)
+#define RID_SVXITEMS_PAGE_END_FALSE         (RID_EDIT_START + 67)
+#define RID_SVXITEMS_HYPHEN_TRUE            (RID_EDIT_START + 68)
+#define RID_SVXITEMS_HYPHEN_FALSE           (RID_EDIT_START + 69)
+#define RID_SVXITEMS_HYPHEN_MINLEAD         (RID_EDIT_START + 70)
+#define RID_SVXITEMS_HYPHEN_MINTRAIL        (RID_EDIT_START + 71)
+#define RID_SVXITEMS_HYPHEN_MAX             (RID_EDIT_START + 72)
+#define RID_SVXITEMS_HNGPNCT_OFF            (RID_EDIT_START + 73)
+#define RID_SVXITEMS_HNGPNCT_ON             (RID_EDIT_START + 74)
+#define RID_SVXITEMS_FORBIDDEN_RULE_OFF     (RID_EDIT_START + 75)
+#define RID_SVXITEMS_FORBIDDEN_RULE_ON      (RID_EDIT_START + 76)
+#define RID_SVXITEMS_SCRPTSPC_OFF           (RID_EDIT_START + 77)
+#define RID_SVXITEMS_SCRPTSPC_ON            (RID_EDIT_START + 78)
+#define RID_SVXITEMS_CHARSCALE_OFF          (RID_EDIT_START + 79)
+#define RID_SVXITEMS_CHARSCALE              (RID_EDIT_START + 80)
+#define RID_SVXITEMS_CHARROTATE_OFF         (RID_EDIT_START + 81)
+#define RID_SVXITEMS_CHARROTATE             (RID_EDIT_START + 82)
+#define RID_SVXITEMS_CHARROTATE_FITLINE     (RID_EDIT_START + 83)
+
+#define RID_SVXITEMS_RELIEF_BEGIN           (RID_EDIT_START + 85)
+#define RID_SVXITEMS_RELIEF_NONE            (RID_EDIT_START + 85)
+#define RID_SVXITEMS_RELIEF_EMBOSSED        (RID_EDIT_START + 86)
+#define RID_SVXITEMS_RELIEF_ENGRAVED        (RID_EDIT_START + 87)
+#define RID_SVXITEMS_RELIEF_END             (RID_EDIT_START + 88)
+
+// HM_ERR
+#define RID_SVXSTR_HMERR_THESAURUS          (RID_EDIT_START + 89)
+
+// enum FontEmphasisMark ---------------------------------------------------
+#define RID_SVXITEMS_EMPHASIS_BEGIN_STYLE   (RID_EDIT_START + 90)
+#define RID_SVXITEMS_EMPHASIS_NONE_STYLE    (RID_EDIT_START + 90)
+#define RID_SVXITEMS_EMPHASIS_DOT_STYLE     (RID_EDIT_START + 91)
+#define RID_SVXITEMS_EMPHASIS_CIRCLE_STYLE  (RID_EDIT_START + 92)
+#define RID_SVXITEMS_EMPHASIS_DISC_STYLE    (RID_EDIT_START + 93)
+#define RID_SVXITEMS_EMPHASIS_ACCENT_STYLE  (RID_EDIT_START + 94)
+
+#define RID_SVXITEMS_EMPHASIS_ABOVE_POS     (RID_EDIT_START + 95)
+#define RID_SVXITEMS_EMPHASIS_BELOW_POS     (RID_EDIT_START + 96)
+
+// enum ESCAPEMENT -------------------------------------------------------
+#define RID_SVXITEMS_ESCAPEMENT_BEGIN       (RID_EDIT_START + 97)
+#define RID_SVXITEMS_ESCAPEMENT_OFF         (RID_EDIT_START + 97)
+#define RID_SVXITEMS_ESCAPEMENT_SUPER       (RID_EDIT_START + 98)
+#define RID_SVXITEMS_ESCAPEMENT_SUB         (RID_EDIT_START + 99)
+#define RID_SVXITEMS_ESCAPEMENT_AUTO        (RID_EDIT_START + 100)
+
+// enum CASEMAP ----------------------------------------------------------
+#define RID_SVXITEMS_CASEMAP_BEGIN          (RID_EDIT_START + 101)
+#define RID_SVXITEMS_CASEMAP_NONE           (RID_EDIT_START + 101)
+#define RID_SVXITEMS_CASEMAP_VERSALIEN      (RID_EDIT_START + 102)
+#define RID_SVXITEMS_CASEMAP_GEMEINE        (RID_EDIT_START + 103)
+#define RID_SVXITEMS_CASEMAP_TITEL          (RID_EDIT_START + 104)
+#define RID_SVXITEMS_CASEMAP_KAPITAELCHEN   (RID_EDIT_START + 105)
+
+#define RID_SVXITEMS_KERNING_COMPLETE       (RID_EDIT_START + 106)
+#define RID_SVXITEMS_KERNING_EXPANDED       (RID_EDIT_START + 107)
+#define RID_SVXITEMS_KERNING_CONDENSED      (RID_EDIT_START + 108)
+
+#define RID_SVXITEMS_BLINK_TRUE             (RID_EDIT_START + 109)
+#define RID_SVXITEMS_BLINK_FALSE            (RID_EDIT_START + 110)
+
+#define RID_SVXITEMS_TWOLINES_OFF           (RID_EDIT_START + 111)
+#define RID_SVXITEMS_TWOLINES               (RID_EDIT_START + 112)
+
+// enum FontStrikeout ----------------------------------------------------
+#define RID_SVXITEMS_STRIKEOUT_BEGIN        (RID_EDIT_START + 113)
+#define RID_SVXITEMS_STRIKEOUT_NONE         (RID_EDIT_START + 113)
+#define RID_SVXITEMS_STRIKEOUT_SINGLE       (RID_EDIT_START + 114)
+#define RID_SVXITEMS_STRIKEOUT_DOUBLE       (RID_EDIT_START + 115)
+#define RID_SVXITEMS_STRIKEOUT_DONTKNOW     (RID_EDIT_START + 116)
+#define RID_SVXITEMS_STRIKEOUT_BOLD         (RID_EDIT_START + 117)
+#define RID_SVXITEMS_STRIKEOUT_SLASH        (RID_EDIT_START + 118)
+#define RID_SVXITEMS_STRIKEOUT_X            (RID_EDIT_START + 119)
+
+// enum FontUnderline - used for overline --------------------------------
+#define RID_SVXITEMS_OL_BEGIN               (RID_EDIT_START + 120)
+#define RID_SVXITEMS_OL_NONE                (RID_EDIT_START + 120)
+#define RID_SVXITEMS_OL_SINGLE              (RID_EDIT_START + 121)
+#define RID_SVXITEMS_OL_DOUBLE              (RID_EDIT_START + 122)
+#define RID_SVXITEMS_OL_DOTTED              (RID_EDIT_START + 123)
+#define RID_SVXITEMS_OL_DONTKNOW            (RID_EDIT_START + 124)
+#define RID_SVXITEMS_OL_DASH                (RID_EDIT_START + 125)
+#define RID_SVXITEMS_OL_LONGDASH            (RID_EDIT_START + 126)
+#define RID_SVXITEMS_OL_DASHDOT             (RID_EDIT_START + 127)
+#define RID_SVXITEMS_OL_DASHDOTDOT          (RID_EDIT_START + 128)
+#define RID_SVXITEMS_OL_SMALLWAVE           (RID_EDIT_START + 129)
+#define RID_SVXITEMS_OL_WAVE                (RID_EDIT_START + 130)
+#define RID_SVXITEMS_OL_DOUBLEWAVE          (RID_EDIT_START + 131)
+#define RID_SVXITEMS_OL_BOLD                (RID_EDIT_START + 132)
+#define RID_SVXITEMS_OL_BOLDDOTTED          (RID_EDIT_START + 133)
+#define RID_SVXITEMS_OL_BOLDDASH            (RID_EDIT_START + 134)
+#define RID_SVXITEMS_OL_BOLDLONGDASH        (RID_EDIT_START + 135)
+#define RID_SVXITEMS_OL_BOLDDASHDOT         (RID_EDIT_START + 136)
+#define RID_SVXITEMS_OL_BOLDDASHDOTDOT      (RID_EDIT_START + 137)
+#define RID_SVXITEMS_OL_BOLDWAVE            (RID_EDIT_START + 138)
+
+// enum FontUnderline - used for underline -------------------------------
+#define RID_SVXITEMS_UL_BEGIN               (RID_EDIT_START + 139)
+#define RID_SVXITEMS_UL_NONE                (RID_EDIT_START + 139)
+#define RID_SVXITEMS_UL_SINGLE              (RID_EDIT_START + 140)
+#define RID_SVXITEMS_UL_DOUBLE              (RID_EDIT_START + 141)
+#define RID_SVXITEMS_UL_DOTTED              (RID_EDIT_START + 142)
+#define RID_SVXITEMS_UL_DONTKNOW            (RID_EDIT_START + 143)
+#define RID_SVXITEMS_UL_DASH                (RID_EDIT_START + 144)
+#define RID_SVXITEMS_UL_LONGDASH            (RID_EDIT_START + 145)
+#define RID_SVXITEMS_UL_DASHDOT             (RID_EDIT_START + 146)
+#define RID_SVXITEMS_UL_DASHDOTDOT          (RID_EDIT_START + 147)
+#define RID_SVXITEMS_UL_SMALLWAVE           (RID_EDIT_START + 148)
+#define RID_SVXITEMS_UL_WAVE                (RID_EDIT_START + 149)
+#define RID_SVXITEMS_UL_DOUBLEWAVE          (RID_EDIT_START + 150)
+#define RID_SVXITEMS_UL_BOLD                (RID_EDIT_START + 151)
+#define RID_SVXITEMS_UL_BOLDDOTTED          (RID_EDIT_START + 152)
+#define RID_SVXITEMS_UL_BOLDDASH            (RID_EDIT_START + 153)
+#define RID_SVXITEMS_UL_BOLDLONGDASH        (RID_EDIT_START + 154)
+#define RID_SVXITEMS_UL_BOLDDASHDOT         (RID_EDIT_START + 155)
+#define RID_SVXITEMS_UL_BOLDDASHDOTDOT      (RID_EDIT_START + 156)
+#define RID_SVXITEMS_UL_BOLDWAVE            (RID_EDIT_START + 157)
+
+// enum FontWeight -------------------------------------------------------
+#define RID_SVXITEMS_WEIGHT_BEGIN           (RID_EDIT_START + 158)
+#define RID_SVXITEMS_WEIGHT_DONTKNOW        (RID_EDIT_START + 158)
+#define RID_SVXITEMS_WEIGHT_THIN            (RID_EDIT_START + 159)
+#define RID_SVXITEMS_WEIGHT_ULTRALIGHT      (RID_EDIT_START + 160)
+#define RID_SVXITEMS_WEIGHT_LIGHT           (RID_EDIT_START + 161)
+#define RID_SVXITEMS_WEIGHT_SEMILIGHT       (RID_EDIT_START + 162)
+#define RID_SVXITEMS_WEIGHT_NORMAL          (RID_EDIT_START + 163)
+#define RID_SVXITEMS_WEIGHT_MEDIUM          (RID_EDIT_START + 164)
+#define RID_SVXITEMS_WEIGHT_SEMIBOLD        (RID_EDIT_START + 165)
+#define RID_SVXITEMS_WEIGHT_BOLD            (RID_EDIT_START + 166)
+#define RID_SVXITEMS_WEIGHT_ULTRABOLD       (RID_EDIT_START + 167)
+#define RID_SVXITEMS_WEIGHT_BLACK           (RID_EDIT_START + 168)
+
+// enum FontItalic -------------------------------------------------------
+#define RID_SVXITEMS_ITALIC_BEGIN           (RID_EDIT_START + 206)
+#define RID_SVXITEMS_ITALIC_NONE            (RID_EDIT_START + 206)
+#define RID_SVXITEMS_ITALIC_OBLIQUE         (RID_EDIT_START + 207)
+#define RID_SVXITEMS_ITALIC_NORMAL          (RID_EDIT_START + 208)
+
+// enum SvxAdjust -----------------------------------------------------------
+#define RID_SVXITEMS_ADJUST_BEGIN           (RID_EDIT_START + 209)
+#define RID_SVXITEMS_ADJUST_LEFT            (RID_EDIT_START + 209)
+#define RID_SVXITEMS_ADJUST_RIGHT           (RID_EDIT_START + 210)
+#define RID_SVXITEMS_ADJUST_BLOCK           (RID_EDIT_START + 211)
+#define RID_SVXITEMS_ADJUST_CENTER          (RID_EDIT_START + 212)
+#define RID_SVXITEMS_ADJUST_BLOCKLINE       (RID_EDIT_START + 213)
+
+#define RID_SVXITEMS_TAB_DECIMAL_CHAR       (RID_EDIT_START + 214)
+#define RID_SVXITEMS_TAB_FILL_CHAR          (RID_EDIT_START + 215)
+
+#define RID_SVXITEMS_TAB_ADJUST_BEGIN       (RID_EDIT_START + 217)
+#define RID_SVXITEMS_TAB_ADJUST_LEFT        (RID_EDIT_START + 217)
+#define RID_SVXITEMS_TAB_ADJUST_RIGHT       (RID_EDIT_START + 218)
+#define RID_SVXITEMS_TAB_ADJUST_DECIMAL     (RID_EDIT_START + 219)
+#define RID_SVXITEMS_TAB_ADJUST_CENTER      (RID_EDIT_START + 220)
+#define RID_SVXITEMS_TAB_ADJUST_DEFAULT     (RID_EDIT_START + 221)
+
+// enum SvxBreak ------------------------------------------------------------
+#define RID_SVXITEMS_BREAK_BEGIN            (RID_EDIT_START + 222)
+#define RID_SVXITEMS_BREAK_NONE             (RID_EDIT_START + 222)
+#define RID_SVXITEMS_BREAK_COLUMN_BEFORE    (RID_EDIT_START + 223)
+#define RID_SVXITEMS_BREAK_COLUMN_AFTER     (RID_EDIT_START + 224)
+#define RID_SVXITEMS_BREAK_COLUMN_BOTH      (RID_EDIT_START + 225)
+#define RID_SVXITEMS_BREAK_PAGE_BEFORE      (RID_EDIT_START + 226)
+#define RID_SVXITEMS_BREAK_PAGE_AFTER       (RID_EDIT_START + 227)
+#define RID_SVXITEMS_BREAK_PAGE_BOTH        (RID_EDIT_START + 228)
+
+// enum SvxShadowLocation ---------------------------------------------------
+#define RID_SVXITEMS_SHADOW_BEGIN           (RID_EDIT_START + 229)
+#define RID_SVXITEMS_SHADOW_NONE            (RID_EDIT_START + 229)
+#define RID_SVXITEMS_SHADOW_TOPLEFT         (RID_EDIT_START + 230)
+#define RID_SVXITEMS_SHADOW_TOPRIGHT        (RID_EDIT_START + 231)
+#define RID_SVXITEMS_SHADOW_BOTTOMLEFT      (RID_EDIT_START + 232)
+#define RID_SVXITEMS_SHADOW_BOTTOMRIGHT     (RID_EDIT_START + 233)
+
+// Border lines
+#define RID_SOLID                           (RID_EDIT_START + 234)
+#define RID_DOTTED                          (RID_EDIT_START + 235)
+#define RID_DASHED                          (RID_EDIT_START + 236)
+#define RID_DOUBLE                          (RID_EDIT_START + 237)
+#define RID_THINTHICK_SMALLGAP              (RID_EDIT_START + 238)
+#define RID_THINTHICK_MEDIUMGAP             (RID_EDIT_START + 239)
+#define RID_THINTHICK_LARGEGAP              (RID_EDIT_START + 240)
+#define RID_THICKTHIN_SMALLGAP              (RID_EDIT_START + 241)
+#define RID_THICKTHIN_MEDIUMGAP             (RID_EDIT_START + 242)
+#define RID_THICKTHIN_LARGEGAP              (RID_EDIT_START + 243)
+#define RID_EMBOSSED                        (RID_EDIT_START + 244)
+#define RID_ENGRAVED                        (RID_EDIT_START + 245)
+#define RID_OUTSET                          (RID_EDIT_START + 246)
+#define RID_INSET                           (RID_EDIT_START + 247)
+
+// Metric-Text
+#define RID_SVXITEMS_METRIC_MM              (RID_EDIT_START + 250)
+#define RID_SVXITEMS_METRIC_CM              (RID_EDIT_START + 251)
+#define RID_SVXITEMS_METRIC_INCH            (RID_EDIT_START + 252)
+#define RID_SVXITEMS_METRIC_POINT           (RID_EDIT_START + 253)
+#define RID_SVXITEMS_METRIC_TWIP            (RID_EDIT_START + 254)
+#define RID_SVXITEMS_METRIC_PIXEL           (RID_EDIT_START + 255)
+
+// enum ColorName -----------------------------------------------------------
+#define RID_SVXITEMS_COLOR_BEGIN            (RID_EDIT_START + 256)
+#define RID_SVXITEMS_COLOR                  (RID_EDIT_START + 256)
+#define RID_SVXITEMS_COLOR_BLACK            (RID_EDIT_START + 257)
+#define RID_SVXITEMS_COLOR_BLUE             (RID_EDIT_START + 258)
+#define RID_SVXITEMS_COLOR_GREEN            (RID_EDIT_START + 259)
+#define RID_SVXITEMS_COLOR_CYAN             (RID_EDIT_START + 260)
+#define RID_SVXITEMS_COLOR_RED              (RID_EDIT_START + 261)
+#define RID_SVXITEMS_COLOR_MAGENTA          (RID_EDIT_START + 262)
+#define RID_SVXITEMS_COLOR_BROWN            (RID_EDIT_START + 263)
+#define RID_SVXITEMS_COLOR_GRAY             (RID_EDIT_START + 264)
+#define RID_SVXITEMS_COLOR_LIGHTGRAY        (RID_EDIT_START + 265)
+#define RID_SVXITEMS_COLOR_LIGHTBLUE        (RID_EDIT_START + 266)
+#define RID_SVXITEMS_COLOR_LIGHTGREEN       (RID_EDIT_START + 267)
+#define RID_SVXITEMS_COLOR_LIGHTCYAN        (RID_EDIT_START + 268)
+#define RID_SVXITEMS_COLOR_LIGHTRED         (RID_EDIT_START + 269)
+#define RID_SVXITEMS_COLOR_LIGHTMAGENTA     (RID_EDIT_START + 270)
+#define RID_SVXITEMS_COLOR_YELLOW           (RID_EDIT_START + 271)
+#define RID_SVXITEMS_COLOR_WHITE            (RID_EDIT_START + 272)
+#define RID_SVXITEMS_COLOR_MENUBAR          (RID_EDIT_START + 273)
+#define RID_SVXITEMS_COLOR_MENUBARTEXT      (RID_EDIT_START + 274)
+#define RID_SVXITEMS_COLOR_POPUPMENU        (RID_EDIT_START + 275)
+#define RID_SVXITEMS_COLOR_POPUPMENUTEXT    (RID_EDIT_START + 276)
+#define RID_SVXITEMS_COLOR_WINDOWTEXT       (RID_EDIT_START + 277)
+#define RID_SVXITEMS_COLOR_WINDOWWORKSPACE  (RID_EDIT_START + 278)
+#define RID_SVXITEMS_COLOR_HIGHLIGHT        (RID_EDIT_START + 279)
+#define RID_SVXITEMS_COLOR_HIGHLIGHTTEXT    (RID_EDIT_START + 280)
+#define RID_SVXITEMS_COLOR_3DTEXT           (RID_EDIT_START + 281)
+#define RID_SVXITEMS_COLOR_3DFACE           (RID_EDIT_START + 282)
+#define RID_SVXITEMS_COLOR_3DLIGHT          (RID_EDIT_START + 283)
+#define RID_SVXITEMS_COLOR_3DSHADOW         (RID_EDIT_START + 284)
+#define RID_SVXITEMS_COLOR_SCROLLBAR        (RID_EDIT_START + 285)
+#define RID_SVXITEMS_COLOR_FIELD            (RID_EDIT_START + 286)
+#define RID_SVXITEMS_COLOR_FIELDTEXT        (RID_EDIT_START + 287)
+
+
+#define RID_SVXITEMS_PARASNAPTOGRID_ON      (RID_EDIT_START + 288)
+#define RID_SVXITEMS_PARASNAPTOGRID_OFF     (RID_EDIT_START + 289)
+
+#define RID_SVXITEMS_PARAVERTALIGN_AUTO     (RID_EDIT_START + 290)
+#define RID_SVXITEMS_PARAVERTALIGN_BASELINE (RID_EDIT_START + 291)
+#define RID_SVXITEMS_PARAVERTALIGN_TOP      (RID_EDIT_START + 292)
+#define RID_SVXITEMS_PARAVERTALIGN_CENTER   (RID_EDIT_START + 293)
+#define RID_SVXITEMS_PARAVERTALIGN_BOTTOM   (RID_EDIT_START + 294)
+
+#define RID_SVXITEMS_CHARHIDDEN_FALSE       (RID_EDIT_START + 295)
+#define RID_SVXITEMS_CHARHIDDEN_TRUE        (RID_EDIT_START + 296)
+
+// strings for error messsages in dictionary updates
+#define RID_SVXSTR_DIC_ERR_UNKNOWN          (RID_EDIT_START + 297)
+#define RID_SVXSTR_DIC_ERR_FULL             (RID_EDIT_START + 298)
+#define RID_SVXSTR_DIC_ERR_READONLY         (RID_EDIT_START + 299)
+
+// ResIds fuer HM-QueryBoxen und Error-Strings
+#define RID_SVXQB_BW_CONTINUE               (RID_EDIT_START + 300)
+#define RID_SVXQB_CONTINUE                  (RID_EDIT_START + 301)
+
+// EditEngine
+#define RID_EDITUNDO_DEL                    (RID_EDIT_START + 302)
+#define RID_EDITUNDO_MOVE                   (RID_EDIT_START + 303)
+#define RID_EDITUNDO_INSERT                 (RID_EDIT_START + 304)
+#define RID_EDITUNDO_REPLACE                (RID_EDIT_START + 305)
+#define RID_EDITUNDO_SETATTRIBS             (RID_EDIT_START + 306)
+#define RID_EDITUNDO_SETSTYLE               (RID_EDIT_START + 307)
+#define RID_EDITUNDO_RESETATTRIBS           (RID_EDIT_START + 308)
+#define RID_EDITUNDO_INDENT                 (RID_EDIT_START + 309)
+#define RID_EDITUNDO_TRANSLITERATE          (RID_EDIT_START + 310)
+#define RID_MENU_SPELL                      (RID_EDIT_START + 311)
+#define RID_STR_PARAGRAPH                   (RID_EDIT_START + 312)
+#define RID_STR_WORD                        (RID_EDIT_START + 313)
+#define RID_SVXSTR_A11Y_IMAGEBULLET_DESCRIPTION (RID_EDIT_START + 314)
+#define RID_SVXSTR_A11Y_IMAGEBULLET_NAME        (RID_EDIT_START + 315)
+
+// enum SvxCellHorJustify
+#define RID_SVXITEMS_HORJUST_STANDARD       (RID_EDIT_START + 316)
+#define RID_SVXITEMS_HORJUST_LEFT           (RID_EDIT_START + 317)
+#define RID_SVXITEMS_HORJUST_CENTER         (RID_EDIT_START + 318)
+#define RID_SVXITEMS_HORJUST_RIGHT          (RID_EDIT_START + 319)
+#define RID_SVXITEMS_HORJUST_BLOCK          (RID_EDIT_START + 320)
+#define RID_SVXITEMS_HORJUST_REPEAT         (RID_EDIT_START + 321)
+
+// enum SvxCellVerJustify
+#define RID_SVXITEMS_VERJUST_STANDARD       (RID_EDIT_START + 322)
+#define RID_SVXITEMS_VERJUST_TOP            (RID_EDIT_START + 323)
+#define RID_SVXITEMS_VERJUST_CENTER         (RID_EDIT_START + 324)
+#define RID_SVXITEMS_VERJUST_BOTTOM         (RID_EDIT_START + 325)
+
+// enum SvxCellJustifyMethod
+#define RID_SVXITEMS_JUSTMETHOD_AUTO            (RID_EDIT_START + 326)
+#define RID_SVXITEMS_JUSTMETHOD_DISTRIBUTE      (RID_EDIT_START + 327)
+
+#if 327 > (RID_EDIT_END-RID_EDIT_START)
+#error Resource-Ueberlauf in #line, #file
+#endif
+
+
+
+#endif
+
+// ******************************************************************* EOF
+

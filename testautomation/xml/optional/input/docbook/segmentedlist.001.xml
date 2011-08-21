@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
+                  "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd">
+<article>
+<articleinfo>
+<title>Unit Test: segmentedlist.001</title>
+<releaseinfo role="CVS">$Id: segmentedlist.001.xml,v 1.2 2008-07-11 07:57:42 rt Exp $</releaseinfo>
+<author><firstname>Norman</firstname><surname>Walsh</surname>
+        <affiliation><address><email>ndw@nwalsh.com</email></address></affiliation>
+</author>
+</articleinfo>
+
+<segmentedlist><title>State Capitals</title>
+<segtitle>State</segtitle>
+<segtitle>Capital</segtitle>
+<seglistitem><seg>Alabama</seg><seg>Montgomery</seg></seglistitem>
+<seglistitem><seg>Alaska</seg><seg>Anchorage</seg></seglistitem>
+<seglistitem><seg>Arkansas</seg><seg>Little Rock</seg></seglistitem>
+</segmentedlist>
+
+</article>

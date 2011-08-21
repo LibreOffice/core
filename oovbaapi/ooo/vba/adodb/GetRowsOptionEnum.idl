@@ -1,0 +1,5 @@
+module ooo { module vba { module adodb {
+    constants GetRowsOptionEnum {
+        const long adGetRowsRest = -1;
+    };
+}; }; };

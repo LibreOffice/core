@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE toolbar:toolbar PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "toolbar.dtd">
+<toolbar:toolbar xmlns:toolbar="http://openoffice.org/2001/toolbar" xmlns:xlink="http://www.w3.org/1999/xlink">
+ <toolbar:toolbaritem xlink:href=".uno:InsertTable" toolbar:helpid="20330"/>
+ <toolbar:toolbaritem xlink:href=".uno:InsertSection" toolbar:helpid="21419"/>
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:InsertFootnote" toolbar:helpid="20399"/>
+ <toolbar:toolbaritem xlink:href=".uno:InsertEndnote" toolbar:helpid="21418"/>
+ <toolbar:toolbaritem xlink:href=".uno:InsertAnnotation" toolbar:helpid="20329"/>
+ <toolbar:toolbaritem xlink:href=".uno:InsertBookmark" toolbar:helpid="20302"/>
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:InsertDoc" toolbar:visible="false" toolbar:helpid="5532"/>
+ <toolbar:toolbaritem xlink:href=".uno:EditGlossary"/>
+ <toolbar:toolbaritem xlink:href=".uno:InsertSymbol" toolbar:helpid="20328"/>
+ <toolbar:toolbaritem xlink:href=".uno:InsertFieldCtrl" toolbar:helpid="52824"/>
+ <toolbar:toolbaritem xlink:href=".uno:Config" toolbar:visible="false" toolbar:helpid="10593"/>
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:InsertGraphic" toolbar:helpid="10241"/>
+ <toolbar:toolbaritem xlink:href=".uno:InsertAVMedia" toolbar:helpid="6695"/>
+ <toolbar:toolbaritem xlink:href=".uno:InsertObjectStarMath" toolbar:helpid="20369"/>
+ <toolbar:toolbaritem xlink:href=".uno:InsertObjectChart" toolbar:visible="false" toolbar:helpid="10140"/>
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:InsertMultiIndex" toolbar:helpid="21420"/>
+ <toolbar:toolbaritem xlink:href=".uno:InsertIndexesEntry" toolbar:helpid="20335"/>
+</toolbar:toolbar>

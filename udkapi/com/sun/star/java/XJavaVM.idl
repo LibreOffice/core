@@ -1,0 +1,139 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_java_XJavaVM_idl__
+#define __com_sun_star_java_XJavaVM_idl__
+
+#include <com/sun/star/uno/XInterface.idl>
+
+//=============================================================================
+
+module com {  module sun {  module star {  module java {
+
+//=============================================================================
+
+// DocMerge from xml: interface com::sun::star::java::XJavaVM
+/** must be implemented by the user of the XJavaVM.
+
+    @deprecated
+    A UNO interface seems to be at the wrong abstraction level for this
+    functionality (also, the C++ classes <code>jvmaccess::VirtualMachine</code>
+    and <code>jvmaccess::UnoVirtualMachine</code> used by
+    <member scope="com::sun::star::java">XJavaVM::getJavaVM</member> are not
+    part of the public C++ UNO runtime API).  This should probably be replaced
+    by an appropriate C/C++ API.
+ */
+published interface XJavaVM: com::sun::star::uno::XInterface
+{
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::java::XJavaVM::getJavaVM
+    /** returns the address of the Java Virtual Machine.
+
+        <p>If the VM is not already instantiated, it will be now.</p>
+
+        <p>If the <code>processID</code> is a normal 16-byte ID, the returned
+        <atom>any</atom> contains a JNI <code>JavaVM</code> pointer as a
+        <atom>long</atom> or <atom>hyper</atom> integer (depending on the
+        platform).  If the <code>processID</code> does not match the current
+        process, or if the VM cannot be instantiated for whatever reason, a
+        <void/> <atom>any</atom> is returned.</p>
+
+        <p>If the <code>processID</code> has an additional 17th byte of
+        value&nbsp;<code>0</code>, the returned <atom>any</atom> contains a
+        non&ndash;reference-counted pointer to a (reference-counted) instance of
+        the C++ <code>jvmaccess::VirtualMachine</code> class, always represented
+        as a <atom>hyper</atom> integer.  The pointer is guaranteed to be valid
+        as long as the reference to this
+        <type scope="com::sun::star::java">XJavaVM</type> is valid (but the
+        pointer should be converted into a reference-counted reference as soon
+        as possible).  Again, if the first 16 bytes of the
+        <code>processID</code> do not match the current process, or if the VM
+        cannot be instantiated for whatever reason, a <void/> <atom>any</atom>
+        is returned.</p>
+
+        <p>If the <code>processID</code> has an additional 17th byte of
+        value&nbsp;<code>1</code>, the returned <atom>any</atom> contains a
+        non&ndash;reference-counted pointer to a (reference-counted) instance of
+        the C++ <code>jvmaccess::UnoVirtualMachine</code> class, always
+        represented as a <atom>hyper</atom> integer.  The pointer is guaranteed
+        to be valid as long as the reference to this
+        <type scope="com::sun::star::java">XJavaVM</type> is valid.  Again, if
+        the first 16 bytes of the <code>processID</code> do not match the
+        current process, or if the VM cannot be instantiated for whatever
+        reason, a <void/> <atom>any</atom> is returned.</p>
+
+        <p>The first form (returning a JNI <code>JavaVM</code> pointer) is
+        mainly for backwards compatibility, new code should use the second form
+        (returning a pointer to a <code>jvmaccess::VirtualMachine</code>) if it
+        does not want to use the Java UNO environment, and it should use the
+        third form (returning a pointer to a
+        <code>jvmaccess::UnoVirtualMachine</code>) if it wants to use the Java
+        UNO environment.  For example, one advantage of using
+        <code>jvmaccess::VirtualMachine</code> instead of the raw
+        <code>JavaVM</code> pointer is that whenever you attach a native thread
+        to the Java virtual machine, that thread's context
+        <code>ClassLoader</code> (see
+        <code>java.lang.Thread.getContextClassLoader</code>) will automatically
+        be set to a meaningful value.</p>
+
+        @param processID
+        The process ID of the caller's process, possibly extended by a 17th byte
+        of value <code>0</code> or&nbsp;<code>1</code>.
+
+        @return
+        On success, the <atom>any</atom> contains a pointer represented as
+        <atom>long</atom> or <atom>hyper</atom>, otherwise the <atom>any</atom>
+        is <void/>.
+     */
+    any getJavaVM( [in] sequence<byte> processID );
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::java::XJavaVM::isVMStarted
+    /** returns <true/> if the VM is started successfully, otherwise <false/>.
+     */
+    boolean isVMStarted();
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::java::XJavaVM::isVMEnabled
+    /** Returns <true/> if the VM is enabled.
+
+        <p>It is only possible to get the VM, if this method return 0. </p>
+     */
+    boolean isVMEnabled();
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+/*=============================================================================
+
+=============================================================================*/
+#endif

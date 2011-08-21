@@ -1,0 +1,6 @@
+module ooo { module vba { module excel {
+    constants XlTabPosition {
+        const long xlTabPositionFirst = 0;
+        const long xlTabPositionLast = 1;
+    };
+}; }; };

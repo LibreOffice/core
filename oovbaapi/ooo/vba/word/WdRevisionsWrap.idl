@@ -1,0 +1,7 @@
+module ooo { module vba { module word {
+    constants WdRevisionsWrap {
+        const long wdWrapAlways = 1;
+        const long wdWrapAsk = 2;
+        const long wdWrapNever = 0;
+    };
+}; }; };

@@ -1,0 +1,125 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_sdb_DocumentContainer_idl__
+#define __com_sun_star_sdb_DocumentContainer_idl__
+
+#include <com/sun/star/sdb/DefinitionContainer.idl>
+#include <com/sun/star/sdb/DefinitionContent.idl>
+
+
+ module com {  module sun {  module star {  module lang {
+ published interface XMultiServiceFactory;
+};};};};
+
+ module com {  module sun {  module star {  module frame {
+ published interface XComponentLoader;
+};};};};
+
+  module com {  module sun {  module star {  module container {
+ published interface XHierarchicalNameContainer;
+};};};};
+
+
+ module com {  module sun {  module star {  module sdb {
+
+
+/** describes a container which provides access to documents embedded into a database document,
+    usually forms and reports.
+
+    <p>The <member scope="com::sun::star::lang">XMultiServiceFactory::createInstanceWithArguments()</member>
+    should be used to create sub document container or form, or report objects.</p>
+
+    <p>The embedded documents do not support any particular database related service, instead, they're
+    usual <type scope="com::sun::star::document">OfficeDocument</type>s.<br/>
+    The only thing worth mentioning here is that they support the
+    <type scope="com::sun::star::container">XChild</type> interface, whose
+    <member scope="com::sun::star::container">XChild::getParent</member> method can be used to
+    obtain the database document which the embedded document belongs to.
+    </p>
+
+    @see DocumentDefinition
+    @see OfficeDatabaseDocument
+ */
+service DocumentContainer
+{
+    service DefinitionContainer;
+
+    /** provides functionality for treating the container as part of a hierarchy
+        of a database document's sub documents.
+
+        <p>The <member scope="com::sun::star::ucb">XCommandProcessor::execute</member> method
+        of a <code>DocumentDefinition</code> supports at least the following commands, additionally to
+        the ones already supported by the DefinitionContent:
+        <ul>
+            <li><strong>open</strong>: provides a <type scope="com::sun::star::ucb::">XDynamicResultSet</type>
+                to enumerate the content of the document container.</li>
+            <li><strong>delete</strong>: deletes the document container, including all contained documents.</li>
+        </ul>
+    */
+    service DefinitionContent;
+
+    /** can be used to load the document inside.
+        <p>
+        URL: describes the name of the document definition to load,
+        TargetFrameName: isn't used.
+        SearchFlags: isn't used.
+        Arguments:
+        <ol>
+            <li>PropertyValue</li>
+                Name = ActiveConnection
+                Value = The connection which should be used when opening the text document.
+            <li>PropertyValue</li>
+                Name = OpenMode
+                Value = string, "open" if the document should be opened in live mode (editing is not possible),
+                                "openDesign" if the document should be open in design mode (editing is possible)
+        </ol>
+        @see com::sun::star::sdbc::XConnection
+        </p>
+    */
+    interface com::sun::star::frame::XComponentLoader;
+
+    /** can be used to create container elements.
+        <p>
+        If this interface is supported, the object created using it (e.g., the object returned by
+        <method scope="com.sun.star.lang">XMultiServiceFactory::createInstanceWithArguments()</method>
+        ) can be used as container elements.
+        </p>
+     */
+    interface com::sun::star::lang::XMultiServiceFactory;
+
+    /** can be used to create folder hierarchies and to organize forms or reports in different sub folders.
+    */
+    interface com::sun::star::container::XHierarchicalNameContainer;
+};
+
+//=============================================================================
+
+}; }; }; };
+
+/*===========================================================================
+===========================================================================*/
+#endif

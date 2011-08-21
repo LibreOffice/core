@@ -1,0 +1,73 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_form_binding_BindableIntegerValueRange_idl__
+#define __com_sun_star_form_binding_BindableIntegerValueRange_idl__
+
+#include <com/sun/star/form/binding/BindableControlModel.idl>
+
+//=============================================================================
+
+module com {  module sun {  module star {  module form {  module binding {
+
+//=============================================================================
+
+/** this service specifies a <type>BindableControlModel</type> which reflects
+    an integer value, out of a range of permitted integer values.
+
+    <p><type>BindableIntegerValueRange</type>s have a value property, a minimum, and a maximum,
+    all of type integer.</p>
+*/
+service BindableIntegerValueRange
+{
+    /** specifies that the control can be bound to external values
+
+        <p>Any binding used with the control model (see <member>XBindableValue::setValueBinding</member>)
+        must support exchanging double values.</p>
+
+        <p>When the (integer) value reflected by the control model is changed, it's converted
+        into an double value and propagated to the binding.</p>
+
+        <p>When the external (double) value changes, it's converted as follows to an integer
+        value:
+        <ul><li>If the external value is <NULL/>, the current value of the control model
+                will be set to it's minimum.</li>
+            <li>If the external value is the <em>infinite</em> value, the control value will
+                be set to its maximum or minimum, depending on the sign of the external value.</li>
+            <li>If none of the aforementioned conditions is met, the external value will be simply
+                rounded.</li>
+        </ul>
+    */
+    service com::sun::star::form::binding::BindableControlModel;
+
+};
+
+//=============================================================================
+
+}; }; }; }; };
+
+#endif

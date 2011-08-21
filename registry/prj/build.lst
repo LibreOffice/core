@@ -1,0 +1,7 @@
+rg	registry	:	salhelper store NULL
+rg	registry								usr1	-	all	rg_mkout NULL
+rg	registry\inc							nmake	-	all	rg_inc NULL
+rg	registry\prj							get		-	all	rg_prj rg_inc NULL
+rg	registry\source							nmake	-	all	rg_src rg_inc NULL
+rg	registry\util							nmake	-	all	rg_utl rg_src NULL
+rg	registry\tools							nmake	-	all	rg_tls rg_utl NULL

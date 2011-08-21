@@ -1,0 +1,17 @@
+module ooo { module vba { module msforms {
+    constants fmIMEMode {
+        const long fmIMEModeAlpha = 8;
+        const long fmIMEModeAlphaFull = 7;
+        const long fmIMEModeDisable = 3;
+        const long fmIMEModeHangul = 10;
+        const long fmIMEModeHangulFull = 9;
+        const long fmIMEModeHanzi = 12;
+        const long fmIMEModeHanziFull = 11;
+        const long fmIMEModeHiragana = 4;
+        const long fmIMEModeKatakana = 5;
+        const long fmIMEModeKatakanaHalf = 6;
+        const long fmIMEModeNoControl = 0;
+        const long fmIMEModeOff = 2;
+        const long fmIMEModeOn = 1;
+    };
+}; }; };

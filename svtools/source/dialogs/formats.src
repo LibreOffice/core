@@ -1,0 +1,293 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#include <svtools/sores.hxx>
+
+String STR_FORMAT_STRING
+{
+    Text [ en-US ] = "Unformatted text" ;
+};
+String STR_FORMAT_BITMAP
+{
+    Text [ en-US ] = "Bitmap";
+};
+String STR_FORMAT_GDIMETAFILE
+{
+    Text [ en-US ] = "GDI metafile";
+};
+String STR_FORMAT_RTF
+{
+    Text [ en-US ] = "Formatted text [RTF]" ;
+};
+String STR_FORMAT_ID_DRAWING
+{
+    Text [ en-US ] = "Drawing format";
+};
+String STR_FORMAT_ID_SVXB
+{
+    Text [ en-US ] = "SVXB (StarView bitmap/animation)";
+};
+String STR_FORMAT_ID_INTERNALLINK_STATE
+{
+    Text [ en-US ] = "Status Info from Svx Internal Link";
+};
+String STR_FORMAT_ID_SOLK
+{
+    Text [ en-US ] = "SOLK (%PRODUCTNAME Link)";
+};
+String STR_FORMAT_ID_NETSCAPE_BOOKMARK
+{
+    Text [ en-US ] = "Netscape Bookmark";
+};
+String STR_FORMAT_ID_STARSERVER
+{
+    Text [ en-US ] = "Star server format";
+};
+String STR_FORMAT_ID_STAROBJECT
+{
+    Text [ en-US ] = "Star object format";
+};
+String STR_FORMAT_ID_APPLETOBJECT
+{
+    Text [ en-US ] = "Applet object";
+};
+String STR_FORMAT_ID_PLUGIN_OBJECT
+{
+    Text [ en-US ] = "Plug-in object";
+};
+String STR_FORMAT_ID_STARWRITER_30
+{
+    Text [ en-US ] = "StarWriter 3.0 object";
+};
+String STR_FORMAT_ID_STARWRITER_40
+{
+    Text [ en-US ] = "StarWriter 4.0 object";
+};
+String STR_FORMAT_ID_STARWRITER_50
+{
+    Text [ en-US ] = "StarWriter 5.0 object";
+};
+String STR_FORMAT_ID_STARWRITERWEB_40
+{
+    Text [ en-US ] = "StarWriter/Web 4.0 object";
+};
+String STR_FORMAT_ID_STARWRITERWEB_50
+{
+    Text [ en-US ] = "StarWriter/Web 5.0 object";
+};
+String STR_FORMAT_ID_STARWRITERGLOB_40
+{
+    Text [ en-US ] = "StarWriter/Master 4.0 object";
+};
+String STR_FORMAT_ID_STARWRITERGLOB_50
+{
+    Text [ en-US ] = "StarWriter/Master 5.0 object";
+};
+String STR_FORMAT_ID_STARDRAW
+{
+    Text [ en-US ] = "StarDraw object";
+};
+String STR_FORMAT_ID_STARDRAW_40
+{
+    Text [ en-US ] = "StarDraw 4.0 object";
+};
+String STR_FORMAT_ID_STARIMPRESS_50
+{
+    Text [ en-US ] = "StarImpress 5.0 object";
+};
+String STR_FORMAT_ID_STARDRAW_50
+{
+    Text [ en-US ] = "StarDraw 5.0 object";
+};
+String STR_FORMAT_ID_STARCALC
+{
+    Text [ en-US ] = "StarCalc object";
+};
+String STR_FORMAT_ID_STARCALC_40
+{
+    Text [ en-US ] = "StarCalc  4.0 object";
+};
+String STR_FORMAT_ID_STARCALC_50
+{
+    Text [ en-US ] = "StarCalc 5.0 object";
+};
+String STR_FORMAT_ID_STARCHART
+{
+    Text [ en-US ] = "StarChart object";
+};
+String STR_FORMAT_ID_STARCHART_40
+{
+    Text [ en-US ] = "StarChart 4.0 object";
+};
+String STR_FORMAT_ID_STARCHART_50
+{
+    Text [ en-US ] = "StarChart 5.0 object";
+};
+String STR_FORMAT_ID_STARIMAGE
+{
+    Text [ en-US ] = "StarImage object";
+};
+String STR_FORMAT_ID_STARIMAGE_40
+{
+    Text [ en-US ] = "StarImage 4.0 object";
+};
+String STR_FORMAT_ID_STARIMAGE_50
+{
+    Text [ en-US ] = "StarImage 5.0 object";
+};
+String STR_FORMAT_ID_STARMATH
+{
+    Text [ en-US ] = "StarMath object";
+};
+String STR_FORMAT_ID_STARMATH_40
+{
+    Text [ en-US ] = "StarMath 4.0 object";
+};
+String STR_FORMAT_ID_STARMATH_50
+{
+    Text [ en-US ] = "StarMath 5.0 object";
+};
+String STR_FORMAT_ID_STAROBJECT_PAINTDOC
+{
+    Text [ en-US ] = "StarObject Paint object";
+};
+String STR_FORMAT_ID_HTML
+{
+    Text [ en-US ] = "HTML (HyperText Markup Language)";
+};
+String STR_FORMAT_ID_HTML_SIMPLE
+{
+    Text [ en-US ] = "HTML format";
+};
+String STR_FORMAT_ID_BIFF_5
+{
+    Text [ en-US ] = "Biff5 (Microsoft Excel 5.0/95)";
+};
+String STR_FORMAT_ID_BIFF_8
+{
+    Text [ en-US ] = "Biff8 (Microsoft Excel 97/2000/XP/2003)";
+};
+String STR_FORMAT_ID_SYLK
+{
+    Text [ en-US ] = "Sylk";
+};
+String STR_FORMAT_ID_LINK
+{
+    Text [ en-US ] = "DDE link" ;
+};
+String STR_FORMAT_ID_DIF
+{
+    Text [ en-US ] = "DIF";
+};
+String STR_FORMAT_ID_MSWORD_DOC
+{
+    Text [ en-US ] = "Microsoft Word object";
+};
+String STR_FORMAT_ID_STAR_FRAMESET_DOC
+{
+    Text [ en-US ] = "StarFrameSet object";
+};
+String STR_FORMAT_ID_OFFICE_DOC
+{
+    Text [ en-US ] = "Office document object";
+};
+String STR_FORMAT_ID_NOTES_DOCINFO
+{
+    Text [ en-US ] = "Notes document info";
+};
+String STR_FORMAT_ID_SFX_DOC
+{
+    Text [ en-US ] = "Sfx document";
+};
+String STR_FORMAT_ID_STARCHARTDOCUMENT_50
+{
+    Text [ en-US ] = "StarChart 5.0 object";
+};
+String STR_FORMAT_ID_GRAPHOBJ
+{
+    Text [ en-US ] = "Graphic object";
+};
+String STR_FORMAT_ID_STARWRITER_60
+{
+    Text [ en-US ] = "%PRODUCTXMLFILEFORMATNAME %PRODUCTXMLFILEFORMATVERSION Writer object";
+};
+String STR_FORMAT_ID_STARWRITERWEB_60
+{
+    Text [ en-US ] = "%PRODUCTXMLFILEFORMATNAME %PRODUCTXMLFILEFORMATVERSION Writer/Web object";
+};
+String STR_FORMAT_ID_STARWRITERGLOB_60
+{
+    Text [ en-US ] = "%PRODUCTXMLFILEFORMATNAME %PRODUCTXMLFILEFORMATVERSION Writer/Master object";
+};
+String STR_FORMAT_ID_STARDRAW_60
+{
+    Text [ en-US ] = "%PRODUCTXMLFILEFORMATNAME %PRODUCTXMLFILEFORMATVERSION Draw object";
+};
+String STR_FORMAT_ID_STARIMPRESS_60
+{
+    Text [ en-US ] = "%PRODUCTXMLFILEFORMATNAME %PRODUCTXMLFILEFORMATVERSION Impress object";
+};
+String STR_FORMAT_ID_STARCALC_60
+{
+    Text [ en-US ] = "%PRODUCTXMLFILEFORMATNAME %PRODUCTXMLFILEFORMATVERSION Calc object";
+};
+String STR_FORMAT_ID_STARCHART_60
+{
+    Text [ en-US ] = "%PRODUCTXMLFILEFORMATNAME %PRODUCTXMLFILEFORMATVERSION Chart object";
+};
+String STR_FORMAT_ID_STARMATH_60
+{
+    Text [ en-US ] = "%PRODUCTXMLFILEFORMATNAME %PRODUCTXMLFILEFORMATVERSION Math object";
+};
+String STR_FORMAT_ID_WMF
+{
+    Text [ en-US ] = "Windows metafile";
+};
+String STR_FORMAT_ID_DBACCESS_QUERY
+{
+    Text [ en-US ] = "Data source object";
+};
+String STR_FORMAT_ID_DBACCESS_TABLE
+{
+    Text [ en-US ] = "Data source table";
+};
+String STR_FORMAT_ID_DBACCESS_COMMAND
+{
+    Text [ en-US ] = "SQL query";
+};
+String STR_FORMAT_ID_DIALOG_60
+{
+    Text [ en-US ] = "%PRODUCTXMLFILEFORMATNAME %PRODUCTXMLFILEFORMATVERSION dialog";
+};
+String STR_FORMAT_ID_FILEGRPDESCRIPTOR
+{
+    Text [ en-US ] = "Link";
+};
+String STR_FORMAT_ID_HTML_NO_COMMENT
+{
+    Text [ en-US ] = "HTML format without comments";
+};

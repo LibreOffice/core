@@ -1,0 +1,7 @@
+module ooo { module vba { module access {
+    constants AcSearchDirection {
+        const long acDown = 1;
+        const long acSearchAll = 2;
+        const long acUp = 0;
+    };
+}; }; };

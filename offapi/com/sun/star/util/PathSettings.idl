@@ -1,0 +1,165 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_util_PathSettings_idl__
+#define __com_sun_star_util_PathSettings_idl__
+
+#include <com/sun/star/beans/XPropertySet.idl>
+#include <com/sun/star/beans/XFastPropertySet.idl>
+#include <com/sun/star/beans/XMultiPropertySet.idl>
+
+//=============================================================================
+
+module com {  module sun {  module star {  module  util {
+
+//=============================================================================
+
+/** Supports read/write access and listener for the paths properties that
+    the Office uses.
+    <p>
+    The property names of the Office paths/directories are an exactly match
+    to the configuration entries found in the file
+    (org/openoffice/Office/Common.xml).<br>
+    This service supports the usage of path variables to define
+    paths that a relative to other office or system directories.
+    See <type>PathSubstitution</type>
+    </p>
+
+    @since OOo 1.1.2
+ */
+published service PathSettings
+{
+  /** Main interface to have access to the path properties. */
+  interface com::sun::star::beans::XPropertySet;
+
+  /** An extension to the <type scope="com::sun::star::beans">XPropertySet</type> interface.
+      The get and set methods use handles to access the property values
+      instead of character strings. */
+  interface com::sun::star::beans::XFastPropertySet;
+
+  /** Provides access to multiple properties of this service with a
+      single call. */
+  interface com::sun::star::beans::XMultiPropertySet;
+
+  /** Specifies the directory that contains spreadsheet add-ins which use
+      the old add-in API */
+  [property] string Addin;
+
+  /** The settings of the AutoCorrect dialog. The value can be more than
+      one path separated by a semicolon.
+  */
+  [property] string AutoCorrect;
+
+  /**The directory which contains the AutoText modules. The value can be more than
+      one path separated by a semicolon.*/
+  [property] string AutoText;
+
+  /** Automatic backup copies of documents are stored here. */
+  [property] string Backup;
+
+  /** The Basic files, used by the AutoPilots, can be found here. The value can be more than
+      one path separated by a semicolon.*/
+  [property] string Basic;
+
+  /** This directory contains the icons for the toolbars. */
+  [property] string Bitmap;
+
+  /** The configuration files are located here. This entry cannot be changed
+      by the user in Office user interface. */
+  [property] string Config;
+
+  /** The provided dictionaries are stored here. */
+  [property] string Dictionary;
+
+  /** Path to save folder bookmarks */
+  [property] string Favorite;
+
+  /** Specifies the directory where all the filters are stored. */
+  [property] string Filter;
+
+  /** Specifies the directories which contains the Gallery
+      database and multimedia files. The value can be more than
+      one path separated by a semicolon.*/
+  [property] string Gallery;
+
+  /** This directory is displayed when the dialog for opening a graphic
+      or for saving a new graphic is called. */
+  [property] string Graphic;
+
+  /** The path to the Office help files. */
+  [property] string Help;
+
+  /** The files that are necessary for the spell check are saved here. */
+  [property] string Linguistic;
+
+  /** This is the path for the modules. */
+  [property] string Module;
+
+  /** This is the path to the palette files *.SOB to *.SOF containing
+      user-defined colors and patterns. */
+  [property] string Palette;
+
+  /** Plugins are saved in these directories. The value can be more than
+      one path separated by a semicolon.*/
+  [property] string Plugin;
+
+  /** Mail, News files and other information (for example, about FTP Server)
+      are stored here.*/
+  [property] string Storage;
+
+  /** The base url to the office temp-files */
+  [property] string Temp;
+
+  /** The templates originate from these folders and sub-folders. The value
+      can be more than one path separated by a semicolon.*/
+  [property] string Template;
+
+  /** Global directories to look for user interface configuration files. The
+      user interface configuration will be merged with user settings stored
+      in the directory specified by <var>UserConfig</var>. The value can be more
+      than one path separated by a semicolon.*/
+  [property] string UIConfig;
+
+  /** Specifies the folder with the user settings. */
+  [property] string UserConfig;
+
+  /** The custom dictionaries are contained here.
+   * @deprecated
+   * */
+  [property] string UserDictionary;
+
+  /** The path of the work folder can be modified according to the
+      user's needs. The path specified here can be seen in the Open
+      or Save dialog. */
+  [property] string Work;
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

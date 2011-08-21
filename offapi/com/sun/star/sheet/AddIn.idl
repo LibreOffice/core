@@ -1,0 +1,152 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_sheet_AddIn_idl__
+#define __com_sun_star_sheet_AddIn_idl__
+
+#include <com/sun/star/lang/XServiceName.idl>
+#include <com/sun/star/sheet/XAddIn.idl>
+#include <com/sun/star/sheet/XCompatibilityNames.idl>
+
+//=============================================================================
+
+module com {  module sun {  module star {  module sheet {
+
+//=============================================================================
+
+/** is the base for AddIn services that supply functions which can be called
+    by other components.
+
+    <p>Any AddIn implementation must implement a service describing its
+    specific set of functions.
+    That service must contain the <type>AddIn</type> service, and the
+    functions that are implemented, in one or more interfaces.
+    The <type scope="com::sun::star::lang">XServiceName</type> interface
+    must describe that service, and the <type>XAddIn</type> interface
+    must describe the individual functions.</p>
+
+    <p>Each AddIn function can take parameters of the following types:</p>
+
+    <dl>
+    <dt><atom>long</atom></dt>
+    <dd>for integer values.</dd>
+
+    <dt><atom>double</atom></dt>
+    <dd>for floating point values.</dd>
+
+    <dt><atom>string</atom></dt>
+    <dd>for text strings.</dd>
+
+    <dt><atom>long[][]</atom></dt>
+    <dd>for (two-dimensional) arrays of integer values.</dd>
+
+    <dt><atom>double[][]</atom></dt>
+    <dd>for (two-dimensional) arrays of floating point values.</dd>
+
+    <dt><atom>string[][]</atom></dt>
+    <dd>for (two-dimensional) arrays of text strings.</dd>
+
+    <dt><atom>any[][]</atom></dt>
+    <dd>for (two-dimensional) arrays of mixed contents. Each <atom>any</atom>
+    will contain a <atom>double</atom> or a <atom>string</atom>, depending on
+    the data.</dd>
+
+    <dt><atom>any</atom></dt>
+    <dd>Depending on the data, a <atom>double</atom>, a <atom>string</atom>,
+    or an <atom>any[][]</atom> will be passed. If no argument is specified in
+    the function call, <void/> will be passed. This allows for optional
+    parameters.</dd>
+
+    <dt><type scope="com::sun::star::table">XCellRange</type></dt>
+    <dd>for a <type scope="com::sun::star::table">XCellRange</type> interface
+    to the source data.</dd>
+
+    <dt><type scope="com::sun::star::beans">XPropertySet</type></dt>
+    <dd>for a <type scope="com::sun::star::beans">XPropertySet</type>
+    interface to the <type>SpreadsheetDocument</type> making the function
+    call. Only one parameter of this type is allowed in each function. It
+    can be used to query document settings like
+    <member>SpreadsheetDocumentSettings::NullDate</member>.</dd>
+
+    <dt><atom>any[]</atom></dt>
+    <dd>for varying parameters. Only the last parameter of a function may
+    have this type. It will be filled with the remaining arguments of the
+    function call that were not used for the previous parameters. Each
+    element of the sequence will be filled as in the case of <atom>any</atom>
+    above.</dd>
+    </dl>
+
+    <p>Each AddIn function must have one of the following return types:</p>
+
+    <ul>
+    <li><atom>long</atom></li>
+    <li><atom>double</atom></li>
+    <li><atom>string</atom></li>
+    <li><atom>long[][]</atom></li>
+    <li><atom>double[][]</atom></li>
+    <li><atom>string[][]</atom></li>
+    <li><atom>any[][]</atom></li>
+    <li><type>XVolatileResult</type></li>
+    <li><atom>any</atom></li>
+    </ul>
+
+    <p>The sequences must contain arrays as described above for the
+    parameter types.
+    An <type>XVolatileResult</type> return value must contain an object
+    implementing the <type>VolatileResult</type> service, that contains
+    a volatile result. Subsequent calls with the same parameters must
+    return the same object.
+    An <atom>any</atom> return value can contain any of the other types.</p>
+ */
+published service AddIn
+{
+    // ------------------------------------------------------------------------
+
+    /** contains a method that returns the service name of the add-in.
+     */
+    interface com::sun::star::lang::XServiceName;
+
+    // ------------------------------------------------------------------------
+
+    /** provides access to function descriptions and localized names
+        and descriptions.
+      */
+    interface com::sun::star::sheet::XAddIn;
+
+    // ------------------------------------------------------------------------
+
+    /** provides access to compatibility names for the functions.
+     */
+    [optional] interface com::sun::star::sheet::XCompatibilityNames;
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif
+

@@ -1,0 +1,676 @@
+/*************************************************************************
+*
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * 
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+************************************************************************/
+
+#include "macros.inc"
+
+RegistryItem gid_Regitem_Bau
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    Subkey = ".bau";
+    ModuleID = gid_Module_Root;
+    Value = "soffice.StarConfigFile.6";
+End
+
+RegistryItem gid_Regitem_AppID__df595024_3257_41b3_bcf1_a51515ad205e_
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    Subkey = "AppID\{82154420-0FBF-11d4-8313-005004526AB4}";
+    ModuleID = gid_Module_Root;
+    Value = "%PRODUCTNAME Service Manager (Ver 1.0)";
+End
+
+RegistryItem gid_Regitem_AppID__df595024_3257_41b3_bcf1_a51515ad205e_soffice
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    Subkey = "AppID\soffice.exe";
+    ModuleID = gid_Module_Root;
+    Value = "%PRODUCTNAME Service Manager (Ver 1.0)";
+End
+
+RegistryItem gid_Regitem_Clsid__3ecf78f0_B1_11d2_8ebe_005ad848af_
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    Subkey = "CLSID\{82154420-0FBF-11d4-8313-005004526AB4}";
+    ModuleID = gid_Module_Root;
+    Value = "%PRODUCTNAME Service Manager (Ver 1.0)";
+End
+
+RegistryItem gid_Regitem_Clsid__3ecf78f0_B1_11d2_8ebe_005ad848af_AppID
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    Subkey = "CLSID\{82154420-0FBF-11d4-8313-005004526AB4}";
+    ModuleID = gid_Module_Root;
+    Name = "AppID";
+    Value = "{82154420-0FBF-11d4-8313-005004526AB4}";
+End
+
+RegistryItem gid_Regitem_Clsid__3ecf78f0_B1_11d2_8ebe_005ad848af__Localserver32
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    Subkey = "CLSID\{82154420-0FBF-11d4-8313-005004526AB4}\LocalServer32";
+    ModuleID = gid_Module_Root;
+    Value = "<progpath>\program\soffice.exe -nodefault -nologo";
+End
+
+RegistryItem gid_Regitem_Clsid__3ecf78f0_B1_11d2_8ebe_005ad848af__Notinsertable
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    Subkey = "CLSID\{82154420-0FBF-11d4-8313-005004526AB4}\NotInsertable";
+    ModuleID = gid_Module_Root;
+    Value = "";
+End
+
+RegistryItem gid_Regitem_Clsid__3ecf78f0_B1_11d2_8ebe_005ad848af__Progid
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    Subkey = "CLSID\{82154420-0FBF-11d4-8313-005004526AB4}\ProgID";
+    ModuleID = gid_Module_Root;
+    Value = "com.sun.star.ServiceManager.1";
+End
+
+RegistryItem gid_Regitem_Clsid__3ecf78f0_B1_11d2_8ebe_005ad848af__Programmable
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    Subkey = "CLSID\{82154420-0FBF-11d4-8313-005004526AB4}\Programmable";
+    ModuleID = gid_Module_Root;
+    Value = "";
+End
+
+RegistryItem gid_Regitem_Clsid__3ecf78f0_B1_11d2_8ebe_005ad848af__Versionindependentprogid
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    Subkey = "CLSID\{82154420-0FBF-11d4-8313-005004526AB4}\VersionIndependentProgID";
+    ModuleID = gid_Module_Root;
+    Value = "com.sun.star.ServiceManager";
+End
+
+RegistryItem gid_Regitem_Sdg
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    Subkey = ".sdg";
+    ModuleID = gid_Module_Root;
+    Value = "soffice.StarConfigFile.6";
+End
+
+RegistryItem gid_Regitem_Sdv
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    Subkey = ".sdv";
+    ModuleID = gid_Module_Root;
+    Value = "soffice.StarConfigFile.6";
+End
+
+RegistryItem gid_Regitem_Sob
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    Subkey = ".sob";
+    ModuleID = gid_Module_Root;
+    Value = "soffice.StarConfigFile.6";
+End
+
+RegistryItem gid_Regitem_Soc
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    Subkey = ".soc";
+    ModuleID = gid_Module_Root;
+    Value = "soffice.StarConfigFile.6";
+End
+
+RegistryItem gid_Regitem_Sod
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    Subkey = ".sod";
+    ModuleID = gid_Module_Root;
+    Value = "soffice.StarConfigFile.6";
+End
+
+RegistryItem gid_Regitem_Soe
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    Subkey = ".soe";
+    ModuleID = gid_Module_Root;
+    Value = "soffice.StarConfigFile.6";
+End
+
+RegistryItem gid_Regitem_Soffice_Starconfigfile_6
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    Subkey = "soffice.StarConfigFile.6";
+    ModuleID = gid_Module_Root;
+    REG_VALUE_LNG(SO60_CONFIGFILE)
+End
+
+RegistryItem gid_Regitem_Software_Microsoft_Windows_Currentversion_Apppaths_Soffice_Exe
+    ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
+    Subkey = "Software\Microsoft\Windows\CurrentVersion\App Paths\soffice.exe";
+    ModuleID = gid_Module_Root;
+    Value = "<progpath>\program\soffice.exe";
+End
+
+RegistryItem gid_Regitem_Software_Microsoft_Windows_Currentversion_Apppaths_Soffice_Exepath
+    ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
+    Subkey = "Software\Microsoft\Windows\CurrentVersion\App Paths\soffice.exe";
+    ModuleID = gid_Module_Root;
+    Name = "Path";
+    Value = "<progpath>";
+End
+
+RegistryItem gid_Regitem_Software_Microsoft_Windows_Currentversion_Apppaths_Unopkg_Exe
+    ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
+    Subkey = "Software\Microsoft\Windows\CurrentVersion\App Paths\unopkg.exe";
+    ModuleID = gid_Module_Root;
+    Value = "<progpath>\program\unopkg.exe";
+End
+
+RegistryItem gid_Regitem_Software_Microsoft_Windows_Currentversion_Apppaths_Unopkg_Exepath
+    ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
+    Subkey = "Software\Microsoft\Windows\CurrentVersion\App Paths\unopkg.exe";
+    ModuleID = gid_Module_Root;
+    Name = "Path";
+    Value = "<progpath>";
+End
+
+RegistryItem gid_Regitem_Software_Microsoft_Windows_Currentversion_Uninstall_Staroffice_Displayname
+    ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
+    Subkey = "Software\Microsoft\Windows\CurrentVersion\Uninstall\%PRODUCTNAME %PRODUCTVERSION";
+    ModuleID = gid_Module_Root;
+    Name = "DisplayName";
+    Value = "%PRODUCTNAME %PRODUCTVERSION";
+End
+
+RegistryItem gid_Regitem_Software_Microsoft_Windows_Currentversion_Uninstall_Staroffice_Displayname2
+    ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
+    Subkey = "Software\Microsoft\Windows\CurrentVersion\Uninstall\%PRODUCTNAME %PRODUCTVERSION";
+    ModuleID = gid_Module_Root;
+    Name = "DisplayIcon";
+    Value = "<progpath>\program\setup.exe";
+End
+
+RegistryItem gid_Regitem_Software_Microsoft_Windows_Currentversion_Uninstall_Staroffice_Displayversion
+    ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
+    ModuleID = gid_Module_Root;
+    Subkey = "Software\Microsoft\Windows\CurrentVersion\Uninstall\%PRODUCTNAME %PRODUCTVERSION";
+    Name = "DisplayVersion";
+    Value = "%PRODUCTVERSION";
+End
+
+RegistryItem gid_Regitem_Software_Microsoft_Windows_Currentversion_Uninstall_Staroffice_Helplink
+    ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
+    ModuleID = gid_Module_Root;
+    Subkey = "Software\Microsoft\Windows\CurrentVersion\Uninstall\%PRODUCTNAME %PRODUCTVERSION";
+    Name = "HelpLink";
+    Value = "http://www.libreoffice.org";
+End
+
+RegistryItem gid_Regitem_Software_Microsoft_Windows_Currentversion_Uninstall_Staroffice_Modifypath
+    ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
+    ModuleID = gid_Module_Root;
+    Subkey = "Software\Microsoft\Windows\CurrentVersion\Uninstall\%PRODUCTNAME %PRODUCTVERSION";
+    Name = "ModifyPath";
+    Value = "<progpath>\program\setup.exe -reinstall";
+End
+
+RegistryItem gid_Regitem_Software_Microsoft_Windows_Currentversion_Uninstall_Staroffice_Publisher
+    ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
+    ModuleID = gid_Module_Root;
+    Subkey = "Software\Microsoft\Windows\CurrentVersion\Uninstall\%PRODUCTNAME %PRODUCTVERSION";
+    Name = "Publisher";
+    Value = "The The Document Foundation for the LibreOffice Community";
+End
+
+RegistryItem gid_Regitem_Software_Microsoft_Windows_Currentversion_Uninstall_Staroffice_Uninstallstring
+    ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
+    Subkey = "Software\Microsoft\Windows\CurrentVersion\Uninstall\%PRODUCTNAME %PRODUCTVERSION";
+    ModuleID = gid_Module_Root;
+    Name = "UninstallString";
+    Value = "<progpath>\program\setup.exe -deinstall";
+End
+
+RegistryItem gid_Regitem_Software_Microsoft_Windows_Currentversion_Uninstall_Staroffice_Urlinfoabout
+    ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
+    ModuleID = gid_Module_Root;
+    Subkey = "Software\Microsoft\Windows\CurrentVersion\Uninstall\%PRODUCTNAME %PRODUCTVERSION";
+    Name = "URLInfoAbout";
+    Value = "http://www.libreoffice.org/";
+End
+
+RegistryItem gid_Regitem_Software_Microsoft_Windows_Currentversion_Uninstall_Staroffice_Urlupdateinfo
+    ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
+    ModuleID = gid_Module_Root;
+    Subkey = "Software\Microsoft\Windows\CurrentVersion\Uninstall\%PRODUCTNAME %PRODUCTVERSION";
+    Name = "URLUpdateInfo";
+    Value = "http://download.libreoffice.org";
+End
+
+RegistryItem gid_Regitem_Software_Openoffice_Productname_Productversion_Path
+	ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
+    Subkey = "Software\LibreOffice\%PRODUCTNAME\%PRODUCTVERSION";
+	ModuleID = gid_Module_Root;
+	Name = "Path";
+	Value = "<progpath>\program\soffice.exe";
+End
+
+RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Productcode_Install
+	ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
+	Subkey = "Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\%PRODUCTCODE";
+	ModuleID = gid_Module_Root;
+	Name = "INSTALLLOCATION";
+	Value = "[INSTALLLOCATION]";
+	Styles = (LANGUAGEPACK,ALWAYS_REQUIRED);
+End
+
+RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Upgradecode_Install
+	ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
+	Subkey = "Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\%UPGRADECODE";
+	ModuleID = gid_Module_Root;
+	Name = "INSTALLLOCATION";
+	Value = "[INSTALLLOCATION]";
+	Styles = (LANGUAGEPACK,ALWAYS_REQUIRED);
+End
+
+RegistryItem gid_Regitem_Software_OpenOfficeorg_Ooobaseversion_Install
+	ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
+    Subkey = "Software\LibreOffice\${REGISTRYLAYERNAME}\%PRODUCTNAME\%BRANDPACKAGEVERSION";
+	ModuleID = gid_Module_Root;
+	Name = "INSTALLLOCATION";
+	Value = "[INSTALLLOCATION]";
+	Styles = (ALWAYS_REQUIRED);
+End
+
+RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Productcode_Officeinstall
+	ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
+	Subkey = "Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\%PRODUCTCODE";
+	ModuleID = gid_Module_Root;
+	Name = "OFFICEINSTALLLOCATION";
+	Value = "[INSTALLLOCATION]";
+	Styles = (LANGUAGEPACK,ALWAYS_REQUIRED,UPGRADEKEY);
+End
+
+RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Productcode_Productversion
+	ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
+	Subkey = "Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\%PRODUCTCODE";
+	ModuleID = gid_Module_Root;
+	Name = "ProductVersion";
+	Value = "[ProductVersion]";
+	Styles = (LANGUAGEPACK,ALWAYS_REQUIRED);
+End
+
+RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Upgradecode_Officeinstall
+	ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
+	Subkey = "Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\%UPGRADECODE";
+	ModuleID = gid_Module_Root;
+	Name = "OFFICEINSTALLLOCATION";
+	Value = "[INSTALLLOCATION]";
+	Styles = (LANGUAGEPACK,ALWAYS_REQUIRED);
+End
+
+RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Upgradecode_Productversion
+	ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
+	Subkey = "Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\%UPGRADECODE";
+	ModuleID = gid_Module_Root;
+	Name = "ProductVersion";
+	Value = "[ProductVersion]";
+	Styles = (LANGUAGEPACK,ALWAYS_REQUIRED);
+End
+
+RegistryItem gid_Regitem_Software_OpenOfficeorg_Ooobaseversion_Officeinstall
+	ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
+    Subkey = "Software\LibreOffice\${REGISTRYLAYERNAME}\%PRODUCTNAME\%BRANDPACKAGEVERSION";
+	ModuleID = gid_Module_Root;
+	Name = "OFFICEINSTALLLOCATION";
+	Value = "[INSTALLLOCATION]";
+	Styles = (ALWAYS_REQUIRED);
+End
+
+RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Productcode_Basisinstall
+	ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
+	Subkey = "Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\%PRODUCTCODE";
+	ModuleID = gid_Module_Root;
+	Name = "BASISINSTALLLOCATION";
+	Value = "[INSTALLLOCATION]Basis\\";
+	Styles = (LANGUAGEPACK,ALWAYS_REQUIRED);
+End
+
+RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Upgradecode_Basisinstall
+	ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
+	Subkey = "Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\%UPGRADECODE";
+	ModuleID = gid_Module_Root;
+	Name = "BASISINSTALLLOCATION";
+	Value = "[INSTALLLOCATION]Basis\\";
+	Styles = (LANGUAGEPACK,ALWAYS_REQUIRED);
+End
+
+RegistryItem gid_Regitem_Software_OpenOfficeorg_Ooobaseversion_Basisinstall
+	ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
+    Subkey = "Software\LibreOffice\${REGISTRYLAYERNAME}\Basis\%OOOBASEVERSION";
+	ModuleID = gid_Module_Root;
+	Name = "BASISINSTALLLOCATION";
+	Value = "[INSTALLLOCATION]Basis\\";
+	Styles = (ALWAYS_REQUIRED,LAYER_REGISTRY,USE_OOOBASEVERSION);
+End
+
+RegistryItem gid_Regitem_Software_OpenOfficeorg_Ooobaseversion_Layer_Basisinstall
+	ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
+    Subkey = "Software\LibreOffice\${REGISTRYLAYERNAME}\%PRODUCTNAME\%BRANDPACKAGEVERSION";
+	ModuleID = gid_Module_Root;
+	Name = "BASISINSTALLLOCATION";
+	Value = "[INSTALLLOCATION]Basis\\";
+	Styles = (ALWAYS_REQUIRED);
+End
+
+RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Productcode_Ureinstall
+	ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
+	Subkey = "Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\%PRODUCTCODE";
+	ModuleID = gid_Module_Root;
+	Name = "UREINSTALLLOCATION";
+	Value = "[INSTALLLOCATION]URE\\";
+	Styles = (LANGUAGEPACK,ALWAYS_REQUIRED);
+End
+
+RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Upgradecode_Ureinstall
+	ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
+	Subkey = "Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\%UPGRADECODE";
+	ModuleID = gid_Module_Root;
+	Name = "UREINSTALLLOCATION";
+	Value = "[INSTALLLOCATION]URE\\";
+	Styles = (LANGUAGEPACK,ALWAYS_REQUIRED);
+End
+
+RegistryItem gid_Regitem_Software_OpenOfficeorg_Ooobaseversion_Ureinstall
+	ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
+    Subkey = "Software\LibreOffice\${REGISTRYLAYERNAME}\URE\%URELAYERVERSION";
+	ModuleID = gid_Module_Root;
+	Name = "UREINSTALLLOCATION";
+	Value = "[INSTALLLOCATION]URE\\";
+	Styles = (ALWAYS_REQUIRED,LAYER_REGISTRY,USE_URELAYERVERSION);
+End
+
+RegistryItem gid_Regitem_Software_OpenOfficeorg_Ooobaseversion_Layer_Ureinstall
+	ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
+    Subkey = "Software\LibreOffice\${REGISTRYLAYERNAME}\%PRODUCTNAME\%BRANDPACKAGEVERSION";
+	ModuleID = gid_Module_Root;
+	Name = "UREINSTALLLOCATION";
+	Value = "[INSTALLLOCATION]URE\\";
+	Styles = (ALWAYS_REQUIRED);
+End
+
+RegistryItem gid_Regitem_Sog
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    Subkey = ".sog";
+    ModuleID = gid_Module_Root;
+    Value = "soffice.StarConfigFile.6";
+End
+
+RegistryItem gid_Regitem_Soh
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    Subkey = ".soh";
+    ModuleID = gid_Module_Root;
+    Value = "soffice.StarConfigFile.6";
+End
+
+RegistryItem gid_Regitem_Stardiv_Uno_Servicemanager
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    Subkey = "com.sun.star.ServiceManager";
+    ModuleID = gid_Module_Root;
+    Value = "%PRODUCTNAME Service Manager";
+End
+
+RegistryItem gid_Regitem_Stardiv_Uno_Servicemanager_1
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    Subkey = "com.sun.star.ServiceManager.1";
+    ModuleID = gid_Module_Root;
+    Value = "%PRODUCTNAME Service Manager (Ver 1.0)";
+End
+
+RegistryItem gid_Regitem_Stardiv_Uno_Servicemanager_1_Clsid
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    Subkey = "com.sun.star.ServiceManager.1\CLSID";
+    ModuleID = gid_Module_Root;
+    Value = "{82154420-0FBF-11d4-8313-005004526AB4}";
+End
+
+RegistryItem gid_Regitem_Stardiv_Uno_Servicemanager_1_Notinsertable
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    Subkey = "com.sun.star.ServiceManager.1\NotInsertable";
+    ModuleID = gid_Module_Root;
+    Value = "";
+End
+
+RegistryItem gid_Regitem_Stardiv_Uno_Servicemanager_Clsid
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    Subkey = "com.sun.star.ServiceManager\CLSID";
+    ModuleID = gid_Module_Root;
+    Value = "{82154420-0FBF-11d4-8313-005004526AB4}";
+End
+
+RegistryItem gid_Regitem_Stardiv_Uno_Servicemanager_Curver
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    Subkey = "com.sun.star.ServiceManager\CurVer";
+    ModuleID = gid_Module_Root;
+    Value = "com.sun.star.ServiceManager.1";
+End
+
+RegistryItem gid_Regitem_Stardiv_Uno_Servicemanager_Notinsertable
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    Subkey = "com.sun.star.ServiceManager\NotInsertable";
+    ModuleID = gid_Module_Root;
+    Value = "";
+End
+
+RegistryItem gid_Regitem_Thm
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    Subkey = ".thm";
+    ModuleID = gid_Module_Root;
+    Value = "soffice.StarConfigFile.6";
+End
+
+RegistryItem gid_Regitem_Vor_Contenttype
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Root;
+    Subkey = ".vor";
+    Name = "Content Type";
+    Value = "application/vnd.stardivision.writer";
+End
+
+RegistryItem gid_Regitem_Vor_Mime_Database
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Root;
+    Subkey = "MIME\Database\Content Type\application/vnd.stardivision.writer";
+    Name = "Extension";
+    Value = ".vor";
+End
+
+RegistryItem gid_Regitem_Xba
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    Subkey = ".xba";
+    ModuleID = gid_Module_Root;
+    Value = "soffice.StarConfigFile.6";
+End
+
+RegistryItem gid_Regitem_Xcs
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    Subkey = ".xcs";
+    ModuleID = gid_Module_Root;
+    Value = "soffice.StarConfigFile.6";
+End
+
+RegistryItem gid_Regitem_Xcu
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    Subkey = ".xcu";
+    ModuleID = gid_Module_Root;
+    Value = "soffice.StarConfigFile.6";
+End
+
+RegistryItem gid_Regitem_Xdl
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    Subkey = ".xdl";
+    ModuleID = gid_Module_Root;
+    Value = "soffice.StarConfigFile.6";
+End
+
+RegistryItem gid_Regitem_Software_Openofficeorg_Uno_Installpath
+    ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
+    Subkey = "Software\LibreOffice\UNO\InstallPath";
+    ModuleID = gid_Module_Root;
+    Value  = "<progpath>\program";
+End
+
+RegistryItem gid_Regitem_Software_Openofficeorg_Uno_Installpath_Branded
+    ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
+    Subkey = "Software\LibreOffice\UNO\InstallPath";
+    ModuleID = gid_Module_Root;
+    Name = "%PRODUCTNAME %PRODUCTVERSION";
+    Value  = "<progpath>\program";
+End
+
+// "OpenWith" Windows Registry keys for extensions supported by OOo
+
+// new oxt file extension for office extension packages
+RegistryItem gid_Regitem_Oxt
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Root;
+    Subkey = ".oxt";
+    Value = "office.Extension.1";
+    Styles = ();
+End
+
+RegistryItem gid_Regitem_Oxt_Contenttype
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Root;
+    Subkey = ".oxt";
+    Name = "Content Type";
+    Value = "application/vnd.openofficeorg.extension";
+    Styles = ();
+End
+
+RegistryItem gid_Regitem_Oxt_Mime_Database
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Root;
+    Subkey = "MIME\Database\Content Type\application/vnd.openofficeorg.extension";
+    Name = "Extension";
+    Value = ".oxt";
+    Styles = ();
+End
+
+RegistryItem gid_Regitem_Office_Extension_Curver
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Root;
+    Subkey = "office.Extension\CurVer";
+    Value = "office.Extension.1";
+    Styles = ();
+End
+
+RegistryItem gid_Regitem_Office_Extension_1
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Root;
+    Subkey = "office.Extension.1";
+    Value = "%PRODUCTNAME Extension";
+    Styles = ();
+End
+
+RegistryItem gid_Regitem_Office_Extension_1_Shell
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Root;
+    Subkey = "office.Extension.1\shell";
+    Value = "open";
+    Styles = ();
+End
+
+RegistryItem gid_Regitem_Office_Extension_1_Shell_Open
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Root;
+    Subkey = "office.Extension.1\shell\open";
+    REG_VALUE_LNG(INSTALL)
+    Styles = ();
+End
+
+RegistryItem gid_Regitem_Office_Extension_1_Shell_Open_Command
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Root;
+    Subkey = "office.Extension.1\shell\open\command";
+    Value = "\"<progpath>\program\soffice.exe\" -o \"%1\"";
+    Styles = ();
+End
+
+RegistryItem gid_Regitem_Office_Extension_1_Defaulticon
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Root;
+    Subkey = "office.Extension.1\DefaultIcon";
+    Value = "<progpath>\program\soffice.exe,39";
+    Styles = ();
+End
+
+// ----- Vista Default Programs ----------------------------------------
+// Find more information here:
+// URL:
+// ---------------------------------------------------------------------
+RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabilities_ApplicationDescription
+	ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
+	Subkey = "Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\Capabilities";
+	ModuleID = gid_Module_Root;
+	Name = "ApplicationDescription";
+//        Value = "";
+        REG_VALUE_LNG(APPCAPABILITY_DESCRIPTION_OOO)
+	Styles = ();
+End
+
+RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabilities_ApplicationName
+	ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
+	Subkey = "Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\Capabilities";
+	ModuleID = gid_Module_Root;
+	Name = "ApplicationName";
+    Value = "%PRODUCTNAME %PRODUCTVERSION";
+	Styles = ();
+End
+
+RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabilities_ApplicationIcon
+	ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
+	Subkey = "Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\Capabilities";
+	ModuleID = gid_Module_Root;
+	Name = "ApplicationIcon";
+    Value = "<progpath>\program\soffice.exe,0";
+	Styles = ();
+End
+
+RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabilities_FileAssociations_Oxt
+    ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
+    Subkey = "Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\Capabilities\FileAssociations";
+    ModuleID = gid_Module_Root;
+    Name = ".oxt";
+    Value = "office.Extension.1";
+    Styles = ();
+End
+
+// RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabilities_ApplicationName
+// 	ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
+// 	Subkey = "Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\Capabilities";
+// 	ModuleID = gid_Module_Root;
+// 	Name = "ApplicationName";
+//      Value = "%PRODUCTNAME%PRODUCTADDON %PRODUCTVERSION";
+// 	Styles = ();
+// End
+
+// RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabilities_Description
+// 	ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
+// 	Subkey = "Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\Capabilities";
+// 	ModuleID = gid_Module_Root;
+// 	Name = "Description";
+//         Value = "blah fasel";
+// 	Styles = ();
+// End
+
+RegistryItem gid_Regitem_Software_RegisteredApplications
+	ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
+	Subkey = "Software\RegisteredApplications";
+	ModuleID = gid_Module_Root;
+	Name = "%PRODUCTNAME %PRODUCTVERSION";
+    Value = "SOFTWARE\%MANUFACTURER\%PRODUCTNAME\%PRODUCTVERSION\Capabilities";
+	Styles = ();
+End

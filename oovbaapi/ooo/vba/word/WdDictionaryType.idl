@@ -1,0 +1,14 @@
+module ooo { module vba { module word {
+    constants WdDictionaryType {
+        const long wdGrammar = 1;
+        const long wdHangulHanjaConversion = 8;
+        const long wdHangulHanjaConversionCustom = 9;
+        const long wdHyphenation = 3;
+        const long wdSpelling = 0;
+        const long wdSpellingComplete = 4;
+        const long wdSpellingCustom = 5;
+        const long wdSpellingLegal = 6;
+        const long wdSpellingMedical = 7;
+        const long wdThesaurus = 2;
+    };
+}; }; };

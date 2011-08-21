@@ -1,0 +1,215 @@
+<?xml version="1.0"?>
+<?mso-application progid="Excel.Sheet"?>
+<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet"
+ xmlns:o="urn:schemas-microsoft-com:office:office"
+ xmlns:x="urn:schemas-microsoft-com:office:excel"
+ xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet"
+ xmlns:html="http://www.w3.org/TR/REC-html40">
+ <DocumentProperties xmlns="urn:schemas-microsoft-com:office:office">
+  <Author>Gavin Lu</Author>
+  <LastAuthor>Gavin Lu</LastAuthor>
+  <Created>2003-07-15T06:28:40Z</Created>
+  <LastSaved>2003-07-15T06:38:34Z</LastSaved>
+  <Company>Sun China ERI</Company>
+  <Version>11.5329</Version>
+ </DocumentProperties>
+ <ExcelWorkbook xmlns="urn:schemas-microsoft-com:office:excel">
+  <WindowHeight>9225</WindowHeight>
+  <WindowWidth>14940</WindowWidth>
+  <WindowTopX>240</WindowTopX>
+  <WindowTopY>105</WindowTopY>
+  <ProtectStructure>False</ProtectStructure>
+  <ProtectWindows>False</ProtectWindows>
+ </ExcelWorkbook>
+ <Styles>
+  <Style ss:ID="Default" ss:Name="Normal">
+   <Alignment ss:Vertical="Center"/>
+   <Borders/>
+   <Font ss:FontName="宋体" x:CharSet="134" ss:Size="12"/>
+   <Interior/>
+   <NumberFormat/>
+   <Protection/>
+  </Style>
+  <Style ss:ID="s21">
+   <Interior ss:Color="#000000" ss:Pattern="Gray75" ss:PatternColor="#CC99FF"/>
+  </Style>
+  <Style ss:ID="s22">
+   <Interior ss:Color="#993300" ss:Pattern="Gray50" ss:PatternColor="#99CCFF"/>
+  </Style>
+  <Style ss:ID="s23">
+   <Interior ss:Color="#FF6600" ss:Pattern="Gray25" ss:PatternColor="#00FF00"/>
+  </Style>
+  <Style ss:ID="s24">
+   <Interior ss:Color="#FFFF00" ss:Pattern="Gray125" ss:PatternColor="#99CC00"/>
+  </Style>
+  <Style ss:ID="s25">
+   <Interior ss:Color="#0000FF" ss:Pattern="Gray0625" ss:PatternColor="#FF00FF"/>
+  </Style>
+  <Style ss:ID="s26">
+   <Interior ss:Color="#0000FF" ss:Pattern="Gray50" ss:PatternColor="#808000"/>
+  </Style>
+  <Style ss:ID="s27">
+   <Interior ss:Color="#FF99CC" ss:Pattern="Gray50" ss:PatternColor="#0000FF"/>
+  </Style>
+  <Style ss:ID="s28">
+   <Interior ss:Color="#339966" ss:Pattern="Gray25" ss:PatternColor="#FF0000"/>
+  </Style>
+  <Style ss:ID="s29">
+   <Interior ss:Color="#CCFFCC" ss:Pattern="Gray125" ss:PatternColor="#0000FF"/>
+  </Style>
+  <Style ss:ID="s30">
+   <Interior ss:Color="#993366" ss:Pattern="Gray0625" ss:PatternColor="#FFFF00"/>
+  </Style>
+  <Style ss:ID="s32">
+   <Interior/>
+  </Style>
+  <Style ss:ID="s33">
+   <Interior ss:Color="#993300" ss:Pattern="Gray75" ss:PatternColor="#FFFFFF"/>
+  </Style>
+  <Style ss:ID="s34">
+   <Interior ss:Color="#FF6600" ss:Pattern="Gray50" ss:PatternColor="#99CCFF"/>
+  </Style>
+  <Style ss:ID="s37">
+   <Interior ss:Color="#FF9900" ss:Pattern="Gray25" ss:PatternColor="#FFFF00"/>
+  </Style>
+  <Style ss:ID="s38">
+   <Interior ss:Color="#FFCC00" ss:Pattern="Gray125" ss:PatternColor="#00FF00"/>
+  </Style>
+  <Style ss:ID="s39">
+   <Interior ss:Color="#FFCC99" ss:Pattern="Gray0625" ss:PatternColor="#3366FF"/>
+  </Style>
+  <Style ss:ID="s40">
+   <Interior ss:Color="#FF99CC" ss:Pattern="Gray75" ss:PatternColor="#FFCC99"/>
+  </Style>
+  <Style ss:ID="s41">
+   <Interior ss:Color="#FFCC99" ss:Pattern="Gray50" ss:PatternColor="#FF9900"/>
+  </Style>
+  <Style ss:ID="s42">
+   <Interior ss:Color="#FFFF99" ss:Pattern="Gray25" ss:PatternColor="#008000"/>
+  </Style>
+  <Style ss:ID="s43">
+   <Interior ss:Color="#00FFFF" ss:Pattern="Gray125" ss:PatternColor="#0000FF"/>
+  </Style>
+  <Style ss:ID="s44">
+   <Interior ss:Color="#3366FF" ss:Pattern="Gray0625" ss:PatternColor="#CCFFCC"/>
+  </Style>
+  <Style ss:ID="s45">
+   <Interior/>
+   <NumberFormat ss:Format="0%"/>
+  </Style>
+  <Style ss:ID="s46">
+   <Interior/>
+   <NumberFormat ss:Format="Percent"/>
+  </Style>
+ </Styles>
+ <Worksheet ss:Name="Sheet1">
+  <Table ss:ExpandedColumnCount="9" ss:ExpandedRowCount="11" x:FullColumns="1"
+   x:FullRows="1" ss:DefaultColumnWidth="54" ss:DefaultRowHeight="14.25">
+   <Column ss:Index="2" ss:AutoFitWidth="0" ss:Width="25.5"/>
+   <Column ss:Index="4" ss:AutoFitWidth="0" ss:Width="28.5"/>
+   <Column ss:Index="6" ss:AutoFitWidth="0" ss:Width="28.5"/>
+   <Column ss:Index="8" ss:AutoFitWidth="0" ss:Width="30"/>
+   <Row>
+    <Cell><Data ss:Type="String">test</Data></Cell>
+    <Cell ss:Index="3"><Data ss:Type="String">cell background pattern</Data></Cell>
+   </Row>
+   <Row>
+    <Cell ss:StyleID="s21"/>
+    <Cell ss:Index="3" ss:StyleID="s22"/>
+    <Cell ss:Index="5" ss:StyleID="s23"/>
+    <Cell ss:Index="7" ss:StyleID="s24"/>
+    <Cell ss:Index="9" ss:StyleID="s25"/>
+   </Row>
+   <Row>
+    <Cell ss:StyleID="s26"/>
+    <Cell ss:Index="3" ss:StyleID="s27"/>
+    <Cell ss:Index="5" ss:StyleID="s28"/>
+    <Cell ss:Index="7" ss:StyleID="s29"/>
+    <Cell ss:Index="9" ss:StyleID="s30"/>
+   </Row>
+   <Row>
+    <Cell ss:StyleID="s33"/>
+    <Cell ss:Index="3" ss:StyleID="s34"/>
+    <Cell ss:Index="5" ss:StyleID="s37"/>
+    <Cell ss:Index="7" ss:StyleID="s38"/>
+    <Cell ss:Index="9" ss:StyleID="s39"/>
+   </Row>
+   <Row>
+    <Cell ss:StyleID="s40"/>
+    <Cell ss:Index="3" ss:StyleID="s41"/>
+    <Cell ss:Index="5" ss:StyleID="s42"/>
+    <Cell ss:Index="7" ss:StyleID="s43"/>
+    <Cell ss:Index="9" ss:StyleID="s44"/>
+   </Row>
+   <Row>
+    <Cell ss:StyleID="s45"><Data ss:Type="Number">0.75</Data></Cell>
+    <Cell ss:Index="3" ss:StyleID="s45"><Data ss:Type="Number">0.5</Data></Cell>
+    <Cell ss:Index="5" ss:StyleID="s46"><Data ss:Type="Number">0.25</Data></Cell>
+    <Cell ss:Index="7" ss:StyleID="s46"><Data ss:Type="Number">0.125</Data></Cell>
+    <Cell ss:Index="9" ss:StyleID="s46"><Data ss:Type="Number">6.25E-2</Data></Cell>
+   </Row>
+   <Row>
+    <Cell ss:StyleID="s32"/>
+    <Cell ss:Index="3" ss:StyleID="s32"/>
+    <Cell ss:Index="5" ss:StyleID="s32"/>
+    <Cell ss:Index="7" ss:StyleID="s32"/>
+    <Cell ss:Index="9" ss:StyleID="s32"/>
+   </Row>
+   <Row>
+    <Cell ss:StyleID="s32"/>
+    <Cell ss:Index="3" ss:StyleID="s32"/>
+    <Cell ss:Index="5" ss:StyleID="s32"/>
+    <Cell ss:Index="7" ss:StyleID="s32"/>
+    <Cell ss:Index="9" ss:StyleID="s32"/>
+   </Row>
+   <Row>
+    <Cell ss:StyleID="s32"/>
+    <Cell ss:Index="3" ss:StyleID="s32"/>
+    <Cell ss:Index="5" ss:StyleID="s32"/>
+    <Cell ss:Index="7" ss:StyleID="s32"/>
+    <Cell ss:Index="9" ss:StyleID="s32"/>
+   </Row>
+   <Row>
+    <Cell ss:StyleID="s32"/>
+    <Cell ss:Index="3" ss:StyleID="s32"/>
+    <Cell ss:Index="5" ss:StyleID="s32"/>
+    <Cell ss:Index="7" ss:StyleID="s32"/>
+    <Cell ss:Index="9" ss:StyleID="s32"/>
+   </Row>
+   <Row>
+    <Cell ss:StyleID="s32"/>
+    <Cell ss:Index="3" ss:StyleID="s32"/>
+    <Cell ss:Index="5" ss:StyleID="s32"/>
+    <Cell ss:Index="7" ss:StyleID="s32"/>
+    <Cell ss:Index="9" ss:StyleID="s32"/>
+   </Row>
+  </Table>
+  <WorksheetOptions xmlns="urn:schemas-microsoft-com:office:excel">
+   <Selected/>
+   <Panes>
+    <Pane>
+     <Number>3</Number>
+     <ActiveRow>4</ActiveRow>
+    </Pane>
+   </Panes>
+   <ProtectObjects>False</ProtectObjects>
+   <ProtectScenarios>False</ProtectScenarios>
+  </WorksheetOptions>
+ </Worksheet>
+ <Worksheet ss:Name="Sheet2">
+  <Table ss:ExpandedColumnCount="0" ss:ExpandedRowCount="0" x:FullColumns="1"
+   x:FullRows="1" ss:DefaultColumnWidth="54" ss:DefaultRowHeight="14.25"/>
+  <WorksheetOptions xmlns="urn:schemas-microsoft-com:office:excel">
+   <ProtectObjects>False</ProtectObjects>
+   <ProtectScenarios>False</ProtectScenarios>
+  </WorksheetOptions>
+ </Worksheet>
+ <Worksheet ss:Name="Sheet3">
+  <Table ss:ExpandedColumnCount="0" ss:ExpandedRowCount="0" x:FullColumns="1"
+   x:FullRows="1" ss:DefaultColumnWidth="54" ss:DefaultRowHeight="14.25"/>
+  <WorksheetOptions xmlns="urn:schemas-microsoft-com:office:excel">
+   <ProtectObjects>False</ProtectObjects>
+   <ProtectScenarios>False</ProtectScenarios>
+  </WorksheetOptions>
+ </Worksheet>
+</Workbook>

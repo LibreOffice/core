@@ -1,0 +1,14 @@
+add dylib to the extensions, to be able to load pyuno.dylib via "import pyuno"
+--- misc/Python-2.6.1/Python/dynload_shlib.c	2006-01-04 02:30:17.000000000 +0100
++++ misc/build/Python-2.6.1/Python/dynload_shlib.c	2011-06-11 19:42:09.000000000 +0200
+@@ -46,6 +46,10 @@
+         {"module.exe", "rb", C_EXTENSION},
+         {"MODULE.EXE", "rb", C_EXTENSION},
+ #else
++#ifdef __APPLE__
++	{".dylib", "rb", C_EXTENSION},
++	{"module.dylib", "rb", C_EXTENSION},
++#endif
+ 	{".so", "rb", C_EXTENSION},
+ 	{"module.so", "rb", C_EXTENSION},
+ #endif

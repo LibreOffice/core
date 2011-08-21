@@ -1,0 +1,152 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_xml_dom_XElement_idl__
+#define __com_sun_star_xml_dom_XElement_idl__
+
+#include <com/sun/star/xml/dom/XNode.idl>
+#include <com/sun/star/xml/dom/XAttr.idl>
+
+module com { module sun { module star { module xml { module dom {
+
+interface XElement: XNode
+{
+    /**
+    Retrieves an attribute value by name.
+    */
+    string getAttribute([in] string name);
+
+    /**
+    Retrieves an attribute node by name.
+    */
+    XAttr getAttributeNode([in] string name);
+
+    /**
+    Retrieves an Attr node by local name and namespace URI.
+    */
+    XAttr getAttributeNodeNS([in] string namespaceURI,[in]
+    string localName);
+
+    /**
+    Retrieves an attribute value by local name and namespace URI.
+    */
+    string getAttributeNS([in] string namespaceURI, [in] string localName);
+
+    /**
+    Returns a NodeList of all descendant Elements with a given tag name,
+    in the order in which they are
+    encountered in a preorder traversal of this Element tree.
+    */
+    XNodeList getElementsByTagName([in] string name);
+
+    /**
+    Returns a NodeList of all the descendant Elements with a given local
+    name and namespace URI in the order in which they are encountered in
+    a preorder traversal of this Element tree.
+    */
+    XNodeList getElementsByTagNameNS([in] string namespaceURI,[in]  string localName);
+
+    /**
+    The name of the element.
+    */
+    string getTagName();
+
+    /**
+    Returns true when an attribute with a given name is specified on this
+    element or has a default value, false otherwise.
+    */
+    boolean hasAttribute([in] string name);
+
+    /**
+    Returns true when an attribute with a given local name and namespace
+    URI is specified on this element or has a default value, false otherwise.
+    */
+    boolean hasAttributeNS([in] string namespaceURI,[in]  string localName);
+
+    /**
+    Removes an attribute by name.
+    Throws:
+    DOMException - NO_MODIFICATION_ALLOWED_ERR: Raised if this node is readonly.
+    */
+    void removeAttribute([in] string name) raises (DOMException);
+
+    /**
+    Removes the specified attribute node.
+    Throws:
+    DOMException - NO_MODIFICATION_ALLOWED_ERR: Raised if this node is readonly.
+    NOT_FOUND_ERR: Raised if oldAttr is not an attribute of the element.
+    */
+    XAttr removeAttributeNode([in] XAttr oldAttr) raises (DOMException);
+
+    /**
+    Removes an attribute by local name and namespace URI.
+    Throws:
+    DOMException - NO_MODIFICATION_ALLOWED_ERR: Raised if this node is readonly.
+    */
+    void removeAttributeNS([in] string namespaceURI,[in]  string localName) raises (DOMException);
+
+    /**
+    Adds a new attribute.
+    Throws:
+    DOMException - INVALID_CHARACTER_ERR: Raised if the specified name contains an illegal character.
+    NO_MODIFICATION_ALLOWED_ERR: Raised if this node is readonly.
+    */
+    void setAttribute([in] string name,[in]  string value) raises (DOMException);
+
+    /**
+    Adds a new attribute node.
+    Throws:
+    DOMException - WRONG_DOCUMENT_ERR: Raised if newAttr was created from a different document than the one that created the element.
+    NO_MODIFICATION_ALLOWED_ERR: Raised if this node is readonly.
+    INUSE_ATTRIBUTE_ERR: Raised if newAttr is already an attribute of another Element object. The DOM user must explicitly clone Attr nodes to re-use them in other elements.
+    */
+    XAttr setAttributeNode([in] XAttr newAttr) raises (DOMException);
+
+    /**
+    Adds a new attribute.
+    Throws:
+    DOMException - WRONG_DOCUMENT_ERR: Raised if newAttr was created from a different document than the one that created the element.
+    NO_MODIFICATION_ALLOWED_ERR: Raised if this node is readonly.
+    INUSE_ATTRIBUTE_ERR: Raised if newAttr is already an attribute of another Element object. The DOM user must explicitly clone Attr nodes to re-use them in other elements.
+    NOT_SUPPORTED_ERR: Always thrown if the current document does not support the "XML" feature, since namespaces were defined by XML.
+    */
+    XAttr setAttributeNodeNS([in] XAttr newAttr) raises (DOMException);
+
+    /**
+    Adds a new attribute.
+    Throws:
+    DOMException - INVALID_CHARACTER_ERR: Raised if the specified qualified name contains an illegal character, per the XML 1.0 specification .
+    NO_MODIFICATION_ALLOWED_ERR: Raised if this node is readonly.
+    NAMESPACE_ERR: Raised if the qualifiedName is malformed per the Namespaces in XML specification, if the qualifiedName has a prefix and the namespaceURI is null, if the qualifiedName has a prefix that is "xml" and the namespaceURI is different from " http://www.w3.org/XML/1998/namespace", or if the qualifiedName, or its prefix, is "xmlns" and the namespaceURI is different from " http://www.w3.org/2000/xmlns/".
+    NOT_SUPPORTED_ERR: Always thrown if the current document does not support the "XML" feature, since namespaces were defined by XML.
+    */
+    void setAttributeNS(
+    [in] string namespaceURI, [in] string qualifiedName, [in] string value) raises (DOMException);
+};
+}; }; }; }; };
+
+#endif

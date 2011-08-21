@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="svx_SvxShapeControl" script:language="StarBasic">
+
+
+'*************************************************************************
+'
+' DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+' 
+' Copyright 2000, 2010 Oracle and/or its affiliates.
+'
+' OpenOffice.org - a multi-platform office productivity suite
+'
+' This file is part of OpenOffice.org.
+'
+' OpenOffice.org is free software: you can redistribute it and/or modify
+' it under the terms of the GNU Lesser General Public License version 3
+' only, as published by the Free Software Foundation.
+'
+' OpenOffice.org is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU Lesser General Public License version 3 for more details
+' (a copy is included in the LICENSE file that accompanied this code).
+'
+' You should have received a copy of the GNU Lesser General Public License
+' version 3 along with OpenOffice.org.  If not, see
+' <http://www.openoffice.org/license.html>
+' for a copy of the LGPLv3 License.
+'
+'*************************************************************************
+'*************************************************************************
+
+
+
+' Be sure that all variables are dimensioned:
+option explicit
+
+
+' REQUIRED VARIABLES for interface/service tests:
+
+' Requiered for  com.sun.star.lang.XComponent
+ Global oComponentInstance As Object ' it will be disposed
+
+' Requiered for  com.sun.star.drawing.XControlShape
+ Global oControlToSet As Object
+
+' Requiered for  com.sun.star.drawing.XShapeDescriptor
+ Global cShapeType As String
+
+
+Sub CreateObj()
+
+'*************************************************************************
+' COMPONENT: 
+' svx.SvxShapeControl
+'*************************************************************************
+On Error Goto ErrHndl
+
+    Dim bOK As Boolean
+    Dim oDrawPage As Object, oShape As Object
+
+    bOK = true
+
+    oDoc = utils.createDocument("sdraw", cObjectName)
+
+    oDrawPage = oDoc.DrawPages(0)
+
+    oControlToSet = oDoc.createInstance("com.sun.star.form.component.CheckBox")
+
+    ' insert ControlShape    
+    Dim aPoint As New com.sun.star.awt.Point
+    Dim aSize As New com.sun.star.awt.Size
+    Dim oControl, oCShape As Object
+
+    aPoint.x = 3000
+    aPoint.y = 4500
+    aSize.Width = 15000
+    aSize.Height = 1000
+    oCShape = oDoc.createInstance("com.sun.star.drawing.ControlShape")
+    oCShape.Size = aSize
+    oCShape.Position = aPoint
+
+    oControl = oDoc.createInstance("com.sun.star.form.component.CommandButton")
+    oControl.DefaultControl = "com.sun.star.form.control.CommandButton"
+
+    oCShape.setControl(oControl)
+
+    oDrawPage.add(oCShape)
+
+    oObj = oCShape
+
+    cShapeType = "com.sun.star.drawing.ControlShape"
+
+    aPoint.x = 3000
+    aPoint.y = 10000
+    aSize.Width = 15000
+    aSize.Height = 1000
+    oComponentInstance = oDoc.createInstance("com.sun.star.drawing.LineShape")
+    oComponentInstance.Size = aSize
+    oComponentInstance.Position = aPoint
+    
+    oDrawPage.add(oComponentInstance)
+Exit Sub
+ErrHndl:
+    Test.Exception()
+End Sub
+</script:module>

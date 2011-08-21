@@ -1,0 +1,34 @@
+: # -*- perl -*-
+eval 'exec perl -wS $0 ${1+"$@"}'
+	if 0;
+
+open(OUTFILE, ">$ARGV[1]");
+
+print OUTFILE "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n";
+print OUTFILE "<org.openoffice.Templates>\n";
+
+
+chdir($ARGV[0]) or die "can't chdir() to $ARGV[0]";
+
+opendir(DIR, ".");
+
+@files=readdir(DIR);
+
+foreach $file (@files) {
+	if ( $file =~ /\w*\.tpl/ ) {
+		open(INFILE, "<$file") or die "can't open file $file";
+		while(<INFILE>) {
+			if ( /xml version=/ ) {
+				next;
+			}	
+			print OUTFILE;
+		}
+		close(INFILE);
+	}	
+}
+
+print OUTFILE "</org.openoffice.Templates>\n";
+
+closedir(DIR);
+
+close(OUTFILE);	

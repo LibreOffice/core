@@ -1,0 +1,984 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * 
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#include "macros.inc"
+
+#ifdef WITH_ACTIVEX_COMPONENT
+
+// MSOLE embedded object in SO7 file format
+RegistryItem gid_Regitem_Clsid__41662fc2_0d57_4aff_Ab27_Ad2e12e7c273_
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Draw_Bin;
+    Subkey = "CLSID\{41662FC2-0D57-4aff-AB27-AD2E12E7C273}";
+    REG_VALUE_LNG(SO60_DRAWING)
+End
+
+RegistryItem gid_Regitem_Clsid__41662fc2_0d57_4aff_Ab27_Ad2e12e7c273__Auxusertype_2
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Draw_Bin;
+    Subkey = "CLSID\{41662FC2-0D57-4aff-AB27-AD2E12E7C273}\AuxUserType\2";
+    Value = "%PRODUCTNAME";
+End
+
+RegistryItem gid_Regitem_Clsid__41662fc2_0d57_4aff_Ab27_Ad2e12e7c273__Auxusertype_3
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Draw_Bin;
+    Subkey = "CLSID\{41662FC2-0D57-4aff-AB27-AD2E12E7C273}\AuxUserType\3";
+    REG_VALUE_LNG(SO60_DRAWING)
+End
+
+RegistryItem gid_Regitem_Clsid__41662fc2_0d57_4aff_Ab27_Ad2e12e7c273__Dataformats_Getset_0
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Draw_Bin;
+    Subkey = "CLSID\{41662FC2-0D57-4aff-AB27-AD2E12E7C273}\DataFormats\GetSet\0";
+    Value = "Embed Source,1,8,1";
+End
+
+RegistryItem gid_Regitem_Clsid__41662fc2_0d57_4aff_Ab27_Ad2e12e7c273__Dataformats_Getset_1
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Draw_Bin;
+    Subkey = "CLSID\{41662FC2-0D57-4aff-AB27-AD2E12E7C273}\DataFormats\GetSet\1";
+    Value = "3,1,32,1";
+End
+
+RegistryItem gid_Regitem_Clsid__41662fc2_0d57_4aff_Ab27_Ad2e12e7c273__Dataformats_Getset_2
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Draw_Bin;
+    Subkey = "CLSID\{41662FC2-0D57-4aff-AB27-AD2E12E7C273}\DataFormats\GetSet\2";
+    Value = "2,1,16,1";
+End
+
+RegistryItem gid_Regitem_Clsid__41662fc2_0d57_4aff_Ab27_Ad2e12e7c273__Defaulticon
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Draw_Bin;
+    Subkey = "CLSID\{41662FC2-0D57-4aff-AB27-AD2E12E7C273}\DefaultIcon";
+    Value = "<progpath>\program\soffice.exe,0";
+End
+
+RegistryItem gid_Regitem_Clsid__41662fc2_0d57_4aff_Ab27_Ad2e12e7c273__Inprochandler32
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Draw_Bin;
+    Subkey = "CLSID\{41662FC2-0D57-4aff-AB27-AD2E12E7C273}\InprocHandler32";
+    Value = "<progpath>\program\inprocserv.dll";
+    Styles = ();
+End
+
+RegistryItem gid_Regitem_Clsid__41662fc2_0d57_4aff_Ab27_Ad2e12e7c273__Insertable
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Draw_Bin;
+    Subkey = "CLSID\{41662FC2-0D57-4aff-AB27-AD2E12E7C273}\Insertable";
+End
+
+RegistryItem gid_Regitem_Clsid__41662fc2_0d57_4aff_Ab27_Ad2e12e7c273__Localserver32
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Draw_Bin;
+    Subkey = "CLSID\{41662FC2-0D57-4aff-AB27-AD2E12E7C273}\LocalServer32";
+    Value = "<progpath>\program\soffice.exe -nodefault -nologo";
+End
+
+RegistryItem gid_Regitem_Clsid__41662fc2_0d57_4aff_Ab27_Ad2e12e7c273__Miscstatus
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Draw_Bin;
+    Subkey = "CLSID\{41662FC2-0D57-4aff-AB27-AD2E12E7C273}\MiscStatus";
+    Value = "16";
+End
+
+RegistryItem gid_Regitem_Clsid__41662fc2_0d57_4aff_Ab27_Ad2e12e7c273__Progid
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Draw_Bin;
+    Subkey = "CLSID\{41662FC2-0D57-4aff-AB27-AD2E12E7C273}\ProgID";
+    Value = "soffice.StarDrawDocument.6";
+End
+
+RegistryItem gid_Regitem_Clsid__41662fc2_0d57_4aff_Ab27_Ad2e12e7c273__Programmable
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Draw_Bin;
+    Subkey = "CLSID\{41662FC2-0D57-4aff-AB27-AD2E12E7C273}\Programmable";
+End
+
+RegistryItem gid_Regitem_Clsid__41662fc2_0d57_4aff_Ab27_Ad2e12e7c273__Verb_0
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Draw_Bin;
+    Subkey = "CLSID\{41662FC2-0D57-4aff-AB27-AD2E12E7C273}\verb\0";
+    Value = "&Edit,0,0";
+End
+
+RegistryItem gid_Regitem_Clsid__41662fc2_0d57_4aff_Ab27_Ad2e12e7c273__Verb__1
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Draw_Bin;
+    Subkey = "CLSID\{41662FC2-0D57-4aff-AB27-AD2E12E7C273}\verb\-1";
+    Value = "Show,0,0";
+End
+
+RegistryItem gid_Regitem_Clsid__41662fc2_0d57_4aff_Ab27_Ad2e12e7c273__Verb__2
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Draw_Bin;
+    Subkey = "CLSID\{41662FC2-0D57-4aff-AB27-AD2E12E7C273}\verb\-2";
+    Value = "Open,0,0";
+End
+
+RegistryItem gid_Regitem_Clsid__41662fc2_0d57_4aff_Ab27_Ad2e12e7c273__Versionindependentprogid
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Draw_Bin;
+    Subkey = "CLSID\{41662FC2-0D57-4aff-AB27-AD2E12E7C273}\VersionIndependentProgID";
+    Value = "soffice.StarDrawDocument.6";
+End
+
+// MSOLE embedded object in OASIS file format
+RegistryItem gid_Regitem_Clsid__448bb771_Cfe2_47c4_Bcdf_1fbf378e202c_
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Draw_Bin;
+    Subkey = "CLSID\{448BB771-CFE2-47C4-BCDF-1FBF378E202C}";
+    REG_VALUE_LNG(OO_DRAW)
+End
+
+RegistryItem gid_Regitem_Clsid__448bb771_Cfe2_47c4_Bcdf_1fbf378e202c__Auxusertype_2
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Draw_Bin;
+    Subkey = "CLSID\{448BB771-CFE2-47C4-BCDF-1FBF378E202C}\AuxUserType\2";
+    Value = "%PRODUCTNAME";
+End
+
+RegistryItem gid_Regitem_Clsid__448bb771_Cfe2_47c4_Bcdf_1fbf378e202c__Auxusertype_3
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Draw_Bin;
+    Subkey = "CLSID\{448BB771-CFE2-47C4-BCDF-1FBF378E202C}\AuxUserType\3";
+    REG_VALUE_LNG(OO_DRAW)
+End
+
+RegistryItem gid_Regitem_Clsid__448bb771_Cfe2_47c4_Bcdf_1fbf378e202c__Dataformats_Getset_0
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Draw_Bin;
+    Subkey = "CLSID\{448BB771-CFE2-47C4-BCDF-1FBF378E202C}\DataFormats\GetSet\0";
+    Value = "Embed Source,1,8,1";
+End
+
+RegistryItem gid_Regitem_Clsid__448bb771_Cfe2_47c4_Bcdf_1fbf378e202c__Dataformats_Getset_1
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Draw_Bin;
+    Subkey = "CLSID\{448BB771-CFE2-47C4-BCDF-1FBF378E202C}\DataFormats\GetSet\1";
+    Value = "3,1,32,1";
+End
+
+RegistryItem gid_Regitem_Clsid__448bb771_Cfe2_47c4_Bcdf_1fbf378e202c__Dataformats_Getset_2
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Draw_Bin;
+    Subkey = "CLSID\{448BB771-CFE2-47C4-BCDF-1FBF378E202C}\DataFormats\GetSet\2";
+    Value = "2,1,16,1";
+End
+
+RegistryItem gid_Regitem_Clsid__448bb771_Cfe2_47c4_Bcdf_1fbf378e202c__Defaulticon
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Draw_Bin;
+    Subkey = "CLSID\{448BB771-CFE2-47C4-BCDF-1FBF378E202C}\DefaultIcon";
+    Value = "<progpath>\program\soffice.exe,0";
+End
+
+RegistryItem gid_Regitem_Clsid__448bb771_Cfe2_47c4_Bcdf_1fbf378e202c__Inprochandler32
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Draw_Bin;
+    Subkey = "CLSID\{448BB771-CFE2-47C4-BCDF-1FBF378E202C}\InprocHandler32";
+    Value = "<progpath>\program\inprocserv.dll";
+    Styles = ();
+End
+
+RegistryItem gid_Regitem_Clsid__448bb771_Cfe2_47c4_Bcdf_1fbf378e202c__Insertable
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Draw_Bin;
+    Subkey = "CLSID\{448BB771-CFE2-47C4-BCDF-1FBF378E202C}\Insertable";
+End
+
+RegistryItem gid_Regitem_Clsid__448bb771_Cfe2_47c4_Bcdf_1fbf378e202c__Localserver32
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Draw_Bin;
+    Subkey = "CLSID\{448BB771-CFE2-47C4-BCDF-1FBF378E202C}\LocalServer32";
+    Value = "<progpath>\program\soffice.exe -nodefault -nologo";
+End
+
+RegistryItem gid_Regitem_Clsid__448bb771_Cfe2_47c4_Bcdf_1fbf378e202c__Miscstatus
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Draw_Bin;
+    Subkey = "CLSID\{448BB771-CFE2-47C4-BCDF-1FBF378E202C}\MiscStatus";
+    Value = "16";
+End
+
+RegistryItem gid_Regitem_Clsid__448bb771_Cfe2_47c4_Bcdf_1fbf378e202c__Progid
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Draw_Bin;
+    Subkey = "CLSID\{448BB771-CFE2-47C4-BCDF-1FBF378E202C}\ProgID";
+    Value = "opendocument.DrawDocument.1";
+End
+
+RegistryItem gid_Regitem_Clsid__448bb771_Cfe2_47c4_Bcdf_1fbf378e202c__Programmable
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Draw_Bin;
+    Subkey = "CLSID\{448BB771-CFE2-47C4-BCDF-1FBF378E202C}\Programmable";
+End
+
+RegistryItem gid_Regitem_Clsid__448bb771_Cfe2_47c4_Bcdf_1fbf378e202c__Verb_0
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Draw_Bin;
+    Subkey = "CLSID\{448BB771-CFE2-47C4-BCDF-1FBF378E202C}\verb\0";
+    Value = "&Edit,0,0";
+End
+
+RegistryItem gid_Regitem_Clsid__448bb771_Cfe2_47c4_Bcdf_1fbf378e202c__Verb__1
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Draw_Bin;
+    Subkey = "CLSID\{448BB771-CFE2-47C4-BCDF-1FBF378E202C}\verb\-1";
+    Value = "Show,0,0";
+End
+
+RegistryItem gid_Regitem_Clsid__448bb771_Cfe2_47c4_Bcdf_1fbf378e202c__Verb__2
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Draw_Bin;
+    Subkey = "CLSID\{448BB771-CFE2-47C4-BCDF-1FBF378E202C}\verb\-2";
+    Value = "Open,0,0";
+End
+
+RegistryItem gid_Regitem_Clsid__448bb771_Cfe2_47c4_Bcdf_1fbf378e202c__Versionindependentprogid
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Draw_Bin;
+    Subkey = "CLSID\{448BB771-CFE2-47C4-BCDF-1FBF378E202C}\VersionIndependentProgID";
+    Value = "opendocument.DrawDocument.1";
+End
+
+#endif // WITH_ACTIVEX_COMPONENT
+
+RegistryItem gid_Regitem_Soffice_Stardrawdocument_6
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Draw_Bin;
+    Subkey = "soffice.StarDrawDocument.6";
+    REG_VALUE_LNG(SO60_DRAWING)
+End
+
+#ifdef WITH_ACTIVEX_COMPONENT
+
+RegistryItem gid_Regitem_Soffice_Stardrawdocument_6_Clsid
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Draw_Bin;
+    Subkey = "soffice.StarDrawDocument.6\CLSID";
+    Value = "{41662FC2-0D57-4aff-AB27-AD2E12E7C273}";
+End
+
+#endif // WITH_ACTIVEX_COMPONENT
+
+RegistryItem gid_Regitem_Soffice_Stardrawdocument_6_Defaulticon
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Draw_Bin;
+    Subkey = "soffice.StarDrawDocument.6\DefaultIcon";
+    Value = "<progpath>\program\soffice.exe,31";
+End
+
+RegistryItem gid_Regitem_Soffice_Stardrawdocument_6_Shell
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Draw_Bin;
+    Subkey = "soffice.StarDrawDocument.6\shell";
+    Value = "open";
+End
+
+RegistryItem gid_Regitem_Soffice_Stardrawdocument_6_Shell_New
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Draw_Bin;
+    Subkey = "soffice.StarDrawDocument.6\shell\new";
+    REG_VALUE_LNG(NEW)
+End
+
+RegistryItem gid_Regitem_Soffice_Stardrawdocument_6_Shell_New_Command
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Draw_Bin;
+    Subkey = "soffice.StarDrawDocument.6\shell\new\command";
+    Value = "\"<progpath>\program\soffice.exe\" -n \"%1\"";
+End
+
+RegistryItem gid_Regitem_Soffice_Stardrawdocument_6_Shell_Open_Command
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Draw_Bin;
+    Subkey = "soffice.StarDrawDocument.6\shell\open\command";
+    Value = "\"<progpath>\program\sdraw.exe\" -o \"%1\"";
+End
+
+RegistryItem gid_Regitem_Soffice_Stardrawdocument_6_Shell_Print_Command
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Draw_Bin;
+    Subkey = "soffice.StarDrawDocument.6\shell\print\command";
+    Value = "\"<progpath>\program\soffice.exe\" -p \"%1\"";
+End
+
+RegistryItem gid_Regitem_Soffice_Stardrawdocument_6_Shell_Printto_Command
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Draw_Bin;
+    Subkey = "soffice.StarDrawDocument.6\shell\printto\command";
+    Value = "\"<progpath>\program\soffice.exe\" -pt \"%2\" \"%1\"";
+End
+
+RegistryItem gid_Regitem_Soffice_Stardrawdocument_Curver
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    Subkey = "soffice.StarDrawDocument\CurVer";
+    ModuleID = gid_Module_Prg_Draw_Bin;
+    Value = "soffice.StarDrawDocument.6";
+End
+
+RegistryItem gid_Regitem_Soffice_Stardrawingdocument_6_Insertable
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Draw_Bin;
+    Subkey = "soffice.StarDrawDocument.6\Insertable";
+End
+
+RegistryItem gid_Regitem_Soffice_Stardrawingdocument_6_Protocol_Stdfileediting_Server
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Draw_Bin;
+    Subkey = "soffice.StarDrawDocument.6\protocol\StdFileEditing\server";
+    Value = "<progpath>\program\soffice.exe";
+End
+
+RegistryItem gid_Regitem_Soffice_Stardrawingdocument_6_Protocol_Stdfileediting_Verb_0
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Draw_Bin;
+    Subkey = "soffice.StarDrawDocument.6\protocol\StdFileEditing\verb\0";
+    Value = "&Edit";
+End
+
+RegistryItem gid_Regitem_Soffice_Stardrawingdocument_6_Protocol_Stdfileediting_Verb__1
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Draw_Bin;
+    Subkey = "soffice.StarDrawDocument.6\protocol\StdFileEditing\verb\-1";
+    Value = "&Show";
+End
+
+RegistryItem gid_Regitem_Soffice_Stardrawingdocument_6_Protocol_Stdfileediting_Verb__2
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Draw_Bin;
+    Subkey = "soffice.StarDrawDocument.6\protocol\StdFileEditing\verb\-2";
+    Value = "&Open";
+End
+
+RegistryItem gid_Regitem_Soffice_Stardrawtemplate_6
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    Subkey = "soffice.StarDrawTemplate.6";
+    ModuleID = gid_Module_Prg_Draw_Bin;
+    REG_VALUE_LNG(SO60_DRAW_TEMPLATE)
+End
+
+RegistryItem gid_Regitem_Soffice_Stardrawtemplate_6_Defaulticon
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    Subkey = "soffice.StarDrawTemplate.6\DefaultIcon";
+    ModuleID = gid_Module_Prg_Draw_Bin;
+    Value = "<progpath>\program\soffice.exe,32";
+End
+
+RegistryItem gid_Regitem_Soffice_Stardrawtemplate_6_Shell
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    Subkey = "soffice.StarDrawTemplate.6\shell";
+    ModuleID = gid_Module_Prg_Draw_Bin;
+    Value = "new";
+End
+
+RegistryItem gid_Regitem_Soffice_Stardrawtemplate_6_Shell_New
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    Subkey = "soffice.StarDrawTemplate.6\shell\new";
+    ModuleID = gid_Module_Prg_Draw_Bin;
+    REG_VALUE_LNG(NEW)
+End
+
+RegistryItem gid_Regitem_Soffice_Stardrawtemplate_6_Shell_New_Command
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    Subkey = "soffice.StarDrawTemplate.6\shell\new\command";
+    ModuleID = gid_Module_Prg_Draw_Bin;
+    Value = "\"<progpath>\program\soffice.exe\" -n \"%1\"";
+End
+
+RegistryItem gid_Regitem_Soffice_Stardrawtemplate_6_Shell_Open_Command
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    Subkey = "soffice.StarDrawTemplate.6\shell\open\command";
+    ModuleID = gid_Module_Prg_Draw_Bin;
+    Value = "\"<progpath>\program\sdraw.exe\" -o \"%1\"";
+End
+
+RegistryItem gid_Regitem_Soffice_Stardrawtemplate_6_Shell_Print_Command
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    Subkey = "soffice.StarDrawTemplate.6\shell\print\command";
+    ModuleID = gid_Module_Prg_Draw_Bin;
+    Value = "\"<progpath>\program\soffice.exe\" -p \"%1\"";
+End
+
+RegistryItem gid_Regitem_Soffice_Stardrawtemplate_6_Shell_Printto_Command
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    Subkey = "soffice.StarDrawTemplate.6\shell\printto\command";
+    ModuleID = gid_Module_Prg_Draw_Bin;
+    Value = "\"<progpath>\program\soffice.exe\" -pt \"%2\" \"%1\"";
+End
+
+RegistryItem gid_Regitem_Std_PersistentHandler
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Draw_Bin;
+    Subkey = ".std\PersistentHandler";
+    Value = "{7BC0E713-5703-45BE-A29D-5D46D8B39262}";
+End
+
+RegistryItem gid_Regitem_Std_Shellex_00021500_0000_0000_C000_000000000046
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Draw_Bin;
+    Subkey = ".std\shellex\{00021500-0000-0000-C000-000000000046}";
+    Value = "{087B3AE3-E237-4467-B8DB-5A38AB959AC9}";
+End
+
+RegistryItem gid_Regitem_Std_Shellex_BB2E617C_0920_11D1_9A0B_00C04FC2D6C1
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Draw_Bin;
+    Subkey = ".std\shellex\{BB2E617C-0920-11D1-9A0B-00C04FC2D6C1}";
+    Value = "{3B092F0C-7696-40E3-A80F-68D74DA84210}";
+End
+
+RegistryItem gid_Regitem_StarDrawTemplate_6_Shellex_PropertySheetHandlers_MyPropSheet1
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Draw_Bin;
+    Subkey = "soffice.StarDrawTemplate.6\shellex\PropertySheetHandlers\MyPropSheet1";
+    Value = "{63542C48-9552-494A-84F7-73AA6A7C99C1}";
+End
+
+RegistryItem gid_Regitem_Std
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    Subkey = ".std";
+    ModuleID = gid_Module_Prg_Draw_Bin;
+    Value = "soffice.StarDrawTemplate.6";
+End
+
+RegistryItem gid_Regitem_Std_Contenttype
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Draw_Bin;
+    Subkey = ".std";
+    Name = "Content Type";
+    Value = "application/vnd.sun.xml.draw.template";
+End
+
+RegistryItem gid_Regitem_std_FullDetails
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Optional_Winexplorerext_PropertyHdl;
+    Subkey = "soffice.StarDrawTemplate.6";
+    Name = "FullDetails";
+    Value = "prop:System.PropGroup.Description;System.Title;System.Author;System.Subject;System.Keywords;System.Comment;System.PropGroup.FileSystem;System.ItemNameDisplay;System.ItemType;System.ItemFolderPathDisplay;System.Size;System.DateCreated;System.DateModified;System.FileAttributes;System.ComputerName";
+End
+
+RegistryItem gid_Regitem_Sxd_PersistentHandler
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Draw_Bin;
+    Subkey = ".sxd\PersistentHandler";
+    Value = "{7BC0E713-5703-45BE-A29D-5D46D8B39262}";
+End
+
+RegistryItem gid_Regitem_Sxd_Shellex_00021500_0000_0000_C000_000000000046
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Draw_Bin;
+    Subkey = ".sxd\shellex\{00021500-0000-0000-C000-000000000046}";
+    Value = "{087B3AE3-E237-4467-B8DB-5A38AB959AC9}";
+End
+
+RegistryItem gid_Regitem_Sxd_Shellex_BB2E617C_0920_11D1_9A0B_00C04FC2D6C1
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Draw_Bin;
+    Subkey = ".sxd\shellex\{BB2E617C-0920-11D1-9A0B-00C04FC2D6C1}";
+    Value = "{3B092F0C-7696-40E3-A80F-68D74DA84210}";
+End
+
+RegistryItem gid_Regitem_StarDrawDocument_1_Shellex_PropertySheetHandlers_MyPropSheet1
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Draw_Bin;
+    Subkey = "soffice.StarDrawDocument.6\shellex\PropertySheetHandlers\MyPropSheet1";
+    Value = "{63542C48-9552-494A-84F7-73AA6A7C99C1}";
+End
+
+RegistryItem gid_Regitem_Sxd_Contenttype
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Draw_Bin;
+    Subkey = ".sxd";
+    Name = "Content Type";
+    Value = "application/vnd.sun.xml.draw";
+End
+
+RegistryItem gid_Regitem_Sxd_Mime_Database
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Draw_Bin;
+    Subkey = "MIME\Database\Content Type\application/vnd.sun.xml.draw";
+    Name = "Extension";
+    Value = ".sxd";
+End
+
+RegistryItem gid_Regitem__Sxd
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Draw_Bin;
+    Subkey = ".sxd";
+    Value = "soffice.StarDrawDocument.6";
+End
+
+RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabilities_FileAssociations_sxd
+    ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
+    Subkey = "Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\Capabilities\FileAssociations";
+    ModuleID = gid_Module_Prg_Draw_Bin;
+    Name = ".sxd";
+    Value = "soffice.StarDrawDocument.6";
+    Styles = ();
+End
+
+RegistryItem gid_Regitem_sxd_FullDetails
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Optional_Winexplorerext_PropertyHdl;
+    Subkey = "soffice.StarDrawDocument.6";
+    Name = "FullDetails";
+    Value = "prop:System.PropGroup.Description;System.Title;System.Author;System.Subject;System.Keywords;System.Comment;System.PropGroup.FileSystem;System.ItemNameDisplay;System.ItemType;System.ItemFolderPathDisplay;System.Size;System.DateCreated;System.DateModified;System.FileAttributes;System.ComputerName";
+End
+
+// new odg file extension 
+
+RegistryItem gid_Regitem_Odg_PersistentHandler
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Draw_Bin;
+    Subkey = ".odg\PersistentHandler";
+    Value = "{7BC0E713-5703-45BE-A29D-5D46D8B39262}";
+End
+
+RegistryItem gid_Regitem_Odg_Shellex_00021500_0000_0000_C000_000000000046
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Draw_Bin;
+    Subkey = ".odg\shellex\{00021500-0000-0000-C000-000000000046}";
+    Value = "{087B3AE3-E237-4467-B8DB-5A38AB959AC9}";
+End
+
+RegistryItem gid_Regitem_Odg_Shellex_BB2E617C_0920_11D1_9A0B_00C04FC2D6C1
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Draw_Bin;
+    Subkey = ".odg\shellex\{BB2E617C-0920-11D1-9A0B-00C04FC2D6C1}";
+    Value = "{3B092F0C-7696-40E3-A80F-68D74DA84210}";
+End
+
+RegistryItem gid_Regitem_DrawDocument_1_Shellex_PropertySheetHandlers_MyPropSheet1
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Draw_Bin;
+    Subkey = "opendocument.DrawDocument.1\shellex\PropertySheetHandlers\MyPropSheet1";
+    Value = "{63542C48-9552-494A-84F7-73AA6A7C99C1}";
+End
+
+RegistryItem gid_Regitem_Odg_Contenttype
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Draw_Bin;
+    Subkey = ".odg";
+    Name = "Content Type";
+    Value = "application/vnd.oasis.opendocument.graphics";
+End
+
+RegistryItem gid_Regitem_Odg_Mime_Database
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Draw_Bin;
+    Subkey = "MIME\Database\Content Type\application/vnd.oasis.opendocument.graphics";
+    Name = "Extension";
+    Value = ".odg";
+End
+
+RegistryItem gid_Regitem__Odg
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Draw_Bin;
+    Subkey = ".odg";
+    Value = "opendocument.DrawDocument.1";
+End
+
+RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabilities_FileAssociations_odg
+    ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
+    Subkey = "Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\Capabilities\FileAssociations";
+    ModuleID = gid_Module_Prg_Draw_Bin;
+    Name = ".odg";
+    Value = "opendocument.DrawDocument.1";
+    Styles = ();
+End
+
+RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabilities_MimeAssociations_odg
+    ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
+    Subkey = "Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\Capabilities\MimeAssociations";
+    ModuleID = gid_Module_Prg_Draw_Bin;
+    Name = "application/vnd.oasis.opendocument.graphics";
+    Value = "opendocument.DrawDocument.1";
+    Styles = ();
+End
+
+RegistryItem gid_Regitem_Odg_Openoffice_Drawdocument_1_Shellnew
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Draw_Bin;
+    Subkey = ".odg\opendocument.DrawDocument.1\ShellNew";
+    Name = "FileName";
+    Value = "soffice.odg";
+End
+
+RegistryItem gid_Regitem_Openoffice_Drawdocument_Curver
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    Subkey = "opendocument.DrawDocument\CurVer";
+    ModuleID = gid_Module_Prg_Draw_Bin;
+    Value = "opendocument.DrawDocument.1";
+End
+
+RegistryItem gid_Regitem_Openoffice_Drawdocument_1
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Draw_Bin;
+    Subkey = "opendocument.DrawDocument.1";
+    REG_VALUE_LNG(OO_DRAW)
+End
+
+#ifdef WITH_ACTIVEX_COMPONENT
+
+RegistryItem gid_Regitem_Openoffice_Drawdocument_1_Clsid
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Draw_Bin;
+    Subkey = "opendocument.DrawDocument.1\CLSID";
+    Value = "{448BB771-CFE2-47C4-BCDF-1FBF378E202C}";
+End
+
+#endif // WITH_ACTIVEX_COMPONENT
+
+RegistryItem gid_Regitem_Openoffice_Drawdocument_1_Defaulticon
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Draw_Bin;
+    Subkey = "opendocument.DrawDocument.1\DefaultIcon";
+    Value = "<progpath>\program\soffice.exe,5";
+End
+
+RegistryItem gid_Regitem_odg_FullDetails
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Optional_Winexplorerext_PropertyHdl;
+    Subkey = "opendocument.DrawDocument.1";
+    Name = "FullDetails";
+    Value = "prop:System.PropGroup.Description;System.Title;System.Author;System.Subject;System.Keywords;System.Comment;System.PropGroup.FileSystem;System.ItemNameDisplay;System.ItemType;System.ItemFolderPathDisplay;System.Size;System.DateCreated;System.DateModified;System.FileAttributes;System.ComputerName";
+End
+
+RegistryItem gid_Regitem_Openoffice_Drawdocument_1_Shell
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Draw_Bin;
+    Subkey = "opendocument.DrawDocument.1\shell";
+    Value = "open";
+End
+
+RegistryItem gid_Regitem_Openoffice_Drawdocument_1_Shell_New
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Draw_Bin;
+    Subkey = "opendocument.DrawDocument.1\shell\new";
+    REG_VALUE_LNG(NEW)
+End
+
+RegistryItem gid_Regitem_Openoffice_Drawdocument_1_Shell_New_Command
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Draw_Bin;
+    Subkey = "opendocument.DrawDocument.1\shell\new\command";
+    Value = "\"<progpath>\program\soffice.exe\" -n \"%1\"";
+End
+
+RegistryItem gid_Regitem_Openoffice_Drawdocument_1_Shell_Open_Command
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Draw_Bin;
+    Subkey = "opendocument.DrawDocument.1\shell\open\command";
+    Value = "\"<progpath>\program\sdraw.exe\" -o \"%1\"";
+    Styles = ();
+End
+
+RegistryItem gid_Regitem_Openoffice_Drawdocument_1_Shell_Print_Command
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Draw_Bin;
+    Subkey = "opendocument.DrawDocument.1\shell\print\command";
+    Value = "\"<progpath>\program\soffice.exe\" -p \"%1\"";
+End
+
+RegistryItem gid_Regitem_Openoffice_Drawdocument_1_Shell_Printto_Command
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Draw_Bin;
+    Subkey = "opendocument.DrawDocument.1\shell\printto\command";
+    Value = "\"<progpath>\program\soffice.exe\" -pt \"%2\" \"%1\"";
+End
+
+RegistryItem gid_Regitem_Openoffice_Drawingdocument_1_Insertable
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Draw_Bin;
+    Subkey = "opendocument.DrawDocument.1\Insertable";
+End
+
+RegistryItem gid_Regitem_Openoffice_Drawingdocument_1_Protocol_Stdfileediting_Server
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Draw_Bin;
+    Subkey = "opendocument.DrawDocument.1\protocol\StdFileEditing\server";
+    Value = "<progpath>\program\soffice.exe";
+End
+
+RegistryItem gid_Regitem_Openoffice_Drawingdocument_1_Protocol_Stdfileediting_Verb_0
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Draw_Bin;
+    Subkey = "opendocument.DrawDocument.1\protocol\StdFileEditing\verb\0";
+    Value = "&Edit";
+End
+
+RegistryItem gid_Regitem_Openoffice_Drawingdocument_1_Protocol_Stdfileediting_Verb__1
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Draw_Bin;
+    Subkey = "opendocument.DrawDocument.1\protocol\StdFileEditing\verb\-1";
+    Value = "&Show";
+End
+
+RegistryItem gid_Regitem_Openoffice_Drawingdocument_1_Protocol_Stdfileediting_Verb__2
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Draw_Bin;
+    Subkey = "opendocument.DrawDocument.1\protocol\StdFileEditing\verb\-2";
+    Value = "&Open";
+End
+
+// .fodg
+
+RegistryItem gid_Regitem_Fodg_PersistentHandler
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Draw_Bin;
+    Subkey = ".fodg\PersistentHandler";
+    Value = "{7BC0E713-5703-45BE-A29D-5D46D8B39262}";
+End
+
+RegistryItem gid_Regitem_Fodg_Shellex_00021500_0000_0000_C000_000000000046
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Draw_Bin;
+    Subkey = ".fodg\shellex\{00021500-0000-0000-C000-000000000046}";
+    Value = "{087B3AE3-E237-4467-B8DB-5A38AB959AC9}";
+End
+
+RegistryItem gid_Regitem_Fodg_Shellex_BB2E617C_0920_11D1_9A0B_00C04FC2D6C1
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Draw_Bin;
+    Subkey = ".fodg\shellex\{BB2E617C-0920-11D1-9A0B-00C04FC2D6C1}";
+    Value = "{3B092F0C-7696-40E3-A80F-68D74DA84210}";
+End
+
+RegistryItem gid_Regitem_Fodg_Contenttype
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Draw_Bin;
+    Subkey = ".fodg";
+    Name = "Content Type";
+    Value = "application/vnd.oasis.opendocument.graphics";
+End
+
+RegistryItem gid_Regitem__Fodg
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Draw_Bin;
+    Subkey = ".fodg";
+    Value = "opendocument.DrawDocument.1";
+End
+
+RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabilities_FileAssociations_fodg
+    ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
+    Subkey = "Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\Capabilities\FileAssociations";
+    ModuleID = gid_Module_Root;
+    Name = ".fodg";
+    Value = "opendocument.DrawDocument.1";
+    Styles = (PATCH);
+End
+
+// new otg file extension 
+
+RegistryItem gid_Regitem_Otg_PersistentHandler
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Draw_Bin;
+    Subkey = ".otg\PersistentHandler";
+    Value = "{7BC0E713-5703-45BE-A29D-5D46D8B39262}";
+End
+
+RegistryItem gid_Regitem_Otg_Shellex_00021500_0000_0000_C000_000000000046
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Draw_Bin;
+    Subkey = ".otg\shellex\{00021500-0000-0000-C000-000000000046}";
+    Value = "{087B3AE3-E237-4467-B8DB-5A38AB959AC9}";
+End
+
+RegistryItem gid_Regitem_Otg_Shellex_BB2E617C_0920_11D1_9A0B_00C04FC2D6C1
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Draw_Bin;
+    Subkey = ".otg\shellex\{BB2E617C-0920-11D1-9A0B-00C04FC2D6C1}";
+    Value = "{3B092F0C-7696-40E3-A80F-68D74DA84210}";
+End
+
+RegistryItem gid_Regitem_DrawTemplate_1_Shellex_PropertySheetHandlers_MyPropSheet1
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Draw_Bin;
+    Subkey = "opendocument.DrawTemplate.1\shellex\PropertySheetHandlers\MyPropSheet1";
+    Value = "{63542C48-9552-494A-84F7-73AA6A7C99C1}";
+End
+
+RegistryItem gid_Regitem_Otg
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    Subkey = ".otg";
+    ModuleID = gid_Module_Prg_Draw_Bin;
+    Value = "opendocument.DrawTemplate.1";
+End
+
+RegistryItem gid_Regitem_Otg_Contenttype
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Draw_Bin;
+    Subkey = ".otg";
+    Name = "Content Type";
+    Value = "application/vnd.oasis.opendocument.graphics-template";
+End
+
+RegistryItem gid_Regitem_Openoffice_Drawtemplate_1
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    Subkey = "opendocument.DrawTemplate.1";
+    ModuleID = gid_Module_Prg_Draw_Bin;
+    REG_VALUE_LNG(OO_DRAW_TEMPLATE)
+End
+
+RegistryItem gid_Regitem_Openoffice_Drawtemplate_1_Defaulticon
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    Subkey = "opendocument.DrawTemplate.1\DefaultIcon";
+    ModuleID = gid_Module_Prg_Draw_Bin;
+    Value = "<progpath>\program\soffice.exe,6";
+End
+
+RegistryItem gid_Regitem_otg_FullDetails
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Optional_Winexplorerext_PropertyHdl;
+    Subkey = "opendocument.DrawTemplate.1";
+    Name = "FullDetails";
+    Value = "prop:System.PropGroup.Description;System.Title;System.Author;System.Subject;System.Keywords;System.Comment;System.PropGroup.FileSystem;System.ItemNameDisplay;System.ItemType;System.ItemFolderPathDisplay;System.Size;System.DateCreated;System.DateModified;System.FileAttributes;System.ComputerName";
+End
+
+RegistryItem gid_Regitem_Openoffice_Drawtemplate_1_Shell
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    Subkey = "opendocument.DrawTemplate.1\shell";
+    ModuleID = gid_Module_Prg_Draw_Bin;
+    Value = "new";
+End
+
+RegistryItem gid_Regitem_Openoffice_Drawtemplate_1_Shell_New
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    Subkey = "opendocument.DrawTemplate.1\shell\new";
+    ModuleID = gid_Module_Prg_Draw_Bin;
+    REG_VALUE_LNG(NEW)
+End
+
+RegistryItem gid_Regitem_Openoffice_Drawtemplate_1_Shell_New_Command
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    Subkey = "opendocument.DrawTemplate.1\shell\new\command";
+    ModuleID = gid_Module_Prg_Draw_Bin;
+    Value = "\"<progpath>\program\soffice.exe\" -n \"%1\"";
+End
+
+RegistryItem gid_Regitem_Openoffice_Drawtemplate_1_Shell_Open_Command
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    Subkey = "opendocument.DrawTemplate.1\shell\open\command";
+    ModuleID = gid_Module_Prg_Draw_Bin;
+    Value = "\"<progpath>\program\sdraw.exe\" -o \"%1\"";
+End
+
+RegistryItem gid_Regitem_Openoffice_Drawtemplate_1_Shell_Print_Command
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    Subkey = "opendocument.DrawTemplate.1\shell\print\command";
+    ModuleID = gid_Module_Prg_Draw_Bin;
+    Value = "\"<progpath>\program\soffice.exe\" -p \"%1\"";
+End
+
+RegistryItem gid_Regitem_Openoffice_Drawtemplate_1_Shell_Printto_Command
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    Subkey = "opendocument.DrawTemplate.1\shell\printto\command";
+    ModuleID = gid_Module_Prg_Draw_Bin;
+    Value = "\"<progpath>\program\soffice.exe\" -pt \"%2\" \"%1\"";
+End
+
+// "OpenWith" Windows Registry keys for extensions supported by Draw
+
+// .ODG
+RegistryItem gid_Regitem_OpenOffice_ODG_OpenWith_Draw
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    Subkey = ".odg\OpenWithProgIDs";
+    ModuleID = gid_Module_Prg_Draw_Bin;
+    Name = "opendocument.DrawDocument.1";
+    Value = " ";
+End
+
+// .OTG
+RegistryItem gid_Regitem_OpenOffice_OTG_OpenWith_Draw
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    Subkey = ".otg\OpenWithProgIDs";
+    ModuleID = gid_Module_Prg_Draw_Bin;
+    Name = "opendocument.DrawTemplate.1";
+    Value = " ";
+End
+
+// .SXD
+RegistryItem gid_Regitem_OpenOffice_SXD_OpenWith_Draw
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    Subkey = ".sxd\OpenWithProgIDs";
+    ModuleID = gid_Module_Prg_Draw_Bin;
+    Name = "soffice.StarDrawDocument.6";
+    Value = " ";
+End
+
+// .STD
+RegistryItem gid_Regitem_OpenOffice_STD_OpenWith_Draw
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    Subkey = ".std\OpenWithProgIDs";
+    ModuleID = gid_Module_Prg_Draw_Bin;
+    Name = "soffice.StarDrawTemplate.6";
+    Value = " ";
+End
+
+
+RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabilities_FileAssociations_Otg
+    ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
+    Subkey = "Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\Capabilities\FileAssociations";
+    ModuleID = gid_Module_Prg_Draw_Bin;
+    Name = ".otg";
+    Value = "opendocument.DrawTemplate.1";
+    Styles = ();
+End
+
+RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabilities_FileAssociations_Std
+    ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
+    Subkey = "Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\Capabilities\FileAssociations";
+    ModuleID = gid_Module_Prg_Draw_Bin;
+    Name = ".std";
+    Value = "soffice.StarDrawTemplate.6";
+    Styles = ();
+End
+
+RegistryItem gid_Regitem_Software_Microsoft_Windows_Currentversion_Apppaths_Sdraw_Exe
+    ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
+    Subkey = "Software\Microsoft\Windows\CurrentVersion\App Paths\sdraw.exe";
+    ModuleID = gid_Module_Prg_Draw_Bin;
+    Value = "<progpath>\program\sdraw.exe";
+End
+
+RegistryItem gid_Regitem_Software_Microsoft_Windows_Currentversion_Apppaths_Sdraw_Exepath
+    ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
+    Subkey = "Software\Microsoft\Windows\CurrentVersion\App Paths\sdraw.exe";
+    ModuleID = gid_Module_Prg_Draw_Bin;
+    Name = "Path";
+    Value = "<progpath>";
+End
+
+// registering the property handler for the supported file types
+
+REGISTER_PROPERTY_HANDLER_FOR_EXTENSION( odg )
+REGISTER_PROPERTY_HANDLER_FOR_EXTENSION( otg )
+REGISTER_PROPERTY_HANDLER_FOR_EXTENSION( sxd )
+REGISTER_PROPERTY_HANDLER_FOR_EXTENSION( std )

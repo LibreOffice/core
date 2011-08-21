@@ -1,0 +1,71 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_ucb_UnsupportedNameClashException_idl__
+#define __com_sun_star_ucb_UnsupportedNameClashException_idl__
+
+#include <com/sun/star/uno/Exception.idl>
+
+//=============================================================================
+
+module com { module sun { module star { module ucb {
+
+//=============================================================================
+/** <p>This exception must be thrown in case the requested name clash
+    directive is not supported, because it is not possible to implement
+    it or if it is just not (yet) implemented.
+
+    <p>Command "transfer": Used if the name clash directive specified in
+    parameter NameClash of the supplied <type>TransferInfo</type> is not
+    supported. For example, if the NameClash was set to NameClash::ERROR,
+    to NameClash::RENAME or to NameClash::ASK, the implementation must be
+    able determine whether there are existing data. This exception must also
+    be used if NameClash::RENAME was specified and the implementation is
+    unable to create a valid new name after a suitable number of tries.
+
+    <p>Command "insert": Used if the parameter ReplaceExisting of the
+    supplied <type>InsertCommandArgument</type> was set to <false/> and the
+    implementation is unable to determine whether there are existing data.
+    The member NameClash of the exception must be set to NameClash::ERROR
+
+    @version    1.0
+    @author     Kai Sommerfeld
+    @see        Content
+*/
+published exception UnsupportedNameClashException : com::sun::star::uno::Exception
+{
+    //-------------------------------------------------------------------------
+    /** contains the <type>NameClash</type> that is not supported.
+     */
+    long NameClash;
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

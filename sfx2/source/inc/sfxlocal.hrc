@@ -1,0 +1,69 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+// local resources
+
+#ifndef _SFXLOCAL_HRC
+#define _SFXLOCAL_HRC
+
+#include <sfx2/sfx.hrc>
+
+// Strings ---------------------------------------------------------------
+
+#define STR_SFX_NEWOFFICEDOC                (RID_SFX_SFXLOCAL_START +  0)
+#define STR_SFX_FILEDLG_ACTUALVERSION       (RID_SFX_SFXLOCAL_START +  2)
+#define STR_SFX_EXPLORERFILE_INSERT         (RID_SFX_SFXLOCAL_START +  3)
+#define STR_SFX_EXPLORERFILE_BUTTONINSERT   (RID_SFX_SFXLOCAL_START +  4)
+#define STR_SFX_IMPORT_ALL                  (RID_SFX_SFXLOCAL_START +  5)
+#define STR_SFX_EXPLORERFILE_EXPORT         (RID_SFX_SFXLOCAL_START +  6)
+#define STR_SFX_DOCK                        (RID_SFX_SFXLOCAL_START +  7)
+#define STR_SFX_UNDOCK                      (RID_SFX_SFXLOCAL_START +  8)
+#define STR_SFX_TASK_PANE_VIEW              (RID_SFX_SFXLOCAL_START +  9)
+#define STR_SFX_TASKS                       (RID_SFX_SFXLOCAL_START + 10)
+
+// Controls --------------------------------------------------------------
+
+#define SFX_CB_PROPERTY_NAME                (RID_SFX_SFXLOCAL_START +  0)
+#define SFX_ED_PROPERTY_VALUE               (RID_SFX_SFXLOCAL_START +  1)
+#define SFX_RB_PROPERTY_YES                 (RID_SFX_SFXLOCAL_START +  2)
+#define SFX_RB_PROPERTY_NO                  (RID_SFX_SFXLOCAL_START +  3)
+#define SFX_LB_PROPERTY_TYPE                (RID_SFX_SFXLOCAL_START +  4)
+#define SFX_PB_PROPERTY_REMOVE              (RID_SFX_SFXLOCAL_START +  5)
+#define SFX_WIN_PROPERTY_YESNO              (RID_SFX_SFXLOCAL_START +  6)
+#define SFX_QB_WRONG_TYPE                   (RID_SFX_SFXLOCAL_START +  7)
+#define SFX_FLD_DATE                        (RID_SFX_SFXLOCAL_START +  10)
+#define SFX_FLD_TIME                        (RID_SFX_SFXLOCAL_START +  11)
+#define SFX_FLD_DURATION                    (RID_SFX_SFXLOCAL_START +  12)
+#define SFX_ST_DURATION_FORMAT              (RID_SFX_SFXLOCAL_START +  13)
+
+// Images ----------------------------------------------------------------
+
+#define SFX_IMG_PROPERTY_REMOVE             (RID_SFX_SFXLOCAL_START +  0)
+#define SFX_IMG_CLOSE_DOC                   (RID_SFX_SFXLOCAL_START +  2)
+
+#endif
+

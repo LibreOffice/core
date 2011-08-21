@@ -1,0 +1,146 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_configuration_backend_XLayerImporter_idl__
+#define __com_sun_star_configuration_backend_XLayerImporter_idl__
+
+#include <com/sun/star/uno/XInterface.idl>
+#include <com/sun/star/configuration/backend/XLayer.idl>
+#include <com/sun/star/configuration/backend/XBackend.idl>
+#include <com/sun/star/configuration/backend/MalformedDataException.idl>
+#include <com/sun/star/lang/NullPointerException.idl>
+#include <com/sun/star/lang/IllegalArgumentException.idl>
+#include <com/sun/star/lang/WrappedTargetException.idl>
+
+//=============================================================================
+
+module com { module sun { module star { module configuration { module backend {
+
+//=============================================================================
+
+/** allows importing a layer into a <type>Backend</type>
+
+  @since OOo 1.1.2
+*/
+published interface XLayerImporter : ::com::sun::star::uno::XInterface
+{
+    //-------------------------------------------------------------------------
+
+    /** gets the target backend for importing.
+
+        @returns
+            the <type>Backend</type> into which layers are
+            imported by <member>XLayerImporter::importLayer()<member/>.
+
+    */
+    XBackend getTargetBackend();
+
+    //-------------------------------------------------------------------------
+
+    /** sets the target backend for importing.
+
+        @param aBackend
+            a <type>Backend</type> into which layers should be
+            imported by <method>XLayerImporter::importLayer()<method/>.
+
+        @throws com::sun::star::lang::NullPointerException
+            if the backend passed is <NULL/>.
+    */
+    void setTargetBackend([in] XBackend aBackend)
+        raises (com::sun::star::lang::NullPointerException) ;
+
+    //-------------------------------------------------------------------------
+
+    /** Imports the layer given into the backend.
+
+        <p>This method imports data for the current entity of the backend.</p>
+
+        @param aLayer
+            a layer whose data will be imported into the backend
+
+        @throws com::sun::star::lang::NullPointerException
+            if the layer passed is <NULL/> or no backend is available.
+
+        @throws com::sun::star::configuration::backend::MalformedDataException
+            if the layer passed is invalid
+
+        @throws com::sun::star::lang::IllegalArgumentException
+            if the layer passed is for a component
+            that doesn't exist in the backend
+
+        @throws com::sun::star::lang::WrappedTargetException
+            if an error occurs in the backend or source layer.
+
+        @see com::sun::star::configuration::backend::XBackend::getOwnUpdateHandler()
+    */
+    void importLayer([in] XLayer aLayer)
+        raises (MalformedDataException,
+                com::sun::star::lang::IllegalArgumentException,
+                com::sun::star::lang::NullPointerException,
+                com::sun::star::lang::WrappedTargetException) ;
+
+    //-------------------------------------------------------------------------
+
+    /** Imports the layer given into the backend for a given entity.
+
+        <p>This method imports data for the current entity of the backend.</p>
+
+        @param aLayer
+            a layer whose data will be imported into the backend
+
+        @param aEntity
+            a entity into whose data the layer will be imported
+
+        @throws com::sun::star::lang::NullPointerException
+            if the layer passed is <NULL/> or no backend is available.
+
+        @throws com::sun::star::configuration::backend::MalformedDataException
+            if the layer passed is invalid
+
+        @throws com::sun::star::lang::IllegalArgumentException
+            if the layer passed is for a component
+            that doesn't exist in the backend
+            or if the entity doesn't exist in the backend.
+
+        @throws com::sun::star::lang::WrappedTargetException
+            if an error occurs in the backend or source layer.
+
+        @see com::sun::star::configuration::backend::XBackend::getUpdateHandler()
+    */
+    void importLayerForEntity([in] XLayer aLayer, [in] string aEntity)
+        raises (MalformedDataException,
+                com::sun::star::lang::IllegalArgumentException,
+                com::sun::star::lang::NullPointerException,
+                com::sun::star::lang::WrappedTargetException) ;
+
+    //-------------------------------------------------------------------------
+} ;
+
+//=============================================================================
+
+} ; } ; } ; } ; } ;
+
+#endif

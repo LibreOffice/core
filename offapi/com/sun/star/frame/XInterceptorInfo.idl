@@ -1,0 +1,71 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_frame_XInterceptorInfo_idl__
+#define __com_sun_star_frame_XInterceptorInfo_idl__
+
+#include <com/sun/star/uno/XInterface.idl>
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module frame {
+
+//=============================================================================
+
+/** makes it possible to get information about a registered interceptor and is used by
+    frame interceptor mechanism to perform interception.
+
+    <p>
+    Frame can call right interceptor directly without calling all of registered ones.
+    Use it as an additional interface to <type>XDispatchProviderInterceptor</type>.
+    If any interceptor in list doesn't support this interface - these mechanism will be broken
+    and normal list of master-slave interceptor objects will be used from top to the bottom.
+    </p>
+
+    @see XDispatchProviderInterception
+    @see XDispatchProviderInterceptor
+ */
+published interface XInterceptorInfo: com::sun::star::uno::XInterface
+{
+    //-------------------------------------------------------------------------
+    /** returns the URL list for interception.
+
+        <p>
+        Wildcards inside the URLs are allowed to register the interceptor for
+        URLs too, which can have optional arguments (e.g. "..#.." or "..?..").
+        </p>
+
+        @return
+            a list of URLs which are handled by this interceptor
+     */
+    sequence< string > getInterceptedURLs();
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

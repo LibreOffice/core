@@ -1,0 +1,237 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+interface ImpressEditView : DrawView
+[
+    uuid ( "661B07E0-2FB4-11CF-89CA-008029E4B0B1" ) ;
+]
+{
+    SID_MODIFYPAGE // ole : no, status : play rec
+    [
+        ExecMethod = FuTemporary ;
+        StateMethod = GetMenuState ;
+    ]
+    SID_ASSIGN_LAYOUT
+    [
+        ExecMethod = FuTemporary ;
+        StateMethod = GetMenuState ;
+    ]
+    SID_ANIMATION_OBJECTS // ole : no, status : ?
+    [
+        ExecMethod = FuTemporary ;
+        StateMethod = GetMenuState ;
+    ]
+    SID_ANIMATION_EFFECTS // ole : no, status : ?
+    [
+        ExecMethod = FuTemporary ;
+        StateMethod = GetMenuState ;
+    ]
+    SID_CUSTOM_ANIMATION_PANEL // ole : no, status : ?
+    [
+        ExecMethod = FuTemporary ;
+        StateMethod = GetMenuState ;
+    ]
+    SID_SLIDE_TRANSITIONS_PANEL // ole : no, status : ?
+    [
+        ExecMethod = FuTemporary ;
+        StateMethod = GetMenuState ;
+    ]
+    SID_SLIDE_TRANSITIONS_PANEL // ole : no, status : ?
+    [
+        ExecMethod = FuTemporary ;
+        StateMethod = GetMenuState ;
+    ]
+    SID_REHEARSE_TIMINGS // ole : no, status : ?
+    [
+        ExecMethod = FuSupport ;
+        StateMethod = GetMenuState ;
+    ]
+    SID_PRESENTATION // ole : no, status : ?
+    [
+        ExecMethod = FuSupport ;
+        StateMethod = GetMenuState ;
+    ]
+    SID_PRESENTATION_END // ole : no, status : ?
+    [
+        ExecMethod = FuSupport ;
+        StateMethod = GetMenuState ;
+    ]
+    SID_CLEAR_UNDO_STACK // ole : no, status : ?
+    [
+        ExecMethod = FuSupport ;
+        StateMethod = GetMenuState ;
+    ]
+    SID_STYLE_FAMILY5 // ole : no, status : ?
+    [
+        ExecMethod = FuTemporary ;
+        StateMethod = GetAttrState ;
+        Export = FALSE ;
+    ]
+    SID_ANIMATOR_INIT // ole : no, status : ?
+    [
+        ExecMethod = ExecAnimationWin ;
+        StateMethod = GetAnimationWinState ;
+    ]
+    SID_ANIMATOR_ADD // ole : no, status : ?
+    [
+        ExecMethod = ExecAnimationWin ;
+        StateMethod = GetAnimationWinState ;
+    ]
+    SID_ANIMATOR_CREATE // ole : no, status : ?
+    [
+        ExecMethod = ExecAnimationWin ;
+        StateMethod = GetAnimationWinState ;
+    ]
+    SID_ANIMATOR_STATE // ole : no, status : ?
+    [
+        ExecMethod = ExecAnimationWin ;
+        StateMethod = GetAnimationWinState ;
+    ]
+    SID_NAVIGATOR_PEN // ole : no, status : ?
+    [
+        ExecMethod = ExecNavigatorWin ;
+        StateMethod = GetNavigatorWinState ;
+    ]
+    SID_PRESENTATION_DLG
+    [
+        ExecMethod = FuTemporary ;
+    ]
+    SID_CUSTOMSHOW_DLG
+    [
+        ExecMethod = FuTemporary ;
+    ]
+    SID_EXPAND_PAGE // ole : no, status : play rec
+    [
+        ExecMethod = FuTemporary ;
+        StateMethod = GetMenuState ;
+        ReadOnlyDoc = FALSE;
+    ]
+    SID_SUMMARY_PAGE // ole : no, status : play rec
+    [
+        ExecMethod = FuTemporary ;
+        StateMethod = GetMenuState ;
+    ]
+    SID_SLIDE_MASTERPAGE // ole : no, status : play rec
+    [
+        ExecMethod = FuSupport ;
+        StateMethod = GetMenuState ;
+    ]
+    SID_NOTES_MASTERPAGE // ole : no, status : play rec
+    [
+        ExecMethod = FuSupport ;
+        StateMethod = GetMenuState ;
+    ]
+    SID_HANDOUT_MASTERPAGE // ole : no, status : play rec
+    [
+        ExecMethod = FuSupport ;
+        StateMethod = GetMenuState ;
+    ]
+    SID_TITLE_MASTERPAGE // deprecated, to be removed see issue #i35731#
+    [
+        ExecMethod = FuSupport ;
+        StateMethod = GetMenuState ;
+    ]
+    SID_STYLE_FAMILY
+    [
+        ExecMethod = FuSupport ;
+        StateMethod = GetMenuState ;
+    ]
+
+    SID_SEARCH_OPTIONS // ole : ?, status : ?
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        GroupId = GID_DOCUMENT ;
+        Cachable ;
+    ]
+    SID_SEARCH_ITEM // ole : ?, status : ?
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_LAYER_DIALOG_WIN // ole : no, status : ?
+    [
+        ExecMethod = FuTemporary ;
+        StateMethod = GetMenuState ;
+    ]
+    SID_SHOW_POSTIT
+    [
+        ExecMethod = ExecuteAnnotation;
+        StateMethod = GetAnnotationState;
+    ]
+    SID_INSERT_POSTIT
+    [
+        ExecMethod = ExecuteAnnotation;
+        StateMethod = GetAnnotationState;
+    ]
+    SID_REPLYTO_POSTIT
+    [
+        ExecMethod = ExecuteAnnotation;
+        StateMethod = GetAnnotationState;
+    ]
+    SID_DELETE_POSTIT
+    [
+        ExecMethod = ExecuteAnnotation;
+        StateMethod = GetAnnotationState;
+    ]
+    SID_DELETEALL_POSTIT
+    [
+        ExecMethod = ExecuteAnnotation;
+        StateMethod = GetAnnotationState;
+    ]
+    SID_PREVIOUS_POSTIT
+    [
+        ExecMethod = ExecuteAnnotation;
+        StateMethod = GetAnnotationState;
+    ]
+    SID_NEXT_POSTIT
+    [
+        ExecMethod = ExecuteAnnotation;
+        StateMethod = GetAnnotationState;
+    ]
+    SID_DELETEALLBYAUTHOR_POSTIT
+    [
+        ExecMethod = ExecuteAnnotation;
+        StateMethod = GetAnnotationState;
+    ]
+}
+
+shell DrawViewShell
+{
+    import ImpressEditView[Automation];
+}
+
+
+shell PresentationViewShell
+{
+    import ImpressEditView[Automation];
+}
+
+
+shell PreviewViewShell
+{
+    import ImpressEditView[Automation];
+}

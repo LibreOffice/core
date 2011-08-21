@@ -59,11 +59,6 @@ GHEditWindow::GHEditWindow(Window * pParent, String aName, WinBits iWstyle)
     SetText(aName);
 }
 
-void GHEditWindow::Clear()
-{
-    aInhalt.SetText(String());
-}
-
 void GHEditWindow::AddText( String aNew, sal_Bool bMoveToEnd)
 {
     String aOld = aInhalt.GetText();

@@ -1,0 +1,231 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_text_TextSection_idl__
+#define __com_sun_star_text_TextSection_idl__
+
+#include <com/sun/star/text/TextContent.idl>
+#include <com/sun/star/text/XTextSection.idl>
+#include <com/sun/star/container/XNamed.idl>
+#include <com/sun/star/beans/XPropertySet.idl>
+#include <com/sun/star/beans/XPropertyState.idl>
+#include <com/sun/star/text/SectionFileLink.idl>
+#include <com/sun/star/style/GraphicLocation.idl>
+#include <com/sun/star/text/XTextColumns.idl>
+#include <com/sun/star/xml/UserDefinedAttributesSupplier.idl>
+
+
+//=============================================================================
+
+module com { module sun { module star { module text {
+
+//=============================================================================
+/** A <type>TextSection</type> is a range of complete paragraphs within a text.
+
+    <p>The content of the section may be the content of a link into another
+    document, a link from the same document, or the result of a DDE
+    operation.
+
+    <p><type>TextSection</type> instances can be linked from and to other
+    texts.
+
+*/
+published service TextSection
+{
+    service com::sun::star::text::TextContent;
+
+    [optional] service com::sun::star::xml::UserDefinedAttributesSupplier;
+
+    interface com::sun::star::text::XTextSection;
+    interface com::sun::star::container::XNamed;
+    interface com::sun::star::beans::XPropertySet;
+    interface com::sun::star::beans::XPropertyState;
+
+    //-------------------------------------------------------------------------
+    /**  This property contains a conditional expression.
+
+    <p>If the result of the conditional expression is <true/> and the property
+    <member>TextSection::IsVisible</member> is <false/>, then the section is hidden.</p>
+    */
+    [property] string Condition;
+
+    //-------------------------------------------------------------------------
+    /** If this property is <FALSE/>, the text section is hidden.
+    */
+    [property] boolean IsVisible;
+
+    //-------------------------------------------------------------------------
+    /** If this property is <TRUE/>, the text section is protected
+        and cannot be modified from the user interface.
+    */
+    [property] boolean IsProtected;
+
+    //-------------------------------------------------------------------------
+    /** If this property is set, then the content of the section is read
+        from the specified document.
+
+    */
+    [property] com::sun::star::text::SectionFileLink FileLink;
+
+    //-------------------------------------------------------------------------
+    /**  specifies the source of a file link in the document that is
+    specified in <member>TextSection::FileLink</member>.
+
+    <p>The source may be a text section or a bookmark.
+    If <member>TextSection::FileLink</member> is empty, then the
+    current document is searched for the source. If this property
+    is empty and <member>TextSection::FileLink</member> is set,
+    then the complete document content is linked into this section.</p>
+    */
+    [property] string LinkRegion;
+
+    //-------------------------------------------------------------------------
+    /**  specifies the type of the command string for a DDE operation.
+     <p>The type can be the name of the application that provides a DDE source.</p>
+    */
+    [property] string DDECommandType;
+
+    //-------------------------------------------------------------------------
+    /**  specifies the source file name of the command string for a DDE operation.
+    */
+    [property] string DDECommandFile;
+
+    //-------------------------------------------------------------------------
+    /**  specifies the source element of the command string for a DDE operation.
+     <p>The element can be i.e. a name of a cell in a sheet or a bookmark.</p>
+    */
+    [property] string DDECommandElement;
+
+    //-------------------------------------------------------------------------
+    /**  contains the URL for the background graphic.
+    */
+    [property] string BackGraphicURL;
+
+    //-------------------------------------------------------------------------
+    /**  contains the name of the file filter for the background graphic.
+    */
+    [property] string BackGraphicFilter;
+
+    //-------------------------------------------------------------------------
+    /** determines the position of the background graphic.
+
+        @see GraphicLocation
+    */
+    [property] com::sun::star::style::GraphicLocation BackGraphicLocation;
+    /** determines whether footnotes inside the section are displayed at the end of the
+     section text.
+    */
+    [property] boolean FootnoteIsCollectAtTextEnd;
+    //-------------------------------------------------------------------------
+    /** determines whether the footnotes numbering restarts within the section.
+     This is only valid if <code>FootnoteIsRestartNumbering</code> is set.
+    */
+    [property] boolean FootnoteIsRestartNumbering;
+    //-------------------------------------------------------------------------
+    /** determines at which number the footnote numbering inside of the section starts.
+     This is only valid if <code>FootnoteIsRestartNumbering</code> is set.
+    */
+    [property] short FootnoteRestartNumberingAt;
+    //-------------------------------------------------------------------------
+    /** determines whether the footnotes within the section use an own numbering format.
+     This is only valid if <code>FootnoteIsRestartNumbering</code> is set.
+    */
+    [property] boolean FootnoteIsOwnNumbering;
+    //-------------------------------------------------------------------------
+    /** determines the numbering type of the footnote numbering as a value of
+     <type scope="com::sun::star::style">NumberingType</type>.
+     This is only valid if <code>FootnoteIsOwnNumbering</code> is set.
+    */
+    [property] short FootnoteNumberingType;
+    //-------------------------------------------------------------------------
+    /** determines the prefix that is display before the footnote number.
+     This is only valid if <code>FootnoteIsOwnNumbering</code> is set.
+    */
+    [property] string FootnoteNumberingPrefix;
+    //-------------------------------------------------------------------------
+    /** determines the suffix that is display after of the footnote number.
+     This is only valid if <code>FootnoteIsOwnNumbering</code> is set.
+    */
+    [property] string FootnoteNumberingSuffix;
+    //-------------------------------------------------------------------------
+    /** determines whether endnotes inside the section are displayed at the end of the
+     section text.
+    */
+    [property] boolean EndnoteIsCollectAtTextEnd;
+    //-------------------------------------------------------------------------
+    /** determines whether the endnotes numbering restarts within the section.
+     This is only valid if <code>EndnoteIsRestartNumbering</code> is set.
+    */
+    [property] boolean EndnoteIsRestartNumbering;
+    //-------------------------------------------------------------------------
+    /** determines at which number the endnote numbering inside of the section starts.
+     This is only valid if <code>EndnoteIsRestartNumbering</code> is set.
+    */
+    [property] short EndnoteRestartNumberingAt;
+    //-------------------------------------------------------------------------
+    /** determines whether the endnotes within the section use an own numbering format.
+     This is only valid if <code>EndnoteIsRestartNumbering</code> is set.
+    */
+    [property] boolean EndnoteIsOwnNumbering;
+    //-------------------------------------------------------------------------
+    /** determines the numbering type of the endnote numbering as a value of
+     <type scope="com::sun::star::style">NumberingType</type>.
+     This is only valid if <code>EndoteIsOwnNumbering</code> is set.
+    */
+    [property] short EndnoteNumberingType;
+    //-------------------------------------------------------------------------
+    /** determines the prefix that is display before the endnote number.
+     This is only valid if <code>EndnoteIsOwnNumbering</code> is set.
+    */
+    [property] string EndnoteNumberingPrefix;
+    //-------------------------------------------------------------------------
+    /** determines the suffix that is display after the endnote number.
+     This is only valid if <code>EndnoteIsOwnNumbering</code> is set.
+    */
+    [property] string EndnoteNumberingSuffix;
+    //-------------------------------------------------------------------------
+    /** determines if a DDE link is updated automatically.
+    */
+    [property] boolean IsAutomaticUpdate;
+    //-------------------------------------------------------------------------
+    /** allows columns to be set into the text section
+    */
+    [property] com::sun::star::text::XTextColumns TextColumns;
+    /** determines the left margin of the section
+     */
+    [optional, property] long SectionLeftMargin;
+    //-------------------------------------------------------------------------
+    /** determines the left margin of the section
+     */
+    [optional, property] long SectionRightMargin;
+    //-------------------------------------------------------------------------
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

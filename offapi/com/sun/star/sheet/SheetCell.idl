@@ -1,0 +1,277 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_sheet_SheetCell_idl__
+#define __com_sun_star_sheet_SheetCell_idl__
+
+
+#include <com/sun/star/table/Cell.idl>
+#include <com/sun/star/text/Text.idl>
+#include <com/sun/star/style/CharacterProperties.idl>
+#include <com/sun/star/style/CharacterPropertiesAsian.idl>
+#include <com/sun/star/style/CharacterPropertiesComplex.idl>
+#include <com/sun/star/style/ParagraphProperties.idl>
+#include <com/sun/star/style/ParagraphPropertiesAsian.idl>
+#include <com/sun/star/style/ParagraphPropertiesComplex.idl>
+#include <com/sun/star/sheet/SheetRangesQuery.idl>
+
+
+#include <com/sun/star/document/XActionLockable.idl>
+#include <com/sun/star/util/XReplaceable.idl>
+#include <com/sun/star/util/XIndent.idl>
+#include <com/sun/star/table/XColumnRowRange.idl>
+#include <com/sun/star/sheet/XCellAddressable.idl>
+#include <com/sun/star/sheet/XSheetAnnotationAnchor.idl>
+#include <com/sun/star/text/XTextFieldsSupplier.idl>
+
+
+#include <com/sun/star/awt/Point.idl>
+#include <com/sun/star/awt/Size.idl>
+#include <com/sun/star/sheet/XSheetConditionalEntries.idl>
+#include <com/sun/star/beans/XPropertySet.idl>
+#include <com/sun/star/beans/XTolerantMultiPropertySet.idl>
+#include <com/sun/star/util/XModifyBroadcaster.idl>
+
+//=============================================================================
+
+module com {  module sun {  module star {  module sheet {
+
+//=============================================================================
+
+/** represents a single addressable cell in a spreadsheet document.
+ */
+published service SheetCell
+{
+    //-------------------------------------------------------------------------
+
+    /** provides basic cell handling and contributes common cell
+        formatting properties.
+     */
+    service com::sun::star::table::Cell;
+
+    //-------------------------------------------------------------------------
+
+    /** provides handling of formatted text cells.
+     */
+    service com::sun::star::text::Text;
+
+    //-------------------------------------------------------------------------
+
+    /** contributes properties for character formatting of Western text.
+     */
+    service com::sun::star::style::CharacterProperties;
+
+    //-------------------------------------------------------------------------
+
+    /** contributes properties for character formatting of Asian text.
+     */
+    service com::sun::star::style::CharacterPropertiesAsian;
+
+    //-------------------------------------------------------------------------
+
+    /** contributes properties for character formatting of Complex text.
+     */
+    service com::sun::star::style::CharacterPropertiesComplex;
+
+    //-------------------------------------------------------------------------
+
+    /** contributes properties for paragraph formatting.
+     */
+    service com::sun::star::style::ParagraphProperties;
+
+    //-------------------------------------------------------------------------
+
+    /** contributes properties for paragraph formatting of Asian text.
+     */
+    [optional] service com::sun::star::style::ParagraphPropertiesAsian;
+
+    //-------------------------------------------------------------------------
+
+    /** contributes properties for paragraph formatting of Complex text.
+     */
+    [optional] service com::sun::star::style::ParagraphPropertiesComplex;
+
+    //-------------------------------------------------------------------------
+
+    /** provides interfaces to find cells with specific properties.
+     */
+    service com::sun::star::sheet::SheetRangesQuery;
+
+    //=========================================================================
+
+    /** provides methods to lock and unlock the update between
+        <type scope="com::sun::star::table">XCell</type> and
+        <type scope="com::sun::star::text">XText</type>.
+    */
+    interface com::sun::star::document::XActionLockable;
+
+    //-------------------------------------------------------------------------
+
+    /** provides "Find & Replace" functionality.
+
+        <p>The property
+        <member scope="com::sun::star::util">SearchDescriptor::SearchWords</member>
+        has a different meaning in spreadsheets: If set to <TRUE/>, the
+        spreadsheet searches for cells containing the search text only.</p>
+     */
+    interface com::sun::star::util::XReplaceable;
+
+    //-------------------------------------------------------------------------
+
+    /** provides modifying the cell indentation.
+     */
+    interface com::sun::star::util::XIndent;
+
+    //-------------------------------------------------------------------------
+
+    /** provides access to the collections of columns and rows.
+     */
+    interface com::sun::star::table::XColumnRowRange;
+
+    //-------------------------------------------------------------------------
+
+    /** provides access to the cell address of this cell.
+     */
+    interface com::sun::star::sheet::XCellAddressable;
+
+    //-------------------------------------------------------------------------
+
+    /** provides access to the annotation attached to this cell.
+     */
+    interface com::sun::star::sheet::XSheetAnnotationAnchor;
+
+    //-------------------------------------------------------------------------
+
+    /** provides access to the text fields used in this cell.
+     */
+    interface com::sun::star::text::XTextFieldsSupplier;
+
+    //-------------------------------------------------------------------------
+
+    [optional] interface com::sun::star::beans::XTolerantMultiPropertySet;
+
+    //-------------------------------------------------------------------------
+
+    /**
+
+    @since OOo 2.0
+
+    */
+    [optional] interface com::sun::star::util::XModifyBroadcaster;
+
+    //=========================================================================
+
+    /** contains the position of this cell in the sheet (in 1/100 mm).
+
+        <p>This property contains the absolute position in the whole
+        sheet, not the position in the visible area.</p>
+     */
+    [readonly, property] com::sun::star::awt::Point Position;
+
+    //-------------------------------------------------------------------------
+
+    /** contains the size of this cell (in 1/100 mm).
+     */
+    [readonly, property] com::sun::star::awt::Size Size;
+
+    //-------------------------------------------------------------------------
+
+    /** contains the formula string with localized function names.
+
+        <p>This property can also be used to set a new localized formula.</p>
+     */
+    [optional, property] string FormulaLocal;
+
+    //-------------------------------------------------------------------------
+
+    /** contains the result type of a formula.
+
+        @see com::sun::star::sheet::FormulaResult
+     */
+    [readonly, property] long FormulaResultType;
+
+    //-------------------------------------------------------------------------
+
+    /** contains the conditional formatting settings for this cell.
+
+        <p>After a conditional format has been changed it has to be
+        reinserted into the property set.</p>
+
+        @see com::sun::star::sheet::TableConditionalFormat
+     */
+    [property] com::sun::star::sheet::XSheetConditionalEntries
+        ConditionalFormat;
+
+    //-------------------------------------------------------------------------
+
+    /** contains the conditional formatting settings for this cell,
+        using localized formulas.
+
+        <p>After a conditional format has been changed it has to be
+        reinserted into the property set.</p>
+
+        @see com::sun::star::sheet::TableConditionalFormat
+     */
+    [optional, property] com::sun::star::sheet::XSheetConditionalEntries
+        ConditionalFormatLocal;
+
+    //-------------------------------------------------------------------------
+
+    /** contains the data validation settings for this cell.
+
+        <p>After the data validation settings have been changed the
+        validation has to be reinserted into the property set.</p>
+
+        @see com::sun::star::sheet::TableValidation
+     */
+    [property] com::sun::star::beans::XPropertySet Validation;
+
+    //-------------------------------------------------------------------------
+
+    /** contains the data validation settings for this cell,
+        using localized formulas.
+
+        <p>After the data validation settings have been changed the
+        validation has to be reinserted into the property set.</p>
+
+        @see com::sun::star::sheet::TableValidation
+     */
+    [optional, property] com::sun::star::beans::XPropertySet ValidationLocal;
+
+    //-------------------------------------------------------------------------
+
+    /** Returns the absolute address of the range as string, e.g. "$Sheet1.$B$2".
+     */
+    [optional, readonly, property] string AbsoluteName;
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif
+

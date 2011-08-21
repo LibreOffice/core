@@ -1,0 +1,4 @@
+ax	sax	:	offapi cppuhelper EXPAT:expat comphelper LIBXSLT:libxslt NULL
+ax	sax\prj									nmake	-	all	ax_prj NULL
+
+ax  sax\test							nmake	-	all ax_test NULL

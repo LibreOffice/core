@@ -1,0 +1,7 @@
+module ooo { module vba { module excel {
+    constants XlTextQualifier {
+        const long xlTextQualifierDoubleQuote = 1;
+        const long xlTextQualifierNone = -4142;
+        const long xlTextQualifierSingleQuote = 2;
+    };
+}; }; };

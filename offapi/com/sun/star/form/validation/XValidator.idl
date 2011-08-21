@@ -1,0 +1,102 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_form_validation_XValidator_idl__
+#define __com_sun_star_form_validation_XValidator_idl__
+
+#include <com/sun/star/uno/XInterface.idl>
+#include <com/sun/star/lang/NullPointerException.idl>
+
+//=============================================================================
+
+module com {  module sun {  module star {  module form { module validation {
+
+interface XValidityConstraintListener;
+
+//=============================================================================
+
+/** specifies a component able to validate (the content of) other components
+
+    <p>Validators support simple validity checks and retrieving justifications for
+    invalidity.</p>
+
+    <p>Validators may additionally support dynamic validity constraints. In such a case,
+    the validity of a given value may change, without the value changing itself.<br/>
+    To be notified about this, interested components should register as <type>XValidityConstraintListener</type>.
+
+    @see XValidatable
+*/
+interface XValidator : com::sun::star::uno::XInterface
+{
+    /** determines whether the given value is valid
+
+    @param aValue
+        the value to check for validity
+    @return
+        <TRUE/> if and only if the value is considered valid.
+    */
+    boolean isValid( [in] any Value );
+
+    /** retrieves a justification for the invalidity of the given value
+
+    @param aValue
+        the value which has been recognized as being invalid
+    @return
+        a human-readable string, which explains why the given value is considered invalid.
+    */
+    string explainInvalid( [in] any Value );
+
+    /** registers the given validity listener.
+
+    <p>Usually, an <type>XValidatable</type> instance will also add itself as validity listener,
+    as soon as the validator is introduced to it.</p>
+
+    <p>Implementations which do not support dynamic validity constraints should simply ignore this
+    call.</p>
+
+    @throws <type scope="com::sun::star::lang">NullPointerException</type>
+        if the given listener is <NULL/>
+    @see XValidityConstraintListener
+    */
+    void    addValidityConstraintListener( [in] XValidityConstraintListener Listener )
+                raises( com::sun::star::lang::NullPointerException );
+
+    /** revokes the given validity listener
+
+    @throws <type scope="com::sun::star::lang">NullPointerException</type>
+        if the given listener is <NULL/>
+    @see XValidityConstraintListener
+    */
+    void    removeValidityConstraintListener( [in] XValidityConstraintListener Listener )
+                raises( com::sun::star::lang::NullPointerException );
+};
+
+//=============================================================================
+
+}; }; }; }; };
+
+#endif

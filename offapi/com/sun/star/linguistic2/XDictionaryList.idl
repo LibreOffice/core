@@ -1,0 +1,253 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_linguistic2_XDictionaryList_idl__
+#define __com_sun_star_linguistic2_XDictionaryList_idl__
+
+#include <com/sun/star/uno/XInterface.idl>
+#include <com/sun/star/linguistic2/XDictionary.idl>
+#include <com/sun/star/linguistic2/XDictionaryListEventListener.idl>
+
+//=============================================================================
+
+module com { module sun { module star { module linguistic2 {
+
+//=============================================================================
+/** is used to manage and maintain a list of dictionaries.
+
+    <P>A dictionary-list may be given to a spell checker or hyphenator
+    service implementation on their creation in order to supply a set
+    of dictionaries and additional information to be used for
+    those purposes.</P>
+
+    @see    <type scope="com::sun::star::linguistic2">XDictionary</type>
+    @see    <type scope="com::sun::star::uno">XInterface</type>
+*/
+published interface XDictionaryList : com::sun::star::uno::XInterface
+{
+    //-------------------------------------------------------------------------
+    /**
+        @returns
+            the number of dictionaries in the list.
+    */
+    short getCount();
+
+    //-------------------------------------------------------------------------
+    /**
+        @returns
+             a sequence with an entry for every dictionary
+            in the list.
+
+        @see    <type scope="com::sun::star::linguistic2">XDictionary</type>
+    */
+    sequence<com::sun::star::linguistic2::XDictionary> getDictionaries();
+
+    //-------------------------------------------------------------------------
+    /** searches the list for a dictionary with a given name.
+
+         @returns
+            the XDictionary with the specified name. If no such
+            dictionary exists, <NULL/> will be returned.
+
+        @param  aDictionaryName
+            specifies the name of the dictionary to look for.
+
+        @see    <type scope="com::sun::star::linguistic2">XDictionary</type>
+    */
+    com::sun::star::linguistic2::XDictionary getDictionaryByName(
+            [in] string aDictionaryName );
+
+    //-------------------------------------------------------------------------
+    /** adds a dictionary to the list.
+
+        <P>Additionally, the dictionary-list will add itself to the list of dictionary
+         event listeners of that dictionary.</P>
+
+        @returns
+             <TRUE/> if the dictionary was added successfully,
+            <FALSE/> otherwise.
+
+        @param  xDictionary
+            the dictionary to be added.
+
+        @see    <type scope="com::sun::star::linguistic2">XDictionary</type>
+    */
+    boolean addDictionary(
+            [in] com::sun::star::linguistic2::XDictionary xDictionary );
+
+    //-------------------------------------------------------------------------
+    /** removes a single dictionary from the list.
+
+        <P>If the dictionary is still active, it will be deactivated
+        first. The dictionary-list will remove itself from the list of
+        dictionary event listeners of the dictionary.</P>
+
+        @returns
+             <TRUE/> if the dictionary was removed successfully, <FALSE/>
+             otherwise.
+
+        @param  xDictionary
+            dictionary to be removed from the list of dictionaries.
+
+        @see    <type scope="com::sun::star::linguistic2">XDictionary</type>
+    */
+    boolean removeDictionary(
+            [in] com::sun::star::linguistic2::XDictionary xDictionary );
+
+    //-------------------------------------------------------------------------
+    /** adds an entry to the list of dictionary-list event listeners.
+
+        <P>On dictionary-list events, each entry in the listener list will
+         be notified via a call to
+        <member scope="com::sun::star::linguistic2">XDictionaryListEventListener::processDictionaryListEvent</member>.</P>
+
+        @returns
+            <TRUE/> if the entry was made, <FALSE/> otherwise.
+            If <member scope="com::sun::star::lang">XEventListener::disposing</member>
+            was called before, it will always fail.
+
+        @param  xListener
+            the object to be notified of dictionary-list events.
+
+        @param  bReceiveVerbose
+            <TRUE/> if the listener requires more detailed event
+            notification than usual.
+
+        @see    <type scope="com::sun::star::linguistic2">XDictionaryListEventListener</type>
+        @see    <type scope="com::sun::star::linguistic2">XDictionaryListEvent</type>
+    */
+    boolean addDictionaryListEventListener(
+        [in] com::sun::star::linguistic2::XDictionaryListEventListener xListener,
+        [in] boolean bReceiveVerbose );
+
+    //-------------------------------------------------------------------------
+    /** removes an entry from the list of dictionary-list event listeners.
+
+        @returns
+            <TRUE/> if the object to be removed was found and removed,
+            <FALSE/> otherwise.
+
+        @param  xListener
+            the object to be removed from the listener list.
+
+        @see    <type scope="com::sun::star::linguistic2">XDictionaryListEventListener</type>
+        @see    <type scope="com::sun::star::linguistic2">XDictionaryListEvent</type>
+    */
+    boolean removeDictionaryListEventListener(
+        [in] com::sun::star::linguistic2::XDictionaryListEventListener xListener );
+
+    //-------------------------------------------------------------------------
+    /** increases request level for event buffering by one.
+
+         <P>The request level for event buffering is an integer
+         counter that is initially set to 0.
+        As long as the request level is not 0, events will be buffered
+         until the next flushing of the buffer.</P>
+
+        @returns
+             the current request level for event buffering.
+
+        @see    <type scope="com::sun::star::linguistic2">XDictionaryListEvent</type>
+        @see    <type scope="com::sun::star::linguistic2">XDictionaryListEventListener</type>
+        @see    <member scope="com::sun::star::linguistic2">XDictionaryList::endCollectEvents</member>
+        @see    <member scope="com::sun::star::linguistic2">XDictionaryList::flushEvents</member>
+    */
+    short beginCollectEvents();
+
+    //-------------------------------------------------------------------------
+    /** flushes the event buffer and decreases the request level for
+         event buffering by one.
+
+         <P>There should be one matching endCollectEvents call for every
+         beginCollectEvents call. Usually you will group these around
+         some code where you do not wish to get notified of every single
+         event.</P>
+
+        @returns
+             the current request level for event buffering.
+
+        @see    <type scope="com::sun::star::linguistic2">XDictionaryListEvent</type>
+        @see    <type scope="com::sun::star::linguistic2">XDictionaryListEventListener</type>
+        @see    <member scope="com::sun::star::linguistic2">XDictionaryList::beginCollectEvents</member>
+        @see    <member scope="com::sun::star::linguistic2">XDictionaryList::flushEvents</member>
+    */
+    short endCollectEvents();
+
+    //-------------------------------------------------------------------------
+    /** notifies the listeners of all buffered events and then clears
+         that buffer.
+
+        @returns
+             the current request level for event buffering.
+
+        @see    <type scope="com::sun::star::linguistic2">XDictionaryListEvent</type>
+        @see    <type scope="com::sun::star::linguistic2">XDictionaryListEventListener</type>
+        @see    <member scope="com::sun::star::linguistic2">XDictionaryList::beginCollectEvents</member>
+        @see    <member scope="com::sun::star::linguistic2">XDictionaryList::endCollectEvents</member>
+    */
+    short flushEvents();
+
+    //-------------------------------------------------------------------------
+    /** creates a new dictionary.
+
+        @returns
+            an empty dictionary with the given name, language and type.
+             <NULL/> on failure.
+
+        @param  aName
+            is the name of the dictionary (should be unique).
+
+        @param  aLocale
+            defines the language of the dictionary.
+             Use an empty aLocale for dictionaries which may contain
+            entries of all languages.
+
+        @param  eDicType
+            specifies the type of the dictionary.
+
+         @param aURL
+            is the URL of the location where the dictionary is persistent,
+            if the XStorable interface is supported.
+            It may be empty, which means the dictionary will not be persistent.
+
+        @see    <type scope="com::sun::star::linguistic2">XDictionary</type>
+        @see    <type scope="com::sun::star::lang">Locale</type>
+        @see    <type scope="com::sun::star::linguistic2">DictionaryType</type>
+    */
+    com::sun::star::linguistic2::XDictionary createDictionary(
+            [in] string aName,
+            [in] com::sun::star::lang::Locale aLocale,
+            [in] com::sun::star::linguistic2::DictionaryType eDicType,
+            [in] string aURL );
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif
+

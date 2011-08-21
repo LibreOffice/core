@@ -1,6 +1,10 @@
 from common.Resource import Resource
 
 class FaxWizardDialogResources(Resource):
+<<<<<<< HEAD
+=======
+    UNIT_NAME = "dbwizres"
+>>>>>>> master
     MODULE_NAME = "dbw"
     RID_FAXWIZARDDIALOG_START = 3200
     RID_FAXWIZARDCOMMUNICATION_START = 3270

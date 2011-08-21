@@ -1,0 +1,342 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#include "helpid.h"
+#include "frmui.hrc"
+#include "cption.hrc"
+#include "cmdid.h"
+ // #pragma ******************************************************************
+
+ // ModalDialog **************************************************************
+ModalDialog DLG_CAPTION
+{
+    HelpID = HID_DLG_CAPTION ;
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 250 , 143 ) ;
+    Text [ en-US ] = "Caption" ;
+    Moveable = TRUE ;
+    OKButton BTN_OK
+    {
+        DefButton = TRUE ;
+        Pos = MAP_APPFONT ( 194 , 6 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    CancelButton BTN_CANCEL
+    {
+        Pos = MAP_APPFONT ( 194 , 23 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    HelpButton BTN_HELP
+    {
+        Pos = MAP_APPFONT ( 194 , 43 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    PushButton BTN_AUTOCAPTION
+    {
+        HelpID = "sw:PushButton:DLG_CAPTION:BTN_AUTOCAPTION";
+        Pos = MAP_APPFONT ( 194 , 63 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "AutoCaption..." ;
+    };
+    PushButton BTN_OPTION
+    {
+        HelpID = "sw:PushButton:DLG_CAPTION:BTN_OPTION";
+        Pos = MAP_APPFONT ( 194 , 80 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "Options..." ;
+    };
+
+    FixedText TXT_TEXT
+    {
+        Pos = MAP_APPFONT ( 6 , 6 ) ;
+        Size = MAP_APPFONT ( 182 , 8 ) ;
+        Text [ en-US ] = "Caption" ;
+        Left = TRUE ;
+    };
+    Edit EDT_TEXT
+    {
+        HelpID = "sw:Edit:DLG_CAPTION:EDT_TEXT";
+        Pos = MAP_APPFONT ( 6 , 17 ) ;
+        Size = MAP_APPFONT ( 182 , 12 ) ;
+        Border = TRUE ;
+        TabStop = TRUE ;
+        Left = TRUE ;
+    };
+    FixedLine FL_SETTINGS
+    {
+        Pos = MAP_APPFONT ( 6 , 35 ) ;
+        Size = MAP_APPFONT ( 182 , 8 ) ;
+        Text [ en-US ] = "Properties";
+    };
+    FixedText TXT_CATEGORY
+    {
+        Pos = MAP_APPFONT ( 12 , 49 ) ;
+        Size = MAP_APPFONT ( 67 , 8 ) ;
+        Text [ en-US ] = "Category" ;
+        Left = TRUE ;
+    };
+    ComboBox BOX_CATEGORY
+    {
+        HelpID = "sw:ComboBox:DLG_CAPTION:BOX_CATEGORY";
+        Pos = MAP_APPFONT ( 82 , 46 ) ;
+        Size = MAP_APPFONT ( 106 , 61 ) ;
+        DropDown = TRUE ;
+        TabStop = TRUE ;
+        Sort = TRUE ;
+    };
+    FixedText TXT_FORMAT
+    {
+        Pos = MAP_APPFONT ( 12 , 66 ) ;
+        Size = MAP_APPFONT ( 67 , 8 ) ;
+        Text [ en-US ] = "Numbering" ;
+        Left = TRUE ;
+    };
+    ListBox BOX_FORMAT
+    {
+        HelpID = "sw:ListBox:DLG_CAPTION:BOX_FORMAT";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 82 , 63 ) ;
+        Size = MAP_APPFONT ( 106 , 83 ) ;
+        DropDown = TRUE ;
+        TabStop = TRUE ;
+    };
+    FixedText FT_NUM_SEP
+    {
+        Pos = MAP_APPFONT ( 12 , 66 ) ;
+        Size = MAP_APPFONT ( 67 , 8 ) ;
+        Text [ en-US ] = "Numbering separator" ;
+        Left = TRUE ;
+        Hide = TRUE;
+    };
+    Edit ED_NUM_SEP
+    {
+        HelpID = "sw:Edit:DLG_CAPTION:ED_NUM_SEP";
+        Pos = MAP_APPFONT ( 82 , 63 ) ;
+        Size = MAP_APPFONT ( 106 , 12 ) ;
+        Border = TRUE ;
+        TabStop = TRUE ;
+        Left = TRUE ;
+        Text  = ". " ;
+        Hide = TRUE;
+    };
+    FixedText TXT_SEP
+    {
+        Pos = MAP_APPFONT ( 12 , 82 ) ;
+        Size = MAP_APPFONT ( 67 , 8 ) ;
+        Text [ en-US ] = "Separator" ;
+        Left = TRUE ;
+    };
+    Edit EDT_SEP
+    {
+        HelpID = "sw:Edit:DLG_CAPTION:EDT_SEP";
+        Pos = MAP_APPFONT ( 82 , 80 ) ;
+        Size = MAP_APPFONT ( 106 , 12 ) ;
+        Border = TRUE ;
+        TabStop = TRUE ;
+        Left = TRUE ;
+        Text [ en-US ] = ": " ;
+    };
+    FixedText TXT_POS
+    {
+        Pos = MAP_APPFONT ( 12 , 100 ) ;
+        Size = MAP_APPFONT ( 67 , 8 ) ;
+        Left = TRUE ;
+        Text [ en-US ] = "Position" ;
+    };
+    ListBox BOX_POS
+    {
+        HelpID = "sw:ListBox:DLG_CAPTION:BOX_POS";
+        Pos = MAP_APPFONT ( 82 , 97 ) ;
+        Size = MAP_APPFONT ( 106 , 61 ) ;
+        DropDown = TRUE ;
+        TabStop = TRUE ;
+        Border = TRUE ;
+    };
+    Window WIN_SAMPLE
+    {
+        Pos = MAP_APPFONT ( 6 , 117 ) ;
+        Size = MAP_APPFONT ( 182 , 20 ) ;
+        Border = TRUE ;
+    };
+
+    String STR_BEGINNING
+    {
+        Text [ en-US ] = "Above" ;
+    };
+    String STR_END
+    {
+        Text [ en-US ] = "Below" ;
+    };
+    String STR_ABOVE
+    {
+        Text [ en-US ] = "Above" ;
+    };
+    String STR_CP_BELOW
+    {
+        Text [ en-US ] = "Below" ;
+    };
+    String STR_CATEGORY_NONE
+    {
+        Text [ en-US ] = "<None>" ;
+    };
+};
+
+ModalDialog DLG_SEQUENCE_OPTION
+{
+    HelpID = HID_DLG_SEQUENCE_OPTION ;
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 200 , 132 ) ;
+    Moveable = TRUE ;
+    Text [ en-US ] = "Options" ;
+    OKButton BTN_OK
+    {
+        DefButton = TRUE ;
+        Pos = MAP_APPFONT ( 145 , 6 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    CancelButton BTN_CANCEL
+    {
+        Pos = MAP_APPFONT ( 145 , 23 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    HelpButton BTN_HELP
+    {
+        Pos = MAP_APPFONT ( 145 , 43 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    FixedLine FL_HEADER
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 132 , 8 ) ;
+        Text [ en-US ] = "Numbering captions by chapter" ;
+    };
+    FixedText FT_LEVEL
+    {
+        Pos = MAP_APPFONT ( 12 , 21 ) ;
+        Size = MAP_APPFONT ( 50 , 8 ) ;
+        Text [ en-US ] = "~Level" ;
+    };
+    ListBox LB_LEVEL
+    {
+        HelpID = "sw:ListBox:DLG_SEQUENCE_OPTION:LB_LEVEL";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 65 , 18 ) ;
+        Size = MAP_APPFONT ( 72 , 60 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+        StringList [ en-US ] =
+        {
+            < "<None>" ; > ;
+        };
+    };
+    FixedText FT_SEPARATOR
+    {
+        Pos = MAP_APPFONT ( 12 , 33 ) ;
+        Size = MAP_APPFONT ( 50 , 8 ) ;
+        Text [ en-US ] = "~Separator" ;
+    };
+    Edit ED_SEPARATOR
+    {
+        HelpID = "sw:Edit:DLG_SEQUENCE_OPTION:ED_SEPARATOR";
+        Pos = MAP_APPFONT ( 65 , 34 ) ;
+        Size = MAP_APPFONT ( 72 , 12 ) ;
+        Border = TRUE ;
+        MaxTextLength = 1 ;
+        TEXT = "." ;
+    };
+        FixedLine FL_CATANDFRAME
+    {
+        Pos = MAP_APPFONT ( 6 , 53 ) ;
+        Size = MAP_APPFONT ( 132 , 8 ) ;
+        Text [ en-US ] = "Category and frame format" ;
+    };
+    FixedText FT_CHARSTYLE
+    {
+        Pos = MAP_APPFONT ( 12 , 71 ) ;
+        Size = MAP_APPFONT ( 50 , 8 ) ;
+        Text [ en-US ] = "Character style" ;
+    };
+    ListBox LB_CHARSTYLE
+    {
+        HelpID = "sw:ListBox:DLG_SEQUENCE_OPTION:LB_CHARSTYLE";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 65 , 68 ) ;
+        Size = MAP_APPFONT ( 72 , 60 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+        StringList [ en-US ] =
+        {
+            < "<None>" ; > ;
+        };
+    };
+    CheckBox CB_APPLYBAS
+    {
+        HelpID = "sw:CheckBox:DLG_SEQUENCE_OPTION:CB_APPLYBAS";
+        Pos = MAP_APPFONT ( 12 , 84 ) ;
+        Size = MAP_APPFONT ( 136 , 10 ) ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "~Apply border and shadow";
+   };
+    FixedLine FL_ORDER
+    {
+        Pos = MAP_APPFONT ( 6 , 97 ) ;
+        Size = MAP_APPFONT ( 132 , 8 ) ;
+        Text [ en-US ] = "Caption" ;
+    };
+    FixedText FT_ORDER
+    {
+        Pos = MAP_APPFONT ( 12 , 115 ) ;
+        Size = MAP_APPFONT ( 50 , 8 ) ;
+        Text [ en-US ] = "Caption order" ;
+    };
+    ListBox LB_ORDER
+    {
+        HelpID = "sw:ListBox:DLG_SEQUENCE_OPTION:LB_ORDER";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 65 , 114 ) ;
+        Size = MAP_APPFONT ( 72 , 60 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+        StringList [ en-US ] =
+        {
+            < "Category first" ; > ;
+            < "Numbering first" ; > ;
+        };
+    };
+};
+ // ********************************************************************** EOF
+

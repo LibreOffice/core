@@ -1,0 +1,12 @@
+module ooo { module vba { module word {
+    constants WdRectangleType {
+        const long wdLineBetweenColumnRectangle = 5;
+        const long wdMarkupRectangle = 2;
+        const long wdMarkupRectangleButton = 3;
+        const long wdPageBorderRectangle = 4;
+        const long wdSelection = 6;
+        const long wdShapeRectangle = 1;
+        const long wdSystem = 7;
+        const long wdTextRectangle = 0;
+    };
+}; }; };

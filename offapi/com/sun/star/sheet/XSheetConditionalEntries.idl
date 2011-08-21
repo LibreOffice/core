@@ -1,0 +1,97 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_sheet_XSheetConditionalEntries_idl__
+#define __com_sun_star_sheet_XSheetConditionalEntries_idl__
+
+#include <com/sun/star/container/XIndexAccess.idl>
+#include <com/sun/star/beans/PropertyValue.idl>
+
+//=============================================================================
+
+module com {  module sun {  module star {  module sheet {
+
+//=============================================================================
+
+/** provides methods to add and remove conditions of a conditional format.
+
+    @see com::sun::star::sheet::TableConditionalFormat
+    @see com::sun::star::sheet::TableConditionalEntry
+ */
+published interface XSheetConditionalEntries: com::sun::star::container::XIndexAccess
+{
+    //-------------------------------------------------------------------------
+
+    /** adds a conditional entry to the format.
+
+        <p>Supported properties are:</p>
+
+        <dl>
+        <dt><type>ConditionOperator</type> Operator</dt>
+        <dd>contains the operation to perform for this condition.</dd>
+
+        <dt><atom>string</atom> Formula1</dt>
+        <dd>contains the value or formula for the operation.</dd>
+
+        <dt><atom>string</atom> Formula2</dt>
+        <dd>contains the second value or formula for the operation (used with
+        <const>ConditionOperator::BETWEEN</const> or
+        <const>ConditionOperator::NOT_BETWEEN</const> operations).</dd>
+
+        <dt><type scope="com::sun::star::table">CellAddress</type>
+        SourcePosition</dt>
+        <dd>contains the base address for relative cell references in formulas.
+        </dd>
+
+        <dt><atom>string</atom> StyleName</dt>
+        <dd>contains the name of the cell style used by this condition.</dd>
+        </dl>
+
+        @see com::sun::star::sheet::TableConditionalFormat
+     */
+    void addNew( [in] sequence< com::sun::star::beans::PropertyValue > aConditionalEntry );
+
+    //-------------------------------------------------------------------------
+
+    /** removes a conditional entry from the format.
+     */
+    void removeByIndex( [in] long nIndex );
+
+    //-------------------------------------------------------------------------
+
+    /** clears all condition entries.
+     */
+    void clear();
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif
+

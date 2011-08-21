@@ -1,0 +1,7 @@
+module ooo { module vba { module excel {
+    constants XlWebSelectionType {
+        const long xlAllTables = 2;
+        const long xlEntirePage = 1;
+        const long xlSpecifiedTables = 3;
+    };
+}; }; };

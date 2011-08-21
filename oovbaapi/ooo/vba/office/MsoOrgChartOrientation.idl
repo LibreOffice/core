@@ -1,0 +1,6 @@
+module ooo { module vba { module office {
+    constants MsoOrgChartOrientation {
+        const long msoOrgChartOrientationMixed = -2;
+        const long msoOrgChartOrientationVertical = 1;
+    };
+}; }; };

@@ -1,0 +1,25 @@
+module ooo { module vba { module excel {
+    constants XlParameterDataType {
+        const long xlParamTypeBigInt = -5;
+        const long xlParamTypeBinary = -2;
+        const long xlParamTypeBit = -7;
+        const long xlParamTypeChar = 1;
+        const long xlParamTypeDate = 9;
+        const long xlParamTypeDecimal = 3;
+        const long xlParamTypeDouble = 8;
+        const long xlParamTypeFloat = 6;
+        const long xlParamTypeInteger = 4;
+        const long xlParamTypeLongVarBinary = -4;
+        const long xlParamTypeLongVarChar = -1;
+        const long xlParamTypeNumeric = 2;
+        const long xlParamTypeReal = 7;
+        const long xlParamTypeSmallInt = 5;
+        const long xlParamTypeTime = 10;
+        const long xlParamTypeTimestamp = 11;
+        const long xlParamTypeTinyInt = -6;
+        const long xlParamTypeUnknown = 0;
+        const long xlParamTypeVarBinary = -3;
+        const long xlParamTypeVarChar = 12;
+        const long xlParamTypeWChar = -8;
+    };
+}; }; };

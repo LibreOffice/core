@@ -1,0 +1,770 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+interface Form
+[
+    uuid = "F38D29A3-9EDA-11d1-AAF5-00A0248A7FBC"
+]
+{
+    SID_FM_CONFIG // ole : no, status : ?
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_FM_PUSHBUTTON
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_FM_RADIOBUTTON
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_FM_CHECKBOX
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_FM_FIXEDTEXT
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_FM_GROUPBOX
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_FM_LISTBOX
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_FM_COMBOBOX
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_FM_NAVIGATIONBAR
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_FM_EDIT
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_FM_DBGRID
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_FM_IMAGEBUTTON
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_FM_IMAGECONTROL
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_FM_FILECONTROL
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_FM_DATEFIELD
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_FM_TIMEFIELD
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_FM_NUMERICFIELD
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_FM_CURRENCYFIELD
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_FM_PATTERNFIELD
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_FM_FORMATTEDFIELD
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_FM_SCROLLBAR
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_FM_SPINBUTTON
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_FM_CTL_PROPERTIES
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_FM_PROPERTIES
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_FM_TAB_DIALOG
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_FM_ADD_FIELD
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_FM_DESIGN_MODE
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_FM_OPEN_READONLY
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_FM_USE_WIZARDS
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_FM_AUTOCONTROLFOCUS
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_FM_SHOW_FMEXPLORER
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_FM_SHOW_PROPERTY_BROWSER
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_FM_SHOW_DATANAVIGATOR
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_FM_RECORD_FIRST
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_FM_RECORD_NEXT
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_FM_RECORD_PREV
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_FM_RECORD_LAST
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_FM_RECORD_NEW
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_FM_RECORD_DELETE
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_FM_RECORD_ABSOLUTE
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_FM_RECORD_TEXT
+    [
+    ]
+    SID_FM_RECORD_FROM_TEXT
+    [
+    ]
+    SID_FM_RECORD_TOTAL
+    [
+        StateMethod = GetState ;
+    ]
+    SID_FM_RECORD_SAVE
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_FM_RECORD_UNDO
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_FM_FORM_FILTERED
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_FM_REMOVE_FILTER_SORT
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_FM_SORTUP
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_FM_SORTDOWN
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_FM_ORDERCRIT
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_FM_FILTER_START
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_FM_AUTOFILTER
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_FM_REFRESH
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_FM_REFRESH_FORM_CONTROL
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_FM_SEARCH
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_FM_FILTER_NAVIGATOR
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_FM_FILTER_EXIT
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_FM_FILTER_EXECUTE
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+     //--------------------------------------------------------------------------
+    SID_FM_FMEXPLORER_CONTROL
+    [
+        StateMethod = GetState ;
+    ]
+     //--------------------------------------------------------------------------
+    SID_FM_DATANAVIGATOR_CONTROL
+    [
+        StateMethod = GetState ;
+    ]
+     //--------------------------------------------------------------------------
+    SID_FM_FIELDS_CONTROL
+    [
+        StateMethod = GetState ;
+    ]
+     //--------------------------------------------------------------------------
+    SID_FM_PROPERTY_CONTROL
+    [
+        StateMethod = GetState ;
+    ]
+    //--------------------------------------------------------------------------
+    SID_FM_FILTER_NAVIGATOR_CONTROL
+    [
+        StateMethod = GetState ;
+    ]
+     //--------------------------------------------------------------------------
+    SID_FM_SHOW_PROPERTIES
+    [
+        StateMethod = GetState ;
+        ExecMethod = Execute ;
+    ]
+
+    SID_FM_VIEW_AS_GRID
+    [
+        StateMethod = GetState ;
+        ExecMethod = Execute ;
+    ]
+}
+
+interface FormTextAttributeShell
+{
+    SID_CUT
+    [
+        ExecMethod = ExecuteTextAttribute;
+        StateMethod = GetTextAttributeState;
+    ]
+    SID_COPY
+    [
+        ExecMethod = ExecuteTextAttribute;
+        StateMethod = GetTextAttributeState;
+    ]
+    SID_PASTE
+    [
+        ExecMethod = ExecuteTextAttribute;
+        StateMethod = GetTextAttributeState;
+    ]
+    SID_SELECTALL
+    [
+        ExecMethod = ExecuteTextAttribute;
+        StateMethod = GetTextAttributeState;
+    ]
+
+    SID_ATTR_PARA_ADJUST
+    [
+        ExecMethod = ExecuteTextAttribute;
+        StateMethod = GetTextAttributeState;
+    ]
+    SID_ATTR_PARA_ADJUST_LEFT
+    [
+        ExecMethod = ExecuteTextAttribute;
+        StateMethod = GetTextAttributeState;
+    ]
+    SID_ATTR_PARA_ADJUST_CENTER
+    [
+        ExecMethod = ExecuteTextAttribute;
+        StateMethod = GetTextAttributeState;
+    ]
+    SID_ATTR_PARA_ADJUST_RIGHT
+    [
+        ExecMethod = ExecuteTextAttribute;
+        StateMethod = GetTextAttributeState;
+    ]
+    SID_ATTR_PARA_ADJUST_BLOCK
+    [
+        ExecMethod = ExecuteTextAttribute;
+        StateMethod = GetTextAttributeState;
+    ]
+    SID_SET_SUPER_SCRIPT
+    [
+        ExecMethod = ExecuteTextAttribute;
+        StateMethod = GetTextAttributeState;
+    ]
+    SID_SET_SUB_SCRIPT
+    [
+        ExecMethod = ExecuteTextAttribute;
+        StateMethod = GetTextAttributeState;
+    ]
+    SID_ATTR_CHAR_UNDERLINE
+    [
+        ExecMethod = ExecuteTextAttribute;
+        StateMethod = GetTextAttributeState;
+    ]
+    SID_ATTR_CHAR_OVERLINE
+    [
+        ExecMethod = ExecuteTextAttribute;
+        StateMethod = GetTextAttributeState;
+    ]
+    SID_ATTR_CHAR_WEIGHT
+    [
+        ExecMethod = ExecuteTextAttribute;
+        StateMethod = GetTextAttributeState;
+    ]
+    SID_ATTR_CHAR_POSTURE
+    [
+        ExecMethod = ExecuteTextAttribute;
+        StateMethod = GetTextAttributeState;
+    ]
+    SID_ATTR_CHAR_STRIKEOUT
+    [
+        ExecMethod = ExecuteTextAttribute;
+        StateMethod = GetTextAttributeState;
+    ]
+    SID_ATTR_CHAR_SHADOWED
+    [
+        ExecMethod = ExecuteTextAttribute;
+        StateMethod = GetTextAttributeState;
+    ]
+    SID_CHAR_DLG
+    [
+        ExecMethod = ExecuteTextAttribute;
+        StateMethod = GetTextAttributeState;
+    ]
+    SID_PARA_DLG
+    [
+        ExecMethod = ExecuteTextAttribute;
+        StateMethod = GetTextAttributeState;
+    ]
+    SID_ATTR_CHAR_FONT
+    [
+        ExecMethod = ExecuteTextAttribute;
+        StateMethod = GetTextAttributeState;
+    ]
+    SID_ATTR_CHAR_FONTHEIGHT
+    [
+        ExecMethod = ExecuteTextAttribute;
+        StateMethod = GetTextAttributeState;
+    ]
+    SID_ATTR_PARA_LINESPACE_10
+    [
+        ExecMethod = ExecuteTextAttribute;
+        StateMethod = GetTextAttributeState;
+    ]
+    SID_ATTR_PARA_LINESPACE_15
+    [
+        ExecMethod = ExecuteTextAttribute;
+        StateMethod = GetTextAttributeState;
+    ]
+    SID_ATTR_PARA_LINESPACE_20
+    [
+        ExecMethod = ExecuteTextAttribute;
+        StateMethod = GetTextAttributeState;
+    ]
+    SID_ATTR_CHAR_CONTOUR
+    [
+        ExecMethod = ExecuteTextAttribute;
+        StateMethod = GetTextAttributeState;
+    ]
+    SID_CLIPBOARD_FORMAT_ITEMS
+    [
+        ExecMethod = ExecuteTextAttribute;
+        StateMethod = GetTextAttributeState;
+    ]
+    SID_ATTR_CHAR_WORDLINEMODE
+    [
+        ExecMethod = ExecuteTextAttribute;
+        StateMethod = GetTextAttributeState;
+    ]
+    SID_ATTR_CHAR_COLOR
+    [
+        ExecMethod = ExecuteTextAttribute;
+        StateMethod = GetTextAttributeState;
+    ]
+    SID_ATTR_CHAR_RELIEF
+    [
+        ExecMethod = ExecuteTextAttribute;
+        StateMethod = GetTextAttributeState;
+    ]
+    SID_ATTR_CHAR_ESCAPEMENT
+    [
+        ExecMethod = ExecuteTextAttribute;
+        StateMethod = GetTextAttributeState;
+    ]
+    SID_ATTR_CHAR_SCALEWIDTH
+    [
+        ExecMethod = ExecuteTextAttribute;
+        StateMethod = GetTextAttributeState;
+    ]
+    SID_ATTR_CHAR_KERNING
+    [
+        ExecMethod = ExecuteTextAttribute;
+        StateMethod = GetTextAttributeState;
+    ]
+    SID_ATTR_CHAR_AUTOKERN
+    [
+        ExecMethod = ExecuteTextAttribute;
+        StateMethod = GetTextAttributeState;
+    ]
+    SID_ATTR_CHAR_LANGUAGE
+    [
+        ExecMethod = ExecuteTextAttribute;
+        StateMethod = GetTextAttributeState;
+    ]
+    SID_ATTR_PARA_LINESPACE
+    [
+        ExecMethod = ExecuteTextAttribute;
+        StateMethod = GetTextAttributeState;
+    ]
+    SID_ATTR_ULSPACE
+    [
+        ExecMethod = ExecuteTextAttribute;
+        StateMethod = GetTextAttributeState;
+    ]
+    SID_ATTR_LRSPACE
+    [
+        ExecMethod = ExecuteTextAttribute;
+        StateMethod = GetTextAttributeState;
+    ]
+    SID_ATTR_PARA_LEFT_TO_RIGHT
+    [
+        ExecMethod = ExecuteTextAttribute;
+        StateMethod = GetTextAttributeState;
+    ]
+    SID_ATTR_PARA_RIGHT_TO_LEFT
+    [
+        ExecMethod = ExecuteTextAttribute;
+        StateMethod = GetTextAttributeState;
+    ]
+
+    /**** <HACK> ****/
+    // the following is a slight hack. Problem is that the form shell needs to translate
+    // slot names/args into URL dispatch names/args. For this, the SfxSlotPool is used
+    // - it provides convinient methods for this. However, the "pool" is not really a
+    // "pool" - it only knows slots, if there is a shell on the dispatcher stack which
+    // which is responsible for this slot.
+    // So, we declare the form shell as responsible for the following slots.
+    SID_ATTR_CHAR_CJK_FONT
+    [
+        ExecMethod = ExecuteTextAttribute;
+        StateMethod = GetTextAttributeState;
+    ]
+    SID_ATTR_CHAR_CTL_FONT
+    [
+        ExecMethod = ExecuteTextAttribute;
+        StateMethod = GetTextAttributeState;
+    ]
+    SID_ATTR_CHAR_CJK_FONTHEIGHT
+    [
+        ExecMethod = ExecuteTextAttribute;
+        StateMethod = GetTextAttributeState;
+    ]
+    SID_ATTR_CHAR_CTL_FONTHEIGHT
+    [
+        ExecMethod = ExecuteTextAttribute;
+        StateMethod = GetTextAttributeState;
+    ]
+    SID_ATTR_CHAR_CJK_WEIGHT
+    [
+        ExecMethod = ExecuteTextAttribute;
+        StateMethod = GetTextAttributeState;
+    ]
+    SID_ATTR_CHAR_CTL_WEIGHT
+    [
+        ExecMethod = ExecuteTextAttribute;
+        StateMethod = GetTextAttributeState;
+    ]
+    SID_ATTR_CHAR_CJK_POSTURE
+    [
+        ExecMethod = ExecuteTextAttribute;
+        StateMethod = GetTextAttributeState;
+    ]
+    SID_ATTR_CHAR_CTL_POSTURE
+    [
+        ExecMethod = ExecuteTextAttribute;
+        StateMethod = GetTextAttributeState;
+    ]
+    SID_ATTR_CHAR_EMPHASISMARK
+    [
+        ExecMethod = ExecuteTextAttribute;
+        StateMethod = GetTextAttributeState;
+    ]
+    SID_ATTR_CHAR_LATIN_FONT
+    [
+        ExecMethod = ExecuteTextAttribute;
+        StateMethod = GetTextAttributeState;
+    ]
+    SID_ATTR_CHAR_LATIN_FONTHEIGHT
+    [
+        ExecMethod = ExecuteTextAttribute;
+        StateMethod = GetTextAttributeState;
+    ]
+    SID_ATTR_CHAR_LATIN_LANGUAGE
+    [
+        ExecMethod = ExecuteTextAttribute;
+        StateMethod = GetTextAttributeState;
+    ]
+    SID_ATTR_CHAR_LATIN_POSTURE
+    [
+        ExecMethod = ExecuteTextAttribute;
+        StateMethod = GetTextAttributeState;
+    ]
+    SID_ATTR_CHAR_LATIN_WEIGHT
+    [
+        ExecMethod = ExecuteTextAttribute;
+        StateMethod = GetTextAttributeState;
+    ]
+    /**** </HACK> ****/
+}
+
+shell FmFormShell
+{
+    import FormTextAttributeShell;
+    import Form [Automation];
+
+    SID_FM_CONFIG // ole : no, status : ?
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_FM_MORE_CONTROLS
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_FM_FORM_DESIGN_TOOLS
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_FM_LEAVE_CREATE
+    [
+        ExecMethod = Execute ;
+    ]
+    SID_FM_TOGGLECONTROLFOCUS
+    [
+        ExecMethod = Execute ;
+    ]
+    SID_FM_CHANGECONTROLTYPE
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_FM_CONVERTTO_EDIT
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_FM_CONVERTTO_BUTTON
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_FM_CONVERTTO_FIXEDTEXT
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_FM_CONVERTTO_LISTBOX
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_FM_CONVERTTO_CHECKBOX
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_FM_CONVERTTO_RADIOBUTTON
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_FM_CONVERTTO_GROUPBOX
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_FM_CONVERTTO_COMBOBOX
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_FM_CONVERTTO_IMAGEBUTTON
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_FM_CONVERTTO_FILECONTROL
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_FM_CONVERTTO_DATE
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_FM_CONVERTTO_TIME
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_FM_CONVERTTO_NUMERIC
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_FM_CONVERTTO_CURRENCY
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_FM_CONVERTTO_PATTERN
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_FM_CONVERTTO_IMAGECONTROL
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_FM_CONVERTTO_FORMATTED
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_FM_CONVERTTO_SCROLLBAR
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_FM_CONVERTTO_SPINBUTTON
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_FM_CONVERTTO_NAVIGATIONBAR
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+}
+

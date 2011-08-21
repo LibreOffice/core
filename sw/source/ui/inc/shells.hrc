@@ -1,0 +1,114 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef _SHELLS_HRC
+#define _SHELLS_HRC
+
+#include "rcid.hrc"
+
+#define STR_GRFILTER_OPENERROR     (RC_SHELLS_BEGIN +  1)
+#define STR_GRFILTER_IOERROR       (RC_SHELLS_BEGIN +  2)
+#define STR_GRFILTER_FORMATERROR   (RC_SHELLS_BEGIN +  3)
+#define STR_GRFILTER_VERSIONERROR  (RC_SHELLS_BEGIN +  4)
+#define STR_GRFILTER_FILTERERROR   (RC_SHELLS_BEGIN +  5)
+#define STR_GRFILTER_TOOBIG        (RC_SHELLS_BEGIN +  6)
+#define STR_INSERT_GRAPHIC         (RC_SHELLS_BEGIN +  7)
+#define STR_NOTIZ_INSERT           (RC_SHELLS_BEGIN +  8)
+#define DLG_IMPORT_DBNAME          (RC_SHELLS_BEGIN +  9)
+#define STR_NO_ADDRESSBOOK         (RC_SHELLS_BEGIN + 10)
+#define STR_REDLINE_COMMENT        (RC_SHELLS_BEGIN + 11)
+#define STR_REDLINE_INSERTED       (RC_SHELLS_BEGIN + 12)
+#define STR_REDLINE_DELETED        (RC_SHELLS_BEGIN + 13)
+#define STR_REDLINE_FMTCOLLSET     (RC_SHELLS_BEGIN + 14)
+
+#define RID_TEXT_TOOLBOX           (RC_SHELLS_BEGIN +  15)
+#define RID_TABLE_TOOLBOX          (RC_SHELLS_BEGIN +  16)
+#define RID_FRAME_TOOLBOX          (RC_SHELLS_BEGIN +  17)
+#define RID_GRAFIK_TOOLBOX         (RC_SHELLS_BEGIN +  18)
+#define RID_DRAW_TOOLBOX           (RC_SHELLS_BEGIN +  19)
+#define RID_DRAW_TEXT_TOOLBOX      (RC_SHELLS_BEGIN +  20)
+#define RID_NUM_TOOLBOX            (RC_SHELLS_BEGIN +  21)
+#define RID_OLE_TOOLBOX            (RC_SHELLS_BEGIN +  22)
+#define RID_TOOLS_TOOLBOX          (RC_SHELLS_BEGIN +  23)
+
+#define STR_SHELLNAME_TEXT         (RC_SHELLS_BEGIN +  24)
+#define STR_SHELLNAME_TABLE        (RC_SHELLS_BEGIN +  25)
+#define STR_SHELLNAME_FRAME        (RC_SHELLS_BEGIN +  26)
+#define STR_SHELLNAME_GRAPHIC      (RC_SHELLS_BEGIN +  27)
+#define STR_SHELLNAME_OBJECT       (RC_SHELLS_BEGIN +  28)
+#define STR_SHELLNAME_LIST         (RC_SHELLS_BEGIN +  29)
+#define STR_SHELLNAME_DRAW         (RC_SHELLS_BEGIN +  30)
+#define STR_SHELLNAME_DRAW_TEXT    (RC_SHELLS_BEGIN +  31)
+#define STR_SHELLNAME_MEDIA        (RC_SHELLS_BEGIN +  32)
+
+
+#define RID_BEZIER_TOOLBOX         (RC_SHELLS_BEGIN +  33)
+#define STR_SHELLNAME_BEZIER       (RC_SHELLS_BEGIN +  34)
+
+#define STR_SWBG_PARAGRAPH         (RC_SHELLS_BEGIN +  37)
+#define STR_SWBG_GRAPHIC           (RC_SHELLS_BEGIN +  38)
+#define STR_SWBG_OLE               (RC_SHELLS_BEGIN +  39)
+#define STR_SWBG_FRAME             (RC_SHELLS_BEGIN +  40)
+#define STR_SWBG_TABLE             (RC_SHELLS_BEGIN +  41)
+#define STR_SWBG_TABLE_ROW         (RC_SHELLS_BEGIN +  42)
+#define STR_SWBG_TABLE_CELL        (RC_SHELLS_BEGIN +  43)
+#define STR_SWBG_PAGE              (RC_SHELLS_BEGIN +  44)
+#define STR_SWBG_HEADER            (RC_SHELLS_BEGIN +  45)
+#define STR_SWBG_FOOTER            (RC_SHELLS_BEGIN +  46)
+#define MSG_NO_RULER               (RC_SHELLS_BEGIN +  47)
+
+#define STR_SHELLNAME_DRAWFORM     (RC_SHELLS_BEGIN +  48)
+    // FREE
+
+#define STR_REDLINE_FORMATED       (RC_SHELLS_BEGIN + 50)
+#define STR_REDLINE_TABLECHG       (RC_SHELLS_BEGIN + 51)
+
+#define STR_REDLINE_TITLE           (RC_SHELLS_BEGIN + 52)
+#define STR_REDLINE_MSG             (RC_SHELLS_BEGIN + 53)
+#define STR_REDLINE_ACCEPT_ALL      (RC_SHELLS_BEGIN + 54)
+#define STR_REDLINE_REJECT_ALL      (RC_SHELLS_BEGIN + 55)
+#define STR_REDLINE_EDIT            (RC_SHELLS_BEGIN + 56)
+#define STR_REDLINE_AUTOFMT         (RC_SHELLS_BEGIN + 57)
+
+// #i68101# no longer needed
+// #define STR_NAME_SHAPE_LABEL        (RC_SHELLS_BEGIN + 58)
+// #define STR_NAME_SHAPE_DIALOG       (RC_SHELLS_BEGIN + 59)
+
+#define RID_MODULE_TOOLBOX          (RC_SHELLS_BEGIN + 60)
+
+#define RID_MEDIA_TOOLBOX           (RC_SHELLS_BEGIN + 61)
+
+#define STR_SHELLNAME_NAVIGATION   (RC_SHELLS_BEGIN +  62)
+
+#define SHELLS_ACT_END              STR_SHELLNAME_NAVIGATION
+
+#if SHELLS_ACT_END > RC_SHELLS_END
+#error Resource-Id Ueberlauf in #file, #line
+#endif
+
+#endif
+

@@ -1,0 +1,160 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_text_CellProperties_idl__
+#define __com_sun_star_text_CellProperties_idl__
+
+#include <com/sun/star/beans/XPropertySet.idl>
+#include <com/sun/star/util/Color.idl>
+#include <com/sun/star/text/XTextSection.idl>
+#include <com/sun/star/style/GraphicLocation.idl>
+#include <com/sun/star/table/BorderLine.idl>
+#include <com/sun/star/container/XNameContainer.idl>
+#include <com/sun/star/xml/UserDefinedAttributesSupplier.idl>
+
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module text {
+
+//=============================================================================
+
+/** service that holds all cell properties of a text table cell in a text document.
+
+    @see com::sun::star::text::Cell
+ */
+published service CellProperties
+{
+    //-------------------------------------------------------------------------
+    /** contains user defined attributes.
+
+        @see    <type scope="com::sun::star::xml">UserDefinedAttributesSupplier</type>
+     */
+    service com::sun::star::xml::UserDefinedAttributesSupplier;
+
+    //-------------------------------------------------------------------------
+
+    /** gives access to the objects properties
+     */
+    interface com::sun::star::beans::XPropertySet;
+
+    //-------------------------------------------------------------------------
+    /** contains the cell name, see SwXTextTable::getCellByName for more information
+     */
+    [property] string CellName;
+
+    //-------------------------------------------------------------------------
+    /** contains the background color.
+     */
+    [property] com::sun::star::util::Color BackColor;
+
+    //-------------------------------------------------------------------------
+    /** contains the URL to the background graphic.
+     */
+    [property] string BackGraphicURL;
+
+    //-------------------------------------------------------------------------
+    /** contains the name of the graphic filter of the background graphic.
+     */
+    [property] string BackGraphicFilter;
+
+    //-------------------------------------------------------------------------
+    /** determines the position of the background graphic.
+     */
+    [property] com::sun::star::style::GraphicLocation BackGraphicLocation;
+
+    //-------------------------------------------------------------------------
+    /** contains the number format.
+     */
+    [property] long NumberFormat;
+
+    //-------------------------------------------------------------------------
+    /** determines whether the background is transparent.
+     */
+    [property] boolean BackTransparent;
+
+    //-------------------------------------------------------------------------
+    /** contains the left border line.
+     */
+    [property] com::sun::star::table::BorderLine LeftBorder;
+
+    //-------------------------------------------------------------------------
+    /** contains the right border line.
+     */
+    [property] com::sun::star::table::BorderLine RightBorder;
+
+    //-------------------------------------------------------------------------
+    /** contains the top border line.
+     */
+    [property] com::sun::star::table::BorderLine TopBorder;
+
+    //-------------------------------------------------------------------------
+    /** contains the bottom border line.
+     */
+    [property] com::sun::star::table::BorderLine BottomBorder;
+
+    //-------------------------------------------------------------------------
+    /** contains the distance of the left border.
+     */
+    [property] long LeftBorderDistance;
+
+    //-------------------------------------------------------------------------
+    /** contains the distance of the right border.
+     */
+    [property] long RightBorderDistance;
+
+    //-------------------------------------------------------------------------
+    /** contains the distance of the top border.
+     */
+    [property] long TopBorderDistance;
+
+    //-------------------------------------------------------------------------
+    /** contains the distance of the bottom border.
+     */
+    [property] long BottomBorderDistance;
+
+    //-------------------------------------------------------------------------
+    /** contains the text section the text table is contained in if there is any.
+     */
+    [readonly, property]com::sun::star::text::XTextSection TextSection;
+
+    //-------------------------------------------------------------------------
+    /** determines whether the cell is write protected or not.
+     */
+    [property] boolean IsProtected;
+
+    //-------------------------------------------------------------------------
+    /** the vertical orientation of the text inside of the table cells in
+        this row.@see VertOrientation
+     */
+    [property] short VertOrient;
+
+};
+
+//=============================================================================
+
+}; }; }; };
+#endif

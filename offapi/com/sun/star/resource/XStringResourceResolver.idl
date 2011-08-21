@@ -1,0 +1,193 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_resource_XStringResourceResolver_idl__
+#define __com_sun_star_resource_XStringResourceResolver_idl__
+
+#include <com/sun/star/resource/MissingResourceException.idl>
+#include <com/sun/star/util/XModifyBroadcaster.idl>
+#include <com/sun/star/lang/Locale.idl>
+
+
+//=============================================================================
+
+module com { module sun { module star { module resource {
+
+//=============================================================================
+/**
+    Interface to access strings in a resource.
+
+    The interface is derived from
+    <type scope="com::sun::star::util">XModifyBroadcaster</type>
+
+    All registered <type scope="com::sun::star::util">XModifyListener</type>
+    interfaces will be notified if either the current locale changes or if
+    a string is added, changed or removed. This usually will only happen if
+    the implementing object also supports the interface
+    <type scope="com::sun::star::resource">XStringResourceManager</type>
+    and is used in the design mode of a Dialog or String table editor.
+    But also changing the locale at runtime can be supported in this way.
+
+*/
+published interface XStringResourceResolver: com::sun::star::util::XModifyBroadcaster
+{
+    /**
+        Resolves the passed ResoureID for the current locale. This
+        locale is set during initialization of the object implementing
+        this interface or - in case that also the interface
+        <type scope="com::sun::star::resource">XStringResourceManager</type>
+        is supported - by using the <code>XStringResourceManager::setLocale</code>
+        method.
+
+        @param ResourceID
+            ID to specify the string inside the resource.
+            The ID can - but not needs to - be a hierarchical
+            name like "foo.nothing.invalid".
+
+        @return  the localized string for the specified ID
+
+        @throws ::com::sun::star::resource::MissingResourceException
+            if no entry exists for the given ResourceID
+    */
+    string resolveString( [in] string ResourceID )
+        raises( com::sun::star::resource::MissingResourceException );
+
+
+    /** Resolves the passed ResoureID for a specific locale.
+
+        It's not recommended to use this method to get the best
+        performance as the implementation may be optimized for
+        the use of the current locale.
+
+        @param ResourceID
+            ID to specify the string inside the resource.
+            The ID can - but not needs to - be a hierarchical
+            name like "foo.nothing.invalid".
+
+        @param locale
+            The locale the string should be resolved for.
+            The locale has to match exactly with one of the locales provided by
+            <member>getLocales</member>. A closest match search is not supported.
+
+        @return  the localized string for the specified ID and Locale
+
+        @throws <type scope="com::sun::star::resource">MissingResourceException</type>
+            if no entry exists for the given ResourceID or locale
+    */
+    string resolveStringForLocale( [in] string ResourceID, [in] com::sun::star::lang::Locale locale )
+        raises( com::sun::star::resource::MissingResourceException );
+
+
+    /**
+        Checks if the resource contains an entry for the given ResourceID
+        and current locale.
+
+        @param ResourceID
+            ID to specify the string inside the resource.
+
+        @return  <TRUE/> if an entry exists, otherwise <FALSE/>
+
+    */
+    boolean hasEntryForId( [in] string ResourceID );
+
+
+    /**
+        Checks if the resource contains an entry for the given ResourceID and locale.
+
+        It's not recommended to use this method to get the best
+        performance as the implementation may be optimized for
+        the use of the current locale.
+
+        @param ResourceID
+            ID to specify the string inside the resource.
+
+        @param locale
+            The locale the entry should be checked for.
+            The locale has to match exactly with one of the locales provided by
+            <member>getLocales</member>. A closest match search is not supported.
+
+        @return  <TRUE/> if an entry exists, otherwise <FALSE/>
+    */
+    boolean hasEntryForIdAndLocale( [in] string ResourceID, [in] com::sun::star::lang::Locale locale );
+
+
+    /**
+        Returns a sequence of all valid Resource IDs for the current locale
+
+        @return  a sequence of all valid Resource IDs
+    */
+    sequence<string> getResourceIDs();
+
+
+    /**
+        Returns a sequence of all valid Resource IDs for a specific locale
+
+        It's not recommended to use this method to get the best
+        performance as the implementation may be optimized for
+        the use of the current locale.
+
+        @param locale
+            The locale the ResourceIDs should be returned for.
+            The locale has to match exactly with one of the locales provided by
+            <member>getLocales</member>. A closest match search is not supported.
+
+        @return  a sequence of all valid Resource IDs
+    */
+    sequence<string> getResourceIDsForLocale( [in] com::sun::star::lang::Locale locale );
+
+
+    /** Returns the current locale specified in the accessed resource.
+
+        If no locale is available, the returned Locale structure
+        only contains empty strings.
+
+        @returns  the used locale
+    */
+    com::sun::star::lang::Locale getCurrentLocale();
+
+
+    /** Returns the default locale of the accessed resource. In many
+        cases this will be the locale of the Office initially used
+        to create the resource.
+
+        @return  the used locale
+    */
+    com::sun::star::lang::Locale getDefaultLocale();
+
+
+    /**
+        Returns a sequence of all supported locales
+
+        @return  a sequence of all supported locales
+    */
+    sequence<com::sun::star::lang::Locale> getLocales();
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

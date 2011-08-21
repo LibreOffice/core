@@ -1,0 +1,6 @@
+module ooo { module vba { module word {
+    constants WdEnableCancelKey {
+        const long wdCancelDisabled = 0;
+        const long wdCancelInterrupt = 1;
+    };
+}; }; };

@@ -52,7 +52,6 @@
 #include <tools/urlobj.hxx>
 #include <unotools/pathoptions.hxx>
 #include <unotools/securityoptions.hxx>
-#include <unotools/javaoptions.hxx>
 #include <unotools/localfilehelper.hxx>
 #include <unotools/extendedsecurityoptions.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
@@ -94,6 +93,7 @@
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/util/XChangesBatch.hpp>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/string.hxx>
 
 #include "com/sun/star/ui/dialogs/TemplateDescription.hpp"
 #include "com/sun/star/task/XMasterPasswordHandling2.hpp"
@@ -165,7 +165,7 @@ void SvxNoSpaceEdit::Modify()
     {
         XubString aValue = GetText();
 
-        if ( !ByteString(::rtl::OUStringToOString(aValue,RTL_TEXTENCODING_UTF8)).IsNumericAscii() || (long)aValue.ToInt32() > USHRT_MAX )
+        if ( !comphelper::string::isAsciiDecimalString(aValue) || (long)aValue.ToInt32() > USHRT_MAX )
             // der H�chstwert einer Portnummer ist USHRT_MAX
             ErrorBox( this, CUI_RES( RID_SVXERR_OPT_PROXYPORTS ) ).Execute();
     }
@@ -629,7 +629,7 @@ IMPL_LINK( SvxProxyTabPage, LoseFocusHdl_Impl, Edit *, pEdit )
 {
     XubString aValue = pEdit->GetText();
 
-    if ( !ByteString(::rtl::OUStringToOString(aValue,RTL_TEXTENCODING_UTF8)).IsNumericAscii() || (long)aValue.ToInt32() > USHRT_MAX )
+    if ( !comphelper::string::isAsciiDecimalString(aValue) || (long)aValue.ToInt32() > USHRT_MAX )
         pEdit->SetText( '0' );
     return 0;
 }

@@ -1,0 +1,149 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_sheet_DataPilotTableDescriptor_idl__
+#define __com_sun_star_sheet_DataPilotTableDescriptor_idl__
+
+#include <com/sun/star/sheet/XDataPilotDescriptor.idl>
+#include <com/sun/star/sheet/XDataPilotDataLayoutFieldSupplier.idl>
+#include <com/sun/star/beans/XPropertySet.idl>
+#include <com/sun/star/beans/PropertyValue.idl>
+
+//=============================================================================
+
+module com { module sun { module star { module sheet {
+
+//=============================================================================
+
+/** represents the description of the layout of a data pilot table.
+
+    @see com::sun::star::sheet::DataPilotTable
+*/
+published service DataPilotDescriptor
+{
+    //-------------------------------------------------------------------------
+
+    /** provides access to the layout settings of the data pilot table.
+     */
+    interface XDataPilotDescriptor;
+
+    //-------------------------------------------------------------------------
+
+    /** provides access to the layout settings of the data pilot table.
+     */
+    [optional] interface com::sun::star::beans::XPropertySet;
+
+    //-------------------------------------------------------------------------
+
+    /** Provides access to the <type>DataPilotField</type> used to layout
+        multiple data fields.
+     */
+    [optional] interface XDataPilotDataLayoutFieldSupplier;
+
+    //=========================================================================
+
+    /** specifies parameters to create the data pilot table from a database.
+
+    @see DatabaseImportDescriptor
+    @since OOo 3.3
+
+     */
+    [optional, property] sequence< com::sun::star::beans::PropertyValue > ImportDescriptor;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies the name of a <type>DataPilotSource</type> implementation
+        for the data pilot table.
+
+    @since OOo 3.3
+
+     */
+    [optional, property] string SourceServiceName;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies arguments that are passed to the implementation named by
+        <member>SourceServiceName</member>.
+
+    @since OOo 3.3
+
+     */
+    [optional, property] sequence< com::sun::star::beans::PropertyValue > ServiceArguments;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies if empty rows in the source data are ignored.
+     */
+    [optional, property] boolean IgnoreEmptyRows;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies if empty category cells in the source data should be treated
+        as repetition of the content from the previous row.
+     */
+    [optional, property] boolean RepeatIfEmpty;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies if columns for grand total results are created.
+     */
+    [optional, property] boolean ColumnGrand;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies if rows for grand total results are created.
+     */
+    [optional, property] boolean RowGrand;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies whether the filter button is shown.
+     */
+    [optional, property] boolean ShowFilterButton;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies whether to drill down to details or go into edit mode.
+     */
+    [optional, property] boolean DrillDownOnDoubleClick;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies a label for grand total results.
+
+    @since OOo 3.4
+     */
+    [optional, property] string GrandTotalName;
+
+    //-------------------------------------------------------------------------
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

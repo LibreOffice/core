@@ -1,0 +1,90 @@
+--- misc/libxslt-1.1.26/config.sub
++++ misc/build/libxslt-1.1.26/config.sub
+@@ -1272,7 +1272,7 @@
+ 	      | -ekkobsd* | -kfreebsd* | -freebsd* | -riscix* | -lynxos* \
+ 	      | -bosx* | -nextstep* | -cxux* | -aout* | -elf* | -oabi* \
+ 	      | -ptx* | -coff* | -ecoff* | -winnt* | -domain* | -vsta* \
+-	      | -udi* | -eabi* | -lites* | -ieee* | -go32* | -aux* \
++	      | -udi* | -androideabi* | -eabi* | -lites* | -ieee* | -go32* | -aux* \
+ 	      | -chorusos* | -chorusrdb* \
+ 	      | -cygwin* | -pe* | -psos* | -moss* | -proelf* | -rtems* \
+ 	      | -mingw32* | -linux-gnu* | -linux-newlib* | -linux-uclibc* \
+--- misc/libxslt-1.1.26/ltmain.sh	Wed Aug 29 14:28:46 2007
++++ misc/build/libxslt-1.1.26/ltmain.sh	Wed Jun 25 13:06:05 2008
+@@ -6195,9 +6195,9 @@
+ 	    revision="$number_revision"
+ 	    ;;
+ 	  freebsd-aout|freebsd-elf|sunos)
+-	    current="$number_major"
+-	    revision="$number_minor"
+-	    age="0"
++	    current=`expr $number_major + $number_minor`
++	    age="$number_minor"
++	    revision="$number_revision"
+ 	    ;;
+ 	  irix|nonstopux)
+ 	    func_arith $number_major + $number_minor
+@@ -6271,8 +6271,8 @@
+ 	  ;;
+ 
+ 	freebsd-elf)
+-	  major=".$current"
+-	  versuffix=".$current"
++	  major=.`expr $current - $age`
++	  versuffix="$major.$age.$revision"
+ 	  ;;
+ 
+ 	irix | nonstopux)
+--- misc/libxslt-1.1.26/xslt-config.in	Wed Jan 17 14:18:26 2007
++++ misc/build/libxslt-1.1.26/xslt-config.in	Wed Jun 25 13:06:05 2008
+@@ -1,10 +1,16 @@
+ #! /bin/sh
+ 
+-prefix=@prefix@
+-exec_prefix=@exec_prefix@
++#prefix=@prefix@
++#exec_prefix=@exec_prefix@
++#exec_prefix_set=no
++#includedir=@includedir@
++#libdir=@libdir@
++
++prefix=${SOLARVERSION}/${INPATH}
++exec_prefix=${SOLARVERSION}/${INPATH}
+ exec_prefix_set=no
+-includedir=@includedir@
+-libdir=@libdir@
++includedir=${SOLARVERSION}/${INPATH}/inc${UPDMINOREXT}/external
++libdir=${SOLARVERSION}/${INPATH}/lib${UPDMINOREXT}
+ 
+ usage()
+ {
+@@ -89,7 +95,8 @@
+     shift
+ done
+ 
+-the_libs="@XSLT_LIBDIR@ @XSLT_LIBS@"
++#the_libs="@XSLT_LIBDIR@ @XSLT_LIBS@"
++the_libs="-L${libdir} ${XSLTLIB} -lm"
+ if test "$includedir" != "/usr/include"; then
+     the_flags="$the_flags -I$includedir `@XML_CONFIG@ --cflags`"
+ else
+--- misc/libxslt-1.1.26/configure	2008-05-14 00:40:54.000000000 +0900
++++ misc/build/libxslt-1.1.26/configure	2008-07-17 22:12:38.097000000 +0900
+@@ -7437,7 +7437,7 @@
+ 
+ cygwin*)
+   # func_win32_libid is a shell function defined in ltmain.sh
+-  lt_cv_deplibs_check_method='file_magic ^x86 archive import|^x86 DLL'
++  lt_cv_deplibs_check_method='file_magic ^x86 archive|^x86 DLL'
+   lt_cv_file_magic_cmd='func_win32_libid'
+   ;;
+ 
+@@ -7446,7 +7446,7 @@
+   # func_win32_libid shell function, so use a weaker test based on 'objdump',
+   # unless we find 'file', for example because we are cross-compiling.
+   if ( file / ) >/dev/null 2>&1; then
+-    lt_cv_deplibs_check_method='file_magic ^x86 archive import|^x86 DLL'
++    lt_cv_deplibs_check_method='file_magic ^x86 archive|^x86 DLL'
+     lt_cv_file_magic_cmd='func_win32_libid'
+   else
+     lt_cv_deplibs_check_method='file_magic file format pei*-i386(.*architecture: i386)?'

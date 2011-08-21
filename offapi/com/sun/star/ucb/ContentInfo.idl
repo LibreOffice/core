@@ -1,0 +1,106 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_ucb_ContentInfo_idl__
+#define __com_sun_star_ucb_ContentInfo_idl__
+
+#include <com/sun/star/beans/Property.idl>
+
+//=============================================================================
+
+module com { module sun { module star { module ucb {
+
+//=============================================================================
+/** A structure for information about contents.
+
+    @see XContentCreator
+    @see XCommandProcessor
+*/
+published struct ContentInfo
+{
+    //-------------------------------------------------------------------------
+    /** A type identifier string for a content.
+
+        <p>This is an implementation specific string characterizing the
+        kind of a content (e.g. "application/vnd.sun.star.hierarchy-link").
+        The value of this member should match the value returned by
+        <member>XContent::getContentType</member> of an appropriate content.
+    */
+    string Type;
+
+    //-------------------------------------------------------------------------
+    /** Additional attributes.
+
+        <p>These flags contain extra information on the content, like its kind
+        (KIND_FOLDER, KIND_DOCUMENT, KIND_LINK).
+
+        <p>It is highly recommended to fill these flags very accurately, as
+        they are very important when transferring contents between different
+        <type>ContentProvider</type>s.
+
+        <p>The value can be one of the <type>ContentInfoAttribute</type>
+           constants.
+    */
+    long Attributes;
+
+    //-------------------------------------------------------------------------
+    /** This field contains a list with the properties which must be set at
+        a content that was just created using
+        <member>XContentCreator::createNewContent</member> before it can be
+        committed (by executing the command "insert" at the new content).
+
+        <p>If one of the properties is missing, the insert command will fail.
+
+        <p>In example, a new file system folder content will need a title. The
+        Properties member of the ContentInfo provided for this kind of
+        content must include the property "Title".
+
+        <p><b>Important:</b> The required properties must have one of the
+        following basic data types (in order to make it possible to implement
+        client applications with a small set of generic input methods for the
+        values):
+
+        <p>
+        <ul>
+        <li>boolean
+        <li>char
+        <li>byte
+        <li>string
+        <li>short
+        <li>long
+        <li>hyper
+        <li>float
+        <li>double
+        </ul>
+    */
+    sequence< com::sun::star::beans::Property > Properties;
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

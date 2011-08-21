@@ -1,0 +1,216 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_sheet_XAddIn_idl__
+#define __com_sun_star_sheet_XAddIn_idl__
+
+#include <com/sun/star/lang/XLocalizable.idl>
+
+//=============================================================================
+
+module com {  module sun {  module star {  module sheet {
+
+//=============================================================================
+
+/** gives access to function descriptions and user-visible names.
+ */
+published interface XAddIn: com::sun::star::lang::XLocalizable
+{
+    //-------------------------------------------------------------------------
+
+    /** returns the internal function name for an user-visible name.
+
+        <p>The user-visible name of a function is the name shown to the
+        user. It may be translated to the current language of the AddIn,
+        so it is never stored in files. It should be a single word and is
+        used when entering or displaying formulas.</p>
+
+        <p>Attention: The method name contains a spelling error. Due to
+        compatibility reasons the name cannot be changed.</p>
+
+        @param aDisplayName
+            the user-visible name of a function.
+
+        @returns
+            the exact name of the method within its interface.
+
+     */
+    string getProgrammaticFuntionName( [in] string aDisplayName );
+
+    //-------------------------------------------------------------------------
+
+    /** returns the user-visible function name for an internal name.
+
+        <p>The user-visible name of a function is the name shown to the
+        user. It may be translated to the current language of the AddIn,
+        so it is never stored in files. It should be a single word and is
+        used when entering or displaying formulas.</p>
+
+        @param aProgrammaticName
+            is the exact name of a method within its interface.
+
+        @returns
+            the user-visible name of the specified function.
+     */
+    string getDisplayFunctionName( [in] string aProgrammaticName );
+
+    //-------------------------------------------------------------------------
+
+    /** returns the description of a function.
+
+        <p>The description is shown to the user when selecting functions.
+        It may be translated to the current language of the AddIn.</p>
+
+        @param aProgrammaticName
+            is the exact name of a method within its interface.
+
+        @returns
+            the description of the specified function.
+     */
+    string getFunctionDescription( [in] string aProgrammaticName );
+
+    //-------------------------------------------------------------------------
+
+    /** returns the user-visible name of the specified argument.
+
+        <p>The argument name is shown to the user when prompting for
+        arguments. It should be a single word and may be translated
+        to the current language of the AddIn.</p>
+
+        @param aProgrammaticFunctionName
+            is the exact name of a method within its interface.
+
+        @param nArgument
+            the index of the argument (0-based).
+
+        @returns
+            the user-visible name of the specified argument.
+     */
+    string getDisplayArgumentName(
+            [in] string aProgrammaticFunctionName,
+            [in] long nArgument );
+
+    //-------------------------------------------------------------------------
+
+    /** returns the description of the specified argument.
+
+        <p>The argument description is shown to the user when prompting
+        for arguments. It may be translated to the current language of
+        the AddIn.</p>
+
+        @param aProgrammaticFunctionName
+            is the exact name of a method within its interface.
+
+        @param nArgument
+            the index of the argument (0-based).
+
+        @returns
+            the description of the specified argument.
+     */
+    string getArgumentDescription(
+            [in] string aProgrammaticFunctionName,
+            [in] long nArgument );
+
+    //-------------------------------------------------------------------------
+
+    /** returns the programmatic name of the category the function
+        belongs to.
+
+        <p>The category name is used to group similar functions together.
+        The programmatic category name should always be in English, it is
+        never shown to the user.
+        It should be one of the following names if the function falls into
+        the corresponding category.</p>
+
+        <dl>
+        <dt>Database</dt>
+        <dd>for functions that operate with data organized in tabular form
+        like databases.</dd>
+
+        <dt>Date&amp;Time</dt>
+        <dd>for functions that deal with date or time values.</dd>
+
+        <dt>Financial</dt>
+        <dd>for functions that solve financial problems.</dd>
+
+        <dt>Information</dt>
+        <dd>for functions that provide information about cells.</dd>
+
+        <dt>Logical</dt>
+        <dd>for functions that deal with logical expressions.</dd>
+
+        <dt>Mathematical</dt>
+        <dd>for mathematical functions.</dd>
+
+        <dt>Matrix</dt>
+        <dd>for matrix functions.</dd>
+
+        <dt>Statistical</dt>
+        <dd>for statistical functions.</dd>
+
+        <dt>Spreadsheet</dt>
+        <dd>for functions that deal with cell ranges.</dd>
+
+        <dt>Text</dt>
+        <dd>for functions that deal with text strings.</dd>
+
+        <dt>Add-In</dt>
+        <dd>for additional functions.</dd>
+        </dl>
+
+        @param aProgrammaticFunctionName
+            is the exact name of a method within its interface.
+
+        @returns
+            the category name the specified function belongs to.
+     */
+    string getProgrammaticCategoryName( [in] string aProgrammaticFunctionName );
+
+    //-------------------------------------------------------------------------
+
+    /** returns the user-visible name of the category the function
+        belongs to.
+
+        <p>This is used when category names are shown to the user.</p>
+
+        @param aProgrammaticFunctionName
+            is the exact name of a method within its interface.
+
+        @returns
+            the user-visible category name the specified function
+            belongs to.
+     */
+    string getDisplayCategoryName( [in] string aProgrammaticFunctionName );
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif
+

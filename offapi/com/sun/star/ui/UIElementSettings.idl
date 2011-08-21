@@ -1,0 +1,89 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_ui_UIElementSettings_idl__
+#define __com_sun_star_ui_UIElementSettings_idl__
+
+#include <com/sun/star/container/XIndexAccess.idl>
+#include <com/sun/star/lang/XSingleComponentFactory.idl>
+
+//=============================================================================
+
+module com {  module sun {  module star {  module ui {
+
+//=============================================================================
+
+/**
+    describes the internal structure of a configurable user interface element.
+
+    <p>
+    No assumption is made about any graphical representation:
+    You could have a menu or a toolbar working with the same UIElementSettings
+    although limitations based on the real user interface element may be visible.
+    </p>
+
+    @since OOo 2.0
+*/
+service UIElementSettings
+{
+    /** provides access to the structure of the user interface element.
+
+        <p>
+        The container contains the items of the user interface element. Every
+        item is stored as a sequence of <type scope="com::sun::star::beans">PropertyValue</type>.
+        The properties insides the sequence are defined by the service <type scope="com::sun::star::ui">ItemDescriptor</type>.
+        It depends on the function which provides these service if the container is shareable read-only or exclusive writable.
+
+        @see com::sun::star::ui::ItemDescriptor
+        @see com::sun::star::ui::ItemType
+        @see com::sun::star::ui::ItemStyle
+        </p>
+    */
+    interface ::com::sun::star::container::XIndexAccess;
+
+
+    /** provides access to an optional factory interface to create sub container.
+
+        <p>
+        The factory should be used to create sub container within this user interface element settings. This interface is only
+        available if the container is exclusive writable.
+        </p>
+    */
+    [optional] interface ::com::sun::star::lang::XSingleComponentFactory;
+
+    /** determine an optional user interface name of the user interface element.
+
+        <p>
+        A toolbar can show a its user interface name on the window title, when it is in floating mode.
+        </p>
+    */
+    [optional, property] string UIName;
+};
+
+}; }; }; };
+
+#endif

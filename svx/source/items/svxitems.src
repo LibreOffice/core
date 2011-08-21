@@ -1,0 +1,353 @@
+﻿/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+ // include ------------------------------------------------------------------
+
+#include "svx/svxitems.hrc"
+#include "svx/svxids.hrc"
+#include <editeng/editids.hrc>
+
+StringArray RID_ATTR_NAMES
+{
+    ItemList [ en-US ] =
+    {
+        < "Scale"           ;           SID_ATTR_ZOOM ; > ;
+        < "Brush"           ;           SID_ATTR_BRUSH ; > ;
+        < "Tab stops"               ;   SID_ATTR_TABSTOP ; > ;
+        < "Character"               ;   SID_ATTR_CHAR ; > ;
+        < "Font"            ;           SID_ATTR_CHAR_FONT ; > ;
+        < "Font posture"        ;       SID_ATTR_CHAR_POSTURE ; > ;
+        < "Font weight"             ;   SID_ATTR_CHAR_WEIGHT ; > ;
+        < "Shadowed"            ;       SID_ATTR_CHAR_SHADOWED ; > ;
+        < "Individual words"        ;   SID_ATTR_CHAR_WORDLINEMODE ; > ;
+        < "Outline"         ;           SID_ATTR_CHAR_CONTOUR ; > ;
+        < "Strikethrough"           ;   SID_ATTR_CHAR_STRIKEOUT ; > ;
+        < "Underline"           ;       SID_ATTR_CHAR_UNDERLINE ; > ;
+        < "Font size"               ;   SID_ATTR_CHAR_FONTHEIGHT ; > ;
+        < "Rel. Font size"      ;       SID_ATTR_CHAR_PROPSIZE ; > ;
+        < "Font color"          ;       SID_ATTR_CHAR_COLOR ; > ;
+        < "Kerning"     ;               SID_ATTR_CHAR_KERNING ; > ;
+        < "Effects"     ;               SID_ATTR_CHAR_CASEMAP ; > ;
+        < "Language";                   SID_ATTR_CHAR_LANGUAGE ; > ;
+        < "Position"        ;           SID_ATTR_CHAR_ESCAPEMENT ; > ;
+        < "Blinking"    ;               SID_ATTR_CHAR_AUTOKERN ; > ;
+        < "Character set color"       ; SID_ATTR_CHAR_CHARSETCOLOR ; > ;
+        < "Overline"      ;             SID_ATTR_CHAR_OVERLINE ; > ;
+        < "Paragraph"       ;           SID_ATTR_PARA ; > ;
+        < "Alignment"       ;           SID_ATTR_PARA_ADJUST ; > ;
+        < "Line spacing"        ;       SID_ATTR_PARA_LINESPACE ; > ;
+        < "Page Break"      ;           SID_ATTR_PARA_PAGEBREAK ; > ;
+        < "Hyphenation"     ;           SID_ATTR_PARA_HYPHENZONE ; > ;
+        < "Do not split paragraph";     SID_ATTR_PARA_SPLIT ; > ;
+        < "Orphans"     ;               SID_ATTR_PARA_ORPHANS ; > ;
+        < "Widows"      ;               SID_ATTR_PARA_WIDOWS ; > ;
+        < "Spacing"     ;               SID_ATTR_PARA_ULSPACE ; > ;
+        < "Indent"      ;               SID_ATTR_PARA_LRSPACE ; > ;
+        < "Indent"      ;               SID_ATTR_LRSPACE ; > ;
+        < "Spacing"     ;               SID_ATTR_ULSPACE ; > ;
+        < "Page"        ;               SID_ATTR_PAGE ; > ;
+        < "Page Style"      ;           SID_ATTR_PARA_MODEL ; > ;
+        < "Keep with next paragraph";   SID_ATTR_PARA_KEEP ; > ;
+        < "Blinking"        ;           SID_ATTR_FLASH ; > ;
+        < "Register-true"       ;       SID_ATTR_PARA_REGISTER ; > ;
+        < "Character background"    ;   SID_ATTR_BRUSH_CHAR ; > ;
+        < "Asian font"      ;           SID_ATTR_CHAR_CJK_FONT ; > ;
+        < "Size of Asian font"      ;   SID_ATTR_CHAR_CJK_FONTHEIGHT ; > ;
+        < "Language of Asian font";     SID_ATTR_CHAR_CJK_LANGUAGE ; > ;
+        < "Posture of Asian font"   ;   SID_ATTR_CHAR_CJK_POSTURE ; > ;
+        < "Weight of Asian font"    ;   SID_ATTR_CHAR_CJK_WEIGHT ; > ;
+        < "CTL"     ;                   SID_ATTR_CHAR_CTL_FONT ; > ;
+        < "Size of complex scripts" ;   SID_ATTR_CHAR_CTL_FONTHEIGHT ; > ;
+        < "Language of complex scripts";SID_ATTR_CHAR_CTL_LANGUAGE ; > ;
+        < "Posture of complex scripts"; SID_ATTR_CHAR_CTL_POSTURE ; > ;
+        < "Weight of complex scripts";  SID_ATTR_CHAR_CTL_WEIGHT ; > ;
+        < "Double-lined"        ;       SID_ATTR_CHAR_TWO_LINES ; > ;
+        < "Emphasis mark"       ;       SID_ATTR_CHAR_EMPHASISMARK ; > ;
+        < "Text spacing"        ;       SID_ATTR_PARA_SCRIPTSPACE ; > ;
+        < "Hanging punctuation"     ;   SID_ATTR_PARA_HANGPUNCTUATION ; > ;
+        < "Forbidden characters"    ;   SID_ATTR_PARA_FORBIDDEN_RULES ; > ;
+        < "Rotation"        ;           SID_ATTR_CHAR_ROTATED ; > ;
+        < "Scale"       ;               SID_ATTR_CHAR_SCALEWIDTH ; > ;
+        < "Relief"      ;               SID_ATTR_CHAR_RELIEF ; > ;
+        < "Vertical text alignment" ;   SID_PARA_VERTALIGN ; > ;
+    };
+};
+
+
+String RID_SVXITEMS_EXTRAS_CHARCOLOR
+{
+    Text [ en-US ] = "Font color" ;
+};
+ // SvxSearchItem ------------------------------------------------------------
+ // Kommando
+String RID_SVXITEMS_SEARCHCMD_FIND
+{
+    Text [ en-US ] = "Search" ;
+};
+String RID_SVXITEMS_SEARCHCMD_FIND_ALL
+{
+    Text [ en-US ] = "Find All" ;
+};
+String RID_SVXITEMS_SEARCHCMD_REPLACE
+{
+    Text [ en-US ] = "Replace" ;
+};
+String RID_SVXITEMS_SEARCHCMD_REPLACE_ALL
+{
+    Text [ en-US ] = "Replace all" ;
+};
+ // Vorlagen
+String RID_SVXITEMS_SEARCHSTYL_CHAR
+{
+    Text [ en-US ] = "Character Style" ;
+};
+String RID_SVXITEMS_SEARCHSTYL_PARA
+{
+    Text [ en-US ] = "Paragraph Style" ;
+};
+String RID_SVXITEMS_SEARCHSTYL_FRAME
+{
+    Text [ en-US ] = "Frame Style" ;
+};
+String RID_SVXITEMS_SEARCHSTYL_PAGE
+{
+    Text [ en-US ] = "Page Style" ;
+};
+ // Zellen-Typ
+String RID_SVXITEMS_SEARCHIN_FORMULA
+{
+    Text [ en-US ] = "Formula" ;
+};
+String RID_SVXITEMS_SEARCHIN_VALUE
+{
+    Text [ en-US ] = "Value" ;
+};
+String RID_SVXITEMS_SEARCHIN_NOTE
+{
+    Text [ en-US ] = "Note" ;
+};
+ // Applikation
+String RID_SVXITEMS_SEARCHAPP_WRITER
+{
+    Text = "StarWriter" ;
+};
+String RID_SVXITEMS_SEARCHAPP_CALC
+{
+    Text = "StarCalc" ;
+};
+String RID_SVXITEMS_SEARCHAPP_DRAW
+{
+    Text = "StarDraw" ;
+};
+String RID_SVXITEMS_SEARCHAPP_BASE
+{
+    Text = "StarBase" ;
+};
+ // enum BrushStyle ----------------------------------------------------------
+String RID_SVXITEMS_BRUSHSTYLE_NULL
+{
+    Text [ en-US ] = "None" ;
+};
+String RID_SVXITEMS_BRUSHSTYLE_SOLID
+{
+    Text [ en-US ] = "Solid" ;
+};
+String RID_SVXITEMS_BRUSHSTYLE_HORZ
+{
+    Text [ en-US ] = "Horizontal" ;
+};
+String RID_SVXITEMS_BRUSHSTYLE_VERT
+{
+    Text [ en-US ] = "Vertical" ;
+};
+String RID_SVXITEMS_BRUSHSTYLE_CROSS
+{
+    Text [ en-US ] = "Grid" ;
+};
+String RID_SVXITEMS_BRUSHSTYLE_DIAGCROSS
+{
+    Text [ en-US ] = "Diamond" ;
+};
+String RID_SVXITEMS_BRUSHSTYLE_UPDIAG
+{
+    Text [ en-US ] = "Diagonal up" ;
+};
+String RID_SVXITEMS_BRUSHSTYLE_DOWNDIAG
+{
+    Text [ en-US ] = "Diagonal down" ;
+};
+String RID_SVXITEMS_BRUSHSTYLE_25
+{
+    Text = "25%" ;
+};
+String RID_SVXITEMS_BRUSHSTYLE_50
+{
+    Text = "50%" ;
+};
+String RID_SVXITEMS_BRUSHSTYLE_75
+{
+    Text = "75%" ;
+};
+String RID_SVXITEMS_BRUSHSTYLE_BITMAP
+{
+    Text [ en-US ] = "Image" ;
+};
+
+String RID_SVXITEMS_ORI_STANDARD
+{
+    Text [ en-US ] = "Default orientation" ;
+};
+String RID_SVXITEMS_ORI_TOPBOTTOM
+{
+    Text [ en-US ] = "From top to bottom" ;
+};
+String RID_SVXITEMS_ORI_BOTTOMTOP
+{
+    Text [ en-US ] = "Bottom to Top" ;
+};
+String RID_SVXITEMS_ORI_STACKED
+{
+    Text [ en-US ] = "Stacked" ;
+};
+ // GetValueText von BoolItems
+String RID_SVXITEMS_BOXINF_TABLE_TRUE
+{
+    Text [ en-US ] = "Table" ;
+};
+String RID_SVXITEMS_BOXINF_TABLE_FALSE
+{
+    Text [ en-US ] = "Not Table" ;
+};
+String RID_SVXITEMS_BOXINF_DIST_TRUE
+{
+    Text [ en-US ] = "Spacing enabled" ;
+};
+String RID_SVXITEMS_BOXINF_DIST_FALSE
+{
+    Text [ en-US ] = "Spacing disabled" ;
+};
+String RID_SVXITEMS_BOXINF_MDIST_TRUE
+{
+    Text [ en-US ] = "Keep spacing interval" ;
+};
+String RID_SVXITEMS_BOXINF_MDIST_FALSE
+{
+    Text [ en-US ] = "Allowed to fall short of spacing interval" ;
+};
+String RID_SVXITEMS_MARGIN_LEFT
+{
+    Text [ en-US ] = "Left margin: " ;
+};
+String RID_SVXITEMS_MARGIN_TOP
+{
+    Text [ en-US ] = "Top margin: " ;
+};
+String RID_SVXITEMS_MARGIN_RIGHT
+{
+    Text [ en-US ] = "Right margin: " ;
+};
+String RID_SVXITEMS_MARGIN_BOTTOM
+{
+    Text [ en-US ] = "Bottom margin: " ;
+};
+String RID_SVXITEMS_PAGE_COMPLETE
+{
+    Text [ en-US ] = "Page Description: " ;
+};
+String RID_SVXITEMS_PAGE_NUM_CHR_UPPER
+{
+    Text [ en-US ] = "Capitals" ;
+};
+String RID_SVXITEMS_PAGE_NUM_CHR_LOWER
+{
+    Text [ en-US ] = "Lowercase" ;
+};
+String RID_SVXITEMS_PAGE_NUM_ROM_UPPER
+{
+    Text [ en-US ] = "Uppercase Roman" ;
+};
+String RID_SVXITEMS_PAGE_NUM_ROM_LOWER
+{
+    Text [ en-US ] = "Lowercase Roman" ;
+};
+String RID_SVXITEMS_PAGE_NUM_ARABIC
+{
+    Text [ en-US ] = "Arabic" ;
+};
+String RID_SVXITEMS_PAGE_NUM_NONE
+{
+    Text [ en-US ] = "None" ;
+};
+String RID_SVXITEMS_PAGE_LAND_TRUE
+{
+    Text [ en-US ] = "Landscape" ;
+};
+String RID_SVXITEMS_PAGE_LAND_FALSE
+{
+    Text [ en-US ] = "Portrait" ;
+};
+String RID_SVXITEMS_PAGE_USAGE_LEFT
+{
+    Text [ en-US ] = "Left" ;
+};
+String RID_SVXITEMS_PAGE_USAGE_RIGHT
+{
+    Text [ en-US ] = "Right" ;
+};
+String RID_SVXITEMS_PAGE_USAGE_ALL
+{
+    Text [ en-US ] = "All" ;
+};
+String RID_SVXITEMS_PAGE_USAGE_MIRROR
+{
+    Text [ en-US ] = "Mirrored" ;
+};
+String RID_SVXITEMS_AUTHOR_COMPLETE
+{
+    Text [ en-US ] = "Author: " ;
+};
+String RID_SVXITEMS_DATE_COMPLETE
+{
+    Text [ en-US ] = "Date: " ;
+};
+String RID_SVXITEMS_TEXT_COMPLETE
+{
+    Text [ en-US ] = "Text: " ;
+};
+String RID_SVXITEMS_BACKGROUND_COLOR
+{
+    Text [ en-US ] = "Background color: " ;
+};
+String RID_SVXITEMS_PATTERN_COLOR
+{
+    Text [ en-US ] = "Pattern color: " ;
+};
+String RID_SVXITEMS_BRUSH_CHAR
+{
+    Text [ en-US ] = "Character background";
+};
+ // ********************************************************************** EOF
+

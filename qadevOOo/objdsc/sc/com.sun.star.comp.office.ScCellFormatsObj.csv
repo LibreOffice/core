@@ -1,0 +1,5 @@
+"ScCellFormatsObj";"com::sun::star::container::XIndexAccess";"getCount()"
+"ScCellFormatsObj";"com::sun::star::container::XIndexAccess";"getByIndex()"
+"ScCellFormatsObj";"com::sun::star::container::XElementAccess";"getElementType()"
+"ScCellFormatsObj";"com::sun::star::container::XElementAccess";"hasElements()"
+"ScCellFormatsObj";"com::sun::star::container::XEnumerationAccess";"createEnumeration()"

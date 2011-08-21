@@ -1,0 +1,90 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef com_sun_star_chart2_ChartDocument_idl
+#define com_sun_star_chart2_ChartDocument_idl
+
+#include <com/sun/star/style/XStyleFamiliesSupplier.idl>
+#include <com/sun/star/util/XNumberFormatsSupplier.idl>
+#include <com/sun/star/chart2/XChartDocument.idl>
+#include <com/sun/star/chart2/XUndoSupplier.idl>
+#include <com/sun/star/chart2/data/XDataReceiver.idl>
+#include <com/sun/star/chart2/XTitled.idl>
+#include <com/sun/star/lang/XInitialization.idl>
+
+module com
+{
+module sun
+{
+module star
+{
+module chart2
+{
+
+service ChartDocument
+{
+    /** this interface is derived from
+        <type-scope="com::sun::star::frame">XModel</type>.  Thus model
+        functionality is available via this interface.
+     */
+    interface  XChartDocument;
+
+    /** offers connection to data
+    */
+    interface  data::XDataReceiver;
+
+    /** gives access to the main title of a chart document
+     */
+    interface  XTitled;
+
+    /** maintains all style families applying to any object in the
+        chart.
+     */
+    interface  ::com::sun::star::style::XStyleFamiliesSupplier;
+
+    /** maintains all number formats used anywhere in the chart.
+     */
+    interface  ::com::sun::star::util::XNumberFormatsSupplier;
+
+    /** Allows passing arguments to createInstanceWithArguments.
+
+        <p>The following arguments are allowed in the given order:</p>
+
+        <ol>
+         <li>string  Name</li>
+        </ol>
+     */
+    [optional] interface  ::com::sun::star::lang::XInitialization;
+
+    [optional] interface XUndoSupplier;
+};
+
+} ; // chart2
+} ; // com
+} ; // sun
+} ; // star
+
+#endif

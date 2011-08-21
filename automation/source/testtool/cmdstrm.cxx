@@ -35,7 +35,7 @@
 #include "cmdstrm.hxx"
 #include "rcontrol.hxx"
 #include "objtest.hxx"
-#include "sttresid.hxx"
+#include "ittresid.hxx"
 #include "svcommstream.hxx"
 #include <basic/testtool.hrc>
 
@@ -43,7 +43,7 @@ ControlDefLoad const CmdStream::arKeyCodes [] =
 #include <keycodes.hxx>
 CNames *CmdStream::pKeyCodes = NULL;
 
-ResMgr* SttResId::getSttResMgr()
+ResMgr* IttResId::getIttResMgr()
 {
     static ResMgr* pMgr = NULL;
     if( ! pMgr )
@@ -153,7 +153,7 @@ String CmdStream::WandleKeyEventString( String aKeys )
                     Result += '<';
                     Result += Token;
                     Result += ' ';
-                    Result += String( SttResId( S_INVALID_KEYCODE ) );
+                    Result += String( IttResId( S_INVALID_KEYCODE ) );
                     Result += '>';
                 }
             }
@@ -422,28 +422,12 @@ void CmdStream::GenCmdFlow( sal_uInt16 nArt )
     Write(sal_uInt16(PARAM_NONE));              // Typ der folgenden Parameter
 }
 
-void CmdStream::GenCmdFlow( sal_uInt16 nArt, sal_uInt16 nNr1 )
-{
-    Write(sal_uInt16(SIFlow));
-    Write(nArt);
-    Write(sal_uInt16(PARAM_USHORT_1));          // Typ der folgenden Parameter
-    Write(nNr1);
-}
-
-void CmdStream::GenCmdFlow( sal_uInt16 nArt, comm_ULONG nNr1 )
+void CmdStream::GenCmdFlow( sal_uInt16 nArt, comm_UINT32 nNr1 )
 {
     Write(sal_uInt16(SIFlow));
     Write(nArt);
     Write(sal_uInt16(PARAM_ULONG_1));           // Typ der folgenden Parameter
     Write(nNr1);
-}
-
-void CmdStream::GenCmdFlow( sal_uInt16 nArt, String aString1 )
-{
-    Write(sal_uInt16(SIFlow));
-    Write(nArt);
-    Write(sal_uInt16(PARAM_STR_1));             // Typ der folgenden Parameter
-    Write(aString1);
 }
 
 void CmdStream::Write( String aString, sal_Bool IsKeyString )

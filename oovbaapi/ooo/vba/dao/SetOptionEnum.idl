@@ -1,0 +1,15 @@
+module ooo { module vba { module dao {
+    constants SetOptionEnum {
+        const long dbExclusiveAsyncDelay = 60;
+        const long dbFlushTransactionTimeout = 66;
+        const long dbImplicitCommitSync = 59;
+        const long dbLockDelay = 63;
+        const long dbLockRetry = 57;
+        const long dbMaxBufferSize = 8;
+        const long dbMaxLocksPerFile = 62;
+        const long dbPageTimeout = 6;
+        const long dbRecycleLVs = 65;
+        const long dbSharedAsyncDelay = 61;
+        const long dbUserCommitSync = 58;
+    };
+}; }; };

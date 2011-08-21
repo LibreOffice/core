@@ -1,0 +1,109 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_rendering_FloatingPointBitmapLayout_idl__
+#define __com_sun_star_rendering_FloatingPointBitmapLayout_idl__
+
+#include <com/sun/star/rendering/FloatingPointBitmapFormat.idl>
+#include <com/sun/star/rendering/XColorSpace.idl>
+
+module com { module sun { module star { module rendering {
+
+/** This structure describes the memory layout of a bitmap having
+    floating point color channels.<p>
+
+    This structure collects all necessary information to describe the
+    memory layout of a bitmap having floating point color channels<p>
+
+    @since OOo 2.0
+ */
+struct FloatingPointBitmapLayout
+{
+    /** Number of scanlines for this bitmap.
+
+        This value must not be negative
+     */
+    long                ScanLines;
+
+    /** Number of data bytes per scanline.
+
+        This value must not be negative
+     */
+    long                ScanLineBytes;
+
+    /** Byte offset between the start of two consecutive scanlines.
+
+        This value is permitted to be negative, denoting a bitmap
+        whose content is flipped at the x axis.
+     */
+    long                ScanLineStride;
+
+    /** Byte offset between the start of two consecutive planes.
+
+        This value is permitted to be negative. If this value is zero,
+        the bitmap is assumed to be in chunky format, otherwise it is
+        assumed to be planar.  The difference between chunky and
+        planar layout lies in the way how color channels are
+        interleaved. For a chunky format, all channel data for a
+        single pixel lies consecutively in memory. For a planar
+        layout, the first channel of all pixel is stored consecutive,
+        followed by the second channel, and so forth.<p>
+     */
+    long                PlaneStride;
+
+    // TODO(F3): Need some specializations of XColorSpace for float
+    // and half float formats. This maybe translates to the bitmap
+    // layout as well, leading to separate structs for double, float
+    // and half float formats, because of the ColorSpace member. Or
+    // leave it as it is, forcing the client to query for derived
+    // interfaces...
+
+    /// Color space the bitmap colors shall be interpreted within.
+    XColorSpace         ColorSpace;
+
+    /** Number of color components per pixel.
+
+        This value must not be negative
+     */
+    long                NumComponents;
+
+    /** Endianness of the pixel values.
+
+        This value must be one of the <type>Endianness</type> constants
+     */
+    byte                Endianness;
+
+    /** Format type of this bitmap.<p>
+
+        This value must be one of the
+        <type>FloatingPointBitmapFormat</type> constants.<p>
+    */
+    byte                Format;
+};
+
+}; }; }; };
+
+#endif

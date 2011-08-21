@@ -1,0 +1,230 @@
+/*************************************************************************
+*
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * 
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+************************************************************************/
+
+#include "macros.inc"
+
+
+// Begin registry items for the Infotip handler
+
+RegistryItem gid_Regitem_Clsid_087B3AE3_E237_4467_B8DB_5A38AB959AC9_InProcServer32
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Optional_Winexplorerext;
+    Styles = (X64);
+    Subkey = "CLSID\{087B3AE3-E237-4467-B8DB-5A38AB959AC9}\InprocServer32";
+    Value = "[INSTALLLOCATION]Basis\program\shlxthdl\shlxthdl.dll";
+    Val64 = "[INSTALLLOCATION]Basis\program\shlxthdl\shlxthdl_x64.dll";
+End
+
+RegistryItem gid_Regitem_Clsid_087B3AE3_E237_4467_B8DB_5A38AB959AC9_InProcServer32_ThreadingModel
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Optional_Winexplorerext;
+    Styles = (X64);
+    Subkey = "CLSID\{087B3AE3-E237-4467-B8DB-5A38AB959AC9}\InprocServer32";
+    Name = "ThreadingModel";
+    Value = "Apartment";
+    Val64 = "Apartment";
+End
+
+// End registry items for the Infotip handler
+
+// Begin registry items for the Thumbnail viewer
+
+RegistryItem gid_Regitem_Clsid_3B092F0C_7696_40E3_A80F_68D74DA84210_InProcServer32
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Optional_Winexplorerext;
+    Styles = (X64);
+    Subkey = "CLSID\{3B092F0C-7696-40E3-A80F-68D74DA84210}\InprocServer32";
+    Value = "[INSTALLLOCATION]Basis\program\shlxthdl\shlxthdl.dll";
+    Val64 = "[INSTALLLOCATION]Basis\program\shlxthdl\shlxthdl_x64.dll";
+End
+
+RegistryItem gid_Regitem_Clsid_3B092F0C_7696_40E3_A80F_68D74DA84210_InProcServer32_ThreadingModel
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Optional_Winexplorerext;
+    Styles = (X64);
+    Subkey = "CLSID\{3B092F0C-7696-40E3-A80F-68D74DA84210}\InprocServer32";
+    Name = "ThreadingModel";
+    Value = "Apartment";
+    Val64 = "Apartment";
+End
+
+// End registry items for the Thumbnail viewer
+
+// Begin registry items for the Column handler
+
+RegistryItem gid_Regitem_Folder_shellex_ColumnHandlers_C52AF81D_F7A0_4AAB_8E87_F80A60CCD396
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Optional_Winexplorerext;
+    Styles = (X64);
+    Subkey = "Folder\shellex\ColumnHandlers\{C52AF81D-F7A0-4AAB-8E87-F80A60CCD396}";
+    Value = "OpenOffice.org Column Handler";
+    Val64 = "OpenOffice.org Column Handler";
+End
+
+RegistryItem gid_Regitem_Clsid_C52AF81D_F7A0_4AAB_8E87_F80A60CCD396_InProcServer32
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Optional_Winexplorerext;
+    Styles = (X64);
+    Subkey = "CLSID\{C52AF81D-F7A0-4AAB-8E87-F80A60CCD396}\InprocServer32";
+    Value = "[INSTALLLOCATION]Basis\program\shlxthdl\shlxthdl.dll";
+    Val64 = "[INSTALLLOCATION]Basis\program\shlxthdl\shlxthdl_x64.dll";
+End
+    
+RegistryItem gid_Regitem_Clsid_C52AF81D_F7A0_4AAB_8E87_F80A60CCD396_InProcServer32_ThreadingModel
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Optional_Winexplorerext;
+    Styles = (X64);
+    Subkey = "CLSID\{C52AF81D-F7A0-4AAB-8E87-F80A60CCD396}\InprocServer32";
+    Name = "ThreadingModel";
+    Value = "Apartment";
+    Val64 = "Apartment";
+End
+    
+// End registry items for the Column handler
+
+// Begin registry items for the MS Indexing server filter component
+
+RegistryItem gid_Regitem_Clsid_7BC0E710_5703_45BE_A29D_5D46D8B39262
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Root;
+    Subkey = "CLSID\{7BC0E710-5703-45BE-A29D-5D46D8B39262}";
+// Better?: "OpenOffice.org Format Filter"
+// old:    Value = "opendocument.org Filter";
+	Styles = (X64_ONLY); // Values: X64
+    Value = "OpenDocument Format Filter";
+    Val64 = "OpenDocument Format Filter";
+End
+
+RegistryItem gid_Regitem_Clsid_7BC0E710_5703_45BE_A29D_5D46D8B39262_InProcServer32
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Root;
+    Subkey = "CLSID\{7BC0E710-5703-45BE-A29D-5D46D8B39262}\InprocServer32";
+    Styles = (X64); // Values: X64 / X64_ONLY
+    Value = "[INSTALLLOCATION]Basis\program\shlxthdl\ooofilt.dll";
+    Val64 = "[INSTALLLOCATION]Basis\program\shlxthdl\ooofilt_x64.dll";
+End
+
+RegistryItem gid_Regitem_Clsid_7BC0E710_5703_45BE_A29D_5D46D8B39262_InProcServer32_ThreadingModel
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Root;
+    Subkey = "CLSID\{7BC0E710-5703-45BE-A29D-5D46D8B39262}\InprocServer32";
+    Styles = (X64); // Values: X64
+    Name = "ThreadingModel";
+    Value = "Apartment";
+    Val64 = "Apartment";
+End
+
+RegistryItem gid_Regitem_Clsid_7BC0E713_5703_45BE_A29D_5D46D8B39262
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Root;
+    Subkey = "CLSID\{7BC0E713-5703-45BE-A29D-5D46D8B39262}";
+//? Better: "OpenOffice.org Persistent Handler"
+// old:    Value = "opendocument.org Persistent Handler";
+	Styles = (X64); // Values: X64
+    Value = "OpenDocument Format Persistent Handler";
+    Val64 = "OpenDocument Format Persistent Handler";
+End
+
+RegistryItem gid_Regitem_Clsid_7BC0E713_5703_45BE_A29D_5D46D8B39262_PersistentAddinsRegistered
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Root;
+    Styles = (X64); // Values: X64
+    Subkey = "CLSID\{7BC0E713-5703-45BE-A29D-5D46D8B39262}\PersistentAddinsRegistered\{89BCB740-6119-101A-BCB7-00DD010655AF}";
+    Value = "{7BC0E710-5703-45BE-A29D-5D46D8B39262}";
+    Val64 = "{7BC0E710-5703-45BE-A29D-5D46D8B39262}";
+End
+
+// End registry items for the MS Indexing server filter component
+
+// Begin registry entries for the PropertySheet handler
+
+RegistryItem gid_Regitem_Clsid_63542C48_9552_494A_84F7_73AA6A7C99C1_InProcServer32
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Optional_Winexplorerext;
+    Styles = (X64);
+    Subkey = "CLSID\{63542C48-9552-494A-84F7-73AA6A7C99C1}\InprocServer32";
+    Value = "[INSTALLLOCATION]Basis\program\shlxthdl\shlxthdl.dll";
+    Val64 = "[INSTALLLOCATION]Basis\program\shlxthdl\shlxthdl_x64.dll";
+End
+
+RegistryItem gid_Regitem_Clsid_63542C48_9552_494A_84F7_73AA6A7C99C1_InProcServer32_ThreadingModel
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Optional_Winexplorerext;
+    Styles = (X64);
+    Subkey = "CLSID\{63542C48-9552-494A-84F7-73AA6A7C99C1}\InprocServer32";
+    Name = "ThreadingModel";
+    Value = "Apartment";
+    Val64 = "Apartment";
+End
+
+// End registry entries for the PropertySheet handler
+
+// Begin registry entries for the Property handler
+
+RegistryItem gid_Regitem_Clsid_AE424E85_F6DF_4910_A6A9_438797986431_PropHdl
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Optional_Winexplorerext_PropertyHdl;
+    ComponentCondition = "VersionNT >= 600";
+    Styles = (X64);
+    Subkey = "CLSID\{AE424E85-F6DF-4910-A6A9-438797986431}";
+    Value = "%PRODUCTNAME Property Handler";
+    Val64 = "%PRODUCTNAME Property Handler";
+End
+
+RegistryItem gid_Regitem_Clsid_AE424E85_F6DF_4910_A6A9_438797986431_InProcServer32
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Optional_Winexplorerext_PropertyHdl;
+    ComponentCondition = "VersionNT >= 600";
+    Styles = (X64);
+    Subkey = "CLSID\{AE424E85-F6DF-4910-A6A9-438797986431}\InprocServer32";
+    Value = "[INSTALLLOCATION]Basis\program\shlxthdl\propertyhdl.dll";
+    Val64 = "[INSTALLLOCATION]Basis\program\shlxthdl\propertyhdl_x64.dll";
+End
+
+RegistryItem gid_Regitem_Clsid_AE424E85_F6DF_4910_A6A9_438797986431_InProcServer32_ThreadingModel
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Optional_Winexplorerext_PropertyHdl;
+    ComponentCondition = "VersionNT >= 600";
+    Styles = (X64);
+    Subkey = "CLSID\{AE424E85-F6DF-4910-A6A9-438797986431}\InprocServer32";
+    Name = "ThreadingModel";
+    Value = "Apartment";
+    Val64 = "Apartment";
+End
+
+RegistryItem gid_Regitem_Clsid_AE424E85_F6DF_4910_A6A9_438797986431_Approved
+    ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
+    ModuleID = gid_Module_Optional_Winexplorerext_PropertyHdl;
+    ComponentCondition = "VersionNT >= 600";
+    Styles = (X64);
+    Subkey = "SOFTWARE\Microsoft\Windows\CurrentVersion\Shell Extensions\Approved";
+    Name = "{AE424E85-F6DF-4910-A6A9-438797986431}";
+    Value = "%PRODUCTNAME Property Handler";
+    Val64 = "%PRODUCTNAME Property Handler";
+End
+
+// End registry entries for the Property handler

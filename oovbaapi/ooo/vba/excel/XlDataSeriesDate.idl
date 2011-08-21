@@ -1,0 +1,8 @@
+module ooo { module vba { module excel {
+    constants XlDataSeriesDate {
+        const long xlDay = 1;
+        const long xlMonth = 3;
+        const long xlWeekday = 2;
+        const long xlYear = 4;
+    };
+}; }; };

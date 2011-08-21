@@ -1,0 +1,6 @@
+module ooo { module vba { module dao {
+    constants QueryDefStateEnum {
+        const long dbQPrepare = 1;
+        const long dbQUnprepare = 2;
+    };
+}; }; };

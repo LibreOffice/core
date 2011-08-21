@@ -1,0 +1,76 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_document_XMLOasisBasicExporter_idl__
+#define __com_sun_star_document_XMLOasisBasicExporter_idl__
+
+#include <com/sun/star/document/XExporter.idl>
+#include <com/sun/star/document/XFilter.idl>
+#include <com/sun/star/lang/XInitialization.idl>
+
+
+//=============================================================================
+
+module com { module sun { module star { module document {
+
+//=============================================================================
+
+/** Filter for exporting Basic macros to the OASIS Open Office file format.
+
+    <p>First the <method>XExporter::setSourceDocument</method> method must be
+    called in order to provide the export component with the source document
+    from which the data should be exported. After that, the export is started
+    by calling the <method>XFilter::filter</method> method.</p>
+
+    @since OOo 2.0
+ */
+published service XMLOasisBasicExporter
+{
+    //-------------------------------------------------------------------------
+
+    /** sets the source document for this filter.
+     */
+    interface com::sun::star::document::XExporter;
+
+    //-------------------------------------------------------------------------
+
+    /** filters the document.
+     */
+    interface com::sun::star::document::XFilter;
+
+    //-------------------------------------------------------------------------
+
+    /** initializes the component.
+     */
+    [optional] interface com::sun::star::lang::XInitialization;
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

@@ -1,0 +1,284 @@
+/************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_awt_tree_XTreeControl_idl__
+#define __com_sun_star_awt_tree_XTreeControl_idl__
+
+#include <com/sun/star/awt/XControl.idl>
+#include <com/sun/star/awt/tree/XTreeExpansionListener.idl>
+#include <com/sun/star/view/XMultiSelectionSupplier.idl>
+#include <com/sun/star/awt/tree/XTreeEditListener.idl>
+
+//=============================================================================
+
+module com {  module sun {  module star {  module awt { module tree {
+
+//=============================================================================
+
+/** An interface to a control that displays a set of hierarchical data as an outline.
+
+    @see TreeControl
+ */
+published interface XTreeControl
+{
+    /** This interfaces provides access to the selection of tree nodes for this control.
+
+        <p>valid selection values for this interface are
+        <type>XTreeNode</type> or sequence&lt;<type>XTreeNode</type>&gt;.</p>
+
+        <method scope="::com::sun::star::view">XSelectionSupplier::getSelection()</method>
+        returns an empty any for no selection, an any with <type>XTreeNode</type> for
+        a single selection and a sequence&lt;<type>XTreeNode</type>&gt; for a multiselection.
+    */
+    interface ::com::sun::star::view::XMultiSelectionSupplier;
+
+    // ----------------------------
+    // expanding/collapsing/visible
+    // ----------------------------
+
+    /** Returns <TRUE/> if <var>Node</var> is currently expanded.
+
+        @param Node
+            the <type>XTreeNode</type> specifying the node to check.
+
+        @returns
+            <FALSE/> if <var>Node</var> or at least one of its parent nodes are collapsed,
+            <TRUE/> if <var>Node</var> and all of its parent nodes are expanded.
+
+        @throws ::com::sun::star::lang::IllegalArgumentException
+            if <var>Node</var> is not a valid node of the corresponding <type>XTreeDataModel</type>.
+    */
+    boolean isNodeExpanded( [in] XTreeNode Node )
+        raises( ::com::sun::star::lang::IllegalArgumentException );
+
+    /** Returns <TRUE/> if <var>Node</var> is currently collapsed.
+
+        @param Node
+            the <type>XTreeNode</type> specifying the node to check
+
+        @returns
+            <TRUE/> if <var>Node</var> or at least one of its parent nodes are collapsed,
+            <FALSE/> if <var>Node</var> and all of its parent nodes are expanded
+
+        @throws ::com::sun::star::lang::IllegalArgumentException
+            if <var>Node</var> is not a valid node of the corresponding <type>XTreeDataModel</type>.
+    */
+    boolean isNodeCollapsed( [in] XTreeNode Node )
+        raises( ::com::sun::star::lang::IllegalArgumentException );
+
+    /** Ensures that <var>Node</var> is currently visible.
+        <p>This includes expanding all parent nodes and scroll the control so this
+        node is visible in the controls display area.</p>
+
+        @param Node
+            the <type>XTreeNode</type> specifying the node to make visible.
+
+        @throws ::com::sun::star::lang::IllegalArgumentException
+            if <var>Node</var> is not a valid node of the corresponding <type>XTreeDataModel</type>.
+
+        @throws ExpandVetoException
+            if <var>Node</var>can't be made visible since at least one of the parent nodes are
+            collapsed and expanding failed because at least one of the registered
+            <type>XTreeExpansionListener</type> raised a <type>ExpandVetoException</type>.
+    */
+    void makeNodeVisible( [in] XTreeNode Node )
+        raises( com::sun::star::lang::IllegalArgumentException, ExpandVetoException );
+
+    /** Returns <TRUE/> if <var>Node</var> is currently visible.
+        <p>Visible means it is either the root or all of its parents are expanded.</p>
+
+        @returns
+            <TRUE/> if <var>Node</var> is visible, otherwise <FALSE/>
+
+        @throws ::com::sun::star::lang::IllegalArgumentException
+            if <var>Node</var> is not a valid node of the corresponding <type>XTreeDataModel</type>.
+    */
+    boolean isNodeVisible( [in] XTreeNode Node )
+        raises( com::sun::star::lang::IllegalArgumentException );
+
+    /** Ensures that <var>Node</var> is expanded and visible.
+        <p>If <var>Node</var> is a leaf node, this will have no effect.</p>
+
+        @param Node
+            the <type>XTreeNode</type> identifying a node.
+
+        @throws ::com::sun::star::lang::IllegalArgumentException
+            if <var>Node</var> is not a valid node of the corresponding <type>XTreeDataModel</type>.
+
+        @throws ExpandVetoException
+            if expanding <var>Node</var> failed because at least one of the registered
+            <type>XTreeExpansionListener</type> raised a <type>ExpandVetoException</type>.
+    */
+    void expandNode( [in] XTreeNode Node )
+        raises( com::sun::star::lang::IllegalArgumentException, ExpandVetoException );
+
+    /** Ensures that <var>Node</var> is collapsed.
+
+        @param Node
+            the <type>XTreeNode</type> identifying a node
+
+        @throws ::com::sun::star::lang::IllegalArgumentException
+            if <var>Node</var> is not a valid node of the corresponding <type>XTreeDataModel</type>.
+
+        @throws ExpandVetoException
+            if collapsing <var>Node</var> failed because at least one of the registered
+            <type>XTreeExpansionListener</type> raised a <type>ExpandVetoException</type>.
+    */
+    void collapseNode( [in] XTreeNode Node )
+        raises( com::sun::star::lang::IllegalArgumentException, ExpandVetoException );
+
+    /** Adds a listener for <type>TreeExpansion</type> events.
+
+        @param Listener
+            a <type>XTreeExpansionListener</type> that will be notified when a tree
+            node is expanded or collapsed.
+    */
+    void addTreeExpansionListener( [in] XTreeExpansionListener Listener );
+
+    /** Removes a listener for <type>TreeExpansion</type> events.
+
+        @param Listener
+            the <type>XTreeExpansionListener</type> to remove.
+    */
+    void removeTreeExpansionListener( [in] XTreeExpansionListener Listener );
+
+    /** If the given URL points to a loadable graphic, the graphic is rendered
+        before expanded non leaf nodes.
+
+        <p>This can be overridden for individual nodes by <member>XTreeNode::getExpandedGraphicURL()</member></p>
+    */
+    [attribute] string DefaultExpandedGraphicURL;
+
+    /** If the given URL points to a loadable graphic, the graphic is rendered
+        before collapsed non leaf nodes.
+
+        <p>This can be overridden for individual nodes by <member>XTreeNode::getCollapsedGraphicURL()</member></p>
+    */
+    [attribute] string DefaultCollapsedGraphicURL;
+
+    // ------------
+    // tree geometry
+    // ------------
+
+    /** Returns the node at the specified location.
+
+        @param x
+            an integer giving the number of pixels horizontally from the left edge of the controls display area
+        @param y
+            an integer giving the number of pixels vertically from the top edge of the controls display area
+        @returns
+            the <type>XTreeNode</type> for the node at that location, or 0 if there is no node at the given position
+    */
+    XTreeNode getNodeForLocation( [in] long x, [in] long y );
+
+    /** Returns the node that is closest to x,y.
+        <p>If no nodes are currently viewable, or there is no model, returns null,
+        otherwise it always returns a valid node. To test if the node is exactly
+        at x, y, use <member>getNodeForLocation()</member>.
+
+        @param x
+            an integer giving the number of pixels horizontally from the left edge of the controls display area
+        @para y
+            an integer giving the number of pixels vertically from the top edge of the controls display area
+        @returns
+            the <type>XTreeNode</type> for the node closest to that location, null if nothing is viewable or there is no model
+    */
+    XTreeNode getClosestNodeForLocation( [in] long x, [in] long y );
+
+    /** returns the rectangle occupied by the visual representation of the given node
+
+        @param Node
+            the node whose geometry should be obtained
+        @throws ::com::sun::star::lang::IllegalArgumentException
+            if the given node is <NULL/>, or does not belong to the tree's data model
+    */
+    ::com::sun::star::awt::Rectangle
+        getNodeRect( [in] XTreeNode Node )
+            raises( ::com::sun::star::lang::IllegalArgumentException );
+
+    // ------------
+    // tree editing
+    // ------------
+
+    /** Returns <TRUE/> if one of tree's nodes is being currently edited.
+        <p>The node that is being edited can be obtained using <method scope="com::sun::star::view">XSelectionSupplier::getSelection()</method>.
+
+        @returns
+            <TRUE/> if the user is currently editing a node
+    */
+    boolean isEditing();
+
+    /** Ends the current editing session.
+        <p>All registered <type>XTreeEditListener</type> are notified if an editing session was in progress</p>
+        <p>Has no effect if the tree isn't being edited.</p>
+
+        @returns
+            <TRUE/> if editing was in progress and is now stopped, <FALSE/> if editing was not in progress
+    */
+    boolean stopEditing();
+
+    /** Cancels the current editing session.
+        <p>Has no effect if the tree isn't being edited.</p>
+    */
+    void cancelEditing();
+
+    /** Selects <var>Node</var> and initiates editing.
+
+        <p>If <member>TreeControlModel::Editable</member> is <FALSE/> or if there are no
+        registered <type>XTreeEditListener</type>, this call has no effect.</p>
+
+        <p>Calling this method also ensures that <var>Node</var> will become visible.</p>
+
+        @param Node
+            the <type>XTreeNode</type> identifying a node.
+
+        @throws ::com::sun::star::lang::IllegalArgumentException
+            if <var>Node</var> is not a valid node of the corresponding <type>XTreeDataModel</type>.
+    */
+    void startEditingAtNode( [in] XTreeNode Node )
+        raises( ::com::sun::star::lang::IllegalArgumentException );
+
+    /** Adds a <type>XTreeEditListener</type>.
+
+        @param xListener
+            a <type>XTreeEditListener</type> that will be notified
+            before and after a tree node is edited.
+    */
+    void addTreeEditListener( [in] XTreeEditListener Listener );
+
+    /** Removes a <type>XTreeEditListener</type>.
+
+        @param xListener
+            the <type>XTreeEditListener</type> to remove
+    */
+    void removeTreeEditListener( [in] XTreeEditListener Listener );
+};
+
+//=============================================================================
+
+}; }; }; }; };
+
+#endif

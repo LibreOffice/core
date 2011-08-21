@@ -1,0 +1,76 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+//i20156 - new file for xml security module
+
+/** -- idl definition -- **/
+
+#ifndef __com_sun_star_xml_crypto_sax_xsignatureverifyresultbroadcaster_idl_
+#define __com_sun_star_xml_crypto_sax_xsignatureverifyresultbroadcaster_idl_
+
+#include <com/sun/star/uno/XInterface.idl>
+#include <com/sun/star/uno/Exception.idl>
+
+module com { module sun { module star { module xml { module crypto { module sax {
+
+interface XSignatureVerifyResultListener;
+
+/**
+ * Interface of Signature Verify Result Broadcaster.
+ * <p>
+ * This interface is used to manipulate signature verify result listener.
+ */
+interface XSignatureVerifyResultBroadcaster : com::sun::star::uno::XInterface
+{
+    /**
+     * Adds a new signature verify result listener.
+     * <p>
+     * When the signature is verified, the result information will be sent to this
+     * listener.
+     *
+     * @param listener         the listener to be added
+     */
+    void addSignatureVerifyResultListener(
+        [in] XSignatureVerifyResultListener listener)
+        raises( com::sun::star::uno::Exception );
+
+    /**
+     * Removes a signature verify result listener.
+     * <p>
+     * After a listener is removed, no result information will be sent to it.
+     *
+     * @param listener         the listener to be removed
+     */
+    void removeSignatureVerifyResultListener(
+        [in] XSignatureVerifyResultListener listener);
+};
+
+} ; } ; } ; } ; } ; } ;
+
+
+#endif
+

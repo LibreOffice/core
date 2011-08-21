@@ -1,0 +1,691 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * 
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#include "macros.inc"
+
+#ifdef WITH_ACTIVEX_COMPONENT
+
+// MSOLE embedded object in SO7 file format
+RegistryItem gid_Regitem_Clsid__D0484de6_Aaee_468a_991f_8d4b0737b57a_
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Math_Bin;
+    Subkey = "CLSID\{D0484DE6-AAEE-468a-991F-8D4B0737B57A}";
+    REG_VALUE_LNG(SO60_FORMULA)
+End
+
+RegistryItem gid_Regitem_Clsid__D0484de6_Aaee_468a_991f_8d4b0737b57a__Auxusertype_2
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Math_Bin;
+    Subkey = "CLSID\{D0484DE6-AAEE-468a-991F-8D4B0737B57A}\AuxUserType\2";
+    Value = "%PRODUCTNAME";
+End
+
+RegistryItem gid_Regitem_Clsid__D0484de6_Aaee_468a_991f_8d4b0737b57a__Auxusertype_3
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Math_Bin;
+    Subkey = "CLSID\{D0484DE6-AAEE-468a-991F-8D4B0737B57A}\AuxUserType\3";
+    REG_VALUE_LNG(SO60_FORMULA)
+End
+
+RegistryItem gid_Regitem_Clsid__D0484de6_Aaee_468a_991f_8d4b0737b57a__Dataformats_Getset_0
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Math_Bin;
+    Subkey = "CLSID\{D0484DE6-AAEE-468a-991F-8D4B0737B57A}\DataFormats\GetSet\0";
+    Value = "Embed Source,1,8,1";
+End
+
+RegistryItem gid_Regitem_Clsid__D0484de6_Aaee_468a_991f_8d4b0737b57a__Dataformats_Getset_1
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Math_Bin;
+    Subkey = "CLSID\{D0484DE6-AAEE-468a-991F-8D4B0737B57A}\DataFormats\GetSet\1";
+    Value = "3,1,32,1";
+End
+
+RegistryItem gid_Regitem_Clsid__D0484de6_Aaee_468a_991f_8d4b0737b57a__Dataformats_Getset_2
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Math_Bin;
+    Subkey = "CLSID\{D0484DE6-AAEE-468a-991F-8D4B0737B57A}\DataFormats\GetSet\2";
+    Value = "2,1,16,1";
+End
+
+RegistryItem gid_Regitem_Clsid__D0484de6_Aaee_468a_991f_8d4b0737b57a__Defaulticon
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Math_Bin;
+    Subkey = "CLSID\{D0484DE6-AAEE-468a-991F-8D4B0737B57A}\DefaultIcon";
+    Value = "<progpath>\program\soffice.exe,0";
+End
+
+RegistryItem gid_Regitem_Clsid__D0484de6_Aaee_468a_991f_8d4b0737b57a__Inprochandler32
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Math_Bin;
+    Subkey = "CLSID\{D0484DE6-AAEE-468a-991F-8D4B0737B57A}\InprocHandler32";
+    Value = "<progpath>\program\inprocserv.dll";
+    Styles = ();
+End
+
+RegistryItem gid_Regitem_Clsid__D0484de6_Aaee_468a_991f_8d4b0737b57a__Insertable
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Math_Bin;
+    Subkey = "CLSID\{D0484DE6-AAEE-468a-991F-8D4B0737B57A}\Insertable";
+End
+
+RegistryItem gid_Regitem_Clsid__D0484de6_Aaee_468a_991f_8d4b0737b57a__Localserver32
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Math_Bin;
+    Subkey = "CLSID\{D0484DE6-AAEE-468a-991F-8D4B0737B57A}\LocalServer32";
+    Value = "<progpath>\program\soffice.exe -nodefault -nologo";
+End
+
+RegistryItem gid_Regitem_Clsid__D0484de6_Aaee_468a_991f_8d4b0737b57a__Miscstatus
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Math_Bin;
+    Subkey = "CLSID\{D0484DE6-AAEE-468a-991F-8D4B0737B57A}\MiscStatus";
+    Value = "16";
+End
+
+RegistryItem gid_Regitem_Clsid__D0484de6_Aaee_468a_991f_8d4b0737b57a__Progid
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Math_Bin;
+    Subkey = "CLSID\{D0484DE6-AAEE-468a-991F-8D4B0737B57A}\ProgID";
+    Value = "soffice.StarMathDocument.6";
+End
+
+RegistryItem gid_Regitem_Clsid__D0484de6_Aaee_468a_991f_8d4b0737b57a__Programmable
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Math_Bin;
+    Subkey = "CLSID\{D0484DE6-AAEE-468a-991F-8D4B0737B57A}\Programmable";
+End
+
+RegistryItem gid_Regitem_Clsid__D0484de6_Aaee_468a_991f_8d4b0737b57a__Verb_0
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Math_Bin;
+    Subkey = "CLSID\{D0484DE6-AAEE-468a-991F-8D4B0737B57A}\verb\0";
+    Value = "&Edit,0,0";
+End
+
+RegistryItem gid_Regitem_Clsid__D0484de6_Aaee_468a_991f_8d4b0737b57a__Verb__1
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Math_Bin;
+    Subkey = "CLSID\{D0484DE6-AAEE-468a-991F-8D4B0737B57A}\verb\-1";
+    Value = "Show,0,0";
+End
+
+RegistryItem gid_Regitem_Clsid__D0484de6_Aaee_468a_991f_8d4b0737b57a__Verb__2
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Math_Bin;
+    Subkey = "CLSID\{D0484DE6-AAEE-468a-991F-8D4B0737B57A}\verb\-2";
+    Value = "Open,0,0";
+End
+
+RegistryItem gid_Regitem_Clsid__D0484de6_Aaee_468a_991f_8d4b0737b57a__Versionindependentprogid
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Math_Bin;
+    Subkey = "CLSID\{D0484DE6-AAEE-468a-991F-8D4B0737B57A}\VersionIndependentProgID";
+    Value = "soffice.StarMathDocument.6";
+End
+
+// MSOLE embedded object in SO7 file format
+RegistryItem gid_Regitem_Clsid__D2d59cd1_0a6a_4d36_Ae20_47817077d57c_
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Math_Bin;
+    Subkey = "CLSID\{D2D59CD1-0A6A-4D36-AE20-47817077D57C}";
+    REG_VALUE_LNG(OO_FORMULA)
+End
+
+RegistryItem gid_Regitem_Clsid__D2d59cd1_0a6a_4d36_Ae20_47817077d57c__Auxusertype_2
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Math_Bin;
+    Subkey = "CLSID\{D2D59CD1-0A6A-4D36-AE20-47817077D57C}\AuxUserType\2";
+    Value = "%PRODUCTNAME";
+End
+
+RegistryItem gid_Regitem_Clsid__D2d59cd1_0a6a_4d36_Ae20_47817077d57c__Auxusertype_3
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Math_Bin;
+    Subkey = "CLSID\{D2D59CD1-0A6A-4D36-AE20-47817077D57C}\AuxUserType\3";
+    REG_VALUE_LNG(OO_FORMULA)
+End
+
+RegistryItem gid_Regitem_Clsid__D2d59cd1_0a6a_4d36_Ae20_47817077d57c__Dataformats_Getset_0
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Math_Bin;
+    Subkey = "CLSID\{D2D59CD1-0A6A-4D36-AE20-47817077D57C}\DataFormats\GetSet\0";
+    Value = "Embed Source,1,8,1";
+End
+
+RegistryItem gid_Regitem_Clsid__D2d59cd1_0a6a_4d36_Ae20_47817077d57c__Dataformats_Getset_1
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Math_Bin;
+    Subkey = "CLSID\{D2D59CD1-0A6A-4D36-AE20-47817077D57C}\DataFormats\GetSet\1";
+    Value = "3,1,32,1";
+End
+
+RegistryItem gid_Regitem_Clsid__D2d59cd1_0a6a_4d36_Ae20_47817077d57c__Dataformats_Getset_2
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Math_Bin;
+    Subkey = "CLSID\{D2D59CD1-0A6A-4D36-AE20-47817077D57C}\DataFormats\GetSet\2";
+    Value = "2,1,16,1";
+End
+
+RegistryItem gid_Regitem_Clsid__D2d59cd1_0a6a_4d36_Ae20_47817077d57c__Defaulticon
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Math_Bin;
+    Subkey = "CLSID\{D2D59CD1-0A6A-4D36-AE20-47817077D57C}\DefaultIcon";
+    Value = "<progpath>\program\soffice.exe,0";
+End
+
+RegistryItem gid_Regitem_Clsid__D2d59cd1_0a6a_4d36_Ae20_47817077d57c__Inprochandler32
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Math_Bin;
+    Subkey = "CLSID\{D2D59CD1-0A6A-4D36-AE20-47817077D57C}\InprocHandler32";
+    Value = "<progpath>\program\inprocserv.dll";
+    Styles = ();
+End
+
+RegistryItem gid_Regitem_Clsid__D2d59cd1_0a6a_4d36_Ae20_47817077d57c__Insertable
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Math_Bin;
+    Subkey = "CLSID\{D2D59CD1-0A6A-4D36-AE20-47817077D57C}\Insertable";
+End
+
+RegistryItem gid_Regitem_Clsid__D2d59cd1_0a6a_4d36_Ae20_47817077d57c__Localserver32
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Math_Bin;
+    Subkey = "CLSID\{D2D59CD1-0A6A-4D36-AE20-47817077D57C}\LocalServer32";
+    Value = "<progpath>\program\soffice.exe -nodefault -nologo";
+End
+
+RegistryItem gid_Regitem_Clsid__D2d59cd1_0a6a_4d36_Ae20_47817077d57c__Miscstatus
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Math_Bin;
+    Subkey = "CLSID\{D2D59CD1-0A6A-4D36-AE20-47817077D57C}\MiscStatus";
+    Value = "16";
+End
+
+RegistryItem gid_Regitem_Clsid__D2d59cd1_0a6a_4d36_Ae20_47817077d57c__Progid
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Math_Bin;
+    Subkey = "CLSID\{D2D59CD1-0A6A-4D36-AE20-47817077D57C}\ProgID";
+    Value = "opendocument.MathDocument.1";
+End
+
+RegistryItem gid_Regitem_Clsid__D2d59cd1_0a6a_4d36_Ae20_47817077d57c__Programmable
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Math_Bin;
+    Subkey = "CLSID\{D2D59CD1-0A6A-4D36-AE20-47817077D57C}\Programmable";
+End
+
+RegistryItem gid_Regitem_Clsid__D2d59cd1_0a6a_4d36_Ae20_47817077d57c__Verb_0
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Math_Bin;
+    Subkey = "CLSID\{D2D59CD1-0A6A-4D36-AE20-47817077D57C}\verb\0";
+    Value = "&Edit,0,0";
+End
+
+RegistryItem gid_Regitem_Clsid__D2d59cd1_0a6a_4d36_Ae20_47817077d57c__Verb__1
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Math_Bin;
+    Subkey = "CLSID\{D2D59CD1-0A6A-4D36-AE20-47817077D57C}\verb\-1";
+    Value = "Show,0,0";
+End
+
+RegistryItem gid_Regitem_Clsid__D2d59cd1_0a6a_4d36_Ae20_47817077d57c__Verb__2
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Math_Bin;
+    Subkey = "CLSID\{D2D59CD1-0A6A-4D36-AE20-47817077D57C}\verb\-2";
+    Value = "Open,0,0";
+End
+
+RegistryItem gid_Regitem_Clsid__D2d59cd1_0a6a_4d36_Ae20_47817077d57c__Versionindependentprogid
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Math_Bin;
+    Subkey = "CLSID\{D2D59CD1-0A6A-4D36-AE20-47817077D57C}\VersionIndependentProgID";
+    Value = "opendocument.MathDocument.1";
+End
+
+#endif // WITH_ACTIVEX_COMPONENT
+
+RegistryItem gid_Regitem_Soffice_Starmathdocument_6
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Math_Bin;
+    Subkey = "soffice.StarMathDocument.6";
+    REG_VALUE_LNG(SO60_FORMULA)
+End
+
+#ifdef WITH_ACTIVEX_COMPONENT
+
+RegistryItem gid_Regitem_Soffice_Starmathdocument_6_Clsid
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Math_Bin;
+    Subkey = "soffice.StarMathDocument.6\CLSID";
+    Value = "{D0484DE6-AAEE-468a-991F-8D4B0737B57A}";
+End
+
+#endif // WITH_ACTIVEX_COMPONENT
+
+RegistryItem gid_Regitem_Soffice_Starmathdocument_6_Defaulticon
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Math_Bin;
+    Subkey = "soffice.StarMathDocument.6\DefaultIcon";
+    Value = "<progpath>\program\soffice.exe,38";
+End
+
+RegistryItem gid_Regitem_Soffice_Starmathdocument_6_Insertable
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Math_Bin;
+    Subkey = "soffice.StarMathDocument.6\Insertable";
+End
+
+RegistryItem gid_Regitem_Soffice_Starmathdocument_6_Protocol_Stdfileediting_Server
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Math_Bin;
+    Subkey = "soffice.StarMathDocument.6\protocol\StdFileEditing\server";
+    Value = "<progpath>\program\soffice.exe";
+End
+
+RegistryItem gid_Regitem_Soffice_Starmathdocument_6_Protocol_Stdfileediting_Verb_0
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Math_Bin;
+    Subkey = "soffice.StarMathDocument.6\protocol\StdFileEditing\verb\0";
+    Value = "&Edit";
+End
+
+RegistryItem gid_Regitem_Soffice_Starmathdocument_6_Protocol_Stdfileediting_Verb__1
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Math_Bin;
+    Subkey = "soffice.StarMathDocument.6\protocol\StdFileEditing\verb\-1";
+    Value = "&Show";
+End
+
+RegistryItem gid_Regitem_Soffice_Starmathdocument_6_Protocol_Stdfileediting_Verb__2
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Math_Bin;
+    Subkey = "soffice.StarMathDocument.6\protocol\StdFileEditing\verb\-2";
+    Value = "&Open";
+End
+
+RegistryItem gid_Regitem_Soffice_Starmathdocument_6_Shell
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Math_Bin;
+    Subkey = "soffice.StarMathDocument.6\shell";
+    Value = "open";
+End
+
+RegistryItem gid_Regitem_Soffice_Starmathdocument_6_Shell_New
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Math_Bin;
+    Subkey = "soffice.StarMathDocument.6\shell\new";
+    REG_VALUE_LNG(NEW)
+End
+
+RegistryItem gid_Regitem_Soffice_Starmathdocument_6_Shell_New_Command
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Math_Bin;
+    Subkey = "soffice.StarMathDocument.6\shell\new\command";
+    Value = "\"<progpath>\program\soffice.exe\" -n \"%1\"";
+End
+
+RegistryItem gid_Regitem_Soffice_Starmathdocument_6_Shell_Open_Command
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Math_Bin;
+    Subkey = "soffice.StarMathDocument.6\shell\open\command";
+    Value = "\"<progpath>\program\smath.exe\" -o \"%1\"";
+End
+
+RegistryItem gid_Regitem_Soffice_Starmathdocument_6_Shell_Print_Command
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Math_Bin;
+    Subkey = "soffice.StarMathDocument.6\shell\print\command";
+    Value = "\"<progpath>\program\soffice.exe\" -p \"%1\"";
+End
+
+RegistryItem gid_Regitem_Soffice_Starmathdocument_6_Shell_Printto_Command
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Math_Bin;
+    Subkey = "soffice.StarMathDocument.6\shell\printto\command";
+    Value = "\"<progpath>\program\soffice.exe\" -pt \"%2\" \"%1\"";
+End
+
+RegistryItem gid_Regitem_Soffice_Starmathdocument_Curver
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    Subkey = "soffice.StarMathDocument\CurVer";
+    ModuleID = gid_Module_Prg_Math_Bin;
+    Value = "soffice.StarMathDocument.6";
+End
+
+RegistryItem gid_Regitem_Sxm_PersistentHandler
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Math_Bin;
+    Subkey = ".sxm\PersistentHandler";
+    Value = "{7BC0E713-5703-45BE-A29D-5D46D8B39262}";
+End
+
+RegistryItem gid_Regitem_Sxm_Shellex_00021500_0000_0000_C000_000000000046
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Math_Bin;
+    Subkey = ".sxm\shellex\{00021500-0000-0000-C000-000000000046}";
+    Value = "{087B3AE3-E237-4467-B8DB-5A38AB959AC9}";
+End
+
+RegistryItem gid_Regitem_Sxm_Shellex_BB2E617C_0920_11D1_9A0B_00C04FC2D6C1
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Math_Bin;
+    Subkey = ".sxm\shellex\{BB2E617C-0920-11D1-9A0B-00C04FC2D6C1}";
+    Value = "{3B092F0C-7696-40E3-A80F-68D74DA84210}";
+End
+
+RegistryItem gid_Regitem_StarMathDocument_6_Shellex_PropertySheetHandlers_MyPropSheet1
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Math_Bin;
+    Subkey = "soffice.StarMathDocument.6\shellex\PropertySheetHandlers\MyPropSheet1";
+    Value = "{63542C48-9552-494A-84F7-73AA6A7C99C1}";
+End
+
+RegistryItem gid_Regitem_Sxm_Contenttype
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Math_Bin;
+    Subkey = ".sxm";
+    Name = "Content Type";
+    Value = "application/vnd.sun.xml.math";
+End
+
+RegistryItem gid_Regitem_Sxm_Mime_Database
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Math_Bin;
+    Subkey = "MIME\Database\Content Type\application/vnd.sun.xml.math";
+    Name = "Extension";
+    Value = ".sxm";
+End
+
+RegistryItem gid_Regitem__Mml
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Math_Bin;
+    Subkey = ".sxm";
+    Value = "soffice.StarMathDocument.6";
+End
+
+RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabilities_FileAssociations_sxm
+    ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
+    Subkey = "Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\Capabilities\FileAssociations";
+    ModuleID = gid_Module_Prg_Math_Bin;
+    Name = ".sxm";
+    Value = "soffice.StarMathDocument.6";
+    Styles = ();
+End
+
+RegistryItem gid_Regitem_sxm_FullDetails
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Optional_Winexplorerext_PropertyHdl;
+    Subkey = "soffice.StarMathDocument.6";
+    Name = "FullDetails";
+    Value = "prop:System.PropGroup.Description;System.Title;System.Author;System.Subject;System.Keywords;System.Comment;System.PropGroup.FileSystem;System.ItemNameDisplay;System.ItemType;System.ItemFolderPathDisplay;System.Size;System.DateCreated;System.DateModified;System.FileAttributes;System.ComputerName";
+End
+
+// new odf file extension
+
+RegistryItem gid_Regitem_Odf_PersistentHandler
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Math_Bin;
+    Subkey = ".odf\PersistentHandler";
+    Value = "{7BC0E713-5703-45BE-A29D-5D46D8B39262}";
+End
+
+RegistryItem gid_Regitem_Odf_Shellex_00021500_0000_0000_C000_000000000046
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Math_Bin;
+    Subkey = ".odf\shellex\{00021500-0000-0000-C000-000000000046}";
+    Value = "{087B3AE3-E237-4467-B8DB-5A38AB959AC9}";
+End
+
+RegistryItem gid_Regitem_Odf_Shellex_BB2E617C_0920_11D1_9A0B_00C04FC2D6C1
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Math_Bin;
+    Subkey = ".odf\shellex\{BB2E617C-0920-11D1-9A0B-00C04FC2D6C1}";
+    Value = "{3B092F0C-7696-40E3-A80F-68D74DA84210}";
+End
+
+RegistryItem gid_Regitem_MathDocument_1_Shellex_PropertySheetHandlers_MyPropSheet1
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Math_Bin;
+    Subkey = "opendocument.MathDocument.1\shellex\PropertySheetHandlers\MyPropSheet1";
+    Value = "{63542C48-9552-494A-84F7-73AA6A7C99C1}";
+End
+
+RegistryItem gid_Regitem_Odf_Contenttype
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Math_Bin;
+    Subkey = ".odf";
+    Name = "Content Type";
+    Value = "application/vnd.oasis.opendocument.formula";
+End
+
+RegistryItem gid_Regitem_Odf_Mime_Database
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Math_Bin;
+    Subkey = "MIME\Database\Content Type\application/vnd.oasis.opendocument.formula";
+    Name = "Extension";
+    Value = ".odf";
+End
+
+RegistryItem gid_Regitem__Odf
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Math_Bin;
+    Subkey = ".odf";
+    Value = "opendocument.MathDocument.1";
+End
+
+RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabilities_FileAssociations_odf
+    ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
+    Subkey = "Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\Capabilities\FileAssociations";
+    ModuleID = gid_Module_Prg_Math_Bin;
+    Name = ".odf";
+    Value = "opendocument.MathDocument.1";
+    Styles = ();
+End
+
+RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabilities_MimeAssociations_odf
+    ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
+    Subkey = "Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\Capabilities\MimeAssociations";
+    ModuleID = gid_Module_Prg_Math_Bin;
+    Name = "application/vnd.oasis.opendocument.formula";
+    Value = "opendocument.MathDocument.1";
+    Styles = ();
+End
+
+RegistryItem gid_Regitem_Openoffice_Mathdocument_Curver
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    Subkey = "opendocument.MathDocument\CurVer";
+    ModuleID = gid_Module_Prg_Math_Bin;
+    Value = "opendocument.MathDocument.1";
+End
+
+RegistryItem gid_Regitem_Openoffice_Mathdocument_1
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Math_Bin;
+    Subkey = "opendocument.MathDocument.1";
+    REG_VALUE_LNG(OO_FORMULA)
+End
+
+#ifdef WITH_ACTIVEX_COMPONENT
+
+RegistryItem gid_Regitem_Openoffice_Mathdocument_1_Clsid
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Math_Bin;
+    Subkey = "opendocument.MathDocument.1\CLSID";
+    Value = "{D2D59CD1-0A6A-4D36-AE20-47817077D57C}";
+End
+
+#endif // WITH_ACTIVEX_COMPONENT
+
+RegistryItem gid_Regitem_Openoffice_Mathdocument_1_Defaulticon
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Math_Bin;
+    Subkey = "opendocument.MathDocument.1\DefaultIcon";
+    Value = "<progpath>\program\soffice.exe,14";
+End
+
+RegistryItem gid_Regitem_odf_FullDetails
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Optional_Winexplorerext_PropertyHdl;
+    Subkey = "opendocument.MathDocument.1";
+    Name = "FullDetails";
+    Value = "prop:System.PropGroup.Description;System.Title;System.Author;System.Subject;System.Keywords;System.Comment;System.PropGroup.FileSystem;System.ItemNameDisplay;System.ItemType;System.ItemFolderPathDisplay;System.Size;System.DateCreated;System.DateModified;System.FileAttributes;System.ComputerName";
+End
+
+RegistryItem gid_Regitem_Openoffice_Mathdocument_1_Insertable
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Math_Bin;
+    Subkey = "opendocument.MathDocument.1\Insertable";
+End
+
+RegistryItem gid_Regitem_Openoffice_Mathdocument_1_Protocol_Stdfileediting_Server
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Math_Bin;
+    Subkey = "opendocument.MathDocument.1\protocol\StdFileEditing\server";
+    Value = "<progpath>\program\soffice.exe";
+End
+
+RegistryItem gid_Regitem_Openoffice_Mathdocument_1_Protocol_Stdfileediting_Verb_0
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Math_Bin;
+    Subkey = "opendocument.MathDocument.1\protocol\StdFileEditing\verb\0";
+    Value = "&Edit";
+End
+
+RegistryItem gid_Regitem_Openoffice_Mathdocument_1_Protocol_Stdfileediting_Verb__1
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Math_Bin;
+    Subkey = "opendocument.MathDocument.1\protocol\StdFileEditing\verb\-1";
+    Value = "&Show";
+End
+
+RegistryItem gid_Regitem_Openoffice_Mathdocument_1_Protocol_Stdfileediting_Verb__2
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Math_Bin;
+    Subkey = "opendocument.MathDocument.1\protocol\StdFileEditing\verb\-2";
+    Value = "&Open";
+End
+
+RegistryItem gid_Regitem_Openoffice_Mathdocument_1_Shell
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Math_Bin;
+    Subkey = "opendocument.MathDocument.1\shell";
+    Value = "open";
+End
+
+RegistryItem gid_Regitem_Openoffice_Mathdocument_1_Shell_New
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Math_Bin;
+    Subkey = "opendocument.MathDocument.1\shell\new";
+    REG_VALUE_LNG(NEW)
+End
+
+RegistryItem gid_Regitem_Openoffice_Mathdocument_1_Shell_New_Command
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Math_Bin;
+    Subkey = "opendocument.MathDocument.1\shell\new\command";
+    Value = "\"<progpath>\program\soffice.exe\" -n \"%1\"";
+End
+
+RegistryItem gid_Regitem_Openoffice_Mathdocument_1_Shell_Open_Command
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Math_Bin;
+    Subkey = "opendocument.MathDocument.1\shell\open\command";
+    Value = "\"<progpath>\program\smath.exe\" -o \"%1\"";
+    Styles = ();
+End
+
+RegistryItem gid_Regitem_Openoffice_Mathdocument_1_Shell_Print_Command
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Math_Bin;
+    Subkey = "opendocument.MathDocument.1\shell\print\command";
+    Value = "\"<progpath>\program\soffice.exe\" -p \"%1\"";
+End
+
+RegistryItem gid_Regitem_Openoffice_Mathdocument_1_Shell_Printto_Command
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Math_Bin;
+    Subkey = "opendocument.MathDocument.1\shell\printto\command";
+    Value = "\"<progpath>\program\soffice.exe\" -pt \"%2\" \"%1\"";
+End
+
+// "OpenWith" Windows Registry keys for extensions supported by Math
+
+// .ODF
+RegistryItem gid_Regitem_OpenOffice_ODF_OpenWith_Math
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    Subkey = ".odf\OpenWithProgIDs";
+    ModuleID = gid_Module_Prg_Math_Bin;
+    Name = "opendocument.MathDocument.1";
+    Value = " ";
+End
+
+// .SXM
+RegistryItem gid_Regitem_OpenOffice_SXM_OpenWith_Math
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    Subkey = ".sxm\OpenWithProgIDs";
+    ModuleID = gid_Module_Prg_Math_Bin;
+    Name = "soffice.StarMathDocument.6";
+    Value = " ";
+End
+
+// .MML
+RegistryItem gid_Regitem_OpenOffice_MML_OpenWith_Math
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    Subkey = ".mml\OpenWithProgIDs";
+    ModuleID = gid_Module_Prg_Math_Bin;
+    Name = "soffice.StarMathDocument.6";
+    Value = " ";
+End
+
+RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabilities_FileAssociations_Mml
+    ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
+    Subkey = "Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\Capabilities\FileAssociations";
+    ModuleID = gid_Module_Prg_Math_Bin;
+    Name = ".mml";
+    Value = "soffice.StarMathDocument.6";
+    Styles = ();
+End
+
+RegistryItem gid_Regitem_Software_Microsoft_Windows_Currentversion_Apppaths_Smath_Exe
+    ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
+    Subkey = "Software\Microsoft\Windows\CurrentVersion\App Paths\smath.exe";
+    ModuleID = gid_Module_Prg_Math_Bin;
+    Value = "<progpath>\program\smath.exe";
+End
+
+RegistryItem gid_Regitem_Software_Microsoft_Windows_Currentversion_Apppaths_Smath_Exepath
+    ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
+    Subkey = "Software\Microsoft\Windows\CurrentVersion\App Paths\smath.exe";
+    ModuleID = gid_Module_Prg_Math_Bin;
+    Name = "Path";
+    Value = "<progpath>";
+End
+
+// registering the property handler for the supported file types
+
+REGISTER_PROPERTY_HANDLER_FOR_EXTENSION( odf )
+REGISTER_PROPERTY_HANDLER_FOR_EXTENSION( sxm )

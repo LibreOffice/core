@@ -1,0 +1,117 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_embed_XEmbedObjectFactory_idl__
+#define __com_sun_star_embed_XEmbedObjectFactory_idl__
+
+#include <com/sun/star/uno/XInterface.idl>
+#include <com/sun/star/embed/XStorage.idl>
+#include <com/sun/star/io/IOException.idl>
+#include <com/sun/star/embed/WrongStateException.idl>
+#include <com/sun/star/lang/IllegalArgumentException.idl>
+#include <com/sun/star/beans/PropertyValue.idl>
+
+//============================================================================
+
+ module com {  module sun {  module star {  module embed {
+
+//============================================================================
+/** allows to create and initialize a new embedded object of specified type.
+    <p>
+    This interface provides user with full control over object creation.
+    </p>
+ */
+published interface XEmbedObjectFactory: com::sun::star::uno::XInterface
+{
+    //------------------------------------------------------------------------
+    /** creates a new object and transport parameters for persistent
+        initialization.
+
+        <p>
+        This method can be used to have a full control over persistence
+        initialization of a object.
+        </p>
+
+        <p>
+        If the service implementation does not support
+        <type>XEmbedObjectCreator</type> interface, it must accept the empty
+        aClassID parameter in case of loading from existing entry.
+        </p>
+
+        @param aClassID
+            the class id of the new object
+
+        @param sClassName
+            the class name of the new object
+
+        @param xStorage
+            a parent storage the entry should be created/opened in
+
+        @param sEntName
+            a name for the entry
+
+        @param nEntryConnectionMode
+            a mode in which the object should be initialized from entry
+            can take values from <type>EntryInitModes</type> constant set
+
+        @param aArgs
+            optional parameters for the embedded document persistence
+            initialization, see also
+            <type scope="com::sun::star::document">MediaDescriptor</type>
+
+        @param aObjectArgs
+            optional parameters for the object persistence initialization,
+            see also
+            <type scope="com::sun::star::embed">EmbeddedObjectDescriptor</type>
+
+        @thrown ::com::sun::star::lang::IllegalArgumentException
+            one of arguments is illegal
+
+        @throws com::sun::star::io::IOException
+            in case of io problems during opening\creation
+
+        @throws com::sun::star::uno::Exception
+            in case of other problems
+     */
+    ::com::sun::star::uno::XInterface createInstanceUserInit(
+            [in] sequence< byte > aClassID,
+            [in] string sClassName,
+            [in] ::com::sun::star::embed::XStorage xStorage,
+            [in] string sEntName,
+            [in] long nEntryConnectionMode,
+            [in] sequence< ::com::sun::star::beans::PropertyValue > aArgs,
+            [in] sequence< ::com::sun::star::beans::PropertyValue > aObjectArgs )
+        raises( ::com::sun::star::lang::IllegalArgumentException,
+                ::com::sun::star::io::IOException,
+                ::com::sun::star::uno::Exception );
+};
+
+//============================================================================
+
+}; }; }; };
+
+#endif
+

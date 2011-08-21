@@ -1,0 +1,7 @@
+module ooo { module vba { module word {
+    constants WdRevisionsMode {
+        const long wdBalloonRevisions = 0;
+        const long wdInLineRevisions = 1;
+        const long wdMixedRevisions = 2;
+    };
+}; }; };

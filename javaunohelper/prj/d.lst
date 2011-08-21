@@ -1,0 +1,7 @@
+..\%__SRC%\class\juh.jar %_DEST%\bin\juh.jar
+..\%__SRC%\bin\juh*.dll %_DEST%\bin\juh*.dll
+..\%__SRC%\lib\libjuh*.so %_DEST%\lib\libjuh*.so
+..\%__SRC%\lib\libjuh*.dylib %_DEST%\lib\libjuh*.dylib
+..\%__SRC%\misc\juh.component %_DEST%\xml\juh.component
+
+..\%__SRC%\bin\juh_src.zip %COMMON_DEST%\bin\juh_src.zip

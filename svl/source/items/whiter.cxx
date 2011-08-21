@@ -1,0 +1,123 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_svl.hxx"
+
+#include <svl/whiter.hxx>
+#include <svl/itemset.hxx>
+
+DBG_NAME(SfxWhichIter)
+
+// -----------------------------------------------------------------------
+
+SfxWhichIter::SfxWhichIter( const SfxItemSet& rSet, sal_uInt16 nFromWh, sal_uInt16 nToWh ):
+    pRanges(rSet.GetRanges()),
+    pStart(rSet.GetRanges()),
+    nOfst(0), nFrom(nFromWh), nTo(nToWh)
+{
+    DBG_CTOR(SfxWhichIter, 0);
+    if ( nFrom > 0 )
+        FirstWhich();
+}
+
+// -----------------------------------------------------------------------
+
+SfxWhichIter::~SfxWhichIter()
+{
+    DBG_DTOR(SfxWhichIter, 0);
+}
+
+// -----------------------------------------------------------------------
+
+sal_uInt16 SfxWhichIter::NextWhich()
+{
+    DBG_CHKTHIS(SfxWhichIter, 0);
+    while ( 0 != *pRanges )
+    {
+        const sal_uInt16 nLastWhich = *pRanges + nOfst;
+        ++nOfst;
+        if (*(pRanges+1) == nLastWhich)
+        {
+            pRanges += 2;
+            nOfst = 0;
+        }
+        sal_uInt16 nWhich = *pRanges + nOfst;
+        if ( 0 == nWhich || ( nWhich >= nFrom && nWhich <= nTo ) )
+            return nWhich;
+    }
+    return 0;
+}
+
+// -----------------------------------------------------------------------
+
+sal_uInt16  SfxWhichIter::PrevWhich()
+{
+    DBG_CHKTHIS(SfxWhichIter, 0);
+    while ( pRanges != pStart || 0 != nOfst )
+    {
+        if(nOfst)
+            --nOfst;
+        else {
+            pRanges -= 2;
+            nOfst = *(pRanges+1) - (*pRanges);
+        }
+        sal_uInt16 nWhich = *pRanges + nOfst;
+        if ( nWhich >= nFrom && nWhich <= nTo )
+            return nWhich;
+    }
+    return 0;
+}
+
+// -----------------------------------------------------------------------
+
+sal_uInt16 SfxWhichIter::FirstWhich()
+{
+    DBG_CHKTHIS(SfxWhichIter, 0);
+    pRanges = pStart;
+    nOfst = 0;
+    if ( *pRanges >= nFrom && *pRanges <= nTo )
+        return *pRanges;
+    return NextWhich();
+}
+
+// -----------------------------------------------------------------------
+
+sal_uInt16 SfxWhichIter::LastWhich()
+{
+    DBG_CHKTHIS(SfxWhichIter, 0);
+    while(*pRanges)
+        ++pRanges;
+    nOfst = 0;
+    sal_uInt16 nWhich = *(pRanges-1);
+    if ( nWhich >= nFrom && nWhich <= nTo )
+        return nWhich;
+    return PrevWhich();
+}
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

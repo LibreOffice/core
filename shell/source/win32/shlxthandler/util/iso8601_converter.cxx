@@ -1,0 +1,175 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_shell.hxx"
+#include "internal/iso8601_converter.hxx"
+#include "internal/utilities.hxx"
+
+#include <sstream>
+#include <iomanip>
+
+//-----------------------------------
+/* Converts ISO 8601 conform date/time
+   represenation to the representation
+   conforming to the current locale
+*/
+std::wstring iso8601_date_to_local_date(const std::wstring& isoDate )
+{
+    const std::wstring CONST_SPACE(L" ");
+    ::std::wstring ws8601DateTime(isoDate);
+
+    if ( ws8601DateTime.length() == 19 )
+    {
+        std::string asDateTime = WStringToString( ws8601DateTime );
+        SYSTEMTIME DateTime;
+        DateTime.wYear         = ( unsigned short )strtol( asDateTime.substr( 0, 4 ).c_str(), NULL, 10 );
+        DateTime.wMonth        = ( unsigned short )strtol( asDateTime.substr( 5, 2 ).c_str(), NULL, 10 );
+        DateTime.wDayOfWeek    =  0;
+        DateTime.wDay          = ( unsigned short )strtol( asDateTime.substr( 8, 2 ).c_str(), NULL, 10 );
+        DateTime.wHour         = ( unsigned short )strtol( asDateTime.substr( 11,2 ).c_str(), NULL, 10 );
+        DateTime.wMinute       = ( unsigned short )strtol( asDateTime.substr( 14,2 ).c_str(), NULL, 10 );
+        DateTime.wSecond       = ( unsigned short )strtol( asDateTime.substr( 17,2 ).c_str(), NULL, 10 );
+        DateTime.wMilliseconds =  0;
+
+        //get Date info from structure
+        WCHAR DateBuffer[ MAX_PATH ];
+        int DateSize = GetDateFormatW(
+            LOCALE_SYSTEM_DEFAULT,
+            0,
+            &DateTime,
+            NULL,
+            DateBuffer,
+            MAX_PATH );
+
+        if ( DateSize )
+            ws8601DateTime.assign(DateBuffer);
+        else
+            ws8601DateTime = StringToWString( asDateTime );
+
+        //get Time info from structure
+        WCHAR TimeBuffer[ MAX_PATH ];
+
+        int TimeSize =  GetTimeFormatW(
+            LOCALE_SYSTEM_DEFAULT,
+            0,
+            &DateTime,
+            NULL,
+            TimeBuffer,
+            MAX_PATH );
+
+        if ( TimeSize )
+        {
+            ws8601DateTime.append(L" ");
+            ws8601DateTime.append(TimeBuffer);
+        }
+        else
+            ws8601DateTime = StringToWString( asDateTime );
+    }
+
+    return ws8601DateTime;
+}
+
+//------------------------------------
+/* Converts ISO 8601 conform duration
+   representation to the representation
+   conforming to the current locale
+
+   Expect format PTnHnMnS according to
+   ISO 8601 where n is abitrary number
+   of digits
+*/
+
+std::wstring iso8601_duration_to_local_duration(const std::wstring& iso8601duration)
+{
+    std::wstring days;
+    std::wstring hours;
+    std::wstring minutes;
+    std::wstring seconds;
+
+    std::wstring::const_iterator iter     = iso8601duration.begin();
+    std::wstring::const_iterator iter_end = iso8601duration.end();
+
+    std::wstring num;
+
+    for (/**/; iter != iter_end; ++iter)
+    {
+        if (isdigit(*iter))
+        {
+            num += *iter;
+        }
+        else
+        {
+            if (*iter == L'D' || *iter == L'd')
+                days = num;
+            else if (*iter == L'H' || *iter == L'h')
+                hours = num;
+            else if (*iter == L'M' || *iter == L'm')
+                minutes = num;
+            else if (*iter == L'S' || *iter == L's')
+                seconds = num;
+
+            num.clear();
+        }
+    }
+
+    if (days.length() > 0)
+    {
+        int h = ((_wtoi(days.c_str()) * 24) + _wtoi(hours.c_str()));
+        wchar_t buff[10];
+        _itow(h, buff, 10);
+        hours = buff;
+    }
+
+#if defined(_MSC_VER) //&& defined(_M_X64)
+    std::wostringstream oss;
+    oss << std::setw(2) << std::setfill(wchar_t('0')) << hours   << L":" <<
+           std::setw(2) << std::setfill(wchar_t('0')) << minutes << L":" <<
+           std::setw(2) << std::setfill(wchar_t('0')) << seconds;
+    return oss.str();
+#elif defined( __MINGW32__ )
+#define ADD_AS_PREFILLED( st, out ) \
+    if ( st.length() == 0 ) \
+        out += L"00"; \
+    else if ( st.length() == 1 ) \
+        out += L"0"; \
+    out += st;
+
+    std::wstring result;
+    ADD_AS_PREFILLED( hours, result )
+    result += L":";
+    ADD_AS_PREFILLED( minutes, result )
+    result += L":";
+    ADD_AS_PREFILLED( seconds, result )
+
+    return result;
+#undef ADD_AS_PREFILLED
+#endif
+}
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

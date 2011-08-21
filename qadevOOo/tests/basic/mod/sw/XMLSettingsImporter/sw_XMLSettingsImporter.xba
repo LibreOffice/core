@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="sw_XMLSettingsImporter" script:language="StarBasic">
+
+
+'*************************************************************************
+'
+' DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+' 
+' Copyright 2000, 2010 Oracle and/or its affiliates.
+'
+' OpenOffice.org - a multi-platform office productivity suite
+'
+' This file is part of OpenOffice.org.
+'
+' OpenOffice.org is free software: you can redistribute it and/or modify
+' it under the terms of the GNU Lesser General Public License version 3
+' only, as published by the Free Software Foundation.
+'
+' OpenOffice.org is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU Lesser General Public License version 3 for more details
+' (a copy is included in the LICENSE file that accompanied this code).
+'
+' You should have received a copy of the GNU Lesser General Public License
+' version 3 along with OpenOffice.org.  If not, see
+' <http://www.openoffice.org/license.html>
+' for a copy of the LGPLv3 License.
+'
+'*************************************************************************
+'*************************************************************************
+
+
+
+' Be sure that all variables are dimensioned:
+option explicit
+
+
+' REQUIRED VARIABLES for interface/service tests:
+
+' Required for com.sun.star.xml.sax.XDocumentHandler
+  Global vXMLData As Variant
+
+' Required for procedure CheckImport
+  Global sZoom As String
+
+' Required for  com.sun.star.document.XImporter:
+  Global oSrcDocument As Object
+
+
+Sub CreateObj()
+
+'*************************************************************************
+' COMPONENT: 
+' sw.XMLSettingsImporter
+'*************************************************************************
+On Error Goto ErrHndl
+    oDoc = utils.createDocument("swriter", cObjectName)
+    oObj = createUnoService("com.sun.star.comp.Writer.XMLSettingsImporter")
+
+    oSrcDocument = oDoc
+    oObj.setTargetDocument(oDoc)
+
+    sZoom = "50"
+    vXMLData = Array( _
+            Array("start", "office:document-settings", _
+                "xmlns:office", "CDATA", "http://openoffice.org/2000/office", _
+                "xmlns:config", "CDATA", "http://openoffice.org/2001/config", _
+                "xmlns:xlink", "CDATA", "http://www.w3.org/1999/xlink"), _
+            Array("start", "office:settings"), _
+            Array("start", "config:config-item-set", _
+                "config:name", "CDATA", "view-settings"), _
+            Array("start", "config:config-item-map-indexed", _
+                "config:name", "CDATA", "Views"), _
+            Array("start", "config:config-item-map-entry"), _
+            Array("start", "config:config-item", _
+                "config:name", "CDATA", "ZoomFactor", _
+                "config:type", "CDATA", "short"), _
+            Array("chars", sZoom), _
+            Array("end", "config:config-item"), _
+            Array("start", "config:config-item", _
+                "config:name", "CDATA", "ZoomType", _
+                "config:type", "CDATA", "short"), _
+            Array("chars", "0"), _
+            Array("end", "config:config-item"), _
+            Array("end", "config:config-item-map-entry"), _
+            Array("end", "config:config-item-map-indexed"), _
+            Array("end", "config:config-item-set"), _
+            Array("end", "office:settings"), _
+            Array("end", "office:document-settings"))
+Exit Sub
+ErrHndl:
+    Test.Exception()
+End Sub
+
+Function CheckImport() As Boolean
+    Dim res As Boolean
+    Dim oController, oViewSettings As Object
+    Dim zoom As String
+    out.log("checking of import...")
+    oController = oDoc.getCurrentController()
+    oViewSettings = oController.getViewSettings()    
+    zoom = oViewSettings.getPropertyValue("ZoomValue")
+    out.log("ZoomValue: " + zoom)
+    res = (zoom = sZoom)
+    out.log("checking result: " + res)
+    CheckImport() = res
+End Function
+</script:module>

@@ -1,0 +1,8 @@
+module ooo { module vba { module word {
+    constants WdAraSpeller {
+        const long wdBoth = 3;
+        const long wdFinalYaa = 2;
+        const long wdInitialAlef = 1;
+        const long wdNone = 0;
+    };
+}; }; };

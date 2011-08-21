@@ -1,0 +1,7 @@
+module ooo { module vba { module powerpoint {
+    constants PpWindowState {
+        const long ppWindowMaximized = 3;
+        const long ppWindowMinimized = 2;
+        const long ppWindowNormal = 1;
+    };
+}; }; };

@@ -1,0 +1,190 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef _DBA_DBACCESS_HELPID_HRC_
+#include "dbaccess_helpid.hrc"
+#endif
+#ifndef _DBU_DLG_HRC_
+#include "dbu_dlg.hrc"
+#endif
+#ifndef DBAUI_CONNECTIONPAGE_HRC
+#include "ConnectionPage.hrc"
+#endif
+#ifndef _DBAUI_AUTOCONTROLS_HRC_
+#include "AutoControls.hrc"
+#endif
+
+
+//.........................................................................
+TabPage PAGE_CONNECTION
+{
+    HelpID = "dbaccess:TabPage:PAGE_CONNECTION";
+    SVLook = TRUE ;
+    Pos = MAP_APPFONT ( 0 , 0 ) ;
+    Size = MAP_APPFONT ( PAGE_X , PAGE_Y ) ;
+    Hide = TRUE;
+
+    FixedLine FL_SEPARATOR1
+    {
+        Pos = MAP_APPFONT ( 4 , UNRELATED_CONTROLS ) ;
+        Size = MAP_APPFONT ( PAGE_X - 8 , FIXEDTEXT_HEIGHT ) ;
+        Text[ en-US ] = "General";
+    };
+
+    AUTO_BROWSECONTROLGROUP( 6, UNRELATED_CONTROLS + FIXEDTEXT_HEIGHT + RELATED_CONTROLS, PAGE_X, HID_DSADMIN_URL_GENERAL, HID_DSADMIN_BROWSECONN)
+
+    FixedText FT_NO_ADDITIONAL_SETTINGS
+    {
+        Hide = TRUE;
+        WordBreak = TRUE;
+        Pos = MAP_APPFONT ( 6 , UNRELATED_CONTROLS + FIXEDTEXT_HEIGHT + RELATED_CONTROLS ) ;
+        Size = MAP_APPFONT ( PAGE_X - 12 , 3*FIXEDTEXT_HEIGHT ) ;
+    };
+
+    FixedText FT_HOSTNAME
+    {
+        Hide = TRUE;
+        Pos = MAP_APPFONT ( 6 , UNRELATED_CONTROLS + FIXEDTEXT_HEIGHT + RELATED_CONTROLS ) ;
+        Size = MAP_APPFONT ( PAGE_X - 12 , FIXEDTEXT_HEIGHT ) ;
+        Text[ en-US ] = "~Host name";
+    };
+
+    FixedLine FL_SEPARATOR2
+    {
+        Pos = MAP_APPFONT ( 4 , 3*FIXEDTEXT_HEIGHT + 3*UNRELATED_CONTROLS + RELATED_CONTROLS ) ;
+        Size = MAP_APPFONT ( PAGE_X - 8 , FIXEDTEXT_HEIGHT ) ;
+        Text[ en-US ] = "User authentication";
+    };
+
+    FixedText FT_USERNAME
+    {
+        Pos = MAP_APPFONT ( 6 , 3*UNRELATED_CONTROLS + 4*FIXEDTEXT_HEIGHT + 2*RELATED_CONTROLS ) ;
+        Size = MAP_APPFONT ( 90 - 12 , FIXEDTEXT_HEIGHT ) ;
+        Text [ en-US ] = "~User name" ;
+    };
+
+    Edit ET_USERNAME
+    {
+        HelpID = "dbaccess:Edit:PAGE_CONNECTION:ET_USERNAME";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 90 , 3*UNRELATED_CONTROLS + 4*FIXEDTEXT_HEIGHT + 2*RELATED_CONTROLS -1 ) ;
+        Size = MAP_APPFONT ( 105 , EDIT_HEIGHT ) ;
+        TabStop = TRUE ;
+    };
+
+    CheckBox CB_PASSWORD_REQUIRED
+    {
+        HelpID = "dbaccess:CheckBox:PAGE_CONNECTION:CB_PASSWORD_REQUIRED";
+        Pos = MAP_APPFONT ( 90 , 4*UNRELATED_CONTROLS + 5*FIXEDTEXT_HEIGHT + 2*RELATED_CONTROLS ) ;
+        Size = MAP_APPFONT ( 105 , CHECKBOX_HEIGHT ) ;
+        Text [ en-US ] = "Password required";
+    };
+
+    FixedLine FL_SEPARATOR3
+    {
+        Pos = MAP_APPFONT ( 4 , 5*UNRELATED_CONTROLS + 5*FIXEDTEXT_HEIGHT + 2*RELATED_CONTROLS + CHECKBOX_HEIGHT) ;
+
+        Size = MAP_APPFONT ( PAGE_X - 8 , FIXEDTEXT_HEIGHT ) ;
+        Text[ en-US ] = "JDBC properties";
+    };
+
+    FixedText FT_JDBCDRIVERCLASS
+    {
+        Pos = MAP_APPFONT ( 6 , 5*UNRELATED_CONTROLS + 6*FIXEDTEXT_HEIGHT + 3*RELATED_CONTROLS + CHECKBOX_HEIGHT) ;
+
+        Size = MAP_APPFONT ( 90 - 12 , FIXEDTEXT_HEIGHT ) ;
+        Text [ en-US ] = "~JDBC driver class" ;
+    };
+
+    Edit ET_JDBCDRIVERCLASS
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 90 , 5*UNRELATED_CONTROLS + 6*FIXEDTEXT_HEIGHT + 3*RELATED_CONTROLS + CHECKBOX_HEIGHT -1) ;
+        Size = MAP_APPFONT ( 105 , EDIT_HEIGHT ) ;
+        TabStop = TRUE ;
+        HelpId = HID_DSADMIN_DRIVERCLASS;
+    };
+
+    PushButton PB_TESTDRIVERCLASS
+    {
+        HelpID = "dbaccess:PushButton:PAGE_CONNECTION:PB_TESTDRIVERCLASS";
+        TabStop = TRUE ;
+        Pos = MAP_APPFONT ( PAGE_X  - BUTTON_WIDTH - UNRELATED_CONTROLS , 5*UNRELATED_CONTROLS + 6*FIXEDTEXT_HEIGHT + 3*RELATED_CONTROLS + CHECKBOX_HEIGHT -2 ) ;
+        Size = MAP_APPFONT ( BUTTON_WIDTH , BUTTON_HEIGHT ) ;
+        Text [ en-US ] = "Test Class" ;
+    };
+
+    PushButton PB_TESTCONNECTION
+    {
+        HelpID = "dbaccess:PushButton:PAGE_CONNECTION:PB_TESTCONNECTION";
+        Pos = MAP_APPFONT ( PAGE_X  - 75 - UNRELATED_CONTROLS, PAGE_Y - BUTTON_HEIGHT - UNRELATED_CONTROLS) ;
+        Size = MAP_APPFONT ( 75 , BUTTON_HEIGHT ) ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "Test Connection";
+    };
+
+};
+
+String STR_NO_ADABASE_DATASOURCES
+{
+    Text [ en-US ] = "No Adabas D data sources were found on your system.";
+};
+
+String STR_CONNECTION_TEST
+{
+    Text [ en-US ] = "Connection Test";
+};
+
+String STR_CONNECTION_SUCCESS
+{
+    Text [ en-US ] = "The connection was established successfully.";
+};
+
+String STR_CONNECTION_NO_SUCCESS
+{
+    Text [ en-US ] = "The connection could not be established.";
+};
+
+String STR_JDBCDRIVER_SUCCESS
+{
+    Text [ en-US ] = "The JDBC driver was loaded successfully.";
+};
+
+String STR_JDBCDRIVER_NO_SUCCESS
+{
+    Text [ en-US ] = "The JDBC driver could not be loaded.";
+};
+
+String STR_MSACCESS_FILTERNAME
+{
+    Text [ en-US ] = "MS Access file";
+};
+
+String STR_MSACCESS_2007_FILTERNAME
+{
+    Text [ en-US ] = "MS Access 2007 file";
+};

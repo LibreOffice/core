@@ -1,0 +1,112 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#include "com/sun/star/lang/WrappedTargetException.idl"
+#include "com/sun/star/uno/Exception.idl"
+#include "com/sun/star/uno/RuntimeException.idl"
+#include "com/sun/star/uno/XInterface.idl"
+
+module test { module registrytdprovider {
+
+published enum Enum1 { E1 };
+
+enum Enum2 { E1 };
+
+published struct Struct1 { long s1; };
+
+struct Struct2 { Struct1 s1; };
+
+published struct Struct3<T, U> { U s2; };
+
+struct Struct3a<T, U> { U s2; };
+
+struct Struct4: Struct2 { Struct3< Struct2, Struct3< boolean, any > > s2; };
+
+published exception Exception1: com::sun::star::uno::Exception {};
+
+exception Exception2: com::sun::star::uno::Exception {};
+
+published interface XBase {};
+
+published typedef XBase Typedef1;
+
+typedef Typedef1 Typedef2;
+
+published interface XTest1 {
+    [optional] interface XBase;
+
+    void f1([out] any p) raises (com::sun::star::uno::RuntimeException);
+
+    [oneway] void f2();
+
+    [attribute, bound] short a1;
+
+    [attribute] long a2 {
+        get raises
+            (com::sun::star::lang::WrappedTargetException,
+             com::sun::star::uno::RuntimeException);
+        set raises
+            (com::sun::star::uno::Exception,
+             com::sun::star::lang::WrappedTargetException);
+    };
+
+    [attribute, readonly, bound] hyper a3 {
+        get raises (com::sun::star::lang::WrappedTargetException);
+    };
+};
+
+interface XTest2: Typedef2 {};
+
+published service Service1: XTest1 {
+    c1();
+
+    c2([in] any... p) raises (com::sun::star::uno::RuntimeException);
+};
+
+service Service2 {
+    [optional] interface XBase;
+
+    interface XTest1;
+};
+
+service Service3: Typedef2 {};
+
+singleton Singleton1: XTest1;
+
+published singleton Singleton2 { service Service1; };
+
+singleton Singleton3: Typedef2;
+
+published const long Const1 = 0;
+
+const long Const2 = 0;
+
+published constants Consts1 { const long C = 0; };
+
+constants Consts2 { const long C = 0; };
+
+}; };

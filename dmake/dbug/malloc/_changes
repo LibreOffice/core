@@ -1,0 +1,9 @@
+I made the following changes to the malloc package as found in
+comp.sources.unix:
+
+	1. created this file _changes.
+	2. moved README to _readme (facilitates transfer to DOS and back to
+	   unix)
+	3. renamed testmalloc.c, malloc_chk.c, and malloc_chn.c to testmlc.c,
+	   mlc_chk.c, and mlc_chn.c respectively.  Again DOS has trouble with
+	   long basenames in filenames.

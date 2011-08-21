@@ -1,0 +1,555 @@
+#!/bin/sh
+
+. ./*[Ee]nv.[Ss]et.sh
+
+BUILDDIR=`pwd`
+FILELISTSDIR="$BUILDDIR/file-lists"
+
+# remove installed file even from the file list
+# Params: file_list file_to_remove
+remove_file()
+{
+    rm -f "$DESTDIR/$2"
+    perl -pi -e "s|^$2$||" "$1"
+}
+
+# move one file from one list of files to a second one
+# Params: target_file_list source_file_list file_to_move
+mv_file_between_flists()
+{
+    if grep "^$3\$" $2 >/dev/null 2>&1 ; then
+        # \$3 can be regular expression
+        grep "^$3\$" $2 >>$1
+        perl -pi -e "s|^$3$||" $2
+    fi
+}
+# add the directories from the source list of files to the target list of
+# file which are used in the target list of files but are missing there
+# Params: target_file_list source_file_list
+add_used_directories()
+{
+    sort -u -r $2 | sed -n "s|^%dir \(.*\)\$|s%^\\\\(\1\\\\).*%\\\\1%p|p" >$2.pattern
+    sed -n -f $2.pattern $1 | sort -u | sed "s|^|%dir |" >>$1
+    rm $2.pattern
+    sort -u $1 >$1.unique
+    mv $1.unique $1
+}
+
+# remove a duplicity between two filelist
+# Params: filelist_with_original filelist_with_duplicity duplicit_path
+remove_duplicity_from_flists()
+{
+    if grep "$3" "$1" >/dev/null 2>&1 && \
+        grep "$3" "$2" >/dev/null 2>&1 ; then
+        perl -pi -e "s|^$3$||" $2
+    fi
+}
+
+# merges one file list into another one
+# Params: source_filelist dest_filelist replace_dest
+merge_flists()
+{
+    if test -f "$1" ; then
+        cat "$1" >>"$2"
+        sort -u "$2" >"$2".sorted
+        mv "$2".sorted "$2"
+    fi
+}
+
+if ! test -f $DESTDIR/gid_Module_Root; then
+    echo "Error: Failed to generate package file lists";
+    echo "       Have you defined DESTDIR?"
+    exit 1;
+fi
+
+
+rm -rf "$FILELISTSDIR"
+mkdir -p "$FILELISTSDIR"
+
+cd $DESTDIR
+
+if test "z$OOO_VENDOR" != "zDebian" ; then
+
+    echo "Generating package file lists for $OOO_VENDOR..."
+
+    rm -f common_list.txt
+    for module in gid_Module_Root gid_Module_Root_Brand \
+        gid_Module_Root_Files_Images \
+        gid_Module_Root_Files_[0-9] \
+        gid_Module_Root_Hack \
+        gid_Module_Oo_Linguistic \
+        gid_Module_Root_Ure_Hidden ; do
+        merge_flists $module $FILELISTSDIR/common_list.txt
+    done
+
+    if test "$SPLIT_APP_MODULES" = "YES" ; then
+        merge_flists gid_Module_Prg_Base_Bin      $FILELISTSDIR/base_list.txt
+        merge_flists gid_Module_Prg_Calc_Bin      $FILELISTSDIR/calc_list.txt
+        merge_flists gid_Module_Prg_Draw_Bin      $FILELISTSDIR/draw_list.txt
+        merge_flists gid_Module_Prg_Math_Bin      $FILELISTSDIR/math_list.txt
+        merge_flists gid_Module_Prg_Impress_Bin   $FILELISTSDIR/impress_list.txt
+        merge_flists gid_Module_Prg_Wrt_Bin       $FILELISTSDIR/writer_list.txt
+        merge_flists gid_Module_Brand_Prg_Base    $FILELISTSDIR/base_list.txt
+        merge_flists gid_Module_Brand_Prg_Calc    $FILELISTSDIR/calc_list.txt
+        merge_flists gid_Module_Brand_Prg_Draw    $FILELISTSDIR/draw_list.txt
+        merge_flists gid_Module_Brand_Prg_Math    $FILELISTSDIR/math_list.txt
+        merge_flists gid_Module_Brand_Prg_Impress $FILELISTSDIR/impress_list.txt
+        merge_flists gid_Module_Brand_Prg_Wrt     $FILELISTSDIR/writer_list.txt
+        # FIXME: small; low dependencies; why optional module?
+        merge_flists gid_Module_Optional_OGLTrans $FILELISTSDIR/impress_list.txt
+    else
+        merge_flists gid_Module_Prg_Base_Bin      $FILELISTSDIR/common_list.txt
+        merge_flists gid_Module_Prg_Calc_Bin      $FILELISTSDIR/common_list.txt
+        merge_flists gid_Module_Prg_Draw_Bin      $FILELISTSDIR/common_list.txt
+        merge_flists gid_Module_Prg_Math_Bin      $FILELISTSDIR/common_list.txt
+        merge_flists gid_Module_Prg_Impress_Bin   $FILELISTSDIR/common_list.txt
+        merge_flists gid_Module_Prg_Wrt_Bin       $FILELISTSDIR/common_list.txt
+        merge_flists gid_Module_Brand_Prg_Base    $FILELISTSDIR/common_list.txt
+        merge_flists gid_Module_Brand_Prg_Calc    $FILELISTSDIR/common_list.txt
+        merge_flists gid_Module_Brand_Prg_Draw    $FILELISTSDIR/common_list.txt
+        merge_flists gid_Module_Brand_Prg_Math    $FILELISTSDIR/common_list.txt
+        merge_flists gid_Module_Brand_Prg_Impress $FILELISTSDIR/common_list.txt
+        merge_flists gid_Module_Brand_Prg_Wrt     $FILELISTSDIR/common_list.txt
+        # FIXME: small; low dependencies; why optional module?
+        merge_flists gid_Module_Optional_OGLTrans $FILELISTSDIR/common_list.txt
+    fi
+
+    if test "$SPLIT_OPT_FEATURES" = "YES" ; then
+        if test "z$OOO_VENDOR" = "zMandriva" ; then
+            merge_flists gid_Module_Optional_Binfilter         $FILELISTSDIR/filter-binfilter_list.txt
+            merge_flists gid_Module_Langpack_Binfilter_en_US   $FILELISTSDIR/filter-binfilter_list.txt
+            merge_flists gid_Module_Optional_Grfflt            $FILELISTSDIR/draw_list.txt
+            merge_flists gid_Module_Optional_Headless          $FILELISTSDIR/common_list.txt
+            merge_flists gid_Module_Optional_Javafilter        $FILELISTSDIR/common_list.txt
+            merge_flists gid_Module_Optional_Pymailmerge       $FILELISTSDIR/pyuno_list.txt
+            merge_flists gid_Module_Optional_Pyuno             $FILELISTSDIR/pyuno_list.txt
+            merge_flists gid_Module_Optional_Testtool          $FILELISTSDIR/testtool_list.txt
+            merge_flists gid_Module_Optional_Xsltfiltersamples $FILELISTSDIR/common_list.txt
+        else
+            merge_flists gid_Module_Optional_Binfilter         $FILELISTSDIR/filters_list.txt
+            merge_flists gid_Module_Optional_Grfflt            $FILELISTSDIR/common_list.txt
+            merge_flists gid_Module_Optional_Headless          $FILELISTSDIR/common_list.txt
+            merge_flists gid_Module_Optional_Javafilter        $FILELISTSDIR/filters_list.txt
+            merge_flists gid_Module_Optional_Pymailmerge       $FILELISTSDIR/mailmerge_list.txt
+            merge_flists gid_Module_Optional_Pyuno             $FILELISTSDIR/pyuno_list.txt
+            merge_flists gid_Module_Optional_Testtool          $FILELISTSDIR/testtool_list.txt
+            merge_flists gid_Module_Optional_Xsltfiltersamples $FILELISTSDIR/filters_list.txt
+        fi
+    else
+        merge_flists gid_Module_Optional_Binfilter         $FILELISTSDIR/common_list.txt
+        merge_flists gid_Module_Langpack_Binfilter         $FILELISTSDIR/common_list.txt
+        merge_flists gid_Module_Optional_Grfflt            $FILELISTSDIR/common_list.txt
+        merge_flists gid_Module_Optional_Headless          $FILELISTSDIR/common_list.txt
+        merge_flists gid_Module_Optional_Javafilter        $FILELISTSDIR/common_list.txt
+        merge_flists gid_Module_Optional_Pymailmerge       $FILELISTSDIR/common_list.txt
+        merge_flists gid_Module_Optional_Pyuno             $FILELISTSDIR/common_list.txt
+        merge_flists gid_Module_Optional_Testtool          $FILELISTSDIR/common_list.txt
+        merge_flists gid_Module_Optional_Xsltfiltersamples $FILELISTSDIR/common_list.txt
+    fi
+
+    # lang packs
+    for lang in `echo $WITH_LANG_LIST | sed -e s/-/_/g`; do
+        lang_lists=
+        if test "$OOO_VENDOR" = "Mandriva" -o \( "$OOO_VENDOR" = "Novell, Inc." -a "$SPLIT_APP_MODULES" = "YES" \) ; then
+            test -f gid_Module_Langpack_Basis_$lang     && lang_lists="$lang_lists gid_Module_Langpack_Basis_$lang" || :
+            test -f gid_Module_Langpack_Brand_$lang     && lang_lists="$lang_lists gid_Module_Langpack_Brand_$lang" || :
+            test -f gid_Module_Langpack_Resource_$lang  && lang_lists="$lang_lists gid_Module_Langpack_Resource_$lang" || :
+            test -f gid_Module_Langpack_Impress_$lang   && lang_lists="$lang_lists gid_Module_Langpack_Impress_$lang" || :
+            test -f gid_Module_Langpack_Draw_$lang      && lang_lists="$lang_lists gid_Module_Langpack_Draw_$lang" || :
+            test -f gid_Module_Langpack_Math_$lang      && lang_lists="$lang_lists gid_Module_Langpack_Math_$lang" || :
+            test -f gid_Module_Langpack_Calc_$lang      && lang_lists="$lang_lists gid_Module_Langpack_Calc_$lang" || :
+            test -f gid_Module_Langpack_Base_$lang      && lang_lists="$lang_lists gid_Module_Langpack_Base_$lang" || :
+            test -f gid_Module_Langpack_Writer_$lang    && lang_lists="$lang_lists gid_Module_Langpack_Writer_$lang" || :
+            test -f gid_Module_Langpack_Binfilter_$lang && lang_lists="$lang_lists gid_Module_Langpack_Binfilter_$lang" || :
+            # Place helps on dedicated packages.
+            test -f gid_Module_Helppack_Help_$lang      && sort -u gid_Module_Helppack_Help_$lang > $FILELISTSDIR/help_${lang}_list.txt || :
+        else
+            test -f gid_Module_Langpack_Basis_$lang     && lang_lists="$lang_lists gid_Module_Langpack_Basis_$lang" || :
+            test -f gid_Module_Langpack_Brand_$lang     && lang_lists="$lang_lists gid_Module_Langpack_Brand_$lang" || :
+            test -f gid_Module_Langpack_Resource_$lang  && lang_lists="$lang_lists gid_Module_Langpack_Resource_$lang" || :
+            test -f gid_Module_Langpack_Impress_$lang   && lang_lists="$lang_lists gid_Module_Langpack_Impress_$lang" || :
+            test -f gid_Module_Langpack_Draw_$lang      && lang_lists="$lang_lists gid_Module_Langpack_Draw_$lang" || :
+            test -f gid_Module_Langpack_Math_$lang      && lang_lists="$lang_lists gid_Module_Langpack_Math_$lang" || :
+            test -f gid_Module_Langpack_Calc_$lang      && lang_lists="$lang_lists gid_Module_Langpack_Calc_$lang" || :
+            test -f gid_Module_Langpack_Base_$lang      && lang_lists="$lang_lists gid_Module_Langpack_Base_$lang" || :
+            test -f gid_Module_Langpack_Writer_$lang    && lang_lists="$lang_lists gid_Module_Langpack_Writer_$lang" || :
+            test -f gid_Module_Langpack_Binfilter_$lang && lang_lists="$lang_lists gid_Module_Langpack_Binfilter_$lang" || :
+            test -f gid_Module_Helppack_Help_$lang      && lang_lists="$lang_lists gid_Module_Helppack_Help_$lang" || :
+        fi
+        if test -n "$lang_lists" ; then
+            # all files are installed below $INSTALLDIR/basis; we want to own also $INSTALLDIR
+            echo "%dir $INSTALLDIR" >$FILELISTSDIR/lang_${lang}_list.txt
+            cat $lang_lists | sort -u >>$FILELISTSDIR/lang_${lang}_list.txt
+        fi
+        # some help files are in _Langpack_{Writer,Impress,...}_<lang>
+        # move them from -l10n to -help
+        if test "$OOO_VENDOR" = "Mandriva" -o \( "$OOO_VENDOR" = "Novell, Inc." -a "$SPLIT_APP_MODULES" = "YES" \) ; then
+            for lang in `echo $WITH_LANG_LIST | sed -e s/-/_/g`; do
+                test -f $FILELISTSDIR/help_${lang}_list.txt || continue;
+                mv_file_between_flists $FILELISTSDIR/help_${lang}_list.txt $FILELISTSDIR/lang_${lang}_list.txt $INSTALLDIR/basis$PRODUCTVERSION/help/.*
+                add_used_directories $FILELISTSDIR/help_${lang}_list.txt $FILELISTSDIR/lang_${lang}_list.txt
+            done
+        fi
+    done
+
+    if test -f $FILELISTSDIR/lang_en_US_list.txt -a "$OOO_VENDOR" = "Novell, Inc." -a "$SPLIT_APP_MODULES" != "YES" ; then
+        cat $FILELISTSDIR/lang_en_US_list.txt >>$FILELISTSDIR/common_list.txt
+        rm $FILELISTSDIR/lang_en_US_list.txt
+    fi
+
+    if test -f gid_Module_Root_SDK ; then
+        cp gid_Module_Root_SDK $FILELISTSDIR/sdk_list.txt
+    fi
+
+    cd $FILELISTSDIR
+
+    # kde subpackage
+    test -f $DESTDIR/gid_Module_Optional_Kde && cp $DESTDIR/gid_Module_Optional_Kde kde_list.txt || :
+    mv_file_between_flists kde_list.txt common_list.txt $INSTALLDIR/program/kdefilepicker
+    mv_file_between_flists kde_list.txt common_list.txt $INSTALLDIR/basis$PRODUCTVERSION/program/fps_kde.uno.so
+    mv_file_between_flists kde_list.txt common_list.txt $INSTALLDIR/basis$PRODUCTVERSION/program/libvclplug_kdel..so
+    mv_file_between_flists kde_list.txt common_list.txt $INSTALLDIR/basis$PRODUCTVERSION/program/libkabdrv1.so
+    add_used_directories kde_list.txt common_list.txt
+
+    # create kde4 subpackage
+    mv_file_between_flists kde4_list.txt kde_list.txt    $INSTALLDIR/basis$PRODUCTVERSION/program/kde4be1.uno.so
+    mv_file_between_flists kde4_list.txt common_list.txt $INSTALLDIR/basis$PRODUCTVERSION/program/libvclplug_kde4l..so
+    mv_file_between_flists kde4_list.txt common_list.txt $INSTALLDIR/basis$PRODUCTVERSION/program/fps_kde4.uno.so
+    add_used_directories kde4_list.txt common_list.txt
+
+    # gnome subpackage
+    test -f $DESTDIR/gid_Module_Optional_Gnome && cp $DESTDIR/gid_Module_Optional_Gnome gnome_list.txt || :
+    mv_file_between_flists gnome_list.txt common_list.txt $INSTALLDIR/basis$PRODUCTVERSION/program/libevoab2.so
+    mv_file_between_flists gnome_list.txt common_list.txt $INSTALLDIR/basis$PRODUCTVERSION/program/fps_gnome.uno.so
+    mv_file_between_flists gnome_list.txt common_list.txt $INSTALLDIR/basis$PRODUCTVERSION/program/libvclplug_gtk[0-9]*l..so
+    mv_file_between_flists common_list.txt gnome_list.txt $INSTALLDIR/basis$PRODUCTVERSION/program/ucpgvfs1.uno.so
+    add_used_directories gnome_list.txt common_list.txt
+
+    # mono subpackage
+    mv_file_between_flists mono_list.txt common_list.txt $INSTALLDIR/basis$PRODUCTVERSION/program/cli_.*.dll
+    mv_file_between_flists mono_list.txt common_list.txt $INSTALLDIR/basis$PRODUCTVERSION/program/cli_.*.dll.config
+    mv_file_between_flists mono_list.txt common_list.txt $INSTALLDIR/basis$PRODUCTVERSION/program/policy.*.cli_.*.dll
+    mv_file_between_flists mono_list.txt common_list.txt $INSTALLDIR/ure/lib/cli_.*.dll
+    mv_file_between_flists mono_list.txt common_list.txt $INSTALLDIR/ure/lib/cli_.*.dll.config
+    mv_file_between_flists mono_list.txt common_list.txt $INSTALLDIR/ure/lib/policy.*.cli_.*.dll
+    mv_file_between_flists mono_list.txt common_list.txt $INSTALLDIR/ure/lib/libcli_.*.so
+    add_used_directories mono_list.txt common_list.txt
+    # add the files from GAC if it was installed
+    test -f mono_gac && cat mono_gac >>mono_list.txt
+
+    # mailmerge
+    if test "$SPLIT_OPT_FEATURES" = "YES" ; then
+        if test "z$OOO_VENDOR" = "zMandriva" ; then
+            flist=pyuno_list.txt
+        else
+            flist=mailmerge_list.txt
+        fi
+        mv_file_between_flists $flist common_list.txt $INSTALLDIR/basis$PRODUCTVERSION/program/mailmerge.py
+        add_used_directories $flist common_list.txt
+    fi
+
+    if test "z$OOO_VENDOR" = "zNovell" ; then
+        # officebean subpackage
+        mv_file_between_flists officebean_list.txt common_list.txt $INSTALLDIR/basis$PRODUCTVERSION/program/classes/officebean.jar
+        mv_file_between_flists officebean_list.txt common_list.txt $INSTALLDIR/basis$PRODUCTVERSION/program/libofficebean.so
+        add_used_directories officebean_list.txt common_list.txt
+    fi
+
+    if test -f sdk_list.txt ; then
+        # in this case we move all entries including directories
+        mv_file_between_flists sdk_doc_list.txt sdk_list.txt "%dir $DOCDIRBASE/sdk/docs.*"
+        mv_file_between_flists sdk_doc_list.txt sdk_list.txt "$DOCDIRBASE/sdk/docs.*"
+        mv_file_between_flists sdk_doc_list.txt sdk_list.txt "$DOCDIRBASE/sdk/examples"
+        mv_file_between_flists sdk_doc_list.txt sdk_list.txt "$DOCDIRBASE/sdk/index.html"
+        mv_file_between_flists sdk_doc_list.txt sdk_list.txt "%dir $INSTALLDIR/basis$PRODUCTVERSION/sdk/examples.*"
+        mv_file_between_flists sdk_doc_list.txt sdk_list.txt "$INSTALLDIR/basis$PRODUCTVERSION/sdk/docs"
+        mv_file_between_flists sdk_doc_list.txt sdk_list.txt "$INSTALLDIR/basis$PRODUCTVERSION/sdk/examples.*"
+        mv_file_between_flists sdk_doc_list.txt sdk_list.txt "$INSTALLDIR/basis$PRODUCTVERSION/sdk/index.html"
+        add_used_directories sdk_doc_list.txt sdk_list.txt
+    fi
+
+    if test "$OOO_VENDOR" = "Novell, Inc." -a "$SPLIT_APP_MODULES" = "YES" ; then
+        # move the prebuilt icons into a hacky temporary package
+        # we want to repack them into a noarch package as soon as possible
+        # without the build dependency on the huge devel package
+        mv_file_between_flists icon_themes_prebuilt.txt common_list.txt $INSTALLDIR/basis$PRODUCTVERSION/share/config/images_classic8.zip
+        mv_file_between_flists icon_themes_prebuilt.txt common_list.txt $INSTALLDIR/basis$PRODUCTVERSION/share/config/images_crystal.zip
+        mv_file_between_flists icon_themes_prebuilt.txt common_list.txt $INSTALLDIR/basis$PRODUCTVERSION/share/config/images_hicontrast.zip
+        mv_file_between_flists icon_themes_prebuilt.txt common_list.txt $INSTALLDIR/basis$PRODUCTVERSION/share/config/images_industrial.zip
+        mv_file_between_flists icon_themes_prebuilt.txt common_list.txt $INSTALLDIR/basis$PRODUCTVERSION/share/config/images_tango.zip
+        mv_file_between_flists icon_themes_prebuilt.txt common_list.txt $INSTALLDIR/basis$PRODUCTVERSION/share/config/images.zip
+    fi
+
+    # Mandriva packaging
+    if test "$OOO_VENDOR" = "Mandriva"; then
+        # Not used
+        remove_file common_list.txt $INSTALLDIR/share/gallery/htmltheme.orig
+        remove_file common_list.txt $INSTALLDIR/share/dict/ooo/dictionary.lst
+
+        # And these are in -draw package
+        mv_file_between_flists draw_list.txt common_list.txt $INSTALLDIR/basis$PRODUCTVERSION/share/registry/modules/org/openoffice/TypeDetection/Filter/fcfg_drawgraphics_filters.xcu
+        mv_file_between_flists draw_list.txt common_list.txt $INSTALLDIR/basis$PRODUCTVERSION/share/registry/modules/org/openoffice/TypeDetection/Filter/fcfg_drawgraphics_types.xcu
+
+        # And these are in -impress package
+        mv_file_between_flists impress_list.txt common_list.txt $INSTALLDIR/basis$PRODUCTVERSION/share/registry/modules/org/openoffice/TypeDetection/Filter/fcfg_impressgraphics_filters.xcu
+        mv_file_between_flists impress_list.txt common_list.txt $INSTALLDIR/basis$PRODUCTVERSION/share/registry/modules/org/openoffice/TypeDetection/Types/fcfg_impressgraphics_types.xcu
+
+        # Split out the gallery
+        mv_file_between_flists gallery_list.txt common_list.txt "$INSTALLDIR/basis$PRODUCTVERSION/share/gallery.*"
+        test -r galleries.txt && cat galleries.txt >> gallery_list.txt
+
+        # Split out dtd-officedocument1.0
+        mv_file_between_flists dtd_list.txt common_list.txt "$INSTALLDIR/share/dtd/officedocument.*"
+
+        # Split out java stuff
+        mv_file_between_flists java_common_list.txt common_list.txt $INSTALLDIR/basis$PRODUCTVERSION/program/JREProperties.class
+        mv_file_between_flists java_common_list.txt common_list.txt "$INSTALLDIR/basis$PRODUCTVERSION/program/classes.*"
+        mv_file_between_flists java_common_list.txt common_list.txt $INSTALLDIR/basis$PRODUCTVERSION/program/libofficebean.so
+        mv_file_between_flists java_common_list.txt common_list.txt "$INSTALLDIR/basis$PRODUCTVERSION/share/Scripts/java.*"
+        mv_file_between_flists java_common_list.txt filter-binfilter_list.txt $INSTALLDIR/basis$PRODUCTVERSION/program/classes/aportisdoc.jar
+        mv_file_between_flists java_common_list.txt filter-binfilter_list.txt $INSTALLDIR/basis$PRODUCTVERSION/program/classes/pocketword.jar
+        mv_file_between_flists java_common_list.txt filter-binfilter_list.txt $INSTALLDIR/basis$PRODUCTVERSION/program/classes/pexcel.jar
+        mv_file_between_flists java_common_list.txt writer_list.txt $INSTALLDIR/basis$PRODUCTVERSION/program/classes/writer2latex.jar
+
+        # Move arch-dependent/dup files from common to core
+        for f in \
+            ".*\.so" \
+            ".*\.so\..*" \
+            "program/.*\.rdb" \
+            program/configimport.bin \
+            program/javaldx \
+            program/msfontextract \
+            program/nsplugin \
+            program/oosplash.bin \
+            program/pagein \
+            program/pagein-calc \
+            program/pagein-common \
+            program/pagein-draw \
+            program/pagein-impress \
+            program/pagein-writer \
+            program/pkgchk.bin \
+            program/pluginapp.bin \
+            program/setofficelang.bin \
+            program/soffice.bin \
+            program/spadmin.bin \
+            program/uno.bin \
+            program/unopkg.bin \
+            program/uri-encode
+        do
+            mv_file_between_flists core_list.txt common_list.txt "$INSTALLDIR/basis$PRODUCTVERSION/$f"
+        done
+
+        # Put gtk/gnome stuff into gnome package
+        mv_file_between_flists gnome_list.txt core_list.txt $INSTALLDIR/basis$PRODUCTVERSION/program/gnome-open-url.bin
+        mv_file_between_flists gnome_list.txt core_list.txt $INSTALLDIR/basis$PRODUCTVERSION/program/fps_gnome.uno.so
+        mv_file_between_flists gnome_list.txt core_list.txt $INSTALLDIR/basis$PRODUCTVERSION/program/ucpgvfs1.uno.so
+        mv_file_between_flists gnome_list.txt core_list.txt $INSTALLDIR/basis$PRODUCTVERSION/program/libeggtray680li.so
+
+        # Ship ooqstart for gnome in gnome package
+        mv_file_between_flists gnome_list.txt core_list.txt "$INSTALLDIR/program/libqstart_gtk680.*"
+
+        # themes are included in other packages
+        # don't use remove_file as we don't want them removed from the buildroot.
+        mv_file_between_flists /dev/null common_list.txt $INSTALLDIR/basis$PRODUCTVERSION/share/config/images_crystal.zip
+        mv_file_between_flists /dev/null common_list.txt $INSTALLDIR/basis$PRODUCTVERSION/share/config/images_hicontrast.zip
+        mv_file_between_flists /dev/null common_list.txt $INSTALLDIR/basis$PRODUCTVERSION/share/config/images_industrial.zip
+        mv_file_between_flists /dev/null common_list.txt $INSTALLDIR/basis$PRODUCTVERSION/share/config/images_tango.zip
+        mv_file_between_flists /dev/null common_list.txt $INSTALLDIR/basis$PRODUCTVERSION/share/config/images.zip
+    fi
+
+    # remove known duplicities to do not have files packaged in two packages
+    # the Bulgarian fixes can be removed after the issue #54110 is fixed
+    remove_duplicity_from_flists common_list.txt lang_bg_list.txt $INSTALLDIR/basis$PRODUCTVERSION/presets/config/arrowhd.soe
+    remove_duplicity_from_flists common_list.txt lang_bg_list.txt $INSTALLDIR/basis$PRODUCTVERSION/presets/config/classic.sog
+    remove_duplicity_from_flists common_list.txt lang_bg_list.txt $INSTALLDIR/basis$PRODUCTVERSION/presets/config/hatching.soh
+    remove_duplicity_from_flists common_list.txt lang_bg_list.txt $INSTALLDIR/basis$PRODUCTVERSION/presets/config/modern.sog
+    remove_duplicity_from_flists common_list.txt lang_bg_list.txt $INSTALLDIR/basis$PRODUCTVERSION/presets/config/palette.soc
+    remove_duplicity_from_flists common_list.txt lang_bg_list.txt $INSTALLDIR/basis$PRODUCTVERSION/presets/config/styles.sod
+    # the British fixes can be removed after the issue #54113 is fixed
+    remove_duplicity_from_flists common_list.txt lang_en-GB_list.txt $INSTALLDIR/basis$PRODUCTVERSION/presets/config/standard.sog
+
+else
+
+    echo "Creating package directories..."
+
+    test -d pkg && rm -r pkg || :
+
+    # Create package tree (needed by Debian's dpkg)
+    # create_package_directory <list_file> <directory_name>
+    create_package_directory()
+    {
+        listfile=$1
+        directory="$2"
+        perl -nl \
+            -e " if(/^%dir (.*)/)
+                    {system('mkdir', '-p', '-m', '755', \"$directory\".\$1);}
+                else
+                    {rename('./'.\$_, \"$directory\".\$_);}
+                " \
+            $listfile
+    }
+
+    create_package_directory gid_Module_Root_Ure_Hidden        pkg/ure
+
+    create_package_directory gid_Module_Root                        pkg/libreoffice-common
+    create_package_directory gid_Module_Root_Brand                  pkg/libreoffice-common
+    create_package_directory gid_Module_Root_Files_Images           pkg/libreoffice-common
+    create_package_directory gid_Module_Oo_Linguistic               pkg/libreoffice-common
+    create_package_directory gid_Module_Optional_Xsltfiltersamples  pkg/libreoffice-common
+    create_package_directory gid_Module_Optional_Javafilter         pkg/libreoffice-common
+    if [ -f gid_Module_Optional_Binfilter ]; then
+        create_package_directory gid_Module_Optional_Binfilter      pkg/libreoffice-filter-binfilter
+    fi
+    create_package_directory gid_Module_Optional_Grfflt             pkg/libreoffice-draw
+    create_package_directory gid_Module_Prg_Calc_Bin                pkg/libreoffice-calc
+    create_package_directory gid_Module_Prg_Math_Bin                pkg/libreoffice-math
+    create_package_directory gid_Module_Prg_Draw_Bin                pkg/libreoffice-draw
+    create_package_directory gid_Module_Prg_Wrt_Bin                 pkg/libreoffice-writer
+    create_package_directory gid_Module_Prg_Impress_Bin             pkg/libreoffice-impress
+    create_package_directory gid_Module_Prg_Base_Bin                pkg/libreoffice-base
+    create_package_directory gid_Module_Brand_Prg_Calc              pkg/libreoffice-calc
+    create_package_directory gid_Module_Brand_Prg_Math              pkg/libreoffice-math
+    create_package_directory gid_Module_Brand_Prg_Draw              pkg/libreoffice-draw
+    create_package_directory gid_Module_Brand_Prg_Wrt               pkg/libreoffice-writer
+    create_package_directory gid_Module_Brand_Prg_Impress           pkg/libreoffice-impress
+    create_package_directory gid_Module_Brand_Prg_Base              pkg/libreoffice-base
+    create_package_directory gid_Module_Optional_Pyuno              pkg/python-uno
+    create_package_directory gid_Module_Optional_Gnome              pkg/libreoffice-gnome
+    create_package_directory gid_Module_Optional_Kde                pkg/libreoffice-kde
+
+    create_package_directory gid_Module_Root_Files_2                pkg/libreoffice-common
+    create_package_directory gid_Module_Root_Files_3                pkg/libreoffice-common
+    create_package_directory gid_Module_Root_Files_4                pkg/libreoffice-common
+    create_package_directory gid_Module_Root_Files_5                pkg/libreoffice-common
+    create_package_directory gid_Module_Root_Files_6                pkg/libreoffice-common
+    create_package_directory gid_Module_Root_Files_7                pkg/libreoffice-common
+    create_package_directory gid_Module_Optional_Testtool           pkg/libreoffice-qa-tools
+    if [ -e gid_Module_Optional_Pymailmerge ]; then
+        create_package_directory gid_Module_Optional_Pymailmerge    pkg/libreoffice-emailmerge
+    else # post m26
+        mkdir -p pkg/libreoffice-emailmerge/$INSTALLDIR/basis$PRODUCTVERSION/program
+        mv pkg/libreoffice-common/$INSTALLDIR/basis$PRODUCTVERSION/program/mailmerge.py \
+            pkg/libreoffice-emailmerge/$INSTALLDIR/basis$PRODUCTVERSION/program/mailmerge.py
+    fi
+    create_package_directory gid_Module_Optional_OGLTrans           pkg/libreoffice-ogltrans
+
+    create_package_directory gid_Module_Root_SDK                    pkg/libreoffice-dev
+
+    for l in `echo $WITH_LANG_LIST`; do
+        for p in Impress Draw Math Calc Base Writer; do
+            create_package_directory  gid_Module_Langpack_${p}_`echo $l | sed -e s/-/_/g` pkg/libreoffice-l10n-$l
+        done
+        create_package_directory gid_Module_Langpack_Basis_`echo $l | sed -e s/-/_/g`     pkg/libreoffice-l10n-$l
+        create_package_directory gid_Module_Langpack_Brand_`echo $l | sed -e s/-/_/g`     pkg/libreoffice-l10n-$l
+        create_package_directory gid_Module_Langpack_Resource_`echo $l | sed -e s/-/_/g`  pkg/libreoffice-l10n-$l
+        create_package_directory gid_Module_Helppack_Help_`echo $l | sed -e s/-/_/g`      pkg/libreoffice-help-$l
+        if [ -f gid_Module_Optional_Binfilter ]; then
+            if [ "$l" = "en-US" ]; then
+                create_package_directory gid_Module_Langpack_Binfilter_en_US    pkg/libreoffice-filter-binfilter
+            else
+                create_package_directory gid_Module_Langpack_Binfilter_`echo $l | sed -e s/-/_/g`    pkg/libreoffice-l10n-$l
+            fi
+        fi
+        # some help files are in _Langpack_{Writer,Impress,...}_<lang>
+        # move them from -l10n to -help
+        if [ "$l" = "en-US" ]; then d=en; else d=$l; fi
+        mv pkg/libreoffice-l10n-$l/$INSTALLDIR/basis$PRODUCTVERSION/help/$d/* \
+            pkg/libreoffice-help-$l/$INSTALLDIR/basis$PRODUCTVERSION/help/$d && \
+        rmdir pkg/libreoffice-l10n-$l/$INSTALLDIR/basis$PRODUCTVERSION/help/$d
+    done
+
+    # move_wrappers <directory_name> <name> [...]
+    move_wrappers()
+    {
+        directory=$1
+        shift
+        mkdir -m755 -p "$directory"/usr/bin
+        while test -n "$1"; do
+            mv usr/*bin/"$1$BINSUFFIX" "$directory"/usr/bin
+            shift
+        done
+    }
+    move_wrappers pkg/libreoffice-common soffice unopkg
+    if test "$COMPAT_OOWRAPPERS" = "YES" ; then
+        move_wrappers pkg/libreoffice-common ooffice oofromtemplate
+        move_wrappers pkg/libreoffice-base oobase
+        move_wrappers pkg/libreoffice-writer oowriter ooweb
+        move_wrappers pkg/libreoffice-calc oocalc
+        move_wrappers pkg/libreoffice-impress ooimpress
+        move_wrappers pkg/libreoffice-math oomath
+        move_wrappers pkg/libreoffice-draw oodraw
+    fi
+    move_wrappers pkg/libreoffice-common libreoffice lofromtemplate
+    move_wrappers pkg/libreoffice-base lobase
+    move_wrappers pkg/libreoffice-writer lowriter loweb
+    move_wrappers pkg/libreoffice-calc localc
+    move_wrappers pkg/libreoffice-impress loimpress
+    move_wrappers pkg/libreoffice-math lomath
+    move_wrappers pkg/libreoffice-draw lodraw
+
+    # Move all libraries, binaries, *.rdb from -common to -core
+    for d in $INSTALLDIR/basis$PRODUCTVERSION/program $INSTALLDIR/program; do \
+      if [ ! -d $DESTDIR/pkg/libreoffice-core/$d ]; then \
+      mkdir -p $DESTDIR/pkg/libreoffice-core/$d; \
+      fi &&
+      ( cd pkg/libreoffice-common/$d
+        find -maxdepth 1 \
+           -regex '\./\(.*\.so.*\|.*\.bin\|pagein\|nsplugin\|kdefilepicker\|msfontextract\|.*\.rdb\|javaldx\|uri-encode\)' \
+           -exec mv {} $DESTDIR/pkg/libreoffice-core/$d \;
+      ); \
+    done
+
+    # install additional ooo-build scripts & misc stuff
+    mkdir -p pkg/libreoffice-common/usr/share/man/man1
+    if test "$COMPAT_OOWRAPPERS" = "YES" ; then
+        mv usr/share/man/man1/openoffice$BINSUFFIX.1 \
+            pkg/libreoffice-common/usr/share/man/man1
+    fi
+    mv usr/share/man/man1/libreoffice$BINSUFFIX.1 \
+        pkg/libreoffice-common/usr/share/man/man1
+    mkdir -p pkg/libreoffice-common/etc/bash_completion.d
+    if test "$COMPAT_OOWRAPPERS" = "YES" ; then
+        mv etc/bash_completion.d/ooffice$BINSUFFIX.sh \
+            pkg/libreoffice-common/etc/bash_completion.d
+    fi
+    mv etc/bash_completion.d/libreoffice$BINSUFFIX.sh \
+        pkg/libreoffice-common/etc/bash_completion.d
+    mv .$INSTALLDIR/basis$PRODUCTVERSION/program/java-set-classpath \
+        pkg/libreoffice-common/$INSTALLDIR/program
+    if echo $WITH_LANG_LIST | grep -q en-US; then
+        for i in forms/resume.ott officorr/project-proposal.ott; do \
+            mkdir -p pkg/libreoffice-common/$INSTALLDIR/basis$PRODUCTVERSION/share/template/en-US/`dirname $i`; \
+            mv .$INSTALLDIR/basis$PRODUCTVERSION/share/template/en-US/$i \
+                pkg/libreoffice-common/$INSTALLDIR/basis$PRODUCTVERSION/share/template/en-US/$i; \
+        done; \
+    fi
+    # Warn for any remaining files
+    find . -path './pkg' -prune -o -not -name 'gid_Module_*' -not -type d -exec echo "File not packaged: {}" \;
+fi
+
+# mark the config files
+RPM_CONFIG_FILE_TAGS=
+if test "$OOO_VENDOR" = "Novell, Inc." -o "$OOO_VENDOR" = "RedHat"; then
+    RPM_CONFIG_FILE_TAGS="%config"
+elif test "$OOO_VENDOR" = "PLD" ; then
+    RPM_CONFIG_FILE_TAGS="%config(noreplace) %verify(not md5 size mtime)"
+fi
+
+if test "z$RPM_CONFIG_FILE_TAGS" != "z" ; then
+    cd $FILELISTSDIR
+    perl -pi -e "s|^($INSTALLDIR/help/.*\.xsl)\$|$RPM_CONFIG_FILE_TAGS \\1|;" \
+	    -e "s|^($INSTALLDIR/help/.*\.css)\$|$RPM_CONFIG_FILE_TAGS \\1|;" \
+	    -e "s|^($INSTALLDIR/program/[a-zA-Z0-9_\.]*rc)\$|$RPM_CONFIG_FILE_TAGS \\1|;" \
+	    -e "s|^($INSTALLDIR/program/.*\.xsl)\$|$RPM_CONFIG_FILE_TAGS \\1|;" \
+	    -e "s|^($INSTALLDIR/share/config/[a-zA-Z0-9]*rc)\$|$RPM_CONFIG_FILE_TAGS \\1|;" \
+	    -e "s|^($INSTALLDIR/share/dict/ooo/.*\.lst)\$|$RPM_CONFIG_FILE_TAGS \\1|;" \
+	    -e "s|^($INSTALLDIR/share/psprint/.*\.conf)\$|$RPM_CONFIG_FILE_TAGS \\1|;" \
+	    -e "s|^($INSTALLDIR/share/registry/.*\.xcu)\$|$RPM_CONFIG_FILE_TAGS \\1|;" \
+	    -e "s|^($INSTALLDIR/share/registry/.*\.properties)\$|$RPM_CONFIG_FILE_TAGS \\1|;" \
+	    -e "s|^($INSTALLDIR/share/registry/.*\.xcs)\$|$RPM_CONFIG_FILE_TAGS \\1|;" \
+	    -e "s|^($INSTALLDIR/user/config/.*\.so.)\$|$RPM_CONFIG_FILE_TAGS \\1|;" \
+	*_list.txt
+fi
+
+mkdir -p $FILELISTSDIR/orig
+mv -f $DESTDIR/gid_Module_* $FILELISTSDIR/orig

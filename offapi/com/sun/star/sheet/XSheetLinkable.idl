@@ -1,0 +1,129 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_sheet_XSheetLinkable_idl__
+#define __com_sun_star_sheet_XSheetLinkable_idl__
+
+#include <com/sun/star/uno/XInterface.idl>
+#include <com/sun/star/sheet/SheetLinkMode.idl>
+
+//=============================================================================
+
+module com {  module sun {  module star {  module sheet {
+
+//=============================================================================
+
+/** enables a sheet to refer to another sheet in a different document.
+
+    <p>To insert a sheet link, the sheet used as linked sheet has to exist
+    already. The method <member>XSheetLinkable::link</member> creates a
+    <type>SheetLink</type> object in the document's <type>SheetLinks</type>
+    collection and links the sheet to the specified external sheet.</p>
+
+    @see com::sun::star::sheet::SheetLinks
+    @see com::sun::star::sheet::SheetLink
+
+    @deprecated
+ */
+published interface XSheetLinkable: com::sun::star::uno::XInterface
+{
+    //-------------------------------------------------------------------------
+
+    /** returns the link mode of the spreadsheet.
+
+        <p>If the returned value is <const>SheetLinkMode::NORMAL</const>,
+        formulas are copied. With <const>SheetLinkMode::VALUE</const>,
+        only results of formulas are used.</p>
+     */
+    com::sun::star::sheet::SheetLinkMode getLinkMode();
+
+    //-------------------------------------------------------------------------
+
+    /** enables the linking of the sheet and controls whether formulas
+        are copied.
+
+        @param nLinkMode
+            the value specifying the link mode for this spreadsheet.
+
+            <p>If the value is <const>SheetLinkMode::NORMAL</const>,
+            formulas are copied.  With <const>SheetLinkMode::VALUE</const>,
+            only results of formulas are used.</p>
+     */
+    void setLinkMode( [in] com::sun::star::sheet::SheetLinkMode nLinkMode );
+
+    //-------------------------------------------------------------------------
+
+    /** returns the target URL of the link.
+     */
+    string getLinkUrl();
+
+    //-------------------------------------------------------------------------
+
+    /** sets the target URL of the link.
+
+        <p>A <type>SheetLink</type> object with the same file name must
+        exist already or the link will not work.</p>
+     */
+    void setLinkUrl( [in] string aLinkUrl );
+
+    //-------------------------------------------------------------------------
+
+    /** returns the sheet name of the sheet in the source document.
+     */
+    string getLinkSheetName();
+
+    //-------------------------------------------------------------------------
+
+    /** sets the name of the linked sheet in the source document.
+
+        <p>This method sets the sheet name in the <type>SheetLink</type>
+        object, it does not modify the sheet name in the source document.</p>
+     */
+    void setLinkSheetName( [in] string aLinkSheetName );
+
+    //-------------------------------------------------------------------------
+
+    /** links the sheet to another sheet in another document.
+
+        <p>A <type>SheetLink</type> object is created if it does not exist,
+        and the link mode, the URL of the linked document and the linked
+        sheet name are set.</p>
+     */
+    void link( [in] string aUrl,
+             [in] string aSheetName,
+             [in] string aFilterName,
+             [in] string aFilterOptions,
+             [in] com::sun::star::sheet::SheetLinkMode nMode );
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif
+

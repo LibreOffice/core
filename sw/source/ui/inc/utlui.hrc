@@ -1,0 +1,180 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef _UTLUI_HRC
+#define _UTLUI_HRC
+
+#include "rcid.hrc"
+
+
+#define RID_SW_SHELLRES             (RC_UTLUI_BEGIN + 1)
+#define RID_STR_SYSTEM              (RC_UTLUI_BEGIN + 2)
+
+// ------------------------------------------------------------------------
+
+// Strings in NumberFormatter-Listbox
+#define STR_DEFINE_NUMBERFORMAT                 (RC_UTLUI_BEGIN + 4)
+// hyperlink status bar control
+#define STR_HYPERCTRL_SEL                       (RC_UTLUI_BEGIN + 5)
+#define STR_HYPERCTRL_HYP                       (RC_UTLUI_BEGIN + 6)
+
+// names of content types                       (RC_UTLUI_BEGIN + 7)
+#define STR_CONTENT_TYPE_FIRST                  (RC_UTLUI_BEGIN + 8)
+#define STR_CONTENT_TYPE_OUTLINE                STR_CONTENT_TYPE_FIRST
+#define STR_CONTENT_TYPE_TABLE                  (RC_UTLUI_BEGIN + 9)
+#define STR_CONTENT_TYPE_FRAME                  (RC_UTLUI_BEGIN + 10)
+#define STR_CONTENT_TYPE_GRAPHIC                (RC_UTLUI_BEGIN + 11)
+#define STR_CONTENT_TYPE_OLE                    (RC_UTLUI_BEGIN + 12)
+#define STR_CONTENT_TYPE_BOOKMARK               (RC_UTLUI_BEGIN + 13)
+#define STR_CONTENT_TYPE_REGION                 (RC_UTLUI_BEGIN + 14)
+#define STR_CONTENT_TYPE_URLFIELD               (RC_UTLUI_BEGIN + 15)
+#define STR_CONTENT_TYPE_REFERENCE              (RC_UTLUI_BEGIN + 16)
+#define STR_CONTENT_TYPE_INDEX                  (RC_UTLUI_BEGIN + 17)
+#define STR_CONTENT_TYPE_POSTIT                 (RC_UTLUI_BEGIN + 18)
+#define STR_CONTENT_TYPE_DRAWOBJECT             (RC_UTLUI_BEGIN + 19)
+#define STR_CONTENT_END                         (RC_UTLUI_BEGIN + 19)
+
+#define STR_CONTENT_TYPE_SINGLE_FIRST           (STR_CONTENT_END + 1)
+#define STR_CONTENT_TYPE_SINGLE_OUTLINE         (STR_CONTENT_TYPE_SINGLE_FIRST + 0)
+#define STR_CONTENT_TYPE_SINGLE_TABLE           (STR_CONTENT_TYPE_SINGLE_FIRST + 1)
+#define STR_CONTENT_TYPE_SINGLE_FRAME           (STR_CONTENT_TYPE_SINGLE_FIRST + 2)
+#define STR_CONTENT_TYPE_SINGLE_GRAPHIC         (STR_CONTENT_TYPE_SINGLE_FIRST + 3)
+#define STR_CONTENT_TYPE_SINGLE_OLE             (STR_CONTENT_TYPE_SINGLE_FIRST + 4)
+#define STR_CONTENT_TYPE_SINGLE_BOOKMARK        (STR_CONTENT_TYPE_SINGLE_FIRST + 5)
+#define STR_CONTENT_TYPE_SINGLE_REGION          (STR_CONTENT_TYPE_SINGLE_FIRST + 6)
+#define STR_CONTENT_TYPE_SINGLE_URLFIELD        (STR_CONTENT_TYPE_SINGLE_FIRST + 7)
+#define STR_CONTENT_TYPE_SINGLE_REFERENCE       (STR_CONTENT_TYPE_SINGLE_FIRST + 8)
+#define STR_CONTENT_TYPE_SINGLE_INDEX           (STR_CONTENT_TYPE_SINGLE_FIRST + 9)
+#define STR_CONTENT_TYPE_SINGLE_POSTIT          (STR_CONTENT_TYPE_SINGLE_FIRST + 10)
+#define STR_CONTENT_TYPE_SINGLE_DRAWOBJECT      (STR_CONTENT_TYPE_SINGLE_FIRST + 11)
+#define STR_CONTENT_SINGLE_END                  STR_CONTENT_TYPE_SINGLE_DRAWOBJECT
+
+#define FLD_DOCINFO_BEGIN   STR_CONTENT_SINGLE_END
+#define FLD_DOCINFO_TITEL   FLD_DOCINFO_BEGIN
+#define FLD_DOCINFO_THEMA   (FLD_DOCINFO_BEGIN + 1)
+#define FLD_DOCINFO_KEYS    (FLD_DOCINFO_BEGIN + 2)
+#define FLD_DOCINFO_COMMENT (FLD_DOCINFO_BEGIN + 3)
+#define FLD_DOCINFO_CREATE  (FLD_DOCINFO_BEGIN + 4)
+#define FLD_DOCINFO_CHANGE  (FLD_DOCINFO_BEGIN + 5)
+#define FLD_DOCINFO_PRINT   (FLD_DOCINFO_BEGIN + 6)
+#define FLD_DOCINFO_DOCNO   (FLD_DOCINFO_BEGIN + 7)
+#define FLD_DOCINFO_EDIT    (FLD_DOCINFO_BEGIN + 8)
+#define FLD_DOCINFO_END     (FLD_DOCINFO_BEGIN + 9)
+
+#define STR_SERVICE_UNAVAILABLE (FLD_DOCINFO_END  + 1)
+
+#define STR_AUTH_TYPE_START     (FLD_DOCINFO_END  + 2)
+#define STR_AUTH_TYPE_ARTICLE       (STR_AUTH_TYPE_START + 0)
+#define STR_AUTH_TYPE_BOOK          (STR_AUTH_TYPE_START + 1)
+#define STR_AUTH_TYPE_BOOKLET       (STR_AUTH_TYPE_START + 2)
+#define STR_AUTH_TYPE_CONFERENCE    (STR_AUTH_TYPE_START + 3)
+#define STR_AUTH_TYPE_INBOOK        (STR_AUTH_TYPE_START + 4)
+#define STR_AUTH_TYPE_INCOLLECTION  (STR_AUTH_TYPE_START + 5)
+#define STR_AUTH_TYPE_INPROCEEDINGS (STR_AUTH_TYPE_START + 6)
+#define STR_AUTH_TYPE_JOURNAL       (STR_AUTH_TYPE_START + 7)
+#define STR_AUTH_TYPE_MANUAL        (STR_AUTH_TYPE_START + 8)
+#define STR_AUTH_TYPE_MASTERSTHESIS (STR_AUTH_TYPE_START + 9)
+#define STR_AUTH_TYPE_MISC          (STR_AUTH_TYPE_START + 10)
+#define STR_AUTH_TYPE_PHDTHESIS     (STR_AUTH_TYPE_START + 11)
+#define STR_AUTH_TYPE_PROCEEDINGS   (STR_AUTH_TYPE_START + 12)
+#define STR_AUTH_TYPE_TECHREPORT    (STR_AUTH_TYPE_START + 13)
+#define STR_AUTH_TYPE_UNPUBLISHED   (STR_AUTH_TYPE_START + 14)
+#define STR_AUTH_TYPE_EMAIL         (STR_AUTH_TYPE_START + 15)
+#define STR_AUTH_TYPE_WWW           (STR_AUTH_TYPE_START + 16)
+#define STR_AUTH_TYPE_CUSTOM1       (STR_AUTH_TYPE_START + 17)
+#define STR_AUTH_TYPE_CUSTOM2       (STR_AUTH_TYPE_START + 18)
+#define STR_AUTH_TYPE_CUSTOM3       (STR_AUTH_TYPE_START + 19)
+#define STR_AUTH_TYPE_CUSTOM4       (STR_AUTH_TYPE_START + 20)
+#define STR_AUTH_TYPE_CUSTOM5       (STR_AUTH_TYPE_START + 21)
+#define STR_AUTH_TYPE_END           (STR_AUTH_TYPE_CUSTOM5)
+
+#define STR_AUTH_FIELD_START            (STR_AUTH_TYPE_END + 1)
+#define STR_AUTH_FIELD_IDENTIFIER       (STR_AUTH_FIELD_START + 0)
+#define STR_AUTH_FIELD_AUTHORITY_TYPE   (STR_AUTH_FIELD_START + 1)
+#define STR_AUTH_FIELD_ADDRESS          (STR_AUTH_FIELD_START + 2)
+#define STR_AUTH_FIELD_ANNOTE           (STR_AUTH_FIELD_START + 3)
+#define STR_AUTH_FIELD_AUTHOR           (STR_AUTH_FIELD_START + 4)
+#define STR_AUTH_FIELD_BOOKTITLE        (STR_AUTH_FIELD_START + 5)
+#define STR_AUTH_FIELD_CHAPTER          (STR_AUTH_FIELD_START + 6)
+#define STR_AUTH_FIELD_EDITION          (STR_AUTH_FIELD_START + 7)
+#define STR_AUTH_FIELD_EDITOR           (STR_AUTH_FIELD_START + 8)
+#define STR_AUTH_FIELD_HOWPUBLISHED     (STR_AUTH_FIELD_START + 9)
+#define STR_AUTH_FIELD_INSTITUTION      (STR_AUTH_FIELD_START + 10)
+#define STR_AUTH_FIELD_JOURNAL          (STR_AUTH_FIELD_START + 11)
+#define STR_AUTH_FIELD_MONTH            (STR_AUTH_FIELD_START + 12)
+#define STR_AUTH_FIELD_NOTE             (STR_AUTH_FIELD_START + 13)
+#define STR_AUTH_FIELD_NUMBER           (STR_AUTH_FIELD_START + 14)
+#define STR_AUTH_FIELD_ORGANIZATIONS    (STR_AUTH_FIELD_START + 15)
+#define STR_AUTH_FIELD_PAGES            (STR_AUTH_FIELD_START + 16)
+#define STR_AUTH_FIELD_PUBLISHER        (STR_AUTH_FIELD_START + 17)
+#define STR_AUTH_FIELD_SCHOOL           (STR_AUTH_FIELD_START + 18)
+#define STR_AUTH_FIELD_SERIES           (STR_AUTH_FIELD_START + 19)
+#define STR_AUTH_FIELD_TITLE            (STR_AUTH_FIELD_START + 20)
+#define STR_AUTH_FIELD_TYPE             (STR_AUTH_FIELD_START + 21)
+#define STR_AUTH_FIELD_VOLUME           (STR_AUTH_FIELD_START + 22)
+#define STR_AUTH_FIELD_YEAR             (STR_AUTH_FIELD_START + 23)
+#define STR_AUTH_FIELD_URL              (STR_AUTH_FIELD_START + 24)
+#define STR_AUTH_FIELD_CUSTOM1          (STR_AUTH_FIELD_START + 25)
+#define STR_AUTH_FIELD_CUSTOM2          (STR_AUTH_FIELD_START + 26)
+#define STR_AUTH_FIELD_CUSTOM3          (STR_AUTH_FIELD_START + 27)
+#define STR_AUTH_FIELD_CUSTOM4          (STR_AUTH_FIELD_START + 28)
+#define STR_AUTH_FIELD_CUSTOM5          (STR_AUTH_FIELD_START + 29)
+#define STR_AUTH_FIELD_ISBN             (STR_AUTH_FIELD_START + 30)
+#define STR_AUTH_FIELD_END              (STR_AUTH_FIELD_ISBN)
+
+
+#define RES_FRMEX_MENU                  (STR_AUTH_FIELD_END + 1)
+
+#define DLG_NAVIGATION_PI           (RC_UTLUI_BEGIN + 1)
+#define DLG_ADDR_PI                 (RC_UTLUI_BEGIN + 2)
+#define DLG_GLOSSARY_DECIDE_DLG     (RC_UTLUI_BEGIN + 3)
+
+#define IMG_NAVI_ENTRYBMP           (RC_UTLUI_BEGIN + 4)
+#define ILIST_DB_DLG                (RC_UTLUI_BEGIN + 6)
+
+#define IMG_VIEWLAYOUT_AUTOMATIC                 (RC_UTLUI_BEGIN +  12)
+#define IMG_VIEWLAYOUT_AUTOMATIC_ACTIVE          (RC_UTLUI_BEGIN +  13)
+#define IMG_VIEWLAYOUT_BOOKMODE                  (RC_UTLUI_BEGIN +  14)
+#define IMG_VIEWLAYOUT_BOOKMODE_ACTIVE           (RC_UTLUI_BEGIN +  15)
+#define IMG_VIEWLAYOUT_SINGLECOLUMN              (RC_UTLUI_BEGIN +  16)
+#define IMG_VIEWLAYOUT_SINGLECOLUMN_ACTIVE       (RC_UTLUI_BEGIN +  17)
+
+
+//local ids of the Database ImageLists
+#define IMG_COLLAPSE        18002  /*RID_SVXIMG_COLLAPSEDNODE*/
+#define IMG_EXPAND          18003  /*RID_SVXIMG_EXPANDEDNODE*/
+#define IMG_DB                  1
+#define IMG_DBTABLE             2
+#define IMG_DBQUERY             3
+
+#define UTLUI_ACT_END               RES_FRMEX_MENU
+
+#if UTLUI_ACT_END > RC_UTLUI_END
+#error Resource-Id Ueberlauf in #file, #line
+#endif
+
+#endif

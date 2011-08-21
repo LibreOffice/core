@@ -1,0 +1,100 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_awt_tree_XTreeNode_idl__
+#define __com_sun_star_awt_tree_XTreeNode_idl__
+
+#include <com/sun/star/container/XEnumerationAccess.idl>
+#include <com/sun/star/lang/IndexOutOfBoundsException.idl>
+
+//=============================================================================
+
+module com {  module sun {  module star {  module awt { module tree {
+
+//=============================================================================
+
+/** An instance implementing this interface represents the model data for an entry in a
+    <type>XTreeDataModel</type>.
+    <p>The <type>TreeControl</type> uses this interface to retrieve the model
+    information needed to display a hierarchical outline</p>
+    <p>Each XTreeNode in a <type>XTreeDataModel</type> must be unique.
+ */
+published interface XTreeNode
+{
+    /** Returns the child tree node at <var>Index</var>.
+
+        @throws ::com::sun::star::lang::IndexOutOfBoundsException
+            if <var>Index</var> is less than 0 or equal or greater then <member>getChildCount</member>.
+    */
+    XTreeNode getChildAt( [in] long Index )
+        raises( com::sun::star::lang::IndexOutOfBoundsException );
+
+    /** Returns the number of child nodes. */
+    long getChildCount();
+
+    /** Returns the parent node of this node. */
+    XTreeNode getParent();
+
+    /** Returns the index of <var>Node</Node> in this instances children.
+        @returns
+            The child index of <var>Node</Node> , or -1 if <var>Node</Node>  is no child of this instance.
+    */
+    long getIndex( [in] XTreeNode Node);
+
+    /** Returns <TRUE/> if the children of this node are created on demand.
+        <p>A <type>TreeControl</type> will handle a node that returns <TRUE/> always
+        like a node that has child nodes, even if <member>getChildCount</member>
+        returns 0.</p>
+
+        @see TreeExpansionListener;
+    */
+    boolean hasChildrenOnDemand();
+
+    /** If not empty, the textual representation of this any is used as the text part of this node.
+    */
+    any getDisplayValue();
+
+    /** The URL for a graphic that is rendered before the text part of this node.
+        <p>If this URL is empty, no graphic is rendered.
+    */
+    string getNodeGraphicURL();
+
+    /** The URL for a graphic that is rendered to visualize expanded non leaf nodes.
+        <p>If <var>URL</var> is empty, <member>XTreeControl::DefaultExpandedGraphicURL</member> is used.
+    */
+    string getExpandedGraphicURL();
+
+    /** The URL for a graphic that is rendered to visualize collapsed non leaf nodes.
+        <p>If <var>URL</var> is empty, <member>XTreeControl::DefaultCollapsedGraphicURL</member> is used.
+    */
+    string getCollapsedGraphicURL();
+};
+
+//=============================================================================
+
+}; }; }; }; };
+
+#endif

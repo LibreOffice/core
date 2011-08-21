@@ -1,0 +1,669 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#include <svtools/controldims.hrc>
+#include "index.hrc"
+#include "idxmrk.hrc"
+#include "helpid.h"
+#include "cmdid.h"
+
+#define     IDX_PHONETIC_LISTBOX_DESCRIPTION \
+Text [ en-US ] = "Phonetic reading";    \
+
+#define IDX_DIALOG_WINDOW \
+    Window WIN_DLG                                                  \
+    {                                                               \
+        Pos = MAP_APPFONT ( 0 , 0 ) ;                               \
+        Size = MAP_APPFONT ( IDX_WIN_WIDTH , WINDOW_HEIGHT ) ;                          \
+        OKButton BT_OK                                              \
+        {                                                           \
+            Pos = MAP_APPFONT ( COL_BUTTONS , 6 ) ;                         \
+            Size = MAP_APPFONT ( 50 , RSC_CD_PUSHBUTTON_HEIGHT ) ;                        \
+            TabStop = TRUE ;                                        \
+            DefButton = TRUE ;                                      \
+            Text [ en-US ] = "Insert";\
+        };                                                          \
+        CancelButton BT_CANCEL                                      \
+        {                                                           \
+            Pos = MAP_APPFONT ( COL_BUTTONS , 23 ) ;                        \
+            Size = MAP_APPFONT ( 50 , RSC_CD_PUSHBUTTON_HEIGHT ) ;                        \
+            Text [ en-US ] = "Close";\
+        };                                                          \
+        HelpButton BT_HELP                                          \
+        {                                                           \
+            Pos = MAP_APPFONT ( COL_BUTTONS , 43 ) ;                        \
+            Size = MAP_APPFONT ( 50 , RSC_CD_PUSHBUTTON_HEIGHT ) ;                        \
+        };                                                          \
+        PushButton BT_DEL                                           \
+        {                                                           \
+            Pos = MAP_APPFONT ( COL_BUTTONS , 63 ) ;                        \
+            Size = MAP_APPFONT ( 50 , RSC_CD_PUSHBUTTON_HEIGHT ) ;                        \
+            Text [ en-US ] = "~Delete" ;                       \
+            TabStop = TRUE ;                                        \
+        };                                                          \
+        ListBox DCB_INDEX                                           \
+        {                                                           \
+            Pos = MAP_APPFONT ( IDX_COL2 , 14) ;                            \
+            Size = MAP_APPFONT ( DCB_INDEX_WIDTH , 56 ) ;           \
+            TabStop = TRUE ;                                        \
+            DropDown = TRUE ;                                       \
+        };                                                          \
+        ImageButton BT_NEW                                          \
+        {                                                           \
+            Pos = MAP_APPFONT ( IDX_NEWIMAGE_XPOS , 13 ) ;                        \
+            Size = MAP_APPFONT ( IDX_NEWIMAGE_WIDTH , 15 ) ;                        \
+            QuickHelpText [ en-US ] = "New User-defined Index";\
+        };                                                          \
+        ImageButton BT_PREVSAME                                     \
+        {                                                           \
+            Hide = TRUE ;                                           \
+            Pos = MAP_APPFONT ( COL_BUTTONS , 80 ) ;                        \
+            Size = MAP_APPFONT ( 24 , 14 ) ;                        \
+            TabStop = TRUE ;                                        \
+            SYMBOL = IMAGEBUTTON_FIRST ;                            \
+        };                                                          \
+        ImageButton BT_PREV                                         \
+        {                                                           \
+            Hide = TRUE ;                                           \
+            Pos = MAP_APPFONT ( COL_BUTTONS , 97 ) ;                        \
+            Size = MAP_APPFONT ( 24 , 14 ) ;                        \
+            TabStop = TRUE ;                                        \
+            SYMBOL = IMAGEBUTTON_PREV ;                             \
+        };                                                          \
+        ImageButton BT_NXT                                          \
+        {                                                           \
+            Hide = TRUE ;                                           \
+            Pos = MAP_APPFONT ( COL_BUTTONS_2 , 97 ) ;                        \
+            Size = MAP_APPFONT ( 24 , 14 ) ;                        \
+            TabStop = TRUE ;                                        \
+            SYMBOL = IMAGEBUTTON_NEXT ;                             \
+        };                                                          \
+        ImageButton BT_NXTSAME                                      \
+        {                                                           \
+            Hide = TRUE ;                                           \
+            Pos = MAP_APPFONT ( COL_BUTTONS_2 , 80 ) ;                        \
+            Size = MAP_APPFONT ( 24 , 14 ) ;                        \
+            TabStop = TRUE ;                                        \
+            SYMBOL = IMAGEBUTTON_LAST ;                             \
+        };                                                          \
+        FixedLine FL_INDEX                                           \
+        {                                                           \
+            Pos = MAP_APPFONT ( 6 , 3 ) ;                           \
+            Size = MAP_APPFONT ( COL_BUTTONS-5-6 , RSC_CD_FIXEDLINE_HEIGHT ) ;                      \
+            Text [ en-US ] = "Selection" ;                    \
+        };                                                          \
+        FixedText LBL_INDEX                                         \
+        {                                                           \
+            Pos = MAP_APPFONT ( IDX_COL1 , 16 ) ;                         \
+            Size = MAP_APPFONT ( 40 , 10 ) ;                        \
+            Text [ en-US ] = "~Index" ;                        \
+            Left = TRUE ;                                           \
+        };                                                          \
+        Edit SL_ENTRY                                               \
+        {                                                           \
+            Border = TRUE ;                                         \
+            Pos = MAP_APPFONT ( IDX_COL2 , IDX_ROW_2_LIST ) ;                         \
+            Size = MAP_APPFONT ( LIST_WIDTH , 12 ) ;                        \
+            TabStop = TRUE ;                                        \
+            Left = TRUE ;                                           \
+        };                                                          \
+        FixedText LBL_ENTRY                                         \
+        {                                                           \
+            Pos = MAP_APPFONT ( IDX_COL1 , IDX_ROW_2_TEXT ) ;                         \
+            Size = MAP_APPFONT ( 27 , RSC_CD_FIXEDTEXT_HEIGHT ) ;                         \
+            Text [ en-US ] = "~Entry" ;                        \
+            Left = TRUE ;                                           \
+        };                                                          \
+        FixedText LBL_KEY                                           \
+        {                                                           \
+            Disable = TRUE ;                                        \
+            Pos = MAP_APPFONT ( IDX_COL1 , IDX_ROW_3_TEXT ) ;                         \
+            Size = MAP_APPFONT ( 42 , RSC_CD_FIXEDTEXT_HEIGHT ) ;                         \
+            Text [ en-US ] = "~1st key" ;                      \
+            Left = TRUE ;                                           \
+        };                                                          \
+        ComboBox DCB_KEY                                            \
+        {                                                           \
+            Disable = TRUE ;                                        \
+            Pos = MAP_APPFONT ( IDX_COL2 , IDX_ROW_3_LIST ) ;                         \
+            Size = MAP_APPFONT ( LIST_WIDTH , 56 ) ;                        \
+            TabStop = TRUE ;                                        \
+            DropDown = TRUE ;                                       \
+        };                                                          \
+        FixedText LBL_KEY2                                          \
+        {                                                           \
+            Disable = TRUE ;                                        \
+            Pos = MAP_APPFONT ( IDX_COL1 , IDX_ROW_4_TEXT ) ;                         \
+            Size = MAP_APPFONT ( 42 , RSC_CD_FIXEDTEXT_HEIGHT ) ;                         \
+            Text [ en-US ] = "~2nd key" ;                      \
+            Left = TRUE ;                                           \
+        };                                                          \
+        ComboBox DCB_KEY2                                           \
+        {                                                           \
+            Disable = TRUE ;                                        \
+            Pos = MAP_APPFONT ( IDX_COL2 , IDX_ROW_4_LIST ) ;                         \
+            Size = MAP_APPFONT ( LIST_WIDTH , 56 ) ;                        \
+            TabStop = TRUE ;                                        \
+            DropDown = TRUE ;                                       \
+        };                                                          \
+        FixedText FT_PHONETIC_1                                     \
+        {                                                           \
+            Pos = MAP_APPFONT ( IDX_COL_PHONETIC_TEXT , IDX_ROW_2_TEXT ) ; \
+            Size = MAP_APPFONT ( IDX_PHONETIC_TEXT_WIDTH , RSC_CD_FIXEDTEXT_HEIGHT ) ; \
+            Hide = PHONETIC_HIDDEN;                                 \
+            IDX_PHONETIC_LISTBOX_DESCRIPTION                        \
+        };                                                          \
+        Edit ED_PHONETIC_1                                          \
+        {                                                           \
+            Border = TRUE ;                                         \
+            Pos = MAP_APPFONT ( IDX_COL_PHONETIC_EDIT , IDX_ROW_2_LIST ) ; \
+            Size = MAP_APPFONT ( IDX_PHONETIC_EDIT_WIDTH , 12 ) ;   \
+            Hide = PHONETIC_HIDDEN;                                 \
+            TabStop = TRUE ;                                        \
+            Left = TRUE ;                                           \
+        };                                                          \
+        FixedText FT_PHONETIC_2                                     \
+        {                                                           \
+            Pos = MAP_APPFONT ( IDX_COL_PHONETIC_TEXT , IDX_ROW_3_TEXT ) ; \
+            Size = MAP_APPFONT ( IDX_PHONETIC_TEXT_WIDTH , RSC_CD_FIXEDTEXT_HEIGHT ) ; \
+            Hide = PHONETIC_HIDDEN;                                 \
+            IDX_PHONETIC_LISTBOX_DESCRIPTION                        \
+        };                                                          \
+        Edit ED_PHONETIC_2                                          \
+        {                                                           \
+            Border = TRUE ;                                         \
+            Pos = MAP_APPFONT ( IDX_COL_PHONETIC_EDIT , IDX_ROW_3_LIST ) ; \
+            Size = MAP_APPFONT ( IDX_PHONETIC_EDIT_WIDTH , 12 ) ;   \
+            Hide = PHONETIC_HIDDEN;                                 \
+            TabStop = TRUE ;                                        \
+            Left = TRUE ;                                           \
+        };                                                          \
+        FixedText FT_PHONETIC_3                                     \
+        {                                                           \
+            Pos = MAP_APPFONT ( IDX_COL_PHONETIC_TEXT , IDX_ROW_4_TEXT ) ; \
+            Size = MAP_APPFONT ( IDX_PHONETIC_TEXT_WIDTH , RSC_CD_FIXEDTEXT_HEIGHT ) ; \
+            Hide = PHONETIC_HIDDEN;                                 \
+            IDX_PHONETIC_LISTBOX_DESCRIPTION                        \
+        };                                                          \
+        Edit ED_PHONETIC_3                                          \
+        {                                                           \
+            Border = TRUE ;                                         \
+            Pos = MAP_APPFONT ( IDX_COL_PHONETIC_EDIT , IDX_ROW_4_LIST ) ; \
+            Size = MAP_APPFONT ( IDX_PHONETIC_EDIT_WIDTH , 12 ) ;   \
+            Hide = PHONETIC_HIDDEN;                                 \
+            TabStop = TRUE ;                                        \
+            Left = TRUE ;                                           \
+        };                                                          \
+        FixedText LBL_LEVEL                                         \
+        {                                                           \
+            Pos = MAP_APPFONT ( IDX_COL1 , 76 ) ;                         \
+            Size = MAP_APPFONT ( 41 , RSC_CD_FIXEDTEXT_HEIGHT ) ;                         \
+            Text [ en-US ] = "~Level" ;                        \
+            Left = TRUE ;                                           \
+        };                                                          \
+        NumericField SL_LEVEL                                       \
+        {                                                           \
+            Border = TRUE ;                                         \
+            Pos = MAP_APPFONT ( IDX_COL2 , 74 ) ;                         \
+            Size = MAP_APPFONT ( 18 , 12 ) ;                        \
+            TabStop = TRUE ;                                        \
+            Left = TRUE ;                                           \
+            Repeat = TRUE ;                                         \
+            Spin = TRUE ;                                           \
+            Minimum = 1 ;                                           \
+            Maximum = 10 ;                                           \
+            Value = 1 ;                                             \
+            Last = 10 ;                                              \
+            SpinSize = 1 ;                                          \
+        };                                                          \
+        CheckBox CB_MAIN_ENTRY                                      \
+        {                                                                       \
+            Pos = MAP_APPFONT ( IDX_COL1 , 76 ) ;                                     \
+            Size = MAP_APPFONT ( 100 , 8 ) ;                                    \
+            Text [ en-US ] = "~Main entry";\
+        };                                                                      \
+        CheckBox CB_APPLY_TO_ALL                                                \
+        {                                                                       \
+            Pos = MAP_APPFONT ( IDX_COL1 , 90 ) ;                                     \
+            Size = MAP_APPFONT ( 140 , 12 ) ;                                   \
+            Hide = TRUE;                                                        \
+            Text [ en-US ] = "~Apply to all similar texts.";                \
+        };                                                                      \
+        CheckBox CB_CASESENSITIVE                                                \
+        {                                                                       \
+            Pos = MAP_APPFONT ( 21 , 104 ) ;                                     \
+            Size = MAP_APPFONT ( 131 , 12 ) ;                                   \
+            Hide = TRUE;\
+            Text [ en-US ] = "Ma~tch case";\
+        };                                                                      \
+        CheckBox CB_WORDONLY                                                \
+        {                                                                       \
+            Pos = MAP_APPFONT ( 21 , 118 ) ;                                     \
+            Size = MAP_APPFONT ( 131 , 12 ) ;                                   \
+            Hide = TRUE;\
+            Text [ en-US ] = "~Whole words only";\
+        };                                                                      \
+    };
+
+ModalDialog DLG_EDIT_IDXMARK
+{
+    OutputSize = TRUE ;
+    Moveable = TRUE ;
+    Closeable = TRUE;
+    Sizeable = FALSE ;
+    HelpId = CMD_FN_EDIT_IDX_ENTRY_DLG;
+    SVLook = TRUE ;
+    #define IDX_WIN_WIDTH IDX_WIN_WIDTH_NORMAL
+    Size = MAP_APPFONT ( IDX_WIN_WIDTH , 118 ) ;
+    #define GB_HEIGHT 109
+    #define DCB_INDEX_WIDTH 94
+    #define PHONETIC_HIDDEN TRUE
+    #define LIST_WIDTH      94
+    #define COL_BUTTONS     IDX_COL_BUTTONS_NORMAL
+    #define COL_BUTTONS_2   (COL_BUTTONS+26)
+    #define WINDOW_HEIGHT   118
+    IDX_DIALOG_WINDOW
+    #undef IDX_WIN_WIDTH
+    #undef GB_HEIGHT
+    #undef DCB_INDEX_WIDTH
+    #undef PHONETIC_HIDDEN
+    #undef LIST_WIDTH
+    #undef COL_BUTTONS
+    #undef COL_BUTTONS_2
+    #undef WINDOW_HEIGHT
+};
+ModalDialog DLG_EDIT_IDXMARK_CJK
+{
+    OutputSize = TRUE ;
+    Moveable = TRUE ;
+    Closeable = TRUE;
+    Sizeable = FALSE ;
+    HelpId = CMD_FN_EDIT_IDX_ENTRY_DLG;
+    SVLook = TRUE ;
+    #define IDX_WIN_WIDTH IDX_WIN_WIDTH_CJK
+    Size = MAP_APPFONT ( IDX_WIN_WIDTH , 118 ) ;
+    #define GB_HEIGHT 109
+    #define DCB_INDEX_WIDTH 94
+    #define PHONETIC_HIDDEN FALSE
+    #define LIST_WIDTH      IDX_PHONETIC_EDIT_WIDTH
+    #define COL_BUTTONS     IDX_COL_BUTTONS_CJK
+    #define COL_BUTTONS_2   (COL_BUTTONS+26)
+    #define WINDOW_HEIGHT   118
+    IDX_DIALOG_WINDOW
+    #undef IDX_WIN_WIDTH
+    #undef GB_HEIGHT
+    #undef DCB_INDEX_WIDTH
+    #undef PHONETIC_HIDDEN
+    #undef LIST_WIDTH
+    #undef COL_BUTTONS
+    #undef COL_BUTTONS_2
+    #undef WINDOW_HEIGHT
+};
+ModelessDialog DLG_INSIDXMARK
+{
+    OutputSize = TRUE ;
+    Moveable = TRUE ;
+    Closeable = TRUE;
+    Sizeable = FALSE ;
+    Hide = TRUE ;
+//  Zoomable = TRUE ;
+    HelpId = CMD_FN_INSERT_IDX_ENTRY_DLG;
+    SVLook = TRUE ;
+    #define IDX_WIN_WIDTH IDX_WIN_WIDTH_NORMAL
+    Size = MAP_APPFONT ( IDX_WIN_WIDTH , 138) ;
+//  Moveable = TRUE ;
+    #define GB_HEIGHT 129
+    #define DCB_INDEX_WIDTH 79
+    #define PHONETIC_HIDDEN TRUE
+    #define LIST_WIDTH      94
+    #define COL_BUTTONS     IDX_COL_BUTTONS_NORMAL
+    #define COL_BUTTONS_2   (COL_BUTTONS+26)
+    #define WINDOW_HEIGHT   138
+    IDX_DIALOG_WINDOW
+    #undef IDX_WIN_WIDTH
+    #undef GB_HEIGHT
+    #undef DCB_INDEX_WIDTH
+    #undef PHONETIC_HIDDEN
+    #undef LIST_WIDTH
+    #undef COL_BUTTONS
+    #undef COL_BUTTONS_2
+    #undef WINDOW_HEIGHT
+};
+ModelessDialog DLG_INSIDXMARK_CJK
+{
+    OutputSize = TRUE ;
+    Moveable = TRUE ;
+    Closeable = TRUE;
+    Sizeable = FALSE ;
+//  Zoomable = TRUE ;
+    HelpId = CMD_FN_INSERT_IDX_ENTRY_DLG;
+    SVLook = TRUE ;
+    #define IDX_WIN_WIDTH IDX_WIN_WIDTH_CJK
+    Size = MAP_APPFONT ( IDX_WIN_WIDTH , 138) ;
+//  Moveable = TRUE ;
+    #define GB_HEIGHT 129
+    #define DCB_INDEX_WIDTH 79
+    #define PHONETIC_HIDDEN FALSE
+    #define LIST_WIDTH      IDX_PHONETIC_EDIT_WIDTH
+    #define COL_BUTTONS     IDX_COL_BUTTONS_CJK
+    #define COL_BUTTONS_2   (COL_BUTTONS+26)
+    #define WINDOW_HEIGHT   138
+    IDX_DIALOG_WINDOW
+    #undef IDX_WIN_WIDTH
+    #undef GB_HEIGHT
+    #undef DCB_INDEX_WIDTH
+    #undef PHONETIC_HIDDEN
+    #undef LIST_WIDTH
+    #undef COL_BUTTONS
+    #undef COL_BUTTONS_2
+    #undef WINDOW_HEIGHT
+};
+ModalDialog DLG_NEW_USER_IDX
+{
+    OutputSize = TRUE ;
+    Moveable = TRUE ;
+    Closeable = TRUE;
+    Sizeable = FALSE ;
+    HelpID = HID_DLG_NEW_USER_IDX;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 194 , 60 ) ;
+    OKButton PB_OK
+    {
+        Pos = MAP_APPFONT ( 141 , 6 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        DefButton = TRUE ;
+    };
+    CancelButton PB_CANCEL
+    {
+        Pos = MAP_APPFONT ( 141 , 23 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+    };
+    HelpButton PB_HELP
+    {
+        Pos = MAP_APPFONT ( 141 , 43 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+    };
+    FixedLine FL_NAME
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 130 , 8 ) ;
+
+        Text [ en-US ] = "New user index";
+    };
+    FixedText FT_NAME
+    {
+        Pos = MAP_APPFONT ( 12 , 17 ) ;
+        Size = MAP_APPFONT ( 40 , 8 ) ;
+
+        Text [ en-US ] = "~Name";
+    };
+    Edit ED_NAME
+    {
+        HelpID = "sw:Edit:DLG_NEW_USER_IDX:ED_NAME";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 55 , 15 ) ;
+        Size = MAP_APPFONT ( 78 , 12 ) ;
+        TabStop = TRUE ;
+        Left = TRUE ;
+    };
+    Text [ en-US ] = "Create New User-defined Index";
+};
+
+String STR_IDXMRK_EDIT
+{
+    Text [ en-US ] = "Edit Index Entry" ;
+};
+String STR_IDXMRK_INSERT
+{
+    Text [ en-US ] = "Insert Index Entry" ;
+};
+
+#define     AUTH_DIALOG_WINDOW  \
+    Window  WIN_DLG                                 \
+    {                                                   \
+        Pos = MAP_APPFONT ( 0 , 0 ) ;                   \
+        Size = MAP_APPFONT ( 218 , 118 + RADIO_BUTTON_HEIGHT) ;     \
+        RadioButton RB_FROMCOMPONENT                                \
+        {                                                           \
+            Pos = MAP_APPFONT ( 12 , 14 ) ;                         \
+            Size = MAP_APPFONT ( 147 , 12 ) ;                       \
+            Text [ en-US ] = "From bibliography ~database";\
+        };                                                          \
+        RadioButton RB_FROMDOCCONTENT                               \
+        {                                                           \
+            Pos = MAP_APPFONT ( 12,  29 ) ;                         \
+            Size = MAP_APPFONT ( 147 , 12 ) ;                       \
+            Text [ en-US ] = "~From document content";\
+        };                                                          \
+        FixedText FT_AUTHOR                             \
+        {                                               \
+            Pos = MAP_APPFONT ( 12 , 14 + RADIO_BUTTON_HEIGHT) ; \
+            Size = MAP_APPFONT ( 60 , 8 ) ;             \
+            Text [ en-US ] = "Author";\
+        };                                              \
+        FixedText   FI_AUTHOR                           \
+        {                                               \
+            Pos = MAP_APPFONT ( 12 , 25 + RADIO_BUTTON_HEIGHT) ; \
+            Size = MAP_APPFONT ( 140, 8 ) ;            \
+            WordBreak = TRUE;                           \
+        };                                              \
+        FixedText FT_TITLE                              \
+        {                                               \
+            Pos = MAP_APPFONT ( 12 , 37 + RADIO_BUTTON_HEIGHT) ; \
+            Size = MAP_APPFONT ( 60 , 8 ) ;             \
+            Text [ en-US ] = "Title";\
+        };                                              \
+        FixedText   FI_TITLE                            \
+        {                                               \
+            Pos = MAP_APPFONT ( 12 , 48  + RADIO_BUTTON_HEIGHT) ; \
+            Size = MAP_APPFONT ( 140, 8 ) ;            \
+            WordBreak = TRUE;                           \
+        };                                              \
+        FixedText FT_ENTRY                              \
+        {                                               \
+            Pos = MAP_APPFONT ( 12 , 62 + RADIO_BUTTON_HEIGHT) ; \
+            Size = MAP_APPFONT ( 60 , 8 ) ;             \
+            Text [ en-US ] = "Short ~name";\
+        };                                              \
+        Edit ED_ENTRY                                   \
+        {                                               \
+            Border = TRUE ;                             \
+            Pos = MAP_APPFONT ( 12 , 73 + RADIO_BUTTON_HEIGHT) ; \
+            Size = MAP_APPFONT ( 140 , 12 ) ;            \
+            TabStop = TRUE ;                            \
+            Left = TRUE ;                               \
+        };                                              \
+        ListBox LB_ENTRY                                   \
+        {                                               \
+            Border = TRUE ;                             \
+            Pos = MAP_APPFONT ( 12 , 73 + RADIO_BUTTON_HEIGHT) ; \
+            Size = MAP_APPFONT ( 140 , 50 ) ;            \
+            TabStop = TRUE ;                            \
+            DropDown = TRUE ;                           \
+        };                                              \
+        FixedLine FL_ENTRY                               \
+        {                                               \
+            Pos = MAP_APPFONT ( 6 , 3 ) ;               \
+            Size = MAP_APPFONT ( 146 , 8 ) ; \
+            Text [ en-US ] = "Entry";\
+        };                                              \
+        OKButton PB_OK                                  \
+        {                                               \
+            Pos = MAP_APPFONT ( 162 , 6 ) ;             \
+            Size = MAP_APPFONT ( 50 , 14 ) ;            \
+            TabStop = TRUE ;                            \
+            DefButton = TRUE ;                          \
+            Text [ en-US ] = "Insert";\
+        };                                              \
+        CancelButton PB_CANCEL                          \
+        {                                               \
+            Pos = MAP_APPFONT ( 162 , 23 ) ;            \
+            Size = MAP_APPFONT ( 50 , 14 ) ;            \
+            Text [ en-US ] = "Close";\
+        };                                              \
+        HelpButton PB_HELP                              \
+        {                                               \
+            Pos = MAP_APPFONT ( 162 , 43 ) ;            \
+            Size = MAP_APPFONT ( 50 , 14 ) ;            \
+        };                                              \
+        PushButton PB_CREATEENTRY                       \
+        {                                               \
+            Pos = MAP_APPFONT ( 162 , 60 ) ;            \
+            Size = MAP_APPFONT ( 50 , 14 ) ;            \
+            Text [ en-US ] = "~New";\
+        };                                              \
+        PushButton PB_EDITENTRY                       \
+        {                                               \
+            Pos = MAP_APPFONT ( 162 , 77 ) ;            \
+            Size = MAP_APPFONT ( 50 , 14 ) ;            \
+            Text [ en-US ] = "Edit";\
+        };                                              \
+        String ST_CHANGE                                \
+        {                                               \
+            Text [ en-US ] = "Modify";\
+        };                                              \
+    };
+
+ModalDialog DLG_EDIT_AUTHMARK
+{
+    OutputSize = TRUE ;
+    Moveable = TRUE ;
+    Closeable = TRUE ;
+    Sizeable = FALSE ;
+    HelpId = CMD_FN_EDIT_AUTH_ENTRY_DLG;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 218 , 118 ) ;
+    #define RADIO_BUTTON_HEIGHT 0
+    AUTH_DIALOG_WINDOW
+    #undef RADIO_BUTTON_HEIGHT
+};
+ModelessDialog DLG_INSAUTHMARK
+{
+    OutputSize = TRUE ;
+    Moveable = TRUE ;
+    Closeable = TRUE ;
+    Sizeable = FALSE ;
+//  Zoomable = TRUE ;
+    HelpId = CMD_FN_INSERT_AUTH_ENTRY_DLG;
+    SVLook = TRUE ;
+    #define RADIO_BUTTON_HEIGHT 30
+    Size = MAP_APPFONT ( 218 , 118 + RADIO_BUTTON_HEIGHT) ;
+//  Moveable = TRUE ;
+    AUTH_DIALOG_WINDOW
+    #undef RADIO_BUTTON_HEIGHT
+};
+ModalDialog DLG_CREATE_AUTH_ENTRY
+{
+    HelpId = HID_DLG_CREATE_AUTH_ENTRY;
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 365 , 203 ) ;
+    Moveable = TRUE ;
+    OKButton PB_OK
+    {
+        Pos = MAP_APPFONT ( 312 , 6 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        DefButton = TRUE ;
+    };
+    CancelButton PB_CANCEL
+    {
+        Pos = MAP_APPFONT ( 312 , 23 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+    };
+    HelpButton PB_HELP
+    {
+        Pos = MAP_APPFONT ( 312 , 43 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+    };
+    FixedLine FL_ENTRIES
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 300 , 8 ) ;
+        Text [ en-US ] = "Entry data";
+    };
+    Text [ en-US ] = "Define Bibliography Entry";
+};
+String STR_AUTHMRK_EDIT
+{
+
+    Text [ en-US ] = "Edit Bibliography Entry";
+};
+String STR_AUTHMRK_INSERT
+{
+
+    Text [ en-US ] = "Insert Bibliography Entry";
+};
+QueryBox DLG_CHANGE_AUTH_ENTRY
+{
+    BUTTONS = WB_YES_NO ;
+    DEFBUTTON = WB_DEF_NO ;
+    Message [ en-US ] = "The document already contains the bibliography entry but with different data. Do you want to adjust the existing entries?";
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,146 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_logging_XLogger_idl__
+#define __com_sun_star_logging_XLogger_idl__
+
+#include <com/sun/star/uno/XInterface.idl>
+
+//=============================================================================
+
+module com { module sun { module star { module logging {
+
+published interface XLogHandler;
+
+//=============================================================================
+
+/** implemented by a component which is able to log events.
+
+    <p>This interface is roughly designed after the
+    <a href="http://java.sun.com/javase/6/docs/api/java/util/logging/package-summary.html">Java
+    Logging API</a>. However, there are some differences, the major ones being:
+    <ul><li>There's no support (yet) for filtering log events.</li>
+        <li>There ain't no convenience methods for logging.</li>
+        <li>There's no localization support.</li>
+        <li>Logger instances do not form a hierarchy.</li>
+    </ul></p>
+
+    @since OOo 2.3
+ */
+published interface XLogger
+{
+    /** denotes the name of the logger.
+    */
+    [attribute, readonly]   string  Name;
+
+    /** specifies which log events are logged or ignored.
+
+        @see LogLevel
+    */
+    [attribute]   long Level;
+
+    /** adds the given handler to the list of handlers.
+
+        <p>When an event is logged, the logger will create a <type>LogRecord</type>
+        for this event, and pass this record to all registered handlers. Single handlers
+        might or might not log those records at their own discretion, and depending on
+        additional restrictions such as filters specified at handler level.</p>
+
+        <p>Note: The log level of the given handler (<member>XLogHandler::Level</member>) will
+        not be touched. In particular, it will not be set to the logger's log level. It's
+        the responsibility of the component which knits a logger with one or more
+        log handlers to ensure that all loggers have appropriate levels set.</p>
+
+        @param LogHandler
+            the handler to add to the list of handlers. The call is ignored if this
+            parameter is <NULL/>.
+    */
+    void    addLogHandler( [in] XLogHandler LogHandler );
+
+    /** removes the given handler from the list of handlers.
+
+        @param LogHandler
+            the handler to remove from the list of handlers. The call is ignored if this
+            parameter is <NULL/>, or if the handler has not previously been added.
+    */
+    void    removeLogHandler( [in] XLogHandler LogHandler );
+
+    /** determines whether logger instance would produce any output for the given level.
+
+        <p>The method can be used to optimize performance as maybe complex parameter evaluation
+        in the <code>log</code> calls can be omitted if <code>isLoggable</code> evaluates to false.</p>
+
+        @param Level
+            level to be checked against
+
+        @returns
+            <TRUE/> if there would be some output for this XLogger for the given level, <FALSE/>
+            otherwise. Note that a return value of <FALSE/> could also indicate that the logger
+            does not have any log handlers associated with it.
+
+        @see addLogHandler
+        @see removeLogHandler
+    */
+    boolean isLoggable( [in] long Level );
+
+    /** logs a given message
+
+        @param Level
+            the log level of this message. If this level is smaller than the logger's <member>Level</member>
+            attribute, then the call will be ignored.
+
+        @param Message
+            the message to log
+    */
+    void    log( [in] long Level, [in] string Message );
+
+    /** logs a given message, detailing the source class and method at which the logged
+        event occurred.
+
+        @param Level
+            the log level of this message. If this level is smaller than the logger's <member>Level</member>
+            attribute, then the call will be ignored.
+
+        @param SourceClass
+            the source class at which the logged event occurred.
+
+        @param SourceMethod
+            the source class at which the logged event occurred.
+
+        @param Message
+            the message to log
+    */
+    void    logp( [in] long Level, [in] string SourceClassName, [in] string SourceMethodName, [in] string Message );
+};
+
+//=============================================================================
+
+}; }; }; };
+
+//=============================================================================
+
+#endif

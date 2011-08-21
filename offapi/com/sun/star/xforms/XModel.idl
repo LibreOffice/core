@@ -1,0 +1,216 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_xforms_XModel_idl__
+#define __com_sun_star_xforms_XModel_idl__
+
+#include <com/sun/star/uno/XInterface.idl>
+
+#include <com/sun/star/beans/XPropertySet.idl>
+#include <com/sun/star/container/XSet.idl>
+#include <com/sun/star/xforms/XDataTypeRepository.idl>
+#include <com/sun/star/xml/dom/XDocument.idl>
+#include <com/sun/star/util/VetoException.idl>
+#include <com/sun/star/lang/WrappedTargetException.idl>
+#include <com/sun/star/task/XInteractionHandler.idl>
+
+//=============================================================================
+
+module com {  module sun {  module star {  module xforms {
+
+interface XSubmission;
+
+//=============================================================================
+
+/** represent an XForms model
+ */
+interface XModel
+{
+    /** get the XForms model ID */
+    string getID();
+
+    /** set the XForms model ID */
+    void setID( [in] string id );
+
+
+    /** initialize the model */
+    void initialize();
+
+    /** rebuild the model */
+    void rebuild();
+
+    /** re-evaluate all calculate attributes */
+    void recalculate();
+
+    /** re-evaluate all validity attributes */
+    void revalidate();
+
+    /** refresh the model */
+    void refresh();
+
+
+    /** submit form through given submission id
+
+        <p>This is a convenience method. Calling it is equivalent to calling
+        <code><member>getSubmission</member>( <arg>id</arg> ).submit()</code>.</p>
+
+        @param id
+            the ID of the submission to execute
+
+        @throws com::sun::star::util::VetoException
+            when the current model state does not allow a submission. Usually, this indicates that
+            consistency criteria for the model data is not fulfilled.
+
+        @throws com::sun::star::lang::WrappedTargetException
+            when another error occurred during the submission. The
+            <member scope="com::sun::star::lang">WrappedTargetException::TargetException</member> describes
+            this error then.
+    */
+    void submit( [in] string id )
+        raises ( com::sun::star::util::VetoException, com::sun::star::lang::WrappedTargetException );
+
+    /** submit form through given submission id
+
+        <p>This is a convenience method. Calling it is equivalent to calling
+        <code><member>getSubmission</member>( <arg>id</arg>, <arg>handler</arg> ).submit()</code>.</p>
+
+        @param id
+            the ID of the submission to execute
+
+        @param aHandler
+            This handler allows additional user interaction, which may be necessary before
+            the submission can be performed.
+
+        @throws com::sun::star::util::VetoException
+            when the current model state does not allow a submission. Usually, this indicates that
+            consistency criteria for the model data is not fulfilled.
+
+        @throws com::sun::star::lang::WrappedTargetException
+            when another error occurred during the submission. The
+            <member scope="com::sun::star::lang">WrappedTargetException::TargetException</member> describes
+            this error then.
+    */
+    void submitWithInteraction( [in] string id, [in] com::sun::star::task::XInteractionHandler aHandler )
+        raises ( com::sun::star::util::VetoException, com::sun::star::lang::WrappedTargetException );
+
+    /** provides management access to the XSD data types associated with the model
+    */
+    XDataTypeRepository
+        getDataTypeRepository( );
+
+
+    //
+    // instances
+    //
+
+    /** gets container containing all instances;
+
+        <p>The elements of the set are arrays of <type scope="com::sun::star::beans">PropertyValue</type>s,
+        containing the ID, the URL, and the instance itself.</p>
+    */
+    com::sun::star::container::XSet getInstances();
+
+    /** retrieves the instance with the given id
+    */
+    com::sun::star::xml::dom::XDocument getInstanceDocument( [in] string id );
+
+    /** get the default instance for this model
+    */
+    com::sun::star::xml::dom::XDocument getDefaultInstance();
+
+
+    //
+    // bindings
+    //
+
+    /** create a binding element for this model
+
+        <p>The returned binding still needs to be inserted into the bindings container.</p>
+
+        @see getBindings
+    */
+    com::sun::star::beans::XPropertySet createBinding();
+
+    /** clone an arbitrary binding element for this model; still needs
+
+        <p>The returned binding still needs to be inserted into the bindings container.</p>
+
+        @see getBindings
+    */
+    com::sun::star::beans::XPropertySet cloneBinding( [in] com::sun::star::beans::XPropertySet binding );
+
+    /** get a binding with a certain ID
+
+        <p>This is a convenience method: the same result can also be obtained through
+        <member>getBindings</member></p>
+    */
+    com::sun::star::beans::XPropertySet getBinding( [in] string id );
+
+    /** get a container containing all bindings; also supports XNameAccess
+    */
+    com::sun::star::container::XSet getBindings();
+
+
+    //
+    // submissions
+    //
+
+    /** create a submission element for this model
+
+        <p>The returned submission element still needs to be inserted into the submission container.</p>
+
+        @see getSubmissions
+    */
+    XSubmission createSubmission();
+
+    /** clone an arbitrary submission element for this model
+
+        <p>The returned submission element still needs to be inserted into the submission container.</p>
+
+        @see getSubmissions
+    */
+    XSubmission cloneSubmission( [in] com::sun::star::beans::XPropertySet submission );
+
+    /** get a submission with a certain ID.
+
+        <p>This is a convenience method: the same result can also be obtained through
+        <member>getSubmissions</member>.</p>
+    */
+    XSubmission getSubmission( [in] string id );
+
+    /** get container containing all submissions; also supports XNameAccess
+    */
+    com::sun::star::container::XSet getSubmissions();
+};
+
+//=============================================================================
+
+}; }; }; };
+
+/*=============================================================================
+
+=============================================================================*/
+#endif

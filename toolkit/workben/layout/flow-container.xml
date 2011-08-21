@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<dialog xmlns="http://openoffice.org/2007/layout"
+             xmlns:cnt="http://openoffice.org/2007/layout/container"
+             title="Interactable Containers" optimumsize="true"
+             has_border="true" sizeable="true" moveable="true">
+    <vbox>
+            <table columns="3" cnt:title="Page 1">
+                <pushbutton cnt:x-expand="false" cnt:row-span="2" label="1,1" />
+                <pushbutton cnt:y-expand="false" label="1,2" />
+                <pushbutton cnt:y-expand="false" label="1,3" />
+                <pushbutton cnt:col-span="2" label="2,1" />
+            </table>
+        <flow>
+            <pushbutton label="label" />
+            <pushbutton label="label" />
+            <pushbutton label="label" />
+            <table columns="3" cnt:title="Page 1">
+                <pushbutton cnt:x-expand="false" cnt:row-span="2" label="1,1" />
+                <pushbutton cnt:y-expand="false" label="1,2" />
+                <pushbutton cnt:y-expand="false" label="1,3" />
+                <pushbutton cnt:col-span="2" label="2,1" />
+            </table>
+            <pushbutton label="label" />
+            <pushbutton label="label" />
+            <pushbutton label="label" />
+            <pushbutton label="label" />
+            <pushbutton label="label" />
+        </flow>
+        <hbox cnt:expand="false">
+            <align>
+                <okbutton cnt:hfill="0" cnt:halign="0" />
+            </align>
+            <align>
+                <okbutton cnt:hfill="0" cnt:halign="0.3" />
+            </align>
+            <align>
+                <okbutton cnt:hfill="0" cnt:halign="0.5" />
+            </align>
+            <align>
+                <okbutton cnt:hfill="0" cnt:halign="0.7" />
+            </align>
+            <align>
+                <okbutton cnt:hfill="0" cnt:halign="1" />
+            </align>
+        </hbox>
+    </vbox>
+</dialog>

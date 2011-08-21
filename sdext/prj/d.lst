@@ -1,0 +1,13 @@
+mkdir: %_DEST%\bin\minimizer
+mkdir: %_DEST%\bin\presenter
+mkdir: %_DEST%\bin\pdfimport
+..\%__SRC%\bin\presentation-minimizer.oxt %_DEST%\bin\presentation-minimizer.oxt
+..\%__SRC%\bin\presenter-screen.oxt %_DEST%\bin\presenter-screen.oxt
+..\%__SRC%\bin\pdfimport.oxt %_DEST%\bin\pdfimport.oxt
+..\%__SRC%\bin\pdf2xml.* %_DEST%\bin\pdf2xml.*
+..\%__SRC%\bin\pdfunzip.* %_DEST%\bin\pdfunzip.*
+..\%__SRC%\bin\pdfimport.oxt %_DEST%\bin\pdfimport\pdfimport.oxt
+..\%__SRC%\bin\presentation-minimizer.oxt %_DEST%\bin\minimizer\presentation-minimizer.oxt
+..\%__SRC%\bin\presentation_minimizer_develop.zip %_DEST%\bin\minimizer\presentation_minimizer_develop.zip
+..\%__SRC%\bin\presenter-screen.oxt %_DEST%\bin\presenter\presenter-screen.oxt
+..\%__SRC%\bin\presenter-screen_develop.zip %_DEST%\bin\presenter\presenter-screen_develop.zip

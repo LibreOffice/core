@@ -1,0 +1,6 @@
+module ooo { module vba { module msforms {
+    constants fmStyle {
+        const long fmStyleDropDownCombo = 0;
+        const long fmStyleDropDownList = 2;
+    };
+}; }; };

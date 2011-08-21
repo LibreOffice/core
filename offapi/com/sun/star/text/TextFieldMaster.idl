@@ -1,0 +1,70 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_text_TextFieldMaster_idl__
+#define __com_sun_star_text_TextFieldMaster_idl__
+
+#include <com/sun/star/beans/XPropertySet.idl>
+#include <com/sun/star/text/XDependentTextField.idl>
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module text {
+
+//=============================================================================
+
+/** A <type>TextFieldMaster</type> specifies important data for its
+    <type>DependentTextField</type>s.
+ */
+published service TextFieldMaster
+{
+    /** This optional interface makes it possible to access properties of
+                this field master, if any.
+     */
+    [optional] interface com::sun::star::beans::XPropertySet;
+    //------------------------------------------------------------------------
+    /** determines the name of the field master. The name is void as long as the
+     instance is not member of the document structure. When the value is being set
+     the instance is inserted into the document and the name cannot be changed afterwards.
+     That does not apply to the Database text field master.
+     */
+    [optional, property]  string Name;
+        //------------------------------------------------------------------------
+    /** contains a sequence of all fields that depend on this master.
+     */
+    [readonly, property]  sequence< XDependentTextField> DependentTextFields;
+    //------------------------------------------------------------------------
+    /** contains the instance name as it is used in the <type scope="::com::sun::star::text">
+        XTextFieldsSupplier</type>.
+     */
+    [readonly, property]  string InstanceName;
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

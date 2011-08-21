@@ -1,0 +1,9 @@
+[Desktop Entry]
+Version=1.0
+Encoding=UTF-8
+Hidden=false
+Icon=
+Type=MimeType
+Patterns=*.xls
+MimeType=application/vnd.ms-excel
+Comment=Microsoft Excel Worksheet

@@ -1,0 +1,96 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+//i20156 - new file for XML security module
+
+/** -- idl definition -- **/
+
+#ifndef __com_sun_star_xml_crypto_xxmlencryptiontemplate_idl_
+#define __com_sun_star_xml_crypto_xxmlencryptiontemplate_idl_
+
+#include <com/sun/star/uno/XInterface.idl>
+#include <com/sun/star/lang/IllegalArgumentException.idl>
+#include <com/sun/star/xml/wrapper/XXMLElementWrapper.idl>
+#include <com/sun/star/xml/crypto/XXMLSecurityTemplate.idl>
+
+module com { module sun { module star { module xml { module crypto {
+
+/**
+ * Interface of XML encryption template
+ *
+ * <p>This interface represents a encryption template, which is the same as the
+ * desired XML encryption element[ EncryptedType ] but some of the nodes may be
+ * empty. The empty entities include CipherValue, which is a subset of
+ * EncryptedData or EncryptedKey. Empty entities are not allowed in a encryption
+ * template when performing decryption.</p>
+ *
+ * <p>In some cases, the encryptor or decryptor can determine and locate the
+ * EncryptedKey from the encryption template by dereference the RetrievalMethod
+ * inside EncryptedData.</p>
+ *
+ * <p>In some cases, the EncryptedKey need to be clearly pointed out by the
+ * encryption template.</p>
+ *
+ * <p>With the help of encryption context, the encryptor or decryptor specifies
+ * the key from the KeyInfo in the encryption template.</p>
+ *
+ *
+ * <p>It isn't a good method to set the EncryptedKey here. In general, there is
+ * a RetrievalMethod in EncryptedData by which we can get the EncryptedKey.
+ *
+ * And some times, in the low level, it is hard to determine what the key is
+ * except that the high level application tell the mechanism and parameters.
+ *
+ * So I think it will be more simple that the application set the encrypted key
+ * information. In this case, the application only need to know the XML schema
+ * or DTD and the encryption device. If so, the high level application takes the
+ * action of build the EncryptedKey template and references it in the element of
+ * EncryptedData. And in this case, the calling to set up EncryptedKey template
+ * and target is not necessary, because the encryptor or decryptor can determine
+ * and locate the EncryptedKey from the encryption template of EncryptedData by
+ * dereference the RetrievalMethod.
+ *
+ * In some situation, the high level applications do not want to know anything
+ * about crypto devices( May be he must, because the lower level do not know
+ * what the key is ). If it gives the key value, it can get EncryptedKey by
+ * setting the key template and key value target.</p>
+ */
+interface XXMLEncryptionTemplate : XXMLSecurityTemplate
+{
+    /**
+     * Get the target XML element, i.e. the element to be encrypted
+     */
+    com::sun::star::xml::wrapper::XXMLElementWrapper getTarget(
+    ) ;
+} ;
+
+
+} ; } ; } ; } ; } ;
+
+
+#endif
+

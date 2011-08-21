@@ -1,0 +1,7 @@
+module ooo { module vba { module msforms {
+    constants fmTextAlign {
+        const long fmTextAlignCenter = 2;
+        const long fmTextAlignLeft = 1;
+        const long fmTextAlignRight = 3;
+    };
+}; }; };

@@ -1,0 +1,122 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_configuration_backend_UpdatableLayer_idl__
+#define __com_sun_star_configuration_backend_UpdatableLayer_idl__
+
+#include <com/sun/star/configuration/backend/Layer.idl>
+#include <com/sun/star/configuration/backend/XUpdatableLayer.idl>
+
+//==============================================================================
+
+module com { module sun { module star { module configuration { module backend {
+
+//==============================================================================
+
+/**
+  provides read/write access to a configuration data layer.
+
+  <p>A layer contains the configuration setting changes to be performed
+  on a default layer (or schema) to obtain the values of those settings
+  for a given entity and component.
+  </p>
+  <p>An updatable layer can be read or replaced with another layer.
+  </p>
+
+  @since OOo 1.1.2
+  */
+published service UpdatableLayer
+{
+    //--------------------------------------------------------------------------
+
+    /**
+        handles read access to the contents of the layer.
+
+        <p> If the implementation supports
+         <type scope="com::sun::star::util">XTimeStamped</type>,
+         then after executing <member>XUpdatableLayer::replaceWith()</member>
+         the timestamp will be the one for the replaced contents and
+         if reading after updates is supported the next read will reproduce the
+         replaced data.
+        </p>
+      */
+    service Layer ;
+
+    //--------------------------------------------------------------------------
+
+    /**
+      provides write access to the contents of the layer.
+
+       <p> Depending of the actual type (simple, i.e pure <type>XLayer</type> or
+       composite, i.e <type>XCompositeLayer</type>) of the current layer and
+       the provided replacement layer, the operation performed
+       by <member>XUpdatableLayer::replaceWith()</member>, will vary.
+       </p>
+       <p> For the different current/replacement layer combinations, we have:
+       <dl>
+           <dt>Simple/Simple<dt>
+           <dd>the provided layer's contents replace the current one's.</dd>
+
+           <dt>Composite/Composite<dt>
+           <dd>all layers (main and sub) present in the
+               provided layer are used to replace the corresponding current
+               layer contents. Sublayers present in the current layer but
+               not in the provided one are left untouched. Sublayers present
+               in the provided layer but not in the current one are added to
+               the current layer.
+            </dd>
+
+           <dt>Simple/Composite<dt>
+           <dd>the main layer and sublayers of the provided layer
+               are merged into one whose contents replace the current layer.
+           </dd>
+
+           <dt>Composite/Simple<dt>
+           <dd>the provided layer is split into a composite one whose contents
+               are then used to replace the current layer as described above.
+           </dd>
+
+       </dl>
+       <em> Not all implementations of <type>XUpdatableLayer</type>
+            support conversions of the replacement layer.
+            In such a case the sublayers of the provided layer may be ignored
+            or all simple data be merged into the main layer.
+       </em>
+       </p>
+      */
+    interface XUpdatableLayer ;
+
+    //--------------------------------------------------------------------------
+
+} ;
+
+//==============================================================================
+
+} ; } ; } ; } ; } ;
+
+#endif
+

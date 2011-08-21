@@ -1,0 +1,14 @@
+module ooo { module vba { module office {
+    constants MsoFilterComparison {
+        const long msoFilterComparisonContains = 8;
+        const long msoFilterComparisonEqual = 0;
+        const long msoFilterComparisonGreaterThan = 3;
+        const long msoFilterComparisonGreaterThanEqual = 5;
+        const long msoFilterComparisonIsBlank = 6;
+        const long msoFilterComparisonIsNotBlank = 7;
+        const long msoFilterComparisonLessThan = 2;
+        const long msoFilterComparisonLessThanEqual = 4;
+        const long msoFilterComparisonNotContains = 9;
+        const long msoFilterComparisonNotEqual = 1;
+    };
+}; }; };

@@ -1,6 +1,7 @@
 from FaxWizardDialog import *
 from CGFaxWizard import *
 from FaxDocument import *
+<<<<<<< HEAD
 from ui.PathSelection import PathSelection
 from common.FileAccess import FileAccess
 from ui.event.UnoDataAware import UnoDataAware
@@ -12,6 +13,21 @@ from common.NoValidPathException import NoValidPathException
 from com.sun.star.awt.VclWindowPeerAttribute import YES_NO, DEF_NO
 from com.sun.star.uno import RuntimeException
 from com.sun.star.util import CloseVetoException
+=======
+from ui.PathSelection import *
+from common.FileAccess import *
+from ui.event.UnoDataAware import *
+from ui.event.RadioDataAware import *
+from common.Configuration import *
+from document.OfficeDocument import OfficeDocument
+from text.TextFieldHandler import TextFieldHandler
+from com.sun.star.awt.VclWindowPeerAttribute import YES_NO, DEF_NO
+
+from common.NoValidPathException import *
+from com.sun.star.uno import RuntimeException
+from com.sun.star.util import CloseVetoException
+
+>>>>>>> master
 from com.sun.star.view.DocumentZoomType import OPTIMAL
 from com.sun.star.document.UpdateDocMode import FULL_UPDATE
 from com.sun.star.document.MacroExecMode import ALWAYS_EXECUTE
@@ -30,11 +46,19 @@ class FaxWizardDialogImpl(FaxWizardDialog):
     RM_FOOTER = 4
     RM_FINALSETTINGS = 5
 
+<<<<<<< HEAD
     lstBusinessStylePos = None
     lstPrivateStylePos = None
 
     def __init__(self, xmsf):
         super(FaxWizardDialogImpl, self).__init__(xmsf)
+=======
+
+    def __init__(self, xmsf):
+        super(FaxWizardDialogImpl, self).__init__(xmsf)
+        self.mainDA = []
+        self.faxDA = []
+>>>>>>> master
         self.bSaveSuccess = False
         self.filenameChanged = False
         self.UserTemplatePath = ""
@@ -59,7 +83,11 @@ class FaxWizardDialogImpl(FaxWizardDialog):
     def startWizard(self, xMSF, CurPropertyValue):
         self.running = True
         try:
+<<<<<<< HEAD
             #Number of steps on WizardDialog
+=======
+            #Number of steps on WizardDialog:
+>>>>>>> master
             self.nMaxStep = 5
 
             #instatiate The Document Frame for the Preview
@@ -82,18 +110,33 @@ class FaxWizardDialogImpl(FaxWizardDialog):
             #special Control fFrameor setting the save Path:
             self.insertPathSelectionControl()
 
+<<<<<<< HEAD
             self.initializeTemplates(xMSF)
 
+=======
+>>>>>>> master
             #load the last used settings
             #from the registry and apply listeners to the controls:
             self.initConfiguration()
 
+<<<<<<< HEAD
 
             if self.myPathSelection.xSaveTextBox.Text.lower() == "":
                 self.myPathSelection.initializePath()
 
             xContainerWindow = self.myFaxDoc.xFrame.ContainerWindow
             self.createWindowPeer(xContainerWindow)
+=======
+            self.initializeTemplates(xMSF)
+
+            #update the dialog UI according to the loaded Configuration
+            self.__updateUI()
+            if self.myPathSelection.xSaveTextBox.Text.lower() == "":
+                self.myPathSelection.initializePath()
+
+            self.xContainerWindow = self.myFaxDoc.xFrame.ContainerWindow
+            self.createWindowPeer(self.xContainerWindow)
+>>>>>>> master
 
             #add the Roadmap to the dialog:
             self.insertRoadmap()
@@ -146,8 +189,12 @@ class FaxWizardDialogImpl(FaxWizardDialog):
                 if fileAccess.exists(self.sPath, True):
                     answer = SystemDialog.showMessageBox(
                         self.xMSF, "MessBox", YES_NO + DEF_NO,
+<<<<<<< HEAD
                         self.resources.resOverwriteWarning,
                         self.xUnoDialog.Peer)
+=======
+                        self.resources.resOverwriteWarning, self.xUnoDialog.Peer)
+>>>>>>> master
                     if answer == 3:
                         # user said: no, do not overwrite...
                         endWizard = False
@@ -214,9 +261,32 @@ class FaxWizardDialogImpl(FaxWizardDialog):
 
     def insertRoadmap(self):
         self.addRoadmap()
+<<<<<<< HEAD
         self.insertRoadMapItems(
                 [True, True, True, False, True], self.resources.RoadmapLabels)
 
+=======
+        i = 0
+        i = self.insertRoadmapItem(
+            0, True, self.resources.RoadmapLabels[
+            FaxWizardDialogImpl.RM_TYPESTYLE - 1],
+            FaxWizardDialogImpl.RM_TYPESTYLE)
+        i = self.insertRoadmapItem(
+            i, True, self.resources.RoadmapLabels[
+            FaxWizardDialogImpl.RM_ELEMENTS - 1],
+            FaxWizardDialogImpl.RM_ELEMENTS)
+        i = self.insertRoadmapItem(
+            i, True, self.resources.RoadmapLabels[
+            FaxWizardDialogImpl.RM_SENDERRECEIVER - 1],
+            FaxWizardDialogImpl.RM_SENDERRECEIVER)
+        i = self.insertRoadmapItem(
+            i, False, self.resources.RoadmapLabels[
+            FaxWizardDialogImpl.RM_FOOTER - 1], FaxWizardDialogImpl.RM_FOOTER)
+        i = self.insertRoadmapItem(i, True,
+            self.resources.RoadmapLabels[
+            FaxWizardDialogImpl.RM_FINALSETTINGS - 1],
+            FaxWizardDialogImpl.RM_FINALSETTINGS)
+>>>>>>> master
         self.setRoadmapInteractive(True)
         self.setRoadmapComplete(True)
         self.setCurrentRoadmapItemID(1)
@@ -235,6 +305,13 @@ class FaxWizardDialogImpl(FaxWizardDialog):
         self.myPathSelection.addSelectionListener( \
             self.myPathSelectionListener())
 
+<<<<<<< HEAD
+=======
+    def __updateUI(self):
+        UnoDataAware.updateUIs(self.mainDA)
+        UnoDataAware.updateUIs(self.faxDA)
+
+>>>>>>> master
     def __initializePaths(self):
         try:
             self.sTemplatePath = FileAccess.getOfficePath2(self.xMSF,
@@ -308,6 +385,7 @@ class FaxWizardDialogImpl(FaxWizardDialog):
             root = Configuration.getConfigurationRoot(self.xMSF,
                 "/org.openoffice.Office.Writer/Wizards/Fax", False)
             self.myConfig.readConfiguration(root, "cp_")
+<<<<<<< HEAD
             RadioDataAware.attachRadioButtons(
                 self.myConfig, "cp_FaxType",
                 (self.optBusinessFax, self.optPrivateFax), True).updateUI()
@@ -368,6 +446,74 @@ class FaxWizardDialogImpl(FaxWizardDialog):
                 "cp_TemplateName", self.txtTemplateName, True).updateUI()
             UnoDataAware.attachEditControl(cgl, "cp_TemplatePath",
                 self.myPathSelection.xSaveTextBox, True).updateUI()
+=======
+            self.mainDA.append(RadioDataAware.attachRadioButtons(
+                self.myConfig, "cp_FaxType",
+                (self.optBusinessFax, self.optPrivateFax), True))
+            self.mainDA.append(UnoDataAware.attachListBox(
+                self.myConfig.cp_BusinessFax, "cp_Style",
+                self.lstBusinessStyle, True))
+            self.mainDA.append(UnoDataAware.attachListBox(
+                self.myConfig.cp_PrivateFax, "cp_Style", self.lstPrivateStyle,
+                True))
+            cgl = self.myConfig.cp_BusinessFax
+            self.faxDA.append(UnoDataAware.attachCheckBox(cgl,
+                "cp_PrintCompanyLogo", self.chkUseLogo, True))
+            self.faxDA.append(UnoDataAware.attachCheckBox(cgl,
+                "cp_PrintSubjectLine", self.chkUseSubject, True))
+            self.faxDA.append(UnoDataAware.attachCheckBox(cgl,
+                "cp_PrintSalutation", self.chkUseSalutation, True))
+            self.faxDA.append(UnoDataAware.attachCheckBox(cgl,
+                "cp_PrintDate", self.chkUseDate, True))
+            self.faxDA.append(UnoDataAware.attachCheckBox(cgl,
+                "cp_PrintCommunicationType", self.chkUseCommunicationType,
+                True))
+            self.faxDA.append(UnoDataAware.attachCheckBox(cgl,
+                "cp_PrintGreeting", self.chkUseGreeting, True))
+            self.faxDA.append(UnoDataAware.attachCheckBox(cgl,
+                "cp_PrintFooter", self.chkUseFooter, True))
+            self.faxDA.append(UnoDataAware.attachEditControl(cgl,
+                "cp_Salutation", self.lstSalutation, True))
+            self.faxDA.append(UnoDataAware.attachEditControl(cgl,
+                "cp_Greeting", self.lstGreeting, True))
+            self.faxDA.append(UnoDataAware.attachEditControl(cgl,
+                "cp_CommunicationType", self.lstCommunicationType,
+                True))
+            self.faxDA.append(RadioDataAware.attachRadioButtons(cgl,
+                "cp_SenderAddressType", (self.optSenderDefine, \
+                self.optSenderPlaceholder), True))
+            self.faxDA.append(UnoDataAware.attachEditControl(cgl,
+                "cp_SenderCompanyName", self.txtSenderName, True))
+            self.faxDA.append(UnoDataAware.attachEditControl(cgl,
+                "cp_SenderStreet", self.txtSenderStreet, True))
+            self.faxDA.append(UnoDataAware.attachEditControl(cgl,
+                "cp_SenderPostCode", self.txtSenderPostCode, True))
+            self.faxDA.append(UnoDataAware.attachEditControl(cgl,
+                "cp_SenderState", self.txtSenderState, True))
+            self.faxDA.append(UnoDataAware.attachEditControl(cgl,
+                "cp_SenderCity", self.txtSenderCity, True))
+            self.faxDA.append(UnoDataAware.attachEditControl(cgl,
+                "cp_SenderFax", self.txtSenderFax, True))
+            self.faxDA.append(RadioDataAware.attachRadioButtons(cgl,
+                "cp_ReceiverAddressType", (self.optReceiverDatabase,
+                self.optReceiverPlaceholder), True))
+            self.faxDA.append(UnoDataAware.attachEditControl(cgl,
+                "cp_Footer", self.txtFooter, True))
+            self.faxDA.append(UnoDataAware.attachCheckBox(cgl,
+                "cp_FooterOnlySecondPage", self.chkFooterNextPages,
+                True))
+            self.faxDA.append(UnoDataAware.attachCheckBox(cgl,
+                "cp_FooterPageNumbers", self.chkFooterPageNumbers,
+                True))
+            self.faxDA.append(RadioDataAware.attachRadioButtons(cgl,
+                "cp_CreationType", (self.optCreateFax, self.optMakeChanges),
+                True))
+            self.faxDA.append(UnoDataAware.attachEditControl(cgl,
+                "cp_TemplateName", self.txtTemplateName, True))
+            self.faxDA.append(UnoDataAware.attachEditControl(cgl,
+                "cp_TemplatePath", self.myPathSelection.xSaveTextBox,
+                True))
+>>>>>>> master
         except Exception, exception:
             traceback.print_exc()
 
@@ -388,7 +534,12 @@ class FaxWizardDialogImpl(FaxWizardDialog):
             self.optPrivateFaxItemChanged()
 
     def optBusinessFaxItemChanged(self):
+<<<<<<< HEAD
         FaxWizardDialogImpl.lstPrivateStylePos = None
+=======
+        DataAware.setDataObjects(self.faxDA,
+            self.myConfig.cp_BusinessFax, True)
+>>>>>>> master
         self.setControlProperty("lblBusinessStyle",
             PropertyNames.PROPERTY_ENABLED, True)
         self.setControlProperty("lstBusinessStyle",
@@ -400,6 +551,7 @@ class FaxWizardDialogImpl(FaxWizardDialog):
         self.lstBusinessStyleItemChanged()
         self.__enableSenderReceiver()
         self.__setPossibleFooter(True)
+<<<<<<< HEAD
 
     def lstBusinessStyleItemChanged(self):
         selectedItemPos = self.lstBusinessStyle.SelectedItemPos
@@ -413,6 +565,18 @@ class FaxWizardDialogImpl(FaxWizardDialog):
 
     def optPrivateFaxItemChanged(self):
         FaxWizardDialogImpl.lstBusinessStylePos = None
+=======
+    def lstBusinessStyleItemChanged(self):
+        TextDocument.xTextDocument = self.myFaxDoc.loadAsPreview( \
+            self.BusinessFiles[1][self.lstBusinessStyle.SelectedItemPos],
+                False)
+        self.initializeElements()
+        self.setElements()
+
+    def optPrivateFaxItemChanged(self):
+        DataAware.setDataObjects(self.faxDA,
+            self.myConfig.cp_PrivateFax, True)
+>>>>>>> master
         self.setControlProperty("lblBusinessStyle",
             PropertyNames.PROPERTY_ENABLED, False)
         self.setControlProperty("lstBusinessStyle",
@@ -426,6 +590,7 @@ class FaxWizardDialogImpl(FaxWizardDialog):
         self.__setPossibleFooter(False)
 
     def lstPrivateStyleItemChanged(self):
+<<<<<<< HEAD
         selectedItemPos = self.lstPrivateStyle.SelectedItemPos
         #avoid to load the same item again
         if FaxWizardDialogImpl.lstPrivateStylePos is not selectedItemPos:
@@ -434,6 +599,13 @@ class FaxWizardDialogImpl(FaxWizardDialog):
                 self.PrivateFiles[1][selectedItemPos], False)
             self.initializeElements()
             self.setElements()
+=======
+        TextDocument.xTextDocument = self.myFaxDoc.loadAsPreview( \
+            self.PrivateFiles[1][self.lstPrivateStyle.SelectedItemPos],
+                False)
+        self.initializeElements()
+        self.setElements()
+>>>>>>> master
 
     def txtTemplateNameTextChanged(self):
         xDocProps = TextDocument.xTextDocument.DocumentProperties
@@ -493,6 +665,23 @@ class FaxWizardDialogImpl(FaxWizardDialog):
         self.txtSenderCityTextChanged()
         self.txtSenderFaxTextChanged()
 
+<<<<<<< HEAD
+=======
+    def optReceiverPlaceholderItemChanged(self):
+        OfficeDocument.attachEventCall(TextDocument.xTextDocument, "OnNew",
+            "StarBasic", "macro:#/Template.Correspondence.Placeholder()")
+
+    def optReceiverDatabaseItemChanged(self):
+        OfficeDocument.attachEventCall(TextDocument.xTextDocument, "OnNew",
+            "StarBasic", "macro:#/Template.Correspondence.Database()")
+
+    def optCreateFaxItemChanged(self):
+        self.bEditTemplate = False
+
+    def optMakeChangesItemChanged(self):
+        self.bEditTemplate = True
+
+>>>>>>> master
     def txtSenderNameTextChanged(self):
         self.myFieldHandler.changeUserFieldContent(
             "Company", self.txtSenderName.Text)
@@ -539,6 +728,7 @@ class FaxWizardDialogImpl(FaxWizardDialog):
         if self.optReceiverDatabase.State:
             self.optReceiverDatabaseItemChanged()
 
+<<<<<<< HEAD
         elif self.optReceiverPlaceholder.State:
             self.optReceiverPlaceholderItemChanged()
 
@@ -546,6 +736,15 @@ class FaxWizardDialogImpl(FaxWizardDialog):
             self.optCreateFromTemplateItemChanged()
 
         elif self.optMakeChanges.State:
+=======
+        if self.optReceiverPlaceholder.State:
+            self.optReceiverPlaceholderItemChanged()
+
+        if self.optCreateFax.State:
+            self.optCreateFaxItemChanged()
+
+        if self.optMakeChanges.State:
+>>>>>>> master
             self.optMakeChangesItemChanged()
 
     def chkUseLogoItemChanged(self):
