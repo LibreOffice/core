@@ -169,7 +169,7 @@ static inline void printIndex2(FILE *source_fp, sal_Int16 *set)
             for (sal_Int32 j = 0; j < 0x100; j++) {
                 sal_Int32 k = (i<<8) + j;
                 if (prev != 0 )
-                    while( charArray[k] == 0 && k < 0x10000 )
+                    while( k < 0x10000 && charArray[k] == 0 )
                         k++;
 
                 prev = charArray[(i<<8) + j];
