@@ -84,9 +84,6 @@ CharPosArray::Replace(int const&, unsigned short)
 CharPosArray::Replace(int const*, unsigned short, unsigned short)
 CharPosArray::_ForEach(unsigned short, unsigned short, unsigned char (*)(int const&, void*), void*)
 CloneList::Count() const
-CollatorWrapper::compareSubstring(rtl::OUString const&, int, int, rtl::OUString const&, int, int) const
-CollatorWrapper::listCollatorOptions(rtl::OUString const&) const
-CollatorWrapper::loadCollatorAlgorithmWithEndUserOption(rtl::OUString const&, com::sun::star::lang::Locale const&, com::sun::star::uno::Sequence<int> const&)
 Color::IncreaseContrast(unsigned char)
 CommandExtTextInputData::CommandExtTextInputData()
 CommunicationLinkList::DeleteAndDestroy(unsigned short, unsigned short)

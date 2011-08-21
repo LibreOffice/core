@@ -50,26 +50,6 @@ CollatorWrapper::~CollatorWrapper()
 }
 
 sal_Int32
-CollatorWrapper::compareSubstring (
-        const ::rtl::OUString& s1, sal_Int32 off1, sal_Int32 len1,
-        const ::rtl::OUString& s2, sal_Int32 off2, sal_Int32 len2) const
-{
-    try
-    {
-        if (mxInternationalCollator.is())
-            return mxInternationalCollator->compareSubstring (
-                                                        s1, off1, len1, s2, off2, len2);
-    }
-    catch (uno::RuntimeException& rRuntimeException)
-    {
-        (void)rRuntimeException;
-        DBG_ERRORFILE ("CollatorWrapper: compareSubstring failed");
-    }
-
-    return 0;
-}
-
-sal_Int32
 CollatorWrapper::compareString (const ::rtl::OUString& s1, const ::rtl::OUString& s2) const
 {
     try
@@ -101,23 +81,6 @@ CollatorWrapper::listCollatorAlgorithms (const lang::Locale& rLocale) const
     }
 
     return uno::Sequence< ::rtl::OUString > ();
-}
-
-uno::Sequence< sal_Int32 >
-CollatorWrapper::listCollatorOptions (const ::rtl::OUString& rAlgorithm) const
-{
-    try
-    {
-        if (mxInternationalCollator.is())
-            return mxInternationalCollator->listCollatorOptions (rAlgorithm);
-    }
-    catch (uno::RuntimeException& rRuntimeException)
-    {
-        (void)rRuntimeException;
-        DBG_ERRORFILE ("CollatorWrapper: listCollatorOptions failed");
-    }
-
-    return uno::Sequence< sal_Int32 > ();
 }
 
 sal_Int32
@@ -155,24 +118,6 @@ CollatorWrapper::loadCollatorAlgorithm (const ::rtl::OUString& rAlgorithm,
 
     return 0;
 
-}
-
-void
-CollatorWrapper::loadCollatorAlgorithmWithEndUserOption (
-        const ::rtl::OUString& rAlgorithm,
-        const lang::Locale& rLocale, const uno::Sequence< sal_Int32 >& rOption)
-{
-    try
-    {
-        if (mxInternationalCollator.is())
-            mxInternationalCollator->loadCollatorAlgorithmWithEndUserOption (
-                                                        rAlgorithm, rLocale, rOption);
-    }
-    catch (uno::RuntimeException& rRuntimeException)
-    {
-        (void)rRuntimeException;
-        DBG_ERRORFILE ("CollatorWrapper: loadCollatorAlgorithmWithEndUserOption failed");
-    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
