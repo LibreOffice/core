@@ -28,7 +28,7 @@
 
 #include "pyuno_impl.hxx"
 
-#include <unordered_map>
+#include <boost/unordered_map.hpp>
 #include <utility>
 
 #include <osl/module.hxx>
@@ -91,11 +91,11 @@ namespace {
 
 class fillStructState
 {
-    typedef std::unordered_map <const OUString, bool, OUStringHash> initialised_t;
+    typedef boost::unordered_map <const OUString, bool, OUStringHash> initialised_t;
     // Keyword arguments used
     PyObject *used;
     // Which structure members are initialised
-    std::unordered_map <const OUString, bool, OUStringHash> initialised;
+    boost::unordered_map <const OUString, bool, OUStringHash> initialised;
     // How many positional arguments are consumed
     // This is always the so-many first ones
     sal_Int32 nPosConsumed;
