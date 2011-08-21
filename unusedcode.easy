@@ -3498,24 +3498,6 @@ svt::table::TableControl::GetTopRow() const
 svt::table::TableControl::SetSelectHdl(Link const&)
 svt::table::TableControl::SetTopRow(int)
 svt::table::TableDataWindow::SetBackground()
-svtools::EditableExtendedColorConfig::GetColorValue(rtl::OUString const&, rtl::OUString const&) const
-svtools::EditableExtendedColorConfig::GetComponentDisplayName(rtl::OUString const&) const
-svtools::EditableExtendedColorConfig::GetCurrentSchemeName() const
-svtools::EditableExtendedColorConfig::GetSchemeNames() const
-svtools::ODocumentInfoPreview::InsertEntry(String const&, String const&)
-svtools::ToolTipListBox::ToolTipListBox(Window*, ResId const&)
-svtools::ToolTipListBox::ToolTipListBox(Window*, long)
-svtools::ToolTipMultiListBox::ToolTipMultiListBox(Window*, long)
-svtools::ToolbarMenu::GetFrame() const
-svtools::ToolbarMenu::GetSelectHdl() const
-svtools::ToolbarMenu::RemoveStatusListener(rtl::OUString const&)
-svtools::ToolbarMenu::UpdateStatus(rtl::OUString const&)
-svtools::ToolbarMenu::appendEntry(int, Image const&, unsigned short)
-svtools::ToolbarMenu::getEntryImage(int) const
-svtools::ToolbarMenu::getEntryText(int) const
-svtools::ToolbarMenu::isEntryChecked(int) const
-svtools::ToolbarMenu::isEntryEnabled(int) const
-svtools::ToolbarMenuEntryAcc::FireAccessibleEvent(short, com::sun::star::uno::Any const&, com::sun::star::uno::Any const&)
 svx::ControllerFeatures::ControllerFeatures(com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory> const&, com::sun::star::uno::Reference<com::sun::star::form::XForm> const&, svx::IControllerFeatureInvalidation*)
 svx::DialControl::DialControl(Window*, Size const&, Font const&, long)
 svx::DialControl::DialControl(Window*, Size const&, long)

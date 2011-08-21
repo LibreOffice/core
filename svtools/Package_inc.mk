@@ -176,7 +176,6 @@ $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/toolpanel/tabitemconte
 $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/toolpanel/tablayouter.hxx,svtools/toolpanel/tablayouter.hxx))
 $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/toolpanel/toolpanel.hxx,svtools/toolpanel/toolpanel.hxx))
 $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/toolpanel/toolpaneldeck.hxx,svtools/toolpanel/toolpaneldeck.hxx))
-$(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/tooltiplbox.hxx,svtools/tooltiplbox.hxx))
 $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/transfer.hxx,svtools/transfer.hxx))
 $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/treelist.hxx,svtools/treelist.hxx))
 $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/ttprops.hxx,svtools/ttprops.hxx))

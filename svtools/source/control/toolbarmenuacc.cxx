@@ -632,30 +632,6 @@ ToolbarMenuEntryAcc::~ToolbarMenuEntryAcc()
 
 // -----------------------------------------------------------------------
 
-void ToolbarMenuEntryAcc::FireAccessibleEvent( short nEventId, const Any& rOldValue, const Any& rNewValue )
-{
-    if( nEventId )
-    {
-        EventListenerVector aTmpListeners( mxEventListeners );
-        ::std::vector< Reference< XAccessibleEventListener > >::const_iterator  aIter( aTmpListeners.begin() );
-        AccessibleEventObject aEvtObject;
-
-        aEvtObject.EventId = nEventId;
-        aEvtObject.Source = static_cast<XWeak*>(this);
-        aEvtObject.NewValue = rNewValue;
-        aEvtObject.OldValue = rOldValue;
-
-        while( aIter != aTmpListeners.end() )
-        {
-            (*aIter)->notifyEvent( aEvtObject );
-            aIter++;
-        }
-    }
-}
-
-
-// -----------------------------------------------------------------------------
-
 void SAL_CALL ToolbarMenuEntryAcc::disposing (void)
 {
     EventListenerVector aListenerListCopy;
