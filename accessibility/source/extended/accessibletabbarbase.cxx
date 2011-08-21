@@ -46,11 +46,11 @@ AccessibleTabBarBase::~AccessibleTabBarBase()
 IMPL_LINK( AccessibleTabBarBase, WindowEventListener, VclSimpleEvent*, pEvent )
 {
     VclWindowEvent* pWinEvent = dynamic_cast< VclWindowEvent* >( pEvent );
-    DBG_ASSERT( pWinEvent, "AccessibleTabBarBase::WindowEventListener - unknown window event" );
+    OSL_ENSURE( pWinEvent, "AccessibleTabBarBase::WindowEventListener - unknown window event" );
     if( pWinEvent )
     {
         Window* pEventWindow = pWinEvent->GetWindow();
-        DBG_ASSERT( pEventWindow, "AccessibleTabBarBase::WindowEventListener: no window!" );
+        OSL_ENSURE( pEventWindow, "AccessibleTabBarBase::WindowEventListener: no window!" );
 
         if( ( pWinEvent->GetId() == VCLEVENT_TABBAR_PAGEREMOVED ) &&
             ( (sal_uInt16)(sal_IntPtr) pWinEvent->GetData() == TabBar::PAGE_NOT_FOUND ) &&
@@ -83,7 +83,7 @@ void AccessibleTabBarBase::disposing()
 
 void AccessibleTabBarBase::SetTabBarPointer( TabBar* pTabBar )
 {
-    DBG_ASSERT( !m_pTabBar, "AccessibleTabBarBase::SetTabBarPointer - multiple call" );
+    OSL_ENSURE( !m_pTabBar, "AccessibleTabBarBase::SetTabBarPointer - multiple call" );
     m_pTabBar = pTabBar;
     if( m_pTabBar )
         m_pTabBar->AddEventListener( LINK( this, AccessibleTabBarBase, WindowEventListener ) );

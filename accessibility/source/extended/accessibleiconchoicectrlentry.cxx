@@ -105,7 +105,7 @@ throw(RuntimeException)
         if ( _rSource.Source == m_xParent )
         {
             dispose();
-            DBG_ASSERT( !m_xParent.is() && ( NULL == m_pIconCtrl ), "" );
+            OSL_ENSURE( !m_xParent.is() && ( NULL == m_pIconCtrl ), "" );
         }
     }
     // -----------------------------------------------------------------------------

@@ -80,10 +80,10 @@ sal_Bool VCLXAccessibleMenuBar::IsFocused()
 
 IMPL_LINK( VCLXAccessibleMenuBar, WindowEventListener, VclSimpleEvent*, pEvent )
 {
-    DBG_ASSERT( pEvent && pEvent->ISA( VclWindowEvent ), "VCLXAccessibleMenuBar::WindowEventListener: unknown window event!" );
+    OSL_ENSURE( pEvent && pEvent->ISA( VclWindowEvent ), "VCLXAccessibleMenuBar::WindowEventListener: unknown window event!" );
     if ( pEvent && pEvent->ISA( VclWindowEvent ) )
     {
-        DBG_ASSERT( ((VclWindowEvent*)pEvent)->GetWindow(), "VCLXAccessibleMenuBar::WindowEventListener: no window!" );
+        OSL_ENSURE( ((VclWindowEvent*)pEvent)->GetWindow(), "VCLXAccessibleMenuBar::WindowEventListener: no window!" );
         if ( !((VclWindowEvent*)pEvent)->GetWindow()->IsAccessibilityEventsSuppressed() || ( pEvent->GetId() == VCLEVENT_OBJECT_DYING ) )
         {
             ProcessWindowEvent( *(VclWindowEvent*)pEvent );

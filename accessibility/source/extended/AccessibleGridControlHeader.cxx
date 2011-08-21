@@ -60,7 +60,7 @@ AccessibleGridControlHeader::AccessibleGridControlHeader(
         ::svt::table::AccessibleTableControlObjType      eObjType):
         AccessibleGridControlTableBase( rxParent, rTable, eObjType )
 {
-    DBG_ASSERT( isRowBar() || isColumnBar(),
+    OSL_ENSURE( isRowBar() || isColumnBar(),
         "accessibility/extended/AccessibleGridControlHeaderBar - invalid object type" );
 }
 

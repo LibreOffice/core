@@ -82,7 +82,7 @@ void AccessibleBrowseBox::setCreator( const Reference< XAccessible >& _rxCreator
 {
 #if OSL_DEBUG_LEVEL > 0
     Reference< XAccessible > xCreator = (Reference< XAccessible >)m_pImpl->m_aCreator;
-    DBG_ASSERT( !xCreator.is(), "accessibility/extended/AccessibleBrowseBox::setCreator: creator already set!" );
+    OSL_ENSURE( !xCreator.is(), "accessibility/extended/AccessibleBrowseBox::setCreator: creator already set!" );
 #endif
     m_pImpl->m_aCreator = _rxCreator;
 }
@@ -224,7 +224,7 @@ OUString SAL_CALL AccessibleBrowseBox::getImplementationName()
 Rectangle AccessibleBrowseBox::implGetBoundingBox()
 {
     Window* pParent = mpBrowseBox->GetAccessibleParentWindow();
-    DBG_ASSERT( pParent, "implGetBoundingBox - missing parent window" );
+    OSL_ENSURE( pParent, "implGetBoundingBox - missing parent window" );
     return mpBrowseBox->GetWindowExtentsRelative( pParent );
 }
 // -----------------------------------------------------------------------------
@@ -302,7 +302,7 @@ AccessibleBrowseBox::implGetFixedChild( sal_Int32 nChildIndex )
 AccessibleBrowseBoxTable* AccessibleBrowseBox::createAccessibleTable()
 {
     Reference< XAccessible > xCreator = (Reference< XAccessible >)m_pImpl->m_aCreator;
-    DBG_ASSERT( xCreator.is(), "accessibility/extended/AccessibleBrowseBox::createAccessibleTable: my creator died - how this?" );
+    OSL_ENSURE( xCreator.is(), "accessibility/extended/AccessibleBrowseBox::createAccessibleTable: my creator died - how this?" );
     return new AccessibleBrowseBoxTable( xCreator, *mpBrowseBox );
 }
 // -----------------------------------------------------------------------------
@@ -357,7 +357,7 @@ Reference< XAccessibleContext > SAL_CALL AccessibleBrowseBoxAccess::getAccessibl
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    DBG_ASSERT( ( m_pContext && m_xContext.is() ) || ( !m_pContext && !m_xContext.is() ),
+    OSL_ENSURE( ( m_pContext && m_xContext.is() ) || ( !m_pContext && !m_xContext.is() ),
         "accessibility/extended/AccessibleBrowseBoxAccess::getAccessibleContext: inconsistency!" );
 
     // if the context died meanwhile (there is no listener, so it won't tell us explicitily when this happens),

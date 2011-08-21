@@ -84,7 +84,7 @@ VCLXAccessibleToolBoxItem::VCLXAccessibleToolBoxItem( ToolBox* _pToolBox, sal_In
 
     m_pExternalLock = static_cast< VCLExternalSolarLock* >( getExternalLock( ) );
 
-    DBG_ASSERT( m_pToolBox, "invalid toolbox" );
+    OSL_ENSURE( m_pToolBox, "invalid toolbox" );
     m_nItemId = m_pToolBox->GetItemId( (sal_uInt16)m_nIndexInParent );
     m_sOldName = GetText( true );
     m_bIsChecked = m_pToolBox->IsItemChecked( m_nItemId );

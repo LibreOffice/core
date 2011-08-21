@@ -236,7 +236,7 @@ OUString SAL_CALL AccessibleGridControl::getImplementationName()
 Rectangle AccessibleGridControl::implGetBoundingBox()
 {
     Window* pParent = m_aTable.GetAccessibleParentWindow();
-    DBG_ASSERT( pParent, "implGetBoundingBox - missing parent window" );
+    OSL_ENSURE( pParent, "implGetBoundingBox - missing parent window" );
     return m_aTable.GetWindowExtentsRelative( pParent );
 }
 // -----------------------------------------------------------------------------
@@ -310,7 +310,7 @@ AccessibleGridControl::implGetFixedChild( sal_Int32 nChildIndex )
 AccessibleGridControlTable* AccessibleGridControl::createAccessibleTable()
 {
     Reference< XAccessible > xCreator = (Reference< XAccessible >)m_pImpl->m_aCreator;
-        DBG_ASSERT( xCreator.is(), "accessibility/extended/AccessibleGirdControl::createAccessibleTable: my creator died - how this?" );
+        OSL_ENSURE( xCreator.is(), "accessibility/extended/AccessibleGirdControl::createAccessibleTable: my creator died - how this?" );
     return new AccessibleGridControlTable( xCreator, m_aTable, TCTYPE_TABLE );
 }
 // ============================================================================
@@ -344,7 +344,7 @@ Reference< XAccessibleContext > SAL_CALL AccessibleGridControlAccess::getAccessi
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    DBG_ASSERT( ( m_pContext && m_xContext.is() ) || ( !m_pContext && !m_xContext.is() ),
+    OSL_ENSURE( ( m_pContext && m_xContext.is() ) || ( !m_pContext && !m_xContext.is() ),
         "accessibility/extended/AccessibleGridControlAccess::getAccessibleContext: inconsistency!" );
 
     // if the context died meanwhile (we're no listener, so it won't tell us explicitily when this happens),

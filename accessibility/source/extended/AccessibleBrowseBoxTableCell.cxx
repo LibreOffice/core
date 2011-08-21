@@ -153,7 +153,7 @@ namespace accessibility
     sal_Int32 SAL_CALL AccessibleBrowseBoxTableCell::getIndexAtPoint( const ::com::sun::star::awt::Point& _aPoint ) throw (RuntimeException)
     {
         //! TODO CTL bidi
-        // DBG_ASSERT(0,"Need to be done by base class!");
+        // OSL_FAIL("Need to be done by base class!");
         SolarMutexGuard aSolarGuard;
         ::osl::MutexGuard aGuard( getOslMutex() );
         ensureIsAlive();

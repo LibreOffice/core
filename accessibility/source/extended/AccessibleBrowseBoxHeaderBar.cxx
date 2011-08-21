@@ -60,7 +60,7 @@ AccessibleBrowseBoxHeaderBar::AccessibleBrowseBoxHeaderBar(
 {
     DBG_CTOR( AccessibleBrowseBoxHeaderBar, NULL );
 
-    DBG_ASSERT( isRowBar() || isColumnBar(),
+    OSL_ENSURE( isRowBar() || isColumnBar(),
         "accessibility/extended/AccessibleBrowseBoxHeaderBar - invalid object type" );
 }
 

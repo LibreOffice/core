@@ -344,7 +344,7 @@ namespace accessibility
         Reference< XAccessible > xParent = (Reference< XAccessible >)m_aParent;
         if ( !xParent.is() )
         {
-            DBG_ASSERT( m_aEntryPath.size(), "AccessibleListBoxEntry::getAccessibleParent: invalid path!" );
+            OSL_ENSURE( m_aEntryPath.size(), "AccessibleListBoxEntry::getAccessibleParent: invalid path!" );
             if ( 1 == m_aEntryPath.size() )
             {   // we're a top level entry
                 // -> our parent is the tree listbox itself
@@ -360,7 +360,7 @@ namespace accessibility
 
                 // get the entry for this shortened access path
                 SvLBoxEntry* pParentEntry = getListBox()->GetEntryFromPath( m_aEntryPath );
-                DBG_ASSERT( pParentEntry, "AccessibleListBoxEntry::implGetParentAccessible: could not obtain a parent entry!" );
+                OSL_ENSURE( pParentEntry, "AccessibleListBoxEntry::implGetParentAccessible: could not obtain a parent entry!" );
 
                 if ( pParentEntry )
                     xParent = new AccessibleListBoxEntry( *getListBox(), pParentEntry, NULL );
@@ -387,7 +387,7 @@ namespace accessibility
     {
         ::osl::MutexGuard aGuard( m_aMutex );
 
-        DBG_ASSERT( !m_aEntryPath.empty(), "empty path" );
+        OSL_ENSURE( !m_aEntryPath.empty(), "empty path" );
         return m_aEntryPath.empty() ? -1 : m_aEntryPath.back();
     }
     // -----------------------------------------------------------------------------

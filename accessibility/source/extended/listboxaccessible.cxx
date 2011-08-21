@@ -50,11 +50,11 @@ namespace accessibility
     //--------------------------------------------------------------------
     IMPL_LINK( ListBoxAccessibleBase, WindowEventListener, VclSimpleEvent*, pEvent )
     {
-        DBG_ASSERT( pEvent && pEvent->ISA( VclWindowEvent ), "ListBoxAccessibleBase::WindowEventListener: unexpected WindowEvent!" );
+        OSL_ENSURE( pEvent && pEvent->ISA( VclWindowEvent ), "ListBoxAccessibleBase::WindowEventListener: unexpected WindowEvent!" );
         if ( pEvent && pEvent->ISA( VclWindowEvent ) )
         {
-            DBG_ASSERT( static_cast< VclWindowEvent* >( pEvent )->GetWindow() , "ListBoxAccessibleBase::WindowEventListener: no event window!" );
-            DBG_ASSERT( static_cast< VclWindowEvent* >( pEvent )->GetWindow() == m_pWindow, "ListBoxAccessibleBase::WindowEventListener: where did this come from?" );
+            OSL_ENSURE( static_cast< VclWindowEvent* >( pEvent )->GetWindow() , "ListBoxAccessibleBase::WindowEventListener: no event window!" );
+            OSL_ENSURE( static_cast< VclWindowEvent* >( pEvent )->GetWindow() == m_pWindow, "ListBoxAccessibleBase::WindowEventListener: where did this come from?" );
 
             ProcessWindowEvent( *static_cast< VclWindowEvent* >( pEvent ) );
         }
