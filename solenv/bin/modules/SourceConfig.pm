@@ -149,12 +149,12 @@ sub get_module_build_list {
 
             if (-e $module_path . "/prj/makefile.mk" )
             {
-                print "module $module -> gbuild\n";
+#                print "module $module -> gbuild\n";
                 ${$self->{MODULE_GBUILDIFIED}}{$module} = 1;
             }
             else
             {
-                print "module $module -> dmake\n";
+#                print "module $module -> dmake\n";
                 ${$self->{MODULE_GBUILDIFIED}}{$module} = 0;
             }
             return $module_path . "/prj/build.lst";

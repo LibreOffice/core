@@ -1821,7 +1821,7 @@ sub run_job {
     getcwd();
 
     my $log_file = $jobs_hash{$registered_name}->{LONG_LOG_PATH};
-    print "logfile:$log_file\n";
+
     my $log_dir = File::Basename::dirname($log_file);
 
     if ( $source_config->is_gbuild($jobs_hash{$registered_name}->{MODULE}) )
