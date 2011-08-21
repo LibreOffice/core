@@ -135,7 +135,7 @@ public:
             if ( pos >= 0 )
             {
                 buf.appendAscii( " at position ");
-                buf.append(pos);
+                buf.append(pos, 10);
             }
             buf.appendAscii( " initialised multiple times.");
             throw RuntimeException(buf.makeStringAndClear(), Reference< XInterface > ());
