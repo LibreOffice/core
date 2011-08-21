@@ -515,12 +515,10 @@ CrashreportOptions::CrashreportOptions( Window* pParent, Config &aConfig )
 
     aNFCRPort.SetUseThousandSep( sal_False );
 
-    ByteString aTemp;
-
     aConfig.SetGroup("Crashreporter");
 
-    aTemp = aConfig.ReadKey( "UseProxy", "false" );
-    if ( aTemp.EqualsIgnoreCaseAscii( "true" ) || aTemp.Equals( "1" ) )
+    rtl::OString aTemp = aConfig.ReadKey( "UseProxy", "false" );
+    if ( aTemp.equalsIgnoreAsciiCase("true") || aTemp.equals("1") )
         aCBUseProxy.Check();
     else
         aCBUseProxy.Check( sal_False );
@@ -529,13 +527,13 @@ CrashreportOptions::CrashreportOptions( Window* pParent, Config &aConfig )
     LINK( this, CrashreportOptions, CheckProxy ).Call( NULL );  // call once to initialize
 
     aTemp = aConfig.ReadKey( "ProxyServer" );
-    aEDCRHost.SetText( String( aTemp, RTL_TEXTENCODING_UTF8 ) );
+    aEDCRHost.SetText(rtl::OStringToOUString(aTemp, RTL_TEXTENCODING_UTF8));
     aTemp = aConfig.ReadKey( "ProxyPort", "8080" );
-    aNFCRPort.SetValue( aTemp.ToInt32() );
+    aNFCRPort.SetValue(aTemp.toInt32());
 
 
     aTemp = aConfig.ReadKey( "AllowContact", "false" );
-    if ( aTemp.EqualsIgnoreCaseAscii( "true" ) || aTemp.Equals( "1" ) )
+    if ( aTemp.equalsIgnoreAsciiCase("true") || aTemp.equals("1") )
         aCBAllowContact.Check();
     else
         aCBAllowContact.Check( sal_False );
@@ -544,7 +542,7 @@ CrashreportOptions::CrashreportOptions( Window* pParent, Config &aConfig )
     LINK( this, CrashreportOptions, CheckResponse ).Call( NULL );  // call once to initialize
 
     aTemp = aConfig.ReadKey( "ReturnAddress" );
-    aEDEMail.SetText( String( aTemp, RTL_TEXTENCODING_UTF8 ) );
+    aEDEMail.SetText(rtl::OStringToOUString(aTemp, RTL_TEXTENCODING_UTF8));
 }
 
 
@@ -659,8 +657,8 @@ void MiscOptions::Save( Config &aConfig )
         rtl::OString::valueOf(static_cast<sal_Int32>(aServerTimeout.GetTime().GetTime())));
 
     aConfig.SetGroup("LRU");
-    ByteString aTemp = aConfig.ReadKey( "MaxLRU", "4" );
-    sal_uInt16 nOldMaxLRU = (sal_uInt16)aTemp.ToInt32();
+    rtl::OString aTemp = aConfig.ReadKey( "MaxLRU", "4" );
+    sal_uInt16 nOldMaxLRU = (sal_uInt16)aTemp.toInt32();
     sal_uInt16 n;
     for ( n = nOldMaxLRU ; n > aTFMaxLRU.GetValue() ; n-- )
     {

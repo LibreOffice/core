@@ -36,10 +36,10 @@
 #include "vcl/msgbox.hxx"
 #include "vcl/strhelper.hxx"
 
-#include "osl/thread.h"
-
+#include <osl/thread.h>
+#include <rtl/strbuf.hxx>
+#include <comphelper/string.hxx>
 #include <boost/unordered_set.hpp>
-
 
 using namespace psp;
 using namespace padmin;
@@ -507,29 +507,31 @@ APOldPrinterPage::APOldPrinterPage( AddPrinterDialog* pParent )
     ByteString aDefCopies( aConfig.ReadKey( "Copies" ) );
     ByteString aDefDPI( aConfig.ReadKey( "DPI" ) );
 
+    using comphelper::string::getToken;
+
     aConfig.SetGroup( "devices" );
     int nDevices = aConfig.GetKeyCount();
     for( int nKey = 0; nKey < nDevices; nKey++ )
     {
         aConfig.SetGroup( "devices" );
-        ByteString aPrinter( aConfig.GetKeyName( nKey ) );
-        ByteString aValue( aConfig.ReadKey( aPrinter ) );
-        ByteString aPort( aValue.GetToken( 1, ',' ) );
-        ByteString aDriver( aValue.GetToken( 0, ' ' ) );
-        ByteString aPS( aValue.GetToken( 0, ',' ).GetToken( 1, ' ' ) );
-        ByteString aNewDriver( aDriver );
-        if( aDriver == "GENERIC" )
-            aNewDriver = "SGENPRT";
+        rtl::OString aPrinter(aConfig.GetKeyName(nKey));
+        rtl::OString aValue(aConfig.ReadKey(aPrinter));
+        rtl::OString aPort(getToken(aValue, 1, ','));
+        rtl::OString aDriver(getToken(aValue, 0, ' '));
+        rtl::OString aPS( getToken(getToken(aValue, 0, ','), 1, ' ') );
+        rtl::OString aNewDriver(aDriver);
+        if( aDriver.equalsL(RTL_CONSTASCII_STRINGPARAM("GENERIC")))
+            aNewDriver = rtl::OString(RTL_CONSTASCII_STRINGPARAM("SGENPRT"));
 
         if( aPS != "PostScript" )
             continue;
 
-        const PPDParser* pParser = PPDParser::getParser( String( aNewDriver, aEncoding ) );
+        const PPDParser* pParser = PPDParser::getParser(rtl::OStringToOUString(aNewDriver, aEncoding));
         if( pParser == NULL )
         {
             String aText( PaResId( RID_TXT_DRIVERDOESNOTEXIST ) );
-            aText.SearchAndReplace( String( RTL_CONSTASCII_USTRINGPARAM( "%s1" ) ), String( aPrinter, aEncoding ) );
-            aText.SearchAndReplace( String( RTL_CONSTASCII_USTRINGPARAM( "%s2" ) ), String( aDriver, aEncoding ) );
+            aText.SearchAndReplace( String( RTL_CONSTASCII_USTRINGPARAM( "%s1" ) ), rtl::OStringToOUString(aPrinter, aEncoding) );
+            aText.SearchAndReplace( String( RTL_CONSTASCII_USTRINGPARAM( "%s2" ) ), rtl::OStringToOUString(aDriver, aEncoding) );
             InfoBox aBox( this, aText );
             aBox.Execute();
             continue;
@@ -541,66 +543,66 @@ APOldPrinterPage::APOldPrinterPage( AddPrinterDialog* pParent )
         if( ! aCommand.Len() )
         {
             String aText( PaResId( RID_TXT_PRINTERWITHOUTCOMMAND ) );
-            aText.SearchAndReplace( String( RTL_CONSTASCII_USTRINGPARAM( "%s" ) ), String( aPrinter, aEncoding ) );
+            aText.SearchAndReplace( String( RTL_CONSTASCII_USTRINGPARAM( "%s" ) ), rtl::OStringToOUString(aPrinter, aEncoding) );
             InfoBox aBox( this, aText );
             aBox.Execute();
             continue;
         }
 
 
-        String aUPrinter( AddPrinterDialog::uniquePrinterName( String( aPrinter, aEncoding ) ) );
+        String aUPrinter( AddPrinterDialog::uniquePrinterName(rtl::OStringToOUString(aPrinter, aEncoding)) );
 
         PrinterInfo aInfo;
-        aInfo.m_aDriverName     = String( aNewDriver, aEncoding );
+        aInfo.m_aDriverName = rtl::OStringToOUString(aNewDriver, aEncoding);
         aInfo.m_pParser         = pParser;
         aInfo.m_aContext.setParser( pParser );
         aInfo.m_aPrinterName    = aUPrinter;
-        aInfo.m_aCommand        = String( aCommand, aEncoding );
+        aInfo.m_aCommand = rtl::OStringToOUString(aCommand, aEncoding);
 
         // read the printer settings
-        ByteString aGroup( aDriver );
-        aGroup += ",PostScript,";
-        aGroup += aPort;
-        aConfig.SetGroup( aGroup );
+        rtl::OStringBuffer aGroup(aDriver);
+        aGroup.append(RTL_CONSTASCII_STRINGPARAM(",PostScript,"));
+        aGroup.append(aPort);
+        aConfig.SetGroup(aGroup.makeStringAndClear());
 
         aValue = aConfig.ReadKey( "PageSize", aDefPageSize );
         int nLeft, nRight, nTop, nBottom;
-        if( aValue.Len() &&
-            aInfo.m_pParser->getMargins( String( aValue, aEncoding ),
+        if( aValue.getLength() &&
+            aInfo.m_pParser->getMargins( rtl::OStringToOUString(aValue, aEncoding),
                                          nLeft, nRight, nTop, nBottom ) )
         {
             const PPDKey* pKey = aInfo.m_pParser->getKey( String( RTL_CONSTASCII_USTRINGPARAM( "PageSize" ) ) );
-            const PPDValue* pValue = pKey ? pKey->getValue( String( aValue, aEncoding ) ) : NULL;
+            const PPDValue* pValue = pKey ? pKey->getValue( rtl::OStringToOUString(aValue, aEncoding) ) : NULL;
             if( pKey && pValue )
                 aInfo.m_aContext.setValue( pKey, pValue );
             aValue = aConfig.ReadKey( "MarginLeft", aDefMarginLeft );
-            if( aValue.Len() )
-                aInfo.m_nLeftMarginAdjust = aValue.ToInt32() - (int)((double)nLeft * 35.27777778 );
+            if (!aValue.isEmpty())
+                aInfo.m_nLeftMarginAdjust = aValue.toInt32() - (int)((double)nLeft * 35.27777778 );
             aValue = aConfig.ReadKey( "MarginRight", aDefMarginRight );
-            if( aValue.Len() )
-                aInfo.m_nRightMarginAdjust = aValue.ToInt32() - (int)((double)nRight * 35.27777778 );
+            if (!aValue.isEmpty())
+                aInfo.m_nRightMarginAdjust = aValue.toInt32() - (int)((double)nRight * 35.27777778 );
             aValue = aConfig.ReadKey( "MarginTop", aDefMarginTop );
-            if( aValue.Len() )
-                aInfo.m_nTopMarginAdjust = aValue.ToInt32() - (int)((double)nTop * 35.27777778 );
+            if (!aValue.isEmpty())
+                aInfo.m_nTopMarginAdjust = aValue.toInt32() - (int)((double)nTop * 35.27777778 );
             aValue = aConfig.ReadKey( "MarginBottom", aDefMarginBottom );
-            if( aValue.Len() )
-                aInfo.m_nBottomMarginAdjust = aValue.ToInt32() - (int)((double)nBottom * 35.27777778 );
+            if (!aValue.isEmpty())
+                aInfo.m_nBottomMarginAdjust = aValue.toInt32() - (int)((double)nBottom * 35.27777778 );
         }
 
         aValue = aConfig.ReadKey( "Copies", aDefScale );
-        if( aValue.Len() )
-            aInfo.m_nCopies = aValue.ToInt32();
+        if (!aValue.isEmpty())
+            aInfo.m_nCopies = aValue.toInt32();
 
         aValue = aConfig.ReadKey( "Comment" );
-        aInfo.m_aComment = String( aValue, aEncoding );
+        aInfo.m_aComment = rtl::OStringToOUString(aValue, aEncoding);
 
         aValue = aConfig.ReadKey( "Level" );
-        if( aValue.Len() )
-            aInfo.m_nPSLevel = aValue.ToInt32();
+        if (!aValue.isEmpty())
+            aInfo.m_nPSLevel = aValue.toInt32();
 
         aValue = aConfig.ReadKey( "Orientation", aDefOrientation );
-        if( aValue.Len() )
-            aInfo.m_eOrientation = aValue.CompareIgnoreCaseToAscii( "landscape" ) == COMPARE_EQUAL ? orientation::Landscape : orientation::Portrait;
+        if (!aValue.isEmpty())
+            aInfo.m_eOrientation = aValue.equalsIgnoreAsciiCase( "landscape" ) == COMPARE_EQUAL ? orientation::Landscape : orientation::Portrait;
         int nGroupKeys = aConfig.GetKeyCount();
         for( int nPPDKey = 0; nPPDKey < nGroupKeys; nPPDKey++ )
         {
@@ -617,7 +619,7 @@ APOldPrinterPage::APOldPrinterPage( AddPrinterDialog* pParent )
                 aValue = aConfig.ReadKey( nPPDKey );
                 aPPDKey.Erase( 0, 4 );
                 const PPDKey* pKey = aInfo.m_pParser->getKey( String( aPPDKey, RTL_TEXTENCODING_ISO_8859_1 ) );
-                const PPDValue* pValue = pKey ? ( aValue.Equals( "*nil" ) ? NULL : pKey->getValue( String( aValue, RTL_TEXTENCODING_ISO_8859_1 ) ) ) : NULL;
+                const PPDValue* pValue = pKey ? ( aValue.equalsL(RTL_CONSTASCII_STRINGPARAM("*nil")) ? NULL : pKey->getValue(rtl::OStringToOUString(aValue, RTL_TEXTENCODING_ISO_8859_1)) ) : NULL;
                 if( pKey )
                     aInfo.m_aContext.setValue( pKey, pValue, true );
             }

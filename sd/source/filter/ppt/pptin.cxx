@@ -433,13 +433,13 @@ sal_Bool ImplSdPPTImport::Import()
                                         {
                                             sal_uInt32 nPageNumber = 0;
                                             String aString( pHyperlink->aSubAdress );
-                                            ByteString aStringAry[ 3 ];
+                                            rtl::OString aStringAry[ 3 ];
                                             sal_uInt16 nTokenCount = aString.GetTokenCount( ',' );
                                             if ( nTokenCount > 3 )
                                                 nTokenCount = 3;
                                             sal_uInt16 nToken;
                                             for( nToken = 0; nToken < nTokenCount; nToken++ )
-                                                aStringAry[ nToken ] = ByteString( aString.GetToken( nToken, (sal_Unicode)',' ), RTL_TEXTENCODING_UTF8 );
+                                                aStringAry[nToken] = rtl::OUStringToOString(aString.GetToken( nToken, (sal_Unicode)',' ), RTL_TEXTENCODING_UTF8);
 
                                             sal_Bool bSucceeded = sal_False;
 
@@ -448,7 +448,7 @@ sal_Bool ImplSdPPTImport::Import()
                                             {
                                                 if (comphelper::string::isAsciiDecimalString(aStringAry[nToken]))
                                                 {
-                                                    sal_Int32 nNumber = aStringAry[ nToken ].ToInt32();
+                                                    sal_Int32 nNumber = aStringAry[ nToken ].toInt32();
                                                     if ( nNumber & ~0xff )
                                                     {
                                                         PptSlidePersistList* pPageList = GetPageList( PPT_SLIDEPAGE );
@@ -486,7 +486,7 @@ sal_Bool ImplSdPPTImport::Import()
                                                 {
                                                     if (comphelper::string::isAsciiDecimalString(aStringAry[nToken]))
                                                     {
-                                                        sal_Int32 nNumber = aStringAry[ nToken ].ToInt32();
+                                                        sal_Int32 nNumber = aStringAry[ nToken ].toInt32();
                                                         if ( ( nNumber & ~0xff ) == 0 )
                                                         {
                                                             nPageNumber = (sal_uInt32)nNumber - 1;
