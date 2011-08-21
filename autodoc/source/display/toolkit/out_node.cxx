@@ -63,35 +63,37 @@ Node  C_aNullNode(Node::null_object);
 
 Node::Node()
     :   sName(),
-          pParent(0),
-          aChildren(),
-          nDepth(0),
-          nNameRoomId(0)
+        pParent(0),
+        aChildren(),
+        nDepth(0),
+        nNameRoomId(0)
 {
 }
 
 Node::Node( E_NullObject )
     :   sName(),
-          pParent(0),
-          aChildren(),
-          nDepth(-1),
-          nNameRoomId(0)
+        pParent(0),
+        aChildren(),
+         nDepth(-1),
+        nNameRoomId(0)
 {
 }
 
-Node::Node( const String &  i_name,
-            Node &          i_parent )
-    :   sName(i_name),
-        pParent(&i_parent),
-        aChildren(),
-        nDepth(i_parent.Depth()+1),
-          nNameRoomId(0)
+Node::Node(
+    const String &  i_name,
+    Node &          i_parent
+) :
+    sName(i_name),
+    pParent(&i_parent),
+    aChildren(),
+    nDepth(i_parent.Depth()+1),
+    nNameRoomId(0)
 {
 }
 
 Node::~Node()
 {
-    for ( List::iterator it = aChildren.begin();
+    for ( NodeList::iterator it = aChildren.begin();
           it != aChildren.end();
           ++it )
     {
@@ -99,19 +101,18 @@ Node::~Node()
     }
 }
 
-Node &
-Node::Provide_Child( const String & i_name )
+Node& Node::Provide_Child( const String & i_name )
 {
-    Node *
-        ret = find_Child(i_name);
+    Node* ret = find_Child(i_name);
     if (ret != 0)
         return *ret;
     return add_Child(i_name);
 }
 
-void
-Node::Get_Path( StreamStr &         o_result,
-                intt                i_maxDepth ) const
+void Node::Get_Path(
+    StreamStr&  o_result,
+    intt        i_maxDepth
+) const
 {
     // Intentionally 'i_maxDepth != 0', so max_Depth == -1 sets no limit:
     if (i_maxDepth != 0)
@@ -122,9 +123,10 @@ Node::Get_Path( StreamStr &         o_result,
     }
 }
 
-void
-Node::Get_Chain( StringVector & o_result,
-                 intt           i_maxDepth ) const
+void Node::Get_Chain(
+    StringVector & o_result,
+    intt           i_maxDepth
+) const
 {
     if (i_maxDepth != 0)
     {
@@ -138,13 +140,12 @@ Node::Get_Chain( StringVector & o_result,
     }
 }
 
-Node *
-Node::find_Child( const String & i_name )
+Node* Node::find_Child( const String & i_name )
 {
     Node aSearch;
     aSearch.sName = i_name;
 
-    List::const_iterator
+    NodeList::const_iterator
         ret = std::lower_bound( aChildren.begin(),
                                 aChildren.end(),
                                 &aSearch,
@@ -155,11 +156,9 @@ Node::find_Child( const String & i_name )
     return 0;
 }
 
-Node &
-Node::add_Child( const String & i_name )
+Node& Node::add_Child( const String & i_name )
 {
-    DYN Node *
-        pNew = new Node(i_name,*this);
+    DYN Node* pNew = new Node(i_name,*this);
     aChildren.insert( std::lower_bound( aChildren.begin(),
                                         aChildren.end(),
                                         pNew,
@@ -168,9 +167,10 @@ Node::add_Child( const String & i_name )
     return *pNew;
 }
 
-Node &
-Node::provide_Child( StringVector::const_iterator i_next,
-                       StringVector::const_iterator i_end )
+Node& Node::provide_Child(
+    StringVector::const_iterator i_next,
+    StringVector::const_iterator i_end
+)
 {
     if (i_next == i_end)
         return *this;
@@ -180,8 +180,7 @@ Node::provide_Child( StringVector::const_iterator i_next,
 
 
 
-Node &
-Node::Null_()
+Node& Node::Null_()
 {
     return C_aNullNode;
 }
