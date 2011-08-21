@@ -230,7 +230,7 @@ String DirEntry::GetVolume() const
     aPath.ToAbs();
 
     struct stat buf;
-    while (stat (ByteString(aPath.GetFull(), osl_getThreadTextEncoding()).GetBuffer(), &buf))
+    while (stat(rtl::OUStringToOString(aPath.GetFull(), osl_getThreadTextEncoding()).getStr(), &buf))
     {
         if (aPath.Level() <= 1)
             return String();
@@ -251,7 +251,7 @@ DirEntry DirEntry::GetDevice() const
     aPath.ToAbs();
 
     struct stat buf;
-    while (stat (ByteString(aPath.GetFull(), osl_getThreadTextEncoding()).GetBuffer(), &buf))
+    while (stat(rtl::OUStringToOString(aPath.GetFull(), osl_getThreadTextEncoding()).getStr(), &buf))
     {
         if (aPath.Level() <= 1)
             return String();
@@ -275,14 +275,14 @@ sal_Bool DirEntry::SetCWD( sal_Bool bSloppy ) const
     DBG_CHKTHIS( DirEntry, ImpCheckDirEntry );
 
 
-    ByteString aPath( GetFull(), osl_getThreadTextEncoding());
-    if ( !chdir( aPath.GetBuffer() ) )
+    rtl::OString aPath(rtl::OUStringToOString(GetFull(), osl_getThreadTextEncoding()));
+    if (!chdir(aPath.getStr()))
     {
         return sal_True;
     }
     else
     {
-        if ( bSloppy && !chdir(aPath.GetBuffer()) )
+        if (bSloppy && !chdir(aPath.getStr()))
         {
             return sal_True;
         }
@@ -306,7 +306,7 @@ sal_uInt16 DirReader_Impl::Read()
 {
     if (!pDosDir)
     {
-        pDosDir = opendir( (char*) ByteString(aPath, osl_getThreadTextEncoding()).GetBuffer() );
+        pDosDir = opendir(rtl::OUStringToOString(aPath, osl_getThreadTextEncoding()).getStr());
     }
 
     if (!pDosDir)
@@ -402,8 +402,8 @@ sal_Bool FileStat::Update( const DirEntry& rDirEntry, sal_Bool )
     }
 
     struct stat aStat;
-    ByteString aPath( rDirEntry.GetFull(), osl_getThreadTextEncoding() );
-    if ( stat( (char*) aPath.GetBuffer(), &aStat ) )
+    rtl::OString aPath(rtl::OUStringToOString(rDirEntry.GetFull(), osl_getThreadTextEncoding()));
+    if (stat(aPath.getStr(), &aStat))
     {
         // pl: #67851#
         // do this here, because an existing filename containing "wildcards"
@@ -412,10 +412,10 @@ sal_Bool FileStat::Update( const DirEntry& rDirEntry, sal_Bool )
         // are handled badly across the whole Office
 
         // Sonderbehandlung falls es sich um eine Wildcard handelt
-        ByteString aTempName( rDirEntry.GetName(), osl_getThreadTextEncoding() );
-        if ( strchr( (char*) aTempName.GetBuffer(), '?' ) ||
-             strchr( (char*) aTempName.GetBuffer(), '*' ) ||
-             strchr( (char*) aTempName.GetBuffer(), ';' ) )
+        rtl::OString aTempName(rtl::OUStringToOString(rDirEntry.GetName(), osl_getThreadTextEncoding()));
+        if ( aTempName.indexOf('?') != -1 ||
+             aTempName.indexOf('*') != -1 ||
+             aTempName.indexOf(';') != -1 )
         {
             nKindFlags = FSYS_KIND_WILD;
             nError = FSYS_ERR_OK;
@@ -506,7 +506,7 @@ void FileStat::SetDateTime( const String& rFileName,
         struct utimbuf u_time;
         u_time.actime = time;
         u_time.modtime = time;
-        utime (ByteString(rFileName, osl_getThreadTextEncoding()).GetBuffer(), &u_time);
+        utime(rtl::OUStringToOString(rFileName, osl_getThreadTextEncoding()).getStr(), &u_time);
     }
 }
 

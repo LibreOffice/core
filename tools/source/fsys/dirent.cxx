@@ -670,12 +670,12 @@ DirEntry::DirEntry( const String& rInitName, FSysPathStyle eStyle )
         return;
     }
 
-    ByteString aTmpName(rInitName, osl_getThreadTextEncoding());
+    ByteString aTmpName(rtl::OUStringToOString(rInitName, osl_getThreadTextEncoding()));
     if( aTmpName.CompareIgnoreCaseToAscii("file:",5 ) == COMPARE_EQUAL )
     {
 #ifndef BOOTSTRAP
         DBG_WARNING( "File URLs are not permitted but accepted" );
-        aTmpName = ByteString(String(INetURLObject( rInitName ).PathToFileName()), osl_getThreadTextEncoding());
+        aTmpName = rtl::OUStringToOString(INetURLObject( rInitName ).PathToFileName(), osl_getThreadTextEncoding());
                 eStyle = FSYS_STYLE_HOST;
 #endif // BOOTSTRAP
     }
@@ -686,7 +686,7 @@ DirEntry::DirEntry( const String& rInitName, FSysPathStyle eStyle )
         if ( FileBase::getFileURLFromSystemPath( OUString( rInitName ), aTmp ) == FileBase::E_None )
         {
             aOInitName = OUString( rInitName );
-            aTmpName = ByteString( String(aOInitName), osl_getThreadTextEncoding() );
+            aTmpName = rtl::OUStringToOString(aOInitName, osl_getThreadTextEncoding());
         }
 
 #ifdef DBG_UTIL
@@ -730,7 +730,7 @@ DirEntry::DirEntry( const ByteString& rInitName, FSysPathStyle eStyle )
     {
 #ifndef BOOTSTRAP
         DBG_WARNING( "File URLs are not permitted but accepted" );
-        aTmpName = ByteString(String(INetURLObject( rInitName ).PathToFileName()), osl_getThreadTextEncoding());
+        aTmpName = rtl::OUStringToOString(INetURLObject( rInitName ).PathToFileName(), osl_getThreadTextEncoding());
         eStyle = FSYS_STYLE_HOST;
 #endif
     }
@@ -905,12 +905,12 @@ sal_Bool DirEntry::First()
         String    aUniPathName( GetPath().GetFull() );
 #ifndef BOOTSTRAP
         FSysRedirector::DoRedirect( aUniPathName );
-        ByteString aPathName(aUniPathName, osl_getThreadTextEncoding());
+        rtl::OString aPathName(rtl::OUStringToOString(aUniPathName, osl_getThreadTextEncoding()));
 #else
-        ByteString aPathName(aUniPathName, gsl_getSystemTextEncoding());
+        rtl::OString aPathName(rtl::OUStringToOString(aUniPathName, gsl_getSystemTextEncoding()));
 #endif
 
-        DIR      *pDir = opendir( (char*) aPathName.GetBuffer() );
+        DIR *pDir = opendir(aPathName.getStr());
         if ( pDir )
         {
 #ifndef BOOTSTRAP
@@ -966,7 +966,7 @@ String DirEntry::GetFull( FSysPathStyle eStyle, sal_Bool bWithDelimiter,
     }
     else
     {
-        aRet = ByteString(GetName( eStyle ), osl_getThreadTextEncoding());
+        aRet = rtl::OUStringToOString(GetName(eStyle), osl_getThreadTextEncoding());
     }
 
     //! Hack
@@ -1388,9 +1388,9 @@ void DirEntry::SetName( const String& rName, FSysPathStyle eFormatter )
         eFlag = FSYS_FLAG_INVALID;
     }
     else
-        {
-        aName = ByteString(rName, osl_getThreadTextEncoding());
-        }
+    {
+        aName = rtl::OUStringToOString(rName, osl_getThreadTextEncoding());
+    }
 }
 
 /*************************************************************************
@@ -1477,10 +1477,10 @@ void DirEntry::SetBase( const String& rBase, char cSep )
     {
         // es wurde ein cSep an der Position p1 gefunden
         aName.Erase( 0, static_cast< xub_StrLen >(p1 - p0) );
-        aName.Insert( ByteString(rBase, osl_getThreadTextEncoding()), 0 );
+        aName.Insert(ByteString(rBase, osl_getThreadTextEncoding()), 0 );
     }
     else
-        aName = ByteString(rBase, osl_getThreadTextEncoding());
+        aName = rtl::OUStringToOString(rBase, osl_getThreadTextEncoding());
 }
 
 /*************************************************************************
@@ -1508,7 +1508,7 @@ const DirEntry& DirEntry::SetTempNameBase( const String &rBase )
         DirEntry aTempDir = DirEntry().TempName().GetPath();
         aTempDir += DirEntry( rBase );
 #ifdef UNX
-        ByteString aName( aTempDir.GetFull(), osl_getThreadTextEncoding());
+        ByteString aName(rtl::OUStringToOString(aTempDir.GetFull(), osl_getThreadTextEncoding()));
         if ( access( aName.GetBuffer(), W_OK | X_OK | R_OK ) )
         {
             // Create the directory and only on success give all rights to
@@ -1557,7 +1557,7 @@ DirEntry DirEntry::TempName( DirEntryKind eKind ) const
         if ( pWild )
         {
             if ( pParent )
-                aDirName = ByteString(pParent->GetFull(), osl_getThreadTextEncoding());
+                aDirName = rtl::OUStringToOString(pParent->GetFull(), osl_getThreadTextEncoding());
             strncpy( pfx, aName.GetBuffer(), Min( (int)5, (int)(pWild-aName.GetBuffer()) ) );
             pfx[ pWild-aName.GetBuffer() ] = 0;
             const char *pExt = strchr( pWild, '.' );
@@ -1571,7 +1571,7 @@ DirEntry DirEntry::TempName( DirEntryKind eKind ) const
         }
         else
         {
-            aDirName = ByteString(GetFull(), osl_getThreadTextEncoding());
+            aDirName = rtl::OUStringToOString(GetFull(), osl_getThreadTextEncoding());
             strcpy( pfx, "lo" );
             strcpy( ext, ".tmp" );
         }
@@ -1651,7 +1651,7 @@ DirEntry DirEntry::TempName( DirEntryKind eKind ) const
 #endif
                                 if ( FSYS_KIND_DIR == eKind )
                                 {
-                                                if ( 0 == _mkdir( ByteString(aRedirected.GetBuffer(), osl_getThreadTextEncoding()).GetBuffer() ) )
+                                                if (0 == _mkdir(rtl::OUStringToOString(aRedirected, osl_getThreadTextEncoding()).getStr()))
                                         {
                                                 aRet = DirEntry( aRetVal );
                                                 break;
@@ -1660,7 +1660,7 @@ DirEntry DirEntry::TempName( DirEntryKind eKind ) const
                                 else
                                 {
 #if defined(UNX)
-                                        if( access( ByteString(aRedirected, osl_getThreadTextEncoding()).GetBuffer(), F_OK ) )
+                                        if (access(rtl::OUStringToOString(aRedirected, osl_getThreadTextEncoding()).getStr(), F_OK))
                                         {
                                                 aRet = DirEntry( aRetVal );
                                                 break;
@@ -1866,12 +1866,12 @@ sal_Bool DirEntry::MakeDir( sal_Bool bSloppy ) const
 #ifndef BOOTSTRAP
                                 FSysRedirector::DoRedirect( aDirName );
 #endif
-                                ByteString bDirName( aDirName, osl_getThreadTextEncoding() );
+                                rtl::OString bDirName(rtl::OUStringToOString(aDirName, osl_getThreadTextEncoding()));
 
 #ifdef WIN32
                                 SetLastError(0);
 #endif
-                                sal_Bool bResult = (0 == _mkdir( (char*) bDirName.GetBuffer() ));
+                                sal_Bool bResult = (0 == _mkdir(bDirName.getStr()));
                                 if ( !bResult )
                                 {
                                     // Wer hat diese Methode const gemacht ?
@@ -1903,10 +1903,10 @@ FSysError DirEntry::CopyTo( const DirEntry& rDest, FSysAction nActions ) const
 #ifdef UNX
     {
         // Hardlink anlegen
-                HACK(redirection missing)
-        ByteString aThis(GetFull(), osl_getThreadTextEncoding());
-        ByteString aDest(rDest.GetFull(), osl_getThreadTextEncoding());
-        if (link( aThis.GetBuffer(), aDest.GetBuffer() ) == -1)
+        HACK(redirection missing)
+        rtl::OString aThis(rtl::OUStringToOString(GetFull(), osl_getThreadTextEncoding()));
+        rtl::OString aDest(rtl::OUStringToOString(rDest.GetFull(), osl_getThreadTextEncoding()));
+        if (link(aThis.getStr(), aDest.getStr()) == -1)
             return Sys2SolarError_Impl(  errno );
         else
             return FSYS_ERR_OK;
@@ -1961,8 +1961,8 @@ FSysError DirEntry::MoveTo( const DirEntry& rNewName ) const
         FSysRedirector::DoRedirect(aTo);
 #endif
 
-        ByteString bFrom(aFrom, osl_getThreadTextEncoding());
-        ByteString bTo(aTo, osl_getThreadTextEncoding());
+        ByteString bFrom(rtl::OUStringToOString(aFrom, osl_getThreadTextEncoding()));
+        ByteString bTo(rtl::OUStringToOString(aTo, osl_getThreadTextEncoding()));
 
 #ifdef WNT
         // MoveTo nun atomar
@@ -2095,7 +2095,7 @@ FSysError DirEntry::Kill(  FSysAction nActions ) const
 #ifndef BOOTSTRAP
         FSysRedirector::DoRedirect( aTmpName );
 #endif
-        ByteString bTmpName( aTmpName, osl_getThreadTextEncoding());
+        ByteString bTmpName(rtl::OUStringToOString(aTmpName, osl_getThreadTextEncoding()));
 
         char *pName = new char[bTmpName.Len()+2];
         strcpy( pName, bTmpName.GetBuffer() );
