@@ -1834,11 +1834,7 @@ IMPL_LINK( SVGFilter, CalcFieldHdl, EditFieldInfo*, pInfo )
                 OSL_FAIL( "error: !mCreateOjectsCurrentMasterPage.is()" );
                 return 0;
             }
-            if( mTextFieldCharSets.find( mCreateOjectsCurrentMasterPage ) == mTextFieldCharSets.end() )
-            {
-                OSL_FAIL( "error: mTextFieldCharSets.find( mCreateOjectsCurrentMasterPage ) == mTextFieldCharSets.end()" );
-                return 0;
-            }
+            sal_Bool bHasCharSetMap = !( mTextFieldCharSets.find( mCreateOjectsCurrentMasterPage ) == mTextFieldCharSets.end() );
 
             static const ::rtl::OUString aHeaderId( B2UCONST( aOOOAttrHeaderField ) );
             static const ::rtl::OUString aFooterId( B2UCONST( aOOOAttrFooterField ) );
@@ -1846,26 +1842,30 @@ IMPL_LINK( SVGFilter, CalcFieldHdl, EditFieldInfo*, pInfo )
             static const ::rtl::OUString aVariableDateTimeId( B2UCONST( aOOOAttrDateTimeField ) + B2UCONST( "-variable" ) );
 
             const UCharSet * pCharSet = NULL;
-            UCharSetMap & aCharSetMap = mTextFieldCharSets[ mCreateOjectsCurrentMasterPage ];
-            const SvxFieldData* pField = pInfo->GetField().GetField();
-            if( ( pField->GetClassId() == SVX_HEADERFIELD ) && ( aCharSetMap.find( aHeaderId ) != aCharSetMap.end() ) )
+            UCharSetMap * pCharSetMap = NULL;
+            if( bHasCharSetMap )
             {
-                pCharSet = &( aCharSetMap[ aHeaderId ] );
+                pCharSetMap = &( mTextFieldCharSets[ mCreateOjectsCurrentMasterPage ] );
             }
-            else if( ( pField->GetClassId() == SVX_FOOTERFIELD ) && ( aCharSetMap.find( aFooterId ) != aCharSetMap.end() ) )
+            const SvxFieldData* pField = pInfo->GetField().GetField();
+            if( bHasCharSetMap && ( pField->GetClassId() == SVX_HEADERFIELD ) && ( pCharSetMap->find( aHeaderId ) != pCharSetMap->end() ) )
             {
-                pCharSet = &( aCharSetMap[ aFooterId ] );
+                pCharSet = &( (*pCharSetMap)[ aHeaderId ] );
+            }
+            else if( bHasCharSetMap && ( pField->GetClassId() == SVX_FOOTERFIELD ) && ( pCharSetMap->find( aFooterId ) != pCharSetMap->end() ) )
+            {
+                pCharSet = &( (*pCharSetMap)[ aFooterId ] );
             }
             else if( pField->GetClassId() == SVX_DATEFIMEFIELD )
             {
-                if( aCharSetMap.find( aDateTimeId ) != aCharSetMap.end() )
+                if( bHasCharSetMap && ( pCharSetMap->find( aDateTimeId ) != pCharSetMap->end() ) )
                 {
-                    pCharSet = &( aCharSetMap[ aDateTimeId ] );
+                    pCharSet = &( (*pCharSetMap)[ aDateTimeId ] );
                 }
-                if( ( aCharSetMap.find( aVariableDateTimeId ) != aCharSetMap.end() ) && !aCharSetMap[ aVariableDateTimeId ].empty() )
+                if( bHasCharSetMap && ( pCharSetMap->find( aVariableDateTimeId ) != pCharSetMap->end() ) && !(*pCharSetMap)[ aVariableDateTimeId ].empty() )
                 {
                     SvxDateFormat eDateFormat = SVXDATEFORMAT_B, eCurDateFormat;
-                    const UCharSet & aCharSet = aCharSetMap[ aVariableDateTimeId ];
+                    const UCharSet & aCharSet = (*pCharSetMap)[ aVariableDateTimeId ];
                     UCharSet::const_iterator aChar = aCharSet.begin();
                     // we look for the most verbose date format
                     for( ; aChar != aCharSet.end(); ++aChar )
