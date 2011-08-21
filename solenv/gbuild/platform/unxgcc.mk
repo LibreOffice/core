@@ -78,10 +78,9 @@ gb_CXXFLAGS := \
 	-Wall \
 	-Wendif-labels \
 	-Wextra \
-	-Wno-ctor-dtor-privacy \
-	-Wno-non-virtual-dtor \
-	-Woverloaded-virtual \
 	-Wshadow \
+	-Woverloaded-virtual \
+	-Wno-non-virtual-dtor \
 	-fPIC \
 	-fmessage-length=0 \
 	-fno-common \
