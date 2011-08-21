@@ -375,7 +375,11 @@ void SAL_CALL uno_Environment_enter(uno_Environment * pEnv)
 int SAL_CALL uno_Environment_isValid(uno_Environment * pEnv, rtl_uString ** pReason)
     SAL_THROW_EXTERN_C();
 
-
+#ifdef IOS
+/* We link statically on iOS and have just one kind of environment */
+void SAL_CALL gcc3_uno_initEnvironment(uno_Environment *pCppEnv)
+     SAL_THROW_EXTERN_C();
+#endif
 
 #ifdef __cplusplus
 }

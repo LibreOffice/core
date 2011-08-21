@@ -1064,6 +1064,14 @@ static bool loadEnv(OUString const  & cLibStem,
                     uno_Environment * pEnv,
                     void            * /*pContext*/)
 {
+#ifdef IOS
+    oslModule hMod;
+    uno_initEnvironmentFunc fpInit = NULL;
+
+    if (cLibStem.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("gcc3_uno")) )
+        fpInit = gcc3_uno_initEnvironment;
+    osl_getModuleHandle( NULL, &hMod );
+#else
     // late init with some code from matching uno language binding
     // will be unloaded by environment
     oslModule hMod = cppu::detail::loadModule( cLibStem );
@@ -1074,6 +1082,8 @@ static bool loadEnv(OUString const  & cLibStem,
     OUString aSymbolName(RTL_CONSTASCII_USTRINGPARAM(UNO_INIT_ENVIRONMENT));
     uno_initEnvironmentFunc fpInit = (uno_initEnvironmentFunc)
         ::osl_getFunctionSymbol( hMod, aSymbolName.pData );
+#endif
+
     if (!fpInit)
     {
         ::osl_unloadModule( hMod );
