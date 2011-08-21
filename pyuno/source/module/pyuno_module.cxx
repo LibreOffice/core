@@ -124,7 +124,7 @@ public:
     {
         return Py_True == PyDict_GetItem(used, key);
     }
-    void setInitialised(OUString key, int pos = -1)
+    void setInitialised(OUString key, sal_Int32 pos = -1)
     {
         if (initialised[key])
         {
@@ -135,7 +135,7 @@ public:
             if ( pos >= 0 )
             {
                 buf.appendAscii( " at position ");
-                buf.append(pos, 10);
+                buf.append(pos);
             }
             buf.appendAscii( " initialised multiple times.");
             throw RuntimeException(buf.makeStringAndClear(), Reference< XInterface > ());
