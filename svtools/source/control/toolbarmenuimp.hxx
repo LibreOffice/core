@@ -224,7 +224,6 @@ public:
     ToolbarMenuEntryAcc( ToolbarMenuEntry* pParent );
     ~ToolbarMenuEntryAcc();
 
-    void    FireAccessibleEvent( short nEventId, const ::com::sun::star::uno::Any& rOldValue, const ::com::sun::star::uno::Any& rNewValue );
     bool    HasAccessibleListeners() const { return( mxEventListeners.size() > 0 ); }
 
     virtual void SAL_CALL dispose()throw (::com::sun::star::uno::RuntimeException)
