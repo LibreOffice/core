@@ -147,15 +147,6 @@ enum FSysExact
 };
 
 // ------------
-// - Char-Set -
-// ------------
-
-// Was different for WIN, no longer needed...
-#define GUI2FSYS(s) s
-#define FSYS2GUI(s) s
-
-
-// ------------
 // - FileStat -
 // ------------
 

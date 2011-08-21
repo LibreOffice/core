@@ -909,7 +909,6 @@ sal_Bool DirEntry::First()
 #else
         ByteString aPathName(aUniPathName, gsl_getSystemTextEncoding());
 #endif
-        aPathName = GUI2FSYS( aPathName );
 
         DIR      *pDir = opendir( (char*) aPathName.GetBuffer() );
         if ( pDir )
@@ -923,7 +922,7 @@ sal_Bool DirEntry::First()
                           pEntry;
                           pEntry = readdir( pDir ) )
                 {
-                        ByteString aFound( FSYS2GUI( ByteString( pEntry->d_name ) ) );
+                        ByteString aFound(pEntry->d_name);
                         if ( aWildeKarte.Matches( String(CMP_LOWER( aFound ), osl_getThreadTextEncoding())))
                         {
                                 aName = aFound;
@@ -1868,7 +1867,6 @@ sal_Bool DirEntry::MakeDir( sal_Bool bSloppy ) const
                                 FSysRedirector::DoRedirect( aDirName );
 #endif
                                 ByteString bDirName( aDirName, osl_getThreadTextEncoding() );
-                                bDirName = GUI2FSYS( bDirName );
 
 #ifdef WIN32
                                 SetLastError(0);
@@ -1906,8 +1904,8 @@ FSysError DirEntry::CopyTo( const DirEntry& rDest, FSysAction nActions ) const
     {
         // Hardlink anlegen
                 HACK(redirection missing)
-    ByteString aThis(GUI2FSYS(GetFull()), osl_getThreadTextEncoding());
-    ByteString aDest(GUI2FSYS(rDest.GetFull()), osl_getThreadTextEncoding());
+        ByteString aThis(GetFull(), osl_getThreadTextEncoding());
+        ByteString aDest(rDest.GetFull(), osl_getThreadTextEncoding());
         if (link( aThis.GetBuffer(), aDest.GetBuffer() ) == -1)
             return Sys2SolarError_Impl(  errno );
         else
@@ -1965,8 +1963,6 @@ FSysError DirEntry::MoveTo( const DirEntry& rNewName ) const
 
         ByteString bFrom(aFrom, osl_getThreadTextEncoding());
         ByteString bTo(aTo, osl_getThreadTextEncoding());
-        bFrom = GUI2FSYS(bFrom);
-        bTo = GUI2FSYS(bTo);
 
 #ifdef WNT
         // MoveTo nun atomar
@@ -2100,7 +2096,6 @@ FSysError DirEntry::Kill(  FSysAction nActions ) const
         FSysRedirector::DoRedirect( aTmpName );
 #endif
         ByteString bTmpName( aTmpName, osl_getThreadTextEncoding());
-        bTmpName = GUI2FSYS(bTmpName);
 
         char *pName = new char[bTmpName.Len()+2];
         strcpy( pName, bTmpName.GetBuffer() );

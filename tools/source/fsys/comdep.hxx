@@ -72,7 +72,7 @@ struct DirReader_Impl
                 :   pDir( &rDir ),
                     pDosEntry( 0 ),
                     pParent( 0 ),
-                    aPath( GUI2FSYS(rDir.GetFull()) ),
+                    aPath(rDir.GetFull()),
                     bReady ( sal_False ),
                     bInUse( sal_False )
                 {
