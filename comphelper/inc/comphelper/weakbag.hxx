@@ -55,7 +55,7 @@ public:
     */
     void add(com::sun::star::uno::Reference< T > const & e) {
         OSL_ASSERT(e.is());
-        for (typename List::iterator i(m_list.begin()); i != m_list.end();) {
+        for (typename WeakReferenceList::iterator i(m_list.begin()); i != m_list.end();) {
             if (com::sun::star::uno::Reference< T >(*i).is()) {
                 ++i;
             } else {
@@ -83,9 +83,9 @@ public:
     }
 
 private:
-    typedef std::list< com::sun::star::uno::WeakReference< T > > List;
+    typedef std::list< com::sun::star::uno::WeakReference< T > > WeakReferenceList;
 
-    List m_list;
+    WeakReferenceList m_list;
 };
 
 }
